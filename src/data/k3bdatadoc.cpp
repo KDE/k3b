@@ -570,7 +570,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 	
     m_size -= item->k3bSize();
     if( m_size < 0 ) {
-      qDebug( "(K3bDataDoc) Size of project is: %i, that CANNOT be! Will exit! PLEASE REPORT!", m_size );
+      qDebug( "(K3bDataDoc) Size of project is: %l, that CANNOT be! Will exit! PLEASE REPORT!", m_size );
       exit(0);
     }
 

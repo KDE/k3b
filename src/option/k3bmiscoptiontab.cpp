@@ -58,3 +58,5 @@ void K3bMiscOptionTab::saveSettings()
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
 }
+
+#include "k3bmiscoptiontab.moc"

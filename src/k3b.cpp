@@ -64,7 +64,7 @@
 #include "data/k3bisoimagewritingdialog.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bprojecttabwidget.h"
-
+#include "rip/songdb/k3bsongmanager.h"
 
 
 K3bMainWindow* k3bMain()
@@ -801,7 +801,8 @@ void K3bMainWindow::init()
 
   // this is a little not to hard hack to ensure that we get the "global" k3b appdir
   // k3bui.rc should always be in $KDEDIR/share/apps/k3b/
-  QString globalConfigFile = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b/k3bsetup";
+  QString globalConfigDir = KGlobal::dirs()->findResourceDir( "data", "k3b/k3bui.rc" ) + "k3b";
+  QString globalConfigFile =  globalConfigDir + "/k3bsetup";
   KConfig globalConfig( globalConfigFile );
 
   readOptions();
@@ -853,6 +854,13 @@ void K3bMainWindow::init()
   emit initializationInfo( i18n("Initializing cd view...") );
 
   m_dirView->setupFinalize( m_deviceManager );
+
+  // ===============================================================================
+  emit initializationInfo( i18n("Reading local CDDB database...") );
+  globalConfig.setGroup("Cddb");
+  QString filename = globalConfig.readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
+  m_songManager = new K3bSongManager( filename );
+  m_songManager->load();
 
   emit initializationInfo( i18n("Ready") );
 }

@@ -31,27 +31,31 @@
 
 #define COLUMN_ARTIST         1
 
-K3bPatternParser::K3bPatternParser( QStringList *dirs, QStringList *files, KListView *view, K3bCddb *cddb ){
+K3bPatternParser::K3bPatternParser( QStringList *dirs, QStringList *files, K3bCddb *cddb ){
     m_dirPattern = dirs;
     m_filePattern = files;
-    m_listView = view;
+    //m_listView = view;
     m_cddb = cddb;
+    m_artist = m_cddb->getArtist();
 }
 
 K3bPatternParser::~K3bPatternParser(){
 
 }
 
-QString K3bPatternParser::prepareFilename( QString title, int no ){
+QString K3bPatternParser::prepareFilename( QString title, int no, bool parseMixed=false ){
     QString fn[5] = { "","","","","" };
     int trackIndex=-1;
     int titleIndex=-1;
     int index=0;
     for( QStringList::Iterator it = m_filePattern->begin(); it != m_filePattern->end(); ++it ) {
         qDebug("(K3bPatternParser) Filepattern: " + (*it) );
-        if( (*it).find(i18n("Artist")) >= 0)
-            fn[index] = m_cddb->getArtist(); //prepareReplaceFilename( m_cddb->getArtist() );
-        else if( (*it).find(i18n("Album")) >= 0 )
+        if( (*it).find(i18n("Artist")) >= 0){
+            //fn[index] = m_cddb->getArtist(); //prepareReplaceFilename( m_cddb->getParsedArtist() );
+            QString tmpArtist;
+            prepareParsedName( title, m_cddb->getArtist(), tmpArtist , parseMixed);
+            fn[index] = tmpArtist;
+        } else if( (*it).find(i18n("Album")) >= 0 )
             fn[index] = m_cddb->getAlbum();//prepareReplaceFilename( m_cddb->getAlbum() );
         else if( (*it).find(i18n("Track No"))  >= 0 )
             trackIndex = index;
@@ -61,8 +65,10 @@ QString K3bPatternParser::prepareFilename( QString title, int no ){
              fn[index] = (*it).latin1();
         ++index;
     }
-    if( titleIndex != -1)
-        fn[titleIndex] = KIO::decodeFileName( title );
+    if( titleIndex != -1){
+        QString newArtist;
+        fn[titleIndex] = KIO::decodeFileName( prepareParsedName( title, m_cddb->getArtist(), newArtist , parseMixed) );
+    }
     if( trackIndex != -1 ){
         if (no < 10)
             fn[trackIndex] = "0" + QString::number(no);
@@ -73,6 +79,14 @@ QString K3bPatternParser::prepareFilename( QString title, int no ){
     return fn[0] + fn[1] + fn[2] + fn[3] + fn[4] + ".wav"; //prepareFilename( (*it).latin1() );
 }
 
+/*
+QString K3bPatternParser::prepareParsedFilename( QString title, int no, QString& newTitle, QString& newArtist ){
+    parseTitle( title, m_artist, newTitle, newArtist );
+    newArtist = m_artist;
+    newTitle = m_title;
+    return prepareFilename( title, no, true );
+}
+*/
 QString K3bPatternParser::prepareDirectory( QListViewItem *item ){
     QString result = 0;
         if( !m_dirPattern->isEmpty() ){
@@ -160,3 +174,31 @@ QString K3bPatternParser::replaceSpaces( QString title, bool replaceSpaces, bool
         result = title;
     return result;
 }
+
+QString K3bPatternParser::prepareParsedName( const QString& title, const QString& artist, QString& newArtist, bool enabled = true ){
+    QString refTitle;
+    int index = title.find("/");
+    if( enabled && (index > 0) ){
+        newArtist = (title.left( index -1 )).stripWhiteSpace();
+        refTitle = (title.right( title.length() - index -1 )).stripWhiteSpace();
+    } else {
+        refTitle = title;
+        newArtist = artist;
+    }
+    //qDebug("Title:" + refTitle);
+    //qDebug("Artist:" + newArtist);
+    return refTitle;
+}
+
+/*
+void K3bPatternParser::parseTitle( const QString& title, const QString& artist, QString& refTitle, QString& refArtist ){
+    int index = title.find("/");
+    if( index > 0 ){
+        refArtist = (title.left( index -1 )).stripWhiteSpace();
+        refTitle = (title.right( title.length() - index -1 )).stripWhiteSpace();
+    } else {
+        refArtist = artist;
+        refTitle = title;
+    }
+}
+*/

@@ -32,3 +32,6 @@ K3bCopyWidget::K3bCopyWidget(QWidget *parent, const char *name )
 
 K3bCopyWidget::~K3bCopyWidget(){
 }
+
+#include "k3bcopywidget.moc"
+

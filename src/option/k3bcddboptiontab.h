@@ -55,6 +55,7 @@ private slots:
     QPushButton *m_delButton;
     KLineEdit *m_cddbServerInput;
     KLineEdit *m_cddbPortInput;
+    KLineEdit *m_songListPath;
     KListBox *m_cddbServerList;
     QGroupBox *m_groupCddbServer;
 

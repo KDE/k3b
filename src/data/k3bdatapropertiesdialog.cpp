@@ -125,3 +125,4 @@ void K3bDataPropertiesDialog::slotOk()
 
   KDialogBase::slotOk();
 }
+#include "k3bdatapropertiesdialog.moc"

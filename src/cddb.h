@@ -20,6 +20,7 @@
 
 #include <qcstring.h>
 #include <qvaluelist.h>
+#include <qstringlist.h>
 
 class CDDB {
   public:
@@ -27,7 +28,15 @@ class CDDB {
     ~CDDB(  );
     bool set_server( const char *hostname = 0, unsigned short int port = 0 );
     unsigned int get_discid( QValueList < int >&track_ofs );
-    bool queryCD( QValueList < int >&track_ofs );
+    void set_discid( unsigned int id ){ m_discid = id; };
+    /*
+    * Fills the list of tracks with title. If an error code of 211 is return by cddb server ( inexact match, more entries )
+    * the multipleEntries will be include all return values of the server ( e.g <category> <discid> <title> ).
+    * Parse this list and set the rigth disc id and try again.
+    */
+    bool queryCD( QValueList < int >&track_ofs, QStringList& multipleEntries );
+    bool queryCD( QValueList < int >&track_ofs, unsigned int id );
+
     QString title(  ) const {
         return m_title;
     } QString artist(  ) const {
@@ -36,7 +45,7 @@ class CDDB {
         return m_tracks;
     } QString track( int i ) const;
   private:
-      bool readLine( QCString & s );
+    bool readLine( QCString & s );
     bool writeLine( const QCString & s );
     bool deinit(  );
     bool parse_read_resp(  );

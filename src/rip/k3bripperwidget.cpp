@@ -22,6 +22,10 @@
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"
 #include "k3bpatternparser.h"
+#include "../k3bburnprogressdialog.h"
+#include "songdb/k3bsong.h"
+#include "songdb/k3bsongmanager.h"
+#include "../k3b.h"
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -55,16 +59,17 @@
 #include <qcheckbox.h>
 #include <qfont.h>
 
-K3bRipperWidget::K3bRipperWidget(QString device, K3bCddb *cddb, K3bCdView *parent, const char *name )
-	: QWidget(0,name)
+K3bRipperWidget::K3bRipperWidget(QString device, K3bCddb *cddb, const char *name )
+	: QWidget( 0, name)
 {
     m_device = device;
     m_cddb = cddb;
-    m_cdview = parent;
+    //m_cdview = parent;
     m_copy = 0;
     m_bytes = 0;
     m_finalClose = false;
     m_album = m_cddb->getAlbum();
+    m_titles = m_cddb->getTitles();
     KConfig* c = kapp->config();
     c->setGroup("Ripping");
     //m_useFilePattern = c->readBoolEntry("useFilePattern", false);
@@ -73,6 +78,11 @@ K3bRipperWidget::K3bRipperWidget(QString device, K3bCddb *cddb, K3bCdView *paren
     m_dirPatternList = c->readEntry("dirBasePath");
     m_dirPatternList += c->readEntry("dirGroup1");
     m_dirPatternList += c->readEntry("dirGroup2");
+    m_spaceDir = c->readBoolEntry("spaceReplaceDir", false);
+    m_spaceFile = c->readBoolEntry("spaceReplaceFile", false);
+    m_parseMixed = c->readBoolEntry("checkSlashFile", true);
+    m_editFile = c->readEntry("spaceReplaceCharFile", "");
+    m_editDir = c->readEntry("spaceReplaceCharDir", "");
     setupGui();
 }
 
@@ -126,18 +136,26 @@ void K3bRipperWidget::setupGui(){
     optionsLayout ->addMultiCellWidget( m_buttonStaticDir, 4, 4, 1, 1);
     optionsLayout ->setColStretch( 0, 10 );
 
-    QHGroupBox *groupProgress = new QHGroupBox( this, "pattern" );
-    groupProgress->setTitle( i18n( "Ripping" ) );
-    m_progress = new KProgress(groupProgress, "m_progress");
-    m_buttonStart = new QPushButton( groupProgress, "m_buttonStart" );
-    m_buttonStart->setText( tr( "Start Ripping" ) );
+    QHGroupBox *groupClose = new QHGroupBox( this, "close" );
+    groupClose->setTitle( i18n( "General" ) );
+    m_closeAfterRipping = new QCheckBox(i18n("Close immediatly after ripping is finished."), groupClose, "check_close");
 
-    Form1Layout->addWidget( groupListView, 0, 0 );
-    Form1Layout->addWidget( groupPattern, 1, 0 );
-    Form1Layout->addWidget( groupProgress, 2, 0 );
+    m_buttonStart = new QPushButton( this, "m_buttonStart" );
+    m_buttonStart->setText( i18n( "Start Ripping" ) );
+    QPushButton *buttonClose = new QPushButton( this, "buttonClose" );
+    buttonClose->setText( i18n( "Close" ) );
 
-    m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_viewTracks , m_cddb );
+    Form1Layout->addMultiCellWidget( groupListView, 0, 0, 0, 3 );
+    Form1Layout->addMultiCellWidget( groupPattern, 1, 1, 0, 3 );
+    Form1Layout->addMultiCellWidget( groupClose, 2, 2, 0, 3 );
+    Form1Layout->addMultiCellWidget( m_buttonStart, 3, 3, 3, 3 );
+    Form1Layout->addMultiCellWidget( buttonClose, 3, 3, 2, 2 );
+    Form1Layout->setColStretch( 0, 20 );
 
+    m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_cddb );
+
+    connect( buttonClose, SIGNAL(clicked() ), this, SLOT( close() ) );
+    connect( m_closeAfterRipping, SIGNAL(clicked() ), this, SLOT( slotCloseAfterRipping() ) );
     connect(m_buttonStart, SIGNAL(clicked() ), this, SLOT(rip() ) );
     connect(m_useStatic, SIGNAL( clicked() ), this, SLOT( useStatic() ) );
     connect(m_usePattern, SIGNAL( clicked() ), this, SLOT( usePattern() ) );
@@ -156,20 +174,21 @@ void K3bRipperWidget::init(){
     } else {
         useStatic();
     }
+    KConfig* c = kapp->config();
+    c->setGroup("Ripping");
+    m_closeAfterRipping->setChecked( c->readBoolEntry( "closeAfterRipping", false ) );
+    refresh();
 }
 
 void K3bRipperWidget::rip(){
-    m_buttonStart->setDisabled(true);
     QStringList::Iterator it;
     int index = 0;
-    //K3bCdda *cdda = new K3bCdda();
-    //struct cdrom_drive *drive = cdda->pickDrive( m_device );
     for( it = m_list.begin(); it != m_list.end(); ++it ){
         QString *tmp = new QString(*it);
         if( m_useCustomDir ){
             // check if directory exists else create it
-            QString dest = m_labelSummaryName->text(); //
-            // mixed cd can have differnt artist viewTracks->itemAtIndex( index )->text( COLUMN_DIRECTORY );
+            //QString dest = m_labelSummaryName->text(); //
+            QString dest = m_directories[ index ];
             QDir destDir( dest );
             if( !destDir.exists() ){
                 QStringList dirs = QStringList::split("/", dest);
@@ -186,37 +205,35 @@ void K3bRipperWidget::rip(){
                     }
                 }
             } // end directory
-            qDebug("(K3bRipperWidget) Final destination" + (*it) );
             (*it) = dest + "/" + KIO::encodeFileName(*tmp);
+            qDebug("(K3bRipperWidget) Final destination" + (*it) );
         } else {
             (*it) = m_editStaticRipPath->text() + "/" + *tmp;
         }
-         m_bytes += m_size[ index ]; //cdda->getRawTrackSize( m_tracks[ index ], drive);
-         qDebug("K3bRipperWidget) KBytes: " + QString::number(m_bytes/1000) );
-         index++;
+        m_bytes += m_size[ index ]; //cdda->getRawTrackSize( m_tracks[ index ], drive);
+        qDebug("(K3bRipperWidget) KBytes: " + QString::number(m_bytes/1000) );
+        index++;
     }
-    //cdda->closeDrive( drive );
-    //delete cdda;
     if( index == 0 ){
         QMessageBox::critical( this, i18n("Ripping Error"), i18n("There is nothing to rip."), i18n("Ok") );
         return;
     }
+    // save all entries with artist title, path filename and so on
+    setSongList();
     m_copy = new K3bCddaCopy(m_viewTracks->childCount() );
-    m_copy->setProgressBar(m_progress, m_bytes);
+    m_copy->setBytes( m_bytes);
     m_copy->setDrive(m_device);
     m_copy->setCopyTracks(m_tracks);
     m_copy->setCopyFiles(m_list);
-/*
-#ifdef QT_THREAD_SUPPORT
-    qDebug("(K3bRipperWidget) Run thread.");
+
+    m_ripDialog = new K3bBurnProgressDialog( this, "Ripping" );
+    m_ripDialog->setCaption( i18n("Ripping process") );
+    m_ripDialog->setJob( m_copy );
+    if( m_closeAfterRipping->isChecked() )
+        connect( m_ripDialog, SIGNAL( closed() ), this, SLOT( close() ) );
+    m_ripDialog->show();
+
     m_copy->start();
-#else
-*/
-    if( !m_copy->run() )
-            m_buttonStart->setEnabled( true );
-    connect(m_copy, SIGNAL(endRipping() ), SLOT( slotRippingFinished() ));
-    connect(m_copy, SIGNAL(interrupted() ), SLOT( waitForClose() ));
-//#endif
 }
 
 void K3bRipperWidget::useStatic(){
@@ -235,15 +252,16 @@ void K3bRipperWidget::usePattern(){
     m_buttonStaticDir->setDisabled( true );
     m_useCustomDir = true;
     QString dir = m_parser->prepareDirectory( m_viewTracks->itemAtIndex( 0 ) );
-    qDebug("dir: " + dir);
     dir = m_parser->prepareReplaceDirectory( dir );
-    qDebug("dir: " + dir);
     m_labelSummaryName->setText( dir );
 }
 
 void K3bRipperWidget::showPatternDialog(){
     K3bFilenamePatternDialog *_dialog = new K3bFilenamePatternDialog(this);
-    _dialog->init(m_viewTracks->itemAtIndex( 0 ), m_album);
+    QStringList::Iterator it = m_titles.at( m_tracks[ 0 ] -1 );
+    QString title( KIO::decodeFileName(*it) );
+     qDebug("PatternTitle:" + *it);
+     _dialog->init( m_album, m_cddb->getArtist(), title, "01" );
     _dialog->show();
 }
 void K3bRipperWidget::setFilePatternList(QStringList list ){
@@ -263,17 +281,16 @@ void K3bRipperWidget::setReplacements(bool dir, QString sdir, bool file, QString
 }
 
 void K3bRipperWidget::refresh(){
-    m_titles = m_cddb->getTitles();
     // print it out
     int no = 1;
     // raw file length (wav has +44 byte header data)
     QString filename;
-    int ripTrackIndex= 0;
-
+    unsigned int ripTrackIndex= 0;
+    m_directories.clear();
     for ( QStringList::Iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
         if( m_tracks[ripTrackIndex] == no ){
             if( m_usePattern ){
-                filename = m_parser->prepareFilename( *it, no );
+                filename = m_parser->prepareFilename( KIO::decodeFileName(*it), no, m_parseMixed );
                 // replace spaces
                 if( m_spaceFile )
                     filename = K3bPatternParser::prepareReplaceName( filename, m_editFile, true );
@@ -282,7 +299,17 @@ void K3bRipperWidget::refresh(){
             qDebug("(K3bRipperWidget) Filename: " + filename + ", Index: " +QString::number(ripTrackIndex ) );
             QListViewItem *item = m_viewTracks->itemAtIndex( ripTrackIndex );
             item->setText(5, KIO::decodeFileName( filename ));
+            QString refArtist;
+            K3bPatternParser::prepareParsedName( KIO::decodeFileName(*it), m_cddb->getArtist(), refArtist, m_parseMixed );
+            item->setText(1, refArtist );
+            item->setText(2, K3bPatternParser::prepareParsedName( KIO::decodeFileName(*it), m_cddb->getArtist(), refArtist, m_parseMixed ) );
             m_list[ ripTrackIndex ] = filename;
+            QString dir = m_parser->prepareDirectory( m_viewTracks->itemAtIndex( ripTrackIndex ) );
+            if( m_spaceDir )
+                dir = K3bPatternParser::prepareReplaceName( dir, m_editDir, true );
+            m_directories.append( dir );
+            qDebug("(K3bRipperWidget) Directory: " + m_directories[ ripTrackIndex ] + ", Index: " +QString::number(ripTrackIndex ) );
+            m_labelSummaryName->setText( dir );
             ripTrackIndex++;
             if( ripTrackIndex == m_tracks.size() )
                 break;
@@ -290,11 +317,7 @@ void K3bRipperWidget::refresh(){
         }
         no++;
     }
-    // at the moment we don't support proper handling of mixed cds
-    QString dir = m_parser->prepareDirectory( m_viewTracks->itemAtIndex( 0 ) );
-    if( m_spaceDir )
-        dir = K3bPatternParser::prepareReplaceName( dir, m_editDir, true );
-    m_labelSummaryName->setText( dir );
+    //m_labelSummaryName->setText( dir );
 }
 
 void K3bRipperWidget::addTrack(QListViewItem *item ){
@@ -317,67 +340,40 @@ void K3bRipperWidget::setFileList(QStringList files){
     m_list = files;
 }
 
-// this is a really strange solution, but i don't know any other soluten
 void K3bRipperWidget::closeEvent( QCloseEvent *e){
-    qDebug("(K3bRipperWidget) Interrupting ripping process.");
-/*
-#ifdef QT_THREAD_SUPPORT
-    if(m_copy != 0){
-        m_copy->setFinish(true);
-        if (m_copy->finished() ){
-            m_cdview->setEnabled(true);
-            qDebug("(K3bRipperWidget) Exit.");
-            //delete m_copy;
-            e->accept();
-        } else {
-            waitForClose();
-        }
-    } else {
-        m_cdview->setEnabled(true);
-        e->accept();
-    }
-#else
-*/
-    m_cdview->setEnabled(true);
-    if( m_copy != 0)
-        m_copy->setFinish(true);
-        if( m_copy->finished() )
-            m_finalClose = true;
-    else
-        // no rip -> no wait
-        m_finalClose = true;
-    if( m_finalClose ){
-        qDebug("(K3bRipperWidget) Exit.");
-        e->accept();
-    }
-//#endif
+    e->accept();
 }
 
-void K3bRipperWidget::waitForClose(){
-/*
-#ifdef QT_THREAD_SUPPORT
-    qDebug("(K3bRipperWidget) Wait for shuting down.");
-    if ( m_copy->running() ){
-        QTimer::singleShot(350, this, SLOT(waitForClose()) );
+void K3bRipperWidget::setSongList(){
+    K3bSongManager *sm = k3bMain()->songManager();
+    //("/home/ft0001/songlist.xml");
+    QStringList::Iterator it;
+    int index = 0;
+    for( it = m_list.begin(); it != m_list.end(); ++it ){
+        int col = (*it).findRev("/");
+        QString path = (*it).left( col );
+        QListViewItem *item = m_viewTracks->itemAtIndex( index );
+        K3bSong song( item->text(5), m_cddb->getAlbum(), item->text(1), item->text(2), m_cddb->get_discid(), item->text(0).toInt() );
+        sm->addSong( path, song );
+        index++;
+        //QString tmpSong = sm.getSong( (*it) ).getFilename();
+        //qDebug("Song" + tmpSong);
     }
-    if ( m_copy->finished() ){
-         qDebug("(K3bRipperWidget) Close finally.");
-         close();
-    }
-#endif
-*/
-    m_finalClose=true;
-    //close();
+    sm->save();
 }
 
-void K3bRipperWidget::slotRippingFinished(){
-    // further development
-}
-
-void K3bRipperWidget::slotFindStaticDir()
-{
+void K3bRipperWidget::slotFindStaticDir() {
   QString path = KFileDialog::getExistingDirectory( m_editStaticRipPath->text(), this, i18n("Select Ripping Directory") );
   if( !path.isEmpty() ) {
     m_editStaticRipPath->setText( path );
   }
 }
+
+void K3bRipperWidget::slotCloseAfterRipping(){
+    KConfig* c = kapp->config();
+    c->setGroup("Ripping");
+    c->writeEntry( "closeAfterRipping", m_closeAfterRipping->isChecked() );
+    c->sync();
+}
+
+#include "k3bripperwidget.moc"

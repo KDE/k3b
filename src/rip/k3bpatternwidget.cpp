@@ -18,11 +18,13 @@
 #include "k3bpatternwidget.h"
 #include "k3bpatternparser.h"
 #include "../kiotree/kiotree.h"
+#include "../k3bcddb.h"
 
 #include <qwidget.h>
 #include <qlistview.h>
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
+#include <qhgroupbox.h>
 #include <qvbox.h>
 #include <qhbox.h>
 #include <qcheckbox.h>
@@ -45,10 +47,6 @@
 #include <kfile.h>
 #include <kdiroperator.h>
 #include <kurl.h>
-
-#define DEFAULT_ARTIST   "artist"
-#define DEFAULT_ALBUM    "album"
-#define DEFAULT_TITLE      "title"
 
 #define SPACE_1     1
 #define SPACE_2     3
@@ -110,9 +108,19 @@ void K3bPatternWidget::setup(){
     QFrame* dirline2 = new QFrame( m_groupPatternDir, "dirline" );
     dirline2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-    m_spaceReplaceDir = new QCheckBox(i18n("Replace all blanks in artist and album name with "), m_groupPatternDir, "space_replace_dir");
-    m_editDir = new KLineEdit("", m_groupPatternDir);
+    QGroupBox *groupReplaceDir = new QGroupBox(m_groupPatternDir, "patterndir" );
+    groupReplaceDir->setColumnLayout(0, Qt::Horizontal );
+    QHBoxLayout *layout = new QHBoxLayout( groupReplaceDir->layout() );
+    m_spaceReplaceDir = new QCheckBox(i18n("Replace all blanks in artist and album name with "), groupReplaceDir, "space_replace_dir");
+    m_editDir = new KLineEdit("", groupReplaceDir);
     m_editDir->setFixedWidth(50);
+    layout->insertWidget( 0, m_spaceReplaceDir );
+    layout->insertWidget( 1, m_editDir );
+    layout->insertStretch( 2, 20 );
+    groupReplaceDir->layout()->setSpacing(0);
+    groupReplaceDir->layout()->setMargin(0);
+    groupReplaceDir->setFrameStyle( QFrame::Plain | QFrame::NoFrame );
+
     optionsLayout_2->setSpacing( KDialog::spacingHint() );
     optionsLayout_2->setMargin( KDialog::marginHint() );
     //optionsLayout_2->addMultiCellWidget(m_alwaysUseDir, 0, 0, 0, 5);
@@ -124,8 +132,9 @@ void K3bPatternWidget::setup(){
     optionsLayout_2->addMultiCellWidget(m_dirs1, 3, 3, 4, 4);
     optionsLayout_2->addMultiCellWidget(m_dirs2, 3, 3, 5, 5);
     optionsLayout_2->addMultiCellWidget(dirline2, 4, 4, 0, 5);
-    optionsLayout_2->addMultiCellWidget(m_spaceReplaceDir, 5, 5, 0, 4);
-    optionsLayout_2->addMultiCellWidget(m_editDir, 5, 5, 5, 5);
+    //optionsLayout_2->addMultiCellWidget(m_spaceReplaceDir, 5, 5, 0, 4);
+    //optionsLayout_2->addMultiCellWidget(m_editDir, 5, 5, 5, 5);
+    optionsLayout_2->addMultiCellWidget(groupReplaceDir, 5, 5, 0, 5);
     optionsLayout_2->setColStretch(2, 10);
 
     // Filename
@@ -169,10 +178,20 @@ void K3bPatternWidget::setup(){
     m_comboFile3->insertStringList(entries);
     m_comboFile2->setCurrentItem(1);
     m_comboFile3->setCurrentItem(3);
-    m_spaceReplaceFile = new QCheckBox(i18n("Replace all blanks in artist name and title with "), m_groupPatternFile, "space_replace");
     m_checkSlashFile = new QCheckBox(i18n("Splits mixed CDs CDDB title into artist name and title."), m_groupPatternFile, "check_slash");
-    m_editFile = new KLineEdit("", m_groupPatternFile);
+
+    QGroupBox *groupReplaceFile = new QGroupBox(m_groupPatternFile, "patternfile" );
+    groupReplaceFile->setColumnLayout(0, Qt::Horizontal );
+    QHBoxLayout *layoutFile = new QHBoxLayout( groupReplaceFile->layout() );
+    m_spaceReplaceFile = new QCheckBox(i18n("Replace all blanks in artist name and title with "), groupReplaceFile, "space_replace");
+    m_editFile = new KLineEdit("", groupReplaceFile);
     m_editFile->setFixedWidth(50);
+    layoutFile->insertWidget( 0, m_spaceReplaceFile );
+    layoutFile->insertWidget( 1, m_editFile );
+    layoutFile->insertStretch( 2, 20 );
+    groupReplaceFile->layout()->setSpacing(0);
+    groupReplaceFile->layout()->setMargin(0);
+    groupReplaceFile->setFrameStyle( QFrame::Plain | QFrame::NoFrame );
 
     optionsLayout_3->setSpacing( KDialog::spacingHint() );
     optionsLayout_3->setMargin( KDialog::marginHint() );
@@ -188,8 +207,9 @@ void K3bPatternWidget::setup(){
     optionsLayout_3->addMultiCellWidget(m_comboFile3, 3, 3, 5, 5);
     optionsLayout_3->addMultiCellWidget(line2, 4, 4, 0, 5);
     optionsLayout_3->addMultiCellWidget(m_checkSlashFile, 5, 5, 0, 5);
-    optionsLayout_3->addMultiCellWidget(m_spaceReplaceFile, 6, 6, 0, 4);
-    optionsLayout_3->addMultiCellWidget(m_editFile, 6, 6, 5, 5);
+    //optionsLayout_3->addMultiCellWidget(m_spaceReplaceFile, 6, 6, 0, 4);
+    //optionsLayout_3->addMultiCellWidget(m_editFile, 6, 6, 5, 5);
+    optionsLayout_3->addMultiCellWidget(groupReplaceFile, 6, 6, 0, 5);
     optionsLayout_3->setColStretch(1, 10);
     optionsLayout_3->setColStretch(3, 10);
     optionsLayout_3->setColStretch(5, 10);
@@ -222,27 +242,15 @@ void K3bPatternWidget::setup(){
     connect( m_kioTree, SIGNAL(urlActivated( const KURL& )), this, SLOT( slotDirTree( const KURL& )) );
     connect( m_spaceReplaceFile, SIGNAL( clicked() ), this, SLOT( slotFileReplaceSpace()) );
     connect( m_spaceReplaceDir, SIGNAL( clicked() ), this, SLOT( slotShowFinalDirPattern()) );
+    connect( m_checkSlashFile, SIGNAL( clicked() ), this, SLOT( slotUpdateView()) );
 
-    // disable features in gui which are not implemented
-    //m_spaceReplaceFile->setDisabled( true );
-    m_checkSlashFile->setDisabled( true );
-    //m_alwaysUseFile->setDisabled( true );
-    //m_alwaysUseDir->setDisabled( true );
-    //m_spaceReplaceDir->setDisabled( true );
 }
 
-void K3bPatternWidget::init(QString& album, QListViewItem *item){
-    if( item !=0 ){
-        m_testNumber = item->text(0);
-        m_testArtist = item->text(1);
-        m_testAlbum = album;
-        m_testTitle = item->text(2);
-    } else {
-        m_testNumber = "01";
-        m_testArtist = DEFAULT_ARTIST;
-        m_testAlbum = DEFAULT_ALBUM;
-        m_testTitle = DEFAULT_TITLE;
-    }
+void K3bPatternWidget::init(const QString& album, const QString& artist, const QString& title, const QString& number){
+    m_testNumber = number;
+    m_testArtist = artist;
+    m_testAlbum = album;
+    m_testTitle = title;
     m_finalPatternFile[0]=m_testArtist;
     m_finalPatternFile[1]=m_editSpaceFile1->text();
     m_finalPatternFile[2]=m_testAlbum;
@@ -250,6 +258,17 @@ void K3bPatternWidget::init(QString& album, QListViewItem *item){
     m_finalPatternFile[4]=m_testTitle;
     // prepares gui for with/without cddb
     initCddb();
+    /*
+    K3bCddb *cddb = new K3bCddb();
+    cddb->setAlbum( m_testAlbum );
+    cddb->setArtist( m_testArtist );
+    QStringList titles;
+    titles << m_testTitle;
+    cddb->setTitles( titles );
+    QStringList ld = QStringList::split( ',', getDirPattern());
+    QStringList lf = QStringList::split( ',', getFilePattern());
+    m_parser = new K3bPatternParser( &ld, &lf, cddb );
+    */
     showFinalFilePattern();
     slotShowFinalDirPattern();
 }
@@ -264,15 +283,22 @@ void K3bPatternWidget::showFinalFilePattern(){
 
 void K3bPatternWidget::setFinalPatternFile(int index, int col ){
     switch(index){
-    case 0:
-        m_finalPatternFile[col] = K3bPatternParser::prepareReplaceName( m_testArtist, m_editFile->text(), m_spaceReplaceFile->isChecked() );
+    case 0: {
+        QString refArtist;
+        K3bPatternParser::prepareParsedName( m_testTitle, m_testArtist, refArtist, m_checkSlashFile->isChecked() );
+        m_finalPatternFile[col] = refArtist;
+        m_finalPatternFile[col] = K3bPatternParser::prepareReplaceName( m_finalPatternFile[col], m_editFile->text(), m_spaceReplaceFile->isChecked() );
         break;
+    }
     case 1:
         m_finalPatternFile[col] = K3bPatternParser::prepareReplaceName( m_testAlbum, m_editFile->text(), m_spaceReplaceFile->isChecked() );
         break;
-    case 2:
-        m_finalPatternFile[col] = K3bPatternParser::prepareReplaceName( m_testTitle, m_editFile->text(), m_spaceReplaceFile->isChecked() );
+    case 2: {
+        QString refArtist;
+        m_finalPatternFile[col] = K3bPatternParser::prepareParsedName( m_testTitle, m_testArtist, refArtist, m_checkSlashFile->isChecked() );
+        m_finalPatternFile[col] = K3bPatternParser::prepareReplaceName( m_finalPatternFile[col], m_editFile->text(), m_spaceReplaceFile->isChecked() );
         break;
+    }
     case 3:
         m_finalPatternFile[col]=m_testNumber;
         break;
@@ -296,9 +322,12 @@ QString K3bPatternWidget::getDirPattern( QButtonGroup *bg ){
     QString pattern = "";
     int index = bg->id( bg->selected() );
     if( index != 2){
-        if( index == 0 )
-            pattern += "/" + K3bPatternParser::prepareReplaceName( m_testArtist, m_editDir->text(), m_spaceReplaceDir->isChecked() );
-        else
+        if( index == 0 ){
+            QString tmpArtist;
+            K3bPatternParser::prepareParsedName( m_testTitle, m_testArtist, tmpArtist, m_checkSlashFile->isChecked() );
+            pattern += "/" + K3bPatternParser::prepareReplaceName( tmpArtist, m_editDir->text(), m_spaceReplaceDir->isChecked() );
+            //pattern += "/" + K3bPatternParser::prepareReplaceName( m_testArtist, m_editDir->text(), m_spaceReplaceDir->isChecked() );
+        } else
             pattern += "/"+ K3bPatternParser::prepareReplaceName( m_testAlbum, m_editDir->text(), m_spaceReplaceDir->isChecked() );
     }
     return pattern;
@@ -389,17 +418,22 @@ void K3bPatternWidget::initCddb(){
     KConfig* c = kapp->config();
     c->setGroup("Cddb");
     m_useCddb =c->readBoolEntry( "useCddb", false );
-    if( m_useCddb ){
-        m_dirs1->setEnabled( true );
-        m_dirs2->setEnabled( true );
-    } else {
-        m_dirs1->setDisabled( true );
-        m_dirs2->setDisabled( true );
-    }
+    m_dirs1->setEnabled( m_useCddb );
+    m_dirs2->setEnabled( m_useCddb );
 }
 
 // slots
 // -------------------------------------------
+void K3bPatternWidget::slotUpdateView(){
+    int index = searchComboIndex( m_list, m_comboFile1->currentText(), m_comboFile1 );
+    setFinalPatternFile(index, 0);
+    index = searchComboIndex( m_list, m_comboFile2->currentText(), m_comboFile2 );
+    setFinalPatternFile(index, 2);
+    index = searchComboIndex( m_list, m_comboFile3->currentText(), m_comboFile3 );
+    setFinalPatternFile(index, 4);
+    slotShowFinalDirPattern();
+}
+
 void K3bPatternWidget::slotFile1(int index ){
     setFinalPatternFile(index, 0);
 }
@@ -455,14 +489,7 @@ void K3bPatternWidget::slotFileReplaceSpace( ){
     }
     showFinalFilePattern();
 }
-/*
-void K3bPatternWidget::slotDirReplaceSpace( ){
-    if( m_spaceReplaceDir->isChecked() ){
-        slotShowFinalDirPattern();
-    } else {
-    }
-}
-*/
+
 void K3bPatternWidget::slotEnableFilePattern(int state){
     switch( state ){
         case 0:
@@ -516,4 +543,5 @@ QString K3bPatternWidget::getReplaceCharDir(){
     return m_editDir->text();
 }
 
+#include "k3bpatternwidget.moc"
 

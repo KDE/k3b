@@ -54,3 +54,5 @@ void K3bProjectTabBar::insertAction( KAction* action )
 {
   m_projectActionMenu->insert( action );
 }
+
+#include "k3bprojecttabbar.moc"

@@ -18,10 +18,9 @@
 #ifndef K3BCDDACOPY_H
 #define K3BCDDACOPY_H
 
-#include "config.h"
 
 #include <qobject.h>
-
+#include "../k3bjob.h"
 #include "k3bcdview.h"
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -41,35 +40,40 @@ class KProgress;
 /**
   *@author Sebastian Trueg
   */
-class K3bCddaCopy : public QWidget {
+class K3bCddaCopy : public K3bJob {
     Q_OBJECT
 public:
   K3bCddaCopy(int arraySize);
   ~K3bCddaCopy();
-    bool run();
+    //void start();
     void setDrive(QString device);
     void setCopyTracks( QArray<int> tracks );
     void setCopyFiles( QStringList list );
+    //void setCopyDirs( QStringList list );
     void setCopyCount( int );
     void setFinish(bool stop);
-    void setProgressBar(KProgress*, long);
-    bool finished() { return m_finished; };
+    void setBytes( long);
+    //bool isFinished() { return m_finished; };
 
-signals:
-    void endRipping();
-    void interrupted();
+public slots:
+    void start();
+    void cancel();
 
 private slots:
     void slotReadData();
 
 private:
     QStringList m_list;
+    //QStringList m_directories;
     QString m_device;
     QFile *m_f;
     QDataStream *m_stream;
     int m_count;
     int m_progressBarValue;
     int m_currentTrackIndex;
+    long m_byteCount;
+    long m_trackBytesAll;
+
     long m_currentSector;
     long m_lastSector;
     bool m_interrupt;
@@ -79,7 +83,7 @@ private:
     long m_bytes;
     long m_bytesAll;
     bool m_finished;
-    KProgress *m_progress;
+    //KProgress *m_progress;
     QTimer *t;
     cdrom_paranoia *m_paranoia;
     bool paranoiaRead(struct cdrom_drive *drive, int track, QString dest);

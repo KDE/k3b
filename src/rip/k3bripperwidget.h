@@ -30,7 +30,7 @@ class QHBoxLayout;
 class QGridLayout;
 class KComboBox;
 class KListView;
-class KProgress;
+//class KProgress;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
@@ -44,6 +44,7 @@ class QListViewItem;
 class KLineEdit;
 class K3bCddb;
 class K3bPatternParser;
+class K3bBurnProgressDialog;
 /**
   *@author Sebastian Trueg
   */
@@ -52,22 +53,23 @@ class K3bRipperWidget : public QWidget {
    Q_OBJECT
 
 public: 
-    K3bRipperWidget(QString device, K3bCddb *cddb, K3bCdView *parent, const char *name=0);
+    K3bRipperWidget(QString device, K3bCddb *cddb, const char *name=0);
     ~K3bRipperWidget();
 
-    QGroupBox* GroupBox3;
-    KComboBox* m_comboSource;
-    QPushButton* m_buttonRefresh;
+    //QGroupBox* GroupBox3;
+    //KComboBox* m_comboSource;
+    //QPushButton* m_buttonRefresh;
     KListView* m_viewTracks;
-    QLabel* TextLabel2;
+    //QLabel* TextLabel2;
     QPushButton* m_buttonStart;
     QPushButton* m_buttonStaticDir;
     QPushButton* m_buttonPattern;
     KLineEdit *m_editStaticRipPath;
-    KProgress *m_progress;
-    K3bCdView *m_cdview;
+    //KProgress *m_progress;
+    //K3bCdView *m_cdview;
     QCheckBox *m_useStatic;
     QCheckBox *m_usePattern;
+    QCheckBox *m_closeAfterRipping;
     long m_bytes;
     void addTrack(QListViewItem *item );
     void setTrackNumbers(QArray<int> tracks);
@@ -78,12 +80,6 @@ public:
     void init();
     void setData( QStringList files, QArray<int> tracks, QArray<long> size);
     void setReplacements(bool dir, QString sdir, bool file, QString sfile, bool mixed );
-
-
-public slots:
-    void waitForClose();
-    void slotRippingFinished();
-
 protected:
     QGridLayout* Form1Layout;
     QGridLayout* GroupBox3Layout;
@@ -96,6 +92,7 @@ private:
     QArray<long> m_size;
     QStringList m_list;
     QStringList m_titles;
+    QStringList m_directories;
     QString m_album;
     QString m_testItemPattern;
     QLabel *m_labelSummaryName;
@@ -119,6 +116,8 @@ private:
     void setupGui();
     QString prepareDirectory( QListViewItem *item);
     QString getRealDirectory( int index, QListViewItem *item);
+    void setSongList();
+    K3bBurnProgressDialog *m_ripDialog;
 
 private slots:
     void rip();
@@ -126,6 +125,8 @@ private slots:
     void usePattern();
     void showPatternDialog();
     void slotFindStaticDir();
+    void slotCloseAfterRipping();
+
 };
 
 #endif

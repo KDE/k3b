@@ -18,6 +18,7 @@
 #include "k3brippingpatternoptiontab.h"
 //#include "../kiotree/kiotree.h"
 #include "../rip/k3bpatternwidget.h"
+#include "../rip/k3bcdview.h"
 
 #include <qcheckbox.h>
 #include <qlayout.h>
@@ -52,7 +53,7 @@ void K3bRippingPatternOptionTab::setup(){
 }
 
 void K3bRippingPatternOptionTab::init( QString& album ){
-    m_frame->init( album );
+    m_frame->init( album, DEFAULT_ARTIST, DEFAULT_TITLE, "01" );
 }
 
 void K3bRippingPatternOptionTab::apply(){

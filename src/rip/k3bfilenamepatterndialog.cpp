@@ -74,8 +74,8 @@ void K3bFilenamePatternDialog::setup(){
     connect(this, SIGNAL(okClicked()), this, SLOT(ok()) );
 }
 
-void K3bFilenamePatternDialog::init( QListViewItem *item, QString album){
-    m_frame->init(album, item);
+void K3bFilenamePatternDialog::init( const QString& album, const QString& artist, const QString& title, const QString& number){
+    m_frame->init(album, artist, title, number);
     m_frame->readSettings();
 }
 
@@ -93,5 +93,5 @@ void K3bFilenamePatternDialog::ok( ){
     apply();
 }
 
-
+#include "k3bfilenamepatterndialog.moc"
 

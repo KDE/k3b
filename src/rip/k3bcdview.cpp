@@ -104,7 +104,7 @@ void K3bCdView::setupGUI(){
 
   m_cddb = new K3bCddb(  );
   m_cdda = new K3bCdda();
-  m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_listView, m_cddb );
+  m_parser = new K3bPatternParser( &m_dirPatternList, &m_filePatternList, m_cddb );
   // connect to the actions
   connect( _buttonReload, SIGNAL(clicked()), this, SLOT(reload()) );
   connect( _buttonGrab, SIGNAL(clicked()), this, SLOT(prepareRipping()) );
@@ -162,7 +162,7 @@ void K3bCdView::showCdContent( ){
   // print it out
   int no = 1;
   // raw file length (wav has +44 byte header data)
-  long totalByteCount = 0;
+  //long totalByteCount = 0;
   QString filename;
   int arraySize = m_titles.count();
   m_size = new QArray<long>( arraySize );
@@ -242,11 +242,11 @@ void K3bCdView::play(){
     qDebug("(K3bCdView) could not wmfind device %s", cd_device );
     return;
   }
+
   if( wmcd_open(drive) != 0 ) {
     qDebug("(K3bCdView) could not wmopen device %s", cd_device );
     return;
   }
-
   // this call also initializes the cd drive and all the stuff
   int i = wm_cd_status();
   qDebug("(K3bCdView) Status of cd: %i", i );
@@ -264,6 +264,37 @@ void K3bCdView::play(){
   }
   wm_cd_play( itemIndex, 0, itemIndex+1);
   qDebug("(K3bCdView) Have started playing song.");
+  //qDebug("(K3bCdView) Check for CD-TEXT.");
+  wm_cd_status();
+  //int stat = -1;
+  //stat = wm_get_cdtext( drive );
+  //wm_cd_get_cdtext( );
+  //qDebug("Index" + QString::number( stat ) + ", " + QString::number(wm_cdtext_info.count_of_entries) );
+  /*qDebug("Index" + QString::number(wm_cdtext_info.count_of_valid_packs) );
+  qDebug("Index" + QString::number(wm_cdtext_info.count_of_invalid_packs) );
+  qDebug("Valid" + QString::number(wm_cdtext_info.valid) );
+  //struct cdtext_info_block *cdtext[8];
+  //cdtext = wm_cdtext_info.blocks;
+  //if( wm_cdtext_info.valid ){
+  /*     QString().sprintf("%s", (const char*)(wm_cdtext_info.blocks[0]->block_unicode ) );
+        int at;
+        for (at = 1 ; at < (wm_cdtext_info.count_of_entries); ++at ) {
+            qDebug("Entries: " + QString().sprintf("%02d: %s", at, wm_cdtext_info.blocks[0]->name[at]) );
+        }
+  //}
+/*        tracktitlelist.append(QString().sprintf("%s / %s", (const char*)(wm_cdtext_info.blocks[0]->name[0]),(const char*)(wm_
+        titlelabel->setText(QString((const char*)(wm_cdtext_info.blocks[0]->name[1])));\
+        artistlabel->setText(tracktitlelist.first());\
+        songListCB->clear();\
+        for (at = 1 ; at < (wm_cdtext_info.count_of_entries); ++at ) {\
+            songListCB->insertItem( QString().sprintf("%02d: %s", at, wm_cdtext_info.blocks[0]->name[at]));\
+            tracktitlelist.append((const char*)(wm_cdtext_info.blocks[0]->name[at]));\
+        }\
+        for(; at < cur_ntracks; ++at){\
+            songListCB->insertItem( QString::fromUtf8( QCString().sprintf(i18n("%02d: <Unknown>").utf8(), at)));\
+        }\
+  */
+  //wm_free_cdtext();
   //i= wm_cd_eject();
   //qDebug("cd eject: %i" ,i );
 }
@@ -301,7 +332,8 @@ void K3bCdView::prepareRipping(){
     QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
     return;
   }
-  K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this);
+  K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb );
+  //K3bRipperWidget *rip = new K3bRipperWidget(m_device, m_cddb, this);
   rip->show();
   qDebug("(K3bCdView) show ripperwidget.");
   QListViewItem *item;
@@ -321,7 +353,7 @@ void K3bCdView::prepareRipping(){
   }
   rip->setData( filelist, tracklist, sizelist);
   rip->init();
-  this->setDisabled(true);
+  //this->setDisabled(true);
 }
 
 int  K3bCdView::checkCDType( QStringList titles ){
@@ -370,3 +402,5 @@ void K3bCdView::applyOptions(){
   m_cddb->setPort(port);
   m_cddb->setUseCddb(useCddb);
 }
+
+#include "k3bcdview.moc"

@@ -46,6 +46,10 @@ class K3bCddb {
 	*/
     unsigned int get_discid( struct cdrom_drive *drive );
     /**
+    * Gets disc id, cd in the drive must be successful accessed one time.
+    */
+    unsigned int get_discid( ) { return discid; };
+    /**
     *
     */
     void update( QString *device );
@@ -65,6 +69,10 @@ class K3bCddb {
     QStringList getTitles() { return titles; };
     QString getAlbum() { return cd_album; };
     QString getArtist() { return cd_artist; };
+
+    void setTitles( const QStringList& list) { titles = list; };
+    void setAlbum( const QString& album ) {cd_album = album; };
+    void setArtist( const QString& artist ) { cd_artist = artist; };
 
     static bool appendCddbInfo( K3bToc& );
 

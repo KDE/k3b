@@ -37,7 +37,7 @@ class K3bFilenamePatternDialog : public KDialogBase  {
 public: 
 	K3bFilenamePatternDialog(K3bRipperWidget *parent=0, const char *name=0);
 	~K3bFilenamePatternDialog();
-    void init(QListViewItem *item, QString album);
+    void init( const QString& album, const QString& artist, const QString& title, const QString& number);
 private:
     K3bRipperWidget *m_parent;
     K3bPatternWidget *m_frame;	

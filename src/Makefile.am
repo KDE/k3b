@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
 k3b_SOURCES = k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bexternalbinmanager.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bcddb.cpp cddb.cpp k3bfileview.cpp k3bglobals.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3bfillstatusdisplay.cpp k3bcopywidget.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
-k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/libdevice.a ./kiotree/libkiotree.a ./audio/input/libinput.a ./option/liboption.a ./rip/librip.a ./kdelibs_patched/libkdelibs_patched.a ./libwm/liblibwm.a -lid3 -lcdda_interface -lcdda_paranoia $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
+k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/libdevice.a ./kiotree/libkiotree.a ./audio/input/libinput.a ./option/liboption.a ./rip/librip.a ./kdelibs_patched/libkdelibs_patched.a ./libwm/liblibwm.a ./rip/songdb/libsongdb.a -lid3 -lcdda_interface -lcdda_paranoia $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = data cdinfo audio device kiotree option rip kdelibs_patched libwm 
 

@@ -295,7 +295,73 @@ bool CDDB::parse_read_resp(  )
     return true;
 }
 
-bool CDDB::queryCD( QValueList < int >&track_ofs )
+bool CDDB::queryCD( QValueList < int >&track_ofs, unsigned int id ){
+    int num_tracks = track_ofs.count(  ) - 2;
+    if( !remote || fd == 0 || num_tracks < 1 )
+        return false;
+    m_tracks = num_tracks;
+    m_title = "";
+    m_artist = "";
+    m_names.clear(  );
+    unsigned int length = track_ofs[num_tracks + 1] - track_ofs[num_tracks];
+    QCString q;
+    q.sprintf( "cddb query %08x %d", id, num_tracks );
+    QCString num;
+    for( int i = 0; i < num_tracks; i++ )
+        q += " " + num.setNum( track_ofs[i] );
+    q += " " + num.setNum( length / 75 );
+    if( !writeLine( q ) )
+        return false;
+    QCString r;
+    if( !readLine( r ) )
+        return false;
+    r = r.stripWhiteSpace(  );
+    int code = get_code( r );
+    if( code == 200 ) {
+        QCString catg, d_id, title;
+        /* an exact match */
+        r.remove( 0, 3 );
+        parse_query_resp( r, catg, d_id, title );
+        kdDebug( 7101 ) << "CDDB: found exact CD: category=" << catg <<
+            " DiscId=" << d_id << " Title=`" << title << "'" << endl;
+        q = "cddb read " + catg + " " + d_id;
+        if( !writeLine( q ) )
+            return false;
+        if( !readLine( r ) )
+            return false;
+        r = r.stripWhiteSpace(  );
+        code = get_code( r );
+        if( code != 210 )
+            return false;
+        if( !parse_read_resp(  ) )
+            return false;
+    } else if( code == 211 ) {
+        QCString end = ".";
+        /* some close matches */
+        //XXX may be try to find marker based on r
+        while( 1 ) {
+            if( !readLine( r ) )
+                return false;
+            r = r.stripWhiteSpace(  );
+            if( r == end )
+                return false;
+            QCString catg, d_id, title;
+            parse_query_resp( r, catg, d_id, title );
+            kdDebug( 7101 ) << "CDDB: found close CD: category=" << catg <<
+                " DiscId=" << d_id << " Title=`" << title << "'" << endl;
+        }
+    } else {
+        /* 202 - no match found
+         * 403 - Database entry corrupt
+         * 409 - no handshake */
+        kdDebug( 7101 ) << "CDDB: query returned code " << code << endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool CDDB::queryCD( QValueList < int >&track_ofs, QStringList &multipleEntries )
 {
     int num_tracks = track_ofs.count(  ) - 2;
     if( !remote || fd == 0 || num_tracks < 1 )
@@ -349,6 +415,7 @@ bool CDDB::queryCD( QValueList < int >&track_ofs )
             if( !readLine( r ) )
                 return false;
             r = r.stripWhiteSpace(  );
+            multipleEntries.append( r );
             if( r == end )
                 return false;
             QCString catg, d_id, title;

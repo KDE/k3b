@@ -15,7 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qthread.h>
 
 #include "k3bcdda.h"
 #include "k3bcddacopy.h"
@@ -28,10 +27,9 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <qtimer.h>
-#include <qmessagebox.h>
 
-#include <kprogress.h>
 #include <klocale.h>
+#include <kio/global.h>
 
 #define WAVHEADER_SIZE       44
 
@@ -41,49 +39,44 @@ void paranoiaCallback(long, int){
 }
 
 
-K3bCddaCopy::K3bCddaCopy(int arraySize) : QWidget() {
+K3bCddaCopy::K3bCddaCopy(int arraySize) : K3bJob() {
     m_count = arraySize;
     m_cdda = new K3bCdda();
-    m_progress = 0;
 }
 
 K3bCddaCopy::~K3bCddaCopy(){
     delete m_cdda;
-    qDebug("(K3bCddaCopy) Exit destructor." );
 }
 
-bool K3bCddaCopy::run(){
-    bool result = true;
+void K3bCddaCopy::start(){
+    //bool result = true;
     m_bytesAll = 0;
     m_interrupt = false;
-    qDebug("(K3bCddaCopy) Start copying " + QString::number(m_bytes) );
+    qDebug("(K3bCddaCopy) Start copying " + QString::number( m_bytes) );
     m_drive = m_cdda->pickDrive(m_device);
+    emit started();
+    emit newTask( i18n("Copy cdrom ")  );
+    infoMessage( i18n("Copying started."), STATUS);
     if( !startRip( m_currentTrackIndex=0 ) )
-        result=false;
-    m_finished = true;
-    return result;
+        emit finished( false );
 }
 
 bool K3bCddaCopy::startRip(int i){
-        qDebug("(K3bCddaCopy) Copy track: " + QString::number(m_track[i]) + " to " + m_list[i] );
-        if( !paranoiaRead( m_drive, m_track[i], m_list[i] ))
-            return false;
-        return true;
+    infoMessage( i18n("Copy track: ") + QString::number(m_track[i]) + i18n(" to ") + KIO::decodeFileName( m_list[i] ), PROCESS);
+    if( !paranoiaRead( m_drive, m_track[i], m_list[i] ))
+        return false;
+    return true;
 }
 
 void K3bCddaCopy::finishedRip(){
     qDebug("(K3bCddaCopy) Finished copying." );
+    infoMessage( "Copying finished.", STATUS);
     m_cdda->closeDrive(m_drive);
     qDebug("(K3bCddaCopy) Exit." );
-    if( m_interrupt )
-        emit interrupted();
-    else
-        emit endRipping();
-    //m_progress = 0;
+   emit finished( true );
 }
 
-void K3bCddaCopy::setProgressBar(KProgress *progress, long bytes){
-    m_progress = progress;
+void K3bCddaCopy::setBytes( long bytes){
     m_bytes = bytes;
 }
 
@@ -103,19 +96,22 @@ void K3bCddaCopy::setDrive(QString device){
     m_device = device;
 }
 
-void K3bCddaCopy::setFinish(bool stop){
-    m_interrupt = stop;
+void K3bCddaCopy::cancel( ){
+    m_interrupt = true;
 }
 
 bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString dest){
     long firstSector = cdda_track_firstsector(drive, track);
     m_lastSector = cdda_track_lastsector(drive, track);
-    long byteCount =  CD_FRAMESIZE_RAW * (m_lastSector - firstSector);
+    // track length
+    m_byteCount =  CD_FRAMESIZE_RAW * (m_lastSector - firstSector);
+    m_trackBytesAll = 0;
 
     qDebug("(K3bCddaCopy) paranoia_init");
     m_paranoia = paranoia_init(drive);
 
     if (0 == m_paranoia){
+        infoMessage( i18n("paranoia_init failed."), ERROR);
         qDebug("(K3bCddaCopy) paranoia_init failed");
         return false;
     }
@@ -132,7 +128,7 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
     m_f = new QFile(dest);
     bool isOpen = m_f->open(IO_WriteOnly);
     if( !isOpen ){
-        QMessageBox::critical( this, i18n("Ripping Error"), i18n("Couldn't rip to: ") + dest, i18n("Ok") );
+        infoMessage( i18n("Couldn't rip to: ") + dest, ERROR );
         paranoia_free(m_paranoia);
         m_paranoia = 0;
         finishedRip();
@@ -140,7 +136,8 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
         return false;
     }
     m_stream = new QDataStream( m_f );
-    writeWavHeader( m_stream, byteCount );
+    writeWavHeader( m_stream, m_byteCount );
+    emit newSubTask( i18n("Copy ") + dest  );
 
     t = new QTimer( this );
     connect( t, SIGNAL(timeout()), SLOT(slotReadData()) );
@@ -151,8 +148,10 @@ bool K3bCddaCopy::paranoiaRead(struct cdrom_drive *drive, int track, QString des
 void K3bCddaCopy::readDataFinished(){
     m_f->close();
     if( m_interrupt ) {
+        infoMessage( i18n("Interrupted by user"), STATUS);
         qDebug("(K3bCddaCopy) Interrupted by user!");
         if( !m_f->remove() ){
+            infoMessage( i18n("Can't delete part of copied file."), ERROR);
             qDebug("(K3bCddaCopy) Can't delete copied file <>.");
         }
     }
@@ -160,7 +159,7 @@ void K3bCddaCopy::readDataFinished(){
     m_paranoia = 0;
     ++m_currentTrackIndex;
     qDebug("(K3bCddaCopy) Check index: %i, %i", m_currentTrackIndex, m_count);
-    if( m_currentTrackIndex < m_count ){
+    if( (m_currentTrackIndex < m_count) && !m_interrupt ){
         startRip( m_currentTrackIndex );
     } else
         finishedRip();
@@ -169,6 +168,7 @@ void K3bCddaCopy::readDataFinished(){
 void K3bCddaCopy::slotReadData(){
 
     if( m_interrupt){
+        infoMessage( i18n("Interrupt reading."), PROCESS);
         qDebug("(K3bCddaCopy) Interrupt reading.");
         t->stop();
         readDataFinished();
@@ -176,6 +176,7 @@ void K3bCddaCopy::slotReadData(){
         int16_t * buf = paranoia_read(m_paranoia, paranoiaCallback);
 
         if (0 == buf) {
+            infoMessage( i18n("Unrecoverable error in paranoia_read."), ERROR);
             qDebug("(K3bCddaCopy) Unrecoverable error in paranoia_read");
         } else {
             ++m_currentSector;
@@ -184,21 +185,15 @@ void K3bCddaCopy::slotReadData(){
             m_stream->writeRawBytes(cbuf, CD_FRAMESIZE_RAW);
         }
 
-	//        int debugValue=0;
-        if( m_progress !=0 ){
-            m_bytesAll += CD_FRAMESIZE_RAW;
-            m_progressBarValue = (int) ((((double) m_bytesAll / (double) m_bytes ) * 100)+0.5);
-            if( m_progressBarValue > 100)
-                m_progressBarValue=100;
-            /*
-            if(m_progressBarValue > debugValue){
-                debugValue=m_progressBarValue+10;
-                qDebug("(K3bCddaCopy) Set progress bar to "+QString::number(m_progressBarValue)+"%.");
-            }
-            */
-            m_progress->setValue(m_progressBarValue);
-            //m_progress->update();
-        }
+      m_bytesAll += CD_FRAMESIZE_RAW;
+      m_trackBytesAll += CD_FRAMESIZE_RAW;
+      m_progressBarValue = (int) ((((double) m_bytesAll / (double) m_bytes ) * 100)+0.5);
+      int trackProgressBarValue = (int) ((((double) m_trackBytesAll / (double) m_byteCount ) * 100)+0.5);
+
+      if( m_progressBarValue > 100)
+           m_progressBarValue=100;
+      emit percent( m_progressBarValue );
+      emit subPercent( trackProgressBarValue );
 
         if (m_currentSector < m_lastSector)
             t->start(0, FALSE);
@@ -239,4 +234,6 @@ void K3bCddaCopy::writeWavHeader(QDataStream *s, long byteCount) {
 
   s->writeRawBytes(riffHeader, WAVHEADER_SIZE);
 }
+
+#include "k3bcddacopy.moc"
 

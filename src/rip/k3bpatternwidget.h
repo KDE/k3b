@@ -32,6 +32,7 @@ class QVButtonGroup;
 class KLineEdit;
 class KioTree;
 class KURL;
+class K3bPatternParser;
 
 /**
   *@author Sebastian Trueg
@@ -42,7 +43,7 @@ class K3bPatternWidget : public QWidget  {
 public:
     K3bPatternWidget(QWidget *parent=0, const char *name=0);
     ~K3bPatternWidget();
-    void init( QString& album, QListViewItem *item=0 );
+    void init( const QString& album, const QString& artist, const QString& title, const QString& number );
     void apply();
     void readSettings();
     QString getFilePattern();
@@ -96,6 +97,7 @@ private:
     void showFinalFilePattern();
     int searchComboIndex(QStringList, QString, KComboBox* );
     QString getDirPattern( QButtonGroup *bg);
+    //K3bPatternParser *m_parser;
 
 private slots:
     void slotFile1(int index );
@@ -110,6 +112,7 @@ private slots:
     void slotEnableFilePattern(int state);
     void slotShowFinalDirPattern( );
     void slotDirTree( const KURL& );
+    void slotUpdateView();
 	
 };
 

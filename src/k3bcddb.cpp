@@ -48,13 +48,16 @@ extern "C" {
 
 extern "C" {
     int FixupTOC( cdrom_drive * d, int tracks );
-} int start_of_first_data_as_in_toc;
+}
+int start_of_first_data_as_in_toc;
 int hack_track;
+
 /* Mega hack.  This function comes from libcdda_interface, and is called by
  * it.  We need to override it, so we implement it ourself in the hope, that
  * shared lib semantics make the calls in libcdda_interface to FixupTOC end
  * up here, instead of it's own copy.  This usually works.
  * You don't want to know the reason for this.  */
+/*
 int FixupTOC( cdrom_drive * d, int tracks )
 {
     int j;
@@ -80,6 +83,7 @@ int FixupTOC( cdrom_drive * d, int tracks )
             for( j = tracks - 1; j >= 0; j-- )
                 if( j > 0 && !IS_AUDIO( d, j ) && IS_AUDIO( d, j - 1 ) ) {
                     if( d->disc_toc[j].dwStartSector > ms_str.addr.lba - 11400 ) {
+*/
                         /* The next two code lines are the purpose of duplicating this
                          * function, all others are an exact copy of paranoias FixupTOC().
                          * The gory details: CD-Extra consist of N audio-tracks in the
@@ -98,7 +102,8 @@ int FixupTOC( cdrom_drive * d, int tracks )
                          * last audio track, not the start of the next track, but the
                          * internal structures of cdparanoia are as they are, so the
                          * length is only implicitely given.  Bloody sh*.  */
-                        start_of_first_data_as_in_toc = d->disc_toc[j].dwStartSector;
+
+/*                        start_of_first_data_as_in_toc = d->disc_toc[j].dwStartSector;
                         hack_track = j + 1;
                         d->disc_toc[j].dwStartSector = ms_str.addr.lba - 11400;
                     }
@@ -109,7 +114,7 @@ int FixupTOC( cdrom_drive * d, int tracks )
     }
     return 0;
 }
-
+*/
 /* libcdda returns for cdda_disc_lastsector() the last sector of the last
  * _audio_ track.  How broken.  For CDDB Disc-ID we need the real last sector
  * to calculate the disc length.  */
@@ -186,8 +191,8 @@ void K3bCddb::updateCD( struct cdrom_drive *drive )
 
     if( m_useCddb ) {
         m_cddb->set_server( m_cddbServer.latin1(  ), m_cddbPort );
-
-        if( m_cddb->queryCD( qvl ) ) {
+        QStringList errorEntries;
+        if( m_cddb->queryCD( qvl, errorEntries ) ) {
             based_on_cddb = true;
             cd_album = m_cddb->title(  );
             cd_artist = m_cddb->artist(  );
@@ -195,7 +200,28 @@ void K3bCddb::updateCD( struct cdrom_drive *drive )
                 titles.append( m_cddb->track( i ) );
             }
             return;
+        } else {
+            qDebug("Cddb error");
+            QStringList::Iterator it;
+            for( it = errorEntries.begin(); it != errorEntries.end(); ++it ){
+                qDebug("(K3bCddb) multiple (wrong) CDDB entry: " + (*it) );
+            }
+            QStringList line = QStringList::split( " ", *(errorEntries.begin()));
+            qDebug( "Entry line: " + *line.at(1) );
+            bool ok;
+            unsigned int id = (*line.at( 1 )).toUInt( &ok, 16);
+            qDebug("Try id: " + QString::number(id) );
+            if( m_cddb->queryCD( qvl, id )){
+                based_on_cddb = true;
+                cd_album = m_cddb->title(  );
+                cd_artist = m_cddb->artist(  );
+                for( int i = 0; i < tracks; i++ ) {
+                    titles.append( m_cddb->track( i ) );
+                }
+                return;
+            }
         }
+
     }
 
     based_on_cddb = false;
@@ -262,7 +288,8 @@ bool K3bCddb::appendCddbInfo( K3bToc& toc )
   bool success;
   CDDB* cddb = new CDDB();
   cddb->set_server( server, port );
-  if( cddb->queryCD( qvl ) ) {
+  QStringList errorList;
+  if( cddb->queryCD( qvl, errorList ) ) {
     toc.setAlbum( cddb->title() );
     toc.setArtist( cddb->artist() );
 

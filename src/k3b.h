@@ -46,7 +46,7 @@ class K3bOptionDialog;
 class K3bJob;
 class K3bProjectTabWidget;
 class KToolBar;
-
+class K3bSongManager;
 
 /** Access to the "lonely" K3bMainWindow Object */
 K3bMainWindow* k3bMain();
@@ -84,6 +84,7 @@ class K3bMainWindow : public KDockMainWindow
 
   K3bDeviceManager* deviceManager() { return m_deviceManager; }
   K3bExternalBinManager* externalBinManager() { return m_externalBinManager; }
+  K3bSongManager* songManager() { return m_songManager; }
   KConfig* config() { return m_config; }
 	
   /** does some initialisation like searching for external programs */
@@ -249,6 +250,7 @@ class K3bMainWindow : public KDockMainWindow
 
   K3bDeviceManager* m_deviceManager;
   K3bExternalBinManager* m_externalBinManager;
+  K3bSongManager*  m_songManager;
 
   // KAction pointers to enable/disable actions
   KActionMenu* actionFileNewMenu;

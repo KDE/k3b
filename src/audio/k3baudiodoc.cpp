@@ -25,6 +25,8 @@
 #include "k3baudioontheflyjob.h"
 #include "input/k3baudiomodulefactory.h"
 #include "input/k3baudiomodule.h"
+#include "../rip/songdb/k3bsong.h"
+#include "../rip/songdb/k3bsongmanager.h"
 
 
 // QT-includes
@@ -148,6 +150,12 @@ void K3bAudioDoc::slotWorkUrlQueue()
 	
     if( K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
+      K3bSong *song = k3bMain()->songManager()->findSong( addedFile.path() );
+      if( song != 0 ){
+          newTrack->setArtist( song->getArtist() );
+          newTrack->setAlbum( song->getAlbum() );
+          newTrack->setTitle( song->getTitle() );
+      }
       addTrack( newTrack, lastAddedPosition );
     }
     else {

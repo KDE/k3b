@@ -18,6 +18,10 @@
 #ifndef K3BCDVIEW_H
 #define K3BCDVIEW_H
 
+#define DEFAULT_ARTIST   "artist"
+#define DEFAULT_ALBUM    "album"
+#define DEFAULT_TITLE      "title"
+
 #include <qwidget.h>
 #include <qvbox.h>
 #include <qarray.h>

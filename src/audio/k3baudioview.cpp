@@ -129,7 +129,6 @@ void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after 
   QString droppedText;
   QTextDrag::decode( e, droppedText );
   QStringList _urls = QStringList::split("\r\n", droppedText );
-	
   AudioListViewItem* _item = (AudioListViewItem*)after;
   uint _pos;
   if( _item == 0L )
