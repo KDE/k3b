@@ -392,8 +392,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
   else {
     m_waveFileWriter->close();
 
-    // TODO: enable me after message freeze
-    //    emit infoMessage( i18n("Audio images successfully created."), STATUS );
+    emit infoMessage( i18n("Audio images successfully created."), STATUS );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
       m_currentAction = WRITING_ISO_IMAGE;

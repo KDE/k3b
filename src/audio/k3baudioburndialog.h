@@ -52,6 +52,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    void readSettings();
 
    QCheckBox* m_checkHideFirstTrack;
+   QCheckBox* m_checkNormalize;
    K3bAudioCdTextWidget* m_cdtextWidget;
    K3bAudioDoc* m_doc;
 

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -87,5 +87,13 @@ class K3bVcdbuilderProgram : public K3bExternalProgram
   QString m_vcdbuilderProgram;
 };
 
+
+class K3bNormalizeProgram : public K3bExternalProgram
+{
+ public:
+  K3bNormalizeProgram();
+
+  bool scan( const QString& );
+};
 
 #endif

@@ -22,6 +22,7 @@
 #include <k3btempdirselectionwidget.h>
 #include "k3baudiocdtextwidget.h"
 #include <tools/k3bglobals.h>
+#include <k3bstdguiitems.h>
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -70,15 +71,20 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
+  QGroupBox* advancedSettingsGroup = new QGroupBox( 1, Qt::Vertical, i18n("Settings"), advancedTab );
+  m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( advancedSettingsGroup );
+
   QGroupBox* advancedGimmickGroup = new QGroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
   m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
 
-  advancedTabGrid->addWidget( advancedGimmickGroup, 0, 0 );
-  advancedTabGrid->setRowStretch( 1, 1 );
+  advancedTabGrid->addWidget( advancedSettingsGroup, 0, 0 );
+  advancedTabGrid->addWidget( advancedGimmickGroup, 1, 0 );
+  advancedTabGrid->setRowStretch( 2, 1 );
 
   addPage( advancedTab, i18n("Advanced") );
 
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
 
   readSettings();
 
@@ -88,14 +94,15 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   // What's This info
   // -------------------------------------------------------------------------
-  QWhatsThis::add( m_checkHideFirstTrack, i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
-					       "<p>The audio CD standard uses pregaps before every track on the CD. "
-					       "By default these last for 2 seconds and are silent. In DAO mode it "
-					       "is possible to have longer pregaps that contain some audio. In this case "
-					       "the first pregap will contain the complete first track."
-					       "<p>You will need to seek back from the beginning of the CD to listen to "
-					       "the first track. Try it, it's quite amusing!"
-					       "<p><b>This feature is only available in DAO mode when writing with cdrdao.") );
+  QWhatsThis::add( m_checkHideFirstTrack, 
+		   i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
+			"<p>The audio CD standard uses pregaps before every track on the CD. "
+			"By default these last for 2 seconds and are silent. In DAO mode it "
+			"is possible to have longer pregaps that contain some audio. In this case "
+			"the first pregap will contain the complete first track."
+			"<p>You will need to seek back from the beginning of the CD to listen to "
+			"the first track. Try it, it's quite amusing!"
+			"<p><b>This feature is only available in DAO mode when writing with cdrdao.") );
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
@@ -112,6 +119,7 @@ void K3bAudioBurnDialog::saveSettings()
   m_doc->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
   m_doc->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
   m_doc->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
+  m_doc->setNormalize( m_checkNormalize->isChecked() );
 
   // -- saving current speed --------------------------------------
   m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -133,6 +141,7 @@ void K3bAudioBurnDialog::readSettings()
   m_checkRemoveBufferFiles->setChecked( m_doc->removeBufferFiles() );
   m_checkBurnproof->setChecked( doc()->burnproof() );
   m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImages() );
+  m_checkNormalize->setChecked( m_doc->normalize() );
 
   // read CD-Text ------------------------------------------------------------
   m_cdtextWidget->load( m_doc );
@@ -151,6 +160,8 @@ void K3bAudioBurnDialog::slotLoadK3bDefaults()
   m_cdtextWidget->setChecked( true );
   m_checkHideFirstTrack->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
+
+  m_checkNormalize->setChecked(false);
 
   toggleAllOptions();
 }
@@ -171,6 +182,7 @@ void K3bAudioBurnDialog::slotLoadUserDefaults()
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_images", false ) );
+  m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
 
   toggleAllOptions();
 }
@@ -190,6 +202,7 @@ void K3bAudioBurnDialog::slotSaveUserDefaults()
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
   c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
   c->writeEntry( "only_create_images", m_checkOnlyCreateImage->isChecked() );
+  c->writeEntry( "normalize", m_checkNormalize->isChecked() );
 
   if( m_tempDirSelectionWidget->isEnabled() ) {
     m_tempDirSelectionWidget->saveConfig();
@@ -211,10 +224,13 @@ void K3bAudioBurnDialog::toggleAllOptions()
     m_cdtextWidget->setEnabled(false);
   }
   else {
-    m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+    m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkNormalize->isChecked() );
     m_checkHideFirstTrack->setEnabled( !m_checkOnlyCreateImage->isChecked() );
     m_cdtextWidget->setEnabled(true);
   }
+
+  // we are not able to normalize in on-the-fly mode
+  m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
 }
 
 #include "k3baudioburndialog.moc"

@@ -62,6 +62,8 @@ class K3bAudioDoc : public K3bDoc
   bool onlyCreateImages() const { return m_onlyCreateImages; }
   int numberOfTracks() const { return m_tracks->count(); }
 
+  bool normalize() const { return m_normalize; }
+
   K3bAudioTrack* first() { return m_tracks->first(); }
   K3bAudioTrack* current() const { return m_tracks->current(); }
   K3bAudioTrack* next() { return m_tracks->next(); }
@@ -116,6 +118,8 @@ class K3bAudioDoc : public K3bDoc
   void setRemoveBufferFiles( bool b ) { m_removeBufferFiles = b; }
 
   void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
+
+  void setNormalize( bool b ) { m_normalize = b; }
 
   // CD-Text
   void writeCdText( bool b ) { m_cdText = b; }
@@ -183,6 +187,8 @@ class K3bAudioDoc : public K3bDoc
   bool m_hideFirstTrack;
   bool m_removeBufferFiles;
   bool m_onlyCreateImages;
+
+  bool m_normalize;
  	
   // CD-Text
   // --------------------------------------------------

@@ -19,6 +19,7 @@
 
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
+#include <k3bcore.h>
 
 #include <qrect.h>
 #include <qapplication.h>
@@ -181,9 +182,17 @@ void K3bFileTreeComboBox::popdown()
 
 void K3bFileTreeComboBox::slotGoUrl()
 {
-  // TODO: check if it's a device or an url
+  QString p = currentText();
+  if( p.startsWith("/dev/") ) {
+    if( K3bCdDevice::CdDevice* dev = k3bcore->deviceManager()->findDevice( p ) ) {
+      emit deviceExecuted( dev );
+      return;
+    }
+  }
+
+  // no device -> select url
   KURL url;
-  url.setPath( currentText() );
+  url.setPath( p );
   emit urlExecuted( url );
 }
 

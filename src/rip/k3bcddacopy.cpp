@@ -20,6 +20,7 @@
 #include <device/k3bdiskinfodetector.h>
 #include <tools/k3bcdparanoialib.h>
 #include <k3bprogressinfoevent.h>
+#include <k3bthreadjob.h>
 
 #include <qptrlist.h>
 #include <qstringlist.h>
@@ -43,19 +44,13 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
 {
   m_device = 0;
   
-#ifdef QT_THREAD_SUPPORT
-  m_audioRip = new K3bAudioRipThread( this );
-#else
-  m_audioRip = new K3bAudioRip( this );
-#endif
+  m_audioRip = new K3bAudioRipThread();
+  K3bThreadJob* threadJob = new K3bThreadJob( m_audioRip, this );
 
-  connect( m_audioRip, SIGNAL(output(const QByteArray&)), this, SLOT(slotTrackOutput(const QByteArray&)) );
-
-#ifndef QT_THREAD_SUPPORT
-  connect( m_audioRip, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
-  connect( m_audioRip, SIGNAL(finished(bool)), this, SLOT(slotTrackFinished(bool)) );
-  connect( m_audioRip, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-#endif
+  connect( threadJob, SIGNAL(data(const char*, int)), this, SLOT(slotTrackOutput(const char*, int)) );
+  connect( threadJob, SIGNAL(percent(int)), this, SLOT(slotTrackPercent(int)) );
+  connect( threadJob, SIGNAL(finished(bool)), this, SLOT(slotTrackFinished(bool)) );
+  connect( threadJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
 
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)), 
@@ -64,6 +59,7 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
 
 K3bCddaCopy::~K3bCddaCopy()
 {
+  delete m_audioRip;
 }
 
 void K3bCddaCopy::start()
@@ -93,10 +89,10 @@ void K3bCddaCopy::slotDiskInfoReady( const K3bCdDevice::DiskInfo& info )
 
 
   // bytes to copy
-  m_bytes = 0;
+  m_bytesToCopy = 0;
   for( QValueList<int>::const_iterator it = m_tracksToCopy.begin();
        it != m_tracksToCopy.end(); ++it ) {
-    m_bytes += info.toc[*it-1].length() * CD_FRAMESIZE_RAW;
+    m_bytesToCopy += info.toc[*it-1].length() * CD_FRAMESIZE_RAW;
   }
 
   m_lastOverallPercent = 0;
@@ -162,11 +158,12 @@ bool K3bCddaCopy::startRip( unsigned int i )
 }
 
 
-void K3bCddaCopy::slotTrackOutput( const QByteArray& data )
+void K3bCddaCopy::slotTrackOutput( const char* data, int len )
 {
-  m_waveFileWriter.write( data.data(), data.size(), K3bWaveFileWriter::LittleEndian );
+  m_waveFileWriter.write( data, len, K3bWaveFileWriter::LittleEndian );
+  m_bytesAll += len;
 
-  m_bytesAll += data.size();
+  m_audioRip->resume();
 }
 
 
@@ -174,14 +171,12 @@ void K3bCddaCopy::cancel( ){
   m_audioRip->cancel();
   m_interrupt = true;
 
-#ifdef QT_THREAD_SUPPORT
   // what if paranoia is stuck in paranoia_read?
   // we need to terminate in that case
   // wait for 1 second. I the thread still is working terminate it
   // and trigger the finished slot manually
   emit infoMessage( i18n("Cancellation could take a while..."), INFO );
   QTimer::singleShot( 1000, this, SLOT(slotCheckIfThreadStillRunning()) );
-#endif
 }
 
 
@@ -228,7 +223,7 @@ void K3bCddaCopy::slotTrackFinished( bool success )
 void K3bCddaCopy::createFilenames()
 {
   KConfig* c = kapp->config();
-  c->setGroup( "Ripping" );
+  c->setGroup( "Audio Ripping" );
 
   m_list.clear();
   
@@ -309,65 +304,6 @@ QString K3bCddaCopy::jobDetails() const
 }
 
 
-
-#ifdef QT_THREAD_SUPPORT
-void K3bCddaCopy::customEvent( QCustomEvent* e )
-{
-  K3bProgressInfoEvent* be = (K3bProgressInfoEvent*)e;
-  switch( be->type() ) {
-  case K3bProgressInfoEvent::Progress:
-    {
-      emit subPercent( be->firstValue() );
-      
-      int progressBarValue = (int) (((double) m_bytesAll / (double) m_bytes ) * 100);
-      
-      // avoid too many gui updates
-      if( m_lastOverallPercent < progressBarValue ) {
-	emit percent( progressBarValue );
-	m_lastOverallPercent = progressBarValue;
-      }
-    }
-    break;
-  case K3bProgressInfoEvent::SubProgress:
- 
-    break;
-  case K3bProgressInfoEvent::ProcessedSize:
- 
-    break;
-  case K3bProgressInfoEvent::ProcessedSubSize:
- 
-    break;
-  case K3bProgressInfoEvent::InfoMessage:
-    emit infoMessage( be->firstString(), be->firstValue() ); 
-    break;
-  case K3bProgressInfoEvent::Started:
- 
-    break;
-  case K3bProgressInfoEvent::Canceled:
- 
-    break;
-  case K3bProgressInfoEvent::Finished:
-    // wait for the thread to finish
-    while( !m_audioRip->finished() )
-      qApp->processEvents();
-    slotTrackFinished( (bool)be->firstValue() ); 
-    break;
-  case K3bProgressInfoEvent::NewTask:
- 
-    break;
-  case K3bProgressInfoEvent::NewSubTask:
- 
-    break;
-  case K3bProgressInfoEvent::DebuggingOutput:
- 
-    break;
-  case K3bProgressInfoEvent::BufferStatus:
- 
-    break;
-  }
-}
-
-
 void K3bCddaCopy::slotCheckIfThreadStillRunning()
 {
   if( m_audioRip->running() ) {
@@ -377,7 +313,12 @@ void K3bCddaCopy::slotCheckIfThreadStillRunning()
     slotTrackFinished( false );
   }
 }
-#endif
+
+
+void K3bCddaCopy::slotTrackPercent( int p )
+{
+  emit subPercent(p);
+  emit percent( (int)(100.0*(double)m_bytesAll/(double)m_bytesToCopy) );
+}
 
 #include "k3bcddacopy.moc"
-

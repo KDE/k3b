@@ -28,6 +28,8 @@ class K3bAbstractWriter;
 class K3bWaveFileWriter;
 class KTempFile;
 class K3bCdrecordWriter;
+class K3bAudioNormalizeJob;
+
 
 /**
   *@author Sebastian Trueg
@@ -51,15 +53,23 @@ class K3bAudioJob : public K3bBurnJob
   void start();
 
  protected slots:
-  void slotAudioDecoderFinished( bool );
-  void slotReceivedAudioDecoderData( const char*, int );
-  void slotAudioDecoderNextTrack( int, int );
+   // writer slots
   void slotDataWritten();
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);
   void slotWriterJobPercent(int);
+
+  // audiodecoder slots
+  void slotAudioDecoderFinished( bool );
+  void slotAudioDecoderNextTrack( int, int );
   void slotAudioDecoderPercent(int);
   void slotAudioDecoderSubPercent( int );
+  void slotReceivedAudioDecoderData( const char*, int );
+
+  // normalizing slots
+  void slotNormalizeJobFinished( bool );
+  void slotNormalizeProgress( int );
+  void slotNormalizeSubProgress( int );
 
  private:
   bool prepareWriter();
@@ -67,11 +77,13 @@ class K3bAudioJob : public K3bBurnJob
   bool startWriting();
   void cleanupAfterError();
   void removeBufferFiles();
+  void normalizeFiles();
 
   K3bAudioDoc* m_doc;
   K3bAudioDecoder* m_audioDecoder;
   K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
+  K3bAudioNormalizeJob* m_normalizeJob;
 
   KTempFile* m_tocFile;
 

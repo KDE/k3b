@@ -12,12 +12,12 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
- 
+
+
 #ifndef K3B_AUDIO_RIP_THREAD_H
 #define K3B_AUDIO_RIP_THREAD_H
 
-#include <qobject.h>
-#include <qthread.h>
+#include <k3bthread.h>
 #include <qcstring.h>
 
 #include "../device/k3bdevice.h"
@@ -26,25 +26,23 @@ class QTimer;
 class K3bCdparanoiaLib;
 
 
-class K3bAudioRipThread : public QObject, public QThread
+class K3bAudioRipThread : public K3bThread
 {
-  Q_OBJECT
-
  public:
-  K3bAudioRipThread( QObject* parent = 0 );
+  K3bAudioRipThread();
   ~K3bAudioRipThread();
 
- public slots:
-  void start( QObject* eventReceiver = 0 );
-  void cancel();
+  // paranoia settings
   void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
   void setMaxRetries( int r ) { m_paranoiaRetries = r; }
   void setNeverSkip( bool b ) { m_neverSkip = b; }
+
   void setDevice( K3bDevice* dev ) { m_device = dev; }
   void setTrackToRip( unsigned int track ) { m_track = track; }
 
- signals:
-  void output( const QByteArray& );
+  void cancel();
+
+  void resume();
 
  private:
   /** reimplemented from QThread. Does the work */
@@ -66,6 +64,7 @@ class K3bAudioRipThread : public QObject, public QThread
 
   bool m_bInterrupt;
   bool m_bError;
+  bool m_bSuspended;
 
   void createStatus(long, int);
 
@@ -73,8 +72,6 @@ class K3bAudioRipThread : public QObject, public QThread
   long m_lastReadSector;
   long m_overlap;
   long m_readSectors;
-
-  QObject* m_eventReceiver;
 
   // this friend function will call createStatus(long,int)
   friend void paranoiaCallback(long, int);

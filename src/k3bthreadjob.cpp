@@ -30,9 +30,9 @@ K3bThreadJob::K3bThreadJob( QObject* parent, const char* name )
 
 
 K3bThreadJob::K3bThreadJob( K3bThread* thread, QObject* parent, const char* name )
-  : K3bJob( parent, name ),
-    m_thread(thread)
+  : K3bJob( parent, name )
 {
+  setThread(thread);
 }
 
 

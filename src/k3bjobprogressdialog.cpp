@@ -114,17 +114,18 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
   setupGUI();
   setupConnections();
 
-  // FIXME: this is bad hacking (although it should work!)
-  // -----
   if( !showSubProgress ) {
     m_progressSubPercent->hide();
   }
-  // -----
 
   m_job = 0;
   m_timer = new QTimer( this );
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
+
+  // make sure the dialog is at least as wide as high
+  if( width() < height() )
+    resize( height(), height() );
 }
 
 void K3bJobProgressDialog::setupGUI()

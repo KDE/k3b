@@ -125,8 +125,8 @@ void K3bCdrecordWriter::prepareArgumentList()
       emit infoMessage( i18n("Cdrecord %1 does not support overburning!").arg(m_cdrecordBinObject->version), INFO );
     
   // additional user parameters from config
-  QStringList params = m_cdrecordBinObject->userParameters();
-  for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
+  const QStringList& params = m_cdrecordBinObject->userParameters();
+  for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 }
 
@@ -168,6 +168,7 @@ void K3bCdrecordWriter::start()
     // it "should" be the executable
     kdDebug() << "(K3bCdrecordWriter) could not start cdrecord" << endl;
     emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+    emit finished(false);
   }
   else {
     if( simulate() ) {

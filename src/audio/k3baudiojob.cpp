@@ -20,6 +20,7 @@
 #include <audio/k3baudiodoc.h>
 #include <audio/k3baudiotrack.h>
 #include <audio/k3baudiotocfilewriter.h>
+#include <audio/k3baudionormalizejob.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <device/k3bmsf.h>
@@ -31,6 +32,7 @@
 #include <k3bcdrdaowriter.h>
 
 #include <qfile.h>
+#include <qvaluevector.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -40,7 +42,8 @@
 
 K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, QObject* parent )
   : K3bBurnJob( parent ),
-    m_doc( doc )
+    m_doc( doc ),
+    m_normalizeJob(0)
 {
   m_audioDecoder = new K3bAudioDecoder( m_doc, this );
   connect( m_audioDecoder, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );
@@ -171,17 +174,20 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
     // close the last written wave file
     m_waveFileWriter->close();
 
-    if( !m_doc->onlyCreateImages() ) {
+    emit infoMessage( i18n("Successfully decoded all tracks."), STATUS );
+
+    if( m_doc->normalize() ) {
+	normalizeFiles();
+    }
+    else if( !m_doc->onlyCreateImages() ) {
       if( !prepareWriter() ) {
 	cleanupAfterError();
 	emit finished(false);
-	return;
       }
-    
-      startWriting();
+      else
+	startWriting();
     }
     else {
-      emit infoMessage( i18n("Successfully decoded all tracks."), STATUS );
       emit finished(true);
     }
   }
@@ -346,19 +352,23 @@ void K3bAudioJob::slotWriterNextTrack( int t, int tt )
 
 void K3bAudioJob::slotWriterJobPercent( int p )
 {
-  if( m_doc->onTheFly() ) {
+  if( m_doc->onTheFly() )
     emit percent(p);
-  }
-  else {
+  else if( m_doc->normalize() )
+    emit percent( 67 + p/3 );
+  else
     emit percent( 50 + p/2 );
-  }
 }
 
 
 void K3bAudioJob::slotAudioDecoderPercent( int p )
 {
-  if( m_doc->onlyCreateImages() )
-    emit percent( p );
+  if( m_doc->onlyCreateImages() ) {
+    if( m_doc->normalize() )
+      emit percent( p/2 );
+    else
+      emit percent( p );
+  }
   else if( !m_doc->onTheFly() )
     emit percent( p/2 );
 }
@@ -420,6 +430,76 @@ void K3bAudioJob::removeBufferFiles()
 	emit infoMessage( i18n("Could not delete file %1.").arg(track->bufferFile()), ERROR );
   }
 }
+
+
+void K3bAudioJob::normalizeFiles()
+{
+  if( !m_normalizeJob ) {
+    m_normalizeJob = new K3bAudioNormalizeJob( this );
+    
+    connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)), 
+	     this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_normalizeJob, SIGNAL(percent(int)), this, SLOT(slotNormalizeProgress(int)) );
+    connect( m_normalizeJob, SIGNAL(subPercent(int)), this, SLOT(slotNormalizeSubProgress(int)) );
+    connect( m_normalizeJob, SIGNAL(finished(bool)), this, SLOT(slotNormalizeJobFinished(bool)) );
+    connect( m_normalizeJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+    connect( m_normalizeJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+  }
+
+  // add all the files
+  QValueVector<QString> files;
+  QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+  for( ; it.current(); ++it ) {
+    K3bAudioTrack* track = it.current();
+    files.append( track->bufferFile() );
+  }
+
+  m_normalizeJob->setFilesToNormalize( files );
+
+  emit newTask( i18n("Normalizing volume levels") );
+  m_normalizeJob->start();
+}
+
+void K3bAudioJob::slotNormalizeJobFinished( bool success )
+{
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
+
+  if( success ) {
+    if( m_doc->onlyCreateImages() ) {
+      emit finished(true);
+    }
+    else {
+      // start the writing
+      if( !prepareWriter() ) {
+	cleanupAfterError();
+	emit finished(false);
+      }
+      else
+	startWriting();
+    }
+  }
+  else {
+    cleanupAfterError();
+    emit finished(false);
+  }
+}
+
+void K3bAudioJob::slotNormalizeProgress( int p )
+{
+  if( m_doc->onlyCreateImages() )
+    emit percent( 50 + (int)((double)p/2.0) );
+  else
+    emit percent( (int)(33.3 + (double)p/3.0) );
+}
+
+
+void K3bAudioJob::slotNormalizeSubProgress( int p )
+{
+  emit subPercent( p );
+}
+
 
 QString K3bAudioJob::jobDescription() const
 {

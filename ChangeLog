@@ -16,6 +16,11 @@ fixed temp-dir problems with nfs-mounted home directories
    K3b now uses the default kde tempdir
 Resmgr support
 added user datamode selection (mode1, mode2(form1))
+support for relative paths in playlists (thanx to Nick Bloke)
+new progressdialog
+faster cddb access (older versions just queried all entries, now only the selected one gets queried)
+K3b is now threaded.
+Gui beautifying.
 videocd:
    add customizing of Gaps and Margins
    add HQ-VIDEOCD support
@@ -24,7 +29,8 @@ videocd:
    add an option to create allways an empty `/SEGMENT' directory (some Players need this)
    fixed load and saveUserDefaults
    fixed autodetection VCD Typ (now the user can turn off this feature)
-   
+added audio volume normalization   
+
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3

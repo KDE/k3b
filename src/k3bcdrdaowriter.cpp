@@ -353,8 +353,8 @@ void K3bCdrdaoWriter::setCommonArguments()
 {
 
   // additional user parameters from config
-  QStringList params = m_cdrdaoBinObject->userParameters();
-  for( QStringList::Iterator it=params.begin(); it != params.end(); ++it )
+  const QStringList& params = m_cdrdaoBinObject->userParameters();
+  for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 
 

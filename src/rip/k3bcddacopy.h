@@ -25,11 +25,7 @@
 #include <device/k3bdiskinfo.h>
 #include <device/k3bdiskinfodetector.h>
 
-#ifdef QT_THREAD_SUPPORT
 #include "k3baudioripthread.h"
-#else
-#include "k3baudiorip.h"
-#endif
 
 #include <cddb/k3bcddbquery.h>
 
@@ -73,15 +69,11 @@ class K3bCddaCopy : public K3bJob
 
  private slots:
   void slotDiskInfoReady( const K3bCdDevice::DiskInfo& );
-  void slotTrackOutput( const QByteArray& );
+  void slotTrackOutput( const char*, int );
   void slotTrackFinished( bool );
+  void slotTrackPercent( int p );
 
-#ifdef QT_THREAD_SUPPORT
   void slotCheckIfThreadStillRunning();
-
- protected:
-  void customEvent( QCustomEvent* );
-#endif
 
  private:
   void createFilenames();
@@ -92,11 +84,7 @@ class K3bCddaCopy : public K3bJob
   K3bDiskInfo m_diskInfo;
   K3bDevice* m_device;
 
-#ifdef QT_THREAD_SUPPORT
   K3bAudioRipThread* m_audioRip;
-#else
-  K3bAudioRip* m_audioRip;
-#endif
 
   bool m_bUsePattern;
   bool m_singleFile;
@@ -117,7 +105,7 @@ class K3bCddaCopy : public K3bJob
   bool m_interrupt;
 
   QValueList<int> m_tracksToCopy;
-  long m_bytes;
+  long m_bytesToCopy;
   long m_bytesAll;
 };
 

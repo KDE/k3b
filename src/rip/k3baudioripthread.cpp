@@ -18,7 +18,6 @@
 #include "../device/k3bdevice.h"
 #include "../tools/k3bcdparanoialib.h"
 #include <k3bjob.h>
-#include <k3bprogressinfoevent.h>
 
 #include <qfile.h>
 #include <qapplication.h>
@@ -51,16 +50,14 @@ void paranoiaCallback(long sector, int status)
 
 
 
-K3bAudioRipThread::K3bAudioRipThread( QObject* parent )
-  : QObject( parent ),
-    QThread(),
+K3bAudioRipThread::K3bAudioRipThread()
+  : K3bThread(),
     m_paranoiaLib(0),
     m_device(0),
     m_paranoiaMode(3),
     m_paranoiaRetries(20),
     m_neverSkip(false),
-    m_track(1),
-    m_eventReceiver(parent)
+    m_track(1)
 {
 }
 
@@ -71,15 +68,6 @@ K3bAudioRipThread::~K3bAudioRipThread()
 }
 
 
-void K3bAudioRipThread::start( QObject* eventReceiver )
-{
-  if( eventReceiver )
-    m_eventReceiver = eventReceiver;
-  QThread::start();
-}
-
-
-
 void K3bAudioRipThread::run()
 {
   if( !m_paranoiaLib ) {
@@ -87,46 +75,31 @@ void K3bAudioRipThread::run()
   }
 
   if( !m_paranoiaLib ) {
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage,
-								     i18n("Could not load libcdparanoia."),
-								     QString::null,
-								     K3bJob::ERROR ) );
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
-								     0 ) );
+    emitInfoMessage( i18n("Could not load libcdparanoia."), K3bJob::ERROR );
+    emitFinished(false);
     return;
   }
 
   // try to open the device
   if( !m_device ) {
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
-								     0 ) );
+    emitFinished(false);
     return;
   }
 
   if( !m_paranoiaLib->paranoiaInit( m_device->blockDeviceName() ) ) {
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage,
-								     i18n("Could not open device %1").arg(m_device->blockDeviceName()),
-								     QString::null,
-								     K3bJob::ERROR ) );
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
-								     0 ) );
+    emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()),
+		     K3bJob::ERROR );
+    emitFinished(false);
     return;
   }
 
-  m_bInterrupt = m_bError = false;
+  m_bInterrupt = m_bError = m_bSuspended = false;
 
   long firstSector = m_paranoiaLib->firstSector( m_track );
   m_lastSector = m_paranoiaLib->lastSector( m_track );
   
   if( firstSector < 0 || m_lastSector < 0 ) {
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
-								     0 ) );
+    emitFinished(false);
     return;
   }
 
@@ -149,7 +122,7 @@ void K3bAudioRipThread::run()
   m_currentSector = firstSector;
 
   while( m_currentSector <= m_lastSector ) {
-    if( m_bInterrupt){
+    if( m_bInterrupt ) {
       kdDebug() << "(K3bAudioRipThread) Interrupt reading." << endl;
       break;
     } 
@@ -157,7 +130,7 @@ void K3bAudioRipThread::run()
     // let the global paranoia callback have access to this
     // to emit signals
     s_audioRip = this;
-        
+    
     int16_t* buf = m_paranoiaLib->paranoiaRead( paranoiaCallback );
 
     if( 0 == buf ) {
@@ -166,37 +139,41 @@ void K3bAudioRipThread::run()
       break;
     } 
     else {
+      m_bSuspended = true;
+
       ++m_currentSector;
-      QByteArray a;
-      a.setRawData( (char*)buf, CD_FRAMESIZE_RAW );
-      emit output( a );
-      a.resetRawData( (char*)buf, CD_FRAMESIZE_RAW );
+      emitData( (char*)buf, CD_FRAMESIZE_RAW );
 
       ++m_sectorsRead;
-      if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress,
-								       100 * m_sectorsRead / m_sectorsAll ) );	       
+      emitPercent( 100 * m_sectorsRead / m_sectorsAll );
+
+      // wait to be resumed
+      while(1) {
+	if( m_bInterrupt )
+	  break;
+	if( !m_bSuspended )
+	  break;
+      }
     }
   }
 
   m_paranoiaLib->paranoiaFree();
   if( m_bInterrupt )
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Canceled ) );
+    emitCanceled();
 
   if( m_bInterrupt || m_bError ) {
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
-								     0 ) );
+    emitFinished(false);
   }
   else {
-    if( m_eventReceiver ) qApp->postEvent( m_eventReceiver,
-					   new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished,
-								     1 ) );
+    emitFinished(true);
   }
-
 }
 
+
+void K3bAudioRipThread::resume()
+{
+  m_bSuspended = false;
+}
 
 void K3bAudioRipThread::cancel()
 {
@@ -248,6 +225,4 @@ void K3bAudioRipThread::createStatus( long sector, int status )
     break;
   } 
 }
-
-#include "k3baudioripthread.moc"
 

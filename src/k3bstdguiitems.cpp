@@ -171,6 +171,20 @@ QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const cha
 }
 
 
+QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent, const char* name )
+{
+  QCheckBox* c = new QCheckBox( i18n("Normalize volume levels"), parent, name );
+  QToolTip::add( c, i18n("Adjust the volume levels of all tracks") );
+  QWhatsThis::add( c, i18n("<p>If this option is checked K3b will adjust the volume of all tracks "
+			   "to a standard level. This is useful for things like creating mixes, "
+			   "where different recording levels on different albums can cause the volume "
+			   "to vary greatly from song to song."
+			   "<p><b>Be aware that K3b currently does not support normalizing when writing "
+			   "on the fly!</b>") );
+  return c;
+}
+
+
 QFrame* K3bStdGuiItems::purpleFrame( QWidget* parent, const char* name )
 {
   QFrame* frame = new QFrame( parent, name );

@@ -173,44 +173,40 @@ int K3bCdDevice::DeviceManager::scanbus()
   }
   info.close();
 
-  if (m_foundDevices == 0)
-  { // fallback - may be removed if proc works reliable
-    static const char* devicenames[] =
-      { "/dev/hda",
-        "/dev/hdb",
-        "/dev/hdc",
-        "/dev/hdd",
-        "/dev/hde",
-        "/dev/hdf",
-        "/dev/hdg",
-        "/dev/hdh",
-        "/dev/hdi",
-        "/dev/hdj",
-        "/dev/hdk",
-        "/dev/hdl",
-        "/dev/dvd",
-        "/dev/cdrom",
-        "/dev/cdrecorder",
-        0
-      };
-    int i = 0;
-    while( devicenames[i] )
-    {
-      if( addDevice( devicenames[i] ) )
-        m_foundDevices++;
-      ++i;
-    }
-    for( int i = 0; i < 16; i++ )
-    {
-      if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
-        m_foundDevices++;
-    }
-    for( int i = 0; i < 16; i++ )
-    {
-      if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
-        m_foundDevices++;
-    }
+  // we also check all these nodes to make sure to get all links and stuff
+  static const char* devicenames[] = {
+    "/dev/hda",
+    "/dev/hdb",
+    "/dev/hdc",
+    "/dev/hdd",
+    "/dev/hde",
+    "/dev/hdf",
+    "/dev/hdg",
+    "/dev/hdh",
+    "/dev/hdi",
+    "/dev/hdj",
+    "/dev/hdk",
+    "/dev/hdl",
+    "/dev/dvd",
+    "/dev/cdrom",
+    "/dev/cdrecorder",
+    0
+  };
+  int i = 0;
+  while( devicenames[i] ) {
+    if( addDevice( devicenames[i] ) )
+      m_foundDevices++;
+    ++i;
   }
+  for( int i = 0; i < 16; i++ ) {
+    if( addDevice( QString("/dev/scd%1").arg(i).ascii() ) )
+      m_foundDevices++;
+  }
+  for( int i = 0; i < 16; i++ ) {
+    if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
+      m_foundDevices++;
+  }
+
   scanFstab();
 
   return m_foundDevices;
@@ -220,20 +216,30 @@ int K3bCdDevice::DeviceManager::scanbus()
 void K3bCdDevice::DeviceManager::printDevices()
 {
   kdDebug() << "\nReader:" << endl;
-  for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() )
-  {
-    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->blockDeviceName() << " " << dev->vendor() << " "
-    << dev->description() << " " << dev->version() << endl << "    "
-    << dev->mountDevice() << " " << dev->mountPoint() << endl;
+  for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
+    kdDebug() << "  " << ": " 
+	      << dev->ioctlDevice() << " " 
+	      << dev->blockDeviceName() << " " 
+	      << dev->vendor() << " "
+	      << dev->description() << " " 
+	      << dev->version() << endl 
+	      << "    "
+	      << dev->mountDevice() << " " 
+	      << dev->mountPoint() << endl;
   }
   kdDebug() << "\nWriter:" << endl;
-  for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() )
-  {
-    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->blockDeviceName() << " " << dev->vendor() << " "
-    << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl
-    << "    " << dev->mountDevice() << " " << dev->mountPoint() << endl;
+  for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
+    kdDebug() << "  " << ": " 
+	      << dev->ioctlDevice() << " " 
+	      << dev->blockDeviceName() << " " 
+	      << dev->vendor() << " "
+	      << dev->description() << " " 
+	      << dev->version() << " " 
+	      << dev->maxWriteSpeed() << endl
+	      << "    " 
+	      << dev->mountDevice() << " " 
+	      << dev->mountPoint() << endl;
   }
-  kdDebug() << flush;
 }
 
 

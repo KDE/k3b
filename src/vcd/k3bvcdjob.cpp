@@ -201,9 +201,9 @@ void K3bVcdJob::vcdxBuild()
     *m_process << k3bMain() ->externalBinManager() ->binPath( "vcdxbuild" );
 
     // additional user parameters from config
-    QStringList params = k3bMain() ->externalBinManager() ->program( "vcdxbuild" ) ->userParameters();
-    for ( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
-        *m_process << *it;
+    const QStringList& params = k3bMain()->externalBinManager()->program( "vcdxbuild" )->userParameters();
+    for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
+      *m_process << *it;
 
 
     if ( vcdDoc() ->vcdOptions() ->Sector2336() ) {
