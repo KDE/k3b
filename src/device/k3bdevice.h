@@ -19,6 +19,7 @@
 
 #include <qstringlist.h>
 #include <qvaluelist.h>
+#include <qglobal.h>
 
 #include <k3bdiskinfo.h>
 #include <k3bcdtext.h>
@@ -549,10 +550,12 @@ namespace K3bCdDevice
   protected:
     bool furtherInit();
 
+#ifdef Q_OS_LINUX
     /**
      * Fallback method that uses the evil cdrom.h stuff
      */
     bool readTocLinux( Toc& ) const;
+#endif
 
     /**
      * The preferred toc reading method for all CDs. Also reads session info.

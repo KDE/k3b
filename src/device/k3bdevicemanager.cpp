@@ -49,11 +49,15 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
+
+#ifdef Q_OS_LINUX
+
 /* Fix definitions for 2.5 kernels */
 #include <linux/version.h>
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,70)
 typedef unsigned char u8;
 #endif
+
 #undef __STRICT_ANSI__
 #include <asm/types.h>
 #define __STRICT_ANSI__
@@ -61,23 +65,25 @@ typedef unsigned char u8;
 #include <scsi/scsi.h>
 #include <linux/major.h>
 
-
 // stupid stupid rat creaturs! (defines)
 #undef INQUIRY
-
 
 
 #ifndef SCSI_DISK_MAJOR
 #define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
   ((M) >= SCSI_DISK1_MAJOR && (M) <= SCSI_DISK7_MAJOR) || \
   ((M) >= SCSI_DISK8_MAJOR && (M) <= SCSI_DISK15_MAJOR))
-#endif /* #ifndef SCSI_DISK_MAJOR */
+#endif
 
 #ifndef SCSI_BLK_MAJOR
 #define SCSI_BLK_MAJOR(M) \
   (SCSI_DISK_MAJOR(M)   \
    || (M) == SCSI_CDROM_MAJOR)
-#endif /* #ifndef SCSI_BLK_MAJOR */
+#endif
+
+#endif // Q_OS_LINUX
+
+
 
 class K3bCdDevice::DeviceManager::Private
 {
@@ -610,6 +616,7 @@ void K3bCdDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int l
 
 bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun )
 {
+#ifdef Q_OS_LINUX
   int ret = false;
   int cdromfd = K3bCdDevice::openDevice( dev.ascii() );
   if (cdromfd < 0) {
@@ -648,6 +655,9 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
 
   ::close(cdromfd);
   return ret;
+#else
+  return false;
+#endif
 }
 
 

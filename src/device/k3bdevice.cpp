@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
@@ -38,44 +40,26 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+
+#ifdef Q_OS_LINUX
+
 #include <linux/version.h>
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,70)
 typedef unsigned char u8;
 #endif
+
 #undef __STRICT_ANSI__
 #include <linux/cdrom.h>
 #define __STRICT_ANSI__
-#include <linux/major.h>
 
+#endif // Q_OS_LINUX
 
-
-#include <config.h>
 
 #ifdef HAVE_RESMGR
 extern "C" {
 #include <resmgr.h>
 }
 #endif
-
-#ifndef SCSI_DISK_MAJOR
-#define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
-			    ((M) >= SCSI_DISK1_MAJOR && (M) <= SCSI_DISK7_MAJOR) || \
-			    ((M) >= SCSI_DISK8_MAJOR && (M) <= SCSI_DISK15_MAJOR))
-#endif /* #ifndef SCSI_DISK_MAJOR */
-
-#ifndef SCSI_BLK_MAJOR
-#define SCSI_BLK_MAJOR(M) \
-  (SCSI_DISK_MAJOR(M)   \
-   || (M) == SCSI_CDROM_MAJOR)
-#endif /* #ifndef SCSI_BLK_MAJOR */
-
-#ifndef IDE_DISK_MAJOR
-#define IDE_DISK_MAJOR(M)       ((M) == IDE0_MAJOR || (M) == IDE1_MAJOR || \
-                                (M) == IDE2_MAJOR || (M) == IDE3_MAJOR || \
-                                (M) == IDE4_MAJOR || (M) == IDE5_MAJOR || \
-                                (M) == IDE6_MAJOR || (M) == IDE7_MAJOR || \
-                                (M) == IDE8_MAJOR || (M) == IDE9_MAJOR)
-#endif /* #ifndef IDE_DISK_MAJOR */
 
 
 
@@ -121,7 +105,6 @@ public:
   QString blockDeviceName;
   int deviceType;
   int supportedProfiles;
-  interface interfaceType;
   QString mountPoint;
   QString mountDeviceName;
   QStringList allNodes;
@@ -136,7 +119,6 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
 {
   d = new Private;
 
-  d->interfaceType = OTHER;
   d->blockDeviceName = devname;
   d->allNodes.append(devname);
 
@@ -161,7 +143,11 @@ bool K3bCdDevice::CdDevice::init()
 {
   kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": init()" << endl;
 
-  d->deviceType = 0;
+  //
+  // they all should read CD-ROM.
+  //
+  d->deviceType = CDROM;
+
   d->supportedProfiles = 0;
 
   if(open() < 0)
@@ -596,21 +582,42 @@ bool K3bCdDevice::CdDevice::init()
   }
 
 
+  //
+  // Check the supported write modes (TAO, SAO, RAW) by trying to set them
+  // We do this before checking mode page 2A in case some readers allow changin
+  // the write parameter page
+  //
+  checkWriteModes();
 
   //
   // Most current drives support the 2A mode page
   // Here we can get some more information (cdrecord -prcap does exactly this)
   //
-
   unsigned char* mm_cap_buffer = 0;
   int mm_cap_len = 0;
   if( modeSense( &mm_cap_buffer, mm_cap_len, 0x2A ) ) {
     mm_cap_page_2A* mm_p = (mm_cap_page_2A*)(mm_cap_buffer+8);
     if( mm_p->BUF )
       d->burnfree = true;
+
+    if( mm_p->cd_r_write )
+      d->deviceType |= CDR;
+    else
+      d->deviceType &= ~CDR;
+
     if( mm_p->cd_rw_write )
       d->deviceType |= CDRW;
-    m_maxWriteSpeed = from2Byte(mm_p->max_write_speed);
+    else
+      d->deviceType &= ~CDRW;
+
+    if( mm_p->dvd_r_write )
+      d->deviceType |= DVDR;
+    else
+      d->deviceType &= ~DVDR;
+
+    if( mm_p->dvd_rom_read || mm_p->dvd_r_read )
+      d->deviceType |= DVD;
+
     m_maxReadSpeed = from2Byte(mm_p->max_read_speed);
     m_bufferSize = from2Byte( mm_p->buffer_size );
 
@@ -619,6 +626,8 @@ bool K3bCdDevice::CdDevice::init()
   else {
     kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": read mode page 2A failed!" << endl;
   }
+
+  m_maxWriteSpeed = determineMaximalWriteSpeed();
 
 
   //
@@ -643,19 +652,25 @@ bool K3bCdDevice::CdDevice::init()
   }
 
 
-  //
-  // Check the supported write modes (TAO, SAO, RAW) by trying to set them
-  //
-  checkWriteModes();
+  close();
+
+  return furtherInit();
+}
 
 
+bool K3bCdDevice::CdDevice::furtherInit()
+{
+#ifdef Q_OS_LINUX
+
   //
-  // This is the backup if the drive does not support the GET CONFIGURATION command
   // Since all CDR drives at least support TAO, all CDRW drives should support 
   // mode page 2a and all DVD writer should support mode page 2a or the GET CONFIGURATION
   // command this is redundant and may be removed for BSD ports or even completely
   //
-  int drivetype = ::ioctl(d->deviceFd, CDROM_GET_CAPABILITY, CDSL_CURRENT);
+  // We just keep it here because of the "should" in the sentence above. If someone can tell me
+  // that the linux driver does nothing more we can remove it completely.
+  //
+  int drivetype = ::ioctl( open(), CDROM_GET_CAPABILITY, CDSL_CURRENT );
   if( drivetype < 0 ) {
     kdDebug() << "Error while retrieving capabilities." << endl;
     close();
@@ -675,44 +690,19 @@ bool K3bCdDevice::CdDevice::init()
   if (drivetype & CDC_DVD)
     d->deviceType |= DVD;
    
-
   close();
 
-  return furtherInit();
-}
-
-
-bool K3bCdDevice::CdDevice::furtherInit()
-{
+#endif // Q_OS_LINUX
   return true;
 }
 
 
 K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
 {
-  if (d->interfaceType == OTHER)
-  {
-    // if the device is already opened we do not close it
-    // to allow fast multible method calls in a row
-    bool needToClose = !isOpen();
-
-    if (open() < 0)
-      return OTHER;
-
-    // stat the device
-    struct stat cdromStat;
-    ::fstat( d->deviceFd, &cdromStat );
-
-    if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-      d->interfaceType = IDE;
-    } else if ( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-      d->interfaceType = SCSI;
-    }
-
-    if( needToClose )
-      close();
-  }
-  return d->interfaceType;
+  if( m_bus != -1 && m_target != -1 && m_lun != -1 )
+    return SCSI;
+  else
+    return IDE;
 }
 
 
@@ -1090,9 +1080,10 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
     return ret;
 
   unsigned char data[CD_FRAMESIZE_RAW];
-  bool readSuccess = true;
+  bool readSuccess = readSectorsRaw( data, lba, 1 );
 
-  if( !readSectorsRaw( data, lba, 1 ) ) {
+#ifdef Q_OS_LINUX
+  if( !readSuccess ) {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 	      << ": MMC RAW READ failed. falling back to cdrom.h." << endl;
 
@@ -1106,6 +1097,7 @@ int K3bCdDevice::CdDevice::getTrackDataMode(int lba) const
       readSuccess = false;
     }
   }
+#endif // Q_OS_LINUX
 
   if( readSuccess ) {
     if ( data[15] == 1 )
@@ -1212,11 +1204,16 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
     if( !readRawToc( toc ) ) {
       kdDebug() << "(K3bCdDevice::CdDevice) MMC READ RAW TOC failed." << endl;
 
-      if( !readFormattedToc( toc ) ) {
+      bool success = readFormattedToc( toc );
+
+#ifdef Q_OS_LINUX
+      if( !success ) {
 	kdDebug() << "(K3bCdDevice::CdDevice) MMC READ TOC failed. falling back to cdrom.h." << endl;
 	readTocLinux(toc);
       }
+#endif
 
+    if( success )
       fixupToc( toc );
     }
   }
@@ -1561,6 +1558,7 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
 }
 
 
+#ifdef Q_OS_LINUX
 // fallback
 bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
 {
@@ -1659,6 +1657,7 @@ bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
 
   return success;
 }
+#endif // Q_OS_LINUX
 
 
 bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
