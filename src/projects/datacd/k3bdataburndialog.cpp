@@ -20,7 +20,7 @@
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
 #include "k3bisooptions.h"
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bjob.h>

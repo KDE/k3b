@@ -18,8 +18,8 @@
 #include "k3bdvdcontent.h"
 #include "k3bdvdcopy.h"
 #include <k3bexternalbinmanager.h>
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevice.h>
 #include <k3bcore.h>
 #include "k3bdvdaudiogain.h"
 

@@ -17,9 +17,9 @@
 #include "k3biso9660imagewritingjob.h"
 #include "k3bisoimageverificationjob.h"
 
-#include <device/k3bdevice.h>
-#include <device/k3bdiskinfo.h>
-#include <device/k3bdevicehandler.h>
+#include <k3bdevice.h>
+#include <k3bdiskinfo.h>
+#include <k3bdevicehandler.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 #include <k3bgrowisofswriter.h>
@@ -28,12 +28,14 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bglobals.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <ktempfile.h>
 #include <kmessagebox.h>
+#include <kio/global.h>
 
 #include <qstring.h>
 #include <qtextstream.h>
@@ -66,6 +68,7 @@ K3bIso9660ImageWritingJob::~K3bIso9660ImageWritingJob()
 void K3bIso9660ImageWritingJob::start()
 {
   m_canceled = m_finished = false;
+  m_currentCopy = 1;
 
   emit started();
 
@@ -78,10 +81,124 @@ void K3bIso9660ImageWritingJob::start()
     return;
   }
 
+  startWriting();
+}
 
-  // TODO: add multiple copies
+
+void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
+{
+  if( m_canceled ) {
+    m_finished = true;
+    emit canceled();
+    emit finished(false);
+    return;
+  }
+
+  if( success ) {
+    if( !m_simulate && m_verifyData ) {
+      emit burning(false);
+
+      // allright
+      // the writerJob should have emited the "simulation/writing successful" signal
+
+      if( !m_verifyJob ) {
+	m_verifyJob = new K3bIsoImageVerificationJob( this );
+	connectSubJob( m_verifyJob,
+		       SLOT(slotVerificationFinished(bool)),
+		       true,
+		       SLOT(slotVerificationProgress(int)),
+		       SIGNAL(subPercent(int)) );
+      }
+      m_verifyJob->setDevice( m_device );
+      m_verifyJob->setImageFileName( m_imagePath );
+      if( m_copies == 1 )
+	emit newTask( i18n("Verifying written data") );
+      else
+	emit newTask( i18n("Verifying written copy %1 of %2").arg(m_currentCopy).arg(m_copies) );
+      m_verifyJob->start();
+    }
+    else if( m_currentCopy >= m_copies ) {
+      m_finished = true;
+      emit finished(true);
+    }
+    else {
+      m_currentCopy++;
+      startWriting();
+    }
+  }
+  else {
+    m_finished = true;
+    emit finished(false);
+  }
+}
 
 
+void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
+{
+  if( m_canceled ) {
+    m_finished = true;
+    emit canceled();
+    emit finished(false);
+    return;
+  }
+
+  if( success && m_currentCopy < m_copies ) {
+    m_currentCopy++;
+    connect( K3bCdDevice::eject( m_device ), SIGNAL(finished(bool)),
+	     this, SLOT(startWriting()) );
+    return;
+  }
+
+  k3bcore->config()->setGroup("General Options");
+  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+    K3bCdDevice::eject( m_device );
+
+  m_finished = true;
+  emit finished( success );
+}
+
+
+void K3bIso9660ImageWritingJob::slotVerificationProgress( int p )
+{
+  emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + 0.5 + (double)p/200.0 )) );
+}
+
+
+void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
+{
+  emit subPercent( p );
+
+  if( m_verifyData )
+    emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + ((double)p/200.0) )) );
+  else
+    emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + ((double)p/100.0) )) );
+}
+
+
+void K3bIso9660ImageWritingJob::slotNextTrack( int, int )
+{
+  if( m_copies == 1 )
+    emit newSubTask( i18n("Writing image") );
+  else
+    emit newSubTask( i18n("Writing copy %1 of %2").arg(m_currentCopy).arg(m_copies) );
+}
+
+
+void K3bIso9660ImageWritingJob::cancel()
+{
+  if( !m_finished ) {
+    m_canceled = true;
+
+    if( m_writer )
+      m_writer->cancel();
+    if( m_verifyData && m_verifyJob )
+      m_verifyJob->cancel();
+  }
+}
+
+
+void K3bIso9660ImageWritingJob::startWriting()
+{
   // we wait for the following:
   // 1. if writing mode auto and writing app auto: all writable media types
   // 2. if writing mode auto and writing app not growisofs: all writable cd types
@@ -134,102 +251,6 @@ void K3bIso9660ImageWritingJob::start()
   else {
     m_finished = true;
     emit finished(false);
-  }
-}
-
-
-void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
-{
-  if( m_canceled ) {
-    m_finished = true;
-    emit canceled();
-    emit finished(false);
-    return;
-  }
-
-  if( success ) {
-    emit burning(false);
-
-    // allright
-    // the writerJob should have emited the "simulation/writing successful" signal
-
-    if( m_verifyData ) {
-      if( !m_verifyJob ) {
-	m_verifyJob = new K3bIsoImageVerificationJob( this );
-	connectSubJob( m_verifyJob,
-		       SLOT(slotVerificationFinished(bool)),
-		       true,
-		       SLOT(slotVerificationProgress(int)),
-		       SIGNAL(subPercent(int)) );
-      }
-      m_verifyJob->setDevice( m_device );
-      m_verifyJob->setImageFileName( m_imagePath );
-      emit newTask( i18n("Verifying written data") );
-      emit burning(false);
-      m_verifyJob->start();
-    }
-    else {
-      m_finished = true;
-      emit finished(true);
-    }
-  }
-  else {
-    m_finished = true;
-    emit finished(false);
-  }
-}
-
-
-void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
-{
-  if( m_canceled ) {
-    m_finished = true;
-    emit canceled();
-    emit finished(false);
-    return;
-  }
-
-  k3bcore->config()->setGroup("General Options");
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
-    K3bCdDevice::eject( m_device );
-
-  m_finished = true;
-  emit finished( success );
-}
-
-
-void K3bIso9660ImageWritingJob::slotVerificationProgress( int p )
-{
-  emit percent( p/2 + 50 );
-}
-
-
-void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
-{
-  emit subPercent( p );
-
-  if( m_verifyData )
-    emit percent( p/2 );
-  else
-    emit percent( p );
-}
-
-
-void K3bIso9660ImageWritingJob::slotNextTrack( int, int )
-{
-  emit newSubTask( i18n("Writing image") );
-}
-
-
-void K3bIso9660ImageWritingJob::cancel()
-{
-  if( !m_finished ) {
-    m_canceled = true;
-
-    if( m_writer )
-      m_writer->cancel();
-    if( m_verifyData && m_verifyJob )
-      m_verifyJob->cancel();
   }
 }
 
@@ -380,14 +401,16 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
 {
   if( m_simulate )
     return i18n("Simulating ISO9660 image");
-  else
+  else if( m_copies == 1 )
     return i18n("Burning ISO9660 image");
+  else
+    return i18n("Burning ISO9660 image (%1 copies)").arg(m_copies);
 }
 
 
 QString K3bIso9660ImageWritingJob::jobDetails() const
 {
-  return m_imagePath.section("/", -1);
+  return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(m_imagePath)));
 }
 
 

@@ -17,8 +17,8 @@
 #include "k3bisoimagewritingdialog.h"
 #include "k3biso9660imagewritingjob.h"
 
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3bburnprogressdialog.h>
 #include <kcutlabel.h>

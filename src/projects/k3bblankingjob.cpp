@@ -18,8 +18,8 @@
 #include "k3bcdrdaowriter.h"
 
 #include <k3bglobals.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdevicehandler.h>
+#include <k3bdevice.h>
+#include <k3bdevicehandler.h>
 #include <k3bemptydiscwaiter.h>
 
 #include <kconfig.h>

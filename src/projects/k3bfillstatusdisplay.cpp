@@ -19,10 +19,10 @@
 
 #include <k3bcore.h>
 #include <k3bdeviceselectiondialog.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevicehandler.h>
-#include <device/k3bmsf.h>
+#include <k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevicehandler.h>
+#include <k3bmsf.h>
 
 #include <qevent.h>
 #include <qpainter.h>

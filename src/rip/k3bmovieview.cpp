@@ -18,7 +18,7 @@
 #include "k3bdvdcontent.h"
 #include "k3btcwrapper.h"
 #include "k3bdvdripperwidget.h"
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include "k3bdvdriplistviewitem.h"
 #include <kcutlabel.h>
 #include <k3btoolbox.h>

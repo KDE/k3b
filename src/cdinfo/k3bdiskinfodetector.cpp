@@ -15,10 +15,10 @@
 
 #include "k3bdiskinfodetector.h"
 
-#include <device/k3bdevice.h>
-#include <device/k3btoc.h>
+#include <k3bdevice.h>
+#include <k3btoc.h>
 #include <k3bglobals.h>
-#include <device/k3bdevicehandler.h>
+#include <k3bdevicehandler.h>
 #include <k3biso9660.h>
 
 #include <kdebug.h>

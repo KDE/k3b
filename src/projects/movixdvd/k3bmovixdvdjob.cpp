@@ -22,7 +22,7 @@
 
 #include <k3bcore.h>
 #include <k3bdvdjob.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 
 #include <klocale.h>
 #include <kdebug.h>

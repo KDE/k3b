@@ -16,7 +16,7 @@
 #include "k3bvideodvdburndialog.h"
 #include "k3bvideodvddoc.h"
 
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bcore.h>

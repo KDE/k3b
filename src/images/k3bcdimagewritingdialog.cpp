@@ -21,8 +21,8 @@
 #include "k3bclonetocreader.h"
 #include <cdclone/k3bclonejob.h>
 
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3bburnprogressdialog.h>
 #include <kcutlabel.h>
@@ -127,6 +127,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 
 K3bCdImageWritingDialog::~K3bCdImageWritingDialog()
 {
+  kdDebug() << "(K3bCdImageWritingDialog) destrcution" << endl;
   delete d;
 }
 
@@ -619,9 +620,13 @@ void K3bCdImageWritingDialog::slotToggleAll()
 
     // some stuff is only available for iso images
     m_checkNoFix->setEnabled( currentImageType() == IMAGE_ISO );
-    m_checkVerify->setEnabled( currentImageType() == IMAGE_ISO );
     m_dataModeWidget->setEnabled( currentImageType() == IMAGE_ISO );
-
+    if( m_checkDummy->isChecked() ) {
+      m_checkVerify->setEnabled( false );
+      m_checkVerify->setChecked( false );
+    }
+    else
+      m_checkVerify->setEnabled( currentImageType() == IMAGE_ISO );
     m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
   }
   else {

@@ -27,6 +27,9 @@ check if a DVD-R(W) writer supports testwriting before trying a simulation
 fixed DVD-Copy. We needed to determine the size of the data to copy for ourselves instead of relying
 	on the kernel
 Automatic CD-writing speed selection (chooses always the max for now)
+Technical info about audiofiles in the audio project are displayed in the track properties dialog
+One may now add complete dirs to an audio project
+Detection of Justlink support
 	
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>

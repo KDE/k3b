@@ -18,7 +18,7 @@
 #include "k3bjobprogresssystemtray.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bstdguiitems.h>
 #include <k3bcore.h>
 #include <k3bversion.h>

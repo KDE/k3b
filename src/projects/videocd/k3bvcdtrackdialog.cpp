@@ -42,7 +42,7 @@
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
 #include <kcutlabel.h>
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 #include <k3bglobals.h>
 #include <k3blistview.h>
 #include <k3bcutcombobox.h>

@@ -175,17 +175,21 @@ Q_LONG K3bDeviceWrapperQIODevice::readBlock( char* data, Q_ULONG maxlen )
   }
   long read = -1;
 
-  if( m_device->read10( buffer,
-			bufferLen,
-			startSec/2048,
-			bufferLen/2048 ) )
+  int retries = 10;  // TODO: no fixed value
+  while( retries && !m_device->read10( buffer,
+				       bufferLen,
+				       startSec/2048,
+				       bufferLen/2048 ) )
+    retries--;
+
+  if( retries > 0 )
     read = maxlen;
 
   
   // fallback
   if( read < 0 ) {
     kdDebug() << "(K3bDeviceWrapperQIODevice) falling back to stdlib read" << endl;
-    if( ::lseek( m_device->open(), startSec,SEEK_SET ) == -1 )
+    if( ::lseek( m_device->open(), startSec, SEEK_SET ) == -1 )
       kdDebug() << "(K3bDeviceWrapperQIODevice) seek failed." << endl;
     else {
       read = ::read( m_device->open(), buffer, bufferLen );

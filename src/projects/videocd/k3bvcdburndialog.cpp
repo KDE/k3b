@@ -37,7 +37,7 @@
 #include "k3bvcdburndialog.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdoptions.h"
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bcore.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>

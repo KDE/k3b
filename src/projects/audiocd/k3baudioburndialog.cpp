@@ -17,7 +17,7 @@
 #include "k3baudioburndialog.h"
 #include <k3bcore.h>
 #include "k3baudiodoc.h"
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include "k3baudiocdtextwidget.h"

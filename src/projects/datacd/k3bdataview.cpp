@@ -20,7 +20,7 @@
 #include "k3bbootimageview.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bfillstatusdisplay.h>
 #include <k3bcore.h>

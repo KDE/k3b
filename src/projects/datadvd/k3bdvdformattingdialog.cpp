@@ -16,8 +16,8 @@
 #include "k3bdvdformattingdialog.h"
 #include "k3bdvdformattingjob.h"
 
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
+#include <k3bdevice.h>
+#include <k3bdevicemanager.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3bwriterselectionwidget.h>

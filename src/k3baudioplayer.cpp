@@ -15,7 +15,7 @@
 
 
 #include "k3baudioplayer.h"
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 #include "kcutlabel.h"
 
 #include <qlabel.h>

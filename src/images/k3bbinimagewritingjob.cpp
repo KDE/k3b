@@ -19,7 +19,7 @@
 #include <k3bcdrdaowriter.h>
 #include <k3bcore.h>
 #include <k3bemptydiscwaiter.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
 
@@ -92,6 +92,8 @@ bool K3bBinImageWritingJob::prepareWriter()
       usedWritingApp = K3b::CDRDAO;
     }
     else {
+      // TODO: put this into K3bCueFileParser
+      // TODO: check K3bCueFileParser::imageFilenameInCue()
       // let's see if cdrecord can handle the cue file
       QFile f( m_tocFile );
       if( f.open( IO_ReadOnly ) ) {

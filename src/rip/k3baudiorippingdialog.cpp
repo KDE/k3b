@@ -25,7 +25,7 @@
 #include "songdb/k3bsongmanager.h"
 #include <k3bcore.h>
 #include <k3bglobals.h>
-#include <device/k3btrack.h>
+#include <k3btrack.h>
 #include <k3bstdguiitems.h>
 #include <k3bthreadjob.h>
 

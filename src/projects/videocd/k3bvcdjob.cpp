@@ -38,7 +38,7 @@
 #include <k3bdoc.h>
 #include <k3bprocess.h>
 #include <k3bemptydiscwaiter.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bglobals.h>
 #include <k3bcdrecordwriter.h>

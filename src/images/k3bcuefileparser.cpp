@@ -67,9 +67,20 @@ void K3bCueFileParser::readFile()
 	    setImageFilename( filename().mid( 0, filename().findRev('/') + 1 ) + dataFile );
 	  }
 
+	  //
+	  // CDRDAO does not use this image filename but replaces the extension from the cue file
+	  // with "bin" to get the image filename, we should take this into account
+	  //
 	  kdDebug() << "(K3bCueFileParser) trying bin file: " << dataFile << endl;
-
-	  setValid( QFileInfo( imageFilename() ).isFile() );
+	  if( QFileInfo( imageFilename() ).isFile() ) {
+	    setValid( true );
+	    m_imageFilenameInCue = true;
+	  }
+	  else {
+	    setImageFilename( filename().mid( filename().length() - 3 ) + "bin" );
+	    setValid( QFileInfo( imageFilename() ).isFile() );
+	    m_imageFilenameInCue = false;
+	  }
 	}
       }
 

@@ -21,14 +21,14 @@
 #include <k3bdatavolumedescwidget.h>
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bisooptions.h>
 #include <k3bglobals.h>
 #include <k3baudiocdtextwidget.h>
 #include <k3bdatamodewidget.h>
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 #include <k3bstdguiitems.h>
 #include <k3bwritingmodewidget.h>
 #include <k3bexternalbinmanager.h>

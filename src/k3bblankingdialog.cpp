@@ -15,8 +15,8 @@
 
 #include "k3bblankingdialog.h"
 
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
+#include <k3bdevice.h>
+#include <k3bdevicemanager.h>
 #include "k3bblankingjob.h"
 #include "k3bwriterselectionwidget.h"
 #include "k3bdiskerasinginfodialog.h"

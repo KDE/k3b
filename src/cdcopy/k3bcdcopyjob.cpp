@@ -20,8 +20,8 @@
 #include <k3b.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bemptydiscwaiter.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdiskinfo.h>
+#include <k3bdevice.h>
+#include <k3bdiskinfo.h>
 #include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bglobals.h>
 

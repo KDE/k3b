@@ -17,7 +17,7 @@
 #include "k3bdevicehandler.h"
 #include <k3bprogressinfoevent.h>
 #include <k3bthread.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 
 
 class K3bCdDevice::DeviceHandler::DeviceHandlerThread : public K3bThread

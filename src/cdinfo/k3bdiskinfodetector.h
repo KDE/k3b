@@ -20,9 +20,9 @@
 
 #include <qobject.h>
 
-#include <device/k3bdiskinfo.h>
-#include <device/k3bdevicehandler.h>
-#include <device/k3bcdtext.h>
+#include <k3bdiskinfo.h>
+#include <k3bdevicehandler.h>
+#include <k3bcdtext.h>
 
 
 class K3bIso9660;

@@ -22,8 +22,8 @@
 #include "k3bdvdextraripstatus.h"
 #include "k3bdvdrippingprocess.h"
 #include <k3bjobprogressdialog.h>
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevice.h>
 #include <k3bexternalbinmanager.h>
 #include "../videoEncoding/k3bdivxcodecdata.h"
 #include "../videoEncoding/k3bdivxview.h"

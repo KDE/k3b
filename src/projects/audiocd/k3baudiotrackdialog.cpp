@@ -36,7 +36,7 @@
 #include "k3baudiotrack.h"
 #include <k3bvalidators.h>
 #include <kcutlabel.h>
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 #include <k3bvalidators.h>
 #include <k3baudiodecoder.h>
 

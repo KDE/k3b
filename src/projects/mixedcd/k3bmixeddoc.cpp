@@ -21,7 +21,7 @@
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
 #include <k3bglobals.h>
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 
 #include <qfileinfo.h>
 #include <qdom.h>

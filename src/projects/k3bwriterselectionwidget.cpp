@@ -17,8 +17,8 @@
 #include "k3bwriterselectionwidget.h"
 
 #include <k3bdevicecombobox.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
+#include <k3bdevice.h>
+#include <k3bdevicemanager.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
 

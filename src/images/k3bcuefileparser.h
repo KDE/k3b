@@ -29,8 +29,17 @@ class K3bCueFileParser : public K3bImageFileReader
  public:
   K3bCueFileParser( const QString& filename = QString::null );
 
+  /**
+   * CDRDAO does not use this image filename but replaces the extension from the cue file
+   * with "bin" to get the image filename.
+   * So in this case cdrecord won't be able to burn the cue file. That is why we need this hack.
+   */
+  bool imageFilenameInCue() const { return m_imageFilenameInCue; }
+
  private:
   void readFile();
+
+  bool m_imageFilenameInCue;
 };
 
 #endif

@@ -46,8 +46,8 @@
 #include "k3bprojectmanager.h"
 //#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
-#include <device/k3bdevice.h>
-#include <device/k3bmsf.h>
+#include <k3bdevice.h>
+#include <k3bmsf.h>
 #include <k3baudiodoc.h>
 #include <k3bdatadoc.h>
 #include <k3bvcddoc.h>
@@ -57,7 +57,7 @@
 #include <k3bdvddoc.h>
 #include <k3bvideodvddoc.h>
 #include <k3bcore.h>
-#include <device/k3bdevicemanager.h>
+#include <k3bdevicemanager.h>
 
 #include <kostore/koStore.h>
 #include <kostore/koStoreDevice.h>

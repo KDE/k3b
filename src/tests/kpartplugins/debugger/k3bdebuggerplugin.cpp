@@ -17,8 +17,8 @@
 
 // the k3b stuff we need
 #include <k3bcore.h>
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevice.h>
 #include <k3binteractiondialog.h>
 
 #include <kdebug.h>

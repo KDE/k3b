@@ -16,7 +16,7 @@
 
 #include "k3bcore.h"
 
-#include <device/k3bdevicemanager.h>
+#include <k3bdevicemanager.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>

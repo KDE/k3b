@@ -17,10 +17,10 @@
 
 #include <k3bglobals.h>
 #include <k3bprocess.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdeviceglobals.h>
-#include <device/k3bdevicehandler.h>
-#include <device/k3bdiskinfo.h>
+#include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
+#include <k3bdevicehandler.h>
+#include <k3bdiskinfo.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bcore.h>

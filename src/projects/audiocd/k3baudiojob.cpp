@@ -21,9 +21,9 @@
 #include <k3baudiotrack.h>
 #include <k3baudionormalizejob.h>
 #include "k3baudiojobtempdata.h"
-#include <device/k3bdevicemanager.h>
-#include <device/k3bdevice.h>
-#include <device/k3bmsf.h>
+#include <k3bdevicemanager.h>
+#include <k3bdevice.h>
+#include <k3bmsf.h>
 #include <k3bwavefilewriter.h>
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>

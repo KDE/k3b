@@ -190,44 +190,60 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
     return 0;
   }
 
+  K3bDirItem* newDirItem = 0;
 
-  // check for recursion
-  // if the added file is a symlink we check if it is a subdirectory
-  // of the resolved one
-  if( f.isSymLink() ) {
-    QFileInfo link( f );
-
-    while( link.isSymLink() ) {
-      if( link.readLink().startsWith("/") )
-	link.setFile( link.readLink() );
-      else
-	link.setFile( link.dirPath() + "/" + link.readLink() );
-    }
-
-    // symLink resolved
-    if( f.absFilePath().startsWith( link.absFilePath() ) ) {
-      KMessageBox::error( qApp->activeWindow(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
+  if( K3bDataItem* oldItem = parent->find( newName ) ) {
+    if( oldItem->isDir() )
+      newDirItem = dynamic_cast<K3bDirItem*>(oldItem);
+    else if( oldItem->isFromOldSession() )
+      return 0;  // FIXME: This is not perfect at all
+    else if( m_bExistingItemsIgnoreAll )
       return 0;
+    else if( m_bExistingItemsReplaceAll )
+      removeItem( oldItem );
+    else {
+      // TODO: use KGuiItems to add ToolTips
+      switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
+					    i18n("%1 already exists.").arg(newName),
+					    qApp->activeWindow(),
+					    0,
+					    5,
+					    i18n("Replace"),
+					    i18n("Replace All"),
+					    i18n("Ignore"),
+					    i18n("Ignore All"),
+					    i18n("Rename") ) ) {
+      case 1: // replace
+	removeItem( oldItem );
+	break;
+      case 2: // replace all
+	removeItem( oldItem );
+	m_bExistingItemsReplaceAll = true;
+	break;
+      case 3: // ignore
+	return 0;
+	break;
+      case 4: // ignore all
+	m_bExistingItemsIgnoreAll = true;
+	return 0;
+	break;
+      case 5: // rename
+	{
+	  bool ok = true;
+	  do {
+	    newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+					     newName, &ok, qApp->activeWindow() );
+	  } while( ok && nameAlreadyInDir( newName, parent ) );
+	  if( !ok )
+	    return 0;
+	}
+	break;
+      }
     }
   }
 
-
-  if( nameAlreadyInDir( newName, parent ) ) {
-    k3bcore->config()->setGroup("Data project settings");
-    bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
-    if( dropDoubles )
-      return 0;
-
-    bool ok = true;
-    while( ok && nameAlreadyInDir( newName, parent ) ) {
-      newName = KLineEditDlg::getText( i18n("A directory with that name already exists. Please enter a new name."),
-				       newName, &ok, qApp->activeWindow() );
-    }
-    if( !ok )
-      return 0;
-  }
-
-  K3bDirItem* newDirItem = new K3bDirItem( newName, this, parent );
+  if( !newDirItem )
+    newDirItem = new K3bDirItem( newName, this, parent );
 
   KConfig* c = k3bcore->config();
   c->setGroup( "Data project settings" );

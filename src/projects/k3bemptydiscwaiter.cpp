@@ -15,9 +15,9 @@
 
 
 #include "k3bemptydiscwaiter.h"
-#include <device/k3bdevice.h>
-#include <device/k3bdeviceglobals.h>
-#include <device/k3bdevicehandler.h>
+#include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
+#include <k3bdevicehandler.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3biso9660.h>

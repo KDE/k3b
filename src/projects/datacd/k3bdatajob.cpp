@@ -22,9 +22,9 @@
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3bversion.h>
-#include <device/k3bdevice.h>
-#include <device/k3btoc.h>
-#include <device/k3btrack.h>
+#include <k3bdevice.h>
+#include <k3btoc.h>
+#include <k3btrack.h>
 #include <k3bdevicehandler.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3bexternalbinmanager.h>

@@ -24,9 +24,9 @@
 #include "k3bfiletreeview.h"
 #include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
-#include <device/k3bdevicehandler.h>
-#include <device/k3bdevice.h>
-#include <device/k3bdevicemanager.h>
+#include <k3bdevicehandler.h>
+#include <k3bdevice.h>
+#include <k3bdevicemanager.h>
 #include <k3bthememanager.h>
 
 #include <unistd.h>

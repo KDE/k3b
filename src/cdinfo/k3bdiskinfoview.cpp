@@ -17,9 +17,9 @@
 #include "k3bdiskinfoview.h"
 #include "k3bdiskinfodetector.h"
 
-#include <device/k3bdiskinfo.h>
-#include <device/k3bcdtext.h>
-#include <device/k3bdeviceglobals.h>
+#include <k3bdiskinfo.h>
+#include <k3bcdtext.h>
+#include <k3bdeviceglobals.h>
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
 #include <k3blistview.h>

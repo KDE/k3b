@@ -16,12 +16,12 @@
 #include "k3baudiocdview.h"
 #include "k3baudiorippingdialog.h"
 
-#include <device/k3btoc.h>
-#include <device/k3bdiskinfo.h>
-#include <device/k3bdevicehandler.h>
+#include <k3btoc.h>
+#include <k3bdiskinfo.h>
+#include <k3bdevicehandler.h>
 #include <k3blistview.h>
 #include <cddb/k3bcddbresult.h>
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 #include <cddb/k3bcddb.h>
 #include <cddb/k3bcddbquery.h>
 #include <k3btoolbox.h>

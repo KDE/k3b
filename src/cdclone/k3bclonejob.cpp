@@ -18,7 +18,7 @@
 #include <k3breadcdreader.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bexternalbinmanager.h>
-#include <device/k3bdevice.h>
+#include <k3bdevice.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3bemptydiscwaiter.h>
