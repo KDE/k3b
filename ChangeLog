@@ -48,7 +48,9 @@ Completely rewritten CD copy:
    - Audio reading with cdparanoia for high quality ripping
    - no cdrdao anymore
 Support for new growisofs option to specify the size of a written image in DAO mode
-
+Added check for free space in temp dir to dvd copy
+Added a script to simplify the start of K3bSetup2.
+	
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
 DVD formatting
