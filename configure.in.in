@@ -249,7 +249,7 @@ dnl === test for LAME - end ====
 dnl === check for resmgr - begin ============
 AC_ARG_WITH(resmgr, AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), [ac_cv_use_resmgr=$withval], [ac_cv_use_resmgr=yes])
 
-if test "$ac_cv_use_regmgr" = "yes"; then
+if test "$ac_cv_use_resmgr" = "yes"; then
   RESMGR_LIB=""
   KDE_CHECK_HEADERS(resmgr.h, [
          KDE_CHECK_LIB(resmgr,rsm_open_device,[
