@@ -1,22 +1,38 @@
-Install K3b 0.5
------------------
-
-K3b 0.5 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net and the cdparanoia devel package
-which should be included in every current distribution.
+Installing K3b 0.6
+------------------
 
 
-After installing ID3Lib and cdparanoia devel install K3b like every other KDE app:
+Before installing K3b please make sure you have at least the following installed on your sytem:
+ - the QT3 library (at least version 3.0.2)
+ - the KDE3 libraries
+ - cdparanoia library (should come with every common distribution)
+ - ID3Lib (get it from http://id3lib.sourceforge.net)
+ 
+
+
+After that it's all the same:
 
 ./configure
 
+or try ./configure --help to leaarn about the options.
+Mostly you will like to set the kde3 directory via:
+
+./configure --prefix=<mykde3base>
+
+
+If configure was successfull just compile K3b:
+
 make
+
+Now you are ready to install:
 
 make install (as root)
 
 
 K3b needs some special permission settings to work properly.
-With 0.5.2 comes the K3bSetup Wizard that will perform all the necessary steps.
-No need to do anything on your own!
+With version 0.6 comes the K3bSetup Wizard that will perform all the necessary steps.
+Just start it.
+
 
 Have fun
 Sebastian Trueg

@@ -1,6 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(k3b,0.5.2)
+AM_INIT_AUTOMAKE(k3b,0.6.0pre1)
 
 AC_MSG_CHECKING(for cdparanoia libraries and headers)
 

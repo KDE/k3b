@@ -1,36 +1,62 @@
-K3b Version 0.5
+K3b Version 0.6
 
-Thanx for downloading my very first KDE-project.
+Thanx for downloading K3b - The CD Kreator
 
-With version 0.5 K3b becomes a grown-up program.
-These are the features:
-   - the most userfriendly interface ever ;-)
-	- writing audio-cds from mp3 and wav files (on-the-fly or with images)
-   	 - cd-text support
-       - ID3-tag support
-       - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
-	- writing ISO-cds
-       - Joliet/Rockridge support
-       - create image/write image
-       - writing on-the-fly
-	    - creating of file-tree via drag'n'drop (as easy as it could be)
-            - removing files and directories from data tree
-            - moving files within the project
-            - adding new empty directories to data tree
-            - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
-	    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
-   - writing existing iso-images
-   - blanking of cdrws
-   - cd ripping to wav
-        - cddb support
-        - sophisticated pattern system to automatically organize the ripped tracks
-   - cd writing in the backgroud
-   - K3b checks if the user inserted an empty disk (I think K3b is the only program under linux with that feature!)
-   - Retrieving cd info and toc
-   - Support for ATAPI drives without SCSI-emulation for reading
+These are the features so far:
+ - the most userfriendly interface ever ;-)
 
-Please, please report bugs (with k3b output!) and tell me what you like/dislike
+ - writing audio-cds
+   - from mp3 and wav files (on-the-fly or with images)
+   - cd-text support
+   - ID3-tag support
+   - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
+
+ - writing ISO-cds
+   - Joliet/Rockridge support
+   - create image/write image
+   - writing on-the-fly
+   - creating of file-tree via drag'n'drop (as easy as it could be)
+   - removing files and directories from data tree
+   - moving files within the project
+   - adding new empty directories to data tree
+   - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
+   - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
+   - multisession support
+
+ - writing existing iso-images to cd
+
+ - blanking of cdrws
+
+ - cd ripping to wav
+   - cddb support
+   - sophisticated pattern system to automatically organize the ripped tracks
+
+ - dvd ripping with the transcode tools
+
+ - K3b checks if the user inserted an empty disk
+
+ - Retrieving cd info and toc
+
+ - Support for ATAPI drives without SCSI-emulation for reading
+
+ - integrated full featured audio player
+
+
+What you need to run K3b:
+ - since K3b is a CD writing program a cd writer would be a good thing to have ;-)
+ - the QT3 and KDE3 libraries from the good guys
+ - the cdparanoia library for cd ripping from Monty
+ - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
+ - cdrdao, the other linux cd writing program from Andreas Mueller
+ - libID3, a library for reading ID3 tags from MP3 files
+ - libmad, great MP3 decoding library from Robert Leslie
+ - optional the transcode tools for DVD ripping from Thomas Oestreich
+
+See INSTALL for further information
+
+
+Please report bugs (with k3b output!) and tell me what you like/dislike
 about the user-interface!
 
 Have fun
-Sebastian Trueg ( trueg@informatik.uni-freiburg.de)
+Sebastian Trueg (trueg@informatik.uni-freiburg.de)
