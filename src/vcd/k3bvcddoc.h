@@ -20,7 +20,7 @@
 
 #include "k3bvcdoptions.h"
 #include "mpeginfo/mpeg.h"
-#include "mpeginfo/chunkTab.h"
+// #include "mpeginfo/chunkTab.h"
 #include "../k3bdoc.h"
 
 #include <qptrqueue.h>
@@ -85,7 +85,6 @@ class K3bVcdDoc : public K3bDoc
   void setVcdType( int type );
   void setDeleteImage( bool b ) { m_deleteImage = b; }
       
-  static unsigned int identifyMpegFile( const KURL& url );
 
  public slots:
   /**
@@ -128,7 +127,7 @@ class K3bVcdDoc : public K3bDoc
  private:
   K3bVcdTrack* createTrack( const KURL& url );
   void informAboutNotFoundFiles();
-
+  unsigned int identifyMpegFile( const KURL& url );
 
   QStringList m_notFoundFiles;
   QString m_vcdImage;
@@ -153,7 +152,7 @@ class K3bVcdDoc : public K3bDoc
   bool m_deleteImage;
   int m_vcdType;
   uint lastAddedPosition;
- 
+  mpeg* m_mpeg;
 };
 
 

@@ -64,7 +64,8 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
 {
   m_tracks = 0L;
   m_vcdOptions = 0L;
-
+  m_mpeg = 0L;
+  
   m_docType = VCD;
   m_vcdType = NONE;
 
@@ -82,6 +83,9 @@ K3bVcdDoc::~K3bVcdDoc()
   if ( m_vcdOptions )
     delete m_vcdOptions;
 
+  if ( m_mpeg )
+    delete m_mpeg;
+    
 }
 
 bool K3bVcdDoc::newDocument()
@@ -180,7 +184,8 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
   kdDebug() << QString("(K3bVcdDoc) createTrack url.path = %1").arg(url.path()) << endl;
   int mpeg = identifyMpegFile( url );
-  if (mpeg > 0) {
+  // no mpeg audio files at this time!!
+  if (mpeg > 0 && m_mpeg->has_video()) {
     if (vcdType() == NONE) {
       setVcdType(vcdTypes(mpeg));
       KMessageBox::information(kapp->mainWidget(),"(" + url.path() + ")\n" +
@@ -196,7 +201,35 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
     }
 
     K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
-    newTrack->setMimeType(QString("Mpeg%1").arg(mpeg));
+    char HMS[30];
+    QString mt;
+
+    m_mpeg->SecsToHMS(HMS, m_mpeg->Duration());
+
+    mt.append(i18n(" MPEG%1").arg(mpeg));
+
+    newTrack->setMpegDisplaySize(" n/a");
+    if (m_mpeg->DExt){
+      switch (m_mpeg->DExt->video_format) {
+        case 0 : mt.append(i18n("  Component")); break;
+        case 1 : mt.append("  PAL"); break;
+        case 2 : mt.append("  NTSC"); break;
+        case 3 : mt.append("  SECAM"); break;
+        case 4 : mt.append("  MAC"); break;
+        case 5 : mt.append(i18n("  Unspecified")); break;
+      }
+      if ((m_mpeg->DExt->h_display_size != m_mpeg->Video->hsize) || (m_mpeg->DExt->v_display_size != m_mpeg->Video->vsize))
+        newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(m_mpeg->DExt->h_display_size).arg(m_mpeg->DExt->v_display_size));
+    }
+    
+    newTrack->setMpegSize(QString(" %1 x %2").arg(m_mpeg->Video->hsize).arg(m_mpeg->Video->vsize));
+    newTrack->setMpegFps(QString(" %1").arg(m_mpeg->Video->frame_rate));
+    newTrack->setMpegMbps(QString(" %1").arg(m_mpeg->Video->bitrate/2500.0));
+    
+    newTrack->setMpegDuration(HMS);
+    newTrack->setMpegType(mt);
+
+
     return newTrack;
   }
   else {
@@ -299,14 +332,12 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
 
 unsigned int K3bVcdDoc::identifyMpegFile( const KURL& url )
 {
-  chunkTab Tab(20);
   char filename[255];
   strcpy(filename,QFile::encodeName(url.path()));
-  Tab.AddFile(filename);
-  Tab.PrintInfos();
-  Tab.PrintTab();
+  m_mpeg = new mpeg(filename,0);
   // return 0 = Unknown file type, 1 = Mpeg 1, 2 = Mpeg 2
-  return Tab.MpegVersion();
+  // return Tab.MpegVersion();
+  return m_mpeg->MpegVersion();
 }
 
 void K3bVcdDoc::informAboutNotFoundFiles()

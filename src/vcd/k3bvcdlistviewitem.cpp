@@ -51,13 +51,28 @@ QString K3bVcdListViewItem::text(int i) const
   switch( i )
     {
     case 0:
-      return QString::number( m_track->index() +2 ).rightJustify( 2, '0' );
+      return QString::number( m_track->index() +1 ).rightJustify( 2, '0' );
     case 1:
       return m_track->fileName();
     case 2:
-      // track mimetype
-      return m_track->mimeComment();
+      // track mpegtype
+      return m_track->mpegType();
     case 3:
+      // track mpegsize
+      return m_track->mpegSize();
+    case 4:
+      // track mpegdisplaysize
+      return m_track->mpegDisplaySize();
+    case 5:
+      // track mpegfps
+      return m_track->mpegFps();
+    case 6:
+      // track mpegmbps
+      return m_track->mpegMbps();
+    case 7:
+      // track mpegduration
+      return m_track->mpegDuration();
+    case 8:
       // track size
       return KIO::convertSize( m_track->size() );
 

@@ -48,10 +48,36 @@ unsigned long K3bVcdTrack::size() const
   return (m_file.size() + 2351) / 2352 * 2352;
 }
 
-void K3bVcdTrack::setMimeType(const QString& mt)
+void K3bVcdTrack::setMpegType(const QString& mt)
 {
-  m_mimetype = mt;
+  m_mpegtype = mt;
 }
+
+void K3bVcdTrack::setMpegDuration(const QString& time)
+{
+  m_mpegduration = time;
+}
+
+void K3bVcdTrack::setMpegSize(const QString& size)
+{
+  m_mpegsize = size;
+}
+
+void K3bVcdTrack::setMpegDisplaySize(const QString& size)
+{
+  m_mpegdisplaysize = size;
+}
+
+void K3bVcdTrack::setMpegFps(const QString& fps)
+{
+  m_mpegfps = fps;
+}
+
+void K3bVcdTrack::setMpegMbps(const QString& mbps)
+{
+  m_mpegmbps = mbps;
+}
+
 
 int K3bVcdTrack::index() const
 {

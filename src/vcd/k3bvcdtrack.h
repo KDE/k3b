@@ -32,17 +32,33 @@ class K3bVcdTrack
 
   QString fileName() const { return QFileInfo(m_file).fileName(); }
   QString absPath() const { return QFileInfo(m_file).absFilePath(); }
-  QString mimeComment() const {return m_mimetype;}
+  QString mpegType() const {return m_mpegtype;}
+  QString mpegDuration() const {return m_mpegduration;}
+  QString mpegSize() const {return m_mpegsize;};
+  QString mpegDisplaySize() const {return m_mpegdisplaysize;};
+  QString mpegFps() const {return m_mpegfps;};
+  QString mpegMbps() const {return m_mpegmbps;};
+  
   unsigned long size() const;
   /** returns the index in the list */
   int index() const;
-  void setMimeType(const QString&);
-
+  void setMpegType(const QString&);
+  void setMpegDuration(const QString&);
+  void setMpegSize(const QString&);
+  void setMpegDisplaySize(const QString&);
+  void setMpegFps(const QString&);
+  void setMpegMbps(const QString&);
+  
  protected:
   QList<K3bVcdTrack>* m_parent;
   int m_filetype;
   QFile m_file;
-  QString m_mimetype;
+  QString m_mpegtype;
+  QString m_mpegduration;
+  QString m_mpegsize;
+  QString m_mpegdisplaysize;
+  QString m_mpegfps;
+  QString m_mpegmbps;
 
 };
 
