@@ -158,6 +158,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 , m_playObject( Arts::PlayObject::null() )
 #endif
 {
+    m_currentItem = 0L;
   // initialize
   // ------------------------------------------------------------------------
   m_labelFilename    = new KCutLabel( i18n("no file"), this );
