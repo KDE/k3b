@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvdpreview.h  -  description
+                          k3bdivxencodingprocess.h  -  description
                              -------------------
-    begin                : Tue Apr 2 2002
+    begin                : Sun Apr 28 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,50 +15,35 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDPREVIEW_H
-#define K3BDVDPREVIEW_H
+#ifndef K3BDIVXENCODINGPROCESS_H
+#define K3BDIVXENCODINGPROCESS_H
 
 #include <qwidget.h>
-#include <qcanvas.h>
+#include "../k3bjob.h"
 
-class QCanvasLine;
-class QCanvas;
-class QCanvasPixmap;
-class QPainter;
+class K3bDvdCodecData;
+class KProcess;
+class KShellProcess;
 
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdPreview : public QCanvasView  {
+class K3bDivXEncodingProcess : public K3bJob  {
    Q_OBJECT
 public: 
-    K3bDvdPreview(QCanvas* c, QWidget *parent=0, const char *name=0);
-    ~K3bDvdPreview();
-    void setPreviewPicture( const QString& image );
-    void setCroppingLines();
-    void setTopLine( int offset );
-    void setLeftLine( int offset );
-    void setBottomLine( int offset );
-    void setRightLine( int offset );
+    K3bDivXEncodingProcess(K3bDvdCodecData *data, QWidget *parent=0, const char *name=0);
+    ~K3bDivXEncodingProcess();
+public slots:
+    void start();
+    void cancel();
+    void slotProcessExited( KProcess *p );
+    void slotParseProcess( KProcess *p, char *buffer, int lenght);
 
-protected:
-   void drawContents( QPainter* p );
-
+    //void slotPercent( unsigned int );
 private:
-    QCanvasLine *m_lineTop;
-    QCanvasLine *m_lineBottom;
-    QCanvasLine *m_lineLeft;
-    QCanvasLine *m_lineRight;
-    QCanvas *can;
-    QCanvasSprite *m_sprite;  // image
-
-    void updateLines();
-    // cropping line offset to sprite edges
-    int m_offsetTop;
-    int m_offsetLeft;
-    int m_offsetBottom;
-    int m_offsetRight;
+    K3bDvdCodecData *m_data;
+     KShellProcess *m_process;
 };
 
 #endif

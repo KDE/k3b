@@ -24,7 +24,7 @@
 class QSlider;
 class QLabel;
 class KComboBox;
-
+class K3bDvdCodecData;
 /**
   *@author Sebastian Trueg
   */
@@ -32,10 +32,15 @@ class KComboBox;
 class K3bDvdResize : public QGroupBox  {
    Q_OBJECT
 public: 
-    K3bDvdResize(QWidget *parent=0, const char *name=0);
+    K3bDvdResize(K3bDvdCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDvdResize();
+    void initView();
+    void updateView();
+signals:
+    void sizeChanged();
 private slots:
-
+    void slotResizeChanged( int );
+    void slotHeightChanged( int );
 private:
     QSlider *m_sliderResize;
     KComboBox *m_comboHeight;
@@ -43,6 +48,9 @@ private:
     QLabel *m_labelAspectError;
     QLabel *m_labelWidth;
 
+    float m_currentAspect;
+    float m_orginalAspect;
+    K3bDvdCodecData *m_data;
     void setupGui();
 };
 

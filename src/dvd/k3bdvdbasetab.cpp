@@ -30,7 +30,7 @@
 #include <klocale.h>
 
 K3bDvdBaseTab::K3bDvdBaseTab( K3bDvdCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
-     m_datas = data;
+     m_data = data;
      setupGui();
 }
 
@@ -62,15 +62,15 @@ void K3bDvdBaseTab::setupGui(){
 
 void K3bDvdBaseTab::slotUpdateData( K3bDivXDataGui *dataGui ){
     qDebug("(K3bDvdBaseTab) Update date"); //
-    dataGui->updateData( m_datas );
+    dataGui->updateData( m_data );
     updateView();
 }
 
 void K3bDvdBaseTab::updateView(){
     //m_avsettings->setLength( m_datas->getLength() );
-    m_info->updateData( m_datas );
-    m_avsettings->updateData( m_datas );
-    m_avextended->updateData( m_datas );
+    m_info->updateData( m_data );
+    m_avsettings->updateData( m_data );
+    m_avextended->updateData( m_data );
 }
 
 #include "k3bdvdbasetab.moc"

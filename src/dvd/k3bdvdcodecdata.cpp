@@ -21,6 +21,14 @@
 #include "kio/global.h"
 
 K3bDvdCodecData::K3bDvdCodecData(){
+    m_iWidth=0;
+    m_iHeight=0;
+    m_resizeHeight=0;
+    m_resizeWidth=0;
+    m_cropTop=0;
+    m_cropLeft=0;
+    m_cropBottom=0;
+    m_cropRight=0;
 }
 
 K3bDvdCodecData::~K3bDvdCodecData(){
@@ -69,6 +77,7 @@ void K3bDvdCodecData::setWidth( const QString& w){
 void K3bDvdCodecData::setHeight( const QString& h){
      m_height = h;
      m_iHeight = h.toInt();
+    qDebug("Height %d", m_iHeight );
 }
 void K3bDvdCodecData::addLanguage( const QString& l){
     m_listAudio << l;

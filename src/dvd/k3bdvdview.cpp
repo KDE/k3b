@@ -19,6 +19,8 @@
 #include "k3bdvdcodecdata.h"
 #include "k3bdvdbasetab.h"
 #include "k3bdvdsizetab.h"
+#include "k3bdivxencodingprocess.h"
+#include "../k3bburnprogressdialog.h"
 
 #include <qlayout.h>
 #include <qsizepolicy.h>
@@ -65,10 +67,23 @@ void K3bDvdView::setupGui(){
 
     basicLayout->addWidget( m_baseTab, 0,0 );
     sizeLayout->addWidget( m_sizeTab, 0,0 );
-
 }
 
 void K3bDvdView::slotUser1(){
+     m_divxJob = new K3bDivXEncodingProcess( m_codingData, this );
+
+    m_divxDialog = new K3bBurnProgressDialog( this, "Encoding", false );
+    m_divxDialog->setCaption( i18n("Encoding process") );
+    m_divxDialog->setJob( m_divxJob );
+
+    /*
+    K3bDvdExtraRipStatus *ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
+    connect( m_ripJob, SIGNAL( dataRate( float )), ripStatus, SLOT( slotDataRate( float )) );
+    connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
+    m_ripDialog->setExtraInfo( ripStatus );
+    */
+    m_divxJob->start();
+    m_divxDialog->exec();
 }
 
 void K3bDvdView::slotUser2(){

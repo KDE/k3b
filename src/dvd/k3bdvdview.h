@@ -27,6 +27,8 @@ class K3bDvdAVExtend;
 class K3bDvdCodecData;
 class K3bDvdBaseTab;
 class K3bDvdSizeTab;
+class K3bDivXEncodingProcess;
+class K3bBurnProgressDialog;
 /**
   *@author Sebastian Trueg
   */
@@ -45,6 +47,8 @@ private:
     //K3bDvdDoc* m_doc;
     K3bDvdBaseTab *m_baseTab;
     K3bDvdSizeTab *m_sizeTab;
+    K3bDivXEncodingProcess *m_divxJob;
+    K3bBurnProgressDialog *m_divxDialog;
 
     void setupGui();
 };

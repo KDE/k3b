@@ -36,7 +36,7 @@ public:
     K3bDvdBaseTab( K3bDvdCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDvdBaseTab();
 private:
-    K3bDvdCodecData *m_datas;
+    K3bDvdCodecData *m_data;
     K3bDvdDirectories *m_directories;
     K3bDvdAVSet *m_avsettings;
     K3bDvdAVExtend *m_avextended;

@@ -29,7 +29,7 @@
 
 
 K3bDvdSizeTab::K3bDvdSizeTab(K3bDvdCodecData *data, QWidget *parent, const char *name ) : QWidget(parent,name) {
-     m_datas = data;
+     m_data = data;
      setupGui();
 }
 
@@ -40,23 +40,25 @@ void K3bDvdSizeTab::setupGui(){
     QGridLayout *mainLayout = new QGridLayout( this );
     mainLayout->setSpacing( KDialog::spacingHint() );
     //mainLayout->setMargin( KDialog::marginHint() );
-    m_crop = new K3bDvdCrop( this );
-    m_info = new K3bDvdInfoExtend( this );
-    m_resize = new K3bDvdResize( this );
+    m_crop = new K3bDvdCrop( m_data, this );
+    //m_info = new K3bDvdInfoExtend( this );
+    m_resize = new K3bDvdResize( m_data, this );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-    mainLayout->addMultiCellWidget( m_info, 0, 1, 0, 0 );
+    //mainLayout->addMultiCellWidget( m_info, 0, 1, 0, 0 );
     mainLayout->addMultiCellWidget( m_crop, 0, 1, 1, 1 );
     mainLayout->addMultiCellWidget( m_resize, 2, 2, 0, 1 );
-    mainLayout->setColStretch( 1, 20 );
-    mainLayout->addItem( spacer, 3, 0);
-
+    mainLayout->setColStretch( 1, 50 );
+    mainLayout->setRowStretch( 0, 50 );
+    //mainLayout->addItem( spacer, 3, 0);
+    connect( m_resize, SIGNAL( sizeChanged() ), m_crop, SLOT( slotUpdateFinalSize() ) );
 }
 
 void K3bDvdSizeTab::show(){
     QWidget::show();
-    m_info->updateData( m_datas );
-    m_crop->initPreview( m_datas );
+    //m_info->updateData( m_datas );
+    m_crop->initPreview( );
+    m_resize->initView();
 }
 
 #include "k3bdvdsizetab.moc"

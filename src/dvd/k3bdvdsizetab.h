@@ -36,7 +36,7 @@ public:
     ~K3bDvdSizeTab();
     void show();
 private:
-    K3bDvdCodecData *m_datas;
+    K3bDvdCodecData *m_data;
     K3bDvdCrop *m_crop;
     K3bDvdInfoExtend *m_info;
     K3bDvdResize *m_resize;
