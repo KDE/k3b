@@ -20,9 +20,16 @@
 #include <qstringlist.h>
 
 #include <klocale.h>
+#include <kconfig.h>
 
 #include "k3bcddb.h"
 #include "cddb.h"
+#include "k3b.h"
+
+#include "cdinfo/k3btoc.h"
+#include "cdinfo/k3btrack.h"
+
+
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -206,3 +213,68 @@ void K3bCddb::updateCD( struct cdrom_drive *drive )
     }
 }
 
+
+bool K3bCddb::appendCddbInfo( K3bToc& toc )
+{
+  if( toc.isEmpty() )
+    return false;
+
+
+  // get the default cddb server
+  // The option-dialog is able to store more than one server
+  // so why don't we use them?
+  // ------------------------------------------------
+  KConfig *c = kapp->config();
+  c->setGroup("Cddb");
+  QString hostString = c->readEntry("cddbServer", "");
+
+  if( hostString.isEmpty() )
+    return false;
+
+  int index = hostString.find(":");
+  QString server = hostString.left(index);
+  unsigned int port = hostString.right(hostString.length()-index-1).toUInt();
+
+
+  // create the strange list of integers that cddb needs
+  // we relly need to get rid of that class!!!
+  // ------------------------------------------------
+  QValueList<int> qvl;
+  
+  int i = 0;
+  for( K3bTrack* track = toc.first(); track != 0; track = toc.next() ) {
+    if( i + 1 != hack_track )
+      qvl.append( track->firstSector() + 150 );
+    else
+      qvl.append( start_of_first_data_as_in_toc + 150 );
+    i++;
+  }
+  qvl.append( toc.firstSector() );
+  qvl.append( toc.lastSector() );
+
+
+
+  // try to retrieve disc-info via cddb
+  // ------------------------------------------------
+  bool success;
+  CDDB* cddb = new CDDB();
+  cddb->set_server( server, port );
+  if( cddb->queryCD( qvl ) ) {
+    toc.setAlbum( cddb->title() );
+    toc.setArtist( cddb->artist() );
+
+    for( unsigned int i = 0; i < toc.count(); i++ ) {
+      toc.at(i)->setTitle( cddb->track( i ) );
+    }
+
+    success = true;
+  }
+  else
+    success = false;
+
+  delete cddb;
+
+
+
+  return success;
+}

@@ -304,7 +304,7 @@ install_location=
 type=HEADER
 
 [src/cdinfo/Makefile.am]
-files=src/cdinfo/k3bcdinfo.cpp,src/cdinfo/k3bcdinfo.h,src/cdinfo/k3bcdinfodialog.cpp,src/cdinfo/k3bcdinfodialog.h
+files=src/cdinfo/k3bcdinfo.cpp,src/cdinfo/k3bcdinfo.h,src/cdinfo/k3bcdinfodialog.cpp,src/cdinfo/k3bcdinfodialog.h,src/cdinfo/k3btoc.cpp,src/cdinfo/k3btoc.h,src/cdinfo/k3btrack.cpp,src/cdinfo/k3btrack.h
 sub_dirs=
 type=static_library
 
@@ -327,6 +327,30 @@ install_location=
 type=SOURCE
 
 [src/cdinfo/k3bcdinfodialog.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/cdinfo/k3btoc.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/cdinfo/k3btoc.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/cdinfo/k3btrack.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/cdinfo/k3btrack.h]
 dist=true
 install=false
 install_location=
@@ -1013,7 +1037,7 @@ install_location=
 type=HEADER
 
 [src/rip/Makefile.am]
-files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bripperwidget.cpp,src/rip/k3bripperwidget.h
+files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcddacopy.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bripperwidget.cpp,src/rip/k3bripperwidget.h,src/rip/k3bcddacopy.cpp
 type=static_library
 
 [src/rip/k3bcdda.cpp]
@@ -1032,7 +1056,7 @@ type=HEADER
 dist=true
 install=false
 install_location=
-type=HEADER
+type=SOURCE
 
 [src/rip/k3bcddacopy.h]
 dist=true

@@ -22,6 +22,9 @@ struct cdrom_drive;
 class QString;
 class QStringList;
 class CDDB;
+class K3bToc;
+
+
 
 class K3bCddb {
   public:
@@ -59,6 +62,8 @@ class K3bCddb {
     QStringList getTitles() { return titles; };
     QString getAlbum() { return cd_album; };
     QString getArtist() { return cd_artist; };
+
+    static bool appendCddbInfo( K3bToc& );
 
   private:
     bool m_useCddb;

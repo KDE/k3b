@@ -6,6 +6,7 @@
 #include <qstring.h>
 
 struct cdrom_drive;
+class K3bToc;
 
 
 class K3bDevice 
@@ -124,6 +125,8 @@ class K3bDevice
    * returns true on success and false on scsi-error
    */
   virtual bool block( bool ) const;
+
+  K3bToc readToc();
 
  protected:
   QString m_vendor;
