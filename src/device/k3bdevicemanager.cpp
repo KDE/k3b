@@ -1,3 +1,20 @@
+/***************************************************************************
+                          k3bdevicemanager.cpp  -  description
+                             -------------------
+    begin                : Tue May 14 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "k3bdevicemanager.h"
 #include "k3bidedevice.h"
 #include "k3bscsidevice.h"
@@ -136,6 +153,7 @@ int K3bDeviceManager::scanbus() {
         }
         break;
     }
+    info.close();
 
     if (m_foundDevices == 0) { // fallback - may be removed if proc works reliable
         static const char* devicenames[] = { "/dev/hda",
@@ -469,12 +487,9 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( const QString& devname) {
 K3bDevice* K3bDeviceManager::initializeIdeDevice( const QString& drive ) {
     K3bIdeDevice* newDevice = new K3bIdeDevice( drive );
 #ifdef SUPPORT_IDE 
-    int target,bus,lun;
-    if ( !determineBusIdLun(drive, bus, target, lun) ) 
-      return 0;
-    newDevice->m_target = target;
-    newDevice->m_lun    = lun;
-    newDevice->m_bus    = bus;    
+    newDevice->m_target = -1;
+    newDevice->m_lun    = -1;
+    newDevice->m_bus    = -1;
 
     determineCapabilities(newDevice);
 #endif
@@ -544,18 +559,27 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename ) {
     
     if( iface == K3bDevice::IDE ) {
        kdDebug() << resolved << " is ATAPI device" << endl;
-       device = initializeIdeDevice( resolved );
+       if ( K3bDevice* oldDev = findDevice(resolved) ) {
+          kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
+          oldDev->addDeviceNode( devicename );
+          return 0;
+       }
+       else
+         device = initializeIdeDevice( resolved );
     } else if( iface == K3bDevice::SCSI ) {
-        kdDebug() << resolved << " is SCSI device" << endl;
-       device = initializeScsiDevice( resolved );
+       kdDebug() << resolved << " is SCSI device" << endl;
+       int bus = -1, target = -1, lun = -1;
+       bool bil = determineBusIdLun( resolved, bus, target, lun );
+       if (bil)
+         if ( K3bDevice* oldDev = findDevice(bus, target, lun) ) {
+           kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
+           oldDev->addDeviceNode( devicename );
+           return 0;
+         }
+         else
+           device = initializeScsiDevice( resolved );
     } else
         kdDebug() << "(K3bDeviceManager) could not determine interfacetype of " << resolved << endl;
-     
-    if ( K3bDevice* oldDev = findDevice(resolved) ) {
-       kdDebug() << "(K3bDeviceManager) dev " << resolved  << " already found" << endl;
-       oldDev->addDeviceNode( resolved );
-       return 0;
-    }
 
     if( device ) {
         if( !device->init() ) {
@@ -618,7 +642,7 @@ void K3bDeviceManager::scanFstab() {
                         }
                     }
                 }
-            
+
 
         }
     } // while mountInfo
@@ -662,16 +686,7 @@ bool K3bDeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id,
             ret = true;
         }
     }
-#ifdef SUPPORT_IDE 
-    else  
-      if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
-        bus = 0;
-        lun = 0;
-        id = (cdromStat.st_rdev & 0xFF) ? 1 : 0;
-        kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
-        ret = true;
-      }
-#endif
+
 
     ::close(cdromfd);
     return ret;
