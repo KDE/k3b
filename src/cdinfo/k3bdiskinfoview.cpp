@@ -118,7 +118,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 
   else {
     // check if we have some atip info
-    if( info.sessions > 0 ) {
+    if( info.size > 0 || !info.mediumManufactor.isEmpty() || info.sessions > 0 ) {
       m_infoWidget->show();
 
       if( info.size > 0 )
