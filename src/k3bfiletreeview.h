@@ -75,7 +75,7 @@ class K3bFileTreeView : public KFileTreeView
   K3bDevice* selectedDevice() const;
   /** returnes an empty url if no url is selected */
   KURL selectedUrl() const;
-
+  void setSelectedDevice(K3bDevice* dev);
  public slots:
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );

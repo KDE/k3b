@@ -296,5 +296,19 @@ KURL K3bFileTreeView::selectedUrl() const
   return KURL();
 }
 
+void K3bFileTreeView::setSelectedDevice(K3bDevice* dev)
+{
+  for(QMap<KFileTreeBranch*, K3bDevice*>::iterator it=m_deviceBranchesMap.begin(); it != m_deviceBranchesMap.end(); ++it)
+  {
+    kdDebug() << "Select " << dev->devicename() << endl;
+    if ( *it == dev )
+     {
+        setCurrentItem( it.key()->root() );
+        setSelected( it.key()->root(), true);
+        repaint();
+        return;
+     }
+  }
+}
 
 #include "k3bfiletreeview.moc"

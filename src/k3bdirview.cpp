@@ -204,6 +204,7 @@ void K3bDirView::showDevice( K3bDevice* dev )
 void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
 {
   m_viewStack->raiseWidget( m_noViewView );
+  m_fileTreeView->setSelectedDevice( dev );
   k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
 //  if ( m_fileView->Url().path().startsWith( dev->mountPoint()) ) {
 //    home();
@@ -256,7 +257,7 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
 void K3bDirView::slotMountDevice( K3bDevice* device )
 {
   const QString& mountPoint = device->mountPoint();
-
+  m_fileTreeView->setSelectedDevice( device );
   if( !mountPoint.isEmpty() ){
     connect( K3bCdDevice::mount(device), SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
              this, SLOT( slotMountFinished() ) );
@@ -269,11 +270,11 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
 
 void K3bDirView::slotMountFinished()
 {
-   K3bDeviceBranch *branch = dynamic_cast<K3bDeviceBranch *>(m_fileTreeView->currentKFileTreeViewItem()->branch());
-   KURL url = KURL(branch->device()->mountPoint());
-   branch->openURL(url,false,true);
-   branch->setOpen(true);
-   slotDirActivated( url );
+  K3bDeviceBranch *branch = dynamic_cast<K3bDeviceBranch *>(m_fileTreeView->currentKFileTreeViewItem()->branch());
+  KURL url = KURL(branch->device()->mountPoint());
+  branch->openURL(url,false,true);
+  branch->setOpen(true);
+  slotDirActivated( url );
 }
 
 void K3bDirView::slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p )
