@@ -36,6 +36,9 @@ public:
       dev->open();
       switch( command ) {
       case DISKINFO:
+	// FIXME: we need a better method to check if
+	// this succeeded
+	success = (dev->open() != -1);
 	ngInfo = dev->ngDiskInfo();
 	if( !ngInfo.empty() ) {
 	  toc = dev->readToc();
@@ -43,11 +46,12 @@ public:
 	      toc.contentType() == MIXED )
 	    cdText = dev->readCdText();
 	}
-	success = (ngInfo.diskState() != STATE_UNKNOWN);
 	break;
       case NG_DISKINFO:
+	// FIXME: we need a better method to check if
+	// this succeeded
+	success = (dev->open() != -1);
 	ngInfo = dev->ngDiskInfo();
-	success = (ngInfo.diskState() != STATE_UNKNOWN);
 	break;
       case TOC:
       case TOCTYPE:
