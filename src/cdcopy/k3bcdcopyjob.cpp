@@ -360,7 +360,7 @@ void K3bCdCopyJob::removeImages() {
 void K3bCdCopyJob::fixTocFile(QString &f) {
   QTextStream s(new QFile(f));
   s.device()->open(IO_ReadWrite);
-  QString toc = s.read().replace("CD_DA","CD_ROM_XA");
+  QString toc = s.read().replace(QRegExp("CD_DA"),"CD_ROM_XA");
   s.device()->reset();
   s << toc;
   s.device()->close();
