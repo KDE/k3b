@@ -75,7 +75,12 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_trackSize;
   int m_alreadyWritten;
 
-  enum CdrecordError { UNKNOWN, OVERSIZE };
+  enum CdrecordError { UNKNOWN, 
+		       OVERSIZE, 
+		       BAD_OPTION, 
+		       SHMGET_FAILED, 
+		       OPC_FAILED,
+		       CANNOT_SET_SPEED };
   int m_cdrecordError;
 
   bool m_writeSpeedInitialized;

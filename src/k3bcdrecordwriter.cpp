@@ -53,8 +53,6 @@ K3bCdrecordWriter::~K3bCdrecordWriter()
 
 void K3bCdrecordWriter::prepareArgumentList()
 {
-  // Caution: we assume we have cdrecord. This could return NULL!!
-  m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord");
   if( m_process ) delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setSplitStdout(true);
@@ -63,42 +61,46 @@ void K3bCdrecordWriter::prepareArgumentList()
   connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
   connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
+  m_cdrecordBinObject = K3bExternalBinManager::self()->binObject("cdrecord");
+  if( !m_cdrecordBinObject )
+    return;
+
   *m_process << m_cdrecordBinObject->path;
 
   // display progress
   *m_process << "-v";
-
+    
   if( m_cdrecordBinObject->hasFeature( "gracetime") )
     *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
-
+    
   // Again we assume the device to be set!
   *m_process << QString("dev=%1").arg(burnDevice()->busTargetLun());
   *m_process << QString("speed=%1").arg(burnSpeed());
-
+    
   if( m_dao ) {
     if( burnDevice()->dao() )
       *m_process << "-dao";
     else
       emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), INFO );
   }
-
+    
   if( simulate() )
     *m_process << "-dummy";
-
+    
   if( burnproof() ) {
     if( burnDevice()->burnproof() ) {
       // with cdrecord 1.11a02 burnproof was renamed to burnfree
       // we have to be aware that 1.9 is bigger than 1.11
       int dotpos = m_cdrecordBinObject->version.find(".");
       int alphapos = m_cdrecordBinObject->version.find( QRegExp("\\D"), dotpos+1 );
-
+	
       int major = m_cdrecordBinObject->version.left( dotpos ).toInt();
       int minor = m_cdrecordBinObject->version.mid( dotpos + 1, (alphapos > 0 ? alphapos-dotpos-1 : -1 ) ).toInt();
       QString alpha = (alphapos > 0 ? m_cdrecordBinObject->version.mid( alphapos ) : "" );
-
+	
       kdDebug() << "(K3bCdrecordWriter) dotpos: " << dotpos << "; alphapos: " << alphapos << endl;
       kdDebug() << "(K3bCdrecordWriter) major: " << major << "; minor: " << minor << "; alpha: " << alpha << endl;
-
+	
       if( major > 1 || 
 	  (major == 1 && 
 	   (minor > 11 || minor == 11 && alpha > "a02") ) )
@@ -109,24 +111,24 @@ void K3bCdrecordWriter::prepareArgumentList()
     else
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
   }
-
+    
   if( k3bMain()->eject() )
     *m_process << "-eject";
 
   kapp->config()->setGroup("General Options");
-
+    
   bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
   if( manualBufferSize ) {
     *m_process << QString("fs=%1m").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
   }
-
+    
   bool overburn = k3bMain()->config()->readBoolEntry( "Allow overburning", false );
   if( overburn )
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";
     else
       emit infoMessage( i18n("Cdrecord version <= 1.10 does not support overburning!"), INFO );
-
+    
   // additional user parameters from config
   QStringList params = m_cdrecordBinObject->userParameters();
   for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
@@ -143,6 +145,12 @@ K3bCdrecordWriter* K3bCdrecordWriter::addArgument( const QString& arg )
 
 void K3bCdrecordWriter::start()
 {
+  if( !m_cdrecordBinObject ) {
+    emit infoMessage( i18n("Could not find cdrecord executable."), ERROR );
+    emit finished(false);
+    return;
+  }
+
   kdDebug() << "***** cdrecord parameters:\n";
   const QValueList<QCString>& args = m_process->args();
   QString s;
@@ -369,6 +377,22 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::INFO );
     m_cdrecordError = OVERSIZE;
   }
+  else if( line.contains("Bad Option") ) {
+    m_cdrecordError = BAD_OPTION;
+    // parse option
+    int pos = line.find( "Bad Option" ) + 13;
+    int len = line.length() - pos - 1;
+    emit infoMessage( i18n("No valid cdrecord option: %1").arg(line.mid(pos, len)), ERROR );
+  }
+  else if( line.contains("shmget failed") ) {
+    m_cdrecordError = SHMGET_FAILED;
+  }
+  else if( line.contains("OPC failed") ) {
+    m_cdrecordError = OPC_FAILED;
+  }
+  else if( line.contains("Cannot set speed/dummy") ) {
+    m_cdrecordError = CANNOT_SET_SPEED;
+  }
   else {
     // debugging
     kdDebug() << "(cdrecord) " << line << endl;
@@ -398,6 +422,20 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );
 	else
 	  emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+	break;
+      case BAD_OPTION:
+	// error message has already been emited earlier since we needed the actual line
+	break;
+      case SHMGET_FAILED:
+	emit infoMessage( i18n("Cdrecord could not reserve shared memory segment of requested size."), ERROR );
+	emit infoMessage( i18n("Probably you chose a too large buffer size."), ERROR );
+	break;
+      case OPC_FAILED:
+	emit infoMessage( i18n("OPC failed. Probably the writer does not like the disk."), ERROR );
+	break;
+      case CANNOT_SET_SPEED:
+	emit infoMessage( i18n("Unable to set write speed to %1.").arg(burnSpeed()), ERROR );
+	emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), ERROR );
 	break;
       case UNKNOWN:
 	// no recording device and also other errors!! :-(
