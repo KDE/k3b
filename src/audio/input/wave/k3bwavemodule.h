@@ -50,7 +50,6 @@ class K3bWaveModule : public K3bAudioModule
   int decodeInternal( const char** _data );
 
  private:
-  long wavSize( QFile* f );
   unsigned long identifyWaveFile( QFile* );
 
   static unsigned short le_a_to_u_short( unsigned char* a );

@@ -24,7 +24,6 @@
 
 #include <kdebug.h>
 
-#include <string.h>
 
 
 unsigned short K3bWaveModule::le_a_to_u_short( unsigned char* a ) {
@@ -91,8 +90,17 @@ bool K3bWaveModule::initDecodingInternal( const QString& filename )
 {
   m_file->close();
   m_file->setName( filename );
-  if( !m_file->open( IO_ReadOnly ) )
+  if( !m_file->open( IO_ReadOnly ) ) {
+    kdDebug() << "(K3bWaveModule) could not open file." << endl;
     return false;
+  }
+
+  // skip the header
+  if( identifyWaveFile( m_file ) <= 0 ) {
+    kdDebug() << "(K3bWaveModule) no supported wave file." << endl;
+    return false;
+  }
+
   m_data->resize( 10*4096 );
   return true;
 }
@@ -120,10 +128,13 @@ int K3bWaveModule::analyseTrack( const QString& filename, unsigned long& size )
 }
 
 
-/*
- * Read WAV header, leave file seek pointer past WAV header.
+/**
+ * Returns the length of the wave file in frames (1/75 second) if
+ * it is a 16bit stereo 44100 kHz wave file
+ * Otherwise 0 is returned.
+ * leave file seek pointer past WAV header.
  */
-long K3bWaveModule::wavSize( QFile* f )
+unsigned long K3bWaveModule::identifyWaveFile( QFile* f )
 {
   typedef struct {
     unsigned char	ckid[4];
@@ -143,215 +154,106 @@ long K3bWaveModule::wavSize( QFile* f )
     unsigned char	bits_per_sample[2];
   } fmt_chunk;
  
- static const char* WAV_RIFF_MAGIC = "RIFF";		/* Magic for file format     */
- static const char* WAV_WAVE_MAGIC = "WAVE";		/* Magic for Waveform Audio  */
- static const char* WAV_FMT_MAGIC  = "fmt ";		/* Start of Waveform format  */
- static const char* WAV_DATA_MAGIC = "data";		/* Start of data chunk	     */
-
-  if( !f->isOpen() )
-    if( !f->open( IO_ReadOnly ) )
-      return -1;
+  static const char* WAV_RIFF_MAGIC = "RIFF";		// Magic for file format
+  static const char* WAV_WAVE_MAGIC = "WAVE";		// Magic for Waveform Audio
+  static const char* WAV_FMT_MAGIC  = "fmt ";		// Start of Waveform format
+  static const char* WAV_DATA_MAGIC = "data";		// Start of data chunk
 
   chunk_t chunk;
   riff_chunk riff;
   fmt_chunk fmt;
-  bool gotFormat = false;
-  bool success = false;
-  unsigned long size = 0;
 
-  for( int i = 0; i < 3; ++i ) { // we need to test 3 chunks
-    if( f->readBlock( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) )
-      break;
 
-    size = le_a_to_u_long(chunk.cksize);
-
-    if( strncmp((char*)chunk.ckid, WAV_RIFF_MAGIC, 4 ) == 0 ) {
-      /*
-       * We found (first) RIFF header. Check if a WAVE
-       * magic follows. Set up size to be able to skip
-       * past this header.
-       */
-      if( f->readBlock( (char*)&riff, sizeof(riff) ) != sizeof(riff) )
-	break;
-
-      if( strncmp((char*)riff.wave, WAV_WAVE_MAGIC, 4) != 0 )
-	break;
-      size = sizeof(riff);
-    } 
-    else if( strncmp((char*)chunk.ckid, WAV_FMT_MAGIC, 4) == 0 ) {
-      /*
-       * We found WAVE "fmt " header. Check size (if it is
-       * valid for a WAVE file) and coding whether it is
-       * useable for a CD. 
-       */
-      if( size < sizeof(fmt) ) 
-	break;
-      if( f->readBlock( (char*)&fmt, sizeof(fmt) ) != sizeof(fmt) )
-	break;
-
-      if( le_a_to_u_short(fmt.channels) != 2 ||
-	  le_a_to_u_long(fmt.sample_rate) != 44100 ||
-	  le_a_to_u_short(fmt.bits_per_sample) != 16) {
-	break;
-      }
-      gotFormat = true;
-    } 
-    else if (strncmp((char *)chunk.ckid, WAV_DATA_MAGIC, 4) == 0) {
-      /*
-       * We found WAVE "data" header. This contains the
-       * size value of the audio part.
-       */
-      if( !gotFormat )
-	break;
-      if( (f->at() + size + sizeof(chunk)) > f->size() )
-	size = f->size() - (f->at() + sizeof(chunk));
-      success = true;
-    }
-
-    f->at( f->at() + size + sizeof(chunk) ); // Skip over current chunk
+  // read riff chunk
+  if( f->readBlock( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+    kdDebug() << "(K3bWaveModule) unable to read from " << f->name() << endl;
+    return 0;
   }
-
-  if( success )
-    return size;
-  else
-    return -1;
-}
-
-
-/**
- * Returns the length of the wave file in frames (1/75 second) if
- * it is a 16bit stereo 44100 kHz wave file
- * Otherwise 0 is returned.
- */
-unsigned long K3bWaveModule::identifyWaveFile( QFile* f )
-{
-  QDataStream inputStream( f );
-
-  char magic[4];
-
-  inputStream.readRawBytes( magic, 4 );
-  if( inputStream.atEnd() || qstrncmp(magic, "RIFF", 4) ) {
-    kdDebug() << f->name() << ": not a RIFF file." << endl;
+  if( qstrncmp( (char*)chunk.ckid, WAV_RIFF_MAGIC, 4 ) ) {
+    kdDebug() << "(K3bWaveModule) " << f->name() << ": not a RIFF file." << endl;
     return 0;
   }
 
-  f->at( 8 );
-  inputStream.readRawBytes( magic, 4 );
-  if( inputStream.atEnd() || qstrncmp(magic, "WAVE", 4) ) {
-    kdDebug() << f->name() << ": not a wave file." << endl;
+  // read wave chunk
+  if( f->readBlock( (char*)&riff, sizeof(riff) ) != sizeof(riff) ) {
+    kdDebug() << "(K3bWaveModule) unable to read from " << f->name() << endl;
+    return 0;
+  }
+  if( qstrncmp( (char*)riff.wave, WAV_WAVE_MAGIC, 4 ) ) {
+    kdDebug() << "(K3bWaveModule) " << f->name() << ": not a WAVE file." << endl;
     return 0;
   }
 
-  Q_INT32 chunkLen;
 
-  while( qstrncmp(magic, "fmt ", 4) ) {
-
-    inputStream.readRawBytes( magic, 4 );
-    if( inputStream.atEnd() ) {
-      kdDebug() << f->name() << ": could not find format chunk." << endl;
-      return 0;
-    }
-
-    inputStream >> chunkLen;
-    chunkLen = K3b::swapByteOrder( chunkLen );
-    chunkLen += chunkLen & 1; // round to multiple of 2
-
-    // skip chunk data of unknown chunk
-    if( qstrncmp(magic, "fmt ", 4) )
-      if( !f->at( f->at() + chunkLen ) ) {
-        kdDebug() << f->name() << ": could not seek in file." << endl;
-        return 0;
-      }
-  }
-
-  // found format chunk
-  if( chunkLen < 16 )
+  // read fmt chunk
+  if( f->readBlock( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+    kdDebug() << "(K3bWaveModule) unable to read from " << f->name() << endl;
     return 0;
-
-  Q_INT16 waveFormat;
-  inputStream >> waveFormat;
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveFormat) != 1) {
-    kdDebug() << f->name() << ": not in PCM format: " << waveFormat << endl;
+  }
+  if( qstrncmp( (char*)chunk.ckid, WAV_FMT_MAGIC, 4 ) ) {
+    kdDebug() << "(K3bWaveModule) " << f->name() << ": could not find format chunk." << endl;
+    return 0;
+  }
+  if( f->readBlock( (char*)&fmt, sizeof(fmt) ) != sizeof(fmt) ) {
+    kdDebug() << "(K3bWaveModule) unable to read from " << f->name() << endl;
+    return 0;
+  }
+  if( le_a_to_u_short(fmt.fmt_tag) != 1 ||
+      le_a_to_u_short(fmt.channels) != 2 ||
+      le_a_to_u_long(fmt.sample_rate) != 44100 ||
+      le_a_to_u_short(fmt.bits_per_sample) != 16) {
+    kdDebug() << "(K3bWaveModule) " << f->name() << ": wrong format:" << endl
+	      << "                format:      " << le_a_to_u_short(fmt.fmt_tag) << endl
+	      << "                channels:    " << le_a_to_u_short(fmt.channels) << endl
+	      << "                samplerate:  " << le_a_to_u_long(fmt.sample_rate) << endl
+	      << "                bits/sample: " << le_a_to_u_short(fmt.bits_per_sample) << endl;
     return 0;
   }
 
-  Q_INT16 waveChannels;
-  inputStream >> waveChannels;
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveChannels) != 2) {
-    kdDebug() << f->name() << ": found " << waveChannels << " channel(s), require 2 channels." << endl;
-    return 0;
-  }
-
-  Q_INT32 waveRate;
-  inputStream >> waveRate; 
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveRate) != 44100) {
-     kdDebug() << f->name() << ": found sampling rate " << waveRate << "d, require 44100." << endl;
-     return 0;
-  }
-
-  Q_INT16 buffer16;
-  Q_INT32 buffer32;
-  inputStream >> buffer32; // skip average bytes/second
-  inputStream >> buffer16; // skip block align
-
-  Q_INT16 waveBits;
-  inputStream >> waveBits;
-  if (inputStream.atEnd() || K3b::swapByteOrder(waveBits) != 16) {
-    kdDebug() << f->name() << ": found " << waveBits << " bits per sample, require 16." << endl;
-    return 0;
-  }
-
-  chunkLen -= 16;
   // skip all other (unknown) format chunk fields
-  if( !f->at( f->at() + chunkLen ) ) {
-    kdDebug() << f->name() << ": could not seek in file." << endl;
+  if( !f->at( f->at() + le_a_to_u_long(chunk.cksize) - sizeof(fmt) ) ) {
+    kdDebug() << "(K3bWaveModule) " << f->name() << ": could not seek in file." << endl;
     return 0;
   }
 
 
-  // search data chunk
-  while( qstrncmp(magic,"data", 4) ) {
-
-    inputStream.readRawBytes( magic, 4 );
-    if( inputStream.atEnd()  ) {
-      kdDebug() << f->name() << ": could not find data chunk." << endl;
+  // find data chunk
+  bool foundData = false;
+  while( !foundData ) {
+    if( f->readBlock( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+      kdDebug() << "(K3bWaveModule) unable to read from " << f->name() << endl;
       return 0;
     }
 
-    inputStream >> chunkLen;
-    kdDebug() << "----before bs: " << chunkLen << "i" << endl;
-    chunkLen = K3b::swapByteOrder( chunkLen );
-    kdDebug() << "----after  bs: " << chunkLen << "i" << endl;
-    chunkLen += chunkLen & 1; // round to multiple of 2
-    kdDebug() << "----after rnd: " << chunkLen << "i" << endl;
-
     // skip chunk data of unknown chunk
-    if( qstrncmp(magic, "data", 4) )
-      if( !f->at( f->at() + chunkLen ) ) {
-        kdDebug() << f->name() << ": could not seek in file." << endl;
+    if( qstrncmp( (char*)chunk.ckid, WAV_DATA_MAGIC, 4 ) ) {
+      kdDebug() << "(K3bWaveModule) skipping chunk: " << (char*)chunk.ckid << endl;
+      if( !f->at( f->at() + le_a_to_u_long(chunk.cksize) ) ) {
+        kdDebug() << "(K3bWaveModule) " << f->name() << ": could not seek in file." << endl;
         return 0;
       }
+    }
+    else
+      foundData = true;
   }
 
   // found data chunk
   int headerLen = f->at();
-  if( headerLen + chunkLen > (int)f->size() ) {
-    kdDebug() << f->name() << ": file length " << f->size()
-      << " does not match length from WAVE header " << headerLen << " + " << chunkLen
-      << " - using actual length." << endl;
+  unsigned long size = le_a_to_u_long(chunk.cksize);
+  if( headerLen + size > (unsigned long)f->size() ) {
+    kdDebug() << "(K3bWaveModule) " << f->name() << ": file length " << f->size() 
+    << " does not match length from WAVE header " << headerLen << " + " << size
+    << " - using actual length." << endl;
+    size = (f->size() - headerLen);
+  }
 
-    // we pad to a multible of 2352 bytes
-    int size = (f->size() - headerLen)/2352;
-    if( (f->size() - headerLen)%2352 > 0 )
-      size++;
-    return size;
-  }
-  else {
-    int size = chunkLen/2352;
-    if( chunkLen%2352 > 0 )
-      size++;
-    return size;
-  }
+  // we pad to a multible of 2352 bytes
+  if( (size%2352) > 0 )
+    size = (size/2352) + 1;
+  else
+    size = size/2352;
+
+  return size;
 }
 
 

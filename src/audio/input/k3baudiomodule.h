@@ -48,8 +48,8 @@ class K3bAudioModule : public QObject
   virtual int analyseTrack( const QString& filename, 
 			    unsigned long& size ) = 0;
 
-  virtual bool metaInfo( const QString& filename,
-			 K3bAudioTitleMetaInfo& info ) { return false; }
+  virtual bool metaInfo( const QString&,
+			 K3bAudioTitleMetaInfo& ) { return false; }
 
   bool initDecoding( const QString& filename, unsigned long trackSize );
 
