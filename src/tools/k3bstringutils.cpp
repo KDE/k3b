@@ -97,17 +97,14 @@ QString K3b::squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText
 	letters--;
 	squeezedText = fullText.left(letters) + "..." + fullText.right(letters);
 	squeezedWidth = fm.width(squeezedText);
-      } while (letters && squeezedWidth > cutWidth);
+      } while (letters > 2 && squeezedWidth > cutWidth);
     }
 
-    if (letters < 2) {
+    if (letters == 2)
       kdDebug() << "(K3b::squeezeTextToWidth) WARNING: unable to squeeze text to width " 
 		<< cutWidth << endl;
-      return fullText;
-    } 
-    else {
-      return squeezedText;
-    }
+    
+    return squeezedText;
   }
   else
     return fullText;

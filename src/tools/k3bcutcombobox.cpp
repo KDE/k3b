@@ -19,7 +19,7 @@
 
 #include <qfontmetrics.h>
 #include <qevent.h>
-#include <qvaluevector.h>
+#include <qstringlist.h>
 #include <qrect.h>
 #include <qsize.h>
 #include <qpixmap.h>
@@ -34,10 +34,10 @@ public:
     method = CUT;
   }
 
-  QValueVector<QString> originalItems;
-  QValueVector<QPixmap> pixmaps;
+  QStringList originalItems;
 
   int method;
+  int width;
 };
 
 
@@ -66,6 +66,7 @@ K3bCutComboBox::~K3bCutComboBox()
 void K3bCutComboBox::setMethod( int m )
 {
   d->method = m;
+  cutText();
 }
 
 
@@ -131,46 +132,60 @@ void K3bCutComboBox::insertItem( const QString& text, int index )
   insertItem( QPixmap(), text, index );
 }
 
-void K3bCutComboBox::insertItem( const QPixmap&, int )
+void K3bCutComboBox::insertItem( const QPixmap& pix, int i )
 {
-  // FIXME
+  insertItem( pix, "", i );
 }
 
 void K3bCutComboBox::insertItem( const QPixmap& pixmap, const QString& text, int index )
 {
-  if( index == -1 ) {
+  if( index != -1 )
+    d->originalItems.insert( d->originalItems.at(index), text );
+  else
     d->originalItems.append( text );
-    d->pixmaps.append( pixmap );
-  }
+
+  if( !pixmap.isNull() )
+    KComboBox::insertItem( pixmap, "xx", index );
+  else
+    KComboBox::insertItem( "xx", index );
 
   cutText();
 }
 
-void K3bCutComboBox::removeItem( int )
+void K3bCutComboBox::removeItem( int i )
 {
-  // FIXME
+  d->originalItems.erase( d->originalItems.at(i) );
+  KComboBox::removeItem( i );
 }
 
-void K3bCutComboBox::changeItem( const QString&, int )
+void K3bCutComboBox::changeItem( const QString& s, int i )
 {
-  // FIXME
+  d->originalItems[i] = s;
+  cutText();
 }
 
-void K3bCutComboBox::changeItem( const QPixmap&, const QString&, int )
+void K3bCutComboBox::changeItem( const QPixmap& pix, const QString& s, int i )
 {
-  // FIXME
+  KComboBox::changeItem( pix, i );
+  changeItem( s, i );
 }
 
 
 QString K3bCutComboBox::text( int i ) const
 {
-  return d->originalItems.at(i);
+  if( i < (int)d->originalItems.count() )
+    return d->originalItems[i];
+  else
+    return QString::null;
 }
 
 
 QString K3bCutComboBox::currentText() const
 {
-  return d->originalItems.at(currentItem());
+  if( currentItem() < (int)d->originalItems.count() )
+    return d->originalItems[currentItem()];
+  else
+    return QString::null;
 }
 
 
@@ -178,7 +193,6 @@ void K3bCutComboBox::clear()
 {
   KComboBox::clear();
   d->originalItems.clear();
-  d->pixmaps.clear();
 }
 
 void K3bCutComboBox::resizeEvent( QResizeEvent* e )
@@ -191,29 +205,25 @@ void K3bCutComboBox::resizeEvent( QResizeEvent* e )
 
 void K3bCutComboBox::cutText()
 {
-  KComboBox::clear();
-
-  // the following size code is from QComboBox's updateLinedGeometry  
-  QRect r = QStyle::visualRect( style().querySubControlMetrics(QStyle::CC_ComboBox, this,
-							       QStyle::SC_ComboBoxEditField), this );
-
+  d->width = QStyle::visualRect( style().querySubControlMetrics(QStyle::CC_ComboBox, this,
+								QStyle::SC_ComboBoxEditField), this ).width();
 
   for( int i = 0; i < (int)d->originalItems.count(); ++i ) {
-    int size = r.width();
-    if ( !d->pixmaps[i].isNull() )
-      size -= ( d->pixmaps[i].width() + 4 );
+    int w = d->width;
+    if ( pixmap(i) && !pixmap(i)->isNull() )
+      w -= ( pixmap(i)->width() + 4 );
 
     QString text;
     if( d->method == SQUEEZE )
-      text = K3b::squeezeTextToWidth( fontMetrics(), d->originalItems[i], size );
+      text = K3b::squeezeTextToWidth( fontMetrics(), d->originalItems[i], w );
     else
-      text = K3b::cutToWidth( fontMetrics(), d->originalItems[i], size );
+      text = K3b::cutToWidth( fontMetrics(), d->originalItems[i], w );
 
     // now insert the cut text
-    if( d->pixmaps[i].isNull() )
-      KComboBox::insertItem( text );
+    if( pixmap(i) )
+      KComboBox::changeItem( *pixmap(i), text, i );
     else
-      KComboBox::insertItem( d->pixmaps[i], text );
+      KComboBox::changeItem( text, i );
   }
 }
 
