@@ -448,6 +448,8 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
 
   if( IDE_DISK_MAJOR( cdromStat.st_rdev>>8 ) ) {
     kdDebug() << devicename << " is ide device" << endl;
+    
+    ::close( cdromfd );
 
     // check if device has already been found
     if( !findDevice( resolved ) )
@@ -457,16 +459,19 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
     kdDebug() << devicename << " is scsi device" << endl;
 
     int bus = -1, target = -1, lun = -1;
-    if( determineBusIdLun( cdromfd, bus, target, lun ) ) {
-      if( K3bDevice* oldDev = findDevice( bus, target, lun ) )
+    bool bil = determineBusIdLun( cdromfd, bus, target, lun );
+    ::close( cdromfd );
+
+    if( bil ) {
+      if( K3bDevice* oldDev = findDevice( bus, target, lun ) ) {
+	kdDebug() << "(K3bDeviceManager) dev already found" << endl;
 	oldDev->addDeviceNode( resolved );
+      }
       else
 	device = initializeScsiDevice( resolved, bus, target, lun );
     }
   }
 
-
-  ::close( cdromfd );
 
   if( device ) {
     if( !device->init() ) {
@@ -474,15 +479,16 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
       delete device;
       return 0;
     }
+  
+  
+    if( device->burner() )
+      m_writer.append( device );
+    else
+      m_reader.append( device );
+    
+    m_allDevices.append( device );
   }
-  
-  if( device->burner() )
-    m_writer.append( device );
-  else
-    m_reader.append( device );
-  
-  m_allDevices.append( device );
-  
+
   return device;
 }
 
