@@ -25,6 +25,7 @@
 #include <kio/global.h>
 
 #include <device/k3bmsf.h>
+#include <device/k3bcdtext.h>
 
 class K3bAudioModule;
 
@@ -60,14 +61,14 @@ class K3bAudioTrack
   /** returns length of track in frames **/
   K3b::Msf length() const { return m_length; }
 	
-  const QString& artist() const { return m_artist; }
-  const QString& title() const { return m_title; }
-  const QString& arranger() const { return m_arranger; }
-  const QString& songwriter() const { return m_songwriter; }
-  const QString& composer() const { return m_composer; }
-  const QString& isrc() const { return m_isrc; }
-  const QString& cdTextMessage() const { return m_cdTextMessage; }
-  const QString& album() const { return m_album; }
+  const QString& artist() const { return m_cdText.performer(); }
+  const QString& title() const { return m_cdText.title(); }
+  const QString& arranger() const { return m_cdText.arranger(); }
+  const QString& songwriter() const { return m_cdText.songwriter(); }
+  const QString& composer() const { return m_cdText.composer(); }
+  const QString& isrc() const { return m_cdText.isrc(); }
+  const QString& cdTextMessage() const { return m_cdText.message(); }
+  const K3bCdDevice::TrackCdText& cdText() const { return m_cdText; }
 	
   bool copyProtection() const { return m_copy; }
   bool preEmp() const { return m_preEmp; }
@@ -77,21 +78,23 @@ class K3bAudioTrack
   /**
    * If the file is a mp3-file, it's mp3-tag is used
    **/
-  void setArtist( const QString& a ) { m_artist = a; }
+  void setArtist( const QString& a ) { m_cdText.setPerformer(a); }
 
   /**
    * If the file is a mp3-file, it's mp3-tag is used
    **/
-  void setTitle( const QString& t ) { m_title = t; }
-  void setArranger( const QString& t ) { m_arranger = t; }
-  void setSongwriter( const QString& t ) { m_songwriter = t; }
-  void setComposer( const QString& t ) { m_composer = t; }
-  void setIsrc( const QString& t ) { m_isrc = t; }
-  void setCdTextMessage( const QString& t ) { m_cdTextMessage = t; }
+  void setTitle( const QString& t ) { m_cdText.setTitle(t); }
+  void setArranger( const QString& t ) { m_cdText.setArranger(t); }
+  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); }
+  void setComposer( const QString& t ) { m_cdText.setComposer(t); }
+  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); }
+  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); }
+
+  void setCdText( const K3bCdDevice::TrackCdText& cdtext ) { m_cdText = cdtext; }
+
   void setPreEmp( bool b ) { m_preEmp = b; }
   void setCopyProtection( bool b ) { m_copy = b; }
 	
-  void setAlbum( const QString& t ) { m_album = t; }
 	
   void setLength( unsigned long time ) { m_length = time; }
 	
@@ -107,13 +110,6 @@ class K3bAudioTrack
   void setStatus( int status ) { m_status = status; }
 
   bool isWave() const { return (m_module == 0); }
-
-  /**
-   * status of the file.<b>
-   * RECOVERABLE means that there are errors in the file that K3b is able to fix.
-   * CORRUPT means K3b is not able to handle the file and it needs to be removed from the project.
-   */
-  enum file_status { OK, RECOVERABLE, CORRUPT };
 
  protected:
   QList<K3bAudioTrack>* m_parent;
@@ -147,6 +143,8 @@ class K3bAudioTrack
   QString m_composer;
   QString m_cdTextMessage;
   QString m_isrc;
+
+  K3bCdDevice::TrackCdText m_cdText;
 };
 
 

@@ -16,6 +16,7 @@
 
 #include "k3btempdirselectionwidget.h"
 #include "k3b.h"
+#include <tools/k3bglobals.h>
 
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -75,12 +76,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   m_mode = DIR;
 
-  kapp->config()->setGroup( "General Options" );
-  QString tempdir = kapp->config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
-  if ( QDir(tempdir).exists() )
-     m_editDirectory->setText( tempdir );
-  else
-     m_editDirectory->setText( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  m_editDirectory->setText( K3b::defaultTempPath() );
   slotUpdateFreeTempSpace();
 
   // ToolTips

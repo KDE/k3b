@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,131 +17,174 @@
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "input/k3baudiomodule.h"
+#include <k3bthread.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <qtimer.h>
+
+#include <unistd.h>
+
+
+
+class K3bAudioDecoder::DecoderThread : public K3bThread
+{
+public:
+  DecoderThread( K3bAudioDoc* doc, QObject* parent )
+    : K3bThread( parent ),
+      m_doc(doc),
+      m_fdToWriteTo(-1),
+      m_suspended(false),
+      m_canceled(false) {
+  }
+
+  void cancel() {
+    m_canceled = true;
+  }
+
+  void resume() {
+    m_suspended = false;
+  }
+
+  void run() {
+    m_canceled = false;
+    kdDebug() << "(K3bAudioDecoder::DecoderThread) run()" << endl;
+
+    const char* data = 0;
+    int length = 0;
+    bool finished = false;
+    bool success = true;
+    K3bAudioModule* module = 0;
+    K3bAudioTrack* track = 0;
+    int currentTrackNumber = 0;
+    unsigned long decodedDataSize = 0;
+    unsigned long decodedTrackSize = 0;
+    unsigned long docSize = m_doc->size();
+
+    while( !finished ) {
+      if( m_canceled ) {
+	finished = true;
+	success = false;
+      }
+      else {
+	currentTrackNumber++;
+	if( currentTrackNumber > m_doc->numOfTracks() ) {
+	  finished = true;
+	  success = true;
+	}
+	else {
+	  emitNextTrack( currentTrackNumber, m_doc->numOfTracks() );
+
+	  track = m_doc->at( currentTrackNumber-1 );
+	  module = track->module();
+	  decodedTrackSize = 0;
+
+	  kdDebug() << "(K3bAudioDecoder::DecoderThread) decoding track "
+		    << currentTrackNumber << ": " << track->absPath() << endl;
+
+	  if( module->initDecoding( track->absPath(), track->size() ) ) {
+	    kdDebug() << "(K3bAudioDecoder::DecoderThread) module successfully initialized." << endl;
+
+	    // now decode the track
+	    while( !finished && (length = module->decode( &data )) > 0 ) {
+	      if( m_canceled ) {
+		finished = true;
+		success = false;
+	      }
+	      else {
+		if( m_fdToWriteTo == -1 ) {
+		  m_suspended = true;
+
+		  emitData( data, length );
+
+		  // wait to be resumed or canceled
+		  //		  while( m_suspended && !m_canceled );
+		  // for some reason (perhaps gcc optimization?) the above does not work
+		  // when resuming (but when canceling) while this version always works.
+		  while(1) {
+		    if( m_canceled )
+		      break;
+		    if( !m_suspended )
+		      break;
+		  }
+		}
+		else if( ::write( m_fdToWriteTo, data, length ) == -1 ) {
+		  kdError() << "(K3bAudioDecoder::DecoderThread) could not write to " << m_fdToWriteTo << endl;
+		  finished = true;
+		  success = false;
+		}
+
+		decodedDataSize += length;
+		decodedTrackSize += length;
+		emitPercent( (int)( (double)decodedDataSize/(double)docSize*100.0 ) );
+		emitSubPercent( (int)( (double)decodedTrackSize/(double)track->size()*100.0 ) );
+	      }
+	    }
+
+	    if( length == 0 ) {
+	      // the module finished
+	      kdDebug() << "(K3bAudioDecoder::DecoderThread) successfully decoded " << track->fileName() << endl;
+	    }
+	    else if( length < 0 ) {
+	      // an error occured
+	      kdError() << "(K3bAudioDecoder::DecoderThread) error while decoding " << track->fileName() << endl;
+	      finished = true;
+	      success = false;
+	    }
+
+	    module->cleanup();
+	  }
+	  else {
+	    kdError() << "(K3bAudioDecoder::DecoderThread) Error while initializing AudioModule." << endl;
+	    finished = true;
+	    success = false;
+	  }
+	}
+      }
+    }
+
+    if( !success )
+      if( !m_canceled )
+	emitInfoMessage( i18n("Decoding canceled"), ERROR );
+      else
+	emitInfoMessage( i18n("Error while decoding track %1").arg(currentTrackNumber), ERROR );
+    emitFinished( success );
+  }
+
+  void writeToFd( int fd ) {
+    m_fdToWriteTo = fd;
+  }
+
+private:
+  K3bAudioDoc* m_doc;
+  int m_fdToWriteTo;
+  bool m_suspended;
+  bool m_canceled;
+};
+
 
 
 K3bAudioDecoder::K3bAudioDecoder( K3bAudioDoc* doc, QObject* parent, const char* name )
-  : K3bJob( parent, name ),
-    m_doc(doc)
+  : K3bThreadJob( parent, name )
 {
-  m_currentTrack = 0;
+  m_thread = new DecoderThread( doc, this );
+  setThread( m_thread );
 }
 
 K3bAudioDecoder::~K3bAudioDecoder()
 {
+  delete m_thread;
 }
-
-
-void K3bAudioDecoder::start()
-{
-  m_currentTrackNumber = 0;
-  m_canceled = false;
-  m_decodedDataSize = 0;
-  m_docSize = m_doc->size();
-  m_suspended = false;
-  m_startNewTrackWhenResuming = false;
-
-  emit started();
-
-  decodeNextTrack();
-}
-
-
-void K3bAudioDecoder::decodeNextTrack()
-{
-  m_startNewTrackWhenResuming = false;
-
-  m_currentTrackNumber++;
-  m_currentTrack = m_doc->at(m_currentTrackNumber-1);
-
-
-  m_currentTrack->module()->disconnect( this );
-  connect( m_currentTrack->module(), SIGNAL(output(const unsigned char*, int)), 
-	   this, SLOT(slotModuleOutput(const unsigned char*, int)) );
-  connect( m_currentTrack->module(), SIGNAL(finished(bool)),
-	   this, SLOT(slotModuleFinished(bool)) );
-  connect( m_currentTrack->module(), SIGNAL(percent(int)),
-	   this, SLOT(slotModulePercent(int)) );
-
-  emit nextTrack( m_currentTrackNumber, m_doc->numOfTracks() );
-
-  m_currentTrack->module()->start( m_currentTrack );
-}
-
 
 
 void K3bAudioDecoder::resume()
 {
-  m_suspended = false;
-  if( m_startNewTrackWhenResuming )
-    decodeNextTrack();
-  else if( m_currentTrack )
-    QTimer::singleShot(0, m_currentTrack->module(), SLOT(resume()) );
+  m_thread->resume();
 }
 
 
-void K3bAudioDecoder::cancel()
+void K3bAudioDecoder::writeToFd( int fd )
 {
-  m_canceled = true;
-
-  if( m_currentTrack ) {
-    m_currentTrack->module()->cancel();
-    m_currentTrack->module()->disconnect( this );
-  }
-  emit canceled();
-  emit finished(false);
+  m_thread->writeToFd(fd);
 }
-
-
-void K3bAudioDecoder::slotModuleOutput( const unsigned char* d, int len )
-{
-  if( m_suspended ) {
-    emit infoMessage( i18n("AudioDecoder internal error! Please report"), ERROR );
-  }
-
-  m_decodedDataSize += len;
-  m_suspended = true;
-
-  emit data( (const char*) d, len );
-}
-
-
-void K3bAudioDecoder::slotModuleFinished( bool success )
-{
-  if( !m_canceled ) {
-    m_currentTrack->module()->disconnect( this );
-
-    if( success ) {
-      // check if we decoded the last track
-      if( m_currentTrackNumber == m_doc->numberOfTracks() ) {
-	m_currentTrack = 0;
-	emit finished(true);
-      }
-      else { 
-	if( m_suspended )
-	  m_startNewTrackWhenResuming = true;
-	else
-	  decodeNextTrack();
-      }
-    }
-    else {
-      emit infoMessage( i18n("Error while decoding track %1").arg(m_currentTrackNumber), ERROR );
-      m_currentTrack = 0;
-      emit finished(false);
-    }
-  }
-}
-
-
-void K3bAudioDecoder::slotModulePercent( int p )
-{
-  emit subPercent( p );
-  // create percent (100*m_decodedDataSize can become too big for unsigned long!)
-  emit percent( (int)(100.0 * ((double)m_decodedDataSize / (double)m_docSize)) );
-}
-
 
 #include "k3baudiodecoder.moc"

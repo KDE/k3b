@@ -58,23 +58,13 @@ K3bWaveModule::~K3bWaveModule()
 }
 
 
-void K3bWaveModule::cancel()
+int K3bWaveModule::decodeInternal( const char** _data )
 {
-  if( m_file->isOpen() ) {
-    m_file->close();
-    emit canceled();
-    emit finished( false );
-  }
-}
-
-
-void K3bWaveModule::slotConsumerReady()
-{
-  long read = m_file->readBlock( m_data->data(), m_data->size() );
+  int read = m_file->readBlock( m_data->data(), m_data->size() );
   if( read > 0 ) {
     if( read % 2 > 0 ) {
       kdDebug() << "(K3bWaveModule) data length is not a multible of 2! Cannot write data." << endl;
-      return;
+      return -1;
     }
 
     // swap bytes
@@ -85,62 +75,48 @@ void K3bWaveModule::slotConsumerReady()
       m_data->at(i+1) = buf;
     }
 
-    emit output( (const unsigned char*)m_data->data(), read );
-    m_alreadyDecodedData += read;
-    emit percent( (int)((double)m_alreadyDecodedData * 100.0 / (double)audioTrack()->size()) );
+    *_data = m_data->data();
+    return read;
   }
   else if( read == 0 ) {
-    // check if we need to pad
-    int bytesToPad = audioTrack()->size() - m_alreadyDecodedData;
-    if( bytesToPad > 0 ) {
-      kdDebug() << "(K3bWaveModule) we need to pad " << bytesToPad << " bytes." << endl;
-      char* c = new char[bytesToPad];
-      memset( c, 0, bytesToPad );
-      emit output( (const unsigned char*)c, bytesToPad );
-      m_alreadyDecodedData += bytesToPad;
-      delete [] c;
-    }
-    else
-      emit finished( true );
+    m_file->close();
+    return 0;
   }
   else
-    emit finished( false );
+    return -1;
 }
 
 
-void K3bWaveModule::startDecoding()
+bool K3bWaveModule::initDecodingInternal( const QString& filename )
 {
   m_file->close();
-  m_file->setName( audioTrack()->absPath() );
-  m_file->open( IO_ReadOnly );
-  identifyWaveFile( m_file );
-  m_alreadyDecodedData = 0;
-  slotConsumerReady();
+  m_file->setName( filename );
+  if( !m_file->open( IO_ReadOnly ) )
+    return false;
+  m_data->resize( 10*4096 );
+  return true;
 }
 
 
-void K3bWaveModule::analyseTrack()
+void K3bWaveModule::cleanup()
 {
-  audioTrack()->setStatus( K3bAudioTrack::OK );
+  m_file->close();
+}
 
-  QFile f( audioTrack()->absPath() );
+
+int K3bWaveModule::analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& )
+{
+  QFile f( filename );
   if( !f.open( IO_ReadOnly ) ) {
-    kdDebug() << "(K3bWaveModule) could not open file " << audioTrack()->absPath() << endl;
-    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-    return;
+    kdDebug() << "(K3bWaveModule) could not open file " << filename << endl;
+    return K3bAudioTitleMetaInfo::CORRUPT;
   }
 
-  unsigned long size = identifyWaveFile( &f );
-  audioTrack()->setLength( size );
+  size = identifyWaveFile( &f );
   if( size <= 0 )
-    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+    return K3bAudioTitleMetaInfo::CORRUPT;
 
-  emit trackAnalysed( audioTrack() );  
-}
-
-
-void K3bWaveModule::stopAnalysingTrack()
-{
+  return K3bAudioTitleMetaInfo::OK;
 }
 
 

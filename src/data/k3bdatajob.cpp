@@ -56,7 +56,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
   m_isoImager = new K3bIsoImager( m_doc, this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_isoImager, SIGNAL(data(char*, int)), this, SLOT(slotReceivedIsoImagerData(char*, int)) );
+  connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
   connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
@@ -159,7 +159,7 @@ void K3bDataJob::writeImage()
   else {
     // get image file path
     if( m_doc->isoImage().isEmpty() )
-      m_doc->setIsoImage( k3bMain()->findTempFile( "iso" ) );
+      m_doc->setIsoImage( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
     
     // open the file for writing
     m_imageFile.setName( m_doc->isoImage() );
@@ -209,7 +209,7 @@ void K3bDataJob::cancel()
 }
 
 
-void K3bDataJob::slotReceivedIsoImagerData( char* data, int len )
+void K3bDataJob::slotReceivedIsoImagerData( const char* data, int len )
 {
   if( !m_doc->onlyCreateImage() && m_doc->onTheFly() ) {
     if( !m_writerJob ) {

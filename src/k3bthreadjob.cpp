@@ -69,8 +69,7 @@ void K3bThreadJob::cancel()
 
 void K3bThreadJob::customEvent( QCustomEvent* e )
 {
-  if( e->type() == K3bDataEvent::EVENT_TYPE ) {
-    K3bDataEvent* de = static_cast<K3bDataEvent*>(e);
+  if( K3bDataEvent* de = dynamic_cast<K3bDataEvent*>(e) ) {
     emit data( de->data(), de->length() );
   }
   else {
@@ -98,6 +97,13 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
       emit canceled();
       break;
     case K3bProgressInfoEvent::Finished:
+      // we wait until the thred really finished
+      // although this may be dangerous if some thread
+      // emits the finished signal although it has not finished yet
+      // but makes a lot stuff easier.
+      kdDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
+      while( m_thread->running() );
+      kdDebug() << "(K3bThreadJob) thread finished." << endl;
       emit finished( be->firstValue() );
       break;
     case K3bProgressInfoEvent::NewTask:

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -24,7 +24,6 @@
 #include "../k3baudiomodule.h"
 
 class OggVorbis_File;
-class QTimer;
 class KURL;
 
 
@@ -40,30 +39,18 @@ class K3bOggVorbisModule : public K3bAudioModule
   ~K3bOggVorbisModule();
 
   bool canDecode( const KURL& url );
+  int analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& );
 
- public slots:
-  void cancel();
+  void cleanup();
 
- private slots:
-  void startDecoding();
-  void decode();
-  void slotConsumerReady();
-
-  void analyseTrack();
-  void stopAnalysingTrack();
-  void slotEmitTrackAnalysed();
+ protected:
+  bool initDecodingInternal( const QString& filename );
+  int decodeInternal( const char** _data );
 
  private:
   OggVorbis_File* m_oggVorbisFile;
   int m_currentOggVorbisSection;
   char* m_outputBuffer;
-
-  unsigned long m_rawDataLengthToStream;
-  unsigned long m_rawDataAlreadyStreamed;
-
-  QTimer* m_decodingTimer;
-
-  bool m_bDecodingInProgress;
 
   static const int OUTPUT_BUFFER_SIZE = 4096;
 };

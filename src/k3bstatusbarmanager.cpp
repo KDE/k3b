@@ -18,6 +18,7 @@
 #include "k3bbusywidget.h"
 #include "k3b.h"
 #include <tools/k3bversion.h>
+#include <tools/k3bglobals.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -74,8 +75,7 @@ K3bStatusBarManager::~K3bStatusBarManager()
 
 void K3bStatusBarManager::update()
 {
-  kapp->config()->setGroup( "General Options" );
-  QString tempdir = kapp->config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  QString tempdir = K3b::defaultTempPath();
 
   struct statfs fs;
   if ( ::statfs(tempdir.latin1(),&fs) == 0 ) {

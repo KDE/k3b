@@ -61,7 +61,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   m_isoImager = new K3bIsoImager( doc->dataDoc(), this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_isoImager, SIGNAL(data(char*, int)), this, SLOT(slotReceivedIsoImagerData(char*, int)) );
+  connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
 
@@ -157,6 +157,10 @@ void K3bMixedJob::start()
   }
   else {
     emit newTask( i18n("Creating image files") );
+    m_tempFilePrefix = K3b::findUniqueFilePrefix( ( !m_doc->audioDoc()->title().isEmpty()
+						    ? m_doc->audioDoc()->title()
+						    : m_doc->dataDoc()->isoOptions().volumeID() ),
+						  m_doc->tempDir() );
 
     if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
       createIsoImage();
@@ -259,7 +263,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 }
 
 
-void K3bMixedJob::slotReceivedIsoImagerData( char* data, int len )
+void K3bMixedJob::slotReceivedIsoImagerData( const char* data, int len )
 {
   if( m_doc->onTheFly() ) {
     if( !m_writer->write( data, len ) )
@@ -429,7 +433,7 @@ void K3bMixedJob::slotAudioDecoderNextTrack( int t, int tt )
   if( !m_doc->onTheFly() ) {
     emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
     //emit infoMessage( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()), INFO );
-    QString bf = k3bMain()->findTempFile( "wav", m_doc->imagePath() );
+    QString bf = m_tempFilePrefix + "_track" + QString::number(t) + ".wav";
     if( !m_waveFileWriter->open( bf ) ) {
       emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_waveFileWriter->filename()), ERROR );
       cleanupAfterError();
@@ -776,7 +780,7 @@ void K3bMixedJob::createIsoImage()
   m_currentAction = CREATING_ISO_IMAGE;
 
   // prepare iso image file
-  m_isoImageFile = new QFile( k3bMain()->findTempFile( "iso", m_doc->imagePath() ) );
+  m_isoImageFile = new QFile( m_tempFilePrefix + "_datatrack.iso" );
   if( !m_isoImageFile->open( IO_WriteOnly ) ) {
     emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_isoImageFile->name()), ERROR );
     cleanupAfterError();

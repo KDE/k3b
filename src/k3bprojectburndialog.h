@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -76,7 +76,7 @@ class K3bProjectBurnDialog : public KDialogBase
     */
    virtual void slotWritingAppChanged( int );
 
-   void toggleAllOptions();
+   virtual void toggleAllOptions();
 
  signals:
    void writerChanged();

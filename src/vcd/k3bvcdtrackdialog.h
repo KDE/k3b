@@ -50,8 +50,8 @@ class K3bVcdTrackDialog : public KDialogBase
   void slotWaitTimeChanged(int);
   
  private:
-  QList<K3bVcdTrack> m_tracks;
-  QList<K3bVcdTrack> m_selectedTracks;
+  QPtrList<K3bVcdTrack> m_tracks;
+  QPtrList<K3bVcdTrack> m_selectedTracks;
   QTabWidget* m_mainTabbed;
   
   KCutLabel* m_displayFileName;

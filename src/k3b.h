@@ -106,10 +106,6 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   K3bDoc* activeDoc() const;
 
-  /** returns a free temp filename in the given directory
-   * @parm dir the directory where to find the tempfile, should end with '/' **/
-  QString findTempFile( const QString& ending, const QString& dir = QString::null );
-
   bool eject();
   void showOptionDialog( int = 0 );
   bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }

@@ -92,7 +92,8 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
     }
     else {
       if( len % 2 > 0 ) {
-	kdDebug() << "(K3bWaveFileWriter) data length is not a multible of 2! Cannot write data." << endl;
+	kdDebug() << "(K3bWaveFileWriter) data length ("
+		  << len << ") is not a multible of 2! Cannot swap bytes." << endl;
 	return;
       }
 

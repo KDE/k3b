@@ -40,6 +40,24 @@ namespace K3b
   int round( double );
 
   QString globalConfig();
+
+
+  QString findUniqueFilePrefix( const QString& _prefix = QString::null, const QString& path = QString::null );
+
+  /**
+   * Find a unique filename in directory d (if d is empty the method uses the defaultTempPath)
+   */
+  QString findTempFile( const QString& ending = QString::null, const QString& d = QString::null );
+
+  /**
+   * get the default K3b temp path to store image files
+   */
+  QString defaultTempPath();
+
+  /**
+   * makes sure a path ends with a "/"
+   */
+  QString prepareDir( const QString& dir );
 };
 
 #endif

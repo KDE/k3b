@@ -49,6 +49,7 @@ class K3bCore : public QObject
   ~K3bCore();
 
   void init();
+  void saveConfig();
 
   K3bCdDevice::DeviceManager* deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;

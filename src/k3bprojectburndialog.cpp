@@ -293,7 +293,6 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
-  toggleAllOptions();
 }
 
 

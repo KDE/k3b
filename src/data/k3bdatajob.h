@@ -49,7 +49,7 @@ class K3bDataJob : public K3bBurnJob
   void start();
 
  protected slots:
-  void slotReceivedIsoImagerData( char* data, int len );
+  void slotReceivedIsoImagerData( const char* data, int len );
   void slotIsoImagerFinished( bool success );
   void slotDataWritten();
   void slotIsoImagerPercent(int);

@@ -76,6 +76,8 @@ class K3bAudioJob : public K3bBurnJob
   bool m_errorOccuredAndAlreadyReported;
 
   bool m_written;
+
+  QString m_tempFilePrefix;
 };
 
 #endif

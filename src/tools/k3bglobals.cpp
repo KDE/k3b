@@ -19,8 +19,12 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kconfig.h>
+#include <kapplication.h>
 
 #include <qdatastream.h>
+#include <qdir.h>
+#include <qfile.h>
 
 #include <cmath>
 
@@ -90,4 +94,53 @@ QString K3b::globalConfig()
   // this is a little not to hard hack to ensure that we get the "global" k3b appdir
   // k3b_cd_copy.png should always be in $KDEDIR/share/apps/k3b/pics/
   return KGlobal::dirs()->findResourceDir( "data", "k3b/pics/k3b_cd_copy.png" ) + "k3b/k3bsetup";
+}
+
+
+QString K3b::findUniqueFilePrefix( const QString& _prefix, const QString& path )
+{
+  QString url;
+  if( path.isEmpty() || !QFile::exists(path) )
+    url = defaultTempPath();
+  else
+    url = prepareDir( path );
+
+  QString prefix = _prefix;
+  if( prefix.isEmpty() )
+    prefix = "k3b_";
+
+  // now create the unique prefix
+  QDir dir( url );
+  QStringList entries = dir.entryList( QDir::DefaultFilter, QDir::Name );
+  int i = 0;
+  for( QStringList::iterator it = entries.begin(); 
+       it != entries.end(); ++it ) {
+    if( (*it).startsWith( url + prefix + QString::number(i) ) ) {
+      i++;
+      it = entries.begin();
+    }
+  }
+
+  return url + prefix + QString::number(i);
+}
+
+
+QString K3b::findTempFile( const QString& ending, const QString& d )
+{
+  return findUniqueFilePrefix( "k3b_", d ) + ( ending.isEmpty() ? "" : "." + ending );
+}
+
+
+QString K3b::defaultTempPath()
+{
+  QString url;
+  kapp->config()->setGroup( "General Options" );
+  url = kapp->config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  return prepareDir(url);
+}
+
+
+QString K3b::prepareDir( const QString& dir )
+{
+  return (dir + (dir[dir.length()-1] != '/' ? "/" : ""));
 }

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -15,17 +15,13 @@
 
 
 #include "k3baudiomodule.h"
-#include "../k3baudiotrack.h"
 
-#include <qtimer.h>
+#include <kdebug.h>
 
 
 K3bAudioModule::K3bAudioModule( QObject* parent, const char* name )
   : QObject( parent, name )
 {
-  m_track = 0;
-  m_currentlyAnalysedTrack = 0;
-  connect( this, SIGNAL(trackAnalysed(K3bAudioTrack*)), this, SLOT(slotAnalysingFinished(K3bAudioTrack*)) );
 }
 
 
@@ -34,61 +30,55 @@ K3bAudioModule::~K3bAudioModule()
 }
 
 
-void K3bAudioModule::start( K3bAudioTrack* track )
+bool K3bAudioModule::initDecoding( const QString& filename, unsigned long trackSize )
 {
-  m_track = track;
-  QTimer::singleShot( 0, this, SLOT(startDecoding()) );
+  m_alreadyDecoded = 0;
+  m_size = trackSize;
+
+  return initDecodingInternal( filename );
 }
 
 
-void K3bAudioModule::resume()
+int K3bAudioModule::decode( const char** _data )
 {
-  slotConsumerReady();
-}
+  if( m_alreadyDecoded >= m_size )
+    return 0;
 
+  int len = decodeInternal( _data );
+  if( len < 0 )
+    return -1;
 
-void K3bAudioModule::addTrackToAnalyse( K3bAudioTrack* track )
-{
-  if( m_tracksToAnalyse.containsRef( track ) <= 0 ) {
-    m_tracksToAnalyse.append( track );
-
-    if( m_currentlyAnalysedTrack == 0 ) {
-      m_currentlyAnalysedTrack = m_tracksToAnalyse.first();
-      m_track = m_currentlyAnalysedTrack;
-      analyseTrack();
+  else if( len == 0 ) {
+    // check if we need to pad
+    int bytesToPad = m_size - m_alreadyDecoded;
+    if( bytesToPad > 0 ) {
+      kdDebug() << "(K3bAudioModule) track length: " << m_size
+		<< "; decoded module data: " << m_alreadyDecoded
+		<< "; we need to pad " << bytesToPad << " bytes." << endl;
+      m_data.resize( bytesToPad );
+      m_data.fill(0);
+      *_data = m_data.data();
+      m_alreadyDecoded += bytesToPad;
+      return bytesToPad;
     }
+    else
+      return 0;
+  }
+  else {
+    // check if we decoded too much
+    if( m_alreadyDecoded + len > m_size ) {
+      kdDebug() << "(K3bAudioModule) we decoded too much. Cutting output." << endl;
+      len = m_size - m_alreadyDecoded;
+    }
+
+    m_alreadyDecoded += len;
+    return len;
   }
 }
 
 
-void K3bAudioModule::removeTrackToAnalyse( K3bAudioTrack* track )
+void K3bAudioModule::cleanup()
 {
-  // stop eventually ongoing analysing
-  if( m_currentlyAnalysedTrack == track ) {
-    stopAnalysingTrack();
-  }
-  
-  slotAnalysingFinished( track );
 }
-
-
-void K3bAudioModule::slotAnalysingFinished( K3bAudioTrack* track )
-{
-  m_tracksToAnalyse.removeRef( track );
-  m_currentlyAnalysedTrack = 0;
-  m_track = 0;
-
-  if( !m_tracksToAnalyse.isEmpty() ) {
-    m_currentlyAnalysedTrack = m_tracksToAnalyse.first();
-    m_track = m_currentlyAnalysedTrack;
-    analyseTrack();
-  }
-}
-
-bool K3bAudioModule::allTracksAnalysed()
-{
-  return m_tracksToAnalyse.isEmpty(); 
-}
-
 
 #include "k3baudiomodule.moc"

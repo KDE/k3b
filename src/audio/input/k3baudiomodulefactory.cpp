@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,7 +18,6 @@
 #include "k3baudiomodulefactory.h"
 #include "mp3/k3bmp3module.h"
 #include "wave/k3bwavemodule.h"
-#include "../k3baudiotrack.h"
 
 #ifdef OGG_VORBIS
 #include "ogg/k3boggvorbismodule.h"
@@ -63,14 +62,10 @@ K3bAudioModuleFactory* K3bAudioModuleFactory::self()
 }
 
 
-K3bAudioModule* K3bAudioModuleFactory::createModule( K3bAudioTrack* track )
+K3bAudioModule* K3bAudioModuleFactory::createModule( const KURL& url )
 {
-  KURL url;
-  url.setPath( track->absPath() );
-
   for( QListIterator<K3bAudioModule> it( m_modules ); it.current(); ++it ) {
     if( it.current()->canDecode( url ) ) {
-      it.current()->addTrackToAnalyse( track );
       return it.current();
     }
   }

@@ -23,6 +23,7 @@
 #include <device/k3bdevice.h>
 #include <device/k3bdiskinfo.h>
 #include <device/k3bdiskinfodetector.h>
+#include <tools/k3bglobals.h>
 
 #include <remote.h>
 
@@ -116,26 +117,29 @@ void K3bCdCopyJob::getSourceDiskInfo(K3bDevice *dev) {
     }
     m_sessions = dev->numSessions();
     if( m_sessions < 2 ) {
-        m_tempPath = k3bMain()->findTempFile( "img", m_tempPath );
+        m_tempPath = K3b::findTempFile( "img", m_tempPath );
         m_tocFile  = m_tempPath;
         m_tocFile  = m_tocFile.replace(m_tocFile.findRev(".img"),4,".toc");;
 
         switch( diskType ) {
-          case K3bDiskInfo::DATA:
-               emit infoMessage( i18n("Source disk seems to be a data CD"), K3bJob::INFO );
-               break;
-          case K3bDiskInfo::AUDIO:
-               emit infoMessage( i18n("Source disk seems to be an audio CD"), K3bJob::INFO );
-               break;
-          case K3bDiskInfo::MIXED:
-               emit infoMessage( i18n("Source disk seems to be a mixed mode CD"), K3bJob::INFO );
-               break;
+	case K3bDiskInfo::DATA:
+	  emit infoMessage( i18n("Source disk seems to be a data CD"), K3bJob::INFO );
+	  break;
+	case K3bDiskInfo::AUDIO:
+	  emit infoMessage( i18n("Source disk seems to be an audio CD"), K3bJob::INFO );
+	  break;
+	case K3bDiskInfo::MIXED:
+	  emit infoMessage( i18n("Source disk seems to be a mixed mode CD"), K3bJob::INFO );
+	  break;
+	default:
+	  emit infoMessage( i18n("Unknown disk type"), ERROR );
+	  break;
         }
     } else {
         m_cdrdaowriter->setMulti(true);
         m_cdrdaowriter->setSession(1);
         m_cdrdaowriter->setEject(false);
-        m_tempPath = k3bMain()->findTempFile( "img.1", m_tempPath );
+        m_tempPath = K3b::findTempFile( "img.1", m_tempPath );
         m_tocFile  = m_tempPath;
         m_tocFile  = m_tocFile.replace(m_tocFile.findRev(".img"),4,".toc");
         emit infoMessage( i18n("Source disk seems to be a multisession CD"), K3bJob::INFO );

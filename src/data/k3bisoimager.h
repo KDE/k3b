@@ -82,7 +82,7 @@ class K3bIsoImager : public K3bJob
    * after data has been emitted image creation will
    * be suspended until resume() is called
    */
-  void data( char* data, int len );
+  //  void data( char* data, int len );
 
  private slots:
   void slotReceivedStdout( KProcess*, char*, int );

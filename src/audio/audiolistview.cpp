@@ -22,6 +22,7 @@
 #include <k3b.h>
 #include <k3baudioplayer.h>
 #include <k3bview.h>
+#include <tools/k3baudiotitlemetainfo.h>
 
 #include <qheader.h>
 #include <qtimer.h>
@@ -215,16 +216,16 @@ void K3bAudioListView::slotAnimation()
 
       if( item->animationIconNumber > 0 ) {
 	if( item->audioTrack()->length() > 0
-	    || item->audioTrack()->status() == K3bAudioTrack::CORRUPT ) {
+	    || item->audioTrack()->status() == K3bAudioTitleMetaInfo::CORRUPT ) {
 	  // set status icon
 	  switch( item->audioTrack()->status() ) {
-	  case K3bAudioTrack::OK:
+	  case K3bAudioTitleMetaInfo::OK:
 	    item->setPixmap( 3, SmallIcon( "greenled" ) );
 	    break;
-	  case K3bAudioTrack::RECOVERABLE:
+	  case K3bAudioTitleMetaInfo::RECOVERABLE:
 	    item->setPixmap( 3, SmallIcon( "yellowled" ) );
 	    break;
-	  case K3bAudioTrack::CORRUPT:
+	  case K3bAudioTitleMetaInfo::CORRUPT:
 	    item->setPixmap( 3, SmallIcon( "redled" ) );
 	    break;
 	  }

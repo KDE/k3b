@@ -84,7 +84,7 @@ void K3bAudioJob::start()
   m_canceled = false;
   m_errorOccuredAndAlreadyReported = false;
 
-  if( m_doc->onTheFly() ) {
+  if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
     if( !prepareWriter() ) {
       cleanupAfterError();
       emit finished(false);
@@ -96,6 +96,7 @@ void K3bAudioJob::start()
   else {
     emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
     emit newTask( i18n("Creating image files") );
+    m_tempFilePrefix = K3b::findUniqueFilePrefix( m_doc->title(), m_doc->tempDir() );
   }
   m_audioDecoder->start();
 }
@@ -153,26 +154,32 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
     return;
   }
 
-  if( !m_doc->onTheFly() ) {
+  if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
     // close the last written wave file
     m_waveFileWriter->close();
+
+    if( !m_doc->onlyCreateImages() ) {
+      if( !prepareWriter() ) {
+	cleanupAfterError();
+	emit finished(false);
+	return;
+      }
     
-    if( !prepareWriter() ) {
-      cleanupAfterError();
-      emit finished(false);
-      return;
+      startWriting();
     }
-    
-    startWriting();
+    else {
+      emit infoMessage( i18n("Successfully decoded all tracks."), STATUS );
+      emit finished(true);
+    }
   }
 }
 
 
 void K3bAudioJob::slotReceivedAudioDecoderData( const char* data, int len )
 {
-  if( m_doc->onTheFly() ) {
+  if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
     if( !m_writer->write( (char*)data, len ) ) {
-      kdDebug() << "(K3bAudioJob) Error while writing data to Writer" << endl;
+      kdError() << "(K3bAudioJob) Error while writing data to Writer" << endl;
       emit infoMessage( i18n("IO error"), ERROR );
       if( !m_written )
 	emit infoMessage( i18n("Internal Error! Please report!"), ERROR );
@@ -191,11 +198,11 @@ void K3bAudioJob::slotReceivedAudioDecoderData( const char* data, int len )
 
 void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
 {
-  if( !m_doc->onTheFly() ) {
+  if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
     emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->at(t-1)->fileName()) );
 
     // create next buffer file (WaveFileWriter will close the last written file)
-    QString bf = k3bMain()->findTempFile( "wav", m_doc->tempDir() );
+    QString bf = m_tempFilePrefix + "_track" + QString::number(t) + ".wav";
     if( !m_waveFileWriter->open( bf ) ) {
       emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_waveFileWriter->filename()), ERROR );
       cleanupAfterError();
@@ -337,15 +344,17 @@ void K3bAudioJob::slotWriterJobPercent( int p )
 
 void K3bAudioJob::slotAudioDecoderPercent( int p )
 {
-  if( !m_doc->onTheFly() ) {
+  if( m_doc->onlyCreateImages() )
+    emit percent( p );
+  else if( !m_doc->onTheFly() )
     emit percent( p/2 );
-  }
 }
 
 
 void K3bAudioJob::slotAudioDecoderSubPercent( int p )
 {
-  if( !m_doc->onTheFly() ) {
+  // when writing on the fly the writer produces the subPercent
+  if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
     emit subPercent( p );
   }
 }

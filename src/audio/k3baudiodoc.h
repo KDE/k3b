@@ -34,6 +34,8 @@ class QWidget;
 class QTimer;
 class QDomDocument;
 class QDomElement;
+class K3bThreadJob;
+
 
 /**Document class for an audio project. 
  *@author Sebastian Trueg
@@ -57,6 +59,7 @@ class K3bAudioDoc : public K3bDoc
   bool padding() const;
   bool hideFirstTrack() const { return m_hideFirstTrack; }
   bool removeBufferFiles() const { return m_removeBufferFiles; }
+  bool onlyCreateImages() const { return m_onlyCreateImages; }
   int numberOfTracks() const { return m_tracks->count(); }
 
   K3bAudioTrack* first() { return m_tracks->first(); }
@@ -112,6 +115,8 @@ class K3bAudioDoc : public K3bDoc
 
   void setRemoveBufferFiles( bool b ) { m_removeBufferFiles = b; }
 
+  void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
+
   // CD-Text
   void writeCdText( bool b ) { m_cdText = b; }
   void setTitle( const QString& v ) { m_cdTextTitle = v; }
@@ -128,6 +133,7 @@ class K3bAudioDoc : public K3bDoc
  protected slots:
   /** processes queue "urlsToAdd" **/
   void slotWorkUrlQueue();
+  void slotDetermineTrackMetaInfo();
 	
  signals:
   void newTracks();
@@ -176,6 +182,7 @@ class K3bAudioDoc : public K3bDoc
   bool m_padding;
   bool m_hideFirstTrack;
   bool m_removeBufferFiles;
+  bool m_onlyCreateImages;
  	
   // CD-Text
   // --------------------------------------------------
@@ -191,6 +198,10 @@ class K3bAudioDoc : public K3bDoc
   // --------------------------------------------------
 
   friend class K3bMixedDoc;
+
+  class AudioTrackMetaInfoThread;
+  AudioTrackMetaInfoThread* m_trackMetaInfoThread;
+  K3bThreadJob* m_trackMetaInfoJob;
 };
 
 

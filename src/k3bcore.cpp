@@ -148,4 +148,13 @@ void K3bCore::init()
   emit initializationInfo( i18n("Ready.") );
 }
 
+
+void K3bCore::saveConfig()
+{
+  config()->setGroup( "Devices" );
+  deviceManager()->saveConfig( config() );
+  config()->setGroup( "External Programs" );
+  externalBinManager()->saveConfig( config() );
+}
+
 #include "k3bcore.moc"

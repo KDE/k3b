@@ -51,7 +51,7 @@ class K3bMixedJob : public K3bBurnJob
 
  protected slots:
   void slotSizeCalculationFinished( int, int );
-  void slotReceivedIsoImagerData( char*, int );
+  void slotReceivedIsoImagerData( const char*, int );
   void slotIsoImagerFinished( bool success );
   void slotAudioDecoderFinished( bool );
   void slotReceivedAudioDecoderData( const char*, int );
@@ -102,6 +102,8 @@ class K3bMixedJob : public K3bBurnJob
   bool m_usingFifo;
 
   int m_usedWritingApp;
+
+  QString m_tempFilePrefix;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,11 +18,12 @@
 
 
 #include <qobject.h>
-#include <qptrlist.h>
+
+#include <tools/k3baudiotitlemetainfo.h>
+
+#include <qcstring.h>
 
 #include <kurl.h>
-
-class K3bAudioTrack;
 
 
 /**
@@ -38,63 +39,38 @@ class K3bAudioModule : public QObject
   K3bAudioModule( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bAudioModule();
 
-  K3bAudioTrack* audioTrack() const { return m_track; }
-
-  void start( K3bAudioTrack* );
-
   virtual bool canDecode( const KURL& url ) = 0;
 
-  bool allTracksAnalysed();
-
- public slots:
-  virtual void cancel() = 0;
-
-  virtual void resume();
- 
-  /** 
-  * add a track that should be analysed by 
-  * this module
-  */
-  void addTrackToAnalyse( K3bAudioTrack* );
-
   /**
-   * called by ~K3bAudioTrack
-   * to stop analysing 
+   * returnes K3bAudioTitleMetaInfo::FileStatus
+   * at least size has to be set in all derived classes
    */
-  void removeTrackToAnalyse( K3bAudioTrack* track );
+  virtual int analyseTrack( const QString& filename, 
+			    unsigned long& size, 
+			    K3bAudioTitleMetaInfo& info ) = 0;
 
- signals:
+  bool initDecoding( const QString& filename, unsigned long trackSize );
+
   /**
-   * after emitting this signal the module has to be resumed
+   * returnes -1 on error, 0 when finished, length of data otherwise
+   * takes care of padding
+   * calls decodeInternal() to actually decode data
    */
-  void output( const unsigned char* data, int len );
-  void percent( int );
-  void canceled();
-  void finished( bool );
-  /**
-   *  this signal has to be emitted when
-   * analysing is finished */
-  void trackAnalysed( K3bAudioTrack* );
-
- protected slots:
-  virtual void slotConsumerReady() {}
-  virtual void startDecoding() = 0;
+  int decode( const char** _data );
 
   /**
-   * retrieve information about the track like the length
-   * emit trackAnalysed signal when finished.
+   * cleanup after decoding like closing files.
    */
-  virtual void analyseTrack() = 0;
-  virtual void stopAnalysingTrack() = 0;
+  virtual void cleanup();
 
- private slots:
-  void slotAnalysingFinished( K3bAudioTrack* );
+ protected:
+  virtual bool initDecodingInternal( const QString& filename ) = 0;
+  virtual int decodeInternal( const char** data ) = 0;
 
  private:
-  K3bAudioTrack* m_track;
-
-  QPtrList<K3bAudioTrack> m_tracksToAnalyse;
-  K3bAudioTrack* m_currentlyAnalysedTrack;
+  unsigned long m_size;
+  unsigned long m_alreadyDecoded;
+  QByteArray m_data;
 };
 
 

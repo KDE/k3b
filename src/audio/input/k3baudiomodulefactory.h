@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,7 +20,6 @@
 #include <qobject.h>
 #include <qptrlist.h>
 
-class K3bAudioTrack;
 class K3bAudioModule;
 class KURL;
 
@@ -34,7 +33,7 @@ class K3bAudioModuleFactory : public QObject
   /** returns NULL if no Module for that type of file is available.
       for now these are static but in the future there could be some plugin
       mode with dynamicly loaded audiomodules */
-  K3bAudioModule* createModule( K3bAudioTrack* );
+  K3bAudioModule* createModule( const KURL& url );
   bool moduleAvailable( const KURL& url );
 
   static K3bAudioModuleFactory* self();

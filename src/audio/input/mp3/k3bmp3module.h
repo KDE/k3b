@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,7 +25,6 @@ extern "C" {
 
 #include <qfile.h>
 
-class QTimer;
 
 
 class K3bMp3Module : public K3bAudioModule
@@ -38,39 +37,28 @@ class K3bMp3Module : public K3bAudioModule
 
   bool canDecode( const KURL& url );
 
- public slots:
-  void cancel();
+  int analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& info );
 
- private slots:
-  void slotDecodeNextFrame();
-  void slotCountFrames();
-  void slotConsumerReady();
-  void startDecoding();
-  void analyseTrack();
-  void stopAnalysingTrack();
+  void cleanup();
+
+ protected:
+  bool initDecodingInternal( const QString& filename );
+  int decodeInternal( const char** _data );
  
  private:
+  int countFrames( unsigned long& frames );
   inline unsigned short linearRound( mad_fixed_t fixed );
-  void initializeDecoding();
   void fillInputBuffer();
-  void clearingUp();
-  void createPcmSamples( mad_synth* );
+  bool createPcmSamples( mad_synth* );
   unsigned int resampleBlock( mad_fixed_t const *source, 
 			      unsigned int nsamples, 
 			      mad_fixed_t* target,
 			      mad_fixed_t& last,
 			      mad_fixed_t& step );
 
-  bool m_bDecodingInProgress;
-  bool m_bCountingFramesInProgress;
   bool m_bEndOfInput;
+  bool m_bInputError;
   bool m_bOutputFinished;
-
-  QTimer* m_decodingTimer;
-  QTimer* m_analysingTimer;
-
-  unsigned long m_rawDataLengthToStream;
-  unsigned long m_rawDataAlreadyStreamed;
 
   mad_stream*   m_madStream;
   mad_frame*    m_madFrame;
@@ -106,7 +94,6 @@ class K3bMp3Module : public K3bAudioModule
   static const int INPUT_BUFFER_SIZE = 5*8192;
   static const int OUTPUT_BUFFER_SIZE = 5*8192;
 
-  int m_recoverableErrorCount;
   static int MaxAllowedRecoverableErrors;
 };
 

@@ -53,8 +53,6 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 {
   prepareGui();
 
-  m_checkOnlyCreateImage->hide();
-
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -76,8 +74,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   addPage( advancedTab, i18n("Advanced") );
 
-  connect( m_checkDao, SIGNAL(toggled(bool)), this, SLOT(slotToggleEverything()) );
-  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleEverything()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
 
   readSettings();
 
@@ -110,6 +107,7 @@ void K3bAudioBurnDialog::saveSettings()
   m_doc->setBurnproof( m_checkBurnproof->isChecked() );
   m_doc->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
   m_doc->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
+  m_doc->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
 
   // -- saving current speed --------------------------------------
   m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -130,11 +128,12 @@ void K3bAudioBurnDialog::readSettings()
   m_checkHideFirstTrack->setChecked( m_doc->hideFirstTrack() );
   m_checkRemoveBufferFiles->setChecked( m_doc->removeBufferFiles() );
   m_checkBurnproof->setChecked( doc()->burnproof() );
+  m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImages() );
 
   // read CD-Text ------------------------------------------------------------
   m_cdtextWidget->load( m_doc );
 
-  slotToggleEverything();
+  toggleAllOptions();
 }
 
 
@@ -149,7 +148,7 @@ void K3bAudioBurnDialog::loadDefaults()
   m_checkHideFirstTrack->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
 
-  slotToggleEverything();
+  toggleAllOptions();
 }
 
 
@@ -167,8 +166,9 @@ void K3bAudioBurnDialog::loadUserDefaults()
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", true ) );
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
+  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_images", false ) );
 
-  slotToggleEverything();
+  toggleAllOptions();
 }
 
 
@@ -185,6 +185,7 @@ void K3bAudioBurnDialog::saveUserDefaults()
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
   c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
+  c->writeEntry( "only_create_images", m_checkOnlyCreateImage->isChecked() );
 
   if( m_tempDirSelectionWidget->isEnabled() ) {
     m_tempDirSelectionWidget->saveConfig();
@@ -192,9 +193,9 @@ void K3bAudioBurnDialog::saveUserDefaults()
 }
 
 
-void K3bAudioBurnDialog::slotToggleEverything()
+void K3bAudioBurnDialog::toggleAllOptions()
 {
-  toggleAllOptions();
+  K3bProjectBurnDialog::toggleAllOptions();
 
   // currently we do not support writing on the fly with cdrecord
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
@@ -206,8 +207,8 @@ void K3bAudioBurnDialog::slotToggleEverything()
     m_cdtextWidget->setEnabled(false);
   }
   else {
-    m_checkOnTheFly->setEnabled( true );
-    m_checkHideFirstTrack->setEnabled(true);
+    m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+    m_checkHideFirstTrack->setEnabled( !m_checkOnlyCreateImage->isChecked() );
     m_cdtextWidget->setEnabled(true);
   }
 }

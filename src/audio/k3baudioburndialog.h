@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -59,7 +59,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
-   void slotToggleEverything();
+   void toggleAllOptions();
 };
 
 #endif

@@ -23,7 +23,6 @@
 #include "k3boggvorbismodule.h"
 #include "../../k3baudiotrack.h"
 
-#include <qtimer.h>
 #include <qfile.h>
 #include <qstringlist.h>
 
@@ -41,12 +40,6 @@ K3bOggVorbisModule::K3bOggVorbisModule( QObject* parent, const char* name )
 {
   m_oggVorbisFile = new OggVorbis_File;
   m_outputBuffer  = new char[OUTPUT_BUFFER_SIZE];
-
-  m_decodingTimer = new QTimer( this );
-  connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(decode()) );
-
-
-  m_bDecodingInProgress = false;
 }
 
 
@@ -57,150 +50,77 @@ K3bOggVorbisModule::~K3bOggVorbisModule()
 }
 
 
-void K3bOggVorbisModule::startDecoding()
+bool K3bOggVorbisModule::initDecodingInternal( const QString& filename )
 {
   // open the file
-  FILE* file = fopen( QFile::encodeName(audioTrack()->absPath()), "r" );
+  FILE* file = fopen( QFile::encodeName(filename), "r" );
   if( !file ) {
-    kdDebug() << "(K3bOggVorbisModule) Could not open file " << audioTrack()->absPath() << endl;
-    emit finished( false );
+    kdError() << "(K3bOggVorbisModule) Could not open file " << filename << endl;
+    return false;
   }
-  else {
-    if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      kdDebug() << "(K3bOggVorbisModule) " << audioTrack()->absPath() << " seems not to to be an ogg vorbis file." << endl;
-      fclose( file );
-      emit finished( false );
-    }
-    else {
-      kdDebug() << "(K3bOggVorbisModule) start decoding of file " << audioTrack()->absPath() << endl;
-
-      m_rawDataLengthToStream = audioTrack()->length().audioBytes();
-      m_rawDataAlreadyStreamed = 0;
-
-      m_bDecodingInProgress = true;
-      m_decodingTimer->start(0);
-    }
+  else if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
+    kdError() << "(K3bOggVorbisModule) " << filename << " seems not to to be an ogg vorbis file." << endl;
+    fclose( file );
+    return false;
   }
+
+  return true;
 }
 
 
-void K3bOggVorbisModule::cancel()
+int K3bOggVorbisModule::decodeInternal( const char** _data )
 {
-  if( m_bDecodingInProgress ) {
-    m_bDecodingInProgress = false;
-    m_decodingTimer->stop();
+  long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
 
-    ov_clear( m_oggVorbisFile );
+  if( bytesRead == OV_HOLE ) {
+    // TODO: I think we can go on here?
 
-    emit canceled();
-    emit finished( false );
-  }
-}
-
-
-void K3bOggVorbisModule::decode()
-{
-  if( m_bDecodingInProgress ) {
- 
-    long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
-
-    if( bytesRead == OV_HOLE ) {
-      // TODO: I think we can go on here?
-
-      kdDebug() << "(K3bOggVorbisModule) OV_HOLE" << endl;
+    kdDebug() << "(K3bOggVorbisModule) OV_HOLE" << endl;
       
-      ov_clear( m_oggVorbisFile );
-
-      m_bDecodingInProgress = false;
-      m_decodingTimer->stop();
-      emit finished( false );
-    }
-
-    else if( bytesRead == OV_EBADLINK ) {
-      kdDebug() << "(K3bOggVorbisModule) OV_EBADLINK" << endl;
-
-      ov_clear( m_oggVorbisFile );
-
-      m_bDecodingInProgress = false;
-      m_decodingTimer->stop();
-      emit finished( false );
-    }
-
-    else if( bytesRead < 0 ) {
-
-      // TODO: add a method in the upcoming vorbisLib class that returnes
-      // an error string
-      // #define OV_FALSE      -1
-      // #define OV_EOF        -2
-      // #define OV_HOLE       -3
-
-      // #define OV_EREAD      -128
-      // #define OV_EFAULT     -129
-      // #define OV_EIMPL      -130
-      // #define OV_EINVAL     -131
-      // #define OV_ENOTVORBIS -132
-      // #define OV_EBADHEADER -133
-      // #define OV_EVERSION   -134
-      // #define OV_ENOTAUDIO  -135
-      // #define OV_EBADPACKET -136
-      // #define OV_EBADLINK   -137
-      // #define OV_ENOSEEK    -138
-
-      kdDebug() << "(K3bOggVorbisModule) Error: " << bytesRead << endl;
-
-      ov_clear( m_oggVorbisFile );
-
-      m_bDecodingInProgress = false;
-      m_decodingTimer->stop();
-      emit finished( false );
-    }
-
-    else if( bytesRead == 0 ) {
-      // eof
-      // pad if necessary
-      if( m_rawDataAlreadyStreamed < m_rawDataLengthToStream ) {
-	long bytesToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
-	kdDebug() << "(K3bOggVorbisModule) we have to pad by " << bytesToPad << "i bytes" << endl;
-
-	memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
-
-	long bytesToOutput = ( bytesToPad < OUTPUT_BUFFER_SIZE ? bytesToPad : OUTPUT_BUFFER_SIZE );
-
-	emit output( (const unsigned char*)m_outputBuffer, bytesToOutput );
-	m_rawDataAlreadyStreamed += bytesToOutput;
-	emit percent( (int)(100.0 * ((double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream)) );
-      }
-      else {
-	kdDebug() << "(K3bOggVorbisModule) successfully finished decoding file " << audioTrack()->absPath() << endl;
-	// finished with success
-	m_bDecodingInProgress = false;
-	m_decodingTimer->stop();
-
-	ov_clear( m_oggVorbisFile );
-
-	emit percent( 100 );
-	emit finished( true );
-      }
-    }
-
-    else {
-      // correct data
-      // TODO: check if too much output
-
-      emit output( (const unsigned char*)m_outputBuffer, bytesRead );
-      m_rawDataAlreadyStreamed += bytesRead;
-      emit percent( (int)(100.0 * ((double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream)) );
-    }
-
-    m_decodingTimer->stop();
+    return -1;
   }
-}
 
+  else if( bytesRead == OV_EBADLINK ) {
+    kdDebug() << "(K3bOggVorbisModule) OV_EBADLINK" << endl;
 
-void K3bOggVorbisModule::slotConsumerReady()
-{
-  if( m_bDecodingInProgress )
-    m_decodingTimer->start(0);
+    return -1;
+  }
+
+  else if( bytesRead < 0 ) {
+
+    // TODO: add a method in the upcoming vorbisLib class that returnes
+    // an error string
+    // #define OV_FALSE      -1
+    // #define OV_EOF        -2
+    // #define OV_HOLE       -3
+
+    // #define OV_EREAD      -128
+    // #define OV_EFAULT     -129
+    // #define OV_EIMPL      -130
+    // #define OV_EINVAL     -131
+    // #define OV_ENOTVORBIS -132
+    // #define OV_EBADHEADER -133
+    // #define OV_EVERSION   -134
+    // #define OV_ENOTAUDIO  -135
+    // #define OV_EBADPACKET -136
+    // #define OV_EBADLINK   -137
+    // #define OV_ENOSEEK    -138
+
+    kdDebug() << "(K3bOggVorbisModule) Error: " << bytesRead << endl;
+
+    return -1;
+  }
+
+  else if( bytesRead == 0 ) {
+    kdDebug() << "(K3bOggVorbisModule) successfully finished decoding." << endl;
+    return 0;
+  }
+
+  else {
+    // correct data
+    *_data = m_outputBuffer;
+    return bytesRead;
+  }
 }
 
 
@@ -225,36 +145,39 @@ bool K3bOggVorbisModule::canDecode( const KURL& url )
 }
 
 
-void K3bOggVorbisModule::analyseTrack()
+int K3bOggVorbisModule::analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& info )
 {
+  int ret = K3bAudioTitleMetaInfo::OK;
+
   // do some initialization
-  FILE* file = fopen( QFile::encodeName(audioTrack()->absPath()), "r" );
+  FILE* file = fopen( QFile::encodeName(filename), "r" );
   if( !file ) {
-    kdDebug() << "(K3bOggVorbisModule) Could not open file " << audioTrack()->absPath() << endl;
-    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+    kdDebug() << "(K3bOggVorbisModule) Could not open file " << filename << endl;
+    ret =  K3bAudioTitleMetaInfo::CORRUPT;
   }
   else {
-    if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      kdDebug() << "(K3bOggVorbisModule) " << audioTrack()->absPath() << " seems to to be an ogg vorbis file." << endl;
-      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+    OggVorbis_File oggVorbisFile;
+    if( ov_open( file, &oggVorbisFile, 0, 0 ) ) {
+      kdDebug() << "(K3bOggVorbisModule) " << filename << " seems to to be an ogg vorbis file." << endl;
+
       fclose( file );
+      ret = K3bAudioTitleMetaInfo::CORRUPT;
     }
     else {
       // check length of track
-      double seconds = ov_time_total( m_oggVorbisFile, -1 );
+      double seconds = ov_time_total( &oggVorbisFile, -1 );
       if( seconds == OV_EINVAL ) {
-	kdDebug() << "(K3bOggVorbisModule) Could not determine length of file " << audioTrack()->absPath() << endl;
-	audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+	kdDebug() << "(K3bOggVorbisModule) Could not determine length of file " << filename << endl;
+	ret = K3bAudioTitleMetaInfo::CORRUPT;
       }
       else {
-	audioTrack()->setLength( (unsigned long)ceil(seconds * 75.0) );
-	audioTrack()->setStatus( K3bAudioTrack::OK );
+	size = (unsigned long)ceil(seconds * 75.0);
       }
 
       // search for artist,title information
-      vorbis_comment* vComment = ov_comment( m_oggVorbisFile, -1 );
+      vorbis_comment* vComment = ov_comment( &oggVorbisFile, -1 );
       if( !vComment ) {
-	kdDebug() << "(K3bOggVorbisModule) Could not open OggVorbis comment of file " << audioTrack()->absPath() << endl;
+	kdDebug() << "(K3bOggVorbisModule) Could not open OggVorbis comment of file " << filename << endl;
       }
       else {
 	for( int i = 0; i < vComment->comments; ++i ) {
@@ -262,34 +185,26 @@ void K3bOggVorbisModule::analyseTrack()
 	  QStringList values = QStringList::split( "=", comment );
 	  if( values.count() > 1 ) {
 	    if( values[0] == "title" )
-	      audioTrack()->setTitle( values[1] );
+	      info.setTitle( values[1] );
 	    else if( values[0] == "artist" )
-	      audioTrack()->setArtist( values[1] );
+	      info.setArtist( values[1] );
 	    else if( values[0] == "album" )
-	      audioTrack()->setAlbum( values[1] );
+	      info.setAlbumTitle( values[1] );
 	  }
 	}
-      }
+   }
+
+      ov_clear( &oggVorbisFile );
     }
-  
-    ov_clear( m_oggVorbisFile );
   }
 
-  QTimer::singleShot( 0, this, SLOT(slotEmitTrackAnalysed()) );
+  return ret;
 }
 
-
-void K3bOggVorbisModule::slotEmitTrackAnalysed()
+void K3bOggVorbisModule::cleanup()
 {
-  emit trackAnalysed( audioTrack() );
+  ov_clear( m_oggVorbisFile );
 }
-
-
-void K3bOggVorbisModule::stopAnalysingTrack()
-{
-  // do nothing since all is done syncronously
-}
-
 
 #include "k3boggvorbismodule.moc"
 

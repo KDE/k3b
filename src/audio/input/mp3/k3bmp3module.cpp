@@ -28,7 +28,6 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qtimer.h>
 
 #include <stdlib.h>
 #include <cmath>
@@ -43,18 +42,6 @@ int K3bMp3Module::MaxAllowedRecoverableErrors = 10;
 K3bMp3Module::K3bMp3Module( QObject* parent, const char* name )
   : K3bAudioModule( parent, name )
 {
-  // at the beginning the timer is used for counting the frames
-  m_decodingTimer = new QTimer( this );
-  m_analysingTimer = new QTimer( this );
-  connect( m_analysingTimer, SIGNAL(timeout()), this, SLOT(slotCountFrames()) );
-  connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(slotDecodeNextFrame()) );
-
-
-  m_bCountingFramesInProgress = false;
-  m_bDecodingInProgress = false;
-  m_bEndOfInput = false;
-  m_bFrameNeedsResampling = false;
-
   m_inputBuffer  = new k3b_mad_char[INPUT_BUFFER_SIZE];
   m_outputBuffer = new k3b_mad_char[OUTPUT_BUFFER_SIZE];
 
@@ -84,179 +71,124 @@ K3bMp3Module::~K3bMp3Module()
 
   delete [] m_madResampledLeftChannel;
   delete [] m_madResampledRightChannel;
+
+  delete m_madStream;
+  delete m_madFrame;
+  delete m_madHeader;
+  delete m_madSynth;
+  delete m_madTimer;
 }
 
 
-void K3bMp3Module::initializeDecoding()
+bool K3bMp3Module::initDecodingInternal( const QString& filename )
 {
-  m_inputFile.setName( audioTrack()->absPath() );
-  m_inputFile.open( IO_ReadOnly );
+  m_bOutputFinished = false;
+  m_bEndOfInput = false;
+  m_bFrameNeedsResampling = false;
+  m_bInputError = false;
+    
+  // just to be sure
+  m_inputFile.close();
+  m_inputFile.setName( filename );
+  if( !m_inputFile.open( IO_ReadOnly ) ) {
+    kdError() << "(K3bMp3Module) could not open file " << filename << endl;
+    return false;
+  }
 
   memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
   memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
 
   mad_stream_init( m_madStream );
   mad_timer_reset( m_madTimer );
+  mad_frame_init( m_madFrame );
+  mad_header_init( m_madHeader );
+  mad_synth_init( m_madSynth );
 
   m_outputPointer = m_outputBuffer;
   
   m_frameCount = 0;
-  m_rawDataAlreadyStreamed = 0;
-  m_rawDataLengthToStream = audioTrack()->size();
-  m_bEndOfInput = false;
 
   // reset the resampling status structures
   m_madResampledStepLeft = 0;
   m_madResampledLastLeft = 0;
   m_madResampledStepRight = 0;
   m_madResampledLastRight = 0;
+
+  return true;
 }
 
-
-void K3bMp3Module::startDecoding()
-{
-  if( !m_bCountingFramesInProgress && !m_bDecodingInProgress ) {
-    m_bDecodingInProgress = true;
-    m_bEndOfInput = false;
-    m_bOutputFinished = false;
-    
-    initializeDecoding();
-
-    mad_frame_init( m_madFrame );
-    mad_synth_init( m_madSynth );
-
-    m_decodingTimer->start(0);
-
-    //kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << " frames." << endl;
-    kdDebug() << "(K3bMp3Module) data to decode: " << m_rawDataLengthToStream << " bytes." << endl;
-  }
-}
-
-
+// streams data from file into stream
+// returnes length of data
 void K3bMp3Module::fillInputBuffer()
 {
-  if( m_bEndOfInput )
-    return;
-
   /* The input bucket must be filled if it becomes empty or if
    * it's the first execution of the loop.
    */
-  if( m_madStream->buffer == 0 || m_madStream->error == MAD_ERROR_BUFLEN )
-    {
-      long readSize, remaining;
-      unsigned char* readStart;
+  if( m_madStream->buffer == 0 || m_madStream->error == MAD_ERROR_BUFLEN ) {
+    long readSize, remaining;
+    unsigned char* readStart;
 
-      if( m_madStream->next_frame != 0 )
-	{
-	  remaining = m_madStream->bufend - m_madStream->next_frame;
-	  memmove( m_inputBuffer, m_madStream->next_frame, remaining );
-	  readStart = m_inputBuffer + remaining;
-	  readSize = INPUT_BUFFER_SIZE - remaining;
-	}
-      else
-	{
-	  readSize  = INPUT_BUFFER_SIZE;
-	  readStart = m_inputBuffer;
-	  remaining = 0;
-	}
-			
-      // Fill-in the buffer. 
-      Q_LONG result = m_inputFile.readBlock( (char*)readStart, readSize );
-      if( result <= 0 ) {
-	if( result < 0 )
-	  kdDebug() << "(K3bMp3Module) read error on bitstream)" << endl;
-	else
-	  kdDebug() << "(K3bMp3Module) end of input stream" << endl;
-
-
-	m_bEndOfInput = true;
-      }
-      else 
-	{
-	  // Pipe the new buffer content to libmad's stream decoder facility.
-	  mad_stream_buffer( m_madStream, m_inputBuffer, result + remaining );
-	  m_madStream->error = MAD_ERROR_NONE;
-	}
+    if( m_madStream->next_frame != 0 ) {
+      remaining = m_madStream->bufend - m_madStream->next_frame;
+      memmove( m_inputBuffer, m_madStream->next_frame, remaining );
+      readStart = m_inputBuffer + remaining;
+      readSize = INPUT_BUFFER_SIZE - remaining;
     }
+    else {
+      readSize  = INPUT_BUFFER_SIZE;
+      readStart = m_inputBuffer;
+      remaining = 0;
+    }
+			
+    // Fill-in the buffer. 
+    Q_LONG result = m_inputFile.readBlock( (char*)readStart, readSize );
+    if( result < 0 ) {
+      kdDebug() << "(K3bMp3Module) read error on bitstream)" << endl;
+      m_bInputError = true;
+    }
+    else if( result == 0 ) {
+      kdDebug() << "(K3bMp3Module) end of input stream" << endl;
+      m_bEndOfInput = true;
+    }
+    else {
+      // Pipe the new buffer content to libmad's stream decoder facility.
+      mad_stream_buffer( m_madStream, m_inputBuffer, result + remaining );
+      m_madStream->error = MAD_ERROR_NONE;
+    }
+  }
 }
 
 
-void K3bMp3Module::slotCountFrames()
+int K3bMp3Module::countFrames( unsigned long& frames )
 {
-  if( m_bEndOfInput ) {
-    // nothing to do anymore (but perhaps there are some zombie timer events)
-    return;
-  }
+  int ret = K3bAudioTitleMetaInfo::OK;
 
+  while( !m_bEndOfInput && !m_bInputError ) {
 
-  // always count 500 frames at a time
-  for( int i = 0; i < 500; i++ ) {
     fillInputBuffer();
-    
-    if( m_bEndOfInput ) {
-      // we need the length of the track to be multible of frames (1/75 second)
-      float seconds = (float)m_madTimer->seconds + (float)m_madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
-      unsigned long frames = (unsigned long)ceil(seconds * 75.0);
-      audioTrack()->setLength( frames );
-      kdDebug() << "(K3bMp3Module) setting length of track " << audioTrack()->index() << " to ceil(" << seconds
-		<< ") seconds = " << frames << " frames" << endl;
-      
-      m_analysingTimer->stop();
 
-      m_bCountingFramesInProgress = false;
-      mad_header_finish( m_madHeader );
-
-      clearingUp();
-
-      emit trackAnalysed( audioTrack() );
-      break;
+    if( m_bInputError ) {
+      kdError() << "(K3bMp3Module) Error while reading fron file." << endl;
     }
-    else { // input ready
-
+    else {
       if( mad_header_decode( m_madHeader, m_madStream ) ) {
 	if( MAD_RECOVERABLE( m_madStream->error ) ) {
 	  kdDebug() << "(K3bMp3Module) recoverable frame level error ("
 		    << mad_stream_errorstr(m_madStream) << ")" << endl;
 
-	  m_recoverableErrorCount++;
-	  if( m_recoverableErrorCount > MaxAllowedRecoverableErrors ) {
-	    kdDebug() << "(K3bMp3Module) found " << MaxAllowedRecoverableErrors 
-		      << " recoverable errors in a row. Stopping decoding." << endl;
-	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-
-	    m_bCountingFramesInProgress = false;
-	    m_analysingTimer->stop();
-	    mad_header_finish( m_madHeader );
-
-	    clearingUp();
-
-	    emit trackAnalysed( audioTrack() );
-	    break;
-	  }
-
-	  audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
+	  ret = K3bAudioTitleMetaInfo::RECOVERABLE;
 	}
 	else {
 	  if( m_madStream->error != MAD_ERROR_BUFLEN ) {
 	    kdDebug() << "(K3bMp3Module) unrecoverable frame level error ("
 		      << mad_stream_errorstr(m_madStream) << endl;
-	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-	    
-	    m_bCountingFramesInProgress = false;
-	    m_analysingTimer->stop();
-	    mad_header_finish( m_madHeader );
-
-	    clearingUp();
-
-	    emit trackAnalysed( audioTrack() );
+	    ret = K3bAudioTitleMetaInfo::CORRUPT;
 	    break;
 	  }
 	}
       } // if( header not decoded )
 
       else {
-	m_recoverableErrorCount = 0;
-
 	m_frameCount++;
 
 	mad_timer_add( m_madTimer, m_madHeader->duration );
@@ -264,23 +196,22 @@ void K3bMp3Module::slotCountFrames()
     } // if( input ready )
 
   } // for( 1000x )
-}
 
-
-void K3bMp3Module::slotConsumerReady()
-{
-  if( m_bDecodingInProgress )
-    m_decodingTimer->start(0);
-}
-
-
-void K3bMp3Module::slotDecodeNextFrame()
-{
-  if( !m_bDecodingInProgress || m_bOutputFinished ) {
-    // nothing to do anymore (but perhaps there are some zombie timer events)
-    return;
+  if( !m_bInputError && ret != K3bAudioTitleMetaInfo::CORRUPT ) {
+    // we need the length of the track to be multible of frames (1/75 second)
+    float seconds = (float)m_madTimer->seconds + (float)m_madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
+    frames = (unsigned long)ceil(seconds * 75.0);
+    kdDebug() << "(K3bMp3Module) length of track " << seconds << endl;
   }
 
+  cleanup();
+
+  return ret;
+}
+
+
+int K3bMp3Module::decodeInternal( const char** _data )
+{
   bool bOutputBufferFull = false;
 
   while( !bOutputBufferFull ) {
@@ -295,45 +226,29 @@ void K3bMp3Module::slotDecodeNextFrame()
       bOutputBufferFull = true;
     }
     else {
+
       fillInputBuffer();
 
-      if( m_bEndOfInput ) {
-	// now check if we need to pad with zeros
-	size_t bufferSize = m_outputPointer - m_outputBuffer;
-	if( m_rawDataLengthToStream > m_rawDataAlreadyStreamed + bufferSize ) {
-	  // pad as much as possible
-	  size_t freeBuffer = OUTPUT_BUFFER_SIZE - bufferSize;
-	  unsigned long dataToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed - bufferSize;
-	  memset( m_outputPointer, 0, freeBuffer );
-	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
-
-	  kdDebug() << "(K3bMp3Module) padding data with " 
-		    << ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) << " zeros." << endl;
-	}
-	else {
-	  break;
-	}
+      if( m_bInputError ) {
+	kdError() << "(K3bMp3Module) Error while reading fron file." << endl;
+	return -1;
+      }
+      else if( m_bEndOfInput ) {
+	kdDebug() << "(K3bMp3Module) end of input." << endl;
+	return 0;
       }
       else {
 	if( mad_frame_decode( m_madFrame, m_madStream ) ) {
 	  if( MAD_RECOVERABLE( m_madStream->error ) ) {
 	    kdDebug() << "(K3bMp3Module) recoverable frame level error ("
 		      << mad_stream_errorstr(m_madStream) << ")" << endl;
-	    audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
 	  }
 	  else {
 	    if( m_madStream->error != MAD_ERROR_BUFLEN ) {
 	      kdDebug() << "(K3bMp3Module) unrecoverable frame level error ("
 			<< mad_stream_errorstr(m_madStream) << endl;
-	      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
-	
-	      m_bDecodingInProgress = false;
-	      m_decodingTimer->stop();
 
-	      clearingUp();
-
-	      emit finished( false );
-	      return;
+	      return -1;
 	    }
 	  }
 	} // mad frame could not be decoded
@@ -351,7 +266,9 @@ void K3bMp3Module::slotDecodeNextFrame()
 
 	  // this does the resampling if needed
 	  // and fills the output buffer
-	  createPcmSamples( m_madSynth );
+	  if( !createPcmSamples( m_madSynth ) ) {
+	    return -1;
+	  }
 
 	} // mad frame successfully decoded
 
@@ -361,74 +278,13 @@ void K3bMp3Module::slotDecodeNextFrame()
 
   } // while loop
 
-  // now the buffer is full and needs to be streamed to
-  // the consumer
-  // if no consumer is set decoding will continue after
-  // the output signal has been emitted
-  // otherwise it will be stopped until the consumer
-  // emitted the ready signal
-
   // flush the output buffer
   size_t buffersize = m_outputPointer - m_outputBuffer;
-  size_t bytesToOutput = buffersize;
 	    
-  if( m_rawDataAlreadyStreamed > m_rawDataLengthToStream ) {
-    kdDebug() << "(K3bMp3Module) to much data streamed" << endl;
-    exit(1);
-  }
-
-
-  // make sure we don't stream to much
-  if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
-    bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
-    kdDebug() << "(K3bMp3Module) decoded data was longer than calculated length. Cutting data." << endl;
-    kdDebug() << "(K3bMp3Module) bytes to stream: "
-	      << m_rawDataLengthToStream 
-	      << "; bytes already streamed: "
-	      << m_rawDataAlreadyStreamed
-	      << "; bytes in buffer: " 
-	      << buffersize << "." << endl;
-  }
-  
-  m_rawDataAlreadyStreamed += bytesToOutput;
-
-  if( bytesToOutput > 0 ) {
-    emit output( m_outputBuffer, bytesToOutput );
-  }
-  else {
-    m_bOutputFinished = true;
-  }
-
+  *_data = (char*)m_outputBuffer;
   m_outputPointer = m_outputBuffer;
 
-  if( m_rawDataAlreadyStreamed < m_rawDataLengthToStream )
-    emit percent( (int)(100.0* (double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream) );
-  else
-    emit percent( 100 );
-
-  if( m_rawDataLengthToStream == m_rawDataAlreadyStreamed )
-    m_bOutputFinished = true;
-
-  if( m_bOutputFinished ) {
-
-    kdDebug() << "(K3bMp3Module) end of output." << endl;
-
-    m_decodingTimer->stop();
-
-    m_bDecodingInProgress = false;
-
-    mad_synth_finish( m_madSynth );
-    mad_frame_finish( m_madFrame );
-
-    clearingUp();
-
-    emit finished( true );
-
-    kdDebug() << "(K3bMp3Module) finished." << endl;
-  }
-  else {
-    m_decodingTimer->stop();
-  }
+  return buffersize;
 }
 
 
@@ -448,7 +304,7 @@ unsigned short K3bMp3Module::linearRound( mad_fixed_t fixed )
 }
 
 
-void K3bMp3Module::createPcmSamples( mad_synth* synth )
+bool K3bMp3Module::createPcmSamples( mad_synth* synth )
 {
   static mad_fixed_t const resample_table[9] =
     {
@@ -502,13 +358,8 @@ void K3bMp3Module::createPcmSamples( mad_synth* synth )
       break;
     default:
       kdDebug() << "(K3bMp3Module) Error: not a supported samplerate: " << synth->pcm.samplerate << endl;
-      m_bDecodingInProgress = false;
-      m_decodingTimer->stop();
-      
-      clearingUp();
-      
-      emit finished( false );
-      return;
+ 
+      return false;
     }
 
 
@@ -546,9 +397,11 @@ void K3bMp3Module::createPcmSamples( mad_synth* synth )
       // output buffer has enough free space
       if( m_outputPointer == m_outputBufferEnd && i+1 < nsamples ) {
 	kdDebug() <<  "(K3bMp3Module) buffer overflow!" << endl;
-	exit(1);
+	return false;
       }
     } // pcm conversion
+
+  return true;
 }
 
 
@@ -614,30 +467,13 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
 }
 
 
-void K3bMp3Module::cancel()
-{
-  if( m_bCountingFramesInProgress ) {
-    kdDebug() << "(K3bMp3Module) length checking cannot be canceled." << endl;
-  }
-  else if( m_bDecodingInProgress ) {
-    m_bDecodingInProgress = false;
-    m_decodingTimer->stop();
-
-    clearingUp();
-
-    mad_synth_finish( m_madSynth );
-    mad_frame_finish( m_madFrame );
-
-    emit canceled();
-    emit finished( false );
-  }
-}
-
-
-void K3bMp3Module::clearingUp()
+void K3bMp3Module::cleanup()
 {
   m_inputFile.close();
 
+  mad_frame_finish( m_madFrame );
+  mad_header_finish( m_madHeader );
+  mad_synth_finish( m_madSynth );
   mad_stream_finish( m_madStream );
 }
 
@@ -743,42 +579,23 @@ bool K3bMp3Module::canDecode( const KURL& url )
 }
 
 
-void K3bMp3Module::analyseTrack()
+int K3bMp3Module::analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& info )
 {
-  KFileMetaInfo metaInfo( audioTrack()->absPath() );
+  KFileMetaInfo metaInfo( filename );
   if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
     
     KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
     KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
     
     if( artistItem.isValid() )
-      audioTrack()->setArtist( artistItem.string() );
+      info.setArtist( artistItem.string() );
 
     if( titleItem.isValid() )
-      audioTrack()->setTitle( titleItem.string() );
+      info.setTitle( titleItem.string() );
   }
 
-
-  audioTrack()->setStatus( K3bAudioTrack::OK );
-
-  // check track length
-  initializeDecoding();
-  mad_header_init( m_madHeader );
-  m_bCountingFramesInProgress = true;
-  m_bDecodingInProgress = false;
-  m_recoverableErrorCount = 0;
-
-  m_analysingTimer->start(0);
-}
-
-
-void K3bMp3Module::stopAnalysingTrack()
-{
-  if( m_bCountingFramesInProgress ) {
-    m_analysingTimer->stop();
-    mad_header_finish( m_madHeader );
-    clearingUp();
-  }
+  initDecodingInternal( filename );
+  return countFrames( size );
 }
 
 #include "k3bmp3module.moc"

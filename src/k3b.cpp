@@ -482,6 +482,8 @@ void K3bMainWindow::saveOptions()
   m_dirView->saveConfig( config() );
 
   saveMainWindowSettings( m_config, "main_window_settings" );
+
+  k3bcore->saveConfig();
 }
 
 
@@ -956,25 +958,6 @@ void K3bMainWindow::slotNewToolBarConfig()
 //  createGUI();
   slotCurrentDocChanged(0);  // make sure the project-specific actions get activated
   applyMainWindowSettings( m_config, "main_window_settings" );
-}
-
-QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
-{
-  KURL url;
-  if( d.isEmpty() ) {
-    config()->setGroup( "General Options" );
-    url.setPath( config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() ) );
-  }
-  else {
-    url.setPath(d + (d[d.length()-1] != '/' ? "/" : "") );
-  }
-
-  // find a free filename
-  int num = 1;
-  while( QFile::exists( url.path(1) + "k3b-" + QString::number( num ) + "." + ending ) )
-    num++;
-
-  return url.path(1) + "k3b-" + QString::number( num ) + "." + ending;
 }
 
 

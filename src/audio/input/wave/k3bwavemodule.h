@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -38,19 +38,16 @@ class K3bWaveModule : public K3bAudioModule
 
   bool canDecode( const KURL& url );
 
- public slots:
-   void cancel();
-
- protected slots:
-  void slotConsumerReady();
-  void startDecoding();
-
   /**
    * retrieve information about the track like the length
-   * emit trackAnalysed signal when finished.
    */
-  void analyseTrack();
-  void stopAnalysingTrack();
+  int analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& );
+
+  void cleanup();
+
+ protected:
+  bool initDecodingInternal( const QString& filename );
+  int decodeInternal( const char** _data );
 
  private:
   long wavSize( QFile* f );
@@ -61,7 +58,6 @@ class K3bWaveModule : public K3bAudioModule
 
   QFile* m_file;
   QByteArray* m_data;
-  unsigned long m_alreadyDecodedData;
 };
 
 
