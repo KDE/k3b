@@ -146,15 +146,16 @@ void K3bFLACDecoder::Private::metadata_callback(const FLAC__StreamMetadata *meta
 }
 
 FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLAC__Frame *frame, const FLAC__int32 * const buffer[]) {
-  int i;
-  // Note that in canDecode we made sure that the input is only 16 bit stereo.
-  int samples = frame->header.blocksize;
+  unsigned i, j;
+  // Note that in canDecode we made sure that the input is only 16 bit stereo or mono.
+  unsigned samples = frame->header.blocksize;
 
   for(i=0; i < samples; i++) {
-    internalBuffer->putch(buffer[0][i] >> 8); // msb left
-    internalBuffer->putch(buffer[0][i] & 0xFF); // lsb left
-    internalBuffer->putch(buffer[1][i] >> 8); // msb right
-    internalBuffer->putch(buffer[1][i] & 0xFF); // lsb right
+   for(j=0; j < this->channels; j++) {
+    // in FLAC channel 0 is left, 1 is right
+    internalBuffer->putch(buffer[j][i] >> 8); // msb
+    internalBuffer->putch(buffer[j][i] & 0xFF); // lsb
+   }
   }
 
   // Rewind the buffer so the decode method will take data from the beginning.
@@ -189,7 +190,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 
   frames = (unsigned long)ceil((d->samples * 75.0))/d->rate;
   samplerate = d->rate;
-  ch = 2;
+  ch = d->channels;
 
   return true;
 }
@@ -346,8 +347,7 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
   FLAC::Metadata::StreamInfo info = FLAC::Metadata::StreamInfo();
   FLAC::Metadata::get_streaminfo(url.path().ascii(), info);
 
-  if((info.get_channels() == 2) &&
-     (info.get_sample_rate() == 44100) &&
+  if((info.get_channels() <= 2) &&
      (info.get_bits_per_sample() == 16)) {
     return true;
   } else {
