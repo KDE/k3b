@@ -7,7 +7,7 @@ more error handling
 dropped KDE/QT 3.0.x compatibility, now K3b requires at least 3.1
 internals:
   devices rewrite, use generic packet ioctl's
-  cdinfo rewrite, use generic packet ioctl's 
+  cdinfo rewrite, use generic packet ioctl's
   merged cdrdaoparser and cdrdaowriter
 added multisession cd copy
 fixed onlyCreateImage (this time for real!)
@@ -29,8 +29,11 @@ videocd:
    add an option to create allways an empty `/SEGMENT' directory (some Players need this)
    fixed load and saveUserDefaults
    fixed autodetection VCD Typ (now the user can turn off this feature)
-added audio volume normalization   
-
+added audio volume normalization
+added udf support to data project
+user commands for external programs are seperated by space now since the comma just 
+   made problems for options like "--driver generic-mmc" which had to be specified
+   as "--driver, generic-mmc"
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3
