@@ -21,7 +21,7 @@
 #include <kdialogbase.h>
 
 class K3bDvdContent;
-class QPushButton;
+class QToolButton;
 class QCheckBox;
 class KLineEdit;
 class QString;
@@ -32,6 +32,7 @@ class K3bDvdCopy;
 class KDiskFreeSp;
 class KProcess;
 class K3bDvdFillDisplay;
+class K3bDivxCodecData;
 /**
   *@author Sebastian Trueg
   */
@@ -44,6 +45,8 @@ public:
     typedef QValueList<K3bDvdContent> DvdTitle;
     void init( const DvdTitle& titles);
 
+public slots:
+    void slotEncodingFinished( bool );
 protected:
     void closeEvent( QCloseEvent *e);
 
@@ -53,13 +56,10 @@ private:
     bool m_finalClose;
     QLabel *m_labelSummaryName;
     QLabel *m_hardDiskSpace;
-    QCheckBox *m_normalize;
-    QPushButton* m_buttonStaticDir;
-    QPushButton* m_buttonStaticDirVob;
-    QPushButton* m_buttonStaticDirTmp;
+    QCheckBox *m_checkOpenEncoding;
+    QCheckBox *m_checkStartEncoding;
+    QToolButton* m_buttonStaticDir;
     KLineEdit *m_editStaticRipPath;
-    KLineEdit *m_editStaticRipPathVob;
-    KLineEdit *m_editStaticRipPathTmp;
     long m_bytes;
     DvdTitle m_ripTitles;
     K3bBurnProgressDialog *m_ripDialog;
@@ -70,25 +70,30 @@ private:
     double m_titleSize;
     bool m_supportSizeDetection;
     bool m_detectTitleSizeDone;
+    bool m_startEncoding;
+    bool m_openEncoding;
+    //K3bDivxCodecData *m_data;
+
 
     K3bDvdFillDisplay *m_fillDisplay;
     void setupGui();
     bool createDirs();
     bool createDirectory( const QString& );
     void checkSize(  );
-
+    void prepareDataForEncoding();
+    void openEncodingDialog();
 private slots:
     void rip();
     void slotFindStaticDir();
-    void slotFindStaticDirVob();
-    void slotFindStaticDirTmp();
     void slotRipJobDeleted();
     void slotSetDependDirs( const QString& );
     void slotFreeTempSpace( const QString & mountPoint, unsigned long kBSize,
         unsigned long kBUsed, unsigned long kBAvail );
     void slotParseError( KProcess *p, char *text, int len );
-
-
+    void slotCheckOpenEncoding(int);
+    void slotOpenEncoding( bool );
+    void slotCheckStartEncoding(int);
+    void slotStartEncoding( bool );
 };
 
 #endif
