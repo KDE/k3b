@@ -101,13 +101,13 @@ void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
 				
 	for( QStringList::ConstIterator _it = urls.begin(); _it != urls.end(); ++_it ) {
 		// test if url directory or file
-		if( (*_it).right(1) == "/" ) {
+		KURL _kurl( *_it );
+		if( QFileInfo( _kurl.path() ).isDir() ) {
 			qDebug("       -dir-");
-			KURL k( *_it );
-			slotAddDirectory( k.path(), dirItem );
+			slotAddDirectory( _kurl.path(), dirItem );
 		}
 		else {
-			addNewFile( *_it, dirItem );
+			addNewFile( _kurl.path(), dirItem );
 		}
 	}
 }
