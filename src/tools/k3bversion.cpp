@@ -187,7 +187,13 @@ bool operator<( const K3bVersion& v1, const K3bVersion& v2 )
 	    ( v2.patchLevel() == -1 && v1.patchLevel() == 0 )
 	    )
 	  {
-	    return ( v1.suffix() < v2.suffix() );
+	    // we treat the version without suffix as newer as all versions that have a suffix
+	    if( v1.suffix().isEmpty() && !v2.suffix().isEmpty() )
+	      return false;
+	    else if( v2.suffix().isEmpty() && !v1.suffix().isEmpty() )
+	      return true;
+	    else
+	      return ( v1.suffix() < v2.suffix() );
 	  }
 	else
 	  return ( v1.patchLevel() < v2.patchLevel() );
