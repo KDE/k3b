@@ -200,10 +200,11 @@ void K3bDataJob::fetchIsoSize()
 
   kdDebug() << "***** mkisofs parameters:\n";
   const QValueList<QCString>& args = m_process->args();
+  QString s;
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    kdDebug() << *it << " ";
+    s += *it + " ";
   }
-  kdDebug() << endl << flush;
+  kdDebug() << s << endl << flush;
 
 	
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
@@ -232,15 +233,23 @@ void K3bDataJob::slotIsoSizeFetched()
   // now parse the output
   // this seems to be the format for mkisofs version < 1.14 (to stdout)
   if( m_collectedOutput.contains( "=" ) ) {
-    m_isoSize = m_collectedOutput.mid( m_collectedOutput.find('=') + 1 ).stripWhiteSpace() + "s";
+    int pos = m_collectedOutput.find('=') + 1;
+    int pos2 = m_collectedOutput.find( "\n", pos );
+    m_isoSize = m_collectedOutput.mid( pos, (pos2>0?pos2:-1) ).stripWhiteSpace() + "s";
   }
   // and mkisofs >= 1.14 prints out only the number (to stderr)
+  // (could be followed or follow other warnings)
   else {
-    int pos = m_collectedOutput.findRev( QRegExp("^\\d") ); // find the size at the end (there could be errors before it)
-    bool ok;
-    int size = m_collectedOutput.mid( pos ).toInt( &ok );
-    if( ok ) {
-      m_isoSize = QString("%1s").arg(size);
+    QStringList lines = QStringList::split( "\n", m_collectedOutput );
+    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+      if( QRegExp("\\d*").exactMatch( *str ) ) {
+	bool ok;
+	int size = (*str).toInt( &ok );
+	if( ok ) {
+	  m_isoSize = QString("%1s").arg(size);
+	  break;
+	}
+      }
     }
   }
     
@@ -865,8 +874,7 @@ void K3bDataJob::slotCollectOutput( KProcess*, char* output, int len )
 {
   emit debuggingOutput( "misc", QString::fromLatin1( output, len ) );
 
-  // we only need the last line (SURE???)
-  m_collectedOutput = QString::fromLatin1( output, len );
+  m_collectedOutput += QString::fromLatin1( output, len );
 }
 
 
