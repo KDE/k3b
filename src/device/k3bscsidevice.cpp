@@ -52,24 +52,25 @@ bool K3bScsiDevice::init()
       int id;
       int lun;
     };
-    int bus = -1;
+    //    int bus = -1;
     ScsiIdLun idLun;
-    idLun.id = -1; idLun.lun = -1;
+    //    idLun.id = -1; idLun.lun = -1;
 
-    if ( ioctl( devFile, SCSI_IOCTL_GET_BUS_NUMBER, &bus) < 0 ) {
-      qDebug( "(K3bScsiDevice) %s: Need a filename that resolves to a SCSI device.", genericDevice().latin1() );
-    }
-    else {
-      qDebug( "(K3bScsiDevice) bus: %i", bus );
-      m_bus = bus;
-    }
+//     if ( ioctl( devFile, SCSI_IOCTL_GET_BUS_NUMBER, &bus) < 0 ) {
+//       qDebug( "(K3bScsiDevice) %s: Need a filename that resolves to a SCSI device.", genericDevice().latin1() );
+//     }
+//     else {
+//       qDebug( "(K3bScsiDevice) bus: %i", bus );
+//       m_bus = bus;
+//     }
     if ( ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) {
       qDebug( "(K3bScsiDevice) %s: Need a filename that resolves to a SCSI device (2).", genericDevice().latin1() );
     }
     else {
-      qDebug( "(K3bScsiDevice) id: %i lun: %i", idLun.id, idLun.lun );
       m_target = idLun.id & 0xff;
-      m_lun = idLun.lun;
+      m_lun    = (idLun.id >> 8) & 0xff;
+      m_bus    = (idLun.id >> 16) & 0xff;
+      qDebug( "(K3bScsiDevice) bus: %i, id: %i, lun: %i", m_bus, m_target, m_lun );
     }
     ::close( devFile );
   }
