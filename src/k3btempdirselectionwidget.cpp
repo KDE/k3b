@@ -35,8 +35,8 @@
 #include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kdiskfreesp.h>
-#include <kio/global.h>
+
+#include <sys/vfs.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name ) 
@@ -70,9 +70,6 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   m_labelCdSize = new QLabel( "                        ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  m_freeTempSpaceTimer = new QTimer( this );
-
-  connect( m_freeTempSpaceTimer, SIGNAL(timeout()), this, SLOT(slotUpdateFreeTempSpace()) );
   connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotTempDirButtonPressed()) );
   connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace()) );
 
@@ -83,9 +80,6 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   QString tempdir = kapp->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
   m_editDirectory->setText( tempdir );
   slotUpdateFreeTempSpace();
-
-  m_freeTempSpaceTimer->start( 1000 );
-
 
   // ToolTips
   // --------------------------------------------------------------------------------
@@ -116,6 +110,7 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
     m_labelCdSize->setPaletteForegroundColor( red );
   else
     m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
+  QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeTempSpace()) );
 }
 
 
@@ -126,14 +121,15 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
   if( !QFile::exists( path ) )
     path.truncate( path.findRev('/') );
 
-  path = KIO::findPathMountPoint( m_editDirectory->text() );
+  struct statfs fs;
 
-  if( QFile::exists( path ) )
-    connect( KDiskFreeSp::findUsageInfo( path ), 
-	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );    
-  else
-    m_labelFreeSpace->setText( "-" );
+  if ( ::statfs(path.latin1(),&fs) == 0 ) {
+     unsigned int kBfak = fs.f_bsize/1024;
+     slotFreeTempSpace(path,fs.f_blocks*kBfak,0L,fs.f_bavail*kBfak);
+  }   
+  else {
+     m_labelFreeSpace->setText("-");
+  }
 }
 
 

@@ -59,7 +59,6 @@ class K3bTempDirSelectionWidget : public QGroupBox
   QLabel* m_labelFreeSpace;
   QLineEdit* m_editDirectory;
   QToolButton* m_buttonFindIsoImage;
-  QTimer* m_freeTempSpaceTimer;
   unsigned long m_freeTempSpace;
 
   unsigned long m_requestedSize;

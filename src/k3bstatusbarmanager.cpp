@@ -9,7 +9,6 @@
 #include <kio/global.h>
 #include <kstatusbar.h>
 #include <kaboutdata.h>
-#include <kdiskfreesp.h>
 
 #include <qlabel.h>
 #include <qhbox.h>
@@ -63,7 +62,8 @@ void K3bStatusBarManager::update()
 
   struct statfs fs;
   if ( ::statfs(tempdir.latin1(),&fs) == 0 ) {
-     slotFreeTempSpace( tempdir, fs.f_blocks*fs.f_bsize, 0L, fs.f_bavail*fs.f_bsize );
+     unsigned int kBfak = fs.f_bsize/1024;
+     slotFreeTempSpace(tempdir,fs.f_blocks*kBfak,0L,fs.f_bavail*kBfak);
   }   
   else {
      m_labelFreeTemp->setText("No info");
@@ -76,8 +76,8 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 					    unsigned long, 
 					    unsigned long kbAvail)
 {
-  m_labelFreeTemp->setText(KIO::convertSize(kbAvail)  + "/" + 
-	                   KIO::convertSize(kbSize)  );
+  m_labelFreeTemp->setText(KIO::convertSizeFromKB(kbAvail)  + "/" + 
+	                   KIO::convertSizeFromKB(kbSize)  );
 
   // if we have less than 640 MB that is not good
   if( kbAvail < 655360 )
