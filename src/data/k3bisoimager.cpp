@@ -1,3 +1,17 @@
+/*
+ *
+ * $Id: $
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
 #include "k3bisoimager.h"
 
 #include <kdebug.h>
@@ -90,30 +104,31 @@ void K3bIsoImager::resume()
 
 void K3bIsoImager::slotReceivedStderr( const QString& line )
 {
-  emit debuggingOutput( "mkisofs", line );
+  if( !line.isEmpty() ) {
+    emit debuggingOutput( "mkisofs", line );
 
-  if( line.contains( "done, estimate" ) ) {
+    if( line.contains( "done, estimate" ) ) {
 
-    QString perStr = line;
-    perStr.truncate( perStr.find('%') );
-    bool ok;
-    double p = perStr.toDouble( &ok );
-    if( !ok ) {
-      kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
+      QString perStr = line;
+      perStr.truncate( perStr.find('%') );
+      bool ok;
+      double p = perStr.toDouble( &ok );
+      if( !ok ) {
+	kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
+      }
+      else {
+	emit percent( (int)p );
+      }
     }
+    else if( line.contains( "extents written" ) ) {
+      emit percent( 100 );
+    }
+
     else {
-      emit percent( (int)p );
+      kdDebug() << "(mkisofs) " << line << endl;
     }
-  }
-  else if( line.contains( "extents written" ) ) {
-    emit percent( 100 );
-  }
-
-  else {
-    kdDebug() << "(mkisofs) " << line << endl;
   }
 }
-
 
 void K3bIsoImager::slotProcessExited( KProcess* p )
 {
