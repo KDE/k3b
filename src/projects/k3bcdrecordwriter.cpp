@@ -575,9 +575,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     if( speed != d->usedSpeed ) {
       emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(d->usedSpeed), K3bJob::WARNING );
       if( speed > d->usedSpeed )
-	emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
-      else
 	emit infoMessage( i18n("Switching up burn speed to %1x").arg(speed), K3bJob::WARNING );
+      else
+	emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
     }
   }
   else if( line.startsWith( "Starting new" ) ) {
