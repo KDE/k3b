@@ -17,9 +17,10 @@
 #ifndef _K3B_DEVICE_HANDLER_H_
 #define _K3B_DEVICE_HANDLER_H_
 
-#include <k3bthreadjob.h>
-#include <device/k3bdiskinfo.h>
-#include <device/k3bmsf.h>
+#include "../k3bthreadjob.h"
+#include "k3bdevice.h"
+#include "k3bdiskinfo.h"
+#include "k3bmsf.h"
 
 
 class QCustomEvent;

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -42,7 +42,8 @@ class K3bFileView : public K3bCdContentsView
   K3bFileView(QWidget *parent=0, const char *name=0);
   ~K3bFileView();
   void setUrl(const KURL &url, bool forward);
-
+  KURL Url();
+  
   KActionCollection* actionCollection() const;
 
   void reload();

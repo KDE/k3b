@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -17,7 +17,7 @@
 #ifndef _K3B_THREAD_JOB_H_
 #define _K3B_THREAD_JOB_H_
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 class QCustomEvent;
 class K3bThread;

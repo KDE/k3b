@@ -25,6 +25,7 @@ typedef Q_INT32 size32;
 
 #include "k3bdiskinfo.h"
 
+#include "k3bdevicehandler.h"
 
 class K3bTcWrapper;
 
@@ -58,16 +59,15 @@ namespace K3bCdDevice
     void testForVCD();
 
   private slots:
-    void slotDeviceHandlerFinished(bool);
+    void slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler *);
     void slotIsVideoDvd( bool dvd );
-    void slotIsVCD( bool );
-    void slotFinished( bool );
+    void slotIsVCD( K3bCdDevice::DeviceHandler * );
+    void slotFinished( K3bCdDevice::DeviceHandler * );
 
   protected:
     CdDevice* m_device;
     DiskInfo m_info;
     K3bTcWrapper* m_tcWrapper;
-    DeviceHandler* m_deviceHandler;
   };
 };
 

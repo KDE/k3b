@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -140,6 +140,11 @@ void K3bFileView::setupGUI()
 void K3bFileView::setUrl(const KURL& url, bool forward)
 {
   m_dirOp->setURL( url, forward );
+}
+
+KURL K3bFileView::Url()
+{
+  return m_dirOp->url();
 }
 
 

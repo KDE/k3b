@@ -15,14 +15,13 @@
 
 #include "k3bdiskinfodetector.h"
 
-#include "k3bdevicehandler.h"
-
 #include "k3bdevice.h"
 #include "k3btoc.h"
 #include "../rip/k3btcwrapper.h"
 #include "../k3b.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../tools/k3bglobals.h"
+#include "k3bdevicehandler.h"
 
 #include <kdebug.h>
 
@@ -47,9 +46,6 @@ K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
     : QObject( parent ),
     m_tcWrapper(0)
 {
-  m_deviceHandler = new DeviceHandler( this );
-  connect( m_deviceHandler, SIGNAL(finished(bool)),
-           this, SLOT(slotDeviceHandlerFinished(bool)) );
 }
 
 
@@ -69,12 +65,10 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   // reset
   m_info = DiskInfo();
   m_info.device = m_device;
-
-  m_deviceHandler->setDevice( device );
-  m_deviceHandler->disconnect();
-  connect( m_deviceHandler, SIGNAL(finished(bool)),
-           this, SLOT(slotDeviceHandlerFinished(bool)) );
-  m_deviceHandler->getDiskInfo();
+  connect( K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::DISKINFO, m_device),
+           SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
+           this,
+	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler *)) );
 }
 
 
@@ -170,22 +164,22 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 
 void K3bCdDevice::DiskInfoDetector::testForVCD()
 {
-  if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 ) {
-    m_deviceHandler->disconnect();
-    connect(m_deviceHandler,SIGNAL(finished(bool)),this,SLOT(slotIsVCD(bool)));
-    m_deviceHandler->mount();
-  }
+  if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 )
+    connect(K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::MOUNT,m_device),
+            SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
+            this,
+            SLOT(slotIsVCD(K3bCdDevice::DeviceHandler *)));
   else if (m_info.tocType == DiskInfo::DVD)
       testForVideoDvd();
   else
     finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::slotIsVCD(bool success)
+void K3bCdDevice::DiskInfoDetector::slotIsVCD(K3bCdDevice::DeviceHandler *handler)
 {
   m_info.isVCD = false;
 
-  if ( success ) {
+  if ( handler->success() ) {
     QStringList files;
     files << QString("/vcd/info.vcd") << QString("/svcd/info.svd");
     for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
@@ -203,23 +197,26 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(bool success)
           m_info.isVCD = true;
       }
     }
-    m_deviceHandler->disconnect();
-    connect(m_deviceHandler, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
-    m_deviceHandler->unmount();
+    connect(K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::UNMOUNT,m_device),
+            SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
+	    this,
+	    SLOT(slotFinished(K3bCdDevice::DeviceHandler *)) );
   } else
     finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::slotFinished(bool success)
+void K3bCdDevice::DiskInfoDetector::slotFinished(K3bCdDevice::DeviceHandler *handler)
 {
-   finish(success);
+   finish(handler->success());
 }
 
-void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( bool success )
+void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler *handler)
 {
-  m_info = m_deviceHandler->diskInfo();
-  if( success )
+  bool success = handler->success();
+  if( success ) {
+    m_info = handler->diskInfo();
     fetchExtraInfo();
+  }
   else
     finish( false );
 }
