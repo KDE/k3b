@@ -75,12 +75,12 @@ int main(int argc, char *argv[])
   
 
 
-  if (app.isRestored())
-    {
-      RESTORE(K3bMainWindow);
-    }
-  else 
-    {
+//   if (app.isRestored())
+//     {
+//       RESTORE(K3bMainWindow);
+//     }
+//   else 
+//     {
       K3bMainWindow *k3bMainWidget = new K3bMainWindow();
       app.setMainWidget( k3bMainWidget );
       k3bMainWidget->initView();  // needs a kapp instance
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	}
 		
       args->clear();
-    }
+      //    }
 
   return app.exec();
 }  
