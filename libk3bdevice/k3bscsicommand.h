@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -16,13 +16,41 @@
 #ifndef _K3B_SCSI_COMMAND_H_
 #define _K3B_SCSI_COMMAND_H_
 
-#include <sys/types.h>
-#undef __STRICT_ANSI__
-#include <linux/cdrom.h>
-#define __STRICT_ANSI__
-
-
+#include <qglobal.h>
 #include <qstring.h>
+
+#include <sys/types.h>
+#ifdef Q_OS_LINUX
+/*
+**  Linux specific part.
+*/
+#  undef __STRICT_ANSI__
+#  include <linux/cdrom.h>
+#  define __STRICT_ANSI__
+#endif
+
+#ifdef Q_OS_FREEBSD
+/*
+** FreeBSD specific part.
+*/
+#  include <sys/types.h>
+#  include <stdio.h>
+#  include <camlib.h>
+#  undef INQUIRY
+#  undef READ_10
+#  undef READ_12
+#  undef READ_BUFFER
+#  undef READ_CAPACITY
+#  undef REQUEST_SENSE
+#  undef START_STOP_UNIT
+#  undef SYNCHRONIZE_CACHE
+#  undef TEST_UNIT_READY
+#  undef WRITE_10
+#  undef WRITE_12
+#  undef WRITE_BUFFER
+#endif
+
+
 
 
 namespace K3bCdDevice
@@ -98,6 +126,7 @@ namespace K3bCdDevice
     public:
       ScsiCommand( int fd );
       ScsiCommand( const CdDevice* );
+      ScsiCommand( const CdDevice* , struct cam_device *); // FBSD
       ~ScsiCommand();
 
       void clear();
@@ -109,9 +138,12 @@ namespace K3bCdDevice
 		     size_t len = 0 );
 
     private:
-      struct cdrom_generic_command m_cmd;
-      struct request_sense m_sense;
-
+      // The private class holds OS-specific things that would
+      // otherwise be member variables. There are parts of ScsiCommand
+      // that refer directly to Private's members, so those are also
+      // OS-specific.
+      class Private;
+      Private *d;
       int m_fd;
       const CdDevice* m_device;
       bool m_needToCloseDevice;
