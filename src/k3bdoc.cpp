@@ -46,6 +46,7 @@
 #include "device/k3bdevice.h"
 #include "audio/k3baudiodoc.h"
 #include "data/k3bdatadoc.h"
+#include "vcd/k3bvcddoc.h"
 #include <kdebug.h>
 
 #include <kostore/koStore.h>
@@ -216,6 +217,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bAudioDoc( k3bMain() );
   else if( xmlDoc.doctype().name() == "k3b_data_project" )
     newDoc = new K3bDataDoc( k3bMain() );
+  else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
+    newDoc = new K3bVcdDoc( k3bMain() );
   else
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
       
