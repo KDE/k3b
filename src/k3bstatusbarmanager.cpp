@@ -14,6 +14,7 @@
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qfile.h>
+#include <qtimer.h>
 
 
 K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
@@ -82,6 +83,9 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
     m_pixFreeTemp->setPixmap( SmallIcon("folder_red") );
   else
     m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
+
+  // update the display every second
+  QTimer::singleShot( 1000, this, SLOT(update()) );
 }
 
 
