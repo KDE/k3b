@@ -71,6 +71,7 @@ class K3bPluginFactory : public KLibFactory
   virtual QString email() const { return m_email; }
   virtual QString version() const { return m_version; }
   virtual QString comment() const { return m_comment; }
+  virtual QString license() const { return m_license; }
 
   /**
    * Version of the plugin system this plugin was written for.
@@ -88,6 +89,7 @@ class K3bPluginFactory : public KLibFactory
   void setEmail( const QString& s ) { m_email = s; }
   void setVersion( const QString& s ) { m_version = s; }
   void setComment( const QString& s ) { m_comment = s; }
+  void setLicense( const QString& s ) { m_license = s; }
 
  protected:
   virtual K3bPlugin* createPluginObject( QObject* parent = 0, 
@@ -118,6 +120,7 @@ class K3bPluginFactory : public KLibFactory
   QString m_email;
   QString m_comment;
   QString m_version;
+  QString m_license;
 
   class Private;
   Private* d;

@@ -610,8 +610,8 @@ bool K3bCdDevice::CdDevice::init()
       d->burnfree = true;
     if( mm_p->cd_rw_write )
       d->deviceType |= CDRW;
-    m_maxWriteSpeed = (int)( from2Byte(mm_p->max_write_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
-    m_maxReadSpeed = (int)( from2Byte(mm_p->max_read_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
+    m_maxWriteSpeed = from2Byte(mm_p->max_write_speed);
+    m_maxReadSpeed = from2Byte(mm_p->max_read_speed);
     m_bufferSize = from2Byte( mm_p->buffer_size );
 
     delete [] mm_cap_buffer;

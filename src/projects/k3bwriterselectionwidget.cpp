@@ -247,17 +247,14 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
   clearSpeedCombo();
   m_comboSpeed->insertItem( i18n("Auto") );
-  if( !d->forceAutoSpeed && !d->dvd ) {
-    insertSpeedItem( 175 ); // 1x
-    
-    K3bDevice* dev = writerDevice();
-    
-    if( dev ) {
+  if( !d->forceAutoSpeed ) {
+    if( K3bDevice* dev = writerDevice() ) {
       // add speeds to combobox
-      int speed = 2;
-      while( speed <= dev->maxWriteSpeed() ) {
-	insertSpeedItem( speed*175 );
-	speed += 2;
+      int i = 1;
+      int speed = ( d->dvd ? 1385 : 175 );
+      while( i*speed <= dev->maxWriteSpeed() ) {
+	insertSpeedItem( i*speed );
+	i = ( i == 1 ? 2 : i+2 );
       }
     }
   }

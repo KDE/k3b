@@ -109,6 +109,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
       k3bFactory->setEmail( c.readEntry( "Email" ) );
       k3bFactory->setVersion( c.readEntry( "Version" ) );
       k3bFactory->setComment( c.readEntry( "Comment" ) );
+      k3bFactory->setLicense( c.readEntry( "License" ) );
 
       d->factories.insert( k3bFactory, libName );
     }

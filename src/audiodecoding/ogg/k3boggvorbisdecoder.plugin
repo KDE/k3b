@@ -6,3 +6,4 @@ Author=Sebastian Trueg
 Email=trueg@k3b.org
 Version=2.0
 Comment=Decoding module to decode Ogg Vorbis files
+License=GPL
