@@ -275,7 +275,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     QWhatsThis::add
         ( m_labelPreGapTrack, i18n( "<p>Used to set the track pre-gap for all tracks in sectors globally."
                                     "<p>The specification requires the pre-gaps to be at least 150 sectors long."
-                                    "<p>Allowed value content: [1..300]. Default: 150." ) );
+                                    "<p>Allowed value content: [0..300]. Default: 150." ) );
 
     QWhatsThis::add
         ( m_labelFrontMarginTrack, i18n( "Margins seem to be used, in order to compensate for inaccurate sector addressing issues on CD-ROM media. Interestingly, they have been abandoned for the Super Video CD."
