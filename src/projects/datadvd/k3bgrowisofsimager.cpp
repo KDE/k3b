@@ -155,14 +155,19 @@ void K3bGrowisofsImager::start()
   // this only makes sense for DVD-R(W) media
   if( m_doc->dummy() )
     *m_process << "-use-the-force-luke=dummy";
+
   if( ( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
       && m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
     *m_process << "-use-the-force-luke=dao";
-    *m_process << "--dvd-compat";
     d->gh->reset( true );
   }
   else
     d->gh->reset( false );
+
+  // close the dvd if no further session should be appended
+  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+      m_doc->multiSessionMode() == K3bDataDoc::FINISH )
+    *m_process << "-dvd-compat";
 
   //
   // Some DVD writers do not allow changing the writing speed so we allow

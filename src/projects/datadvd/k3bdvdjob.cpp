@@ -270,6 +270,9 @@ bool K3bDvdJob::prepareWriterJob()
       ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
 	m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
     writer->setWritingMode( K3b::DAO );
+
+  writer->setCloseDvd( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+		       m_doc->multiSessionMode() == K3bDataDoc::FINISH );
   
   if( m_doc->onTheFly() )
     writer->setImageToWrite( QString::null );  // read from stdin

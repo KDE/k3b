@@ -133,7 +133,7 @@ void K3bFileView::setupGUI()
   connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
   connect( m_dirOp, SIGNAL(doubleClicked(KFileItem*)), this, SLOT(slotAddFilesToProject()) );
 
-  actionPlay->setEnabled( false );
+  slotFileHighlighted(0);
 }
 
 void K3bFileView::setDir( const QString& dir )
