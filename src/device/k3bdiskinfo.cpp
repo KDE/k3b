@@ -184,12 +184,12 @@ void K3bCdDevice::NextGenerationDiskInfo::debug() const
 
 	    << "Remaining size:  " << remainingSize().toString() 
 	    << " (LBA " << QString::number(remainingSize().lba())
-	    << ") (" << QString::number(remainingSize().mode1Bytes()) << " Bytes) (" 
+	    << ") (" << QString::number((unsigned long)remainingSize().mode1Bytes()) << " Bytes) (" 
 	    << KIO::convertSize(remainingSize().mode1Bytes()) << ")" << endl
 
 	    << "Used Size:       " << size().toString()  
 	    << " (LBA " << QString::number(size().lba())
-	    << ") (" << QString::number(size().mode1Bytes()) << " Bytes) (" 
+	    << ") (" << QString::number((unsigned long)size().mode1Bytes()) << " Bytes) (" 
 	    << KIO::convertSize(size().mode1Bytes()) << ")" << endl;
 
   if( mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW )
