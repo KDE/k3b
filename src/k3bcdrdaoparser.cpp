@@ -123,7 +123,7 @@ void K3bCdrdaoParser::parseCdrdaoWrote( const QString& line ) {
     if( line.contains( "blocks" ) ) {
       if (m_isStarted) {
         elapsed = m_startWriteTime.secsTo( QTime::currentTime() );
-        if (elapsed <= 0.0) return;
+        if (elapsed <= 0) return;
         
         speed = (m_size  * 1024) / elapsed;
         emit infoMessage( i18n("Estimated speed %1 Kb/s (%2x)").arg((int)speed).arg(speed/150.0,0,'g',2), K3bJob::INFO );
@@ -138,7 +138,7 @@ void K3bCdrdaoParser::parseCdrdaoWrote( const QString& line ) {
     }
     
     elapsed = m_startWriteTime.secsTo( QTime::currentTime() );
-    if (elapsed <= 0.0) return;
+    if (elapsed <= 0) return;
 
     pos = line.find( "Wrote" );
     po2 = line.find( " ", pos + 6 );
