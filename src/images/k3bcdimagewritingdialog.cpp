@@ -140,20 +140,20 @@ void K3bCdImageWritingDialog::setupGui()
   m_editImagePath->setCaption( i18n("Choose Image File") );
   m_editImagePath->setFilter( i18n("*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files") 
 			      + "\n"
-			      + i18n("*.iso *.ISO|Iso9660 Image Files")
+			      + i18n("*.iso *.ISO|ISO9660 Image Files")
 			      + "\n"
 			      + i18n("*.cue *.CUE|Cue Files")
 			      + "\n"
-			      + i18n("*.toc *.TOC|Cdrdao Toc Files and Cdrecord Clone Images")
+			      + i18n("*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images")
 			      + "\n" 
 			      + i18n("*|All Files") );
   
   QGroupBox* groupImageType = new QGroupBox( 1, Qt::Horizontal, i18n("Image Type"), frame );
   m_comboImageType = new QComboBox( groupImageType );
   m_comboImageType->insertItem( i18n("Auto Detection") );
-  m_comboImageType->insertItem( i18n("Iso9660 Image") );
+  m_comboImageType->insertItem( i18n("ISO9660 Image") );
   m_comboImageType->insertItem( i18n("Cue/Bin Image") );
-  m_comboImageType->insertItem( i18n("Cdrdao Toc File") );
+  m_comboImageType->insertItem( i18n("Cdrdao TOC File") );
   m_comboImageType->insertItem( i18n("Cdrecord Clone Image") );
   d->imageTypeSelectionMap[1] = IMAGE_ISO;
   d->imageTypeSelectionMap[2] = IMAGE_CUE_BIN;

@@ -165,7 +165,7 @@ void K3bSystemProblemDialog::checkSystem()
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("Unable to find %1 executable").arg("cdrecord"),
-				       i18n("K3b uses cdrecord to actually write cds."),
+				       i18n("K3b uses cdrecord to actually write CDs."),
 				       i18n("Install the cdrtools package which contains "
 					    "cdrecord."),
 				       false ) );
@@ -197,7 +197,7 @@ void K3bSystemProblemDialog::checkSystem()
   if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("Unable to find %1 executable").arg("cdrdao"),
-				       i18n("K3b uses cdrdao to actually write cds."),
+				       i18n("K3b uses cdrdao to actually write CDs."),
 				       i18n("Install the cdrdao package."),
 				       false ) );
   }

@@ -379,9 +379,9 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 QString K3bIso9660ImageWritingJob::jobDescription() const
 {
   if( m_simulate )
-    return i18n("Simulating Iso9660 image");
+    return i18n("Simulating ISO9660 image");
   else
-    return i18n("Burning Iso9660 image");
+    return i18n("Burning ISO9660 image");
 }
 
 

@@ -168,7 +168,7 @@ void K3bAudioRipThread::run()
 
 
   if( m_useIndex0 ) {
-    emitNewSubTask( i18n("Searching index 0 for all track") );
+    emitNewSubTask( i18n("Searching index 0 for all tracks") );
     m_device->indexScan( d->toc );
   }
 

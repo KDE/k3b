@@ -654,7 +654,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 
 	if( !m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
-	  emit infoMessage( i18n("Cdrecord does not run with root privileges."), ERROR );
+	  emit infoMessage( i18n("Cdrecord is not being run with root privileges."), ERROR );
 	  emit infoMessage( i18n("This influences the stability of the burning process."), ERROR );
 #ifdef HAVE_K3BSETUP
 	  emit infoMessage( i18n("Use K3bSetup to solve this problem."), ERROR );    
