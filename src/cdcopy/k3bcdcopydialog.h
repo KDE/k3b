@@ -24,6 +24,7 @@
 
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
+class K3bDeviceComboBox;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
@@ -66,7 +67,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   QSpinBox*  m_spinTaoSourceAdjust;
 
   QCheckBox* m_checkOnlyCreateImage;
-  QComboBox* m_comboSourceDevice;
+  K3bDeviceComboBox* m_comboSourceDevice;
   QComboBox* m_comboParanoiaMode;
   QComboBox* m_comboSubchanMode;
   QSpinBox* m_spinCopies;

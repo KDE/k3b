@@ -16,6 +16,7 @@
 
 #include "k3bwriterselectionwidget.h"
 
+#include "k3bdevicecombobox.h"
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
 #include "k3b.h"
@@ -39,8 +40,6 @@
 class K3bWriterSelectionWidget::Private
 {
 public:
-  QMap<QString, int> writerIndexMap;
-  QPtrVector<K3bDevice> devices;
   int maxSpeed;
 };
 
@@ -68,7 +67,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   m_comboSpeed->setAutoMask( FALSE );
   m_comboSpeed->setDuplicatesEnabled( FALSE );
 
-  m_comboWriter = new KComboBox( FALSE, groupWriter, "m_comboWriter" );
+  m_comboWriter = new K3bDeviceComboBox( groupWriter, "m_comboWriter" );
 
   QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
   labelDevice->setText( i18n( "Device:" ) );
@@ -138,30 +137,29 @@ K3bWriterSelectionWidget::~K3bWriterSelectionWidget()
 
 void K3bWriterSelectionWidget::init()
 {
-  d->writerIndexMap.clear();
-  d->devices.clear();
   m_comboWriter->clear();
 
   // -- read cd-writers ----------------------------------------------
   QPtrList<K3bDevice> devices = k3bcore->deviceManager()->burningDevices();
-  d->devices.resize( devices.count() );
   K3bDevice* dev = devices.first();
-  int i = 0;
   while( dev ) {
-    m_comboWriter->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")", i );
-    d->writerIndexMap[dev->devicename()] = i;
-    d->devices.insert(i, dev);
-    ++i;
+    m_comboWriter->addDevice( dev );
     dev = devices.next();
   }
 
   kapp->config()->setGroup( "General Settings" );
   K3bDevice *current = k3bcore->deviceManager()->deviceByName( kapp->config()->readEntry( "current_writer" ) );
-  if ( current == (K3bDevice *)0 )
-  	current = devices.first();
+
+  if ( current == 0 )
+    current = devices.first();
   setWriterDevice( current );
   
   slotRefreshWriterSpeeds();
+  
+  // set to saved speed
+  if( writerDevice() )
+    setSpeed( writerDevice()->currentWriteSpeed() );
+
   slotConfigChanged(kapp->config());
   setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
 }
@@ -188,19 +186,13 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
     // add speeds to combobox
     m_comboSpeed->clear();
     m_comboSpeed->insertItem( "1x" );
-    int currentSpeedIndex = 0;
     int speed = 2;
     while( speed <= dev->maxWriteSpeed() ) {
       m_comboSpeed->insertItem( QString( "%1x" ).arg(speed) );
-      if( speed == dev->currentWriteSpeed() )
-	currentSpeedIndex = m_comboSpeed->count() - 1;
       speed += 2;
     }
 
     d->maxSpeed = speed;
-
-    // set to saved speed
-    m_comboSpeed->setCurrentItem( currentSpeedIndex );
   }
 }
 
@@ -213,19 +205,13 @@ void K3bWriterSelectionWidget::slotWritingAppSelected( int )
 
 K3bDevice* K3bWriterSelectionWidget::writerDevice() const
 {
-   if ( m_comboWriter->count() > 0 )
-     	return d->devices[m_comboWriter->currentItem()];
-   else
-        return (K3bDevice*)0;
+  return m_comboWriter->selectedDevice();
 }
 
 
 void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 {
-  if( dev ) {
-    if( d->writerIndexMap.contains(dev->devicename()) )
-      m_comboWriter->setCurrentItem( d->writerIndexMap[dev->devicename()] );
-  }
+  m_comboWriter->setSelectedDevice( dev );
 }
 
 

@@ -17,6 +17,7 @@
 
 #include "k3bcdcopydialog.h"
 
+#include "k3bdevicecombobox.h"
 #include "k3bcdcopyjob.h"
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -70,7 +71,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
 
-  m_comboSourceDevice = new QComboBox( groupSource );
+  m_comboSourceDevice = new K3bDeviceComboBox( groupSource );
 
 
   // tab widget --------------------
@@ -173,7 +174,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setRowStretch( 2, 1 );
 
 
-  connect( m_comboSourceDevice, SIGNAL(activated(int)), this, SLOT(slotSourceSelected()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice*)), this, SLOT(slotSourceSelected()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotSourceSelected()) );
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
@@ -190,8 +191,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_checkTaoSource, SIGNAL(toggled(bool)), taoSourceAdjustLabel, SLOT(setEnabled(bool)) );
 
   initReadingDevices();
-  slotSourceSelected();
   slotLoadUserDefaults();
+  slotSourceSelected();
 
 
   // ToolTips
@@ -257,7 +258,7 @@ void K3bCdCopyDialog::initReadingDevices()
       if( dev->interfaceType() == K3bDevice::SCSI ||
 	  (K3bCdDevice::plainAtapiSupport() && cdrdaoBin->hasFeature("plain-atapi")) ||
 	  (K3bCdDevice::hackedAtapiSupport() && cdrdaoBin->hasFeature("hacked-atapi")) )
-	m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
+	m_comboSourceDevice->addDevice( dev );
       dev = devices.next();
     }
       
@@ -283,15 +284,7 @@ void K3bCdCopyDialog::slotSourceSelected()
 
 K3bDevice* K3bCdCopyDialog::readingDevice() const
 {
-  const QString s = m_comboSourceDevice->currentText();
-
-  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
- 
-  K3bDevice* dev =  k3bcore->deviceManager()->deviceByName( strDev );
-  if( !dev )
-    kdDebug() << "(K3bCdCopyDialog) could not find device " << s << endl;
-		
-  return dev;
+  return m_comboSourceDevice->selectedDevice();
 }
 
 
@@ -374,6 +367,10 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
     m_comboSubchanMode->setCurrentItem(0); // none
 
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+
+  m_writerSelectionWidget->setSpeed( c->readNumEntry( "writing_speed", 1 ) );
+  m_writerSelectionWidget->setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
 }
 
 void K3bCdCopyDialog::slotSaveUserDefaults()
@@ -393,6 +390,10 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
   c->writeEntry( "subchannel_mode", m_comboSubchanMode->currentText() );
   c->writeEntry( "copies", m_spinCopies->value() );
+
+  c->writeEntry( "writing_speed", m_writerSelectionWidget->writerSpeed() );
+  c->writeEntry( "writer_device", m_writerSelectionWidget->writerDevice()->devicename() );
+  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 }
 
 void K3bCdCopyDialog::slotLoadK3bDefaults()

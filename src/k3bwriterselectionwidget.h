@@ -21,10 +21,9 @@
 #include "device/k3bdevice.h"
 
 class KComboBox;
-/* class QRadioButton; */
-/* class QButtonGroup; */
 class KConfig;
 class QLabel;
+class K3bDeviceComboBox;
 
 
 /**
@@ -73,14 +72,9 @@ class K3bWriterSelectionWidget : public QWidget
   int selectedWritingApp() const;
 
   KComboBox* m_comboSpeed;
-  KComboBox* m_comboWriter;
+  K3bDeviceComboBox* m_comboWriter;
   KComboBox* m_comboWritingApp;
   QLabel* m_writingAppLabel;
-
-/*   QButtonGroup* m_groupCdWritingApp; */
-/*   QRadioButton* m_selectDefault; */
-/*   QRadioButton* m_selectCdrecord; */
-/*   QRadioButton* m_selectCdrdao; */
 
   class Private;
   Private* d;
