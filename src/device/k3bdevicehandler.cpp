@@ -64,6 +64,10 @@ public:
       case EJECT:
 	success = dev->eject();
 	break;
+      case RELOAD:
+	success = dev->eject();
+	success = success && dev->load();
+	break;
       case MOUNT:
         errorCode = dev->mount();
 	success = (errorCode >= 0 );

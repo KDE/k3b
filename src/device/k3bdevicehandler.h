@@ -80,6 +80,7 @@ namespace K3bCdDevice
 	BLOCK,
 	UNBLOCK,
 	EJECT,
+	RELOAD,
 	MOUNT,
 	UNMOUNT,
 	MEDIUM_STATE /* empty, appendable, full, no disk */
@@ -174,6 +175,9 @@ namespace K3bCdDevice
     return sendCommand(DeviceHandler::EJECT,dev);
   }
 
+  inline DeviceHandler* reload(CdDevice* dev) {
+    return sendCommand(DeviceHandler::RELOAD,dev);
+  }
 }
 
 #endif
