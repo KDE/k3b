@@ -100,7 +100,7 @@ void K3bMd5Job::start()
       return;
     }
 
-    d->imageSize = K3b::filesize( d->filename );
+    d->imageSize = K3b::filesize( KURL::fromPathOrURL(d->filename) );
   }
   else
     d->imageSize = 0;
