@@ -217,13 +217,14 @@ void K3bAudioCdView::reload()
   bool useCddb = ( c->readBoolEntry( "use local cddb query", true ) || 
 		   c->readBoolEntry( "use remote cddb", false ) );
 
-  if( m_cdText.isEmpty() ||
-      ( useCddb && KMessageBox::questionYesNo( this, 
-					       i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
-					       i18n("Found Cd-Text"), 
-					       KStdGuiItem::yes(),
-					       KStdGuiItem::no(),
-					       "prefereCdTextOverCddb" ) == KMessageBox::No ) )
+  if( useCddb &&
+      ( m_cdText.isEmpty() ||
+	KMessageBox::questionYesNo( this, 
+				    i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
+				    i18n("Found Cd-Text"), 
+				    KStdGuiItem::yes(),
+				    KStdGuiItem::no(),
+				    "prefereCdTextOverCddb" ) == KMessageBox::No ) )
     queryCddb();
   else
     enableInteraction(true);

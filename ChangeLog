@@ -7,6 +7,7 @@ Default to RAW writing mode for Audio CDs which contain zero length pregaps sinc
 Backported new device configuration format fixing all issues with removable devices (USB,...)
 Fix: Some writers return the number of bytes instead of the number of write speed descriptors
      in mode page 2a data (thanks to <simon@munton.demon.co.uk>)
+Fixed a bug which caused the audio ripping window to stay greyed out if cddb queries are disabled.
 	
 0.11.11
 Qt 3.1 compile fix
