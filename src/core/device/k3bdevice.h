@@ -371,6 +371,19 @@ namespace K3bCdDevice
 		 int c2,
 		 int subChannel ) const;
 
+    bool read10( unsigned char* data,
+		 int dataLen,
+		 unsigned long startAdress,
+		 unsigned int length,
+		 bool fua = false ) const;
+
+    bool read12( unsigned char* data,
+		 int dataLen,
+		 unsigned long startAdress,
+		 unsigned long length,
+		 bool streaming = false,
+		 bool fua = false ) const;
+
     /**
      * @param subchannelParam: 01h - CD current position
      *                         02h - Media Catalog number (UPC/bar code)

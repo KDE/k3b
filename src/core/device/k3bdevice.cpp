@@ -2468,6 +2468,64 @@ int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
 }
 
 
+bool K3bCdDevice::CdDevice::read10( unsigned char* data,
+				    int dataLen,
+				    unsigned long startAdress,
+				    unsigned int length,
+				    bool fua ) const
+{
+  ::memset( data, 0, dataLen );
+
+  ScsiCommand cmd( this );
+  cmd[0] = 0x28;  // READ 10
+  cmd[1] = ( fua ? 1<<3 : 0 );
+  cmd[2] = startAdress>>24;
+  cmd[3] = startAdress>>16;
+  cmd[4] = startAdress>>8;
+  cmd[5] = startAdress;
+  cmd[7] = length>>8;
+  cmd[8] = length;
+
+  if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ 10 failed!" << endl;
+    return false;
+  }
+  else
+    return true;
+}
+
+
+bool K3bCdDevice::CdDevice::read12( unsigned char* data,
+				    int dataLen,
+				    unsigned long startAdress,
+				    unsigned long length,
+				    bool streaming,
+				    bool fua ) const
+{
+  ::memset( data, 0, dataLen );
+
+  ScsiCommand cmd( this );
+  cmd[0] = 0xa8;  // READ 12
+  cmd[1] = ( fua ? 1<<3 : 0 );
+  cmd[2] = startAdress>>24;
+  cmd[3] = startAdress>>16;
+  cmd[4] = startAdress>>8;
+  cmd[5] = startAdress;
+  cmd[6] = length>>32;
+  cmd[7] = length>>16;
+  cmd[8] = length>>8;
+  cmd[9] = length;
+  cmd[10] = (streaming ? 1<<7 : 0 );
+
+  if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ 12 failed!" << endl;
+    return false;
+  }
+  else
+    return true;
+}
+
+
 bool K3bCdDevice::CdDevice::readCd( unsigned char* data, 
 				    int dataLen,
 				    int sectorType,

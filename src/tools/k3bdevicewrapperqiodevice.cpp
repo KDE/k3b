@@ -122,19 +122,12 @@ Q_LONG K3bDeviceWrapperQIODevice::readBlock( char* data, Q_ULONG maxlen )
 //   }
   long read = -1;
 
-  if( m_device->readCd( (unsigned char*)data,
+  // FIXME: some drives may not support read12 but read10 which would be a better fallback
+
+  if( m_device->read12( (unsigned char*)data,
 			maxlen,
-			0,
-			false,
 			(d->start + d->pos)/2048,
-			maxlen/2048,
-			false,
-			false,
-			false,
-			true, // USER DATA
-			false,
-			0,
-			0 ) )
+ 			maxlen/2048 ) )
     read = maxlen;
 
   // fallback
