@@ -35,6 +35,9 @@ added udf support to data project
 user commands for external programs are seperated by space now since the comma just 
    made problems for options like "--driver generic-mmc" which had to be specified
    as "--driver, generic-mmc"
+support for newer versions of cdrecord which have a slighly changed user interface
+support for cuefile writing with cdrecord > 2.01a14
+
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3
