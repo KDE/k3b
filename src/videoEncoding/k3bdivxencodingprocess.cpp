@@ -244,7 +244,7 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ){
             kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
             slotStartEncoding();
         } else {
-            infoMessage( i18n("Video generating successful finished."), STATUS );
+            infoMessage( i18n("Video generating successfully finished."), STATUS );
             emit debuggingOutput("videoencoding (transcode)", m_debugBuffer);
             emit finished( true );
         }

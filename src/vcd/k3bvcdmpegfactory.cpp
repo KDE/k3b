@@ -21,6 +21,7 @@
 
 // QT-includes
 #include <qstring.h>
+#include <qfile.h>
 
 // KDE-includes
 #include <kurl.h>
@@ -102,7 +103,7 @@ bool K3bVcdMpegFactory::refill_buffer()
 /* open the device to read the bit stream from it */
 void K3bVcdMpegFactory::init_getbits(const QString bs_filename)
 {
-  if ((bitfile = fopen(QString(bs_filename).latin1(), "rb")) == NULL) {
+  if ((bitfile = fopen(QFile::encodeName(bs_filename), "rb")) == NULL) {
     kdDebug() << QString("Unable to open file %1 for reading.").arg(bs_filename) << endl;
     return;
   }

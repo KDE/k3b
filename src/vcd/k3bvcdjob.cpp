@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
- 
+
 #include "k3bvcdjob.h"
 
 #include "k3bvcddoc.h"
@@ -111,7 +111,7 @@ void K3bVcdJob::start()
   }
   else {
     m_cueFile = m_doc->vcdImage() + ".cue";
-    m_doc->setVcdImage(m_doc->vcdImage() + ".bin");    
+    m_doc->setVcdImage(m_doc->vcdImage() + ".bin");
   }
 
   vcdxGen();
@@ -164,7 +164,7 @@ void K3bVcdJob::vcdxGen()
     cancelAll();
     return;
   }
-  
+
   emit infoMessage( i18n("Writing XML-file"), K3bJob::STATUS );
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
   // Label
@@ -190,7 +190,7 @@ void K3bVcdJob::vcdxGen()
         *m_process << "-t" << "vcd2";
     break;
   }
-  
+
   kdDebug() << QString("(K3bVcdJob) xmlfile = \"%1\"").arg(QFile::encodeName(m_xmlFile)) << endl;
   *m_process << "-o" << QString("%1").arg(QFile::encodeName(m_xmlFile));
 
@@ -226,7 +226,7 @@ void K3bVcdJob::slotVcdxGenFinished()
       emit finished( false );
       return;
     }
-    
+
     // TODO: check the process' exitStatus()
     switch( m_process->exitStatus() ) {
       case 0:
@@ -290,7 +290,7 @@ void K3bVcdJob::vcdxBuild()
   *m_process << QString("--cue-file=%1").arg( m_cueFile );
 
   *m_process << QString("--bin-file=%1").arg( m_doc->vcdImage() );
-  
+
   *m_process << QString("%1").arg(QFile::encodeName(m_xmlFile));;
 
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
@@ -396,7 +396,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
             }
             else {
               kdDebug() << QString("(K3bVcdJob) vcdxbuild error, %1").arg(text) << endl;
-              emit infoMessage( QString(i18n("%1")).arg(text) , K3bJob::ERROR );
+              emit infoMessage( text, K3bJob::ERROR );
             }
           }
         }
@@ -430,7 +430,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
   //remove xml-file
   if( QFile::exists( m_xmlFile ) )
     QFile::remove( m_xmlFile );
-    
+
   this->cdrdaoWrite();
 }
 
@@ -506,7 +506,7 @@ void K3bVcdJob::cdrdaoWrite()
   // cue-file
   kdDebug() << QString("(K3bVcdJob) cdrdaoWrite cuefile = %1").arg(m_cueFile) << endl;
   *m_process << QString("\"%1\"").arg(QFile::encodeName( m_cueFile ));
-  
+
   // connect to the cdrdao slots
   connect( m_process, SIGNAL(processExited(KProcess*)),
     this, SLOT(slotCdrdaoFinished()) );

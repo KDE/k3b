@@ -92,7 +92,7 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     QWhatsThis::add( m_comboCd, wt_cd );
 
     m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass-through mode" ), this );
-    QWhatsThis::add( m_checkAc3Passthrough, i18n("Enable this if you want the orginal digital sound (AC3).") );
+    QWhatsThis::add( m_checkAc3Passthrough, i18n("Enable this if you want the original digital sound (AC3).") );
     // TODO
     m_checkAc3Passthrough->setEnabled( false );
 

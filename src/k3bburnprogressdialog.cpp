@@ -57,7 +57,7 @@
 #include <kpixmapeffect.h>
 
 
-class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog 
+class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog
 {
 public:
   PrivateDebugWidget( QMap<QString, QStringList>&, QWidget* parent );
@@ -69,7 +69,7 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 {
   setCaption( i18n("Debugging output") );
 
-  QPushButton* okButton = new QPushButton( "OK", this );
+  QPushButton* okButton = new QPushButton( i18n("OK"), this );
   QTextView* debugView = new QTextView( this );
   QGridLayout* grid = new QGridLayout( this );
   grid->addMultiCellWidget( debugView, 0, 0, 0, 1 );
@@ -100,7 +100,7 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 
 
 
-K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress, 
+K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name, bool showSubProgress,
 					      bool showBuffer, bool modal, WFlags wf )
   : KDialog(parent,name, modal, wf), m_showBuffer( showBuffer )
 {
@@ -180,8 +180,8 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupInfoLayout->setMargin( marginHint() );
 
   m_viewInfo = new KListView( m_groupInfo, "m_viewInfo" );
-  m_viewInfo->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, 
-					  (QSizePolicy::SizeType)7, 
+  m_viewInfo->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1,
+					  (QSizePolicy::SizeType)7,
 					  m_viewInfo->sizePolicy().hasHeightForWidth() ) );
   m_viewInfo->setMinimumSize( QSize( 500, 0 ) );
   m_viewInfo->addColumn( i18n("type") );
@@ -363,10 +363,10 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   if( m_job )
     disconnect( m_job );
   m_job = job;
-	
+
   // connect to all the shit
   connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(displayInfo(const QString&,int)) );
-	
+
   connect( job, SIGNAL(percent(int)), m_progressCd, SLOT(setValue(int)) );
   connect( job, SIGNAL(percent(int)), this, SLOT(animateSystemTray(int)) );
   connect( job, SIGNAL(percent(int)), this, SLOT(slotUpdateCaption(int)) );
@@ -380,18 +380,18 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   connect( job, SIGNAL(started()), this, SLOT(started()) );
   connect( job, SIGNAL(finished(bool)), this, SLOT(finished(bool)) );
   connect( job, SIGNAL(canceled()), this, SLOT(canceled()) );
-	
-  connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+
+  connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SLOT(mapDebuggingOutput(const QString&, const QString&)) );
 
 
-  
+
   K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
   if( m_showBuffer && burnJob ) {
     if( burnJob->writer() )
-      m_labelWriter->setText( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()). 
+      m_labelWriter->setText( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()).
 			      arg(burnJob->writer()->description()) );
-  
+
     // connect to the "special" signals
     connect( burnJob, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
 
@@ -445,7 +445,7 @@ void K3bBurnProgressDialog::slotUpdateTime()
 {
   int elapsed = m_startTime.secsTo( QTime::currentTime() );
 
-  m_labelCdTime->setText( i18n("Overall progress (%1)").arg( QTime().addSecs(elapsed).toString() ) );	
+  m_labelCdTime->setText( i18n("Overall progress (%1)").arg( QTime().addSecs(elapsed).toString() ) );
 }
 
 

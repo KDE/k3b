@@ -23,10 +23,12 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qregexp.h>
+#include <qfile.h>
 
 #include <kurl.h>
 
 #include <sys/stat.h>
+
 
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
@@ -45,7 +47,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
   // instead the size of the link.
   struct stat statBuf;
-  if( lstat( filePath.latin1(), &statBuf ) ) {
+  if( lstat( QFile::encodeName(filePath), &statBuf ) ) {
     m_size = size();
   }
   else {
@@ -83,17 +85,17 @@ QString K3bFileItem::absIsoPath()
 //{
 //	K3bDataItem* _item = this;
 //	K3bDataItem* _parentItem = parent();
-//	
+//
 //	while( _parentItem ) {
 //		if( K3bDataItem* i = _parentItem->nextChild( _item ) )
 //			return i;
-//		
+//
 //		_item = _parentItem;
 //		_parentItem = _item->parent();
 //	}
 //
 //	return 0;
-//		
+//
 //	if( parent() ) {
 //		if( K3bDataItem* i = parent()->nextChild( this ) )
 //			return i;
@@ -131,7 +133,7 @@ bool K3bFileItem::isValid() const
     if( dest[0] == '/' )
       return false;  // absolut links can never be part of the compilation!
 
-    // parse the link 
+    // parse the link
     K3bDirItem* dir = parent();
 
     QStringList tokens = QStringList::split( QRegExp("/+"), dest );  // two slashes or more do the same as one does!
@@ -161,7 +163,7 @@ bool K3bFileItem::isValid() const
 	  if( i+1 != tokens.size() )
 	    return false;  // if di is a file we need to be at the last token
 	  else
-	    return (dest[dest.length()-1] != '/');   // if the link destination ends with a slash 
+	    return (dest[dest.length()-1] != '/');   // if the link destination ends with a slash
                                             	   // it can only point to a directory!
 	}
       }

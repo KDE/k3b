@@ -59,7 +59,7 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
   m_tracks = 0L;
   m_mpegFactory = 0L;
   m_vcdOptions = 0L;
-  
+
   m_docType = VCD;
   m_vcdType = NONE;
 
@@ -78,7 +78,7 @@ K3bVcdDoc::~K3bVcdDoc()
     delete m_vcdOptions;
 
   if ( m_mpegFactory )
-    delete m_mpegFactory;    
+    delete m_mpegFactory;
 }
 
 bool K3bVcdDoc::newDocument()
@@ -103,7 +103,7 @@ unsigned long long K3bVcdDoc::calcTotalSize() const
   if ( m_tracks ) {
     for ( K3bVcdTrack* track = m_tracks->first(); track; track = m_tracks->next() ) {
       sum += track->size();
-    }  
+    }
   }
   return sum;
 }
@@ -182,7 +182,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
     if (vcdType() == NONE) {
       setVcdType(vcdTypes(mpeg));
       KMessageBox::information(kapp->mainWidget(),"(" + url.path() + ")\n" +
-        i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format.K3b performs no resample on MPEG files yet.This looks like an MPEG%1 file and K3b set the type to %2.").arg(mpeg).arg((mpeg==1)?"VCD 2.0": "SVCD"),
+        i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format. K3b performs no resample on MPEG files yet. This looks like an MPEG%1 file and K3b set the type to %2.").arg(mpeg).arg((mpeg==1)?"VCD 2.0": "SVCD"),
         i18n("Set Type to %1 (MPEG%2)").arg((mpeg==1)?"VCD 2.0":"SVCD").arg(mpeg) );
     }
 
@@ -192,7 +192,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
         i18n("Wrong File Type for this Project") );
       return 0;
     }
-    
+
     K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
     newTrack->setMimeType(QString("Mpeg%1").arg(mpeg));
     return newTrack;

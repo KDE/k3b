@@ -102,7 +102,7 @@ K3bMainWindow::K3bMainWindow()
   m_dataUntitledCount = 0;
   m_mixedUntitledCount = 0;
   m_vcdUntitledCount = 0;
-  
+
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
 
@@ -163,7 +163,7 @@ void K3bMainWindow::initActions()
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
 
-  actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotFileBurn()), 
+  actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotFileBurn()),
 			  actionCollection(), "file_burn");
   actionFileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()),
 			    actionCollection(), "file_export" );
@@ -182,19 +182,19 @@ void K3bMainWindow::initActions()
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->insert( actionFileNewMixed );
-  actionFileNewMenu->insert( actionFileNewVcd );  
+  actionFileNewMenu->insert( actionFileNewVcd );
   actionFileNewMenu->setDelayed( false );
 
-  actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()), 
+  actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
 				       actionCollection(), "project_add_files");
 
-  actionViewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), 
+  actionViewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()),
 				  actionCollection(), "view_dir");
 
-  actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()), 
+  actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()),
 					    actionCollection(), "view_audio_player");
 
-  actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()), 
+  actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
 					       actionCollection(), "view_document_header");
 
   actionToolsBlankCdrw = new KAction(i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
@@ -217,8 +217,8 @@ void K3bMainWindow::initActions()
   // Data Project
   actionDataImportSession = new KAction(i18n("&Import Session"), "gear", 0, this, SLOT(slotDataImportSession()),
 					actionCollection(), "project_data_import_session" );
-  actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this, 
-					       SLOT(slotDataClearImportedSession()), actionCollection(), 
+  actionDataClearImportedSession = new KAction(i18n("&Clear imported Session"), "gear", 0, this,
+					       SLOT(slotDataClearImportedSession()), actionCollection(),
 					       "project_data_clear_imported_session" );
 
   // ==============================================================================================================
@@ -272,7 +272,7 @@ void K3bMainWindow::endBusy()
 void K3bMainWindow::initView()
 {
   // setup main docking things
-  mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
+  mainDock = createDockWidget( i18n("Workspace"), SmallIcon("idea") );
   setView( mainDock );
   setMainDockWidget( mainDock );
   mainDock->setDockSite( KDockWidget::DockCorner );
@@ -328,7 +328,7 @@ void K3bMainWindow::initView()
 
 
   // --- Directory Dock --------------------------------------------------------------------------
-  dirDock = createDockWidget( "K3b Dir View", SmallIcon("idea") );
+  dirDock = createDockWidget( i18n("K3b Dir View"), SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
   dirDock->setWidget( m_dirView );
   dirDock->setEnableDocking( KDockWidget::DockCorner );
@@ -340,7 +340,7 @@ void K3bMainWindow::initView()
 
 
   // --- Audioplayer Dock ------------------------------------------------------------------------
-  m_audioPlayerDock = createDockWidget( "K3b Audio Player", SmallIcon("1rightarrow") );
+  m_audioPlayerDock = createDockWidget( i18n("K3b Audio Player"), SmallIcon("1rightarrow") );
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
   m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner );
@@ -414,7 +414,7 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
   if( doc == 0 )
     {
       KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
-      return;	
+      return;
     }
 
   actionFileOpenRecent->addURL(url);
@@ -427,7 +427,7 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
 
 
 void K3bMainWindow::saveOptions()
-{	
+{
   m_config->setGroup("General Options");
   m_config->writeEntry("Geometry", size());
   m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
@@ -510,7 +510,7 @@ bool K3bMainWindow::queryClose()
     if( !view->close(true) )
       return false;
   }
-  
+
   return true;
 }
 
@@ -566,7 +566,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
     return true;
   }
 
-  switch ( KMessageBox::warningYesNoCancel(this, i18n("%1 has unsaved data.").arg( doc->URL().fileName() ), 
+  switch ( KMessageBox::warningYesNoCancel(this, i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
 					   i18n("Closing project..."), i18n("&Save"), i18n("&Discard") ) )
     {
     case KMessageBox::Yes:
@@ -602,7 +602,7 @@ void K3bMainWindow::slotFileNew()
 void K3bMainWindow::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
-	
+
   KURL url=KFileDialog::getOpenURL(QString::null,
 				   i18n("*.k3b|K3b Projects"), this, i18n("Open File"));
   if(!url.isEmpty())
@@ -615,7 +615,7 @@ void K3bMainWindow::slotFileOpen()
 void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
-  	
+
   openDocumentFile(url);
 }
 
@@ -665,8 +665,8 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
     QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
 					       i18n("*.k3b|K3b Projects"), this, i18n("Save As"));
-    
-    
+
+
     if(!url.isEmpty())
       {
 
@@ -678,8 +678,8 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	}
 
 	if( !QFile::exists(url) ||
-	    ( QFile::exists(url) && 
-	      KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File exists...") ) 
+	    ( QFile::exists(url) &&
+	      KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File exists...") )
 	      == KMessageBox::Yes ) ) {
 
 	  if(!doc->saveDocument(url))
@@ -738,7 +738,7 @@ void K3bMainWindow::slotFileClose()
 
 void K3bMainWindow::slotFileQuit()
 {
-  close();		
+  close();
 }
 
 
@@ -750,7 +750,7 @@ void K3bMainWindow::slotViewToolBar()
   }
   else {
     toolBar("mainToolBar")->hide();
-  }		
+  }
 }
 
 void K3bMainWindow::slotViewStatusBar()
@@ -779,7 +779,7 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 void K3bMainWindow::slotSettingsConfigure()
 {
   K3bOptionDialog d( this, "SettingsDialog", true );
-		
+
   d.exec();
 
   // emit a changed signal everytime since we do not know if the user selected
@@ -793,7 +793,7 @@ void K3bMainWindow::showOptionDialog( int index )
   K3bOptionDialog d( this, "SettingsDialog", true );
 
   d.showPage( index );
-	
+
   d.exec();
 }
 
@@ -884,11 +884,11 @@ void K3bMainWindow::slotFileBurn()
 
   if( view ) {
     K3bDoc* doc = view->getDocument();
-    
+
     if( doc ) {
       // test if there is something to burn
       if( doc->numOfTracks() == 0 ) {
-	KMessageBox::information( kapp->mainWidget(), i18n("Please add files to your project first!"), 
+	KMessageBox::information( kapp->mainWidget(), i18n("Please add files to your project first!"),
 				  i18n("No data to burn"), QString::null, false );
       }
       else {
@@ -943,7 +943,7 @@ void K3bMainWindow::init()
     config()->setGroup( "Devices" );
     K3bDeviceManager::self()->readConfig( config() );
   }
-			
+
   K3bDeviceManager::self()->printDevices();
   // ===============================================================================
 
@@ -995,7 +995,7 @@ QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
     config()->setGroup( "General Options" );
     url = config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
   }
-	
+
   // find a free filename
   int num = 1;
   while( QFile::exists( url.path(1) + "k3b-" + QString::number( num ) + "." + ending ) )
@@ -1113,7 +1113,7 @@ void K3bMainWindow::slotViewDocumentHeader()
   }
   else {
     m_documentHeader->hide();
-  }		
+  }
 }
 
 

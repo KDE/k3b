@@ -63,7 +63,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 
   groupWriterLayout->addWidget( labelDevice, 0, 0 );
   groupWriterLayout->addWidget( labelSpeed, 0, 1 );
-  groupWriterLayout->addWidget( m_comboWriter, 1, 0 );  
+  groupWriterLayout->addWidget( m_comboWriter, 1, 0 );
   groupWriterLayout->addWidget( m_comboSpeed, 1, 1 );
   groupWriterLayout->setColStretch( 0, 1 );
 
@@ -71,8 +71,8 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   m_groupCdWritingApp = new QHButtonGroup( i18n("Writing Application"), this );
   m_groupCdWritingApp->setExclusive( true );
   m_selectDefault  = new QRadioButton( i18n("Default"), m_groupCdWritingApp );
-  m_selectCdrecord = new QRadioButton( i18n("cdrecord"), m_groupCdWritingApp );
-  m_selectCdrdao   = new QRadioButton( i18n("cdrdao"), m_groupCdWritingApp );
+  m_selectCdrecord = new QRadioButton( "cdrecord", m_groupCdWritingApp );
+  m_selectCdrdao   = new QRadioButton( "cdrdao", m_groupCdWritingApp );
 
 
   QGridLayout* mainLayout = new QGridLayout( this );
@@ -82,7 +82,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 
   mainLayout->addWidget( groupWriter, 0, 0 );
   mainLayout->addWidget( m_groupCdWritingApp, 1, 0 );
-  
+
 
   connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
   connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
@@ -96,8 +96,8 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
     m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->ioctlDevice() + ")" );
     _dev = _devices.next();
   }
-  
-  slotRefreshWriterSpeeds(); 
+
+  slotRefreshWriterSpeeds();
   slotConfigChanged(k3bMain()->config());
   m_groupCdWritingApp->setButton( 0 );
 
@@ -157,7 +157,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
       speed += 2;
     }
 
-    // set to saved speed 
+    // set to saved speed
     m_comboSpeed->setCurrentItem( currentSpeedIndex );
   }
 }
@@ -185,11 +185,11 @@ K3bDevice* K3bWriterSelectionWidget::writerDevice() const
   const QString& s = m_comboWriter->currentText();
 
   QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
- 
+
   K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
   if( !dev )
     kdDebug() << "(K3bWriterSelectionWidget) could not find device " << s << endl;
-		
+
   return dev;
 }
 
@@ -198,7 +198,7 @@ int K3bWriterSelectionWidget::writerSpeed() const
 {
   QString strSpeed = m_comboSpeed->currentText();
   strSpeed.truncate( strSpeed.find('x') );
-	
+
   return strSpeed.toInt();
 }
 

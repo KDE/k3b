@@ -1,5 +1,5 @@
 /***************************************************************************
-                          k3bprocess.cpp  -  
+                          k3bprocess.cpp  -
                    KProcess with enhanced stderr handling
                              -------------------
     begin                : Wed Sep  4 12:01:14 CEST 2002
@@ -64,7 +64,7 @@ void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
 
 void K3bProcess::splitOutput( char* data, int len, bool stdout )
 {
-  QString buffer = QString::fromLatin1( data, len );
+  QString buffer = QString::fromLocal8Bit( data, len );
   QStringList lines = QStringList::split( "\n", buffer );
 
   QString& unfinishedLine = m_unfinishedStderrLine;
@@ -90,7 +90,7 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
     --it;
     lines.remove( it );
   }
-  
+
   for( it = lines.begin(); it != lines.end(); ++it ) {
     QString& str = *it;
     if( str[0] == '\r' )

@@ -508,7 +508,7 @@ void K3bIsoImageWritingDialog::slotCheckMd5Sum()
 
   if( QFile::exists( m_editImagePath->text() ) ) {
     ifstream md5sumFile;
-    md5sumFile.open( m_editImagePath->text().latin1(), ios::binary|ios::in );
+    md5sumFile.open( QFile::encodeName(m_editImagePath->text()), ios::binary|ios::in );
     QString md5sumString;
     if( md5sumFile ) {
       MD5 md5sumTester( md5sumFile );

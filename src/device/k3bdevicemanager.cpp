@@ -138,13 +138,13 @@ void K3bDeviceManager::printDevices()
 {
   kdDebug() << "\nReader:" << endl;
   for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
-    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
-	      << dev->description() << " " << dev->version() << endl << "    " 
+    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " "
+	      << dev->description() << " " << dev->version() << endl << "    "
 	      << dev->mountDevice() << dev->mountPoint() << endl;
   }
   kdDebug() << "\nWriter:" << endl;
   for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
-    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
+    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " "
 	 << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl
 	 << "    " << dev->mountDevice() << dev->mountPoint() << endl;
   }
@@ -170,7 +170,7 @@ bool K3bDeviceManager::readConfig( KConfig* c )
   }
 
   c->setGroup( "Devices" );
-    
+
   // read Readers
   QStringList list = c->readListEntry( "Reader1" );
   int devNum = 1;
@@ -275,7 +275,7 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
     QStringList list;
     list << dev->genericDevice()
 	 << QString::number(dev->maxReadSpeed())
-	 << QString::number(dev->maxWriteSpeed()) 
+	 << QString::number(dev->maxWriteSpeed())
 	 << dev->cdrdaoDriver();
 
     if( dev->cdrdaoDriver() != "auto" )
@@ -316,7 +316,7 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     ::close( devFile );
 
     if( K3bDevice* oldDev = findDevice( bus, id, lun ) ) {
-      kdDebug() << "(K3bDeviceManager) " << drive->cdda_device_name << " already detected as " 
+      kdDebug() << "(K3bDeviceManager) " << drive->cdda_device_name << " already detected as "
 		<<  oldDev->genericDevice() << "." << endl;
       return 0;
     }
@@ -352,14 +352,14 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     capProc << m_externalBinManager->binPath( "cdrecord" );
     capProc << QString("dev=%1").arg(dev->busTargetLun());
     capProc << "-prcap";
-    
+
     connect( &capProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
-    
+
     m_processOutput = "";
-    
+
     capProc.start( KProcess::Block, KProcess::Stdout );
-    
+
     QStringList lines = QStringList::split( "\n", m_processOutput );
 
     // parse output
@@ -369,25 +369,25 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
       if( line.startsWith("  ") ) {
 	if( line.contains("write CD-R media") )
 	  dev->m_burner = !line.contains( "not" );
-	
+
 	else if( line.contains("write CD-RW media") )
 	  dev->m_bWritesCdrw = !line.contains( "not" );
-	
+
 	else if( line.contains("Buffer-Underrun-Free recording") ||
 		 line.contains("support BURN-Proof") )
 	  dev->m_burnproof = !line.contains( "not" );
-	
-	else if( line.contains( "Maximum read  speed" ) )
+
+	else if( line.contains( "Maximum read  speed" ) ) //lukas: are there really two spaces?
 	  dev->m_maxReadSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
-	
+
 	else if( line.contains( "Maximum write speed" ) )
 	  dev->m_maxWriteSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
-	
+
 	else if( line.contains( "Buffer size" ) )
 	  dev->m_bufferSize = line.mid( line.find(":")+1 ).toInt();
 	else
 	  kdDebug() << "(K3bDeviceManager) unusable cdrecord output: " << line << endl;
-	
+
       }
       else if( line.startsWith("Vendor_info") )
 	dev->m_vendor = line.mid( line.find(":")+3, 8 ).stripWhiteSpace();
@@ -397,9 +397,9 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 	dev->m_version = line.mid( line.find(":")+3, 4 ).stripWhiteSpace();
       else
 	kdDebug() << "(K3bDeviceManager) unusable cdrecord output: " << line << endl;
-      
+
     }
-    
+
   }
 
   return dev;
@@ -436,7 +436,7 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
       kdDebug() << "(K3bDeviceManager) " << devicename << " is not generic-scsi or cooked-ioctl." << endl;
     }
   }
-    
+
   cdda_close( drive );
 
 
@@ -473,10 +473,10 @@ void K3bDeviceManager::scanFstab()
   struct mntent* mountInfo = 0;
   while( (mountInfo = ::getmntent( fstabFile )) ) {
     // check if the entry corresponds to a device
-    QString md = QString::fromLatin1( mountInfo->mnt_fsname );
+    QString md = QFile::decodeName( mountInfo->mnt_fsname );
 
     kdDebug() << "(K3bDeviceManager) scanning fstab: " << md << endl;
-    
+
     if( K3bDevice* dev = findDevice( resolveSymLink(md) ) ) {
       kdDebug() << "(K3bDeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
       if( dev->mountDevice().isEmpty() ) {
@@ -527,20 +527,20 @@ bool K3bDeviceManager::determineBusIdLun( int cdromfd, int& bus, int& id, int& l
 	int lun;
       };
       ScsiIdLun idLun;
-      
+
       // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
       if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
 	   (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
 	kdDebug() << "Need a filename that resolves to a SCSI device" << endl;
 	return false;
       }
-      
+
       id  = idLun.id & 0xff;
       lun = (idLun.id >> 8) & 0xff;
       kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
       return true;
       //    }
-//   else 
+//   else
 //     return false;
 }
 
@@ -548,7 +548,7 @@ bool K3bDeviceManager::determineBusIdLun( int cdromfd, int& bus, int& id, int& l
 QString K3bDeviceManager::resolveSymLink( const QString& path )
 {
   char resolved[PATH_MAX];
-  if( !realpath( path.latin1(), resolved ) ) {
+  if( !realpath( QFile::encodeName(path), resolved ) ) {
     kdDebug() << "Could not resolve " << path << endl;
     return path;
   }

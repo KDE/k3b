@@ -339,9 +339,9 @@ void K3bSetup::doCreateFstabEntries()
 
   kdDebug() << "(K3bSetup) creating new " << fstabPath << endl;
   kdDebug() << "(K3bSetup) saving backup to " << backupFstabPath << endl;
-  
+
   // move /etc/fstab to /etc/fstab.k3bsetup
-  rename( fstabPath.latin1(), backupFstabPath.latin1() );
+  rename( QFile::encodeName(fstabPath), QFile::encodeName(backupFstabPath) );
 
   emit settingWritten( true, i18n("Success") );
 
@@ -350,11 +350,11 @@ void K3bSetup::doCreateFstabEntries()
   QFile oldFstabFile( backupFstabPath );
   oldFstabFile.open( IO_ReadOnly );
   QTextStream fstabStream( &oldFstabFile );
-  
+
   QFile newFstabFile( fstabPath );
   newFstabFile.open( IO_WriteOnly );
   QTextStream newFstabStream( &newFstabFile );
-  
+
   QString line = fstabStream.readLine();
   while( !line.isNull() ) {
     bool write = true;
@@ -395,8 +395,8 @@ void K3bSetup::doCreateFstabEntries()
     if( createMountPoint ) {
       // set the correct permissions for the mountpoint
       chmod( QFile::encodeName(dev->mountPoint()), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
-	
-      newFstabStream << dev->ioctlDevice() << "\t" 
+
+      newFstabStream << dev->ioctlDevice() << "\t"
 		     << dev->mountPoint() << "\t"
 		     << "auto" << "\t"
 		     << "ro,noauto,user,exec" << "\t"
@@ -409,13 +409,13 @@ void K3bSetup::doCreateFstabEntries()
 
     dev = m_deviceManager->allDevices().next();
   }
-    
-    
+
+
   newFstabFile.close();
   newFstabFile.close();
 
   // set the correct permissions (although they seem to be correct. Just to be sure!)
-  chmod( fstabPath.latin1(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
+  chmod( QFile::encodeName(fstabPath), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
 }
 
 
@@ -427,7 +427,7 @@ const QString& K3bSetup::cdWritingGroup() const
 
 const QStringList& K3bSetup::users() const
 {
-  return m_userList; 
+  return m_userList;
 }
 
 

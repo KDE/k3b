@@ -72,9 +72,9 @@ void K3bExternalBin::addUserParameter( const QString& p )
 
 
 // ///////////////////////////////////////////////////////////
-// 
+//
 // K3BEXTERNALBINMANAGER
-// 
+//
 // ///////////////////////////////////////////////////////////
 
 
@@ -149,7 +149,7 @@ K3bExternalBin* K3bExternalBinManager::probeCdrecord( const QString& path )
       bin->addFeature( "suidroot" );
     else {
       struct stat s;
-      if( !::stat( path.latin1(), &s ) ) {
+      if( !::stat( QFile::encodeName(path), &s ) ) {
 	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
 	  bin->addFeature( "suidroot" );
       }
@@ -280,7 +280,7 @@ K3bExternalBin* K3bExternalBinManager::probeCdrdao( const QString& path )
       bin->addFeature( "suidroot" );
     else {
       struct stat s;
-      if( !::stat( path.latin1(), &s ) ) {
+      if( !::stat( QFile::encodeName(path), &s ) ) {
 	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
 	  bin->addFeature( "suidroot" );
       }
@@ -404,7 +404,7 @@ void K3bExternalBinManager::gatherOutput( KProcess*, char* data, int len )
 
 bool K3bExternalBinManager::readConfig( KConfig* c )
 {
-  loadDefaultSearchPath();  
+  loadDefaultSearchPath();
 
   if( c->hasKey( "search path" ) )
     setSearchPath( c->readListEntry( "search path" ) );
@@ -477,11 +477,11 @@ void K3bExternalBinManager::createProgramContainer()
   for( int i = 0; binPrograms[i]; ++i ) {
     if( m_programs.find( binPrograms[i] ) == m_programs.end() )
       m_programs.insert( binPrograms[i], new K3bExternalProgram( binPrograms[i] ) );
-  }  
+  }
   for( int i = 0; transcodeTools[i]; ++i ) {
     if( m_programs.find( transcodeTools[i] ) == m_programs.end() )
       m_programs.insert( transcodeTools[i], new K3bExternalProgram( transcodeTools[i] ) );
-  }  
+  }
   for( int i = 0; vcdTools[i]; ++i ) {
     if( m_programs.find( vcdTools[i] ) == m_programs.end() )
       m_programs.insert( vcdTools[i], new K3bExternalProgram( vcdTools[i] ) );
@@ -564,9 +564,9 @@ void K3bExternalBinManager::search()
     kdDebug() << "(K3bExternalBinManager) Probing cdrecord failed" << endl;
   }
   else {
-    kdDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: " 
+    kdDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "
 	      << bin->features().join( ", " ) << endl;
-    
+
     if( bin->version >= "1.11a02" )
       kdDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" << endl;
     if( bin->version >= "1.11a31" )
@@ -620,9 +620,9 @@ void K3bExternalBinManager::addSearchPath( const QString& path )
 
 
 // ///////////////////////////////////////////////////////////
-// 
+//
 // K3BEXTERNALPROGRAM
-// 
+//
 // ///////////////////////////////////////////////////////////
 
 
