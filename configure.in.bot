@@ -43,7 +43,6 @@ fi
 echo ""
 
 if test x$compile_k3bsetup = xyes; then
-        AC_DEFINE(HAVE_K3BSETUP,1,[defined if K3bSetup is compiled])
 	echo "Compile K3bSetup 2:                   yes"
 else
 	echo "Compile K3bSetup 2:                   no"

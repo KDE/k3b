@@ -93,9 +93,12 @@ void K3bAudioJob::start()
   // determine writing mode
   if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
     // DAO is always the first choice
-    // should we consider choosing TAO if the writer does not support DAO?
-    // the problem is that there are none-DAO writers that are supported by cdrdao
-    m_usedWritingMode = K3b::DAO;
+    // choose TAO if the user wants to use cdrecord since
+    // there are none-DAO writers that are supported by cdrdao
+    if( !writer()->dao() && writingApp() == K3b::CDRECORD )
+      m_usedWritingMode = K3b::TAO;
+    else
+      m_usedWritingMode = K3b::DAO;
   }
   else
     m_usedWritingMode = m_doc->writingMode();
@@ -110,7 +113,9 @@ void K3bAudioJob::start()
   // determine writing app
   if( writingApp() == K3b::DEFAULT ) {
     if( m_usedWritingMode == K3b::DAO ) {
-      if( ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
+      // there are none-DAO writers that are supported by cdrdao
+      if( !writer()->dao() ||
+	  ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
 	  ( m_doc->cdText() &&
 	    // the inf-files we use do only support artist and title in the global section
 	    ( !m_doc->arranger().isEmpty() ||

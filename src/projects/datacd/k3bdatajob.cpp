@@ -621,7 +621,8 @@ void K3bDataJob::determineWritingMode()
 
   // determine the writing mode
   if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-    if( d->doc->multiSessionMode() == K3bDataDoc::NONE )
+    if( d->doc->multiSessionMode() == K3bDataDoc::NONE &&
+	writer()->dao() )
       d->usedWritingMode = K3b::DAO;
     else
       d->usedWritingMode = K3b::TAO;

@@ -54,9 +54,6 @@ class K3bDataView : public K3bView
    void clearImportedSession();
    void editBootImages();
 
- private slots:
-   void slotMountFinished( KIO::Job* job );
-
  protected:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;

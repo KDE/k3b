@@ -91,7 +91,9 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       OPC_FAILED,
 		       CANNOT_SET_SPEED,
 		       CANNOT_SEND_CUE_SHEET,
-		       CANNOT_OPEN_NEW_SESSION };
+		       CANNOT_OPEN_NEW_SESSION,
+		       PERMISSION_DENIED,
+		       BUFFER_UNDERRUN };
 
   QStringList m_arguments;
 

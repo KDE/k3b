@@ -159,6 +159,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
   const K3bCdDevice::DiskInfo& info = did->diskInfo();
 
   m_infoView->clear();
+  m_infoView->header()->resizeSection( 0, 20 );
 
   if( !info.valid ) {
     setTitle( i18n("K3b was unable to retrieve disk information.") );

@@ -57,6 +57,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   void setNoFix( bool b ) { m_noFix = b; }
   void setDataMode( int m ) { m_dataMode = m; }
   void setVerifyData( bool b ) { m_verifyData = b; }
+  void setCopies( int c ) { m_copies = c; }
 
  protected slots:
   void slotWriterJobFinished( bool );
@@ -84,6 +85,8 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
 
   bool m_canceled;
   bool m_finished;
+
+  int m_copies;
 
   K3bIsoImageVerificationJob* m_verifyJob;
 };

@@ -11,8 +11,7 @@
 		<Action name="tools_copy_cd" />
 	  	<Action name="tools_clone_cd" />
 		<Action name="tools_blank_cdrw" />
-		<Action name="tools_write_cd_iso" />
-	        <Action name="tools_write_bin" />
+		<Action name="tools_write_cd_image" />
 	</Menu>
 	<Menu name="dvd_tools"><text>DVD</text>
 	  	<Action name="tools_copy_dvd" />
@@ -31,6 +30,7 @@
   	<Action name="view_contents" append="show_merge" />
   	<Action name="view_audio_player" append="show_merge" />
   	<Action name="view_document_header" append="show_merge" />
+	<Action name="settings_k3bsetup"/>
   </Menu>
 
   <Menu name="help"><text>&amp;Help</text>

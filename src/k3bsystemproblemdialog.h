@@ -64,8 +64,12 @@ class K3bSystemProblemDialog : public KDialog
  protected:
   void closeEvent( QCloseEvent* );
 
+ private slots:
+  void slotK3bSetup();
+
  private:
   QPushButton* m_closeButton;
+  QPushButton* m_k3bsetupButton;
   QCheckBox* m_checkDontShowAgain;
 };
 

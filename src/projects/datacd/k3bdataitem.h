@@ -67,6 +67,7 @@ class K3bDataItem
   virtual bool isFile() const { return false; }
   virtual bool isSpecialFile() const { return false; }
   virtual bool isSymLink() const { return false; }	
+  virtual bool isFromOldSession() const { return false; }
 
   bool hideOnRockRidge() const;
   bool hideOnJoliet() const;

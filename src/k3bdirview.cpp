@@ -287,23 +287,8 @@ void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
     }
   }
   else {
-    // check for MIXED_MODE and ask
-    bool mount = false;
-    if( did->diskInfo().tocType == K3bDiskInfo::MIXED  ) {
-      mount = ( KMessageBox::questionYesNo( this,
-					    i18n("Found %1. Do you want K3b to mount the data part "
-						 "or show all the tracks?").arg( i18n("Mixed-Mode CD") ),
-					    i18n("Mixed-Mode CD"),
-					    i18n("Mount CD"),
-					    i18n("Show Audio Tracks") ) == KMessageBox::Yes );
-    }
-
-    if( mount )
-      slotMountDevice( did->diskInfo().device );
-    else {
-      m_viewStack->raiseWidget( m_cdView );
-      m_cdView->setDisk( did );
-    }
+    m_viewStack->raiseWidget( m_cdView );
+    m_cdView->setDisk( did );
   }
 }
 

@@ -23,6 +23,8 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
+#include <kurl.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -279,4 +281,21 @@ unsigned long long K3b::toULongLong( const QString& s, bool* ok, int base )
   if ( ok )
     *ok = is_ok;
   return is_ok ? val : 0;
+}
+
+
+KIO::filesize_t K3b::filesize( const KURL& url )
+{
+  KIO::filesize_t fSize = 0;
+  // we use KIO since QFileInfo does provide the size as unsigned int wich is way too small for DVD images
+  KIO::UDSEntry uds;
+  KIO::NetAccess::stat( url, uds );
+  for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
+    if( (*it).m_uds == KIO::UDS_SIZE ) {
+      fSize = (*it).m_long;
+      break;
+    }
+  }
+
+  return fSize;
 }

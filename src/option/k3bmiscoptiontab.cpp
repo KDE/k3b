@@ -31,6 +31,7 @@
 K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   : base_K3bMiscOptionTab(parent,name)
 {
+  m_editTempDir->setMode( KFile::Directory );
 }
 
 
@@ -70,10 +71,10 @@ bool K3bMiscOptionTab::saveSettings()
   }
 
   if( !fi.exists() ) {
-    if( KMessageBox::questionYesNo( this, i18n("Directory does not exist. Create?"),
+    if( KMessageBox::questionYesNo( this, i18n("Directory (%1) does not exist. Create?").arg(tempDir),
 				    i18n("Create Directory") ) == KMessageBox::Yes ) {
       if( !KStandardDirs::makeDir( fi.absFilePath() ) ) {
-	KMessageBox::error( this, i18n("Unable to create directory\n(%1)").arg(fi.absFilePath()) );
+	KMessageBox::error( this, i18n("Unable to create directory %1").arg(tempDir) );
 	return false;
       }
     }

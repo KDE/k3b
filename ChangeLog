@@ -6,7 +6,17 @@ fixed CD-TEXT reading. On some systems some senseless characters where appended.
 fixed Id3lib detection in configure.in.in
 added primitive supermount support
 kernel 2.5 compile fixes (thanks to ismail (cartman) dönmez <ismail.donmez@boun.edu.tr>)
-
+K3b now defaults to the generic-mmc cdrdao driver if the used burner is not listed in 
+	cdrdao's driver table. As all modern drives use the generic-mmc driver anyway this
+	is valid and prevents from a lot of newbie problems.
+Added a thememanager and the new crystal look by Everaldo
+K3b does not mount the disk for session import or data verification anymore. This way supermount
+	users will have no problems.
+merged cue/bin and isoimage burning in one dialog which provides image-type-detection
+	supported so far: iso, cue, cdrdao toc, cdrecord clone images
+better systemconfigcheck messages when cdrecord is not running with root privs
+proper automatic writing mode and writing app selection for non-DAO-capable writers
+	
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
 DVD formatting

@@ -54,7 +54,8 @@ K3bCloneJob::K3bCloneJob( QObject* parent, const char* name )
     m_burnfree(true),
     m_speed(1),
     m_copies(1),
-    m_onlyCreateImage(false)
+    m_onlyCreateImage(false),
+    m_onlyBurnExistingImage(false)
 {
   d = new Private;
 }
@@ -94,7 +95,8 @@ void K3bCloneJob::start()
     return;
   }
 
-  if( !writer() || !readingDevice() ) {
+  if( (!m_onlyCreateImage && !writer()) ||
+       (!m_onlyBurnExistingImage && !readingDevice()) ) {
     emit infoMessage( i18n("No device set."), ERROR );
     emit finished(false);
     m_running = false;
@@ -105,20 +107,25 @@ void K3bCloneJob::start()
     m_imagePath = K3b::findTempFile( "img" );
   }
 
-  prepareReader();
+  if( m_onlyBurnExistingImage ) {
+    startWriting();
+  }
+  else {
+    prepareReader();
 
-  if (  K3bEmptyDiscWaiter::wait( readingDevice(),
+    if( K3bEmptyDiscWaiter::wait( readingDevice(),
 				  K3bCdDevice::STATE_COMPLETE,
 				  K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) == -1 ) {
-    m_running = false;
-    emit canceled();
-    emit finished(false);
-    return;
+      m_running = false;
+      emit canceled();
+      emit finished(false);
+      return;
+    }
+
+    emit newTask( i18n("Reading clone image") );
+
+    m_readcdReader->start();
   }
-
-  emit newTask( i18n("Reading clone image") );
-
-  m_readcdReader->start();
 }
 
 
@@ -187,7 +194,10 @@ void K3bCloneJob::cancel()
 
 void K3bCloneJob::slotWriterPercent( int p )
 {
-  emit percent( (int)((double)(1+d->doneCopies)*100.0/(double)(1+m_copies) + (double)p/(double)(1+m_copies)) );
+  if( m_onlyBurnExistingImage )
+    emit percent( (int)((double)(d->doneCopies)*100.0/(double)(m_copies) + (double)p/(double)(m_copies)) );
+  else
+    emit percent( (int)((double)(1+d->doneCopies)*100.0/(double)(1+m_copies) + (double)p/(double)(1+m_copies)) );
 }
 
 
@@ -287,11 +297,13 @@ void K3bCloneJob::startWriting()
 
 void K3bCloneJob::removeImageFiles()
 {
-  emit infoMessage( i18n("Removing image files."), INFO );
-  if( QFile::exists( m_imagePath ) )
-    QFile::remove( m_imagePath );
-  if( QFile::exists( m_imagePath + ".toc" ) )
-    QFile::remove( m_imagePath + ".toc"  );
+  if( !m_onlyBurnExistingImage ) {
+    emit infoMessage( i18n("Removing image files."), INFO );
+    if( QFile::exists( m_imagePath ) )
+      QFile::remove( m_imagePath );
+    if( QFile::exists( m_imagePath + ".toc" ) )
+      QFile::remove( m_imagePath + ".toc"  );
+  }
 }
 
 
@@ -305,6 +317,12 @@ QString K3bCloneJob::jobDetails() const
 {
   if( m_onlyCreateImage )
     return i18n("Creating clone image");
+  else if( m_onlyBurnExistingImage ) {
+    if( m_simulate )
+      return i18n("Simulating clone image");
+    else
+      return i18n("Burning clone image");
+  }
   else if( m_simulate )
     return i18n("Simulating clone copy");
   else

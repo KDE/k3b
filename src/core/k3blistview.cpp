@@ -245,6 +245,7 @@ void K3bListViewItem::setBackgroundColor( int col, const QColor& c )
   ColumnInfo* info = getColumnInfo( col );
   info->backgroundColorSet = true;
   info->backgroundColor = c;
+  repaint();
 }
 
 
@@ -253,6 +254,7 @@ void K3bListViewItem::setForegroundColor( int col, const QColor& c )
  ColumnInfo* info = getColumnInfo( col );
  info->foregroundColorSet = true;
  info->foregroundColor = c;
+ repaint();
 }
 
 

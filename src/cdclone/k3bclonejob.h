@@ -52,6 +52,7 @@ class K3bCloneJob : public K3bBurnJob
   void setNoCorrection( bool b ) { m_noCorrection = b; }
   void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }
   void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
+  void setOnlyBurnExistingImage( bool b ) { m_onlyBurnExistingImage = b; }
   void setSimulate( bool b ) { m_simulate = b; }
   void setWriteSpeed( int s ) { m_speed = s; }
   void setBurnfree( bool b ) { m_burnfree = b; }
@@ -88,6 +89,7 @@ class K3bCloneJob : public K3bBurnJob
   int m_speed;
   int m_copies;
   bool m_onlyCreateImage;
+  bool m_onlyBurnExistingImage;
 
   class Private;
   Private* d;

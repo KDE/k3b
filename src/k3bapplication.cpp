@@ -170,17 +170,11 @@ void K3bApplication::init()
       doc->addUrl( args->url(i) );
     }
   }
-  else if( args->isSet( "isoimage" ) ) {
+  else if( args->isSet( "cdimage" ) ) {
     if ( args->count() == 1 )
-      m_mainWindow->slotWriteIsoImage( args->url(0) );
+      m_mainWindow->slotWriteCdImage( args->url(0) );
     else
-      m_mainWindow->slotWriteCdIsoImage();
-  }
-  else if( args->isSet( "binimage" ) ) {
-    if ( args->count() == 1 )
-      m_mainWindow->slotWriteBinImage( args->url(0) );
-    else
-      m_mainWindow->slotWriteBinImage();
+      m_mainWindow->slotWriteCdImage();
   }
   else if(args->count()) {
     for( int i = 0; i < args->count(); i++ ) {

@@ -1,12 +1,6 @@
-Q: When writing an audio cd K3b canceles with the following message:
-   "No cdrdao driver found."
-A: K3b is not able to determine the cdrdao driver for your writer automatically. Please set it
-   manually in K3b's device settings (not K3bSetup) (for most current drives it would be 'generic-mmc').
-
-
 Q: I cannot select my IDE CDROM as reading device in the cd copy dialog.
 A: K3b currently does only support SCSI devices for cd copy. To use your IDE CDROM for 
-   reading please enable SCSI emulation.
+   reading please enable SCSI emulation or use the cvs version of cdrdao.
 
 
 Q: Compiling K3b fails with errors like this:
@@ -26,18 +20,17 @@ A: If you are using the rpm from SuSE your version of K3bSetup is not able to se
    K3b features.
 
 
-Q: Everytime K3b starts it asks for K3bSetup to be run although I completed it.
+Q: Where has all the fancy graphic gone?
 A: Most likely you installed K3b in the wrong directory. All KDE programs are installed in the 
    KDE dirtree (SuSE: /opt/kde3, RedHat: /usr). If you compile K3b from source it defaults 
-   to either $KDEDIR or /usr/local (which is strange since /opt/kde3 should be the default; but this is part of
-   the KDE build system). To install in the correct directory you need to specify the prefix to configure
-   like this:
-     ./configure --prefix=/opt/kde3
-   That will install K3b relative to /opt/kde3.
+   to either $KDEDIR or /usr/local. To install in the correct directory you need to specify the prefix 
+   to configure like this:
+     ./configure --prefix=`kde-config --prefix`
+   That will install K3b relative to the correct path.
 
 Q: The linking always breaks with the missing -laudio.
 A: You need to install NAS.
 
-Q: I can't find how to run k3bsetup.
-A: Since K3b version 0.10 it's a kcontrolcenter module.
-    You can find it in the KDE - Controlcenter or try "kdesu kcmshell k3bsetup2"
+Q: Where can I find K3bSetup2?
+A: K3bSetup2 is a KControlCenter Module. You can find it in the System Administration section or start
+   it manually with "kdesu kcmshell k3bsetup2".

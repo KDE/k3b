@@ -140,6 +140,18 @@ K3bInteractionDialog::~K3bInteractionDialog()
 }
 
 
+QSize K3bInteractionDialog::sizeHint() const
+{
+  QSize s = KDialog::sizeHint();
+  // I want the dialogs to look good.
+  // That means their height should never outgrow their width
+  if( s.height() > s.width() )
+    s.setWidth( s.height() );
+
+  return s;
+}
+
+
 void K3bInteractionDialog::initConnections()
 {
   if( m_buttonStart )

@@ -14,6 +14,9 @@
  */
 
 
+#include <config.h>
+
+
 #include "k3bcore.h"
 #include "k3bsystemproblemdialog.h"
 #include "tools/k3btitlelabel.h"
@@ -34,7 +37,9 @@
 #include <ktextedit.h>
 #include <kconfig.h>
 #include <kapplication.h>
-
+#include <kmessagebox.h>
+#include <kprocess.h>
+#include <kglobal.h>
 
 
 K3bSystemProblem::K3bSystemProblem( int t,
@@ -85,6 +90,10 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
   m_checkDontShowAgain = new QCheckBox( i18n("Don't show again"), this );
 
+#ifdef HAVE_K3BSETUP
+  m_k3bsetupButton = new QPushButton( i18n("Start K3bSetup2"), this );
+  connect( m_k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
+#endif
 
   // setup the problem view
   // ---------------------------------------------------------------------------------------------------
@@ -100,7 +109,14 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   grid->addMultiCellWidget( headerFrame, 0, 0, 0, 1 );
   grid->addMultiCellWidget( view, 1, 1, 0, 1 );
   grid->addWidget( m_checkDontShowAgain, 2, 0 );
-  grid->addWidget( m_closeButton, 2, 1 );
+  QHBoxLayout* buttonBox = new QHBoxLayout;
+  buttonBox->setSpacing( spacingHint() );
+  buttonBox->setMargin( 0 );
+#ifdef HAVE_K3BSETUP
+  buttonBox->addWidget( m_k3bsetupButton );
+#endif
+  buttonBox->addWidget( m_closeButton );
+  grid->addLayout( buttonBox, 2, 1 );
   grid->setColStretch( 0, 1 );
   grid->setRowStretch( 1, 1 );
 
@@ -149,9 +165,7 @@ void K3bSystemProblemDialog::checkSystem()
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("Unable to find %1 executable").arg("cdrecord"),
-				       i18n("K3b uses cdrecord to actually write cds. "
-					    "Without cdrecord K3b won't be able to properly "
-					    "initialize the writing devices."),
+				       i18n("K3b uses cdrecord to actually write cds."),
 				       i18n("Install the cdrtools package which contains "
 					    "cdrecord."),
 				       false ) );
@@ -169,10 +183,12 @@ void K3bSystemProblemDialog::checkSystem()
     if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("%1 does not run with root privileges").arg("cdrecord"),
-					 i18n("cdrecord needs to run with root privileges "
-					      "to be able to access the cd devices, "
-					      "use real time scheduling, and "
-					      "set a non-standard fifo buffer. This is also "
+					 i18n("It is highly recommended to configure cdrecord "
+					      "to run with root privileges. Only then cdrecord "
+					      "runs with high priority which increases the overall "
+					      "stability of the burning process. Apart from that "
+					      "it allows changing the size of the used burning buffer. "
+					      "A lot of user problems could be solved this way. This is also "
 					      "true when using SuSE's resmgr."),
 					 i18n("Use K3bSetup to solve this problem."),
 					 true ) );
@@ -181,20 +197,16 @@ void K3bSystemProblemDialog::checkSystem()
   if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("Unable to find %1 executable").arg("cdrdao"),
-				       i18n("K3b uses cdrdao to actually write cds. "
-					    "Without cdrdao you won't be able to copy cds, "
-					    "write cue/bin images, write CD-TEXT, and write "
-					    "audio cds on-the-fly."),
+				       i18n("K3b uses cdrdao to actually write cds."),
 				       i18n("Install the cdrdao package."),
 				       false ) );
   }
   else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("%1 does not run with root privileges").arg("cdrdao"),
-				       i18n("cdrdao needs to run with root privileges "
-					    "to be able to access the cd devices and "
-					    "use real time scheduling."
-					    "This is also true when using SuSE's resmgr."),
+				       i18n("It is highly recommended to configure cdrdao "
+					    "to run with root privileges to increase the "
+					    "overall stability of the burning process."),
 				       i18n("Use K3bSetup to solve this problem."),
 				       true ) );
   }
@@ -202,11 +214,10 @@ void K3bSystemProblemDialog::checkSystem()
 
   if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
     if( !readcdBin->hasFeature( "suidroot" ) )
-      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+      problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					 i18n("%1 does not run with root privileges").arg("readcd"),
-					 i18n("Readcd needs to run with root privileges "
-					      "to be able to access the cd devices unless "
-					      "using SuSE's resmgr with a patched readcd."),
+					 i18n("It is recommended to run readcd with root "
+					      "privileges."),
 					 i18n("Use K3bSetup to solve this problem."),
 					 true ) );
 
@@ -390,5 +401,15 @@ void K3bSystemProblemDialog::checkSystem()
     K3bSystemProblemDialog( problems ).exec();
   }
 }
+
+
+void K3bSystemProblemDialog::slotK3bSetup()
+{
+  KProcess p;
+  p << "kdesu" << "kcmshell k3bsetup2 --lang " + KGlobal::locale()->language();
+  if( !p.start( KProcess::DontCare ) )
+    KMessageBox::error( 0, i18n("Unable to start K3bSetup2.") );
+}
+
 
 #include "k3bsystemproblemdialog.moc"

@@ -184,8 +184,9 @@ void K3bDataVerifyingJob::compareNextFile()
 {
   d->currentItem = d->currentItem->nextSibling();
   
-  // we only compare files
-  while( d->currentItem && !d->currentItem->isFile() )
+  // we only compare files which have been written to cd
+  while( d->currentItem && 
+	 (!d->currentItem->isFile() || !d->currentItem->writeToCd() ) )
     d->currentItem = d->currentItem->nextSibling();
   
   d->originalCalculated = false;

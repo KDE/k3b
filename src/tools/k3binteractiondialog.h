@@ -71,6 +71,8 @@ class K3bInteractionDialog : public KDialog
     CANCEL_BUTTON = 4
   };
 
+  QSize sizeHint() const;
+
  signals:
   void loadUserDefaults();
   void saveUserDefaults();

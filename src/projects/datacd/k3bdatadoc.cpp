@@ -26,8 +26,13 @@
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3bmsf.h>
+#include <k3biso9660.h>
+#include <k3bdevicehandler.h>
+#include <k3bdevice.h>
+#include <k3btoc.h>
+#include <k3btrack.h>
 
-#include <stdlib.h>
+//#include <stdlib.h>
 
 #include <qdir.h>
 #include <qstring.h>
@@ -60,7 +65,7 @@ K3bDataDoc::K3bDataDoc( QObject* parent )
   connect( m_queuedToAddItemsTimer, SIGNAL(timeout()), this, SLOT(slotAddQueuedItems()) );
 
   m_sizeHandler = new K3bFileCompilationSizeHandler();
-  m_oldSessionSizeHandler = new K3bFileCompilationSizeHandler();
+  //  m_oldSessionSizeHandler = new K3bFileCompilationSizeHandler();
 
   // FIXME: remove the newFileItems() signal and replace it with the changed signal
   connect( this, SIGNAL(newFileItems()), this, SIGNAL(changed()) );
@@ -70,7 +75,7 @@ K3bDataDoc::~K3bDataDoc()
 {
   delete m_root;
   delete m_sizeHandler;
-  delete m_oldSessionSizeHandler;
+  //  delete m_oldSessionSizeHandler;
 }
 
 
@@ -78,6 +83,7 @@ bool K3bDataDoc::newDocument()
 {
   m_bootImages.clear();
   m_bootCataloge = 0;
+  m_oldSessionHackSize = m_oldSessionSize = 0;
 
   if( m_root ) {
     while( m_root->children()->first() )
@@ -327,7 +333,7 @@ KIO::filesize_t K3bDataDoc::size() const
 {
   //return m_size;
   //  return root()->k3bSize();
-  return m_sizeHandler->size();
+  return m_sizeHandler->size() - m_oldSessionHackSize + m_oldSessionSize;
 }
 
 
@@ -337,7 +343,7 @@ KIO::filesize_t K3bDataDoc::burningSize() const
       m_multisessionMode == START )
     return size();
 
-  return size() - m_oldSessionSizeHandler->size();
+  return size() - m_oldSessionSize; //m_oldSessionSizeHandler->size();
 }
 
 
@@ -1153,7 +1159,7 @@ void K3bDataDoc::setMultiSessionMode( int mode )
 }
 
 
-void K3bDataDoc::importSession( const QString& path )
+void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
 {
   // remove previous imported sessions
   clearImportedSession();
@@ -1162,98 +1168,112 @@ void K3bDataDoc::importSession( const QString& path )
   if( m_multisessionMode != FINISH )
     m_multisessionMode = CONTINUE;
 
-  // add all files from cd as readonly fileitems
-  KProgressDialog d( qApp->activeWindow(), 
-		     0, 
-		     i18n("Importing session"), 
-		     i18n("Importing old session from %1").arg(path) );
-  d.show();
+//   KProgressDialog d( qApp->activeWindow(), 
+// 		     0, 
+// 		     i18n("Importing session"), 
+// 		     i18n("Importing old session from %1").arg(device->blockDeviceName()) );
+//   d.show();
 
-  int dirFilter = QDir::All | QDir::Hidden | QDir::System;
-
-  QStringList dlist = QDir( path ).entryList( dirFilter );
-  dlist.remove(".");
-  dlist.remove("..");
-
-  d.progressBar()->setTotalSteps( dlist.count() );
-
-  for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-    createSessionImportItems( path + "/" + *it, root(), &d );
-    if( d.wasCancelled() ) {
-      clearImportedSession();
-      return;
-    }
-    d.progressBar()->setValue( d.progressBar()->value() + 1 );
-  }
-
-  emit newFileItems();
-
-  d.hide();
+  connect( K3bCdDevice::toc( device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	   this, SLOT(slotTocRead(K3bCdDevice::DeviceHandler*)) );
 }
 
 
-void K3bDataDoc::createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* d )
+void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
+{
+  if( dh->success() ) {
+    K3bCdDevice::Toc::const_iterator it = dh->toc().end();
+    --it; // this is valid since there is at least one data track
+    while( it != dh->toc().begin() && (*it).type() != K3bCdDevice::Track::DATA )
+      --it;
+    long startSec = (*it).firstSector().lba();
+    
+    // since in iso9660 it is possible that two files share it's data
+    // simply summing the file sizes could result in wrong values
+    // that's why we use the size from the toc. This is more accurate
+    // anyway since there might be files overwritten or removed
+    m_oldSessionSize = (*it).lastSector().mode1Bytes();
+
+
+    K3bIso9660 iso( burner(), startSec );
+    iso.open( IO_ReadOnly );
+
+    // import some former settings
+    isoOptions().setCreateJoliet( iso.firstJolietDirEntry() != 0 );
+    isoOptions().setVolumeID( iso.primaryDescriptor().volumeId );
+    // TODO: also import some other pd fields
+
+    const KArchiveDirectory* rootDir = iso.directory();
+    createSessionImportItems( rootDir, root() );
+  }
+  else {
+    kdDebug() << "(K3bDataDoc) unable to read toc." << endl;
+    // FIXME: inform the user. By the way: this all still sucks!
+  }
+
+  emit newFileItems();
+}
+
+
+void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K3bDirItem* parent )
 {
   kapp->processEvents();
 
-  if( d->wasCancelled() ) {
-    return;
-  }
+//   if( d->wasCancelled() ) {
+//     return;
+//   }
 
-  QFileInfo newF(path);
-  K3bDataItem* oldItem = parent->find( newF.fileName() );
-  if( oldItem ) {
-    // remove the item already in the project since mkisofs is not
-    // capable of overwriting files
-    if( (oldItem->isDir() && !newF.isDir()) ||
-	!oldItem->isDir() ) {
-      //      m_sizeHandler->removeFile( oldItem->localPath() );
-	delete oldItem;
-	oldItem = 0;
+  QStringList entries = importDir->entries();
+  entries.remove( "." );
+  entries.remove( ".." );
+  for( QStringList::const_iterator it = entries.begin();
+       it != entries.end(); ++it ) {
+    const KArchiveEntry* entry = importDir->entry( *it );
+    K3bDataItem* oldItem = parent->find( entry->name() );
+    if( entry->isDirectory() ) {
+      K3bDirItem* dir = 0;
+      if( oldItem ) {
+	dir = (K3bDirItem*)oldItem;
+      }
+      else {
+	dir = new K3bDirItem( entry->name(), this, parent );
+	dir->setRemoveable(false);
+	dir->setRenameable(false);
+	dir->setMoveable(false);
+	dir->setHideable(false);
+	dir->setWriteToCd(false);
+	dir->setExtraInfo( i18n("From previous session") );
+	m_oldSession.append( dir );
+      }
+
+      createSessionImportItems( (KArchiveDirectory*)entry, dir );
     }
-  }
+    else {
 
-  if( newF.isDir() && !newF.isSymLink() ) {
-    K3bDirItem* dir = 0;
-    if( !oldItem ) {
-      dir = new K3bDirItem( newF.fileName(), this, parent );
-      dir->setRemoveable(false);
-      dir->setRenameable(false);
-      dir->setMoveable(false);
-      dir->setHideable(false);
-      dir->setWriteToCd(false);
-      dir->setExtraInfo( i18n("From previous session") );
-      m_oldSession.append( dir );
+      // TODO: implement file replacing
+
+      const KArchiveFile* file = (const KArchiveFile*)entry;
+      K3bSpecialDataItem* item = new K3bSpecialDataItem( this, file->size(), parent, entry->name() );
+      item->setRemoveable(false);
+      item->setRenameable(false);
+      item->setMoveable(false);
+      item->setHideable(false);
+      item->setWriteToCd(false);
+      item->setExtraInfo( i18n("From previous session") );
+      m_oldSession.append( item );
+
+      // this is a bad hack. We need to implement some mechanism
+      // so the sizehandler knows which files to count and which to ignore
+      m_oldSessionHackSize += file->size();
     }
-    else
-      dir = (K3bDirItem*)oldItem;
-
-    int dirFilter = QDir::All | QDir::Hidden | QDir::System;
-    QStringList dlist = QDir( path ).entryList( dirFilter );
-    dlist.remove(".");
-    dlist.remove("..");
-
-    for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-      createSessionImportItems( path + "/" + *it, dir, d );
-    }
-  }
-  else {
-    K3bFileItem* item = new K3bFileItem( newF.absFilePath(), this, parent, newF.fileName() );
-    item->setRemoveable(false);
-    item->setRenameable(false);
-    item->setMoveable(false);
-    item->setHideable(false);
-    item->setWriteToCd(false);
-    item->setExtraInfo( i18n("From previous session") );
-    m_oldSession.append( item );
-    m_oldSessionSizeHandler->addFile( item );
   }
 }
 
 
 void K3bDataDoc::clearImportedSession()
 {
-  m_oldSessionSizeHandler->clear();
+  //  m_oldSessionSizeHandler->clear();
+  m_oldSessionSize = m_oldSessionHackSize = 0;
   m_oldSession.setAutoDelete(false);
   K3bDataItem* item = m_oldSession.first();
   while( !m_oldSession.isEmpty() ) {
@@ -1321,9 +1341,20 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
   if( !dir )
     dir = bootImageDir();
 
-  // TODO: check if a file with the same name already exists
-  K3bBootItem* boot = new K3bBootItem( filename,
-				       this, dir );
+  QString newName = QFileInfo(filename).fileName();
+
+  if( nameAlreadyInDir( newName, dir ) ) {
+    bool ok = true;
+    do {
+      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+				       newName, &ok, qApp->activeWindow() );
+    } while( ok && nameAlreadyInDir( newName, dir ) );
+    
+    if( !ok )
+      return 0;
+  }
+
+  K3bBootItem* boot = new K3bBootItem( filename, this, dir, newName );
 
   m_bootImages.append(boot);
 
@@ -1338,7 +1369,14 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
 K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
 {
   if( !m_bootCataloge ) {
-    K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, dir, "boot.cataloge" );
+    QString newName = "boot.cataloge";
+    int i = 0;
+    while( nameAlreadyInDir( "boot.cataloge", dir ) ) {
+      ++i;
+      newName = QString( "boot%1.cataloge" ).arg(i);
+    }
+
+    K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, dir, newName );
     m_bootCataloge = b;
     m_bootCataloge->setRemoveable(false);
     m_bootCataloge->setHideable(false);
@@ -1369,5 +1407,18 @@ K3bProjectBurnDialog* K3bDataDoc::newBurnDialog( QWidget* parent, const char* na
   return new K3bDataBurnDialog( this, parent, name, true );
 }
 
+
+void K3bDataDoc::slotBurn()
+{
+  if( burningSize() == 0 ) {
+    KMessageBox::information( qApp->activeWindow(), i18n("Please add files to your project first!"),
+			      i18n("No Data to Burn"), QString::null, false );
+  }
+  else {
+    K3bProjectBurnDialog* dlg = newBurnDialog( qApp->activeWindow() );
+    dlg->exec(true);
+    delete dlg;
+  }
+}
 
 #include "k3bdatadoc.moc"

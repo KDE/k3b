@@ -18,6 +18,8 @@
 #define K3BGLOBALS_H
 
 #include <qstring.h>
+#include <kio/global.h>
+#include <kurl.h>
 
 class KConfig;
 class K3bVersion;
@@ -105,6 +107,8 @@ namespace K3b
    * This gets introduced in QT 3.2 but we already need it now
    */
   unsigned long long toULongLong( const QString&, bool* ok = 0, int base = 10 );
+
+  KIO::filesize_t filesize( const KURL& );
 }
 
 #endif

@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 
 #include "k3bcdrecordwriter.h"
 
@@ -647,11 +649,20 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	    emit infoMessage( i18n("Please choose a lower burning speed."), ERROR );
 	break;
       case UNKNOWN:
-	// no recording device and also other errors!! :-(
 	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
 			  K3bJob::ERROR );
 	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+
+	if( !m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
+	  emit infoMessage( i18n("Cdrecord does not run with root privileges."), ERROR );
+	  emit infoMessage( i18n("This influences the stability of the burning process."), ERROR );
+#ifdef HAVE_K3BSETUP
+	  emit infoMessage( i18n("Use K3bSetup to solve this problem."), ERROR );    
+#endif
+	}
+	else {
+	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	}
 	break;
       }
       d->running = false;

@@ -149,47 +149,9 @@ void K3bDataView::importSession()
   m_device = K3bDeviceSelectionDialog::selectWriter( this, i18n("Please select the appendable disk") );
 
   if( m_device ) {
-    // TODO: check if it's a data cd and appendable
-
-    k3bcore->requestBusyInfo( i18n("Mounting disk...") );
-
-    QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
-    if( mp.isEmpty() ) {
-      // mount the cd
-      connect( KIO::mount( true, 0L, 
-			   m_device->mountDevice(), 
-			   m_device->mountPoint(), false ), 
-	       SIGNAL(result(KIO::Job*)),
-	       this, 
-	       SLOT(slotMountFinished(KIO::Job*)) );
-    }
-    else {
-      // cd is already mounted
-      k3bcore->requestBusyInfo( i18n("Importing old session...") );
-      m_doc->setBurner( m_device );
-      m_doc->importSession( mp );
-      k3bcore->requestBusyFinish();
-    }
-  }
-}
-
-
-void K3bDataView::slotMountFinished( KIO::Job* job )
-{
-  if( job->error() && !m_device->supermount() ) {
-    KMessageBox::error( this, KIO::buildErrorString( job->error(), 
-						     m_device->vendor() + " " + m_device->description() ) );
-  }
-  else {
-    k3bcore->requestBusyInfo( i18n("Importing old session...") );
     m_doc->setBurner( m_device );
-    m_doc->importSession( m_device->mountPoint() );
-
-    // unmount the cd
-    KIO::unmount( m_device->mountPoint(), false );
+    m_doc->importSession( m_device );
   }
-
-  k3bcore->requestBusyFinish();
 }
 
 

@@ -327,6 +327,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
     }
   }
   else {
+    removeImageFiles();
     emit finished(false);
     d->running = false;
   }

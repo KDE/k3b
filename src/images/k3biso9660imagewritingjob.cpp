@@ -52,6 +52,7 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
     m_dataMode(K3b::DATA_MODE_AUTO),
     m_writer(0),
     m_tocFile(0),
+    m_copies(1),
     m_verifyJob(0)
 {
 }
@@ -76,6 +77,9 @@ void K3bIso9660ImageWritingJob::start()
     emit finished( false );
     return;
   }
+
+
+  // TODO: add multiple copies
 
 
   // we wait for the following:
@@ -244,7 +248,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
       // cdrecord seems to have problems when writing in mode2 in dao mode
       // so with cdrecord we use TAO
-      if( m_noFix || m_dataMode == K3b::MODE2 )
+      if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
 	usedWriteMode = K3b::TAO;
       else
 	usedWriteMode = K3b::DAO;
@@ -374,7 +378,10 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
 QString K3bIso9660ImageWritingJob::jobDescription() const
 {
-  return i18n("Writing Iso9660 image");
+  if( m_simulate )
+    return i18n("Simulating Iso9660 image");
+  else
+    return i18n("Burning Iso9660 image");
 }
 
 

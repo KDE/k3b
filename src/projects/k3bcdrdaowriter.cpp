@@ -868,7 +868,6 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
   else if( line.contains("Drive does not accept any cue sheet") )
   {
     emit infoMessage( i18n("Cue sheet not accepted."), K3bJob::ERROR );
-    emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
     m_knownError = true;
   }
   else if( (pos = line.find( "Illegal option" )) > 0 ) {

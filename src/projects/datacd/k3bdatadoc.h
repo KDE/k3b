@@ -44,7 +44,12 @@ class QStringList;
 class QWidget;
 class QDomDocument;
 class QDomElement;
+class KArchiveDirectory;
 
+namespace K3bCdDevice {
+  class CdDevice;
+  class DeviceHandler;
+}
 
 
 /**
@@ -121,13 +126,15 @@ class K3bDataDoc : public K3bDoc
   K3bFileCompilationSizeHandler* sizeHandler() const { return m_sizeHandler; }
 
  public slots:
+  void slotBurn();
+
   /** add urls to the compilation.
    * @param dir the directory where to add the urls, by default this is the root directory.
    **/
   void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
   virtual void addUrls( const KURL::List& urls );
 
-  void importSession( const QString& path );
+  void importSession( K3bCdDevice::CdDevice* );
   void clearImportedSession();
 
   virtual void loadDefaultSettings( KConfig* );
@@ -138,6 +145,7 @@ class K3bDataDoc : public K3bDoc
 	
  private slots:
   void slotAddQueuedItems();
+  void slotTocRead( K3bCdDevice::DeviceHandler* dh );
 
  protected:
   /** reimplemented from K3bDoc */
@@ -153,7 +161,9 @@ class K3bDataDoc : public K3bDoc
   virtual QString documentType() const;
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
-  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
+  //  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
+  KIO::filesize_t m_oldSessionSize;
+  KIO::filesize_t m_oldSessionHackSize; // :((
 
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 
@@ -161,7 +171,7 @@ class K3bDataDoc : public K3bDoc
   virtual K3bView* newView( QWidget* parent );
 
  private:
-  void createSessionImportItems( const QString& path, K3bDirItem* parent, KProgressDialog* );
+  void createSessionImportItems( const KArchiveDirectory*, K3bDirItem* parent );
   K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
 
   /**

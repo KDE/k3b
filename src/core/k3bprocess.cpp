@@ -142,6 +142,10 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   for( it = lines.begin(); it != lines.end(); ++it ) {
     QString& str = *it;
 
+    // just to be sure since something above does not do this right
+    if( str.isEmpty() )
+      continue;
+
     if( stdout )
       emit stdoutLine( str );
     else

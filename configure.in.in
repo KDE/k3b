@@ -190,4 +190,9 @@ AC_ARG_WITH(k3bsetup,
 	[  --with-k3bsetup[=ARG]     do compile K3bSetup2 KControl Module (default=yes)],
 	[compile_k3bsetup=$withval]
 )
+
+if test x$compile_k3bsetup = xyes; then
+        AC_DEFINE(HAVE_K3BSETUP,1,[defined if K3bSetup is compiled])
+fi
+
 AM_CONDITIONAL(with_k3bsetup1, [test x$compile_k3bsetup = xyes])

@@ -1,5 +1,5 @@
-Installing K3b 0.9
-------------------
+Installing K3b 0.10
+-------------------
 
 
 Before installing K3b please make sure you have at least the following installed on your system:
@@ -13,9 +13,9 @@ After that it's all the same:
 ./configure
 
 or try ./configure --help to learn about the options.
-Mostly you will like to set the kde3 directory via:
+Most likely you will have to set the kde3 directory via:
 
-./configure --prefix=<mykde3base>
+./configure --prefix=`kde-config --prefix`
 
 
 If configure was successful just compile K3b:
@@ -28,8 +28,8 @@ make install (as root)
 
 
 K3b needs some special permission settings to work properly.
-With K3b comes the K3bSetup Wizard that will perform all the necessary steps.
-Just start it.
+With K3b comes the K3bSetup2 KControlModule ehich can perform all the necessary steps.
+Just give it a try.
 
 
 Have fun

@@ -136,11 +136,9 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotBlankCdrw();
   void slotFormatDvd();
-  void slotWriteCdIsoImage();
+  void slotWriteCdImage();
   void slotWriteDvdIsoImage();
-  void slotWriteIsoImage( const KURL& url );
-  void slotWriteBinImage();
-  void slotWriteBinImage( const KURL& url );
+  void slotWriteCdImage( const KURL& url );
   // encoding dialog for transcode encoding utility
   void slotDivxEncoding();
   void slotCdCopy();
@@ -332,8 +330,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionSettingsK3bSetup;
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsDivxEncoding;
-  KAction* actionToolsWriteIsoImage;
-  KAction* actionToolsWriteBinImage;
+  KAction* actionToolsWriteCdImage;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewStatusBar;
