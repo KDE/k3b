@@ -78,7 +78,6 @@ void K3bPatternWidget::setup(){
     m_groupPatternDir->setTitle( i18n( "Directory Pattern" ) );
 
     QGridLayout *optionsLayout_2 = new QGridLayout( m_groupPatternDir->layout() );
-    QLabel *labelDirectory = new QLabel(i18n("Directory") + ":", m_groupPatternDir);
     m_labelSummaryDirectory = new QLabel("",m_groupPatternDir);
     m_labelSummaryDirectory->font().setBold(true);
     m_labelSummaryDirectory->setFrameStyle( QFrame::Panel | QFrame::Sunken );
@@ -107,7 +106,6 @@ void K3bPatternWidget::setup(){
     m_radioDir2None->setChecked(true);
     //QToolTip::add( m_dirs2, i18n("Another subdirectory like the left one."));
 
-    QLabel *labelDirpattern = new QLabel(i18n("Pattern") + ":", m_groupPatternDir);
     QFrame* dirline2 = new QFrame( m_groupPatternDir, "dirline" );
     dirline2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
@@ -128,17 +126,15 @@ void K3bPatternWidget::setup(){
     optionsLayout_2->setMargin( KDialog::marginHint() );
     //optionsLayout_2->addMultiCellWidget(m_alwaysUseDir, 0, 0, 0, 5);
     //optionsLayout_2->addMultiCellWidget(dirline, 1, 1, 0, 5);
-    optionsLayout_2->addMultiCellWidget(labelDirectory, 2, 2, 0, 0);
-    optionsLayout_2->addMultiCellWidget(m_labelSummaryDirectory, 2, 2, 1, 5);
-    optionsLayout_2->addMultiCellWidget(labelDirpattern, 3, 3, 0, 0);
-    optionsLayout_2->addMultiCellWidget(groupPatternDirTree, 3, 3, 1, 3);
-    optionsLayout_2->addMultiCellWidget(m_dirs1, 3, 3, 4, 4);
-    optionsLayout_2->addMultiCellWidget(m_dirs2, 3, 3, 5, 5);
-    optionsLayout_2->addMultiCellWidget(dirline2, 4, 4, 0, 5);
+    optionsLayout_2->addMultiCellWidget(m_labelSummaryDirectory, 2, 2, 0, 2);
+    optionsLayout_2->addWidget(groupPatternDirTree, 3, 0);
+    optionsLayout_2->addWidget(m_dirs1, 3, 1);
+    optionsLayout_2->addWidget(m_dirs2, 3, 2);
+    optionsLayout_2->addMultiCellWidget(dirline2, 4, 4, 0, 2);
     //optionsLayout_2->addMultiCellWidget(m_spaceReplaceDir, 5, 5, 0, 4);
     //optionsLayout_2->addMultiCellWidget(m_editDir, 5, 5, 5, 5);
-    optionsLayout_2->addMultiCellWidget(groupReplaceDir, 5, 5, 0, 5);
-    optionsLayout_2->setColStretch(2, 10);
+    optionsLayout_2->addMultiCellWidget(groupReplaceDir, 5, 5, 0, 2);
+    optionsLayout_2->setColStretch(0, 1);
 
     // Filename
     //-----------------------------------
