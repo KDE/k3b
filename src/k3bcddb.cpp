@@ -120,6 +120,7 @@ long my_last_sector( cdrom_drive * drive )
 
 
 K3bCddb::K3bCddb( ){
+    m_useCddb = false;
 }
 
 K3bCddb::K3bCddb( bool useCddb, QString server, unsigned int port )
@@ -200,15 +201,17 @@ void K3bCddb::updateCD( struct cdrom_drive *drive )
     based_on_cddb = false;
     cd_album = "";
     cd_artist = "";
+    s_track = "";
     for( int i = 0; i < tracks; i++ ) {
         QString num;
         int ti = i + 1;
         QString s;
         num.sprintf( "Track %02d", ti );
         if( cdda_track_audiop( drive, ti ) )
-            s = s_track.arg( num );
+            s = num.stripWhiteSpace(); //s_track.arg( num );
         else
             s.sprintf( "data%02d", ti );
+        qDebug("Track:" + s + "end");
         titles.append( s );
     }
 }

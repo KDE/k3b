@@ -33,7 +33,7 @@ class KioTree;
 class K3bCdView;
 class K3bFileView;
 class K3bDeviceManager;
-
+class KProcess;
 /**
   *@author Sebastian Trueg
   */
@@ -50,13 +50,14 @@ public:
 protected slots:
         void slotViewChanged( KFileView* newView );
         void slotDirActivated( const KURL& );
+        void slotCDDirActivated( QString  );
 
 private:
         K3bCdView* m_cdView;
         K3bFileView* m_fileView;
         QSplitter* m_mainSplitter;
         KioTree* m_kiotree;
-		  bool m_initialized;
+	  bool m_initialized;
 };
 
 #endif

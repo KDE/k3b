@@ -23,6 +23,7 @@
 #include "../k3b.h"
 #include "../k3bglobals.h"
 #include "../device/k3bdevice.h"
+#include "k3bdiritem.h"
 
 #include <kprocess.h>
 #include <kapp.h>
@@ -777,6 +778,7 @@ bool K3bDataJob::writePathSpec( const QString& filename )
     return false;
   }
 	
+  /*
   QTextStream t(&file);
 
   // start writing the path-specs
@@ -789,7 +791,9 @@ bool K3bDataJob::writePathSpec( const QString& filename )
     item = item->nextSibling();
   }
 	
+
   file.close();
+  */
   return filename;
 }
 

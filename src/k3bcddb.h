@@ -18,9 +18,11 @@
 #ifndef K3BCDDB_H
 #define K3BCDDB_H
 
+#include <qstring.h>
+#include <qstringlist.h>
+
 struct cdrom_drive;
-class QString;
-class QStringList;
+
 class CDDB;
 class K3bToc;
 
@@ -58,6 +60,7 @@ class K3bCddb {
     * Generates instance of cddb and enables cddb use.
     */
     void setUseCddb(bool useCddb);
+    bool useCddb() { return m_useCddb; };
 
     QStringList getTitles() { return titles; };
     QString getAlbum() { return cd_album; };
