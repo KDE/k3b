@@ -65,13 +65,15 @@ class K3bAudioServer : public QObject
   static K3bAudioOutputPlugin* findOutputPlugin( const QCString& name );
 
  private:
+  class Private;
+  friend class Private;
+
   static K3bAudioServer* s_instance;
 
   K3bAudioOutputPlugin* m_usedOutputPlugin;
   bool m_pluginInitialized;
   K3bAudioClient* m_client;
 
-  class Private;
   Private* d;
 };
 
