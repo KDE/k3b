@@ -213,6 +213,7 @@ void K3bAudioRippingDialog::setupGui()
   connect( m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_checkSingleFile, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_comboFileType, SIGNAL(activated(int)), this, SLOT(refresh()) );
+  connect( m_editStaticRipPath, SIGNAL(textChanged(const QString&)), this, SLOT(refresh()) );
 }
 
 
