@@ -40,6 +40,8 @@ namespace K3b
     DVD_RW_FORMAT = 32
   };
 
+  int writingAppFromString( const QString& );
+
   /**
    * DATA_MODE_AUTO - let K3b determine the best mode
    * MODE1 - refers to the default Yellow book mode1

@@ -368,3 +368,19 @@ QString K3b::externalBinDeviceParameter( K3bCdDevice::CdDevice* dev, const K3bEx
     return QString("ATAPI:%1").arg(dev->blockDeviceName());
 }
 
+
+int K3b::writingAppFromString( const QString& s )
+{
+  if( s.lower() == "cdrdao" )
+    return K3b::CDRDAO;
+  else if( s.lower() == "cdrecord" )
+    return K3b::CDRECORD;
+  else if( s.lower() == "dvdrecord" )
+    return K3b::DVDRECORD;
+  else if( s.lower() == "growisofs" )
+    return K3b::GROWISOFS;
+  else if( s.lower() == "dvd+rw-format" )
+    return K3b::DVD_RW_FORMAT;
+  else
+    return K3b::DEFAULT;
+}
