@@ -26,7 +26,7 @@ class K3bDiskInfo
     device(0)
     { }
 
-  enum type { UNKNOWN, AUDIO, DATA, MIXED, DVD };
+  enum type { UNKNOWN, NODISC, AUDIO, DATA, MIXED, DVD };
 
   K3bToc toc;
   QString mediumManufactor;

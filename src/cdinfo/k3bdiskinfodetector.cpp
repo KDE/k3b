@@ -5,6 +5,7 @@
 #include "../rip/k3btcwrapper.h"
 #include "../k3b.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "../tools/k3bglobals.h"
 
 #include <kdebug.h>
 
@@ -57,80 +58,33 @@ void K3bDiskInfoDetector::finish(bool success)
 
 void K3bDiskInfoDetector::fetchDiskInfo()
 {
-  struct cdrom_generic_command cmd;
-// struct cdrom_generic_command
-// {
-//         unsigned char           cmd[CDROM_PACKET_SIZE];
-//         unsigned char           *buffer;
-//         unsigned int            buflen;
-//         int                     stat;
-//         struct request_sense    *sense;
-//         unsigned char           data_direction;
-//         int                     quiet;
-//         int                     timeout;
-//         void                    *reserved[1];
-// };
-
-
-  unsigned char inf[32];
-
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-  ::memset(inf,0,32);
-  cmd.cmd[0] = GPCMD_READ_DISC_INFO;
-  cmd.cmd[8] = 32;
-  cmd.buffer = inf;
-  cmd.buflen = 32;
-  cmd.data_direction = CGC_DATA_READ;
-//
-// Disc Information Block
-// ======================
-// Byte   0-1: Disk Information Length
-// Byte     2: Bits 0-1 Disc Status: 0-empty,1-appendable,2-complete,3-other
-//             Bits 2-3 State of last Session: 0-empty,1-incomplete,2-reserved,3-complete
-//             Bit    4 Erasable, 1-cd-rw present
-//             Bits 5-7 Reserved
-// Byte     3: Number of first Track on Disk
-// Byte     4: Number of Sessions (LSB)
-// Byte     5: First Track in Last Session (LSB)
-// Byte     6: Last Track in Last Session (LSB)
-// Byte     7: Bits 0-4 Reserved
-//             Bit    5 URU Unrestricted Use Bit
-//             Bit    6 DBC_V Disc Bar Code Field is Valid 
-//             Bit    7 DID_V Disc Id Field is valid
-// Byte     8: Disc Type: 0x00 CD-DA or CD-ROM, 0x10 CD-I, 0x20 CD-ROM XA, 0xFF undefined
-//                        all other values reserved
-// Byte     9: Number of Sessions (MSB)
-// Byte    10: First Track in Last Session (MSB)
-// Byte    11: Last Track in Last Session (MSB)
-// Byte 12-15: Disc Identification
-// Byte 16-19: Last Session Lead-In Start Time MSF (16-MSB 19-LSB)
-// Byte 20-23: Last Possible Start Time for Start of Lead-Out MSF (20-MSB 23-LSB)
-// Byte 24-31: Disc Bar Code
-//        
-  if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-    m_info.appendable = ( (inf[2] & 0x03) < 2 );        // disc empty or incomplete
-    m_info.empty = ( (inf[2] & 0x03) == 0 );
-    m_info.cdrw =( ((inf[2] >> 4 ) & 0x01) == 1 );      // erasable
-    if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) {
-      m_info.size = inf[21]*4500 + inf[22]*75 +inf[23] - 150;
-      m_info.sizeString = QString("%1:%2:%3").arg(inf[21]).arg(inf[22]).arg(inf[23]);
+  int empty = m_device->isEmpty();        
+  m_info.appendable = (empty < 2);
+  m_info.empty = (empty == 0);
+  m_info.cdrw = (m_device->rewritable() == 1);
+  int size = m_device->discSize();
+  if ( size != -1 ) {
+    m_info.size = ((size >> 16) & 0xFF)*4500 + ((size >> 8) & 0xFF)*75 + (size & 0xFF) - 150;
+    m_info.sizeString = K3b::framesToString(m_info.size);
+  }
+  if ( m_info.empty ) {
+    m_info.remaining = m_info.size;
+    m_info.remainingString = m_info.sizeString;
+  } else {
+    size = m_device->remainingSize();
+    if ( size != -1 ) {
+      m_info.remaining = m_info.size - ((size >> 16) & 0xFF)*4500 - ((size >> 8) & 0xFF)*75 - (size & 0xFF) - 4650;
+      m_info.remainingString = K3b::framesToString(m_info.remaining);
     }
-    if (m_info.empty) {
-      m_info.remaining = m_info.size;
-      m_info.remainingString = m_info.sizeString;
-    } else if ( inf[17] != 0xFF && inf[18] != 0xFF && inf[19] != 0xFF ) { // start of last leadin - 4650
-      m_info.remaining = m_info.size - inf[17]*4500 - inf[18]*75 - inf[19] - 4650;
-      m_info.remainingString = QString("%1:%2:%3").arg(inf[17]).arg(inf[18]).arg(inf[19]);
-    }
-  } else
-    kdDebug() << "(K3bDiskInfoDetector) could not get disk info !" << endl;
+  }
+
 }
 
 void K3bDiskInfoDetector::fetchTocInfo()
 {
   struct cdrom_tochdr tochdr;
   struct cdrom_tocentry tocentry;
-  int status;
+
   if ( (m_cdfd = ::open(m_device->ioctlDevice().latin1(),O_RDONLY | O_NONBLOCK)) == -1 ) {
     kdDebug() << "(K3bDiskInfoDetector) could not open device !" << endl;
     m_info.valid=false;
@@ -138,52 +92,21 @@ void K3bDiskInfoDetector::fetchTocInfo()
     return;
   }
   
-  if ( (status = ::ioctl(m_cdfd,CDROM_DISC_STATUS)) >= 0 )
-    switch (status) {
-      case CDS_AUDIO:   m_info.tocType = K3bDiskInfo::AUDIO;
-                        break;
-      case CDS_DATA_1:
-      case CDS_DATA_2:  m_info.tocType = K3bDiskInfo::DATA;
-                        break;
-      case CDS_XA_2_1: 
-      case CDS_XA_2_2: 
-      case CDS_MIXED:   m_info.tocType = K3bDiskInfo::MIXED;
-                        break;
-      case CDS_NO_DISC: finish(true);
-                        return;  
-      case CDS_NO_INFO: m_info.noDisk = false;
-                        if (m_info.device->burner())
-                           fetchDiskInfo();
-                        finish(true);
-                        return;  
-  } else 
-     kdDebug() << "(K3bDiskInfoDetector) disc status is " << status << " !" << endl;   
-  
+  m_info.tocType = m_device->diskType();
+  if ( m_info.tocType == K3bDiskInfo::NODISC ) {
+     finish(true);
+     return;
+  } else if (m_info.tocType == K3bDiskInfo::UNKNOWN ) {
+     m_info.noDisk = false;
+     if (m_info.device->burner())
+        fetchDiskInfo();
+     finish(true);
+     return;  
+  }
   m_info.noDisk = false;
   
-  struct cdrom_generic_command cmd;
-  unsigned char dat[4];
+  m_info.sessions = m_device->numSessions();
 
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-  ::memset(dat,0,4);
-  cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP; 
-// Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-  cmd.cmd[2] = 1; 
-  cmd.cmd[8] = 4;
-  cmd.buffer = dat;
-  cmd.buflen = 4;
-  cmd.data_direction = CGC_DATA_READ;
-//
-// Session Info
-// ============
-// Byte 0-1: Data Length
-// Byte   2: First Complete Session Number (Hex) - always 1
-// Byte   3: Last Complete Session Number (Hex)
-//
-  if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 )
-     m_info.sessions = dat[3];
-  else 
-    kdDebug() << "(K3bDiskInfoDetector) could not get session info !" << endl;
 // 
 // CDROMREADTOCHDR ioctl returns: 
 // cdth_trk0: First Track Number
