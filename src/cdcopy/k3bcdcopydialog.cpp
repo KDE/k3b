@@ -186,14 +186,9 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   // ToolTips
   // --------------------------------------------------------------------------------
   QToolTip::add( m_checkFastToc, i18n("Do not extract pre-gaps and index marks") );
-  QToolTip::add( m_checkSimulate, i18n("Only simulate the writing process") );
-  QToolTip::add( m_checkOnTheFly, i18n("Copy directly without creating an image") );
-  QToolTip::add( m_checkDeleteImages, i18n("Remove images from harddisk when finished") );
-  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an image of the disk, no writing") );
   QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicatey") );
   QToolTip::add( m_spinCopies, i18n("Number of copies") );
   QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
-  QToolTip::add( m_comboParanoiaMode, i18n("Set the paranoia level when reading audio cds") );
   QToolTip::add( m_comboSubchanMode, i18n("Set the sub-channel data to be extracted") );
   QToolTip::add( m_checkTaoSource, i18n("Set this for discs written in TAO mode") );
   QToolTip::add( m_spinTaoSourceAdjust, i18n("Set the number of link blocks for TAO sources") );
@@ -206,21 +201,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					"on an audio CD."
 					"<p><b>Caution:</b> This may result in faster reading but does not guarantee "
 					"an exact copy.") );
-  QWhatsThis::add( m_checkSimulate, i18n("<p>If this option is checked K3b will perform all writing steps with the "
-					 "laser turned off."
-					 "<p>This is useful, for example, to test a higher writing speed "
-					 "or if your system is able to write on-the-fly.") );
-  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will copy directly from the CD reader to the "
-					 "writer without creating an image first."
-					 "<p><b>Caution:</b> This may result in buffer underruns on slow systems. "
-					 "It is not recommended to use this if the reader "
-					 "and writer are connected to the same IDE bus.")
-					 + i18n("<p>It is recommended to try a simulation first.") );
-  QWhatsThis::add( m_checkDeleteImages, i18n("<p>If this option is checked K3b will remove any created images after the "
-					     "writing has finished."
-					     "<p>Uncheck this if you want to keep the images.") );
-  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked K3b will only create an image of the disk "
-    						"without writing an actual copy.") );
   QWhatsThis::add( m_comboSourceDevice, i18n("<p>Here you should select the drive which contains the CD to copy.") );
   QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the CD.") );
   QWhatsThis::add( m_checkRawCopy, i18n("<p>If this option is checked, K3b will write all data sectors as 2352 byte "
@@ -228,14 +208,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					"with reading data cds."
 					"<p>Has no effect on audio cds."
 					"<p>Does not work in on-the-fly mode.") );
-  QWhatsThis::add( m_comboParanoiaMode, i18n("<p>Sets the correction mode for digital audio extraction."
-					    "<ul><li>0: No checking, data is copied directly from the drive. "
-					    "This should work with all current drives as they include their own "
-					    "hardware based correction.</li>"
-					    "<li>1: Perform overlapped reading to avoid jitter.</li>"
-					    "<li>2: Like 1 but with additional checks of the read audio data.</li>"
-					    "<li>3: Like 2 but with additional scratch detection and repair.</li></ul>"
-					    "<p><b>The extraction speed reduces from 0 to 3.</b>") );
   QWhatsThis::add( m_comboSubchanMode, i18n("<p>Specifies the type of sub-channel data " 
               "that is extracted from the source CD."
               "<ul><li><b>rw</b>: packed R-W sub-channel data, deinterleaved and error corrected.</li>"
