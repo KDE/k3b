@@ -309,7 +309,7 @@ void K3bProjectBurnDialog::readSettings()
 
 void K3bProjectBurnDialog::slotSaveUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
 
   c->setGroup( "General Options" );
   c->writePathEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
@@ -331,7 +331,7 @@ void K3bProjectBurnDialog::slotLoadUserDefaults()
 {
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
 
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "default " + doc()->documentType() + " settings" );
 
   m_writingModeWidget->loadConfig( c );

@@ -41,7 +41,6 @@
 
 K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bAbstractWriter( dev, parent, name ),
-    m_rawWrite(false),
     m_stdin(false),
     m_clone(false)
 {
@@ -461,7 +460,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.startsWith( "Writing lead-in" ) ) {
     m_totalTracksParsed = true;
-    emit newSubTask( i18n("Writing lead-in") );
+    emit newSubTask( i18n("Writing Leadin") );
+  }
+  else if( line.startsWith( "Writing Leadout") ) {
+    emit newSubTask( i18n("Writing Leadout") );
   }
   else if( line.startsWith( "Writing pregap" ) ) {
     emit newSubTask( i18n("Writing pregap") );

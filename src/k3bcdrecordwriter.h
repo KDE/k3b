@@ -52,7 +52,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void cancel();
 
   void setDao( bool b );
-  void setRawWrite( bool b ) { m_rawWrite = b; }
   void setProvideStdin( bool b ) { m_stdin = b; }
   void setWritingMode( int );
   void setCueFile( const QString& s);
@@ -69,7 +68,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   K3bProcess* m_process;
 
   int m_writingMode;
-  bool m_rawWrite;
   bool m_stdin;
   bool m_totalTracksParsed;
   bool m_clone;

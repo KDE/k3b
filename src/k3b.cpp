@@ -84,7 +84,7 @@
 #include "k3bfiletreeview.h"
 #include "k3bstdguiitems.h"
 #include "dvd/k3bdvdformattingdialog.h"
-
+#include "cdclone/k3bclonedialog.h"
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -260,6 +260,9 @@ void K3bMainWindow::initActions()
 
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
+
+  (void)new KAction(i18n("C&lone CD..."), "cdcopy", 0, this, SLOT(slotCdClone()),
+		    actionCollection(), "tools_clone_cd" );
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
@@ -1135,6 +1138,13 @@ void K3bMainWindow::slotK3bSetup()
 void K3bMainWindow::slotCdCopy()
 {
   K3bCdCopyDialog d( this );
+  d.exec();
+}
+
+
+void K3bMainWindow::slotCdClone()
+{
+  K3bCloneDialog d( this );
   d.exec();
 }
 

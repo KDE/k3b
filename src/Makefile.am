@@ -8,15 +8,16 @@ k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp
 			k3bgrowisofswriter.cpp \
 			k3babstractwriter.cpp \
 			k3bcdrdaowriter.cpp \
+			k3breadcdreader.cpp \
 			k3bjobprogressdialog.cpp k3binteractiondialog.cpp \
 			k3bjobprogresssystemtray.cpp k3bsystemproblemdialog.cpp \
 			k3bdevicecombobox.cpp \
 			k3binterface.cpp k3binterface.skel \
 			k3bprojectinterface.cpp k3bprojectinterface.skel
 
-k3b_LDADD   = ./data/libdata.la ./dvd/libdvd.la ./mixed/libmixed.la ./vcd/libvcd.la ./movix/libmovix.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./tools/kostore/libkostore.la ./cdcopy/libcdcopy.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la $(OGG_VORBISLIBS) -lartskde -lkio -lkparts ./core/libk3bcore.la $(RESMGR_LIB)
+k3b_LDADD   = ./data/libdata.la ./dvd/libdvd.la ./mixed/libmixed.la ./vcd/libvcd.la ./movix/libmovix.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./tools/kostore/libkostore.la ./cdcopy/libcdcopy.la ./cdclone/libcdclone.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la $(OGG_VORBISLIBS) -lartskde -lkio -lkparts ./core/libk3bcore.la $(RESMGR_LIB)
 
-SUBDIRS = core tools cddb data dvd audio mixed vcd movix cdinfo option rip cdcopy videoEncoding pics icons konqi mimetypes plugin k3bsetup
+SUBDIRS = core tools cddb data dvd audio mixed vcd movix cdinfo option rip cdcopy cdclone videoEncoding pics icons konqi mimetypes plugin k3bsetup
 
 EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bui.rc k3b.desktop k3bdirview.cpp k3bdirview.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3bprojectburndialog.cpp k3bprojectburndialog.h kcutlabel.cpp kcutlabel.h k3bfileview.cpp k3bfileview.h k3bblankingdialog.cpp k3bblankingdialog.h k3bblankingjob.cpp k3bblankingjob.h k3bsplash.h k3bsplash.cpp k3bwriterselectionwidget.cpp k3bwriterselectionwidget.h k3bprojecttabwidget.cpp k3bprojecttabwidget.h k3bprojecttabbar.cpp k3bprojecttabbar.h k3baudioplayer.cpp k3baudioplayer.h k3bcddbmultientriesdialog.cpp k3bcddbmultientriesdialog.h k3bfiletreeview.cpp k3bfiletreeview.h k3bcdcontentsview.h k3btempdirselectionwidget.cpp k3btempdirselectionwidget.h kdndfileview.cpp kdndfileview.h k3bdiroperator.cpp k3bdiroperator.h k3btoolbox.h k3btoolbox.cpp
 

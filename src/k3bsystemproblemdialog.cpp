@@ -198,6 +198,18 @@ void K3bSystemProblemDialog::checkSystem()
 				       true ) );
   }
 
+
+  if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
+    if( !readcdBin->hasFeature( "suidroot" ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("%1 does not run with root privileges").arg("readcd"),
+					 i18n("Readcd needs to run with root privileges "
+					      "to be able to access the cd devices unless "
+					      "using SuSE's resmgr with a patched readcd."),
+					 i18n("Use K3bSetup to solve this problem."),
+					 true ) );
+
+
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
     if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,

@@ -59,7 +59,7 @@ K3bErasingInfoDialog::~K3bErasingInfoDialog()
 
 void K3bErasingInfoDialog::slotFinished( bool success )
 {
-  if( m_progress )
+  if( !m_progress )
     m_busyWidget->showBusy( false );
 
   showButtonOK( true );

@@ -148,7 +148,25 @@ void K3bTempDirSelectionWidget::setTempPath( const QString& dir )
 
 QString K3bTempDirSelectionWidget::tempPath() const
 {
-  return m_editDirectory->url();
+  QFileInfo fi( m_editDirectory->url() );
+
+  if( fi.exists() ) {
+    if( m_mode == DIR ) {
+      if( fi.isDir() )
+	return fi.absFilePath();
+      else
+	return fi.dirPath( true );
+    }
+    else {
+      if( fi.isFile() )
+	return fi.absFilePath();
+      else
+	return fi.absFilePath() + "/k3b_image.img";
+    }
+  }
+  else {
+    return fi.absFilePath();
+  }
 }
 
 

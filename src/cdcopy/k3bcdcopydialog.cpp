@@ -318,9 +318,7 @@ void K3bCdCopyDialog::slotStartClicked()
   job->setForce(m_checkForce->isChecked());
 
   // create a progresswidget
-  K3bBurnProgressDialog d( this, "burnProgress", 
-			   true /*!m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked()*/,
-			   !m_checkOnlyCreateImage->isChecked() );
+  K3bBurnProgressDialog d( this );
 
   hide();
 
