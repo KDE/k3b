@@ -60,16 +60,17 @@ extern "C" {
 #define ID_PATTERN                 0
 #define ID_PLAYSONG              1
 
-K3bCdView::K3bCdView(QWidget *parent, const char *name=0)
-  : K3bCdContentsView(parent, name){
-
+K3bCdView::K3bCdView( QWidget* parent, const char *name )
+  : K3bCdContentsView( parent, name )
+{
   readSettings();
 
   setupGUI();
 }
 
-K3bCdView::~K3bCdView(){
 
+K3bCdView::~K3bCdView()
+{
   // FIXME: shouldn't these be QObjects?
   delete m_cddb;
   delete m_cdda;
@@ -123,7 +124,8 @@ void K3bCdView::setupGUI()
 }
 
 
-void K3bCdView::checkTitlesOnCd( ){
+void K3bCdView::checkTitlesOnCd( )
+{
   // read cddb settings each time to get changes in optiondialog
   applyOptions();
   // wait for signal updatedCD, to get really all information with getTitles()
@@ -131,7 +133,9 @@ void K3bCdView::checkTitlesOnCd( ){
   m_cddb->updateCD( m_drive );
 }
 
-void K3bCdView::slotCheckView(){
+
+void K3bCdView::slotCheckView()
+{
   qDebug("(K3bCdView) Check CD type (Audio, Audio/Data).");
   m_titles = m_cddb->getTitles();
   int type = checkCDType( m_titles );
@@ -154,30 +158,39 @@ void K3bCdView::slotCheckView(){
   }
 }
 
-void K3bCdView::showCdContent( ){
-    m_listView->clear();
-    m_album = m_cddb->getAlbum();
-    // print it out
-    int no = 1;
-    // raw file length (wav has +44 byte header data)
-    //long totalByteCount = 0;
-    QString filename;
-    int arraySize = m_titles.count();
-    m_size = new QArray<long>( arraySize );
-    for ( QStringList::Iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
-        m_size->at(no-1) = m_cdda->getRawTrackSize(no, m_drive);
-        if( m_usePattern ){
-            filename = m_parser->prepareFilename( *it, no );
-            filename = K3bPatternParser::prepareReplaceFilename( filename );
-        } else {
-            filename =  KIO::decodeFileName(*it) + ".wav";
-        }
-        // add item to cdViewItem
-        long length = m_size->at(no-1);
-        addItem(no, m_cddb->getArtist(), KIO::decodeFileName(*it), K3b::sizeToTime( length ), length, filename);
-        no++;
+
+void K3bCdView::showCdContent( )
+{
+  m_listView->clear();
+  m_album = m_cddb->getAlbum();
+
+  // print it out
+  int no = 1;
+
+  // raw file length (wav has +44 byte header data)
+  // long totalByteCount = 0;
+
+  QString filename;
+  int arraySize = m_titles.count();
+  m_size.resize( arraySize );
+  for ( QStringList::const_iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
+    m_size.at(no-1) = m_cdda->getRawTrackSize( no, m_drive );
+
+    if( m_usePattern ) {
+      filename = m_parser->prepareFilename( *it, no );
+      filename = K3bPatternParser::prepareReplaceFilename( filename );
+    } 
+    else {
+      filename =  KIO::decodeFileName(*it) + ".wav";
     }
+
+    // add item to cdViewItem
+    long& length = m_size.at(no-1);
+    addItem( no, m_cddb->getArtist(), KIO::decodeFileName(*it), K3b::sizeToTime( length ), length, filename );
+    no++;
+  }
 }
+
 
 void K3bCdView::showCdView( K3bDevice* device )
 {
@@ -187,7 +200,8 @@ void K3bCdView::showCdView( K3bDevice* device )
   }
 }
 
-void K3bCdView::readSettings( ){
+void K3bCdView::readSettings( )
+{
   KConfig* c = kapp->config();
   c->setGroup("Ripping");
   m_usePattern = c->readBoolEntry("usePattern", false);
@@ -197,12 +211,14 @@ void K3bCdView::readSettings( ){
   m_dirPatternList += c->readEntry("dirGroup2");
 }
 
+
 // ===========  slots ==============
-void K3bCdView::reload(){
+void K3bCdView::reload()
+{
   readSettings();
   // clear old entries
   m_listView->clear();
-  m_drive = m_cdda->pickDrive(m_device );
+  m_drive = m_cdda->pickDrive( m_device );
   int result = K3bCdda::driveType( m_drive );
   qDebug("(K3bCdView) CD type: (Audio=0, Data/DVD=1, Audio/Data=2) %i", result );
   if( result == 0 || result == 2 ){
@@ -215,7 +231,9 @@ void K3bCdView::reload(){
   }
 }
 
-void K3bCdView::slotMenuItemActivated(int itemId){
+
+void K3bCdView::slotMenuItemActivated(int itemId)
+{
   switch( itemId ){
   case ID_PATTERN: {
     /*K3bFilenamePatternDialog *_dialog = new K3bFilenamePatternDialog(this);
@@ -230,7 +248,9 @@ void K3bCdView::slotMenuItemActivated(int itemId){
   }
 }
 
-void K3bCdView::play(){
+
+void K3bCdView::play()
+{
   qDebug("(K3bCdView) play");
   // the sgx devices dont work, must use the real device i.e sr0, scd0
   //    cd_device = (char *)qstrdup(QFile::encodeName("/dev/cdrom"));
@@ -327,7 +347,9 @@ void K3bCdView::slotMenuActivated( QListViewItem *_item, const QPoint &point, in
   */
 }
 
-void K3bCdView::changeSelectionMode(){
+
+void K3bCdView::changeSelectionMode()
+{
   if (m_listView->selectionMode() == QListView::Multi ){
     m_listView->setSelectionMode(QListView::Extended);
   } else {
@@ -335,7 +357,9 @@ void K3bCdView::changeSelectionMode(){
   }
 }
 
-void K3bCdView::prepareRipping(){
+
+void K3bCdView::prepareRipping()
+{
   QPtrList<QListViewItem> selectedList = m_listView->selectedItems();
   if( selectedList.isEmpty() ){
     QMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("Ok") );
@@ -354,7 +378,7 @@ void K3bCdView::prepareRipping(){
   for ( item=selectedList.first(); item != 0; item=selectedList.next() ){
     filelist.append( item->text(COLUMN_FILENAME) );
     tracklist[index] = item->text(COLUMN_NUMBER).toInt();
-    sizelist[index] = m_size->at(item->text(COLUMN_NUMBER).toInt()-1 );
+    sizelist[index] = m_size.at(item->text(COLUMN_NUMBER).toInt()-1 );
     index++;
     qDebug("(K3bCdView) add song.");
     rip->addTrack( item );
@@ -365,11 +389,13 @@ void K3bCdView::prepareRipping(){
   //this->setDisabled(true);
 }
 
-int  K3bCdView::checkCDType( QStringList titles ){
-  unsigned int dataIndex=0;
-  unsigned int audioIndex=0;
 
-  for ( QStringList::Iterator it = titles.begin(); it != titles.end(); ++it ) {
+int K3bCdView::checkCDType( const QStringList& titles )
+{
+  unsigned int dataIndex = 0;
+  unsigned int audioIndex = 0;
+
+  for ( QStringList::const_iterator it = titles.begin(); it != titles.end(); ++it ) {
     if( (*it).find("data") >=0 )
       ++dataIndex;
     else
@@ -385,20 +411,20 @@ int  K3bCdView::checkCDType( QStringList titles ){
   }
 }
 
+
+
 //  helpers
 // -----------------------------------------
-void K3bCdView::addItem(int no, QString artist, QString title, QString time, long length, QString filename){
-  QString number;
-  QString size;
-  if (no < 10)
-    number = "0" + QString::number(no);
-  else
-    number = QString::number(no);
-  size = QString::number( (double) length / 1000000, 'g', 3) + " MB";
-  KListViewItem *song = new KListViewItem(m_listView, number, artist, title, time, size, filename);
+void K3bCdView::addItem( int no, const QString& artist, const QString& title, 
+			 const QString& time, long length, const QString& filename )
+{
+  KListViewItem *song = new KListViewItem( m_listView, QString::number(no).rightJustify( 2, '0' ), 
+					   artist, title, time, KIO::convertSize( length ), filename );
 }
 
-void K3bCdView::applyOptions(){
+
+void K3bCdView::applyOptions()
+{
   KConfig *c = kapp->config();
   c->setGroup("Cddb");
   bool useCddb = c->readBoolEntry("useCddb", false);
@@ -411,5 +437,6 @@ void K3bCdView::applyOptions(){
   m_cddb->setPort(port);
   m_cddb->setUseCddb(useCddb);
 }
+
 
 #include "k3bcdview.moc"

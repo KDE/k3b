@@ -24,7 +24,7 @@
 
 #include "../k3bcdcontentsview.h"
 
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qstringlist.h>
 
 //extern "C" {
@@ -79,7 +79,7 @@ class K3bCdView : public K3bCdContentsView
   QString m_device;
   QString m_album;
   QStringList m_titles;
-  QArray<long> *m_size;
+  QMemArray<long> m_size;
   K3bPatternParser *m_parser;
   bool m_initialized;
   //bool m_useFilePattern;
@@ -90,13 +90,13 @@ class K3bCdView : public K3bCdContentsView
 
   KActionCollection* m_actionCollection;
 
-  void addItem(int, QString, QString, QString, long, QString);
+  void addItem( int, const QString&, const QString&, const QString&, long, const QString& );
   //QString prepareFilename(QString);
   void setupGUI();
   void applyOptions();
   void checkTitlesOnCd( );
   //void askForView();
-  int checkCDType(QStringList titles);
+  int checkCDType( const QStringList& titles);
   void readSettings();
   //QString prepareDirectory( QListViewItem *item );
   //QString getRealDirectory(int, QListViewItem* );

@@ -219,12 +219,20 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 
 void K3bAudioJob::createCdrdaoProgress( int made, int size )
 {
+  if( size == 0 ) {
+    qDebug("(K3bAudioJob) got progress: %i, %i", made, size );
+    return;
+  }
+
   double f = (double)size / (double)m_doc->size();
   // calculate track progress
   int trackMade = (int)( (double)made -f*(double)m_bytesFinishedTracks );
   int trackSize = (int)( f * (double)m_currentWrittenTrack->size() );
   emit processedSubSize( trackMade, trackSize );
-  emit subPercent( 100*trackMade / trackSize );
+  if( trackSize > 0 )
+    emit subPercent( 100*trackMade / trackSize );
+  else
+    qDebug("(K3bAudioJob) got trackSize %i", trackSize );
   
   emit processedSize( made, size );
   if( !m_onTheFly ) {
