@@ -107,10 +107,13 @@ int main( int argc, char* argv[] )
   // I have no idea why.... it does not use kapp)
   K3bApplication app;
 
+  app.config()->setGroup( "General Options" );
+
   //
   // In case no unblocked instance of K3b was found we create a new one.
   //
-  if( !K3bSmartInstanceReuser::reuseInstance(args) ) {
+  if( app.config()->readEntry( "Multiple Instances", "smart" ) == "always_new" ||
+      !K3bSmartInstanceReuser::reuseInstance(args) ) {
 
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
@@ -118,7 +121,6 @@ int main( int argc, char* argv[] )
 		  << " current is: " << KGlobal::locale()->language() << endl;
 
 
-    app.config()->setGroup( "General Options" );
     K3bSplash* splash = 0;
     if( app.config()->readBoolEntry("Show splash", true) ) {
       splash = new K3bSplash( 0 );

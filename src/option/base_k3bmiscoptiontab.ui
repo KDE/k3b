@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bMiscOptionTab</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>480</height>
+            <width>207</width>
+            <height>311</height>
         </rect>
     </property>
     <property name="caption">
@@ -78,14 +78,6 @@
             <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>1</verstretch>
-                </sizepolicy>
-            </property>
             <property name="title">
                 <string>GUI Settings</string>
             </property>
@@ -131,12 +123,66 @@
                 </widget>
             </vbox>
         </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>m_groupMultipleInstances</cstring>
+            </property>
+            <property name="title">
+                <string>Multiple Instances</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioMultipleInstancesSmart</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Smart (reuse idle K3b instances)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will try to reuse already running Instances if the user attempts to start a new one.
+&lt;p&gt;&lt;em&gt;Example:&lt;/em&gt; An instance of K3b is running on another desktop and the user right clicks an iso image to burn it with K3b. Then the running instance will be moved to the current desktop and used to burn that iso image.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioMultipleInstancesNew</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Always create new instance</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will always start a new instance regardless of whether another idle instance is already running or not.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>31</width>
+                    <height>71</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

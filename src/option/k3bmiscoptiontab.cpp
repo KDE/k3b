@@ -18,6 +18,7 @@
 
 #include <qcheckbox.h>
 #include <qfileinfo.h>
+#include <qradiobutton.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -51,6 +52,11 @@ void K3bMiscOptionTab::readSettings()
 
   QString tempdir = c->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   m_editTempDir->setURL( tempdir );
+
+  if( c->readEntry( "Multiple Instances", "smart" ) == "smart" )
+    m_radioMultipleInstancesSmart->setChecked(true);
+  else
+    m_radioMultipleInstancesNew->setChecked(true);
 }
 
 
@@ -100,6 +106,11 @@ bool K3bMiscOptionTab::saveSettings()
   m_editTempDir->setURL( fi.absFilePath() );
 
   c->writePathEntry( "Temp Dir", m_editTempDir->url() );
+
+  if( m_radioMultipleInstancesSmart->isChecked() )
+    c->writeEntry( "Multiple Instances", "smart" );
+  else
+    c->writeEntry( "Multiple Instances", "always_new" );
 
   return true;
 }
