@@ -19,6 +19,7 @@
 #include <cmath>
 #include <cstdlib>
 
+
 typedef unsigned char k3b_mad_char;
 
 
@@ -86,6 +87,12 @@ void K3bMp3Module::initializeDecoding()
   m_rawDataAlreadyStreamed = 0;
   m_rawDataLengthToStream = audioTrack()->size();
   m_bEndOfInput = false;
+
+  // reset the resampling status structures
+  m_madResampledStepLeft = 0;
+  m_madResampledLastLeft = 0;
+  m_madResampledStepRight = 0;
+  m_madResampledLastRight = 0;
 }
 
 
@@ -101,9 +108,6 @@ void K3bMp3Module::startDecoding()
     mad_frame_init( m_madFrame );
     mad_synth_init( m_madSynth );
 
-    m_madResampledStep = 0;
-    m_madResampledLast = 0;
-    
     m_decodingTimer->start(0);
 
     kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << " frames." << endl;
@@ -431,7 +435,6 @@ void K3bMp3Module::createPcmSamples( mad_synth* synth )
   mad_fixed_t* rightChannel = synth->pcm.samples[1];
   unsigned short nsamples = synth->pcm.length;
 
-
   // check if we need to resample
   if( synth->pcm.samplerate != 44100 ) {
 
@@ -475,8 +478,10 @@ void K3bMp3Module::createPcmSamples( mad_synth* synth )
     }
 
 
-    resampleBlock( leftChannel, synth->pcm.length, m_madResampledLeftChannel );
-    nsamples = resampleBlock( rightChannel, synth->pcm.length, m_madResampledRightChannel );
+    resampleBlock( leftChannel, synth->pcm.length, m_madResampledLeftChannel, m_madResampledLastLeft, 
+		   m_madResampledStepLeft );
+    nsamples = resampleBlock( rightChannel, synth->pcm.length, m_madResampledRightChannel, 
+			      m_madResampledLastRight, m_madResampledStepRight );
 
     leftChannel = m_madResampledLeftChannel;
     rightChannel = m_madResampledRightChannel;
@@ -515,7 +520,9 @@ void K3bMp3Module::createPcmSamples( mad_synth* synth )
 
 unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source, 
 					  unsigned int nsamples,
-					  mad_fixed_t* target )
+					  mad_fixed_t* target,
+					  mad_fixed_t& last,
+					  mad_fixed_t& step )
 {
   /*
    * This resampling algorithm is based on a linear interpolation, which is
@@ -532,42 +539,42 @@ unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source,
   end   = source + nsamples;
   begin = target;
 
-  if (m_madResampledStep < 0) {
-    m_madResampledStep = mad_f_fracpart(-m_madResampledStep);
+  if (step < 0) {
+    step = mad_f_fracpart(-step);
 
-    while (m_madResampledStep < MAD_F_ONE) {
-      *target++ = m_madResampledStep ?
-	m_madResampledLast + mad_f_mul(*source - m_madResampledLast, m_madResampledStep) 
-	: m_madResampledLast;
+    while (step < MAD_F_ONE) {
+       *target++ = step ?
+ 	last + mad_f_mul(*source - last, step) 
+ 	: last;
 
-      m_madResampledStep += m_madResampledRatio;
-      if (((m_madResampledStep + 0x00000080L) & 0x0fffff00L) == 0)
-	m_madResampledStep = (m_madResampledStep + 0x00000080L) & ~0x0fffffffL;
+       step += m_madResampledRatio;
+      if (((step + 0x00000080L) & 0x0fffff00L) == 0)
+	step = (step + 0x00000080L) & ~0x0fffffffL;
     }
 
-    m_madResampledStep -= MAD_F_ONE;
+    step -= MAD_F_ONE;
   }
 
 
-  while (end - source > 1 + mad_f_intpart(m_madResampledStep)) {
-    source += mad_f_intpart(m_madResampledStep);
-    m_madResampledStep = mad_f_fracpart(m_madResampledStep);
+  while (end - source > 1 + mad_f_intpart(step)) {
+    source += mad_f_intpart(step);
+    step = mad_f_fracpart(step);
 
-    *target++ = m_madResampledStep ?
-      *source + mad_f_mul(source[1] - source[0], m_madResampledStep) 
+    *target++ = step ?
+      *source + mad_f_mul(source[1] - source[0], step) 
       : *source;
 
-    m_madResampledStep += m_madResampledRatio;
-    if (((m_madResampledStep + 0x00000080L) & 0x0fffff00L) == 0)
-      m_madResampledStep = (m_madResampledStep + 0x00000080L) & ~0x0fffffffL;
+    step += m_madResampledRatio;
+    if (((step + 0x00000080L) & 0x0fffff00L) == 0)
+      step = (step + 0x00000080L) & ~0x0fffffffL;
   }
 
-  if (end - source == 1 + mad_f_intpart(m_madResampledStep)) {
-    m_madResampledLast = end[-1];
-    m_madResampledStep = -m_madResampledStep;
+  if (end - source == 1 + mad_f_intpart(step)) {
+    last = end[-1];
+    step = -step;
   }
   else
-    m_madResampledStep -= mad_f_fromint(end - source);
+    step -= mad_f_fromint(end - source);
   
   return target - begin;
 }

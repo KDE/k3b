@@ -42,7 +42,9 @@ class K3bMp3Module : public K3bAudioModule
   void createPcmSamples( mad_synth* );
   unsigned int resampleBlock( mad_fixed_t const *source, 
 			      unsigned int nsamples, 
-			      mad_fixed_t* target );
+			      mad_fixed_t* target,
+			      mad_fixed_t& last,
+			      mad_fixed_t& step );
 
   bool m_bDecodingInProgress;
   bool m_bCountingFramesInProgress;
@@ -62,12 +64,20 @@ class K3bMp3Module : public K3bAudioModule
   mad_timer_t*  m_madTimer;
 
   // needed for resampling
+  // ----------------------------------
   bool m_bFrameNeedsResampling;
-  mad_fixed_t m_madResampledStep;
-  mad_fixed_t m_madResampledLast;
   mad_fixed_t m_madResampledRatio;
+
+  // left channel
+  mad_fixed_t m_madResampledStepLeft;
+  mad_fixed_t m_madResampledLastLeft;
   mad_fixed_t* m_madResampledLeftChannel;
+
+  // right channel
+  mad_fixed_t m_madResampledStepRight;
+  mad_fixed_t m_madResampledLastRight;
   mad_fixed_t* m_madResampledRightChannel;
+  // ----------------------------------
 
   unsigned long m_frameCount;
 
