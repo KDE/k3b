@@ -134,9 +134,20 @@ void K3bIsoImageWritingDialog::setupGui()
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( d->dvd, frame );
 
+
+  // options
+  // -----------------------------------------------------------------------
+  QTabWidget* optionTabbed = new QTabWidget( frame );
+
+  QWidget* optionTab = new QWidget( optionTabbed );
+  QGridLayout* groupOptionsLayout = new QGridLayout( optionTab );
+  groupOptionsLayout->setAlignment( Qt::AlignTop );
+  groupOptionsLayout->setSpacing( spacingHint() );
+  groupOptionsLayout->setMargin( marginHint() );
+
   // image group box
   // -----------------------------------------------------------------------
-  QGroupBox* groupImage = new QGroupBox( 2, Qt::Horizontal, i18n("Image to Burn"), frame );
+  QGroupBox* groupImage = new QGroupBox( 2, Qt::Horizontal, i18n("Image to Burn"), optionTab );
   m_editImagePath = new KURLRequester( groupImage );
   m_editImagePath->setCaption( i18n("Choose ISO Image File or cue/bin Combination") );
   QString filter = i18n("*.iso|ISO9660 Image Files");
@@ -158,17 +169,6 @@ void K3bIsoImageWritingDialog::setupGui()
 	   this, SLOT(slotMd5SumCompare()) );
   // -----------------------------------------------------------------------
 
-
-  // options
-  // -----------------------------------------------------------------------
-  QTabWidget* optionTabbed = new QTabWidget( frame );
-
-  QWidget* optionTab = new QWidget( optionTabbed );
-  QGridLayout* groupOptionsLayout = new QGridLayout( optionTab );
-  groupOptionsLayout->setAlignment( Qt::AlignTop );
-  groupOptionsLayout->setSpacing( spacingHint() );
-  groupOptionsLayout->setMargin( marginHint() );
-
   QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
@@ -185,7 +185,8 @@ void K3bIsoImageWritingDialog::setupGui()
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
   groupOptionsLayout->addWidget( writingModeGroup, 0, 0 );
-  groupOptionsLayout->addWidget( optionGroup, 0, 1 );
+  groupOptionsLayout->addWidget( optionGroup, 1, 0 );
+  groupOptionsLayout->addMultiCellWidget( groupImage, 0, 1, 1, 1 );
   groupOptionsLayout->setRowStretch( 1, 1 );
   groupOptionsLayout->setColStretch( 1, 1 );
 
@@ -220,10 +221,10 @@ void K3bIsoImageWritingDialog::setupGui()
   grid->setMargin( 0 );
 
   grid->addWidget( m_writerSelectionWidget, 0, 0 );
-  grid->addWidget( groupImage, 1, 0 );
-  grid->addWidget( optionTabbed, 2, 0 );
+  //  grid->addWidget( groupImage, 1, 0 );
+  grid->addWidget( optionTabbed, 1, 0 );
 
-  grid->setRowStretch( 2, 1 );
+  grid->setRowStretch( 1, 1 );
 }
 
 
