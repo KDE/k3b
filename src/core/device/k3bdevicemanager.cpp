@@ -40,12 +40,19 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+
 /* Fix definitions for 2.5 kernels */
 #include <linux/version.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,21) 
+typedef unsigned long long __u64; 
+#endif
+
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
 typedef unsigned long long __u64;
 typedef unsigned char u8;
 #endif
+
 #include <linux/../scsi/scsi.h> /* cope with silly includes */
 #include <linux/cdrom.h>
 #include <linux/major.h>
