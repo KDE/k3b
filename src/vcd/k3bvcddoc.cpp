@@ -572,6 +572,8 @@ void K3bVcdDoc::loadDefaultSettings()
   // the group is set in K3bDoc
   KConfig* c = k3bMain() ->config();
 
+	// FIXME: The "Video project settings" not. Is this the wrog place?
+	c->setGroup( "Video project settings" );
   vcdOptions()->setPbcEnabled( c->readBoolEntry("Use Playback Control", false) );
   vcdOptions()->setPbcNumKeys( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
   vcdOptions()->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );

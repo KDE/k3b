@@ -100,7 +100,7 @@ class K3bVcdOptions
 
         void setPbcWaitTime( const int i ) { m_def_pbcwaittime = i; }
         int PbcWaitTime( ) { return m_def_pbcwaittime; }
-                        
+
         void setSegmentFolder( const bool& b ) { m_segmentfolder = b; }
         bool SegmentFolder() const { return m_segmentfolder; };
 
@@ -113,7 +113,7 @@ class K3bVcdOptions
         // pbc
         bool m_pbcenabled;
         bool m_pbcnumkeys;
-        
+
         // volume descriptor
         QString m_volumeID;
         QString m_albumID;

@@ -817,7 +817,7 @@ void K3bVcdTrackDialog::slotPlayTimeChanged( int value )
 
 void K3bVcdTrackDialog::slotWaitTimeChanged( int value )
 {
-    if ( value < 0 ) {
+    if ( value < 0 || !m_labelWait->isEnabled() ) {
         m_labelAfterTimeout->setEnabled( false );
         m_comboAfterTimeout->setEnabled( false );
     } else {

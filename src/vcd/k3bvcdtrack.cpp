@@ -44,6 +44,7 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
     }
 
     m_segment = false;
+		m_reactivity = false;
 }
 
 
