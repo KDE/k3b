@@ -64,6 +64,13 @@ bool K3bDevice::init()
   m_vendor = m_scsiIf->vendor();
   m_version = m_scsiIf->revision();
 
+
+  // I do not really understand this, but
+  // the max values are not usable!
+  m_maxWriteSpeed = currentWriteSpeed;
+  m_maxReadSpeed = currentReadSpeed;
+
+
   qDebug( "current write: %i, max write: %i", currentWriteSpeed, m_maxWriteSpeed );
 
   return true;
@@ -208,7 +215,7 @@ bool K3bDevice::cdCapacity( long* length )
   cmd[0] = 0x25; // READ CD-ROM CAPACITY
 
   if( m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, 8, 0) != 0 ) {
-    qDebug("(K3bDevice) Cannot read capacity of device " + m_devicename );
+    qDebug("(K3bDevice) Cannot read capacity of device " + devicename );
     return false;
   }
   
@@ -217,3 +224,137 @@ bool K3bDevice::cdCapacity( long* length )
 
   return true;
 }
+
+
+
+// taken from cdrdao GenericMMC driver
+// I think this should work for most of the cd drives out there
+// ------------------------------------------------------------
+// DiskInfo* K3bDevice::diskInfo()
+// {
+//   DiskInfo diskInfo_;
+//   unsigned char cmd[10];
+//   unsigned long dataLen = 34;
+//   unsigned char data[34];
+//   char spd;
+
+//   memset(&diskInfo_, 0, sizeof(DiskInfo));
+
+//   // perform READ DISK INFORMATION
+//   memset(cmd, 0, 10);
+//   memset(data, 0, dataLen);
+
+//   cmd[0] = 0x51; // READ DISK INFORMATION
+//   cmd[7] = dataLen >> 8;
+//   cmd[8] = dataLen;
+
+//   if (m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) == 0) {
+//     diskInfo_.cdrw = (data[2] & 0x10) ? 1 : 0;
+//     diskInfo_.valid.cdrw = 1;
+
+//     switch (data[2] & 0x03) {
+//     case 0:
+//       // disc is empty
+//       diskInfo_.empty = 1;
+//       diskInfo_.append = 1;
+
+//       diskInfo_.manufacturerId = Msf(data[17], data[18], data[19]);
+//       diskInfo_.valid.manufacturerId = 1;
+//       break;
+
+//     case 1:
+//       // disc is not empty but appendable
+//       diskInfo_.sessionCnt = data[4];
+//       diskInfo_.lastTrackNr = data[6];
+
+//       diskInfo_.diskTocType = data[8];
+
+//       switch ((data[2] >> 2) & 0x03) {
+//       case 0:
+// 	// last session is empty
+// 	diskInfo_.append = 1;
+
+// 	// don't count the empty session and invisible track
+// 	diskInfo_.sessionCnt -= 1;
+// 	diskInfo_.lastTrackNr -= 1;
+// 	break;
+
+//       case 1:
+// 	// last session is incomplete (not fixated)
+// 	// we cannot append in DAO mode, just update the statistic data
+	
+// 	diskInfo_.diskTocType = data[8];
+
+// 	// don't count the invisible track
+// 	diskInfo_.lastTrackNr -= 1;
+// 	break;
+//       }
+//       break;
+
+//     case 2:
+//       // disk is complete
+//       diskInfo_.sessionCnt = data[4];
+//       diskInfo_.lastTrackNr = data[6];
+//       diskInfo_.diskTocType = data[8];
+//       break;
+//     }
+
+//     diskInfo_.valid.empty = 1;
+//     diskInfo_.valid.append = 1;
+
+//     if (data[21] != 0xff || data[22] != 0xff || data[23] != 0xff) {
+//       diskInfo_.valid.capacity = 1;
+//       diskInfo_.capacity = Msf(data[21], data[22], data[23]).lba() - 150;
+//     }
+//   }
+
+//   // perform READ TOC to get session info
+//   memset(cmd, 0, 10);
+//   dataLen = 12;
+//   memset(data, 0, dataLen);
+
+//   cmd[0] = 0x43; // READ TOC
+//   cmd[2] = 1; // get session info
+//   cmd[8] = dataLen; // allocation length
+
+//   if (m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) == 0) {
+//     diskInfo_.lastSessionLba = (data[8] << 24) | (data[9] << 16) |
+//                                (data[10] << 8) | data[11];
+
+//     if (!diskInfo_.valid.empty) {
+//       diskInfo_.valid.empty = 1;
+//       diskInfo_.empty = (data[3] == 0) ? 1 : 0;
+
+//       diskInfo_.sessionCnt = data[3];
+//     }
+//   }
+
+//   // read ATIP data
+//   dataLen = 28;
+//   memset(cmd, 0, 10);
+//   memset(data, 0, dataLen);
+
+//   cmd[0] = 0x43; // READ TOC/PMA/ATIP
+//   cmd[1] = 0x00;
+//   cmd[2] = 4; // get ATIP
+//   cmd[7] = 0;
+//   cmd[8] = dataLen; // data length
+  
+//   if (m_scsiIf->sendCmd(cmd, 10, NULL, 0, data, dataLen, 0) == 0) {
+//     if (data[6] & 0x04) {
+//       diskInfo_.valid.recSpeed = 1;
+//       spd = (data[16] >> 4) & 0x07;
+//       diskInfo_.recSpeedLow = spd == 1 ? 2 : 0;
+      
+//       spd = (data[16] & 0x0f);
+//       diskInfo_.recSpeedHigh = spd >= 1 && spd <= 4 ? spd * 2 : 0;
+//     }
+
+//     if (data[8] >= 80 && data[8] <= 99) {
+//       diskInfo_.manufacturerId = Msf(data[8], data[9], data[10]);
+//       diskInfo_.valid.manufacturerId = 1;
+//     }
+//   }
+
+//   return &diskInfo_;
+// }
