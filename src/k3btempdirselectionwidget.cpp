@@ -43,7 +43,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  (void)new QLabel( i18n( "Write image file to" ), this, "TextLabel1_3" );
+  (void)new QLabel( i18n( "Write image file to:" ), this, "TextLabel1_3" );
 
   QHBox* urlRequesterBox = new QHBox( this );
   urlRequesterBox->setSpacing( KDialog::spacingHint() );
@@ -137,9 +137,9 @@ void K3bTempDirSelectionWidget::slotTempDirButtonPressed()
 {
   QString path;
   if( m_mode == DIR )
-    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), this, i18n("Select temp directory") );
+    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), this, i18n("Select Temp Directory") );
   else
-    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, this, i18n("Select temp file") );
+    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, this, i18n("Select Temp File") );
 
   if( !path.isEmpty() ) {
     setTempPath( path );

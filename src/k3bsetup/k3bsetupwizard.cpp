@@ -91,7 +91,7 @@ void K3bSetupWizard::accept()
 			     "just run K3b Setup again.\n"
 			     "Thank you for using K3b. Have a lot of fun!") );
 
-  KMessageBox::information( this, finishMessage, i18n("K3b Setup finished") );
+  KMessageBox::information( this, finishMessage, i18n("K3b Setup Finished") );
 
   KWizard::accept();
 }

@@ -205,7 +205,7 @@ FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   m_viewFstab->setRenameable( 1, false );
   m_viewFstab->setRenameable( 2, true );
 
-  m_checkFstab = new QCheckBox( i18n("Let K3b Setup create fstab entries."), main );
+  m_checkFstab = new QCheckBox( i18n("Let K3b setup create fstab entries"), main );
   m_checkFstab->setChecked( true );
 
   m_buttonSelectMountPoint = new QPushButton( i18n("Select Mount Point"), main );
@@ -308,7 +308,7 @@ void FstabEntriesTab::slotSelectMountPoint()
   K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( m_viewFstab->selectedItem() );
   if( deviceItem != 0 ) {
     QString newMp = KFileDialog::getExistingDirectory( deviceItem->device->mountPoint(), this,
-						       i18n("Select new mount point for %1").arg(deviceItem->device->ioctlDevice()) );
+						       i18n("Select new Mount Point for %1").arg(deviceItem->device->ioctlDevice()) );
     if( !newMp.isEmpty() ) {
       deviceItem->setText( 2, newMp );
       deviceItem->device->setMountPoint( newMp );
@@ -501,7 +501,7 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
 
   m_boxUsers = new QListBox( m_groupUsers, "m_boxUsers" );
   m_buttonRemoveUser = new QPushButton( i18n( "Remove User" ), m_groupUsers, "m_buttonRemoveUser" );
-  m_buttonAddUser = new QPushButton( i18n( "Add User" ), m_groupUsers, "m_buttonAddUser" );
+  m_buttonAddUser = new QPushButton( i18n( "Add User..." ), m_groupUsers, "m_buttonAddUser" );
   QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
   groupUsersLayout->addMultiCellWidget( m_boxUsers, 0, 2, 0, 0 );
@@ -510,11 +510,11 @@ PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   groupUsersLayout->addItem( spacer_2, 2, 1 );
 
   m_checkPermissionsDevices = new QCheckBox( main, "m_checkPermissionsDevices" );
-  m_checkPermissionsDevices->setText( i18n( "Let K3b Setup make the required changes for the devices" ) );
+  m_checkPermissionsDevices->setText( i18n( "Let K3b setup make the required changes for the devices" ) );
   m_checkPermissionsDevices->setChecked( TRUE );
 
   m_checkPermissionsExternalPrograms = new QCheckBox( main, "m_checkPermissionsExternalPrograms" );
-  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b Setup make the required changes for the external programs" ) );
+  m_checkPermissionsExternalPrograms->setText( i18n( "Let K3b setup make the required changes for the external programs" ) );
   m_checkPermissionsExternalPrograms->setChecked( TRUE );
 
 //   QFrame* Line1 = new QFrame( main, "Line1" );
@@ -609,7 +609,7 @@ bool PermissionTab::saveSettings()
 void PermissionTab::slotAddUser()
 {
   QString user;
-  QString text = i18n("Please enter a user name");
+  QString text = i18n("Please enter a user name:");
   bool ok = true;
   bool validUser = false;
   while( ok && !validUser ) {
@@ -618,7 +618,7 @@ void PermissionTab::slotAddUser()
       validUser = ( getpwnam( user.local8Bit() ) != 0 );
     else
       validUser = false;
-    text = i18n("Not a valid user name. Please enter a user name");
+    text = i18n("Not a valid user name. Please enter a user name:");
   }
 
   if( ok )

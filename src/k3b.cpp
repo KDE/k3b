@@ -161,9 +161,9 @@ void K3bMainWindow::initActions()
 			    actionCollection(), "file_export" );
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  actionFileNewAudio = new KAction(i18n("New &Audio project"), "sound", 0, this, SLOT(slotNewAudioDoc()), 
+  actionFileNewAudio = new KAction(i18n("New &Audio Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
-  actionFileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
+  actionFileNewData = new KAction(i18n("New &Data Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
 			    actionCollection(), "file_new_data");
 
   actionFileNewMenu->insert( actionFileNewAudio );
@@ -179,17 +179,17 @@ void K3bMainWindow::initActions()
   actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()), 
 					    actionCollection(), "view_audio_player");
 
-  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
+  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
 			       actionCollection(), "tools_blank_cdrw" );
-  actionToolsDivxEncoding = new KAction(i18n("&Encode video"),"gear", 0, this, SLOT( slotDivxEncoding() ),
+  actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
-  actionToolsWriteIsoImage = new KAction(i18n("&Write Iso image"), "gear", 0, this, SLOT(slotWriteIsoImage()),
+  actionToolsWriteIsoImage = new KAction(i18n("&Write Iso Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
 
-  actionCdCopy = new KAction(i18n("&Copy CD"), "cdcopy", 0, this, SLOT(slotCdCopy()),
+  actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
 
-  actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()), 
+  actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
 
 
@@ -576,7 +576,7 @@ void K3bMainWindow::slotFileOpen()
   slotStatusMsg(i18n("Opening file..."));
 	
   KURL url=KFileDialog::getOpenURL(QString::null,
-				   i18n("*.k3b|K3b Projects"), this, i18n("Open File..."));
+				   i18n("*.k3b|K3b Projects"), this, i18n("Open File"));
   if(!url.isEmpty())
     {
       openDocumentFile(url);
@@ -635,7 +635,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
   if( doc != 0 ) {
 
     QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
-					       i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
+					       i18n("*.k3b|K3b Projects"), this, i18n("Save As"));
     
     
     if(!url.isEmpty())
@@ -672,14 +672,14 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 void K3bMainWindow::slotFileExport()
 {
   if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( activeView() ) ) {
-    QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc-file") );
+    QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc File") );
     if( !file.isEmpty() ) {
       if( !((K3bAudioDoc*)m->getDocument())->writeTOC( file ) )
 	KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
     }
   }
   else if( K3bDataView* m = dynamic_cast<K3bDataView*>( activeView() ) ) {
-    QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.mkisofs", k3bMain(), i18n("Export to mkisofs-pathspec-file") );
+    QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.mkisofs", k3bMain(), i18n("Export to mkisofs-pathspec File") );
     if( !file.isEmpty() ) {
       if( ((K3bDataDoc*)m->getDocument())->writePathSpec( file ).isEmpty() )
 	KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
@@ -974,7 +974,7 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bDoc* doc = activeDoc();
 
   if( doc ) {
-    QStringList urls = KFileDialog::getOpenFileNames( ".", "*", this, i18n("Select files to add to the project") );
+    QStringList urls = KFileDialog::getOpenFileNames( ".", "*", this, i18n("Select Files to add to Project") );
     if( !urls.isEmpty() )
       doc->addUrls( urls );
   }

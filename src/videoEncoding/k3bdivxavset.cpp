@@ -54,7 +54,7 @@ void K3bDivxAVSet::setupGui(){
     QLabel *cds = new QLabel( i18n("CDs:"), this );
     QString wt_cd( i18n("Select how many CDs the final encoded video should be. You can select CDRs with size of 650MB and 700MB."));
     QWhatsThis::add( cds, wt_cd );
-    QLabel *mp3bitrate = new QLabel( i18n("MP3 Bitrate:"), this );
+    QLabel *mp3bitrate = new QLabel( i18n("MP3 bitrate:"), this );
     QString wt_mp3( i18n("Select bitrate of the audio track. MP3 will encode with constant bitrate and joint stereo."));
     QWhatsThis::add( mp3bitrate, wt_mp3 );
     QLabel *codec = new QLabel( i18n("Video codec:"), this );
@@ -69,7 +69,7 @@ I haven't do any tests with DivX5."));
     QString wt_codecmode( i18n("Select the mode for video encoding. 1-pass encoding has worse quality than 2-pass, but needs half time to encode a video.\
 In 2-pass mode the video will be encoded twice. The first time the video will only be analysed to get the best quality in the second encoding pass."));
     QWhatsThis::add( codecmode, wt_codecmode );
-    m_vBitrateDesc = i18n("Bitrate: ");
+    m_vBitrateDesc = i18n("Bitrate:");
     m_vBitrate = new QLabel( m_vBitrateDesc, this );
 
     m_comboCd = new KComboBox( false, this );

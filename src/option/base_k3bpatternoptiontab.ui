@@ -98,7 +98,7 @@
                                     <cstring>TextLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Second directory</string>
+                                    <string>Second directory:</string>
                                 </property>
                             </widget>
                             <widget class="KComboBox" row="1" column="0">
@@ -116,7 +116,7 @@
                                     <cstring>TextLabel1</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>First directory</string>
+                                    <string>First directory:</string>
                                 </property>
                             </widget>
                         </grid>

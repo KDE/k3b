@@ -87,7 +87,7 @@ void K3bFileView::setupGUI()
 				     m_dirOp->actionCollection(), "audio_file_play");
   KAction* actionEnqueue = new KAction( i18n("En&queue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
 					m_dirOp->actionCollection(), "audio_file_enqueue");
-  KAction* actionAddFilesToProject = new KAction( i18n("&Add to project"), 0, this, SLOT(slotAddFilesToProject()), 
+  KAction* actionAddFilesToProject = new KAction( i18n("&Add to Project"), 0, this, SLOT(slotAddFilesToProject()), 
 						  m_dirOp->actionCollection(), "add_file_to_project");
 
   KAction* actionUp = m_dirOp->actionCollection()->action("home");
@@ -199,7 +199,7 @@ void K3bFileView::slotAudioFileEnqueue()
 void K3bFileView::slotAddFilesToProject()
 {
   if( !k3bMain()->activeDoc() )
-    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No active Project"));
+    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No Active Project"));
   else {
     KURL::List files;
     for( QListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {

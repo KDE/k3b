@@ -50,16 +50,16 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   groupWriterLayout->setMargin( KDialog::marginHint() );
 
   QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
-  labelSpeed->setText( i18n( "Burning speed" ) );
-    
+  labelSpeed->setText( i18n( "Speed:" ) );
+
   m_comboSpeed = new QComboBox( FALSE, groupWriter, "m_comboSpeed" );
   m_comboSpeed->setAutoMask( FALSE );
   m_comboSpeed->setDuplicatesEnabled( FALSE );
-    
+
   m_comboWriter = new QComboBox( FALSE, groupWriter, "m_comboWriter" );
 
   QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
-  labelDevice->setText( i18n( "Device" ) );
+  labelDevice->setText( i18n( "Device:" ) );
 
   groupWriterLayout->addWidget( labelDevice, 0, 0 );
   groupWriterLayout->addWidget( labelSpeed, 0, 1 );

@@ -531,7 +531,7 @@
                             <cstring>m_groupCgi</cstring>
                         </property>
                         <property name="title">
-                            <string>Cgi-path</string>
+                            <string>Cgi-Path</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -580,7 +580,7 @@
                             <cstring>m_groupCddbpServer</cstring>
                         </property>
                         <property name="title">
-                            <string>Cddbp access</string>
+                            <string>Cddbp Access</string>
                         </property>
                         <vbox>
                             <property name="name">

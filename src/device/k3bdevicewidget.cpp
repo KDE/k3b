@@ -111,7 +111,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   refreshButtonGrid->setSpacing( KDialog::spacingHint() );
   refreshButtonGrid->setMargin(0);
   m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this, "m_buttonRefreshDevices" );
-  m_buttonAddDevice = new QPushButton( i18n( "Add Device" ), this, "m_buttonAddDevice" );
+  m_buttonAddDevice = new QPushButton( i18n( "Add Device..." ), this, "m_buttonAddDevice" );
   QToolTip::add( m_buttonRefreshDevices, i18n( "Rescan the Devices" ) );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   refreshButtonGrid->addItem( spacer, 0, 0 );
@@ -396,7 +396,7 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
 void K3bDeviceWidget::slotNewDevice()
 {
   bool ok;
-  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the devicename where\n K3b shall search for a new drive\n(example: /dev/mebecdrom)"), "/dev/", &ok, this );
+  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the devicename where K3b shall search\n for a new drive (example: /dev/mebecdrom):"), "/dev/", &ok, this );
 
   if( ok ) {
     if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {

@@ -148,8 +148,8 @@ void K3bBurningOptionTab::setupGui()
   QGridLayout* bufferLayout = new QGridLayout;
   bufferLayout->setMargin( 0 );
   bufferLayout->setSpacing( KDialog::spacingHint() );
-  bufferLayout->addWidget( new QLabel( "Cdrecord", advancedTab ), 0, 1 );
-  bufferLayout->addWidget( new QLabel( "Cdrdao", advancedTab ), 1, 1 );
+  bufferLayout->addWidget( new QLabel( "Cdrecord:", advancedTab ), 0, 1 );
+  bufferLayout->addWidget( new QLabel( "Cdrdao:", advancedTab ), 1, 1 );
   bufferLayout->addWidget( m_editWritingBufferSizeCdrecord, 0, 2 );
   bufferLayout->addWidget( m_editWritingBufferSizeCdrdao, 1, 2 );
   bufferLayout->addWidget( new QLabel( i18n("MB"), advancedTab ), 0, 3 );

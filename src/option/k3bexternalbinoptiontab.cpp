@@ -33,11 +33,11 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
   frameLayout->setMargin( 0 );
 
   m_viewPrograms = new KListView( this, "m_viewPrograms" );
-  m_viewPrograms->addColumn( i18n( "found" ) );
+  m_viewPrograms->addColumn( i18n( "Found" ) );
   m_viewPrograms->addColumn( i18n( "Program" ) );
-  m_viewPrograms->addColumn( i18n( "version" ) );
-  m_viewPrograms->addColumn( i18n( "path" ) );
-  m_viewPrograms->addColumn( i18n( "additional parameters" ) );
+  m_viewPrograms->addColumn( i18n( "Version" ) );
+  m_viewPrograms->addColumn( i18n( "Path" ) );
+  m_viewPrograms->addColumn( i18n( "Additional Parameters" ) );
 
   // set the second column renameable
   m_viewPrograms->setItemsRenameable( true );
