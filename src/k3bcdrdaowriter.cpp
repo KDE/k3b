@@ -422,9 +422,6 @@ void K3bCdrdaoWriter::start() {
             emit newTask( i18n("Blanking") );
         }
 
-	// initialize estimation
-	createEstimatedWriteSpeed( 0, true );
-
         emit started();
     }
 }
@@ -556,7 +553,8 @@ void K3bCdrdaoWriter::slotUnknownCdrdaoLine( const QString& line ) {
 
 void K3bCdrdaoWriter::slotProcessedSize( int s, int )
 {
-  createEstimatedWriteSpeed( s );
+  createEstimatedWriteSpeed( s, !m_writeSpeedInitialized );
+  m_writeSpeedInitialized = true;
 }
 
 #include "k3bcdrdaowriter.moc"

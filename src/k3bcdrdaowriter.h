@@ -119,6 +119,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   K3bCdrdaoParser *m_parser;
 
   bool m_stdin;
+  bool m_writeSpeedInitialized;
 };
 
 #endif

@@ -195,23 +195,32 @@ void K3bBurnProgressDialog::setupGUI()
   m_buttonClose->setText( i18n( "Close" ) );
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this, "m_buttonShowDebug" );
 
+
+
   m_groupBuffer = new QGroupBox( this, "m_groupBuffer" );
   m_groupBuffer->setTitle( i18n( "Writer: %1 %2" ).arg("-").arg("-" ) );
   m_groupBuffer->setColumnLayout(0, Qt::Vertical );
   m_groupBuffer->layout()->setSpacing( 0 );
   m_groupBuffer->layout()->setMargin( 0 );
-  m_groupBufferLayout = new QHBoxLayout( m_groupBuffer->layout() );
-  m_groupBufferLayout->setAlignment( Qt::AlignTop );
+  QGridLayout* m_groupBufferLayout = new QGridLayout( m_groupBuffer->layout() );
   m_groupBufferLayout->setSpacing( spacingHint() );
   m_groupBufferLayout->setMargin( marginHint() );
 
+  QLabel* labelWriteSpeedLabel = new QLabel( i18n("Estimated write speed"), m_groupBuffer );
+  labelWriteSpeedLabel->setAlignment( Qt::AlignCenter );
   m_labelWriteSpeed = new QLabel( "-", m_groupBuffer );
+  m_labelWriteSpeed->setAlignment( Qt::AlignCenter );
+  QLabel* labelBufferStat = new QLabel( i18n("Buffer status"), m_groupBuffer );
+  labelBufferStat->setAlignment( Qt::AlignCenter );
   m_progressBuffer = new KProgress( m_groupBuffer, "m_progressBuffer" );
   m_progressBuffer->setMaximumWidth( 150 );
 
-  m_groupBufferLayout->addWidget( new QLabel( i18n("Estimated write speed:"), m_groupBuffer ) );
-  m_groupBufferLayout->addWidget( m_labelWriteSpeed );
-  m_groupBufferLayout->addWidget( m_progressBuffer );
+  m_groupBufferLayout->addWidget( labelWriteSpeedLabel, 0, 0 );
+  m_groupBufferLayout->addWidget( m_labelWriteSpeed, 1, 0 );
+  m_groupBufferLayout->addWidget( labelBufferStat, 0, 1 );
+  m_groupBufferLayout->addWidget( m_progressBuffer, 1, 1 );
+  m_groupBufferLayout->setRowStretch( 2, 1 );
+
 
   m_groupProgress = new QGroupBox( this, "m_groupProgress" );
   m_groupProgress->setTitle( i18n( "Progress" ) );

@@ -108,7 +108,6 @@ class K3bBurnProgressDialog : public KDialog  {
 		
   QGridLayout* mainLayout;
   QHBoxLayout* m_groupInfoLayout;
-  QHBoxLayout* m_groupBufferLayout;
   QGridLayout* m_groupProgressLayout;
 
   // debugging output display

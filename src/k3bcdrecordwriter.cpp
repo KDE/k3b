@@ -163,9 +163,7 @@ void K3bCdrecordWriter::start()
       emit newTask( i18n("Writing") );
     }
 
-    // initialize estimation
-    createEstimatedWriteSpeed( 0, true );
-
+    m_writeSpeedInitialized = false;
     emit started();
   }
 }
@@ -298,7 +296,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	    emit percent( 100*(m_alreadyWritten+made)/m_totalSize );
 	  }
 
-	  createEstimatedWriteSpeed( m_alreadyWritten+made );
+	  createEstimatedWriteSpeed( m_alreadyWritten+made, !m_writeSpeedInitialized );
+	  m_writeSpeedInitialized = true;
 
 	  m_trackSize = size;
 	}

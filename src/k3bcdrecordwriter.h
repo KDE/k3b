@@ -77,6 +77,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
   enum CdrecordError { UNKNOWN, OVERSIZE };
   int m_cdrecordError;
+
+  bool m_writeSpeedInitialized;
 };
 
 #endif
