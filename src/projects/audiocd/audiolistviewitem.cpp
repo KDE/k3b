@@ -48,6 +48,11 @@ K3bAudioListViewItem::~K3bAudioListViewItem()
 
 QString K3bAudioListViewItem::text(int i) const
 {
+  //
+  // We add two spaces after all strings (except the once renamable)
+  // to increase readability
+  //
+
   switch( i )
     {
     case 0:
@@ -57,13 +62,11 @@ QString K3bAudioListViewItem::text(int i) const
     case 2:
       return m_track->title();
     case 3:
-      // track length
-      return m_track->length().toString();
+      return m_track->length().toString() + "  ";
     case 4:
-      // track pregap
-      return m_track->pregap().toString();
+      return m_track->pregap().toString() + "  ";
     case 5:
-      return m_track->module()->fileType();
+      return m_track->module()->fileType() + "  ";
     case 6:
       return m_track->fileName();
     default:
