@@ -94,8 +94,7 @@ int K3bDeviceManager::scanbus()
   K3bDeviceChecker *dc = new K3bDeviceChecker();
   m_foundDevices = 0;
   for( int i = 0; i < DEV_ARRAY_SIZE; i++ ) {
-    if( dc->scanDevice( deviceNames[i] ) == 0 ) {
-      K3bDevice *dev = dc->getCurrentDevice();
+    if( K3bDevice *dev = dc->scanDevice( deviceNames[i] ) ) {
       if( dev->burner ) {
 	m_writer.append( dev );
       } 

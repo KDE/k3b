@@ -58,26 +58,20 @@ class K3bDeviceChecker : public QObject
   ~K3bDeviceChecker();
 
   /**
-   * Gets information about a scanned device.
-   */
-  K3bDevice *getCurrentDevice();
-
-  /**
    * Scans a device for the read and write speed and burnproof capabilities.
    * @param dev The device to check for further information.
    * @param showErrorMsg The level of the error messages.
    */
-  int scanDevice( const char *dev, int showErrorMsg = 1 );
+  K3bDevice* scanDevice( const char *dev, int showErrorMsg = 1 );
 
  protected slots:
   void parseCdrecordOutput( KProcess * p, char *output, int len );
 
  private:
   ScsiIf *m_scsiIf;
-  K3bDevice *m_currentDevice;
   QList< K3bScsiBusId > m_scsiBusIds;
 
-  K3bScsiBusId *getScsiIds( QString product );
+  K3bScsiBusId *getScsiIds( const QString& product );
 
   /**
    * Gets the scsibus information bus, target and lun.

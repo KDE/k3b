@@ -30,28 +30,30 @@ K3bDeviceChecker::K3bDeviceChecker()
 {
   m_scsiBusIds.setAutoDelete( true );
   scanbus();
-  m_currentDevice = new K3bDevice();
 }
 
 K3bDeviceChecker::~K3bDeviceChecker()
 {
-  delete m_currentDevice;
   m_scsiBusIds.clear();
 }
 
-int K3bDeviceChecker::scanDevice( const char *dev, int showErrorMsg )
+K3bDevice* K3bDeviceChecker::scanDevice( const char *dev, int showErrorMsg )
 {
   m_scsiIf = new ScsiIf( dev );
-  m_scsiIf->init();
+  if( m_scsiIf->init() != 0 ) {
+    qDebug( "(K3bDeviceChecker) Could not detect speed for device %s", dev );
+    return 0;
+  }
+
   unsigned char mp[32];
 
   if( getModePage( 0x2a, mp, 32, NULL, NULL, showErrorMsg ) != 0 ) {
     if( showErrorMsg ) {
-      qDebug( "Cannot retrieve drive capabilities mode page." );
+      qDebug( "(K3bDeviceChecker) Cannot retrieve drive capabilities mode page." );
     }
-    return 1;
+    return 0;
   }
-  qDebug ( "Get device information." );
+  qDebug ( "(K3bDeviceChecker) Get device information." );
   bool burnproof = ( mp[4] & 0x80 ) ? true : false;
   int accurateAudioStream = mp[5] & 0x02 ? 1 : 0;
   // speed must be diveded by 176
@@ -63,23 +65,31 @@ int K3bDeviceChecker::scanDevice( const char *dev, int showErrorMsg )
   currentWriteSpeed = currentWriteSpeed / 176;
   bool burner = ( currentWriteSpeed > 0 ) ? true : false;
   K3bScsiBusId *id = getScsiIds( m_scsiIf->product() );
-  m_currentDevice->bus = id->bus;
-  m_currentDevice->target = id->target;
-  m_currentDevice->lun = id->lun;
-  m_currentDevice->description = m_scsiIf->product();
-  m_currentDevice->vendor = m_scsiIf->vendor();
-  m_currentDevice->version = m_scsiIf->revision();
-  m_currentDevice->burner = burner;
-  m_currentDevice->burnproof = burnproof;
-  m_currentDevice->maxReadSpeed = currentReadSpeed;
-  m_currentDevice->devicename = dev;
-  m_currentDevice->maxWriteSpeed = currentWriteSpeed;
-  return 0;
+
+  K3bDevice* newDevice = new K3bDevice();
+  if( id ) {
+    newDevice->bus = id->bus;
+    newDevice->target = id->target;
+    newDevice->lun = id->lun;
+  }
+  else {
+    qDebug( "(K3bDeviceChecker) Could not map device %s to bus,target,lun.", dev );
+  }
+  newDevice->description = m_scsiIf->product();
+  newDevice->vendor = m_scsiIf->vendor();
+  newDevice->version = m_scsiIf->revision();
+  newDevice->burner = burner;
+  newDevice->burnproof = burnproof;
+  newDevice->maxReadSpeed = currentReadSpeed;
+  newDevice->devicename = dev;
+  newDevice->maxWriteSpeed = currentWriteSpeed;
+
+  return newDevice;
 }
 
-K3bScsiBusId *K3bDeviceChecker::getScsiIds( QString product )
+K3bScsiBusId *K3bDeviceChecker::getScsiIds( const QString& product )
 {
-  K3bScsiBusId *id;
+  K3bScsiBusId *id = 0;
   for( id = m_scsiBusIds.first(); id != 0; id = m_scsiBusIds.next() ) {
     if( ( id->product.compare( product ) ) == 0 ) {
       return id;
@@ -88,11 +98,6 @@ K3bScsiBusId *K3bDeviceChecker::getScsiIds( QString product )
   return 0;
 }
 
-K3bDevice *K3bDeviceChecker::getCurrentDevice()
-{
-  return new K3bDevice( m_currentDevice );
-  //return m_currentDevice;
-}
 
 int K3bDeviceChecker::scanbus()
 {
