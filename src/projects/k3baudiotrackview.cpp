@@ -888,30 +888,12 @@ void K3bAudioTrackView::removePlayerIndicator()
 void K3bAudioTrackView::slotQueryMusicBrainz()
 {
 #ifdef HAVE_MUSICBRAINZ
-  // we can only do a query on a single source but on the other hand we can only
-  // use meta info for tracks, so we need
-  // tracks with a single source
-
   QPtrList<K3bAudioTrack> tracks;
   QPtrList<K3bAudioDataSource> sources;
   getSelectedItems( tracks, sources );
 
   if( tracks.isEmpty() ) {
     KMessageBox::sorry( this, i18n("Please select an audio track.") );
-    return;
-  }
-
-  // determine the tracks we can use (one single audio file)
-  for( QPtrListIterator<K3bAudioTrack> it( tracks ); *it; ++it ) {
-    if( it.current()->numberSources() > 1 )
-      tracks.remove( it.current() );
-    else if( dynamic_cast<K3bAudioFile*>( it.current()->firstSource() ) == 0 )
-      tracks.remove( it.current() );
-  }
-
-  if( tracks.isEmpty() ) {
-    KMessageBox::sorry( this, i18n("K3b can only perform a MusicBrainz query on tracks "
-				   "with a single file source.") );
     return;
   }
 
