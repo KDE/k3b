@@ -195,11 +195,19 @@ void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {
     m_editStaticRipPathTmp->setText( path + "/" + tmp );
     */
     QDir space( p );
-    if( space.exists() ){
-        connect( KDiskFreeSp::findUsageInfo( p ),
-	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
+    if( !space.exists() ){
+        int index = p.findRev("/");
+        QString tmp = tmp.mid( index+1 );
+        kdDebug() << "(K3bDvdRipperWidget) new directory. Check existing." << endl;
+        space.setPath( tmp );
+        if ( !space.exists() ){
+             kdDebug() << "(K3bDvdRipperWidget) Error: directory doesn't exists: " << tmp << endl;
+             return;
+        }
     }
+    connect( KDiskFreeSp::findUsageInfo( p ),
+     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
+     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
 }
 
 void K3bDvdRipperWidget::slotFreeTempSpace( const QString & mountPoint, unsigned long kBSize,
