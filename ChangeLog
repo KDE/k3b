@@ -1,3 +1,7 @@
+0.4.3
+Fixed bug that caused K3b to crash while detecting devices
+some little improvements
+	
 0.4.2
 added new DirTree (code from Konqueror)
 added new device-management (the scsi-bus is checked directly)

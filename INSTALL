@@ -1,7 +1,7 @@
-Install K3b 0.4.2
+Install K3b 0.4.3
 -----------------
 
-K3b 0.4.2 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
+K3b 0.4.3 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
 First you need to install (configure/make/make install) the id3lib.
 
 Then install K3b like every other KDE app:
@@ -29,8 +29,8 @@ This is how I configured my system:
 
 This configuration is based on the cdrecord-man-page.
 
-Since K3b 0.4.2 has a new CD-Device-Management-System which needs access to the sgX devices
-you need to either run K3b as root (bad) or gain write-access to the /dev/sgX devices (less bad).
+With K3b 0.4.2 came a new CD-Device-Management-System which needs access to the sgX devices.
+You need to either run K3b as root (bad) or gain write-access to the /dev/sgX devices (less bad).
 This could be done as root by typing the following commands (using the same group as above):
 
 	chgrp cdrecording /dev/sg*
