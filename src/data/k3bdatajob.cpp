@@ -997,25 +997,33 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 	       == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
 	  sameNameCount++;
 
-	kdDebug() << "K3bDataJob) found " << sameNameCount << " files with same joliet name" << endl;
+	kdDebug() << "(K3bDataJob) found " << sameNameCount << " files with same joliet name" << endl;
 
-	unsigned int charsForNumber = QString::number(sameNameCount).length();
-	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
-	  // we always reserve 5 chars for the extension
-	  QString extension = sortedChildren.at(i)->k3bName().right(5);
-	  if( !extension.contains(".") )
-	    extension = "";
-	  else
-	    extension = extension.mid( extension.find(".") );
-	  QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
-	  jolietName.append( " " );
-	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
-	  jolietName.append( extension );
-	  sortedChildren.at(i)->setJolietName( jolietName );
+	if( sameNameCount > 1 ) {
+	  kdDebug() << "(K3bDataJob) cutting filenames." << endl;
 
-	  kdDebug() << "(K3bDataJob) set joliet name for "
-		    << sortedChildren.at(i)->k3bName() << " to "
-		    << jolietName << endl;
+	  unsigned int charsForNumber = QString::number(sameNameCount).length();
+	  for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
+	    // we always reserve 5 chars for the extension
+	    QString extension = sortedChildren.at(i)->k3bName().right(5);
+	    if( !extension.contains(".") )
+	      extension = "";
+	    else
+	      extension = extension.mid( extension.find(".") );
+	    QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
+	    jolietName.append( " " );
+	    jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
+	    jolietName.append( extension );
+	    sortedChildren.at(i)->setJolietName( jolietName );
+
+	    kdDebug() << "(K3bDataJob) set joliet name for "
+		      << sortedChildren.at(i)->k3bName() << " to "
+		      << jolietName << endl;
+	  }
+	}
+	else {
+	  kdDebug() << "(K3bDataJob) single file -> no change." << endl;
+	  sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
 	}
 
 	begin += sameNameCount;
