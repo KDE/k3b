@@ -1,6 +1,6 @@
 /*
 *
-* $Id$
+* $Id: $
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *             THX to Manfred Odenstein <odix@chello.at>
 *
@@ -306,12 +306,13 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
                     break;
                 case K3bVcdTrack::AFTERTIMEOUT:
-		    if ( track->getWaitTime() >= 0 )
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+		    if ( track->getWaitTime() >= 0 ) {
+                    	elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
+                    	elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
 		    }
                     break;
-	} else {
+            }
+        } else {
             // jump to <endlist> otherwise do noop while disabled
             if ( track->getNonPbcTrack( i ) == K3bVcdTrack::VIDEOEND ) {
                 switch ( i ) {
@@ -332,13 +333,14 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end");
                         break;
                     case K3bVcdTrack::AFTERTIMEOUT:
-		        if ( track->getWaitTime() >= 0 )
-                    	    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                            elemPbcSelectionPNRDT.setAttribute( "ref", "end");
+		    	if ( track->getWaitTime() >= 0 ) {
+                        	elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
+                        	elemPbcSelectionPNRDT.setAttribute( "ref", "end");
 			}
                         break;
-	    }
-	}
+                }
+            }
+        }
     }
 
     addSubElement( doc, elemSelection, "wait", track->getWaitTime() );
