@@ -42,11 +42,12 @@ public:
     void setDvdTitle( const QValueList<K3bDvdContent> &titles );
     void setBaseFilename( const QString& f ){ m_filename = f; };
     void setDevice( const QString& f ){ m_device = f; };
+    void setRipSize( double size );
 
 public slots:
     void start();
     void cancel();
-    void slotPercent( int );
+    void slotPercent( unsigned int );
     void ripFinished( bool );
 
 //    void slotParseError( KProcess *p, char *text, int len);
@@ -66,6 +67,7 @@ private:
     QString m_dirtmp;
     QWidget *m_parent;
     K3bDvdRippingProcess *m_ripProcess;
+    double m_ripSize;
 
 };
 	

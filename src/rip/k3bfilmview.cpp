@@ -164,6 +164,12 @@ void K3bFilmView::setupGui(){
     infoLayout->addMultiCellWidget( m_frames, 2, 2, 3, 3 );
     infoLayout->addMultiCellWidget( m_framerate, 3, 3, 3, 3 );
 
+    // TODO
+
+    _groupAudio->setDisabled(true);
+    _groupVideoChapter->setDisabled(true);
+
+
     //_layout->addMultiCellWidget( toolBar, 0, 0, 0, 1 );
     _layout->addMultiCellWidget( _groupVideo, 0, 0, 0, 2 );
     _layout->addMultiCellWidget( _groupAudio, 0, 0, 3, 3 );
@@ -220,7 +226,6 @@ void K3bFilmView::slotDvdChecked( bool successful ){
             setCheckBoxes( m_audioView, TRUE );
             setCheckBoxes( m_chapterView, TRUE );
         }
-        qDebug("(K3bFilmView) show");
         QWidget::show();
     } else {
         // error during parsing
@@ -286,6 +291,7 @@ void K3bFilmView::slotAudioButtonAll(){
 void K3bFilmView::slotAudioButtonNone(){
     setCheckBoxes( m_audioView, FALSE );
 }
+
 void K3bFilmView::slotRip(){
     K3bDvdRipperWidget *ripWidget = new K3bDvdRipperWidget( m_device->devicename(), this, "dvdrip");
     DvdTitle::Iterator dvd;
@@ -295,14 +301,17 @@ void K3bFilmView::slotRip(){
     QCheckListItem *item = dynamic_cast<QCheckListItem*>( m_titleView->firstChild( ) );
     int title = 0;
     bool addToRipTitles = false;
+    // clear old angle selection if already used
+
     while( item !=0 ){
         if( item->type() == QCheckListItem::Controller ){
-            qDebug("item " + item->text(0) );
+            //qDebug("item " + item->text(0) );
             dvd = m_dvdTitles.at( title );
+            (*dvd).getSelectedAngle()->clear();
             int c  = item->childCount();
             if( c > 0 ){
                 QCheckListItem *child = dynamic_cast<QCheckListItem*>(item->firstChild( ) );
-                qDebug("child " + child->text() );
+                //qDebug("child " + child->text() );
                 if( child->isOn() ){
                     qDebug("(K3bDvdFilmView) Add title %i with angle %i.", title+1, 1 );
                     ( *dvd ).addAngle( QString::number( 1 ) );
@@ -310,7 +319,7 @@ void K3bFilmView::slotRip(){
                 }
                 for( int i=1; i < c; i++){
                     if( dynamic_cast<QCheckListItem*>(item->nextSibling( ) )->isOn() ){
-                        qDebug("(K3bDvdFilmView) Add more title %i with angle %i.", i+1);
+                        qDebug("(K3bDvdFilmView) Add more title with angle %i.", i+1);
                         ( *dvd ).addAngle( QString::number( i+1 ) );
                     }
                 }

@@ -29,7 +29,7 @@ class K3bDvdContent;
 class K3bDvdCopy;
 class K3bDvdAudioGain;
 class QWidget;
-
+class K3bExternalBin;
  /**
   *@author Sebastian Trueg
   */
@@ -45,15 +45,16 @@ public:
     //void setJob( K3bDvdCopy *job );
     void start( );
     void cancel();
+    void setRipSize( double );
     static float tccatParsedBytes( char *text, int len);
 
 signals:
     void interrupted();
     void finished( bool );
-    void progressPercent( int );
+    void progressPercent( unsigned int );
 
 private slots:
-    void slotParseError( KProcess *p, char *text, int len);
+    //void slotParseError( KProcess *p, char *text, int len);
     void slotParseOutput( KProcess *p, char *text, int len);
     void slotExited( KProcess* );
     void slotAudioProcessFinished();
@@ -75,6 +76,7 @@ private:
     int m_currentRipAngle;
     int m_currentVobIndex;
     int m_maxTitle;
+    int m_percent;
     double m_rippedBytes;
     double m_titleBytes;
     double m_summaryBytes;
@@ -83,9 +85,10 @@ private:
     bool m_delAudioProcess;
     bool m_interrupted;
     K3bDvdAudioGain *m_audioProcess;
+    //K3bExternalBin *m_tccatBin;
 
     void checkRippingMode();
-    void rip();
+    void startRippingProcess();
     QString prepareFilename();
     float getAudioGain();
     void saveConfig();

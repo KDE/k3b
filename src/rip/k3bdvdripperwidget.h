@@ -31,6 +31,7 @@ class K3bDvdRippingProcess;
 class K3bDvdCopy;
 class KDiskFreeSp;
 class KProcess;
+class K3bDvdFillDisplay;
 /**
   *@author Sebastian Trueg
   */
@@ -51,12 +52,11 @@ private:
     QString m_editDir;
     bool m_finalClose;
     QLabel *m_labelSummaryName;
+    QLabel *m_hardDiskSpace;
     QCheckBox *m_normalize;
-    QPushButton* m_buttonStart;
     QPushButton* m_buttonStaticDir;
     QPushButton* m_buttonStaticDirVob;
     QPushButton* m_buttonStaticDirTmp;
-    QPushButton* m_buttonPattern;
     KLineEdit *m_editStaticRipPath;
     KLineEdit *m_editStaticRipPathVob;
     KLineEdit *m_editStaticRipPathTmp;
@@ -68,9 +68,10 @@ private:
     bool m_enoughSpace;
     double m_vobSize;
     double m_titleSize;
-    KDiskFreeSp *m_df;
     bool m_supportSizeDetection;
+    bool m_detectTitleSizeDone;
 
+    K3bDvdFillDisplay *m_fillDisplay;
     void setupGui();
     bool createDirs();
     bool createDirectory( const QString& );

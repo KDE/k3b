@@ -30,7 +30,7 @@ class KListView;
 class K3bTcWrapper;
 class K3bDvdContent;
 class K3bDevice;
-
+class K3bDvdRipperWidget;
 
 /**
   *@author Sebastian Trueg
@@ -59,11 +59,15 @@ class K3bFilmView : public K3bCdContentsView
   void setupGui();
   void setCheckBoxes( KListView *m_audioView, bool status );
 
+  //K3bDvdRipperWidget *m_ripWidget;
+
  signals:
   void notSupportedDisc( const QString& device );
 
+
  private slots:
-  void slotDvdChecked( bool successful );
+ //void ripperWidgetClosed();
+ void slotDvdChecked( bool successful );
   void slotNotSupportedDisc();
   void slotTitleSelected(QListViewItem*item);
   void slotAudioButtonAll();

@@ -25,6 +25,7 @@
 #include "../device/k3bdevice.h"
 #include "../kdiskfreesp.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "k3bdvdfilldisplay.h"
 
 #include <qlayout.h>
 #include <qvgroupbox.h>
@@ -35,6 +36,9 @@
 #include <qcheckbox.h>
 #include <qdatastream.h>
 #include <qmessagebox.h>
+
+#include <qpainter.h>
+#include <qrect.h>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -64,6 +68,7 @@ K3bDvdRipperWidget::~K3bDvdRipperWidget(){
 }
 
 void K3bDvdRipperWidget::setupGui(){
+    setMinimumWidth( 500 );
     QFrame *frame = makeMainWidget();
     QGridLayout *mainLayout = new QGridLayout( frame );
 
@@ -95,11 +100,23 @@ void K3bDvdRipperWidget::setupGui(){
     dirsLayout->addMultiCellWidget( m_buttonStaticDirTmp, 2,2,3,3 );
     dirsLayout->setColStretch( 0, 20 );
 
-    mainLayout->addWidget( groupPattern, 0, 0 );
+    QGroupBox *groupSize = new QGroupBox( i18n( "Available Space" ), frame, "size" );
+    groupSize->setColumnLayout(0, Qt::Vertical );
+    QGridLayout *sizeLayout = new QGridLayout( groupSize->layout() );
+
+    m_fillDisplay = new K3bDvdFillDisplay( groupSize );
+    m_fillDisplay->setFixedHeight( 20 );
+    m_hardDiskSpace = new QLabel( groupSize );
+
+    sizeLayout->addMultiCellWidget( m_fillDisplay, 0, 0, 0, 1 );
+    sizeLayout->addMultiCellWidget( m_hardDiskSpace, 0, 0, 2, 2 );
+    sizeLayout->setColStretch( 0, 20 );
+
+    mainLayout->addMultiCellWidget( groupPattern, 0, 0, 0, 1 );
+    mainLayout->addMultiCellWidget( groupSize, 1, 1, 0, 1 );
 
     setButtonApplyText( i18n( "Start Ripping" ), i18n( "This starts copying the DVD.") );
 
-    //m_df = new KDiskFreeSp();
 
     connect( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT(rip() ) );
@@ -107,11 +124,50 @@ void K3bDvdRipperWidget::setupGui(){
     connect(m_buttonStaticDirVob, SIGNAL(clicked()), this, SLOT(slotFindStaticDirVob()) );
     connect(m_buttonStaticDirTmp, SIGNAL(clicked()), this, SLOT(slotFindStaticDirTmp()) );
     connect(m_editStaticRipPath, SIGNAL( textChanged( const QString& )), this, SLOT( slotSetDependDirs( const QString& )) );
-    //connect(m_df, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-    //this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
+
+
+//  double one = (double)contentsRect().width() / 90.0;
+/*	
+  p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter,
+	       QString().sprintf( " %.2f MB", ((float)doc->size())/1024.0/1024.0 ) );
+	
+  // draw yellow if value > 650
+  if( value > 65 ) {
+    rect.setLeft( rect.left() + (int)(one*65.0) );
+  }
+	
+  // draw red if value > 80
+  if( value > 70 ) {
+    rect.setLeft( rect.left() + (int)(one*5.0) );
+    p->fillRect( rect, Qt::red );
+  }
+	
+  // now draw the 650, 700, and 800 marks
+  p->drawLine( contentsRect().left() + (int)(one*65.0), contentsRect().bottom(),
+	       contentsRect().left() + (int)(one*65.0), contentsRect().top() );
+  p->drawLine( contentsRect().left() + (int)(one*70.0), contentsRect().bottom(),
+	       contentsRect().left() + (int)(one*70.0), contentsRect().top() );
+  p->drawLine( contentsRect().left() + (int)(one*80.0), contentsRect().bottom(),
+	       contentsRect().left() + (int)(one*80.0), contentsRect().top() );
+	
+  // draw the text marks
+  rect = contentsRect();
+  rect.setRight( (int)(one*65) );
+  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "650" );
+
+  rect = contentsRect();
+  rect.setRight( (int)(one*70) );
+  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "700" );
+
+  rect = contentsRect();
+  rect.setRight( (int)(one*80) );
+  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "800" );
+	
+  */
 }
 
 void K3bDvdRipperWidget::init( const QValueList<K3bDvdContent>& list ){
+    m_ripTitles.clear();
     m_ripTitles = list;
     checkSize();
 }
@@ -123,30 +179,15 @@ void K3bDvdRipperWidget::rip(){
         return;
     }
     m_ripJob = new K3bDvdCopy(m_device, m_editStaticRipPath->text(), m_editStaticRipPathVob->text(), m_editStaticRipPathTmp->text(), m_ripTitles, this );
-    /*
-    m_ripJob->setDvdTitle( m_ripTitles );
-    m_ripJob->setDevice( m_device );
-    m_ripJob->setBaseFilename( m_editStaticRipPath->text() + "/dvd" );
-    */
-    //connect( m_ripJob, SIGNAL( interrupted() ), this, SLOT( slotRipJobDeleted() ) );
-    /*
-    m_ripProcess = new K3bDvdRippingProcess( this );
-    m_ripProcess->setDvdTitle( m_ripTitles );
-    K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
-    m_ripProcess->setDevice( dev->ioctlDevice() );
-    m_ripProcess->setBaseFilename( m_editStaticRipPath->text()  );
-    m_ripProcess->setJob( m_ripJob );
-    connect( m_ripProcess, SIGNAL( interrupted() ), this, SLOT( slotRipJobDeleted() ) );
-    */
-    m_ripDialog = new K3bBurnProgressDialog( this, "Ripping" );
+    m_ripJob->setRipSize( m_vobSize );
+
+    m_ripDialog = new K3bBurnProgressDialog( this, "Ripping", false );
     m_ripDialog->setCaption( i18n("Ripping process") );
     m_ripDialog->setJob( m_ripJob );
 
     m_ripDialog->show();
 
     m_ripJob->start();
-    //m_ripProcess->start( );
-    //this.hide();
 }
 
 void K3bDvdRipperWidget::slotRipJobDeleted(){
@@ -200,23 +241,27 @@ void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {
 
     QDir space( p );
     if( space.exists() ){
-        qDebug("CheckSize");
         connect( KDiskFreeSp::findUsageInfo( p ),
 	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
 	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
-      //m_df->readDF( p );
     }
 }
 
 void K3bDvdRipperWidget::slotFreeTempSpace( const QString & mountPoint, unsigned long kBSize,
         unsigned long kBUsed, unsigned long kBAvail ){
-    if( kBAvail > m_vobSize/1000 ) {
-        qDebug("avail");
+    m_fillDisplay->setKbSize( kBSize );
+    m_fillDisplay->setKbAvailable( kBAvail );
+    m_fillDisplay->setKbUsed( kBUsed );
+    qDebug("(K3bDvdRipperWidget) DVD VobSize: %.2f", (float) m_vobSize);
+    m_fillDisplay->setKbDvd( (unsigned long) (m_vobSize/1000) );
+     if( kBAvail > m_vobSize/1000 ) {
         m_enoughSpace = true;
     } else {
-        qDebug("full");
         m_enoughSpace = false;
     }
+    m_fillDisplay->repaint();
+    QString overview = m_fillDisplay->freeWithDvd() + QString().sprintf( " / %.2f GBytes", ((float)kBSize)/1000000);
+    m_hardDiskSpace->setText( overview );
 }
 bool K3bDvdRipperWidget::createDirs(){
     bool result = true;
@@ -243,15 +288,15 @@ void K3bDvdRipperWidget::checkSize(  ){
     typedef QValueList<K3bDvdContent> DvdTitle;
     DvdTitle::Iterator dvd;
     int max = m_ripTitles.count();
+    //qDebug(" ripTitles checksite %d", max);
     K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tccat");
     for( int i = 0; i < max; i++ ){
         dvd = m_ripTitles.at( i );
         if( (*dvd).isAllAngle() ){
+            m_detectTitleSizeDone = false;
             m_supportSizeDetection = true;
             int title = (*dvd).getTitleNumber();
             QString t( QString::number(title) );
-            qDebug("Title: %i", t );
-            qDebug("Device: " +m_device );
             KShellProcess p;
             p << bin->path << "-d 1" << "-i" <<  m_device << "-P" << t;
             connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseError(KProcess*, char*, int)) );
@@ -259,19 +304,24 @@ void K3bDvdRipperWidget::checkSize(  ){
             if( !p.start( KProcess::Block, KProcess::Stderr ) ) {
                 qDebug("(K3bDvdRipperWidget) Can't detect size of title");
             }
+            //qDebug("VobSize: %f, titlesize %f", (float) m_vobSize, (float) m_titleSize);
+
             m_vobSize += m_titleSize;
         } else {
             m_supportSizeDetection = false;
         }
     }
-    qDebug("(K3bDvdRipperWidget) VOB Size: " + QString::number( m_vobSize, 'f', 9 ) );
-    delete bin;
     setupGui();
+    slotSetDependDirs( m_editStaticRipPath->text() );
 }
 
 void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
-    qDebug("titlesize" + QString::number(m_titleSize) );
-    m_titleSize = K3bDvdRippingProcess::tccatParsedBytes( text, len );
+    // must be the first line, ignore other
+    if( !m_detectTitleSizeDone ){
+        m_detectTitleSizeDone = true;
+        m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
+    }
+    qDebug("(K3bDvdRipperWidget) Titlesize to rip: " + QString::number(m_titleSize) );
     p->kill();
 }
 

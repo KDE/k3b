@@ -64,8 +64,11 @@ void K3bDvdContent::addAngle( const QString &number){
 }
 
 bool K3bDvdContent::isAllAngle( ){
-    if ( m_maxAngle == m_selectedAngle.count() )
+    //qDebug("must be selectedAngle count %i", m_selectedAngle.count() );
+    //qDebug("maxAngle %i", m_maxAngle );
+    if ( m_maxAngle == m_selectedAngle.count() ){
         return true;
+    }
     return false;
 }
 

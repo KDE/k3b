@@ -47,10 +47,11 @@ void K3bDvdCopy::start(){
     m_ripProcess->setDvdTitle( m_ripTitles );
     m_ripProcess->setDevice( m_device );
     m_ripProcess->setDirectories( m_directory, m_dirvob, m_dirtmp );
+    m_ripProcess->setRipSize( m_ripSize );
     //m_ripProcess->setJob( m_ripJob );
     connect( m_ripProcess, SIGNAL( interrupted() ), m_parent, SLOT( slotRipJobDeleted() ) );
     connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
-    connect( m_ripProcess, SIGNAL( progressPercent( int ) ), this, SLOT( slotPercent( int ) ) );
+    connect( m_ripProcess, SIGNAL( progressPercent( unsigned int ) ), this, SLOT( slotPercent( unsigned int ) ) );
     m_ripProcess->start();
     emit started();
     emit newTask( i18n("Copy DVD.")  );
@@ -66,12 +67,15 @@ void K3bDvdCopy::cancel( ){
     m_ripProcess->cancel();
 }
 
-void K3bDvdCopy::slotPercent( int i ){
-    emit percent( i );
+void K3bDvdCopy::slotPercent( unsigned int i ){
+    emit percent( (int) i );
 }
 
 void K3bDvdCopy::setDvdTitle( const QValueList<K3bDvdContent> &titles ){
     m_ripTitles = titles;
+}
+void K3bDvdCopy::setRipSize( double size ){
+    m_ripSize = size;
 }
 
 #include "k3bdvdcopy.moc"
