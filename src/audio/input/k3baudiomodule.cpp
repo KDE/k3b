@@ -9,7 +9,6 @@ K3bAudioModule::K3bAudioModule( QObject* parent, const char* name )
   : QObject( parent, name )
 {
   m_track = 0;
-  m_consumer = 0;
   m_currentlyAnalysedTrack = 0;
   connect( this, SIGNAL(trackAnalysed(K3bAudioTrack*)), this, SLOT(slotAnalysingFinished(K3bAudioTrack*)) );
 }
@@ -24,20 +23,6 @@ void K3bAudioModule::start( K3bAudioTrack* track )
 {
   m_track = track;
   QTimer::singleShot( 0, this, SLOT(startDecoding()) );
-}
-
-
-void K3bAudioModule::setConsumer( QObject* c, const char* goOnSignal )
-{
-  if( m_consumer ) {
-    disconnect(m_consumer);
-    m_consumer = 0;
-  }
-
-  if( c  && goOnSignal != 0 ) {
-    m_consumer = c;
-    connect( m_consumer, goOnSignal, this, SLOT(slotConsumerReady()) );
-  }
 }
 
 

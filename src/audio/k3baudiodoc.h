@@ -142,12 +142,6 @@ class K3bAudioDoc : public K3bDoc
 
   unsigned long isWaveFile( const KURL& url );
 
-  /**
-   * replaces special characters like "\" in str to prepare it
-   * for usage in cdrdao toc-files
-   */
-  QString prepareForTocFile( const QString& str );
-
   void loadDefaultSettings();
 
  private:

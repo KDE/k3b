@@ -25,16 +25,6 @@ class K3bAudioModule : public QObject
 
   K3bAudioTrack* audioTrack() const { return m_track; }
 
-  /**
-   * The consumer is the object that will handle the output
-   * Since we need async streaming the AudioModule will
-   * produce some output and then wait for the goOnSignal to
-   * be emitted by the consumer. When it receives the signal
-   * it will produce the next portion of output
-   * if consumer is set to null output will be streamed without
-   * waiting for the signal (used when writing to a file)
-   */
-  virtual void setConsumer( QObject* c = 0, const char* goOnSignal = 0 );
   void start( K3bAudioTrack* );
 
   virtual bool canDecode( const KURL& url ) = 0;
@@ -59,6 +49,9 @@ class K3bAudioModule : public QObject
   void removeTrackToAnalyse( K3bAudioTrack* track );
 
  signals:
+  /**
+   * after emitting this signal the module has to be resumed
+   */
   void output( const unsigned char* data, int len );
   void percent( int );
   void canceled();
@@ -78,9 +71,6 @@ class K3bAudioModule : public QObject
    */
   virtual void analyseTrack() = 0;
   virtual void stopAnalysingTrack() = 0;
-
- protected:
-  QObject* m_consumer;
 
  private slots:
   void slotAnalysingFinished( K3bAudioTrack* );

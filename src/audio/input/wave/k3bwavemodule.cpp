@@ -73,9 +73,6 @@ void K3bWaveModule::slotConsumerReady()
     emit output( (const unsigned char*)m_data->data(), read );
     m_alreadyDecodedData += read;
     emit percent( (int)((double)m_alreadyDecodedData * 100.0 / (double)audioTrack()->size()) );
-
-    if( !m_consumer )
-      QTimer::singleShot( 0, this, SLOT(slotConsumerReady()) );
   }
   else
     emit finished( read == 0 );

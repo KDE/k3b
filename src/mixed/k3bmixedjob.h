@@ -55,7 +55,7 @@ class K3bMixedJob : public K3bBurnJob
   void slotIsoImagerFinished( bool success );
   void slotAudioDecoderFinished( bool );
   void slotReceivedAudioDecoderData( const char*, int );
-  void slotAudioDecoderNextTrack( int );
+  void slotAudioDecoderNextTrack( int, int );
   void slotDataWritten();
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);

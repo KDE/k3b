@@ -92,35 +92,7 @@ class K3bBurnJob : public K3bJob
  signals:
   void bufferStatus( int );
 
- protected slots:
-  /**
-   * calls parseCdrdaoLine
-   * connect this to the cdrdao process
-   * joines lines splitted by KProcess
-   */
-  void parseCdrdaoOutput( KProcess*, char* line, int len );
-
-  /**
-   * only reimplement this if the default parsing does not fit.
-   * calls parseCdrdaoSpecialLine for every unparsed line
-   * calls createCdrdaoProgress
-   * calls startNewCdrdaoTrack
-   * calls parseCdrdaoError
-   */
-  virtual void parseCdrdaoLine( const QString& line );
-
-  /**
-   * this should be reimplemented if some special line parsing is required
-   */
-  virtual void parseCdrdaoSpecialLine( const QString& line );
-
-  virtual void parseCdrdaoError( const QString& line );
-
-  virtual void createCdrdaoProgress( int made, int size );
-  virtual void startNewCdrdaoTrack();
-
  private:
-  QString m_notFinishedLine;
   int m_writeMethod;
 };
 #endif

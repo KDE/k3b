@@ -26,6 +26,8 @@ void K3bAudioDecoder::start()
   m_canceled = false;
   m_decodedDataSize = 0;
   m_docSize = m_doc->size();
+  m_suspended = false;
+  m_startNewTrackWhenResuming = false;
 
   emit started();
 
@@ -35,6 +37,8 @@ void K3bAudioDecoder::start()
 
 void K3bAudioDecoder::decodeNextTrack()
 {
+  m_startNewTrackWhenResuming = false;
+
   m_currentTrackNumber++;
   m_currentTrack = m_doc->at(m_currentTrackNumber-1);
 
@@ -47,10 +51,7 @@ void K3bAudioDecoder::decodeNextTrack()
   connect( m_currentTrack->module(), SIGNAL(percent(int)),
 	   this, SLOT(slotModulePercent(int)) );
 
-  // TODO: remove me
-  m_currentTrack->module()->setConsumer( this, SIGNAL(resumeDecoding()) );
-
-  emit nextTrack( m_currentTrackNumber );
+  emit nextTrack( m_currentTrackNumber, m_doc->numOfTracks() );
 
   m_currentTrack->module()->start( m_currentTrack );
 }
@@ -59,7 +60,10 @@ void K3bAudioDecoder::decodeNextTrack()
 
 void K3bAudioDecoder::resume()
 {
-  if( m_currentTrack )
+  m_suspended = false;
+  if( m_startNewTrackWhenResuming )
+    decodeNextTrack();
+  else if( m_currentTrack )
     QTimer::singleShot(0, m_currentTrack->module(), SLOT(resume()) );
 }
 
@@ -71,8 +75,6 @@ void K3bAudioDecoder::cancel()
   if( m_currentTrack ) {
     m_currentTrack->module()->cancel();
     m_currentTrack->module()->disconnect( this );
-    // TODO: remove me
-    m_currentTrack->module()->setConsumer( 0 );
   }
   emit canceled();
   emit finished(false);
@@ -81,7 +83,12 @@ void K3bAudioDecoder::cancel()
 
 void K3bAudioDecoder::slotModuleOutput( const unsigned char* d, int len )
 {
+  if( m_suspended ) {
+    emit infoMessage( i18n("AudioDecoder internal error! Please report"), ERROR );
+  }
+
   m_decodedDataSize += len;
+  m_suspended = true;
 
   emit data( (const char*) d, len );
 }
@@ -91,8 +98,6 @@ void K3bAudioDecoder::slotModuleFinished( bool success )
 {
   if( !m_canceled ) {
     m_currentTrack->module()->disconnect( this );
-    // TODO: remove me
-    m_currentTrack->module()->setConsumer( 0 );
 
     if( success ) {
       // check if we decoded the last track
@@ -100,8 +105,12 @@ void K3bAudioDecoder::slotModuleFinished( bool success )
 	m_currentTrack = 0;
 	emit finished(true);
       }
-      else 
-	decodeNextTrack();
+      else { 
+	if( m_suspended )
+	  m_startNewTrackWhenResuming = true;
+	else
+	  decodeNextTrack();
+      }
     }
     else {
       emit infoMessage( i18n("Error while decoding track %1").arg(m_currentTrackNumber), ERROR );

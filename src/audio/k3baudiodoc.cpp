@@ -576,21 +576,6 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 }
 
 
-// deprected
-QString K3bAudioDoc::prepareForTocFile( const QString& str )
-{
-  // since "\" is the only special character I now of so far...
-  QString newStr = str;
-  int pos = str.find('\\');
-  while( pos > -1 ) {
-    newStr.insert( pos+1, "134" );
-    pos = str.find( '\\', pos+3 );
-  }
-
-  return newStr;
-}
-
-
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {

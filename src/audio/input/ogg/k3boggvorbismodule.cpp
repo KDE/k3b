@@ -193,8 +193,7 @@ void K3bOggVorbisModule::decode()
       emit percent( (int)(100.0 * ((double)m_rawDataAlreadyStreamed / (double)m_rawDataLengthToStream)) );
     }
 
-    if( m_consumer )
-      m_decodingTimer->stop();
+    m_decodingTimer->stop();
   }
 }
 

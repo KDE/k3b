@@ -390,9 +390,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 
     kdDebug() << "(K3bMp3Module) finished." << endl;
   }
-  else if( m_consumer ) {
-    // the timer will be restarted when the consumer
-    // emits the corresponding signal (s.a.)
+  else {
     m_decodingTimer->stop();
   }
 }
@@ -603,11 +601,6 @@ void K3bMp3Module::cancel()
 void K3bMp3Module::clearingUp()
 {
   m_inputFile.close();
-
-  if( m_consumer )
-    m_consumer->disconnect(this);
-
-  m_consumer = 0;
 
   mad_stream_finish( m_madStream );
 }

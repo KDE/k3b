@@ -26,7 +26,7 @@ class K3bAudioDecoder : public K3bJob
 
  signals:
   void data( const char* data, int len );
-  void nextTrack( int );
+  void nextTrack( int, int );
   // just needed for the dumb module consumer api
   void resumeDecoding();
 
@@ -43,6 +43,9 @@ class K3bAudioDecoder : public K3bJob
   bool m_canceled;
   unsigned long m_decodedDataSize;
   unsigned long m_docSize;
+
+  bool m_suspended;
+  bool m_startNewTrackWhenResuming;
 };
 
 #endif

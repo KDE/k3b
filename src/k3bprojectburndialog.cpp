@@ -50,7 +50,8 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
                  KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"),
                            i18n("Saves the settings to the project and closes the burn dialog.") ),
                  KStdGuiItem::cancel() ),
-    m_writerSelectionWidget(0)
+    m_writerSelectionWidget(0),
+    m_tempDirSelectionWidget(0)
 {
   m_doc = doc;
 
@@ -173,6 +174,14 @@ void K3bProjectBurnDialog::slotOk()
   }
 
   saveSettings();
+
+  // check if enough space in tempdir if not on-the-fly
+  if( m_tempDirSelectionWidget )
+    if( !doc()->onTheFly() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+      if( KMessageBox::warningYesNo( this, i18n("There seems to be not enough free space in temporary directory. Write anyway?") ) == KMessageBox::No )
+	return;
+    }
+
 
   m_job = m_doc->newBurnJob();
 

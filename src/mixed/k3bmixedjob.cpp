@@ -69,7 +69,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_audioDecoder, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
   connect( m_audioDecoder, SIGNAL(subPercent(int)), this, SLOT(slotAudioDecoderSubPercent(int)) );
   connect( m_audioDecoder, SIGNAL(finished(bool)), this, SLOT(slotAudioDecoderFinished(bool)) );
-  connect( m_audioDecoder, SIGNAL(nextTrack(int)), this, SLOT(slotAudioDecoderNextTrack(int)) );
+  connect( m_audioDecoder, SIGNAL(nextTrack(int, int)), this, SLOT(slotAudioDecoderNextTrack(int, int)) );
 
   m_waveFileWriter = new K3bWaveFileWriter();
 
@@ -351,10 +351,10 @@ void K3bMixedJob::slotReceivedAudioDecoderData( const char* data, int len )
 }
 
 
-void K3bMixedJob::slotAudioDecoderNextTrack( int t )
+void K3bMixedJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( !m_doc->onTheFly() ) {
-    emit newSubTask( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
+    emit newSubTask( i18n("Decoding audiotrack %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
     //emit infoMessage( i18n("Decoding audiotrack %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()), INFO );
     QString bf = k3bMain()->findTempFile( "wav", m_doc->imagePath() );
     if( !m_waveFileWriter->open( bf ) ) {
@@ -571,21 +571,21 @@ void K3bMixedJob::slotWriterNextTrack( int t, int tt )
 {
   if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
     if( t == 1 )
-      emit newSubTask( i18n("Writing track %1 (%2)").arg(t).arg(i18n("Iso9660 data")) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt).arg(i18n("Iso9660 data")) );
     else
-      emit newSubTask( i18n("Writing track %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-2)->fileName()) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->audioDoc()->at(t-2)->fileName()) );
   }
   else if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) {
     if( t == m_doc->audioDoc()->numberOfTracks()+1 )
-      emit newSubTask( i18n("Writing track %1 (%2)").arg(t).arg(i18n("Iso9660 data")) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt).arg(i18n("Iso9660 data")) );
     else
-      emit newSubTask( i18n("Writing track %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
   }
   else {
     if( m_currentAction == WRITING_AUDIO_IMAGE )
-      emit newSubTask( i18n("Writing track %1 (%2)").arg(t).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt+1).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
     else
-      emit newSubTask( i18n("Writing track %1 (%2)").arg(t+1).arg(i18n("Iso9660 data")) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(m_doc->numOfTracks()).arg(m_doc->numOfTracks()).arg(i18n("Iso9660 data")) );
   }
 }
 
