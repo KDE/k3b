@@ -1,3 +1,91 @@
+dnl ============
+dnl Machine type
+dnl ============
+ 
+ARCH_CFLAGS="$CFLAGS -O2 -funroll-all-loops -finline-functions -ffast-math"
+
+case "$ARCH_TYPE" in
+	i486)
+		AC_DEFINE(ARCH_486, 1, [WE ARE BUILDING FOR A 486])
+		OPTIMIZED_ARCH="YES"
+	;;
+	i586)
+		AC_DEFINE(ARCH_586, 1, [WE ARE BUILDING FOR A PENTIUM])
+		OPTIMIZED_ARCH="YES"
+	;;
+	i686)
+		AC_DEFINE(ARCH_686, 1, [WE ARE BUILDING FOR A PPRO])
+		OPTIMIZED_ARCH="YES"
+		#EXTRA_CPU_CFLAGS=$(if $CC -march=i686 -S -o /dev/null -xc /dev/null > /dev/null; then echo "-march=i686"; fi)
+	;;
+	ppc)
+		AC_DEFINE(ARCH_PPC, 1, [WE ARE BUILDING FOR A POWERPC])
+		OPTIMIZED_ARCH="YES"
+	;;
+	sun4u)
+		AC_DEFINE(ARCH_ULTRA, 1, [WE ARE BUILDING FOR A SUN ULTRASPARC])
+		# Is there mpg123 optimization for UltraSparc?
+	;;
+esac
+
+# ARCH_X86
+if test "$ARCH_TYPE" = "i486" || test "$ARCH_TYPE" = "i586" || test "$ARCH_TYPE" = "i686"; then
+	MPG123_PLAT_LIB="$MPG123_PLAT_LIB libmpx86.la"
+fi
+# ARCH_486
+if test "$ARCH_TYPE" = "i486"; then
+	MPG123_PLAT_LIB="$MPG123_PLAT_LIB libmp486.la"
+	ARCH_CFLAGS="$ARCH_CFLAGS -DROT_I386 -DI386_ASSEM -DI486_OPT -DLINUX -DREAL_IS_FLOAT"
+fi
+# ARCH_586
+if test "$ARCH_TYPE" = "i586" -a "$MMX_SUPPORT" = "no"; then
+        MPG123_PLAT_LIB="$MPG123_PLAT_LIB libmp586.la"
+	ARCH_CFLAGS="$ARCH_CFLAGS -DROT_I386 -DI386_ASSEM -DPENTIUM_OPT -DLINUX -DREAL_IS_FLOAT"
+fi
+# ARCH_586_MMX
+if test "$ARCH_TYPE" = "i586" -a "$MMX_SUPPORT" = "yes"; then
+	ARCH_CFLAGS="$ARCH_CFLAGS -DROT_I386 -DI386_ASSEM -DPENTIUM_OPT -DLINUX -DREAL_IS_FLOAT"
+	MPG123_PLAT_LIB=libmp586mmx.la
+fi
+# ARCH_686
+if test "$ARCH_TYPE" = "i686" -a "$MMX_SUPPORT" = "no"; then
+	ARCH_CFLAGS="$ARCH_CFLAGS -DROT_I386 -DI386_ASSEM -DPENTIUM_OPT -DLINUX -DREAL_IS_FLOAT -march=pentiumpro"
+	MPG123_PLAT_LIB=libmp686.la
+fi
+# ARCH_686_MMX
+if test "$ARCH_TYPE" = "i686" -a "$MMX_SUPPORT" = "yes"; then
+	ARCH_CFLAGS="$ARCH_CFLAGS -DROT_I386 -DI386_ASSEM -DPENTIUM_OPT -DUSE_MMX -DLINUX -DREAL_IS_FLOAT -march=pentiumpro"
+	MPG123_PLAT_LIB=libmp686mmx.la
+fi
+# ARCH_PPC
+if test "$ARCH_TYPE" = "ppc"; then
+	ARCH_CFLAGS="$ARCH_CFLAGS -mcpu=ppc"
+	MPG123_PLAT_LIB=libmpppc.la
+fi
+# ARCH_ULTRA
+if test "$ARCH_TYPE" = "sun4u"; then
+	:
+	# nothing for now
+fi
+# ARCH_PLAIN
+if test -z "$OPTIMIZED_ARCH"; then
+	MPG123_PLAT_LIB=libmpplain.la
+fi
+
+AC_SUBST(ARCH_CFLAGS)
+
+# this is run after libtool configure parts, which set AS to as
+# which is the wrong one for us.  E.g. libtool doesn't recognize that as
+# tag.  So we unset it here, so the below macro can set it.
+save_AS=$AS
+unset AS
+ifdef([AM_PROG_AS],[AM_PROG_AS],[])
+#if the macro did set something usefull fallback.
+test -z "$AS" && AS=$save_AS
+#and if AS was set to as by the macro, and we have a saved value,
+#it's likely it contains a better guess (or it's also as)
+test "x$AS" = xas && test -n "$save_AS" && AS=$save_AS
+
 linux_scsi=no
 AC_MSG_CHECKING(for linux scsi headers)
 AC_TRY_COMPILE([
