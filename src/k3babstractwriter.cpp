@@ -66,7 +66,8 @@ void K3bAbstractWriter::createEstimatedWriteSpeed( int made, bool firstCall )
 
 void K3bAbstractWriter::createAverageWriteSpeedInfoMessage()
 {
-  double speed = (double)m_lastWrittenBytes * 1024.0 / (double)m_firstWriteSpeedCalcTime.secsTo( m_lastWriteSpeedCalcTime );
+  double secs = (double)m_firstWriteSpeedCalcTime.secsTo( m_lastWriteSpeedCalcTime );
+  double speed = (double)m_lastWrittenBytes * 1024.0 / ( secs > 0 ? secs : 1 );
   emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(speed/150.0, 0, 'g', 2), INFO );
 }
 
