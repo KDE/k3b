@@ -48,7 +48,6 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
         m_command(WRITE),
         m_blankMode(MINIMAL),
         m_sourceDevice(0),
-        m_sourceDriver("auto"),
         m_dataFile(QString("")),
         m_tocFile(QString("")),
         m_readRaw(false),
@@ -157,8 +156,8 @@ void K3bCdrdaoWriter::prepareArgumentList() {
         if ( m_sourceDevice )
             *m_process << "--device"
             << m_sourceDevice->busTargetLun();
-        if ( m_sourceDriver != "auto" )
-            *m_process << "--driver" << m_sourceDriver;
+        if ( m_sourceDevice->cdrdaoDriver() != "auto" )
+            *m_process << "--driver" << m_sourceDevice->cdrdaoDriver();
         setReadArguments();
         break;
     case BLANK:
@@ -268,8 +267,8 @@ void K3bCdrdaoWriter::setReadArguments() {
 void K3bCdrdaoWriter::setCopyArguments() {
     // source device and source driver
     *m_process << "--source-device" << m_sourceDevice->busTargetLun();
-    if ( m_sourceDriver != "auto" )
-        *m_process << "--source-driver" << m_sourceDriver;
+    if ( m_sourceDevice->cdrdaoDriver() != "auto" )
+        *m_process << "--source-driver" << m_sourceDevice->cdrdaoDriver();
 
     // on-the-fly
     if ( m_onTheFly )
