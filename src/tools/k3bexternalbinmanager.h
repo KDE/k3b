@@ -25,6 +25,7 @@ class K3bExternalBin
   const QString& name() const;
   bool isEmpty() const;
   const QStringList& userParameters() const { return m_userParameters; }
+  const QStringList& features() const { return m_features; }
 
   bool hasFeature( const QString& ) const;
   void addFeature( const QString& );
@@ -68,11 +69,16 @@ Q_OBJECT
   void slotParseOutputVersion( KProcess *p, char* data, int len );
   void slotParseTranscodeVersion( KProcess *p, char* data, int len );
   //void slotProcessExited( KProcess *p );
+  void gatherOutput(KProcess*, char*, int);
 
  private:
+  bool probeCdrecord( K3bExternalBin* );
+
   QMap<QString, K3bExternalBin*> m_binMap;
   KProcess* m_process;
   QString m_noPath;  // used for binPath() to return const string
+
+  QString m_gatheredOutput;
   //unsigned int m_programArrayIndex;
   //QString m_bin; // binary path/program to test
 

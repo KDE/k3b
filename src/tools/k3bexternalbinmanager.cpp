@@ -129,6 +129,19 @@ void K3bExternalBinManager::search() {
     for( int i=0; i<NUM_BIN_PROGRAMS; i++ ) {
         searchVersion( i );
     }
+
+    if( !probeCdrecord( binObject("cdrecord") ) ) {
+      kdDebug() << "(K3bExternalBinManager) Probing cdrecord failed" << endl;
+    }
+    else {
+      kdDebug() << "(K3bExternalBinManager) Cdrecord " << binObject("cdrecord")->version << " features: " 
+		<< binObject("cdrecord")->features().join( ", " ) << endl;
+
+      if( binObject("cdrecord")->version >= "1.11a02" )
+	kdDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" << endl;
+      if( binObject("cdrecord")->version >= "1.11a31" )
+	kdDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree driveroption" << endl;
+    }
 }
 
 void K3bExternalBinManager::searchVersion( int programArrayIndex ){
@@ -306,7 +319,7 @@ void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int
 }
 
 
-void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*p, char* data, int len ){
+void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*, char* data, int len ){
     QString buffer = QString::fromLocal8Bit( data, len );
     int start = buffer.find( QRegExp("[0-9]") );
     int findStart = ( start > -1 ? start : 0 );
@@ -371,6 +384,68 @@ void K3bExternalBinManager::slotParseTranscodeVersion( KProcess* p, char* data, 
         }
     }
 }
+
+
+bool K3bExternalBinManager::probeCdrecord( K3bExternalBin* bin )
+{
+  // probe version
+  KProcess vp;
+  vp << bin->path << "-version";
+  connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  connect( &vp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  m_gatheredOutput = "";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = m_gatheredOutput.find( "Cdrecord" );
+    if( pos < 0 )
+      return false;
+
+    pos = m_gatheredOutput.find( QRegExp("[0-9]"), pos );
+    if( pos < 0 )
+      return false;
+
+    int endPos = m_gatheredOutput.find( ' ', pos+1 );
+    if( endPos < 0 )
+      return false;
+
+    bin->version = m_gatheredOutput.mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
+    return false;
+  }
+
+
+
+  // probe features
+  KProcess fp;
+  fp << bin->path << "-help";
+  connect( &fp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  connect( &fp, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  m_gatheredOutput = "";
+  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    if( m_gatheredOutput.contains( "gracetime" ) )
+      bin->addFeature( "gracetime" );
+    if( m_gatheredOutput.contains( "-overburn" ) )
+      bin->addFeature( "overburn" );
+    if( m_gatheredOutput.contains( "-text" ) )
+      bin->addFeature( "cdtext" );
+    if( m_gatheredOutput.contains( "-clone" ) )  // cdrecord ProDVD
+      bin->addFeature( "clone" );
+  }
+  else {
+    kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
+    return false;
+  }
+
+  return true;
+}
+
+
+void K3bExternalBinManager::gatherOutput( KProcess*, char* data, int len )
+{
+  m_gatheredOutput.append( QString::fromLatin1( data, len ) );
+}
+
 
 bool K3bExternalBinManager::readConfig( KConfig* c )
 {
