@@ -93,7 +93,7 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
     debugView->append( "\n" );
   }
 
-  resize( 200, 300 );
+  resize( 600, 300 );
 }
 
 
