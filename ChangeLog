@@ -1,7 +1,14 @@
 0.7.4
 fixed bug that caused stupid mountpoint to be assigned to the devices
+Mounting dvd with UDF filesystem (uppercase words) should now work (copy ifo-files).
 beautified cddb setup
 internal cddb change (rewrite)
+Fix audiolanguange parsing for transcode 0.6.2 (wrong entries in k3bDVDRip.xml)
+
+Bugfix Selecting ripping dir with file dialog and new directory now shows the available space properly.
+Bugfix Cancel one pass in encoding now works
+If select "Add to project" in the context menu of the file/dir tree a dialog (audio/data) asks
+for creating a new data or audio project.
 
 0.7.3
 fixed compile problems with gcc 3.x
