@@ -51,7 +51,12 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   }
   else {
     m_size = (KIO::filesize_t)statBuf.st_size;
-    m_inode = statBuf.st_ino;
+
+    //
+    // integrate the device number into the inode since files on different
+    // devices may have the same inode number!
+    //
+    m_inode = (statBuf.st_ino&0xffff) | (statBuf.st_dev<<16)&0xffff0000;
   }
 
   // add automagically like a qlistviewitem

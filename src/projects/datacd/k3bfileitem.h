@@ -47,6 +47,11 @@ public:
 
   /** reimplemented from K3bDataItem */
   QString localPath() const;
+
+  /**
+   * This is not the normal inode number but it also contains
+   * the device number.
+   */
   int localInode() const { return m_inode; }
 
   KIO::filesize_t k3bSize() const;
