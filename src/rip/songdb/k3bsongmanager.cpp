@@ -39,6 +39,7 @@ void K3bSongManager::save(){
     QFile f( m_filename );
     if ( f.open(IO_WriteOnly) ) {    // file opened successfully
         QTextStream t( &f );        // use a text stream
+	t << "<?xml version = \"1.0\" encoding = \"ISO 8859-1\" ?>" << endl;  // needed for german umlauts
         t << "<k3b-CDDB-Database version=\"1.0\">" << endl;
         ContainerList::Iterator con;
         QString insertTab_1 = "    "; // 4 spaces
