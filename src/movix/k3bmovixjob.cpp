@@ -26,6 +26,7 @@
 #include <data/k3bfileitem.h>
 #include <data/k3bisoimager.h>
 #include <k3bexternalbinmanager.h>
+#include <device/k3bdevice.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -74,7 +75,7 @@ K3bMovixJob::~K3bMovixJob()
 }
 
 
-K3bDevice* K3bMovixJob::writer() const
+K3bCdDevice::CdDevice* K3bMovixJob::writer() const
 {
   return m_dataJob->writer();
 }

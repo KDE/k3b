@@ -39,7 +39,7 @@
 // application specific includes
 #include "k3bview.h"
 #include "k3bdoc.h"
-#include "k3bprojectinterface.h"
+//#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
 #include <device/k3bdevice.h>
 #include <audio/k3baudiodoc.h>
@@ -57,8 +57,8 @@
 
 
 K3bDoc::K3bDoc( QObject* parent )
-  : QObject( parent ),
-    m_dcopInterface( 0 )
+  : QObject( parent )
+    //    m_dcopInterface( 0 )
 {
   pViewList = new QPtrList<K3bView>;
   pViewList->setAutoDelete(false);
@@ -78,23 +78,23 @@ K3bDoc::K3bDoc( QObject* parent )
 K3bDoc::~K3bDoc()
 {
   delete pViewList;
-  if( m_dcopInterface )
-    delete m_dcopInterface;
+//   if( m_dcopInterface )
+//     delete m_dcopInterface;
 }
 
 
-K3bProjectInterface* K3bDoc::dcopInterface()
-{
-  if( !m_dcopInterface )
-    m_dcopInterface = new K3bProjectInterface( this );
-  return m_dcopInterface;
-}
+// K3bProjectInterface* K3bDoc::dcopInterface()
+// {
+//   if( !m_dcopInterface )
+//     m_dcopInterface = new K3bProjectInterface( this );
+//   return m_dcopInterface;
+// }
 
 
-QCString K3bDoc::dcopId()
-{
-  return dcopInterface()->objId();
-}
+// QCString K3bDoc::dcopId()
+// {
+//   return dcopInterface()->objId();
+// }
 
 
 void K3bDoc::setDummy( bool b )

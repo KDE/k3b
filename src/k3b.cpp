@@ -27,6 +27,8 @@
 #include <qvaluelist.h>
 #include <qfont.h>
 #include <qpalette.h>
+#include <qmap.h>
+
 #include <kkeydialog.h>
 // include files for KDE
 #include <kiconloader.h>
@@ -85,6 +87,7 @@
 #include "k3bstdguiitems.h"
 #include "dvd/k3bdvdformattingdialog.h"
 #include "cdclone/k3bclonedialog.h"
+#include "k3bprojectinterface.h"
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -103,6 +106,7 @@ K3bMainWindow* k3bMain()
 class K3bMainWindow::Private
 {
 public:
+  QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
 };
 
 
@@ -447,9 +451,6 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   slotCurrentDocChanged( m_documentTab->currentPage() );
 
   setProjectsHidable( false );
-
-  // create the dcop interface
-  doc->dcopInterface();
 }
 
 
@@ -608,6 +609,12 @@ bool K3bMainWindow::eventFilter(QObject* object, QEvent* event)
 	  // if it was the last view we removed the doc should be removed
 	  // ---------------------------------
 	  if( !pDoc->firstView() ) {
+	    QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( pDoc );
+	    if( it != d->projectInterfaceMap.end() ) {
+	      // delete the interface
+	      delete it.data();
+	      d->projectInterfaceMap.remove( it );
+	    }
 	    pDocList->remove( pDoc );
 	  }
 	  e->accept();
@@ -974,6 +981,22 @@ void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
   pDocList->append(doc);
   doc->newDocument();
   doc->loadDefaultSettings( config() );
+
+  // create the dcop interface
+  dcopInterface( doc );
+}
+
+
+K3bProjectInterface* K3bMainWindow::dcopInterface( K3bDoc* doc )
+{
+  QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
+  if( it == d->projectInterfaceMap.end() ) {
+    K3bProjectInterface* dcopInterface = new K3bProjectInterface( doc );
+    d->projectInterfaceMap[doc] = dcopInterface;
+    return dcopInterface;
+  }
+  else
+    return it.data();
 }
 
 

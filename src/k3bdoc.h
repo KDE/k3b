@@ -31,20 +31,20 @@
 #include <kurl.h>
 #include <kio/global.h>
 #include "device/k3bmsf.h"
-#include "device/k3bdevice.h"
 
 
 // forward declaration of the K3b classes
 class K3bView;
 class QTimer;
 class KTempFile;
-class K3bMainWindow;
 class K3bBurnJob;
 class QDomDocument;
 class QDomElement;
 class KConfig;
-class K3bProjectInterface;
 
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 /**
  * K3bDoc is the base document class.
@@ -127,7 +127,7 @@ class K3bDoc : public QObject
   bool onlyCreateImages() const { return m_onlyCreateImages; }
 
   int speed() const { return m_speed; }
-  K3bDevice* burner() const { return m_burner; }
+  K3bCdDevice::CdDevice* burner() const { return m_burner; }
   virtual KIO::filesize_t size() const = 0;
   virtual K3b::Msf length() const = 0;
 
@@ -150,8 +150,8 @@ class K3bDoc : public QObject
    */
   virtual QString documentType() const = 0;
 
-  virtual K3bProjectInterface* dcopInterface();
-  QCString dcopId();
+/*   virtual K3bProjectInterface* dcopInterface(); */
+/*   QCString dcopId(); */
 
  signals:
   void changed();
@@ -163,7 +163,7 @@ class K3bDoc : public QObject
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setOverburn( bool b ) { m_overburn = b; }
   void setSpeed( int speed );
-  void setBurner( K3bDevice* dev );
+  void setBurner( K3bCdDevice::CdDevice* dev );
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
   void setRemoveImages( bool b ) { m_removeImages = b; }
@@ -215,7 +215,7 @@ class K3bDoc : public QObject
 
   int m_docType;
 
-  K3bProjectInterface* m_dcopInterface;
+  //  K3bProjectInterface* m_dcopInterface;
 
  private:
   /** the modified flag of the current document */
@@ -225,7 +225,7 @@ class K3bDoc : public QObject
   QPtrList<K3bView> *pViewList;
   QString m_projectName;
   QString m_tempDir;
-  K3bDevice* m_burner;
+  K3bCdDevice::CdDevice* m_burner;
   bool m_dummy;
   bool m_onTheFly;
   bool m_burnproof;
@@ -240,8 +240,6 @@ class K3bDoc : public QObject
   int m_writingMode;
 
   bool m_saved;
-
-  friend class K3bProjectManager;
 };
 
 #endif // K3BDOC_H

@@ -15,7 +15,6 @@
 
 
 #include "k3bdirview.h"
-#include "k3bapplication.h"
 #include "k3b.h"
 #include "k3bcore.h"
 

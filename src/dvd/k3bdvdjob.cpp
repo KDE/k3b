@@ -24,6 +24,7 @@
 #include <k3bemptydiscwaiter.h>
 #include <k3bglobals.h>
 #include <k3bemptydiscwaiter.h>
+#include <device/k3bdevice.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -51,7 +52,7 @@ K3bDoc* K3bDvdJob::doc() const
 }
 
 
-K3bDevice* K3bDvdJob::writer() const
+K3bCdDevice::CdDevice* K3bDvdJob::writer() const
 {
   return m_doc->burner();
 }
@@ -358,7 +359,9 @@ bool K3bDvdJob::waitForDvd()
 	cancel();
 	return false;
       }
-		
+    }
+     
+    if( m_doc->speed() > 0 ) {
       emit infoMessage( i18n("DVD+R(W) writers do take care of the writing speed themselves."), INFO );
       emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
     }

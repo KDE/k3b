@@ -15,6 +15,7 @@
 
 
 #include "k3binterface.h"
+#include "k3bprojectinterface.h"
 #include "k3b.h"
 #include "k3bdoc.h"
 
@@ -32,37 +33,37 @@ K3bInterface::K3bInterface( K3bMainWindow* w )
 DCOPRef K3bInterface::createDataCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  m_main->slotNewDataDoc()->dcopId() );
+		  m_main->dcopInterface( m_main->slotNewDataDoc() )->objId() );
 }
 
 DCOPRef K3bInterface::createAudioCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  m_main->slotNewAudioDoc()->dcopId() );
+		  m_main->dcopInterface( m_main->slotNewAudioDoc() )->objId() );
 }
 
 DCOPRef K3bInterface::createMixedCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  m_main->slotNewMixedDoc()->dcopId() );
+		  m_main->dcopInterface( m_main->slotNewMixedDoc() )->objId() );
 }
 
 DCOPRef K3bInterface::createVideoCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  m_main->slotNewVcdDoc()->dcopId() );
+		  m_main->dcopInterface( m_main->slotNewVcdDoc() )->objId() );
 }
 
 DCOPRef K3bInterface::createMovixCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  m_main->slotNewMovixDoc()->dcopId() );
+		  m_main->dcopInterface( m_main->slotNewMovixDoc() )->objId() );
 }
 
 DCOPRef K3bInterface::createDataDVDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  m_main->slotNewDvdDoc()->dcopId() );
+		  m_main->dcopInterface( m_main->slotNewDvdDoc() )->objId() );
 }
 
 DCOPRef K3bInterface::openDocument( const KURL& url )
@@ -70,7 +71,7 @@ DCOPRef K3bInterface::openDocument( const KURL& url )
   K3bDoc* doc = m_main->openDocument( url );
   if( doc )
     return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->dcopId() );
+		    m_main->dcopInterface( doc )->objId() );
   else
     return DCOPRef();
 }
@@ -80,7 +81,7 @@ QValueList<DCOPRef> K3bInterface::projects()
   QValueList<DCOPRef> lst;
   QPtrList<K3bDoc>* docs = m_main->projects();
   for( QPtrListIterator<K3bDoc> it( *docs ); it.current(); ++it )
-    lst.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopId() ) );
+    lst.append( DCOPRef( kapp->dcopClient()->appId(), m_main->dcopInterface( it.current() )->objId() ) );
 
   return lst;
 }

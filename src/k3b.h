@@ -52,6 +52,8 @@ class K3bAudioPlayer;
 class K3bBusyWidget;
 class KSystemTray;
 class K3bStatusBarManager;
+class K3bProjectInterface;
+
 
 namespace K3bCdDevice {
   class DeviceManager;
@@ -121,6 +123,7 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   KSystemTray* systemTray() const { return m_systemTray; }
 
+  K3bProjectInterface* dcopInterface( K3bDoc* doc );
 
  public slots:
   K3bDoc* slotNewAudioDoc();
