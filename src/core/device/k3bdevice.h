@@ -311,7 +311,11 @@ namespace K3bCdDevice
   protected:
     bool furtherInit();
 
-    bool readDiscInfo( K3bCdDevice::disc_info_t* info ) const;
+    /**
+     * if true is returned dataLen specifies the actual length of *data which needs to be
+     * deleted after using.
+     */
+    bool readDiscInfo( unsigned char** data, int& dataLen ) const;
 
     bool modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const;
 

@@ -898,36 +898,41 @@ int K3bCdDevice::CdDevice::isEmpty() const
   if (open() < 0)
     return NO_INFO;
 
-  int drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS);
-  if ( drive_status < 0 ) {
-    kdDebug() << "(K3bCdDevice) Error: could not get drive status" << endl;
-    ret = NO_INFO;
-  } else if ( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN ) {
-    // kernel bug ?? never seen CDS_NO_DISC
-    kdDebug() << "(K3bCdDevice)  Error: No disk in drive" << endl;
-    ret = NO_DISK;
-  } else {
-    disc_info_t inf;
-    if( readDiscInfo( &inf ) ) {
-      switch( inf.status ) {
-      case 0:
-        ret = EMPTY;
-        break;
-      case 1:
-        ret = APPENDABLE;
-        break;
-      case 2:
-        ret = COMPLETE;
-        break;
-      default:
-        ret = NO_INFO;
-        break;
-      }
-    }
-    else {
-      kdDebug() << "(K3bCdDevice) could not get disk info !" << endl;
+  unsigned char* data = 0;
+  int dataLen = 0;
+
+  if( readDiscInfo( &data, dataLen ) ) {
+    disc_info_t* inf = (disc_info_t*)data;
+    switch( inf->status ) {
+    case 0:
+      ret = EMPTY;
+      break;
+    case 1:
+      ret = APPENDABLE;
+      break;
+    case 2:
+      ret = COMPLETE;
+      break;
+    default:
       ret = NO_INFO;
+      break;
     }
+
+    delete [] data;
+  }
+  else {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	      << ": READ DISC INFORMATION failed. falling back to cdrom.h" << endl;
+    int drive_status = ::ioctl(d->deviceFd,CDROM_DRIVE_STATUS);
+    if( drive_status < 0 ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": could not get drive status" << endl;
+      ret = NO_INFO;
+    } 
+    else if( drive_status == CDS_NO_DISC || drive_status == CDS_TRAY_OPEN ) {
+      // kernel bug ?? never seen CDS_NO_DISC
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": No disk in drive" << endl;
+      ret = NO_DISK;
+    } 
   }
 
   if( needToClose )
@@ -935,6 +940,7 @@ int K3bCdDevice::CdDevice::isEmpty() const
 
   return ret;
 }
+
 
 K3b::Msf K3bCdDevice::CdDevice::discSize()
 {
@@ -946,25 +952,24 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
   if (open() < 0)
     return ret;
 
-  disc_info_t inf;
-  if( readDiscInfo( &inf ) ) {
-    if ( inf.lead_out_m != 0xFF && inf.lead_out_s != 0xFF && inf.lead_out_f != 0xFF ) {
-      ret = K3b::Msf( inf.lead_out_m, inf.lead_out_s, inf.lead_out_f );
+  unsigned char* data = 0;
+  int dataLen = 0;
+
+  if( readDiscInfo( &data, dataLen ) ) {
+    disc_info_t* inf = (disc_info_t*)data;
+    if ( inf->lead_out_m != 0xFF && inf->lead_out_s != 0xFF && inf->lead_out_f != 0xFF ) {
+      ret = K3b::Msf( inf->lead_out_m, inf->lead_out_s, inf->lead_out_f );
       ret -= 150;
     }
+
+    delete [] data;
   }
 
   if( ret == 0 ) {
-    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
-    struct cdrom_tocentry tocentry;
-    tocentry.cdte_track = CDROM_LEADOUT;
-    tocentry.cdte_format = CDROM_LBA;
-    if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) )
-      kdDebug() << "(K3bCdDevice) error reading lead out " << endl;
-    else {
-      ret = tocentry.cdte_addr.lba;
-      ret -= 1;  // we need the last sector of the last track, not the first from the lead-out
-    }
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	      << "READ DISC INFORMATION failed. getting disk size via toc." << endl;
+    Toc toc = readToc();
+    ret = toc.lastSector();
   }
 
   if( needToClose )
@@ -974,27 +979,43 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
 }
 
 
-bool K3bCdDevice::CdDevice::readDiscInfo( K3bCdDevice::disc_info_t* info ) const
+bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
-  bool success = true;
+
+  bool success = false;
 
   if (open() < 0)
     return false;
 
-
-  ::memset(info, 0, sizeof(disc_info_t));
+  unsigned char header[2];
+  ::memset( header, 0, 2 );
 
   ScsiCommand cmd( open() );
-  cmd[0] = 0x51;   // GPCMD_READ_DISC_INFO;
-  cmd[8] = sizeof(disc_info_t);
+  cmd[0] = 0x51;   // READ DISC INFORMATION
+  cmd[8] = 2;
 
-  if( cmd.transport( TR_DIR_READ, info, sizeof(disc_info_t) ) ) {
-    success = false;
-    kdDebug() << "(K3bCdDevice::CdDevice) could not get disk info (size: "
-	      << sizeof(disc_info_t) << ")" << endl;
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
+    // again with real length
+    dataLen = from2Byte( header ) + 2;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[7] = dataLen>>8;
+    cmd[8] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
+      success = true;
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
+		<< dataLen << " failed." << endl;
+      delete [] *data;
+    }
+  }
+  else {
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
   }
 
   if( needToClose )
@@ -1010,18 +1031,22 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
   bool empty = false;
   bool appendable = false;
 
-  disc_info_t inf;
+  unsigned char* data = 0;
+  int dataLen = 0;
 
-  if( readDiscInfo( &inf ) ) {
-    if ( inf.lead_in_m != 0xFF && inf.lead_in_s != 0xFF && inf.lead_in_f != 0xFF ) {
-      ret = K3b::Msf( inf.lead_in_m, inf.lead_in_s, inf.lead_in_f );
+  if( readDiscInfo( &data, dataLen ) ) {
+    disc_info_t* inf = (disc_info_t*)data;
+    if ( inf->lead_in_m != 0xFF && inf->lead_in_s != 0xFF && inf->lead_in_f != 0xFF ) {
+      ret = K3b::Msf( inf->lead_in_m, inf->lead_in_s, inf->lead_in_f );
     }
-    if ( inf.lead_out_m != 0xFF && inf.lead_out_s != 0xFF && inf.lead_out_f != 0xFF ) {
-      size = K3b::Msf( inf.lead_out_m, inf.lead_out_s, inf.lead_out_f );
+    if ( inf->lead_out_m != 0xFF && inf->lead_out_s != 0xFF && inf->lead_out_f != 0xFF ) {
+      size = K3b::Msf( inf->lead_out_m, inf->lead_out_s, inf->lead_out_f );
     }
 
-    empty = !inf.status;
-    appendable = ( inf.status == 1 );
+    empty = !inf->status;
+    appendable = ( inf->status == 1 );
+
+    delete [] data;
   }
   else
     return 0;
@@ -1063,7 +1088,7 @@ int K3bCdDevice::CdDevice::numSessions() const
   if( readTocPmaAtip( &dat, len, 1, 0, 0 ) )
     ret = dat[3];
   else
-    kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": could not get session info !" << endl;
   
   if( needToClose )
     close();
@@ -1074,61 +1099,30 @@ int K3bCdDevice::CdDevice::numSessions() const
 
 int K3bCdDevice::CdDevice::tocType() const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( readTocPmaAtip( &data, dataLen, 2, true, 1 ) ) {
 
-  int ret=-1;
-  if (open() < 0)
+    //
+    // We are interested in POINT A0 (always first) PSEC field
+    // 0x00 - CD_DA or CD_ROM
+    // 0x10 - CD-I
+    // 0x20 - CD_XA
+    //
+
+    int ret = -1;
+    toc_raw_track_descriptor* td = (toc_raw_track_descriptor*)&data[4];
+    if( td->point == 0xA0 )
+      ret = td->p_sec;
+
+    delete [] data;
+
     return ret;
-
-  unsigned char dat[15];
-  ::memset(dat,0,15);
-
-  ScsiCommand cmd( open() );
-  cmd[0] = 0x43;  // GPCMD_READ_TOC_PMA_ATIP;
-  // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-  cmd[1] = 2;
-  cmd[2] = 2;
-  cmd[8] = 15;
-
-  //
-  // Full Toc
-  // ============
-  // Byte 0-1: Data Length
-  // Byte   2: First Complete Session Number (Hex) - always 1
-  // Byte   3: Last Complete Session Number (Hex)
-  //   TOC Track Descriptors
-  // Byte   4: Session Number
-  // Byte   5: ADR | CTRL
-  // Byte   6: TNO
-  // Byte   7; POINT
-  // Byte   8: Min
-  // Byte   9: Sec
-  // Byte  10: Frame
-  // Byte  11: Zero
-  // Byte  12: PMIN
-  // Byte  13: PSEC
-  // Byte  14: PFRAME
-  //
-  // We are interested in POINT A0 (always first) PSEC field
-  // 0x00 - CD_DA or CD_ROM
-  // 0x10 - CD-I
-  // 0x20 - CD_XA
-  //
-
-  // WHY DON'T WE DO THIS WITH DISC_INFO???
-
-  if( cmd.transport( TR_DIR_READ, dat, 15 ) == 0 )
-    if ( dat[7] == 0xA0 )
-      ret = dat[13];
-    else
-      kdDebug() << "(K3bCdDevice) could not get toc type !" << endl;
-
-  if( needToClose )
-    close();
-  return ret;
+  }
+  else
+    return -1;
 }
+
 
 int K3bCdDevice::CdDevice::getTrackDataMode(int lba)
 {
@@ -1530,10 +1524,17 @@ bool K3bCdDevice::CdDevice::rewritable() const
   if( isReady() != 0 )
     return false;
 
-  disc_info_t inf;
+  unsigned char* data = 0;
+  int dataLen = 0;
 
-  if( readDiscInfo( &inf ) )
-    return inf.erasable;
+  if( readDiscInfo( &data, dataLen ) ) {
+    disc_info_t* inf = (disc_info_t*)data;
+    bool e = inf->erasable;
+
+    delete [] data;
+
+    return e;
+  }
   else
     return false;
 }
@@ -1746,13 +1747,16 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
     ScsiCommand cmd( open() );
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
-      disc_info_t dInf;
-      if( readDiscInfo( &dInf ) ) {
 
+      unsigned char* data = 0;
+      int dataLen = 0;
+      
+      if( readDiscInfo( &data, dataLen ) ) {
+	disc_info_t* dInf = (disc_info_t*)data;
 	//
 	// Copy the needed values from the disk_info struct
 	//
-	switch( dInf.status ) {
+	switch( dInf->status ) {
 	case 0:
 	  inf.m_diskState = STATE_EMPTY;
 	  break;
@@ -1767,7 +1771,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	  break;
 	}
 
-	switch( dInf.border ) {
+	switch( dInf->border ) {
 	case 0x00:
 	  inf.m_lastSessionState = STATE_EMPTY;
 	  break;
@@ -1782,29 +1786,31 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	  break;
 	}
 
-	inf.m_rewritable = dInf.erasable;
+	inf.m_rewritable = dInf->erasable;
 
 	// we set it here so we have the info even if the call to GPCMD_READ_TOC_PMA_ATIP failes
-	inf.m_numSessions = dInf.n_sessions_l | (dInf.n_sessions_m << 8);
+	inf.m_numSessions = dInf->n_sessions_l | (dInf->n_sessions_m << 8);
 
-	//	inf.m_numTracks = ( (dInf.last_track_m<<8) | dInf.last_track_l);
+	//	inf.m_numTracks = ( (dInf->last_track_m<<8) | dInf->last_track_l);
 
 	// MMC-4 says that only CD-R(W) should return proper sizes here. 
 	// Does that means that lead_out_r is rather useless?
-	inf.m_capacity = K3b::Msf( dInf.lead_out_m + dInf.lead_out_r*60, 
-				   dInf.lead_out_s, 
-				   dInf.lead_out_f ) - 150;
+	inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60, 
+				   dInf->lead_out_s, 
+				   dInf->lead_out_f ) - 150;
 
 	// Why do we need to substract 4500 again??
 	if( inf.appendable() )
-	  inf.m_remaining = inf.capacity() - K3b::Msf( dInf.lead_in_m + dInf.lead_in_r*60, 
-						       dInf.lead_in_s, 
-						       dInf.lead_in_f ) - 4500;
+	  inf.m_remaining = inf.capacity() - K3b::Msf( dInf->lead_in_m + dInf->lead_in_r*60, 
+						       dInf->lead_in_s, 
+						       dInf->lead_in_f ) - 4500;
+
+	delete [] data;
       }
 
       //
       // Now we determine the size:
-      // for empty and appendable CD-R(W) and DVD+R media this should be in the dInf.lead_out_X fields
+      // for empty and appendable CD-R(W) and DVD+R media this should be in the dInf->lead_out_X fields
       // for all empty and appendable media READ FORMAT CAPACITIES should return the proper unformatted size
       // for complete disks we may use the READ_CAPACITY command or the start sector from the leadout
       //
@@ -2265,8 +2271,8 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
 
   bool ret = false;
 
-  unsigned char header[4];
-  ::memset( header, 0, 4 );
+  unsigned char header[2];
+  ::memset( header, 0, 2 );
 
   ScsiCommand cmd( open() );
   cmd[0] = 0x43;  // READ TOC/PMA/ATIP
@@ -2274,11 +2280,11 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
   cmd[2] = format & 0x0F;
   cmd[6] = track;
   cmd[7] = 0;
-  cmd[8] = 4; // we only read the length first
+  cmd[8] = 2; // we only read the length first
 
-  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
     // again with real length
-    dataLen = from2Byte( header ) + 4;
+    dataLen = from2Byte( header ) + 2;
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
@@ -2287,11 +2293,15 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
     cmd[8] = dataLen;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
       ret = true;
-    else
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
+		<< format << " with real length "
+		<< dataLen << " failed." << endl;
       delete [] *data;
+    }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP length failed." << endl;
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
 
   if( needToClose )
     close();
