@@ -13,46 +13,42 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_TRM_H_
-#define _K3B_TRM_H_
+#ifndef _K3B_MUSICBRAINZ_H_
+#define _K3B_MUSICBRAINZ_H_
 
 #include <config.h>
 
 #ifdef HAVE_MUSICBRAINZ
 
-#include <k3bmsf.h>
+#include <qcstring.h>
+#include <qstring.h>
+
 
 /**
- * This class is a wrapper around the trm part of libmusicbrainz.
- * It handles proxy settings automatically through KDE.
+ * A wrapper class around libmusicbrainz. Use in combination with K3bTRM.
  *
- * K3bTRM always treats audio data as 44100, 2 channel, 16 bit data.
+ * Tries to determine the artist and title related to a trm.
  */
-class K3bTRM
+class K3bMusicBrainz
 {
  public:
-  K3bTRM();
-  ~K3bTRM();
-
-  void start( const K3b::Msf& length );
+  K3bMusicBrainz();
+  ~K3bMusicBrainz();
 
   /**
-   * \return true if no more data is needed
+   * \return number of found results.
    */
-  bool generate( char* data, int len );
+  int query( const QCString& trm );
 
-  /**
-   * \return true on success, false on error.
-   */
-  bool finalize();
-
-  const QCString& rawSignature() const;
-  const QCString& signature() const;
+  const QString& title( unsigned int i = 0 ) const;
+  const QString& artist( unsigned int i = 0 ) const;
 
  private:
   class Private;
   Private* d;
 };
 
+
 #endif
+
 #endif

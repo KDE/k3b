@@ -72,7 +72,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   toolBox()->addWidgetAction( static_cast<KWidgetAction*>(m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
   toolBox()->addSeparator();
 
-#ifdef HAVE_TUNEPIMP
+#ifdef HAVE_MUSICBRAINZ
   KAction* mbAction = new KAction( i18n("Musicbrainz Lookup"), "musicbrainz", 0, m_songlist, 
 				   SLOT(slotQueryMusicBrainz()),
 				   actionCollection(), "project_audio_musicbrainz" );
@@ -92,7 +92,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	  "<MenuBar>"
 	  " <Menu name=\"project\"><text>&amp;Project</text>"
 	  "  <Action name=\"project_audio_convert\"/>"
-#if HAVE_TUNEPIMP
+#if HAVE_MUSICBRAINZ
 	  "  <Action name=\"project_audio_musicbrainz\"/>"
 #endif
 	  " </Menu>"

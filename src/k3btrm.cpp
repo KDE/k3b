@@ -15,59 +15,79 @@
 
 #include <config.h>
 
-#ifdef HAVE_TUNEPIMP
+#ifdef HAVE_MUSICBRAINZ
 
 #include "k3btrm.h"
+#include "musicbrainz/mb_c.h"
 
 #include <kdebug.h>
+#include <kprotocolmanager.h>
+#include <kurl.h>
 
 
-K3bTRMLookup::K3bTRMLookup( const QString& file, QObject* parent, const char* name )
-  : QObject( parent, name ),
-    KTRMLookup( file )
+class K3bTRM::Private
 {
+public:
+  trm_t trm;
+  QCString sig;
+  QCString rawSig;
+};
+
+
+K3bTRM::K3bTRM()
+{
+  d = new Private;
+  d->trm = trm_New();
+  d->rawSig.resize( 17 );
+  d->sig.resize( 37 );
 }
 
 
-K3bTRMLookup::~K3bTRMLookup()
+K3bTRM::~K3bTRM()
 {
+  trm_Delete( d->trm );
+  delete d;
 }
 
 
-void K3bTRMLookup::recognized()
+void K3bTRM::start( const K3b::Msf& length )
 {
-  m_resultState = RECOGNIZED;
-  KTRMLookup::recognized();
+  if( KProtocolManager::useProxy() ) {
+    KURL proxy = KProtocolManager::proxyFor("http");
+    trm_SetProxy( d->trm, const_cast<char*>(proxy.host().latin1()), short(proxy.port()) );
+  }
+
+  trm_SetPCMDataInfo( d->trm, 44100, 2, 16 );
+  trm_SetSongLength( d->trm, length.totalFrames()/75 );
 }
 
 
-void K3bTRMLookup::unrecognized()
+bool K3bTRM::generate( char* data, int len )
 {
-  m_resultState = UNRECOGNIZED;
-  KTRMLookup::unrecognized();
+  return ( trm_GenerateSignature( d->trm, data, len ) == 1 );
 }
 
 
-void K3bTRMLookup::collision()
+bool K3bTRM::finalize()
 {
-  m_resultState = COLLISION;
-  KTRMLookup::collision();
+  if( trm_FinalizeSignature( d->trm, d->rawSig.data(), 0 ) == 0 ) {
+    trm_ConvertSigToASCII( d->trm, d->rawSig.data(), d->sig.data() );
+    return true;
+  }
+  else
+    return false;
 }
 
 
-void K3bTRMLookup::error()
+const QCString& K3bTRM::rawSignature() const
 {
-  m_resultState = ERROR;
-  KTRMLookup::error();
+  return d->rawSig;
 }
 
 
-void K3bTRMLookup::finished()
+const QCString& K3bTRM::signature() const
 {
-  emit lookupFinished( this );
-  KTRMLookup::finished();
+  return d->sig;
 }
-
-#include "k3btrm.moc"
 
 #endif
