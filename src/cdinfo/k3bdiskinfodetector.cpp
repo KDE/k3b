@@ -177,7 +177,7 @@ void K3bDiskInfoDetector::fetchTocInfo()
     calculateDiscId();
 
   testForDvd();
-  finish(true);
+//  finish(true);
 }
 
 void K3bDiskInfoDetector::fetchIsoInfo()
@@ -222,6 +222,7 @@ void K3bDiskInfoDetector::slotIsDvd( bool dvd )
     m_info.noDisk = false;
     m_info.tocType = K3bDiskInfo::DVD;
   }
+  finish(true);
 }
 
 
