@@ -264,6 +264,8 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
 // 	m_urlPopupMenu->popup(p);
 //     }
 //     else {
+      setCurrentItem( treeItem );
+      setSelected( treeItem, true);
       if( device )
 	emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
       else

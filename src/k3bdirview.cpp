@@ -300,8 +300,9 @@ void K3bDirView::slotUnmountDisk()
   if( m_lastDevice ) {
     KFileTreeViewItem* item = m_fileTreeView->currentKFileTreeViewItem();
     item->branch()->setAutoUpdate(false);
+    item->branch()->stop();
     if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
-    	home();
+    	m_fileView->setUrl(KURL( QDir::homeDirPath() ), true);
     connect( K3bCdDevice::unmount(m_lastDevice),SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
 	           this, SLOT( slotUnmountFinished(K3bCdDevice::DeviceHandler *) ) );
     m_fileTreeView->setCurrentItem( item );
@@ -311,9 +312,9 @@ void K3bDirView::slotUnmountDisk()
 void K3bDirView::slotUnmountFinished(K3bCdDevice::DeviceHandler *)
 {
   KFileTreeViewItem* item = m_fileTreeView->currentKFileTreeViewItem();
-
-  item->branch()->updateDirectory(KURL(m_lastDevice->mountPoint()));
-
+  QString dir = m_lastDevice->mountPoint();
+  item->branch()->updateDirectory( KURL(dir) );
+  slotDirActivated( dir );
   k3bMain()->endBusy();
 }
 
