@@ -153,9 +153,9 @@ bool K3bDevice::Device::readMcn( QCString& mcn ) const
 
 
 bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
-					    unsigned int type,
-					    unsigned int dataType,
-					    unsigned int lba ) const
+					unsigned int type,
+					unsigned int dataType,
+					unsigned int lba ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -199,8 +199,8 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
 
 
 bool K3bDevice::Device::setSpeed( unsigned int readingSpeed,
-				      unsigned int writingSpeed,
-				      bool cav ) const
+				  unsigned int writingSpeed,
+				  bool cav ) const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_SET_SPEED;

@@ -385,6 +385,7 @@ K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url )
   // if not create one
   if( !decoder ) {
     QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+
     for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
       K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
       if( f && f->canDecode( url ) ) {

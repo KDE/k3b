@@ -508,8 +508,8 @@ bool K3bAudioRipThread::writePlaylist()
 	  t << m_tracks[i].second << endl;
       }
     }
-   
-    return true;
+
+    return ( t.device()->status() == IO_Ok );
   }
   else {
     emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(m_playlistFilename), K3bJob::ERROR );

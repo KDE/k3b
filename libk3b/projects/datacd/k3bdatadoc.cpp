@@ -33,6 +33,7 @@
 #include <k3btoc.h>
 #include <k3btrack.h>
 #include <k3bmultichoicedialog.h>
+#include <k3bvalidators.h>
 
 #include <qdir.h>
 #include <qstring.h>
@@ -230,12 +231,16 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
       case 5: // rename
 	{
 	  bool ok = true;
+	  QValidator* validator = K3bValidators::iso9660Validator( false, this );
 	  do {
 	    newName = KInputDialog::getText( i18n("Enter New Filename"),
 					     i18n("A file with that name already exists. Please enter a new name."),
-					     newName, &ok, qApp->activeWindow() );
+					     newName, &ok, qApp->activeWindow(), "renamedialog", validator );
 
 	  } while( ok && parent->alreadyInDirectory( newName ) );
+
+	  delete validator;
+
 	  if( !ok )
 	    return 0;
 	}
@@ -339,11 +344,15 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 	case 5: // rename
 	  {
 	    bool ok = true;
+	    QValidator* validator = K3bValidators::iso9660Validator( false, this );
 	    do {
 	      newName = KInputDialog::getText( i18n("Enter New Filename"),
 					       i18n("A file with that name already exists. Please enter a new name."),
-					       newName, &ok, qApp->activeWindow() );
+					       newName, &ok, qApp->activeWindow(), "renameslg", validator );
 	    } while( ok && parent->alreadyInDirectory( newName ) );
+
+	    delete validator;
+
 	    if( !ok )
 	      return 0;
 	  }
@@ -1486,11 +1495,14 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
 
   if( dir->alreadyInDirectory( newName ) ) {
     bool ok = true;
+    QValidator* validator = K3bValidators::iso9660Validator( false, this );
     do {
       newName = KInputDialog::getText( i18n("Enter New Filename"),
 				       i18n("A file with that name already exists. Please enter a new name."),
-				       newName, &ok, qApp->activeWindow() );
+				       newName, &ok, qApp->activeWindow(), "renamdlg", validator );
     } while( ok && dir->alreadyInDirectory( newName ) );
+
+    delete validator;
     
     if( !ok )
       return 0;

@@ -117,6 +117,9 @@ void K3bThemeManager::setCurrentTheme( const QString& name )
 
 void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 {
+  if( !theme )
+    theme = findTheme( "crystal" ); // default
+
   if( theme ) {
     if( theme != d->currentTheme ) {
       d->currentTheme = theme;

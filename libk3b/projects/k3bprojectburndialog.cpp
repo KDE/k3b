@@ -26,7 +26,6 @@
 #include <k3bdevicemanager.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
-#include <k3bthememanager.h>
 
 #include <qstring.h>
 #include <qpushbutton.h>
@@ -49,7 +48,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
-
+#include <kiconloader.h>
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const char *name, bool modal, bool dvd )
@@ -238,8 +237,7 @@ void K3bProjectBurnDialog::prepareGui()
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
-  if( K3bTheme* theme = k3bthememanager->currentTheme() )
-    pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
+  pixLabel->setPixmap( SmallIcon( "cdcopy", KIcon::SizeMedium ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( 1, 99, 1, groupCopies );
 

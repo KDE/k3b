@@ -130,7 +130,7 @@ bool K3bInfFileWriter::save( QTextStream& s )
 
   s << "Index0=\t\t" << m_index0 << endl;
 
-  return true;
+  return ( s.device()->status() == IO_Ok );
 }
 
 

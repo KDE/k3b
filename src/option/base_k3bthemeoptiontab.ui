@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bThemeOptionTab</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,9 +9,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>624</width>
+            <width>661</width>
             <height>499</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>base_K3bThemeOptionTab</string>
     </property>
     <vbox>
         <property name="name">
@@ -148,6 +151,52 @@
                             </property>
                         </widget>
                     </hbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>161</width>
+                            <height>2</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonInstallTheme</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Install New Theme...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonRemoveTheme</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Remove Theme</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>

@@ -24,8 +24,16 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <klistview.h>
+#include <kio/global.h>
+#include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kstandarddirs.h>
+#include <ktar.h>
+#include <kurlrequesterdlg.h>
 
 #include <qlabel.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 
 
 class K3bThemeOptionTab::Private
@@ -56,6 +64,10 @@ K3bThemeOptionTab::K3bThemeOptionTab(QWidget *parent, const char *name )
 
   connect( m_viewTheme, SIGNAL(selectionChanged()),
 	   this, SLOT(selectionChanged()) );
+  connect( m_buttonInstallTheme, SIGNAL(clicked()),
+	   this, SLOT(slotInstallTheme()) );
+  connect( m_buttonRemoveTheme, SIGNAL(clicked()),
+	   this, SLOT(slotRemoveTheme()) );
 }
 
 
@@ -99,6 +111,90 @@ void K3bThemeOptionTab::selectionChanged()
     m_centerPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
     m_leftPreviewLabel->setPixmap( item->theme->pixmap( "k3bprojectview_left_short" ) );
     m_rightPreviewLabel->setPixmap( item->theme->pixmap( "k3bprojectview_right" ) );
+
+    QFileInfo fi( item->theme->path() );
+    m_buttonRemoveTheme->setEnabled( fi.isWritable() ); 
+  }
+}
+
+
+void K3bThemeOptionTab::slotInstallTheme()
+{
+  KURL themeURL = KURLRequesterDlg::getURL( QString::null, this,
+					    i18n("Drag or Type Theme URL") );
+
+  if( themeURL.url().isEmpty() )
+    return;
+
+  QString themeTmpFile;
+  // themeTmpFile contains the name of the downloaded file
+
+  if( !KIO::NetAccess::download( themeURL, themeTmpFile, this ) ) {
+    QString sorryText;
+    if (themeURL.isLocalFile())
+       sorryText = i18n("Unable to find the icon theme archive %1!");
+    else
+       sorryText = i18n("Unable to download the icon theme archive!\n"
+                        "Please check that address %1 is correct.");
+    KMessageBox::sorry( this, sorryText.arg(themeURL.prettyURL()) );
+    return;
+  }
+
+  // check if the archive contains a dir with a k3b.theme file
+  KTar archive( themeTmpFile );
+  archive.open(IO_ReadOnly);
+  const KArchiveDirectory* themeDir = archive.directory();
+  QStringList entries = themeDir->entries();
+  bool validThemeArchive = false;
+  if( entries.count() > 0 ) {
+    if( themeDir->entry(entries.first())->isDirectory() ) {
+      const KArchiveDirectory* subDir = dynamic_cast<const KArchiveDirectory*>( themeDir->entry(entries.first()) );
+      if( subDir && subDir->entry( "k3b.theme" ) )
+	validThemeArchive = true;
+    }
+  }
+
+  if( !validThemeArchive ) {
+    KMessageBox::error( this, i18n("The file is not a valid K3b theme archive!") );
+  }
+  else {
+    // install the theme
+    archive.directory()->copyTo( locateLocal( "data", "k3b/pics/" ) );
+  }
+
+  archive.close();
+  KIO::NetAccess::removeTempFile(themeTmpFile);
+
+  readSettings();
+}
+
+
+void K3bThemeOptionTab::slotRemoveTheme()
+{
+  ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
+  if( item ) {
+    QString question=i18n("<qt>Are you sure you want to remove the "
+			  "<strong>%1</strong> icon theme?<br>"
+			  "<br>"
+			  "This will delete the files installed by this theme.</qt>").
+      arg(item->text(0));
+
+    if( KMessageBox::questionYesNo( this, question, i18n("Confirmation")) != KMessageBox::Yes )
+      return;
+
+    K3bTheme* theme = item->theme;
+    delete item;
+    QString path = theme->path();
+
+    // delete k3b.theme file to avoid it to get loaded
+    QFile::remove( path + "/k3b.theme" );
+    
+    // reread the themes (this will also set the default theme in case we delete the 
+    // selected one)
+    readSettings();
+
+    // delete the theme data itself
+    KIO::del( path, false, false );
   }
 }
 

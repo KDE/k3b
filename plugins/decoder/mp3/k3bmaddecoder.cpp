@@ -517,8 +517,14 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
       if( MAD_NCHANNELS( &handle.madFrame->header ) == c &&
 	  handle.madFrame->header.layer == layer &&
 	  handle.madFrame->header.samplerate == s ) {
-	if( ++cnt >= 5 )
-	  return true;
+	// only support layer III for now since otherwise some wave files
+	// are taken for layer I
+	if( ++cnt >= 5 ) {
+	  kdDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer 
+		    << " file with " << c << " channels and a samplerate of "
+		    << s << endl;
+	  return ( layer == MAD_LAYER_III );
+	}
       }
       else
 	break;

@@ -17,6 +17,7 @@
 #include "k3bmd5job.h"
 #include <k3biso9660.h>
 #include <k3bglobals.h>
+#include <k3bdevice.h>
 
 #include <kmdcodec.h>
 #include <klocale.h>
@@ -46,6 +47,8 @@ public:
   QTimer timer;
   QString filename;
   int fileDes;
+  K3bDevice::Device* device;
+
   bool finished;
   char* data;
   const K3bIso9660File* isoFile;
@@ -86,7 +89,7 @@ void K3bMd5Job::start()
   if( d->isoFile ) {
     d->imageSize = d->isoFile->size();
   }
-  else if( d->fileDes < 0 ) {
+  else if( !d->filename.isEmpty() ) {
     if( !QFile::exists( d->filename ) ) {
       emit infoMessage( i18n("Could not find file %1").arg(d->filename), ERROR );
       emit finished(false);
@@ -128,6 +131,7 @@ void K3bMd5Job::setFile( const QString& filename )
   d->filename = filename;
   d->isoFile = 0;
   d->fileDes = -1;
+  d->device = 0;
 }
 
 
@@ -136,12 +140,23 @@ void K3bMd5Job::setFile( const K3bIso9660File* file )
   d->isoFile = file;
   d->fileDes = -1;
   d->filename.truncate(0);
+  d->device = 0;
 }
 
 
 void K3bMd5Job::setFd( int fd )
 {
   d->fileDes = fd;
+  d->filename.truncate(0);
+  d->isoFile = 0;
+  d->device = 0;
+}
+
+
+void K3bMd5Job::setDevice( K3bDevice::Device* dev )
+{
+  d->device = dev;
+  d->fileDes = -1;
   d->filename.truncate(0);
   d->isoFile = 0;
 }
@@ -157,19 +172,56 @@ void K3bMd5Job::slotUpdate()
 {
   if( !d->finished ) {
 
-    if( d->readData >= d->maxSize && d->maxSize > 0 ) {
+    // determine bytes to read
+    unsigned int readSize = K3bMd5JobPrivate::BUFFERSIZE;
+    if( d->maxSize > 0 )
+      readSize = QMIN( readSize, d->maxSize - d->readData );
+
+    if( readSize <= 0 ) {
       stop();
       emit percent( 100 );
       emit finished(true);
     }
     else {
       int read = 0;
-      if( d->isoFile )
-	read = d->isoFile->read( d->readData, d->data, K3bMd5JobPrivate::BUFFERSIZE );
-      else if( d->fileDes < 0 )
-	read = d->file.readBlock( d->data, K3bMd5JobPrivate::BUFFERSIZE );
-      else
-	read = ::read( d->fileDes, d->data, K3bMd5JobPrivate::BUFFERSIZE );
+
+      //
+      // read from the iso9660 file
+      //
+      if( d->isoFile ) {
+	read = d->isoFile->read( d->readData, d->data, readSize );
+      }
+
+      //
+      // read from the device
+      //
+      else if( d->device ) {
+	//
+	// when reading from a device we always read multiples of 2048 bytes.
+	// Only the last sector may not be used completely.
+	//
+	unsigned long sector = d->readData/2048;
+	unsigned int sectorCnt = QMAX( readSize/2048, 1 );
+	read = -1;
+	if( d->device->read10( reinterpret_cast<unsigned char*>(d->data),
+			       sectorCnt*2048,
+			       sector,
+			       sectorCnt ) )
+	  read = QMIN( readSize, sectorCnt*2048 );
+      }
+
+      //
+      // read from the file
+      //
+      else if( d->fileDes < 0 ) {
+	read = d->file.readBlock( d->data, readSize );
+      }
+
+      //
+      // read from the file descriptor
+      else {
+	read = ::read( d->fileDes, d->data, readSize );
+      }
 
       if( read < 0 ) {
 	emit infoMessage( i18n("Error while reading from file %1").arg(d->filename), ERROR );
@@ -184,7 +236,7 @@ void K3bMd5Job::slotUpdate()
       else {
 	d->readData += read;
 	d->md5.update( d->data, read );
-	if( d->fileDes < 0 )
+	if( d->isoFile || !d->filename.isEmpty() )
 	  emit percent( (int)((double)d->readData * 100.0 / (double)d->imageSize) );
 	else if( d->maxSize > 0 )
 	  emit percent( (int)((double)d->readData * 100.0 / (double)d->maxSize) );

@@ -296,7 +296,8 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
       else {
 	if( d->wantedMediaState == K3bDevice::STATE_EMPTY ) {
 	  // check if the media contains a filesystem
-	  K3bIso9660 isoF( d->device->open() );
+	  d->device->open();
+	  K3bIso9660 isoF( d->device );
 	  bool hasIso = isoF.open();
 	  d->device->close();
 	  
@@ -364,7 +365,8 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW restricted overwrite." << endl;
 
 	// check if the media contains a filesystem
-	K3bIso9660 isoF( d->device->open() );
+	d->device->open();
+	K3bIso9660 isoF( d->device );
 	bool hasIso = isoF.open();
 	d->device->close();
 

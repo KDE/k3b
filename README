@@ -13,7 +13,9 @@ These are the features so far:
    - ID3-tag support
    - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
    - volume level normalization (only when writing with an image)
-
+   - multiple sources for one track possible (merging of tracks, splitting of tracks, adding silence of arbitrary 
+     length)
+   
  - writing ISO-cds
    - Joliet/Rockridge support
    - Udf filestructures (no pure Udf so far)
@@ -65,8 +67,6 @@ These are the features so far:
  - Retrieving cd info and toc
 
  - Support for ATAPI drives without SCSI-emulation
-   writing in in alpha-state when supported by the kernel and cdrecord
-   full support for audio-ripping and dvd-ripping
 
  - integrated full featured audio player
 

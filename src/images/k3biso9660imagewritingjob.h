@@ -76,6 +76,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   int m_speed;
   int m_dataMode;
   bool m_verifyData;
+  bool m_dvd;
 
   QString m_imagePath;
 

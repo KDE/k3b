@@ -615,8 +615,11 @@ void K3bJobProgressDialog::slotUpdateCaption( int percent )
 {
   if( percent > d->lastProgress ) {
     d->lastProgress = percent;
-    if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+    if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) ) {
       w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+    }
+
+    setCaption( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
   }
 }
 

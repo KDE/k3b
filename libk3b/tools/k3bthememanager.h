@@ -42,6 +42,8 @@ class K3bTheme
   const QString& comment() const { return m_comment; }
   const QString& version() const { return m_version; }
 
+  const QString& path() const { return m_path; }
+
  private:
   QString m_path;
   QString m_name;

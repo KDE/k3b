@@ -29,7 +29,6 @@
 #include <k3bcore.h>
 #include <k3blistview.h>
 #include <k3biso9660.h>
-#include <k3bthememanager.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -173,7 +172,7 @@ void K3bIsoImageWritingDialog::setupGui()
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
-  pixLabel->setPixmap( k3bthememanager->currentTheme()->pixmap( "k3b_cd_copy" ) );
+  pixLabel->setPixmap( SmallIcon( "cdcopy", KIcon::SizeMedium ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );

@@ -18,6 +18,7 @@
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
 #include <k3bmd5job.h>
+#include <k3bglobals.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -147,32 +148,22 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
       // the image filesize to make sure we do not compare too much data and thus get
       // a wrong result
       //
-      KIO::UDSEntry entry;
-      if( !KIO::NetAccess::stat( KURL::fromPathOrURL(d->imageFileName), entry ) ) {
-	emit infoMessage( i18n("Unable to read file %1.").arg(d->imageFileName), ERROR );
+
+      d->imageSize = K3b::filesize( d->imageFileName );
+      if( d->imageSize == (KIO::filesize_t)0 ) {
+	emit infoMessage( i18n("Unable to determine size of file %1.").arg(d->imageFileName), ERROR );
+	finishVerification(false);
+      }
+      else if( !d->device->open() ) {
+	emit infoMessage( i18n("Unable to open device %1.").arg(d->device->blockDeviceName()), ERROR );
 	finishVerification(false);
       }
       else {
-	d->imageSize = (KIO::filesize_t)-1;
-	for( KIO::UDSEntry::ConstIterator it = entry.begin(); it != entry.end(); it++ )
-	  if( (*it).m_uds == KIO::UDS_SIZE )
-	    d->imageSize = (*it).m_long;
-
-	if( d->imageSize == (KIO::filesize_t)-1 ) {
-	  emit infoMessage( i18n("Unable to determine size of file %1.").arg(d->imageFileName), ERROR );
-	  finishVerification(false);
-	}
-	else if( d->device->open() < 0 ) {
-	  emit infoMessage( i18n("Unable to open device %1.").arg(d->device->blockDeviceName()), ERROR );
-	  finishVerification(false);
-	}
-	else {
-	  // start the written data check
-	  emit newTask( i18n("Calculating the written data's md5sum") );
-	  d->md5Job->setFd( d->device->open() );
-	  d->md5Job->setMaxReadSize( d->imageSize );
-	  d->md5Job->start();
-	}
+	// start the written data check
+	emit newTask( i18n("Calculating the written data's md5sum") );
+	d->md5Job->setDevice( d->device );
+	d->md5Job->setMaxReadSize( d->imageSize );
+	d->md5Job->start();
       }
     }
   }

@@ -87,5 +87,5 @@ bool K3bCueFileWriter::save( QTextStream& t )
     i++;
   }
 
-  return true;
+  return ( t.device()->status() == IO_Ok );
 }

@@ -570,7 +570,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit nextTrack( m_currentTrack, m_totalTracks );
   }
   else if( line.startsWith( "Fixating" ) ) {
-    emit newSubTask( i18n("Fixating") );
+    emit newSubTask( i18n("Closing Disc") );
   }
   else if( line.startsWith( "Writing lead-in" ) ) {
     m_totalTracksParsed = true;

@@ -322,10 +322,10 @@ int K3bIso9660::read( unsigned int sector, char* data, int count )
     // fallback
     if( read < 0 ) {
       kdDebug() << "(K3bIso9660) falling back to stdlib read" << endl;
-      if( ::lseek( d->cdDevice->open(), static_cast<unsigned long long>(sector)*2048, SEEK_SET ) == -1 )
+      if( ::lseek( d->cdDevice->handle(), static_cast<unsigned long long>(sector)*2048, SEEK_SET ) == -1 )
 	kdDebug() << "(K3bIso9660) seek failed." << endl;
       else {
-	read = ::read( d->cdDevice->open(), data, count*2048 );
+	read = ::read( d->cdDevice->handle(), data, count*2048 );
 	if( read < 0 )
 	  kdDebug() << "(K3bIso9660) stdlib read failed." << endl;
 	else
@@ -495,7 +495,7 @@ bool K3bIso9660::open()
     d->closeFd = true;
   }
   else if( d->cdDevice ) {
-    if( d->cdDevice->open() < 0 )
+    if( !d->cdDevice->open() )
       return false;
 
     // set optimal reading speed

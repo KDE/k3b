@@ -149,7 +149,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
     trackIndex++;
   }
 
-  return true;
+  return ( t.device()->status() == IO_Ok );
 }
 
 

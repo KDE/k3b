@@ -149,7 +149,7 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 
   if( d->toc.contentType() == K3bDevice::DATA ||
       d->toc.contentType() == K3bDevice::MIXED ) {
-    if( d->device->open() != -1 ) {
+    if( d->device->open() ) {
 
       unsigned long startSec = 0;
 

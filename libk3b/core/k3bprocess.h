@@ -121,6 +121,8 @@ class K3bProcess : public KProcess
 
   class OutputCollector;
 
+  // FIXME: implement closeStdin, closeStdout, closeStderr
+
  public slots:
   void setSplitStdout( bool b ) { m_bSplitStdout = b; }
  

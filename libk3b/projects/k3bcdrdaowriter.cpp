@@ -164,8 +164,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
   }
   else
   {
-    if( m_comSock )
-      delete m_comSock;
+    delete m_comSock;
     m_comSock = new QSocket();
     m_comSock->setSocket(m_cdrdaoComm[1]);
     m_comSock->socketDevice()->setReceiveBufferSize(49152);
@@ -178,11 +177,11 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
 
 K3bCdrdaoWriter::~K3bCdrdaoWriter()
 {
+  delete d->speedEst;
   delete d;
 
   // close the socket
-  if( m_comSock )
-  {
+  if( m_comSock ) {
     m_comSock->close();
     ::close( m_cdrdaoComm[0] );
   }
@@ -301,7 +300,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     // one buffer in cdrdao holds 1 second of audio data = 75 frames = 75 * 2352 bytes
     //
     int bufSizeInMb = k3bcore->config()->readNumEntry( "Fifo buffer", 4 );
-    *m_process << "--buffers" << QString::number( bufSizeInMb/(75*2352) );
+    *m_process << "--buffers" << QString::number( bufSizeInMb*1024*1024/(75*2352) );
   }
 
   bool overburn =
@@ -426,6 +425,10 @@ void K3bCdrdaoWriter::setCommonArguments()
 
   // display debug info
   *m_process << "-n" << "-v" << "2";
+
+  // we have the power to do what ever we want. ;)
+  *m_process << "--force";
+
   // eject
   if( m_eject && !m_forceNoEject )
     *m_process << "--eject";
@@ -458,8 +461,7 @@ void K3bCdrdaoWriter::start()
 
   d->speedEst->reset();
 
-  if( m_process )
-    delete m_process;  // kdelibs want this!
+  delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
   m_process->setSplitStdout(false);
@@ -965,12 +967,6 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
         || ( d->newMsg.track == 1 &&
              d->newMsg.trackProgress <= 10 )) {
 
-      emit subPercent( d->newMsg.trackProgress/10 );
-      emit percent( d->newMsg.totalProgress/10 );
-      emit buffer(d->newMsg.bufferFillRate);
-      if( d->progressMsgSize == (unsigned int)sizeof(ProgressMsg2) )
-	emit deviceBuffer( d->newMsg.writerFillRate );
-
       if( d->newMsg.track != m_currentTrack ) {
         switch( d->newMsg.status ) {
         case PGSMSG_RCD_EXTRACTING:
@@ -989,6 +985,20 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
 
         m_currentTrack = d->newMsg.track;
       }
+
+      if( d->newMsg.status == PGSMSG_WCD_LEADIN || d->newMsg.status == PGSMSG_WCD_LEADOUT ) {
+	// cdrdao >= 1.1.8 emits progress data when writing the lead-in and lead-out :)
+	emit subPercent( d->newMsg.totalProgress/10 );
+      }
+      else {
+	emit subPercent( d->newMsg.trackProgress/10 );
+	emit percent( d->newMsg.totalProgress/10 );
+      }
+
+      emit buffer(d->newMsg.bufferFillRate);
+
+      if( d->progressMsgSize == (unsigned int)sizeof(ProgressMsg2) )
+	emit deviceBuffer( d->newMsg.writerFillRate );
 
       ::memcpy( &d->oldMsg, &d->newMsg, d->progressMsgSize );
     }

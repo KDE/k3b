@@ -36,6 +36,8 @@ class K3bThemeOptionTab : public base_K3bThemeOptionTab
 
  private slots:
   void selectionChanged();
+  void slotInstallTheme();
+  void slotRemoveTheme();
 
  private:
   class Private;

@@ -56,7 +56,7 @@ public:
 
     emitStarted();
 
-    if( m_device->open() < 0 ) {
+    if( !m_device->open() ) {
       emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()), K3bJob::ERROR );
       emitFinished(false);
       return;

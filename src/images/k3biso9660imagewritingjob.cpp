@@ -79,6 +79,11 @@ void K3bIso9660ImageWritingJob::start()
     return;
   }
 
+  unsigned long gb = K3b::filesize( m_imagePath )/1024/1024/1024;
+
+  // very rough test but since most dvd images are 4,x or 8,x GB it should be enough
+  m_dvd = ( gb > 900 );
+
   startWriting();
 }
 
@@ -210,8 +215,12 @@ void K3bIso9660ImageWritingJob::startWriting()
 
   int mt = 0;
   if( m_writingMode == K3b::WRITING_MODE_AUTO ) {
-    if( writingApp() == K3b::DEFAULT )
-      mt = K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_CD;
+    if( writingApp() == K3b::DEFAULT ) {
+      if( m_dvd )
+	mt = K3bDevice::MEDIA_WRITABLE_DVD;
+      else
+	mt = K3bDevice::MEDIA_WRITABLE_CD;
+    }
     else if( writingApp() != K3b::GROWISOFS )
       mt = K3bDevice::MEDIA_WRITABLE_CD;
     else
@@ -220,8 +229,12 @@ void K3bIso9660ImageWritingJob::startWriting()
   else if( m_writingMode == K3b::TAO || m_writingMode == K3b::RAW )
     mt = K3bDevice::MEDIA_WRITABLE_CD;
   else if( m_writingMode == K3b::DAO ) {
-    if( writingApp() == K3b::DEFAULT )
-      mt = K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
+    if( writingApp() == K3b::DEFAULT ) {
+      if( m_dvd )
+	mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
+      else
+	mt = K3bDevice::MEDIA_WRITABLE_CD;
+    }
     else if( writingApp() == K3b::GROWISOFS )
       mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
     else
@@ -257,7 +270,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 {
   if( mediaType == 0 ) { // media forced
     // just to get it going...
-    if( writingApp() != K3b::GROWISOFS )
+    if( writingApp() != K3b::GROWISOFS && !m_dvd )
       mediaType = K3bDevice::MEDIA_CD_R;
     else
       mediaType = K3bDevice::MEDIA_DVD_R;
@@ -270,10 +283,10 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     if( usedWriteMode == K3b::WRITING_MODE_AUTO ) {
       // cdrecord seems to have problems when writing in mode2 in dao mode
       // so with cdrecord we use TAO
-      if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
+      //      if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
 	usedWriteMode = K3b::TAO;
-      else
-	usedWriteMode = K3b::DAO;
+//       else
+// 	usedWriteMode = K3b::DAO;
     }
 
     int usedApp = writingApp();

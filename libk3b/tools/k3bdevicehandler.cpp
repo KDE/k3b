@@ -36,7 +36,7 @@ public:
     success = false;
 
     if( dev ) {
-      success = (dev->open() != -1);
+      success = dev->open();
       if( command & DISKINFO ) {
 	ngInfo = dev->diskInfo();
 	if( !ngInfo.empty() ) {

@@ -19,7 +19,9 @@
 
 #include <k3bjob.h>
 #include <qcstring.h>
-
+namespace K3bDevice {
+  class Device;
+}
 
 class K3bIso9660File;
 
@@ -39,8 +41,21 @@ class K3bMd5Job : public K3bJob
   void start();
   void cancel();
 
+  /**
+   * read from a file
+   */
   void setFile( const QString& filename );
+
+  /**
+   * read from an iso9660 file
+   */
   void setFile( const K3bIso9660File* );
+
+  /**
+   * read from a device
+   * This should be used in combination with setMaxReadSize
+   */
+  void setDevice( K3bDevice::Device* dev );
 
   /**
    * read from the opened file descriptor
