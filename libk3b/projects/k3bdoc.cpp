@@ -63,8 +63,8 @@
 
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent ),
-    m_view(0),
-    m_modified(false)
+    m_modified(false),
+    m_view(0)
 {
   // register the project with the manager
   k3bprojectmanager->addProject( this );
@@ -170,7 +170,7 @@ bool K3bDoc::newDocument()
 K3bDoc* K3bDoc::openDocument(const KURL& url )
 {
   QString tmpfile;
-  KIO::NetAccess::download( url, tmpfile );
+  KIO::NetAccess::download( url, tmpfile, 0L );
 
   // ///////////////////////////////////////////////
   // first check if it's a store or an old plain xml file
