@@ -8,6 +8,8 @@
 #include <kprocess.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kio/global.h>
+#include <kio/job.h>
 
 #include <qstring.h>
 #include <kdebug.h>
@@ -52,6 +54,21 @@ void K3bBlankingJob::start()
   if( m_device == 0 )
     return;
 
+  if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() ) {
+    // TODO: enable me after message freeze
+    // emit infoMessage( i18n("Unmounting disk"), INFO );
+    // unmount the cd
+    connect( KIO::unmount( m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	     this, SLOT(slotStartErasing()) );
+  }
+  else {
+    slotStartErasing();
+  }
+}
+
+
+void K3bBlankingJob::slotStartErasing()
+{
   m_process->clearArguments();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
@@ -69,6 +86,10 @@ void K3bBlankingJob::start()
     *m_process << "-force";
   if( k3bMain()->eject() )
     *m_process << "-eject";
+
+  if( k3bMain()->externalBinManager()->binObject( "cdrecord" )->hasFeature( "gracetime") )
+    *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
+
 
   QString mode;
   switch( m_mode ) {

@@ -31,6 +31,7 @@ class K3bBlankingJob : public K3bJob
  private slots:
   void slotParseCdrecordOutput( KProcess*, char*, int );
   void slotCdrecordFinished();
+  void slotStartErasing();
 
  private:
   KProcess* m_process;
