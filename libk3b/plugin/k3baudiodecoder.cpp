@@ -51,6 +51,7 @@ public:
       inBuffer(0),
       inBufferPos(0),
       inBufferFill(0),
+      outBuffer(0),
       monoBuffer(0),
       decodingBufferPos(0),
       decodingBufferFill(0),
