@@ -75,6 +75,7 @@ private:
     double m_ripSize;
     QTime m_timeEstimated;
     QTime m_timeDataRate;
+    bool m_successfulStarted;
 
 };
 	

@@ -37,6 +37,7 @@ K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QS
     m_dirtmp = tmp;
     m_ripTitles = titles;
     m_parent = parent;
+    m_successfulStarted = true;
     m_ripProcess = new K3bDvdRippingProcess( m_parent );
 }
 
@@ -58,12 +59,17 @@ void K3bDvdCopy::start(){
     connect( m_ripProcess, SIGNAL( rippedBytesPerPercent( unsigned long ) ), this, SLOT( slotDataRate( unsigned long ) ) );
 
     m_ripProcess->start();
-    emit started();
-    emit newTask( i18n("Copy DVD.")  );
-    kdDebug() << "(K3bDvdCopy) Starting rip." << endl;
+    if( m_successfulStarted ) {
+        emit started();
+        emit newTask( i18n("Copy DVD.")  );
+        kdDebug() << "(K3bDvdCopy) Starting rip." << endl;
+    } else {
+        kdDebug() << "(K3bDvdCopy) Start ripping failed." << endl;
+    }
 }
 
 void K3bDvdCopy::ripFinished( bool result ){
+    m_successfulStarted = result; // if start failed it returns immedatitely finsihed with false;
     kdDebug() << "(K3bDvdCopy) Send finished." << endl;
     emit finished( result );
 }
