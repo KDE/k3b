@@ -253,7 +253,11 @@ void K3bCddbOptionTab::apply()
   if( c->hasKey( "cddbp server" ) )
     c->deleteEntry( "cddbp server" );
 
+#if KDE_IS_VERSION(3,1,3)
   c->writePathEntry( "local cddb dirs", localCddbDirs );
+#else
+  c->writeEntry( "local cddb dirs", localCddbDirs );
+#endif
 }
 
 

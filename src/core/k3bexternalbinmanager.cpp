@@ -204,7 +204,11 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
 
 bool K3bExternalBinManager::saveConfig( KConfig* c )
 {
+#if KDE_IS_VERSION(3,1,3)
   c->writePathEntry( "search path", m_searchPath );
+#else
+  c->writeEntry( "search path", m_searchPath );
+#endif
 
   for ( QMap<QString, K3bExternalProgram*>::iterator it = m_programs.begin(); it != m_programs.end(); ++it ) {
     K3bExternalProgram* p = it.data();
