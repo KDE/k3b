@@ -27,6 +27,8 @@ class K3bDeviceManager;
 class K3bDevice;
 class KFileTreeBranch;
 class QPoint;
+class QDropEvent;
+class QDragEnterEvent;
 
 
 class K3bDeviceBranch : public KFileTreeBranch
@@ -68,19 +70,27 @@ class K3bFileTreeView : public KFileTreeView
   void addDefaultBranches();
 
   void addCdDeviceBranches( K3bDeviceManager* );
-
  public slots:
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );
+
+ protected:
+  virtual void contentsDropEvent(QDropEvent* event);
+  void contentsDragMoveEvent ( QDragMoveEvent *e );
+  virtual bool acceptDrag(QDropEvent* event) const;
 
  signals:
   void urlExecuted( const KURL& url );
   void deviceExecuted( K3bDevice* dev );
   void contextMenu( K3bDevice*, const QPoint& );
-
+  //void startAudioCDRip( QString );
+  
  private slots:
   void slotItemExecuted( QListViewItem* item );
   void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
+
+  //void slotDropped();
+
 
  private:
   bool m_dirOnlyMode;

@@ -16,6 +16,10 @@
  ***************************************************************************/
 
 #include "k3bfiletreeview.h"
+#include "k3b.h"
+#include "k3bdirview.h"
+
+#include "rip/k3bcdview.h"
 
 #include "device/k3bdevicemanager.h"
 #include "device/k3bdevice.h"
@@ -26,7 +30,10 @@
 #include <kstandarddirs.h>
 
 #include <qdir.h>
-
+#include <qevent.h>
+#include <qdragobject.h>
+#include <qcursor.h>
+#include <qnamespace.h>
 
 
 
@@ -56,7 +63,8 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   : KFileTreeView( parent,  name )
 {
   addColumn( i18n("Directories") );
-  setDragEnabled( true );
+  setAcceptDrops( true );
+  setDropVisualizer( true );
   setAlternateBackground( QColor() );
   setFullWidth();
   setRootIsDecorated(true);
@@ -73,6 +81,61 @@ K3bFileTreeView::~K3bFileTreeView()
 {
 }
 
+/*
+void K3bFileTreeView::slotDropped() {
+    kdDebug() << "(K3bFileTreeView:slotDropped)" << endl;
+}
+*/
+void K3bFileTreeView::contentsDropEvent(QDropEvent* event) {
+    kdDebug() << "(K3bFileTreeView:contentsDropEvent)" << endl;
+    QString text;
+    if ( QTextDrag::decode(event, text) ) {
+        if ( text == CD_DRAG) {
+            event->accept();
+            QImage image;
+            kdDebug() << "(K3bFileTreeView) Drop text index: " << text << endl;
+            // correct entry  if scrollbar are visible and scrolled
+            KFileTreeViewItem *item = dynamic_cast<KFileTreeViewItem*>( itemAt( contentsToViewport( event->pos() ) ));
+            if( item ){
+                kdDebug() << "(K3bFileTreeView) Path: " << item->path() << endl;
+                QApplication::setOverrideCursor( Qt::ArrowCursor );
+                kdDebug() << "(K3bFileTreeView) Start rip dialog" << endl;
+                k3bMain()->mainWindow()->getCdView()->slotPrepareRipping( item->path() );
+                QApplication::restoreOverrideCursor();
+            }
+        }
+    }
+}
+
+void K3bFileTreeView::contentsDragMoveEvent ( QDragMoveEvent *e ){
+   QString text;
+   QTextDrag::decode( e, text );
+   if ( text == CD_DRAG) {
+       KFileTreeView::contentsDragMoveEvent( e );
+   } else {
+       e->ignore();
+   }
+}
+
+/*
+* overwrite original to support K3b DND Objects. That will enable autoOpenFolder in the tree.
+*/
+bool K3bFileTreeView::acceptDrag(QDropEvent* e ) const {
+   bool result = false;
+   QString text;
+   QTextDrag::decode( e, text );
+   if ( text == CD_DRAG) {
+       result = true;
+   }
+   if( !result ){
+       // the original from KFileTreeView to support copy/link/move
+       result = QUriDrag::canDecode( e ) &&
+           ( e->action() == QDropEvent::Copy
+           || e->action() == QDropEvent::Move
+           || e->action() == QDropEvent::Link );
+   }
+   return result;
+}
 
 void K3bFileTreeView::addDefaultBranches()
 {
