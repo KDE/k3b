@@ -18,7 +18,6 @@
 #include <qspinbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <qregexp.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -27,7 +26,6 @@
 #include <qgrid.h>
 #include <qtoolbutton.h>
 #include <qfileinfo.h>
-#include <qvalidator.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -45,6 +43,7 @@
 #include <k3bstdguiitems.h>
 #include <tools/k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
+#include "tools/k3biso646validator.h"
 
 K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
         : K3bProjectBurnDialog( _doc, parent, name, modal )
@@ -462,13 +461,13 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
 
     // only ISO646 d-Characters ( 0-9 A-Z _ )
-    m_editVolumeId->setValidator( new QRegExpValidator( QRegExp("[a-zA-Z0-9_]*"), m_editVolumeId ) );
-    m_editAlbumId->setValidator( new QRegExpValidator( QRegExp("[a-zA-Z0-9_]*"), m_editVolumeId ) );
+    m_editVolumeId->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_d, true, m_editVolumeId ) );
+    m_editAlbumId->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_d, true, m_editVolumeId ) );
         
     m_editVolumeId->setMaxLength( 32 );
     m_editAlbumId->setMaxLength( 16 );
     // only ISO646 a-Characters ( [0-9A-Z!" %&'()*+,-./:;<=>?_] )
-    m_editPublisher->setValidator( new QRegExpValidator( QRegExp("[a-zA-Z0-9!\" %&'()*+,-./:;<=>?_]*"), m_editVolumeId ) );
+    m_editPublisher->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_a, true, m_editVolumeId ) );
     m_editPublisher->setMaxLength( 128 );
     
     m_spinVolumeNumber->setMinValue( 1 );
