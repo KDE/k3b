@@ -17,19 +17,18 @@
 #ifndef _K3B_APPLICATION_H_
 #define _K3B_APPLICATION_H_
 
-#include <kapplication.h>
-#include <dcopobject.h>
+#include <kuniqueapplication.h>
+#include <k3bcore.h>
 
 #define k3bapp K3bApplication::k3bApplication()
 
 class K3bMainWindow;
-class K3bCore;
 class K3bInterface;
 class K3bSongManager;
 class K3bAudioServer;
 
 
-class K3bApplication : public KApplication, public DCOPObject
+class K3bApplication : public KUniqueApplication
 {
   Q_OBJECT
 
@@ -39,25 +38,14 @@ class K3bApplication : public KApplication, public DCOPObject
 
   void init();
 
+  int newInstance();
+
   K3bMainWindow* k3bMainWindow() const;
   K3bSongManager* songManager() const { return m_songManager; }
 
-  /**
-   * Dispatches any incoming DCOP message for a new instance.
-   *
-   * If it is not a request for a new instance, return false.
-   * Overloaded from DCOPObject to hide the reuseInstance method
-   * from the public DCOP api.
-   * @param fun DCOP function signature
-   * @param data the data for the arguments
-   * @param replyType the type of the reply value
-   * @param replyData the reply
-   * @see DCOPObject
-   */
-  bool process( const QCString& fun, const QByteArray& data,
-		QCString& replyType, QByteArray& replyData );
-
   static K3bApplication* k3bApplication() { return s_k3bApp; }
+
+  class Core;
 
  signals:
   void initializationInfo( const QString& );
@@ -65,23 +53,40 @@ class K3bApplication : public KApplication, public DCOPObject
 
  private slots:
   void slotShutDown();
-  void reuseInstance();
 
  private:
-  /**
-   * Returns true if no dialog is opened by the args (and the tips may be shown on startup)
-   */
   bool processCmdLineArgs();
 
-  K3bCore* m_core;
   K3bInterface* m_interface;
+  Core* m_core;
   K3bMainWindow* m_mainWindow;
   K3bSongManager* m_songManager;
   K3bAudioServer* m_audioServer;
 
-  QByteArray m_reuseData;
+  bool m_needToInit;
 
   static K3bApplication* s_k3bApp;
+};
+
+
+/**
+ * Just to show some info in the splash screen
+ */
+class K3bApplication::Core : public K3bCore
+{
+  Q_OBJECT;
+
+ public:
+  Core( QObject* parent );
+  ~Core();
+
+  void init();
+
+ signals:
+  /**
+   * This is used for showing info in the K3b splashscreen
+   */
+  void initializationInfo( const QString& );
 };
 
 #endif

@@ -16,10 +16,10 @@
 
 #include "k3bapplication.h"
 #include "k3b.h"
-#include "k3binterface.h"
 #include "k3bwriterspeedverificationdialog.h"
 #include "k3bsplash.h"
 #include "k3baudioserver.h"
+#include "k3binterface.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -55,16 +55,16 @@ K3bApplication* K3bApplication::s_k3bApp = 0;
 
 
 K3bApplication::K3bApplication()
-  : KApplication(),
-    DCOPObject( "K3b" ),
+  : KUniqueApplication(),
     m_interface(0),
-    m_mainWindow(0)
+    m_mainWindow(0),
+    m_needToInit(true)
 {
   // insert library i18n data
   KGlobal::locale()->insertCatalogue( "libk3bdevice" );
   KGlobal::locale()->insertCatalogue( "libk3b" );
 
-  m_core = new K3bCore( aboutData()->version(), config(), this );
+  m_core = new Core( this );
 
   m_songManager = K3bSongManager::instance();  // this is bad stuff!!!
 
@@ -86,7 +86,6 @@ K3bApplication::K3bApplication()
 K3bApplication::~K3bApplication()
 {
   // we must not delete m_mainWindow here, QApplication takes care of it
-  delete m_interface;
   delete m_songManager;  // this is bad stuff!!!
 }
 
@@ -115,40 +114,26 @@ void K3bApplication::init()
     }
   }
 
-  // load the plugins before doing anything else
-  // they might add external bins
-  K3bPluginManager* pluginManager = new K3bPluginManager( this );
-  pluginManager->loadAll();
-
-  //
-  // The eMovix program is a special case which is not part of
-  // the default programs handled by K3bCore
-  //
-  m_core->externalBinManager()->addProgram( new K3bMovixProgram() );
-
   //
   // Load device, external programs, and stuff.
   //
   m_core->init();
+  m_core->readSettings( config() );
 
-  emit initializationInfo( i18n("Reading local Song database...") );
+  m_core->deviceManager()->printDevices();
+
   config()->setGroup( "General Options" );
-
   m_audioServer->setOutputMethod( config()->readEntry( "Audio Output System", "arts" ).local8Bit() );
 
   emit initializationInfo( i18n("Creating GUI...") );
 
   m_mainWindow = new K3bMainWindow();
 
-  if( dcopClient()->registerAs( "k3b" ) ) {
-    m_interface = new K3bInterface( m_mainWindow );
-    dcopClient()->setDefaultObject( m_interface->objId() );
-  }
-  else {
-    kdDebug() << "(K3bApplication) unable to attach to dcopserver!" << endl;
-  }
+  m_interface = new K3bInterface( m_mainWindow );
+  dcopClient()->setDefaultObject( m_interface->objId() );
 
   if( isRestored() ) {
+    // we only have one single mainwindow to restore  
     m_mainWindow->restore(1);
   }
   else {
@@ -201,19 +186,32 @@ void K3bApplication::init()
       K3bSystemProblemDialog::checkSystem();
     }
 
-
-    if( processCmdLineArgs() ) {
+    if( processCmdLineArgs() )
       KTipDialog::showTip( m_mainWindow );
-    }
 
     emit initializationDone();
   }
 }
 
 
+int K3bApplication::newInstance()
+{
+  if( m_needToInit ) {
+    init();
+    m_needToInit = false;
+  }
+  else
+    processCmdLineArgs();
+
+  return KUniqueApplication::newInstance();
+}
+
+
 bool K3bApplication::processCmdLineArgs()
 {
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+  bool showTips = true;
 
   if( args->isSet( "datacd" ) ) {
     // create new data project and add all arguments
@@ -272,22 +270,31 @@ bool K3bApplication::processCmdLineArgs()
     }
   }
   else if( args->isSet( "cdimage" ) ) {
-    if ( args->count() == 1 )
-      m_mainWindow->slotWriteCdImage( args->url(0) );
-    else
-      m_mainWindow->slotWriteCdImage();
+    showTips = false;
+    if( k3bcore->jobsRunning() == 0 ) {
+      if ( args->count() == 1 )
+	m_mainWindow->slotWriteCdImage( args->url(0) );
+      else
+	m_mainWindow->slotWriteCdImage();
+    }
   }
   else if( args->isSet( "dvdimage" ) ) {
-    if ( args->count() == 1 )
-      m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
-    else
-      m_mainWindow->slotWriteDvdIsoImage();
+    showTips = false;
+    if( k3bcore->jobsRunning() == 0 ) {
+      if ( args->count() == 1 )
+	m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
+      else
+	m_mainWindow->slotWriteDvdIsoImage();
+    }
   }
   else if( args->isSet( "image" ) && args->count() == 1 ) {
-    if( K3b::filesize( args->url(0) ) > 1000*1024*1024 )
-      m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
-    else
-      m_mainWindow->slotWriteCdImage( args->url(0) );
+    showTips = false;
+    if( k3bcore->jobsRunning() == 0 ) {
+      if( K3b::filesize( args->url(0) ) > 1000*1024*1024 )
+	m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
+      else
+	m_mainWindow->slotWriteCdImage( args->url(0) );
+    }
   }
   else if(args->count()) {
     for( int i = 0; i < args->count(); i++ ) {
@@ -295,22 +302,24 @@ bool K3bApplication::processCmdLineArgs()
     }
   }
 
-  bool showTips = false;
-
-  if( args->isSet("copycd") ) {
-    m_mainWindow->slotCdCopy();
+  if( k3bcore->jobsRunning() == 0 ) {
+    if( args->isSet("copycd") ) {
+      showTips = false;
+      m_mainWindow->slotCdCopy();
+    }
+    else if( args->isSet("copydvd") ) {
+      showTips = false;
+      m_mainWindow->slotDvdCopy();
+    }
+    else if( args->isSet("erasecd") ) {
+      showTips = false;
+      m_mainWindow->slotBlankCdrw();
+    }
+    else if( args->isSet("formatdvd") ) {
+      showTips = false;
+      m_mainWindow->slotFormatDvd();
+    }
   }
-  else if( args->isSet("copydvd") ) {
-    m_mainWindow->slotDvdCopy();
-  }
-  else if( args->isSet("erasecd") ) {
-    m_mainWindow->slotBlankCdrw();
-  }
-  else if( args->isSet("formatdvd") ) {
-    m_mainWindow->slotFormatDvd();
-  }
-  else
-    showTips = true;
 
   // FIXME: seems not like the right place...
   if( args->isSet( "ao" ) )
@@ -333,31 +342,40 @@ void K3bApplication::slotShutDown()
 }
 
 
-void K3bApplication::reuseInstance()
+K3bApplication::Core::Core( QObject* parent )
+  : K3bCore( parent )
 {
-  QDataStream ds( m_reuseData, IO_ReadOnly );
-  KCmdLineArgs::loadAppArgs(ds);
-  QCString newStartupId;
-  ds >> newStartupId;
-
-  setStartupId( newStartupId );
-  KStartupInfo::setNewStartupId( mainWidget(), startupId() );
-
-  processCmdLineArgs();
 }
 
 
-bool K3bApplication::process( const QCString& fun, const QByteArray& data,
-			      QCString& replyType, QByteArray& replyData )
+K3bApplication::Core::~Core()
 {
-  kdDebug() << "(K3bApplication::process) " << fun << endl;
-  if( fun == "reuseInstance()" ) {
-    m_reuseData = data;
-    QTimer::singleShot( 0, this, SLOT(reuseInstance()) );
-    return true;
-  }
-  else
-    return DCOPObject::process(fun, data, replyType, replyData);
 }
+
+
+void K3bApplication::Core::init()
+{
+  emit initializationInfo( i18n("Loading all plugins...") );
+  pluginManager()->loadAll();
+
+  emit initializationInfo( i18n("Searching for external programs...") );
+
+  //
+  // The eMovix program is a special case which is not part of
+  // the default programs handled by K3bCore
+  //
+  externalBinManager()->addProgram( new K3bMovixProgram() );
+  externalBinManager()->addProgram( new K3bNormalizeProgram() );
+  K3b::addTranscodePrograms( externalBinManager() );
+  K3b::addVcdimagerPrograms( externalBinManager() );
+
+  externalBinManager()->search();
+
+  emit initializationInfo( i18n("Scanning for CD devices...") );
+
+  if( !deviceManager()->scanbus() )
+    kdDebug() << "No Devices found!" << endl;
+}
+
 
 #include "k3bapplication.moc"

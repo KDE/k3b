@@ -33,7 +33,6 @@
 #include <stdlib.h>
 
 #include "k3bapplication.h"
-#include "k3bsmartinstancereuser.h"
 #include <k3bglobals.h>
 
 
@@ -103,30 +102,16 @@ int main( int argc, char* argv[] )
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
-  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-  K3bApplication app;
-
-  app.config()->setGroup( "General Options" );
-  bool alwaysNew = ( app.config()->readEntry( "Multiple Instances", "smart" ) == "always_new" );
-  
-  //
-  // In case no unblocked instance of K3b was found we create a new one.
-  //
-  if( app.isRestored() || alwaysNew || args->isSet( "forcenew" ) || !K3bSmartInstanceReuser::reuseInstance(args) ) {
-    
+  if( K3bApplication::start() ) {
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
 	kdDebug() << "Unable to set to language " << args->getOption("lang") 
 		  << " current is: " << KGlobal::locale()->language() << endl;
-    
-    
-    //
-    // this will init everything
-    // and also handle the command line arguments
-    //
-    app.init();
-    
+  
+    K3bApplication app;
+
     return app.exec();
   }
 }

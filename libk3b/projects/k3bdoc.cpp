@@ -63,7 +63,8 @@
 
 K3bDoc::K3bDoc( QObject* parent )
   : QObject( parent ),
-    m_view(0)
+    m_view(0),
+    m_modified(false)
 {
   // register the project with the manager
   k3bprojectmanager->addProject( this );

@@ -29,10 +29,10 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
+#include <k3bglobalsettings.h>
 
 #include <kprocess.h>
 #include <kapplication.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -441,8 +441,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
 
   d->copiesDone++;
 
-  k3bcore->config()->setGroup("General Options");
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) || d->copiesDone < d->copies )
+  if( !k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )
     K3bDevice::eject( d->doc->burner() );
   
   if( d->copiesDone < d->copies ) {
@@ -651,7 +650,6 @@ void K3bDataJob::determineWritingMode()
   if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
     // TODO: put this into the cdreocrdwriter and decide based on the size of the
     // track
-    k3bcore->config()->setGroup("General Options");
     if( writer()->dao() && d->usedDataMode == K3b::MODE1 &&
 	d->doc->multiSessionMode() == K3bDataDoc::NONE )
       d->usedWritingMode = K3b::DAO;

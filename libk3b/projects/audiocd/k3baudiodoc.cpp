@@ -95,8 +95,14 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
 K3bAudioDoc::~K3bAudioDoc()
 {
   // delete all tracks
-  while( m_firstTrack )
+  int i = 1;
+  int cnt = numOfTracks();
+  while( m_firstTrack ) {
+    kdDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleting track " << i << " of " << cnt << endl;
     delete m_firstTrack->take();
+    kdDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleted." << endl;
+    ++i;
+  }
 }
 
 bool K3bAudioDoc::newDocument()
@@ -655,8 +661,6 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
     }
   }
 
-  emit changed();
-
   informAboutNotFoundFiles();
 
   setModified(false);
@@ -939,11 +943,12 @@ void K3bAudioDoc::slotHouseKeeping()
       const QPtrList<K3bAudioTrack>& tracks = m_decoderMetaInfoSetMap[thread->m_decoder];
       for( QPtrListIterator<K3bAudioTrack> it( tracks ); *it; ++it ) {
 	K3bAudioTrack* track = *it;
-	track->setTitle( thread->m_decoder->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	track->setArtist( thread->m_decoder->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	track->setSongwriter( thread->m_decoder->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	track->setComposer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	track->setCdTextMessage( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+	// we directly access the cdtext objet here to avoid the changed signal
+	track->m_cdText.setTitle( thread->m_decoder->metaInfo( K3bAudioDecoder::META_TITLE ) );
+	track->m_cdText.setPerformer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+	track->m_cdText.setSongwriter( thread->m_decoder->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+	track->m_cdText.setComposer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+	track->m_cdText.setMessage( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMMENT ) );
       }
       m_decoderMetaInfoSetMap.erase( thread->m_decoder );
       m_audioTrackStatusThreads.removeRef( thread );
@@ -953,7 +958,7 @@ void K3bAudioDoc::slotHouseKeeping()
   if( !m_audioTrackStatusThreads.isEmpty() )
     QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
   else
-    emit changed(); // let the gui update the length values
+    emit changed(); // inform about the changed length
 
   kdDebug() << "(K3bAudioDoc::slotHouseKeeping) finished" << endl;
 }

@@ -23,7 +23,6 @@
 
 #include <kurl.h>
 
-
 class K3bMainWindow;
 
 

@@ -15,6 +15,8 @@
 
 #include <config.h>
 
+#include <k3bcore.h>
+
 #include "k3baudiodecoder.h"
 #include "k3bpluginmanager.h"
 
@@ -557,7 +559,7 @@ void K3bAudioDecoder::addTechnicalInfo( const QString& key, const QString& value
 K3bAudioDecoder* K3bAudioDecoderFactory::createDecoder( const KURL& url )
 {
   kdDebug() << "(K3bAudioDecoderFactory::createDecoder( " << url.path() << " )" << endl;
-  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
+  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
 
   // first search for a single format decoder
   for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {

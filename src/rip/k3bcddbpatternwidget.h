@@ -45,6 +45,7 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
 
  private slots:
   void slotSeeSpecialStrings();
+  void slotSeeConditionalInclusion();
 };
 
 #endif

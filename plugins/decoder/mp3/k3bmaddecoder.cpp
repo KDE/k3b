@@ -59,7 +59,10 @@ int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
 class K3bMadDecoder::Private
 {
 public:
-  Private() {
+  Private()
+    : outputBuffer(0),
+      outputPointer(0),
+      outputBufferEnd(0) {
   }
 
   K3bMad* handle;

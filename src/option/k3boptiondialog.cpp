@@ -123,10 +123,6 @@ bool K3bOptionDialog::saveSettings()
   if( !m_miscOptionTab->saveSettings() )
     return false;
 
-  k3bcore->config()->sync();
-
-  k3bcore->saveConfig();
-
   return true;
 }
 

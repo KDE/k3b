@@ -25,6 +25,8 @@ class K3bExternalBinManager;
 namespace K3b
 {
   void addDefaultPrograms( K3bExternalBinManager* );
+  void addTranscodePrograms( K3bExternalBinManager* );
+  void addVcdimagerPrograms( K3bExternalBinManager* );
 }
 
 

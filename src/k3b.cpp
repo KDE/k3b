@@ -553,7 +553,7 @@ void K3bMainWindow::saveOptions()
 
   saveMainWindowSettings( m_config, "main_window_settings" );
 
-  k3bcore->saveConfig();
+  k3bcore->saveSettings( config() );
 
   d->welcomeWidget->saveConfig( config() );
 }
@@ -625,6 +625,9 @@ void K3bMainWindow::saveProperties( KConfig* c )
 
 void K3bMainWindow::readProperties( KConfig* c )
 {
+  // FIXME: do not delete the files here. rather do it when the app is exited normally
+  //        since that's when we can be sure we never need the session stuff again.
+
   // 1. read all projects from the config
   // 2. simply open all of them
   // 3. reset the saved urls and the modified state
@@ -647,18 +650,21 @@ void K3bMainWindow::readProperties( KConfig* c )
     KURL saveUrl = c->readPathEntry( QString("%1 saveurl").arg(i) );
 
     // now load the project
-    K3bDoc* doc = K3bDoc::openDocument( saveUrl );
+    if( K3bDoc* doc = K3bDoc::openDocument( saveUrl ) ) {
+
+      // reset the url
+      doc->setURL( url );
+      doc->setModified( modified );
+      doc->setSaved( saved );
+      
+      createClient( doc );
+    }
+    else
+      kdDebug() << "(K3bMainWindow) could not open session saved doc " << url.path() << endl;
 
     // remove the temp file
     if( !saved || modified )
       QFile::remove( saveUrl.path() );
-
-    // reset the url
-    doc->setURL( url );
-    doc->setModified( modified );
-    doc->setSaved( saved );
-
-    createClient( doc );
   }
 
   // and now remove the temp dir
@@ -670,6 +676,9 @@ bool K3bMainWindow::queryClose()
 {
   if( kapp->sessionSaving() ) 
     return true;
+
+  // FIXME: do not close the docs here. Just ask for them to be saved and return false
+  //        if the user chose cancel for some doc
 
   // ---------------------------------
   // we need to manually close all the views to ensure that
@@ -696,8 +705,11 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
   if( !m_config->readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
     return true;
 
-  switch ( KMessageBox::warningYesNoCancel(this, i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
-					   i18n("Closing Project"), i18n("&Save"), i18n("&Discard") ) )
+  switch ( KMessageBox::warningYesNoCancel( this, 
+					    i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
+					    i18n("Closing Project"), 
+					    KGuiItem( i18n("&Save"), "filesave" ),
+					    KGuiItem( i18n("&Discard"), "editshred" ) ) )
     {
     case KMessageBox::Yes:
       fileSave( doc );
@@ -711,6 +723,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
 
 bool K3bMainWindow::queryExit()
 {
+  // TODO: call this in K3bApplication somewhere
   saveOptions();
   return true;
 }
@@ -945,7 +958,7 @@ void K3bMainWindow::showOptionDialog( int index )
 
 K3bDoc* K3bMainWindow::slotNewAudioDoc()
 {
-  if( k3bpluginmanager->plugins( "AudioDecoder" ).isEmpty() )
+  if( k3bcore->pluginManager()->plugins( "AudioDecoder" ).isEmpty() )
     KMessageBox::error( this, i18n("No audio decoder plugins found. You won't be able to add any files "
 				   "to the audio project!") );
 
@@ -1464,7 +1477,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
   else {
     // check if the files are all audio we can handle. If so create an audio project
     bool audio = true;
-    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
+    QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
     for( KURL::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
       const KURL& url = *it;
 

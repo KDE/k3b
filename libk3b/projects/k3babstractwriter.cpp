@@ -19,10 +19,11 @@
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
+#include <k3bglobalsettings.h>
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kconfig.h>
+
 
 
 K3bAbstractWriter::K3bAbstractWriter( K3bDevice::Device* dev, K3bJobHandler* jh, QObject* parent, const char* name )
@@ -66,10 +67,8 @@ void K3bAbstractWriter::cancel()
 
 void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 {
-  k3bcore->config()->setGroup("General Options");
-
   if( success ) {
-    if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
+    if( !k3bcore->globalSettings()->ejectMedia() ) {
       emit newSubTask( i18n("Ejecting CD") );  // FIXME: "media" instead of "CD"
       connect( K3bDevice::eject( burnDevice() ), SIGNAL(finished(bool)),
 	       this, SLOT(slotEjectWhileCancellationFinished(bool)) );

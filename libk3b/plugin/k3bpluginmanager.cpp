@@ -39,19 +39,12 @@ public:
 };
 
 
-K3bPluginManager* K3bPluginManager::s_k3bPluginManager = 0;
 
 
 K3bPluginManager::K3bPluginManager( QObject* parent, const char* name )
   : QObject( parent, name )
 {
   d = new Private();
-
-  if( s_k3bPluginManager ) {
-    qFatal("ONLY ONE INSTANCE OF K3BPLUGINMANAGER ALLOWED!");
-  }
-
-  s_k3bPluginManager = this;
 }
 
 

@@ -16,10 +16,6 @@ Fixed incorrect PBC order, PBC now should work on all "standalone" DVD Players
 Fixed waittime bug for PBC infinite timeout.
 Import Audio Cue files into an audio project.
 It is now possible to open an iso image or an audio cue file just like a project file.
-K3b now smartly reuses already running instances if they are idle. Example: you already started K3b and 
-	now right click an iso image to burn it with k3b. Instead of starting a new instance the running
-	one gets reused. But if that instance is already doing something like ripping a cd or whatever
-	a new instance is started.
 Create cue files for an audio CD ripped into one single file
 Show writer buffer state in addition to fifo buffer when writing CDs.
 Fixed read and save setting in VideoCD project.
@@ -48,6 +44,7 @@ When the speed for an on-the-fly audio project is set to "Auto" K3b now determin
 Do not close dialogs after the action is done (for example cd copy)
 Directly copy Audio tracks from an Audio CD to an Audio project.
 Session management
+Made K3b a unique application only allowing one instance.
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.

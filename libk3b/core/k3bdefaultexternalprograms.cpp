@@ -35,12 +35,18 @@
 
 void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
-  // don't know if we need more vcdTools in the future (vcdxrip)
-  static const char* vcdTools[] =  { "vcdxbuild",
-                                     "vcdxminfo",
-                                     "vcdxrip",
-                                     0 };
-  
+  m->addProgram( new K3bCdrecordProgram(false) );
+  m->addProgram( new K3bMkisofsProgram() );
+  m->addProgram( new K3bReadcdProgram() );
+  m->addProgram( new K3bCdrdaoProgram() );
+  m->addProgram( new K3bGrowisofsProgram() );
+  m->addProgram( new K3bDvdformatProgram() );
+  //  m->addProgram( new K3bDvdBooktypeProgram() );
+}
+
+
+void K3b::addTranscodePrograms( K3bExternalBinManager* m )
+{
   static const char* transcodeTools[] =  { "transcode",
 					   "tcprobe",
 					   "tccat",
@@ -48,21 +54,22 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 					   "tcextract",
 					   "tcdecode",
 					   0 };
-  for( int i = 0; vcdTools[i]; ++i )
-    m->addProgram( new K3bVcdbuilderProgram( vcdTools[i] ) );
+
   for( int i = 0; transcodeTools[i]; ++i )
     m->addProgram( new K3bTranscodeProgram( transcodeTools[i] ) );
-  m->addProgram( new K3bCdrecordProgram(false) );
-  //  m->addProgram( new K3bCdrecordProgram(true) );
-  //  m->addProgram( new K3bDvdrecordProgram() );
-  m->addProgram( new K3bMkisofsProgram() );
-  m->addProgram( new K3bReadcdProgram() );
-  m->addProgram( new K3bCdrdaoProgram() );
-  m->addProgram( new K3bNormalizeProgram() );
-  m->addProgram( new K3bGrowisofsProgram() );
-  m->addProgram( new K3bDvdformatProgram() );
-  m->addProgram( new K3bDvdBooktypeProgram() );
-//  m->addProgram( new K3bCdda2wavProgram() );
+}
+
+
+void K3b::addVcdimagerPrograms( K3bExternalBinManager* m )
+{
+  // don't know if we need more vcdTools in the future (vcdxrip)
+  static const char* vcdTools[] =  { "vcdxbuild",
+                                     "vcdxminfo",
+                                     "vcdxrip",
+                                     0 };
+  
+  for( int i = 0; vcdTools[i]; ++i )
+    m->addProgram( new K3bVcdbuilderProgram( vcdTools[i] ) );
 }
 
 

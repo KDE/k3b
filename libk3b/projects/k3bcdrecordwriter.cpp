@@ -26,6 +26,7 @@
 #include <k3bdevicehandler.h>
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
+#include <k3bglobalsettings.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -36,7 +37,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kmessagebox.h>
 #include <ktempfile.h>
 
@@ -157,8 +157,6 @@ void K3bCdrecordWriter::prepareProcess()
   if( !m_cdrecordBinObject )
     return;
 
-  k3bcore->config()->setGroup("General Options");
-
   *m_process << m_cdrecordBinObject;
 
   // display progress
@@ -210,7 +208,7 @@ void K3bCdrecordWriter::prepareProcess()
     *m_process << "-dummy";
     
   d->usingBurnfree = false;
-  if( k3bcore->config()->readBoolEntry( "burnfree", true ) ) {
+  if( k3bcore->globalSettings()->overburn() ) {
     if( burnDevice()->burnproof() ) {
 
       d->usingBurnfree = true;
@@ -243,16 +241,16 @@ void K3bCdrecordWriter::prepareProcess()
     *m_process << "textfile=" + d->cdTextFile->name();
   }
 
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) &&
+  if( k3bcore->globalSettings()->ejectMedia() &&
       !m_forceNoEject )
     *m_process << "-eject";
 
-  bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
+  bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
   if( manualBufferSize ) {
-    *m_process << QString("fs=%1m").arg( k3bcore->config()->readNumEntry( "Fifo buffer", 4 ) );
+    *m_process << QString("fs=%1m").arg( k3bcore->globalSettings()->bufferSize() );
   }
     
-  bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
+  bool overburn = k3bcore->globalSettings()->overburn();
   if( overburn )
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";
@@ -482,8 +480,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       m_cdrecordError = BUFFER_UNDERRUN;
     }
     else if( errStr.startsWith("WARNING: Data may not fit") ) {
-      k3bcore->config()->setGroup( "General Options" );
-      bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
+      bool overburn = k3bcore->globalSettings()->overburn();
       if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
 	emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
       m_cdrecordError = OVERSIZE;
@@ -655,8 +652,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 
       switch( m_cdrecordError ) {
       case OVERSIZE:
-	k3bcore->config()->setGroup( "General Options" );
-	if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
+	if( k3bcore->globalSettings()->overburn() &&
 	    m_cdrecordBinObject->hasFeature("overburn") )
 	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );
 	else {

@@ -67,7 +67,9 @@ K3bAudioTrack::~K3bAudioTrack()
   m_currentlyDeleting = true;
 
   // fix the list
-  remove();
+  take();
+
+  kdDebug() << "(K3bAudioTrack::~K3bAudioTrack) deleting sources." << endl;
 
   // delete all sources
   while( m_firstSource )
@@ -153,7 +155,7 @@ void K3bAudioTrack::setIndex0( const K3b::Msf& msf )
 }
 
 
-void K3bAudioTrack::remove()
+K3bAudioTrack* K3bAudioTrack::take()
 {
   if( inList() ) {
     if( !m_prev )
@@ -172,15 +174,6 @@ void K3bAudioTrack::remove()
     if( m_parent )
       m_parent->slotTrackRemoved(this);
     m_parent = 0;
-  }
-}
-
-
-K3bAudioTrack* K3bAudioTrack::take()
-{
-  if( inList() ) {
-    remove();    
-    emitChanged();
   }
 
   return this;
@@ -210,7 +203,7 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
   }
 
   // remove this from the list
-  remove();
+  take();
 
   // set the new parent doc
   m_parent = track->doc();
@@ -258,7 +251,7 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
   }
 
   // remove this from the list
-  remove();
+  take();
 
   // set the new parent doc
   m_parent = track->doc();

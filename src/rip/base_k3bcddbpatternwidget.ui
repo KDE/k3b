@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bCddbPatternWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>305</width>
-            <height>123</height>
+            <width>399</width>
+            <height>154</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,7 +25,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>layout8</cstring>
             </property>
@@ -60,6 +60,17 @@
             </property>
             <property name="text">
                 <string>See special strings</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="KURLLabel" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_conditionalInclusionLabel</cstring>
+            </property>
+            <property name="text">
+                <string>About conditional inclusion</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -118,8 +129,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>m_checkBlankReplace</sender>
@@ -130,6 +139,12 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
     <includehint>kurllabel.h</includehint>
+    <includehint>kurllabel.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

@@ -25,6 +25,7 @@
 #include <k3bdevicehandler.h>
 #include <k3bthroughputestimator.h>
 #include <k3bglobals.h>
+#include <k3bglobalsettings.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -39,7 +40,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kio/netaccess.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -152,8 +152,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
 
-  k3bcore->config()->setGroup("General Options");
-  m_eject = !k3bcore->config()->readBoolEntry( "No cd eject", false );
+  m_eject = k3bcore->globalSettings()->ejectMedia();
 
   ::memset( &d->oldMsg, 0, sizeof(ProgressMsg2) );
   ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
@@ -283,28 +282,25 @@ void K3bCdrdaoWriter::setWriteArguments()
     *m_process << "--force";
 
   // burnproof
-  k3bcore->config()->setGroup("General Options");
-  if ( !k3bcore->config()->readBoolEntry( "burnfree", true ) ) {
+  if ( !k3bcore->globalSettings()->burnfree() ) {
     if( m_cdrdaoBinObject->hasFeature( "disable-burnproof" ) )
       *m_process << "--buffer-under-run-protection" << "0";
     else
       emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.").arg(m_cdrdaoBinObject->version), WARNING );
   }
   
-  k3bcore->config()->setGroup("General Options");
-
   bool manualBufferSize =
-    k3bcore->config()->readBoolEntry( "Manual buffer size", false );
+    k3bcore->globalSettings()->useManualBufferSize();
   if( manualBufferSize ) {
     //
     // one buffer in cdrdao holds 1 second of audio data = 75 frames = 75 * 2352 bytes
     //
-    int bufSizeInMb = k3bcore->config()->readNumEntry( "Fifo buffer", 4 );
+    int bufSizeInMb = k3bcore->globalSettings()->bufferSize();
     *m_process << "--buffers" << QString::number( bufSizeInMb*1024*1024/(75*2352) );
   }
 
   bool overburn =
-    k3bcore->config()->readBoolEntry( "Allow overburning", false );
+    k3bcore->globalSettings()->overburn();
   if( overburn ) {
     if( m_cdrdaoBinObject->hasFeature("overburn") )
       *m_process << "--overburn";

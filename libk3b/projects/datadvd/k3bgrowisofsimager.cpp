@@ -26,10 +26,10 @@
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 #include <k3bgrowisofshandler.h>
+#include <k3bglobalsettings.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kconfig.h>
 #include <kglobal.h>
 
 #include <qvaluelist.h>
@@ -189,7 +189,7 @@ void K3bGrowisofsImager::start()
 					      : QString::number( speed/1385 ) );
   }
 
-  if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
+  if( k3bcore->globalSettings()->overburn() )
     *m_process << "-overburn";
 
 
@@ -347,8 +347,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
     d->success = false;
   }
 
-  k3bcore->config()->setGroup("General Options");
-  if( k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+  if( !k3bcore->globalSettings()->ejectMedia() )
     emit finished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );

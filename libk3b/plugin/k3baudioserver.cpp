@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <k3bcore.h>
 #include "k3baudioserver.h"
 #include "k3baudioclient.h"
 #include "k3bpluginmanager.h"
@@ -167,7 +168,7 @@ void K3bAudioServer::detachClient( K3bAudioClient* c )
 
 K3bAudioOutputPlugin* K3bAudioServer::findOutputPlugin( const QCString& name )
 {
-  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioOutput" );
+  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
   
   for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioOutputPlugin* f = dynamic_cast<K3bAudioOutputPlugin*>( it.current() );

@@ -21,8 +21,6 @@
 #include <qstringlist.h>
 
 
-#define k3bpluginmanager K3bPluginManager::k3bPluginManager()
-
 
 class K3bPlugin;
 class QWidget;
@@ -54,8 +52,6 @@ class K3bPluginManager : public QObject
 
   int pluginSystemVersion() const;
 
-  static K3bPluginManager* k3bPluginManager() { return s_k3bPluginManager; }
-
  public slots:
   /**
    * Loads all plugins from the ressource directories.
@@ -69,8 +65,6 @@ class K3bPluginManager : public QObject
  private:
   class Private;
   Private* d;
-
-  static K3bPluginManager* s_k3bPluginManager;
 };
 
 #endif

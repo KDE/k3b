@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>587</width>
-            <height>396</height>
+            <height>313</height>
         </rect>
     </property>
     <property name="caption">
@@ -153,42 +153,6 @@
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Show the splash screen when K3b starts</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>m_groupMultipleInstances</cstring>
-            </property>
-            <property name="title">
-                <string>Multiple Instances</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>m_radioMultipleInstancesSmart</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Smart (reuse idle K3b instances)</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will try to reuse already running Instances if the user attempts to start a new one.
-&lt;p&gt;&lt;em&gt;Example:&lt;/em&gt; An instance of K3b is running on another desktop and the user right clicks an iso image to burn it with K3b. Then the running instance will be moved to the current desktop and used to burn that iso image.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>m_radioMultipleInstancesNew</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Always create new instance</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will always start a new instance regardless of whether another idle instance is already running or not.</string>
                     </property>
                 </widget>
             </vbox>

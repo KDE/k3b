@@ -28,6 +28,8 @@ class K3bVersion;
 class KConfig;
 class KAboutData;
 class K3bJob;
+class K3bGlobalSettings;
+class K3bPluginManager;
 
 
 namespace K3bDevice {
@@ -47,19 +49,59 @@ class K3bCore : public QObject
   Q_OBJECT
 
  public:
-  K3bCore( const K3bVersion&, KConfig* = 0, QObject* parent = 0, const char* name = 0 );
+  /**
+   * Although K3bCore is a singlelton it's constructor is not private to make inheritance
+   * possible. Just make sure to only create one instance.
+   */
+  K3bCore( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCore();
 
   bool jobsRunning() const;
 
-  void init();
-  void saveConfig();
+  /**
+   * The default implementation scans for devices, applications, and reads the global settings.
+   */
+  virtual void init();
+
+  /**
+   * @param c if 0 K3bCore uses the K3b configuration
+   */
+  virtual void readSettings( KConfig* c = 0 );
+
+  /**
+   * @param c if 0 K3bCore uses the K3b configuration
+   */
+  virtual void saveSettings( KConfig* c = 0 );
 
   K3bDevice::DeviceManager* deviceManager() const;
-  K3bExternalBinManager* externalBinManager() const;
 
+  /**
+   * Returns the external bin manager from K3bCore.
+   *
+   * By default K3bCore only adds the default programs:
+   * cdrecord, cdrdao, growisofs, mkisofs, dvd+rw-format, readcd
+   *
+   * If you need other programs you have to add them manually like this:
+   * <pre>externalBinManager()->addProgram( new K3bNormalizeProgram() );</pre>
+   */
+  K3bExternalBinManager* externalBinManager() const;
+  K3bPluginManager* pluginManager() const;
+
+  /**
+   * Global settings used throughout libk3b. Change the settings directly in the
+   * K3bGlobalSettings object. They will be saved by K3bCore::saveSettings
+   */
+  K3bGlobalSettings* globalSettings() const;
+
+  /**
+   * returns the version of the library as defined by LIBK3B_VERSION
+   */
   const K3bVersion& version() const;
 
+  /**
+   * Returns the K3b configuration from k3brc.
+   * Normally this should not be used.
+   */
   KConfig* config() const;
 
   static K3bCore* k3bCore() { return s_k3bCore; }
@@ -69,8 +111,14 @@ class K3bCore : public QObject
    * This will just emit the busyInfoRequested signal
    * Anyone may connect to it and show the string to the
    * user in some way.
+   *
+   * FIXME: move this to k3b
    */
   void requestBusyInfo( const QString& );
+
+  /**
+   * FIXME: move this to k3b
+   */
   void requestBusyFinish();
 
   /**
@@ -83,18 +131,17 @@ class K3bCore : public QObject
 
  signals:
   /**
-   * This is used for showing info in the K3b splashscreen
-   * and should really be moved somewhere else!
-   */
-  void initializationInfo( const QString& );
-
-  /**
    * Any component may request busy info
    * In the K3b main app this will be displayed
    * as a moving square in the taskbar
+   *
+   * FIXME: move this to k3b
    */
   void busyInfoRequested( const QString& );
 
+  /**
+   * FIXME: move this to k3b
+   */
   void busyFinishRequested();
 
  private:

@@ -24,6 +24,8 @@
 #include <k3bversion.h>
 #include <k3bjob.h>
 #include <k3bthreadwidget.h>
+#include <k3bglobalsettings.h>
+#include <k3bpluginmanager.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -34,16 +36,24 @@
 #include <qptrlist.h>
 
 
+#define LIBK3B_VERSION "0.11.97"
+
+
 class K3bCore::Private {
 public:
-  Private( const K3bVersion& about )
-    : version( about ) {
+  Private()
+    : version( LIBK3B_VERSION ),
+      config(0),
+      deleteConfig(false) {
   }
 
-  KConfig* config;
   K3bVersion version;
+  KConfig* config;
+  bool deleteConfig;
   K3bDevice::DeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
+  K3bPluginManager* pluginManager;
+  K3bGlobalSettings* globalSettings;
 
   QPtrList<K3bJob> runningJobs;
 };
@@ -54,13 +64,10 @@ K3bCore* K3bCore::s_k3bCore = 0;
 
 
 
-K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const char* name )
+K3bCore::K3bCore( QObject* parent, const char* name )
   : QObject( parent, name )
 {
-  d = new Private( version );
-  d->config = c;
-  if( !c )
-    d->config = kapp->config();
+  d = new Private();
 
   if( s_k3bCore ) {
     qFatal("ONLY ONE INSTANCE OF K3BCORE ALLOWED!");
@@ -68,8 +75,11 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
 
   s_k3bCore = this;
 
+  d->globalSettings = new K3bGlobalSettings();
   d->externalBinManager = new K3bExternalBinManager( this );
   d->deviceManager = new K3bDevice::DeviceManager( this );
+  d->pluginManager = new K3bPluginManager( this );
+
   K3b::addDefaultPrograms( d->externalBinManager );
 
   // create the thread widget instance in the GUI thread
@@ -79,6 +89,8 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
 
 K3bCore::~K3bCore()
 {
+  delete d->globalSettings;
+  delete d->pluginManager;
   delete d;
 }
 
@@ -95,6 +107,18 @@ K3bExternalBinManager* K3bCore::externalBinManager() const
 }
 
 
+K3bPluginManager* K3bCore::pluginManager() const
+{
+  return d->pluginManager;
+}
+
+
+K3bGlobalSettings* K3bCore::globalSettings() const
+{
+  return d->globalSettings;
+}
+
+
 const K3bVersion& K3bCore::version() const
 {
   return d->version;
@@ -103,62 +127,59 @@ const K3bVersion& K3bCore::version() const
 
 KConfig* K3bCore::config() const
 {
+  if( !d->config ) {
+    d->deleteConfig = true;
+    d->config = new KConfig( "k3brc" );
+  }
+
   return d->config;
 }
 
 
 void K3bCore::init()
 {
-  emit initializationInfo( i18n("Reading Options...") );
-
-  config()->setGroup( "General Options" );
-  K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
-
-  // external bin manager
-  // ===============================================================================
-  emit initializationInfo( i18n("Searching for external programs...") );
+  // load the plugins before doing anything else
+  // they might add external bins
+  d->pluginManager->loadAll();
 
   d->externalBinManager->search();
-
-  if( config()->hasGroup("External Programs") ) {
-    config()->setGroup( "External Programs" );
-    d->externalBinManager->readConfig( config() );
-  }
-
-  // ===============================================================================
-
-
-  // device manager
-  // ===============================================================================
-  //
-
-  emit initializationInfo( i18n("Scanning for CD devices...") );
-
   if( !d->deviceManager->scanbus() )
     kdDebug() << "No Devices found!" << endl;
-
-  if( config()->hasGroup("Devices") ) {
-    config()->setGroup( "Devices" );
-    d->deviceManager->readConfig( config() );
-  }
-
-  d->deviceManager->printDevices();
-  // ===============================================================================
-
-  //  emit initializationInfo( i18n("Initializing CD view...") );
-
-  // ===============================================================================
 }
 
 
-void K3bCore::saveConfig()
+void K3bCore::readSettings( KConfig* cnf )
 {
-  config()->setGroup( "General Options" );
-  config()->writeEntry( "config version", version() );
-  config()->setGroup( "Devices" );
-  deviceManager()->saveConfig( config() );
-  config()->setGroup( "External Programs" );
-  externalBinManager()->saveConfig( config() );
+  KConfig* c = cnf;
+  if( !c )
+    c = config();
+
+  QString oldGrp = c->group();
+
+  d->globalSettings->readSettings( c );
+  d->deviceManager->readConfig( c );
+  d->externalBinManager->readConfig( c );
+
+  c->setGroup( oldGrp );
+}
+
+
+void K3bCore::saveSettings( KConfig* cnf )
+{
+  KConfig* c = cnf;
+  if( !c )
+    c = config();
+
+  QString oldGrp = c->group();
+
+  c->setGroup( "General Options" );
+  c->writeEntry( "config version", version() );
+
+  deviceManager()->saveConfig( c );
+  externalBinManager()->saveConfig( c );
+  d->globalSettings->saveSettings( c );
+
+  c->setGroup( oldGrp );
 }
 
 

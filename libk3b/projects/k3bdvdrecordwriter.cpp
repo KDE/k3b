@@ -21,8 +21,8 @@
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
 #include <k3bglobals.h>
+#include <k3bglobalsettings.h>
 
-#include <kconfig.h>
 #include <klocale.h>
 
 
@@ -90,17 +90,15 @@ void K3bDvdrecordWriter::prepareProcess()
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
   }
   
-  k3bcore->config()->setGroup("General Options");
-  
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+  if( !k3bcore->globalSettings()->ejectMedia() )
     *m_process << "-eject";
 
-  bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
+  bool manualBufferSize = k3bcore->globalSettings()->manualBufferSize();
   if( manualBufferSize ) {
-    *m_process << QString("fs=%1m").arg( k3bcore->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+    *m_process << QString("fs=%1m").arg( k3bcore->globalSettings()->writingBuffer() );
   }
     
-  bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
+  bool overburn = k3bcore->globalSettings()->overburn();
   if( overburn )
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";

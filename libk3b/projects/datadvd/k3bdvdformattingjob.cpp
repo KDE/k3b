@@ -24,10 +24,10 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
+#include <k3bglobalsettings.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 
 #include <qvaluelist.h>
 #include <qregexp.h>
@@ -260,9 +260,8 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
     d->success = false;
   }
 
-  k3bcore->config()->setGroup("General Options");
   if( d->forceNoEject ||
-      k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
+      !k3bcore->globalSettings()->ejectMedia() ) {
     d->running = false;
     emit finished(d->success);
   }

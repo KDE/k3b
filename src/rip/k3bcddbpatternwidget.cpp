@@ -65,6 +65,8 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
 	   this, SIGNAL(changed()) );
   connect( m_specialStringsLabel, SIGNAL(leftClickedURL()), 
 	   this, SLOT(slotSeeSpecialStrings()) );
+  connect( m_conditionalInclusionLabel, SIGNAL(leftClickedURL()),
+	   this, SLOT(slotSeeConditionalInclusion()) );
 }
 
 
@@ -139,6 +141,29 @@ void K3bCddbPatternWidget::slotSeeSpecialStrings()
 			     "<li>%x - extended information about the CD\n"
 			     "<li>%d - current date\n"
 			     "</ul>" ) );
+}
+
+void K3bCddbPatternWidget::slotSeeConditionalInclusion()
+{
+  QWhatsThis::display( i18n( "<p><b>Conditional inclusion:</b>"
+			     "<p>These patterns make it possible to selectively include texts, "
+			     "depending on the value of CDDB entries. You can choose only to "
+			     "include something if one of the entries is empty, "
+			     "or if it has a specific value."
+			     "<ul>\n"
+			     "<li>@m{TEXT} includes TEXT if the CD Title is specified\n"
+			     "<li>!m{TEXT} includes TEXT if the CD Title is not specified\n"
+			     "<li>@x=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended information "
+			       "is named Soundtrack\n"
+			     "<li>!x=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended information "
+			       "is anything else but Soundtrack\n"
+			     "<li>It's also possible to include special strings in texts and conditions, "
+			       "e.g. !a=\"%r\"{%a} only includes the title's artist information "
+			       "if it doesn't differ from the album artist\n"
+			     "</ul>\n"
+			     "<p>Conditional includes make use of the same characters as the special "
+			       "strings, which means that the X in @X{...} can be one character out of "
+			       "[atnyegrmxd]." ) );
 }
 
 #include "k3bcddbpatternwidget.moc"

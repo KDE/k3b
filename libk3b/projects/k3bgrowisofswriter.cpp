@@ -26,10 +26,10 @@
 #include <k3bthroughputestimator.h>
 #include "k3bgrowisofshandler.h"
 #include <k3bpipebuffer.h>
+#include <k3bglobalsettings.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kglobal.h>
 
 #include <qvaluelist.h>
@@ -275,7 +275,7 @@ bool K3bGrowisofsWriter::prepareProcess()
 					      : QString::number( speed/1385 ) );
   }
 
-  if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
+  if( k3bcore->globalSettings()->overburn() )
     *d->process << "-overburn";
 
 
@@ -346,9 +346,8 @@ void K3bGrowisofsWriter::start()
 	}
 
 	d->ringBuffer->writeToFd( d->process->stdinFd() );
-	k3bcore->config()->setGroup("General Options");
-	bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );
-	int bufSize = ( manualBufferSize ? k3bcore->config()->readNumEntry( "Fifo buffer", 4 ) : 4 );
+	bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
+	int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 4 );
 	d->ringBuffer->setBufferSize( bufSize );
 
 	if( !d->image.isEmpty() )
@@ -495,8 +494,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     d->success = false;
   }
 
-  k3bcore->config()->setGroup("General Options");
-  if( k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+  if( !k3bcore->globalSettings()->ejectMedia() )
     emit finished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );

@@ -74,7 +74,7 @@ K3bPluginOptionTab::~K3bPluginOptionTab()
 void K3bPluginOptionTab::readSettings()
 {
   m_viewPlugins->clear();
-  QStringList groups = k3bpluginmanager->groups();
+  QStringList groups = k3bcore->pluginManager()->groups();
   for( QStringList::const_iterator it = groups.begin();
        it != groups.end(); ++it ) {
     const QString& group = *it;
@@ -82,7 +82,7 @@ void K3bPluginOptionTab::readSettings()
     KListViewItem* groupViewItem = new KListViewItem( m_viewPlugins,
 						      m_viewPlugins->lastChild(),
 						      group );
-    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( group );
+    QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( group );
     for( QPtrListIterator<K3bPlugin> fit( fl ); fit.current(); ++fit )
       (void)new PluginViewItem( fit.current(), groupViewItem );
 
@@ -103,7 +103,7 @@ void K3bPluginOptionTab::slotConfigureButtonClicked()
 {
   QListViewItem* item = m_viewPlugins->selectedItem();
   if( PluginViewItem* pi = dynamic_cast<PluginViewItem*>( item ) )
-    k3bpluginmanager->execPluginDialog( pi->plugin, this );
+    k3bcore->pluginManager()->execPluginDialog( pi->plugin, this );
 }
 
 

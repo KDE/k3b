@@ -68,7 +68,7 @@ bool K3bMad::open( const QString& filename )
 
   initMad();
 
-  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
+  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE+MAD_BUFFER_GUARD );
 
   return true;
 }

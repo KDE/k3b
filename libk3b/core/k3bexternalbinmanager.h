@@ -122,9 +122,14 @@ class K3bExternalBinManager : public QObject
   void search();
 
   /**
-   * read config and add changes to current map
+   * read config and add changes to current map.
+   * Takes care of setting the config group
    */
   bool readConfig( KConfig* );
+
+  /**
+   * Takes care of setting the config group
+   */
   bool saveConfig( KConfig* );
 
   bool foundBin( const QString& name );

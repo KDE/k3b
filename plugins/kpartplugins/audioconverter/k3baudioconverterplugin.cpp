@@ -108,7 +108,7 @@ void K3bAudioConverterPluginDialog::loadAudioEncoder()
   m_w->comboFormat->insertItem( i18n("Wave") );
 
   // check the available encoding plugins
-  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioEncoder" );
+  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
   for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioEncoder* f = (K3bAudioEncoder*)it.current();
     QStringList exL = f->extensions();
@@ -157,7 +157,7 @@ void K3bAudioConverterPluginDialog::slotConfigureEncoder()
 {
   K3bAudioEncoder* encoder = d->encoderMap[m_w->comboFormat->currentItem()];  // 0 for wave
   if( encoder )
-    k3bpluginmanager->execPluginDialog( encoder, this );
+    k3bcore->pluginManager()->execPluginDialog( encoder, this );
 }
 
 

@@ -175,11 +175,6 @@ class K3bAudioTrack
 
  private:	
   /**
-   * Removes the track from the list
-   */
-  void remove();
-
-  /**
    * Tells the doc that the track has changed
    */
   void emitChanged();

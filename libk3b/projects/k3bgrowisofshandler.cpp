@@ -17,11 +17,11 @@
 
 #include <k3bjob.h>
 #include <k3bcore.h>
+#include <k3bglobalsettings.h>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kconfig.h>
 
 #include <errno.h>
 #include <string.h>
@@ -74,8 +74,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
 
     else if( line.contains( "blocks are free" ) && line.contains( "to be written" ) ) {
       m_error = ERROR_OVERSIZE;
-      k3bcore->config()->setGroup( "General Options" );
-      if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
+      if( k3bcore->globalSettings()->overburn() )
 	emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
     }
 
@@ -164,8 +163,7 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
     break;
 
   case ERROR_OVERSIZE:
-    k3bcore->config()->setGroup( "General Options" );
-    if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
+    if( k3bcore->globalSettings()->overburn() )
       emit infoMessage( i18n("Data did not fit on disk."), K3bJob::ERROR );
     else
       emit infoMessage( i18n("Data does not fit on disk."), K3bJob::ERROR );

@@ -17,6 +17,7 @@
 #include <k3bmsfedit.h>
 #include <k3bcore.h>
 #include <k3bstdguiitems.h>
+#include <k3bglobalsettings.h>
 
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -240,7 +241,6 @@ void K3bBurningOptionTab::readSettings()
   KConfig* c = k3bcore->config();
 
   c->setGroup("General Options");
-  m_checkBurnfree->setChecked( c->readBoolEntry( "burnfree", true ) );
   m_checkSaveOnExit->setChecked( c->readBoolEntry( "ask_for_saving_changes_on_exit", true ) );
 
   c->setGroup( "Video project settings" );
@@ -254,15 +254,15 @@ void K3bBurningOptionTab::readSettings()
   m_checkListSystemFiles->setChecked( c->readBoolEntry("Add system files", false ) );
 
   c->setGroup( "General Options" );
-  m_checkEject->setChecked( c->readBoolEntry( "No cd eject", false ) );
   m_checkAutoErasingRewritable->setChecked( c->readBoolEntry( "auto rewritable erasing", false ) );
-  m_checkOverburn->setChecked( c->readBoolEntry( "Allow overburning", false ) );
-  bool manualBufferSize = c->readBoolEntry( "Manual buffer size", false );
-  m_checkManualWritingBufferSize->setChecked( manualBufferSize );
-  if( manualBufferSize ) {
-    m_editWritingBufferSize->setValue( c->readNumEntry( "Fifo buffer", 4 ) );
-  }
   m_checkAllowWritingAppSelection->setChecked( c->readBoolEntry( "Manual writing app selection", false ) );
+
+  m_checkBurnfree->setChecked( k3bcore->globalSettings()->burnfree() );
+  m_checkEject->setChecked( !k3bcore->globalSettings()->ejectMedia() );
+  m_checkOverburn->setChecked( k3bcore->globalSettings()->overburn() );
+  m_checkManualWritingBufferSize->setChecked( k3bcore->globalSettings()->useManualBufferSize() );
+  if( k3bcore->globalSettings()->useManualBufferSize() )
+    m_editWritingBufferSize->setValue( k3bcore->globalSettings()->bufferSize() );
 }
 
 
@@ -271,7 +271,6 @@ void K3bBurningOptionTab::saveSettings()
   KConfig* c = k3bcore->config();
 
   c->setGroup("General Options");
-  c->writeEntry( "burnfree", m_checkBurnfree->isChecked() );
   c->writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
 
   c->setGroup( "Video project settings" );
@@ -285,12 +284,17 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Add system files", m_checkListSystemFiles->isChecked() );
 
   c->setGroup( "General Options" );
-  c->writeEntry( "No cd eject", m_checkEject->isChecked() );
   c->writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
-  c->writeEntry( "Allow overburning", m_checkOverburn->isChecked() );
-  c->writeEntry( "Manual buffer size", m_checkManualWritingBufferSize->isChecked() );
-  c->writeEntry( "Fifo buffer", m_editWritingBufferSize->value() );
   c->writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
+
+  k3bcore->globalSettings()->setEjectMedia( !m_checkEject->isChecked() );
+  k3bcore->globalSettings()->setOverburn( m_checkOverburn->isChecked() );
+  k3bcore->globalSettings()->setBurnfree( m_checkBurnfree->isChecked() );
+  k3bcore->globalSettings()->setUseManualBufferSize( m_checkManualWritingBufferSize->isChecked() );
+  k3bcore->globalSettings()->setBufferSize( m_editWritingBufferSize->value() );
+
+  // FIXME: remove this once libk3b does not use KConfig anymore for these values
+  k3bcore->globalSettings()->saveSettings( c );
 }
 
 

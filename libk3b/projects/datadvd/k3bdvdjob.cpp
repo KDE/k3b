@@ -28,11 +28,11 @@
 #include <k3bdevicehandler.h>
 #include <k3bdiskinfo.h>
 #include <k3bdeviceglobals.h>
+#include <k3bglobalsettings.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
-#include <kconfig.h>
 
 
 class K3bDvdJob::Private
@@ -489,8 +489,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
   else {
     cleanup();
     
-    k3bcore->config()->setGroup("General Options");
-    if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+    if( k3bcore->globalSettings()->ejectMedia() )
       K3bDevice::eject( m_doc->burner() );
   
     emit finished( success );

@@ -137,7 +137,6 @@ void K3bMixedJob::start()
 
   determineWritingMode();
 
-
   // depending on the mixed type and if it's onthefly or not we
   // decide what to do first
 

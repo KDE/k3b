@@ -19,6 +19,7 @@
 #include <k3bpluginmanager.h>
 #include <k3baudiooutputplugin.h>
 #include <k3baudioserver.h>
+#include <k3bcore.h>
 
 #include <qcheckbox.h>
 #include <qfileinfo.h>
@@ -60,14 +61,14 @@ void K3bMiscOptionTab::readSettings()
   QString tempdir = c->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   m_editTempDir->setURL( tempdir );
 
-  if( c->readEntry( "Multiple Instances", "smart" ) == "smart" )
-    m_radioMultipleInstancesSmart->setChecked(true);
-  else
-    m_radioMultipleInstancesNew->setChecked(true);
+//   if( c->readEntry( "Multiple Instances", "smart" ) == "smart" )
+//     m_radioMultipleInstancesSmart->setChecked(true);
+//   else
+//     m_radioMultipleInstancesNew->setChecked(true);
 
   // Audio Output
   m_comboAudioOutputSystem->clear();
-  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioOutput" );
+  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
   for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioOutputPlugin* f = static_cast<K3bAudioOutputPlugin*>( it.current() );
     m_comboAudioOutputSystem->insertItem( QString::fromLocal8Bit(f->soundSystem()) );
@@ -125,10 +126,10 @@ bool K3bMiscOptionTab::saveSettings()
 
   c->writePathEntry( "Temp Dir", m_editTempDir->url() );
 
-  if( m_radioMultipleInstancesSmart->isChecked() )
-    c->writeEntry( "Multiple Instances", "smart" );
-  else
-    c->writeEntry( "Multiple Instances", "always_new" );
+//   if( m_radioMultipleInstancesSmart->isChecked() )
+//     c->writeEntry( "Multiple Instances", "smart" );
+//   else
+//     c->writeEntry( "Multiple Instances", "always_new" );
 
   // Audio Output System
   if( m_comboAudioOutputSystem->count() > 0 ) {
@@ -144,7 +145,7 @@ void K3bMiscOptionTab::slotConfigureAudioOutput()
 {
   QString system = m_comboAudioOutputSystem->currentText();
   if( K3bAudioOutputPlugin* plugin = K3bAudioServer::findOutputPlugin( system.local8Bit() ) ) {
-    k3bpluginmanager->execPluginDialog( plugin, this );
+    k3bcore->pluginManager()->execPluginDialog( plugin, this );
   }
 }
 
