@@ -1,12 +1,16 @@
-* video cd Mpeg Stills, photoalbum, portfolio
+* video cd Navigation
+* integrated Audio CD player
+
+- video cd photoalbum, portfolio
 - video cd Interactive Menues (automenues)
 - video cd split long mpegs (volume set)
-* video cd Navigation
-* video cd ripping
 - video dvd creation with menu support
-* integrated Audio CD player
 - Support for other playlist formats
+
++ video cd ripping
++ video cd mpeg-still support
 
 legend:
 - planned
 * work in progress
++ done
