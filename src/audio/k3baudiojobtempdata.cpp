@@ -175,9 +175,13 @@ bool K3bAudioJobTempData::writeInfFiles()
     s << "Channels=\t2" << endl;
 
     // copy-permitted
+    // TODO: not sure about this!
+    //       there are three options: yes, no, once
+    //       but using "once" gives the same result as with cdrdao
+    //       and that's important.
     s << "Copy_permitted=\t";
     if( track->copyProtection() )
-      s << "no";
+      s << "once";
     else
       s << "yes";
     s << endl;
@@ -318,7 +322,7 @@ bool K3bAudioJobTempData::writeAudioTocFilePart( QTextStream& t )
 	stdinDataLength += hiddenTrack->length();
       }
       else {
-	t << "\"" << bufferFileName(track) << "\"" << " 0" << "\n";
+	t << "\"" << bufferFileName(hiddenTrack) << "\"" << " 0" << "\n";
       }
       t << "START" << "\n"; // use the whole hidden file as pregap
 
@@ -416,11 +420,14 @@ bool K3bAudioJobTempData::writeAudioTocFilePart( QTextStream& t )
 	stdinDataLength += track->length();
       }
       else {
-	t << "\"" << bufferFileName(lastTrack) << "\" "
-	  << (lastTrack->length() - track->pregap()).toString()
-	  << endl;
-	t << "START" << endl;
-	t << "FILE \"" << bufferFileName(track) << "\"" 
+	if( track->pregap() > 0 ) {
+	  t << "\"" << bufferFileName(lastTrack) << "\" "
+	    << lastTrack->length().toString()
+	    << endl;
+	  t << "START" << endl;
+	  t << "FILE ";
+	}
+	t << "\"" << bufferFileName(track) << "\"" 
 	  << " 0" 
 	  << endl;
       }

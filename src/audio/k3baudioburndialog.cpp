@@ -24,6 +24,7 @@
 #include <tools/k3bglobals.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bwritingmodewidget.h>
+#include <tools/k3bexternalbinmanager.h>
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -189,16 +190,20 @@ void K3bAudioBurnDialog::toggleAllOptions()
 {
   K3bProjectBurnDialog::toggleAllOptions();
 
-  // currently we do not support writing on the fly with cdrecord
+  bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
+  bool cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+
   if( m_writingModeWidget->writingMode() == K3b::TAO ||
       m_writingModeWidget->writingMode() == K3b::RAW ||
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
-    m_checkOnTheFly->setChecked( false );
-    m_checkOnTheFly->setEnabled( false );
+    m_checkOnTheFly->setChecked( cdrecordOnTheFly );
+    if( !cdrecordOnTheFly )
+      m_checkOnTheFly->setEnabled( false );
     m_checkHideFirstTrack->setChecked(false);
     m_checkHideFirstTrack->setEnabled(false);
-    m_cdtextWidget->setChecked(false);
-    m_cdtextWidget->setEnabled(false);
+    m_cdtextWidget->setChecked( cdrecordCdText );
+    if( !cdrecordCdText )
+      m_cdtextWidget->setEnabled(false);
   }
   else {
     m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkNormalize->isChecked() );

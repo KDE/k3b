@@ -102,6 +102,7 @@ void K3bAudioJob::start()
     m_usedWritingMode = m_doc->writingMode();
 
   bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
+  bool cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
 
   // determine writing app
   if( writingApp() == K3b::DEFAULT ) {
@@ -112,8 +113,10 @@ void K3bAudioJob::start()
 	    ( !m_doc->arranger().isEmpty() ||
 	      !m_doc->songwriter().isEmpty() ||
 	      !m_doc->composer().isEmpty() ||
-	      !m_doc->cdTextMessage().isEmpty() )
-	    )
+	      !m_doc->cdTextMessage().isEmpty() ||
+	      !cdrecordCdText )
+	    ) ||
+	  m_doc->hideFirstTrack() 
 	  )
 	m_usedWritingApp = K3b::CDRDAO;
       else
@@ -135,14 +138,20 @@ void K3bAudioJob::start()
 
   if( m_usedWritingApp == K3b::CDRECORD &&
       m_doc->cdText() ) {
-    if( !m_doc->arranger().isEmpty() )
-      emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
-    if( !m_doc->songwriter().isEmpty() )
-      emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
-    if( !m_doc->composer().isEmpty() )
-      emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
-    if( !m_doc->cdTextMessage().isEmpty() )
-      emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
+    if( !cdrecordCdText ) {
+      emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+      m_doc->writeCdText(false);
+    }
+    else {
+      if( !m_doc->arranger().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
+      if( !m_doc->songwriter().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
+      if( !m_doc->composer().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
+      if( !m_doc->cdTextMessage().isEmpty() )
+	emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
+    }
   }
 
   if( !m_doc->onlyCreateImages() && m_doc->onTheFly() ) {
@@ -412,7 +421,7 @@ void K3bAudioJob::slotWriterJobPercent( int p )
   if( m_doc->onTheFly() )
     emit percent(p);
   else if( m_doc->normalize() )
-    emit percent( 67 + p/3 );
+    emit percent( (int)(66.6 + (double)p/3) );
   else
     emit percent( 50 + p/2 );
 }
