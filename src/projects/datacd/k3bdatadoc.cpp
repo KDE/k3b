@@ -703,7 +703,17 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
   }
   else if( elem.nodeName() == "directory" ) {
     // This is for the VideoDVD project which already contains the *_TS folders
-    K3bDirItem* newDirItem = parent->find( elem.attributeNode( "name" ).value() );
+    K3bDirItem* newDirItem = 0;
+    if( K3bDataItem* item = parent->find( elem.attributeNode( "name" ).value() ) ) {
+      if( item->isDir() ) {
+	newDirItem = static_cast<K3bDirItem*>(item);
+      }
+      else {
+	kdError() << "(K3bDataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
+	return false;
+      }
+    }
+	
     if( !newDirItem )
       newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
     QDomNodeList childNodes = elem.childNodes();
