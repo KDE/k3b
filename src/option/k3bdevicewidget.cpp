@@ -20,7 +20,7 @@
 #include "k3bdeviceglobals.h"
 #include <k3blistview.h>
 
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kdialog.h>
@@ -204,7 +204,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   m_viewDevices->setDoubleClickForEdit(false);
   m_viewDevices->setAlternateBackground( QColor() );
   m_viewDevices->setSelectionMode( QListView::NoSelection );
-  m_viewDevices->setFullWidth();
+  m_viewDevices->setFullWidth(true);
   // ------------------------------------------------
 
 
@@ -386,7 +386,9 @@ void K3bDeviceWidget::updateDeviceListViews()
 void K3bDeviceWidget::slotNewDevice()
 {
   bool ok;
-  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the device name where K3b should search\nfor a new drive (example: /dev/mebecdrom):"), "/dev/", &ok, this );
+  QString newDevicename = KInputDialog::getText( i18n("Location of New Drive"),
+						 i18n("Please enter the device name where K3b should search\nfor a new drive (example: /dev/mebecdrom):"),
+						 "/dev/", &ok, this );
 
   if( ok ) {
     if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {

@@ -38,7 +38,7 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -408,9 +408,9 @@ void K3bFillStatusDisplay::slotDvd4_7GB()
 void K3bFillStatusDisplay::slotCustomSize()
 {
   bool ok;
-  QString size = KLineEditDlg::getText( i18n("Custom Size"), 
+  QString size = KInputDialog::getText( i18n("Custom Size"), 
 					i18n("Please specify the size of the media in minutes:"), 
-					d->showDvdSizes ? "74" : "510", &ok, this, new QIntValidator( this ) );
+					d->showDvdSizes ? QString("74") : QString("510"), &ok, this, (const char*)0, new QIntValidator( this ) );
   if( ok ) {
     d->displayWidget->setCdSize( size.toInt()*60*75 );
     update();

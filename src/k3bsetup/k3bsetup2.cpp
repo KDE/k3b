@@ -30,7 +30,7 @@
 #include <klistview.h>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -465,8 +465,9 @@ void K3bSetup2::slotSearchPrograms()
 void K3bSetup2::slotAddDevice()
 {
   bool ok;
-  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the device name where K3b should search\n"
-						      "for a new drive (example: /dev/mebecdrom):"),
+  QString newDevicename = KInputDialog::getText( i18n("Location of New Drive"),
+                                                 i18n("Please enter the device name where K3b should search\n"
+						 "for a new drive (example: /dev/mebecdrom):"),
 						 "/dev/", &ok, this );
 
   if( ok ) {

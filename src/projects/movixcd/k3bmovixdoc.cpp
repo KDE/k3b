@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
@@ -98,7 +98,8 @@ void K3bMovixDoc::addMovixFile( const KURL& url, int pos )
     
     bool ok = true;
     do {
-      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."), 
+      newName = KInputDialog::getText( i18n("Enter New Filename"),
+					i18n("A file with that name already exists. Please enter a new name."), 
 				       newName, &ok, 0 );
     } while( ok && nameAlreadyInDir( newName, root() ) );
     

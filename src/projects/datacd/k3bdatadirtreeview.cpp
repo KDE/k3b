@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kurldrag.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kiconloader.h>
 
 #include <kdebug.h>
@@ -62,7 +62,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   setDropVisualizer( false );
   setDropHighlighter( true );
   setRootIsDecorated( false );
-  setFullWidth();
+  setFullWidth( true );
   setDragEnabled( true );
   setItemsMovable( false );
   setAlternateBackground( QColor() );
@@ -334,11 +334,13 @@ void K3bDataDirTreeView::slotNewDir()
     QString name;
     bool ok;
 
-    name = KLineEditDlg::getText( i18n("Please insert the name for the new directory:"),
+    name = KInputDialog::getText( i18n("New Directory"),
+				  i18n("Please insert the name for the new directory:"),
 				  i18n("New Directory"), &ok, this );
 
     while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
-      name = KLineEditDlg::getText( i18n("A file with that name already exists. "
+      name = KInputDialog::getText( i18n("New Directory"),
+                                    i18n("A file with that name already exists. "
 					 "Please insert the name for the new directory:"),
 				    i18n("New Directory"), &ok, this );
     }

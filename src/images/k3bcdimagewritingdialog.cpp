@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kio/global.h>
 #include <kurl.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 #include <qheader.h>
 #include <qgroupbox.h>
@@ -696,7 +696,7 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 void K3bCdImageWritingDialog::slotMd5SumCompare()
 {
   bool ok;
-  QString md5sumToCompare = KLineEditDlg::getText( i18n("MD5 Sum check"),
+  QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum check"),
 						   i18n("Please insert the MD5 Sum to compare:"),
 						   QString::null,
 						   &ok,

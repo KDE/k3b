@@ -47,7 +47,7 @@
 #include <kurl.h>
 #include <kstatusbar.h>
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -231,8 +231,10 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 	{
 	  bool ok = true;
 	  do {
-	    newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+	    newName = KInputDialog::getText( i18n("Enter New Filename"),
+					     i18n("A file with that name already exists. Please enter a new name."),
 					     newName, &ok, qApp->activeWindow() );
+
 	  } while( ok && parent->alreadyInDirectory( newName ) );
 	  if( !ok )
 	    return 0;
@@ -338,7 +340,8 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 	  {
 	    bool ok = true;
 	    do {
-	      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+	      newName = KInputDialog::getText( i18n("Enter New Filename"),
+					       i18n("A file with that name already exists. Please enter a new name."),
 					       newName, &ok, qApp->activeWindow() );
 	    } while( ok && parent->alreadyInDirectory( newName ) );
 	    if( !ok )
@@ -1484,7 +1487,8 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
   if( dir->alreadyInDirectory( newName ) ) {
     bool ok = true;
     do {
-      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
+      newName = KInputDialog::getText( i18n("Enter New Filename"),
+				       i18n("A file with that name already exists. Please enter a new name."),
 				       newName, &ok, qApp->activeWindow() );
     } while( ok && dir->alreadyInDirectory( newName ) );
     
