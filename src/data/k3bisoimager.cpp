@@ -18,6 +18,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
+#include <ktempfile.h>
 
 #include <qfile.h>
 #include <qregexp.h>
@@ -27,6 +28,7 @@
 #include "../tools/k3bexternalbinmanager.h"
 #include "../device/k3bdevice.h"
 #include "k3bdiritem.h"
+#include "k3bbootitem.h"
 #include "../k3bprocess.h"
 
 
@@ -34,6 +36,9 @@
 K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
   : K3bJob( parent, name ),
     m_doc( doc ),
+    m_pathSpecFile(0),
+    m_rrHideFile(0),
+    m_jolietHideFile(0),
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
     m_process( 0 ),
@@ -162,13 +167,11 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 void K3bIsoImager::cleanup()
 {
   // remove all temp files
-  if( QFile::exists( m_pathSpecFile ) )
-    QFile::remove( m_pathSpecFile );
-  if( QFile::exists( m_rrHideFile ) )
-    QFile::remove( m_rrHideFile );
-  if( QFile::exists( m_jolietHideFile ) )
-    QFile::remove( m_jolietHideFile );
-  m_pathSpecFile = m_rrHideFile = m_jolietHideFile = QString::null;
+  if( m_pathSpecFile ) delete m_pathSpecFile;
+  if( m_rrHideFile ) delete m_rrHideFile;
+  if( m_jolietHideFile ) delete m_jolietHideFile;
+
+  m_pathSpecFile = m_jolietHideFile = m_rrHideFile = 0;
 
   delete m_process;
   m_process = 0;
@@ -413,14 +416,14 @@ bool K3bIsoImager::addMkisofsParameters()
       *m_process << "-R";
     else
       *m_process << "-r";
-    if( QFile::exists( m_rrHideFile ) )
-      *m_process << "-hide-list" << m_rrHideFile;
+    if( m_rrHideFile )
+      *m_process << "-hide-list" << m_rrHideFile->name();
   }
 
   if( m_doc->isoOptions().createJoliet() ) {
     *m_process << "-J";
-    if( QFile::exists( m_jolietHideFile ) )
-      *m_process << "-hide-joliet-list" << m_jolietHideFile;
+    if( m_jolietHideFile )
+      *m_process << "-hide-joliet-list" << m_jolietHideFile->name();
   }
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
@@ -464,7 +467,41 @@ bool K3bIsoImager::addMkisofsParameters()
   if( m_doc->isoOptions().forceInputCharset() )
     *m_process << "-input-charset" << m_doc->isoOptions().inputCharset();
 
-  *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile);
+  *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile->name());
+
+
+  // boot stuff
+  if( !m_doc->bootImages().isEmpty() ) {
+    bool first = true;
+    for( QPtrListIterator<K3bBootItem> it( m_doc->bootImages() );
+	 *it; ++it ) {
+      if( !first )
+	*m_process << "-eltorito-alt-boot";
+
+      K3bBootItem* bootItem = *it;
+
+      *m_process << "-b" << bootItem->k3bPath();
+
+      if( bootItem->imageType() == K3bBootItem::HARDDISK )
+	*m_process << "-hard-disk-boot";
+
+      if( bootItem->noEmulate() ) {
+	*m_process << "-no-emul-boot";
+	if( bootItem->loadSegment() > 0 )
+	  *m_process << "-boot-load-seg" << bootItem->loadSegment() ;
+	if( bootItem->loadSegment() > 0 )
+	  *m_process << "-boot-load-size" << bootItem->loadSize() ;
+      }
+      if( bootItem->noBoot() )
+	*m_process << "-no-boot";
+      if( bootItem->bootInfoTable() )
+	*m_process << "-boot-info-table";
+
+      first = false;
+    }
+
+    *m_process << "-c" << m_doc->bootCataloge()->k3bPath();
+  }
 
 
   // additional parameters from config
@@ -476,21 +513,22 @@ bool K3bIsoImager::addMkisofsParameters()
 }
 
 
-bool K3bIsoImager::writePathSpec( const QString& filename )
+bool K3bIsoImager::writePathSpec()
 {
-  QFile file( filename );
-  if( !file.open( IO_WriteOnly ) ) {
-    return false;
+  if( m_pathSpecFile )
+    delete m_pathSpecFile;
+  m_pathSpecFile = new KTempFile();
+  m_pathSpecFile->setAutoDelete(true);
+
+  if( QTextStream* t = m_pathSpecFile->textStream() ) {
+    // recursive path spec writing
+    writePathSpecForDir( m_doc->root(), *t );
+    
+    m_pathSpecFile->close();
+    return true;
   }
-
-  QTextStream t(&file);
-
-  // recursive path spec writing
-  writePathSpecForDir( m_doc->root(), t );
-
-  file.close();
-
-  return true;
+  else
+    return false;
 }
 
 
@@ -620,57 +658,65 @@ void K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 
 
 
-bool K3bIsoImager::writeRRHideFile( const QString& filename )
+bool K3bIsoImager::writeRRHideFile()
 {
-  QFile file( filename );
-  if( !file.open( IO_WriteOnly ) )
-    return false;
+  if( m_rrHideFile )
+    delete m_rrHideFile;
+  m_rrHideFile = new KTempFile();
+  m_rrHideFile->setAutoDelete(true);
 
-  QTextStream stream( &file );
+  if( QTextStream* t = m_rrHideFile->textStream() ) {
 
-  K3bDataItem* item = m_doc->root();
-  while( item ) {
-    if( item->hideOnRockRidge() ) {
-      if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
-	stream << escapeGraftPoint( item->localPath() ) << "\n";
-//       if( item->isDir() ) {
-// 	K3bDirItem* parent = item->parent();
-// 	if( parent )
-// 	  item = parent->nextChild( item );
-// 	else
-// 	  item = 0;
-//       }
-//       else
-//	item = item->nextSibling();
-    }
-    //    else
+    K3bDataItem* item = m_doc->root();
+    while( item ) {
+      if( item->hideOnRockRidge() ) {
+	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
+	  *t << escapeGraftPoint( item->localPath() ) << "\n";
+	//       if( item->isDir() ) {
+	// 	K3bDirItem* parent = item->parent();
+	// 	if( parent )
+	// 	  item = parent->nextChild( item );
+	// 	else
+	// 	  item = 0;
+	//       }
+	//       else
+	//	item = item->nextSibling();
+      }
+      //    else
       item = item->nextSibling();
+    }
+    
+    m_rrHideFile->close();
+    return true;
   }
-
-  file.close();
-  return true;
+  else
+    return false;
 }
 
 
-bool K3bIsoImager::writeJolietHideFile( const QString& filename )
+bool K3bIsoImager::writeJolietHideFile()
 {
-  QFile file( filename );
-  if( !file.open( IO_WriteOnly ) )
-    return false;
+  if( m_jolietHideFile )
+    delete m_jolietHideFile;
+  m_jolietHideFile = new KTempFile();
+  m_jolietHideFile->setAutoDelete(true);
 
-  QTextStream stream( &file );
+  if( QTextStream* t = m_jolietHideFile->textStream() ) {
 
-  K3bDataItem* item = m_doc->root();
-  while( item ) {
-    if( item->hideOnRockRidge() ) {
-      if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
-	stream << escapeGraftPoint( item->localPath() ) << "\n";
+    K3bDataItem* item = m_doc->root();
+    while( item ) {
+      if( item->hideOnRockRidge() ) {
+	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
+	  *t << escapeGraftPoint( item->localPath() ) << "\n";
+      }
+      item = item->nextSibling();
     }
-    item = item->nextSibling();
-  }
 
-  file.close();
-  return true;
+    m_jolietHideFile->close();
+    return true;
+  }
+  else
+    return false;
 }
 
 
@@ -689,24 +735,21 @@ bool K3bIsoImager::prepareMkisofsFiles()
 {
   // write path spec file
   // ----------------------------------------------------
-  m_pathSpecFile = locateLocal( "appdata", "temp/path_spec.mkisofs" );
-  if( !writePathSpec( m_pathSpecFile ) ) {
-    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
+  if( !writePathSpec() ) {
+    emit infoMessage( i18n("Could not write temporary file"), K3bJob::ERROR );
     return false;
   }
 
   if( m_doc->isoOptions().createRockRidge() ) {
-    m_rrHideFile = locateLocal( "appdata", "temp/rr_hide.mkisofs" );
-    if( !writeRRHideFile( m_rrHideFile ) ) {
-      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
+    if( !writeRRHideFile() ) {
+      emit infoMessage( i18n("Could not write temporary file"), K3bJob::ERROR );
       return false;
     }
   }
 
   if( m_doc->isoOptions().createJoliet() ) {
-    m_jolietHideFile = locateLocal( "appdata", "temp/joliet_hide.mkisofs" );
-    if( !writeJolietHideFile( m_jolietHideFile ) ) {
-      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
+    if( !writeJolietHideFile() ) {
+      emit infoMessage( i18n("Could not write temporary file"), K3bJob::ERROR );
       return false ;
     }
   }

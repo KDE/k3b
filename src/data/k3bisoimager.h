@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,6 +25,7 @@ class K3bDirItem;
 class QTextStream;
 class K3bProcess;
 class K3bDevice;
+class KTempFile;
 
 
 class K3bIsoImager : public K3bJob
@@ -74,9 +75,9 @@ class K3bIsoImager : public K3bJob
  private:
   K3bDataDoc* m_doc;
 
-  QString m_pathSpecFile;
-  QString m_rrHideFile;
-  QString m_jolietHideFile;
+  KTempFile* m_pathSpecFile;
+  KTempFile* m_rrHideFile;
+  KTempFile* m_jolietHideFile;
 
   bool m_noDeepDirectoryRelocation;
 
@@ -95,9 +96,9 @@ class K3bIsoImager : public K3bJob
   QString m_collectedMkisofsPrintSizeStderr;
   int m_mkisofsPrintSizeResult;
 
-  bool writePathSpec( const QString& filename );
-  bool writeRRHideFile( const QString& filename );
-  bool writeJolietHideFile( const QString& filename );
+  bool writePathSpec();
+  bool writeRRHideFile();
+  bool writeJolietHideFile();
   void writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
   bool addMkisofsParameters();
