@@ -17,470 +17,399 @@
 #include <qfile.h>
 #include <qtimer.h>
 
-#include <kprocess.h>
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <cmath>
 #include <iostream>
+#include <errno.h>
 
+//#include <mad.h>
 
 
 
 K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
-  : K3bExternalBinModule( track )
+  : K3bAudioModule( track )
 {
-  m_decodingProcess = new KShellProcess();
+  // at the beginning the timer is used for counting the frames
+  m_decodingTimer = new QTimer( this );
+  connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(slotCountFrames()) );
 
-  ID3_Tag _tag( audioTrack()->absPath().latin1() );
-  ID3_Frame* _frame = _tag.Find( ID3FID_TITLE );
-  if( _frame )
-    audioTrack()->setTitle( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
+
+  m_bCountingFramesInProgress = true;
+  m_bDecodingInProgress = false;
+  m_bEndOfInput = false;
+
+  m_inputBuffer  = new (unsigned char)[INPUT_BUFFER_SIZE];
+  m_outputBuffer = new (unsigned char)[OUTPUT_BUFFER_SIZE];
+
+  m_outputPointer   = m_outputBuffer;
+  m_outputBufferEnd = m_outputBuffer + OUTPUT_BUFFER_SIZE;
+
+  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
+  memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
+
+  m_madStream = new mad_stream;
+  m_madFrame  = new mad_frame;
+  m_madHeader = new mad_header;
+  m_madSynth  = new mad_synth;
+  m_madTimer  = new mad_timer_t;
+
+  m_inputFile = 0;
+
+  // read id3 tag
+  // -----------------------------------------------
+  ID3_Tag tag( audioTrack()->absPath().latin1() );
+  ID3_Frame* frame = tag.Find( ID3FID_TITLE );
+  if( frame )
+    audioTrack()->setTitle( QString(ID3_GetString(frame, ID3FN_TEXT )) );
 		
-  _frame = _tag.Find( ID3FID_LEADARTIST );
-  if( _frame )
-    audioTrack()->setArtist( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
+  frame = tag.Find( ID3FID_LEADARTIST );
+  if( frame )
+    audioTrack()->setArtist( QString(ID3_GetString(frame, ID3FN_TEXT )) );
 
+  audioTrack()->setStatus( K3bAudioTrack::OK );
 
-  int _id3TagSize = _tag.Size();
-
-
-  // find frame-header
-  unsigned char data[1024];
-  unsigned char* datapointer;
-
-
-  FILE *fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
-  if( fd == NULL )
-    qDebug( "(K3bMp3Module) could not open file " + audioTrack()->absPath() );
-  else
-    {
-      fseek(fd, 0, SEEK_SET);
-      int readbytes = fread(&data, 1, 1024, fd);
-      fclose(fd);
-      
-      // some hacking
-      if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
-	fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
-	fseek(fd, _id3TagSize, SEEK_SET);
-	readbytes = fread(&data, 1, 1024, fd);
-	fclose(fd);
-      }
-
-      bool found = false;
-      
-      unsigned int _header = data[0]<<24 | data[1]<<16 | data[2]<<8 | data[3];
-      datapointer = data+4;
-      readbytes -= 4;
-      
-      while( !found && (readbytes > 0) ) 
-	{
-	  if( mp3HeaderCheck(_header) ) {
-	    //	    qDebug( "*header found: %x", _header );
-	    found = true;
-	    break;
-	  }
-	  
-	  _header = _header<<8 | *datapointer;
-	  datapointer++;
-	  readbytes--;
-	}
-      if( found ) 
-	{
-	  // calculate length
-	  if( mp3SampleRate(_header) ) {
-	    
-	    double tpf;
-	    
-	    tpf = (double)1152;
-	    tpf /= mp3SampleRate(_header) << 1;
-	    
-	    double _frameSize = 144000.0 * (double)mp3Bitrate(_header);
-	    _frameSize /= (double)( mp3SampleRate(_header) - mp3Padding(_header) );
-	    
-	    if( mp3Protection( _header ) )
-	      _frameSize += 16;
-
-	    //	    qDebug( "*framesize calculated: %f", _frameSize);
-	    if( _frameSize > 0 ) {
-	      int _frameNumber = (int)( (double)(QFileInfo(audioTrack()->absPath()).size() - _id3TagSize ) / _frameSize );
-	      //	      qDebug( " #frames: %i", _frameNumber );
-
-	      // cdrdao needs the length in frames where 75 frames are 1 second 
-	      double _length = _frameNumber * compute_tpf( _header );
-	      //	  setLength(  _frameNumber * 26 * 75 / 1000 );
-	      audioTrack()->setLength( _length * 75 );
-	    }
-	  }
-// 	  else
-// 	    qDebug("Samplerate is 0");
-	}
-      else
-	{
-	  qDebug( "(K3bMp3Module) Warning: No mp3-frame-header found!!!" );
-	}
-    }
+  // check track length
+  initializeDecoding();
+  mad_header_init( m_madHeader );
+  m_decodingTimer->start(0);
 }
 
 
 K3bMp3Module::~K3bMp3Module()
 {
-  delete m_decodingProcess;
+  delete [] m_inputBuffer;
+  delete [] m_outputBuffer;
+
+  mad_stream_finish( m_madStream );
+
+  if( m_inputFile != 0 )
+    fclose( m_inputFile );
 }
 
 
-void K3bMp3Module::addArguments()
+void K3bMp3Module::initializeDecoding()
 {
-  kapp->config()->setGroup( "External Programs");
+  if( m_inputFile == 0 )
+    m_inputFile = fopen( audioTrack()->absPath().latin1(), "r" );
+
+  mad_stream_init( m_madStream );
+  mad_timer_reset( m_madTimer );
   
-  // start a new mpg123 process for this track
-  *m_process << kapp->config()->readEntry( "mpg123 path" );
-
-  // needed for percent output
-  // *m_process << "-v";
-
-  // switch on buffer
-  // TODO: let the user specify the buffer-size
-  *m_process << "-b" << "10000";  // 2 Mb
-
-  *m_process << "-s";
-  *m_process << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
-
-  *m_process << "|";
-  
-  // convert the stream to big endian with sox
-  *m_process << kapp->config()->readEntry( "sox path", "/usr/bin/sox" );
-  // input options
-  *m_process << "-t" << "raw";    // filetype raw
-  *m_process << "-r" << "44100";  // samplerate
-  *m_process << "-c" << "2";      // channels
-  *m_process << "-s";             // signed linear data
-  *m_process << "-w";             // 16-bit words
-  *m_process << "-";              // input from stdin
-  
-  // output options
-  *m_process << "-t" << "raw";    // filetype raw 
-  *m_process << "-r" << "44100";  // samplerate
-  *m_process << "-c" << "2";      // channels
-  *m_process << "-s";             // signed linear data
-  *m_process << "-w";             // 16-bit words
-  *m_process << "-x";             // swap byte order
-  *m_process << "-";              // output to stdout
+  m_frameCount = 0;
+  m_rawDataAlreadyStreamed = 0;
 }
 
 
-KURL K3bMp3Module::writeToWav( const KURL& url )
+void K3bMp3Module::start( double offset )
 {
-  if( m_decodingProcess->isRunning() ) {
-    m_decodingProcess->kill();
-  }
-
-  m_decodingProcess->clearArguments();
-  m_decodingProcess->disconnect();
-  connect( m_decodingProcess, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotWriteToWavFinished()) );
-  connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-	   this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
-  // TODO: we need some error shit: parse some error messages like "disc full"
-
-  kapp->config()->setGroup( "External Programs");
-  
-  // start a new mpg123 process for this track
-  m_decodingProcess->clearArguments();
-  *m_decodingProcess << kapp->config()->readEntry( "mpg123 path" );
-
-  *m_decodingProcess << "-v" << "-w";
-  *m_decodingProcess << url.path();
-  *m_decodingProcess << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
-
-  if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    qDebug( "(K3bMp3Module) could not start mpg123 process." );
-    return KURL();
-  }
-  else {
-    m_currentToWavUrl = url;
-  }
-  
-  return url;
-}
-
-
-void K3bMp3Module::slotWriteToWavFinished()
-{
-  m_currentToWavUrl = QString::null;
-  if( m_decodingProcess->normalExit() && m_decodingProcess->exitStatus() == 0 )
-    emit finished( true );
-  else
-    emit finished( false );
-}
-
-
-void K3bMp3Module::recalcLength()
-{
-  if( m_decodingProcess->isRunning() ) {
-    m_decodingProcess->kill();
-  }
-
-  // better start a timer and not call it direct because of the signals
-  QTimer::singleShot( 0, this, SLOT(slotStartCountRawData()) );
-}
-
-
-void K3bMp3Module::slotStartCountRawData()
-{
-  // ===================
-  // here we start a mpg123 process to decode the complete file and count it's output
-  // in the background. This is neccessary since we need the perfect size of the input
-  // for burning on-the-fly!
-  // ===================
-
-  m_rawData = 0;
-
-  qDebug( "(K3bMp3Module) start counting raw data for track: " + audioTrack()->fileName() );
-      
-  m_decodingProcess->clearArguments();
-  m_decodingProcess->disconnect();
-  kapp->config()->setGroup( "External Programs" );
-      
-  *m_decodingProcess << kapp->config()->readEntry( "mpg123 path" );
-      
-  // switch on buffer
-  // TODO: let the user specify the buffer-size
-  *m_decodingProcess << "-b" << "2048";  // 2 Mb
-      
-  *m_decodingProcess << "-s";
-  *m_decodingProcess << QString("\"%1\"").arg(QFile::encodeName( audioTrack()->absPath() ));
-
-  //       cerr << endl;
-  //       for( char* it = m_decodingProcess->args()->first(); it != 0; 
-  // 	   it = m_decodingProcess->args()->next() )
-  // 	cerr << it << " ";
-  //       cerr << endl;
-      
-  connect( m_decodingProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), 
-	   this, SLOT(slotCountRawData(KProcess*, char*, int)) );
-  //       connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-  // 	    this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
-  connect( m_decodingProcess, SIGNAL(processExited(KProcess*)), this, SLOT(slotCountRawDataFinished()) );
-      
-  if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::Stdout ) ) {
-    qDebug( "(K3bMp3Module) could not start mpg123 process." );
-
-    emit finished( false );
-  }
-}
-
-
-void K3bMp3Module::slotCountRawData(KProcess*, char*, int len)
-{
-  m_rawData += len;
-}
-
-
-void K3bMp3Module::slotCountRawDataFinished()
-{
-  m_decodingProcess->disconnect();
-  m_decodingProcess->clearArguments();
-
-  if( m_decodingProcess->normalExit() && m_decodingProcess->exitStatus() == 0 ) {
-    audioTrack()->setLength( (int)(ceil((float)m_rawData / 2352.0) ) /* here we need bytesPerFrame */ );
+  if( !m_bCountingFramesInProgress && !m_bDecodingInProgress ) {
+    m_bDecodingInProgress = true;
+    m_bEndOfInput = false;
     
-    qDebug( "(K3bMp3Module) bytes in raw data: %ld,  frames: %f, ceil: %d", 
-	    m_rawData, (float)m_rawData / 2352.0, (int)(ceil((float)m_rawData / 2352.0) ) );
-    
-    emit finished( true );
-  }
-  else {
-    emit finished( false );
-  }
-}
+    initializeDecoding();
 
-
-
-void K3bMp3Module::slotParseStdErrOutput(KProcess*, char* output, int len)
-{
-  QString buffer = QString::fromLatin1( output, len );
-
-  // split to lines
-  QStringList lines = QStringList::split( "\n", buffer );
-	
-  for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
-    {
-      if( (*str).left(10).contains("Frame#") ) {
-	int made, togo;
-	bool ok;
-	int pos1 = (*str).find('#');
-	int pos2 = (*str).find('[');
-	int pos3 = (*str).find(']');
-
-	if( pos1 == -1 || pos2 == -1 || pos3 == -1 ) {
-	  qDebug("parsing did not work for " + *str );
-	  return;
-	}
-
-	made = (*str).mid(pos1+1,pos2-pos1-1).toInt(&ok);
-	if( !ok ) {
-	  qDebug("parsing did not work for " + (*str).mid(pos1+1,pos2-pos1-1) );
-	  return;
-	}
-	togo = (*str).mid(pos2+1,pos3-pos2-1).toInt(&ok);
-	if( !ok ) {
-	    qDebug("parsing did not work for " + (*str).mid(pos2+1,pos3-pos2-1) );
-	    return;
-	}
-
-	emit percent( 100 * made / (made+togo) );
-      }
-      else
-	qDebug( *str );
+    if( offset > 0 && offset < 1 ) {
+      fseek( m_inputFile, (long)(offset*(double)audioTrack()->size()), SEEK_SET );
     }
+    else
+      rewind( m_inputFile );
+
+    mad_frame_init( m_madFrame );
+    mad_synth_init( m_madSynth );    
+    
+    m_decodingTimer->start(0);
+  }
+}
+
+
+void K3bMp3Module::fillInputBuffer()
+{
+  /* The input bucket must be filled if it becomes empty or if
+   * it's the first execution of the loop.
+   */
+  if( m_madStream->buffer == 0 || m_madStream->error == MAD_ERROR_BUFLEN )
+    {
+      size_t readSize, remaining;
+      unsigned char* readStart;
+
+      if( m_madStream->next_frame != 0 )
+	{
+	  remaining = m_madStream->bufend - m_madStream->next_frame;
+	  memmove( m_inputBuffer, m_madStream->next_frame, remaining );
+	  readStart = m_inputBuffer + remaining;
+	  readSize = INPUT_BUFFER_SIZE - remaining;
+	}
+      else
+	{
+	  readSize  = INPUT_BUFFER_SIZE;
+	  readStart = m_inputBuffer;
+	  remaining = 0;
+	}
+			
+      // Fill-in the buffer. 
+      readSize = fread( readStart, 1, readSize, m_inputFile );
+      if( readSize <= 0 )
+	{
+	  if( ferror(m_inputFile) )
+	    {
+	      qDebug("(K3bMp3Module) read error on bitstream (%s)", strerror(errno) );
+	    }
+	  if( feof(m_inputFile) )
+	    qDebug("(K3bMp3Module) end of input stream" );
+
+
+	  m_bEndOfInput = true;
+	}
+      else 
+	{
+	  // Pipe the new buffer content to libmad's stream decoder facility.
+	  mad_stream_buffer( m_madStream, m_inputBuffer, readSize + remaining );
+	  m_madStream->error = MAD_ERROR_NONE;
+	}
+    }
+}
+
+
+void K3bMp3Module::slotCountFrames()
+{
+  if( m_bEndOfInput ) {
+    // nothing to do anymore (but perhaps there are some zombie timer events)
+    return;
+  }
+
+
+  // always count 500 frames at a time
+  for( int i = 0; i < 500; i++ ) {
+    fillInputBuffer();
+    
+    if( m_bEndOfInput ) {
+      // we need the length of the track to be multible of frames (1/75 second)
+      float seconds = (float)m_madTimer->seconds + (float)m_madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
+      unsigned long frames = (unsigned long)ceil(seconds * 75.0);
+      audioTrack()->setLength( frames );
+      qDebug("(K3bMp3Module) setting length of track %i to ceil(%f) seconds = %li frames", 
+	     audioTrack()->index(), seconds, frames );
+      
+      m_rawDataLengthToStream = frames * 2352;
+      
+      // finished. Prepare timer for decoding
+      m_decodingTimer->stop();
+      m_decodingTimer->disconnect();
+      connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(slotDecodeNextFrame()) );
+
+      m_bCountingFramesInProgress = false;
+      mad_header_finish( m_madHeader );
+
+      emit finished( true );
+      break;
+    }
+    else { // input ready
+
+      if( mad_header_decode( m_madHeader, m_madStream ) ) {
+	if( MAD_RECOVERABLE( m_madStream->error ) ) {
+	  qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
+		  mad_stream_errorstr(m_madStream) );
+	  audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
+	}
+	else {
+	  if( m_madStream->error != MAD_ERROR_BUFLEN ) {
+	    qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
+		    mad_stream_errorstr(m_madStream));
+	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+	    
+	    m_bCountingFramesInProgress = false;
+	    m_decodingTimer->stop();
+	    mad_header_finish( m_madHeader );
+
+	    emit finished( false );
+	    break;
+	  }
+	}
+      } // if( header decoded )
+    } // if( input ready )
+
+    m_frameCount++;
+
+    mad_timer_add( m_madTimer, m_madHeader->duration );
+  } // for( 1000x )
+}
+
+
+void K3bMp3Module::slotDecodeNextFrame()
+{
+  if( m_bEndOfInput ) {
+    // nothing to do anymore (but perhaps there are some zombie timer events)
+    return;
+  }
+
+
+  fillInputBuffer();
+
+  // if no input is available anymore test if we need to pad
+  if( m_bEndOfInput ) {
+    if( m_rawDataLengthToStream > m_rawDataAlreadyStreamed ) {
+      qDebug( "(K3bMp3Module) data needs to be padded by %li bytes.", 
+	      m_rawDataLengthToStream - m_rawDataAlreadyStreamed );
+
+    }
+
+    finishDecoding();
+  }
+  else {
+    if( mad_frame_decode( m_madFrame, m_madStream ) ) {
+      if( MAD_RECOVERABLE( m_madStream->error ) ) {
+	qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
+		mad_stream_errorstr(m_madStream) );
+	audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
+	return;
+      }
+      else {
+	if( m_madStream->error == MAD_ERROR_BUFLEN )
+	  return;
+	else {
+	  qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
+		  mad_stream_errorstr(m_madStream));
+	  audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+	
+	  m_bDecodingInProgress = false;
+	  m_decodingTimer->stop();
+	  emit finished( false );
+	  return;
+	}
+      }
+    }
+  
+    m_frameCount++;
+
+    mad_timer_add( m_madTimer, m_madFrame->header.duration );
+
+    /* Once decoded the frame is synthesized to PCM samples. No errors
+     * are reported by mad_synth_frame();
+     */
+    mad_synth_frame( m_madSynth, m_madFrame );
+
+    
+    /* Synthesized samples must be converted from mad's fixed
+     * point number to the consumer format. Here we use unsigned
+     * 16 bit big endian integers on two channels. Integer samples
+     * are temporarily stored in a buffer that is flushed when
+     * full.
+     */
+    for( int i = 0; i < m_madSynth->pcm.length; i++ )
+      {
+	unsigned short	sample;
+	  
+	/* Left channel */
+	sample = madFixedToUshort( m_madSynth->pcm.samples[0][i] );
+	*(m_outputPointer++) = sample >> 8;
+	*(m_outputPointer++) = sample & 0xff;
+	  
+	/* Right channel. If the decoded stream is monophonic then
+	 * the right output channel is the same as the left one.
+	 */
+	if( MAD_NCHANNELS( &m_madFrame->header ) == 2 )
+	  sample = madFixedToUshort( m_madSynth->pcm.samples[1][i] );
+	  
+	*(m_outputPointer++) = sample >> 8;
+	*(m_outputPointer++) = sample & 0xff;
+	
+	/* Flush the buffer if it is full. */
+	if( m_outputPointer == m_outputBufferEnd )
+	  {
+	    flushOutputBuffer();
+	  }
+      }
+  } // output the synth
+}
+
+
+
+void K3bMp3Module::finishDecoding()
+{
+  flushOutputBuffer();
+
+  m_bDecodingInProgress = false;
+
+  mad_synth_finish( m_madSynth );
+  mad_frame_finish( m_madFrame );
+
+  emit finished( true );
+}
+
+
+void K3bMp3Module::flushOutputBuffer()
+{
+  // flush the output buffer
+  size_t buffersize = m_outputPointer - m_outputBuffer;
+  size_t bytesToOutput = buffersize;
+	    
+  // make sure we don't stream to much
+  if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
+    bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
+    qDebug("(K3bMp3Module) decoded data was longer than calculated length. diff: %i. Cutting data.", 
+	   buffersize - bytesToOutput );
+  }
+  
+  m_rawDataAlreadyStreamed += bytesToOutput;
+
+  if( bytesToOutput > 0 )  
+    emit output( m_outputBuffer, bytesToOutput );
+
+  m_outputPointer = m_outputBuffer;
+}
+
+
+unsigned short K3bMp3Module::madFixedToUshort( mad_fixed_t fixed )
+{
+  /* A fixed point number is formed of the following bit pattern:
+   *
+   * SWWWFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+   * MSB                          LSB
+   * S ==> Sign (0 is positive, 1 is negative)
+   * W ==> Whole part bits
+   * F ==> Fractional part bits
+   *
+   * This pattern contains MAD_F_FRACBITS fractional bits, one
+   * should alway use this macro when working on the bits of a fixed
+   * point number. It is not guaranteed to be constant over the
+   * different platforms supported by libmad.
+   *
+   * The unsigned short value is formed by the least significant
+   * whole part bit, followed by the 15 most significant fractional
+   * part bits. Warning: this is a quick and dirty way to compute
+   * the 16-bit number, madplay includes much better algorithms.
+   */
+  fixed = fixed >> ( MAD_F_FRACBITS - 15 );
+  return (unsigned short)fixed;
 }
 
 
 void K3bMp3Module::cancel()
 {
-  // cancel whatever in process
-  m_decodingProcess->disconnect();
-  m_decodingProcess->kill();
+  if( m_bCountingFramesInProgress ) {
+    qDebug( "(K3bMp3Module) length checking cannot be canceled." );
+  }
+  else if( m_bDecodingInProgress ) {
+    m_bDecodingInProgress = false;
+    m_decodingTimer->stop();
 
-  if( !m_currentToWavUrl.isEmpty() ) {
-    if( QFile::exists( m_currentToWavUrl.path() ) ) {
-      QFile::remove( m_currentToWavUrl.path() );
-    }
-    m_currentToWavUrl = QString::null;
-    
-  K3bExternalBinModule::cancel();
+    emit canceled();
+    emit finished( false );
   }
 }
 
 
-int K3bMp3Module::mp3VersionNumber(unsigned int header) 
+void K3bMp3Module::pause()
 {
-  int d = (header & 0x00180000) >> 19;
-
-  switch (d) 
-    {
-    case 3:
-      return 0;
-    case 2:
-      return 1;
-    case 0:	
-      return 2;
-    }
-
-  return -1;
+  if( m_bDecodingInProgress )
+    m_decodingTimer->stop();
 }
 
-
-
-int K3bMp3Module::mp3LayerNumber(unsigned int header) 
+void K3bMp3Module::resume()
 {
-  int d = (header & 0x00060000) >> 17;
-  return 4-d;
-}
-
-bool K3bMp3Module::mp3Protection(unsigned int header) 
-{
-  return ((header>>16 & 0x00000001)==1);
-}
-
-int K3bMp3Module::mp3Bitrate(unsigned int header) 
-{
-  const unsigned int bitrates[3][3][15] =
-    {
-      {
-	{0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448},
-     	{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384},
-	{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320}
-      },
-      {
-     	{0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256},
-	{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160},
-	{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160}
-      },
-      {
-     	{0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256},
-	{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160},
-	{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160}
-      }
-    };
-  int version = mp3VersionNumber(header);
-  int layer = mp3LayerNumber(header)-1;
-  int bitrate = (header & 0x0000f000) >> 12;
-
-//   if( bitrate == 0 )
-//     qDebug(" Bitrate is 0");
-
-//   printf(" Version:%x\n",version);
-//   printf(" Layer:%d\n",layer);
-//   printf(" Bitrate:%d\n",bitrates[version][layer][bitrate]);
-
-  return bitrates[version][layer][bitrate];
-}
-
-int K3bMp3Module::mp3SampleRate(unsigned int header)
-{
-  const unsigned int s_freq[3][4] =
-    {
-      {44100, 48000, 32000, 0},
-      {22050, 24000, 16000, 0},
-      {11025, 8000, 8000, 0}
-    };
-
-  int version = mp3VersionNumber(header);
-  int srate = (header & 0x00000c00) >> 10;
-
-  //  qDebug(" samplerate: %i", s_freq[version][srate] );
-
-  return s_freq[version][srate];
-}
-
-
-bool K3bMp3Module::mp3HeaderCheck(unsigned int head)
-{
-  if( (head & 0xffe00000) != 0xffe00000)
-    return false;
-
-  if(!((head>>17)&3))
-    return false;
-
-  if( ((head>>12)&0xf) == 0xf)
-    return false;
-
-  if( ((head>>10)&0x3) == 0x3 )
-    return false;
-
-  if ((head & 0xffff0000) == 0xfffe0000)
-    return false;
-
-  return true;
-}
-
-
-int K3bMp3Module::mp3Padding(unsigned int header)
-{
-  if( header & 0x00000200 == 0x00000200 ) {
-    // calculate padding
-    //    qDebug( " padding: 1" );
-    return 1;
-  }
-  else {
-    //    qDebug( " padding: 0" );
-    return 0;
-  }
-}
-
-
-double K3bMp3Module::compute_tpf( unsigned int header )
-{
-  static int bs[4] = { 0,384,1152,1152 };
-  double tpf;
-  
-  tpf = (double) bs[mp3LayerNumber(header)];
-  tpf /= mp3SampleRate(header);// << (fr->lsf);
-  return tpf;
+  if( m_bDecodingInProgress )
+    m_decodingTimer->start(0);
+  else
+    qDebug("(K3bMp3Module) tried to resume without decoding process.");
 }
 
 

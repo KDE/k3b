@@ -16,17 +16,4 @@ K3bAudioModule::~K3bAudioModule()
 }
 
 
-void K3bAudioModule::recalcLength()
-{
-  QTimer::singleShot( 0, this, SLOT(successFinish()) );
-}
-
-
-void K3bAudioModule::successFinish()
-{
-  emit finished( true );
-}
-
-
-
 #include "k3baudiomodule.moc"

@@ -22,46 +22,24 @@ class K3bAudioModule : public QObject
 
   K3bAudioTrack* audioTrack() const { return m_track; }
 
-  /**
-   * call this on every module to have perfect track length
-   * information. Might take a while for some modules (mp3)
-   * (This is bad but nessesary!)
-   */
-  virtual void recalcLength();
-
   /** check if the url contains the correct filetype **/
 //  virtual bool valid() const = 0;
 
-  /** has to be async. returns the url the data
-      will actually be written (wav files should not be copied!) **/
-  virtual KURL writeToWav( const KURL& url = KURL() ) = 0;
-  /** has to be async. Uses signal output() **/
-  virtual bool getStream() = 0;
-
   /**
-   * must return the number of actually read bytes
+   * start decoding from relative position
    */
-  virtual int readData( char*, int ) = 0;
+  virtual void start( double offset = 0.0 ) = 0;
 
  public slots:
   virtual void cancel() = 0;
+  virtual void pause() = 0;
+  virtual void resume() = 0;
 
  signals:
-  /**
-   * when this signal is emmited new output is availible and can be read
-   * with readData().
-   * Note that the module stops working until readData() is called.
-   * @param len The length of the data being available.
-   */
-  void output( int len );
+  void output( const unsigned char* data, int len );
   void percent( int );
+  void canceled();
   void finished( bool );
-
- private slots:
-   /**
-   * used interally
-   */
-  void successFinish();
 
  private:
   K3bAudioTrack* m_track;

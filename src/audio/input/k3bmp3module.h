@@ -2,12 +2,15 @@
 #define K3BMP3MODULE_H
 
 
-#include "k3bexternalbinmodule.h"
+#include "k3baudiomodule.h"
 
-class KShellProcess;
-class KURL;
+#include <mad.h>
+#include <stdio.h>
 
-class K3bMp3Module : public K3bExternalBinModule
+class QTimer;
+
+
+class K3bMp3Module : public K3bAudioModule
 {
   Q_OBJECT
 
@@ -15,39 +18,53 @@ class K3bMp3Module : public K3bExternalBinModule
   K3bMp3Module( K3bAudioTrack* track );
   ~K3bMp3Module();
 
-  /** check if the url contains the correct filetype **/
-//  bool valid() const;
-
-  KURL writeToWav( const KURL& url );
-
-  void recalcLength();
+  /**
+   * start decoding from relative position
+   */
+  void start( double offset = 0.0 );
 
  public slots:
   void cancel();
-
- protected:
-  void addArguments();
+  void pause();
+  void resume();
 
  private slots:
-  void slotStartCountRawData();
-  void slotCountRawData(KProcess*, char*, int);
-  void slotCountRawDataFinished();
-  void slotParseStdErrOutput(KProcess*, char*, int);
-  void slotWriteToWavFinished();
-
+  void slotDecodeNextFrame();
+  void slotCountFrames();
+ 
  private:
-  bool mp3HeaderCheck(unsigned int header);
-  int mp3Padding(unsigned int header);
-  int mp3SampleRate(unsigned int header);
-  int mp3LayerNumber(unsigned int header);
-  int mp3Bitrate(unsigned int header);
-  int mp3VersionNumber(unsigned int header);
-  bool mp3Protection(unsigned int header);
-  double compute_tpf( unsigned int header );
+  unsigned short madFixedToUshort( mad_fixed_t fixed );
+  void initializeDecoding();
+  void finishDecoding();
+  void flushOutputBuffer();
+  void fillInputBuffer();
 
-  KURL m_currentToWavUrl;
-  KShellProcess* m_decodingProcess;
-  long m_rawData;
+  bool m_bDecodingInProgress;
+  bool m_bCountingFramesInProgress;
+  bool m_bEndOfInput;
+
+  QTimer* m_decodingTimer;
+
+  unsigned long m_rawDataLengthToStream;
+  unsigned long m_rawDataAlreadyStreamed;
+
+  mad_stream*   m_madStream;
+  mad_frame*    m_madFrame;
+  mad_header*   m_madHeader;
+  mad_synth*    m_madSynth;
+  mad_timer_t*  m_madTimer;
+
+  unsigned long m_frameCount;
+
+  unsigned char* m_inputBuffer;
+  unsigned char* m_outputBuffer;
+  unsigned char* m_outputPointer;
+  unsigned char* m_outputBufferEnd;
+
+  FILE* m_inputFile;
+
+  static const int INPUT_BUFFER_SIZE = 5*8192;
+  static const int OUTPUT_BUFFER_SIZE = 8192;
 };
 
 
