@@ -1,3 +1,8 @@
+devices rewrite, use generic packet ioctl's
+cdinfo rewrite, use generic packet ioctl's 
+merged cdrdaoparser and cdrdaowriter
+added multisession cd copy
+
 0.8.1
 fixed compiling problems with kernel < 2.4.3
 
