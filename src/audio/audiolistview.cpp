@@ -83,7 +83,7 @@ K3bAudioListView::~K3bAudioListView(){
 }
 
 void K3bAudioListView::setupColumns(){
-  addColumn( i18n("No") );
+  addColumn( i18n("No.") );
   addColumn( i18n("Artist (CD-Text)") );
   addColumn( i18n("Title (CD-Text)") );
   addColumn( i18n("Length") );
