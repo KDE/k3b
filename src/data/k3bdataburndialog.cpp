@@ -247,7 +247,7 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
     m_groupPreSettingsLayout->setMargin( marginHint() );
 
     m_comboPreSettings = new QComboBox( FALSE, m_groupPreSettings, "m_comboPreSettings" );
-    m_comboPreSettings->insertItem( i18n( "For Win9x/NT use only (don't you dare!)" ) );
+    m_comboPreSettings->insertItem( i18n( "For Win9x/NT use only" ) );
     m_comboPreSettings->insertItem( i18n( "K3b Default" ), 0 );
     m_comboPreSettings->insertItem( i18n( "For Linux/UNIX use only" ), 1 );
 //    m_comboPreSettings->insertItem( i18n( "Max Compatibility" ) );
@@ -543,7 +543,7 @@ void K3bDataBurnDialog::slotLoadPreSettings( const QString& pre )
 		m_checkMultiDot->setChecked( false );
 		m_checkLowercase->setChecked( false );
 	}
-	else if( pre == i18n("For Win9x/NT use only (don't you dare!)") ) {
+	else if( pre == i18n("For Win9x/NT use only") ) {
 		m_checkCreateJoliet->setChecked( true );
 		m_checkCreateRR->setChecked( false );
 		m_checkNoDeepDirRel->setChecked( false );

@@ -310,6 +310,7 @@ void K3bAudioJob::slotCdrecordFinished()
 				// no recording device and also other errors!! :-(
 				emit infoMessage( "Cdrecord returned some error!" );
 				emit infoMessage( "Sorry, no error handling yet! :-((" );
+				emit infoMessage( "Please send me a mail with the last output..." );
 				m_error = K3b::CDRECORD_ERROR;
 				break;
 		}
@@ -342,6 +343,7 @@ void K3bAudioJob::slotCdrdaoFinished()
 				// no recording device and also other errors!! :-(
 				emit infoMessage( "Cdrdao returned some error!" );
 				emit infoMessage( "Sorry, no error handling yet! :-((" );
+				emit infoMessage( "Please send me a mail with the last output..." );
 				m_error = K3b::CDRDAO_ERROR;
 				break;
 		}

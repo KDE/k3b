@@ -1,14 +1,9 @@
-K3b Version 0.3
+K3b Version 0.4.0 alpha
 
 Thanx for downloading my very first KDE-project.
 
-Things that should work so far:
+Since this is an alpha version some things might not work correct!
 
-- burning audio cds from wav and mp3-files (cd-text seems not to work since there is still a problem with cdrdao)
-- Configuring external programs
-- Configuring devices
+Have fun
 
-I hope this little :-) program will help you to create some cds under KDE.
-
-Sebastian Trueg
-  contact: trueg@informatik.uni-freiburg.de
+Sebastian Trueg ( trueg@informatik.uni-freiburg.de)

@@ -79,7 +79,7 @@ void K3bOptionDialog::slotOk()
 	
 	bAccept = bAccept && savePrograms();
 
-	saveDevices();
+	slotApply();
 	
 	if( bAccept )
 		accept();

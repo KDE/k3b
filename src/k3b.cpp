@@ -94,6 +94,9 @@ K3bApp::K3bApp()
   m_audioTrackDialog = 0;
   m_optionDialog = 0;
   m_burnProgressDialog = 0;
+
+  // not implemented yet
+  fileOpen->setEnabled(false);
 }
 
 K3bApp::~K3bApp()
@@ -741,8 +744,8 @@ void K3bApp::slotCurrentDocChanged( QWidget* w )
 	if( w->inherits( "K3bView" ) ) {
 		// activate actions for file-handling
 		fileClose->setEnabled( true );
-		fileSave->setEnabled( true );
-		fileSaveAs->setEnabled( true );
+//		fileSave->setEnabled( true );
+//		fileSaveAs->setEnabled( true );
 		fileExport->setEnabled( true );
 	}
 	else {
