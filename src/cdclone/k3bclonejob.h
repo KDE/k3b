@@ -90,6 +90,7 @@ class K3bCloneJob : public K3bBurnJob
   int m_copies;
   bool m_onlyCreateImage;
   bool m_onlyBurnExistingImage;
+  int m_readRetries;
 
   class Private;
   Private* d;
