@@ -35,6 +35,8 @@ A KlistView with feature to display text and pixmap if no item is in the view.
 #include <qlineedit.h>
 #include <qevent.h>
 #include <qvalidator.h>
+#include <qfont.h>
+#include <qpalette.h>
 
 
 // ///////////////////////////////////////////////
@@ -52,6 +54,9 @@ public:
     button = false;
     comboEditable = false;
     next = 0;
+    fontSet = false;
+    backgroundColorSet = false;
+    foregroundColorSet = false;
   }
 
   ~ColumnInfo() {
@@ -63,6 +68,12 @@ public:
   int editorType;
   QStringList comboItems;
   bool comboEditable;
+  bool fontSet;
+  bool backgroundColorSet;
+  bool foregroundColorSet;
+  QFont font;
+  QColor backgroundColor;
+  QColor foregroundColor;
   ColumnInfo* next;
 };
 
@@ -205,6 +216,48 @@ const QStringList& K3bListViewItem::comboStrings( int col ) const
   return info->comboItems;
 }
 
+
+void K3bListViewItem::setFont( int col, const QFont& f )
+{
+  ColumnInfo* info = getColumnInfo( col );
+  info->fontSet = true;
+  info->font = f;
+}
+
+
+void K3bListViewItem::setBackgroundColor( int col, const QColor& c )
+{
+  ColumnInfo* info = getColumnInfo( col );
+  info->backgroundColorSet = true;
+  info->backgroundColor = c;
+}
+
+
+void K3bListViewItem::setForegroundColor( int col, const QColor& c )
+{
+ ColumnInfo* info = getColumnInfo( col );
+ info->foregroundColorSet = true;
+ info->foregroundColor = c;
+}
+
+
+void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+{
+  ColumnInfo* info = getColumnInfo( col );
+
+  QFont oldFont( p->font() );
+  QFont newFont = info->fontSet ? info->font : oldFont;
+  p->setFont( newFont );
+  QColorGroup cg2(cg);
+  if( info->foregroundColorSet )
+    cg2.setColor( QColorGroup::Text, info->foregroundColor );
+  if( info->backgroundColorSet )
+    cg2.setColor( QColorGroup::Base, info->backgroundColor );
+
+  KListViewItem::paintCell( p, cg2, col, width, align );
+
+  p->setFont( oldFont );
+}
 
 
 // ///////////////////////////////////////////////
@@ -356,7 +409,7 @@ void K3bListView::placeEditor( K3bListViewItem* item, int col )
 }
 
 
-void K3bListView::prepareButton( K3bListViewItem* item, int col )
+void K3bListView::prepareButton( K3bListViewItem* item, int )
 {
   if( !m_editorButton ) {
     m_editorButton = new QPushButton( viewport() );

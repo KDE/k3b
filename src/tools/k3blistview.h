@@ -84,6 +84,12 @@ class K3bListViewItem : public KListViewItem
 
   enum EditorType { NONE, COMBO, LINE, SPIN, MSF };
 
+  void setFont( int col, const QFont& f );
+  void setBackgroundColor( int col, const QColor& );
+  void setForegroundColor( int col, const QColor& );
+
+  virtual void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
+
  private:
   class ColumnInfo;
   mutable ColumnInfo* m_columns;
