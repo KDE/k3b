@@ -51,7 +51,9 @@
 #include <kprocess.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kdiskfreesp.h>
+
+#include <sys/vfs.h>
+
 
 K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("Ripping DVD"), KDialogBase::Close|KDialogBase::Apply ) {
@@ -208,9 +210,10 @@ void K3bDvdRipperWidget::slotSetDependDirs( const QString& p ) {
              return;
         }
     }
-    connect( KDiskFreeSp::findUsageInfo( p ),
-     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
-     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
+   struct statfs fs;
+   ::statfs(p.latin1(),&fs);
+   unsigned int kBfak = fs.f_bsize/1024;
+   slotFreeTempSpace(p,fs.f_blocks*kBfak,(fs.f_blocks-fs.f_bfree)*kBfak,fs.f_bavail*kBfak);
 }
 
 void K3bDvdRipperWidget::slotFreeTempSpace( const QString & mountPoint, unsigned long kBSize,
