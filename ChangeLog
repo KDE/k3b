@@ -1,3 +1,12 @@
+0.11
+fixed libcdparanoia-loading on Debian (and maybe some other systems)
+fixed crash at end of image creation in DVD project
+fixed filesize display for very large files and projects (integer overflow)
+fixed CD-TEXT reading. On some systems some senseless characters where appended.
+fixed Id3lib detection in configure.in.in
+added primitive supermount support
+kernel 2.5 compile fixes (thanks to ismail (cartman) dönmez <ismail.donmez@boun.edu.tr>)
+
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
 DVD formatting

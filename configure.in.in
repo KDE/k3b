@@ -152,7 +152,7 @@ AM_CONDITIONAL(include_MP3, [test -n "$MAD_LIB"])
 
 dnl === check for id3lib ============
 ID3_LIB=""
-AC_CHECK_HEADER(id3/tag.h, [
+KDE_CHECK_HEADERS(id3/tag.h, [
 	ID3_LIB="-lid3"
 	AC_DEFINE(HAVE_LIBID3,1,[defined if you have libid3 headers and libraries])
 ])

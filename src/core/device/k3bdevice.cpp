@@ -39,11 +39,17 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/stat.h>
-#include <linux/hdreg.h>
-#include <linux/../scsi/scsi.h> /* cope with silly includes */
+
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,70)
+typedef unsigned char u8;
+#endif
+#undef __STRICT_ANSI__
 #include <linux/cdrom.h>
+#define __STRICT_ANSI__
 #include <linux/major.h>
-#include <linux/limits.h>
+
+
 
 #include <config.h>
 
@@ -52,6 +58,18 @@ extern "C" {
 #include <resmgr.h>
 }
 #endif
+
+#ifndef SCSI_DISK_MAJOR
+#define SCSI_DISK_MAJOR(M) ((M) == SCSI_DISK0_MAJOR || \
+			    ((M) >= SCSI_DISK1_MAJOR && (M) <= SCSI_DISK7_MAJOR) || \
+			    ((M) >= SCSI_DISK8_MAJOR && (M) <= SCSI_DISK15_MAJOR))
+#endif /* #ifndef SCSI_DISK_MAJOR */
+
+#ifndef SCSI_BLK_MAJOR
+#define SCSI_BLK_MAJOR(M) \
+  (SCSI_DISK_MAJOR(M)   \
+   || (M) == SCSI_CDROM_MAJOR)
+#endif /* #ifndef SCSI_BLK_MAJOR */
 
 #ifndef IDE_DISK_MAJOR
 #define IDE_DISK_MAJOR(M)       ((M) == IDE0_MAJOR || (M) == IDE1_MAJOR || \

@@ -44,6 +44,9 @@
 
 /* Fix definitions for 2.5 kernels */
 #include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,70)
+typedef unsigned char u8;
+#endif
 #undef __STRICT_ANSI__
 #include <asm/types.h>
 #define __STRICT_ANSI__

@@ -17,7 +17,9 @@
 #define _K3B_SCSI_COMMAND_H_
 
 #include <sys/types.h>
+#undef __STRICT_ANSI__
 #include <linux/cdrom.h>
+#define __STRICT_ANSI__
 
 
 namespace K3bCdDevice

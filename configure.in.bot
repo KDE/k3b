@@ -13,7 +13,7 @@ echo ""
 
 if test -n "$MAD_LIB"; then
 	echo "Mp3 decoding support (libmad):        yes"
-	if test HAVE_LIBID3; then
+	if test -n "$ID3_LIB"; then
 		echo "    ID3 Tag handling with libid3:     yes"
 	else
 		echo "    ID3 Tag handling with libid3:     no"
