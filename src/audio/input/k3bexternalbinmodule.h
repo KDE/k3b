@@ -40,12 +40,6 @@ class K3bExternalBinModule : public K3bAudioModule
   virtual void addArguments() = 0;
 
  protected slots:
-   /**
-    * This will be started by a timer and should
-    * calculate length.
-    */
-  virtual void slotGatherInformation() = 0;
-
  /**
   * parse your process' output to create progress or error 
   * information
@@ -61,7 +55,6 @@ class K3bExternalBinModule : public K3bAudioModule
   KShellProcess* m_process;
 
  private:
-  QTimer* m_infoTimer;
   QTimer* m_clearDataTimer;
 
   char* m_currentData;

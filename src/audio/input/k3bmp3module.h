@@ -20,8 +20,6 @@ class K3bMp3Module : public K3bExternalBinModule
 
   KURL writeToWav( const KURL& url );
 
-  void init();
-
   void recalcLength();
 
  public slots:
@@ -32,7 +30,6 @@ class K3bMp3Module : public K3bExternalBinModule
 
  private slots:
   void slotStartCountRawData();
-  void slotGatherInformation();
   void slotCountRawData(KProcess*, char*, int);
   void slotCountRawDataFinished();
   void slotParseStdErrOutput(KProcess*, char*, int);

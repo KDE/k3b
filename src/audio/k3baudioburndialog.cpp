@@ -66,6 +66,7 @@ void K3bAudioBurnDialog::saveSettings()
   ((K3bAudioDoc*)doc())->setPadding( m_checkPadding->isChecked() );
   ((K3bAudioDoc*)doc())->writeCdText( m_checkCdText->isChecked() );
   ((K3bAudioDoc*)doc())->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
+  ((K3bAudioDoc*)doc())->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
 	
   // -- saving current speed --------------------------------------
   doc()->setSpeed( writerSpeed() );
@@ -90,6 +91,7 @@ void K3bAudioBurnDialog::readSettings()
   m_checkPadding->setChecked( ((K3bAudioDoc*)doc())->padding() );
   m_checkCdText->setChecked( ((K3bAudioDoc*)doc())->cdText() );
   m_checkHideFirstTrack->setChecked( ((K3bAudioDoc*)doc())->hideFirstTrack() );
+  m_checkRemoveBufferFiles->setChecked( ((K3bAudioDoc*)doc())->removeBufferFiles() );
 
   // read CD-Text ------------------------------------------------------------
   m_editTitle->setText( ((K3bAudioDoc*)doc())->title() );
@@ -139,8 +141,12 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_checkHideFirstTrack = new QCheckBox( m_groupOptions, "m_checkHideFirstTrack" );
   m_checkHideFirstTrack->setText( i18n( "Hide first track" ) );
 
+  m_checkRemoveBufferFiles = new QCheckBox( m_groupOptions, "m_checkRemoveBufferFiles" );
+  m_checkRemoveBufferFiles->setText( i18n("Remove temp files") );
+
   m_groupOptionsLayout->addWidget( m_checkSimulate );
   m_groupOptionsLayout->addWidget( m_checkOnTheFly );
+  m_groupOptionsLayout->addWidget( m_checkRemoveBufferFiles );
   m_groupOptionsLayout->addWidget( m_checkCdText );
   m_groupOptionsLayout->addWidget( m_checkPadding );
   m_groupOptionsLayout->addWidget( m_checkDao );
@@ -155,6 +161,7 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setColStretch( 1, 1 );
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), tempDirBox(), SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
 }

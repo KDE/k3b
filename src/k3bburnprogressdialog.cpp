@@ -300,23 +300,11 @@ void K3bBurnProgressDialog::updateCdSizeProgress( int processed, int size )
   m_labelCdProgress->setText( i18n("%1 of %2 written").arg( processed ).arg( size ) );
 }
 
-//void K3bBurnProgressDialog::updateCdTimeProgress( const QTime& processedMin )
-//{
-//  QString str = processedMin.toString();
-//  str += " / ";
-//  str += ((K3bAudioDoc*)doc)->audioSize().toString();
-//  m_labelCdTime->setText( str );
-//}
 
 void K3bBurnProgressDialog::updateTrackSizeProgress( int processedTrackSize, int trackSize )
 {
   m_labelTrackProgress->setText( i18n("%1 of %2 processed").arg(processedTrackSize).arg(trackSize) );
 }
-
-//void K3bBurnProgressDialog::updateTrackTimeProgress( const QTime& processedTrackTime )
-//{
-//
-//}
 
 
 void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
@@ -368,7 +356,7 @@ void K3bBurnProgressDialog::finished( bool success )
 }
 
 
-void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
+void K3bBurnProgressDialog::setJob( K3bJob* job )
 {
   // clear everything
   m_buttonClose->hide();
@@ -387,9 +375,6 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
 
   m_debugOutputMap.clear();
 
-  //	m_progressTrack->hide();
-  //	m_labelFileName->hide();
-  //	m_labelTrackProgress->hide();
 
   // disconnect from the former job
   if( m_job )
@@ -417,14 +402,21 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   connect( job, SIGNAL(percent(int)), m_statusBarProgress->progress, SLOT(setValue(int)) );
 
 
-  if( job->writer() )
-    m_labelWriter->setText( "Writer: " + job->writer()->vendor() + " " + 
-			    job->writer()->description() );
   
-  // connect to the "special" signals
-  connect( job, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
-		
-  m_groupBuffer->setEnabled( true );
+  K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
+  if( burnJob ) {
+    if( burnJob->writer() )
+      m_labelWriter->setText( "Writer: " + burnJob->writer()->vendor() + " " + 
+			      burnJob->writer()->description() );
+  
+    // connect to the "special" signals
+    connect( burnJob, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
+
+    m_groupBuffer->show();
+  }
+  else {
+    m_groupBuffer->hide();
+  }
 }
 
 
@@ -445,9 +437,6 @@ void K3bBurnProgressDialog::show()
 
 void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
 {
-  //	m_progressTrack->show();
-  //	m_labelFileName->show();
-  //	m_labelTrackProgress->show();
   m_labelFileName->setText(name);
   m_labelTrackProgress->setText("");
   m_progressTrack->setValue(0);

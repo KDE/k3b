@@ -23,13 +23,6 @@ class K3bAudioModule : public QObject
   K3bAudioTrack* audioTrack() const { return m_track; }
 
   /**
-   * can be reimplemented to read data like id3-tags in mp3-files
-   * will only be called if added to a project.
-   * but not when loading a project.
-   */
-  virtual void init() {}
-
-  /**
    * call this on every module to have perfect track length
    * information. Might take a while for some modules (mp3)
    * (This is bad but nessesary!)

@@ -27,7 +27,6 @@ class K3bWavModule : public K3bExternalBinModule
   void addArguments();
 
  protected slots:
-  void slotGatherInformation();
   void slotParseStdErrOutput(KProcess*, char*, int);
   void slotWavFinished();
 

@@ -354,8 +354,9 @@ void K3bAudioJob::cancel()
   }
 	
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+
+  clearBufferFiles();
   emit finished( false );
-  qDebug("(K3bAudioJob) slot cancel finished!");
 }
 
 void K3bAudioJob::start()
@@ -471,6 +472,7 @@ void K3bAudioJob::decodeNextFile()
       qDebug( "(K3bAudioJob) Could not buffer file: " + m_currentTrackInfo->track->absPath() );
       emit infoMessage( i18n("Could not buffer file: '%1'").arg( m_currentTrackInfo->track->fileName() ), K3bJob::ERROR );
 
+      clearBufferFiles();
       emit finished( false );
     }
     else
@@ -483,7 +485,8 @@ void K3bAudioJob::slotModuleFinished( bool success )
 {
   if( !success ) {
     qDebug( "(K3bAudioJob) Could not buffer track " + m_currentTrackInfo->track->fileName() );
-    // TODO: cancel or anything
+    clearBufferFiles();
+    emit finished( false );
   }
   else {
     qDebug( "(K3bAudioJob) Successfully buffered track " + m_currentTrackInfo->track->fileName() );
@@ -551,6 +554,7 @@ void K3bAudioJob::slotStartWriting()
       qDebug( "(K3bAudioJob) Could not write TOC-file." );
       emit infoMessage( i18n("Could not write correct TOC-file."), K3bJob::ERROR );
 
+      clearBufferFiles();
       emit finished( false );
     }
     else {
@@ -617,6 +621,7 @@ void K3bAudioJob::slotStartWriting()
 	  m_tocFile = QString::null;
 
 	  emit infoMessage( i18n("Could not start cdrdao!"), K3bJob::ERROR );
+	  clearBufferFiles();
 	  emit finished( false );
 	}
       else
@@ -702,6 +707,7 @@ void K3bAudioJob::slotStartWriting()
 	qDebug("(K3bAudioJob) could not start cdrecord");
 
 	emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+	clearBufferFiles();
 	emit finished( false );
       }
     else
@@ -745,7 +751,12 @@ void K3bAudioJob::createTrackInfo()
 
   K3bAudioTrack* track = m_doc->first();
   while( track != 0 ) {
-    m_trackInfoList.append( new SAudioTrackInfo( track, KURL() ) );
+    SAudioTrackInfo* newInfo = new SAudioTrackInfo( track, KURL() );
+    if( QFile::exists(track->bufferFile()) ) {
+      newInfo->urlToDecodedWav = track->bufferFile();
+      newInfo->decoded = true;
+    }
+    m_trackInfoList.append( newInfo );
     track = m_doc->next();
   }
 }
@@ -753,18 +764,14 @@ void K3bAudioJob::createTrackInfo()
 
 void K3bAudioJob::clearBufferFiles()
 {
-  // TODO: add option to not delete the buffer files!
-
-  emit infoMessage( i18n("Removing temporary files!"), K3bJob::STATUS );
-
-  for( SAudioTrackInfo* info = m_trackInfoList.first(); info != 0; info = m_trackInfoList.next() ) {
-    info->track->setBufferFile( QString::null );
-    QFile::remove( info->urlToDecodedWav.path() );
-  }
-
-  // TODO: This is SHIT!
-  for( SAudioTrackInfo* info = m_trackInfoList.first(); info != 0; info = m_trackInfoList.next() ) {
-    info->track->setBufferFile( QString::null );
+  if( !m_doc->onTheFly() && m_doc->removeBufferFiles() ) {
+    
+    emit infoMessage( i18n("Removing temporary files!"), K3bJob::STATUS );
+    
+    for( SAudioTrackInfo* info = m_trackInfoList.first(); info != 0; info = m_trackInfoList.next() ) {
+      info->track->setBufferFile( QString::null );
+      QFile::remove( info->urlToDecodedWav.path() );
+    }
   }
 }
 

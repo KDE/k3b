@@ -20,12 +20,10 @@
 K3bExternalBinModule::K3bExternalBinModule( K3bAudioTrack* track )
   : K3bAudioModule( track )
 {
-  m_infoTimer = new QTimer( this );
   m_clearDataTimer = new QTimer( this );
   m_process = new KShellProcess();
 
 
-  connect( m_infoTimer, SIGNAL(timeout()), this, SLOT(slotGatherInformation()) );
   connect( m_clearDataTimer, SIGNAL(timeout()), this, SLOT(slotClearData()) );
 
 
@@ -41,14 +39,6 @@ K3bExternalBinModule::K3bExternalBinModule( K3bAudioTrack* track )
   m_currentData = 0;
   m_currentDataLength = 0;
   m_finished = true;
-
-  m_infoTimer->start(0, true);
-
-
-  // testing
-//   m_testFile = new QFile( "/home/trueg/download/test_k3b_module.cd" );
-//   m_testFile->open( IO_WriteOnly );
-  //-----------------
 }
 
 
@@ -273,7 +263,6 @@ void K3bExternalBinModule::cancel()
   m_process->kill();
 
   m_clearDataTimer->stop();
-  m_infoTimer->stop();
 
   delete [] m_currentData;
   m_currentDataLength = 0;

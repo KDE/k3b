@@ -84,6 +84,7 @@ bool K3bAudioDoc::newDocument()
   m_cdText = true;
   m_padding = false;
   m_hideFirstTrack = false;
+  m_removeBufferFiles = true;
 	
   return K3bDoc::newDocument();
 }
@@ -147,7 +148,6 @@ void K3bAudioDoc::slotWorkUrlQueue()
 	
     if( K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
       K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
-      newTrack->module()->init();   // read special data like id3-tags
       addTrack( newTrack, lastAddedPosition );
     }
     else {

@@ -33,6 +33,95 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   : K3bExternalBinModule( track )
 {
   m_decodingProcess = new KShellProcess();
+
+  ID3_Tag _tag( audioTrack()->absPath().latin1() );
+  ID3_Frame* _frame = _tag.Find( ID3FID_TITLE );
+  if( _frame )
+    audioTrack()->setTitle( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
+		
+  _frame = _tag.Find( ID3FID_LEADARTIST );
+  if( _frame )
+    audioTrack()->setArtist( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
+
+
+  int _id3TagSize = _tag.Size();
+
+
+  // find frame-header
+  unsigned char data[1024];
+  unsigned char* datapointer;
+
+
+  FILE *fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
+  if( fd == NULL )
+    qDebug( "(K3bMp3Module) could not open file " + audioTrack()->absPath() );
+  else
+    {
+      fseek(fd, 0, SEEK_SET);
+      int readbytes = fread(&data, 1, 1024, fd);
+      fclose(fd);
+      
+      // some hacking
+      if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
+	fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
+	fseek(fd, _id3TagSize, SEEK_SET);
+	readbytes = fread(&data, 1, 1024, fd);
+	fclose(fd);
+      }
+
+      bool found = false;
+      
+      unsigned int _header = data[0]<<24 | data[1]<<16 | data[2]<<8 | data[3];
+      datapointer = data+4;
+      readbytes -= 4;
+      
+      while( !found && (readbytes > 0) ) 
+	{
+	  if( mp3HeaderCheck(_header) ) {
+	    //	    qDebug( "*header found: %x", _header );
+	    found = true;
+	    break;
+	  }
+	  
+	  _header = _header<<8 | *datapointer;
+	  datapointer++;
+	  readbytes--;
+	}
+      if( found ) 
+	{
+	  // calculate length
+	  if( mp3SampleRate(_header) ) {
+	    
+	    double tpf;
+	    
+	    tpf = (double)1152;
+	    tpf /= mp3SampleRate(_header) << 1;
+	    
+	    double _frameSize = 144000.0 * (double)mp3Bitrate(_header);
+	    _frameSize /= (double)( mp3SampleRate(_header) - mp3Padding(_header) );
+	    
+	    if( mp3Protection( _header ) )
+	      _frameSize += 16;
+
+	    //	    qDebug( "*framesize calculated: %f", _frameSize);
+	    if( _frameSize > 0 ) {
+	      int _frameNumber = (int)( (double)(QFileInfo(audioTrack()->absPath()).size() - _id3TagSize ) / _frameSize );
+	      //	      qDebug( " #frames: %i", _frameNumber );
+
+	      // cdrdao needs the length in frames where 75 frames are 1 second 
+	      double _length = _frameNumber * compute_tpf( _header );
+	      //	  setLength(  _frameNumber * 26 * 75 / 1000 );
+	      audioTrack()->setLength( _length * 75 );
+	    }
+	  }
+// 	  else
+// 	    qDebug("Samplerate is 0");
+	}
+      else
+	{
+	  qDebug( "(K3bMp3Module) Warning: No mp3-frame-header found!!!" );
+	}
+    }
 }
 
 
@@ -127,103 +216,6 @@ void K3bMp3Module::slotWriteToWavFinished()
     emit finished( false );
 }
 
-
-void K3bMp3Module::init()
-{
-  ID3_Tag _tag( audioTrack()->absPath().latin1() );
-  ID3_Frame* _frame = _tag.Find( ID3FID_TITLE );
-  if( _frame )
-    audioTrack()->setTitle( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
-		
-  _frame = _tag.Find( ID3FID_LEADARTIST );
-  if( _frame )
-    audioTrack()->setArtist( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
-}
-
-
-void K3bMp3Module::slotGatherInformation()
-{
-  ID3_Tag _tag( audioTrack()->absPath().latin1() );
-  int _id3TagSize = _tag.Size();
-
-
-  // find frame-header
-  unsigned char data[1024];
-  unsigned char* datapointer;
-
-
-  FILE *fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
-  if( fd == NULL )
-    qDebug( "(K3bMp3Module) could not open file " + audioTrack()->absPath() );
-  else
-    {
-      fseek(fd, 0, SEEK_SET);
-      int readbytes = fread(&data, 1, 1024, fd);
-      fclose(fd);
-      
-      // some hacking
-      if( data[0] == 'I' && data[1] == 'D' && data[2] == '3' ) {
-	fd = fopen( QFile::encodeName(audioTrack()->absPath()),"r");
-	fseek(fd, _id3TagSize, SEEK_SET);
-	readbytes = fread(&data, 1, 1024, fd);
-	fclose(fd);
-      }
-
-      bool found = false;
-      
-      unsigned int _header = data[0]<<24 | data[1]<<16 | data[2]<<8 | data[3];
-      datapointer = data+4;
-      readbytes -= 4;
-      
-      while( !found && (readbytes > 0) ) 
-	{
-	  if( mp3HeaderCheck(_header) ) {
-	    //	    qDebug( "*header found: %x", _header );
-	    found = true;
-	    break;
-	  }
-	  
-	  _header = _header<<8 | *datapointer;
-	  datapointer++;
-	  readbytes--;
-	}
-      if( found ) 
-	{
-	  // calculate length
-	  if( mp3SampleRate(_header) ) {
-	    
-	    double tpf;
-	    
-	    tpf = (double)1152;
-	    tpf /= mp3SampleRate(_header) << 1;
-	    
-	    double _frameSize = 144000.0 * (double)mp3Bitrate(_header);
-	    _frameSize /= (double)( mp3SampleRate(_header) - mp3Padding(_header) );
-	    
-	    if( mp3Protection( _header ) )
-	      _frameSize += 16;
-
-	    //	    qDebug( "*framesize calculated: %f", _frameSize);
-	    if( _frameSize > 0 ) {
-	      int _frameNumber = (int)( (double)(QFileInfo(audioTrack()->absPath()).size() - _id3TagSize ) / _frameSize );
-	      //	      qDebug( " #frames: %i", _frameNumber );
-
-	      // cdrdao needs the length in frames where 75 frames are 1 second 
-	      double _length = _frameNumber * compute_tpf( _header );
-	      //	  setLength(  _frameNumber * 26 * 75 / 1000 );
-	      audioTrack()->setLength( _length * 75 );
-	    }
-	  }
-// 	  else
-// 	    qDebug("Samplerate is 0");
-	}
-      else
-	{
-	  qDebug( "(K3bMp3Module) Warning: No mp3-frame-header found!!!" );
-	}
-    }
-
-}
 
 void K3bMp3Module::recalcLength()
 {

@@ -25,17 +25,7 @@ K3bWavModule::K3bWavModule( K3bAudioTrack* track )
   : K3bExternalBinModule( track )
 {
   m_streamingTimer = new QTimer( this );
-}
 
-
-K3bWavModule::~K3bWavModule()
-{
-}
-
-
-
-void K3bWavModule::slotGatherInformation()
-{
   audioTrack()->setBufferFile( audioTrack()->absPath() );
 
   // try to determine the track length
@@ -54,6 +44,11 @@ void K3bWavModule::slotGatherInformation()
     }
   else
     qDebug( "(K3bWavModule) Could not determine length of track!" );
+}
+
+
+K3bWavModule::~K3bWavModule()
+{
 }
 
 
