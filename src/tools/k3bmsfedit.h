@@ -40,6 +40,8 @@ class K3bMsfEdit : public QSpinBox
   K3bMsfEdit( QWidget* parent = 0, const char* name = 0 );
   ~K3bMsfEdit();
 
+  QSize sizeHint() const;
+
   void setFrameStyle( int style );
   void setLineWidth(int);
 
