@@ -1,3 +1,4 @@
+
 /***************************************************************************
                           k3bmixedjob.cpp  -  Job that creates a mixed mode cd
                              -------------------
@@ -271,6 +272,7 @@ void K3bMixedJob::slotWriterFinished( bool success )
     // reload the media
     emit infoMessage( i18n("Reloading the media"), PROCESS );
     m_doc->burner()->eject();
+    qApp->processEvents();
     m_doc->burner()->load();
 
     m_currentAction = WRITING_ISO_IMAGE;
