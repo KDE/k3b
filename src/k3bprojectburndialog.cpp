@@ -37,7 +37,7 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
-#include <kdiskfreesp.h>
+#include "kdiskfreesp.h"
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
