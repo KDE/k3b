@@ -59,7 +59,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // QCheckBox* m_checkDao;
    QCheckBox* m_checkOnTheFly;
    QCheckBox* m_checkSimulate;
-   QCheckBox* m_checkRemoveBufferFiles;
+   QCheckBox* m_checkDeleteImage;
    QCheckBox* m_checkApplicationId;
    K3bWriterSelectionWidget* m_writerSelectionWidget;
    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;

@@ -56,6 +56,7 @@ K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc )
   m_process = 0;
   m_currentWrittenTrackNumber = 0;
   m_bytesFinishedTracks = 0;
+  m_imageFinished = false;
 }
 
 
@@ -98,6 +99,25 @@ void K3bVcdJob::cancelAll()
     else if ( k3bMain()->eject() )
       m_doc->burner()->eject();
   }
+
+  // remove bin-file if it is unfinished or the user selected to remove image
+  if( QFile::exists( m_doc->vcdImage() ) ) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
+      emit infoMessage( i18n("Removing Binary file %1").arg(m_doc->vcdImage()), K3bJob::STATUS );
+      QFile::remove( m_doc->vcdImage() );
+      m_doc->setVcdImage("");
+    }
+  }
+
+  // remove cue-file if it is unfinished or the user selected to remove image
+  if( QFile::exists( m_cueFile ) ) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage() || !m_imageFinished ) {
+      emit infoMessage( i18n("Removing Cue file %1").arg(m_cueFile), K3bJob::STATUS );
+      QFile::remove( m_cueFile );
+      m_cueFile = "";
+    }
+  }
+  
 }
 
 
@@ -415,18 +435,22 @@ void K3bVcdJob::slotVcdxBuildFinished()
     switch( m_process->exitStatus() ) {
       case 0:
         emit infoMessage( i18n("Cue/Bin files successfully created."), K3bJob::STATUS );
+        m_imageFinished = true;
         break;
     default:
       emit infoMessage( i18n("vcdxbuild returned an error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
       emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
       emit finished( false );
-      break;
+      cancelAll();
+      return;
     }
   }
   else {
     emit infoMessage( i18n("vcdxbuild not exit cleanly."), K3bJob::ERROR );
     emit finished( false );
+    cancelAll();
+    return;
   }
 
   //remove xml-file
@@ -530,10 +554,14 @@ void K3bVcdJob::cdrdaoWrite()
 
   kdDebug() << "(K3bVcdJob) write process started!" << endl;
 
-  if( m_doc->dummy() )
+  if( m_doc->dummy() ) {
     emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-  else
+    emit newSubTask( i18n("Writing image ... (Simulation)") );
+  }
+  else {
     emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+    emit newSubTask( i18n("Writing image ...") );
+  }
 }
 
 void K3bVcdJob::createCdrdaoProgress( int made, int size )
@@ -583,6 +611,25 @@ void K3bVcdJob::slotCdrdaoFinished()
   }
 
   m_process->disconnect(this);
+
+  // remove bin-file if the user selected to remove image
+  if( QFile::exists( m_doc->vcdImage() ) ) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage()) {
+      emit infoMessage( i18n("Removing Binary file %1").arg(m_doc->vcdImage()), K3bJob::STATUS );
+      QFile::remove( m_doc->vcdImage() );
+      m_doc->setVcdImage("");
+    }
+  }
+
+  // remove cue-file if the user selected to remove image
+  if( QFile::exists( m_cueFile ) ) {
+    if( !m_doc->onTheFly() && m_doc->deleteImage()) {
+      emit infoMessage( i18n("Removing Cue file %1").arg(m_cueFile), K3bJob::STATUS );
+      QFile::remove( m_cueFile );
+      m_cueFile = "";
+    }
+  }
+  
 
 }
 

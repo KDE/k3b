@@ -79,8 +79,8 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   setupLabelTab( f3 );
     
   // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
-  // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
-
+  // connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImage, SLOT(setDisabled(bool)) );
+  
   QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
   QString path;
 
@@ -97,7 +97,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 
-  // loadDefaults();
   readSettings();
 }
 
@@ -134,12 +133,12 @@ void K3bVcdBurnDialog::setupBurnTab( QFrame* frame )
   // m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
   // m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
 
-  m_checkRemoveBufferFiles = new QCheckBox( m_groupOptions, "m_checkRemoveBufferFiles" );
-  m_checkRemoveBufferFiles->setText( i18n("Remove image files") );
+  m_checkDeleteImage = new QCheckBox( m_groupOptions, "m_checkDeleteImage" );
+  m_checkDeleteImage->setText( i18n( "Delete image" ) );
 
   m_groupOptionsLayout->addWidget( m_checkSimulate );
   // m_groupOptionsLayout->addWidget( m_checkOnTheFly );
-  m_groupOptionsLayout->addWidget( m_checkRemoveBufferFiles );
+  m_groupOptionsLayout->addWidget( m_checkDeleteImage );
   // m_groupOptionsLayout->addWidget( m_checkDao );
   // --------------------------------------------------- options group ---
 
@@ -303,7 +302,7 @@ void K3bVcdBurnDialog::loadDefaults()
   // m_checkDao->setChecked( true );
   // m_checkOnTheFly->setChecked( false );
   // m_checkBurnProof->setChecked( true );
-  m_checkRemoveBufferFiles->setChecked( true );
+  m_checkDeleteImage->setChecked( true );
 
   m_checkApplicationId->setChecked( true );
 
@@ -325,7 +324,7 @@ void K3bVcdBurnDialog::saveSettings()
   doc()->setDummy( m_checkSimulate->isChecked() );
   // doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
   doc()->setOnTheFly( false );
-  // ((K3bVcdDoc*)doc())->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
+  ((K3bVcdDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
 
   // -- saving current speed --------------------------------------
   doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -335,9 +334,6 @@ void K3bVcdBurnDialog::saveSettings()
 
   // save image file path (.bin)
   ((K3bVcdDoc*)doc())->setVcdImage( m_tempDirSelectionWidget->tempPath() );
-  // save cue file path (.cue)
-  // ((K3bVcdDoc*)doc())->setVcdCueFile( "" );
-
   
   // TODO: save vcdType
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
@@ -351,7 +347,7 @@ void K3bVcdBurnDialog::readSettings()
   // m_checkDao->setChecked( doc()->dao() );
   // m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkSimulate->setChecked( doc()->dummy() );
-  // m_checkRemoveBufferFiles->setChecked( ((K3bVcdDoc*)doc())->removeBufferFiles() );
+  m_checkDeleteImage->setChecked( ((K3bVcdDoc*)doc())->deleteImage() );
 
   // read vcdType
   switch( ((K3bVcdDoc*)doc())->vcdType() ) {
@@ -389,8 +385,7 @@ void K3bVcdBurnDialog::loadUserDefaults()
   m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
   // m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
   // m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
-
-  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
+  m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
   
 }
 
@@ -404,7 +399,7 @@ void K3bVcdBurnDialog::saveUserDefaults()
   c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
   // c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
 
-  c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
+  c->writeEntry( "remove_image", m_checkDeleteImage->isChecked() );
   
 }
 

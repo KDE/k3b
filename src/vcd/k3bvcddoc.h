@@ -78,9 +78,12 @@ class K3bVcdDoc : public K3bDoc
   K3bBurnJob* newBurnJob();
   K3bVcdOptions* vcdOptions() const { return m_vcdOptions; }
 
+  bool deleteImage() const { return m_deleteImage; }
+
   int vcdType() const { return m_vcdType; }
   void setVcdType( int type );
-    
+  void setDeleteImage( bool b ) { m_deleteImage = b; }
+      
   static unsigned int identifyMpegFile( const KURL& url );
 
  public slots:
@@ -147,6 +150,7 @@ class K3bVcdDoc : public K3bDoc
   K3bVcdOptions* m_vcdOptions;
   K3bVcdMpegFactory* m_mpegFactory;
 
+  bool m_deleteImage;
   int m_vcdType;
   uint lastAddedPosition;
   

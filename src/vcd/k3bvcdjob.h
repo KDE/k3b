@@ -99,6 +99,7 @@ class K3bVcdJob : public K3bBurnJob
   bool m_dummy;
   bool m_fastToc;
   bool m_readRaw;
+  bool m_imageFinished;
 
   QString m_tempPath;
   QString m_cueFile;

@@ -328,7 +328,8 @@ void K3bVcdDoc::loadDefaultSettings()
   setDao( c->readBoolEntry( "dao", true ) );
   setOnTheFly( c->readBoolEntry( "on_the_fly", false ) );
 
-  // m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
+  m_deleteImage = c->readBoolEntry( "remove_image", true );  
+
 }
 
 
