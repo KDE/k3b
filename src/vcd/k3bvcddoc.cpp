@@ -341,7 +341,7 @@ bool K3bVcdDoc::loadDocumentData( QDomDocument* doc )
 
   QDomNodeList nodes = doc->documentElement().childNodes();
 
-  if( nodes.length() < 2 )
+  if( nodes.length() < 3 )
     return false;
 
   if( nodes.item(0).nodeName() != "general" )
@@ -349,10 +349,21 @@ bool K3bVcdDoc::loadDocumentData( QDomDocument* doc )
   if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
     return false;
     
-  if( nodes.item(1).nodeName() != "contents" )                     
+  if( nodes.item(1).nodeName() != "vcd" )
     return false;
 
-  QDomNodeList trackNodes = nodes.item(1).childNodes();
+  if( nodes.item(2).nodeName() != "contents" )
+    return false;
+
+ 
+  // vcd Label
+  QDomNodeList vcdNodes = nodes.item(1).childNodes();
+  vcdOptions()->setAlbumId( vcdNodes.item(0).toElement().text() );
+  vcdOptions()->setVolumeId( vcdNodes.item(1).toElement().text() );
+  setVcdType( vcdNodes.item(2).toElement().text().toInt() );
+  
+  // vcd Tracks
+  QDomNodeList trackNodes = nodes.item(2).childNodes();
 
   for( uint i = 0; i< trackNodes.length(); i++ ) {
 
@@ -387,6 +398,22 @@ bool K3bVcdDoc::saveDocumentData( QDomDocument* doc)
 
   saveGeneralDocumentData( &docElem );
 
+  // save Vcd Label
+  QDomElement vcdMain = doc->createElement( "vcd" );
+  QDomElement vcdElem = doc->createElement( "albumId" );
+  vcdElem.appendChild( doc->createTextNode( ( vcdOptions()->albumId() )) );
+  vcdMain.appendChild( vcdElem );
+
+  vcdElem = doc->createElement( "volumeId" );
+  vcdElem.appendChild( doc->createTextNode( (vcdOptions()->volumeId() )) );
+  vcdMain.appendChild( vcdElem );
+
+  vcdElem = doc->createElement( "vcdType" );
+  vcdElem.appendChild( doc->createTextNode( (QString("%1").arg(vcdType()) )) );
+  vcdMain.appendChild( vcdElem );
+
+  docElem.appendChild( vcdMain );
+  
   // save the tracks
   // -------------------------------------------------------------
   QDomElement contentsElem = doc->createElement( "contents" );
