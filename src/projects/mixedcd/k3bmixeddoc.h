@@ -17,15 +17,33 @@
 #define K3B_MIXED_DOC_H
 
 #include <k3bdoc.h>
+#include <k3bdatadoc.h>
+#include <k3baudiodoc.h>
 
-class K3bAudioDoc;
-class K3bDataDoc;
 class QDomDocument;
 class QDomElement;
 class K3bBurnJob;
 class K3bView;
 class QWidget;
 class KConfig;
+
+
+class K3bMixedDataDoc : public K3bDataDoc
+{
+ public:
+  K3bMixedDataDoc( K3bMixedDoc* parent );
+
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+};
+
+
+class K3bMixedAudioDoc : public K3bAudioDoc
+{
+ public:
+  K3bMixedAudioDoc( K3bMixedDoc* parent );
+
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+};
 
 
 class K3bMixedDoc : public K3bDoc

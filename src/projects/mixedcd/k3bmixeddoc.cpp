@@ -33,11 +33,34 @@
 
 
 
+K3bMixedDataDoc::K3bMixedDataDoc( K3bMixedDoc* parent )
+  : K3bDataDoc( parent )
+{
+}
+
+
+K3bProjectBurnDialog* K3bMixedDataDoc::newBurnDialog( QWidget* p, const char* name )
+{
+  return new K3bMixedBurnDialog( static_cast<K3bMixedDoc*>(parent()), p, name, true );
+}
+
+K3bMixedAudioDoc::K3bMixedAudioDoc( K3bMixedDoc* parent )
+  : K3bAudioDoc( parent )
+{
+}
+
+K3bProjectBurnDialog* K3bMixedAudioDoc::newBurnDialog( QWidget* p, const char* name )
+{
+  return new K3bMixedBurnDialog( static_cast<K3bMixedDoc*>(parent()), p, name, true );
+}
+
+
+
 K3bMixedDoc::K3bMixedDoc( QObject* parent )
   : K3bDoc( parent )
 {
-  m_dataDoc = new K3bDataDoc( this );
-  m_audioDoc = new K3bAudioDoc( this );
+  m_dataDoc = new K3bMixedDataDoc( this );
+  m_audioDoc = new K3bMixedAudioDoc( this );
 
   connect( m_dataDoc, SIGNAL(changed()),
 	   this, SIGNAL(changed()) );
