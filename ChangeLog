@@ -8,6 +8,7 @@ Backported new device configuration format fixing all issues with removable devi
 Fix: Some writers return the number of bytes instead of the number of write speed descriptors
      in mode page 2a data (thanks to <simon@munton.demon.co.uk>)
 Fixed a bug which caused the audio ripping window to stay greyed out if cddb queries are disabled.
+Always use single click in the tree view like konqi does.
 	
 0.11.11
 Qt 3.1 compile fix
