@@ -24,6 +24,12 @@
             <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
             <property name="title">
                 <string>MPlayer Options</string>
             </property>
@@ -31,18 +37,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QComboBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>m_comboSubtitleFontset</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Special font set for MPlayer</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;Specifes which font set will be included with the eMovix cd.
-&lt;p&gt;They all contain a complete set of latin standard fonts plus a set of the specific language fonts.</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel2</cstring>
@@ -51,7 +45,7 @@
                         <string>MPlayer subtitle fontset:</string>
                     </property>
                 </widget>
-                <widget class="QSpinBox" row="1" column="1" rowspan="2" colspan="1">
+                <widget class="QSpinBox" row="1" column="1">
                     <property name="name">
                         <cstring>m_spinLoop</cstring>
                     </property>
@@ -68,15 +62,7 @@
                         <string>How often should the playlist be looped</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Loop playlist:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0" rowspan="2" colspan="1">
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
                         <cstring>textLabel6</cstring>
                     </property>
@@ -84,7 +70,7 @@
                         <string>Additional MPlayer Options:</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="4" column="0">
+                <widget class="QLabel" row="3" column="0">
                     <property name="name">
                         <cstring>textLabel7</cstring>
                     </property>
@@ -95,7 +81,7 @@
                         <string></string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="3" column="1">
+                <widget class="QLineEdit" row="2" column="1">
                     <property name="name">
                         <cstring>m_editAdditionalMplayerOptions</cstring>
                     </property>
@@ -108,7 +94,7 @@
 &lt;pre&gt;opt1 opt2 opt3&lt;/pre&gt;</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="4" column="1">
+                <widget class="QLineEdit" row="3" column="1">
                     <property name="name">
                         <cstring>m_editUnwantedMplayerOptions</cstring>
                     </property>
@@ -119,6 +105,19 @@
                         <string>&lt;p&gt;Here one can specify MPlayer options that should never be used.
 &lt;p&gt;They have to be seperated by spaces:
 &lt;pre&gt;opt1 opt2 opt3&lt;/pre&gt;</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>m_comboSubtitleFontset</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Loop playlist:</string>
                     </property>
                 </widget>
             </grid>
@@ -134,17 +133,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QComboBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>m_comboBootMessageLanguage</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The language of the eMovix messages.</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;This specifies in which language the messages should be presented after booting the eMovix cd.</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
                         <cstring>textLabel5</cstring>
@@ -153,26 +141,22 @@
                         <string>Default boot label:</string>
                     </property>
                 </widget>
-                <widget class="QComboBox" row="1" column="1">
-                    <property name="name">
-                        <cstring>m_comboDefaultBootLabel</cstring>
-                    </property>
-                    <property name="editable">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Specify the default boot label</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;This specifies the default boot label. When booting a eMovix CD the user will be presented a greeting message and a boot prompt. This option specifies what happens if nothing is chosen on the boot prompt.</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
                         <string>eMovix boot messages language:</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>m_comboBootMessageLanguage</cstring>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_comboDefaultBootLabel</cstring>
                     </property>
                 </widget>
             </grid>
@@ -242,5 +226,24 @@
         </widget>
     </vbox>
 </widget>
+<connections>
+    <connection>
+        <sender>m_checkShutdown</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkReboot</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkReboot</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkShutdown</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+</connections>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+</includehints>
 </UI>

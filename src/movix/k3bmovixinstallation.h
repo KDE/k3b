@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -31,10 +31,18 @@ class K3bMovixInstallation
   const QStringList& supportedSubtitleFonts() const { return m_supportedSubtitleFonts; }
   const QStringList& supportedLanguages() const { return m_supportedLanguages; }
 
+  /** returnes empty string if font was not found */
+  QString subtitleFontDir( const QString& font ) const;
+  /** returnes empty string if lang was not found */
+  QString languageDir( const QString& lang ) const;
+
   /**
    * returns 0 if not every necessary files could be found
    */
   static K3bMovixInstallation* probeInstallation( const QString& path );
+
+  static QStringList movixFiles();
+  static QStringList isolinuxFiles();
 
  private:
   K3bMovixInstallation( const QString& path );

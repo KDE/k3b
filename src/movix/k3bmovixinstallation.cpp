@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,16 +21,76 @@
 #include <qdir.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 
 K3bMovixInstallation::K3bMovixInstallation( const QString& path )
   : m_path(path)
 {
+  if( m_path[m_path.length()-1] == '/' )
+    m_path.truncate( m_path.length()-1 );
 }
 
 
 K3bMovixInstallation::~K3bMovixInstallation()
 {
+}
+
+
+QString K3bMovixInstallation::subtitleFontDir( const QString& font ) const
+{
+  if( font == i18n("none" ) )
+    return "";
+  else if( m_supportedSubtitleFonts.contains( font ) )
+    return m_path + "/mplayer-fonts/" + font;
+  else
+    return "";
+}
+
+
+QString K3bMovixInstallation::languageDir( const QString& lang ) const
+{
+  if( lang == i18n("default") )
+    return languageDir( "en" );
+  else if( m_supportedLanguages.contains( lang ) )
+    return m_path + "/boot-messages/" + lang;
+  else
+    return "";
+}
+
+
+QStringList K3bMovixInstallation::isolinuxFiles()
+{
+  static QStringList s_isolinuxFiles;
+  if( s_isolinuxFiles.isEmpty() ) {
+    s_isolinuxFiles.append( "initrd.gz" );
+    s_isolinuxFiles.append( "isolinux.bin" );
+    s_isolinuxFiles.append( "isolinux.cfg" );
+    s_isolinuxFiles.append( "kernel/vmlinuz" );
+    s_isolinuxFiles.append( "movix.lss" );
+    s_isolinuxFiles.append( "movix.msg" );
+  }
+
+  return s_isolinuxFiles;
+}
+
+
+QStringList K3bMovixInstallation::movixFiles()
+{
+  static QStringList s_movixFiles;
+  if( s_movixFiles.isEmpty() ) {
+    s_movixFiles.append( "bugReport.sh" );
+    s_movixFiles.append( "input.conf" ); 
+    s_movixFiles.append( "lircrc" );
+    s_movixFiles.append( "manpage.txt" );
+    s_movixFiles.append( "menu.conf" );
+    s_movixFiles.append( "mixer.pl" );
+    s_movixFiles.append( "movix.pl" );
+    s_movixFiles.append( "profile" );
+    s_movixFiles.append( "rc.movix" );
+  }
+
+  return s_movixFiles;
 }
 
 
@@ -59,7 +119,26 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
 
   // ok, all subdirs present
 
-  // TODO: check every single necessary file :(
+  // check every single necessary file :(
+
+  QStringList isolinuxFiles = K3bMovixInstallation::isolinuxFiles();
+  for( QStringList::const_iterator it = isolinuxFiles.begin();
+       it != isolinuxFiles.end(); ++it ) {
+    if( !QFile::exists( path + "/isolinux/" + *it ) ) {
+      kdDebug() << "(K3bMovixInstallation) Could not find file " << *it << endl;
+      return 0;
+    }
+  }
+  QStringList movixFiles = K3bMovixInstallation::movixFiles();
+  for( QStringList::const_iterator it = movixFiles.begin();
+       it != movixFiles.end(); ++it ) {
+    if( !QFile::exists( path + "/movix/" + *it ) ) {
+      kdDebug() << "(K3bMovixInstallation) Could not find file " << *it << endl;
+      return 0;
+    }
+  }
+
+
 
   // now check the boot-messages languages
   K3bMovixInstallation* inst = new K3bMovixInstallation( path );
@@ -67,6 +146,8 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
   inst->m_supportedLanguages = dir.entryList(QDir::Dirs);
   inst->m_supportedLanguages.remove(".");
   inst->m_supportedLanguages.remove("..");
+  inst->m_supportedLanguages.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
+  inst->m_supportedLanguages.prepend( i18n("default") );
   dir.cdUp();
 
   // now check the supported mplayer-fontsets
@@ -74,6 +155,8 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
   inst->m_supportedSubtitleFonts = dir.entryList( QDir::Dirs );
   inst->m_supportedSubtitleFonts.remove(".");
   inst->m_supportedSubtitleFonts.remove("..");
+  inst->m_supportedSubtitleFonts.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
+  inst->m_supportedSubtitleFonts.prepend( i18n("none") );
   dir.cdUp();
   
   // now check the supported boot labels
@@ -93,6 +176,7 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
     line = fs.readLine();
   }
   f.close();
+  inst->m_supportedBootLabels.prepend( i18n("default") );
   
   return inst;
 }

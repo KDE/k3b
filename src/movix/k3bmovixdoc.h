@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -47,6 +47,28 @@ class K3bMovixDoc : public K3bDataDoc
 
   int indexOf( K3bMovixFileItem* );
 
+
+  bool shutdown() const { return m_shutdown; }
+  bool reboot() const { return m_reboot; }
+  bool ejectDisk() const { return m_ejectDisk; }
+  const QString& subtitleFontset() const { return m_subtitleFontset; }
+  const QString& bootMessageLanguage() const { return m_bootMessageLanguage; }
+  const QString& defaultBootLabel() const { return m_defaultBootLabel; }
+  const QString& additionalMPlayerOptions() const { return m_additionalMPlayerOptions; }
+  const QString& unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
+  int loopPlaylist() const { return m_loopPlaylist; }
+
+ void setShutdown( bool v ) { m_shutdown = v; }
+ void setSeboot( bool v ) { m_reboot = v; }
+ void setEjectDisk( bool v ) { m_ejectDisk = v; }
+ void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
+ void setBootMessageLanguage( const QString& v ) { m_bootMessageLanguage = v; }
+ void setDefaultBootLabel( const QString& v ) { m_defaultBootLabel = v; }
+ void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
+ void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
+ void setLoopPlaylist( int v ) { m_loopPlaylist = v; }
+
+
  signals:
   void newMovixFileItems();
   void movixItemRemoved( K3bMovixFileItem* );
@@ -72,6 +94,16 @@ class K3bMovixDoc : public K3bDataDoc
 
  private:
   QPtrList<K3bMovixFileItem> m_movixFiles;
+
+  bool m_shutdown;
+  bool m_reboot;
+  bool m_ejectDisk;
+  QString m_subtitleFontset;
+  QString m_bootMessageLanguage;
+  QString m_defaultBootLabel;
+  QString m_additionalMPlayerOptions;
+  QString m_unwantedMPlayerOptions;
+  int m_loopPlaylist;
 };
 
 #endif

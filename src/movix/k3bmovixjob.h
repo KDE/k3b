@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -23,6 +23,9 @@ class K3bMovixDoc;
 class K3bDevice;
 class K3bDataJob;
 class KTempFile;
+class K3bMovixInstallation;
+class K3bDirItem;
+class K3bFileItem;
 
 class K3bMovixJob : public K3bBurnJob
 {
@@ -44,13 +47,26 @@ class K3bMovixJob : public K3bBurnJob
 
  private:
   bool writePlaylistFile();
+  bool writeIsolinuxConfigFile();
+  bool writeMovixRcFile();
+  bool addMovixFiles();
+
+  void cleanUp();
 
   K3bMovixDoc* m_doc;
   K3bDataJob* m_dataJob;
+  K3bMovixInstallation* m_installation;
 
   bool m_canceled;
 
   KTempFile* m_playlistFile;
+  KTempFile* m_isolinuxConfigFile;
+  KTempFile* m_movixRcFile;
+
+  K3bDirItem* m_isolinuxDir;
+  K3bDirItem* m_movixDir;
+  K3bDirItem* m_mplayerDir;
+  K3bFileItem* m_playlistFileItem;
 };
 
 #endif

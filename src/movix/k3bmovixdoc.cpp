@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -61,6 +61,11 @@ K3bBurnJob* K3bMovixDoc::newBurnJob()
 
 bool K3bMovixDoc::newDocument()
 {
+  m_loopPlaylist = 1;
+  m_ejectDisk = false;
+  m_reboot = false;
+  m_shutdown = false;
+
   return K3bDataDoc::newDocument();
 }
 
@@ -119,7 +124,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* root )
 }
 
 
-bool K3bMovixDoc::saveDocumentData( QDomElement* )
+bool K3bMovixDoc::saveDocumentData( QDomElement* d )
 {
   // FIXME
   return false;
@@ -159,6 +164,8 @@ void K3bMovixDoc::moveMovixItem( K3bMovixFileItem* item, K3bMovixFileItem* itemA
   m_movixFiles.insert( pos+1, item );
 
   emit newMovixFileItems();
+
+  setModified(true);
 }
 
 

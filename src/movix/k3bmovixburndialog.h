@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,6 +22,11 @@
 
 class K3bMovixDoc;
 class K3bMovixOptionsWidget;
+class K3bMovixInstallation;
+class K3bDataImageSettingsWidget;
+class K3bDataAdvancedImageSettingsWidget;
+class K3bDataVolumeDescWidget;
+
 
 class K3bMovixBurnDialog : public K3bProjectBurnDialog
 {
@@ -43,6 +48,10 @@ class K3bMovixBurnDialog : public K3bProjectBurnDialog
  private:
   K3bMovixDoc* m_doc;
   K3bMovixOptionsWidget* m_movixOptionsWidget;
+  K3bDataVolumeDescWidget* m_volumeDescWidget;
+  K3bDataImageSettingsWidget* m_imageSettingsWidget;
+  K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
+  K3bMovixInstallation* m_installation;
 };
 
 

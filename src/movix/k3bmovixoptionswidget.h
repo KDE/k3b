@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,17 +20,21 @@
 #include "base_k3bmovixoptionswidget.h"
 
 class K3bMovixDoc;
+class K3bMovixInstallation;
+
 
 class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
 {
   Q_OBJECT
 
  public:
-  K3bMovixOptionsWidget( K3bMovixDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  K3bMovixOptionsWidget( QWidget* parent = 0, const char* name = 0 );
   ~K3bMovixOptionsWidget();
 
- private:
-  K3bMovixDoc* m_doc;
+ public slots:
+  void init( K3bMovixInstallation* );
+  void readSettings( K3bMovixDoc* );
+  void saveSettings( K3bMovixDoc* );
 };
 
 
