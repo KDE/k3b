@@ -180,7 +180,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 				       false ) );
   }
   else {
-    if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) )
+    if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					 i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject( "cdrecord" )->version),
 					 i18n("Although K3b supports all cdrtools versions since "
@@ -188,6 +188,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "version 2.0."),
 					 i18n("Install a more recent version of the cdrtools."),
 					 false ) );
+    }
     
 #ifdef Q_OS_LINUX
 
@@ -216,8 +217,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "true when using SuSE's resmgr."),
 					 i18n("Use K3bSetup to solve this problem."),
 					 true ) );
-  }
 #endif
+  }
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
@@ -237,8 +238,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "overall stability of the burning process."),
 					 i18n("Use K3bSetup to solve this problem."),
 					 true ) );
-  }
 #endif
+  }
 
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
     if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
@@ -403,7 +404,6 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     K3bSystemProblemDialog( problems, parent, name ).exec();
   }
 }
-
 
 void K3bSystemProblemDialog::slotK3bSetup()
 {
