@@ -30,14 +30,13 @@ K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupW
   QFont font( m_labelInfoText->font() );
   font.setBold( true );
   m_labelInfoText->setFont( font );
-  m_labelInfoText->setPaletteBackgroundColor( QColor(49, 174, 255) );
+  m_labelInfoText->setPaletteBackgroundColor( QColor(131, 206, 255) );
   m_labelInfoText->setPaletteForegroundColor( white );
 
   m_labelSetupLogo = new QLabel( this, "setuplogolabel" );
   m_labelSetupLogo->setPixmap( setupLogo );
   m_labelSetupLogo->setScaledContents( false );
   m_labelSetupLogo->setAlignment( AlignCenter );
-  m_labelSetupLogo->setPaletteBackgroundColor( QColor(49, 174, 255) );
 
   m_mainLayout = new QGridLayout( this );
   m_mainLayout->addWidget( m_labelSetupLogo, 0, 0 );
@@ -45,7 +44,7 @@ K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupW
 
   m_mainLayout->setMargin( KDialog::marginHint() );
   m_mainLayout->setSpacing( 0 );
-  m_mainLayout->addColSpacing( 1, KDialog::spacingHint() );
+  m_mainLayout->addColSpacing( 1, KDialog::marginHint() );
   m_mainLayout->setRowStretch( 1, 1 );
   m_mainLayout->setColStretch( 2, 1 );
 }
