@@ -204,7 +204,7 @@ void K3bVcdTrackDialog::fillGui()
     QToolTip::add
         ( m_pbc_default, i18n( "This key is usually mapped to the > or PLAY key." ) );
     QToolTip::add
-        ( m_comboAfterTimeout, i18n( "Target to be jumped on time - out of <wait>." ) );
+        ( m_comboAfterTimeout, i18n( "Target to be jumped to on time-out of <wait>." ) );
     QToolTip::add
         ( m_check_reactivity, i18n( "Delay reactivity of keys." ) );
     QToolTip::add
@@ -221,8 +221,8 @@ void K3bVcdTrackDialog::fillGui()
         ( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track'." ) );
 
     QWhatsThis::add
-        ( m_comboAfterTimeout, i18n( "<p>Target to be jumped on time - out of <wait>."
-                                     "<p>If omitted ( and <wait> is not set to an infinite time ) one of the targets is selected at random!" ) );
+        ( m_comboAfterTimeout, i18n( "<p>Target to be jumped to on time-out of <wait>."
+                                     "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random." ) );
     QWhatsThis::add
         ( m_check_reactivity, i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
                                     "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
