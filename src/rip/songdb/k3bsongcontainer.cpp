@@ -1,64 +1,70 @@
-/***************************************************************************
-                          k3bsongcontainer.cpp  -  description
-                             -------------------
-    begin                : Sat Dec 29 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2002 Thomas Froescher <tfroescher@k3b.org>
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bsongcontainer.h"
 #include "k3bsong.h"
 
+#include <kdebug.h>
+
+
 K3bSongContainer::K3bSongContainer( const QString& path)
-  : m_path( path ){
+  : m_path( path )
+{
+  m_songs.setAutoDelete(true);
 }
 
-K3bSongContainer::K3bSongContainer(){
+K3bSongContainer::K3bSongContainer()
+{
 }
 
-K3bSongContainer::~K3bSongContainer(){
+K3bSongContainer::~K3bSongContainer()
+{
 }
 
-void K3bSongContainer::deleteSong( const QString& filename ){
-    SongList::Iterator it;
-    for( it = m_songs.begin(); it != m_songs.end(); ++it ){
-        if( filename == (*it).getFilename() ){
-            m_songs.remove( it );
-            break;
-        }
+void K3bSongContainer::deleteSong( const QString& filename )
+{
+  for( QPtrListIterator<K3bSong> it( m_songs ); *it; ++it ){
+    if( filename == it.current()->getFilename() ) {
+      m_songs.removeRef( it.current() );
+      break;
     }
+  }
 }
 
-K3bSong* K3bSongContainer::addSong( const K3bSong& song){
-    QString filename = song.getFilename();
-    SongList::Iterator it;
-    for( it = m_songs.begin(); it != m_songs.end(); ++it ){
-        if( filename == (*it).getFilename() ){
-            m_songs.remove( it );
-            break;
-        }
+K3bSong* K3bSongContainer::addSong( K3bSong* song )
+{
+  deleteSong( song->getFilename() );
+  m_songs.append( song );
+  return song;
+}
+
+
+bool K3bSongContainer::isEmpty() const
+{
+  return m_path.isEmpty();
+}
+
+K3bSong* K3bSongContainer::findSong( const QString& filename ) const
+{
+  for( QPtrListIterator<K3bSong> it( m_songs ); *it; ++it )
+    if( filename == it.current()->getFilename() ) {
+      kdDebug() << "(K3bSongContainer) found song: " << it.current()->getFilename() << endl;
+      return it.current();
     }
-    return &(*m_songs.append( song ));
-}
-
-QValueList<K3bSong> K3bSongContainer::getSongs() const{
-    return m_songs;
-}
-const QString& K3bSongContainer::getPath() const {
-    return m_path;
-}
-
-bool K3bSongContainer::isEmpty(){
-    if( m_path.isEmpty() )
-        return true;
-    return false;
+  
+  return 0;
 }
