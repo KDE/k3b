@@ -35,7 +35,8 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
   // dont't know if we need more vcdTools in the future (vcdxrip)
   static const char* vcdTools[] =  { "vcdxbuild",
-				     0 };
+                                     "vcdxminfo",
+				            0 };
   
   static const char* transcodeTools[] =  { "transcode",
 					   "tcprobe",
