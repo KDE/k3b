@@ -31,10 +31,6 @@ static const char* binPrograms[] =  { "cdrecord",
 				      "mkisofs",
 				      0 };
 
-static const char* systemTools[] =  { "shutdown",
-				      "halt",
-				      0 };
-
 
 K3bExternalBin::K3bExternalBin( const QString& name )
  : m_name( name )
@@ -218,6 +214,17 @@ K3bExternalBin* K3bExternalBinManager::probeMkisofs( const QString& path )
       bin->addFeature( "dvd-video" );
     if( m_gatheredOutput.contains( "-joliet-long" ) )
       bin->addFeature( "joliet-long" );
+
+    // check if we run mkisofs as root
+    if( !getuid() )
+      bin->addFeature( "suidroot" );
+    else {
+      struct stat s;
+      if( !::stat( QFile::encodeName(path), &s ) ) {
+	if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	  bin->addFeature( "suidroot" );
+      }
+    }
   }
   else {
     kdDebug() << "(K3bExternalBinManager) could not start " << bin->path << endl;
@@ -336,37 +343,73 @@ K3bExternalBin* K3bExternalBinManager::probeTranscode( const QString& path )
   return bin;
 }
 
-K3bExternalBin* K3bExternalBinManager::probeShutdown( const QString& path, int index ){
-  if( !QFile::exists( path ) ){
-    return 0;
-  } else {
-    K3bExternalBin* bin = new K3bExternalBin( systemTools[index] );
-    bin->path = path;
-    return bin;
-  }
-}
 
 K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
 {
-  // we need the following files:
-  // isolinux/initrd.gz
-  // isolinux/iso.sort
-  // isolinux/isolinux.bin
-  // isolinux/isolinux.cfg
-  // isolinux/movix.lss
-  // isolinux/mphelp.txt
-  // isolinux/mxhelp.txt
-  // isolinux/trblst.txt
-  // isolinux/credits.txt
-  // isolinux/kernel/vmlinuz
+  // first test if we have a version info (eMovix >= 0.8.0pre3)
+  if( !QFile::exists( path + "/movix-version") )
+    return 0;
 
-  return 0;
-}
+  K3bExternalBin* bin = 0;
 
+  // probe version
+  KProcess vp;
+  vp << path + "/movix-version" ;
+  connect( &vp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  m_gatheredOutput = "";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    // movix-version just gives us the version number on stdout
+    if( !m_gatheredOutput.isEmpty() ) {
+      bin = new K3bExternalBin( "eMovix" );
+      bin->version = m_gatheredOutput;
+    }
+  }
+  else {
+    kdDebug() << "(K3bExternalBinManager) could not start " << path << "/movix-version" << endl;
+    return 0;
+  }
 
-K3bExternalBin* K3bExternalBinManager::probeMovix2( const QString& )
-{
-  return 0;
+  // now search for the config and the files
+  if( !QFile::exists( path + "/movix-conf") ) {
+    delete bin;
+    return 0;
+  }
+
+  KProcess cp;
+  cp << path + "/movix-conf";
+  connect( &cp, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(gatherOutput(KProcess*, char*, int)) );
+  m_gatheredOutput = "";
+  if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    // now search the needed files in the given dir
+    if( m_gatheredOutput.isEmpty() ) {
+      kdDebug() << "(K3bExternalBinManager) no eMovix config info" << endl;
+      delete bin;
+      return 0;
+    }
+
+    // we need the following files:
+    // isolinux/initrd.gz
+    // isolinux/iso.sort
+    // isolinux/isolinux.bin
+    // isolinux/isolinux.cfg
+    // isolinux/movix.lss
+    // isolinux/mphelp.txt
+    // isolinux/mxhelp.txt
+    // isolinux/trblst.txt
+    // isolinux/credits.txt
+    // isolinux/kernel/vmlinuz
+
+    // TODO: search the files
+
+    // the eMovix bin does not contain the path to any executable but the path to the eMovix files
+    bin->path = m_gatheredOutput;
+    return bin;
+  }
+  else {
+    kdDebug() << "(K3bExternalBinManager) could not start " << path << "/movix-conf" << endl;
+    delete bin;
+    return 0;
+  }
 }
 
 
@@ -492,19 +535,13 @@ void K3bExternalBinManager::createProgramContainer()
     if( m_programs.find( transcodeTools[i] ) == m_programs.end() )
       m_programs.insert( transcodeTools[i], new K3bExternalProgram( transcodeTools[i] ) );
   }  
-  for( int i = 0; systemTools[i]; ++i ) {
-    if( m_programs.find( systemTools[i] ) == m_programs.end() )
-      m_programs.insert( systemTools[i], new K3bExternalProgram( systemTools[i] ) );
-  }
   for( int i = 0; vcdTools[i]; ++i ) {
     if( m_programs.find( vcdTools[i] ) == m_programs.end() )
       m_programs.insert( vcdTools[i], new K3bExternalProgram( vcdTools[i] ) );
   }
 
-  if( m_programs.find( "movix" ) == m_programs.end() )
-    m_programs.insert( "movix", new K3bExternalProgram( "movix" ) );
-  if( m_programs.find( "movix2" ) == m_programs.end() )
-    m_programs.insert( "movix2", new K3bExternalProgram( "movix2" ) );
+  if( m_programs.find( "eMovix" ) == m_programs.end() )
+    m_programs.insert( "eMovix", new K3bExternalProgram( "eMovix" ) );
 }
 
 
@@ -542,20 +579,14 @@ void K3bExternalBinManager::search()
            if( bin )
            m_programs[ transcodeTools[i] ]->addBin( bin );
        }
-       for( int i = 0; systemTools[i]; ++i ) {
-           K3bExternalBin* shutdownBin = probeShutdown ( path + "/" + QString::fromLatin1( systemTools[i] ),i );
-           if( shutdownBin ){
-               m_programs[ systemTools[i] ]->addBin( shutdownBin );
-           }
-       }
        for( int i = 0; vcdTools[i]; ++i ) {
          K3bExternalBin* bin = probeVcd( path + "/" + QString::fromLatin1(vcdTools[i]) );
          if( bin )
           m_programs[ vcdTools[i] ]->addBin( bin );
        }
-       K3bExternalBin* movixBin = probeMovix( path + "/movix" );
+       K3bExternalBin* movixBin = probeMovix( path );
        if( movixBin )
-         m_programs[ "movix" ]->addBin( movixBin );
+         m_programs[ "eMovix" ]->addBin( movixBin );
     }
     else {
        cdrecordBin = probeCdrecord( path );

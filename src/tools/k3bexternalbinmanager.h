@@ -111,9 +111,7 @@ class K3bExternalBinManager : public QObject
   K3bExternalBin* probeMkisofs( const QString& );
   K3bExternalBin* probeCdrdao( const QString& );
   K3bExternalBin* probeTranscode( const QString& );
-  K3bExternalBin* probeShutdown( const QString& path, int index );
   K3bExternalBin* probeMovix( const QString& );
-  K3bExternalBin* probeMovix2( const QString& );
   K3bExternalBin* probeVcd( const QString& );
 
   QMap<QString, K3bExternalProgram*> m_programs;
