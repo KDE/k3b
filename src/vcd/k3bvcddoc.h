@@ -81,6 +81,7 @@ class K3bVcdDoc : public K3bDoc
 
         int vcdType() const { return m_vcdType; }
         void setVcdType( int type );
+        void setPbcTracks();
 
     public slots:
         /**
@@ -106,6 +107,7 @@ class K3bVcdDoc : public K3bDoc
 
     signals:
         void newTracks();
+
         //  void trackRemoved( uint );
 
     protected:
@@ -121,7 +123,6 @@ class K3bVcdDoc : public K3bDoc
     private:
         K3bVcdTrack* createTrack( const KURL& url );
         void informAboutNotFoundFiles();
-        void setPbcTracks();
 
         QStringList m_notFoundFiles;
         QString m_vcdImage;

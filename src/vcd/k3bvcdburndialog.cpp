@@ -430,8 +430,8 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     // ----------------------------------------------------------------------
     // noEdit
-    QLabel* labelSystemId = new QLabel( i18n( "System Id:" ), w, "labelSystemId" );
-    QLabel* labelApplicationId = new QLabel( i18n( "Application Id:" ), w, "labelApplicationId" );
+    QLabel* labelSystemId = new QLabel( i18n( "System:" ), w, "labelSystemId" );
+    QLabel* labelApplicationId = new QLabel( i18n( "Application:" ), w, "labelApplicationId" );
     QLabel* labelInfoSystemId = new QLabel( vcdDoc() ->vcdOptions() ->systemId(), w, "labelInfoSystemId" );
     QLabel* labelInfoApplicationId = new QLabel( vcdDoc() ->vcdOptions() ->applicationId(), w, "labelInfoApplicationId" );
 
@@ -445,28 +445,26 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     // ----------------------------------------------------------------------
 
-    QLabel* labelVolumeId = new QLabel( i18n( "Volume &label:" ), w, "labelVolumeId" );
+    QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), w, "labelVolumeId" );
+    QLabel* labelAlbumId = new QLabel( i18n( "Volume &set name:" ), w, "labelAlbumId" );
+    QLabel* labelVolumeCount = new QLabel( i18n( "Volume set s&ize:" ), w, "labelVolumeCount" );
+    QLabel* labelVolumeNumber = new QLabel( i18n( "Volume set &number:" ), w, "labelVolumeNumber" );
     QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), w, "labelPublisher" );
-    QLabel* labelAlbumId = new QLabel( i18n( "&Album Id:" ), w, "labelAlbumId" );
-
-    QLabel* labelVolumeCount = new QLabel( i18n( "Number of &volumes in album:" ), w, "labelVolumeCount" );
-    QLabel* labelVolumeNumber = new QLabel( i18n( "This CD is &sequence number:" ), w, "labelVolumeNumber" );
 
 
     m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
-    m_editPublisher = new QLineEdit( w, "m_editPublisher" );
     m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
-
     m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
     m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
+    m_editPublisher = new QLineEdit( w, "m_editPublisher" );
 
-    // only ISO646 d-Characters ( 0-9 A-Z _ )
+    // only ISO646 d-Characters
     m_editVolumeId->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_d, true, m_editVolumeId ) );
     m_editAlbumId->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_d, true, m_editVolumeId ) );
         
     m_editVolumeId->setMaxLength( 32 );
     m_editAlbumId->setMaxLength( 16 );
-    // only ISO646 a-Characters ( [0-9A-Z!" %&'()*+,-./:;<=>?_] )
+    // only ISO646 a-Characters
     m_editPublisher->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_a, true, m_editVolumeId ) );
     m_editPublisher->setMaxLength( 128 );
     
@@ -475,34 +473,38 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_spinVolumeCount->setMinValue( 1 );
 
     QFrame* line = new QFrame( w );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line->setFrameShape( QFrame::HLine );
+    line->setFrameShadow( QFrame::Sunken );
+    line->setFrameShape( QFrame::HLine );
+    
 
     // ----------------------------------------------------------------------
     QGridLayout* grid = new QGridLayout( w );
     grid->setMargin( marginHint() );
     grid->setSpacing( spacingHint() );
 
-    grid->addWidget( labelSystemId, 1, 0 );
-    grid->addWidget( labelInfoSystemId, 1, 1 );
-    grid->addWidget( labelApplicationId, 2, 0 );
-    grid->addWidget( labelInfoApplicationId, 2, 1 );
+    grid->addWidget( labelVolumeId, 1, 0 );
+    grid->addMultiCellWidget( m_editVolumeId, 1, 1, 1, 3 );
+    grid->addWidget( labelAlbumId, 2, 0 );
+    grid->addMultiCellWidget( m_editAlbumId, 2, 2, 1, 3 );
 
-    grid->addMultiCellWidget( line, 3, 3, 0, 1 );
+    grid->addWidget( labelVolumeCount, 3, 0 );
+    grid->addWidget( m_spinVolumeCount, 3, 1 );
+    grid->addWidget( labelVolumeNumber, 3, 2 );
+    grid->addWidget( m_spinVolumeNumber, 3, 3 );
 
-    grid->addWidget( labelVolumeId, 4, 0 );
-    grid->addWidget( m_editVolumeId, 4, 1 );
-    grid->addWidget( labelPublisher, 5, 0 );
-    grid->addWidget( m_editPublisher, 5, 1 );
-    grid->addWidget( labelAlbumId, 6, 0 );
-    grid->addWidget( m_editAlbumId, 6, 1 );
+    grid->addWidget( labelPublisher, 4, 0 );
+    grid->addMultiCellWidget( m_editPublisher, 4, 4, 1, 3 );
 
-    grid->addWidget( labelVolumeCount, 7, 0 );
-    grid->addWidget( m_spinVolumeCount, 7, 1 );
-    grid->addWidget( labelVolumeNumber, 8, 0 );
-    grid->addWidget( m_spinVolumeNumber, 8, 1 );
+    grid->addMultiCellWidget( line, 5, 5, 0, 3 );
+
+    grid->addWidget( labelSystemId, 6, 0 );
+    grid->addMultiCellWidget( labelInfoSystemId, 6, 6, 1, 3 );
+    grid->addWidget( labelApplicationId, 7, 0 );
+    grid->addMultiCellWidget( labelInfoApplicationId, 7, 7, 1, 3 );
 
     //  grid->addRowSpacing( 5, 15 );
-    grid->setRowStretch( 9, 1 );
+    grid->setRowStretch( 8, 1 );
 
     // buddies
     labelVolumeId->setBuddy( m_editVolumeId );
@@ -511,14 +513,14 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     labelVolumeCount->setBuddy( m_spinVolumeCount );
     labelVolumeNumber->setBuddy( m_spinVolumeNumber );
-
+    
     // tab order
-    setTabOrder( m_editVolumeId, m_editPublisher );
-    setTabOrder( m_editPublisher, m_editAlbumId );
+    setTabOrder( m_editVolumeId, m_editAlbumId );
     setTabOrder( m_editAlbumId, m_spinVolumeCount );
     setTabOrder( m_spinVolumeCount, m_spinVolumeNumber );
+    setTabOrder( m_spinVolumeNumber, m_editPublisher );
 
-    addPage( w, i18n( "Label" ) );
+    addPage( w, i18n( "Volume Descriptor" ) );
 }
 
 
@@ -551,8 +553,10 @@ void K3bVcdBurnDialog::slotLoadK3bDefaults()
     m_check2336->setChecked( o.Sector2336() );
     m_checkNonCompliant->setChecked( o.NonCompliantMode() );
 
-    m_spinVolumeNumber->setValue( o.volumeNumber() );
     m_spinVolumeCount->setValue( o.volumeCount() );
+    m_spinVolumeNumber->setMaxValue( o.volumeCount() );
+    m_spinVolumeNumber->setValue( o.volumeNumber() );
+
 
     if ( m_radioSvcd10->isChecked() ) {
         m_checkCdiSupport->setEnabled( false );
@@ -636,6 +640,9 @@ void K3bVcdBurnDialog::saveSettings()
     vcdDoc() ->vcdOptions() ->setVolumeCount( m_spinVolumeCount->value() );
 
     vcdDoc() ->vcdOptions() ->setPbcEnabled( m_checkPbc->isChecked() );
+    if ( m_checkPbc->isChecked() )
+        vcdDoc()-> setPbcTracks();
+        
     vcdDoc() ->vcdOptions() ->setSegmentFolder( m_checkSegmentFolder->isChecked() );
     vcdDoc() ->vcdOptions() ->setRelaxedAps( m_checkRelaxedAps->isChecked() );
     vcdDoc() ->vcdOptions() ->setUpdateScanOffsets( m_checkUpdateScanOffsets->isChecked() );
@@ -684,6 +691,7 @@ void K3bVcdBurnDialog::readSettings()
     }
 
     m_spinVolumeCount->setValue( vcdDoc() ->vcdOptions() ->volumeCount() );
+    m_spinVolumeNumber->setMaxValue( vcdDoc() ->vcdOptions() ->volumeCount() );
     m_spinVolumeNumber->setValue( vcdDoc() ->vcdOptions() ->volumeNumber() );
 
     m_checkAutoDetect->setChecked( vcdDoc() ->vcdOptions() ->AutoDetect() );
@@ -765,6 +773,7 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
     }
 
     m_spinVolumeCount->setValue( o.volumeCount() );
+    m_spinVolumeNumber->setMaxValue( o.volumeCount() );    
     m_spinVolumeNumber->setValue( o.volumeNumber() );
 
     m_editVolumeId->setText( o.volumeId() );

@@ -57,13 +57,15 @@ class K3bVcdTrack
         void setUserDefined( int, bool );
         void setPlayTime( int t ) { m_pbcplaytime = t; }
         void setWaitTime( int t ) { m_pbcwaittime = t; }
-
+        void setReactivity( bool b ) { m_reactivity = b; }
+        
         K3bVcdTrack* getPbcTrack( const int& );
         int getNonPbcTrack( const int& );
         bool isPbcUserDefined( int );
         int getPlayTime() { return m_pbcplaytime; }
         int getWaitTime() { return m_pbcwaittime; }
-
+        bool Reactivity() { return m_reactivity; }
+        
         // video
         int mpegType() const { return m_mpegtype; }
         int mpegVideoVersion() const { return m_mpegvideoversion; }
@@ -163,6 +165,7 @@ class K3bVcdTrack
         bool m_hasaudio;
         bool m_mpegaudiocopyright;
         bool m_mpegaudiooriginal;
+        bool m_reactivity;
         int m_mpegaudiotype;
         int m_mpegaudiolayer;
         QString m_mpegaudioduration;

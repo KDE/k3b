@@ -67,7 +67,7 @@ class K3bVcdOptions
         void setVcdVersion( const QString& s ) { m_vcdversion = s; }
 
         void setPreGapLeadout( const int i) {m_pregapleadout = i;}
-        void setPreGapTrack( const int i) {m_pregapleadout = i;}
+        void setPreGapTrack( const int i) {m_pregaptrack = i;}
         void setFrontMarginTrack( const int i) {m_frontmargintrack = i;}
         void setRearMarginTrack( const int i) {m_rearmargintrack = i;}
         void setFrontMarginTrackSVCD( const int i) {m_frontmargintrackSVCD = i;}
@@ -91,16 +91,16 @@ class K3bVcdOptions
         static K3bVcdOptions load( KConfig* c );
         static K3bVcdOptions defaults();
 
-        bool loadDefaultPBC();
-        bool loadDefaultPBCNumKeys();
-        int loadDefaultPBCWaitTime();
-        int loadDefaultPBCPlayTime();
-                                                                
         void setPbcEnabled( const bool& b ) { m_pbcenabled = b; }
         bool PbcEnabled() const { return m_pbcenabled; };
         void setPbcNumKeys( const bool& b ) { m_pbcnumkeys = b; }
         bool PbcNumKeys() const { return m_pbcnumkeys; };
+        void setPbcPlayTime( const int i ) { m_def_pbcplaytime = i; }
+        int PbcPlayTime( ) { return m_def_pbcplaytime; }
 
+        void setPbcWaitTime( const int i ) { m_def_pbcwaittime = i; }
+        int PbcWaitTime( ) { return m_def_pbcwaittime; }
+                        
         void setSegmentFolder( const bool& b ) { m_segmentfolder = b; }
         bool SegmentFolder() const { return m_segmentfolder; };
 
@@ -148,6 +148,8 @@ class K3bVcdOptions
         bool m_segmentfolder;
         bool m_usegaps;
 
+        int m_def_pbcplaytime;
+        int m_def_pbcwaittime;
         unsigned long long m_cdisize;
 };
 

@@ -126,6 +126,10 @@ void K3bVcdTrackDialog::slotApply()
 
     selectedTrack->setPlayTime( m_spin_times->value() );
     selectedTrack->setWaitTime( m_spin_waittime->value() );
+    selectedTrack->setReactivity( m_check_reactivity->isChecked() );
+    // TODO: selectedTrack->setPbcNumKeys( (m_checkpbc->isChecked() );
+    
+    VcdOptions()->setPbcEnabled( m_check_pbc->isChecked() );
 
 }
 
@@ -433,11 +437,12 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_spin_times->setValue( selectedTrack->getPlayTime() );
     m_spin_waittime->setValue( selectedTrack->getWaitTime() );
 
-    m_groupPlay->setEnabled( VcdOptions()->PbcEnabled() );
-    m_groupPbc->setEnabled( VcdOptions()->PbcEnabled() );
+    m_check_reactivity->setChecked( selectedTrack->Reactivity() );
+    m_check_pbc->setChecked( VcdOptions()->PbcEnabled() );
 
     // not implemented yet
-    m_mainTabbed->setTabEnabled( m_widgetnumkeys, VcdOptions()->PbcNumKeys() );
+    m_check_usekeys->setChecked( VcdOptions()->PbcNumKeys() );
+    m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() );
 }
 
 void K3bVcdTrackDialog::prepareGui()
@@ -524,16 +529,16 @@ void K3bVcdTrackDialog::setupPbcTab()
     groupOptions->layout() ->setSpacing( spacingHint() );
     groupOptions->layout() ->setMargin( marginHint() );
 
-		m_check_pbc = new QCheckBox( i18n( "Enable Playback Control (for the hole CD)" ), groupOptions, "m_check_pbc" );
+    m_check_pbc = new QCheckBox( i18n( "Enable Playback Control (for the hole CD)" ), groupOptions, "m_check_pbc" );
 
-		m_check_usekeys = new QCheckBox( i18n( "Use numeric keys" ), groupOptions, "m_check_usekeys" );
-		m_check_usekeys->setEnabled( false );
+    m_check_usekeys = new QCheckBox( i18n( "Use numeric keys" ), groupOptions, "m_check_usekeys" );
+    m_check_usekeys->setEnabled( false );
 
-		m_check_reactivity = new QCheckBox( i18n( "Reactivity delayed to the end of playing track" ), groupOptions, "m_check_reactivity" );
-		m_check_reactivity->setEnabled( false );
+    m_check_reactivity = new QCheckBox( i18n( "Reactivity delayed to the end of playing track" ), groupOptions, "m_check_reactivity" );
+    m_check_reactivity->setEnabled( false );
 
-		//////////////////////////////////////////////////////////////////////////////////////////
-		m_groupPlay = new QGroupBox( 0, Qt::Vertical, i18n( "Playing" ), w );
+    //////////////////////////////////////////////////////////////////////////////////////////
+    m_groupPlay = new QGroupBox( 0, Qt::Vertical, i18n( "Playing" ), w );
     m_groupPlay->layout() ->setSpacing( spacingHint() );
     m_groupPlay->layout() ->setMargin( marginHint() );
 
@@ -576,7 +581,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     QGridLayout* groupPbcLayout = new QGridLayout( m_groupPbc->layout() );
     groupPbcLayout->setAlignment( Qt::AlignTop );
 
-		QLabel* labelPbc_previous = new QLabel( i18n( "Previous:" ), m_groupPbc, "labelPbc_previous" );
+    QLabel* labelPbc_previous = new QLabel( i18n( "Previous:" ), m_groupPbc, "labelPbc_previous" );
     QLabel* labelPbc_next = new QLabel( i18n( "Next:" ), m_groupPbc, "labelPbc_next" );
     QLabel* labelPbc_return = new QLabel( i18n( "Return:" ), m_groupPbc, "labelPbc_return" );
     QLabel* labelPbc_default = new QLabel( i18n( "Default:" ), m_groupPbc, "labelPbc_default" );
@@ -600,15 +605,19 @@ void K3bVcdTrackDialog::setupPbcTab()
 
 
     grid->addWidget( groupOptions, 0, 0 );
-		grid->addWidget( m_groupPlay, 1, 0 );
+    grid->addWidget( m_groupPlay, 1, 0 );
     grid->addWidget( m_groupPbc, 2, 0 );
 
     grid->setRowStretch( 9, 1 );
 
     m_mainTabbed->addTab( w, i18n( "Playback Control" ) );
 
+    m_groupPlay->setEnabled( false );
+    m_groupPbc->setEnabled( false );
+
     connect( m_spin_times, SIGNAL( valueChanged( int ) ), this, SLOT( slotPlayTimeChanged( int ) ) );
     connect( m_spin_waittime, SIGNAL( valueChanged( int ) ), this, SLOT( slotWaitTimeChanged( int ) ) );
+    connect( m_check_pbc, SIGNAL( toggled( bool ) ), this, SLOT( slotPbcToggled( bool ) ) );
 }
 
 void K3bVcdTrackDialog::setupPbcKeyTab()
@@ -815,6 +824,13 @@ void K3bVcdTrackDialog::slotWaitTimeChanged( int value )
         m_labelAfterTimeout->setEnabled( true );
         m_comboAfterTimeout->setEnabled( true );
     }
+}
+
+void K3bVcdTrackDialog::slotPbcToggled( bool b )
+{
+    m_groupPlay->setEnabled( b );
+    m_groupPbc->setEnabled( b );
+    m_check_reactivity->setEnabled( b );
 }
 
 #include "k3bvcdtrackdialog.moc"

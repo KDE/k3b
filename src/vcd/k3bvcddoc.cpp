@@ -85,6 +85,7 @@ bool K3bVcdDoc::newDocument()
     m_tracks->setAutoDelete( false );
 
     m_vcdOptions = new K3bVcdOptions();
+    loadDefaultSettings();
 
     return K3bDoc::newDocument();
 }
@@ -298,9 +299,8 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             }
 
             // set defaults;
-            K3bVcdOptions options = K3bVcdOptions();
-            newTrack->setPlayTime( options.loadDefaultPBCPlayTime() );
-            newTrack->setWaitTime( options.loadDefaultPBCWaitTime() );
+            newTrack->setPlayTime( vcdOptions()->PbcPlayTime() );
+            newTrack->setWaitTime( vcdOptions()->PbcWaitTime() );
 
             // for debuging
             Mpeg->PrintInfos();
@@ -572,7 +572,10 @@ void K3bVcdDoc::loadDefaultSettings()
   // the group is set in K3bDoc
   KConfig* c = k3bMain() ->config();
 
-  // TODO: load additional video settings
+  vcdOptions()->setPbcEnabled( c->readBoolEntry("Use Playback Control", false) );
+  vcdOptions()->setPbcNumKeys( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
+  vcdOptions()->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
+  vcdOptions()->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
 }
 
 
@@ -603,7 +606,9 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
     for ( uint i = 0; i < vcdNodes.count(); i++ ) {
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
-				kdDebug() << QString("LoadDocument: name = '%1'").arg(name) << endl;
+
+        kdDebug() << QString("(K3bVcdDoc::loadDocumentData) nodeName = '%1'").arg( name ) << endl;
+
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );
         else if ( name == "albumId" )
@@ -617,8 +622,8 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         else if ( name == "vcdType" )
             setVcdType( vcdTypes(item.toElement().text().toInt()) );
         else if ( name == "mpegVersion" )
-						vcdOptions() ->setMpegVersion( item.toElement().text().toInt() );
-				else if ( name == "PreGapLeadout" )
+            vcdOptions() ->setMpegVersion( item.toElement().text().toInt() );
+        else if ( name == "PreGapLeadout" )
             vcdOptions() ->setPreGapLeadout( item.toElement().text().toInt() );
         else if ( name == "PreGapTrack" )
             vcdOptions() ->setPreGapTrack( item.toElement().text().toInt() );
@@ -674,8 +679,9 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
             if ( K3bVcdTrack* track = createTrack( k ) ) {
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
                 track ->setWaitTime( trackElem.attribute( "waittime", "2" ).toInt() );
+                track ->setReactivity( trackElem.attribute( "reactivity", "0" ).toInt() );
 
-								addTrack( track, m_tracks->count() );
+                addTrack( track, m_tracks->count() );
             }
         }
     }
@@ -684,21 +690,46 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
 
     informAboutNotFoundFiles();
 
+    // do not add saved pbcTrack links when one ore more files missing.
+    // TODO: add info message to informAboutNotFoundFiles();
     if ( m_notFoundFiles.isEmpty() ) {
-		    for ( uint i = 0; i < trackNodes.length(); i++ ) {
-	        QDomElement trackElem = trackNodes.item( i ).toElement();
-					QDomNodeList trackNodes = trackElem.childNodes();
-					for ( uint type = 0; type < trackNodes.length(); type++ ) {
-						QDomElement trackElem = trackNodes.item( type ).toElement();
-						kdDebug() << "PBC Element Type: " << trackElem.attribute ("type") << endl;
-						kdDebug() << "PBC Element PbcTrack: " << trackElem.attribute ("pbctrack") << endl;
-						kdDebug() << "PBC Element Value: " << trackElem.attribute ("val") << endl;
-						kdDebug() << "------------------------------------" << endl;
-					}
+        int type;
+        int val;
+        bool pbctrack;
+        for ( uint trackId = 0; trackId < trackNodes.length(); trackId++ ) {
+            QDomElement trackElem = trackNodes.item( trackId ).toElement();
+            QDomNodeList trackNodes = trackElem.childNodes();
+            kdDebug() << "PBC Element Type: " << trackElem.attribute ("type") << endl;
+            kdDebug() << "PBC Element PbcTrack: " << trackElem.attribute ("pbctrack") << endl;
+            kdDebug() << "PBC Element Value: " << trackElem.attribute ("val") << endl;
+            kdDebug() << "------------------------------------" << endl;
+            for ( uint i = 0; i < trackNodes.length(); i++ ) {
+                QDomElement trackElem = trackNodes.item( i ).toElement();
+                if ( trackElem.hasAttribute ("type") ) {
+                    type = trackElem.attribute ("type").toInt();
+                    if ( trackElem.hasAttribute ("pbctrack") ) {
+                        pbctrack = ( trackElem.attribute ("pbctrack") == "yes" );
+                        if ( trackElem.hasAttribute ("val") ) {
+                            val = trackElem.attribute ("val").toInt();
+                            K3bVcdTrack* track = m_tracks->at( trackId );
+                            K3bVcdTrack* pbcTrack = m_tracks->at( val );
+                            if ( pbctrack ) {
+                                pbcTrack->addToRevRefList( track );
+                                track->setPbcTrack( type, pbcTrack );
+                                track->setUserDefined( type, true );
+                            } else {
+                                track->setPbcTrack( type );
+                                track->setPbcNonTrack( type, val );
+                                track->setUserDefined( type, true );
+                            }
+                        }
+                    }
+                }
+            }
         }
-
+        setPbcTracks();
         setModified( false );
-		}
+    }
 
     return true;
 }
@@ -739,7 +770,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdType() ) ) );
     vcdMain.appendChild( vcdElem );
 
-		vcdElem = doc.createElement( "mpegVersion" );
+    vcdElem = doc.createElement( "mpegVersion" );
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->mpegVersion() ) ) );
     vcdMain.appendChild( vcdElem );
 
@@ -819,7 +850,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->Restriction() ) ) );
     vcdMain.appendChild( vcdElem );
 
-		docElem->appendChild( vcdMain );
+    docElem->appendChild( vcdMain );
 
     // save the tracks
     // -------------------------------------------------------------
@@ -835,10 +866,11 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
         trackElem.setAttribute( "url", KIO::decodeFileName( track->absPath() ) );
         trackElem.setAttribute( "playtime", track->getPlayTime() );
         trackElem.setAttribute( "waittime", track->getWaitTime() );
-                
+        trackElem.setAttribute( "reactivity", track->Reactivity() );
+                                
         for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
             if ( track->isPbcUserDefined( i ) ) {
-                // save pbc
+                // save pbcTracks
                 QDomElement pbcElem = doc.createElement( "pbc" );
                 pbcElem.setAttribute( "type", i );
                 if ( track->getPbcTrack( i ) ) {

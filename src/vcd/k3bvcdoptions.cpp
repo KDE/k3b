@@ -30,8 +30,8 @@
 
 K3bVcdOptions::K3bVcdOptions()
         : m_restriction( 0 ),
-        m_pbcenabled( loadDefaultPBC() ),
-        m_pbcnumkeys( loadDefaultPBCNumKeys() ),
+        m_pbcenabled( PbcEnabled() ),
+        m_pbcnumkeys( PbcNumKeys() ),
         m_volumeID( i18n( "Project name", "VIDEOCD" ) ),
         m_albumID( "" ),
         m_volumeSetId( "" ),
@@ -58,7 +58,6 @@ K3bVcdOptions::K3bVcdOptions()
         m_segmentfolder( true ),
         m_usegaps( false )
 {
-    setPbcEnabled( loadDefaultPBC() );
 }
 
 bool K3bVcdOptions::checkCdiFiles()
@@ -135,35 +134,6 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
 
     return options;
 }
-
-bool K3bVcdOptions::loadDefaultPBC()
-{
-    KConfig* c = kapp->config();
-    c->setGroup( "Video project settings" );
-    return c->readBoolEntry("Use Playback Control", false);
-}
-
-bool K3bVcdOptions::loadDefaultPBCNumKeys()
-{
-    KConfig* c = kapp->config();
-    c->setGroup( "Video project settings" );
-    return c->readBoolEntry("Use numeric keys to navigate chapters", false);
-}
-
-int K3bVcdOptions::loadDefaultPBCPlayTime()
-{
-    KConfig* c = kapp->config();
-    c->setGroup( "Video project settings" );
-    return c->readNumEntry( "Play each Sequence/Segment", 1 );
-}
-
-int K3bVcdOptions::loadDefaultPBCWaitTime()
-{
-    KConfig* c = kapp->config();
-    c->setGroup( "Video project settings" );
-    return c->readNumEntry( "Time to wait after each Sequence/Segment", 2 );
-}
-
 
 K3bVcdOptions K3bVcdOptions::defaults()
 {

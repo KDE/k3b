@@ -49,6 +49,7 @@ class K3bVcdTrackDialog : public KDialogBase
     private slots:
         void slotPlayTimeChanged( int );
         void slotWaitTimeChanged( int );
+        void slotPbcToggled( bool );
 
     private:
         K3bVcdDoc* m_vcdDoc;
@@ -91,8 +92,8 @@ class K3bVcdTrackDialog : public KDialogBase
         K3bCutComboBox* m_pbc_default;
         K3bCutComboBox* m_comboAfterTimeout;
 
-				QCheckBox* m_check_reactivity;
-				QCheckBox* m_check_pbc;
+        QCheckBox* m_check_reactivity;
+        QCheckBox* m_check_pbc;
         QCheckBox* m_check_usekeys;
         QCheckBox* m_check_overwritekeys;
         K3bListView* m_list_keys;

@@ -321,8 +321,10 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
     }
 
     addSubElement( doc, elemSelection, "wait", track->getWaitTime() );
-    // TODO: jump-timing
-    addSubElement( doc, elemSelection, "loop", track->getPlayTime() );
+    QDomElement loop = addSubElement( doc, elemSelection, "loop", track->getPlayTime() );
+    if ( track->Reactivity() )
+        loop.setAttribute( "jump-timing", "delayed");
+
     addSubElement( doc, elemSelection, "play-item" ).setAttribute( "ref", QString( "%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
 
 }
