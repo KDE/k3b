@@ -47,6 +47,7 @@
 #include <qtextstream.h>
 #include <qclipboard.h>
 #include <qapplication.h>
+#include <qcursor.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -99,6 +100,9 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
   debugView->append( "QT Version:  " + QString(qVersion()) + "\n" );
   debugView->append( "\n" );
 
+  // the following may take some time
+  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+
   // add the debugging output
   for( QMap<QString, QStringList>::Iterator itMap = map.begin(); itMap != map.end(); ++itMap ) {
     QStringList& list = itMap.data();
@@ -112,6 +116,8 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
     }
     debugView->append( "\n" );
   }
+
+  QApplication::restoreOverrideCursor();
 
   resize( 600, 300 );
 }

@@ -156,6 +156,8 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
   if( m_device )
     m_device->close();
 
+  cleanup();
+
   if( m_canceled )
     return;
 
@@ -200,8 +202,6 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
     emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
     emit finished( false );
   }
-
-  cleanup();
 }
 
 
