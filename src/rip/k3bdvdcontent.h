@@ -35,6 +35,8 @@ public:
     void setMode( const QString& i) { m_smode = i; };
     void setRes( const QString& );
     void setAspect( const QString& );
+    void setAspectExtension( const QString& s){ m_saspectExtension = s; };
+    void setAspectAnamorph( const QString& s){ m_saspectAnamorph = s; }
     void setTime( const QString& );
     void setVideo( const QString& i) { m_saudio = i; };
     void setAudio( const QString& i) { m_svideo = i; };
@@ -52,16 +54,18 @@ public:
     void setTitleSet( int t ){ m_titleset = t; };
 
     QString getInput() { return m_sinput; };
-    QString getMode() { return m_smode; };
+    QString getMode() { return m_smode.upper(); };
     QString getStrRes() { return m_sres; };
     QString getStrAspect() { return m_saspect; };
+    QString getStrAspectAnamorph() { return m_saspectAnamorph; };
+    QString getStrAspectExtension() { return m_saspectExtension; };
     QString getStrTime() { return m_time.toString(); };
     QString getVideo() { return m_svideo; };
     QString getAudio() { return m_saudio; };
     QString getStrFrames() { return m_sframes; };
     QString getStrFramerate() { return m_sframerate; };
     QStringList* getAudioList() { return &m_audioList; };
-    QStringList* getSelectedAngle() { return &m_selectedAngle; };
+    QStringList* getAngles() { return &m_selectedAngle; };
     QStringList* getSelectedChapter() { return &m_selectedChapters; };
 
     QSize& getRes() { return m_res; };
@@ -84,6 +88,8 @@ public:
 private:
     // view strings
     QString m_sinput, m_smode, m_sres, m_saspect, m_stime;
+    QString m_saspectAnamorph;
+    QString m_saspectExtension;
     QString m_svideo, m_saudio, m_sframes, m_sframerate;
     QStringList m_audioList;
     // content values
