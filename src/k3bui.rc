@@ -21,7 +21,6 @@
   	<Action name="view_contents" append="show_merge" />
   	<Action name="view_audio_player" append="show_merge" />
   	<Action name="view_document_header" append="show_merge" />
-	<Action name="settings_k3bsetup" />
   </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar">
