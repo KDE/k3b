@@ -131,7 +131,7 @@ void K3bCdrdaoParser::parseCdrdaoMessage(QSocket *comSock) {
         // move the read-index forward to the beginnig of the most recent message
         count = ( msgs-1 ) * ( sizeof(msgSync)+sizeof(struct ProgressMsg) );
         comSock->at(count);
-        kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skiped" << endl;
+        kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
     }
     while (count < avail) {
         state = 0;
