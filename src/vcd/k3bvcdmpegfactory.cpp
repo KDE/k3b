@@ -18,6 +18,7 @@
 // TODO: more mpeg functions (Size, Frames ...), cleanup, FILE -> QFile
 
 #include "k3bvcdmpegfactory.h"
+#include "k3bvcdmpegfactory.moc"
 
 // QT-includes
 #include <qstring.h>
