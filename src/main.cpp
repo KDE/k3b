@@ -21,54 +21,55 @@
 
 #include "k3b.h"
 
-static const char *description =
-	I18N_NOOP("K3b is a cd burning program that has two aims: usability and as much features as possible.");
-// INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
+static const char *description = 
+I18N_NOOP("K3b is a cd burning program that has two aims: 
+usability and as much features as possible.");
 	
 	
 static KCmdLineOptions options[] =
-{
-  { "+[File]", I18N_NOOP("file to open"), 0 },
-  { 0, 0, 0 }
-  // INSERT YOUR COMMANDLINE OPTIONS HERE
-};
+  {
+    { "+[File]", I18N_NOOP("file to open"), 0 },
+    { 0, 0, 0 }
+    // INSERT YOUR COMMANDLINE OPTIONS HERE
+  };
 
 int main(int argc, char *argv[])
 {
 
-	KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-		VERSION, description, KAboutData::License_GPL,
-		"(c) 2001, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
-	aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@informatik.uni-freiburg.de");
+  KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
+			VERSION, description, KAboutData::License_GPL,
+			"(c) 2001, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
+  aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@informatik.uni-freiburg.de");
+  aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Developer"), "tfroescher@gmx.net");
 	
-	KCmdLineArgs::init( argc, argv, &aboutData );
-	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+  KCmdLineArgs::init( argc, argv, &aboutData );
+  KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
   KApplication app;
  
   if (app.isRestored())
-  {
-    RESTORE(K3bApp);
-  }
+    {
+      RESTORE(K3bApp);
+    }
   else 
-  {
-    K3bApp *testmdi = new K3bApp();
-    app.setMainWidget(testmdi);
-    testmdi->show();
-    testmdi->init();
+    {
+      K3bApp *testmdi = new K3bApp();
+      app.setMainWidget(testmdi);
+      testmdi->show();
+      testmdi->init();
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+      KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		
-		if (args->count())
-		{
-			for(int i=0;i<args->count();i++)
-			{
-				testmdi->openDocumentFile(args->arg(i));
-			}
-		}
+      if (args->count())
+	{
+	  for(int i=0;i<args->count();i++)
+	    {
+	      testmdi->openDocumentFile(args->arg(i));
+	    }
+	}
 		
-		args->clear();
-  }
+      args->clear();
+    }
 
   return app.exec();
 }  

@@ -33,38 +33,41 @@ class K3bProjectBurnDialog : public KDialogBase
 {
    Q_OBJECT
 
-public:
-	K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
-	~K3bProjectBurnDialog();
+ public:
+   K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
+   ~K3bProjectBurnDialog();
 
-	enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
+   enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
 
-	/** shows the dialog with exec()
-		@param burn If true the dialog shows the Burn-button */
-	int exec( bool burn );
+   /** shows the dialog with exec()
+       @param burn If true the dialog shows the Burn-button */
+   int exec( bool burn );
 
-	K3bDoc* doc() const { return m_doc; }
+   K3bDoc* doc() const { return m_doc; }
 	
-protected slots:
-	virtual void slotUser1();
-	virtual void slotOk();
-	virtual void slotCancel();
-	void slotRefreshWriterSpeeds();
+   protected slots:
+     virtual void slotUser1();
+   virtual void slotOk();
+   virtual void slotCancel();
+   void slotRefreshWriterSpeeds();
 
-protected:
-	QGroupBox* writerBox() const { return m_groupWriter; }
-	int writerSpeed() const;
-	K3bDevice* writerDevice() const;
-	
-	virtual void saveSettings() = 0;
-	virtual void readSettings();
-	
-private:
-	QGroupBox* m_groupWriter;
-    QComboBox* m_comboSpeed;
-    QComboBox* m_comboWriter;
+ signals:
+   void writerChanged();
 
-	K3bDoc* m_doc;
+ protected:
+   QGroupBox* writerBox() const { return m_groupWriter; }
+   int writerSpeed() const;
+   K3bDevice* writerDevice() const;
+	
+   virtual void saveSettings() = 0;
+   virtual void readSettings();
+	
+ private:
+   QGroupBox* m_groupWriter;
+   QComboBox* m_comboSpeed;
+   QComboBox* m_comboWriter;
+
+   K3bDoc* m_doc;
 };
 
 #endif

@@ -36,83 +36,87 @@ class K3bDataDoc;
   *@author Sebastian Trueg
   */
 
-class K3bDataBurnDialog : public K3bProjectBurnDialog  {
+class K3bDataBurnDialog : public K3bProjectBurnDialog  
+{
+ Q_OBJECT
 
-   Q_OBJECT
+ public:
+   K3bDataBurnDialog(K3bDataDoc*, QWidget *parent=0, const char *name=0, bool modal = true );
+   ~K3bDataBurnDialog();
 
-public:
-	K3bDataBurnDialog(K3bDataDoc*, QWidget *parent=0, const char *name=0, bool modal = true );
-	~K3bDataBurnDialog();
+ protected:
+   void setupBurnTab( QFrame* frame );
+   void setupAdvancedTab( QFrame* frame );
+   void setupSettingsTab( QFrame* frame );
 
-protected:
-	void setupBurnTab( QFrame* frame );
-	void setupAdvancedTab( QFrame* frame );
-	void setupSettingsTab( QFrame* frame );
+   // --- general tab -------------------------	
+   QLabel* TextLabel1;
+   QLabel* TextLabel1_2;
+   QGroupBox* m_groupTempDir;
+   QLabel* TextLabel1_3;
+   QLabel* TextLabel2;
+   QLabel* TextLabel4;
+   QLabel* m_labelCdSize;
+   QLabel* m_labelFreeSpace;
+   QLineEdit* m_editDirectory;
+   QToolButton* m_buttonFindIsoImage;
+   QGroupBox* m_groupOptions;
+   QCheckBox* m_checkDummy;
+   QCheckBox* m_checkOnTheFly;
+   QCheckBox* m_checkOnlyCreateImage;
+   QCheckBox* m_checkDeleteImage;
+   QCheckBox* m_checkDao;
+   QCheckBox* m_checkBurnProof;
+   // ----------------------------------------------
 
-	// --- general tab -------------------------	
-    QLabel* TextLabel1;
-    QLabel* TextLabel1_2;
-    QGroupBox* m_groupTempDir;
-    QLabel* TextLabel1_3;
-    QLabel* TextLabel2;
-    QLabel* TextLabel4;
-    QLabel* m_labelCdSize;
-    QLabel* m_labelFreeSpace;
-    QLineEdit* m_editDirectory;
-    QToolButton* m_buttonFindIsoImage;
-    QGroupBox* m_groupOptions;
-    QCheckBox* m_checkDummy;
-    QCheckBox* m_checkOnTheFly;
-    QCheckBox* m_checkOnlyCreateImage;
-    QCheckBox* m_checkDeleteImage;
-    QCheckBox* m_checkDao;
-	// ----------------------------------------------
-
-	// --- settings tab ---------------------------
-    QLineEdit* m_editVolumeID;
-    QLineEdit* m_editPublisher;
-    QLineEdit* m_editPreparer;
-    QCheckBox* m_checkCreateRR;
-    QCheckBox* m_checkCreateJoliet;
-    QButtonGroup* m_groupWhiteSpace;
-    QRadioButton* m_radioSpaceLeave;
-    QRadioButton* m_radioSpaceReplace;
-    QRadioButton* m_radioSpaceStrip;
-    QRadioButton* m_radioSpaceExtended;
-	// ----------------------------------------------
+   // --- settings tab ---------------------------
+   QLineEdit* m_editVolumeID;
+   QLineEdit* m_editPublisher;
+   QLineEdit* m_editPreparer;
+   QCheckBox* m_checkCreateRR;
+   QCheckBox* m_checkCreateJoliet;
+   QButtonGroup* m_groupWhiteSpace;
+   QRadioButton* m_radioSpaceLeave;
+   QRadioButton* m_radioSpaceReplace;
+   QRadioButton* m_radioSpaceStrip;
+   QRadioButton* m_radioSpaceExtended;
+   // ----------------------------------------------
 	
-	// --- advanced tab -------------------------
-    QPushButton* m_buttonSaveAsDefault;
-    QGroupBox* m_groupPreSettings;
-    QComboBox* m_comboPreSettings;
-    QFrame* frameSettings;
-    QButtonGroup* m_groupIsoLevel;
-    QRadioButton* m_radioIsoLevel1;
-    QRadioButton* m_radioIsoLevel2;
-    QRadioButton* m_radioIsoLevel3;
-    QCheckBox* m_checkNoDeepDirRel;
-    QCheckBox* m_checkPadding;
-    QCheckBox* m_checkHideRR_MOVED;
-    QCheckBox* m_checkCreateTRANS_TBL;
-    QCheckBox* m_checkHideTRANS_TBL;
-    QCheckBox* m_checkUntranslatedNames;
-    QCheckBox* m_checkAllow31;
-    QCheckBox* m_checkMaxNames;
-    QCheckBox* m_checkBeginPeriod;
-    QCheckBox* m_checkRelaxedNames;
-    QCheckBox* m_checkOmitVersion;
-    QCheckBox* m_checkNoISOTrans;
-    QCheckBox* m_checkMultiDot;
-    QCheckBox* m_checkLowercase;
-	// ---------------------------------------------
+   // --- advanced tab -------------------------
+   QPushButton* m_buttonSaveAsDefault;
+   QGroupBox* m_groupPreSettings;
+   QComboBox* m_comboPreSettings;
+   QFrame* frameSettings;
+   QButtonGroup* m_groupIsoLevel;
+   QRadioButton* m_radioIsoLevel1;
+   QRadioButton* m_radioIsoLevel2;
+   QRadioButton* m_radioIsoLevel3;
+   QCheckBox* m_checkNoDeepDirRel;
+   QCheckBox* m_checkPadding;
+   QCheckBox* m_checkHideRR_MOVED;
+   QCheckBox* m_checkCreateTRANS_TBL;
+   QCheckBox* m_checkHideTRANS_TBL;
+   QCheckBox* m_checkUntranslatedNames;
+   QCheckBox* m_checkAllow31;
+   QCheckBox* m_checkMaxNames;
+   QCheckBox* m_checkBeginPeriod;
+   QCheckBox* m_checkRelaxedNames;
+   QCheckBox* m_checkOmitVersion;
+   QCheckBox* m_checkNoISOTrans;
+   QCheckBox* m_checkMultiDot;
+   QCheckBox* m_checkLowercase;
+   // ---------------------------------------------
 	
-protected slots:
-  void saveSettings();
-  void readSettings();
-  void slotFindIsoImage();
-  void slotLoadPreSettings( const QString& );
-  void slotSaveDefaults();
-  void slotSelectCustom();
+ protected slots:
+   void saveSettings();
+   void readSettings();
+   void slotFindIsoImage();
+   void slotLoadPreSettings( const QString& );
+   void slotSaveDefaults();
+   void slotSelectCustom();
+   void slotWriterChanged();
+   void slotUpdateFreeTempSpace( const QString& );
+   void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
 };
 
 #endif

@@ -74,7 +74,8 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
     m_groupWriterLayout->setColStretch( 0 , 1);
     // --------------------------------------------------------- device group ---
 
-   	connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
+    connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
+    connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
 }
 
 K3bProjectBurnDialog::~K3bProjectBurnDialog(){

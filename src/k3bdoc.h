@@ -113,6 +113,7 @@ class K3bDoc : public QObject
   bool dao() const { return m_dao; }
   bool dummy() const { return m_dummy; }
   bool onTheFly() const { return m_onTheFly; }
+  bool burnProof() const { return m_burnProof; }
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
   virtual int size() const = 0;
@@ -139,6 +140,7 @@ class K3bDoc : public QObject
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setSpeed( int speed );
   void setBurner( K3bDevice* dev );
+  void setBurnProof( bool b ) { m_burnProof = b; }
 	
  signals:
 	void errorMessage( const QString& );
@@ -172,6 +174,7 @@ class K3bDoc : public QObject
   bool m_dao;
   bool m_dummy;
   bool m_onTheFly;
+  bool m_burnProof;
   int  m_speed;
 };
 

@@ -39,16 +39,18 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
+#include <kdiskfreesp.h>
+
 
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
-	: K3bProjectBurnDialog( _doc, parent, name, modal )
+  : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-	setupBurnTab( addPage( i18n("Burning") ) );
-	setupSettingsTab( addPage( i18n("Settings") ) );
-	setupAdvancedTab( addPage( i18n("Advanced") ) );
+  setupBurnTab( addPage( i18n("Burning") ) );
+  setupSettingsTab( addPage( i18n("Settings") ) );
+  setupAdvancedTab( addPage( i18n("Advanced") ) );
 	
-	readSettings();
-	slotLoadPreSettings( i18n("K3b Default" ) );
+  readSettings();
+  slotLoadPreSettings( i18n("K3b Default" ) );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -57,574 +59,608 @@ K3bDataBurnDialog::~K3bDataBurnDialog(){
 
 void K3bDataBurnDialog::saveSettings()
 {
-	doc()->setDao( m_checkDao->isChecked() );
-	doc()->setDummy( m_checkDummy->isChecked() );
-	doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
-	((K3bDataDoc*)doc())->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-	((K3bDataDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
+  doc()->setDao( m_checkDao->isChecked() );
+  doc()->setDummy( m_checkDummy->isChecked() );
+  doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
+  doc()->setBurnProof( m_checkBurnProof->isChecked() );
+  ((K3bDataDoc*)doc())->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+  ((K3bDataDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
 			
-	// -- saving current speed --------------------------------------
-	doc()->setSpeed( writerSpeed() );
+  // -- saving current speed --------------------------------------
+  doc()->setSpeed( writerSpeed() );
 	
-	// -- saving current device --------------------------------------
-	doc()->setBurner( writerDevice() );
+  // -- saving current device --------------------------------------
+  doc()->setBurner( writerDevice() );
 	
-	// -- saving mkisofs-options -------------------------------------
-	((K3bDataDoc*)doc())->setCreateRockRidge( m_checkCreateRR->isChecked() );
-	((K3bDataDoc*)doc())->setCreateJoliet( m_checkCreateJoliet->isChecked() );
-	((K3bDataDoc*)doc())->setISOallowLowercase( m_checkLowercase->isChecked() );
-	((K3bDataDoc*)doc())->setISOallowPeriodAtBegin( m_checkBeginPeriod->isChecked() );
-	((K3bDataDoc*)doc())->setISOallow31charFilenames( m_checkAllow31->isChecked() );
-	((K3bDataDoc*)doc())->setISOomitVersionNumbers( m_checkOmitVersion->isChecked() );
-	((K3bDataDoc*)doc())->setISOmaxFilenameLength( m_checkMaxNames->isChecked() );
-	((K3bDataDoc*)doc())->setISOrelaxedFilenames( m_checkRelaxedNames->isChecked() );
-	((K3bDataDoc*)doc())->setISOnoIsoTranslate( m_checkNoISOTrans->isChecked() );
-	((K3bDataDoc*)doc())->setISOallowMultiDot( m_checkMultiDot->isChecked() );
-	((K3bDataDoc*)doc())->setISOuntranslatedFilenames( m_checkUntranslatedNames->isChecked() );
-	((K3bDataDoc*)doc())->setNoDeepDirectoryRelocation( m_checkNoDeepDirRel->isChecked() );
-//	((K3bDataDoc*)doc())->setFollowSymbolicLinks( m_check->isChecked() );
-	((K3bDataDoc*)doc())->setHideRR_MOVED( m_checkHideRR_MOVED->isChecked() );
-	((K3bDataDoc*)doc())->setCreateTRANS_TBL( m_checkCreateTRANS_TBL->isChecked() );
-	((K3bDataDoc*)doc())->setHideTRANS_TBL( m_checkHideTRANS_TBL->isChecked() );
-	((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
+  // -- saving mkisofs-options -------------------------------------
+  ((K3bDataDoc*)doc())->setCreateRockRidge( m_checkCreateRR->isChecked() );
+  ((K3bDataDoc*)doc())->setCreateJoliet( m_checkCreateJoliet->isChecked() );
+  ((K3bDataDoc*)doc())->setISOallowLowercase( m_checkLowercase->isChecked() );
+  ((K3bDataDoc*)doc())->setISOallowPeriodAtBegin( m_checkBeginPeriod->isChecked() );
+  ((K3bDataDoc*)doc())->setISOallow31charFilenames( m_checkAllow31->isChecked() );
+  ((K3bDataDoc*)doc())->setISOomitVersionNumbers( m_checkOmitVersion->isChecked() );
+  ((K3bDataDoc*)doc())->setISOmaxFilenameLength( m_checkMaxNames->isChecked() );
+  ((K3bDataDoc*)doc())->setISOrelaxedFilenames( m_checkRelaxedNames->isChecked() );
+  ((K3bDataDoc*)doc())->setISOnoIsoTranslate( m_checkNoISOTrans->isChecked() );
+  ((K3bDataDoc*)doc())->setISOallowMultiDot( m_checkMultiDot->isChecked() );
+  ((K3bDataDoc*)doc())->setISOuntranslatedFilenames( m_checkUntranslatedNames->isChecked() );
+  ((K3bDataDoc*)doc())->setNoDeepDirectoryRelocation( m_checkNoDeepDirRel->isChecked() );
+  //	((K3bDataDoc*)doc())->setFollowSymbolicLinks( m_check->isChecked() );
+  ((K3bDataDoc*)doc())->setHideRR_MOVED( m_checkHideRR_MOVED->isChecked() );
+  ((K3bDataDoc*)doc())->setCreateTRANS_TBL( m_checkCreateTRANS_TBL->isChecked() );
+  ((K3bDataDoc*)doc())->setHideTRANS_TBL( m_checkHideTRANS_TBL->isChecked() );
+  ((K3bDataDoc*)doc())->setPadding( m_checkPadding->isChecked() );
 	
-	((K3bDataDoc*)doc())->setVolumeID( m_editVolumeID->text() );
-	((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
-	((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
-	// ------------------------------------- saving mkisofs-options --
+  ((K3bDataDoc*)doc())->setVolumeID( m_editVolumeID->text() );
+  ((K3bDataDoc*)doc())->setPublisher( m_editPublisher->text() );
+  ((K3bDataDoc*)doc())->setPreparer( m_editPreparer->text() );
+  // ------------------------------------- saving mkisofs-options --
 
-	// save iso-level
-	qDebug("(K3bDataBurnDialog) saving iso-level");
-	if( m_groupIsoLevel->selected() == m_radioIsoLevel3 )
-	  ((K3bDataDoc*)doc())->setISOLevel( 3 );
-	else if( m_groupIsoLevel->selected() == m_radioIsoLevel2 )
-	  ((K3bDataDoc*)doc())->setISOLevel( 2 );
-	else
-	  ((K3bDataDoc*)doc())->setISOLevel( 1 );
+  // save iso-level
+  qDebug("(K3bDataBurnDialog) saving iso-level");
+  if( m_groupIsoLevel->selected() == m_radioIsoLevel3 )
+    ((K3bDataDoc*)doc())->setISOLevel( 3 );
+  else if( m_groupIsoLevel->selected() == m_radioIsoLevel2 )
+    ((K3bDataDoc*)doc())->setISOLevel( 2 );
+  else
+    ((K3bDataDoc*)doc())->setISOLevel( 1 );
 	
-	// save whitespace-treatment
-	qDebug("(K3bDataBurnDialog) saving whitespace-treatment");
-	if( m_groupWhiteSpace->selected() == m_radioSpaceStrip )
-		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::strip );
-	else if( m_groupWhiteSpace->selected() == m_radioSpaceExtended )
-		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::extendedStrip );
-	else if( m_groupWhiteSpace->selected() == m_radioSpaceReplace )
-		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::convertToUnderScore );
-	else
-		((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::normal );
+  // save whitespace-treatment
+  qDebug("(K3bDataBurnDialog) saving whitespace-treatment");
+  if( m_groupWhiteSpace->selected() == m_radioSpaceStrip )
+    ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::strip );
+  else if( m_groupWhiteSpace->selected() == m_radioSpaceExtended )
+    ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::extendedStrip );
+  else if( m_groupWhiteSpace->selected() == m_radioSpaceReplace )
+    ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::convertToUnderScore );
+  else
+    ((K3bDataDoc*)doc())->setWhiteSpaceTreatment( K3bDataDoc::normal );
 }
 
 
 void K3bDataBurnDialog::readSettings()
 {
-	// we do not read the mkisofs-options!!!
+  // we do not read the mkisofs-options!!!
 
-	m_labelCdSize->setText( QString("%1 MB").arg(doc()->size()) );
+  m_labelCdSize->setText( QString().sprintf( " %.2f MB", ((float)doc()->size())/1024.0/1024.0 ) );
 	
-	// read temp dir
-	k3bMain()->config()->setGroup( "General Options" );
-	m_editDirectory->setText( k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) + "image.iso" );
+  // read temp dir
+  k3bMain()->config()->setGroup( "General Options" );
+  QString tempdir = k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+  m_editDirectory->setText( tempdir + "image.iso" );
+  slotUpdateFreeTempSpace( tempdir );
 	
-	m_checkDao->setChecked( doc()->dao() );
-	m_checkDummy->setChecked( doc()->dummy() );
-	m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
-	m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
+  m_checkDao->setChecked( doc()->dao() );
+  m_checkDummy->setChecked( doc()->dummy() );
+  m_checkBurnProof->setChecked( doc()->burnProof() );
+  m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
+  m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
 	
-	m_editVolumeID->setText(  ((K3bDataDoc*)doc())->volumeID() );
-	m_editPublisher->setText(  ((K3bDataDoc*)doc())->publisher() );
-	m_editPreparer->setText(  ((K3bDataDoc*)doc())->preparer() );
+  m_editVolumeID->setText(  ((K3bDataDoc*)doc())->volumeID() );
+  m_editPublisher->setText(  ((K3bDataDoc*)doc())->publisher() );
+  m_editPreparer->setText(  ((K3bDataDoc*)doc())->preparer() );
 	
-	K3bProjectBurnDialog::readSettings();
+  K3bProjectBurnDialog::readSettings();
 }
 
 
 void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 {
-    QGridLayout* frameLayout = new QGridLayout( frame );
-    frameLayout->setSpacing( spacingHint() );
-    frameLayout->setMargin( marginHint() );
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
 
-	writerBox()->reparent( frame, QPoint(0,0) );
-    frameLayout->addMultiCellWidget( writerBox(), 0, 0, 0, 1 );
+  writerBox()->reparent( frame, QPoint(0,0) );
+  frameLayout->addMultiCellWidget( writerBox(), 0, 0, 0, 1 );
 
-    m_groupTempDir = new QGroupBox( frame, "m_groupTempDir" );
-    m_groupTempDir->setFrameShape( QGroupBox::Box );
-    m_groupTempDir->setFrameShadow( QGroupBox::Sunken );
-    m_groupTempDir->setTitle( i18n( "Temp Directory" ) );
-    m_groupTempDir->setColumnLayout(0, Qt::Vertical );
-    m_groupTempDir->layout()->setSpacing( 0 );
-    m_groupTempDir->layout()->setMargin( 0 );
-    QGridLayout* m_groupTempDirLayout = new QGridLayout( m_groupTempDir->layout() );
-    m_groupTempDirLayout->setAlignment( Qt::AlignTop );
-    m_groupTempDirLayout->setSpacing( spacingHint() );
-    m_groupTempDirLayout->setMargin( marginHint() );
+  m_groupTempDir = new QGroupBox( frame, "m_groupTempDir" );
+  m_groupTempDir->setFrameShape( QGroupBox::Box );
+  m_groupTempDir->setFrameShadow( QGroupBox::Sunken );
+  m_groupTempDir->setTitle( i18n( "Temp Directory" ) );
+  m_groupTempDir->setColumnLayout(0, Qt::Vertical );
+  m_groupTempDir->layout()->setSpacing( 0 );
+  m_groupTempDir->layout()->setMargin( 0 );
+  QGridLayout* m_groupTempDirLayout = new QGridLayout( m_groupTempDir->layout() );
+  m_groupTempDirLayout->setAlignment( Qt::AlignTop );
+  m_groupTempDirLayout->setSpacing( spacingHint() );
+  m_groupTempDirLayout->setMargin( marginHint() );
 
-    TextLabel1_3 = new QLabel( m_groupTempDir, "TextLabel1_3" );
-    TextLabel1_3->setText( i18n( "Write Image file to" ) );
+  TextLabel1_3 = new QLabel( m_groupTempDir, "TextLabel1_3" );
+  TextLabel1_3->setText( i18n( "Write Image file to" ) );
 
-    m_groupTempDirLayout->addWidget( TextLabel1_3, 0, 0 );
+  m_groupTempDirLayout->addWidget( TextLabel1_3, 0, 0 );
 
-    TextLabel2 = new QLabel( m_groupTempDir, "TextLabel2" );
-    TextLabel2->setText( i18n( "Free space on device" ) );
+  TextLabel2 = new QLabel( m_groupTempDir, "TextLabel2" );
+  TextLabel2->setText( i18n( "Free space on device" ) );
 
-    m_groupTempDirLayout->addWidget( TextLabel2, 2, 0 );
+  m_groupTempDirLayout->addWidget( TextLabel2, 2, 0 );
 
-    TextLabel4 = new QLabel( m_groupTempDir, "TextLabel4" );
-    TextLabel4->setText( i18n( "Size of CD" ) );
+  TextLabel4 = new QLabel( m_groupTempDir, "TextLabel4" );
+  TextLabel4->setText( i18n( "Size of CD" ) );
 
-    m_groupTempDirLayout->addWidget( TextLabel4, 3, 0 );
+  m_groupTempDirLayout->addWidget( TextLabel4, 3, 0 );
 
-    m_labelCdSize = new QLabel( m_groupTempDir, "m_labelCdSize" );
-    m_labelCdSize->setText( i18n( "0.0 MB" ) );
-    m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelCdSize = new QLabel( m_groupTempDir, "m_labelCdSize" );
+  m_labelCdSize->setText( i18n( "0.0 MB" ) );
+  m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-    m_groupTempDirLayout->addMultiCellWidget( m_labelCdSize, 3, 3, 1, 2 );
+  m_groupTempDirLayout->addMultiCellWidget( m_labelCdSize, 3, 3, 1, 2 );
 
-    m_labelFreeSpace = new QLabel( m_groupTempDir, "m_labelFreeSpace" );
-    m_labelFreeSpace->setText( i18n( "0.0 MB" ) );
-    m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelFreeSpace = new QLabel( m_groupTempDir, "m_labelFreeSpace" );
+  m_labelFreeSpace->setText( i18n( "0.0 MB" ) );
+  m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-    m_groupTempDirLayout->addMultiCellWidget( m_labelFreeSpace, 2, 2, 1, 2 );
+  m_groupTempDirLayout->addMultiCellWidget( m_labelFreeSpace, 2, 2, 1, 2 );
 
-    m_editDirectory = new QLineEdit( m_groupTempDir, "m_editDirectory" );
+  m_editDirectory = new QLineEdit( m_groupTempDir, "m_editDirectory" );
 
-    m_groupTempDirLayout->addMultiCellWidget( m_editDirectory, 1, 1, 0, 1 );
+  m_groupTempDirLayout->addMultiCellWidget( m_editDirectory, 1, 1, 0, 1 );
 
-    m_buttonFindIsoImage = new QToolButton( m_groupTempDir, "m_buttonFindDir" );
-    m_buttonFindIsoImage->setText( i18n( "..." ) );
+  m_buttonFindIsoImage = new QToolButton( m_groupTempDir, "m_buttonFindDir" );
+  m_buttonFindIsoImage->setText( i18n( "..." ) );
 
-    m_groupTempDirLayout->addWidget( m_buttonFindIsoImage, 1, 2 );
+  m_groupTempDirLayout->addWidget( m_buttonFindIsoImage, 1, 2 );
 
-    frameLayout->addWidget( m_groupTempDir, 1, 1 );
+  frameLayout->addWidget( m_groupTempDir, 1, 1 );
 
-    m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
-    m_groupOptions->setTitle( i18n( "Options" ) );
-    m_groupOptions->setColumnLayout(0, Qt::Vertical );
-    m_groupOptions->layout()->setSpacing( 0 );
-    m_groupOptions->layout()->setMargin( 0 );
-    QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
-    m_groupOptionsLayout->setAlignment( Qt::AlignTop );
-    m_groupOptionsLayout->setSpacing( spacingHint() );
-    m_groupOptionsLayout->setMargin( marginHint() );
+  m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
+  m_groupOptions->setTitle( i18n( "Options" ) );
+  m_groupOptions->setColumnLayout(0, Qt::Vertical );
+  m_groupOptions->layout()->setSpacing( 0 );
+  m_groupOptions->layout()->setMargin( 0 );
+  QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
+  m_groupOptionsLayout->setAlignment( Qt::AlignTop );
+  m_groupOptionsLayout->setSpacing( spacingHint() );
+  m_groupOptionsLayout->setMargin( marginHint() );
 
-    m_checkDummy = new QCheckBox( m_groupOptions, "m_checkDummy" );
-    m_checkDummy->setText( i18n( "Simulate writing" ) );
-    m_groupOptionsLayout->addWidget( m_checkDummy );
+  m_checkDummy = new QCheckBox( m_groupOptions, "m_checkDummy" );
+  m_checkDummy->setText( i18n( "Simulate writing" ) );
+  m_groupOptionsLayout->addWidget( m_checkDummy );
 
-    m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
-    m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-    m_groupOptionsLayout->addWidget( m_checkOnTheFly );
+  m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
+  m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
+  m_groupOptionsLayout->addWidget( m_checkOnTheFly );
 
-    m_checkOnlyCreateImage = new QCheckBox( m_groupOptions, "m_checkOnlyCreateImage" );
-    m_checkOnlyCreateImage->setText( i18n( "Only create image" ) );
-    m_groupOptionsLayout->addWidget( m_checkOnlyCreateImage );
+  m_checkOnlyCreateImage = new QCheckBox( m_groupOptions, "m_checkOnlyCreateImage" );
+  m_checkOnlyCreateImage->setText( i18n( "Only create image" ) );
+  m_groupOptionsLayout->addWidget( m_checkOnlyCreateImage );
 
-    m_checkDeleteImage = new QCheckBox( m_groupOptions, "m_checkDeleteImage" );
-    m_checkDeleteImage->setText( i18n( "Delete image" ) );
-    m_groupOptionsLayout->addWidget( m_checkDeleteImage );
+  m_checkDeleteImage = new QCheckBox( m_groupOptions, "m_checkDeleteImage" );
+  m_checkDeleteImage->setText( i18n( "Delete image" ) );
+  m_groupOptionsLayout->addWidget( m_checkDeleteImage );
 
-    m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-    m_checkDao->setText( i18n( "Disc at once" ) );
-    m_groupOptionsLayout->addWidget( m_checkDao );
+  m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
+  m_checkDao->setText( i18n( "Disc at once" ) );
+  m_groupOptionsLayout->addWidget( m_checkDao );
 
-    frameLayout->addWidget( m_groupOptions, 1, 0 );
+  m_checkBurnProof = new QCheckBox( m_groupOptions, "m_checkBurnProof" );
+  m_checkBurnProof->setText( i18n( "use BURN-PROOF" ) );
+  m_groupOptionsLayout->addWidget( m_checkBurnProof );
 
-    // signals and slots connections
-    connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkDeleteImage, SLOT( setDisabled(bool) ) );
-    connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_groupTempDir, SLOT( setDisabled(bool) ) );
-    connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkOnlyCreateImage, SLOT( setDisabled(bool) ) );
+  frameLayout->addWidget( m_groupOptions, 1, 0 );
+
+  // signals and slots connections
+  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkDeleteImage, SLOT( setDisabled(bool) ) );
+  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_groupTempDir, SLOT( setDisabled(bool) ) );
+  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkOnlyCreateImage, SLOT( setDisabled(bool) ) );
 
 
-    m_groupTempDirLayout->setColStretch( 1 , 1);
-    frameLayout->setRowStretch( 1, 1 );
-	frameLayout->setColStretch( 1, 1 );
+  m_groupTempDirLayout->setColStretch( 1 , 1);
+  frameLayout->setRowStretch( 1, 1 );
+  frameLayout->setColStretch( 1, 1 );
 
 
-    connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotFindIsoImage()) );
+  connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotFindIsoImage()) );
+  connect( this, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace(const QString&)) );
+
+  m_checkBurnProof->setEnabled( writerDevice()->burnproof );
 }
 
 
 void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
 {
-    QGridLayout* frameLayout = new QGridLayout( frame );
-    frameLayout->setSpacing( spacingHint() );
-    frameLayout->setMargin( marginHint() );
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
 
-    m_buttonSaveAsDefault = new QPushButton( frame, "m_buttonSaveAsDefault" );
-    m_buttonSaveAsDefault->setText( i18n( "Save as default" ) );
-    QToolTip::add(  m_buttonSaveAsDefault, i18n( "Saves the current settings into \"K3b Default\"" ) );
+  m_buttonSaveAsDefault = new QPushButton( frame, "m_buttonSaveAsDefault" );
+  m_buttonSaveAsDefault->setText( i18n( "Save as default" ) );
+  QToolTip::add(  m_buttonSaveAsDefault, i18n( "Saves the current settings into \"K3b Default\"" ) );
 
-    frameLayout->addWidget( m_buttonSaveAsDefault, 0, 2 );
+  frameLayout->addWidget( m_buttonSaveAsDefault, 0, 2 );
 
-    m_groupPreSettings = new QGroupBox( frame, "m_groupPreSettings" );
-    m_groupPreSettings->setTitle( i18n( "Predefined Settings" ) );
-    m_groupPreSettings->setColumnLayout(0, Qt::Vertical );
-    m_groupPreSettings->layout()->setSpacing( 0 );
-    m_groupPreSettings->layout()->setMargin( 0 );
-    QVBoxLayout* m_groupPreSettingsLayout = new QVBoxLayout( m_groupPreSettings->layout() );
-    m_groupPreSettingsLayout->setAlignment( Qt::AlignTop );
-    m_groupPreSettingsLayout->setSpacing( spacingHint() );
-    m_groupPreSettingsLayout->setMargin( marginHint() );
+  m_groupPreSettings = new QGroupBox( frame, "m_groupPreSettings" );
+  m_groupPreSettings->setTitle( i18n( "Predefined Settings" ) );
+  m_groupPreSettings->setColumnLayout(0, Qt::Vertical );
+  m_groupPreSettings->layout()->setSpacing( 0 );
+  m_groupPreSettings->layout()->setMargin( 0 );
+  QVBoxLayout* m_groupPreSettingsLayout = new QVBoxLayout( m_groupPreSettings->layout() );
+  m_groupPreSettingsLayout->setAlignment( Qt::AlignTop );
+  m_groupPreSettingsLayout->setSpacing( spacingHint() );
+  m_groupPreSettingsLayout->setMargin( marginHint() );
 
-    m_comboPreSettings = new QComboBox( FALSE, m_groupPreSettings, "m_comboPreSettings" );
-    m_comboPreSettings->insertItem( i18n( "For Win9x/NT use only" ) );
-    m_comboPreSettings->insertItem( i18n( "K3b Default" ), 0 );
-    m_comboPreSettings->insertItem( i18n( "For Linux/UNIX use only" ), 1 );
-//    m_comboPreSettings->insertItem( i18n( "Max Compatibility" ) );
-    m_comboPreSettings->insertItem( i18n( "Custom" ) );
-    m_groupPreSettingsLayout->addWidget( m_comboPreSettings );
+  m_comboPreSettings = new QComboBox( FALSE, m_groupPreSettings, "m_comboPreSettings" );
+  m_comboPreSettings->insertItem( i18n( "For Win9x/NT use only" ) );
+  m_comboPreSettings->insertItem( i18n( "K3b Default" ), 0 );
+  m_comboPreSettings->insertItem( i18n( "For Linux/UNIX use only" ), 1 );
+  //    m_comboPreSettings->insertItem( i18n( "Max Compatibility" ) );
+  m_comboPreSettings->insertItem( i18n( "Custom" ) );
+  m_groupPreSettingsLayout->addWidget( m_comboPreSettings );
 
-    frameLayout->addWidget( m_groupPreSettings, 0, 0 );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    frameLayout->addItem( spacer, 0, 1 );
+  frameLayout->addWidget( m_groupPreSettings, 0, 0 );
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  frameLayout->addItem( spacer, 0, 1 );
 
-    frameSettings = new QFrame( frame, "frameSettings" );
-    frameSettings->setFrameShape( QFrame::Box );
-    frameSettings->setFrameShadow( QFrame::Sunken );
-    QGridLayout* frameSettingsLayout = new QGridLayout( frameSettings );
-    frameSettingsLayout->setSpacing( spacingHint() );
-    frameSettingsLayout->setMargin( marginHint() );
+  frameSettings = new QFrame( frame, "frameSettings" );
+  frameSettings->setFrameShape( QFrame::Box );
+  frameSettings->setFrameShadow( QFrame::Sunken );
+  QGridLayout* frameSettingsLayout = new QGridLayout( frameSettings );
+  frameSettingsLayout->setSpacing( spacingHint() );
+  frameSettingsLayout->setMargin( marginHint() );
 
-    m_groupIsoLevel = new QButtonGroup( frameSettings, "m_groupIsoLevel" );
-    m_groupIsoLevel->setTitle( i18n( "ISO Level" ) );
-    m_groupIsoLevel->setColumnLayout(0, Qt::Vertical );
-    m_groupIsoLevel->layout()->setSpacing( 0 );
-    m_groupIsoLevel->layout()->setMargin( 0 );
-    QVBoxLayout* m_groupIsoLevelLayout = new QVBoxLayout( m_groupIsoLevel->layout() );
-    m_groupIsoLevelLayout->setAlignment( Qt::AlignTop );
-    m_groupIsoLevelLayout->setSpacing( spacingHint() );
-    m_groupIsoLevelLayout->setMargin( marginHint() );
+  m_groupIsoLevel = new QButtonGroup( frameSettings, "m_groupIsoLevel" );
+  m_groupIsoLevel->setTitle( i18n( "ISO Level" ) );
+  m_groupIsoLevel->setColumnLayout(0, Qt::Vertical );
+  m_groupIsoLevel->layout()->setSpacing( 0 );
+  m_groupIsoLevel->layout()->setMargin( 0 );
+  QVBoxLayout* m_groupIsoLevelLayout = new QVBoxLayout( m_groupIsoLevel->layout() );
+  m_groupIsoLevelLayout->setAlignment( Qt::AlignTop );
+  m_groupIsoLevelLayout->setSpacing( spacingHint() );
+  m_groupIsoLevelLayout->setMargin( marginHint() );
 
-    m_radioIsoLevel1 = new QRadioButton( m_groupIsoLevel, "m_radioIsoLevel1" );
-    m_radioIsoLevel1->setText( "Level 1" );
-    m_radioIsoLevel1->setChecked( TRUE );
-    m_groupIsoLevelLayout->addWidget( m_radioIsoLevel1 );
+  m_radioIsoLevel1 = new QRadioButton( m_groupIsoLevel, "m_radioIsoLevel1" );
+  m_radioIsoLevel1->setText( "Level 1" );
+  m_radioIsoLevel1->setChecked( TRUE );
+  m_groupIsoLevelLayout->addWidget( m_radioIsoLevel1 );
 
-    m_radioIsoLevel2 = new QRadioButton( m_groupIsoLevel, "m_radioIsoLevel2" );
-    m_radioIsoLevel2->setText( "Level 2" );
-    m_groupIsoLevelLayout->addWidget( m_radioIsoLevel2 );
+  m_radioIsoLevel2 = new QRadioButton( m_groupIsoLevel, "m_radioIsoLevel2" );
+  m_radioIsoLevel2->setText( "Level 2" );
+  m_groupIsoLevelLayout->addWidget( m_radioIsoLevel2 );
 
-    m_radioIsoLevel3 = new QRadioButton( m_groupIsoLevel, "m_radioIsoLevel3" );
-    m_radioIsoLevel3->setText( "Level 3" );
-    m_groupIsoLevelLayout->addWidget( m_radioIsoLevel3 );
+  m_radioIsoLevel3 = new QRadioButton( m_groupIsoLevel, "m_radioIsoLevel3" );
+  m_radioIsoLevel3->setText( "Level 3" );
+  m_groupIsoLevelLayout->addWidget( m_radioIsoLevel3 );
 
-    frameSettingsLayout->addWidget( m_groupIsoLevel, 0, 0 );
+  frameSettingsLayout->addWidget( m_groupIsoLevel, 0, 0 );
 
-    QVBoxLayout* Layout1 = new QVBoxLayout;
-    Layout1->setSpacing( spacingHint() );
-    Layout1->setMargin( 0 );
+  QVBoxLayout* Layout1 = new QVBoxLayout;
+  Layout1->setSpacing( spacingHint() );
+  Layout1->setMargin( 0 );
 
-    m_checkNoDeepDirRel = new QCheckBox( frameSettings, "m_checkNoDeepDirRel" );
-    m_checkNoDeepDirRel->setText( i18n( "no deep directory relocation" ) );
-    Layout1->addWidget( m_checkNoDeepDirRel );
+  m_checkNoDeepDirRel = new QCheckBox( frameSettings, "m_checkNoDeepDirRel" );
+  m_checkNoDeepDirRel->setText( i18n( "no deep directory relocation" ) );
+  Layout1->addWidget( m_checkNoDeepDirRel );
 
-    m_checkPadding = new QCheckBox( frameSettings, "m_checkPadding" );
-    m_checkPadding->setText( i18n( "use padding" ) );
-    Layout1->addWidget( m_checkPadding );
+  m_checkPadding = new QCheckBox( frameSettings, "m_checkPadding" );
+  m_checkPadding->setText( i18n( "use padding" ) );
+  Layout1->addWidget( m_checkPadding );
 
-    m_checkHideRR_MOVED = new QCheckBox( frameSettings, "m_checkHideRR_MOVED" );
-    m_checkHideRR_MOVED->setText( i18n( "hide RR_MOVED" ) );
-    Layout1->addWidget( m_checkHideRR_MOVED );
+  m_checkHideRR_MOVED = new QCheckBox( frameSettings, "m_checkHideRR_MOVED" );
+  m_checkHideRR_MOVED->setText( i18n( "hide RR_MOVED" ) );
+  Layout1->addWidget( m_checkHideRR_MOVED );
 
-    m_checkCreateTRANS_TBL = new QCheckBox( frameSettings, "m_checkCreateTRANS_TBL" );
-    m_checkCreateTRANS_TBL->setText( i18n( "create TRANS_TBL entries" ) );
-    Layout1->addWidget( m_checkCreateTRANS_TBL );
+  m_checkCreateTRANS_TBL = new QCheckBox( frameSettings, "m_checkCreateTRANS_TBL" );
+  m_checkCreateTRANS_TBL->setText( i18n( "create TRANS_TBL entries" ) );
+  Layout1->addWidget( m_checkCreateTRANS_TBL );
 
-    m_checkHideTRANS_TBL = new QCheckBox( frameSettings, "m_checkHideTRANS_TBL" );
-    m_checkHideTRANS_TBL->setText( i18n( "hide TRANS_TBL in Joliet" ) );
-    Layout1->addWidget( m_checkHideTRANS_TBL );
+  m_checkHideTRANS_TBL = new QCheckBox( frameSettings, "m_checkHideTRANS_TBL" );
+  m_checkHideTRANS_TBL->setText( i18n( "hide TRANS_TBL in Joliet" ) );
+  Layout1->addWidget( m_checkHideTRANS_TBL );
 
-    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    Layout1->addItem( spacer_2 );
+  QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  Layout1->addItem( spacer_2 );
 
 
-    frameSettingsLayout->addMultiCellLayout( Layout1, 0, 1, 1, 1 );
-    QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    frameSettingsLayout->addItem( spacer_3, 1, 0 );
+  frameSettingsLayout->addMultiCellLayout( Layout1, 0, 1, 1, 1 );
+  QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  frameSettingsLayout->addItem( spacer_3, 1, 0 );
 
-    QVBoxLayout* Layout3 = new QVBoxLayout;
-    Layout3->setSpacing( spacingHint() );
-    Layout3->setMargin( 0 );
+  QVBoxLayout* Layout3 = new QVBoxLayout;
+  Layout3->setSpacing( spacingHint() );
+  Layout3->setMargin( 0 );
 
-    m_checkUntranslatedNames = new QCheckBox( frameSettings, "m_checkUntranslatedNames" );
-    m_checkUntranslatedNames->setText( i18n( "allow untranslated filenames" ) );
-    Layout3->addWidget( m_checkUntranslatedNames );
-    QSpacerItem* spacer_4 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    Layout3->addItem( spacer_4 );
+  m_checkUntranslatedNames = new QCheckBox( frameSettings, "m_checkUntranslatedNames" );
+  m_checkUntranslatedNames->setText( i18n( "allow untranslated filenames" ) );
+  Layout3->addWidget( m_checkUntranslatedNames );
+  QSpacerItem* spacer_4 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  Layout3->addItem( spacer_4 );
 
-    m_checkAllow31 = new QCheckBox( frameSettings, "m_checkAllow31" );
-    m_checkAllow31->setText( i18n( "allow 31 character filenames" ) );
-    Layout3->addWidget( m_checkAllow31 );
+  m_checkAllow31 = new QCheckBox( frameSettings, "m_checkAllow31" );
+  m_checkAllow31->setText( i18n( "allow 31 character filenames" ) );
+  Layout3->addWidget( m_checkAllow31 );
 
-    m_checkMaxNames = new QCheckBox( frameSettings, "m_checkMaxNames" );
-    m_checkMaxNames->setText( i18n( "max length (37) filenames" ) );
-    Layout3->addWidget( m_checkMaxNames );
+  m_checkMaxNames = new QCheckBox( frameSettings, "m_checkMaxNames" );
+  m_checkMaxNames->setText( i18n( "max length (37) filenames" ) );
+  Layout3->addWidget( m_checkMaxNames );
 
-    m_checkBeginPeriod = new QCheckBox( frameSettings, "m_checkBeginPeriod" );
-    m_checkBeginPeriod->setText( i18n( "allow beginning period" ) );
-    Layout3->addWidget( m_checkBeginPeriod );
+  m_checkBeginPeriod = new QCheckBox( frameSettings, "m_checkBeginPeriod" );
+  m_checkBeginPeriod->setText( i18n( "allow beginning period" ) );
+  Layout3->addWidget( m_checkBeginPeriod );
 
-    m_checkRelaxedNames = new QCheckBox( frameSettings, "m_checkRelaxedNames" );
-    m_checkRelaxedNames->setText( i18n( "relaxed filenames" ) );
-    Layout3->addWidget( m_checkRelaxedNames );
+  m_checkRelaxedNames = new QCheckBox( frameSettings, "m_checkRelaxedNames" );
+  m_checkRelaxedNames->setText( i18n( "relaxed filenames" ) );
+  Layout3->addWidget( m_checkRelaxedNames );
 
-    m_checkOmitVersion = new QCheckBox( frameSettings, "m_checkOmitVersion" );
-    m_checkOmitVersion->setText( i18n( "omit version numbers" ) );
-    Layout3->addWidget( m_checkOmitVersion );
+  m_checkOmitVersion = new QCheckBox( frameSettings, "m_checkOmitVersion" );
+  m_checkOmitVersion->setText( i18n( "omit version numbers" ) );
+  Layout3->addWidget( m_checkOmitVersion );
 
-    m_checkNoISOTrans = new QCheckBox( frameSettings, "m_checkNoISOTrans" );
-    m_checkNoISOTrans->setText( i18n( "allow # and ~" ) );
-    Layout3->addWidget( m_checkNoISOTrans );
+  m_checkNoISOTrans = new QCheckBox( frameSettings, "m_checkNoISOTrans" );
+  m_checkNoISOTrans->setText( i18n( "allow # and ~" ) );
+  Layout3->addWidget( m_checkNoISOTrans );
 
-    m_checkMultiDot = new QCheckBox( frameSettings, "m_checkMultiDot" );
-    m_checkMultiDot->setText( i18n( "allow multible dots" ) );
-    Layout3->addWidget( m_checkMultiDot );
+  m_checkMultiDot = new QCheckBox( frameSettings, "m_checkMultiDot" );
+  m_checkMultiDot->setText( i18n( "allow multible dots" ) );
+  Layout3->addWidget( m_checkMultiDot );
 
-    m_checkLowercase = new QCheckBox( frameSettings, "m_checkLowercase" );
-    m_checkLowercase->setText( i18n( "allow lowercase filenames" ) );
-    Layout3->addWidget( m_checkLowercase );
+  m_checkLowercase = new QCheckBox( frameSettings, "m_checkLowercase" );
+  m_checkLowercase->setText( i18n( "allow lowercase filenames" ) );
+  Layout3->addWidget( m_checkLowercase );
 
-    frameSettingsLayout->addMultiCellLayout( Layout3, 0, 1, 2, 2 );
+  frameSettingsLayout->addMultiCellLayout( Layout3, 0, 1, 2, 2 );
 
-    frameLayout->addMultiCellWidget( frameSettings, 1, 1, 0, 2 );
+  frameLayout->addMultiCellWidget( frameSettings, 1, 1, 0, 2 );
 
-    // signals and slots connections
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkAllow31, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkBeginPeriod, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkOmitVersion, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkRelaxedNames, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkLowercase, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkNoISOTrans, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMultiDot, SLOT( setDisabled(bool) ) );
-    connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMaxNames, SLOT( setDisabled(bool) ) );
+  // signals and slots connections
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkAllow31, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkBeginPeriod, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkOmitVersion, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkRelaxedNames, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkLowercase, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkNoISOTrans, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMultiDot, SLOT( setDisabled(bool) ) );
+  connect( m_checkUntranslatedNames, SIGNAL( toggled(bool) ), m_checkMaxNames, SLOT( setDisabled(bool) ) );
 
-//	connect( m_checkCreateJoliet, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-//	connect( m_checkCreateRR, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkNoDeepDirRel, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkPadding, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkHideRR_MOVED, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkCreateTRANS_TBL, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkHideTRANS_TBL, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkUntranslatedNames, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkAllow31, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkMaxNames, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkBeginPeriod, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkRelaxedNames, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkOmitVersion, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkNoISOTrans, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkMultiDot, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect(	m_checkLowercase, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
-	connect( m_groupIsoLevel, SIGNAL(clicked(int)), this, SLOT(slotSelectCustom()) );
+  //	connect( m_checkCreateJoliet, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  //	connect( m_checkCreateRR, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkNoDeepDirRel, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkPadding, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkHideRR_MOVED, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkCreateTRANS_TBL, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkHideTRANS_TBL, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkUntranslatedNames, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkAllow31, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkMaxNames, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkBeginPeriod, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkRelaxedNames, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkOmitVersion, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkNoISOTrans, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkMultiDot, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect(	m_checkLowercase, SIGNAL(clicked()), this, SLOT(slotSelectCustom()) );
+  connect( m_groupIsoLevel, SIGNAL(clicked(int)), this, SLOT(slotSelectCustom()) );
 
-    connect( m_comboPreSettings, SIGNAL(activated(const QString&)), this, SLOT(slotLoadPreSettings(const QString&)) );
-    connect( m_buttonSaveAsDefault, SIGNAL(clicked()), this, SLOT(slotSaveDefaults()) );
+  connect( m_comboPreSettings, SIGNAL(activated(const QString&)), this, SLOT(slotLoadPreSettings(const QString&)) );
+  connect( m_buttonSaveAsDefault, SIGNAL(clicked()), this, SLOT(slotSaveDefaults()) );
 }
 
 
 void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 {
-    QGridLayout* frameLayout = new QGridLayout( frame );
-    frameLayout->setSpacing( spacingHint() );
-    frameLayout->setMargin( marginHint() );
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
 
-    QGroupBox* _groupVolumeInfo = new QGroupBox( frame, "_groupVolumeInfo" );
-    _groupVolumeInfo->setTitle( i18n( "Information" ) );
-    _groupVolumeInfo->setColumnLayout(0, Qt::Vertical );
-    _groupVolumeInfo->layout()->setSpacing( 0 );
-    _groupVolumeInfo->layout()->setMargin( 0 );
-    QGridLayout* _groupVolumeInfoLayout = new QGridLayout( _groupVolumeInfo->layout() );
-    _groupVolumeInfoLayout->setAlignment( Qt::AlignTop );
-    _groupVolumeInfoLayout->setSpacing( spacingHint() );
-    _groupVolumeInfoLayout->setMargin( marginHint() );
+  QGroupBox* _groupVolumeInfo = new QGroupBox( frame, "_groupVolumeInfo" );
+  _groupVolumeInfo->setTitle( i18n( "Information" ) );
+  _groupVolumeInfo->setColumnLayout(0, Qt::Vertical );
+  _groupVolumeInfo->layout()->setSpacing( 0 );
+  _groupVolumeInfo->layout()->setMargin( 0 );
+  QGridLayout* _groupVolumeInfoLayout = new QGridLayout( _groupVolumeInfo->layout() );
+  _groupVolumeInfoLayout->setAlignment( Qt::AlignTop );
+  _groupVolumeInfoLayout->setSpacing( spacingHint() );
+  _groupVolumeInfoLayout->setMargin( marginHint() );
 
-    QLabel* _labelVolumeID = new QLabel( _groupVolumeInfo, "m_labelVolumeID" );
-    _labelVolumeID->setText( i18n( "Volume ID" ) );
+  QLabel* _labelVolumeID = new QLabel( _groupVolumeInfo, "m_labelVolumeID" );
+  _labelVolumeID->setText( i18n( "Volume ID" ) );
 
-    _groupVolumeInfoLayout->addWidget( _labelVolumeID, 0, 0 );
+  _groupVolumeInfoLayout->addWidget( _labelVolumeID, 0, 0 );
 
-    QLabel* _labelPublisher = new QLabel( _groupVolumeInfo, "m_labelPublisher" );
-    _labelPublisher->setText( i18n( "Publisher" ) );
+  QLabel* _labelPublisher = new QLabel( _groupVolumeInfo, "m_labelPublisher" );
+  _labelPublisher->setText( i18n( "Publisher" ) );
 
-    _groupVolumeInfoLayout->addWidget( _labelPublisher, 1, 0 );
+  _groupVolumeInfoLayout->addWidget( _labelPublisher, 1, 0 );
 
-    QLabel* _labelPreparer = new QLabel( _groupVolumeInfo, "m_labelPreparer" );
-    _labelPreparer->setText( i18n( "Preparer" ) );
+  QLabel* _labelPreparer = new QLabel( _groupVolumeInfo, "m_labelPreparer" );
+  _labelPreparer->setText( i18n( "Preparer" ) );
 
-    _groupVolumeInfoLayout->addWidget( _labelPreparer, 2, 0 );
+  _groupVolumeInfoLayout->addWidget( _labelPreparer, 2, 0 );
 
-    m_editVolumeID = new QLineEdit( _groupVolumeInfo, "m_editVolumeID" );
-    m_editVolumeID->setMaxLength( 32 );
+  m_editVolumeID = new QLineEdit( _groupVolumeInfo, "m_editVolumeID" );
+  m_editVolumeID->setMaxLength( 32 );
 
-    _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
 
-    m_editPublisher = new QLineEdit( _groupVolumeInfo, "m_editPublisher" );
-    m_editPublisher->setMaxLength( 128 );
+  m_editPublisher = new QLineEdit( _groupVolumeInfo, "m_editPublisher" );
+  m_editPublisher->setMaxLength( 128 );
 
-    _groupVolumeInfoLayout->addWidget( m_editPublisher, 1, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editPublisher, 1, 1 );
 
-    m_editPreparer = new QLineEdit( _groupVolumeInfo, "m_editPreparer" );
-    m_editPreparer->setMaxLength( 128 );
+  m_editPreparer = new QLineEdit( _groupVolumeInfo, "m_editPreparer" );
+  m_editPreparer->setMaxLength( 128 );
 
-    _groupVolumeInfoLayout->addWidget( m_editPreparer, 2, 1 );
+  _groupVolumeInfoLayout->addWidget( m_editPreparer, 2, 1 );
 
-    frameLayout->addMultiCellWidget( _groupVolumeInfo, 0, 3, 1, 1 );
+  frameLayout->addMultiCellWidget( _groupVolumeInfo, 0, 3, 1, 1 );
 
-    m_checkCreateRR = new QCheckBox( frame, "m_checkCreateRR" );
-    m_checkCreateRR->setText( i18n( "Generate Rockridge Entries" ) );
+  m_checkCreateRR = new QCheckBox( frame, "m_checkCreateRR" );
+  m_checkCreateRR->setText( i18n( "Generate Rockridge Entries" ) );
 
-    frameLayout->addWidget( m_checkCreateRR, 1, 0 );
+  frameLayout->addWidget( m_checkCreateRR, 1, 0 );
 
-    m_checkCreateJoliet = new QCheckBox( frame, "m_checkCreateJoliet" );
-    m_checkCreateJoliet->setText( i18n( "Generate Joilet entries" ) );
+  m_checkCreateJoliet = new QCheckBox( frame, "m_checkCreateJoliet" );
+  m_checkCreateJoliet->setText( i18n( "Generate Joilet entries" ) );
 
-    frameLayout->addWidget( m_checkCreateJoliet, 0, 0 );
+  frameLayout->addWidget( m_checkCreateJoliet, 0, 0 );
 
-    m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
-    m_groupWhiteSpace->setTitle( i18n( "Whitespace treatment" ) );
-    m_groupWhiteSpace->setColumnLayout(0, Qt::Vertical );
-    m_groupWhiteSpace->layout()->setSpacing( 0 );
-    m_groupWhiteSpace->layout()->setMargin( 0 );
-    QVBoxLayout* m_groupWhiteSpaceLayout = new QVBoxLayout( m_groupWhiteSpace->layout() );
-    m_groupWhiteSpaceLayout->setAlignment( Qt::AlignTop );
-    m_groupWhiteSpaceLayout->setSpacing( spacingHint() );
-    m_groupWhiteSpaceLayout->setMargin( marginHint() );
+  m_groupWhiteSpace = new QButtonGroup( frame, "m_groupWhiteSpace" );
+  m_groupWhiteSpace->setTitle( i18n( "Whitespace treatment" ) );
+  m_groupWhiteSpace->setColumnLayout(0, Qt::Vertical );
+  m_groupWhiteSpace->layout()->setSpacing( 0 );
+  m_groupWhiteSpace->layout()->setMargin( 0 );
+  QVBoxLayout* m_groupWhiteSpaceLayout = new QVBoxLayout( m_groupWhiteSpace->layout() );
+  m_groupWhiteSpaceLayout->setAlignment( Qt::AlignTop );
+  m_groupWhiteSpaceLayout->setSpacing( spacingHint() );
+  m_groupWhiteSpaceLayout->setMargin( marginHint() );
 
-    m_radioSpaceLeave = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceLeave" );
-    m_radioSpaceLeave->setText( i18n( "leave them" ) );
-    m_radioSpaceLeave->setChecked( TRUE );
-    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceLeave );
+  m_radioSpaceLeave = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceLeave" );
+  m_radioSpaceLeave->setText( i18n( "leave them" ) );
+  m_radioSpaceLeave->setChecked( TRUE );
+  m_groupWhiteSpaceLayout->addWidget( m_radioSpaceLeave );
 
-    m_radioSpaceReplace = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceReplace" );
-    m_radioSpaceReplace->setText( i18n( "replace with underscores" ) );
-    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceReplace );
+  m_radioSpaceReplace = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceReplace" );
+  m_radioSpaceReplace->setText( i18n( "replace with underscores" ) );
+  m_groupWhiteSpaceLayout->addWidget( m_radioSpaceReplace );
 
-    m_radioSpaceStrip = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceStrip" );
-    m_radioSpaceStrip->setText( i18n( "strip" ) );
-    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceStrip );
+  m_radioSpaceStrip = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceStrip" );
+  m_radioSpaceStrip->setText( i18n( "strip" ) );
+  m_groupWhiteSpaceLayout->addWidget( m_radioSpaceStrip );
 
-    m_radioSpaceExtended = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceExtended" );
-    m_radioSpaceExtended->setText( i18n( "extended strip" ) );
-    m_groupWhiteSpaceLayout->addWidget( m_radioSpaceExtended );
+  m_radioSpaceExtended = new QRadioButton( m_groupWhiteSpace, "m_radioSpaceExtended" );
+  m_radioSpaceExtended->setText( i18n( "extended strip" ) );
+  m_groupWhiteSpaceLayout->addWidget( m_radioSpaceExtended );
 
-    frameLayout->addWidget( m_groupWhiteSpace, 3, 0 );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    frameLayout->addItem( spacer, 2, 0 );
+  frameLayout->addWidget( m_groupWhiteSpace, 3, 0 );
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  frameLayout->addItem( spacer, 2, 0 );
 
 }
 
 
 void K3bDataBurnDialog::slotFindIsoImage()
 {
-	// TODO: ask for confirmation if already exists
-	QString dir = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, k3bMain(), "Select Iso Image" );
-	if( !dir.isEmpty() ) {
-		m_editDirectory->setText( dir );
-	}
+  // TODO: ask for confirmation if already exists
+  QString dir = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, k3bMain(), "Select Iso Image" );
+  if( !dir.isEmpty() ) {
+    m_editDirectory->setText( dir );
+  }
 }
 
 
 void K3bDataBurnDialog::slotLoadPreSettings( const QString& pre )
 {
-	if( pre == i18n("K3b Default") ) {
-		// load defaults from config
-		kapp->config()->setGroup( "Default ISO Settings" );
-		m_checkCreateJoliet->setChecked( kapp->config()->readBoolEntry( "create Joliet", false ) );
-		m_checkCreateRR->setChecked( kapp->config()->readBoolEntry( "create Rockridge", true ) );
-		m_checkNoDeepDirRel->setChecked( kapp->config()->readBoolEntry( "no deep dir relocation", false ) );
-		m_checkPadding->setChecked( kapp->config()->readBoolEntry( "padding", false ) );
-		m_checkHideRR_MOVED->setChecked( kapp->config()->readBoolEntry( "hide RR_MOVED", false ) );
-		m_checkCreateTRANS_TBL->setChecked( kapp->config()->readBoolEntry( "create TRANS_TBL", false ) );
-		m_checkHideTRANS_TBL->setChecked( kapp->config()->readBoolEntry( "hide TRANS_TBL", false ) );
-		m_checkUntranslatedNames->setChecked( kapp->config()->readBoolEntry( "untranslated filenames", false ) );
-		m_checkAllow31->setChecked( kapp->config()->readBoolEntry( "allow 31 character filenames", false ) );
-		m_checkMaxNames->setChecked( kapp->config()->readBoolEntry( "max ISO filenames", false ) );
-		m_checkBeginPeriod->setChecked( kapp->config()->readBoolEntry( "allow beginning period", false ) );
-		m_checkRelaxedNames->setChecked( kapp->config()->readBoolEntry( "relaxed filenames", false ) );
-		m_checkOmitVersion->setChecked( kapp->config()->readBoolEntry( "omit version numbers", false ) );
-		m_checkNoISOTrans->setChecked( kapp->config()->readBoolEntry( "no iSO translation", false ) );
-		m_checkMultiDot->setChecked( kapp->config()->readBoolEntry( "allow multible dots", false ) );
-		m_checkLowercase->setChecked( kapp->config()->readBoolEntry( "allow lowercase filenames", false ) );
-	}
-	else if( pre == i18n("For Linux/UNIX use only") ) {
-		m_checkCreateJoliet->setChecked( false );
-		m_checkCreateRR->setChecked( true );
-		m_checkNoDeepDirRel->setChecked( false );
-		m_checkPadding->setChecked( false );
-		m_checkHideRR_MOVED->setChecked( true );
-		m_checkCreateTRANS_TBL->setChecked( false );
-		m_checkHideTRANS_TBL->setChecked( false );
-		m_checkUntranslatedNames->setChecked( false );
-		m_checkAllow31->setChecked( false );
-		m_checkMaxNames->setChecked( false );
-		m_checkBeginPeriod->setChecked( false );
-		m_checkRelaxedNames->setChecked( false );
-		m_checkOmitVersion->setChecked( false );
-		m_checkNoISOTrans->setChecked( false );
-		m_checkMultiDot->setChecked( false );
-		m_checkLowercase->setChecked( false );
-	}
-	else if( pre == i18n("For Win9x/NT use only") ) {
-		m_checkCreateJoliet->setChecked( true );
-		m_checkCreateRR->setChecked( false );
-		m_checkNoDeepDirRel->setChecked( false );
-		m_checkPadding->setChecked( false );
-		m_checkHideRR_MOVED->setChecked( true );
-		m_checkCreateTRANS_TBL->setChecked( true );
-		m_checkHideTRANS_TBL->setChecked( false );
-		m_checkUntranslatedNames->setChecked( false );
-		m_checkAllow31->setChecked( true );
-		m_checkMaxNames->setChecked( false );
-		m_checkBeginPeriod->setChecked( false );
-		m_checkRelaxedNames->setChecked( false );
-		m_checkOmitVersion->setChecked( false );
-		m_checkNoISOTrans->setChecked( true );
-		m_checkMultiDot->setChecked( false );
-		m_checkLowercase->setChecked( false );
-	}
-//	else if( pre == i18n("Max Compatibility") ) {
-//		m_checkCreateJoliet->setChecked(  );
-//		m_checkCreateRR->setChecked(  );
-//		m_checkNoDeepDirRel->setChecked(  );
-//		m_checkPadding->setChecked(  );
-//		m_checkHideRR_MOVED->setChecked(  );
-//		m_checkCreateTRANS_TBL->setChecked(  );
-//		m_checkHideTRANS_TBL->setChecked(  );
-//		m_checkUntranslatedNames->setChecked(  );
-//		m_checkAllow31->setChecked(  );
-//		m_checkMaxNames->setChecked(  );
-//		m_checkBeginPeriod->setChecked(  );
-//		m_checkRelaxedNames->setChecked(  );
-//		m_checkOmitVersion->setChecked(  );
-//		m_checkNoISOTrans->setChecked(  );
-//		m_checkMultiDot->setChecked(  );
-//		m_checkLowercase->setChecked(  );
-//	}
+  if( pre == i18n("K3b Default") ) {
+    // load defaults from config
+    kapp->config()->setGroup( "Default ISO Settings" );
+    m_checkCreateJoliet->setChecked( kapp->config()->readBoolEntry( "create Joliet", false ) );
+    m_checkCreateRR->setChecked( kapp->config()->readBoolEntry( "create Rockridge", true ) );
+    m_checkNoDeepDirRel->setChecked( kapp->config()->readBoolEntry( "no deep dir relocation", false ) );
+    m_checkPadding->setChecked( kapp->config()->readBoolEntry( "padding", false ) );
+    m_checkHideRR_MOVED->setChecked( kapp->config()->readBoolEntry( "hide RR_MOVED", false ) );
+    m_checkCreateTRANS_TBL->setChecked( kapp->config()->readBoolEntry( "create TRANS_TBL", false ) );
+    m_checkHideTRANS_TBL->setChecked( kapp->config()->readBoolEntry( "hide TRANS_TBL", false ) );
+    m_checkUntranslatedNames->setChecked( kapp->config()->readBoolEntry( "untranslated filenames", false ) );
+    m_checkAllow31->setChecked( kapp->config()->readBoolEntry( "allow 31 character filenames", false ) );
+    m_checkMaxNames->setChecked( kapp->config()->readBoolEntry( "max ISO filenames", false ) );
+    m_checkBeginPeriod->setChecked( kapp->config()->readBoolEntry( "allow beginning period", false ) );
+    m_checkRelaxedNames->setChecked( kapp->config()->readBoolEntry( "relaxed filenames", false ) );
+    m_checkOmitVersion->setChecked( kapp->config()->readBoolEntry( "omit version numbers", false ) );
+    m_checkNoISOTrans->setChecked( kapp->config()->readBoolEntry( "no iSO translation", false ) );
+    m_checkMultiDot->setChecked( kapp->config()->readBoolEntry( "allow multible dots", false ) );
+    m_checkLowercase->setChecked( kapp->config()->readBoolEntry( "allow lowercase filenames", false ) );
+  }
+  else if( pre == i18n("For Linux/UNIX use only") ) {
+    m_checkCreateJoliet->setChecked( false );
+    m_checkCreateRR->setChecked( true );
+    m_checkNoDeepDirRel->setChecked( false );
+    m_checkPadding->setChecked( false );
+    m_checkHideRR_MOVED->setChecked( true );
+    m_checkCreateTRANS_TBL->setChecked( false );
+    m_checkHideTRANS_TBL->setChecked( false );
+    m_checkUntranslatedNames->setChecked( false );
+    m_checkAllow31->setChecked( false );
+    m_checkMaxNames->setChecked( false );
+    m_checkBeginPeriod->setChecked( false );
+    m_checkRelaxedNames->setChecked( false );
+    m_checkOmitVersion->setChecked( false );
+    m_checkNoISOTrans->setChecked( false );
+    m_checkMultiDot->setChecked( false );
+    m_checkLowercase->setChecked( false );
+  }
+  else if( pre == i18n("For Win9x/NT use only") ) {
+    m_checkCreateJoliet->setChecked( true );
+    m_checkCreateRR->setChecked( false );
+    m_checkNoDeepDirRel->setChecked( false );
+    m_checkPadding->setChecked( false );
+    m_checkHideRR_MOVED->setChecked( true );
+    m_checkCreateTRANS_TBL->setChecked( true );
+    m_checkHideTRANS_TBL->setChecked( false );
+    m_checkUntranslatedNames->setChecked( false );
+    m_checkAllow31->setChecked( true );
+    m_checkMaxNames->setChecked( false );
+    m_checkBeginPeriod->setChecked( false );
+    m_checkRelaxedNames->setChecked( false );
+    m_checkOmitVersion->setChecked( false );
+    m_checkNoISOTrans->setChecked( true );
+    m_checkMultiDot->setChecked( false );
+    m_checkLowercase->setChecked( false );
+  }
+  //	else if( pre == i18n("Max Compatibility") ) {
+  //		m_checkCreateJoliet->setChecked(  );
+  //		m_checkCreateRR->setChecked(  );
+  //		m_checkNoDeepDirRel->setChecked(  );
+  //		m_checkPadding->setChecked(  );
+  //		m_checkHideRR_MOVED->setChecked(  );
+  //		m_checkCreateTRANS_TBL->setChecked(  );
+  //		m_checkHideTRANS_TBL->setChecked(  );
+  //		m_checkUntranslatedNames->setChecked(  );
+  //		m_checkAllow31->setChecked(  );
+  //		m_checkMaxNames->setChecked(  );
+  //		m_checkBeginPeriod->setChecked(  );
+  //		m_checkRelaxedNames->setChecked(  );
+  //		m_checkOmitVersion->setChecked(  );
+  //		m_checkNoISOTrans->setChecked(  );
+  //		m_checkMultiDot->setChecked(  );
+  //		m_checkLowercase->setChecked(  );
+  //	}
 }
 
 
 void K3bDataBurnDialog::slotSaveDefaults()
 {
-	kapp->config()->setGroup( "Default ISO Settings" );
-	kapp->config()->writeEntry( "create Joliet", m_checkCreateJoliet->isChecked( ) );
-	kapp->config()->writeEntry( "create Rockridge", m_checkCreateRR->isChecked( ) );
-	kapp->config()->writeEntry( "no deep dir relocation", m_checkNoDeepDirRel->isChecked( ) );
-	kapp->config()->writeEntry( "padding" , m_checkPadding->isChecked( ) );
-	kapp->config()->writeEntry( "hide RR_MOVED", m_checkHideRR_MOVED->isChecked( ) );
-	kapp->config()->writeEntry( "create TRANS_TBL", m_checkCreateTRANS_TBL->isChecked( ) );
-	kapp->config()->writeEntry( "hide TRANS_TBL", m_checkHideTRANS_TBL->isChecked( ) );
-	kapp->config()->writeEntry( "untranslated filenames", m_checkUntranslatedNames->isChecked( ) );
-	kapp->config()->writeEntry( "allow 31 character filenames", m_checkAllow31->isChecked() );
-	kapp->config()->writeEntry( "max ISO filenames", m_checkMaxNames->isChecked() );
-	kapp->config()->writeEntry( "allow beginning period", m_checkBeginPeriod->isChecked() );
-	kapp->config()->writeEntry( "relaxed filenames", m_checkRelaxedNames->isChecked( ) );
-	kapp->config()->writeEntry( "omit version numbers", m_checkOmitVersion->isChecked() );
-	kapp->config()->writeEntry( "no iSO translation", m_checkNoISOTrans->isChecked() );
-	kapp->config()->writeEntry( "allow multible dots", m_checkMultiDot->isChecked() );
-	kapp->config()->writeEntry( "allow lowercase filenames", m_checkLowercase->isChecked( ) );
+  kapp->config()->setGroup( "Default ISO Settings" );
+  kapp->config()->writeEntry( "create Joliet", m_checkCreateJoliet->isChecked( ) );
+  kapp->config()->writeEntry( "create Rockridge", m_checkCreateRR->isChecked( ) );
+  kapp->config()->writeEntry( "no deep dir relocation", m_checkNoDeepDirRel->isChecked( ) );
+  kapp->config()->writeEntry( "padding" , m_checkPadding->isChecked( ) );
+  kapp->config()->writeEntry( "hide RR_MOVED", m_checkHideRR_MOVED->isChecked( ) );
+  kapp->config()->writeEntry( "create TRANS_TBL", m_checkCreateTRANS_TBL->isChecked( ) );
+  kapp->config()->writeEntry( "hide TRANS_TBL", m_checkHideTRANS_TBL->isChecked( ) );
+  kapp->config()->writeEntry( "untranslated filenames", m_checkUntranslatedNames->isChecked( ) );
+  kapp->config()->writeEntry( "allow 31 character filenames", m_checkAllow31->isChecked() );
+  kapp->config()->writeEntry( "max ISO filenames", m_checkMaxNames->isChecked() );
+  kapp->config()->writeEntry( "allow beginning period", m_checkBeginPeriod->isChecked() );
+  kapp->config()->writeEntry( "relaxed filenames", m_checkRelaxedNames->isChecked( ) );
+  kapp->config()->writeEntry( "omit version numbers", m_checkOmitVersion->isChecked() );
+  kapp->config()->writeEntry( "no iSO translation", m_checkNoISOTrans->isChecked() );
+  kapp->config()->writeEntry( "allow multible dots", m_checkMultiDot->isChecked() );
+  kapp->config()->writeEntry( "allow lowercase filenames", m_checkLowercase->isChecked( ) );
 }
 
 
 void K3bDataBurnDialog::slotSelectCustom()
 {
-	m_comboPreSettings->setCurrentItem( 3 );
+  m_comboPreSettings->setCurrentItem( 3 );
+}
+
+
+void K3bDataBurnDialog::slotWriterChanged()
+{
+  m_checkBurnProof->setEnabled( writerDevice()->burnproof );
+}
+
+
+void K3bDataBurnDialog::slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long kbAvail)
+{
+  m_labelFreeSpace->setText( QString().sprintf( "%.2f MB", (float)kbAvail/1024.0 ) );
+}
+
+
+void K3bDataBurnDialog::slotUpdateFreeTempSpace( const QString& path )
+{
+  if( QFile::exists( path ) ) {
+    connect( KDiskFreeSp::findUsageInfo( path ), 
+	     SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long, unsigned long)),
+	     this, SLOT(slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long)) );
+  }
 }

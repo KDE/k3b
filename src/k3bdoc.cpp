@@ -42,75 +42,78 @@
 #include "k3bglobals.h"
 
 K3bDoc::K3bDoc( QObject* parent )
-	: QObject( parent )
+  : QObject( parent )
 {
-	pViewList = new QList<K3bView>;
-	pViewList->setAutoDelete(false);
+  pViewList = new QList<K3bView>;
+  pViewList->setAutoDelete(false);
 
-	m_process = new KProcess();
-	m_burner = 0;
-	m_dao = true;
-	m_error = K3b::NOT_STARTED;
-	m_speed = 1;
+  m_process = new KProcess();
+  m_burner = 0;
+  m_dao = true;
+  m_error = K3b::NOT_STARTED;
+  m_speed = 1;
 }
 
 
 K3bDoc::~K3bDoc()
 {
-	delete m_process;
-	delete pViewList;
+  delete m_process;
+  delete pViewList;
 }
 
 void K3bDoc::setDao( bool b )
 {
-	m_dao = b;
+  m_dao = b;
 }
 
 void K3bDoc::setDummy( bool b )
 {
-	m_dummy = b;
+  m_dummy = b;
 }
 
 void K3bDoc::setSpeed( int speed )
 {
-	m_speed = speed;
+  m_speed = speed;
 }
 
 void K3bDoc::setBurner( K3bDevice* dev )
 {
-	m_burner = dev;
-	if( dev )
-		qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->device()).arg(dev->description) );
+  m_burner = dev;
+  if( dev ) {
+    qDebug( QString("(K3bDoc) Setting writer to %1 %2").arg( dev->device()).arg(dev->description) );
+    if( !dev->burnproof )
+      setBurnProof( false );
+  }
 }
 
 
 void K3bDoc::addView(K3bView *view)
 {
-	pViewList->append(view);
-	changedViewList();
+  pViewList->append(view);
+  changedViewList();
 }
 
 void K3bDoc::removeView(K3bView *view)
 {
-	  pViewList->remove(view);
-	  if(!pViewList->isEmpty())
-			changedViewList();
-		else
-			deleteContents();
+  pViewList->remove(view);
+  if(!pViewList->isEmpty())
+    changedViewList();
+  else
+    deleteContents();
 }
 
 void K3bDoc::changedViewList(){	
 	
-	K3bView *w;
-	if((int)pViewList->count() == 1){
-  	w=pViewList->first();
-  	w->setCaption(URL().fileName());
-	}
-	else{	
-		int i;
+  K3bView *w;
+  if((int)pViewList->count() == 1){
+    w=pViewList->first();
+    w->setCaption(URL().fileName());
+  }
+  else{	
+    int i;
     for( i=1,w=pViewList->first(); w!=0; i++, w=pViewList->next())
-  		w->setCaption(QString(URL().fileName()+":%1").arg(i));	
-	}
+      w->setCaption(QString(URL().fileName()+":%1").arg(i));	
+  }
 }
 
 bool K3bDoc::isLastView() {
@@ -122,9 +125,9 @@ void K3bDoc::updateAllViews(K3bView *sender)
 {
   K3bView *w;
   for(w=pViewList->first(); w!=0; w=pViewList->next())
-  {
-     w->update(sender);
-  }
+    {
+      w->update(sender);
+    }
 
 }
 
@@ -142,28 +145,28 @@ void K3bDoc::closeDocument()
 {
   K3bView *w;
   if(!isLastView())
-  {
-    for(w=pViewList->first(); w!=0; w=pViewList->next())
     {
-   	 	if(!w->close())
- 				break;
-    }
+      for(w=pViewList->first(); w!=0; w=pViewList->next())
+	{
+	  if(!w->close())
+	    break;
 	}
+    }
   if(isLastView())
-  {
-  	w=pViewList->first();
-  	w->close();
-  }
+    {
+      w=pViewList->first();
+      w->close();
+    }
 }
 
 bool K3bDoc::newDocument()
 {
-	m_dummy = false;
-	m_dao = true;
-	m_onTheFly = false;
+  m_dummy = false;
+  m_dao = true;
+  m_onTheFly = false;
 	
-	modified=false;
-	return true;
+  modified=false;
+  return true;
 }
 
 bool K3bDoc::openDocument(const KURL& url, const char* )
@@ -172,14 +175,14 @@ bool K3bDoc::openDocument(const KURL& url, const char* )
   KIO::NetAccess::download( url, tmpfile );
 
   /////////////////////////////////////////////////
-	QFile f( tmpfile );
-	if ( !f.open( IO_ReadOnly ) )
-		return false;
+  QFile f( tmpfile );
+  if ( !f.open( IO_ReadOnly ) )
+    return false;
 	
-	// load the data into the document	
-	bool success = loadDocumentData( f );
+  // load the data into the document	
+  bool success = loadDocumentData( f );
 	
-	f.close();
+  f.close();
 
   /////////////////////////////////////////////////
   KIO::NetAccess::removeTempFile( tmpfile );
@@ -191,19 +194,19 @@ bool K3bDoc::openDocument(const KURL& url, const char* )
 
 bool K3bDoc::saveDocument(const KURL&, const char* )
 {
-//  KTempFile( locateLocal( "tmp", "k3b"
-//	QFile f( filename );
-//	if ( !f.open( IO_WriteOnly ) )
-//		return false;
-//
-//  bool success = saveDocumentData( f );
-//
-//  f.close();
-//
-//  modified=false;
-//	m_filename=filename;
-//	m_title=QFileInfo(f).fileName();
-//  return success;
+  //  KTempFile( locateLocal( "tmp", "k3b"
+  //	QFile f( filename );
+  //	if ( !f.open( IO_WriteOnly ) )
+  //		return false;
+  //
+  //  bool success = saveDocumentData( f );
+  //
+  //  f.close();
+  //
+  //  modified=false;
+  //	m_filename=filename;
+  //	m_title=QFileInfo(f).fileName();
+  //  return success;
   return true;
 }
 
@@ -217,52 +220,52 @@ void K3bDoc::deleteContents()
 
 bool K3bDoc::canCloseFrame(K3bView* pFrame)
 {
-	if(!isLastView())
-		return true;
+  if(!isLastView())
+    return true;
 		
-	bool ret=false;
+  bool ret=false;
   if(isModified())
-  {
-		KURL saveURL;
-  	switch(KMessageBox::warningYesNoCancel(pFrame, i18n("The current file has been modified.\n"
-                          "Do you want to save it?"),URL().fileName()))
     {
-			case KMessageBox::Yes:
-				if(URL().fileName().contains(i18n("Untitled")))
-				{
-					saveURL=KFileDialog::getSaveURL(QDir::currentDirPath(),
-                      i18n("*|All files"), pFrame, i18n("Save as..."));
-          if(saveURL.isEmpty())
+      KURL saveURL;
+      switch(KMessageBox::warningYesNoCancel(pFrame, i18n("The current file has been modified.\n"
+							  "Do you want to save it?"),URL().fileName()))
+	{
+	case KMessageBox::Yes:
+	  if(URL().fileName().contains(i18n("Untitled")))
+	    {
+	      saveURL=KFileDialog::getSaveURL(QDir::currentDirPath(),
+					      i18n("*|All files"), pFrame, i18n("Save as..."));
+	      if(saveURL.isEmpty())
           	return false;
-				}
-				else
-						saveURL=URL();
+	    }
+	  else
+	    saveURL=URL();
 					
-				if(!saveDocument(saveURL))
-				{
- 					switch(KMessageBox::warningYesNo(pFrame,i18n("Could not save the current document !\n"
-																												"Close anyway ?"), i18n("I/O Error !")))
- 					{
- 						case KMessageBox::Yes:
- 							ret=true;
- 						case KMessageBox::No:
- 							ret=false;
- 					}	        			
-				}
-				else
-					ret=true;
-				break;
-			case KMessageBox::No:
-				ret=true;
-				break;
-			case KMessageBox::Cancel:
-			default:
-				ret=false; 				
-				break;
-		}
+	  if(!saveDocument(saveURL))
+	    {
+	      switch(KMessageBox::warningYesNo(pFrame,i18n("Could not save the current document !\n"
+							   "Close anyway ?"), i18n("I/O Error !")))
+		{
+		case KMessageBox::Yes:
+		  ret=true;
+		case KMessageBox::No:
+		  ret=false;
+		}	        			
+	    }
+	  else
+	    ret=true;
+	  break;
+	case KMessageBox::No:
+	  ret=true;
+	  break;
+	case KMessageBox::Cancel:
+	default:
+	  ret=false; 				
+	  break;
 	}
-	else
-		ret=true;
+    }
+  else
+    ret=true;
 		
-	return ret;
+  return ret;
 }
