@@ -20,6 +20,8 @@
 #include <k3bdevicemanager.h>
 
 #include <klocale.h>
+#include <kglobal.h>
+
 
 K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bJob( parent, name ),
@@ -68,7 +70,7 @@ void K3bAbstractWriter::createAverageWriteSpeedInfoMessage()
 {
   double secs = (double)m_firstWriteSpeedCalcTime.secsTo( m_lastWriteSpeedCalcTime );
   double speed = (double)m_lastWrittenBytes * 1024.0 / ( secs > 0 ? secs : 1 );
-  emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(speed/150.0, 0, 'f', 2), INFO );
+  emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/150.0,2)), INFO );
 }
 
 #include "k3babstractwriter.moc"
