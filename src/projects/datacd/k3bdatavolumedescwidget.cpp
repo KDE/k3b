@@ -72,7 +72,7 @@ void K3bDataVolumeDescWidget::load( const K3bIsoOptions& o )
 void K3bDataVolumeDescWidget::save( K3bIsoOptions& o )
 {
   o.setVolumeID( m_editVolumeName->text() );
-  o.setVolumeSetId( m_editVolumeSetName->text() );
+  o.setVolumeSetId( QString::null /*m_editVolumeSetName->text()*/ );
   o.setVolumeSetSize( 1/*m_spinVolumeSetSize->value() */);
   o.setVolumeSetNumber( 1/*m_spinVolumeSetNumber->value() */);
   o.setPublisher( m_editPublisher->text() );
