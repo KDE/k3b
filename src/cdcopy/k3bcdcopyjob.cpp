@@ -53,7 +53,7 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
         m_onTheFly(true),
         m_tempPath(QString("")),
         m_tocFile(QString("")),
-        m_job(READING) 
+        m_job(READING)
 {
     m_cdrdaowriter = new K3bCdrdaoWriter(0, this);
     connect(m_cdrdaowriter,SIGNAL(percent(int)),
@@ -75,15 +75,11 @@ K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
     connect( m_cdrdaowriter, SIGNAL(writeSpeed(int)),
              this, SIGNAL(writeSpeed(int)) );
 
-    m_diskInfoDetector = new K3bDiskInfoDetector( this );
-    connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
-             this, SLOT(diskInfoReady(const K3bDiskInfo&)) );
 }
 
 
 K3bCdCopyJob::~K3bCdCopyJob() {
     delete m_cdrdaowriter;
-    delete m_diskInfoDetector;
 }
 
 
@@ -93,37 +89,38 @@ void K3bCdCopyJob::start() {
     m_finishedCopies = 0;
 
     emit infoMessage( i18n("Retrieving information about source disk"), K3bJob::PROCESS );
-    m_diskInfoDetector->detect( m_cdrdaowriter->sourceDevice() );
+    getSourceDiskInfo( m_cdrdaowriter->sourceDevice() );
 
 }
 
 
-void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info ) {
-    if( info.noDisk ) {
+void K3bCdCopyJob::getSourceDiskInfo(K3bDevice *dev) {
+    if( dev->isEmpty() == 0 ) {
+        emit infoMessage( i18n("Source disk is empty"), K3bJob::ERROR );
+        cancelAll();
+        return;
+    }
+    K3bDiskInfo::type diskType = dev->diskType();
+
+    if( diskType == K3bDiskInfo::NODISC  ) {
         emit infoMessage( i18n("No disk in CD reader"), K3bJob::ERROR );
         cancelAll();
         return;
     }
 
-    if( info.empty ) {
-        emit infoMessage( i18n("Source disk is empty"), K3bJob::ERROR );
-        cancelAll();
-        return;
-    }
-
-    if( info.tocType == K3bDiskInfo::DVD ) {
+    if( diskType == K3bDiskInfo::DVD ) {
         emit infoMessage( i18n("Source disk seems to be a DVD."), K3bJob::ERROR );
         emit infoMessage( i18n("K3b is not able to copy DVDs yet."), K3bJob::ERROR );
         cancelAll();
         return;
     }
-    m_sessions = info.sessions;
+    m_sessions = dev->numSessions();
     if( m_sessions < 2 ) {
         m_tempPath = k3bMain()->findTempFile( "img", m_tempPath );
         m_tocFile  = m_tempPath;
         m_tocFile  = m_tocFile.replace(m_tocFile.findRev(".img"),4,".toc");;
 
-        switch( info.tocType ) {
+        switch( diskType ) {
           case K3bDiskInfo::DATA:
                emit infoMessage( i18n("Source disk seems to be a data CD"), K3bJob::INFO );
                break;

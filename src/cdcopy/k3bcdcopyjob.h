@@ -23,8 +23,6 @@
 
 class K3bProcess;
 class K3bDevice;
-class K3bDiskInfo;
-class K3bDiskInfoDetector;
 class QUrlOperator;
 
 
@@ -35,7 +33,7 @@ class K3bCdCopyJob : public K3bBurnJob
 {
   Q_OBJECT
 
- public: 
+ public:
   K3bCdCopyJob( QObject* parent = 0 );
   ~K3bCdCopyJob();
   K3bDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
@@ -63,10 +61,8 @@ class K3bCdCopyJob : public K3bBurnJob
   void setTaoSource(bool b) { m_cdrdaowriter->setTaoSource(b); };
   void setTaoSourceAdjust(int a) { m_cdrdaowriter->setTaoSourceAdjust(a); };
   void setForce(bool b) { m_cdrdaowriter->setForce(b); };
-  
- private slots:
-  void diskInfoReady( const K3bDiskInfo& info );
 
+ private slots:
   void cdrdaoFinished(bool);
 
   void copyPercent(int p);
@@ -74,9 +70,10 @@ class K3bCdCopyJob : public K3bBurnJob
   void slotNextTrack( int, int );
 
  private:
+  void getSourceDiskInfo(K3bDevice *dev);
   void cdrdaoDirectCopy();
-  void cdrdaoRead(); 
-  void cdrdaoWrite();  
+  void cdrdaoRead();
+  void cdrdaoWrite();
   void removeImages();
   void finishAll();
   void cancelAll();
@@ -101,7 +98,6 @@ class K3bCdCopyJob : public K3bBurnJob
   int m_job; // Task
 
   K3bCdrdaoWriter *m_cdrdaowriter;
-  K3bDiskInfoDetector* m_diskInfoDetector;
 };
 
 #endif
