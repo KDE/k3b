@@ -594,6 +594,13 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
     writer->addArgument( "-text" );
   writer->addArgument( "-audio" );
 
+  // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
+  // it seems that normalize sometimes corrupts these lengths
+  writer->addArgument( "-pad" );
+
+  // Allow tracks shorter than 4 seconds
+  writer->addArgument( "-shorttrack" );
+
   // add all the audio tracks
   QPtrListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
   for( ; it.current(); ++it ) {
