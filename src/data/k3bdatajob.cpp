@@ -4,7 +4,7 @@
     begin                : Tue May 15 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -74,159 +74,188 @@ K3bDevice* K3bDataJob::writer() const
 
 void K3bDataJob::start()
 {
-  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
-
-    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-    if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
-      cancel();
-      return;
-    }
-
-
-    // check msinfo
-    m_process->clearArguments();
-    m_process->disconnect();
-
-    if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-      qDebug("(K3bAudioJob) could not find cdrecord executable" );
-      emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-      return;
-    }
-
-    *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
-    *m_process << "-msinfo";
-
-    // add the device (e.g. /dev/sg1)
-    *m_process << QString("dev=%1").arg( m_doc->burner()->busTargetLun() );//genericDevice() );
-
-    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-
-    m_collectedOutput = QString::null;
-    m_msInfo = QString::null;
-
-    if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
-      qDebug( "(K3bDataJob) could not start cdrecord" );
-      emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-      return;
-    }
-
-    qDebug("(K3bDataJob) msinfo fetched");
-
-    // now parse the output
-    QStringList list = QStringList::split( ",", m_collectedOutput );
-    if( list.count() == 2 ) {
-      bool ok1, ok2;
-      list.first().toInt( &ok1 );
-      list[1].toInt( &ok2 );
-      if( ok1 && ok2 )
-	m_msInfo = m_collectedOutput.stripWhiteSpace();
-      else
-	m_msInfo = QString::null;
-    }
-    else {
-      m_msInfo = QString::null;
-    }
-
-    qDebug("(K3bDataJob) msinfo parsed: " + m_msInfo );
-		
-    if( m_msInfo.isEmpty() ) {
-      emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
-      emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-      return;
-    }
+  // write path spec file
+  // ----------------------------------------------------
+  m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
+  if( !writePathSpec( m_pathSpecFile ) ) {
+    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
   }
 
 
-
-
-  if( m_doc->onTheFly() ) {
-    m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
-    if( !writePathSpec( m_pathSpecFile ) ) {
-      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-      return;
-    }
-
-    // determine iso-size
-    m_process->clearArguments();
-    m_process->disconnect();
-
-    qDebug("(K3bDataJob) process cleared");
-
-    if( !addMkisofsParameters() )
-      return;
-
-    qDebug("(K3bDataJob) mkisofs arguments set");
-
-    *m_process << "-print-size" << "-quiet";
-    // add empty dummy dir since one path-spec is needed
-    *m_process << m_doc->dummyDir();
-
-    cout << "***** mkisofs parameters:\n";
-    const QValueList<QCString>& args = m_process->args();
-    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-      cout << *it << " ";
-    }
-    cout << endl << flush;
-
-	
-    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-
-    m_collectedOutput = QString::null;
-    m_isoSize = QString::null;
-			
-    if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
-      qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
-      emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-      return;
-    }
-    
-    qDebug("(K3bDataJob) iso size fetched");
-
-    // now parse the output
-    // this seems to be the format for mkisofs version < 1.14 (to stdout)
-    if( m_collectedOutput.contains( "=" ) ) {
-      m_isoSize = m_collectedOutput.mid( m_collectedOutput.find('=') + 1 ).stripWhiteSpace() + "s";
-    }
-    // and mkisofs >= 1.14 prints out only the number (to stderr)
-    else {
-      bool ok;
-      m_collectedOutput.toInt( &ok );
-      if( ok ) {
-	m_isoSize = m_collectedOutput.stripWhiteSpace() + "s";
-      }
-    }
-    
-    qDebug("(K3bDataJob) iso size parsed: " + m_isoSize );
-
-    if( m_isoSize.isEmpty() ) {
-      emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
-      emit infoMessage( i18n("Please create an image first!"), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-    }
-    else {
-      writeCD();
-    }
+  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+    fetchMultiSessionInfo();
+  }
+  else if( m_doc->onTheFly() ) {
+    fetchIsoSize();
   }
   else {
     writeImage();
+  }
+}
+
+
+void K3bDataJob::fetchMultiSessionInfo()
+{
+  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+  if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
+    return;
+  }
+
+  emit infoMessage( i18n("Searching previous session"), K3bJob::PROCESS );
+
+  // check msinfo
+  m_process->clearArguments();
+  m_process->disconnect();
+
+  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
+  }
+
+  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
+  *m_process << "-msinfo";
+
+  // add the device (e.g. /dev/sg1)
+  *m_process << QString("dev=%1").arg( m_doc->burner()->busTargetLun() );//genericDevice() );
+
+  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(processExited(KProcess*)),
+	   this, SLOT(slotMsInfoFetched()) );
+
+  m_msInfo = QString::null;
+  m_collectedOutput = QString::null;
+
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+    qDebug( "(K3bDataJob) could not start cdrecord" );
+    emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
+  }
+}
+
+
+void K3bDataJob::slotMsInfoFetched()
+{
+  qDebug("(K3bDataJob) msinfo fetched");
+
+  // now parse the output
+  QStringList list = QStringList::split( ",", m_collectedOutput );
+  if( list.count() == 2 ) {
+    bool ok1, ok2;
+    list.first().toInt( &ok1 );
+    list[1].toInt( &ok2 );
+    if( ok1 && ok2 )
+      m_msInfo = m_collectedOutput.stripWhiteSpace();
+    else
+      m_msInfo = QString::null;
+  }
+  else {
+    m_msInfo = QString::null;
+  }
+
+  qDebug("(K3bDataJob) msinfo parsed: " + m_msInfo );
+		
+  if( m_msInfo.isEmpty() ) {
+    emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
+    emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
+  }
+  else if( m_doc->onTheFly() ) {
+    fetchIsoSize();
+  }
+  else {
+    writeImage();
+  }
+}
+
+
+void K3bDataJob::fetchIsoSize()
+{
+  // determine iso-size
+  m_process->clearArguments();
+  m_process->disconnect();
+
+  qDebug("(K3bDataJob) process cleared");
+
+  if( !addMkisofsParameters() )
+    return;
+
+  qDebug("(K3bDataJob) mkisofs arguments set");
+
+  *m_process << "-print-size" << "-quiet";
+  // add empty dummy dir since one path-spec is needed
+  *m_process << m_doc->dummyDir();
+
+  cout << "***** mkisofs parameters:\n";
+  const QValueList<QCString>& args = m_process->args();
+  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    cout << *it << " ";
+  }
+  cout << endl << flush;
+
+	
+  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(processExited(KProcess*)),
+	   this, SLOT(slotIsoSizeFetched()) );
+
+  m_collectedOutput = QString::null;
+  m_isoSize = QString::null;
+			
+  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+    qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
+    emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+    return;
+  }
+}
+
+
+void K3bDataJob::slotIsoSizeFetched()
+{
+  qDebug("(K3bDataJob) iso size fetched");
+
+  // now parse the output
+  // this seems to be the format for mkisofs version < 1.14 (to stdout)
+  if( m_collectedOutput.contains( "=" ) ) {
+    m_isoSize = m_collectedOutput.mid( m_collectedOutput.find('=') + 1 ).stripWhiteSpace() + "s";
+  }
+  // and mkisofs >= 1.14 prints out only the number (to stderr)
+  else {
+    bool ok;
+    m_collectedOutput.toInt( &ok );
+    if( ok ) {
+      m_isoSize = m_collectedOutput.stripWhiteSpace() + "s";
+    }
+  }
+    
+  qDebug("(K3bDataJob) iso size parsed: " + m_isoSize );
+
+  if( m_isoSize.isEmpty() ) {
+    emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
+    emit infoMessage( i18n("Please create an image first!"), K3bJob::ERROR );
+    cancelAll();
+    emit finished( false );
+  }
+  else {
+    writeCD();
   }
 }
 
@@ -332,14 +361,14 @@ void K3bDataJob::writeCD()
 
 		
   // debugging output
-//   cout << "***** mkisofs parameters:\n";
-//   QStrList* _args = m_process->args();
-//   QStrListIterator _it(*_args);
-//   while( _it ) {
-//     cout << *_it << " ";
-//     ++_it;
-//   }
-//   cout << endl << flush;
+  //   cout << "***** mkisofs parameters:\n";
+  //   QStrList* _args = m_process->args();
+  //   QStrListIterator _it(*_args);
+  //   while( _it ) {
+  //     cout << *_it << " ";
+  //     ++_it;
+  //   }
+  //   cout << endl << flush;
 
 			
   // connect to the cdrecord slots
@@ -382,12 +411,6 @@ void K3bDataJob::writeCD()
 
 void K3bDataJob::writeImage()
 {
-  m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
-  if( !writePathSpec( m_pathSpecFile ) ) {
-    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
-    emit finished( false );
-  }
-	
   // get image file path
   if( m_doc->isoImage().isEmpty() )
     m_doc->setIsoImage( k3bMain()->findTempFile( "iso" ) );
@@ -906,8 +929,8 @@ bool K3bDataJob::writePathSpec( const QString& filename )
 }
 
 /*
-void K3bDataJob::splitDoc()
-{
+  void K3bDataJob::splitDoc()
+  {
   m_splittedLists.setAutoDelete( true );
   m_splittedLists.clear();
 
@@ -919,19 +942,19 @@ void K3bDataJob::splitDoc()
 
   while( item ) {
 
-    item = item->nextSibling();
+  item = item->nextSibling();
 
-    if( size + item->size() < 650 ) {    // we should let the user choose the size of the images
-      newList->append( item );
-      size += item->size();
-    }
-    else {
-      m_splittedLists.append( newList );
-      newList = new QPtrList<K3bDataItem>();
-      size = 0;
-    }
+  if( size + item->size() < 650 ) {    // we should let the user choose the size of the images
+  newList->append( item );
+  size += item->size();
   }
-}
+  else {
+  m_splittedLists.append( newList );
+  newList = new QPtrList<K3bDataItem>();
+  size = 0;
+  }
+  }
+  }
 */
 
 
@@ -949,11 +972,11 @@ void K3bDataJob::cancelAll()
     }
 
   // remove toc-file
-//   if( QFile::exists( m_tocFile ) ) {
-//      qDebug("(K3bAudioOnTheFlyJob) Removing temporary TOC-file");
-//      QFile::remove( m_tocFile );
-//   }
-//   m_tocFile = QString::null;
+  //   if( QFile::exists( m_tocFile ) ) {
+  //      qDebug("(K3bAudioOnTheFlyJob) Removing temporary TOC-file");
+  //      QFile::remove( m_tocFile );
+  //   }
+  //   m_tocFile = QString::null;
 
   // remove path-spec-file
   if( QFile::exists( m_pathSpecFile ) ) {

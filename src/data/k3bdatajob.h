@@ -51,6 +51,13 @@ class K3bDataJob : public K3bBurnJob
   void slotMkisofsFinished();
   void slotCdrecordFinished();
   void slotCollectOutput( KProcess*, char*, int );
+  void fetchMultiSessionInfo();
+  void fetchIsoSize();
+  void slotMsInfoFetched();
+  void slotIsoSizeFetched();
+  void writeImage();
+  void writeCD();
+  void cancelAll();
 		
  private:
   K3bDataDoc* m_doc;
@@ -63,11 +70,8 @@ class K3bDataJob : public K3bBurnJob
   QString m_msInfo;
   QString m_collectedOutput;
 		
-  void writeImage();
-  void writeCD();
   bool addMkisofsParameters();
   bool writePathSpec( const QString& filename );
-  void cancelAll();
 };
 
 #endif
