@@ -1,7 +1,7 @@
 #ifndef K3BTOC_H
 #define K3BTOC_H
 
-#include <qlist.h>
+#include <qvaluelist.h>
 
 #include "k3btrack.h"
 
@@ -13,7 +13,7 @@ class QString;
  * The Toc deletes all its tracks when it is deleted and
  * deletes removed tracks.
  */
-class K3bToc : public QList<K3bTrack>
+class K3bToc : public QValueList<K3bTrack>
 {
  public:
   K3bToc();

@@ -58,7 +58,6 @@
 #include "audio/k3baudioview.h"
 #include "device/k3bdevicemanager.h"
 #include "audio/k3baudiotrackdialog.h"
-#include "k3bcopywidget.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
 #include "data/k3bdatadoc.h"

@@ -21,6 +21,7 @@
 #include "../k3bglobals.h"
 #include "../device/k3bdevice.h"
 #include "../device/k3bemptydiscwaiter.h"
+#include "../tools/k3bexternalbinmanager.h"
 
 #include <kprocess.h>
 #include <kconfig.h>
@@ -99,6 +100,8 @@ void K3bIsoImageJob::setDummy( bool dummy )
 
 void K3bIsoImageJob::start()
 {
+  emit started();
+
   // check if everything is set
   if( m_device == 0 || !m_device->burner() ) {
     emit infoMessage( i18n("Please specify a cd writing device"), K3bJob::ERROR );
@@ -114,22 +117,19 @@ void K3bIsoImageJob::start()
   }
 
 
-  K3bEmptyDiscWaiter waiter( m_device, k3bMain() );
-  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-    cancel();
-    return;
-  }
-
-
-  emit started();
-
   emit newSubTask( i18n("Preparing write process...") );
 
   m_process->clearArguments();
 	
-  // now add the cdrecord parameters
-  kapp->config()->setGroup( "External Programs" );
-  *m_process << kapp->config()->readEntry( "cdrecord path" );
+  // use cdrecord to burn the cd
+  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+    qDebug("(K3bAudioJob) could not find cdrecord executable" );
+    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+    emit finished( false );
+    return;
+  }
+
+  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 	
   // and now we add the needed arguments...
   // display progress
@@ -154,27 +154,32 @@ void K3bIsoImageJob::start()
   QString s = QString("-speed=%1").arg( m_speed );
   *m_process << s;
 
-  // add the device (e.g. /dev/sg1)
-  s = QString("-dev=%1").arg( m_device->genericDevice() );
+  // add the device (e.g. 0,0,0)
+  s = QString("dev=%1").arg( m_device->busTargetLun() );
   *m_process << s;
 
   // additional parameters from config
   QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
     *m_process << *it;
-			
-  // debugging output
-//   cout << "***** cdrecord parameters:\n";
-//   QStrList* _args = m_process->args();
-//   QStrListIterator _it(*_args);
-//   while( _it ) {
-//     cout << *_it << " ";
-//     ++_it;
-//   }
-//   cout << endl << flush;
 
-  *m_process << QString("\"%1\"").arg(QFile::encodeName(m_imagePath));
-				
+  *m_process << "-data" << QString("\"%1\"").arg( m_imagePath );
+			
+
+  cout << "***** cdrecord parameters:\n";
+  const QValueList<QCString>& args = m_process->args();
+  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    cout << *it << " ";
+  }
+  cout << endl << flush;
+
+
+
+  K3bEmptyDiscWaiter waiter( m_device, k3bMain() );
+  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    emit finished( false );
+    return;
+  }
 
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
@@ -193,7 +198,6 @@ void K3bIsoImageJob::start()
 	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_speed), K3bJob::STATUS );
 
       emit newTask( i18n("Writing ISO Image") );
-
     }
 }
 
@@ -336,7 +340,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else {
 	// debugging
-	cout << *str << endl;
+	qDebug("(cdrecord) " + *str );
       }
     } // for every line
 

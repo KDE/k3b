@@ -149,27 +149,27 @@ bool K3bDevice::block( bool block ) const
 }
 
 
-K3bToc K3bDevice::readToc()
-{
-  cdrom_drive* drive = open();
-  if( !drive )
-    return K3bToc();
+// K3bToc K3bDevice::readToc()
+// {
+//   cdrom_drive* drive = open();
+//   if( !drive )
+//     return K3bToc();
 
-  K3bToc toc;
-  int discFirstSector = cdda_disc_firstsector( drive );
-  toc.setFirstSector( discFirstSector );
+//   K3bToc toc;
+//   int discFirstSector = cdda_disc_firstsector( drive );
+//   toc.setFirstSector( discFirstSector );
 
-  int tracks = cdda_tracks( drive );
-  for( int i = 1; i <= tracks; i++ ) {
+//   int tracks = cdda_tracks( drive );
+//   for( int i = 1; i <= tracks; i++ ) {
     
-    int firstSector = cdda_track_firstsector( drive, i );
-    int lastSector = cdda_track_lastsector( drive, i );
-    int type = ( cdda_track_audiop( drive, i ) ? K3bTrack::AUDIO : K3bTrack::DATA );
+//     int firstSector = cdda_track_firstsector( drive, i );
+//     int lastSector = cdda_track_lastsector( drive, i );
+//     int type = ( cdda_track_audiop( drive, i ) ? K3bTrack::AUDIO : K3bTrack::DATA );
 
-    toc.append( new K3bTrack(firstSector, lastSector, type, QString("Track %1").arg(i)) );
-  }
+//     toc.append( new K3bTrack(firstSector, lastSector, type, QString("Track %1").arg(i)) );
+//   }
 
-  close();
+//   close();
 
-  return toc;
-}
+//   return toc;
+// }

@@ -63,6 +63,8 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   m_dirOnlyMode = true;
 
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+  connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
+	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
 }
 
 
@@ -140,7 +142,15 @@ void K3bFileTreeView::setTreeDirOnlyMode( bool b )
 
 void K3bFileTreeView::followUrl( const KURL& url )
 {
-  // suche in branches() rootUrl(), ist in url? dann find im branch
+  // FIXME: suche in branches() rootUrl(), ist in url? dann find im branch
+}
+
+
+void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QPoint& p )
+{
+  KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
+  if( m_deviceBranchesMap.contains( treeItem->branch() ) )
+    emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
 }
 
 

@@ -335,7 +335,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>( job );
   if( burnJob ) {
     if( burnJob->writer() )
-      m_labelWriter->setText( "Writer: " + burnJob->writer()->vendor() + " " + 
+      m_labelWriter->setText( i18n("Writer: ") + burnJob->writer()->vendor() + " " + 
 			      burnJob->writer()->description() );
   
     // connect to the "special" signals
@@ -352,7 +352,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 void K3bBurnProgressDialog::slotCancelPressed()
 {
   if( m_job )
-    if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes ) {
+    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
       if( m_job )
 	m_job->cancel();
     }

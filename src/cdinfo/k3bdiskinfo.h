@@ -13,14 +13,27 @@ class K3bDiskInfo
 {
  public:
   K3bDiskInfo()
-    : empty(true), cdrw(false), appendable(false), noDisk(false), size(0), speed(0), sessions(0)
+    : empty(true), 
+    cdrw(false), 
+    appendable(false), 
+    noDisk(false), 
+    size(0), 
+    remaining(0),
+    speed(0), 
+    sessions(0),
+    valid(true),
+    device(0)
     { }
 
   enum type { AUDIO, DATA, MIXED, DVD };
 
   K3bToc toc;
-  QString manufactor;
+  QString mediumManufactor;
+  QString mediumType;
+  QString sizeString;
+  QString remainingString;
   unsigned long size;
+  unsigned long remaining;
   bool cdrw;
   int speed;
   bool appendable;
@@ -28,6 +41,8 @@ class K3bDiskInfo
   bool noDisk;
   bool empty;
   int tocType;
+
+  bool valid;
 
   K3bDevice* device;
 };

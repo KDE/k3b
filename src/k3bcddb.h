@@ -76,8 +76,6 @@ class K3bCddb : public QObject {
     void setAlbum( const QString& album ) {m_cd_album = album; };
     void setArtist( const QString& artist ) { m_cd_artist = artist; };
 
-    static bool appendCddbInfo( K3bToc& );
-
  signals:
    void updatedCD();
 

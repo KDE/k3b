@@ -39,6 +39,8 @@ class QWidgetStack;
 class K3bDiskInfo;
 class K3bDiskInfoView;
 class KActionCollection;
+class K3bDiskInfoDetector;
+class KActionMenu;
 
 
 /**
@@ -56,12 +58,15 @@ class K3bDirView : public QVBox
  protected slots:
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
-  void slotDeviceActivated( K3bDevice*  );
   void slotUpdateURLCombo( const KURL& url );
   void slotMountDevice( K3bDevice* dev );
   void slotDiskInfoReady( const K3bDiskInfo& info );
   void reload();
   void home();
+  void slotDetectDiskInfo( K3bDevice* dev );
+  void slotShowDiskInfo();
+  void slotUnmountDisk();
+  void slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p );
 
  private:
   QWidgetStack* m_viewStack;
@@ -76,6 +81,11 @@ class K3bDirView : public QVBox
   K3bFileTreeView* m_fileTreeView;
 
   KActionCollection* m_actionCollection;
+
+  K3bDiskInfoDetector* m_diskInfoDetector;
+  bool m_bViewDiskInfo;
+  KActionMenu* m_devicePopupMenu;
+  K3bDevice* m_lastDevice;
 };
 
 #endif

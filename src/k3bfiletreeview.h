@@ -26,7 +26,7 @@
 class K3bDeviceManager;
 class K3bDevice;
 class KFileTreeBranch;
-
+class QPoint;
 
 
 class K3bDeviceBranch : public KFileTreeBranch
@@ -76,9 +76,11 @@ class K3bFileTreeView : public KFileTreeView
  signals:
   void urlExecuted( const KURL& url );
   void deviceExecuted( K3bDevice* dev );
+  void contextMenu( K3bDevice*, const QPoint& );
 
  private slots:
   void slotItemExecuted( QListViewItem* item );
+  void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
 
  private:
   bool m_dirOnlyMode;

@@ -2,30 +2,81 @@
 #include "k3bdiskinfoview.h"
 
 #include "k3bdiskinfo.h"
+#include "k3bdiskinfodetector.h"
+#include "../k3bglobals.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfont.h>
 #include <qcolor.h>
+#include <qheader.h>
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <klistview.h>
+#include <kiconloader.h>
 
 
 K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   : K3bCdContentsView( parent, name )
 {
-  QFont f( font() );
-  f.setPointSize( f.pointSize() + 4 );
-  setFont( f );
+  QVBoxLayout* mainLayout = new QVBoxLayout( this );
+  mainLayout->setAutoAdd( true );
+  mainLayout->setMargin( KDialog::marginHint() );
+  mainLayout->setSpacing( KDialog::spacingHint() );
 
-  setPaletteBackgroundColor( white );
+  m_labelTocType          = new QLabel( this );
+  QFont f(m_labelTocType->font() );
+  f.setBold( true );
+  m_labelTocType->setFont( f );
 
-  QHBoxLayout* layout = new QHBoxLayout( this );
-  layout->setAutoAdd( true );
-  layout->setMargin( KDialog::marginHint() );
+  QFrame* line = new QFrame( this );
+  line->setMargin( 0 );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-  m_label = new QLabel( this );
+  m_infoWidget            = new QWidget( this );
+
+  QGridLayout* infoLayout = new QGridLayout( m_infoWidget );
+  infoLayout->setSpacing( KDialog::spacingHint() );
+  infoLayout->setMargin( 0 );
+
+  m_labelSize             = new QLabel( m_infoWidget );
+  m_labelRemaining        = new QLabel( m_infoWidget );
+  m_labelMediumManufactor = new QLabel( m_infoWidget );
+  m_labelMediumType       = new QLabel( m_infoWidget );
+  m_labelCdrw             = new QLabel( m_infoWidget );
+  m_labelAppendable       = new QLabel( m_infoWidget );
+  m_labelSessions         = new QLabel( m_infoWidget );
+
+  infoLayout->addWidget( new QLabel( i18n("Total Capacity of medium:"), m_infoWidget ), 0, 0 );
+  infoLayout->addWidget( new QLabel( i18n("Remaining Capacity:"), m_infoWidget ), 1, 0 );
+  infoLayout->addWidget( new QLabel( i18n("Medium type:"), m_infoWidget ), 2, 0 );
+  infoLayout->addWidget( m_labelSize, 0, 1 );
+  infoLayout->addWidget( m_labelRemaining, 1, 1 );
+  infoLayout->addWidget( m_labelMediumManufactor, 2, 1 );
+  infoLayout->addWidget( m_labelMediumType, 3, 1 );
+
+  infoLayout->addWidget( new QLabel( i18n("Is rewritable:"), m_infoWidget ), 0, 3 );
+  infoLayout->addWidget( new QLabel( i18n("Is appendable:"), m_infoWidget ), 1, 3 );
+  infoLayout->addWidget( new QLabel( i18n("Number of Sessions:"), m_infoWidget ), 2, 3 );
+  infoLayout->addWidget( m_labelCdrw, 0, 4 );
+  infoLayout->addWidget( m_labelAppendable, 1, 4 );
+  infoLayout->addWidget( m_labelSessions, 2, 4 );
+
+  infoLayout->addColSpacing( 2, 10 );
+  infoLayout->setColStretch( 5, 1 );
+
+  mainLayout->addSpacing( 10 );
+
+  m_trackView = new KListView( this );
+  m_trackView->addColumn( i18n("Tracks") );
+  m_trackView->addColumn( i18n("First Sector") );
+  m_trackView->addColumn( i18n("Last Sector") );
+  m_trackView->addColumn( i18n("Length") );
+  m_trackView->setFullWidth();
+  m_trackView->setRootIsDecorated( true );
+  m_trackView->setSorting(-1);
+  m_trackView->header()->setClickEnabled( false );
 }
 
 
@@ -36,15 +87,105 @@ K3bDiskInfoView::~K3bDiskInfoView()
 
 void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 {
+  m_trackView->clear();
+
+  // first check if there is a cd
   if( info.noDisk ) {
-    m_label->setText( i18n("No disk in drive") );
+    m_infoWidget->hide();
+    (void)new QListViewItem( m_trackView, i18n("No disk") );
+    m_labelTocType->setText( i18n("No disk in drive") );
   }
-  else if( info.empty ) {
-    m_label->setText( i18n("Disk seems to be empty") );
-  }
+
+
   else {
-    m_label->setText( i18n("!!! Disk is not empty. Some view should have shown up !!! ") );
+    // check if we have some atip info
+    if( info.size > 0 ) {
+      m_infoWidget->show();
+
+      m_labelSize->setText( QString("%1 (%2 MB)").arg( K3b::framesToString(info.size) ).arg(info.size*2048/1024/1024) );
+
+      if( info.remaining > 0 )
+	m_labelRemaining->setText( QString("%1 (%2 MB)").arg( K3b::framesToString(info.remaining) ).arg(info.remaining*2048/1024/1024) );
+      else
+	m_labelRemaining->setText("-");
+
+      if( !info.mediumManufactor.isEmpty() ) {
+	m_labelMediumManufactor->setText( info.mediumManufactor );
+	m_labelMediumType->setText( info.mediumType );
+      }
+      else {
+	m_labelMediumManufactor->setText( "-" );
+	m_labelMediumType->setText( QString::null );
+      }
+
+      m_labelCdrw->setText( info.cdrw ? i18n("yes") : i18n("no") );
+
+      m_labelAppendable->setText( info.appendable ? i18n("yes") : i18n("no") );
+
+      m_labelSessions->setText( QString::number( info.sessions ) );
+    }
+    else {
+      m_infoWidget->hide();
+    }
+
+
+    if( info.empty ) {
+      m_labelTocType->setText( i18n("Disk is empty") );
+    }
+    else {
+      switch( info.tocType ) {
+      case K3bDiskInfo::AUDIO:
+	m_labelTocType->setText( i18n("Audio CD") );
+	break;
+      case K3bDiskInfo::DATA:
+	m_labelTocType->setText( i18n("Data CD") );
+	break;
+      case K3bDiskInfo::MIXED:
+	m_labelTocType->setText( i18n("Mixed mode CD") );
+	break;
+      case K3bDiskInfo::DVD:
+	m_labelTocType->setText( i18n("DVD") );
+	break;
+      }
+    }
+
+
+    if( info.toc.isEmpty() )
+      (void)new QListViewItem( m_trackView, i18n("disk is empty") );
+    else {
+      // create items for the tracks
+      K3bToc::const_iterator it;
+      for( it = info.toc.begin(); it != info.toc.end(); ++it ) {
+	const K3bTrack& track = *it;
+
+	QListViewItem* item = new QListViewItem( m_trackView, m_trackView->lastItem() );
+	if( track.type() == K3bTrack::AUDIO ) {
+	  item->setPixmap( 0, SmallIcon( "sound" ) );
+	  item->setText( 0, i18n("audio") );
+	}
+	else {
+	  item->setPixmap( 0, SmallIcon( "tar" ) );
+	  if( track.mode() == K3bTrack::MODE1 )
+	    item->setText( 0, i18n("data/mode1") );
+	  else if( track.mode() == K3bTrack::MODE2 )
+	    item->setText( 0, i18n("data/mode2") );
+	  else
+	    item->setText( 0, i18n("data") );
+	}
+
+	item->setText( 1, QString::number( track.firstSector() ) );
+	item->setText( 2, QString::number( track.lastSector() ) );
+	item->setText( 3, QString::number( track.length() ) );
+      }
+    }
   }
+}
+
+
+void K3bDiskInfoView::reload()
+{
+//   if( m_currentInfo )
+//     m_diskInfoDetector->detect( m_currentInfo.device );
 }
 
 
