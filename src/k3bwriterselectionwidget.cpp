@@ -152,10 +152,14 @@ void K3bWriterSelectionWidget::init()
     dev = devices.next();
   }
 
+  kapp->config()->setGroup( "General Settings" );
+  K3bDevice *current = k3bcore->deviceManager()->deviceByName( kapp->config()->readEntry( "current_writer" ) );
+  if ( current == (K3bDevice *)0 )
+  	current = devices.first();
+  setWriterDevice( current );
+  
   slotRefreshWriterSpeeds();
   slotConfigChanged(kapp->config());
-  kapp->config()->setGroup( "General Settings" );
-  setWriterDevice( k3bcore->deviceManager()->deviceByName( kapp->config()->readEntry( "current_writer" ) ) );
 }
 
 
@@ -175,12 +179,12 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-  if( K3bDevice* dev = writerDevice() ) {
+    if( K3bDevice* dev = writerDevice() ) {
     // add speeds to combobox
     m_comboSpeed->clear();
     m_comboSpeed->insertItem( "1x" );
-    int speed = 2;
     int currentSpeedIndex = 0;
+    int speed = 2;
     while( speed <= dev->maxWriteSpeed() ) {
       m_comboSpeed->insertItem( QString( "%1x" ).arg(speed) );
       if( speed == dev->currentWriteSpeed() )
@@ -213,7 +217,10 @@ void K3bWriterSelectionWidget::slotWritingAppSelected( int id )
 
 K3bDevice* K3bWriterSelectionWidget::writerDevice() const
 {
-  return d->devices[m_comboWriter->currentItem()];
+   if ( m_comboWriter->count() > 0 )
+     	return d->devices[m_comboWriter->currentItem()];
+   else
+        return (K3bDevice*)0;
 }
 
 
