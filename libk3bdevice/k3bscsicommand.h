@@ -19,12 +19,11 @@
 #include <qglobal.h>
 #include <qstring.h>
 
+#include "k3bdevice.h"
 
 
 namespace K3bDevice
 {
-  class Device;
-
   const unsigned char MMC_BLANK = 0xA1;
   const unsigned char MMC_CLOSE_TRACK_SESSION = 0x5B;
   const unsigned char MMC_ERASE = 0x2C;
@@ -90,7 +89,7 @@ namespace K3bDevice
   class ScsiCommand
     {
     public:
-      ScsiCommand( int fd );
+      ScsiCommand( K3bDevice::Device::Handle handle );
       ScsiCommand( const Device* );
       ~ScsiCommand();
 
@@ -108,15 +107,10 @@ namespace K3bDevice
       static QString senseKeyToString( int key );
       void debugError( int command, int errorCode, int senseKey, int asc, int ascq );
 
-      // The private class holds OS-specific things that would
-      // otherwise be member variables. There are parts of ScsiCommand
-      // that refer directly to Private's members, so those are also
-      // OS-specific.
       class Private;
       Private *d;
-      int m_fd;
+      Device::Handle m_deviceHandle;
       const Device* m_device;
-      bool m_needToCloseDevice;
       bool m_printErrors;
     };
 }

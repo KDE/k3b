@@ -199,10 +199,8 @@ bool K3bDevice::Device::init()
 
   d->supportedProfiles = 0;
 
-#ifndef Q_OS_FREEBSD
-  if( open() < 0 )
+  if( !open() )
     return false;
-#endif
 
   //
   // inquiry
@@ -743,7 +741,8 @@ bool K3bDevice::Device::furtherInit()
   // We just keep it here because of the "should" in the sentence above. If someone can tell me
   // that the linux driver does nothing more we can remove it completely.
   //
-  int drivetype = ::ioctl( open(), CDROM_GET_CAPABILITY, CDSL_CURRENT );
+  open();
+  int drivetype = ::ioctl( handle(), CDROM_GET_CAPABILITY, CDSL_CURRENT );
   if( drivetype < 0 ) {
     kdDebug() << "Error while retrieving capabilities." << endl;
     close();
@@ -997,7 +996,7 @@ int K3bDevice::Device::isEmpty() const
   bool needToClose = !isOpen();
 
   int ret = NO_INFO;
-  if (open() < 0)
+  if( !open() )
     return NO_INFO;
 
   if( !isReady() )
@@ -1040,7 +1039,7 @@ K3b::Msf K3bDevice::Device::discSize() const
   bool needToClose = !isOpen();
 
   K3b::Msf ret(0);
-  if (open() < 0)
+  if( !open() )
     return ret;
 
   unsigned char* data = 0;
@@ -1143,7 +1142,7 @@ int K3bDevice::Device::getDataMode( const K3b::Msf& sector ) const
 
   int ret = Track::UNKNOWN;
 
-  if (open() < 0)
+  if( !open() )
     return ret;
 
   // we use readCdMsf here since it's defined mandatory in MMC1 and
@@ -1202,7 +1201,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
 
   Toc toc;
 
-  if( open() == -1 )
+  if( !open() )
     return toc;
 
   if( isDVD() ) {
@@ -1445,7 +1444,7 @@ bool K3bDevice::Device::readRawToc( K3bDevice::Toc& toc ) const
 
   toc.clear();
 
-  if( open() != -1 ) {
+  if( open() ) {
     //
     // Read Raw TOC (format: 0010b)
     //
@@ -1717,7 +1716,7 @@ K3bDevice::CdText K3bDevice::Device::readCdText() const
 
   K3bDevice::CdText textData;
 
-  if( open() != -1 ) {
+  if( open() ) {
     unsigned char* data = 0;
     int dataLen = 0;
 
@@ -1750,7 +1749,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
   struct cdrom_tochdr tochdr;
   struct cdrom_tocentry tocentry;
 
-  if (open() != -1) {
+  if( open() ) {
     //
     // CDROMREADTOCHDR ioctl returns:
     // cdth_trk0: First Track Number
@@ -1956,22 +1955,31 @@ bool K3bDevice::Device::supportsWriteMode( WriteMode w )
 }
 
 
-int K3bDevice::Device::open( bool write ) const
+K3bDevice::Device::Handle K3bDevice::Device::handle() const
 {
 #ifdef Q_OS_FREEBSD
-  // FIXME: perhaps we should also use write here and open with O_RDONLY if false
+  return d->cam;
+#else
+  return d->deviceFd;
+#endif
+}
+
+
+bool K3bDevice::Device::open( bool write ) const
+{
+#ifdef Q_OS_FREEBSD
   if( !d->cam ) {
-    d->cam = cam_open_pass (m_passDevice.latin1(),O_RDWR,0 /* NULL */);
+    d->cam = cam_open_pass (m_passDevice.latin1(), (write ? O_RDWR : O_RDONLY),0 /* NULL */);
     kdDebug() << "(K3bDevice::openDevice) open device " << m_passDevice
 	      << ((d->cam)?" succeeded.":" failed.") << endl;
   }
-  return (d->cam ? 0 : -1);
+  return (d->cam != 0);
 #endif
 #ifdef Q_OS_LINUX
   if( d->deviceFd == -1 )
     d->deviceFd = openDevice( QFile::encodeName(devicename()), write );
 
-  return d->deviceFd;
+  return ( d->deviceFd != -1 );
 #endif
 }
 
@@ -2055,7 +2063,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  if( open() != -1 ) {
+  if( open() ) {
 
     unsigned char* data = 0;
     int dataLen = 0;
@@ -2576,7 +2584,7 @@ void K3bDevice::Device::checkWriteModes()
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  if( open() < 0 )
+  if( !open() )
     return;
 
   // header size is 8
@@ -2797,7 +2805,7 @@ int K3bDevice::Device::getIndex( unsigned long lba ) const
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  if( open() < 0 )
+  if( !open() )
     return -1;
 
   int ret = -1;
@@ -2893,7 +2901,7 @@ bool K3bDevice::Device::searchIndex0( unsigned long startSec,
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  if( open() < 0 )
+  if( !open() )
     return false;
 
   bool ret = false;
@@ -2942,7 +2950,7 @@ bool K3bDevice::Device::indexScan( K3bDevice::Toc& toc ) const
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
 
-  if( open() < 0 )
+  if( !open() )
     return false;
 
   bool ret = true;
@@ -3017,11 +3025,3 @@ int K3bDevice::Device::copyrightProtectionSystemType() const
   else
     return -1;
 }
-
-
-#ifdef Q_OS_FREEBSD
-struct cam_device *K3bDevice::Device::cam() const
-{
-  return d->cam;
-}
-#endif

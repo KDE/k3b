@@ -79,6 +79,13 @@ namespace K3bDevice
   {
 
   public:
+#ifdef Q_OS_FREEBSD
+    typedef struct cam_device* Handle;
+#else
+    // file descriptor
+    typedef int Handle;
+#endif
+
     /**
      * The available cdrdao drivers
      */
@@ -482,10 +489,10 @@ namespace K3bDevice
 
     /**
      * Open the device for acces via a file descriptor.
-     * @return an open file descriptor on success or -1 on failure
+     * @return true on success or if the device is already open.
      * @see close()
      */
-    int open( bool write = false ) const;
+    bool open( bool write = false ) const;
 
     /**
      * Close the files descriptor.
@@ -497,6 +504,11 @@ namespace K3bDevice
      * @return true if the device was successfully opened via @p open()
      */
     bool isOpen() const;
+
+    /**
+     * fd on linux, cam on bsd
+     */
+    Handle handle() const;
 
     /**
      * @return -1 on error (no DVD), 1 (CSS/CPPM) or 2 (CPRM) if scrambled, 0 otherwise
@@ -697,13 +709,6 @@ namespace K3bDevice
      * Seek to the specified sector.
      */
     bool seek( unsigned long lba ) const;
-
-#ifdef Q_OS_FREEBSD
-    /**
-     * Return the SCSI control handle (only FBSD)
-     */
-    struct cam_device *cam() const;
-#endif
 
   protected:
     bool furtherInit();

@@ -189,28 +189,21 @@ void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKe
 
 
 
-K3bDevice::ScsiCommand::ScsiCommand( int fd )
+K3bDevice::ScsiCommand::ScsiCommand( K3bDevice::Device::Handle handle )
   : d(new Private),
-    m_fd(fd),
     m_device(0),
     m_printErrors(true)
 {
+  m_deviceHandle = handle;
   clear();
 }
 
 
 K3bDevice::ScsiCommand::ScsiCommand( const K3bDevice::Device* dev )
   : d(new Private),
-    m_fd(-1),
     m_device(dev),
     m_printErrors(true)
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  m_needToCloseDevice = !m_device->isOpen();
-
-  m_fd = m_device->open();
-
   clear();
 }
 
@@ -218,7 +211,5 @@ K3bDevice::ScsiCommand::ScsiCommand( const K3bDevice::Device* dev )
 K3bDevice::ScsiCommand::~ScsiCommand()
 {
   delete d;
-  if( m_device && m_needToCloseDevice )
-    m_device->close();
 }
 

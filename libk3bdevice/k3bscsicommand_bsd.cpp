@@ -51,10 +51,10 @@ public:
 void K3bDevice::ScsiCommand::clear()
 {
   memset (&d->ccb,0,sizeof(ccb));
-  if (!m_device || !m_device->cam()) return;
-  d->ccb.ccb_h.path_id    = m_device->cam()->path_id;
-  d->ccb.ccb_h.target_id  = m_device->cam()->target_id;
-  d->ccb.ccb_h.target_lun = m_device->cam()->target_lun;
+  if (!m_device || !m_device->handle()) return;
+  d->ccb.ccb_h.path_id    = m_device->handle()->path_id;
+  d->ccb.ccb_h.target_id  = m_device->handle()->target_id;
+  d->ccb.ccb_h.target_lun = m_device->handle()->target_lun;
 }
 
 
@@ -65,11 +65,18 @@ unsigned char& K3bDevice::ScsiCommand::operator[]( size_t i )
 }
 
 int K3bDevice::ScsiCommand::transport( TransportDirection dir,
-					 void* data,
-					 size_t len )
+				       void* data,
+				       size_t len )
 {
-  if( !m_device || m_device->open() == -1 )
+  if( !m_device )
     return -1;
+
+  bool needToClose = false;
+  if( !m_device->isOpen() ) {
+    needToClose = true;
+    if( !m_device->open() )
+      return -1;
+  }
 
   kdDebug() << "(K3bDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
   int ret=0;
@@ -80,7 +87,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     direction |= (dir & TR_DIR_READ)?CAM_DIR_IN : CAM_DIR_OUT;
   cam_fill_csio (&(d->ccb.csio), 1, 0 /* NULL */, direction | CAM_DEV_QFRZDIS, MSG_SIMPLE_Q_TAG, (u_int8_t *)data, len, sizeof(d->ccb.csio.sense_data), d->ccb.csio.cdb_len, 30*1000);
   unsigned char * sense = (unsigned char *)&d->ccb.csio.sense_data;
-  if ((ret = cam_send_ccb(m_device->cam(), &d->ccb)) < 0)
+  if ((ret = cam_send_ccb(m_device->handle(), &d->ccb)) < 0)
     {
       kdDebug() << "(K3bDevice::ScsiCommand) transport failed: " << ret << endl;
       struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
@@ -89,10 +96,15 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		  senset->flags & SSD_KEY,
 		  senset->add_sense_code,
 		  senset->add_sense_code_qual );
+      if( needToClose )
+	m_device->close();
       return ret;
     }
-  if ((d->ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP)
+  if ((d->ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP) {
+    if( needToClose )
+      m_device->close();
     return 0;
+  }
 
   errno = EIO;
   // FreeBSD 5-CURRENT since 2003-08-24, including 5.2 fails to
@@ -113,7 +125,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.data_ptr  = _sense;
       d->ccb.csio.dxfer_len = sizeof(_sense);
       d->ccb.csio.sense_len = 0;
-      ret = cam_send_ccb(m_device->cam(), &d->ccb);
+      ret = cam_send_ccb(m_device->handle(), &d->ccb);
 
       d->ccb.csio.resid = resid;
       if (ret<0)
@@ -126,6 +138,10 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		      senset->flags & SSD_KEY,
 		      senset->add_sense_code,
 		      senset->add_sense_code_qual );
+
+	  if( needToClose )
+	    m_device->close();
+
 	  return -1;
 	}
       if ((d->ccb.ccb_h.status&CAM_STATUS_MASK) != CAM_REQ_CMP)
@@ -139,6 +155,10 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		      senset->flags & SSD_KEY,
 		      senset->add_sense_code,
 		      senset->add_sense_code_qual );
+
+	  if( needToClose )
+	    m_device->close();
+
 	  return -1;
 	}
 
@@ -157,5 +177,9 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 	      senset->flags & SSD_KEY,
 	      senset->add_sense_code,
 	      senset->add_sense_code_qual );
+
+  if( needToClose )
+    m_device->close();
+
   return ret;
 }

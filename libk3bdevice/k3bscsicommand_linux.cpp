@@ -56,20 +56,18 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 				       void* data,
 				       size_t len )
 {
-  //
-  // As of kernel 2.6.8 we are not allowed to issue WRITE commands
-  // anymore if the device was opened O_RDONLY
-  //
-  if( dir == TR_DIR_WRITE ) {
-    m_device->close();
-    m_fd = m_device->open( true );
-    m_needToCloseDevice = true;
+  bool needToClose = false;
+  if( m_device ) {
+    if( !m_device->isOpen() ) {
+      needToClose = true;
+      m_device->open( dir == TR_DIR_WRITE );
+    }
+    m_deviceHandle = m_device->handle();
   }
 
-  if( m_fd == -1 ) {
+  if( m_deviceHandle == -1 )
     return -1;
-  }
-
+  
   d->cmd.buffer = (unsigned char*)data;
   d->cmd.buflen = len;
   if( dir == TR_DIR_READ )
@@ -79,7 +77,12 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   else
     d->cmd.data_direction = CGC_DATA_NONE;
 
-  if( ::ioctl( m_fd, CDROM_SEND_PACKET, &d->cmd ) ) {
+  int i = ::ioctl( m_deviceHandle, CDROM_SEND_PACKET, &d->cmd );
+
+  if( needToClose )
+    m_device->close();
+
+  if( i ) {
     debugError( d->cmd.cmd[0],
 		d->sense.error_code,
 		d->sense.sense_key,
