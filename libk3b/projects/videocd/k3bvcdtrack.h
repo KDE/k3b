@@ -118,6 +118,25 @@ class K3bVcdTrack
             return m_reactivity;
         }
 
+        // Numeric keys
+        void setDefinedNumKey( int key, K3bVcdTrack* track )
+        {
+            m_definedkeysmap.insert( key, track );
+        }
+        void delDefinedNumKey( int key )
+        {
+            m_definedkeysmap.remove( key );
+        }
+        void delDefinedNumKey()
+        {
+            m_definedkeysmap.clear();
+        }
+        QMap<int, K3bVcdTrack*> DefinedNumKey()
+        {
+            return m_definedkeysmap;
+        }
+
+        // Mpeg Infos
         const QString resolution();
         const QString highresolution();
         const QString video_frate();
@@ -161,6 +180,7 @@ class K3bVcdTrack
         QMap<int, K3bVcdTrack*> m_pbctrackmap;        // Pbc Tracks (Previous, Next, ...)
         QMap<int, int> m_pbcnontrackmap;              // Pbc NON Track types (Previous, Next, ...)
         QMap<int, bool> m_pbcusrdefmap;               // Pbc is userdefined or defaults (Previous, Next, ...)
+        QMap<int, K3bVcdTrack*> m_definedkeysmap;
 
         bool m_pbcnumkeys;
         bool m_pbcnumkeysuserdefined;

@@ -48,6 +48,8 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
 
     m_reactivity = false;
 
+    m_definedkeysmap.clear();
+
     mpeg_info = new Mpeginfo();
 }
 

@@ -21,9 +21,9 @@
 #include <qtabwidget.h>
 
 #include <k3bvcddoc.h>
+#include <k3blistview.h>
 
 class K3bVcdTrack;
-class K3bListView;
 class QLabel;
 class QCheckBox;
 class QComboBox;
@@ -45,13 +45,12 @@ class K3bVcdTrackDialog : public KDialogBase
     protected slots:
         void slotOk();
         void slotApply();
-        void slotItemRenamed( QListViewItem*, const QString&, int );
 
     private slots:
         void slotPlayTimeChanged( int );
         void slotWaitTimeChanged( int );
         void slotPbcToggled( bool );
-        void slotNumkeyToggled( bool );
+        void slotUseKeysToggled( bool );
         void slotGroupkeyToggled( bool );
 
 
@@ -112,6 +111,8 @@ class K3bVcdTrackDialog : public KDialogBase
         void fillPbcGui();
 
         void setPbcTrack( K3bVcdTrack*, K3bCutComboBox*, int );
+        void setDefinedNumKeys( );
+        QString displayName( K3bVcdTrack* );
         K3bVcdOptions* VcdOptions()
         {
             return m_vcdDoc->vcdOptions();
