@@ -20,7 +20,6 @@
 #include "k3bdataview.h"
 #include "k3bdatajob.h"
 #include "../k3b.h"
-#include "../tools/kstringlistdialog.h"
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
 
@@ -1013,14 +1012,8 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
 void K3bDataDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    // this is for kde 3.1
-//     KMessageBox::informationList( k3bMain(), i18n("Could not find the following files:"), 
-// 				  m_notFoundFiles, i18n("Not found") );
-
-    KStringListDialog d( m_notFoundFiles, i18n("Not found"), i18n("Could not find the following files:"), 
-			 true, k3bMain(), "notFoundFilesInfoDialog" );
-    d.exec();
-
+    KMessageBox::informationList( k3bMain(), i18n("Could not find the following files:"), 
+ 				  m_notFoundFiles, i18n("Not found") );
     m_notFoundFiles.clear();
   }
 
@@ -1029,16 +1022,9 @@ void K3bDataDoc::informAboutNotFoundFiles()
   // that contain one or more backslashes
   // -----------------------------------------------------------------------
   if( !m_mkisofsBuggyFiles.isEmpty() ) {
-    // this is for kde 3.1
-//     KMessageBox::informationList( k3bMain(), i18n("Due to a bug in mkisofs, K3b is unable to handle "
-// 						  "filenames that contain more than one backslash:"),
-// 				  m_mkisofsBuggyFiles, i18n("Sorry") );
-
-    KStringListDialog d( m_mkisofsBuggyFiles, i18n("Sorry"), i18n("Due to a bug in mkisofs, K3b is unable to handle "
-								  "filenames that contain more than one backslash:"), 
-			 true, k3bMain() );
-    d.exec();
-
+     KMessageBox::informationList( k3bMain(), i18n("Due to a bug in mkisofs, K3b is unable to handle "
+ 						  "filenames that contain more than one backslash:"),
+	          				  m_mkisofsBuggyFiles, i18n("Sorry") );
     m_mkisofsBuggyFiles.clear();
   }
   // -----------------------------------------------------------------------

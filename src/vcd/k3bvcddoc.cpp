@@ -20,7 +20,6 @@
 #include "k3bvcdtrack.h"
 #include "k3bvcdburndialog.h"
 #include "k3bvcdjob.h"
-#include "../tools/kstringlistdialog.h"
 
 // QT-includes
 #include <qstring.h>
@@ -388,9 +387,8 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
 void K3bVcdDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KStringListDialog d( m_notFoundFiles, i18n("Not found"), i18n("Could not find the following files:"),
-      true, k3bMain(), "notFoundFilesInfoDialog" );
-    d.exec();
+    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"), 
+ 				  m_notFoundFiles, i18n("Not found") );
 
     m_notFoundFiles.clear();
   }

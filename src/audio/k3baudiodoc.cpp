@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -25,7 +25,6 @@
 #include "input/k3baudiomodule.h"
 #include "../rip/songdb/k3bsong.h"
 #include "../rip/songdb/k3bsongmanager.h"
-#include "../tools/kstringlistdialog.h"
 
 // QT-includes
 #include <qstring.h>
@@ -581,9 +580,8 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KStringListDialog d( m_notFoundFiles, i18n("Not found"), i18n("Could not find the following files:"),
-      true, k3bMain(), "notFoundFilesInfoDialog" );
-    d.exec();
+    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"), 
+ 				  m_notFoundFiles, i18n("Not found") );
 
     m_notFoundFiles.clear();
   }
