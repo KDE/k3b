@@ -21,6 +21,8 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 
+#include "../kdelibs_patched/kcharvalidator.h"
+
 #include <qdragobject.h>
 #include <qheader.h>
 
@@ -39,7 +41,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataDoc* doc, QWidget* parent )
 	
   setItemsRenameable( true );
 
-  setInvalidChars( "\\/;:*$" );
+  setValidator( new KCharValidator( this, "isoValidator", "\\/;:*$", KCharValidator::InvalidChars ) );
 
   m_doc = doc;	
   m_root = new K3bDataRootViewItem( doc, this );

@@ -897,9 +897,21 @@ install_location=
 type=HEADER
 
 [src/kdelibs_patched/Makefile.am]
-files=src/kdelibs_patched/krestrictedline.h,src/kdelibs_patched/krestrictedline.cpp,src/kdelibs_patched/klistviewlineedit.h,src/kdelibs_patched/klistview.h,src/kdelibs_patched/klistview.cpp
+files=src/kdelibs_patched/klistviewlineedit.h,src/kdelibs_patched/klistview.h,src/kdelibs_patched/klistview.cpp,src/kdelibs_patched/kcharvalidator.cpp,src/kdelibs_patched/kcharvalidator.h
 sub_dirs=
 type=static_library
+
+[src/kdelibs_patched/kcharvalidator.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/kdelibs_patched/kcharvalidator.h]
+dist=true
+install=false
+install_location=
+type=HEADER
 
 [src/kdelibs_patched/klistview.cpp]
 dist=true
@@ -914,18 +926,6 @@ install_location=
 type=HEADER
 
 [src/kdelibs_patched/klistviewlineedit.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/kdelibs_patched/krestrictedline.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/kdelibs_patched/krestrictedline.h]
 dist=true
 install=false
 install_location=

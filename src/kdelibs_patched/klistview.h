@@ -24,6 +24,7 @@
 
 #include <qlist.h>
 
+class QValidator;
 class QDragObject;
 /**
  * This Widget extends the functionality of QListView to honor the system
@@ -252,30 +253,7 @@ public:
    */
   const QColor &alternateBackground() const;
 
-
-  /**
-   * All characters in the string valid are treated as 
-   * acceptable characters.
-   * Sets the mode to check for valid characters.
-   */
-  void setValidChars(const QString& valid);
-
-  /**
-   * All characters in the srting are treated as
-   * inaccepable characters.
-   * Sets the mode to check for invalid characters.
-   */
-  void setInvalidChars(const QString& invalid);
-
-  /**
-   * @return the string of acceptable characters.
-   */
-  QString validChars() const;
-
-  /**
-   * @return the string of inacceptable characters.
-   */
-  QString invalidChars() const;
+  void setValidator( const QValidator* );
 
 signals:
 

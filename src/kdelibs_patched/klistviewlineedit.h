@@ -18,15 +18,14 @@
 #ifndef KLISTVIEWLINEEDIT_H
 #define KLISTVIEWLINEEDIT_H
 
-//#include <krestrictedline.h>
-#include "krestrictedline.h"
+#include <klineedit.h>
 #include <klistview.h>
 
 /**
  * the editor for a KListView.  please don't use this.
  * @internal
  **/
-class KListViewLineEdit : public KRestrictedLine
+class KListViewLineEdit : public KLineEdit
 {
 Q_OBJECT
 public:

@@ -151,7 +151,7 @@ public:
 
 
 KListViewLineEdit::KListViewLineEdit(KListView *parent)
-        : KRestrictedLine(parent->viewport()), item(0), col(0), p(parent)
+        : KLineEdit(parent->viewport()), item(0), col(0), p(parent)
 {
         setFrame( false );
         hide();
@@ -202,7 +202,7 @@ void KListViewLineEdit::keyPressEvent(QKeyEvent *e)
         else if(e->key() == Qt::Key_Escape)
             terminate(false);
         else
-            KRestrictedLine::keyPressEvent(e);
+            KLineEdit::keyPressEvent(e);
 }
 
 void KListViewLineEdit::terminate()
@@ -236,7 +236,7 @@ void KListViewLineEdit::focusOutEvent(QFocusEvent *ev)
 
 void KListViewLineEdit::paintEvent( QPaintEvent *e )
 {
-    KRestrictedLine::paintEvent( e );
+    KLineEdit::paintEvent( e );
 
     if ( !frame() ) {
         QPainter p( this );
@@ -1674,24 +1674,9 @@ void KListView::setAlternateBackground(const QColor &c)
 }
 
 
-void KListView::setValidChars(const QString& valid)
+void KListView::setValidator(const QValidator* validator)
 {
-  d->editor->setValidChars( valid );
-}
-
-void KListView::setInvalidChars(const QString& invalid)
-{
-  d->editor->setInvalidChars( invalid );
-}
-
-QString KListView::validChars() const
-{
-  return d->editor->validChars();
-}
-
-QString KListView::invalidChars() const
-{
-  return d->editor->invalidChars();
+  d->editor->setValidator( validator );
 }
 
 

@@ -37,8 +37,8 @@
 #include <qbuttongroup.h>
 
 #include <kmessagebox.h>
-//#include <krestrictedline.h>
-#include "../kdelibs_patched/krestrictedline.h"    // patched version with the ability to set invalid chars!
+#include <klineedit.h>
+#include "../kdelibs_patched/kcharvalidator.h"
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
@@ -424,30 +424,32 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   _groupVolumeInfoLayout->addWidget( _labelPreparer, 3, 0 );
 
-  m_editVolumeID = new KRestrictedLine( _groupVolumeInfo, "m_editVolumeID" );
+  KCharValidator* isoValidator = new KCharValidator( this, "isoValidator", "\\/;:*$\"", KCharValidator::InvalidChars );
+
+  m_editVolumeID = new KLineEdit( _groupVolumeInfo, "m_editVolumeID" );
   // are this really the allowed characters?
-  m_editVolumeID->setInvalidChars( "\\/;:*$" );
+  m_editVolumeID->setValidator( isoValidator );
   m_editVolumeID->setMaxLength( 32 );
 
   _groupVolumeInfoLayout->addWidget( m_editVolumeID, 0, 1 );
 
-  m_editApplicationID = new KRestrictedLine( _groupVolumeInfo, "m_editApplicationID" );
+  m_editApplicationID = new KLineEdit( _groupVolumeInfo, "m_editApplicationID" );
   // are this really the allowed characters?
-  m_editApplicationID->setInvalidChars( "\\/;:*$" );
+  m_editApplicationID->setValidator( isoValidator );
   m_editApplicationID->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editApplicationID, 1, 1 );
 
-  m_editPublisher = new KRestrictedLine( _groupVolumeInfo, "m_editPublisher" );
+  m_editPublisher = new KLineEdit( _groupVolumeInfo, "m_editPublisher" );
   // are this really the allowed characters?
-  m_editPublisher->setInvalidChars( "\\/;:*$" );
+  m_editPublisher->setValidator( isoValidator );
   m_editPublisher->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editPublisher, 2, 1 );
 
-  m_editPreparer = new KRestrictedLine( _groupVolumeInfo, "m_editPreparer" );
+  m_editPreparer = new KLineEdit( _groupVolumeInfo, "m_editPreparer" );
   // are this really the allowed characters?
-  m_editPreparer->setInvalidChars( "\\/;:*$" );
+  m_editPreparer->setValidator( isoValidator );
   m_editPreparer->setMaxLength( 128 );
 
   _groupVolumeInfoLayout->addWidget( m_editPreparer, 3, 1 );

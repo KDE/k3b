@@ -75,7 +75,7 @@ bool K3bDataDoc::newDocument()
   m_onlyCreateImage = false;
   m_followSymbolicLinks = false;
   m_isoLevel = 1;
-  m_whiteSpaceTreatment = K3bDataDoc::normal;;
+  m_whiteSpaceTreatment = K3bDataDoc::normal;
 	
   return K3bDoc::newDocument();
 }
@@ -217,6 +217,9 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
 {
   if( doc->doctype().name() != documentType() )
     return false;
+
+  if( !root() )
+    newDocument();
 
   QDomNodeList nodes = doc->documentElement().childNodes();
 

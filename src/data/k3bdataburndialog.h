@@ -24,13 +24,12 @@ class QCheckBox;
 class QComboBox;
 class QGroupBox;
 class QLabel;
-class QLineEdit;
 class QToolButton;
 class QRadioButton;
 class QButtonGroup;
 
 class K3bDataDoc;
-class KRestrictedLine;
+class KLineEdit;
 
 
 /**
@@ -63,10 +62,10 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    // ----------------------------------------------
 
    // --- settings tab ---------------------------
-   KRestrictedLine* m_editApplicationID;
-   KRestrictedLine* m_editVolumeID;
-   KRestrictedLine* m_editPublisher;
-   KRestrictedLine* m_editPreparer;
+   KLineEdit* m_editApplicationID;
+   KLineEdit* m_editVolumeID;
+   KLineEdit* m_editPublisher;
+   KLineEdit* m_editPreparer;
    QCheckBox* m_checkCreateRR;
    QCheckBox* m_checkCreateJoliet;
    QButtonGroup* m_groupWhiteSpace;

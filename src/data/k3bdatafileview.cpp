@@ -22,6 +22,8 @@
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 
+#include "../kdelibs_patched/kcharvalidator.h"
+
 #include <qdragobject.h>
 #include <klocale.h>
 
@@ -40,7 +42,7 @@ K3bDataFileView::K3bDataFileView( K3bDataDoc* doc, QWidget* parent )
   setItemsRenameable( true );
   setSelectionModeExt( KListView::Konqueror );
 
-  setInvalidChars( "\\/;:*$" );
+  setValidator( new KCharValidator( this, "isoValidator", "\\/;:*$", KCharValidator::InvalidChars ) );
   
   m_doc = doc;
   m_currentDir = doc->root();
