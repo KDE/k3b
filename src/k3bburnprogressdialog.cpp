@@ -55,6 +55,7 @@
 #include <kdebug.h>
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
+#include <kglobal.h>
 
 
 class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog
@@ -560,7 +561,7 @@ void K3bBurnProgressDialog::slotUpdateCaption( int percent )
 
 void K3bBurnProgressDialog::slotWriteSpeed( int s )
 {
-  m_labelWriteSpeed->setText( QString("%1 kb/s (%2x)").arg(s).arg((double)s/150.0,0,'f',2) );
+  m_labelWriteSpeed->setText( QString("%1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0,2)) );
 }
   
 #include "k3bburnprogressdialog.moc"
