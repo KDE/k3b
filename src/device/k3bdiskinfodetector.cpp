@@ -15,6 +15,8 @@
 
 #include "k3bdiskinfodetector.h"
 
+#include "k3bdevicehandler.h"
+
 #include "k3bdevice.h"
 #include "k3btoc.h"
 #include "../rip/k3btcwrapper.h"
@@ -43,8 +45,11 @@ typedef unsigned long long __u64;
 
 K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
   : QObject( parent ),
-  m_tcWrapper(0),m_thread(0)
+    m_tcWrapper(0)
 {
+  m_deviceHandler = new DeviceHandler( this );
+  connect( m_deviceHandler, SIGNAL(finished(bool)),
+	   this, SLOT(slotDeviceHandlerFinished(bool)) );
 }
 
 
@@ -65,13 +70,9 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   // reset
   m_info = DiskInfo();
   m_info.device = m_device;
-  if (m_thread)
-    if (m_thread->running())
-      return;
-    else
-      delete m_thread;
-  m_thread = new DiskInfoThread(this, m_device);
-  m_thread->start();
+
+  m_deviceHandler->setDevice( device );
+  m_deviceHandler->getDiskInfo();
 }
 
 
@@ -180,12 +181,13 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
   finish(true);
 }
 
-void K3bCdDevice::DiskInfoDetector::customEvent(QCustomEvent *e) {
-  K3bProgressInfoEvent* be = static_cast<K3bProgressInfoEvent*>(e);
-  if(be->type() == K3bProgressInfoEvent::Finished) {
-    m_info = m_thread->diskInfo();
+void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( bool success )
+{
+  m_info = m_deviceHandler->diskInfo();
+  if( success )
     fetchExtraInfo();
-  }
+  else
+    finish( false );
 }
 
 #include "k3bdiskinfodetector.moc"
