@@ -34,7 +34,7 @@ class K3bAudioTrack;
 class KActionCollection;
 class K3bAudioListViewItem;
 class QPainter;
-
+class QResizeEvent;
 
 /**
   *@author Sebastian Trueg
@@ -74,6 +74,8 @@ class K3bAudioListView : public K3bListView
 
   QMap<K3bAudioTrack*, K3bAudioListViewItem*> m_itemMap;
 
+  bool m_updatingColumnWidths;
+
  private slots:
   void slotAnimation();
   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
@@ -84,6 +86,8 @@ class K3bAudioListView : public K3bListView
   void slotTrackRemoved( K3bAudioTrack* );
 
  protected:
+  virtual void resizeEvent( QResizeEvent* e );
+  void resizeColumns();
   bool acceptDrag(QDropEvent* e) const;
   QDragObject* dragObject();
 };

@@ -33,11 +33,6 @@ class K3bAudioListViewItem : public K3bListViewItem  {
   K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent, QListViewItem* after );
   ~K3bAudioListViewItem();
 
-  /**
-   * reimplemented from K3bListViewItem
-   */
-  void setup();
-
   /** reimplemented from QListViewItem */
   QString text(int i) const;
 
