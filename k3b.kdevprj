@@ -38,7 +38,7 @@ project_type=mdi_kde2
 sgml_file=/home/trueg/dev/kde/k3b/doc/en/index.docbook
 short_info=K3b is intended to fulfill all your burning needs under KDE.
 sub_dir=src/
-version=0.4.1
+version=0.4.2
 version_control=CVS
 workspace=1
 

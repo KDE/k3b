@@ -1,3 +1,9 @@
+0.4.2
+added new DirTree (code from Konqueror)
+added new device-management (the scsi-bus is checked directly)
+detection of Burn-Proof-capable drives
+some bugfixes
+
 0.4.1
 added whitespace-treatment
 dock-positions are saved
