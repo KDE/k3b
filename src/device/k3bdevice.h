@@ -586,7 +586,11 @@ namespace K3bCdDevice
      */
     bool fixupToc( Toc& ) const;
 
+  private:
+    void searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const;
     void checkWriteModes();
+    void checkForAncientWriters();
+
 
     QString m_vendor;
     QString m_description;
@@ -610,8 +614,6 @@ namespace K3bCdDevice
 
     bool m_supermount;
 
-  private:
-    void searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const;
 
     class Private;
     Private* d;

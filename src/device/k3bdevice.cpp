@@ -654,6 +654,11 @@ bool K3bCdDevice::CdDevice::init()
   }
 
 
+  //
+  // Support for some very old drives
+  //
+  checkForAncientWriters();
+
   close();
 
   return furtherInit();
@@ -696,6 +701,20 @@ bool K3bCdDevice::CdDevice::furtherInit()
 
 #endif // Q_OS_LINUX
   return true;
+}
+
+
+void K3bCdDevice::CdDevice::checkForAncientWriters()
+{
+  if( vendor() == "TEAC" ) {
+    if( description() == "R50S" || description() == "R55S" ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		<< " found ancient drive: " << vendor() << " " << description() << endl;
+   
+      m_writeModes |= TAO;
+      d->deviceType |= CDR;
+    }
+  }
 }
 
 
