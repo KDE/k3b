@@ -164,6 +164,7 @@ void K3bProjectBurnDialog::toggleAllOptions()
     actionButton(Ok)->setDisabled(false);
   }
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+  m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
 
@@ -230,17 +231,21 @@ void K3bProjectBurnDialog::slotOk()
     m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
   prepareJob( m_job );
 
-  K3bBurnProgressDialog d( k3bMain() );
+  K3bJobProgressDialog* d = 0;
+  if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
+    d = new K3bJobProgressDialog( k3bMain() );
+  else
+    d = new K3bBurnProgressDialog( k3bMain() );
 
-
-  d.setJob( m_job );
+  d->setJob( m_job );
   m_job->start();
 
   hide();
-  d.exec();
+  d->exec();
 
 
   delete m_job;
+  delete d;
 
   done( Burn );
 }

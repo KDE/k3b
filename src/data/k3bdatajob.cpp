@@ -487,10 +487,15 @@ void K3bDataJob::cancelAll()
 
 QString K3bDataJob::jobDescription() const
 {
-  if( m_doc->isoOptions().volumeID().isEmpty() ) 
-    return i18n("Writing Iso9660 data cd");
-  else
-    return i18n("Writing Iso9660 data cd (%1)").arg(m_doc->isoOptions().volumeID().isEmpty());
+  if( m_doc->onlyCreateImage() ) {
+    if( m_doc->isoOptions().volumeID().isEmpty() ) 
+      return i18n("Writing Iso9660 data cd");
+    else
+      return i18n("Writing Iso9660 data cd (%1)").arg(m_doc->isoOptions().volumeID());
+  }
+  else {
+    return i18n("Creating Iso9660 image file");
+  }
 }
 
 
