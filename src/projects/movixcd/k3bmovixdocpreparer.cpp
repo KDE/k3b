@@ -270,6 +270,10 @@ bool K3bMovixDocPreparer::addMovixFiles()
     // first of all we create the directories
     d->isolinuxDir = new K3bDirItem( "isolinux", d->doc, d->doc->root() );
     d->movixDir = new K3bDirItem( "movix", d->doc, d->doc->root() );
+    K3bDirItem* kernelDir = d->doc->addEmptyDir( "kernel", d->isolinuxDir );
+
+    // add the linux kernel
+    (void)new K3bFileItem( d->installation->path() + "/isolinux/kernel/vmlinuz", d->doc, kernelDir );
 
     // add the boot image
     K3bBootItem* bootItem = d->doc->createBootItem( d->installation->path() + "/isolinux/isolinux.bin",
@@ -277,6 +281,11 @@ bool K3bMovixDocPreparer::addMovixFiles()
     bootItem->setImageType( K3bBootItem::NONE );
     bootItem->setLoadSize( 4 );
     bootItem->setBootInfoTable(true);
+
+    // some sort weights as defined in isolinux
+    d->isolinuxDir->setSortWeigth( 100 );
+    kernelDir->setSortWeigth( 50 );
+    bootItem->setSortWeigth( 200 );
 
     // rename the boot cataloge file
     d->doc->bootCataloge()->setK3bName( "isolinux.boot" );
@@ -293,9 +302,6 @@ bool K3bMovixDocPreparer::addMovixFiles()
       QString path = d->installation->path() + "/isolinux/" + *it;
       (void)new K3bFileItem( path, d->doc, d->isolinuxDir );
     }
-
-    K3bDirItem* kernelDir = d->doc->addEmptyDir( "kernel", d->isolinuxDir );
-    (void)new K3bFileItem( d->installation->path() + "/isolinux/kernel/vmlinuz", d->doc, kernelDir );
 
     QStringList movixFiles = d->installation->movixFiles();
     for( QStringList::const_iterator it = movixFiles.begin();

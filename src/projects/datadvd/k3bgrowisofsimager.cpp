@@ -241,7 +241,7 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
-    emit infoMessage( i18n("Flushing Cache") + "...", PROCESS );
+    emit infoMessage( i18n("Flushing the cache may take some time") + "...", PROCESS );
   }
   else if( line.contains( "updating RMA" ) ) {
     emit newSubTask( i18n("Updating RMA") );
@@ -270,14 +270,16 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     bool ok = true;
     double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
     if( ok )
-      emit infoMessage( i18n("Writing speed: %1 kb/s (%2x)").arg((int)(speed*1385.0)).arg(KGlobal::locale()->formatNumber(speed)), INFO );
+      emit infoMessage( i18n("Writing speed: %1 kb/s (%2x)")
+			.arg((int)(speed*1385.0))
+			.arg(KGlobal::locale()->formatNumber(speed)), INFO );
     else
       kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
   else if( line.contains( ":-[" ) ) {
     // Error
     // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
-    if( line.contains( "engage DAO" ) ) 
+    if( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) )
       emit infoMessage( i18n("Please try again with writing mode DAO."), ERROR );
   }
   else {

@@ -83,6 +83,7 @@ K3bDvdCopyJob::~K3bDvdCopyJob()
 void K3bDvdCopyJob::start()
 {
   emit started();
+  emit burning(false);
 
   d->canceled = false;
   d->running = true;
@@ -158,9 +159,12 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       if( waitForDvd() ) {
 	if( m_simulate )
 	  emit newTask( i18n("Simulating DVD copy") );
-	else
+	else if( m_copies > 1 )
 	  emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+	else
+	  emit newTask( i18n("Writing DVD copy") );
 
+	emit burning(true);
 	d->writerJob->start();
       }
       else {
@@ -275,6 +279,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
     d->writerJob->closeFd();
 
   if( d->canceled ) {
+    removeImageFiles();
     emit canceled();
     emit finished(false);
     d->running = false;
@@ -289,7 +294,10 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
     else if( !m_onTheFly ) {
       prepareWriter();
       if( waitForDvd() ) {
-	emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+	if( m_copies > 1 )
+	  emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+	else
+	  emit newTask( i18n("Writing DVD copy") );
 	d->writerJob->start();
       }
       else {
@@ -309,6 +317,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 void K3bDvdCopyJob::slotWriterFinished( bool success )
 {
   if( d->canceled ) {
+    removeImageFiles();
     emit canceled();
     emit finished(false);
     d->running = false;
@@ -404,7 +413,10 @@ bool K3bDvdCopyJob::waitForDvd()
 		  K3bCdDevice::MEDIA_DVD_R_SEQ|
 		  K3bCdDevice::MEDIA_DVD_R|
 		  K3bCdDevice::MEDIA_DVD_RW) ) {
-      emit infoMessage( i18n("Writing DVD-R(W) in sequential mode."), INFO );
+      if( m_writingMode == K3b::DAO )
+	emit infoMessage( i18n("Writing DVD-R(W) in DAO mode."), INFO );
+      else
+	emit infoMessage( i18n("Writing DVD-R(W) in sequential mode."), INFO );
     }
   }
 
