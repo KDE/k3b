@@ -30,7 +30,8 @@
 #include <qvaluelist.h>
 #include <qregexp.h>
 #include <qfile.h>
-
+#include <qdir.h>
+#include <qurl.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -342,21 +343,20 @@ void K3bCdrdaoWriter::start() {
 
     // workaround, cdrdao kill the tocfile when --remote parameter is set
     // hope to fix it in the future
-    QString saveToc = m_tocFile;
     switch ( m_command ) {
-    case WRITE:
-    case COPY:
-        if ( ! link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) )
-            kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
-        m_tocFile += QString(".bak");
-        break;
-
-    case BLANK:
-    case READ:
+      case WRITE:
+      case COPY:
+           if ( link(m_tocFile.latin1(),(m_tocFile+QString(".bak")).latin1()) == -1 )
+               kdDebug() << "(cdrdaowriter) backup tocfile " <<   m_tocFile << " failed." << endl;
+           break;
+      case BLANK:
+      case READ:
         break;
     }
     prepareArgumentList();
-
+// set working dir to dir part of toc file (to allow rel names in toc-file)
+    m_process->setWorkingDirectory(QUrl(m_tocFile).dirPath());
+    
     kdDebug() << "***** cdrdao parameters:\n";
     const QValueList<QCString>& args = m_process->args();
     QString s;
@@ -416,9 +416,7 @@ void K3bCdrdaoWriter::start() {
             emit newTask( i18n("Blanking") );
         }
         emit started();
-
     }
-    m_tocFile = saveToc;
 }
 
 
@@ -427,7 +425,6 @@ void K3bCdrdaoWriter::cancel() {
         if( m_process->isRunning() ) {
             m_process->disconnect();
             m_process->kill();
-
             // we need to unlock the writer because cdrdao locked it while writing
             if ( burnDevice() ) {
                 bool block = burnDevice()->block( false );
@@ -445,10 +442,19 @@ void K3bCdrdaoWriter::cancel() {
             }
 
         }
-        if ( QFile::exists(m_tocFile+QString(".bak")) )
-            QFile::remove
-                (m_tocFile+QString(".bak"));
+        switch ( m_command ) {
+          case WRITE:
+          case COPY:
+            if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
+               kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+            break;
+          case BLANK:
+          case READ:
+            break;
+        }
     }
+    emit canceled();
+    emit finished( false );
 }
 
 
@@ -494,8 +500,17 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
         emit infoMessage( i18n("Cdrdao did not exit cleanly."), K3bJob::ERROR );
         emit finished( false );
     }
-
-}
+       switch ( m_command ) {
+          case WRITE:
+          case COPY:
+            if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
+               kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+            break;
+          case BLANK:
+          case READ:
+            break;
+        }
+ }
 
 void K3bCdrdaoWriter::getCdrdaoMessage() {
     m_parser->parseCdrdaoMessage(m_comSock);
