@@ -97,29 +97,43 @@ static const char * mkisofsCharacterSets[] = { "cp10081",
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-  QTabWidget* tab = new QTabWidget( k3bMainWidget() );
-  QFrame* f1 = new QFrame( tab );
-  QFrame* f2 = new QFrame( tab );
-  QFrame* f3 = new QFrame( tab );
-  QFrame* f4 = new QFrame( tab );
+  prepareGui();
 
-  setupBurnTab( f1 );
+  QFrame* f2 = new QFrame( this );
+  QFrame* f3 = new QFrame( this );
+  QFrame* f4 = new QFrame( this );
+
+  m_checkOnlyCreateImage = new QCheckBox( m_optionGroup, "m_checkOnlyCreateImage" );
+  m_checkOnlyCreateImage->setText( i18n( "Only create image" ) );
+  m_optionGroupLayout->addWidget( m_checkOnlyCreateImage );
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  m_optionGroupLayout->addItem( spacer );
+
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
+  // we do not need writer settings when only creating the image
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkOnTheFly, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnproof, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageToggled(bool)) );
+
+  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an ISO9660 image") );
+  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked, K3b will only create an ISO9660 "
+						"image and not do any actual writing."
+						"<p>The image can later be written to a CD with most current CD writing "
+						"programs (including K3b of course).") );
+
+
   setupVolumeInfoTab( f2 );
   setupSettingsTab( f3 );
   setupAdvancedTab( f4 );
 
-//   connect( m_imageSettingsWidget->m_checkDiscardAllLinks, SIGNAL(toggled(bool)), 
-// 	   m_advancedImageSettingsWidget->m_checkFollowSymbolicLinks, SLOT(setDisabled(bool)) );
-	
-  tab->addTab( f1, i18n("Burning") );
-  tab->addTab( f2, i18n("Volume Desc") );
-  tab->addTab( f3, i18n("Settings") );
-  tab->addTab( f4, i18n("Advanced") );
+  addPage( f2, i18n("Volume Desc") );
+  addPage( f3, i18n("Settings") );
+  addPage( f4, i18n("Advanced") );
 
   readSettings();
-
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
-    m_checkBurnProof->setEnabled( dev->burnproof() );
 
   QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
   QString path;
@@ -131,10 +145,6 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
     path.append("/");
   path.append( _doc->isoOptions().volumeID() + ".iso" );
   m_tempDirSelectionWidget->setTempPath( path );
-
-  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
-
-  slotWriterChanged();
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -144,11 +154,11 @@ K3bDataBurnDialog::~K3bDataBurnDialog(){
 void K3bDataBurnDialog::saveSettings()
 {
   doc()->setDao( m_checkDao->isChecked() );
-  doc()->setDummy( m_checkDummy->isChecked() );
+  doc()->setDummy( m_checkSimulate->isChecked() );
   doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
-  doc()->setBurnproof( m_checkBurnProof->isChecked() );
+  doc()->setBurnproof( m_checkBurnproof->isChecked() );
   ((K3bDataDoc*)doc())->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-  ((K3bDataDoc*)doc())->setDeleteImage( m_checkDeleteImage->isChecked() );
+  ((K3bDataDoc*)doc())->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
 			
   // -- saving current speed --------------------------------------
   doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -181,11 +191,11 @@ void K3bDataBurnDialog::saveSettings()
 void K3bDataBurnDialog::readSettings()
 {
   m_checkDao->setChecked( doc()->dao() );
-  m_checkDummy->setChecked( doc()->dummy() );
+  m_checkSimulate->setChecked( doc()->dummy() );
   m_checkOnTheFly->setChecked( doc()->onTheFly() );
-  m_checkBurnProof->setChecked( doc()->burnproof() );
+  m_checkBurnproof->setChecked( doc()->burnproof() );
   m_checkOnlyCreateImage->setChecked( ((K3bDataDoc*)doc())->onlyCreateImage() );
-  m_checkDeleteImage->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
+  m_checkRemoveBufferFiles->setChecked( ((K3bDataDoc*)doc())->deleteImage() );
 	
   // read multisession 
   switch( ((K3bDataDoc*)doc())->multiSessionMode() ) {
@@ -211,116 +221,7 @@ void K3bDataBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
   m_volumeDescWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
 
-  K3bProjectBurnDialog::readSettings();
-
   slotWriterChanged();
-}
-
-
-void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
-{
-  QGridLayout* frameLayout = new QGridLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
-
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
-  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( frame );
-  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
-
-  frameLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  frameLayout->addWidget( m_tempDirSelectionWidget, 1, 1 );
-
-  m_groupOptions = new QGroupBox( frame, "m_groupOptions" );
-  m_groupOptions->setTitle( i18n( "Options" ) );
-  m_groupOptions->setColumnLayout(0, Qt::Vertical );
-  m_groupOptions->layout()->setSpacing( 0 );
-  m_groupOptions->layout()->setMargin( 0 );
-  QVBoxLayout* m_groupOptionsLayout = new QVBoxLayout( m_groupOptions->layout() );
-  m_groupOptionsLayout->setAlignment( Qt::AlignTop );
-  m_groupOptionsLayout->setSpacing( spacingHint() );
-  m_groupOptionsLayout->setMargin( marginHint() );
-
-  m_checkDummy = new QCheckBox( m_groupOptions, "m_checkDummy" );
-  m_checkDummy->setText( i18n( "Simulate writing" ) );
-  m_groupOptionsLayout->addWidget( m_checkDummy );
-
-  m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
-  m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-  m_groupOptionsLayout->addWidget( m_checkOnTheFly );
-
-  m_checkOnlyCreateImage = new QCheckBox( m_groupOptions, "m_checkOnlyCreateImage" );
-  m_checkOnlyCreateImage->setText( i18n( "Only create image" ) );
-  m_groupOptionsLayout->addWidget( m_checkOnlyCreateImage );
-
-  m_checkDeleteImage = new QCheckBox( m_groupOptions, "m_checkDeleteImage" );
-  m_checkDeleteImage->setText( i18n( "Delete image" ) );
-  m_groupOptionsLayout->addWidget( m_checkDeleteImage );
-
-  m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-  m_checkDao->setText( i18n( "Disk at once" ) );
-  m_groupOptionsLayout->addWidget( m_checkDao );
-
-  m_checkBurnProof = new QCheckBox( m_groupOptions, "m_checkBurnProof" );
-  m_checkBurnProof->setText( i18n( "Use BURN-PROOF" ) );
-  m_groupOptionsLayout->addWidget( m_checkBurnProof );
-
-  frameLayout->addWidget( m_groupOptions, 1, 0 );
-
-  // we do not need a tempdir or image settings when writing on-the-fly
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImage, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
-
-  // we do not need writer settings when only creating the image
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkOnTheFly, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnProof, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDummy, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageToggled(bool)) );
-
-  frameLayout->setRowStretch( 1, 1 );
-  frameLayout->setColStretch( 1, 1 );
-
-
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-
-
-  // ToolTips
-  // -------------------------------------------------------------------------
-  QToolTip::add( m_checkDummy, i18n("Only simulate the writing process") );
-  QToolTip::add( m_checkOnTheFly, i18n("Write files directly to CD without creating an image") );
-  QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an ISO9660 image") );
-  QToolTip::add( m_checkDeleteImage, i18n("Remove images from harddisk when finished") );
-  QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
-  QToolTip::add( m_checkBurnProof, i18n("Enable BURN-PROOF to avoid buffer underruns") );
-
-
-  // What's This info
-  // -------------------------------------------------------------------------
-  QWhatsThis::add( m_checkDummy, i18n("<p>If this option is checked K3b will perform all writing steps with the "
-				      "laser turned off."
-				      "<p>This is useful, for example, to test a higher writing speed "
-				      "or if your system is able to write on-the-fly.") );
-  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked, K3b will not create an image first but write "
-					 "the files directly to the CD."
-					 "<p><b>Caution:</b> Although this should work on most systems, make sure "
-					 "the data is sent to the writer fast enough.")
-					 + i18n("<p>It is recommended to try a simulation first.") );
-  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked, K3b will only create an ISO9660 "
-						"image and not do any actual writing."
-						"<p>The image can later be written to a CD with most current CD writing "
-						"programs (including K3b of course).") );
-  QWhatsThis::add( m_checkDeleteImage, i18n("<p>If this option is checked, K3b will remove any created images after the "
-					    "writing has finished."
-					    "<p>Uncheck this if you want to keep the images.") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
-				    "compared to 'track at once' (TAO)."
-				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Track pregaps with a length other than 2 seconds are only supported "
-				    "in DAO mode.") );
-  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked, K3b enables <em>BURN-PROOF</em>. This is "
-					  "a feature of the CD writer which avoids buffer underruns.") );
 }
 
 
@@ -398,33 +299,17 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 }
 
 
-void K3bDataBurnDialog::slotWriterChanged()
-{
-  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
-    m_checkBurnProof->setEnabled( dev->burnproof() );
-    m_checkDao->setEnabled( dev->dao() );
-    if( !dev->burnproof() )
-      m_checkBurnProof->setChecked(false);
-    if( !dev->dao() )
-      m_checkDao->setChecked(false);
-  }
-}
-
-
 void K3bDataBurnDialog::slotOk()
 {
-  // check if enough space in tempdir if not on-the-fly
-  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
-    KMessageBox::sorry( this, i18n("Not enough space in temporary directory. Either change the directory or select on-the-fly burning.") );
-    return;
-  }
-  else if( !m_checkOnTheFly->isChecked() ) {
+  if( !m_checkOnTheFly->isChecked() ) {
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
-
+    
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-      if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), i18n("File exists...") ) 
+      if( KMessageBox::questionYesNo( this, 
+				      i18n("Do you want to overwrite %1").arg(m_tempDirSelectionWidget->tempPath()), 
+				      i18n("File exists...") ) 
 	  != KMessageBox::Yes )
 	return;
     }
@@ -436,18 +321,18 @@ void K3bDataBurnDialog::slotOk()
 
 void K3bDataBurnDialog::slotOnlyCreateImageToggled( bool on )
 {
-  m_checkDeleteImage->setChecked( !on );
+  m_checkRemoveBufferFiles->setChecked( !on );
 }
 
 
 void K3bDataBurnDialog::loadDefaults()
 {
-  m_checkDummy->setChecked( false );
+  m_checkSimulate->setChecked( false );
   m_checkDao->setChecked( true );
   m_checkOnTheFly->setChecked( true );
-  m_checkBurnProof->setChecked( true );
+  m_checkBurnproof->setChecked( true );
 
-  m_checkDeleteImage->setChecked( true );
+  m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
@@ -463,11 +348,11 @@ void K3bDataBurnDialog::loadUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "default data settings" );
 
-  m_checkDummy->setChecked( c->readBoolEntry( "dummy_mode", false ) );
+  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
   m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-  m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
-  m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
+  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
 
@@ -486,11 +371,11 @@ void K3bDataBurnDialog::saveUserDefaults()
 
   c->setGroup( "default data settings" );
 
-  c->writeEntry( "dummy_mode", m_checkDummy->isChecked() );
+  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
   c->writeEntry( "dao", m_checkDao->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
-  c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
-  c->writeEntry( "remove_image", m_checkDeleteImage->isChecked() );
+  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
+  c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
 
 
@@ -503,12 +388,6 @@ void K3bDataBurnDialog::saveUserDefaults()
   if( m_tempDirSelectionWidget->isEnabled() ) {
     m_tempDirSelectionWidget->saveConfig();
   }
-}
-
-
-void K3bDataBurnDialog::prepareJob( K3bBurnJob* job )
-{
-  job->setWritingApp( m_writerSelectionWidget->writingApp() );
 }
 
 #include "k3bdataburndialog.moc"

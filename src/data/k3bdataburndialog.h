@@ -49,25 +49,12 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    ~K3bDataBurnDialog();
 
  protected:
-   void prepareJob( K3bBurnJob* );
-
-   void setupBurnTab( QFrame* frame );
    void setupAdvancedTab( QFrame* frame );
    void setupSettingsTab( QFrame* frame );
    void setupVolumeInfoTab( QFrame* frame );
 
    // --- general tab -------------------------	
-   QLabel* TextLabel1;
-   QLabel* TextLabel1_2;
-   QGroupBox* m_groupOptions;
-   QCheckBox* m_checkDummy;
-   QCheckBox* m_checkOnTheFly;
    QCheckBox* m_checkOnlyCreateImage;
-   QCheckBox* m_checkDeleteImage;
-   QCheckBox* m_checkDao;
-   QCheckBox* m_checkBurnProof;
-   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-   K3bWriterSelectionWidget* m_writerSelectionWidget;
    // ----------------------------------------------
 
    K3bDataVolumeDescWidget* m_volumeDescWidget;
@@ -92,7 +79,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void slotOk();
    void saveSettings();
    void readSettings();
-   void slotWriterChanged();
 
    void loadDefaults();
    void loadUserDefaults();
