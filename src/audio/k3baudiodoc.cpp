@@ -26,6 +26,7 @@
 #include "input/k3baudiomodule.h"
 #include "../rip/songdb/k3bsong.h"
 #include "../rip/songdb/k3bsongmanager.h"
+#include "../tools/kstringlistdialog.h"
 
 // QT-includes
 #include <qstring.h>
@@ -949,8 +950,9 @@ unsigned long K3bAudioDoc::identifyWaveFile( const KURL& url )
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( k3bMain(), i18n("Could not find the following files:"), 
-				  m_notFoundFiles, i18n("Not found") );
+    KStringListDialog d( m_notFoundFiles, i18n("Not found"), i18n("Could not find the following files:"), 
+			 true, k3bMain(), "notFoundFilesInfoDialog" );
+    d.exec();
 
     m_notFoundFiles.clear();
   }
