@@ -46,6 +46,16 @@ class K3bInterface : public DCOPObject
   DCOPRef createVideoDVDProject();
   DCOPRef createMovixDVDProject();
 
+  /**
+   * Returns a reference to the currently active project.
+   * This is useful to do things like:
+   *
+   * <pre>k3b --audiocd</pre>
+   * and then use dcop on the newly created project via:
+   * <pre>dcop $(dcop k3b K3bInterface currentProject) something</pre>
+   */
+  DCOPRef currentProject();
+
   DCOPRef openDocument( const KURL& url );
 
   QValueList<DCOPRef> projects();

@@ -47,7 +47,9 @@ Session management
 Made K3b a unique application only allowing one instance.
 Improved dcop interface for data projects which allows to add and remove items 
 	to and from specific folders in the project.
-
+Conditional audio ripping pattern. Now what does that mean? It means that you can do stuff like:
+	"if the track has a genre encoded use it, otherwise use 'misc'" and stuff like that.
+	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.

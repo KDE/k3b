@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2005 Sebastian Trueg <trueg@k3b.org>
@@ -47,13 +47,13 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
   m_editBlankReplace->setValidator( dirValidator );
 
   // default pattern
-  m_comboFilenamePattern->insertItem( i18n( "%r/%m/%a - %t" ) );
-  m_comboFilenamePattern->insertItem( i18n( "%g/%r - %m/Track%n" ) );
+  m_comboFilenamePattern->insertItem( i18n( "%A/%T/%a - %t" ) );
+  m_comboFilenamePattern->insertItem( i18n( "%g/%A - %T/Track%n" ) );
   m_comboFilenamePattern->insertItem( i18n( "music/ripped-tracks/%a - %t" ) );
-  
-  m_comboPlaylistPattern->insertItem( i18n( "%r - %m" ) );
+
+  m_comboPlaylistPattern->insertItem( i18n( "%A - %T" ) );
   m_comboPlaylistPattern->insertItem( i18n( "Playlist" ) );
-  m_comboPlaylistPattern->insertItem( i18n( "playlists/%r/%m" ) );
+  m_comboPlaylistPattern->insertItem( i18n( "playlists/%A/%T" ) );
 
   connect( m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
@@ -63,7 +63,7 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
 	   this, SIGNAL(changed()) );
   connect( m_checkBlankReplace, SIGNAL(toggled(bool)),
 	   this, SIGNAL(changed()) );
-  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()), 
+  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()),
 	   this, SLOT(slotSeeSpecialStrings()) );
   connect( m_conditionalInclusionLabel, SIGNAL(leftClickedURL()),
 	   this, SLOT(slotSeeConditionalInclusion()) );
@@ -101,8 +101,8 @@ bool K3bCddbPatternWidget::replaceBlanks() const
 
 void K3bCddbPatternWidget::loadConfig( KConfig* c )
 {
-  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%r - %m" ) );
-  m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%r - %m/%a - %t" ) );
+  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%A - %T" ) );
+  m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%A - %T/%a - %t" ) );
   m_checkBlankReplace->setChecked( c->readBoolEntry( "replace blanks", false ) );
   m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );
 }
@@ -119,8 +119,8 @@ void K3bCddbPatternWidget::saveConfig( KConfig* c )
 
 void K3bCddbPatternWidget::loadDefaults()
 {
-  m_comboPlaylistPattern->setEditText( "%r - %m.m3u" );
-  m_comboFilenamePattern->setEditText( "%r - %m/%a - %t" );
+  m_comboPlaylistPattern->setEditText( "%A - %T.m3u" );
+  m_comboFilenamePattern->setEditText( "%A - %T/%a - %t" );
   m_checkBlankReplace->setChecked( false );
   m_editBlankReplace->setText( "_" );
 }
@@ -129,41 +129,45 @@ void K3bCddbPatternWidget::loadDefaults()
 void K3bCddbPatternWidget::slotSeeSpecialStrings()
 {
   QWhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
-			     "<ul>\n"
-			     "<li>%a - artist of the track\n"
-			     "<li>%t - title of the track\n"
-			     "<li>%n - track number\n"
-			     "<li>%y - year of the CD\n"
-			     "<li>%e - extended information about the track\n"
-			     "<li>%g - genre of the CD\n"
-			     "<li>%r - album artist (differs from %a only on soundtracks or compilations)\n"
-			     "<li>%m - album title\n"
-			     "<li>%x - extended information about the CD\n"
-			     "<li>%d - current date\n"
-			     "</ul>" ) );
+			     "<p>The following strings will be replaced with their respective meaning in every "
+			     "track name.<br>"
+			     "<em>Hint:</em> %A differs from %a only on soundtracks or compilations."
+                             "<p><table border=\"0\">"
+			     "<tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</em></td></tr>"
+                             "<tr><td>%a</td><td>artist of the track</td><td>%{a} or %{artist}</td></tr>"
+                             "<tr><td>%t</td><td>title of the track</td><td>%{t} or %{title}</td></tr>"
+                             "<tr><td>%n</td><td>track number</td><td>%{n} or %{number}</td></tr>"
+                             "<tr><td>%y</td><td>year of the CD</td><td>%{y} or %{year}</td></tr>"
+                             "<tr><td>%c</td><td>extended track information</td><td>%{c} or %{comment}</td></tr>"
+                             "<tr><td>%g</td><td>genre of the CD</td><td>%{g} or %{genre}</td></tr>"
+                             "<tr><td>%A</td><td>album artist</td><td>%{A} or %{albumartist}</td></tr>"
+                             "<tr><td>%T</td><td>album title</td><td>%{T} or %{albumtitle}</td></tr>"
+                             "<tr><td>%C</td><td>extended CD information</td><td>%{C} or %{albumcomment}</td></tr>"
+                             "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
+                             "</table>") );
 }
 
 void K3bCddbPatternWidget::slotSeeConditionalInclusion()
 {
   QWhatsThis::display( i18n( "<p><b>Conditional inclusion:</b>"
-			     "<p>These patterns make it possible to selectively include texts, "
-			     "depending on the value of CDDB entries. You can choose only to "
-			     "include something if one of the entries is empty, "
-			     "or if it has a specific value."
-			     "<ul>\n"
-			     "<li>@m{TEXT} includes TEXT if the CD Title is specified;\n"
-			     "<li>!m{TEXT} includes TEXT if the CD Title is not specified;\n"
-			     "<li>@x=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended information "
-			       "is named Soundtrack;\n"
-			     "<li>!x=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended information "
-			       "is anything else but Soundtrack;\n"
-			     "<li>It is also possible to include special strings in texts and conditions, "
-			       "e.g. !a=\"%r\"{%a} only includes the title's artist information "
-			       "if it does not differ from the album artist.\n"
-			     "</ul>\n"
-			     "<p>Conditional includes make use of the same characters as the special "
-			       "strings, which means that the X in @X{...} can be one character out of "
-			       "[atnyegrmxd]." ) );
+                             "<p>These patterns make it possible to selectively include texts, "
+                             "depending on the value of CDDB entries. You can choose only to "
+                             "include or exclude texts if one of the entries is empty, "
+                             "or if it has a specific value. Examples:"
+                             "<ul>"
+                             "<li>@T{TEXT} includes TEXT if the album title is specified"
+                             "<li>!T{TEXT} includes TEXT if the album title is not specified"
+                             "<li>@C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
+                             "information is named Soundtrack"
+                             "<li>!C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
+                             "information is anything else but Soundtrack"
+                             "<li>It is also possible to include special strings in texts and conditions, "
+                             "e.g. !a='%A'{%a} only includes the title's artist information "
+                             "if it does not differ from the album artist."
+                             "</ul>"
+                             "<p>Conditional includes make use of the same characters as the special "
+                             "strings, which means that the X in @X{...} can be one character out of "
+                             "[atnycgATCd]." ) );
 }
 
 #include "k3bcddbpatternwidget.moc"

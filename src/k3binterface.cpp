@@ -18,7 +18,8 @@
 #include "k3bprojectinterface.h"
 #include "k3b.h"
 #include "k3bdoc.h"
-#include <k3bcore.h>
+#include "k3bview.h"
+#include "k3bcore.h"
 
 #include <dcopclient.h>
 #include <qptrlist.h>
@@ -78,6 +79,16 @@ DCOPRef K3bInterface::createMovixDVDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
 		  m_main->dcopInterface( m_main->slotNewMovixDvdDoc() )->objId() );
+}
+
+DCOPRef K3bInterface::currentProject()
+{
+  K3bView* view = m_main->activeView();
+  if( view )
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    m_main->dcopInterface( view->doc() )->objId() );
+  else
+    return DCOPRef();
 }
 
 DCOPRef K3bInterface::openDocument( const KURL& url )

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -25,14 +25,28 @@
 /**
   *@author Sebastian Trueg
   */
-class K3bPatternParser 
+class K3bPatternParser
 {
- public: 
-  static QString parsePattern( const K3bCddbResultEntry& entry, 
-			       unsigned int trackNumber,
-			       const QString& pattern, 
-			       bool replace = false, 
-			       const QString& replaceString = "_" );
+ public:
+  static QString parsePattern( const K3bCddbResultEntry& entry,
+                               unsigned int trackNumber,
+                               const QString& pattern,
+                               bool replace = false,
+                               const QString& replaceString = "_" );
+
+ private:
+  enum {
+    TITLE   = 't',
+    ARTIST  = 'a',
+    NUMBER  = 'n',
+    COMMENT = 'c',
+    YEAR    = 'y',
+    GENRE   = 'g',
+    ALBUMTITLE   = 'T',
+    ALBUMARTIST  = 'A',
+    ALBUMCOMMENT = 'C',
+    DATE = 'd'
+  };
 };
 
 #endif

@@ -97,6 +97,9 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Erik de Castro Lopo",
 		      I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
 		      "erikd@mega-nerd.com" );
+  aboutData.addCredit("Jakob Petsovits",
+		      I18N_NOOP("For the very cool conditional audio ripping pattern."),
+		      "jpetso@gmx.at" );
 
 
   KCmdLineArgs::init( argc, argv, &aboutData );
