@@ -264,7 +264,7 @@ void K3bCdrdaoWriter::setWriteArguments()
   }
   else if( defaultToGenericMMC( burnDevice(), true ) ) {
     kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
-    *m_process << "--driver" << "generic-mmc";
+    *m_process << "--driver" << "generic-mmc:0x00000010";
   }
 
   // burn speed
