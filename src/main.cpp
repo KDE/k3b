@@ -3,7 +3,7 @@
  * $Id$
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 
     KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
                           "0.10.99", description, KAboutData::License_GPL,
-                          I18N_NOOP("(c) 1999 - 2003, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );
+                          I18N_NOOP("(c) 1999 - 2004, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );
     aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
     aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
     aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@k3b.org");
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     aboutData.addCredit("John Steele Scott",
 			I18N_NOOP("For the flac decoding plugin."),
 			"toojays@toojays.net" );
-    aboutData.addCredit("György Szombathelyi",
+    aboutData.addCredit("GyÃ¶rgy Szombathelyi",
 			I18N_NOOP("For the very useful isofslib."),
 			"gyurco@users.sourceforge.net" );
     aboutData.addCredit("Erik de Castro Lopo",

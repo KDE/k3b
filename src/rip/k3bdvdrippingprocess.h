@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 1998-2003 Thomas Froescher <tfroescher@k3b.org>
+ * Copyright (C) 1998-2004 Thomas Froescher <tfroescher@k3b.org>
  *           (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

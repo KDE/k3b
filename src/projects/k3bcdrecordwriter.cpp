@@ -4,7 +4,7 @@
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -570,11 +570,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains( "at speed" ) ) {
     // parse the speed and inform the user if cdrdao switched it down
     int pos = line.find( "at speed" );
-    int po2 = line.find( QRegExp("\\D"), pos + 9 );
-    int speed = line.mid( pos+9, po2-pos-9 ).toInt();
-    if( speed < d->usedSpeed ) {
+    int po2 = line.find( QRegExp("[^\\d\\.]"), pos + 9 );
+    int speed = static_cast<int>( line.mid( pos+9, po2-pos-9 ).toDouble() );  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
+    if( speed != d->usedSpeed ) {
       emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(d->usedSpeed), K3bJob::WARNING );
-      emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
+      if( speed > d->usedSpeed )
+	emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
+      else
+	emit infoMessage( i18n("Switching up burn speed to %1x").arg(speed), K3bJob::WARNING );
     }
   }
   else if( line.startsWith( "Starting new" ) ) {
