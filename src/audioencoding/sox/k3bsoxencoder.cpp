@@ -157,6 +157,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
     delete d->process;
     d->process = new K3bProcess();
     d->process->setSplitStdout(true);
+    d->process->setRawStdin(true);
 
     connect( d->process, SIGNAL(processExited(KProcess*)),
 	     this, SLOT(slotSoxFinished(KProcess*)) );
