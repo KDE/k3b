@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(all_includes) -I$(srcdir)/libmad
 
 SUBDIRS = libmad
 
