@@ -67,8 +67,9 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   KAction* burnAction = new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
 				     actionCollection(), "project_burn");
   burnAction->setToolTip( i18n("Open the burning dialog") );
-  (void)new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
-		     actionCollection(), "project_properties");
+  KAction* propAction = new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
+				     actionCollection(), "project_properties");
+  propAction->setToolTip( i18n("Open the properties dialog") );
 
   m_toolBox->addButton( burnAction );
   m_toolBox->addSeparator();
@@ -85,10 +86,12 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
 	  "  <Action name=\"project_properties\"/>"
 	  " </Menu>"
 	  "</MenuBar>"
+#if 0
 	  "<ToolBar name=\"projectToolBar\" index=\"1\">"
 	  "  <Action name=\"project_burn\"/>"
 	  "  <Action name=\"project_properties\"/>"
 	  " </ToolBar>"
+#endif
 	  "</kpartgui>", true );
 }
 

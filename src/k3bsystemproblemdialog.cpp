@@ -308,7 +308,18 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
        it.current(); ++it ) {
     if( it.current()->interfaceType() == K3bDevice::IDE ) {
       atapiWriter = true;
-      break;
+    }
+
+    if( it.current()->automount() ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+					 i18n("Writing device %1 - %2 is automounted.")
+					 .arg(it.current()->vendor()).arg(it.current()->description()),
+					 i18n("Automounting can cause problems with CD/DVD writing, especially "
+					      "with rewritable media. Although it might all work just fine it "
+					      "is recommended to disable automounting completely for now."),
+					 i18n("Replace the automounting entries in /etc/fstab with old-fashioned "
+					      "ones."),
+					 false ) );
     }
   }
 

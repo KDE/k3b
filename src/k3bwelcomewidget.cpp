@@ -118,8 +118,25 @@ void K3bWelcomeWidget::Display::rebuildGui()
 
   int numActions = m_actions.count();
   if( numActions > 0 ) {
-    // step 2: calculate rows and columns
-    // for now we simply create 1-3 rows and as may cols as neccessary
+
+    // create buttons
+    for( QPtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
+      KAction* a = it.current();
+
+      K3bFlatButton* b = new K3bFlatButton( a, this );
+
+      m_buttons.append( b );
+      m_buttonMap.insert( b, a );
+    }
+
+    // determine the needed button size (since all buttons should be equal in size
+    // we use the max of all sizes)
+    m_buttonSize = m_buttons.first()->sizeHint();
+    for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
+      m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
+    }
+
+    // calculate rows and columns
     m_cols = 0;
     m_rows = 0;
     if( numActions < 3 )
@@ -133,38 +150,18 @@ void K3bWelcomeWidget::Display::rebuildGui()
     if( numActions%m_rows )
       m_cols++;
 
-    // step 3: create buttons
-    for( QPtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
-      KAction* a = it.current();
-
-      K3bFlatButton* b = new K3bFlatButton( a, this );
-
-      m_buttons.append( b );
-      m_buttonMap.insert( b, a );
-    }
-
-    // step 4: calculate button size
-    // determine the needed button size (since all buttons should be equal in size
-    // we use the max of all sizes)
-    m_buttonSize = m_buttons.first()->sizeHint();
-    for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
-      m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
-    }
-
-    // step 5: position buttons
-    // starting rect
     repositionButtons();
 
-    // step 6: calculate widget size
-    m_size = QSize( QMAX(40+m_header->widthUsed(), 160+(m_buttonSize.width()*m_cols)+5*(m_cols-1)),
-		    160+(m_buttonSize.height()*m_rows)+5*(m_rows-1) );
+    // calculate widget size
+    m_size = QSize( QMAX(40+m_header->widthUsed(), 160+((m_buttonSize.width()+4)*m_cols)),
+		    160+((m_buttonSize.height()+4)*m_rows) );
   }
 }
 
 
 void K3bWelcomeWidget::Display::repositionButtons()
 {
-  int leftMargin = QMAX( 80, (width() - (m_buttonSize.width()*m_cols + (m_cols-1)*5))/2 );
+  int leftMargin = QMAX( 80, (width() - ((m_buttonSize.width()+4)*m_cols))/2 );
   int topOffset = m_header->height() + 40 + 10;//(height() - m_header->height() - 60 - (m_buttonSize.height()*m_rows))/2;
 
   int row = 0;
@@ -173,8 +170,8 @@ void K3bWelcomeWidget::Display::repositionButtons()
   for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
     K3bFlatButton* b = it.current();
     
-    b->setGeometry( QRect( QPoint( leftMargin+(col*m_buttonSize.width())+(col*5), 
-				   topOffset+(row*m_buttonSize.height())+(row*5) ),
+    b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ), 
+				   topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
 			   m_buttonSize ) );
     b->show();
     
@@ -265,6 +262,8 @@ void K3bWelcomeWidget::loadConfig( KConfig* c )
       actions.append(a);
 
   main->rebuildGui( actions );
+
+  fixSize();
 }
 
 
@@ -283,7 +282,12 @@ void K3bWelcomeWidget::saveConfig( KConfig* c )
 void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 {
   QScrollView::resizeEvent( e );
+  fixSize();
+}
 
+
+void K3bWelcomeWidget::fixSize()
+{
   QRect r( contentsRect() );
   QSize s = r.size();
   if( s.width() < main->sizeHint().width() )
@@ -310,7 +314,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
       // the actionmenu containing all the other file_new actions and that would not make sense
       // on a toolbutton
       QString aname(a->name());
-      if( aname != "file_new"  &&
+      if( aname != "file_new"  && aname != "file_new_cd" && aname != "file_new_dvd" &&
 	  ( aname.startsWith( "tools" ) || aname.startsWith( "file_new" ) ) )
 	map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
     }
@@ -334,6 +338,8 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
       else
 	main->addAction( map[r] );
     }
+
+    fixSize();
   }
 }
 

@@ -215,6 +215,8 @@ void K3bAudioProjectConvertingDialog::refresh()
 
   QString extension = m_optionWidget->extension();
 
+  KIO::filesize_t overallSize = 0;
+
   if( m_optionWidget->createSingleFile() ) {
     QString filename;
     long long filesize = 0;
@@ -224,6 +226,9 @@ void K3bAudioProjectConvertingDialog::refresh()
     else {
       filesize = m_optionWidget->encoder()->fileSize( extension, m_doc->length() );
     }
+
+    if( filesize > 0 )
+      overallSize = filesize;
 
     filename = K3bPatternParser::parsePattern( cddbEntry, 1,
 					       m_patternWidget->filenamePattern(),
@@ -261,6 +266,9 @@ void K3bAudioProjectConvertingDialog::refresh()
 	filesize = m_optionWidget->encoder()->fileSize( extension, track->length() );
       }
 
+      if( filesize > 0 )
+	overallSize += filesize;
+
       QString filename = K3bPatternParser::parsePattern( cddbEntry, i,
 							 m_patternWidget->filenamePattern(),
 							 m_patternWidget->replaceBlanks(),
@@ -295,6 +303,11 @@ void K3bAudioProjectConvertingDialog::refresh()
     
     d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
   }
+
+  if( overallSize > 0 )
+    m_optionWidget->setNeededSize( overallSize );
+  else
+    m_optionWidget->setNeededSize( 0 );
 }
 
 

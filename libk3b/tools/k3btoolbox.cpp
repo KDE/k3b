@@ -30,6 +30,7 @@
 #include <qstyle.h>
 #include <qpainter.h>
 #include <qevent.h>
+#include <qobjectlist.h>
 
 
 /**
@@ -175,22 +176,23 @@ K3bToolBox::K3bToolBox( QWidget* parent, const char* name )
 
 K3bToolBox::~K3bToolBox()
 {
-  // we do not want to delete the widgets from the widgetactions becasue they
-  // might be used afterwards
-  for( QPtrListIterator<QWidget> it( m_doNotDeleteWidgets ); it.current(); ++it )
-    it.current()->reparent( 0L, QPoint() );
+  clear();
 }
 
 
 K3bToolBoxButton* K3bToolBox::addButton( KAction* action, bool forceText )
 {
-  K3bToolBoxButton* b = new K3bToolBoxButton( action, this );
-  if( forceText ) {
-    b->setUsesTextLabel( true );
-    b->setTextPosition( QToolButton::BesideIcon );
+  if( action ) {
+    K3bToolBoxButton* b = new K3bToolBoxButton( action, this );
+    if( forceText ) {
+      b->setUsesTextLabel( true );
+      b->setTextPosition( QToolButton::BesideIcon );
+    }
+    addWidget( b );
+    return b;
   }
-  addWidget( b );
-  return b;
+  else
+    return 0;
 }
 
 
@@ -271,5 +273,17 @@ void K3bToolBox::addWidgetAction( KWidgetAction* action )
   m_doNotDeleteWidgets.append( action->widget() );
 }
 
+
+void K3bToolBox::clear()
+{
+  // we do not want to delete the widgets from the widgetactions becasue they
+  // might be used afterwards
+  for( QPtrListIterator<QWidget> it( m_doNotDeleteWidgets ); it.current(); ++it )
+    it.current()->reparent( 0L, QPoint() );
+
+  for( QObjectListIterator it2( *children() ); it2.current(); ++it2 )
+    if( it2.current()->isWidgetType() )
+      delete it2.current();
+}
 
 #include "k3btoolbox.moc"

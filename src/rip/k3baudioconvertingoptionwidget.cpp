@@ -43,6 +43,8 @@ public:
   QMap<int, QString> extensionMap;
 
   QTimer freeSpaceUpdateTimer;
+
+  KIO::filesize_t neededSize;
 };
 
 
@@ -111,6 +113,18 @@ void K3bAudioConvertingOptionWidget::setBaseDir( const QString& path )
 }
 
 
+void K3bAudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
+{
+  d->neededSize = size;
+  if( size > 0 )
+    m_labelNeededSpace->setText( KIO::convertSize( size ) );
+  else
+    m_labelNeededSpace->setText( i18n("unknown") );
+
+  slotUpdateFreeTempSpace();
+}
+
+
 void K3bAudioConvertingOptionWidget::slotConfigurePlugin()
 {
   // 0 for wave
@@ -128,10 +142,17 @@ void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
     path.truncate( path.findRev('/') );
 
   unsigned long size, avail;
-  if( K3b::kbFreeOnFs( path, size, avail ) )
+  if( K3b::kbFreeOnFs( path, size, avail ) ) {
     m_labelFreeSpace->setText( KIO::convertSizeFromKB(avail) );
-  else
+    if( avail < d->neededSize/1024 )
+      m_labelNeededSpace->setPaletteForegroundColor( Qt::red );
+    else
+      m_labelNeededSpace->setPaletteForegroundColor( paletteForegroundColor() );
+  }
+  else {
     m_labelFreeSpace->setText("-");
+    m_labelNeededSpace->setPaletteForegroundColor( paletteForegroundColor() );
+  }
 }
 
 

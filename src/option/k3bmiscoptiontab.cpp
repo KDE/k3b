@@ -54,7 +54,7 @@ void K3bMiscOptionTab::readSettings()
   KConfig* c = kapp->config();
   c->setGroup( "General Options" );
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
-  m_checkShowSystemTrayProgress->setChecked( c->readBoolEntry( "Show progress in system tray", true ) );
+  m_checkShowProgressOSD->setChecked( c->readBoolEntry( "Show progress OSD", true ) );
   m_checkHideMainWindowWhileWriting->setChecked( c->readBoolEntry( "hide main window while writing", false ) );
   m_checkSystemConfig->setChecked( c->readBoolEntry( "check system config", true ) );
 
@@ -84,7 +84,7 @@ bool K3bMiscOptionTab::saveSettings()
   KConfig* c = kapp->config();
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
-  c->writeEntry( "Show progress in system tray", m_checkShowSystemTrayProgress->isChecked() );
+  c->writeEntry( "Show progress OSD", m_checkShowProgressOSD->isChecked() );
   c->writeEntry( "hide main window while writing", m_checkHideMainWindowWhileWriting->isChecked() );
   c->writeEntry( "check system config", m_checkSystemConfig->isChecked() );
 

@@ -118,13 +118,13 @@
                 </property>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>m_checkShowSystemTrayProgress</cstring>
+                        <cstring>m_checkShowProgressOSD</cstring>
                     </property>
                     <property name="text">
-                        <string>Show progress in system tray</string>
+                        <string>Show progress OSD</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will graphically display the progress in the system tray.</string>
+                        <string>&lt;p&gt;If this option is checked K3b will display the progress in an OSD which always stays on top of all other windows.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">

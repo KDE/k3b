@@ -80,13 +80,16 @@ class K3bMixedJob : public K3bBurnJob
   void slotNormalizeProgress( int );
   void slotNormalizeSubProgress( int );
 
+  // misc slots
   void slotMediaReloadedForSecondSession( bool );
+  void slotMaxSpeedJobFinished( bool );
 
  private:
   bool prepareWriter();
   bool writeTocFile();
   bool writeInfFiles();
   bool startWriting();
+  void startFirstCopy();
   void addAudioTracks( K3bCdrecordWriter* writer );
   void addDataTrack( K3bCdrecordWriter* writer );
   void cleanupAfterError();
@@ -96,6 +99,7 @@ class K3bMixedJob : public K3bBurnJob
   void normalizeFiles();
   void prepareProgressInformation();
   void writeNextCopy();
+  void determinePreliminaryDataImageSize();
 
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
@@ -110,7 +114,8 @@ class K3bMixedJob : public K3bBurnJob
 
   KTempFile* m_tocFile;
 
-  enum Action { CREATING_ISO_IMAGE,
+  enum Action { PREPARING_DATA,
+		CREATING_ISO_IMAGE,
 		CREATING_AUDIO_IMAGE,
 		WRITING_ISO_IMAGE,
 		WRITING_AUDIO_IMAGE,
@@ -129,6 +134,8 @@ class K3bMixedJob : public K3bBurnJob
   int m_usedAudioWritingMode;
 
   QString m_tempFilePrefix;
+
+  K3b::Msf m_projectSize;
 
   class Private;
   Private* d;

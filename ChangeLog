@@ -53,6 +53,7 @@ Conditional audio ripping pattern. Now what does that mean? It means that you ca
 New project plugin interface. Example: the audio project cddb plugin is now a project plugin
 MusicBrainz support (Query audio file tags over the internet)
 K3b now has a "smart" automatic multisession handling in Data projects.
+Replaced the system tray by an OSD inspired by the one in amaroK
 
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.

@@ -76,11 +76,9 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
-  KAction* mbAction = new KAction( i18n("Musicbrainz Lookup"), "musicbrainz", 0, m_songlist, 
-				   SLOT(slotQueryMusicBrainz()),
-				   actionCollection(), "project_audio_musicbrainz" );
-  mbAction->setToolTip( i18n("Try to determine meta information over the internet") );
-  toolBox()->addButton( mbAction );
+  kdDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count() << endl;
+  toolBox()->addButton( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
+  toolBox()->addSeparator();
 #endif
 
   addPluginButtons( K3bProjectPlugin::AUDIO_CD );

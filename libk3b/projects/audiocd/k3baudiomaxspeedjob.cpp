@@ -44,11 +44,22 @@ public:
   }
 
   void run() {
+    kdDebug() << k_funcinfo << endl;
     m_canceled = false;
 
     emitStarted();
 
     K3bAudioTrack* track = m_doc->firstTrack();
+
+    // count sources for minimal progress info
+    int numSources = 0;
+    int sourcesDone = 0;
+    while( track ) {
+      numSources += track->numberSources();
+      track = track->next();
+    }
+
+    track = m_doc->firstTrack();
     K3bAudioDataSource* source = track->firstSource();
     bool success = true;
     maxSpeed = 175*1000;
@@ -62,6 +73,9 @@ public:
       
       // read some data
       int speed = speedTest( source );
+
+      ++sourcesDone;
+      emitPercent( 100*numSources/sourcesDone );
 
       if( speed < 0 ) {
 	success = false;
@@ -140,6 +154,7 @@ public:
   }
 
   void cancel() {
+    kdDebug() << k_funcinfo << endl;
     m_canceled = true;
   }
 

@@ -217,6 +217,8 @@ void K3bAudioJob::start()
       emit newSubTask( i18n("Determining maximum writing speed") );
       if( !m_maxSpeedJob ) {
 	m_maxSpeedJob = new K3bAudioMaxSpeedJob( m_doc, this, this );
+	connect( m_maxSpeedJob, SIGNAL(percent(int)), 
+		 this, SIGNAL(subPercent(int)) );
 	connect( m_maxSpeedJob, SIGNAL(finished(bool)), 
 		 this, SLOT(slotMaxSpeedJobFinished(bool)) );
       }
@@ -284,6 +286,9 @@ void K3bAudioJob::slotMaxSpeedJobFinished( bool success )
 void K3bAudioJob::cancel()
 {
   m_canceled = true;
+
+  if( m_maxSpeedJob )
+    m_maxSpeedJob->cancel();
 
   if( m_writer )
     m_writer->cancel();

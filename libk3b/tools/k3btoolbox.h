@@ -81,6 +81,8 @@ class K3bToolBox : public QFrame
   void addSeparator();
   void addStretch();
 
+  void clear();
+
  protected:
   QGridLayout* m_mainLayout;
   QPtrList<QWidget> m_doNotDeleteWidgets;

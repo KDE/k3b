@@ -292,9 +292,9 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->popup = new KPopupMenu( this, "popup" );
   d->dvdPopup = new KPopupMenu( this, "dvdpopup" );
 
-  d->actionShowMinutes = new KRadioAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()),
+  d->actionShowMinutes = new KRadioAction( i18n("Minutes"), 0, this, SLOT(showTime()),
 					   d->actionCollection, "fillstatus_show_minutes" );
-  d->actionShowMegs = new KRadioAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()),
+  d->actionShowMegs = new KRadioAction( i18n("Megabytes"), 0, this, SLOT(showSize()),
 					d->actionCollection, "fillstatus_show_megabytes" );
 
   d->actionShowMegs->setExclusiveGroup( "show_size_in" );

@@ -230,6 +230,7 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
   const int bufferLength = 10*1024;
   int readLength = 0;
   long long readFile = 0;
+  track->seek(0);
   while( !d->canceled && ( readLength = track->read( buffer, bufferLength ) ) > 0 ) {
 
     if( d->encoder ) {

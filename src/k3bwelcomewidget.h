@@ -56,6 +56,8 @@ class K3bWelcomeWidget : public QScrollView
   void slotThemeChanged();
 
  private:
+  void fixSize();
+
   K3bMainWindow* m_mainWindow;
   Display* main;
 };

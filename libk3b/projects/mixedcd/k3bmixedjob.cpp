@@ -27,6 +27,7 @@
 #include <k3baudiotrack.h>
 #include <k3baudionormalizejob.h>
 #include <k3baudiojobtempdata.h>
+#include <k3baudiomaxspeedjob.h>
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
@@ -39,6 +40,7 @@
 #include <k3bcdrdaowriter.h>
 #include <k3btocfilewriter.h>
 #include <k3binffilewriter.h>
+#include <k3bglobalsettings.h>
 
 #include <qfile.h>
 #include <qdatastream.h>
@@ -55,11 +57,15 @@
 class K3bMixedJob::Private
 {
 public:
-  Private() {
+  Private()
+    : maxSpeedJob(0) {
   }
 
   int copies;
   int copiesDone;
+
+  K3bAudioMaxSpeedJob* maxSpeedJob;
+  bool maxSpeed;
 };
 
 
@@ -123,6 +129,8 @@ void K3bMixedJob::start()
   m_errorOccuredAndAlreadyReported = false;
   d->copiesDone = 0;
   d->copies = m_doc->copies();
+  m_currentAction = PREPARING_DATA;
+  d->maxSpeed = false;
 
   if( m_doc->dummy() )
     d->copies = 1;
@@ -134,19 +142,60 @@ void K3bMixedJob::start()
   m_doc->audioDoc()->setHideFirstTrack( false );   // unsupported
   m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
+  emit newTask( i18n("Preparing write process") );
 
   determineWritingMode();
 
   // depending on the mixed type and if it's onthefly or not we
   // decide what to do first
 
+  //
+  // in case we write two sessions we need to check if the resulting data will really fit on the Cd
+  //
+  if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+    determinePreliminaryDataImageSize();
+  else
+    startFirstCopy();
+}
+
+
+
+void K3bMixedJob::determinePreliminaryDataImageSize()
+{
+  // we do not have msinfo yet
+  m_isoImager->setMultiSessionInfo( QString::null );
+  m_isoImager->calculateSize();
+}
+
+
+void K3bMixedJob::startFirstCopy()
+{
+  //
   // if not onthefly create the iso image and then the wavs
   // and write then
   // if onthefly calculate the iso size
+  //
   if( m_doc->onTheFly() ) {
-    emit newTask( i18n("Preparing write process") );
+    if( m_doc->speed() == 0 ) {
+      emit newSubTask( i18n("Determining maximum writing speed") );
 
-    if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
+      //
+      // try to determine the max possible speed
+      // no need to check the data track's max speed. Most current systems are able
+      // to handle the maxium possible
+      //
+      if( !d->maxSpeedJob ) {
+	// the maxspeed job gets the device from the doc:
+	m_doc->audioDoc()->setBurner( m_doc->burner() );
+	d->maxSpeedJob = new K3bAudioMaxSpeedJob( m_doc->audioDoc(), this, this );
+	connect( d->maxSpeedJob, SIGNAL(percent(int)), 
+		 this, SIGNAL(subPercent(int)) );
+	connect( d->maxSpeedJob, SIGNAL(finished(bool)), 
+		 this, SLOT(slotMaxSpeedJobFinished(bool)) );
+      }
+      d->maxSpeedJob->start();
+    }
+    else if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
       m_isoImager->calculateSize();
     }
     else {
@@ -183,24 +232,33 @@ void K3bMixedJob::start()
 }
 
 
+void K3bMixedJob::slotMaxSpeedJobFinished( bool success )
+{
+  d->maxSpeed = success;
+  if( !success )
+    emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), WARNING );
+
+  if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
+    m_isoImager->calculateSize();
+  }
+  else {
+    // we cannot calculate the size since we don't have the msinfo yet
+    // so first write the audio session
+    writeNextCopy();
+  }
+}
+
+
 void K3bMixedJob::writeNextCopy()
 {
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
     m_currentAction = WRITING_AUDIO_IMAGE;
-    if( !prepareWriter() ) {
-      cleanupAfterError();
-      emit finished(false);
-      return;
-    }
-    
-    if( startWriting() ) {
-      if( m_doc->onTheFly() )
-	m_audioImager->start();
-    }
-    else {
+    if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
       emit finished(false);
     }
+    else if( m_doc->onTheFly() )
+      m_audioImager->start();
   }
   else {
     // the prepareWriter method needs the action to be set
@@ -209,24 +267,15 @@ void K3bMixedJob::writeNextCopy()
     else
       m_currentAction = WRITING_ISO_IMAGE;
 
-    if( !prepareWriter() ) {
+    if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
       emit finished(false);
-      return;
     }
-
-    if( startWriting() ) {
-      if( m_doc->onTheFly() ) {
-	if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK )
-	  m_audioImager->start();
-	else
-	  m_isoImager->start();
-      }
-    }
-    else {
-      cleanupAfterError();
-      emit finished(false);
-      return;
+    else if( m_doc->onTheFly() ) {
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK )
+	m_audioImager->start();
+      else
+	m_isoImager->start();
     }
   }
 }
@@ -235,6 +284,9 @@ void K3bMixedJob::writeNextCopy()
 void K3bMixedJob::cancel()
 {
   m_canceled = true;
+
+  if( d->maxSpeedJob )
+    d->maxSpeedJob->cancel();
 
   if( m_writer )
     m_writer->cancel();
@@ -278,8 +330,19 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
 
 void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), INFO );
+  kdDebug() << "(K3bMixedJob) size calculated: " << size << endl;
+  emit debuggingOutput( "K3b", QString( "Size of filesystem calculated: %1" ).arg(size) );
+
   if( status != ERROR ) {
+
+    if( m_currentAction == PREPARING_DATA ) {
+      // check the size
+      m_projectSize  = size + m_doc->audioDoc()->length();
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+	m_projectSize += 11400; // the session gap
+      
+      startFirstCopy();
+    }
 
     // 1. data in first track:
     //    start isoimager and writer
@@ -293,23 +356,20 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
     //    start audiodecoder and writer
     //    start isoimager and writer
 
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( !prepareWriter() ) {
+    else if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      if( !prepareWriter() || !startWriting() ) {
 	cleanupAfterError();
 	emit finished(false);
-	return;
       }
-
-      if( !startWriting() ) {
-	cleanupAfterError();
-	emit finished(false);
-	return;
-      }
-
-      m_isoImager->start();
+      else
+	m_isoImager->start();
     }
     else
       writeNextCopy();
+  }
+  else {
+    cleanupAfterError();
+    emit finished( false );
   }
 }
 
@@ -339,13 +399,10 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       m_currentAction = WRITING_ISO_IMAGE;
 
-      if( !prepareWriter() ) {
+      if( !prepareWriter() || !startWriting() ) {
 	cleanupAfterError();
 	emit finished(false);
-	return;
       }
-
-      startWriting();
     }
     else {
       emit newTask( i18n("Creating audio image files") );
@@ -454,13 +511,10 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
       else
 	m_currentAction = WRITING_AUDIO_IMAGE;
 
-      if( !prepareWriter() ) {
+      if( !prepareWriter() || !startWriting() ) {
 	cleanupAfterError();
 	emit finished(false);
-	return;
       }
-      else
-	startWriting();
     }
   }
 }
@@ -880,7 +934,28 @@ bool K3bMixedJob::startWriting()
     // just to be sure we did not get canceled during the async discWaiting
     if( m_canceled )
       return false;
+
+    // check if the project will fit on the CD
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      // the media is in and has been checked so this should be fast (hopefully)
+      K3b::Msf mediaSize = m_doc->burner()->diskInfo().capacity();
+      if( mediaSize < m_projectSize ) {
+	if( k3bcore->globalSettings()->overburn() ) {
+	  emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
+	}
+	else {
+	  emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+	  return false;
+	}
+      }
+    }
   }
+
+  // in case we determined the max possible writing speed we have to reset the speed on the writer job
+  // here since an inserted media is neccessary
+  // the Max speed job will compare the max speed value with the supported values of the writer
+  if( d->maxSpeed )
+    m_writer->setBurnSpeed( d->maxSpeedJob->maxSpeed() );
 
   emit burning(true);
   m_writer->start();
@@ -1099,13 +1174,10 @@ void K3bMixedJob::slotNormalizeJobFinished( bool success )
     else
       m_currentAction = WRITING_AUDIO_IMAGE;
 
-    if( !prepareWriter() ) {
+    if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
       emit finished(false);
-      return;
     }
-    else
-      startWriting();
   }
   else {
     cleanupAfterError();

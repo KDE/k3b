@@ -19,7 +19,7 @@
 #include "base_k3baudiorippingoptionwidget.h"
 
 #include <qcheckbox.h>
-
+#include <kio/global.h>
 
 class K3bAudioEncoder;
 class KConfig;
@@ -37,6 +37,8 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
   ~K3bAudioConvertingOptionWidget();
 
   void setBaseDir( const QString& path );
+
+  void setNeededSize( KIO::filesize_t );
 
   /**
    * @returns 0 if wave is selected

@@ -15,9 +15,9 @@
 
 
 #include "k3bjobprogressdialog.h"
-#include "k3bjobprogresssystemtray.h"
 #include "k3bapplication.h"
 #include "k3bemptydiscwaiter.h"
+#include "k3bjobprogressosd.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
@@ -58,7 +58,6 @@
 #include <klistview.h>
 #include <kiconloader.h>
 #include <kconfig.h>
-#include <ksystemtray.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <knotifyclient.h>
@@ -168,7 +167,7 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 					    bool modal, WFlags fl )
   : KDialog( parent, name, modal, fl ),
     in_loop(false),
-    m_systemTray(0)
+    m_osd(0)
 {
   d = new Private;
 
@@ -192,6 +191,7 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 K3bJobProgressDialog::~K3bJobProgressDialog()
 {
   delete d;
+  delete m_osd;
 }
 
 
@@ -356,25 +356,25 @@ void K3bJobProgressDialog::show()
   KConfig* c = k3bcore->config();
   c->setGroup( "General Options");
 
-  m_bShowSystemTrayProgress = c->readBoolEntry( "Show progress in system tray", true );
-  if( m_bShowSystemTrayProgress ) {
-    if( !m_systemTray )
-      m_systemTray = new K3bJobProgressSystemTray(this);
-    m_systemTray->setJob( m_job );
-    m_systemTray->show();
-  }
-
   if( c->readBoolEntry( "hide main window while writing", false ) )
     if( QWidget* w = kapp->mainWidget() )
       w->hide();
 
+  if( m_osd ) {
+    m_osd->readSettings( c );
+    m_osd->show();
+  }
+
   KDialog::show();
 }
 
-void K3bJobProgressDialog::setExtraInfo( QWidget *extra ){
+
+void K3bJobProgressDialog::setExtraInfo( QWidget *extra )
+{
   extra->reparent( m_frameExtraInfo, QPoint(0,0) );
   m_frameExtraInfoLayout->addWidget( extra, 0, 0 );
 }
+
 
 void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 {
@@ -383,13 +383,14 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
     if( QWidget* w = kapp->mainWidget() )
       w->show();
 
-    if( m_systemTray ) {
-      m_systemTray->hide();
-    }
-
     if( !m_plainCaption.isEmpty() )
       if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
 	w->setPlainCaption( m_plainCaption );
+
+    if( m_osd ) {
+      m_osd->hide();
+      m_osd->saveSettings( kapp->config() );
+    }
   }
   else
     e->ignore();
@@ -458,6 +459,9 @@ void K3bJobProgressDialog::slotFinished( bool success )
     m_progressSubPercent->setValue(100);
     slotUpdateCaption(100);
 
+    if( m_osd )
+      m_osd->setText( i18n("Success.") );
+
     KNotifyClient::event( 0, "SuccessfullyFinished", i18n("Successfully finished.") );
   }
   else {
@@ -465,10 +469,16 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
     m_labelTask->setPaletteForegroundColor( Qt::red );
 
-    if( m_bCanceled )
+    if( m_bCanceled ) {
       m_labelTask->setText( i18n("Canceled.") );
-    else
+      if( m_osd )
+	m_osd->setText( i18n("Canceled.") );
+    }
+    else {
       m_labelTask->setText( i18n("Error.") );
+      if( m_osd )
+	m_osd->setText( i18n("Error.") );
+    }
    
     KNotifyClient::event( 0, "FinishedWithError", i18n("Finished with errors") );
   }
@@ -536,6 +546,20 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
     m_labelJobDetails->setText( m_job->jobDetails() );
 
     setCaption( m_job->jobDescription() );
+
+    kapp->config()->setGroup( "General Options" );
+    if( kapp->config()->readBoolEntry( "Show progress OSD", true ) ) {
+      if( !m_osd )
+	m_osd = new K3bJobProgressOSD( this, "progressosd" );
+    }
+    else
+      delete m_osd;
+
+    if( m_osd ) {
+      // FIXME: use a setJob method and let the osd also change the text color to red/green
+      connect( job, SIGNAL(newTask(const QString&)), m_osd, SLOT(setText(const QString&)) );
+      connect( job, SIGNAL(percent(int)), m_osd, SLOT(setProgress(int)) );
+    }
   }
 }
 

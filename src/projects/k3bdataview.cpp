@@ -25,6 +25,7 @@
 #include <k3bfillstatusdisplay.h>
 #include <k3bcore.h>
 #include <k3bprojectplugin.h>
+#include <k3btoolbox.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -67,14 +68,22 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
 
 
   // the data actions
-  (void)new KAction(i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
-		    actionCollection(), "project_data_import_session" );
-  (void)new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
-		    SLOT(clearImportedSession()), actionCollection(),
-		    "project_data_clear_imported_session" );
-  (void)new KAction(i18n("&Edit Boot Images..."), "cdtrack", 0, this,
-		    SLOT(editBootImages()), actionCollection(),
-		    "project_data_edit_boot_images" );
+  KAction* actionImportSession = new KAction(i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
+					     actionCollection(), "project_data_import_session" );
+  actionImportSession->setToolTip( i18n("Import a previous session from an appendable data media.") );
+  KAction* actionClearSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
+					    SLOT(clearImportedSession()), actionCollection(),
+					    "project_data_clear_imported_session" );
+  actionClearSession->setToolTip( i18n("Clear the imported session.") );
+  KAction* actionEditBootImages = new KAction(i18n("&Edit Boot Images..."), "cdtrack", 0, this,
+					      SLOT(editBootImages()), actionCollection(),
+					      "project_data_edit_boot_images" );
+  actionEditBootImages->setToolTip( i18n("Edit the boot images of this project to make it bootable.") );
+
+  toolBox()->addButton( actionImportSession );
+  toolBox()->addButton( actionClearSession );
+  toolBox()->addButton( actionEditBootImages );
+  toolBox()->addSeparator();
 
   addPluginButtons( K3bProjectPlugin::DATA_CD );
 

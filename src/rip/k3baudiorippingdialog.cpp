@@ -304,6 +304,8 @@ void K3bAudioRippingDialog::refresh()
 
   QString baseDir = K3b::prepareDir( m_optionWidget->baseDir() );
 
+  KIO::filesize_t overallSize = 0;
+
   if( m_optionWidget->createSingleFile() ) {
     long length = 0;
     for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
@@ -324,6 +326,9 @@ void K3bAudioRippingDialog::refresh()
       extension = m_optionWidget->extension();
       fileSize = m_optionWidget->encoder()->fileSize( extension, length );
     }
+
+    if( fileSize > 0 )
+      overallSize = fileSize;
 
     if( (int)m_cddbEntry.titles.count() >= 1 ) {
       filename = K3bPatternParser::parsePattern( m_cddbEntry, 1,
@@ -372,6 +377,9 @@ void K3bAudioRippingDialog::refresh()
 	fileSize = m_optionWidget->encoder()->fileSize( extension, trackLength );
       }
 
+      if( fileSize > 0 )
+	overallSize += fileSize;
+
       if( m_toc[index].type() == K3bTrack::DATA ) {
 	extension = ".iso";
 	continue;  // TODO: find out how to rip the iso data
@@ -418,7 +426,10 @@ void K3bAudioRippingDialog::refresh()
     d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
   }
 
-  //  k3bcore->config()->setGroup( oldGroup );
+  if( overallSize > 0 )
+    m_optionWidget->setNeededSize( overallSize );
+  else
+    m_optionWidget->setNeededSize( 0 );
 }
 
 

@@ -17,12 +17,14 @@
 #ifndef _K3B_VIDEO_DVDVIEW_H_
 #define _K3B_VIDEO_DVDVIEW_H_
 
-#include <k3bdvdview.h>
+#include <k3bview.h>
 
 class K3bVideoDvdDoc;
+class K3bDataDirTreeView;
+class K3bDataFileView;
 
 
-class K3bVideoDvdView : public K3bDvdView
+class K3bVideoDvdView : public K3bView
 {
   Q_OBJECT
 
@@ -37,6 +39,8 @@ class K3bVideoDvdView : public K3bDvdView
 
  private:
   K3bVideoDvdDoc* m_doc;
+  K3bDataDirTreeView* m_dataDirTree;
+  K3bDataFileView* m_dataFileView;
 };
 
 #endif

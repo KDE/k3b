@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3baudiotrackview.h"
 #include "k3baudiotrackviewitem.h"
 #include "k3baudiodatasourceviewitem.h"
@@ -168,6 +170,12 @@ void K3bAudioTrackView::setupActions()
   m_actionPlayTrack = new KAction( i18n("Play Track"), "player_play",
 				   KShortcut(), this, SLOT(slotPlayTrack()),
 				   actionCollection(), "track_play" );
+#ifdef HAVE_MUSICBRAINZ
+  KAction* mbAction = new KAction( i18n("Musicbrainz Lookup"), "musicbrainz", 0, this, 
+				   SLOT(slotQueryMusicBrainz()),
+				   actionCollection(), "project_audio_musicbrainz" );
+  mbAction->setToolTip( i18n("Try to determine meta information over the internet") );
+#endif
 }
 
 

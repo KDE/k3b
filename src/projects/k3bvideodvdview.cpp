@@ -16,17 +16,37 @@
 #include "k3bvideodvdview.h"
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdburndialog.h"
+#include "k3bdatadirtreeview.h"
+#include "k3bdatafileview.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bdatafileview.h>
+#include <k3btoolbox.h>
+#include <k3bprojectplugin.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kactioncollection.h>
+
+#include <qsplitter.h>
 
 
 K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent, const char *name )
-  : K3bDvdView( doc, parent, name ),
+  : K3bView( doc, parent, name ),
     m_doc(doc)
 {
+  // --- setup GUI ---------------------------------------------------
+  QSplitter* mainSplitter = new QSplitter( this );
+  m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
+  m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
+  m_dataDirTree->setFileView( m_dataFileView );
+  setMainWidget( mainSplitter );
+
+  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
+
+  m_dataDirTree->checkForNewItems();
+  m_dataFileView->checkForNewItems();
+
+  addPluginButtons( K3bProjectPlugin::VIDEO_DVD );
 }
 
 

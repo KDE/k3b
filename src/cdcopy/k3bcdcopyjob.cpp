@@ -39,6 +39,8 @@
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kio/global.h>
 #include <kmessagebox.h>
 
 #include <qtimer.h>

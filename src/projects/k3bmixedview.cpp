@@ -19,12 +19,15 @@
 #include "k3bmixedburndialog.h"
 #include "k3bmixeddirtreeview.h"
 
+#include <k3baudiotrackplayer.h>
 #include <k3baudiodoc.h>
 #include <k3bdataviewitem.h>
 #include <k3bdatafileview.h>
 #include <k3bdatadoc.h>
 #include <k3baudiotrackview.h>
 #include <k3bfillstatusdisplay.h>
+#include <k3btoolbox.h>
+#include <k3bprojectplugin.h>
 
 #include <qwidgetstack.h>
 #include <qsplitter.h>
@@ -36,6 +39,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kactionclasses.h>
 
 
 K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name )
@@ -57,12 +61,24 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
 
   m_widgetStack->raiseWidget( m_dataFileView );
 
-  // split
-  QValueList<int> sizes = splitter->sizes();
-  int all = sizes[0] + sizes[1];
-  sizes[1] = all*2/3;
-  sizes[0] = all - sizes[1];
-  splitter->setSizes( sizes );
+  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
+  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
+  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+  toolBox()->addSpacing();
+  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
+  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+  toolBox()->addSpacing();
+  toolBox()->addWidgetAction( static_cast<KWidgetAction*>(m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
+  toolBox()->addSeparator();
+
+#ifdef HAVE_MUSICBRAINZ
+  toolBox()->addButton( m_audioListView->actionCollection()->action( "project_audio_musicbrainz" ) );
+  toolBox()->addSeparator();
+#endif
+
+  addPluginButtons( K3bProjectPlugin::MIXED_CD );
+
+  toolBox()->addStretch();
 
   m_mixedDirTreeView->checkForNewItems();
   m_dataFileView->checkForNewItems();

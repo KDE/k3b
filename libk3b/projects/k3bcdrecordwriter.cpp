@@ -208,7 +208,7 @@ void K3bCdrecordWriter::prepareProcess()
     *m_process << "-dummy";
     
   d->usingBurnfree = false;
-  if( k3bcore->globalSettings()->overburn() ) {
+  if( k3bcore->globalSettings()->burnfree() ) {
     if( burnDevice()->burnproof() ) {
 
       d->usingBurnfree = true;

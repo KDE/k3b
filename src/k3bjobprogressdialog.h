@@ -38,10 +38,9 @@ class QTimer;
 class K3bJob;
 class KCutLabel;
 class QCloseEvent;
-class KSystemTray;
 class QGridLayout;
 class QKeyEvent;
-class K3bJobProgressSystemTray;
+class K3bJobProgressOSD;
 
 
 
@@ -151,13 +150,12 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   QMap<QString, QStringList> m_debugOutputMap;
 
   bool m_bCanceled;
-  bool m_bShowSystemTrayProgress;
 
   QString m_plainCaption;
 
   bool in_loop;
 
-  K3bJobProgressSystemTray* m_systemTray;
+  K3bJobProgressOSD* m_osd;
 };
 
 

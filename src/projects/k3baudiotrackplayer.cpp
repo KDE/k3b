@@ -131,6 +131,13 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 	   this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
   connect( &d->sliderTimer, SIGNAL(timeout()),
 	   this, SLOT(slotUpdateSlider()) );
+
+  // tooltips
+  d->actionPlay->setToolTip( i18n("Play") );
+  d->actionStop->setToolTip( i18n("Stop") );
+  d->actionPause->setToolTip( i18n("Pause") );
+  d->actionNext->setToolTip( i18n("Next") );
+  d->actionPrev->setToolTip( i18n("Previous") );
 }
 
 
