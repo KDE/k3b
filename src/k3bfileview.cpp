@@ -87,7 +87,7 @@ void K3bFileView::setupGUI()
   // setup actions
   KAction* actionPlay = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
 				     m_dirOp->actionCollection(), "audio_file_play");
-  KAction* actionEnqueue = new KAction( i18n("&Enqueue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
+  KAction* actionEnqueue = new KAction( i18n("En&queue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
 					m_dirOp->actionCollection(), "audio_file_enqueue");
   KAction* actionAddFilesToProject = new KAction( i18n("&Add to project"), 0, this, SLOT(slotAddFilesToProject()), 
 						  m_dirOp->actionCollection(), "add_file_to_project");
@@ -114,7 +114,7 @@ void K3bFileView::setupGUI()
 
   QToolButton* buttonPlay = new QToolButton( toolBar );
   buttonPlay->setIconSet( actionPlay->iconSet() );
-  buttonPlay->setTextLabel( actionPlay->toolTip(), true );
+  buttonPlay->setTextLabel( i18n("Play audio file"), true );
   buttonPlay->setTextLabel( actionPlay->text() );
   buttonPlay->setAutoRaise( true );
   connect( buttonPlay, SIGNAL(clicked()), actionPlay, SLOT(activate()) );
@@ -139,7 +139,7 @@ void K3bFileView::setupGUI()
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
-  QLabel* filterLabel = new QLabel( i18n("&Filter:"), toolBar, "filterLabel" );
+  QLabel* filterLabel = new QLabel( i18n("Filter:"), toolBar, "filterLabel" );
   m_filterWidget = new KFileFilterCombo( toolBar, "filterwidget" );
 
   toolBarLayout->addWidget( filterLabel );
