@@ -191,9 +191,6 @@ bool K3bVcdXmlView::write( const QString& fname )
             if ( m_doc->vcdOptions() ->PbcEnabled() ) {
                  if ( elemPbc.isNull() ) {
                     elemPbc = addSubElement( xmlDoc, root, "pbc" );
-                    QDomElement elemEndlist = addSubElement( xmlDoc, elemPbc, "endlist" );
-                    elemEndlist.setAttribute( "id", "end");
-                    elemEndlist.setAttribute( "rejected", "true");
                  }
                 doPbc(xmlDoc, elemPbc, it.current() );
             }
@@ -209,13 +206,16 @@ bool K3bVcdXmlView::write( const QString& fname )
             if ( m_doc->vcdOptions() ->PbcEnabled() ) {
                  if ( elemPbc.isNull() ) {
                     elemPbc = addSubElement( xmlDoc, root, "pbc" );
-                    QDomElement elemEndlist = addSubElement( xmlDoc, elemPbc, "endlist" );
-                    elemEndlist.setAttribute( "id", "end");
-                    elemEndlist.setAttribute( "rejected", "true");
                  }
                 doPbc(xmlDoc, elemPbc, it.current() );
             }
         }
+    }
+    
+    if ( ! elemPbc.isNull() ) {
+    	QDomElement elemEndlist = addSubElement( xmlDoc, elemPbc, "endlist" );
+	elemEndlist.setAttribute( "id", "end");
+	elemEndlist.setAttribute( "rejected", "true");
     }
 
     m_xmlstring = xmlDoc.toString();

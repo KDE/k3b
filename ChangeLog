@@ -7,6 +7,7 @@ Added missed VCD 3.0 track interpretation option for SVCD's
 New Lame encoding plugin providing a proper configuration dialog.
 Added Bookmarks
 Fixed window layering problem with windowmanagers != kwm
+Fixed incorrect PBC order, PBC now should work on all "standalone" DVD Players
 
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
@@ -87,7 +88,7 @@ fixed filesize display for very large files and projects (integer overflow)
 fixed CD-TEXT reading. On some systems some senseless characters where appended.
 fixed Id3lib detection in configure.in.in
 added primitive supermount support
-kernel 2.5 compile fixes (thanks to ismail (cartman) dönmez <ismail.donmez@boun.edu.tr>)
+kernel 2.5 compile fixes (thanks to ismail (cartman) dï¿½mez <ismail.donmez@boun.edu.tr>)
 K3b now defaults to the generic-mmc cdrdao driver if the used burner is not listed in 
 	cdrdao's driver table. As all modern drives use the generic-mmc driver anyway this
 	is valid and prevents from a lot of newbie problems.
