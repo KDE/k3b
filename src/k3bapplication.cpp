@@ -42,6 +42,7 @@
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
 #include <kstandarddirs.h>
+#include <kstartupinfo.h>
 
 #include <qguardedptr.h>
 #include <qtimer.h>
@@ -53,6 +54,7 @@ K3bApplication* K3bApplication::s_k3bApp = 0;
 
 K3bApplication::K3bApplication()
   : KApplication(),
+    DCOPObject( "K3b" ),
     m_interface(0),
     m_mainWindow(0)
 {
@@ -92,9 +94,11 @@ K3bMainWindow* K3bApplication::k3bMainWindow() const
 
 void K3bApplication::init()
 {
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
   config()->setGroup( "General Options" );
   QGuardedPtr<K3bSplash> splash;
-  if( config()->readBoolEntry("Show splash", true) ) {
+  if( config()->readBoolEntry("Show splash", true) && !args->isSet( "nosplash" ) ) {
     splash = new K3bSplash( 0 );
     splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
     
@@ -132,8 +136,7 @@ void K3bApplication::init()
   m_mainWindow = new K3bMainWindow();
   setMainWidget( m_mainWindow );
 
-  if( dcopClient()->attach() ) {
-    dcopClient()->registerAs( "k3b" );
+  if( dcopClient()->registerAs( "k3b" ) ) {
     m_interface = new K3bInterface( m_mainWindow );
     dcopClient()->setDefaultObject( m_interface->objId() );
   }
@@ -188,9 +191,19 @@ void K3bApplication::init()
     K3bSystemProblemDialog::checkSystem();
   }
 
+
+  if( processCmdLineArgs() ) {
+    KTipDialog::showTip( m_mainWindow );
+  }
+
+  emit initializationDone();
+}
+
+
+bool K3bApplication::processCmdLineArgs()
+{
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-  bool closeSplash = true;
   if( args->isSet( "datacd" ) ) {
     // create new data project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewDataDoc();
@@ -258,10 +271,9 @@ void K3bApplication::init()
       m_mainWindow->openDocument( args->url(i) );
     }
   }
-  else
-    closeSplash = false;
 
-  bool closeSplash2 = true;
+  bool showTips = false;
+
   if( args->isSet("copycd") ) {
     m_mainWindow->slotCdCopy();
   }
@@ -274,18 +286,12 @@ void K3bApplication::init()
   else if( args->isSet("formatdvd") ) {
     m_mainWindow->slotFormatDvd();
   }
-  else {
-    closeSplash2 = false;
-    KTipDialog::showTip( m_mainWindow );
-  }
-
-  if( (closeSplash||closeSplash2) && splash ) {
-    splash->close();
-  }
+  else
+    showTips = true;
 
   args->clear();
 
-  emit initializationDone();
+  return showTips;
 }
 
 
@@ -296,6 +302,34 @@ void K3bApplication::slotShutDown()
   K3bThread::waitUntilFinished();
 
   k3bthememanager->saveConfig( config() );
+}
+
+
+void K3bApplication::reuseInstance()
+{
+  QDataStream ds( m_reuseData, IO_ReadOnly );
+  KCmdLineArgs::loadAppArgs(ds);
+  QCString newStartupId;
+  ds >> newStartupId;
+
+  setStartupId( newStartupId );
+  KStartupInfo::setNewStartupId( mainWidget(), startupId() );
+
+  processCmdLineArgs();
+}
+
+
+bool K3bApplication::process( const QCString& fun, const QByteArray& data,
+			      QCString& replyType, QByteArray& replyData )
+{
+  kdDebug() << "(K3bApplication::process) " << fun << endl;
+  if( fun == "reuseInstance()" ) {
+    m_reuseData = data;
+    QTimer::singleShot( 0, this, SLOT(reuseInstance()) );
+    return true;
+  }
+  else
+    return DCOPObject::process(fun, data, replyType, replyData);
 }
 
 #include "k3bapplication.moc"

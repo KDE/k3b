@@ -19,7 +19,7 @@
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
+#include <ksimpleconfig.h>
 #include <kstdguiitem.h>
 #include <kdebug.h>
 #include <dcopclient.h>
@@ -60,6 +60,7 @@ static KCmdLineOptions options[] =
 	{ "erasecd", I18N_NOOP("Erase a CDRW"), 0 },
 	{ "formatdvd", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
 	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },
+	{ "nosplash", I18N_NOOP("Disable the splash screen"), 0 },
         KCmdLineLastOption
     };
 
@@ -104,16 +105,18 @@ int main( int argc, char* argv[] )
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-  // we need the app in both cases since KWin::forceActiveWindow will crash otherwise
-  K3bApplication app;
-
-  app.config()->setGroup( "General Options" );
+  KInstance* dummyInstance = new KInstance( "Dummy_k3b" );
+  KSimpleConfig cfg( "k3brc" );
+  cfg.setGroup( "General Options" );
+  bool alwaysNew = ( cfg.readEntry( "Multiple Instances", "smart" ) == "always_new" );
+  delete dummyInstance;
 
   //
   // In case no unblocked instance of K3b was found we create a new one.
   //
-  if( app.config()->readEntry( "Multiple Instances", "smart" ) == "always_new" ||
-      !K3bSmartInstanceReuser::reuseInstance(args) ) {
+  if( alwaysNew || !K3bSmartInstanceReuser::reuseInstance(args) ) {
+
+    K3bApplication app;
 
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )

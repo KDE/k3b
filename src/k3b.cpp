@@ -144,7 +144,7 @@ public:
 
 
 K3bMainWindow::K3bMainWindow()
-  : DockMainWindow(0,"K3b")
+  : DockMainWindow(0,"K3bMainwindow")
 {
   d = new Private;
   d->projectManager = new K3bProjectManager( this );

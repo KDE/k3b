@@ -18,9 +18,14 @@
 #include <dcopref.h>
 #include <kurl.h>
 #include <kdebug.h>
-#include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kwin.h>
+#include <kstartupinfo.h>
+
+// arghhh.. why is saveAppArgs private??? Why why why
+#define private public
+#include <kcmdlineargs.h>
+#undef private
 
 #include <qcstring.h>
 
@@ -76,91 +81,31 @@ void K3bSmartInstanceReuser::reuseInstance( DCOPRef& instance )
   //
 
   // raise the found instance to the foreground
-  DCOPReply winIDReply = DCOPRef( instance.app(), "K3b" ).call( "getWinID()" );
-  if( winIDReply.isValid() ) {
-    int winID;
-    winIDReply.get(winID);
-    KWin::setOnDesktop( winID, KWin::currentDesktop() );
-    KWin::forceActiveWindow( winID );
-  }
-
-  //
-  // handle the commandline args
-  //
-
-  QByteArray replyData;
+  QCString new_asn_id;
+  KStartupInfoId id = KStartupInfo::currentStartupIdEnv();
+  if( !id.none())
+    new_asn_id = id.id();
+  QByteArray data, reply;
   QCString replyType;
-  bool projectCreated = false;
-  if( m_args->isSet( "datacd" ) ) {
-    // create new data project and add all arguments
-    if( instance.call( "createDataCDProject()" ).isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "audiocd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createAudioCDProject()").isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "mixedcd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createMixedCDProject()").isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "videocd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createVideoCDProject()").isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "emovixcd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createMovixCDProject()").isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "datadvd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createDataDVDProject()").isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "emovixdvd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createMovixDVDProject()").isValid() )
-      projectCreated = true;
-  }
-  else if( m_args->isSet( "videodvd" ) ) {
-    // create new audio project and add all arguments
-    if( instance.call( "createVideoDVDProject()").isValid() )
-      projectCreated = true;
-  }
-      
+  QDataStream ds(data, IO_WriteOnly);
+  KCmdLineArgs::saveAppArgs(ds);
+  ds << new_asn_id;
 
-  if( !projectCreated && m_args->isSet( "cdimage" ) ) {
-    if ( m_args->count() == 1 )
-      instance.call( "burnCdImage(KURL)", m_args->url(0) );
-    else
-      instance.call( "burnCdImage()" );
+  DCOPClient dc;
+  if( !dc.attach() ) {
+    kdError() << "(K3bSmartInstanceReuser) cannot attach to dcop server." << endl;
+    return;
   }
-  else {
-    for( int i = 0; i < m_args->count(); i++ ) {
-      QByteArray singleUrlData;
-      QDataStream ds( singleUrlData, IO_WriteOnly );
-      ds << m_args->url(i);
-      if( projectCreated )
-	instance.call( "addUrl(KURL)", m_args->url(i) );
-      else
-	instance.call( "openDocument(KURL)", m_args->url(i) );
-    }
-  }
-      
-  if( m_args->isSet("copycd") )
-    instance.call( "copyCd()" );
-  else if( m_args->isSet("copydvd") )
-    instance.call( "copyDvd()" );
-  else if( m_args->isSet("erasecd") )
-    instance.call( "eraseCdrw()" );
-  else if( m_args->isSet("formatdvd") )
-    instance.call( "formatDvd()" );
 
-  m_args->clear();
+  // KUniqueApplication does this...
+  dc.setPriorityCall(true);
+  if( !dc.call( instance.app(), "K3b", "reuseInstance()", data, replyType, reply ) ) {
+    kdError() << "(K3bSmartInstanceReuser) comunication error with " << instance.app() << endl;
+    return;
+  }
+  dc.setPriorityCall(false);
+
+  return;
 }
 
 
