@@ -179,6 +179,6 @@ void K3bDevice::eject() const
   KProcess p;
   p << "eject";
   p << ioctlDevice();
-  p.start(KProcess::Block);
+  p.start(KProcess::DontCare);
 }
 
