@@ -331,29 +331,13 @@ void K3bDivXEncodingProcess::slotShutdown( bool b ) {
         }
     }
 }
+
+
 bool K3bDivXEncodingProcess::shutdown() {
-    const K3bExternalBin * bin = K3bExternalBinManager::self() ->binObject( "halt" );
-    QString params( "" );
-    bool result = false;
-    if ( bin == 0 ) {
-        kdDebug() << "(K3bDivXEncodingProcess) Fatal Error, couldn't find <halt>." << endl;
-        bin = K3bExternalBinManager::self() ->binObject( "shutdown" );
-        if ( bin == 0 ) {
-            kdDebug() << "(K3bDivXEncodingProcess) Fatal Error, couldn't find <shutdown>." << endl;
-            return false;
-        } else {
-            params = "-h now";
-        }
-    }
-    KShellProcess process; // = new KShellProcess;
-    process << bin->path << params;
-    if ( !process.start( KProcess::DontCare, KProcess::NoCommunication ) ) {
-        kdDebug() << "(K3bDivXEncodingProcess) Couldn't shutdown system. Probably no rights to start <" << bin->path << ">." << endl;
-        result = false;
-    } else {
-        kdDebug() << "(K3bDivXEncodingProcess) K3b shuts down system. " << endl;
-    }
-    return result;
+  // not sure if KApplication::ShutdownModeSchedule is the one to use...
+  return kapp->requestShutDown( KApplication::ShutdownConfirmYes, 
+				KApplication::ShutdownTypeHalt, 
+				KApplication::ShutdownModeSchedule );
 }
 
 void K3bDivXEncodingProcess::checkVobDirectory() {

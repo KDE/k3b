@@ -44,8 +44,10 @@ void K3bDivxExtSettings::setupGui(){
     mainLayout->setMargin( KDialog::marginHint() );
 
     m_checkShutdown = new QCheckBox( i18n("Shutdown after encoding process finished"), this );
-    QWhatsThis::add( m_checkShutdown, i18n("If enabled, K3b shuts the system down after encoding has finished. \
-The shutdown command must be setuid to use it as normal user.") );
+
+    // TODO: enable me after message freeze
+//     QWhatsThis::add( m_checkShutdown, i18n("If enabled, K3b shuts the system down after encoding has finished."
+// 					   "This only works in when using Kdm.") );
 
     m_checkWithoutAudio = new QCheckBox( i18n("Start encoding without detecting normalize parameter for audio."), this);
     m_checkOnlyFirstPass = new QCheckBox( i18n("Do only the first pass of a two-pass encoding."), this);
