@@ -19,6 +19,8 @@
 
 #include <qobject.h>
 
+class KConfig;
+
 
 class K3bPlugin : public QObject
 {
@@ -27,6 +29,13 @@ class K3bPlugin : public QObject
  public:
   K3bPlugin( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bPlugin();
+
+  /**
+   * Load the configuration of the plugin.
+   * There is no need to change the config group. This has already
+   * been done by the framework.
+   */
+  void loadConfig( KConfig* );
 };
 
 #endif

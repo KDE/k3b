@@ -60,6 +60,16 @@ class K3bPluginFactory : public KLibFactory
   virtual QString version() const;
   virtual QString comment() const;
 
+  /**
+   * Version of the plugin system this plugin was written for.
+   */
+  virtual int pluginSystemVersion() const = 0;
+
+  /**
+   * The plugin group. Needs to be the same as in the desktop entry.
+   */
+  virtual QString group() const = 0;
+
  protected:
   virtual K3bPlugin* createPluginObject( QObject* parent = 0, 
 					 const char* name = 0,

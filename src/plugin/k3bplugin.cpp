@@ -26,4 +26,9 @@ K3bPlugin::~K3bPlugin()
 {
 }
 
+
+void K3bPlugin::loadConfig( KConfig* )
+{
+}
+
 #include "k3bplugin.moc"
