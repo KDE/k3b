@@ -39,9 +39,25 @@ extern "C" {
 
 
 const char* K3bDeviceManager::deviceNames[] =
-  { "/dev/cdrom", "/dev/cdrecorder", "/dev/dvd", "/dev/sg0", "/dev/sg1", "/dev/sg2", "/dev/sg3", "/dev/sg4", "/dev/sg5",
-    "/dev/sg6", "/dev/sg7", "/dev/sg8", "/dev/sg9", "/dev/sg10", "/dev/sg11", "/dev/sg12", "/dev/sg13",
-    "/dev/sg14", "/dev/sg15" };
+  { "/dev/cdrom", 
+    "/dev/cdrecorder", 
+    "/dev/dvd",
+    "/dev/sg0",
+    "/dev/sg1", 
+    "/dev/sg2", 
+    "/dev/sg3", 
+    "/dev/sg4",
+    "/dev/sg5",
+    "/dev/sg6", 
+    "/dev/sg7", 
+    "/dev/sg8", 
+    "/dev/sg9", 
+    "/dev/sg10", 
+    "/dev/sg11",
+    "/dev/sg12",
+    "/dev/sg13",
+    "/dev/sg14",
+    "/dev/sg15" };
 
 
 
