@@ -2511,7 +2511,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
   cmd[3] = startAdress>>16;
   cmd[4] = startAdress>>8;
   cmd[5] = startAdress;
-  cmd[6] = length>>32;
+  cmd[6] = length>>24;
   cmd[7] = length>>16;
   cmd[8] = length>>8;
   cmd[9] = length;
