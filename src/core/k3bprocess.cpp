@@ -185,62 +185,16 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
 }
 
 
-/**
- * This has mainly been copied from KProcess with some little changes:
- * If the user requested direct control over stdin or stdout no socketNotifier 
- * is created
- */
 int K3bProcess::commSetupDoneP()
 {
-//   int ok = 1;
-
-//   if (communication != NoCommunication) {
-//         if (communication & Stdin)
-//           close(in[0]);
-//         if (communication & Stdout)
-//           close(out[1]);
-//         if (communication & Stderr)
-//           close(err[1]);
-
-//         // Don't create socket notifiers and set the sockets non-blocking if
-//         // blocking is requested.
-//         if (run_mode == Block) return ok;
-
-//         if ((communication & Stdin) && !m_rawStdin) {
-// //        ok &= (-1 != fcntl(in[1], F_SETFL, O_NONBLOCK));
-//           innot =  new QSocketNotifier(in[1], QSocketNotifier::Write, this);
-//           Q_CHECK_PTR(innot);
-//           innot->setEnabled(false); // will be enabled when data has to be sent
-//           QObject::connect(innot, SIGNAL(activated(int)),
-//                                            this, SLOT(slotSendData(int)));
-//         }
-
-//         if (communication & Stdout) {
-// //        ok &= (-1 != fcntl(out[0], F_SETFL, O_NONBLOCK));
-//           outnot = new QSocketNotifier(out[0], QSocketNotifier::Read, this);
-//           Q_CHECK_PTR(outnot);
-// 	  if( m_rawStdout ) {
-// 	    connect( outnot, SIGNAL(activated(int)),
-// 		     this, SIGNAL(stdoutReady(int)) );
-// 	  }
-// 	  else {
-// 	    QObject::connect(outnot, SIGNAL(activated(int)),
-// 			     this, SLOT(slotChildOutput(int)));
-// 	    if (communication & NoRead)
-//               suspend();
-// 	  }
-//         }
-
-//         if (communication & Stderr) {
-// //        ok &= (-1 != fcntl(err[0], F_SETFL, O_NONBLOCK));
-//           errnot = new QSocketNotifier(err[0], QSocketNotifier::Read, this );
-//           Q_CHECK_PTR(errnot);
-//           QObject::connect(errnot, SIGNAL(activated(int)),
-//                                            this, SLOT(slotChildError(int)));
-//         }
-//   }
-
   int ok = KProcess::commSetupDoneP();
+
+  if( communication & Stdin ) {
+    // this fixed an issue introduced in kde 3.2 rc1 which for some reason 
+    // makes in[1] O_NONBLOCK which causes our whole K3bProcess<->K3bProcess
+    // communication to fail
+    fcntl(in[1], F_SETFL, ~O_NONBLOCK & fcntl(in[1], F_GETFL));
+  }
 
   if( m_rawStdout ) {
     disconnect( outnot, SIGNAL(activated(int)),
@@ -248,70 +202,22 @@ int K3bProcess::commSetupDoneP()
     connect( outnot, SIGNAL(activated(int)),
 	     this, SIGNAL(stdoutReady(int)) );
   }
-  if( m_rawStdin ) {
+  if( m_rawStdin || d->dupStdinFd != -1 ) {
     delete innot;
     innot = 0;
+  }
+
+  if( d->dupStdoutFd != -1 ) {
+    delete outnot;
+    outnot = 0;
   }
 
   return ok;
 }
 
 
-// this is just the same as in KProcess except the additional
-// d->dupStdoutFd stuff
 int K3bProcess::commSetupDoneC()
 {
-//   int ok = 1;
-//   struct linger so;
-//   memset(&so, 0, sizeof(so));
-
-// //   if (communication & Stdin)
-// //     close(in[1]);
-// //   if (communication & Stdout)
-// //     close(out[0]);
-// //   if (communication & Stderr)
-// //     close(err[0]);
-
-//   if (communication & Stdin) {
-//     ok &= (dup2( in[0], STDIN_FILENO ) != -1);
-//   }
-//   else {
-//     int null_fd = open( "/dev/null", O_RDONLY );
-//     ok &= dup2( null_fd, STDIN_FILENO ) != -1;
-//     close( null_fd );
-//   }
-
-
-//   if( d->dupStdoutFd != -1 ) {
-//     if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) != -1 ) {
-//       kdDebug() << "(K3bProcess) Successfully duplicated " << d->dupStdoutFd << " to " << STDOUT_FILENO << endl;
-//     }
-//     else {
-//       kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
-//       ok = 0;
-//       communication = (Communication) (communication & ~Stdout);
-//     }
-//   }
-//   else if (communication & Stdout) {
-//     ok &= dup2(out[1], STDOUT_FILENO) != -1;
-//     ok &= !setsockopt(out[1], SOL_SOCKET, SO_LINGER, (char*)&so, sizeof(so));
-//   }
-//   else {
-//     int null_fd = open( "/dev/null", O_WRONLY );
-//     ok &= dup2( null_fd, STDOUT_FILENO ) != -1;
-//     close( null_fd );
-//   }
-//   if (communication & Stderr) {
-//     ok &= dup2(err[1], STDERR_FILENO) != -1;
-//     ok &= !setsockopt(err[1], SOL_SOCKET, SO_LINGER, reinterpret_cast<char *>(&so), sizeof(so));
-//   }
-//   else {
-//     int null_fd = open( "/dev/null", O_WRONLY );
-//     ok &= dup2( null_fd, STDERR_FILENO ) != -1;
-//     close( null_fd );
-//   }
-//   return ok;
-
   int ok = KProcess::commSetupDoneC();
 
   if( d->dupStdoutFd != -1 ) {
@@ -334,6 +240,7 @@ int K3bProcess::commSetupDoneC()
       communication = (Communication) (communication & ~Stdin);
     }
   }
+
   return ok;
 }
 
