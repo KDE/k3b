@@ -188,6 +188,11 @@ bool K3b::operator==( const K3b::Msf& m1, const K3b::Msf& m2 )
 	   m1.frames() == m2.frames() );
 }
 
+bool K3b::operator!=( const K3b::Msf& m1, const K3b::Msf& m2 )
+{
+	  return !operator==(m1,m2);
+}
+
 bool K3b::operator<( const K3b::Msf& m1, const K3b::Msf& m2 )
 {
   return ( m1.totalFrames() < m2.totalFrames() );

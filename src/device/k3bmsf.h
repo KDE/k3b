@@ -72,6 +72,7 @@ namespace K3b
   Msf operator-( const Msf&, const Msf& );
   Msf operator-( const Msf&, int );
   bool operator==( const Msf&, const Msf& );
+  bool operator!=( const Msf&, const Msf& );
   bool operator<( const Msf&, const Msf& );
   bool operator>( const Msf&, const Msf& );
 };
