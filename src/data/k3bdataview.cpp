@@ -191,7 +191,6 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
 
 K3bDataDirViewItem::~K3bDataDirViewItem()
 {
-  qDebug( "deleting K3bDataDirViewItem " + dirItem()->k3bName() );
 }
 
 	
