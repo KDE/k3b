@@ -645,7 +645,11 @@ void K3bCdDevice::DeviceManager::scanFstab()
     QString md = QFile::decodeName( mountInfo->mnt_fsname );
     QString type = QFile::decodeName( mountInfo->mnt_type );
 
+    bool supermount = false;
+
     if( type == "supermount" ) {
+      supermount = true;
+
       // parse the device
       QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->mnt_opts) );
       for( QStringList::const_iterator it = opts.begin(); it != opts.end(); ++it ) {
@@ -664,10 +668,10 @@ void K3bCdDevice::DeviceManager::scanFstab()
     if( K3bDevice* dev = findDevice( resolveSymLink(md) ) )
     {
       kdDebug() << "(K3bDeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
-      if( dev->mountDevice().isEmpty() )
-      {
+      if( dev->mountDevice().isEmpty() ) {
         dev->setMountPoint( mountInfo->mnt_dir );
         dev->setMountDevice( md );
+	dev->m_supermount = supermount;
       }
     }
     else
@@ -675,14 +679,12 @@ void K3bCdDevice::DeviceManager::scanFstab()
       // compare bus, id, lun since the same device can for example be
       // determined as /dev/srX or /dev/scdX
       int bus = -1, id = -1, lun = -1;
-      if( determineBusIdLun( mountInfo->mnt_fsname, bus, id, lun ) )
-      {
-        if( K3bDevice* dev = findDevice( bus, id, lun ) )
-        {
-          if( dev->mountDevice().isEmpty() )
-          {
+      if( determineBusIdLun( mountInfo->mnt_fsname, bus, id, lun ) ) {
+        if( K3bDevice* dev = findDevice( bus, id, lun ) ) {
+          if( dev->mountDevice().isEmpty() ) {
             dev->setMountPoint( mountInfo->mnt_dir );
             dev->setMountDevice( md );
+	    dev->m_supermount = supermount;
           }
         }
       }

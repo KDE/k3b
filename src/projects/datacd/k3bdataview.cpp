@@ -176,7 +176,7 @@ void K3bDataView::importSession()
 
 void K3bDataView::slotMountFinished( KIO::Job* job )
 {
-  if( job->error() ) {
+  if( job->error() && !m_device->supermount() ) {
     KMessageBox::error( this, KIO::buildErrorString( job->error(), 
 						     m_device->vendor() + " " + m_device->description() ) );
   }

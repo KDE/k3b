@@ -137,6 +137,8 @@ namespace K3bCdDevice
 
     const QString& mountPoint() const;
 
+    bool supermount() const { return m_supermount; }
+
     /**
      * returns: 0 auto (no cdrdao-driver selected)
      *          1 yes
@@ -412,6 +414,8 @@ namespace K3bCdDevice
     int m_bufferSize;
 
     int m_writeModes;
+
+    bool m_supermount;
 
   private:
     class Private;

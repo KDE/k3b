@@ -136,7 +136,8 @@ public:
 
 
 K3bCdDevice::CdDevice::CdDevice( const QString& devname )
-  : m_writeModes(0)
+  : m_writeModes(0),
+    m_supermount(false)
 {
   d = new Private;
 

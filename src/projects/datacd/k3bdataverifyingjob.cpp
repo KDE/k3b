@@ -132,7 +132,7 @@ void K3bDataVerifyingJob::slotMountFinished( KIO::Job* job )
     emit finished(false);
   }
 
-  if( job->error() ) {
+  if( job->error() && !d->device->supermount() ) {
     // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
     job->showErrorDialog( qApp->activeWindow() );
     emit infoMessage( i18n("Mounting failed."), ERROR );

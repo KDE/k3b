@@ -185,6 +185,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_devicePopupMenu->insert( new KActionSeparator( this ) );
   m_devicePopupMenu->insert( actionUnmount );
   m_devicePopupMenu->insert( actionEject );
+  m_devicePopupMenu->insert( actionLoad );
   m_devicePopupMenu->insert( actionUnlock );
   m_devicePopupMenu->insert( actionlock );
 
