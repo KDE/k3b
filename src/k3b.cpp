@@ -431,28 +431,38 @@ void K3bApp::slotFileSaveAs()
 {
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
-  KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
-				   i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
+  QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
+					     i18n("*.k3b|K3b Projects"), this, i18n("Save as..."));
   if(!url.isEmpty())
     {
-      // TODO: if the file exists, ask for owerwrite
+      if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
+	if( url[ url.length()-1 ] != '.' )
+	  url += ".";
+	url += "k3b";
+      }
 
-      K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-      if( m )
-	{
-	  K3bDoc* doc =	m->getDocument();
-	  if(!doc->saveDocument(url))
-	    {
-	      KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
-	      return;
-	    }
-	  doc->changedViewList();
-	  m_documentTab->changeTab( m, m->caption() );   // does not fit with the multible view architecture !!!
-	  //setWndTitle(m);
-	  fileOpenRecent->addURL(url);
-	}	
+      if( !QFile::exists(url) ||
+	  ( QFile::exists(url) && 
+	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(url), i18n("File exists...") ) 
+	    == KMessageBox::Yes ) ) {
+
+	K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
+	if( m )
+	  {
+	    K3bDoc* doc =	m->getDocument();
+	    if(!doc->saveDocument(url))
+	      {
+		KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+		return;
+	      }
+	    doc->changedViewList();
+	    m_documentTab->changeTab( m, m->caption() );   // does not fit with the multible view architecture !!!
+	    //setWndTitle(m);
+	    fileOpenRecent->addURL(url);
+	  }
+      }
     }
-
+  
   slotStatusMsg(i18n("Ready."));
 }
 
