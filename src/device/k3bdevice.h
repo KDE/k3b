@@ -72,6 +72,9 @@ class K3bDevice
 
   /** makes only sense to use with sg devices */
   virtual QString busTargetLun() const;
+  virtual int scsiBus() const { return m_bus; }
+  virtual int scsiId() const { return m_target; }
+  virtual int scsiLun() const { return m_lun; }
 
   virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
   virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }

@@ -33,6 +33,9 @@ class K3bDeviceManager : public QObject
 
   K3bDevice* deviceByName( const QString& );
 
+  K3bDevice* findDevice( int bus, int id, int lun );
+  K3bDevice* findDevice( const QString& devicename );
+
   /**
    * Before getting the devices do a @ref scanbus().
    * @return List of all writer devices.
@@ -83,7 +86,10 @@ class K3bDeviceManager : public QObject
   void slotCollectStdout( KProcess*, char* data, int len );
 
  private:
- K3bExternalBinManager* m_externalBinManager;
+  bool determineBusIdLun( int cdromfd, int& bus, int& id, int& lun );
+  QString resolveSymLink( const QString& path );
+
+  K3bExternalBinManager* m_externalBinManager;
 
   QList<K3bDevice> m_reader;
   QList<K3bDevice> m_writer;

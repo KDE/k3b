@@ -19,10 +19,15 @@
 #include <fstab.h>
 #include <mntent.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <linux/../scsi/scsi.h> /* cope with silly includes */
+#include <linux/cdrom.h>
+#include <linux/major.h>
+#include <linux/limits.h>
 
 
 typedef Q_INT16 size16;
@@ -52,9 +57,35 @@ K3bDeviceManager::K3bDeviceManager( K3bExternalBinManager* exM, QObject * parent
 
 K3bDevice* K3bDeviceManager::deviceByName( const QString& name )
 {
-  for( K3bDevice* _dev = m_allDevices.first(); _dev; _dev = m_allDevices.next() )
-    if( _dev->genericDevice() == name || _dev->ioctlDevice() == name )
-      return _dev;
+  return findDevice( name );
+}
+
+
+K3bDevice* K3bDeviceManager::findDevice( int bus, int id, int lun )
+{
+  QPtrListIterator<K3bDevice> it( m_allDevices );
+  while( it.current() ) {
+    if( it.current()->scsiBus() == bus &&
+	it.current()->scsiId() == id &&
+	it.current()->scsiLun() == lun )
+      return it.current();
+
+    ++it;
+  }
+
+  return 0;
+}
+
+
+K3bDevice* K3bDeviceManager::findDevice( const QString& devicename )
+{
+  QPtrListIterator<K3bDevice> it( m_allDevices );
+  while( it.current() ) {
+    if( it.current()->ioctlDevice() == devicename )
+      return it.current();
+
+    ++it;
+  }
 
   return 0;
 }
@@ -269,32 +300,31 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 
   // determine bus, target, lun
   int devFile = ::open( drive->cdda_device_name, O_RDONLY | O_NONBLOCK);
-  if( devFile ) {
-    struct ScsiIdLun {
-      int id;
-      int lun;
-    };
-    ScsiIdLun idLun;
-    int bus;
+  if( devFile < 0 ) {
+    kdDebug() << "(K3bDeviceManager) ERROR: Could not open device " << dev->genericDevice() << endl;
+    return 0;
+  }
 
-    // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
-    if ( (ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
-	 (ioctl( devFile, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
-      kdDebug() << "(K3bDeviceManager) " << drive->cdda_device_name << ": Need a filename that resolves to a SCSI device (2)." << endl;
-      ::close( devFile );
+  int bus = -1, id = -1, lun = -1;
+  if( determineBusIdLun( devFile, bus, id, lun ) ) {
+    ::close( devFile );
+
+    if( K3bDevice* oldDev = findDevice( bus, id, lun ) ) {
+      kdDebug() << "(K3bDeviceManager) " << drive->cdda_device_name << " already detected as " 
+		<<  oldDev->genericDevice() << "." << endl;
       return 0;
     }
     else {
       dev = new K3bScsiDevice( drive );
-      dev->m_target = idLun.id & 0xff;
-      dev->m_lun    = (idLun.id >> 8) & 0xff;
+      dev->m_target = id & 0xff;
+      dev->m_lun    = (id >> 8) & 0xff;
       dev->m_bus    = bus;
       kdDebug() << "(K3bDeviceManager) bus: " << dev->m_bus << ", id: " << dev->m_target << ", lun: " << dev->m_lun << endl;
     }
-    ::close( devFile );
   }
   else {
-    kdDebug() << "(K3bDeviceManager) ERROR: Could not open device " << dev->genericDevice() << endl;
+    kdDebug() << "(K3bDeviceManager) ERROR: could not determine bus, id, lun of " << drive->cdda_device_name << endl;
+    ::close( devFile );
     return 0;
   }
 
@@ -310,7 +340,6 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     // this should work for all drives
     // so we are always able to say if a drive is a writer or not
     dev->m_burner = ( driverProc.exitStatus() == 0 );
-
 
     // check drive capabilities
     // does only work for generic-mmc drives
@@ -366,7 +395,6 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
     }
     
   }
-
 
   return dev;
 }
@@ -437,49 +465,88 @@ void K3bDeviceManager::scanFstab()
 
 
   struct mntent* mountInfo = 0;
-  while( mountInfo = getmntent( fstabFile ) ) {
+  while( (mountInfo = ::getmntent( fstabFile )) ) {
     // check if the entry corresponds to a device
-    QPtrListIterator<K3bDevice> it( m_allDevices );
-    while( K3bDevice* dev = *it ) {
-      QFileInfo fi( mountInfo->mnt_fsname );
-      // use the first found entry
-      if( dev->mountDevice().isEmpty() &&
-	  (( fi.absFilePath() == dev->ioctlDevice() ) || 
-	   ( fi.isSymLink() && fi.readLink() == dev->ioctlDevice() ))
-	  ) {
+    QString md = QString::fromLatin1( mountInfo->mnt_fsname );
+
+    kdDebug() << "(K3bDeviceManager) scanning fstab: " << md << endl;
+    
+    if( K3bDevice* dev = findDevice( resolveSymLink(md) ) ) {
+      if( dev->mountDevice().isEmpty() ) {
 	dev->setMountPoint( mountInfo->mnt_dir );
-	dev->setMountDevice( fi.absFilePath() );
+	dev->setMountDevice( md );
+      }
+    }
+    else {
+      // compare bus, id, lun since the same device can for example be
+      // determined as /dev/srX or /dev/scdX
+      int cdromfd = ::open( md.latin1(), O_RDONLY | O_NONBLOCK );
+      if (cdromfd != -1) {
+	int bus = -1, id = -1, lun = -1;
+	if( determineBusIdLun( cdromfd, bus, id, lun ) ) {
+	  if( K3bDevice* dev = findDevice( bus, id, lun ) ) {
+	    if( dev->mountDevice().isEmpty() ) {
+	      dev->setMountPoint( mountInfo->mnt_dir );
+	      dev->setMountDevice( md );
+	    }
+	  }
+	}
       }
 
-      ++it;
+      ::close( cdromfd );
     }
-  }
+  } // while mountInfo
 
   endmntent( fstabFile );
-
-//   // for the mountPoints we need to use the ioctl-device name
-//   // since sg is no block device and so cannot be mounted
-
-
-
-//   K3bDevice* dev = m_allDevices.first();
-//   while( dev != 0 ) {
-//     // mounting only makes sense with a working ioctlDevice
-//     // if we do not have permission to read the device ioctlDevice is empty
-//     struct fstab* fs = 0;
-//     if( !dev->ioctlDevice().isEmpty() ) 
-//       fs = getfsspec( QFile::encodeName(dev->ioctlDevice()) );
-//     if( fs != 0 )
-//       dev->setMountPoint( fs->fs_file );
-
-//     dev = m_allDevices.next();
-//   }
 }
 
 
 void K3bDeviceManager::slotCollectStdout( KProcess*, char* data, int len )
 {
   m_processOutput += QString::fromLocal8Bit( data, len );
+}
+
+
+bool K3bDeviceManager::determineBusIdLun( int cdromfd, int& bus, int& id, int& lun )
+{
+  struct stat cdromStat;
+  ::fstat( cdromfd, &cdromStat );
+
+  // check diabled since it seems not to work if a cdparanoia drive is opened
+//   if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) )
+//     {
+      struct ScsiIdLun {
+	int id;
+	int lun;
+      };
+      ScsiIdLun idLun;
+      
+      // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
+      if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
+	   (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
+	kdDebug() << "Need a filename that resolves to a SCSI device" << endl;
+	return false;
+      }
+      
+      id  = idLun.id & 0xff;
+      lun = (idLun.id >> 8) & 0xff;
+      kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
+      return true;
+      //    }
+//   else 
+//     return false;
+}
+
+
+QString K3bDeviceManager::resolveSymLink( const QString& path )
+{
+  char resolved[PATH_MAX];
+  if( !realpath( path.latin1(), resolved ) ) {
+    kdDebug() << "Could not resolve " << path << endl;
+    return path;
+  }
+
+  return QString::null;
 }
 
 
