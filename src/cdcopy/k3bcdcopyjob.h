@@ -44,6 +44,7 @@ class K3bCdCopyJob : public K3bBurnJob
   void start();
   void cancel();
 
+ public:
   void setWriter( K3bDevice* dev ) { m_cdrdaowriter->setBurnDevice(dev); }
   void setReader( K3bDevice* dev ) { m_cdrdaowriter->setSourceDevice(dev); }
   void setSpeed( int s ) { m_cdrdaowriter->setBurnSpeed(s); }
@@ -62,25 +63,31 @@ class K3bCdCopyJob : public K3bBurnJob
   void setTaoSource(bool b) { m_cdrdaowriter->setTaoSource(b); };
   void setTaoSourceAdjust(int a) { m_cdrdaowriter->setTaoSourceAdjust(a); };
   void setForce(bool b) { m_cdrdaowriter->setForce(b); };
-
+  
  private slots:
   void diskInfoReady( const K3bDiskInfo& info );
 
-  void cdrdaoDirectCopy();
-  void cdrdaoRead(); 
-  void cdrdaoWrite();  
-
   void cdrdaoFinished(bool);
-  void finishAll();
-  void cancelAll();
 
   void copyPercent(int p);
   void copySubPercent(int p);
   void slotNextTrack( int, int );
 
  private:
+  void cdrdaoDirectCopy();
+  void cdrdaoRead(); 
+  void cdrdaoWrite();  
+  void removeImages();
+  void finishAll();
+  void cancelAll();
+  void fixTocFile(QString &);
+
+ private:
   int m_copies;
   int m_finishedCopies;
+
+  int m_sessions;
+  int m_finishedSessions;
 
   bool m_keepImage;
   bool m_onlyCreateImage;
