@@ -491,7 +491,7 @@ void K3bSetup2::makeReadOnly()
 
 
 typedef KGenericFactory<K3bSetup2, QWidget> K3bSetup2Factory;
-K_EXPORT_COMPONENT_FACTORY( kcm_k3bsetup2, K3bSetup2Factory("k3b") )
+K_EXPORT_COMPONENT_FACTORY( kcm_k3bsetup2, K3bSetup2Factory("k3bsetup") )
 
 
 #include "k3bsetup2.moc"
