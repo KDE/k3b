@@ -71,8 +71,8 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   m_groupCdWritingApp = new QHButtonGroup( i18n("Writing Application"), this );
   m_groupCdWritingApp->setExclusive( true );
   m_selectDefault  = new QRadioButton( i18n("Default"), m_groupCdWritingApp );
-  m_selectCdrecord = new QRadioButton( i18n("Cdrecord"), m_groupCdWritingApp );
-  m_selectCdrdao   = new QRadioButton( i18n("Cdrdao"), m_groupCdWritingApp );
+  m_selectCdrecord = new QRadioButton( i18n("cdrecord"), m_groupCdWritingApp );
+  m_selectCdrdao   = new QRadioButton( i18n("cdrdao"), m_groupCdWritingApp );
 
 
   QGridLayout* mainLayout = new QGridLayout( this );
@@ -108,16 +108,16 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 
   // ToolTips
   // --------------------------------------------------------------------------------
-  QToolTip::add( m_comboWriter, i18n("The cd writer that will write the cd") );
-  QToolTip::add( m_comboSpeed, i18n("The speed to write the cd with") );
+  QToolTip::add( m_comboWriter, i18n("The CD writer that will write the CD") );
+  QToolTip::add( m_comboSpeed, i18n("The speed at which to write the CD") );
 
   // What's This info
   // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_comboWriter, i18n("<p>Select the cd writer that you want to write the cd."
+  QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD writer that you want to write the CD."
 				       "<p>In most cases there will only be one writer available which "
 				       "does not leave much choice.") );
   QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
-				      "<p>1x speed means 150 kb/s."
+				      "<p>1x speed means 150 KB/s."
 				      "<p><b>Caution:</b> Make sure your system is able to send the data "
 				      "fast enough to prevent buffer underruns.") );
 }

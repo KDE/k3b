@@ -53,7 +53,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   QHBox* freeTempSpaceBox = new QHBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
-  (void)new QLabel( i18n( "Free space in temp directory" ), freeTempSpaceBox, "TextLabel2" );
+  (void)new QLabel( i18n( "Free space in temporary directory" ), freeTempSpaceBox, "TextLabel2" );
   m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
   m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
@@ -82,11 +82,11 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   // ToolTips
   // --------------------------------------------------------------------------------
-  QToolTip::add( m_editDirectory, i18n("The directory to save the image files in") );
+  QToolTip::add( m_editDirectory, i18n("The directory in which to save the image files") );
 
   // What's This info
   // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_editDirectory, i18n("<p>This is the directory where K3b will save the <em>image files</em> in."
+  QWhatsThis::add( m_editDirectory, i18n("<p>This is the directory in which K3b will save the <em>image files</em>."
 					 "<p>Please make sure that it resides on a partition that has enough free space.") );
 }
 
@@ -137,9 +137,9 @@ void K3bTempDirSelectionWidget::slotTempDirButtonPressed()
 {
   QString path;
   if( m_mode == DIR )
-    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), this, i18n("Select Temp Directory") );
+    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), this, i18n("Select Temporary Directory") );
   else
-    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, this, i18n("Select Temp File") );
+    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, this, i18n("Select Temporary File") );
 
   if( !path.isEmpty() ) {
     setTempPath( path );
@@ -165,9 +165,9 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
   m_mode = mode;
 
   if( m_mode == DIR )
-    setTitle( i18n("Temp directory") );
+    setTitle( i18n("Temporary directory") );
   else
-    setTitle( i18n("Temp file") );
+    setTitle( i18n("Temporary file") );
 }
 
 
