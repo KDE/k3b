@@ -68,9 +68,9 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // the video-cd-tab
    // -----------------------------------------------------------
 
-   QRadioButton* m_checkVcd11;
-   QRadioButton* m_checkVcd20;
-   QRadioButton* m_checkSvcd10;
+   QRadioButton* m_radioVcd11;
+   QRadioButton* m_radioVcd20;
+   QRadioButton* m_radioSvcd10;
 
    QCheckBox* m_checkNonCompliant;
    QCheckBox* m_check2336;

@@ -172,16 +172,16 @@ void K3bVcdBurnDialog::setupVideoCdTab( QFrame* frame )
   m_groupVcdFormatLayout->setSpacing( spacingHint() );
   m_groupVcdFormatLayout->setMargin( marginHint() );
 
-  m_checkVcd11 = new QRadioButton( m_groupVcdFormat, "m_checkVcd11" );
-  m_checkVcd11->setText( i18n( "VideoCD 1.1" ) );
-  m_checkVcd20 = new QRadioButton( m_groupVcdFormat, "m_checkVcd20" );
-  m_checkVcd20->setText( i18n( "VideoCD 2.0" ) );
-  m_checkSvcd10 = new QRadioButton( m_groupVcdFormat, "m_checkSvcd10" );
-  m_checkSvcd10->setText( i18n( "Super-VideoCD" ) );
+  m_radioVcd11 = new QRadioButton( m_groupVcdFormat, "m_radioVcd11" );
+  m_radioVcd11->setText( i18n( "VideoCD 1.1" ) );
+  m_radioVcd20 = new QRadioButton( m_groupVcdFormat, "m_radioVcd20" );
+  m_radioVcd20->setText( i18n( "VideoCD 2.0" ) );
+  m_radioSvcd10 = new QRadioButton( m_groupVcdFormat, "m_radioSvcd10" );
+  m_radioSvcd10->setText( i18n( "Super-VideoCD" ) );
 
-  m_groupVcdFormatLayout->addWidget( m_checkVcd11 );
-  m_groupVcdFormatLayout->addWidget( m_checkVcd20 );
-  m_groupVcdFormatLayout->addWidget( m_checkSvcd10 );    
+  m_groupVcdFormatLayout->addWidget( m_radioVcd11 );
+  m_groupVcdFormatLayout->addWidget( m_radioVcd20 );
+  m_groupVcdFormatLayout->addWidget( m_radioSvcd10 );    
   // --------------------------------------------------- VcdFormat group ---
 
   // ---- option group ------------------------------------------------
@@ -340,6 +340,7 @@ void K3bVcdBurnDialog::saveSettings()
 
   
   // TODO: save vcdType
+  vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
   
 }
@@ -355,19 +356,19 @@ void K3bVcdBurnDialog::readSettings()
   // read vcdType
   switch( ((K3bVcdDoc*)doc())->vcdType() ) {
   case K3bVcdDoc::VCD11:
-      m_checkVcd11->setChecked( true );
+      m_radioVcd11->setChecked( true );
     break;
   case K3bVcdDoc::VCD20:
-      m_checkVcd20->setChecked( true );
+      m_radioVcd20->setChecked( true );
     break;
   case K3bVcdDoc::SVCD10:
-      m_checkSvcd10->setChecked( true );
+      m_radioSvcd10->setChecked( true );
     break;
   // case K3bVcdDoc::HQVCD:
-  //   m_checkHqVcd->setChecked( true );
+  //   m_radioHqVcd->setChecked( true );
   //  break;
   default:
-      m_checkVcd20->setChecked( true );
+      m_radioVcd20->setChecked( true );
     break;
   }
 
@@ -381,11 +382,30 @@ void K3bVcdBurnDialog::readSettings()
 
 void K3bVcdBurnDialog::loadUserDefaults()
 {
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default vcd settings" );
+
+  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
+  // m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
+  // m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
+
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
+  
 }
 
 
 void K3bVcdBurnDialog::saveUserDefaults()
 {
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default vcd settings" );
+
+  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
+  // c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+
+  c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
+  
 }
 
 #include "k3bvcdburndialog.moc"
