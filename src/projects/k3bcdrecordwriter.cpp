@@ -174,7 +174,7 @@ void K3bCdrecordWriter::prepareProcess()
   if( d->usedSpeed != 0 )
     *m_process << QString("speed=%1").arg(d->usedSpeed);
     
-  if( m_writingMode == K3b::DAO ) {
+  if( m_writingMode == K3b::DAO || m_cue ) {
     if( burnDevice()->dao() )
       *m_process << "-dao";
     else
@@ -203,7 +203,7 @@ void K3bCdrecordWriter::prepareProcess()
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), WARNING );
   }
   
-  if( m_cue && !m_cueFile.isEmpty() ) {
+  if( m_cue ) {
       m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
     *m_process << QString("cuefile=%1").arg( m_cueFile );
   }

@@ -83,9 +83,12 @@ private:
 K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
   : KDialogBase( parent, "debugViewDialog", true, i18n("Debugging Output"), Close|User1|User2, Close, 
 		 false, 
-		 KGuiItem( i18n("Save"), "filesaveas", i18n("Save to file") ), 
-		 KGuiItem( i18n("Copy"), "editcopy", i18n("Copy to clipboard") ) )
+		 KGuiItem( i18n("Save"), "filesaveas" ), 
+		 KGuiItem( i18n("Copy"), "editcopy" ) )
 {
+  setButtonTip( User1, i18n("Save to file") );
+  setButtonTip( User2, i18n("Copy to clipboard") );
+
   debugView = new QTextView( this );
   setMainWidget( debugView );
 

@@ -16,6 +16,8 @@
 #include "k3bmsf.h"
 #include <qregexp.h>
 
+#include <math.h>
+
 
 K3b::Msf::Msf()
   : m_minutes(0),
@@ -185,6 +187,12 @@ QRegExp K3b::Msf::regExp()
   //
   static QRegExp rx( "(\\d+)(?::([0-5]?\\d)(?:[:\\.]((?:[0-6]?\\d)|(?:7[0-4])))?)?" );
   return rx;
+}
+
+
+K3b::Msf K3b::Msf::fromSeconds( double ms )
+{
+  return K3b::Msf( ceil(ms*75.0) );
 }
 
 

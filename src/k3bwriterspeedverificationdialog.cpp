@@ -47,7 +47,7 @@ K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3b
 
     QSpinBox* spin = new QSpinBox( plainPage() );
     spin->setSuffix( "x" );
-    spin->setValue( dev->maxWriteSpeed() );
+    spin->setValue( dev->maxWriteSpeed()/175 );
 
     grid->addWidget( new QLabel( i18n("%1 %2 - CD writing speed:").arg(dev->vendor()).arg(dev->description()), plainPage() ), row, 0 );
     grid->addWidget( spin, row, 1 );
@@ -69,7 +69,7 @@ K3bWriterSpeedVerificationDialog::~K3bWriterSpeedVerificationDialog()
 
 void K3bWriterSpeedVerificationDialog::slotSpeedChanged( int speed )
 {
-  m_spinMap[dynamic_cast<const QSpinBox*>(sender())]->setMaxWriteSpeed( speed );
+  m_spinMap[dynamic_cast<const QSpinBox*>(sender())]->setMaxWriteSpeed( speed*175 );
 }
 
 

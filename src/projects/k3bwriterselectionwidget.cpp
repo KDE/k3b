@@ -198,8 +198,12 @@ void K3bWriterSelectionWidget::init()
 					 "does not leave much choice.") );
     QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
 					"<p><b>Auto</b><br>"
-					"Let the DVD writer decide which speed to use for the media. "
+					"This will choose the maximum writing speed possible with the used "
+					"medium. "
 					"This is the recommended selection for most media.</p>"
+					"<p><b>Ignore</b><br>"
+					"This will leave the speed selection to the writer device. "
+					"Use this if K3b is unable to set the writing speed."
 					"<p>1x refers to 1385 KB/s.</p>") );
   }
   else {
@@ -247,6 +251,8 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
   clearSpeedCombo();
   m_comboSpeed->insertItem( i18n("Auto") );
+  if( d->dvd )
+    m_comboSpeed->insertItem( i18n("Ignore") );
   if( !d->forceAutoSpeed ) {
     if( K3bDevice* dev = writerDevice() ) {
       // add speeds to combobox
@@ -306,7 +312,9 @@ void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 
 void K3bWriterSelectionWidget::setSpeed( int s )
 {
-  if( d->speedIndexMap.contains( s ) )
+  if( d->dvd && s < 0 )
+    m_comboSpeed->setCurrentItem( 1 ); // Ignore
+  else if( d->speedIndexMap.contains( s ) )
     m_comboSpeed->setCurrentItem( d->speedIndexMap[s] );
   else
     m_comboSpeed->setCurrentItem( 0 ); // Auto
@@ -342,6 +350,8 @@ int K3bWriterSelectionWidget::writerSpeed() const
 {
   if( m_comboSpeed->currentItem() == 0 )
     return 0; // Auto
+  else if( d->dvd && m_comboSpeed->currentItem() == 1 )
+    return -1; // Ignore
   else
     return d->indexSpeedMap[m_comboSpeed->currentItem()];
 }
@@ -471,7 +481,9 @@ void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
 	
 	clearSpeedCombo();
 	m_comboSpeed->insertItem( i18n("Auto") );
-	
+	if( d->dvd )
+	  m_comboSpeed->insertItem( i18n("Ignore") );
+
 	for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
 	  insertSpeedItem( *it );
 	

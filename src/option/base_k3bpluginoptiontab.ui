@@ -93,6 +93,17 @@
                     <bool>true</bool>
                 </property>
             </column>
+            <column>
+                <property name="text">
+                    <string>License</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
             <property name="name">
                 <cstring>m_viewPlugins</cstring>
             </property>

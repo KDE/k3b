@@ -49,8 +49,8 @@ public:
   PrivateTempDevice( K3bDevice* d ) {
     device = d;
     cdrdaoDriver = d->cdrdaoDriver();
-    maxReadSpeed = d->maxReadSpeed();
-    maxWriteSpeed = d->maxWriteSpeed();
+    maxReadSpeed = d->maxReadSpeed() / 175;
+    maxWriteSpeed = d->maxWriteSpeed() / 175;
     cdTextCapable = ( d->cdTextCapable() != 2 );
     writer = d->burner();
   }
@@ -335,10 +335,12 @@ void K3bDeviceWidget::updateDeviceListViews()
       typeItem->setForegroundColor( 1, gray );
     }
 
-    PrivateDeviceViewItem1* maxReadSpeedItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxReadSpeed,
-									   dev,
-									   devRoot,
-									   typeItem );
+    // WE DO NOT USE THE READ SPEED YET SO IT WOULD JUST DISTRACT THE USER
+
+    PrivateDeviceViewItem1* maxReadSpeedItem = typeItem; //new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxReadSpeed,
+// 									   dev,
+// 									   devRoot,
+// 									   typeItem );
     PrivateDeviceViewItem1* cdrdaoDriverItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdrdaoDriver,
 									   dev,
 									   devRoot,
@@ -402,8 +404,8 @@ void K3bDeviceWidget::apply()
   // update the devices
   PrivateTempDevice* tempDev = m_tempDevices.first();
   while( tempDev != 0 ) {
-    tempDev->device->setMaxReadSpeed( tempDev->maxReadSpeed );
-    tempDev->device->setMaxWriteSpeed( tempDev->maxWriteSpeed );
+    tempDev->device->setMaxReadSpeed( tempDev->maxReadSpeed * 175 );
+    tempDev->device->setMaxWriteSpeed( tempDev->maxWriteSpeed * 175 );
     tempDev->device->setCdrdaoDriver( tempDev->cdrdaoDriver );
     tempDev->device->setCdTextCapability( tempDev->cdTextCapable );
 

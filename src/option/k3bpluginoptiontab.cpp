@@ -49,6 +49,7 @@ public:
     }
     setText( 2, factory->version() );
     setText( 3, factory->comment() );
+    setText( 4, factory->license() );
   }
 
   K3bPluginFactory* pluginFactory;

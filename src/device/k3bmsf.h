@@ -78,6 +78,12 @@ namespace K3b
        */
       static Msf fromString( const QString&, bool* ok = 0 );
 
+      /**
+       * @param ms seconds
+       * frames will be rounded up
+       */
+      static Msf fromSeconds( double ms );
+
       static QRegExp regExp();
 
     private:

@@ -115,7 +115,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *){
         // check dvd
         for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
             kdDebug() << (*str) << endl;
-            if( !(*str).contains("tcprobe") && !(*str).contains("DVD image/device") ) {
+            if( !(*str).contains("tcprobe") || !(*str).contains("DVD image/device") ) {
                 continue;
             } else{
                 isDvd = true;

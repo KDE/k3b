@@ -150,7 +150,6 @@ void K3bGrowisofsImager::start()
   *m_process << "-use-the-force-luke=tty";
 
   // this only makes sense for DVD-R(W) media
-  // ----------------------------------------
   if( m_doc->dummy() )
     *m_process << "-use-the-force-luke=dummy";
   if( ( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
@@ -161,19 +160,24 @@ void K3bGrowisofsImager::start()
   else
     d->gh->reset( false );
 
+  //
+  // Some DVD writers do not allow changing the writing speed so we allow
+  // the user to ignore the speed setting
+  //
   int speed = m_doc->speed();
-  if( speed == 0 ) {
-    // try to determine the writeSpeed
-    // if it fails determineMaxWriteSpeed() will return 0 and
-    // the choice is left to growisofs which means that the choice is
-    // really left to the drive since growisofs does not change the speed
-    // if no option is given
-    speed = m_doc->burner()->determineMaximalWriteSpeed();
+  if( speed >= 0 ) {
+    if( speed == 0 ) {
+      // try to determine the writeSpeed
+      // if it fails determineMaxWriteSpeed() will return 0 and
+      // the choice is left to growisofs which means that the choice is
+      // really left to the drive since growisofs does not change the speed
+      // if no option is given
+      speed = m_doc->burner()->determineMaximalWriteSpeed();
+    }
+    
+    if( speed != 0 )
+      *m_process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
   }
-
-  if( speed != 0 )
-    *m_process << QString("-speed=%1").arg( (double)speed/1385.0, 0, 'g', 1 );
-  // -------------------------------- DVD-R(W)
 
   if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
     *m_process << "-overburn";
