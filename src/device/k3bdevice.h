@@ -2,20 +2,21 @@
 #ifndef K3BDEVICE_H
 #define K3BDEVICE_H
 
-
 #include <qstringlist.h>
+#include "../cdinfo/k3bdiskinfo.h"
 
 class K3bToc;
 
 
-class K3bDevice 
+class K3bDevice
 {
+
  public:
   /**
    * The available cdrdao drivers
    */
   static const char* cdrdao_drivers[];
-  enum interface { SCSI, IDE };
+  enum interface { SCSI, IDE, OTHER };
   enum DeviceType    { CDR = 1, 
 		       CDRW = 2, 
 		       CDROM = 4, 
@@ -39,7 +40,20 @@ class K3bDevice
 		   RAW_R96P = 64,
 		   RAW_R96R = 128 };
 
-  /**
+  class Private
+  {
+     public:
+       Private() {}
+
+       QString blockDeviceName;
+       QString genericDevice;
+       int deviceType;
+       QString mountPoint;
+       QString mountDeviceName;
+       QStringList allNodes;
+  };
+
+ /**
    * create a K3bDevice from a cdrom_drive struct
    * (cdparanoia-lib)
    */
@@ -183,7 +197,12 @@ class K3bDevice
    */
   virtual int isEmpty();
 
-  virtual bool rewritable() { return false; }
+  virtual bool rewritable();
+
+  K3bDiskInfo::type diskType();
+  int numSessions();
+  int discSize();
+  int remainingSize();
 
   /**
    * block or unblock the drive's tray
@@ -212,6 +231,7 @@ class K3bDevice
   int m_maxWriteSpeed;
   int m_currentWriteSpeed;
 
+
   // only needed for scsi devices
   int m_bus;
   int m_target;
@@ -224,7 +244,6 @@ class K3bDevice
  private:
   class Private;
   Private* d;
-
   friend class K3bDeviceManager;
 };
 
