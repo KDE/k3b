@@ -122,6 +122,7 @@ default_presentation=1
 [WaitingForMedium]
 Name=Waiting for medium
 Name[bg]=Очаква се медия
+Name[br]=Emaon o c'hortoz evit ar vedium
 Name[ca]=S'espera un medi
 Name[cs]=Čekám na médium
 Name[da]=Venter på mediet
