@@ -22,7 +22,7 @@
 #include "k3baudiotrack.h"
 #include "../k3bprogressdialog.h"
 #include "k3baudioburndialog.h"
-#include "k3baudioburninfodialog.h"
+#include "../k3bburnprogressdialog.h"
 
 // QT-includes
 #include <qstring.h>
@@ -47,6 +47,7 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
 {
 	m_burnDialog = 0L;
 	m_tracks = 0L;
+	m_fileDecodingSuccessful = true;
 }
 
 K3bAudioDoc::~K3bAudioDoc()
@@ -141,7 +142,7 @@ void K3bAudioDoc::parseCdrecordOutput( KProcess*, char* output, int len )
 		*str = (*str).stripWhiteSpace();
 		if( (*str).startsWith( "Track" ) )
 		{
-			qDebug("Parsing line [[" + *str + "]]" );
+//			qDebug("Parsing line [[" + *str + "]]" );
 			
 			if( (*str).contains( "fifo", false ) > 0 )
 			{
@@ -220,6 +221,8 @@ void K3bAudioDoc::parseCdrecordOutput( KProcess*, char* output, int len )
 				else
 					_trackPercent = 0;
 					
+				// TODO: remove the overall progress since this should be calculated outside this method!	
+				
 				double _percentPerTrack = 100.0 / (double)( m_iNumFilesToBuffer + m_tracks->count() );
 				// already done files
 				double _overallPercent = _percentPerTrack * ( m_iNumFilesToBuffer + num -1 );
@@ -232,13 +235,17 @@ void K3bAudioDoc::parseCdrecordOutput( KProcess*, char* output, int len )
 				
 				emit bufferStatus( fifo );
 				
-				if( num > 0 )
+				if( num > 0 ) {
+					// TODO: emit something like currentTrack(int) or set an integer like <currentProcessedTrackNumber> to num
+					//             because this method should be moved to K3bDoc to be used in all doc-types
 					m_currentProcessedTrack = m_tracks->at(num);
+				}
 						
 			}
 		}
 		else if( (*str).startsWith( "Starting new" ) )
 		{
+			// TODO: emit newTrackStarted(int) with the integer metioned above
 			emit nextTrackProcessed();
 			emitMessage( *str );
 		}
@@ -480,7 +487,7 @@ void K3bAudioDoc::bufferFiles( )
 	*m_process << kapp->config()->readEntry( "mpg123 path" );
 	
 	kapp->config()->setGroup( "General Options");
-	lastTempFile = findTempFile( "wav", k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) );
+	lastTempFile = k3bMain()->findTempFile( k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ), "wav" );
 	*m_process << "-v";
 	*m_process << "-w";
 	*m_process << lastTempFile;
@@ -507,6 +514,7 @@ void K3bAudioDoc::bufferFiles( )
 		emitMessage( "Decoding file " + m_currentProcessedTrack->fileName() );
 		emit nextTrackProcessed();
 		m_error = K3b::WORKING;
+		m_fileDecodingSuccessful = false;
 	}
 }
 
@@ -532,6 +540,7 @@ void K3bAudioDoc::fileBufferingFinished()
 	else {	
 		// here the file should be valid!
 		m_currentProcessedTrack->setBufferFile( lastTempFile );
+		m_fileDecodingSuccessful = true;
 		m_iNumFilesAlreadyBuffered++;
 	
 		m_error = K3b::SUCCESS;
@@ -545,14 +554,14 @@ void K3bAudioDoc::fileBufferingFinished()
 int K3bAudioDoc::size(){
 	// TODO: sum the sizes of all tracks, the pregaps, and leadin/leadout stuff
 	
-	return 76;
+	return 700;
 }
 
 
 QTime K3bAudioDoc::audioSize() const
 {
 	//TODO: make it right!
-	return QTime();
+	return QTime(1, 14);
 }
 
 
@@ -803,9 +812,20 @@ void K3bAudioDoc::showBurnDialog()
 	}
 		
 	if( m_burnDialog->exec( true ) == K3bAudioBurnDialog::Burn ) {
-		K3bAudioBurnInfoDialog _test( this, k3bMain() );
+		K3bBurnProgressDialog _test( this, k3bMain() );
 		connect( &_test, SIGNAL(cancelPressed()), this, SLOT(cancel()) );
 		write();
 		_test.show();
+	}
+}
+
+void K3bAudioDoc::cancel()
+{
+	K3bDoc::cancel();
+	
+	// remove not finished temp-files
+	if( !m_fileDecodingSuccessful ) {
+		QFile::remove( lastTempFile );
+		lastTempFile = QString::null;
 	}
 }

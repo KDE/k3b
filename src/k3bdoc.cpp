@@ -107,15 +107,6 @@ int K3bDoc::error() const
 	return m_error;
 }
 
-QString K3bDoc::findTempFile( const QString& ending, const QString& dir )
-{
-	// find a free filename
-	int num = 1;
-	while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )
-		num++;
-
-	return dir + "k3b-" + QString::number( num ) + "." + ending;
-}
 
 void K3bDoc::cancel()
 {

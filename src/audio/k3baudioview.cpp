@@ -49,6 +49,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	
 	m_songlist = new AudioListView( this );
 	m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
+	m_fillStatusDisplay->showTime();
 	m_propertiesDialog = 0;
 		
 	grid->addWidget( m_songlist, 0, 0 );

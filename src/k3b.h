@@ -85,6 +85,10 @@ class K3bApp : public KDockMainWindow
 	/** does some initialisation like searching for external programs */
 	void init();
 	
+	/** returns a free temp filename in the given directory
+	 * @parm dir the directory where to find the tempfile, should end with '/' **/
+	QString findTempFile( const QString& dir, const QString& ending = "tmp" );
+	
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
      * default implementation (only returns true), this overridden function retrieves all modified documents

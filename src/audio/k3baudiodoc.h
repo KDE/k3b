@@ -85,6 +85,7 @@ public slots:
 	void showBurnDialog();
 
 	void setPadding( bool p ) { m_padding = p; }
+	void cancel();
 	
 protected slots:
  	/** processes queue "urlsToAdd" **/
@@ -116,6 +117,7 @@ signals:
 	void trackProcessedMinutes( const QTime& );
 	void processedMinutes( const QTime& );
 	void startDecoding();
+	void processedTrackName( const QString& );
 
 protected:
  	/** reimplemented from K3bDoc */
@@ -157,6 +159,7 @@ private:
  	/** if true the adding of files will take longer */
  	bool testFiles;
  	bool m_padding;
+ 	bool m_fileDecodingSuccessful;
 };
 
 

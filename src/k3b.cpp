@@ -662,3 +662,14 @@ void K3bApp::slotCurrentDocChanged( QWidget* w )
 		fileSaveAs->setEnabled( false );
 	}
 }
+
+
+QString K3bApp::findTempFile( const QString& dir, const QString& ending )
+{
+	// find a free filename
+	int num = 1;
+	while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )
+		num++;
+
+	return dir + "k3b-" + QString::number( num ) + "." + ending;
+}

@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BAUDIOBURNINFODIALOG_H
-#define K3BAUDIOBURNINFODIALOG_H
+#ifndef K3BBURNPROGRESSDIALOG_H
+#define K3BBURNPROGRESSDIALOG_H
 
 #include <kdialog.h>
 
@@ -30,7 +30,7 @@ class QLabel;
 class KProgress;
 class QPushButton;
 class QTextView;
-class K3bAudioDoc;
+class K3bDoc;
 class QTime;
 
 
@@ -38,59 +38,63 @@ class QTime;
   *@author Sebastian Trueg
   */
 
-class K3bAudioBurnInfoDialog : public KDialog  {
+class K3bBurnProgressDialog : public KDialog  {
 
-   Q_OBJECT
+  Q_OBJECT
 
-public:
-	K3bAudioBurnInfoDialog( K3bAudioDoc*, QWidget *parent=0, const char *name=0);
-	~K3bAudioBurnInfoDialog();
+ public:
+  K3bBurnProgressDialog( K3bDoc*, QWidget *parent=0, const char *name=0);
+  ~K3bBurnProgressDialog();
 
-protected:
-	enum action { DECODING = 1, WRITING = 2 };
-	int currentAction;
+  enum action { DECODING = 1, WRITING_AUDIO = 2, WRITING_DATA = 3 };
+
+  void setAction( int );
+
+ protected:
+  void setupGUI();
+  void setupConnections();
 	
-	void setupGUI();
-	void setupConnections();
-	
-    QGroupBox* m_groupInfo;
-    QTextView* m_viewInfo;
-    QPushButton* m_buttonCancel;
-    QPushButton* m_buttonOk;
-    QGroupBox* m_groupBuffer;
-    KProgress* m_progressBuffer;
-    QGroupBox* m_groupProgress;
-    KProgress* m_progressTrack;
-    KProgress* m_progressCd;
-    QLabel* m_labelFileName;
-    QLabel* m_labelTrackProgress;
-    QLabel* m_labelCdTime;
-    QLabel* m_labelCdProgress;
-	QLabel* m_labelWriter;
+  QGroupBox* m_groupInfo;
+  QTextView* m_viewInfo;
+  QPushButton* m_buttonCancel;
+  QPushButton* m_buttonOk;
+  QGroupBox* m_groupBuffer;
+  KProgress* m_progressBuffer;
+  QGroupBox* m_groupProgress;
+  KProgress* m_progressTrack;
+  KProgress* m_progressCd;
+  QLabel* m_labelFileName;
+  QLabel* m_labelTrackProgress;
+  QLabel* m_labelCdTime;
+  QLabel* m_labelCdProgress;
+  QLabel* m_labelWriter;
 		
-    QGridLayout* mainLayout;
-    QHBoxLayout* m_groupInfoLayout;
-    QHBoxLayout* m_groupBufferLayout;
-    QGridLayout* m_groupProgressLayout;
+  QGridLayout* mainLayout;
+  QHBoxLayout* m_groupInfoLayout;
+  QHBoxLayout* m_groupBufferLayout;
+  QGridLayout* m_groupProgressLayout;
 
-private:
-	K3bAudioDoc* doc;
+ private:
+  K3bDoc* doc;
+  int currentAction;
+  int alreadyWrittenMb;
+  int alreadyWrittenTrackMb;
 
-signals:
+ signals:
   void cancelPressed();
 
-protected slots:
+ protected slots:
   void updateCdTimeProgress( const QTime& processedTime );
-  void updateCdSizeProgress( unsigned long processed, unsigned long size );
-//  void updateTrackTimeProgress( const QTime& processedTrackTime );
+  //  void updateCdSizeProgress( unsigned long processed, unsigned long size );
+  //  void updateTrackTimeProgress( const QTime& processedTrackTime );
   void updateTrackSizeProgress( int processed, int size );
   void displayInfo( const QString& infoString );
 
   void finished();
   void nextTrack();
 
-public slots:
-  void startBurning();
+ public slots:
+  void startWriting();
   void startDecoding();
 };
 

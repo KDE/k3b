@@ -36,12 +36,16 @@ public:
 	K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent=0, const char *name=0);
 	~K3bFillStatusDisplay();
 
-	enum DisplayType { Megs = 0, Time = 1 };
+	void showSize();
+	void showTime();
 	
 protected:
 	void drawContents(QPainter*);
+	void drawSize(QPainter*);
+	void drawTime(QPainter*);
 	
 private:
+	bool m_showTime;
 	K3bDoc* doc;
 };
 
