@@ -1199,7 +1199,7 @@ void mpeg::PrintInfos() {
 					dbg.append("  Mpeg 1 System File [Video");
 				}
 				else {
-					if (mpeg_version!=2)
+					// if (mpeg_version!=2)
 					dbg.append("  Mpeg 2 Program Stream File [Video");
 				}
 				if (HasAudio)
