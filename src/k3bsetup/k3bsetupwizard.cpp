@@ -87,9 +87,9 @@ void K3bSetupWizard::accept()
 
   QString finishMessage = i18n("All settings have been saved.\n");
 
-  finishMessage.append( i18n("If the configuration of your system changes "
+  finishMessage.append( i18n("If the configuration of your system changes, "
 			     "just run K3b Setup again.\n"
-			     "Thanx for using K3b. Have a lot of fun!") );
+			     "Thank you for using K3b. Have a lot of fun!") );
 
   KMessageBox::information( this, finishMessage, i18n("K3b Setup finished") );
 

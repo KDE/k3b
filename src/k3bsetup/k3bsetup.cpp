@@ -91,7 +91,7 @@ bool K3bSetup::saveConfig()
 
   // save devices
   // -----------------------------------------------------------------------
-  emit writingSetting( i18n("Saving cd devices to global configuration.") );
+  emit writingSetting( i18n("Saving CD devices to global configuration.") );
 
   if( m_config->hasGroup( "Devices" ) )
     m_config->deleteGroup( "Devices" );
@@ -307,7 +307,7 @@ void K3bSetup::doApplyExternalProgramPermissions( uint groupId )
 	emit settingWritten( true, i18n("Success") );
       }
       else {
-	emit settingWritten( false, i18n("%1 is no %2 executable.").arg(binObject->path).arg(programs[i]) );
+	emit settingWritten( false, i18n("%1 is not a %2 executable.").arg(binObject->path).arg(programs[i]) );
 	kdDebug() << "(K3bSetup) " << binObject->path << " is not " << programs[i] << "." << endl;
       }
     }
