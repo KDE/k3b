@@ -17,22 +17,26 @@
 
 #include "k3bdivxavset.h"
 #include "k3bdivxcodecdata.h"
+#include "k3bdivxtcprobeac3.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qhbuttongroup.h>
 #include <qradiobutton.h>
 #include <qwhatsthis.h>
+#include <qcheckbox.h>
 
 #include <klocale.h>
 #include <kdialog.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 
-static long finalSize[] = { 681574400L, 734000320L, 1363148800L, 1468006400L };
+// order must be in sync with comboBox entries
+static long finalSize[] = { 681574400L, 734000320L, 1363148800L, 1468006400L, 739000000L, 750000000L };
+// order must be in sync with comboBox entries
 static long audioBitrate[] = { 64000L, 96000L, 112000L, 128000L, 160000L, 192000L };
 // order must be in sync with comboBox entries
-static QString codec[] = { "xvid", "divx4", "divx5" };
+static QString codec[] = { "xvid", "divx4", "divx5", "xvidcvs" };
 
 K3bDivxAVSet::K3bDivxAVSet(K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox( parent,name ) {
     m_data = data;
@@ -54,31 +58,44 @@ void K3bDivxAVSet::setupGui(){
     QLabel *cds = new QLabel( i18n("CDs:"), this );
     QString wt_cd( i18n("Select how many CDs the final encoded video should have. You can select CDRs with a size of 650MB and 700MB."));
     QWhatsThis::add( cds, wt_cd );
-    QLabel *mp3bitrate = new QLabel( i18n("MP3 bitrate:"), this );
-    QString wt_mp3( i18n("Select bitrate of the audio track. MP3 will encode with a constant bitrate and joint stereo."));
+    QLabel *mp3bitrate = new QLabel( i18n("MP3 Bitrate:"), this );
+    QString wt_mp3( i18n("Select bitrate of the audio track. MP3 can be encoded with constant or variable bitrate and joint stereo. AC3 passthrough must be disabled to use MP3."));
     QWhatsThis::add( mp3bitrate, wt_mp3 );
     QLabel *codec = new QLabel( i18n("Video codec:"), this );
     // PROOF READER COMMENT: I've taken out some of the subjective text and made it a bit more general
     //                       I hope you're okay with that - my goal is to make it more professional :¬)
+    // Thomas: Sounds good to me. Thanks.
     QString wt_codec( i18n("Select the video codec to encode to the final movie. XviD (www.xvid.org) is an Open Source codec and \
 has similar features to DivX5. DivX4 is the predecessor to DivX5. All three codecs support 1-pass and 2-pass encoding. \
+XviD (CVS) is support for the latest nightly snapshots of XviD. \
 Regarding quality, try all the different codecs to find out which you prefer. Secondly, read the various forums about MPEG-4 Encoding \
 (www.doom9.org, www.xvid.org, www.divx.net, ... ). The difference between a DivX4 and XviD 2-pass encoded movie \
-is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper)."));
+is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper).\
+If the encoding process crashes you probably haven't used the codec you have installed. Due to the same name of the codec libraries you \
+can only use Divx4 or Divx5 and Xvid or Xvid (CVS). This will be fixed in future version so the codecs will auto dectect and \
+can be used with different install locations."));
     QWhatsThis::add( codec, wt_codec );
     QLabel *codecmode = new QLabel( i18n("Codec mode:"), this );
     QString wt_codecmode( i18n("Select the mode for video encoding. 1-pass encoding has lower quality than 2-pass, but requires half the time to encode a video. \
 In 2-pass mode the video will be encoded twice. The first time, the video will only be analyzed to get the best quality in the second encoding pass."));
     QWhatsThis::add( codecmode, wt_codecmode );
-    m_vBitrateDesc = i18n("Bitrate:");
+    m_vBitrateDesc = i18n("Bitrate: ");
     m_vBitrate = new QLabel( m_vBitrateDesc, this );
 
     m_comboCd = new KComboBox( false, this );
-    m_comboCd->insertItem( i18n("1 x 650 MB" ) );
-    m_comboCd->insertItem( i18n("1 x 700 MB" ) );
-    m_comboCd->insertItem( i18n("2 x 650 MB" ) );
-    m_comboCd->insertItem( i18n("2 x 700 MB" ) );
+    m_comboCd->insertItem( i18n("1 * 650 MB" ) );
+    m_comboCd->insertItem( i18n("1 * 700 MB" ) );
+    m_comboCd->insertItem( i18n("2 * 650 MB" ) );
+    m_comboCd->insertItem( i18n("2 * 700 MB" ) );
+    m_comboCd->insertItem( i18n("1 * 705 MB" ) );
+    m_comboCd->insertItem( i18n("1 * 716 MB" ) );
     QWhatsThis::add( m_comboCd, wt_cd );
+
+    m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass through mode" ), this );
+    QWhatsThis::add( m_checkAc3Passthrough, i18n("Enable this if you want the orginal digital sound (AC3).") );
+    // TODO
+    m_checkAc3Passthrough->setEnabled( false );
+
     m_comboMp3 = new KComboBox( false, this );
     m_comboMp3->insertItem( i18n(" 64 kbits") );
     m_comboMp3->insertItem( i18n(" 96 kbits") );
@@ -91,6 +108,7 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     m_comboCodec->insertItem( "XviD" );
     m_comboCodec->insertItem( "DivX4" );
     m_comboCodec->insertItem( "DivX5" );
+    m_comboCodec->insertItem( "XviD (CVS)" );
     QWhatsThis::add( m_comboCodec, wt_codec );
 
     QHButtonGroup *modeGroup = new QHButtonGroup( this );
@@ -102,28 +120,46 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     modeGroup->setButton( 1 );
     QWhatsThis::add( modeGroup, wt_codecmode );
 
+    m_mp3modeGroup = new QHButtonGroup( this );
+    m_mp3modeGroup->layout()->setSpacing( KDialog::spacingHint() );
+    m_mp3modeGroup->layout()->setMargin( 0 ); //KDialog::marginHint() );
+    m_mp3modeGroup->setFrameStyle( Plain | NoFrame );
+    m_buttonCbr = new QRadioButton( i18n("CBR"), m_mp3modeGroup );
+    m_buttonVbr = new QRadioButton( i18n("VBR"), m_mp3modeGroup );
+    m_buttonVbr->setEnabled( false );
+    m_mp3modeGroup->setButton( 0 );
+    QWhatsThis::add( m_mp3modeGroup, i18n("If set to CBR the mp3 encoding is done with a constant bitrate \
+,if set to VBR then a variable bitrate is used. Typically a variable bitrate gets better quality but is often out of sync.\
+you should first try it with some test encodings."));
+
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     mainLayout->addMultiCellWidget( cds, 0, 0, 0, 0);
-    mainLayout->addMultiCellWidget( mp3bitrate, 1, 1, 0, 0);
-    mainLayout->addMultiCellWidget( codec, 2, 2, 0, 0);
-    mainLayout->addMultiCellWidget( codecmode, 3, 3, 0, 0);
-    mainLayout->addMultiCellWidget( m_vBitrate, 0, 0, 2, 2);
     mainLayout->addMultiCellWidget( m_comboCd, 0, 0, 1, 1);
-    mainLayout->addMultiCellWidget( m_comboMp3, 1, 1, 1, 1);
-    mainLayout->addMultiCellWidget( m_comboCodec, 2, 2, 1, 1);
-    mainLayout->addMultiCellWidget( modeGroup, 3, 3, 1, 2);
-    mainLayout->addItem( spacer, 4, 1);
+    mainLayout->addMultiCellWidget( m_checkAc3Passthrough, 1, 1, 0, 2);
+    mainLayout->addMultiCellWidget( mp3bitrate, 2, 2, 0, 0);
+    mainLayout->addMultiCellWidget( codec, 3, 3, 0, 0);
+    mainLayout->addMultiCellWidget( codecmode, 4, 4, 0, 0);
+    mainLayout->addMultiCellWidget( m_vBitrate, 0, 0, 2, 2);
+    mainLayout->addMultiCellWidget( m_comboMp3, 2, 2, 1, 1);
+    mainLayout->addMultiCellWidget( m_mp3modeGroup, 2, 2, 2, 2);
+    mainLayout->addMultiCellWidget( m_comboCodec, 3, 3, 1, 1);
+    mainLayout->addMultiCellWidget( modeGroup, 4, 4, 1, 2);
+    mainLayout->addItem( spacer, 5, 1);
 
     connect( m_comboMp3, SIGNAL( activated( int )), this, SLOT( slotCalcBitrate( ) ));
     connect( m_comboCd, SIGNAL( activated( int )), this, SLOT( slotCalcBitrate( ) ));
     connect( m_comboCodec, SIGNAL( activated( int )), this, SLOT( slotCodecChanged( int ) ));
     connect( modeGroup, SIGNAL( clicked( int )), this, SLOT( slotModeChanged( int ) ));
+    connect( m_mp3modeGroup, SIGNAL( clicked( int )), this, SLOT( slotMp3ModeChanged( int ) ));
+    connect( m_checkAc3Passthrough, SIGNAL( stateChanged( int ) ), this, SLOT( slotAc3Passthrough( int ) ));
+
 }
 
 void K3bDivxAVSet::updateView( ){
     QTime t = m_data->getTime();
     m_lengthSecs = t.hour()*3600 + t.minute()*60 + t.second();
+    m_checkAc3Passthrough->setChecked( false );
     slotCalcBitrate();
 }
 
@@ -140,10 +176,14 @@ void K3bDivxAVSet::slotCalcBitrate(){
      int sizeIndex = m_comboCd->currentItem();
      int aBitrateIndex = m_comboMp3->currentItem();
      if( m_lengthSecs < 1 ){
-         kdDebug() << "(K3bDivxAVSet) Fatal error: no video length. You must load an project file" << endl;
+         kdDebug() << "(K3bDivxAVSet) Warning: no video length. You must load an project file" << endl;
          return;
      }
-     long vBitrate = ( finalSize[ sizeIndex ] / m_lengthSecs * 8 ) *1.024 - audioBitrate[ aBitrateIndex ]; // one correct 1.024 K->1024
+     long vBitrate = ( finalSize[ sizeIndex ] / m_lengthSecs * 8 );// one correct 1.024 K->1024
+     if( m_comboCodec->currentItem() == 1 ){
+         vBitrate *= 1.024; // correction vor divx4
+     }
+     vBitrate = vBitrate - audioBitrate[ aBitrateIndex ];
      m_vBitrate->setText( m_vBitrateDesc + i18n("%1 kbits").arg(vBitrate/1000) );
      m_data->setVideoBitrate( vBitrate/1000 );
      m_data->setAudioBitrate( audioBitrate[ aBitrateIndex ]/1000 );
@@ -151,6 +191,7 @@ void K3bDivxAVSet::slotCalcBitrate(){
 
 void K3bDivxAVSet::slotCodecChanged( int codecIndex ){
      m_data->setCodec( codec[ codecIndex ] );
+     slotCalcBitrate();
 }
 
 void K3bDivxAVSet::slotModeChanged( int id ){
@@ -158,5 +199,23 @@ void K3bDivxAVSet::slotModeChanged( int id ){
     m_data->setCodecMode( id + 1);
 }
 
+void K3bDivxAVSet::slotMp3ModeChanged( int id ){
+    // id = 0 is cbr, 1 is vbr
+    m_data->setMp3CodecMode( id );
+}
+void K3bDivxAVSet::slotAc3Passthrough( int mode ){
+    m_data->setAc3( mode );
+    if( mode == 0 ){
+        m_mp3modeGroup->setEnabled( true );
+        m_comboMp3->setEnabled( true );
+    } else {
+        m_mp3modeGroup->setEnabled( false );
+        m_comboMp3->setEnabled( false );
+    }
+    if( !m_data->isAc3Set() ){
+        K3bDivXTcprobeAc3 *parser = new K3bDivXTcprobeAc3();
+        parser->parseAc3Bitrate( m_data );
+    }
+}
 
 #include "k3bdivxavset.moc"

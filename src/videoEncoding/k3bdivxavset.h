@@ -21,7 +21,9 @@
 #include <qgroupbox.h>
 
 class KComboBox;
+class QCheckBox;
 class QRadioButton;
+class QHButtonGroup;
 class QLabel;
 class QString;
 class K3bDivxCodecData;
@@ -46,7 +48,10 @@ private:
     QString m_vBitrateDesc;
     QRadioButton *m_buttonOnePass;
     QRadioButton *m_buttonTwoPass;
-
+    QRadioButton *m_buttonCbr;
+    QRadioButton *m_buttonVbr;
+    QCheckBox *m_checkAc3Passthrough;
+    QHButtonGroup *m_mp3modeGroup;
     K3bDivxCodecData *m_data;
     int m_lengthSecs;
     void setupGui();
@@ -54,6 +59,8 @@ private slots:
     void slotCalcBitrate();
     void slotCodecChanged( int );
     void slotModeChanged( int );
+    void slotMp3ModeChanged( int );
+    void slotAc3Passthrough( int );
 };
 
 #endif
