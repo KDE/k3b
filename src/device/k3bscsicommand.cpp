@@ -106,6 +106,12 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 					 void* data,
 					 size_t len )
 {
+  if( dir == TR_DIR_WRITE ) {
+    m_device->close();
+    m_fd = m_device->open( true );
+    m_needToCloseDevice = true;
+  }
+
   if( m_fd == -1 ) {
     return -1;
   }

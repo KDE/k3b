@@ -75,20 +75,28 @@ const char* K3bCdDevice::CdDevice::cdrdao_drivers[] =
 
 
 
-int K3bCdDevice::openDevice( const char* name )
+int K3bCdDevice::openDevice( const char* name, bool write )
 {
   int fd = -1;
+  int flags = O_NONBLOCK;
+  if( write )
+    flags |= O_RDWR;
+  else
+    flags |= O_RDONLY;
+
 #ifdef HAVE_RESMGR
   // first try resmgr
-  fd = ::rsm_open_device( name, O_RDONLY | O_NONBLOCK );
-  kdDebug() << "(K3bCdDevice) resmgr open: " << fd << endl;
+  fd = ::rsm_open_device( name, flags );
+  kdDebug() << "(K3bDevice::Device) resmgr open: " << fd << endl;
 #endif
 
   if( fd < 0 )
-    fd = ::open( name, O_RDONLY | O_NONBLOCK );
+    fd = ::open( name, flags );
 
-  if( fd < 0 )
+  if( fd < 0 ) {
+    kdDebug() << "(K3bDevice::Device) Error: could not open device " << name << endl;
     fd = -1;
+  }
 
   return fd;
 }
@@ -1792,10 +1800,10 @@ bool K3bCdDevice::CdDevice::supportsWriteMode( WriteMode w )
 }
 
 
-int K3bCdDevice::CdDevice::open() const
+int K3bCdDevice::CdDevice::open( bool write ) const
 {
   if( d->deviceFd == -1 )
-    d->deviceFd = openDevice( QFile::encodeName(devicename()) );
+    d->deviceFd = openDevice( QFile::encodeName(devicename()), write );
   if (d->deviceFd < 0)
   {
     kdDebug() << "(K3bCdDevice) Error: could not open device." << endl;

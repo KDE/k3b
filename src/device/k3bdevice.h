@@ -435,7 +435,7 @@ namespace K3bCdDevice
      * @return an open file descriptor on success or -1 on failure
      * @see close()
      */
-    int open() const;
+    int open( bool write = false ) const;
 
     /**
      * Close the files descriptor.
@@ -686,7 +686,7 @@ namespace K3bCdDevice
    *
    * @internal
    */
-  int openDevice( const char* name );
+  int openDevice( const char* name, bool write = false );
 }
 
 typedef K3bCdDevice::CdDevice K3bDevice;
