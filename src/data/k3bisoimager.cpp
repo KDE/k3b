@@ -94,9 +94,12 @@ void K3bIsoImager::slotProcessExited( KProcess* )
 void K3bIsoImager::cleanup()
 {
   // remove all temp files
-  QFile::remove( m_pathSpecFile );
-  QFile::remove( m_rrHideFile );
-  QFile::remove( m_jolietHideFile );
+  if( QFile::exists( m_pathSpecFile ) )
+    QFile::remove( m_pathSpecFile );
+  if( QFile::exists( m_rrHideFile ) )
+    QFile::remove( m_rrHideFile );
+  if( QFile::exists( m_jolietHideFile ) )
+    QFile::remove( m_jolietHideFile );
   m_pathSpecFile = m_rrHideFile = m_jolietHideFile = QString::null;
 
   delete [] m_dataBuffer;
@@ -107,12 +110,28 @@ void K3bIsoImager::cleanup()
 
 void K3bIsoImager::calculateSize()
 {
+  // write path spec file
+  // ----------------------------------------------------
+  m_pathSpecFile = locateLocal( "appdata", "temp/k3b_path_spec.mkisofs" );
+  if( !writePathSpec( m_pathSpecFile ) ) {
+    emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
+    cleanup();
+
+    emit sizeCalculated( ERROR, 0 );
+    return;
+  }
+
+
   // determine iso-size
   delete m_process;
   m_process = new KProcess();
 
-  if( !addMkisofsParameters() )
+  if( !addMkisofsParameters() ) {
+    cleanup();
+
+    emit sizeCalculated( ERROR, 0 );
     return;
+  }
 
   *m_process << "-print-size" << "-quiet";
   // add empty dummy dir since one path-spec is needed
@@ -153,8 +172,7 @@ void K3bIsoImager::calculateSize()
     emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
     cleanup();
 
-    // TODO: emit some signal
-
+    emit sizeCalculated( ERROR, 0 );
     return;
   }
 }
@@ -226,7 +244,7 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info )
 
 bool K3bIsoImager::addMkisofsParameters()
 {
-  if( m_externalBinManager->foundBin( "mkisofs" ) ) {
+  if( !m_externalBinManager->foundBin( "mkisofs" ) ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
     emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
     return false;
@@ -264,12 +282,14 @@ bool K3bIsoImager::addMkisofsParameters()
       *m_process << "-R";
     else
       *m_process << "-r";
-    *m_process << "-hide-list" << m_rrHideFile;
+    if( QFile::exists( m_rrHideFile ) )
+      *m_process << "-hide-list" << m_rrHideFile;
   }
 
   if( m_doc->isoOptions().createJoliet() ) {
     *m_process << "-J";
-    *m_process << "-hide-joliet-list" << m_jolietHideFile;
+    if( QFile::exists( m_jolietHideFile ) )
+      *m_process << "-hide-joliet-list" << m_jolietHideFile;
   }
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {

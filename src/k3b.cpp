@@ -77,6 +77,8 @@
 #include "k3btempdirselectionwidget.h"
 #include "k3bbusywidget.h"
 
+#include "data/k3bisoimager.h"
+
 #include "libmad/mad.h"
 
 
@@ -329,6 +331,8 @@ void K3bMainWindow::initView()
   mad_synth_init( m_madSynth );
   mad_synth_finish( m_madSynth );
   delete m_madSynth;
+
+  K3bIsoImager imager(0,0,0);
 }
 
 
