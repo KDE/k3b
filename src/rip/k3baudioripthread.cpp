@@ -155,7 +155,7 @@ void K3bAudioRipThread::run()
   m_paranoiaLib->paranoiaSeek( firstSector, SEEK_SET );
   m_currentSector = firstSector;
 
-  while( m_currentSector < m_lastSector ) {
+  while( m_currentSector <= m_lastSector ) {
     if( m_bInterrupt){
       kdDebug() << "(K3bAudioRipThread) Interrupt reading." << endl;
       break;

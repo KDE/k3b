@@ -140,7 +140,7 @@ void K3bAudioRip::slotParanoiaRead()
       ++m_sectorsRead;
       emit percent( 100 * m_sectorsRead / m_sectorsAll );
       
-      if ( m_currentSector >= m_lastSector ) {
+      if ( m_currentSector > m_lastSector ) {
 	slotParanoiaFinished();
       }
     }
