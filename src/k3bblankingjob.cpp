@@ -17,13 +17,10 @@
 #include "k3bcdrecordwriter.h"
 #include "k3bcdrdaowriter.h"
 
-#include "k3b.h"
 #include "tools/k3bglobals.h"
 #include "device/k3bdevice.h"
 #include "device/k3bdevicehandler.h"
-#include "tools/k3bexternalbinmanager.h"
 
-#include <kprocess.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kio/global.h>
@@ -41,13 +38,13 @@ K3bBlankingJob::K3bBlankingJob( QObject* parent )
   m_mode = Fast;
   m_speed = 1;
   m_writingApp = K3b::DEFAULT;
-
+  m_writerJob = 0;
 }
 
 
 K3bBlankingJob::~K3bBlankingJob()
 {
-  delete m_blankingJob;
+  delete m_writerJob;
 }
 
 
@@ -76,106 +73,84 @@ void K3bBlankingJob::start()
 
 void K3bBlankingJob::slotStartErasing()
 {
-  switch ( m_writingApp )
-  {
-     case K3b::CDRDAO:  slotUseCdrdao(); break;
-     case K3b::DEFAULT:
-     case K3b::CDRECORD:
-     default:           slotUseCdrecord(); break;
-  }
-}
+  m_canceled = false;
 
-void K3bBlankingJob::slotUseCdrecord()
-{
-  m_blankingJob = new K3bCdrecordWriter(m_device,this);
-  K3bCdrecordWriter *writer = dynamic_cast<K3bCdrecordWriter *>(m_blankingJob);
-  connect(writer, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
-  connect(writer, SIGNAL(infoMessage( const QString&, int)),
+  if( m_writerJob )
+    delete m_writerJob;
+
+  if( m_writingApp == K3b::CDRDAO ) {
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
+    m_writerJob = writer;
+    
+    writer->setCommand(K3bCdrdaoWriter::BLANK);
+    writer->setBlankMode( m_mode == Fast ? K3bCdrdaoWriter::MINIMAL : K3bCdrdaoWriter::FULL );
+    writer->setForce(m_force);
+    writer->setBurnSpeed(m_speed);
+  }
+  else {
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
+    m_writerJob = writer;
+
+    QString mode;
+    switch( m_mode ) {
+    case Fast:
+      mode = "fast";
+      break;
+    case Complete:
+      mode = "all";
+      break;
+    case Track:
+      mode = "track";
+      break;
+    case Unclose:
+      mode = "unclose";
+      break;
+    case Session:
+      mode = "session";
+      break;
+    }
+    
+    writer->addArgument("blank="+ mode);
+    
+    if (m_force)
+      writer->addArgument("-force");
+    writer->setBurnSpeed(m_speed);
+  }
+
+  connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
+  connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
 
-  writer->prepareArgumentList();
-
-  QString mode;
-  switch( m_mode ) {
-  case Fast:
-    mode = "fast";
-    break;
-  case Complete:
-    mode = "all";
-    break;
-  case Track:
-    mode = "track";
-    break;
-  case Unclose:
-    mode = "unclose";
-    break;
-  case Session:
-    mode = "session";
-    break;
-  }
-
-  writer->addArgument("blank="+ mode);
-
-  if (m_force)
-    writer->addArgument("-force");
-  writer->setBurnSpeed(m_speed);
-
-  writer->start();
-
+  m_writerJob->start();
 }
 
-void K3bBlankingJob::slotUseCdrdao()
-{
-  m_blankingJob = new K3bCdrdaoWriter(m_device,this);
-  K3bCdrdaoWriter *writer = dynamic_cast<K3bCdrdaoWriter *>(m_blankingJob);
-  connect(writer, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
-  connect(writer, SIGNAL(infoMessage( const QString&, int)),
-          this,SIGNAL(infoMessage( const QString&, int)));
-
-  writer->setCommand(K3bCdrdaoWriter::BLANK);
-
-  int mode = K3bCdrdaoWriter::MINIMAL;
-  switch( m_mode ) {
-  case Fast:
-    mode = K3bCdrdaoWriter::MINIMAL;
-    break;
-  case Complete:
-    mode = K3bCdrdaoWriter::FULL;
-    break;
-  }
-
-  writer->setBlankMode(mode);
-  writer->setForce(m_force);
-  writer->setBurnSpeed(m_speed);
-
-  writer->start();
-}
 
 void K3bBlankingJob::cancel()
 {
-   switch ( m_writingApp )
-  {
-     case K3b::CDRDAO:  dynamic_cast<K3bCdrdaoWriter *>(m_blankingJob)->cancel(); break;
-     case K3b::DEFAULT:
-     case K3b::CDRECORD:
-     default:           dynamic_cast<K3bCdrecordWriter *>(m_blankingJob)->cancel(); break;
-  }
-  emit canceled();
-  emit finished( false );
+  m_canceled = true;
+
+  if( m_writerJob )
+    m_writerJob->cancel();
 }
 
 
 void K3bBlankingJob::slotFinished(bool success)
 {
-  if( success )
-  {
-	  emit infoMessage( i18n("Process completed successfully"), K3bJob::STATUS );
-	  emit finished( true );
-	} else {
-	  emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
-	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
-	  emit finished( false );
-	}
+  if( success ) {
+    emit infoMessage( i18n("Process completed successfully"), K3bJob::STATUS );
+    emit finished( true );
+  }
+  else {
+    if( m_canceled ) {
+      emit infoMessage( i18n("Canceled!"), ERROR );
+      emit canceled();
+    }
+    else {
+      emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
+      emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
+    }
+    emit finished( false );
+  }
 }
 
 

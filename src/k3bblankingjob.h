@@ -21,6 +21,7 @@
 class KProcess;
 class QString;
 class K3bCdDevice::CdDevice;
+class K3bAbstractWriter;
 
 
 class K3bBlankingJob : public K3bJob
@@ -45,16 +46,15 @@ class K3bBlankingJob : public K3bJob
  private slots:
   void slotFinished(bool);
   void slotStartErasing();
-  void slotUseCdrecord();
-  void slotUseCdrdao();
 
  private:
-  K3bJob* m_blankingJob;
+  K3bAbstractWriter* m_writerJob;
   bool m_force;
   K3bDevice* m_device;
   int m_speed;
   int m_mode;
   int m_writingApp;
+  bool m_canceled;
 };
 
 #endif
