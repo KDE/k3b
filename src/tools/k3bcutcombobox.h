@@ -38,7 +38,19 @@ class K3bCutComboBox : public KComboBox
 
  public:
   K3bCutComboBox( QWidget* parent = 0, const char* name = 0 );
+  K3bCutComboBox( int method, QWidget* parent = 0, const char* name = 0 );
   virtual ~K3bCutComboBox();
+
+  enum Method {
+    CUT,
+    SQUEEZE
+  };
+
+  /**
+   * The method to shorten the text
+   * defaut: CUT
+   */
+  void setMethod( int );
 
   /** reimplemeted */
   QSize sizeHint() const;

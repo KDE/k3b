@@ -23,7 +23,17 @@ class QFontMetrics;
 
 namespace K3b
 {
+  /**
+   * Cuts the text at the end.
+   * Example: "some long text" -> "some lo..."
+   */
   QString cutToWidth( const QFontMetrics&, const QString&, int );
+
+  /**
+   * squeezes the text.
+   * Example: "some long text" -> "some...ext"
+   */
+  QString squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth );
 };
 
 #endif
