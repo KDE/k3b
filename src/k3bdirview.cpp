@@ -207,7 +207,7 @@ void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
   k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
   if ( m_fileView->Url().path().startsWith( dev->mountPoint()) ) {
     home();
-    K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::UNMOUNT,dev);
+    K3bCdDevice::unmount(dev);
   }
   m_diskInfoDetector->detect( dev );
 }
@@ -258,7 +258,7 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
   const QString& mountPoint = device->mountPoint();
 
   if( !mountPoint.isEmpty() ){
-    connect( K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::MOUNT,device),
+    connect( K3bCdDevice::mount(device),
              SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
 	     this, SLOT(reload()) );
 
@@ -294,7 +294,7 @@ void K3bDirView::slotUnmountDisk()
     k3bMain()->endBusy();
     if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
     	home();
-    K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::UNMOUNT,m_lastDevice);
+    K3bCdDevice::unmount(m_lastDevice);
   }
 }
 
@@ -308,7 +308,7 @@ void K3bDirView::slotEjectDisk()
   if( m_lastDevice ) {
      if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
     	home();
-     K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::EJECT, m_lastDevice );
+     K3bCdDevice::eject( m_lastDevice );
     // TODO: check if this was the currently displayed device and if so return to home dir
   }
 }

@@ -65,7 +65,7 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   // reset
   m_info = DiskInfo();
   m_info.device = m_device;
-  connect( K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::DISKINFO, m_device),
+  connect( K3bCdDevice::diskInfo(m_device),
            SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
            this,
 	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler *)) );
@@ -165,7 +165,7 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
 void K3bCdDevice::DiskInfoDetector::testForVCD()
 {
   if (m_info.tocType == DiskInfo::DATA && m_info.toc.count() > 1 && m_info.sessions == 1 )
-    connect(K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::MOUNT,m_device),
+    connect(K3bCdDevice::mount(m_device),
             SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
             this,
             SLOT(slotIsVCD(K3bCdDevice::DeviceHandler *)));
@@ -197,7 +197,7 @@ void K3bCdDevice::DiskInfoDetector::slotIsVCD(K3bCdDevice::DeviceHandler *handle
           m_info.isVCD = true;
       }
     }
-    connect(K3bCdDevice::sendCommand(K3bCdDevice::DeviceHandler::UNMOUNT,m_device),
+    connect(K3bCdDevice::unmount(m_device),
             SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
 	    this,
 	    SLOT(slotFinished(K3bCdDevice::DeviceHandler *)) );

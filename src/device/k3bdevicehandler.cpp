@@ -249,4 +249,5 @@ void K3bCdDevice::DeviceHandler::customEvent( QCustomEvent* e )
   }
 }
 
+
 #include "k3bdevicehandler.moc"

@@ -128,6 +128,51 @@ namespace K3bCdDevice
    * emited.
    */
   DeviceHandler* sendCommand( int command, CdDevice* );
+
+  inline DeviceHandler* diskInfo(CdDevice* dev) {
+    return sendCommand(DeviceHandler::DISKINFO,dev);
+  };
+
+  inline DeviceHandler* toc(CdDevice* dev) {
+    return sendCommand(DeviceHandler::TOC,dev);
+  };
+
+  inline DeviceHandler* diskSize(CdDevice* dev) {
+    return sendCommand(DeviceHandler::DISKSIZE,dev);
+  };
+
+  inline DeviceHandler* remainingSize(CdDevice* dev) {
+    return sendCommand(DeviceHandler::REMAININGSIZE,dev);
+  };
+
+  inline DeviceHandler* tocType(CdDevice* dev) {
+    return sendCommand(DeviceHandler::TOCTYPE,dev);
+  };
+
+  inline DeviceHandler* numSessions(CdDevice* dev) {
+    return sendCommand(DeviceHandler::NUMSESSIONS,dev);
+  };
+
+  inline DeviceHandler* block(CdDevice* dev) {
+    return sendCommand(DeviceHandler::BLOCK,dev);
+  };
+
+  inline DeviceHandler* unblock(CdDevice* dev) {
+    return sendCommand(DeviceHandler::UNBLOCK,dev);
+  };
+
+  inline DeviceHandler* mount(CdDevice* dev) {
+    return sendCommand(DeviceHandler::MOUNT,dev);
+  };
+
+  inline DeviceHandler* unmount(CdDevice* dev) {
+    return sendCommand(DeviceHandler::UNMOUNT,dev);
+  };
+
+  inline DeviceHandler* eject(CdDevice* dev) {
+    return sendCommand(DeviceHandler::EJECT,dev);
+  };
+
 };
 
 #endif
