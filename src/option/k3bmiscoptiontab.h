@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -17,16 +17,15 @@
 #ifndef K3BMISCOPTIONTAB_H
 #define K3BMISCOPTIONTAB_H
 
-#include <qwidget.h>
+#include "base_k3bmiscoptiontab.h"
 
 class QCheckBox;
-class QToolButton;
-class QLineEdit;
+class KURLRequester;
 
 /**
   *@author Sebastian Trueg
   */
-class K3bMiscOptionTab : public QWidget
+class K3bMiscOptionTab : public base_K3bMiscOptionTab
 {
    Q_OBJECT
 
@@ -36,17 +35,6 @@ class K3bMiscOptionTab : public QWidget
 
   void readSettings();
   bool saveSettings();
-
- private slots:
-  void slotGetTempDir();
-
- private:
-  QCheckBox* m_checkShowSplash;
-  QCheckBox* m_checkShowSystemTrayProgress;
-
-  QLineEdit*    m_editTempDir;
-  QToolButton*  m_buttonTempDir;
-
 };
 
 #endif

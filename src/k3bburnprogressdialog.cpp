@@ -141,7 +141,7 @@ void K3bBurnProgressDialog::show()
     m_systemTray->show();
   }
 
-  if( c->readBoolEntry( "hide main window while writing" ), true )
+  if( c->readBoolEntry( "hide main window while writing", false ) )
     k3bMain()->hide();
 
   KDialog::show();

@@ -17,51 +17,20 @@
 #include "k3bmiscoptiontab.h"
 
 #include <qcheckbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qtoolbutton.h>
-#include <qlabel.h>
-#include <qgroupbox.h>
+#include <qfileinfo.h>
 
 #include <kapplication.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kiconloader.h>
-#include <kio/netaccess.h>
+#include <kurlrequester.h>
 
 
 K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
-  : QWidget(parent,name)
+  : base_K3bMiscOptionTab(parent,name)
 {
-  m_checkShowSplash = new QCheckBox( i18n("Show splash screen"), this );
-  m_checkShowSystemTrayProgress = new QCheckBox( i18n("Show progress in system tray"), this );
-
-  QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default Temporary Directory"), this );
-  groupTempDir->layout()->setMargin( KDialog::marginHint() );
-  groupTempDir->layout()->setSpacing( KDialog::spacingHint() );
-
-
-  // FIXME: Use KURLRequester!
-
-  m_editTempDir = new QLineEdit( groupTempDir );
-  m_buttonTempDir = new QToolButton( groupTempDir );
-  m_buttonTempDir->setIconSet( SmallIconSet( "fileopen" ) );
-
-
-  QGridLayout* mainGrid = new QGridLayout( this );
-  mainGrid->setAlignment( Qt::AlignTop );
-  mainGrid->setSpacing( KDialog::spacingHint() );
-  mainGrid->setMargin( 0 );
-
-  mainGrid->addWidget( m_checkShowSplash, 0, 0 );
-  mainGrid->addWidget( m_checkShowSystemTrayProgress, 1, 0 );
-  mainGrid->addWidget( groupTempDir, 2, 0 );
-
-  connect( m_buttonTempDir, SIGNAL(clicked()), this, SLOT(slotGetTempDir()) );
 }
 
 
@@ -76,9 +45,10 @@ void K3bMiscOptionTab::readSettings()
   c->setGroup( "General Options" );
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
   m_checkShowSystemTrayProgress->setChecked( c->readBoolEntry( "Show progress in system tray", true ) );
+  m_checkHideMainWindowWhileWriting->setChecked( c->readBoolEntry( "hide main window while writing", false ) );
 
   QString tempdir = c->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
-  m_editTempDir->setText( tempdir );
+  m_editTempDir->setURL( tempdir );
 }
 
 
@@ -88,8 +58,9 @@ bool K3bMiscOptionTab::saveSettings()
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
   c->writeEntry( "Show progress in system tray", m_checkShowSystemTrayProgress->isChecked() );
-;
-  QString tempDir = m_editTempDir->text();
+  c->writeEntry( "hide main window while writing", m_checkHideMainWindowWhileWriting->isChecked() );
+
+  QString tempDir = m_editTempDir->url();
   QFileInfo fi( tempDir );
 
   if( fi.isRelative() ) {
@@ -99,7 +70,7 @@ bool K3bMiscOptionTab::saveSettings()
   if( !fi.exists() ) {
     if( KMessageBox::questionYesNo( this, i18n("Directory does not exist. Create?"),
 				    i18n("Create Directory") ) == KMessageBox::Yes ) {
-      if( !KIO::NetAccess::mkdir( fi.absFilePath() ) ) {
+      if( !KStandardDirs::makeDir( fi.absFilePath() ) ) {
 	KMessageBox::error( this, i18n("Unable to create directory\n(%1)").arg(fi.absFilePath()) );
 	return false;
       }
@@ -111,7 +82,9 @@ bool K3bMiscOptionTab::saveSettings()
   }
 
   if( fi.isFile() ) {
-    KMessageBox::information( this, i18n("You specified a file for the temporary directory. K3b will use its base path as the temporary directory."), i18n("Warning"), i18n("Don't show again.") );
+    KMessageBox::information( this, i18n("You specified a file for the temporary directory. "
+					 "K3b will use its base path as the temporary directory."), 
+			      i18n("Warning"), i18n("Don't show again.") );
     fi.setFile( fi.dirPath() );
   }
 
@@ -121,18 +94,11 @@ bool K3bMiscOptionTab::saveSettings()
     return false;
   }
 
-  c->writeEntry( "Temp Dir", m_editTempDir->text() );
+  m_editTempDir->setURL( fi.absFilePath() );
+
+  c->writeEntry( "Temp Dir", m_editTempDir->url() );
 
   return true;
-}
-
-
-void K3bMiscOptionTab::slotGetTempDir()
-{
-  QString dir = KFileDialog::getExistingDirectory( m_editTempDir->text(), this, i18n("Select Temp Directory") );
-  if( !dir.isEmpty() ) {
-    m_editTempDir->setText( dir );
-  }
 }
 
 

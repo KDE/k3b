@@ -1,0 +1,115 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bMiscOptionTab</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bMiscOptionTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Default Temporary Directory</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>m_editTempDir</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The directory where K3b stores temporary files</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;This is the default temporary directory. This is where K3b will store temporary files like iso images or decoded audio files.
+&lt;p&gt;Be aware that the temporary directory may also be changed in every project burn dialog.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Gui Settings</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkShowSystemTrayProgress</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show progress in system tray</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will graphically display the progress in the system tray.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkHideMainWindowWhileWriting</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hide main window while writing</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Hide the main window while displaying the progress window</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will hide the main window while displaying the progress dialog.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkShowSplash</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show splashscreen</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Show the splash screen when K3b starts</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>
