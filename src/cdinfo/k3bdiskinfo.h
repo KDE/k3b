@@ -13,7 +13,7 @@ class K3bDiskInfo
 {
  public:
   K3bDiskInfo()
-    : empty(true), 
+    : empty(false), 
     cdrw(false), 
     appendable(false), 
     noDisk(false), 
@@ -21,12 +21,12 @@ class K3bDiskInfo
     remaining(0),
     speed(0), 
     sessions(0),
-    tocType(AUDIO),
+    tocType(UNKNOWN),
     valid(true),
     device(0)
     { }
 
-  enum type { AUDIO, DATA, MIXED, DVD };
+  enum type { UNKNOWN, AUDIO, DATA, MIXED, DVD };
 
   K3bToc toc;
   QString mediumManufactor;
