@@ -765,6 +765,9 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( "-multi" );
 
     if( d->haveCddb || d->haveCdText ) {
+      // TODO:       if( usedWritingMode == K3b::TAO ) {
+      //     emit infoMessage( "no cd-text in TAO mode." )
+      //    }
       if( d->haveCdText && ( !d->haveCddb || m_preferCdText ) ) {
 
 	// create a temp file containing the raw cdtext data

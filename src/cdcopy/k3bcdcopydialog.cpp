@@ -180,6 +180,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SLOT(slotToggleAll()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -354,8 +355,13 @@ void K3bCdCopyDialog::slotToggleAll()
    }
 
    m_comboParanoiaMode->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
-   m_checkQueryCddb->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
-   m_checkPrefereCdText->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+
+   // no CD-TEXT in TAO mode
+   m_checkQueryCddb->setDisabled( m_writingModeWidget->writingMode() == K3b::TAO ||
+				  m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkPrefereCdText->setDisabled( m_writingModeWidget->writingMode() == K3b::TAO ||
+				      m_groupCopyMode->selected() == m_radioCloneCopy );
+
    m_checkIgnoreReadErrors->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
 
    m_checkNoCorrection->setEnabled( m_groupCopyMode->selected() == m_radioCloneCopy );
@@ -371,6 +377,7 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
   KConfig* c = k3bcore->config();
   c->setGroup( "CD Copy" );
 
+  m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
   m_checkBurnfree->setChecked( c->readBoolEntry( "burnfree", true ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
@@ -404,6 +411,7 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "CD Copy" );
 
+  m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "burnfree", m_checkBurnfree->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
@@ -432,6 +440,7 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
 
 void K3bCdCopyDialog::slotLoadK3bDefaults()
 {
+  m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_writerSelectionWidget->loadDefaults();
   m_checkSimulate->setChecked( false );
   m_checkBurnfree->setChecked(true);
