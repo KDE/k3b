@@ -15,6 +15,8 @@ pics_DATA = 	splash.png \
 		progress_fail.png \
 		progress_success.png \
 		progress_right.png \
+		dialog_left.png \
+		dialog_right.png \
 		welcome_bg.png \
 		k3b.theme
 
