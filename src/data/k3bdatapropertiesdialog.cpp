@@ -103,8 +103,9 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     m_labelLocalLocation->hide();
     line->hide();
     K3bDirItem* dirItem = (K3bDirItem*)dataItem;
-    m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) + 
-			  i18n("\n(in %1 files and %2 directories)").arg(dirItem->numFiles()).arg(dirItem->numDirs()) );
+    m_labelSize->setText( KIO::convertSize(dataItem->k3bSize()) + "\n(" +
+			  i18n("in 1 file", "in %n files", dirItem->numFiles()) + " " +
+			  i18n("and 1 directory", "and %n directories", dirItem->numDirs()) + ")" );
   }
 
   m_editName->setText( dataItem->k3bName() );

@@ -153,7 +153,8 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
     index++;
   }
 
-  m_labelCdArtist->setText( i18n("Audio CD\n%1 minutes").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
+  m_labelCdArtist->setText( i18n("Audio CD") + "\n" + 
+			    i18n("%1 minutes").arg( K3b::framesToString(m_lastDiskInfo.toc.length()) ) );
 
   KConfig* c = kapp->config();
   c->setGroup("Cddb");

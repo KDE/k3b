@@ -68,7 +68,7 @@ void K3bMixedJob::cancel()
 
 void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 {
-  emit infoMessage( i18n("Size calculated: %1 (%2 Bytes)").arg(size).arg(size*2048), status );
+  emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), status );
   if( status != ERROR ) {
     m_isoImageFile = new QFile( "/home/trueg/tmp/image.iso" );
     m_isoImageFile->open( IO_WriteOnly );

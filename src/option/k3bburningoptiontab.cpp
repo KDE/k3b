@@ -101,9 +101,9 @@ void K3bBurningOptionTab::setupGui()
   groupCdSizeLayout->setSpacing( KDialog::spacingHint() );
   groupCdSizeLayout->setMargin( KDialog::marginHint() );
 
-  m_radio74Minutes    = new QRadioButton( i18n("%1 minutes (%2 MB)").arg(74).arg(650), groupCdSize );
-  m_radio80Minutes    = new QRadioButton( i18n("%1 minutes (%2 MB)").arg(80).arg(700), groupCdSize );
-  m_radio100Minutes   = new QRadioButton( i18n("%1 minutes (%2 MB)").arg(100).arg(880), groupCdSize );
+  m_radio74Minutes    = new QRadioButton( i18n("75 minutes (650 MB)"), groupCdSize );
+  m_radio80Minutes    = new QRadioButton( i18n("80 minutes (700 MB)"), groupCdSize );
+  m_radio100Minutes   = new QRadioButton( i18n("100 minutes (800 MB)"), groupCdSize );
   m_radioCustomCdSize = new QRadioButton( i18n("Custom:"), groupCdSize );
   m_editCustomCdSize  = new KLineEdit( groupCdSize );
 
