@@ -239,7 +239,7 @@ void K3bVcdTrackDialog::fillGui()
     QWhatsThis::add
         ( m_spin_times, i18n( "<p>Times to repeat the playback of 'play track'."
                               "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
-                              "<p>After the specified amount of repetitions are completed, the <wait> time begins to count down, unless set to an infinite wait time."
+                              "<p>After the specified number of repetitions have completed, the <wait> time begins to count down, unless set to an infinite wait time."
                               "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
     QWhatsThis::add
         ( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );

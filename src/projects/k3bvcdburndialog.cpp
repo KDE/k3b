@@ -141,13 +141,13 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     QToolTip::add
         ( m_checkGaps, i18n( "This option allows customization of Gaps and Margins." ) );
     QToolTip::add
-        ( m_labelPreGapLeadout, i18n( "Used to set the amount of empty sectors added before the lead-out area begins." ) );
+        ( m_labelPreGapLeadout, i18n( "Used to set the number of empty sectors added before the lead-out area begins." ) );
     QToolTip::add
         ( m_labelPreGapTrack, i18n( "Used to set the track pre-gap for all tracks in sectors globally." ) );
     QToolTip::add
-        ( m_labelFrontMarginTrack, i18n( "Set's the front margin for sequence items." ) );
+        ( m_labelFrontMarginTrack, i18n( "Sets the front margin for sequence items." ) );
     QToolTip::add
-        ( m_labelRearMarginTrack, i18n( "Set's the rear margin for sequence items." ) );
+        ( m_labelRearMarginTrack, i18n( "Sets the rear margin for sequence items." ) );
 
     // What's This info
     // -------------------------------------------------------------------------
@@ -267,7 +267,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     QWhatsThis::add
         ( m_checkGaps, i18n( "<p>This option allows customization of Gaps and Margins." ) );
     QWhatsThis::add
-        ( m_labelPreGapLeadout, i18n( "<p>This option allows to set the amount of empty sectors added before the lead-out area begins, i.e. the amount of post-gap sectors."
+        ( m_labelPreGapLeadout, i18n( "<p>This option allows to set the number of empty sectors added before the lead-out area begins, i.e. the number of post-gap sectors."
                                       "<p>The ECMA-130 specification requires the last data track before the lead-out to carry a post-gap of at least 150 sectors, which is used as default for this parameter."
                                       "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last MPEG track if this parameter is set too low."
                                       "<p>Allowed value content: [0..300]. Default: 150." ) );
