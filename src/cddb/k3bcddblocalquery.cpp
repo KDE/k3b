@@ -44,12 +44,12 @@ void K3bCddbLocalQuery::doQuery()
   QString path = preparePath( m_cddbDir );
 
   kdDebug() << "(K3bCddbLocalQuery) searching in dir " << path << " for " 
-	    << QString::number( toc().discId(), 16 ) << endl;
+	    << QString::number( toc().discId(), 16 ).rightJustify( 8, '0' ) << endl;
 
   for( QStringList::const_iterator it = categories().begin();
        it != categories().end(); ++it ) {
 
-    QString file = path + *it + "/" +  QString::number( toc().discId(), 16 );
+    QString file = path + *it + "/" +  QString::number( toc().discId(), 16 ).rightJustify( 8, '0' );
 
     if( QFile::exists( file ) ) {
       // found file
@@ -64,7 +64,7 @@ void K3bCddbLocalQuery::doQuery()
 	K3bCddbResultEntry entry;
 	parseEntry( t, entry );
 	K3bCddbResultHeader header;
-	header.discid = QString::number( toc().discId(), 16 );
+	header.discid = QString::number( toc().discId(), 16 ).rightJustify( 8, '0' );
 	header.category = *it;
 	header.title = entry.cdTitle;
 	header.artist = entry.cdArtist;
