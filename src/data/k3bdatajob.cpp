@@ -90,6 +90,14 @@ void K3bDataJob::start()
     }
 		
     delete m_process;
+
+    if( m_isoSize.isEmpty() ) {
+      emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work.") );
+      emit infoMessage( i18n("Please creata an image first!") );
+      m_error = K3b::MKISOFS_ERROR;
+      emit finished(this);
+      return;
+    }
 		
     // start the writing process -------------------------------------------------------------
     // create a kshellprocess and do it on the fly!
@@ -350,17 +358,17 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
   // do every line
   for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
     {
-      if( (*str).at(6) == '%' ) {     // percent
+      if( (*str).contains( "done, estimate" ) ) {
+
 	QString _perStr = *str;
-	_perStr.truncate(3);
+	_perStr.truncate( _perStr.find('%') );
 	bool ok;
-	int _percent = _perStr.toInt( &ok );
+	int _percent = (int)_perStr.toDouble( &ok );
 	if( !ok ) {
 	  qDebug( "Parsing did not work for " + _perStr );
 	}
-	else {
+	else
 	  emit percent( _percent );
-	}
       }
       else {
 	cout << (*str).latin1() << endl;
@@ -467,13 +475,13 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else if( (*str).startsWith( "Starting new" ) )
 	{
-	  emit newSubTask( i18n("Writing data") );
+	  emit newSubTask( i18n("Writing iso data") );
 	}
       else if( (*str).startsWith( "Fixating" ) ) {
 	emit newSubTask( i18n("Fixating") );
       }
       else if( (*str).contains("seconds.") ) {
-	emit infoMessage( (*str).stripWhiteSpace() + " to start of writing..." );
+	emit infoMessage( "in " + (*str).mid( (*str).find("seconds") - 2 ) );
       }
       else if( (*str).startsWith( "Writing pregap" ) ) {
 	emit newSubTask( i18n("Writing pregap") );
@@ -486,6 +494,27 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       }
       else if( (*str).contains( "Turning BURN-Proof" ) ) {
 	emit infoMessage( i18n("Enabled BURN-Proof") );
+      }
+      else if( (*str).contains( "done, estimate" ) ) {
+
+	// mkisofs percent output
+	// only avaliable in on-the-fly mode
+
+	QString _perStr = *str;
+	_perStr.truncate( _perStr.find('%') );
+	bool ok;
+	int _percent = (int)_perStr.toDouble( &ok );
+	if( !ok ) {
+	  qDebug( "Parsing did not work for " + _perStr );
+	}
+	else
+	  emit subPercent( _percent );
+      }
+      else if( (*str).contains( "extents written" ) ) {
+
+	// mkisofs finishing output
+	// only avaliable in on-the-fly mode
+	emit subPercent( 100 );
       }
       else {
 	// debugging
@@ -572,7 +601,7 @@ void K3bDataJob::slotCdrecordFinished()
       emit infoMessage( "cdrecord did not exit cleanly!" );
     }
 
-  // remove toc-file
+  // remove path-spec-file
   if( QFile::exists( m_pathSpecFile ) ) {
     QFile::remove( m_pathSpecFile );
     m_pathSpecFile = QString::null;

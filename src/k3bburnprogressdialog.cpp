@@ -355,7 +355,7 @@ void K3bBurnProgressDialog::slotUpdateTime()
   if( min < 10 )
     timeStr = "0" + timeStr;	
 		
-  m_labelCdTime->setText( timeStr );	
+  m_labelCdTime->setText( i18n("Overall progress - %1").arg(timeStr) );	
 }
 
 

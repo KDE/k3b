@@ -181,6 +181,8 @@ int K3bProjectBurnDialog::exec( bool burn )
     actionButton(User1)->show();
   else
     actionButton(User1)->hide();
+
+  readSettings();
 		
   return QDialog::exec();
 }
