@@ -70,8 +70,8 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
   connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
-  connect( this, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
-	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(contextMenu(KListView*,QListViewItem*, const QPoint&)),
+	   this, SLOT(showPopupMenu(KListView*,QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*, QListViewItem*, QListViewItem*)) );
 
@@ -285,7 +285,7 @@ void K3bDataDirTreeView::setupActions()
 }
 
 
-void K3bDataDirTreeView::showPopupMenu( QListViewItem* item, const QPoint& point )
+void K3bDataDirTreeView::showPopupMenu( KListView*, QListViewItem* item, const QPoint& point )
 {
   kdDebug() << "(K3bDataDirTreeView) show Popup menu!" << endl;
 

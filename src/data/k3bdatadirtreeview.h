@@ -93,7 +93,7 @@ class K3bDataDirTreeView : public KListView
   void slotExecuted( QListViewItem* );
   void slotDataItemRemoved( K3bDataItem* );
   void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
-  void showPopupMenu( QListViewItem* _item, const QPoint& );
+  void showPopupMenu( KListView*, QListViewItem* _item, const QPoint& );
   void slotRenameItem();
   void slotRemoveItem();
   void slotNewDir();
