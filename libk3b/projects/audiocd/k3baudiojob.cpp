@@ -371,7 +371,7 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
 void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
-    K3bAudioTrack* track = m_doc->getTrack(t-1);
+    K3bAudioTrack* track = m_doc->getTrack(t);
     emit newSubTask( i18n("Decoding audio track %1 of %2%3")
 		     .arg(t)
 		     .arg(tt)
@@ -471,10 +471,10 @@ bool K3bAudioJob::prepareWriter()
 
 void K3bAudioJob::slotWriterNextTrack( int t, int tt )
 {
-  K3bAudioTrack* track = m_doc->getTrack(t-1);
+  K3bAudioTrack* track = m_doc->getTrack(t);
   // t is in range 1..tt
   if( m_doc->hideFirstTrack() )
-    track = m_doc->getTrack(t);
+    track = m_doc->getTrack(t+1);
   emit newSubTask( i18n("Writing track %1 of %2%3")
 		   .arg(t)
 		   .arg(tt)
