@@ -203,7 +203,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 KMessageBox::information( kapp->mainWidget(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
                                                 "files, but these files must already be in %2 "
-                                                "format. K3b performs no resample on MPEG files." )
+                                                "format. K3b does not yet resample MPEG files." )
                                           .arg( i18n( "VCD" ) )
                                           .arg( i18n( "VCD" ) ),
                                           i18n( "Information" ) );
@@ -215,11 +215,11 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
                                                       i18n( "K3b will create a %1 image from the given MPEG "
                                                             "files, but these files must already be in %2 "
-                                                            "format. K3b performs no resample on MPEG files yet." )
+                                                            "format. K3b does not yet resample MPEG files." )
                                                       .arg( i18n( "SVCD" ) )
                                                       .arg( i18n( "SVCD" ) )
                                                       + "\n\n"
-                                                      + i18n( "Note: Forcing mpeg2 as VCD is not supported by "
+                                                      + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
                                                               "some standalone DVD players." ),
                                                       i18n( "Information" ),
                                                       KStdGuiItem::ok().text(),
