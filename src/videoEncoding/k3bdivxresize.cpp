@@ -25,10 +25,12 @@
 #include <qslider.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qwhatsthis.h>
 
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 
 K3bDivxResize::K3bDivxResize(K3bDivxCodecData *data, QWidget *parent, const char *name ) : QGroupBox(parent,name) {
     m_data = data;
@@ -52,12 +54,16 @@ void K3bDivxResize::setupGui(){
     m_sliderResize->setLineStep( 32 );
     m_sliderResize->setPageStep( 16 );
     m_sliderResize->setValue( 704 );
-
+    QWhatsThis::add( m_sliderResize, i18n("Resizes the final output video depended on the aspect ratio of the movie. Before resizing the video \
+image should already be cropped, so it can be used to detect the real aspect ratio of the movie. If the aspect ratio isn't properly detect you must \
+correct the height of the video to fit it."));
     QHGroupBox *groupSize = new QHGroupBox( this );
     groupSize->setFrameStyle( Plain | NoFrame );
     groupSize->layout()->setSpacing( 0 );
     groupSize->layout()->setMargin( 0 );
-    //cropLayout->setMargin( KDialog::marginHint() );
+    QWhatsThis::add( groupSize, i18n("The aspect ratio error shows the difference to the original aspect ratio. If cropping is used the apsect \
+ratio error shows the difference to the \"best match\" aspect ratio (i.e 4:3, 16:9 or letterbox 1:2.35). To correct the aspect ratio manually change \
+the height."));
     QLabel *width = new QLabel( i18n("Width:"), groupSize );
     m_labelWidth = new QLabel( "", groupSize );
     QLabel *height = new QLabel( i18n("Height:"), groupSize );
@@ -91,37 +97,71 @@ void K3bDivxResize::setupGui(){
 
 void K3bDivxResize::initView(){
     m_orginalAspect = m_data->getAspectRatioValue();
-    updateView();
+    m_realAspect = m_orginalAspect;
+    slotResizeChanged( 704 );
+    //updateView(); // done in slotResizeChanged
 }
 
 void K3bDivxResize::resetView(){
     m_sliderResize->setValue(704);
+    kdDebug() << "(K3bDivxResize) Reset slider" << endl;
 }
 
-void K3bDivxResize::updateView(){
+void K3bDivxResize::slotUpdateView(){
+     kdDebug() << "(K3bDivxResize) update view" << endl;
      m_labelWidth->setText( QString::number( m_data->getWidthValue() - (m_data->getResizeWidth()*8) ) );
      int currentHeight = m_data->getHeightValue() -( m_data->getResizeHeight() *8 );
      int currentWidth = m_data->getWidthValue() - ( m_data->getResizeWidth() *8 );
-     m_currentAspect = ( (float)currentWidth ) / ( (float) currentHeight );
+     // estimate real aspect
+     int cropWidth = m_data->getCropLeft() + m_data->getCropRight();
+     int cropHeight = m_data->getCropTop() + m_data->getCropBottom();
+     if( cropWidth > 0 || cropHeight > 0){
+         m_realAspect = (( float ) (m_data->getWidthValue() - cropWidth)) / ((float) (m_data->getHeightValue() - cropHeight));
+         // check for anamorph
+         if( m_data->isAnamorph() ){
+             if( m_realAspect < 1.5 ){
+                 // true 16:9 anamorph
+                 m_realAspect = 1.778;
+             } else if ( m_realAspect < 2.05 ){
+                 // widescreen 1:2.35 (16:9) anamorph
+                 m_realAspect = 2.35;
+             }
+             // check for cropped aspect ratio
+         } else if( m_realAspect > 2.05 ){
+             m_realAspect = 2.35;
+         } else if ( m_realAspect > 1.55 ){
+             m_realAspect = 1.778;
+         } else {
+             m_realAspect = 1.333;
+         }
+     } else {
+         m_realAspect = m_data->getAspectRatioValue();
+     }
+     m_currentAspect = ( (float)(currentWidth-m_data->getCropLeft()-m_data->getCropRight() ) ) /
+     ( (float) (currentHeight-m_data->getCropTop() - m_data->getCropBottom() ) );
+
      m_labelAspectRatio->setText( "1:" + QString::number( m_currentAspect, 'f', 2) );
-     float error = ( m_data->getAspectRatioValue() / m_currentAspect -1) *100;
+
+     float error = ( m_realAspect / m_currentAspect -1) *100;
      m_labelAspectError->setText( QString::number( error, 'f', 2) + " %" );
 }
 
 void K3bDivxResize::slotResizeChanged( int value ){
+     kdDebug() << "(K3bDivxResize) Resize" << endl;
      m_data->setResizeWidth( (704-value) / 8 );
-     int h = (int) (value / m_orginalAspect);
-     h = h + ( (8- (h % 8)) % 8);
+     int h = (int) ((value-m_data->getCropLeft() - m_data->getCropRight() ) / m_realAspect);
+     h = h + m_data->getCropBottom() + m_data->getCropTop();
+     h = h + ( (8- (h % 8)) % 8) + 8; // last +8 is experience, most times one step to small
      int comboIndex = 72 - (h / 8);
      m_data->setResizeHeight( comboIndex );
      m_comboHeight->setCurrentItem( comboIndex );
-     updateView();
+     slotUpdateView();
      emit sizeChanged();
 }
 
 void K3bDivxResize::slotHeightChanged( int index ){
     m_data->setResizeHeight( index );
-    updateView();
+    slotUpdateView();
     emit sizeChanged();
 }
 #include "k3bdivxresize.moc"

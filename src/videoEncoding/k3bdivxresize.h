@@ -35,8 +35,10 @@ public:
     K3bDivxResize(K3bDivxCodecData *data, QWidget *parent=0, const char *name=0);
     ~K3bDivxResize();
     void initView();
-    void updateView();
     void resetView();
+public slots:
+    void slotUpdateView();
+
 signals:
     void sizeChanged();
 private slots:
@@ -51,6 +53,7 @@ private:
 
     float m_currentAspect;
     float m_orginalAspect;
+    float m_realAspect; // estimated aspect after cropping
     K3bDivxCodecData *m_data;
     void setupGui();
 };
