@@ -17,7 +17,6 @@
 
 #include "k3bripperwidget.h"
 #include "k3bfilenamepatterndialog.h"
-#include "k3bcdda.h"
 #include "../k3bcddb.h"
 #include "k3bcddacopy.h"
 #include "k3bcdview.h"
