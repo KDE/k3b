@@ -368,7 +368,7 @@ float K3bDvdRippingProcess::getAudioGain(){
         }
         f.close();
     } else {
-        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't get data for audio normalizing, use default of 1.0."), i18n("OK") );
+        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), i18n("OK") );
     }
     return result;
 }

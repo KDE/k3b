@@ -77,7 +77,7 @@ void K3bDivXEncodingProcess::slotStartAudioProcessing(KIO::Job *job){
      emit started();
      //emit newTask( i18n("Generating video")  );
      emit newSubTask( i18n("Preprocessing audio")  );
-     infoMessage( i18n("Search for maximum audio gain to get normalize parameter."), INFO );
+     infoMessage( i18n("Search for maximum audio gain to get normalized parameter."), INFO );
      kdDebug() <<"(K3bDivXEncodingProcess) Starting get audio gain." << endl;
 }
 
@@ -203,7 +203,7 @@ void K3bDivXEncodingProcess::slotParseEncoding( KProcess *p, char *buffer, int l
 void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ){
     kdDebug() << "(K3bDivxEncodingProcess) Encoding finished" << endl;
     if( !p->normalExit() ){
-        infoMessage( i18n("Video generating aborted by user."), STATUS );
+        infoMessage( i18n("Video generation aborted by user."), STATUS );
         kdDebug() << "(K3bDivxEncodingProcess) Aborted encoding" << endl;
         delete m_process;
         emit finished( true );
@@ -213,7 +213,7 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ){
             kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
             startEncoding();
         } else {
-            infoMessage( i18n("Video generating successful finished."), STATUS );
+            infoMessage( i18n("Video generation successfully completed."), STATUS );
             emit finished( true );
         }
     }
@@ -250,7 +250,7 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess *p, char *buffer, int len)
     m_speedFlag++;
 }
 void K3bDivXEncodingProcess::slotAudioExited( KProcess *p ){
-    infoMessage( i18n("Preprocessing audio finished."), STATUS );
+    infoMessage( i18n("Preprocessing audio completed."), STATUS );
     kdDebug() << "(K3bDivxEncodingProcess) Audio gain detection finished" << endl;
     if( p->normalExit() ){
         delete m_process;

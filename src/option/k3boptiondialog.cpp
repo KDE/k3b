@@ -144,7 +144,7 @@ void K3bOptionDialog::setupProgramsPage()
 
 void K3bOptionDialog::setupCddbPage()
 {
-  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the Cddb Server"),
+  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the CDDB Server"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "connect_established", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QGridLayout* mainGrid = new QGridLayout( frame );

@@ -6,7 +6,7 @@
 
 
 K3bIsoOptions::K3bIsoOptions()
-  : m_volumeID( i18n("Dataproject") ),
+  : m_volumeID( i18n("Project name", "Data") ),
     m_applicationID( "K3B" ),
     m_inputCharset( "iso8859-1" ),
     m_whiteSpaceTreatmentReplaceString( "_" )

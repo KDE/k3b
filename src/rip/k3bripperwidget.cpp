@@ -88,7 +88,7 @@ void K3bRipperWidget::setupGui()
   m_viewTracks = new KListView( frame, "m_viewTracks" );
   m_viewTracks->addColumn(i18n( "Filename") );
   m_viewTracks->addColumn(i18n( "Length") );
-  m_viewTracks->addColumn(i18n( "Filesize") );
+  m_viewTracks->addColumn(i18n( "File Size") );
   m_viewTracks->addColumn(i18n( "Type") );
   m_viewTracks->addColumn(i18n( "Path") );
 
@@ -118,7 +118,7 @@ void K3bRipperWidget::setupGui()
   groupOptionsLayout->setColStretch( 0, 1 );
 
 
-  m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("Filetype"), frame );
+  m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("File Type"), frame );
   m_radioWav = new QRadioButton( i18n("Wave"), m_groupFileType );
   m_radioMp3 = new QRadioButton( i18n("MP3"), m_groupFileType );
   m_radioOgg = new QRadioButton( i18n("Ogg Vorbis"), m_groupFileType ); // TODO: test if ogg available

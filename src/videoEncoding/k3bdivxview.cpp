@@ -84,11 +84,11 @@ void K3bDivxView::setupGui(){
 int K3bDivxView::checkSettings(){
     QDir d( m_codingData->getAviFile() );
     if( d.exists() ){
-        KMessageBox::error ( this, i18n("You must choose an filename for the final video."), i18n("Settings error") );
+        KMessageBox::error ( this, i18n("You must choose a filename for the final video."), i18n("Settings Error") );
         return 2;
     }
     if( QFile::exists( m_codingData->getAviFile() )){
-        if( KMessageBox::No == KMessageBox::warningYesNo ( this, i18n("File <%1> already exists. Do you want overwrite it?").arg( m_codingData->getAviFile()) ,i18n( "Settings error" ) )){
+        if( KMessageBox::No == KMessageBox::warningYesNo ( this, i18n("File <%1> already exists. Do you want to overwrite it?").arg( m_codingData->getAviFile()) ,i18n( "Settings Error" ) )){
             return 1;
         }
     }

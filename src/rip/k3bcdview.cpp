@@ -178,7 +178,7 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
     m_lastQuery = cddb->queryResult();
 
     if( m_lastQuery.foundEntries() == 0 ) {
-      KMessageBox::information( this, i18n("No cddb entry found"), i18n("Cddb") );
+      KMessageBox::information( this, i18n("No CDDB entry found"), i18n("CDDB") );
     }
     else {
       m_lastSelectedCddbEntry = 0;
@@ -240,11 +240,11 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
 	  m_cddb->httpQuery( m_lastDiskInfo.toc );
       }
       else {
-	KMessageBox::information( this, i18n("No cddb entry found"), i18n("Cddb") );
+	KMessageBox::information( this, i18n("No CDDB entry found"), i18n("CDDB") );
       }
     }
     else
-      KMessageBox::information( this, i18n("No cddb entry found"), i18n("Cddb") );
+      KMessageBox::information( this, i18n("No CDDB entry found"), i18n("CDDB") );
   }
 }
 

@@ -65,7 +65,7 @@ void K3bCddbLocalDBTab::setup(){
   localServerSettings->layout()->setSpacing(KDialog::spacingHint());
   localServerSettings->layout()->setMargin(KDialog::marginHint());
   localServerSettings->addSpace( 3 );
-  QLabel *localServer = new QLabel( i18n("File to save cddb entries of ripped 'wavs'."), localServerSettings );
+  QLabel *localServer = new QLabel( i18n("File to save CDDB entries of ripped 'wav' files."), localServerSettings );
   QHGroupBox *localEditGroup = new QHGroupBox( localServerSettings );
   localEditGroup->setFrameStyle( QFrame::NoFrame );
   localEditGroup->layout()->setSpacing( 0 );
@@ -139,7 +139,7 @@ void K3bCddbLocalDBTab::verifyDb(){
         }
     } else {
         QMessageBox::critical( this, i18n("Database Error"), 
-			       i18n("File doesn't exists <%1>.").arg(m_songListPath->text()), i18n("OK") );
+			       i18n("File does not exist <%1>.").arg(m_songListPath->text()), i18n("OK") );
     }
 }
 void K3bCddbLocalDBTab::findDbEntries(){

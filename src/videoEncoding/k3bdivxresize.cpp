@@ -54,15 +54,15 @@ void K3bDivxResize::setupGui(){
     m_sliderResize->setLineStep( 32 );
     m_sliderResize->setPageStep( 16 );
     m_sliderResize->setValue( 704 );
-    QWhatsThis::add( m_sliderResize, i18n("Resizes the final output video depended on the aspect ratio of the movie. Before resizing the video \
-image should already be cropped, so it can be used to detect the real aspect ratio of the movie. If the aspect ratio isn't properly detect you must \
+    QWhatsThis::add( m_sliderResize, i18n("Resizes the final output video depending on the aspect ratio of the movie. Before resizing the video \
+the image should already be cropped, so it can be used to detect the real aspect ratio of the movie. If the aspect ratio is not properly detected you must \
 correct the height of the video to fit it."));
     QHGroupBox *groupSize = new QHGroupBox( this );
     groupSize->setFrameStyle( Plain | NoFrame );
     groupSize->layout()->setSpacing( 0 );
     groupSize->layout()->setMargin( 0 );
-    QWhatsThis::add( groupSize, i18n("The aspect ratio error shows the difference to the original aspect ratio. If cropping is used the apsect \
-ratio error shows the difference to the \"best match\" aspect ratio (i.e 4:3, 16:9 or letterbox 1:2.35). To correct the aspect ratio manually change \
+    QWhatsThis::add( groupSize, i18n("The aspect ratio error shows the difference from the original aspect ratio. If cropping is used, the apsect \
+ratio error shows the difference from the \"best match\" aspect ratio (i.e. 4:3, 16:9 or letterbox 1:2.35). To correct the aspect ratio manually change \
 the height."));
     QLabel *width = new QLabel( i18n("Width:"), groupSize );
     m_labelWidth = new QLabel( "", groupSize );

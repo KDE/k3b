@@ -111,7 +111,7 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
   QString dir = m_list[i].left( m_list[i].findRev("/") );
   if( !createDirectory( dir ) ) {
-    infoMessage( i18n("Could not create directory %1").arg(dir), ERROR );
+    infoMessage( i18n("Unable to create directory %1").arg(dir), ERROR );
     return false;
   }
   
@@ -121,7 +121,7 @@ bool K3bCddaCopy::startRip( unsigned int i )
   bool isOpen = m_waveFileWriter.open( m_list[i] );
   
   if( !isOpen ){
-    infoMessage( i18n("Couldn't rip to: %1").arg(m_list[i]), ERROR );
+    infoMessage( i18n("Unable to rip to: %1").arg(m_list[i]), ERROR );
     m_currentWrittenFile = QString::null;
 
     return false;
@@ -131,7 +131,7 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
   if( !m_audioRip->ripTrack( m_device, m_tracksToCopy[i] ) ) {
     m_waveFileWriter.close();
-    emit infoMessage( i18n("Could not read track %1").arg(i), ERROR );
+    emit infoMessage( i18n("Unable to read track %1").arg(i), ERROR );
     return false;
   }
 
@@ -182,7 +182,7 @@ void K3bCddaCopy::slotTrackFinished( bool success )
       infoMessage( i18n("Canceled by user"), ERROR );
       kdDebug() << "(K3bCddaCopy) Interrupted by user!" << endl;
       if( !QFile::remove( m_currentWrittenFile ) ){
-	infoMessage( i18n("Can't delete part of copied file."), ERROR );
+	infoMessage( i18n("Unable to delete part of copied file"), ERROR );
 	kdDebug() << "(K3bCddaCopy) Can't delete copied file <>." << endl;
       }
     }

@@ -55,7 +55,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
   frameLayout->addWidget( m_buttonSearch, 2, 1 );
 
   QLabel* m_labelInfo = new QLabel( this, "m_labelInfo" );
-  m_labelInfo->setText( i18n( "Please specify the paths to the external programs that K3b needs to work properly or press \"Search\" to let K3b search for the programs." ) );
+  m_labelInfo->setText( i18n( "Specify the paths to the external programs that K3b needs to work properly, or press \"Search\" to let K3b search for the programs." ) );
   m_labelInfo->setScaledContents( FALSE );
   m_labelInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
 

@@ -64,16 +64,16 @@ void K3bDivxCrop::setupGui(){
     QCanvas *c = new QCanvas(380, 300);  //image 360x288
     //c->setAdvancePeriod(30);
     m_preview = new K3bDivxPreview( c, this );
-    QWhatsThis::add( m_preview, i18n("Preview picture off the video to crop it properly. The colors and the quality are NOT the final state, so use this \
-picture only to cut of black borders"));
+    QWhatsThis::add( m_preview, i18n("Preview picture of the video to crop it properly. The colors and quality are not the final state, so use this \
+picture only to cut off black borders."));
     m_sliderPreview = new QSlider( Horizontal,  this );
     m_sliderPreview->setValue( 5 );
-    QWhatsThis::add( m_sliderPreview, i18n("Move through to video to find a light picture to do a proper cut of the black bars"));
+    QWhatsThis::add( m_sliderPreview, i18n("Step through the video to find a light picture to do a proper cut of the black bars."));
     QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize mode"), this );
     modeGroup->layout()->setMargin( KDialog::marginHint() );
     m_buttonFast = new QRadioButton( i18n("Fast (-B)"), modeGroup );
     m_buttonExactly = new QRadioButton( i18n("Exact (-Z)"), modeGroup );
-    QWhatsThis::add( modeGroup, i18n("\"Fast\" resizing is much faster than the \"Exact\" resizing but is limit to a resize step multiple of 8 pixels."));
+    QWhatsThis::add( modeGroup, i18n("\"Fast\" resizing is much faster than the \"Exact\" resizing but is limited to a resize step multiple of 8 pixels."));
 
     QGroupBox *groupCrop = new QGroupBox( this );
     groupCrop->setColumnLayout(0, Qt::Vertical );
@@ -86,7 +86,7 @@ picture only to cut of black borders"));
     m_spinTop = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
     m_spinLeft = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
     m_spinRight = new KIntSpinBox( 0, 100, 8, 0, 10, groupCrop );
-    QWhatsThis::add( groupCrop, i18n("Cut of the black borders of the movie"));
+    QWhatsThis::add( groupCrop, i18n("Cut off the black borders of the movie"));
     QFrame* line = new QFrame( groupCrop, "line" );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     m_autoCrop = new QCheckBox( i18n("Automatically crop"), groupCrop );
@@ -117,11 +117,11 @@ picture only to cut of black borders"));
     finalLayout->addWidget( m_finalSize, 0, 1);
     finalLayout->addWidget( m_finalAspect, 1, 1);
     finalLayout->addWidget( m_finalQuality, 2, 1 );
-    QWhatsThis::add( groupFinal, i18n("This is the final size of the movie. Verify that the final size of your movie have the right aspect ratio \
-1:1.333 for a 4:3 movie, 1:1.77 for a 16:9 movie, and 1:2.35 for a letterbox movie. If you are using cropping you can ignore the aspect ratio error shown \
-in the resizing box. The \"Video quality\" is an value to ESTIMATE the final video quality. (The value is calculate as \"<video bitrate>/(<framerate>*<height>*<width>)\", \
-you may know this from GordianKnot (www.doom9.net)). The higher the value the better the quality.\nThe following values are ok if you look the movies on TV. \
-Values > 0.15 are ok for letterbox movie, for 16:9 you should use better values > 0.16 and for 4:3 > 0.17-0.18, but that depends on you, try it."));
+    QWhatsThis::add( groupFinal, i18n("This is the final size of the movie. Verify that the final size of your movie has the right aspect ratio: \
+1:1.333 for a 4:3 movie, 1:1.77 for a 16:9 movie, and 1:2.35 for a letterbox movie. If you are using cropping, you can ignore the aspect ratio error shown \
+in the resizing box. The \"Video quality\" is a value to estimate the final video quality. (The value is calculated as \"<video bitrate>/(<framerate>*<height>*<width>)\". \
+You may know this from GordianKnot (www.doom9.net)). The higher the value the better the quality.\nThe following values are adequate if the movies on viewed on a television. \
+Values greater than 0.15 are adequate for letterbox movies. For 16:9 you should use values greater than 0.16 and for 4:3, use greater than 0.17-0.18. Experiment with different values to see what you prefer."));
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 

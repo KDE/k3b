@@ -41,7 +41,7 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   m_checkShowSplash = new QCheckBox( i18n("Show splash screen"), this );
   m_checkShowSystemTrayProgress = new QCheckBox( i18n("Show progress in system tray"), this );
 
-  QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default Temp Directory"), this );
+  QGroupBox* groupTempDir = new QGroupBox( 2, Qt::Horizontal, i18n("Default Temporary Directory"), this );
   groupTempDir->layout()->setMargin( KDialog::marginHint() );
   groupTempDir->layout()->setSpacing( KDialog::spacingHint() );
 
@@ -98,7 +98,7 @@ bool K3bMiscOptionTab::saveSettings()
     if( KMessageBox::questionYesNo( this, i18n("Directory does not exist. Create?"), 
 				    i18n("Create Directory") ) == KMessageBox::Yes ) {
       if( !KIO::NetAccess::mkdir( fi.absFilePath() ) ) {
-	KMessageBox::error( this, i18n("Could not create directory\n(%1)").arg(fi.absFilePath()) );
+	KMessageBox::error( this, i18n("Unable to create directory\n(%1)").arg(fi.absFilePath()) );
 	return false;
       }
     }
@@ -109,7 +109,7 @@ bool K3bMiscOptionTab::saveSettings()
   }
 
   if( fi.isFile() ) {
-    KMessageBox::information( this, i18n("You specified a file as temp directory. K3b will use it's base path as temp directory."), i18n("Warning"), i18n("Don't show again.") );
+    KMessageBox::information( this, i18n("You specified a file for the temporary directory. K3b will use its base path as the temporary directory."), i18n("Warning"), i18n("Don't show again.") );
     fi.setFile( fi.dirPath() );
   }
 

@@ -116,7 +116,7 @@ void K3bDvdRipperWidget::setupGui(){
     mainLayout->addMultiCellWidget( groupPattern, 0, 0, 0, 1 );
     mainLayout->addMultiCellWidget( groupSize, 1, 1, 0, 1 );
 
-    setButtonApplyText( i18n( "Start Ripping" ), i18n( "This starts copying the DVD.") );
+    setButtonApplyText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
 
 
     connect( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
@@ -242,7 +242,7 @@ bool K3bDvdRipperWidget::createDirectory( const QString& dir ){
     QDir destDir( dir );
     if( !destDir.exists() ){
         if( !destDir.mkdir( dir ) ){
-            QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't create directory %1").arg(dir), i18n("OK") );
+            QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to create directory %1").arg(dir), i18n("OK") );
             return false;
         }
     }

@@ -161,7 +161,7 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->addColSpacing( 0, 30 );
   bufferLayout->setColStretch( 4, 1 );
 
-  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing app selection"), advancedTab );
+  m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application selection"), advancedTab );
 
   groupAdvancedLayout->addWidget( m_checkOverburn, 0, 0 );
   groupAdvancedLayout->addWidget( m_checkEject, 1, 0 );
@@ -191,10 +191,10 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
 
-  QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked hidden files "
+  QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked, hidden files "
 						"in directories added to a data project will "
 						"also be added.</p>" ) );
-  QWhatsThis::add( m_checkListSystemFiles, i18n("<p>If this option is checked system files "
+  QWhatsThis::add( m_checkListSystemFiles, i18n("<p>If this option is checked, system files "
 						"(fifos, devices, sockets) "
 						"in directories added to a data project will "
 						"also be added.</p>" ) );
