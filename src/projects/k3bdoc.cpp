@@ -252,7 +252,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     QDomElement root = xmlDoc.documentElement();
     if( newDoc->loadDocumentData( &root ) ) {
       newDoc->setURL( url );
-      newDoc->setSaved(true);
+      newDoc->m_saved = true;
       return newDoc;
     }
   }
@@ -299,6 +299,8 @@ bool K3bDoc::saveDocument(const KURL& url )
 
   // remove the store (destructor writes the store to disk)
   delete store;
+
+  m_saved = success;
 
   return success;
 }

@@ -188,6 +188,7 @@ void K3bDataVerifyingJob::compareNextFile()
   } while( d->currentItem && 
 	   (!d->currentItem->isFile() || 
 	    !d->currentItem->writeToCd() || 
+	    d->currentItem->isFromOldSession() ||
 	    (d->currentItem->isSymLink() && !d->doc->isoOptions().followSymbolicLinks()) ) );
   
   d->originalCalculated = false;
@@ -281,7 +282,7 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
 	kdDebug() << "(K3bDataVerifyingJob) could not find " 
 		  << d->currentItem->writtenPath()
 		  << " in filesystem." << endl;
-	emit infoMessage( i18n("Unable to read Iso9660 filesystem."), ERROR );
+	emit infoMessage( i18n("Could not find file %1.").arg(d->currentItem->writtenName()), ERROR );
 	finishVerification(false);
       }
     }
@@ -300,7 +301,7 @@ void K3bDataVerifyingJob::slotMd5JobProgress( int p )
     percentCurrentFile += 50.0;
 
   double doneCurrentFile = (double)d->currentItem->k3bSize()*percentCurrentFile/100.0;
-  int newProgress = (int)( 100.0 * ((double)d->alreadyCheckedData + doneCurrentFile) / (double)d->doc->size() );
+  int newProgress = (int)( 100.0 * ((double)d->alreadyCheckedData + doneCurrentFile) / (double)d->doc->burningSize() );
 
   if( newProgress > d->lastProgress ) {
     d->lastProgress = newProgress;

@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(srcdir)/../tools -I$(srcdir)/../device $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../device $(all_includes)
 
 lib_LTLIBRARIES = libk3bcore.la
 

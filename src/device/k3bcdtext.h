@@ -20,9 +20,6 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-// more or less a hack... this hole cdtect thing is not perfect
-#include "k3bvalidators.h"
-
 #include <kdebug.h>
 
 
@@ -46,13 +43,14 @@ namespace K3bCdDevice
       const QString& message() const { return m_message; }
       const QString& isrc() const { return m_isrc; }
 
-      void setTitle( const QString& s ) { m_title = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setPerformer( const QString& s ) { m_performer = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setSongwriter( const QString& s ) { m_songwriter = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setComposer( const QString& s ) { m_composer = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setArranger( const QString& s ) { m_arranger = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setMessage( const QString& s ) { m_message = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setIsrc( const QString& s ) { m_isrc = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
+      // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
+      void setTitle( const QString& s ) { m_title = s; fixup(m_title); }
+      void setPerformer( const QString& s ) { m_performer = s; fixup(m_performer); }
+      void setSongwriter( const QString& s ) { m_songwriter = s; fixup(m_songwriter); }
+      void setComposer( const QString& s ) { m_composer = s; fixup(m_composer); }
+      void setArranger( const QString& s ) { m_arranger = s; fixup(m_arranger); }
+      void setMessage( const QString& s ) { m_message = s; fixup(m_message); }
+      void setIsrc( const QString& s ) { m_isrc = s; fixup(m_isrc); }
 
       bool isEmpty() const {
 	if( !m_title.isEmpty() )
@@ -74,6 +72,9 @@ namespace K3bCdDevice
       }
 
     private:
+      // TODO: remove this (see above)
+      void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
+
       QString m_title;
       QString m_performer;
       QString m_songwriter;
@@ -149,14 +150,15 @@ namespace K3bCdDevice
       const QString& discId() const { return m_discId; }
       const QString& upcEan() const { return m_upcEan; }
 
-      void setTitle( const QString& s ) { m_title = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setPerformer( const QString& s ) { m_performer = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setSongwriter( const QString& s ) { m_songwriter = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setComposer( const QString& s ) { m_composer = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setArranger( const QString& s ) { m_arranger = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setMessage( const QString& s ) { m_message = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setDiscId( const QString& s ) { m_discId = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
-      void setUpcEan( const QString& s ) { m_upcEan = K3bValidators::fixup(s, K3bValidators::cdTextCharSet()); }
+      // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
+      void setTitle( const QString& s ) { m_title = s; fixup(m_title); }
+      void setPerformer( const QString& s ) { m_performer = s; fixup(m_performer); }
+      void setSongwriter( const QString& s ) { m_songwriter = s; fixup(m_songwriter); }
+      void setComposer( const QString& s ) { m_composer = s; fixup(m_composer); }
+      void setArranger( const QString& s ) { m_arranger = s; fixup(m_arranger); }
+      void setMessage( const QString& s ) { m_message = s; fixup(m_message); }
+      void setDiscId( const QString& s ) { m_discId = s; fixup(m_discId); }
+      void setUpcEan( const QString& s ) { m_upcEan = s; fixup(m_upcEan); }
 
       const TrackCdText& trackCdText( int i ) const { return m_trackCdText[i]; }
       void addTrackCdText( const TrackCdText& t ) { m_trackCdText.append(t); }
@@ -186,6 +188,9 @@ namespace K3bCdDevice
       }
 	
     private:
+      // TODO: remove this (see above)
+      void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
+
       QString m_title;
       QString m_performer;
       QString m_songwriter;

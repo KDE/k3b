@@ -144,6 +144,10 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     emit debuggingOutput( "mkisofs", line );
 
     if( line.contains( "done, estimate" ) ) {
+
+      if( m_device )
+	m_device->close();  // release the device for cdrecord
+
       int p = parseProgress( line );
       if( p != -1 )
 	emit percent( p );
@@ -515,6 +519,7 @@ bool K3bIsoImager::addMkisofsParameters()
 	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
 	return false;
       }
+
       //
       // we want mkisofs to read from fd
       // we could do that by just passing /dev/fd/$(fd)
@@ -522,7 +527,13 @@ bool K3bIsoImager::addMkisofsParameters()
       // so if K3b will ever run well on FreeBSD we are ready...
       //
       m_process->dupStdin( fd ); // make mkisofs's stdin a copy of fd
-      *m_process << "-M" << QString("/dev/fd/0");//.arg(fd); //m_device->busTargetLun();
+
+      // PROBLEM: when writing on the fly cdrecord waits for mkisofs to release the device
+      //          Since we open and not close the device here it seems to happen sometimes
+      //          that cdrecord is not able to open the device at all. So we need to close it
+      //          somewhere...
+
+      *m_process << "-M" << QString("/dev/fd/0");
     }
   }
 

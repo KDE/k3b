@@ -146,7 +146,9 @@ class K3bDoc : public QObject
   int writingApp() const { return m_writingApp; }
   void setWritingApp( int a ) { m_writingApp = a; }
 
-  void setSaved( bool b ) { m_saved = b; }
+  /**
+   * @return true if the document has successfully been saved to a file
+   */
   bool saved() const { return m_saved; }
 
   /**

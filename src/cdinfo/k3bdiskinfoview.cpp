@@ -194,6 +194,9 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
         setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Mixed mode CD") );
 	setRightPixmap( "diskinfo_mixed" );
         break;
+      default:
+	setTitle( i18n("Unknown disk type") );
+	setRightPixmap( "diskinfo_right" );
       }
     }
 
@@ -209,13 +212,13 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 
     // tracks
     // /////////////////////////////////////////////////////////////////////////////////////
-    if( m_infoView->childCount() )
-      (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+    if( !toc.isEmpty() ) {
 
-    KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
-    if( toc.isEmpty() )
-      (void)new KListViewItem( trackHeaderItem, i18n("Disk is empty") );
-    else {
+      if( m_infoView->childCount() )
+	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+      
+      KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
+
       // create header item
       KListViewItem* item = new KListViewItem( trackHeaderItem,
 					       i18n("Type"),
@@ -281,8 +284,8 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
       }
 
       trackItem->setOpen(true);
+      trackHeaderItem->setOpen( true );
     }
-    trackHeaderItem->setOpen( true );
 
 
     // CD-TEXT
