@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libk3bflacdecoder.la
 
 libk3bflacdecoder_la_SOURCES = k3bflacdecoder.cpp
 
-libk3bflacdecoder_la_LIBADD = $(LIB_KDECORE) -lFLAC++ -lFLAC ../../plugin/libk3bplugin.la $(LIB_KDEUI)
+libk3bflacdecoder_la_LIBADD = $(LIB_KDECORE) -lFLAC++ -lFLAC $(ID3_LIB) ../../plugin/libk3bplugin.la $(LIB_KDEUI)
 # ../../core/libk3bcore.la
 libk3bflacdecoder_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
 
