@@ -244,6 +244,8 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 
     if ( ioctl( devFile, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) {
       qDebug( "(K3bDeviceManager) %s: Need a filename that resolves to a SCSI device (2).", dev->genericDevice().latin1() );
+      ::close( devFile );
+      return 0;
     }
     else {
       dev->m_target = idLun.id & 0xff;
