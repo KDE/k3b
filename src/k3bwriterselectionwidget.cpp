@@ -100,6 +100,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   m_groupCdWritingApp->setButton( 0 );
 
   connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
+  connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 }
 
 
@@ -124,15 +125,21 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-  if( K3bDevice* _dev = writerDevice() ) {
+  if( K3bDevice* dev = writerDevice() ) {
     // add speeds to combobox
     m_comboSpeed->clear();
     m_comboSpeed->insertItem( "1x" );
-    int _speed = 2;
-    while( _speed <= _dev->maxWriteSpeed() ) {
-      m_comboSpeed->insertItem( QString( "%1x" ).arg(_speed) );
-      _speed+=2;
+    int speed = 2;
+    int currentSpeedIndex = 0;
+    while( speed <= dev->maxWriteSpeed() ) {
+      m_comboSpeed->insertItem( QString( "%1x" ).arg(speed) );
+      if( speed == dev->currentWriteSpeed() )
+	currentSpeedIndex = m_comboSpeed->count() - 1;
+      speed += 2;
     }
+
+    // set to saved speed 
+    m_comboSpeed->setCurrentItem( currentSpeedIndex );
   }
 }
 
@@ -170,10 +177,10 @@ K3bDevice* K3bWriterSelectionWidget::writerDevice() const
 
 int K3bWriterSelectionWidget::writerSpeed() const
 {
-  QString _strSpeed = m_comboSpeed->currentText();
-  _strSpeed.truncate( _strSpeed.find('x') );
+  QString strSpeed = m_comboSpeed->currentText();
+  strSpeed.truncate( strSpeed.find('x') );
 	
-  return _strSpeed.toInt();
+  return strSpeed.toInt();
 }
 
 
@@ -188,6 +195,12 @@ int K3bWriterSelectionWidget::writingApp() const
   default:
     return K3b::DEFAULT;
   }
+}
+
+
+void K3bWriterSelectionWidget::slotSpeedChanged( int index )
+{
+  writerDevice()->setCurrentWriteSpeed( writerSpeed() );
 }
 
 

@@ -25,7 +25,6 @@
 #include <qstring.h>
 #include <qsplitter.h>
 #include <qevent.h>
-#include <qtabwidget.h>
 #include <qvaluelist.h>
 #include <qfont.h>
 #include <qpalette.h>
@@ -58,6 +57,7 @@
 #include "audio/k3baudiodoc.h"
 #include "audio/k3baudioview.h"
 #include "device/k3bdevicemanager.h"
+#include "device/k3bdevicewidget.h"
 #include "audio/k3baudiotrackdialog.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
@@ -72,7 +72,7 @@
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
 #include "dvd/k3bdvdview.h"
-
+#include "k3btempdirselectionwidget.h"
 
 K3bMainWindow* k3bMain()
 {
@@ -284,6 +284,12 @@ void K3bMainWindow::initView()
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
   // ---------------------------------------------------------------------------------------------
+
+
+  // ///////////////////////////
+  // HACK needed because otherwise I get undefined references ???? :-((
+  // //////////////////////////
+  delete (new K3bDeviceWidget( deviceManager(), 0 ));
 }
 
 
@@ -370,14 +376,14 @@ void K3bMainWindow::saveOptions()
   m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
   actionFileOpenRecent->saveEntries(m_config,"Recent Files");
 
-  m_config->setGroup("ISO Options");
-  m_config->writeEntry( "Use ID3 Tag for mp3 renaming", m_useID3TagForMp3Renaming );
-
   // save dock positions!
   manager()->writeConfig( m_config, "Docking Config" );
 
   m_config->setGroup( "External Programs" );
   m_externalBinManager->saveConfig( m_config );
+  m_deviceManager->saveConfig( m_config );
+
+  emit saveConfig( config() );
 }
 
 
@@ -767,7 +773,7 @@ void K3bMainWindow::slotNewDataDoc()
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
-  doc->setVolumeID( QString("ISO_%1").arg(untitledCount) );
+  doc->setVolumeID( QString("Data_%1").arg(untitledCount) );
 
   // create the window
   createClient(doc);

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvddoc.cpp  -  description
+                          kdndfiledetailview.h  -  description
                              -------------------
-    begin                : Sun Mar 31 2002
+    begin                : Sat Apr 20 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,30 +15,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "k3bdvddoc.h"
-#include "../k3bview.h"
-#include "k3bdvdview.h"
+#ifndef KDNDFILEVIEW_H
+#define KDNDFILEVIEW_H
 
-K3bDvdDoc::K3bDvdDoc( QObject *parent) : K3bDoc( parent ){
-}
+#include <kfiledetailview.h>
+#include <kfileiconview.h>
 
-K3bDvdDoc::~K3bDvdDoc(){
-}
 
-bool K3bDvdDoc::newDocument(){
-    return true;
-}
-
-K3bView* K3bDvdDoc::newView( QWidget* parent ){
-  return 0;
-}
-
-void K3bDvdDoc::addView(K3bView* view){
-    K3bDoc::addView( view );
-}
-
-void K3bDvdDoc::loadDefaultSettings()
+/**
+ * adds Drag'n'Drop support
+  * @author Sebastian Trueg
+  */
+class KDndFileDetailView : public KFileDetailView
 {
-}
+  Q_OBJECT
 
-#include "k3bdvddoc.moc"
+ public: 
+  KDndFileDetailView( QWidget* parent, const char* name );
+  ~KDndFileDetailView();
+  
+ protected:
+  QDragObject* dragObject();
+};
+
+
+class KDndFileIconView : public KFileIconView
+{
+  Q_OBJECT
+
+ public:
+  KDndFileIconView( QWidget* parent = 0, const char* name = 0);
+  ~KDndFileIconView();
+
+ protected:
+  QDragObject* dragObject();
+};
+
+#endif

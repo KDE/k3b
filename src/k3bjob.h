@@ -23,7 +23,7 @@
 class QString;
 class K3bDoc;
 class K3bDevice;
-
+class KProcess;
 
 
 /**This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
@@ -69,8 +69,7 @@ class K3bBurnJob : public K3bJob
   Q_OBJECT
 	
  public:
-  K3bBurnJob( QObject* parent = 0 )
-    : K3bJob( parent ) {}
+  K3bBurnJob( QObject* parent = 0 );
 	
   virtual K3bDoc* doc() const { return 0; }
   virtual K3bDevice* writer() const { return 0; }
@@ -79,8 +78,33 @@ class K3bBurnJob : public K3bJob
   void bufferStatus( int );
 
  protected slots:
-  virtual void parseCdrdaoStdoutLine( const QString& line );
+  /**
+   * calls parseCdrdaoLine
+   * connect this to the cdrdao process
+   * joines lines splitted by KProcess
+   */
+  void parseCdrdaoOutput( KProcess*, char* line, int len );
+
+  /**
+   * only reimplement this if the default parsing does not fit.
+   * calls parseCdrdaoSpecialLine for every unparsed line
+   * calls createCdrdaoProgress
+   * calls startNewCdrdaoTrack
+   * calls parseCdrdaoError
+   */
+  virtual void parseCdrdaoLine( const QString& line );
+
+  /**
+   * this should be reimplemented if some special line parsing is required
+   */
+  virtual void parseCdrdaoSpecialLine( const QString& line );
+
+  virtual void parseCdrdaoError( const QString& line );
+
   virtual void createCdrdaoProgress( int made, int size );
   virtual void startNewCdrdaoTrack();
+
+ private:
+  QString m_notFinishedLine;
 };
 #endif

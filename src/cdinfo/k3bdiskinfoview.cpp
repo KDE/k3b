@@ -40,10 +40,10 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   infoLayout->setSpacing( KDialog::spacingHint() );
   infoLayout->setMargin( 0 );
 
-  m_labelSize             = new QLabel( m_infoWidget );
-  m_labelRemaining        = new QLabel( m_infoWidget );
-  m_labelMediumManufactor = new QLabel( m_infoWidget );
-  m_labelMediumType       = new QLabel( m_infoWidget );
+  m_labelSize             = new KCutLabel( m_infoWidget );
+  m_labelRemaining        = new KCutLabel( m_infoWidget );
+  m_labelMediumManufactor = new KCutLabel( m_infoWidget );
+  m_labelMediumType       = new KCutLabel( m_infoWidget );
   m_labelCdrw             = new QLabel( m_infoWidget );
   m_labelAppendable       = new QLabel( m_infoWidget );
   m_labelSessions         = new QLabel( m_infoWidget );
@@ -64,7 +64,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   infoLayout->addWidget( m_labelSessions, 2, 4 );
 
   infoLayout->addColSpacing( 2, 10 );
-  infoLayout->setColStretch( 5, 1 );
+  //  infoLayout->setColStretch( 5, 1 );
 
 
   m_isoInfoWidget = new QWidget( this );
@@ -73,22 +73,13 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   isoInfoLayout->setSpacing( KDialog::spacingHint() );
 
   // we use KCutLabels here since some of the values go up to 128 characters
-  // disabled because K3b hangs when text is set (probably some endless loop with resizing)
-//   m_labelIsoId            = new KCutLabel( m_isoInfoWidget );
-//   m_labelIsoSystemId      = new KCutLabel( m_isoInfoWidget );
-//   m_labelIsoVolumeId      = new KCutLabel( m_isoInfoWidget );
-//   m_labelIsoVolumeSetId   = new KCutLabel( m_isoInfoWidget );
-//   m_labelIsoPublisherId   = new KCutLabel( m_isoInfoWidget );
-//   m_labelIsoPreparerId    = new KCutLabel( m_isoInfoWidget );
-//   m_labelIsoApplicationId = new KCutLabel( m_isoInfoWidget );
-
-  m_labelIsoId            = new QLabel( m_isoInfoWidget );
-  m_labelIsoSystemId      = new QLabel( m_isoInfoWidget );
-  m_labelIsoVolumeId      = new QLabel( m_isoInfoWidget );
-  m_labelIsoVolumeSetId   = new QLabel( m_isoInfoWidget );
-  m_labelIsoPublisherId   = new QLabel( m_isoInfoWidget );
-  m_labelIsoPreparerId    = new QLabel( m_isoInfoWidget );
-  m_labelIsoApplicationId = new QLabel( m_isoInfoWidget );
+  m_labelIsoId            = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoSystemId      = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoVolumeId      = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoVolumeSetId   = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoPublisherId   = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoPreparerId    = new KCutLabel( m_isoInfoWidget );
+  m_labelIsoApplicationId = new KCutLabel( m_isoInfoWidget );
 
 
   isoInfoLayout->addWidget( new QLabel( i18n("Id:"), m_isoInfoWidget ), 0, 0 );
@@ -107,7 +98,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   isoInfoLayout->addWidget( m_labelIsoApplicationId, 2, 4 );
 
   isoInfoLayout->addColSpacing( 2, 10 );
-  isoInfoLayout->setColStretch( 5, 1 );
+  //  isoInfoLayout->setColStretch( 5, 1 );
 
   f = m_labelSize->font();
   f.setBold( true );

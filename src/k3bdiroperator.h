@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvddoc.cpp  -  description
+                          k3bdiroperator.h  -  description
                              -------------------
-    begin                : Sun Mar 31 2002
+    begin                : Sat Apr 20 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,30 +15,35 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "k3bdvddoc.h"
-#include "../k3bview.h"
-#include "k3bdvdview.h"
+#ifndef K3BDIROPERATOR_H
+#define K3BDIROPERATOR_H
 
-K3bDvdDoc::K3bDvdDoc( QObject *parent) : K3bDoc( parent ){
-}
+#include <kdiroperator.h>
 
-K3bDvdDoc::~K3bDvdDoc(){
-}
+class QIconViewItem;
+class QListViewItem;
 
-bool K3bDvdDoc::newDocument(){
-    return true;
-}
 
-K3bView* K3bDvdDoc::newView( QWidget* parent ){
-  return 0;
-}
-
-void K3bDvdDoc::addView(K3bView* view){
-    K3bDoc::addView( view );
-}
-
-void K3bDvdDoc::loadDefaultSettings()
+/**
+  *@author Sebastian Trueg
+  */
+class K3bDirOperator : public KDirOperator
 {
-}
+  Q_OBJECT
 
-#include "k3bdvddoc.moc"
+ public: 
+  K3bDirOperator( const KURL& urlName = KURL(), QWidget* parent = 0, const char* name = 0 );
+  ~K3bDirOperator();
+
+ signals:
+  void doubleClicked( KFileItem* item );
+
+ protected:
+  KFileView* createView( QWidget* parent, KFile::FileView view );
+
+ protected slots:
+  void slotIconViewItemDoubleClicked( QIconViewItem* );
+  void slotListViewItemDoubleClicked( QListViewItem* );
+};
+
+#endif

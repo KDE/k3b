@@ -122,6 +122,11 @@ class K3bMainWindow : public KDockMainWindow
   void initializationInfo( const QString& );
   void configChanged( KConfig* c );
 
+  /**
+   * if there is some config stuff to save connect to this signal
+   */
+  void saveConfig( KConfig* c );
+
  public slots:
   /** No descriptions */
   void slotErrorMessage(const QString&);

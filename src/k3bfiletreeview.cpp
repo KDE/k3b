@@ -56,7 +56,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 {
   addColumn( i18n("Directories") );
   setDragEnabled( true );
-  setAlternateBackground( QColor(-1,-1,-1) );
+  setAlternateBackground( QColor() );
   setFullWidth();
   setRootIsDecorated(true);
 

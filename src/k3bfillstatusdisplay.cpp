@@ -18,6 +18,7 @@
 #include "k3bfillstatusdisplay.h"
 #include "audio/k3baudiodoc.h"
 #include "tools/k3bglobals.h"
+#include "k3b.h"
 
 #include <qevent.h>
 #include <qpainter.h>
@@ -25,22 +26,44 @@
 #include <qrect.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
+#include <qvalidator.h>
 
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <klocale.h>
+#include <klineeditdlg.h>
+#include <kconfig.h>
 
-K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* _doc, QWidget *parent, const char *name )
+
+K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
   : QFrame(parent,name)
 {
-  // defaults to megabytes
-  m_showTime = false;
-
-  doc = _doc;
+  m_doc = doc;
+  k3bMain()->config()->setGroup( "General Options" );
+  m_cdSize = k3bMain()->config()->readNumEntry( "Default cd size", 74 );
 
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
   setFrameStyle( Panel | Sunken );
   setupPopupMenu();
+
+  // defaults to megabytes
+  m_showTime = false;
+  m_actionShowMegs->setChecked( true );
+
+  switch( m_cdSize ) {
+  case 74:
+    m_action74Min->setChecked( true );
+    break;
+  case 80:
+    m_action80Min->setChecked( true );
+    break;
+  case 100:
+    m_action100Min->setChecked( true );
+    break;
+  default:
+    m_actionCustomSize->setChecked( true );
+    break;
+  }
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()
@@ -51,12 +74,30 @@ K3bFillStatusDisplay::~K3bFillStatusDisplay()
 void K3bFillStatusDisplay::setupPopupMenu()
 {
   m_popup = new KPopupMenu( this, "popup" );
-  m_popup->insertTitle( i18n("Show size in...") );
-  m_showMinutes = new KAction( i18n("&Minutes"), "kmidi", 0, this, SLOT(showTime()), this );
-  m_showMegs = new KAction( i18n("&Megabytes"), "kwikdisk", 0, this, SLOT(showSize()), this );
-  
-  m_showMinutes->plug( m_popup );
-  m_showMegs->plug( m_popup );
+  m_actionShowMinutes = new KToggleAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()), this );
+  m_actionShowMegs = new KToggleAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()), this );
+
+  m_actionShowMegs->setExclusiveGroup( "show_size_in" );
+  m_actionShowMinutes->setExclusiveGroup( "show_size_in" );
+
+  m_action74Min = new KToggleAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()), this );
+  m_action80Min = new KToggleAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()), this );
+  m_action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), this );
+  m_actionCustomSize = new KToggleAction( i18n("custom..."), 0, this, SLOT(slotCustomSize()), this );
+
+  m_action74Min->setExclusiveGroup( "cd_size" );
+  m_action80Min->setExclusiveGroup( "cd_size" );
+  m_action100Min->setExclusiveGroup( "cd_size" );
+  m_actionCustomSize->setExclusiveGroup( "cd_size" );
+ 
+  m_popup->insertTitle( i18n("Show size in...") );  
+  m_actionShowMinutes->plug( m_popup );
+  m_actionShowMegs->plug( m_popup );
+  m_popup->insertTitle( i18n("CD size") );
+  m_action74Min->plug( m_popup );
+  m_action80Min->plug( m_popup );
+  m_action100Min->plug( m_popup );
+  m_actionCustomSize->plug( m_popup );
 }
 
 
@@ -71,119 +112,81 @@ void K3bFillStatusDisplay::drawContents( QPainter* p )
 {
   erase( contentsRect() );
 
-  if(m_showTime)
-    drawTime(p);
+  long docSize;
+  long cdSize;
+  long maxValue;
+  long tolerance;
+
+  if( m_showTime ) {
+    docSize = m_doc->length() / 75 / 60;
+    cdSize = m_cdSize;
+    maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
+    tolerance = 1;
+  }
+  else {
+    docSize = m_doc->size()/1024/1024;
+    cdSize = m_cdSize*60*75*2048/1024/1024;
+    maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
+    tolerance = 10;
+  }
+
+  // so split width() in maxValue pieces
+  double one = (double)contentsRect().width() / (double)maxValue;
+  QRect rect( contentsRect() );
+  rect.setWidth( (int)(one*(double)docSize) );
+	
+  p->fillRect( rect, Qt::green );
+
+  if( m_showTime )
+    p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, 
+		 " " + K3b::framesToString( m_doc->length(), false ) + " min" );
   else
-    drawSize(p);
-}
-
-void K3bFillStatusDisplay::drawSize(QPainter* p)
-{
-  // calculate MB
-  int value = doc->size()/1024/1024/10;
-
-  // the maximum is 800
-  // so split width() in 80 pieces!
-  double one = (double)contentsRect().width() / 90.0;
-  QRect rect( contentsRect() );
-  rect.setWidth( (int)(one*(double)value) );
+    p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, 
+		 QString().sprintf( " %.2f MB", ((float)m_doc->size())/1024.0/1024.0 ) );
 	
-  p->fillRect( rect, Qt::green );
-	
-  p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, 
-	       QString().sprintf( " %.2f MB", ((float)doc->size())/1024.0/1024.0 ) );
-	
-  // draw yellow if value > 650
-  if( value > 65 ) {
-    rect.setLeft( rect.left() + (int)(one*65.0) );
+  // draw yellow if m_cdSize - tolerance < docSize
+  if( docSize > cdSize - tolerance ) {
+    rect.setLeft( rect.left() + (int)(one * (cdSize - tolerance)) );
     p->fillRect( rect, Qt::yellow );
   }
 	
-  // draw red if value > 80
-  if( value > 70 ) {
-    rect.setLeft( rect.left() + (int)(one*5.0) );
+  // draw red if docSize > cdSize + tolerance
+  if( docSize > cdSize + tolerance ) {
+    rect.setLeft( rect.left() + (int)(one * tolerance*2) );
     p->fillRect( rect, Qt::red );
   }
 	
-  // now draw the 650, 700, and 800 marks
-  p->drawLine( contentsRect().left() + (int)(one*65.0), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*65.0), contentsRect().top() );
-  p->drawLine( contentsRect().left() + (int)(one*70.0), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*70.0), contentsRect().top() );
-  p->drawLine( contentsRect().left() + (int)(one*80.0), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*80.0), contentsRect().top() );
+
+  p->drawLine( contentsRect().left() + (int)(one*cdSize), contentsRect().bottom(), 
+	       contentsRect().left() + (int)(one*cdSize), contentsRect().top() );
 	
   // draw the text marks
   rect = contentsRect();
-  rect.setRight( (int)(one*65) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "650" );
-
-  rect = contentsRect();
-  rect.setRight( (int)(one*70) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "700" );
-
-  rect = contentsRect();
-  rect.setRight( (int)(one*80) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "800" );
-	
+  rect.setLeft( (int)(one*cdSize) );
+  p->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, " " + QString::number(cdSize) );
 }
 
-void K3bFillStatusDisplay::drawTime(QPainter* p)
-{
-  int value = doc->length() / 75 / 60;
-
-  // the maximum is 100
-  // so split width() in 100 pieces!
-  double one = (double)contentsRect().width() / 100.0;
-  QRect rect( contentsRect() );
-  rect.setWidth( (int)(one*(double)value) );
-	
-  p->fillRect( rect, Qt::green );
-	
-  p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, " " + K3b::framesToString( doc->length(), false ) + " min" );
-	
-  // draw yellow if value > 74
-  if( value > 74 ) {
-    rect.setLeft( rect.left() + (int)(one*74.0) );
-    p->fillRect( rect, Qt::yellow );
-  }
-	
-  // draw red if value > 80
-  if( value > 80 ) {
-    rect.setLeft( rect.left() + (int)(one*6.0) );
-    p->fillRect( rect, Qt::red );
-  }
-	
-  // now draw the 74, 80, and 99 marks
-  p->drawLine( contentsRect().left() + (int)(one*74.0), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*74.0), contentsRect().top() );
-  p->drawLine( contentsRect().left() + (int)(one*80.0), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*80.0), contentsRect().top() );
-  p->drawLine( contentsRect().left() + (int)(one*99.0), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*99.0), contentsRect().top() );
-	
-  // draw the text marks
-  rect = contentsRect();
-  rect.setRight( (int)(one*74) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "74" );
-
-  rect = contentsRect();
-  rect.setRight( (int)(one*80) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "80" );
-
-  rect = contentsRect();
-  rect.setRight( (int)(one*99) );
-  p->drawText( rect, Qt::AlignRight | Qt::AlignVCenter, "99" );
-}
 
 void K3bFillStatusDisplay::showSize()
 {
+  m_actionShowMegs->setChecked( true );
+
+  m_action74Min->setText( i18n("%1 MB").arg(650) );
+  m_action80Min->setText( i18n("%1 MB").arg(700) );
+  m_action100Min->setText( i18n("%1 MB").arg(880) );
+
   m_showTime = false;
   update();
 }
 	
 void K3bFillStatusDisplay::showTime()
 {
+  m_actionShowMinutes->setChecked( true );
+
+  m_action74Min->setText( i18n("%1 minutes").arg(74) );
+  m_action80Min->setText( i18n("%1 minutes").arg(80) );
+  m_action100Min->setText( i18n("%1 minutes").arg(100) );
+
   m_showTime = true;
   update();
 }
@@ -200,6 +203,39 @@ QSize K3bFillStatusDisplay::minimumSizeHint() const
   int margin = 2;
   QFontMetrics fm( font() );
   return QSize( -1, 2 * frameWidth() + fm.height() + 2 * margin );
+}
+
+
+void K3bFillStatusDisplay::slot74Minutes()
+{
+  m_cdSize = 74;
+  update();
+}
+
+
+void K3bFillStatusDisplay::slot80Minutes()
+{
+  m_cdSize = 80;
+  update();
+}
+
+
+void K3bFillStatusDisplay::slot100Minutes()
+{
+  m_cdSize = 100;
+  update();
+}
+
+
+void K3bFillStatusDisplay::slotCustomSize()
+{
+  bool ok;
+  QString size = KLineEditDlg::getText( i18n("Custom cd size"), i18n("Please specify the size of your CD in minutes:"), 
+					   "74", &ok, this, new QIntValidator( this ) );
+  if( ok ) {
+    m_cdSize = size.toInt();
+    update();
+  }
 }
 
 

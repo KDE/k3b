@@ -36,7 +36,7 @@
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, true, 
+  : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, false, 
 		 KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"), 
 			   i18n("Saves the settings to the project and closes the burn dialog.") ),
 		 KStdGuiItem::cancel() )
@@ -54,7 +54,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 
   QGridLayout* grid = new QGridLayout( box );
   grid->setSpacing( spacingHint() );
-  grid->setMargin( marginHint() );
+  grid->setMargin( 0 );
 
   m_buttonLoadDefaults = new QPushButton( i18n("Defaults"), box );
   m_buttonLoadUserDefaults = new QPushButton( i18n("User Defaults"), box );

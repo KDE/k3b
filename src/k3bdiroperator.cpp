@@ -1,0 +1,103 @@
+/***************************************************************************
+                          k3bdiroperator.cpp  -  description
+                             -------------------
+    begin                : Sat Apr 20 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "k3bdiroperator.h"
+#include "kdndfileview.h"
+
+#include <kcombiview.h>
+#include <kfilepreview.h>
+#include <kaction.h>
+
+
+K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* name )
+  : KDirOperator( url, parent, name )
+{
+  // add view-switching actions
+  KAction* detailedViewAction = actionCollection()->action("detailed view");
+  KAction* shortViewAction = actionCollection()->action("short view");
+
+  KActionMenu* viewMenu = (KActionMenu*)actionCollection()->action("view menu");
+  viewMenu->insert( detailedViewAction, 0 );
+  viewMenu->insert( shortViewAction, 1 );
+  viewMenu->insert( new KActionSeparator( actionCollection() ), 2 );
+}
+
+
+K3bDirOperator::~K3bDirOperator()
+{
+}
+
+
+KFileView* K3bDirOperator::createView( QWidget* parent, KFile::FileView view )
+{
+  KFileView* new_view = 0L;
+  bool separateDirs = KFile::isSeparateDirs( view );
+  bool preview=( (view & KFile::PreviewInfo) == KFile::PreviewInfo ||
+		 (view & KFile::PreviewContents) == KFile::PreviewContents );
+  
+  if( separateDirs ) {
+    KCombiView *combi = new KCombiView( parent, "combi view" );
+    combi->setOnlyDoubleClickSelectsFiles( onlyDoubleClickSelectsFiles() );
+    KFileView* v = 0L;
+    if ( (view & KFile::Simple) == KFile::Simple )
+      v = createView( combi, KFile::Simple );
+    else
+      v = createView( combi, KFile::Detail );
+    combi->setRight( v );
+    new_view = combi;
+  }
+  else if( (view & KFile::Detail) == KFile::Detail && !preview ) {
+    new_view = new KDndFileDetailView( parent, "detail view");
+    connect( (KDndFileDetailView*)new_view, SIGNAL(doubleClicked(QListViewItem*)), 
+	     this, SLOT(slotListViewItemDoubleClicked(QListViewItem*)) );
+  }
+  else if ((view & KFile::Simple) == KFile::Simple && !preview ) {
+    new_view = new KDndFileIconView( parent, "simple view");
+    new_view->setViewName( i18n("Short View") );
+    connect( (KDndFileIconView*)new_view, SIGNAL(doubleClicked(QIconViewItem*)), 
+	     this, SLOT(slotIconViewItemDoubleClicked(QIconViewItem*)) );
+  }
+  else { // preview
+    KFileView* v = 0L; // will get reparented by KFilePreview
+    if ( (view & KFile::Simple ) == KFile::Simple )
+      v = createView( 0L, KFile::Simple );
+    else
+      v = createView( 0L, KFile::Detail );
+    
+    KFilePreview* pView = new KFilePreview( v, parent, "preview" );
+    pView->setOnlyDoubleClickSelectsFiles( onlyDoubleClickSelectsFiles() );
+    new_view = pView;
+  }
+  
+  return new_view;
+}
+
+
+void K3bDirOperator::slotIconViewItemDoubleClicked( QIconViewItem* item )
+{
+  emit doubleClicked( ((KFileIconViewItem*)item)->fileInfo() );
+}
+
+
+void K3bDirOperator::slotListViewItemDoubleClicked( QListViewItem* item )
+{
+  emit doubleClicked( ((KFileListViewItem*)item)->fileInfo() );
+}
+
+
+#include "k3bdiroperator.moc"
+

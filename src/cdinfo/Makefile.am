@@ -1,9 +1,10 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-noinst_LIBRARIES = libcdinfo.a
 
 INCLUDES = $(all_includes)
 
 libcdinfo_a_METASOURCES = AUTO
+
+noinst_LIBRARIES = libcdinfo.a
 
 libcdinfo_a_SOURCES = k3bdiskinfoview.cpp k3bdiskinfodetector.cpp 
 

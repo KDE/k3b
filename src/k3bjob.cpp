@@ -18,6 +18,10 @@
 #include "k3bjob.h"
 
 #include <klocale.h>
+#include <kprocess.h>
+
+#include <qstringlist.h>
+
 
 K3bJob::K3bJob( QObject* parent )
   : QObject( parent )
@@ -29,8 +33,50 @@ K3bJob::~K3bJob()
 }
 
 
-void K3bBurnJob::parseCdrdaoStdoutLine( const QString& str )
+K3bBurnJob::K3bBurnJob( QObject* parent )
+  : K3bJob( parent )
 {
+}
+
+
+void K3bBurnJob::parseCdrdaoOutput( KProcess*, char* data, int len )
+{
+  QString buffer = QString::fromLatin1( data, len );
+  QStringList lines = QStringList::split( "\n", buffer );
+
+  if( !m_notFinishedLine.isEmpty() ) {
+    qDebug("(K3bBurnJob) joining line: " + m_notFinishedLine + lines.front());
+
+    lines.first().prepend( m_notFinishedLine );
+    m_notFinishedLine = "";
+  }
+
+  QStringList::iterator it;
+
+  // check if line ends with a newline
+  // if not save the last line because it is not finished
+  bool notFinishedLine = ( buffer.right(1) != "\n" && buffer.right(1) != "\r" );
+  if( notFinishedLine ) {
+    qDebug("(K3bBurnJob) found unfinished line: " + lines.last());
+    m_notFinishedLine = lines.last();
+    it = lines.end();
+    --it;
+    lines.remove( it );
+  }
+  
+  for( it = lines.begin(); it != lines.end(); ++it ) {
+    QString& str = *it;
+    if( str[0] == '\r' )
+      str = str.mid( 1 );
+    parseCdrdaoLine( str );
+  }
+}
+
+
+void K3bBurnJob::parseCdrdaoLine( const QString& str )
+{
+  emit debuggingOutput( "cdrdao", str );
+
   // find some messages from cdrdao
   // -----------------------------------------------------------------------------------------
   if( (str).startsWith( "Warning" ) || (str).startsWith( "ERROR" ) ) {
@@ -43,7 +89,7 @@ void K3bBurnJob::parseCdrdaoStdoutLine( const QString& str )
       // no nothing...
     }
     else
-      emit infoMessage( str, K3bJob::ERROR );
+      parseCdrdaoError( str );
   }
   else if( (str).startsWith( "Executing power" ) ) {
     emit newSubTask( i18n("Executing Power calibration") );
@@ -61,7 +107,12 @@ void K3bBurnJob::parseCdrdaoStdoutLine( const QString& str )
   else if( (str).startsWith( "Turning BURN-Proof on" ) ) {
     emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
   }
-
+  else if( str.contains( "at speed" ) ) {
+    // parse speed
+    // compare it to writer()->currentSpeed()
+    // if different -> emit infoMessage that requested speed could not be set
+    qDebug("(K3bBurnJob) ------ SPEED -------");
+  }
   else if( (str).contains( "Writing track" ) ) {
     // a new track has been started
     // let the derived classes do whatever they want...
@@ -108,15 +159,28 @@ void K3bBurnJob::parseCdrdaoStdoutLine( const QString& str )
     // let the derived classes do whatever they want...
     createCdrdaoProgress( made, size );
   }
+
   else {
-    qDebug( str );
+    parseCdrdaoSpecialLine( str );
   }
+}
+
+
+void K3bBurnJob::parseCdrdaoSpecialLine( const QString& str )
+{
+  qDebug("(cdrdao) " + str );
+}
+
+
+void K3bBurnJob::parseCdrdaoError( const QString& line )
+{
+  emit infoMessage( line, K3bJob::ERROR );
 }
 
 
 void K3bBurnJob::createCdrdaoProgress( int made, int size )
 {
-  emit percent( made/size );
+  emit percent( 100*made/size );
 }
 
 void K3bBurnJob::startNewCdrdaoTrack()

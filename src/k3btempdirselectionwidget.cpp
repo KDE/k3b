@@ -24,70 +24,43 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qtimer.h>
+#include <qhbox.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdialog.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 #include "kdiskfreesp.h"
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name ) 
-  : QWidget( parent, name )
+  : QGroupBox( 4, Qt::Vertical, i18n( "Temp directory" ), parent, name )
 {
-  QVBoxLayout* mainLayout = new QVBoxLayout( this );
-  mainLayout->setMargin( 0 );
-  mainLayout->setAutoAdd( true );
+  layout()->setSpacing( KDialog::spacingHint() );
+  layout()->setMargin( KDialog::marginHint() );
 
-  // setup temp dir selection
-  // -----------------------------------------------
-  m_groupTempDir = new QGroupBox( this, "m_groupTempDir" );
-  m_groupTempDir->setFrameShape( QGroupBox::Box );
-  m_groupTempDir->setFrameShadow( QGroupBox::Sunken );
-  m_groupTempDir->setTitle( i18n( "Temp directory" ) );
-  m_groupTempDir->setColumnLayout(0, Qt::Vertical );
-  m_groupTempDir->layout()->setSpacing( 0 );
-  m_groupTempDir->layout()->setMargin( 0 );
-  QGridLayout* m_groupTempDirLayout = new QGridLayout( m_groupTempDir->layout() );
-  m_groupTempDirLayout->setAlignment( Qt::AlignTop );
-  m_groupTempDirLayout->setSpacing( KDialog::spacingHint() );
-  m_groupTempDirLayout->setMargin( KDialog::marginHint() );
+  QLabel* TextLabel1_3 = new QLabel( i18n( "Write Image file to" ), this, "TextLabel1_3" );
 
-  QLabel* TextLabel1_3 = new QLabel( m_groupTempDir, "TextLabel1_3" );
-  TextLabel1_3->setText( i18n( "Write Image file to" ) );
+  QHBox* urlRequesterBox = new QHBox( this );
+  urlRequesterBox->setSpacing( KDialog::spacingHint() );
+  m_editDirectory = new QLineEdit( urlRequesterBox, "m_editDirectory" );
+  m_buttonFindIsoImage = new QToolButton( urlRequesterBox, "m_buttonFindDir" );
+  m_buttonFindIsoImage->setIconSet( SmallIconSet( "fileopen" ) );
 
-  m_groupTempDirLayout->addWidget( TextLabel1_3, 0, 0 );
-
-  QLabel* TextLabel2 = new QLabel( i18n( "Free space in temp directory" ), m_groupTempDir, "TextLabel2" );
-
-  m_groupTempDirLayout->addWidget( TextLabel2, 2, 0 );
-
-  QLabel* TextLabel4 = new QLabel( m_groupTempDir, "TextLabel4" );
-  TextLabel4->setText( i18n( "Size of CD" ) );
-
-  m_groupTempDirLayout->addWidget( TextLabel4, 3, 0 );
-
-  m_labelCdSize = new QLabel( m_groupTempDir, "m_labelCdSize" );
-  m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-
-  m_groupTempDirLayout->addMultiCellWidget( m_labelCdSize, 3, 3, 1, 2 );
-
-  m_labelFreeSpace = new QLabel( m_groupTempDir, "m_labelFreeSpace" );
+  QHBox* freeTempSpaceBox = new QHBox( this );
+  freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
+  QLabel* TextLabel2 = new QLabel( i18n( "Free space in temp directory" ), freeTempSpaceBox, "TextLabel2" );
+  m_labelFreeSpace = new QLabel( freeTempSpaceBox, "m_labelFreeSpace" );
   m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  m_groupTempDirLayout->addMultiCellWidget( m_labelFreeSpace, 2, 2, 1, 2 );
+  QHBox* cdSizeBox = new QHBox( this );
+  cdSizeBox->setSpacing( KDialog::spacingHint() );
+  QLabel* TextLabel4 = new QLabel( i18n( "Size of CD" ), cdSizeBox, "TextLabel4" );
+  m_labelCdSize = new QLabel( cdSizeBox, "m_labelCdSize" );
+  m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  m_editDirectory = new QLineEdit( m_groupTempDir, "m_editDirectory" );
-
-  m_groupTempDirLayout->addMultiCellWidget( m_editDirectory, 1, 1, 0, 1 );
-
-  m_buttonFindIsoImage = new QToolButton( m_groupTempDir, "m_buttonFindDir" );
-  m_buttonFindIsoImage->setText( i18n( "..." ) );
-
-  m_groupTempDirLayout->addWidget( m_buttonFindIsoImage, 1, 2 );
-
-  m_groupTempDirLayout->setColStretch( 1, 1 );
 
   m_freeTempSpaceTimer = new QTimer( this );
 
@@ -181,9 +154,9 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
   m_mode = mode;
 
   if( m_mode == DIR )
-    m_groupTempDir->setTitle( i18n("Temp directory") );
+    setTitle( i18n("Temp directory") );
   else
-    m_groupTempDir->setTitle( i18n("Temp file") );
+    setTitle( i18n("Temp file") );
 }
 
 

@@ -29,7 +29,7 @@
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   : KDialogBase( parent, name, true, i18n("Blanking CD-RW"), /*Help|*/User2|User1, User1, 
-		 true, KGuiItem( i18n("Blank"), "blank", i18n("Start blanking") ), KStdGuiItem::close() )
+		 false, KGuiItem( i18n("Blank"), "blank", i18n("Start blanking") ), KStdGuiItem::close() )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
@@ -118,7 +118,7 @@ void K3bBlankingDialog::setupGui()
 
   QGridLayout* grid = new QGridLayout( frame );
   grid->setSpacing( spacingHint() );
-  grid->setMargin( marginHint() );
+  grid->setMargin( 0 );
 
   grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
   grid->addWidget( m_groupBlankType, 1, 0 );

@@ -181,6 +181,11 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 	qDebug("(K3bDiskInfoDetector) unusable cdrdao output: " + str );
       }
     }
+
+    if( m_info.empty ) {
+      m_info.remaining = m_info.size;
+      m_info.remainingString = m_info.sizeString;
+    }
   }
 
   testForDvd();

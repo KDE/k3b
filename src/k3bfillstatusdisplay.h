@@ -23,7 +23,7 @@
 class QPainter;
 class QMouseEvent;
 class K3bDoc;
-class KAction;
+class KToggleAction;
 class KPopupMenu;
 
 
@@ -49,16 +49,26 @@ class K3bFillStatusDisplay : public QFrame  {
  protected:
   void mousePressEvent( QMouseEvent* );
   void drawContents(QPainter*);
-  void drawSize(QPainter*);
-  void drawTime(QPainter*);
   void setupPopupMenu();
-	
- private:
-  bool m_showTime;
-  K3bDoc* doc;
 
-  KAction* m_showMinutes;
-  KAction* m_showMegs;
+ private slots:
+  void slot74Minutes();
+  void slot80Minutes();
+  void slot100Minutes();
+  void slotCustomSize();
+
+ private:
+  long m_cdSize;
+  bool m_showTime;
+  K3bDoc* m_doc;
+
+  KToggleAction* m_actionShowMinutes;
+  KToggleAction* m_actionShowMegs;
+  KToggleAction* m_action74Min;
+  KToggleAction* m_action80Min;
+  KToggleAction* m_action100Min;
+  KToggleAction* m_actionCustomSize;
+
   KPopupMenu* m_popup;
 };
 

@@ -19,6 +19,7 @@
 #include "k3b.h"
 #include "k3baudioplayer.h"
 #include "k3bdoc.h"
+#include "k3bdiroperator.h"
 
 #include <qwidget.h>
 #include <qdragobject.h>
@@ -30,7 +31,6 @@
 #include <kfiledetailview.h>
 #include <klistview.h>
 #include <kaction.h>
-#include <kdiroperator.h>
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
 #include <kurl.h>
@@ -42,35 +42,12 @@
 
 
 
-K3bFileView::PrivateFileView::PrivateFileView( QWidget* parent, const char* name )
-  : KFileDetailView( parent, name )
-{
-  setDragEnabled( true );
-}
-
-	
-QDragObject* K3bFileView::PrivateFileView::dragObject()
-{
-  if( !currentItem() )
-    return 0;
-	
-  const KFileItemList* list = KFileView::selectedItems();
-  QListIterator<KFileItem> it(*list);
-  KURL::List urls;
-	
-  for( ; it.current(); ++it )
-    urls.append( it.current()->url() );
-
-  return KURLDrag::newDrag( urls, viewport() );
-}
-
-
-
-
 K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
   : K3bCdContentsView(parent,name) 
 {
   setupGUI();
+
+  connect( k3bMain(), SIGNAL(saveConfig(KConfig*)), this, SLOT(saveConfig(KConfig*)) );
 }
 
 
@@ -90,13 +67,12 @@ void K3bFileView::setupGUI()
   QVBoxLayout* layout = new QVBoxLayout( this );
   layout->setAutoAdd( true );
 
-  m_dirOp           = new KDirOperator( QDir::home().absPath(), this );
-  KToolBar* toolBar = new KToolBar( this, "fileviewtoolbar" );
+  m_dirOp           = new K3bDirOperator( QDir::home().absPath(), this );
 
-  // PrivateFileView just adds d'n'd support (can hopefully be replaced with default detailView in KDE3)
-  PrivateFileView* fileView = new PrivateFileView( m_dirOp, "fileview" );
-  m_dirOp->setView( fileView );
-  fileView->setSelectionMode( KFile::Extended );
+  m_dirOp->readConfig( k3bMain()->config(), "file view" );
+  m_dirOp->setView( KFile::Default );
+
+  KToolBar* toolBar = new KToolBar( this, "fileviewtoolbar" );
 
   KAction* actionPlay = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
 				     m_dirOp->actionCollection(), "audio_file_play");
@@ -117,14 +93,6 @@ void K3bFileView::setupGUI()
   dirOpMenu->insert( actionEnqueue, 3 );
   dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 4 );
 
-  // this has to be disabled since the user must NEVER change the fileview because
-  // that would disable the dragging support! (hopefully obsolete in KDE3)
-  m_dirOp->actionCollection()->action("short view")->setEnabled( false );
-  m_dirOp->actionCollection()->action("detailed view")->setEnabled( false );
-  m_dirOp->actionCollection()->action("separate dirs")->setEnabled( false );
-  m_dirOp->actionCollection()->action("preview")->setEnabled( false );
-  m_dirOp->actionCollection()->action("single")->setEnabled( false );
-
   // check if some actions should be enabled
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
@@ -144,6 +112,7 @@ void K3bFileView::setupGUI()
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
   connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
+  connect( m_dirOp, SIGNAL(doubleClicked(KFileItem*)), this, SLOT(slotAddFilesToProject()) );
 
   actionPlay->setEnabled( false );
 }
@@ -252,6 +221,12 @@ void K3bFileView::slotCheckActions()
 void K3bFileView::reload()
 {
   m_dirOp->actionCollection()->action("reload")->activate();
+}
+
+
+void K3bFileView::saveConfig( KConfig* c )
+{
+  m_dirOp->writeConfig( k3bMain()->config(), "file view" );
 }
 
 

@@ -21,7 +21,6 @@
 
 #include "k3bcdcontentsview.h"
 
-#include <kfiledetailview.h>
 
 class KDirOperator;
 class QDragObject;
@@ -29,7 +28,7 @@ class KURL;
 class KFileFilterCombo;
 class KFileItem;
 class KActionCollection;
-
+class KConfig;
 
 
 /**
@@ -67,18 +66,7 @@ class K3bFileView : public K3bCdContentsView
   void slotFilterChanged();
   void slotFileHighlighted( const KFileItem* item );
   void slotCheckActions();
-};
-
-
-class K3bFileView::PrivateFileView : public KFileDetailView
-{
-  Q_OBJECT
-
- public:
-  PrivateFileView( QWidget* parent, const char* name );
-
- protected:
-  QDragObject* dragObject();
+  void saveConfig( KConfig* c );
 };
 
 

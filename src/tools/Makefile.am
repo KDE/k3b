@@ -1,9 +1,10 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-noinst_LIBRARIES = libtools.a
 
 INCLUDES = $(all_includes)
 
 libtools_a_METASOURCES = AUTO
+
+noinst_LIBRARIES = libtools.a
 
 libtools_a_SOURCES = k3bglobals.cpp k3bwavefilewriter.cpp k3bexternalbinmanager.cpp 
 

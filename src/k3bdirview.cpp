@@ -145,6 +145,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
 K3bDirView::~K3bDirView()
 {
+  qDebug("(K3bDirView) deleted........");
 }
 
 void K3bDirView::setupFinalize( K3bDeviceManager *dm )

@@ -58,6 +58,7 @@ class K3bWriterSelectionWidget : public QWidget
   void slotRefreshWriterSpeeds();
   void slotWritingAppSelected( int id );
   void slotConfigChanged( KConfig* c );
+  void slotSpeedChanged( int index );
 
  private:
   QComboBox* m_comboSpeed;

@@ -18,11 +18,10 @@
 #ifndef K3BTEMPDIRSELECTIONWIDGET_H
 #define K3BTEMPDIRSELECTIONWIDGET_H
 
-#include <qwidget.h>
+#include <qgroupbox.h>
 
 class QTimer;
 class QLabel;
-class QGroupBox;
 class QLineEdit;
 class QToolButton;
 
@@ -30,7 +29,7 @@ class QToolButton;
 /**
   *@author Sebastian Trueg
   */
-class K3bTempDirSelectionWidget : public QWidget
+class K3bTempDirSelectionWidget : public QGroupBox
 {
   Q_OBJECT
 
@@ -55,7 +54,6 @@ class K3bTempDirSelectionWidget : public QWidget
   void slotTempDirButtonPressed();
 
  private:
-  QGroupBox* m_groupTempDir;
   QLabel* m_labelCdSize;
   QLabel* m_labelFreeSpace;
   QLineEdit* m_editDirectory;

@@ -75,6 +75,11 @@ QString KCutLabel::cutToWidth( const QString& fullText, int cutWidth )
     return fullText;
   }
 
+  if( fm.width(fullText.right(1) + "..." ) > cutWidth ) {
+    qDebug("(KCutLabel) not able to cut text to %i!", cutWidth );
+    return fullText.right(1) + "...";
+  }
+
   // estimate how many letters we can add to the dots
   int letters = fullText.length() * (cutWidth - squeezedWidth) / textWidth;
   squeezedText = fullText.left(letters) + "...";
