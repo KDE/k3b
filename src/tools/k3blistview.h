@@ -36,6 +36,7 @@ class QSpinBox;
 class QLineEdit;
 class QFocusEvent;
 class QValidator;
+class K3bMsfEdit;
 
 class K3bListView;
 
@@ -81,7 +82,7 @@ class K3bListViewItem : public KListViewItem
   bool needButton( int col ) const;
   const QStringList& comboStrings( int col ) const;
 
-  enum EditorType { NONE, COMBO, LINE, SPIN };
+  enum EditorType { NONE, COMBO, LINE, SPIN, MSF };
 
  private:
   class ColumnInfo;
@@ -121,6 +122,7 @@ class K3bListView : public KListView
   virtual void slotEditorLineEditReturnPressed();
   virtual void slotEditorComboBoxActivated( const QString& );
   virtual void slotEditorSpinBoxValueChanged( int );
+  virtual void slotEditorMsfEditValueChanged( int );
   virtual void slotEditorButtonClicked();
 
  protected slots:
@@ -172,6 +174,7 @@ class K3bListView : public KListView
   QComboBox* m_editorComboBox;
   QSpinBox* m_editorSpinBox;
   QLineEdit* m_editorLineEdit;
+  K3bMsfEdit* m_editorMsfEdit;
 
   // TODO: think about a more universal solution!
   QValidator* m_validator;

@@ -21,6 +21,8 @@ A KlistView with feature to display text and pixmap if no item is in the view.
 
 #include "k3blistview.h"
 
+#include "k3bmsfedit.h"
+
 #include <qstringlist.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
@@ -226,6 +228,7 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
   m_editorComboBox = 0;
   m_editorSpinBox = 0;
   m_editorLineEdit = 0;
+  m_editorMsfEdit = 0;
   m_currentEditItem = 0;
   m_currentEditColumn = 0;
   m_doubleClickForEdit = true;
@@ -235,10 +238,12 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
 
 K3bListView::~K3bListView()
 {
+  // FIXME: is this really necessary or does viewport() delete them?
   delete m_editorButton;
   delete m_editorComboBox;
   delete m_editorSpinBox;
   delete m_editorLineEdit;
+  delete m_editorMsfEdit;
 }
 
 void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
@@ -264,6 +269,8 @@ void K3bListView::hideEditor()
     m_editorComboBox->hide();
   if( m_editorButton )
     m_editorButton->hide();
+  if( m_editorMsfEdit )
+    m_editorMsfEdit->hide();
 }
 
 void K3bListView::showEditor( K3bListViewItem* item, int col )
@@ -289,6 +296,10 @@ void K3bListView::showEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::SPIN:
     m_editorSpinBox->show();
     m_editorSpinBox->setFocus();
+    break;
+  case K3bListViewItem::MSF:
+    m_editorMsfEdit->show();
+    m_editorMsfEdit->setFocus();
     break;
   default:
     break;
@@ -327,6 +338,7 @@ void K3bListView::placeEditor( K3bListViewItem* item, int col )
 
   if( QWidget* editor = prepareEditor( item, col ) ) {
     editor->resize( r.size() );
+    //    editor->resize( QSize( r.width(), editor->minimumSizeHint().height() ) );
     moveChild( editor, r.x(), r.y() );
   }
 }
@@ -391,6 +403,17 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
     // set the range
     m_editorSpinBox->setValue( item->text(col).toInt() );
     return m_editorSpinBox;
+
+  case K3bListViewItem::MSF:
+    if( !m_editorMsfEdit ) {
+      m_editorMsfEdit = new K3bMsfEdit( viewport() );
+//       m_editorMsfEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
+//       m_editorMsfEdit->setLineWidth(1);
+      connect( m_editorMsfEdit, SIGNAL(valueChanged(int)),
+	       this, SLOT(slotEditorMsfEditValueChanged(int)) );
+    }
+    m_editorMsfEdit->setText( item->text(col) );
+    return m_editorMsfEdit;
 
   default:
     return 0;
@@ -515,6 +538,15 @@ void K3bListView::slotEditorSpinBoxValueChanged( int value )
     m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
   else
     m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
+}
+
+
+void K3bListView::slotEditorMsfEditValueChanged( int value )
+{
+  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) )
+    m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
+  else
+    m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
 }
 
 
