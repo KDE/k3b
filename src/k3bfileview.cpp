@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -72,10 +72,10 @@ void K3bFileView::setupGUI()
   m_dirOp->setMode( KFile::Files );
   m_dirOp->setView( KFile::Default );
 
-  K3bToolBox* toolBox = new K3bToolBox( this );
+  m_toolBox = new K3bToolBox( this );
 
   layout->addWidget( m_dirOp );
-  layout->addWidget( toolBox );
+  layout->addWidget( m_toolBox );
   layout->setStretchFactor( m_dirOp, 1 );
 
 
@@ -94,13 +94,13 @@ void K3bFileView::setupGUI()
   KAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
 
-  toolBox->addButton( actionUp );
-  toolBox->addButton( actionBack );
-  toolBox->addButton( actionHome );
-  toolBox->addButton( actionReload );
-  toolBox->addSpacing();
-  toolBox->addButton( actionPlay );
-  toolBox->addSpacing();
+  m_toolBox->addButton( actionUp );
+  m_toolBox->addButton( actionBack );
+  m_toolBox->addButton( actionHome );
+  m_toolBox->addButton( actionReload );
+  m_toolBox->addSpacing();
+  m_toolBox->addButton( actionPlay );
+  m_toolBox->addSpacing();
 
 
   // insert actions into diroperator menu
@@ -115,9 +115,9 @@ void K3bFileView::setupGUI()
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
-  toolBox->addLabel( i18n("Filter:") );
-  m_filterWidget = new KFileFilterCombo( toolBox, "filterwidget" );
-  toolBox->addWidget( m_filterWidget );
+  m_toolBox->addLabel( i18n("Filter:") );
+  m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
+  m_toolBox->addWidget( m_filterWidget );
 
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All files");

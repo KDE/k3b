@@ -61,11 +61,16 @@ int main(int argc, char *argv[]) {
     aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
     aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
     aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@k3b.org");
-    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Cdrdao handling and cd-copy"), "kd@k3b.org" );
+    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer "), "kd@k3b.org" );
 
-    aboutData.addCredit("Ayo", I18N_NOOP("For his bombastic artwork."), "73lab@free.fr" );
-    aboutData.addCredit("Crissi", I18N_NOOP("For extensive testing and the first German translation."), "crissi99@gmx.de");
-    aboutData.addCredit("Joerg Schilling", I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
+    aboutData.addCredit("Ayo", 
+			I18N_NOOP("For his bombastic artwork."), 
+			"73lab@free.fr" );
+    aboutData.addCredit("Crissi", 
+			I18N_NOOP("For extensive testing and the first German translation."), 
+			"crissi99@gmx.de");
+    aboutData.addCredit("Joerg Schilling", 
+			I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
 
 
     KCmdLineArgs::init( argc, argv, &aboutData );
@@ -82,14 +87,16 @@ int main(int argc, char *argv[]) {
     //     {
     
     if( !QFile::exists( K3b::globalConfig() ) ) {
-      if( KMessageBox::warningYesNo( 0, i18n("It appears that you have not run K3bSetup yet. It is recommended to do so. "
+      if( KMessageBox::warningYesNo( 0, i18n("It appears that you have not run K3bSetup yet. "
+					     "It is recommended to do so. "
 					     "Should K3bSetup be started?"),
 				     i18n("K3b Setup"), KStdGuiItem::yes(), KStdGuiItem::no(),
 				     i18n("Don't prompt me again.") ) == KMessageBox::Yes ) {
 	KProcess p;
 	p << "kdesu" << "k3bsetup --lang " + KGlobal::locale()->language();
 	if( !p.start( KProcess::DontCare ) )
-	  KMessageBox::error( 0, i18n("Could not find kdesu to run K3bSetup with root privileges. Please run it manually as root.") );
+	  KMessageBox::error( 0, i18n("Could not find kdesu to run K3bSetup with root privileges. "
+				      "Please run it manually as root.") );
 	exit(0);
       }
     }
@@ -109,14 +116,8 @@ int main(int argc, char *argv[]) {
     // this will init the devicemanager and stuff
     app.init();
 
-    if( splash )
-      splash->addInfo( i18n("Setting up GUI...") );
-
     K3bMainWindow *k3bMainWidget = new K3bMainWindow();
     app.setMainWidget( k3bMainWidget );
-
-    if( splash )
-      splash->addInfo( i18n("Ready.") );
 
     k3bMainWidget->show();
 

@@ -91,8 +91,11 @@ protected:
 
 
 
-K3bDirView::K3bDirView(QWidget *parent, const char *name )
-  : QVBox(parent, name), m_bViewDiskInfo(false), m_lastDevice(0)
+K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
+  : QVBox(parent, name), 
+    m_bViewDiskInfo(false), 
+    m_fileTreeView(treeView),
+    m_lastDevice(0)
 {
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bCdDevice::DiskInfo&)),
@@ -102,11 +105,19 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
   //  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
 
-  m_mainSplitter = new QSplitter( this );
-  m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
+
+  if( !m_fileTreeView ) {
+    m_mainSplitter = new QSplitter( this );
+    m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
+    m_viewStack    = new QWidgetStack( m_mainSplitter );
+  }
+  else {  
+    m_viewStack    = new QWidgetStack( this );
+    m_mainSplitter = 0;
+  }
+
   m_fileTreeView->header()->hide();
 
-  m_viewStack    = new QWidgetStack( m_mainSplitter );
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bCdView(m_viewStack, "cdview");
   m_movieView    = new K3bMovieView(m_viewStack, "movieview");
@@ -118,12 +129,14 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
   m_fileTreeView->addDefaultBranches();
 
-  // split
-  QValueList<int> sizes = m_mainSplitter->sizes();
-  int all = sizes[0] + sizes[1];
-  sizes[1] = all*2/3;
-  sizes[0] = all - sizes[1];
-  m_mainSplitter->setSizes( sizes );
+  if( m_mainSplitter ) {
+    // split
+    QValueList<int> sizes = m_mainSplitter->sizes();
+    int all = sizes[0] + sizes[1];
+    sizes[1] = all*2/3;
+    sizes[0] = all - sizes[1];
+    m_mainSplitter->setSizes( sizes );
+  }
 
 
   m_actionCollection = new KActionCollection( this );

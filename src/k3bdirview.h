@@ -52,7 +52,7 @@ class K3bDirView : public QVBox
   Q_OBJECT
 
  public:
-  K3bDirView(QWidget *parent=0, const char *name=0);
+  K3bDirView(K3bFileTreeView* tree, QWidget *parent=0, const char *name=0);
   ~K3bDirView();
 
   void setupFinalize( K3bDeviceManager *dm );

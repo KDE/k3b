@@ -81,6 +81,7 @@
 #include "tools/k3bbusywidget.h"
 #include "k3bstatusbarmanager.h"
 #include "k3bfiletreecombobox.h"
+#include "k3bfiletreeview.h"
 
 
 
@@ -153,7 +154,7 @@ K3bMainWindow::~K3bMainWindow()
   delete pDocList;
   delete mainDock;
   delete m_audioPlayerDock;
-  delete dirDock;
+  delete m_contentsDock;
 }
 
 
@@ -204,8 +205,11 @@ void K3bMainWindow::initActions()
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
 				       actionCollection(), "project_add_files");
 
-  actionViewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()),
-				  actionCollection(), "view_dir");
+  actionViewDirTreeView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirTreeView()),
+					    actionCollection(), "view_dir_tree");
+
+  actionViewContentsView = new KToggleAction(i18n("Show Contents"), 0, this, SLOT(slotShowContentsView()),
+					     actionCollection(), "view_contents");
 
   actionViewProjectView = new KToggleAction(i18n("Show Project View"), 0, this, SLOT(slotShowProjectView()),
 					    actionCollection(), "view_show_project_view");
@@ -355,16 +359,24 @@ void K3bMainWindow::initView()
 
 
   // --- Directory Dock --------------------------------------------------------------------------
-  dirDock = createDockWidget( "directory_tree", SmallIcon("idea"), 0,
-			      kapp->makeStdCaption( i18n("Dir View") ), i18n("Dir View") );
-  m_dirView = new K3bDirView( dirDock );
-  m_dirView->setupFinalize( K3bDeviceManager::self() );
-  dirDock->setWidget( m_dirView );
-  //  dirDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
-  dirDock->manualDock( mainDock, KDockWidget::DockTop, 3000 );
+  m_dirTreeDock = createDockWidget( "directory_tree", SmallIcon("folder"), 0,
+				    kapp->makeStdCaption( i18n("Directory Tree") ), i18n("Directory Tree") );
+  K3bFileTreeView* m_fileTreeView = new K3bFileTreeView( m_dirTreeDock );
+  m_dirTreeDock->setWidget( m_fileTreeView );
+  m_dirTreeDock->manualDock( mainDock, KDockWidget::DockTop, 4000 );
+  connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
+  connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
 
-  connect( dirDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirDockHidden()) );
-  connect( dirDock, SIGNAL(hasUndocked()), this, SLOT(slotDirDockHidden()) );
+  m_contentsDock = createDockWidget( "contents_view", SmallIcon("idea"), 0,
+			      kapp->makeStdCaption( i18n("Contents View") ), i18n("Contents View") );
+  m_dirView = new K3bDirView( m_fileTreeView, m_contentsDock );
+  m_dirView->setupFinalize( K3bDeviceManager::self() );
+  m_contentsDock->setWidget( m_dirView );
+  //  m_contentsDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
+  m_contentsDock->manualDock( m_dirTreeDock, KDockWidget::DockRight, 2000 );
+
+  connect( m_contentsDock, SIGNAL(iMBeingClosed()), this, SLOT(slotContentsDockHidden()) );
+  connect( m_contentsDock, SIGNAL(hasUndocked()), this, SLOT(slotContentsDockHidden()) );
   // ---------------------------------------------------------------------------------------------
 
 
@@ -374,7 +386,7 @@ void K3bMainWindow::initView()
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
   //  m_audioPlayerDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
-  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockRight, 3000 );
+  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockRight, 8000 );
 
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
@@ -397,6 +409,8 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   actionProjectAddFiles->setEnabled( true );
 
   slotCurrentDocChanged( m_documentTab->currentPage() );
+
+  setProjectsHidable( false );
 }
 
 
@@ -564,6 +578,8 @@ bool K3bMainWindow::eventFilter(QObject* object, QEvent* event)
 	  return true;
 	}
 
+	if( !activeDoc() )
+	  setProjectsHidable(true);
       }
     }
 
@@ -1050,9 +1066,16 @@ void K3bMainWindow::slotViewAudioPlayer()
 }
 
 
-void K3bMainWindow::slotShowDirView()
+void K3bMainWindow::slotShowDirTreeView()
 {
-  dirDock->changeHideShowState();
+  m_dirTreeDock->changeHideShowState();
+  slotCheckDockWidgetStatus();
+}
+
+
+void K3bMainWindow::slotShowContentsView()
+{
+  m_contentsDock->changeHideShowState();
   slotCheckDockWidgetStatus();
 }
 
@@ -1070,9 +1093,15 @@ void K3bMainWindow::slotAudioPlayerHidden()
 }
 
 
-void K3bMainWindow::slotDirDockHidden()
+void K3bMainWindow::slotDirTreeDockHidden()
 {
-  actionViewDirView->setChecked( false );
+  actionViewDirTreeView->setChecked( false );
+}
+
+
+void K3bMainWindow::slotContentsDockHidden()
+{
+  actionViewContentsView->setChecked( false );
 }
 
 
@@ -1085,8 +1114,9 @@ void K3bMainWindow::slotProjectDockHidden()
 void K3bMainWindow::slotCheckDockWidgetStatus()
 {
   actionViewAudioPlayer->setChecked( m_audioPlayerDock->isVisible() );
-  actionViewDirView->setChecked( dirDock->isVisible() );
+  actionViewContentsView->setChecked( m_contentsDock->isVisible() );
   actionViewProjectView->setChecked( mainDock->isVisible() );
+  actionViewDirTreeView->setChecked( m_dirTreeDock->isVisible() );
 }
 
 
@@ -1142,5 +1172,19 @@ void K3bMainWindow::slotEditBootImages()
   }
 }
 
+
+void K3bMainWindow::setProjectsHidable( bool hidable )
+{
+  if( hidable ) {
+  }
+  else {
+    // TODO: somehow we need to disable the little close button in the dockheader
+    //       QDockWindow allows this...
+
+    if( !mainDock->isVisible() )
+      slotShowProjectView();
+  }
+  //  actionViewProjectView->setEnabled( hidable );
+}
 
 #include "k3b.moc"

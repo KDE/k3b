@@ -219,7 +219,8 @@ class K3bMainWindow : public KDockMainWindow
   void slotFileClose();
 
   void slotFileBurn();
-  void slotDirDockHidden();
+  void slotDirTreeDockHidden();
+  void slotContentsDockHidden();
   void slotProjectDockHidden();
 
   void slotSettingsConfigure();
@@ -244,7 +245,8 @@ class K3bMainWindow : public KDockMainWindow
    */
   void slotStatusMsg(const QString &text);
 
-  void slotShowDirView();
+  void slotShowDirTreeView();
+  void slotShowContentsView();
   void slotShowProjectView();
 
   void slotProjectAddFiles();
@@ -255,6 +257,8 @@ class K3bMainWindow : public KDockMainWindow
   void slotDataImportSession();
   void slotDataClearImportedSession();
   void slotEditBootImages();
+
+  void setProjectsHidable( bool );
 
  private:
   void fileSave( K3bDoc* doc = 0 );
@@ -318,7 +322,8 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewStatusBar;
-  KToggleAction* actionViewDirView;
+  KToggleAction* actionViewDirTreeView;
+  KToggleAction* actionViewContentsView;
   KToggleAction* actionViewProjectView;
   KToggleAction* actionViewAudioPlayer;
   KToggleAction* actionViewDocumentHeader;
@@ -331,7 +336,8 @@ class K3bMainWindow : public KDockMainWindow
   QPtrList<KAction> m_dataProjectActions;
 
   KDockWidget* mainDock;
-  KDockWidget* dirDock;
+  KDockWidget* m_contentsDock;
+  KDockWidget* m_dirTreeDock;
   KDockWidget* m_audioPlayerDock;
 
   // The K3b-specific widgets

@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kio/global.h>
+#include <kfileitem.h>
 
 #include <qdir.h>
 #include <qevent.h>
@@ -57,6 +58,7 @@ bool K3bDeviceBranch::populate( const KURL& url, KFileTreeViewItem* item )
     return KFileTreeBranch::populate( url, item );
   }
   else {
+    // if the device is not mounted we don't need to do anything
     emit populateFinished( root() );
     return true;
   }
@@ -222,7 +224,8 @@ KFileTreeBranch* K3bFileTreeView::addBranch( const KURL& url, const QString& nam
 void K3bFileTreeView::slotItemExecuted( QListViewItem* item )
 {
   KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
-  if( m_deviceBranchesMap.contains( treeItem->branch() ) )
+  if( m_deviceBranchesMap.contains( treeItem->branch() ) &&
+      treeItem == treeItem->branch()->root() )
     emit deviceExecuted( m_deviceBranchesMap[treeItem->branch()] );
   else
     emit urlExecuted( treeItem->url() );

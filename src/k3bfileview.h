@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -28,6 +28,7 @@ class KFileFilterCombo;
 class KFileItem;
 class KActionCollection;
 class KConfig;
+class K3bToolBox;
 
 
 /**
@@ -56,7 +57,7 @@ class K3bFileView : public K3bCdContentsView
   void saveConfig( KConfig* c );
 
  private:
-  class PrivateFileView;
+  K3bToolBox* m_toolBox;
   KDirOperator *m_dirOp;
   KFileFilterCombo* m_filterWidget;
 
