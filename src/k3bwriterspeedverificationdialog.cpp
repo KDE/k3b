@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,9 +26,9 @@
 #include <klocale.h>
 
 
-K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3bCdDevice::CdDevice>& wlist, 
+K3bWriterSpeedVerificationDialog::K3bWriterSpeedVerificationDialog( QPtrList<K3bCdDevice::CdDevice>& wlist,
 								    QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, i18n("Writer speed verification"), KDialogBase::Ok, KDialogBase::Ok, parent, name, true )
+  : KDialogBase( KDialogBase::Plain, i18n("Writer Speed Verification"), KDialogBase::Ok, KDialogBase::Ok, parent, name, true )
 {
   QGridLayout* grid = new QGridLayout( plainPage() );
   grid->setSpacing( spacingHint() );
