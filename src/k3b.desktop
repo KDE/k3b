@@ -22,3 +22,4 @@ Terminal=0
 Name=K3b
 MimeType=application/x-k3b
 X-KDE-NativeMimeType=application/x-k3b
+Categories=QT;KDE;AudioVideo
