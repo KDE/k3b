@@ -26,6 +26,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <qfile.h>
+#include <qtextstream.h>
+
 
 
 K3bBinImageWritingJob::K3bBinImageWritingJob( QObject* parent )
@@ -77,30 +80,28 @@ bool K3bBinImageWritingJob::prepareWriter()
   if( m_writer )
     delete m_writer;
 
-
+  int usedWritingApp = writingApp();
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-  if( writingApp() == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") )
-    setWritingApp( K3b::CDRECORD );
+  if( writingApp() == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") ) {
+    usedWritingApp = K3b::CDRECORD;
 
-  if( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
-    // create cdrdao job
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
-    writer->setCommand( K3bCdrdaoWriter::WRITE );
-    writer->setSimulate( m_simulate );
-    writer->setBurnSpeed( m_speed );
-    writer->setForce( m_force );
-
-    // multisession
-    writer->setMulti( m_noFix );
-
-    // burnproof
-    writer->setBurnproof( m_burnproof );
-
-    writer->setTocFile( m_tocFile );
-
-    m_writer = writer;
+    // let's see if cdrecord can handle the cue file
+    QFile f( m_tocFile );
+    if( f.open( IO_WriteOnly ) ) {
+      QTextStream fStr( &f );
+      if( fStr.read().contains( "MODE1/2352" ) ) {
+	kdDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao." << endl;
+	usedWritingApp = K3b::CDRDAO;
+      }
+      f.close();
+    }
+    else
+      kdDebug() << "(K3bBinImageWritingJob) could not open file " << m_tocFile << endl;
   }
-  else {
+  else
+    usedWritingApp = K3b::CDRDAO;
+
+  if( usedWritingApp == K3b::CDRECORD ) {
     // create cdrecord job
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 
@@ -118,6 +119,24 @@ bool K3bBinImageWritingJob::prepareWriter()
     if( m_force ) {
       writer->addArgument("-force");
     }
+
+    m_writer = writer;
+  }
+  else {
+    // create cdrdao job
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
+    writer->setCommand( K3bCdrdaoWriter::WRITE );
+    writer->setSimulate( m_simulate );
+    writer->setBurnSpeed( m_speed );
+    writer->setForce( m_force );
+
+    // multisession
+    writer->setMulti( m_noFix );
+
+    // burnproof
+    writer->setBurnproof( m_burnproof );
+
+    writer->setTocFile( m_tocFile );
 
     m_writer = writer;
   }
