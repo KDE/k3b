@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -174,6 +174,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
         m_outputFile.close();
         p->kill();
         //m_audioProcess->kill();
+        emit finished( false );
         return;
     }
     m_stream->writeRawBytes( text, len );
@@ -203,6 +204,8 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
             kdDebug() << "(K3bDvdRippingProcess) Cancel due to vob already exists." << endl;
             p->kill();
             //m_audioProcess->kill();
+            //Whats the difference ?? finished/canceled
+            //emit finished( false );
             emit canceled();
             return;
         }
