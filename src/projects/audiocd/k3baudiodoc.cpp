@@ -299,6 +299,19 @@ bool K3bAudioDoc::readM3uFile( const KURL& url, int pos )
 K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 {
   QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+
+  //
+  // This is an evil hack to force the wave decoder to be checked first since
+  // the mad decoder's canDecode method is not very reliable. :(
+  //
+  for( K3bPluginFactory* factory = fl.first();
+       factory; factory = fl.next() ) {
+    if( factory->isA( "K3bWaveDecoderFactory" ) ) {
+      fl.prepend( fl.take() );
+      break;
+    }
+  }
+  
   for( QPtrListIterator<K3bPluginFactory> it( fl );
        it.current(); ++it ) {
     if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
