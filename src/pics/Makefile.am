@@ -30,6 +30,12 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/k3bsetup_welcome.png $(kde_datadir)/k3b/pics/k3bsetup_welcome.png
 	$(mkinstalldirs) $(kde_datadir)/k3b/pics/
 	$(INSTALL_DATA) $(srcdir)/k3b_probing_cd.png $(kde_datadir)/k3b/pics/k3b_probing_cd.png
+	$(INSTALL_DATA) $(srcdir)/diskinfo_audio.png $(kde_datadir)/k3b/pics/diskinfo_audio.png
+	$(INSTALL_DATA) $(srcdir)/diskinfo_data.png $(kde_datadir)/k3b/pics/diskinfo_data.png
+	$(INSTALL_DATA) $(srcdir)/diskinfo_dvd.png $(kde_datadir)/k3b/pics/diskinfo_dvd.png
+	$(INSTALL_DATA) $(srcdir)/diskinfo_mixed.png $(kde_datadir)/k3b/pics/diskinfo_mixed.png
+	$(INSTALL_DATA) $(srcdir)/diskinfo_empty.png $(kde_datadir)/k3b/pics/diskinfo_empty.png
+	$(INSTALL_DATA) $(srcdir)/diskinfo_left.png $(kde_datadir)/k3b/pics/diskinfo_left.png
 
 uninstall-local:
 	-rm -f $(kde_datadir)/k3b/pics/k3bsetup_1.png
