@@ -155,6 +155,8 @@ void K3bMixedJob::start()
     }
   }
   else {
+    emit burning(false);
+
     m_tempFilePrefix = K3b::findUniqueFilePrefix( ( !m_doc->audioDoc()->title().isEmpty()
 						    ? m_doc->audioDoc()->title()
 						    : m_doc->dataDoc()->isoOptions().volumeID() ),
@@ -338,6 +340,8 @@ void K3bMixedJob::slotWriterFinished( bool success )
     emit finished(false);
     return;
   }
+
+  emit burning(false);
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
     // reload the media (as a subtask so the user does not see the "Flushing cache" or "Fixating" messages while
@@ -789,6 +793,7 @@ bool K3bMixedJob::startWriting()
       return false;
   }
 
+  emit burning(true);
   m_writer->start();
 
   if( m_doc->onTheFly() ) {

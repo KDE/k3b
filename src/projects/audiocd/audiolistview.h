@@ -84,6 +84,7 @@ class K3bAudioListView : public K3bListView
   void showPopupMenu( KListView*, QListViewItem* item, const QPoint& );
   void showPropertiesDialog();
   void slotRemoveTracks();
+  void slotTrackRemoved( K3bAudioTrack* );
 
  protected:
   bool acceptDrag(QDropEvent* e) const;

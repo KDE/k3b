@@ -125,6 +125,7 @@ void K3bIso9660ImageWritingJob::start()
 
   if( prepareWriter( media ) ) {
     emit newSubTask( i18n("Writing image") );
+    emit burning(true);
     m_writer->start();
   }
   else {
@@ -144,6 +145,8 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
   }
 
   if( success ) {
+    emit burning(false);
+
     // allright
     // the writerJob should have emited the "simulation/writing successful" signal
 

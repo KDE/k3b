@@ -222,7 +222,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
       }
     }
     else {
-      emit infoMessage( i18n("mkisofs exited abnormally."), ERROR );
+      emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
       emit finished( false );
     }
 
@@ -317,7 +317,7 @@ void K3bIsoImager::calculateSize()
   m_mkisofsPrintSizeResult = 0;
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     cleanup();
 
     emit sizeCalculated( ERROR, 0 );
@@ -397,7 +397,7 @@ void K3bIsoImager::start()
   const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
   if( !mkisofsBin ) {
     kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
-    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.").arg("mkisofs"), K3bJob::ERROR );
     cleanup();
     emit finished( false );
     return;

@@ -132,7 +132,7 @@ class K3bAudioDoc : public K3bDoc
 	
  signals:
   void newTracks();
-  //  void trackRemoved( uint );
+  void trackRemoved( K3bAudioTrack* );
 
  protected:
   /** reimplemented from K3bDoc */

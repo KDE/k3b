@@ -74,7 +74,7 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
 	   this, SLOT(showPropertiesDialog()) );
 
   connect( m_doc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
-
+  connect( m_doc, SIGNAL(trackRemoved(K3bAudioTrack*)), this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
 
   slotUpdateItems();
 }
@@ -291,11 +291,6 @@ void K3bAudioListView::slotRemoveTracks()
 
     for( K3bAudioTrack* track = selected.first(); track != 0; track = selected.next() ) {
       m_doc->removeTrack( track );
-
-      // not best, I think we should connect to doc.removedTrack (but since there is only one view this is not important!)
-      QListViewItem* viewItem = m_itemMap[track];
-      m_itemMap.remove( track );
-      delete viewItem;
     }
   }
 
@@ -303,6 +298,14 @@ void K3bAudioListView::slotRemoveTracks()
     m_actionRemove->setEnabled(false);
     //    m_actionPlay->setEnabled(false);
   }
+}
+
+
+void K3bAudioListView::slotTrackRemoved( K3bAudioTrack* track )
+{
+  QListViewItem* viewItem = m_itemMap[track];
+  m_itemMap.remove( track );
+  delete viewItem;
 }
 
 

@@ -49,7 +49,7 @@ void K3bMsInfoFetcher::start()
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;
-    emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), K3bJob::ERROR );
     emit finished(false);
     return;
   }

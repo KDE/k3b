@@ -105,7 +105,7 @@ class K3bVcdDoc : public K3bDoc
     signals:
         void newTracks();
 
-        //  void trackRemoved( uint );
+        void trackRemoved( K3bVcdTrack* );
 
     protected:
         /** reimplemented from K3bDoc */

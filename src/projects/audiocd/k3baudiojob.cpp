@@ -179,6 +179,7 @@ void K3bAudioJob::start()
     }
   }
   else {
+    emit burning(false);
     emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
     emit newTask( i18n("Creating image files") );
   }
@@ -452,6 +453,7 @@ bool K3bAudioJob::startWriting()
   if( m_canceled )
     return false;
 
+  emit burning(true);
   m_writer->start();
   return true;
 }

@@ -125,6 +125,7 @@ void K3bVcdJob::start()
     kdDebug() << "(K3bVcdJob) starting job" << endl;
 
     emit started();
+    emit burning(false);
     m_canceled = false;
 
     int pos = QString( m_doc->vcdImage() ).find( ".bin", QString( m_doc->vcdImage() ).length() - 4 );
@@ -372,6 +373,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
 	  if( m_canceled )
 	    return;
 
+	  emit burning(true);
 	  m_writerJob->start();
         }
     } else {

@@ -77,12 +77,14 @@ bool K3bDataDoc::newDocument()
   m_bootImages.clear();
   m_bootCataloge = 0;
 
-  if( m_root )
-    removeItem( m_root );
+  if( m_root ) {
+    while( m_root->children()->first() )
+      removeItem( m_root->children()->first() );
+  }
+  else
+    m_root = new K3bRootItem( this );
 
-  m_root = new K3bRootItem( this );
   m_sizeHandler->clear();
-
 
   m_name = "Dummyname";
 

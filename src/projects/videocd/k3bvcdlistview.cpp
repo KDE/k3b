@@ -68,7 +68,7 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
              this, SLOT( showPropertiesDialog() ) );
 
     connect( m_doc, SIGNAL( newTracks() ), this, SLOT( slotUpdateItems() ) );
-
+    connect( m_doc, SIGNAL(trackRemoved(K3bVcdTrack*)), this, SLOT(slotTrackRemoved(K3bVcdTrack*)) );
 
     slotUpdateItems();
 }
@@ -226,17 +226,20 @@ void K3bVcdListView::slotRemoveTracks()
 
         for ( K3bVcdTrack * track = selected.first(); track != 0; track = selected.next() ) {
             m_doc->removeTrack( track );
-
-            // not best, I think we should connect to doc.removedTrack (but since there is only one view this is not important!)
-            QListViewItem* viewItem = m_itemMap[ track ];
-            m_itemMap.remove( track );
-            delete viewItem;
         }
     }
 
     if ( m_doc->numOfTracks() == 0 ) {
         m_actionRemove->setEnabled( false );
     }
+}
+
+
+void K3bVcdListView::slotTrackRemoved( K3bVcdTrack* track )
+{
+  QListViewItem* viewItem = m_itemMap[ track ];
+  m_itemMap.remove( track );
+  delete viewItem;
 }
 
 
@@ -247,7 +250,7 @@ void K3bVcdListView::slotUpdateItems()
     K3bVcdTrack* lastTrack = 0;
     while ( track != 0 ) {
         if ( !m_itemMap.contains( track ) )
-            m_itemMap.insert( track, new K3bVcdListViewItem( track, this, m_itemMap[ lastTrack ] ) );
+	  m_itemMap.insert( track, new K3bVcdListViewItem( track, this, m_itemMap[ lastTrack ] ) );
 
         lastTrack = track;
         track = m_doc->next();

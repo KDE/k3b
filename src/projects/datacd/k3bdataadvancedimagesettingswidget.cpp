@@ -220,13 +220,13 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 					     i18n("ISO Level") );
 
   m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
-					 i18n("Level 1"),
+					 i18n("Level %1").arg(1),
 					 QCheckListItem::RadioButton );
   m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController, 
-					 i18n("Level 2"),
+					 i18n("Level %1").arg(2),
 					 QCheckListItem::RadioButton );
   m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController, 
-					 i18n("Level 3"),
+					 i18n("Level %1").arg(3),
 					 QCheckListItem::RadioButton );
 
   m_isoLevelController->setOpen(true);

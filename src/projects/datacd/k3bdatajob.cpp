@@ -129,6 +129,8 @@ void K3bDataJob::start()
   if( !d->doc->onlyCreateImages() && 
       ( d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	d->doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
+    emit burning(false);
+
     m_msInfoFetcher->setDevice( d->doc->burner() );
     waitForDisk();
 
@@ -485,7 +487,8 @@ bool K3bDataJob::prepareWriterJob()
     // writing the second data session is only possible in TAO mode.
     if( d->usedWritingMode == K3b::DAO &&
 	d->doc->multiSessionMode() != K3bDataDoc::NONE )
-      emit infoMessage( i18n("Writing multisession in DAO is not supported by most writers."), INFO );
+      emit infoMessage( i18n("Most writers do not support writing "
+			     "multisession CDs in DAO mode."), INFO );
 
     writer->setWritingMode( d->usedWritingMode );
     writer->setSimulate( d->doc->dummy() );

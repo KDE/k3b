@@ -77,6 +77,7 @@ class K3bVcdListView : public K3bListView
         void showPopupMenu( KListView*, QListViewItem* item, const QPoint& );
         void showPropertiesDialog();
         void slotRemoveTracks();
+	void slotTrackRemoved( K3bVcdTrack* );
 
     protected:
         bool acceptDrag( QDropEvent* e ) const;

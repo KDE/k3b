@@ -146,6 +146,7 @@ void K3bBinImageWritingJob::writerStart()
   }
   // just to be sure we did not get canceled during the async discWaiting
   else if( !m_canceled ) {
+    emit burning(true);
     m_writer->start();
   }
 }

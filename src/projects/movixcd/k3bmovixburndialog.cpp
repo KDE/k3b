@@ -261,7 +261,7 @@ void K3bMovixBurnDialog::slotStartClicked()
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
     if( KMessageBox::warningContinueCancel( this,
 					    i18n("Most writers do not support writing "
-						 "multisession cds in DAO mode.") )
+						 "multisession CDs in DAO mode.") )
 	== KMessageBox::Cancel )
       return;
 

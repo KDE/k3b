@@ -64,6 +64,7 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
 
   // FIXME: remove the newTracks() signal and replace it with the changed signal
   connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
+  connect( this, SIGNAL(trackRemoved(K3bVcdTrack*)), this, SIGNAL(changed()) );
 }
 
 K3bVcdDoc::~K3bVcdDoc()
@@ -202,8 +203,10 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 KMessageBox::information( kapp->mainWidget(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
-						"files, but these files must already be in %1 "
-						"format. K3b performs no resample on MPEG files." ).arg(i18n("VCD")),
+						"files, but these files must already be in %2 "
+						"format. K3b performs no resample on MPEG files." )
+					  .arg(i18n("VCD"))
+					  .arg(i18n("VCD")),
                                           i18n( "Information" ) );
                 m_urlAddingTimer->start( 0 );
             } else if ( vcdType() == NONE ) {
@@ -212,8 +215,9 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                 bool force = false;
                 force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
                                                       i18n( "K3b will create a %1 image from the given MPEG "
-							    "files, but these files must already be in %1 "
+							    "files, but these files must already be in %2 "
 							    "format. K3b performs no resample on MPEG files yet." )
+						      .arg(i18n("SVCD"))
 						      .arg(i18n("SVCD"))
 						      + "\n\n"
                                                       + i18n( "Note: Forcing mpeg2 as VCD is not supported by "
@@ -375,7 +379,7 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
 
         // emit signal before deleting the track to avoid crashes
         // when the view tries to call some of the tracks' methods
-        emit newTracks();
+        emit trackRemoved(track);
 
         delete track;
 

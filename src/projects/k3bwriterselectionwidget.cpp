@@ -194,7 +194,7 @@ void K3bWriterSelectionWidget::init()
 					"the speed automagically.") );
   }
   else {
-    QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD/DVD writer that you want to use."
+    QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD writer that you want to use."
 					 "<p>In most cases there will only be one writer available which "
 					 "does not leave much choice.") );
     QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."

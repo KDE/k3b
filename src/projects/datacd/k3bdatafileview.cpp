@@ -294,7 +294,7 @@ void K3bDataFileView::slotNewDir()
 
   while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
     name = KLineEditDlg::getText( i18n("A file with that name already exists."
-                                  "Please insert the name for the new directory:"),
+				       "Please insert the name for the new directory:"),
 				  i18n("New Directory"), &ok, this );
   }
 

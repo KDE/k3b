@@ -108,6 +108,7 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
 
   // FIXME: remove the newTracks() signal and replace it with the changed signal
   connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
+  connect( this, SIGNAL(trackRemoved(K3bAudioTrack*)), this, SIGNAL(changed()) );
 }
 
 K3bAudioDoc::~K3bAudioDoc()
@@ -121,9 +122,10 @@ K3bAudioDoc::~K3bAudioDoc()
 
 bool K3bAudioDoc::newDocument()
 {
-  if( m_tracks )
+  if( m_tracks ) {
     while( m_tracks->first() )
       removeTrack( m_tracks->first() );
+  }
   else
     m_tracks = new QPtrList<K3bAudioTrack>;
   m_tracks->setAutoDelete(false);
@@ -311,7 +313,7 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
       
     // emit signal before deleting the track to avoid crashes
     // when the view tries to call some of the tracks' methods
-    emit newTracks();
+    emit trackRemoved( track );
       
     delete track;
 
