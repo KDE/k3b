@@ -17,6 +17,8 @@
 #include "k3baudiotrack.h"
 #include "k3baudiodatasource.h"
 #include "k3baudiodoc.h"
+#include "k3baudiocdtracksource.h"
+
 #include <k3bdevice.h>
 
 #include <k3bthread.h>
@@ -72,15 +74,17 @@ public:
 	success = false;
 	break;
       }
+      else if( data > 0 ) {
 
-      // KB/sec (add 1 millisecond to avoid division by 0)
-      int throughput = (data*1000+usedT)/(usedT+1)/1024;
-      kdDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
-		<< " (" << data << "/" << usedT << ")" << endl;
-
-      // update the max speed
-      maxSpeed = QMIN( maxSpeed, throughput );
-
+	// KB/sec (add 1 millisecond to avoid division by 0)
+	int throughput = (data*1000+usedT)/(usedT+1)/1024;
+	kdDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
+		  << " (" << data << "/" << usedT << ")" << endl;
+	
+	// update the max speed
+	maxSpeed = QMIN( maxSpeed, throughput );
+      }
+      
       // next source
       source = source->next();
       if( !source ) {
@@ -103,6 +107,22 @@ public:
 
   // returns the amount of data read from this source
   int speedTest( K3bAudioDataSource* source ) {
+    //
+    // in case of an audio track source we only test when the cd is inserted since asking the user would
+    // confuse him a lot.
+    //
+    // FIXME: there is still the problem of the spin up time.
+    //
+    if( K3bAudioCdTrackSource* cdts = dynamic_cast<K3bAudioCdTrackSource*>( source ) ) {
+      if( K3bDevice::Device* dev = cdts->searchForAudioCD() ) {
+	cdts->setDevice( dev );
+      }
+      else {
+	kdDebug() << "(K3bAudioMaxSpeedJob) ignoring audio cd track source." << endl;
+	return 0;
+      }
+    }
+
     int dataRead = 0;
     int r = 0;
     // read ten seconds of audio data. This is some value which seemed about right. :)

@@ -46,6 +46,7 @@ Plugin based Audio Output system for Audio project "preview".
 Dropped id3lib in favor of TagLib (great work Scott :)
 When the speed for an on-the-fly audio project is set to "Auto" K3b now determines the max writing speed.
 Do not close dialogs after the action is done (for example cd copy)
+Directly copy Audio tracks from an Audio CD to an Audio project.
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.

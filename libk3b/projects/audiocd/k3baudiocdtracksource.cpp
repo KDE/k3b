@@ -69,7 +69,27 @@ bool K3bAudioCdTrackSource::initParanoia()
       m_cdParanoiaLib = K3bCdparanoiaLib::create();
     
     if( m_cdParanoiaLib ) {
-      if( !(m_lastUsedDevice = searchForAudioCD()) )
+      m_lastUsedDevice = searchForAudioCD();
+
+      // ask here for the cd since searchForAudioCD() may also be called from outside
+      if( !m_lastUsedDevice ) {
+	// could not find the CD, so ask for it
+	QString s = i18n("Please insert Audio CD %1%2")
+	  .arg(m_toc.discId(), 0, 16)
+	  .arg(m_cddbEntry.cdTitle.isEmpty() || m_cddbEntry.cdArtist.isEmpty() 
+	       ? QString::null 
+	       : " (" + m_cddbEntry.cdArtist + " - " + m_cddbEntry.cdTitle + ")");
+	
+	while( K3bDevice::Device* dev = K3bThreadWidget::selectDevice( track()->doc()->view(), s ) ) {
+	  if( searchForAudioCD( dev ) ) {
+	    m_lastUsedDevice = dev;
+	    break;
+	  }
+	}
+      }
+
+      // user canceled
+      if( !m_lastUsedDevice )
 	return false;
 
       if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) )
@@ -109,19 +129,6 @@ K3bDevice::Device* K3bAudioCdTrackSource::searchForAudioCD() const
   for( QPtrListIterator<K3bDevice::Device> it(devices); *it; ++it ) {
     if( searchForAudioCD( *it ) ) {
       return *it;
-    }
-  }
-
-  // could not find the CD, so ask for it
-  QString s = i18n("Please insert Audio CD %1%2")
-    .arg(m_toc.discId(), 0, 16)
-    .arg(m_cddbEntry.cdTitle.isEmpty() || m_cddbEntry.cdArtist.isEmpty() 
-	 ? QString::null 
-	 : m_cddbEntry.cdArtist + " - " + m_cddbEntry.cdTitle );
-
-  while( K3bDevice::Device* dev = K3bThreadWidget::selectDevice( track()->doc()->view(), s ) ) {
-    if( searchForAudioCD( dev ) ) {
-      return dev;
     }
   }
 

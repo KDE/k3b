@@ -31,6 +31,7 @@
 #include <k3bcore.h>
 #include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bthememanager.h>
+#include <k3baudiocdtrackdrag.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -589,10 +590,11 @@ QDragObject* K3bAudioCdView::dragObject()
 {
   QPtrList<QListViewItem> items = m_trackView->selectedItems();
   if( !items.isEmpty() ) {
-    QStoredDrag* drag = new QStoredDrag( "k3b/audiorip", m_trackView );
-    QByteArray data;
-    // FIXME
-    return drag;
+    return new K3bAudioCdTrackDrag( m_toc, 
+				    static_cast<AudioTrackViewItem*>(items.first())->trackNumber, 
+				    m_cddbInfo,
+				    m_device,
+				    this );
   }
   else
     return 0;

@@ -42,6 +42,8 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, int cdTrack
     s << track.firstSector().lba() << track.lastSector().lba();
   }
   QTextStream t( s.device() );
+  t << cddb.cdArtist << endl
+    << cddb.cdTitle << endl;
   for( unsigned int i = 0; i < toc.count(); ++i ) {
     t << cddb.artists[i] << endl
       << cddb.titles[i] << endl;
@@ -78,6 +80,8 @@ bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
   QTextStream t( s.device() );
   cddb.artists.clear();
   cddb.titles.clear();
+  cddb.cdArtist = t.readLine();
+  cddb.cdTitle = t.readLine();
   for( int i = 0; i < trackCnt; ++i ) {
     cddb.artists.append( t.readLine() );
     cddb.titles.append( t.readLine() );
