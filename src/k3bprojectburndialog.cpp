@@ -160,6 +160,8 @@ void K3bProjectBurnDialog::toggleAllOptions()
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
+  if( m_checkOnTheFly->isChecked() )
+    m_checkRemoveBufferFiles->setChecked(false);
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
 }
 
