@@ -40,10 +40,15 @@ class K3bMsfEdit : public QSpinBox
   K3bMsfEdit( QWidget* parent = 0, const char* name = 0 );
   ~K3bMsfEdit();
 
+  QSize sizeHint() const;
+
   void setFrameStyle( int style );
   void setLineWidth(int);
 
   K3b::Msf msfValue() const;
+
+ signals:
+  void valueChanged( const K3b::Msf& );
 
  public slots:
   void setValue( int v );
@@ -56,6 +61,9 @@ class K3bMsfEdit : public QSpinBox
   QString mapValueToText( int );
   int mapTextToValue( bool* ok );
   int currentStepValue() const;
+
+ private slots:
+  void slotValueChanged( int );
 };
 
 

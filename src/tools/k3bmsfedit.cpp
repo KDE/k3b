@@ -20,6 +20,9 @@
 
 #include <qstringlist.h>
 #include <qlineedit.h>
+#include <qstyle.h>
+#include <qfontmetrics.h>
+#include <qapplication.h>
 
 
 
@@ -36,11 +39,31 @@ K3bMsfEdit::K3bMsfEdit( QWidget* parent, const char* name )
   setValidator( new K3bMsfValidator( this ) );
   setMinValue( 0 );
   setMaxValue( (60*60*75) + (60*75) + 75 );
+
+  connect( this, SIGNAL(valueChanged(int)),
+	   this, SLOT(slotValueChanged(int)) );
 }
 
 
 K3bMsfEdit::~K3bMsfEdit()
 {}
+
+
+QSize K3bMsfEdit::sizeHint() const
+{
+  // more or less copied from QSpinBox
+  constPolish();
+  QSize sz = editor()->sizeHint();
+  int h = sz.height();
+  QFontMetrics fm( font() );
+  int w = fm.width( "00:00:00" );
+  int wx = fm.width( ' ' )*2;
+  int frame = style().pixelMetric( QStyle::PM_SpinBoxFrameWidth );
+  return style().sizeFromContents(QStyle::CT_SpinBox, this,
+				  QSize( w + wx + downRect().width() + frame*2,
+					 h + frame*2).
+				  expandedTo( QApplication::globalStrut() ));
+}
 
 
 QString K3bMsfEdit::mapValueToText( int value )
@@ -118,6 +141,12 @@ int K3bMsfEdit::currentStepValue() const
   }
 
   return val;
+}
+
+
+void K3bMsfEdit::slotValueChanged( int v )
+{
+  emit valueChanged( K3b::Msf(v) );
 }
 
 #include "k3bmsfedit.moc"
