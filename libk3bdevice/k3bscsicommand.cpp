@@ -44,6 +44,8 @@
     }							\
 } while(0)
 
+static void dump_error(int b,struct scsi_sense_data *sense);
+
 #endif
 
 
@@ -157,7 +159,6 @@ unsigned char& K3bCdDevice::ScsiCommand::operator[]( size_t i )
 #endif
 }
 
-
 int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 					 void* data,
 					 size_t len )
@@ -207,7 +208,8 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
   if ((ret = cam_send_ccb(m_device->cam(), &d->ccb)) < 0)
     {
       kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed: " << ret << endl;
-      goto dump_error;
+      dump_error(d->ccb.csio.cdb_io.cdb_bytes[0],(struct scsi_sense_data *)sense);
+      return ret;
     }
   if ((d->ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP)
     return 0;
@@ -233,21 +235,21 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.sense_len = 0;
       ret = cam_send_ccb(m_device->cam(), &d->ccb);
 
-      // FIXME: remove this goto stuff! It has no place in a C++ application.
-
       d->ccb.csio.resid = resid;
       if (ret<0)
 	{
 	  kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed (2): " << ret << endl;
 	  ret = -1;
-	  goto dump_error;
+	  dump_error(d->ccb.csio.cdb_io.cdb_bytes[0],(struct scsi_sense_data *)sense);
+	  return -1;
 	}
       if ((d->ccb.ccb_h.status&CAM_STATUS_MASK) != CAM_REQ_CMP)
 	{
 	  kdDebug() << "(K3bCdDevice::ScsiCommand) transport failed (3): " << ret << endl;
 	  errno=EIO,-1;
 	  ret = -1;
-	  goto dump_error;
+	  dump_error(d->ccb.csio.cdb_io.cdb_bytes[0],(struct scsi_sense_data *)sense);
+	  return -1;
 	}
 
       memcpy(sense,_sense,sizeof(_sense));
@@ -259,16 +261,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
     ret = -1;
   else
     CREAM_ON_ERRNO(((unsigned char *)&d->ccb.csio.sense_data));
- dump_error:
-  kdDebug() << "(K3bCdDevice::ScsiCommand) failed: " << endl
-	    << "                           command:    " << QString("%1 (%2)")
-    .arg( commandString( d->ccb.csio.cdb_io.cdb_bytes[0] ) )
-    .arg( QString::number(d->ccb.csio.cdb_io.cdb_bytes[0], 16) ) << endl
-	    << "                           errorcode:  " << QString::number(((struct scsi_sense_data *)sense)->error_code & SSD_ERRCODE, 16) << endl
-	    << "                           sense key:  " << senseKeyToString(((struct scsi_sense_data *)sense)->flags & SSD_KEY) << endl
-	    << "                           asc:        " << QString::number(((struct scsi_sense_data *)sense)->add_sense_code, 16) << endl
-	    << "                           ascq:       " << QString::number(((struct scsi_sense_data *)sense)->add_sense_code_qual, 16) << endl;
-
+  dump_error(d->ccb.csio.cdb_io.cdb_bytes[0],(struct scsi_sense_data *)sense);
   return ret;
 #endif
 }
@@ -383,3 +376,19 @@ QString K3bCdDevice::commandString( const unsigned char& command )
 
   return "unknown";
 }
+
+#ifdef Q_OS_FREEBSD
+static void dump_error(int b,struct scsi_sense_data *sense)
+{
+  kdDebug() << "(K3bCdDevice::ScsiCommand) failed: " << endl
+	    << "                           command:    " << QString("%1 (%2)")
+    .arg( K3bCdDevice::commandString( b ) )
+    .arg( QString::number(b, 16) ) << endl
+	    << "                           errorcode:  " << QString::number(sense->error_code & SSD_ERRCODE, 16) << endl
+	    << "                           sense key:  " << senseKeyToString(sense->flags & SSD_KEY) << endl
+	    << "                           asc:        " << QString::number(sense->add_sense_code, 16) << endl
+	    << "                           ascq:       " << QString::number(sense->add_sense_code_qual, 16) << endl;
+}
+#endif
+
+
