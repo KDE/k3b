@@ -4,7 +4,8 @@ Honor the manual writing app selection for automatic CDRW erasing.
 K3b now refuses to use transcode >= 0.6.12 for dvd ripping. The next major version will
 	be able to use new transcode versions.
 Properly eject the written media between multiple cd (clone) copies
-	
+Fix toc reading for old CD drives which report raw to data in bcd.
+
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.

@@ -53,7 +53,12 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
   cfg->setGroup( group );
 
   KDirOperator::readConfig( cfg, group );
-  setURL( KURL::fromPathOrURL( cfg->readPathEntry( "last url", QDir::home().absPath() ) ), true );
+
+  QString p = cfg->readPathEntry( "last url", QDir::home().absPath() );
+  if( QFile::exists( p ) )
+    setURL( KURL::fromPathOrURL( p ), true );
+  else
+    setURL( KURL::fromPathOrURL( QDir::home().absPath() ), true );
 
   cfg->setGroup( oldGroup );
 }
