@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>647</width>
-            <height>603</height>
+            <height>605</height>
         </rect>
     </property>
     <property name="caption">
@@ -77,11 +77,11 @@
                         <number>5</number>
                     </property>
                     <property name="text">
-                        <string>&lt;p&gt;This simple setup assistent is able to set the permissions needed by K3b in order to
+                        <string>&lt;p&gt;This simple setup assistant is able to set the permissions needed by K3b in order to
 burn CDs and DVDs.
-&lt;p&gt;It does not take things like devfs or resmgr into accout. In most cases this is not a 
+&lt;p&gt;It does not take things like devfs or resmgr into account. In most cases this is not a 
 problem but on some systems the permissions may be altered the next time you login or restart 
-your computer. In those cases it is best to consult the distrobution documentation.
+your computer. In those cases it is best to consult the distribution documentation.
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Although K3bSetup 2 should not be able
 to mess up your system no guarantee can be given.</string>
                     </property>
@@ -436,8 +436,6 @@ to mess up your system no guarantee can be given.</string>
         </widget>
     </hbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>m_checkUseBurningGroup</sender>
