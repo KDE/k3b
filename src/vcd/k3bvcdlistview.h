@@ -65,6 +65,7 @@ class K3bVcdListView : public K3bListView
   K3bVcdDoc* m_doc;
   K3bView* m_view;
 
+  KAction* m_actionProperties;
   KAction* m_actionRemove;
   KActionCollection* m_actionCollection;
 
@@ -76,6 +77,7 @@ class K3bVcdListView : public K3bListView
   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
   void slotUpdateItems();
   void showPopupMenu( KListView*, QListViewItem* item, const QPoint& );
+  void showPropertiesDialog();
   void slotRemoveTracks();
 
  protected:

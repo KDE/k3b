@@ -18,6 +18,7 @@
 #include "k3bvcdlistview.h"
 #include "k3bvcdlistviewitem.h"
 #include "k3bvcdtrack.h"
+#include "k3bvcdtrackdialog.h"
 #include "../k3b.h"
 #include "k3bvcddoc.h"
 #include "../k3bview.h"
@@ -66,6 +67,8 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+	   this, SLOT(showPropertiesDialog()) );
 
   connect( m_doc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
 
@@ -92,10 +95,8 @@ void K3bVcdListView::setupColumns(){
 void K3bVcdListView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
-
-  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-			      Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
-
+  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(showPropertiesDialog()), actionCollection() );
+  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
 
   // disabled by default
   m_actionRemove->setEnabled(false);
@@ -107,6 +108,8 @@ void K3bVcdListView::setupPopupMenu()
   m_popupMenu = new KPopupMenu( this, "VcdViewPopupMenu" );
   m_actionRemove->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
+  m_actionProperties->plug( m_popupMenu );
+  m_popupMenu->insertSeparator();  
   k3bMain()->actionCollection()->action("file_burn")->plug( m_popupMenu );
 }
 
@@ -187,9 +190,29 @@ void K3bVcdListView::showPopupMenu( KListView*, QListViewItem* _item, const QPoi
      m_actionRemove->setEnabled(false);
    }
 
+  if (_item && selectedTracks().count() == 1) {
+    m_actionProperties->setEnabled(true);
+  }
+  else {
+    m_actionProperties->setEnabled(false);
+  }
+   
   m_popupMenu->popup( _point );
 }
 
+void K3bVcdListView::showPropertiesDialog()
+{
+  QPtrList<K3bVcdTrack> selected = selectedTracks();
+  if( !selected.isEmpty() && selected.count() == 1 ) {
+    K3bVcdTrackDialog d( selected, this );
+    if( d.exec() ) {
+      repaint();
+    }
+  }
+  else {
+    m_view->burnDialog( false );
+  }
+}
 
 QPtrList<K3bVcdTrack> K3bVcdListView::selectedTracks()
 {
@@ -242,9 +265,11 @@ void K3bVcdListView::slotUpdateItems()
 
   if( m_doc->numOfTracks() > 0 ) {
     m_actionRemove->setEnabled(true);
+    m_actionProperties->setEnabled(true);
   }
   else {
     m_actionRemove->setEnabled(false);
+    m_actionProperties->setEnabled(false);
   }
 }
 
