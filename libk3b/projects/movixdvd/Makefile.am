@@ -16,4 +16,5 @@ noinst_LTLIBRARIES = libmovixdvd.la
 
 libmovixdvd_la_SOURCES = k3bmovixdvddoc.cpp k3bmovixdvdview.cpp k3bmovixdvdburndialog.cpp k3bmovixdvdjob.cpp
 
-include_HEADERS = k3bmovixdvddoc.h k3bmovixdvdjob.h k3bmovixdvdview.h
+include_HEADERS = 	k3bmovixdvddoc.h \
+			k3bmovixdvdjob.h

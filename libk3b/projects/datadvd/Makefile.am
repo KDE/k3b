@@ -20,4 +20,6 @@ libdvd_la_SOURCES = 	k3bdvddoc.cpp \
 			k3bdvdformattingdialog.cpp \
 			k3bdvdbooktypejob.cpp
 
-include_HEADERS = k3bdvddoc.h k3bdvdjob.h k3bdvdview.h k3bdvdformattingjob.h
+include_HEADERS = 	k3bdvddoc.h \
+			k3bdvdjob.h \
+			k3bdvdformattingjob.h

@@ -72,8 +72,8 @@ class K3bMadDecoder : public K3bAudioDecoder
 
   static int MaxAllowedRecoverableErrors;
 
-  class Private;
-  Private* d;
+  class MadDecoderPrivate;
+  MadDecoderPrivate* d;
 };
 
 #endif

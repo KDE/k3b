@@ -198,7 +198,7 @@ void K3bVcdListView::showPropertiesDialog()
             repaint();
         }
     } else {
-        m_doc->view()->slotProperties();
+      m_view->slotProperties();
     }
 }
 

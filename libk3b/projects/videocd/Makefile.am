@@ -14,4 +14,6 @@ libvcd_la_LIBADD = mpeginfo/libmpeginfo.la
 
 SUBDIRS = cdi extra mpeginfo
 
-include_HEADERS = k3bvcdjob.h k3bvcddoc.h k3bvcdview.h k3bvcdoptions.h
+include_HEADERS = 	k3bvcdjob.h \
+			k3bvcddoc.h \
+			k3bvcdoptions.h

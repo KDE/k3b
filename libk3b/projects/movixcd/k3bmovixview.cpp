@@ -105,7 +105,7 @@ void K3bMovixView::showPropertiesDialog()
     d.exec();
   }
   else
-    m_doc->view()->slotProperties();
+    slotProperties();
 }
 
 

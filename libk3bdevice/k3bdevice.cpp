@@ -169,6 +169,9 @@ public:
 
 K3bDevice::Device::Device( const QString& devname )
   : m_writeModes(0),
+    m_bus(-1),
+    m_target(-1),
+    m_lun(-1),
     m_automount(false)
 {
   d = new Private;
@@ -181,7 +184,6 @@ K3bDevice::Device::Device( const QString& devname )
   m_maxWriteSpeed = 0;
   m_maxReadSpeed = 0;
   d->burnfree = false;
-  m_bus = m_target = m_lun = -1;
   m_dvdMinusTestwrite = true;
   m_bufferSize = 0;
 }

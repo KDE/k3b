@@ -74,22 +74,25 @@ class K3bDoc : public QObject
     VIDEODVD 
   };
 
-  //  virtual KActionCollection* actionCollection() const { return m_actionCollection; }
-
   virtual int docType() const { return m_docType; }
 
   /** 
    * Create a new view
    * This should only be called once.
+   *
+   * TODO: remove this. Decide it somewhere in k3b
    */
   K3bView* createView( QWidget* parent = 0, const char* name = 0 );
 
   /** 
    * returns the K3bView created by newView() or null if none has been created
    */
-  K3bView* view() const { return m_view; }
+  QWidget* view() const { return m_view; }
 
-  void setView( K3bView* v ) { m_view = v; }
+  /**
+   * Just for convinience to make an easy mapping from doc to GUI possible.
+   */
+  void setView( QWidget* v ) { m_view = v; }
 
   /** 
    * sets the modified flag for the document after a modifying action on the view connected to the document.
@@ -113,11 +116,15 @@ class K3bDoc : public QObject
    * allow opening an URL in an already created doc. So this static method checks
    * the type of the saved project and creates a appropriate project object or 0
    * if no K3b project has been found.
+   *
+   * TODO: move this to k3b
    */
   static K3bDoc* openDocument(const KURL &url);
 
   /**
    * saves the document under filename and format.
+   *
+   * TODO: move this to k3b
    */
   bool saveDocument(const KURL &url);
 
@@ -143,6 +150,12 @@ class K3bDoc : public QObject
 
   virtual int numOfTracks() const { return 1; }
 
+  /**
+   * Create a new BurnJob to burn this project. It is not mandatory to use this
+   * method. You may also just create the BurnJob you need manually. It is just 
+   * easier this way since you don't need to distinguish between the different
+   * project types.
+   */
   virtual K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 ) = 0;
 
   int writingApp() const { return m_writingApp; }
@@ -164,9 +177,6 @@ class K3bDoc : public QObject
    * and naming the config group to store the default settings in.
    */
   virtual QString documentType() const = 0;
-
-/*   virtual K3bProjectInterface* dcopInterface(); */
-/*   QCString dcopId(); */
 
  signals:
   void changed();
@@ -210,6 +220,8 @@ class K3bDoc : public QObject
    * </ul>
    * New implementations should call this before doing anything else.
    * After that there is no need to change the config group.
+   *
+   * TODO: move this to k3b
    */
   virtual void loadDefaultSettings( KConfig* );
 
@@ -217,6 +229,8 @@ class K3bDoc : public QObject
   /**
    * when deriving from K3bDoc this method really opens the document since
    * openDocument only opens a tempfile and calls this method.
+   *
+   * TODO: move this to k3b
    */
   virtual bool loadDocumentData( QDomElement* root ) = 0;
 
@@ -225,16 +239,26 @@ class K3bDoc : public QObject
    * saveDocument only opens the file and calls this method.
    * Append all child elements to docElem.
    * XML header was already created
+   *
+   * TODO: move this to k3b
    */
   virtual bool saveDocumentData( QDomElement* docElem ) = 0;
 
+  /**
+   * TODO: move this to k3b
+   */
   bool saveGeneralDocumentData( QDomElement* );
+
+  /**
+   * TODO: move this to k3b
+   */
   bool readGeneralDocumentData( const QDomElement& );
 
   int m_docType;
 
-  //  K3bProjectInterface* m_dcopInterface;
-
+  /**
+   * TODO: move this to k3b
+   */
   virtual K3bView* newView( QWidget* parent = 0 ) = 0;
 
  private slots:
@@ -245,7 +269,9 @@ class K3bDoc : public QObject
   bool m_modified;
   KURL doc_url;
 
-  K3bView* m_view;
+  // TODO: make this a QWidget
+  QWidget* m_view;
+
   QString m_tempDir;
   K3bDevice::Device* m_burner;
   bool m_dummy;
@@ -264,8 +290,6 @@ class K3bDoc : public QObject
   int m_copies;
 
   bool m_saved;
-
-  //  KActionCollection* m_actionCollection;
 };
 
 #endif // K3BDOC_H

@@ -45,7 +45,9 @@ Do not close dialogs after the action is done (for example cd copy)
 Directly copy Audio tracks from an Audio CD to an Audio project.
 Session management
 Made K3b a unique application only allowing one instance.
-	
+Improved dcop interface for data projects which allows to add and remove items 
+	to and from specific folders in the project.
+
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.

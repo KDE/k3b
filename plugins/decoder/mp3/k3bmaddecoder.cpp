@@ -56,10 +56,10 @@ int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
 
 
 
-class K3bMadDecoder::Private
+class K3bMadDecoder::MadDecoderPrivate
 {
 public:
-  Private()
+  MadDecoderPrivate()
     : outputBuffer(0),
       outputPointer(0),
       outputBufferEnd(0) {
@@ -86,7 +86,7 @@ public:
 K3bMadDecoder::K3bMadDecoder( QObject* parent, const char* name )
   : K3bAudioDecoder( parent, name )
 {
-  d = new Private();
+  d = new MadDecoderPrivate();
   d->handle = new K3bMad();
 }
 

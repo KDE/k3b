@@ -138,10 +138,11 @@ void K3bDoc::addUrl( const KURL& url )
 
 K3bView* K3bDoc::createView( QWidget* parent, const char* )
 {
-  m_view = newView( parent );
-  m_view->setCaption( URL().fileName() );
+  K3bView* view = newView( parent );
+  view->setCaption( URL().fileName() );
+  m_view = view;
 
-  return m_view;
+  return view;
 }
 
 

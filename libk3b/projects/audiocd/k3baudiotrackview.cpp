@@ -819,7 +819,7 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
 
   m_actionProperties->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
-  m_doc->view()->actionCollection()->action( "project_burn" )->plug( m_popupMenu );
+  static_cast<K3bView*>(m_doc->view())->actionCollection()->action( "project_burn" )->plug( m_popupMenu );
 
   m_popupMenu->popup( pos );
 }
@@ -838,7 +838,7 @@ void K3bAudioTrackView::slotProperties()
     d.exec();
   }
   else {
-    m_doc->view()->slotProperties();
+    static_cast<K3bView*>(m_doc->view())->slotProperties();
   }
 }
 

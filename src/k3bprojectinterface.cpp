@@ -18,6 +18,8 @@
 #include <k3bdoc.h>
 #include <k3bview.h>
 
+#include <qtimer.h>
+
 
 //static
 QCString K3bProjectInterface::newIfaceName()
@@ -53,5 +55,6 @@ void K3bProjectInterface::addUrl( const KURL& url )
 
 void K3bProjectInterface::burn()
 {
-  m_doc->view()->slotBurn();
+  // we want to return this method immediately
+  QTimer::singleShot( 0, m_doc->view(), SLOT(slotBurn()) );
 }

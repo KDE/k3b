@@ -100,6 +100,7 @@
 #include "dvdcopy/k3bdvdcopydialog.h"
 //#include "dvdcopy/k3bvideodvdcopydialog.h"
 #include "k3bprojectinterface.h"
+#include "k3bdataprojectinterface.h"
 #include <k3bprojectmanager.h>
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
@@ -832,7 +833,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	  return;
 	}
 
-	K3bView* view = doc->view();
+	QWidget* view = doc->view();
 	m_documentTab->changeTab( view, view->caption() );
 
 	actionFileOpenRecent->addURL(url);
@@ -880,7 +881,7 @@ void K3bMainWindow::closeProject( K3bDoc* doc )
   // unplug the actions
   if( factory() ) {
     if( d->lastDoc == doc ) {
-      factory()->removeClient( d->lastDoc->view() );
+      factory()->removeClient( static_cast<K3bView*>(d->lastDoc->view()) );
       d->lastDoc = 0;
     }
   }
@@ -1164,7 +1165,11 @@ K3bProjectInterface* K3bMainWindow::dcopInterface( K3bDoc* doc )
 {
   QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
   if( it == d->projectInterfaceMap.end() ) {
-    K3bProjectInterface* dcopInterface = new K3bProjectInterface( doc );
+    K3bProjectInterface* dcopInterface = 0;
+    if( doc->docType() == K3bDoc::DATA || doc->docType() == K3bDoc::DVD )
+      dcopInterface = new K3bDataProjectInterface( static_cast<K3bDataDoc*>(doc) );
+    else
+      dcopInterface = new K3bProjectInterface( doc );
     d->projectInterfaceMap[doc] = dcopInterface;
     return dcopInterface;
   }
@@ -1205,7 +1210,7 @@ void K3bMainWindow::slotCurrentDocChanged()
 
     if( factory() ) {
       if( d->lastDoc )
-	factory()->removeClient( d->lastDoc->view() );
+	factory()->removeClient( static_cast<K3bView*>(d->lastDoc->view()) );
       factory()->addClient( v );
       d->lastDoc = v->doc();
     }

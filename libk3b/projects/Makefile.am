@@ -31,15 +31,9 @@ libk3bproject_la_SOURCES = k3babstractwriter.cpp \
 			   k3bcuefileparser.cpp \
 			   k3bpipebuffer.cpp
 
-include_HEADERS =          k3bview.h \
-                           k3bblankingjob.h \
+include_HEADERS =          k3bblankingjob.h \
                            k3bdoc.h \
-	                   k3bwriterselectionwidget.h \
-                           k3bemptydiscwaiter.h \
-			   k3bprojectmanager.h \
-			   k3bjobprogressdialog.h \
-			   k3bburnprogressdialog.h \
-			   k3bpipebuffer.h
+			   k3bprojectmanager.h
 
 SUBDIRS = kostore songdb datacd audiocd mixedcd movixcd videocd datadvd movixdvd videodvd
 
