@@ -1126,12 +1126,14 @@ void K3bDataJob::cancelAll()
       m_process->disconnect(this);
       m_process->kill();
       
-      // we need to unlock the writer because cdrdao/cdrecord locked it while writing
-      bool block = m_doc->burner()->block( false );
-      if( !block )
-	emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
-      else if( k3bMain()->eject() )
-	m_doc->burner()->eject();
+      if( !m_doc->onlyCreateImage() ) {
+	// we need to unlock the writer because cdrdao/cdrecord locked it while writing
+	bool block = m_doc->burner()->block( false );
+	if( !block )
+	  emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
+	else if( k3bMain()->eject() )
+	  m_doc->burner()->eject();
+      }
     }
 
   // remove path-spec-file

@@ -81,6 +81,8 @@ class K3bBurnProgressDialog : public KDialog  {
 
   void animateSystemTray( int );
 
+  void slotUpdateCaption( int );
+
  protected:
   void closeEvent( QCloseEvent* );
 
@@ -124,6 +126,8 @@ class K3bBurnProgressDialog : public KDialog  {
   bool m_bCanceled;
   bool m_bShowSystemTrayProgress;
   int m_lastAnimatedProgress;
+
+  QString m_plainCaption;
 };
 
 #endif
