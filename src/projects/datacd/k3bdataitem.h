@@ -38,17 +38,39 @@ class K3bDataItem
   K3bDirItem* parent() const { return m_parentDir; }
 	
   K3bDataDoc* doc() const { return m_doc; }
-  virtual const QString& k3bName();
-  const QString& jolietName();
+  virtual const QString& k3bName() const;
   virtual void setK3bName( const QString& );
-  void setJolietName( const QString& );
+
   /** 
    * returns the path as defined by the k3b-hierachy, NOT starting with a slash
    * (since this is used for graft-points!) 
    * directories have a trailing "/"
    */
-  virtual QString k3bPath();
-  virtual QString jolietPath();
+  QString k3bPath() const;
+
+  /**
+   * Returns the name of the item as used on the CD or DVD image.
+   *
+   * Only valid for Rockridge and Joliet since for now K3b does not determine
+   * the names as created by mkisofs when creating an ISO9660 only filesystem.
+   *
+   * This is only valid after a call to @p K3bDataDoc::prepareFilenames()
+   */
+  const QString& writtenName() const { return m_writtenName; }
+
+  /**
+   * Returns the path of the item as written to the CD or DVD image.
+   *
+   * This is suited to be used for mkisofs graftpoints.
+   *
+   * This is only valid after a call to @p K3bDataDoc::prepareFilenames()
+   */
+  QString writtenPath() const;
+
+  /**
+   * Used to set the written name by @p K3bDataDoc::prepareFilenames()
+   */
+  void setWrittenName( const QString& s ) { m_writtenName = s; }
 
   virtual K3bDataItem* nextSibling();
 	
@@ -100,12 +122,10 @@ class K3bDataItem
 
  protected:
   QString m_k3bName;
-  /**
-   * this is used if Joliet extensions are enabled for cutting the filenames
-   */
-  QString m_jolietName;
 
  private:
+  QString m_writtenName;
+
   K3bDataDoc* m_doc;
   K3bDirItem* m_parentDir;
 

@@ -83,6 +83,17 @@ namespace K3b
    */
   bool kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail );
 
+  /**
+   * Cut a filename preserving the extension
+   */
+  QString cutFilename( const QString& name, unsigned int len );
+
+  /**
+   * Append a number to a filename preserving the extension.
+   * The resulting name's length will not exceed @p maxlen
+   */
+  QString appendNumberToFilename( const QString& name, int num, unsigned int maxlen );
+
   QString findUniqueFilePrefix( const QString& _prefix = QString::null, const QString& path = QString::null );
 
   /**

@@ -107,7 +107,7 @@ void K3bDataFileView::updateContents()
 
   // perhaps we should check if the K3bDirItem m_currentDir still exists
 
-  for( QPtrListIterator<K3bDataItem> it( *m_currentDir->children() ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bDataItem> it( m_currentDir->children() ); it.current(); ++it ) {
     if( it.current()->isDir() )
       (void)new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
     else if( it.current()->isFile() )

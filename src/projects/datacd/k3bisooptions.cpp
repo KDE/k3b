@@ -49,6 +49,8 @@ K3bIsoOptions::K3bIsoOptions()
   m_followSymbolicLinks = false;
   m_createTRANS_TBL = false;
   m_hideTRANS_TBL = false;
+  m_jolietLong = false;
+
   m_isoLevel = 2;
 
   m_discardSymlinks = false;
@@ -94,6 +96,8 @@ void K3bIsoOptions::save( KConfig* c )
   c->writeEntry( "allow multible dots", m_ISOallowMultiDot );
   c->writeEntry( "allow lowercase filenames", m_ISOallowLowercase );
   c->writeEntry( "follow symbolic links", m_followSymbolicLinks );
+
+  c->writeEntry( "joliet long", m_jolietLong );
 
   c->writeEntry( "force input charset", m_bForceInputCharset );
   c->writeEntry( "input charset", m_inputCharset );
@@ -158,6 +162,8 @@ K3bIsoOptions K3bIsoOptions::load( KConfig* c )
   options.setISOallowLowercase( c->readBoolEntry( "allow lowercase filenames", options.ISOallowLowercase() ) );
   options.setISOomitTrailingPeriod( c->readBoolEntry( "omit trailing period", options.ISOomitTrailingPeriod() ) );
   options.setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", options.followSymbolicLinks() ) );
+
+  options.setJolietLong( c->readBoolEntry( "joliet long", options.jolietLong() ) );
 
   QString w = c->readEntry( "white_space_treatment", "noChange" );
   if( w == "replace" )

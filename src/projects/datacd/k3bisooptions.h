@@ -50,6 +50,7 @@ class K3bIsoOptions
   bool followSymbolicLinks() const { return m_followSymbolicLinks; }
   bool createTRANS_TBL() const { return m_createTRANS_TBL; }
   bool hideTRANS_TBL() const { return m_hideTRANS_TBL; }
+  bool jolietLong() const { return m_jolietLong; }
 
   bool preserveFilePermissions() const { return m_preserveFilePermissions; }
 
@@ -79,6 +80,7 @@ class K3bIsoOptions
   void setFollowSymbolicLinks( bool b ) {  m_followSymbolicLinks = b; }
   void setCreateTRANS_TBL( bool b ) {  m_createTRANS_TBL = b; }
   void setHideTRANS_TBL( bool b ) {  m_hideTRANS_TBL = b; }
+  void setJolietLong( bool b ) { m_jolietLong = b; }
 	
   void setISOLevel( int i ) { m_isoLevel = i; }
   void setSystemId( const QString& s ) { m_systemId = s; }
@@ -146,6 +148,7 @@ class K3bIsoOptions
   bool m_hideTRANS_TBL;    // -hide-joliet-trans-tbl
 
   bool m_preserveFilePermissions;   // if true -R instead of -r is used
+  bool m_jolietLong;
 	
   int m_isoLevel;
 

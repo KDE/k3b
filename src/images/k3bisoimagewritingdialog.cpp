@@ -24,12 +24,12 @@
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <tools/k3bmd5job.h>
-#include <k3bdatamodewidget.h>
 #include <k3bglobals.h>
 #include <k3bwritingmodewidget.h>
 #include <k3bcore.h>
 #include <k3blistview.h>
 #include <k3biso9660.h>
+#include <k3bthememanager.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -41,7 +41,6 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kio/global.h>
-#include <kio/netaccess.h>
 #include <kurl.h>
 #include <klineeditdlg.h>
 
@@ -51,16 +50,13 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qlayout.h>
-#include <qptrlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-
+#include <qspinbox.h>
 
 
 class K3bIsoImageWritingDialog::Private
@@ -72,28 +68,24 @@ public:
 
   K3bListViewItem* md5SumItem;
   QString lastCheckedFile;
-  bool dvd;
   bool isIsoImage;
 };
 
 
-K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( bool dvd, QWidget* parent, const char* name, bool modal )
+K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
   : K3bInteractionDialog( parent, name, 
 			  i18n("Burn Iso9660 Image"), 
-			  dvd ? i18n("to DVD") : i18n("to CD"),
+			  i18n("to DVD"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  modal )
 {
   d = new Private();
-  d->dvd = dvd;
 
   setupGui();
 
-  if( d->dvd )
-    m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
-  else
-    m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD|K3b::CDRDAO );
+  m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
+  m_writingModeWidget->setSupportedModes( K3b::DAO|K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR );
 
   m_job = 0;
   m_md5Job = new K3bMd5Job( this );
@@ -104,7 +96,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( bool dvd, QWidget* parent, c
 
 
   slotLoadUserDefaults();
-  slotWriterChanged();
 
   updateImageSize( m_editImagePath->url() );
 
@@ -116,6 +107,8 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( bool dvd, QWidget* parent, c
 	   this, SLOT(slotWriterChanged()) );
   connect( m_editImagePath, SIGNAL(textChanged(const QString&)), 
 	   this, SLOT(updateImageSize(const QString&)) );
+  connect( m_checkDummy, SIGNAL(toggled(bool)),
+	   this, SLOT(slotWriterChanged()) );
 }
 
 
@@ -130,33 +123,21 @@ void K3bIsoImageWritingDialog::setupGui()
 {
   QWidget* frame = mainWidget();
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( d->dvd, frame );
-
-
-  // options
+  // image
   // -----------------------------------------------------------------------
-  QTabWidget* optionTabbed = new QTabWidget( frame );
+  QGroupBox* groupImageUrl = new QGroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
+  m_editImagePath = new KURLRequester( groupImageUrl );
+  m_editImagePath->setCaption( i18n("Choose Image File") );
+  m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
+			      + i18n("*|All Files") );
 
-  QWidget* optionTab = new QWidget( optionTabbed );
-  QGridLayout* groupOptionsLayout = new QGridLayout( optionTab );
-  groupOptionsLayout->setAlignment( Qt::AlignTop );
-  groupOptionsLayout->setSpacing( spacingHint() );
-  groupOptionsLayout->setMargin( marginHint() );
-
-  // image group box
+  // image info
   // -----------------------------------------------------------------------
-  QGroupBox* groupImage = new QGroupBox( 2, Qt::Horizontal, i18n("Image to Burn"), optionTab );
-  m_editImagePath = new KURLRequester( groupImage );
-  m_editImagePath->setCaption( i18n("Choose ISO Image File or cue/bin Combination") );
-  QString filter = i18n("*.iso|ISO9660 Image Files");
-  filter += "\n" + i18n("*|All Files");
-  m_editImagePath->setFilter(filter);
-
-  m_infoView = new K3bListView( groupImage );
+  m_infoView = new K3bListView( frame );
   m_infoView->addColumn( "key" );
   m_infoView->addColumn( "value" );
   m_infoView->header()->hide();
-  m_infoView->setNoItemText( i18n("Please select an Iso9660 image file") );
+  m_infoView->setNoItemText( i18n("No image file selected") );
   m_infoView->setSorting( -1 );
   m_infoView->setAlternateBackground( QColor() );
   m_infoView->setFullWidth(true);
@@ -165,62 +146,61 @@ void K3bIsoImageWritingDialog::setupGui()
 
   connect( m_infoView, SIGNAL(editorButtonClicked( K3bListViewItem*, int )),
 	   this, SLOT(slotMd5SumCompare()) );
+
+
+  // options
   // -----------------------------------------------------------------------
+  QTabWidget* optionTabbed = new QTabWidget( frame );
+
+  QWidget* optionTab = new QWidget( optionTabbed );
+  QGridLayout* optionTabLayout = new QGridLayout( optionTab );
+  optionTabLayout->setAlignment( Qt::AlignTop );
+  optionTabLayout->setSpacing( spacingHint() );
+  optionTabLayout->setMargin( marginHint() );
+
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( true, optionTab );
 
   QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
 
+
+  // copies --------
+  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
+  groupCopies->setInsideSpacing( spacingHint() );
+  groupCopies->setInsideMargin( marginHint() );
+  QLabel* pixLabel = new QLabel( groupCopies );
+  pixLabel->setPixmap( k3bthememanager->currentTheme()->pixmap( "k3b_cd_copy" ) );
+  pixLabel->setScaledContents( false );
+  m_spinCopies = new QSpinBox( groupCopies );
+  m_spinCopies->setMinValue( 1 );
+  m_spinCopies->setMaxValue( 99 );
+  // -------- copies
+
   QGroupBox* optionGroup = new QGroupBox( 3, Vertical, i18n("Options"), optionTab );
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
-  if( d->dvd )
-    m_checkBurnProof = 0;
-  else
-    m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( optionGroup );
-
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
-  groupOptionsLayout->addWidget( writingModeGroup, 0, 0 );
-  groupOptionsLayout->addWidget( optionGroup, 1, 0 );
-  groupOptionsLayout->addMultiCellWidget( groupImage, 0, 1, 1, 1 );
-  groupOptionsLayout->setRowStretch( 1, 1 );
-  groupOptionsLayout->setColStretch( 1, 1 );
+
+  optionTabLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+  optionTabLayout->addWidget( writingModeGroup, 1, 0 );
+  optionTabLayout->addWidget( groupCopies, 2, 0 );
+  optionTabLayout->addMultiCellWidget( optionGroup, 1, 2, 1, 1 );
+  optionTabLayout->setRowStretch( 2, 1 );
+  optionTabLayout->setColStretch( 1, 1 );
 
   optionTabbed->addTab( optionTab, i18n("Options") );
-
-
-  if( !d->dvd ) {
-    // advanced ---------------------------------
-    QWidget* advancedTab = new QWidget( optionTabbed );
-    QGridLayout* advancedTabLayout = new QGridLayout( advancedTab );
-    advancedTabLayout->setAlignment( Qt::AlignTop );
-    advancedTabLayout->setSpacing( spacingHint() );
-    advancedTabLayout->setMargin( marginHint() );
-    
-    m_dataModeWidget = new K3bDataModeWidget( advancedTab );
-    m_checkNoFix = K3bStdGuiItems::startMultisessionCheckBox( advancedTab );
-    
-    advancedTabLayout->addWidget( new QLabel( i18n("Data mode:"), advancedTab ), 0, 0 );
-    advancedTabLayout->addWidget( m_dataModeWidget, 0, 1 );
-    advancedTabLayout->addMultiCellWidget( m_checkNoFix, 1, 1, 0, 2 );
-    advancedTabLayout->setRowStretch( 2, 1 );
-    advancedTabLayout->setColStretch( 2, 1 );
-    
-    optionTabbed->addTab( advancedTab, i18n("Advanced") );
-    // -----------------------------------------------------------------------
-  }
-
 
 
   QGridLayout* grid = new QGridLayout( frame );
   grid->setSpacing( spacingHint() );
   grid->setMargin( 0 );
 
-  grid->addWidget( m_writerSelectionWidget, 0, 0 );
-  //  grid->addWidget( groupImage, 1, 0 );
-  grid->addWidget( optionTabbed, 1, 0 );
+  grid->addWidget( groupImageUrl, 0, 0 );
+  grid->addWidget( m_infoView, 1, 0 );
+  grid->addWidget( optionTabbed, 2, 0 );
 
   grid->setRowStretch( 1, 1 );
 }
@@ -228,17 +208,11 @@ void K3bIsoImageWritingDialog::setupGui()
 
 void K3bIsoImageWritingDialog::slotStartClicked()
 {
-  // check if the image exists
-  if( !QFile::exists( m_editImagePath->url() ) ) {
-    KMessageBox::error( this, i18n("Could not find file %1").arg(m_editImagePath->url()) );
-    return;
-  }
-
   m_md5Job->cancel();
 
   // save the path
   KConfig* c = k3bcore->config();
-  c->setGroup( d->dvd ? "Iso9660 DVD image writing" : "Iso9660 image writing" );
+  c->setGroup( "DVD image writing" );
   if( c->readPathEntry( "last written image" ).isEmpty() )
     c->writePathEntry( "last written image", m_editImagePath->url() );
 
@@ -251,16 +225,11 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_job->setSimulate( m_checkDummy->isChecked() );
   m_job->setWritingMode( m_writingModeWidget->writingMode() );
   m_job->setVerifyData( m_checkVerify->isChecked() );
-  if( !d->dvd ) {
-    m_job->setBurnproof( m_checkBurnProof->isChecked() );
-    m_job->setNoFix( m_checkNoFix->isChecked() );
-    m_job->setDataMode( m_dataModeWidget->dataMode() );
-  }
-
+  m_job->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
   m_job->setImagePath( m_editImagePath->url() );
 
   // HACK (needed since if the medium is forced the stupid K3bIso9660ImageWritingJob defaults to cd writing)
-  m_job->setWritingApp( d->dvd ? K3b::GROWISOFS : m_writerSelectionWidget->writingApp() );
+  m_job->setWritingApp( K3b::GROWISOFS );
 
   // create a progresswidget
   K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
@@ -284,23 +253,15 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
   QFileInfo info( path );
   if( info.isFile() ) {
 
-    KIO::filesize_t imageSize = 0;
-    // we use KIO since QFileInfo does provide the size as unsigned int wich is way too small for DVD images
-    KIO::UDSEntry uds;
-    KIO::NetAccess::stat( path, uds );
-    for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
-      if( (*it).m_uds == KIO::UDS_SIZE ) {
-	imageSize = (*it).m_long;
-	break;
-      }
-    }
+    KIO::filesize_t imageSize = K3b::filesize( path );
 
     // ------------------------------------------------
     // Test for iso9660 image
     // ------------------------------------------------
     K3bIso9660 isoF( path );
     if( isoF.open( IO_ReadOnly ) ) {
-      isoF.debug();
+
+      d->isIsoImage = true;
 
       K3bListViewItem* isoRootItem = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
 							  i18n("Iso9660 image") );
@@ -369,39 +330,25 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
       item->setPixmap( 0, SmallIcon( "stop") );
     }
 
-    // enable the Write-Button
-    m_buttonStart->setEnabled( true );
-
     calculateMd5Sum( path );
   }
-  else {
-    // Disable the Write-Button
-    m_buttonStart->setDisabled( true );
-  }
+
+  slotWriterChanged();
 }
 
 
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
-  if (m_writerSelectionWidget->writerDevice()) {
-    m_buttonStart->setEnabled( true );
+  if( m_writerSelectionWidget->writerDevice() ) {
+    m_buttonStart->setEnabled( d->isIsoImage );
 
-    if( !d->dvd ) {
-      if( !m_writerSelectionWidget->writerDevice()->burnproof() ) {
-	m_checkBurnProof->setChecked( false );
-	m_checkBurnProof->setDisabled( true );
-      }
-      else {
-	m_checkBurnProof->setEnabled( true );
-      }
+    if( m_checkDummy->isChecked() ) {
+      m_checkVerify->setEnabled( false );
+      m_checkVerify->setChecked( false );
     }
-
-    if( d->dvd )   
-      m_writingModeWidget->setSupportedModes( K3b::DAO|K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR );
-    else if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
-      m_writingModeWidget->setSupportedModes( K3b::DAO );
     else
-      m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW ); // stuff supported by cdrecord
+      m_checkVerify->setEnabled( true );
+    m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
   }
   else {
     m_buttonStart->setEnabled( false );
@@ -482,16 +429,10 @@ void K3bIsoImageWritingDialog::slotMd5SumCompare()
 void K3bIsoImageWritingDialog::slotLoadUserDefaults()
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( d->dvd ? "Iso9660 DVD image writing" : "Iso9660 image writing" );
+  c->setGroup( "DVD image writing" );
 
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
-  if( !d->dvd ) {
-    m_checkBurnProof->setChecked( c->readBoolEntry("burnproof", true ) );
-    m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
-    m_dataModeWidget->loadConfig(c);
-  }
- 
   m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
 
   m_writerSelectionWidget->loadConfig( c );
@@ -503,16 +444,10 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
 void K3bIsoImageWritingDialog::slotSaveUserDefaults()
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( d->dvd ? "Iso9660 DVD image writing" : "Iso9660 image writing" );
+  c->setGroup( "DVD image writing" );
 
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
-  if( !d->dvd ) {
-    c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
-    c->writeEntry( "multisession", m_checkNoFix->isChecked() );
-    m_dataModeWidget->saveConfig(c);
-  }
-
   c->writeEntry( "verify_data", m_checkVerify->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
@@ -526,11 +461,6 @@ void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkDummy->setChecked( false );
   m_checkVerify->setChecked( false );
-  if( !d->dvd ) {
-    m_checkBurnProof->setChecked( true );
-    m_checkNoFix->setChecked( false );
-    m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
-  }
 }
 
 #include "k3bisoimagewritingdialog.moc"

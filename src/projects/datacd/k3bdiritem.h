@@ -39,18 +39,13 @@ class K3bDirItem : public K3bDataItem
 	
   K3bDirItem* getDirItem();
 
-  QPtrList<K3bDataItem>* children() const { return m_children; }
+  const QPtrList<K3bDataItem>& children() const { return m_children; }
   K3bDirItem* addDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( int index );
-  /** reimplemented from K3bDataItem */
-  virtual QString k3bPath();
-  virtual QString jolietPath();
 	
   K3bDataItem* nextSibling();
   K3bDataItem* nextChild( K3bDataItem* );
-  /** returns an empty dummy directory */
-  QString localPath() const;
 
   bool alreadyInDirectory( const QString& fileName ) const;
   K3bDataItem* find( const QString& filename ) const;
@@ -72,11 +67,6 @@ class K3bDirItem : public K3bDataItem
 
   virtual bool isRemoveable() const;
 
-  /**
-   * Makes sure that all subitems have different jolietnames.
-   */
-  virtual void revalidateJolietNames();
-	
  private:
   /**
    * this recursivly updates the size of the directories.
@@ -90,7 +80,7 @@ class K3bDirItem : public K3bDataItem
    */
   void updateFiles( long files, long dirs );
 
-  QPtrList<K3bDataItem>* m_children;
+  QPtrList<K3bDataItem> m_children;
 
   KIO::filesize_t m_size;
   long m_files;
@@ -106,7 +96,6 @@ class K3bRootItem : public K3bDirItem
 
   /** reimplemented from K3bDataItem */
   QString k3bPath();
-  QString jolietPath();
 
   const QString& k3bName();
   void setK3bName( const QString& );

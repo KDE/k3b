@@ -108,6 +108,9 @@ bool K3bMovixDocPreparer::createMovixStructures()
 
   removeMovixStructures();
 
+  if( doc() )
+    doc()->prepareFilenames();
+
   if( addMovixFiles() ) {
     d->structuresCreated = true;
     emit finished(true);
@@ -164,10 +167,7 @@ bool K3bMovixDocPreparer::writePlaylistFile()
     for( QPtrListIterator<K3bMovixFileItem> it( movixFileItems );
 	 *it; ++it ) {
       *s << "/cdrom/";
-      if( d->doc->isoOptions().createJoliet() )
-	*s << it.current()->jolietName();
-      else
-	*s << it.current()->k3bName();
+      *s << it.current()->writtenName();
       *s << endl;
     }
 

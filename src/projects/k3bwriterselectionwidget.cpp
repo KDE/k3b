@@ -26,14 +26,19 @@
 #include <kdialog.h>
 #include <kconfig.h>
 #include <kcombobox.h>
+#include <kmessagebox.h>
+#include <kiconloader.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qtooltip.h>
+#include <qtoolbutton.h>
 #include <qwhatsthis.h>
 #include <qmap.h>
 #include <qptrvector.h>
+#include <qcursor.h>>
+#include <qapplication.h>
 
 
 class K3bWriterSelectionWidget::Private
@@ -72,18 +77,18 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
 
   m_comboWriter = new K3bDeviceComboBox( groupWriter, "m_comboWriter" );
 
-//   QLabel* labelDevice = new QLabel( groupWriter, "TextLabel1_2" );
-//   labelDevice->setText( i18n( "Device:" ) );
+  m_buttonDetermineSpeed = new QToolButton( groupWriter );
+  m_buttonDetermineSpeed->setIconSet( SmallIconSet( "reload" ) );
 
   m_writingAppLabel = new QLabel( i18n("Writing app:"), groupWriter );
   m_comboWritingApp = new KComboBox( groupWriter );
 
-  //  groupWriterLayout->addWidget( labelDevice, 0, 0 );
-  groupWriterLayout->addWidget( labelSpeed, 0, 1 );
-  groupWriterLayout->addWidget( m_writingAppLabel, 0, 3 );
   groupWriterLayout->addWidget( m_comboWriter, 0, 0 );
+  groupWriterLayout->addWidget( labelSpeed, 0, 1 );
   groupWriterLayout->addWidget( m_comboSpeed, 0, 2 );
-  groupWriterLayout->addWidget( m_comboWritingApp, 0, 4 );
+  groupWriterLayout->addWidget( m_buttonDetermineSpeed, 0, 3 );
+  groupWriterLayout->addWidget( m_writingAppLabel, 0, 4 );
+  groupWriterLayout->addWidget( m_comboWritingApp, 0, 5 );
   groupWriterLayout->setColStretch( 0, 1 );
 
 
@@ -95,12 +100,20 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
   mainLayout->addWidget( groupWriter, 0, 0 );
 
 
-  connect( m_comboWriter, SIGNAL(selectionChanged(K3bDevice*)), this, SIGNAL(writerChanged()) );
+  connect( m_comboWriter, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SIGNAL(writerChanged()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
-
+  connect( m_buttonDetermineSpeed, SIGNAL(clicked()), this, SLOT(slotDetermineSupportedWriteSpeeds()) );
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 
+  QToolTip::add( m_buttonDetermineSpeed, i18n("Determine supported writing speeds") );
+  QWhatsThis::add( m_buttonDetermineSpeed, i18n("<p>Normally K3b presents static list of writing speeds "
+						"that is only based on the maximum writing speed of the "
+						"device."
+						"<p>If this button is clicked K3b tries to determine the "
+						"writing speeds supported with the mounted media."
+						"<p>Be aware that this only works with MMC3 compliant "
+						"writers.") );
   init();
 
   slotWriterChanged();
@@ -444,5 +457,33 @@ void K3bWriterSelectionWidget::setForceAutoSpeed( bool b )
   d->forceAutoSpeed = b;
   slotRefreshWriterSpeeds();
 }
+
+
+void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
+{
+  if( writerDevice() ) {
+    // change the cursor since we block the gui here :(
+    QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+
+    QValueList<int> speeds = writerDevice()->determineSupportedWriteSpeeds();
+    if( speeds.isEmpty() ) {
+      KMessageBox::error( this, i18n("Unable to determine the supported writing speeds.") );
+    }
+    else {
+      int lastSpeed = writerSpeed();
+
+      m_comboSpeed->clear();
+      m_comboSpeed->insertItem( i18n("Auto") );
+      for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
+	m_comboSpeed->insertItem( QString( "%1x" ).arg( d->dvd ? *it/1385 : *it/175 ) );
+
+      // try to reload last set speed
+      setSpeed( lastSpeed );
+    }
+
+    QApplication::restoreOverrideCursor();
+  }
+}
+
 
 #include "k3bwriterselectionwidget.moc"

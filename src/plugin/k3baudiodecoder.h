@@ -104,14 +104,18 @@ class K3bAudioDecoder : public K3bPlugin
   /**
    * This method may be reimplemented to provide technical information about
    * the file. It should return localized strings.
+   *
+   * the default implementation returns the infos set via @p addTechnicalInfo
    */
-  virtual QStringList supportedTechnicalInfos() const { return QStringList(); }
+  virtual QStringList supportedTechnicalInfos() const;
 
   /**
    * The framework will call this method with all strings returned by the
    * supportedTechnicalInfos() method. It should return localized strings.
+   *
+   * the default implementation returns the infos set via @p addTechnicalInfo
    */
-  virtual QString technicalInfo( const QString& ) const { return QString::null; }
+  virtual QString technicalInfo( const QString& ) const;
 
   /**
    * returnes -1 on error, 0 when finished, length of data otherwise
@@ -152,6 +156,12 @@ class K3bAudioDecoder : public K3bPlugin
   static void from8BitTo16BitBeSigned( char* src, char* dest, int samples );
 
  protected:
+  /**
+   * Use this method if using the default implementation of @p technicalInfo
+   * and @p supportedTechnicalInfos.
+   */
+  void addTechnicalInfo( const QString&, const QString& );
+
   /**
    * This will be called once before the first call to decodeInternal.
    * Use it to initialize decoding structures if necessary.

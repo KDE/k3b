@@ -23,6 +23,7 @@ class KComboBox;
 class KConfig;
 class QLabel;
 class K3bDeviceComboBox;
+class QToolButton;
 namespace K3bCdDevice {
   class CdDevice;
 }
@@ -86,6 +87,7 @@ class K3bWriterSelectionWidget : public QWidget
   void slotConfigChanged( KConfig* c );
   void slotSpeedChanged( int index );
   void slotWriterChanged();
+  void slotDetermineSupportedWriteSpeeds();
 
  private:
   void init();
@@ -96,6 +98,7 @@ class K3bWriterSelectionWidget : public QWidget
   K3bDeviceComboBox* m_comboWriter;
   KComboBox* m_comboWritingApp;
   QLabel* m_writingAppLabel;
+  QToolButton* m_buttonDetermineSpeed;
 
   class Private;
   Private* d;

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -48,6 +48,7 @@ class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSetti
   QCheckListItem* m_checkFollowSymbolicLinks;
   QCheckListItem* m_checkAllow31CharFilenames;
   QCheckListItem* m_checkAllowBeginningPeriod;
+  QCheckListItem* m_checkJolietLong;
 
   QCheckListItem* m_isoLevelController;
   QCheckListItem* m_radioIsoLevel1;

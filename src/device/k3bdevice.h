@@ -18,6 +18,8 @@
 #define K3BDEVICE_H
 
 #include <qstringlist.h>
+#include <qvaluelist.h>
+
 #include <k3bdiskinfo.h>
 #include <k3bcdtext.h>
 #include <k3bmsf.h>
@@ -391,6 +393,14 @@ namespace K3bCdDevice
      * @returns -1 on error K3bCdDevice::MediaType otherwise
      */
     int dvdMediaType() const;
+
+    /**
+     * Returnes the list of supported writing speeds as reported by 
+     * mode page 2Ah.
+     *
+     * This only works with MMC3 compliant drives.
+     */
+    QValueList<int> determineSupportedWriteSpeeds() const;
 
     /**
      * @returnes the speed in kb/s or 0 on failure.

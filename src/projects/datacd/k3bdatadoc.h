@@ -87,18 +87,8 @@ class K3bDataDoc : public K3bDoc
 
   K3bDirItem* addEmptyDir( const QString& name, K3bDirItem* parent );
 	
-  /** writes a mkisofs-path-spec file with graft-points **/
-  QString writePathSpec( const QString& fileName );
-
   QString treatWhitespace( const QString& );
 	
-  /**
-   * returns an empty dummy dir for use with K3bDirItems.
-   * Creates one if nessessary.
-   * The dummy dir is used to create empty dirs on the iso-filesystem! 
-   */
-  static QString dummyDir();
-
   virtual K3bBurnJob* newBurnJob();
 	
   int multiSessionMode() const { return m_multisessionMode; }
@@ -124,6 +114,19 @@ class K3bDataDoc : public K3bDoc
 
   // This is just a temp solution and will be removed
   K3bFileCompilationSizeHandler* sizeHandler() const { return m_sizeHandler; }
+
+  /**
+   * This will prepare the filenames as written to the image.
+   * These filenames are saved in K3bDataItem::writtenName
+   */
+  void prepareFilenames();
+
+  /**
+   * Returns true if filenames need to be cut due to the limitations of Joliet.
+   *
+   * This is only valid after a call to @p prepareFilenames()
+   */
+  bool needToCutFilenames() const { return m_needToCutFilenames; }
 
  public slots:
   void slotBurn();
@@ -170,6 +173,7 @@ class K3bDataDoc : public K3bDoc
   virtual K3bView* newView( QWidget* parent );
 
  private:
+  void prepareFilenamesInDir( K3bDirItem* dir );
   void createSessionImportItems( const KArchiveDirectory*, K3bDirItem* parent );
   K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
 
@@ -224,6 +228,8 @@ class K3bDataDoc : public K3bDoc
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;
+
+  bool m_needToCutFilenames;
 
   friend class K3bMixedDoc;
 };

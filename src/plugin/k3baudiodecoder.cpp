@@ -20,6 +20,8 @@
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 
+#include <qmap.h>
+
 #include <math.h>
 
 #ifdef HAVE_LIBSAMPLERATE
@@ -76,6 +78,8 @@ public:
   // mono -> stereo conversion
   char* monoBuffer;
   int monoBufferSize;
+
+  QMap<QString, QString> technicalInfoMap;
 };
 
 
@@ -110,6 +114,7 @@ void K3bAudioDecoder::setFilename( const QString& filename )
 
 bool K3bAudioDecoder::analyseFile()
 {
+  d->technicalInfoMap.clear();
   cleanup();
   bool ret = analyseFileInternal( m_length, d->samplerate, d->channels );
   if( ret ) {
@@ -371,6 +376,28 @@ QString K3bAudioDecoder::metaInfo( const QString& tag )
   }
 
   return QString::null;
+}
+
+
+QStringList K3bAudioDecoder::supportedTechnicalInfos() const
+{
+  QStringList l;
+  for( QMap<QString, QString>::const_iterator it = d->technicalInfoMap.begin();
+       it != d->technicalInfoMap.end(); ++it )
+    l.append( it.key() );
+  return l;
+}
+
+
+QString K3bAudioDecoder::technicalInfo( const QString& key ) const
+{
+  return d->technicalInfoMap[key];
+}
+
+
+void K3bAudioDecoder::addTechnicalInfo( const QString& key, const QString& value )
+{
+  d->technicalInfoMap[key] = value;
 }
 
 

@@ -31,6 +31,12 @@ class KProcess;
 class K3bExternalProgram;
 
 
+/**
+ * A K3bExternalBin represents an installed version of a program.
+ * All K3bExternalBin objects are managed by K3bExternalPrograms.
+ *
+ * A bin may have certain features that are represented by a string.
+ */
 class K3bExternalBin
 {
  public:

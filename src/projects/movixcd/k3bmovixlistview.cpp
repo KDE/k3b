@@ -67,23 +67,28 @@ K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
 
 QString K3bMovixFileViewItem::text( int col ) const
 {
+  //
+  // We add two spaces after all strings (except the once renamable)
+  // to increase readability
+  //
+
   switch( col ) {
   case 0:
     // allowing 999 files to be added. 
     return QString::number( doc()->indexOf( fileItem() ) ).rightJustify( 3, ' ' );
   case 1:
-    return fileItem()->k3bName();
+    return fileItem()->k3bName() + "  ";
   case 2:
     {
       if( fileItem()->isSymLink() )
-	return i18n("Link to %1").arg(fileItem()->mimeComment());
+	return i18n("Link to %1").arg(fileItem()->mimeComment()) + "  ";
       else
-	return fileItem()->mimeComment();
+	return fileItem()->mimeComment() + "  ";
     }
   case 3:
-    return KIO::convertSize( fileItem()->k3bSize() );
+    return KIO::convertSize( fileItem()->k3bSize() ) + "  ";
   case 4:
-    return fileItem()->localPath();
+    return fileItem()->localPath() + "  ";
   case 5:
     return ( fileItem()->isValid() ? fileItem()->linkDest() : fileItem()->linkDest() + i18n(" (broken)") );
   default:

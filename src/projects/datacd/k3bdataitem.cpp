@@ -60,44 +60,44 @@ void K3bDataItem::setK3bName( const QString& name ) {
   }
 
   m_k3bName = name;
-  if( parent() )
-    parent()->revalidateJolietNames();
 }
 
 
-void K3bDataItem::setJolietName( const QString& name )
-{
-  m_jolietName = name;
-}
-
-
-const QString& K3bDataItem::k3bName()
+const QString& K3bDataItem::k3bName() const
 {
   return m_k3bName;
 }
 
 
-const QString& K3bDataItem::jolietName()
+QString K3bDataItem::k3bPath() const
 {
-  return m_jolietName;
+  QString s;
+
+  if( !m_parentDir )
+    s = k3bName();
+  else
+    s = m_parentDir->k3bPath() + k3bName();
+
+  if( isDir() )
+    s += "/";
+
+  return s;
 }
 
 
-QString K3bDataItem::k3bPath()
+QString K3bDataItem::writtenPath() const
 {
-  if( !m_parentDir )
-    return k3bName();
-  else
-    return m_parentDir->k3bPath() + k3bName();
-}
+  QString s;
 
-
-QString K3bDataItem::jolietPath()
-{
   if( !m_parentDir )
-    return jolietName();
+    s = writtenName();
   else
-    return m_parentDir->jolietPath() + jolietName();
+    s = m_parentDir->writtenPath() + writtenName();
+
+  if( isDir() )
+    s += "/";
+
+  return s;
 }
 
 

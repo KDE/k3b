@@ -21,6 +21,8 @@
 
 #include <kdialogbase.h>
 
+#include <qptrlist.h>
+
 namespace K3bCdDevice {
   class CdDevice;
 }
@@ -38,6 +40,10 @@ class K3bDeviceSelectionDialog : public KDialogBase
   ~K3bDeviceSelectionDialog();
 
   void addDevice( K3bCdDevice::CdDevice* );
+  void addDevices( const QPtrList<K3bCdDevice::CdDevice>& );
+
+  void setSelectedDevice( K3bCdDevice::CdDevice* );
+
   K3bCdDevice::CdDevice* selectedDevice() const;
 
   static K3bCdDevice::CdDevice* selectWriter( QWidget* parent, 

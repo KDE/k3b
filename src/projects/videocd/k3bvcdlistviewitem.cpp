@@ -38,32 +38,37 @@ K3bVcdListViewItem::~K3bVcdListViewItem()
 
 QString K3bVcdListViewItem::text( int i ) const
 {
+  //
+  // We add two spaces after all strings (except the once renamable)
+  // to increase readability
+  //
+
     switch ( i ) {
         case 0:
-            return QString::number( m_track->index() + 1 ).rightJustify( 2, ' ' );
+            return QString::number( m_track->index() + 1 ).rightJustify( 2, ' ' ) + "  ";
         case 1:
             return m_track->title();
         case 2:
             // track mpegtype
-            return m_track->mpegVersion();
+            return m_track->mpegVersion() + "  ";
         case 3:
             // track mpegsize
-            return m_track->mpegSize();
+            return m_track->mpegSize() + "  ";
         case 4:
             // track mpegdisplaysize
-            return m_track->mpegDisplaySize();
+            return m_track->mpegDisplaySize() + "  ";
         case 5:
             // track mpegfps
-            return m_track->mpegFps();
+            return m_track->mpegFps() + "  ";
         case 6:
             // track mpegmbps
-            return m_track->mpegMbps();
+            return m_track->mpegMbps() + "  ";
         case 7:
             // track mpegduration
-            return m_track->mpegDuration();
+            return m_track->mpegDuration() + "  ";
         case 8:
             // track size
-            return KIO::convertSize( m_track->size() );
+            return KIO::convertSize( m_track->size() ) + "  ";
         case 9:
             // filename
             return m_track->fileName();

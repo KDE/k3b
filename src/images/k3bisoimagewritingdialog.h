@@ -26,12 +26,10 @@ class QLabel;
 class K3bIso9660ImageWritingJob;
 class KURL;
 class K3bMd5Job;
-class KActiveLabel;
-class KProgress;
-class K3bDataModeWidget;
 class K3bWritingModeWidget;
 class KURLRequester;
 class K3bListView;
+class QSpinBox;
 
 
 /**
@@ -42,7 +40,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bIsoImageWritingDialog( bool dvd, QWidget* = 0, const char* = 0, bool = true );
+  K3bIsoImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
   ~K3bIsoImageWritingDialog();
 
   void setImage( const KURL& url );
@@ -70,10 +68,8 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkDummy;
-  QCheckBox* m_checkBurnProof;
-  QCheckBox* m_checkNoFix;
   QCheckBox* m_checkVerify;
-  K3bDataModeWidget* m_dataModeWidget;
+  QSpinBox* m_spinCopies;
   K3bWritingModeWidget* m_writingModeWidget;
 
   KURLRequester* m_editImagePath;

@@ -43,6 +43,13 @@ class K3bIsoImager : public K3bJob
 
   int size() const { return m_mkisofsPrintSizeResult; }
 
+  /**
+   * returns an empty dummy dir for use with K3bDirItems.
+   * Creates one if nessessary.
+   * The dummy dir is used to create empty dirs on the iso-filesystem! 
+   */
+  static QString dummyDir();
+
  public slots:
   virtual void start();
   virtual void cancel();
@@ -86,13 +93,6 @@ class K3bIsoImager : public K3bJob
   //  void data( char* data, int len );
 
  protected:
-  /**
-   * This method just creates some user information about the filenames
-   * that need to be cut in order to fulfill the 64 char restriction of
-   * the joliet extensions.
-   */
-  void informAboutCutJolietNames();
-
   bool addMkisofsParameters();
 
   /**

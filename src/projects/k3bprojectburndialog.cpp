@@ -87,7 +87,7 @@ void K3bProjectBurnDialog::toggleAllOptions()
 {
   if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
     if( !m_dvd ) {
-      if( dev->burnproof() ) {
+      if( dev->burnfree() ) {
 	if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
 	  // no possibility to disable burnfree yet
 	  m_checkBurnproof->setChecked(true);

@@ -158,7 +158,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   // setup connections
   // //////////////////////////////////////////////////////////////////////////
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
-  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice*)), this, SLOT(slotToggleAll()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );

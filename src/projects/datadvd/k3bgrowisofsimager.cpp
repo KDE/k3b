@@ -187,6 +187,9 @@ void K3bGrowisofsImager::start()
     *m_process << *it;
 
 
+  // prepare the filenames as written to the image
+  m_doc->prepareFilenames();
+
   //
   // now add the mkisofs options
   //
@@ -215,7 +218,11 @@ void K3bGrowisofsImager::start()
   emit debuggingOutput("growisofs comand:", s);
 
 
-  informAboutCutJolietNames();
+  if( m_doc->needToCutFilenames() )
+    emit infoMessage( i18n("Some filenames need to be shortened due to the %1 char restriction "
+			   "of the Joliet extensions.")
+		      .arg( m_doc->isoOptions().jolietLong() ? 103 : 64 ), 
+		      WARNING );
 
 
   emit newSubTask( i18n("Preparing write process...") );

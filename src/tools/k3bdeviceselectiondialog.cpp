@@ -17,8 +17,9 @@
 
 #include "k3bdeviceselectiondialog.h"
 #include <k3bdevice.h>
-#include <k3bdevicemanager.h>
+#include <k3bdevicecombobox.h>
 #include <k3bcore.h>
+#include <k3bdevicemanager.h>
 
 #include <qcombobox.h>
 #include <qlayout.h>
@@ -32,7 +33,7 @@
 class K3bDeviceSelectionDialog::Private
 {
 public:
-  QComboBox* comboDevices;
+  K3bDeviceComboBox* comboDevices;
 };
 
 
@@ -53,7 +54,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
   QGridLayout* lay = new QGridLayout( plainPage() );
 
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, plainPage() );
-  d->comboDevices = new QComboBox( plainPage() );
+  d->comboDevices = new K3bDeviceComboBox( plainPage() );
 
   lay->addWidget( label, 0, 0 );
   lay->addWidget( d->comboDevices, 1, 0 );
@@ -68,21 +69,25 @@ K3bDeviceSelectionDialog::~K3bDeviceSelectionDialog()
 
 void K3bDeviceSelectionDialog::addDevice( K3bCdDevice::CdDevice* dev )
 {
-  d->comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
+  d->comboDevices->addDevice( dev );
+}
+
+
+void K3bDeviceSelectionDialog::addDevices( const QPtrList<K3bCdDevice::CdDevice>& list )
+{
+  d->comboDevices->addDevices( list );
 }
 
 
 K3bDevice* K3bDeviceSelectionDialog::selectedDevice() const
 {
-  const QString& s = d->comboDevices->currentText();
+  return d->comboDevices->selectedDevice();
+}
 
-  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
- 
-  K3bDevice* dev =  k3bcore->deviceManager()->deviceByName( strDev );
-  if( !dev )
-    kdDebug() << "(K3bDeviceSelectionDialog) could not find device " << s << endl;
-		
-  return dev;
+
+void K3bDeviceSelectionDialog::setSelectedDevice( K3bCdDevice::CdDevice* dev )
+{
+  d->comboDevices->setSelectedDevice( dev );
 }
 
 
@@ -96,8 +101,7 @@ K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
     return devices.getFirst();
 
   K3bDeviceSelectionDialog dlg( parent, 0, text );
-  for( QPtrListIterator<K3bCdDevice::CdDevice> it( devices ); it.current(); ++it )
-    dlg.addDevice( it.current() );
+  dlg.addDevices( devices );
 
   if( dlg.exec() == Accepted )
     return dlg.selectedDevice();

@@ -19,11 +19,43 @@
 #define K3BTRACK_H
 
 #include <qstring.h>
+#include <qvaluelist.h>
 
 #include <k3bmsf.h>
 
 namespace K3bCdDevice
 {
+
+  class Index
+    {
+    public:
+      /**
+       * Invalid index
+       */
+      Index()
+	: m_num(-1) {
+      }
+
+      Index( int num, const K3b::Msf& pos )
+	: m_position(pos),
+	m_num(num) {
+      }
+
+      /**
+       * Startposition
+       */
+      const K3b::Msf& position() const { return m_position; }
+
+      /**
+       * Index number
+       */
+      int number() const { return m_num; }
+
+    private:
+      K3b::Msf m_position;
+      int m_num;
+    };
+
 
   class Track
   {
@@ -49,11 +81,9 @@ namespace K3bCdDevice
     Track( const K3b::Msf& firstSector, 
 	   const K3b::Msf& lastSector, 
 	   int type, 
-	   int mode = UNKNOWN, 
-	   const QString& = QString::null );
+	   int mode = UNKNOWN );
     Track& operator=( const Track& );
 
-    const QString& title() const { return m_title; }
     int type() const { return m_type; }
 
     /**
@@ -80,20 +110,21 @@ namespace K3bCdDevice
      */
     K3b::Msf realAudioLength() const;
 
-    long index0() const { return m_index0; }
+    /**
+     * Returns the lba value of the position of index 0 if it is there.
+     */
+    long index0() const;
     
     /**
      * 0 if unknown
      */
     int session() const { return m_session; }
 
-    void setTitle( const QString& );
+    const QValueList<Index>& indices() const { return m_indices; }
 
   private:
     K3b::Msf m_firstSector;
     K3b::Msf m_lastSector;
-
-    long m_index0;
 
     int m_type;
     int m_mode;
@@ -102,7 +133,7 @@ namespace K3bCdDevice
 
     int m_session;
 
-    QString m_title;
+    QValueList<Index> m_indices;
   };
 }
 

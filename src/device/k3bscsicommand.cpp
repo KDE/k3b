@@ -22,6 +22,42 @@
 #include <sys/ioctl.h>
 
 
+QString senseKeyToString( int key )
+{
+  switch( key ) {
+  case 0x0:
+    return "NO SENSE (2)";
+  case 0x1:
+    return "RECOVERED ERROR (1)";
+  case 0x2:
+    return "NOT READY (2)";
+  case 0x3:
+    return "MEDIUM ERROR (3)";
+  case 0x4:
+    return "HARDWARE ERROR (4)";
+  case 0x5:
+    return "ILLEGAL REQUEST (5)";
+  case 0x6:
+    return "UNIT ATTENTION (6)";
+  case 0x7:
+    return "DATA PROTECT (7)";
+  case 0x8:
+    return "BLANK CHECK (8)";
+  case 0x9:
+    return "VENDOR SPECIFIC (9)";
+  case 0xA:
+    return "COPY ABORTED (A)";
+  case 0xB:
+    return "ABORTED COMMAND (B)";
+  case 0xC:
+    return "0xC is obsolete... ??";
+  }
+
+  return "unknown";
+}
+
+
+
 K3bCdDevice::ScsiCommand::ScsiCommand( int fd )
   : m_fd(fd),
     m_device(0)
@@ -88,51 +124,9 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 	      << "                           command:    " << QString("%1 (%2)")
       .arg( MMC::commandString( m_cmd.cmd[0] ) )
       .arg( QString::number(m_cmd.cmd[0], 16) ) << endl
-	      << "                           errorcode:  " << QString::number((int)m_sense.error_code, 16) << endl;
-
-    switch( m_sense.sense_key ) {
-    case 0x0:
-      kdDebug() << "                           sense key:  NO SENSE (2)" << endl;
-      break;
-    case 0x1:
-      kdDebug() << "                           sense key:  RECOVERED ERROR (1)" << endl;
-      break;
-    case 0x2:
-      kdDebug() << "                           sense key:  NOT READY (2)" << endl;
-      break;
-    case 0x3:
-      kdDebug() << "                           sense key:  MEDIUM ERROR (3)" << endl;
-      break;
-    case 0x4:
-      kdDebug() << "                           sense key:  HARDWARE ERROR (4)" << endl;
-      break;
-    case 0x5:
-      kdDebug() << "                           sense key:  ILLEGAL REQUEST (5)" << endl;
-      break;
-    case 0x6:
-      kdDebug() << "                           sense key:  UNIT ATTENTION (6)" << endl;
-      break;
-    case 0x7:
-      kdDebug() << "                           sense key:  DATA PROTECT (7)" << endl;
-      break;
-    case 0x8:
-      kdDebug() << "                           sense key:  BLANK CHECK (8)" << endl;
-      break;
-    case 0x9:
-      kdDebug() << "                           sense key:  VENDOR SPECIFIC (9)" << endl;
-      break;
-    case 0xA:
-      kdDebug() << "                           sense key:  COPY ABORTED (A)" << endl;
-      break;
-    case 0xB:
-      kdDebug() << "                           sense key:  ABORTED COMMAND (B)" << endl;
-      break;
-    case 0xC:
-      kdDebug() << "                           sense key:  0xC is obsolete... ??" << endl;
-      break;
-    }
-
-    kdDebug() << "                           asc:        " << QString::number((int)m_sense.asc, 16) << endl
+	      << "                           errorcode:  " << QString::number((int)m_sense.error_code, 16) << endl
+	      << "                           sense key:  " << senseKeyToString(m_sense.sense_key) << endl
+	      << "                           asc:        " << QString::number((int)m_sense.asc, 16) << endl
 	      << "                           ascq:       " << QString::number((int)m_sense.ascq, 16) << endl;
 
     return( m_sense.error_code != 0 ? m_sense.error_code : -1 );

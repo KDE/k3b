@@ -34,6 +34,7 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qtimer.h>
+#include <qdir.h>
 
 #include <errno.h>
 #include <string.h>
@@ -276,6 +277,9 @@ void K3bIsoImager::calculateSize()
 
   *m_process << mkisofsBin->path;
 
+  // prepare the filenames as written to the image
+  m_doc->prepareFilenames();
+
   if( !prepareMkisofsFiles() || 
       !addMkisofsParameters() ) {
     cleanup();
@@ -285,7 +289,7 @@ void K3bIsoImager::calculateSize()
 
   *m_process << "-print-size" << "-quiet";
   // add empty dummy dir since one path-spec is needed
-  *m_process << m_doc->dummyDir();
+  *m_process << dummyDir();
 
   kdDebug() << "***** mkisofs parameters:\n";
   const QValueList<QCString>& args = m_process->args();
@@ -411,6 +415,9 @@ void K3bIsoImager::start()
 
   *m_process << mkisofsBin->path;
 
+  // prepare the filenames as written to the image
+  m_doc->prepareFilenames();
+
   if( !prepareMkisofsFiles() ||
       !addMkisofsParameters() ) {
     cleanup();
@@ -440,8 +447,11 @@ void K3bIsoImager::start()
   kdDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs comand:", s);
 
-
-  informAboutCutJolietNames();
+  if( m_doc->needToCutFilenames() )
+    emit infoMessage( i18n("Some filenames need to be shortened due to the %1 char restriction "
+			   "of the Joliet extensions.")
+		      .arg( m_doc->isoOptions().jolietLong() ? 103 : 64 ), 
+		      WARNING );
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
@@ -560,6 +570,8 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( m_doc->isoOptions().createJoliet() ) {
     *m_process << "-J";
+    if( m_doc->isoOptions().jolietLong() )
+      *m_process << "-joliet-long";
     if( m_jolietHideFile )
       *m_process << "-hide-joliet-list" << m_jolietHideFile->name();
   }
@@ -625,10 +637,7 @@ bool K3bIsoImager::addMkisofsParameters()
       K3bBootItem* bootItem = *it;
 
       *m_process << "-b";
-      if( m_doc->isoOptions().createJoliet() )
-	*m_process << m_doc->treatWhitespace( bootItem->jolietPath() );
-      else
-	*m_process << m_doc->treatWhitespace( bootItem->k3bPath() );
+      *m_process << bootItem->writtenPath();
 
       if( bootItem->imageType() == K3bBootItem::HARDDISK ) {
 	*m_process << "-hard-disk-boot";
@@ -689,7 +698,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 
   // now create the graft points
   int num = 0;
-  for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
     if(
        item->writeToCd()
@@ -704,19 +713,17 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 	  )
        ) {
 
-      if( QFile::exists(item->localPath()) ) {
+      if( item->isDir() || QFile::exists(item->localPath()) ) {
 	num++;
 
 	// some versions of mkisofs seem to have a bug that prevents to use filenames
 	// that contain one or more backslashes
-	if( item->k3bPath().contains("\\") )
+	if( item->writtenPath().contains("\\") )
 	  m_containsFilesWithMultibleBackslashes = true;
 	
-	if( m_doc->isoOptions().createJoliet() )
-	  stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) );
-	else
-	  stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) );
-	stream << "=";
+	stream << escapeGraftPoint( item->writtenPath() )
+	       << "=";
+
 	if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
 	  
 	  // create temp file
@@ -730,10 +737,12 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 	  }
 	  
 	  m_tempFiles.append(tempPath);
-	  stream << escapeGraftPoint( tempPath ) << "\n";
+	  stream << escapeGraftPoint( tempPath ) << endl;
 	}
+	else if( item->isDir() )
+	  stream << dummyDir() << endl;
 	else
-	  stream << escapeGraftPoint( item->localPath() ) << "\n";
+	  stream << escapeGraftPoint( item->localPath() ) << endl;
       }
       else
 	emit infoMessage( i18n("Could not find %1. Skipping...").arg(item->localPath()), WARNING );
@@ -790,7 +799,7 @@ bool K3bIsoImager::writeJolietHideFile()
     K3bDataItem* item = m_doc->root();
     while( item ) {
       if( item->hideOnRockRidge() ) {
-	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
+	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir but we could introduce a second hidden dummy dir)
 	  *t << escapeGraftPoint( item->localPath() ) << endl;
       }
       item = item->nextSibling();
@@ -877,28 +886,15 @@ bool K3bIsoImager::prepareMkisofsFiles()
 }
 
 
-void K3bIsoImager::informAboutCutJolietNames()
+QString K3bIsoImager::dummyDir()
 {
-  // now that the command has been set up we check if some filenames get crippled due to an enabled Joliet extension
-  if( m_doc->isoOptions().createJoliet() ) {
-    QPtrList<K3bDataItem> cutFiles;
-    K3bDataItem* item = m_doc->root();
-    while( (item = item->nextSibling()) )  // we skip the root here
-      if( item->k3bName() != item->jolietName() )
-	cutFiles.append(item);
-
-    if( !cutFiles.isEmpty() ) {
-      emit infoMessage( i18n("Some filenames need to be shortened due to the 64 char restriction of the Joliet extensions."), 
-			WARNING );
-      emit infoMessage( i18n("See the debugging output for details."), WARNING );
-
-      for( QPtrListIterator<K3bDataItem> it( cutFiles ); it.current(); ++it ) {
-	item = it.current();
-	emit debuggingOutput( i18n("Filenames cut for Joliet conformance"),
-			      item->k3bName() + " -> " + item->jolietName() );
-      }
-    }
+  QDir _appDir( locateLocal( "appdata", "temp/" ) );
+  if( !_appDir.cd( "dummydir" ) ) {
+    _appDir.mkdir( "dummydir" );
+    _appDir.cd( "dummydir" );
   }
+
+  return _appDir.absPath() + "/";
 }
 
 #include "k3bisoimager.moc"

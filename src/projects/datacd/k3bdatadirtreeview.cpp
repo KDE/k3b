@@ -252,7 +252,7 @@ void K3bDataDirTreeView::slotDataItemRemoved( K3bDataItem* item )
 
       // we don't get removedInfo for the child items
       // so we need to remove them here
-      QPtrListIterator<K3bDataItem> it( *dirItem->children() );
+      QPtrListIterator<K3bDataItem> it( dirItem->children() );
       for( ; it.current(); ++it ) {
 	if( it.current()->isDir() )
 	  slotDataItemRemoved( it.current() );

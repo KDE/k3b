@@ -89,8 +89,8 @@ bool K3bDataDoc::newDocument()
   m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
 
   if( m_root ) {
-    while( m_root->children()->first() )
-      removeItem( m_root->children()->first() );
+    while( m_root->children().getFirst() )
+      removeItem( m_root->children().getFirst() );
   }
   else
     m_root = new K3bRootItem( this );
@@ -233,7 +233,7 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 	  do {
 	    newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
 					     newName, &ok, qApp->activeWindow() );
-	  } while( ok && nameAlreadyInDir( newName, parent ) );
+	  } while( ok && parent->alreadyInDirectory( newName ) );
 	  if( !ok )
 	    return 0;
 	}
@@ -340,7 +340,7 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 	    do {
 	      newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
 					       newName, &ok, qApp->activeWindow() );
-	    } while( ok && nameAlreadyInDir( newName, parent ) );
+	    } while( ok && parent->alreadyInDirectory( newName ) );
 	    if( !ok )
 	      return 0;
 	  }
@@ -367,19 +367,10 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 
 bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
 {
-  if( !dir ) {
+  if( !dir )
     return false;
-  }
-
-  QPtrListIterator<K3bDataItem> it( *dir->children() );
-  for( ; it.current(); ++it ) {
-    if( it.current()->k3bName() == name ) {
-      kdDebug() << "(K3bDataDoc) already a file with that name in directory: " << name << endl;
-      return true;
-    }
-  }
-
-  return false;
+  else
+    return ( dir->find( name ) != 0 );
 }
 
 
@@ -755,7 +746,7 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   // ----------------------------------------------------------------------
   QDomElement topElem = doc.createElement( "files" );
 
-  QPtrListIterator<K3bDataItem> it( *root()->children() );
+  QPtrListIterator<K3bDataItem> it( root()->children() );
   for( ; it.current(); ++it ) {
     saveDataItem( it.current(), &doc, &topElem );
   }
@@ -996,7 +987,7 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
     if( item->sortWeight() != 0 )
       topElem.setAttribute( "sort_weight", QString::number(item->sortWeight()) );
 
-    QPtrListIterator<K3bDataItem> it( *dirItem->children() );
+    QPtrListIterator<K3bDataItem> it( dirItem->children() );
     for( ; it.current(); ++it ) {
       saveDataItem( it.current(), doc, &topElem );
     }
@@ -1094,42 +1085,6 @@ void K3bDataDoc::moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParen
 }
 
 
-QString K3bDataDoc::writePathSpec( const QString& filename )
-{
-  QFile file( filename );
-  if( !file.open( IO_WriteOnly ) ) {
-    kdDebug() << "(K3bDataDoc) Could not open path-spec-file " << filename << endl;
-    return QString::null;
-  }
-
-  QTextStream t(&file);
-
-  // start writing the path-specs
-  // iterate over all the dataItems
-  K3bDataItem* item = root()->nextSibling();
-
-  while( item ) {
-    t << treatWhitespace(item->k3bPath()) << "=" << item->localPath() << "\n";
-
-    item = item->nextSibling();
-  }
-
-  file.close();
-  return filename;
-}
-
-
-QString K3bDataDoc::dummyDir()
-{
-  QDir _appDir( locateLocal( "appdata", "temp/" ) );
-  if( !_appDir.cd( "dummydir" ) ) {
-    _appDir.mkdir( "dummydir" );
-    _appDir.cd( "dummydir" );
-  }
-
-  return _appDir.absPath() + "/";
-}
-
 K3bBurnJob* K3bDataDoc::newBurnJob()
 {
   return new K3bDataJob( this );
@@ -1147,43 +1102,127 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
 
 
   if( isoOptions().whiteSpaceTreatment() != K3bIsoOptions::noChange ) {
-    QString _result;
-    int _startPos = path.findRev('/');
-    if( _startPos == -1 ) _startPos = 0;
-    else _startPos += 1;
-    _result = path.left( _startPos );
+    QString result = path;
 
     if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::replace ) {
-      const QString& rs = isoOptions().whiteSpaceTreatmentReplaceString();
-      for( uint i = _startPos; i < path.length(); i++ ) {
-	if( path[i] == ' ' )
-	  _result.append(rs);
-	else
-	  _result.append( path[i] );
-      }
+      result.replace( ' ', isoOptions().whiteSpaceTreatmentReplaceString() );
     }
     else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::strip ) {
-      for( uint i = _startPos; i < path.length(); i++ ) {
-	if( path[i] != ' ' )
-	  _result.append( path[i] );
-      }
+      result.remove( ' ' );
     }
     else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::extended ) {
-      for( uint i = _startPos; i < path.length(); i++ ) {
+      result.truncate(0);
+      for( uint i = 0; i < path.length(); i++ ) {
 	if( path[i] == ' ' ) {
 	  if( path[i+1] != ' ' )
-	    _result.append( path[++i].upper() );
+	    result.append( path[++i].upper() );
 	}
 	else
-	  _result.append( path[i] );
+	  result.append( path[i] );
       }
     }
 
-    kdDebug() << "(K3bDataDoc) converted " << path << " to " << _result << endl;
-    return _result;
+    kdDebug() << "(K3bDataDoc) converted " << path << " to " << result << endl;
+    return result;
   }
   else
     return path;
+}
+
+
+void K3bDataDoc::prepareFilenames()
+{
+  m_needToCutFilenames = false;
+
+
+  //
+  // 1. do the space replacing for all files and save the result in K3bDataItem::writtenName
+  //
+  K3bDataItem* item = root();
+  while( (item = item->nextSibling()) ) {
+    item->setWrittenName( treatWhitespace( item->k3bName() ) );
+  }
+
+  //
+  // 2. if joliet is used cut the names and rename if neccessary
+  //    64 characters for standard joliet and 103 characters for long joliet names
+  //
+  //    Rockridge supports the full 255 UNIX chars and in case Rockridge is disabled we leave
+  //    it to mkisofs for now since handling all the options to alter the ISO9660 standard it just
+  //    too much.
+  //
+  if( isoOptions().createJoliet() ) {
+    item = root();
+    while( (item = item->nextSibling()) ) {
+      if( isoOptions().jolietLong() && item->writtenName().length() > 103 ) {
+	m_needToCutFilenames = true;
+	item->setWrittenName( K3b::cutFilename( item->writtenName(), 103 ) );
+      }
+      else if( !isoOptions().jolietLong() && item->writtenName().length() > 64 ) {
+	m_needToCutFilenames = true;
+	item->setWrittenName( K3b::cutFilename( item->writtenName(), 64 ) );
+      }
+    }
+
+    // TODO: check the Joliet charset
+  }
+
+  //
+  // 3. check if a directory contains items with the same name
+  //
+  prepareFilenamesInDir( root() );
+}
+
+
+void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
+{
+  if( !dir )
+    return;
+
+  // insertion sort
+  QPtrList<K3bDataItem> sortedChildren;
+  for( QPtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
+    K3bDataItem* item = it.current();
+
+    if( item->isDir() )
+      prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );
+
+    unsigned int i = 0;
+    while( i < sortedChildren.count() && item->writtenName() > sortedChildren.at(i)->writtenName() )
+      ++i;
+
+    sortedChildren.insert( i, item );
+  }
+
+
+  QPtrList<K3bDataItem> sameNameList;
+  while( !sortedChildren.isEmpty() ) {
+
+    sameNameList.clear();
+
+    do {
+      sameNameList.append( sortedChildren.first() );
+      sortedChildren.removeFirst();
+    } while( !sortedChildren.isEmpty() &&
+	     sortedChildren.first()->writtenName() == sameNameList.first()->writtenName() );
+
+    if( sameNameList.count() > 1 ) {
+      // now we need to rename the items
+      unsigned int maxlen = 255;
+      if( isoOptions().createJoliet() ) {
+	if( isoOptions().jolietLong() )
+	  maxlen = 103;
+	else
+	  maxlen = 64;
+      }
+
+      int cnt = 1;
+      for( QPtrListIterator<K3bDataItem> it( sameNameList ); 
+	   it.current(); ++it ) {
+	it.current()->setWrittenName( K3b::appendNumberToFilename( it.current()->writtenName(), cnt++, maxlen ) );
+      }
+    }
+  }
 }
 
 
@@ -1364,7 +1403,7 @@ void K3bDataDoc::clearImportedSession()
 	delete dir;
       }
       else {
-	for( QPtrListIterator<K3bDataItem> it( *dir->children() ); it.current(); ++it ) {
+	for( QPtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
 	  if( !m_oldSession.contains(it.current()) ) {
 	    m_oldSession.remove();
 	    // now the dir becomes a totally normal dir
@@ -1417,12 +1456,12 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
 
   QString newName = QFileInfo(filename).fileName();
 
-  if( nameAlreadyInDir( newName, dir ) ) {
+  if( dir->alreadyInDirectory( newName ) ) {
     bool ok = true;
     do {
       newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
 				       newName, &ok, qApp->activeWindow() );
-    } while( ok && nameAlreadyInDir( newName, dir ) );
+    } while( ok && dir->alreadyInDirectory( newName ) );
     
     if( !ok )
       return 0;
@@ -1445,7 +1484,7 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
   if( !m_bootCataloge ) {
     QString newName = "boot.cataloge";
     int i = 0;
-    while( nameAlreadyInDir( "boot.cataloge", dir ) ) {
+    while( dir->alreadyInDirectory( "boot.cataloge" ) ) {
       ++i;
       newName = QString( "boot%1.cataloge" ).arg(i);
     }

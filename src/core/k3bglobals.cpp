@@ -303,6 +303,46 @@ KIO::filesize_t K3b::filesize( const KURL& url )
 }
 
 
+QString K3b::cutFilename( const QString& name, unsigned int len )
+{
+  if( name.length() > len ) {
+    QString ret = name;
+
+    // determine extension (we think of an extension to be at most 5 chars in length)
+    int pos = name.find( '.', -6 );
+    if( pos > 0 )
+      len -= (name.length() - pos);
+
+    ret.truncate( len );
+
+    if( pos > 0 )
+      ret.append( name.mid( pos ) );
+
+    return ret;
+  }
+  else
+    return name;
+}
+
+
+QString K3b::appendNumberToFilename( const QString& name, int num, unsigned int maxlen )
+{
+  // determine extension (we think of an extension to be at most 5 chars in length)
+  QString result = name;
+  QString ext;
+  int pos = name.find( '.', -6 );
+  if( pos > 0 ) {
+    ext = name.mid(pos);
+    result.truncate( pos );
+  }
+
+  ext.prepend( QString::number(num) );
+  result.truncate( maxlen - ext.length() );
+
+  return result + ext;
+}
+
+
 bool K3b::plainAtapiSupport()
 {
   // IMPROVEME!!!
@@ -327,3 +367,4 @@ QString K3b::externalBinDeviceParameter( K3bCdDevice::CdDevice* dev, const K3bEx
   else
     return QString("ATAPI:%1").arg(dev->blockDeviceName());
 }
+

@@ -230,8 +230,7 @@ void K3bAudioMetainfoRenamerPluginDialog::scanDir( K3bDirItem* dir, QListViewIte
 
   d->dirItemDict.insert( dir, viewRoot );
 
-  QPtrList<K3bDataItem>* childs = dir->children();
-  for( QPtrListIterator<K3bDataItem> it( *childs ); it.current(); ++it ) {
+  for( QPtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
 
     if( item->isFile() ) {

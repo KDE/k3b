@@ -31,8 +31,6 @@ K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentD
     m_dirs(0)
 {
   m_k3bName = name;
-  m_jolietName = name;
-  m_children = new QPtrList<K3bDataItem>();
   
   // add automagically like a qlistviewitem
   if( parent() )
@@ -45,16 +43,14 @@ K3bDirItem::~K3bDirItem()
   // doing this by hand is much saver than using the 
   // auto-delete feature since some of the items' destructors
   // may change the list
-  K3bDataItem* i = m_children->first();
+  K3bDataItem* i = m_children.first();
   while( i ) {
     // it is important to use takeDataItem here to be sure
     // the size gets updated properly
     takeDataItem(i);
     delete i;
-    i = m_children->first();
+    i = m_children.first();
   }    
-
-  delete m_children;
 
   // this has to be done after deleting the children
   // because the directory itself has a size of 0 in K3b
@@ -70,8 +66,8 @@ K3bDirItem* K3bDirItem::getDirItem()
 
 K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
-  if( m_children->findRef( item ) == -1 ) {
-    m_children->append( item );
+  if( m_children.findRef( item ) == -1 ) {
+    m_children.append( item );
     updateSize( item->k3bSize() );
     if( item->isDir() )
       updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
@@ -83,18 +79,12 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
     }
   }
 
-  // Speed improvement: revalidateJolietNames only updates the Joliet names
-  if( item->k3bName().length() > 64 )
-    revalidateJolietNames();
-  else
-    item->setJolietName( item->k3bName() );
-	
   return this;
 }
 
 K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 {
-  int x = m_children->findRef( item );
+  int x = m_children.findRef( item );
   if( x > -1 ) {
     return takeDataItem(x);
   }
@@ -104,7 +94,7 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 
 K3bDataItem* K3bDirItem::takeDataItem( int index )
 {
-  K3bDataItem* item = m_children->take( index );
+  K3bDataItem* item = m_children.take( index );
   updateSize( -1*item->k3bSize() );
   if( item->isDir() )
     updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
@@ -115,30 +105,14 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
     updateFiles( -1, 0 );
   }
 
-  // Speed improvement: revalidateJolietNames only updates the Joliet names
-  if( item->k3bName().length() > 64 )
-    revalidateJolietNames();
-
   return item;
-}
-
-
-QString K3bDirItem::k3bPath()
-{
-  return K3bDataItem::k3bPath() + "/";
-}
-
-
-QString K3bDirItem::jolietPath()
-{
-  return K3bDataItem::jolietPath() + "/";
 }
 
 
 K3bDataItem* K3bDirItem::nextSibling()
 {
-  if( !m_children->isEmpty() )
-    return m_children->getFirst();
+  if( !m_children.isEmpty() )
+    return m_children.getFirst();
   else
     return K3bDataItem::nextSibling();
 }
@@ -147,17 +121,11 @@ K3bDataItem* K3bDirItem::nextSibling()
 K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev )
 {
   // search for prev in children
-  if( m_children->findRef( prev ) < 0 ) {
+  if( m_children.findRef( prev ) < 0 ) {
     return 0;
   }
   else
-    return m_children->next();
-}
-
-
-QString K3bDirItem::localPath() const
-{
-  return K3bDataDoc::dummyDir();
+    return m_children.next();
 }
 
 
@@ -169,7 +137,7 @@ bool K3bDirItem::alreadyInDirectory( const QString& filename ) const
 
 K3bDataItem* K3bDirItem::find( const QString& filename ) const
 {
-  QPtrListIterator<K3bDataItem> it( *m_children );
+  QPtrListIterator<K3bDataItem> it( m_children );
   for( ; it.current(); ++it ) {
     if( it.current()->k3bName() == filename )
       return it.current();
@@ -228,7 +196,7 @@ long K3bDirItem::numFiles() const
   return m_files;
   int num = 0;
 
-  QPtrListIterator<K3bDataItem> it( *m_children );
+  QPtrListIterator<K3bDataItem> it( m_children );
   for( ; it.current(); ++it )
     if( !it.current()->isDir() )
       num++;
@@ -240,7 +208,7 @@ long K3bDirItem::numFiles() const
 long K3bDirItem::numDirs() const
 {
   return m_dirs;
-  return m_children->count() - numFiles();
+  return m_children.count() - numFiles();
 }
 
 
@@ -250,7 +218,7 @@ bool K3bDirItem::isRemoveable() const
     return false;
 
   bool rem = true;
-  QPtrListIterator<K3bDataItem> it( *m_children );
+  QPtrListIterator<K3bDataItem> it( m_children );
   for( ; it.current(); ++it )
     rem = rem && it.current()->isRemoveable();
   return rem;
@@ -274,104 +242,6 @@ void K3bDirItem::updateFiles( long files, long dirs )
 
 
 
-//
-// mkisofs is not able to cut the joliet names so we do it ourselves.
-//
-void K3bDirItem::revalidateJolietNames()
-{
-  // create new joliet names and use jolietPath for graftpoints
-  // sort dirItem->children entries and rename all to fit joliet
-  // which is about x characters
-
-  // insertion sort
-  QPtrList<K3bDataItem> sortedChildren;
-  for( QPtrListIterator<K3bDataItem> it( *children() ); it.current(); ++it ) {
-    K3bDataItem* item = it.current();
-
-    unsigned int i = 0;
-    while( i < sortedChildren.count() && item->k3bName() > sortedChildren.at(i)->k3bName() )
-      ++i;
-
-    sortedChildren.insert( i, item );
-  }
-
-
-//   // first of all we need to make sure that no two items with the same name exist
-//   QPtrListIterator<K3bDataItem> it( sortedChildren );
-//   QPtrListIterator<K3bDataItem> it2( sortedChildren );
-//   ++it2;
-//   // this is used to check if a k3bName already contains a counter suffix
-//   // containing of a space, an integer in brackets and a dot or the end of the
-//   // string. The dot should follow the extension (so it's the last dot in the string)
-//   QRegExp countChecker( "\\s\\(\\d+\\)[\\.(?!\\.+)$]" );
-//   while( it.current() && it2.current() ) {
-//     K3bDataItem* item1 = it.current();
-//     K3bDataItem* item2 = it2.current();
-//     if( item1->k3bName() == item2->k3bName() ) {
-//       QString newName = item2->k3bName();
-
-//       // check if the name already ends in a count (i)
-//       int pos = countChecker.search( item2->k3bName() );
-//       if( pos >= 0 ) {
-// 	// increase the counter
-
-//       }
-//       // append a count (i)
-//       item2->setK3bName( item2->k3bName() + 
-//     }
-//   }
-
-
-  unsigned int begin = 0;
-  unsigned int sameNameCount = 0;
-  unsigned int jolietMaxLength = 64;
-  //  unsigned int jolietLongMaxLength = 103;
-  while( begin < sortedChildren.count() ) {
-    if( sortedChildren.at(begin)->k3bName().length() > jolietMaxLength ) {
-      sameNameCount = 1;
-
-      while( begin + sameNameCount < sortedChildren.count() &&
-	     sortedChildren.at( begin + sameNameCount )->k3bName().left(jolietMaxLength)
-	     == sortedChildren.at(begin)->k3bName().left(jolietMaxLength) )
-	sameNameCount++;
-
-      kdDebug() << "(K3bDirItem) found " << sameNameCount << " files with same joliet name" << endl;
-
-      if( sameNameCount > 1 ) {
-	kdDebug() << "(K3bDirItem) cutting filenames." << endl;
-
-	unsigned int charsForNumber = QString::number(sameNameCount).length();
-	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
-	  // we always reserve 5 chars for the extension
-	  QString extension = sortedChildren.at(i)->k3bName().right(5);
-	  if( !extension.contains(".") )
-	    extension = "";
-	  else
-	    extension = extension.mid( extension.find(".") );
-	  QString jolietName = sortedChildren.at(i)->k3bName().left(jolietMaxLength-charsForNumber-extension.length()-1);
-	  jolietName.append( " " );
-	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
-	  jolietName.append( extension );
-	  sortedChildren.at(i)->setJolietName( jolietName );
-	}
-      }
-      else {
-	QString extension = sortedChildren.at(begin)->k3bName().mid( sortedChildren.at(begin)->k3bName().findRev(".") );
-	if( extension.length() > 5 )
-	  extension = QString::null;
-	sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName().left(jolietMaxLength-extension.length())
-						 + extension );
-      }
-
-      begin += sameNameCount;
-    }
-    else {
-      sortedChildren.at(begin)->setJolietName( sortedChildren.at(begin)->k3bName() );
-      begin++;
-    }
-  }
-}
-
 
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )
   : K3bDirItem( "root", doc, 0 )
@@ -384,13 +254,6 @@ K3bRootItem::~K3bRootItem()
 }
 
 QString K3bRootItem::k3bPath()
-{
-  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
-  return "";
-}
-
-
-QString K3bRootItem::jolietPath()
 {
   // graft-points have to start with the name of the directory or the file, not with a slash or anything!
   return "";

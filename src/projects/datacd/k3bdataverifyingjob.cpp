@@ -272,16 +272,14 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
       d->originalCalculated = true;
       d->originalMd5Sum = d->md5Job->hexDigest();
       const K3bIso9660File* isoFile = 
-	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->entry( d->doc->isoOptions().createJoliet()
-										   ? d->currentItem->jolietPath()
-										   : d->currentItem->k3bPath() ) );
+	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->entry( d->currentItem->writtenPath() ) );
       if( isoFile ) {
 	d->md5Job->setFile( isoFile );
 	d->md5Job->start();
       }
       else {
 	kdDebug() << "(K3bDataVerifyingJob) could not find " 
-		  << (d->doc->isoOptions().createJoliet() ? d->currentItem->jolietPath() : d->currentItem->k3bPath())
+		  << d->currentItem->writtenPath()
 		  << " in filesystem." << endl;
 	emit infoMessage( i18n("Unable to read Iso9660 filesystem."), ERROR );
 	finishVerification(false);

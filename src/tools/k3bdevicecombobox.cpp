@@ -14,7 +14,7 @@
  */
 
 #include "k3bdevicecombobox.h"
-#include "device/k3bdevice.h"
+#include <k3bdevice.h>
 
 #include <klocale.h>
 
@@ -44,7 +44,7 @@ K3bDeviceComboBox::~K3bDeviceComboBox()
   delete d;
 }
 
-K3bDevice* K3bDeviceComboBox::selectedDevice() const
+K3bCdDevice::CdDevice* K3bDeviceComboBox::selectedDevice() const
 {
   if ( count() > 0 )
     return d->devices[currentItem()];
@@ -53,7 +53,7 @@ K3bDevice* K3bDeviceComboBox::selectedDevice() const
 }
 
 
-void K3bDeviceComboBox::addDevice( K3bDevice* dev )
+void K3bDeviceComboBox::addDevice( K3bCdDevice::CdDevice* dev )
 {
   insertItem( dev->vendor() + " " + dev->description() /*+ " (" + dev->blockDeviceName() + ")"*/ );
   d->deviceIndexMap[dev->devicename()] = count()-1;
@@ -62,7 +62,15 @@ void K3bDeviceComboBox::addDevice( K3bDevice* dev )
 }
 
 
-void K3bDeviceComboBox::setSelectedDevice( K3bDevice* dev )
+void K3bDeviceComboBox::addDevices( const QPtrList<K3bCdDevice::CdDevice>& list )
+{
+  for( QPtrListIterator<K3bCdDevice::CdDevice> it( list );
+       it.current(); ++it )
+    addDevice( it.current() );
+}
+
+
+void K3bDeviceComboBox::setSelectedDevice( K3bCdDevice::CdDevice* dev )
 {
   if( dev ) {
     if( d->deviceIndexMap.contains(dev->devicename()) ) {

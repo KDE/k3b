@@ -18,8 +18,7 @@
 
 
 K3bCdDevice::Track::Track()
-  : m_index0(-1),
-    m_type(-1),
+  : m_type(-1),
     m_mode(-1),
     m_copyPermitted(true),
     m_preEmphasis(false),
@@ -31,13 +30,12 @@ K3bCdDevice::Track::Track()
 K3bCdDevice::Track::Track( const Track& track )
   : m_firstSector( track.firstSector() ),
     m_lastSector( track.lastSector() ),
-    m_index0( track.index0() ),
     m_type( track.type() ),
     m_mode( track.mode() ),
     m_copyPermitted( track.copyPermitted() ),
     m_preEmphasis( track.preEmphasis() ),
     m_session( track.session() ),
-    m_title( track.title() )
+    m_indices( track.indices() )
 {
 }
 
@@ -45,29 +43,27 @@ K3bCdDevice::Track::Track( const Track& track )
 K3bCdDevice::Track::Track( const K3b::Msf& firstSector, 
 			   const K3b::Msf& lastSector, 
 			   int type, 
-			   int mode, 
-			   const QString& title )
+			   int mode )
   : m_firstSector( firstSector ), 
     m_lastSector( lastSector ), 
-    m_index0(-1),
     m_type( type ), 
     m_mode( mode ), 
     m_copyPermitted(true),
     m_preEmphasis(false),
-    m_session(0),
-    m_title( title )
+    m_session(0)
 {
 }
 
 
 K3bCdDevice::Track& K3bCdDevice::Track::operator=( const K3bTrack& track )
 {
-  m_firstSector = track.firstSector();
-  m_lastSector = track.lastSector();
-  m_index0 = track.index0();
-  m_type = track.type();
-  m_mode = track.mode();
-  m_title = track.title();
+  if( this != &track ) {
+    m_firstSector = track.firstSector();
+    m_lastSector = track.lastSector();
+    m_type = track.type();
+    m_mode = track.mode();
+    m_indices = track.indices();
+  }
 
   return *this;
 }
@@ -89,8 +85,11 @@ K3b::Msf K3bCdDevice::Track::realAudioLength() const
 }
 
 
-void K3bCdDevice::Track::setTitle( const QString& title )
+long K3bCdDevice::Track::index0() const
 {
-  m_title = title;
+  // TODO: if there is an index 0 has it to be the first??
+  for( QValueListConstIterator<Index> it = m_indices.begin(); it != m_indices.end(); ++it )
+    if( (*it).number() == 0 )
+      return (*it).position().lba();
+  return -1;
 }
-

@@ -207,6 +207,9 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 
   m_checkAllowUntranslatedFilenames->setOpen(true);
 
+  m_checkJolietLong = new QCheckListItem( m_viewIsoSettings,
+					  i18n("Allow 103 character Joliet filenames"),
+					  QCheckListItem::CheckBox );
 
   m_checkCreateTransTbl = new QCheckListItem( m_viewIsoSettings, 
 					      i18n( "Create TRANS.TBL files" ),
@@ -280,6 +283,7 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
   m_checkAllowMultiDot->setOn( o.ISOallowMultiDot() );
   m_checkAllowLowercaseCharacters->setOn( o.ISOallowLowercase() );
   m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
+  m_checkJolietLong->setOn( o.jolietLong() );
 }
 
 
@@ -309,6 +313,7 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
   o.setISOallowMultiDot( m_checkAllowMultiDot->isOn() );
   o.setISOallowLowercase( m_checkAllowLowercaseCharacters->isOn() );
   o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isOn() );
+  o.setJolietLong( m_checkJolietLong->isOn() );
 }
 
 
