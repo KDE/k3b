@@ -317,12 +317,19 @@ void K3bCdDevice::DeviceManager::printDevices()
 
 void K3bCdDevice::DeviceManager::clear()
 {
+  kdDebug() << "(K3bCdDevice::DeviceManager::clear)" << endl;
+
   // clear current devices
   d->cdReader.clear();
   d->cdWriter.clear();
   d->dvdReader.clear();
   d->dvdWriter.clear();
   d->allDevices.clear();
+
+  emit changed();
+  emit changed( this );
+
+  kdDebug() << "(K3bCdDevice::DeviceManager::clear) done" << endl;
 }
 
 
@@ -531,6 +538,9 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
 		<< " to " << device->maxWriteSpeed() << endl;
       device->setCurrentWriteSpeed( device->maxWriteSpeed() );
     }
+
+    emit changed();
+    emit changed( this );
   }
 
   return device;

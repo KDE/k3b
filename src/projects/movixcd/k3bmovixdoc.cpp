@@ -54,9 +54,9 @@ K3bView* K3bMovixDoc::newView( QWidget* parent )
 }
 
 
-K3bBurnJob* K3bMovixDoc::newBurnJob()
+K3bBurnJob* K3bMovixDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-  return new K3bMovixJob(this);
+  return new K3bMovixJob( this, hdl, parent );
 }
 
 

@@ -33,7 +33,7 @@ class K3bCloneJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bCloneJob( QObject* parent = 0, const char* name = 0 );
+  K3bCloneJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bCloneJob();
 
   K3bCdDevice::CdDevice* writer() const { return m_writerDevice; }

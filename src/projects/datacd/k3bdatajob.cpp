@@ -26,7 +26,6 @@
 #include <k3btoc.h>
 #include <k3btrack.h>
 #include <k3bdevicehandler.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
@@ -72,8 +71,8 @@ public:
 };
 
 
-K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
-  : K3bBurnJob(parent)
+K3bDataJob::K3bDataJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
+  : K3bBurnJob( hdl, parent )
 {
   d = new Private;
 
@@ -83,7 +82,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
 
   m_isoImager = 0;
 
-  m_msInfoFetcher = new K3bMsInfoFetcher( this );
+  m_msInfoFetcher = new K3bMsInfoFetcher( this, this );
   connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
   connect( m_msInfoFetcher, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_msInfoFetcher, SIGNAL(debuggingOutput(const QString&, const QString&)), 
@@ -342,7 +341,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
     if( d->doc->verifyData() ) {
       if( !d->verificationJob ) {
-	d->verificationJob = new K3bDataVerifyingJob( this );
+	d->verificationJob = new K3bDataVerifyingJob( this, this );
 	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
 		 this, SIGNAL(infoMessage(const QString&, int)) );
 	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
@@ -405,6 +404,7 @@ void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
   connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writerJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
   connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
@@ -429,7 +429,7 @@ void K3bDataJob::setImager( K3bIsoImager* imager )
 void K3bDataJob::prepareImager()
 {
   if( !m_isoImager )
-    setImager( new K3bIsoImager( d->doc, this ) );
+    setImager( new K3bIsoImager( d->doc, this, this ) );
 }
 
 
@@ -440,7 +440,7 @@ bool K3bDataJob::prepareWriterJob()
 
   // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
   if( d->usedWritingApp == K3b::CDRECORD )  {
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( d->doc->burner(), this );
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( d->doc->burner(), this, this );
 
     // cdrecord manpage says that "not all" writers are able to write
     // multisession disks in dao mode. That means there are writers that can.
@@ -489,7 +489,7 @@ bool K3bDataJob::prepareWriterJob()
   }
   else {
     // create cdrdao job
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( d->doc->burner(), this );
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( d->doc->burner(), this, this );
     writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( d->doc->dummy() );
     writer->setBurnSpeed( d->doc->speed() );
@@ -641,10 +641,9 @@ void K3bDataJob::cancelAll()
 
 void K3bDataJob::waitForDisk()
 {
-  if( K3bEmptyDiscWaiter::wait( d->doc->burner(), 
-				d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-				d->doc->multiSessionMode() == K3bDataDoc::FINISH )
-      == K3bEmptyDiscWaiter::CANCELED ) {
+  if( waitForMedia( d->doc->burner(), 
+		    d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+		    d->doc->multiSessionMode() == K3bDataDoc::FINISH ) < 0 ) {
     cancel();
   }
 }

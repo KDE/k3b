@@ -41,7 +41,7 @@ class K3bMovixDoc : public K3bDataDoc
 
   virtual int docType() const { return MOVIX; }
 
-  virtual K3bBurnJob* newBurnJob();
+  virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 
   bool newDocument();
 

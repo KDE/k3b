@@ -67,8 +67,8 @@ public:
 
 
 
-K3bAudioStreamer::K3bAudioStreamer( K3bAudioDoc* doc, QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bAudioStreamer::K3bAudioStreamer( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name )
 {
   d = new Private;
   d->doc = doc;

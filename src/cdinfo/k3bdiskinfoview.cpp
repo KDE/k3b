@@ -349,11 +349,11 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDis
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;
   if( info.currentProfile() != -1 )
+    typeStr = K3bCdDevice::mediaTypeString( info.currentProfile() );
+  else if( info.mediaType() != -1 )
     typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
-  else if( info.mediaType() == -1 )
-    typeStr = i18n("Unknown (probably CD-ROM)");
   else
-    typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
+    typeStr = i18n("Unknown (probably CD-ROM)");
 
   KListViewItem* atipChild = new KListViewItem( atipItem, i18n("Type:"), typeStr );
 
@@ -380,6 +380,25 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDis
 				 i18n("Empty:"),
 				 info.empty() ? i18n("yes") : i18n("no") );
 
+  if( info.mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+    atipChild = new KListViewItem( atipItem, atipChild,
+				   i18n("Background Format:") );
+    switch( info.bgFormatState() ) {
+    case K3bCdDevice::BG_FORMAT_NONE:
+      atipChild->setText( 1, i18n("not formatted") );
+      break;
+    case K3bCdDevice::BG_FORMAT_INCOMPLETE:
+      atipChild->setText( 1, i18n("incomplete") );
+      break;
+    case K3bCdDevice::BG_FORMAT_IN_PROGRESS:
+      atipChild->setText( 1, i18n("in progress") );
+      break;
+    case K3bCdDevice::BG_FORMAT_COMPLETE:
+      atipChild->setText( 1, i18n("complete") );
+      break;
+    }
+  }
+    
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Sessions:"),
 				 QString::number( info.numSessions() ) );

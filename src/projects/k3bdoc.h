@@ -42,6 +42,7 @@ class QDomDocument;
 class QDomElement;
 class KConfig;
 class KActionCollection;
+class K3bJobHandler;
 
 
 namespace K3bCdDevice {
@@ -141,7 +142,7 @@ class K3bDoc : public QObject
 
   virtual int numOfTracks() const { return 1; }
 
-  virtual K3bBurnJob* newBurnJob() = 0;
+  virtual K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 ) = 0;
 
   int writingApp() const { return m_writingApp; }
   void setWritingApp( int a ) { m_writingApp = a; }

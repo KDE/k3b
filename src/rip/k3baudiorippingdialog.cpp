@@ -312,9 +312,10 @@ void K3bAudioRippingDialog::slotStartClicked()
   thread->setUseIndex0( m_checkUseIndex0->isChecked() );
   if( factory )
     thread->setFileType( d->extensionMap[m_optionWidget->m_comboFileType->currentItem()] );
-  K3bThreadJob job( thread, this );
 
   K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
+
+  K3bThreadJob job( thread, &ripDialog, this );
 
   hide();
   ripDialog.startJob(&job);

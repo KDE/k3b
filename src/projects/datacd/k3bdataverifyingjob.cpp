@@ -67,8 +67,8 @@ public:
 };
 
 
-K3bDataVerifyingJob::K3bDataVerifyingJob( QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bDataVerifyingJob::K3bDataVerifyingJob( K3bJobHandler* hdl, QObject* parent, const char* name )
+  : K3bJob( hdl, parent, name )
 {
   d = new Private();
 }

@@ -59,9 +59,9 @@ bool K3bVideoDvdDoc::newDocument()
 }
 
 
-K3bBurnJob* K3bVideoDvdDoc::newBurnJob()
+K3bBurnJob* K3bVideoDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-  return new K3bVideoDvdJob( this );
+  return new K3bVideoDvdJob( this, hdl, parent );
 }
 
 

@@ -21,7 +21,6 @@
 #include <k3bdeviceglobals.h>
 #include <k3bdevicehandler.h>
 #include <k3bdiskinfo.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
@@ -70,8 +69,8 @@ public:
 };
 
 
-K3bDvdFormattingJob::K3bDvdFormattingJob( QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bDvdFormattingJob::K3bDvdFormattingJob( K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name )
 {
   d = new Private;
 }
@@ -124,10 +123,10 @@ void K3bDvdFormattingJob::start()
   // Be aware that an empty DVD-RW might be reformatted to another writing mode
   // so we also wait for empty dvds
   //
-  if( K3bEmptyDiscWaiter::wait( d->device,  
-				K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE|K3bCdDevice::STATE_EMPTY,
-				K3bCdDevice::MEDIA_WRITABLE_DVD,
-				i18n("Please insert a rewritable DVD medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) ) == -1 ) {
+  if( waitForMedia( d->device,  
+		    K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE|K3bCdDevice::STATE_EMPTY,
+		    K3bCdDevice::MEDIA_WRITABLE_DVD,
+		    i18n("Please insert a rewritable DVD medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) ) == -1 ) {
     emit canceled();
     emit finished(false);
     d->running = false;
@@ -231,7 +230,11 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 
 void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
 {
-  if( p->normalExit() ) {
+  if( d->canceled ) {
+    emit canceled();
+    d->success = false;
+  }
+  else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
       emit infoMessage( i18n("Formatting successfully finished"), K3bJob::SUCCESS );
 
@@ -333,7 +336,8 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
       // mode is ignored
 
-      if( dh->ngDiskInfo().empty() ) {
+      if( dh->ngDiskInfo().empty() ||
+	  dh->ngDiskInfo().bgFormatState() & (K3bCdDevice::BG_FORMAT_NONE|K3bCdDevice::BG_FORMAT_INCOMPLETE) ) {
 	// 
 	// The DVD+RW is blank and needs to be initially formatted
 	//

@@ -102,7 +102,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 
   setupGui();
 
-  d->md5Job = new K3bMd5Job( this );
+  d->md5Job = new K3bMd5Job( 0, this );
   connect( d->md5Job, SIGNAL(finished(bool)),
 	   this, SLOT(slotMd5JobFinished(bool)) );
   connect( d->md5Job, SIGNAL(percent(int)),
@@ -281,12 +281,15 @@ void K3bCdImageWritingDialog::slotStartClicked()
   if( d->tocFile.isEmpty() )
     d->tocFile = m_editImagePath->url();
 
+  // create a progresswidget
+  K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
+
   // create the job
   K3bBurnJob* job = 0;
   switch( currentImageType() ) {
   case IMAGE_CDRECORD_CLONE:
     {
-      K3bCloneJob* _job = new K3bCloneJob( this );
+      K3bCloneJob* _job = new K3bCloneJob( &dlg, this );
       _job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
       _job->setImagePath( d->imageFile );
       _job->setSimulate( m_checkDummy->isChecked() );
@@ -302,7 +305,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
     // for now the K3bBinImageWritingJob decides if it's a toc or a cue file
   case IMAGE_CDRDAO_TOC:
     {
-      K3bBinImageWritingJob* job_ = new K3bBinImageWritingJob( this );
+      K3bBinImageWritingJob* job_ = new K3bBinImageWritingJob( &dlg, this );
 
       job_->setWriter( m_writerSelectionWidget->writerDevice() );
       job_->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -317,7 +320,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
 
   case IMAGE_ISO:
     {
-      K3bIso9660ImageWritingJob* job_ = new K3bIso9660ImageWritingJob();
+      K3bIso9660ImageWritingJob* job_ = new K3bIso9660ImageWritingJob( &dlg );
       
       job_->setBurnDevice( m_writerSelectionWidget->writerDevice() );
       job_->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -341,9 +344,6 @@ void K3bCdImageWritingDialog::slotStartClicked()
   if( job ) {
     job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
-    // create a progresswidget
-    K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
-    
     hide();
     
     dlg.startJob(job);

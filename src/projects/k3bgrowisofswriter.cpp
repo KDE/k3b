@@ -71,8 +71,9 @@ public:
 };
 
 
-K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, QObject* parent, const char* name )
-  : K3bAbstractWriter( dev, parent, name )
+K3bGrowisofsWriter::K3bGrowisofsWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl,
+					QObject* parent, const char* name )
+  : K3bAbstractWriter( dev, hdl, parent, name )
 {
   d = new Private;
   d->speedEst = new K3bThroughputEstimator( this );

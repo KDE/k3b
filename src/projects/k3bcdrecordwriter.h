@@ -33,7 +33,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   Q_OBJECT
 
  public:
-  K3bCdrecordWriter( K3bCdDevice::CdDevice*, QObject* parent = 0, const char* name = 0 );
+  K3bCdrecordWriter( K3bCdDevice::CdDevice*, K3bJobHandler* hdl, 
+		     QObject* parent = 0, const char* name = 0 );
   ~K3bCdrecordWriter();
 
   bool active() const;

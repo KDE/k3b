@@ -38,6 +38,13 @@ namespace K3bCdDevice
     STATE_EMPTY = 4
   };
 
+  enum BackGroundFormattingState {
+    BG_FORMAT_NONE = 0,
+    BG_FORMAT_INCOMPLETE = 1,
+    BG_FORMAT_IN_PROGRESS = 2,
+    BG_FORMAT_COMPLETE = 3
+  };
+
   /**
    * Defines the different media types as retured by 
    * K3bDevice::mediaType()
@@ -162,6 +169,12 @@ namespace K3bCdDevice
       int lastSessionState() const;
 
       /**
+       * Returnes the state of the background formatting. This does
+       * only make sense for DVD+RW (and MRW which is not yet supported)
+       */
+      int bgFormatState() const;
+
+      /**
        * returnes true if diskState() == STATE_EMPTY
        */
       bool empty() const;
@@ -227,6 +240,7 @@ namespace K3bCdDevice
 
       int m_diskState;
       int m_lastSessionState;
+      int m_bgFormatState;
       int m_numSessions;
       int m_numTracks;
       int m_rewritable;

@@ -25,8 +25,8 @@
 #include <kconfig.h>
 
 
-K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, QObject* parent, const char* name )
-  : K3bJob( parent, name ),
+K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name ),
     m_burnDevice(dev),
     m_burnSpeed(1),
     m_simulate(false)

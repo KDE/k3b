@@ -27,12 +27,12 @@
 #include <kdebug.h>
 
 
-K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, QObject* parent )
-  : K3bBurnJob( parent ),
+K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, K3bJobHandler* jh, QObject* parent )
+  : K3bBurnJob( jh, parent ),
     m_doc(doc)
 {
-  m_dataJob = new K3bDataJob( doc, this );
-  m_movixDocPreparer = new K3bMovixDocPreparer( doc, this );
+  m_dataJob = new K3bDataJob( doc, this, this );
+  m_movixDocPreparer = new K3bMovixDocPreparer( doc, this, this );
 
   // pipe signals
   connect( m_dataJob, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
@@ -40,6 +40,7 @@ K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, QObject* parent )
   connect( m_dataJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_dataJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_dataJob, SIGNAL(bufferStatus(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_dataJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_dataJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_dataJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_dataJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );

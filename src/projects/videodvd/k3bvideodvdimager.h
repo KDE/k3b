@@ -34,7 +34,7 @@ class K3bVideoDvdImager : public K3bIsoImager
   Q_OBJECT
 
  public:
-  K3bVideoDvdImager( K3bVideoDvdDoc* doc, QObject* parent = 0, const char* name = 0 );
+  K3bVideoDvdImager( K3bVideoDvdDoc* doc, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bVideoDvdImager();
 
  public slots:

@@ -23,7 +23,6 @@
 #include <k3bdiskinfo.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bgrowisofswriter.h>
 #include <k3breadcdreader.h>
 #include <k3bversion.h>
@@ -70,8 +69,8 @@ public:
 };
 
 
-K3bDvdCopyJob::K3bDvdCopyJob( QObject* parent, const char* name )
-  : K3bBurnJob( parent, name ),
+K3bDvdCopyJob::K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent, const char* name )
+  : K3bBurnJob( hdl, parent, name ),
     m_writerDevice(0),
     m_readerDevice(0),
     m_onTheFly(false),
@@ -533,9 +532,9 @@ bool K3bDvdCopyJob::waitForDvd()
   else
     mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
 
-  int m = K3bEmptyDiscWaiter::wait( m_writerDevice, false, mt );
+  int m = waitForMedia( m_writerDevice, K3bCdDevice::STATE_EMPTY, mt );
 
-  if( m == -1 ) {
+  if( m < 0 ) {
     cancel();
     return false;
   }

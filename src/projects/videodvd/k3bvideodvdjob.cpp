@@ -22,9 +22,7 @@
 #include <k3bisoimager.h>
 #include <k3bdataverifyingjob.h>
 #include <k3bgrowisofswriter.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bglobals.h>
-#include <k3bemptydiscwaiter.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -33,8 +31,8 @@
 
 
 
-K3bVideoDvdJob::K3bVideoDvdJob( K3bVideoDvdDoc* doc, QObject* parent )
-  : K3bDvdJob( doc, parent ),
+K3bVideoDvdJob::K3bVideoDvdJob( K3bVideoDvdDoc* doc, K3bJobHandler* jh, QObject* parent )
+  : K3bDvdJob( doc, jh, parent ),
     m_doc(doc)
 {
 }

@@ -120,13 +120,6 @@ class K3bFileTreeView : public KFileTreeView
   K3bDeviceBranch* branch( K3bCdDevice::CdDevice* dev );
 
   /**
-   * adds home and root dir branch
-   */
-  void addDefaultBranches();
-
-  void addCdDeviceBranches( K3bCdDevice::DeviceManager* );
-
-  /**
    * returns 0 if no device is selected 
    */
   K3bCdDevice::CdDevice* selectedDevice() const;
@@ -138,9 +131,20 @@ class K3bFileTreeView : public KFileTreeView
   void setSelectedDevice(K3bCdDevice::CdDevice* dev);
 
  public slots:
+  /**
+   * adds home and root dir branch
+   */
+  void addDefaultBranches();
+  void addCdDeviceBranches( K3bCdDevice::DeviceManager* );
+
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );
   void enablePopupMenu( bool b ) { m_menuEnabled = b; }
+
+  /**
+   * @reimplemented
+   */
+  virtual void clear();
 
  protected:
   virtual void contentsDropEvent(QDropEvent* event);

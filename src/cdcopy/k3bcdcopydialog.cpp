@@ -215,7 +215,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QWhatsThis::add( m_checkPrefereCdText, i18n("<p>If this option is checked and K3b finds CD-Text on the source media it will be "
 					      "copied to the resulting CD ignoring any potentially existing Cddb entries.") );
   QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
-						 "source CD it will replace it with zeros on the resulting copy.") );
+						 "source CD/DVD it will be replaced with zeros on the resulting copy.") );
 
 
   QWhatsThis::add( m_comboCopyMode, 
@@ -248,6 +248,14 @@ K3bCdDevice::CdDevice* K3bCdCopyDialog::readingDevice() const
 
 void K3bCdCopyDialog::slotStartClicked()
 {
+  K3bJobProgressDialog* dlg = 0;
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
+  }
+  else {
+    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
+  }
+
   K3bBurnJob* burnJob = 0;
 
   if( m_comboCopyMode->currentItem() == 1 ) {
@@ -272,7 +280,7 @@ void K3bCdCopyDialog::slotStartClicked()
 	return;
     }
     
-    K3bCloneJob* job = new K3bCloneJob( this );
+    K3bCloneJob* job = new K3bCloneJob( dlg, this );
 
     job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
     job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
@@ -288,7 +296,7 @@ void K3bCdCopyDialog::slotStartClicked()
     burnJob = job;
   }
   else {
-    K3bCdCopyJob* job = new K3bCdCopyJob( this );
+    K3bCdCopyJob* job = new K3bCdCopyJob( dlg, this );
     
     job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
     job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
@@ -308,14 +316,7 @@ void K3bCdCopyDialog::slotStartClicked()
     burnJob = job;
   }
 
-  K3bJobProgressDialog* dlg = 0;
-  if( m_checkOnlyCreateImage->isChecked() ) {
-    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
-  }
-  else {
-    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
-  }
-   
+  
   hide();
   dlg->startJob( burnJob );
   delete dlg;

@@ -54,8 +54,8 @@ public:
 
 
 
-K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, QObject* parent, const char* name )
-  : K3bIsoImager( doc, parent, name ),
+K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bIsoImager( doc, jh, parent, name ),
     m_doc(doc)
 {
   d = new Private;
@@ -314,6 +314,13 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 
   else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
+
+      //
+      // growisofs/mkisofs normally end the output at 99.98 or something like that.
+      // So here we make sure we get to 100%
+      //
+      emit processedSize( m_doc->burningSize()/1024/1024, m_doc->burningSize()/1024/1024 );
+      emit percent( 100 );
 
       int av = d->speedEst->average();
       emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)")

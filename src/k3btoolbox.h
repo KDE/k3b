@@ -18,11 +18,28 @@
 
 #include <qframe.h>
 #include <qstring.h>
+#include <qtoolbutton.h>
 
 class KAction;
 class KToggleAction;
 class QGridLayout;
-class QToolButton;
+class QPopupMenu;
+
+
+
+class K3bToolBoxButton : public QToolButton
+{
+  Q_OBJECT
+
+ public:
+  K3bToolBoxButton( KAction*, QWidget* parent );
+
+ private slots:
+  void slotPopupActivated();
+
+ private:
+  QPopupMenu* m_popupMenu;
+};
 
 
 class K3bToolBox : public QFrame
@@ -40,7 +57,6 @@ class K3bToolBox : public QFrame
   void addSpacing();
 
  protected:
-  QToolButton* addClearButton( KAction* );
   QGridLayout* m_mainLayout;
 };
 

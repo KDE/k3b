@@ -23,9 +23,7 @@
 #include <k3bisoimager.h>
 #include <k3bdataverifyingjob.h>
 #include <k3bgrowisofswriter.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bglobals.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
 #include <k3bdiskinfo.h>
@@ -49,8 +47,8 @@ public:
 };
 
 
-K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, QObject* parent )
-  : K3bBurnJob( parent ),
+K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
+  : K3bBurnJob( hdl, parent ),
     m_isoImager( 0 ),
     m_growisofsImager( 0 ),
     m_writerJob( 0 ),
@@ -135,7 +133,7 @@ void K3bDvdJob::writeImage()
 void K3bDvdJob::prepareIsoImager()
 {
   if( !m_isoImager ) {
-    m_isoImager = new K3bIsoImager( m_doc, this );
+    m_isoImager = new K3bIsoImager( m_doc, this, this );
     connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
@@ -149,7 +147,7 @@ void K3bDvdJob::prepareIsoImager()
 void K3bDvdJob::prepareGrowisofsImager()
 {
   if( !m_growisofsImager ) {
-    m_growisofsImager = new K3bGrowisofsImager( m_doc, this );
+    m_growisofsImager = new K3bGrowisofsImager( m_doc, this, this );
     connect( m_growisofsImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_growisofsImager, SIGNAL(percent(int)), this, SLOT(slotGrowisofsImagerPercent(int)) );
@@ -260,7 +258,7 @@ bool K3bDvdJob::prepareWriterJob()
   if( m_writerJob )
     delete m_writerJob;
 
-  K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this );
+  K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this, this );
   
   // these do only make sense with DVD-R(W)
   writer->setSimulate( m_doc->dummy() );
@@ -326,7 +324,7 @@ void K3bDvdJob::slotWritingFinished( bool success )
 
     if( m_doc->verifyData() ) {
       if( !d->verificationJob ) {
-	d->verificationJob = new K3bDataVerifyingJob( this );
+	d->verificationJob = new K3bDataVerifyingJob( this, this );
 	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
 		 this, SIGNAL(infoMessage(const QString&, int)) );
 	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
@@ -408,11 +406,11 @@ bool K3bDvdJob::waitForDvd()
   else
     mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
 
-  int m = K3bEmptyDiscWaiter::wait( m_doc->burner(), 
-				    m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-				    m_doc->multiSessionMode() == K3bDataDoc::FINISH,
-				    mt );
-  if( m == -1 ) {
+  int m = waitForMedia( m_doc->burner(), 
+			m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+			m_doc->multiSessionMode() == K3bDataDoc::FINISH,
+			mt );
+  if( m < 0 ) {
     cancel();
     return false;
   }

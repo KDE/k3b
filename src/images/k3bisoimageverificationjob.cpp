@@ -50,8 +50,8 @@ public:
 };
 
 
-K3bIsoImageVerificationJob::K3bIsoImageVerificationJob( QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bIsoImageVerificationJob::K3bIsoImageVerificationJob( K3bJobHandler* hdl, QObject* parent, const char* name )
+  : K3bJob( hdl, parent, name )
 {
   d = new Private();
 

@@ -39,7 +39,7 @@ class K3bLameEncoderFactory : public K3bAudioEncoderFactory
 
   long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-  int pluginSystemVersion() const { return 1; }
+  int pluginSystemVersion() const { return 2; }
 
   K3bPlugin* createPluginObject( QObject* parent = 0, 
 				 const char* name = 0,
@@ -63,7 +63,7 @@ class K3bLameEncoder : public K3bAudioEncoder
 
  private:
   void finishEncoderInternal();
-  bool initEncoderInternal( const QString& extension );
+  bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
   long encodeInternal( const char* data, Q_ULONG len );
   void setMetaDataInternal( MetaDataField, const QString& );
 

@@ -212,7 +212,7 @@ void K3bExternalEncoder::slotExternalProgramFinished( KProcess* p )
 }
 
 
-bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename )
+bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& )
 {
   d->fileName = filename;
   d->extension = ext;

@@ -139,7 +139,7 @@ public:
 
 
 K3bCdDevice::DeviceHandler::DeviceHandler( CdDevice* dev, QObject* parent, const char* name )
-  : K3bThreadJob( parent, name ),
+  : K3bThreadJob( 0, parent, name ),
     m_selfDelete(false)
 {
   m_thread = new DeviceHandlerThread();
@@ -149,7 +149,7 @@ K3bCdDevice::DeviceHandler::DeviceHandler( CdDevice* dev, QObject* parent, const
 
 
 K3bCdDevice::DeviceHandler::DeviceHandler( QObject* parent, const char* name )
-  : K3bThreadJob( parent, name ),
+  : K3bThreadJob( 0, parent, name ),
     m_selfDelete(false)
 {
   m_thread = new DeviceHandlerThread();
@@ -158,7 +158,7 @@ K3bCdDevice::DeviceHandler::DeviceHandler( QObject* parent, const char* name )
 
 
 K3bCdDevice::DeviceHandler::DeviceHandler( int command, CdDevice* dev, const char* name )
-  : K3bThreadJob( 0, name ),
+  : K3bThreadJob( 0, 0, name ),
     m_selfDelete(true)
 {
   m_thread = new DeviceHandlerThread();

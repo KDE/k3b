@@ -18,7 +18,6 @@
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 #include <k3bcore.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bdevice.h>
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
@@ -31,8 +30,8 @@
 
 
 
-K3bBinImageWritingJob::K3bBinImageWritingJob( QObject* parent )
-  : K3bBurnJob( parent ),
+K3bBinImageWritingJob::K3bBinImageWritingJob( K3bJobHandler* hdl, QObject* parent )
+  : K3bBurnJob( hdl, parent ),
     m_device(0),
     m_simulate(false),
     m_force(false),
@@ -150,6 +149,7 @@ bool K3bBinImageWritingJob::prepareWriter()
   connect( m_writer, SIGNAL(subPercent(int)), this, SLOT(copySubPercent(int)) );
   connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(writerFinished(bool)) );
   connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
@@ -164,7 +164,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 void K3bBinImageWritingJob::writerStart()
 {
 
-  if( K3bEmptyDiscWaiter::wait( m_device ) == K3bEmptyDiscWaiter::CANCELED ) {
+  if( waitForMedia( m_device ) < 0 ) {
     cancel();
   }
   // just to be sure we did not get canceled during the async discWaiting

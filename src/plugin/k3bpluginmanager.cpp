@@ -14,6 +14,7 @@
  */
 
 #include "k3bpluginmanager.h"
+#include "k3bplugin.h"
 #include "k3bpluginfactory.h"
 #include "k3bpluginconfigwidget.h"
 
@@ -111,7 +112,13 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
       k3bFactory->setComment( c.readEntry( "Comment" ) );
       k3bFactory->setLicense( c.readEntry( "License" ) );
 
-      d->factories.insert( k3bFactory, libName );
+      // FIXME: improve this versioning stuff
+      if( k3bFactory->pluginSystemVersion() > K3B_PLUGIN_SYSTEM_VERSION ) {
+	delete k3bFactory;
+	kdDebug() << "(K3bPluginFactory) plugin system too old for lib " << libName << endl;
+      }
+      else
+	d->factories.insert( k3bFactory, libName );
     }
     else
       kdDebug() << "(K3bPluginManager) lib " << libName << " not a K3b plugin" << endl;

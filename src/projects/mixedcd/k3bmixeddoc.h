@@ -63,7 +63,7 @@ class K3bMixedDoc : public K3bDoc
 
   int numOfTracks() const;
 
-  K3bBurnJob* newBurnJob();
+  K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 );
 
   K3bAudioDoc* audioDoc() const { return m_audioDoc; }
   K3bDataDoc* dataDoc() const { return m_dataDoc; }

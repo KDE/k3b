@@ -21,7 +21,7 @@
 #include "k3bcdcontentsview.h"
 
 
-class KDirOperator;
+class K3bDirOperator;
 class QDragObject;
 class KURL;
 class KFileFilterCombo;
@@ -62,7 +62,7 @@ class K3bFileView : public K3bCdContentsView
 
  private:
   K3bToolBox* m_toolBox;
-  KDirOperator *m_dirOp;
+  K3bDirOperator *m_dirOp;
   KFileFilterCombo* m_filterWidget;
 
   void setupGUI();

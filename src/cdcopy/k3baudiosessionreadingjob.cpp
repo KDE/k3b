@@ -181,8 +181,8 @@ public:
 };
 
 
-K3bAudioSessionReadingJob::K3bAudioSessionReadingJob( QObject* parent, const char* name )
-  : K3bThreadJob( parent, name )
+K3bAudioSessionReadingJob::K3bAudioSessionReadingJob( K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bThreadJob( jh, parent, name )
 {
   m_thread = new WorkThread();
   setThread( m_thread );

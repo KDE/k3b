@@ -44,8 +44,7 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 			  i18n("DVD-RW and DVD+RW"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
-			  modal ),
-    m_job(0)
+			  modal )
 {
   setCancelButtonText( i18n("Close") );
 
@@ -105,7 +104,6 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 
 K3bDvdFormattingDialog::~K3bDvdFormattingDialog()
 {
-  delete m_job;
 } 
 
 
@@ -114,19 +112,22 @@ void K3bDvdFormattingDialog::slotStartClicked()
   //
   // create a jobprogressdialog and start the job
   //
-  if( !m_job ) 
-    m_job = new K3bDvdFormattingJob( this );
 
-  m_job->setDevice( m_writerSelectionWidget->writerDevice() );
-  m_job->setMode( m_writingModeWidget->writingMode() );
-  m_job->setForce( m_checkForce->isChecked() );
-  m_job->setQuickFormat( m_checkQuickFormat->isChecked() );
+
 
   K3bJobProgressDialog d( kapp->mainWidget(), "formattingProgress", false );
 
+  K3bDvdFormattingJob*  job = new K3bDvdFormattingJob( &d, this );
+  job->setDevice( m_writerSelectionWidget->writerDevice() );
+  job->setMode( m_writingModeWidget->writingMode() );
+  job->setForce( m_checkForce->isChecked() );
+  job->setQuickFormat( m_checkQuickFormat->isChecked() );
+
   hide();
 
-  d.startJob( m_job );
+  d.startJob( job );
+
+  delete job;
 
   show();
 } 

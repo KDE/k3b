@@ -31,7 +31,7 @@ class K3bMovixDvdDoc : public K3bMovixDoc
 
   int docType() const { return MOVIX_DVD; }
 
-  K3bBurnJob* newBurnJob();
+  K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 
  protected:
   QString documentType() const { return "movixdvd"; }

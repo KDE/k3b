@@ -30,9 +30,9 @@ K3bMovixDvdDoc::~K3bMovixDvdDoc()
 {
 }
 
-K3bBurnJob* K3bMovixDvdDoc::newBurnJob()
+K3bBurnJob* K3bMovixDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-  return new K3bMovixDvdJob( this );
+  return new K3bMovixDvdJob( this, hdl, parent );
 }
 
 

@@ -28,7 +28,6 @@
 #include <k3bwavefilewriter.h>
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
@@ -42,12 +41,12 @@
 
 
 
-K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, QObject* parent )
-  : K3bBurnJob( parent ),
+K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, K3bJobHandler* hdl, QObject* parent )
+  : K3bBurnJob( hdl, parent ),
     m_doc( doc ),
     m_normalizeJob(0)
 {
-  m_audioStreamer = new K3bAudioStreamer( m_doc, this );
+  m_audioStreamer = new K3bAudioStreamer( m_doc, this, this );
   connect( m_audioStreamer, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );
   connect( m_audioStreamer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_audioStreamer, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
@@ -308,7 +307,7 @@ bool K3bAudioJob::prepareWriter()
       return false;
     }
 
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this, this );
 
     writer->setWritingMode( m_usedWritingMode );
     writer->setSimulate( m_doc->dummy() );
@@ -358,7 +357,7 @@ bool K3bAudioJob::prepareWriter()
 
     // create the writer
     // create cdrdao job
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this );
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this, this );
     writer->setCommand( K3bCdrdaoWriter::WRITE );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
@@ -374,6 +373,7 @@ bool K3bAudioJob::prepareWriter()
   connect( m_writer, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
   connect( m_writer, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
@@ -444,7 +444,7 @@ bool K3bAudioJob::startWriting()
     emit newTask( i18n("Writing") );
 
 
-  if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
+  if( waitForMedia( m_doc->burner() ) < 0 ) {
     cancel();
     return false;
   }
@@ -486,7 +486,7 @@ void K3bAudioJob::removeBufferFiles()
 void K3bAudioJob::normalizeFiles()
 {
   if( !m_normalizeJob ) {
-    m_normalizeJob = new K3bAudioNormalizeJob( this );
+    m_normalizeJob = new K3bAudioNormalizeJob( this, this );
 
     connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)),
 	     this, SIGNAL(infoMessage(const QString&, int)) );

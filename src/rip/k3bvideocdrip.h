@@ -29,7 +29,7 @@ class K3bVideoCdRip : public K3bJob
         Q_OBJECT
 
     public:
-        K3bVideoCdRip( K3bVideoCdRippingOptions* options, QObject* parent = 0, const char* name = 0 );
+        K3bVideoCdRip( K3bJobHandler*, K3bVideoCdRippingOptions* options, QObject* parent = 0, const char* name = 0 );
         ~K3bVideoCdRip();
 
         enum { CDROM, BIN_IMAGE, NRG_IMAGE };

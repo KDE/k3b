@@ -433,9 +433,9 @@ QString K3bVcdDoc::documentType() const
 }
 
 
-K3bBurnJob* K3bVcdDoc::newBurnJob()
+K3bBurnJob* K3bVcdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-    return new K3bVcdJob( this );
+    return new K3bVcdJob( this, hdl, parent );
 }
 
 void K3bVcdDoc::informAboutNotFoundFiles()

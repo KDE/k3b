@@ -41,7 +41,7 @@ class K3bExternalEncoderFactory : public K3bAudioEncoderFactory
 
   //  long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-  int pluginSystemVersion() const { return 1; }
+  int pluginSystemVersion() const { return 2; }
 
   K3bPlugin* createPluginObject( QObject* parent = 0, 
 				 const char* name = 0,
@@ -67,7 +67,7 @@ class K3bExternalEncoder : public K3bAudioEncoder
    * reimplemented since the external program is intended to write the file
    * TODO: allow writing to stdout.
    */
-  bool openFile( const QString& ext, const QString& filename );
+  bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
   void closeFile();
 
   class Command;

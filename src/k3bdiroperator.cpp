@@ -17,33 +17,73 @@
 #include "k3bdiroperator.h"
 #include "kdndfileview.h"
 
+#include <k3bcore.h>
+
 #include <kcombiview.h>
 #include <kfilepreview.h>
 #include <kaction.h>
+#include <kbookmarkmenu.h>
+#include <kstandarddirs.h>
+#include <kpopupmenu.h>
+
+#include <qdir.h>
 
 
 K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* name )
   : KDirOperator( url, parent, name )
 {
-//   // add view-switching actions (no need in KDE 3.1)
-//   KAction* detailedViewAction = actionCollection()->action("detailed view");
-//   KAction* shortViewAction = actionCollection()->action("short view");
-
-//   KActionMenu* viewMenu = (KActionMenu*)actionCollection()->action("view menu");
-//   viewMenu->insert( detailedViewAction, 0 );
-//   viewMenu->insert( shortViewAction, 1 );
-//   viewMenu->insert( new KActionSeparator( actionCollection() ), 2 );
+  setViewConfig( k3bcore->config(), "file view" );
+  readConfig( k3bcore->config(), "file view" );
+  setMode( KFile::Files );
+  setView( KFile::Default );
 
   // disable the del-key since we still have a focus problem and users keep
   // deleting files when they want to remove project entries
   KAction* aDelete = actionCollection()->action("delete");
   if( aDelete )
     aDelete->setAccel( 0 );
+
+  // add the bookmark stuff
+  KBookmarkManager* bmMan = KBookmarkManager::managerForFile( locateLocal( "data", "k3b/bookmarks.xml" ), false );
+  bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
+  bmMan->setUpdate( true );
+  bmMan->setShowNSBookmarks( false );
+
+  m_bmPopup = new KActionMenu( i18n("Bookmarks"), "bookmark", this, "bookmarks" );
+  KActionMenu* dirOpMenu = (KActionMenu*)actionCollection()->action("popupMenu");
+  dirOpMenu->insert( new KActionSeparator( actionCollection() ) );
+  dirOpMenu->insert( m_bmPopup );
+  m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection(), true );
 }
 
 
 K3bDirOperator::~K3bDirOperator()
 {
+  delete m_bmMenu; 
+}
+
+
+void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
+{
+  QString oldGroup = cfg->group();
+  cfg->setGroup( group );
+
+  KDirOperator::readConfig( cfg, group );
+  setURL( KURL::fromPathOrURL( cfg->readPathEntry( "last url", QDir::home().absPath() ) ), true );
+
+  cfg->setGroup( oldGroup );
+}
+
+
+void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
+{
+  QString oldGroup = cfg->group();
+  cfg->setGroup( group );
+
+  KDirOperator::writeConfig( cfg, group );
+  cfg->writePathEntry( "last url", url().path() );
+
+  cfg->setGroup( oldGroup );
 }
 
 
@@ -105,6 +145,31 @@ void K3bDirOperator::slotListViewItemDoubleClicked( QListViewItem* item )
   if( KFileListViewItem* f = dynamic_cast<KFileListViewItem*>( item ) )
     if( f->fileInfo()->isFile() )
       emit doubleClicked( f->fileInfo() );
+}
+
+
+void K3bDirOperator::openBookmarkURL( const QString& url )
+{
+  setURL( KURL::fromPathOrURL( url ), true );
+}
+
+
+QString K3bDirOperator::currentTitle() const
+{
+  return url().path(-1);
+}
+
+
+QString K3bDirOperator::currentURL() const
+{
+  return url().path(-1);
+}
+
+
+void K3bDirOperator::activatedMenu( const KFileItem* item, const QPoint& pos )
+{
+  // TODO: use our own menu and remove or add play and stuff
+  return KDirOperator::activatedMenu( item, pos );
 }
 
 

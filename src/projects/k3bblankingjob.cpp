@@ -20,7 +20,6 @@
 #include <k3bglobals.h>
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
-#include <k3bemptydiscwaiter.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -32,8 +31,8 @@
 
 
 
-K3bBlankingJob::K3bBlankingJob( QObject* parent )
-  : K3bJob( parent ),
+K3bBlankingJob::K3bBlankingJob( K3bJobHandler* hdl, QObject* parent )
+  : K3bJob( hdl, parent ),
     m_writerJob(0),
     m_force(true),
     m_device(0),
@@ -126,13 +125,13 @@ void K3bBlankingJob::slotStartErasing()
   connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
 
-  if( K3bEmptyDiscWaiter::wait( m_device,  
-				K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE,
-				K3bCdDevice::MEDIA_CD_RW,
-				i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(m_device->vendor())
-				.arg(m_device->description())
-				.arg(m_device->devicename()) ) == -1 ) {
+  if( waitForMedia( m_device,  
+		    K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE,
+		    K3bCdDevice::MEDIA_CD_RW,
+		    i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.")
+		    .arg(m_device->vendor())
+		    .arg(m_device->description())
+		    .arg(m_device->devicename()) ) < 0 ) {
     emit canceled();
     emit finished(false);
     return;

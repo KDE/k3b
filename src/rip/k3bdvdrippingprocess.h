@@ -36,7 +36,7 @@ class K3bExternalBin;
 class K3bDvdRippingProcess : public K3bJob {
     Q_OBJECT
 public:
-    K3bDvdRippingProcess( QObject *parent );
+    K3bDvdRippingProcess( K3bJobHandler*, QObject *parent );
     ~K3bDvdRippingProcess();
     void setDvdTitle( const QValueList<K3bDvdContent>& titles );
     void setDirectories( const QString& f, const QString& v, const QString& t ){ m_dirname = f; m_dirvob=v; m_dirtmp=t; };

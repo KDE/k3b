@@ -65,11 +65,14 @@ public:
   QValueList<Track> tracks;
 
   KTempFile* cdTextFile;
+
+  bool bufferInfo;
 };
 
 
-K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
-  : K3bAbstractWriter( dev, parent, name ),
+K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, K3bJobHandler* hdl, 
+				      QObject* parent, const char* name )
+  : K3bAbstractWriter( dev, hdl, parent, name ),
     m_clone(false),
     m_cue(false),
     m_forceNoEject(false)
@@ -183,8 +186,11 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_writingMode == K3b::DAO || m_cue ) {
     if( burnDevice()->dao() )
       *m_process << "-dao";
-    else
+    else {
+      if( m_cdrecordBinObject->hasFeature( "tao" ) )
+	*m_process << "-tao";
       emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
+    }
   }
   else if( m_writingMode == K3b::RAW ) {
     *m_process << "-raw";
@@ -271,6 +277,8 @@ void K3bCdrecordWriter::clearArguments()
 
 void K3bCdrecordWriter::start()
 {
+  d->bufferInfo = false;
+
   emit started();
 
   d->canceled = false;
@@ -358,10 +366,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   // tracknumber: cap(1)
   // done: cap(2)
   // complete: cap(3)
-  // fifo: cap(4)
+  // fifo: cap(4)  (it seems as if some patched cdrecord versions do not emit the fifo info but only the buf... :(
   // buffer: cap(5)
-  static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s\\(fifo\\s*(\\d*)\\%\\)\\s*(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
-  
+  static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s(?:\\(fifo\\s*(\\d*)\\%\\)\\s*)?(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
+
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
   
   //
@@ -408,7 +416,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       m_lastFifoValue = fifo;
 
       if( s_progressRx.numCaptures() > 4 )
-	emit deviceBuffer( s_progressRx.cap(5).toInt() );
+	emit deviceBuffer( s_progressRx.cap(5).toInt() ), d->bufferInfo = true;
 
       //
       // cdrecord's output sucks a bit.
@@ -635,6 +643,11 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
 	
+	if( d->bufferInfo )
+	  emit infoMessage( "got buffer info", INFO );
+	else
+	  emit infoMessage( "got NO buffer info", WARNING );
+
 	emit finished( true );
       }
       break;

@@ -46,6 +46,15 @@ K3bAudioListViewItem::~K3bAudioListViewItem()
 {
 }
 
+
+void K3bAudioListViewItem::setup()
+{
+  KListViewItem::setup();
+
+  setHeight( height() + 4 );
+}
+
+
 QString K3bAudioListViewItem::text(int i) const
 {
   //
@@ -62,11 +71,11 @@ QString K3bAudioListViewItem::text(int i) const
     case 2:
       return m_track->title();
     case 3:
-      return m_track->length().toString() + "  ";
+      return m_track->module()->fileType() + "  ";
     case 4:
       return m_track->pregap().toString();
     case 5:
-      return m_track->module()->fileType() + "  ";
+      return m_track->length().toString() + "  ";
     case 6:
       return m_track->filename();
     default:

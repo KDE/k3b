@@ -180,18 +180,17 @@ void K3bProjectBurnDialog::slotStartClicked()
 	return;
     }
 
-
-  m_job = m_doc->newBurnJob();
-
-  if( m_writerSelectionWidget )
-    m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
-  prepareJob( m_job );
-
   K3bJobProgressDialog* d = 0;
   if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
     d = new K3bJobProgressDialog( kapp->mainWidget() );
   else
     d = new K3bBurnProgressDialog( kapp->mainWidget() );
+
+  m_job = m_doc->newBurnJob( d );
+
+  if( m_writerSelectionWidget )
+    m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
+  prepareJob( m_job );
 
   hide();
   d->startJob(m_job);

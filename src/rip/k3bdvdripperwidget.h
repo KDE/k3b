@@ -33,6 +33,8 @@ class K3bDivxCodecData;
 class K3bJobProgressDialog;
 class K3bDvdCopy;
 class KComboBox;
+class K3bDvdExtraRipStatus;
+
 
 /**
   *@author Thomas Froescher
@@ -82,6 +84,7 @@ private:
 
     K3bDvdCopy *m_ripJob;
     K3bJobProgressDialog *m_ripDialog;
+    K3bDvdExtraRipStatus *m_ripStatus;
     
     K3bDvdFillDisplay *m_fillDisplay;
     void setupGui();

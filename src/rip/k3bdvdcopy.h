@@ -36,7 +36,7 @@ class K3bDvdRippingProcess;
 class K3bDvdCopy : public K3bJob {
     Q_OBJECT
 public:
-    K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QObject *parent );
+    K3bDvdCopy( K3bJobHandler*, const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QObject *parent );
     ~K3bDvdCopy();
 
     void setDvdTitle( const QValueList<K3bDvdContent> &titles );

@@ -19,6 +19,7 @@
 
 #include <qobject.h>
 
+#define K3B_PLUGIN_SYSTEM_VERSION 2
 
 class K3bPlugin : public QObject
 {

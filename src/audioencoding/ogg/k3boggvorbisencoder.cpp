@@ -99,7 +99,7 @@ K3bOggVorbisEncoder::~K3bOggVorbisEncoder()
 }
 
 
-bool K3bOggVorbisEncoder::initEncoderInternal( const QString& )
+bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
 {
   cleanup();
 

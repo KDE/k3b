@@ -190,7 +190,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
 
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
-						 "source CD it will replace it with zeros on the resulting copy.") );
+						 "source CD/DVD it will be replaced with zeros on the resulting copy.") );
 
   slotLoadUserDefaults();
 }
@@ -215,9 +215,16 @@ void K3bDvdCopyDialog::slotStartClicked()
 	return;
     }
 
+  K3bJobProgressDialog* dlg = 0;
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
+  }
+  else {
+    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
+  }
 
   if( !m_job )
-    m_job = new K3bDvdCopyJob( this );
+    m_job = new K3bDvdCopyJob( dlg, this );
 
   m_job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
   m_job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
@@ -231,15 +238,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   m_job->setWritingMode( m_writingModeWidget->writingMode() );
   m_job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
   m_job->setReadRetries( m_spinRetries->value() );
-
-  K3bJobProgressDialog* dlg = 0;
-  if( m_checkOnlyCreateImage->isChecked() ) {
-    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
-  }
-  else {
-    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
-  }
-   
+  
   hide();
   dlg->startJob( m_job );
   delete dlg;
@@ -263,6 +262,8 @@ void K3bDvdCopyDialog::slotLoadUserDefaults()
   m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
+  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
+
   m_writerSelectionWidget->loadConfig( c );
 
   slotToggleAll();
@@ -279,6 +280,8 @@ void K3bDvdCopyDialog::slotSaveUserDefaults()
   c->setGroup( "default dvd copy settings" );
 
   m_writingModeWidget->saveConfig( c );
+
+  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );

@@ -32,7 +32,7 @@ class K3bDvdFormattingJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bDvdFormattingJob( QObject* parent = 0, const char* name = 0 );
+  K3bDvdFormattingJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bDvdFormattingJob();
 
   QString jobDescription() const;

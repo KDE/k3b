@@ -74,7 +74,7 @@ class K3bVcdDoc : public K3bDoc
         KIO::filesize_t size() const;
         K3b::Msf length() const;
 
-        K3bBurnJob* newBurnJob();
+        K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
         K3bVcdOptions* vcdOptions() const { return m_vcdOptions; }
 
         int vcdType() const { return m_vcdType; }

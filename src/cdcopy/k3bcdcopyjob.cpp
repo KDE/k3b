@@ -18,7 +18,6 @@
 #include "k3baudiosessionreadingjob.h"
 
 #include <k3bexternalbinmanager.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
 #include <k3btoc.h>
@@ -114,8 +113,8 @@ public:
 };
 
 
-K3bCdCopyJob::K3bCdCopyJob( QObject* parent )
-  : K3bBurnJob( parent ),
+K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
+  : K3bBurnJob( hdl, parent ),
     m_simulate(false),
     m_copies(1),
     m_onlyCreateImages(false),
@@ -156,10 +155,9 @@ void K3bCdCopyJob::start()
   emit burning(false);
 
   // wait for a source disk
-  if( K3bEmptyDiscWaiter::wait( m_readerDevice,
-				K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE,
-				K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) 
-      == K3bEmptyDiscWaiter::CANCELED ) {
+  if( waitForMedia( m_readerDevice,
+		    K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE,
+		    K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) < 0 ) {
     finishJob( true, false );
     return;
   }
@@ -538,7 +536,7 @@ void K3bCdCopyJob::readNextSession()
   // is an audio track
   if( d->currentReadSession == 1 && d->toc[0].type() == K3bCdDevice::Track::AUDIO ) {
     if( !d->audioSessionReader ) {
-      d->audioSessionReader = new K3bAudioSessionReadingJob( this );
+      d->audioSessionReader = new K3bAudioSessionReadingJob( this, this );
       connect( d->audioSessionReader, SIGNAL(nextTrack(int, int)), 
 	       this, SLOT(slotReadingNextTrack(int, int)) );
       connectSubJob( d->audioSessionReader, 
@@ -563,7 +561,7 @@ void K3bCdCopyJob::readNextSession()
   }
   else {
 //     if( !d->readcdReader ) {
-//       d->readcdReader = new K3bReadcdReader( this );
+//       d->readcdReader = new K3bReadcdReader( this, this );
 //       connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
 //       connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
 //       connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
@@ -578,7 +576,7 @@ void K3bCdCopyJob::readNextSession()
 //     d->readcdReader->setRetries( m_readRetries );
 
     if( !d->dataTrackReader ) {
-      d->dataTrackReader = new K3bDataTrackReader( this );
+      d->dataTrackReader = new K3bDataTrackReader( this, this );
       connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
       connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
       connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
@@ -651,13 +649,13 @@ bool K3bCdCopyJob::writeNextSession()
   emit newSubTask( i18n("Waiting for disk") );
 
   // if session > 1 we wait for an appendable CD
-  if( K3bEmptyDiscWaiter::wait( m_writerDevice, d->currentWrittenSession > 1 ) == K3bEmptyDiscWaiter::CANCELED ) {
+  if( waitForMedia( m_writerDevice, d->currentWrittenSession > 1 ) < 0 ) {
     d->canceled = true;
     return false;
   }
 
   if( !d->cdrecordWriter ) {
-    d->cdrecordWriter = new K3bCdrecordWriter( m_writerDevice, this );
+    d->cdrecordWriter = new K3bCdrecordWriter( m_writerDevice, this, this );
     connect( d->cdrecordWriter, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( d->cdrecordWriter, SIGNAL(percent(int)), this, SLOT(slotWriterProgress(int)) );
     connect( d->cdrecordWriter, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
@@ -665,6 +663,7 @@ bool K3bCdCopyJob::writeNextSession()
     connect( d->cdrecordWriter, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
     connect( d->cdrecordWriter, SIGNAL(nextTrack(int, int)), this, SLOT(slotWritingNextTrack(int, int)) );
     connect( d->cdrecordWriter, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+    connect( d->cdrecordWriter, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
     connect( d->cdrecordWriter, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
     connect( d->cdrecordWriter, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
     //    connect( d->cdrecordWriter, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );

@@ -30,7 +30,7 @@ class K3bMovixDocPreparer : public K3bJob
   Q_OBJECT
 
  public:
-  explicit K3bMovixDocPreparer( K3bMovixDoc* doc, QObject* parent = 0, const char* name = 0 );
+  explicit K3bMovixDocPreparer( K3bMovixDoc* doc, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bMovixDocPreparer();
 
   K3bMovixDoc* doc() const;

@@ -48,6 +48,7 @@ K3bCdDevice::NextGenerationDiskInfo::NextGenerationDiskInfo()
     m_currentProfile(-1),
     m_diskState(STATE_UNKNOWN),
     m_lastSessionState(-1),
+    m_bgFormatState(0),
     m_numSessions(0),
     m_numTracks(0),
     m_rewritable(false)
@@ -69,6 +70,12 @@ int K3bCdDevice::NextGenerationDiskInfo::diskState() const
 int K3bCdDevice::NextGenerationDiskInfo::lastSessionState() const
 {
   return m_lastSessionState;
+}
+
+
+int K3bCdDevice::NextGenerationDiskInfo::bgFormatState() const
+{
+  return m_bgFormatState;
 }
 
 

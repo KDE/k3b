@@ -40,7 +40,7 @@ namespace K3bCdDevice {
 class K3bDataTrackReader : public K3bThreadJob
 {
  public:
-  K3bDataTrackReader( QObject* parent = 0, const char* name = 0 );
+  K3bDataTrackReader( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bDataTrackReader();
 
   void setDevice( K3bCdDevice::CdDevice* );

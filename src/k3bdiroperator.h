@@ -18,21 +18,52 @@
 #define K3BDIROPERATOR_H
 
 #include <kdiroperator.h>
+#include <kbookmarkmanager.h>
 
 class QIconViewItem;
 class QListViewItem;
+class KBookmarkMenu;
+class KActionMenu;
+
 
 
 /**
   *@author Sebastian Trueg
   */
-class K3bDirOperator : public KDirOperator
+class K3bDirOperator : public KDirOperator, public KBookmarkOwner
 {
   Q_OBJECT
 
  public: 
   K3bDirOperator( const KURL& urlName = KURL(), QWidget* parent = 0, const char* name = 0 );
   ~K3bDirOperator();
+
+  /**
+   * reimplemented from KDirOperator
+   */
+  void readConfig( KConfig* cfg, const QString& group );
+
+  /**
+   * reimplemented from KDirOperator
+   */
+  void writeConfig( KConfig* cfg, const QString& group );
+
+  /**
+   * reimplemented from KBookmarkOwner
+   */
+  void openBookmarkURL( const QString& url );
+
+  /**
+   * reimplemented from KBookmarkOwner
+   */
+  QString currentTitle() const;
+
+  /**
+   * reimplemented from KBookmarkOwner
+   */
+  QString currentURL() const;
+
+  KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 
  signals:
   void doubleClicked( KFileItem* item );
@@ -43,6 +74,15 @@ class K3bDirOperator : public KDirOperator
  protected slots:
   void slotIconViewItemDoubleClicked( QIconViewItem* );
   void slotListViewItemDoubleClicked( QListViewItem* );
+
+  /**
+   * reimplemented from KDirOperator
+   */
+  void activatedMenu( const KFileItem*, const QPoint& );
+
+ private:
+  KBookmarkMenu* m_bmMenu;
+  KActionMenu* m_bmPopup;
 };
 
 #endif

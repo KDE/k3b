@@ -265,22 +265,34 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 
-      if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY ) {
-	// empty - preformat without asking
-	prepareErasingDialog();
+      //
+      // for now we do not only check fr the bg format state but also if the media is empty
+      // since I do not know if the bg format state is reported by all drives... (probably it is)
+      //
+      if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY ||
+	  dh->ngDiskInfo().bgFormatState() & (K3bCdDevice::BG_FORMAT_NONE|K3bCdDevice::BG_FORMAT_INCOMPLETE) ) {
 
-	K3bDvdFormattingJob job;
-	job.setDevice( d->device );
-	job.setQuickFormat( true );
-	job.setForce( false );
-	job.setForceNoEject( true );
-	
-	d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
-	connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-	connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
-	connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
-	job.start(dh);
-	d->erasingInfoDialog->exec(true);
+	// special case for the formatting job which wants to preformat itself!
+	if( d->wantedMediaState & (K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_EMPTY) ) {
+	  finishWaiting( K3bCdDevice::MEDIA_DVD_PLUS_RW );
+	}
+	else {
+	  // empty - preformat without asking
+	  prepareErasingDialog();
+	  
+	  K3bDvdFormattingJob job( this );
+	  job.setDevice( d->device );
+	  job.setQuickFormat( true );
+	  job.setForce( false );
+	  job.setForceNoEject( true );
+	  
+	  d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
+	  connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
+	  connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+	  connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	  job.start(dh);
+	  d->erasingInfoDialog->exec(true);
+	}
       }
       else {
 	if( d->wantedMediaState == K3bCdDevice::STATE_EMPTY ) {
@@ -405,7 +417,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 
 	  prepareErasingDialog();
 
-	  K3bDvdFormattingJob job;
+	  K3bDvdFormattingJob job( this );
 	  job.setDevice( d->device );
 	  // we prefere the current mode of the media if no special mode has been requested
 	  job.setMode( ( (d->wantedMediaType & K3bCdDevice::MEDIA_DVD_RW_SEQ) &&
@@ -483,7 +495,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	// start a k3bblankingjob
 	d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
 	  
-	K3bBlankingJob job;
+	K3bBlankingJob job( this );
 	job.setDevice( d->device );
 	job.setMode( K3bBlankingJob::Fast );
 	job.setForceNoEject(true);
@@ -647,10 +659,29 @@ void K3bEmptyDiscWaiter::prepareErasingDialog()
 
 QWidget* K3bEmptyDiscWaiter::parentWidgetToUse()
 {
+  // we might also show dialogs if the discwaiter widget is not visible yet
   if( d->dialogVisible )
     return this;
   else
     return parentWidget();
 }
+
+
+int K3bEmptyDiscWaiter::waitForMedia( K3bCdDevice::CdDevice* device,
+				      int mediaState,
+				      int mediaType,
+				      const QString& message )
+{
+  // this is only needed for the formatting
+  return wait( device, mediaState, mediaType, message, d->erasingInfoDialog );
+}
+
+  
+bool K3bEmptyDiscWaiter::questionYesNo( const QString& text,
+					const QString& caption )
+{
+  return ( KMessageBox::questionYesNo( parentWidgetToUse(), text, caption ) == KMessageBox::Yes );
+}
+
 
 #include "k3bemptydiscwaiter.moc"

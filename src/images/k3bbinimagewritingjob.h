@@ -32,7 +32,7 @@ class K3bBinImageWritingJob : public K3bBurnJob
   Q_OBJECT
 
  public: 
-  K3bBinImageWritingJob( QObject* parent = 0 );
+  K3bBinImageWritingJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bBinImageWritingJob();
 
   K3bCdDevice::CdDevice* writer() const { return m_device; };

@@ -28,8 +28,8 @@
 #include <kprocess.h>
 #include <klocale.h>
 
-K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QObject *parent )
-  : K3bJob(parent) {
+K3bDvdCopy::K3bDvdCopy( K3bJobHandler* hdl, const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QObject *parent )
+  : K3bJob( hdl, parent ) {
     m_device = device;
     m_directory = directory;
     m_dirvob = vob;
@@ -37,7 +37,7 @@ K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QS
     m_ripTitles = titles;
     //    m_parent = parent;
     m_successfulStarted = true;
-    m_ripProcess = new K3bDvdRippingProcess( this );
+    m_ripProcess = new K3bDvdRippingProcess( this, this );
 }
 
 K3bDvdCopy::~K3bDvdCopy(){

@@ -35,7 +35,6 @@
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bversion.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
@@ -52,12 +51,12 @@
 #include <kmessagebox.h>
 
 
-K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
-  : K3bBurnJob( parent ),
+K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, K3bJobHandler* hdl, QObject* parent )
+  : K3bBurnJob( hdl, parent ),
     m_doc( doc ),
     m_normalizeJob(0)
 {
-  m_isoImager = new K3bIsoImager( doc->dataDoc(), this );
+  m_isoImager = new K3bIsoImager( doc->dataDoc(), this, this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
@@ -65,7 +64,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-  m_audioDecoder = new K3bAudioStreamer( doc->audioDoc(), this );
+  m_audioDecoder = new K3bAudioStreamer( doc->audioDoc(), this, this );
   connect( m_audioDecoder, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );
   connect( m_audioDecoder, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_audioDecoder, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
@@ -73,7 +72,7 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_audioDecoder, SIGNAL(finished(bool)), this, SLOT(slotAudioDecoderFinished(bool)) );
   connect( m_audioDecoder, SIGNAL(nextTrack(int, int)), this, SLOT(slotAudioDecoderNextTrack(int, int)) );
 
-  m_msInfoFetcher = new K3bMsInfoFetcher( this );
+  m_msInfoFetcher = new K3bMsInfoFetcher( this, this );
   connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
   connect( m_msInfoFetcher, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
 
@@ -435,7 +434,7 @@ bool K3bMixedJob::prepareWriter()
       return false;
     }
 
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
+    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this, this );
 
     // only write the audio tracks in DAO mode
     if( m_currentAction == WRITING_ISO_IMAGE )
@@ -478,7 +477,7 @@ bool K3bMixedJob::prepareWriter()
 
     // create the writer
     // create cdrdao job
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this );
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this, this );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
 
@@ -498,6 +497,7 @@ bool K3bMixedJob::prepareWriter()
   connect( m_writer, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
   connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
   //  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
@@ -751,7 +751,7 @@ bool K3bMixedJob::startWriting()
   if( !(m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION
 	&& m_currentAction == WRITING_ISO_IMAGE) ) {
 
-    if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
+    if( waitForMedia( m_doc->burner() ) < 0 ) {
       cancel();
       return false;
     }
@@ -947,7 +947,7 @@ void K3bMixedJob::determineWritingMode()
 void K3bMixedJob::normalizeFiles()
 {
   if( !m_normalizeJob ) {
-    m_normalizeJob = new K3bAudioNormalizeJob( this );
+    m_normalizeJob = new K3bAudioNormalizeJob( this, this );
 
     connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)),
 	     this, SIGNAL(infoMessage(const QString&, int)) );

@@ -30,7 +30,7 @@ namespace K3bCdDevice {
 class K3bAudioSessionReadingJob : public K3bThreadJob
 {
  public:
-  K3bAudioSessionReadingJob( QObject* parent = 0, const char* name = 0 );
+  K3bAudioSessionReadingJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bAudioSessionReadingJob();
 
   /**

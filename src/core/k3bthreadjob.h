@@ -42,8 +42,8 @@ class K3bThreadJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bThreadJob( QObject* parent = 0, const char* name = 0 );
-  K3bThreadJob( K3bThread*, QObject* parent = 0, const char* name = 0 );
+  K3bThreadJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+  K3bThreadJob( K3bThread*, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bThreadJob();
 
   void setThread( K3bThread* t );

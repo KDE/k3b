@@ -22,6 +22,7 @@
 #include <k3bmsf.h>
 
 
+
 /**
  * PluginFactory that needs to be subclassed in order to create an
  * audio encoder.
@@ -100,8 +101,7 @@ class K3bAudioEncoder : public K3bPlugin
    * @param extension the filetype to be used.
    *
    */
-  // TODO: add third parameter: const K3b::Msf& length
-  virtual bool openFile( const QString& extension, const QString& filename );
+  virtual bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
 
 
   /**
@@ -156,7 +156,7 @@ class K3bAudioEncoder : public K3bPlugin
    * Called by the default implementation of openFile
    * This calls initEncoderInternal.
    */
-  bool initEncoder( const QString& extension );
+  bool initEncoder( const QString& extension, const K3b::Msf& length );
 
   /**
    * Called by the deafult implementation of openFile
@@ -176,7 +176,7 @@ class K3bAudioEncoder : public K3bPlugin
    * default implementation does nothing
    * this may already write data.
    */
-  virtual bool initEncoderInternal( const QString& extension );
+  virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
 
   /**
    * reimplement this if the encoder needs to do some

@@ -29,7 +29,7 @@ class K3bMd5Job : public K3bJob
   Q_OBJECT
 
  public:
-  K3bMd5Job( QObject* parent = 0, const char* name = 0 );
+  K3bMd5Job( K3bJobHandler* jh , QObject* parent = 0, const char* name = 0 );
   ~K3bMd5Job();
 
   QCString hexDigest();

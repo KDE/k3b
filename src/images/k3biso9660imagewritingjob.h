@@ -36,7 +36,7 @@ class K3bIso9660ImageWritingJob : public K3bBurnJob
   Q_OBJECT
 	
  public:
-  K3bIso9660ImageWritingJob();
+  K3bIso9660ImageWritingJob( K3bJobHandler* );
   ~K3bIso9660ImageWritingJob();
 
   K3bCdDevice::CdDevice* writer() const { return m_device; };

@@ -32,7 +32,7 @@ class K3bDataVerifyingJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bDataVerifyingJob( QObject* parent = 0, const char* name = 0 );
+  K3bDataVerifyingJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bDataVerifyingJob();
 
   bool active() const;

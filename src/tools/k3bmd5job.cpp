@@ -59,8 +59,8 @@ public:
 };
 
 
-K3bMd5Job::K3bMd5Job( QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bMd5Job::K3bMd5Job( K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name )
 {
   d = new K3bMd5JobPrivate;
   d->data = new char[K3bMd5JobPrivate::BUFFERSIZE];

@@ -5,10 +5,38 @@ Some GUI changes: cleaned up the action dialogs, moved the burnfree option to th
 Added support for multiple copies to the projects (in progress)
 Added missed VCD 3.0 track interpretation option for SVCD's
 New Lame encoding plugin providing a proper configuration dialog.
+Added Bookmarks
+Fixed window layering problem with windowmanagers != kwm
+Properly preformat DVD+RWs with a previous unfinished preformatting
+
+0.11.10
+Support Mp3 files starting with multiple ID3 tags.
+Improved ~ handling in the QuickDirSelector.
+Save/Load composer fields in audio projects
+Save/Load default DVD Copy reading device
+	
+0.11.9
+Fixed data project size calculation (for good this time).
+	
+0.11.8
+K3b now searches for the Debian cdrecord wrapper script and properly selects the cdrecord version to use
+	(cdrecord.mmap or cdrecord.shm) based on the kernel version. This should fix all problems with
+	K3bSetup on Debian.
+Fixed writing speed parsing with patched cdrecord
+Add leading zero to tracknumber meta data field when encoding audio tracks.
+Fixed data project size calculation if files from different devices have the same inode number.
+It is now possible to enter hexadecimal values in the boot image load segment fields.
+Fixed external program encoder plugin (this includes lame and flac encoding)
 
 0.11.7
 Check size of returned CD-TEXT data to be a multiple of the pack length. This should fix problems
 	with CD copy.
+Audio Project: Do not overwrite CD-Text values loaded from the project file with the ones detected.
+Added --copydvd command line parameter
+Do only read MCN and ISRCs when copying an audio cd since scanning them takes a very long time.
+Fixed cdrdao 1.1.8 version handling (no ATAPI warning)
+Fixed crash when using the Audiometadatarenamer on Movix Projects
+Automatically enable UDF extensions in case the project contains files bigger then 2 gb.
 
 0.11.6
 Fixed length calculation for long FLAC files.

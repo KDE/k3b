@@ -39,8 +39,8 @@
 #include <kio/job.h>
 #include <kmessagebox.h>
 
-K3bDvdRippingProcess::K3bDvdRippingProcess( QObject *parent )
-  : K3bJob(parent) {
+K3bDvdRippingProcess::K3bDvdRippingProcess( K3bJobHandler* hdl, QObject *parent )
+  : K3bJob( hdl, parent ) {
     //m_processAudio = processAudio;
   //    m_parent = parent;
 }

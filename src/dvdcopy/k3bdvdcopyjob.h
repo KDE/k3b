@@ -32,7 +32,7 @@ class K3bDvdCopyJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bDvdCopyJob( QObject* parent = 0, const char* name = 0 );
+  K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
   ~K3bDvdCopyJob();
 
   K3bCdDevice::CdDevice* writer() const { return m_writerDevice; }

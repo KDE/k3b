@@ -28,7 +28,7 @@ class K3bIsoImageVerificationJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bIsoImageVerificationJob( QObject* parent = 0, const char* name = 0 );
+  K3bIsoImageVerificationJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bIsoImageVerificationJob();
 
  public slots:

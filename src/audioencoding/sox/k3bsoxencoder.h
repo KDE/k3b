@@ -41,7 +41,7 @@ class K3bSoxEncoderFactory : public K3bAudioEncoderFactory
 
   long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-  int pluginSystemVersion() const { return 1; }
+  int pluginSystemVersion() const { return 2; }
 
   K3bPlugin* createPluginObject( QObject* parent = 0, 
 				 const char* name = 0,

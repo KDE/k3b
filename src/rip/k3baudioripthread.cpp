@@ -198,7 +198,7 @@ void K3bAudioRipThread::run()
     // initialize
     bool isOpen = true;
     if( d->encoder ) {
-      isOpen = d->encoder->openFile( d->fileType, filename );
+      isOpen = d->encoder->openFile( d->fileType, filename, d->overallSectorsToRead );
       
       // here we use cd Title and Artist
       d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.cdArtist );
@@ -296,7 +296,9 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
     bool isOpen = true;
     if( !m_singleFile ) {
       if( d->encoder ) {
-	isOpen = d->encoder->openFile( d->fileType, filename );
+	isOpen = d->encoder->openFile( d->fileType, 
+				       filename, 
+				       m_useIndex0 ? d->toc[track-1].realAudioLength() : d->toc[track-1].length() );
 	
 	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.artists[track-1] );
 	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.titles[track-1] );

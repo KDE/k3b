@@ -27,8 +27,9 @@
 #include <kapplication.h>
 
 
+// we do not use a jobhandler here since no discwiting and no questioning is done anyway (this needs a lot of work!)
 K3bDivXEncodingProcess::K3bDivXEncodingProcess( K3bDivxCodecData *data, QWidget* parent, const char *name )
-  : K3bJob( parent, name ),
+  : K3bJob( 0, parent, name ),
     m_process(0) {
   m_data = data;
 }

@@ -221,24 +221,41 @@ bool K3bMadDecoder::initDecoderInternal()
     return false;
   }
 
-  if( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
-      ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
+  int offset = 0;
+
+  //
+  // We use a loop here since an mp3 file may contain multible id3 tags
+  //
+  while( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
+	 ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
     kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
-	      << (unsigned short)buf[3] << "." << (unsigned short)buf[4] << endl;
+	      << (unsigned short)buf[3] << "." << (unsigned short)buf[4] 
+	      << " at offset " << offset << endl;
 
-    int pos = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
+    offset = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
 
-    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << pos << endl;
+    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << offset << endl;
 
-    if( !d->inputFile.at(pos) ) {
-      kdDebug() << "(K3bMadDecoder) " << filename() << ": couldn't seek to " << pos << endl;
+    // skip the id3 tag
+    if( !d->inputFile.at(offset) ) {
+      kdDebug() << "(K3bMadDecoder) " << filename() << ": couldn't seek to " << offset << endl;
+      d->inputFile.close();
+      return false;
+    }
+
+    // read further to check for additional id3 tags
+    if( d->inputFile.readBlock( buf, bufLen ) < bufLen ) {
+      kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << filename() << endl;
       d->inputFile.close();
       return false;
     }
   }
-  else {
-    // reset
-    d->inputFile.at(0);
+
+  // skip any id3 stuff
+  if( !d->inputFile.at(offset) ) {
+    kdDebug() << "(K3bMadDecoder) " << filename() << ": couldn't seek to " << offset << endl;
+    d->inputFile.close();
+    return false;
   }
 
 
@@ -719,8 +736,10 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
 
 
 
-  // now check if the file starts with an id3 tag
-  if( i < bufLen-10 && 
+  //
+  // now skip any id3 tags
+  //
+  while( i < bufLen-10 && 
       ( buf[i] == 'I' && buf[i+1] == 'D' && buf[i+2] == '3' ) &&
       ( (unsigned short)buf[i+3] < 0xff && (unsigned short)buf[i+4] < 0xff ) ) {
     kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
@@ -771,8 +790,7 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
       
 
 
-  // here no id3 tag could be found
-  // so let libmad try to decode one frame header
+  // let libmad try to decode one frame header
   mad_stream stream;;
   mad_header header;
   mad_stream_init( &stream );

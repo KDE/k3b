@@ -31,7 +31,7 @@ class K3bAudioNormalizeJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bAudioNormalizeJob( QObject* parent = 0, const char* name = 0 );
+  K3bAudioNormalizeJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bAudioNormalizeJob();
 
  public slots:

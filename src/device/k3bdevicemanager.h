@@ -98,6 +98,13 @@ namespace K3bCdDevice {
        */
       CdDevice* addDevice( const QString& );
 
+    signals:
+      /**
+       * Emitted if the device configuration changed, i.e. a device was added or removed.
+       */
+      void changed( K3bCdDevice::DeviceManager* );
+      void changed();
+
     private slots:
       void slotCollectStdout( KProcess*, char* data, int len );
 

@@ -23,6 +23,7 @@
 #include <qdatetime.h>
 
 class K3bCdDevice::CdDevice;
+class K3bJobHandler;
 
 
 class K3bAbstractWriter : public K3bJob
@@ -58,13 +59,13 @@ class K3bAbstractWriter : public K3bJob
   void setSimulate( bool b ) { m_simulate = b; }
 
  signals:
-  void burnDeviceBuffer( int );
   void buffer( int );
   void deviceBuffer( int );
   void writeSpeed( int, int );
 
  protected:
-  K3bAbstractWriter( K3bCdDevice::CdDevice* dev, QObject* parent = 0, const char* name = 0 );
+  K3bAbstractWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl, 
+		     QObject* parent = 0, const char* name = 0 );
 
  protected slots:
   void slotUnblockWhileCancellationFinished( bool success );

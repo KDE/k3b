@@ -112,9 +112,9 @@ int K3bMixedDoc::numOfTracks() const
 }
 
 
-K3bBurnJob* K3bMixedDoc::newBurnJob()
+K3bBurnJob* K3bMixedDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-  return new K3bMixedJob( this );
+  return new K3bMixedJob( this, hdl, parent  );
 }
 
 

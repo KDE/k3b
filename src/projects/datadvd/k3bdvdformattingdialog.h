@@ -22,7 +22,6 @@
 class QCheckBox;
 class K3bWritingModeWidget;
 class K3bWriterSelectionWidget;
-class K3bDvdFormattingJob;
 
 
 class K3bDvdFormattingDialog : public K3bInteractionDialog
@@ -46,8 +45,6 @@ class K3bDvdFormattingDialog : public K3bInteractionDialog
   K3bWritingModeWidget* m_writingModeWidget;
   QCheckBox* m_checkForce;
   QCheckBox* m_checkQuickFormat;
-
-  K3bDvdFormattingJob* m_job;
 };
 
 #endif

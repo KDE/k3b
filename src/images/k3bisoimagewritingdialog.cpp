@@ -88,7 +88,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   m_writingModeWidget->setSupportedModes( K3b::DAO|K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR );
 
   m_job = 0;
-  m_md5Job = new K3bMd5Job( this );
+  m_md5Job = new K3bMd5Job( 0, this );
   connect( m_md5Job, SIGNAL(finished(bool)),
 	   this, SLOT(slotMd5JobFinished(bool)) );
   connect( m_md5Job, SIGNAL(percent(int)),
@@ -216,9 +216,12 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   if( c->readPathEntry( "last written image" ).isEmpty() )
     c->writePathEntry( "last written image", m_editImagePath->url() );
 
+  // create a progresswidget
+  K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
+
   // create the job
   if( m_job == 0 )
-    m_job = new K3bIso9660ImageWritingJob();
+    m_job = new K3bIso9660ImageWritingJob( &dlg );
 
   m_job->setBurnDevice( m_writerSelectionWidget->writerDevice() );
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -230,9 +233,6 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   // HACK (needed since if the medium is forced the stupid K3bIso9660ImageWritingJob defaults to cd writing)
   m_job->setWritingApp( K3b::GROWISOFS );
-
-  // create a progresswidget
-  K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
 
   hide();
 

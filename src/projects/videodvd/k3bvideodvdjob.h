@@ -31,7 +31,7 @@ class K3bVideoDvdJob : public K3bDvdJob
   Q_OBJECT
 
  public:
-  K3bVideoDvdJob( K3bVideoDvdDoc*, QObject* parent = 0 );
+  K3bVideoDvdJob( K3bVideoDvdDoc*, K3bJobHandler*, QObject* parent = 0 );
   virtual ~K3bVideoDvdJob();
 
   virtual QString jobDescription() const;

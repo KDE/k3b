@@ -174,8 +174,8 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     m_videooptions ->setVideoCdExtractXml( m_extractXML ->isChecked() );
     m_videooptions ->setVideoCdDestination( m_editDirectory ->url() );
 
-    K3bVideoCdRip * rip = new K3bVideoCdRip( m_videooptions );
     K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
+    K3bVideoCdRip * rip = new K3bVideoCdRip( &ripDialog, m_videooptions );
 
     hide();
     ripDialog.startJob( rip );

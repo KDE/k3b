@@ -18,22 +18,39 @@
 #define K3B_BLANKING_DIALOG_H
 
 #include "k3binteractiondialog.h"
-#include "device/k3bdevice.h"
+#include <k3bjobhandler.h>
 
 class QGroupBox;
 class QComboBox;
 class QCloseEvent;
 class KListView;
 class K3bWriterSelectionWidget;
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 
-class K3bBlankingDialog : public K3bInteractionDialog
+class K3bBlankingDialog : public K3bInteractionDialog, public K3bJobHandler
 {
 Q_OBJECT
 
  public:
   K3bBlankingDialog( QWidget*, const char* );
   ~K3bBlankingDialog();
+
+  /**
+   * @reimplemented from K3bJobHandler
+   */
+  int waitForMedia( K3bCdDevice::CdDevice*,
+		    int mediaState = K3bCdDevice::STATE_EMPTY,
+		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		    const QString& message = QString::null );
+  
+  /**
+   * @reimplemented from K3bJobHandler
+   */
+  bool questionYesNo( const QString& text,
+		      const QString& caption = QString::null );
 
  protected slots:
   void slotStartClicked();

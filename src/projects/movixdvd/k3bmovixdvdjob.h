@@ -33,7 +33,7 @@ class K3bMovixDvdJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bMovixDvdJob( K3bMovixDvdDoc* doc, QObject* parent = 0 );
+  K3bMovixDvdJob( K3bMovixDvdDoc* doc, K3bJobHandler*, QObject* parent = 0 );
   ~K3bMovixDvdJob();
 
   K3bDoc* doc() const;

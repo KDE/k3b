@@ -33,9 +33,9 @@ K3bDvdDoc::~K3bDvdDoc()
 {
 }
 
-K3bBurnJob* K3bDvdDoc::newBurnJob()
+K3bBurnJob* K3bDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-  return new K3bDvdJob( this );
+  return new K3bDvdJob( this, hdl, parent );
 }
 
 

@@ -1923,6 +1923,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	  break;
 	}
 
+	inf.m_bgFormatState = dInf->bg_f_status;
+
 	inf.m_numTracks = (dInf->last_track_l & 0xff) | (dInf->last_track_m<<8 & 0xff00);
 	if( inf.diskState() == STATE_EMPTY )
 	  inf.m_numTracks = 0;

@@ -28,7 +28,7 @@ class K3bVideoDvdDoc : public K3bDvdDoc
 
   virtual int docType() const { return VIDEODVD; }
 
-  virtual K3bBurnJob* newBurnJob();
+  virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 
   virtual bool newDocument();
 

@@ -18,6 +18,7 @@
 #define K3BEMPTYDISCWAITER_H
 
 #include <kdialogbase.h>
+#include <k3bjobhandler.h>
 
 #include <k3bdiskinfo.h>
 
@@ -34,7 +35,7 @@ namespace K3bCdDevice {
  *
  * @author Sebastian Trueg
  */
-class K3bEmptyDiscWaiter : public KDialogBase
+class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
 {
  Q_OBJECT
 
@@ -62,6 +63,21 @@ class K3bEmptyDiscWaiter : public KDialogBase
    * the same as waitForEmptyDisc( false );
    */
   int exec();
+
+  /**
+   * @reimplemented from K3bJobHandler
+   */
+  int waitForMedia( K3bCdDevice::CdDevice*,
+		    int mediaState = K3bCdDevice::STATE_EMPTY,
+		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		    const QString& message = QString::null );
+  
+  /**
+   * @reimplemented from K3bJobHandler
+   */
+  bool questionYesNo( const QString& text,
+		      const QString& caption = QString::null );
+
 
   /**
    * This only openes a dialog if the first check failed.

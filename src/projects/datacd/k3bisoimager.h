@@ -37,7 +37,7 @@ class K3bIsoImager : public K3bJob
  Q_OBJECT
 
  public:
-  K3bIsoImager( K3bDataDoc*, QObject* parent = 0, const char* name = 0 );
+  K3bIsoImager( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bIsoImager();
 
   virtual bool active() const;

@@ -181,11 +181,14 @@ QString K3bFileTreeViewItem::key( int column, bool ascending ) const
 class K3bFileTreeView::Private
 {
 public:
-  Private() {
+  Private()
+    : deviceManager(0) {
   }
 
   QPtrDict<K3bDeviceBranch> deviceBranchDict;
   QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*> branchDeviceMap;
+
+  K3bDeviceManager* deviceManager;
 };
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
@@ -217,6 +220,15 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 K3bFileTreeView::~K3bFileTreeView()
 {
   delete d;
+}
+
+
+void K3bFileTreeView::clear()
+{
+  KFileTreeView::clear();
+  if( d->deviceManager )
+    d->deviceManager->disconnect( this );
+  d->deviceManager = 0;
 }
 
 
@@ -310,6 +322,8 @@ void K3bFileTreeView::addDefaultBranches()
 
 void K3bFileTreeView::addCdDeviceBranches( K3bDeviceManager* dm )
 {
+  kdDebug() << "(K3bFileTreeView::addCdDeviceBranches)" << endl;
+
   // remove all previous added device branches
   for( QMap<KFileTreeBranch*, K3bCdDevice::CdDevice*>::Iterator it = d->branchDeviceMap.begin();
        it != d->branchDeviceMap.end(); ++it ) {
@@ -335,6 +349,18 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDeviceManager* dm )
     d->branchDeviceMap.insert( newBranch, dev );
     d->deviceBranchDict.insert( (void*)dev, newBranch );
   }
+
+  if( dm != d->deviceManager ) {
+    if( d->deviceManager )
+      d->deviceManager->disconnect( this );
+    d->deviceManager = dm;
+
+    // make sure we get changes to the config
+    connect( dm, SIGNAL(changed(K3bCdDevice::DeviceManager*)),
+	     this, SLOT(addCdDeviceBranches(K3bCdDevice::DeviceManager*)) );
+  }
+
+  kdDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
 }
 
 

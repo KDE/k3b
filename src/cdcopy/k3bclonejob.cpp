@@ -21,7 +21,6 @@
 #include <k3bdevice.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
-#include <k3bemptydiscwaiter.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -42,8 +41,8 @@ public:
 };
 
 
-K3bCloneJob::K3bCloneJob( QObject* parent, const char* name )
-  : K3bBurnJob( parent, name ),
+K3bCloneJob::K3bCloneJob( K3bJobHandler* hdl, QObject* parent, const char* name )
+  : K3bBurnJob( hdl, parent, name ),
     m_writerDevice(0),
     m_readerDevice(0),
     m_writerJob(0),
@@ -117,9 +116,9 @@ void K3bCloneJob::start()
   else {
     prepareReader();
 
-    if( K3bEmptyDiscWaiter::wait( readingDevice(),
-				  K3bCdDevice::STATE_COMPLETE,
-				  K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) == -1 ) {
+    if( waitForMedia( readingDevice(),
+		      K3bCdDevice::STATE_COMPLETE,
+		      K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) < 0 ) {
       m_running = false;
       emit canceled();
       emit finished(false);
@@ -136,7 +135,7 @@ void K3bCloneJob::start()
 void K3bCloneJob::prepareReader()
 {
   if( !m_readcdReader ) {
-    m_readcdReader = new K3bReadcdReader( this );
+    m_readcdReader = new K3bReadcdReader( this, this );
     connect( m_readcdReader, SIGNAL(percent(int)), this, SLOT(slotReadingPercent(int)) );
     connect( m_readcdReader, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
     connect( m_readcdReader, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
@@ -159,13 +158,14 @@ void K3bCloneJob::prepareReader()
 void K3bCloneJob::prepareWriter()
 {
   if( !m_writerJob ) {
-    m_writerJob = new K3bCdrecordWriter( writer(), this );
+    m_writerJob = new K3bCdrecordWriter( writer(), this, this );
     connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
     connect( m_writerJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
     connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
     connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
     connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+    connect( m_writerJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
     connect( m_writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
     connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
     //    connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
@@ -279,9 +279,9 @@ void K3bCloneJob::startWriting()
   // start writing
   prepareWriter();
     
-  if( K3bEmptyDiscWaiter::wait( writer(), 
-				K3bCdDevice::STATE_EMPTY,
-				K3bCdDevice::MEDIA_WRITABLE_CD ) == -1 ) {
+  if( waitForMedia( writer(), 
+		    K3bCdDevice::STATE_EMPTY,
+		    K3bCdDevice::MEDIA_WRITABLE_CD ) < 0 ) {
     removeImageFiles();
     m_running = false;
     emit canceled();

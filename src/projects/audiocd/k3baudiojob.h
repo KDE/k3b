@@ -40,7 +40,7 @@ class K3bAudioJob : public K3bBurnJob
   Q_OBJECT
 	
  public:
-  K3bAudioJob( K3bAudioDoc*, QObject* parent = 0 );
+  K3bAudioJob( K3bAudioDoc*, K3bJobHandler*, QObject* parent = 0 );
   ~K3bAudioJob();
 	
   K3bDoc* doc() const;

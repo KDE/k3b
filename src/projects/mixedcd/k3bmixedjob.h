@@ -42,7 +42,7 @@ class K3bMixedJob : public K3bBurnJob
   Q_OBJECT
 	
  public:
-  K3bMixedJob( K3bMixedDoc*, QObject* parent = 0 );
+  K3bMixedJob( K3bMixedDoc*, K3bJobHandler*, QObject* parent = 0 );
   ~K3bMixedJob();
 	
   K3bDoc* doc() const;

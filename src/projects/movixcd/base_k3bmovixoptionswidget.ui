@@ -59,7 +59,7 @@
                         <number>1</number>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>How often should the playlist be looped</string>
+                        <string>How many times should the playlist be looped</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="4" column="0">

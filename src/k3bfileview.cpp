@@ -42,7 +42,6 @@
 #include <kdirlister.h>
 
 
-
 K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
   : K3bCdContentsView(false, parent,name) 
 {
@@ -67,9 +66,6 @@ void K3bFileView::setupGUI()
   //  layout->setAutoAdd( true );
 
   m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );
-  m_dirOp->readConfig( k3bMain()->config(), "file view" );
-  m_dirOp->setMode( KFile::Files );
-  m_dirOp->setView( KFile::Default );
 
   m_toolBox = new K3bToolBox( this );
 
@@ -100,7 +96,8 @@ void K3bFileView::setupGUI()
   m_toolBox->addSpacing();
   m_toolBox->addButton( actionPlay );
   m_toolBox->addSpacing();
-
+  m_toolBox->addButton( m_dirOp->bookmarkMenu() );
+  m_toolBox->addSpacing();
 
   // insert actions into diroperator menu
   KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
@@ -109,6 +106,7 @@ void K3bFileView::setupGUI()
   dirOpMenu->insert( actionPlay, 2 );
   dirOpMenu->insert( actionEnqueue, 3 );
   dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 4 );
+
 
   // check if some actions should be enabled
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );

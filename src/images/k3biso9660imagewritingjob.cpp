@@ -24,7 +24,6 @@
 #include <k3bcdrdaowriter.h>
 #include <k3bgrowisofswriter.h>
 #include <k3bglobals.h>
-#include <k3bemptydiscwaiter.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bexternalbinmanager.h>
@@ -43,8 +42,8 @@
 #include <qapplication.h>
 
 
-K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
-  : K3bBurnJob(),
+K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob( K3bJobHandler* hdl )
+  : K3bBurnJob( hdl ),
     m_writingMode(K3b::WRITING_MODE_AUTO),
     m_simulate(false),
     m_device(0),
@@ -235,8 +234,8 @@ void K3bIso9660ImageWritingJob::startWriting()
 
 
   // wait for the media
-  int media = K3bEmptyDiscWaiter::wait( m_device, false, mt );
-  if( media == K3bEmptyDiscWaiter::CANCELED ) {
+  int media = waitForMedia( m_device, K3bCdDevice::STATE_EMPTY, mt );
+  if( media < 0 ) {
     m_finished = true;
     emit canceled();
     emit finished(false);
@@ -387,6 +386,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
   connect( m_writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
   connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
   connect( m_writer, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
   connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );

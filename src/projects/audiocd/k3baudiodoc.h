@@ -88,7 +88,7 @@ class K3bAudioDoc : public K3bDoc
 
   int numOfTracks() const;
 
-  K3bBurnJob* newBurnJob();
+  K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 );
 
  public slots:
   /**

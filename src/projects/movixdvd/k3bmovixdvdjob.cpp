@@ -27,12 +27,12 @@
 #include <kdebug.h>
 
 
-K3bMovixDvdJob::K3bMovixDvdJob( K3bMovixDvdDoc* doc, QObject* parent )
-  : K3bBurnJob( parent ),
+K3bMovixDvdJob::K3bMovixDvdJob( K3bMovixDvdDoc* doc, K3bJobHandler* jh, QObject* parent )
+  : K3bBurnJob( jh, parent ),
     m_doc(doc)
 {
-  m_dvdJob = new K3bDvdJob( doc, this );
-  m_movixDocPreparer = new K3bMovixDocPreparer( doc, this );
+  m_dvdJob = new K3bDvdJob( doc, this, this );
+  m_movixDocPreparer = new K3bMovixDocPreparer( doc, this, this );
 
   // pipe signals
   connect( m_dvdJob, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );

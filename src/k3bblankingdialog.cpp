@@ -22,6 +22,7 @@
 #include "k3bdiskerasinginfodialog.h"
 #include <k3bglobals.h>
 #include <k3bcore.h>
+#include <k3bemptydiscwaiter.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -139,7 +140,7 @@ void K3bBlankingDialog::slotStartClicked()
   m_viewOutput->clear();
 
   if( d->job == 0 ) {
-    d->job = new K3bBlankingJob( this );
+    d->job = new K3bBlankingJob( this, this );
     connect( d->job, SIGNAL(infoMessage(const QString&,int)), 
 	     this, SLOT(slotInfoMessage(const QString&,int)) );
     connect( d->job, SIGNAL(finished(bool)), 
@@ -331,5 +332,23 @@ void K3bBlankingDialog::slotSaveUserDefaults()
 
   m_writerSelectionWidget->saveConfig( c );
 }
+
+
+int K3bBlankingDialog::waitForMedia( K3bCdDevice::CdDevice* device,
+				     int mediaState,
+				     int mediaType,
+				     const QString& message )
+{
+  // this is only needed for the formatting
+  return K3bEmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
+}
+
+  
+bool K3bBlankingDialog::questionYesNo( const QString& text,
+					const QString& caption )
+{
+  return ( KMessageBox::questionYesNo( this, text, caption ) == KMessageBox::Yes );
+}
+
 
 #include "k3bblankingdialog.moc"

@@ -182,25 +182,27 @@ void K3bDvdRipperWidget::rip(){
     return;
   }
 
-  m_ripJob = new K3bDvdCopy( m_device, 
+
+  if( !m_ripDialog ) {
+    m_ripDialog = new K3bJobProgressDialog( kapp->mainWidget(), "Ripping", false );
+    m_ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
+    m_ripDialog->setExtraInfo( m_ripStatus );
+    connect( m_ripDialog, SIGNAL( closeClicked()), this, SLOT( slotRipJobDeleted() ));
+  }
+
+  m_ripJob = new K3bDvdCopy( m_ripDialog,
+			     m_device, 
 			     m_editStaticRipPath->url(), 
 			     m_editStaticRipPath->url()+"/vob", 
 			     m_editStaticRipPath->url()+"/tmp", 
 			     m_ripTitles, 
 			     this );
   m_ripJob->setSettings( m_vobSize, m_comboAngle->currentText() );
+  connect( m_ripJob, SIGNAL( dataRate( float )), m_ripStatus, SLOT( slotDataRate( float )) );
+  connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), 
+	   m_ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
+  connect( m_ripJob, SIGNAL( finished( bool )), this, SLOT( slotOpenEncoding( bool )) );
   
-  if( !m_ripDialog ) {
-    m_ripDialog = new K3bJobProgressDialog( kapp->mainWidget(), "Ripping", false );
-    K3bDvdExtraRipStatus *ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
-    connect( m_ripJob, SIGNAL( dataRate( float )), ripStatus, SLOT( slotDataRate( float )) );
-    connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), 
-	     ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
-    connect( m_ripJob, SIGNAL( finished( bool )), this, SLOT( slotOpenEncoding( bool )) );
-    m_ripDialog->setExtraInfo( ripStatus );
-    connect( m_ripDialog, SIGNAL( closeClicked()), this, SLOT( slotRipJobDeleted() ));
-  }
-
   hide(); 
 
   m_ripDialog->startJob( m_ripJob );

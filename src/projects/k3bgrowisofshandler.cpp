@@ -49,7 +49,40 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
 {
   int pos = 0;
 
-  if( line.contains( "flushing cache" ) ) {
+  if( line.startsWith( ":-[" ) ) {
+    // Error
+
+    if( line.contains( "ASC=30h" ) )
+      m_error = ERROR_MEDIA;
+
+    // :-[ PERFORM OPC failed with SK=3h/ASC=73h/ASCQ=03h
+    else if( line.startsWith( ":-[ PERFORM OPC failed" ) )
+      emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), K3bJob::ERROR );
+
+    // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
+    else if( !m_dao && 
+	     ( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) ) )
+      emit infoMessage( i18n("Please try again with writing mode DAO."), K3bJob::ERROR );
+
+    else if( line.startsWith( ":-[ Failed to change write speed" ) ) {
+      m_error = ERROR_SPEED_SET_FAILED;
+    }
+  }
+  else if( line.startsWith( ":-(" ) ) {
+    if( line.contains( "No space left on device" ) )
+      m_error = ERROR_OVERSIZE;
+
+    else if( line.contains( "blocks are free" ) && line.contains( "to be written" ) ) {
+      m_error = ERROR_OVERSIZE;
+      k3bcore->config()->setGroup( "General Options" );
+      if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
+	emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
+    }
+
+    else  
+      emit infoMessage( line, K3bJob::ERROR );
+  }
+ else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
     emit infoMessage( i18n("Flushing the cache may take some time."), K3bJob::INFO );
   }
@@ -95,39 +128,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
-  else if( line.startsWith( ":-[" ) ) {
-    // Error
 
-    if( line.contains( "ASC=30h" ) )
-      m_error = ERROR_MEDIA;
-
-    // :-[ PERFORM OPC failed with SK=3h/ASC=73h/ASCQ=03h
-    else if( line.startsWith( ":-[ PERFORM OPC failed" ) )
-      emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), K3bJob::ERROR );
-
-    // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
-    else if( !m_dao && 
-	     ( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) ) )
-      emit infoMessage( i18n("Please try again with writing mode DAO."), K3bJob::ERROR );
-
-    else if( line.startsWith( ":-[ Failed to change write speed" ) ) {
-      m_error = ERROR_SPEED_SET_FAILED;
-    }
-  }
-  else if( line.startsWith( ":-(" ) ) {
-    if( line.contains( "No space left on device" ) )
-      m_error = ERROR_OVERSIZE;
-
-    else if( line.contains( "blocks are free" ) && line.contains( "to be written" ) ) {
-      m_error = ERROR_OVERSIZE;
-      k3bcore->config()->setGroup( "General Options" );
-      if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) )
-	emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
-    }
-
-    else  
-      emit infoMessage( line, K3bJob::ERROR );
-  }
   else {
     kdDebug() << "(growisofs) " << line << endl;
   }
@@ -153,7 +154,7 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
 
   case ERROR_SPEED_SET_FAILED:
     emit infoMessage( i18n("Unable to set writing speed."), K3bJob::ERROR );
-    emit infoMessage( i18n("Please try again, ignoring the speed setting."), K3bJob::ERROR );
+    emit infoMessage( i18n("Please try again with the 'ignore speed' setting."), K3bJob::ERROR );
     break;
 
   default:

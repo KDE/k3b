@@ -24,6 +24,7 @@
 #include <qcombobox.h>
 #include <qhbox.h>
 #include <qtabwidget.h>
+#include <qwhatsthis.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -199,6 +200,16 @@ void K3bAudioTrackDialog::setupGui()
 
   m_checkPreEmp       = new QCheckBox( i18n( "Pr&eemphasis" ), optionsTab, "m_checkPreEmp" );
   m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
+
+  QWhatsThis::add( m_checkPreEmp, i18n( "Preemphasis is mainly used in audio processing.\n"
+					"Higher frequencies in audio signals ususally have "
+					"lower amplitudes.\n"
+					"This can lead to bad signal quality on noisy "
+					"transmission because the high frequencies might become "
+					"too weak. To avoid this effect, high frequencies are "
+					"beeing amplified before transmission (preemphasis). "
+					"The receiver will then weaken them accordingly for "
+					"playback." ) );
 
   optionsGrid->addWidget( labelPregap, 0, 0 );
   optionsGrid->addWidget( m_inputPregap, 0, 1 );

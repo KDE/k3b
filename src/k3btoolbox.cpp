@@ -16,12 +16,64 @@
 #include "k3btoolbox.h"
 
 #include <kaction.h>
+#include <kpopupmenu.h>
+#include <ktoolbarbutton.h>
 
 #include <qtoolbutton.h>
 #include <qsizepolicy.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
 #include <qlabel.h>
+
+
+
+K3bToolBoxButton::K3bToolBoxButton( KAction* action, QWidget* parent )
+  : QToolButton( parent ),
+    m_popupMenu(0)
+{
+  setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+  setIconSet( action->iconSet() );
+  setTextLabel( action->toolTip(), true );
+  setTextLabel( action->text() );
+  setAutoRaise( true );
+
+  QWhatsThis::add( this, action->whatsThis() );
+
+  if( KToggleAction* ta = dynamic_cast<KToggleAction*>( action ) ) {
+    setToggleButton( true );
+    
+    // initial state
+    if( ta->isChecked() )
+      toggle();
+    
+    connect( ta, SIGNAL(toggled(bool)), this, SLOT(toggle()) );
+    connect( this, SIGNAL(toggled(bool)), ta, SLOT(setChecked(bool)) );
+  }
+
+  else if( KActionMenu* am = dynamic_cast<KActionMenu*>( action ) ) {
+    m_popupMenu = am->popupMenu();
+    connect( this, SIGNAL(pressed()), this, SLOT(slotPopupActivated()) );
+    setPopup( m_popupMenu );
+  }
+
+  else {
+    connect( this, SIGNAL(clicked()), action, SLOT(activate()) );
+  }
+
+  connect( action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)) );
+}
+
+
+void K3bToolBoxButton::slotPopupActivated()
+{
+  // force the toolbutton to open the popupmenu instantly
+  openPopup();
+}
+
+
+
+
+
 
 
 K3bToolBox::K3bToolBox( QWidget* parent, const char* name )
@@ -42,10 +94,7 @@ K3bToolBox::~K3bToolBox()
 
 void K3bToolBox::addButton( KAction* action )
 {
-  QToolButton* button = addClearButton( action );
-
-  connect( button, SIGNAL(clicked()), action, SLOT(activate()) );
-  connect( action, SIGNAL(enabled(bool)), button, SLOT(setEnabled(bool)) );
+  addWidget( new K3bToolBoxButton( action, this ) );
 }
 
 
@@ -85,33 +134,7 @@ void K3bToolBox::addWidget( QWidget* w )
 
 void K3bToolBox::addToggleButton( KToggleAction* action )
 {
-  QToolButton* button = addClearButton( action );
-  button->setToggleButton( true );
-
-  if( action->isChecked() )
-    button->toggle();
-
-  connect( action, SIGNAL(toggled(bool)), button, SLOT(toggle()) );
-  connect( button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)) );
-  connect( action, SIGNAL(enabled(bool)), button, SLOT(setEnabled(bool)) );
-}
-
-
-QToolButton* K3bToolBox::addClearButton( KAction* action )
-{
-  QToolButton* button = new QToolButton( this );
-  button->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-
-  button->setIconSet( action->iconSet() );
-  button->setTextLabel( action->toolTip(), true );
-  button->setTextLabel( action->text() );
-  QWhatsThis::add( button, action->whatsThis() );
-
-  button->setAutoRaise( true );
-
-  addWidget( button );
-
-  return button;
+  addButton( action );
 }
 
 

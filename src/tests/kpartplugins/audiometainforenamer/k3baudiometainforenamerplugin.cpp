@@ -134,8 +134,9 @@ K3bAudioMetainfoRenamerPluginDialog::K3bAudioMetainfoRenamerPluginDialog( K3bDat
   QToolTip::add( d->checkRecursive, i18n("Recurse into subdirectories") );
   QToolTip::add( d->checkCompleteDoc, i18n("Scan the whole project for renamable files") );
   QWhatsThis::add( d->comboPattern, i18n("<qt>This specifies how the files should be renamed. "
-					 "Currently only the special strings <em>%a</em> (Artist) "
-					 "and <em>%t</em> (Title) are supported.") );
+					 "Currently only the special strings <em>%a</em> (Artist), "
+					 "<em>%n</em> (Track number), and <em>%t</em> (Title) ,"
+					 "are supported.") );
   
   // we cannot apply without scanning first
   m_buttonSave->setEnabled( false );
@@ -290,19 +291,23 @@ QString K3bAudioMetainfoRenamerPluginDialog::createNewName( K3bFileItem* item )
   // sometimes ogg-vorbis files go as "application/x-ogg"
   if( item->mimetype().contains( "audio" ) || item->mimetype().contains("ogg") ) {
 
-    QString artist, title;
+    QString artist, title,track;
 
     KFileMetaInfo metaInfo( item->localPath() );
     if( metaInfo.isValid() ) {
 
       KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
       KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
+      KFileMetaInfoItem trackItem = metaInfo.item( "Tracknumber" );
       
       if( artistItem.isValid() )
 	artist = artistItem.string();
       
       if( titleItem.isValid() )
 	title = titleItem.string();
+      
+      if( trackItem.isValid() )
+	track = track.sprintf("%02d",trackItem.string().toInt());
     }
 
     QString newName;
@@ -316,6 +321,11 @@ QString K3bAudioMetainfoRenamerPluginDialog::createNewName( K3bFileItem* item )
 	    if( artist.isEmpty() )
 	      return QString::null;
 	    newName.append(artist);
+	  }
+	  else if( d->pattern[i] == 'n' ) {
+	    if( title.isEmpty() )
+	      return QString::null;
+	    newName.append(track);
 	  }
 	  else if( d->pattern[i] == 't' ) {
 	    if( title.isEmpty() )

@@ -89,7 +89,7 @@ class K3bDataDoc : public K3bDoc
 	
   QString treatWhitespace( const QString& );
 	
-  virtual K3bBurnJob* newBurnJob();
+  virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent = 0 );
 	
   int multiSessionMode() const { return m_multisessionMode; }
   void setMultiSessionMode( int mode );

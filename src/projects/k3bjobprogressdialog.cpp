@@ -23,6 +23,7 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bthememanager.h>
+#include <k3bemptydiscwaiter.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -688,10 +689,7 @@ int K3bJobProgressDialog::waitForMedia( K3bCdDevice::CdDevice* device,
 					int mediaType,
 					const QString& message )
 {
-  // TODO: make the emptydiskwaiter available here
-  //       maybe we need to move the K3bJobProgressDialog to libprojects
-  //  return K3bEmptyDiscWaiter::wait( device, mediaState, mediaType, message );
-  return 0;
+  return K3bEmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
 }
 
   

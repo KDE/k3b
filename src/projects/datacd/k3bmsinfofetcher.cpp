@@ -29,8 +29,8 @@
 #include <qstringlist.h>
 
 
-K3bMsInfoFetcher::K3bMsInfoFetcher( QObject* parent, const char* name )
-  : K3bJob( parent, name ),
+K3bMsInfoFetcher::K3bMsInfoFetcher( K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name ),
     m_process(0),
     m_device(0),
     m_dvd(false)

@@ -29,7 +29,7 @@ class K3bBlankingJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bBlankingJob( QObject* parent = 0 );
+  K3bBlankingJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bBlankingJob();
 
   enum blank_mode { Fast, Complete, Track, Unclose, Session };

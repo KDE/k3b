@@ -32,7 +32,8 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   Q_OBJECT
 
  public:
-  K3bGrowisofsWriter( K3bCdDevice::CdDevice*, QObject* parent = 0, const char* name = 0 );
+  K3bGrowisofsWriter( K3bCdDevice::CdDevice*, K3bJobHandler*,
+		      QObject* parent = 0, const char* name = 0 );
   ~K3bGrowisofsWriter();
 
   bool active() const;

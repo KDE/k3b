@@ -17,7 +17,7 @@
 #include "k3bburnprogressdialog.h"
 
 #include "k3bjob.h"
-#include "device/k3bdevice.h"
+#include <k3bdevice.h>
 #include "k3bstdguiitems.h"
 #include <k3bthememanager.h>
 
@@ -36,10 +36,10 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   : K3bJobProgressDialog(parent,name, showSubProgress, modal, wf)
 {
   m_labelWritingSpeed = new QLabel( m_frameExtraInfo, "m_labelWritingSpeed" );
-  m_labelWritingSpeed->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  //  m_labelWritingSpeed->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-  m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 2 );
-  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 2 );
+  m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 0 );
+  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 0 );
 
   QFrame* headerFrame = K3bStdGuiItems::purpleFrame( m_frameExtraInfo );
   QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
@@ -51,11 +51,15 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_labelWriter->setFont( textLabel14_font );
   m_labelWriter->setMargin( 3 );
 
-  m_frameExtraInfoLayout->addMultiCellWidget( headerFrame, 0, 0, 0, 2 );
-  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Buffer status:"), m_frameExtraInfo ), 1, 0 );
+  m_frameExtraInfoLayout->addMultiCellWidget( headerFrame, 0, 0, 0, 3 );
+  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Fifo Buffer:"), m_frameExtraInfo ), 1, 2 );
+  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device Buffer:"), m_frameExtraInfo ), 2, 2 );
 
   m_progressWritingBuffer = new KProgress( m_frameExtraInfo, "m_progressWritingBuffer" );
-  m_frameExtraInfoLayout->addWidget( m_progressWritingBuffer, 2, 0 );
+  m_frameExtraInfoLayout->addWidget( m_progressWritingBuffer, 1, 3 );
+
+  m_progressDeviceBuffer = new KProgress( m_frameExtraInfo );
+  m_frameExtraInfoLayout->addWidget( m_progressDeviceBuffer, 2, 3 );
 
   QFrame* line1 = new QFrame( m_frameExtraInfo, "line1" );
   line1->setFrameShape( QFrame::VLine );
@@ -89,8 +93,10 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
 
   if( burnJob ) {
     connect( burnJob, SIGNAL(bufferStatus(int)), this, SLOT(slotBufferStatus(int)) );
+    connect( burnJob, SIGNAL(deviceBuffer(int)), this, SLOT(slotDeviceBuffer(int)) );
     connect( burnJob, SIGNAL(writeSpeed(int, int)), this, SLOT(slotWriteSpeed(int, int)) );
     connect( burnJob, SIGNAL(burning(bool)), m_progressWritingBuffer, SLOT(setEnabled(bool)) );
+    connect( burnJob, SIGNAL(burning(bool)), m_progressDeviceBuffer, SLOT(setEnabled(bool)) );
     connect( burnJob, SIGNAL(burning(bool)), m_labelWritingSpeed, SLOT(setEnabled(bool)) );
 
     if( burnJob->writer() )
@@ -99,6 +105,7 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
 
     m_labelWritingSpeed->setText( i18n("no info") );
     m_progressWritingBuffer->setFormat( i18n("no info") );
+    m_progressDeviceBuffer->setFormat( i18n("no info") );
   }
 }
 
@@ -109,6 +116,7 @@ void K3bBurnProgressDialog::slotFinished( bool success )
   if( success ) {
     m_labelWritingSpeed->setEnabled( false );
     m_progressWritingBuffer->setEnabled( false );
+    m_progressDeviceBuffer->setEnabled( false );
   }
 }
 
@@ -117,6 +125,13 @@ void K3bBurnProgressDialog::slotBufferStatus( int b )
 {
   m_progressWritingBuffer->setFormat( "%p%" );
   m_progressWritingBuffer->setValue( b );
+}
+
+
+void K3bBurnProgressDialog::slotDeviceBuffer( int b )
+{
+  m_progressDeviceBuffer->setFormat( "%p%" );
+  m_progressDeviceBuffer->setValue( b );
 }
 
 

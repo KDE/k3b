@@ -66,8 +66,8 @@ public:
 };
 
 
-K3bMovixDocPreparer::K3bMovixDocPreparer( K3bMovixDoc* doc, QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bMovixDocPreparer::K3bMovixDocPreparer( K3bMovixDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name )
 {
   d = new Private();
   d->doc = doc;

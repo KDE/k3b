@@ -89,9 +89,9 @@ void K3bAudioListView::setupColumns(){
   addColumn( i18n("No.") );
   addColumn( i18n("Artist (CD-Text)") );
   addColumn( i18n("Title (CD-Text)") );
-  addColumn( i18n("Length") );
-  addColumn( i18n("Pregap") );
   addColumn( i18n("Type") );
+  addColumn( i18n("Pregap") );
+  addColumn( i18n("Length") );
   addColumn( i18n("Filename") );
 }
 
@@ -207,7 +207,7 @@ void K3bAudioListView::slotAnimation()
 	if( item->audioTrack()->length() > 0
 	    || item->audioTrack()->status() != 0 ) {
 	  // set status icon
-	  item->setPixmap( 3, 
+	  item->setPixmap( 5, 
 			   ( item->audioTrack()->status() == 0 
 			     ? SmallIcon( "greenled" )
 			     : SmallIcon( "redled" ) )
@@ -218,7 +218,7 @@ void K3bAudioListView::slotAnimation()
 	else {
 	  int& iconNumber = item->animationIconNumber;
 	  QString icon = QString( "kde%1" ).arg( iconNumber );
-	  item->setPixmap( 3, SmallIcon( icon ) );
+	  item->setPixmap( 5, SmallIcon( icon ) );
 	  iconNumber++;
 	  if ( iconNumber > 6 )
 	    iconNumber = 1;

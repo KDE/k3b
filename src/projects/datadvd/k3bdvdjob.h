@@ -39,7 +39,7 @@ class K3bDvdJob : public K3bBurnJob
   /**
    * To be more flexible we allow writing of any data doc
    */
-  K3bDvdJob( K3bDataDoc*, QObject* parent = 0 );
+  K3bDvdJob( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
   virtual ~K3bDvdJob();
 
   K3bDoc* doc() const;

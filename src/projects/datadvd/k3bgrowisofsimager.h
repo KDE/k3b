@@ -42,7 +42,7 @@ class K3bGrowisofsImager : public K3bIsoImager
   Q_OBJECT
 
  public:
-  K3bGrowisofsImager( K3bDataDoc* doc, QObject* parent = 0, const char* name = 0 );
+  K3bGrowisofsImager( K3bDataDoc* doc, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bGrowisofsImager();
 
  public slots:

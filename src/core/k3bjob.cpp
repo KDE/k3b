@@ -24,13 +24,30 @@
 #include <kdebug.h>
 
 
-K3bJob::K3bJob( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
+  : QObject( parent, name ),
+    m_jobHandler( handler )
 {
 }
 
 K3bJob::~K3bJob()
 {
+}
+
+
+int K3bJob::waitForMedia( K3bCdDevice::CdDevice* device,
+			  int mediaState,
+			  int mediaType,
+			  const QString& message )
+{
+  return m_jobHandler->waitForMedia( device, mediaState, mediaType, message );
+}
+
+
+bool K3bJob::questionYesNo( const QString& text,
+			    const QString& caption )
+{
+  return m_jobHandler->questionYesNo( text, caption );
 }
 
 
@@ -69,8 +86,8 @@ void K3bJob::slotNewSubTask( const QString& str )
 }
 
 
-K3bBurnJob::K3bBurnJob( QObject* parent, const char* name )
-  : K3bJob( parent, name ),
+K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent, const char* name )
+  : K3bJob( handler, parent, name ),
     m_writeMethod( K3b::DEFAULT )
 {
 }

@@ -18,6 +18,7 @@
 #define K3BJOB_H
 
 #include <qobject.h>
+#include "k3bjobhandler.h"
 
 
 class K3bDoc;
@@ -30,7 +31,7 @@ namespace K3bCdDevice {
   *@author Sebastian Trueg
   */
 
-class K3bJob : public QObject
+class K3bJob : public QObject, public K3bJobHandler
 {
   Q_OBJECT
 
@@ -58,8 +59,22 @@ class K3bJob : public QObject
 
   enum MessageType { INFO, WARNING, ERROR, SUCCESS };
 
+  /**
+   * reimplemented from K3bJobHandler
+   */
+  int waitForMedia( K3bCdDevice::CdDevice*,
+		    int mediaState = K3bCdDevice::STATE_EMPTY,
+		    int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		    const QString& message = QString::null );
+  
+  /**
+   * reimplemented from K3bJobHandler
+   */
+  bool questionYesNo( const QString& text,
+		      const QString& caption = QString::null );
+
  protected:
-  K3bJob( QObject* parent = 0, const char* name = 0 );
+  K3bJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
 
  public slots:
   virtual void start() = 0;
@@ -85,6 +100,9 @@ class K3bJob : public QObject
    * simply converts into an infoMessage
    */
   void slotNewSubTask( const QString& str );
+
+ private:
+  K3bJobHandler* m_jobHandler;
 };
 
 
@@ -93,7 +111,7 @@ class K3bBurnJob : public K3bJob
   Q_OBJECT
 	
  public:
-  K3bBurnJob( QObject* parent = 0, const char* name = 0 );
+  K3bBurnJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
 	
   virtual K3bDoc* doc() const { return 0; }
   virtual K3bCdDevice::CdDevice* writer() const { return 0; }
@@ -116,6 +134,9 @@ class K3bBurnJob : public K3bJob
 
  signals:
   void bufferStatus( int );
+
+  void deviceBuffer( int );
+
   /**
    * @param speed current writing speed in Kb
    * @param multiplicator use 150 for CDs and 1380 for DVDs

@@ -44,8 +44,8 @@
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 
-K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, QObject* parent, const char* name )
-        : K3bBurnJob( parent, name )
+K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
+        : K3bBurnJob( jh, parent, name )
 {
     m_doc = doc;
     m_process = 0;
@@ -399,7 +399,7 @@ bool K3bVcdJob::prepareWriterJob()
         setWritingApp( K3b::CDRECORD );
 
     if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {
-        K3bCdrdaoWriter * writer = new K3bCdrdaoWriter( m_doc->burner(), this );
+        K3bCdrdaoWriter * writer = new K3bCdrdaoWriter( m_doc->burner(), this, this );
         // create cdrdao job
 	writer->setCommand( K3bCdrdaoWriter::WRITE );
         writer->setSimulate( m_doc->dummy() );
@@ -410,7 +410,7 @@ bool K3bVcdJob::prepareWriterJob()
         m_writerJob = writer;
 
     } else if ( writingApp() == K3b::CDRECORD ) {
-        K3bCdrecordWriter * writer = new K3bCdrecordWriter( m_doc->burner(), this );
+        K3bCdrecordWriter * writer = new K3bCdrecordWriter( m_doc->burner(), this, this );
         // create cdrecord job
 
         writer->setSimulate( m_doc->dummy() );
@@ -429,6 +429,7 @@ bool K3bVcdJob::prepareWriterJob()
     connect( m_writerJob, SIGNAL( processedSubSize( int, int ) ), this, SIGNAL( processedSubSize( int, int ) ) );
     connect( m_writerJob, SIGNAL( nextTrack( int, int ) ), this, SLOT( slotWriterNextTrack( int, int ) ) );
     connect( m_writerJob, SIGNAL( buffer( int ) ), this, SIGNAL( bufferStatus( int ) ) );
+    connect( m_writerJob, SIGNAL( deviceBuffer( int ) ), this, SIGNAL( deviceBuffer( int ) ) );
     connect( m_writerJob, SIGNAL( writeSpeed( int, int ) ), this, SIGNAL( writeSpeed( int, int ) ) );
     connect( m_writerJob, SIGNAL( finished( bool ) ), this, SLOT( slotWriterJobFinished( bool ) ) );
     connect( m_writerJob, SIGNAL( newTask( const QString& ) ), this, SIGNAL( newTask( const QString& ) ) );

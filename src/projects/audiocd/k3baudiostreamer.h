@@ -35,7 +35,7 @@ class K3bAudioStreamer : public K3bJob
   Q_OBJECT
 
  public:
-  K3bAudioStreamer( K3bAudioDoc*, QObject* parent = 0, const char* name = 0 );
+  K3bAudioStreamer( K3bAudioDoc*, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bAudioStreamer();
 
   /**

@@ -67,7 +67,7 @@ K3bLameEncoder::~K3bLameEncoder()
 }
 
 
-bool K3bLameEncoder::initEncoderInternal( const QString& )
+bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
 {
   KConfig* c = k3bcore->config();
   c->setGroup( "K3bLameEncoderPlugin" );

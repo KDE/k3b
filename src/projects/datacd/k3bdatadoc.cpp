@@ -1099,9 +1099,9 @@ void K3bDataDoc::moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParen
 }
 
 
-K3bBurnJob* K3bDataDoc::newBurnJob()
+K3bBurnJob* K3bDataDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
-  return new K3bDataJob( this );
+  return new K3bDataJob( this, hdl, parent );
 }
 
 

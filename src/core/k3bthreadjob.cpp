@@ -23,15 +23,15 @@
 
 
 
-K3bThreadJob::K3bThreadJob( QObject* parent, const char* name )
-  : K3bJob( parent, name ),
+K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name ),
     m_running(false)
 {
 }
 
 
-K3bThreadJob::K3bThreadJob( K3bThread* thread, QObject* parent, const char* name )
-  : K3bJob( parent, name ),
+K3bThreadJob::K3bThreadJob( K3bThread* thread, K3bJobHandler* jh, QObject* parent, const char* name )
+  : K3bJob( jh, parent, name ),
     m_running(false)
 {
   setThread(thread);
