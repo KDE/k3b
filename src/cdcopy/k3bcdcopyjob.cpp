@@ -22,7 +22,7 @@
 #include <k3bemptydiscwaiter.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdiskinfo.h>
-#include <device/k3bdiskinfodetector.h>
+#include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bglobals.h>
 
 #include <remote.h>

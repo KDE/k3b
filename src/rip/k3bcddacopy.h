@@ -23,7 +23,6 @@
 #include <k3bjob.h>
 #include <tools/k3bwavefilewriter.h>
 #include <device/k3bdiskinfo.h>
-#include <device/k3bdiskinfodetector.h>
 
 #include "k3baudioripthread.h"
 
@@ -35,8 +34,12 @@ typedef Q_INT32 size32;
 
 class QStringList;
 class QFile;
-class K3bCdDevice::CdDevice;
+namespace K3bCdDevice {
+  class CdDevice;
+  class DiskInfoDetector;
+}
 class QCustomEvent;
+
 
 /**
   *@author Sebastian Trueg
@@ -53,7 +56,7 @@ class K3bCddaCopy : public K3bJob
   QString jobDetails() const;
 
  public slots:
-  void setDevice( K3bDevice* dev ) { m_device = dev; }
+  void setDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
   void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
 
   /**
@@ -93,14 +96,14 @@ class K3bCddaCopy : public K3bJob
 
   K3bCddbResultEntry m_cddbEntry;
   K3bDiskInfo m_diskInfo;
-  K3bDevice* m_device;
+  K3bCdDevice::CdDevice* m_device;
 
   K3bAudioRipThread* m_audioRip;
 
   bool m_bUsePattern;
   bool m_singleFile;
 
-  K3bDiskInfoDetector* m_diskInfoDetector;
+  K3bCdDevice::DiskInfoDetector* m_diskInfoDetector;
 
   QString m_baseDirectory;
   QString m_dirPattern;

@@ -17,7 +17,7 @@
 #include "k3bpatternparser.h"
 #include "k3bcdparanoialib.h"
 #include <device/k3bdevice.h>
-#include <device/k3bdiskinfodetector.h>
+#include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bprogressinfoevent.h>
 #include <k3bthreadjob.h>
 #include <k3bcore.h>

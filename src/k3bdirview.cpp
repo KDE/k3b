@@ -25,7 +25,7 @@
 #include "device/k3bdevice.h"
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
-#include "device/k3bdiskinfodetector.h"
+#include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
 #include <device/k3bdevicehandler.h>
 
