@@ -154,10 +154,11 @@ AM_CONDITIONAL(include_MP3, [test -n "$MAD_LIB"])
 
 
 
-dnl === test for FLAC++ ====
+dnl === test for FLAC++ and FLAC ====
 have_flac=no
 KDE_CHECK_HEADERS(FLAC++/decoder.h, [
-	have_flac=yes])
+   AC_CHECK_LIB(FLAC,FLAC__seekable_stream_decoder_process_single,
+	        have_flac=yes)])
 AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
 
 
