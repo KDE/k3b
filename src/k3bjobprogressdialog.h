@@ -37,6 +37,7 @@ class KCutLabel;
 class QCloseEvent;
 class KSystemTray;
 class QGridLayout;
+class QKeyEvent;
 
 
 class K3bJobProgressDialog : public KDialog
@@ -78,6 +79,7 @@ class K3bJobProgressDialog : public KDialog
 
  protected:
   void closeEvent( QCloseEvent* );
+  void keyPressEvent( QKeyEvent* e );
 
   void setupGUI();
   void setupConnections();
@@ -96,6 +98,7 @@ class K3bJobProgressDialog : public KDialog
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
   QPushButton* m_buttonShowDebug;
+  QLabel* m_pixLabel;
 
   QGridLayout* m_frameExtraInfoLayout;
 

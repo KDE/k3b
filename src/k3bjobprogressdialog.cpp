@@ -132,11 +132,11 @@ void K3bJobProgressDialog::setupGUI()
 
   QHBoxLayout* layout1 = new QHBoxLayout( 0, 0, 0, "layout1"); 
 
-  QLabel* pixmapLabel1 = new QLabel( this, "pixmapLabel1" );
-  pixmapLabel1->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  pixmapLabel1->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
-  pixmapLabel1->setScaledContents( FALSE );
-  layout1->addWidget( pixmapLabel1 );
+  m_pixLabel = new QLabel( this, "m_pixLabel" );
+  m_pixLabel->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
+  m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3bprojectview_left.png" )) );
+  m_pixLabel->setScaledContents( FALSE );
+  layout1->addWidget( m_pixLabel );
 
   QFrame* frame4 = new QFrame( this, "frame4" );
   frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
@@ -233,7 +233,6 @@ void K3bJobProgressDialog::setupGUI()
   QFrame* line2 = new QFrame( this, "line2" );
   line2->setFrameShape( QFrame::HLine );
   line2->setFrameShadow( QFrame::Sunken );
-  line2->setFrameShape( QFrame::HLine );
   Form1Layout->addWidget( line2 );
 
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
@@ -282,13 +281,14 @@ void K3bJobProgressDialog::setExtraInfo( QWidget *extra ){
 
 void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 {
-  QToolTip::remove( m_systemTray );
-  QToolTip::add( m_systemTray, i18n("Ready") );
-  m_systemTray->hide();
-
   if( m_buttonClose->isVisible() ) {
     KDialog::closeEvent( e );
     k3bMain()->show();
+
+    QToolTip::remove( m_systemTray );
+    QToolTip::add( m_systemTray, i18n("Ready") );
+    m_systemTray->hide();
+
     if( !m_plainCaption.isEmpty() )
       k3bMain()->setPlainCaption( m_plainCaption );
   }
@@ -347,6 +347,8 @@ void K3bJobProgressDialog::slotFinished( bool success )
   m_job = 0;
 
   if( success ) {
+    m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3b_progress_dialog_success.png" )) );
+
     m_labelTask->setText( i18n("Success!") );
     m_labelTask->setPaletteForegroundColor( Qt::darkGreen );
     m_labelSubTask->setText( QString::null );
@@ -357,6 +359,8 @@ void K3bJobProgressDialog::slotFinished( bool success )
     KNotifyClient::event( "SuccessfullyFinished" );
   }
   else {
+    m_pixLabel->setPixmap( QPixmap(locate( "appdata", "pics/k3b_progress_dialog_failed.png" )) );
+
     m_labelTask->setPaletteForegroundColor( Qt::red );
 
     if( m_bCanceled )
@@ -577,4 +581,29 @@ void K3bJobProgressDialog::animateSystemTray( int percent )
 void K3bJobProgressDialog::slotUpdateCaption( int percent )
 {
   k3bMain()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+}
+
+
+void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
+{
+  switch ( e->key() ) {
+  case Key_Enter:
+  case Key_Return:
+    // if the process finished this closes the dialog
+    if( m_buttonClose->isVisible() )
+      close();
+    break;
+  case Key_Escape:
+    // simulate button clicks
+    if( m_buttonCancel->isVisible() )
+      slotCancelButtonPressed();
+    else
+      close();
+    break;
+  default:
+    // nothing
+    break;
+  }
+
+  e->accept();
 }
