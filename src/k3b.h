@@ -17,7 +17,7 @@
 
 #ifndef K3B_H
 #define K3B_H
- 
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -103,7 +103,7 @@ class K3bMainWindow : public KDockMainWindow
 
   /** does some initialisation like searching for external programs */
   void init();
-	
+
   /** returns a free temp filename in the given directory
    * @parm dir the directory where to find the tempfile, should end with '/' **/
   QString findTempFile( const QString& ending, const QString& dir = QString::null );
@@ -126,7 +126,7 @@ class K3bMainWindow : public KDockMainWindow
   void slotNewAudioDoc();
   void slotNewDataDoc();
   void slotNewMixedDoc();
-  void slotNewVcdDoc();  
+  void slotNewVcdDoc();
   void slotBlankCdrw();
   void slotWriteIsoImage();
   void slotWriteIsoImage( const KURL& url );
@@ -163,7 +163,7 @@ class K3bMainWindow : public KDockMainWindow
   virtual bool queryClose();
 
   /** queryExit is called by KTMainWindow when the last window of the application is going to be closed during the closeEvent().
-   * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's	
+   * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's
    * properties.
    * @see KTMainWindow#queryExit
    * @see KTMainWindow#closeEvent
@@ -220,12 +220,12 @@ class K3bMainWindow : public KDockMainWindow
   void slotFileSaveAs();
   /** asks for saving if the file is modified, then closes the actual file and window*/
   void slotFileClose();
-	
+
   void slotFileExport();
   void slotFileBurn();
   void slotDirDockHidden();
   void slotSettingsConfigure();
-	
+
   /** checks if the currently visible tab is a k3bview
       or not and dis- or enables some actions */
   void slotCurrentDocChanged( QWidget* w );
@@ -255,6 +255,7 @@ class K3bMainWindow : public KDockMainWindow
   void slotProjectAddFiles();
 
   void slotEditToolbars();
+  void slotNewToolBarConfig();
 
   void slotDataImportSession();
   void slotDataClearImportedSession();
@@ -265,7 +266,7 @@ class K3bMainWindow : public KDockMainWindow
 
   /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
    * file
-   */ 	
+   */
   void saveOptions();
   /** read general Options again and initialize all variables like the recent file list */
   void readOptions();
@@ -287,12 +288,12 @@ class K3bMainWindow : public KDockMainWindow
   int m_audioUntitledCount;
   int m_dataUntitledCount;
   int m_mixedUntitledCount;
-  int m_vcdUntitledCount;  
+  int m_vcdUntitledCount;
 
   /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
    * removes this document from the list. The document list is checked for modified documents when the user
    * is about to close the application. */
-  QList<K3bDoc> *pDocList;	
+  QList<K3bDoc> *pDocList;
 
   K3bSongManager*        m_songManager;
   K3bAudioPlayer*        m_audioPlayer;
@@ -302,7 +303,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionFileNewAudio;
   KAction* actionFileNewData;
   KAction* actionFileNewMixed;
-  KAction* actionFileNewVcd;  
+  KAction* actionFileNewVcd;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;
@@ -331,14 +332,14 @@ class K3bMainWindow : public KDockMainWindow
   KDockWidget* mainDock;
   KDockWidget* dirDock;
   KDockWidget* m_audioPlayerDock;
-		
+
   // The K3b-specific widgets
   K3bDirView* m_dirView;
   K3bOptionDialog* m_optionDialog;
 
   K3bBusyWidget* m_busyWidget;
   KSystemTray* m_systemTray;
-	
+
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;
 

@@ -429,11 +429,8 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
 void K3bMainWindow::saveOptions()
 {
   m_config->setGroup("General Options");
-  m_config->writeEntry("Geometry", size());
-  m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
-  m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
+  saveMainWindowSettings( m_config );
   m_config->writeEntry("Show Document Header", m_documentHeader->isVisible());
-  m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
   actionFileOpenRecent->saveEntries(m_config,"Recent Files");
 
   // save dock positions!
@@ -451,32 +448,17 @@ void K3bMainWindow::readOptions()
 {
   m_config->setGroup("General Options");
 
-  // bar status settings
-  bool bViewToolbar = m_config->readBoolEntry("Show Toolbar", true);
-  actionViewToolBar->setChecked(bViewToolbar);
-  slotViewToolBar();
-
-  bool bViewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
-  actionViewStatusBar->setChecked(bViewStatusbar);
-  slotViewStatusBar();
+  // toolbar and statusbar settings
+  applyMainWindowSettings( m_config );
+  actionViewToolBar->setChecked( !toolBar()->isHidden() );
+  actionViewStatusBar->setChecked( !statusBar()->isHidden() );
 
   bool bViewDocumentHeader = m_config->readBoolEntry("Show Document Header", true);
   actionViewDocumentHeader->setChecked(bViewDocumentHeader);
   slotViewDocumentHeader();
 
-  // bar position settings
-  KToolBar::BarPosition toolBarPos;
-  toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ToolBarPos", KToolBar::Top);
-  toolBar("mainToolBar")->setBarPos(toolBarPos);
-
   // initialize the recent file list
   actionFileOpenRecent->loadEntries(m_config,"Recent Files");
-
-  QSize size=m_config->readSizeEntry("Geometry");
-  if(!size.isEmpty())
-    {
-      resize(size);
-    }
 
   // read dock-positions
   manager()->readConfig( m_config, "Docking Config" );
@@ -982,11 +964,18 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 
 void K3bMainWindow::slotEditToolbars()
 {
-  KEditToolbar d( actionCollection() );
-  if( d.exec() )
-    createGUI();
+  saveMainWindowSettings( m_config, "General Options" );
+  KEditToolbar dlg( actionCollection() );
+  connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()));
+  dlg.exec();
 }
 
+
+void K3bMainWindow::slotNewToolBarConfig()
+{
+  createGUI();
+  applyMainWindowSettings(m_config, "General Options");
+}
 
 QString K3bMainWindow::findTempFile( const QString& ending, const QString& d )
 {
