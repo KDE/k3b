@@ -1,0 +1,393 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>base_K3bBootImageView</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bBootImageView</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>276</width>
+            <height>359</height>
+        </rect>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout17</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Boot images:</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonNew</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;New...</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add new boot image</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonDelete</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Delete</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Remove selected boot image</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="KListView">
+            <column>
+                <property name="text">
+                    <string>Emulation Type</string>
+                </property>
+                <property name="clickable">
+                    <bool>false</bool>
+                </property>
+                <property name="resizable">
+                    <bool>false</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Local Path</string>
+                </property>
+                <property name="clickable">
+                    <bool>false</bool>
+                </property>
+                <property name="resizable">
+                    <bool>false</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>m_viewImages</cstring>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="fullWidth">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>m_groupImageType</cstring>
+            </property>
+            <property name="title">
+                <string>Emulation Type</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioFloppy</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Floppy</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Emulate a 1440/2880 kb floppy</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioHarddisk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Harddisk</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Emulate a harddisk</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>m_radioNoEmulation</cstring>
+                    </property>
+                    <property name="text">
+                        <string>None</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>No emulation at all</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>m_groupOptions</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Options</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkNoBoot</cstring>
+                    </property>
+                    <property name="text">
+                        <string>No boot image</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Do not boot from the emulated floppy/harddisk</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkInfoTable</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Boot-info-table</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout10</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLineEdit" row="0" column="1">
+                            <property name="name">
+                                <cstring>m_editLoadSegment</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>0</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>m_editLoadSize</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>0</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel2_2</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Boot load segment:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Boot load size:</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout16</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonToggleOptions</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show Advanced Op&amp;tions</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer16</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>261</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout18</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Boot catalog:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_editBootCataloge</cstring>
+                    </property>
+                    <property name="text">
+                        <string>boot/boot.catalog</string>
+                    </property>
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>m_radioFloppy</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_radioHarddisk</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkNoBoot</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkInfoTable</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_editLoadSegment</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_editLoadSize</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_radioNoEmulation</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel2_2</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioNoEmulation</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel3</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioNoEmulation</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editLoadSegment</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioNoEmulation</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editLoadSize</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioNoEmulation</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkNoBoot</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioNoEmulation</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>base_K3bBootImageView</receiver>
+        <slot>slotOptionsChanged()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="protected">slotOptionsChanged()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
+</UI>
