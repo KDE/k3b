@@ -5,7 +5,7 @@ k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/
 
 SUBDIRS = data cdinfo audio device kiotree option rip kdelibs_patched 
 
-EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bcopywidget.cpp k3bcopywidget.h k3bglobals.h k3bprogressdialog.h k3bprogressdialog.cpp k3bstickybutton.cpp k3bstickybutton.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h k3bjob.cpp k3bjob.h k3bprojectburndialog.cpp k3bprojectburndialog.h kcutlabel.cpp kcutlabel.h k3bglobals.cpp nonsticky.png sticky.png hi16-app-k3b.png hi32-app-k3b.png hi48-app-k3b.png kdiskfreesp.h k3bfileview.cpp k3bfileview.h cddb.h cddb.cpp k3bcddb.cpp k3bcddb.h k3bblankingdialog.cpp k3bblankingdialog.h k3bblankingjob.cpp k3bblankingjob.h k3bexternalbinmanager.cpp k3bexternalbinmanager.h k3bsplash.h k3bsplash.cpp k3b-splash-naive.png 
+EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bcopywidget.cpp k3bcopywidget.h k3bglobals.h k3bprogressdialog.h k3bprogressdialog.cpp k3bstickybutton.cpp k3bstickybutton.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h k3bjob.cpp k3bjob.h k3bprojectburndialog.cpp k3bprojectburndialog.h kcutlabel.cpp kcutlabel.h k3bglobals.cpp nonsticky.png sticky.png hi16-app-k3b.png hi32-app-k3b.png hi48-app-k3b.png kdiskfreesp.h k3bfileview.cpp k3bfileview.h cddb.h cddb.cpp k3bcddb.cpp k3bcddb.h k3bblankingdialog.cpp k3bblankingdialog.h k3bblankingjob.cpp k3bblankingjob.h k3bexternalbinmanager.cpp k3bexternalbinmanager.h k3bsplash.h k3bsplash.cpp k3b-splash-naive.png hi16-tools-cdinfo.png hi22-tools-cdinfo.png 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
@@ -26,6 +26,10 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/hi48-app-k3b.png $(kde_icondir)/hicolor/48x48/apps/k3b.png
 	$(mkinstalldirs) $(kde_datadir)/k3b/pics/
 	$(INSTALL_DATA) $(srcdir)/k3b-splash-naive.png $(kde_datadir)/k3b/pics/k3bsplash.png
+	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/16x16/actions/
+	$(INSTALL_DATA) $(srcdir)/hi16-tools-cdinfo.png $(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
+	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/22x22/actions/
+	$(INSTALL_DATA) $(srcdir)/hi22-tools-cdinfo.png $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/k3b.desktop
@@ -37,6 +41,8 @@ uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/32x32/apps/k3b.png
 	-rm -f $(kde_icondir)/hicolor/48x48/apps/k3b.png
 	-rm -f $(kde_datadir)/k3b/pics/k3bsplash.png
+	-rm -f $(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
+	-rm -f $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:

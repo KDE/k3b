@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="k3b" version="0.1">
+<kpartgui name="k3b" version="0.5">
 <MenuBar>
   <Action name="window_menu"/>
   <Menu name="file">
   	<Action name="file_burn"/>
   	<Action name="file_export" append="save_merge"/>
   </Menu>
-  <Menu name="tools">
+  <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_cd_info"/>
 	<Action name="tools_blank_cdrw"/>
   </Menu>
@@ -16,5 +16,8 @@
 </MenuBar>
 <ToolBar name="mainToolBar">
 	<Action name="file_burn"/>
+	<Separator/>
+	<Action name="tools_cd_info"/>
+	<Action name="tools_blank_cdrw"/>
 </ToolBar>
 </kpartgui>

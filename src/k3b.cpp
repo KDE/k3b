@@ -133,7 +133,7 @@ void K3bMainWindow::initActions()
   actionViewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), 
 				  actionCollection(), "view_dir");
 
-  actionToolsCdInfo = new KAction(i18n("CD &Info"), "cdrom_unmount", 0, this, SLOT(slotCdInfo()), 
+  actionToolsCdInfo = new KAction(i18n("CD &Info"), "cdinfo", 0, this, SLOT(slotCdInfo()), 
 			    actionCollection(), "tools_cd_info" );
 
   actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdwriter_unmount", 0, this, SLOT(slotBlankCdrw()), 
