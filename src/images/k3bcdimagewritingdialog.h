@@ -81,6 +81,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   void createCueBinItems( const QString&, const QString& );
   void createAudioCueItems( const K3bCueFileParser& cp );
   int currentImageType();
+  QString imagePath() const;
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkDummy;

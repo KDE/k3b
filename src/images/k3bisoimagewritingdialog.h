@@ -62,6 +62,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
 
  private:
   void setupGui();
+  QString imagePath() const;
 
   K3bIso9660ImageWritingJob* m_job;
   K3bMd5Job* m_md5Job;

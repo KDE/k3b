@@ -239,7 +239,8 @@ void K3bCdda2wavReader::slotProcessExited( KProcess* p )
       emit finished( true );
     }
     else {
-      emit infoMessage( i18n("%1 returned error: %1").arg("Cdda2wav").arg(p->exitStatus()), ERROR );
+      emit infoMessage( i18n("%1 returned an unknown error (code %2).")
+			.arg("Cdda2wav").arg(p->exitStatus()), ERROR );
       emit finished( false );
     }
   }

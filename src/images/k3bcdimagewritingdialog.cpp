@@ -279,12 +279,12 @@ void K3bCdImageWritingDialog::slotStartClicked()
   KConfig* c = k3bcore->config();
   c->setGroup( "image writing" );
   if( c->readPathEntry( "last written image" ).isEmpty() )
-    c->writePathEntry( "last written image", m_editImagePath->url() );
+    c->writePathEntry( "last written image", imagePath() );
 
   if( d->imageFile.isEmpty() )
-    d->imageFile = m_editImagePath->url();
+    d->imageFile = imagePath();
   if( d->tocFile.isEmpty() )
-    d->tocFile = m_editImagePath->url();
+    d->tocFile = imagePath();
 
   // create a progresswidget
   K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
@@ -653,7 +653,7 @@ void K3bCdImageWritingDialog::slotToggleAll()
 
     // enable the Write-Button if we found a valid image or the user forced an image type
     m_buttonStart->setEnabled( currentImageType() != IMAGE_UNKNOWN 
-			       && QFile::exists( m_editImagePath->url() ) );
+			       && QFile::exists( imagePath() ) );
 
     // cdrecord clone and cue both need DAO
     if( m_writerSelectionWidget->writingApp() != K3b::CDRDAO 
@@ -759,10 +759,10 @@ void K3bCdImageWritingDialog::slotMd5SumCompare()
 						   this );
   if( ok ) {
     if( md5sumToCompare.utf8() == d->md5Job->hexDigest() )
-      KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(m_editImagePath->url()),
+      KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(imagePath()),
 				i18n("MD5 Sums Equal") );
     else
-      KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from the specified.").arg(m_editImagePath->url()),
+      KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from the specified.").arg(imagePath()),
 			  i18n("MD5 Sums Differ") );
   }
 }
@@ -782,7 +782,9 @@ void K3bCdImageWritingDialog::slotLoadUserDefaults()
 
   m_writerSelectionWidget->loadConfig( c );
 
-  m_editImagePath->setURL( c->readPathEntry( "last written image" ) );
+  QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image" ) );
+  if( QFile::exists( image ) )
+    m_editImagePath->setURL( image );
 
   QString imageType = c->readEntry( "image type", "auto" );
   int x = 0;
@@ -817,7 +819,7 @@ void K3bCdImageWritingDialog::slotSaveUserDefaults()
 
   m_writerSelectionWidget->saveConfig( c );
 
-  c->writePathEntry( "last written image", m_editImagePath->url() );
+  c->writePathEntry( "image path", imagePath() );
 
   QString imageType;
   if( m_comboImageType->currentItem() == 0 )
@@ -864,6 +866,12 @@ int K3bCdImageWritingDialog::currentImageType()
     return d->foundImageType;
   else
     return d->imageTypeSelectionMap[m_comboImageType->currentItem()];    
+}
+
+
+QString K3bCdImageWritingDialog::imagePath() const
+{
+  return KURL::fromPathOrURL( m_editImagePath->url() ).path();
 }
 
 #include "k3bcdimagewritingdialog.moc"

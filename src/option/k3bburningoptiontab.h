@@ -27,7 +27,6 @@ class QString;
 class QSpinBox;
 class KIntNumInput;
 class QRadioButton;
-class K3bMsfEdit;
 
 
 
@@ -52,8 +51,6 @@ Q_OBJECT
   QCheckBox*    m_checkSaveOnExit;
   QCheckBox*    m_checkListHiddenFiles;
   QCheckBox*    m_checkListSystemFiles;
-
-  K3bMsfEdit*   m_editDefaultPregap;
 
   QCheckBox*    m_checkEject;
   QCheckBox*    m_checkAutoErasingRewritable;

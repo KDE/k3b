@@ -73,18 +73,6 @@ void K3bBurningOptionTab::setupGui()
   // -----------------------------------------------------------------------
 
 
-  // audio settings group
-  // -----------------------------------------------------------------------
-  QGroupBox* m_groupAudio = new QGroupBox( 2, Qt::Horizontal, i18n( "Audio Project" ), projectTab, "m_groupAudio" );
-  m_groupAudio->setInsideSpacing( KDialog::spacingHint() );
-  m_groupAudio->setInsideMargin( KDialog::marginHint() );
-
-  QLabel* labelDefaultPregap = new QLabel( i18n("&Default pregap:"), m_groupAudio );
-  m_editDefaultPregap = new K3bMsfEdit( m_groupAudio );
-  labelDefaultPregap->setBuddy( m_editDefaultPregap );
-  // -----------------------------------------------------------------------
-
-
   // data settings group
   // -----------------------------------------------------------------------
   QGroupBox* m_groupData = new QGroupBox( 2, Qt::Vertical, i18n( "Data Project" ), projectTab, "m_groupData" );
@@ -152,10 +140,9 @@ void K3bBurningOptionTab::setupGui()
   projectGrid->setMargin( KDialog::marginHint() );
 
   projectGrid->addWidget( groupGeneral, 0, 0 );
-  projectGrid->addWidget( m_groupAudio, 1, 0 );
-  projectGrid->addWidget( m_groupData, 2, 0 );
-  projectGrid->addWidget( groupVideo, 3, 0 );
-  projectGrid->setRowStretch( 4, 1 );
+  projectGrid->addWidget( m_groupData, 1, 0 );
+  projectGrid->addWidget( groupVideo, 2, 0 );
+  projectGrid->setRowStretch( 3, 1 );
 
   // ///////////////////////////////////////////////////////////////////////
 
@@ -181,13 +168,12 @@ void K3bBurningOptionTab::setupGui()
   m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
   m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
   m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
-
-  bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 3 );
+  m_editWritingBufferSize->setSuffix( " " + i18n("MB") );
+  bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 2 );
   bufferLayout->addWidget( m_checkManualWritingBufferSize, 1, 0 );
-  bufferLayout->addWidget( m_editWritingBufferSize, 1, 2 );
-  bufferLayout->addWidget( new QLabel( i18n("MB"), groupWritingApp ), 1, 3 );
-  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 2, 2, 0, 3 );
-  bufferLayout->setColStretch( 3, 1 );
+  bufferLayout->addWidget( m_editWritingBufferSize, 1, 1 );
+  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 2, 2, 0, 2 );
+  bufferLayout->setColStretch( 2, 1 );
 
   QGroupBox* groupMisc = new QGroupBox( 2, Qt::Vertical, i18n("Miscellaneous"), advancedTab );
   m_checkEject = new QCheckBox( i18n("Do not &eject medium after write process"), groupMisc );
@@ -268,9 +254,6 @@ void K3bBurningOptionTab::readSettings()
   m_checkListHiddenFiles->setChecked( c->readBoolEntry("Add hidden files", true ) );
   m_checkListSystemFiles->setChecked( c->readBoolEntry("Add system files", false ) );
 
-  c->setGroup( "Audio project settings" );
-  m_editDefaultPregap->setValue( c->readNumEntry( "default pregap", 150 ) );
-
   c->setGroup( "General Options" );
   m_checkEject->setChecked( c->readBoolEntry( "No cd eject", false ) );
   m_checkAutoErasingRewritable->setChecked( c->readBoolEntry( "auto rewritable erasing", false ) );
@@ -301,9 +284,6 @@ void K3bBurningOptionTab::saveSettings()
   c->setGroup( "Data project settings" );
   c->writeEntry( "Add hidden files", m_checkListHiddenFiles->isChecked() );
   c->writeEntry( "Add system files", m_checkListSystemFiles->isChecked() );
-
-  c->setGroup( "Audio project settings" );
-  c->writeEntry( "default pregap", m_editDefaultPregap->value() );
 
   c->setGroup( "General Options" );
   c->writeEntry( "No cd eject", m_checkEject->isChecked() );
