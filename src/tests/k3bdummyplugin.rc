@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartplugin name="k3bdummyplugin" library="libk3bdummyplugin">
-<MenuBar>
- <Menu name="extras"><Text>&amp;Extras</Text>
-  <Action name="k3bdummyplugin"/>
- </Menu>
-</MenuBar>
-</kpartplugin>
