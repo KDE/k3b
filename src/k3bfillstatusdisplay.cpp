@@ -49,7 +49,7 @@ K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* pa
     m_doc(doc)
 {
   k3bMain()->config()->setGroup( "General Options" );
-  m_cdSize.setMinutes( k3bMain()->config()->readNumEntry( "Default cd size", 74 ) );
+  m_cdSize.addMinutes( k3bMain()->config()->readNumEntry( "Default cd size", 74 ) );
 
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
 }
@@ -329,9 +329,9 @@ void K3bFillStatusDisplay::slotDetermineSize()
 {
   K3bDevice* dev = K3bDeviceSelectionDialog::selectWriter( parentWidget() );
   if( dev ) {
-    K3b::Msf size = dev->discSize();
+    K3b::Msf size = dev->remainingSize();
     if( size == 0 )
-      KMessageBox::error( parentWidget(), i18n("Could not get size of disk in %1").arg(dev->devicename()) );
+      KMessageBox::error( parentWidget(), i18n("Could not get remaining size of disk in %1").arg(dev->devicename()) );
     else {
       m_displayWidget->setCdSize( size );
       m_actionCustomSize->setChecked(true);
