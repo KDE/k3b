@@ -21,7 +21,10 @@ K3bAudioModuleFactory::K3bAudioModuleFactory()
   // create an instance of all available modules 
   // (This should be plugins in the future)
   m_modules.append( new K3bMp3Module( this ) );
+
+#ifdef OGG_VORBIS
   m_modules.append( new K3bOggVorbisModule( this ) );
+#endif
 }
 
 
