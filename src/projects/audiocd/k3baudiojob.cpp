@@ -105,7 +105,7 @@ void K3bAudioJob::start()
 	bool zeroPregap = false;
 	for( QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() ); it.current(); ++it ) {
 	  K3bAudioTrack* track = it.current();
-	  if( track->pregap() != 150 ) {
+	  if( track->pregap() == 0 ) {
 	    zeroPregap = true;
 	    break;
 	  }
