@@ -360,7 +360,7 @@ K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
     // movix-version just gives us the version number on stdout
     if( !m_gatheredOutput.isEmpty() ) {
       bin = new K3bExternalBin( program("eMovix") );
-      bin->version = m_gatheredOutput;
+      bin->version = m_gatheredOutput.stripWhiteSpace();
     }
   }
   else {
@@ -401,7 +401,7 @@ K3bExternalBin* K3bExternalBinManager::probeMovix( const QString& path )
     // TODO: search the files
 
     // the eMovix bin does not contain the path to any executable but the path to the eMovix files
-    bin->path = m_gatheredOutput;
+    bin->path = m_gatheredOutput.stripWhiteSpace();
     return bin;
   }
   else {
