@@ -702,7 +702,10 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
     }
   }
   else if( elem.nodeName() == "directory" ) {
-    K3bDirItem* newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
+    // This is for the VideoDVD project which already contains the *_TS folders
+    K3bDirItem* newDirItem = parent->find( elem.attributeNode( "name" ).value() );
+    if( !newDirItem )
+      newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
     QDomNodeList childNodes = elem.childNodes();
     for( uint i = 0; i < childNodes.count(); i++ ) {
 
