@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(srcdir)/..
+INCLUDES = $(all_includes) -I.. -I../data -I$(top_srcdir)/k3b/src
 
 METASOURCES = AUTO
 

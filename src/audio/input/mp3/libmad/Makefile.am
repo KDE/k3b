@@ -21,8 +21,6 @@
 
 ## Process this file with automake to produce Makefile.in
 
-CFLAGS = -O3
-
 noinst_LTLIBRARIES =	libmad.la
 #include_HEADERS =	mad.h
 
@@ -48,7 +46,7 @@ libmad_la_LIBADD =	$(ASO_OBJS)
 #CFLAGS  +=	$(ARCH) $(DEBUGGER) $(OPTIMIZER) $(PROFILER)
 #LDFLAGS +=	$(PROFILER)
 
-INCLUDES =	$(FPM) $(ASO)
+INCLUDES =	$(FPM) $(ASO) -O3
 
 BUILT_SOURCES =		mad.h
 CLEANFILES =		mad.h
