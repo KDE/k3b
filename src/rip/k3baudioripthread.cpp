@@ -203,6 +203,9 @@ void K3bAudioRipThread::run()
       d->encoder->setMetaData( "Artist", m_cddbEntry.cdArtist );
       d->encoder->setMetaData( "Title", m_cddbEntry.cdTitle );
       d->encoder->setMetaData( "Comment", m_cddbEntry.cdExtInfo );
+      d->encoder->setMetaData( "AlbumTitle", m_cddbEntry.cdTitle );
+      d->encoder->setMetaData( "AlbumArtist", m_cddbEntry.cdTitle );
+      d->encoder->setMetaData( "AlbumComment", m_cddbEntry.cdExtInfo );
       d->encoder->setMetaData( "Year", QString::number(m_cddbEntry.year) );
     }
     else {
@@ -259,6 +262,8 @@ void K3bAudioRipThread::run()
     success = success && writePlaylist();
   }
 
+  d->paranoiaLib->close();
+
   if( d->canceled ) {
     emitCanceled();
     emitFinished(false);
@@ -293,7 +298,9 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	d->encoder->setMetaData( "Artist", m_cddbEntry.artists[track-1] );
 	d->encoder->setMetaData( "Title", m_cddbEntry.titles[track-1] );
 	d->encoder->setMetaData( "Comment", m_cddbEntry.extInfos[track-1] );
-	d->encoder->setMetaData( "Album", m_cddbEntry.cdTitle );
+	d->encoder->setMetaData( "AlbumArtist", m_cddbEntry.cdArtist );
+	d->encoder->setMetaData( "AlbumTitle", m_cddbEntry.cdTitle );
+	d->encoder->setMetaData( "AlbumComment", m_cddbEntry.cdExtInfo );
 	d->encoder->setMetaData( "Year", QString::number(m_cddbEntry.year) );
       }
       else {

@@ -51,6 +51,8 @@ class K3bCdparanoiaLib
    */
   bool initParanoia( K3bCdDevice::CdDevice* dev );
 
+  void close();
+
   /**
    * Call this after initParanoia to set the data to rip.
    */

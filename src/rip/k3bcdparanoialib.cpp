@@ -442,8 +442,15 @@ bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
 }
 
 
+void K3bCdparanoiaLib::close()
+{
+  cleanup();
+}
+
+
 void K3bCdparanoiaLib::cleanup()
 {
+  paranoiaFree();
   d->device = 0;
   d->currentSector = 0;
 }
