@@ -116,11 +116,13 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
   connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
-  connect( m_cdView, SIGNAL(showDirView(const QString&)), this, SLOT(slotCDDirActivated(const QString&)) );
+  //connect( m_cdView, SIGNAL(showDirView(const QString&)), this, SLOT(slotCDDirActivated(const QString&)) );
   connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_kiotree, SLOT(followURL(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
+  connect( m_cdView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT( slotCheckDvd( const QString& )) );
   connect( m_filmView, SIGNAL(notSupportedDisc( const QString& ) ), this, SLOT(slotDriveActivated( const QString& )) );
+
 }
 
 K3bDirView::~K3bDirView()

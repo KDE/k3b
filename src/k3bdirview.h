@@ -55,7 +55,7 @@ class K3bDirView : public QVBox
   void slotDirActivated( const QString& );
   void slotDriveActivated( const QString&  );
   void slotCheckDvd( const QString& );
-  void slotCDDirActivated( const QString&  );
+ // void slotCDDirActivated( const QString&  );
   void slotUpdateURLCombo( const KURL& url );
 
  private:
