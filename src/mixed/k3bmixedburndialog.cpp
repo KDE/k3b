@@ -24,6 +24,8 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qvbox.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -34,54 +36,120 @@
 K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( doc, parent, name, modal ), m_doc(doc)
 {
-  // create the main tab
-  QTabWidget* mainTab = new QTabWidget( k3bMainWidget() );
+  prepareGui();
 
-  // create burn tab
-  QWidget* burnTab = new QWidget( mainTab );
-  mainTab->addTab( burnTab, i18n("Burning") );
+  setupSettingsPage();
 
   // create volume descriptor tab
-  QVBox* box = new QVBox( mainTab );
-  box->setMargin( marginHint() );
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( box );
-  mainTab->addTab( box, i18n("Volume Desc") );
+  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
+  m_volumeDescWidget->layout()->setMargin( marginHint() );
+  addPage( m_volumeDescWidget, i18n("Volume Desc") );
 
   // create image settings tab
-  box = new QVBox( mainTab );
-  box->setMargin( marginHint() );
-  m_imageSettingsWidget = new K3bDataImageSettingsWidget( box );
-  mainTab->addTab( box, i18n("Data Settings") );
+  m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+  m_imageSettingsWidget->layout()->setMargin( marginHint() );
+  addPage( m_imageSettingsWidget, i18n("Data Settings") );
 
   // create advanced image settings tab
-  box = new QVBox( mainTab );
-  box->setMargin( marginHint() );
-  m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( box );
-  mainTab->addTab( box, i18n("Advanced") );
+  m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
+  m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
+  addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
+
+  createContextHelp();
+}
+
+
+void K3bMixedBurnDialog::setupSettingsPage()
+{
+  QWidget* w = new QWidget( k3bMainWidget() );
+  m_groupMixedType = new QButtonGroup( 4, Qt::Vertical, i18n("Mixed mode type"), w );
+  // standard mixed mode
+  m_radioMixedTypeFirstTrack = new QRadioButton( i18n("Data in first track"), m_groupMixedType );
+  // is this a standard?
+  m_radioMixedTypeLastTrack = new QRadioButton( i18n("Data in last track"), m_groupMixedType );
+  //   QRadioButton* m_radioMixedTypePregap = new QRadioButton( i18n("Data in first track's pregap"), 
+  // 							   m_groupMixedType );
+
+  // Enhanced music CD/CD Extra/CD Plus format (Blue Book) 
+  // to fulfill the standard we also need the special file structure
+  // but in the case of our simple mixed mode cd we allow to create blue book cds without
+  // these special files and directories
+  m_radioMixedTypeSessions = new QRadioButton( i18n("Data in second session"), m_groupMixedType );
+  m_groupMixedType->setExclusive(true);
+
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( marginHint() );
+  grid->setSpacing( spacingHint() );
+  grid->addWidget( m_groupMixedType, 0, 0 );
+
+  addPage( w, i18n("Settings") );
+}
+
+
+void K3bMixedBurnDialog::createContextHelp()
+{
+  QWhatsThis::add( m_radioMixedTypeFirstTrack, i18n("<p><b>Standard mixed mode cd 1</b>"
+						    "<p>K3b will write the data track before all "
+						    "audio tracks."
+						    "<p>This mode should only be used for cds that are unlikely to "
+						    "be played on a hifi audio cd player."
+						    "<p><b>Caution:</b> It could lead to problems with some older "
+						    "hifi audio cd player that try to play the data track.") );
+
+  QWhatsThis::add( m_radioMixedTypeLastTrack, i18n("<p><b>Standard mixed mode cd 2</b>"
+						   "<p>K3b will write the data track after all "
+						   "audio tracks."
+						    "<p>This mode should only be used for cds that are unlikely to "
+						    "be played on a hifi audio cd player."
+						   "<p><b>Caution:</b> It could lead to problems with some older "
+						   "hifi audio cd player that try to play the data track.") );
+
+  QWhatsThis::add( m_radioMixedTypeSessions, i18n("<p><b>Blue book cd</b>"
+						  "<p>K3b will create a multisession cd with "
+						  "2 sessions. The first session will contain all "
+						  "audio tracks and the second session will contain "
+						  "a mode 2 form 1 data track."
+						  "<p>This mode is based on the <em>Blue book</em> "
+						  "standard (also known as <em>Extended Audio CD</em>, "
+						  "<em>CD-Extra</em>, or <em>CD Plus</em>) "
+						  "and has the advantage that a hifi audio "
+						  "cd player will just recognize the first session "
+						  "and ignore the second session with the data track."
+						  "<p>If the cd is intended to be used in a hifi audio cd player "
+						  "this is the recommended mode."
+						  "<p>Some older CD-ROMs may have problems reading "
+						  "a blue book cd since it's a multisession cd.") );
 }
 
 
 void K3bMixedBurnDialog::slotWriterChanged()
 {
   if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
-    m_checkBurnProof->setEnabled( dev->burnproof() );
+    m_checkBurnproof->setEnabled( dev->burnproof() );
 }
 
 
 void K3bMixedBurnDialog::saveSettings()
 {
-//   m_doc->setDao( m_checkDao->isChecked() );
-//   m_doc->setDummy( m_checkDummy->isChecked() );
-//   m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
-//   m_doc->setBurnproof( m_checkBurnProof->isChecked() );
+  m_doc->setDao( m_checkDao->isChecked() );
+  m_doc->setDummy( m_checkSimulate->isChecked() );
+  m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
+  m_doc->setBurnproof( m_checkBurnproof->isChecked() );
 //   m_doc->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
 //   m_doc->setDeleteImage( m_checkDeleteImage->isChecked() );
 			
   // -- saving current speed --------------------------------------
-//   m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
+  m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
 	
-//   // -- saving current device --------------------------------------
-//   m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
+  // -- saving current device --------------------------------------
+  m_doc->setBurner( m_writerSelectionWidget->writerDevice() );
+
+  if( m_groupMixedType->selected() == m_radioMixedTypeFirstTrack )
+    m_doc->setMixedType( K3bMixedDoc::DATA_FIRST_TRACK );
+  else if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
+    m_doc->setMixedType( K3bMixedDoc::DATA_LAST_TRACK );
+  else if( m_groupMixedType->selected() == m_radioMixedTypeSessions )
+    m_doc->setMixedType( K3bMixedDoc::DATA_SECOND_SESSION );
 
 
   // save iso image settings
@@ -97,16 +165,28 @@ void K3bMixedBurnDialog::saveSettings()
 
 void K3bMixedBurnDialog::readSettings()
 {
-//   m_checkDao->setChecked( doc()->dao() );
-//   m_checkDummy->setChecked( doc()->dummy() );
-//   m_checkOnTheFly->setChecked( doc()->onTheFly() );
-//   m_checkBurnProof->setChecked( doc()->burnproof() );
+  m_checkDao->setChecked( doc()->dao() );
+  m_checkSimulate->setChecked( doc()->dummy() );
+  m_checkOnTheFly->setChecked( doc()->onTheFly() );
+  m_checkBurnproof->setChecked( doc()->burnproof() );
 //   m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImage() );
 //   m_checkDeleteImage->setChecked( m_doc->deleteImage() );
 	
 
 //   if( !((K3bDataDoc*)doc())->isoImage().isEmpty() )
 //     m_tempDirSelectionWidget->setTempPath( ((K3bDataDoc*)doc())->isoImage() );
+
+  switch( m_doc->mixedType() ) {
+  case K3bMixedDoc::DATA_FIRST_TRACK:
+    m_radioMixedTypeFirstTrack->setChecked(true);
+    break;
+  case K3bMixedDoc::DATA_LAST_TRACK:
+    m_radioMixedTypeLastTrack->setChecked(true);
+    break;
+  case K3bMixedDoc::DATA_SECOND_SESSION:
+    m_radioMixedTypeSessions->setChecked(true);
+    break;
+  }
 
   m_imageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
   m_advancedImageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
@@ -124,10 +204,10 @@ void K3bMixedBurnDialog::slotOnlyCreateImageToggled( bool on )
 
 void K3bMixedBurnDialog::loadDefaults()
 {
-//   m_checkDummy->setChecked( false );
-//   m_checkDao->setChecked( true );
-//   m_checkOnTheFly->setChecked( true );
-//   m_checkBurnProof->setChecked( true );
+   m_checkSimulate->setChecked( false );
+   m_checkDao->setChecked( true );
+   m_checkOnTheFly->setChecked( true );
+   m_checkBurnproof->setChecked( true );
 
 //   m_checkDeleteImage->setChecked( true );
 //   m_checkOnlyCreateImage->setChecked( false );
@@ -143,10 +223,10 @@ void K3bMixedBurnDialog::loadUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "default mixed settings" );
 
-//   m_checkDummy->setChecked( c->readBoolEntry( "dummy_mode", false ) );
-//   m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
-//   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
-//   m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
+  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
+  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
+  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
+  m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
 //   m_checkDeleteImage->setChecked( c->readBoolEntry( "remove_image", true ) );
 //   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
@@ -163,11 +243,11 @@ void K3bMixedBurnDialog::saveUserDefaults()
   KConfig* c = kapp->config();
 
   c->setGroup( "default mixed settings" );
-
-//   c->writeEntry( "dummy_mode", m_checkDummy->isChecked() );
-//   c->writeEntry( "dao", m_checkDao->isChecked() );
-//   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
-//   c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
+  
+  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
+  c->writeEntry( "dao", m_checkDao->isChecked() );
+  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
 //   c->writeEntry( "remove_image", m_checkDeleteImage->isChecked() );
 //   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
 

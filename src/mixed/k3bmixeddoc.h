@@ -33,7 +33,14 @@ class K3bMixedDoc : public K3bDoc
   K3bAudioDoc* audioDoc() const { return m_audioDoc; }
   K3bDataDoc* dataDoc() const { return m_dataDoc; }
 
+  enum MixedType { DATA_FIRST_TRACK,
+		   DATA_LAST_TRACK,
+		   DATA_SECOND_SESSION };
+
+  int mixedType() const { return m_mixedType; }
+
  public slots:
+  void setMixedType( MixedType t ) { m_mixedType = t; }
   void addUrl( const KURL& url );
   void addUrls( const KURL::List& urls );
 
@@ -47,6 +54,8 @@ class K3bMixedDoc : public K3bDoc
  private:
   K3bDataDoc* m_dataDoc;
   K3bAudioDoc* m_audioDoc;
+
+  int m_mixedType;
 };
 
 

@@ -23,10 +23,13 @@
 
 class K3bMixedDoc;
 class K3bIsoImager;
+class K3bAudioDecoder;
 class QFile;
 class QDataStream;
 class K3bAbstractWriter;
-
+class K3bWaveFileWriter;
+class KTempFile;
+class K3bCdrecordWriter;
 
 /**
   *@author Sebastian Trueg
@@ -40,7 +43,7 @@ class K3bMixedJob : public K3bBurnJob
   ~K3bMixedJob();
 	
   K3bDoc* doc() const;
-/*   K3bDevice* writer() const; */
+  K3bDevice* writer() const;
 		
  public slots:
   void cancel();
@@ -50,16 +53,41 @@ class K3bMixedJob : public K3bBurnJob
   void slotSizeCalculationFinished( int, int );
   void slotReceivedIsoImagerData( char*, int );
   void slotIsoImagerFinished( bool success );
+  void slotAudioDecoderFinished( bool );
+  void slotReceivedAudioDecoderData( const char*, int );
+  void slotAudioDecoderNextTrack( int );
   void slotDataWritten();
   void slotWriterFinished( bool success );
+  void slotWriterNextTrack(int, int);
+  void slotWriterJobPercent(int);
+  void slotAudioDecoderPercent(int);
+  void slotAudioDecoderSubPercent( int );
+  void slotIsoImagerPercent(int);
 
  private:
+  bool prepareWriter();
+  bool writeTocFile();
+  void startWriting();
+  void addAudioTracks( K3bCdrecordWriter* writer );
+  void addDataTrack( K3bCdrecordWriter* writer );
+
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
+  K3bAudioDecoder* m_audioDecoder;
+  K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
 
   QFile* m_isoImageFile;
   QDataStream* m_isoImageFileStream;
+  KTempFile* m_tocFile;
+
+  enum Action { CREATING_ISO_IMAGE,
+		CREATING_AUDIO_IMAGE,
+		WRITING_ISO_IMAGE,
+		WRITING_AUDIO_IMAGE };
+
+  int m_currentAction;
+  double m_audioDocPartOfProcess;
 };
 
 #endif

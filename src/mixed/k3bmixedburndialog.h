@@ -27,6 +27,8 @@ class K3bMixedDoc;
 class K3bDataImageSettingsWidget;
 class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
+class QButtonGroup;
+class QRadioButton;
 
 
 /**
@@ -41,15 +43,6 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    K3bMixedBurnDialog( K3bMixedDoc*, QWidget *parent=0, const char *name=0, bool modal = true );
 
  protected:
-   QCheckBox* m_checkDummy;
-   QCheckBox* m_checkOnTheFly;
-   QCheckBox* m_checkOnlyCreateImage;
-   QCheckBox* m_checkDeleteImage;
-   QCheckBox* m_checkDao;
-   QCheckBox* m_checkBurnProof;
-   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-   K3bWriterSelectionWidget* m_writerSelectionWidget;
-
    K3bDataVolumeDescWidget* m_volumeDescWidget;
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
@@ -67,7 +60,14 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void slotOnlyCreateImageToggled( bool on );
 
  private:
+   void setupSettingsPage();
+   void createContextHelp();
    K3bMixedDoc* m_doc;
+
+   QButtonGroup* m_groupMixedType;
+   QRadioButton* m_radioMixedTypeFirstTrack;
+   QRadioButton* m_radioMixedTypeLastTrack;
+   QRadioButton* m_radioMixedTypeSessions;
 };
 
 #endif

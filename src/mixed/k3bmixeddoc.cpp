@@ -27,6 +27,8 @@ bool K3bMixedDoc::newDocument()
   m_dataDoc->isoOptions().setVolumeID( i18n("Project name", "Mixed") );
   m_audioDoc->newDocument();
 
+  m_mixedType = DATA_FIRST_TRACK;
+
   // TODO: overwrite default settings with mixed defaults
 
   return K3bDoc::newDocument();
@@ -86,6 +88,8 @@ bool K3bMixedDoc::saveDocumentData( QDomDocument* )
   
 void K3bMixedDoc::loadDefaultSettings()
 {
+  // TODO: load user defaults
+  setDummy(false);
 }
 
 
