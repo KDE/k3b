@@ -103,6 +103,9 @@ namespace K3bCdDevice
 		     size_t len = 0 );
 
     private:
+      static QString senseKeyToString( int key );
+      static void debugError( int command, int errorCode, int senseKey, int asc, int ascq );
+
       // The private class holds OS-specific things that would
       // otherwise be member variables. There are parts of ScsiCommand
       // that refer directly to Private's members, so those are also
