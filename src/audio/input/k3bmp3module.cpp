@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <cmath>
+#include <cstdlib>
 
 
 K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
