@@ -210,7 +210,7 @@ void K3bMainWindow::initStatusBar()
 void K3bMainWindow::initView()
 {
   // setup main docking things
-  mainDock = createDockWidget( i18n("Workspace"), SmallIcon("idea") );
+  mainDock = createDockWidget( "Workspace", SmallIcon("idea") );
   setView( mainDock );
   setMainDockWidget( mainDock );
   mainDock->setDockSite( KDockWidget::DockCorner );
@@ -251,7 +251,7 @@ void K3bMainWindow::initView()
 
 
   // --- Directory Dock --------------------------------------------------------------------------
-  dirDock = createDockWidget( i18n("K3b Dir View"), SmallIcon("idea") );
+  dirDock = createDockWidget( "K3b Dir View", SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
   dirDock->setWidget( m_dirView );
   dirDock->setEnableDocking( KDockWidget::DockCorner );
@@ -263,7 +263,7 @@ void K3bMainWindow::initView()
 
 
   // --- Audioplayer Dock ------------------------------------------------------------------------
-  m_audioPlayerDock = createDockWidget( i18n("K3b Audio Player"), SmallIcon("1rightarrow") );
+  m_audioPlayerDock = createDockWidget( "K3b Audio Player", SmallIcon("1rightarrow") );
   m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
   m_audioPlayerDock->setWidget( m_audioPlayer );
   m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop );
