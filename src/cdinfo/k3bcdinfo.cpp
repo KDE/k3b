@@ -132,7 +132,7 @@ void K3bCdInfo::slotTestDevice()
 	kapp->config()->setGroup("External Programs");
 	*m_process << kapp->config()->readEntry( "cdrdao path" );
 	*m_process << "disk-info";
-	*m_process << "--device" << m_device->devicename();
+	*m_process << "--device" << m_device->genericDevice();
 	
 	connect( m_process, SIGNAL(processExited(KProcess*)),
 		 this, SLOT(slotCdrdaoFinished()) );

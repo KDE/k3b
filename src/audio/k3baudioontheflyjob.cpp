@@ -80,6 +80,12 @@ K3bDoc* K3bAudioOnTheFlyJob::doc() const
 }
 
 
+K3bDevice* K3bAudioOnTheFlyJob::writer() const
+{
+  return doc()->burner();
+}
+
+
 void K3bAudioOnTheFlyJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 {
   QString buffer = QString::fromLatin1( output, len );
@@ -328,7 +334,7 @@ void K3bAudioOnTheFlyJob::slotStartWriting()
     m_process << "write";
 
     // device
-    m_process << "--device" << m_doc->burner()->devicename();
+    m_process << "--device" << m_doc->burner()->genericDevice();
     if( m_doc->burner()->cdrdaoDriver() != "auto" ) {
       m_process << "--driver";
       if( m_doc->burner()->cdTextCapable() == 1 )

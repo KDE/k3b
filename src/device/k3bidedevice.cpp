@@ -49,3 +49,9 @@ bool K3bIdeDevice::init()
   // nothing to do so far
   return true;
 }
+
+
+const QString& K3bIdeDevice::genericDevice() const
+{
+  return m_emptyString;
+}

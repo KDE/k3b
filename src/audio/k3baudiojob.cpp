@@ -61,6 +61,12 @@ K3bDoc* K3bAudioJob::doc() const
 }
 
 
+K3bDevice* K3bAudioJob::writer() const
+{
+  return doc()->burner();
+}
+
+
 void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 {
   QString buffer = QString::fromLatin1( output, len );
@@ -524,7 +530,7 @@ void K3bAudioJob::startWriting()
       m_process << "write";
 
       // device
-      m_process << "--device" << m_doc->burner()->devicename();
+      m_process << "--device" << m_doc->burner()->genericDevice();
       if( m_doc->burner()->cdrdaoDriver() != "auto" ) {
 	m_process << "--driver";
 	if( m_doc->burner()->cdTextCapable() == 1 )
@@ -617,7 +623,7 @@ void K3bAudioJob::startWriting()
     m_process << s;
 
     // add the device
-    s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
+    s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
     m_process << s;
 	
     // test if padding is nessessary

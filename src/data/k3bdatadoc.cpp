@@ -107,7 +107,7 @@ void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
     }
 
   m_queuedToAddItemsTimer->start(0);
-  k3bMain()->statusBar()->changeItem( i18n( "Adding files to Project %1..." ).arg( volumeID() ), 1 );
+  k3bMain()->statusBar()->message( i18n( "Adding files to Project %1..." ).arg( volumeID() ) );
 }
 
 
@@ -173,7 +173,7 @@ void K3bDataDoc::slotAddQueuedItems()
     {
       m_queuedToAddItemsTimer->stop();
       emit newFileItems();
-      k3bMain()->statusBar()->changeItem( i18n("Ready"), 1 );
+      k3bMain()->statusBar()->clear();
     }
 }
 

@@ -74,6 +74,7 @@ class K3bDeviceManager : public QObject
   QList<K3bDevice> m_writer;
   int m_foundDevices;
 
+  void scanFstab();
   K3bDevice* scanDevice( const char *dev );
 
   static const int DEV_ARRAY_SIZE = 19;

@@ -248,7 +248,7 @@ void K3bProjectBurnDialog::readSettings()
     QList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
     K3bDevice* _dev = _devices.first();
     while( _dev ) {
-      m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->devicename() + ")" );
+      m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->genericDevice() + ")" );
       _dev = _devices.next();
     }
 	

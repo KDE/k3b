@@ -20,6 +20,7 @@
 #include "device/k3bdevice.h"
 #include "k3bjob.h"
 #include "k3bdoc.h"
+#include "k3b.h"
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -40,15 +41,31 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klistview.h>
-#include <kapp.h>
 #include <kiconloader.h>
 
+
+
+class K3bBurnProgressDialog::PrivateDebugWidget : public KDialog 
+{
+public:
+  PrivateDebugWidget( QMap<QString, QStringList>&, QWidget* parent );
+};
+
+
+class K3bBurnProgressDialog::PrivateStatusBarProgress : public QWidget
+{
+public:
+  PrivateStatusBarProgress( QWidget* parent );
+
+  KProgress* progress;
+  QLabel*    label;
+};
 
 
 K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
   : KDialog( parent, "debugViewDialog", true )
 {
-  setCaption( "Debugging output" );
+  setCaption( i18n("Debugging output") );
 
   QPushButton* okButton = new QPushButton( "OK", this );
   QTextView* debugView = new QTextView( this );
@@ -79,10 +96,32 @@ K3bBurnProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QSt
 }
 
 
+
+
+K3bBurnProgressDialog::PrivateStatusBarProgress::PrivateStatusBarProgress( QWidget* parent )
+  : QWidget( parent )
+{
+  progress = new KProgress( 0, 100, 0, Qt::Horizontal, this, "m_statusBarProgress" );
+  label = new QLabel( this );
+
+  QHBoxLayout* layout = new QHBoxLayout( this );
+  layout->setSpacing( 5 );
+  layout->setMargin( 0 );
+  layout->addWidget( label );
+  layout->addWidget( progress );
+
+  QToolTip::add( progress, i18n("Click to show progress window") );
+
+  setMaximumHeight( k3bMain()->statusBar()->height() );
+}
+
+
+
+
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name )
   : KDialog(parent,name, true)
 {
-  setCaption( "Writing process" );
+  setCaption( i18n("Writing process") );
 
   setupGUI();
   setupConnections();
@@ -93,10 +132,32 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name 
   m_timer = new QTimer( this );
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
+
+  // setup the statusbar progress
+  m_statusBarProgress = new PrivateStatusBarProgress( k3bMain()->statusBar() );
+  m_statusBarProgress->progress->installEventFilter( this );
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
 {
+  //  delete m_statusBarProgress;
+}
+
+
+bool K3bBurnProgressDialog::eventFilter(QObject* object, QEvent* event)
+{
+  if( dynamic_cast<KProgress*>(object) == m_statusBarProgress->progress &&
+      event->type() == QEvent::MouseButtonPress ) {
+
+    // remove the statusbar-widgets
+    k3bMain()->statusBar()->removeWidget( m_statusBarProgress );
+    m_statusBarProgress->hide();
+
+    show();
+    return true;
+  }
+  else
+    return KDialog::eventFilter( object, event );
 }
 
 
@@ -131,10 +192,12 @@ void K3bBurnProgressDialog::setupGUI()
   m_buttonClose = new QPushButton( this, "m_buttonClose" );
   m_buttonClose->setText( i18n( "Close" ) );
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this, "m_buttonShowDebug" );
+  m_buttonBackground = new QPushButton( i18n("To Background"), this, "m_buttonBackground" );
 
   mainLayout->addWidget( m_buttonCancel, 3, 1 );
   mainLayout->addWidget( m_buttonClose, 3, 1 );
   mainLayout->addWidget( m_buttonShowDebug, 3, 2 );
+  mainLayout->addWidget( m_buttonBackground, 3, 2 );
  	
   m_groupBuffer = new QGroupBox( this, "m_groupBuffer" );
   m_groupBuffer->setTitle( i18n( "Buffer Status" ) );
@@ -146,7 +209,7 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupBufferLayout->setSpacing( spacingHint() );
   m_groupBufferLayout->setMargin( marginHint() );
 
-  m_labelWriter = new QLabel( "WRITER", m_groupBuffer );
+  m_labelWriter = new QLabel( i18n("Writer"), m_groupBuffer );
   m_progressBuffer = new KProgress( 0, 100, 0, Qt::Horizontal, m_groupBuffer, "m_progressBuffer" );
   m_progressBuffer->setMaximumWidth( 150 );
 
@@ -204,6 +267,7 @@ void K3bBurnProgressDialog::setupConnections()
   connect( m_buttonCancel, SIGNAL(clicked()), this, SLOT(slotCancelPressed()) );
   connect( m_buttonClose, SIGNAL(clicked()), this, SLOT(accept()) );
   connect( m_buttonShowDebug, SIGNAL(clicked()), this, SLOT(slotShowDebuggingOutput()) );
+  connect( m_buttonBackground, SIGNAL(clicked()), this, SLOT(slotToBackground()) );
 }
 
 
@@ -248,7 +312,7 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
     item->setPixmap( 0, kapp->iconLoader()->loadIcon( "ok", KIcon::Small, 16 ) );
   }
 
-  // scroll down
+  // scroll down (does not work :-(
   m_viewInfo->verticalScrollBar()->setValue( m_viewInfo->verticalScrollBar()->maxValue() );
 }
 
@@ -257,15 +321,22 @@ void K3bBurnProgressDialog::finished()
 {
   qDebug( "(K3bBurnProgressDialog) received finished signal!");
 
-  m_labelFileName->setText("Writing finished");
+  m_labelFileName->setText( i18n("Writing finished") );
   m_labelTrackProgress->setText("");
 
   m_buttonCancel->hide();
+  m_buttonBackground->hide();
   m_buttonShowDebug->show();
   m_buttonClose->show();
   m_timer->stop();
 
   m_progressBuffer->setValue(0);
+
+  // remove the statusbar-widgets
+  k3bMain()->statusBar()->removeWidget( m_statusBarProgress );
+  m_statusBarProgress->hide();
+
+  show();
 }
 
 
@@ -274,6 +345,7 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   // clear everything
   m_buttonClose->hide();
   m_buttonShowDebug->hide();
+  m_buttonBackground->show();
   m_buttonCancel->show();
   m_viewInfo->clear();
   m_progressBuffer->setValue(0);
@@ -313,17 +385,18 @@ void K3bBurnProgressDialog::setJob( K3bBurnJob* job )
   connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SLOT(mapDebuggingOutput(const QString&, const QString&)) );
 
-  if( job->doc() )
-    {
-      if( job->doc()->burner() )
-	m_labelWriter->setText( "Writer: " + job->doc()->burner()->vendor() + " " + 
-				job->doc()->burner()->description() );
+  // setup the connections to the statusbar-progress
+  connect( job, SIGNAL(percent(int)), m_statusBarProgress->progress, SLOT(setValue(int)) );
 
-      // connect to the "special" signals
-      connect( job, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
+
+  if( job->writer() )
+    m_labelWriter->setText( "Writer: " + job->writer()->vendor() + " " + 
+			    job->writer()->description() );
+  
+  // connect to the "special" signals
+  connect( job, SIGNAL(bufferStatus(int)), m_progressBuffer, SLOT(setValue(int)) );
 		
-      m_groupBuffer->setEnabled( true ); 	
-    }
+  m_groupBuffer->setEnabled( true );
 }
 
 
@@ -350,6 +423,9 @@ void K3bBurnProgressDialog::slotNewSubTask(const QString& name)
   m_labelFileName->setText(name);
   m_labelTrackProgress->setText("");
   m_progressTrack->setValue(0);
+
+  m_statusBarProgress->label->setText( name );
+  m_statusBarProgress->label->update();
 }
 
 void K3bBurnProgressDialog::slotNewTask(const QString& name)
@@ -378,7 +454,7 @@ void K3bBurnProgressDialog::slotUpdateTime()
   if( min < 10 )
     timeStr = "0" + timeStr;	
 		
-  m_labelCdTime->setText( i18n("Overall progress - %1").arg(timeStr) );	
+  m_labelCdTime->setText( i18n("Overall progress (%1)").arg(timeStr) );	
 }
 
 
@@ -393,4 +469,15 @@ void K3bBurnProgressDialog::slotShowDebuggingOutput()
   PrivateDebugWidget* debugWidget = new PrivateDebugWidget( m_debugOutputMap, this );
   debugWidget->exec();
   delete debugWidget;
+}
+
+
+void K3bBurnProgressDialog::slotToBackground()
+{
+  // add the statusbar widgets
+  k3bMain()->statusBar()->addWidget( m_statusBarProgress, 0, true );
+  m_statusBarProgress->show();
+  m_statusBarProgress->label->setText( i18n("Progress") );
+
+  hide();
 }

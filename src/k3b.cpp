@@ -136,10 +136,14 @@ void K3bMainWindow::initActions()
   actionToolsCdInfo = new KAction(i18n("CD &Info"), "cdinfo", 0, this, SLOT(slotCdInfo()), 
 			    actionCollection(), "tools_cd_info" );
 
-  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdwriter_unmount", 0, this, SLOT(slotBlankCdrw()), 
+  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdrwblank", 0, this, SLOT(slotBlankCdrw()), 
 			       actionCollection(), "tools_blank_cdrw" );
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
+  actionFileNewData->setStatusText( i18n("Creates a new data project") );
+  actionFileNewAudio->setStatusText( i18n("Creates a new audio project") );
+  actionToolsBlankCdrw->setStatusText( i18n("Opens CD-blanking dialog") );
+  actionToolsCdInfo->setStatusText( i18n("Show information on a disk") );
   actionFileOpen->setStatusText(i18n("Opens an existing project"));
   actionFileOpenRecent->setStatusText(i18n("Opens a recently used file"));
   actionFileSave->setStatusText(i18n("Saves the actual project"));
@@ -161,7 +165,7 @@ void K3bMainWindow::initStatusBar()
   ///////////////////////////////////////////////////////////////////
   // STATUSBAR
   // TODO: add your own items you need for displaying current application status.
-  statusBar()->insertItem(i18n("Ready."),1);
+  //  statusBar()->insertItem(i18n("Ready."),1);
 }
 
 
@@ -233,8 +237,6 @@ void K3bMainWindow::openDocumentFile(const KURL& url)
 
   // create the window
   createClient(doc);
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -400,8 +402,6 @@ void K3bMainWindow::slotFileNew()
   slotStatusMsg(i18n("Creating new document..."));
 
   openDocumentFile();
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 void K3bMainWindow::slotFileOpen()
@@ -415,8 +415,6 @@ void K3bMainWindow::slotFileOpen()
       openDocumentFile(url);
       actionFileOpenRecent->addURL( url );
     }
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 void K3bMainWindow::slotFileOpenRecent(const KURL& url)
@@ -424,8 +422,6 @@ void K3bMainWindow::slotFileOpenRecent(const KURL& url)
   slotStatusMsg(i18n("Opening file..."));
   	
   openDocumentFile(url);
-	
-  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -455,8 +451,6 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
       if( !doc->saveDocument(doc->URL()) )
 	KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
   }
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -514,8 +508,6 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	}
       }
   }
-  
-  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -547,8 +539,6 @@ void K3bMainWindow::slotFileClose()
     {
       m->close(true);
     }
-	
-  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -560,8 +550,6 @@ void K3bMainWindow::slotFileQuit()
 
 void K3bMainWindow::slotViewToolBar()
 {
-  slotStatusMsg(i18n("Toggle the toolbar..."));
-  ///////////////////////////////////////////////////////////////////
   // turn Toolbar on or off
   if(!actionViewToolBar->isChecked())
     {
@@ -571,14 +559,10 @@ void K3bMainWindow::slotViewToolBar()
     {
       toolBar("mainToolBar")->show();
     }		
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 void K3bMainWindow::slotViewStatusBar()
 {
-  slotStatusMsg(i18n("Toggle the statusbar..."));
-  ///////////////////////////////////////////////////////////////////
   //turn Statusbar on or off
   if(!actionViewStatusBar->isChecked())
     {
@@ -588,8 +572,6 @@ void K3bMainWindow::slotViewStatusBar()
     {
       statusBar()->show();
     }
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -597,8 +579,10 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
-  statusBar()->clear();
-  statusBar()->changeItem(text,1);
+//   statusBar()->clear();
+//   statusBar()->changeItem(text,1);
+
+  statusBar()->message( text, 2000 );
 }
 
 
@@ -737,8 +721,6 @@ void K3bMainWindow::slotNewAudioDoc()
 
   // create the window
   createClient(doc);
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 void K3bMainWindow::slotNewDataDoc()
@@ -758,8 +740,6 @@ void K3bMainWindow::slotNewDataDoc()
 
   // create the window
   createClient(doc);
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 K3bAudioTrackDialog* K3bMainWindow::audioTrackDialog()

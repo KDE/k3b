@@ -47,9 +47,26 @@ class K3bDevice
   virtual bool           burner() const { return m_burner; }
   virtual bool           burnproof() const { return m_burnproof; }
   virtual int            maxReadSpeed() const { return m_maxReadSpeed; }
-  virtual const QString& devicename() const { return m_devicename; }
+
+  /**
+   * returns genericDevice if not null
+   * otherwise ioctlDevice is returned
+   */
+  const QString& devicename() const;
+
+  /**
+   * needed for the external programs
+   */
+  virtual const QString& genericDevice() const;
+
+  /**
+   * needed for mounting the drive
+   */
+  virtual const QString& ioctlDevice() const;
   virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
   virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
+
+  const QString& mountPoint() const { return m_mountPoint; }
 
   /**
    * returns: 0 auto (no cdrdao-driver selected)
@@ -80,6 +97,9 @@ class K3bDevice
    */
   virtual void setCdTextCapability( bool );
 
+  void setBurnproof( bool );
+
+  void setMountPoint( const QString& );
 
   /** checks if unit is ready, returns:
    * <ul>
@@ -142,7 +162,9 @@ class K3bDevice
   cdrom_drive* m_cdromStruct;
 
  private:
-  QString m_devicename;
+  QString m_genericDevice;
+  QString m_ioctlDevice;
+  QString m_mountPoint;
 };
 
 

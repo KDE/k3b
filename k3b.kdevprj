@@ -109,7 +109,7 @@ sub_dirs=
 type=po
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h,src/k3bsplash.h,src/k3bsplash.cpp,src/k3b-splash-naive.png,src/hi16-tools-cdinfo.png,src/hi22-tools-cdinfo.png,src/hi16-tools-cdrwblank.png,src/hi22-tools-cdrwblank.png
 sub_dirs=data,cdinfo,audio,device,kiotree,option,rip,kdelibs_patched
 type=prog_main
 
@@ -357,7 +357,7 @@ install_location=
 type=HEADER
 
 [src/data/Makefile.am]
-files=src/data/k3bfileitem.cpp,src/data/k3bfileitem.h,src/data/k3bdiritem.cpp,src/data/k3bdiritem.h,src/data/k3bdatadoc.h,src/data/k3bdataitem.cpp,src/data/k3bdataitem.h,src/data/k3bdatadoc.cpp,src/data/k3bdataview.cpp,src/data/k3bdataview.h,src/data/k3bdatajob.cpp,src/data/k3bdatajob.h,src/data/k3bdataburndialog.cpp,src/data/k3bdataburndialog.h,src/data/k3bdatafileview.cpp,src/data/k3bdatafileview.h,src/data/k3bdatadirtreeview.cpp,src/data/k3bdatadirtreeview.h
+files=src/data/k3bfileitem.cpp,src/data/k3bfileitem.h,src/data/k3bdiritem.cpp,src/data/k3bdiritem.h,src/data/k3bdatadoc.h,src/data/k3bdataitem.cpp,src/data/k3bdataitem.h,src/data/k3bdatadoc.cpp,src/data/k3bdataview.cpp,src/data/k3bdataview.h,src/data/k3bdatajob.cpp,src/data/k3bdatajob.h,src/data/k3bdataburndialog.cpp,src/data/k3bdataburndialog.h,src/data/k3bdatafileview.cpp,src/data/k3bdatafileview.h,src/data/k3bdatadirtreeview.cpp,src/data/k3bdatadirtreeview.h,src/data/k3bisoimagejob.h,src/data/k3bisoimagejob.cpp,src/data/k3bisoimagewritingdialog.cpp,src/data/k3bisoimagewritingdialog.h
 sub_dirs=
 type=static_library
 
@@ -464,6 +464,30 @@ install_location=
 type=SOURCE
 
 [src/data/k3bfileitem.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/data/k3bisoimagejob.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/data/k3bisoimagejob.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/data/k3bisoimagewritingdialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/data/k3bisoimagewritingdialog.h]
 dist=true
 install=false
 install_location=
@@ -596,10 +620,22 @@ install=true
 install_location=$$(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
 type=DATA
 
+[src/hi16-tools-cdrwblank.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdrwblank.png
+type=DATA
+
 [src/hi22-tools-cdinfo.png]
 dist=true
 install=true
 install_location=$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
+type=DATA
+
+[src/hi22-tools-cdrwblank.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdrwblank.png
 type=DATA
 
 [src/hi32-app-k3b.png]

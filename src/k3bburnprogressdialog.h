@@ -56,50 +56,6 @@ class K3bBurnProgressDialog : public KDialog  {
   /** reimplemented from QDialog since we need this to return imideately! */
   void show();
 
- protected:
-  /**
-   * reimplemented from QWidget since the user should really not
-   * close this widget another way than the close button!
-   */
-  void closeEvent( QCloseEvent* ) {}
-
-  void setupGUI();
-  void setupConnections();
-	
-  QGroupBox* m_groupInfo;
-  KListView* m_viewInfo;
-  QPushButton* m_buttonCancel;
-  QPushButton* m_buttonClose;
-  QPushButton* m_buttonShowDebug;
-  QGroupBox* m_groupBuffer;
-  KProgress* m_progressBuffer;
-  QGroupBox* m_groupProgress;
-  KProgress* m_progressTrack;
-  KProgress* m_progressCd;
-  KCutLabel* m_labelFileName;
-  QLabel* m_labelTrackProgress;
-  QLabel* m_labelCdTime;
-  QLabel* m_labelCdProgress;
-  QLabel* m_labelWriter;
-		
-  QGridLayout* mainLayout;
-  QHBoxLayout* m_groupInfoLayout;
-  QHBoxLayout* m_groupBufferLayout;
-  QGridLayout* m_groupProgressLayout;
-
-  // debugging output display
-  class PrivateDebugWidget : public KDialog {
-  public:
-    PrivateDebugWidget( QMap<QString, QStringList>&, QWidget* parent );
-  };
-
- private:
-  K3bBurnJob* m_job;
-  QTimer* m_timer;
-  int m_time;
-
-  QMap<QString, QStringList> m_debugOutputMap;
-
  protected slots:
 //  void updateCdTimeProgress( const QTime& processedTime );
   void updateCdSizeProgress( int processed, int size );
@@ -117,6 +73,60 @@ class K3bBurnProgressDialog : public KDialog  {
   void slotUpdateTime();
 
   void slotShowDebuggingOutput();
+
+  void slotToBackground();
+
+ protected:
+  /**
+   * only used for filtering out mouseclicks on the
+   * statusbar progress.
+   */
+  bool eventFilter(QObject* object, QEvent* event);
+
+  /**
+   * reimplemented from QWidget since the user should really not
+   * close this widget another way than the close button!
+   */
+  void closeEvent( QCloseEvent* ) {}
+
+  void setupGUI();
+  void setupConnections();
+	
+  QGroupBox* m_groupInfo;
+  KListView* m_viewInfo;
+  QPushButton* m_buttonCancel;
+  QPushButton* m_buttonClose;
+  QPushButton* m_buttonShowDebug;
+  QPushButton* m_buttonBackground;
+  QGroupBox* m_groupBuffer;
+  KProgress* m_progressBuffer;
+  QGroupBox* m_groupProgress;
+  KProgress* m_progressTrack;
+  KProgress* m_progressCd;
+  KCutLabel* m_labelFileName;
+  QLabel* m_labelTrackProgress;
+  QLabel* m_labelCdTime;
+  QLabel* m_labelCdProgress;
+  QLabel* m_labelWriter;
+		
+  QGridLayout* mainLayout;
+  QHBoxLayout* m_groupInfoLayout;
+  QHBoxLayout* m_groupBufferLayout;
+  QGridLayout* m_groupProgressLayout;
+
+  // the status bar widget
+  class PrivateStatusBarProgress;
+  PrivateStatusBarProgress* m_statusBarProgress;
+
+  // debugging output display
+  class PrivateDebugWidget;
+
+ private:
+  K3bBurnJob* m_job;
+  QTimer* m_timer;
+  int m_time;
+
+  QMap<QString, QStringList> m_debugOutputMap;
 };
 
 #endif

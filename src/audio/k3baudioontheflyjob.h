@@ -42,6 +42,7 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
   ~K3bAudioOnTheFlyJob();
 
   K3bDoc* doc() const;
+  K3bDevice* writer() const;
 	
  public slots:
   void start();

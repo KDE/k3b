@@ -12,6 +12,7 @@
 #include <kconfig.h>
 
 #include <iostream>
+#include <fstab.h>
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
@@ -40,11 +41,11 @@ K3bDeviceManager::K3bDeviceManager( QObject * parent )
 K3bDevice* K3bDeviceManager::deviceByName( const QString& name )
 {
   for( K3bDevice* _dev = m_writer.first(); _dev; _dev = m_writer.next() )
-    if( _dev->devicename() == name )
+    if( _dev->genericDevice() == name || _dev->ioctlDevice() == name )
       return _dev;
 
   for( K3bDevice * _dev = m_reader.first(); _dev; _dev = m_reader.next() )
-    if( _dev->devicename() == name )
+    if( _dev->genericDevice() == name || _dev->ioctlDevice() == name )
       return _dev;
 
   return 0;
@@ -83,6 +84,8 @@ int K3bDeviceManager::scanbus()
     }
   }
 
+  scanFstab();
+
   return m_foundDevices;
 }
 
@@ -91,13 +94,14 @@ void K3bDeviceManager::printDevices()
 {
   cout << "\nReader:" << endl;
   for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
-    cout << "  " << ": " << dev->devicename() << " " << dev->vendor() << " " 
-	 << dev->description() << " " << dev->version() << endl;
+    cout << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
+	 << dev->description() << " " << dev->version() << endl << "    " << dev->mountPoint() << endl;
   }
   cout << "\nWriter:" << endl;
   for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
-    cout << "  " << ": " << dev->devicename() << " " << dev->vendor() << " " 
-	 << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl;
+    cout << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
+	 << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl
+	 << "    " << dev->mountPoint() << endl;
   }
   cout << flush;
 }
@@ -200,7 +204,9 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
   K3bDevice* dev = m_reader.first();
   while( dev != 0 ) {
     QStringList list;
-    list << dev->devicename() << QString::number(dev->maxReadSpeed());
+    list << ( !dev->genericDevice().isEmpty() ? dev->genericDevice() : dev->ioctlDevice() )
+	 << QString::number(dev->maxReadSpeed());
+       
 
     c->writeEntry( QString("Reader%1").arg(i), list );
 
@@ -212,7 +218,7 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
   dev = m_writer.first();
   while( dev != 0 ) {
     QStringList list;
-    list << dev->devicename()
+    list << dev->genericDevice()
 	 << QString::number(dev->maxReadSpeed())
 	 << QString::number(dev->maxWriteSpeed()) 
 	 << dev->cdrdaoDriver();
@@ -267,6 +273,7 @@ K3bDevice* K3bDeviceManager::scanDevice( const char *dev )
   }
   else {
     qDebug( "(K3bDeviceManager) %s is not generic-scsi or cooked-ioctl.", dev );
+    cdda_close( drive );
     return 0;
   }
 }
@@ -285,4 +292,38 @@ K3bDevice* K3bDeviceManager::addDevice( const QString& devicename )
     m_reader.append( dev );
 
   return dev;
+}
+
+
+void K3bDeviceManager::scanFstab()
+{
+
+  // for the mountPoints we need to use the ioctl-device name
+  // since sg is no block device and so cannot be mounted
+
+  K3bDevice* dev = m_reader.first();
+  while( dev != 0 ) {
+    // mounting only makes sense with a working ioctlDevice
+    // if we do not have permission to read the device ioctlDevice is empty
+    struct fstab* fs = 0;
+    if( !dev->ioctlDevice().isEmpty() ) 
+      fs = getfsspec( dev->ioctlDevice().latin1() );
+    if( fs != 0 )
+      dev->setMountPoint( fs->fs_file );
+
+    dev = m_reader.next();
+  }
+
+  dev = m_writer.first();
+  while( dev != 0 ) {
+    // mounting only makes sense with a working ioctlDevice
+    // if we do not have permission to read the device ioctlDevice is empty
+    struct fstab* fs = 0;
+    if( !dev->ioctlDevice().isEmpty() ) 
+      fs = getfsspec( dev->ioctlDevice().latin1() );
+    if( fs != 0 )
+      dev->setMountPoint( fs->fs_file );
+
+    dev = m_writer.next();
+  }
 }

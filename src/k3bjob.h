@@ -22,6 +22,9 @@
 
 class QString;
 class K3bDoc;
+class K3bDevice;
+
+
 
 /**This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
   *@author Sebastian Trueg
@@ -70,8 +73,9 @@ class K3bBurnJob : public K3bJob
  public:
   K3bBurnJob( ) {}
 	
-  virtual K3bDoc* doc() const = 0;
-	
+  virtual K3bDoc* doc() const { return 0; }
+  virtual K3bDevice* writer() const = 0;
+
  signals:
   void bufferStatus( int );
 };

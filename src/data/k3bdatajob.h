@@ -39,6 +39,7 @@ class K3bDataJob : public K3bBurnJob
   ~K3bDataJob();
 	
   K3bDoc* doc() const;
+  K3bDevice* writer() const;
 		
  public slots:
   void cancel();

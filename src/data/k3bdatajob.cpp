@@ -58,6 +58,12 @@ K3bDoc* K3bDataJob::doc() const
 }
 
 
+K3bDevice* K3bDataJob::writer() const
+{
+  return doc()->burner();
+}
+
+
 void K3bDataJob::start()
 {
   if( m_process ) {
@@ -133,7 +139,7 @@ void K3bDataJob::start()
     *m_process << s;
 
     // add the device (e.g. /dev/sg1)
-    s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
+    s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
     *m_process << s;
 
     // additional parameters from config
@@ -276,7 +282,7 @@ void K3bDataJob::writeCD()
   *m_process << s;
 
   // add the device (e.g. /dev/sg1)
-  s = QString("-dev=%1").arg( m_doc->burner()->devicename() );
+  s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
   *m_process << s;
 
   // additional parameters from config

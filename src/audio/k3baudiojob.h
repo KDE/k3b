@@ -43,6 +43,7 @@ class K3bAudioJob : public K3bBurnJob  {
   ~K3bAudioJob();
 
   K3bDoc* doc() const;
+  K3bDevice* writer() const;
 	
  public slots:
   void start();

@@ -20,7 +20,8 @@ const char* K3bDevice::cdrdao_drivers[13] = { "plextor", "plextor-scan", "cdd260
 
 K3bDevice::K3bDevice( cdrom_drive* drive )
 {
-  m_devicename = drive->cdda_device_name;
+  m_genericDevice = drive->cdda_device_name;
+  m_ioctlDevice = drive->ioctl_device_name;
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
   m_cdromStruct = 0;
@@ -37,7 +38,7 @@ cdrom_drive* K3bDevice::open()
   if( m_cdromStruct == 0 ) {
     m_cdromStruct = cdda_identify( devicename().latin1(), CDDA_MESSAGE_FORGETIT, 0 );
     if( !m_cdromStruct ) {
-      qDebug( "(K3bDevice) Could not open device " + m_devicename );
+      qDebug( "(K3bDevice) Could not open device " + devicename() );
       return 0;
     }
     cdda_open( m_cdromStruct );
@@ -60,6 +61,28 @@ bool K3bDevice::close()
 }
 
 
+
+const QString& K3bDevice::devicename() const
+{
+  if( !genericDevice().isEmpty() )
+    return genericDevice();
+  else
+    return ioctlDevice();
+}
+
+
+const QString& K3bDevice::ioctlDevice() const
+{
+  return m_ioctlDevice;
+}
+
+
+const QString& K3bDevice::genericDevice() const
+{
+  return m_genericDevice;
+}
+
+
 int K3bDevice::cdTextCapable() const
 {
   if( cdrdaoDriver() == "auto" )
@@ -72,6 +95,18 @@ int K3bDevice::cdTextCapable() const
 void K3bDevice::setCdTextCapability( bool b )
 {
   m_cdTextCapable = ( b ? 1 : 2 );
+}
+
+
+void K3bDevice::setMountPoint( const QString& mp )
+{
+  m_mountPoint = mp;
+}
+
+
+void K3bDevice::setBurnproof( bool b )
+{
+  m_burnproof = b;
 }
 
 
