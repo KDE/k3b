@@ -1,26 +1,16 @@
 
 #include "kcutlabel.h"
 
-KCutLabel::KCutLabel( const QString &text , QWidget *parent)
- : QLabel ( parent) {
-  QSizePolicy myLabelSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-  setSizePolicy(myLabelSizePolicy);
-  fullText = text;
-  cutTextToLabel();
-}
+#include <qtooltip.h>
+
+
 
 KCutLabel::KCutLabel( const QString &text , QWidget *parent, const char *name )
  : QLabel ( parent, name ) {
   QSizePolicy myLabelSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
   setSizePolicy(myLabelSizePolicy);
-  fullText = text;
+  m_fullText = text;
   cutTextToLabel();
-}
-
-KCutLabel::KCutLabel( QWidget *parent)
- : QLabel ( parent) {
-  QSizePolicy myLabelSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-  setSizePolicy(myLabelSizePolicy);
 }
 
 KCutLabel::KCutLabel( QWidget *parent, const char *name )
@@ -34,61 +24,75 @@ void KCutLabel::resizeEvent( QResizeEvent * ) {
 }
 
 void KCutLabel::setText( const QString &text ) {
-  fullText = text;
+  m_fullText = text;
   cutTextToLabel();
 }
 
-void KCutLabel::cutTextToLabel() {
+void KCutLabel::cutTextToLabel()
+{
+  QToolTip::remove( this );
+  QToolTip::hide();
+
+  if( m_fullText.contains( "\n" ) ) {
+    QString newText;
+    QStringList lines = QStringList::split( "\n", m_fullText );
+    for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
+      QString squeezedText = cutToWidth( *it, size().width() );
+      newText += squeezedText;
+      newText += "\n";
+      if( squeezedText != *it )
+	QToolTip::add( this, m_fullText );
+    }
+    newText.truncate( newText.length() - 2 ); // get rid of the last newline
+
+    QLabel::setText( newText );
+  }
+  else {
+    QString squeezedText = cutToWidth( m_fullText, size().width() );
+    QLabel::setText( squeezedText );
+    if( squeezedText != m_fullText )
+      QToolTip::add( this, m_fullText );      
+  }
+}
+
+
+QString KCutLabel::cutToWidth( const QString& fullText, int cutWidth )
+{
   QFontMetrics fm(fontMetrics());
-  int labelWidth = size().width();
+  QString squeezedText = "...";
+  int squeezedWidth = fm.width(squeezedText);
   int textWidth = fm.width(fullText);
-  if (textWidth > labelWidth) {
-    // start with the dots only
-    QString squeezedText = "...";
-    int squeezedWidth = fm.width(squeezedText);
 
-    // estimate how many letters we can add to the dots on both sides
-    int letters = fullText.length() * (labelWidth - squeezedWidth) / textWidth;
+  if( textWidth <= cutWidth ) {
+    return fullText;
+  }
+
+  // estimate how many letters we can add to the dots
+  int letters = fullText.length() * (cutWidth - squeezedWidth) / textWidth;
+  squeezedText = fullText.left(letters) + "...";
+  squeezedWidth = fm.width(squeezedText);
+
+  if (squeezedWidth < cutWidth) {
+    // we estimated too short
+    // add letters while text < label
+    do {
+      letters++;
+      squeezedText = fullText.left(letters) + "...";
+      squeezedWidth = fm.width(squeezedText);
+    } while (squeezedWidth < cutWidth);
+    letters--;
     squeezedText = fullText.left(letters) + "...";
-    squeezedWidth = fm.width(squeezedText);
+  } else if (squeezedWidth > cutWidth) {
+    // we estimated too long
+    // remove letters while text > label
+    do {
+      letters--;
+      squeezedText = fullText.left(letters) + "...";
+      squeezedWidth = fm.width(squeezedText);
+    } while (squeezedWidth > cutWidth);
+  }
 
-    if (squeezedWidth < labelWidth) {
-        // we estimated too short
-        // add letters while text < label
-        do {
-                letters++;
-                squeezedText = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-        } while (squeezedWidth < labelWidth);
-        letters--;
-        squeezedText = fullText.left(letters) + "...";
-    } else if (squeezedWidth > labelWidth) {
-        // we estimated too long
-        // remove letters while text > label
-        do {
-            letters--;
-            squeezedText = fullText.left(letters) + "...";
-            squeezedWidth = fm.width(squeezedText);
-        } while (squeezedWidth > labelWidth);
-    }
-
-    if (letters < 5) {
-    	// too few letters added -> we give up squeezing
-    	QLabel::setText(fullText);
-    } else {
-	QLabel::setText(squeezedText);
-    }
-
-    QToolTip::remove( this );
-    QToolTip::add( this, fullText );
-
-  } else {
-    QLabel::setText(fullText);
-
-    QToolTip::remove( this );
-    QToolTip::hide();
-
-  };
+  return squeezedText;
 }
 
 

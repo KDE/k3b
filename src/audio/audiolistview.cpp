@@ -23,37 +23,37 @@
 
 
 AudioListView::AudioListView(QWidget *parent, const char *name )
- : KListView(parent,name)
+  : KListView(parent,name)
 {
- 	setAcceptDrops( true );
-	setDropVisualizer( true );
-	setAllColumnsShowFocus( true );
-	setDragEnabled( true );
+  setAcceptDrops( true );
+  setDropVisualizer( true );
+  setAllColumnsShowFocus( true );
+  setDragEnabled( true );
 		
-	setupColumns();
-	header()->setClickEnabled( false );
+  setupColumns();
+  header()->setClickEnabled( false );
 }
 
 AudioListView::~AudioListView(){
 }
 
 void AudioListView::setupColumns(){
-	addColumn( "No" );
-	addColumn( "Artist (CD-Text)" );
-	addColumn( "Title (CD-Text)" );
-	addColumn( "Length" );
-	addColumn( "Pregap" );
-	addColumn( "Filename" );
+  addColumn( "No" );
+  addColumn( "Artist (CD-Text)" );
+  addColumn( "Title (CD-Text)" );
+  addColumn( "Length" );
+  addColumn( "Pregap" );
+  addColumn( "Filename" );
 	
-	setItemsRenameable( true );
-	setRenameable( 0, false );
-	setRenameable( 1 );
-	setRenameable( 2 );
-// 	setRenameable( 4 );
+  setItemsRenameable( true );
+  setRenameable( 0, false );
+  setRenameable( 1 );
+  setRenameable( 2 );
+  // 	setRenameable( 4 );
 }
 
 bool AudioListView::acceptDrag(QDropEvent* e) const{
-	return ( e->source() == viewport() || QTextDrag::canDecode(e) );
+  return ( e->source() == viewport() || QTextDrag::canDecode(e) );
 }
 
 

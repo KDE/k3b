@@ -33,6 +33,7 @@
 #include <qdragobject.h>
 #include <qpoint.h>
 #include <qtimer.h>
+#include <qlist.h>
 
 // KDE-includes
 #include <kpopupmenu.h>
@@ -52,9 +53,9 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   grid->setMargin( 2 );
 	
   m_songlist = new AudioListView( this );
+  m_songlist->setSelectionModeExt( KListView::Konqueror );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
   m_fillStatusDisplay->showTime();
-  m_propertiesDialog = 0;
   m_burnDialog = 0;
 	
   grid->addWidget( m_songlist, 0, 0 );
@@ -70,8 +71,6 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	
   connect( m_songlist, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
-  connect( m_songlist, SIGNAL(clicked(QListViewItem*)),
-	   this, SLOT(itemClicked(QListViewItem*)) );
 
 
   connect( pDoc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
@@ -110,12 +109,6 @@ void K3bAudioView::setupPopupMenu()
 }
 
 
-// void K3bAudioView::addItem( K3bAudioTrack* _track )
-// {
-//   //  qDebug( "(K3bAudioView) adding new item to list: " + _track->fileName() );
-//   (void)new AudioListViewItem( _track, m_songlist );
-//   m_fillStatusDisplay->repaint();
-// }
 
 void K3bAudioView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after )
 {
@@ -165,36 +158,23 @@ void K3bAudioView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
     m_popupMenu->popup( _point );
 }
 
-void K3bAudioView::itemClicked( QListViewItem* _item )
-{
-  if( m_propertiesDialog ) {
-    if( m_propertiesDialog->sticky() )
-      updatePropertiesDialog( _item );
-    else
-      m_propertiesDialog->hide();
-  }
-}
-
-void K3bAudioView::updatePropertiesDialog( QListViewItem* _item )
-{
-  if( m_propertiesDialog && m_propertiesDialog->isVisible() ) {
-    AudioListViewItem* _sel = (AudioListViewItem*)_item;
-    if( _sel )
-      m_propertiesDialog->setTrack( _sel->audioTrack() );
-  }
-}
 
 void K3bAudioView::showPropertiesDialog()
 {
-  if( !m_propertiesDialog ) {
-    // get an instance from K3bApp
-    m_propertiesDialog = k3bMain()->audioTrackDialog();
-    connect( m_songlist, SIGNAL(itemRenamed(QListViewItem*)), m_propertiesDialog, SLOT(updateView()) );
-  }		
-  if( !m_propertiesDialog->isVisible() )
-    m_propertiesDialog->show();
-	
-  updatePropertiesDialog( m_songlist->selectedItem() );
+  QList<K3bAudioTrack> selectedTracks;
+  QList<QListViewItem> selectedItems = m_songlist->selectedItems();
+  for( QListViewItem* item = selectedItems.first(); item != 0; item = selectedItems.next() ) {
+    AudioListViewItem* audioItem = dynamic_cast<AudioListViewItem*>(item);
+    if( audioItem ) {
+      selectedTracks.append( audioItem->audioTrack() );
+    }
+  }
+
+  if( !selectedTracks.isEmpty() ) {
+    K3bAudioTrackDialog* d = new K3bAudioTrackDialog( selectedTracks, this );
+    d->exec();
+    delete d;
+  }
 }
 
 

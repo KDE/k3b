@@ -33,7 +33,6 @@ class QListViewItem;
 class KListView;
 class KPopupMenu;
 class KAction;
-class K3bAudioTrackDialog;
 class K3bFillStatusDisplay;
 class K3bAudioBurnDialog;
 class K3bProjectBurnDialog;
@@ -63,7 +62,6 @@ class K3bAudioView : public K3bView  {
   KAction* actionRemove;
   AudioListView* m_songlist;
   KPopupMenu* m_popupMenu;
-  K3bAudioTrackDialog* m_propertiesDialog;
   K3bFillStatusDisplay* m_fillStatusDisplay;
   K3bAudioBurnDialog* m_burnDialog;
 
@@ -85,8 +83,6 @@ class K3bAudioView : public K3bView  {
   void slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* );
   void showPopupMenu( QListViewItem* _item, const QPoint& );
   void showPropertiesDialog();
-  void itemClicked( QListViewItem* _item );
-  void updatePropertiesDialog( QListViewItem* _item );
   void removeTrack();
 };
 

@@ -3,28 +3,27 @@
 #define KCUTLABEL_H
 
 #include <qlabel.h>
-#include <qtooltip.h>
+
 
 
 /*
  * @ref QLabel
  */
-class KCutLabel : public QLabel {
+class KCutLabel : public QLabel 
+{
   Q_OBJECT
 
-public:
+ public:
   /**
    * Default constructor.
    */
-  KCutLabel( QWidget *parent );
-  KCutLabel( QWidget *parent, const char *name);                       //### merge with the above
-  KCutLabel( const QString &text, QWidget *parent );
-  KCutLabel( const QString &text, QWidget *parent, const char *name ); //### merge with the above
+  KCutLabel( QWidget *parent = 0, const char *name = 0);
+  KCutLabel( const QString &text, QWidget *parent = 0, const char *name = 0 );
 
-public slots:
+ public slots:
   void setText( const QString & );
 
-protected:
+ protected:
   /**
    * used when widget is resized
    */
@@ -33,7 +32,8 @@ protected:
    * does the dirty work
    */
   void cutTextToLabel();
-  QString fullText;
+  QString cutToWidth( const QString&, int );
+  QString m_fullText;
 };
 
 #endif // KCUTLABEL_H

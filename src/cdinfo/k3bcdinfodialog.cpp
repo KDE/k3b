@@ -97,18 +97,4 @@ void K3bCdInfoDialog::slotDeviceChanged()
 }
 
 
-void K3bCdInfoDialog::closeEvent( QCloseEvent* e )
-{
-  delayedDestruct();
-
-  e->accept();
-}
-
-
-void K3bCdInfoDialog::slotClose()
-{
-  close();
-}
-
-
 #include "k3bcdinfodialog.moc"

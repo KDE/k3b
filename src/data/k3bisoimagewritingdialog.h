@@ -42,7 +42,6 @@ Q_OBJECT
 
  protected slots:
   void slotOk();
-  void slotClose();
   void updateImageSize( const QString& );
   void slotFindImageFile();
   void slotWriterChanged();

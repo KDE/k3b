@@ -19,7 +19,9 @@
 #define K3BAUDIOTRACKDIALOG_H
 
 
-#include <kdialog.h>
+#include <kdialogbase.h>
+
+#include <qlist.h>
 
 class K3bAudioTrack;
 class QLineEdit;
@@ -29,7 +31,6 @@ class QCheckBox;
 class QComboBox;
 class KToggleAction;
 class KIntNumInput;
-class K3bStickyButton;
 class KCutLabel;
 
 
@@ -37,57 +38,42 @@ class KCutLabel;
   *@author Sebastian Trueg
   */
 
-class K3bAudioTrackDialog : public KDialog  {
+class K3bAudioTrackDialog : public KDialogBase
+{
+  Q_OBJECT
 
-   Q_OBJECT
-
-public:
-	K3bAudioTrackDialog(QWidget *parent=0, const char *name=0);
-	~K3bAudioTrackDialog();
-
-	bool sticky() const { return m_sticky; }
+ public:
+  K3bAudioTrackDialog( QList<K3bAudioTrack>&, QWidget *parent=0, const char *name=0);
+  ~K3bAudioTrackDialog();
 	
-public slots:
-	void setTrack( K3bAudioTrack* _track );
-	void setSticky( bool s );
-	void updateView();
-	
-protected slots:
-	void updateTitle( const QString& );
-	void updatePerformer( const QString& );
-	void updateArranger( const QString& );
-	void updateSongwriter( const QString& );
-	void updateIsrc( const QString& );
-	void updateMessage();
-	void updatePregap( int );
-	void updatePreEmp( int );
-	void updateCopyProtection( int );
-	void slotChangePregapFormat( const QString& );
+ protected slots:
+  void slotChangePregapFormat( const QString& );
+  void slotOk();
+  void slotApply();
+  void slotCancel();
 			
-private:
-	K3bAudioTrack* m_track;
+ private:
+  QList<K3bAudioTrack> m_tracks;
 
-    QLineEdit* m_editPerformer;
-    QLineEdit* m_editTitle;
-    QMultiLineEdit* m_editMessage;
-    QLineEdit* m_editArranger;
-    QLineEdit* m_editSongwriter;
-    QLineEdit* m_editIsrc;
-    K3bStickyButton* m_stickyButton;
-    QLabel* m_labelMimeType;
-    KCutLabel* m_displayFileName;
-    QLabel* m_displaySize;
-    QLabel* m_displayLength;
-    KIntNumInput* m_inputPregap;
-    QComboBox* m_comboPregapFormat;
-    QCheckBox* m_checkPreEmp;
-    QCheckBox* m_checkCopy;
+  QLineEdit* m_editPerformer;
+  QLineEdit* m_editTitle;
+  QMultiLineEdit* m_editMessage;
+  QLineEdit* m_editArranger;
+  QLineEdit* m_editSongwriter;
+  QLineEdit* m_editIsrc;
+  QLabel* m_labelMimeType;
+  KCutLabel* m_displayFileName;
+  QLabel* m_displaySize;
+  QLabel* m_displayLength;
+  KIntNumInput* m_inputPregap;
+  QComboBox* m_comboPregapFormat;
+  QCheckBox* m_checkPreEmp;
+  QCheckBox* m_checkCopy;
 	
-    bool m_sticky;
-    bool m_bPregapSeconds;
+  bool m_bPregapSeconds;
 	
-    void setupGui();
-    void setupConnections();
+  void setupGui();
+  void setupConnections();
 };
 
 #endif

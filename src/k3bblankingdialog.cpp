@@ -179,14 +179,14 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
   // set the icon
   switch( type ) {
   case K3bJob::ERROR:
-    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "stop", KIcon::Small, 16 ) );
+    item->setPixmap( 0, SmallIcon( "stop" ) );
     break;
   case K3bJob::PROCESS:
-    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::Small, 16 ) );
+    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     break;
   case K3bJob::STATUS:
   default:
-    item->setPixmap( 0, kapp->iconLoader()->loadIcon( "ok", KIcon::Small, 16 ) );
+    item->setPixmap( 0, SmallIcon( "ok" ) );
   }
 }
 
@@ -204,16 +204,12 @@ void K3bBlankingDialog::closeEvent( QCloseEvent* e )
     if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes ) {
       m_job->cancel();
       
-      // do a delayed destruct
-      delayedDestruct();
-      
       e->accept();
     }
     else
       e->ignore();
   }
   else {
-    delayedDestruct();
     e->accept();
   }
 }

@@ -98,7 +98,6 @@ K3bMainWindow::K3bMainWindow()
   actionFileBurn->setEnabled( false );
   actionFileExport->setEnabled( false );
 
-  m_audioTrackDialog = 0;
   m_optionDialog = 0;
 }
 
@@ -759,13 +758,6 @@ void K3bMainWindow::slotNewDataDoc()
   createClient(doc);
 }
 
-K3bAudioTrackDialog* K3bMainWindow::audioTrackDialog()
-{
-  if( !m_audioTrackDialog )
-    m_audioTrackDialog = new K3bAudioTrackDialog( this );
-		
-  return m_audioTrackDialog;
-}
 
 void K3bMainWindow::slotFileBurn()
 {
@@ -918,23 +910,24 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 void K3bMainWindow::slotCdInfo()
 {
   K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod" );
-  d->show();  // will delete itself (modeless)
+  d->exec();
+  delete d;
 }
 
 
 void K3bMainWindow::slotBlankCdrw()
 {
-  // K3bBlankingDialog is modeless so don't use exec!
-  // the dialog also does a delayed self-destrcut
   K3bBlankingDialog* d = new K3bBlankingDialog( this, "blankingdialog" );
-  d->show();
+  d->exec();
+  delete d;
 }
 
 
 void K3bMainWindow::slotWriteIsoImage()
 {
   K3bIsoImageWritingDialog* d = new K3bIsoImageWritingDialog( this, "isodialog" );
-  d->show();
+  d->exec();
+  delete d;
 }
 
 

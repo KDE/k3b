@@ -42,7 +42,6 @@ class K3bView;
 class K3bDirView;
 class K3bDeviceManager;
 class K3bExternalBinManager;
-class K3bAudioTrackDialog;
 class K3bOptionDialog;
 class K3bJob;
 class K3bProjectTabWidget;
@@ -85,7 +84,6 @@ class K3bMainWindow : public KDockMainWindow
 
   K3bDeviceManager* deviceManager() { return m_deviceManager; }
   K3bExternalBinManager* externalBinManager() { return m_externalBinManager; }
-  K3bAudioTrackDialog* audioTrackDialog();
   KConfig* config() { return m_config; }
 	
   /** does some initialisation like searching for external programs */
@@ -274,7 +272,6 @@ class K3bMainWindow : public KDockMainWindow
 		
   // The K3b-specific widgets
   K3bDirView* m_dirView;
-  K3bAudioTrackDialog* m_audioTrackDialog;
   K3bOptionDialog* m_optionDialog;
 	
   bool m_useID3TagForMp3Renaming;

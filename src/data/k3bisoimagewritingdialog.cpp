@@ -169,12 +169,6 @@ void K3bIsoImageWritingDialog::slotOk()
 }
 
 
-void K3bIsoImageWritingDialog::slotClose()
-{
-  delayedDestruct();
-}
-
-
 void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 {
   if( QFile::exists( path ) ) {
