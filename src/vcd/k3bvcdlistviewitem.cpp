@@ -51,7 +51,7 @@ QString K3bVcdListViewItem::text(int i) const
   switch( i )
     {
     case 0:
-      return QString::number( m_track->index() +1 ).rightJustify( 2, '0' );
+      return QString::number( m_track->index() +2 ).rightJustify( 2, '0' );
     case 1:
       return m_track->fileName();
     case 2:
