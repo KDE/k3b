@@ -335,6 +335,9 @@ void K3bDataJob::writeCD()
   // display progress
   *m_process << "-v";
 
+  if( K3bExternalBinManager::self()->binObject("cdrecord")->hasFeature("gracetime") )
+    *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, man, why do you do this to us?)
+
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
     if( m_doc->onTheFly() )
@@ -351,7 +354,8 @@ void K3bDataJob::writeCD()
   if( m_doc->dummy() )
     *m_process << "-dummy";
   if( overburn )
-    *m_process << "-overburn";  // this only seems to work in non-the-fly modus
+    *m_process << "-overburn";
+
 
   // multisession
   if( m_doc->multiSessionMode() == K3bDataDoc::START ||
@@ -823,23 +827,28 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-gui";
   *m_process << "-graft-points";
 
+  QString t;
+  if( m_doc->onTheFly() )
+    t = "\"";  // when writing on-the-fly we use a ShellProcess and there we need to put everything
+               // that might contain a space in quotations
+
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
-    *m_process << "-V" << m_doc->isoOptions().volumeID();
+    *m_process << "-V" << t+m_doc->isoOptions().volumeID()+t;
   }
   if( !m_doc->isoOptions().volumeSetId().isEmpty() ) {
-    *m_process << "-volset" << m_doc->isoOptions().volumeSetId();
+    *m_process << "-volset" << t+m_doc->isoOptions().volumeSetId()+t;
   }
   if( !m_doc->isoOptions().applicationID().isEmpty() ) {
-    *m_process << "-A" << m_doc->isoOptions().applicationID();
+    *m_process << "-A" << t+m_doc->isoOptions().applicationID()+t;
   }
   if( !m_doc->isoOptions().publisher().isEmpty() ) {
-    *m_process << "-P" << m_doc->isoOptions().publisher();
+    *m_process << "-P" << t+m_doc->isoOptions().publisher()+t;
   }
   if( !m_doc->isoOptions().preparer().isEmpty() ) {
-    *m_process << "-p" << m_doc->isoOptions().preparer();
+    *m_process << "-p" << t+m_doc->isoOptions().preparer()+t;
   }
   if( !m_doc->isoOptions().systemId().isEmpty() ) {
-    *m_process << "-sysid" << m_doc->isoOptions().systemId();
+    *m_process << "-sysid" << t+m_doc->isoOptions().systemId()+t;
   }
 
   if( m_doc->isoOptions().createRockRidge() ) {
