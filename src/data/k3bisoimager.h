@@ -132,6 +132,8 @@ class K3bIsoImager : public K3bJob
   QStringList m_tempFiles;
 
   int m_fdToWriteTo;
+
+  bool m_containsFilesWithMultibleBackslashes;
 };
 
 

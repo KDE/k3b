@@ -20,6 +20,8 @@
 #include <tools/k3bexternalbinmanager.h>
 #include <device/k3bdevice.h>
 #include <k3bprocess.h>
+#include <k3bcore.h>
+#include <tools/k3bversion.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -33,7 +35,8 @@
 #include <qregexp.h>
 #include <qtimer.h>
 
-
+#include <errno.h>
+#include <string.h>
 
 
 K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
@@ -165,8 +168,27 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("mkisofs finished successfully."), STATUS );
 	emit finished( true );
       }
-      else {
-	emit infoMessage( i18n("mkisofs returned error: %1").arg(p->exitStatus()), ERROR );
+      else  {
+	switch( p->exitStatus() ) {
+	case 2:
+	  // mkisofs seems to have a bug that prevents to use filenames 
+	  // that contain one or more backslashes
+	  // mkisofs 1.14 has the bug, 1.15a40 not
+	  // TODO: find out the version that fixed the bug
+	  if( m_containsFilesWithMultibleBackslashes &&
+	      k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
+	    emit infoMessage( i18n("Due to a bug in mkisofs, K3b is unable to handle "
+				   "filenames that contain more than one backslash:"), ERROR );
+
+	    break;
+	  }
+	  // otherwise just fall through
+	default:
+	  emit infoMessage( i18n("mkisofs returned error: %1").arg(p->exitStatus()), ERROR );
+	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	}
+
 	emit finished( false );
       }
     }
@@ -315,6 +337,8 @@ void K3bIsoImager::start()
   emit started();
 
   cleanup();
+
+  m_containsFilesWithMultibleBackslashes = false;
 
   m_process = new K3bProcess();
 
@@ -598,6 +622,11 @@ bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
 	  )
        ) {
 	
+      // some versions of mkisofs seem to have a bug that prevents to use filenames 
+      // that contain one or more backslashes
+      if( item->k3bPath().contains("\\") )
+	m_containsFilesWithMultibleBackslashes = true;
+
       if( m_doc->isoOptions().createJoliet() )
 	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) );
       else
@@ -702,8 +731,8 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
 {
   QString newStr( str );
 
-  newStr.replace( QRegExp( "\\\\\\\\" ), "\\\\\\\\\\\\\\\\" );
-  newStr.replace( QRegExp( "=" ), "\\=" );
+  newStr.replace( "\\\\", "\\\\\\\\" );
+  newStr.replace( "=", "\\=" );
 
   return newStr;
 }

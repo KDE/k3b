@@ -121,16 +121,7 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
       const KURL& url = *it;
       if( url.isLocalFile() && QFile::exists(url.path()) ) {
 
-	// mkisofs seems to have a bug that prevents us to use filenames 
-	// that contain one or more backslashes
-	// -----------------------------------------------------------------------
-	if( url.path().contains( "\\\\" ) ) {
-	  m_mkisofsBuggyFiles.append( url.path() );
-	}
-	// -----------------------------------------------------------------------
-
-	else
-	  m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
+	m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
       }
       else
 	m_notFoundFiles.append( url.path() );
@@ -610,15 +601,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       m_notFoundFiles.append( urlElem.text() );
     else {
 
-      // mkisofs seems to have a bug that prevents us to use filenames 
-      // that contain one or more backslashes
-      // -----------------------------------------------------------------------
-      if( urlElem.text().contains( "\\\\" ) ) {
-	m_mkisofsBuggyFiles.append( urlElem.text() );
-      }
-      // -----------------------------------------------------------------------
-
-      else if( !elem.attribute( "bootimage" ).isEmpty() ) {
+      if( !elem.attribute( "bootimage" ).isEmpty() ) {
 	K3bBootItem* bootItem = new K3bBootItem( urlElem.text(), this, parent, elem.attributeNode( "name" ).value() );
 	if( elem.attribute( "bootimage" ) == "floppy" )
 	  bootItem->setImageType( K3bBootItem::FLOPPY );
@@ -1108,18 +1091,6 @@ void K3bDataDoc::informAboutNotFoundFiles()
  				  m_notFoundFiles, i18n("Not found") );
     m_notFoundFiles.clear();
   }
-
-
-  // mkisofs seems to have a bug that prevents us to use filenames 
-  // that contain one or more backslashes
-  // -----------------------------------------------------------------------
-  if( !m_mkisofsBuggyFiles.isEmpty() ) {
-     KMessageBox::informationList( firstView(), i18n("Due to a bug in mkisofs, K3b is unable to handle "
- 						  "filenames that contain more than one backslash:"),
-	          				  m_mkisofsBuggyFiles, i18n("Sorry") );
-    m_mkisofsBuggyFiles.clear();
-  }
-  // -----------------------------------------------------------------------
 }
 
 

@@ -179,14 +179,6 @@ class K3bDataDoc : public K3bDoc
 
   QStringList m_notFoundFiles;
 
-
-  // mkisofs seems to have a bug that prevents us to use filenames 
-  // that contain one or more backslashes
-  // -----------------------------------------------------------------------
-  QStringList m_mkisofsBuggyFiles;
-  // -----------------------------------------------------------------------
-
-
   K3bRootItem* m_root;
   QString m_name;
   QString m_dummyDir;
