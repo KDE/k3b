@@ -6,7 +6,7 @@
 
 class KAction;
 class KToggleAction;
-class QHBoxLayout;
+class QGridLayout;
 class QToolButton;
 
 
@@ -26,7 +26,7 @@ class K3bToolBox : public QFrame
 
  protected:
   QToolButton* addClearButton( KAction* );
-  QHBoxLayout* m_mainLayout;
+  QGridLayout* m_mainLayout;
 };
 
 

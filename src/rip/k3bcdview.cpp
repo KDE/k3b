@@ -16,17 +16,12 @@
  ***************************************************************************/
 
 #include "k3bcdview.h"
-//#include "k3bcdda.h"
-//#include "k3bcddacopy.h"
 #include "../k3b.h"
-// #include "../device/k3bdevicemanager.h"
-// #include "../device/k3bdevice.h"
 #include "../tools/k3bglobals.h"
 #include "k3bripperwidget.h"
-//#include "k3bfilenamepatterndialog.h"
-//#include "k3bpatternparser.h"
 #include "../k3bcddbmultientriesdialog.h"
 #include "../kcutlabel.h"
+#include "../k3btoolbox.h"
 
 #include <qlayout.h>
 #include <qmessagebox.h>
@@ -36,8 +31,6 @@
 #include <qptrlist.h>
 
 #include <kiconloader.h>
-// #include <ktoolbar.h>
-// #include <ktoolbarbutton.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -112,6 +105,9 @@ void K3bCdView::setupGUI()
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( m_listView, SIGNAL(selectionChanged()),
 	   this, SLOT(slotSelectionChanged()) );
+
+  K3bToolBox* toolBox = new K3bToolBox( this );
+  toolBox->addButton( m_copyAction );
 }
 
 

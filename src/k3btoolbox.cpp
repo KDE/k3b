@@ -14,7 +14,7 @@ K3bToolBox::K3bToolBox( QWidget* parent, const char* name )
 {
   setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed) );
 
-  m_mainLayout = new QHBoxLayout( this );
+  m_mainLayout = new QGridLayout( this );
   m_mainLayout->setMargin( 1 );
   m_mainLayout->setSpacing( 0 );
 }
@@ -36,7 +36,10 @@ void K3bToolBox::addButton( KAction* action )
 
 void K3bToolBox::addSpacing()
 {
-  m_mainLayout->addSpacing( 5 );
+  int lastStretch = m_mainLayout->colStretch( m_mainLayout->numCols()-1 );
+  m_mainLayout->setColStretch( m_mainLayout->numCols()-1, 0 );
+  m_mainLayout->addColSpacing( m_mainLayout->numCols()-1, 5 );
+  m_mainLayout->setColStretch( m_mainLayout->numCols(), lastStretch );
 }
 
 
@@ -45,15 +48,23 @@ void K3bToolBox::addLabel( const QString& text )
   QLabel* label = new QLabel( text, this );
   label->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
 
-  m_mainLayout->addWidget( label );
+  addWidget( label );
 }
 
 
 void K3bToolBox::addWidget( QWidget* w )
 {
   // TODO: reparent??
+  m_mainLayout->setColStretch( m_mainLayout->numCols()-1, 0 );
 
-  m_mainLayout->addWidget( w );
+  m_mainLayout->addWidget( w, 0, m_mainLayout->numCols()-1 );
+
+  if( w->sizePolicy().horData() == QSizePolicy::Fixed || w->sizePolicy().horData() == QSizePolicy::Maximum )
+    m_mainLayout->setColStretch( m_mainLayout->numCols(), 1 );
+  else {
+    m_mainLayout->setColStretch( m_mainLayout->numCols()-1, 1 );
+    m_mainLayout->setColStretch( m_mainLayout->numCols(), 0 );
+  }
 }
 
 
@@ -83,7 +94,7 @@ QToolButton* K3bToolBox::addClearButton( KAction* action )
 
   button->setAutoRaise( true );
 
-  m_mainLayout->addWidget( button );
+  addWidget( button );
 
   return button;
 }
