@@ -225,7 +225,6 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotShowDirView();
 
-  void slotCdInfo();
   void slotBlankCdrw();
   void slotWriteIsoImage();
   void slotK3bSetup();
@@ -285,7 +284,6 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionSettingsConfigure;
   KAction* actionSettingsK3bSetup;
   KAction* actionFileExport;
-  KAction* actionToolsCdInfo;
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsWriteIsoImage;
   KAction* actionProjectAddFiles;

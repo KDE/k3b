@@ -27,7 +27,6 @@
 #include "k3bfilenamepatterndialog.h"
 #include "k3bpatternparser.h"
 
-#include <qwidget.h>
 #include <qlayout.h>
 #include <qmessagebox.h>
 #include <qarray.h>
@@ -62,7 +61,7 @@ extern "C" {
 #define ID_PLAYSONG              1
 
 K3bCdView::K3bCdView(QWidget *parent, const char *name=0)
-  : QVBox(parent, name){
+  : K3bCdContentsView(parent, name){
 
   readSettings();
 
@@ -76,7 +75,12 @@ K3bCdView::~K3bCdView(){
   delete m_cdda;
 }
 
-void K3bCdView::setupGUI(){
+void K3bCdView::setupGUI()
+{
+  QVBoxLayout* layout = new QVBoxLayout( this );
+  layout->setAutoAdd( true );
+
+
   // FIXME: the toolbar can be moved around and not be docked again
   KToolBar *toolBar = new KToolBar( k3bMain(), this, "cdviewtoolbar" );
 
@@ -95,7 +99,6 @@ void K3bCdView::setupGUI(){
   m_listView->setAllColumnsShowFocus(true);
 
 
-  KAction* reloadAction   = KStdAction::redisplay( this, SLOT(reload()), m_actionCollection );
   KAction* copyAction     = KStdAction::copy( this, SLOT(prepareRipping()), m_actionCollection );
   KAction* viewModeAction = new KAction( i18n("&Selection Mode"), "view_choose", 0, this,
 					 SLOT(changeSelectionMode()), m_actionCollection );
@@ -104,11 +107,13 @@ void K3bCdView::setupGUI(){
   KAction* stopAction     = new KAction( i18n("&Stop"), "player_stop", 0, this, SLOT(stop()),
 					 m_actionCollection );
 
-  reloadAction->plug( toolBar );
   copyAction->plug( toolBar );
   viewModeAction->plug( toolBar );
   playAction->plug( toolBar );
   stopAction->plug( toolBar );
+
+
+  // TODO: create a KActionMenu (or KPopupMenu) from the actions
 
 
   m_cddb = new K3bCddb();
@@ -176,10 +181,10 @@ void K3bCdView::showCdContent( ){
   }
 }
 
-void K3bCdView::showCdView(const QString& device)
+void K3bCdView::showCdView( K3bDevice* device )
 {
   if( isEnabled() ) {
-    m_device = device;
+    m_device = device->devicename();
     reload();
   }
 }
@@ -307,6 +312,9 @@ void K3bCdView::stop(){
 }
 
 void K3bCdView::slotMenuActivated( QListViewItem *_item, const QPoint &point, int id){
+
+  // TODO: show the KAcionMenu (or KPopupMenu) s.o.
+
   /*KPopupMenu *_popup = new KPopupMenu(this, "editmenu");
     _popup->setTitle(i18n("Helpers") );
     _popup->insertItem(i18n("Filename Pattern"), ID_PATTERN, 1 );

@@ -27,16 +27,19 @@
 #include <kfiledetailview.h>
 
 class QSplitter;
-class KFileView;
 class KURL;
 class K3bCdView;
 class K3bFileView;
 class K3bFilmView;
 class K3bDeviceManager;
-class KProcess;
 class KComboBox;
 class K3bFileTreeView;
 class K3bDevice;
+class QWidgetStack;
+class K3bDiskInfo;
+class K3bDiskInfoView;
+class KActionCollection;
+
 
 /**
   *@author Sebastian Trueg
@@ -48,7 +51,7 @@ class K3bDirView : public QVBox
  public:
   K3bDirView(QWidget *parent=0, const char *name=0);
   ~K3bDirView();
-  void setupFinalize( K3bDeviceManager *dm);
+  void setupFinalize( K3bDeviceManager *dm );
 
  protected slots:
   void slotDirActivated( const KURL& );
@@ -58,15 +61,23 @@ class K3bDirView : public QVBox
  // void slotCDDirActivated( const QString&  );
   void slotUpdateURLCombo( const KURL& url );
   void slotMountDevice( const QString& );
+  void slotDiskInfoReady( const K3bDiskInfo& info );
+  void reload();
+  void home();
 
  private:
-  K3bCdView* m_cdView;
+  QWidgetStack* m_viewStack;
+
+  K3bCdView*   m_cdView;
   K3bFilmView* m_filmView;
   K3bFileView* m_fileView;
+  K3bDiskInfoView* m_infoView;
+
   KComboBox* m_urlCombo;
   QSplitter* m_mainSplitter;
   K3bFileTreeView* m_fileTreeView;
-  bool m_initialized;
+
+  KActionCollection* m_actionCollection;
 };
 
 #endif

@@ -24,44 +24,49 @@
 
 class KProcess;
 class K3bDvdContent;
+class K3bDevice;
+
+
 /**
   *@author Sebastian Trueg
   */
 
-class K3bTcWrapper : public QObject  {
-    Q_OBJECT
-public: 
-    K3bTcWrapper();
-    ~K3bTcWrapper();
-    /* Returns true if transcode tools installed
-    */
-    bool supportDvd();
-    void checkDvd( const QString&);
-    QValueList<K3bDvdContent> getDvdTitles() const;
+class K3bTcWrapper : public QObject
+{
+  Q_OBJECT
 
-private slots:
+ public: 
+  K3bTcWrapper( QObject* parent = 0 );
+  ~K3bTcWrapper();
+  /* Returns true if transcode tools installed
+   */
+  static bool supportDvd();
+  void checkDvd( K3bDevice* );
+  QValueList<K3bDvdContent> getDvdTitles() const;
+
+ private slots:
   void slotParseTcprobeOutput( KProcess *p, char *text, int index);
   void slotParseTcprobeError( KProcess *p, char *text, int index);
   void slotTcprobeExited( KProcess* );
 	
-signals:
-    void notSupportedDisc();
-    void successfulDvdCheck( bool );
+ signals:
+  void notSupportedDisc();
+  void successfulDvdCheck( bool );
 
-private:
-    QString m_errorBuffer;
-    QString m_outputBuffer;
-    typedef QValueList<K3bDvdContent> DvdTitle;
-    DvdTitle m_dvdTitles;
-    bool m_firstProbeDone;
-    int m_currentTitle;
-    int m_allTitle;
-    int m_allAngle;
-    QString m_device;
+ private:
+  QString m_errorBuffer;
+  QString m_outputBuffer;
+  typedef QValueList<K3bDvdContent> DvdTitle;
+  DvdTitle m_dvdTitles;
+  bool m_firstProbeDone;
+  int m_currentTitle;
+  int m_allTitle;
+  int m_allAngle;
+  K3bDevice*  m_device;
 
 
-    K3bDvdContent* parseTcprobe();
-    void runTcprobe( const QString& );
+  K3bDvdContent* parseTcprobe();
+  void runTcprobe();
 };
 
 #endif

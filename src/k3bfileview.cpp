@@ -68,7 +68,7 @@ QDragObject* K3bFileView::PrivateFileView::dragObject()
 
 
 K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
-  : QVBox(parent,name) 
+  : K3bCdContentsView(parent,name) 
 {
   setupGUI();
 }
@@ -87,6 +87,9 @@ KActionCollection* K3bFileView::actionCollection() const
 
 void K3bFileView::setupGUI()
 {
+  QVBoxLayout* layout = new QVBoxLayout( this );
+  layout->setAutoAdd( true );
+
   m_dirOp           = new KDirOperator( QDir::home().absPath(), this );
   KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
 
@@ -103,10 +106,8 @@ void K3bFileView::setupGUI()
 						  m_dirOp->actionCollection(), "add_file_to_project");
 
   // add some actions to the toolbar
-//   m_dirOp->actionCollection()->action("up")->plug( toolBar );
-//   m_dirOp->actionCollection()->action("home")->plug( toolBar );
-//   m_dirOp->actionCollection()->action("reload")->plug( toolBar );
-//   toolBar->insertSeparator();
+  m_dirOp->actionCollection()->action("up")->plug( toolBar );
+  toolBar->insertSeparator();
   actionPlay->plug( toolBar );
   toolBar->insertSeparator();
 
@@ -139,6 +140,8 @@ void K3bFileView::setupGUI()
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
   connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
+
+  actionPlay->setEnabled( false );
 }
 
 
@@ -239,6 +242,12 @@ void K3bFileView::slotFilterChanged()
 void K3bFileView::slotCheckActions()
 {
   m_dirOp->actionCollection()->action("add_file_to_project")->setEnabled( k3bMain()->activeView() != 0 );
+}
+
+
+void K3bFileView::reload()
+{
+  m_dirOp->actionCollection()->action("reload")->activate();
 }
 
 

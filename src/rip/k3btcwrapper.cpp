@@ -27,8 +27,11 @@
 #include <kprocess.h>
 #include <klocale.h>
 
-K3bTcWrapper::K3bTcWrapper(){
+K3bTcWrapper::K3bTcWrapper( QObject* parent )
+  : QObject( parent )
+{
 }
+
 K3bTcWrapper::~K3bTcWrapper(){
 }
 
@@ -36,30 +39,33 @@ bool K3bTcWrapper::supportDvd(){
     return k3bMain()->externalBinManager()->foundBin("tcprobe");
 }
 
-void K3bTcWrapper::checkDvd( const QString& device) {
+void K3bTcWrapper::checkDvd( K3bDevice* device ) {
     m_firstProbeDone = false;
     m_currentTitle = 1;
     m_device = device;
-    runTcprobe( device );
+    runTcprobe();
     m_dvdTitles.clear();
 }
 
-void K3bTcWrapper::runTcprobe( const QString& device ){
-    m_outputBuffer = QString::null;
-    m_errorBuffer = QString::null;
-    K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( device );
-    K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tcprobe");
-    KShellProcess *p = new KShellProcess();
-    *p << bin->path << "-i" <<  dev->ioctlDevice() << "-T" << QString::number(m_currentTitle);
-    connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseTcprobeError(KProcess*, char*, int)) );
-    connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseTcprobeOutput(KProcess*, char*, int)) );
-    connect( p, SIGNAL(processExited(KProcess*)), this, SLOT(slotTcprobeExited( KProcess* )) );
+void K3bTcWrapper::runTcprobe()
+{
+  m_outputBuffer = QString::null;
+  m_errorBuffer = QString::null;
 
-    if( !p->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-        // something went wrong when starting the program
-        // it "should" be the executable
-        qDebug("(K3bDirView) Error during checking drive for DVD.");
-    }
+  K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tcprobe");
+  KShellProcess *p = new KShellProcess();
+
+  *p << bin->path << "-i" <<  m_device->ioctlDevice() << "-T" << QString::number(m_currentTitle);
+
+  connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseTcprobeError(KProcess*, char*, int)) );
+  connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseTcprobeOutput(KProcess*, char*, int)) );
+  connect( p, SIGNAL(processExited(KProcess*)), this, SLOT(slotTcprobeExited( KProcess* )) );
+  
+  if( !p->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+    // something went wrong when starting the program
+    // it "should" be the executable
+    qDebug("(K3bDirView) Error during checking drive for DVD.");
+  }
 }
 
 void K3bTcWrapper::slotParseTcprobeOutput( KProcess *p, char *text, int len){
@@ -80,7 +86,8 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         // check dvd
         QStringList::Iterator str = errorLines.begin();
         if( !(*str).contains("tcprobe") && !(*str).contains("DVD image/device") ) {
-            emit notSupportedDisc( );
+	  qDebug("(K3bTcWrapper) no readable dvd.");
+            emit successfulDvdCheck( false );
             return;
         }
         // chekc
@@ -119,7 +126,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         m_dvdTitles.append( con );
         m_currentTitle++;
         if( m_currentTitle <= m_allTitle) {
-            runTcprobe( m_device );
+            runTcprobe();
         } else {
             emit successfulDvdCheck( true );
         }

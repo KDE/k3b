@@ -22,8 +22,8 @@
 #define DEFAULT_ALBUM    "album"
 #define DEFAULT_TITLE      "title"
 
-#include <qwidget.h>
-#include <qvbox.h>
+#include "../k3bcdcontentsview.h"
+
 #include <qarray.h>
 #include <qstringlist.h>
 
@@ -44,13 +44,13 @@ class KListView;
 class QListViewItem;
 class QPoint;
 class KActionCollection;
-
+class K3bDevice;
 
 
 /**
   *@author Sebastian Trueg
   */
-class K3bCdView : public QVBox  
+class K3bCdView : public K3bCdContentsView
 {
   Q_OBJECT
 
@@ -59,13 +59,12 @@ class K3bCdView : public QVBox
   ~K3bCdView();
 
   void showCdContent();
-  void refresh();
   void setFilePatternList(QStringList p){ m_filePatternList = p; };
   void setDirPatternList(QStringList p){ m_dirPatternList = p; };
 
  public slots:
    /** */
-  void showCdView(const QString& device);
+  void showCdView( K3bDevice* dev );
   void reload();
 
  signals:

@@ -304,7 +304,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
 bool K3bExternalBinManager::saveConfig( KConfig* c )
 {
     for( int i=0; i< NUM_BIN_PROGRAMS; i++) {
-        if( QFile::exists( m_binMap[ binPrograms[ i ] ]->path ) )
+      if( QFile::exists( m_binMap[ binPrograms[ i ] ]->path ) )
             c->writeEntry( QString( binPrograms[ i ] ) + " path", m_binMap[ binPrograms[ i ] ]->path );
     }
   return true;

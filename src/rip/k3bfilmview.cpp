@@ -20,6 +20,7 @@
 #include "../k3b.h"
 #include "k3bdvdcontent.h"
 #include "k3bdvdripperwidget.h"
+#include "../device/k3bdevice.h"
 
 #include <qstring.h>
 #include <qlayout.h>
@@ -45,11 +46,13 @@
 #include <kaction.h>
 
 
-K3bFilmView::K3bFilmView(QWidget *parent, const char *name ) : QWidget(parent,name) {
-    m_tcWrapper = new K3bTcWrapper();
-    connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool ) ), this, SLOT( slotDvdChecked( bool )) );
-    connect( m_tcWrapper, SIGNAL( notSupportedDisc() ), this, SLOT( slotNotSupportedDisc( )) );
-    setupGui();
+K3bFilmView::K3bFilmView(QWidget *parent, const char *name )
+ : K3bCdContentsView( parent, name )
+{
+  m_tcWrapper = new K3bTcWrapper( this );
+  connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool ) ), this, SLOT( slotDvdChecked( bool )) );
+  //    connect( m_tcWrapper, SIGNAL( notSupportedDisc() ), this, SLOT( slotNotSupportedDisc( )) );
+  setupGui();
 }
 
 K3bFilmView::~K3bFilmView(){
@@ -59,11 +62,8 @@ K3bFilmView::~K3bFilmView(){
 void K3bFilmView::setupGui(){
     KToolBar *toolBar = new KToolBar( k3bMain(), this, "filmviewtoolbar" );
     KIconLoader *_il = new KIconLoader("k3b");
-    KAction *reload = new KAction( i18n("&Reload"), _il->iconPath("reload", KIcon::Toolbar), 0, this,
-                               SLOT( slotReload()), this);
     KAction *grab = new KAction(i18n("&Rip CD"), _il->iconPath("editcopy", KIcon::Toolbar), 0, this,
                                SLOT( slotRip()), this);
-    reload->plug( toolBar );
     grab->plug( toolBar );
 
     QGroupBox *mainAVGroup = new QGroupBox( this );
@@ -111,6 +111,10 @@ void K3bFilmView::setupGui(){
     _groupAudioButton->layout()->setSpacing(0);
     _groupAudioButton->layout()->setMargin(0);
     _groupAudioButton->addSpace(0);
+
+
+    //FIXME: boese: don't use fixed size if avoidable!
+
     QPushButton *_audioAllButton = new QPushButton( i18n("all"),  _groupAudioButton );
     _audioAllButton->setFixedSize( 60, 20 );
     QPushButton *_audioNoneButton = new QPushButton( i18n("none"),  _groupAudioButton );
@@ -178,23 +182,22 @@ void K3bFilmView::setupGui(){
 }
 
 
-void K3bFilmView::setDevice( const QString& device ){
+void K3bFilmView::setDevice( K3bDevice* device ){
     m_device = device;
 }
 
-void K3bFilmView::showAndCheck(){
-    /*
-    if( !m_initialized ){
-        m_initialized=true;
-    */
-    // check if transcode tool installed
-   if( !m_tcWrapper->supportDvd() ) {
-        emit notSupportedDisc( m_device );
-        return;
-   }
-   m_tcWrapper->checkDvd( m_device );
-   this->show();
+void K3bFilmView::reload()
+{
+  // check if transcode tool installed
+  if( !m_tcWrapper->supportDvd() ) {
+    emit notSupportedDisc( m_device->devicename() );
+    return;
+  }
+
+  m_tcWrapper->checkDvd( m_device );
 }
+
+
 // ------------------------------------------
 // slots
 // ------------------------------------------
@@ -221,6 +224,7 @@ void K3bFilmView::slotDvdChecked( bool successful ){
         QWidget::show();
     } else {
         // error during parsing
+      emit notSupportedDisc( m_device->devicename() );
     }
 }
 
@@ -265,8 +269,10 @@ void K3bFilmView::slotTitleSelected(QListViewItem*item){
 }
 
 void K3bFilmView::slotNotSupportedDisc(){
-    emit notSupportedDisc( m_device );
+    emit notSupportedDisc( m_device->devicename() );
 }
+
+
 
 void K3bFilmView::slotChapterButtonAll(){
     setCheckBoxes( m_chapterView, TRUE );
@@ -281,7 +287,7 @@ void K3bFilmView::slotAudioButtonNone(){
     setCheckBoxes( m_audioView, FALSE );
 }
 void K3bFilmView::slotRip(){
-    K3bDvdRipperWidget *ripWidget = new K3bDvdRipperWidget( m_device, this, "dvdrip");
+    K3bDvdRipperWidget *ripWidget = new K3bDvdRipperWidget( m_device->devicename(), this, "dvdrip");
     DvdTitle::Iterator dvd;
     int c = m_titleView->childCount();
     qDebug("(K3bFilmView) titles %i", c);
@@ -331,4 +337,6 @@ void K3bFilmView::setCheckBoxes( KListView *view, bool status ){
         dynamic_cast<QCheckListItem*> (view->itemAtIndex( i ))->setOn( status );
     }
 }
+
+
 #include "k3bfilmview.moc"

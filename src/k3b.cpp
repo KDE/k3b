@@ -64,7 +64,6 @@
 #include "data/k3bdatadoc.h"
 #include "data/k3bdataview.h"
 #include "data/k3bdatajob.h"
-#include "cdinfo/k3bcdinfodialog.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
 #include "tools/k3bexternalbinmanager.h"
@@ -165,9 +164,6 @@ void K3bMainWindow::initActions()
   actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()), 
 					    actionCollection(), "view_audio_player");
 
-  actionToolsCdInfo = new KAction(i18n("CD &Info"), "cdinfo", 0, this, SLOT(slotCdInfo()), 
-			    actionCollection(), "tools_cd_info" );
-
   actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdrwblank", 0, this, SLOT(slotBlankCdrw()), 
 			       actionCollection(), "tools_blank_cdrw" );
 
@@ -182,7 +178,6 @@ void K3bMainWindow::initActions()
   actionFileNewData->setStatusText( i18n("Creates a new data project") );
   actionFileNewAudio->setStatusText( i18n("Creates a new audio project") );
   actionToolsBlankCdrw->setStatusText( i18n("Opens CD-blanking dialog") );
-  actionToolsCdInfo->setStatusText( i18n("Show information on a disk") );
   actionFileOpen->setStatusText(i18n("Opens an existing project"));
   actionFileOpenRecent->setStatusText(i18n("Opens a recently used file"));
   actionFileSave->setStatusText(i18n("Saves the actual project"));
@@ -903,14 +898,6 @@ void K3bMainWindow::slotErrorMessage(const QString& message)
 void K3bMainWindow::slotWarningMessage(const QString& message)
 {
   KMessageBox::sorry( this, message );
-}
-
-
-void K3bMainWindow::slotCdInfo()
-{
-  K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod" );
-  d->exec();
-  delete d;
 }
 
 

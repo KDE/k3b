@@ -18,8 +18,9 @@
 #ifndef K3BFILEVIEW_H
 #define K3BFILEVIEW_H
 
-#include <qwidget.h>
-#include <qvbox.h>
+
+#include "k3bcdcontentsview.h"
+
 #include <kfiledetailview.h>
 
 class KDirOperator;
@@ -34,7 +35,7 @@ class KActionCollection;
 /**
   *@author Sebastian Trueg
   */
-class K3bFileView : public QVBox
+class K3bFileView : public K3bCdContentsView
 {
   Q_OBJECT
 
@@ -44,6 +45,8 @@ class K3bFileView : public QVBox
   void setUrl(const KURL &url, bool forward);
 
   KActionCollection* actionCollection() const;
+
+  void reload();
 
  signals:
   void urlEntered( const KURL& url );
