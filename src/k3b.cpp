@@ -1203,8 +1203,18 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bDoc* doc = activeDoc();
 
   if( doc ) {
-    QStringList urls = KFileDialog::getOpenFileNames( ".", i18n("*|All Files"), this,
+    QStringList files = KFileDialog::getOpenFileNames( ".", i18n("*|All Files"), this,
                                                       i18n("Select Files to Add to Project") );
+
+    KURL::List urls;
+    for (QStringList::ConstIterator it = files.begin();
+         it != files.end(); it++)
+    {
+      KURL url;
+      url.setPath(*it);
+      urls.append( url );
+    }
+                                  
     if( !urls.isEmpty() )
       doc->addUrls( urls );
   }
