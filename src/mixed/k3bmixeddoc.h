@@ -21,8 +21,8 @@ class K3bMixedDoc : public K3bDoc
 
   bool newDocument();
 
-  unsigned long size() const;
-  unsigned long length() const;
+  unsigned long long size() const;
+  unsigned long long length() const;
 
   K3bView* newView( QWidget* parent );
 

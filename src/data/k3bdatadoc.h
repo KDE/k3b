@@ -64,8 +64,8 @@ class K3bDataDoc : public K3bDoc
   void addView(K3bView* view);
 
   bool newDocument();	
-  unsigned long size() const;
-  unsigned long length() const;
+  unsigned long long size() const;
+  unsigned long long length() const;
 
   const QString& name() const { return m_name; }
 
@@ -177,7 +177,7 @@ class K3bDataDoc : public K3bDoc
   bool m_deleteImage;
   bool m_onlyCreateImage;
 
-  unsigned long m_size;
+  unsigned long long m_size;
 		
   K3bIsoOptions m_isoOptions;
 

@@ -33,12 +33,12 @@ bool K3bMixedDoc::newDocument()
 }
 
 
-unsigned long K3bMixedDoc::size() const
+unsigned long long K3bMixedDoc::size() const
 {
   return m_dataDoc->size() + m_audioDoc->size();
 }
 
-unsigned long K3bMixedDoc::length() const
+unsigned long long K3bMixedDoc::length() const
 {
   return m_dataDoc->length() + m_audioDoc->length();
 }

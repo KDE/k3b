@@ -346,14 +346,14 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 }
 
 
-unsigned long K3bDataDoc::size() const
+unsigned long long K3bDataDoc::size() const
 {
   return m_size;	
   //  return root()->k3bSize();
 }
 
 
-unsigned long K3bDataDoc::length() const
+unsigned long long K3bDataDoc::length() const
 {
   // 1 block consists of 2048 bytes real data
   // and 1 block equals to 1 audio frame

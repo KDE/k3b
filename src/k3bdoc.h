@@ -118,8 +118,8 @@ class K3bDoc : public QObject
   bool overburn() const { return m_overburn; }
   int speed() const { return m_speed; }
   K3bDevice* burner() const { return m_burner; }
-  virtual unsigned long size() const = 0;
-  virtual unsigned long length() const = 0;
+  virtual unsigned long long size() const = 0;
+  virtual unsigned long long length() const = 0;
 
   const QString& tempDir() const { return m_tempDir; }
 
