@@ -64,7 +64,6 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
 {
   m_tracks = 0L;
   m_vcdOptions = 0L;
-  m_mpeg = 0L;
   
   m_docType = VCD;
   m_vcdType = NONE;
@@ -83,9 +82,6 @@ K3bVcdDoc::~K3bVcdDoc()
   if ( m_vcdOptions )
     delete m_vcdOptions;
 
-  if ( m_mpeg )
-    delete m_mpeg;
-    
 }
 
 bool K3bVcdDoc::newDocument()
@@ -182,78 +178,87 @@ void K3bVcdDoc::slotWorkUrlQueue()
 
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
-  kdDebug() << QString("(K3bVcdDoc) createTrack url.path = %1").arg(url.path()) << endl;
-  int mpeg = identifyMpegFile( url );
-  // no mpeg audio files at this time!!
-  if (mpeg > 0 && m_mpeg->has_video()) {
-    if (vcdType() == NONE) {
-      setVcdType(vcdTypes(mpeg));
-      KMessageBox::information(kapp->mainWidget(),"(" + url.path() + ")\n" +
-        i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format. K3b performs no resample on MPEG files yet. This looks like an MPEG%1 file and K3b set the type to %2.").arg(mpeg).arg((mpeg==1)?"VCD 2.0": "SVCD"),
-        i18n("Set Type to %1 (MPEG%2)").arg((mpeg==1)?"VCD 2.0":"SVCD").arg(mpeg) );
-    }
+  char filename[255];
+  strcpy(filename,QFile::encodeName(url.path()));
+  mpeg* Mpeg = new mpeg(filename,0);
 
-    if (vcdType() != vcdTypes(mpeg)) {
-      KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-        i18n("You can't mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet :("),
-        i18n("Wrong File Type for this Project") );
-      return 0;
-    }
-
-    K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
-    char HMS[30];
-    QString mt;
-    m_mpeg->SecsToHMS(HMS, m_mpeg->Video->duration);
-    mt.append(i18n(" MPEG%1").arg(mpeg));
-
-    newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(m_mpeg->Video->hsize).arg(m_mpeg->Video->vsize));
-    if (m_mpeg->DExt){
-      switch (m_mpeg->DExt->video_format) {
-        case 0 : mt.append(i18n("  Component")); break;
-        case 1 : mt.append("  PAL"); break;
-        case 2 : mt.append("  NTSC"); break;
-        case 3 : mt.append("  SECAM"); break;
-        case 4 : mt.append("  MAC"); break;
-        case 5 : mt.append(i18n("  Unspecified")); break;
+  if ( Mpeg ) {
+    int mpegVersion = Mpeg->MpegVersion();
+    // no mpeg audio files at this time!!
+    if (mpegVersion > 0 && Mpeg->has_video()) {
+      if (vcdType() == NONE) {
+        m_urlAddingTimer->stop();
+        setVcdType(vcdTypes(mpegVersion));
+        KMessageBox::information(kapp->mainWidget(),"(" + url.path() + ")\n" +
+          i18n("K3b will create a (S)VCD image from the given MPEG files, but these files must already be in (S)VCD format. K3b performs no resample on MPEG files yet. This looks like an MPEG%1 file and K3b set the type to %2.").arg(mpegVersion).arg((mpegVersion==1)?"VCD 2.0": "SVCD"),
+          i18n("Set Type to %1 (MPEG%2)").arg((mpegVersion==1)?"VCD 2.0":"SVCD").arg(mpegVersion) );
+        m_urlAddingTimer->start(0);
       }
-      if ((m_mpeg->DExt->h_display_size != m_mpeg->Video->hsize) || (m_mpeg->DExt->v_display_size != m_mpeg->Video->vsize))
-        newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(m_mpeg->DExt->h_display_size).arg(m_mpeg->DExt->v_display_size));
+      
+      if (vcdType() != vcdTypes(mpegVersion)) {
+        KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+          i18n("You can't mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet :("),
+          i18n("Wrong File Type for this Project") );
+
+        delete Mpeg;
+        return 0;
+      }
+      K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
+      char HMS[30];
+      QString mt;
+      Mpeg->SecsToHMS(HMS, Mpeg->Video->duration);
+      mt.append(i18n(" MPEG%1").arg(mpegVersion));
+
+      newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(Mpeg->Video->hsize).arg(Mpeg->Video->vsize));
+      if (Mpeg->DExt){
+        switch (Mpeg->DExt->video_format) {
+          case 0 : mt.append(i18n("  Component")); break;
+          case 1 : mt.append("  PAL"); break;
+          case 2 : mt.append("  NTSC"); break;
+          case 3 : mt.append("  SECAM"); break;
+          case 4 : mt.append("  MAC"); break;
+          case 5 : mt.append(i18n("  Unspecified")); break;
+        }
+        if ((Mpeg->DExt->h_display_size != Mpeg->Video->hsize) || (Mpeg->DExt->v_display_size != Mpeg->Video->vsize))
+          newTrack->setMpegDisplaySize(QString(" %1 x %2").arg(Mpeg->DExt->h_display_size).arg(Mpeg->DExt->v_display_size));
+      }
+
+      newTrack->setMpegSize(QString(" %1 x %2").arg(Mpeg->Video->hsize).arg(Mpeg->Video->vsize));
+      newTrack->setMpegFps(QString(" %1").arg(Mpeg->Video->frame_rate));
+      newTrack->setMpegMbps(QString(" %1").arg(Mpeg->Video->bitrate/2500.0));
+
+      newTrack->setMpegDuration(HMS);
+      newTrack->setMpegType(mt);
+
+      newTrack->setMpegAspectRatio(QString("%1").arg(Mpeg->Video->aspect_ratio));
+
+      if (Mpeg->SExt){
+        newTrack->setMpegProgressive(Mpeg->SExt->progressive);
+        newTrack->setMpegChromaFormat(QString("%1").arg(Mpeg->SExt->chroma_format));
+      }
+      // audio
+      if (Mpeg->has_audio()) {
+        Mpeg->SecsToHMS(HMS, Mpeg->Audio->duration);
+        newTrack->setMpegAudioType(Mpeg->Audio->mpeg_ver);
+        newTrack->setMpegAudioLayer(Mpeg->Audio->layer);
+        newTrack->setMpegAudioDuration(HMS);
+        newTrack->setMpegAudioKbps(QString("%1").arg(Mpeg->Audio->bitrate));
+        newTrack->setMpegAudioHz(QString("%1").arg(Mpeg->Audio->sampling_rate));
+        newTrack->setMpegAudioFrame(QString("%1").arg(Mpeg->Audio->frame_length));
+        newTrack->setMpegAudioMode(Mpeg->Audio->mode);
+        newTrack->setMpegAudioModeExt(Mpeg->Audio->modext);
+      }
+
+      delete Mpeg;
+      return newTrack;
     }
-
-    newTrack->setMpegSize(QString(" %1 x %2").arg(m_mpeg->Video->hsize).arg(m_mpeg->Video->vsize));
-    newTrack->setMpegFps(QString(" %1").arg(m_mpeg->Video->frame_rate));
-    newTrack->setMpegMbps(QString(" %1").arg(m_mpeg->Video->bitrate/2500.0));
-    
-    newTrack->setMpegDuration(HMS);
-    newTrack->setMpegType(mt);
-
-    newTrack->setMpegAspectRatio(QString("%1").arg(m_mpeg->Video->aspect_ratio));
-
-    if (m_mpeg->SExt){
-      newTrack->setMpegProgressive(m_mpeg->SExt->progressive);
-      newTrack->setMpegChromaFormat(QString("%1").arg(m_mpeg->SExt->chroma_format));
+    else {
+      KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+        i18n("Only MPEG1 and MPEG2 video files are supported."),
+        i18n("Wrong File Format") );
     }
-    // audio
-    if (m_mpeg->has_audio()) {
-      m_mpeg->SecsToHMS(HMS, m_mpeg->Audio->duration);
-      newTrack->setMpegAudioType(m_mpeg->Audio->mpeg_ver);
-      newTrack->setMpegAudioLayer(m_mpeg->Audio->layer);
-      newTrack->setMpegAudioDuration(HMS);
-      newTrack->setMpegAudioKbps(QString("%1").arg(m_mpeg->Audio->bitrate));
-      newTrack->setMpegAudioHz(QString("%1").arg(m_mpeg->Audio->sampling_rate));
-      newTrack->setMpegAudioFrame(QString("%1").arg(m_mpeg->Audio->frame_length));
-      newTrack->setMpegAudioMode(m_mpeg->Audio->mode);
-      newTrack->setMpegAudioModeExt(m_mpeg->Audio->modext);
-    }
-
-    return newTrack;
   }
-  else {
-    KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-      i18n("Only MPEG1 and MPEG2 video files are supported."),
-      i18n("Wrong File Format") );
-    return 0;
-  }
+  return 0;
 }
 
 
@@ -344,16 +349,6 @@ void K3bVcdDoc::addView(K3bView* view)
 K3bBurnJob* K3bVcdDoc::newBurnJob()
 {
   return new K3bVcdJob( this );
-}
-
-unsigned int K3bVcdDoc::identifyMpegFile( const KURL& url )
-{
-  char filename[255];
-  strcpy(filename,QFile::encodeName(url.path()));
-  m_mpeg = new mpeg(filename,0);
-  // return 0 = Unknown file type, 1 = Mpeg 1, 2 = Mpeg 2
-  // return Tab.MpegVersion();
-  return m_mpeg->MpegVersion();
 }
 
 void K3bVcdDoc::informAboutNotFoundFiles()

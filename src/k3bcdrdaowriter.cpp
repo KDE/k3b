@@ -464,6 +464,19 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line ) {
 
 
 void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
+
+    // rename toc-file before emit finished( ... );
+    switch ( m_command ) {
+      case WRITE:
+      case COPY:
+        if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
+          kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
+          break;
+      case BLANK:
+      case READ:
+        break;
+    }
+
     if( p->normalExit() ) {
         switch( p->exitStatus() ) {
         case 0:
@@ -500,16 +513,6 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p ) {
         emit infoMessage( i18n("Cdrdao did not exit cleanly."), K3bJob::ERROR );
         emit finished( false );
     }
-       switch ( m_command ) {
-          case WRITE:
-          case COPY:
-            if ( rename((m_tocFile+QString(".bak")).latin1(),m_tocFile.latin1()) == -1 )
-               kdDebug() << "(cdrdaowriter) restore tocfile " <<   m_tocFile << " failed." << endl;
-            break;
-          case BLANK:
-          case READ:
-            break;
-        }
  }
 
 void K3bCdrdaoWriter::getCdrdaoMessage() {

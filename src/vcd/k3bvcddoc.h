@@ -127,7 +127,6 @@ class K3bVcdDoc : public K3bDoc
  private:
   K3bVcdTrack* createTrack( const KURL& url );
   void informAboutNotFoundFiles();
-  unsigned int identifyMpegFile( const KURL& url );
 
   QStringList m_notFoundFiles;
   QString m_vcdImage;
@@ -152,7 +151,6 @@ class K3bVcdDoc : public K3bDoc
   bool m_deleteImage;
   int m_vcdType;
   uint lastAddedPosition;
-  mpeg* m_mpeg;
 };
 
 

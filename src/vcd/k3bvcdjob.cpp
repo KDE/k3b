@@ -188,7 +188,7 @@ void K3bVcdJob::vcdxGen()
     return;
   }
 
-  emit infoMessage( i18n("Create XML-file"), K3bJob::STATUS );
+  emit infoMessage( i18n("Create XML-file"), K3bJob::INFO );
   *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
   // Label
   *m_process << "-l" << QString("%1").arg(m_doc->vcdOptions()->volumeId());
@@ -298,7 +298,7 @@ void K3bVcdJob::vcdxBuild()
   delete m_process;
   m_process = new KProcess();
 
-  emit infoMessage( i18n("Create Cue/Bin files ..."), K3bJob::STATUS );
+  emit infoMessage( i18n("Create Cue/Bin files ..."), K3bJob::INFO );
   if( !k3bMain()->externalBinManager()->foundBin( "vcdxbuild" ) ) {
     kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
     emit infoMessage( i18n("vcdxbuild executable not found."), K3bJob::ERROR );
@@ -558,6 +558,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     emit finished(true);
   }
   else {
+    emit finished(false);
     cancelAll();
   }
 }

@@ -156,7 +156,7 @@ void K3bVcdListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* afte
       trackAfter = track;
       ++it;
     }
-
+    
     sort();  // This is so lame!
   }
   else {
