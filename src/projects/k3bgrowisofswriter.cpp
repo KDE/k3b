@@ -140,6 +140,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   // now we use the force (luke ;) do not reload the dvd, K3b does that.
   *d->process << "-use-the-force-luke=notray";
 
+  // we check for existing filesystems ourselves, so we always force the overwrite...
+  *d->process << "-use-the-force-luke=tty";
+
   // this only makes sense for DVD-R(W) media
   // ----------------------------------------
   if( simulate() )

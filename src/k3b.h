@@ -134,7 +134,8 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotBlankCdrw();
   void slotFormatDvd();
-  void slotWriteIsoImage();
+  void slotWriteCdIsoImage();
+  void slotWriteDvdIsoImage();
   void slotWriteIsoImage( const KURL& url );
   void slotWriteBinImage();
   void slotWriteBinImage( const KURL& url );

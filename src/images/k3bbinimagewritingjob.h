@@ -20,7 +20,9 @@
 #include <k3bjob.h>
 
 class K3bAbstractWriter;
-class K3bCdDevice::CdDevice;
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 /**
   *@author Klaus-Dieter Krannich

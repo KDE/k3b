@@ -22,7 +22,9 @@
 class QString;
 class K3bAbstractWriter;
 class KTempFile;
-class K3bCdDevice::CdDevice;
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 /**
   *@author Sebastian Trueg

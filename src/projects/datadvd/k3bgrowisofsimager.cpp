@@ -130,6 +130,9 @@ void K3bGrowisofsImager::start()
   // now we use the force (luke ;)
   *m_process << "-use-the-force-luke=notray";
 
+  // we check for existing filesystems ourselves, so we always force the overwrite...
+  *m_process << "-use-the-force-luke=tty";
+
   // this only makes sense for DVD-R(W) media
   // ----------------------------------------
   if( m_doc->dummy() )
@@ -221,7 +224,7 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   if( line.contains( "done, estimate" ) ) {
     int p = K3bIsoImager::parseProgress( line );
     if( p != -1 ) {
-      emit writeSpeed( createEstimatedWriteSpeed( p*size()/100 ), 1385 );
+      createEstimatedWriteSpeed( p*size()/100 );
       emit percent( p );
     }
   }

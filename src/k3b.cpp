@@ -17,6 +17,7 @@
 // include files for QT
 #include <qdir.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -76,8 +77,8 @@
 #include "movixcd/k3bmovixdoc.h"
 #include "movixdvd/k3bmovixdvddoc.h"
 #include "k3bblankingdialog.h"
-#include "datacd/k3bisoimagewritingdialog.h"
-#include "datacd/k3bbinimagewritingdialog.h"
+#include "images/k3bisoimagewritingdialog.h"
+#include "images/k3bbinimagewritingdialog.h"
 #include <k3bexternalbinmanager.h>
 #include "k3bprojecttabwidget.h"
 #include "k3baudioplayer.h"
@@ -272,8 +273,10 @@ void K3bMainWindow::initActions()
 							 actionCollection(), "tools_format_dvd" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
-  actionToolsWriteIsoImage = new KAction(i18n("&Burn ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
-					 actionCollection(), "tools_write_iso" );
+  actionToolsWriteIsoImage = new KAction(i18n("&Burn CD ISO Image..."), "gear", 0, this, SLOT(slotWriteCdIsoImage()),
+					 actionCollection(), "tools_write_cd_iso" );
+  (void)new KAction(i18n("&Burn DVD ISO Image..."), "gear", 0, this, SLOT(slotWriteDvdIsoImage()),
+		    actionCollection(), "tools_write_dvd_iso" );
 
   actionToolsWriteBinImage = new KAction(i18n("&Burn Bin/Cue Image..."), "gear", 0, this, SLOT(slotWriteBinImage()),
 					 actionCollection(), "tools_write_bin" );
@@ -1121,16 +1124,25 @@ void K3bMainWindow::slotFormatDvd()
 }
 
 
-void K3bMainWindow::slotWriteIsoImage()
+void K3bMainWindow::slotWriteCdIsoImage()
 {
-  K3bIsoImageWritingDialog d( this, "isodialog" );
+  K3bIsoImageWritingDialog d( false, this, "isodialog" );
+  d.exec();
+}
+
+
+void K3bMainWindow::slotWriteDvdIsoImage()
+{
+  K3bIsoImageWritingDialog d( true, this, "isodialog" );
   d.exec();
 }
 
 
 void K3bMainWindow::slotWriteIsoImage( const KURL& url )
 {
-  K3bIsoImageWritingDialog d( this, "isodialog" );
+  // if the image fits on a cd we use the CD writing
+  QFileInfo f( url.path() );
+  K3bIsoImageWritingDialog d( f.size() > 700*1024*1024 , this, "isodialog" );
   d.setImage( url );
   d.exec();
 }

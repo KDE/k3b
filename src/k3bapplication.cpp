@@ -163,7 +163,7 @@ void K3bApplication::init()
     if ( args->count() == 1 )
       m_mainWindow->slotWriteIsoImage( args->url(0) );
     else
-      m_mainWindow->slotWriteIsoImage();
+      m_mainWindow->slotWriteCdIsoImage();
   }
   else if( args->isSet( "binimage" ) ) {
     if ( args->count() == 1 )

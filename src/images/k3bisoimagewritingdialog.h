@@ -41,7 +41,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bIsoImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
+  K3bIsoImageWritingDialog( bool dvd, QWidget* = 0, const char* = 0, bool = true );
   ~K3bIsoImageWritingDialog();
 
   void setImage( const KURL& url );
@@ -87,6 +87,8 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
 
   bool m_bIsoImage;
   QString m_lastCheckedFile;
+
+  bool m_dvd;
 };
 
 #endif
