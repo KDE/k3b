@@ -4,4 +4,10 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libdvd.la
 
-libdvd_la_SOURCES = k3bdvddoc.cpp k3bdvdjob.cpp k3bdvdview.cpp k3bdvdburndialog.cpp k3bgrowisofsimager.cpp
+libdvd_la_SOURCES = 	k3bdvddoc.cpp \
+			k3bdvdjob.cpp \
+			k3bdvdview.cpp \
+			k3bdvdburndialog.cpp \
+			k3bgrowisofsimager.cpp \
+			k3bdvdformattingjob.cpp \
+			k3bdvdformattingdialog.cpp

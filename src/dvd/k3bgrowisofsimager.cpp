@@ -21,6 +21,7 @@
 #include <k3bexternalbinmanager.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
+#include <device/k3bdevicehandler.h>
 #include <k3bprocess.h>
 #include <k3bglobals.h>
 
@@ -34,15 +35,25 @@
 #include <string.h>
 
 
+class K3bGrowisofsImager::Private
+{
+public:
+  bool success;
+};
+
+
+
 K3bGrowisofsImager::K3bGrowisofsImager( K3bDvdDoc* doc, QObject* parent, const char* name )
   : K3bIsoImager( doc, parent, name ),
     m_doc(doc)
 {
+  d = new Private;
 }
 
 
 K3bGrowisofsImager::~K3bGrowisofsImager()
 {
+  delete d;
 }
 
 
@@ -217,13 +228,11 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
   // This is more or less the same as in K3bGrowisofsWriter. :(
   //
 
-  // TODO: eject the dvd if configured
-
   cleanup();
 
   if( m_canceled ) {
     emit canceled();
-    emit finished(false);
+    d->success = false;
   }
   else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
@@ -232,7 +241,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
       else
 	emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
 
-      emit finished( true );
+      d->success = true;
     }
     else {
       //
@@ -262,14 +271,34 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 			  ERROR );
       }
 
-      emit finished( false );
+      d->success = false;
     }
   }
   else {
     emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_growisofsBin->name()), 
 		      ERROR );
-    emit finished( false );
+    d->success = false;
   }
+
+  k3bcore->config()->setGroup("General Options");
+  if( k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+    emit finished(d->success);
+  else {
+    emit infoMessage( i18n("Ejecting CD..."), INFO );
+    connect( K3bCdDevice::eject( m_doc->burner() ), 
+	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	     this, 
+	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
+  }
+}
+
+
+void K3bGrowisofsImager::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
+{
+  if( !dh->success() )
+    emit infoMessage( "Unable to eject media.", ERROR );
+
+  emit finished(d->success);
 }
 
 

@@ -52,13 +52,13 @@ class K3bEmptyDiscWaiter : public KDialogBase
 
   /**
    * starts the emptydiskwaiter.
-   * @param appendable if true a not empty but appendable disk is also
-   *                   considered as valid.
+   * @param mediaState a bitwise combination of the K3bCdDevice::State enum
    * @param mediaType a bitwise combination of the MediaType enum
    * @returns the found MediaType on success, 0 if forced and -1 if canceled
    */
-  int waitForEmptyDisc( bool appendable = false, 
-			int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD );
+  int waitForDisc( int mediaState = K3bCdDevice::STATE_EMPTY,
+		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		   const QString& message = QString::null );
 
   /**
    * the same as waitForEmptyDisc( false );
@@ -71,6 +71,11 @@ class K3bEmptyDiscWaiter : public KDialogBase
   static int wait( K3bCdDevice::CdDevice* device, 
 		   bool appendable = false, 
 		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD );
+
+  static int wait( K3bCdDevice::CdDevice*,
+		   int mediaState,
+		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD,
+		   const QString& message = QString::null );
 
  signals:
   void canceled();

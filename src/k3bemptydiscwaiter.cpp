@@ -48,9 +48,8 @@ public:
   QPushButton* buttonCancel;
   QPushButton* buttonForce;
 
-  bool appendable;
-
   int wantedMediaType;
+  int wantedMediaState;
 
   int result;
   int dialogVisible;
@@ -116,14 +115,14 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 }
 
 
-int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, int mediaType )
+int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QString& message )
 {
   if ( d->inLoop ) {
     kdError() << "(K3bEmptyDiscWaiter) Recursive call detected." << endl;
     return -1;
   }
 
-  d->appendable = appendable;
+  d->wantedMediaState = mediaState;
   d->wantedMediaType = mediaType;
   d->dialogVisible = false;
   d->forced = false;
@@ -132,16 +131,25 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, int mediaType )
   QString m;
   if( (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD) &&
       (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_CD) )
-    m = i18n("CDR or DVDR");
+    m = i18n("CD-R or DVD±R");
   else if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
-    m = i18n("DVDR(W)");
+    m = i18n("DVD±R(W)");
   else
-    m = i18n("CDR(W)");
+    m = i18n("CD-R(W)");
 
-  if( appendable )
-    d->labelRequest->setText( i18n("Please insert an appendable medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+  if( message.isEmpty() ) {
+    //
+    // We do not cover every case here but just the once that really make sense
+    //
+    if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE && d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE )
+      d->labelRequest->setText( i18n("Please insert a complete or appendable medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+    else if( d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE )
+      d->labelRequest->setText( i18n("Please insert an appendable medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+    else
+      d->labelRequest->setText( i18n("Please insert an empty medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+  }
   else
-    d->labelRequest->setText( i18n("Please insert an empty medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+    d->labelRequest->setText( message );
 
   if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
     d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "dvd_unmount", 
@@ -165,7 +173,7 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, int mediaType )
 
 int K3bEmptyDiscWaiter::exec()
 {
-  return waitForEmptyDisc( false );
+  return waitForDisc();
 }
 
 
@@ -204,12 +212,8 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 			       + mediaState );
 
   if( dh->success() ) {
-    if( d->wantedMediaType & dh->ngDiskInfo().mediaType() 
-      &&
-	( (dh->ngDiskInfo().empty() && !d->appendable)
-	  ||
-	  (dh->ngDiskInfo().appendable() && d->appendable)
-	  ) )
+    if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
+	(d->wantedMediaState & dh->ngDiskInfo().diskState()) )
 	finishWaiting( dh->ngDiskInfo().mediaType() );
     else {
       if( dh->ngDiskInfo().rewritable() ) {
@@ -304,7 +308,19 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
 int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, int mediaType )
 {
   K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
-  return d.waitForEmptyDisc( appendable, mediaType );
+  int mediaState = K3bCdDevice::STATE_EMPTY;
+  if( appendable ) mediaState |= K3bCdDevice::STATE_INCOMPLETE;
+  return d.waitForDisc( mediaState, mediaType );
+}
+
+
+int K3bEmptyDiscWaiter::wait( K3bCdDevice::CdDevice* device,
+			      int mediaState,
+			      int mediaType,
+			      const QString& message )
+{
+  K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
+  return d.waitForDisc( mediaState, mediaType, message );
 }
 
 #include "k3bemptydiscwaiter.moc"

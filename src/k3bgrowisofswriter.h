@@ -21,6 +21,7 @@
 
 namespace K3bCdDevice {
   class CdDevice;
+  class DeviceHandler;
 }
 class KProcess;
 
@@ -56,6 +57,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
  protected slots:
   void slotReceivedStderr( const QString& );
   void slotProcessExited( KProcess* );
+  void slotEjectingFinished( K3bCdDevice::DeviceHandler* dh );
 
  private:
   class Private;

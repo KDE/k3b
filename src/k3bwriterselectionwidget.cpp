@@ -292,6 +292,9 @@ void K3bWriterSelectionWidget::setWritingApp( int app )
   case K3b::GROWISOFS:
     m_comboWritingApp->setCurrentItem( "growisofs" );
     break;
+  case K3b::DVD_RW_FORMAT:
+    m_comboWritingApp->setCurrentItem( "dvd+rw-format" );
+    break;
   default:
     m_comboWritingApp->setCurrentItem( 0 );  // Auto
     break;
@@ -345,6 +348,8 @@ int K3bWriterSelectionWidget::writingAppFromString( const QString& s )
     return K3b::DVDRECORD;
   else if( s == "growisofs" )
     return K3b::GROWISOFS;
+  else if( s == "dvd+rw-format" )
+    return K3b::DVD_RW_FORMAT;
   else
     return K3b::DEFAULT;
 }
@@ -383,6 +388,8 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
     m_comboWritingApp->insertItem( "dvdrecord" );
   if( i & K3b::GROWISOFS )
     m_comboWritingApp->insertItem( "growisofs" );
+  if( i & K3b::DVD_RW_FORMAT )
+    m_comboWritingApp->insertItem( "dvd+rw-format" );
 }
 
 

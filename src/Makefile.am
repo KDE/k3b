@@ -23,7 +23,7 @@ EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bui.rc k3b.desktop k3bdirview.cpp k3bdirvi
 apps_DATA = k3b.desktop
 appsdir = $(kde_appsdir)/Multimedia
 
-silent_DATA = k3b-iso.desktop
+silent_DATA = k3b-iso.desktop k3b-cue.desktop
 silentdir = $(kde_appsdir)/.hidden/
 
 ###################
@@ -42,9 +42,6 @@ silentdir = $(kde_appsdir)/.hidden/
 
 # set the include path for X, qt and KDE
 AM_CPPFLAGS= -I$(srcdir)/tools -I$(srcdir)/core -I$(srcdir)/device $(all_includes)
-
-# K3b does not compile filne with --enable-final
-#KDE_OPTIONS = nofinal
 
 METASOURCES = AUTO
 

@@ -5,6 +5,7 @@
   <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_copy_cd" />
 	<Action name="tools_blank_cdrw" />
+	<Action name="tools_format_dvd" />
 	<Action name="tools_write_iso" />
         <Action name="tools_write_bin" />
 	<Action name="tools_encode_video" />

@@ -86,7 +86,7 @@ QString K3bCdDevice::mediaTypeString( int m )
 K3bCdDevice::NextGenerationDiskInfo::NextGenerationDiskInfo()
   : m_mediaType(-1),
     m_currentProfile(-1),
-    m_diskState(-1),
+    m_diskState(STATE_UNKNOWN),
     m_lastSessionState(-1),
     m_numSessions(0),
     m_numTracks(0),

@@ -129,6 +129,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotNewDvdDoc();
 
   void slotBlankCdrw();
+  void slotFormatDvd();
   void slotWriteIsoImage();
   void slotWriteIsoImage( const KURL& url );
   void slotWriteBinImage();
@@ -145,7 +146,9 @@ class K3bMainWindow : public KParts::DockMainWindow
   void showBusyInfo( const QString& str );
   void endBusy();
   void slotViewAudioPlayer();
-    void slotConfigureKeys();
+
+  void slotConfigureKeys();
+  void slotShowTips();
 
  signals:
   void initializationInfo( const QString& );
@@ -265,8 +268,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotDataImportSession();
   void slotDataClearImportedSession();
   void slotEditBootImages();
-
-  void slotShowTips();
 
   void setProjectsHidable( bool );
 

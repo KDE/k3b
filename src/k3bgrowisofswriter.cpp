@@ -17,6 +17,7 @@
 
 #include <k3bcore.h>
 #include <device/k3bdevice.h>
+#include <device/k3bdevicehandler.h>
 #include <k3bprocess.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bversion.h>
@@ -46,6 +47,8 @@ public:
   K3bProcess* process;
   const K3bExternalBin* growisofsBin;
   QString image;
+
+  bool success;
 };
 
 
@@ -249,8 +252,6 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 
 void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 {
-  // TODO: eject the dvd if configured
-
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
       if( simulate() )
@@ -259,7 +260,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
 
       createAverageWriteSpeedInfoMessage();
-      emit finished( true );
+      d->success = true;
     }
     else {
       //
@@ -289,14 +290,34 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 			  ERROR );
       }
 
-      emit finished( false );
+      d->success = false;
     }
   }
   else {
     emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->growisofsBin->name()), 
 		      ERROR );
-    emit finished( false );
+    d->success = false;
   }
+
+  k3bcore->config()->setGroup("General Options");
+  if( k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+    emit finished(d->success);
+  else {
+    emit infoMessage( i18n("Ejecting CD..."), INFO );
+    connect( K3bCdDevice::eject( burnDevice() ), 
+	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+	     this, 
+	     SLOT(slotEjectingFinished(K3bCdDevice::DeviceHandler*)) );
+  }
+}
+
+
+void K3bGrowisofsWriter::slotEjectingFinished( K3bCdDevice::DeviceHandler* dh )
+{
+  if( !dh->success() )
+    emit infoMessage( "Unable to eject media.", ERROR );
+
+  emit finished(d->success);
 }
 
 

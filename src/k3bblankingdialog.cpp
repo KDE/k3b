@@ -30,7 +30,6 @@
 #include <kguiitem.h>
 #include <kstdguiitem.h>
 #include <kconfig.h>
-#include <kapplication.h>
 
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
@@ -246,7 +245,7 @@ void K3bBlankingDialog::slotLoadK3bDefaults()
 
 void K3bBlankingDialog::slotLoadUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "CDRW Erasing" );
 
   QString mode = c->readEntry( "erase_mode" );
@@ -268,7 +267,7 @@ void K3bBlankingDialog::slotLoadUserDefaults()
 
 void K3bBlankingDialog::slotSaveUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "CDRW Erasing" );
 
   QString mode;

@@ -31,11 +31,11 @@ class kdbgstream;
 namespace K3bCdDevice
 {
   enum State { 
-    STATE_UNKNOWN = -1,
+    STATE_UNKNOWN = 256,
     STATE_NO_MEDIA = 0,
     STATE_COMPLETE = 1, 
-    STATE_INCOMPLETE,
-    STATE_EMPTY
+    STATE_INCOMPLETE = 2,
+    STATE_EMPTY = 4
   };
 
   /**

@@ -83,6 +83,7 @@
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
 #include "k3bstdguiitems.h"
+#include "dvd/k3bdvdformattingdialog.h"
 
 
 
@@ -185,8 +186,6 @@ void K3bMainWindow::showEvent( QShowEvent* e )
 
 void K3bMainWindow::initActions()
 {
-    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
-
   actionFileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
@@ -198,6 +197,7 @@ void K3bMainWindow::initActions()
 
   // the tip action
   (void)KStdAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection(), "show_tips" );
+  (void)KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
   setStandardToolBarMenuEnabled(true);
@@ -246,8 +246,10 @@ void K3bMainWindow::initActions()
   actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
 					       actionCollection(), "view_document_header");
 
-  actionToolsBlankCdrw = new KAction(i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
-			       actionCollection(), "tools_blank_cdrw" );
+  actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
+				      actionCollection(), "tools_blank_cdrw" );
+  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "cdrwblank", 0, this, SLOT(slotFormatDvd()),
+							 actionCollection(), "tools_format_dvd" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
   actionToolsWriteIsoImage = new KAction(i18n("&Write ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
@@ -1066,6 +1068,13 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 void K3bMainWindow::slotBlankCdrw()
 {
   K3bBlankingDialog d( this, "blankingdialog" );
+  d.exec();
+}
+
+
+void K3bMainWindow::slotFormatDvd()
+{
+  K3bDvdFormattingDialog d( this );
   d.exec();
 }
 

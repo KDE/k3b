@@ -88,7 +88,7 @@ void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 void K3bAbstractWriter::slotEjectWhileCancellationFinished( bool success )
 {
   if( !success ) {
-    emit infoMessage( i18n("Could not eject CD."), K3bJob::ERROR );
+    emit infoMessage( i18n("Unable to eject media."), K3bJob::ERROR );
   }
 
   emit canceled();
