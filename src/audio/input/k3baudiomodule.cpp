@@ -8,6 +8,7 @@
 K3bAudioModule::K3bAudioModule( K3bAudioTrack* track )
 {
   m_track = track;
+  m_consumer = 0;
 }
 
 

@@ -152,43 +152,15 @@ void K3bAudioDoc::slotWorkUrlQueue()
     }
 	
     if( !QFile::exists( addedFile.path() ) ) {
-      KMessageBox::information( kapp->mainWidget(), "File not found: " + addedFile.fileName(), 
-				"Error", QString::null, false );
+      KMessageBox::error( kapp->mainWidget(), i18n("File not found: ") + addedFile.fileName() );
       return;
     }
 
     // TODO: check if it is a textfile and if so try to create a KURL from every line
     //       for now drop all non-local urls
     //       add all existing files
-    unsigned long length = identifyWaveFile( addedFile.path() );
-    if( length > 0 || K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
-      K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
-      if( length > 0 ) {
-	newTrack->setLength( length );  // no module needed for wave files
-	newTrack->setStatus( K3bAudioTrack::OK );
-      }
-      else {
-	K3bAudioModule* module = K3bAudioModuleFactory::createModule( newTrack );
-	newTrack->setModule( module );
-
-	// connect to the finished signal to ensure the calculated length and status of the file 
-	// will be displayed properly
-	// FIXME: it does not seem to work. The filldisplay is not updated at all
-	connect( module, SIGNAL(finished(bool)), this, SLOT(updateAllViews()) );
-      }
-
-      K3bSong *song = k3bMain()->songManager()->findSong( addedFile.path() );
-      if( song != 0 ){
-	newTrack->setArtist( song->getArtist() );
-	newTrack->setAlbum( song->getAlbum() );
-	newTrack->setTitle( song->getTitle() );
-      }
+    if( K3bAudioTrack* newTrack = createTrack( addedFile.path() ) )
       addTrack( newTrack, lastAddedPosition );
-    }
-    else {
-      KMessageBox::information( kapp->mainWidget(), "Only mp3 and wav audio files are supported!", 
-				"Wrong file format", QString::null, false );		
-    }
   }
 
   else {
@@ -197,6 +169,43 @@ void K3bAudioDoc::slotWorkUrlQueue()
     emit newTracks();
   }
 }
+
+
+K3bAudioTrack* K3bAudioDoc::createTrack( const QString& url )
+{
+  unsigned long length = identifyWaveFile( url );
+  if( length > 0 || K3bAudioModuleFactory::moduleAvailable( url ) ) {
+    K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, url );
+    if( length > 0 ) {
+      newTrack->setLength( length );  // no module needed for wave files
+      newTrack->setStatus( K3bAudioTrack::OK );
+    }
+    else {
+      K3bAudioModule* module = K3bAudioModuleFactory::createModule( newTrack );
+      newTrack->setModule( module );
+
+      // connect to the finished signal to ensure the calculated length and status of the file 
+      // will be displayed properly
+      // FIXME: it does not seem to work. The filldisplay is not updated at all
+      //connect( module, SIGNAL(finished(bool)), this, SLOT(updateAllViews()) );
+    }
+
+    K3bSong *song = k3bMain()->songManager()->findSong( url );
+    if( song != 0 ){
+      newTrack->setArtist( song->getArtist() );
+      newTrack->setAlbum( song->getAlbum() );
+      newTrack->setTitle( song->getTitle() );
+    }
+
+    return newTrack;
+  }
+  else {
+    KMessageBox::error( kapp->mainWidget(), "(" + url + ")\n" + i18n("Only mp3 and wav audio files are supported."), 
+			i18n("Wrong file format") );		
+    return 0;
+  }
+}
+
 
 void K3bAudioDoc::addTrack(const QString& url, uint position )
 {
@@ -236,7 +245,7 @@ void K3bAudioDoc::removeTrack( int position )
 	
   K3bAudioTrack* track = take( position );
   if( track ) {
-    // emit signal before deleteing the track to avoid crashes
+    // emit signal before deleting the track to avoid crashes
     // when the view tries to call some of the tracks' methods
     emit newTracks();
 
@@ -333,40 +342,39 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
     QString url = trackElem.attributeNode( "url" ).value();
     if( !QFile::exists( url ) )
       qDebug( "(K3bAudioDoc) Could not find file: " + url );
-    else if( !K3bAudioModuleFactory::moduleAvailable( KURL(url) ) )
-      qDebug( "(K3bAudioDoc) No module available for file: " + url );
     else {
 
-      K3bAudioTrack* track = new K3bAudioTrack( m_tracks, url );
+      if( K3bAudioTrack* track = createTrack( url ) ) {
       
-      QDomNodeList trackNodes = trackElem.childNodes();
+	QDomNodeList trackNodes = trackElem.childNodes();
 
-      // set cd-text
-      QDomElement cdTextElem = trackNodes.item(0).toElement();
+	// set cd-text
+	QDomElement cdTextElem = trackNodes.item(0).toElement();
 
-      cdTextNodes = cdTextElem.childNodes();
-      track->setTitle( cdTextNodes.item(0).toElement().text() );
-      track->setArtist( cdTextNodes.item(1).toElement().text() );
-      track->setArranger( cdTextNodes.item(2).toElement().text() );
-      track->setSongwriter( cdTextNodes.item(3).toElement().text() );
-      track->setIsrc( cdTextNodes.item(4).toElement().text() );
-      track->setAlbum( cdTextNodes.item(5).toElement().text() );
-      track->setCdTextMessage( cdTextNodes.item(6).toElement().text() );
+	cdTextNodes = cdTextElem.childNodes();
+	track->setTitle( cdTextNodes.item(0).toElement().text() );
+	track->setArtist( cdTextNodes.item(1).toElement().text() );
+	track->setArranger( cdTextNodes.item(2).toElement().text() );
+	track->setSongwriter( cdTextNodes.item(3).toElement().text() );
+	track->setIsrc( cdTextNodes.item(4).toElement().text() );
+	track->setAlbum( cdTextNodes.item(5).toElement().text() );
+	track->setCdTextMessage( cdTextNodes.item(6).toElement().text() );
       
 
-      // set pregap
-      QDomElement pregapElem = trackNodes.item(1).toElement();
-      track->setPregap( pregapElem.text().toInt() );
+	// set pregap
+	QDomElement pregapElem = trackNodes.item(1).toElement();
+	track->setPregap( pregapElem.text().toInt() );
 
-      // set copy-protection      
-      QDomElement copyProtectElem = trackNodes.item(2).toElement();
-      track->setCopyProtection( copyProtectElem.text() == "yes" );
+	// set copy-protection      
+	QDomElement copyProtectElem = trackNodes.item(2).toElement();
+	track->setCopyProtection( copyProtectElem.text() == "yes" );
 
-      // set pre-emphasis
-      QDomElement preEmpElem = trackNodes.item(3).toElement();
-      track->setPreEmp( preEmpElem.text() == "yes" );
+	// set pre-emphasis
+	QDomElement preEmpElem = trackNodes.item(3).toElement();
+	track->setPreEmp( preEmpElem.text() == "yes" );
 
-      addTrack( track, m_tracks->count() );
+	addTrack( track, m_tracks->count() );
+      }
     }
   }
 
@@ -532,19 +540,19 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     t << "CD_TEXT {" << "\n";
     t << "  LANGUAGE_MAP { 0: EN }\n";
     t << "  LANGUAGE 0 {\n";
-    t << "    TITLE " << "\"" << title() << "\"" << "\n";
-    t << "    PERFORMER " << "\"" << artist() << "\"" << "\n";
+    t << "    TITLE " << "\"" << prepareForTocFile(title()) << "\"" << "\n";
+    t << "    PERFORMER " << "\"" << prepareForTocFile(artist()) << "\"" << "\n";
     if( !disc_id().isEmpty() )
-      t << "    DISC_ID " << "\"" << disc_id() << "\"" << "\n";
+      t << "    DISC_ID " << "\"" << prepareForTocFile(disc_id()) << "\"" << "\n";
     if( !upc_ean().isEmpty() )
-      t << "    UPC_EAN " << "\"" << upc_ean() << "\"" << "\n";
+      t << "    UPC_EAN " << "\"" << prepareForTocFile(upc_ean()) << "\"" << "\n";
     t << "\n";
     if( !arranger().isEmpty() )
-      t << "    ARRANGER " << "\"" << arranger() << "\"" << "\n";
+      t << "    ARRANGER " << "\"" << prepareForTocFile(arranger()) << "\"" << "\n";
     if( !songwriter().isEmpty() )
-      t << "    SONGWRITER " << "\"" << songwriter() << "\"" << "\n";
+      t << "    SONGWRITER " << "\"" << prepareForTocFile(songwriter()) << "\"" << "\n";
     if( !cdTextMessage().isEmpty() )
-      t << "    MESSAGE " << "\"" << cdTextMessage() << "\"" << "\n";
+      t << "    MESSAGE " << "\"" << prepareForTocFile(cdTextMessage()) << "\"" << "\n";
     t << "  }" << "\n";
     t << "}" << "\n\n";
   }
@@ -585,16 +593,16 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
       if( cdText() ) {
 	t << "CD_TEXT {" << "\n";
 	t << "  LANGUAGE 0 {" << "\n";
-	t << "    TITLE " << "\"" << _track->title() << "\"" << "\n";
-	t << "    PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
+	t << "    TITLE " << "\"" << prepareForTocFile(_track->title()) << "\"" << "\n";
+	t << "    PERFORMER " << "\"" << prepareForTocFile(_track->artist()) << "\"" << "\n";
 	if( !_track->isrc().isEmpty() )
-	  t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
+	  t << "    ISRC " << "\"" << prepareForTocFile(_track->isrc()) << "\"" << "\n";
 	if( !_track->arranger().isEmpty() )
-	  t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
+	  t << "    ARRANGER " << "\"" << prepareForTocFile(_track->arranger()) << "\"" << "\n";
 	if( !_track->songwriter().isEmpty() )
-	  t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
+	  t << "    SONGWRITER " << "\"" << prepareForTocFile(_track->songwriter()) << "\"" << "\n";
 	if( !_track->cdTextMessage().isEmpty() )
-	  t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
+	  t << "    MESSAGE " << "\"" << prepareForTocFile(_track->cdTextMessage()) << "\"" << "\n";
 	t << "  }" << "\n";
 	t << "}" << "\n";
       }
@@ -631,16 +639,16 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     if( cdText() ) {
       t << "CD_TEXT {" << "\n";
       t << "  LANGUAGE 0 {" << "\n";
-      t << "    TITLE " << "\"" << _track->title() << "\"" << "\n";
-      t << "    PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
+      t << "    TITLE " << "\"" << prepareForTocFile(_track->title()) << "\"" << "\n";
+      t << "    PERFORMER " << "\"" << prepareForTocFile(_track->artist()) << "\"" << "\n";
       if( !_track->isrc().isEmpty() )
-	t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
+	t << "    ISRC " << "\"" << prepareForTocFile(_track->isrc()) << "\"" << "\n";
       if( !_track->arranger().isEmpty() )
-	t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
+	t << "    ARRANGER " << "\"" << prepareForTocFile(_track->arranger()) << "\"" << "\n";
       if( !_track->songwriter().isEmpty() )
-	t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
+	t << "    SONGWRITER " << "\"" << prepareForTocFile(_track->songwriter()) << "\"" << "\n";
       if( !_track->cdTextMessage().isEmpty() )
-	t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
+	t << "    MESSAGE " << "\"" << prepareForTocFile(_track->cdTextMessage()) << "\"" << "\n";
       t << "  }" << "\n";
       t << "}" << "\n";
     }
@@ -710,8 +718,15 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 
 QString K3bAudioDoc::prepareForTocFile( const QString& str )
 {
-  // FIXME
-  return str;
+  // since "\" is the only special character I now of so far...
+  QString newStr = str;
+  int pos = str.find('\\');
+  while( pos > -1 ) {
+    newStr.insert( pos+1, "134" );
+    pos = str.find( '\\', pos+3 );
+  }
+
+  return newStr;
 }
 
 

@@ -5,7 +5,7 @@
 #include "k3baudiomodule.h"
 
 #include <mad.h>
-#include <stdio.h>
+#include <qfile.h>
 
 class QTimer;
 
@@ -32,6 +32,7 @@ class K3bMp3Module : public K3bAudioModule
   unsigned short madFixedToUshort( mad_fixed_t fixed );
   void initializeDecoding();
   void fillInputBuffer();
+  void clearingUp();
 
   bool m_bDecodingInProgress;
   bool m_bCountingFramesInProgress;
@@ -56,7 +57,7 @@ class K3bMp3Module : public K3bAudioModule
   unsigned char* m_outputPointer;
   unsigned char* m_outputBufferEnd;
 
-  FILE* m_inputFile;
+  QFile m_inputFile;
 
   static const int INPUT_BUFFER_SIZE = 5*8192;
   static const int OUTPUT_BUFFER_SIZE = 20*8192;

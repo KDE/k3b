@@ -50,7 +50,7 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
   m_doc = doc;
   m_process = new KShellProcess();
 	
-  m_writtenData = 0;
+  m_bytesFinishedTracks = 0;
   m_working = false;
 }
 
@@ -165,9 +165,9 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      emit subPercent( 100 * made / size );
 	      emit processedSubSize( made, size );
 
-	      emit processedSize( m_writtenData/1024/1024 + made, m_doc->size()/1024/1024 );
+	      emit processedSize( m_bytesFinishedTracks/1024/1024 + made, m_doc->size()/1024/1024 );
 
-	      double relOverallWritten = ( (double)m_writtenData + (double)(made*1024*1024) ) / (double)m_doc->size();
+	      double relOverallWritten = ( (double)m_bytesFinishedTracks + (double)(made*1024*1024) ) / (double)m_doc->size();
 
 	      if( !m_onTheFly ) {
 		// decoding is part of the overall progress
@@ -200,8 +200,8 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
       else if( (*str).startsWith( "Starting new" ) )
 	{
 	  if(!firstTrack) {
+	    m_bytesFinishedTracks += m_doc->at(m_currentWrittenTrackNumber)->size();
 	    m_currentWrittenTrackNumber++;
-	    m_writtenData += m_doc->at(m_currentWrittenTrackNumber)->size();
 	  }
 	  else
 	    firstTrack = false;
@@ -211,7 +211,7 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else {
 	// debugging
-	//			emitMessage( *str );
+	qDebug("(cdrecord) " + *str );
       }
     } // for every line
 }
@@ -269,8 +269,8 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
       if( (*str).contains( "Writing track" ) ) {
 	// a new track has been started
 	if(!firstTrack) {
+	  m_bytesFinishedTracks += m_doc->at(m_currentWrittenTrackNumber)->size();
 	  m_currentWrittenTrackNumber++;
-	  m_writtenData += m_doc->at(m_currentWrittenTrackNumber)->size();
 	}
 	else
 	  firstTrack = false;
@@ -300,27 +300,27 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 			
 	made = (*str).mid( 6, pos2-pos1-1 ).toInt( &ok );
 	if( !ok )
-	  qDebug( "Parsing did not work for: " + (*str).mid( 6, pos2-pos1-1 ) );
+	  qDebug( "(K3bAudioJob) Parsing did not work for: " + (*str).mid( 6, pos2-pos1-1 ) );
 			
 	// ---- parse size ---------------------------
 	pos1 = pos2 + 2;
 	pos2 = (*str).find("MB");
 	size = (*str).mid( pos1, pos2-pos1-1 ).toInt(&ok);
 	if( !ok )
-	  qDebug( "Parsing did not work for: " + (*str).mid( pos1, pos2-pos1-1 ) );
+	  qDebug( "(K3bAudioJob) Parsing did not work for: " + (*str).mid( pos1, pos2-pos1-1 ) );
 				
 	// ----- parsing fifo ---------------------------
 	pos1 = (*str).findRev(' ');
 	pos2 =(*str).findRev('%');
 	fifo = (*str).mid( pos1, pos2-pos1 ).toInt(&ok);
 	if( !ok )
-	  qDebug( "Parsing did not work for: " + (*str).mid( pos1, pos2-pos1 ) );
+	  qDebug( "(K3bAudioJob) Parsing did not work for: " + (*str).mid( pos1, pos2-pos1 ) );
 			
 	emit bufferStatus( fifo );
 	
 	double f = (double)size / (double)m_doc->size();
 	// calculate track progress
-	int trackMade = (int)( (double)made -f*(double)m_writtenData );
+	int trackMade = (int)( (double)made -f*(double)m_bytesFinishedTracks );
 	int trackSize = (int)( f * (double)m_currentWrittenTrack->size() );
 	emit processedSubSize( trackMade, trackSize );
 	emit subPercent( 100*trackMade / trackSize );
@@ -339,7 +339,7 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
       
       if( _debug ) {
 	// debugging
-	qDebug(*str);
+	qDebug("(cdrdao) " + *str);
       }
     }
 }
@@ -396,7 +396,7 @@ void K3bAudioJob::start()
 {
   m_dataToDecode = 0;
   m_decodedData = 0;
-  m_writtenData = 0;
+  m_bytesFinishedTracks = 0;
   m_bLengthInfoEmited = false;
   m_currentWrittenTrackNumber = 0;
   m_currentWrittenTrack = m_doc->at(0);
@@ -405,6 +405,8 @@ void K3bAudioJob::start()
   m_working = true;
 
   emit started();
+
+  m_processWroteStdin = true;
 
   QTimer::singleShot( 0, this, SLOT(slotTryStart()) );
 }
@@ -513,13 +515,21 @@ void K3bAudioJob::slotStartWriting()
 
 void K3bAudioJob::slotDecodeNextFile()
 {
+  if( m_onTheFly ) {
+    // wait for the process to write to stdin
+    if( !m_processWroteStdin ) {
+      QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
+      return;
+    }
+  }
+
   // find next file to decode
   while( m_currentDecodedTrack && 
 	 m_currentDecodedTrack->isWave() ) {
     m_currentDecodedTrackNumber++;
     m_currentDecodedTrack = m_doc->at(m_currentDecodedTrackNumber);
   }
-  qDebug("(K3bAudioJob) next decoder");
+
   if( m_currentDecodedTrack ) {
     K3bAudioModule* module = m_currentDecodedTrack->module();
     if( module == 0 ) {
@@ -538,6 +548,7 @@ void K3bAudioJob::slotDecodeNextFile()
 
       if( m_onTheFly ) {
 	module->setConsumer( m_process, SIGNAL(wroteStdin(KProcess*)) );
+	connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SLOT(slotProcessWroteStdin()) );
 	qDebug("(K3bAudioJob) streaming track %i", m_currentDecodedTrackNumber );
       }
       else {
@@ -563,6 +574,9 @@ void K3bAudioJob::slotDecodeNextFile()
     }
   }
   else {
+
+    qDebug("(K3bAudioJob) decoded %li bytes via K3bAudioModules:", m_decodedData );
+
     if( m_onTheFly ) {
       // everything streamed. 
       qDebug("(K3bAudioJob) streaming finished." );
@@ -582,20 +596,23 @@ void K3bAudioJob::slotModuleOutput( const unsigned char* data, int len )
   if( m_onTheFly ) {
     // if we receive this signal from the module the process must have signaled "wroteStdin" before
     // otherwise this will fail
-    
+
     m_currentModuleDataLength += len;  //only for debugging
     m_process->writeStdin( (const char*)data, len );
+
+    m_processWroteStdin = false;
   }
   else {
     m_waveFileWriter.write( (const char*)data, len );
   }
+
+  m_decodedData += len;
 }
 
 
 void K3bAudioJob::slotModuleFinished( bool success )
 {
   m_currentDecodedTrack->module()->disconnect(this);
-  m_decodedData += m_currentDecodedTrack->size();
 
   if( m_onTheFly ) {
     if( success ) {
@@ -978,6 +995,12 @@ void K3bAudioJob::clearBufferFiles()
       }
     }
   }
+}
+
+
+void K3bAudioJob::slotProcessWroteStdin()
+{
+  m_processWroteStdin = true;
 }
 
 

@@ -295,13 +295,13 @@ void K3bBurnProgressDialog::setupConnections()
 
 void K3bBurnProgressDialog::updateCdSizeProgress( int processed, int size )
 {
-  m_labelCdProgress->setText( i18n("%1 of %2 written").arg( processed ).arg( size ) );
+  m_labelCdProgress->setText( i18n("%1 of %2 MB written").arg( processed ).arg( size ) );
 }
 
 
 void K3bBurnProgressDialog::updateTrackSizeProgress( int processedTrackSize, int trackSize )
 {
-  m_labelTrackProgress->setText( i18n("%1 of %2 processed").arg(processedTrackSize).arg(trackSize) );
+  m_labelTrackProgress->setText( i18n("%1 of %2 MB written").arg(processedTrackSize).arg(trackSize) );
 }
 
 

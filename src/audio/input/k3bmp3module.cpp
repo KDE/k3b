@@ -18,15 +18,12 @@
 #include <qtimer.h>
 
 #include <cmath>
-#include <iostream>
-#include <errno.h>
 
-//#include <mad.h>
 
 
 
 K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
-  : K3bAudioModule( track )
+  : K3bAudioModule( track ), m_inputFile( track->absPath() )
 {
   // at the beginning the timer is used for counting the frames
   m_decodingTimer = new QTimer( this );
@@ -52,7 +49,6 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   m_madSynth  = new mad_synth;
   m_madTimer  = new mad_timer_t;
 
-  m_inputFile = 0;
 
   // read id3 tag
   // -----------------------------------------------
@@ -81,15 +77,14 @@ K3bMp3Module::~K3bMp3Module()
 
   mad_stream_finish( m_madStream );
 
-  if( m_inputFile != 0 )
-    fclose( m_inputFile );
+  clearingUp();
 }
 
 
 void K3bMp3Module::initializeDecoding()
 {
-  if( m_inputFile == 0 )
-    m_inputFile = fopen( audioTrack()->absPath().latin1(), "r" );
+  if( !m_inputFile.isOpen() )
+    m_inputFile.open( IO_ReadOnly );
 
   mad_stream_init( m_madStream );
   mad_timer_reset( m_madTimer );
@@ -110,7 +105,7 @@ void K3bMp3Module::start()
     
     initializeDecoding();
 
-    rewind( m_inputFile );
+    m_inputFile.at(0);
 
     mad_frame_init( m_madFrame );
     mad_synth_init( m_madSynth );    
@@ -151,19 +146,16 @@ void K3bMp3Module::fillInputBuffer()
 	}
 			
       // Fill-in the buffer. 
-      readSize = fread( readStart, 1, readSize, m_inputFile );
-      if( readSize <= 0 )
-	{
-	  if( ferror(m_inputFile) )
-	    {
-	      qDebug("(K3bMp3Module) read error on bitstream (%s)", strerror(errno) );
-	    }
-	  if( feof(m_inputFile) )
-	    qDebug("(K3bMp3Module) end of input stream" );
+      readSize = m_inputFile.readBlock( (char*)readStart, readSize );
+      if( readSize <= 0 ) {
+	if( readSize < 0 )
+	  qDebug("(K3bMp3Module) read error on bitstream)" );
+	else
+	  qDebug("(K3bMp3Module) end of input stream" );
 
 
-	  m_bEndOfInput = true;
-	}
+	m_bEndOfInput = true;
+      }
       else 
 	{
 	  // Pipe the new buffer content to libmad's stream decoder facility.
@@ -204,8 +196,7 @@ void K3bMp3Module::slotCountFrames()
       m_bCountingFramesInProgress = false;
       mad_header_finish( m_madHeader );
 
-      fclose( m_inputFile );
-      m_inputFile = 0;
+      clearingUp();
 
       emit finished( true );
       break;
@@ -228,8 +219,7 @@ void K3bMp3Module::slotCountFrames()
 	    m_decodingTimer->stop();
 	    mad_header_finish( m_madHeader );
 
-	    fclose( m_inputFile );
-	    m_inputFile = 0;
+	    clearingUp();
 
 	    emit finished( false );
 	    break;
@@ -307,11 +297,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 	      m_bDecodingInProgress = false;
 	      m_decodingTimer->stop();
 
-	      fclose( m_inputFile );
-	      m_inputFile = 0;
-
-	      if( m_consumer )
-		m_consumer->disconnect(this);
+	      clearingUp();
 
 	      emit finished( false );
 	      return;
@@ -356,11 +342,10 @@ void K3bMp3Module::slotDecodeNextFrame()
 	      
 	      // this should not happen since we only decode if the
 	      // output buffer has enough free space
-	      if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length )
-		{
-		  qDebug( "(K3bMp3Module) buffer overflow!" );
-		  exit(1);
-		}
+	      if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length ) {
+		qDebug( "(K3bMp3Module) buffer overflow!" );
+		exit(1);
+	      }
 	    } // pcm conversion
 
 	} // mad frame successfully decoded
@@ -426,10 +411,7 @@ void K3bMp3Module::slotDecodeNextFrame()
     mad_synth_finish( m_madSynth );
     mad_frame_finish( m_madFrame );
 
-    fclose( m_inputFile );
-    m_inputFile = 0;
-    if( m_consumer )
-      m_consumer->disconnect(this);
+    clearingUp();
 
     emit finished( true );
 
@@ -445,26 +427,17 @@ void K3bMp3Module::slotDecodeNextFrame()
 
 unsigned short K3bMp3Module::madFixedToUshort( mad_fixed_t fixed )
 {
-  /* A fixed point number is formed of the following bit pattern:
-   *
-   * SWWWFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-   * MSB                          LSB
-   * S ==> Sign (0 is positive, 1 is negative)
-   * W ==> Whole part bits
-   * F ==> Fractional part bits
-   *
-   * This pattern contains MAD_F_FRACBITS fractional bits, one
-   * should alway use this macro when working on the bits of a fixed
-   * point number. It is not guaranteed to be constant over the
-   * different platforms supported by libmad.
-   *
-   * The unsigned short value is formed by the least significant
-   * whole part bit, followed by the 15 most significant fractional
-   * part bits. Warning: this is a quick and dirty way to compute
-   * the 16-bit number, madplay includes much better algorithms.
-   */
-  fixed = fixed >> ( MAD_F_FRACBITS - 15 );
-  return (unsigned short)fixed;
+  // round
+  fixed += (1L << ( MAD_F_FRACBITS - 16 ));
+
+  // clip
+  if( fixed >= MAD_F_ONE )
+    fixed = MAD_F_ONE - 1;
+  else if( fixed < -MAD_F_ONE )
+    fixed = -MAD_F_ONE;
+
+  // quatisize
+  return fixed >> (MAD_F_FRACBITS + 1 - 16 );
 }
 
 
@@ -477,11 +450,7 @@ void K3bMp3Module::cancel()
     m_bDecodingInProgress = false;
     m_decodingTimer->stop();
 
-    fclose( m_inputFile );
-    m_inputFile = 0;
-
-    if( m_consumer )
-      m_consumer->disconnect(this);
+    clearingUp();
 
     mad_synth_finish( m_madSynth );
     mad_frame_finish( m_madFrame );
@@ -489,6 +458,15 @@ void K3bMp3Module::cancel()
     emit canceled();
     emit finished( false );
   }
+}
+
+
+void K3bMp3Module::clearingUp()
+{
+  m_inputFile.close();
+
+  if( m_consumer )
+    m_consumer->disconnect(this);
 }
 
 

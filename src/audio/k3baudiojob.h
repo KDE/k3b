@@ -62,6 +62,8 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotStartWriting();
   void slotTryStart();
   void slotDecodeNextFile();
+
+  void slotProcessWroteStdin();
 	
  private:
   void clearBufferFiles();
@@ -83,7 +85,7 @@ class K3bAudioJob : public K3bBurnJob  {
   int m_currentDecodedTrackNumber;
   int m_currentWrittenTrackNumber;
 
-  unsigned long m_writtenData;
+  unsigned long m_bytesFinishedTracks;
   unsigned long m_dataToDecode;
   unsigned long m_decodedData;
   unsigned long m_currentModuleDataLength;
@@ -96,6 +98,8 @@ class K3bAudioJob : public K3bBurnJob  {
   bool m_bLengthInfoEmited;
 
   int m_writingApp;
+
+  bool m_processWroteStdin;
 
  signals:
   void writingLeadOut();

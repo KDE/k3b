@@ -153,6 +153,8 @@ class K3bAudioDoc : public K3bDoc
   QString prepareForTocFile( const QString& str );
 
  private:
+  K3bAudioTrack* createTrack( const QString& url );
+
   class PrivateUrlToAdd
     {
     public:
