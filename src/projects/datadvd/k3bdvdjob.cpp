@@ -628,9 +628,10 @@ QString K3bDvdJob::jobDetails() const
       !m_doc->dummy() &&
       !(m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	m_doc->multiSessionMode() == K3bDataDoc::FINISH) )
-    return i18n("Iso9660 Filesystem (Size: %1) - %2 copies")
-      .arg(KIO::convertSize( m_doc->size() ))
-      .arg(m_doc->copies());
+    return i18n("Iso9660 Filesystem (Size: %1) - %n copy",
+		"Iso9660 Filesystem (Size: %1) - %n copies",
+		m_doc->copies())
+      .arg(KIO::convertSize( m_doc->size() ));
   else
     return i18n("Iso9660 Filesystem (Size: %1)")
       .arg(KIO::convertSize( m_doc->size() ));

@@ -1065,7 +1065,13 @@ QString K3bMixedJob::jobDescription() const
 
 QString K3bMixedJob::jobDetails() const
 {
-  return i18n("%1 tracks (%2 minutes audio data, %3 Iso9660 data)").arg(m_doc->numOfTracks()).arg(m_doc->audioDoc()->length().toString()).arg(KIO::convertSize(m_doc->dataDoc()->size()));
+  return ( i18n("%1 tracks (%2 minutes audio data, %3 Iso9660 data)")
+	   .arg(m_doc->numOfTracks())
+	   .arg(m_doc->audioDoc()->length().toString())
+	   .arg(KIO::convertSize(m_doc->dataDoc()->size()))
+	   + ( m_doc->copies() > 1 
+	       ? i18n(" - %n copy", " - %n copies", m_doc->copies()) 
+	       : QString::null ) );
 }
 
 #include "k3bmixedjob.moc"

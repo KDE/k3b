@@ -652,18 +652,29 @@ void K3bDvdCopyJob::removeImageFiles()
 
 QString K3bDvdCopyJob::jobDescription() const
 {
-  return i18n("Copying DVD");
+  if( m_onlyCreateImage ) {
+    return i18n("Creating DVD Image");
+  }
+  else if( m_simulate ) {
+    if( m_onTheFly )
+      return i18n("Simulating DVD Copy on-the-fly");
+    else
+      return i18n("Simulating DVD Copy");
+  }
+  else {
+    if( m_onTheFly )
+      return i18n("Copying DVD on-the-fly");
+    else
+      return i18n("Copying DVD");
+  }
 }
 
 
 QString K3bDvdCopyJob::jobDetails() const
 {
-  if( m_onlyCreateImage )
-    return i18n("Creating DVD image");
-  else if( m_simulate )
-    return i18n("Simulating DVD copy");
-  else
-    return i18n("Creating 1 DVD copy", "Creating %n DVD copies", m_copies );
+  return i18n("Creating 1 copy", 
+	      "Creating %n copies", 
+	      (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
 }
 
 #include "k3bdvdcopyjob.moc"

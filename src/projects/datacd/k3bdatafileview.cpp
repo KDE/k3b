@@ -53,8 +53,8 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   setAllColumnsShowFocus( true );
 
   setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.\n"
-		 "To remove or rename files use the context menu.\n"
-		 "After that press the burn button to write the CD.") );
+		      "To remove or rename files use the context menu.\n"
+		      "After that press the burn button to write the CD.") );
 
 
   addColumn( i18n("Name") );
@@ -80,6 +80,8 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*, QListViewItem*, QListViewItem*)) );
+  connect( this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+	   this, SLOT(slotDoubleClicked(QListViewItem*)) );
 
   setupActions();
 }
@@ -109,7 +111,6 @@ void K3bDataFileView::clearItems()
 
 void K3bDataFileView::checkForNewItems()
 {
-  kdDebug() << "(K3bDataFileView::checkForNewItems()" << endl;
   hideEditor();
 
   // add items that are not there yet
@@ -131,7 +132,6 @@ void K3bDataFileView::checkForNewItems()
 	m_itemMap[it.current()] = vi;
     }
   }
-  kdDebug() << "(K3bDataFileView::checkForNewItems finished." << endl;
 }
 
 
@@ -213,8 +213,6 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 
 void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
-  kdDebug() << "(K3bDataFileView::slotDataItemRemoved) " << item->k3bName() << endl;
-
   if( item->isDir() ) {
     if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
       slotSetCurrentDir( item->parent() );
@@ -222,11 +220,9 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
   }
   
   if( m_itemMap.contains( item ) ) {
-    kdDebug() << "(K3bDataFileView::slotDataItemRemoved) removing " << item->k3bName() << endl;
     delete m_itemMap[item];
     m_itemMap.remove(item);
   }
-  kdDebug() << "(K3bDataFileView::slotDataItemRemoved finished" << endl;
 }
 
 
@@ -361,5 +357,15 @@ void K3bDataFileView::slotProperties()
     m_doc->slotProperties();
 }
 
+
+void K3bDataFileView::slotDoubleClicked( QListViewItem* item )
+{
+  if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( selectedItems().first() ) ) {
+    if( !viewItem->dataItem()->isDir() ) {
+      K3bDataPropertiesDialog d( viewItem->dataItem(), this );
+      d.exec();
+    }
+  }
+}
 
 #include "k3bdatafileview.moc"

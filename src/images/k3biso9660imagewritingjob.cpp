@@ -402,10 +402,11 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
 {
   if( m_simulate )
     return i18n("Simulating ISO9660 image");
-  else if( m_copies == 1 )
-    return i18n("Burning ISO9660 image");
   else
-    return i18n("Burning ISO9660 image (%1 copies)").arg(m_copies);
+    return ( i18n("Burning ISO9660 image")
+	     + ( m_copies > 1 
+		 ? i18n(" - %n copy", " - %n copies", m_copies) 
+		 : QString::null ) );
 }
 
 

@@ -1141,7 +1141,9 @@ QString K3bCdCopyJob::jobDescription() const
 
 QString K3bCdCopyJob::jobDetails() const
 {
-  return i18n("1 copy", "%n copies", m_copies );
+  return i18n("Creating 1 copy", 
+	      "Creating %n copies", 
+	      (m_simulate||m_onlyCreateImages) ? 1 : m_copies );
 }
 
 

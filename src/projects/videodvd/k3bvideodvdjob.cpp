@@ -107,7 +107,10 @@ QString K3bVideoDvdJob::jobDescription() const
 
 QString K3bVideoDvdJob::jobDetails() const
 {
-  return i18n("Iso9660/Udf Filesystem (Size: %1)").arg(KIO::convertSize( doc()->size() ));
+  return ( i18n("Iso9660/Udf Filesystem (Size: %1)").arg(KIO::convertSize( doc()->size() ))
+	   + ( m_doc->copies() > 1 
+	       ? i18n(" - %n copy", " - %n copies", m_doc->copies()) 
+	       : QString::null ) );
 }
 
 #include "k3bvideodvdjob.moc"
