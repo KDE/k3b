@@ -55,6 +55,10 @@ class K3bCddaCopy : public K3bJob
  public slots:
   void setDevice( K3bDevice* dev ) { m_device = dev; }
   void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
+
+  /**
+   * 1 is the first track
+   */
   void setCopyTracks( const QValueList<int>& t ) { m_tracksToCopy = t; }
   void setUsePattern( bool b ) { m_bUsePattern = b; }
   void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
@@ -101,6 +105,8 @@ class K3bCddaCopy : public K3bJob
   unsigned int m_currentTrackIndex;
   unsigned long m_byteCount;
   int m_lastOverallPercent;
+
+  int m_currentRippedTrackNumber;
 
   bool m_interrupt;
 

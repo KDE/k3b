@@ -121,7 +121,9 @@ void K3bCddaCopy::slotDiskInfoReady( const K3bCdDevice::DiskInfo& info )
 
 bool K3bCddaCopy::startRip( unsigned int i )
 {
-  infoMessage( i18n("Reading track %1").arg( m_tracksToCopy[i] ), PROCESS );
+  m_currentRippedTrackNumber = m_tracksToCopy[i];
+
+  infoMessage( i18n("Reading track %1").arg( m_currentRippedTrackNumber ), PROCESS );
 
   // if we are writing a single file we only need the first filename
   if( !m_singleFile || i == 0 )
@@ -151,16 +153,17 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
   kdDebug() << "(K3bCddaCopy) starting K3bAudioRip" << endl;
 
-  m_audioRip->setTrackToRip( m_tracksToCopy[i] );
+  m_audioRip->setTrackToRip( m_currentRippedTrackNumber );
   m_audioRip->setDevice( m_device );
 
   m_audioRip->start();
 
-  if( !m_cddbEntry.artists[m_tracksToCopy[i]].isEmpty() &&
-      !m_cddbEntry.titles[m_tracksToCopy[i]].isEmpty() )
-    emit newSubTask( i18n("Reading track %1 (%2 - %3)").arg(m_tracksToCopy[i]).arg(m_cddbEntry.artists[m_tracksToCopy[i]]).arg(m_cddbEntry.titles[m_tracksToCopy[i]]) );
+
+  if( !m_cddbEntry.artists[m_currentRippedTrackNumber-1].isEmpty() &&
+      !m_cddbEntry.titles[m_currentRippedTrackNumber-1].isEmpty() )
+    emit newSubTask( i18n("Reading track %1 (%2 - %3)").arg(m_currentRippedTrackNumber).arg(m_cddbEntry.artists[m_currentRippedTrackNumber-1]).arg(m_cddbEntry.titles[m_currentRippedTrackNumber-1]) );
   else
-    emit newSubTask( i18n("Reading track %1").arg(m_tracksToCopy[i]) );
+    emit newSubTask( i18n("Reading track %1").arg(m_currentRippedTrackNumber) );
 
   return true;
 }
@@ -198,10 +201,10 @@ void K3bCddaCopy::slotTrackFinished( bool success )
     kdDebug() << "(K3bCddaCopy) creating new entry in SongDb." << endl;
     K3bSong* song = new K3bSong( m_currentWrittenFile.right( m_currentWrittenFile.length() - 1 - m_currentWrittenFile.findRev("/") ),
 				 m_cddbEntry.cdTitle,
-				 m_cddbEntry.artists[m_tracksToCopy[m_currentTrackIndex]],
-				 m_cddbEntry.titles[m_tracksToCopy[m_currentTrackIndex]],
+				 m_cddbEntry.artists[m_currentRippedTrackNumber-1],
+				 m_cddbEntry.titles[m_currentRippedTrackNumber-1],
 				 m_cddbEntry.discid,
-				 m_tracksToCopy[m_currentTrackIndex] );
+				 m_currentRippedTrackNumber );
     k3bcore->songManager()->addSong( m_currentWrittenFile.left(m_currentWrittenFile.findRev("/")), song );
 
 
