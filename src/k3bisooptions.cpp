@@ -25,7 +25,7 @@
 
 K3bIsoOptions::K3bIsoOptions()
   : m_volumeID( "CDROM" ),
-    m_applicationID( QString("K3B THE CD KREATOR VERSION %1 (C) 2003 THE K3B TEAM").arg(k3bcore->version()) ),
+    m_applicationID( QString("K3B THE CD KREATOR VERSION %1 (C) 2003 SEBASTIAN TRUEG AND THE K3B TEAM").arg(k3bcore->version()) ),
     m_preparer( i18n("K3b - Version %1").arg(k3bcore->version()) ),
     m_systemId( K3b::systemName().upper() ),
     m_inputCharset( "iso8859-1" ),
