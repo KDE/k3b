@@ -341,9 +341,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   // tracknumber: cap(1)
   // done: cap(2)
   // complete: cap(3)
-  // fifo: cap(4)
+  // fifo: cap(4)  (it seems as if some patched cdrecord versions do not emit the fifo info but only the buf... :(
   // buffer: cap(5)
-  static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s\\(fifo\\s*(\\d*)\\%\\)\\s*(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
+  static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s(?:\\(fifo\\s*(\\d*)\\%\\)\\s*)?(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
   
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
   
