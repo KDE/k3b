@@ -185,11 +185,10 @@ void K3bCdCopyJob::cdrdaoWrite() {
     m_cdrdaowriter->setDataFile("");
 
     if (m_finishedSessions == 0 ) {
-       K3bEmptyDiscWaiter waiter( m_cdrdaowriter->burnDevice(), k3bMain() );
-       if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-          cancelAll();
-          return;
-       }
+      if( K3bEmptyDiscWaiter::wait( m_cdrdaowriter->burnDevice() ) == K3bEmptyDiscWaiter::CANCELED ) {
+	cancelAll();
+	return;
+      }
     }
     m_job = WRITING;
     m_cdrdaowriter->start();
@@ -200,8 +199,7 @@ void K3bCdCopyJob::cdrdaoDirectCopy() {
     m_cdrdaowriter->setOnTheFly(true);
 
     if (m_finishedSessions == 0 ) {
-      K3bEmptyDiscWaiter waiter( m_cdrdaowriter->burnDevice(), k3bMain() );
-      if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+      if( K3bEmptyDiscWaiter::wait( m_cdrdaowriter->burnDevice() ) == K3bEmptyDiscWaiter::CANCELED ) {
         cancelAll();
         return;
       }

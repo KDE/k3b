@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -63,7 +63,7 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 
 int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
 {
-  m_apppendable = appendable;
+  m_appendable = appendable;
 
   if( appendable )
     m_label->setText( i18n("Please insert an appendable CDR medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
@@ -82,7 +82,7 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
 void K3bEmptyDiscWaiter::slotTestForEmptyCd()
 {
   int x = m_device->isEmpty();
-  if( x == K3bDevice::EMPTY || ( x == K3bDevice::APPENDABLE && m_apppendable ) ) {
+  if( x == K3bDevice::EMPTY || ( x == K3bDevice::APPENDABLE && m_appendable ) ) {
     m_timer->stop();
     
     done( DISK_READY );
@@ -131,5 +131,17 @@ void K3bEmptyDiscWaiter::slotUser1()
   done( DISK_READY );
 }
 
+
+int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable )
+{
+  int x = device->isEmpty();
+  if( x == K3bDevice::EMPTY || ( x == K3bDevice::APPENDABLE && appendable ) ) {
+    return DISK_READY;
+  }
+  else {
+    K3bEmptyDiscWaiter d( device );
+    return d.waitForEmptyDisc( appendable );
+  }
+}
 
 #include "k3bemptydiscwaiter.moc"

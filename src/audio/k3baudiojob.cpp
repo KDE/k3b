@@ -418,8 +418,7 @@ bool K3bAudioJob::startWriting()
     emit newTask( i18n("Writing") );
 
 
-  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+  if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
     cancel();
     return false;
   }

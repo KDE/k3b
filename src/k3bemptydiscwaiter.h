@@ -54,6 +54,11 @@ class K3bEmptyDiscWaiter : public KDialogBase
    */
   int waitForEmptyDisc( bool appendable = false );
 
+  /**
+   * This only openes a dialog if the first check failed.
+   */
+  static int wait( K3bDevice* device, bool appendable = false );
+
  signals:
   void canceled();
   void discReady();
@@ -71,7 +76,7 @@ class K3bEmptyDiscWaiter : public KDialogBase
   K3bDevice* m_device;
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonForce;
-  bool m_apppendable;
+  bool m_appendable;
 
   QLabel* m_label;
 };

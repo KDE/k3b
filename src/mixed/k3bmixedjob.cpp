@@ -760,8 +760,7 @@ bool K3bMixedJob::startWriting()
   if( !(m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION 
 	&& m_currentAction == WRITING_ISO_IMAGE) ) {
 
-    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
       cancel();
       return false;
     }

@@ -88,10 +88,9 @@ void K3bBinImageWritingJob::cancel() {
 
 void K3bBinImageWritingJob::cdrdaoWrite() {
     m_cdrdaowriter->setCommand(K3bCdrdaoWriter::WRITE);
-    K3bEmptyDiscWaiter waiter( m_cdrdaowriter->burnDevice(), k3bMain() );
-    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-        cancelAll();
-        return;
+    if( K3bEmptyDiscWaiter::wait( m_cdrdaowriter->burnDevice() ) == K3bEmptyDiscWaiter::CANCELED ) {
+      cancelAll();
+      return;
     }
     m_cdrdaowriter->start();
 }

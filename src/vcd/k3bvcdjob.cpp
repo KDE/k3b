@@ -353,12 +353,11 @@ void K3bVcdJob::slotVcdxBuildFinished()
     if ( !vcdDoc() ->onlyCreateImages() ) {
         kdDebug() << "(K3bVcdJob) start writing" << endl;
         if ( prepareWriterJob() ) {
-            K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-            if ( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-                cancel();
-                return ;
-            }
-            m_writerJob->start();
+	  if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
+	    cancel();
+	    return ;
+	  }
+	  m_writerJob->start();
         }
     } else {
         emit finished( true );

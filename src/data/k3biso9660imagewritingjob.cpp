@@ -20,6 +20,7 @@
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 #include <tools/k3bglobals.h>
+#include <k3bemptydiscwaiter.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -62,8 +63,15 @@ void K3bIso9660ImageWritingJob::start()
     return;
   }
 
-  if( prepareWriter() )
-    m_writer->start();
+  if( prepareWriter() ) {
+    if( K3bEmptyDiscWaiter::wait( m_device ) == K3bEmptyDiscWaiter::CANCELED ) {
+      emit canceled();
+      emit finished(false);
+    }
+    else {
+      m_writer->start();
+    }
+  }
 }
 
 

@@ -21,6 +21,8 @@
 #include <k3b.h>
 #include <tools/k3bglobals.h>
 #include <device/k3bdevice.h>
+#include <device/k3btoc.h>
+#include <device/k3btrack.h>
 #include <k3bemptydiscwaiter.h>
 #include <tools/k3bexternalbinmanager.h>
 #include <k3bcdrecordwriter.h>
@@ -95,14 +97,11 @@ void K3bDataJob::start()
   m_canceled = false;
   m_imageFinished = false;
 
-  determineWritingMode();
-
   if( !m_doc->onlyCreateImages() && 
       ( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
     m_msInfoFetcher->setDevice( m_doc->burner() );
-    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-    if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
+    if( K3bEmptyDiscWaiter::wait( m_doc->burner(), true ) == K3bEmptyDiscWaiter::CANCELED ) {
       cancel();
       return;
     }
@@ -118,6 +117,7 @@ void K3bDataJob::start()
   }
   else {
     m_isoImager->setMultiSessionInfo( QString::null );
+    determineWritingMode();
     writeImage();
   }
 }
@@ -129,6 +129,10 @@ void K3bDataJob::slotMsInfoFetched(bool success)
     return;
 
   if( success ) {
+    // we call this here since in ms mode we might want to check 
+    // the last track's datamode
+    determineWritingMode();
+
     if( m_usedWritingApp == K3b::CDRECORD )
       m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo(), m_doc->burner() );
     else  // cdrdao seems to write a 150 blocks pregap that is not used by cdrecord
@@ -269,8 +273,7 @@ bool K3bDataJob::startWriting()
   if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
       m_doc->multiSessionMode() == K3bDataDoc::START ) {
 	  
-    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
       cancel();
       return false;
     }
@@ -452,7 +455,34 @@ void K3bDataJob::determineWritingMode()
 {
   // first of all we determine the data mode
   if( m_doc->dataMode() == K3b::AUTO ) {
-    if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+    if( !m_doc->onlyCreateImages() && 
+	( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
+
+      // try to get the last track's datamode
+      // we already asked for an appendable cdr when fetching
+      // the ms info
+      kdDebug() << "(K3bDataJob) determining last track's datamode..." << endl;
+
+      // FIXME: use a devicethread
+      K3bCdDevice::Toc toc = m_doc->burner()->readToc();
+      if( toc.isEmpty() ) {
+	kdDebug() << "(K3bDataJob) could not retrieve toc." << endl;
+	emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), ERROR );
+	m_usedDataMode = K3b::MODE2;
+      }
+      else {
+	if( toc[toc.count()-1].mode() == K3bCdDevice::Track::MODE1 )
+	  m_usedDataMode = K3b::MODE1;
+	else
+	  m_usedDataMode = K3b::MODE2;
+
+	kdDebug() << "(K3bDataJob) using datamode: " 
+		  << (m_usedDataMode == K3b::MODE1 ? "mode1" : "mode2")
+		  << endl;
+      }
+    }
+    else if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
       m_usedDataMode = K3b::MODE1;
     else
       m_usedDataMode = K3b::MODE2;
@@ -520,20 +550,28 @@ void K3bDataJob::cancelAll()
 QString K3bDataJob::jobDescription() const
 {
   if( m_doc->onlyCreateImages() ) {
-    return i18n("Creating Iso9660 image file");
+    return i18n("Creating Data Image File");
   }
   else {
-    if( m_doc->isoOptions().volumeID().isEmpty() ) 
-      return i18n("Writing Iso9660 data cd");
-    else
-      return i18n("Writing Iso9660 data cd (%1)").arg(m_doc->isoOptions().volumeID());
+    if( m_doc->isoOptions().volumeID().isEmpty() ) {
+      if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+	return i18n("Writing Data CD");
+      else
+	return i18n("Writing Multisession CD");
+    }
+    else {
+      if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+	return i18n("Writing Data CD (%1)").arg(m_doc->isoOptions().volumeID());
+      else
+	return i18n("Writing Multisession CD (%1)").arg(m_doc->isoOptions().volumeID());
+    }
   }
 }
 
 
 QString K3bDataJob::jobDetails() const
 {
-  return i18n("Size: %1").arg(KIO::convertSize( m_doc->size() ));
+  return i18n("Iso9660 Filesystem (Size: %1)").arg(KIO::convertSize( m_doc->size() ));
 }
 
 #include "k3bdatajob.moc"
