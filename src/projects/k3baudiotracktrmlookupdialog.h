@@ -32,7 +32,10 @@ class K3bAudioTrackTRMLookupDialog : public KDialog
   K3bAudioTrackTRMLookupDialog( QWidget* parent = 0, const char* name = 0 );
   ~K3bAudioTrackTRMLookupDialog();
 
-  void lookup( const QPtrList<K3bAudioTrack>& tracks );
+  /**
+   * This will show the dialog and start the lookup
+   */
+  int lookup( const QPtrList<K3bAudioTrack>& tracks );
 
  private slots:
   void slotLookupFinished( K3bTRMLookup* );

@@ -112,6 +112,7 @@ class K3bAudioTrackView : public K3bListView
   void showPopupMenu( KListView*, QListViewItem* item, const QPoint& pos );
   void slotProperties();
   void slotPlayTrack();
+  void slotQueryMusicBrainz();
 
  protected:
   void keyPressEvent( QKeyEvent* e );

@@ -46,7 +46,6 @@ class K3bAudioView : public K3bView
 
  private slots:
   void slotAudioConversion();
-  void slotQueryMusicBrainz();
 
  private:
   K3bAudioDoc* m_doc;

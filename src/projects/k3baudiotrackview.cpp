@@ -26,6 +26,7 @@
 #include "k3baudiotrackplayer.h"
 #include "k3baudiocdtrackdrag.h"
 #include "k3baudiocdtracksource.h"
+#include "k3baudiotracktrmlookupdialog.h"
 
 #include <k3bview.h>
 #include <k3bcdtextvalidator.h>
@@ -49,6 +50,7 @@
 #include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kmessagebox.h>
 
 
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const char* name )
@@ -880,6 +882,43 @@ void K3bAudioTrackView::removePlayerIndicator()
     getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, QPixmap() );
   m_playerItemAnimator->stop();
   m_currentlyPlayingTrack = 0;
+}
+
+
+void K3bAudioTrackView::slotQueryMusicBrainz()
+{
+#if HAVE_MUSICBRAINZ
+  // we can only do a query on a single source but on the other hand we can only
+  // use meta info for tracks, so we need
+  // tracks with a single source
+
+  QPtrList<K3bAudioTrack> tracks;
+  QPtrList<K3bAudioDataSource> sources;
+  getSelectedItems( tracks, sources );
+
+  if( tracks.isEmpty() ) {
+    KMessageBox::sorry( this, i18n("Please select an audio track.") );
+    return;
+  }
+
+  // determine the tracks we can use (one single audio file)
+  for( QPtrListIterator<K3bAudioTrack> it( tracks ); *it; ++it ) {
+    if( it.current()->numberSources() > 1 )
+      tracks.remove( it.current() );
+    else if( dynamic_cast<K3bAudioFile*>( it.current()->firstSource() ) == 0 )
+      tracks.remove( it.current() );
+  }
+
+  if( tracks.isEmpty() ) {
+    KMessageBox::sorry( this, i18n("K3b can only perform a MusicBrainz query on tracks "
+				   "with a single file source.") );
+    return;
+  }
+
+  // now do the lookup on the files.
+  K3bAudioTrackTRMLookupDialog dlg( this );
+  dlg.lookup( tracks );
+#endif
 }
 
 #include "k3baudiotrackview.moc"

@@ -27,7 +27,7 @@
 class K3bMainWindow;
 class QDropEvent;
 class QDragEnterEvent;
-class QToolButton;
+class K3bFlatButton;
 class QPaintEvent;
 class QResizeEvent;
 class QSimpleRichText;
@@ -68,11 +68,6 @@ class K3bWelcomeWidget::Display : public QWidget
  public:
   Display( QWidget* parent );
 
-  QToolButton* audioDocButton;
-  QToolButton* dataDocButton;
-  QToolButton* dataDvdDocButton;
-  QToolButton* copyCdButton;
-
   void setHeaderBackgroundColor( const QColor& );
   void setHeaderForegroundColor( const QColor& );
 
@@ -80,7 +75,7 @@ class K3bWelcomeWidget::Display : public QWidget
 
   void addAction( KAction* );
   void removeAction( KAction* );
-  void removeButton( QToolButton* );
+  void removeButton( K3bFlatButton* );
   void rebuildGui();
   void rebuildGui( const QPtrList<KAction>& );
 
@@ -102,8 +97,8 @@ class K3bWelcomeWidget::Display : public QWidget
   int m_cols;
 
   QPtrList<KAction> m_actions;
-  QPtrList<QToolButton> m_buttons;
-  QMap<QToolButton*, KAction*> m_buttonMap;
+  QPtrList<K3bFlatButton> m_buttons;
+  QMap<K3bFlatButton*, KAction*> m_buttonMap;
 
   QColor m_headerBgColor;
   QColor m_headerFgColor;

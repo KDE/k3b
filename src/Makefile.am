@@ -14,7 +14,7 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3binteractiondialog.cpp k3bthememanager.cpp k3bdvdformattingdialog.cpp \
 	k3bprojectmanager.cpp ktrm.cpp k3btrm.cpp \
 	k3baudioprojectinterface.cpp k3bmixedprojectinterface.cpp \
-	k3baudioprojectinterface.skel k3bmixedprojectinterface.skel
+	k3baudioprojectinterface.skel k3bmixedprojectinterface.skel k3bflatbutton.cpp
 
 k3b_LDADD   = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la ./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la ./images/libimagewriting.la ./projects/libprojects.la ../libk3bdevice/libk3bdevice.la ../libk3b/libk3b.la -lkio -lkparts $(CAM_LIB) $(MB_LIBS)
 

@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,11 @@
 
 #include "k3bwelcomewidget.h"
 #include "k3b.h"
+#include "k3bflatbutton.h"
 #include <k3bstdguiitems.h>
-#include <k3bapplication.h>
+#include "k3bapplication.h"
 #include <k3bversion.h>
-#include <k3bthememanager.h>
+#include "k3bthememanager.h"
 
 #include <qpixmap.h>
 #include <qtoolbutton.h>
@@ -27,6 +28,7 @@
 #include <qsimplerichtext.h>
 #include <qptrlist.h>
 #include <qmap.h>
+#include <qtooltip.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -88,7 +90,7 @@ void K3bWelcomeWidget::Display::removeAction( KAction* action )
 }
 
 
-void K3bWelcomeWidget::Display::removeButton( QToolButton* b )
+void K3bWelcomeWidget::Display::removeButton( K3bFlatButton* b )
 {
   removeAction( m_buttonMap[b] );
 }
@@ -103,7 +105,7 @@ void K3bWelcomeWidget::Display::rebuildGui( const QPtrList<KAction>& actions )
 
 void K3bWelcomeWidget::Display::rebuildGui()
 {
-  // step 1: delete all old buttons in the buttons QPtrList<QToolButton>
+  // step 1: delete all old buttons in the buttons QPtrList<K3bFlatButton>
   m_buttonMap.clear();
   m_buttons.setAutoDelete(true);
   m_buttons.clear();
@@ -129,16 +131,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
     for( QPtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
       KAction* a = it.current();
 
-      QToolButton* b = new QToolButton( this );
-      b->setTextLabel( a->toolTip(), true );
-      b->setTextLabel( a->text(), false );
-      b->setIconSet( a->iconSet(KIcon::Desktop) );
-      b->setUsesTextLabel( true );
-      b->setUsesBigPixmap( true );
-      b->setAutoRaise( true );
-      b->setTextPosition( QToolButton::Under );
-
-      connect( b, SIGNAL(clicked()), a, SLOT(activate()) );
+      K3bFlatButton* b = new K3bFlatButton( a, this );
 
       m_buttons.append( b );
       m_buttonMap.insert( b, a );
@@ -148,7 +141,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
     // determine the needed button size (since all buttons should be equal in size
     // we use the max of all sizes)
     m_buttonSize = m_buttons.first()->sizeHint();
-    for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
+    for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
       m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
     }
 
@@ -157,8 +150,8 @@ void K3bWelcomeWidget::Display::rebuildGui()
     repositionButtons();
 
     // step 6: calculate widget size
-    m_size = QSize( QMAX(40+m_header->widthUsed(), 160+(m_buttonSize.width()*m_cols)),
-		    160+(m_buttonSize.height()*rows) );
+    m_size = QSize( QMAX(40+m_header->widthUsed(), 160+(m_buttonSize.width()*m_cols)+5*(m_cols-1)),
+		    160+(m_buttonSize.height()*rows)+5*(rows-1) );
   }
 }
 
@@ -169,10 +162,10 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
   int row = 0;
   int col = 0;
-  for( QPtrListIterator<QToolButton> it( m_buttons ); it.current(); ++it ) {
-    QToolButton* b = it.current();
+  for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
+    K3bFlatButton* b = it.current();
     
-    b->setGeometry( QRect( QPoint( leftMargin+(col*m_buttonSize.width()), 80+(row*m_buttonSize.height()) ), 
+    b->setGeometry( QRect( QPoint( leftMargin+(col*m_buttonSize.width())+(col*5), 80+(row*m_buttonSize.height())+(row*5) ), 
 			   m_buttonSize ) );
     b->show();
     
@@ -316,7 +309,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     int r = -1;
 
     int removeAction = -1;
-    if( viewport()->childAt(e->pos())->inherits( "QToolButton" ) ) {
+    if( viewport()->childAt(e->pos())->inherits( "K3bFlatButton" ) ) {
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
       pop.insertItem( i18n("Add Button"), &addPop );
       r = pop.exec( e->globalPos() );
@@ -328,7 +321,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
     if( r != -1 ) {
       if( r == removeAction )
-	main->removeButton( (QToolButton*)viewport()->childAt(e->pos()) );
+	main->removeButton( (K3bFlatButton*)viewport()->childAt(e->pos()) );
       else
 	main->addAction( map[r] );
     }

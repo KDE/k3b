@@ -35,6 +35,8 @@
 #include <qlayout.h>
 #include <qtimer.h>
 #include <qframe.h>
+#include <qeventloop.h>
+#include <qapplication.h>
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent, const char* name )
@@ -70,16 +72,23 @@ K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent, con
 
 K3bAudioTrackTRMLookupDialog::~K3bAudioTrackTRMLookupDialog()
 {
+  kdDebug() << k_funcinfo << endl;
 }
 
 
-void K3bAudioTrackTRMLookupDialog::lookup( const QPtrList<K3bAudioTrack>& tracks )
+int K3bAudioTrackTRMLookupDialog::lookup( const QPtrList<K3bAudioTrack>& tracks )
 {
   m_tracks = tracks;
 
   m_busyWidget->showBusy(true);
 
   lookup( m_tracks.first() );
+
+  // doing our own event loop becasue exec makes K3b hang for some reason.... ??
+  setModal( true );
+  show();
+  QApplication::eventLoop()->enterLoop();
+  return 0;
 }
 
 
@@ -97,7 +106,8 @@ void K3bAudioTrackTRMLookupDialog::lookup( K3bAudioTrack* track )
   }
   else {
     m_busyWidget->showBusy(false);
-    done(0);
+    hide();
+    QApplication::eventLoop()->exitLoop();
   }
 }
 
