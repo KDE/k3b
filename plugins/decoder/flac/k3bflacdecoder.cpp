@@ -234,7 +234,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
     // no Vorbis comments, check for ID3 tags
     kdDebug() << "(K3bFLACDecoder) using taglib to read tag" << endl;
     TagLib::FLAC::File f( QFile::encodeName(filename()) );
-    if( file.isOpen() ) {
+    if( f.isOpen() ) {
       addMetaInfo( META_TITLE, TStringToQString( f.tag()->title() ) );
       addMetaInfo( META_ARTIST, TStringToQString( f.tag()->artist() ) );
       addMetaInfo( META_COMMENT, TStringToQString( f.tag()->comment() ) );
