@@ -258,8 +258,11 @@ void K3bIso9660ImageWritingJob::startWriting()
 bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 {
   if( mediaType == 0 ) { // media forced
+    // just to get it going...
     if( writingApp() != K3b::GROWISOFS )
-      mediaType = K3bCdDevice::MEDIA_CD_R; // just to get it going...
+      mediaType = K3bCdDevice::MEDIA_CD_R;
+    else
+      mediaType = K3bCdDevice::MEDIA_DVD_R;
   }
 
   delete m_writer;
