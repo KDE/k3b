@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,15 +20,14 @@
 #include "../k3bview.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
-
-
+#include "../device/k3bdevice.h"
 
 class K3bDataDoc;
 class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
 class K3bFillStatusDisplay;
-class K3bDevice;
+
 namespace KIO {
   class Job;
 };

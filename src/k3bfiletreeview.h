@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -19,11 +19,11 @@
 
 
 #include <kfiletreeview.h>
+#include "device/k3bdevice.h"
+#include "device/k3bdevicemanager.h"
 
 #include <qmap.h>
 
-class K3bDeviceManager;
-class K3bDevice;
 class KFileTreeBranch;
 class KActionCollection;
 class KActionMenu;

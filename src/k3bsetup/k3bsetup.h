@@ -25,8 +25,9 @@ class KConfig;
 #include <qstring.h>
 #include <qstringlist.h>
 
+#include "../device/k3bdevice.h"
+#include "../device/k3bdevicemanager.h"
 
-class K3bDeviceManager;
 class K3bExternalBinManager;
 class KSimpleConfig;
 

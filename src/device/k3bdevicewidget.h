@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -19,6 +19,8 @@
 
 #include <qwidget.h>
 #include <qptrlist.h>
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
 
 class QComboBox;
 class QLabel;
@@ -31,8 +33,6 @@ class KIntNumInput;
 class QFrame;
 class QListViewItem;
 class QString;
-class K3bDevice;
-class K3bDeviceManager;
 class QLineEdit;
 
 

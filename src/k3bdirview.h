@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -24,16 +24,16 @@
 #include <klistview.h>
 #include <kdiroperator.h>
 #include <kfiledetailview.h>
+#include "device/k3bdevice.h"
+#include "device/k3bdevicemanager.h"
 
 class QSplitter;
 class KURL;
 class K3bCdView;
 class K3bFileView;
 class K3bMovieView;
-class K3bDeviceManager;
 class KComboBox;
 class K3bFileTreeView;
-class K3bDevice;
 class QWidgetStack;
 class K3bDiskInfo;
 class K3bDiskInfoView;

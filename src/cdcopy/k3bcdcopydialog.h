@@ -20,13 +20,13 @@
 
 
 #include <kdialogbase.h>
+#include "../device/k3bdevice.h"
 
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
-class K3bDevice;
 
 
 /**

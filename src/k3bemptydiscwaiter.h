@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,14 +18,13 @@
 #define K3BEMPTYDISCWAITER_H
 
 #include <kdialogbase.h>
+#include "device/k3bdevice.h"
 
 class QTimer;
-class K3bDevice;
 class QPushButton;
 class QCloseEvent;
 class QLabel;
 class K3bBusyWidget;
-
 
 /**
  * Tests for an empty cd in a given device.

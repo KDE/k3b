@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -20,17 +20,22 @@
 
 #include "../device/k3btoc.h"
 #include "../device/k3bmsf.h"
+
 #include <qstring.h>
 
-class K3bDevice;
+namespace K3bCdDevice {
+   class CdDevice;
+};
+
+typedef K3bCdDevice::CdDevice K3bDevice;
 
 class K3bDiskInfo
 {
  public:
   K3bDiskInfo()
-    : empty(false), 
-    cdrw(false), 
-    appendable(false), 
+    : empty(false),
+    cdrw(false),
+    appendable(false),
     noDisk(true),
     isVideoDvd(false),
     isVCD(false),

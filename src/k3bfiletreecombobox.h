@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -17,9 +17,9 @@
 #define _K3B_FILETREE_COMBOBOX_H_
 
 #include <kcombobox.h>
+#include "device/k3bdevice.h"
 
 class K3bFileTreeView;
-class K3bDevice;
 class QEvent;
 class QKeyEvent;
 class QMouseEvent;

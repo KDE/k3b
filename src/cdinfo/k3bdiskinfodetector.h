@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,7 +26,7 @@ typedef Q_INT32 size32;
 #include "../rip/k3btcwrapper.h"
 
 
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 
 
 class K3bDiskInfoDetector : public QObject

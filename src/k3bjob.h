@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,12 +18,11 @@
 #define K3BJOB_H
 
 #include <qobject.h>
+#include "device/k3bdevice.h"
 
 class QString;
 class K3bDoc;
-class K3bDevice;
 class KProcess;
-
 
 /**This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
   *@author Sebastian Trueg

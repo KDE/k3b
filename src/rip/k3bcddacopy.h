@@ -40,7 +40,7 @@ typedef Q_INT32 size32;
 
 class QStringList;
 class QFile;
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 class K3bDiskInfoDetector;
 class QCustomEvent;
 

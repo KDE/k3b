@@ -20,6 +20,8 @@
 
 #include "../k3bcdcontentsview.h"
 #include <qvaluelist.h>
+#include "../device/k3bdevice.h"
+
 //class QString;
 class KCutLabel;
 class QListViewItem;
@@ -31,7 +33,6 @@ class KListView;
 class KPopupMenu;
 class K3bTcWrapper;
 class K3bDvdContent;
-class K3bDevice;
 class K3bDvdRipListViewItem;
 //class K3bDvdRipperWidget;
 

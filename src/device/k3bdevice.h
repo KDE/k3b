@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -19,14 +19,16 @@
 
 #include <qstringlist.h>
 #include "../cdinfo/k3bdiskinfo.h"
+
 #include "k3bmsf.h"
 
-/* #define SUPPORT_IDE */
+#define SUPPORT_IDE
 
-class K3bToc;
+namespace K3bCdDevice {
 
+class Toc;
 
-class K3bDevice
+class CdDevice
 {
 
  public:
@@ -34,22 +36,23 @@ class K3bDevice
    * The available cdrdao drivers
    */
   static const char* cdrdao_drivers[];
-  enum interface { SCSI, IDE, OTHER };
-  enum DeviceType    { CDR = 1, 
-		       CDRW = 2, 
-		       CDROM = 4, 
-		       DVDROM = 8, 
-		       DVDRAM = 16, 
-		       DVDR = 32, 
-		       DVDRW = 64, 
+
+enum interface { SCSI, IDE, OTHER };
+enum DeviceType    { CDR = 1,
+		       CDRW = 2,
+		       CDROM = 4,
+		       DVDROM = 8,
+		       DVDRAM = 16,
+		       DVDR = 32,
+		       DVDRW = 64,
 		       DVDPR = 128,
 		       DVDPRW = 256 };
-  enum DiskStatus { EMPTY = 0,
+enum DiskStatus { EMPTY = 0,
 		    APPENDABLE = 1,
 		    COMPLETE = 2,
 		    NO_DISK = -1,
 		    NO_INFO = -2 };
-  enum WriteMode { SAO = 1,
+enum WriteMode { SAO = 1,
 		   TAO = 2,
 		   PACKET = 4,
 		   SAO_R96P = 8,
@@ -57,6 +60,7 @@ class K3bDevice
 		   RAW_R16 = 32,
 		   RAW_R96P = 64,
 		   RAW_R96R = 128 };
+
 
   class Private
   {
@@ -66,6 +70,7 @@ class K3bDevice
        QString blockDeviceName;
        QString genericDevice;
        int deviceType;
+       interface interfaceType;
        QString mountPoint;
        QString mountDeviceName;
        QStringList allNodes;
@@ -75,25 +80,25 @@ class K3bDevice
    * create a K3bDevice from a cdrom_drive struct
    * (cdparanoia-lib)
    */
-  K3bDevice( const QString& devname );
-  virtual ~K3bDevice();
+  CdDevice( const QString& devname );
+  ~CdDevice();
 
   bool init();
 
-  virtual int interfaceType() const = 0;
-  virtual int type() const;
+  interface interfaceType();
+  int type() const;
 
-  virtual const QString& vendor() const { return m_vendor; }
-  virtual const QString& description() const { return m_description; }
-  virtual const QString& version() const { return m_version; }
-  virtual bool           burner() const { return m_burner; }
-  virtual bool           writesCdrw() const { return m_bWritesCdrw; }
-  virtual bool           burnproof() const { return m_burnproof; }
-  virtual bool           dao() const { return m_dao; }
-  virtual int            maxReadSpeed() const { return m_maxReadSpeed; }
-  virtual int            currentWriteSpeed() const { return m_currentWriteSpeed; }
+  const QString& vendor() const { return m_vendor; }
+  const QString& description() const { return m_description; }
+  const QString& version() const { return m_version; }
+  bool           burner() const { return m_burner; }
+  bool           writesCdrw() const { return m_bWritesCdrw; }
+  bool           burnproof() const { return m_burnproof; }
+  bool           dao() const { return m_dao; }
+  int            maxReadSpeed() const { return m_maxReadSpeed; }
+  int            currentWriteSpeed() const { return m_currentWriteSpeed; }
 
-  virtual int            bufferSize() const { return m_bufferSize; }
+  int            bufferSize() const { return m_bufferSize; }
 
   /**
    * ioctlDevice is returned
@@ -103,7 +108,7 @@ class K3bDevice
   /**
    * compatibility
    */
-  virtual const QString& genericDevice() const;
+  const QString& genericDevice() const;
 
   /**
    * returnes blockDeviceName()
@@ -114,11 +119,11 @@ class K3bDevice
    * for SCSI devices this should be something like /dev/scd0 or /dev/sr0
    * for ide device this should be something like /dev/hdb1
    */
-  virtual const QString& blockDeviceName() const;
+  const QString& blockDeviceName() const;
 
   /**
    * returnes all device nodes for this drive
-   * this mainly makes sense with scsi devices which 
+   * this mainly makes sense with scsi devices which
    * can be accessed through /dev/scdX or /dev/srX
    * and is useful for fstab scanning
    */
@@ -129,13 +134,13 @@ class K3bDevice
   const QString& mountDevice() const;
 
   /** makes only sense to use with sg devices */
-  virtual QString busTargetLun() const;
-  virtual int scsiBus() const { return m_bus; }
-  virtual int scsiId() const { return m_target; }
-  virtual int scsiLun() const { return m_lun; }
+  QString busTargetLun() const;
+  int scsiBus() const { return m_bus; }
+  int scsiId() const { return m_target; }
+  int scsiLun() const { return m_lun; }
 
-  virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
-  virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
+  int            maxWriteSpeed() const { return m_maxWriteSpeed; }
+  const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
 
   const QString& mountPoint() const;
 
@@ -144,41 +149,41 @@ class K3bDevice
    *          1 yes
    *          2 no
    */
-  virtual int cdTextCapable() const;
+  int cdTextCapable() const;
 
 
   /** internally K3b value. */
-  virtual void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
+  void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
 
 
-  virtual void setIsWriter( bool b ) { m_burner = b; }
-
-  /**
-   * Use this if the speed was not detected correctly.
-   */
-  virtual void setMaxReadSpeed( int s ) { m_maxReadSpeed = s; }
+  void setIsWriter( bool b ) { m_burner = b; }
 
   /**
    * Use this if the speed was not detected correctly.
    */
-  virtual void setMaxWriteSpeed( int s ) { m_maxWriteSpeed = s; }
+  void setMaxReadSpeed( int s ) { m_maxReadSpeed = s; }
+
+  /**
+   * Use this if the speed was not detected correctly.
+   */
+  void setMaxWriteSpeed( int s ) { m_maxWriteSpeed = s; }
 
   /**
    * Use this if cdrdao is not able to autodetect the nessessary driver.
    */
-  virtual void setCdrdaoDriver( const QString& d ) { m_cdrdaoDriver = d; }
+  void setCdrdaoDriver( const QString& d ) { m_cdrdaoDriver = d; }
 
   /**
    * Only used if the cdrdao-driver is NOT set to "auto".
    * In that case it must be manually set because there
    * is no way to autosense the cd-text capability.
    */
-  virtual void setCdTextCapability( bool );
+  void setCdTextCapability( bool );
 
-  virtual void setBurnproof( bool );
-  virtual void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
-  virtual void setDao( bool b ) { m_dao = b; }
-  virtual void setBufferSize( int b ) { m_bufferSize = b; }
+  void setBurnproof( bool );
+  void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
+  void setDao( bool b ) { m_dao = b; }
+  void setBufferSize( int b ) { m_bufferSize = b; }
 
   void setMountPoint( const QString& );
   void setMountDevice( const QString& d );
@@ -192,7 +197,7 @@ class K3bDevice
    *  <li>4: not ready, tray out</li>
    * </ul>
    */
-  virtual int isReady() const;
+  int isReady() const;
 
   /** not quite sure if this is nessesary! */
   //  virtual bool rezero() const;
@@ -213,9 +218,9 @@ class K3bDevice
    *  <li>-1: not ready, no disk in drive</li>
    * </ul>
    */
-  virtual int isEmpty();
+  int isEmpty();
 
-  virtual bool rewritable();
+  bool rewritable();
 
   bool isDVD();
   K3bDiskInfo::type diskType();
@@ -227,7 +232,7 @@ class K3bDevice
    * block or unblock the drive's tray
    * returns true on success and false on scsi-error
    */
-  virtual bool block( bool ) const;
+  bool block( bool ) const;
 
   void eject() const;
   void load() const;
@@ -235,7 +240,7 @@ class K3bDevice
   bool supportsWriteMode( WriteMode );
 
  protected:
-  virtual bool furtherInit();
+  bool furtherInit();
 
   QString m_vendor;
   QString m_description;
@@ -263,8 +268,11 @@ class K3bDevice
  private:
   class Private;
   Private* d;
-  friend class K3bDeviceManager;
+  friend class DeviceManager;
 };
 
+};
+
+typedef K3bCdDevice::CdDevice K3bDevice;
 
 #endif

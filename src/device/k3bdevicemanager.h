@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -31,15 +31,16 @@ class KConfig;
 class K3bExternalBinManager;
 class cdrom_drive;
 
+namespace K3bCdDevice {
 
-class K3bDeviceManager : public QObject 
+class DeviceManager : public QObject
 {
   Q_OBJECT
 
  public:
-  ~K3bDeviceManager();
+  ~DeviceManager();
 
-  static K3bDeviceManager* self();
+  static DeviceManager* self();
 
   K3bDevice* deviceByName( const QString& );
 
@@ -91,7 +92,7 @@ class K3bDeviceManager : public QObject
    * by the deviceManager.
    */
   K3bDevice* addDevice( const QString& );
-  
+
  private slots:
   void slotCollectStdout( KProcess*, char* data, int len );
 
@@ -102,10 +103,9 @@ class K3bDeviceManager : public QObject
    * a machine is equal, so having multible instances
    * does not make sense.
    **/
-  K3bDeviceManager();
-  
+  DeviceManager();
+
   bool testForCdrom( const QString& );
-  K3bDevice::interface determineInterfaceType(const QString&);
   bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
   void determineCapabilities(K3bDevice *dev);
   QString resolveSymLink( const QString& path );
@@ -119,8 +119,8 @@ class K3bDeviceManager : public QObject
 
   QString m_processOutput;
 
-  K3bDevice* initializeScsiDevice( const QString& devname);
-  K3bDevice* initializeIdeDevice( const QString& devname);
+};
 };
 
+typedef K3bCdDevice::DeviceManager K3bDeviceManager;
 #endif

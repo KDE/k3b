@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -20,7 +20,7 @@
 #include <k3bjob.h>
 
 class K3bMovixDoc;
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 class K3bDataJob;
 class KTempFile;
 class K3bMovixInstallation;

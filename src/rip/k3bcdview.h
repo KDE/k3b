@@ -48,7 +48,7 @@ class QListViewItem;
 
 //class QPoint;
 class KActionCollection;
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 class K3bDiskInfo;
 class K3bCddbResult;
 class QLabel;

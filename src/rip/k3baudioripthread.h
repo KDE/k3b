@@ -5,9 +5,8 @@
 #include <qthread.h>
 #include <qcstring.h>
 
+#include "../device/k3bdevice.h"
 
-
-class K3bDevice;
 class QTimer;
 class K3bCdparanoiaLib;
 

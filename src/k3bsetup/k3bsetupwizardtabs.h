@@ -7,6 +7,8 @@
 
 #include <klistview.h>
 
+#include "../device/k3bdevice.h"
+
 class QPushButton;
 class QLabel;
 class QCheckBox;
@@ -14,7 +16,6 @@ class QListBox;
 class QGroupBox;
 class QLineEdit;
 class QListViewItem;
-class K3bDevice;
 class K3bDeviceWidget;
 class K3bExternalBinWidget;
 

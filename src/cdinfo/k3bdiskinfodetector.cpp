@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -87,7 +87,7 @@ void K3bDiskInfoDetector::fetchDiskInfo()
   } else {
     size = m_device->remainingSize();
     if ( size != K3b::Msf(0) ) {
-      m_info.remaining = m_info.size - size - 4650;
+      m_info.remaining = size - 4650;
     }
   }
 

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,7 +22,7 @@
 
 #include <qdatetime.h>
 
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 
 
 class K3bAbstractWriter : public K3bJob

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -42,7 +42,6 @@ class K3bMainWindow;
 class K3bDoc;
 class K3bView;
 class K3bDirView;
-class K3bDeviceManager;
 class K3bExternalBinManager;
 class K3bOptionDialog;
 class K3bJob;
@@ -53,6 +52,7 @@ class K3bBusyWidget;
 class KSystemTray;
 class K3bStatusBarManager;
 
+#include "device/k3bdevicemanager.h"
 
 /** Access to the "lonely" K3bMainWindow Object */
 K3bMainWindow* k3bMain();

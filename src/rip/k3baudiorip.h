@@ -7,7 +7,7 @@
 
 
 
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 class QTimer;
 class K3bCdparanoiaLib;
 

@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *                    Klaus-Dieter Krannich <kd@k3b.org>
  *
@@ -27,7 +27,7 @@
 
 class K3bExternalBin;
 class K3bProcess;
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 
 
 class K3bCdrdaoWriter : public K3bAbstractWriter

@@ -22,9 +22,10 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
+#include "../device/k3bdevice.h"
+
 class KProcess;
 class K3bDvdContent;
-class K3bDevice;
 
 
 /**

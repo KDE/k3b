@@ -22,7 +22,7 @@
 #include "../k3bcdrdaowriter.h"
 
 class K3bProcess;
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 class QUrlOperator;
 
 

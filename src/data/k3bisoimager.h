@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,7 +26,7 @@ class K3bDirItem;
 class K3bDataItem;
 class QTextStream;
 class K3bProcess;
-class K3bDevice;
+class K3bCdDevice::CdDevice;
 class KTempFile;
 
 

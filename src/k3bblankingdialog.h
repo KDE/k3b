@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -18,6 +18,7 @@
 #define K3B_BLANKING_DIALOG_H
 
 #include <kdialogbase.h>
+#include "device/k3bdevice.h"
 
 class QString;
 class QGroupBox;
@@ -28,7 +29,6 @@ class QCheckBox;
 class QComboBox;
 class QCloseEvent;
 class KListView;
-class K3bDevice;
 class K3bBlankingJob;
 class KProgress;
 class K3bWriterSelectionWidget;
