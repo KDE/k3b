@@ -47,7 +47,6 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
   : K3bBurnJob(),
     m_writingMode(K3b::WRITING_MODE_AUTO),
     m_simulate(false),
-    m_burnproof(false),
     m_device(0),
     m_noFix(false),
     m_speed(2),
@@ -258,8 +257,11 @@ void K3bIso9660ImageWritingJob::startWriting()
 bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 {
   if( mediaType == 0 ) { // media forced
+    // just to get it going...
     if( writingApp() != K3b::GROWISOFS )
-      mediaType = K3bCdDevice::MEDIA_CD_R; // just to get it going...
+      mediaType = K3bCdDevice::MEDIA_CD_R;
+    else
+      mediaType = K3bCdDevice::MEDIA_DVD_R;
   }
 
   delete m_writer;
@@ -290,7 +292,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       writer->setWritingMode( usedWriteMode );
       writer->setSimulate( m_simulate );
-      writer->setBurnproof( m_burnproof );
       writer->setBurnSpeed( m_speed );
 
       if( m_noFix ) {
