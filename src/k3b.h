@@ -145,6 +145,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotCdCopy();
   void slotCdClone();
   void slotDvdCopy();
+  //  void slotVideoDvdCopy();
   void slotK3bSetup();
   /** No descriptions */
   void slotErrorMessage(const QString&);

@@ -59,7 +59,8 @@ class K3bSystemProblemDialog : public KDialog
 			  QWidget* parent = 0, 
 			  const char* name = 0 );
 
-  static void checkSystem();
+  static void checkSystem( QWidget* parent = 0, 
+			   const char* name = 0 );
 
  protected:
   void closeEvent( QCloseEvent* );

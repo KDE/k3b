@@ -157,7 +157,8 @@ void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 }
 
 
-void K3bSystemProblemDialog::checkSystem()
+void K3bSystemProblemDialog::checkSystem( QWidget* parent, 
+					  const char* name )
 {
   QValueList<K3bSystemProblem> problems;
 
@@ -398,7 +399,7 @@ void K3bSystemProblemDialog::checkSystem()
   if( problems.isEmpty() )
     kdDebug() << "          - none - " << endl;
   else {
-    K3bSystemProblemDialog( problems ).exec();
+    K3bSystemProblemDialog( problems, parent, name ).exec();
   }
 }
 

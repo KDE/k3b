@@ -97,6 +97,7 @@
 #include "datadvd/k3bdvdformattingdialog.h"
 #include "cdclone/k3bclonedialog.h"
 #include "dvdcopy/k3bdvdcopydialog.h"
+//#include "dvdcopy/k3bvideodvdcopydialog.h"
 #include "k3bprojectinterface.h"
 #include <k3bprojectmanager.h>
 #include "k3bwelcomewidget.h"
@@ -105,6 +106,7 @@
 #include <k3bsystemproblemdialog.h>
 #include <k3baudiodecoder.h>
 #include <k3bthememanager.h>
+
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -304,6 +306,9 @@ void K3bMainWindow::initActions()
   KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
 					    actionCollection(), "tools_copy_dvd" );
 
+//   KAction* actionToolsVideoDvdCopy = new KAction(i18n("Copy &VideoDVD..."), "cdcopy", 0, this, SLOT(slotVideoDvdCopy()),
+// 						 actionCollection(), "tools_copy_video_dvd" );
+
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
 
@@ -356,6 +361,7 @@ void K3bMainWindow::initActions()
   actionToolsBlankCdrw->setToolTip( i18n("Opens CD-blanking dialog") );
   actionCdCopy->setToolTip( i18n("Open the CD Copy dialog") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD Copy dialog") );
+  //  actionToolsVideoDvdCopy->setToolTip( i18n("Open the VideoDVD Copy dialog") );
   actionToolsCloneCd->setToolTip( i18n("Open the CD Cloning dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
@@ -945,6 +951,14 @@ K3bDoc* K3bMainWindow::slotNewVideoDvdDoc()
   // create the window
   createClient(doc);
 
+  KMessageBox::information( this, 
+			    i18n("Be aware that you need to provide the complete Video DVD filestructure. "
+				 "K3b does not support video transcoding and preparation of video object "
+				 "files yet. That means you need to already have the VTS_X_YY.VOB "
+				 "and VTS_X_YY.IFO files."),
+			    i18n("K3b Video DVD restrictions"),
+			    "video_dvd_restrictions" );
+
   return doc;
 }
 
@@ -1241,6 +1255,13 @@ void K3bMainWindow::slotDvdCopy()
 }
 
 
+// void K3bMainWindow::slotVideoDvdCopy()
+// {
+//   K3bVideoDvdCopyDialog d( this );
+//   d.exec();
+// }
+
+
 void K3bMainWindow::slotViewAudioPlayer()
 {
   m_audioPlayerDock->changeHideShowState();
@@ -1377,7 +1398,7 @@ void K3bMainWindow::setProjectsHidable( bool hidable )
 
 void K3bMainWindow::slotCheckSystem()
 {
-  K3bSystemProblemDialog::checkSystem();
+  K3bSystemProblemDialog::checkSystem( this );
 }
 
 
