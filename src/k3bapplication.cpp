@@ -200,7 +200,6 @@ void K3bApplication::init()
 
 void K3bApplication::slotShutDown()
 {
-  m_core->saveConfig();
   songManager()->save();
 
   K3bThread::waitUntilFinished();

@@ -29,8 +29,10 @@ static QPtrList<K3bThread> s_threads;
 void K3bThread::waitUntilFinished()
 {
   QPtrListIterator<K3bThread> it( s_threads );
-  while( it.current() )
+  while( it.current() ) {
     it.current()->wait();
+    ++it;
+  }
 }
 
 

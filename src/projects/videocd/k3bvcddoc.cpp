@@ -130,7 +130,8 @@ K3b::Msf K3bVcdDoc::length() const
 
 void K3bVcdDoc::addUrl( const KURL& url )
 {
-    addTrack( url, m_tracks->count() );
+  // make sure we add them at the end even if urls are in the queue
+  addTrack( url, 99 );
 }
 
 bool K3bVcdDoc::isImage( const KURL& url )

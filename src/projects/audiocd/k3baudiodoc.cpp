@@ -155,7 +155,8 @@ K3b::Msf K3bAudioDoc::length() const
 
 void K3bAudioDoc::addUrls( const KURL::List& urls )
 {
-  addTracks( urls, m_tracks->count() );
+  // make sure we add them at the end even if urls are in the queue
+  addTracks( urls, 99 );
 }
 
 
@@ -457,8 +458,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 
   informAboutNotFoundFiles();
 
-  if ( m_notFoundFiles.isEmpty() )
-    setModified(false);
+  setModified(false);
 
   return true;
 }
@@ -598,13 +598,13 @@ K3bBurnJob* K3bAudioDoc::newBurnJob()
 void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( view(), i18n("Could not find the following files:"),
+    KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
  				  m_notFoundFiles, i18n("Not Found") );
 
     m_notFoundFiles.clear();
   }
   if( !m_unknownFileFormatFiles.isEmpty() ) {
-    KMessageBox::informationList( view(), i18n("Unable to handle the following files due to an unsupported format:"),
+    KMessageBox::informationList( qApp->activeWindow(), i18n("Unable to handle the following files due to an unsupported format:"),
  				  m_unknownFileFormatFiles, i18n("Unsupported Format") );
 
     m_unknownFileFormatFiles.clear();
@@ -643,7 +643,7 @@ void K3bAudioDoc::slotDetermineTrackStatus()
   if( !m_trackStatusThread->running() ) {
     kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread not running." << endl;
     // find the next track to meta-info
-    for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); *it; ++it ) {
+    for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); it.current(); ++it ) {
       if( it.current()->length() == 0 && it.current()->status() == 0 ) {
 	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->absPath() << endl;
 	m_trackStatusThread->analyseTrack( it.current() );
@@ -653,6 +653,7 @@ void K3bAudioDoc::slotDetermineTrackStatus()
   }
   else
     kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread running." << endl;
+  kdDebug() << "(K3bAudioDoc) slotDetermineTrackStatus() end" << endl;
 }
 
 

@@ -120,6 +120,8 @@ bool K3bOptionDialog::saveSettings()
 
   k3bcore->config()->sync();
 
+  k3bcore->saveConfig();
+
   return true;
 }
 

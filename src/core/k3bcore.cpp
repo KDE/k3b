@@ -145,8 +145,6 @@ void K3bCore::saveConfig()
 {
   config()->setGroup( "General Options" );
   config()->writeEntry( "config version", version() );
-
-  // FIXME: I think this should be done when saving the options.
   config()->setGroup( "Devices" );
   deviceManager()->saveConfig( config() );
   config()->setGroup( "External Programs" );
