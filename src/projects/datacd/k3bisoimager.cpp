@@ -707,7 +707,7 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream 
     
     if( !KIO::NetAccess::copy( item->localPath(), tempPath ) ) {
       emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
-      return -1;
+      return;
     }
     
     static_cast<K3bBootItem*>(item)->setTempPath( tempPath );
