@@ -58,6 +58,8 @@ default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
+Name[pt_BR]=Aguardando pela mídia
 Comment=The user needs to insert a medium
+Comment[pt_BR]=O usuário precisa inserir uma mídia
 default_sound=k3b_wait_media1.wav
 default_presentation=1
