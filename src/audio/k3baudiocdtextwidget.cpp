@@ -25,6 +25,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qframe.h>
+#include <qtextedit.h>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -50,7 +51,7 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
 
   m_editDisc_id = new QLineEdit( this, "m_editDisc_id" );
   m_editUpc_ean = new QLineEdit( this, "m_editUpc_ean" );
-  m_editMessage = new QLineEdit( this, "m_editMessage" );
+  m_editMessage = new QTextEdit( this, "m_editMessage" );
   m_editPerformer = new QLineEdit( this, "m_editPerformer" );
   m_editArranger = new QLineEdit( this, "m_editArranger" );
   m_editTitle = new QLineEdit( this, "m_editTitle" );
@@ -77,7 +78,7 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
   mainGrid->addWidget( labelDisc_id, 9, 0 );
   mainGrid->addWidget( m_editDisc_id, 9, 1 );
   mainGrid->addWidget( labelMessage, 10, 0 );
-  mainGrid->addWidget( m_editMessage, 10, 1 );
+  mainGrid->addMultiCellWidget( m_editMessage, 10, 11, 1, 1 );
 
   mainGrid->addRowSpacing( 7, 20 );
   mainGrid->setRowStretch( 11, 1 );
@@ -102,7 +103,7 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
   setTabOrder( m_editUpc_ean, m_editDisc_id );
   setTabOrder( m_editDisc_id, m_editMessage );
 
-  QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
+  QToolTip::add( m_editDisc_id, i18n( "International Standard Recording Code" ) );
   QToolTip::add( m_editUpc_ean, i18n("CD-TEXT information field") );
   QToolTip::add( m_editMessage, i18n("CD-TEXT information field") );
   QToolTip::add( m_editPerformer, i18n("CD-TEXT information field") );
@@ -136,6 +137,7 @@ void K3bAudioCdTextWidget::load( K3bAudioDoc* doc )
   m_editArranger->setText( doc->arranger() );
   m_editSongwriter->setText( doc->songwriter() );
   m_editComposer->setText( doc->composer() );
+  m_editMessage->setText( doc->cdTextMessage() );
 }
 
 void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
@@ -149,6 +151,7 @@ void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
   doc->setArranger( m_editArranger->text() );
   doc->setSongwriter( m_editSongwriter->text() );
   doc->setComposer( m_editComposer->text() );
+  doc->setCdTextMessage( m_editMessage->text() );
 }
 
 void K3bAudioCdTextWidget::setChecked( bool b )

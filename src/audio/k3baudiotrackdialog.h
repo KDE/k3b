@@ -24,7 +24,7 @@
 
 class K3bAudioTrack;
 class QLineEdit;
-class QMultiLineEdit;
+class QTextEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
@@ -55,7 +55,7 @@ class K3bAudioTrackDialog : public KDialogBase
 
   QLineEdit* m_editPerformer;
   QLineEdit* m_editTitle;
-  QMultiLineEdit* m_editMessage;
+  QTextEdit* m_editMessage;
   QLineEdit* m_editArranger;
   QLineEdit* m_editSongwriter;
   QLineEdit* m_editComposer;

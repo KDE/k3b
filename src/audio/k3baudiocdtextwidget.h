@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -21,7 +21,9 @@
 
 class QCheckBox;
 class QLineEdit;
+class QTextEdit;
 class K3bAudioDoc;
+
 
 class K3bAudioCdTextWidget : public QWidget
 {
@@ -41,7 +43,7 @@ class K3bAudioCdTextWidget : public QWidget
  private:
   QLineEdit* m_editDisc_id;
   QLineEdit* m_editUpc_ean;
-  QLineEdit* m_editMessage;
+  QTextEdit* m_editMessage;
   QLineEdit* m_editPerformer;
   QLineEdit* m_editArranger;
   QLineEdit* m_editTitle;

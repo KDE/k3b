@@ -15,7 +15,7 @@
 
 
 #include <qlineedit.h>
-#include <qmultilineedit.h>
+#include <qtextedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -156,7 +156,7 @@ void K3bAudioTrackDialog::slotApply()
     if( m_editIsrc->edited() )
       track->setIsrc( m_editIsrc->text() );
 
-    if( m_editMessage->edited() )
+    if( m_editMessage->isModified() )
       track->setCdTextMessage( m_editMessage->text() );
 
     if( m_checkCopy->state() != QButton::NoChange )
@@ -238,7 +238,7 @@ void K3bAudioTrackDialog::setupGui()
 
   m_editPerformer  = new QLineEdit( cdTextTab, "m_editPerformer" );
   m_editTitle      = new QLineEdit( cdTextTab, "m_editTitle" );
-  m_editMessage    = new QMultiLineEdit( cdTextTab, "m_editMessage" );
+  m_editMessage    = new QTextEdit( cdTextTab, "m_editMessage" );
   m_editArranger   = new QLineEdit( cdTextTab, "m_editArranger" );
   m_editSongwriter = new QLineEdit( cdTextTab, "m_editSongwriter" );
   m_editComposer = new QLineEdit( cdTextTab, "m_editComposer" );
@@ -246,7 +246,7 @@ void K3bAudioTrackDialog::setupGui()
   QFrame* line1    = new QFrame( cdTextTab, "_line1" );
 
   //  m_editPerformer->setMinimumWidth( 100 );
-  m_editMessage->setWordWrap( QMultiLineEdit::WidgetWidth );
+  m_editMessage->setWordWrap( QTextEdit::WidgetWidth );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
 
