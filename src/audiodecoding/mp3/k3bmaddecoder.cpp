@@ -584,7 +584,7 @@ unsigned int K3bMadDecoder::resampleBlock( mad_fixed_t const *source,
 
     while (step < MAD_F_ONE) {
        *target++ = step ?
- 	last + mad_f_mul(*source - last, step) 
+ 	last + __extension__ mad_f_mul(*source - last, step) 
  	: last;
 
        step += d->madResampledRatio;
@@ -601,7 +601,7 @@ unsigned int K3bMadDecoder::resampleBlock( mad_fixed_t const *source,
     step = mad_f_fracpart(step);
 
     *target++ = step ?
-      *source + mad_f_mul(source[1] - source[0], step) 
+      *source + __extension__ mad_f_mul(source[1] - source[0], step) 
       : *source;
 
     step += d->madResampledRatio;
