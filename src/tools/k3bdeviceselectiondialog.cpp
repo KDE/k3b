@@ -109,6 +109,14 @@ K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
     return 0;
 }
 
+K3bCdDevice::CdDevice* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
+							       const QString& text )
+{
+  return selectDevice( parent, k3bcore->deviceManager()->allDevices(), text );
+
+
+}
+
 
 K3bDevice* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
 {

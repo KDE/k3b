@@ -49,6 +49,8 @@ class K3bDeviceSelectionDialog : public KDialogBase
   static K3bCdDevice::CdDevice* selectWriter( QWidget* parent, 
 					      const QString& text = QString::null );
   static K3bCdDevice::CdDevice* selectDevice( QWidget* parent, 
+					      const QString& text = QString::null );
+  static K3bCdDevice::CdDevice* selectDevice( QWidget* parent, 
 					      const QPtrList<K3bCdDevice::CdDevice>& devices,
 					      const QString& text = QString::null );
 

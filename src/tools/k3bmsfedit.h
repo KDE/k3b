@@ -45,6 +45,9 @@ class K3bMsfEdit : public QSpinBox
 
   K3b::Msf msfValue() const;
 
+ signals:
+  void valueChanged( const K3b::Msf& );
+
  public slots:
   void setValue( int v );
   void setText( const QString& );
@@ -56,6 +59,9 @@ class K3bMsfEdit : public QSpinBox
   QString mapValueToText( int );
   int mapTextToValue( bool* ok );
   int currentStepValue() const;
+
+ private slots:
+  void slotValueChanged( int );
 };
 
 
