@@ -1635,8 +1635,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 	  inf.diskState() == STATE_INCOMPLETE ) {
 	K3b::Msf readFrmtCap;
 	if( readFormatCapacity( readFrmtCap ) ) {
-	  kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap
-		    << " other capacity: " << inf.m_capacity << endl;
+		//kdDebug() << "(K3bCdDevice::CdDevice) READ FORMAT CAPACITY: " << readFrmtCap
+		//    << " other capacity: " << inf.m_capacity << endl;
 	  inf.m_capacity = readFrmtCap;
 	}
       }
