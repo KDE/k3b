@@ -372,7 +372,7 @@ void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type 
     currentInfoItem->setPixmap( 0, SmallIcon( "stop" ) );
     break;
   case K3bJob::WARNING:
-    currentInfoItem->setPixmap( 0, SmallIcon( "misc" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "yellowinfo" ) );
     break;
   case K3bJob::SUCCESS:
     currentInfoItem->setPixmap( 0, SmallIcon( "ok" ) );
