@@ -31,7 +31,7 @@ class QWidgetStack;
 class QCheckBox;
 
 class K3bDevice;
-class K3bOptionCddb;
+class K3bCddbOptionTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
 
@@ -73,7 +73,7 @@ class K3bOptionDialog : public KDialogBase
   K3bBurningOptionTab* m_burningOptionTab;
 
   // cddb tab
-  K3bOptionCddb *m_cddbPage;
+  K3bCddbOptionTab *m_cddbOptionTab;
   void setupCddbPage();		
 };
 

@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BOPTIONCDDB_H
-#define K3BOPTIONCDDB_H
+#ifndef K3B_CDDB_OPTION_TAB_H
+#define K3B_CDDB_OPTION_TAB_H
 
 #include <qwidget.h>
 
@@ -34,12 +34,12 @@ class KListBox;
   *@author Thomas Froescher
   */
 
-class K3bOptionCddb : public QWidget {
+class K3bCddbOptionTab : public QWidget {
     Q_OBJECT
 
 public: 
-    K3bOptionCddb(QFrame *parent, const char *name);
-    ~K3bOptionCddb();
+    K3bCddbOptionTab(QFrame *parent, const char *name);
+    ~K3bCddbOptionTab();
     void apply();
     void readSettings();
 

@@ -109,7 +109,7 @@ sub_dirs=
 type=po
 
 [src/Makefile.am]
-files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h
+files=src/main.cpp,src/k3b.cpp,src/k3b.h,src/k3bdoc.cpp,src/k3bdoc.h,src/k3bview.cpp,src/k3bview.h,src/k3bui.rc,src/k3b.desktop,src/lo32-app-k3b.png,src/lo16-app-k3b.png,src/k3bdirview.cpp,src/k3bdirview.h,src/k3bcopywidget.cpp,src/k3bcopywidget.h,src/k3bglobals.h,src/k3bprogressdialog.h,src/k3bprogressdialog.cpp,src/k3bstickybutton.cpp,src/k3bstickybutton.h,src/k3bfillstatusdisplay.cpp,src/k3bfillstatusdisplay.h,src/k3bburnprogressdialog.cpp,src/k3bburnprogressdialog.h,src/k3bjob.cpp,src/k3bjob.h,src/k3bprojectburndialog.cpp,src/k3bprojectburndialog.h,src/kcutlabel.cpp,src/kcutlabel.h,src/k3bglobals.cpp,src/nonsticky.png,src/sticky.png,src/hi16-app-k3b.png,src/hi32-app-k3b.png,src/hi48-app-k3b.png,src/kdiskfreesp.h,src/k3bfileview.cpp,src/k3bfileview.h,src/cddb.h,src/cddb.cpp,src/k3bcddb.cpp,src/k3bcddb.h,src/k3bblankingdialog.cpp,src/k3bblankingdialog.h,src/k3bblankingjob.cpp,src/k3bblankingjob.h,src/k3bexternalbinmanager.cpp,src/k3bexternalbinmanager.h
 sub_dirs=data,cdinfo,audio,device,kiotree,option,rip
 type=prog_main
 
@@ -752,6 +752,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/k3bexternalbinmanager.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/k3bexternalbinmanager.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/k3bfileview.cpp]
 dist=true
 install=false
@@ -1006,7 +1018,7 @@ install_location=$$(kde_datadir)/k3b/pics/nonsticky.png
 type=DATA
 
 [src/option/Makefile.am]
-files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h,src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp
+files=src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp,src/option/k3bcddboptiontab.cpp,src/option/k3bcddboptiontab.h
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
@@ -1024,6 +1036,18 @@ install=false
 install_location=
 type=HEADER
 
+[src/option/k3bcddboptiontab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bcddboptiontab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
 [src/option/k3bdeviceoptiontab.cpp]
 dist=true
 install=false
@@ -1031,18 +1055,6 @@ install_location=
 type=SOURCE
 
 [src/option/k3bdeviceoptiontab.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/option/k3boptioncddb.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/option/k3boptioncddb.h]
 dist=true
 install=false
 install_location=

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "k3boptioncddb.h"
+#include "k3bcddboptiontab.h"
 
 #include <qwidget.h>
 #include <qframe.h>
@@ -37,15 +37,15 @@
 
 #define DEFAULT_CDDB_HOST  "localhost:888"
 
-K3bOptionCddb::K3bOptionCddb(QFrame *parent, const char *name)
+K3bCddbOptionTab::K3bCddbOptionTab(QFrame *parent, const char *name)
 : QWidget(parent, name) {
 	setup();
 }
 
-K3bOptionCddb::~K3bOptionCddb(){
+K3bCddbOptionTab::~K3bCddbOptionTab(){
 }
 
-void K3bOptionCddb::setup(){
+void K3bCddbOptionTab::setup(){
 
   QGridLayout* frameLayout = new QGridLayout( this );
   frameLayout->setSpacing( KDialog::spacingHint() );
@@ -101,7 +101,7 @@ void K3bOptionCddb::setup(){
 }
 // slots
 // ------------------------------------------------------
-void K3bOptionCddb::toggled(bool enabled){
+void K3bCddbOptionTab::toggled(bool enabled){
 	if (enabled){
 		m_groupCddbServer->setEnabled(true);
 	} else {
@@ -109,25 +109,25 @@ void K3bOptionCddb::toggled(bool enabled){
 	}
 }
 
-void K3bOptionCddb::addCddbServer(){
+void K3bCddbOptionTab::addCddbServer(){
    QString server = m_cddbServerInput->text() + ":" + m_cddbPortInput->text();
 	QListBoxText *item = new QListBoxText(m_cddbServerList, server);
 }
 
-void K3bOptionCddb::delCddbServer(){
+void K3bCddbOptionTab::delCddbServer(){
 	//m_cddbServerList->takeItem(m_cddbServerList->selectedItem() );
 	m_cddbServerList->removeItem(m_cddbServerList->currentItem() );
    m_delButton->setDisabled(true);
 }
 
-void K3bOptionCddb::serverSelected(QListBoxItem *item){
+void K3bCddbOptionTab::serverSelected(QListBoxItem *item){
 	m_delButton->setEnabled(true);
    QString hostString =	m_cddbServerList->currentText(); //item( m_cddbServerList->currentItem() )->text();
    fillInputFields(hostString);
 }
 // reading and writing settings
 // --------------------------------------------------
-void K3bOptionCddb::apply(){
+void K3bCddbOptionTab::apply(){
    KConfig* c = kapp->config();
    c->setGroup("Cddb");
    c->writeEntry( "useCddb", m_cddbLockup->isChecked() );
@@ -140,7 +140,7 @@ void K3bOptionCddb::apply(){
    c->sync();
 }
 
-void K3bOptionCddb::readSettings(){
+void K3bCddbOptionTab::readSettings(){
   KConfig *c = kapp->config();
   c->setGroup("Cddb");
   m_cddbLockup->setChecked( c->readBoolEntry("useCddb", false) );
@@ -155,7 +155,7 @@ void K3bOptionCddb::readSettings(){
 }
 //  helpers
 // -------------------------------------------------
-void K3bOptionCddb::fillInputFields(QString hostString){
+void K3bCddbOptionTab::fillInputFields(QString hostString){
    int index = hostString.find(":");
    m_cddbServerInput->setText(hostString.left(index) );
    m_cddbPortInput->setText(hostString.right(hostString.length()-index-1) );

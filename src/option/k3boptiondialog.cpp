@@ -17,7 +17,7 @@
 
 #include "k3boptiondialog.h"
 #include "../k3b.h"
-#include "k3boptioncddb.h"
+#include "k3bcddboptiontab.h"
 #include "k3bdeviceoptiontab.h"
 #include "k3bburningoptiontab.h"
 
@@ -67,7 +67,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   //	setupPermissionPage();
 	
   readPrograms();
-  m_cddbPage->readSettings();
+  m_cddbOptionTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
 
@@ -99,7 +99,7 @@ void K3bOptionDialog::slotApply()
 {
   // save all the shit!
   savePrograms();
-  m_cddbPage->apply();
+  m_cddbOptionTab->apply();
   m_deviceOptionTab->saveDevices();
   m_burningOptionTab->saveSettings();
 
@@ -267,8 +267,8 @@ void K3bOptionDialog::setupCddbPage()
   QGridLayout* mainGrid = new QGridLayout( frame );
   mainGrid->setSpacing(0);
   mainGrid->setMargin(0);
-  m_cddbPage = new K3bOptionCddb(frame, "cddbpage");
-  mainGrid->addWidget( m_cddbPage, 0, 0 );
+  m_cddbOptionTab = new K3bCddbOptionTab(frame, "cddbpage");
+  mainGrid->addWidget( m_cddbOptionTab, 0, 0 );
 }
 
 
