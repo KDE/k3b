@@ -1,3 +1,7 @@
+0.11.24
+K3b now ejects the source DVD when reader and writer device are the same (no more 
+accidently overwriting the rewritable source DVD)
+
 0.11.23
 Fixed session import.
 Fixed seldom crash in the welcome widget.
