@@ -71,199 +71,202 @@ class K3bApp : public KDockMainWindow
 {
   Q_OBJECT
 
-  public:
-    /** construtor of K3bApp, calls all init functions to create the application.
-     * @see initMenuBar initToolBar
-     */
-    K3bApp();
-    ~K3bApp();
+    public:
+  /** construtor of K3bApp, calls all init functions to create the application.
+   * @see initMenuBar initToolBar
+   */
+  K3bApp();
+  ~K3bApp();
 
-    /** opens a file specified by commandline option */
-    void openDocumentFile(const KURL& url=0);
+  /** opens a file specified by commandline option */
+  void openDocumentFile(const KURL& url=0);
 
-   K3bDeviceManager* deviceManager() { return m_deviceManager; };
-   K3bOptionDialog* optionDialog() { return m_optionDialog; };
-	K3bAudioTrackDialog* audioTrackDialog();
-	KConfig* config() { return m_config; }
+  K3bDeviceManager* deviceManager() { return m_deviceManager; };
+  K3bOptionDialog* optionDialog() { return m_optionDialog; };
+  K3bAudioTrackDialog* audioTrackDialog();
+  KConfig* config() { return m_config; }
 	
-	/** does some initialisation like searching for external programs */
-	void init();
+  /** does some initialisation like searching for external programs */
+  void init();
 	
-	/** returns a free temp filename in the given directory
-	 * @parm dir the directory where to find the tempfile, should end with '/' **/
-	QString findTempFile( const QString& ending, const QString& dir = QString::null );
+  /** returns a free temp filename in the given directory
+   * @parm dir the directory where to find the tempfile, should end with '/' **/
+  QString findTempFile( const QString& ending, const QString& dir = QString::null );
 
-	bool eject();
-	void showOptionDialog( int = 0 );
-	bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
-	void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
-    /**
-    * Reimplemented of QWidget. Does some initializing which needs an instance of K3bApp and cannot done in the constructor.
-    */
-    void show();
-  protected:
-    /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
-     * default implementation (only returns true), this overridden function retrieves all modified documents
-     * from the open document list and asks the user to select which files to save before exiting the application.
-     * @see KTMainWindow#queryClose
-     * @see KTMainWindow#closeEvent
-     */
-    virtual bool queryClose();
+  bool eject();
+  void showOptionDialog( int = 0 );
+  bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
+  void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
+  /**
+   * Reimplemented of QWidget. Does some initializing which needs an instance of K3bApp and cannot done in the constructor.
+   */
+  void show();
 
-    /** queryExit is called by KTMainWindow when the last window of the application is going to be closed during the closeEvent().
-     * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's	
-     * properties.
-     * @see KTMainWindow#queryExit
-     * @see KTMainWindow#closeEvent
-     */
-    virtual bool queryExit();
-
-    /** saves the window properties for each open window during session end to the session config file, including saving the currently
-     * opened file by a temporary filename provided by KApplication.
-     * @see KTMainWindow#saveProperties
-     */
-    virtual void saveProperties(KConfig *_cfg);
-
-    /** reads the session config file and restores the application's state including the last opened files and documents by reading the
-     * temporary files saved by saveProperties()
-     * @see KTMainWindow#readProperties
-     */
-    virtual void readProperties(KConfig *_cfg);
-
-    /** event filter to catch close events for MDI child windows and is installed in createClient() on every child window.
-     * Closing a window calls the eventFilter first which removes the view from the connected documents' view list. If the
-     * last view is going to be closed, the eventFilter() tests if the document is modified; if yes, it asks the user to
-     * save the document. If the document title contains "Untitled", slotFileSaveAs() gets called to get a save name and path.
-     */
-    virtual bool eventFilter(QObject* object, QEvent* event);
-
-    /** creates a new child window. The document that will be connected to it
-     * has to be created before and the instances filled, with e.g. openDocument().
-     * Then call createClient() to get a new MDI child window.
-     * @see K3bDoc#addView
-     * @see K3bDoc#openDocument
-     * @param doc pointer to the document instance that the view will
-     * be connected to.
-     */
-	void createClient(K3bDoc* doc);
-
-  private slots:
-    /** clears the document in the actual view to reuse it as the new document */
-    void slotFileNew();
-    /** open a file and load it into the document*/
-    void slotFileOpen();
-    /** opens a file from the recent files menu */
-    void slotFileOpenRecent(const KURL& url);
-    /** save a document */
-    void slotFileSave();
-    /** save a document by a new filename*/
-    void slotFileSaveAs();
-    /** asks for saving if the file is modified, then closes the actual file and window*/
-    void slotFileClose();
-	
-	void slotFileExport();
-	void slotFileBurn();
-	void slotDirDockHidden();
-	void slotSettingsConfigure();
-	
-	/** checks if the currently visible tab is a k3bview
-	or not and dis- or enables some actions */
-	void slotCurrentDocChanged( QWidget* w );
-
-    void slotFileQuit();
-
-    /** toggles the toolbar
-     */
-    void slotViewToolBar();
-    /** toggles the statusbar
-     */
-    void slotViewStatusBar();
-    /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
-     * @param text the text that is displayed in the statusbar
-     */
-    void slotStatusMsg(const QString &text);
-
-	void slotShowDirView();
-
-	void slotCdInfo();
-
-	void slotNewAudioDoc();
-	void slotNewDataDoc();
-
-	void slotJobFinished( K3bJob* job );
-
-  private:
-    /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
-     * file
-     */ 	
-    void saveOptions();
-    /** read general Options again and initialize all variables like the recent file list */
-    void readOptions();
-
-    /** initializes the KActions of the application */
-    void initActions();
-
-    /** sets up the statusbar for the main window by initialzing a statuslabel.
-     */
-    void initStatusBar();
-
-    /** Creates the main view of the KDockMainWindow instance and initializes the MDI view area including any needed
-    	* connections.  */
-    void initView();
-	
-	void searchExternalProgs();
-
-    /** the configuration object of the application */
-    KConfig *m_config;
-
-    /** The MDI-Interface is managed by this tabbed view */
-    QTabWidget* m_documentTab;
-
-    /** a counter that gets increased each time the user creates a new document with "File"->"New" */
-    int untitledCount;
-    /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
-     * removes this document from the list. The document list is checked for modified documents when the user
-     * is about to close the application. */
-    QList<K3bDoc> *pDocList;	
-
-    K3bDeviceManager* m_deviceManager;
-
-    // KAction pointers to enable/disable actions
-    KActionMenu* fileNewMenu;
-    KAction* fileNewAudio;
-    KAction* fileNewData;
-    KAction* fileOpen;
-    KRecentFilesAction* fileOpenRecent;
-    KAction* fileSave;
-    KAction* fileSaveAs;
-    KAction* fileClose;
-    KAction* fileQuit;
-    KAction* fileBurn;
-    KAction* settingsConfigure;
-    KAction* fileExport;
-    KAction* toolsCdInfo;
-	
-    KToggleAction* viewToolBar;
-    KToggleAction* viewStatusBar;
-    KToggleAction* viewDirView;
-
-    KDockWidget* mainDock;
-    KDockWidget* dirDock;
-		
-    // The K3b-specific widgets
-    K3bDirView* m_dirView;
-    K3bAudioTrackDialog* m_audioTrackDialog;
-	K3bOptionDialog* m_optionDialog;
-	K3bBurnProgressDialog* m_burnProgressDialog;
-	
-	bool m_useID3TagForMp3Renaming;
-	bool m_initialized;
-	
-public slots: // Public slots
+ public slots:
   /** No descriptions */
   void slotErrorMessage(const QString&);
   /** No descriptions */
   void slotWarningMessage(const QString&);
+
+ protected:
+  /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
+   * default implementation (only returns true), this overridden function retrieves all modified documents
+   * from the open document list and asks the user to select which files to save before exiting the application.
+   * @see KTMainWindow#queryClose
+   * @see KTMainWindow#closeEvent
+   */
+  virtual bool queryClose();
+
+  /** queryExit is called by KTMainWindow when the last window of the application is going to be closed during the closeEvent().
+   * Against the default implementation that just returns true, this calls saveOptions() to save the settings of the last window's	
+   * properties.
+   * @see KTMainWindow#queryExit
+   * @see KTMainWindow#closeEvent
+   */
+  virtual bool queryExit();
+
+  /** saves the window properties for each open window during session end to the session config file, including saving the currently
+   * opened file by a temporary filename provided by KApplication.
+   * @see KTMainWindow#saveProperties
+   */
+  virtual void saveProperties(KConfig *_cfg);
+
+  /** reads the session config file and restores the application's state including the last opened files and documents by reading the
+   * temporary files saved by saveProperties()
+   * @see KTMainWindow#readProperties
+   */
+  virtual void readProperties(KConfig *_cfg);
+
+  /** event filter to catch close events for MDI child windows and is installed in createClient() on every child window.
+   * Closing a window calls the eventFilter first which removes the view from the connected documents' view list. If the
+   * last view is going to be closed, the eventFilter() tests if the document is modified; if yes, it asks the user to
+   * save the document. If the document title contains "Untitled", slotFileSaveAs() gets called to get a save name and path.
+   */
+  virtual bool eventFilter(QObject* object, QEvent* event);
+
+  /** creates a new child window. The document that will be connected to it
+   * has to be created before and the instances filled, with e.g. openDocument().
+   * Then call createClient() to get a new MDI child window.
+   * @see K3bDoc#addView
+   * @see K3bDoc#openDocument
+   * @param doc pointer to the document instance that the view will
+   * be connected to.
+   */
+  void createClient(K3bDoc* doc);
+
+ private slots:
+  /** clears the document in the actual view to reuse it as the new document */
+  void slotFileNew();
+  /** open a file and load it into the document*/
+  void slotFileOpen();
+  /** opens a file from the recent files menu */
+  void slotFileOpenRecent(const KURL& url);
+  /** save a document */
+  void slotFileSave();
+  /** save a document by a new filename*/
+  void slotFileSaveAs();
+  /** asks for saving if the file is modified, then closes the actual file and window*/
+  void slotFileClose();
+	
+  void slotFileExport();
+  void slotFileBurn();
+  void slotDirDockHidden();
+  void slotSettingsConfigure();
+	
+  /** checks if the currently visible tab is a k3bview
+      or not and dis- or enables some actions */
+  void slotCurrentDocChanged( QWidget* w );
+
+  void slotFileQuit();
+
+  /** toggles the toolbar
+   */
+  void slotViewToolBar();
+  /** toggles the statusbar
+   */
+  void slotViewStatusBar();
+  /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
+   * @param text the text that is displayed in the statusbar
+   */
+  void slotStatusMsg(const QString &text);
+
+  void slotShowDirView();
+
+  void slotCdInfo();
+  void slotBlankCdrw();
+
+  void slotNewAudioDoc();
+  void slotNewDataDoc();
+
+  void slotJobFinished( K3bJob* job );
+
+ private:
+  /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
+   * file
+   */ 	
+  void saveOptions();
+  /** read general Options again and initialize all variables like the recent file list */
+  void readOptions();
+
+  /** initializes the KActions of the application */
+  void initActions();
+
+  /** sets up the statusbar for the main window by initialzing a statuslabel.
+   */
+  void initStatusBar();
+
+  /** Creates the main view of the KDockMainWindow instance and initializes the MDI view area including any needed
+   * connections.  */
+  void initView();
+	
+  void searchExternalProgs();
+
+  /** the configuration object of the application */
+  KConfig *m_config;
+
+  /** The MDI-Interface is managed by this tabbed view */
+  QTabWidget* m_documentTab;
+
+  /** a counter that gets increased each time the user creates a new document with "File"->"New" */
+  int untitledCount;
+  /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
+   * removes this document from the list. The document list is checked for modified documents when the user
+   * is about to close the application. */
+  QList<K3bDoc> *pDocList;	
+
+  K3bDeviceManager* m_deviceManager;
+
+  // KAction pointers to enable/disable actions
+  KActionMenu* fileNewMenu;
+  KAction* fileNewAudio;
+  KAction* fileNewData;
+  KAction* fileOpen;
+  KRecentFilesAction* fileOpenRecent;
+  KAction* fileSave;
+  KAction* fileSaveAs;
+  KAction* fileClose;
+  KAction* fileQuit;
+  KAction* fileBurn;
+  KAction* settingsConfigure;
+  KAction* fileExport;
+  KAction* toolsCdInfo;
+  KAction* toolsBlankCdrw;
+	
+  KToggleAction* viewToolBar;
+  KToggleAction* viewStatusBar;
+  KToggleAction* viewDirView;
+
+  KDockWidget* mainDock;
+  KDockWidget* dirDock;
+		
+  // The K3b-specific widgets
+  K3bDirView* m_dirView;
+  K3bAudioTrackDialog* m_audioTrackDialog;
+  K3bOptionDialog* m_optionDialog;
+  K3bBurnProgressDialog* m_burnProgressDialog;
+	
+  bool m_useID3TagForMp3Renaming;
+  bool m_initialized;
 };
 
 #endif // K3B_H

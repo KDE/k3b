@@ -162,6 +162,9 @@ void K3bCdInfo::slotRefresh()
   if( m_device == 0 )
     return;
 
+  if( m_process->isRunning() )
+    m_process->kill();
+
   clear();
   m_cdinfo->reset();
   tries = 0;

@@ -56,7 +56,7 @@
 #include "data/k3bdataview.h"
 #include "data/k3bdatajob.h"
 #include "cdinfo/k3bcdinfodialog.h"
-
+#include "k3bblankingdialog.h"
 
 
 K3bApp* k3bMain()
@@ -147,6 +147,9 @@ void K3bApp::initActions()
 
   toolsCdInfo = new KAction(i18n("CD &Info"), "cdrom_unmount", 0, this, SLOT(slotCdInfo()), 
 			    actionCollection(), "tools_cd_info" );
+
+  toolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdwriter_unmount", 0, this, SLOT(slotBlankCdrw()), 
+			       actionCollection(), "tools_blank_cdrw" );
 
   fileNewMenu->setStatusText(i18n("Creates a new project"));
   fileOpen->setStatusText(i18n("Opens an existing project"));
@@ -838,7 +841,7 @@ QString K3bApp::findTempFile( const QString& ending, const QString& d )
 
 bool K3bApp::eject()
 {
-  config()->setGroup( "Writing Options" );
+  config()->setGroup( "General Options" );
   return config()->readBoolEntry( "Eject when finished", true );
 }
 
@@ -867,4 +870,13 @@ void K3bApp::slotCdInfo()
   K3bCdInfoDialog* d = new K3bCdInfoDialog( this, "cdinfod", true );
   d->exec();
   delete d;
+}
+
+
+void K3bApp::slotBlankCdrw()
+{
+  // K3bBlankingDialog is modeless so don't use exec!
+  // the dialog also does a delayed self-destrcut
+  K3bBlankingDialog* d = new K3bBlankingDialog( this, "blankingdialog" );
+  d->show();
 }

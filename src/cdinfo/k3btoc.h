@@ -49,7 +49,7 @@ class K3bToc : public QList<K3bTrack>
  private:
   unsigned int m_discId;
   int m_firstSector;
-  int m_lastSector;
+  //  int m_lastSector;
   QString m_artist;
   QString m_album;
 };

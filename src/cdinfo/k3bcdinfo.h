@@ -18,6 +18,7 @@
 #ifndef K3BCDINFO_H
 #define K3BCDINFO_H
 
+
 #include <qwidget.h>
 #include <qlist.h>
 

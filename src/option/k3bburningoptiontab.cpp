@@ -99,9 +99,12 @@ void K3bBurningOptionTab::setupGui()
   m_buttonTempDir = new QToolButton( m_groupMisc );
   m_buttonTempDir->setText( "..." );
 
+  m_checkEject = new QCheckBox( i18n("Do not eject CD after write process"), m_groupMisc );
+
   groupMiscLayout->addWidget( labelTempDir, 0, 0 );
   groupMiscLayout->addWidget( m_editTempDir, 1, 0 );
   groupMiscLayout->addWidget( m_buttonTempDir, 1, 1 );
+  groupMiscLayout->addMultiCellWidget( m_checkEject, 2, 2, 0, 1 );
 
   connect( m_buttonTempDir, SIGNAL(clicked()), this, SLOT(slotGetTempDir()) );
   // -----------------------------------------------------------------------
@@ -138,6 +141,8 @@ void K3bBurningOptionTab::readSettings()
   c->setGroup( "General Options" );
   QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
   m_editTempDir->setText( tempdir );
+
+  m_checkEject->setChecked( !c->readBoolEntry( "Eject when finished", true ) );
 }
 
 
@@ -155,6 +160,7 @@ void K3bBurningOptionTab::saveSettings()
 
   c->setGroup( "General Options" );
   c->writeEntry( "Temp Dir", m_editTempDir->text() );
+  c->writeEntry( "Eject when finished", !m_checkEject->isChecked() );
 }
 
 

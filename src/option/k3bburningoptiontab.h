@@ -44,6 +44,7 @@ Q_OBJECT
 
   QLineEdit*    m_editTempDir;
   QToolButton*  m_buttonTempDir;
+  QCheckBox*    m_checkEject;
 };
 
 

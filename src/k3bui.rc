@@ -8,6 +8,7 @@
   </Menu>
   <Menu name="tools">
   	<Action name="tools_cd_info"/>
+	<Action name="tools_blank_cdrw"/>
   </Menu>
   <Menu name="settings">
   	<Action name="view_dir" append="show_merge"/>

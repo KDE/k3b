@@ -7,7 +7,7 @@ K3bToc::K3bToc()
 {
   m_discId = 0;
   m_firstSector = -1;
-  m_lastSector = -1;
+  //  m_lastSector = -1;
 
   setAutoDelete( true );
 }
@@ -18,7 +18,7 @@ K3bToc::K3bToc( const K3bToc& toc )
     m_album( toc.album() )
 {
   m_firstSector = toc.firstSector();
-  m_lastSector = toc.lastSector();
+  //  m_lastSector = toc.lastSector();
   m_discId = toc.discId();
 
   QListIterator<K3bTrack> it( toc );
@@ -35,7 +35,7 @@ K3bToc::K3bToc( const QString& artist, const QString& album )
 {
   m_discId = 0;
   m_firstSector = -1;
-  m_lastSector = -1;
+  //  m_lastSector = -1;
 
   setAutoDelete( true );
 }
@@ -54,7 +54,7 @@ K3bToc& K3bToc::operator=( const K3bToc& toc )
   m_album = toc.album();
 
   m_firstSector = toc.firstSector();
-  m_lastSector = toc.lastSector();
+  //  m_lastSector = toc.lastSector();
   m_discId = toc.discId();
 
   clear();
@@ -81,6 +81,8 @@ int K3bToc::firstSector() const
 
 int K3bToc::lastSector() const
 {
+  if( isEmpty() )
+    return 0;
   // the last track's last sector should be the last sector of the entire cd
   return getLast()->lastSector();
 }
@@ -88,5 +90,5 @@ int K3bToc::lastSector() const
 
 int K3bToc::length() const
 {
-  return m_lastSector - m_firstSector;
+  return lastSector() - m_firstSector;
 }
