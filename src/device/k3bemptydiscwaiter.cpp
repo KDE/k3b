@@ -19,6 +19,7 @@
 #include "k3bdevice.h"
 #include "../k3bblankingjob.h"
 #include "../k3bbusywidget.h"
+#include "../k3bdiskerasinginfodialog.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -91,7 +92,7 @@ void K3bEmptyDiscWaiter::slotTestForEmptyCd()
       if( KMessageBox::questionYesNo( this, i18n("K3b found a rewritable disk. Should it be erased?"),
 				      i18n("Found CD-RW") ) == KMessageBox::Yes ) {
 	// start a k3bblankingjob
-	ErasingInfoDialog d;
+	K3bErasingInfoDialog d;
 
 	K3bBlankingJob job;
 	job.setDevice( m_device );
@@ -126,45 +127,6 @@ void K3bEmptyDiscWaiter::slotUser1()
   m_timer->stop();
 
   done( DISK_READY );
-}
-
-
-
-
-K3bEmptyDiscWaiter::ErasingInfoDialog::ErasingInfoDialog( QWidget* parent, const char* name ) 
-  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true )
-{
-  QFrame* main = makeMainWidget();
-  QGridLayout* mainLayout = new QGridLayout( main );
-  mainLayout->setMargin( marginHint() );
-  mainLayout->setSpacing( spacingHint() );
-
-  m_label = new QLabel( i18n("Erasing CD-RW"), main );
-  m_busyWidget = new K3bBusyWidget( main );
-
-  mainLayout->addWidget( m_label, 0, 0 );
-  mainLayout->addWidget( m_busyWidget, 1, 0 );
-
-  showButtonOK( false );
-  m_busyWidget->showBusy( true );
-}
-
-
-K3bEmptyDiscWaiter::ErasingInfoDialog::~ErasingInfoDialog()
-{}
-
-
-void K3bEmptyDiscWaiter::ErasingInfoDialog::slotFinished( bool success )
-{
-  m_busyWidget->showBusy( false );
-
-  showButtonOK( true );
-  showButtonCancel( false );
-  
-  if( success )
-    m_label->setText( i18n("Disk successfully erased. Please reload the disk.") );
-  else
-    m_label->setText( i18n("K3b was unable to erase the disk.") );
 }
 
 

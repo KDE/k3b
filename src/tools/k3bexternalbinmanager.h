@@ -39,17 +39,44 @@ class K3bExternalBin
 };
 
 
+class K3bExternalProgram
+{
+ public:
+  K3bExternalProgram( const QString& name );
+  ~K3bExternalProgram();
+
+  const K3bExternalBin* defaultBin() const { return m_bins.getFirst(); }
+
+  void addUserParameter( const QString& );
+  void setUserParameters( const QStringList& list ) { m_userParameters = list; }
+
+  const QStringList& userParameters() const { return m_userParameters; }
+  const QString& name() const { return m_name; }
+
+  void addBin( K3bExternalBin* );
+  void clear() { m_bins.clear(); }
+  void setDefault( K3bExternalBin* );
+  void setDefault( const QString& path );
+
+  const QPtrList<K3bExternalBin>& bins() const { return m_bins; }
+
+ private:
+  QString m_name;
+  QStringList m_userParameters;
+  QPtrList<K3bExternalBin> m_bins;
+};
+
+
 
 class K3bExternalBinManager : public QObject
 {
-Q_OBJECT
+  Q_OBJECT
 
  public:
   K3bExternalBinManager( QObject* parent = 0 );
   ~K3bExternalBinManager();
 
   void search();
-  void checkVersions();
 
   /**
    * read config and add changes to current map
@@ -59,31 +86,36 @@ Q_OBJECT
 
   bool foundBin( const QString& name );
   const QString& binPath( const QString& name );
-  K3bExternalBin* binObject( const QString& name );
+  const K3bExternalBin* binObject( const QString& name );
 
-  QPtrList<K3bExternalBin> list() const;
+  K3bExternalProgram* program( const QString& ) const;
+  const QMap<QString, K3bExternalProgram*>& programs() const { return m_programs; }
+
+  /** always extends the default searchpath */
+  void setSearchPath( const QStringList& );
+  void addSearchPath( const QString& );
+  void loadDefaultSearchPath();
+
+  const QStringList& searchPath() const { return m_searchPath; }
 
  private slots:
-  void slotParseCdrdaoVersion( KProcess*, char* data, int len );
-  void slotParseCdrtoolsVersion( KProcess*, char* data, int len );
-  void slotParseOutputVersion( KProcess *p, char* data, int len );
-  void slotParseTranscodeVersion( KProcess *p, char* data, int len );
-  //void slotProcessExited( KProcess *p );
   void gatherOutput(KProcess*, char*, int);
 
  private:
-  bool probeCdrecord( K3bExternalBin* );
+  void createProgramContainer();
 
-  QMap<QString, K3bExternalBin*> m_binMap;
-  KProcess* m_process;
+  K3bExternalBin* probeCdrecord( const QString& );
+  K3bExternalBin* probeMkisofs( const QString& );
+  K3bExternalBin* probeCdrdao( const QString& );
+  K3bExternalBin* probeTranscode( const QString& );
+
+
+  QMap<QString, K3bExternalProgram*> m_programs;
+  QStringList m_searchPath;
+
   QString m_noPath;  // used for binPath() to return const string
 
   QString m_gatheredOutput;
-  //unsigned int m_programArrayIndex;
-  //QString m_bin; // binary path/program to test
-
-  void searchVersion( int );
-  void checkTranscodeVersion();
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "../device/k3bdevice.h"
 #include "../device/k3bdevicewidget.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "../tools/k3bexternalbinwidget.h"
 
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -341,128 +342,38 @@ ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   m_labelExternalPrograms = new QLabel( main, "m_labelExternalPrograms" );
   m_labelExternalPrograms->setText( i18n( "<p>K3b uses cdrdao, cdrecord and mkisofs to actually write the CDs. "
 					  "It is recommended to install these programs. K3b will run without them but major"
-					  " functions (for example CD writing!) will be disabled.</p>"
-					  "<p>K3b Setup tries to find the executables. You can change the paths manually if you"
-					  " want other versions to be used, or K3b Setup did not find your installation.</p>" ) );
+					  " functions (for example CD writing!) will be disabled.</p>" ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
+  m_externalBinWidget = new K3bExternalBinWidget( setup()->externalBinManager(), main );
 
-  m_labelWarning = new QLabel( main );
-  m_labelWarning->setPaletteForegroundColor( red );
-  m_labelWarning->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
-
-  m_viewExternalPrograms = new KListView( main, "m_viewExternalPrograms" );
-  m_viewExternalPrograms->addColumn( i18n( "Found" ) );
-  m_viewExternalPrograms->addColumn( i18n( "Program" ) );
-  m_viewExternalPrograms->addColumn( i18n( "Version" ) );
-  m_viewExternalPrograms->addColumn( i18n( "Path" ) );
-  m_viewExternalPrograms->setAllColumnsShowFocus( true );
-  m_viewExternalPrograms->setItemsRenameable( true );
-  m_viewExternalPrograms->setRenameable( 0, false );
-  m_viewExternalPrograms->setRenameable( 3, true );
-
-  m_buttonSelectExternalBin = new QPushButton( i18n("Find Program"), main );
-
-  mainGrid->addMultiCellWidget( m_labelExternalPrograms, 0, 0, 0, 1 );
-  mainGrid->addMultiCellWidget( m_labelWarning, 1, 1, 0, 1 );
-  mainGrid->addMultiCellWidget( m_viewExternalPrograms, 2, 2, 0, 1 );
-  mainGrid->addWidget( m_buttonSelectExternalBin, 3, 1 );
-
-  mainGrid->setColStretch( 0, 1 );
-
-  QToolTip::add( m_viewExternalPrograms, i18n("Click twice to change a value") );
+  mainGrid->addWidget( m_labelExternalPrograms, 0, 0 );
+  mainGrid->addWidget( m_externalBinWidget, 1, 0 );
+  mainGrid->setRowStretch( 1, 1 );
 
   setMainWidget( main );
-
-  connect( m_buttonSelectExternalBin, SIGNAL(clicked()), this, SLOT(slotSelectExternalBin()) );
-  connect( m_viewExternalPrograms, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
-	   this, SLOT(slotExternalProgramItemRenamed(QListViewItem*, const QString&, int)) );
 }
 
 
 void ExternalBinTab::aboutToShow()
 {
-  // search for programs
-  setup()->externalBinManager()->checkVersions();
-
   readSettings();
 }
 
 
 void ExternalBinTab::readSettings()
 {
-  m_viewExternalPrograms->clear();
-
-  KListViewItem* item = new KListViewItem( m_viewExternalPrograms );
-  item->setPixmap( 0, setup()->externalBinManager()->foundBin( "cdrecord" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
-  item->setText( 1, "cdrecord" );
-  item->setText( 2, setup()->externalBinManager()->binObject( "cdrecord" )->version );
-  item->setText( 3, setup()->externalBinManager()->binPath( "cdrecord" ) );
-
-
-  item = new KListViewItem( m_viewExternalPrograms, item );
-  item->setPixmap( 0, setup()->externalBinManager()->foundBin( "mkisofs" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
-  item->setText( 1, "mkisofs" );
-  item->setText( 2, setup()->externalBinManager()->binObject( "mkisofs" )->version );
-  item->setText( 3, setup()->externalBinManager()->binPath( "mkisofs" ) );
-
-
-  item = new KListViewItem( m_viewExternalPrograms, item );
-  item->setPixmap( 0, setup()->externalBinManager()->foundBin( "cdrdao" ) ? SmallIcon( "ok" ) : SmallIcon( "stop" ) );
-  item->setText( 1, "cdrdao" );
-  item->setText( 2, setup()->externalBinManager()->binObject( "cdrdao" )->version );
-  item->setText( 3, setup()->externalBinManager()->binPath( "cdrdao" ) );
-
-
-  // check if cdrecord was found
-  if( !setup()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    m_labelWarning->setText( i18n("<p><b><font color=\"red\">K3bSetup was unable to find cdrecord. You will not be able to write CDs or get "
-				  "information about your CD drives without it. It is highly recommended to install "
-				  "cdrecord.</font></b></p>") );
-    m_labelWarning->show();
-  }
-  else {
-    //  m_labelWarning->setText("");
-    m_labelWarning->hide();
-  }
+  m_externalBinWidget->load();
 }
 
 
 bool ExternalBinTab::saveSettings()
 {
+  m_externalBinWidget->save();
   return true;
 }
 
 
-void ExternalBinTab::slotExternalProgramItemRenamed( QListViewItem* item, const QString& newText, int )
-{
-  QString bin = item->text(1);
-  K3bExternalBin* binO = setup()->externalBinManager()->binObject( bin );
-  if( binO ) {
-    binO->path = newText;
-    setup()->externalBinManager()->checkVersions();
-    readSettings();
-  }
-  else {
-    kdDebug() <<  "(K3bSetupWizard) Could not find bin " << bin << endl;
-  }
-}
-
-
-void ExternalBinTab::slotSelectExternalBin()
-{
-  QListViewItem* item = m_viewExternalPrograms->selectedItem();
-
-  if( item == 0 )
-    return;
-
-  QString newPath;
-  newPath = KFileDialog::getOpenFileName( QString::null, QString::null, this, 
-					  i18n("Please Select %1 Executable").arg(item->text(1)) );
-
-  if( !newPath.isEmpty() )
-    slotExternalProgramItemRenamed( item, newPath, 2 );
-}
 
 // ========================================================================================================== EXTBIN-TAB ==
 

@@ -16,7 +16,7 @@ class QLineEdit;
 class QListViewItem;
 class K3bDevice;
 class K3bDeviceWidget;
-
+class K3bExternalBinWidget;
 
 
 class K3bDeviceViewItem : public KListViewItem
@@ -104,15 +104,9 @@ class ExternalBinTab : public K3bSetupTab
 
   void aboutToShow();
 
- private slots:
-  void slotExternalProgramItemRenamed( QListViewItem*, const QString&, int );
-  void slotSelectExternalBin();
-
  private:
   QLabel*      m_labelExternalPrograms;
-  QLabel*      m_labelWarning;
-  KListView*   m_viewExternalPrograms;
-  QPushButton* m_buttonSelectExternalBin;
+  K3bExternalBinWidget* m_externalBinWidget;
 };
 
 

@@ -10,6 +10,7 @@ class QPushButton;
 class QListViewItem;
 class KListView;
 class K3bExternalBinManager;
+class K3bExternalBinWidget;
 
 
 class K3bExternalBinOptionTab : public QWidget
@@ -23,14 +24,10 @@ Q_OBJECT
   void readSettings();
   void saveSettings();
 
- private slots:
-  void slotItemRenamed(QListViewItem*, const QString&, int);
-
  private:
   K3bExternalBinManager* m_manager;
 
-  KListView* m_viewPrograms;
-  QPushButton* m_buttonSearch;
+  K3bExternalBinWidget* m_externalBinWidget;
 };
 
 
