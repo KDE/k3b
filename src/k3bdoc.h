@@ -31,7 +31,6 @@
 // include files for KDE
 #include <kurl.h>
 
-#include "k3bdocsettings.h"
 
 
 // forward declaration of the K3b classes
@@ -136,8 +135,6 @@ class K3bDoc : public QObject
   void setSaved( bool b ) { m_saved = b; }
   bool saved() const { return m_saved; }
 
-  virtual K3bDocSettings settings() const { return m_settings; }
-
   /**
    * should return the name of the document type
    * for saving the contents in a XML file
@@ -208,8 +205,6 @@ class K3bDoc : public QObject
   int m_writingApp;
 
   bool m_saved;
-
-  K3bDocSettings m_settings;
 };
 
 #endif // K3BDOC_H
