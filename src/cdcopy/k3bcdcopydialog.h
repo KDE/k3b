@@ -21,6 +21,13 @@
 
 #include <kdialogbase.h>
 
+class K3bWriterSelectionWidget;
+class QCheckBox;
+class QSpinBox;
+class QComboBox;
+class K3bDevice;
+
+
 /**
   *@author Sebastian Trueg
   */
@@ -31,6 +38,20 @@ class K3bCdCopyDialog : public KDialogBase
  public: 
   K3bCdCopyDialog(QWidget *parent = 0, const char *name = 0, bool modal = true );
   ~K3bCdCopyDialog();
+
+  K3bDevice* readingDevice() const;
+
+ private slots:
+  void slotSourceSelected();
+  void slotUser1();
+  void slotUser2();
+
+ private:
+  K3bWriterSelectionWidget* m_writerSelectionWidget;
+  QCheckBox* m_checkSimulate;
+  QCheckBox* m_checkOnTheFly;
+  QComboBox* m_comboSourceDevice;
+  QSpinBox* m_spinCopies;
 };
 
 #endif

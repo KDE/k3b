@@ -17,18 +17,113 @@
 
 #include "k3bcdcopydialog.h"
 
+#include "k3bcdcopyjob.h"
+#include "../k3bwriterselectionwidget.h"
+#include "../k3b.h"
+#include "../device/k3bdevice.h"
+#include "../device/k3bdevicemanager.h"
+
 #include <kguiitem.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
+
+#include <qcheckbox.h>
+#include <qspinbox.h>
+#include <qcombobox.h>
+#include <qlayout.h>
+#include <qgroupbox.h>
+#include <qptrlist.h>
+
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : KDialogBase( Plain, i18n("K3b Cd Copy"), User1|Cancel, User1, parent, name, modal, true, 
-		 KGuiItem( i18n("Copy"), "copy", i18n("Start cd copy") )  )
+  : KDialogBase( parent, name, modal, i18n("K3b Cd Copy"), User1|User2, User1, false, 
+		 KGuiItem( i18n("Copy"), "copy", i18n("Start cd copy") ), KStdGuiItem::close() )
 {
+  setButtonBoxOrientation( Qt::Vertical );
+
+  QWidget* main = new QWidget( this );
+  setMainWidget( main );
+
+  QGridLayout* mainGrid = new QGridLayout( main );
+  mainGrid->setSpacing( spacingHint() );
+  mainGrid->setMargin( marginHint() );
+
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
+  QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("Reading Device"), main );
+  groupSource->setInsideSpacing( spacingHint() );
+  groupSource->setInsideMargin( marginHint() );
+  QGroupBox* groupOptions = new QGroupBox( 2, Qt::Vertical, i18n("Options"), main );
+  groupOptions->setInsideSpacing( spacingHint() );
+  groupOptions->setInsideMargin( marginHint() );
+  QGroupBox* groupCopies = new QGroupBox( 1, Qt::Vertical, i18n("Copies"), main );
+  groupCopies->setInsideSpacing( spacingHint() );
+  groupCopies->setInsideMargin( marginHint() );
+
+  m_comboSourceDevice = new QComboBox( groupSource );
+  m_checkOnTheFly = new QCheckBox( i18n("Writing on the fly"), groupOptions );
+  m_checkSimulate = new QCheckBox( i18n("Simulate writing"), groupOptions );
+  m_spinCopies = new QSpinBox( groupCopies );
+  m_spinCopies->setValue( 1 );
+
+  mainGrid->addMultiCellWidget( groupSource, 0, 0, 0, 1  );
+  mainGrid->addMultiCellWidget( m_writerSelectionWidget, 1, 1, 0, 1  );
+  mainGrid->addWidget( groupOptions, 2, 0 );
+  mainGrid->addWidget( groupCopies, 2, 1 );
+
+  // -- read cd-devices ----------------------------------------------
+  QPtrList<K3bDevice> devices = k3bMain()->deviceManager()->allDevices();
+  K3bDevice* dev = devices.first();
+  while( dev ) {
+    m_comboSourceDevice->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->genericDevice() + ")" );
+    dev = devices.next();
+  }
+
+  connect( m_comboSourceDevice, SIGNAL(activated(int)), this, SLOT(slotSourceSelected()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotSourceSelected()) );
+
+  slotSourceSelected();
 }
 
 
 K3bCdCopyDialog::~K3bCdCopyDialog()
 {
+}
+
+
+void K3bCdCopyDialog::slotSourceSelected()
+{
+  K3bDevice* writer = m_writerSelectionWidget->writerDevice();
+  K3bDevice* reader = readingDevice();
+
+  if( writer == reader )
+    m_checkOnTheFly->setChecked( false );
+  m_checkOnTheFly->setDisabled( writer == reader );
+}
+
+
+K3bDevice* K3bCdCopyDialog::readingDevice() const
+{
+  const QString s = m_comboSourceDevice->currentText();
+
+  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
+ 
+  K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
+  if( !dev )
+    qDebug( "(K3bCdCopyDialog) could not find device " + s );
+		
+  return dev;
+}
+
+
+void K3bCdCopyDialog::slotUser1()
+{
+
+}
+
+
+void K3bCdCopyDialog::slotUser2()
+{
+  slotClose();
 }
 
 

@@ -50,8 +50,7 @@ class K3bDataJob : public K3bBurnJob
   void slotParseMkisofsOutput( KProcess*, char*, int );
   void slotMkisofsFinished();
   void slotCdrecordFinished();
-  void slotParseMkisofsSize(KProcess*, char*, int);
-  void slotParseMsInfo(KProcess*, char*, int);
+  void slotCollectOutput( KProcess*, char*, int );
 		
  private:
   K3bDataDoc* m_doc;
@@ -62,6 +61,7 @@ class K3bDataJob : public K3bBurnJob
 
   QString m_isoSize;
   QString m_msInfo;
+  QString m_collectedOutput;
 		
   void writeImage();
   void writeCD();

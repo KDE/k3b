@@ -10,6 +10,8 @@
 #include <kmessagebox.h>
 #include <klistview.h>
 #include <kiconloader.h>
+#include <kguiitem.h>
+#include <kstdguiitem.h>
 
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
@@ -26,9 +28,8 @@
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
-  : KDialogBase( parent, name, true, i18n("Blanking CD-RW"), 
-		 /*KDialogBase::Help|*/KDialogBase::User2|KDialogBase::User1, 
-		 KDialogBase::User1, true, i18n("Blank"), i18n("Close") )
+  : KDialogBase( parent, name, true, i18n("Blanking CD-RW"), /*Help|*/User2|User1, User1, 
+		 true, KGuiItem( i18n("Blank"), "blank", i18n("Start blanking") ), KStdGuiItem::close() )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
@@ -52,7 +53,7 @@ void K3bBlankingDialog::setupGui()
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
 
-  // --- setup the blynking type button group -----------------------------
+  // --- setup the blanking type button group -----------------------------
   m_groupBlankType = new QButtonGroup( i18n("Blanking type"), frame );
   m_groupBlankType->setExclusive( true );
   m_groupBlankType->setColumnLayout(0, Qt::Vertical );

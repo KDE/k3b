@@ -56,6 +56,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
 
 K3bDataJob::~K3bDataJob()
 {
+  delete m_process;
 }
 
 
@@ -99,12 +100,15 @@ void K3bDataJob::start()
     *m_process << "-msinfo";
 
     // add the device (e.g. /dev/sg1)
-    *m_process << QString("dev=%1").arg( m_doc->burner()->genericDevice() );
+    *m_process << QString("dev=%1").arg( m_doc->burner()->busTargetLun() );//genericDevice() );
 
     connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotParseMsInfo(KProcess*, char*, int)) );
+	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
     connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotParseMsInfo(KProcess*, char*, int)) );
+	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+
+    m_collectedOutput = QString::null;
+    m_msInfo = QString::null;
 
     if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
       qDebug( "(K3bDataJob) could not start cdrecord" );
@@ -113,12 +117,32 @@ void K3bDataJob::start()
       emit finished( false );
       return;
     }
+
+    qDebug("(K3bDataJob) msinfo fetched");
+
+    // now parse the output
+    QStringList list = QStringList::split( ",", m_collectedOutput );
+    if( list.count() == 2 ) {
+      bool ok1, ok2;
+      list.first().toInt( &ok1 );
+      list[1].toInt( &ok2 );
+      if( ok1 && ok2 )
+	m_msInfo = m_collectedOutput.stripWhiteSpace();
+      else
+	m_msInfo = QString::null;
+    }
+    else {
+      m_msInfo = QString::null;
+    }
+
+    qDebug("(K3bDataJob) msinfo parsed: " + m_msInfo );
 		
     if( m_msInfo.isEmpty() ) {
       emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
       emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
       cancelAll();
       emit finished( false );
+      return;
     }
   }
 
@@ -131,24 +155,40 @@ void K3bDataJob::start()
       emit infoMessage( i18n("Could not write to temporary file %1").arg( m_pathSpecFile ), K3bJob::ERROR );
       cancelAll();
       emit finished( false );
+      return;
     }
-		
+
     // determine iso-size
     m_process->clearArguments();
     m_process->disconnect();
 
+    qDebug("(K3bDataJob) process cleared");
+
     if( !addMkisofsParameters() )
       return;
 
-    *m_process << "-print-size" << "-q";
+    qDebug("(K3bDataJob) mkisofs arguments set");
+
+    *m_process << "-print-size" << "-quiet";
     // add empty dummy dir since one path-spec is needed
     *m_process << m_doc->dummyDir();
+
+    cout << "***** mkisofs parameters:\n";
+    const QValueList<QCString>& args = m_process->args();
+    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+      cout << *it << " ";
+    }
+    cout << endl << flush;
+
 	
     connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotParseMkisofsSize(KProcess*, char*, int)) );
+	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
     connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotParseMkisofsSize(KProcess*, char*, int)) );
-				
+	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+
+    m_collectedOutput = QString::null;
+    m_isoSize = QString::null;
+			
     if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
       qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
@@ -156,10 +196,28 @@ void K3bDataJob::start()
       emit finished( false );
       return;
     }
-		
+    
+    qDebug("(K3bDataJob) iso size fetched");
+
+    // now parse the output
+    // this seems to be the format for mkisofs version < 1.14 (to stdout)
+    if( m_collectedOutput.contains( "=" ) ) {
+      m_isoSize = m_collectedOutput.mid( m_collectedOutput.find('=') + 1 ).stripWhiteSpace() + "s";
+    }
+    // and mkisofs >= 1.14 prints out only the number (to stderr)
+    else {
+      bool ok;
+      m_collectedOutput.toInt( &ok );
+      if( ok ) {
+	m_isoSize = m_collectedOutput.stripWhiteSpace() + "s";
+      }
+    }
+    
+    qDebug("(K3bDataJob) iso size parsed: " + m_isoSize );
+
     if( m_isoSize.isEmpty() ) {
       emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
-      emit infoMessage( i18n("Please creata an image first!"), K3bJob::ERROR );
+      emit infoMessage( i18n("Please create an image first!"), K3bJob::ERROR );
       cancelAll();
       emit finished( false );
     }
@@ -175,13 +233,15 @@ void K3bDataJob::start()
 
 void K3bDataJob::writeCD()
 {
-  bool appendable = (m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-		     m_doc->multiSessionMode() == K3bDataDoc::FINISH );
+  // if we append a new session we asked for an appendable cd already
+  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+      m_doc->multiSessionMode() == K3bDataDoc::START ) {
 
-  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-  if( waiter.waitForEmptyDisc( appendable ) == K3bEmptyDiscWaiter::CANCELED ) {
-    cancel();
-    return;
+    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+      cancel();
+      return;
+    }
   }
 
   emit newSubTask( i18n("Preparing write process...") );
@@ -198,7 +258,7 @@ void K3bDataJob::writeCD()
       emit finished( false );
       return;
     }
-				
+
     // add empty dummy dir since one path-spec is needed
     *m_process << m_doc->dummyDir();
     *m_process << "|";
@@ -218,6 +278,12 @@ void K3bDataJob::writeCD()
   // and now we add the needed arguments...
   // display progress
   *m_process << "-v";
+
+  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+    if( m_doc->onTheFly() )
+      *m_process << "-waiti";  // wait for data on stdin before opening SCSI
+  }
 
   k3bMain()->config()->setGroup( "General Options" );
   bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
@@ -246,8 +312,8 @@ void K3bDataJob::writeCD()
   QString s = QString("-speed=%1").arg( m_doc->speed() );
   *m_process << s;
 
-  // add the device (e.g. /dev/sg1)
-  s = QString("dev=%1").arg( m_doc->burner()->genericDevice() );
+  // add the device (bus,target,lun)
+  s = QString("dev=%1").arg( m_doc->burner()->busTargetLun() ); //genericDevice() );
   *m_process << s;
 
   // additional parameters from config
@@ -724,6 +790,15 @@ bool K3bDataJob::addMkisofsParameters()
   }
 
   *m_process << k3bMain()->externalBinManager()->binPath( "mkisofs" );
+
+  // add multisession info
+  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+
+    // it has to be the device we are writing to cause only this makes sense
+    *m_process << "-M" << m_doc->burner()->busTargetLun();//genericDevice();
+    *m_process << "-C" << m_msInfo;  
+  }
 	
   // add the arguments
   *m_process << "-gui";
@@ -772,7 +847,7 @@ bool K3bDataJob::addMkisofsParameters()
   // this should be handled internally by K3b.
   // the config dialog should give the option to choose between using symlinks and not
   //  if( m_doc->followSymbolicLinks()  )
-    *m_process << "-f";	
+  *m_process << "-f";	
 
 
   if( m_doc->hideRR_MOVED()  )
@@ -789,70 +864,19 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile);
 
 
-  // add multisession info
-  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
-
-    // it has to be the device we are writing to cause only this makes sense
-    *m_process << "-M" << m_doc->burner()->genericDevice();
-    *m_process << "-C" << m_msInfo;
-  }
-
-	
   // additional parameters from config
-  QStringList _params = kapp->config()->readListEntry( "mkisofs parameters" );
-  for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
+  QStringList params = kapp->config()->readListEntry( "mkisofs parameters" );
+  for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
     *m_process << *it;
 
   return true;
 }
 
 
-
-void K3bDataJob::slotParseMkisofsSize(KProcess*, char* output, int len)
+void K3bDataJob::slotCollectOutput( KProcess*, char* output, int len )
 {
-  QString buffer = QString::fromLatin1( output, len ).stripWhiteSpace();
-  qDebug("*** parsing line: " + buffer );
-
-  // this seems to be the format for mkisofs version < 1.14 (to stdout)
-  if( buffer.contains( "=" ) )
-    m_isoSize = buffer.mid( buffer.find('=') + 1 ).stripWhiteSpace() + "s";
-
-  // and mkisofs >= 1.14 prints out only the number (to stderr)
-  else {
-    bool ok;
-    buffer.toInt( &ok );
-    if( ok )
-      m_isoSize = buffer + "s";
-  }
-
-  qDebug("ISO-Size should be: " + m_isoSize );
-}
-
-
-void K3bDataJob::slotParseMsInfo( KProcess*, char* output, int len )
-{
-  QString buffer = QString::fromLatin1( output, len ).stripWhiteSpace();
-  if( buffer.startsWith("cdrecord:") ) {
-    qDebug("(K3bDataJob) msinfo error: " + buffer );
-    m_msInfo = QString::null;
-  }
-  else if( buffer.contains(",") ) {
-    qDebug("(K3bDataJob) found msinfo? " + buffer );
-    QStringList list = QStringList::split( ",", buffer );
-    if( list.count() == 2 ) {
-      bool ok1, ok2;
-      list.first().toInt( &ok1 );
-      list[1].toInt( &ok2 );
-      if( ok1 && ok2 )
-	m_msInfo = buffer;
-      else
-	m_msInfo = QString::null;
-    }
-    else {
-      m_msInfo = QString::null;
-    }
-  }
+  // we only need the last line
+  m_collectedOutput = QString::fromLatin1( output, len );
 }
 
 

@@ -70,7 +70,7 @@
 #include "k3bprojecttabwidget.h"
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
-
+#include "cdcopy/k3bcdcopydialog.h"
 
 
 
@@ -169,6 +169,9 @@ void K3bMainWindow::initActions()
 
   actionToolsWriteIsoImage = new KAction(i18n("&Write Iso image"), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
+
+  actionCdCopy = new KAction(i18n("&Copy CD"), "gear", 0, this, SLOT(slotCdCopy()),
+			     actionCollection(), "tools_copy_cd" );
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()), 
 				       actionCollection(), "settings_k3bsetup" );
@@ -905,17 +908,15 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 
 void K3bMainWindow::slotBlankCdrw()
 {
-  K3bBlankingDialog* d = new K3bBlankingDialog( this, "blankingdialog" );
-  d->exec();
-  delete d;
+  K3bBlankingDialog d( this, "blankingdialog" );
+  d.exec();
 }
 
 
 void K3bMainWindow::slotWriteIsoImage()
 {
-  K3bIsoImageWritingDialog* d = new K3bIsoImageWritingDialog( this, "isodialog" );
-  d->exec();
-  delete d;
+  K3bIsoImageWritingDialog d( this, "isodialog" );
+  d.exec();
 }
 
 
@@ -936,6 +937,13 @@ void K3bMainWindow::slotProjectAddFiles()
 void K3bMainWindow::slotK3bSetup()
 {
   KRun::runCommand( "kdesu k3bsetup" );
+}
+
+
+void K3bMainWindow::slotCdCopy()
+{
+  K3bCdCopyDialog d( this );
+  d.exec();
 }
 
 

@@ -181,12 +181,14 @@ void K3bProjectBurnDialog::slotUser2()
 {
   saveSettings();
   m_doc->updateAllViews();
+  m_freeTempSpaceTimer->stop();
   done( Saved );
 }
 
 
 void K3bProjectBurnDialog::slotCancel()
 {
+  m_freeTempSpaceTimer->stop();
   done( Canceled );
 }
 
@@ -196,6 +198,8 @@ void K3bProjectBurnDialog::slotUser1()
     KMessageBox::sorry( k3bMain(), i18n("Sorry, K3b is already working on this project!"), i18n("Sorry") );
     return;
   }
+
+  m_freeTempSpaceTimer->stop();
 
   saveSettings();
 

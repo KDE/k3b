@@ -227,6 +227,7 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotBlankCdrw();
   void slotWriteIsoImage();
+  void slotCdCopy();
   void slotK3bSetup();
 
   void slotNewAudioDoc();
@@ -286,6 +287,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionFileExport;
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsWriteIsoImage;
+  KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
 	
   KToggleAction* actionViewToolBar;

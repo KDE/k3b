@@ -41,7 +41,8 @@ Q_OBJECT
   ~K3bIsoImageWritingDialog();
 
  protected slots:
-  void slotOk();
+  void slotUser1();
+  void slotUser2();
   void updateImageSize( const QString& );
   void slotFindImageFile();
   void slotWriterChanged();

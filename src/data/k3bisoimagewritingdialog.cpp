@@ -27,6 +27,8 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kfiledialog.h>
+#include <kstdguiitem.h>
+#include <kguiitem.h>
 
 #include <qgroupbox.h>
 #include <qcheckbox.h>
@@ -44,8 +46,8 @@
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : KDialogBase( parent, name, modal, i18n("Write ISO image to cd"), KDialogBase::Ok|KDialogBase::Close,
-		 KDialogBase::Ok, true )
+  : KDialogBase( parent, name, modal, i18n("Write ISO image to cd"), User1|User2,
+		 User1, true, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )
 {
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
@@ -136,7 +138,7 @@ void K3bIsoImageWritingDialog::setupGui()
 }
 
 
-void K3bIsoImageWritingDialog::slotOk()
+void K3bIsoImageWritingDialog::slotUser1()
 {
   // check if the image exists
   if( !QFile::exists( m_editImagePath->text() ) ) {
@@ -166,6 +168,12 @@ void K3bIsoImageWritingDialog::slotOk()
   d->show();
 
   m_job->start();
+}
+
+
+void K3bIsoImageWritingDialog::slotUser2()
+{
+  slotClose();
 }
 
 
