@@ -147,7 +147,8 @@ Values greater than 0.15 are adequate for letterbox movies. For 16:9 you should 
     modeGroup->setButton( 0  );
 }
 
-void K3bDivxCrop::updateView(){
+void K3bDivxCrop::slotUpdateView(){
+    kdDebug(  ) << "(K3bDivxCrop::slotUpdateView)" << endl;
     m_spinBottom->setMaxValue( m_data->getHeightValue()/2 - 50 );
     m_spinTop->setMaxValue( m_data->getHeightValue()/2 - 50 );
     m_spinLeft->setMaxValue( m_data->getWidthValue()/2 - 100 );
@@ -156,6 +157,7 @@ void K3bDivxCrop::updateView(){
 }
 
 void K3bDivxCrop::resetView(){
+    kdDebug(  ) << "(K3bDivxCrop::resetView)" << endl;
     m_preview->resetView();
     resetCrop();
 }
@@ -166,14 +168,19 @@ void K3bDivxCrop::resetCrop(){
     m_spinRight->setValue( 0 );
 }
 void K3bDivxCrop::initPreview( ){
+    kdDebug(  ) << "(K3bDivxCrop::initPreview)" << endl;
     KURL url(m_data->getProjectDir() + "/vob" );
     m_maxDirSize = KDirSize::dirSize( url )/2048;      // typedef unsigned long long int
     kdDebug()  << "Dirsize: (2KBytes)"  <<  KIO::number( m_maxDirSize ) << endl;
+    m_previewOffset = (int) m_maxDirSize/20;
+    m_preview->resetView();
     encodePreview();
-    m_preview->setPreviewPicture( m_data->getProjectDir() + "/preview00000.ppm" );
+    //done after slotEncodePreview to verify image exists
+    //m_preview->setPreviewPicture( m_data->getProjectDir() + "/preview000000.ppm" );
 }
 
 void K3bDivxCrop::encodePreview( ){
+    kdDebug(  ) << "(K3bDivxCrop::encodePreview)" << endl;
     // delete ifos
     QDir vobs( m_data->getProjectDir() + "/vob");
     if( vobs.exists() ){
@@ -184,12 +191,13 @@ void K3bDivxCrop::encodePreview( ){
         KURL::List ifoList( ifos );
 //        KURL dest( m_dirvob );
         connect( KIO::del( ifoList, false, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotEncodePreview( ) ) );
-        kdDebug() << "(K3bDivxEncodingProcess) Delete IFO files in " << vobs.path() << endl;
+        kdDebug() << "(K3bDivxCrop) Delete IFO files in " << vobs.path() << endl;
     }
 }
 
 void K3bDivxCrop::slotEncodePreview( ){
-    previewProcess = new KShellProcess(); // = new KShellProcess;
+     kdDebug(  ) << "(K3bDivxCrop::slotEncodePreview)" << endl;
+     previewProcess = new KShellProcess(); // = new KShellProcess;
      *previewProcess << k3bMain()->externalBinManager()->binObject("transcode")->path;
      *previewProcess << " -i " + m_data->getProjectDir() + "/vob";
      *previewProcess << " -x vob -y ppm -V -w 1200 -a 0 -c 4-5 "; // -V
@@ -206,6 +214,9 @@ void K3bDivxCrop::slotEncodePreview( ){
          kdDebug() << "Error process starting" << endl;
      }
      delete previewProcess;
+     kdDebug() << "(K3bDivxCrop::slotEncodePreview) Set image first time" << endl;
+     m_preview->setPreviewPicture( m_data->getProjectDir() + "/preview000000.ppm" );
+     //emit previewEncoded();
 }
 void K3bDivxCrop::setSpinBoxMode( int step ){
     m_spinTop->setLineStep( step );
@@ -264,9 +275,10 @@ void K3bDivxCrop::slotUpdateFinalSize(){
 }
 
 void K3bDivxCrop::slotPreviewChanged( int v ){
+    kdDebug(  ) << "(K3bDivxCrop::slotPreviewChanged)" << endl;
     m_previewOffset = v*m_maxDirSize/100;
-    encodePreview();
-    m_preview->updatePreviewPicture( m_data->getProjectDir() + "/preview00000.ppm" );
+    slotEncodePreview();
+    //m_preview->setPreviewPicture( m_data->getProjectDir() + "/preview000000.ppm" );
     slotAutoCropMode( m_autoCrop->state() );  // update auto cropping
 }
 
@@ -318,8 +330,8 @@ void K3bDivxCrop::slotResizeMode( int id ){
 
 void K3bDivxCrop::autoCrop(){
     resetCrop();
-    QImage i( m_data->getProjectDir() + "/preview00000.ppm" );
-    kdDebug() << "Image: " << QString::number( i.width() ) << "x" << QString::number( i.height() ) << endl;
+    QImage i( m_data->getProjectDir() + "/preview000000.ppm" );
+    kdDebug() << "(K3bDivxCrop::autoCrop) Image: " << QString::number( i.width() ) << "x" << QString::number( i.height() ) << endl;
     int difArray[25];
     int topCrop = 0;
     int bottomCrop = 0;
@@ -332,9 +344,9 @@ void K3bDivxCrop::autoCrop(){
             index++;
         }
         if( checkLine( difArray ) ){
-            kdDebug() << "Found line: " << QString::number( y ) << endl;
+            //kdDebug() << "Found line: " << QString::number( y ) << endl;
             int correct = y - ( y % m_spinTop->lineStep() );
-            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            //kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
             m_spinTop->setValue( correct );
             slotSpinTop( correct );
             topCrop = correct;
@@ -351,9 +363,9 @@ void K3bDivxCrop::autoCrop(){
         }
         if( checkLine( difArray ) ){
             bottomCrop = 576 - y;
-            kdDebug() << "Found line: " << QString::number( y ) << endl;
+            //kdDebug() << "Found line: " << QString::number( y ) << endl;
             int correct = bottomCrop - ( bottomCrop % m_spinBottom->lineStep() );
-            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            //kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
             m_spinBottom->setValue( correct );
             slotSpinBottom( correct );
             break;
@@ -370,9 +382,9 @@ void K3bDivxCrop::autoCrop(){
             index++;
         }
         if( checkLine( difArray ) ){
-            kdDebug() << "Found line: " << QString::number( x ) << endl;
+            //kdDebug() << "Found line: " << QString::number( x ) << endl;
             int correct = x - ( x % m_spinLeft->lineStep() );
-            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            //kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
             m_spinLeft->setValue( correct );
             slotSpinLeft( correct );
             break;
@@ -388,9 +400,9 @@ void K3bDivxCrop::autoCrop(){
         }
         if( checkLine( difArray ) ){
             int r = 720 - x;
-            kdDebug() << "Found line: " << QString::number( r ) << endl;
+            //kdDebug() << "Found line: " << QString::number( r ) << endl;
             int correct = r - ( r % m_spinRight->lineStep() );
-            kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
+            //kdDebug() << "Corrected line: " << QString::number( correct ) << endl;
             m_spinRight->setValue( correct );
             slotSpinRight( correct );
             break;
@@ -407,8 +419,8 @@ int K3bDivxCrop::checkPixels( QImage *i, int x, int y, int xoffset, int yoffset 
     int grey2 = qGray( i->pixel( x+xoffset, y+yoffset ) );
     int difference = grey2 -grey;
     if( difference > 0 ){
-        kdDebug() << "( " + QString::number(x) + "," + QString::number(y) + "): " << QString::number( difference )
-        << "," << QString::number( grey ) << "," << QString::number( grey2 ) << endl;
+        //kdDebug() << "( " + QString::number(x) + "," + QString::number(y) + "): " << QString::number( difference )
+        //<< "," << QString::number( grey ) << "," << QString::number( grey2 ) << endl;
         result  = difference;
     }
     return result;

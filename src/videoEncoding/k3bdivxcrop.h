@@ -48,13 +48,14 @@ public:
     ~K3bDivxCrop();
     void initPreview( );
     void resetView();
-    void updateView();
 public slots:
     void slotUpdateFinalSize();
     void slotAutoCropMode( int buttonStatus );
     void slotEncodePreview();
+    void slotUpdateView();
 signals:
     void cropChanged();
+    void previewEncoded();
 protected:
 //   void drawContents( QPainter* p );
 private:
