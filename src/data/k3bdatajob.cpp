@@ -435,16 +435,15 @@ bool K3bDataJob::prepareWriterJob()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      if( m_doc->multiSessionMode() == K3bDataDoc::START ||
-	  m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
-	*s << "CD_ROM_XA" << "\n";
-	*s << "\n";
-	*s << "TRACK MODE2" << "\n";
-      }
-      else {
+      if( m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
 	*s << "CD_ROM" << "\n";
 	*s << "\n";
 	*s << "TRACK MODE1" << "\n";
+      }
+      else {
+	*s << "CD_ROM_XA" << "\n";
+	*s << "\n";
+	*s << "TRACK MODE2" << "\n";
       }
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
