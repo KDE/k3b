@@ -371,10 +371,10 @@ void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type 
   case K3bJob::ERROR:
     currentInfoItem->setPixmap( 0, SmallIcon( "stop" ) );
     break;
-  case K3bJob::PROCESS:
-    currentInfoItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
+  case K3bJob::WARNING:
+    currentInfoItem->setPixmap( 0, SmallIcon( "misc" ) );
     break;
-  case K3bJob::STATUS:
+  case K3bJob::SUCCESS:
     currentInfoItem->setPixmap( 0, SmallIcon( "ok" ) );
     break;
   case K3bJob::INFO:

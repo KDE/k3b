@@ -157,27 +157,25 @@ void K3bDiskInfoView::displayInfo( const K3bCdDevice::DiskInfo& )
 void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 {
   const K3bCdDevice::DiskInfo& info = did->diskInfo();
+  const K3bCdDevice::NextGenerationDiskInfo& ngInfo = did->ngDiskInfo();
+  const K3bCdDevice::Toc& toc = did->toc();
 
   m_infoView->clear();
   //  m_infoView->header()->resizeSection( 0, 20 );
 
-  if( !info.valid ) {
-    setTitle( i18n("K3b was unable to retrieve disk information.") );
-    setRightPixmap( "diskinfo_right" );
-  } 
-  else if( info.noDisk ) {
+  if( ngInfo.diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );
     setTitle( i18n("No disk in drive") );
     setRightPixmap( "diskinfo_right" );
   }
   else {
 
-    if( info.empty ) {
+    if( ngInfo.empty() ) {
       setTitle( i18n("Disk is empty") );
       setRightPixmap( "diskinfo_empty" );
     } 
     else {
-      switch( info.tocType ) {
+      switch( toc.contentType() ) {
       case K3bDiskInfo::AUDIO:
         setTitle( i18n("Audio CD") );
 	setRightPixmap( "diskinfo_audio" );
@@ -197,7 +195,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
       }
     }
 
-    createMediaInfoItems( did->ngDiskInfo() );
+    createMediaInfoItems( ngInfo );
 
 
     // iso9660 info
@@ -213,7 +211,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
       (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
     KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
-    if( info.toc.isEmpty() )
+    if( toc.isEmpty() )
       (void)new KListViewItem( trackHeaderItem, i18n("Disk is Empty") );
     else {
       // create header item
@@ -227,7 +225,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 
       // if we have multible sessions we create a header item for every session
       KListViewItem* trackItem = 0;
-      if( info.sessions > 1 && info.toc[0].session() > 0 ) {
+      if( ngInfo.numSessions() > 1 && toc[0].session() > 0 ) {
 	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1").arg(1) );
 	lastSession = 1;
       }
@@ -237,10 +235,10 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
       // create items for the tracks
       K3bToc::const_iterator it;
       int index = 1;
-      for( it = info.toc.begin(); it != info.toc.end(); ++it ) {
+      for( it = toc.begin(); it != toc.end(); ++it ) {
         const K3bTrack& track = *it;
 
-	if( info.sessions > 1 && track.session() != lastSession ) {
+	if( ngInfo.numSessions() > 1 && track.session() != lastSession ) {
 	  lastSession = track.session();
 	  trackItem->setOpen(true);
 	  trackItem = new HeaderViewItem( trackHeaderItem, 
@@ -333,7 +331,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDis
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;
   if( info.currentProfile() != -1 )
-    typeStr = K3bCdDevice::mediaTypeString( info.currentProfile() );
+    typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
   else if( info.mediaType() == -1 )
     typeStr = i18n("Unknown (probably CD-ROM)");
   else

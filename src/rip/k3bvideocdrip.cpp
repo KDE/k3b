@@ -264,7 +264,7 @@ void K3bVideoCdRip::slotVcdXRipFinished()
         // TODO: check the process' exitStatus()
         switch ( m_process->exitStatus() ) {
             case 0:
-                emit infoMessage( i18n( "Files successfully extracted." ), K3bJob::STATUS );
+                emit infoMessage( i18n( "Files successfully extracted." ), K3bJob::SUCCESS );
                 break;
             default:
                 emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxrip" ).arg( m_process->exitStatus() ), K3bJob::ERROR );

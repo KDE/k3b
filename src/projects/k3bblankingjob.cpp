@@ -154,7 +154,7 @@ void K3bBlankingJob::cancel()
 void K3bBlankingJob::slotFinished(bool success)
 {
   if( success ) {
-    emit infoMessage( i18n("Process completed successfully"), K3bJob::STATUS );
+    emit infoMessage( i18n("Process completed successfully"), K3bJob::SUCCESS );
     emit finished( true );
   }
   else {

@@ -45,6 +45,7 @@ public:
   }
 
   K3bDataVerifyingJob* verificationJob;
+  bool simulate;
 };
 
 
@@ -89,8 +90,9 @@ void K3bDvdJob::start()
 
   m_canceled = false;
   m_writingStarted = false;
+  d->simulate = m_doc->dummy();
 
-  if( m_doc->dummy() )
+  if( d->simulate )
     m_doc->setVerifyData( false );
 
   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
@@ -220,7 +222,7 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
 
   m_imageFile.close();
   if( success ) {
-    emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::STATUS );
+    emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );
     
     if( m_doc->onlyCreateImages() ) {
       emit finished( true );
@@ -278,7 +280,7 @@ bool K3bDvdJob::prepareWriterJob()
 //   if( m_usedWritingApp == K3b::DVDRECORD )  {
 //     K3bDvdrecordWriter* writer = new K3bDvdrecordWriter( m_doc->burner(), this );
 
-//     writer->setSimulate( m_doc->dummy() );
+//     writer->setSimulate( d->simulate );
 //     writer->setBurnproof( m_doc->burnproof() );
 //     writer->setBurnSpeed( m_doc->speed() );
 
@@ -307,7 +309,7 @@ bool K3bDvdJob::prepareWriterJob()
     K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this );
 
     // these do only make sense with DVD-R(W)
-    writer->setSimulate( m_doc->dummy() );
+    writer->setSimulate( d->simulate );
     //    writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
     writer->setWritingMode( m_doc->writingMode() );
@@ -430,7 +432,7 @@ void K3bDvdJob::cleanup()
   if( m_canceled || m_doc->removeImages() ) {
     if( m_imageFile.exists() ) {
       m_imageFile.remove();
-      emit infoMessage( i18n("Removed image file %1").arg(m_imageFile.name()), K3bJob::STATUS );
+      emit infoMessage( i18n("Removed image file %1").arg(m_imageFile.name()), K3bJob::SUCCESS );
     }
   }
 }
@@ -463,7 +465,7 @@ bool K3bDvdJob::waitForDvd()
 
   else {
     if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
-      if( m_doc->dummy() ) {
+      if( d->simulate ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
 					    "Do you really want to continue? The media will be written "
@@ -472,6 +474,8 @@ bool K3bDvdJob::waitForDvd()
 	  cancel();
 	  return false;
 	}
+
+	d->simulate = false;
       }
       
       if( m_doc->speed() > 0 ) {
@@ -492,32 +496,82 @@ bool K3bDvdJob::waitForDvd()
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
-    else if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
-      if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
-	  m_doc->multiSessionMode() == K3bDataDoc::START )
-	emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
-      else
-	emit infoMessage( i18n("Growing Iso9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
-    }
-    else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
-		  K3bCdDevice::MEDIA_DVD_RW) ) {
-      if( m_doc->writingMode() == K3b::DAO ||
-	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
-   	emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
-      else
-	emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );	
-    }
-    else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
-		  K3bCdDevice::MEDIA_DVD_R) ) {
-      if( m_doc->writingMode() == K3b::DAO ||
-	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
-	emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
-      else {
-	if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR )
-	  emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
-	emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );	
+    else {
+      if( d->simulate && !m_doc->burner()->dvdMinusTestwrite() ) {
+	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+				       i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
+					    "Do you really want to continue? The media will be written "
+					    "for real.")
+				       .arg(m_doc->burner()->vendor())
+				       .arg(m_doc->burner()->description()),
+				       i18n("No simulation with DVD-R(W)") ) == KMessageBox::No ) {
+	  cancel();
+	  return false;
+	}
+
+	d->simulate = false;
+      }
+
+
+      if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
+	if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+	    m_doc->multiSessionMode() == K3bDataDoc::START )
+	  emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
+	else
+	  emit infoMessage( i18n("Growing Iso9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
+      }
+      else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
+		    K3bCdDevice::MEDIA_DVD_RW) ) {
+	if( m_doc->writingMode() == K3b::DAO ||
+	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+	      m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+	  emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
+	else if( m_doc->multiSessionMode() == K3bDataDoc::START ||
+		 m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
+	  // check if the writer supports writing sequential and thus multisession
+	  if( !m_doc->burner()->supportsFeature( 0x21 ) ) {
+	    if( KMessageBox::warningYesNo( qApp->activeWindow(),
+					   i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
+						"media. Multisession will not be possible. Continue anyway?")
+					   .arg(m_doc->burner()->vendor())
+					   .arg(m_doc->burner()->description())
+					   .arg( i18n("DVD-RW") ),
+					   i18n("No Incremental Streaming") ) == KMessageBox::No ) {
+	      cancel();
+	      return false;
+	    }
+	  }
+	  emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );	
+	}
+      }
+      else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
+		    K3bCdDevice::MEDIA_DVD_R) ) {
+	if( m_doc->writingMode() == K3b::DAO ||
+	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+	      m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+	  emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+	else {
+	  if( m_doc->multiSessionMode() == K3bDataDoc::START ||
+	      m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
+	    // check if the writer supports writing sequential and thus multisession
+	    if( !m_doc->burner()->supportsFeature( 0x21 ) ) {
+	      if( KMessageBox::warningYesNo( qApp->activeWindow(),
+					     i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
+						  "media. Multisession will not be possible. Continue anyway?")
+					     .arg(m_doc->burner()->vendor())
+					     .arg(m_doc->burner()->description())
+					     .arg( i18n("DVD-R") ),
+					     i18n("No Incremental Streaming") ) == KMessageBox::No ) {
+		cancel();
+		return false;
+	      }
+	    }
+	  }
+	
+	  if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR )
+	    emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
+	  emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );	
+	}
       }
     }
   }

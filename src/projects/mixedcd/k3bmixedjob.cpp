@@ -308,7 +308,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
   }
   else {
     m_isoImageFile->close();
-    emit infoMessage( i18n("Iso image successfully created."), STATUS );
+    emit infoMessage( i18n("Iso image successfully created."), SUCCESS );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       m_currentAction = WRITING_ISO_IMAGE;
@@ -403,7 +403,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
   else {
     m_waveFileWriter->close();
 
-    emit infoMessage( i18n("Audio images successfully created."), STATUS );
+    emit infoMessage( i18n("Audio images successfully created."), SUCCESS );
 
     if( m_doc->audioDoc()->normalize() ) {
       normalizeFiles();

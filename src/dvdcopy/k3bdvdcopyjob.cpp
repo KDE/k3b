@@ -26,6 +26,7 @@
 #include <k3bgrowisofswriter.h>
 #include <k3breadcdreader.h>
 #include <k3bversion.h>
+#include <k3biso9660.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -55,6 +56,8 @@ public:
   K3bGrowisofsWriter* writerJob;
   K3bReadcdReader* readcdReader;
   //  QFile bufferFile;
+
+  K3b::Msf lastSector;
 };
 
 
@@ -99,7 +102,7 @@ void K3bDvdCopyJob::start()
 
   // TODO: check the cd size and warn the user if not enough space
 
-  emit infoMessage( i18n("Checking source media") + "...", PROCESS );
+  emit infoMessage( i18n("Checking source media") + "...", INFO );
   emit newSubTask( i18n("Checking source media") );
 
   connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, m_readerDevice ),
@@ -129,7 +132,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       if( KMessageBox::warningYesNo( qApp->activeWindow(), 
 				     i18n("The source DVD seems to be too large (%1) to make its contents fit on "
 					  "a normal writable DVD media which have a capacity of approximately "
-					  "4.3 Gigabytes. Do you really want to continue?").arg(KIO::convertSize( dh->ngDiskInfo().capacity().mode1Bytes() ) ),
+					  "4.3 Gigabytes. Do you really want to continue?")
+				     .arg(KIO::convertSize( dh->ngDiskInfo().capacity().mode1Bytes() ) ),
 				     i18n("Source DVD too large") ) == KMessageBox::No ) {
 	emit canceled();
 	emit finished(false);
@@ -138,18 +142,67 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
       }
     }
 
-    // now we may really start.
+    //
+    // We cannot rely on the kernel to determine the size of the DVD for some reason
+    // On the other hand it is not always a good idea to rely on the size from the ISO9660
+    // header since that may be wrong due to some buggy encoder or some boot code appended
+    // after creating the image.
+    // That is why we try our best to determine the size of the DVD. For DVD-ROM this is very
+    // easy since it has only one track. The same goes for single session DVD-R(W) and DVD+R.
+    // Multisession DVDs we will simply not copy. ;)
+    // For DVD+RW and DVD-RW in restricted overwrite mode we are left with no other choice but
+    // to use the ISO9660 header.
+    //
+    // On the other hand: in on-the-fly mode growisofs determines the size of the data to be written
+    //                    by looking at the ISO9660 header. So in this case it would be best for us 
+    //                    to do the same....
+    //
 
-    //      if( m_onlyCreateImage || !m_onTheFly ) {
-    //        emit newTask( i18n("Reading image") );
-    //        d->bufferFile.setName( m_imagePath );
-    //        if( !d->bufferFile.open( IO_ReadOnly ) {
-    //          emit infoMessage( i18n("Could not open %1 for writing").arg(m_imagePath), ERROR );
-    //          emit finished(false);
-    //          d->running = false;
-    //          return;
-    //        }
-    //      }
+    switch( dh->ngDiskInfo().mediaType() ) {
+    case K3bCdDevice::MEDIA_DVD_ROM:
+    case K3bCdDevice::MEDIA_DVD_R:
+    case K3bCdDevice::MEDIA_DVD_R_SEQ:
+    case K3bCdDevice::MEDIA_DVD_RW:
+    case K3bCdDevice::MEDIA_DVD_RW_SEQ:
+    case K3bCdDevice::MEDIA_DVD_PLUS_R:
+
+      if( dh->ngDiskInfo().numSessions() > 1 ) {
+	emit infoMessage( i18n("K3b does not support copying multisession DVDs."), ERROR );
+	emit finished(false);
+	d->running = false;
+	return;
+      }
+
+//       d->lastSector = dh->toc()[0].lastSector();
+//       break;
+    case K3bCdDevice::MEDIA_DVD_PLUS_RW:
+    case K3bCdDevice::MEDIA_DVD_RW_OVWR:
+      {
+	emit infoMessage( i18n("K3b needs to rely on the size saved in the ISO9660 header."), WARNING );
+	emit infoMessage( i18n("This will result in a corrupt copy if the source was mastered with a buggy software."), WARNING );
+
+	K3bIso9660 isoF( m_writerDevice, 0 );
+	if( isoF.open( IO_ReadOnly ) ) {
+	  d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL;
+	}
+	else {
+	  emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
+	  emit finished(false);
+	  d->running = false;
+	  return;
+	}
+      }
+      break;
+    case K3bCdDevice::MEDIA_DVD_RAM:
+      emit infoMessage( i18n("K3b does not support copying DVD-RAM."), ERROR );
+      emit finished(false);
+      d->running = false;
+      return;
+      break;
+    default:
+      kdDebug() << "(K3bDvdCopyJob) unable to determine media type." << endl;
+    }
+
 
     if( m_onlyCreateImage || !m_onTheFly ) {
       emit newTask( i18n("Creating DVD image") );
@@ -210,6 +263,7 @@ void K3bDvdCopyJob::prepareReader()
 
   d->readcdReader->setReadDevice( m_readerDevice );
   d->readcdReader->setReadSpeed( 0 ); // MAX
+  d->readcdReader->setSectorRange( 0, d->lastSector );
 
   if( m_onTheFly && !m_onlyCreateImage )
     d->readcdReader->writeToFd( d->writerJob->fd() );
@@ -305,7 +359,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
   }
 
   if( success ) {
-    emit infoMessage( i18n("Successfully read source DVD."), STATUS );
+    emit infoMessage( i18n("Successfully read source DVD."), SUCCESS );
     if( m_onlyCreateImage ) {
       emit finished(true);
       d->running = false;
@@ -436,24 +490,42 @@ bool K3bDvdCopyJob::waitForDvd()
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
-    else if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
-      emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
-    }
-    else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
-		  K3bCdDevice::MEDIA_DVD_RW) ) {
-      if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
-	emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );
-      else
-	emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
-    }
-    else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
-		  K3bCdDevice::MEDIA_DVD_R) ) {
-      if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
-	emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
-      else {
-	if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
-	  emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
-	emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+    else {
+      if( m_simulate && !m_writerDevice->dvdMinusTestwrite() ) {
+	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+				       i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
+					    "Do you really want to continue? The media will be written "
+					    "for real.")
+				       .arg(m_writerDevice->vendor())
+				       .arg(m_writerDevice->description()),
+				       i18n("No simulation with DVD-R(W)") ) == KMessageBox::No ) {
+	  cancel();
+	  return false;
+	}
+
+	m_simulate = false;
+      }
+
+
+      if( m & K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
+	emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
+      }
+      else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
+		    K3bCdDevice::MEDIA_DVD_RW) ) {
+	if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
+	  emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );
+	else
+	  emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
+      }
+      else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
+		    K3bCdDevice::MEDIA_DVD_R) ) {
+	if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
+	  emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
+	else {
+	  if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
+	    emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
+	  emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+	}
       }
     }
   }
@@ -467,7 +539,7 @@ void K3bDvdCopyJob::removeImageFiles()
 {
   if( QFile::exists( m_imagePath ) ) {
     QFile::remove( m_imagePath );
-    emit infoMessage( i18n("Removed image file %1").arg(m_imagePath), K3bJob::STATUS );
+    emit infoMessage( i18n("Removed image file %1").arg(m_imagePath), K3bJob::SUCCESS );
   }
 }
 

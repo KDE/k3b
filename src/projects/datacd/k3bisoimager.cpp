@@ -366,7 +366,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 
 
   if( success ) {
-    emit sizeCalculated( PROCESS, m_mkisofsPrintSizeResult );
+    emit sizeCalculated( INFO, m_mkisofsPrintSizeResult );
   }
   else {
     m_mkisofsPrintSizeResult = 0;
@@ -516,7 +516,7 @@ bool K3bIsoImager::addMkisofsParameters()
     *m_process << "-V" << s;
   }
   else {
-    emit infoMessage( i18n("No volume id specified. Using default."), INFO );
+    emit infoMessage( i18n("No volume id specified. Using default."), WARNING );
     *m_process << "-V" << "CDROM";
   }
 
@@ -875,8 +875,9 @@ void K3bIsoImager::informAboutCutJolietNames()
 	cutFiles.append(item);
 
     if( !cutFiles.isEmpty() ) {
-      emit infoMessage( i18n("Some filenames need to be shortened due to the 64 char restriction of the Joliet extensions."), INFO );
-      emit infoMessage( i18n("See the debugging output for details."), INFO );
+      emit infoMessage( i18n("Some filenames need to be shortened due to the 64 char restriction of the Joliet extensions."), 
+			WARNING );
+      emit infoMessage( i18n("See the debugging output for details."), WARNING );
 
       for( QPtrListIterator<K3bDataItem> it( cutFiles ); it.current(); ++it ) {
 	item = it.current();

@@ -239,7 +239,7 @@ void K3bGrowisofsWriter::start()
       if( simulate() ) {
 	emit newTask( i18n("Simulating") );
 	emit infoMessage( i18n("Starting simulation..."), 
-			  K3bJob::PROCESS );
+			  K3bJob::INFO );
 	//
 	// TODO: info message that DVD+R(W) has no dummy mode and the speed setting is not used
 	//       perhaps we could determine the media type in the writer?
@@ -247,7 +247,7 @@ void K3bGrowisofsWriter::start()
       }
       else {
 	emit newTask( i18n("Writing") );
-	emit infoMessage( i18n("Starting writing..."), K3bJob::PROCESS );
+	emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
       }
     }
   }
@@ -284,9 +284,6 @@ void K3bGrowisofsWriter::setImageToWrite( const QString& filename )
 
 void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 {
-  // this takes way too long. We should do it manually
-  // /dev/sr0: pre-formatting blank DVD+RW...
-
   emit debuggingOutput( d->growisofsBin->name(), line );
 
   int pos = 0;
@@ -338,19 +335,23 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
-    emit infoMessage( i18n("Flushing the cache may take some time") + "...", PROCESS );
+    emit infoMessage( i18n("Flushing the cache may take some time") + "...", INFO );
   }
   else if( line.contains( "updating RMA" ) ) {
     emit newSubTask( i18n("Updating RMA") );
-    emit infoMessage( i18n("Updating RMA") + "...", PROCESS );
+    emit infoMessage( i18n("Updating RMA") + "...", INFO );
   }
   else if( line.contains( "closing session" ) ) {
     emit newSubTask( i18n("Closing Session") );
-    emit infoMessage( i18n("Closing Session") + "...", PROCESS );
+    emit infoMessage( i18n("Closing Session") + "...", INFO );
   }
   else if( line.contains( "writing lead-out" ) ) {
     emit newSubTask( i18n("Writing Lead-out") );
     emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
+  }
+  else if( line.contains( "FEATURE 21h is not on" ) ) {
+    emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
+    emit infoMessage( i18n("Engaging DAO"), WARNING );
   }
   else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
     // parse write speed
@@ -394,9 +395,9 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
 
       if( simulate() )
-	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
+	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
       else
-	emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+	emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
 
       d->success = true;
     }

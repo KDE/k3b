@@ -134,7 +134,7 @@ void K3bDvdFormattingJob::start()
     return;
   }
 
-  emit infoMessage( i18n("Checking media..."), PROCESS );
+  emit infoMessage( i18n("Checking media..."), INFO );
   emit newTask( i18n("Checking media") );
 
   connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, d->device ), 
@@ -233,7 +233,7 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
 {
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
-      emit infoMessage( i18n("Formatting successfully finished"), K3bJob::STATUS );
+      emit infoMessage( i18n("Formatting successfully finished"), K3bJob::SUCCESS );
 
       if( d->lastProgressValue < 100 ) {
 	emit infoMessage( i18n("Do not bother with the progress stopping before 100%."), INFO );

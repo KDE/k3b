@@ -285,7 +285,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     if( m_cdrdaoBinObject->hasFeature( "disable-burnproof" ) )
       *m_process << "--buffer-under-run-protection" << "0";
     else
-      emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.").arg(m_cdrdaoBinObject->version), INFO );
+      emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.").arg(m_cdrdaoBinObject->version), WARNING );
   }
   
   k3bcore->config()->setGroup("General Options");
@@ -305,7 +305,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     if( m_cdrdaoBinObject->hasFeature("overburn") )
       *m_process << "--overburn";
     else
-      emit infoMessage( i18n("Cdrdao %1 does not support overburning!").arg(m_cdrdaoBinObject->version), INFO );
+      emit infoMessage( i18n("Cdrdao %1 does not support overburning!").arg(m_cdrdaoBinObject->version), WARNING );
   }
 
 }
@@ -555,33 +555,33 @@ void K3bCdrdaoWriter::start()
 	  if( simulate() )
 	    {
 	      emit infoMessage(i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
-			       K3bJob::PROCESS );
+			       K3bJob::INFO );
 	      emit newTask( i18n("Simulating") );
 	    }
 	  else
 	    {
-	      emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	      emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
 	      emit newTask( i18n("Writing") );
 	    }
 	  break;
 	case READ:
-	  emit infoMessage(i18n("Starting reading..."), K3bJob::PROCESS );
+	  emit infoMessage(i18n("Starting reading..."), K3bJob::INFO );
 	  emit newTask( i18n("Reading") );
 	  break;
 	case COPY:
 	  if( simulate() )
 	    {
-	      emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	      emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
 	      emit newTask( i18n("Simulating") );
 	    }
 	  else
 	    {
-	      emit infoMessage( i18n("Starting copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	      emit infoMessage( i18n("Starting copy at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
 	      emit newTask( i18n("Copying") );
 	    }
 	  break;
 	case BLANK:
-	  emit infoMessage(i18n("Starting blanking..."), K3bJob::PROCESS );
+	  emit infoMessage(i18n("Starting blanking..."), K3bJob::INFO );
 	  emit newTask( i18n("Blanking") );
 	}
     }
@@ -709,21 +709,21 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
     {
     case 0:
       if( simulate() )
-        emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
+        emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
       else
         switch ( m_command )
         {
         case READ:
-          emit infoMessage( i18n("Reading successfully finished"), K3bJob::STATUS );
+          emit infoMessage( i18n("Reading successfully finished"), K3bJob::SUCCESS );
           break;
         case WRITE:
-          emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+          emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
           break;
         case COPY:
-          emit infoMessage( i18n("Copying successfully finished"), K3bJob::STATUS );
+          emit infoMessage( i18n("Copying successfully finished"), K3bJob::SUCCESS );
           break;
         case BLANK:
-          emit infoMessage( i18n("Blanking successfully finished"), K3bJob::STATUS );
+          emit infoMessage( i18n("Blanking successfully finished"), K3bJob::SUCCESS );
           break;
         }
 
@@ -776,8 +776,8 @@ void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line )
     int speed = line.mid( pos+9, po2-pos-9 ).toInt();
     if( speed < burnSpeed() )
     {
-      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::INFO );
-      emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::PROCESS );
+      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::WARNING );
+      emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
     }
   }
 }
@@ -816,7 +816,7 @@ void K3bCdrdaoWriter::parseCdrdaoLine( const QString& str )
   }
   else if( (str).startsWith( "Power calibration successful" ) )
   {
-    emit infoMessage( i18n("Power calibration successful"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Power calibration successful"), K3bJob::INFO );
     emit newSubTask( i18n("Preparing burn process...") );
   }
   else if( (str).startsWith( "Flushing cache" ) )
@@ -829,19 +829,19 @@ void K3bCdrdaoWriter::parseCdrdaoLine( const QString& str )
   }
   else if( (str).startsWith( "Turning BURN-Proof on" ) )
   {
-    emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::INFO );
   }
   else if( str.startsWith( "Copying" ) )
   {
-    emit infoMessage( str, K3bJob::PROCESS );
+    emit infoMessage( str, K3bJob::INFO );
   }
   else if( str.startsWith( "Found ISRC" ) )
   {
-    emit infoMessage( i18n("Found ISRC code"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Found ISRC code"), K3bJob::INFO );
   }
   else if( str.startsWith( "Found pre-gap" ) )
   {
-    emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::PROCESS );
+    emit infoMessage( i18n("Found pregap: %1").arg( str.mid(str.find(":")+1) ), K3bJob::INFO );
   }
   else
     unknownCdrdaoLine(str);
@@ -865,7 +865,7 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
   }
   else if( line.contains( "not ready") )
   {
-    emit infoMessage( i18n("Device not ready, waiting."),K3bJob::PROCESS );
+    emit infoMessage( i18n("Device not ready, waiting."),K3bJob::WARNING );
   }
   else if( line.contains("Drive does not accept any cue sheet") )
   {

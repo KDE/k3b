@@ -45,7 +45,7 @@ K3bMsInfoFetcher::~K3bMsInfoFetcher()
 
 void K3bMsInfoFetcher::start()
 {
-  emit infoMessage( i18n("Searching previous session"), K3bJob::PROCESS );
+  emit infoMessage( i18n("Searching previous session"), K3bJob::INFO );
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;

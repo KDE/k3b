@@ -286,7 +286,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       d->doc->onlyCreateImages() ) {
     d->imageFile.close();
     if( success ) {
-      emit infoMessage( i18n("Image successfully created in %1").arg(d->doc->tempDir()), K3bJob::STATUS );
+      emit infoMessage( i18n("Image successfully created in %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
       d->imageFinished = true;
 
       if( d->doc->onlyCreateImages() ) {
@@ -362,7 +362,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
   if( !d->doc->onTheFly() && d->doc->removeImages() ) {
     if( d->imageFile.exists() ) {
       d->imageFile.remove();
-      emit infoMessage( i18n("Removed image file %1").arg(d->imageFile.name()), K3bJob::STATUS );
+      emit infoMessage( i18n("Removed image file %1").arg(d->imageFile.name()), K3bJob::SUCCESS );
     }
   }
 
@@ -663,7 +663,7 @@ void K3bDataJob::cancelAll()
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( d->doc->tempDir() ) ) {
     if( !d->doc->onTheFly() && (d->doc->removeImages() || !d->imageFinished) ) {
-      emit infoMessage( i18n("Removing ISO image %1").arg(d->doc->tempDir()), K3bJob::STATUS );
+      emit infoMessage( i18n("Removing ISO image %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
       QFile::remove( d->doc->tempDir() );
     }
   }

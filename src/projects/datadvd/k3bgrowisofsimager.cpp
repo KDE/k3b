@@ -218,7 +218,7 @@ void K3bGrowisofsImager::start()
     if( m_doc->dummy() ) {
       emit newTask( i18n("Simulating") );
       emit infoMessage( i18n("Starting simulation..."), 
-			K3bJob::PROCESS );
+			K3bJob::INFO );
       //
       // TODO: info message that DVD+R(W) has no dummy mode and the speed setting is not used
       //       perhaps we could determine the media type in the writer?
@@ -226,7 +226,7 @@ void K3bGrowisofsImager::start()
     }
     else {
       emit newTask( i18n("Writing") );
-      emit infoMessage( i18n("Starting writing..."), K3bJob::PROCESS );
+      emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
     }
   }
 }
@@ -270,25 +270,29 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
-    emit infoMessage( i18n("Flushing the cache may take some time") + "...", PROCESS );
+    emit infoMessage( i18n("Flushing the cache may take some time") + "...", INFO );
   }
   else if( line.contains( "updating RMA" ) ) {
     emit newSubTask( i18n("Updating RMA") );
-    emit infoMessage( i18n("Updating RMA") + "...", PROCESS );
+    emit infoMessage( i18n("Updating RMA") + "...", INFO );
   }
   else if( line.contains( "closing session" ) ) {
     emit newSubTask( i18n("Closing Session") );
-    emit infoMessage( i18n("Closing Session") + "...", PROCESS );
+    emit infoMessage( i18n("Closing Session") + "...", INFO );
   }
   else if( line.contains( "writing lead-out" ) ) {
     emit newSubTask( i18n("Writing Lead-out") );
     emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
   }
   else if( line.contains( "Quick Grow" ) ) {
-    emit infoMessage( i18n("Removing reference to lead-out."), PROCESS );
+    emit infoMessage( i18n("Removing reference to lead-out."), INFO );
   }
   else if( line.contains( "copying volume descriptor" ) ) {
-    emit infoMessage( i18n("Modifying Iso9660 volume descriptor"), PROCESS );
+    emit infoMessage( i18n("Modifying Iso9660 volume descriptor"), INFO );
+  }
+  else if( line.contains( "FEATURE 21h is not on" ) ) {
+    emit infoMessage( i18n("Writer does not support Incremental Streaming"), WARNING );
+    emit infoMessage( i18n("Engaging DAO"), WARNING );
   }
   else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
     // parse write speed
@@ -344,9 +348,9 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 			.arg(av).arg(KGlobal::locale()->formatNumber((double)av/1385.0, 2)), INFO );
 
       if( m_doc->dummy() )
-	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
+	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
       else
-	emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+	emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
 
       d->success = true;
     }

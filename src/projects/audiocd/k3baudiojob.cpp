@@ -187,6 +187,7 @@ void K3bAudioJob::start()
     emit burning(false);
     emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
     emit newTask( i18n("Creating image files") );
+    m_tempData->prepareTempFileNames( doc()->tempDir() );
   }
   m_audioStreamer->start();
 }
@@ -249,7 +250,7 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
     // close the last written wave file
     m_waveFileWriter->close();
 
-    emit infoMessage( i18n("Successfully decoded all tracks."), STATUS );
+    emit infoMessage( i18n("Successfully decoded all tracks."), SUCCESS );
 
     if( m_doc->normalize() ) {
 	normalizeFiles();

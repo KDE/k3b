@@ -187,13 +187,13 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     }
     //emit started();
     if ( m_pass == 1 ) {
-        infoMessage( i18n( "Start first pass of video encoding." ), PROCESS );
+        infoMessage( i18n( "Start first pass of video encoding." ), INFO );
         emit newSubTask( i18n( "Encoding video (Pass 1)" ) );
     } else if ( m_pass == 2 ) {
-        infoMessage( i18n( "Start second pass of video encoding." ), PROCESS );
+        infoMessage( i18n( "Start second pass of video encoding." ), INFO );
         emit newSubTask( i18n( "Encoding video (Pass 2)" ) );
     } else {
-        infoMessage( i18n( "Start video encoding." ), PROCESS );
+        infoMessage( i18n( "Start video encoding." ), INFO );
         emit newSubTask( i18n( "Encoding video" ) );
     }
     kdDebug() << "(K3bDivXEncodingProcess) Starting encoding." << endl;
@@ -276,7 +276,7 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
     emit debuggingOutput( "Videoencoding (transcode)", m_debugBuffer );
     emit finished( false );
   } else if ( !p->normalExit() ) {
-    infoMessage( i18n( "Video generation aborted by user." ), STATUS );
+    infoMessage( i18n( "Video generation aborted by user." ), SUCCESS );
     kdDebug() << "(K3bDivxEncodingProcess) Aborted encoding" << endl;
     restoreBackupFiles();
     emit debuggingOutput( "Videoencoding (transcode)", m_debugBuffer );
@@ -299,10 +299,10 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
                     emit finished( true );
                 }
             } else {
-                infoMessage( i18n( "Video generating successfully finished." ), STATUS );
+                infoMessage( i18n( "Video generating successfully finished." ), SUCCESS );
                 emit finished( true );
             }
-            infoMessage( i18n("Video generating successfully finished."), STATUS );
+            infoMessage( i18n("Video generating successfully finished."), SUCCESS );
             emit debuggingOutput("videoencoding (transcode)", m_debugBuffer);
             emit finished( true );
         }
@@ -342,7 +342,7 @@ void K3bDivXEncodingProcess::slotParseAudio( KProcess*, char * buffer, int len )
   m_speedFlag++;
 }
 void K3bDivXEncodingProcess::slotAudioExited( KProcess * p ) {
-  infoMessage( i18n( "Preprocessing audio completed." ), STATUS );
+  infoMessage( i18n( "Preprocessing audio completed." ), SUCCESS );
   kdDebug() << "(K3bDivxEncodingProcess) Audio gain detection finished" << endl;
   if ( p->normalExit() ) {
     deleteIfos(); // delete ifos and slotStartEncoding( );

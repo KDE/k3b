@@ -89,7 +89,7 @@ void K3bCdCopyJob::start() {
         m_copies = 1;
     m_finishedCopies = 0;
 
-    emit infoMessage( i18n("Retrieving information about source disk"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Retrieving information about source disk"), K3bJob::INFO );
     getSourceDiskInfo( m_cdrdaowriter->sourceDevice() );
 
 }
@@ -323,7 +323,7 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
 void K3bCdCopyJob::finishAll() {
     if( !m_keepImage && !m_onTheFly ) {
         removeImages();
-        emit infoMessage( i18n("Image files removed"), K3bJob::STATUS );
+        emit infoMessage( i18n("Image files removed"), K3bJob::SUCCESS );
     }
 
     if( k3bMain()->eject() ) {
@@ -338,7 +338,7 @@ void K3bCdCopyJob::finishAll() {
 
 void K3bCdCopyJob::cancelAll() {
     removeImages();
-    emit infoMessage( i18n("Canceled, temporary files removed"), K3bJob::STATUS );
+    emit infoMessage( i18n("Canceled, temporary files removed"), K3bJob::SUCCESS );
 
     emit finished( false );
 }

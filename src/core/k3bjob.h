@@ -56,7 +56,7 @@ class K3bJob : public QObject
 			      const char* processedSizeSlot = 0,
 			      const char* processedSubSizeSlot = 0 );
 
-  enum MessageType { STATUS, PROCESS, ERROR, INFO };
+  enum MessageType { INFO, WARNING, ERROR, SUCCESS };
 
  protected:
   K3bJob( QObject* parent = 0, const char* name = 0 );

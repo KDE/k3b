@@ -169,10 +169,10 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
   case K3bJob::ERROR:
     item->setPixmap( 0, SmallIcon( "stop" ) );
     break;
-  case K3bJob::PROCESS:
+  case K3bJob::INFO:
     item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     break;
-  case K3bJob::STATUS:
+  case K3bJob::SUCCESS:
   default:
     item->setPixmap( 0, SmallIcon( "ok" ) );
   }

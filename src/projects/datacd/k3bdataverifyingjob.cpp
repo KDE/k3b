@@ -201,7 +201,7 @@ void K3bDataVerifyingJob::compareNextFile()
       finishVerification( false );
     }
     else {
-      emit infoMessage( i18n("All files seem binary equal."), STATUS );
+      emit infoMessage( i18n("All files seem binary equal."), SUCCESS );
       finishVerification( true );
     }
   }

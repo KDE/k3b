@@ -132,7 +132,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
 	finishVerification(false);
       }
       else {
-	emit infoMessage( i18n("The written image seems binary equal."), STATUS );
+	emit infoMessage( i18n("The written image seems binary equal."), SUCCESS );
 	finishVerification(true);
       }
     }

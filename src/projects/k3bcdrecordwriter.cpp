@@ -157,7 +157,7 @@ void K3bCdrecordWriter::prepareProcess()
     if( burnDevice()->dao() )
       *m_process << "-dao";
     else
-      emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), INFO );
+      emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
   }
   else if( m_writingMode == K3b::RAW ) {
       *m_process << "-raw";
@@ -179,7 +179,7 @@ void K3bCdrecordWriter::prepareProcess()
 	*m_process << "driveropts=burnfree";
     }
     else
-      emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
+      emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), WARNING );
   }
   
   if ( m_cue && !m_cueFile.isEmpty() ) {
@@ -204,7 +204,7 @@ void K3bCdrecordWriter::prepareProcess()
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";
     else
-      emit infoMessage( i18n("Cdrecord %1 does not support overburning!").arg(m_cdrecordBinObject->version), INFO );
+      emit infoMessage( i18n("Cdrecord %1 does not support overburning!").arg(m_cdrecordBinObject->version), WARNING );
     
   // additional user parameters from config
   const QStringList& params = m_cdrecordBinObject->userParameters();
@@ -281,23 +281,23 @@ void K3bCdrecordWriter::start()
       emit newTask( i18n("Simulating") );
       if( m_writingMode == K3b::DAO )
 	emit infoMessage( i18n("Starting dao simulation at %1x speed...").arg(burnSpeed()), 
-			  K3bJob::PROCESS );
+			  K3bJob::INFO );
       else if( m_writingMode == K3b::RAW )
 	emit infoMessage( i18n("Starting raw simulation at %1x speed...").arg(burnSpeed()), 
-			  K3bJob::PROCESS );
+			  K3bJob::INFO );
       else
 	emit infoMessage( i18n("Starting tao simulation at %1x speed...").arg(burnSpeed()), 
-			  K3bJob::PROCESS );
+			  K3bJob::INFO );
     }
     else {
       emit newTask( i18n("Writing") );
 
       if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
       else if( m_writingMode == K3b::RAW )
-	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
       else
-	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
+	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
     }
   }
 }
@@ -470,8 +470,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     int po2 = line.find( QRegExp("\\D"), pos + 9 );
     int speed = line.mid( pos+9, po2-pos-9 ).toInt();
     if( speed < burnSpeed() ) {
-      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::INFO );
-      emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::PROCESS );
+      emit infoMessage( i18n("Medium or burner do not support writing at %1x speed").arg(burnSpeed()), K3bJob::WARNING );
+      emit infoMessage( i18n("Switching down burn speed to %1x").arg(speed), K3bJob::WARNING );
     }
   }
   else if( line.startsWith( "Starting new" ) ) {
@@ -483,7 +483,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
     }
     else
-      emit infoMessage( i18n("Starting writing"), PROCESS );
+      emit infoMessage( i18n("Starting writing"), INFO );
 
     m_currentTrack++;
     kdDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
@@ -499,7 +499,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     if( secs > 0 )
       emit infoMessage( i18n("Starting in 1 second", 
 			     "Starting in %n seconds", 
-			     secs), K3bJob::PROCESS );
+			     secs), K3bJob::INFO );
   }
   else if( line.startsWith( "Writing lead-in" ) ) {
     m_totalTracksParsed = true;
@@ -512,16 +512,16 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit newSubTask( i18n("Writing pregap") );
   }
   else if( line.startsWith( "Performing OPC" ) ) {
-    emit infoMessage( i18n("Performing Optimum Power Calibration"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Performing Optimum Power Calibration"), K3bJob::INFO );
   }
   else if( line.startsWith( "Sending" ) ) {
-    emit infoMessage( i18n("Sending CUE sheet"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Sending CUE sheet"), K3bJob::INFO );
   }
   else if( line.contains( "Turning BURN-Proof" ) ) {
-    emit infoMessage( i18n("Enabled BURN-Proof"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Enabled BURN-Proof"), K3bJob::INFO );
   }
   else if( line.contains( "Drive needs to reload the media" ) ) {
-    emit infoMessage( i18n("Reloading of media required"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Reloading of media required"), K3bJob::INFO );
   }
   else if( line.contains( "The current problem looks like a buffer underrun" ) ) {
     m_cdrecordError = BUFFER_UNDERRUN;
@@ -533,7 +533,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Data may not fit") ) {
     bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
     if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
-      emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::INFO );
+      emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
     m_cdrecordError = OVERSIZE;
   }
   else if( line.contains("Bad Option") ) {
@@ -560,7 +560,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     m_cdrecordError = CANNOT_SEND_CUE_SHEET;
   }
   else if( line.contains("Input/output error.") ) {
-    emit infoMessage( i18n("Input/output error. Not necessarily serious."), ERROR );
+    emit infoMessage( i18n("Input/output error. Not necessarily serious."), WARNING );
   }
   else if( line.contains( "Permission denied. Cannot open" ) ) {
     m_cdrecordError = PERMISSION_DENIED;
@@ -592,9 +592,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
     case 0:
       {
 	if( simulate() )
-	  emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
+	  emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
 	else
-	  emit infoMessage( i18n("Writing successfully finished"), K3bJob::STATUS );
+	  emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
 	
 	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );

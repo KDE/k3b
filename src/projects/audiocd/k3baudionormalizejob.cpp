@@ -180,7 +180,7 @@ void K3bAudioNormalizeJob::slotProcessExited( KProcess* p )
   if( p->normalExit() ) {
     switch( p->exitStatus() ) {
     case 0:
-      emit infoMessage( i18n("Successfully normalized all tracks."), STATUS );
+      emit infoMessage( i18n("Successfully normalized all tracks."), SUCCESS );
       emit finished(true);
       break;
     default:

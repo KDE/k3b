@@ -101,7 +101,7 @@ void K3bVcdJob::cancelAll()
     // remove bin-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_doc->vcdImage() ) ) {
         if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::STATUS );
+            emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_doc->vcdImage() );
             m_doc->setVcdImage( "" );
@@ -111,7 +111,7 @@ void K3bVcdJob::cancelAll()
     // remove cue-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_cueFile ) ) {
         if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::STATUS );
+            emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_cueFile );
             m_cueFile = "";
@@ -161,7 +161,7 @@ void K3bVcdJob::xmlGen()
         emit finished( false );
     }
 
-    //    emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::STATUS );
+    //    emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::SUCCESS );
     emit debuggingOutput("K3bVcdXml:", xmlView.xmlString() );
 
     vcdxBuild();
@@ -346,7 +346,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
         // TODO: check the process' exitStatus()
         switch ( m_process->exitStatus() ) {
             case 0:
-	      emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::STATUS );
+	      emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
 	      m_imageFinished = true;
 	      break;
             default:
@@ -463,7 +463,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     // remove bin-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_doc->vcdImage() ) ) {
         if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::STATUS );
+            emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_doc->vcdImage() );
             m_doc->setVcdImage( "" );
@@ -473,7 +473,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     // remove cue-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_cueFile ) ) {
         if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::STATUS );
+            emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_cueFile );
             m_cueFile = "";

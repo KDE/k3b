@@ -181,6 +181,7 @@ void K3bAudioDoc::slotWorkUrlQueue()
 
     if( !item->url.isLocalFile() ) {
       kdDebug() << item->url.path() << " no local file" << endl;
+      m_notFoundFiles.append( item->url.path() );
       return;
     }
 

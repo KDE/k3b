@@ -163,7 +163,7 @@ void K3bDvdRippingProcess::slotExited( KProcess* ) {
         kdDebug() << "(K3bDvdRippingProcess) Copy IFO files for audio gain processing." << endl;
         //postProcessingDvd();
         saveConfig();
-	emit infoMessage( i18n("Successfully ripped all video titles to %1.").arg(m_dirvob), STATUS );        
+	emit infoMessage( i18n("Successfully ripped all video titles to %1.").arg(m_dirvob), SUCCESS );        
         emit finished( true );
         //  postProcessingFinished();
     }
