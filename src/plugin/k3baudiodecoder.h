@@ -123,7 +123,10 @@ class K3bAudioDecoder : public K3bPlugin
   int decode( char* data, int maxLen );
 
   /**
-   * cleanup after decoding like closing files.
+   * Cleanup after decoding like closing files.
+   * Be aware that this is the counterpart to @p initDecoder().
+   *
+   * There might happen multible calls to initDecoder() and cleanup(). 
    */
   virtual void cleanup();
 
@@ -152,6 +155,8 @@ class K3bAudioDecoder : public K3bPlugin
   /**
    * This will be called once before the first call to decodeInternal.
    * Use it to initialize decoding structures if necessary.
+   *
+   * There might happen multible calls to initDecoder() and cleanup(). 
    */
   virtual bool initDecoderInternal() = 0;
 
