@@ -177,7 +177,7 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
     KURL& url = *it;
     if( url.path().right(3).lower() == "cue" ) {
       // try adding a cue file
-      if( K3bAudioTrack* newAfter = importCueFile( url.path(), getTrack(position-1) ) ) {
+      if( K3bAudioTrack* newAfter = importCueFile( url.path(), getTrack(position) ) ) {
 	position = newAfter->trackNumber();
 	continue;
       }
@@ -462,7 +462,7 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
   else if( position == 0 )
     track->moveAhead( m_firstTrack );
   else {
-    K3bAudioTrack* after = getTrack( position-1 );
+    K3bAudioTrack* after = getTrack( position );
     if( after )
       track->moveAfter( after );
     else
