@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "k3bfileview.h"
+#include "k3b.h"
 
 #include <qwidget.h>
 #include <qdragobject.h>
@@ -64,8 +65,14 @@ QDragObject* K3bFileView::PrivateFileView::dragObject() const
 
 
 K3bFileView::K3bFileView(QWidget *parent, const char *name ) : QVBox(parent,name) {
+    m_initialized=false;
+}
 
-  KToolBar *toolBar = new KToolBar( this, "fileviewtoolbar" );
+K3bFileView::~K3bFileView(){
+}
+
+void K3bFileView::setupGUI(){
+    KToolBar *toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
 
   m_fileView = new KDirOperator( QDir::home().absPath(), this );
   m_fileView->setView( new PrivateFileView( m_fileView, "fileview" ) );	
@@ -94,9 +101,14 @@ K3bFileView::K3bFileView(QWidget *parent, const char *name ) : QVBox(parent,name
   connect( _buttonReload, SIGNAL(clicked()), _actionReload, SLOT(activate()) );
 
 }
-K3bFileView::~K3bFileView(){
-}
 
+void K3bFileView::show(){
+    if( !m_initialized){
+        m_initialized=true;
+        setupGUI();
+    }
+    QWidget::show();
+}
 void K3bFileView::setUrl(const KURL& url, bool forward){
 	m_fileView->setURL( url, forward );
 }

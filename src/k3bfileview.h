@@ -36,9 +36,12 @@ public:
 	K3bFileView(QWidget *parent=0, const char *name=0);
 	~K3bFileView();
 	void setUrl(const KURL &url, bool forward);
+	void show();
 private:
-	class PrivateFileView;
-	KDirOperator *m_fileView;
+    class PrivateFileView;
+    KDirOperator *m_fileView;
+    bool m_initialized;
+    void setupGUI();
 };
 
 class K3bFileView::PrivateFileView : public KFileDetailView

@@ -99,12 +99,20 @@ K3bApp::K3bApp()
 
   // setup audio cd drives here because we need access to the device manager
   init();
-  m_dirView->setupAudioDrives(m_deviceManager);
+  m_initialized=false;
 }
 
 K3bApp::~K3bApp()
 {
   delete pDocList;
+}
+// here we do the final initialize which can't be done in a constructor because it needs an instance of kapp, k3bapp or similar
+void K3bApp::show(){
+    if( !m_initialized ){
+        m_initialized = true;
+        m_dirView->setupFinalize(m_deviceManager);
+    }
+    QWidget::show();
 }
 
 void K3bApp::initActions()

@@ -43,6 +43,7 @@
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kurl.h>
+#include <klocale.h>
 
 #include "kiotree/kiotree.h"
 #include "kiotree/kiotreemodule.h"
@@ -72,6 +73,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   //m_kiotree->addTopLevelDir( url, "Audio CD Init");
 	
   m_fileView = new K3bFileView(box2, "fileview");
+
   // cd view
   m_cdView = new K3bCdView(box2, "cdview");
   m_cdView->hide();
@@ -84,6 +86,40 @@ K3bDirView::~K3bDirView(){
         delete m_cdView;
 }
 
+void K3bDirView::setupFinalize(K3bDeviceManager *dm){
+    m_fileView->show();
+    K3bDevice *dev;
+    KURL result;
+    QList<K3bDevice> devices = dm->readingDevices();
+    for ( dev=devices.first(); dev != 0; dev=devices.next() ){
+        KURL url = KURL( dev->devicename() );
+        url.setProtocol("k3b_cdview");
+        result = url;
+        m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
+        for( int i=0; i<m_kiotree->childCount(); i++){
+            KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
+            KURL url = item->externalURL();	
+            if( url.path().find( dev->devicename() ) == 0){
+                item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+            }
+        }
+    }
+    devices = dm->burningDevices();
+    for ( dev=devices.first(); dev != 0; dev=devices.next() ){
+        KURL url = KURL(dev->devicename() );
+        url.setProtocol("k3b_cdview");
+        m_kiotree->addTopLevelDir( url, i18n("Drive: ") + dev->vendor() );
+        for( int i=0; i<m_kiotree->childCount(); i++){
+            KioTreeItem *item = dynamic_cast<KioTreeItem*> (m_kiotree->itemAtIndex(i) );
+            KURL url = item->externalURL();	
+            if( url.path().find(dev->devicename() ) == 0){
+                item->setPixmap(0, KGlobal::iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+            }
+        }
+    }
+    //return result;
+}
+
 void K3bDirView::slotViewChanged( KFileView* newView )
 {
   newView->setSelectionMode( KFile::Extended );
@@ -94,7 +130,7 @@ void K3bDirView::slotViewChanged( KFileView* newView )
 void K3bDirView::slotDirActivated( const KURL& url )
 {
      qDebug("show url:" + url.path() );
-	  // hack due to I dont know how to setup the drives proper
+  // hack due to I dont know how to setup the drives proper
 	  //if (!m_initialized)
 	  //		setupAudioDrives();
 	  		
@@ -109,24 +145,3 @@ void K3bDirView::slotDirActivated( const KURL& url )
     }
 }
 
-void K3bDirView::setupAudioDrives(K3bDeviceManager *dm){
-    //m_initialized = true;
-    //m_kiotree->takeItem(m_kiotree->selectedItem() );
-    //K3bDeviceManager *dm = app->deviceManager();
-    K3bDevice *dev;
-    KURL result;
-    QList<K3bDevice> devices = dm->readingDevices();
-    for ( dev=devices.first(); dev != 0; dev=devices.next() ){
-			KURL url = KURL( dev->devicename() );
-			url.setProtocol("k3b_cdview");
-			result = url;
-         m_kiotree->addTopLevelDir( url, "Audio CD " + dev->vendor() + "/" + dev->description() );
-    }
-    devices = dm->burningDevices();
-    for ( dev=devices.first(); dev != 0; dev=devices.next() ){
-			KURL url = KURL(dev->devicename() );
-			url.setProtocol("k3b_cdview");
-         m_kiotree->addTopLevelDir( url, "Audio CD" + dev->vendor() + "/" + dev->description() );
-    }
-    //return result;
-}

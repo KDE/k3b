@@ -45,7 +45,7 @@ class K3bDirView : public QVBox  {
 public:
         K3bDirView(QWidget *parent=0, const char *name=0);
         ~K3bDirView();
-        void setupAudioDrives( K3bDeviceManager *dm);
+        void setupFinalize( K3bDeviceManager *dm);
 
 protected slots:
         void slotViewChanged( KFileView* newView );

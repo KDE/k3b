@@ -97,7 +97,10 @@ class K3bApp : public KDockMainWindow
 	void showOptionDialog( int = 0 );
 	bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
 	void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
-	
+    /**
+    * Reimplemented of QWidget. Does some initializing which needs an instance of K3bApp and cannot done in the constructor.
+    */
+    void show();
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
      * default implementation (only returns true), this overridden function retrieves all modified documents
@@ -254,6 +257,8 @@ class K3bApp : public KDockMainWindow
 	K3bBurnProgressDialog* m_burnProgressDialog;
 	
 	bool m_useID3TagForMp3Renaming;
+	bool m_initialized;
+	
 public slots: // Public slots
   /** No descriptions */
   void slotErrorMessage(const QString&);
