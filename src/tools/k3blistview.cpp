@@ -37,6 +37,7 @@
 #include <qstyle.h>
 #include <qapplication.h>
 #include <qprogressbar.h>
+#include <qimage.h>
 
 #include <limits.h>
 
@@ -929,6 +930,58 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   }
 
     return KListView::eventFilter( o, e );
+}
+
+
+void K3bListView::setK3bBackgroundPixmap( const QPixmap& pix, int pos )
+{
+  m_backgroundPixmap = pix;
+  m_backgroundPixmapPosition = pos;
+}
+
+
+void K3bListView::viewportResizeEvent( QResizeEvent* e )
+{
+  if( !m_backgroundPixmap.isNull() ) {
+
+    QSize size = viewport()->size().expandedTo( QSize( contentsWidth(), contentsHeight() ) );
+
+    QPixmap bgPix( size );
+
+    // FIXME: let the user specify the color
+    bgPix.fill( colorGroup().base() );
+
+    if( bgPix.width() < m_backgroundPixmap.width() ||
+	bgPix.height() < m_backgroundPixmap.height() ) {
+      QPixmap newBgPix( m_backgroundPixmap.convertToImage().scale( bgPix.size(), QImage::ScaleMin ) );
+      if( m_backgroundPixmapPosition == TOP_LEFT )
+	bitBlt( &bgPix, 0, 0, 
+		&newBgPix, 0, 0, 
+		newBgPix.width(), newBgPix.height() );
+      else {
+	int dx = bgPix.width() / 2 - m_backgroundPixmap.width() /2;
+	int dy = bgPix.height() / 2 - m_backgroundPixmap.height() /2;
+	bitBlt( &bgPix, dx, dy, &newBgPix, 0, 0, 
+		newBgPix.width(), newBgPix.height() );
+      }
+    }
+    else {
+      if( m_backgroundPixmapPosition == TOP_LEFT )
+	bitBlt( &bgPix, 0, 0, 
+		&m_backgroundPixmap, 0, 0, 
+		m_backgroundPixmap.width(), m_backgroundPixmap.height() );
+      else {
+	int dx = bgPix.width() / 2 - m_backgroundPixmap.width() /2;
+	int dy = bgPix.height() / 2 - m_backgroundPixmap.height() /2;
+	bitBlt( &bgPix, dx, dy, &m_backgroundPixmap, 0, 0, 
+		m_backgroundPixmap.width(), m_backgroundPixmap.height() );
+      }
+    }
+
+    viewport()->setPaletteBackgroundPixmap( bgPix );
+  }
+
+  KListView::viewportResizeEvent( e );
 }
 
 

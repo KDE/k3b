@@ -22,6 +22,7 @@
 
 #include <qptrvector.h>
 #include <qstringlist.h>
+#include <qpixmap.h>
 
 class QPainter;
 class QPushButton;
@@ -136,6 +137,17 @@ class K3bListView : public KListView
 
   K3bListViewItem* currentlyEditedItem() const { return m_currentEditItem; }
 
+  enum BgPixPosition {
+    TOP_LEFT,
+    CENTER 
+  };
+
+  /**
+   * This will set a background pixmap which is not tiled.
+   * @param pos position on the viewport.
+   */
+  void setK3bBackgroundPixmap( const QPixmap&, int pos = CENTER );
+
  signals:
   void editorButtonClicked( K3bListViewItem*, int );
 
@@ -185,6 +197,15 @@ class K3bListView : public KListView
   virtual void resizeEvent( QResizeEvent* );
   virtual void paintEmptyArea( QPainter*, const QRect& rect );
 
+  /**
+   * Reimplemented for internal reasons.
+   *
+   * Further reimplementations should call this function or else some features may not work correctly.
+   *
+   * The API is unaffected.
+   */
+  virtual void viewportResizeEvent( QResizeEvent* );
+
   virtual bool eventFilter( QObject*, QEvent* );
 
   K3bListViewItem* currentEditItem() const { return m_currentEditItem; }
@@ -214,6 +235,9 @@ class K3bListView : public KListView
 
   // TODO: think about a more universal solution!
   QValidator* m_validator;
+
+  QPixmap m_backgroundPixmap;
+  int m_backgroundPixmapPosition;
 };
 
 
