@@ -1,3 +1,4 @@
+
 /***************************************************************************
                           k3bcddbpquery.cpp  -  description
                              -------------------
@@ -75,7 +76,7 @@ void K3bCddbpQuery::slotConnected()
 void K3bCddbpQuery::slotConnectionClosed()
 {
   emit infoMessage( i18n("Connection closed") );
-  emit queryFinished( this );
+  emitQueryFinished();
 }
 
 
@@ -117,10 +118,10 @@ void K3bCddbpQuery::slotReadyRead()
       if( getCode( line ) == 200 ) {
 	emit infoMessage( i18n("Handshake successful") );
 
-	m_state = QUERY;
+	m_state = PROTO;
 
 	QTextStream stream( m_socket );
-	stream << queryString() << "\n";
+	stream << "proto 5\n";
       }
 
       else {
@@ -129,6 +130,20 @@ void K3bCddbpQuery::slotReadyRead()
 	m_socket->close(); // just to be sure
       }
       break;
+
+    case PROTO:
+      {
+	if( getCode( line ) == 501 ) {
+	  kdDebug() << "(K3bCddbpQuery) illigal protocol level!" << endl;
+	}
+	
+	// just ignore the reply since it's not important for the functionality
+	m_state = QUERY;
+	
+	QTextStream stream( m_socket );
+	stream << queryString() << "\n";
+	break;
+      }
 
     case QUERY:
       if( getCode( line ) == 200 ) {
@@ -290,6 +305,9 @@ void K3bCddbpQuery::slotError( int e )
     emit infoMessage( i18n("Error while reading from %1").arg( m_server ) );
     break;
   }
+
+  m_socket->close();
+  emitQueryFinished();
 }
 
 #include "k3bcddbpquery.moc"

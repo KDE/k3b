@@ -69,10 +69,19 @@ class K3bCddbQuery : public QObject
   QString queryString() const;
   bool parseExactMatch( const QString &line, K3bCddbResultEntry& entry );
 
+  /**
+   * since I'm not quite sure when the socket will emit connectionClosed
+   * this method makes sure the queryFinished signal
+   * gets emited only once.
+   */
+  void emitQueryFinished();
+
  private:
   K3bToc m_toc;
   K3bCddbResult m_queryResult;
   int m_error;
+
+  bool m_bQueryFinishedEmited;
 };
 
 #endif

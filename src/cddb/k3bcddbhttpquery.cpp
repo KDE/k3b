@@ -71,7 +71,7 @@ void K3bCddbHttpQuery::doQuery()
   if( !connectToServer() ) {
     setError( CONNECTION_ERROR );
     emit infoMessage( i18n("Could not connect to host %1").arg(m_server) );
-    emit queryFinished( this );
+    emitQueryFinished();
   }
 }
 
@@ -128,7 +128,7 @@ void K3bCddbHttpQuery::slotConnectionClosed()
     // the query was not successfull
 
     setError( QUERY_ERROR );
-    emit queryFinished( this );
+    emitQueryFinished();
   }
   else if( m_state == READ ) {
     // successfull query
@@ -138,14 +138,14 @@ void K3bCddbHttpQuery::slotConnectionClosed()
       // finish
       if( error() != READ_ERROR )
 	setError( SUCCESS );
-      emit queryFinished( this );
+      emitQueryFinished();
     }
     else {
       // connect to host to send the read command
       if( !connectToServer() ) {
 	emit infoMessage( i18n("Could not connect to host %1").arg(m_currentlyConnectingServer) );
 	setError( CONNECTION_ERROR );
-	emit queryFinished( this );
+	emitQueryFinished();
       }
     }
   }
@@ -194,7 +194,7 @@ void K3bCddbHttpQuery::slotReadyRead()
 	kdDebug() << "(K3bCddbHttpQuery) no match found" << endl;
 	emit infoMessage( i18n("No match found") );
 	setError(NO_ENTRY_FOUND);
-	emit queryFinished( this );
+	emitQueryFinished();
 	m_socket->close();
 	return;
       }
@@ -203,7 +203,7 @@ void K3bCddbHttpQuery::slotReadyRead()
 	kdDebug() << "(K3bCddbHttpQuery) Error while querying: " << line << endl;
 	emit infoMessage( i18n("Error while querying") );
 	setError(QUERY_ERROR);
-	emit queryFinished( this );
+	emitQueryFinished();
 	m_socket->close();
 	return;
       }
@@ -239,7 +239,7 @@ void K3bCddbHttpQuery::slotReadyRead()
 	emit infoMessage( i18n("Could not read match") );
 	m_matches.erase( m_matches.begin() );  // remove the unreadable match
 	setError(READ_ERROR);
-	emit queryFinished( this );
+	emitQueryFinished();
 	m_socket->close();
 	return;
       }
@@ -334,7 +334,7 @@ void K3bCddbHttpQuery::slotConnectionFailed( int )
 //   }
 
   setError( CONNECTION_ERROR );
-  emit queryFinished( this );
+  emitQueryFinished();
 }
 
 
@@ -345,19 +345,20 @@ void K3bCddbHttpQuery::slotError( int e )
     kdDebug() <<  i18n("Connection to %1 refused").arg( m_currentlyConnectingServer ) << endl;
     emit infoMessage( i18n("Connection to %1 refused").arg( m_currentlyConnectingServer ) );
     setError( CONNECTION_ERROR );
-    emit queryFinished( this );
     break;
   case QSocket::ErrHostNotFound:
     kdDebug() <<  i18n("Could not find host %1").arg( m_currentlyConnectingServer ) << endl;
     emit infoMessage( i18n("Could not find host %1").arg( m_currentlyConnectingServer ) );
     setError( CONNECTION_ERROR );
-    emit queryFinished( this );
     break;
   case QSocket::ErrSocketRead:
     kdDebug() <<  i18n("Error while reading from %1").arg( m_currentlyConnectingServer ) << endl;
     emit infoMessage( i18n("Error while reading from %1").arg( m_currentlyConnectingServer ) );
     break;
   }
+
+  m_socket->close();
+  emitQueryFinished();
 }
 
 #include "k3bcddbhttpquery.moc"

@@ -37,7 +37,7 @@
 K3bCddbQuery::K3bCddbQuery( QObject* parent, const char* name )
   : QObject(parent, name)
 {
-
+  m_bQueryFinishedEmited = false;
 }
 
 
@@ -48,6 +48,7 @@ K3bCddbQuery::~K3bCddbQuery()
 
 void K3bCddbQuery::query( const K3bToc& toc )
 {
+  m_bQueryFinishedEmited = false;
   m_toc = toc;
   m_queryResult.clear();
   QTimer::singleShot( 0, this, SLOT(doQuery()) );
@@ -237,5 +238,15 @@ bool K3bCddbQuery::parseExactMatch( const QString &line, K3bCddbResultEntry& ent
 
   return true;
 }
+
+
+void K3bCddbQuery::emitQueryFinished()
+{
+  if( !m_bQueryFinishedEmited ) {
+    m_bQueryFinishedEmited = true;
+    emit queryFinished( this );
+  }
+}
+
 
 #include "k3bcddbquery.moc"

@@ -49,7 +49,7 @@ class K3bCddbpQuery : public K3bCddbQuery
  private:
   void cddbpQuit();
   bool readFirstEntry();
-  enum State { GREETING, HANDSHAKE, QUERY, QUERY_DATA, READ, READ_DATA, QUIT };
+  enum State { GREETING, HANDSHAKE, PROTO, QUERY, QUERY_DATA, READ, READ_DATA, QUIT };
 
   int m_state;
   QString m_server;
