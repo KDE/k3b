@@ -99,8 +99,8 @@ void K3bBurningOptionTab::setupGui()
   m_groupData->layout()->setSpacing( KDialog::spacingHint() );
   m_groupData->layout()->setMargin( KDialog::marginHint() );
 
-  m_checkListHiddenFiles = new QCheckBox( i18n("List &hidden files"), m_groupData );
-  m_checkListSystemFiles = new QCheckBox( i18n("List &system files"), m_groupData );
+  m_checkListHiddenFiles = new QCheckBox( i18n("Add &hidden files"), m_groupData );
+  m_checkListSystemFiles = new QCheckBox( i18n("Add &system files"), m_groupData );
 
   // -----------------------------------------------------------------------
   // vcd settings group
@@ -276,8 +276,8 @@ void K3bBurningOptionTab::readSettings()
   m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
   
   c->setGroup( "Data project settings" );
-  m_checkListHiddenFiles->setChecked( c->readBoolEntry("List hidden files", false ) );
-  m_checkListSystemFiles->setChecked( c->readBoolEntry("List system files", false ) );
+  m_checkListHiddenFiles->setChecked( c->readBoolEntry("Add hidden files", true ) );
+  m_checkListSystemFiles->setChecked( c->readBoolEntry("Add system files", false ) );
 
   c->setGroup( "Audio project settings" );
   m_editDefaultPregap->setValue( c->readNumEntry( "default pregap", 150 ) );
@@ -309,8 +309,8 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "Use numeric keys to navigate chapters", m_checkUseNumKey->isChecked() );
   
   c->setGroup( "Data project settings" );
-  c->writeEntry( "List hidden files", m_checkListHiddenFiles->isChecked() );
-  c->writeEntry( "List system files", m_checkListSystemFiles->isChecked() );
+  c->writeEntry( "Add hidden files", m_checkListHiddenFiles->isChecked() );
+  c->writeEntry( "Add system files", m_checkListSystemFiles->isChecked() );
 
   c->setGroup( "Audio project settings" );
   c->writeEntry( "default pregap", m_bPregapSeconds ? m_editDefaultPregap->value() * 75 : m_editDefaultPregap->value() );

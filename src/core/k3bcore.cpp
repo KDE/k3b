@@ -62,7 +62,7 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
   s_k3bCore = this;
 
   d->externalBinManager = new K3bExternalBinManager( this );
-  d->deviceManager = new K3bCdDevice::DeviceManager( d->externalBinManager, this );
+  d->deviceManager = new K3bCdDevice::DeviceManager( this );
   K3b::addDefaultPrograms( d->externalBinManager );
 }
 

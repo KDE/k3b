@@ -407,9 +407,9 @@ void K3bFillStatusDisplay::slotDvd4_7GB()
 void K3bFillStatusDisplay::slotCustomSize()
 {
   bool ok;
-  QString size = KLineEditDlg::getText( i18n("Custom CD Size"), 
-					i18n("Please specify the size of your CD in minutes:"), 
-					"74", &ok, this, new QIntValidator( this ) );
+  QString size = KLineEditDlg::getText( i18n("Custom Size"), 
+					i18n("Please specify the size of the media in minutes:"), 
+					d->showDvdSizes ? "74" : "510", &ok, this, new QIntValidator( this ) );
   if( ok ) {
     d->displayWidget->setCdSize( size.toInt()*60*75 );
     update();
@@ -442,6 +442,8 @@ void K3bFillStatusDisplay::slotDetermineSize()
 							   : k3bcore->deviceManager()->cdWriter() );
 
   if( dev ) {
+    k3bcore->requestBusyInfo( i18n("Determine size of media in %1").arg(dev->vendor() + " " + dev->description() ) );
+
     connect( K3bCdDevice::sendCommand( K3bCdDevice::DeviceHandler::NG_DISKINFO, dev ),
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	     this,
@@ -451,15 +453,25 @@ void K3bFillStatusDisplay::slotDetermineSize()
 
 void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
 {
+  k3bcore->requestBusyFinish();
+
   if( dh->success() ) {
-    K3b::Msf size = dh->ngDiskInfo().remainingSize();
-    d->displayWidget->setCdSize( size );
-    d->actionCustomSize->setChecked(true);
-    update();
+    if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+      KMessageBox::error( parentWidget(), i18n("No media found.") );
+    }
+    else {
+      K3b::Msf size = dh->ngDiskInfo().remainingSize();
+      if( size > 0 ) {    
+	d->displayWidget->setCdSize( size );
+	d->actionCustomSize->setChecked(true);
+	update();
+      }
+      else
+	KMessageBox::error( parentWidget(), i18n("Media is not empty.") );
+    }
   }
-  else {
+  else
     KMessageBox::error( parentWidget(), i18n("Could not get remaining size of disk.") );
-  }
 }
 
 

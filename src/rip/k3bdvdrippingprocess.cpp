@@ -240,8 +240,6 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
     if( !m_dvdOrgFilenameDetected ) {
         K3bDevice *dev = k3bcore->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
-        kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data mount device: " << dev->mountDevice() << ", mount Point: "<< dev->mountPoint() << endl;
-        kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data ioctl device: " << dev->ioctlDevice() << ", generic device: "<< dev->genericDevice() << endl;
         if( !m_mountPoint.isEmpty() ) {
             QString mount = KIO::findDeviceMountPoint( m_device );
             kdDebug() << "(K3bDvdRippingProcess) Is mounted device:  <" << m_device << "> on <" << mount << ">." << endl;

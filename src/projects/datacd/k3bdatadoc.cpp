@@ -1217,6 +1217,8 @@ void K3bDataDoc::setMultiSessionMode( int mode )
 
 void K3bDataDoc::importSession( K3bCdDevice::CdDevice* device )
 {
+  k3bcore->requestBusyInfo( i18n( "Importing old session..." ) );
+
   // remove previous imported sessions
   clearImportedSession();
 
@@ -1267,6 +1269,8 @@ void K3bDataDoc::slotTocRead( K3bCdDevice::DeviceHandler* dh )
     kdDebug() << "(K3bDataDoc) unable to read toc." << endl;
     // FIXME: inform the user. By the way: this all still sucks!
   }
+
+  k3bcore->requestBusyFinish();
 
   emit newFileItems();
 }

@@ -119,7 +119,6 @@ public:
   }
   
   QString blockDeviceName;
-  QString genericDevice;
   int deviceType;
   int supportedProfiles;
   interface interfaceType;
@@ -128,8 +127,6 @@ public:
   QStringList allNodes;
   int deviceFd;
   bool burnfree;
-  bool writesDvdPlusR;
-  bool writesDvdR;
 };
 
 
@@ -142,15 +139,12 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   d->interfaceType = OTHER;
   d->blockDeviceName = devname;
   d->allNodes.append(devname);
-  d->writesDvdPlusR = d->writesDvdR = false;
 
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
   m_maxWriteSpeed = 0;
   m_maxReadSpeed = 0;
   d->burnfree = false;
-  m_burner = false;
-  m_bWritesCdrw = false;
   m_bus = m_target = m_lun = -1;
   m_dvdMinusTestwrite = true;
 }
@@ -702,7 +696,7 @@ bool K3bCdDevice::CdDevice::writesCd() const
 
 bool K3bCdDevice::CdDevice::burner() const
 {
-  return writesCd();
+  return ( writesCd() || writesDvd() );
 }
 
 
@@ -714,8 +708,21 @@ bool K3bCdDevice::CdDevice::writesCdrw() const
 
 bool K3bCdDevice::CdDevice::writesDvd() const
 {
-  return d->deviceType & (DVDR|DVDPR|DVDRW|DVDPRW);
+  return ( writesDvdPlus() || writesDvdMinus() );
 }
+
+
+bool K3bCdDevice::CdDevice::writesDvdPlus() const
+{
+  return d->deviceType & (DVDPR|DVDPRW);
+}
+
+
+bool K3bCdDevice::CdDevice::writesDvdMinus() const
+{
+  return d->deviceType & (DVDR|DVDRW);
+}
+
 
 bool K3bCdDevice::CdDevice::readsDvd() const
 {
@@ -744,12 +751,6 @@ const QString& K3bCdDevice::CdDevice::ioctlDevice() const
 const QString& K3bCdDevice::CdDevice::blockDeviceName() const
 {
   return d->blockDeviceName;
-}
-
-
-const QString& K3bCdDevice::CdDevice::genericDevice() const
-{
-  return d->genericDevice;
 }
 
 

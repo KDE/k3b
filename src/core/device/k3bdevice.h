@@ -63,10 +63,6 @@ namespace K3bCdDevice
                      RAW_R96R = 256 };
 
 
-    /**
-      * create a K3bDevice from a cdrom_drive struct
-      * (cdparanoia-lib)
-      */
     CdDevice( const QString& devname );
     ~CdDevice();
 
@@ -79,21 +75,33 @@ namespace K3bCdDevice
     const QString& description() const { return m_description; }
     const QString& version() const { return m_version; }
 
-    // depr. use writesCd
-    bool           burner() const;
-    bool           writesCd() const;
-    bool           writesCdrw() const;
-    bool           writesDvd() const;
-    bool           readsDvd() const;
-    bool           burnproof() const;
-    bool           burnfree() const;
-    bool           dao() const;
-    bool           dvdMinusTestwrite() const { return m_dvdMinusTestwrite; }
+    /**
+     * @return Equal to writesCd() || writesDvd()
+     */
+    bool burner() const;
+    bool writesCd() const;
+    bool writesCdrw() const;
 
-    int            maxReadSpeed() const { return m_maxReadSpeed; }
-    int            currentWriteSpeed() const { return m_currentWriteSpeed; }
+    /**
+     * @return Equal to writesDvdMinus() || writesDvdPlus()
+     */
+    bool writesDvd() const;
+    bool writesDvdPlus() const;
+    bool writesDvdMinus() const;
+    bool readsDvd() const;
 
-    int            bufferSize() const { return m_bufferSize; }
+    /**
+     * @deprecated Use burnfree()
+     */
+    bool burnproof() const;
+    bool burnfree() const;
+    bool dao() const;
+    bool dvdMinusTestwrite() const { return m_dvdMinusTestwrite; }
+
+    int maxReadSpeed() const { return m_maxReadSpeed; }
+    int currentWriteSpeed() const { return m_currentWriteSpeed; }
+
+    int bufferSize() const { return m_bufferSize; }
 
     /**
      * ioctlDevice is returned
@@ -101,12 +109,7 @@ namespace K3bCdDevice
     const QString& devicename() const;
 
     /**
-     * compatibility
-     */
-    const QString& genericDevice() const;
-
-    /**
-     * returnes blockDeviceName()
+     * @deprecated use blockDeviceName()
      */
     const QString& ioctlDevice() const;
 
@@ -128,7 +131,7 @@ namespace K3bCdDevice
 
     const QString& mountDevice() const;
 
-    /** makes only sense to use with sg devices */
+    /** makes only sense to use with scsi devices */
     QString busTargetLun() const;
     int scsiBus() const { return m_bus; }
     int scsiId() const { return m_target; }
@@ -175,7 +178,6 @@ namespace K3bCdDevice
     void setCdTextCapability( bool );
 
     void setBurnproof( bool );
-    void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
     void setBufferSize( int b ) { m_bufferSize = b; }
 
     void setMountPoint( const QString& );
@@ -467,8 +469,6 @@ namespace K3bCdDevice
     QString m_vendor;
     QString m_description;
     QString m_version;
-    bool m_burner;
-    bool m_bWritesCdrw;
     QString m_cdrdaoDriver;
     int m_cdTextCapable;
     int m_maxReadSpeed;

@@ -27,7 +27,6 @@
 
 class KProcess;
 class KConfig;
-class K3bExternalBinManager;
 class K3bExternalBin;
 
 
@@ -40,7 +39,7 @@ namespace K3bCdDevice {
       Q_OBJECT
 
     public:
-      DeviceManager( K3bExternalBinManager*, QObject* parent = 0, const char* name = 0 );
+      DeviceManager( QObject* parent = 0, const char* name = 0 );
       ~DeviceManager();
 
       CdDevice* deviceByName( const QString& );
@@ -105,10 +104,7 @@ namespace K3bCdDevice {
     private:
       bool testForCdrom( const QString& );
       bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
-      void determineCapabilities(CdDevice *dev);
       QString resolveSymLink( const QString& path );
-
-      K3bExternalBinManager* m_externalBinManager;
 
       int m_foundDevices;
 

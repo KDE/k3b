@@ -541,6 +541,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3bJob::ERROR );
   }
   else if( line.contains("Data may not fit") ) {
+    k3bcore->config()->setGroup( "General Options" );
     bool overburn = k3bcore->config()->readBoolEntry( "Allow overburning", false );
     if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
       emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
@@ -622,6 +623,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 
       switch( m_cdrecordError ) {
       case OVERSIZE:
+	k3bcore->config()->setGroup( "General Options" );
 	if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
 	    m_cdrecordBinObject->hasFeature("overburn") )
 	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );

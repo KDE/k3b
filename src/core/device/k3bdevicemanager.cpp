@@ -88,10 +88,8 @@ public:
   QPtrList<K3bDevice> dvdWriter;
 };
 
-K3bCdDevice::DeviceManager::DeviceManager( K3bExternalBinManager* externalBinManager,
-					   QObject* parent, const char* name )
-  : QObject( parent, name ),
-    m_externalBinManager( externalBinManager )
+K3bCdDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
+  : QObject( parent, name )
 {
   d = new Private;
 
@@ -421,99 +419,6 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
   return true;
 }
 
-void K3bCdDevice::DeviceManager::determineCapabilities(K3bDevice *dev)
-{
-  // we just need to do this for writers since we use it to determine the writing modes
-  if( !dev->burner() )
-    return;
-
-
-  // we do not use the user configured cdrecord here since we want to make sure
-  // to get all the capabilities of the system
-
-  const K3bExternalBin* cdrecordBin = m_externalBinManager->mostRecentBinObject( "cdrecord" );
-  if( !cdrecordBin ) {
-    kdError() << "(K3bDeviceManager) Could not find cdrecord. No proper device initialization possible." << endl;
-    return;
-  }
-
-  if (dev->interfaceType() == K3bDevice::IDE ) {
-    // only if the kernel and cdrecord support atapi
-    if( !(plainAtapiSupport() && cdrecordBin->hasFeature("plain-atapi") ) &&
-	!(hackedAtapiSupport() && cdrecordBin->hasFeature("hacked-atapi")) ) {
-      kdError() << "(K3bDeviceManager) no ATAPI support." << endl;
-      return;
-    }
-  }
-
-
-  kdDebug() << "(K3bDeviceManager) probing capabilities for device " << dev->blockDeviceName() << endl;
-
-  //
-  // This is just a temp solution for those drives that do not support the GET CONFIGURATION command
-  // and thus do not give us their supported features
-  //
-  if( dev->m_writeModes == 0 ) {
-
-    kdDebug() << "(K3bDeviceManager) calling cdrecord to determine supported writemodes for "
-	      << dev->blockDeviceName() << endl;
-
-    KProcess driverProc, capProc;
-    driverProc << cdrecordBin->path;
-
-    driverProc << QString("dev=%1").arg(externalBinDeviceParameter(dev, cdrecordBin));
-
-    driverProc << "-checkdrive";
-    connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
-
-    m_processOutput = "";
-
-    driverProc.start( KProcess::Block, KProcess::Stdout );
-    // this should work for all drives
-    // so we are always able to say if a drive is a writer or not
-    if( driverProc.exitStatus() == 0 )
-      {
-	dev->m_burner = true;
-	dev->m_writeModes = 0;
-	QStringList lines = QStringList::split( "\n", m_processOutput );
-	for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
-	  {
-	    const QString& line = *it;
-
-	    // no info in cdrecord <= 1.10 !!!!!
-	    if( line.startsWith( "Supported modes" ) )
-	      {
-		QStringList modes = QStringList::split( " ", line.mid(16) );
-		if( modes.contains( "SAO" ) )
-		  dev->m_writeModes |= K3bDevice::SAO;
-		if( modes.contains( "TAO" ) )
-		  dev->m_writeModes |= K3bDevice::TAO;
-		if( modes.contains( "PACKET" ) )
-		  dev->m_writeModes |= K3bDevice::PACKET;
-		if( modes.contains( "SAO/R96R" ) )
-		  dev->m_writeModes |= K3bDevice::SAO_R96R;
-		if( modes.contains( "SAO/R96P" ) )
-		  dev->m_writeModes |= K3bDevice::SAO_R96P;
-		if( modes.contains( "RAW/R16" ) )
-		  dev->m_writeModes |= K3bDevice::RAW_R16;
-		if( modes.contains( "RAW/R96R" ) )
-		  dev->m_writeModes |= K3bDevice::RAW_R96R;
-		if( modes.contains( "RAW/R96P" ) )
-		  dev->m_writeModes |= K3bDevice::RAW_R96P;
-		break;
-	      }
-	  }
-      }
-
-    // default to dao and tao if no write modes info was available (cdrecord <= 1.10)
-    // I include this hack because I think it's better to get an error:
-    //   "mode not supported" when trying to write instead of never getting to choose DAO!
-    if( dev->m_writeModes == 0 )
-      dev->m_writeModes = K3bDevice::SAO|K3bDevice::TAO;
-  }
-}
-
 
 bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 {
@@ -602,8 +507,6 @@ K3bDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
   }
 
   if( device ) {
-    determineCapabilities(device);
-
     d->allDevices.append( device );
 
     // not every drive is able to read CDs

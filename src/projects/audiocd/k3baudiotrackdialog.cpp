@@ -330,8 +330,12 @@ void K3bAudioTrackDialog::setupGui()
   QFrame* fileInfoLine = new QFrame( groupFileInfo );
   fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-  groupFileInfoLayout->addWidget( m_labelMimeType, 0, 0 );
-  groupFileInfoLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );
+  QGridLayout* filenameLayout = new QGridLayout;
+  filenameLayout->addWidget( m_labelMimeType, 0, 0 );
+  filenameLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );
+  filenameLayout->setRowStretch( 1, 1 );
+  filenameLayout->setColStretch( 1, 1 );
+  groupFileInfoLayout->addMultiCellLayout( filenameLayout, 0, 0, 0, 1 );
   groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 1 );
   groupFileInfoLayout->addWidget( labelLength, 3, 0 );
   groupFileInfoLayout->addWidget( labelSize, 4, 0 );

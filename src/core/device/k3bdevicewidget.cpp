@@ -391,7 +391,7 @@ void K3bDeviceWidget::updateDeviceListViews()
     // --------------------------------
     K3bListViewItem* typeItem = new K3bListViewItem( devRoot, versionItem,
 						     i18n("Writes CDs:"),
-						     dev->device->burner() ? i18n("yes") : i18n("no") );
+						     dev->device->writesCd() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
 				    i18n("Writes CD/RWs:"),
@@ -402,8 +402,12 @@ void K3bDeviceWidget::updateDeviceListViews()
 				    dev->device->readsDvd() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVDs:"),
-				    dev->device->writesDvd() ? i18n("yes") : i18n("no") );
+				    i18n("Writes DVD-R(W)s:"),
+				    dev->device->writesDvdMinus() ? i18n("yes") : i18n("no") );
+    typeItem->setForegroundColor( 1, gray );
+    typeItem = new K3bListViewItem( devRoot, typeItem,
+				    i18n("Writes DVD+R(W)s:"),
+				    dev->device->writesDvdPlus() ? i18n("yes") : i18n("no") );
     typeItem->setForegroundColor( 1, gray );
     // --------------------------------
 

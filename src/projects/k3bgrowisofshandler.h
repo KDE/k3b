@@ -34,7 +34,9 @@ class K3bGrowisofsHandler : public QObject
 
   enum ErrorType {
     ERROR_UNKNOWN,
-    ERROR_MEDIA 
+    ERROR_MEDIA,
+    ERROR_OVERSIZE,
+    ERROR_SPEED_SET_FAILED
   };
 
   int error() const { return m_error; }
