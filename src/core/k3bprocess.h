@@ -79,6 +79,8 @@ class K3bProcess : public KProcess
    */
   void setRawStdout(bool b) { m_rawStdout = b; }
 
+  class OutputCollector;
+
  public slots:
   void setSplitStdout( bool b ) { m_bSplitStdout = b; }
  
@@ -126,5 +128,23 @@ class K3bProcess : public KProcess
   bool m_suppressEmptyLines;
 };
 
+
+class K3bProcess::OutputCollector : public QObject
+{
+  Q_OBJECT
+
+ public:
+  OutputCollector( KProcess* );
+  void setProcess( KProcess* );
+
+  const QString& output() const { return m_gatheredOutput; }
+
+ private slots:
+  void slotGatherOutput( KProcess*, char*, int );
+
+ private:
+  QString m_gatheredOutput;
+  KProcess* m_process;
+};
 
 #endif

@@ -16,6 +16,9 @@
 
 #include "k3bmovixinstallation.h"
 
+#include <k3bexternalbinmanager.h>
+#include <k3bprocess.h>
+
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
@@ -24,11 +27,9 @@
 #include <klocale.h>
 
 
-K3bMovixInstallation::K3bMovixInstallation( const QString& path )
-  : m_path(path)
+K3bMovixInstallation::K3bMovixInstallation( const K3bExternalBin* bin )
+  : m_bin(bin)
 {
-  if( m_path[m_path.length()-1] == '/' )
-    m_path.truncate( m_path.length()-1 );
 }
 
 
@@ -42,7 +43,7 @@ QString K3bMovixInstallation::subtitleFontDir( const QString& font ) const
   if( font == i18n("none" ) )
     return "";
   else if( m_supportedSubtitleFonts.contains( font ) )
-    return m_path + "/mplayer-fonts/" + font;
+    return path() + "/mplayer-fonts/" + font;
   else
     return "";
 }
@@ -53,7 +54,7 @@ QString K3bMovixInstallation::languageDir( const QString& lang ) const
   if( lang == i18n("default") )
     return languageDir( "en" );
   else if( m_supportedLanguages.contains( lang ) )
-    return m_path + "/boot-messages/" + lang;
+    return path() + "/boot-messages/" + lang;
   else
     return "";
 }
@@ -78,35 +79,54 @@ QStringList K3bMovixInstallation::isolinuxFiles()
 }
 
 
-QStringList K3bMovixInstallation::movixFiles()
+const QStringList& K3bMovixInstallation::movixFiles()
 {
-  // to be compatible with 0.8.0rc2 we just add all files in the movix directory
+  // we cache the movix files
+  if( m_movixFiles.isEmpty() ) {
+    if( m_bin->hasFeature( "files" ) ) {
+      KProcess p;
+      K3bProcess::OutputCollector out( &p );
+      p << m_bin->path + "movix-files";
+      if( p.start( KProcess::Block, KProcess::AllOutput ) ) {
+	m_movixFiles = QStringList::split( "\n", out.output() );
+      }
+    }
+    
+    else {
+      // fallback; to be compatible with 0.8.0rc2 we just add all files in the movix directory
+      QDir dir( path() + "/movix" );
+      m_movixFiles = dir.entryList(QDir::Files);
+    }
+  }
 
-  QDir dir( m_path + "/movix" );
-  return dir.entryList(QDir::Files);
-
-//   static QStringList s_movixFiles;
-//   if( s_movixFiles.isEmpty() ) {
-//     s_movixFiles.append( "bugReport.sh" );
-//     s_movixFiles.append( "input.conf" ); 
-//     s_movixFiles.append( "lircrc" );
-//     s_movixFiles.append( "manpage.txt" );
-//     s_movixFiles.append( "menu.conf" );
-//     s_movixFiles.append( "mixer.pl" );
-//     s_movixFiles.append( "movix.pl" );
-//     s_movixFiles.append( "profile" );
-//     s_movixFiles.append( "rc.movix" );
-//   }
-
-//   return s_movixFiles;
+  return m_movixFiles;
 }
 
 
-K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& path )
+K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const K3bExternalBin* bin )
 {
+  // we first need to get the movix dir
+  QString movixPath;
+  KProcess cp;
+  K3bProcess::OutputCollector out( &cp );
+  cp << bin->path + "movix-conf";
+  if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    if( out.output().isEmpty() ) {
+      kdDebug() << "(K3bMovixInstallation) no eMovix config info" << endl;
+      return 0;
+    }
+
+    movixPath = out.output().stripWhiteSpace();
+  }
+  else {
+    kdDebug() << "(K3bMovixInstallation) could not start " << bin->path << "movix-conf" << endl;
+    return 0;
+  }
+
   // first check if all necessary directories are present
-  QDir dir(path);
-  QStringList subdirs = dir.entryList();
+  QDir dir(movixPath);
+  kdDebug() << "(K3bMovixInstallation) searching for emovix files in '" << dir.path() << "'" << endl;
+  QStringList subdirs = dir.entryList( QDir::Dirs );
 
   if( !subdirs.contains( "boot-messages" ) ) {
     kdDebug() << "(K3bMovixInstallation) could not find subdir 'boot-messages'" << endl;
@@ -132,7 +152,7 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
   QStringList isolinuxFiles = K3bMovixInstallation::isolinuxFiles();
   for( QStringList::const_iterator it = isolinuxFiles.begin();
        it != isolinuxFiles.end(); ++it ) {
-    if( !QFile::exists( path + "/isolinux/" + *it ) ) {
+    if( !QFile::exists( movixPath + "/isolinux/" + *it ) ) {
       kdDebug() << "(K3bMovixInstallation) Could not find file " << *it << endl;
       return 0;
     }
@@ -149,7 +169,8 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
 
 
   // now check the boot-messages languages
-  K3bMovixInstallation* inst = new K3bMovixInstallation( path );
+  K3bMovixInstallation* inst = new K3bMovixInstallation( bin );
+  inst->m_movixPath = movixPath;
   dir.cd( "boot-messages" );
   inst->m_supportedLanguages = dir.entryList(QDir::Dirs);
   inst->m_supportedLanguages.remove(".");

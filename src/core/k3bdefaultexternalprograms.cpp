@@ -22,7 +22,7 @@
 #include <qobject.h>
 #include <qregexp.h>
 
-#include <kprocess.h>
+#include <k3bprocess.h>
 #include <kdebug.h>
 
 #include <unistd.h>
@@ -91,7 +91,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -202,7 +202,7 @@ bool K3bDvdrecordProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -288,7 +288,7 @@ bool K3bMkisofsProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path << "-version";
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "mkisofs" );
     if( pos < 0 )
@@ -377,7 +377,7 @@ bool K3bReadcdProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path << "-version";
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "readcd" );
     if( pos < 0 )
@@ -465,7 +465,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path ;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "Cdrdao version" );
     if( pos < 0 )
@@ -557,7 +557,7 @@ bool K3bTranscodeProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path ;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "transcode v" );
     if( pos < 0 )
@@ -596,18 +596,17 @@ bool K3bEMovixProgram::scan( const QString& p )
   QString path = p;
   if( path[path.length()-1] != '/' )
     path.append("/");
-  path.append("movix-version");
 
   // first test if we have a version info (eMovix >= 0.8.0pre3)
-  if( !QFile::exists( path ) )
+  if( !QFile::exists( path + "movix-version" ) )
     return false;
 
   K3bExternalBin* bin = 0;
 
   // probe version
   KProcess vp;
-  vp << path;
-  OutputCollector out( &vp );
+  vp << path + "movix-version";
+  K3bProcess::OutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // movix-version just gives us the version number on stdout
     if( !out.output().isEmpty() ) {
@@ -616,24 +615,19 @@ bool K3bEMovixProgram::scan( const QString& p )
     }
   }
   else {
-    kdDebug() << "(K3bEMovixProgram) could not start " << path << endl;
+    kdDebug() << "(K3bEMovixProgram) could not start " << path << "movix-version" << endl;
     return false;
   }
 
 
-  path = p;
-  if( path[path.length()-1] != '/' )
-    path.append("/");
-  path.append("movix-conf");
-
   // now search for the config and the files
-  if( !QFile::exists( path ) ) {
+  if( !QFile::exists( path + "movix-conf" ) ) {
     delete bin;
     return false;
   }
 
   KProcess cp;
-  cp << path;
+  cp << path + "movix-conf";
   out.setProcess( &cp );
   if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // now search the needed files in the given dir
@@ -643,22 +637,13 @@ bool K3bEMovixProgram::scan( const QString& p )
       return false;
     }
 
-    // we need the following files:
-    // isolinux/initrd.gz
-    // isolinux/iso.sort
-    // isolinux/isolinux.bin
-    // isolinux/isolinux.cfg
-    // isolinux/movix.lss
-    // isolinux/mphelp.txt
-    // isolinux/mxhelp.txt
-    // isolinux/trblst.txt
-    // isolinux/credits.txt
-    // isolinux/kernel/vmlinuz
+    // we save the path to all the movix scripts.
+    bin->path = path;
 
-    // TODO: search the files
+    // check if we have a version of eMovix which contains the movix-files script
+    if( QFile::exists( path + "movix-files" ) )
+      bin->addFeature( "files" );
 
-    // the eMovix bin does not contain the path to any executable but the path to the eMovix files
-    bin->path = out.output().stripWhiteSpace();
     addBin(bin);
     return true;
   }
@@ -697,7 +682,7 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path << "-V";
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "GNU VCDImager" );
     if( pos < 0 )
@@ -753,7 +738,7 @@ bool K3bNormalizeProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
 
   vp << path << "--version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -812,7 +797,7 @@ bool K3bGrowisofsProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -881,7 +866,7 @@ bool K3bDvdformatProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
 
   vp << path;
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -954,7 +939,7 @@ bool K3bCdda2wavProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  OutputCollector out( &vp );
+  K3bProcess::OutputCollector out( &vp );
 
   vp << path << "-h";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {

@@ -62,7 +62,7 @@ class K3bSoxProgram : public K3bExternalProgram
     
     // probe version
     KProcess vp;
-    OutputCollector out( &vp );
+    K3bProcess::OutputCollector out( &vp );
     
     vp << path << "-h";
     if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {

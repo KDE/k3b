@@ -19,6 +19,7 @@
 
 #include <qstringlist.h>
 
+class K3bExternalBin;
 
 class K3bMovixInstallation
 {
@@ -26,7 +27,7 @@ class K3bMovixInstallation
   ~K3bMovixInstallation();
 
   /** path to the eMovix installation */
-  const QString& path() const { return m_path; }
+  const QString& path() const { return m_movixPath; }
   const QStringList& supportedBootLabels() const { return m_supportedBootLabels; }
   const QStringList& supportedSubtitleFonts() const { return m_supportedSubtitleFonts; }
   const QStringList& supportedLanguages() const { return m_supportedLanguages; }
@@ -39,15 +40,17 @@ class K3bMovixInstallation
   /**
    * returns 0 if not every necessary files could be found
    */
-  static K3bMovixInstallation* probeInstallation( const QString& path );
+  static K3bMovixInstallation* probeInstallation( const K3bExternalBin* );
 
-  QStringList movixFiles();
+  const QStringList& movixFiles();
   static QStringList isolinuxFiles();
 
  private:
-  K3bMovixInstallation( const QString& path );
+  K3bMovixInstallation( const K3bExternalBin* );
 
-  QString m_path;
+  const K3bExternalBin* m_bin;
+  QString m_movixPath;
+  QStringList m_movixFiles;
   QStringList m_supportedBootLabels;
   QStringList m_supportedSubtitleFonts;
   QStringList m_supportedLanguages;

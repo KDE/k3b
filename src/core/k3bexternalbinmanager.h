@@ -97,31 +97,10 @@ class K3bExternalProgram
    */
   virtual bool supportsUserParameters() const { return true; }
 
-  class OutputCollector;
-
  private:
   QString m_name;
   QStringList m_userParameters;
   QPtrList<K3bExternalBin> m_bins;
-};
-
-
-class K3bExternalProgram::OutputCollector : public QObject
-{
-  Q_OBJECT
-
- public:
-  OutputCollector( KProcess* );
-  void setProcess( KProcess* );
-
-  const QString& output() const { return m_gatheredOutput; }
-
- private slots:
-  void slotGatherOutput( KProcess*, char*, int );
-
- private:
-  QString m_gatheredOutput;
-  KProcess* m_process;
 };
 
 

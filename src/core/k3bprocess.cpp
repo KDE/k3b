@@ -329,4 +329,35 @@ void K3bProcess::dupStdin( int fd )
   d->dupStdinFd = fd;
 }
 
+
+
+K3bProcess::OutputCollector::OutputCollector( KProcess* p )
+  : m_process(0)
+{
+  setProcess( p );
+}
+
+void K3bProcess::OutputCollector::setProcess( KProcess* p )
+{
+  if( m_process )
+    m_process->disconnect( this );
+
+  m_process = p;
+  if( p ) {
+    connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), 
+	     this, SLOT(slotGatherOutput(KProcess*, char*, int)) );
+    connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), 
+	     this, SLOT(slotGatherOutput(KProcess*, char*, int)) );
+  }
+
+  m_gatheredOutput = "";
+}
+
+void K3bProcess::OutputCollector::slotGatherOutput( KProcess*, char* data, int len )
+{
+  m_gatheredOutput.append( QString::fromLatin1( data, len ) );
+}
+
+
+
 #include "k3bprocess.moc"

@@ -226,14 +226,13 @@ void K3bMovixBurnDialog::readSettings()
   m_dataModeWidget->setDataMode( m_doc->dataMode() );
 
   // first of all we need a movix installation object
-  QString path = k3bcore->externalBinManager()->binPath("eMovix");
-  m_installation = K3bMovixInstallation::probeInstallation( path );
+  m_installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
   if( m_installation ) {
     m_movixOptionsWidget->init( m_installation );
     m_movixOptionsWidget->readSettings( m_doc );
   }
   else {
-    KMessageBox::error( this, i18n("Could not find eMovix installation in %1").arg(path) );
+    KMessageBox::error( this, i18n("Could not find a valid eMovix installation.") );
     slotCancelClicked();
   }
 }

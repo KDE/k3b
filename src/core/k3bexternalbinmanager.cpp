@@ -152,32 +152,6 @@ void K3bExternalProgram::addUserParameter( const QString& p )
 }
 
 
-K3bExternalProgram::OutputCollector::OutputCollector( KProcess* p )
-  : m_process(0)
-{
-  setProcess( p );
-}
-
-void K3bExternalProgram::OutputCollector::setProcess( KProcess* p )
-{
-  if( m_process )
-    disconnect( m_process );
-
-  m_process = p;
-  if( p ) {
-    connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotGatherOutput(KProcess*, char*, int)) );
-    connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotGatherOutput(KProcess*, char*, int)) );
-  }
-
-  m_gatheredOutput = "";
-}
-
-void K3bExternalProgram::OutputCollector::slotGatherOutput( KProcess*, char* data, int len )
-{
-  m_gatheredOutput.append( QString::fromLatin1( data, len ) );
-}
-
-
 
 // ///////////////////////////////////////////////////////////
 //

@@ -260,11 +260,9 @@ bool K3bMovixDocPreparer::writeMovixRcFile()
 
 bool K3bMovixDocPreparer::addMovixFiles()
 {
-  if( d->installation )
-    delete d->installation;
+  delete d->installation;
 
-  QString path = k3bcore->externalBinManager()->binPath("eMovix");
-  d->installation = K3bMovixInstallation::probeInstallation( path );
+  d->installation = K3bMovixInstallation::probeInstallation( k3bcore->externalBinManager()->binObject("eMovix") );
   if( d->installation ) {
 
     // first of all we create the directories
@@ -277,7 +275,7 @@ bool K3bMovixDocPreparer::addMovixFiles()
 
     // add the boot image
     K3bBootItem* bootItem = d->doc->createBootItem( d->installation->path() + "/isolinux/isolinux.bin",
-						   d->isolinuxDir );
+						    d->isolinuxDir );
     bootItem->setImageType( K3bBootItem::NONE );
     bootItem->setLoadSize( 4 );
     bootItem->setBootInfoTable(true);
@@ -303,7 +301,7 @@ bool K3bMovixDocPreparer::addMovixFiles()
       (void)new K3bFileItem( path, d->doc, d->isolinuxDir );
     }
 
-    QStringList movixFiles = d->installation->movixFiles();
+    const QStringList& movixFiles = d->installation->movixFiles();
     for( QStringList::const_iterator it = movixFiles.begin();
 	 it != movixFiles.end(); ++it ) {
       QString path = d->installation->path() + "/movix/" + *it;
@@ -365,7 +363,7 @@ bool K3bMovixDocPreparer::addMovixFiles()
       return false;
   }
   else {
-    emit infoMessage( i18n("Could not find eMovix installation in %1").arg(path), ERROR );
+    emit infoMessage( i18n("Could not find a valid eMovix installation."), ERROR );
     return false;
   }
 }
