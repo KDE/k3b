@@ -29,6 +29,7 @@
 #include <ksimpleconfig.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <kio/global.h>
 
 #include <qgroupbox.h>
 #include <qpushbutton.h>
@@ -52,10 +53,6 @@ public:
     maxWriteSpeed = d->maxWriteSpeed();
     cdTextCapable = ( d->cdTextCapable() != 2 );
     writer = d->burner();
-    //    cdrw = d->writesCdrw();
-    burnproof = d->burnproof();
-    bufferSize = d->bufferSize();
-    //    dao = d->dao();
   }
 
   K3bDevice* device;
@@ -64,79 +61,6 @@ public:
   QString cdrdaoDriver;
   bool cdTextCapable;
   bool writer;
-  //  bool cdrw;
-  bool burnproof;
-  //  bool dao;
-  int bufferSize;
-};
-
-
-class K3bDeviceWidget::PrivateDeviceViewItem2 : public QCheckListItem
-{
-public:
-  PrivateDeviceViewItem2( int type, PrivateTempDevice* dev, QListView* view, QListViewItem* after )
-    : QCheckListItem( view, after, QString::null, CheckBox ),
-      m_type(type) {
-    this->dev = dev;
-    init();
-  }
-
-  PrivateDeviceViewItem2( int type, PrivateTempDevice* dev, QListViewItem* item, QListViewItem* after )
-    : QCheckListItem( item, after, QString::null, CheckBox ),
-      m_type(type) {
-    this->dev = dev;
-    init();
-  }
-
-  QString text( int col ) const {
-    if( col == 0 ) {
-      switch(m_type) {
-//       case t_cdrw:
-// 	return i18n("CD/RW drive");
-      case t_burnproof:
-	return i18n("Supports Burnfree");
-//       case t_dao:
-// 	return i18n("Supports DAO writing");
-      }
-    }
-    return "";
-  }
-
-  enum itemType { /*t_cdrw,*/ t_burnproof/*, t_dao */};
-
-  PrivateTempDevice* dev;
-
-protected:
-  void stateChange( bool on ) {
-    switch(m_type) {
-//     case t_cdrw:
-//       dev->cdrw = on;
-//       break;
-    case t_burnproof:
-      dev->burnproof = on;
-      break;
-//     case t_dao:
-//       dev->dao = on;
-//       break;
-    }
-  }
-
-private:
-  void init() {
-    switch(m_type) {
-//     case t_cdrw:
-//       setOn(dev->cdrw);
-//       break;
-    case t_burnproof:
-      setOn(dev->burnproof);
-      break;
-//     case t_dao:
-//       setOn(dev->dao);
-//       break;
-    }
-  }
-
-  int m_type;
 };
 
 
@@ -169,9 +93,6 @@ public:
       case t_cdrdaoDriver:
 	dev->cdrdaoDriver = text;
 	break;
-      case t_bufferSize:
-	dev->bufferSize = text.toInt();
-	break;
       case t_cdTextCapable:
 	if( dev->cdrdaoDriver != "auto" )
 	  dev->cdTextCapable = ( text == i18n("yes") );
@@ -191,9 +112,6 @@ public:
     case t_cdrdaoDriver:
       return (col == 0 ? i18n("Cdrdao driver:") : dev->cdrdaoDriver );
       break;
-    case t_bufferSize:
-      return (col == 0 ? i18n("Buffer size:") : QString::number(dev->bufferSize) );
-      break;
     case t_cdTextCapable:
       if( col == 0 )
 	return i18n("CD-Text capable:");
@@ -206,7 +124,7 @@ public:
     return "???";
   }
 
-  enum itemType { t_maxReadSpeed, t_maxWriteSpeed, t_cdrdaoDriver, t_bufferSize, t_cdTextCapable };
+  enum itemType { t_maxReadSpeed, t_maxWriteSpeed, t_cdrdaoDriver, t_cdTextCapable };
 
   PrivateTempDevice* dev;
 
@@ -228,9 +146,6 @@ private:
 	  l.append(K3bDevice::cdrdao_drivers[i]);
 
       setEditor( 1, COMBO, l );
-      break;
-    case t_bufferSize:
-      setEditor( 1, SPIN );
       break;
     case t_cdTextCapable:
       if( l2.isEmpty() ) {
@@ -413,6 +328,13 @@ void K3bDeviceWidget::updateDeviceListViews()
 
 
     // now add the reader (both interfaces) items
+    if( dev->device->bufferSize() > 0 ) {
+      typeItem = new K3bListViewItem( devRoot, typeItem,
+				      i18n("Buffer Size:"),
+				      KIO::convertSizeFromKB(dev->device->bufferSize()) );
+      typeItem->setForegroundColor( 1, gray );
+    }
+
     PrivateDeviceViewItem1* maxReadSpeedItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxReadSpeed,
 									   dev,
 									   devRoot,
@@ -435,20 +357,15 @@ void K3bDeviceWidget::updateDeviceListViews()
 								       devRoot,
 								       cdrdaoDriverItem );
 
-      PrivateDeviceViewItem2* burnfreeItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_burnproof,
-									 dev,
-									 devRoot,
-									 cdTextItem );
-      
-      
-//       PrivateDeviceViewItem2* daoItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_dao,
-// 								    dev,
-// 								    devRoot,
-// 								    cdrwItem );
+      typeItem = new K3bListViewItem( devRoot, cdTextItem,
+				      i18n("Supports Burnfree:"),
+				      dev->device->burnfree() ? i18n("yes") : i18n("no") );
+      typeItem->setForegroundColor( 1, gray );
 
+      
       // and at last the write modes
       (new K3bListViewItem( devRoot, 
-			    burnfreeItem, 
+			    typeItem, 
 			    i18n("Write modes:"), 
 			    K3bCdDevice::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, gray );
     }
@@ -489,8 +406,6 @@ void K3bDeviceWidget::apply()
     tempDev->device->setMaxWriteSpeed( tempDev->maxWriteSpeed );
     tempDev->device->setCdrdaoDriver( tempDev->cdrdaoDriver );
     tempDev->device->setCdTextCapability( tempDev->cdTextCapable );
-    tempDev->device->setBurnproof( tempDev->burnproof );
-    tempDev->device->setBufferSize( tempDev->bufferSize );
 
     tempDev = m_tempDevices.next();
   }

@@ -147,6 +147,7 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   d->burnfree = false;
   m_bus = m_target = m_lun = -1;
   m_dvdMinusTestwrite = true;
+  m_bufferSize = 0;
 }
 
 
@@ -611,6 +612,7 @@ bool K3bCdDevice::CdDevice::init()
       d->deviceType |= CDRW;
     m_maxWriteSpeed = (int)( from2Byte(mm_p->max_write_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
     m_maxReadSpeed = (int)( from2Byte(mm_p->max_read_speed) * 1024.0 / ( 2352.0 * 75.0 ) );
+    m_bufferSize = from2Byte( mm_p->buffer_size );
 
     delete [] mm_cap_buffer;
   }
@@ -675,8 +677,6 @@ bool K3bCdDevice::CdDevice::init()
    
 
   close();
-
-  d->interfaceType = interfaceType();
 
   return furtherInit();
 }
@@ -825,10 +825,6 @@ const QString& K3bCdDevice::CdDevice::mountPoint() const
   return d->mountPoint;
 }
 
-void K3bCdDevice::CdDevice::setBurnproof( bool b )
-{
-  d->burnfree = b;
-}
 
 
 bool K3bCdDevice::CdDevice::burnproof() const

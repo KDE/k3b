@@ -60,7 +60,6 @@ class K3bDeviceWidget : public QWidget
  private:
   class PrivateTempDevice;
   class PrivateDeviceViewItem1;
-  class PrivateDeviceViewItem2;
 
   /** list to save changes to the devices before applying */
   QPtrList<PrivateTempDevice> m_tempDevices;

@@ -109,11 +109,6 @@ namespace K3bCdDevice
     const QString& devicename() const;
 
     /**
-     * @deprecated use blockDeviceName()
-     */
-    const QString& ioctlDevice() const;
-
-    /**
      * for SCSI devices this should be something like /dev/scd0 or /dev/sr0
      * for ide device this should be something like /dev/hdb1
      */
@@ -176,9 +171,6 @@ namespace K3bCdDevice
      * is no way to autosense the cd-text capability.
      */
     void setCdTextCapability( bool );
-
-    void setBurnproof( bool );
-    void setBufferSize( int b ) { m_bufferSize = b; }
 
     void setMountPoint( const QString& );
     void setMountDevice( const QString& d );

@@ -21,6 +21,7 @@
 #include "k3bscsicommand.h"
 #include <k3bexternalbinmanager.h>
 #include <k3bglobals.h>
+#include <k3bversion.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -324,7 +325,15 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
   m_foundDevices = 0;
 
   if( !c->hasGroup( "Devices" ) )
-  {
+    return false;
+
+  //
+  // We changed the config style in K3b 0.11. So we need to check this first
+  //
+  c->setGroup( "General Options" );
+  K3bVersion configVersion( c->readEntry( "config version", "0.1" ) );
+  if( configVersion < K3bVersion( 0, 10, 99 ) ) {
+    kdDebug() << "(K3bDeviceManager) ignoring device config from K3b version " << configVersion << endl;
     return false;
   }
 
@@ -341,26 +350,25 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
     if( dev == 0 )
       dev = addDevice( list[0] );
 
-    if( dev != 0 )
-    {
-      // device found, apply changes
-      if( list.count() > 1 )
-        dev->setMaxReadSpeed( list[1].toInt() );
-      if( list.count() > 2 )
-        dev->setMaxWriteSpeed( list[2].toInt() );
-      if( list.count() > 3 )
-        dev->setCdrdaoDriver( list[3] );
-      if( list.count() > 4 )
-        dev->setCdTextCapability( list[4] == "yes" );
-      if( list.count() > 5 )
-        dev->setBurnproof( list[5] == "yes" );
-      if( list.count() > 6 )
-        dev->setBufferSize( list[6].toInt() );
-      if( list.count() > 7 )
-        dev->setCurrentWriteSpeed( list[7].toInt() );
-    }
+    if( dev != 0 ) {
 
-    if( dev == 0 )
+      // first we check if the saved entry really corresponds to dev
+      if( dev->vendor() != list[1] || dev->description() != list[2] ) {
+	kdDebug() << "(K3bDeviceManager) found wrong device entry in config." << endl;
+      }
+      else {
+	// device found, apply changes
+	if( list.count() > 3 )
+	  dev->setMaxReadSpeed( list[1].toInt() );
+	if( list.count() > 4 )
+	  dev->setMaxWriteSpeed( list[2].toInt() );
+	if( list.count() > 5 )
+	  dev->setCdrdaoDriver( list[3] );
+	if( list.count() > 6 )
+	  dev->setCdTextCapability( list[4] == "yes" );
+      }
+    }
+    else
       kdDebug() << "(K3bDeviceManager) Could not detect saved device " << list[0] << "." << endl;
 
     devNum++;
@@ -394,19 +402,16 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
   {
     QStringList list;
     list << dev->blockDeviceName()
-    << QString::number(dev->maxReadSpeed())
-    << QString::number(dev->maxWriteSpeed())
-    << dev->cdrdaoDriver();
+	 << dev->vendor()
+	 << dev->description()
+	 << QString::number(dev->maxReadSpeed())
+	 << QString::number(dev->maxWriteSpeed())
+	 << dev->cdrdaoDriver();
 
     if( dev->cdrdaoDriver() != "auto" )
       list << ( dev->cdTextCapable() == 1 ? "yes" : "no" );
     else
       list << "auto";
-
-    list 
-      << ( dev->burnproof() ? "yes" : "no" )
-      << QString::number( dev->bufferSize() )
-      << QString::number( dev->currentWriteSpeed() );
 
     c->writeEntry( QString("Device%1").arg(i), list );
 
@@ -446,7 +451,7 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
     ::memset( buf, 0, sizeof(buf) );
 
     ScsiCommand cmd( cdromfd );
-    cmd[0] = 0x12;  // GPCMD_INQUIRY
+    cmd[0] = 0x12;  // INQUIRY
     cmd[4] = sizeof(buf);
     cmd[5] = 0;
 
