@@ -22,8 +22,8 @@ bin_program=k3b
 cflags=
 cppflags=
 cxxflags=\s-O2 -g3 -Wall
-ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) -lmad -lartskde -lqt-mt $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE)
-ldflags=\s
+ldadd=$(ID3LIB_LIBS) $(CDPARANOIA_LIBS) $(OGG_VORBISLIBS) -lmad -lartskde -lqt-mt $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE)
+ldflags=\s\s
 
 [General]
 AMChanged=true
@@ -51,13 +51,13 @@ install_location=
 type=DATA
 
 [KPP]
-kpp_appgrp=
+kpp_appgrp=Application/CDWriting
 kpp_bldroot=
 kpp_icon=0
 kpp_license=5
 kpp_summary=
-kpp_url=
-kpp_version=0.1
+kpp_url=http://k3b.sourceforge.net
+kpp_version=0.6.0pre1
 
 [LFV Groups]
 GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS
@@ -158,7 +158,7 @@ install_location=
 type=HEADER
 
 [src/audio/input/Makefile.am]
-files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3baudiomodule.cpp
+files=src/audio/input/k3baudiomodule.h,src/audio/input/k3baudiomodulefactory.cpp,src/audio/input/k3baudiomodulefactory.h,src/audio/input/k3bmp3module.cpp,src/audio/input/k3bmp3module.h,src/audio/input/k3baudiomodule.cpp,src/audio/input/k3boggvorbismodule.cpp,src/audio/input/k3boggvorbismodule.h
 sub_dirs=
 type=static_library
 
@@ -193,6 +193,18 @@ install_location=
 type=SOURCE
 
 [src/audio/input/k3bmp3module.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/audio/input/k3boggvorbismodule.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/audio/input/k3boggvorbismodule.h]
 dist=true
 install=false
 install_location=

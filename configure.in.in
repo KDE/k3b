@@ -2,40 +2,6 @@
 
 AM_INIT_AUTOMAKE(k3b,0.6.0pre1)
 
-AC_MSG_CHECKING(for cdparanoia libraries and headers)
-
-#checking for cdparanoia (from audiocd-ioslave)
-
-with_cdparanoia=NOTFOUND
-search_incs="$kde_includes /usr/include /usr/local/include"
-AC_FIND_FILE(cdda_interface.h, $search_incs, para_incdir)
-if test -r $para_incdir/cdda_interface.h ; then
-  test "x$para_incdir" != "x/usr/include" && CDPARANOIA_INCS="-I$para_incdir"
-  with_cdparanoia=FOUND
-fi
-if test $with_cdparanoia = FOUND ; then
-  with_cdparanoia=NOTFOUND
-  # because of the horrible hack we need shared cdparanoia
-  AC_FIND_FILE(libcdda_paranoia.so, $kde_libraries /usr/lib /usr/local/lib, para_libdir)
-  if test -r $para_libdir/libcdda_paranoia.so ; then
-    if test "x$para_libdir" != "x/usr/lib" ; then
-      CDPARANOIA_LIBS="-L$para_libdir "
-    fi
-    CDPARANOIA_LIBS="${CDPARANOIA_LIBS}-lcdda_paranoia -lcdda_interface"
-    with_cdparanoia=FOUND
-  fi
-fi
-
-
-case "$with_cdparanoia" in
-NOTFOUND) AC_MSG_ERROR(could not find cdparanoia includes and library) ;;
-*)        AC_MSG_RESULT(incs=$para_incdir libs=$para_libdir) ;;
-esac
-
-AC_SUBST(CDPARANOIA_INCS)
-AC_SUBST(CDPARANOIA_LIBS)
-
-
 #checking libid3
 AC_MSG_CHECKING(for ID3Lib)
 
@@ -79,3 +45,65 @@ esac
 
 AC_SUBST(ID3LIB_INCS)
 AC_SUBST(ID3LIB_LIBS)
+
+
+
+CDPARANOIA_LIBS==""
+AC_MSG_CHECKING(for cdparanoia headers)
+cdda_paranoia=no
+AC_TRY_COMPILE([
+		#include <sys/types.h> 
+		typedef int16_t size16;
+		typedef int32_t size32;
+                #include <cdda_interface.h>
+                #include <cdda_paranoia.h>
+                ],[
+                ],[
+                cdda_paranoia=yes
+                ])
+dnl currently disabled
+dnl cdda_paranoia=no
+AC_MSG_RESULT($cdda_paranoia)
+if test x$cdda_paranoia = xyes; then
+   dnl we need the cdda_paranoia_lib because otherwise we override LIBS !
+   AC_CHECK_LIB(cdda_paranoia,paranoia_init,cdda_paranoia_lib=yes,
+                cdda_paranoia=no,[-lcdda_paranoia -lcdda_interface])
+fi
+if test x$cdda_paranoia = xyes; then
+   AC_DEFINE(CDDA_PARANOIA,1,[Define if you have cdparanoia installed])
+   CDPARANOIA_LIBS="-lcdda_paranoia -lcdda_interface"
+fi
+
+
+AC_SUBST(CDPARANOIA_LIBS)
+
+
+OGG_VORBISLIBS=""
+AC_MSG_CHECKING(for ogg/vorbis headers)
+ogg_vorbis=no
+AC_TRY_COMPILE([
+		#include <vorbis/codec.h>
+		#include <vorbis/vorbisfile.h>
+                ],[
+                ],[
+                ogg_vorbis=yes
+                ])
+AC_MSG_RESULT($ogg_vorbis)
+if test x$ogg_vorbis = xyes; then
+   dnl we need the ogg_vorbis_lib because otherwise we override LIBS !
+   AC_CHECK_LIB(vorbisfile,ov_open,ogg_vorbis_lib=yes,
+                ogg_vorbis=no,[-lvorbisfile -lvorbis -logg])
+fi
+if test x$ogg_vorbis = xyes; then
+   AC_DEFINE(OGG_VORBIS,1,[Define if you have ogg/vorbis installed])
+   OGG_VORBISLIBS="-lvorbisfile -lvorbis -logg"
+fi
+
+AC_SUBST(OGG_VORBISLIBS)
+
+
+if test x$ogg_vorbis = xyes; then
+	echo ""
+	echo "No Ogg Vorbis library and headers found."
+	echo "Ogg Vorbis support disabled."
+fi

@@ -34,7 +34,7 @@ class K3bAudioModule : public QObject
    * waiting for the signal (used when writing to a file)
    */
   virtual void setConsumer( QObject* c = 0, const char* goOnSignal = 0 );
-  virtual void start() = 0;
+  void start();
 
  public slots:
   virtual void cancel() = 0;
@@ -47,6 +47,7 @@ class K3bAudioModule : public QObject
 
  protected slots:
   virtual void slotConsumerReady() = 0;
+  virtual void startDecoding() = 0;
 
  protected:
   QObject* m_consumer;

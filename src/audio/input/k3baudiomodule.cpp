@@ -17,6 +17,12 @@ K3bAudioModule::~K3bAudioModule()
 }
 
 
+void K3bAudioModule::start()
+{
+  QTimer::singleShot( 0, this, SLOT(startDecoding()) );
+}
+
+
 void K3bAudioModule::setConsumer( QObject* c = 0, const char* goOnSignal = 0 )
 {
   if( m_consumer ) {

@@ -1,0 +1,242 @@
+/***************************************************************************
+                          k3boggvorbismodule.cpp  -  description
+                             -------------------
+    begin                : Mon Apr 1 2002
+    copyright            : (C) 2002 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "../../../config.h"
+
+
+#ifdef OGG_VORBIS
+
+#include "k3boggvorbismodule.h"
+#include "../k3baudiotrack.h"
+
+#include <qtimer.h>
+#include <qstringlist.h>
+
+#include <kurl.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <vorbis/codec.h>
+#include <vorbis/vorbisfile.h>
+
+
+K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
+  : K3bAudioModule( track )
+{
+  m_oggVorbisFile = new OggVorbis_File;
+  m_outputBuffer  = new char[OUTPUT_BUFFER_SIZE];
+
+  m_decodingTimer = new QTimer( this );
+  connect( m_decodingTimer, SIGNAL(timeout()), this, SLOT(decode()) );
+
+
+  m_bDecodingInProgress = false;
+
+
+  // do some initialization
+  FILE* file = fopen( track->absPath().latin1(), "r" );
+  if( !file ) {
+    qDebug("(K3bOggVorbisModule) Could not open file " + track->absPath() );
+    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+  }
+  else {
+    if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
+      qDebug("(K3bOggVorbisModule) " + track->absPath() + " seems to to be an ogg vorbis file." );
+      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+      fclose( file );
+    }
+    else {
+      // check length of track
+      double seconds = ov_time_total( m_oggVorbisFile, -1 );
+      if( seconds == OV_EINVAL ) {
+	qDebug( "(K3bOggVorbisModule) Could not determine length of file " + track->absPath() );
+	audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
+      }
+      else {
+	track->setLength( (unsigned long)ceil(seconds * 75.0) );
+	audioTrack()->setStatus( K3bAudioTrack::OK );
+      }
+
+      // search for artist,title information
+      vorbis_comment* vComment = ov_comment( m_oggVorbisFile, -1 );
+      if( !vComment ) {
+	qDebug( "(K3bOggVorbisModule) Could not open OggVorbis comment of file " + track->absPath() );
+      }
+      else {
+	for( int i = 0; i < vComment->comments; ++i ) {
+	  QString comment( vComment->user_comments[i] );
+	  QStringList values = QStringList::split( "=", comment );
+	  if( values.count() > 1 ) {
+	    if( values[0] == "title" )
+	      track->setTitle( values[1] );
+	    else if( values[0] == "artist" )
+	      track->setArtist( values[1] );
+	    else if( values[0] == "album" )
+	      track->setAlbum( values[1] );
+	  }
+	}
+      }
+    }
+  
+    ov_clear( m_oggVorbisFile );
+  }
+
+}
+
+
+K3bOggVorbisModule::~K3bOggVorbisModule()
+{
+  delete m_oggVorbisFile;
+  delete [] m_outputBuffer;
+}
+
+
+void K3bOggVorbisModule::startDecoding()
+{
+  // open the file
+  FILE* file = fopen( audioTrack()->absPath().latin1(), "r" );
+  if( !file ) {
+    qDebug("(K3bOggVorbisModule) Could not open file " + audioTrack()->absPath() );
+    emit finished( false );
+  }
+  else {
+    if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
+      qDebug("(K3bOggVorbisModule) " + audioTrack()->absPath() + " seems to to be an ogg vorbis file." );
+      fclose( file );
+      emit finished( false );
+    }
+    else {
+      m_rawDataLengthToStream = audioTrack()->length()*2352;
+      m_rawDataAlreadyStreamed = 0;
+
+      m_bDecodingInProgress = true;
+      m_decodingTimer->start(0);
+    }
+  }
+}
+
+
+void K3bOggVorbisModule::cancel()
+{
+  if( m_bDecodingInProgress ) {
+    m_bDecodingInProgress = false;
+    m_decodingTimer->stop();
+
+    ov_clear( m_oggVorbisFile );
+
+    emit canceled();
+    emit finished( false );
+  }
+}
+
+
+void K3bOggVorbisModule::decode()
+{
+  if( m_bDecodingInProgress ) {
+    long bytesRead = ov_read( m_oggVorbisFile, m_outputBuffer, OUTPUT_BUFFER_SIZE, 1, 2, 1, &m_currentOggVorbisSection );
+
+    if( bytesRead == OV_HOLE ) {
+      qDebug( "(K3bOggVorbisModule) OV_HOLE" );
+      
+      ov_clear( m_oggVorbisFile );
+
+      m_decodingTimer->stop();
+      emit finished( false );
+    }
+
+    else if( bytesRead == OV_EBADLINK ) {
+      qDebug( "(K3bOggVorbisModule) OV_EBADLINK" );
+
+      ov_clear( m_oggVorbisFile );
+
+      m_decodingTimer->stop();
+      emit finished( false );
+    }
+
+    else if( bytesRead == 0 ) {
+      // eof
+      // pad if necessary
+      if( m_rawDataAlreadyStreamed < m_rawDataLengthToStream ) {
+	unsigned long bytesToPad = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
+	qDebug("(K3bOggVorbisModule) we have to pad by %li bytes", bytesToPad );
+
+	memset( m_outputBuffer, 0, OUTPUT_BUFFER_SIZE );
+
+	long bytesToOutput = ( bytesToPad < OUTPUT_BUFFER_SIZE ? bytesToPad : OUTPUT_BUFFER_SIZE );
+
+	emit output( (const unsigned char*)m_outputBuffer, bytesToOutput );
+	emit percent( 100 * m_rawDataAlreadyStreamed / m_rawDataLengthToStream );
+	m_rawDataAlreadyStreamed += bytesToOutput;
+      }
+      else {
+	// finished with success
+	m_decodingTimer->stop();
+
+	ov_clear( m_oggVorbisFile );
+
+	emit percent( 100 );
+	emit finished( true );
+      }
+    }
+
+    else {
+      // correct data
+      // TODO: check if too much output
+
+      emit output( (const unsigned char*)m_outputBuffer, bytesRead );
+      emit percent( 100 * m_rawDataAlreadyStreamed / m_rawDataLengthToStream );
+      m_rawDataAlreadyStreamed += bytesRead;
+    }
+
+    if( m_consumer )
+      m_decodingTimer->stop();
+  }
+}
+
+
+void K3bOggVorbisModule::slotConsumerReady()
+{
+  if( m_bDecodingInProgress )
+    m_decodingTimer->start(0);
+}
+
+
+bool K3bOggVorbisModule::canDecode( const KURL& url )
+{
+  FILE* file = fopen( url.path().latin1(), "r" );
+  if( !file ) {
+    qDebug("(K3bOggVorbisModule) Could not open file " + url.path() );
+    return false;
+  }
+
+  OggVorbis_File of;
+
+  if( ov_open( file, &of, 0, 0 ) ) {
+    fclose( file );
+    return false;
+  }
+
+  ov_clear( &of );
+
+  return true;
+}
+
+
+#include "k3boggvorbismodule.moc"
+
+#endif

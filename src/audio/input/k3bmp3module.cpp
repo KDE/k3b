@@ -94,7 +94,7 @@ void K3bMp3Module::initializeDecoding()
 }
 
 
-void K3bMp3Module::start()
+void K3bMp3Module::startDecoding()
 {
   if( !m_bCountingFramesInProgress && !m_bDecodingInProgress ) {
     m_bDecodingInProgress = true;

@@ -18,8 +18,6 @@ class K3bMp3Module : public K3bAudioModule
   K3bMp3Module( K3bAudioTrack* track );
   ~K3bMp3Module();
 
-  void start();
-
  public slots:
   void cancel();
 
@@ -27,6 +25,7 @@ class K3bMp3Module : public K3bAudioModule
   void slotDecodeNextFrame();
   void slotCountFrames();
   void slotConsumerReady();
+  void startDecoding();
  
  private:
   unsigned short madFixedToUshort( mad_fixed_t fixed );

@@ -203,7 +203,7 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
   }
   else {
     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" + 
-			i18n("Only mp3 and wav audio files are supported."), 
+			i18n("Only mp3, ogg vorbis, and wav audio files are supported."), 
 			i18n("Wrong file format") );		
     return 0;
   }
