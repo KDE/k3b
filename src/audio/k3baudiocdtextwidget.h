@@ -16,16 +16,13 @@
 #ifndef K3B_AUDIO_CDTEXT_WIDGET_H
 #define K3B_AUDIO_CDTEXT_WIDGET_H
 
-#include <qwidget.h>
+#include "base_k3baudiocdtextwidget.h"
 
 
-class QCheckBox;
-class QLineEdit;
-class QTextEdit;
 class K3bAudioDoc;
 
 
-class K3bAudioCdTextWidget : public QWidget
+class K3bAudioCdTextWidget : public base_K3bAudioCdTextWidget
 {
   Q_OBJECT
 
@@ -40,16 +37,15 @@ class K3bAudioCdTextWidget : public QWidget
   void load( K3bAudioDoc* );
   void save( K3bAudioDoc* );
 
+ private slots:
+  void slotCopyTitle();
+  void slotCopyPerformer();
+  void slotCopyArranger();
+  void slotCopySongwriter();
+  void slotCopyComposer();
+
  private:
-  QLineEdit* m_editDisc_id;
-  QLineEdit* m_editUpc_ean;
-  QTextEdit* m_editMessage;
-  QLineEdit* m_editPerformer;
-  QLineEdit* m_editArranger;
-  QLineEdit* m_editTitle;
-  QLineEdit* m_editSongwriter;
-  QLineEdit* m_editComposer;
-  QCheckBox* m_checkCdText;
+  K3bAudioDoc* m_doc;
 };
 
 #endif

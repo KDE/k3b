@@ -76,9 +76,10 @@ class K3bAudioTrack
   void setPregap( const K3b::Msf& p );
 
   /**
-   * If the file is a mp3-file, it's mp3-tag is used
+   * @obsolete use setPerformer
    **/
   void setArtist( const QString& a ) { m_cdText.setPerformer(a); }
+  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); }
 
   /**
    * If the file is a mp3-file, it's mp3-tag is used
