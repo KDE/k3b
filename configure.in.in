@@ -21,7 +21,7 @@ AC_TRY_COMPILE([
 AC_MSG_RESULT($linux_scsi)
 
 
-CDPARANOIA_LIBS==""
+CDPARANOIA_LIBS=""
 AC_MSG_CHECKING(for cdparanoia headers)
 cdda_paranoia=no
 AC_TRY_COMPILE([
