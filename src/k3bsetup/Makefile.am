@@ -10,7 +10,7 @@ EXTRA_DIST = main.cpp k3bsetup.cpp k3bsetup.h lo32-app-k3bsetup.png lo16-app-k3b
 KDE_ICON = k3bsetup
 
 apps_DATA = k3bsetup.desktop
-appsdir = $(kde_appsdir)/Applications
+appsdir = $(kde_appsdir)/Multimedia
 
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
