@@ -712,7 +712,7 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
     else
       if( !doc->saveDocument(doc->URL()) )
 	KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
-    doc->setSaved(true);
+//    doc->setSaved(true);
   }
 }
 
