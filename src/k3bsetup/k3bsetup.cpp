@@ -126,14 +126,15 @@ bool K3bSetup::saveConfig()
 
   emit settingWritten( true, i18n("Success") );
 
-  uint groupid;
   if( m_applyDevicePermissions || m_applyExternalBinPermission )
-    groupid = createCdWritingGroup();
+  {
+    uint groupid = createCdWritingGroup();
 
-  if( m_applyDevicePermissions )
-    doApplyDevicePermissions(groupid);
-  if( m_applyExternalBinPermission )
-    doApplyExternalProgramPermissions(groupid);
+    if( m_applyDevicePermissions )
+      doApplyDevicePermissions(groupid);
+    if( m_applyExternalBinPermission )
+      doApplyExternalProgramPermissions(groupid);
+  }
   if( m_createFstabEntries )
     doCreateFstabEntries();
 
@@ -159,7 +160,7 @@ uint K3bSetup::createCdWritingGroup()
   uint groupId;
   if( oldGroup == 0 ) {
 
-    qDebug("(K3bSetup) Could not find group " + m_cdwritingGroup );
+    qDebug("(K3bSetup) Could not find group %s", m_cdwritingGroup.latin1() );
 
     // find new group id
     uint newId = 100;
@@ -171,7 +172,7 @@ uint K3bSetup::createCdWritingGroup()
   }
   else {
 
-    qDebug("(K3bSetup) found group " + m_cdwritingGroup );
+    qDebug("(K3bSetup) found group %s", m_cdwritingGroup.latin1() );
 
     groupId = oldGroup->gr_gid;
   }
@@ -196,7 +197,7 @@ uint K3bSetup::createCdWritingGroup()
     line = oldGroupStream.readLine();
   }
 
-  qDebug("(K3bSetup) copied all groups except " + m_cdwritingGroup );
+  qDebug("(K3bSetup) copied all groups except %s", m_cdwritingGroup.latin1() );
 
   // add cdwriting group
   QStringList members;
@@ -265,7 +266,7 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 	chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
       }
       else {
-	qDebug("(K3bSetup) Could not find generic device: " + dev->genericDevice() );
+	qDebug("(K3bSetup) Could not find generic device: %s", dev->genericDevice().latin1() );
 	emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
       }
     }
@@ -275,7 +276,7 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
 	chmod( QFile::encodeName(dev->ioctlDevice()), S_IRUSR|S_IWUSR|S_IRGRP );
       }
       else {
-	qDebug("(K3bSetup) Could not find ioctl device: " + dev->ioctlDevice() );
+	qDebug("(K3bSetup) Could not find ioctl device: %s", dev->ioctlDevice().latin1() );
 	emit error( i18n("Could not find ioctl device (%1)").arg(dev->ioctlDevice()) );
       }
     }

@@ -121,7 +121,7 @@ void K3bDvdCrop::initPreview( ){
      previewProcess = new KShellProcess(); // = new KShellProcess;
      *previewProcess << "/usr/local/bin/transcode -i ";
      *previewProcess << m_data->getProjectDir() + "/vob";
-     qDebug("Projectdir: " + m_data->getProjectDir()+"/vob");
+     qDebug("Projectdir: %s/vob", m_data->getProjectDir().latin1());
      *previewProcess << " -x vob -V -y ppm -w 1200 -a 0 -L 300000 -c 4-5";
      *previewProcess << "-o " + m_data->getProjectDir() + "/preview";
      connect( previewProcess, SIGNAL(receivedStdout(KProcess*, char*, int)),
@@ -165,7 +165,7 @@ void K3bDvdCrop::slotUpdateFinalSize(){
 
 void K3bDvdCrop::slotParseProcess( KProcess* p, char *data, int len){
     QString tmp = QString::fromLatin1( data, len );
-    qDebug( tmp );
+    qDebug( "%s", tmp.latin1() );
 }
 
 void K3bDvdCrop::slotSpinTop( int v){

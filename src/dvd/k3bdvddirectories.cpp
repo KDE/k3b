@@ -75,7 +75,7 @@ void K3bDvdDirectories::setupGui(){
 }
 
 void K3bDvdDirectories::updateData( K3bDvdCodecData *data ){
-      qDebug("(K3bDvdDirectories) update data:" + m_editVideoPath->text() ); //
+      qDebug("(K3bDvdDirectories) update data: %s", m_editVideoPath->text().latin1() );
       data->setProjectFile( m_editVideoPath->text() );
       data->setAviFile( m_editAviPath->text() );
 }

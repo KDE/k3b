@@ -38,7 +38,7 @@ void K3bDvdCodecData::setProjectFile( const QString& file ){
     m_projectFile = file;
     int index = file.findRev("/");
     m_projectDir = file.left( index );
-    qDebug("ProjectDir: " + m_projectDir );
+    qDebug("ProjectDir: %s", m_projectDir.latin1() );
     loadData();
 }
 
@@ -54,7 +54,7 @@ void K3bDvdCodecData::loadData( ){
 void K3bDvdCodecData::setLength( const QString& l){
     m_length = l;
     m_timeLength = QTime::fromString( l );
-    qDebug( "Time" + m_timeLength.toString() );
+    qDebug( "Time %s", m_timeLength.toString().latin1() );
 }
 void K3bDvdCodecData::setAspectRatio( const QString& a){
     m_aspectRatio = a;

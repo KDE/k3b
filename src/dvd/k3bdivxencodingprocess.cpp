@@ -32,7 +32,7 @@ void K3bDivXEncodingProcess::start(){
      qDebug("(K3bDivXEncodingProcess) Run transcode.");
      m_process = new KShellProcess;
      *m_process << "/usr/local/bin/transcode -i ";
-     qDebug("Projectdir: " + m_data->getProjectDir()+"/vob ");
+     qDebug("Projectdir: %s/vob", m_data->getProjectDir().latin1());
      *m_process << m_data->getProjectDir() + "/vob ";
      *m_process << " -x vob -y xvid -w 1200 -V -a 0 -c 0-1000 -L 450000 ";
      *m_process << " -o " + m_data->getProjectDir() + "/k3btest.avi ";
@@ -65,11 +65,11 @@ void K3bDivXEncodingProcess::cancel( ){
 
 void K3bDivXEncodingProcess::slotParseProcess( KProcess *p, char *buffer, int len){
     QString tmp = QString::fromLatin1( buffer, len );
-    qDebug( tmp );
+    qDebug( "%s", tmp.latin1() );
 }
 
 void K3bDivXEncodingProcess::slotProcessExited( KProcess *p ){
-    qDebug("finsihed");
+    qDebug("finished");
     delete m_process;
     emit finished( true );
 }
