@@ -33,6 +33,17 @@ class K3bProcess : public KProcess
 
   bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
 
+  /** get stdin socket */
+  int stdin() const;
+  /** get stdout socket */
+  int stdout() const;
+
+  /** if set to true one needs to create a socketnotifier on one's own */
+  void setRawStdin(bool b) { m_rawStdin = b; }
+  /** if set to true K3bProcess emits stdoutReady instead of the KProcess signal
+   *  and the data has to read by the user */
+  void setRawStdout(bool b) { m_rawStdout = b; }
+
  public slots:
   void setSplitStdout( bool b ) { m_bSplitStdout = b; }
 
@@ -43,6 +54,14 @@ class K3bProcess : public KProcess
  signals:
   void stderrLine( const QString& line );
   void stdoutLine( const QString& line );
+  /** gets emitted if raw stdout mode has been requested */
+  void stdoutReady(int);
+
+ protected:
+  /**
+   * reimplemeted from KProcess
+   */
+  int commSetupDoneP();
 
  private:
   void splitOutput( char*, int, bool );
@@ -50,6 +69,9 @@ class K3bProcess : public KProcess
   QString m_unfinishedStdoutLine;
   QString m_unfinishedStderrLine;
   bool m_bSplitStdout;
+
+  bool m_rawStdin;
+  bool m_rawStdout;
 };
 
 

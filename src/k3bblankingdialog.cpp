@@ -5,6 +5,7 @@
 #include "k3b.h"
 #include "k3bblankingjob.h"
 #include "k3bwriterselectionwidget.h"
+#include "k3bdiskerasinginfodialog.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -163,7 +164,13 @@ void K3bBlankingDialog::slotUser1()
     break;
   }
 
+  K3bErasingInfoDialog d;
+
+  connect( m_job, SIGNAL(finished(bool)), &d, SLOT(slotFinished(bool)) );
+  connect( &d, SIGNAL(cancelClicked()), m_job, SLOT(cancel()) );
+
   m_job->start();
+  d.exec();
 }
 
 

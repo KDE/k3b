@@ -20,6 +20,9 @@
 #include "k3bdoc.h"
 #include "k3bburnprogressdialog.h"
 #include "k3bjob.h"
+#include "k3btempdirselectionwidget.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3bstdguiitems.h"
 
 #include <qstring.h>
 #include <qpushbutton.h>
@@ -27,6 +30,9 @@
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qvbox.h>
+#include <qcheckbox.h>
+#include <qtabwidget.h>
+#include <qgroupbox.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -40,7 +46,8 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
   : KDialogBase( parent, name, modal, i18n("Write CD"), Ok|User1|User2, User1, false,
                  KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"),
                            i18n("Saves the settings to the project and closes the burn dialog.") ),
-                 KStdGuiItem::cancel() )
+                 KStdGuiItem::cancel() ),
+    m_writerSelectionWidget(0)
 {
   m_doc = doc;
 
@@ -145,6 +152,9 @@ void K3bProjectBurnDialog::slotOk()
   saveSettings();
 
   m_job = m_doc->newBurnJob();
+
+  if( m_writerSelectionWidget )
+    m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
   prepareJob( m_job );
 
   K3bBurnProgressDialog d( k3bMain() );
@@ -160,6 +170,51 @@ void K3bProjectBurnDialog::slotOk()
 
   done( Burn );
 }
+
+
+void K3bProjectBurnDialog::prepareGui()
+{
+  m_tabWidget = new QTabWidget( m_k3bMainWidget );
+  QWidget* w = new QWidget( m_tabWidget );
+  m_tabWidget->addTab( w, i18n("Writing") );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
+  m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( w );
+
+  m_optionGroup = new QGroupBox( 0, Qt::Vertical, i18n("Options"), w );
+  m_optionGroup->layout()->setMargin(0);
+  m_optionGroup->layout()->setSpacing(0);
+  m_optionGroupLayout = new QVBoxLayout( m_optionGroup->layout() );
+  m_optionGroupLayout->setMargin( KDialog::marginHint() );
+  m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
+
+  // add the options
+  m_checkDao = K3bStdGuiItems::daoCheckbox( m_optionGroup );
+  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( m_optionGroup );
+  m_checkBurnproof = K3bStdGuiItems::burnproofCheckbox( m_optionGroup );
+  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( m_optionGroup );
+
+  m_optionGroupLayout->addWidget(m_checkSimulate);
+  m_optionGroupLayout->addWidget(m_checkOnTheFly);
+  m_optionGroupLayout->addWidget(m_checkDao);
+  m_optionGroupLayout->addWidget(m_checkBurnproof);
+
+  // arrange it
+  QGridLayout* grid = new QGridLayout( w );
+  grid->setMargin( KDialog::marginHint() );
+  grid->setSpacing( KDialog::spacingHint() );
+  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+  grid->addWidget( m_optionGroup, 1, 0 );
+  grid->addWidget( m_tempDirSelectionWidget, 1, 1 );
+  grid->setRowStretch( 1, 1 );
+  grid->setColStretch( 1, 1 );
+}
+
+
+void K3bProjectBurnDialog::addPage( QWidget* page, const QString& title )
+{
+  m_tabWidget->addTab( page, title );
+}
+
 
 
 // void K3bProjectBurnDialog::loadDefaults()

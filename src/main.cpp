@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
 			"0.8", description, KAboutData::License_GPL,
-			"(c) 1999 - 2002, Sebastian Trueg", 0, 0, "trueg@k3b.org");
+			"(c) 1999 - 2002, Sebastian Trueg", 0, 0, "trueg@kde.org");
   aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@k3b.org");

@@ -106,9 +106,7 @@ void K3bDataJob::fetchMultiSessionInfo()
 {
   K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
   if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
-    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
-    emit canceled();
-    cancelAll();
+    cancel();
     return;
   }
 
@@ -316,10 +314,7 @@ void K3bDataJob::startWriting()
 	  
     K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
     if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-      emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
-      emit canceled();
-      cancelAll();
-      emit finished(false);
+      cancel();
       return;
     }
   }
@@ -385,7 +380,9 @@ bool K3bDataJob::prepareWriterJob()
   if( writingApp() == K3b::CDRECORD || writingApp() == K3b::DEFAULT ) {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
-    writer->setDao( m_doc->multiSessionMode() == K3bDataDoc::NONE && m_doc->dao() );
+    // cdrecord manpage says that "not all" writers are able to write
+    // multisession disks in dao mode. That means there are writers that can.
+    writer->setDao( m_doc->dao() );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
@@ -395,9 +392,13 @@ bool K3bDataJob::prepareWriterJob()
     if( m_doc->multiSessionMode() == K3bDataDoc::START ||
 	m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
       writer->addArgument("-multi");
-      if( m_doc->onTheFly() )
-	writer->addArgument("-waiti");
     }
+
+    if( m_doc->onTheFly() &&
+	( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) )
+      writer->addArgument("-waiti");
+
 
     if( m_doc->onTheFly() ) {
       writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
@@ -428,7 +429,11 @@ bool K3bDataJob::prepareWriterJob()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      *s << "CD_ROM" << "\n";
+      if( m_doc->multiSessionMode() == K3bDataDoc::START ||
+	  m_doc->multiSessionMode() == K3bDataDoc::CONTINUE )
+	*s << "CD_ROM_XA" << "\n";
+      else
+	*s << "CD_ROM" << "\n";
       *s << "\n";
       *s << "TRACK MODE1" << "\n";
       if( m_doc->onTheFly() )

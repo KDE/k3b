@@ -23,8 +23,12 @@
 
 class K3bDoc;
 class K3bBurnJob;
-class K3bBurnJob;
-
+class K3bWriterSelectionWidget;
+class K3bTempDirSelectionWidget;
+class QGroupBox;
+class QCheckBox;
+class QTabWidget;
+class QVBoxLayout;
 
 
 /**
@@ -75,11 +79,24 @@ class K3bProjectBurnDialog : public KDialogBase
     * The widget to add new stuff. Use instead of mainWidget()
     */
    QWidget* k3bMainWidget() { return m_k3bMainWidget; }
-	
+
+   void prepareGui();
+   void addPage( QWidget*, const QString& title );
+
+   K3bWriterSelectionWidget* m_writerSelectionWidget;
+   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+   QGroupBox* m_optionGroup;
+   QVBoxLayout* m_optionGroupLayout;
+   QCheckBox* m_checkDao;
+   QCheckBox* m_checkOnTheFly;
+   QCheckBox* m_checkBurnproof;
+   QCheckBox* m_checkSimulate;
+
  private:
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
    QWidget* m_k3bMainWidget;
+   QTabWidget* m_tabWidget;
 
    QPushButton* m_buttonLoadDefaults;
    QPushButton* m_buttonSaveUserDefaults;

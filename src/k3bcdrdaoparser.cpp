@@ -113,6 +113,10 @@ void K3bCdrdaoParser::parseCdrdaoError( const QString& line )
   else if( line.contains( "not ready") ) {
     emit infoMessage( i18n("Device not ready, waiting."),K3bJob::PROCESS );
   }
+  else if( line.contains("Drive does not accept any cue sheet") ) {
+    emit infoMessage( i18n("Cue sheet not accepted."), K3bJob::ERROR );
+    emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
+  }
   else if( !line.contains( "remote progress message" ) )
     emit infoMessage( line, K3bJob::ERROR );
 }

@@ -273,7 +273,9 @@ void K3bDirView::slotShowDiskInfo()
 void K3bDirView::slotUnmountDisk()
 {
   if( m_lastDevice ) {
-    KIO::unmount( m_lastDevice->mountPoint() );
+    m_diskInfoDetector->cancel();
+    k3bMain()->endBusy();
+    KIO::unmount( m_lastDevice->mountPoint() );    
   }
 }
 
@@ -282,6 +284,7 @@ void K3bDirView::slotEjectDisk()
 {
   // cancel any previous disk info retrieval
   m_diskInfoDetector->cancel();
+  k3bMain()->endBusy();
 
   if( m_lastDevice ) {
     m_lastDevice->eject();
@@ -290,7 +293,7 @@ void K3bDirView::slotEjectDisk()
 }
 
 
-void K3bDirView::slotUpdateURLCombo( const KURL& url )
+void K3bDirView::slotUpdateURLCombo( const KURL& )
 {
 //   m_urlCombo->setEditText( url.path() );
 }
@@ -307,6 +310,7 @@ void K3bDirView::slotDirActivated( const KURL& url )
 {
   // cancel any previous disk info retrieval
   m_diskInfoDetector->cancel();
+  k3bMain()->endBusy();
 
   m_fileView->setUrl(url, true);
 //   m_urlCombo->setEditText( url.path() );

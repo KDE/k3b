@@ -20,6 +20,7 @@
 #include "k3bblankingjob.h"
 #include "tools/k3bbusywidget.h"
 #include "k3bdiskerasinginfodialog.h"
+#include "k3b.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -97,13 +98,13 @@ void K3bEmptyDiscWaiter::slotTestForEmptyCd()
 	K3bBlankingJob job;
 	job.setDevice( m_device );
 	job.setMode( K3bBlankingJob::Fast );
-	job.setForce( true );
 	connect( &job, SIGNAL(finished(bool)), &d, SLOT(slotFinished(bool)) );
 	connect( &d, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	job.start();
 	d.exec();
 
-	m_device->eject();
+	if( !k3bMain()->eject() )  // the job ejected the cd otherwise
+	  m_device->eject();
       }
       else
 	m_device->eject();

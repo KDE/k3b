@@ -155,13 +155,13 @@ void K3bDeviceManager::printDevices()
 {
   kdDebug() << "\nReader:" << endl;
   for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
-    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " "
+    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->blockDeviceName() << " " << dev->vendor() << " "
 	      << dev->description() << " " << dev->version() << endl << "    "
 	      << dev->mountDevice() << dev->mountPoint() << endl;
   }
   kdDebug() << "\nWriter:" << endl;
   for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
-    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " "
+    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->blockDeviceName() << " " << dev->vendor() << " "
 	 << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl
 	 << "    " << dev->mountDevice() << dev->mountPoint() << endl;
   }
@@ -278,7 +278,7 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
   K3bDevice* dev = m_reader.first();
   while( dev != 0 ) {
     QStringList list;
-    list << ( !dev->genericDevice().isEmpty() ? dev->genericDevice() : dev->ioctlDevice() )
+    list << dev->blockDeviceName()
 	 << QString::number(dev->maxReadSpeed())
        	 << dev->cdrdaoDriver();
 
@@ -292,7 +292,7 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
   dev = m_writer.first();
   while( dev != 0 ) {
     QStringList list;
-    list << dev->genericDevice()
+    list << dev->blockDeviceName()
 	 << QString::number(dev->maxReadSpeed())
 	 << QString::number(dev->maxWriteSpeed())
 	 << dev->cdrdaoDriver();

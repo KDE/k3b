@@ -338,9 +338,11 @@ void K3bCdrdaoWriter::cancel()
     }
 
     // close the socket
-    qsn->setEnabled(false);
-    ::close( cdrdaoComm[0] );
-    ::close( cdrdaoComm[1] );
+    if( qsn ) {
+      qsn->setEnabled(false);
+      ::close( cdrdaoComm[0] );
+      ::close( cdrdaoComm[1] );
+    }
     
     emit canceled();
     emit finished( false );
@@ -388,9 +390,11 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   }
 
   // close the socket
-  qsn->setEnabled(false);
-  ::close( cdrdaoComm[0] );
-  ::close( cdrdaoComm[1] );
+  if( qsn ) {
+    qsn->setEnabled(false);
+    ::close( cdrdaoComm[0] );
+    ::close( cdrdaoComm[1] );
+  }
 }
 
 
