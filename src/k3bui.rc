@@ -1,0 +1,6 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="k3b" version="0.1">
+<MenuBar>
+  <Action name="window_menu"/>
+</MenuBar>
+</kpartgui>

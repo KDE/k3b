@@ -1,0 +1,12 @@
+# KDE Config File  
+[Desktop Entry]
+Type=Application
+Exec=k3b -caption "%c" %i %m  
+Icon=k3b.png
+MiniIcon=k3b.png
+DocPath=k3b/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=K3b
+Name[de]=K3b
