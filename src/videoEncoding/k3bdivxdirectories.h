@@ -25,6 +25,8 @@ class KLineEdit;
 class QToolButton;
 class K3bDivxCodecData;
 class K3bDivXDataGui;
+class KCompletionBox;
+class KDirOperator;
 
 /**
   *@author Sebastian Trueg
@@ -45,8 +47,10 @@ private:
     KLineEdit *m_editAviPath;
     QToolButton *m_buttonAviDir;
     K3bDivxCodecData *m_data;
-
+    KCompletionBox *m_completionBox;
+    KDirOperator *m_ops;
     void setupGui();
+    void init();
 
 private slots:
     void slotAviClicked();
@@ -54,6 +58,7 @@ private slots:
     void slotVideoClicked();
     void slotVideoEdited( const QString& );
     void slotAviEdited( const QString& );
+    void slotCompletion( const QString& );
 };
 
 #endif

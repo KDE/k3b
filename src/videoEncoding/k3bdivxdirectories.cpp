@@ -25,17 +25,20 @@
 
 #include <klineedit.h>
 #include <kcompletion.h>
+#include <kcompletionbox.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kdiroperator.h>
 
 
 K3bDivxDirectories::K3bDivxDirectories( K3bDivxCodecData *data, QWidget *parent, const char *name) : QGroupBox( parent, name ){
     m_data = data;
     setupGui();
+    init();
 }
 
 K3bDivxDirectories::~K3bDivxDirectories(){
@@ -83,7 +86,36 @@ void K3bDivxDirectories::setupGui(){
     mainLayout->addMultiCellWidget( m_buttonAviDir, 5, 5, 2, 2);
     mainLayout->setColStretch( 0, 20 );
 
-    KCompletion *comp = m_editVideoPath->completionObject();
+    //m_ops = new KDirOperator("/home/ft0001", this, "K3bDivxdirectorys::ops");
+    //ops->setOnlyDoubleClickSelectsFiles( true );
+    m_editVideoPath->setHandleSignals( true );
+    //(void) m_editVideoPath->completionBox();
+
+    //m_editVideoPath->setFocus();
+//     locationEdit->setCompletionObject( new KURLCompletion() );
+//     locationEdit->setAutoDeleteCompletionObject( true );
+    //m_editVideoPath->setCompletionObject( m_ops->completionObject(), false );
+
+    //connect( m_editVideoPath, SIGNAL( returnPressed() ),
+    //         this, SLOT( slotOk()));
+    //connect(m_editVideoPath, SIGNAL( activated( const QString&  )),
+    //        this,  SLOT( locationActivated( const QString& ) ));
+    //connect( m_editVideoPath, SIGNAL( completion( const QString& )),
+    //         SLOT( fileCompletion( const QString& )));
+    //connect(m_editVideoPath, SIGNAL( activated( const QString&  )),
+    //        this,  SLOT( slotCompletion( const QString& ) ));
+    connect( m_editVideoPath, SIGNAL( completion( const QString& )),
+             SLOT( slotCompletion( const QString& )));
+
+    //connect( m_editVideoPath, SIGNAL( textRotation(KCompletionBase::KeyBindingType) ),
+    //         m_editVideoPath, SLOT( rotateText(KCompletionBase::KeyBindingType) ));
+
+
+    //m_completionBox = m_editVideoPath->completionBox();
+    (void) m_editVideoPath->completionObject();
+    m_editVideoPath->setCompletionMode( KGlobalSettings::CompletionAuto );
+    //connect(m_editVideoPath,SIGNAL(completion(const QString&)),this,SLOT(slotCompletion(const QString&)));
+
     connect( m_buttonVideoDir, SIGNAL( clicked() ), this, SLOT( slotVideoClicked() ) );
     connect( m_buttonAviDir, SIGNAL( clicked() ), this, SLOT( slotAviClicked() ) );
     connect( m_editVideoPath, SIGNAL( textChanged( const QString& )), this, SLOT( slotVideoEdited( const QString& ) ) );
@@ -92,33 +124,78 @@ void K3bDivxDirectories::setupGui(){
     connect( m_buttonAudioDir, SIGNAL( clicked() ), this, SLOT( slotAudioClicked() ) );
 }
 
+void K3bDivxDirectories::init(){
+    if( m_data->getProjectFile().length() > 1 ){
+        m_editVideoPath->setText( m_data->getProjectFile() );
+    }
+    if( !m_data->getAviFile().isEmpty() ){
+        m_editAviPath->setText( m_data->getAviFile() );
+    }
+}
+
 void K3bDivxDirectories::slotVideoClicked(){
     QString path = KFileDialog::getOpenFileName( m_editVideoPath->text(), "*.xml", this, i18n("Select project file") );
     if( !path.isEmpty() ) {
         m_editVideoPath->setText( path );
-        slotVideoEdited( path );
+        emit dataChanged( );
     }
 }
 void K3bDivxDirectories::slotAviClicked(){
-    QString path = KFileDialog::getSaveFileName( m_editAviPath->text(), "*.avi", this, i18n("Save video as") );
-    if( !path.isEmpty() ) {
-        m_editAviPath->setText( path );
+    QString aviName = KFileDialog::getSaveFileName( m_editAviPath->text(), "*.avi", this, i18n("Save video as") );
+    if( !aviName.isEmpty() ) {
+        if( !aviName.endsWith(".avi") ){
+            aviName += ".avi";
+        }
+        m_editAviPath->setText( aviName );
         m_data->setAviFile( m_editAviPath->text() );
     }
     if( m_data->getProjectDir().length() > 1 ){
         emit dataChanged( );
     }
 }
+void K3bDivxDirectories::slotCompletion( const QString& st ){
+    QString s = st;
+    qDebug("Compl: " + s);
+    QStringList list;
+    QDir testDir(s);
+    if( testDir.exists() ){
+        testDir.setNameFilter("k3bDVDRip.xml");
+        testDir.setMatchAllDirs(true);
+        list = testDir.entryList();
+        list.remove( list.first() );
+        list.remove( list.first() );
+    } else {
+       QString search = s.right( s.length()-s.findRev("/")-1 );
+       s = s.mid( 0, s.findRev("/"));
+       QDir d(s);
+       d.setNameFilter(search +"*;k3bDVDRip.xml");
+       list = d.entryList();
+    }
+    if( !s.endsWith("/"))
+        s = s + "/";
+    if (!list.isEmpty() ){
+        m_editVideoPath->setCompletedText( s + list[0] );
+   }
+}
 
 void K3bDivxDirectories::slotAudioClicked(){
 }
 
 void K3bDivxDirectories::slotVideoEdited( const QString& text){
-    if( QFile::exists( text )){
+    if( text == m_data->getProjectFile() )
+        return;
+    QDir testDir(text);
+    if( testDir.exists() ){
+        testDir.setMatchAllDirs(true);
+    }
+    if( testDir.exists() ){
+        kdDebug() << "(K3bDivxDirectories) Directory exists: " << testDir.path() << endl;
+    } else if( QFile::exists(text) ){
+        kdDebug() << "(K3bDivxDirectories) File exists: " << text << endl;
         m_data->setProjectFile( text );
         if( !m_data->projectLoaded() ){
-            KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: ") + text);
-            m_data->setProjectDir( "" );
+            KMessageBox::error( this, i18n("Error loading project"), i18n("Error while parsing file: %1").arg(text) );
+            m_data->setProjectFile( "" );
             return;
         }
         emit dataChanged( );
