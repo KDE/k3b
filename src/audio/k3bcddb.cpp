@@ -1,0 +1,208 @@
+/***************************************************************************
+                          k3bcddb.cpp  -  description
+                             -------------------
+    begin                : Sun Oct 7 2001
+    copyright            : (C) 2001 by Sebastian Trueg
+    email                : trueg@informatik.uni-freiburg.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include <qstring.h>
+#include <qvaluelist.h>
+#include <qstringlist.h>
+
+#include <klocale.h>
+
+#include "k3bcddb.h"
+#include "cddb.h"
+
+typedef Q_INT16 size16;
+typedef Q_INT32 size32;
+
+/* This is in support for the Mega Hack, if cdparanoia ever is fixed, or we
+ * use another ripping library we can remove this.  */
+#include <linux/cdrom.h>
+#include <sys/ioctl.h>
+
+extern "C" {
+#include <cdda_interface.h>
+#include <cdda_paranoia.h>
+}
+#define MAX_IPC_SIZE (1024*32)
+#define DEFAULT_CDDB_SERVER "localhost:888"
+
+extern "C" {
+    int FixupTOC( cdrom_drive * d, int tracks );
+} int start_of_first_data_as_in_toc;
+int hack_track;
+/* Mega hack.  This function comes from libcdda_interface, and is called by
+ * it.  We need to override it, so we implement it ourself in the hope, that
+ * shared lib semantics make the calls in libcdda_interface to FixupTOC end
+ * up here, instead of it's own copy.  This usually works.
+ * You don't want to know the reason for this.  */
+int FixupTOC( cdrom_drive * d, int tracks )
+{
+    int j;
+    for( j = 0; j < tracks; j++ ) {
+        if( d->disc_toc[j].dwStartSector < 0 )
+            d->disc_toc[j].dwStartSector = 0;
+        if( j < tracks - 1 && d->disc_toc[j].dwStartSector > d->disc_toc[j + 1].dwStartSector )
+            d->disc_toc[j].dwStartSector = 0;
+    }
+    long last = d->disc_toc[0].dwStartSector;
+    for( j = 1; j < tracks; j++ ) {
+        if( d->disc_toc[j].dwStartSector < last )
+            d->disc_toc[j].dwStartSector = last;
+    }
+    start_of_first_data_as_in_toc = -1;
+    hack_track = -1;
+    if( d->ioctl_fd != -1 ) {
+        struct cdrom_multisession ms_str;
+        ms_str.addr_format = CDROM_LBA;
+        if( ioctl( d->ioctl_fd, CDROMMULTISESSION, &ms_str ) == -1 )
+            return -1;
+        if( ms_str.addr.lba > 100 ) {
+            for( j = tracks - 1; j >= 0; j-- )
+                if( j > 0 && !IS_AUDIO( d, j ) && IS_AUDIO( d, j - 1 ) ) {
+                    if( d->disc_toc[j].dwStartSector > ms_str.addr.lba - 11400 ) {
+                        /* The next two code lines are the purpose of duplicating this
+                         * function, all others are an exact copy of paranoias FixupTOC().
+                         * The gory details: CD-Extra consist of N audio-tracks in the
+                         * first session and one data-track in the next session.  This
+                         * means, the first sector of the data track is not right behind
+                         * the last sector of the last audio track, so all length
+                         * calculation for that last audio track would be wrong.  For this
+                         * the start sector of the data track is adjusted (we don't need
+                         * the real start sector, as we don't rip that track anyway), so
+                         * that the last audio track end in the first session.  All well
+                         * and good so far.  BUT: The CDDB disc-id is based on the real
+                         * TOC entries so this adjustment would result in a wrong Disc-ID.
+                         * We can only solve this conflict, when we save the old
+                         * (toc-based) start sector of the data track.  Of course the
+                         * correct solution would be, to only adjust the _length_ of the
+                         * last audio track, not the start of the next track, but the
+                         * internal structures of cdparanoia are as they are, so the
+                         * length is only implicitely given.  Bloody sh*.  */
+                        start_of_first_data_as_in_toc = d->disc_toc[j].dwStartSector;
+                        hack_track = j + 1;
+                        d->disc_toc[j].dwStartSector = ms_str.addr.lba - 11400;
+                    }
+                    break;
+                }
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/* libcdda returns for cdda_disc_lastsector() the last sector of the last
+ * _audio_ track.  How broken.  For CDDB Disc-ID we need the real last sector
+ * to calculate the disc length.  */
+long my_last_sector( cdrom_drive * drive )
+{
+    return cdda_track_lastsector( drive, drive->tracks );
+}
+
+
+K3bCddb::K3bCddb( ){
+}
+
+K3bCddb::K3bCddb( bool useCddb, QString server, unsigned int port )
+{
+    m_useCddb = useCddb;
+    if (useCddb){
+      m_cddb = new CDDB();
+		m_cddbServer = server;
+      m_cddbPort = port;
+    }
+}
+
+K3bCddb::~K3bCddb(  )
+{
+	if (m_useCddb)
+		delete m_cddb;
+}
+
+void K3bCddb::setUseCddb(bool useCddb){
+    m_useCddb = useCddb;
+    if (useCddb){
+      m_cddb = new CDDB();
+    }
+}
+
+unsigned int K3bCddb::get_discid( struct cdrom_drive *drive )
+{
+    unsigned int id = 0;
+    for( int i = 1; i <= drive->tracks; i++ ) {
+        unsigned int n = cdda_track_firstsector( drive, i ) + 150;
+        if( i == hack_track )
+            n = start_of_first_data_as_in_toc + 150;
+        n /= 75;
+        while( n > 0 ) {
+            id += n % 10;
+            n /= 10;
+        }
+    }
+    unsigned int l = ( my_last_sector( drive ) );
+    l -= cdda_disc_firstsector( drive );
+    l /= 75;
+    id = ( ( id % 255 ) << 24 ) | ( l << 8 ) | drive->tracks;
+    return id;
+}
+
+void K3bCddb::updateCD( struct cdrom_drive *drive )
+{
+    discid = get_discid( drive );
+    tracks = cdda_tracks( drive );
+    cd_album = i18n( "No Title" );
+    titles.clear(  );
+    QValueList < int >qvl;
+
+    for( int i = 0; i < tracks; i++ ) {
+        is_audio[i] = cdda_track_audiop( drive, i + 1 );
+        if( i + 1 != hack_track )
+            qvl.append( cdda_track_firstsector( drive, i + 1 ) + 150 );
+        else
+            qvl.append( start_of_first_data_as_in_toc + 150 );
+    }
+    qvl.append( cdda_disc_firstsector( drive ) );
+    qvl.append( my_last_sector( drive ) );
+
+    if( m_useCddb ) {
+        m_cddb->set_server( m_cddbServer.latin1(  ), m_cddbPort );
+
+        if( m_cddb->queryCD( qvl ) ) {
+            based_on_cddb = true;
+            cd_album = m_cddb->title(  );
+            cd_artist = m_cddb->artist(  );
+            for( int i = 0; i < tracks; i++ ) {
+                titles.append( m_cddb->track( i ) );
+            }
+            return;
+        }
+    }
+
+    based_on_cddb = false;
+    cd_album = "";
+    cd_artist = "";
+    for( int i = 0; i < tracks; i++ ) {
+        QString num;
+        int ti = i + 1;
+        QString s;
+        num.sprintf( "Track %02d", ti );
+        if( cdda_track_audiop( drive, ti ) )
+            s = s_track.arg( num );
+        else
+            s.sprintf( "data%02d", ti );
+        titles.append( s );
+    }
+}
+
