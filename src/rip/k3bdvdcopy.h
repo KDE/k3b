@@ -1,19 +1,19 @@
-/***************************************************************************
-                          k3bdvdcopy.h  -  description
-                             -------------------
-    begin                : Sun Mar 3 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #ifndef K3BDVDCOPY_H
 #define K3BDVDCOPY_H
@@ -27,7 +27,6 @@
 class KProcess;
 class K3bDvdContent;
 class K3bDvdCopy;
-class QWidget;
 class K3bDvdRippingProcess;
 
 /**
@@ -37,7 +36,7 @@ class K3bDvdRippingProcess;
 class K3bDvdCopy : public K3bJob {
     Q_OBJECT
 public:
-    K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QWidget *parent );
+    K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QObject *parent );
     ~K3bDvdCopy();
 
     void setDvdTitle( const QValueList<K3bDvdContent> &titles );
@@ -75,7 +74,7 @@ private:
     QString m_dirvob;
     QString m_dirtmp;
     QString m_angle;
-    QWidget *m_parent;
+    //    QWidget *m_parent;
     K3bDvdRippingProcess *m_ripProcess;
     double m_ripSize;
     QTime m_timeEstimated;

@@ -80,7 +80,7 @@ void K3bDivXEncodingProcess::slotStartAudioProcessing( ) {
     const K3bExternalBin *tcdecodeBin = k3bcore->externalBinManager() ->binObject( "tcdecode" );
     const K3bExternalBin *tcscanBin = k3bcore->externalBinManager() ->binObject( "tcscan" );
     // parse audio for   gain to normalize
-    *m_process << "nice" << "-10";
+    //    *m_process << "nice" << "-10";
     *m_process << tccatBin->path << " -i" << m_data->getProjectDir() + "/vob" << "-t" << "vob" << "-P" << m_data->getTitle();
     *m_process << "|" << tcextractBin->path << m_data->getParaAudioLanguage() << "-x" << "ac3" << "-t" << "vob";
     *m_process << "|" << tcdecodeBin->path << "-x" << "ac3";
@@ -117,7 +117,7 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     if( m_process ) delete m_process;
     m_process = new KShellProcess;
 
-    *m_process << "nice" << "-10";
+    //    *m_process << "nice" << "-10";
     *m_process << transcodeBin->path; //"/usr/local/bin/transcode -i ";
     *m_process << " -i" << m_data->getProjectDir() + "/vob ";
     // -x vob

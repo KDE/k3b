@@ -179,6 +179,9 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 {
   m_processExited = true;
 
+  if( m_device )
+    m_device->close();
+
   if( m_canceled )
     return;
 
@@ -450,6 +453,8 @@ void K3bIsoImager::cancel()
     if( !m_processExited ) {
       disconnect(m_process);
       m_process->kill();
+      if( m_device )
+	m_device->close();
     }
 
   if( !m_processExited || m_data.count() > 0 ) {
@@ -471,8 +476,20 @@ bool K3bIsoImager::addMkisofsParameters()
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
     *m_process << "-C" << m_multiSessionInfo;
-    if( m_device )
-      *m_process << "-M" << m_device->busTargetLun();
+    if( m_device ) {
+
+      //
+      // To make sure that mkisofs does not need root permissions we open the device
+      // and pass the open device to mkisofs
+      //
+
+      int fd = m_device->open();
+      if( fd == -1 ) {
+	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
+	return false;
+      }
+      *m_process << "-M" << QString("/dev/fd/%1").arg(fd); //m_device->busTargetLun();
+    }
   }
 
   // add the arguments

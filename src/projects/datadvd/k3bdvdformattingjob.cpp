@@ -98,7 +98,10 @@ QString K3bDvdFormattingJob::jobDescription() const
 
 QString K3bDvdFormattingJob::jobDetails() const
 {
-  return QString::null; // ??
+  if( d->quick )
+    return i18n("Quick Format");
+  else
+    return QString::null;
 }
 
 
@@ -188,26 +191,19 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 
   emit debuggingOutput( "dvd+rw-format", line );
 
-  // parsing for the -gui mode (to come...)
+  // parsing for the -gui mode (since dvd+rw-format 4.6)
   int pos = line.find( "blanking" );
   if( pos < 0 )
     pos = line.find( "formatting" );
   if( pos >= 0 ) {
-    int endPos = line.find( QRegExp("[^\\d\\.]"), pos );
-    bool ok;
-    int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
-    if( ok ) {
-      d->lastProgressValue = progress;
-      emit percent( progress );
-    }
-    else {
-      kdDebug() << "(K3bDvdFormattingJob) parsing error: '" << line.mid( pos, endPos - pos ) << "'" << endl;
-    }
+    pos = line.find( QRegExp( "\\d" ), pos );
   }
-
   // parsing for \b\b... stuff 
   else if( !line.startsWith("*") ) {
-    int pos = line.find( QRegExp("\\d") );
+    pos = line.find( QRegExp( "\\d" ) );
+  }
+
+  if( pos >= 0 ) {
     int endPos = line.find( QRegExp("[^\\d\\.]"), pos ) - 1;
     bool ok;
     int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
@@ -293,7 +289,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
     //            emit warning if formatting is full and stuff
     //
     // in overwrite mode: emit info that progress might stop before 100% since formatting will continue
-    //                    in the background once the media gets rewritten
+    //                    in the background once the media gets rewritten (only DVD+RW?)
     //
 
     // emit info about what kind of media has been found
@@ -333,7 +329,8 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	blank = false;
       }
       else {
-	emit infoMessage( i18n("No need to format %1 media."). arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)), INFO );
+	emit infoMessage( i18n("No need to format %1 media more than once."). arg(K3bCdDevice::mediaTypeString(K3bCdDevice::MEDIA_DVD_PLUS_RW)), INFO );
+	emit infoMessage( i18n("It may simply be overwritten."), INFO );
 
 	if( d->force ) {
 	  emit infoMessage( i18n("Forcing formatting anyway."), INFO );
@@ -345,6 +342,9 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	  format = false;
 	}
       }
+
+      if( format )
+	emit newSubTask( i18n("Formatting DVD+RW") );
     }
 
 
@@ -363,13 +363,13 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	
 
 	//
-	// Is it possible to have an empty DVD-RW in restricted overwrite mode???? It seems so....
+	// Is it possible to have an empty DVD-RW in restricted overwrite mode???? I don't think so.
 	//
 	
 	if( dh->ngDiskInfo().empty() &&
 	    (d->mode == K3b::WRITING_MODE_AUTO ||
 	     (d->mode == K3b::WRITING_MODE_INCR_SEQ && 
-	      dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_R_SEQ) ||
+	      dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ) ||
 	     (d->mode == K3b::WRITING_MODE_RES_OVWR && 
 	      dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR) )
 	    ) {
@@ -380,7 +380,8 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	    format = false;
 	}
 // 	else if( dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_OVWR ) {
-// 	  emit infoMessage( i18n("No need to format %1 media."). arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
+// 	  emit infoMessage( i18n("No need to format %1 media more than once."). arg(K3bCdDevice::mediaTypeString(dh->ngDiskInfo().currentProfile())), INFO );
+// emit infoMessage( i18n("It may simply be overwritten."), INFO );
 // 	  if( d->force )
 // 	    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
 // 	  else
@@ -391,16 +392,16 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 	if( format ) {
 	  if( d->mode == K3b::WRITING_MODE_AUTO ) {
 	    // just format in the same mode as the media is currently formatted
-	    blank = (dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_R_SEQ);
+	    blank = (dh->ngDiskInfo().currentProfile() == K3bCdDevice::MEDIA_DVD_RW_SEQ);
 	  }
 	  else {
-	    blank = (d->mode == K3bCdDevice::MEDIA_DVD_R_SEQ);
+	    blank = (d->mode == K3b::WRITING_MODE_INCR_SEQ);
 	  }
 	  
-	  emit infoMessage( i18n("Formatting"
-				 " DVD-RW in %1 mode.").arg(K3bCdDevice::mediaTypeString( blank ? 
-											  K3bCdDevice::MEDIA_DVD_R_SEQ :
-											  K3bCdDevice::MEDIA_DVD_RW_OVWR )), INFO );
+	  emit newSubTask( i18n("Formatting"
+				" DVD-RW in %1 mode.").arg(K3bCdDevice::mediaTypeString( blank ? 
+											 K3bCdDevice::MEDIA_DVD_RW_SEQ :
+											 K3bCdDevice::MEDIA_DVD_RW_OVWR )) );
 	}
       }
       else {
@@ -416,6 +417,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
       delete d->process;
       d->process = new K3bProcess();
       d->process->setRunPrivileged(true);
+      //      d->process->setSuppressEmptyLines(false);
       connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
       connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessFinished(KProcess*)) );
       
@@ -432,6 +434,9 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
       
       
       *d->process << d->dvdFormatBin->path;
+
+      if( d->dvdFormatBin->version >= K3bVersion( 4, 6 ) )
+	*d->process << "-gui";
 
       QString p;
       if( blank )

@@ -318,7 +318,7 @@ void K3bCdCopyDialog::slotStartClicked()
   job->setForce(m_checkForce->isChecked());
 
   // create a progresswidget
-  K3bBurnProgressDialog d( this );
+  K3bBurnProgressDialog d( kapp->mainWidget() );
 
   hide();
 
@@ -342,7 +342,7 @@ void K3bCdCopyDialog::slotOnlyCreateImageChecked( bool c )
 
 void K3bCdCopyDialog::slotLoadUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "CD Copy" );
 
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );

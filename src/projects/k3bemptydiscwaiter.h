@@ -95,6 +95,7 @@ class K3bEmptyDiscWaiter : public KDialogBase
 
  private:
   void finishWaiting( int );
+  void prepareErasingDialog();
 
   class Private;
   Private* d;

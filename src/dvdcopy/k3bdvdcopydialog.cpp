@@ -221,10 +221,10 @@ void K3bDvdCopyDialog::slotStartClicked()
 
   K3bJobProgressDialog* dlg = 0;
   if( m_checkOnlyCreateImage->isChecked() ) {
-    dlg = new K3bJobProgressDialog( this );
+    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
   }
   else {
-    dlg = new K3bBurnProgressDialog( this );
+    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
   }
    
   hide();

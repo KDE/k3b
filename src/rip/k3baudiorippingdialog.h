@@ -77,7 +77,6 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   
  private slots:
   void slotStartClicked();
-  void showPatternDialog();
 
   void slotLoadK3bDefaults();
   void slotLoadUserDefaults();

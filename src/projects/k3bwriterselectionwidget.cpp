@@ -187,7 +187,7 @@ void K3bWriterSelectionWidget::init()
 					"which results in corrupted recordings. This option forces the "
 					"writer to switch to 1x speed to be on the save side. When using "
 					"no-name media it is recommended to use this option.</p>"
-					"<p>1x refers to 1380 KB/s.</p>"
+					"<p>1x refers to 1385 KB/s.</p>"
 					"<p><b>Caution:</b> Be aware that the speed selection only makes "
 					"sense for DVD-R(W) writers since DVD+R(W) writers always choose "
 					"the speed automagically.") );
@@ -197,7 +197,7 @@ void K3bWriterSelectionWidget::init()
 					 "<p>In most cases there will only be one writer available which "
 					 "does not leave much choice.") );
     QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
-					"<p>1x speed means 150 KB/s for CD-Writers and 1380 KB/s for DVD-Writers."
+					"<p>1x speed means 150 KB/s for CD-Writers and 1385 KB/s for DVD-Writers."
 					"<p><b>Caution:</b> Make sure your system is able to send the data "
 					"fast enough to prevent buffer underruns.") );
   }

@@ -191,7 +191,7 @@ void K3bDvdRipperWidget::rip(){
   m_ripJob->setSettings( m_vobSize, m_comboAngle->currentText() );
   
   if( !m_ripDialog ) {
-    m_ripDialog = new K3bJobProgressDialog( this, "Ripping", false );
+    m_ripDialog = new K3bJobProgressDialog( kapp->mainWidget(), "Ripping", false );
     K3bDvdExtraRipStatus *ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
     connect( m_ripJob, SIGNAL( dataRate( float )), ripStatus, SLOT( slotDataRate( float )) );
     connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), 

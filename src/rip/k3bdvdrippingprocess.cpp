@@ -30,6 +30,7 @@
 #include <qstringlist.h>
 #include <qmessagebox.h>
 #include <qregexp.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <kprocess.h>
@@ -37,9 +38,10 @@
 #include <kio/job.h>
 #include <kmessagebox.h>
 
-K3bDvdRippingProcess::K3bDvdRippingProcess( QWidget *parent) : QObject() {
+K3bDvdRippingProcess::K3bDvdRippingProcess( QObject *parent ) 
+  : K3bJob(parent) {
     //m_processAudio = processAudio;
-    m_parent = parent;
+  //    m_parent = parent;
 }
 
 K3bDvdRippingProcess::~K3bDvdRippingProcess() {
@@ -133,7 +135,7 @@ void K3bDvdRippingProcess::startRippingProcess( ) {
         m_outputFile.close();
     }
     // successful start
-    m_parent->close();
+    //    m_parent->close();
 }
 
 void K3bDvdRippingProcess::setDvdTitle( const QValueList<K3bDvdContent> &titles ) {
@@ -160,7 +162,8 @@ void K3bDvdRippingProcess::slotExited( KProcess* ) {
     } else {
         kdDebug() << "(K3bDvdRippingProcess) Copy IFO files for audio gain processing." << endl;
         //postProcessingDvd();
-        saveConfig();        
+        saveConfig();
+	emit infoMessage( i18n("Successfully ripped all video titles to %1.").arg(m_dirvob), STATUS );        
         emit finished( true );
         //  postProcessingFinished();
     }
@@ -180,7 +183,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
     if( m_titleBytes > 0 ) {
         unsigned int pc = (unsigned int) ((( m_summaryBytes / m_titleBytes) *100)+0.5);
         if ( pc > m_percent ) {
-            emit progressPercent( pc );
+            emit percent( pc );
             m_percent = pc;
             unsigned long b = (unsigned long) ( m_summaryBytes - m_dataRateBytes );
             m_dataRateBytes = m_summaryBytes;
@@ -200,7 +203,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
             kdDebug() << "(K3bDvdRippingProcess) Cancel due to vob already exists." << endl;
             p->kill();
             //m_audioProcess->kill();
-            emit interrupted();
+            emit canceled();
             return;
         }
         p->resume(); // restart process
@@ -241,6 +244,7 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
             kdDebug() << "(K3bDvdRippingProcess) Is mounted device:  <" << m_device << "> on <" << mount << ">." << endl;
             if( mount.isEmpty() ) {
                 kdDebug() << "(K3bDvdRippingProcess) Try to mount <" << m_mountPoint << ">." << endl;
+		emit newSubTask( i18n("Mounting media") );
                 connect( KIO::mount( true, "autofs", "", m_mountPoint, true ),
                          SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd(KIO::Job*) ) );
             } else {
@@ -249,7 +253,7 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
                 slotPreProcessingDvd();
             }
         } else {
-            KMessageBox::error(m_parent, i18n("K3b could not mount <%1>. Please run K3bSetup.").arg(dev->mountDevice()),
+            KMessageBox::error(qApp->activeWindow(), i18n("K3b could not mount <%1>. Please run K3bSetup.").arg(dev->mountDevice()),
                                i18n("I/O Error") );
             emit finished( false );
         }
@@ -257,15 +261,15 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
 }
 
 void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
-    if( resultJob->error() > 0 ) {
-            KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive."),
-                               i18n("I/O Error") );
-            kdDebug() << "(K3bDvdRippingProcess) Mount DVD-device failed." << endl;
-            m_preProcessingFailed = true;
-            emit finished( false );
-    } else {
-        slotPreProcessingDvd();
-    }
+  if( resultJob->error() > 0 ) {
+    emit infoMessage( i18n("Mounting failed: %1.").arg(resultJob->errorString()), ERROR );
+    
+    m_preProcessingFailed = true;
+    emit finished( false );
+  } else {
+    emit infoMessage( i18n("Successfully mounted media. Starting DVD Ripping."), INFO );
+    slotPreProcessingDvd();
+  }
 }
 
 void K3bDvdRippingProcess::slotPreProcessingDvd() {
@@ -278,7 +282,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     video_ts.setPath( m_mountPoint + "/video_ts");
     if( !video_ts.exists() && !m_udfMount){
         m_preProcessingFailed = true;
-        KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
+        KMessageBox::error(qApp->activeWindow(), i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
                            i18n("I/O Error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Mount DVD-device failed." << endl;
         emit finished( false );
@@ -296,7 +300,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     }
     if( !result ) {
         m_preProcessingFailed = true;
-        KMessageBox::error(m_parent, i18n("K3b could not copy the ifo-files from %1.").arg( m_mountPoint + "/" + video),
+        KMessageBox::error(qApp->activeWindow(), i18n("K3b could not copy the ifo-files from %1.").arg( m_mountPoint + "/" + video),
                            i18n("I/O Error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Copy IFO files failed." << endl;
         emit finished( false );
@@ -381,7 +385,7 @@ void K3bDvdRippingProcess::saveConfig() {
     QFile f( m_dirname + "/k3bDVDRip.xml" );
     if( f.exists() ) {
         QString dontAskAgainName = "Overwrite k3bDVDRip.xml";
-        int button = KMessageBox::questionYesNo(m_parent, i18n("Log file already exists. Overwrite?"), i18n("Ripping error"),
+        int button = KMessageBox::questionYesNo(qApp->activeWindow(), i18n("Log file already exists. Overwrite?"), i18n("Ripping error"),
         KStdGuiItem::yes(), KStdGuiItem::no(), dontAskAgainName) ;
         if( button != KMessageBox::Yes ) {
             kdDebug() << "(K3bDvdRippingProcess) Couldn't save ripping datas." << endl;

@@ -94,7 +94,8 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
   QWhatsThis::add( m_checkQuickFormat, i18n("<p>If this option is checked K3b will tell the writer "
 					    "to perform a quick format."
 					    "<p>Formatting a DVD-RW completely can take a very long "
-					    "time. Blabla FIXME!" ) );
+					    "time and some DVD writers perform a full format even if "
+					    "quick format is enabled." ) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
 
   slotWriterChanged();
@@ -142,7 +143,7 @@ void K3bDvdFormattingDialog::slotLoadUserDefaults()
   c->setGroup( "DVD Formatting" );
 
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
-  m_checkQuickFormat->setChecked( c->readBoolEntry( "quick format", false ) );
+  m_checkQuickFormat->setChecked( c->readBoolEntry( "quick format", true ) );
   m_writerSelectionWidget->loadConfig( c );
   m_writingModeWidget->loadConfig( c );
 } 

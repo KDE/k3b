@@ -121,7 +121,7 @@ int K3bAbstractWriter::createAverageWriteSpeedInfoMessage()
   double secs = (double)m_firstWriteSpeedCalcTime.secsTo( m_lastWriteSpeedCalcTime );
   double speed = (double)m_lastWrittenBytes / ( secs > 0 ? secs : 1 );
   return (int)speed;
-  //  emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/(dvd ? 1380.0 : 150.0), 2)), INFO );
+  //  emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/(dvd ? 1385.0 : 150.0), 2)), INFO );
 }
 
 #include "k3babstractwriter.moc"

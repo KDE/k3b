@@ -97,7 +97,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   delete d->process;
   d->process = new K3bProcess();
   d->process->setRunPrivileged(true);
+  d->process->setSplitStdout(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
+  connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
   connect( d->process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
@@ -242,33 +244,57 @@ void K3bGrowisofsWriter::setImageToWrite( const QString& filename )
 
 void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 {
+  // this takes way too long. We should do it manually
+  // /dev/sr0: pre-formatting blank DVD+RW...
+
   emit debuggingOutput( d->growisofsBin->name(), line );
+
+  int pos = 0;
 
   if( line.contains( "remaining" ) ) {
     // parse progress
     int pos = line.find( "/" );
     int done = line.left( pos ).toInt();
-    int size = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toInt();
-    int p = 100 * done / size;
-    if( p > d->lastProgress ) {
-      emit percent( p );
-      d->lastProgress = p;
+    bool ok = true;
+    int size = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toInt(&ok);
+    if( ok ) {
+      int p = 100 * done / size;
+      if( p > d->lastProgress ) {
+	emit percent( p );
+	d->lastProgress = p;
+      }
+      if( done/1024/1024 > d->lastProgressed ) {
+	d->lastProgressed = done/1024/1024;
+	emit processedSize( d->lastProgressed, size/1024/1024  );
+      }
+
+      // try parsing write speed (since growisofs 5.11)
+      pos = line.find( '@' );
+      if( pos != -1 ) {
+	pos += 1;
+	double speed = line.mid( pos, line.find( 'x', pos ) - pos ).toDouble(&ok);
+	if( ok )
+	  emit writeSpeed( (int)(speed*1385.0), 1385 );
+	else
+	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '" 
+		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
+      }
+      else {
+	// calculate writing speed
+	emit writeSpeed( createEstimatedWriteSpeed( done, d->lastSpeedCalculationBytes == 0 ), 1385 );
+	//     int writtenBytes = done - d->lastSpeedCalculationBytes;
+	//     int secs = d->lastSpeedCalculationTime.msecsTo( QTime::currentTime() )/1000;
+	//     int bytesPerSec = writtenBytes/secs;
+	//     d->lastSpeedCalculationTime = QTime::currentTime();
+	d->lastSpeedCalculationBytes = done;
+	//     if( bytesPerSec != d->lastWritingSpeed ) {
+	//       d->lastWritingSpeed = bytesPerSec;
+	//       emit writeSpeed( bytesPerSec );
+	//     }
+      }
     }
-    if( done/1024/1024 > d->lastProgressed ) {
-      d->lastProgressed = done/1024/1024;
-      emit processedSize( d->lastProgressed, size/1024/1024  );
-    }
-    // calculate writing speed
-    emit writeSpeed( createEstimatedWriteSpeed( done, d->lastSpeedCalculationBytes == 0 ), 1380 );
-//     int writtenBytes = done - d->lastSpeedCalculationBytes;
-//     int secs = d->lastSpeedCalculationTime.msecsTo( QTime::currentTime() )/1000;
-//     int bytesPerSec = writtenBytes/secs;
-//     d->lastSpeedCalculationTime = QTime::currentTime();
-    d->lastSpeedCalculationBytes = done;
-//     if( bytesPerSec != d->lastWritingSpeed ) {
-//       d->lastWritingSpeed = bytesPerSec;
-//       emit writeSpeed( bytesPerSec );
-//     }
+    else
+      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '" << line.mid( pos+1, line.find( "(", pos ) - pos - 1 ) << "'" << endl;
   }
   else if( line.contains( "flushing cache" ) ) {
     emit newSubTask( i18n("Flushing Cache")  );
@@ -286,6 +312,19 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     emit newSubTask( i18n("Writing Lead-out") );
     emit infoMessage( i18n("Writing the lead-out may take a while."), INFO );
   }
+  else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
+    // parse write speed
+    // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
+
+    pos += 24;
+    int endPos = line.find( "x", pos );
+    bool ok = true;
+    double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
+    if( ok )
+      emit infoMessage( i18n("Writing speed: %1 kb/s (%2x)").arg((int)(speed*1385.0)).arg(KGlobal::locale()->formatNumber(speed)), INFO );
+    else
+      kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
+  }
   else {
     kdDebug() << "(growisofs) " << line << endl;
   }
@@ -297,8 +336,8 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
 
-      int s = createAverageWriteSpeedInfoMessage();
-      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1380.0), 2), INFO );
+//       int s = createAverageWriteSpeedInfoMessage();
+//       emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
 
       if( simulate() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );

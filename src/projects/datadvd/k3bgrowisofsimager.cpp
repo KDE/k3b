@@ -216,10 +216,12 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
 
   emit debuggingOutput( "growisofs", line );
 
+  int pos = 0;
+
   if( line.contains( "done, estimate" ) ) {
     int p = K3bIsoImager::parseProgress( line );
     if( p != -1 ) {
-      createEstimatedWriteSpeed( p*size()/100 );
+      emit writeSpeed( createEstimatedWriteSpeed( p*size()/100 ), 1385 );
       emit percent( p );
     }
   }
@@ -245,6 +247,19 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
   else if( line.contains( "copying volume descriptor" ) ) {
     emit infoMessage( i18n("Modifying Iso9660 volume descriptor"), PROCESS );
   }
+  else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
+    // parse write speed
+    // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
+
+    pos += 24;
+    int endPos = line.find( "x", pos );
+    bool ok = true;
+    double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
+    if( ok )
+      emit infoMessage( i18n("Writing speed: %1 kb/s (%2x)").arg((int)(speed*1385.0)).arg(KGlobal::locale()->formatNumber(speed)), INFO );
+    else
+      kdDebug() << "(K3bGrowisofsWriter) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
+  }
   else {
     kdDebug() << "(growisofs) " << line << endl;
   }
@@ -268,7 +283,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 
       double secs = (double)d->firstWriteSpeedCalcTime.secsTo( d->lastWriteSpeedCalcTime );
       double speed = (double)d->lastWrittenSpeedCalcBytes / ( secs > 0 ? secs : 1 );
-      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/1380.0, 2)), INFO );
+      emit infoMessage( i18n("Average overall write speed: %1 kb/s (%2x)").arg((int)speed).arg(KGlobal::locale()->formatNumber(speed/1385.0, 2)), INFO );
 
       if( m_doc->dummy() )
 	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::STATUS );
@@ -364,7 +379,7 @@ void K3bGrowisofsImager::createEstimatedWriteSpeed( int madeBlocks )
       d->lastWriteSpeedCalcTime = QTime::currentTime();
       d->lastWrittenSpeedCalcBytes = madeBlocks;
       // kb/s
-      emit writeSpeed( (int)((double)writtenBlocks * 2.0 * 1000.0 / (double)elapsed), 1380 );
+      emit writeSpeed( (int)((double)writtenBlocks * 2.0 * 1000.0 / (double)elapsed), 1385 );
     }
   }
 }

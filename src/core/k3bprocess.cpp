@@ -82,6 +82,7 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   QString buffer;
   for( int i = 0; i < len; i++ ) {
     if( data[i] == '\b' ) {
+      kdDebug() << "(K3bProcess) !!!!!!!!!!! BACKSPACE !!!!!!!!!!" << endl;
       while( data[i] == '\b' )  // we replace multible backspaces with a single line feed
 	i++;
       buffer += '\n';
@@ -95,6 +96,11 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   }
 
   QStringList lines = QStringList::split( '\n', buffer, !m_suppressEmptyLines );
+
+  // in case we suppress empty lines we need to handle the following seperately
+  // to make sure we join unfinished lines correctly
+  if( m_suppressEmptyLines && buffer[0] == '\n' )
+    lines.prepend( QString::null );
 
   QString* unfinishedLine = ( stdout ? &m_unfinishedStdoutLine : &m_unfinishedStderrLine );
 

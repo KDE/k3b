@@ -81,8 +81,8 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   slotWriterChanged();
   slotLoadUserDefaults();
 
-  kapp->config()->setGroup("General Options");
-  m_editImagePath->setURL( kapp->config()->readPathEntry( "last written image" ) );
+  k3bcore->config()->setGroup("General Options");
+  m_editImagePath->setURL( k3bcore->config()->readPathEntry( "last written image" ) );
   updateImageSize( m_editImagePath->url() );
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()),
@@ -275,8 +275,8 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   m_md5Job->cancel();
 
   // save the path
-  kapp->config()->setGroup("General Options");
-  kapp->config()->writePathEntry( "last written image", m_editImagePath->url() );
+  k3bcore->config()->setGroup("General Options");
+  k3bcore->config()->writePathEntry( "last written image", m_editImagePath->url() );
 
   // create the job
   if( m_job == 0 )
@@ -326,7 +326,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     m_lastCheckedFile = path;
 
     // do not show the size here since path could be a cue file
-    long imageSize = info.size();
+    unsigned long imageSize = info.size();
 
 
     // ------------------------------------------------
@@ -472,7 +472,7 @@ void K3bIsoImageWritingDialog::slotMd5JobFinished( bool success )
 
 void K3bIsoImageWritingDialog::slotLoadUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "Iso9660 image writing" );
 
   m_writingModeWidget->loadConfig( c );
@@ -486,7 +486,7 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
 
 void K3bIsoImageWritingDialog::slotSaveUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "Iso9660 image writing" );
 
   m_writingModeWidget->saveConfig( c ),

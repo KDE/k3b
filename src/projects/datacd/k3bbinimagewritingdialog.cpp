@@ -108,8 +108,8 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
 
    slotLoadUserDefaults();
 
-   kapp->config()->setGroup("General Options");
-   m_editTocPath->setURL( kapp->config()->readPathEntry( "last written bin/cue image", "" ) );
+   k3bcore->config()->setGroup("General Options");
+   m_editTocPath->setURL( k3bcore->config()->readPathEntry( "last written bin/cue image", "" ) );
 
    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged( int )), this, SLOT(slotWritingAppChanged( int )) );
 
@@ -231,8 +231,8 @@ void K3bBinImageWritingDialog::slotStartClicked()
   if (!m_editTocPath->url().isEmpty()) {
 
     // save the path
-    kapp->config()->setGroup("General Options");
-    kapp->config()->writePathEntry( "last written bin/cue image", m_editTocPath->url() );
+    k3bcore->config()->setGroup("General Options");
+    k3bcore->config()->writePathEntry( "last written bin/cue image", m_editTocPath->url() );
 
     K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
 
@@ -268,7 +268,7 @@ void K3bBinImageWritingDialog::slotWritingAppChanged( int app )
 
 void K3bBinImageWritingDialog::slotLoadUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "CueBin image writing" );
 
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
@@ -283,7 +283,7 @@ void K3bBinImageWritingDialog::slotLoadUserDefaults()
 
 void K3bBinImageWritingDialog::slotSaveUserDefaults()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "CueBin image writing" );
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );

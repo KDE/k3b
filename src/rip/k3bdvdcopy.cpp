@@ -28,16 +28,16 @@
 #include <kprocess.h>
 #include <klocale.h>
 
-K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QWidget *parent )
-  : K3bJob() {
+K3bDvdCopy::K3bDvdCopy(const QString& device, const QString& directory, const QString& vob, const QString& tmp, const QValueList<K3bDvdContent> &titles, QObject *parent )
+  : K3bJob(parent) {
     m_device = device;
     m_directory = directory;
     m_dirvob = vob;
     m_dirtmp = tmp;
     m_ripTitles = titles;
-    m_parent = parent;
+    //    m_parent = parent;
     m_successfulStarted = true;
-    m_ripProcess = new K3bDvdRippingProcess( m_parent );
+    m_ripProcess = new K3bDvdRippingProcess( this );
 }
 
 K3bDvdCopy::~K3bDvdCopy(){
@@ -53,15 +53,17 @@ void K3bDvdCopy::start(){
     m_ripProcess->setRipSize( m_ripSize );
     m_ripProcess->setAngle( m_angle );
     //m_ripProcess->setJob( m_ripJob );
-    connect( m_ripProcess, SIGNAL( interrupted() ), m_parent, SLOT( slotRipJobDeleted() ) );
+    //    connect( m_ripProcess, SIGNAL( canceled() ), m_parent, SLOT( slotRipJobDeleted() ) );
+    connect( m_ripProcess, SIGNAL( infoMessage(const QString&, int) ), this, SIGNAL( infoMessage(const QString&, int) ) );
+    connect( m_ripProcess, SIGNAL( newSubTask(const QString&) ), this, SIGNAL( newSubTask(const QString&) ) );
     connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
-    connect( m_ripProcess, SIGNAL( progressPercent( unsigned int ) ), this, SLOT( slotPercent( unsigned int ) ) );
+    connect( m_ripProcess, SIGNAL( percent( unsigned int ) ), this, SLOT( slotPercent( unsigned int ) ) );
     connect( m_ripProcess, SIGNAL( rippedBytesPerPercent( unsigned long ) ), this, SLOT( slotDataRate( unsigned long ) ) );
 
     m_ripProcess->start();
     if( m_successfulStarted ) {
         emit started();
-        emit newTask( i18n("Copy DVD.")  );
+        emit newTask( i18n("Ripping Video DVD")  );
         kdDebug() << "(K3bDvdCopy) Starting rip." << endl;
     } else {
         kdDebug() << "(K3bDvdCopy) Start ripping failed." << endl;

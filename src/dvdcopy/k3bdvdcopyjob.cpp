@@ -121,6 +121,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 					  "a normal writable DVD media which have a capacity of approximately "
 					  "4.3 Gigabytes. Do you really want to continue?").arg(KIO::convertSize( dh->ngDiskInfo().capacity().mode1Bytes() ) ),
 				     i18n("Source DVD too large") ) == KMessageBox::No ) {
+	emit canceled();
 	emit finished(false);
 	d->running = false;
 	return;
@@ -273,8 +274,10 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
     }
     else if( !m_onTheFly ) {
       prepareWriter();
-      if( waitForDvd() )
+      if( waitForDvd() ) {
+	emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
 	d->writerJob->start();
+      }
       else {
 	removeImageFiles();
 	emit finished(false);

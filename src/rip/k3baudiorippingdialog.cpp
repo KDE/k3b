@@ -22,7 +22,6 @@
 #include "songdb/k3bsong.h"
 #include "songdb/k3bsongmanager.h"
 #include <k3bcore.h>
-#include <k3b.h>
 #include <k3bglobals.h>
 #include <device/k3btrack.h>
 #include <k3bstdguiitems.h>
@@ -326,7 +325,7 @@ void K3bAudioRippingDialog::slotStartClicked()
 
   K3bThreadJob job( thread, this );
 
-  K3bJobProgressDialog ripDialog( this, "Ripping" );
+  K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
 
   hide();
   ripDialog.startJob(&job);
@@ -337,17 +336,9 @@ void K3bAudioRippingDialog::slotStartClicked()
 }
 
 
-void K3bAudioRippingDialog::showPatternDialog()
-{
-  k3bMain()->showOptionDialog( 4 );
-  refresh();
-}
-
-
-
 void K3bAudioRippingDialog::refresh()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
   m_viewTracks->clear();

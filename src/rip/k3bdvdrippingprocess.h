@@ -1,25 +1,24 @@
-/***************************************************************************
-                          k3bdvdrippingprocess.h  -  description
-                             -------------------
-    begin                : Sun Mar 3 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+/* 
+ *
+ * $Id$
+ * Copyright (C) 1998-2003 Thomas Froescher <tfroescher@k3b.org>
+ *           (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #ifndef K3BDVDRIPPINGPROCESS_H
 #define K3BDVDRIPPINGPROCESS_H
 
-#include <qthread.h>
-#include <qobject.h>
+#include <k3bjob.h>
 #include <qfile.h>
 #include <qvaluelist.h>
 #include <kio/job.h>
@@ -29,16 +28,15 @@ class KShellProcess;
 class K3bDvdContent;
 class K3bDvdCopy;
 class K3bDvdAudioGain;
-class QWidget;
 class K3bExternalBin;
- /**
-  *@author Sebastian Trueg
-  */
 
-class K3bDvdRippingProcess : public QObject {
+ /**
+  *@author Thomas Froescher
+  */
+class K3bDvdRippingProcess : public K3bJob {
     Q_OBJECT
 public:
-    K3bDvdRippingProcess( QWidget *parent );
+    K3bDvdRippingProcess( QObject *parent );
     ~K3bDvdRippingProcess();
     void setDvdTitle( const QValueList<K3bDvdContent>& titles );
     void setDirectories( const QString& f, const QString& v, const QString& t ){ m_dirname = f; m_dirvob=v; m_dirtmp=t; };
@@ -52,9 +50,6 @@ public:
     bool isInitFailed(){ return m_preProcessingFailed; }
 
 signals:
-    void interrupted();
-    void finished( bool );
-    void progressPercent( unsigned int );
     void rippedBytesPerPercent( unsigned long );
 
 private slots:
@@ -70,7 +65,7 @@ private slots:
     void slotIfoRename( KIO::Job *job);
 
 private:
-    QWidget *m_parent;
+    //    QWidget *m_parent;
     QFile m_outputFile;
     QDataStream *m_stream;
     QString m_dirname;

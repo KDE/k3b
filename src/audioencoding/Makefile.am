@@ -1,6 +1,2 @@
+SUBDIRS = $(AUDIO_ENCODER_TO_COMPILE) 
 
-if include_OGG
-ENCOGGDIR = ogg
-endif
-
-SUBDIRS =  $(ENCOGGDIR)

@@ -38,6 +38,7 @@
 #include <kguiitem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 K3bDivxView::K3bDivxView( QWidget* parent, const char *name)
   : K3bInteractionDialog( parent, name, i18n("Encoding Video") ),
@@ -157,7 +158,7 @@ void K3bDivxView::slotStartClicked()
   if( !m_divxJob )
     m_divxJob = new K3bDivXEncodingProcess( m_codingData, this );
 
-  K3bJobProgressDialog d( this, "Encoding", true );
+  K3bJobProgressDialog d( kapp->mainWidget(), "Encoding", true );
 
   hide();
 
