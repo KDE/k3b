@@ -47,6 +47,7 @@
 #include <kedittoolbar.h>
 #include <ksystemtray.h>
 #include <kaboutdata.h>
+#include <knotifyclient.h>
 
 #include <stdlib.h>
 
@@ -861,6 +862,13 @@ void K3bMainWindow::slotNewMixedDoc()
 
 void K3bMainWindow::slotNewVcdDoc()
 {
+
+  if ( !k3bMain() ->externalBinManager() ->foundBin( "vcdxbuild" ) ) {
+      kdDebug() << "(K3bMainWindow) could not find vcdxbuild executable" << endl;
+      KNotifyClient::event( "NotInstalled", i18n("Could not find VcdImager executable.\nTo use this features you must install VcdImager >= 0.7.12.\nYou can find this on your distribution disks or download it from http://www.vcdimager.org" )); 
+      return;
+  }
+
   slotStatusMsg(i18n("Creating new Video Project."));
 
   K3bVcdDoc* doc = new K3bVcdDoc( this );
