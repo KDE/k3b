@@ -227,12 +227,13 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotBlankCdrw();
   void slotWriteIsoImage();
+  // encoding dialog for transcode encoding utility
+  void slotDivxEncoding();
   void slotCdCopy();
   void slotK3bSetup();
 
   void slotNewAudioDoc();
   void slotNewDataDoc();
-  void slotNewDvdDoc();
 
   void slotProjectAddFiles();
 
@@ -278,7 +279,6 @@ class K3bMainWindow : public KDockMainWindow
   KActionMenu* actionFileNewMenu;
   KAction* actionFileNewAudio;
   KAction* actionFileNewData;
-  KAction* actionFileNewDvd;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;
@@ -290,6 +290,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionSettingsK3bSetup;
   KAction* actionFileExport;
   KAction* actionToolsBlankCdrw;
+  KAction* actionToolsDivxEncoding;
   KAction* actionToolsWriteIsoImage;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvdview.h  -  description
+                          k3bdvdinfoextend.h  -  description
                              -------------------
-    begin                : Sun Mar 31 2002
+    begin                : Thu Apr 4 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,37 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDVIEW_H
-#define K3BDVDVIEW_H
+#ifndef K3BDVDINFOEXTEND_H
+#define K3BDVDINFOEXTEND_H
 
-#include <kdialogbase.h>
+#include <qwidget.h>
+#include <k3bdvdinfo.h>
 
-class K3bDvdDoc;
-class K3bDvdDirectories;
-class K3bDvdAVSet;
-class K3bDvdAVExtend;
-class K3bDvdCodecData;
-class K3bDvdBaseTab;
-class K3bDvdSizeTab;
+class QLabel;
+
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdView : public KDialogBase  {
-     Q_OBJECT
-public:
-    K3bDvdView( QWidget* parent=0, const char *name=0 );
-    ~K3bDvdView();
-private slots:
-    void slotUser1();
-    void slotUser2();
+class K3bDvdInfoExtend : public K3bDvdInfo  {
+   Q_OBJECT
+public: 
+    K3bDvdInfoExtend(QWidget *parent=0, const char *name=0);
+    ~K3bDvdInfoExtend();
 private:
-    K3bDvdCodecData *m_codingData;
-    K3bDvdDoc* m_doc;
-    K3bDvdBaseTab *m_baseTab;
-    K3bDvdSizeTab *m_sizeTab;
+    QLabel *m_quality;
 
     void setupGui();
+
 };
 
 #endif

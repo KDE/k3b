@@ -249,8 +249,8 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
     int audioTracks = 0, dataTracks = 0;
 
     for( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
-      QString& str = *it;
 
+      QString& str = *it;
       if( str.startsWith("track:") ) {
 	// cdrecord produces the following outout:
 	// <tracknumber> lba: <startSector> (<...>) <startTime> adr: 1 control: <trackType> mode: <trackMode>
@@ -382,11 +382,13 @@ void K3bDiskInfoDetector::testForDvd()
     // check if it is a dvd we can display
 
     if( !m_tcWrapper ) {
+      qDebug("(K3bDiskInfoDetector) testForDvd");
       m_tcWrapper = new K3bTcWrapper( this );
       connect( m_tcWrapper, SIGNAL(successfulDvdCheck(bool)), this, SLOT(slotIsDvd(bool)) );
     }
 
-    m_tcWrapper->checkDvd( m_device );
+    m_tcWrapper->isDvdInsert( m_device );
+
   }
   else {
     // we are finished

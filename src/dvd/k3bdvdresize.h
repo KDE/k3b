@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvdview.h  -  description
+                          k3bdvdresize.h  -  description
                              -------------------
-    begin                : Sun Mar 31 2002
+    begin                : Sat Apr 6 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,35 +15,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDVIEW_H
-#define K3BDVDVIEW_H
+#ifndef K3BDVDRESIZE_H
+#define K3BDVDRESIZE_H
 
-#include <kdialogbase.h>
+#include <qwidget.h>
+#include <qgroupbox.h>
 
-class K3bDvdDoc;
-class K3bDvdDirectories;
-class K3bDvdAVSet;
-class K3bDvdAVExtend;
-class K3bDvdCodecData;
-class K3bDvdBaseTab;
-class K3bDvdSizeTab;
+class QSlider;
+class QLabel;
+class KComboBox;
+
 /**
   *@author Sebastian Trueg
   */
 
-class K3bDvdView : public KDialogBase  {
-     Q_OBJECT
-public:
-    K3bDvdView( QWidget* parent=0, const char *name=0 );
-    ~K3bDvdView();
+class K3bDvdResize : public QGroupBox  {
+   Q_OBJECT
+public: 
+    K3bDvdResize(QWidget *parent=0, const char *name=0);
+    ~K3bDvdResize();
 private slots:
-    void slotUser1();
-    void slotUser2();
+
 private:
-    K3bDvdCodecData *m_codingData;
-    K3bDvdDoc* m_doc;
-    K3bDvdBaseTab *m_baseTab;
-    K3bDvdSizeTab *m_sizeTab;
+    QSlider *m_sliderResize;
+    KComboBox *m_comboHeight;
+    QLabel *m_labelAspectRatio;
+    QLabel *m_labelAspectError;
+    QLabel *m_labelWidth;
 
     void setupGui();
 };

@@ -39,7 +39,7 @@ K3bDvdBaseTab::~K3bDvdBaseTab(){
 void K3bDvdBaseTab::setupGui(){
     QGridLayout *mainLayout = new QGridLayout( this );
     mainLayout->setSpacing( KDialog::spacingHint() );
-    mainLayout->setMargin( KDialog::marginHint() );
+    //mainLayout->setMargin( KDialog::marginHint() );
     m_directories = new K3bDvdDirectories( this );
     m_avsettings = new K3bDvdAVSet( this );
     m_avextended = new K3bDvdAVExtend( this );
@@ -51,8 +51,8 @@ void K3bDvdBaseTab::setupGui(){
     mainLayout->addMultiCellWidget( m_avsettings, 1, 1, 0, 0 );
     mainLayout->addMultiCellWidget( m_avextended, 1, 1, 1, 1 );
     mainLayout->addMultiCellWidget( m_info, 0, 0, 1, 1 );
-    mainLayout->addItem( spacer, 2, 0);
-    mainLayout->addItem( spacer2, 2, 1);
+    //mainLayout->addItem( spacer, 2, 0);
+    //mainLayout->addItem( spacer2, 2, 1);
     mainLayout->setRowStretch( 2, 20 );
 }
 

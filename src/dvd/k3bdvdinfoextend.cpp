@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bdvdview.h  -  description
+                          k3bdvdinfoextend.cpp  -  description
                              -------------------
-    begin                : Sun Mar 31 2002
+    begin                : Thu Apr 4 2002
     copyright            : (C) 2002 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,37 +15,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BDVDVIEW_H
-#define K3BDVDVIEW_H
+#include "k3bdvdinfoextend.h"
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qsizepolicy.h>
 
-#include <kdialogbase.h>
+#include <klocale.h>
 
-class K3bDvdDoc;
-class K3bDvdDirectories;
-class K3bDvdAVSet;
-class K3bDvdAVExtend;
-class K3bDvdCodecData;
-class K3bDvdBaseTab;
-class K3bDvdSizeTab;
-/**
-  *@author Sebastian Trueg
-  */
+K3bDvdInfoExtend::K3bDvdInfoExtend(QWidget *parent, const char *name ) : K3bDvdInfo(parent,name) {
+    setupGui();
+}
 
-class K3bDvdView : public KDialogBase  {
-     Q_OBJECT
-public:
-    K3bDvdView( QWidget* parent=0, const char *name=0 );
-    ~K3bDvdView();
-private slots:
-    void slotUser1();
-    void slotUser2();
-private:
-    K3bDvdCodecData *m_codingData;
-    K3bDvdDoc* m_doc;
-    K3bDvdBaseTab *m_baseTab;
-    K3bDvdSizeTab *m_sizeTab;
+K3bDvdInfoExtend::~K3bDvdInfoExtend(){
+}
 
-    void setupGui();
-};
+void K3bDvdInfoExtend::setupGui(){
+    QLabel *quality = new QLabel( i18n("Quality:"), this );
+    m_quality = new QLabel( "", this );
 
-#endif
+   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+    m_mainLayout->addMultiCellWidget( quality, 4, 4, 0, 0);
+    m_mainLayout->addMultiCellWidget( m_quality, 4, 4, 1, 1);
+    m_mainLayout->addItem ( spacer, 5, 0 );
+    m_mainLayout->setRowStretch( 5, 20 );
+}
+
+#include "k3bdvdinfoextend.moc"

@@ -37,9 +37,9 @@ K3bDvdInfo::~K3bDvdInfo(){
 void K3bDvdInfo::setupGui(){
     setColumnLayout(0, Qt::Vertical );
     setTitle( i18n( "DVD Information" ) );
-    QGridLayout *mainLayout = new QGridLayout( layout() );
-    mainLayout->setSpacing( KDialog::spacingHint() );
-    mainLayout->setMargin( KDialog::marginHint() );
+    m_mainLayout = new QGridLayout( layout() );
+    m_mainLayout->setSpacing( KDialog::spacingHint() );
+    m_mainLayout->setMargin( KDialog::marginHint() );
 
     QLabel *length = new QLabel( i18n("Play length:"), this );
     QLabel *frames = new QLabel( i18n("Frames:"), this );
@@ -53,15 +53,15 @@ void K3bDvdInfo::setupGui(){
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-    mainLayout->addMultiCellWidget( length, 0, 0, 0, 0);
-    mainLayout->addMultiCellWidget( m_length, 0, 0, 1, 1);
-    mainLayout->addMultiCellWidget( frames, 1, 1, 0, 0);
-    mainLayout->addMultiCellWidget( m_frames, 1, 1, 1, 1);
-    mainLayout->addMultiCellWidget( size, 2, 2, 0, 0);
-    mainLayout->addMultiCellWidget( m_size, 2, 2, 1, 1);
-    mainLayout->addMultiCellWidget( aspect, 3, 3, 0, 0);
-    mainLayout->addMultiCellWidget( m_aspect, 3, 3, 1, 1);
-    mainLayout->addItem( spacer, 0, 2);
+    m_mainLayout->addMultiCellWidget( length, 0, 0, 0, 0);
+    m_mainLayout->addMultiCellWidget( m_length, 0, 0, 1, 1);
+    m_mainLayout->addMultiCellWidget( frames, 1, 1, 0, 0);
+    m_mainLayout->addMultiCellWidget( m_frames, 1, 1, 1, 1);
+    m_mainLayout->addMultiCellWidget( size, 2, 2, 0, 0);
+    m_mainLayout->addMultiCellWidget( m_size, 2, 2, 1, 1);
+    m_mainLayout->addMultiCellWidget( aspect, 3, 3, 0, 0);
+    m_mainLayout->addMultiCellWidget( m_aspect, 3, 3, 1, 1);
+    m_mainLayout->addItem( spacer, 0, 2);
 
 }
 

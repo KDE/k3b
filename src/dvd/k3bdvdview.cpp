@@ -23,14 +23,22 @@
 
 #include <qlayout.h>
 #include <qsizepolicy.h>
+#include <qgrid.h>
 
 #include <kdialog.h>
 #include <klocale.h>
 #include <ktabctl.h>
+#include <kdialogbase.h>
+#include <kstdguiitem.h>
+#include <kguiitem.h>
 
-K3bDvdView::K3bDvdView( K3bDvdDoc* pDoc, QWidget* parent, const char *name)
-    : K3bView( pDoc, parent, name ) {
-  m_doc = pDoc;
+K3bDvdView::K3bDvdView( QWidget* parent, const char *name)
+    : KDialogBase( KDialogBase::Tabbed, i18n("Encoding Video"), User1|User2,
+		 User1, 0, 0, true, false, KGuiItem( i18n("Encode"), "encode", i18n("Start encoding") ), KStdGuiItem::close() ){
+
+           //KDialogBase::Close|KDialogBase::Apply, KDialogBase::Apply, parent, name ) {
+
+  setButtonBoxOrientation( Qt::Vertical );
   setupGui();
 }
 
@@ -38,24 +46,33 @@ K3bDvdView::~K3bDvdView(){
 }
 
 void K3bDvdView::setupGui(){
+    setMinimumWidth( 500 );
+    QGrid *gridBasic = addGridPage(0, Horizontal, i18n("Basic Audio/Video settings") );
+    QGridLayout *basicLayout = new QGridLayout( gridBasic );
+    basicLayout->setSpacing( KDialog::spacingHint() );
+    basicLayout->setMargin( KDialog::marginHint() );
+    QGrid *gridSize = addGridPage(1, Horizontal, i18n("Advanced Audio/Video settings") );
+    QGridLayout *sizeLayout = new QGridLayout( gridSize );
+    sizeLayout->setSpacing( KDialog::spacingHint() );
+    sizeLayout->setMargin( KDialog::marginHint() );
+
     m_codingData = new K3bDvdCodecData();
-    QGridLayout *mainLayout = new QGridLayout( this );
-    mainLayout->setSpacing( KDialog::spacingHint() );
-    mainLayout->setMargin( KDialog::marginHint() );
 
-    KTabCtl *mainTabPool = new KTabCtl( this );
-    m_baseTab = new K3bDvdBaseTab( m_codingData, mainTabPool );
-    m_sizeTab = new K3bDvdSizeTab( m_codingData, mainTabPool );
-    mainTabPool->addTab( m_baseTab, i18n("Codec settings") );
-    mainTabPool->addTab( m_sizeTab, i18n("Re/Size settings") );
-    mainTabPool->show();
+    m_baseTab = new K3bDvdBaseTab( m_codingData, gridBasic );
+    m_sizeTab = new K3bDvdSizeTab( m_codingData, gridSize );
+    //mainTabPool->addTab( m_baseTab, i18n("Codec settings") );
+    //mainTabPool->addTab( m_sizeTab, i18n("Re/Size settings") );
+    //mainTabPool->show();
 
-    mainLayout->addWidget( mainTabPool, 0,0 );
-
+    basicLayout->addWidget( m_baseTab, 0,0 );
+    sizeLayout->addWidget( m_sizeTab, 0,0 );
 }
 
-K3bProjectBurnDialog* K3bDvdView::burnDialog(){
-      return 0;
+void K3bDvdView::slotUser1(){
+}
+
+void K3bDvdView::slotUser2(){
+    slotClose();
 }
 
 #include "k3bdvdview.moc"

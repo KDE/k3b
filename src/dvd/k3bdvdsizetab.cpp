@@ -18,6 +18,8 @@
 #include "k3bdvdsizetab.h"
 #include "k3bdvdcodecdata.h"
 #include "k3bdvdcrop.h"
+#include "k3bdvdresize.h"
+#include "k3bdvdinfoextend.h"
 
 #include <qlayout.h>
 #include <qsizepolicy.h>
@@ -37,9 +39,17 @@ K3bDvdSizeTab::~K3bDvdSizeTab(){
 void K3bDvdSizeTab::setupGui(){
     QGridLayout *mainLayout = new QGridLayout( this );
     mainLayout->setSpacing( KDialog::spacingHint() );
-    mainLayout->setMargin( KDialog::marginHint() );
+    //mainLayout->setMargin( KDialog::marginHint() );
     m_crop = new K3bDvdCrop( this );
-    mainLayout->addMultiCellWidget( m_crop, 0, 0, 0, 0 );
+    m_info = new K3bDvdInfoExtend( this );
+    m_resize = new K3bDvdResize( this );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+    mainLayout->addMultiCellWidget( m_info, 0, 1, 0, 0 );
+    mainLayout->addMultiCellWidget( m_crop, 0, 1, 1, 1 );
+    mainLayout->addMultiCellWidget( m_resize, 2, 2, 0, 1 );
+    mainLayout->setColStretch( 1, 20 );
+    mainLayout->addItem( spacer, 3, 0);
 
 }
 

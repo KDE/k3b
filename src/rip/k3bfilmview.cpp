@@ -200,8 +200,21 @@ void K3bFilmView::reload()
     emit notSupportedDisc( m_device->devicename() );
     return;
   }
+  KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WDestructiveClose );
+  infoDialog->setCaption( i18n("Please wait...") );
+  QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
+  infoLayout->setSpacing( KDialog::spacingHint() );
+  infoLayout->setMargin( KDialog::marginHint() );
+  infoLayout->setAutoAdd( true );
+  QLabel* picLabel = new QLabel( infoDialog );
+  picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
+  QLabel* infoLabel = new QLabel( i18n("K3b is fetching information about title "), infoDialog );
+  m_fetchingInfoLabel = new QLabel( "<1>", infoDialog );
+  connect( m_tcWrapper, SIGNAL(tcprobeTitleParsed( int )), this, SLOT( slotUpdateInfoDialog( int )) );
+  connect( m_tcWrapper, SIGNAL( successfulDvdCheck( bool )), infoDialog, SLOT( close() ));
+  infoDialog->show();
 
-  m_tcWrapper->checkDvd( m_device );
+  m_tcWrapper->checkDvdContent( m_device );
 }
 
 
@@ -278,7 +291,9 @@ void K3bFilmView::slotNotSupportedDisc(){
     emit notSupportedDisc( m_device->devicename() );
 }
 
-
+void K3bFilmView::slotUpdateInfoDialog( int i ){
+   m_fetchingInfoLabel->setText( "<"+QString::number( i )+">" );
+}
 
 void K3bFilmView::slotChapterButtonAll(){
     setCheckBoxes( m_chapterView, TRUE );

@@ -41,7 +41,8 @@ class K3bTcWrapper : public QObject
   /* Returns true if transcode tools installed
    */
   static bool supportDvd();
-  void checkDvd( K3bDevice* );
+  void checkDvdContent( K3bDevice* );
+  void isDvdInsert( K3bDevice* device );
   QValueList<K3bDvdContent> getDvdTitles() const;
 
  private slots:
@@ -52,6 +53,7 @@ class K3bTcWrapper : public QObject
  signals:
   void notSupportedDisc();
   void successfulDvdCheck( bool );
+  void tcprobeTitleParsed( int );
 
  private:
   QString m_errorBuffer;
@@ -59,10 +61,13 @@ class K3bTcWrapper : public QObject
   typedef QValueList<K3bDvdContent> DvdTitle;
   DvdTitle m_dvdTitles;
   bool m_firstProbeDone;
+  // check only one title in runTcProbe, for testing if dvd is inserted
+  bool m_runTcProbeCheckOnly;
   int m_currentTitle;
   int m_allTitle;
   int m_allAngle;
   K3bDevice*  m_device;
+
 
 
   K3bDvdContent* parseTcprobe();

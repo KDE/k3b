@@ -22,6 +22,8 @@
 
 class K3bDvdCodecData;
 class K3bDvdCrop;
+class K3bDvdInfoExtend;
+class K3bDvdResize;
 
 /**
   *@author Sebastian Trueg
@@ -35,6 +37,8 @@ public:
 private:
     K3bDvdCodecData *m_datas;
     K3bDvdCrop *m_crop;
+    K3bDvdInfoExtend *m_info;
+    K3bDvdResize *m_resize;
 
     void setupGui();
 };

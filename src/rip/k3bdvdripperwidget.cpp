@@ -282,13 +282,16 @@ void K3bDvdRipperWidget::checkSize(  ){
 }
 
 void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
-    // must be the first line, ignore other
+    QString tmp = QString::fromLatin1( text, len );
+    // must be the first line, ignore other. NO, not for encrypted DVDs
     if( !m_detectTitleSizeDone ){
-        m_detectTitleSizeDone = true;
-        m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
+        if( tmp.contains("blocks") ){
+            m_detectTitleSizeDone = true;
+            m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
+            qDebug("(K3bDvdRipperWidget) Titlesize to rip: " + QString::number(m_titleSize) );
+            p->kill();
+        }
     }
-    qDebug("(K3bDvdRipperWidget) Titlesize to rip: " + QString::number(m_titleSize) );
-    p->kill();
 }
 
 #include "k3bdvdripperwidget.moc"

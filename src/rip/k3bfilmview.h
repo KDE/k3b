@@ -54,6 +54,7 @@ class K3bFilmView : public K3bCdContentsView
   KListView *m_audioView;
   QLabel *m_input, *m_mode, *m_res, *m_aspect, *m_time;
   QLabel *m_video, *m_audio, *m_frames, *m_framerate;
+  QLabel* m_fetchingInfoLabel;
   typedef QValueList<K3bDvdContent> DvdTitle;
   DvdTitle m_dvdTitles;
   void setupGui();
@@ -75,6 +76,8 @@ class K3bFilmView : public K3bCdContentsView
   void slotChapterButtonAll();
   void slotChapterButtonNone();
   void slotRip();
+  void slotUpdateInfoDialog( int i);
+
   //void slotReload();
 };
 

@@ -30,6 +30,7 @@
 K3bTcWrapper::K3bTcWrapper( QObject* parent )
   : QObject( parent )
 {
+    m_runTcProbeCheckOnly = false;
 }
 
 K3bTcWrapper::~K3bTcWrapper(){
@@ -39,7 +40,12 @@ bool K3bTcWrapper::supportDvd(){
     return k3bMain()->externalBinManager()->foundBin("tcprobe");
 }
 
-void K3bTcWrapper::checkDvd( K3bDevice* device ) {
+void K3bTcWrapper::isDvdInsert( K3bDevice* device ) {
+    m_runTcProbeCheckOnly = true;
+    checkDvdContent( device );
+}
+
+void K3bTcWrapper::checkDvdContent( K3bDevice* device ) {
     m_firstProbeDone = false;
     m_currentTitle = 1;
     m_device = device;
@@ -54,6 +60,7 @@ void K3bTcWrapper::runTcprobe()
 
   K3bExternalBin *bin = k3bMain()->externalBinManager()->binObject("tcprobe");
   KShellProcess *p = new KShellProcess();
+  emit tcprobeTitleParsed( m_currentTitle );
 
   *p << bin->path << "-i" <<  m_device->ioctlDevice() << "-T" << QString::number(m_currentTitle);
 
@@ -86,8 +93,14 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         // check dvd
         QStringList::Iterator str = errorLines.begin();
         if( !(*str).contains("tcprobe") && !(*str).contains("DVD image/device") ) {
-	  qDebug("(K3bTcWrapper) no readable dvd.");
+            qDebug("(K3bTcWrapper) no readable dvd.");
             emit successfulDvdCheck( false );
+            return;
+        }
+        if ( m_runTcProbeCheckOnly ){
+            qDebug("(K3bTcWrapper) DVD check, is DVD.");
+            m_runTcProbeCheckOnly = false;
+            emit successfulDvdCheck( true );
             return;
         }
         // chekc
@@ -145,6 +158,10 @@ K3bDvdContent* K3bTcWrapper::parseTcprobe(){
             if( dvdreaderIndex > 0 ){
                 // audio channels
                 title->getAudioList()->append( tmp );
+            } else if ( (*str).contains( "title set") ) {
+                int index = (*str).find( "title set" );
+                QString tmp = (*str).mid( index+10).stripWhiteSpace();
+                title->setTitleSet( tmp.toInt() );
             } else {
                 // input mode
                 QStringList mode = QStringList::split( " ", tmp );

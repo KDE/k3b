@@ -22,6 +22,7 @@
 #include <qobject.h>
 #include <qfile.h>
 #include <qvaluelist.h>
+#include <kio/job.h>
 
 class KProcess;
 class KShellProcess;
@@ -59,6 +60,8 @@ private slots:
     void slotParseOutput( KProcess *p, char *text, int len);
     void slotExited( KProcess* );
     void slotAudioProcessFinished();
+    void slotPreProcessingDvd();
+    void slotJobDebug( KIO::Job *job );
 private:
     QWidget *m_parent;
     QFile m_outputFile;
@@ -83,15 +86,25 @@ private:
     double m_summaryBytes;
     double m_dataRateBytes;
     QString m_ripMode;
+    QString m_baseFilename;
+    // dvd mount directory
+    QString m_mountPoint;
     bool m_processAudio;
     bool m_delAudioProcess;
     bool m_interrupted;
+    bool m_dvdOrgFilenameDetected;
+    // if dvd is already mounted this will be set to true during preProcessingDVD
+    bool m_dvdAlreadyMounted;
+
     K3bDvdAudioGain *m_audioProcess;
     //K3bExternalBin *m_tccatBin;
 
     void checkRippingMode();
     void startRippingProcess();
-    QString prepareFilename();
+    void preProcessingDvd();
+    void postProcessingDvd();
+    void postProcessingFinished();
+    QString getFilename();
     float getAudioGain();
     void saveConfig();
 };

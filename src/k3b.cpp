@@ -71,7 +71,7 @@
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
-#include "dvd/k3bdvddoc.h"
+#include "dvd/k3bdvdview.h"
 
 
 K3bMainWindow* k3bMain()
@@ -144,7 +144,7 @@ void K3bMainWindow::initActions()
 
   actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), 
 			  actionCollection(), "file_burn");
-  actionFileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()), 
+  actionFileExport = new KAction( i18n("E&xport..."), "revert", 0, this, SLOT(slotFileExport()),
 			    actionCollection(), "file_export" );
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
@@ -152,12 +152,9 @@ void K3bMainWindow::initActions()
 			     actionCollection(), "file_new_audio");
   actionFileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
 			    actionCollection(), "file_new_data");
-  actionFileNewDvd = new KAction(i18n("New D&VD project"),"tar", 0, this, SLOT(slotNewDvdDoc()),
-			    actionCollection(), "file_new_dvd");
 
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
-  actionFileNewMenu->insert( actionFileNewDvd );
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()), 
@@ -169,9 +166,10 @@ void K3bMainWindow::initActions()
   actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()), 
 					    actionCollection(), "view_audio_player");
 
-  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdrwblank", 0, this, SLOT(slotBlankCdrw()), 
+  actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW"), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
 			       actionCollection(), "tools_blank_cdrw" );
-
+  actionToolsDivxEncoding = new KAction(i18n("&Encode video"),"gear", 0, this, SLOT( slotDivxEncoding() ),
+			    actionCollection(), "tools_encode_video");
   actionToolsWriteIsoImage = new KAction(i18n("&Write Iso image"), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
 
@@ -775,22 +773,10 @@ void K3bMainWindow::slotNewDataDoc()
   createClient(doc);
 }
 
-void K3bMainWindow::slotNewDvdDoc()
-{
+void K3bMainWindow::slotDivxEncoding(){
   slotStatusMsg(i18n("Creating new DVD Project."));
-
-  K3bDvdDoc* doc = new K3bDvdDoc( this );
-  pDocList->append(doc);
-  doc->newDocument();
-
-  untitledCount+=1;
-  QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
-  KURL url;
-  url.setFileName(fileName);
-  doc->setURL(url);
-
-  // create the window
-  createClient(doc);
+   K3bDvdView d( this, "divx");
+   d.exec();
 }
 
 void K3bMainWindow::slotFileBurn()

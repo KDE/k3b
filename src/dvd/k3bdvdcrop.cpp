@@ -49,13 +49,13 @@ void K3bDvdCrop::setupGui(){
     mainLayout->setSpacing( KDialog::spacingHint() );
     mainLayout->setMargin( KDialog::marginHint() );
 
-    QCanvas *c = new QCanvas(300, 150);
+    QCanvas *c = new QCanvas(30, 15);
     c->setAdvancePeriod(30);
     K3bDvdPreview *pre = new K3bDvdPreview( c, this );
 
     m_sliderPreview = new QSlider( Horizontal,  this );
 
-    QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize mode") );
+    QVButtonGroup *modeGroup = new QVButtonGroup( i18n("Resize mode"), this );
     m_buttonFast = new QRadioButton( i18n("Fast (-B)"), modeGroup );
     m_buttonExactly = new QRadioButton( i18n("Exactly (-Z)"), modeGroup );
     modeGroup->insert( m_buttonFast  );
@@ -83,10 +83,10 @@ void K3bDvdCrop::setupGui(){
     cropLayout->addMultiCellWidget( m_spinBottom, 5, 5, 2, 2);
     cropLayout->addMultiCellWidget( m_spinRight, 4, 4, 3, 3);
 
-    mainLayout->addMultiCellWidget( pre, 0, 0, 0, 3);
-    mainLayout->addMultiCellWidget( m_sliderPreview, 1, 1, 0, 3);
-    mainLayout->addMultiCellWidget( modeGroup, 2, 2, 0, 1);
-    mainLayout->addMultiCellWidget( groupCrop, 2, 2, 2, 3);
+    mainLayout->addMultiCellWidget( pre, 0, 2, 0, 1);
+    mainLayout->addMultiCellWidget( m_sliderPreview, 3, 3, 0, 1);
+    mainLayout->addMultiCellWidget( modeGroup, 0, 0, 2, 2);
+    mainLayout->addMultiCellWidget( groupCrop, 1, 1, 2, 2);
 
 }
 

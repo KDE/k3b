@@ -49,6 +49,7 @@ public:
     void setSelectedAudio( QStringList );
 
     void setTitleNumber( int t ){ m_title = t; };
+    void setTitleSet( int t ){ m_titleset = t; };
 
     QString getInput() { return m_sinput; };
     QString getMode() { return m_smode; };
@@ -73,6 +74,7 @@ public:
     int getMaxChapters( ){ return m_maxChapters; };
     int getMaxAudio(  ){ return m_maxAudio; };
     int getTitleNumber(  ){ return m_title; };
+    int getTitleSet(  ){ return m_titleset; };
 
     bool isAllChapters() { return m_allChapters; };
     bool isAllAudio() { return m_allAudio; };
@@ -94,14 +96,17 @@ private:
     int m_maxAudio;
     unsigned int m_maxAngle;
     int m_title;
+    int m_titleset;
+    // commaseparated list of entry numbers
     QStringList m_selectedChapters;
     QStringList m_selectedAudio;
     QStringList m_selectedAngle;
+    QSize m_res;
+    QSize m_aspect;
+    // helper
     bool m_allAudio;
     bool m_allChapters;
     bool m_allAngle;
-    QSize m_res;
-    QSize m_aspect;
 };
 
 #endif

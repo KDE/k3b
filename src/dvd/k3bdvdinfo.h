@@ -21,6 +21,7 @@
 #include <qwidget.h>
 #include <qgroupbox.h>
 class QLabel;
+class QGridLayout;
 
 /**
   *@author Sebastian Trueg
@@ -31,13 +32,15 @@ class K3bDvdInfo : public QGroupBox  {
 public:
     K3bDvdInfo(QWidget *parent=0, const char *name=0);
     ~K3bDvdInfo();
+protected:
+    QGridLayout *m_mainLayout;
+    void setupGui();
 private:
     QLabel *m_length;
     QLabel *m_frames;
     QLabel *m_size;
     QLabel *m_aspect;
 
-    void setupGui();
 
 };
 

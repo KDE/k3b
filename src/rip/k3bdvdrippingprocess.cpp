@@ -19,6 +19,8 @@
 #include "k3bdvdcontent.h"
 #include "k3bdvdcopy.h"
 #include "../tools/k3bexternalbinmanager.h"
+#include "../device/k3bdevicemanager.h"
+#include "../device/k3bdevice.h"
 #include "../k3b.h"
 #include "k3bdvdaudiogain.h"
 
@@ -26,10 +28,13 @@
 #include <qdatastream.h>
 #include <qtextstream.h>
 #include <qdir.h>
+#include <qstringlist.h>
 #include <qmessagebox.h>
 
 #include <kprocess.h>
 #include <klocale.h>
+#include <kio/job.h>
+#include <kmessagebox.h>
 
 K3bDvdRippingProcess::K3bDvdRippingProcess( QWidget *parent) : QObject() {
     //m_processAudio = processAudio;
@@ -57,6 +62,8 @@ void K3bDvdRippingProcess::start( ){
     m_percent = 0;
     m_interrupted = false;
     m_delAudioProcess = false;
+    m_dvdOrgFilenameDetected = false;
+                m_dvdAlreadyMounted = false;
     if( m_maxTitle > 0 ){
         checkRippingMode();
     } else {
@@ -79,11 +86,12 @@ void K3bDvdRippingProcess::checkRippingMode(){
         m_currentRipAngle++;
         m_angle = *titleList;
     }
-    startRippingProcess();
+    // TODO first check filename on dvd and copy ifos
+    preProcessingDvd();
 }
 
 void K3bDvdRippingProcess::startRippingProcess( ){
-    QString f = prepareFilename();
+    QString f = getFilename();
     if( !f.isNull() ){
         m_outputFile.setName( f );
     } else {
@@ -143,15 +151,21 @@ void K3bDvdRippingProcess::slotExited( KProcess* ){
     if( m_currentRipTitle < m_maxTitle ){
         checkRippingMode();
     } else {
-        qDebug("(K3bDvdRippingProcess) Send finish.");
-        emit finished( true );
+        qDebug("(K3bDvdRippingProcess) Copy IFO files for audio gain processing.");
+        postProcessingDvd();
+        postProcessingFinished();
     }
+}
+
+void K3bDvdRippingProcess::postProcessingFinished(){
+    qDebug("(K3bDvdRippingProcess) Send finish.");
+    saveConfig();
+    emit finished( true );
 }
 
 void K3bDvdRippingProcess::slotAudioProcessFinished(){
     qDebug("(K3bDvdRippingProcess) Save audio/config data.");
     delete m_audioProcess;
-    saveConfig();
 }
 
 void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
@@ -181,7 +195,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
         m_outputFile.close();
         delete m_stream;
         QString index;
-        QString f = prepareFilename();
+        QString f = getFilename();
         if( !f.isNull() ){
             m_outputFile.setName( f );
         } else {
@@ -217,12 +231,77 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     return blocks;
 }
 
-QString K3bDvdRippingProcess::prepareFilename( ){
+void K3bDvdRippingProcess::preProcessingDvd( ){
+    if( !m_dvdOrgFilenameDetected ){
+        qDebug("(K3bDvdRippingProcess) Mount dvd for filename detection.");
+        K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
+        m_mountPoint = dev->mountPoint();
+
+        if( !m_mountPoint.isEmpty() ){
+             QString mount = KIO::findDeviceMountPoint( dev->ioctlDevice() );
+             if( mount.isEmpty() ){
+                connect( KIO::mount( true, "autofs", dev->ioctlDevice(), m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd() ) );
+            } else {
+                m_mountPoint = mount;
+                m_dvdAlreadyMounted = true;
+                slotPreProcessingDvd();
+            }
+        } else {
+            KMessageBox::error(m_parent, i18n("K3b could not mount %1. Please run K3bSetup.").arg(dev->ioctlDevice()),i18n("I/O error") );
+        }
+    }
+}
+
+void K3bDvdRippingProcess::slotPreProcessingDvd( ){
+    // read directory from /dev/dvd
+    if( !m_mountPoint.isEmpty() ){
+         QDir video_ts( m_mountPoint + "/video_ts");
+         video_ts.setSorting( QDir::Size );
+         if( video_ts.exists() ){
+             QStringList vobs = video_ts.entryList();
+             QStringList::Iterator it = vobs.begin();
+             m_baseFilename = (*it).left( (*it).length()-5 );
+             qDebug("(K3bDvdRippingProcess) First entry of vobs used as name: " + m_baseFilename );
+         }
+    }
+    // copy ifos and video.ifo
+    m_dvdOrgFilenameDetected = true;
+    startRippingProcess();
+}
+
+void K3bDvdRippingProcess::postProcessingDvd( ){
+    QDir video_ts( m_mountPoint + "/video_ts", "*.ifo");
+    if( video_ts.exists() ){
+        QStringList vobs = video_ts.entryList();
+        for ( QStringList::Iterator it = vobs.begin(); it != vobs.end(); ++it ) {
+            (*it) = m_mountPoint + "/video_ts/" +(*it);
+        }
+        KURL::List ifoList( vobs );
+        KURL dest( m_dirtmp );
+        connect( KIO::copy( ifoList, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotJoDebug( KIO::Job* ) ) );
+        qDebug("(K3bDvdRippingProcess) Copy IFO files to " + dest.path() );
+    }
+    QDir dvdtmp( m_dirvob, "*.vob");
+    QStringList vobs = dvdtmp.entryList();
+    for ( QStringList::Iterator it = vobs.begin(); it != vobs.end(); ++it ) {
+        QString target("../vob/"+ (*it));
+        KURL dest( m_dirtmp + "/" + *it );
+        connect( KIO::symlink( target, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotJobDebug( KIO::Job*) ) );
+        qDebug("(K3bDvdRippingProcess) Symlink " + dest.path() + " -> " + target);
+    }
+}
+
+void K3bDvdRippingProcess::slotJobDebug( KIO::Job *job ){
+     if( !job->errorString().isEmpty() )
+        qDebug("(K3bDvdRippingProcess) Job error: " + job->errorString() );
+}
+
+QString K3bDvdRippingProcess::getFilename(){
     QString index;
     index = QString::number( m_currentRipTitle );
     if( index.length() == 1 )
         index = "0" + index;
-    QString result = m_dirvob + "/" + "vts_"+index+ "_" + QString::number( m_currentVobIndex ) + ".vob";
+    QString result = m_dirvob + "/" + m_baseFilename + QString::number( m_currentVobIndex ) + ".vob";
     m_currentVobIndex++;
     QFile destFile( result );
     if( destFile.exists() ){
@@ -236,7 +315,7 @@ QString K3bDvdRippingProcess::prepareFilename( ){
 }
 
 void K3bDvdRippingProcess::saveConfig(){
-    QFile f( m_dirname + "/k3bDVDRip.log" );
+    QFile f( m_dirname + "/k3bDVDRip.xml" );
     if( f.exists() ){
         int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Log file already exists."), i18n("Overwrite"), i18n("Cancel") );
         if( button != 0 ){

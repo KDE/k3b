@@ -23,11 +23,11 @@
 K3bDvdPreview::K3bDvdPreview(QCanvas* c, QWidget *parent, const char *name ) : QCanvasView( c, parent,name) {
      can = c;
      lineTop = new QCanvasLine( can );
-     lineTop->setPoints( 1, 1, can->width(), can->height() );
-     QPen pen( Qt::black, 12 );
+     lineTop->setPoints( 1, 1, width(), height() );
+     QPen pen( Qt::black, 2 );
      lineTop->setPen( pen );
-     lineTop->setX( 5 );
-     lineTop->setY( 35 );
+     lineTop->setX( 0 );
+     lineTop->setY( 0 );
      lineTop->setZ( 55 );
      lineTop->show( );
 
@@ -40,24 +40,7 @@ K3bDvdPreview::~K3bDvdPreview(){
 }
 
 void K3bDvdPreview::drawContents( QPainter* p ){
-    //p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter,
-//        " blubMB" );
-     //p->setPen( QPen( Qt::red, 6 ) );
-     //p->drawLine( 100,1,100,100 );
-     qDebug("drawContents");
-     /*lineTop = new QCanvasLine( can );
-     lineTop->setPoints( 1, 1, 10, 200 );
-     QPen pen( Qt::red, 12 );
-     lineTop->setPen( pen );
-     lineTop->setX( 5 );
-     lineTop->setY( 35 );
-     lineTop->setZ( 55 );
-     lineTop->show( );
-     */
-     //can->update();
-     //can->drawArea( QRect(0,0,1000,600), p);
-     //lineTop->drawArea( QRect(0,0,300,150), p );
-     //drawContents( p, 0,0,300,150);
+    can->resize( width(), height() );
 }
 
 #include "k3bdvdpreview.moc"
