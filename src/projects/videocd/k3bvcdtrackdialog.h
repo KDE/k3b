@@ -45,11 +45,13 @@ class K3bVcdTrackDialog : public KDialogBase
     protected slots:
         void slotOk();
         void slotApply();
-
+        void slotItemRenamed( QListViewItem*, const QString&, int );
+                
     private slots:
         void slotPlayTimeChanged( int );
         void slotWaitTimeChanged( int );
         void slotPbcToggled( bool );
+
 
     private:
         K3bVcdDoc* m_vcdDoc;

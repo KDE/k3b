@@ -128,8 +128,8 @@ void K3bVcdTrackDialog::slotApply()
     selectedTrack->setPlayTime( m_spin_times->value() );
     selectedTrack->setWaitTime( m_spin_waittime->value() );
     selectedTrack->setReactivity( m_check_reactivity->isChecked() );
-    // TODO: selectedTrack->setPbcNumKeys( (m_checkpbc->isChecked() );
-    
+    // TODO: selectedTrack->setPbcNumKeys( m_check_pbc->isChecked() );
+
     VcdOptions()->setPbcEnabled( m_check_pbc->isChecked() );
 
 }
@@ -318,26 +318,26 @@ void K3bVcdTrackDialog::fillGui()
     QToolTip::add( m_pbc_return, i18n( "This key may be mapped to the STOP key." ) );
     QToolTip::add( m_pbc_default, i18n( "This key is usually mapped to the > or PLAY key." ) );
     QToolTip::add( m_comboAfterTimeout, i18n( "Target to be jumped on time-out of <wait>." ) );
-		QToolTip::add( m_check_reactivity, i18n( "Delay reactivity of keys." ) );
-		QToolTip::add( m_check_pbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
+                QToolTip::add( m_check_reactivity, i18n( "Delay reactivity of keys." ) );
+                QToolTip::add( m_check_pbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
     QToolTip::add( m_check_usekeys, i18n( "Activate the use of numeric keys." ) );
     QToolTip::add( m_check_overwritekeys, i18n( "Overwrite default numeric keys." ) );
     QToolTip::add( m_list_keys, i18n( "Numeric keys." ) );
     QToolTip::add( m_spin_times, i18n( "Times to repeat the playback of 'play track'." ) );
     QToolTip::add( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track'." ) );
 
-		QWhatsThis::add( m_comboAfterTimeout, i18n( "<p>Target to be jumped on time-out of <wait>."
-		                                "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random!" ) );
-		QWhatsThis::add( m_check_reactivity, i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
-		                                "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
-		QWhatsThis::add( m_check_pbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
+                QWhatsThis::add( m_comboAfterTimeout, i18n( "<p>Target to be jumped on time-out of <wait>."
+                                                "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random!" ) );
+                QWhatsThis::add( m_check_reactivity, i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
+                                                "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
+                QWhatsThis::add( m_check_pbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                                     "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
     QWhatsThis::add( m_check_usekeys, i18n( "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9." ) );
     QWhatsThis::add( m_check_overwritekeys, i18n( "<p>If numeric keys enabled, you can overwrite the default settings." ) );
     QWhatsThis::add( m_spin_times, i18n( "<p>Times to repeat the playback of 'play track'."
-		                                "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
-																		"<p>After the specified amount of repetitions are completed, the <wait> time begins to count down, unless set to an infinite wait time."
-																		"<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
+                                                "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
+                                                                                                                                                "<p>After the specified amount of repetitions are completed, the <wait> time begins to count down, unless set to an infinite wait time."
+                                                                                                                                                "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
     QWhatsThis::add( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );
 
 }
@@ -354,17 +354,22 @@ void K3bVcdTrackDialog::fillPbcGui()
 
     K3bVcdTrack* track;
     K3bListViewItem* item;
+    QStringList numkeys_list;
+
+    numkeys_list << "";
+    numkeys_list << i18n( "ItSelf" );
+
     for ( track = m_tracks.first(); track; track = m_tracks.next() ) {
         QPixmap pm = KMimeType::pixmapForURL( KURL( track->absPath() ), 0, KIcon::Desktop, 16 );
         QString s;
         if ( track == m_selectedTracks.first() ) {
             s = i18n( "ItSelf" );
-            item = new K3bListViewItem( m_list_keys, QString( "%1" ).arg( m_pbc_previous->count() ), s );
-            item->setEditor( 1, K3bListViewItem::COMBO );
         } else if ( track->isSegment() ) {
             s = i18n( "Segment-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
+            numkeys_list << s;
         } else {
             s = i18n( "Sequence-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
+            numkeys_list << s;
         }
 
         m_pbc_previous->insertItem( pm, s );
@@ -397,6 +402,7 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_pbc_return->insertItem( pmDisabled, txtDisabled );
     m_pbc_default->insertItem( pmDisabled, txtDisabled );
     m_comboAfterTimeout->insertItem( pmDisabled, txtDisabled );
+    numkeys_list << txtDisabled;
 
     // add VideoCD End
     QPixmap pmEnd = SmallIcon( "cdrom_unmount" );
@@ -406,6 +412,15 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_pbc_return->insertItem( pmEnd, txtEnd );
     m_pbc_default->insertItem( pmEnd, txtEnd );
     m_comboAfterTimeout->insertItem( pmEnd, txtEnd );
+    numkeys_list << txtEnd;
+
+    for (int i = 99; i > 1; i--) {
+        item = new K3bListViewItem( m_list_keys, QString::number( i ) + " ", "" );
+        item->setEditor( 1, K3bListViewItem::COMBO , numkeys_list );
+    }
+
+    item = new K3bListViewItem( m_list_keys, "1 ", i18n( "ItSelf" ) );
+    item->setEditor( 1, K3bListViewItem::COMBO , numkeys_list );
 
     int count = m_tracks.count();
 
@@ -435,15 +450,16 @@ void K3bVcdTrackDialog::fillPbcGui()
         m_comboAfterTimeout->setCurrentItem( iAfterTimeOut );
 
 
-    m_spin_times->setValue( selectedTrack->getPlayTime() );
     m_spin_waittime->setValue( selectedTrack->getWaitTime() );
+    m_spin_times->setValue( selectedTrack->getPlayTime() );
 
     m_check_reactivity->setChecked( selectedTrack->Reactivity() );
     m_check_pbc->setChecked( VcdOptions()->PbcEnabled() );
 
     // not implemented yet
     m_check_usekeys->setChecked( VcdOptions()->PbcNumKeys() );
-    m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() );
+    // m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() );
+    m_mainTabbed->setTabEnabled( m_widgetnumkeys, true );
 }
 
 void K3bVcdTrackDialog::prepareGui()
@@ -565,7 +581,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     m_labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), m_groupPlay, "m_labelTimeout" );
     // m_labelAfterTimeout->setEnabled( false );
     m_comboAfterTimeout = new K3bCutComboBox( K3bCutComboBox::SQUEEZE, m_groupPlay, "m_comboAfterTimeout" );
-    //    m_comboAfterTimeout->setEnabled( false );
+    // m_comboAfterTimeout->setEnabled( false );
 
     groupPlayLayout->addWidget( labelPlaying, 1, 0 );
     groupPlayLayout->addWidget( m_spin_times, 1, 1 );
@@ -616,9 +632,9 @@ void K3bVcdTrackDialog::setupPbcTab()
     m_groupPlay->setEnabled( false );
     m_groupPbc->setEnabled( false );
 
+    connect( m_check_pbc, SIGNAL( toggled( bool ) ), this, SLOT( slotPbcToggled( bool ) ) );
     connect( m_spin_times, SIGNAL( valueChanged( int ) ), this, SLOT( slotPlayTimeChanged( int ) ) );
     connect( m_spin_waittime, SIGNAL( valueChanged( int ) ), this, SLOT( slotWaitTimeChanged( int ) ) );
-    connect( m_check_pbc, SIGNAL( toggled( bool ) ), this, SLOT( slotPbcToggled( bool ) ) );
 }
 
 void K3bVcdTrackDialog::setupPbcKeyTab()
@@ -634,21 +650,27 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     grid->setMargin( marginHint() );
 
     QGroupBox* groupKey = new QGroupBox( 3, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
-    groupKey->setEnabled( false );
+    groupKey->setEnabled( true );
     groupKey->layout() ->setSpacing( spacingHint() );
     groupKey->layout() ->setMargin( marginHint() );
 
     m_list_keys = new K3bListView( groupKey, "m_list_keys" );
-    m_list_keys->setSorting( 0 );
+    m_list_keys->setAllColumnsShowFocus( true );
+    m_list_keys->setDoubleClickForEdit(false);
+    m_list_keys->setColumnAlignment( 0, Qt::AlignRight );
+    m_list_keys->setSelectionMode( QListView::NoSelection );
+    m_list_keys->setSorting( -1 );
     m_list_keys->addColumn( i18n( "Key" ) );
     m_list_keys->addColumn( i18n( "Playing" ) );
     m_list_keys->setResizeMode( QListView::LastColumn );
-
     m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), groupKey, "m_check_overwritekeys" );
 
     grid->addWidget( groupKey, 1, 0 );
 
     m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
+
+    connect( m_list_keys, SIGNAL( itemRenamed( QListViewItem*, const QString&, int ) ), this, SLOT( slotItemRenamed( QListViewItem*, const QString&, int) ) );
+
 }
 
 void K3bVcdTrackDialog::setupAudioTab()
@@ -832,6 +854,12 @@ void K3bVcdTrackDialog::slotPbcToggled( bool b )
     m_groupPlay->setEnabled( b );
     m_groupPbc->setEnabled( b );
     m_check_reactivity->setEnabled( b );
+    if (b)
+        slotWaitTimeChanged( m_spin_waittime->value() );
+}
+
+void K3bVcdTrackDialog::slotItemRenamed( QListViewItem* item, const QString &text, int col ) {
+    kdDebug() << "K3bvcdTrackDialog::slotItemRenamed Text:" << text << endl;
 }
 
 #include "k3bvcdtrackdialog.moc"
