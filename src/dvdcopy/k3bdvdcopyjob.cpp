@@ -181,7 +181,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	emit infoMessage( i18n("K3b needs to rely on the size saved in the ISO9660 header."), WARNING );
 	emit infoMessage( i18n("This will result in a corrupt copy if the source was mastered with a buggy software."), WARNING );
 
-	K3bIso9660 isoF( m_writerDevice, 0 );
+	K3bIso9660 isoF( m_readerDevice, 0 );
 	if( isoF.open( IO_ReadOnly ) ) {
 	  d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL;
 	}
