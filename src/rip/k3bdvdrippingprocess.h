@@ -48,6 +48,7 @@ public:
     void cancel();
     void setRipSize( double );
     static float tccatParsedBytes( char *text, int len);
+    bool isInitFailed(){ return m_preProcessingFailed; }
 
 signals:
     void interrupted();
@@ -65,6 +66,7 @@ private slots:
     //void slotJobDebug( KIO::Job *job );
     void slotIfoCopyFinished( KIO::Job *job );
     void slotPreProcessingFinished( KIO::Job *job );
+    void slotIfoRename( KIO::Job *job);
 
 private:
     QWidget *m_parent;
@@ -99,10 +101,12 @@ private:
     bool m_dvdOrgFilenameDetected;
     // if dvd is already mounted this will be set to true during preProcessingDVD
     bool m_dvdAlreadyMounted;
-
+    // flag to avoid opening ProcessWindow
+    bool m_preProcessingFailed;
     //K3bDvdAudioGain *m_audioProcess;
     //K3bExternalBin *m_tccatBin;
-
+     // flag of already tried to mount dvd as iso9660, if true try to mount as udf and mv aller upper_case names to lower_case names
+    bool  m_udfMount;
     void checkRippingMode();
     void startRippingProcess();
     void preProcessingDvd();
@@ -113,6 +117,8 @@ private:
     void saveConfig();
     // generates 01 form 1, 02 from 2 of the current title to rip
     QString formattedTitleset();
+    //
+    bool copyIfoFiles(const QString&, const QString&, const QString&);
 };
 
 #endif

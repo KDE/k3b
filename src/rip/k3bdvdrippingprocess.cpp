@@ -43,19 +43,19 @@ K3bDvdRippingProcess::K3bDvdRippingProcess( QWidget *parent) : QObject() {
     m_parent = parent;
 }
 
-K3bDvdRippingProcess::~K3bDvdRippingProcess(){
+K3bDvdRippingProcess::~K3bDvdRippingProcess() {
     /*
     if( m_delAudioProcess )
         delete m_audioProcess;
     */
 }
 
-void K3bDvdRippingProcess::start( ){
+void K3bDvdRippingProcess::start( ) {
     // split of process and view (m_ripJob) due to m_ripJob cannot receive signals,
     // they will always connect to k3bjob instead to k3bdvdcopy. Why ?
-    m_maxTitle = m_titles.count();
+    m_maxTitle=m_titles.count();
     kdDebug() << "(K3bDvdRippingProcess) Starting rip " << m_maxTitle << " titles." << endl;
-    m_currentRipTitle = 0;
+    m_currentRipTitle=0;
     m_currentRipAngle = 0;
     m_currentVobIndex = 1;
     m_summaryBytes = 0;
@@ -66,19 +66,22 @@ void K3bDvdRippingProcess::start( ){
     m_delAudioProcess = false;
     m_dvdOrgFilenameDetected = false;
     m_dvdAlreadyMounted = false;
-    if( m_maxTitle > 0 ){
+    m_preProcessingFailed = false;
+    m_udfMount = false;
+    if( m_maxTitle > 0 ) {
         checkRippingMode();
     } else {
         kdDebug() << "(K3bDvdRippingProcess) Nothing to rip." << endl;
     }
+
 }
 
-void K3bDvdRippingProcess::checkRippingMode(){
+void K3bDvdRippingProcess::checkRippingMode() {
     m_rippedBytes = 0;
     m_dvd = m_titles.at( m_currentRipTitle );
     m_currentRipTitle++;
     m_title = QString::number( (*m_dvd).getTitleNumber() );
-    if( (*m_dvd).isAllAngle() ){
+    if( (*m_dvd).isAllAngle() ) {
         kdDebug() << "K3bDvdRippingProcess) Rip Title" << endl;
         m_ripMode = "-P";
     } else {
@@ -91,9 +94,9 @@ void K3bDvdRippingProcess::checkRippingMode(){
     preProcessingDvd();
 }
 
-void K3bDvdRippingProcess::startRippingProcess( ){
+void K3bDvdRippingProcess::startRippingProcess( ) {
     QString f = getFilename();
-    if( !f.isNull() ){
+    if( !f.isNull() ) {
         m_outputFile.setName( f );
     } else {
         kdDebug() << "(K3bDvdRippingProcess) Ripping not started due to vob already exists." << endl;
@@ -108,14 +111,13 @@ void K3bDvdRippingProcess::startRippingProcess( ){
     if( !m_audioProcess->start() ){
         emit interrupted();
         return;
-    }
+}
     connect( m_audioProcess, SIGNAL( finished() ), this, SLOT( slotAudioProcessFinished() ) );
     m_delAudioProcess = true;
     */
-   const K3bExternalBin *m_tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
-
+    const K3bExternalBin *m_tccatBin = k3bMain()->externalBinManager()->binObject("tccat");
     m_ripProcess = new KShellProcess();
-    kdDebug() << "(K3bDvdRippingProcess)" <<m_tccatBin->path << " -i " << m_device <<" "<< m_ripMode <<" "<< m_title <<",-1," << m_angle << endl;
+    kdDebug() << "(K3bDvdRippingProcess)" << m_tccatBin->path << " -i " << m_device <<" "<< m_ripMode <<" "<< m_title <<",-1," << m_angle << endl;
     //*m_ripProcess << m_tccatBin->path << "-d 1" << "-i" <<  m_device << m_ripMode << m_title << ",-1," << m_angle;
     *m_ripProcess << m_tccatBin->path << "-i" <<  m_device << m_ripMode << m_title << ",-1," << m_angle;
     connect( m_ripProcess, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotParseOutput(KProcess*, char*, int)) );
@@ -131,26 +133,26 @@ void K3bDvdRippingProcess::startRippingProcess( ){
     m_parent->close();
 }
 
-void K3bDvdRippingProcess::setDvdTitle( const QValueList<K3bDvdContent> &titles ){
+void K3bDvdRippingProcess::setDvdTitle( const QValueList<K3bDvdContent> &titles ) {
     m_titles = titles;
 }
 
-void K3bDvdRippingProcess::setRipSize( double size ){
+void K3bDvdRippingProcess::setRipSize( double size ) {
     //kdDebug() << "RipSize: " << (float) size << endl;
     m_titleBytes = size;
 }
 
-void K3bDvdRippingProcess::cancel( ){
+void K3bDvdRippingProcess::cancel( ) {
     m_interrupted = true;
 }
 
-void K3bDvdRippingProcess::slotExited( KProcess* ){
+void K3bDvdRippingProcess::slotExited( KProcess* ) {
     kdDebug() << "(K3bDvdRippingProcess) Ripping task finsihed." << endl;
     m_outputFile.close();
     delete m_ripProcess;
     kdDebug() << "(K3bDvdRippingProcess) Ripped bytes: " << m_summaryBytes << endl;
     //m_audioProcess->closeStdin();
-    if( m_currentRipTitle < m_maxTitle ){
+    if( m_currentRipTitle < m_maxTitle ) {
         checkRippingMode();
     } else {
         kdDebug() << "(K3bDvdRippingProcess) Copy IFO files for audio gain processing." << endl;
@@ -160,8 +162,9 @@ void K3bDvdRippingProcess::slotExited( KProcess* ){
         //  postProcessingFinished();
     }
 }
-void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
-    if( m_interrupted ){
+
+void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
+    if( m_interrupted ) {
         m_outputFile.close();
         p->kill();
         //m_audioProcess->kill();
@@ -171,9 +174,9 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
     //m_audioProcess->writeStdin( text, len );
     m_rippedBytes += len;
     m_summaryBytes += len;
-    if( m_titleBytes > 0 ){
+    if( m_titleBytes > 0 ) {
         unsigned int pc = (unsigned int) ((( m_summaryBytes / m_titleBytes) *100)+0.5);
-        if ( pc > m_percent ){
+        if ( pc > m_percent ) {
             emit progressPercent( pc );
             m_percent = pc;
             unsigned long b = (unsigned long) ( m_summaryBytes - m_dataRateBytes );
@@ -188,7 +191,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
         delete m_stream;
         QString index;
         QString f = getFilename();
-        if( !f.isNull() ){
+        if( !f.isNull() ) {
             m_outputFile.setName( f );
         } else {
             kdDebug() << "(K3bDvdRippingProcess) Cancel due to vob already exists." << endl;
@@ -201,11 +204,13 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
         m_outputFile.open( IO_WriteOnly );                     // open file for writing
         m_stream = new QDataStream( &m_outputFile );                        // serialize using f
     }
+
+
 }
-float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
+float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len) {
     QString tmp = QString::fromLocal8Bit( text, len );
     float blocks = 0;
-    if( tmp.contains("blocks (") ){
+    if( tmp.contains("blocks (") ) {
         int index = tmp.find("blocks (");
         tmp = tmp.mid(index+8); // start range i.e 3645-214245)
         int end = tmp.find( "-" );
@@ -220,106 +225,139 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     return blocks;
 }
 
-void K3bDvdRippingProcess::preProcessingDvd( ){
+void K3bDvdRippingProcess::preProcessingDvd( ) {
     kdDebug() << "(K3bDvdRippingProcess::preProcessingDVD) Copy IFO files from device: <" << m_device << ">."<< endl;
-    if( !m_dvdOrgFilenameDetected ){
+    if( !m_dvdOrgFilenameDetected ) {
         K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
         kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data mount device: " << dev->mountDevice() << ", mount Point: "<< dev->mountPoint() << endl;
         kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data ioctl device: " << dev->ioctlDevice() << ", generic device: "<< dev->genericDevice() << endl;
-        if( !m_mountPoint.isEmpty() ){
-             QString mount = KIO::findDeviceMountPoint( m_device );
-             kdDebug() << "(K3bDvdRippingProcess) Is mounted device:  <" << m_device << "> on <" << mount << ">." << endl;
-             if( mount.isEmpty() ){
-                kdDebug() << "(K3bDvdRippingProcess) Try to mount: <" << m_mountPoint << ">." << endl;
-                connect( KIO::mount( true, "autofs", "", m_mountPoint, true ), 
-			 SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd(KIO::Job*) ) );
-             } else {
+        if( !m_mountPoint.isEmpty() ) {
+            QString mount = KIO::findDeviceMountPoint( m_device );
+            kdDebug() << "(K3bDvdRippingProcess) Is mounted device:  <" << m_device << "> on <" << mount << ">." << endl;
+            if( mount.isEmpty() ) {
+                kdDebug() << "(K3bDvdRippingProcess) Try to mount <" << m_mountPoint << ">." << endl;
+                connect( KIO::mount( true, "autofs", "", m_mountPoint, true ),
+                         SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd(KIO::Job*) ) );
+            } else {
                 m_mountPoint = mount;
                 m_dvdAlreadyMounted = true;
                 slotPreProcessingDvd();
             }
         } else {
             KMessageBox::error(m_parent, i18n("K3b could not mount <%1>. Please run K3bSetup.").arg(dev->mountDevice()),
-			       i18n("I/O error") );
+                               i18n("I/O error") );
             emit finished( false );
         }
     }
 }
 
-void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob){
-    if( resultJob->error() > 0 ){
-        KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-devcie. Ensure that you have the rights to mount the DVD-drive."),
-			       i18n("I/O error") );
-        kdDebug() << "(K3bDvdRippingProcess) Mount DVD-device failed." << endl;
-        emit finished( false );
+void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
+    if( resultJob->error() > 0 ) {
+            KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-devcie. Ensure that you have the rights to mount the DVD-drive."),
+                               i18n("I/O error") );
+            kdDebug() << "(K3bDvdRippingProcess) Mount DVD-device failed." << endl;
+            m_preProcessingFailed = true;
+            emit finished( false );
     } else {
-        // all ok, errorCode = 0
         slotPreProcessingDvd();
     }
 }
 
-void K3bDvdRippingProcess::slotPreProcessingDvd(){
-    // hier sollte auf jeden Fall getestet werden, ob das mounten erfolgreich war!!!!
-    // this code should not be run if mount has been failed (hopefully)
-
+void K3bDvdRippingProcess::slotPreProcessingDvd() {
+    QString video;
+    QDir video_ts( m_mountPoint + "/VIDEO_TS");
+    if( video_ts.exists() ) {
+        m_udfMount = true;
+        kdDebug() << "(K3bDvdRippingProcess) <" << m_mountPoint << "> has UDF filesystem." << endl;
+    }
+    video_ts.setPath( m_mountPoint + "/video_ts");
+    if( !video_ts.exists() && !m_udfMount){
+        m_preProcessingFailed = true;
+        KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-devcie. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
+                           i18n("I/O error") );
+        kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Mount DVD-device failed." << endl;
+        emit finished( false );
+        return;
+    }
+    bool result = false;
     // read directory from /dev/dvd
-    if( !m_mountPoint.isEmpty() ){
-        QDir video_ts( m_mountPoint + "/video_ts", "*.ifo");
-        if( video_ts.exists() ){
-            QStringList ifos; // = video_ts.entryList();
-            ifos << m_mountPoint + "/video_ts/video_ts.ifo"; // dvd norm
-            ifos << m_mountPoint + "/video_ts/vts_"+formattedTitleset()+"_0.ifo"; // titleset ifo for the current ripped title
-            KURL::List ifoList( ifos );
-            KURL dest( m_dirtmp );
-            connect( KIO::copy( ifoList, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotIfoCopyFinished( KIO::Job* ) ) );
-            kdDebug() << "(K3bDvdRippingProcess) Copy IFO files to " << dest.path() << endl;
-            //connect( KIO::unmount( m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotJobDebug( KIO::Job* )) );
-        }
-        m_dvdOrgFilenameDetected = true;
-        //startRippingProcess();
+    if( !m_mountPoint.isEmpty() && !m_udfMount) {
+        result = copyIfoFiles("video_ts", "vts", "ifo");
+        video = "video_ts";
+    } else if (!m_mountPoint.isEmpty() && m_udfMount) {
+        kdDebug() << "(K3bDvdRippingProcess) UDF DVD mount filessystem." << endl;
+        video = "VIDEO_TS";
+        result = copyIfoFiles("VIDEO_TS", "VTS", "IFO");
+    }
+    if( !result ) {
+        m_preProcessingFailed = true;
+        KMessageBox::error(m_parent, i18n("K3b could not copy the ifo-files from %1.").arg( m_mountPoint + "/" + video),
+                           i18n("I/O error") );
+        kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Copy IFO files failed." << endl;
+        emit finished( false );
     }
 }
 
-void K3bDvdRippingProcess::slotIfoCopyFinished( KIO::Job *job ){
-    if( job->error() > 0 ){
-         kdDebug() << "(K3bDvdRippingProcess) Job error: " << job->errorString() << endl;
+bool K3bDvdRippingProcess::copyIfoFiles( const QString& video, const QString& vts, const QString& ifo) {
+    bool result = false;
+    QDir video_ts( m_mountPoint + "/" + video, "*." +ifo);
+    if( video_ts.exists() ) {
+        QStringList ifos;  // = video_ts.entryList();
+        ifos << (m_mountPoint + "/" + video + "/" + video + "." +ifo); // dvd norm
+        ifos << (m_mountPoint + "/" + video + "/" + vts + "_"+formattedTitleset()+"_0." + ifo); // titleset ifo for the current ripped title	
+        KURL::List ifoList( ifos );
+        KURL dest( m_dirtmp );
+        connect( KIO::copy( ifoList, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotIfoCopyFinished( KIO::Job* ) ) );
+        kdDebug() << "(K3bDvdRippingProcess) Copy IFO files to " << dest.path() << endl;
+        result = true;
     }
+    m_dvdOrgFilenameDetected = true;
+    return result;
+}
+
+void K3bDvdRippingProcess::slotIfoCopyFinished( KIO::Job *job ) {
+    if( job->error() > 0 ) {
+        kdDebug() << "(K3bDvdRippingProcess) Job error: " << job->errorString() << endl;
+        return;
+    }
+    /*
+    if ( m_udfMount ){
+        KURL src(m_dirtmp + "/" + "VIDEO_TS.IFO");
+        KURL dest(m_dirtmp + "/" + "video_ts.ifo");
+        connect( KIO::rename( src, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotIfoRename( KIO::Job* ) ) );        
+        src.setFileName( "VTS_" + formattedTitleset() + "_0.IFO");
+        dest.setFileName( "vts_" + formattedTitleset() + "_0.ifo");
+        connect( KIO::rename( src, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotIfoRename( KIO::Job* ) ) );
+    } */
     connect( KIO::unmount( m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingFinished( KIO::Job* )) );
 }
 
-void K3bDvdRippingProcess::slotPreProcessingFinished( KIO::Job *job ){
-    if( job->error() > 0 ){
-         kdDebug() << "(K3bDvdRippingProcess) Job error: " << job->errorString() << endl;
+void K3bDvdRippingProcess::slotPreProcessingFinished( KIO::Job *job ) {
+    if( job->error() > 0 ) {
+        kdDebug() << "(K3bDvdRippingProcess) WARNING: Unmount failed, Job error: " << job->errorString() << endl;
     }
     startRippingProcess();
 }
 
-QString K3bDvdRippingProcess::formattedTitleset(){
+QString K3bDvdRippingProcess::formattedTitleset() {
     QString titleset;
     int s = (*m_dvd).getTitleSet();
     if( s < 10 )
-         titleset = "0" + QString::number( s );
+        titleset = "0" + QString::number( s );
     else
-         titleset = QString::number( s );
+        titleset = QString::number( s );
     return titleset;
 }
 
-QString K3bDvdRippingProcess::getFilename(){
-    QString result = m_dirvob + "/vts_" + formattedTitleset() + "_" + QString::number( m_currentVobIndex ) + ".vob";
+QString K3bDvdRippingProcess::getFilename() {
+    QString result;
+    result = m_dirvob + "/vts_" + formattedTitleset() + "_" + QString::number( m_currentVobIndex ) + ".vob";
     kdDebug() << "(K3bDvdRippingProcess) Vob filename: " << result << endl;
     m_currentVobIndex++;
 
-    /*
-    QString index;
-    index = QString::number( m_currentRipTitle );
-    if( index.length() == 1 )
-        index = "0" + index;
-    QString result = m_dirvob + "/" + m_baseFilename + QString::number( m_currentVobIndex ) + ".vob";
-    m_currentVobIndex++;
-    */
     QFile destFile( result );
-    if( destFile.exists() ){
+    if( destFile.exists() ) {
         int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), i18n("Cancel") );
         if( button == 0 )
             return result;
@@ -329,16 +367,23 @@ QString K3bDvdRippingProcess::getFilename(){
     return result;
 }
 
-void K3bDvdRippingProcess::saveConfig(){
+void K3bDvdRippingProcess::slotIfoRename( KIO::Job* job){
+    if( job->error() > 0 ){
+        kdDebug() << "(K3bDvdRippingProcess) Renaming IFO Files failed. Can't move files form upper to lower case."
+            << "You should enable your dvd drive to mount as iso9660 filesystem instead of udf." << endl;
+    }
+}
+
+void K3bDvdRippingProcess::saveConfig() {
     QFile f( m_dirname + "/k3bDVDRip.xml" );
-    if( f.exists() ){
+    if( f.exists() ) {
         int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Log file already exists."), i18n("Overwrite"), i18n("Cancel") );
-        if( button != 0 ){
+        if( button != 0 ) {
             kdDebug() << "(K3bDvdRippingProcess) Couldn't save ripping datas." << endl;
             return;
         }
     }
-    if( m_currentRipTitle == 1 ){
+    if( m_currentRipTitle == 1 ) {
         f.open( IO_WriteOnly );
     } else {
         f.open( IO_WriteOnly | IO_Append );
@@ -348,7 +393,7 @@ void K3bDvdRippingProcess::saveConfig(){
     QString extension( (*m_dvd).getStrAspectExtension() );
     if( extension.contains( "&" ) ){
         extension.replace( QRegExp("&"), "&amp" );
-    } */
+} */
     t << "<k3bDVDTitles>\n";
     t << "    <title number=\"" << (*m_dvd).getTitleNumber() << "\">\n";
     t << "        " << "<frames>" << (*m_dvd).getFrames() << "</frames>\n";
@@ -356,10 +401,10 @@ void K3bDvdRippingProcess::saveConfig(){
     t << "        " << "<time>" << (*m_dvd).getStrTime() << "</time>\n";
     // can't be detected with using kprocess
     t << "        " << "<audiogain>" << "1.0" << "</audiogain>\n";
-//    t << "        " << "<audiogain>" << getAudioGain() << "</audiogain>\n";
+    //    t << "        " << "<audiogain>" << getAudioGain() << "</audiogain>\n";
     t << "        " << "<aspectratio>" << (*m_dvd).getStrAspect() << "</aspectratio>\n";
     t << "        " << "<aspectratioAnamorph>" << (*m_dvd).getStrAspectAnamorph() << "</aspectratioAnamorph>\n";
-// & not supported, TODO    t << "        " << "<aspectratioExtension>" << extension << "</aspectratioExtension>\n";
+    // & not supported, TODO    t << "        " << "<aspectratioExtension>" << extension << "</aspectratioExtension>\n";
     t << "        " << "<width>" << (*m_dvd).getRes().width() << "</width>\n";
     t << "        " << "<height>" << (*m_dvd).getRes().height() << "</height>\n";
     t << "        " << "<chapters>" << (*m_dvd).getMaxChapters() << "</chapters>\n";
@@ -373,16 +418,16 @@ void K3bDvdRippingProcess::saveConfig(){
     f.close();
 }
 
-float K3bDvdRippingProcess::getAudioGain(){
+float K3bDvdRippingProcess::getAudioGain() {
     QFile f( m_dirtmp + "/audioGain.log" );
     float result = 1.0;
-    if( f.open( IO_ReadOnly ) ){
+    if( f.open( IO_ReadOnly ) ) {
         QTextStream t( &f );
         QString tmp;
-        for( int i=0; i < 5; i++ ){
+        for( int i=0; i < 5; i++ ) {
             tmp = t.readLine();
             kdDebug() << tmp << endl;
-            if( tmp.contains("rescale") ){
+            if( tmp.contains("rescale") ) {
                 int index = tmp.find( "rescale=" );
                 tmp = tmp.mid(index+8);
                 result = tmp.stripWhiteSpace().toFloat();
