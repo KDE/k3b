@@ -80,6 +80,7 @@ class K3bAudioDoc : public K3bDoc
   const QString& disc_id() const { return m_cdTextDisc_id; }
   const QString& arranger() const { return m_cdTextArranger; }
   const QString& songwriter() const { return m_cdTextSongwriter; }
+  const QString& composer() const { return m_cdTextComposer; }
   const QString& upc_ean() const { return m_cdTextUpc_Ean; }
   const QString& cdTextMessage() const { return m_cdTextMessage; }
 
@@ -123,6 +124,7 @@ class K3bAudioDoc : public K3bDoc
   void setDisc_id( const QString& v ) { m_cdTextDisc_id = v; }
   void setArranger( const QString& v ) { m_cdTextArranger = v; }
   void setSongwriter( const QString& v ) { m_cdTextSongwriter = v; }
+  void setComposer( const QString& v ) { m_cdTextComposer = v; }
   void setUpc_ean( const QString& v ) { m_cdTextUpc_Ean = v; }
   void setCdTextMessage( const QString& v ) { m_cdTextMessage = v; }
 
@@ -195,6 +197,7 @@ class K3bAudioDoc : public K3bDoc
   QString m_cdTextArranger;
   QString m_cdTextUpc_Ean;
   QString m_cdTextSongwriter;
+  QString m_cdTextComposer;
   QString m_cdTextMessage;
   // --------------------------------------------------
 };

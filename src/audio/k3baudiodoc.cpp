@@ -567,6 +567,18 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
   QTextStream t(&file);
 
 
+
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // from the cdrdao manpage:
+  // ------------------------
+  // If one of the CD-TEXT items TITLE, PERFORMER, SONGWRITER, COMPOSER, ARRANGER, ISRC is defined for at least on  track  or
+  // in  the  global section it must be defined for all tracks and in the global section. If a DISC_ID item is defined in the
+  // global section, an ISRC entry must be defined for each track.
+  //
+  // Question: does it make any difference to specify empty cd-text fields?
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
   // ===========================================================================
   // header
   // ===========================================================================
@@ -585,16 +597,17 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     t << "  LANGUAGE 0 {\n";
     t << "    TITLE " << "\"" << prepareForTocFile(title()) << "\"" << "\n";
     t << "    PERFORMER " << "\"" << prepareForTocFile(artist()) << "\"" << "\n";
-    if( !disc_id().isEmpty() )
+    //    if( !disc_id().isEmpty() )
       t << "    DISC_ID " << "\"" << prepareForTocFile(disc_id()) << "\"" << "\n";
-    if( !upc_ean().isEmpty() )
+      //    if( !upc_ean().isEmpty() )
       t << "    UPC_EAN " << "\"" << prepareForTocFile(upc_ean()) << "\"" << "\n";
     t << "\n";
-    if( !arranger().isEmpty() )
+    //    if( !arranger().isEmpty() )
       t << "    ARRANGER " << "\"" << prepareForTocFile(arranger()) << "\"" << "\n";
-    if( !songwriter().isEmpty() )
+      //    if( !songwriter().isEmpty() )
       t << "    SONGWRITER " << "\"" << prepareForTocFile(songwriter()) << "\"" << "\n";
-    if( !cdTextMessage().isEmpty() )
+      t << "    COMPOSER " << "\"" << prepareForTocFile(composer()) << "\"" << "\n";
+      //    if( !cdTextMessage().isEmpty() )
       t << "    MESSAGE " << "\"" << prepareForTocFile(cdTextMessage()) << "\"" << "\n";
     t << "  }" << "\n";
     t << "}" << "\n\n";
@@ -638,13 +651,14 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
 	t << "  LANGUAGE 0 {" << "\n";
 	t << "    TITLE " << "\"" << prepareForTocFile(_track->title()) << "\"" << "\n";
 	t << "    PERFORMER " << "\"" << prepareForTocFile(_track->artist()) << "\"" << "\n";
-	if( !_track->isrc().isEmpty() )
+	//	if( !_track->isrc().isEmpty() )
 	  t << "    ISRC " << "\"" << prepareForTocFile(_track->isrc()) << "\"" << "\n";
-	if( !_track->arranger().isEmpty() )
+	  //	if( !_track->arranger().isEmpty() )
 	  t << "    ARRANGER " << "\"" << prepareForTocFile(_track->arranger()) << "\"" << "\n";
-	if( !_track->songwriter().isEmpty() )
+	  //	if( !_track->songwriter().isEmpty() )
 	  t << "    SONGWRITER " << "\"" << prepareForTocFile(_track->songwriter()) << "\"" << "\n";
-	if( !_track->cdTextMessage().isEmpty() )
+	  t << "    COMPOSER " << "\"" << prepareForTocFile(_track->composer()) << "\"" << "\n";
+	  //	if( !_track->cdTextMessage().isEmpty() )
 	  t << "    MESSAGE " << "\"" << prepareForTocFile(_track->cdTextMessage()) << "\"" << "\n";
 	t << "  }" << "\n";
 	t << "}" << "\n";
@@ -684,13 +698,14 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
       t << "  LANGUAGE 0 {" << "\n";
       t << "    TITLE " << "\"" << prepareForTocFile(_track->title()) << "\"" << "\n";
       t << "    PERFORMER " << "\"" << prepareForTocFile(_track->artist()) << "\"" << "\n";
-      if( !_track->isrc().isEmpty() )
+      //      if( !_track->isrc().isEmpty() )
 	t << "    ISRC " << "\"" << prepareForTocFile(_track->isrc()) << "\"" << "\n";
-      if( !_track->arranger().isEmpty() )
+	//      if( !_track->arranger().isEmpty() )
 	t << "    ARRANGER " << "\"" << prepareForTocFile(_track->arranger()) << "\"" << "\n";
-      if( !_track->songwriter().isEmpty() )
+	//      if( !_track->songwriter().isEmpty() )
 	t << "    SONGWRITER " << "\"" << prepareForTocFile(_track->songwriter()) << "\"" << "\n";
-      if( !_track->cdTextMessage().isEmpty() )
+	t << "    COMPOSER " << "\"" << prepareForTocFile(_track->composer()) << "\"" << "\n";
+	//      if( !_track->cdTextMessage().isEmpty() )
 	t << "    MESSAGE " << "\"" << prepareForTocFile(_track->cdTextMessage()) << "\"" << "\n";
       t << "  }" << "\n";
       t << "}" << "\n";

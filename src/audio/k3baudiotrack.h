@@ -62,6 +62,7 @@ class K3bAudioTrack
   const QString& title() const { return m_title; }
   const QString& arranger() const { return m_arranger; }
   const QString& songwriter() const { return m_songwriter; }
+  const QString& composer() const { return m_composer; }
   const QString& isrc() const { return m_isrc; }
   const QString& cdTextMessage() const { return m_cdTextMessage; }
   const QString& album() const { return m_album; }
@@ -82,6 +83,7 @@ class K3bAudioTrack
   void setTitle( const QString& t ) { m_title = t; }
   void setArranger( const QString& t ) { m_arranger = t; }
   void setSongwriter( const QString& t ) { m_songwriter = t; }
+  void setComposer( const QString& t ) { m_composer = t; }
   void setIsrc( const QString& t ) { m_isrc = t; }
   void setCdTextMessage( const QString& t ) { m_cdTextMessage = t; }
   void setPreEmp( bool b ) { m_preEmp = b; }
@@ -142,6 +144,7 @@ class K3bAudioTrack
   QString m_album;
   QString m_arranger;
   QString m_songwriter;
+  QString m_composer;
   QString m_cdTextMessage;
   QString m_isrc;
 };

@@ -104,6 +104,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   QToolTip::add( m_editArranger, i18n("CD-TEXT information field") );
   QToolTip::add( m_editTitle, i18n("CD-TEXT information field") );
   QToolTip::add( m_editSongwriter, i18n("CD-TEXT information field") );
+  QToolTip::add( m_editComposer, i18n("CD-TEXT information field") );
 
   // What's This info
   // -------------------------------------------------------------------------
@@ -175,6 +176,7 @@ void K3bAudioBurnDialog::saveSettings()
   ((K3bAudioDoc*)doc())->setUpc_ean( m_editUpc_ean->text() );
   ((K3bAudioDoc*)doc())->setArranger( m_editArranger->text() );
   ((K3bAudioDoc*)doc())->setSongwriter( m_editSongwriter->text() );
+  ((K3bAudioDoc*)doc())->setComposer( m_editComposer->text() );
 }
 
 
@@ -195,6 +197,7 @@ void K3bAudioBurnDialog::readSettings()
   m_editUpc_ean->setText( ((K3bAudioDoc*)doc())->upc_ean() );
   m_editArranger->setText( ((K3bAudioDoc*)doc())->arranger() );
   m_editSongwriter->setText( ((K3bAudioDoc*)doc())->songwriter() );
+  m_editComposer->setText( ((K3bAudioDoc*)doc())->composer() );
 	
   K3bProjectBurnDialog::readSettings();
 }
@@ -262,6 +265,7 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   QLabel* labelUpc_ean = new QLabel( i18n( "&UPC EAN:" ), frame, "labelUpc_ean" );
   QLabel* labelArranger = new QLabel( i18n( "&Arranger:" ), frame, "labelArranger" );
   QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), frame, "labelSongwriter" );
+  QLabel* labelComposer = new QLabel( i18n( "&Composer:" ), frame, "labelComposer" );
   QLabel* labelPerformer = new QLabel( i18n( "&Performer:" ), frame, "labelPerformer" );
   QLabel* labelTitle = new QLabel( i18n( "&Title:" ), frame, "labelTitle" );
 
@@ -273,6 +277,7 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   m_editArranger = new QLineEdit( frame, "m_editArranger" );
   m_editTitle = new QLineEdit( frame, "m_editTitle" );
   m_editSongwriter = new QLineEdit( frame, "m_editSongwriter" );
+  m_editComposer = new QLineEdit( frame, "m_editComposer" );
 
 
   QFrame* line = new QFrame( frame );
@@ -288,15 +293,17 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   mainGrid->addWidget( m_editArranger, 4, 1 );
   mainGrid->addWidget( labelSongwriter, 5, 0 );
   mainGrid->addWidget( m_editSongwriter, 5, 1 );
-  mainGrid->addWidget( labelUpc_ean, 7, 0 );
-  mainGrid->addWidget( m_editUpc_ean, 7, 1 );
-  mainGrid->addWidget( labelDisc_id, 8, 0 );
-  mainGrid->addWidget( m_editDisc_id, 8, 1 );
-  mainGrid->addWidget( labelMessage, 9, 0 );
-  mainGrid->addWidget( m_editMessage, 9, 1 );
+  mainGrid->addWidget( labelComposer, 6, 0 );
+  mainGrid->addWidget( m_editComposer, 6, 1 );
+  mainGrid->addWidget( labelUpc_ean, 8, 0 );
+  mainGrid->addWidget( m_editUpc_ean, 8, 1 );
+  mainGrid->addWidget( labelDisc_id, 9, 0 );
+  mainGrid->addWidget( m_editDisc_id, 9, 1 );
+  mainGrid->addWidget( labelMessage, 10, 0 );
+  mainGrid->addWidget( m_editMessage, 10, 1 );
 
-  mainGrid->addRowSpacing( 6, 20 );
-  mainGrid->setRowStretch( 9, 1 );
+  mainGrid->addRowSpacing( 7, 20 );
+  mainGrid->setRowStretch( 10, 1 );
 
   // buddies
   labelDisc_id->setBuddy( m_editDisc_id );
@@ -304,6 +311,7 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   labelUpc_ean->setBuddy( m_editUpc_ean );
   labelArranger->setBuddy( m_editArranger );
   labelSongwriter->setBuddy( m_editSongwriter );
+  labelComposer->setBuddy( m_editComposer );
   labelPerformer->setBuddy( m_editPerformer );
   labelTitle->setBuddy( m_editTitle );
 
@@ -312,7 +320,8 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   setTabOrder( m_editTitle, m_editPerformer );
   setTabOrder( m_editPerformer, m_editArranger);
   setTabOrder( m_editArranger, m_editSongwriter );
-  setTabOrder( m_editSongwriter, m_editUpc_ean );
+  setTabOrder( m_editSongwriter, m_editComposer );
+  setTabOrder( m_editComposer, m_editUpc_ean );
   setTabOrder( m_editUpc_ean, m_editDisc_id );
   setTabOrder( m_editDisc_id, m_editMessage );
 }

@@ -59,6 +59,7 @@ class K3bAudioTrackDialog : public KDialogBase
   QMultiLineEdit* m_editMessage;
   QLineEdit* m_editArranger;
   QLineEdit* m_editSongwriter;
+  QLineEdit* m_editComposer;
   QLineEdit* m_editIsrc;
   QLabel* m_labelMimeType;
   KCutLabel* m_displayFileName;

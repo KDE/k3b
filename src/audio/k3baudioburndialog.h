@@ -74,6 +74,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    QLineEdit* m_editArranger;
    QLineEdit* m_editTitle;
    QLineEdit* m_editSongwriter;
+   QLineEdit* m_editComposer;
    // -----------------------------------------------------------
 
  protected slots:

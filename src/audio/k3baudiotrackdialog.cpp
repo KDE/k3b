@@ -62,6 +62,7 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
     m_editPerformer->setText( track->artist() );
     m_editArranger->setText( track->arranger() );
     m_editSongwriter->setText( track->songwriter() );
+    m_editComposer->setText( track->composer() );
     m_editIsrc->setText( track->isrc() );
     m_editMessage->setText( track->cdTextMessage() );
     
@@ -91,6 +92,9 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( QPtrList<K3bAudioTrack>& tracks, QWidg
 
       if( track->songwriter() != m_editSongwriter->text() )
 	m_editSongwriter->setText( QString::null );
+
+      if( track->composer() != m_editComposer->text() )
+	m_editComposer->setText( QString::null );
 
       if( track->isrc() != m_editIsrc->text() )
 	m_editIsrc->setText( QString::null );
@@ -143,6 +147,9 @@ void K3bAudioTrackDialog::slotApply()
 
     if( m_editSongwriter->edited() )
       track->setSongwriter( m_editSongwriter->text() );
+
+    if( m_editComposer->edited() )
+      track->setComposer( m_editComposer->text() );
 
     if( m_editIsrc->edited() )
       track->setIsrc( m_editIsrc->text() );
@@ -222,6 +229,7 @@ void K3bAudioTrackDialog::setupGui()
   QLabel* labelTitle      = new QLabel( i18n( "&Title:" ), cdTextTab, "labelTitle" );
   QLabel* labelIsrc       = new QLabel( i18n( "&ISRC:" ), cdTextTab, "labelIsrc" );
   QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), cdTextTab, "labelSongwriter" );
+  QLabel* labelComposer   = new QLabel( i18n( "&Composer:" ), cdTextTab, "labelComposer" );
   QLabel* labelArranger   = new QLabel( i18n( "&Arranger:" ), cdTextTab, "labelArranger" );
 
   labelMessage->setAlignment( Qt::AlignLeft | Qt::AlignTop );
@@ -231,6 +239,7 @@ void K3bAudioTrackDialog::setupGui()
   m_editMessage    = new QMultiLineEdit( cdTextTab, "m_editMessage" );
   m_editArranger   = new QLineEdit( cdTextTab, "m_editArranger" );
   m_editSongwriter = new QLineEdit( cdTextTab, "m_editSongwriter" );
+  m_editComposer = new QLineEdit( cdTextTab, "m_editComposer" );
   m_editIsrc       = new QLineEdit( cdTextTab, "m_editIsrc" );
   QFrame* line1    = new QFrame( cdTextTab, "_line1" );
 
@@ -248,12 +257,14 @@ void K3bAudioTrackDialog::setupGui()
   cdTextTabLayout->addWidget( m_editArranger, 3, 1 );
   cdTextTabLayout->addWidget( labelSongwriter, 4, 0 );
   cdTextTabLayout->addWidget( m_editSongwriter, 4, 1 );
-  cdTextTabLayout->addWidget( labelIsrc, 5, 0 );
-  cdTextTabLayout->addWidget( m_editIsrc, 5, 1 );
-  cdTextTabLayout->addWidget( labelMessage, 6, 0 );
-  cdTextTabLayout->addWidget( m_editMessage, 6, 1 );
+  cdTextTabLayout->addWidget( labelComposer, 5, 0 );
+  cdTextTabLayout->addWidget( m_editComposer, 5, 1 );
+  cdTextTabLayout->addWidget( labelIsrc, 6, 0 );
+  cdTextTabLayout->addWidget( m_editIsrc, 6, 1 );
+  cdTextTabLayout->addWidget( labelMessage, 7, 0 );
+  cdTextTabLayout->addWidget( m_editMessage, 7, 1 );
 
-  cdTextTabLayout->setRowStretch( 6, 1 );
+  cdTextTabLayout->setRowStretch( 7, 1 );
 
 
   // buddies
@@ -262,13 +273,15 @@ void K3bAudioTrackDialog::setupGui()
   labelMessage->setBuddy( m_editMessage );
   labelIsrc->setBuddy( m_editIsrc );
   labelSongwriter->setBuddy( m_editSongwriter );
+  labelComposer->setBuddy( m_editComposer );
   labelArranger->setBuddy( m_editArranger );
 
   // tab order
   setTabOrder( m_editTitle, m_editPerformer );
   setTabOrder( m_editPerformer, m_editArranger );
   setTabOrder( m_editArranger, m_editSongwriter );
-  setTabOrder( m_editSongwriter, m_editIsrc );
+  setTabOrder( m_editSongwriter, m_editComposer );
+  setTabOrder( m_editComposer, m_editIsrc );
   setTabOrder( m_editIsrc, m_editMessage );
 
   // /////////////////////////////////////////////////
