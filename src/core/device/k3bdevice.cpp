@@ -31,8 +31,6 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 
-#include <fstab.h>
-#include <mntent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
