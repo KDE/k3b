@@ -372,8 +372,6 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
 				      "To learn more about what K3b Setup will do press \"Details\"." ) );
   m_labelPermissions1->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
-  pageLayout_6->addMultiCellWidget( m_labelPermissions1, 0, 0, 1, 3 );
-
   m_groupUsers = new QGroupBox( m_page6, "m_groupUsers" );
   m_groupUsers->setTitle( i18n( "K3b users" ) );
   m_groupUsers->setColumnLayout(0, Qt::Vertical );
@@ -383,48 +381,32 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   groupUsersLayout->setAlignment( Qt::AlignTop );
 
   m_boxUsers = new QListBox( m_groupUsers, "m_boxUsers" );
+  m_buttonRemoveUser = new QPushButton( i18n( "Remove user" ), m_groupUsers, "m_buttonRemoveUser" );
+  m_buttonAddUser = new QPushButton( i18n( "Add user" ), m_groupUsers, "m_buttonAddUser" );
+  QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
   groupUsersLayout->addMultiCellWidget( m_boxUsers, 0, 2, 0, 0 );
-
-  m_buttonRemoveUser = new QPushButton( m_groupUsers, "m_buttonRemoveUser" );
-  m_buttonRemoveUser->setText( i18n( "Remove user" ) );
-
   groupUsersLayout->addWidget( m_buttonRemoveUser, 0, 1 );
-
-  m_buttonAddUser = new QPushButton( m_groupUsers, "m_buttonAddUser" );
-  m_buttonAddUser->setText( i18n( "Add user" ) );
-
   groupUsersLayout->addWidget( m_buttonAddUser, 1, 1 );
-  QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   groupUsersLayout->addItem( spacer_2, 2, 1 );
-
-  pageLayout_6->addMultiCellWidget( m_groupUsers, 1, 3, 2, 3 );
 
   m_checkPermissionsDevices = new QCheckBox( m_page6, "m_checkPermissionsDevices" );
   m_checkPermissionsDevices->setText( i18n( "let K3b Setup do the needed changes for the devices" ) );
   m_checkPermissionsDevices->setChecked( TRUE );
 
-  pageLayout_6->addMultiCellWidget( m_checkPermissionsDevices, 6, 6, 1, 2 );
-
   m_checkPermissionsExternalPrograms = new QCheckBox( m_page6, "m_checkPermissionsExternalPrograms" );
   m_checkPermissionsExternalPrograms->setText( i18n( "let K3b Setup do the needed changes for the external programs" ) );
   m_checkPermissionsExternalPrograms->setChecked( TRUE );
 
-  pageLayout_6->addMultiCellWidget( m_checkPermissionsExternalPrograms, 5, 5, 1, 2 );
-
-  QFrame* Line1 = new QFrame( m_page6, "Line1" );
-  Line1->setProperty( "frameShape", (int)QFrame::HLine );
-  Line1->setFrameShadow( QFrame::Sunken );
-  Line1->setFrameShape( QFrame::HLine );
-
-  pageLayout_6->addMultiCellWidget( Line1, 4, 4, 1, 3 );
+//   QFrame* Line1 = new QFrame( m_page6, "Line1" );
+//   Line1->setProperty( "frameShape", (int)QFrame::HLine );
+//   Line1->setFrameShadow( QFrame::Sunken );
+//   Line1->setFrameShape( QFrame::HLine );
 
   m_labelPermissions2 = new QLabel( m_page6, "m_labelPermissions2" );
   m_labelPermissions2->setText( i18n( "Please specify the users that will use K3b. You can also specify an alternative group name."
 				      " If you do not know what that means just leave the default." ) );
   m_labelPermissions2->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
-
-  pageLayout_6->addWidget( m_labelPermissions2, 1, 1 );
 
   QVBoxLayout* Layout1 = new QVBoxLayout( 0, 0, 6, "Layout1"); 
   QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -434,13 +416,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_buttonPermissionsDetails->setText( i18n( "Details" ) );
   Layout1->addWidget( m_buttonPermissionsDetails );
 
-  pageLayout_6->addMultiCellLayout( Layout1, 5, 6, 3, 3 );
-
   QLabel* pixmapLabel6 = new QLabel( m_page6, "pixmapLabel6" );
   pixmapLabel6->setPixmap( image0 );
   pixmapLabel6->setScaledContents( TRUE );
-
-  pageLayout_6->addMultiCellWidget( pixmapLabel6, 0, 6, 0, 0 );
 
   m_groupWriterGroup = new QGroupBox( m_page6, "m_groupWriterGroup" );
   m_groupWriterGroup->setTitle( i18n( "cd writing group" ) );
@@ -454,9 +432,19 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_editPermissionsGroup->setText( i18n( "cdrecording" ) );
   groupWriterGroupLayout->addWidget( m_editPermissionsGroup );
 
-  pageLayout_6->addWidget( m_groupWriterGroup, 2, 1 );
-  QSpacerItem* spacer_4 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-  pageLayout_6->addItem( spacer_4, 3, 1 );
+
+  pageLayout_6->addMultiCellWidget( pixmapLabel6, 0, 6, 0, 0 );
+  pageLayout_6->addMultiCellWidget( m_labelPermissions1, 0, 0, 1, 2 );
+  pageLayout_6->addMultiCellWidget( m_labelPermissions2, 1, 1, 1, 2 );
+  pageLayout_6->addMultiCellWidget( m_groupWriterGroup, 3, 3, 1, 2 );
+  pageLayout_6->addMultiCellWidget( m_groupUsers, 2, 2, 1, 2 );
+  pageLayout_6->addWidget( m_checkPermissionsDevices, 6, 1 );
+  pageLayout_6->addWidget( m_checkPermissionsExternalPrograms, 5, 1 );
+  //  pageLayout_6->addMultiCellWidget( Line1, 4, 4, 1, 2 );
+  pageLayout_6->addMultiCellLayout( Layout1, 5, 6, 2, 2 );
+
+  pageLayout_6->setColStretch( 1, 1 );
+
   addPage( m_page6, i18n( "Setup permissions" ) );
   // -----------------------------------------------------------------------------------------------------------
 
