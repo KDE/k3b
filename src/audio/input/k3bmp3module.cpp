@@ -13,6 +13,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 
+#include <stdlib.h>
 #include <cmath>
 
 

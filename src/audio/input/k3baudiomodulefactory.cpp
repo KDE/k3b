@@ -1,4 +1,4 @@
-#include "../../../config.h"
+#include "../../../../config.h"
 
 #include "k3baudiomodulefactory.h"
 #include "k3bmp3module.h"

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "../../../config.h"
+#include "../../../../config.h"
 
 
 #ifdef OGG_VORBIS
@@ -51,12 +51,12 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
   // do some initialization
   FILE* file = fopen( track->absPath().latin1(), "r" );
   if( !file ) {
-    qDebug("(K3bOggVorbisModule) Could not open file " + track->absPath() );
+    qDebug("(K3bOggVorbisModule) Could not open file %s", track->absPath().latin1() );
     audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
   }
   else {
     if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      qDebug("(K3bOggVorbisModule) " + track->absPath() + " seems to to be an ogg vorbis file." );
+      qDebug("(K3bOggVorbisModule) %s seems to to be an ogg vorbis file.", track->absPath().latin1() );
       audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
       fclose( file );
     }
@@ -64,7 +64,7 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
       // check length of track
       double seconds = ov_time_total( m_oggVorbisFile, -1 );
       if( seconds == OV_EINVAL ) {
-	qDebug( "(K3bOggVorbisModule) Could not determine length of file " + track->absPath() );
+	qDebug( "(K3bOggVorbisModule) Could not determine length of file %s", track->absPath().latin1() );
 	audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
       }
       else {
@@ -75,7 +75,7 @@ K3bOggVorbisModule::K3bOggVorbisModule( K3bAudioTrack* track )
       // search for artist,title information
       vorbis_comment* vComment = ov_comment( m_oggVorbisFile, -1 );
       if( !vComment ) {
-	qDebug( "(K3bOggVorbisModule) Could not open OggVorbis comment of file " + track->absPath() );
+	qDebug( "(K3bOggVorbisModule) Could not open OggVorbis comment of file %s", track->absPath().latin1() );
       }
       else {
 	for( int i = 0; i < vComment->comments; ++i ) {
@@ -111,12 +111,12 @@ void K3bOggVorbisModule::startDecoding()
   // open the file
   FILE* file = fopen( audioTrack()->absPath().latin1(), "r" );
   if( !file ) {
-    qDebug("(K3bOggVorbisModule) Could not open file " + audioTrack()->absPath() );
+    qDebug("(K3bOggVorbisModule) Could not open file %s", audioTrack()->absPath().latin1() );
     emit finished( false );
   }
   else {
     if( ov_open( file, m_oggVorbisFile, 0, 0 ) ) {
-      qDebug("(K3bOggVorbisModule) " + audioTrack()->absPath() + " seems to to be an ogg vorbis file." );
+      qDebug("(K3bOggVorbisModule) %s seems to to be an ogg vorbis file.", audioTrack()->absPath().latin1() );
       fclose( file );
       emit finished( false );
     }
@@ -220,7 +220,7 @@ bool K3bOggVorbisModule::canDecode( const KURL& url )
 {
   FILE* file = fopen( url.path().latin1(), "r" );
   if( !file ) {
-    qDebug("(K3bOggVorbisModule) Could not open file " + url.path() );
+    qDebug("(K3bOggVorbisModule) Could not open file %s", url.path().latin1() );
     return false;
   }
 

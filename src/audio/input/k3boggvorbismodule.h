@@ -18,7 +18,7 @@
 #ifndef K3BOGGVORBISMODULE_H
 #define K3BOGGVORBISMODULE_H
 
-#include "../../../config.h"
+#include "../../../../config.h"
 
 #ifdef OGG_VORBIS
 
