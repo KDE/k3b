@@ -57,6 +57,7 @@
 #include <qradiobutton.h>
 #include <qsizepolicy.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
@@ -238,7 +239,7 @@ void K3bCdCopyDialog::slotStartClicked()
     // check for m_tempDirSelectionWidget->tempPath() and
     // m_tempDirSelectionWidget-tempPath() + ".toc"
     //
-    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+    if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
 				     i18n("File Exists") )
@@ -246,7 +247,7 @@ void K3bCdCopyDialog::slotStartClicked()
 	return;
     }
     
-    if( QFile::exists( m_tempDirSelectionWidget->tempPath() + ".toc" ) ) {
+    if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
 				     i18n("File Exists") )
