@@ -15,6 +15,7 @@
 
 #include "k3bmixedburndialog.h"
 #include "k3bmixeddoc.h"
+#include "k3bmixedview.h"
 
 #include <k3bdataimagesettingswidget.h>
 #include <k3bdataadvancedimagesettingswidget.h>
@@ -34,6 +35,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bversion.h>
 #include <k3bcore.h>
+#include <k3baudiotrackplayer.h>
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -177,6 +179,14 @@ void K3bMixedBurnDialog::createContextHelp()
 						  "this is the recommended mode."
 						  "<p>Some older CD-ROMs may have problems reading "
 						  "a blue book CD since it is a multisession CD.") );
+}
+
+
+void K3bMixedBurnDialog::slotStartClicked()
+{
+  // FIXME: this should not be done via the doc. So remove all gui stuff from the doc
+  static_cast<K3bMixedView*>(m_doc->view())->player()->stop();
+  K3bProjectBurnDialog::slotStartClicked();
 }
 
 

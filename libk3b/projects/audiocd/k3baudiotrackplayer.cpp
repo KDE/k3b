@@ -16,7 +16,6 @@
 #include "k3baudiotrackplayer.h"
 #include <k3baudiodoc.h>
 #include <k3baudiotrack.h>
-#include <k3bcore.h>
 
 #include <kactionclasses.h>
 #include <klocale.h>
@@ -24,6 +23,7 @@
 #include <qslider.h>
 #include <qtimer.h>
 #include <qmutex.h>
+#include <qtooltip.h>
 
 
 class K3bAudioTrackPlayer::Private
@@ -53,7 +53,7 @@ public:
 
 K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, const char* name )
   : QObject( parent, name ),
-    K3bAudioClient( k3bcore->audioServer() ),
+    K3bAudioClient(),
     m_doc( doc ),
     m_currentTrack( 0 )
 {
@@ -106,6 +106,9 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 
   d->seekSlider = new QSlider( 0, 100, 1, 0, Qt::Horizontal, 0, "audiotrackplayerslider" );
   connect( d->seekSlider, SIGNAL(sliderMoved(int)), this, SLOT(slotSeek(int)) );
+  // FIXME: maybe it's not such a good idea to use a KWidgetAction here since this way the player
+  // can only be used once in one widget. If the action would always create a new slider we could plug
+  // the action into several toolboxes and also use it in some resizing or track splitting dialogs.
   d->actionSeek = new KWidgetAction( d->seekSlider,
 				     i18n("Seek"),
 				     KShortcut(),
@@ -113,7 +116,7 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 				     0,
 				     d->actionCollection,
 				     "seek" );
-  // this should be done in KWidgetAction but is not yet (patch pending :)
+  // this should be done in KWidgetAction but is not yet
   connect( d->actionSeek, SIGNAL(enabled(bool)), d->seekSlider, SLOT(setEnabled(bool)) );
 
   d->actionStop->setEnabled(false);
@@ -133,6 +136,7 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 
 K3bAudioTrackPlayer::~K3bAudioTrackPlayer()
 {
+  stop();
   delete d->seekSlider;
   delete d;
 }
@@ -164,6 +168,12 @@ KAction* K3bAudioTrackPlayer::action( int action ) const
 void K3bAudioTrackPlayer::playTrack( K3bAudioTrack* track )
 {
   if( track ) {
+    // we show the currently playing track as a tooltip on the slider
+    QToolTip::remove( d->seekSlider );
+    QToolTip::add( d->seekSlider, i18n("Playing track %1: %2 - %3")
+		   .arg(track->index()+1)
+		   .arg(track->artist())
+		   .arg(track->title()) );
     d->seekSlider->setMaxValue( track->length().totalFrames() );
     m_currentTrack = track;
     d->paused = true;

@@ -90,6 +90,10 @@ K3bToolBox::K3bToolBox( QWidget* parent, const char* name )
 
 K3bToolBox::~K3bToolBox()
 {
+  // we do not want to delete the widgets from the widgetactions becasue they
+  // might be used afterwards
+  for( QPtrListIterator<QWidget> it( m_doNotDeleteWidgets ); it.current(); ++it )
+    it.current()->reparent( 0L, QPoint() );
 }
 
 
@@ -154,5 +158,13 @@ void K3bToolBox::addToggleButton( KToggleAction* action )
 {
   addButton( action );
 }
+
+
+void K3bToolBox::addWidgetAction( KWidgetAction* action )
+{
+  addWidget( action->widget() );
+  m_doNotDeleteWidgets.append( action->widget() );
+}
+
 
 #include "k3btoolbox.moc"

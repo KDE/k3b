@@ -40,7 +40,10 @@ Use DAO writing mode for data CDs when overwrite is enabled.
 Added option to load the last used settings in addition to the default user settings in every
 	action dialog.
 Show system device name in case the string representing two devices are equal.
-	
+Fixed the docking issues. No floating dock windows anymore. :) I have no idea why I wasn't able to do this 
+	before... it was so easy after all.
+Plugin based Audio Output system for Audio project "preview".
+
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.

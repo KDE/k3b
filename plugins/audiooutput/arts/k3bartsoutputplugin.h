@@ -13,33 +13,35 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_ARTS_AUDIO_SERVER_H_
-#define _K3B_ARTS_AUDIO_SERVER_H_
+#ifndef _K3B_ARTS_AUDIO_OUTPUT_H_
+#define _K3B_ARTS_AUDIO_OUTPUT_H_
 
-#include <k3baudioserver.h>
+#include <k3baudiooutputplugin.h>
 
-#include <qmap.h>
+#include <artsc/artsc.h>
 
 
-class K3bArtsAudioServer : public K3bAudioServer
+class K3bArtsOutputPlugin : public K3bAudioOutputPlugin
 {
  public:
-  K3bArtsAudioServer( QObject* parent = 0, const char* name = 0 );
-  ~K3bArtsAudioServer();
+  K3bArtsOutputPlugin( QObject* parent = 0, const char* name = 0 );
+  ~K3bArtsOutputPlugin();
 
   int pluginSystemVersion() const { return 3; }
+  QCString soundSystem() const { return "arts"; }
 
-  bool isAvailable() const;
-
-  void attachClient( K3bAudioClient* );
-  void detachClient( K3bAudioClient* );
-
- private:
+  bool init();
   void cleanup();
 
-  class Private;
-  QMap<K3bAudioClient*, Private*> m_clientMap;
+  QString lastErrorMessage() const;
+
+  int write( char* data, int len );
+
+ private:
   bool m_initialized;
+  int m_lastErrorCode;
+
+  arts_stream_t m_stream;
 };
 
 #endif

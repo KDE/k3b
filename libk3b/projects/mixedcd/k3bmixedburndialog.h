@@ -54,6 +54,10 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    K3bAudioCdTextWidget* m_cdtextWidget;
 
  protected slots:
+   /**
+    * Reimplemented for internal reasons (shut down the audio player)
+    */
+   void slotStartClicked();
    void saveSettings();
    void readSettings();
 

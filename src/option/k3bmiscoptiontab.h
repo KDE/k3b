@@ -35,6 +35,9 @@ class K3bMiscOptionTab : public base_K3bMiscOptionTab
 
   void readSettings();
   bool saveSettings();
+
+ private slots:
+  void slotConfigureAudioOutput();
 };
 
 #endif

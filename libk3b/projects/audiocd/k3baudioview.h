@@ -18,6 +18,7 @@
 #define K3BAUDIOVIEW_H
 
 #include <k3bview.h>
+#include "k3baudiotrackview.h"
 
 #include <qstringlist.h>
 
@@ -25,7 +26,6 @@
 class K3bAudioDoc;
 class K3bAudioTrack;
 class K3bAudioTrackView;
-class K3bAudioTrackPlayer;
 
 
 /**
@@ -39,11 +39,12 @@ class K3bAudioView : public K3bView
   K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name = 0 );
   ~K3bAudioView();
 
+  K3bAudioTrackPlayer* player() const { return m_songlist->player(); }
+
  private:
   K3bAudioDoc* m_doc;
 	
   K3bAudioTrackView* m_songlist;
-  K3bAudioTrackPlayer* m_player;
 };
 
 #endif

@@ -17,9 +17,8 @@
 #include "k3baudioserver.h"
 
 
-K3bAudioClient::K3bAudioClient( K3bAudioServer* s )
-  : m_audioServer(s),
-    m_attached(false)
+K3bAudioClient::K3bAudioClient()
+  : m_attached(false)
 {
 }
 
@@ -32,7 +31,7 @@ K3bAudioClient::~K3bAudioClient()
 void K3bAudioClient::startStreaming()
 {
   if( !m_attached ) {
-    m_audioServer->attachClient( this );
+    K3bAudioServer::instance()->attachClient( this );
     m_attached = true;
   }
 }
@@ -41,7 +40,7 @@ void K3bAudioClient::startStreaming()
 void K3bAudioClient::stopStreaming()
 {
   if( m_attached ) {
-    m_audioServer->detachClient( this );
+    K3bAudioServer::instance()->detachClient( this );
     m_attached = false;
   }
 }

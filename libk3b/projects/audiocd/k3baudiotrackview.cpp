@@ -22,9 +22,13 @@
 #include "k3baudiodoc.h"
 #include "k3baudiozerodata.h"
 #include "k3baudiotracksplitdialog.h"
+#include "k3baudiofile.h"
+#include "k3baudiotrackplayer.h"
 
 #include <k3bview.h>
 #include <k3bcdtextvalidator.h>
+#include <k3blistviewitemanimator.h>
+#include <k3baudiodecoder.h>
 
 #include <qheader.h>
 #include <qtimer.h>
@@ -51,6 +55,12 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
     m_updatingColumnWidths(false),
     m_currentlyPlayingTrack(0)
 {
+  m_player = new K3bAudioTrackPlayer( m_doc, this );
+  connect( m_player, SIGNAL(playingTrack(K3bAudioTrack*)), this,
+	   SLOT(showPlayerIndicator(K3bAudioTrack*)) );
+  connect( m_player, SIGNAL(paused(bool)), this, SLOT(togglePauseIndicator(bool)) );
+  connect( m_player, SIGNAL(stopped()), this, SLOT(removePlayerIndicator()) );
+
   setAcceptDrops( true );
   setDropVisualizer( true );
   setAllColumnsShowFocus( true );
@@ -67,6 +77,8 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
 
   setupColumns();
   setupActions();
+
+  m_playerItemAnimator = new K3bListViewItemAnimator( this );
 
   m_animationTimer = new QTimer( this );
   connect( m_animationTimer, SIGNAL(timeout()), this, SLOT(slotAnimation()) );
@@ -149,6 +161,9 @@ void K3bAudioTrackView::setupActions()
   m_actionSplitTrack = new KAction( i18n("Split Track..."), 0,
 				    KShortcut(), this, SLOT(slotSplitTrack()),
 				    actionCollection(), "track_split" );
+  m_actionPlayTrack = new KAction( i18n("Play Track"), "player_play",
+				   KShortcut(), this, SLOT(slotPlayTrack()),
+				   actionCollection(), "track_play" );
 }
 
 
@@ -166,11 +181,27 @@ QDragObject* K3bAudioTrackView::dragObject()
   if( list.isEmpty() )
     return 0;
 
-  QPtrListIterator<QListViewItem> it(list);
   KURL::List urls;
 
-  for( ; it.current(); ++it ) {
-    // FIXME
+  for( QPtrListIterator<QListViewItem> it(list); it.current(); ++it ) {
+    QListViewItem* item = *it;
+    // we simply ignore open track items to not include files twice
+    // we also don't want the invisible source items
+    if( !item->isOpen() && K3bListView::parentItem(item)->isOpen() ) {
+      if( K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item ) ) {
+	if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( sourceItem->source() ) )
+	  urls.append( KURL::fromPathOrURL(file->filename()) );
+      }
+      else {
+	K3bAudioTrackViewItem* trackItem = static_cast<K3bAudioTrackViewItem*>( item );
+	K3bAudioDataSource* source = trackItem->track()->firstSource();
+	while( source ) {
+	  if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) )
+	    urls.append( KURL::fromPathOrURL(file->filename()) );
+	  source = source->next();
+	}
+      }
+    }
   }
 
   return new KURLDrag( urls, viewport() );
@@ -691,6 +722,15 @@ void K3bAudioTrackView::slotSplitSource()
       trackAfter = trackAfter->prev();
     track->addSource( sv->source()->take() );
     track->moveAfter( trackAfter );
+
+    // let's see if it's a file because in that case we can reuse the metainfo :)
+    if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( track->firstSource() ) ) {
+      track->setArtist( file->decoder()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+      track->setTitle( file->decoder()->metaInfo( K3bAudioDecoder::META_TITLE ) );
+      track->setSongwriter( file->decoder()->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+      track->setComposer( file->decoder()->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+      track->setCdTextMessage( file->decoder()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+    }
   }
 }
 
@@ -719,6 +759,11 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
 
   // build the menu
   m_popupMenu->clear();
+
+  if( numTracks >= 1 ) {
+    m_actionPlayTrack->plug( m_popupMenu );
+    m_popupMenu->insertSeparator();
+  }
 
   if( item )
     m_actionRemove->plug( m_popupMenu );
@@ -765,11 +810,23 @@ void K3bAudioTrackView::slotProperties()
 }
 
 
+void K3bAudioTrackView::slotPlayTrack()
+{
+  QPtrList<K3bAudioTrack> tracks;
+  QPtrList<K3bAudioDataSource> sources;
+  getSelectedItems( tracks, sources );
+  if( tracks.count() > 0 )
+    m_player->playTrack( tracks.first() );
+}
+
+
 void K3bAudioTrackView::showPlayerIndicator( K3bAudioTrack* track )
 {
   removePlayerIndicator();
   m_currentlyPlayingTrack = track;
-  getTrackViewItem( track )->setPixmap( 1, SmallIcon( "player_play" ) );  
+  K3bAudioTrackViewItem* item = getTrackViewItem( track );
+  item->setPixmap( 1, SmallIcon( "player_play" ) );  
+  m_playerItemAnimator->setItem( item, 1 );
 }
 
 
@@ -777,9 +834,9 @@ void K3bAudioTrackView::togglePauseIndicator( bool b )
 {
   if( m_currentlyPlayingTrack ) {
     if( b )
-      getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, SmallIcon( "player_pause" ) );  
+      m_playerItemAnimator->setPixmap( SmallIcon( "player_pause" ) );
     else
-      getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, SmallIcon( "player_play" ) );  
+      m_playerItemAnimator->setPixmap( SmallIcon( "player_play" ) );
   }
 }
 
@@ -787,7 +844,8 @@ void K3bAudioTrackView::togglePauseIndicator( bool b )
 void K3bAudioTrackView::removePlayerIndicator()
 {
   if( m_currentlyPlayingTrack )
-    getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, QPixmap() );  
+    getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, QPixmap() );
+  m_playerItemAnimator->stop();
   m_currentlyPlayingTrack = 0;
 }
 

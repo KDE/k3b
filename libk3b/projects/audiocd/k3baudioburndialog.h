@@ -60,6 +60,10 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    K3bAudioDoc* m_doc;
 
  protected slots:
+   /**
+    * Reimplemented for internal reasons (shut down the audio player)
+    */
+   void slotStartClicked();
    void toggleAllOptions();
 };
 

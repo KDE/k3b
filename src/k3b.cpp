@@ -273,9 +273,6 @@ void K3bMainWindow::initActions()
   actionViewContentsView = new KToggleAction(i18n("Show Contents"), 0, this, SLOT(slotShowContentsView()),
 					     actionCollection(), "view_contents");
 
-  actionViewProjectView = new KToggleAction(i18n("Show Project View"), 0, this, SLOT(slotShowProjectView()),
-					    actionCollection(), "view_show_project_view");
-
   actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
 					       actionCollection(), "view_document_header");
 
@@ -372,11 +369,10 @@ void K3bMainWindow::initView()
   // setup main docking things
   mainDock = createDockWidget( "project_view", SmallIcon("idea"), 0,
 			       kapp->makeStdCaption( i18n("Project View") ), i18n("Project View") );
+  mainDock->setDockSite( KDockWidget::DockCorner );
+  mainDock->setEnableDocking( KDockWidget::DockNone );
   setView( mainDock );
   setMainDockWidget( mainDock );
-  connect( mainDock, SIGNAL(iMBeingClosed()), this, SLOT(slotProjectDockHidden()) );
-  connect( mainDock, SIGNAL(hasUndocked()), this, SLOT(slotProjectDockHidden()) );
-
 
   // --- Document Dock ----------------------------------------------------------------------------
   d->documentStack = new QWidgetStack( mainDock );
@@ -411,53 +407,45 @@ void K3bMainWindow::initView()
 
   // add the document tab to the styled document box
   m_documentTab = new K3bProjectTabWidget( d->documentHull );
-  //  m_documentTab->setPalette( oldPal );
 
   documentHullLayout->addWidget( m_documentHeader, 0, 0 );
   documentHullLayout->addWidget( m_documentTab, 1, 0 );
 
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged()) );
 
-
   d->welcomeWidget = new K3bWelcomeWidget( this, d->documentStack );
-//   d->welcomeWidget->m_topPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
-//   d->welcomeWidget->m_bottomPixLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
-
-//   connect( d->welcomeWidget->m_buttonDataCD, SIGNAL(leftClickedURL()),
-// 	   this, SLOT(slotNewDataDoc()) );
-//   connect( d->welcomeWidget->m_buttonDataDVD, SIGNAL(leftClickedURL()),
-// 	   this, SLOT(slotNewDvdDoc()) );
-//   connect( d->welcomeWidget->m_buttonAudioCD, SIGNAL(leftClickedURL()),
-// 	   this, SLOT(slotNewAudioDoc()) );
-//   connect( d->welcomeWidget->m_buttonCopyCD, SIGNAL(leftClickedURL()),
-// 	   this, SLOT(slotCdCopy()) );
 
   d->documentStack->addWidget( d->welcomeWidget );
   d->documentStack->raiseWidget( d->welcomeWidget );
   // ---------------------------------------------------------------------------------------------
 
-
   // --- Directory Dock --------------------------------------------------------------------------
   m_dirTreeDock = createDockWidget( "directory_tree", SmallIcon("folder"), 0,
 				    kapp->makeStdCaption( i18n("Sidepanel") ), i18n("Sidepanel") );
-  K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
+  m_dirTreeDock->setEnableDocking( KDockWidget::DockCorner );
+
+  K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
+  //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
+
   m_dirTreeDock->setWidget( sidePanel );
   m_dirTreeDock->manualDock( mainDock, KDockWidget::DockTop, 4000 );
   connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
   connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
+  // ---------------------------------------------------------------------------------------------
 
+  // --- Contents Dock ---------------------------------------------------------------------------
   m_contentsDock = createDockWidget( "contents_view", SmallIcon("idea"), 0,
 			      kapp->makeStdCaption( i18n("Contents View") ), i18n("Contents View") );
-  m_dirView = new K3bDirView( sidePanel->fileTreeView(), m_contentsDock );
+  m_contentsDock->setEnableDocking( KDockWidget::DockCorner );
+  m_dirView = new K3bDirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
   m_contentsDock->setWidget( m_dirView );
-  //  m_contentsDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
   m_contentsDock->manualDock( m_dirTreeDock, KDockWidget::DockRight, 2000 );
 
   connect( m_contentsDock, SIGNAL(iMBeingClosed()), this, SLOT(slotContentsDockHidden()) );
   connect( m_contentsDock, SIGNAL(hasUndocked()), this, SLOT(slotContentsDockHidden()) );
   // ---------------------------------------------------------------------------------------------
 
-  // --- filetreecombobox-toolbar -------------------------------------------------------------------
+  // --- filetreecombobox-toolbar ----------------------------------------------------------------
   K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
   connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
   connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice::Device*)), m_dirView,
@@ -480,8 +468,6 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   m_documentTab->showPage( w );
 
   slotCurrentDocChanged();
-
-  setProjectsHidable( false );
 }
 
 
@@ -1275,13 +1261,6 @@ void K3bMainWindow::slotShowContentsView()
 }
 
 
-void K3bMainWindow::slotShowProjectView()
-{
-  mainDock->changeHideShowState();
-  slotCheckDockWidgetStatus();
-}
-
-
 void K3bMainWindow::slotShowTips()
 {
   KTipDialog::showTip( this, QString::null, true );
@@ -1300,16 +1279,9 @@ void K3bMainWindow::slotContentsDockHidden()
 }
 
 
-void K3bMainWindow::slotProjectDockHidden()
-{
-  actionViewProjectView->setChecked( false );
-}
-
-
 void K3bMainWindow::slotCheckDockWidgetStatus()
 {
   actionViewContentsView->setChecked( m_contentsDock->isVisible() );
-  actionViewProjectView->setChecked( mainDock->isVisible() );
   actionViewDirTreeView->setChecked( m_dirTreeDock->isVisible() );
 }
 
@@ -1366,20 +1338,6 @@ void K3bMainWindow::slotEditBootImages()
   }
 }
 
-
-void K3bMainWindow::setProjectsHidable( bool hidable )
-{
-  if( hidable ) {
-  }
-  else {
-    // TODO: somehow we need to disable the little close button in the dockheader
-    //       QDockWindow allows this...
-
-    if( !mainDock->isVisible() )
-      slotShowProjectView();
-  }
-  //  actionViewProjectView->setEnabled( hidable );
-}
 
 void K3bMainWindow::slotCheckSystem()
 {

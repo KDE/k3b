@@ -1023,4 +1023,14 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
 }
 
 
+QListViewItem* K3bListView::parentItem( QListViewItem* item )
+{
+  if( !item )
+    return 0;
+  if( item->parent() )
+    return item->parent();
+  else
+    return K3bListView::parentItem( item->itemAbove() );
+}
+
 #include "k3blistview.moc"

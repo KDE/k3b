@@ -26,6 +26,7 @@ class K3bMainWindow;
 class K3bCore;
 class K3bInterface;
 class K3bSongManager;
+class K3bAudioServer;
 
 
 class K3bApplication : public KApplication, public DCOPObject
@@ -76,6 +77,7 @@ class K3bApplication : public KApplication, public DCOPObject
   K3bInterface* m_interface;
   K3bMainWindow* m_mainWindow;
   K3bSongManager* m_songManager;
+  K3bAudioServer* m_audioServer;
 
   QByteArray m_reuseData;
 

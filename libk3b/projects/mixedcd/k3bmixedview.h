@@ -27,6 +27,8 @@ class K3bMixedDirTreeView;
 class K3bAudioTrackView;
 class QListViewItem;
 class K3bDirItem;
+class K3bAudioTrackPlayer;
+
 
 class K3bMixedView : public K3bView
 {
@@ -37,6 +39,8 @@ class K3bMixedView : public K3bView
   ~K3bMixedView();
 
   K3bDirItem* currentDir() const;
+
+  K3bAudioTrackPlayer* player() const;
 
  private slots:
   void slotAudioTreeSelected();

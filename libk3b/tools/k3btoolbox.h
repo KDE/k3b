@@ -19,9 +19,11 @@
 #include <qframe.h>
 #include <qstring.h>
 #include <qtoolbutton.h>
+#include <qptrlist.h>
 
 class KAction;
 class KToggleAction;
+class KWidgetAction;
 class QGridLayout;
 class QPopupMenu;
 
@@ -52,6 +54,13 @@ class K3bToolBox : public QFrame
 
   void addButton( KAction* );
   void addToggleButton( KToggleAction* );
+  void addWidgetAction( KWidgetAction* );
+
+  /**
+   * Be aware that the toolbox will take ownership of the widget
+   * and destroy it on destruction. Becasue of this it is not fitted
+   * for WidgetActions.
+   */
   void addWidget( QWidget* );
   void addLabel( const QString& );
   void addSpacing();
@@ -60,6 +69,7 @@ class K3bToolBox : public QFrame
 
  protected:
   QGridLayout* m_mainLayout;
+  QPtrList<QWidget> m_doNotDeleteWidgets;
 };
 
 

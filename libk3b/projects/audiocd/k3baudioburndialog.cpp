@@ -15,6 +15,8 @@
 
 
 #include "k3baudioburndialog.h"
+#include "k3baudioview.h"
+#include "k3baudiotrackplayer.h"
 #include <k3bcore.h>
 #include "k3baudiodoc.h"
 #include <k3bdevice.h>
@@ -108,6 +110,14 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 }
 
 K3bAudioBurnDialog::~K3bAudioBurnDialog(){
+}
+
+
+void K3bAudioBurnDialog::slotStartClicked()
+{
+  // FIXME: this should not be done via the doc. So remove all gui stuff from the doc
+  static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
+  K3bProjectBurnDialog::slotStartClicked();
 }
 
 

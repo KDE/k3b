@@ -229,7 +229,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotDirTreeDockHidden();
   void slotContentsDockHidden();
-  void slotProjectDockHidden();
 
   void slotSettingsConfigure();
 
@@ -254,7 +253,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotShowDirTreeView();
   void slotShowContentsView();
-  void slotShowProjectView();
 
   void slotProjectAddFiles();
 
@@ -264,8 +262,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotDataImportSession();
   void slotDataClearImportedSession();
   void slotEditBootImages();
-
-  void setProjectsHidable( bool );
 
   void showBusyInfo( const QString& str );
   void endBusy();
@@ -336,7 +332,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirTreeView;
   KToggleAction* actionViewContentsView;
-  KToggleAction* actionViewProjectView;
   KToggleAction* actionViewDocumentHeader;
 
   // project actions

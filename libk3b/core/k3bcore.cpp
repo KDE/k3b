@@ -23,8 +23,6 @@
 #include <k3bglobals.h>
 #include <k3bversion.h>
 #include <k3bjob.h>
-#include <k3baudioserver.h>
-#include <k3bpluginmanager.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -38,15 +36,13 @@
 class K3bCore::Private {
 public:
   Private( const K3bVersion& about )
-    : version( about ),
-      audioServer(0) {
+    : version( about ) {
   }
 
   KConfig* config;
   K3bVersion version;
   K3bDevice::DeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
-  K3bAudioServer* audioServer;
 
   QPtrList<K3bJob> runningJobs;
 };
@@ -92,39 +88,6 @@ K3bDevice::DeviceManager* K3bCore::deviceManager() const
 K3bExternalBinManager* K3bCore::externalBinManager() const
 {
   return d->externalBinManager;
-}
-
-
-K3bAudioServer* K3bCore::audioServer() const
-{
-  if( !d->audioServer ) {
-    K3bCore* that = const_cast<K3bCore*>(this);
-
-    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioServer" );
-
-    // we always prefere the arts audio server so we need a little hacking
-    for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-      K3bAudioServer* f = dynamic_cast<K3bAudioServer*>( it.current() );
-      if( f && f->isA( "K3bArtsAudioServer" ) && f->isAvailable() ) {
-	that->d->audioServer = f;
-	return d->audioServer;
-      }
-    }
-
-    // arts was not available. so search for another one
-    for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-      K3bAudioServer* f = dynamic_cast<K3bAudioServer*>( it.current() );
-      if( f && f->isAvailable() ) {
-	that->d->audioServer = f;
-	return d->audioServer;
-      }
-    }
-
-    // nothing found
-    kdDebug() << "(K3bCore) arts unavailable. No other server implemented yet." << endl;
-  }
-
-  return d->audioServer;
 }
 
 

@@ -19,6 +19,7 @@
 #include "k3binterface.h"
 #include "k3bwriterspeedverificationdialog.h"
 #include "k3bsplash.h"
+#include "k3baudioserver.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -43,6 +44,7 @@
 #include <dcopclient.h>
 #include <kstandarddirs.h>
 #include <kstartupinfo.h>
+#include <kmessagebox.h>
 
 #include <qguardedptr.h>
 #include <qtimer.h>
@@ -65,6 +67,9 @@ K3bApplication::K3bApplication()
   m_core = new K3bCore( aboutData()->version(), config(), this );
 
   m_songManager = K3bSongManager::instance();  // this is bad stuff!!!
+
+  // from this point on available through K3bAudioServer::instance()
+  m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
 
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
@@ -128,8 +133,7 @@ void K3bApplication::init()
   emit initializationInfo( i18n("Reading local Song database...") );
   config()->setGroup( "General Options" );
 
-  QString filename = config()->readPathEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
-  K3bSongManager::instance()->load( filename );
+  m_audioServer->setOutputMethod( config()->readEntry( "Audio Output System", "arts" ).local8Bit() );
 
   emit initializationInfo( i18n("Creating GUI...") );
 
@@ -300,6 +304,11 @@ bool K3bApplication::processCmdLineArgs()
   }
   else
     showTips = true;
+
+  // FIXME: seems not like the right place...
+  if( args->isSet( "ao" ) )
+    if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
+      KMessageBox::error( m_mainWindow, i18n("Could not find Audio Output plugin '%1'").arg( args->getOption("ao") ) );
 
   args->clear();
 

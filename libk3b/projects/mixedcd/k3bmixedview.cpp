@@ -73,6 +73,12 @@ K3bMixedView::~K3bMixedView()
 }
 
 
+K3bAudioTrackPlayer* K3bMixedView::player() const
+{
+  return m_audioListView->player();
+}
+
+
 void K3bMixedView::slotAudioTreeSelected()
 {
   m_widgetStack->raiseWidget( m_audioListView );

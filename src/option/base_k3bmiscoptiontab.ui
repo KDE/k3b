@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bMiscOptionTab</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>207</width>
-            <height>311</height>
+            <width>587</width>
+            <height>396</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>base_K3bMiscOptionTab</string>
     </property>
     <vbox>
         <property name="name">
@@ -40,6 +43,40 @@
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;This is the default temporary directory. This is where K3b will store temporary files like iso images or decoded audio files.
 &lt;p&gt;Be aware that the temporary directory may also be changed in every project burn dialog.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox4</cstring>
+            </property>
+            <property name="title">
+                <string>Audio Output</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Used Audio Output System:</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox">
+                    <property name="name">
+                        <cstring>m_comboAudioOutputSystem</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonConfigureAudioOutput</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Configure...</string>
                     </property>
                 </widget>
             </hbox>
@@ -169,7 +206,7 @@
             <property name="sizeHint">
                 <size>
                     <width>31</width>
-                    <height>71</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>

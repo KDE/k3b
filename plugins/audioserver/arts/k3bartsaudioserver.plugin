@@ -1,9 +1,0 @@
-[K3b Plugin]
-Lib=libk3bartsaudioserver
-Group=AudioServer
-Name=K3b Arts Audioserver
-Author=Sebastian Trueg
-Email=trueg@k3b.org
-Version=1.0
-Comment=Audio server playing though arts
-Licence=GPL

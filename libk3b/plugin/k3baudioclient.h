@@ -17,9 +17,6 @@
 #define _K3B_AUDIO_CLIENT_H_
 
 
-class K3bAudioServer;
-
-
 /**
  * Interface for all K3b audio client classes which may attach to 
  * a K3b Audio Server to play 44100 16bit stereo audio data.
@@ -35,7 +32,7 @@ class K3bAudioClient
   virtual int read( char* data, int maxlen ) = 0;
 
  protected:
-  K3bAudioClient( K3bAudioServer* );
+  K3bAudioClient();
 
   /**
    * This will start the streaming.
@@ -48,7 +45,6 @@ class K3bAudioClient
   void stopStreaming();
 
  private:
-  K3bAudioServer* m_audioServer;
   bool m_attached;
 };
 

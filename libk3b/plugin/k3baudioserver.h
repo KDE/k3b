@@ -16,43 +16,63 @@
 #ifndef _K3B_AUDIO_SERVER_H_
 #define _K3B_AUDIO_SERVER_H_
 
-#include <k3bplugin.h>
+#include <qobject.h>
 
+class K3bAudioOutputPlugin;
 class K3bAudioClient;
 
 
 /**
- * Interface for the K3b Audio Servers. It's implementations (like
- * the K3bArtsAudioServer) take care of playing 4100 Hz 16bit stereo audio
- * data which is provided by a K3bAudioClient
+ * The AudioServer manages AudioClients to play audio data through
+ * some output plugin.
  */
-class K3bAudioServer : public K3bPlugin
+class K3bAudioServer : public QObject
 {
   Q_OBJECT
 
  public:
-  virtual ~K3bAudioServer() {
-  }
-
-  QString group() const { return "AudioServer"; }
+  K3bAudioServer( QObject* parent = 0, const char* name = 0 );
+  ~K3bAudioServer();
 
   /**
-   * Is the sound system available on this sytem.
+   * Returns false in case the named ouput method could not be found.
    */
-  virtual bool isAvailable() const = 0;
+  bool setOutputMethod( const QCString& name );
+  void setOutputPlugin( K3bAudioOutputPlugin* p );
 
- public slots:
   /**
    * Start playing the clients data. It's up to the server if older
    * clients are suspended, stopped or mixed into a single stream.
+   *
+   * This is called by K3bAudioClient
    */
-  virtual void attachClient( K3bAudioClient* ) = 0;
-  virtual void detachClient( K3bAudioClient* ) = 0;
+  void attachClient( K3bAudioClient* );
 
- protected:
-  K3bAudioServer( QObject* parent = 0, const char* name = 0 )
-    : K3bPlugin( parent, name ) {
-  }
+  /**
+   * Stop streaming data from the client.
+   * This is called by K3bAudioClient
+   */
+  void detachClient( K3bAudioClient* );
+
+  /**
+   * We need to be able to play data from everywhere in K3b.
+   */
+  static K3bAudioServer* instance() { return s_instance; }
+
+  /**
+   * Find a plugin by classname.
+   */
+  static K3bAudioOutputPlugin* findOutputPlugin( const QCString& name );
+
+ private:
+  static K3bAudioServer* s_instance;
+
+  K3bAudioOutputPlugin* m_usedOutputPlugin;
+  bool m_pluginInitialized;
+  K3bAudioClient* m_client;
+
+  class Private;
+  Private* d;
 };
 
 #endif

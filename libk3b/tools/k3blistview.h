@@ -148,6 +148,12 @@ class K3bListView : public KListView
    */
   void setK3bBackgroundPixmap( const QPixmap&, int pos = CENTER );
 
+  /**
+   * Searches for the first item above @p i which is one level higher.
+   * For 1st level items this will always be the listview's root item.
+   */
+  static QListViewItem* parentItem( QListViewItem* i );
+
  signals:
   void editorButtonClicked( K3bListViewItem*, int );
 

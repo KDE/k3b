@@ -40,31 +40,27 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   : K3bView( pDoc, parent, name )
 {
   m_doc = pDoc;
-  m_player = new K3bAudioTrackPlayer( m_doc, this );
 
+  // FIXME: move the toolbox into K3bView
   QVBox* box = new QVBox( this );
-  K3bToolBox* toolBox = new K3bToolBox( box );
+  K3bToolBox* toolBox = new K3bToolBox( box, "toolbox" );
   m_songlist = new K3bAudioTrackView( m_doc, box );
   setMainWidget( box );
   fillStatusDisplay()->showTime();
 
-  toolBox->addButton( m_player->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
-  toolBox->addButton( m_player->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
-  toolBox->addButton( m_player->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
+  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
+  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
   toolBox->addSpacing();
-  toolBox->addButton( m_player->action( K3bAudioTrackPlayer::ACTION_PREV ) );
-  toolBox->addButton( m_player->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
+  toolBox->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
   toolBox->addSpacing();
-  toolBox->addWidget( ((KWidgetAction*)m_player->action( K3bAudioTrackPlayer::ACTION_SEEK ))->widget() );
+  toolBox->addWidgetAction( static_cast<KWidgetAction*>(m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
   toolBox->addStretch();
-
-  // FIXME: this is not the right place for this!
-  connect( m_player, SIGNAL(playingTrack(K3bAudioTrack*)), m_songlist, SLOT(showPlayerIndicator(K3bAudioTrack*)) );
-  connect( m_player, SIGNAL(paused(bool)), m_songlist, SLOT(togglePauseIndicator(bool)) );
-  connect( m_player, SIGNAL(stopped()), m_songlist, SLOT(removePlayerIndicator()) );
 }
 
-K3bAudioView::~K3bAudioView(){
+K3bAudioView::~K3bAudioView()
+{
 }
 
 

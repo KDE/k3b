@@ -35,6 +35,8 @@ class QDragMoveEvent;
 class QTimer;
 class KPopupMenu;
 class QPainter;
+class K3bListViewItemAnimator;
+class K3bAudioTrackPlayer;
 
 
 class K3bAudioTrackView : public K3bListView
@@ -46,6 +48,8 @@ class K3bAudioTrackView : public K3bListView
   ~K3bAudioTrackView();
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
+
+  K3bAudioTrackPlayer* player() const { return m_player; }
 
  public slots:
   void showPlayerIndicator( K3bAudioTrack* );
@@ -69,6 +73,7 @@ class K3bAudioTrackView : public K3bListView
   KAction* m_actionMergeTracks;
   KAction* m_actionSplitSource;
   KAction* m_actionSplitTrack;
+  KAction* m_actionPlayTrack;
   KActionCollection* m_actionCollection;
 
   bool m_updatingColumnWidths;
@@ -81,8 +86,13 @@ class K3bAudioTrackView : public K3bListView
 
   KPopupMenu* m_popupMenu;
 
+  K3bAudioTrackPlayer* m_player;
+
   // used for the audiotrackplayer indicator
   K3bAudioTrack* m_currentlyPlayingTrack;
+
+  // to animate the player icon
+  K3bListViewItemAnimator* m_playerItemAnimator;
 
  private slots:
   void slotAnimation();
@@ -100,6 +110,7 @@ class K3bAudioTrackView : public K3bListView
   void slotSplitTrack();
   void showPopupMenu( KListView*, QListViewItem* item, const QPoint& pos );
   void slotProperties();
+  void slotPlayTrack();
 
  protected:
   void keyPressEvent( QKeyEvent* e );

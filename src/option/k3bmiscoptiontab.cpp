@@ -16,6 +16,10 @@
 
 #include "k3bmiscoptiontab.h"
 
+#include <k3bpluginmanager.h>
+#include <k3baudiooutputplugin.h>
+#include <k3baudioserver.h>
+
 #include <qcheckbox.h>
 #include <qfileinfo.h>
 #include <qradiobutton.h>
@@ -27,12 +31,15 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
+#include <kcombobox.h>
 
 
 K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   : base_K3bMiscOptionTab(parent,name)
 {
   m_editTempDir->setMode( KFile::Directory );
+  connect( m_buttonConfigureAudioOutput, SIGNAL(clicked()),
+	   this, SLOT(slotConfigureAudioOutput()) );
 }
 
 
@@ -57,6 +64,17 @@ void K3bMiscOptionTab::readSettings()
     m_radioMultipleInstancesSmart->setChecked(true);
   else
     m_radioMultipleInstancesNew->setChecked(true);
+
+  // Audio Output
+  m_comboAudioOutputSystem->clear();
+  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioOutput" );
+  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+    K3bAudioOutputPlugin* f = static_cast<K3bAudioOutputPlugin*>( it.current() );
+    m_comboAudioOutputSystem->insertItem( QString::fromLocal8Bit(f->soundSystem()) );
+  }
+
+  m_comboAudioOutputSystem->setCurrentItem( c->readEntry( "Audio Output System", "arts" ), false );
+  m_buttonConfigureAudioOutput->setEnabled( m_comboAudioOutputSystem->count() > 0 );
 }
 
 
@@ -112,8 +130,22 @@ bool K3bMiscOptionTab::saveSettings()
   else
     c->writeEntry( "Multiple Instances", "always_new" );
 
+  // Audio Output System
+  if( m_comboAudioOutputSystem->count() > 0 ) {
+    c->writeEntry( "Audio Output System", m_comboAudioOutputSystem->currentText() );
+    K3bAudioServer::instance()->setOutputMethod( m_comboAudioOutputSystem->currentText().local8Bit() );
+  }
+
   return true;
 }
 
+
+void K3bMiscOptionTab::slotConfigureAudioOutput()
+{
+  QString system = m_comboAudioOutputSystem->currentText();
+  if( K3bAudioOutputPlugin* plugin = K3bAudioServer::findOutputPlugin( system.local8Bit() ) ) {
+    k3bpluginmanager->execPluginDialog( plugin, this );
+  }
+}
 
 #include "k3bmiscoptiontab.moc"
