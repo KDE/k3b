@@ -62,10 +62,11 @@ class K3bDataJob : public K3bBurnJob
   void slotMsInfoFetched();
   void writeImage();
   void startWriting();
-  void prepareWriterJob();
   void cancelAll();
 		
  private:
+  bool prepareWriterJob();
+
   K3bDataDoc* m_doc;
   KProcess* m_process;
 

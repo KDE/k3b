@@ -220,9 +220,10 @@ void K3bDataJob::slotSizeCalculationFinished( int status, int size )
   emit infoMessage( i18n("Size calculated:") + i18n("%1 (1 Byte)", "%1 (%n bytes)", size*2048).arg(size), status );
   if( status != ERROR ) {
     // this only happens in on-the-fly mode
-    prepareWriterJob();
-    startWriting();
-    m_isoImager->start();
+    if( prepareWriterJob() ) {
+      startWriting();
+      m_isoImager->start();
+    }
   }
   else {
     cancelAll();
@@ -291,8 +292,8 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 	emit finished( true );
       }
       else {
-	prepareWriterJob();
-	startWriting();
+	if( prepareWriterJob() )
+	  startWriting();
       }
     }
   }
@@ -368,7 +369,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 }
 
 
-void K3bDataJob::prepareWriterJob()
+bool K3bDataJob::prepareWriterJob()
 {
   if( m_writerJob )
     delete m_writerJob;
@@ -433,7 +434,7 @@ void K3bDataJob::prepareWriterJob()
       kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
       cancelAll();
-      return;
+      return false;
     }
 
     writer->setTocFile( m_tocFile->name() );
@@ -451,6 +452,8 @@ void K3bDataJob::prepareWriterJob()
   connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
   connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+
+  return true;
 }
 
 
