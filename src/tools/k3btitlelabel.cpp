@@ -87,7 +87,7 @@ void K3bTitleLabel::drawContents( QPainter* p )
 
   QFont f(font());
   f.setBold(true);
-  f.setPointSize( 14 );
+  f.setPointSize( f.pointSize() + 2 );
 
   p->setFont(f);
 
@@ -96,7 +96,7 @@ void K3bTitleLabel::drawContents( QPainter* p )
 
   if( !d->subTitle.isEmpty() ) {
     f.setBold(false);
-    f.setPointSize( 10 );
+    f.setPointSize( f.pointSize() - 4 );
     p->setFont(f);
     p->drawText( r.left() + d->margin + d->titleLength, r.top() + d->subTitleBaseLine, d->subTitle );
   }
@@ -117,11 +117,11 @@ void K3bTitleLabel::updatePositioning()
 {
   QFont f(font());
   f.setBold(true);
-  f.setPointSize( 14 );
+  f.setPointSize( f.pointSize() + 2 );
   QFontMetrics titleFm(f);
 
   f.setBold(false);
-  f.setPointSize(10);
+  f.setPointSize( f.pointSize() - 4 );
   QFontMetrics subTitleFm(f);
 
   d->titleBaseLine = contentsRect().height()/2 + titleFm.height()/2 - titleFm.descent();
