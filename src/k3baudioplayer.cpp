@@ -32,6 +32,7 @@
 #include <qevent.h>
 #include <qdragobject.h>
 #include <qptrlist.h>
+#include <kurldrag.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -130,7 +131,7 @@ K3bPlayListView::~K3bPlayListView()
 bool K3bPlayListView::acceptDrag( QDropEvent* e ) const
 {
   // we accept textdrag (urls) and moved items (supported by KListView)
-  return QUriDrag::canDecode(e) || KListView::acceptDrag(e);
+  return KURLDrag::canDecode(e) || KListView::acceptDrag(e);
 }
 
 
@@ -216,10 +217,10 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   // actions
   // ------------------------------------------------------------------------
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-				Key_Delete, this, SLOT(slotRemoveSelected()), 
+				Key_Delete, this, SLOT(slotRemoveSelected()),
 				this, "audioplayer_remove" );
   m_actionClear = new KAction( i18n( "Clear List" ), "editclear",
-			       0, this, SLOT(clear()), 
+			       0, this, SLOT(clear()),
 			       this, "audioplayer_clear" );
 
   m_contextMenu = new KActionMenu( this, "audio_player_menu" );
