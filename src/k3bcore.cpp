@@ -186,18 +186,28 @@ void K3bCore::checkSystem() const
 					    "cdrecord."),
 				       false ) );
   }
-  else if( !externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) ) {
-    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-				       i18n("%1 does not run with root privileges").arg("cdrecord"),
-				       i18n("cdrecord needs to run with root privileges "
-					    "to be able to access the cd devices, "
-					    "use real time scheduling, and "
-					    "set a non-standard fifo buffer. This is also "
-					    "true when using SuSE's resmgr."),
-				       i18n("Use K3bSetup to solve this problem."),
-				       true ) );
+  else {
+    if( externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+					 i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(externalBinManager()->binObject( "cdrecord" )->version),
+					 i18n("Although K3b supports all cdrtools versions since "
+					      "1.10 it is highly recommended to at least use "
+					      "version 2.0."),
+					 i18n("Install a more recent version of the cdrtools."),
+					 false ) );
+    
+    if( !externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("%1 does not run with root privileges").arg("cdrecord"),
+					 i18n("cdrecord needs to run with root privileges "
+					      "to be able to access the cd devices, "
+					      "use real time scheduling, and "
+					      "set a non-standard fifo buffer. This is also "
+					      "true when using SuSE's resmgr."),
+					 i18n("Use K3bSetup to solve this problem."),
+					 true ) );
   }
-
+  
   if( !externalBinManager()->foundBin( "cdrdao" ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("Unable to find %1 executable").arg("cdrdao"),
