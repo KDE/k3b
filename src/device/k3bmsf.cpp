@@ -94,6 +94,45 @@ K3b::Msf& K3b::Msf::operator-=( int i )
 }
 
 
+QString K3b::Msf::toString( bool showFrames ) const
+{
+  QString str;
+
+  if( showFrames )
+    str.sprintf( "%.2i:%.2i:%.2i", m_minutes, m_seconds, m_frames );
+  else
+    str.sprintf( "%.2i:%.2i", m_minutes, m_seconds );
+
+  return str;
+}
+
+
+KIO::filesize_t K3b::Msf::mode1Form1Bytes() const
+{
+  return (KIO::filesize_t)2048 * ( (KIO::filesize_t)totalFrames() );
+}
+
+KIO::filesize_t K3b::Msf::mode1Form2Bytes() const
+{
+  return (KIO::filesize_t)2336 * ( (KIO::filesize_t)totalFrames() );
+}
+
+KIO::filesize_t K3b::Msf::mode2Form1Bytes() const
+{
+  return (KIO::filesize_t)2048 * ( (KIO::filesize_t)totalFrames() );
+}
+
+KIO::filesize_t K3b::Msf::mode2Form2Bytes() const
+{
+  return (KIO::filesize_t)2324 * ( (KIO::filesize_t)totalFrames() );
+}
+
+KIO::filesize_t K3b::Msf::audioBytes() const
+{
+  return (KIO::filesize_t)2352 * ( (KIO::filesize_t)totalFrames() );
+}
+
+
 void K3b::Msf::makeValid()
 {
   if( m_frames < 0 ) {

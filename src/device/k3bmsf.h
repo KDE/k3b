@@ -17,11 +17,16 @@
 #ifndef _K3B_MSF_H_
 #define _K3B_MSF_H_
 
+#include <qstring.h>
+#include <kio/global.h>
+
+
 namespace K3b
 {
   /**
    * int values are always treated as frames
    * except in the set methods
+   * A MSF is never < 0.
    */
   class Msf
     {
@@ -47,6 +52,13 @@ namespace K3b
       void setMinutes( int m ) { m_minutes = m < 0 ? 0 : m; }
       void setSeconds( int s ) { m_seconds = s < 0 ? 0 : s; }
       void setFrames( int f ) { m_frames = f < 0 ? 0 : f; }
+
+      QString toString( bool showFrames = true ) const;
+      KIO::filesize_t mode1Form1Bytes() const;
+      KIO::filesize_t mode1Form2Bytes() const;
+      KIO::filesize_t mode2Form1Bytes() const;
+      KIO::filesize_t mode2Form2Bytes() const;
+      KIO::filesize_t audioBytes() const;
 
     private:
       void makeValid();
