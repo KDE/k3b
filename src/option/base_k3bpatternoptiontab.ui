@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>541</width>
-            <height>613</height>
+            <width>695</width>
+            <height>606</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,25 +25,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>m_generalInfoLabel</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&lt;p&gt;Here you can setup the audio cd ripping pattern which states how your ripped tracks will be saved. The basic system allows to set some standard pattern. If you want to have full control over the pattern please use the advanced pattern system.</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignTop</set>
-            </property>
-        </widget>
         <widget class="QTabWidget">
             <property name="name">
                 <cstring>m_mainTabbed</cstring>
@@ -55,6 +36,9 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;Here you can setup the audio cd ripping pattern which states how your ripped tracks will be saved. The basic system allows to set some standard pattern. If you want to have full control over the pattern please use the advanced pattern system.</string>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -311,7 +295,7 @@
                                 <hsizetype>1</hsizetype>
                                 <vsizetype>1</vsizetype>
                                 <horstretch>0</horstretch>
-                                <verstretch>1</verstretch>
+                                <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
                         <property name="text">
@@ -335,7 +319,7 @@
                                 <hsizetype>1</hsizetype>
                                 <vsizetype>1</vsizetype>
                                 <horstretch>0</horstretch>
-                                <verstretch>1</verstretch>
+                                <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
                         <property name="text">
