@@ -62,6 +62,7 @@ class K3bAbstractWriter : public K3bJob
  signals:
   void burnDeviceBuffer( int );
   void buffer( int );
+  void deviceBuffer( int );
   void writeSpeed( int, int );
 
  protected:

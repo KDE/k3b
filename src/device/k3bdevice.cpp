@@ -189,8 +189,9 @@ bool K3bCdDevice::CdDevice::init()
   // TODO: do multiple calls with length 65530 and different starting features (only for future versions of MMC.
   //       MMC4 says it's never more than 1KB)
 
-  unsigned char header[8];
-  ::memset( header, 0, 8 );
+  unsigned char header[2048];
+  ::memset( header, 0, 2048 );
+
   cmd[0] = MMC::GET_CONFIGURATION;
   cmd[8] = 8;
   if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
@@ -198,6 +199,19 @@ bool K3bCdDevice::CdDevice::init()
   }
   else {
     int len = from4Byte( header );
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( len == 8 ) {
+      cmd[7] = 2084>>8;
+      cmd[8] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	len = from2Byte( header );
+    }
 
     // again with full length
     unsigned char* profiles = new unsigned char[len];
@@ -979,19 +993,14 @@ K3b::Msf K3bCdDevice::CdDevice::discSize() const
 
 bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
-  unsigned char header[2048];
-  ::memset( header, 0, 2048 );
+  unsigned char header[2];
+  ::memset( header, 0, 2 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::READ_DISK_INFORMATION;
-  cmd[7] = 2048>>8;
-  cmd[8] = 2048;
+  cmd[8] = 2;
 
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
 
@@ -1914,11 +1923,6 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
 	inf.m_rewritable = dInf->erasable;
 
-	// we set it here so we have the info even if the call to READ TOC/PMA/ATIP failes
-	inf.m_numSessions = (dInf->n_sessions_l & 0x00FF) | ((dInf->n_sessions_m << 8) & 0xFF00);
-
-	//	inf.m_numTracks = ( (dInf->last_track_m<<8) | dInf->last_track_l);
-
 	// MMC-4 says that only CD-R(W) should return proper sizes here. 
 	// Does that means that lead_out_r is rather useless?
 	inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60, 
@@ -1952,7 +1956,6 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       }
     
 
-      // fix the number of sessions (since I get wrong values from disk_info with non-ide-scsi emulated drives
       int sessions = numSessions();
       if( sessions >= 0 ) {
 	inf.m_numSessions = sessions;
@@ -2174,10 +2177,6 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
 
 bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, int page ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
@@ -2185,11 +2184,23 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
   cmd[0] = MMC::MODE_SENSE;
   cmd[1] = 0x08;        // Disable Block Descriptors
   cmd[2] = page;
-  cmd[7] = 2048>>8;
-  cmd[8] = 2048;           // first we determine the data length
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
+  cmd[8] = 8;           // first we determine the data length
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
     pageLen = from2Byte( header ) + 2;
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( pageLen == 8 ) {
+      cmd[7] = 2084>>8;
+      cmd[8] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	pageLen = from2Byte( header ) + 2;
+    }
 
     *pageData = new unsigned char[pageLen];
     ::memset( *pageData, 0, pageLen );
@@ -2323,10 +2334,6 @@ void K3bCdDevice::CdDevice::checkWriteModes()
 
 bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
@@ -2335,12 +2342,24 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
   cmd[6] = track;
-  cmd[7] = 2048>>8;
-  cmd[8] = 2048; // we only read the length first
+  cmd[8] = 2; // we only read the length first
 
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( dataLen == 2 ) {
+      cmd[7] = 2084>>8;
+      cmd[8] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	dataLen = from2Byte( header ) + 2;
+    }
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
@@ -2365,20 +2384,28 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
 
 bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
   ScsiCommand cmd( this );
   cmd[0] = MMC::MECHANISM_STATUS;
-  cmd[8] = 2048>>8;
-  cmd[9] = 2048;     // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
+  cmd[9] = 8;     // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( &header[6] ) + 8;
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( dataLen == 8 ) {
+      cmd[8] = 2084>>8;
+      cmd[9] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	dataLen = from2Byte( &header[6] ) + 8;
+    }
 
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS " 
 	      << (int)header[5] << " slots." << endl;
@@ -2606,10 +2633,6 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
 					    unsigned int subchannelParam,
 					    unsigned int trackNumber ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
@@ -2618,11 +2641,23 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
   cmd[2] = 0x40;    // SUBQ
   cmd[3] = subchannelParam;
   cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
-  cmd[7] = 2048>>8;
-  cmd[8] = 2048;      // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
+  cmd[8] = 4;      // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( &header[2] ) + 4;
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( dataLen == 4 ) {
+      cmd[7] = 2084>>8;
+      cmd[8] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	dataLen = from2Byte( &header[2] ) + 4;
+    }
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
@@ -2647,10 +2682,6 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
 
 bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
@@ -2672,11 +2703,23 @@ bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dat
     return false;
   }
 
-  cmd[7] = 2048>>8;
-  cmd[8] = 2048;      // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 ) {
+  cmd[8] = 4;      // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( dataLen == 4 ) {
+      cmd[7] = 2084>>8;
+      cmd[8] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	dataLen = from2Byte( header ) + 2;
+    }
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
@@ -2921,10 +2964,6 @@ void K3bCdDevice::CdDevice::searchIndexTransitions( long start, long end, K3bCdD
 
 bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
 {
-  //
-  // Some buggy firmwares (or is this normal behaviour?) do not return the size of the available data
-  // but the returned data. So we use a high power of 2 to be on the safe side.
-  //
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
@@ -2933,11 +2972,23 @@ bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsi
   cmd[1] = 2;      // read only specified feature
   cmd[2] = feature>>8;
   cmd[3] = feature;
-  cmd[7] = 2048>>8;
-  cmd[8] = 2048;      // we only read the data length first
-  if( cmd.transport( TR_DIR_READ, header, 2048 ) ) {
+  cmd[8] = 8;      // we only read the data length first
+  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
     // again with real length
     dataLen = from4Byte( header ) + 4;
+
+    //
+    // Some buggy firmwares do not return the size of the available data
+    // but the returned data. So we use a high power of 2 to be on the safe side
+    // with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high data length.
+    //
+    if( dataLen == 8 ) {
+      cmd[7] = 2084>>8;
+      cmd[8] = 2048;
+      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
+	dataLen = from2Byte( header ) + 4;
+    }
 
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );

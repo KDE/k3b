@@ -529,6 +529,9 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     bin->addFeature( "hacked-atapi" );
   }
 
+  if( bin->version >= K3bVersion( 1, 1, 8 ) )
+    bin->addFeature( "plain-atapi" );
+
   addBin(bin);
   return true;
 }
