@@ -212,10 +212,8 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
 
                     m_bytesFinished = pos;
 
-                    double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videooptions ->getVideoCdSize() ;
+                    double relOverallWritten = ( ( double ) overallPos * 1024 ) / ( double ) m_videooptions ->getVideoCdSize() ;
                     emit percent( ( int ) ( 100 * relOverallWritten ) );
-
-                    kdDebug() << QString( "(K3bVideoCdRip::slotParseVcdXRipOutput) overallPos = %1, relOverallWritten = %2, videolen = " ).arg( overallPos ).arg( relOverallWritten ) << m_videooptions ->getVideoCdSize()  << endl;
 
                 } else {
                     return ;
@@ -291,7 +289,7 @@ void K3bVideoCdRip::parseInformation( QString text )
                 // extracting item0001.mpg... (start lsn 225, 1 segments)
                 int end = text.find(  ",", index );
                 int overallPos = text.mid( index + 11, end - index - 11 ).stripWhiteSpace().toLong();
-                double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videooptions ->getVideoCdSize()  ;
+                double relOverallWritten = ( ( double ) overallPos * 1024) / ( double ) m_videooptions ->getVideoCdSize()  ;
                 emit percent( ( int ) ( 100 * relOverallWritten ) );
             }
 

@@ -128,7 +128,24 @@ void K3bVideoCdRippingDialog::setupGui()
 
 
 void K3bVideoCdRippingDialog::setupContextHelp()
-{}
+{
+    QToolTip::add( m_labelFreeSpace, i18n("Free space on destination directory: %1").arg( m_editDirectory ->url() ) );
+
+    QToolTip::add( m_labelNecessarySize, i18n("Necessary space for extracted files") );
+
+    QToolTip::add( m_ignoreExt, i18n("Ignore extended PSD") );
+    QWhatsThis::add( m_ignoreExt, i18n("<p>Ignore extended PSD (located in the ISO-9660 filesystem under `/EXT/PSD_X.VCD') and use the <em>standard</em> PSD.</p>") );
+
+    QToolTip::add( m_sector2336, i18n("Assume a 2336-byte sector mode") );
+    QWhatsThis::add( m_sector2336, i18n("<p>This option only makes sense if you are reading from a BIN CD disk image. This indicates to `vcdxrip' to assume a 2336-byte sector mode for image file.</p>"
+                                                            "<b>Note: This option is slated to disappear.</b>") );
+
+    QToolTip::add( m_extractXML, i18n("Create XML description file.") );
+    QWhatsThis::add( m_extractXML, i18n("<p>This option create a XML description file with all Video CD infos.</p>"
+                                                            "<p>There are always all infos in this description file.</p>"
+                                                            "<p>Example: If you only extract sequences, the description file also hold the infos for files and segments.</p>"
+                                                            "<p>The Filename is the same as the Video CD name with .xml extension. default is VIDEOCD.xml</p>") );
+}
 
 void K3bVideoCdRippingDialog::slotStartClicked()
 {
