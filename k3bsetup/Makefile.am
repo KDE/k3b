@@ -16,4 +16,4 @@ bin_SCRIPTS = k3bsetup
 
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.ui"` > rc.cpp
-	$(XGETTEXT) --from-code=UTF-8 `find -name "*.cpp" -or -name "*.h"` -o $(podir)/k3bsetup.pot
+	$(XGETTEXT) `find -name "*.cpp" -or -name "*.h"` -o $(podir)/k3bsetup.pot
