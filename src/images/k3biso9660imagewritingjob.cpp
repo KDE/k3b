@@ -365,11 +365,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 				       i18n("No simulation with DVD+R(W)") ) == KMessageBox::No ) {
 	  return false;
 	}
-      }
-      
-      if( m_speed > 0 ) {
-	emit infoMessage( i18n("DVD+R(W) writers do take care of the writing speed themselves."), INFO );
-	emit infoMessage( i18n("The K3b writing speed setting is ignored for DVD+R(W) media."), INFO );
+
+	m_simulate = false;
       }
     }
 
@@ -378,6 +375,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     writer->setBurnSpeed( m_speed );
     writer->setWritingMode( m_writingMode == K3b::DAO ? K3b::DAO : 0 );
     writer->setImageToWrite( m_imagePath );
+    writer->setCloseDvd( !m_noFix );
 
     m_writer = writer;
   }

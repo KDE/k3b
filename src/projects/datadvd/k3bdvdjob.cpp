@@ -266,9 +266,9 @@ bool K3bDvdJob::prepareWriterJob()
   writer->setSimulate( m_doc->dummy() );
   writer->setBurnSpeed( m_doc->speed() );
 
-  if( m_doc->writingMode() == K3b::DAO ||
-      ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+  if( m_doc->writingMode() == K3b::DAO )
+//       ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+// 	m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
     writer->setWritingMode( K3b::DAO );
 
   writer->setCloseDvd( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
