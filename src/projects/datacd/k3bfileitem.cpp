@@ -17,6 +17,7 @@
 #include "k3bfileitem.h"
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
+#include "k3bisooptions.h"
 
 #include <qfileinfo.h>
 #include <qstring.h>
@@ -171,7 +172,7 @@ bool K3bFileItem::isSymLink() const
 
 bool K3bFileItem::isValid() const
 {
-  if( isSymLink() ) {
+  if( isSymLink() && !doc()->isoOptions().followSymbolicLinks() ) {
     QString dest = linkDest();
 
     if( dest[0] == '/' )
