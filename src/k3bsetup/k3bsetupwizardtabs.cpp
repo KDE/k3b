@@ -47,14 +47,14 @@ WelcomeTab::WelcomeTab( int i, int o, K3bSetupWizard* wizard )
 
   QLabel* label = new QLabel( this, "m_labelWelcome" );
   label->setText( i18n( "<h1>Welcome to K3b Setup.</h1>"
-			"<p>This Wizard will help you to prepare your system for cd writing with K3b. "
-			"First of all: DO NOT fear linux permissions anymore. K3b Setup takes care of nearly everything."
-			" So if you are new to linux and know nothing about things like suid root don't panic!"
+			"<p>This Wizard will help you to prepare your system for CD writing with K3b. "
+			"First of all: Don't worry about Linux permissions, K3b Setup takes care of nearly everything."
+			" So if you are new to Linux and know nothing about things like suid root, don't panic!"
 			" Just click next.</p>"
-			"<p>If you know what is needed to write cds under linux and think you do not need a wizard like this"
-			" please do not exit since there are some things special to K3b and K3b Setup will not change anything"
-			" on your system before you finished the setup.</p>"
-			"<p><b>Thanx for using K3b.</b></p>" ) );
+			"<p>If you know what is needed to write CDs under Linux and think you don't need a wizard like this,"
+			" please do not exit, as there are some things specific to K3b. Also, K3b Setup will not change anything"
+			" until after the setup wizard has finished.</p>"
+			"<p><b>Thank you for using K3b.</b></p>" ) );
   label->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 
   setMainWidget( label );
@@ -84,7 +84,7 @@ DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   infoLabel->setText( i18n( "<p>K3b Setup has detected the following CD drives.</p>"
 			    "<p>You can add additional devices (like /dev/cdrom) if your drive has not "
 			    "been detected.</p>"
-			    "<p>K3b will only detect the capabilities of generic-mmc drives correct. "
+			    "<p>K3b will only detect the capabilities of generic-mmc drives correctly. "
 			    "For all other drives you need to set them manually." ) );
   infoLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
   m_deviceWidget = new K3bDeviceWidget( setup()->deviceManager(), main );
@@ -104,8 +104,8 @@ bool DeviceTab::saveSettings()
 {
   m_deviceWidget->apply();
   if( setup()->deviceManager()->allDevices().isEmpty() )
-    if( KMessageBox::warningYesNo( this, i18n("K3b Setup did not find any cd devices on your system. "
-					      "K3b is not of much use without any. Do you really want to continue?"),
+    if( KMessageBox::warningYesNo( this, i18n("K3b Setup did not find any CD devices on your system. "
+					      "K3b is not very useful without any. Do you really want to continue?"),
 				   i18n("Missing CD Devices") ) == KMessageBox::No )
       return false;
 
@@ -135,10 +135,10 @@ NoWriterTab::NoWriterTab( int i, int o, K3bSetupWizard* wizard )
   setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_devices.png" )) );
 
   QLabel* label = new QLabel( this, "m_labelNoWriter" );
-  label->setText( i18n( "<p><b>K3b Setup did not find a cd writer on your system.</b></p>\n"
-			"<p>If you have no cd writer and want to use K3b only for cd ripping everything is fine.</p>\n"
-			"<p>If you are sure you have either a SCSI cd writer or enabled SCSI emulation please go back "
-			"and add the device manually. If that does not work... well... please report!</p>\n"
+  label->setText( i18n( "<p><b>K3b Setup did not find a CD writer on your system.</b></p>\n"
+			"<p>If you do not have a CD writer, but just want to use K3b for CD ripping, everything is fine.</p>\n"
+			"<p>If you are sure you have either a SCSI CD writer or enabled SCSI emulation, please go back "
+			"and add the device manually. If that still does not work... well... please report!</p>\n"
 			"<p>Otherwise you need to enable SCSI emulation for (at least) your ATAPI cd writer (although "
 			"it is recommended to enable SCSI emulation for all cd drives it is not nessesary) since this "
 			"is the only thing K3b Setup is not able to do for you (yet).</p>\n"
