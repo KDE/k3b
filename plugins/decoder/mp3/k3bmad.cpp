@@ -152,8 +152,12 @@ bool K3bMad::skipTag()
     bool footer = (buf[5] & 0x10);
 
     // the size is saved as a synched int meaning bit 7 is always cleared to 0
-    int size = (buf[6]<<21) | (buf[7]<<14) | (buf[8]<<7) | buf[9];
-    int offset = size + 10;
+    unsigned int size = 
+      ( (buf[6] & 0x7f) << 21 ) | 
+      ( (buf[7] & 0x7f) << 14 ) | 
+      ( (buf[8] & 0x7f) << 7) | 
+      (buf[9] & 0x7f);
+    unsigned int offset = size + 10;
     if( footer )
       offset += 10;
 
