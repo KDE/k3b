@@ -61,6 +61,14 @@ class K3bDataProjectInterface : public K3bProjectInterface
    */
   void removeItem( const QString& path );
 
+  void renameItem( const QString& path, const QString& newName );
+
+  /**
+   * Set the volume ID of the data project. This is the name shown by Windows
+   * when the CD is inserted.
+   */
+  void setVolumeID( const QString& id );
+
  private:
   K3bDataDoc* m_dataDoc;
 };

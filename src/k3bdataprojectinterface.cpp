@@ -17,6 +17,7 @@
 
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
+#include <k3bisooptions.h>
 
 
 K3bDataProjectInterface::K3bDataProjectInterface( K3bDataDoc* doc, const char* name )
@@ -64,4 +65,18 @@ void K3bDataProjectInterface::removeItem( const QString& path )
   K3bDataItem* p = m_dataDoc->root()->findByPath( path );
   if( p )
     m_dataDoc->removeItem( p );
+}
+
+
+void K3bDataProjectInterface::renameItem( const QString& path, const QString& newName )
+{
+  K3bDataItem* p = m_dataDoc->root()->findByPath( path );
+  if( p && !newName.isEmpty() )
+    p->setK3bName( newName );
+}
+
+
+void K3bDataProjectInterface::setVolumeID( const QString& id )
+{
+  m_dataDoc->isoOptions().setVolumeID( id );
 }
