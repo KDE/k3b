@@ -26,16 +26,14 @@ class K3bBootItem : public K3bFileItem
 
   bool isHideable() const { return false; }
 
-  enum imageType { FLOPPY, HARDDISK };
+  enum imageType { FLOPPY, HARDDISK, NONE };
 
-  void setNoEmulate( bool b ) { m_noEmulate = b; }
   void setNoBoot( bool b ) { m_noBoot = b; }
   void setBootInfoTable( bool b ) { m_bootInfoTable = b; }
   void setLoadSegment( int s ) { m_loadSegment = s; }
   void setLoadSize( int s ) { m_loadSize = s; }
   void setImageType( int t ) { m_imageType = t; }
 
-  bool noEmulate() const { return m_noEmulate; }
   bool noBoot() const { return m_noBoot; }
   bool bootInfoTable() const { return m_bootInfoTable; }
   int loadSegment() const { return m_loadSegment; }
@@ -43,7 +41,6 @@ class K3bBootItem : public K3bFileItem
   int imageType() const { return m_imageType; }
 
  private:
-  bool m_noEmulate;
   bool m_noBoot;
   bool m_bootInfoTable;
   int m_loadSegment;

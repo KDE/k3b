@@ -40,6 +40,8 @@ public:
   /* reimplemeted from base_...*/
   void slotOptionsChanged();
 
+  void slotNoEmulationToggled( bool );
+
  private:
   void updateBootImages();
   void showAdvancedOptions( bool );

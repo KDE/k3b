@@ -480,19 +480,24 @@ bool K3bIsoImager::addMkisofsParameters()
 
       K3bBootItem* bootItem = *it;
 
-      *m_process << "-b" << bootItem->k3bPath();
+      *m_process << "-b";
+      if( m_doc->isoOptions().createJoliet() )
+	*m_process << m_doc->treatWhitespace( bootItem->jolietPath() );
+      else
+	*m_process << m_doc->treatWhitespace( bootItem->k3bPath() );
 
-      if( bootItem->imageType() == K3bBootItem::HARDDISK )
+      if( bootItem->imageType() == K3bBootItem::HARDDISK ) {
 	*m_process << "-hard-disk-boot";
-
-      if( bootItem->noEmulate() ) {
+      }
+      else if( bootItem->imageType() == K3bBootItem::NONE ) {
 	*m_process << "-no-emul-boot";
 	if( bootItem->loadSegment() > 0 )
 	  *m_process << "-boot-load-seg" << bootItem->loadSegment() ;
 	if( bootItem->loadSegment() > 0 )
 	  *m_process << "-boot-load-size" << bootItem->loadSize() ;
       }
-      if( bootItem->noBoot() )
+
+      if( bootItem->imageType() != K3bBootItem::NONE && bootItem->noBoot() )
 	*m_process << "-no-boot";
       if( bootItem->bootInfoTable() )
 	*m_process << "-boot-info-table";

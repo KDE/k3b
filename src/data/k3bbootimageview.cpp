@@ -52,8 +52,10 @@ public:
     if( col == 0 ) {
       if( m_image->imageType() == K3bBootItem::FLOPPY )
 	return i18n("Floppy");
-      else
+      else if( m_image->imageType() == K3bBootItem::HARDDISK )
 	return i18n("Harddisk");
+      else
+	return i18n("None");
     }
     else if( col == 1 )
       return m_image->localPath();
@@ -80,6 +82,8 @@ K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent, const char
 	   this, SLOT(slotToggleOptions()) );
   connect( m_viewImages, SIGNAL(selectionChanged()),
 	   this, SLOT(slotSelectionChanged()) );
+  connect( m_radioNoEmulation, SIGNAL(toggled(bool)),
+	   this, SLOT(slotNoEmulationToggled(bool)) );
 
   QIntValidator* v = new QIntValidator( this );
   m_editLoadSegment->setValidator( v );
@@ -166,15 +170,16 @@ void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
     m_groupImageType->setEnabled(true);
 
     m_checkNoBoot->setChecked( item->noBoot() );
-    m_checkNoEmulate->setChecked( item->noEmulate() );
     m_checkInfoTable->setChecked( item->bootInfoTable() );
     m_editLoadSegment->setText( QString::number( item->loadSegment() ) );
     m_editLoadSize->setText( QString::number( item->loadSize() ) );
 
     if( item->imageType() == K3bBootItem::FLOPPY )
       m_radioFloppy->setChecked(true);
-    else
+    else if( item->imageType() == K3bBootItem::HARDDISK )
       m_radioHarddisk->setChecked(true);      
+    else
+      m_radioNoEmulation->setChecked(true);
   }
   else {
     m_groupOptions->setEnabled(false);
@@ -192,17 +197,27 @@ void K3bBootImageView::slotOptionsChanged()
     if( item ) {
       K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
       
-      i->setNoEmulate( m_checkNoEmulate->isChecked() );
       i->setNoBoot( m_checkNoBoot->isChecked() );
       i->setBootInfoTable( m_checkInfoTable->isChecked() );
       i->setLoadSegment( m_editLoadSegment->text().toInt() ); 
       i->setLoadSize( m_editLoadSize->text().toInt() ); 
       if( m_radioFloppy->isChecked() )
 	i->setImageType( K3bBootItem::FLOPPY );
-      else
+      else if( m_radioHarddisk->isChecked() )
 	i->setImageType( K3bBootItem::HARDDISK );
+      else
+	i->setImageType( K3bBootItem::NONE );
     }
   }
+}
+
+
+void K3bBootImageView::slotNoEmulationToggled( bool on )
+{
+  // it makes no sense to combine no emulation and no boot!
+  // the base_widget takes care of the disabling
+  if( on )
+    m_checkNoBoot->setChecked(false);
 }
 
 #include "k3bbootimageview.moc"

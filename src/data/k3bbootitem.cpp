@@ -23,11 +23,10 @@
 
 K3bBootItem::K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
   : K3bFileItem( fileName, doc, dir, k3bName ),
-    m_noEmulate(false),
     m_noBoot(false),
     m_bootInfoTable(false),
-    m_loadSegment(-1),
-    m_loadSize(-1),
+    m_loadSegment(0),
+    m_loadSize(0),
     m_imageType(FLOPPY)
 {
   setExtraInfo( i18n("El Torito Boot image") );
