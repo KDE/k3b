@@ -20,7 +20,6 @@ to make the code more readable.
 
 
 #include "k3bdevice.h"
-//#include "k3bmmc.h"
 #include "k3bscsicommand.h"
 #include "k3bdeviceglobals.h"
 

@@ -626,13 +626,11 @@ bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 
 K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& devicename )
 {
-  K3bCdDevice::CdDevice* device = 0;
-
-  // FIXME: is this check really nessessary? If so it won't do harm on linux either.
 #ifdef Q_OS_FREEBSD
-  if( findDevice(devicename) )
-    return 0;
+  return 0;
 #endif
+
+  K3bCdDevice::CdDevice* device = 0;
 
   // resolve all symlinks
   QString resolved = resolveSymLink( devicename );
@@ -757,13 +755,11 @@ void K3bCdDevice::DeviceManager::scanFstab()
     if( !dev && determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
       dev = findDevice( bus, id, lun );
 
-#ifdef Q_OS_FREEBSD
     // FIXME: is this nessessary? Don't we resolve all symlinks on bsd, too?
     //        and shouldn't we do an addDevice anywhere here in case the fstab
     //        contains a device which we did not find before?
     if( !dev )
       dev = findDevice( md );
-#endif
 
     //
     // Maybe the fstab contains a device we did not find before?
@@ -778,10 +774,6 @@ void K3bCdDevice::DeviceManager::scanFstab()
       bool isPreferredMountPoint = false;
       kdDebug() << "(K3bCdDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
 
-      // FIXME: this does also make sense on linux. Shouldn't we check for the "users" option?
-      //        (like I now implemented for linux)
-      //        Does checking if we own the mountpoint really make sense? At least on linux this has
-      //        no influence on us beeing able to mount the device.
 #ifdef Q_OS_FREEBSD
       // Several mount points for one device might exist. If more than one are found, the one with
       // user permission should have a higher priority.
