@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -153,6 +153,7 @@ void K3bCdrecordWriter::start()
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
+  emit debuggingOutput("cdrecord comand:", s);
 
   m_currentTrack = 0;
   m_cdrecordError = UNKNOWN;

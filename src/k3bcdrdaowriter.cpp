@@ -442,6 +442,7 @@ void K3bCdrdaoWriter::start()
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
+  emit debuggingOutput("cdrdao comand:", s);
 
   m_currentTrack = 0;
   reinitParser();

@@ -345,6 +345,7 @@ void K3bIsoImager::start()
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
+  emit debuggingOutput("mkisofs comand:", s);
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
