@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 
 class K3bVcdTrack

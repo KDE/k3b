@@ -39,7 +39,6 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
-#include <qtabwidget.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -79,7 +78,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   tab->addTab( advancedTab, i18n("Advanced") );
 
 
-	
+
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
@@ -165,13 +164,13 @@ void K3bAudioBurnDialog::saveSettings()
   ((K3bAudioDoc*)doc())->writeCdText( m_checkCdText->isChecked() );
   ((K3bAudioDoc*)doc())->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
   ((K3bAudioDoc*)doc())->setRemoveBufferFiles( m_checkRemoveBufferFiles->isChecked() );
-	
+
   // -- saving current speed --------------------------------------
   doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
-	
+
   // -- saving current device --------------------------------------
   doc()->setBurner( m_writerSelectionWidget->writerDevice() );
-	
+
   // -- save Cd-Text ------------------------------------------------
   ((K3bAudioDoc*)doc())->setTitle( m_editTitle->text() );
   ((K3bAudioDoc*)doc())->setArtist( m_editPerformer->text() );
@@ -201,7 +200,7 @@ void K3bAudioBurnDialog::readSettings()
   m_editArranger->setText( ((K3bAudioDoc*)doc())->arranger() );
   m_editSongwriter->setText( ((K3bAudioDoc*)doc())->songwriter() );
   m_editComposer->setText( ((K3bAudioDoc*)doc())->composer() );
-	
+
   K3bProjectBurnDialog::readSettings();
 
   slotWriterChanged();

@@ -20,7 +20,7 @@
 
 #include "../k3bdoc.h"
 
-#include <qqueue.h>
+#include <qptrqueue.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>

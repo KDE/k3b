@@ -28,7 +28,7 @@ class QString;
 class KProcess;
 class QDataStream;
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <kurl.h>
 
 

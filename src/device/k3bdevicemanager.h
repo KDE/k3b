@@ -5,8 +5,8 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qarray.h>
-#include <qlist.h>
+#include <qmemarray.h>
+#include <qptrlist.h>
 
 #include <kdebug.h>
 

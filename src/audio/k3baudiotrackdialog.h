@@ -21,7 +21,7 @@
 
 #include <kdialogbase.h>
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 class K3bAudioTrack;
 class QLineEdit;

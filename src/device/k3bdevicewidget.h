@@ -19,7 +19,7 @@
 #define K3BDEVICEWIDGET_H
 
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QComboBox;
 class QLabel;

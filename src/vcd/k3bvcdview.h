@@ -21,7 +21,7 @@
 #include "../k3bview.h"
 
 #include <qstringlist.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 
 class K3bVcdListView;

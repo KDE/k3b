@@ -22,7 +22,7 @@
 
 #include "../k3bisooptions.h"
 
-#include <qqueue.h>
+#include <qptrqueue.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qptrlist.h>

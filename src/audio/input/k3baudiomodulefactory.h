@@ -3,7 +3,7 @@
 
 
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class K3bAudioTrack;
 class K3bAudioModule;

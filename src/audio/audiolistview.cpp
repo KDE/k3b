@@ -24,8 +24,6 @@
 #include "k3baudiodoc.h"
 #include "../k3bview.h"
 
-#include <qevent.h>
-#include <qdragobject.h>
 #include <qheader.h>
 #include <qtimer.h>
 #include <qdragobject.h>
@@ -36,7 +34,6 @@
 #include <qpainter.h>
 #include <qfontmetrics.h>
 
-#include <kiconloader.h>
 #include <kurl.h>
 #include <kurldrag.h>
 #include <klocale.h>
@@ -64,7 +61,7 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
 
   setupActions();
   setupPopupMenu();
-		
+
   setupColumns();
   header()->setClickEnabled( false );
 
@@ -94,7 +91,7 @@ void K3bAudioListView::setupColumns(){
   addColumn( i18n("Length") );
   addColumn( i18n("Pregap") );
   addColumn( i18n("Filename") );
-	
+
 //   setItemsRenameable( true );
 //   setRenameable( 0, false );
 //   setRenameable( 1 );
@@ -106,11 +103,11 @@ void K3bAudioListView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  m_actionProperties = new KAction( i18n("Properties..."), "misc", 
+  m_actionProperties = new KAction( i18n("Properties..."), "misc",
 				  0, this, SLOT(showPropertiesDialog()), actionCollection() );
-  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", 
+  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
 			      Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
-  m_actionPlay = new KAction( i18n( "Play" ), "1rightarrow", 
+  m_actionPlay = new KAction( i18n( "Play" ), "1rightarrow",
 			      0, this, SLOT(slotPlaySelected()), actionCollection() );
 
   m_actionPlayAll = new KAction( i18n( "Play all" ), "1rightarrow",
@@ -152,7 +149,7 @@ QDragObject* K3bAudioListView::dragObject()
 
   QPtrListIterator<QListViewItem> it(list);
   KURL::List urls;
-	
+
   for( ; it.current(); ++it )
     urls.append( KURL( ((K3bAudioListViewItem*)it.current())->audioTrack()->absPath() ) );
 
@@ -187,7 +184,7 @@ void K3bAudioListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* af
   else {
     KURL::List urls;
     KURLDrag::decode( e, urls );
-		
+
     m_doc->addTracks( urls, pos );
   }
 }
@@ -232,7 +229,7 @@ void K3bAudioListView::slotAnimation()
 	    item->setPixmap( 3, SmallIcon( "redled" ) );
 	    break;
 	  }
-	  
+
 	  item->animationIconNumber = 0;
 	}
 	else {
@@ -307,7 +304,7 @@ void K3bAudioListView::slotRemoveTracks()
 
     for( K3bAudioTrack* track = selected.first(); track != 0; track = selected.next() ) {
       m_doc->removeTrack( track );
-		
+
       // not best, I think we should connect to doc.removedTrack (but since there is only one view this is not important!)
       QListViewItem* viewItem = m_itemMap[track];
       m_itemMap.remove( track );
@@ -373,7 +370,7 @@ void K3bAudioListView::slotPlaySelected()
   if( !selected.isEmpty() ) {
     QListIterator<K3bAudioTrack> it( selected );
     k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
-    
+
     for( ++it; it.current(); ++it ) {
       k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
     }
@@ -386,7 +383,7 @@ void K3bAudioListView::slotPlayAll()
   if( !m_doc->tracks()->isEmpty() ) {
     QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
     k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
-    
+
     for( ++it; it.current(); ++it ) {
       k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
     }

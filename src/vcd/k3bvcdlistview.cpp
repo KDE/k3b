@@ -22,8 +22,6 @@
 #include "k3bvcddoc.h"
 #include "../k3bview.h"
 
-#include <qevent.h>
-#include <qdragobject.h>
 #include <qheader.h>
 #include <qtimer.h>
 #include <qdragobject.h>
@@ -40,7 +38,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
-#include <kiconloader.h>
 #include <kdialog.h>
 
 
