@@ -48,7 +48,6 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
     m_command(WRITE),
     m_blankMode(MINIMAL),
     m_sourceDevice(0),
-    m_sourceDriver("auto"),
     m_dataFile(QString("")),
     m_tocFile(QString("")),
     m_readRaw(false),
