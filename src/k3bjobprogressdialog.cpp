@@ -151,7 +151,7 @@ void K3bJobProgressDialog::setupGUI()
   frame4->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout"); 
 
-  m_labelJob = new KCutLabel( frame4, "m_labelJob" );
+  m_labelJob = new QLabel( frame4, "m_labelJob" );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( 12 );
   m_labelJob_font.setBold( TRUE );
@@ -159,7 +159,7 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
-  m_labelJobDetails = new KCutLabel( frame4, "m_labelJobDetails" );
+  m_labelJobDetails = new QLabel( frame4, "m_labelJobDetails" );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
   m_labelJobDetails->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJobDetails );
