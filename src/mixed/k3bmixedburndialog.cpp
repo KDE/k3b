@@ -69,7 +69,7 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   connect( m_checkDao, SIGNAL(toggled(bool)), this, SLOT(slotToggleEverything()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleEverything()) );
 
-  slotWriterChanged();
+  readSettings();
 }
 
 
@@ -201,7 +201,8 @@ void K3bMixedBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
   m_volumeDescWidget->load( m_doc->dataDoc()->isoOptions() );
 
-  K3bProjectBurnDialog::readSettings();
+  slotWriterChanged();
+  slotToggleEverything();
 }
 
 
@@ -219,6 +220,9 @@ void K3bMixedBurnDialog::loadDefaults()
    m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
    m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
    m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+
+   slotWriterChanged();
+   slotToggleEverything();
 }
 
 
@@ -247,6 +251,9 @@ void K3bMixedBurnDialog::loadUserDefaults()
   m_imageSettingsWidget->load( o );
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
+
+  slotWriterChanged();
+  slotToggleEverything();
 }
 
 
@@ -296,9 +303,12 @@ void K3bMixedBurnDialog::slotToggleEverything()
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
     m_checkOnTheFly->setEnabled( false );
     m_checkOnTheFly->setChecked( false );
+    m_cdtextWidget->setChecked(false);
+    m_cdtextWidget->setEnabled(false);
   }
   else {
     m_checkOnTheFly->setEnabled( true );
+    m_cdtextWidget->setEnabled(true);
   }
 }
 

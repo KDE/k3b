@@ -71,6 +71,8 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
   else
     m_label->setText( i18n("Please insert an empty CDR medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
 
+  adjustSize();
+
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotTestForEmptyCd()) );
   m_timer->start(1000);
 

@@ -33,6 +33,8 @@ class QToolButton;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class K3bAudioDoc;
+class K3bAudioCdTextWidget;
+
 
 
 /**
@@ -47,43 +49,18 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    ~K3bAudioBurnDialog();
 
  protected:
-   void setupBurnTab( QFrame* frame );
-   void setupCdTextTab( QFrame* frame );
    void saveSettings();
    void readSettings();
 
-   // the burn tab
-   // ---------------------------------------------------------
-   QCheckBox* m_checkCdText;
-   QCheckBox* m_checkDao;
-   QCheckBox* m_checkOnTheFly;
-   QCheckBox* m_checkPadding;
-   QCheckBox* m_checkSimulate;
    QCheckBox* m_checkHideFirstTrack;
-   QCheckBox* m_checkRemoveBufferFiles;
-   K3bWriterSelectionWidget* m_writerSelectionWidget;
-   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-   // -----------------------------------------------------------
-	
-   // the cd-text-tab
-   // -----------------------------------------------------------
-   QLineEdit* m_editDisc_id;
-   QLineEdit* m_editUpc_ean;
-   QLineEdit* m_editMessage;
-   QLineEdit* m_editPerformer;
-   QLineEdit* m_editArranger;
-   QLineEdit* m_editTitle;
-   QLineEdit* m_editSongwriter;
-   QLineEdit* m_editComposer;
-   // -----------------------------------------------------------
+   K3bAudioCdTextWidget* m_cdtextWidget;
+   K3bAudioDoc* m_doc;
 
  protected slots:
-   void slotOk();
-
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
-   void slotWriterChanged();
+   void slotToggleEverything();
 };
 
 #endif
