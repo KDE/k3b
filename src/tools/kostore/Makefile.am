@@ -1,5 +1,5 @@
 
-lib_LTLIBRARIES = libkostore.la
+noinst_LTLIBRARIES = libkostore.la
 INCLUDES = $(all_includes)
 
 ####### Files

@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 					   "Should K3bSetup be started?"),
 				   i18n("K3b Setup"), KStdGuiItem::yes(), KStdGuiItem::no(), 
 				   i18n("Don't prompt me again.") ) == KMessageBox::Yes ) {
-      KRun::runCommand( "kdesu k3bsetup" );
+      KRun::runCommand( "kdesu --n \"k3bsetup --lang " + KGlobal::locale()->language() + "\"" );
       exit(0);
     }
   }

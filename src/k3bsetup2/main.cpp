@@ -32,6 +32,7 @@ static const char *description = I18N_NOOP("K3bSetup prepares the system for cd 
 	
 static KCmdLineOptions options[] =
 {
+  { "lang <language>", I18N_NOOP("Specify a particular language"), 0 },
   { 0, 0, 0 }
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
@@ -47,7 +48,12 @@ int main(int argc, char *argv[])
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
+  KLocale::setMainCatalogue( "k3b" );
+
   KApplication a;
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+  if( args->isSet("lang") )
+    KGlobal::locale()->setLanguage(args->getOption("lang"));
 
   if (getuid()) {
     KMessageBox::error(0, i18n("K3b Setup must be run as root!"));

@@ -1039,7 +1039,7 @@ void K3bMainWindow::slotProjectAddFiles()
 
 void K3bMainWindow::slotK3bSetup()
 {
-  KRun::runCommand( "kdesu k3bsetup" );
+  KRun::runCommand( "kdesu --n \"k3bsetup --lang " + KGlobal::locale()->language() + "\"" );
 }
 
 
