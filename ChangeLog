@@ -2,7 +2,9 @@
 Another qt 3.1 compile fix
 Mkisofs 2.02 obsoletes the use of -L, -H, and -P. Replaced them by the long versions.
 Fixed GET PERFORMANCE command which caused crashes on some systems and DMA problems on other.
-	
+Default to RAW writing mode for Audio CDs which contain zero length pregaps since there are
+    so many buggy CD writers out there failing to create proper CDs in that case.
+
 0.11.11
 Qt 3.1 compile fix
 Honor the manual writing app selection for automatic CDRW erasing.
