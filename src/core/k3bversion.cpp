@@ -51,7 +51,7 @@ K3bVersion::K3bVersion( int majorVersion,
 void K3bVersion::setVersion( const QString& v )
 {
   QString suffix;
-  splitVersionString( v, m_majorVersion, suffix );
+  splitVersionString( v.stripWhiteSpace(), m_majorVersion, suffix );
   if( m_majorVersion >= 0 ) {
     if( suffix.startsWith(".") ) {
       suffix = suffix.mid( 1 );
@@ -192,6 +192,9 @@ bool operator<( const K3bVersion& v1, const K3bVersion& v2 )
 	      return false;
 	    else if( v2.suffix().isEmpty() && !v1.suffix().isEmpty() )
 	      return true;
+	    // we need to handle this case specially since QString("") < QString::null is true
+	    else if( v1.suffix().isEmpty() && v2.suffix().isEmpty() )
+	      return false;
 	    else
 	      return ( v1.suffix() < v2.suffix() );
 	  }
