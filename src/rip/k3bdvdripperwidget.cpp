@@ -156,10 +156,9 @@ void K3bDvdRipperWidget::rip(){
   connect( m_ripJob, SIGNAL( finished( bool )), this, SLOT( slotOpenEncoding( bool )) );
   m_ripDialog->setExtraInfo( ripStatus );
 
-  m_ripJob->start();
   // doesn't work proper, TODO later
   //if ( !m_ripJob->isStartFailed() ){
-  m_ripDialog->exec();
+  m_ripDialog->startJob();
   //} 
 }
 

@@ -210,6 +210,7 @@ void K3bMixedDoc::loadDefaultSettings()
   setRemoveBufferFiles( c->readBoolEntry( "remove_buffer_files", true ) );
 
   m_audioDoc->writeCdText( c->readBoolEntry( "cd_text", false ) );
+  m_audioDoc->setNormalize( c->readBoolEntry( "normalize", false ) );
 
   // load mixed type
   if( c->readEntry( "mixed_type" ) == "last_track" )

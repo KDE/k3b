@@ -322,12 +322,9 @@ void K3bCdCopyDialog::slotStartClicked()
 			   true /*!m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked()*/,
 			   !m_checkOnlyCreateImage->isChecked() );
 
-  d.setJob( job );
-
   hide();
 
-  job->start();
-  d.exec();
+  d.startJob(job);
 
   close();
 }

@@ -29,6 +29,7 @@
 #include <audio/k3baudiocdtextwidget.h>
 #include <tools/k3bdatamodewidget.h>
 #include <device/k3bmsf.h>
+#include <k3bstdguiitems.h>
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -89,8 +90,8 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
-  connect( m_checkDao, SIGNAL(toggled(bool)), this, SLOT(slotToggleEverything()) );
-  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleEverything()) );
+  connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
 
   readSettings();
 }
@@ -102,6 +103,9 @@ void K3bMixedBurnDialog::setupSettingsPage()
 
   QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
   m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+
+  QGroupBox* groupNormalize = new QGroupBox( 1, Qt::Vertical, i18n("Misc."), w );
+  m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( groupNormalize );
 
   m_groupMixedType = new QButtonGroup( 4, Qt::Vertical, i18n("Mixed mode type"), w );
   // standard mixed mode
@@ -121,7 +125,8 @@ void K3bMixedBurnDialog::setupSettingsPage()
   grid->setSpacing( spacingHint() );
   grid->addWidget( m_groupMixedType, 0, 0 );
   grid->addWidget( groupDataMode, 1, 0 );
-  grid->setRowStretch( 2, 1 );
+  grid->addWidget( groupNormalize, 2, 0 );
+  grid->setRowStretch( 3, 1 );
 
 
   addPage( w, i18n("Settings") );
@@ -190,6 +195,8 @@ void K3bMixedBurnDialog::saveSettings()
 
   m_cdtextWidget->save( m_doc->audioDoc() );
 
+  m_doc->audioDoc()->setNormalize( m_checkNormalize->isChecked() );
+
   // save iso image settings
   m_imageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
   m_advancedImageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
@@ -209,7 +216,7 @@ void K3bMixedBurnDialog::readSettings()
   m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkBurnproof->setChecked( doc()->burnproof() );
   m_checkRemoveBufferFiles->setChecked( m_doc->removeBufferFiles() );
-	
+  m_checkNormalize->setChecked( m_doc->audioDoc()->normalize() );	
 
   if( !m_doc->imagePath().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( m_doc->imagePath() );
@@ -234,7 +241,7 @@ void K3bMixedBurnDialog::readSettings()
 
   m_dataModeWidget->setDataMode( m_doc->dataDoc()->dataMode() );
 
-  slotToggleEverything();
+  toggleAllOptions();
 }
 
 
@@ -246,6 +253,7 @@ void K3bMixedBurnDialog::slotLoadK3bDefaults()
    m_checkBurnproof->setChecked( true );
    m_checkRemoveBufferFiles->setChecked( true );
    m_cdtextWidget->setChecked( false );
+   m_checkNormalize->setChecked(false);
 
    m_radioMixedTypeFirstTrack->setChecked(true);
    
@@ -255,7 +263,7 @@ void K3bMixedBurnDialog::slotLoadK3bDefaults()
    m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
    m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
-   slotToggleEverything();
+   toggleAllOptions();
 }
 
 
@@ -271,6 +279,7 @@ void K3bMixedBurnDialog::slotLoadUserDefaults()
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
 
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", false ) );
+  m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
 
   // load mixed type
   if( c->readEntry( "mixed_type" ) == "last_track" )
@@ -294,7 +303,7 @@ void K3bMixedBurnDialog::slotLoadUserDefaults()
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
-  slotToggleEverything();
+  toggleAllOptions();
 }
 
 
@@ -311,6 +320,7 @@ void K3bMixedBurnDialog::slotSaveUserDefaults()
   c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
 
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
+  c->writeEntry( "normalize", m_checkNormalize->isChecked() );
 
   // save mixed type
   if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
@@ -341,21 +351,24 @@ void K3bMixedBurnDialog::slotSaveUserDefaults()
 }
 
 
-void K3bMixedBurnDialog::slotToggleEverything()
+void K3bMixedBurnDialog::toggleAllOptions()
 {
-  toggleAllOptions();
+  K3bProjectBurnDialog::toggleAllOptions();
 
   // currently we do not support writing on the fly with cdrecord
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
     m_checkOnTheFly->setChecked( false );
     m_checkOnTheFly->setEnabled( false );
-    m_cdtextWidget->setChecked(false);
-    m_cdtextWidget->setEnabled(false);
+    m_cdtextWidget->setChecked( false );
+    m_cdtextWidget->setEnabled( false );
   }
   else {
-    m_checkOnTheFly->setEnabled( true );
-    m_cdtextWidget->setEnabled(true);
+    m_checkOnTheFly->setEnabled( !m_checkNormalize->isChecked() );
+    m_cdtextWidget->setEnabled( true );
   }
+
+  // we are not able to normalize in on-the-fly mode
+  m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() );
 }
 
 

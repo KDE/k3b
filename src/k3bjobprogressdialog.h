@@ -58,6 +58,19 @@ class K3bJobProgressDialog : public KDialog
   /** just reimplemented to show the systemtray */
   void show();
 
+  /**
+   * reimplemented for internal reasons
+   */
+  void hide();
+
+  /**
+   * This will show the dialog and then start the given job or
+   * if job == 0 the job set with setJob
+   */
+  int startJob( K3bJob* job = 0 );
+
+  QSize sizeHint() const;
+
  protected slots:
   virtual void slotProcessedSize( int processed, int size );
   virtual void slotProcessedSubSize( int processed, int size );
@@ -119,6 +132,8 @@ class K3bJobProgressDialog : public KDialog
   int m_lastAnimatedProgress;
 
   QString m_plainCaption;
+
+  bool in_loop;
 };
 
 #endif

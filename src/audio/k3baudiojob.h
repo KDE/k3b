@@ -53,7 +53,7 @@ class K3bAudioJob : public K3bBurnJob
   void start();
 
  protected slots:
-   // writer slots
+  // writer slots
   void slotDataWritten();
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -207,6 +207,7 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkDropDoubles, i18n("Do not ask to rename already existing files") );
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
+  QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose betweeen cdrecord and cdrdao") );
 
   QWhatsThis::add( m_checkUseID3Tag, i18n("<p>If this option is checked K3b will rename audio files "
 					  "that contain meta information (for example id3 tags in mp3 "
@@ -224,6 +225,13 @@ void K3bBurningOptionTab::setupGui()
 						"(fifos, devices, sockets) "
 						"in directories added to a data project will "
 						"also be added.</p>" ) );
+  QWhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
+							 "the possiblity to choose between cdrecord "
+							 "and cdrdao when writing a cd."
+							 "<p>This may be useful if one of the programs "
+							 "does not support the used writer."
+							 "<p><b>Be aware that K3b does not support both "
+							 "programs in all project types.</b>") );
 }
 
 

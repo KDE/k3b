@@ -203,11 +203,8 @@ void K3bBinImageWritingDialog::slotStartClicked()
 
      K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
   
-     d.setJob( m_job );
      hide();
-
-     m_job->start();
-     d.exec();
+     d.startJob(m_job);
      close();
   } else
      KMessageBox::error( this, i18n("Please select a TOC File"), i18n("No TOC File"));

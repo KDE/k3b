@@ -475,33 +475,33 @@ void K3bCdrdaoWriter::start()
     case WRITE:
       if( simulate() )
       {
-        emit infoMessage(i18n("Start simulation write at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+        emit infoMessage(i18n("Starting simulation at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
         emit newTask( i18n("Simulating") );
       }
       else
       {
-        emit infoMessage( i18n("Start writing at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+        emit infoMessage( i18n("Starting writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
         emit newTask( i18n("Writing") );
       }
       break;
     case READ:
-      emit infoMessage(i18n("Start reading..."), K3bJob::STATUS );
+      emit infoMessage(i18n("Starting reading..."), K3bJob::PROCESS );
       emit newTask( i18n("Reading") );
       break;
     case COPY:
       if( simulate() )
       {
-        emit infoMessage(i18n("Start simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+        emit infoMessage(i18n("Starting simulation copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
         emit newTask( i18n("Simulating") );
       }
       else
       {
-        emit infoMessage( i18n("Start copying at %1x speed...").arg(burnSpeed()), K3bJob::INFO );
+        emit infoMessage( i18n("Starting copy at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
         emit newTask( i18n("Copying") );
       }
       break;
     case BLANK:
-      emit infoMessage(i18n("Start blanking..."), K3bJob::INFO );
+      emit infoMessage(i18n("Starting blanking..."), K3bJob::PROCESS );
       emit newTask( i18n("Blanking") );
     }
 

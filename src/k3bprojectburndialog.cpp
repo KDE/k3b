@@ -187,12 +187,8 @@ void K3bProjectBurnDialog::slotStartClicked()
   else
     d = new K3bBurnProgressDialog( k3bMain() );
 
-  d->setJob( m_job );
-  m_job->start();
-
   hide();
-  d->exec();
-
+  d->startJob(m_job);
 
   delete m_job;
   delete d;

@@ -172,11 +172,11 @@ void K3bCdrecordWriter::start()
   }
   else {
     if( simulate() ) {
-      emit infoMessage( i18n("Starting simulation at %1x speed...").arg(burnSpeed()), K3bJob::STATUS );
+      emit infoMessage( i18n("Starting simulation at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
       emit newTask( i18n("Simulating") );
     }
     else {
-      emit infoMessage( i18n("Starting recording at %1x speed...").arg(burnSpeed()), K3bJob::STATUS );
+      emit infoMessage( i18n("Starting writing at %1x speed...").arg(burnSpeed()), K3bJob::PROCESS );
       emit newTask( i18n("Writing") );
     }
 

@@ -261,11 +261,9 @@ void K3bAudioRippingDialog::slotStartClicked()
   job->setSingleFile( m_checkSingleFile->isChecked() );
 
   K3bJobProgressDialog ripDialog( this, "Ripping" );
-  ripDialog.setJob( job );
 
-  job->start();
   hide();
-  ripDialog.exec();
+  ripDialog.startJob(job);
 
   delete job;
 

@@ -26,6 +26,7 @@
 #include <audio/k3baudiodoc.h>
 #include <audio/k3baudiotrack.h>
 #include <audio/k3baudiotocfilewriter.h>
+#include <audio/k3baudionormalizejob.h>
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <device/k3bmsf.h>
@@ -57,7 +58,8 @@
 
 K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   : K3bBurnJob( parent ),
-    m_doc( doc )
+    m_doc( doc ),
+    m_normalizeJob(0)
 {
   m_isoImager = new K3bIsoImager( doc->dataDoc(), this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
@@ -112,22 +114,15 @@ void K3bMixedJob::start()
   m_canceled = false;
   m_errorOccuredAndAlreadyReported = false;
 
-  // calculate percentage of audio and data
-  double ds = (double)m_doc->dataDoc()->length().totalFrames();
-  double as = (double)m_doc->audioDoc()->length().totalFrames();
-  m_audioDocPartOfProcess = as/(ds+as);
-
+  prepareProgressInformation();
 
   // set some flags that are needed
   m_doc->audioDoc()->setOnTheFly( m_doc->onTheFly() );  // for the toc writer
   m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
 
-  if( writingApp() == K3b::CDRECORD ||
-      ( writingApp() == K3b::DEFAULT && !m_doc->dao() ) )
-    m_usedWritingApp = K3b::CDRECORD;
-  else
-    m_usedWritingApp = K3b::CDRDAO;
+  determineDataMode();
+  determineUsedWritingApp();
 
 
   // depending on the mixed type and if it's onthefly or not we
@@ -158,7 +153,6 @@ void K3bMixedJob::start()
     }
   }
   else {
-    emit newTask( i18n("Creating image files") );
     m_tempFilePrefix = K3b::findUniqueFilePrefix( ( !m_doc->audioDoc()->title().isEmpty()
 						    ? m_doc->audioDoc()->title()
 						    : m_doc->dataDoc()->isoOptions().volumeID() ),
@@ -168,6 +162,7 @@ void K3bMixedJob::start()
       createIsoImage();
     }
     else {
+      emit newTask( i18n("Creating audio image files") );
       m_currentAction = CREATING_AUDIO_IMAGE;
       m_audioDecoder->start();
     }
@@ -309,7 +304,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
   }
   else {
     m_isoImageFile->close();
-    emit infoMessage( i18n("Iso image successfully created."), INFO );
+    emit infoMessage( i18n("Iso image successfully created."), STATUS );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       m_currentAction = WRITING_ISO_IMAGE;
@@ -323,6 +318,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
       startWriting();
     }
     else {
+      emit newTask( i18n("Creating audio image files") );
       m_currentAction = CREATING_AUDIO_IMAGE;
       m_audioDecoder->start();
     }
@@ -394,18 +390,23 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
 
     emit infoMessage( i18n("Audio images successfully created."), STATUS );
 
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-      m_currentAction = WRITING_ISO_IMAGE;
-    else
-      m_currentAction = WRITING_AUDIO_IMAGE;
-    
-    if( !prepareWriter() ) {
-      cleanupAfterError();
-      emit finished(false);
-      return;
+    if( m_doc->audioDoc()->normalize() ) {
+      normalizeFiles();
     }
+    else {
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
+	m_currentAction = WRITING_ISO_IMAGE;
+      else
+	m_currentAction = WRITING_AUDIO_IMAGE;
     
-    startWriting();
+      if( !prepareWriter() ) {
+	cleanupAfterError();
+	emit finished(false);
+	return;
+      }
+      else
+	startWriting();
+    }
   }
 }
 
@@ -556,8 +557,7 @@ bool K3bMixedJob::writeTocFile()
   if( QTextStream* s = m_tocFile->textStream() ) {
 
     // TocType
-    if( ( m_doc->dataDoc()->dataMode() == K3b::AUTO && m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) ||
-	m_doc->dataDoc()->dataMode() == K3b::MODE2 ) {
+    if( m_usedDataMode == K3b::MODE2 ) {
       *s << "CD_ROM_XA" << endl;
     }
     else {
@@ -574,8 +574,7 @@ bool K3bMixedJob::writeTocFile()
     if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ||
 	m_currentAction == WRITING_ISO_IMAGE ) {
 
-      if( ( m_doc->dataDoc()->dataMode() == K3b::AUTO && m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) ||
-	  m_doc->dataDoc()->dataMode() == K3b::MODE2 )
+      if( m_usedDataMode == K3b::MODE2 )
 	*s << "TRACK MODE2_FORM1" << endl;
       else
 	*s << "TRACK MODE1" << endl;
@@ -637,8 +636,7 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 void K3bMixedJob::addDataTrack( K3bCdrecordWriter* writer )
 {
   // add data track
-  if( ( m_doc->dataDoc()->dataMode() == K3b::AUTO && m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) ||
-      m_doc->dataDoc()->dataMode() == K3b::MODE2 )
+  if(  m_usedDataMode == K3b::MODE2 )
     writer->addArgument( "-xa1" );
   else
     writer->addArgument( "-data" );
@@ -675,29 +673,17 @@ void K3bMixedJob::slotWriterNextTrack( int t, int tt )
 
 void K3bMixedJob::slotWriterJobPercent( int p )
 {
-  if( m_doc->onTheFly() ) {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( m_currentAction == WRITING_AUDIO_IMAGE ) {
-	emit percent( (int)((double)p * m_audioDocPartOfProcess) );
-      }
-      else {
-	emit percent( (int)( 100.0*m_audioDocPartOfProcess + (1.0-m_audioDocPartOfProcess)*(double)p ) );
-      }
-    }
+  if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+    if( m_currentAction == WRITING_AUDIO_IMAGE )
+      emit percent( (int)( 100.0*(1.0-m_writingPartOfProcess)*m_audioDocPartOfProcess + 
+			   (double)p*m_audioDocPartOfProcess*m_writingPartOfProcess) );
     else
-      emit percent(p);
+      emit percent( (int)( 100.0*m_audioDocPartOfProcess +
+			   100.0*(1.0-m_writingPartOfProcess)*(1.0-m_audioDocPartOfProcess) + 
+			   + (double)p*(1.0-m_audioDocPartOfProcess)*m_writingPartOfProcess ) );
   }
   else {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( m_currentAction == WRITING_AUDIO_IMAGE )
-	emit percent( (int)(50.0*m_audioDocPartOfProcess) + (int)((double)p*m_audioDocPartOfProcess*0.5) );
-      else
-	emit percent( (int)( 100.0*m_audioDocPartOfProcess + 50.0*(1.0-m_audioDocPartOfProcess)
-			     + (double)p*(1.0-m_audioDocPartOfProcess)*0.5 ) );
-    }
-    else {
-      emit percent( 50 + p/2 );
-    }
+    emit percent( (int)( 100.0*(1.0-m_writingPartOfProcess) + (double)p*m_writingPartOfProcess ) );
   }
 }
 
@@ -706,11 +692,13 @@ void K3bMixedJob::slotAudioDecoderPercent( int p )
 {
   if( !m_doc->onTheFly() ) {
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      emit percent( (int)( (double)p*m_audioDocPartOfProcess*0.5 ) );
+      emit percent( (int)( (double)p*m_audioDecoderPartOfProgress*(1.0-m_writingPartOfProcess) ) );
     }
     else {
       // the iso imager already finished
-      emit percent( (int)((1.0-m_audioDocPartOfProcess)*50.0 + (double)p*m_audioDocPartOfProcess*0.5) );
+      // plus the current progress of the audiodecoder * audiopart * imagepart
+      emit percent( (int)( 100.0*m_isoImagerPartOfProgress*(1.0-m_writingPartOfProcess) +
+			   (double)p*m_audioDecoderPartOfProgress*(1.0-m_writingPartOfProcess) ) );
     }
   }
 }
@@ -729,11 +717,15 @@ void K3bMixedJob::slotIsoImagerPercent( int p )
   if( !m_doc->onTheFly() ) {
     emit subPercent( p );
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      emit percent( (int)( 100.0*m_audioDocPartOfProcess
-			   + (double)p*(1.0-m_audioDocPartOfProcess)*0.5 ) );
+      // the audio decoder finished
+      // the normalizer finished
+      // the writing of the audio part finished
+      emit percent( (int)( 100.0*m_audioDocPartOfProcess*(1.0-m_writingPartOfProcess) +
+			   100.0*m_audioDocPartOfProcess*m_writingPartOfProcess + 
+			   (double)p*(m_isoImagerPartOfProgress)*(1.0-m_writingPartOfProcess) ) );
     }
     else {
-      emit percent( (int)((double)p*(1.0-m_audioDocPartOfProcess)*0.5) );
+      emit percent( (int)((double)p*(m_isoImagerPartOfProgress)*(1.0-m_writingPartOfProcess)) );
     }
   }
 }
@@ -803,6 +795,8 @@ void K3bMixedJob::createIsoImage()
   
   m_isoImageFileStream = new QDataStream( m_isoImageFile );
 
+  if( !m_doc->onTheFly() )
+    emit newTask( i18n("Creating iso image file") );
   emit newSubTask( i18n("Creating iso image in %1").arg(m_isoImageFile->name()) );
   emit infoMessage( i18n("Creating iso image in %1").arg(m_isoImageFile->name()), INFO );
   
@@ -842,6 +836,150 @@ void K3bMixedJob::removeBufferFiles()
       if( !QFile::remove( track->bufferFile() ) )
 	emit infoMessage( i18n("Could not delete file %1.").arg(track->bufferFile()), ERROR );
   }
+}
+
+
+void K3bMixedJob::determineUsedWritingApp()
+{
+  // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
+
+  if( writingApp() == K3b::DEFAULT ) {
+    if( m_doc->dao() ) {
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+	m_usedWritingApp = K3b::CDRDAO;
+      else if( m_usedDataMode == K3b::MODE2 )
+	m_usedWritingApp = K3b::CDRDAO;
+      else
+	m_usedWritingApp = K3b::CDRECORD;
+    }
+    else
+      m_usedWritingApp = K3b::CDRECORD;
+  }
+  else 
+    m_usedWritingApp = writingApp();
+}
+
+
+void K3bMixedJob::determineDataMode()
+{
+  if( m_doc->dataDoc()->dataMode() == K3b::AUTO ) {
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+      m_usedDataMode = K3b::MODE2;
+    else
+      m_usedDataMode = K3b::MODE1;
+  }
+  else
+    m_usedDataMode = m_doc->dataDoc()->dataMode();
+}
+
+
+void K3bMixedJob::normalizeFiles()
+{
+  if( !m_normalizeJob ) {
+    m_normalizeJob = new K3bAudioNormalizeJob( this );
+    
+    connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)), 
+	     this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_normalizeJob, SIGNAL(percent(int)), this, SLOT(slotNormalizeProgress(int)) );
+    connect( m_normalizeJob, SIGNAL(subPercent(int)), this, SLOT(slotNormalizeSubProgress(int)) );
+    connect( m_normalizeJob, SIGNAL(finished(bool)), this, SLOT(slotNormalizeJobFinished(bool)) );
+    connect( m_normalizeJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+    connect( m_normalizeJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+  }
+
+  // add all the files
+  QValueVector<QString> files;
+  QListIterator<K3bAudioTrack> it( *m_doc->audioDoc()->tracks() );
+  for( ; it.current(); ++it ) {
+    K3bAudioTrack* track = it.current();
+    files.append( track->bufferFile() );
+  }
+
+  m_normalizeJob->setFilesToNormalize( files );
+
+  emit newTask( i18n("Normalizing volume levels") );
+  m_normalizeJob->start();
+}
+
+void K3bMixedJob::slotNormalizeJobFinished( bool success )
+{
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
+
+  if( success ) {
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
+      m_currentAction = WRITING_ISO_IMAGE;
+    else
+      m_currentAction = WRITING_AUDIO_IMAGE;
+    
+    if( !prepareWriter() ) {
+      cleanupAfterError();
+      emit finished(false);
+      return;
+    }
+    else
+      startWriting();
+  }
+  else {
+    cleanupAfterError();
+    emit finished(false);
+  }
+}
+
+void K3bMixedJob::slotNormalizeProgress( int p )
+{
+  if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+    // the decoder finished
+    // plus the normalize progress
+
+    emit percent( (int)( 100.0*m_audioDecoderPartOfProgress*(1.0-m_writingPartOfProcess) +
+			 (double)p*m_normalizerPartOfProgress*(1.0-m_writingPartOfProcess) ) );
+  }
+  else {
+    // the iso imager already finished
+    // the decoder finished
+    // plus the normalize progress
+
+    emit percent( (int)( 100.0*m_isoImagerPartOfProgress*(1.0-m_writingPartOfProcess) +
+			 100.0*m_audioDecoderPartOfProgress*(1.0-m_writingPartOfProcess) +
+			 (double)p*m_normalizerPartOfProgress*(1.0-m_writingPartOfProcess) ) );
+  }
+}
+
+
+void K3bMixedJob::slotNormalizeSubProgress( int p )
+{
+  emit subPercent( p );
+}
+
+
+void K3bMixedJob::prepareProgressInformation()
+{
+  // all these values are basicly useful when not writing on the fly
+  // since with on-the-fly the writer gets the full percentage
+
+  // calculate percentage of audio and data
+  // this is also used in on-the-fly mode
+  double ds = (double)m_doc->dataDoc()->length().totalFrames();
+  double as = (double)m_doc->audioDoc()->length().totalFrames();
+  m_audioDocPartOfProcess = as/(ds+as);
+
+  if( m_doc->onTheFly() )
+    m_writingPartOfProcess = 1.0;
+  else {
+    m_writingPartOfProcess = 0.5;
+  }
+
+  m_audioDecoderPartOfProgress = ( m_doc->audioDoc()->normalize() ? 
+				   m_audioDocPartOfProcess/2 :
+				   m_audioDocPartOfProcess );
+
+  m_isoImagerPartOfProgress = 1.0 - m_audioDocPartOfProcess;
+
+  m_normalizerPartOfProgress = ( m_doc->audioDoc()->normalize() ? 
+				 m_audioDecoderPartOfProgress : 
+				 0 );
 }
 
 

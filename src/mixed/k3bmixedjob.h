@@ -30,6 +30,8 @@ class K3bWaveFileWriter;
 class KTempFile;
 class K3bCdrecordWriter;
 class K3bMsInfoFetcher;
+class K3bAudioNormalizeJob;
+
 
 /**
   *@author Sebastian Trueg
@@ -53,20 +55,32 @@ class K3bMixedJob : public K3bBurnJob
   void start();
 
  protected slots:
+  // iso imager slots
   void slotSizeCalculationFinished( int, int );
   void slotReceivedIsoImagerData( const char*, int );
   void slotIsoImagerFinished( bool success );
+  void slotIsoImagerPercent(int);
+
+  // ms info fetcher slots
+  void slotMsInfoFetched(bool);
+
+  // audio decoder slots
   void slotAudioDecoderFinished( bool );
-  void slotReceivedAudioDecoderData( const char*, int );
   void slotAudioDecoderNextTrack( int, int );
-  void slotDataWritten();
+  void slotAudioDecoderPercent(int);
+  void slotAudioDecoderSubPercent( int );
+  void slotReceivedAudioDecoderData( const char*, int );
+
+  // writer slots
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);
   void slotWriterJobPercent(int);
-  void slotAudioDecoderPercent(int);
-  void slotAudioDecoderSubPercent( int );
-  void slotIsoImagerPercent(int);
-  void slotMsInfoFetched(bool);
+  void slotDataWritten();
+
+  // normalizing slots
+  void slotNormalizeJobFinished( bool );
+  void slotNormalizeProgress( int );
+  void slotNormalizeSubProgress( int );
 
  private:
   bool prepareWriter();
@@ -77,6 +91,10 @@ class K3bMixedJob : public K3bBurnJob
   void cleanupAfterError();
   void removeBufferFiles();
   void createIsoImage();
+  void determineUsedWritingApp();
+  void determineDataMode();
+  void normalizeFiles();
+  void prepareProgressInformation();
 
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
@@ -84,6 +102,7 @@ class K3bMixedJob : public K3bBurnJob
   K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
   K3bMsInfoFetcher* m_msInfoFetcher;
+  K3bAudioNormalizeJob* m_normalizeJob;
 
   QFile* m_isoImageFile;
   QDataStream* m_isoImageFileStream;
@@ -97,6 +116,10 @@ class K3bMixedJob : public K3bBurnJob
 
   int m_currentAction;
   double m_audioDocPartOfProcess;
+  double m_writingPartOfProcess;
+  double m_audioDecoderPartOfProgress;
+  double m_isoImagerPartOfProgress;
+  double m_normalizerPartOfProgress;
 
   bool m_canceled;
   bool m_errorOccuredAndAlreadyReported;
@@ -104,6 +127,7 @@ class K3bMixedJob : public K3bBurnJob
   int m_fifo;
   bool m_usingFifo;
 
+  int m_usedDataMode;
   int m_usedWritingApp;
 
   QString m_tempFilePrefix;

@@ -56,7 +56,7 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void slotLoadK3bDefaults();
    void slotLoadUserDefaults();
    void slotSaveUserDefaults();
-   void slotToggleEverything();
+   void toggleAllOptions();
 
  private:
    void setupSettingsPage();
@@ -67,6 +67,8 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioMixedTypeFirstTrack;
    QRadioButton* m_radioMixedTypeLastTrack;
    QRadioButton* m_radioMixedTypeSessions;
+
+   QCheckBox* m_checkNormalize;
 
    K3bDataModeWidget* m_dataModeWidget;
 };

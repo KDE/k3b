@@ -105,7 +105,8 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 					    const char* name, 
 					    bool showSubProgress,
 					    bool modal, WFlags fl )
-  : KDialog( parent, name, modal, fl )
+  : KDialog( parent, name, modal, fl ),
+    in_loop(false)
 {
   setCaption( i18n("Progress") );
 
@@ -122,10 +123,6 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
   m_timer = new QTimer( this );
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
-
-  // make sure the dialog is at least as wide as high
-  if( width() < height() )
-    resize( height(), height() );
 }
 
 void K3bJobProgressDialog::setupGUI()
@@ -154,7 +151,7 @@ void K3bJobProgressDialog::setupGUI()
 
   m_labelJob = new QLabel( frame4, "m_labelJob" );
   QFont m_labelJob_font(  m_labelJob->font() );
-  m_labelJob_font.setPointSize( 12 );
+  m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
   m_labelJob_font.setBold( TRUE );
   m_labelJob->setFont( m_labelJob_font ); 
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
@@ -196,7 +193,7 @@ void K3bJobProgressDialog::setupGUI()
 
   m_labelTask = new KCutLabel( frame5, "m_labelTask" );
   QFont m_labelTask_font(  m_labelTask->font() );
-  m_labelTask_font.setPointSize( 12 );
+  m_labelTask_font.setPointSize( m_labelTask_font.pointSize() + 2 );
   m_labelTask_font.setBold( TRUE );
   m_labelTask->setFont( m_labelTask_font ); 
   frame5Layout->addWidget( m_labelTask );
@@ -627,6 +624,76 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
   }
 
   e->accept();
+}
+
+
+QSize K3bJobProgressDialog::sizeHint() const
+{
+  QSize s = layout()->totalSizeHint();
+  if( s.width() < s.height() )
+    s.setWidth( s.height() );
+  return s;
+}
+
+
+int K3bJobProgressDialog::startJob( K3bJob* job )
+{
+  if( job ) {
+    setJob( job );
+  }
+  else if( !m_job ) {
+    kdError() << "(K3bJobProgressDialog) null job!" << endl;
+    return -1;
+  }
+
+  // the following code is mainly taken from QDialog::exec
+
+  if ( in_loop ) {
+    kdError() << "(K3bJobProgressDialog::startJob) Recursive call detected." << endl;
+    return -1;
+  }
+  
+  bool destructiveClose = testWFlags( WDestructiveClose );
+  clearWFlags( WDestructiveClose );
+  
+  bool wasShowModal = testWFlags( WShowModal );
+  setWFlags( WShowModal );
+  setResult( 0 );
+  
+  show();
+  
+  // start the job after showing the dialog
+  m_job->start();
+
+  in_loop = TRUE;
+  qApp->enter_loop();
+  
+  if ( !wasShowModal )
+    clearWFlags( WShowModal );
+  
+  int res = result();
+  
+  if ( destructiveClose )
+    delete this;
+  
+  return res;
+}
+
+
+void K3bJobProgressDialog::hide()
+{
+  // we need to reimplement this since
+  // QDialog does not know if we are in a loop from startJob
+
+  if ( isHidden() )
+    return;
+  
+  KDialog::hide();
+  
+  if ( in_loop ) {
+    in_loop = FALSE;
+    qApp->exit_loop();
+  }
 }
 
 #include "k3bjobprogressdialog.moc"

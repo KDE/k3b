@@ -95,15 +95,8 @@ void K3bDataJob::start()
   m_canceled = false;
   m_imageFinished = false;
 
-
-  if( writingApp() == K3b::CDRECORD || 
-      (writingApp() == K3b::DEFAULT && 
-       !(m_doc->dao() && !m_doc->multiSessionMode() == K3bDataDoc::NONE) &&
-       m_doc->dataMode() != K3b::MODE2 ) )
-    m_usedWritingApp = K3b::CDRECORD;  // cdrecord seems to have problems writing xa 1 disks? At least on my system!
-  else 
-    m_usedWritingApp = K3b::CDRDAO;
-
+  determineDataMode();
+  determineUsedWritingApp();
 
   if( !m_doc->onlyCreateImage() && 
       ( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
@@ -374,10 +367,8 @@ bool K3bDataJob::prepareWriterJob()
 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) )
       writer->addArgument("-waiti");
 
-    if( ( m_doc->dataMode() == K3b::AUTO &&
-	  m_doc->multiSessionMode() == K3bDataDoc::NONE ) ||
-	m_doc->dataMode() == K3b::MODE1 )
-      writer->addArgument( "-data" );  // default to mode1
+    if( m_usedDataMode == K3b::MODE1 )
+      writer->addArgument( "-data" );
     else
       writer->addArgument( "-xa1" );
 
@@ -410,9 +401,7 @@ bool K3bDataJob::prepareWriterJob()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      if( ( m_doc->dataMode() == K3b::AUTO &&
-	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) ||
-	  m_doc->dataMode() == K3b::MODE1 ) {
+      if( m_usedDataMode == K3b::MODE1 ) {
 	*s << "CD_ROM" << "\n";
 	*s << "\n";
 	*s << "TRACK MODE1" << "\n";
@@ -457,6 +446,40 @@ bool K3bDataJob::prepareWriterJob()
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   return true;
+}
+
+
+void K3bDataJob::determineUsedWritingApp()
+{
+  // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
+
+  if( writingApp() == K3b::DEFAULT ) {
+    if( m_doc->dao() ) {
+      if( m_doc->multiSessionMode() != K3bDataDoc::NONE )
+	m_usedWritingApp = K3b::CDRDAO;
+      else if( m_usedDataMode == K3b::MODE2 )
+	m_usedWritingApp = K3b::CDRDAO;
+      else
+	m_usedWritingApp = K3b::CDRECORD;
+    }
+    else
+      m_usedWritingApp = K3b::CDRECORD;
+  }
+  else 
+    m_usedWritingApp = writingApp();
+}
+
+
+void K3bDataJob::determineDataMode()
+{
+  if( m_doc->dataMode() == K3b::AUTO ) {
+    if( m_doc->multiSessionMode() == K3bDataDoc::NONE )
+      m_usedDataMode = K3b::MODE1;
+    else
+      m_usedDataMode = K3b::MODE2;
+  }
+  else
+    m_usedDataMode = m_doc->dataMode();
 }
 
 
