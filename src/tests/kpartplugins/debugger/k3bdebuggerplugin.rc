@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="k3bdebuggerplugin" library="libk3bdebuggerplugin">
+<MenuBar>
+ <Menu name="plugins">
+  <Action name="k3bdebuggerplugin"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>
