@@ -20,6 +20,7 @@
 
 #include <qwidget.h>
 #include "../k3bjob.h"
+#include <kio/job.h>
 
 class K3bDivxCodecData;
 class KProcess;
@@ -41,6 +42,7 @@ public slots:
     void slotParseEncoding( KProcess *p, char *buffer, int lenght);
     void slotAudioExited( KProcess *p );
     void slotParseAudio( KProcess *p, char *buffer, int lenght);
+    void slotStartAudioProcessing( KIO::Job *job );
 
     //void slotPercent( unsigned int );
 private:
@@ -50,9 +52,8 @@ private:
     int m_speedTrigger;
     int m_pass;
     int m_speedInitialFlag;
-
-
     void startEncoding();
+    void copyIfos();
 
 };
 

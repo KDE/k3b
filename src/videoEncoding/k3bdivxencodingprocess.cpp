@@ -20,9 +20,12 @@
 #include "../tools/k3bexternalbinmanager.h"
 #include "../k3b.h"
 
+#include <qdir.h>
+
 #include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
+
 
 K3bDivXEncodingProcess::K3bDivXEncodingProcess(K3bDivxCodecData *data, QWidget *parent, const char *name ) : K3bJob( ) {
      m_data = data;
@@ -32,6 +35,14 @@ K3bDivXEncodingProcess::~K3bDivXEncodingProcess(){
 }
 
 void K3bDivXEncodingProcess::start(){
+    infoMessage( i18n("Copy IFO files to vob directory."), INFO );
+    copyIfos(); // copy IFO files to enable dvd import mode of transcode
+}
+
+void K3bDivXEncodingProcess::slotStartAudioProcessing(KIO::Job *job){
+    if( job->error() > 0 ){
+        kdDebug() << "(K3bDivXEncodingProcess) Job error during copy: " << job->errorString() << endl;
+    }
      m_pass = 0;
      m_speedFlag = 1;
      m_speedTrigger = 0;
@@ -42,14 +53,14 @@ void K3bDivXEncodingProcess::start(){
      K3bExternalBin *tcextractBin = k3bMain()->externalBinManager()->binObject("tcextract");
      K3bExternalBin *tcdecodeBin = k3bMain()->externalBinManager()->binObject("tcdecode");
      K3bExternalBin *tcscanBin = k3bMain()->externalBinManager()->binObject("tcscan");
-
+      // parse audio for gain to normalize
      *m_process << "nice -10 ";
-     *m_process << tccatBin->path + " -i " + m_data->getProjectDir() + "/tmp -t vob -P " + m_data->getTitle();
+     *m_process << tccatBin->path + " -i " + m_data->getProjectDir() + "/vob -t vob -P " + m_data->getTitle();
      *m_process << " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob ";
      *m_process << " | " + tcdecodeBin->path + " -x ac3 ";
      *m_process << " | " + tcscanBin->path + " -x pcm";
 
-     kdDebug() << "(K3bDivXEncodingProcess)" +  tccatBin->path + " -i " + m_data->getProjectDir() + "/tmp -t vob -P " + m_data->getTitle()
+     kdDebug() << "(K3bDivXEncodingProcess)" +  tccatBin->path + " -i " + m_data->getProjectDir() + "/vob -t vob -P " + m_data->getTitle()
      + " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob "
      + " | " + tcdecodeBin->path + " -x ac3 " + " | " + tcscanBin->path + " -x pcm";
 
@@ -63,7 +74,7 @@ void K3bDivXEncodingProcess::start(){
      if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ){
          kdDebug() << "Error audio process starting" << endl;
      }
-     //emit started();
+     emit started();
      //emit newTask( i18n("Generating video")  );
      emit newSubTask( i18n("Preprocessing audio")  );
      infoMessage( i18n("Search for maximum audio gain to get normalize parameter."), INFO );
@@ -80,9 +91,9 @@ void K3bDivXEncodingProcess::startEncoding(){
 
      *m_process << "nice -10 ";
      *m_process << transcodeBin->path; //"/usr/local/bin/transcode -i ";
-     *m_process << " -i " + m_data->getProjectDir() + "/vob ";
+     *m_process << " -i " << m_data->getProjectDir() + "/vob ";
 
-     *m_process << " -x vob" + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness();
+     *m_process << " -x dvd -T " + m_data->getTitle() +",-1,1" + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness();
      kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness()<< endl;
      *m_process << m_data->getParaYuv() + m_data->getParaAudioLanguage();
      kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaYuv() + m_data->getParaAudioLanguage()<< endl;
@@ -112,7 +123,8 @@ void K3bDivXEncodingProcess::startEncoding(){
              debugPass = " -R 2";
          }
      }
-     kdDebug() << "(K3bDivXEncodingProcess)" + transcodeBin->path + " -i " + m_data->getProjectDir() + "/vob -x vob" +
+     kdDebug() << "(K3bDivXEncodingProcess)" + transcodeBin->path + " -i " + m_data->getProjectDir() +
+     "/vob -x dvd -T" + m_data->getTitle() +",-1,1" +
      m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness() +
      m_data->getParaYuv() + m_data->getParaAudioLanguage() +
      m_data->getParaAudioResample()  + m_data->getParaAudioBitrate() + m_data->getParaAudioGain()  +
@@ -141,6 +153,20 @@ void K3bDivXEncodingProcess::startEncoding(){
          emit newSubTask( i18n("Encoding video")  );
      }
      kdDebug() << "(K3bDivXEncodingProcess) Starting encoding." << endl;
+}
+
+void K3bDivXEncodingProcess::copyIfos(){
+    QDir vobs( m_data->getProjectDir() + "/tmp");
+    if( vobs.exists() ){
+        QStringList ifos = vobs.entryList("*.ifo");
+        for ( QStringList::Iterator it = ifos.begin(); it != ifos.end(); ++it ) {
+            (*it) = m_data->getProjectDir() + "/tmp/" +(*it);
+        }
+        KURL::List ifoList( ifos );
+        KURL dest( m_data->getProjectDir() + "/vob" );
+        connect( KIO::copy( ifoList, dest, false ), SIGNAL( result( KIO::Job *) ), this, SLOT( slotStartAudioProcessing( KIO::Job* ) ) );
+        kdDebug() << "(K3bDivxEncodingProcess) Copy IFO files to " << dest.path() << endl;
+    }
 }
 
 void K3bDivXEncodingProcess::cancel( ){
@@ -233,5 +259,6 @@ void K3bDivXEncodingProcess::slotAudioExited( KProcess *p ){
         slotEncodingExited( p );
     }
 }
+
 
 #include "k3bdivxencodingprocess.moc"
