@@ -43,6 +43,7 @@
 #include <kio/global.h>
 #include <kurl.h>
 #include <kinputdialog.h>
+#include <kurldrag.h>
 
 #include <qheader.h>
 #include <qgroupbox.h>
@@ -57,6 +58,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qspinbox.h>
+#include <qevent.h>
 
 
 class K3bIsoImageWritingDialog::Private
@@ -82,6 +84,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 {
   d = new Private();
 
+  setAcceptDrops(true);
   setupGui();
 
   m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
@@ -470,6 +473,20 @@ void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
 QString K3bIsoImageWritingDialog::imagePath() const
 {
   return KURL::fromPathOrURL( m_editImagePath->url() ).path();
+}
+
+
+void K3bIsoImageWritingDialog::dragEnterEvent( QDragEnterEvent* e )
+{
+  e->accept( KURLDrag::canDecode(e) );
+}
+
+
+void K3bIsoImageWritingDialog::dropEvent( QDropEvent* e )
+{
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
+  m_editImagePath->setURL( urls.first().path() );
 }
 
 #include "k3bisoimagewritingdialog.moc"

@@ -34,6 +34,8 @@ class QSpinBox;
 class QComboBox;
 class K3bIso9660;
 class K3bCueFileParser;
+class QDragEnterEvent;
+class QDropEvent;
 
 
 /**
@@ -65,6 +67,8 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
 
  protected:
   void calculateMd5Sum( const QString& );
+  void dragEnterEvent( QDragEnterEvent* );
+  void dropEvent( QDropEvent* );
 
  private:
   enum {

@@ -30,6 +30,8 @@ class K3bWritingModeWidget;
 class KURLRequester;
 class K3bListView;
 class QSpinBox;
+class QDragEnterEvent;
+class QDropEvent;
 
 
 /**
@@ -59,6 +61,8 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
 
  protected:
   void calculateMd5Sum( const QString& );
+  void dragEnterEvent( QDragEnterEvent* );
+  void dropEvent( QDropEvent* );
 
  private:
   void setupGui();

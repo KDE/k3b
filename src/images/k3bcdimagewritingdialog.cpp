@@ -51,6 +51,7 @@
 #include <kio/global.h>
 #include <kurl.h>
 #include <kinputdialog.h>
+#include <kurldrag.h>
 
 #include <qheader.h>
 #include <qgroupbox.h>
@@ -102,6 +103,8 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 			  modal )
 {
   d = new Private();
+
+  setAcceptDrops( true );
 
   setupGui();
 
@@ -364,8 +367,10 @@ void K3bCdImageWritingDialog::slotStartClicked()
 }
 
 
-void K3bCdImageWritingDialog::slotUpdateImage( const QString& path )
+void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
 {
+  QString path = imagePath();
+
   // check the image types
 
   d->md5Job->cancel();
@@ -872,6 +877,20 @@ int K3bCdImageWritingDialog::currentImageType()
 QString K3bCdImageWritingDialog::imagePath() const
 {
   return KURL::fromPathOrURL( m_editImagePath->url() ).path();
+}
+
+
+void K3bCdImageWritingDialog::dragEnterEvent( QDragEnterEvent* e )
+{
+  e->accept( KURLDrag::canDecode(e) );
+}
+
+
+void K3bCdImageWritingDialog::dropEvent( QDropEvent* e )
+{
+  KURL::List urls;
+  KURLDrag::decode( e, urls );
+  m_editImagePath->setURL( urls.first().path() );
 }
 
 #include "k3bcdimagewritingdialog.moc"
