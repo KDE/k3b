@@ -115,6 +115,8 @@ public:
   QStringList allNodes;
   int deviceFd;
   bool burnfree;
+  bool writesDvdPlusR;
+  bool writesDvdR;
 };
 
 
@@ -126,6 +128,7 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   d->interfaceType = OTHER;
   d->blockDeviceName = devname;
   d->allNodes.append(devname);
+  d->writesDvdPlusR = d->writesDvdR = false;
 
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
@@ -620,6 +623,7 @@ bool K3bCdDevice::CdDevice::writesCdrw() const
 {
   return d->deviceType & CDRW;
 }
+
 
 bool K3bCdDevice::CdDevice::writesDvd() const
 {

@@ -259,8 +259,10 @@ void K3bSystemProblemDialog::checkSystem()
 					      "writer in your system not configured to use "
 					      "SCSI emulation."),
 					 i18n("The best and recommended solution is to enable "
-					      "ide-scsi (SCSI emulation) for all writer devices. "
-					      "This way you won't have any problems."),
+					      "ide-scsi (SCSI emulation) for all devices. "
+					      "This way you won't have any problems."
+					      "Be aware that you may still enable DMA on ide-scsi "
+					      "emulated drives."),
 					 false ) );
     }
     else {
@@ -280,7 +282,7 @@ void K3bSystemProblemDialog::checkSystem()
 						  "in your system not configured to use "
 						  "SCSI emulation.").arg("cdrecord"),
 					     i18n("The best and recommended solution is to enable "
-						  "ide-scsi (SCSI emulation) for all writer devices. "
+						  "ide-scsi (SCSI emulation) for all devices. "
 						  "This way you won't have any problems. Or you install "
 						  "(or select as the default) a more recent version of %1.").arg("cdrtools"),
 					     false ) );

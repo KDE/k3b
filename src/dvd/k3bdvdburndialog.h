@@ -17,12 +17,19 @@
 #ifndef _K3B_DVD_BURNDIALOG_H_
 #define _K3B_DVD_BURNDIALOG_H_
 
-#include <k3bdataburndialog.h>
+#include <k3bprojectburndialog.h>
 
 
 class K3bDvdDoc;
+class K3bDataImageSettingsWidget;
+class K3bDataAdvancedImageSettingsWidget;
+class K3bDataVolumeDescWidget;
+class QGroupBox;
+class QRadioButton;
+class QButtonGroup;
 
-class K3bDvdBurnDialog : public K3bDataBurnDialog
+
+class K3bDvdBurnDialog : public K3bProjectBurnDialog
 {
  Q_OBJECT
 
@@ -33,7 +40,34 @@ class K3bDvdBurnDialog : public K3bDataBurnDialog
  protected slots:
    void toggleAllOptions();
 
+   void saveSettings();
+   void readSettings();
+
+   void slotLoadK3bDefaults();
+   void slotLoadUserDefaults();
+   void slotSaveUserDefaults();
+
  private:
+   void setupSettingsTab();
+
+   K3bDataVolumeDescWidget* m_volumeDescWidget;
+
+   // --- settings tab ---------------------------
+   K3bDataImageSettingsWidget* m_imageSettingsWidget;
+   // ----------------------------------------------
+	
+   // --- advanced tab -------------------------
+   K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
+   // ---------------------------------------------
+	
+   // --- multisession tab -------------------------
+   QButtonGroup* m_groupMultiSession;
+   QRadioButton* m_radioMultiSessionNone;
+   QRadioButton* m_radioMultiSessionStart;
+   QRadioButton* m_radioMultiSessionContinue;
+   QRadioButton* m_radioMultiSessionFinish;
+   // ---------------------------------------------
+
    K3bDvdDoc* m_doc;
 };
 

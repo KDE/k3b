@@ -40,7 +40,8 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    Q_OBJECT
 
  public:
-   K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent=0, const char *name=0, bool modal = true );
+   K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent=0, const char *name=0, 
+			 bool modal = true, bool dvd = false );
    ~K3bProjectBurnDialog();
 
    enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
@@ -180,6 +181,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
    QTabWidget* m_tabWidget;
+   bool m_dvd;
 };
 
 #endif
