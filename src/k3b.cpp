@@ -42,9 +42,9 @@
 #include "k3b.h"
 #include "k3bview.h"
 #include "k3bdirview.h"
-#include "k3baudiodoc.h"
+#include "audio/k3baudiodoc.h"
 #include "k3bdevicemanager.h"
-#include "k3baudiotrackdialog.h"
+#include "audio/k3baudiotrackdialog.h"
 #include "k3bcopywidget.h"
 #include "k3bripperwidget.h"
 #include "k3boptiondialog.h"
@@ -102,16 +102,16 @@ void K3bApp::initActions()
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   settingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
-  fileBurn = new KAction( i18n("&Burn..."), 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
+  fileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
 
-  fileNewMenu = new KActionMenu( i18n("&New Project"), SmallIconSet("filenew"), actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
+  fileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
+  fileNewAudio = new KAction(i18n("New &Audio project"), "filenew", 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"),"filenew", 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
   fileNewMenu->insert( fileNewAudio );
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
 
-  viewDirView = new KToggleAction(i18n("Show Directories"), SmallIconSet("view_sidetree"), 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
+  viewDirView = new KToggleAction(i18n("Show Directories"), "view_sidetree", 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
 
   fileNewMenu->setStatusText(i18n("Creates a new project"));
   fileOpen->setStatusText(i18n("Opens an existing project"));
@@ -636,10 +636,6 @@ void K3bApp::init()
 			qDebug( "No SCSI-Devices found!" );
 			
 	m_deviceManager->printDevices();
-
-  // debugging
-  m_config->setGroup("General Options");
-  m_config->writeEntry("tempdir", QString::null);
 }
 
 

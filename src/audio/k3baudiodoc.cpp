@@ -37,6 +37,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 #include <iostream>
 
@@ -477,7 +478,9 @@ void K3bAudioDoc::bufferFiles( )
 	// start a new mpg123 process for this track
 	m_process->clearArguments();
 	*m_process << kapp->config()->readEntry( "mpg123 path" );
-	lastTempFile = findTempFile( "wav" );
+	
+	kapp->config()->setGroup( "General Options");
+	lastTempFile = findTempFile( "wav", k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) ) );
 	*m_process << "-v";
 	*m_process << "-w";
 	*m_process << lastTempFile;

@@ -26,7 +26,7 @@
 
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotrack.h"
-#include "k3bstickybutton.h"
+#include "../k3bstickybutton.h"
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog(QWidget *parent, const char *name )

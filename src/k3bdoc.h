@@ -185,7 +185,7 @@ protected:
 	virtual void emitProgress( unsigned long size, unsigned long processed, int speed = 0 );
 	void emitMessage( const QString& msg );
 
-	QString findTempFile( const QString& ending );
+	QString findTempFile( const QString& ending, const QString& dir );
 
 	QTimer* m_timer;
 	KProcess* m_process;

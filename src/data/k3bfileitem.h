@@ -19,14 +19,17 @@
 #define K3BFILEITEM_H
 
 
-class QFileInfo;
-class QString;
+#include <qfileinfo.h>
+#include <qstring.h>
+
 class K3bDataDoc;
 class K3bDirItem;
 
 /**
   *@author Sebastian Trueg
   */
+
+// TODO: inherit from KIO::KFileItem or even use it instead of QFileInfo
 
 class K3bFileItem
 {

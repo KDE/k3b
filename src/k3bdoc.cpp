@@ -107,12 +107,8 @@ int K3bDoc::error() const
 	return m_error;
 }
 
-QString K3bDoc::findTempFile( const QString& ending )
+QString K3bDoc::findTempFile( const QString& ending, const QString& dir )
 {
-	// searching in default group
-	k3bMain()->config()->setGroup( "" );
-	QString dir = k3bMain()->config()->readEntry( "Temp Dir", "/usr/cdburn/" );//locateLocal( "appdata", "temp/" ) );
-	
 	// find a free filename
 	int num = 1;
 	while( QFile::exists( dir + "k3b-" + QString::number( num ) + "." + ending ) )

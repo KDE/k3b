@@ -9,4 +9,7 @@
   	<Action name="view_dir" append="show_merge"/>
   </Menu>
 </MenuBar>
+<ToolBar name="mainToolBar">
+	<Action name="file_burn"/>
+</ToolBar>
 </kpartgui>

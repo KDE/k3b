@@ -89,6 +89,7 @@ protected slots:
   void readSettings();
   void slotCancel();
   void slotRefreshWriterSpeeds();
+  void slotFindDir();
 };
 
 #endif

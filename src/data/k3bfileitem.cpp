@@ -31,8 +31,8 @@ K3bFileItem::K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* 
 	m_next = 0;
 	m_prev = 0;
 	
-	m_isoName = doc->isoName( this );
-	m_joiletName = m_rockRidgeName = m_file.name();
+//	m_isoName = doc->isoName( this );
+//	m_joiletName = m_rockRidgeName = m_file.name();
 }
 
 
@@ -47,5 +47,6 @@ bool K3bFileItem::exists() const
 
 QString K3bFileItem::absIsoPath()
 {
-	return m_dir->absIsoPath() + m_isoName;
+//	return m_dir->absIsoPath() + m_isoName;
+	return QString::null;
 }
