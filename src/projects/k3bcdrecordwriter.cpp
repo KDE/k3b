@@ -65,8 +65,6 @@ public:
   QValueList<Track> tracks;
 
   KTempFile* cdTextFile;
-
-  bool bufferInfo;
 };
 
 
@@ -277,8 +275,6 @@ void K3bCdrecordWriter::clearArguments()
 
 void K3bCdrecordWriter::start()
 {
-  d->bufferInfo = false;
-
   emit started();
 
   d->canceled = false;
@@ -416,7 +412,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       m_lastFifoValue = fifo;
 
       if( s_progressRx.numCaptures() > 4 )
-	emit deviceBuffer( s_progressRx.cap(5).toInt() ), d->bufferInfo = true;
+	emit deviceBuffer( s_progressRx.cap(5).toInt() );
 
       //
       // cdrecord's output sucks a bit.
@@ -505,8 +501,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr.startsWith("Cannot send CUE sheet") ) {
       m_cdrecordError = CANNOT_SEND_CUE_SHEET;
     }
-    else if( errStr.startsWith( "Trying to use ultra high speed medium on improper writer" ) ) {
+    else if( errStr.startsWith( "Trying to use ultra high speed medium" ) ||
+	     errStr.startsWith( "Trying to use high speed medium" ) ) {
       m_cdrecordError = HIGH_SPEED_MEDIUM;
+    }
+    else if( errStr.startsWith( "You may have used an ultra low speed medium" ) ) {
+      m_cdrecordError = LOW_SPEED_MEDIUM;
     }
     else if( errStr.startsWith( "Permission denied. Cannot open" ) ) {
       m_cdrecordError = PERMISSION_DENIED;
@@ -605,13 +605,13 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     bool ok;
     int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
     if( ok )
-      emit infoMessage( i18n("Burnfree was used %1 times.").arg(num), INFO );
+      emit infoMessage( i18n("Burnfree was used 1 time.", "Burnfree was used %n times.", num), INFO );
   }
   else if( s_burnfreeCounterRxPredict.search( line ) ) {
     bool ok;
     int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
     if( ok )
-      emit infoMessage( i18n("Buffer was low %1 times.").arg(num), INFO );
+      emit infoMessage( i18n("Buffer was low 1 time.", "Buffer was low %n times.", num), INFO );
   }
   else {
     // debugging
@@ -645,11 +645,6 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
 	
-	if( d->bufferInfo )
-	  emit infoMessage( "got buffer info", INFO );
-	else
-	  emit infoMessage( "got NO buffer info", WARNING );
-
 	emit finished( true );
       }
       break;
@@ -705,20 +700,25 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
       case HIGH_SPEED_MEDIUM:
 	emit infoMessage( i18n("Found a high speed medium not suitable for the writer being used."), ERROR );
 	break;
+      case LOW_SPEED_MEDIUM:
+	emit infoMessage( i18n("Found a low speed medium not suitable for the writer being used."), ERROR );
+	break;
       case UNKNOWN:
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
-			  K3bJob::ERROR );
-	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-
-	if( !m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
-	  emit infoMessage( i18n("Cdrecord is not being run with root privileges."), ERROR );
-	  emit infoMessage( i18n("This influences the stability of the burning process."), ERROR );
+	if( !wasSourceUnreadable() ) {
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
+			    K3bJob::ERROR );
+	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+	  
+	  if( !m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
+	    emit infoMessage( i18n("Cdrecord is not being run with root privileges."), ERROR );
+	    emit infoMessage( i18n("This influences the stability of the burning process."), ERROR );
 #ifdef HAVE_K3BSETUP
-	  emit infoMessage( i18n("Use K3bSetup to solve this problem."), ERROR );    
+	    emit infoMessage( i18n("Use K3bSetup to solve this problem."), ERROR );    
 #endif
-	}
-	else {
-	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	  }
+	  else {
+	    emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	  }
 	}
 	break;
       }

@@ -202,7 +202,7 @@ void K3bAudioTrackDialog::setupGui()
   m_checkCopy         = new QCheckBox( i18n( "&Copy protected" ), optionsTab, "m_checkCopy" );
 
   QWhatsThis::add( m_checkPreEmp, i18n( "Preemphasis is mainly used in audio processing.\n"
-					"Higher frequencies in audio signals ususally have "
+					"Higher frequencies in audio signals usually have "
 					"lower amplitudes.\n"
 					"This can lead to bad signal quality on noisy "
 					"transmission because the high frequencies might become "

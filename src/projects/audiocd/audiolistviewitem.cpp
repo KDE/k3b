@@ -95,7 +95,7 @@ QString K3bAudioListViewItem::text(int i) const
     case 5:
       return " " + m_track->length().toString() + " ";
     case 6:
-      return m_track->filename();
+      return " " + m_track->filename() + " ";
     default:
       return KListViewItem::text(i);
     }

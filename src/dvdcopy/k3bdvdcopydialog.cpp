@@ -316,7 +316,8 @@ void K3bDvdCopyDialog::slotLoadK3bDefaults()
 
 void K3bDvdCopyDialog::slotToggleAll()
 {
-  if( K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice() ) {
+  K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
+  if( dev ) {
 
     if( (dev->type() & (K3bCdDevice::CdDevice::DVDPR|K3bCdDevice::CdDevice::DVDPRW)) &&
 	!(dev->type() & (K3bCdDevice::CdDevice::DVDR|K3bCdDevice::CdDevice::DVDRW)) ) {
@@ -340,20 +341,18 @@ void K3bDvdCopyDialog::slotToggleAll()
     else {
       m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
     }
+  }
 
-    m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
-    m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
-    m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
-    m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
-    m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
-    m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
-    if( m_checkOnlyCreateImage->isChecked() )
-      m_checkDeleteImages->setChecked( false );
-    m_buttonStart->setEnabled(true);
-  }
-  else {
-    m_buttonStart->setEnabled(false);
-  }
+  m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+  m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
+  m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
+  if( m_checkOnlyCreateImage->isChecked() )
+    m_checkDeleteImages->setChecked( false );
+  
+  m_buttonStart->setEnabled( dev || m_checkOnlyCreateImage->isChecked() );
 }
 
 

@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kio/global.h>
 
 #include <qstringlist.h>
 
@@ -44,10 +45,10 @@ K3bCdDevice::DiskInfo::DiskInfo()
 
 
 K3bCdDevice::NextGenerationDiskInfo::NextGenerationDiskInfo()
-  : m_mediaType(-1),
-    m_currentProfile(-1),
+  : m_mediaType(MEDIA_UNKNOWN),
+    m_currentProfile(MEDIA_UNKNOWN),
     m_diskState(STATE_UNKNOWN),
-    m_lastSessionState(-1),
+    m_lastSessionState(STATE_UNKNOWN),
     m_bgFormatState(0),
     m_numSessions(0),
     m_numTracks(0),
@@ -130,15 +131,30 @@ int K3bCdDevice::NextGenerationDiskInfo::numTracks() const
 K3bMsf K3bCdDevice::NextGenerationDiskInfo::remainingSize() const
 {
   if( empty() )
-    return capacity();
+    return m_capacity;
+  else if( appendable() )
+    return m_capacity - m_usedCapacity;
+
+  //
+  // There is no way to properly determine the used size on an overwrite media
+  // without having a look at the filesystem (or is there?)
+  //
+  else if( mediaType() & (MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR) )
+    return m_capacity;
   else
-    return m_remaining;
+    return 0;
 }
 
 
 K3bMsf K3bCdDevice::NextGenerationDiskInfo::capacity() const
 {
-  return m_capacity;
+  return (m_capacity == 0 ? size() : m_capacity);
+}
+
+
+K3bMsf K3bCdDevice::NextGenerationDiskInfo::size() const
+{
+  return m_usedCapacity;
 }
 
 
@@ -161,8 +177,29 @@ void K3bCdDevice::NextGenerationDiskInfo::debug() const
 	    << "Appendable:      " << appendable() << endl
 	    << "Sessions:        " << numSessions() << endl
 	    << "Tracks:          " << numTracks() << endl
-	    << "Size:            " << capacity().toString() << endl
-	    << "Remaining size:  " << remainingSize().toString() << endl;
+	    << "Capacity:        " << capacity().toString() 
+	    << " (LBA " << QString::number(capacity().lba())
+	    << ") (" << QString::number(capacity().mode1Bytes()) << " Bytes) (" 
+	    << KIO::convertSize(capacity().mode1Bytes()) << ")" << endl
+
+	    << "Remaining size:  " << remainingSize().toString() 
+	    << " (LBA " << QString::number(remainingSize().lba())
+	    << ") (" << QString::number(remainingSize().mode1Bytes()) << " Bytes) (" 
+	    << KIO::convertSize(remainingSize().mode1Bytes()) << ")" << endl
+
+	    << "Used Size:       " << size().toString()  
+	    << " (LBA " << QString::number(size().lba())
+	    << ") (" << QString::number(size().mode1Bytes()) << " Bytes) (" 
+	    << KIO::convertSize(size().mode1Bytes()) << ")" << endl;
+
+  if( mediaType() == K3bCdDevice::MEDIA_DVD_PLUS_RW )
+    kdDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ? 
+					  "none" :
+					  ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
+					    "incomplete" :
+					    ( bgFormatState() == BG_FORMAT_IN_PROGRESS ?
+					      "in progress" :
+					      "complete" ) ) ) << endl;
 }
 
 

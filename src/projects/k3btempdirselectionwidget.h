@@ -55,6 +55,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
   void slotTempDirButtonPressed( KURLRequester* );
 
  private:
+  QLabel* m_imageFileLabel;
   QLabel* m_labelCdSize;
   QLabel* m_labelFreeSpace;
   KURLRequester* m_editDirectory;

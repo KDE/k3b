@@ -31,6 +31,7 @@
 #include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
+#include <k3bexceptions.h>
 
 #include <qfile.h>
 #include <qvaluevector.h>
@@ -101,11 +102,18 @@ void K3bAudioJob::start()
   if( !m_doc->onlyCreateImages() ) {
     // determine writing mode
     if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+      //
       // DAO is always the first choice
       // choose TAO if the user wants to use cdrecord since
       // there are none-DAO writers that are supported by cdrdao
+      //
+      // There are some writers that fail to create proper audio cds
+      // in DAO mode. For those we choose the raw writing mode.
+      //
       if( !writer()->dao() && writingApp() == K3b::CDRECORD )
 	m_usedWritingMode = K3b::TAO;
+      else if( K3bExceptions::brokenDaoAudio( writer() ) )
+	m_usedWritingMode = K3b::RAW;
       else
 	m_usedWritingMode = K3b::DAO;
     }

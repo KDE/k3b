@@ -29,7 +29,8 @@ K3bAbstractWriter::K3bAbstractWriter( K3bDevice* dev, K3bJobHandler* jh, QObject
   : K3bJob( jh, parent, name ),
     m_burnDevice(dev),
     m_burnSpeed(1),
-    m_simulate(false)
+    m_simulate(false),
+    m_sourceUnreadable(false)
 {
 }
 

@@ -303,7 +303,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				     d->actionCollection, "fillstatus_80minutes" );
   d->action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), 
 				      d->actionCollection, "fillstatus_100minutes" );
-  d->actionDvd4_7GB = new KToggleAction( i18n("4.7 GB"), 0, this, SLOT(slotDvd4_7GB()), 
+  d->actionDvd4_7GB = new KToggleAction( i18n("4.4 GB"), 0, this, SLOT(slotDvd4_7GB()), 
 					 d->actionCollection, "fillstatus_dvd_4_7gb" );
   d->actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
 					  d->actionCollection, "fillstatus_custom_size" );

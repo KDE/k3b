@@ -408,7 +408,9 @@ bool K3bDvdJob::waitForDvd()
 
   int m = waitForMedia( m_doc->burner(), 
 			m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-			m_doc->multiSessionMode() == K3bDataDoc::FINISH,
+			m_doc->multiSessionMode() == K3bDataDoc::FINISH ?
+			K3bCdDevice::STATE_INCOMPLETE :
+			K3bCdDevice::STATE_EMPTY,
 			mt );
   if( m < 0 ) {
     cancel();

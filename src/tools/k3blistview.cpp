@@ -842,17 +842,23 @@ void K3bListView::setValidator( QValidator* v )
 
 bool K3bListView::eventFilter( QObject* o, QEvent* e )
 {
-  if( e->type() == QEvent::KeyPress && 
-      static_cast<QKeyEvent*>(e)->key() == Key_Return ) {
-    if( o == m_editorLineEdit ) {
-      slotEditorLineEditReturnPressed();
-    }
-    else if( o == m_editorMsfEdit || o == m_editorSpinBox ) {
-      if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
-	editItem( nextItem, currentEditColumn() );
-      else
-	hideEditor();
-    }
+  if( e->type() == QEvent::KeyPress ) { 
+     QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+     if( ke->key() == Key_Return ) {
+       if( o == m_editorLineEdit ) {
+	 slotEditorLineEditReturnPressed();
+       }
+       else if( o == m_editorMsfEdit || o == m_editorSpinBox ) {
+	 if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
+	   editItem( nextItem, currentEditColumn() );
+	 else
+	   hideEditor();
+       }
+     }
+     else if( ke->key() == Key_Escape ) {
+       if( o == m_editorLineEdit || o == m_editorSpinBox || o == m_editorMsfEdit )
+	 hideEditor();
+     }
   }
   else if( e->type() == QEvent::FocusOut ) {
     if( o == m_editorSpinBox ||

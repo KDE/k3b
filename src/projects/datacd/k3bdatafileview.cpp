@@ -314,7 +314,8 @@ void K3bDataFileView::slotNewDir()
 
 void K3bDataFileView::slotRenameItem()
 {
-  showEditor( (K3bListViewItem*)currentItem(), 0 );
+  if( currentItem() )
+    showEditor( (K3bListViewItem*)currentItem(), 0 );
 }
 
 

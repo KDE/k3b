@@ -170,7 +170,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
   else {
 
     if( ngInfo.empty() ) {
-      setTitle( i18n("Disk is empty") );
+      setTitle( i18n("Empty %1 media").arg(K3bCdDevice::mediaTypeString( ngInfo.mediaType(), true )) );
       setRightPixmap( "diskinfo_empty" );
     } 
     else {
@@ -348,9 +348,9 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDis
 {
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;
-  if( info.currentProfile() != -1 )
+  if( info.currentProfile() != K3bCdDevice::MEDIA_UNKNOWN )
     typeStr = K3bCdDevice::mediaTypeString( info.currentProfile() );
-  else if( info.mediaType() != -1 )
+  else if( info.mediaType() != K3bCdDevice::MEDIA_UNKNOWN )
     typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
   else
     typeStr = i18n("Unknown (probably CD-ROM)");

@@ -379,8 +379,6 @@ void K3bAudioListView::resizeEvent( QResizeEvent* e )
 
 void K3bAudioListView::resizeColumns()
 {
-  kdDebug() << "(K3bAudioListView::resizeColumns)" << endl;
-
   if( m_updatingColumnWidths ) {
     kdDebug() << "(K3bAudioListView) already updating column widths." << endl;
     return;
@@ -399,8 +397,6 @@ void K3bAudioListView::resizeColumns()
   int pregapWidth = header()->fontMetrics().width( header()->label(5) );
   int filenameWidth = header()->fontMetrics().width( header()->label(6) );
 
-  kdDebug() << "(K3bAudioListView::resizeColumns) brefore for" << endl;
-
   for( QListViewItemIterator it( this ); it.current(); ++it ) {
     artistWidth = QMAX( artistWidth, it.current()->width( fontMetrics(), this, 1 ) );
     titleWidth = QMAX( titleWidth, it.current()->width( fontMetrics(), this, 2 ) );
@@ -409,8 +405,6 @@ void K3bAudioListView::resizeColumns()
     lengthWidth = QMAX( lengthWidth, it.current()->width( fontMetrics(), this, 5 ) );
     filenameWidth = QMAX( filenameWidth, it.current()->width( fontMetrics(), this, 6 ) );
   }
-
-  kdDebug() << "(K3bAudioListView::resizeColumns) after for " << endl;
 
   // add a margin
   typeWidth += 10;
@@ -443,15 +437,8 @@ void K3bAudioListView::resizeColumns()
     setColumnWidth( 6, remaining/3 );
   }
 
-  kdDebug() << "(K3bAudioListView::resizeColumns) before updateContents" << endl;
-
   triggerUpdate();
-
-  kdDebug() << "(K3bAudioListView::resizeColumns) after updateContents" << endl;
-
   m_updatingColumnWidths = false;
-
-  kdDebug() << "(K3bAudioListView::resizeColumns) done" << endl;
 }
 
 #include "audiolistview.moc"

@@ -396,8 +396,14 @@ namespace K3bCdDevice
 
     /**
      * Refers to MMC command READ FORMAT CAPACITY
+     *
+     * @param wantedFormat The requested format type.
+     * @param result If true is returned this contains the requested value.
+     * @param currentMax If not 0 this will be filled with the Current/Maximum Descriptor value.
+     * @param currentMax If not 0 this will be filled with the Current/Maximum Format Type.
      */
-    bool readFormatCapacity( K3b::Msf& ) const;
+    bool readFormatCapacity( int wantedFormat, K3b::Msf& result, 
+			     K3b::Msf* currentMax = 0, int* currentMaxFormat = 0 ) const;
 
     /**
      * Does only make sense for cd media.
@@ -486,6 +492,16 @@ namespace K3bCdDevice
      * data will be filled with the feature header and the descriptor
      */
     bool getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const;
+
+
+    /**
+     * if true is returned dataLen specifies the actual length of *data which needs to be
+     * deleted after using.
+     */
+    bool getPerformance( unsigned char** data, int& dataLen, 
+			 unsigned int type,
+			 unsigned int dataType,
+			 unsigned int lba = 0 ) const;
 
     /**
      * @param sectorType: 000b - all types

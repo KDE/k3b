@@ -70,7 +70,8 @@ namespace K3bCdDevice
 		                        MEDIA_DVD_RW_OVWR |
 		                        MEDIA_DVD_RW_SEQ |
 		                        MEDIA_DVD_PLUS_RW |
-		                        MEDIA_DVD_PLUS_R 
+		   MEDIA_DVD_PLUS_R,
+		   MEDIA_UNKNOWN = 32768
   };
 
   inline bool isDvdMedia( int mediaType ) {
@@ -227,10 +228,15 @@ namespace K3bCdDevice
 
       /**
        * The capacity of the disk.
-       * For empty and appendable disks this is the complete size of the disk.
-       * For complete disks this is the used size.
+       * For complete disks this may be the same as size()
        */
       K3b::Msf capacity() const;
+
+      /**
+       * Returns the size of the used part.
+       * For appendable media this equals capacity() - remainingSize()
+       */
+      K3b::Msf size() const;
 
       void debug() const;
 
@@ -246,7 +252,7 @@ namespace K3bCdDevice
       int m_rewritable;
 
       K3b::Msf m_capacity;
-      K3b::Msf m_remaining;
+      K3b::Msf m_usedCapacity;
 
       friend class CdDevice;
     };

@@ -495,6 +495,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	K3bBlankingJob job( this );
 	job.setDevice( d->device );
 	job.setMode( K3bBlankingJob::Fast );
+	job.setForce(true);
 	job.setForceNoEject(true);
 	job.setSpeed( 0 ); // Auto
 	connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );

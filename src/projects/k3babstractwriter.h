@@ -58,6 +58,14 @@ class K3bAbstractWriter : public K3bJob
   void setBurnSpeed( int s ) { m_burnSpeed = s; }
   void setSimulate( bool b ) { m_simulate = b; }
 
+  /**
+   * Used to inform the writer that the source (especially useful when reading from 
+   * another cd/dvd media) could not be read.
+   *
+   * Basicly it should be used to make sure no "write an email" message is thrown.
+   */
+  void setSourceUnreadable( bool b = true ) { m_sourceUnreadable = b; }
+
  signals:
   void buffer( int );
   void deviceBuffer( int );
@@ -67,6 +75,8 @@ class K3bAbstractWriter : public K3bJob
   K3bAbstractWriter( K3bCdDevice::CdDevice* dev, K3bJobHandler* hdl, 
 		     QObject* parent = 0, const char* name = 0 );
 
+  bool wasSourceUnreadable() const { return m_sourceUnreadable; }
+
  protected slots:
   void slotUnblockWhileCancellationFinished( bool success );
   void slotEjectWhileCancellationFinished( bool success );
@@ -75,6 +85,7 @@ class K3bAbstractWriter : public K3bJob
   K3bCdDevice::CdDevice* m_burnDevice;
   int m_burnSpeed;
   bool m_simulate;
+  bool m_sourceUnreadable;
 };
 
 

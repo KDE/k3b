@@ -81,7 +81,7 @@ QString K3bCdDevice::writingModeString( int m )
 }
 
 
-QString K3bCdDevice::mediaTypeString( int m )
+QString K3bCdDevice::mediaTypeString( int m, bool simple )
 {
   if( m == -1 )
     return i18n("Error");
@@ -91,17 +91,19 @@ QString K3bCdDevice::mediaTypeString( int m )
     s += i18n("No media");
   if( m & MEDIA_DVD_ROM )
     s += i18n("DVD-ROM");
-  if( m & MEDIA_DVD_R )
+  if( m & MEDIA_DVD_R || 
+      (simple && (m & MEDIA_DVD_R_SEQ)) )
     s += i18n("DVD-R");
-  if( m & MEDIA_DVD_R_SEQ )
+  if( m & MEDIA_DVD_R_SEQ && !simple )
     s += i18n("DVD-R Sequential");
   if( m & MEDIA_DVD_RAM )
     s += i18n("DVD-RAM");
-  if( m & MEDIA_DVD_RW )
+  if( m & MEDIA_DVD_RW ||
+      (simple && (m & (MEDIA_DVD_RW_OVWR|MEDIA_DVD_RW_SEQ))) )
     s += i18n("DVD-RW");
-  if( m & MEDIA_DVD_RW_OVWR )
+  if( m & MEDIA_DVD_RW_OVWR && !simple )
     s += i18n("DVD-RW Restricted Overwrite");
-  if( m & MEDIA_DVD_RW_SEQ )
+  if( m & MEDIA_DVD_RW_SEQ && !simple )
     s += i18n("DVD-RW Sequential");
   if( m & MEDIA_DVD_PLUS_RW )
     s += i18n("DVD+RW");

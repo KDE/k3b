@@ -32,6 +32,7 @@
 #include <cddb/k3bcddbquery.h>
 #include <k3bcore.h>
 #include <k3binffilewriter.h>
+#include <k3bexceptions.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -262,6 +263,23 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 	  finishJob( true, false );
 	  return;
 	}
+      }
+    }
+
+
+    //
+    // It is not possible to create multisession cds in raw writing mode
+    //
+    if( d->numSessions > 1 && m_writingMode == K3b::RAW ) {
+      if( !questionYesNo( i18n("You will only be able to copy the first session in raw writing mode. "
+			       "Continue anyway?"),
+			  i18n("Multisession CD") ) ) {
+	finishJob( true, false );
+	return;
+      }
+      else {
+	emit infoMessage( i18n("Only copying first session."), WARNING );
+	// TODO: remove the second session from the progress stuff
       }
     }
 
@@ -749,13 +767,17 @@ bool K3bCdCopyJob::writeNextSession()
     //
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
-//       if( K3bExceptions::brokenDaoAudio( m_writerDevice ) ) {
-// 	if( d->numSessions == 1 )
-// 	  usedWritingMode = K3b::RAW;
-// 	else
-// 	  usedWritingMode = K3b::TAO;
-//       }
-      if( m_writerDevice->dao() )
+      //
+      // There are some writers that fail to create proper audio cds
+      // in DAO mode. For those we choose the raw writing mode.
+      //
+      if( K3bExceptions::brokenDaoAudio( m_writerDevice ) ) {
+	if( d->numSessions == 1 )
+	  usedWritingMode = K3b::RAW;
+	else
+	  usedWritingMode = K3b::TAO;
+      }
+      else if( m_writerDevice->dao() )
 	usedWritingMode = K3b::DAO;
       else if( m_writerDevice->supportsRawWriting() )
 	usedWritingMode = K3b::RAW;
@@ -906,8 +928,11 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
     }
   }
   else {
-    if( !d->canceled )
+    if( !d->canceled ) {
       emit infoMessage( i18n("Error while reading session %1.").arg(d->currentReadSession), ERROR );
+      if( m_onTheFly )
+	d->cdrecordWriter->setSourceUnreadable(true);	
+    }
 
     finishJob( d->canceled, !d->canceled );
   }

@@ -308,8 +308,10 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler*
 
     // emit info about what kind of media has been found
 
-    if( dh->ngDiskInfo().mediaType() != K3bCdDevice::MEDIA_DVD_RW &&
-	dh->ngDiskInfo().mediaType() != K3bCdDevice::MEDIA_DVD_PLUS_RW ) {
+    if( !(dh->ngDiskInfo().mediaType() & (K3bCdDevice::MEDIA_DVD_RW|
+					  K3bCdDevice::MEDIA_DVD_RW_SEQ|
+					  K3bCdDevice::MEDIA_DVD_RW_OVWR|
+					  K3bCdDevice::MEDIA_DVD_PLUS_RW)) ) {
       emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), ERROR );
       emit finished(false);
       d->running = false;

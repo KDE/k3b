@@ -38,16 +38,16 @@
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
-  : QGroupBox( 4, Qt::Vertical, i18n( "Temp Directory" ), parent, name ),
+  : QGroupBox( 4, Qt::Vertical, parent, name ),
     m_labelCdSize(0)
 {
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  QLabel* imageFileLabel = new QLabel( i18n( "Wri&te image file to:" ), this );
+  m_imageFileLabel = new QLabel( this );
   m_editDirectory = new KURLRequester( this, "m_editDirectory" );
 
-  imageFileLabel->setBuddy( m_editDirectory );
+  m_imageFileLabel->setBuddy( m_editDirectory );
 
   QHBox* freeTempSpaceBox = new QHBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
@@ -61,8 +61,8 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   connect( m_editDirectory, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(slotUpdateFreeTempSpace()) );
 
-
-  m_mode = DIR;
+  // choose a default
+  setSelectionMode( DIR );
 
   m_editDirectory->setURL( K3b::defaultTempPath() );
   slotUpdateFreeTempSpace();
@@ -185,10 +185,14 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 {
   m_mode = mode;
 
-  if( m_mode == DIR )
+  if( m_mode == DIR ) {
+    m_imageFileLabel->setText( i18n( "Wri&te image files to:" ) );
     setTitle( i18n("Temporary Directory") );
-  else
+  }
+  else {
+    m_imageFileLabel->setText( i18n( "Wri&te image file to:" ) );
     setTitle( i18n("Temporary File") );
+  }
 }
 
 

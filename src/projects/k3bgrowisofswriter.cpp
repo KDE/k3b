@@ -375,7 +375,8 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
       d->success = true;
     }
     else {
-      d->gh->handleExit( p->exitStatus() );
+      if( !wasSourceUnreadable() )
+	d->gh->handleExit( p->exitStatus() );
       d->success = false;
     }
   }
