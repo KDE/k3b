@@ -1,3 +1,18 @@
+0.7.1
+audio:
+ fixed mp3 resampling problems
+ better handling of newly added tracks
+data:
+ proper symlink handling
+ better support of the mkisofs options
+ option for adding hidden files
+ backup permissions
+device:
+ support for symlinks in fstab
+misc:
+ progress display in the K3b titlebar
+ better progress display in systray
+	
 0.7
 DivX/XviD encoding
 enhanced cddb support
