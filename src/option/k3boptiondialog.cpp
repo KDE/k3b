@@ -71,7 +71,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_miscOptionTab->readSettings();
   m_notifyOptionTab->readSettings();
   m_pluginOptionTab->readSettings();
-  m_divxOptionTab->readSettings();
+  //m_divxOptionTab->readSettings();
 
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
@@ -113,7 +113,7 @@ bool K3bOptionDialog::saveSettings()
   //  m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
   m_notifyOptionTab->saveSettings();
-  m_divxOptionTab->saveSettings();
+  //m_divxOptionTab->saveSettings();
 
   if( !m_miscOptionTab->saveSettings() )
     return false;
