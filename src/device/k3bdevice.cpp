@@ -41,6 +41,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <math.h>
 
 
 #ifdef Q_OS_LINUX
@@ -913,7 +914,7 @@ bool K3bCdDevice::CdDevice::burnfree() const
 bool K3bCdDevice::CdDevice::isDVD() const
 {
   if( d->deviceType & ( DVDR | DVDRAM | DVD ) ) {
-    return( dvdMediaType() >= 0 );
+    return( dvdMediaType() != MEDIA_UNKNOWN );
   }
   else
     return false;
@@ -2722,37 +2723,17 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
   if( burner() ) {
     unsigned char* data = 0;
     int dataLen = 0;
-    int numDesc = 0;
+    bool dvd = isDVD();
 
     //
-    // first try GET PERFORMANCE
+    // First we try the 2A mode page
     //
-    if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
-      numDesc = (dataLen-8)/16;
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-		<< ":  Number of supported write speeds via GET PERFORMANCE: "
-		<< numDesc << endl;
-      
-      for( int i = 0; i < numDesc; ++i ) {
-	int speed = from4Byte( &data[20+i*16] );
-	QValueList<int>::iterator it = ret.begin();
-	while( it != ret.end() && *it < speed )
-	  ++it;
-	ret.insert( it, speed );
-
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-		  << " : " << speed << " KB/s" << endl;
-      }
-
-      delete [] data;
-    }
-
-    if( numDesc == 0 && modeSense( &data, dataLen, 0x2A ) ) {
+    if( modeSense( &data, dataLen, 0x2A ) ) {
       mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
-
+      
       if( dataLen > 32 ) {
 	// we have descriptors
-	numDesc = from2Byte( mm->num_wr_speed_des );
+	int numDesc = from2Byte( mm->num_wr_speed_des );
 	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
 
 	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
@@ -2761,24 +2742,89 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 		
 
 	for( int i = 0; i < numDesc; ++i ) {
-	  // sort the list
 	  int s = from2Byte( wr[i].wr_speed_supp );
-	  QValueList<int>::iterator it = ret.begin();
-	  while( it != ret.end() && *it < s )
-	    ++it;
-	  ret.insert( it, s );
+	  //
+	  // some DVD writers report CD writing speeds here
+	  // If that is the case we cannot rely on the reported speeds
+	  // and need to use the values gained from GET PERFORMANCE.
+	  //
+	  if( dvd && s < 1385 ) {
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		      << " Invalid DVD speed: " << s << " KB/s" << endl;
+	    ret.clear();
+	    break;
+	  }
+	  else {
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		      << " : " << s << " KB/s" << endl;
 
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-		    << " : " << s << " KB/s" << endl;
+	    //
+	    // Very evil hacking: force the speed values to be acurate
+	    // as long as "they" do not introduce other "broken" DVD
+	    // speeds like 2.4 this works fine
+	    //
+	    if( dvd && s > 2770 && s < 4155 )
+	      s = 3324; // 2.4x
+	    else if( dvd )
+	      s = 1385*(int)nearbyint( (double)s/1385.0 );
+	    else
+	      s = 175*(int)nearbyint( (double)s/175.0 );
+
+	    // sort the list
+	    QValueList<int>::iterator it = ret.begin();
+	    while( it != ret.end() && *it < s )
+	      ++it;
+	    ret.insert( it, s );
+	  }
 	}
       }
       else if( dataLen > 19 ) {
 	// MMC1 used byte 18 and 19 for the max write speed
 	ret.append( from2Byte( mm->max_write_speed ) );
       }
-      else
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
-		  << ": no writing speed info. No MMC drive?" << endl;
+
+      delete [] data;
+    }
+
+    if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
+      int numDesc = (dataLen-8)/16;
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		<< ":  Number of supported write speeds via GET PERFORMANCE: "
+		<< numDesc << endl;
+      
+      for( int i = 0; i < numDesc; ++i ) {
+	int s = from4Byte( &data[20+i*16] );
+	if( dvd && s < 1385 ) {
+	  //
+	  // Does this ever happen?
+	  //
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		    << " Invalid DVD speed: " << s << " KB/s" << endl;
+	}
+	else {
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+		      << " : " << s << " KB/s" << endl;
+
+	  //
+	  // Very evil hacking: force the speed values to be acurate
+	  // as long as "they" do not introduce other "broken" DVD
+	  // speeds like 2.4 this works fine
+	  //
+	  if( dvd && s > 2770 && s < 4155 )
+	    s = 3324; // 2.4x
+	  else if( dvd )
+	    s = 1385*(int)nearbyint( (double)s/1385.0 );
+	  else
+	    s = 175*(int)nearbyint( (double)s/175.0 );
+	  
+	  QValueList<int>::iterator it = ret.begin();
+	  while( it != ret.end() && *it < s )
+	    ++it;
+	  // the speed might already have been found in the 2a modepage
+	  if( it == ret.end() || *it != s )
+	    ret.insert( it, s );
+	}
+      }
 
       delete [] data;
     }

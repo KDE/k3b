@@ -83,8 +83,8 @@ QString K3bCdDevice::writingModeString( int m )
 
 QString K3bCdDevice::mediaTypeString( int m, bool simple )
 {
-  if( m == -1 )
-    return i18n("Error");
+  if( m == K3bCdDevice::MEDIA_UNKNOWN )
+    return i18n("Unknown");
 
   QStringList s;
   if( m & MEDIA_NONE )
