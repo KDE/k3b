@@ -84,7 +84,7 @@ class K3bAudioListView : public K3bListView
   void slotAnimation();
   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
   void slotUpdateItems();
-  void showPopupMenu( QListViewItem* item, const QPoint& );
+  void showPopupMenu( KListView*, QListViewItem* item, const QPoint& );
   void showPropertiesDialog();
   void slotRemoveTracks();
   void slotPlaySelected();

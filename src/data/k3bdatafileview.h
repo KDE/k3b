@@ -62,7 +62,7 @@ class K3bDataFileView : public K3bListView
   void slotDataItemRemoved( K3bDataItem* );
   void slotExecuted( QListViewItem* );
   void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
-  void showPopupMenu( QListViewItem* _item, const QPoint& );
+  void showPopupMenu( KListView*, QListViewItem* _item, const QPoint& );
   void slotRenameItem();
   void slotRemoveItem();
   void slotNewDir();

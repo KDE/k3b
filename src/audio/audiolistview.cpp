@@ -73,7 +73,7 @@ K3bAudioListView::K3bAudioListView( K3bView* view, K3bAudioDoc* doc, QWidget *pa
 
   connect( this, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
-  connect( this, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+  connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPropertiesDialog()) );
@@ -255,7 +255,7 @@ void K3bAudioListView::slotAnimation()
 }
 
 
-void K3bAudioListView::showPopupMenu( QListViewItem* _item, const QPoint& _point )
+void K3bAudioListView::showPopupMenu( KListView*, QListViewItem* _item, const QPoint& _point )
 {
   if( _item ) {
      m_actionRemove->setEnabled(true);

@@ -80,8 +80,8 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
-  connect( this, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
-	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*, QListViewItem*, QListViewItem*)) );
 
@@ -254,7 +254,7 @@ void K3bDataFileView::setupActions()
 }
 
 
-void K3bDataFileView::showPopupMenu( QListViewItem* item, const QPoint& point )
+void K3bDataFileView::showPopupMenu( KListView*, QListViewItem* item, const QPoint& point )
 {
   if( item ) {
     m_actionRemove->setEnabled( true );
