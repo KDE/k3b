@@ -27,6 +27,9 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qvalidator.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
+#include <qlayout.h>
 
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -34,24 +37,150 @@
 #include <klineeditdlg.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 
-K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
-  : QFrame(parent,name)
+K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* parent )
+  : QWidget( parent ),
+    m_doc(doc)
 {
-  m_doc = doc;
   k3bMain()->config()->setGroup( "General Options" );
   m_cdSize = k3bMain()->config()->readNumEntry( "Default cd size", 74 );
 
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
+}
+
+
+K3bFillStatusDisplayWidget::~K3bFillStatusDisplayWidget()
+{
+}
+
+
+void K3bFillStatusDisplayWidget::setShowTime( bool b )
+{
+  m_showTime = b;
+  update();
+}
+
+
+void K3bFillStatusDisplayWidget::setCdSize( long size )
+{
+  m_cdSize = size;
+  update();
+}
+
+
+QSize K3bFillStatusDisplayWidget::sizeHint() const
+{
+  return minimumSizeHint();
+}
+
+
+QSize K3bFillStatusDisplayWidget::minimumSizeHint() const
+{
+  int margin = 2;
+  QFontMetrics fm( font() );
+  return QSize( -1, fm.height() + 2 * margin );
+}
+
+
+void K3bFillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
+{
+  if( e->button() == Qt::RightButton )
+    emit contextMenu( e->globalPos() );
+}
+
+
+void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
+{
+  erase( rect() );
+
+  QPainter p(this);
+
+  long long docSize;
+  long long cdSize;
+  long long maxValue;
+  long tolerance;
+
+  if( m_showTime ) {
+    docSize = m_doc->length() / 75 / 60;
+    cdSize = m_cdSize;
+    maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
+    tolerance = 1;
+  }
+  else {
+    docSize = m_doc->size()/1024/1024;
+    cdSize = m_cdSize*60*75*2048/1024/1024;
+    maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
+    tolerance = 10;
+  }
+
+  // so split width() in maxValue pieces
+  double one = (double)rect().width() / (double)maxValue;
+  QRect crect( rect() );
+  crect.setWidth( (int)(one*(double)docSize) );
+	
+  p.fillRect( crect, Qt::green );
+
+  if( m_showTime )
+    p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
+		 " " + K3b::framesToString( m_doc->length(), false ) + " min" );
+  else
+    p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, 
+		 QString().sprintf( " %.2f MB", ((float)m_doc->size())/1024.0/1024.0 ) );
+	
+  // draw yellow if cdSize - tolerance < docSize
+  if( docSize > cdSize - tolerance ) {
+    crect.setLeft( crect.left() + (int)(one * (cdSize - tolerance)) );
+    p.fillRect( crect, Qt::yellow );
+  }
+	
+  // draw red if docSize > cdSize + tolerance
+  if( docSize > cdSize + tolerance ) {
+    crect.setLeft( crect.left() + (int)(one * tolerance*2) );
+    p.fillRect( crect, Qt::red );
+  }
+	
+
+  p.drawLine( rect().left() + (int)(one*cdSize), rect().bottom(), 
+	       rect().left() + (int)(one*cdSize), rect().top() );
+	
+  // draw the text marks
+  crect = rect();
+  crect.setLeft( (int)(one*cdSize) );
+  p.drawText( crect, Qt::AlignLeft | Qt::AlignVCenter, " " + QString::number((long)cdSize) );
+}
+
+
+
+// ----------------------------------------------------------------------------------------------------
+
+K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
+  : QFrame(parent,name)
+{
   setFrameStyle( Panel | Sunken );
+
+  m_displayWidget = new K3bFillStatusDisplayWidget( doc, this );
+  m_buttonMenu = new QToolButton( this );
+  m_buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
+  m_buttonMenu->setAutoRaise(true);
+  QToolTip::add( m_buttonMenu, i18n("Fill display properties") );
+  connect( m_buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
+
+  QGridLayout* layout = new QGridLayout( this );
+  layout->setSpacing(5);
+  layout->setMargin(frameWidth());
+  layout->addWidget( m_displayWidget, 0, 0 );
+  layout->addWidget( m_buttonMenu, 0, 1 );
+  layout->setColStretch( 0, 1 );
+
   setupPopupMenu();
 
   // defaults to megabytes
-  m_showTime = false;
+  m_displayWidget->setShowTime(false);
   m_actionShowMegs->setChecked( true );
 
-  switch( m_cdSize ) {
+  switch( m_displayWidget->cdSize() ) {
   case 74:
     m_action74Min->setChecked( true );
     break;
@@ -71,6 +200,13 @@ K3bFillStatusDisplay::~K3bFillStatusDisplay()
 {
 }
 
+
+void K3bFillStatusDisplay::paintEvent(QPaintEvent* e)
+{
+  // just to pass updates to the display
+  m_displayWidget->update();
+  QFrame::paintEvent(e);
+}
 
 void K3bFillStatusDisplay::setupPopupMenu()
 {
@@ -99,72 +235,8 @@ void K3bFillStatusDisplay::setupPopupMenu()
   m_action80Min->plug( m_popup );
   m_action100Min->plug( m_popup );
   m_actionCustomSize->plug( m_popup );
-}
 
-
-void K3bFillStatusDisplay::mousePressEvent( QMouseEvent* e )
-{
-  if( e->button() == Qt::RightButton )
-    m_popup->popup( e->globalPos() );
-}
-
-
-void K3bFillStatusDisplay::drawContents( QPainter* p )
-{
-  erase( contentsRect() );
-
-  long long docSize;
-  long long cdSize;
-  long long maxValue;
-  long tolerance;
-
-  if( m_showTime ) {
-    docSize = m_doc->length() / 75 / 60;
-    cdSize = m_cdSize;
-    maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
-    tolerance = 1;
-  }
-  else {
-    docSize = m_doc->size()/1024/1024;
-    cdSize = m_cdSize*60*75*2048/1024/1024;
-    maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
-    tolerance = 10;
-  }
-
-  // so split width() in maxValue pieces
-  double one = (double)contentsRect().width() / (double)maxValue;
-  QRect rect( contentsRect() );
-  rect.setWidth( (int)(one*(double)docSize) );
-	
-  p->fillRect( rect, Qt::green );
-
-  if( m_showTime )
-    p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 " " + K3b::framesToString( m_doc->length(), false ) + " min" );
-  else
-    p->drawText( contentsRect(), Qt::AlignLeft | Qt::AlignVCenter, 
-		 QString().sprintf( " %.2f MB", ((float)m_doc->size())/1024.0/1024.0 ) );
-	
-  // draw yellow if cdSize - tolerance < docSize
-  if( docSize > cdSize - tolerance ) {
-    rect.setLeft( rect.left() + (int)(one * (cdSize - tolerance)) );
-    p->fillRect( rect, Qt::yellow );
-  }
-	
-  // draw red if docSize > cdSize + tolerance
-  if( docSize > cdSize + tolerance ) {
-    rect.setLeft( rect.left() + (int)(one * tolerance*2) );
-    p->fillRect( rect, Qt::red );
-  }
-	
-
-  p->drawLine( contentsRect().left() + (int)(one*cdSize), contentsRect().bottom(), 
-	       contentsRect().left() + (int)(one*cdSize), contentsRect().top() );
-	
-  // draw the text marks
-  rect = contentsRect();
-  rect.setLeft( (int)(one*cdSize) );
-  p->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, " " + QString::number((long)cdSize) );
+  connect( m_displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
 }
 
 
@@ -176,8 +248,7 @@ void K3bFillStatusDisplay::showSize()
   m_action80Min->setText( i18n("700 MB"));
   m_action100Min->setText( i18n("880 MB") );
 
-  m_showTime = false;
-  update();
+  m_displayWidget->setShowTime(false);
 }
 	
 void K3bFillStatusDisplay::showTime()
@@ -190,43 +261,25 @@ void K3bFillStatusDisplay::showTime()
   m_action80Min->setText( i18n("80 minutes") );
   m_action100Min->setText( i18n("100 minutes") );
 
-  m_showTime = true;
-  update();
-}
-
-
-QSize K3bFillStatusDisplay::sizeHint() const
-{
-  return minimumSizeHint();
-}
-
-
-QSize K3bFillStatusDisplay::minimumSizeHint() const
-{
-  int margin = 2;
-  QFontMetrics fm( font() );
-  return QSize( -1, 2 * frameWidth() + fm.height() + 2 * margin );
+  m_displayWidget->setShowTime(true);
 }
 
 
 void K3bFillStatusDisplay::slot74Minutes()
 {
-  m_cdSize = 74;
-  update();
+  m_displayWidget->setCdSize( 74 );
 }
 
 
 void K3bFillStatusDisplay::slot80Minutes()
 {
-  m_cdSize = 80;
-  update();
+  m_displayWidget->setCdSize( 80 );
 }
 
 
 void K3bFillStatusDisplay::slot100Minutes()
 {
-  m_cdSize = 100;
-  update();
+  m_displayWidget->setCdSize( 100 );
 }
 
 
@@ -236,10 +289,22 @@ void K3bFillStatusDisplay::slotCustomSize()
   QString size = KLineEditDlg::getText( i18n("Custom CD size"), i18n("Please specify the size of your CD in minutes:"), 
 					   "74", &ok, this, new QIntValidator( this ) );
   if( ok ) {
-    m_cdSize = size.toInt();
+    m_displayWidget->setCdSize( size.toInt() );
     update();
   }
 }
 
+
+void K3bFillStatusDisplay::slotMenuButtonClicked()
+{
+  QSize size = m_popup->sizeHint();
+  slotPopupMenu( m_buttonMenu->mapToGlobal(QPoint(m_buttonMenu->width(), 0)) + QPoint(-1*size.width(), -1*size.height()) );
+}
+
+
+void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
+{
+  m_popup->popup(p);
+}
 
 #include "k3bfillstatusdisplay.moc"
