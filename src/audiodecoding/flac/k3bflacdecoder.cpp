@@ -198,9 +198,8 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 
 bool K3bFLACDecoder::initDecoderInternal()
 {
-  if(d == 0) {
-    d = new Private(new QFile(filename()));
-  }
+  // FIXME: this is a bad solution but I don't know the code well enough to fix it better.
+  cleanup();
 
   return true;
 }
