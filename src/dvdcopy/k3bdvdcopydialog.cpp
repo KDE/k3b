@@ -323,6 +323,7 @@ void K3bDvdCopyDialog::slotToggleAll()
     }
 
     m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+    m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
     m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
     m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
     m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );

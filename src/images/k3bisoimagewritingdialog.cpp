@@ -41,6 +41,7 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kio/global.h>
+#include <kio/netaccess.h>
 #include <kurl.h>
 #include <klineeditdlg.h>
 
@@ -282,7 +283,16 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
   QFileInfo info( path );
   if( info.isFile() ) {
 
-    unsigned long imageSize = info.size();
+    KIO::filesize_t imageSize = 0;
+    // we use KIO since QFileInfo does provide the size as unsigned int wich is way too small for DVD images
+    KIO::UDSEntry uds;
+    KIO::NetAccess::stat( path, uds );
+    for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
+      if( (*it).m_uds == KIO::UDS_SIZE ) {
+	imageSize = (*it).m_long;
+	break;
+      }
+    }
 
     // ------------------------------------------------
     // Test for iso9660 image

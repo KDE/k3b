@@ -52,6 +52,7 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_doc( doc ),
     m_noDeepDirectoryRelocation( false ),
     m_importSession( false ),
+    m_device(0),
     m_lastOutput(0),
     m_mkisofsPrintSizeResult( 0 ),
     m_fdToWriteTo(-1)

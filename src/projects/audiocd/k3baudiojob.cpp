@@ -394,8 +394,14 @@ bool K3bAudioJob::prepareWriter()
 
 void K3bAudioJob::slotWriterNextTrack( int t, int tt )
 {
+  K3bAudioTrack* track = m_doc->at(t-1);
   // t is in range 1..tt
-  emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->at(t-1)->fileName()) );
+  emit newSubTask( i18n("Writing track %1 of %2 (%3)")
+		   .arg(t)
+		   .arg(tt)
+		   .arg( track->title().isEmpty() || track->artist().isEmpty() 
+			 ? track->fileName()
+			 : track->artist() + " - " + track->title() ) );
 }
 
 

@@ -293,6 +293,10 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
   if( d->writerJob )
     d->writerJob->closeFd();
 
+  // already finished?
+  if( !d->running )
+    return;
+ 
   if( d->canceled ) {
     removeImageFiles();
     emit canceled();
@@ -331,6 +335,10 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 
 void K3bDvdCopyJob::slotWriterFinished( bool success )
 {
+  // already finished?
+  if( !d->running )
+    return;
+
   if( d->canceled ) {
     removeImageFiles();
     emit canceled();
