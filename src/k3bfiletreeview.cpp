@@ -79,10 +79,10 @@ void K3bFileTreeView::addDefaultBranches()
   KURL home = KURL( QDir::homeDirPath() );
   KURL root = KURL( "/" );
 
-  KFileTreeBranch* treeBranch = addBranch( home, i18n("Home"), SmallIcon(KMimeType::iconForURL(home)) );
+  KFileTreeBranch* treeBranch = addBranch( home, i18n("Home"), SmallIcon("folder_home") );
   treeBranch->setOpen( true );
 
-  treeBranch = addBranch( root, i18n("Root"), SmallIcon(KMimeType::iconForURL(root)) );
+  treeBranch = addBranch( root, i18n("Root"), SmallIcon("folder_red") );
 }
 
 
