@@ -105,6 +105,8 @@ void K3bVcdJob::start()
 {
   kdDebug() << "(K3bVcdJob) starting job" << endl;
 
+  emit started();
+
   int pos = QString(m_doc->vcdImage()).find(".bin");
   if (pos > 0) {
     m_cueFile = m_doc->vcdImage().left(pos) + ".cue";
