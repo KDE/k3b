@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -70,8 +70,8 @@ void K3bProjectManager::addProject( K3bDoc* doc )
 
 void K3bProjectManager::removeProject( K3bDoc* doc )
 {
-  // 
-  // QPtrList.findRef seems to be buggy. Everytime we search for the 
+  //
+  // QPtrList.findRef seems to be buggy. Everytime we search for the
   // first added item it is not found!
   //
   for( QPtrListIterator<K3bDoc> it( d->projects );
@@ -79,7 +79,7 @@ void K3bProjectManager::removeProject( K3bDoc* doc )
     if( it.current() == doc ) {
       d->projects.removeRef(doc);
       emit closingProject(doc);
-      
+
       return;
     }
   }
@@ -107,8 +107,14 @@ bool K3bProjectManager::isEmpty() const
 
 void K3bProjectManager::setActive( K3bDoc* doc )
 {
-  // 
-  // QPtrList.findRef seems to be buggy. Everytime we search for the 
+    if (  !doc )
+    {
+        d->activeProject = 0L;
+        emit activeProjectChanged( 0L );
+        return;
+    }
+  //
+  // QPtrList.findRef seems to be buggy. Everytime we search for the
   // first added item it is not found!
   //
   for( QPtrListIterator<K3bDoc> it( d->projects );

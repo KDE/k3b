@@ -331,7 +331,7 @@ void K3bMainWindow::initActions()
   // --- filetreecombobox-toolbar -------------------------------------------------------------------
   K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
   connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KURL&)), m_dirView, SLOT(showUrl(const KURL& )) );
-  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), m_dirView, 
+  connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bCdDevice::CdDevice*)), m_dirView,
 	   SLOT(showDevice(K3bCdDevice::CdDevice* )) );
 
   KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
@@ -540,7 +540,7 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
     doc->view()->setFocus();
     return doc;
   }
-  
+
   doc = K3bDoc::openDocument( url );
 
   if( doc == 0 ) {
@@ -729,10 +729,10 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
     QString url = KFileDialog::getSaveFileName(QDir::currentDirPath(),
 					       i18n("*.k3b|K3b Projects"), this, i18n("Save As"));
-    
-    
+
+
     if( !url.isEmpty() ) {
-      
+
       // default to ending ".k3b"
       if( url.mid( url.findRev('.')+1 ) != "k3b" ) {
 	if( url[ url.length()-1 ] != '.' )
@@ -763,17 +763,16 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
-
   if( K3bView* pView = activeView() ) {
     if( pView ) {
       K3bDoc* pDoc = pView->doc();
 
       if( canCloseDocument(pDoc) ) {
-	closeProject(pDoc);	
+	closeProject(pDoc);
       }
     }
   }
-  
+
   slotCurrentDocChanged();
 }
 
@@ -790,7 +789,6 @@ void K3bMainWindow::closeProject( K3bDoc* doc )
 
   // remove the view from the project tab
   m_documentTab->removePage( doc->view() );
-	
   // remove the DCOP interface
   QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
   if( it != d->projectInterfaceMap.end() ) {
@@ -798,7 +796,7 @@ void K3bMainWindow::closeProject( K3bDoc* doc )
     delete it.data();
     d->projectInterfaceMap.remove( it );
   }
-	
+
   // delete view and doc
   delete doc->view();
   delete doc;
@@ -1070,7 +1068,7 @@ void K3bMainWindow::slotCurrentDocChanged()
     //    This way every view is a KXMLGUIClient and it's GUI is just merged into the MainWindow's.
     //    Advantage: flexible
     //    Disadvantage: every view needs it's own XML file
-    //                  
+    //
     //
 
     if( factory() ) {
@@ -1082,7 +1080,8 @@ void K3bMainWindow::slotCurrentDocChanged()
     else
       kdDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance." << endl;
   }
-
+  else
+      d->projectManager->setActive( 0L );
   if( d->projectManager->isEmpty() ) {
     d->documentStack->raiseWidget( d->welcomeWidget );
     slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
@@ -1412,7 +1411,7 @@ void K3bMainWindow::slotClearProject()
 {
   K3bDoc* doc = k3bprojectmanager->activeDoc();
   if( doc ) {
-    if( KMessageBox::questionYesNo( this, 
+    if( KMessageBox::questionYesNo( this,
 				    i18n("Do you really want to clear the current project?"),
 				    i18n("Clear Project"),
 				    KStdGuiItem::yes(),
