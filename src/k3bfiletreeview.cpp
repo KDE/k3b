@@ -43,6 +43,9 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice* dev, KFileTree
 bool K3bDeviceBranch::populate( const KURL&, KFileTreeViewItem* )
 {
   // do nothing for now, perhaps we could mount in the future...?
+
+  emit populateFinished( root() );
+
   return true;
 }
 
