@@ -221,30 +221,47 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
 }
 
 void K3bDvdRippingProcess::preProcessingDvd( ){
+    kdDebug() << "(K3bDvdRippingProcess::preProcessingDVD) Copy IFO files from device: <" << m_device << ">."<< endl;
     if( !m_dvdOrgFilenameDetected ){
-        kdDebug() << "(K3bDvdRippingProcess) Mount dvd to copy IFO files." << endl;
         K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
         m_mountPoint = dev->mountPoint();
+        kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data mount device: " << dev->mountDevice() << ", mount Point: "<< dev->mountPoint() << endl;
+        kdDebug() << "(K3bDvdRippingProcess) K3bDevice Data ioctl device: " << dev->ioctlDevice() << ", generic device: "<< dev->genericDevice() << endl;
         if( !m_mountPoint.isEmpty() ){
-             QString mount = KIO::findDeviceMountPoint( dev->mountDevice() );
+             QString mount = KIO::findDeviceMountPoint( m_device );
+             kdDebug() << "(K3bDvdRippingProcess) Is mounted device:  <" << m_device << "> on <" << mount << ">." << endl;
              if( mount.isEmpty() ){
-                connect( KIO::mount( true, "autofs", dev->mountDevice(), m_mountPoint, true ), 
-			 SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd() ) );
-            } else {
+                kdDebug() << "(K3bDvdRippingProcess) Try to mount: <" << m_mountPoint << ">." << endl;
+                connect( KIO::mount( true, "autofs", "", m_mountPoint, true ), 
+			 SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd(KIO::Job*) ) );
+             } else {
                 m_mountPoint = mount;
                 m_dvdAlreadyMounted = true;
                 slotPreProcessingDvd();
             }
         } else {
-            KMessageBox::error(m_parent, i18n("K3b could not mount %1. Please run K3bSetup.").arg(dev->mountDevice()),
+            KMessageBox::error(m_parent, i18n("K3b could not mount <%1>. Please run K3bSetup.").arg(dev->mountDevice()),
 			       i18n("I/O error") );
+            emit finished( false );
         }
     }
 }
 
-void K3bDvdRippingProcess::slotPreProcessingDvd( ){
+void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob){
+    if( resultJob->error() > 0 ){
+        KMessageBox::error(m_parent, i18n("K3b could not mount the DVD-devcie. Ensure that you have the rights to mount the DVD-drive."),
+			       i18n("I/O error") );
+        kdDebug() << "(K3bDvdRippingProcess) Mount DVD-device failed." << endl;
+        emit finished( false );
+    } else {
+        // all ok, errorCode = 0
+        slotPreProcessingDvd();
+    }
+}
 
-  // hier sollte auf jeden Fall getestet werden, ob das mounten erfolgreich war!!!!
+void K3bDvdRippingProcess::slotPreProcessingDvd(){
+    // hier sollte auf jeden Fall getestet werden, ob das mounten erfolgreich war!!!!
+    // this code should not be run if mount has been failed (hopefully)
 
     // read directory from /dev/dvd
     if( !m_mountPoint.isEmpty() ){

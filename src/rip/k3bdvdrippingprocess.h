@@ -60,7 +60,8 @@ private slots:
     void slotParseOutput( KProcess *p, char *text, int len);
     void slotExited( KProcess* );
     //void slotAudioProcessFinished();
-    void slotPreProcessingDvd();
+    void slotPreProcessingDvd( KIO::Job *resultJob );
+    void slotPreProcessingDvd( );
     //void slotJobDebug( KIO::Job *job );
     void slotIfoCopyFinished( KIO::Job *job );
     void slotPreProcessingFinished( KIO::Job *job );
