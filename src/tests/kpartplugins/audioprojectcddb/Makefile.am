@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(srcdir)/../../../core -I$(srcdir)/../../../tools -I$(srcdir)/../../../projects/audiocd -I$(srcdir)/../../../device -I$(srcdir)/../../../cddb $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../../../core -I$(srcdir)/../../../tools -I$(srcdir)/../../../projects/audiocd -I$(srcdir)/../../../projects -I$(srcdir)/../../../device -I$(srcdir)/../../../cddb $(all_includes)
 
 lib_LTLIBRARIES = libk3baudioprojectcddbplugin.la
 
