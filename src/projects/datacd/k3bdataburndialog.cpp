@@ -262,7 +262,7 @@ void K3bDataBurnDialog::slotLoadK3bDefaults()
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-
+  m_radioMultiSessionNone->setChecked(true);
   m_checkVerify->setChecked( false );
 
   toggleAllOptions();

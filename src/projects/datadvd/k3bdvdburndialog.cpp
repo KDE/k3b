@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -139,15 +139,15 @@ void K3bDvdBurnDialog::setupSettingsTab()
 
 
   frameLayout->addWidget( m_groupMultiSession, 0, 0 );
- 
+
   frameLayout->setRowStretch( 1, 1 );
 
   addPage( frame, i18n("Settings") );
 
   // ToolTips
   // -------------------------------------------------------------------------
- 
- 
+
+
   // What's This info
   // -------------------------------------------------------------------------
 }
@@ -235,7 +235,7 @@ void K3bDvdBurnDialog::toggleAllOptions()
       // we can only continue ms with growisofsimager
       if( m_radioMultiSessionFinish->isChecked() || m_radioMultiSessionContinue->isChecked() ) {
 	KMessageBox::information( this, i18n("K3b does only support writing multisession DVDs on-the-fly. "
-					     "Multisession has been disabled."), 
+					     "Multisession has been disabled."),
 				  i18n("DVD multisession"),
 				  "dvd_multisession_only_on_the_fly" );
 	m_radioMultiSessionNone->setChecked(true);
@@ -265,7 +265,7 @@ void K3bDvdBurnDialog::slotLoadK3bDefaults()
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-
+  m_radioMultiSessionNone->setChecked(true);
   m_checkVerify->setChecked( false );
 
   toggleAllOptions();
