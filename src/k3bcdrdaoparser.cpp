@@ -16,7 +16,6 @@
 #include <unistd.h>
 
 
-
 inline bool operator<( const ProgressMsg& m1, const ProgressMsg& m2 ) {
     return m1.track < m2.track
            || ( m1.track == m2.track
@@ -49,6 +48,7 @@ m_currentTrack(0)
     m_oldMsg->track = 0;
     m_oldMsg->trackProgress = 0;
     m_oldMsg->totalProgress = 0;
+    m_isStarted = false;
 }
 
 
@@ -76,6 +76,8 @@ void K3bCdrdaoParser::parseCdrdaoLine( const QString& str ) {
     // -----------------------------------------------------------------------------------------
     if( (str).startsWith( "Warning" ) || (str).startsWith( "WARNING" ) || (str).startsWith( "ERROR" ) ) {
         parseCdrdaoError( str );
+    } else if( (str).startsWith( "Wrote" ) ) {
+        parseCdrdaoWrote( str );
     } else if( (str).startsWith( "Executing power" ) ) {
         emit newSubTask( i18n("Executing Power calibration") );
     } else if( (str).startsWith( "Power calibration successful" ) ) {
@@ -111,6 +113,46 @@ void K3bCdrdaoParser::parseCdrdaoError( const QString& line ) {
         emit infoMessage( i18n("Try setting the first pregap to 0."), K3bJob::ERROR );
     } else if( !line.contains( "remote progress message" ) )
         emit infoMessage( line, K3bJob::ERROR );
+}
+
+void K3bCdrdaoParser::parseCdrdaoWrote( const QString& line ) {
+
+    double speed;
+    int pos, po2, elapsed;
+
+    if( line.contains( "blocks" ) ) {
+      if (m_isStarted) {
+        elapsed = m_startWriteTime.secsTo( QTime::currentTime() );
+        if (elapsed <= 0.0) return;
+        
+        speed = (m_size  * 1024) / elapsed;
+        emit infoMessage( i18n("Estimated speed %1 Kb/s (%2x)").arg((int)speed).arg(speed/150.0,0,'g',2), K3bJob::INFO );
+        m_isStarted = false;
+      }
+      return;
+    }
+
+    if (!m_isStarted) {
+      m_startWriteTime = QTime::currentTime();
+      m_isStarted = true;
+    }
+    
+    elapsed = m_startWriteTime.secsTo( QTime::currentTime() );
+    if (elapsed <= 0.0) return;
+
+    pos = line.find( "Wrote" );
+    po2 = line.find( " ", pos + 6 );
+    int processed = line.mid( pos+6, po2-pos-6 ).toInt();
+
+    pos = line.find( "of" );
+    po2 = line.find( " ", pos + 3 );
+    m_size = line.mid( pos+3, po2-pos-3 ).toInt();
+
+    speed = (processed  * 1024) / elapsed;
+
+    // kdDebug() << QString("Speed: %1 Kb/s (%2x) elapsed: %3s").arg((int)speed).arg(speed / 150.0,0,'g',2).arg(elapsed) << endl;
+    emit processedSize( processed, m_size );
+      
 }
 
 void K3bCdrdaoParser::parseCdrdaoMessage(QSocket *comSock) {

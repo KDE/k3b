@@ -26,6 +26,8 @@
 #include <kdebug.h>
 #include <qsocket.h>
 
+#include <qdatetime.h>
+
 struct ProgressMsg;
 
 
@@ -38,6 +40,7 @@ class K3bCdrdaoParser : public QObject
   virtual ~K3bCdrdaoParser();
   void reinit();
   void parseCdrdaoLine( const QString& line );
+  void parseCdrdaoWrote( const QString& line );
   void parseCdrdaoError( const QString& line ); 
   void parseCdrdaoMessage(QSocket *comSock);	  
 
@@ -50,8 +53,12 @@ class K3bCdrdaoParser : public QObject
   void subPercent( int p );
   void buffer( int );
   void nextTrack( int, int );
+  void processedSize( int, int );
 
  private:
+  QTime m_startWriteTime;
+  bool m_isStarted;
+  int m_size;
   int m_currentTrack;
   struct ProgressMsg* m_oldMsg;
   struct ProgressMsg* m_newMsg;

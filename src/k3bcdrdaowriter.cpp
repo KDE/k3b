@@ -106,7 +106,10 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice* dev, QObject* parent, const char* n
              this, SLOT(slotUnknownCdrdaoLine(const QString&)) );
     connect(m_parser,SIGNAL(nextTrack(int, int)),
             this,SIGNAL(nextTrack(int, int)));
+    connect(m_parser,SIGNAL(processedSize(int, int)),
+            this,SIGNAL(processedSize(int, int)));
 
+            
     if( socketpair(AF_UNIX,SOCK_STREAM,0,m_cdrdaoComm) ) {
         kdDebug() << "(K3bCdrdaoWriter) could not open socketpair for cdrdao remote messages" << endl;
     } else {
