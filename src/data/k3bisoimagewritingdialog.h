@@ -26,7 +26,7 @@ class K3bWriterSelectionWidget;
 class KLineEdit;
 class QToolButton;
 class QLabel;
-class K3bIsoImageJob;
+class K3bIso9660ImageWritingJob;
 class KURL;
 
 /**
@@ -48,21 +48,17 @@ Q_OBJECT
   void updateImageSize( const QString& );
   void slotFindImageFile();
   void slotWriterChanged();
-  void slotCueBinChecked( bool c );
   void slotCheckMd5Sum();
 
  private:
   void setupGui();
 
-  K3bIsoImageJob* m_job;
+  K3bIso9660ImageWritingJob* m_job;
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkDummy;
   QCheckBox* m_checkDao;
   QCheckBox* m_checkBurnProof;
-
-  QCheckBox* m_checkRawWrite;
-  QCheckBox* m_checkUseCueFile;
   QCheckBox* m_checkNoFix;
 
   QLabel*    m_labelImageSize;
@@ -82,9 +78,6 @@ Q_OBJECT
   QLabel* m_generalInfoLabel;
 
   bool m_bIsoImage;
-  bool m_bCueBinAvailable;
-  QString m_cuePath;
-  QString m_binPath;
 };
 
 #endif

@@ -152,6 +152,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     
   connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writer, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
+  //  connect( m_writer, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
   connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
   connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );

@@ -46,6 +46,32 @@
 #include <qgroupbox.h>
 
 
+
+    // ------------------------------------------------
+    // Test for cue/bin
+    // ------------------------------------------------
+
+    // TODO: check if cue-file has only one FILE-statement (otherwise say: unusabe cue-file: xxx.cue)
+
+//     if( info.extension( false ) == "bin" || info.extension( false ) == "cue" ) {
+//       // search the corresponding file
+//       QString basename = path.left( path.length() - 3 );
+
+//       // cdrdao does not use the FILE statement but the basename + the bin extension
+//       bool binAvail = QFile::exists( basename + "bin" );
+//       bool cueAvail = QFile::exists( basename + "cue" );
+
+//       if( binAvail && cueAvail ) {
+// 	// TODO: check if the cue-file has only one FILE-statement as needed for cdrdao
+// 	m_bCueBinAvailable = true;
+// 	m_cuePath = basename + "cue";
+// 	m_binPath = basename + "bin";
+
+// 	imageSize = QFileInfo( m_binPath ).size();
+//       }
+//     }
+
+
 K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char* name, bool modal )
   : KDialogBase( parent, name, modal, i18n("Write Bin/Cue Image to CD"), User1|User2,
 		 User1, false, KGuiItem( i18n("Write"), "write", i18n("Start writing") ), KStdGuiItem::close() )

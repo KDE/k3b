@@ -20,8 +20,9 @@
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3bburnprogressdialog.h"
-#include "k3bisoimagejob.h"
+#include "k3biso9660imagewritingjob.h"
 #include "../kcutlabel.h"
+#include <k3bstdguiitems.h>
 
 // md5sum stuff
 #include "../tools/md5sum/md5.hh"
@@ -64,8 +65,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   setupGui();
   setButtonBoxOrientation( Qt::Vertical );
 
-  connect( m_checkUseCueFile, SIGNAL(toggled(bool)), this, SLOT(slotCueBinChecked(bool)) );
-
   m_job = 0;
 
   m_checkBurnProof->setChecked( true ); // enabled by default
@@ -80,26 +79,10 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 
   // ToolTips
   // --------------------------------------------------------------------------------
-  QToolTip::add( m_checkDummy, i18n("Only simulate the writing process") );
-  QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
-  QToolTip::add( m_checkBurnProof, i18n("Enable BURN-PROOF to avoid buffer underruns") );
-  QToolTip::add( m_checkUseCueFile, i18n("") );
   QToolTip::add( m_checkNoFix, i18n("Allow further sessions to be appended") );
 
   // What's This info
   // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_checkDummy, i18n("<p>If this option is checked K3b will perform all writing steps with the "
-				      "laser turned off."
-				      "<p>This is useful, for example, to test a higher writing speed "
-				      "or if your system is able to write on-the-fly.") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
-				    "compared to 'track at once' (TAO)."
-				    "<p>It is always recommended to use DAO where possible."
-				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
-				    "in DAO mode.") );
-  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked, K3b enables <em>BURN-PROOF</em>. This is "
-					  "a feature of the CD writer which avoids buffer underruns.") );
-  QWhatsThis::add( m_checkUseCueFile, i18n("") );
   QWhatsThis::add( m_checkNoFix, i18n("<p>If this option is checked, K3b will not close the CD, meaning "
 				      "it will only write a temporary table of contents.</p>"
 				      "<p>This allows further sessions to be appended to the CD.</p>") );
@@ -219,9 +202,9 @@ void K3bIsoImageWritingDialog::setupGui()
   groupOptionsLayout->setSpacing( spacingHint() );
   groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkBurnProof = new QCheckBox( i18n("Burn-proof"), optionTab );
-  m_checkDummy = new QCheckBox( i18n("Simulate"), optionTab );
-  m_checkDao = new QCheckBox( i18n("Disk at once"), optionTab );
+  m_checkBurnProof = K3bStdGuiItems::burnproofCheckbox( optionTab );
+  m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionTab );
+  m_checkDao = K3bStdGuiItems::daoCheckbox( optionTab );
 
   groupOptionsLayout->addWidget( m_checkDummy, 0, 0 );
   groupOptionsLayout->addWidget( m_checkDao, 1, 0 );
@@ -233,13 +216,9 @@ void K3bIsoImageWritingDialog::setupGui()
   advancedTabLayout->setSpacing( spacingHint() );
   advancedTabLayout->setMargin( marginHint() );
 
-  //  m_checkRawWrite = new QCheckBox( i18n("Raw writing"), advancedTab );
-  m_checkUseCueFile = new QCheckBox( i18n("Use cue-file"), advancedTab );
   m_checkNoFix = new QCheckBox( i18n("Do not close CD"), advancedTab );
 
   advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
-  //  advancedTabLayout->addWidget( m_checkRawWrite, 1, 0 );
-  advancedTabLayout->addWidget( m_checkUseCueFile, 1, 0 );
 
 
   optionTabbed->addTab( optionTab, i18n("Options") );
@@ -280,33 +259,20 @@ void K3bIsoImageWritingDialog::slotUser1()
   kapp->config()->setGroup("General Options");
   kapp->config()->writeEntry( "last written image", m_editImagePath->text() );
 
-//   if( m_bIsoImage && m_checkRawWrite->isChecked() && !m_checkUseCueFile->isChecked() )
-//     if( KMessageBox::warningContinueCancel( this, i18n("Writing an Iso9660 image in raw mode will lead to an unusable disk. "
-// 						       "Are you sure you want to continue?") )
-// 	== KMessageBox::Cancel )
-//       return;
-
-
   // create the job
   if( m_job == 0 )
-    m_job = new K3bIsoImageJob();
+    m_job = new K3bIso9660ImageWritingJob();
 
-  m_job->setWriter( m_writerSelectionWidget->writerDevice() );
+  m_job->setBurnDevice( m_writerSelectionWidget->writerDevice() );
   m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
   m_job->setBurnproof( m_checkBurnProof->isChecked() );
-  m_job->setDummy( m_checkDummy->isChecked() );
+  m_job->setSimulate( m_checkDummy->isChecked() );
   m_job->setDao( m_checkDao->isChecked() );
-  //  m_job->setRawWrite( m_checkRawWrite->isChecked() );
   m_job->setNoFix( m_checkNoFix->isChecked() );
 
-  if( m_checkUseCueFile->isChecked() ) {
-    m_job->setImagePath( m_cuePath );
-    m_job->setWriteCueBin( true );
-  }
-  else {
-    m_job->setImagePath( m_editImagePath->text() );
-    m_job->setWriteCueBin( false );
-  }
+  m_job->setImagePath( m_editImagePath->text() );
+
+  m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
   // create a progresswidget
   K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", false );
@@ -330,7 +296,6 @@ void K3bIsoImageWritingDialog::slotUser2()
 void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 {
   m_bIsoImage = false;
-  m_bCueBinAvailable = false;
 
 
   QFileInfo info( path );
@@ -369,39 +334,6 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     }
 
 
-
-    // ------------------------------------------------
-    // Test for cue/bin
-    // ------------------------------------------------
-
-    // TODO: check if cue-file has only one FILE-statement (otherwise say: unusabe cue-file: xxx.cue)
-
-    if( info.extension( false ) == "bin" || info.extension( false ) == "cue" ) {
-      // search the corresponding file
-      QString basename = path.left( path.length() - 3 );
-
-      // cdrdao does not use the FILE statement but the basename + the bin extension
-      bool binAvail = QFile::exists( basename + "bin" );
-      bool cueAvail = QFile::exists( basename + "cue" );
-
-      if( binAvail && cueAvail ) {
-	// TODO: check if the cue-file has only one FILE-statement as needed for cdrdao
-	m_bCueBinAvailable = true;
-	m_cuePath = basename + "cue";
-	m_binPath = basename + "bin";
-
-	imageSize = QFileInfo( m_binPath ).size();
-      }
-    }
-
-    // ------------------------------------------------
-    // Test for cdrecord-clone toc
-    // ------------------------------------------------
-
-    // TODO: check if xxx and xxx.toc could be found and if so enable clone option (only if cdrecord-clone is available)
-
-
-
     // ------------------------------------------------
     // Show file size
     // ------------------------------------------------
@@ -427,26 +359,10 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
       m_isoInfoWidget->show();
 
       m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image") );
-      m_checkUseCueFile->setChecked( false );
-      //      m_checkRawWrite->setChecked( false );
     }
     else {
       m_isoInfoWidget->hide();
-      if( m_bCueBinAvailable ) {
-	m_generalInfoLabel->setText( i18n("Usable cue/bin combination found:\n%1\n%2").arg(m_cuePath).arg(m_binPath) );
-	m_checkUseCueFile->setChecked( true );
-      }
-      else {
-	m_generalInfoLabel->setText( i18n("Seems not to be a usable image file (or raw image)") );
-      }
-    }
-
-    if( m_bCueBinAvailable ) {
-      m_checkUseCueFile->setEnabled( true );
-    }
-    else {
-      m_checkUseCueFile->setChecked( false );
-      m_checkUseCueFile->setEnabled( false );
+      m_generalInfoLabel->setText( i18n("Seems not to be a usable image file (or raw image)") );
     }
 
     // enable the Write-Button
@@ -480,19 +396,6 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
   else {
     m_checkBurnProof->setEnabled( true );
   }
-}
-
-
-void K3bIsoImageWritingDialog::slotCueBinChecked( bool c )
-{
-  // raw writing is set in the cue-file so there is no use in allowing to set it when using one
-  // cdrdao has no option to not fixate a cd (DAO)
-  if( c ) {
-    //    m_checkRawWrite->setChecked( false );
-    m_checkNoFix->setChecked( false );
-  }
-  //  m_checkRawWrite->setDisabled( c );
-  m_checkNoFix->setDisabled( c );
 }
 
 
