@@ -81,48 +81,25 @@ public:
 
 
 K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
-  : K3bCdContentsView( parent, name )
+  : K3bCdContentsView( true, parent, name )
 {
-  QGridLayout* mainGrid = new QGridLayout( this );
-  mainGrid->setMargin( 2 );
-
-  // header
-  // ----------------------------------------------------------------------------------
-  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
-  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame ); 
-  headerLayout->setMargin( 2 );  // to make sure the frame gets displayed
-  m_pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabel1" );
-  m_pixmapLabelLeft->setScaledContents( FALSE );
-  headerLayout->addWidget( m_pixmapLabelLeft );
-
-  m_labelTitle = new KCutLabel( headerFrame, "m_labelTitle" );
-  m_labelTitle->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, m_labelTitle->sizePolicy().hasHeightForWidth() ) );
-  QFont m_labelTitle_font( m_labelTitle->font() );
-  m_labelTitle_font.setPointSize( 12 );
-  m_labelTitle_font.setBold( TRUE );
-  m_labelTitle->setFont( m_labelTitle_font ); 
-  headerLayout->addWidget( m_labelTitle );
-
-  m_pixmapLabelRight = new QLabel( headerFrame, "pixmapLabel2" );
-  m_pixmapLabelRight->setScaledContents( FALSE );
-  headerLayout->addWidget( m_pixmapLabelRight );
-
+  QGridLayout* mainGrid = new QGridLayout( mainWidget() );
 
   // toolbox
   // ----------------------------------------------------------------------------------
   QHBoxLayout* toolBoxLayout = new QHBoxLayout( 0, 0, 0, "toolBoxLayout" );
-  m_toolBox = new K3bToolBox( this );
+  m_toolBox = new K3bToolBox( mainWidget() );
   toolBoxLayout->addWidget( m_toolBox );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   toolBoxLayout->addItem( spacer );
-  m_labelLength = new QLabel( this );
+  m_labelLength = new QLabel( mainWidget() );
   m_labelLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   toolBoxLayout->addWidget( m_labelLength );
 
 
   // the track view
   // ----------------------------------------------------------------------------------
-  m_trackView = new K3bListView( this );
+  m_trackView = new K3bListView( mainWidget() );
   m_trackView->setFullWidth(true);
   m_trackView->setSorting(-1);
   m_trackView->setAllColumnsShowFocus( true );
@@ -153,9 +130,8 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
 	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
 
-  mainGrid->addWidget( headerFrame, 0, 0 );
-  mainGrid->addLayout( toolBoxLayout, 1, 0 );
-  mainGrid->addWidget( m_trackView, 2, 0 );
+  mainGrid->addLayout( toolBoxLayout, 0, 0 );
+  mainGrid->addWidget( m_trackView, 1, 0 );
 
 
   m_cddb = new K3bCddb( this );
@@ -169,9 +145,9 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   initActions();
   slotTrackSelectionChanged(0);
-  slotThemeChanged();
 
-  connect( k3bthememanager, SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+  setLeftPixmap( "diskinfo_left" );
+  setRightPixmap( "diskinfo_audio" );
 }
 
 
@@ -601,10 +577,10 @@ void K3bAudioCdView::updateDisplay()
     QString s = m_cddbInfo.cdTitle;
     if( !m_cddbInfo.cdArtist.isEmpty() )
       s += " (" + m_cddbInfo.cdArtist + ")";
-    m_labelTitle->setText( s );
+    setTitle( s );
   }
   else
-    m_labelTitle->setText( i18n("Audio CD") );
+    setTitle( i18n("Audio CD") );
 
   m_labelLength->setText( i18n("1 track (%1)", 
 			       "%n tracks (%1)", 
@@ -616,17 +592,6 @@ void K3bAudioCdView::enableInteraction( bool b )
 {
   m_trackView->setEnabled(b);
   m_toolBox->setEnabled(b);
-}
-
-
-void K3bAudioCdView::slotThemeChanged()
-{
-  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
-    m_pixmapLabelLeft->setPixmap( theme->pixmap( "diskinfo_left" ) );
-    m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
-    m_pixmapLabelRight->setPixmap( theme->pixmap( "diskinfo_audio" ) );
-  }
 }
 
 

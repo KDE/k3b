@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -61,8 +61,6 @@ class K3bVideoCdView : public K3bCdContentsView
   void slotDeselectAll();
   void slotSelect();
   void slotDeselect();
-
-  void slotThemeChanged();
   
  private:
 
@@ -83,14 +81,10 @@ class K3bVideoCdView : public K3bCdContentsView
   K3bVideoCdInfo* m_videocdinfo;
     
   K3bListView* m_trackView;
-  QLabel* m_labelTitle;
   K3bToolBox* m_toolBox;
   QLabel* m_labelLength;
-  QLabel* m_pixmapLabelLeft;
-  QLabel* m_pixmapLabelRight;
 
   QValueList<VideoTrackViewCheckItem *> m_contentList;
-
 };
 
 #endif

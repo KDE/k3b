@@ -44,7 +44,7 @@
 
 
 K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
-  : K3bCdContentsView(parent,name) 
+  : K3bCdContentsView(false, parent,name) 
 {
   setupGUI();
 }

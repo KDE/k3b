@@ -71,8 +71,6 @@ class K3bAudioCdView : public K3bCdContentsView
   void slotSelect();
   void slotDeselect();
 
-  void slotThemeChanged();
-
  private:
   void initActions();
   void updateDisplay();
@@ -85,11 +83,8 @@ class K3bAudioCdView : public K3bCdContentsView
   KActionMenu* m_popupMenu;
 
   K3bListView* m_trackView;
-  QLabel* m_labelTitle;
   K3bToolBox* m_toolBox;
   QLabel* m_labelLength;
-  QLabel* m_pixmapLabelLeft;
-  QLabel* m_pixmapLabelRight;
 
   class AudioTrackViewItem;
 

@@ -48,10 +48,6 @@ class K3bDiskInfoView : public K3bCdContentsView
   void createMediaInfoItems( const K3bCdDevice::NextGenerationDiskInfo& info );
   void createIso9660InfoItems( const K3bIso9660* iso );
 
-  QLabel* m_labelDiskPix;
-  QLabel* m_labelTocType;
-  QLabel* m_labelLeftPic;
-
   KListView* m_infoView;
 
   class HeaderViewItem;

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -19,19 +19,42 @@
 
 #include <qwidget.h>
 
+
+class QLabel;
+
+
 /**
  * Abstract class from which all cd views must be
  * derived.
  */
-
 class K3bCdContentsView : public QWidget
 {
- public:
-  K3bCdContentsView( QWidget* parent = 0, const char* name = 0 )
-    : QWidget( parent, name ) {}
-  virtual ~K3bCdContentsView() {}
+  Q_OBJECT
 
-  virtual void reload() {}
+ public:
+  K3bCdContentsView( bool withHeader,
+		     QWidget* parent = 0, const char* name = 0 );
+  virtual ~K3bCdContentsView();
+
+  virtual void reload();
+
+ protected:
+  QWidget* mainWidget();
+  void setMainWidget( QWidget* );
+  void setTitle( const QString& );
+  void setLeftPixmap( const QString& );
+  void setRightPixmap( const QString& );
+
+ private slots:
+  void slotThemeChanged();
+
+ private:
+  QWidget* m_centerWidget;
+  QLabel* m_labelTitle;
+  QLabel* m_pixmapLabelLeft;
+  QLabel* m_pixmapLabelRight;
+  QString m_leftPixName;
+  QString m_rightPixName;
 };
 
 #endif

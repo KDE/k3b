@@ -445,6 +445,9 @@ void K3bDirView::slotDirActivated( const KURL& url )
 
 void K3bDirView::reload()
 {
+  // TODO: the fileview should be a special case
+  //       and then the boolean withHeader parameter should be removed from 
+  //       K3bCdContentsView
   K3bCdContentsView* v = (K3bCdContentsView*)m_viewStack->visibleWidget();
 
   v->reload();

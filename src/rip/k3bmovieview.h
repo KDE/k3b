@@ -65,14 +65,10 @@ private:
     KPopupMenu *m_popupMenu;
     K3bDvdRipListViewItem *m_ripTitle;
     KCutLabel *m_labelDvdInfo;
-    QLabel* m_labelTitle;
     K3bToolBox* m_toolBox;
     void setupGUI();
     void setupActions();
     QString filterAudioList( QStringList* );
-
-    QLabel* m_pixmapLabelLeft;
-    QLabel* m_pixmapLabelRight;
 
 private slots:
     void slotDvdChecked( bool successful );
@@ -81,8 +77,6 @@ private slots:
     void slotRip();
     void slotUpdateInfoDialog( int i);
     void slotContextMenu( KListView*, QListViewItem*, const QPoint& p);
-
-    void slotThemeChanged();
 };
 
 #endif
