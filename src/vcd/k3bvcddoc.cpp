@@ -599,10 +599,54 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
 
     // vcd Label
     QDomNodeList vcdNodes = nodes.item( 1 ).childNodes();
-    vcdOptions() ->setAlbumId( vcdNodes.item( 0 ).toElement().text() );
-    vcdOptions() ->setVolumeId( vcdNodes.item( 1 ).toElement().text() );
-    setVcdType( vcdNodes.item( 2 ).toElement().text().toInt() );
 
+    for ( uint i = 0; i < vcdNodes.count(); i++ ) {
+        QDomNode item = vcdNodes.item( i );
+        QString name = item.nodeName();
+        if ( name == "volumeId" )
+            vcdOptions() ->setVolumeId( item.toElement().text() );
+        else if ( name == "albumId" )
+            vcdOptions() ->setAlbumId( item.toElement().text() );
+        else if ( name == "volumeSetId" )
+            vcdOptions() ->setVolumeSetId( item.toElement().text() );
+        else if ( name == "preparer" )
+            vcdOptions() ->setPreparer( item.toElement().text() );
+        else if ( name == "publisher" )
+            vcdOptions() ->setPublisher( item.toElement().text() );
+        else if ( name == "vcdType" )
+            setVcdType( item.toElement().text().toInt() );
+        else if ( name == "PreGapLeadout" )
+            vcdOptions() ->setPreGapLeadout( item.toElement().text().toInt() );
+        else if ( name == "PreGapTrack" )
+            vcdOptions() ->setPreGapTrack( item.toElement().text().toInt() );
+        else if ( name == "FrontMarginTrack" )
+            vcdOptions() ->setFrontMarginTrack( item.toElement().text().toInt() );
+        else if ( name == "RearMarginTrack" )
+            vcdOptions() ->setRearMarginTrack( item.toElement().text().toInt() );
+        else if ( name == "FrontMarginTrackSVCD" )
+            vcdOptions() ->setFrontMarginTrackSVCD( item.toElement().text().toInt() );
+        else if ( name == "RearMarginTrackSVCD" )
+            vcdOptions() ->setRearMarginTrackSVCD( item.toElement().text().toInt() );
+        else if ( name == "volumeCount" )
+            vcdOptions() ->setVolumeCount( item.toElement().text().toInt() );
+        else if ( name == "volumeNumber" )
+            vcdOptions() ->setVolumeNumber( item.toElement().text().toInt() );
+        else if ( name == "AutoDetect" )
+            vcdOptions() ->setAutoDetect( item.toElement().text().toInt() );
+        else if ( name == "CdiSupport" )
+            vcdOptions() ->setCdiSupport( item.toElement().text().toInt() );
+        else if ( name == "NonCompliantMode" )
+            vcdOptions() ->setNonCompliantMode( item.toElement().text().toInt() );
+        else if ( name == "Sector2336" )
+            vcdOptions() ->setSector2336( item.toElement().text().toInt() );
+        else if ( name == "UpdateScanOffsets" )
+            vcdOptions() ->setUpdateScanOffsets( item.toElement().text().toInt() );
+        else if ( name == "RelaxedAps" )
+            vcdOptions() ->setRelaxedAps( item.toElement().text().toInt() );
+        else if ( name == "UseGaps" )
+            vcdOptions() ->setUseGaps( item.toElement().text().toInt() );
+    }
+    
     // vcd Tracks
     QDomNodeList trackNodes = nodes.item( 2 ).childNodes();
 
@@ -617,7 +661,15 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
             KURL k;
             k.setPath( url );
             if ( K3bVcdTrack* track = createTrack( k ) ) {
+                track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
+                track ->setWaitTime( trackElem.attribute( "wait", "2" ).toInt() );
+
                 QDomNodeList trackNodes = trackElem.childNodes();
+                QDomElement pbcElem = trackNodes.item(0).toElement();
+                for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+                    // TODO: load PBC                    
+                }
+            
                 addTrack( track, m_tracks->count() );
             }
         }
@@ -641,16 +693,92 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
 
     // save Vcd Label
     QDomElement vcdMain = doc.createElement( "vcd" );
-    QDomElement vcdElem = doc.createElement( "albumId" );
-    vcdElem.appendChild( doc.createTextNode( ( vcdOptions() ->albumId() ) ) );
+
+    QDomElement vcdElem = doc.createElement( "volumeId" );
+    vcdElem.appendChild( doc.createTextNode( vcdOptions() ->volumeId() ) );
     vcdMain.appendChild( vcdElem );
 
-    vcdElem = doc.createElement( "volumeId" );
-    vcdElem.appendChild( doc.createTextNode( ( vcdOptions() ->volumeId() ) ) );
+    vcdElem = doc.createElement( "albumId" );
+    vcdElem.appendChild( doc.createTextNode( vcdOptions() ->albumId() ) );
     vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "volumeSetId" );
+    vcdElem.appendChild( doc.createTextNode( vcdOptions() ->volumeSetId() ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "preparer" );
+    vcdElem.appendChild( doc.createTextNode( vcdOptions() ->preparer() ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "publisher" );
+    vcdElem.appendChild( doc.createTextNode( vcdOptions() ->publisher() ) );
+    vcdMain.appendChild( vcdElem );
+
+// applicationId()
+// systemId()
 
     vcdElem = doc.createElement( "vcdType" );
-    vcdElem.appendChild( doc.createTextNode( ( QString( "%1" ).arg( vcdType() ) ) ) );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdType() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "PreGapLeadout" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->PreGapLeadout() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "PreGapTrack" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->PreGapTrack() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "FrontMarginTrack" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->FrontMarginTrack() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "RearMarginTrack" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->RearMarginTrack() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "FrontMarginTrackSVCD" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->FrontMarginTrackSVCD() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "RearMarginTrackSVCD" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->RearMarginTrackSVCD() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "volumeCount" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->volumeCount() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "volumeNumber" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->volumeNumber() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "AutoDetect" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->AutoDetect() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "CdiSupport" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->CdiSupport() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "NonCompliantMode" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->NonCompliantMode() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "Sector2336" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->Sector2336() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "UpdateScanOffsets" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->UpdateScanOffsets() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "RelaxedAps" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->RelaxedAps() ) ) );
+    vcdMain.appendChild( vcdElem );
+
+    vcdElem = doc.createElement( "UseGaps" );
+    vcdElem.appendChild( doc.createTextNode( QString::number( vcdOptions() ->UseGaps() ) ) );
     vcdMain.appendChild( vcdElem );
 
     docElem->appendChild( vcdMain );
@@ -659,10 +787,33 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
     // -------------------------------------------------------------
     QDomElement contentsElem = doc.createElement( "contents" );
 
-    for ( K3bVcdTrack* track = first(); track != 0; track = next() ) {
+    QPtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
+    K3bVcdTrack* track;
+
+    while ( ( track = iterTrack.current() ) != 0 ) {
+        ++iterTrack;
 
         QDomElement trackElem = doc.createElement( "track" );
         trackElem.setAttribute( "url", KIO::decodeFileName( track->absPath() ) );
+        trackElem.setAttribute( "playtime", track->getPlayTime() );
+        trackElem.setAttribute( "waittime", track->getWaitTime() );
+                
+        for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+            if ( track->isPbcUserDefined( i ) ) {
+                // save pbc
+                QDomElement pbcElem = doc.createElement( "pbc" );
+                pbcElem.setAttribute( "type", i );
+                if ( track->getPbcTrack( i ) ) {
+                    pbcElem.setAttribute( "pbctrack", "yes" );
+                    pbcElem.setAttribute( "val", track->getPbcTrack( i )->index() );
+                }
+                else {
+                    pbcElem.setAttribute( "pbctrack", "no" );
+                    pbcElem.setAttribute( "val", track->getPbcTrack( i )->getNonPbcTrack( i ) );
+                }
+                trackElem.appendChild( pbcElem );
+            }
+        }
 
         contentsElem.appendChild( trackElem );
     }
