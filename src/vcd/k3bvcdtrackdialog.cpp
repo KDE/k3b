@@ -79,20 +79,19 @@ void K3bVcdTrackDialog::fillGui()
   K3bVcdTrack* track = m_tracks.first();
         
   if (track->mpegVideoVersion() == 1) {
-    tmp = "Mpeg 1 System File [Video";
+    if (track->hasAudio())
+      m_mpegver_video->setText(i18n("Mpeg 1 System File [Video/Audio]"));
+    else
+      m_mpegver_video->setText(i18n("Mpeg 1 System File [Video]"));
   }
   else {
-    tmp.append(i18n("Mpeg 2 Program Stream File [Video"));
+    if (track->hasAudio())
+      m_mpegver_video->setText(i18n("Mpeg Program Stream File [Video/Audio]"));
+    else
+      m_mpegver_video->setText(i18n("Mpeg Program Stream File [Video]"));
   }
 
-  if (track->hasAudio())
-    tmp.append(i18n("/Audio]"));
-  else
-    tmp.append("]");
-
-  m_mpegver_video->setText(tmp);
-
-  m_rate_video->setText(QString("%1 Mbps").arg(track->mpegMbps()));
+  m_rate_video->setText(i18n("%1 Mbps").arg(track->mpegMbps()));
 
   m_duration_video->setText(track->mpegDuration());
 
@@ -134,10 +133,8 @@ void K3bVcdTrackDialog::fillGui()
   }
 
   m_displaysize_video->setText(track->mpegDisplaySize());
-  tmp = track->mpegSize();
-  tmp.append(QString(" %1 fps").arg(track->mpegFps()));
-  tmp.append(QString(" %1 Mbps").arg(track->mpegMbps()));
-  m_size_video->setText(tmp);
+  m_size_video->setText(i18n("%1 %2 fps %3 Mbps").arg(track->mpegSize()).arg(track->mpegFps()).arg(track->mpegMbps()));
+  
 
   if (track->hasAudio()){
     if (track->MpegAudioType() !=3)
@@ -152,39 +149,39 @@ void K3bVcdTrackDialog::fillGui()
 
     switch (track->MpegAudioMode()){
       case 0: tmp = i18n("Stereo"); break;
-      case 1: tmp = i18n("Joint Stereo: ");
+      case 1: tmp = i18n("Joint Stereo");
               if (track->MpegAudioLayer() == 1 || track->MpegAudioLayer() == 2){
                 switch (track->MpegAudioModeExt()){
-                  case 0: tmp.append(i18n("(Intensity stereo on bands 4-31/32)")); break;
-                  case 1: tmp.append(i18n("(Intensity stereo on bands 8-31/32)")); break;
-                  case 2: tmp.append(i18n("(Intensity stereo on bands 12-31/32)")); break;
-                  case 3: tmp.append(i18n("(Intensity stereo on bands 16-31/32)")); break;
+                  case 0: tmp.append(" " + i18n("(Intensity stereo on bands 4-31/32)")); break;
+                  case 1: tmp.append(" " + i18n("(Intensity stereo on bands 8-31/32)")); break;
+                  case 2: tmp.append(" " + i18n("(Intensity stereo on bands 12-31/32)")); break;
+                  case 3: tmp.append(" " + i18n("(Intensity stereo on bands 16-31/32)")); break;
                 }
               }
               else {
                 //mp3
                 switch (track->MpegAudioModeExt()){
-                  case 0: tmp.append(i18n("(Intensity stereo off, M/S stereo off)")); break;
-                  case 1: tmp.append(i18n("(Intensity stereo on, M/S stereo off)")); break;
-                  case 2: tmp.append(i18n("(Intensity stereo off, M/S stereo on)")); break;
-                  case 3: tmp.append(i18n("(Intensity stereo on, M/S stereo on)")); break;
+                  case 0: tmp.append(" " + i18n("(Intensity stereo off, M/S stereo off)")); break;
+                  case 1: tmp.append(" " + i18n("(Intensity stereo on, M/S stereo off)")); break;
+                  case 2: tmp.append(" " + i18n("(Intensity stereo off, M/S stereo on)")); break;
+                  case 3: tmp.append(" " + i18n("(Intensity stereo on, M/S stereo on)")); break;
                 }
               }
               break;
       case 2: tmp = i18n("Dual Channel"); break;
-      case 3: tmp = "Mono"; break;
+      case 3: tmp = i18n("Mono"); break;
     }
     m_mode_audio->setText(tmp);
 
     switch (track->MpegAudioEmphasis()){
       case 0: m_emphasis_audio->setText(i18n("No emphasis")); break;
-      case 1: m_emphasis_audio->setText(i18n("Emphasis: 50/15 microsecs")); break;
+      case 1: m_emphasis_audio->setText(i18n("Emphasis 50/15 microsecs")); break;
       case 2: m_emphasis_audio->setText(i18n("Emphasis Unknown")); break;
       case 3: m_emphasis_audio->setText(i18n("Emphasis CCITT J 17")); break;
     }
 
     tmp = "";
-    if (track->MpegAudioCopyright()) tmp.append("(c),");
+    if (track->MpegAudioCopyright()) tmp.append("(c) ");
     if (track->MpegAudioOriginal())
       tmp.append(i18n("original"));
     else
