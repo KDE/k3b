@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -335,7 +335,8 @@ void K3bCloneDialog::slotToggleAll()
     m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
     m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() );
     m_spinCopies->setEnabled( !m_checkSimulate->isChecked() && !m_checkOnlyCreateImage->isChecked() );
-  
+    if ( m_checkOnlyCreateImage->isChecked() )
+      m_checkDeleteImages->setChecked( false );
     m_buttonStart->setEnabled(true);
   }
   else {

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -144,7 +144,7 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
     //
     // We do not cover every case here but just the once that really make sense
     //
-    if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE && d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE )
+    if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE || d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE )
       d->labelRequest->setText( i18n("Please insert a complete or appendable medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
     else if( d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE )
       d->labelRequest->setText( i18n("Please insert an appendable medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
@@ -155,10 +155,10 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
     d->labelRequest->setText( message );
 
   if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
-    d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "dvd_unmount", 
+    d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "dvd_unmount",
 									 KIcon::NoGroup, KIcon::SizeMedium ) );
   else
-    d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", 
+    d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount",
 									 KIcon::NoGroup, KIcon::SizeMedium ) );
 
   adjustSize();
@@ -167,7 +167,7 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
 
   d->inLoop = true;
   QApplication::eventLoop()->enterLoop();
-  
+
   kdDebug() << "(K3bEmptyDiscWaiter) waitForEmptyDisc() finished" << endl;
 
   return d->result;

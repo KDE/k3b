@@ -273,6 +273,8 @@ namespace K3bCdDevice
     int writingModes() const { return m_writeModes; }
     bool supportsWriteMode( WriteMode );
 
+    bool readSectorsRaw(unsigned char *buf, int start, int count);
+
     /**
      * Get a list of supported profiles. See enumeration MediaType.
      */

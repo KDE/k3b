@@ -109,6 +109,7 @@ void K3bCdDevice::DiskInfoDetector::fetchIsoInfo()
     m_info.isoPublisherId = QString::fromLocal8Bit( &buf[16*2048+318], 128 ).stripWhiteSpace();
     m_info.isoPreparerId = QString::fromLocal8Bit( &buf[16*2048+446], 128 ).stripWhiteSpace();
     m_info.isoApplicationId = QString::fromLocal8Bit( &buf[16*2048+574], 128 ).stripWhiteSpace();
+    m_info.isoSize = *(int *) &buf[16*2048+80];
   }
 
   m_device->close();

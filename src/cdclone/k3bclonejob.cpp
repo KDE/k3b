@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -53,6 +53,7 @@ K3bCloneJob::K3bCloneJob( QObject* parent, const char* name )
     m_burnfree(true),
     m_speed(1),
     m_copies(1),
+    m_removeImageFiles(false),
     m_onlyCreateImage(false)
 {
   d = new Private;
@@ -106,9 +107,9 @@ void K3bCloneJob::start()
 
   prepareReader();
 
-  if( K3bEmptyDiscWaiter::wait( readingDevice(), 
+  if (  K3bEmptyDiscWaiter::wait( readingDevice(),
 				K3bCdDevice::STATE_COMPLETE,
-				K3bCdDevice::MEDIA_WRITABLE_CD|K3bCdDevice::MEDIA_CD_ROM ) == -1 ) {
+				K3bCdDevice::MEDIA_CD_ROM ) == -1 ) {
     m_running = false;
     emit canceled();
     emit finished(false);
@@ -230,7 +231,8 @@ void K3bCloneJob::slotWriterFinished( bool success )
 
 void K3bCloneJob::slotReadingPercent( int p )
 {
-  emit percent( m_onlyCreateImage ? p : (int)((double)p/(double)(1+m_copies)) );
+  int add = m_onlyCreateImage ? 0 : 1;
+  emit percent( m_onlyCreateImage ? p : (int)((double)p/(double)(add+m_copies)) );
 }
 
 

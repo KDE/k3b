@@ -1890,6 +1890,45 @@ bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
     return false;
 }
 
+bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int count)
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+
+  if (open() != -1) {
+    struct cdrom_generic_command cmd;
+    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+    cmd.cmd[0] = GPCMD_READ_CD;
+    cmd.cmd[1] = 0; // all types
+    cmd.cmd[2] = (start >> 24) & 0xff;
+    cmd.cmd[3] = (start >> 16) & 0xff;
+    cmd.cmd[4] = (start >>  8) & 0xff;
+    cmd.cmd[5] = start & 0xff;
+    cmd.cmd[6] = (count >> 16) & 0xff;
+    cmd.cmd[7] = (count >>  8) & 0xff;
+    cmd.cmd[8] = count & 0xff;
+    cmd.cmd[9] = 0x80 | 0x40 | 0x20 | 0x10 | 0x08;
+                 // DATA_SYNC | DATA_ALLHEADER | DATA_USER | DATA_EDC;
+    cmd.buffer = buf;
+    cmd.buflen = count*2352;
+    cmd.data_direction = CGC_DATA_READ;
+    if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) ) {
+      kdError() << "(K3bCdDevice::CdDevice) Cannot read raw sectors." << endl;
+      return false;
+    }
+
+
+    if( needToClose )
+      close();
+
+    return true;
+  }
+  else
+    return false;
+}
+
 
 bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
 {
