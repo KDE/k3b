@@ -46,6 +46,7 @@
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
 #include <kdialog.h>
+#include <kedittoolbar.h>
 
 #include <stdlib.h>
 
@@ -138,6 +139,8 @@ void K3bMainWindow::initActions()
   actionViewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+
+  KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
 
   actionFileBurn = new KAction( i18n("&Burn..."), "cdwriter_unmount", 0, this, SLOT(slotFileBurn()), 
 			  actionCollection(), "file_burn");
@@ -866,6 +869,15 @@ void K3bMainWindow::init()
 
 void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 {
+}
+
+
+void K3bMainWindow::slotEditToolbars()
+{
+  KEditToolbar dlg(actionCollection());
+
+  if (dlg.exec())
+    createGUI();
 }
 
 

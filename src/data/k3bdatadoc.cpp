@@ -38,6 +38,7 @@
 #include <klocale.h>
 #include <klineeditdlg.h>
 #include <kmimemagic.h>
+#include <kmessagebox.h>
 
 #include <id3/tag.h>
 #include <id3/misc_support.h>
@@ -179,10 +180,17 @@ void K3bDataDoc::slotAddQueuedItems()
       createFileItem( item->fileInfo, item->parent );
     }
     
+    m_numberAddedItems++;
+    if( m_numberAddedItems >= 500 ) {
+      emit newFileItems();
+      m_numberAddedItems = 0;
+    }
+
     delete item;
     m_queuedToAddItemsTimer->start(0);
   }
   else {
+    m_numberAddedItems = 0;
     m_queuedToAddItemsTimer->stop();
     emit newFileItems();
     k3bMain()->statusBar()->clear();
@@ -199,6 +207,28 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
     qDebug("(K3bDataDoc) tried to create dir without name.");
     return;
   }
+
+
+  // check for recursion
+  // if the added file is a symlink we check if it is a subdirectory
+  // of the resolved one
+  if( f.isSymLink() ) {
+    QFileInfo link( f );
+
+    while( link.isSymLink() ) {
+      if( link.readLink().startsWith("/") )
+	link.setFile( link.readLink() );
+      else
+	link.setFile( link.dirPath() + "/" + link.readLink() );
+    }
+
+    // symLink resolved
+    if( f.absFilePath().startsWith( link.absFilePath() ) ) {
+      KMessageBox::error( k3bMain(), i18n("Found recursion in directory tree. Omitting") + QString("\n<b>%1</b>").arg(f.absFilePath()) );
+      return;
+    }
+  }
+
 
   if( nameAlreadyInDir( newName, parent ) ) {
     k3bMain()->config()->setGroup("Data project settings");
@@ -246,6 +276,7 @@ void K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
     // check if it was a corrupted symlink
     if( !f.exists() ) {
       qDebug("(K3bDataDoc) corrupted symlink: " + f.absFilePath() );
+      m_notFoundFiles.append( f.absFilePath() );
       return;
     }
   }
@@ -457,7 +488,13 @@ bool K3bDataDoc::loadDocumentData( QDomDocument* doc )
     
     else if( e.nodeName() == "preparer" )
       setPreparer( e.text() );
-    
+
+    else if( e.nodeName() == "volume_set_id" )
+      setVolumeSetId( e.text() );
+
+    else if( e.nodeName() == "system_id" )
+      setSystemId( e.text() );
+
     else
       qDebug( "(K3bDataDoc) unknown header entry: " + e.nodeName() );
     
@@ -638,6 +675,14 @@ bool K3bDataDoc::saveDocumentData( QDomDocument* doc )
 
   topElem = doc->createElement( "volume_id" );
   topElem.appendChild( doc->createTextNode( volumeID() ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc->createElement( "volume_set_id" );
+  topElem.appendChild( doc->createTextNode( volumeSetId() ) );
+  headerElem.appendChild( topElem );
+
+  topElem = doc->createElement( "system_id" );
+  topElem.appendChild( doc->createTextNode( systemId() ) );
   headerElem.appendChild( topElem );
 
   topElem = doc->createElement( "application_id" );

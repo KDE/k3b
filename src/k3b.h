@@ -235,6 +235,8 @@ class K3bMainWindow : public KDockMainWindow
 
   void slotProjectAddFiles();
 
+  void slotEditToolbars();
+
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );

@@ -207,6 +207,7 @@ class K3bDataDoc : public K3bDoc
 
   QQueue<PrivateItemToAdd> m_queuedToAddItems;
   QTimer* m_queuedToAddItemsTimer;
+  int m_numberAddedItems;
 
   QStringList m_notFoundFiles;
 
