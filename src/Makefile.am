@@ -53,3 +53,15 @@ messages: rc.cpp
 	$(PREPARETIPS) > tips.cpp
 	$(XGETTEXT) `find . -name \*.cpp -o -name \*.h` `find ../plugins -name \*.cpp -o -name \*.h` -o $(podir)/k3b.pot
 	rm -f tips.cpp 
+
+
+### FIXME: Workaround because --enable-final triggers multiple-inclusion
+### of kcmdlineargs.h and *one* of those inclusions (the one in
+### k3bsmartinstancereuser.cpp) does the silly #define private public
+### trick to munge the internals of KCmdLineArgs; unfortunately,
+### kcmdlineargs.h has already been included by then and it's protected
+### against multiple-inclusion and the trick fails. This suggests that
+### there should be _some_ way to save command-line arguments to a
+### stream in a public API.
+KDE_OPTIONS = nofinal
+
