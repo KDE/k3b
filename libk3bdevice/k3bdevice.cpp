@@ -57,6 +57,11 @@ typedef unsigned char u8;
 
 #endif // Q_OS_LINUX
 
+#ifdef Q_OS_FREEBSD
+#define __BYTE_ORDER BYTE_ORDER
+#define __BIG_ENDIAN BIG_ENDIAN
+#define CD_FRAMESIZE_RAW 2352
+#endif
 
 #ifdef HAVE_RESMGR
 extern "C" {
@@ -125,7 +130,7 @@ public:
       deviceFd(-1),
       burnfree(false) {
   }
-  
+
   QString blockDeviceName;
   int deviceType;
   int supportedProfiles;
@@ -168,6 +173,10 @@ bool K3bCdDevice::CdDevice::init()
 {
   kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": init()" << endl;
 
+  bool attemptopen = true;
+#ifdef Q_OS_FREEBSD
+  attemptopen = false;
+#endif
   //
   // they all should read CD-ROM.
   //
@@ -175,7 +184,7 @@ bool K3bCdDevice::CdDevice::init()
 
   d->supportedProfiles = 0;
 
-  if(open() < 0)
+  if(attemptopen && (open() < 0))
     return false;
 
 
@@ -215,6 +224,7 @@ bool K3bCdDevice::CdDevice::init()
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
+  cmd.clear();
   cmd[0] = MMC::GET_CONFIGURATION;
   cmd[8] = 8;
   if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
@@ -275,8 +285,8 @@ bool K3bCdDevice::CdDevice::init()
 	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
 	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
 	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
-	    default: 
-	      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: " 
+	    default:
+	      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: "
 			<< profile << endl;
 	    }
 	  }
@@ -384,7 +394,7 @@ bool K3bCdDevice::CdDevice::init()
 	      // and some stuff we do not use here...
 	    };
 #endif
-	    
+
 	    struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
 	    if( p->write ) d->deviceType |= DVDPRW;
 	    break;
@@ -610,7 +620,7 @@ bool K3bCdDevice::CdDevice::init()
 	  // 0xFF00 - 0xFFFF vendor specific
 
 	default:
-	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": unknown feature: " 
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": unknown feature: "
 		    << feature << endl;
 	  break;
 	}
@@ -710,7 +720,7 @@ bool K3bCdDevice::CdDevice::furtherInit()
 #ifdef Q_OS_LINUX
 
   //
-  // Since all CDR drives at least support TAO, all CDRW drives should support 
+  // Since all CDR drives at least support TAO, all CDRW drives should support
   // mode page 2a and all DVD writer should support mode page 2a or the GET CONFIGURATION
   // command this is redundant and may be removed for BSD ports or even completely
   //
@@ -723,7 +733,7 @@ bool K3bCdDevice::CdDevice::furtherInit()
     close();
     return false;
   }
-    
+
   d->deviceType |= CDROM;
 
   if (drivetype & CDC_CD_R)
@@ -736,7 +746,7 @@ bool K3bCdDevice::CdDevice::furtherInit()
     d->deviceType |= DVDRAM;
   if (drivetype & CDC_DVD)
     d->deviceType |= DVD;
-   
+
   close();
 
 #endif // Q_OS_LINUX
@@ -751,20 +761,20 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
   //
   // There are a lot writers out there which behave like the TEAC R5XS
   //
-  if( ( vendor().startsWith("TEAC") && ( description().startsWith("CD-R50S") || 
+  if( ( vendor().startsWith("TEAC") && ( description().startsWith("CD-R50S") ||
 					 description().startsWith("CD-R55S") ) )
-      || 
-      ( vendor().startsWith("SAF") && ( description().startsWith("CD-R2006PLUS") || 
-					description().startsWith("CD-RW226") || 
+      ||
+      ( vendor().startsWith("SAF") && ( description().startsWith("CD-R2006PLUS") ||
+					description().startsWith("CD-RW226") ||
 					description().startsWith("CD-R4012") ) )
       ||
-      ( vendor().startsWith("JVC") && ( description().startsWith("XR-W2001") || 
-					description().startsWith("XR-W2010") || 
+      ( vendor().startsWith("JVC") && ( description().startsWith("XR-W2001") ||
+					description().startsWith("XR-W2010") ||
 					description().startsWith("R2626") ) )
       ||
-      ( vendor().startsWith("PINNACLE") && ( description().startsWith("RCD-1000") || 
-					description().startsWith("RCD5020") || 
-					description().startsWith("RCD5040") || 
+      ( vendor().startsWith("PINNACLE") && ( description().startsWith("RCD-1000") ||
+					description().startsWith("RCD5020") ||
+					description().startsWith("RCD5040") ||
 					description().startsWith("RCD 4X4") ) )
       ||
       ( vendor().startsWith("Traxdata") && description().startsWith("CDR4120") ) ) {
@@ -792,6 +802,14 @@ void K3bCdDevice::CdDevice::checkForAncientWriters()
       m_bufferSize = 1024;
       d->burnfree = false;
     }
+    else if( description().startsWith("CD-R56S") ) {
+      m_writeModes |= TAO;
+      d->deviceType |= CDROM|CDR;
+      m_maxWriteSpeed = 6;
+      m_maxReadSpeed = 24;
+      m_bufferSize = 1302;
+      d->burnfree = false;
+    }
   }
   else if( vendor().startsWith("HP") ) {
     if( description().startsWith("CD-Writer 6020") ) {
@@ -815,7 +833,7 @@ K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
 }
 
 
-bool K3bCdDevice::CdDevice::dao() const 
+bool K3bCdDevice::CdDevice::dao() const
 {
   return m_writeModes & SAO;
 }
@@ -1029,7 +1047,7 @@ K3b::Msf K3bCdDevice::CdDevice::discSize() const
   }
 
   if( ret == 0 ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 	      << "READ DISC INFORMATION failed. getting disk size via toc." << endl;
     Toc toc = readToc();
     ret = toc.lastSector();
@@ -1112,7 +1130,7 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize() const
 
 int K3bCdDevice::CdDevice::numSessions() const
 {
-  // 
+  //
   // Althought disk_info should get the real value without ide-scsi
   // I keep getting wrong values (the value is too high. I think the leadout
   // gets counted as session sometimes :()
@@ -1158,7 +1176,7 @@ int K3bCdDevice::CdDevice::getDataMode( const K3b::Msf& sector ) const
   bool readSuccess = readCdMsf( data, 2352,
 				0,      // all sector types
 				false,  // no dap
-				sector, 
+				sector,
 				sector+1,
 				true, // SYNC
 				true, // HEADER
@@ -1230,7 +1248,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 	int dataLen = 0;
 	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
 	  track_info_t* trackInfo = (track_info_t*)data;
-	  
+
 	  Track track;
 	  track.m_firstSector = 0;
 	  track.m_lastSector = from4Byte( trackInfo->track_size ) - 1;
@@ -1239,15 +1257,15 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 	  track.m_mode = Track::DVD;
 	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
 	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
-	  
+
 	  toc.append( track );
-	  
+
 	  delete [] data;
-	  
+
 	  break;
 	}
 	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		    << "READ TRACK INFORMATION for toc failed." << endl;
 
 	K3b::Msf size;
@@ -1266,7 +1284,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 	  break;
 	}
 	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		    << "READ CAPACITY for toc failed." << endl;
       }
 
@@ -1292,7 +1310,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
       // every closed session is viewed as a track whereas
       // every fragment of the open session is viewed as a track
       //
-      // We may use 
+      // We may use
       // READ DISK INFORMATION
       // READ TRACK INFORMATION: track number FFh refers to the incomplete fragment (track)
       // READ TOC/PMA/ATIP: form 0 refers to all closed sessions
@@ -1430,7 +1448,7 @@ bool K3bCdDevice::CdDevice::readFormattedToc( K3bCdDevice::Toc& toc, bool dvd ) 
 
       success = true;
     }
-    
+
     delete [] data;
   }
 
@@ -1476,7 +1494,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	bool isBcd = rawTocDataWithBcdValues( data, dataLen );
 
 	K3b::Msf sessionLeadOut;
-	
+
 	kdDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |" << endl;
 	for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
 	  QString s;
@@ -1493,7 +1511,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	  s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
 	  s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
 	  kdDebug() << s << endl;
-	  
+
 	  if( tr[i].adr == 1 && tr[i].point <= 0x63 ) {
 	    // track
 	    K3bTrack track;
@@ -1511,14 +1529,14 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	    track.m_mode = ( track.type() == Track::DATA ? getTrackDataMode(track) : Track::UNKNOWN );
 	    track.m_copyPermitted = ( tr[i].control & 0x2 );
 	    track.m_preEmphasis = ( tr[i].control & 0x1 );
-	    
+
 	    //
 	    // only do this within a session because otherwise we already set the last sector with the session leadout
 	    //
 	    if( !toc.isEmpty() )
 	      if( toc[toc.count()-1].session() == track.session() )
 		toc[toc.count()-1].m_lastSector = track.firstSector() - 1;
-	    
+
 	    toc.append(track);
 	  }
 	  else if( tr[i].point == 0xa2 ) {
@@ -1531,7 +1549,7 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 	    //
 	    if( !toc.isEmpty() )
 	      toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
-	    
+
 	    // this is save since the descriptors are reported in ascending order of the session number
 	    // :( We use 00:00:00 == 0 lba)
 	    if( isBcd )
@@ -1564,9 +1582,9 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const
 {
   toc_raw_track_descriptor* tr = (toc_raw_track_descriptor*)&data[4];
- 
+
   int isBcd = -1;
- 
+
   //
   // in most cases this will already tell us if a drive does not provide bcd numbers
   // (which should be all newer MMC drives)
@@ -1591,8 +1609,8 @@ bool K3bCdDevice::CdDevice::rawTocDataWithBcdValues( unsigned char* data, int da
   }
 
   if( isBcd == -1 ) {
-    // 
-    // all values are valid bcd values but we still don't know for sure if they are really 
+    //
+    // all values are valid bcd values but we still don't know for sure if they are really
     // used as bcd. So we also check the HEX values.
     //
     for( int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
@@ -1657,13 +1675,13 @@ K3bCdDevice::CdText K3bCdDevice::CdDevice::readCdText() const
   if( open() != -1 ) {
     unsigned char* data = 0;
     int dataLen = 0;
-    
+
     if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
       textData.setRawPackData( data, dataLen );
-      
+
       delete [] data;
     }
-    
+
     if( needToClose )
       close();
   }
@@ -1696,7 +1714,7 @@ bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
     if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) ) {
       kdDebug() << "(K3bCdDevice) could not get toc header !" << endl;
       success = false;
-    } 
+    }
     else {
       Track lastTrack;
       for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
@@ -1755,7 +1773,7 @@ bool K3bCdDevice::CdDevice::readTocLinux( K3bCdDevice::Toc& toc ) const
           mode = getDataMode(startSec);
           if( mode != Track::UNKNOWN )
             trackMode = mode;
-        } 
+        }
 	else
           trackType = Track::AUDIO;
 
@@ -1783,7 +1801,7 @@ bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
   // (a CD with two sessions: one with audio tracks and one with the data track)
   // If a drive does not support reading raw toc or reading track info we only
   // get every track's first sector. But between sessions there is a gap which is used
-  // for ms stuff. In this case it's 11400 sectors in size. When ripping ausio we would 
+  // for ms stuff. In this case it's 11400 sectors in size. When ripping ausio we would
   // include these 11400 sectors which would result in a strange ending audio file.
   //
   if( numSessions() > 1 || toc.contentType() == MIXED ) {
@@ -1950,7 +1968,7 @@ int K3bCdDevice::CdDevice::currentProfile() const
     case 0x10: return MEDIA_DVD_ROM;
     case 0x11: return MEDIA_DVD_R_SEQ;
     case 0x12: return MEDIA_DVD_RAM;
-    case 0x13: return MEDIA_DVD_RW_OVWR; 
+    case 0x13: return MEDIA_DVD_RW_OVWR;
     case 0x14: return MEDIA_DVD_RW_SEQ;
     case 0x1A: return MEDIA_DVD_PLUS_RW;
     case 0x1B: return MEDIA_DVD_PLUS_R;
@@ -1983,7 +2001,7 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
     //
     if( modeSense( &data, dataLen, 0x05 ) ) {
       wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
-	    
+
       // reset some stuff to be on the safe side
       mp->PS = 0;
       mp->BUFE = 0;
@@ -2009,7 +2027,7 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
       delete [] data;
     }
     else
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		<< ": modeSense 0x05 failed!" << endl;
 
 
@@ -2088,8 +2106,8 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	    dInf->lead_out_r != 0xff &&
 	    dInf->lead_out_s != 0xff &&
 	    dInf->lead_out_f != 0xff )
-	  inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60, 
-				     dInf->lead_out_s, 
+	  inf.m_capacity = K3b::Msf( dInf->lead_out_m + dInf->lead_out_r*60,
+				     dInf->lead_out_s,
 				     dInf->lead_out_f ) - 150;
 
 	//
@@ -2101,20 +2119,20 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	    dInf->lead_in_r != 0xff &&
 	    dInf->lead_in_s != 0xff &&
 	    dInf->lead_in_f != 0xff )
-	  inf.m_usedCapacity = K3b::Msf( dInf->lead_in_m + dInf->lead_in_r*60, 
-					 dInf->lead_in_s, 
+	  inf.m_usedCapacity = K3b::Msf( dInf->lead_in_m + dInf->lead_in_r*60,
+					 dInf->lead_in_s,
 					 dInf->lead_in_f ) - 4500;
-	
+
 	delete [] data;
       }
 
 
 
-      // 
+      //
       // The mediatype needs to be set
       //
       inf.m_mediaType = dvdMediaType();
-	
+
       if( inf.m_mediaType == MEDIA_UNKNOWN ) {
 	// probably it is a CD
 	if( inf.rewritable() )
@@ -2220,7 +2238,7 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
       case MEDIA_CD_ROM:
 	if( inf.m_capacity > 0 && inf.m_usedCapacity == 0 )
 	  inf.m_usedCapacity = inf.m_capacity;
-	
+
 	if( inf.m_usedCapacity == 0 ) {
 	  K3b::Msf readCap;
 	  if( readCapacity( readCap ) ) {
@@ -2317,7 +2335,7 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	    inf.m_usedCapacity = readCap + 1;
 	  }
 	  else
-	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		      << " READ CAPACITY for DVD-R failed." << endl;
 	}
 
@@ -2346,12 +2364,12 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 	    inf.m_usedCapacity = 0;
        	}
 	else
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		    << " READ FORMAT CAPACITIES for DVD+RW failed." << endl;
 
 	break;
       }
-     
+
       case MEDIA_DVD_RW_OVWR:
 	inf.m_numSessions = 1;
 	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
@@ -2408,11 +2426,11 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo() const
 // 	}
 //       }
     }
-   
+
     if( needToClose )
       close();
   }
-  
+
   return inf;
 }
 
@@ -2477,7 +2495,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
       }
     }
   }
-  
+
   return m;
 }
 
@@ -2498,7 +2516,7 @@ bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 }
 
 
-bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r, 
+bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 						K3b::Msf* currentMax, int* currentMaxFormat ) const
 {
   bool success = false;
@@ -2547,7 +2565,7 @@ bool K3bCdDevice::CdDevice::readFormatCapacity( int wantedFormat, K3b::Msf& r,
       }
     }
   }
-  
+
   return success;
 }
 
@@ -2557,7 +2575,7 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
   return readCd( buf, count*2352,
 		 0,      // all sector types
 		 false,  // no dap
-		 start, 
+		 start,
 		 count,
 		 true, // SYNC
 		 true, // HEADER
@@ -2611,7 +2629,7 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
   }
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
-    
+
   return false;
 }
 
@@ -2642,8 +2660,12 @@ void K3bCdDevice::CdDevice::checkWriteModes()
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
   bool needToClose = !isOpen();
+  bool attemptopen = true;
+#ifdef Q_OS_FREEBSD
+  attemptopen = false;
+#endif
 
-  if (open() < 0)
+  if (attemptopen && (open() < 0))
     return;
 
   // header size is 8
@@ -2729,8 +2751,8 @@ void K3bCdDevice::CdDevice::checkWriteModes()
 
     delete [] buffer;
   }
-    
-  if( needToClose )
+
+  if( attemptopen && needToClose )
     close();
 }
 
@@ -2810,7 +2832,7 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
 	dataLen = from2Byte( &header[6] ) + 8;
     }
 
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS " 
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS "
 	      << (int)header[5] << " slots." << endl;
 
     *data = new unsigned char[dataLen];
@@ -2849,7 +2871,7 @@ int K3bCdDevice::CdDevice::determineMaximalWriteSpeed() const
 }
 
 
-QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const 
+QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 {
   QValueList<int> ret;
 
@@ -2863,7 +2885,7 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
     //
     if( modeSense( &data, dataLen, 0x2A ) ) {
       mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
-      
+
       if( dataLen > 32 ) {
 	// we have descriptors
 	int numDesc = from2Byte( mm->num_wr_speed_des );
@@ -2875,12 +2897,12 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	if( numDesc > ((dataLen - 32 - 8) / 4) )
 	  numDesc = (dataLen - 32 - 8) / 4;
 
-	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
+	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;
 
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		  << ":  Number of supported write speeds via 2A: "
 		  << numDesc << endl;
-		
+
 
 	for( int i = 0; i < numDesc; ++i ) {
 	  int s = from2Byte( wr[i].wr_speed_supp );
@@ -2896,7 +2918,7 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 	    break;
 	  }
 	  else {
-	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		      << " : " << s << " KB/s" << endl;
 
 	    if( dvd )
@@ -2920,21 +2942,21 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
 
     if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
       int numDesc = (dataLen-8)/16;
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		<< ":  Number of supported write speeds via GET PERFORMANCE: "
 		<< numDesc << endl;
-      
+
       for( int i = 0; i < numDesc; ++i ) {
 	int s = from4Byte( &data[20+i*16] );
 	if( dvd && s < 1352 ) {
 	  //
 	  // Does this ever happen?
 	  //
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		    << " Invalid DVD speed: " << s << " KB/s" << endl;
 	}
 	else {
-	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 		      << " : " << s << " KB/s" << endl;
 
 	  if( dvd )
@@ -3015,7 +3037,7 @@ bool K3bCdDevice::CdDevice::read12( unsigned char* data,
 }
 
 
-bool K3bCdDevice::CdDevice::readCd( unsigned char* data, 
+bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 				    int dataLen,
 				    int sectorType,
 				    bool dap,
@@ -3024,7 +3046,7 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 				    bool sync,
 				    bool header,
 				    bool subHeader,
-				    bool userData,				    
+				    bool userData,
 				    bool edcEcc,
 				    int c2,
 				    int subChannel ) const
@@ -3041,8 +3063,8 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
   cmd[6] = length>>16;
   cmd[7] = length>>8;
   cmd[8] = length;
-  cmd[9] = ( ( sync      ? 0x80 : 0x0 ) | 
-	     ( subHeader ? 0x40 : 0x0 ) | 
+  cmd[9] = ( ( sync      ? 0x80 : 0x0 ) |
+	     ( subHeader ? 0x40 : 0x0 ) |
 	     ( header    ? 0x20 : 0x0 ) |
 	     ( userData  ? 0x10 : 0x0 ) |
 	     ( edcEcc    ? 0x8  : 0x0 ) |
@@ -3058,7 +3080,7 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 }
 
 
-bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data, 
+bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data,
 				       int dataLen,
 				       int sectorType,
 				       bool dap,
@@ -3067,7 +3089,7 @@ bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data,
 				       bool sync,
 				       bool header,
 				       bool subHeader,
-				       bool userData,				    
+				       bool userData,
 				       bool edcEcc,
 				       int c2,
 				       int subChannel ) const
@@ -3083,8 +3105,8 @@ bool K3bCdDevice::CdDevice::readCdMsf( unsigned char* data,
   cmd[6] = (endAdress+150).minutes();
   cmd[7] = (endAdress+150).seconds();
   cmd[8] = (endAdress+150).frames();
-  cmd[9] = ( ( sync      ? 0x80 : 0x0 ) | 
-	     ( subHeader ? 0x40 : 0x0 ) | 
+  cmd[9] = ( ( sync      ? 0x80 : 0x0 ) |
+	     ( subHeader ? 0x40 : 0x0 ) |
 	     ( header    ? 0x20 : 0x0 ) |
 	     ( userData  ? 0x10 : 0x0 ) |
 	     ( edcEcc    ? 0x8  : 0x0 ) |
@@ -3236,8 +3258,8 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
   //
   // So if the current sector does not provide Mode-1 Q subchannel we try the previous.
   //
-  
-  if( readCd( readData, 
+
+  if( readCd( readData,
 	      16,
 	      1, // CD-DA
 	      0, // no DAP
@@ -3251,12 +3273,12 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
 	      0,
 	      2 // Q-Subchannel
 	      ) ) {
-    // byte 0: 4 bits CONTROL (MSB) + 4 bits ADR (LSB) 
+    // byte 0: 4 bits CONTROL (MSB) + 4 bits ADR (LSB)
     if( (readData[0]&0x0f) == 0x1 )
       ret = readData[2];
 
     // search previous sector for Mode1 Q Subchannel
-    else if( readCd( readData, 
+    else if( readCd( readData,
 	      16,
 	      1, // CD-DA
 	      0, // no DAP
@@ -3293,7 +3315,7 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
 	else
 	  ret = -2;
       }
-      
+
       delete [] data;
     }
     else
@@ -3302,7 +3324,7 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
 
   if( needToClose )
     close();
-  
+
   return ret;
 }
 
@@ -3363,7 +3385,7 @@ bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
     pregapStart = -1;
     ret = true;
   }
-  
+
   if( needToClose )
     close();
 
@@ -3411,7 +3433,7 @@ bool K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
 
 void K3bCdDevice::CdDevice::searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const
 {
-  kdDebug() << "(K3bCdDevice::CdDevice) searching for index transitions betweeen " 
+  kdDebug() << "(K3bCdDevice::CdDevice) searching for index transitions betweeen "
 	    << start << " and " << end << endl;
   int startIndex = getIndex( start );
   int endIndex = getIndex( end );
@@ -3419,7 +3441,7 @@ void K3bCdDevice::CdDevice::searchIndexTransitions( long start, long end, K3bCdD
   if( startIndex < 0 || endIndex < 0 ) {
     kdDebug() << "(K3bCdDevice::CdDevice) could not retrieve index values." << endl;
   }
-  
+
   kdDebug() << "(K3bCdDevice::CdDevice) indices: " << start << " - " << startIndex
 	    << " and " << end << " - " << endIndex << endl;
 
@@ -3483,7 +3505,7 @@ bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsi
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": GET CONFIGURATION length det failed." << endl;
 
-  return false; 
+  return false;
 }
 
 
@@ -3496,7 +3518,7 @@ bool K3bCdDevice::CdDevice::supportsFeature( unsigned int feature ) const
     if( dataLen >= 11 )
       success = ( data[10]&1 );  // check the current flag
 
-    delete [] data;      
+    delete [] data;
 
     return success;
   }
@@ -3515,15 +3537,15 @@ bool K3bCdDevice::CdDevice::readIsrc( unsigned int track, QCString& isrc ) const
 
     if( dataLen >= 8+18 ) {
       isrcValid = (data[8+4]>>7 & 0x1);
-      
+
       if( isrcValid ) {
 	isrc = QCString( reinterpret_cast<char*>(data[8+5]), 13 );
 
 	// TODO: check the range of the chars
-	
+
       }
     }
-    
+
     delete [] data;
 
     return isrcValid;
@@ -3543,11 +3565,11 @@ bool K3bCdDevice::CdDevice::readMcn( QCString& mcn ) const
 
     if( dataLen >= 8+18 ) {
       mcnValid = (data[8+4]>>7 & 0x1);
-      
+
       if( mcnValid )
 	mcn = QCString( reinterpret_cast<char*>(data[8+5]), 14 );
     }
-    
+
     delete [] data;
 
     return mcnValid;
@@ -3557,7 +3579,7 @@ bool K3bCdDevice::CdDevice::readMcn( QCString& mcn ) const
 }
 
 
-bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen, 
+bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
 					    unsigned int type,
 					    unsigned int dataType,
 					    unsigned int lba ) const
@@ -3596,7 +3618,7 @@ bool K3bCdDevice::CdDevice::getPerformance( unsigned char** data, int& dataLen,
     }
   }
   else
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
 	      << ": GET PERFORMANCE length det failed." << endl;
 
   return false;
