@@ -66,7 +66,7 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
   // some defaults
   if( cmds.isEmpty() ) {
     K3bExternalEncoder::Command lameCmd, flacCmd;
-    lameCmd.name = "Lame";
+    lameCmd.name = "Mp3 (Lame)";
     lameCmd.extension = "mp3";
     lameCmd.command = "lame -h --tt %t --ta %a --ty %y --tc %c - %f"; 
 
