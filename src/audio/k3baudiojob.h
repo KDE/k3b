@@ -59,7 +59,6 @@ class K3bAudioJob : public K3bBurnJob  {
   void slotModuleProgress( int percent );
   void slotModuleFinished( bool success );
   void slotModuleOutput( const unsigned char* data, int len );
-  void slotStartWriting();
   void slotTryStart();
   void slotDecodeNextFile();
 

@@ -29,15 +29,14 @@
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, i18n("insert empty disk"), KDialogBase::Cancel | KDialogBase::User1, 
+  : KDialogBase( KDialogBase::Plain, i18n("Waiting for disk"), KDialogBase::Cancel | KDialogBase::User1, 
 		 KDialogBase::Cancel, parent, name, true, true, i18n("Force") )
 {
   m_timer = new QTimer( this );
   m_device = device;
 
-  QLabel* label = new QLabel( plainPage() );
-  label->setText( i18n("Please insert an empty cdr medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
-  label->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+  m_label = new QLabel( plainPage() );
+  m_label->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 
   QLabel* pixLabel = new QLabel( plainPage() );
   pixLabel->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
@@ -47,8 +46,8 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
   box->setSpacing( 20 );
   box->setMargin( marginHint() );
   box->addWidget( pixLabel );
-  box->addWidget( label );
-  box->setStretchFactor( label, 1 );
+  box->addWidget( m_label );
+  box->setStretchFactor( m_label, 1 );
 
   QToolTip::add( actionButton(KDialogBase::User1), i18n("Force K3b to continue if it seems not to detect your empty cdr") );
 }
@@ -58,14 +57,19 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 {
 }
 
-void K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
+int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable )
 {
   m_apppendable = appendable;
+
+  if( appendable )
+    m_label->setText( i18n("Please insert an appendable cdr medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
+  else
+    m_label->setText( i18n("Please insert an empty cdr medium into drive<p><b>%1 %2 (%3)</b>.").arg(m_device->vendor()).arg(m_device->description()).arg(m_device->devicename()) );
 
   connect( m_timer, SIGNAL(timeout()), this, SLOT(slotTestForEmptyCd()) );
   m_timer->start(1000);
 
-  show();
+  return exec();
 }
 
 
@@ -74,10 +78,8 @@ void K3bEmptyDiscWaiter::slotTestForEmptyCd()
   int x = m_device->isEmpty();
   if( x == 0 || ( x == 1 && m_apppendable ) ) {
     m_timer->stop();
-    m_timer->disconnect();
-    delayedDestruct();
     
-    emit discReady();
+    done( DISK_READY );
   }
 }
 
@@ -85,20 +87,16 @@ void K3bEmptyDiscWaiter::slotTestForEmptyCd()
 void K3bEmptyDiscWaiter::slotCancel()
 {
   m_timer->stop();
-  m_timer->disconnect();
-  delayedDestruct();
 
-  emit canceled();
+  done( CANCELED );
 }
 
 
 void K3bEmptyDiscWaiter::slotUser1()
 {
   m_timer->stop();
-  m_timer->disconnect();
-  delayedDestruct();
 
-  emit discReady();
+  done( DISK_READY );
 }
 
 

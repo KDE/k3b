@@ -114,15 +114,13 @@ void K3bIsoImageJob::start()
   }
 
 
-  K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_device, k3bMain() );
-  connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
-  connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
-  waiter->waitForEmptyDisc();
-}
+  K3bEmptyDiscWaiter waiter( m_device, k3bMain() );
+  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
+    return;
+  }
 
 
-void K3bIsoImageJob::slotStartWriting()
-{
   emit started();
 
   emit newSubTask( i18n("Preparing write process...") );

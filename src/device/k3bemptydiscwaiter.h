@@ -24,6 +24,7 @@ class QTimer;
 class K3bDevice;
 class QPushButton;
 class QCloseEvent;
+class QLabel;
 
 /**
  * Tests for an empty cd in a given device.
@@ -43,12 +44,15 @@ class K3bEmptyDiscWaiter : public KDialogBase
   K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent = 0, const char* name = 0 );
   ~K3bEmptyDiscWaiter();
 
+  enum returnValue { DISK_READY, CANCELED };
+
   /**
    * starts the emptydiskwaiter.
    * @param appendable if true a not empty but appendable disk is also
    *                   considered as valid.
+   * @returns DISK_READY or CANCELED
    */
-  void waitForEmptyDisc( bool appendable = false );
+  int waitForEmptyDisc( bool appendable = false );
 
  signals:
   void canceled();
@@ -68,6 +72,8 @@ class K3bEmptyDiscWaiter : public KDialogBase
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonForce;
   bool m_apppendable;
+
+  QLabel* m_label;
 };
 
 #endif

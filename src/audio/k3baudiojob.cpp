@@ -488,15 +488,13 @@ void K3bAudioJob::slotTryStart()
 
 void K3bAudioJob::startWriting()
 {
-  K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
-  connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
-  connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
-  waiter->waitForEmptyDisc();
-}
+  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
 
+  if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+    cancel();
+    return;
+  }
 
-void K3bAudioJob::slotStartWriting()
-{
   emit newTask( i18n("Writing") );
   emit newSubTask( i18n("Preparing write process...") );
   
