@@ -348,7 +348,7 @@ void K3bMainWindow::initActions()
   actionFileSaveAs->setToolTip(i18n("Saves the actual project as..."));
   actionFileClose->setToolTip(i18n("Closes the actual project"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
-  actionToolsDiskInfo->setToolTip( i18n("Retrieve informationabout inserted media") );
+  actionToolsDiskInfo->setToolTip( i18n("Retrieve information about inserted media") );
 
   // make sure the tooltips are used for the menu
   actionCollection()->setHighlightingEnabled( true );
