@@ -96,12 +96,14 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
       }
 
       // we need to swap the bytes
-      char buffer[len];
+      char* buffer = new char[len];
       for( int i = 0; i < len-1; i+=2 ) {
 	buffer[i] = data[i+1];
 	buffer[i+1] = data[i];
       }
       m_outputStream.writeRawBytes( buffer, len );
+
+      delete [] buffer;
     }
 
     m_dataWritten += len;

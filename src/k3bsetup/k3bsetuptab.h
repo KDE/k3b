@@ -11,6 +11,7 @@ class QLabel;
 class QGridLayout;
 class K3bSetup;
 class K3bSetupWizard;
+class QPixmap;
 
 
 class K3bSetupTab : public QWidget
@@ -31,16 +32,15 @@ class K3bSetupTab : public QWidget
 
   virtual void aboutToShow();
 
- protected:
-  class PrivatePicLabel;
-  PrivatePicLabel* m_labelSetupLogo;
+  void setPixmap( const QPixmap& );
 
+ protected:
   void setMainWidget( QWidget* );
   K3bSetup* setup() { return m_setup; }
 
  private:
-/*   QLabel* m_labelSetupLogo; */
-/*   QLabel* m_labelInfoText; */
+  class PrivatePicLabel;
+  PrivatePicLabel* m_labelSetupLogo;
 
   QWidget* m_mainWidget;
 

@@ -26,13 +26,13 @@ protected:
   {
     QLabel::drawContents(p);
 
-    QRect rect = contentsRect();
-    rect.setLeft( rect.left() + 20 );
-    rect.setRight( rect.right() - 20 );
-    rect.setTop( rect.top() + 10 );
-    //    rect.setBottom( rect.top() + 40 );
+//     QRect rect = contentsRect();
+//     rect.setLeft( rect.left() + 20 );
+//     rect.setRight( rect.right() - 20 );
+//     rect.setTop( rect.top() + 10 );
+//     //    rect.setBottom( rect.top() + 40 );
 
-    p->drawText( rect, AlignTop|AlignHCenter|WordBreak, m_text );
+//     p->drawText( rect, AlignTop|AlignHCenter|WordBreak, m_text );
   }
 
 private:
@@ -56,14 +56,20 @@ K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupW
   QFont f( m_labelSetupLogo->font() );
   f.setBold(true);
   m_labelSetupLogo->setFont(f);
+
+  QLabel* topLabel = new QLabel( info, this );
+  topLabel->setMargin( KDialog::marginHint() );
+  topLabel->setPaletteBackgroundColor( QColor(201, 208, 255) );
+  topLabel->setAlignment( AlignCenter | WordBreak );
+  topLabel->setFont( f );
   
   m_mainLayout = new QGridLayout( this );
-  m_mainLayout->addWidget( m_labelSetupLogo, 0, 0 );
-
-  m_mainLayout->setMargin( KDialog::marginHint() );
+  m_mainLayout->addWidget( m_labelSetupLogo, 1, 0 );
+  m_mainLayout->addWidget( topLabel, 0, 0 );
+  m_mainLayout->setMargin( 0 );
   m_mainLayout->setSpacing( 0 );
-  m_mainLayout->addColSpacing( 1, KDialog::marginHint() );
-  m_mainLayout->setRowStretch( 1, 1 );
+  m_mainLayout->addColSpacing( 1, 2*KDialog::marginHint() );
+  m_mainLayout->setRowStretch( 0, 1 );
   m_mainLayout->setColStretch( 2, 1 );
 
   m_initialized = false;
@@ -78,7 +84,7 @@ K3bSetupTab::~K3bSetupTab()
 void K3bSetupTab::setMainWidget( QWidget* mainWidget )
 {
   m_mainWidget = mainWidget;
-  m_mainLayout->addMultiCellWidget( mainWidget, 0, 0, 2, 2 );
+  m_mainLayout->addMultiCellWidget( mainWidget, 0, 1, 2, 2 );
 }
 
 void K3bSetupTab::readSettings()
@@ -106,5 +112,10 @@ void K3bSetupTab::aboutToShow()
   }
 }
 
+
+void K3bSetupTab::setPixmap( const QPixmap& pix )
+{
+  m_labelSetupLogo->setPixmap( pix );
+}
 
 #include "k3bsetuptab.moc"

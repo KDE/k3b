@@ -53,7 +53,6 @@
 
 
 
-
 K3bCdView::K3bCdView( QWidget* parent, const char *name )
   : K3bCdContentsView( parent, name )
 {
@@ -159,10 +158,14 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
 
   m_cddb->readConfig( c );
 
-  if( c->readBoolEntry( "local cddb query", true ) )
+  if( c->readBoolEntry( "use local cddb query", true ) )
     m_cddb->localQuery( info.toc );
-  else if( c->readBoolEntry( "remote cddb query", false ) )
-    m_cddb->query( info.toc );
+  else if( c->readBoolEntry( "use remote cddb", false ) ) {
+    if( c->readBoolEntry( "query via cddbp", false ) )
+      m_cddb->cddbpQuery( m_lastDiskInfo.toc );
+    else
+      m_cddb->httpQuery( m_lastDiskInfo.toc );
+  }
 }
 
 
@@ -174,7 +177,7 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
     m_lastQuery = cddb->queryResult();
 
     if( m_lastQuery.foundEntries() == 0 ) {
-      KMessageBox::information( this, i18n("Cddb"), i18n("No cddb entry found") );
+      KMessageBox::information( this, i18n("No cddb entry found"), i18n("Cddb") );
     }
     else {
       m_lastSelectedCddbEntry = 0;
@@ -194,15 +197,15 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
 
       for( QStringList::const_iterator it = entry.titles.begin();
 	   it != entry.titles.end(); ++it ) {
-	kdDebug() << "TTITLE:  '" << (*it) << "'" << endl;
+	kdDebug() << "TTITLE:  '" << *it << "'" << endl;
       }
       for( QStringList::const_iterator it = entry.artists.begin();
 	   it != entry.artists.end(); ++it ) {
-	kdDebug() << "TARTIST: '" << (*it) << "'" << endl;
+	kdDebug() << "TARTIST: '" << *it << "'" << endl;
       }
       for( QStringList::const_iterator it = entry.extInfos.begin();
 	   it != entry.extInfos.end(); ++it ) {
-	kdDebug() << "TEXT:    '" << (*it) << "'" << endl;
+	kdDebug() << "TEXT:    '" << *it << "'" << endl;
       }
 
       // now update the listview
@@ -229,15 +232,18 @@ void K3bCdView::slotCddbQueryFinished( K3bCddb* cddb )
       // do a remote query if configured
       KConfig* c = kapp->config();
       c->setGroup( "Cddb" );
-      if( c->readBoolEntry( "remote cddb query", false ) ) {
-	m_cddb->query( m_lastDiskInfo.toc );
+      if( c->readBoolEntry( "use remote cddb", false ) ) {
+	if( c->readBoolEntry( "query via cddbp", false ) )
+	  m_cddb->cddbpQuery( m_lastDiskInfo.toc );
+	else
+	  m_cddb->httpQuery( m_lastDiskInfo.toc );
       }
       else {
-	KMessageBox::error( this, i18n("Cddb"), i18n("No cddb entry found") );
+	KMessageBox::information( this, i18n("No cddb entry found"), i18n("Cddb") );
       }
     }
     else
-      KMessageBox::error( this, i18n("Cddb"), i18n("No cddb entry found") );
+      KMessageBox::information( this, i18n("No cddb entry found"), i18n("Cddb") );
   }
 }
 
@@ -289,22 +295,6 @@ void K3bCdView::slotSelectionChanged()
 void K3bCdView::reload()
 {
 }
-
-
-// void K3bCdView::applyOptions()
-// {
-//   KConfig *c = kapp->config();
-//   c->setGroup("Cddb");
-//   bool useCddb = c->readBoolEntry("useCddb", false);
-//   QString hostString = c->readEntry("cddbServer", DEFAULT_CDDB_HOST);
-//   int index = hostString.find(":");
-//   QString server = hostString.left(index);
-//   unsigned int port = hostString.right(hostString.length()-index-1).toUInt();
-//   kdDebug() << "(K3bCdView) CddbServer: " << server << ":" << port << endl;
-//   m_cddb->setServer(server);
-//   m_cddb->setPort(port);
-//   m_cddb->setUseCddb(useCddb);
-// }
 
 
 #include "k3bcdview.moc"

@@ -31,10 +31,14 @@ class K3bMp3Module : public K3bAudioModule
   void startDecoding();
  
  private:
-  unsigned short madFixedToUshort( mad_fixed_t fixed );
+  inline unsigned short linearRound( mad_fixed_t fixed );
   void initializeDecoding();
   void fillInputBuffer();
   void clearingUp();
+  void createPcmSamples( mad_synth* );
+  unsigned int resampleBlock( mad_fixed_t const *source, 
+			      unsigned int nsamples, 
+			      mad_fixed_t* target );
 
   bool m_bDecodingInProgress;
   bool m_bCountingFramesInProgress;
@@ -51,6 +55,13 @@ class K3bMp3Module : public K3bAudioModule
   mad_header*   m_madHeader;
   mad_synth*    m_madSynth;
   mad_timer_t*  m_madTimer;
+
+  // needed for resampling
+  mad_fixed_t m_madResampledStep;
+  mad_fixed_t m_madResampledLast;
+  mad_fixed_t m_madResampledRatio;
+  mad_fixed_t* m_madResampledLeftChannel;
+  mad_fixed_t* m_madResampledRightChannel;
 
   unsigned long m_frameCount;
 

@@ -43,6 +43,8 @@
 WelcomeTab::WelcomeTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Welcome to K3bSetup"), wizard )
 {
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_welcome.png" )) );
+
   QLabel* label = new QLabel( this, "m_labelWelcome" );
   label->setText( i18n( "<h1>Welcome to K3b Setup.</h1>"
 			"<p>This Wizard will help you to prepare your system for cd writing with K3b. "
@@ -70,6 +72,8 @@ WelcomeTab::WelcomeTab( int i, int o, K3bSetupWizard* wizard )
 DeviceTab::DeviceTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Setup CD Devices"), wizard )
 {
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_devices.png" )) );
+
   QWidget* main = new QWidget( this );
   QVBoxLayout* mainLayout = new QVBoxLayout( main );
   mainLayout->setMargin( 0 );
@@ -128,6 +132,8 @@ void DeviceTab::slotRefreshButtonClicked()
 NoWriterTab::NoWriterTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("No CD Writer Found"), wizard )
 {
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_devices.png" )) );
+
   QLabel* label = new QLabel( this, "m_labelNoWriter" );
   label->setText( i18n( "<p><b>K3b Setup did not find a cd writer on your system.</b></p>\n"
 			"<p>If you have no cd writer and want to use K3b only for cd ripping everything is fine.</p>\n"
@@ -175,6 +181,8 @@ bool NoWriterTab::appropriate()
 FstabEntriesTab::FstabEntriesTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Setup Mount Points for the CD Drives"), wizard )
 {
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_fstab.png" )) );
+
   QWidget* main = new QWidget( this, "main" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
   mainGrid->setSpacing( KDialog::spacingHint() );
@@ -277,7 +285,7 @@ bool FstabEntriesTab::saveSettings()
 }
 
 
-void FstabEntriesTab::slotMountPointChanged( QListViewItem* item, const QString& str, int col )
+void FstabEntriesTab::slotMountPointChanged( QListViewItem* item, const QString& str, int )
 {
   QString newMp(str);
   K3bDeviceViewItem* deviceItem = dynamic_cast<K3bDeviceViewItem*>( item );
@@ -319,6 +327,8 @@ void FstabEntriesTab::slotSelectMountPoint()
 ExternalBinTab::ExternalBinTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Setup External Applications Used by K3b"), wizard )
 {
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_programs.png" )) );
+
   QWidget* main = new QWidget( this, "m_page5" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
   mainGrid->setSpacing( KDialog::spacingHint() );
@@ -420,7 +430,7 @@ bool ExternalBinTab::saveSettings()
 }
 
 
-void ExternalBinTab::slotExternalProgramItemRenamed( QListViewItem* item, const QString& newText, int col )
+void ExternalBinTab::slotExternalProgramItemRenamed( QListViewItem* item, const QString& newText, int )
 {
   QString bin = item->text(1);
   K3bExternalBin* binO = setup()->externalBinManager()->binObject( bin );
@@ -430,7 +440,7 @@ void ExternalBinTab::slotExternalProgramItemRenamed( QListViewItem* item, const 
     readSettings();
   }
   else {
-    kdDebug() << "(K3bSetupWizard) Could not find bin " << bin << endl;
+    kdDebug() <<  "(K3bSetupWizard) Could not find bin " << bin << endl;
   }
 }
 
@@ -460,6 +470,9 @@ void ExternalBinTab::slotSelectExternalBin()
 PermissionTab::PermissionTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Setup Some Necessary Permissions for K3b"), wizard )
 {
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_permissions.png" )) );
+
+
   QWidget* main = new QWidget( this, "main" );
   QGridLayout* mainGrid = new QGridLayout( main ); 
   mainGrid->setSpacing( KDialog::spacingHint() );
@@ -669,7 +682,7 @@ void PermissionTab::slotPermissionsDetails()
 FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Save Your Settings"), wizard )
 {
-  ((QLabel*)m_labelSetupLogo)->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_2.png" )) );
+  setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_finish.png" )) );
 
   QWidget* main = new QWidget( this );
   QGridLayout* mainGrid = new QGridLayout( main );

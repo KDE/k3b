@@ -57,7 +57,7 @@ class K3bCddbQuery
 
   void clear();
   void addEntry( const K3bCddbEntry& = K3bCddbEntry() );
-  const K3bCddbEntry& entry( int number = 0 ) const;
+  const K3bCddbEntry& entry( unsigned int number = 0 ) const;
   int foundEntries() const;
 
  private:
@@ -79,14 +79,20 @@ class K3bCddb : public QObject
   int queryType() const { return m_queryType; }
   const K3bCddbQuery& queryResult() const { return m_query; }
 
-  enum Error { SUCCESS = 0, NO_ENTRY_FOUND, FAILURE, WORKING };
+  enum Error { SUCCESS = 0, 
+	       NO_ENTRY_FOUND, 
+	       QUERY_ERROR,
+	       READ_ERROR,
+	       FAILURE, 
+	       WORKING };
   enum QueryType { CDDBP, HTTP, LOCAL };
 
  public slots:  
   /** query a cd and connect to the queryFinished signal */
   void query( const K3bToc& );
   void localQuery( const K3bToc& );
-/*   void httpQuery( const K3bToc& ); */
+  void httpQuery( const K3bToc& );
+  void cddbpQuery( const K3bToc& );
   void readConfig( KConfig* c );
 
  signals:
@@ -110,8 +116,11 @@ class K3bCddb : public QObject
   bool readFirstEntry();
   int  getCode( const QString& );
   bool splitServerPort( const QString&, QString& server, int& port );
-
   void cddbpQuit();
+  QString handshakeString() const;
+  QString queryString() const;
+  QString createHttpUrl( unsigned int i );
+  bool connectToHttpServer( unsigned int );
 
   enum state { GREETING, HANDSHAKE, QUERY, QUERY_DATA, READ, READ_DATA, QUIT };
 
@@ -126,18 +135,25 @@ class K3bCddb : public QObject
   K3bCddbEntry m_currentEntry;
   QString m_parsingBuffer;
 
-  int m_iCurrentQueriedServer;
-  int m_iCurrentLocalDir;
+  unsigned int m_iCurrentQueriedServer;
+  unsigned int m_iCurrentLocalDir;
 
   QString m_localCddbFile;
+  QString m_currentlyConnectingServer;
 
   // config
   QStringList m_cddbpServer;
   QStringList m_httpServer;
   QString m_proxyServer;
+  int m_proxyPort;
+  QString m_cgiPath;
   bool m_bUseProxyServer;
+  bool m_bUseKdeSettings;
   QStringList m_localCddbDirs;
   bool m_bSaveCddbEntriesLocally;
+  bool m_bCddbpQuery;
+  bool m_bSearchLocalDirs;
+  bool m_bUseManualCgiPath;
 };
   
 

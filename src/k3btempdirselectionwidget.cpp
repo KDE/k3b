@@ -41,7 +41,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  QLabel* TextLabel1_3 = new QLabel( i18n( "Write image file to" ), this, "TextLabel1_3" );
+  (void)new QLabel( i18n( "Write image file to" ), this, "TextLabel1_3" );
 
   QHBox* urlRequesterBox = new QHBox( this );
   urlRequesterBox->setSpacing( KDialog::spacingHint() );
@@ -51,14 +51,14 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   QHBox* freeTempSpaceBox = new QHBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
-  QLabel* TextLabel2 = new QLabel( i18n( "Free space in temp directory" ), freeTempSpaceBox, "TextLabel2" );
-  m_labelFreeSpace = new QLabel( freeTempSpaceBox, "m_labelFreeSpace" );
+  (void)new QLabel( i18n( "Free space in temp directory" ), freeTempSpaceBox, "TextLabel2" );
+  m_labelFreeSpace = new QLabel( "                     ", freeTempSpaceBox, "m_labelFreeSpace" );
   m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   QHBox* cdSizeBox = new QHBox( this );
   cdSizeBox->setSpacing( KDialog::spacingHint() );
-  QLabel* TextLabel4 = new QLabel( i18n( "Size of CD" ), cdSizeBox, "TextLabel4" );
-  m_labelCdSize = new QLabel( cdSizeBox, "m_labelCdSize" );
+  (void)new QLabel( i18n( "Size of CD" ), cdSizeBox, "TextLabel4" );
+  m_labelCdSize = new QLabel( "                     ", cdSizeBox, "m_labelCdSize" );
   m_labelCdSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
 

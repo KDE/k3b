@@ -13,8 +13,6 @@
 #include <qfile.h>
 #include <qtimer.h>
 
-#include <stdlib.h>
-#include <kdebug.h>
 #include <cmath>
 
 
@@ -47,6 +45,8 @@ K3bMp3Module::K3bMp3Module( K3bAudioTrack* track )
   m_madSynth  = new mad_synth;
   m_madTimer  = new mad_timer_t;
 
+  m_madResampledLeftChannel = new mad_fixed_t[1152];
+  m_madResampledRightChannel = new mad_fixed_t[1152];
 
   KFileMetaInfo metaInfo( audioTrack()->absPath() );
   if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
@@ -75,6 +75,9 @@ K3bMp3Module::~K3bMp3Module()
 {
   delete [] m_inputBuffer;
   delete [] m_outputBuffer;
+
+  delete [] m_madResampledLeftChannel;
+  delete [] m_madResampledRightChannel;
 
   mad_stream_finish( m_madStream );
 }
@@ -108,11 +111,14 @@ void K3bMp3Module::startDecoding()
 
     mad_frame_init( m_madFrame );
     mad_synth_init( m_madSynth );
+
+    m_madResampledStep = 0;
+    m_madResampledLast = 0;
     
     m_decodingTimer->start(0);
 
-    kdDebug() << "(K3bMp3Module) length of track: " << audioTrack()->length() << "i frames." << endl;
-    kdDebug() << "(K3bMp3Module) data to decode:  " << m_rawDataLengthToStream << "i bytes." << endl;
+    qDebug("(K3bMp3Module) length of track: %li frames.", audioTrack()->length() );
+    qDebug("(K3bMp3Module) data to decode:  %li bytes.", m_rawDataLengthToStream );
   }
 }
 
@@ -148,9 +154,9 @@ void K3bMp3Module::fillInputBuffer()
       readSize = m_inputFile.readBlock( (char*)readStart, readSize );
       if( readSize <= 0 ) {
 	if( readSize < 0 )
-	  kdDebug() << "(K3bMp3Module) read error on bitstream)" << endl;
+	  qDebug("(K3bMp3Module) read error on bitstream)" );
 	else
-	  kdDebug() << "(K3bMp3Module) end of input stream" << endl;
+	  qDebug("(K3bMp3Module) end of input stream" );
 
 
 	m_bEndOfInput = true;
@@ -182,7 +188,8 @@ void K3bMp3Module::slotCountFrames()
       float seconds = (float)m_madTimer->seconds + (float)m_madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
       unsigned long frames = (unsigned long)ceil(seconds * 75.0);
       audioTrack()->setLength( frames );
-      kdDebug() << "(K3bMp3Module) setting length of track " << audioTrack()->index() << " to ceil(" << seconds << ") seconds = " << frames << "i frames" << endl;
+      qDebug("(K3bMp3Module) setting length of track %i to ceil(%f) seconds = %li frames", 
+	     audioTrack()->index(), seconds, frames );
       
       m_rawDataLengthToStream = frames * 2352;
       
@@ -203,12 +210,14 @@ void K3bMp3Module::slotCountFrames()
 
       if( mad_header_decode( m_madHeader, m_madStream ) ) {
 	if( MAD_RECOVERABLE( m_madStream->error ) ) {
-	  kdDebug() << "(K3bMp3Module) recoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")" << endl;
+	  qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
+		  mad_stream_errorstr(m_madStream) );
 	  audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
 	}
 	else {
 	  if( m_madStream->error != MAD_ERROR_BUFLEN ) {
-	    kdDebug() << "(K3bMp3Module) unrecoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")." << endl;
+	    qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
+		    mad_stream_errorstr(m_madStream));
 	    audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
 	    
 	    m_bCountingFramesInProgress = false;
@@ -251,10 +260,10 @@ void K3bMp3Module::slotDecodeNextFrame()
   bool bOutputBufferFull = false;
 
   while( !bOutputBufferFull ) {
-    // a mad_synth can consist of at most 1152 frames per channel
-    // so we need to make sure to have always 2*1152 byte of output buffer free
-    // otherwise we would need to flush the buffer while decoding of a frame is in 
-    // process which will end in a lot of checking overhead since we cannot go on immediately
+
+    // a mad_synth contains of the data of one mad_frame
+    // one mad_frame represents a mp3-frame which is always 1152 samples
+    // for us that means we need 2*1152 bytes of output buffer for every frame
     if( m_outputBufferEnd - m_outputPointer < 4*1152 ) {
       bOutputBufferFull = true;
     }
@@ -271,7 +280,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 	  memset( m_outputPointer, 0, freeBuffer );
 	  m_outputPointer += ( freeBuffer > dataToPad ? dataToPad : freeBuffer );
 
-	  kdDebug() << "(K3bMp3Module) padding data with " << (( freeBuffer > dataToPad ? dataToPad : freeBuffer )) << " zeros." << endl;
+	  qDebug("(K3bMp3Module) padding data with %i zeros.", ( freeBuffer > dataToPad ? dataToPad : freeBuffer ) );
 	}
 	else {
 	  break;
@@ -280,12 +289,14 @@ void K3bMp3Module::slotDecodeNextFrame()
       else {
 	if( mad_frame_decode( m_madFrame, m_madStream ) ) {
 	  if( MAD_RECOVERABLE( m_madStream->error ) ) {
-	    kdDebug() << "(K3bMp3Module) recoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")" << endl;
+	    qDebug( "(K3bMp3Module) recoverable frame level error (%s)",
+		    mad_stream_errorstr(m_madStream) );
 	    audioTrack()->setStatus( K3bAudioTrack::RECOVERABLE );
 	  }
 	  else {
 	    if( m_madStream->error != MAD_ERROR_BUFLEN ) {
-	      kdDebug() << "(K3bMp3Module) unrecoverable frame level error (" << mad_stream_errorstr(m_madStream) << ")." << endl;
+	      qDebug( "(K3bMp3Module) unrecoverable frame level error (%s).",
+		      mad_stream_errorstr(m_madStream));
 	      audioTrack()->setStatus( K3bAudioTrack::CORRUPT );
 	
 	      m_bDecodingInProgress = false;
@@ -309,38 +320,10 @@ void K3bMp3Module::slotDecodeNextFrame()
 	   * are reported by mad_synth_frame();
 	   */
 	  mad_synth_frame( m_madSynth, m_madFrame );
-	  
-	  /* Synthesized samples must be converted from mad's fixed
-	   * point number to the consumer format. Here we use unsigned
-	   * 16 bit big endian integers on two channels. Integer samples
-	   * are temporarily stored in a buffer that is flushed when
-	   * full.
-	   */
-	  for( int i = 0; i < m_madSynth->pcm.length; i++ )
-	    {
-	      unsigned short	sample;
-	      
-	      /* Left channel */
-	      sample = madFixedToUshort( m_madSynth->pcm.samples[0][i] );
-	      *(m_outputPointer++) = sample >> 8;
-	      *(m_outputPointer++) = sample & 0xff;
-	      
-	      /* Right channel. If the decoded stream is monophonic then
-	       * the right output channel is the same as the left one.
-	       */
-	      if( MAD_NCHANNELS( &m_madFrame->header ) == 2 )
-		sample = madFixedToUshort( m_madSynth->pcm.samples[1][i] );
-	      
-	      *(m_outputPointer++) = sample >> 8;
-	      *(m_outputPointer++) = sample & 0xff;
-	      
-	      // this should not happen since we only decode if the
-	      // output buffer has enough free space
-	      if( m_outputPointer == m_outputBufferEnd && i+1 < m_madSynth->pcm.length ) {
-		kdDebug() << "(K3bMp3Module) buffer overflow!" << endl;
-		exit(1);
-	      }
-	    } // pcm conversion
+
+	  // this does the resampling if needed
+	  // and fills the output buffer
+	  createPcmSamples( m_madSynth );
 
 	} // mad frame successfully decoded
 
@@ -362,7 +345,7 @@ void K3bMp3Module::slotDecodeNextFrame()
   size_t bytesToOutput = buffersize;
 	    
   if( m_rawDataAlreadyStreamed > m_rawDataLengthToStream ) {
-    kdDebug() << "to much data streamed" << endl;
+    qDebug("to much data streamed");
     exit(1);
   }
 
@@ -370,8 +353,9 @@ void K3bMp3Module::slotDecodeNextFrame()
   // make sure we don't stream to much
   if( m_rawDataAlreadyStreamed + buffersize > m_rawDataLengthToStream ) {
     bytesToOutput = m_rawDataLengthToStream - m_rawDataAlreadyStreamed;
-    kdDebug() << "(K3bMp3Module) decoded data was longer than calculated length. Cutting data." << endl;
-    kdDebug() << "(K3bMp3Module) bytes to stream: " << m_rawDataLengthToStream << "i; bytes already streamed: " << m_rawDataAlreadyStreamed << "i; bytes in buffer: " << buffersize << "i." << endl;
+    qDebug("(K3bMp3Module) decoded data was longer than calculated length. Cutting data." );
+    qDebug("(K3bMp3Module) bytes to stream: %li; bytes already streamed: %li; bytes in buffer: %li.",
+	   m_rawDataLengthToStream, m_rawDataAlreadyStreamed, buffersize );
   }
   
   m_rawDataAlreadyStreamed += bytesToOutput;
@@ -395,7 +379,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 
   if( m_bOutputFinished ) {
 
-    kdDebug() << "(K3bMp3Module) end of output." << endl;
+    qDebug("(K3bMp3Module) end of output.");
 
     m_decodingTimer->stop();
 
@@ -408,7 +392,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 
     emit finished( true );
 
-    kdDebug() << "(K3bMp3Module) finished." << endl;
+    qDebug("(K3bMp3Module) finished.");
   }
   else if( m_consumer ) {
     // the timer will be restarted when the consumer
@@ -418,7 +402,7 @@ void K3bMp3Module::slotDecodeNextFrame()
 }
 
 
-unsigned short K3bMp3Module::madFixedToUshort( mad_fixed_t fixed )
+unsigned short K3bMp3Module::linearRound( mad_fixed_t fixed )
 {
   // round
   fixed += (1L << ( MAD_F_FRACBITS - 16 ));
@@ -434,10 +418,171 @@ unsigned short K3bMp3Module::madFixedToUshort( mad_fixed_t fixed )
 }
 
 
+void K3bMp3Module::createPcmSamples( mad_synth* synth )
+{
+  static mad_fixed_t const resample_table[9] =
+    {
+      MAD_F(0x116a3b36) /* 1.088435374 */,
+      MAD_F(0x10000000) /* 1.000000000 */,
+      MAD_F(0x0b9c2779) /* 0.725623583 */,
+      MAD_F(0x08b51d9b) /* 0.544217687 */,
+      MAD_F(0x08000000) /* 0.500000000 */,
+      MAD_F(0x05ce13bd) /* 0.362811791 */,
+      MAD_F(0x045a8ecd) /* 0.272108844 */,
+      MAD_F(0x04000000) /* 0.250000000 */,
+      MAD_F(0x02e709de) /* 0.181405896 */, 
+    };
+
+
+
+  mad_fixed_t* leftChannel = synth->pcm.samples[0];
+  mad_fixed_t* rightChannel = synth->pcm.samples[1];
+  unsigned short nsamples = synth->pcm.length;
+
+
+  // check if we need to resample
+  if( synth->pcm.samplerate != 44100 ) {
+
+    switch ( synth->pcm.samplerate ) {
+    case 48000:
+      m_madResampledRatio = resample_table[0];
+      break;
+    case 44100:
+      m_madResampledRatio = resample_table[1];
+      break;
+    case 32000:
+      m_madResampledRatio = resample_table[2];
+      break;
+    case 24000:
+      m_madResampledRatio = resample_table[3];
+      break;
+    case 22050:
+      m_madResampledRatio = resample_table[4];
+      break;
+    case 16000:
+      m_madResampledRatio = resample_table[5];
+      break;
+    case 12000:
+      m_madResampledRatio = resample_table[6];
+      break;
+    case 11025:
+      m_madResampledRatio = resample_table[7];
+      break;
+    case  8000:
+      m_madResampledRatio = resample_table[8];
+      break;
+    default:
+      qDebug("(K3bMp3Module) Error: not a supported samplerate: %i", synth->pcm.samplerate );
+      m_bDecodingInProgress = false;
+      m_decodingTimer->stop();
+      
+      clearingUp();
+      
+      emit finished( false );
+      return;
+    }
+
+
+    resampleBlock( leftChannel, synth->pcm.length, m_madResampledLeftChannel );
+    nsamples = resampleBlock( rightChannel, synth->pcm.length, m_madResampledRightChannel );
+
+    leftChannel = m_madResampledLeftChannel;
+    rightChannel = m_madResampledRightChannel;
+  }
+
+
+
+  // now create the output
+  for( int i = 0; i < nsamples; i++ )
+    {
+      unsigned short	sample;
+      
+      /* Left channel */
+      sample = linearRound( leftChannel[i] );
+      *(m_outputPointer++) = (sample >> 8) & 0xff;
+      *(m_outputPointer++) = sample & 0xff;
+      
+      /* Right channel. If the decoded stream is monophonic then
+       * the right output channel is the same as the left one.
+       */
+      if( synth->pcm.channels == 2 )
+	sample = linearRound( rightChannel[i] );
+      
+      *(m_outputPointer++) = (sample >> 8) & 0xff;
+      *(m_outputPointer++) = sample & 0xff;
+      
+      // this should not happen since we only decode if the
+      // output buffer has enough free space
+      if( m_outputPointer == m_outputBufferEnd && i+1 < nsamples ) {
+	qDebug( "(K3bMp3Module) buffer overflow!" );
+	exit(1);
+      }
+    } // pcm conversion
+}
+
+
+unsigned int K3bMp3Module::resampleBlock( mad_fixed_t const *source, 
+					  unsigned int nsamples,
+					  mad_fixed_t* target )
+{
+  /*
+   * This resampling algorithm is based on a linear interpolation, which is
+   * not at all the best sounding but is relatively fast and efficient.
+   *
+   * A better algorithm would be one that implements a bandlimited
+   * interpolation.
+   *
+   * taken from madplay
+   */
+
+
+  mad_fixed_t const *end, *begin;
+  end   = source + nsamples;
+  begin = target;
+
+  if (m_madResampledStep < 0) {
+    m_madResampledStep = mad_f_fracpart(-m_madResampledStep);
+
+    while (m_madResampledStep < MAD_F_ONE) {
+      *target++ = m_madResampledStep ?
+	m_madResampledLast + mad_f_mul(*source - m_madResampledLast, m_madResampledStep) : m_madResampledLast;
+
+      m_madResampledStep += m_madResampledRatio;
+      if (((m_madResampledStep + 0x00000080L) & 0x0fffff00L) == 0)
+	m_madResampledStep = (m_madResampledStep + 0x00000080L) & ~0x0fffffffL;
+    }
+
+    m_madResampledStep -= MAD_F_ONE;
+  }
+
+
+  while (end - source > 1 + mad_f_intpart(m_madResampledStep)) {
+    source += mad_f_intpart(m_madResampledStep);
+    m_madResampledStep = mad_f_fracpart(m_madResampledStep);
+
+    *target++ = m_madResampledStep ?
+      *source + mad_f_mul(source[1] - source[0], m_madResampledStep) : *source;
+
+    m_madResampledStep += m_madResampledRatio;
+    if (((m_madResampledStep + 0x00000080L) & 0x0fffff00L) == 0)
+      m_madResampledStep = (m_madResampledStep + 0x00000080L) & ~0x0fffffffL;
+  }
+
+  if (end - source == 1 + mad_f_intpart(m_madResampledStep)) {
+    m_madResampledLast = end[-1];
+    m_madResampledStep = -m_madResampledStep;
+  }
+  else
+    m_madResampledStep -= mad_f_fromint(end - source);
+  
+  return target - begin;
+}
+
+
 void K3bMp3Module::cancel()
 {
   if( m_bCountingFramesInProgress ) {
-    kdDebug() << "(K3bMp3Module) length checking cannot be canceled." << endl;
+    qDebug( "(K3bMp3Module) length checking cannot be canceled." );
   }
   else if( m_bDecodingInProgress ) {
     m_bDecodingInProgress = false;

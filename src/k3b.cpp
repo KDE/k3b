@@ -248,35 +248,6 @@ void K3bMainWindow::initView()
 
 
   // --- Document Dock ----------------------------------------------------------------------------
-  // create styled document box
-//   QFrame* documentBox = new QFrame( mainDock );
-//   documentBox->setFrameStyle( QFrame::Box | QFrame::Plain );
-//   documentBox->setLineWidth( 5 );
-//   QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
-//   documentLayout->setAutoAdd( true );
-//   documentLayout->setMargin( 5 );
-
-//   QLabel* projectHeader = new QLabel( documentBox );
-//   projectHeader->setText( i18n("Current Projects") );
-//   //  projectHeader->setAlignment( AlignHCenter | AlignVCenter );
-//   projectHeader->setFont( KGlobalSettings::windowTitleFont() );
-//   projectHeader->setMargin( 2 );
-
-//   QPalette oldPal( documentBox->palette() );
-//   QPalette p( documentBox->palette() );
-//   p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTitleColor() );
-//   documentBox->setPalette( p );
-//   p.setColor( QColorGroup::Background, KGlobalSettings::activeTitleColor() );
-//   p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTextColor() );
-//   projectHeader->setPalette( p );
-
-//   QFrame* documentHull = new QFrame( documentBox );
-//   documentHull->setFrameStyle( QFrame::Box | QFrame::Plain );
-//   documentHull->setLineWidth( 5 );
-//   QHBoxLayout* hullLayout = new QHBoxLayout( documentHull );
-//   hullLayout->setAutoAdd( true );
-//   hullLayout->setMargin( 10 );
-
   QWidget* documentHull = new QWidget( mainDock );
   QGridLayout* documentHullLayout = new QGridLayout( documentHull );
   documentHullLayout->setMargin( 0 );
@@ -286,11 +257,11 @@ void K3bMainWindow::initView()
   QLabel* centerDocLabel = new QLabel( documentHull );
   QLabel* rightDocPicLabel = new QLabel( documentHull );
 
-  leftDocPicLabel->setPixmap( DesktopIcon( "k3b" ) );
-  rightDocPicLabel->setPixmap( DesktopIcon( "k3b" ) );
+  leftDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
+  rightDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
   centerDocLabel->setText( i18n("Current Projects") );
   centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-  centerDocLabel->setPaletteBackgroundColor( QColor(197, 0, 49) );
+  centerDocLabel->setPaletteBackgroundColor( QColor(201, 208, 255) );
   centerDocLabel->setPaletteForegroundColor( Qt::white );
   QFont f(centerDocLabel->font());
   f.setBold(true);
@@ -781,28 +752,23 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 
 void K3bMainWindow::slotSettingsConfigure()
 {
-  if( !m_optionDialog )
-    m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
+  K3bOptionDialog d( this, "SettingsDialog", true );
 		
-  if( !m_optionDialog->isVisible() ) {
-    m_optionDialog->exec();
+  d.exec();
 
-    // emit a changed signal everytime since we do not know if the user selected
-    // "apply" and "cancel" or "ok"
-    emit configChanged( m_config );
-  }
+  // emit a changed signal everytime since we do not know if the user selected
+  // "apply" and "cancel" or "ok"
+  emit configChanged( m_config );
 }
 
 
 void K3bMainWindow::showOptionDialog( int index )
 {
-  if( !m_optionDialog )
-    m_optionDialog = new K3bOptionDialog( this, "SettingsDialog", true );
+  K3bOptionDialog d( this, "SettingsDialog", true );
 
-  m_optionDialog->showPage( index );
+  d.showPage( index );
 	
-  if( !m_optionDialog->isVisible() )
-    m_optionDialog->show();
+  d.exec();
 }
 
 

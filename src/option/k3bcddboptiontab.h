@@ -15,6 +15,20 @@ class K3bCddbOptionTab : public base_K3bCddbOptionTab
  public slots:
   void readSettings();
   void apply();
+
+ private slots:
+  void slotKdeProxySettings();
+  
+  void slotLocalDirAdd();
+  void slotLocalDirRemove();
+
+  void slotHttpServerAdd();
+  void slotHttpServerRemove();
+
+  void slotCddbpServerAdd();
+  void slotCddbpServerRemove();
+
+  void enDisableButtons();
 };
 
 #endif
