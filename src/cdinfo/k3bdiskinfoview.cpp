@@ -335,6 +335,9 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
                                         i18n("Application Id:"),
                                         info.isoApplicationId.isEmpty() ? QString("-") : info.isoApplicationId );
+      iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+                                        i18n("Size:"),
+                                        QString("%1").arg(info.isoSize) );
 
       iso9660Item->setOpen( true );
     }

@@ -123,6 +123,7 @@ namespace K3bCdDevice
     QString isoPublisherId;
     QString isoPreparerId;
     QString isoApplicationId;
+    int     isoSize;
 
     bool valid;
 
