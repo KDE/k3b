@@ -13,10 +13,6 @@ After that it's all the same:
 ./configure
 
 or try ./configure --help to learn about the options.
-Most likely you will have to set the kde3 directory via:
-
-./configure --prefix=`kde-config --prefix`
-
 
 If configure was successful just compile K3b:
 
