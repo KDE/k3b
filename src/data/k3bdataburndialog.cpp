@@ -107,8 +107,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   setupSettingsTab( f3 );
   setupAdvancedTab( f4 );
 
-  connect( m_imageSettingsWidget->m_checkDiscardAllLinks, SIGNAL(toggled(bool)), 
-	   m_advancedImageSettingsWidget->m_checkFollowSymbolicLinks, SLOT(setDisabled(bool)) );
+//   connect( m_imageSettingsWidget->m_checkDiscardAllLinks, SIGNAL(toggled(bool)), 
+// 	   m_advancedImageSettingsWidget->m_checkFollowSymbolicLinks, SLOT(setDisabled(bool)) );
 	
   tab->addTab( f1, i18n("Burning") );
   tab->addTab( f2, i18n("Volume Desc") );
