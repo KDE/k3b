@@ -248,6 +248,7 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
+  if( writerDevice())
   insertWritingSpeedsUpTo( writerDevice()->maxWriteSpeed() );
 }
 
