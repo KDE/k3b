@@ -69,6 +69,10 @@ class K3bInfFileWriter
   void setPreEmphasis( bool b ) { m_preEmphasis = b; }
   void setCopyPermitted( bool b ) { m_copyPermitted = b; }
 
+  /**
+   * Cdrecord seems to ignore this anyway and always expect big endian
+   * data on stdin and wavs are little endian anyway.
+   */
   void setBigEndian( bool b ) { m_bigEndian = b; }
 
   void setTrackCdText( const K3bCdDevice::TrackCdText& );

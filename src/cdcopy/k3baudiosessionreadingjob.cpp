@@ -101,6 +101,15 @@ public:
       }
 
       if( fd > 0 ) {
+
+	// we need big endian for cd writing
+	for( int i = 0; i < CD_FRAMESIZE_RAW/2; ++i ) {
+	  char* x = reinterpret_cast<char*>(&buffer[i]);
+	  char b = x[0];
+	  x[0] = x[1];
+	  x[1] = b;
+	}
+
 	if( ::write( fd, reinterpret_cast<void*>(buffer), CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
 	  kdDebug() << "(K3bAudioSessionCopyJob::WorkThread) error while writing to fd " << fd << endl;
 	  writeError = true;

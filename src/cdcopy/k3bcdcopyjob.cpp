@@ -695,7 +695,6 @@ bool K3bCdCopyJob::writeNextSession()
 
 	d->infFileWriter->setTrack( track );
 	d->infFileWriter->setTrackNumber( trackNumber );
-	d->infFileWriter->setBigEndian( false );
 
 	if( d->haveCddb ) {
 	  d->infFileWriter->setTrackTitle( d->cddbInfo.titles[trackNumber-1] );
@@ -707,6 +706,8 @@ bool K3bCdCopyJob::writeNextSession()
 	}
 
 	if( m_onTheFly ) {
+
+	  d->infFileWriter->setBigEndian( true );
 
 	  // we let KTempFile choose a temp file but delete it on our own
 	  // the same way we delete them when writing with images
@@ -721,6 +722,8 @@ bool K3bCdCopyJob::writeNextSession()
 	    return false;
 	}
 	else {
+	  d->infFileWriter->setBigEndian( false );
+
 	  if( !d->infFileWriter->save( d->infNames[trackNumber-1] ) )
 	    return false;
 	}
@@ -746,8 +749,6 @@ bool K3bCdCopyJob::writeNextSession()
     if( d->numSessions > 1 )
       d->cdrecordWriter->addArgument( "-multi" );
 
-    d->cdrecordWriter->addArgument( "-useinfo" );
-
     if( d->haveCddb || d->haveCdText ) {
       d->cdrecordWriter->addArgument( "-text" );
 
@@ -757,17 +758,18 @@ bool K3bCdCopyJob::writeNextSession()
 	// TODO: move this to K3bCdrecordWriter
 
 	delete d->cdTextFile;
-	d->cdTextFile = new KTempFile;
+	d->cdTextFile = new KTempFile( QString::null, ".dat" );
 	d->cdTextFile->setAutoDelete(true);
 	d->cdTextFile->file()->writeBlock( d->cdTextRaw );
 	d->cdTextFile->close();
 
 	// use the raw CDTEXT data
-	d->cdrecordWriter->addArgument( "textfile=" );
+	d->cdrecordWriter->addArgument( "textfile=" + d->cdTextFile->name() );
       }
       // else cdrecord will use the cdtext data in the inf files	
     }
 
+    d->cdrecordWriter->addArgument( "-useinfo" );
 
     //
     // add all the audio tracks
