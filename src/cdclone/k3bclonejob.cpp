@@ -109,7 +109,7 @@ void K3bCloneJob::start()
 
   if (  K3bEmptyDiscWaiter::wait( readingDevice(),
 				K3bCdDevice::STATE_COMPLETE,
-				K3bCdDevice::MEDIA_CD_ROM ) == -1 ) {
+				K3bCdDevice::MEDIA_WRITABLE_CD|MEDIA_CD_ROM ) == -1 ) {
     m_running = false;
     emit canceled();
     emit finished(false);
@@ -231,8 +231,7 @@ void K3bCloneJob::slotWriterFinished( bool success )
 
 void K3bCloneJob::slotReadingPercent( int p )
 {
-  int add = m_onlyCreateImage ? 0 : 1;
-  emit percent( m_onlyCreateImage ? p : (int)((double)p/(double)(add+m_copies)) );
+  emit percent( m_onlyCreateImage ? p : (int)((double)p/(double)(1+m_copies)) );
 }
 
 
