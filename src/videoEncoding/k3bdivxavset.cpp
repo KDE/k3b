@@ -72,7 +72,7 @@ Regarding quality, try all the different codecs to find out which you prefer. Se
 (www.doom9.org, www.xvid.org, www.divx.net, ... ). The difference between a DivX4 and XviD 2-pass encoded movie \
 is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper). \
 If the encoding process crashes then you probably haven't used the codec you have installed. Due to the codec libraries having the same name, you \
-can only use DivX4 or DivX5 and Xvid or Xvid (CVS). This will be fixed in a future version, so the codecs will auto dectect and \
+can only use DivX4 or DivX5 and XviD or XviD (CVS). This will be fixed in a future version, so the codecs will auto-detect and \
 can be used with different install locations."));
     QWhatsThis::add( codec, wt_codec );
     QLabel *codecmode = new QLabel( i18n("Codec mode:"), this );
@@ -83,12 +83,12 @@ In 2-pass mode the video will be encoded twice. The first time, the video will o
     m_vBitrate = new QLabel( m_vBitrateDesc, this );
 
     m_comboCd = new KComboBox( false, this );
-    m_comboCd->insertItem( i18n("1 * 650 MB" ) );
-    m_comboCd->insertItem( i18n("1 * 700 MB" ) );
-    m_comboCd->insertItem( i18n("2 * 650 MB" ) );
-    m_comboCd->insertItem( i18n("2 * 700 MB" ) );
-    m_comboCd->insertItem( i18n("1 * 705 MB" ) );
-    m_comboCd->insertItem( i18n("1 * 716 MB" ) );
+    m_comboCd->insertItem( i18n("1 x 650 MB" ) );
+    m_comboCd->insertItem( i18n("1 x 700 MB" ) );
+    m_comboCd->insertItem( i18n("2 x 650 MB" ) );
+    m_comboCd->insertItem( i18n("2 x 700 MB" ) );
+    m_comboCd->insertItem( i18n("1 x 705 MB" ) );
+    m_comboCd->insertItem( i18n("1 x 716 MB" ) );
     QWhatsThis::add( m_comboCd, wt_cd );
 
     m_checkAc3Passthrough = new QCheckBox( i18n( "AC3 pass-through mode" ), this );
