@@ -1,5 +1,5 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-noinst_LIBRARIES = libdivx.a
+noinst_LIBRARIES = libvideoEncoding.a
 
 INCLUDES = $(all_includes)
 
