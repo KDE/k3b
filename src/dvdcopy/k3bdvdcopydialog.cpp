@@ -303,6 +303,9 @@ void K3bDvdCopyDialog::slotLoadK3bDefaults()
 
 void K3bDvdCopyDialog::slotToggleAll()
 {
+  m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
+
   K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
 

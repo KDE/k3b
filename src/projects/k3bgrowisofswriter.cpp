@@ -358,6 +358,9 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
 
+      // the output stops before 100%, so we do it manually
+      emit percent( 100 );
+
       int s = d->speedEst->average();
       if( s > 0 )
 	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
