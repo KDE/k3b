@@ -338,8 +338,9 @@ void K3bMixedJob::slotWriterFinished( bool success )
   }
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
-    // reload the media
-    emit infoMessage( i18n("Reloading the media"), INFO );
+    // reload the media (as a subtask so the user does not see the "Flushing cache" or "Fixating" messages while
+    // doing so
+    emit newSubTask( i18n("Reloading the media") );
     connect( K3bCdDevice::reload( m_doc->burner() ), SIGNAL(finished(bool)),
 	     this, SLOT(slotMediaReloadedForSecondSession(bool)) );
   }

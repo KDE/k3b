@@ -1,7 +1,15 @@
-0.9
+0.9pre2
+support for writing CD-Text with cdrecord
+support for writing audio and mixed-mode CDs on-the-fly with cdrecord >= 2.01a13
+no gui blocking when reloading the media while writing a two-session mixed-mode cd
+nodma option in eMovix project
+fixed problems with audio decoding (the process sometimes stalled)
+
+0.9pre1	
 added system notification
 added eMovix project
 added bootable cd support (multible images)
+K3b now allows automatic writing mode selection to be sure to always use the best writing mode (DAO, TAO)
 the environment PATH is searched for external bins
 more error handling
 dropped KDE/QT 3.0.x compatibility, now K3b requires at least 3.1
@@ -37,10 +45,6 @@ user commands for external programs are seperated by space now since the comma j
    as "--driver, generic-mmc"
 support for newer versions of cdrecord which have a slighly changed user interface
 support for cuefile writing with cdrecord > 2.01a14
-support for writing CD-Text with cdrecord
-support for writing audio and mixed-mode CDs on-the-fly with cdrecord >= 2.01a13
-no gui blocking when reloading the media while writing a two-session mixed-mode cd
-K3b now allows automatic writing mode selection to be sure to always use the best writing mode (DAO, TAO)
     
 0.8.1
 fixed compiling problems with kernel < 2.4.3
