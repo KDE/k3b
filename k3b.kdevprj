@@ -1424,7 +1424,7 @@ install_location=
 type=HEADER
 
 [src/rip/Makefile.am]
-files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h,src/rip/k3bfilmview.cpp,src/rip/k3bfilmview.h,src/rip/k3btcwrapper.cpp,src/rip/k3btcwrapper.h,src/rip/k3bdvdcontent.cpp,src/rip/k3bdvdcontent.h,src/rip/k3bdvdripperwidget.cpp,src/rip/k3bdvdripperwidget.h,src/rip/k3bdvdrippingprocess.cpp,src/rip/k3bdvdrippingprocess.h,src/rip/k3bdvdcopy.cpp,src/rip/k3bdvdcopy.h,src/rip/k3bdvdaudiogain.cpp,src/rip/k3bdvdaudiogain.h
+files=src/rip/k3bcdda.cpp,src/rip/k3bcdda.h,src/rip/k3bcdview.cpp,src/rip/k3bcdview.h,src/rip/k3bfilenamepatterndialog.cpp,src/rip/k3bfilenamepatterndialog.h,src/rip/k3bripperwidget.cpp,src/rip/k3bcddacopy.cpp,src/rip/k3bcddacopy.h,src/rip/k3bripperwidget.h,src/rip/k3bpatternparser.cpp,src/rip/k3bpatternparser.h,src/rip/k3bpatternwidget.cpp,src/rip/k3bpatternwidget.h,src/rip/k3bfilmview.cpp,src/rip/k3bfilmview.h,src/rip/k3btcwrapper.cpp,src/rip/k3btcwrapper.h,src/rip/k3bdvdcontent.cpp,src/rip/k3bdvdcontent.h,src/rip/k3bdvdripperwidget.cpp,src/rip/k3bdvdripperwidget.h,src/rip/k3bdvdrippingprocess.cpp,src/rip/k3bdvdrippingprocess.h,src/rip/k3bdvdcopy.cpp,src/rip/k3bdvdcopy.h,src/rip/k3bdvdaudiogain.cpp,src/rip/k3bdvdaudiogain.h,src/rip/k3bdvdfilldisplay.cpp,src/rip/k3bdvdfilldisplay.h
 sharedlib_LDFLAGS=
 sharedlib_rootname=
 sub_dirs=songdb
@@ -1497,6 +1497,18 @@ install_location=
 type=SOURCE
 
 [src/rip/k3bdvdcopy.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/rip/k3bdvdfilldisplay.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/rip/k3bdvdfilldisplay.h]
 dist=true
 install=false
 install_location=

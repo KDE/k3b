@@ -15,10 +15,10 @@
 //static const char* binVersions[] =  { "1.13", "1.9", "1.1.3", "unknown", "unknown", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
 
 static const char* binPrograms[] =  { "mkisofs", "cdrecord", "cdrdao",
-                    "transcode", "tccat", "tcprobe", "tcscan", "tcextract", "tcdecode" };
+                    "transcode", "tcprobe", "tccat", "tcscan", "tcextract", "tcdecode" };
 static const char* binVersions[] =  { "1.13", "1.9", "1.1.3",
                     "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3", "0.6.0pre3" };
-static const char* binVersionFlag[] =  { "--version", "--version", "--version", "--version", "-h", "-version", "--version", "-version", "-version", "-version", "-v" };
+static const char* binVersionFlag[] =  { "--version", "--version", "--version", "-version", "-version", "-version", "-version", "-version", "-version" };
 
 static const char* searchPaths[] = { "/usr/bin/", "/usr/local/bin/",
 				       "/usr/sbin/", "/usr/local/sbin/",

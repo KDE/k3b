@@ -278,12 +278,13 @@ void K3bExternalBinManager::slotParseTranscodeVersion( KProcess* p, char* data, 
 
         for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
             if( (*str).contains( "transcode v" ) ) {
-	        int start = (*str).find( "transcode v" ) + 11;
-	        if( start > -1 ) {
-	            int end = (*str).find( ")", start );
-	            m_binMap[ name ]->version = (*str).mid( start, end-start ); // 0.6.0pre3-20010101
-	            break;   // version found
-	        }
+                int start = (*str).find( "transcode v" ) + 11;
+                if( start > -1 ) {
+                    qDebug("version found");
+                    int end = (*str).find( ")", start );
+                    m_binMap[ name ]->version = (*str).mid( start, end-start ); // 0.6.0pre3-20010101
+                    break;   // version found
+                }
             }
         }
     }
