@@ -156,7 +156,7 @@ void K3bAudioRipThread::run()
 // 		  << "                    Control: " << (int)sub.cdsc_ctrl << endl
 // 		  << "                    Address: " << (int)sub.cdsc_adr << endl
 // 		  << "                    Status:  " << (int)sub.cdsc_audiostatus << endl;
-      }
+//      }
 
 //       if( index != 1 ) {
 // 	kdDebug() << "(K3bAudioRipThread) Index: " << index << endl;
