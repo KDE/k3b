@@ -21,6 +21,7 @@
 #include "k3bvcdview.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdburndialog.h"
+#include "k3bvcdmpegfactory.h"
 #include "k3bvcdjob.h"
 #include "../tools/kstringlistdialog.h"
 
@@ -54,7 +55,7 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
   m_vcdOptions = 0L;
   
   m_docType = VCD;
-  m_vcdType = VCD20;
+  m_vcdType = NONE;
 
   m_urlAddingTimer = new QTimer( this );
   connect( m_urlAddingTimer, SIGNAL(timeout()), this, SLOT(slotWorkUrlQueue()) );
@@ -165,16 +166,29 @@ void K3bVcdDoc::slotWorkUrlQueue()
 
 K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
 {
-  long test = identifyMpegFile( url );
-  QString mimetype = KMimeMagic::self()->findFileType(url.path())->mimeType();
-  if ( mimetype.contains( "video" ) ) {
+  // QString mimetype = KMimeMagic::self()->findFileType(url.path())->mimeType();
+  // if ( mimetype.contains( "video" ) ) {
+  kdDebug() << QString("(K3bVcdDoc) createTrack url.path = ").arg(url.path()) << endl;
+  if (int mpeg = identifyMpegFile( url ) > 0) {
+    if (vcdType() == NONE) {
+      setVcdType(vcdTypes(mpeg+1));
+    }
+
+    if (vcdType() != vcdTypes(mpeg+1)) {
+      KMessageBox::information( kapp->mainWidget(), "(" + url.path() + ")\n" +
+        i18n("You can't mix MPEG1 and MPEG2 video files."),
+        i18n("Please start a new project for this filetype"),
+        i18n("Resample not implemented yet :(") );
+      return 0;
+    }
+    
     K3bVcdTrack* newTrack =  new K3bVcdTrack( m_tracks, url.path() );
-    newTrack->setMimeType(mimetype);
+    newTrack->setMimeType(QString("Mpeg%1").arg(mpeg));
     return newTrack;
   }
   else {
     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-      i18n("Only MPEG video files are supported."),
+      i18n("Only MPEG1 and MPEG2 video files are supported."),
       i18n("Wrong File Format") );
     return 0;
   }
@@ -227,6 +241,9 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
     emit newTracks();
 
     delete track;
+    kdDebug() << QString("(K3bVcdDoc) removeTrack count = %1").arg(numOfTracks()) << endl;
+    if (numOfTracks() == 0)
+      this->setVcdType(NONE);
   }
 }
 
@@ -267,12 +284,10 @@ K3bBurnJob* K3bVcdDoc::newBurnJob()
   return new K3bVcdJob( this );
 }
 
-unsigned long K3bVcdDoc::identifyMpegFile( const KURL& url )
+unsigned int K3bVcdDoc::identifyMpegFile( const KURL& url )
 {
-  k3bMain()->showBusyInfo( i18n( "Identify Mpeg file ..." ) );
-  // TODO: Get Mpeginfos
-  k3bMain()->endBusy();
-  return 0;
+  // return 0 = Unknown file type, 1 = Mpeg 1, 2 = Mpeg 2
+  return K3bVcdMpegFactory::self()->getMpegFileType( url );
 }
 
 void K3bVcdDoc::informAboutNotFoundFiles()

@@ -52,7 +52,7 @@ class K3bVcdDoc : public K3bDoc
   /** reimplemented from K3bDoc */
   void addView(K3bView* view);
 
-  enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD};
+  enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
   
   bool newDocument();
   int numOfTracks() const { return m_tracks->count(); }
@@ -79,7 +79,7 @@ class K3bVcdDoc : public K3bDoc
   int vcdType() const { return m_vcdType; }
   void setVcdType( int type );
     
-  static unsigned long identifyMpegFile( const KURL& url );
+  static unsigned int identifyMpegFile( const KURL& url );
 
  public slots:
   /**
@@ -96,7 +96,7 @@ class K3bVcdDoc : public K3bDoc
   void addTrack( K3bVcdTrack* track, uint position = 0 );
 
 
-  // --- TODO: this should read: removeTrack( K3bAudioTrack* )
+  // --- TODO: this should read: removeTrack( K3bVcdTrack* )
   void removeTrack( K3bVcdTrack* );
   void moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after );
 
