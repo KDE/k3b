@@ -36,11 +36,12 @@ class K3bVcdTrackDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bVcdTrackDialog( K3bVcdDoc*, QList<K3bVcdTrack>&, QWidget *parent=0, const char *name=0);
+  K3bVcdTrackDialog( QList<K3bVcdTrack>& tracks, QList<K3bVcdTrack>& selectedTracks, QWidget *parent=0, const char *name=0);
   ~K3bVcdTrackDialog();
 
  protected slots:
   void slotOk();
+  void slotApply();
 
  private slots:
   void slotPlayForever(bool);
@@ -49,8 +50,8 @@ class K3bVcdTrackDialog : public KDialogBase
   void slotWaitTimeChanged(int);
   
  private:
-  K3bVcdDoc* m_doc;
   QList<K3bVcdTrack> m_tracks;
+  QList<K3bVcdTrack> m_selectedTracks;
   QTabWidget* m_mainTabbed;
   
   KCutLabel* m_displayFileName;

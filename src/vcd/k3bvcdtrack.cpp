@@ -34,6 +34,12 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
 {
   m_parent = parent;
   m_title = QFileInfo(m_file).baseName(true);
+
+  m_previous = 0L;
+  m_next = 0L;
+  m_return = 0L;
+  m_default = 0L;
+  
 }
 
 

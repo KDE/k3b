@@ -37,7 +37,24 @@ class K3bVcdTrack
   
   const QString& title() const { return m_title; }
   void setTitle( const QString& t ) { m_title = t; }
+
+  void setPrevious(K3bVcdTrack* nav_previous) {m_previous = nav_previous;}
+  void setPrevious() {m_previous = 0L;}
+  K3bVcdTrack* Previous() {return m_previous;}
+
+  void setNext(K3bVcdTrack* nav_next) {m_next = nav_next;}
+  void setNext() {m_previous = 0L;}
+  K3bVcdTrack* Next() {return m_next;}
+
+  void setReturn(K3bVcdTrack* nav_return) {m_return = nav_return;}
+  void setReturn() {m_return = 0L;}
+  K3bVcdTrack* Return() {return m_return;}
+
+  void setDefault(K3bVcdTrack* nav_default) {m_default = nav_default;}
+  void setDefault() {m_default = 0L;}
+  K3bVcdTrack* Default() {return m_default;}
   
+      
   // video
   int mpegType() const {return m_mpegtype;}
   int mpegVideoVersion() const {return m_mpegvideoversion;}
@@ -101,6 +118,11 @@ class K3bVcdTrack
   
  protected:
   QList<K3bVcdTrack>* m_parent;
+  K3bVcdTrack* m_previous;
+  K3bVcdTrack* m_next;
+  K3bVcdTrack* m_return;
+  K3bVcdTrack* m_default;
+      
   int m_filetype;
   QFile m_file;
   QString m_title;

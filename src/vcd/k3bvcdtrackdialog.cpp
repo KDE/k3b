@@ -44,7 +44,7 @@
 #include "../tools/k3bglobals.h"
 
 
-K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* pDoc, QPtrList<K3bVcdTrack>& tracks, QWidget *parent, const char *name )
+K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Video Track Properties"), KDialogBase::Ok,
 		 KDialogBase::Ok, parent, name )
 {
@@ -55,17 +55,17 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* pDoc, QPtrList<K3bVcdTrack>& tr
   setupAudioTab();
 
   m_tracks = tracks;
-  m_doc = pDoc;
+  m_selectedTracks = selectedTracks;
 
-  if( !m_tracks.isEmpty() ) {
+  if( !m_selectedTracks.isEmpty() ) {
 
-    K3bVcdTrack* track = m_tracks.first();
+    K3bVcdTrack* selectedTrack = m_selectedTracks.first();
 
-    m_displayFileName->setText( track->fileName() );
-    m_displayLength->setText( track->mpegDuration() );
-    m_displaySize->setText( KIO::convertSize(track->size()) );
+    m_displayFileName->setText( selectedTrack->fileName() );
+    m_displayLength->setText( selectedTrack->mpegDuration() );
+    m_displaySize->setText( KIO::convertSize(selectedTrack->size()) );
 
-    m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(m_tracks.first()->absPath()), 0, KIcon::Desktop, 48 ) );
+    m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL(selectedTrack->absPath()), 0, KIcon::Desktop, 48 ) );
 
     fillGui();
   }
@@ -82,29 +82,56 @@ void K3bVcdTrackDialog::slotOk()
   done(0);
 }
 
+void K3bVcdTrackDialog::slotApply()
+{
+  // TODO: apply button :)
+  K3bVcdTrack* selectedTrack = m_selectedTracks.first();
+
+  if (m_nav_previous->currentItem() > m_tracks.count())
+    selectedTrack->setPrevious();
+  else
+    selectedTrack->setPrevious( m_tracks.at( m_nav_previous->currentItem()) );
+
+  if (m_nav_next->currentItem() > m_tracks.count())
+    selectedTrack->setNext();
+  else
+    selectedTrack->setNext( m_tracks.at( m_nav_next->currentItem()) );
+
+  if (m_nav_return->currentItem() > m_tracks.count())
+    selectedTrack->setReturn();
+  else
+    selectedTrack->setReturn( m_tracks.at( m_nav_return->currentItem()) );
+    
+  if (m_nav_default->currentItem() > m_tracks.count())
+    selectedTrack->setDefault();
+  else
+    selectedTrack->setDefault( m_tracks.at( m_nav_default->currentItem()) );
+
+}
+
 void K3bVcdTrackDialog::fillGui()
 {
   QString tmp;
-  K3bVcdTrack* track = m_tracks.first();
+  K3bVcdTrack* selectedTrack = m_selectedTracks.first();
         
-  if (track->mpegVideoVersion() == 1) {
-    if (track->hasAudio())
+  if (selectedTrack->mpegVideoVersion() == 1) {
+    if (selectedTrack->hasAudio())
       m_mpegver_video->setText(i18n("Mpeg 1 System File [Video/Audio]"));
     else
       m_mpegver_video->setText(i18n("Mpeg 1 System File [Video]"));
   }
   else {
-    if (track->hasAudio())
+    if (selectedTrack->hasAudio())
       m_mpegver_video->setText(i18n("Mpeg Program Stream File [Video/Audio]"));
     else
       m_mpegver_video->setText(i18n("Mpeg Program Stream File [Video]"));
   }
 
-  m_rate_video->setText(i18n("%1 Mbps").arg(track->mpegMbps()));
+  m_rate_video->setText(i18n("%1 Mbps").arg(selectedTrack->mpegMbps()));
 
-  m_duration_video->setText(track->mpegDuration());
+  m_duration_video->setText(selectedTrack->mpegDuration());
 
-  switch (track->MpegAspectRatio()) {
+  switch (selectedTrack->MpegAspectRatio()) {
     case 0: m_rate_video->setText(i18n("Invalid aspect ratio (forbidden)")); break;
     case 1: m_rate_video->setText(i18n("Aspect ratio 1/1 (VGA)")); break;
     case 2: m_rate_video->setText(i18n("Aspect ratio 4/3 (TV)")); break;
@@ -115,13 +142,13 @@ void K3bVcdTrackDialog::fillGui()
 
   m_chromaformat_video->setText(i18n("n/a"));
 
-  if (track->MpegSExt()){
-    if (track->MpegProgressive())
+  if (selectedTrack->MpegSExt()){
+    if (selectedTrack->MpegProgressive())
       tmp = i18n("Not interlaced");
     else
       tmp = i18n("Interlaced");
 
-    switch (track->MpegChromaFormat()){
+    switch (selectedTrack->MpegChromaFormat()){
       case 1 : tmp.append(", 4:2:0");break;
       case 2 : tmp.append(", 4:2:2");break;
       case 3 : tmp.append(", 4:4:4");break;
@@ -130,8 +157,8 @@ void K3bVcdTrackDialog::fillGui()
   }
 
   m_format_video->setText(i18n("n/a"));
-  if (track->MpegDExt()){
-    switch(track->MpegFormat()){
+  if (selectedTrack->MpegDExt()){
+    switch(selectedTrack->MpegFormat()){
       case 0 : m_format_video->setText(i18n("Component"));break;
       case 1 : m_format_video->setText("PAL");break;
       case 2 : m_format_video->setText("NTSC");break;
@@ -141,26 +168,26 @@ void K3bVcdTrackDialog::fillGui()
     }
   }
 
-  m_displaysize_video->setText(track->mpegDisplaySize());
-  m_size_video->setText(i18n("%1 %2 fps %3 Mbps").arg(track->mpegSize()).arg(track->mpegFps()).arg(track->mpegMbps()));
-  
+  m_displaysize_video->setText(selectedTrack->mpegDisplaySize());
+  m_size_video->setText(i18n("%1 %2 fps %3 Mbps").arg(selectedTrack->mpegSize()).arg(selectedTrack->mpegFps()).arg(selectedTrack->mpegMbps()));
 
-  if (track->hasAudio()){
-    if (track->MpegAudioType() !=3)
-      m_mpegver_audio->setText(i18n("Mpeg %1 layer %2").arg(track->MpegAudioType()).arg(track->MpegAudioLayer()));
+
+  if (selectedTrack->hasAudio()){
+    if (selectedTrack->MpegAudioType() !=3)
+      m_mpegver_audio->setText(i18n("Mpeg %1 layer %2").arg(selectedTrack->MpegAudioType()).arg(selectedTrack->MpegAudioLayer()));
     else
-      m_mpegver_audio->setText(i18n("Mpeg 2.5 (rare) layer %1").arg(track->MpegAudioLayer()));
+      m_mpegver_audio->setText(i18n("Mpeg 2.5 (rare) layer %1").arg(selectedTrack->MpegAudioLayer()));
 
-    if (!track->MpegAudioKbps().isNull())
-      m_rate_audio->setText(i18n("%1 kbps %2 Hz").arg(track->MpegAudioKbps()).arg(track->MpegAudioHz()));
+    if (!selectedTrack->MpegAudioKbps().isNull())
+      m_rate_audio->setText(i18n("%1 kbps %2 Hz").arg(selectedTrack->MpegAudioKbps()).arg(selectedTrack->MpegAudioHz()));
     else
-      m_rate_audio->setText(i18n("free bitrate %1 Hz").arg(track->MpegAudioHz()));
+      m_rate_audio->setText(i18n("free bitrate %1 Hz").arg(selectedTrack->MpegAudioHz()));
 
-    switch (track->MpegAudioMode()){
+    switch (selectedTrack->MpegAudioMode()){
       case 0: tmp = i18n("Stereo"); break;
       case 1: tmp = i18n("Joint Stereo");
-              if (track->MpegAudioLayer() == 1 || track->MpegAudioLayer() == 2){
-                switch (track->MpegAudioModeExt()){
+              if (selectedTrack->MpegAudioLayer() == 1 || selectedTrack->MpegAudioLayer() == 2){
+                switch (selectedTrack->MpegAudioModeExt()){
                   case 0: tmp.append(" " + i18n("(Intensity stereo on bands 4-31/32)")); break;
                   case 1: tmp.append(" " + i18n("(Intensity stereo on bands 8-31/32)")); break;
                   case 2: tmp.append(" " + i18n("(Intensity stereo on bands 12-31/32)")); break;
@@ -169,7 +196,7 @@ void K3bVcdTrackDialog::fillGui()
               }
               else {
                 //mp3
-                switch (track->MpegAudioModeExt()){
+                switch (selectedTrack->MpegAudioModeExt()){
                   case 0: tmp.append(" " + i18n("(Intensity stereo off, M/S stereo off)")); break;
                   case 1: tmp.append(" " + i18n("(Intensity stereo on, M/S stereo off)")); break;
                   case 2: tmp.append(" " + i18n("(Intensity stereo off, M/S stereo on)")); break;
@@ -182,7 +209,7 @@ void K3bVcdTrackDialog::fillGui()
     }
     m_mode_audio->setText(tmp);
 
-    switch (track->MpegAudioEmphasis()){
+    switch (selectedTrack->MpegAudioEmphasis()){
       case 0: m_emphasis_audio->setText(i18n("No emphasis")); break;
       case 1: m_emphasis_audio->setText(i18n("Emphasis 50/15 microsecs")); break;
       case 2: m_emphasis_audio->setText(i18n("Emphasis Unknown")); break;
@@ -190,8 +217,8 @@ void K3bVcdTrackDialog::fillGui()
     }
 
     tmp = "";
-    if (track->MpegAudioCopyright()) tmp.append("(c) ");
-    if (track->MpegAudioOriginal())
+    if (selectedTrack->MpegAudioCopyright()) tmp.append("(c) ");
+    if (selectedTrack->MpegAudioOriginal())
       tmp.append(i18n("original"));
     else
       tmp.append(i18n("duplicate"));
@@ -202,29 +229,71 @@ void K3bVcdTrackDialog::fillGui()
 
   // TODO: make this better :) only for testing now
   /////////////////////////////////////////////////////////////////////////////////////////////////
-  QPixmap pm = SmallIcon( "stop" );
-  m_nav_previous->insertItem(pm, i18n("Event Disabled"));
-  m_nav_next->insertItem(pm, i18n("Event Disabled"));
-  m_nav_return->insertItem(pm, i18n("Event Disabled"));
-  m_nav_default->insertItem(pm, i18n("Event Disabled"));
 
-  QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    QPixmap pm = KMimeType::pixmapForURL( KURL(it.current()->absPath()), 0, KIcon::Desktop, 16 );
-    QString s = i18n("Sequence-%1 - %2").arg(it.current()->index() +1).arg(it.current()->title());
+  // add tracks to combobox
+  int iPrevious = -1;
+  int iNext = -1;
+  int iReturn = -1;
+  int iDefault = -1;
+
+  K3bVcdTrack* track;
+  for( track = m_tracks.first(); track; track = m_tracks.next() ) {
+    QPixmap pm = KMimeType::pixmapForURL( KURL(track->absPath()), 0, KIcon::Desktop, 16 );
+    QString s = i18n("%1 - Sequence-%2").arg(track->title()).arg(track->index() +1);
     m_nav_previous->insertItem(pm, s);
+    if (track == selectedTrack->Previous())
+      iPrevious = m_nav_previous->count() -1;
+    
     m_nav_next->insertItem(pm, s);
+    if (track == selectedTrack->Next())
+      iNext = m_nav_next->count() -1;
+
     m_nav_return->insertItem(pm, s);
+    if (track == selectedTrack->Return())
+      iReturn = m_nav_return->count() -1;
+
     m_nav_default->insertItem(pm, s);
+    if (track == selectedTrack->Default())
+      iDefault = m_nav_default->count() -1;
 
     m_comboAfterTimeout->insertItem(pm, s);
   }
 
-  pm = SmallIcon( "cdrom_unmount" );
-  m_nav_previous->insertItem(pm, i18n("VideoCD END"));
-  m_nav_next->insertItem(pm, i18n("VideoCD END"));
-  m_nav_return->insertItem(pm, i18n("VideoCD END"));
-  m_nav_default->insertItem(pm, i18n("VideoCD END"));
+  // add Event Disabled
+  QPixmap pmDisabled = SmallIcon( "stop" );
+  QString txtDisabled = i18n("Event Disabled");
+  m_nav_previous->insertItem(pmDisabled, txtDisabled);
+  m_nav_next->insertItem(pmDisabled, txtDisabled);
+  m_nav_return->insertItem(pmDisabled, txtDisabled);
+  m_nav_default->insertItem(pmDisabled, txtDisabled);
+
+  // add VideoCD End
+  QPixmap pmEnd = SmallIcon( "cdrom_unmount" );
+  QString txtEnd = i18n("VideoCD END");
+  m_nav_previous->insertItem(pmEnd, txtEnd);
+  m_nav_next->insertItem(pmEnd, txtEnd);
+  m_nav_return->insertItem(pmEnd, txtEnd);
+  m_nav_default->insertItem(pmEnd, txtEnd);
+
+  if (iPrevious < 0)
+    m_nav_previous->setCurrentItem(m_tracks.count());
+  else
+    m_nav_previous->setCurrentItem(iPrevious);
+
+  if (iNext < 0)
+    m_nav_next->setCurrentItem(m_tracks.count());
+  else
+    m_nav_next->setCurrentItem(iNext);
+
+  if (iReturn < 0)
+    m_nav_return->setCurrentItem(m_tracks.count());
+  else
+    m_nav_return->setCurrentItem(iReturn);
+
+  if (iDefault < 0)
+    m_nav_default->setCurrentItem(m_tracks.count());
+  else
+    m_nav_default->setCurrentItem(iDefault);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -379,7 +448,6 @@ void K3bVcdTrackDialog::setupNavigationTab()
   m_nav_next = new QComboBox( groupNav, "m_nav_next" );
   m_nav_return = new QComboBox( groupNav, "m_nav_return" );
   m_nav_default = new QComboBox( groupNav, "m_nav_default" );
-  
   groupNavLayout->addWidget(labelNav_previous, 2, 0);
   groupNavLayout->addWidget(m_nav_previous, 2, 1);
 
@@ -395,6 +463,7 @@ void K3bVcdTrackDialog::setupNavigationTab()
   
   //////////////////////////////////////////////////////////////////////////////////////////
   QGroupBox* groupKey = new QGroupBox( 6, Qt::Vertical, i18n("Numeric keys"), w );
+  groupKey->setEnabled( false );
   groupKey->layout()->setSpacing( spacingHint() );
   groupKey->layout()->setMargin( marginHint() );
 
