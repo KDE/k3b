@@ -249,7 +249,7 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
   }
 
   // scroll down
-  //m_viewInfo->verticalScrollBar()->setValue( m_viewInfo->verticalScrollBar()->maxValue() );
+  m_viewInfo->verticalScrollBar()->setValue( m_viewInfo->verticalScrollBar()->maxValue() );
 }
 
 

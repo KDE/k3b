@@ -305,6 +305,14 @@ void K3bAudioJob::cancel()
     m_process.kill();
     emit infoMessage( i18n("Writing canceled."), K3bJob::STATUS );
 	
+    // we need to unlock the writer because cdrecord locked it while writing
+    bool block = m_doc->burner()->block( false );
+    if( !block )
+      emit infoMessage( i18n("Could not unlock cd drive."), K3bJob::ERROR );
+    //    else if( k3bMain()->eject() )
+    // m_doc->burner()->eject();
+
+
     // remove toc-file
     if( QFile::exists( m_tocFile ) ) {
       qDebug("(K3bAudioJob) Removing temporary TOC-file");
