@@ -34,7 +34,7 @@ class K3bCdInfoDialog : public KDialogBase
  Q_OBJECT
 
  public: 
-  K3bCdInfoDialog( QWidget* parent = 0, const char* name = 0, bool modal = false );
+  K3bCdInfoDialog( QWidget* parent = 0, const char* name = 0, bool modal = true );
   ~K3bCdInfoDialog();
 
  private slots:
