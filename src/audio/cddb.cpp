@@ -35,10 +35,16 @@
 
 #include "cddb.h"
 
+#ifdef __need_timeval
+#undef __need_timeval
+
 struct timeval {
    int tv_sec;
    int tv_usec;
 };
+
+#endif
+
 
 CDDB::CDDB(  )
 :  fd( 0 ), port( 0 ), remote( false )
