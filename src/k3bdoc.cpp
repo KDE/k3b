@@ -32,7 +32,6 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kprocess.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -40,7 +39,7 @@
 // application specific includes
 #include "k3bview.h"
 #include "k3bdoc.h"
-#include "k3b.h"
+#include "k3bprojectinterface.h"
 #include <k3bglobals.h>
 #include <device/k3bdevice.h>
 #include <audio/k3baudiodoc.h>
@@ -57,7 +56,8 @@
 
 
 K3bDoc::K3bDoc( QObject* parent )
-  : QObject( parent )
+  : QObject( parent ),
+    m_dcopInterface( 0 )
 {
   pViewList = new QPtrList<K3bView>;
   pViewList->setAutoDelete(false);
@@ -77,6 +77,22 @@ K3bDoc::K3bDoc( QObject* parent )
 K3bDoc::~K3bDoc()
 {
   delete pViewList;
+  if( m_dcopInterface )
+    delete m_dcopInterface;
+}
+
+
+K3bProjectInterface* K3bDoc::dcopInterface()
+{
+  if( !m_dcopInterface )
+    m_dcopInterface = new K3bProjectInterface( this );
+  return m_dcopInterface;
+}
+
+
+QCString K3bDoc::dcopId()
+{
+  return dcopInterface()->objId();
 }
 
 
@@ -232,7 +248,7 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
   // we do this to load the writer and the writing speed
   // since those are not saved in a project file
   // FIXME
-  newDoc->loadDefaultSettings( kapp->config() );
+  newDoc->loadDefaultSettings( k3bcore->config() );
 
   // ---------
   // load the data into the document

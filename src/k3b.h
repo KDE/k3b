@@ -357,6 +357,9 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   // the funny header
   QWidget* m_documentHeader;
+
+  class Private;
+  Private* d;
 };
 
 #endif // K3B_H

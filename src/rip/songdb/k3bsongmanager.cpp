@@ -216,3 +216,4 @@ void K3bSongManager::debug() const
 }
 
 
+#include "k3bsongmanager.moc"

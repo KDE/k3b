@@ -20,6 +20,7 @@
 #include <k3bjobprogressdialog.h>
 #include "songdb/k3bsong.h"
 #include "songdb/k3bsongmanager.h"
+#include "../k3bcore.h"
 #include "../k3b.h"
 #include "../tools/k3bglobals.h"
 #include "../device/k3btrack.h"
@@ -356,7 +357,7 @@ void K3bAudioRippingDialog::slotLoadK3bDefaults()
 
 void K3bAudioRippingDialog::slotLoadUserDefaults()
 {
-  KConfig* c = k3bMain()->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
   m_editStaticRipPath->setURL( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
@@ -370,7 +371,7 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
 
 void K3bAudioRippingDialog::slotSaveUserDefaults()
 {
-  KConfig* c = k3bMain()->config();
+  KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
   c->writeEntry( "last ripping directory", m_editStaticRipPath->url() );

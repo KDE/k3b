@@ -84,6 +84,7 @@
 #include "k3bstdguiitems.h"
 
 
+
 static K3bMainWindow* s_k3bMainWindow = 0;
 
 K3bMainWindow* k3bMain()
@@ -97,9 +98,18 @@ K3bMainWindow* k3bMain()
 
 
 
+class K3bMainWindow::Private
+{
+public:
+};
+
+
 K3bMainWindow::K3bMainWindow()
   : DockMainWindow(0,"K3b")
+
 {
+  d = new Private;
+
   s_k3bMainWindow = this;
 
   setPlainCaption( i18n("K3b - The CD Kreator") );
@@ -159,6 +169,8 @@ K3bMainWindow::~K3bMainWindow()
   delete mainDock;
   delete m_audioPlayerDock;
   delete m_contentsDock;
+
+  delete d;
 }
 
 
@@ -415,6 +427,9 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   slotCurrentDocChanged( m_documentTab->currentPage() );
 
   setProjectsHidable( false );
+
+  // create the dcop interface
+  doc->dcopInterface();
 }
 
 

@@ -19,7 +19,6 @@
 #include "k3bdevicecombobox.h"
 #include "device/k3bdevice.h"
 #include "device/k3bdevicemanager.h"
-#include "k3b.h"
 #include "tools/k3bglobals.h"
 #include <k3bcore.h>
 
@@ -97,8 +96,6 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
 
-  // TODO: probably use KApplication::settingsChanged
-  connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 
 
@@ -147,8 +144,8 @@ void K3bWriterSelectionWidget::init()
     dev = devices.next();
   }
 
-  kapp->config()->setGroup( "General Settings" );
-  K3bDevice *current = k3bcore->deviceManager()->deviceByName( kapp->config()->readEntry( "current_writer" ) );
+  k3bcore->config()->setGroup( "General Settings" );
+  K3bDevice *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
 
   if ( current == 0 )
     current = devices.first();
@@ -160,7 +157,7 @@ void K3bWriterSelectionWidget::init()
   if( writerDevice() )
     setSpeed( writerDevice()->currentWriteSpeed() );
 
-  slotConfigChanged(kapp->config());
+  slotConfigChanged(k3bcore->config());
   setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
 }
 
@@ -232,7 +229,7 @@ int K3bWriterSelectionWidget::writerSpeed() const
 
 int K3bWriterSelectionWidget::writingApp() const
 {
-  KConfig* c = kapp->config();
+  KConfig* c = k3bcore->config();
   c->setGroup("General Options");
   if( c->readBoolEntry( "Manual writing app selection", false ) ) {
     return selectedWritingApp();
@@ -268,8 +265,8 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 {
   // save last selected writer
   if( writerDevice() ) {
-    kapp->config()->setGroup( "General Settings" );
-    kapp->config()->writeEntry( "current_writer", writerDevice()->devicename() );
+    k3bcore->config()->setGroup( "General Settings" );
+    k3bcore->config()->writeEntry( "current_writer", writerDevice()->devicename() );
   }
 }
 

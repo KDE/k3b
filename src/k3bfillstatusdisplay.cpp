@@ -16,7 +16,7 @@
 
 #include "k3bfillstatusdisplay.h"
 #include "audio/k3baudiodoc.h"
-#include "k3b.h"
+#include "k3bcore.h"
 
 #include <tools/k3bdeviceselectiondialog.h>
 #include <device/k3bdevice.h>
@@ -49,8 +49,8 @@ K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* pa
   : QWidget( parent ),
     m_doc(doc)
 {
-  k3bMain()->config()->setGroup( "General Options" );
-  m_cdSize.addMinutes( k3bMain()->config()->readNumEntry( "Default cd size", 74 ) );
+  k3bcore->config()->setGroup( "General Options" );
+  m_cdSize.addMinutes( k3bcore->config()->readNumEntry( "Default cd size", 74 ) );
 
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
 }

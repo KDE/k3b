@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(srcdir)/..
+AM_CPPFLAGS= -I$(srcdir)/.. $(all_includes)
 
 METASOURCES = AUTO
 

@@ -69,6 +69,8 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
+  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   m_audioDecoder = new K3bAudioDecoder( doc->audioDoc(), this );
   connect( m_audioDecoder, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedAudioDecoderData(const char*, int)) );

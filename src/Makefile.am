@@ -1,4 +1,3 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
 
 k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3btoolbox.cpp k3bisooptions.cpp k3b.cpp k3bprocess.cpp main.cpp k3bdiskerasinginfodialog.cpp k3bemptydiscwaiter.cpp k3bstdguiitems.cpp k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp k3bburnprogressdialog.cpp k3bjob.cpp \
@@ -11,7 +10,10 @@ k3b_SOURCES = k3bcore.cpp k3bapplication.cpp k3bdiroperator.cpp kdndfileview.cpp
 			k3bthreadjob.cpp \
 			k3bjobprogressdialog.cpp k3binteractiondialog.cpp \
 			k3bjobprogresssystemtray.cpp k3bsystemproblemdialog.cpp \
-			k3bdevicecombobox.cpp
+			k3bdevicecombobox.cpp \
+			k3bprojectmanager.cpp \
+			k3binterface.cpp k3binterface.skel \
+			k3bprojectinterface.cpp k3bprojectinterface.skel
 
 k3b_LDADD   = ./data/libdata.la ./mixed/libmixed.la ./vcd/libvcd.la ./movix/libmovix.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./device/libdevice.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./tools/kostore/libkostore.la ./cdcopy/libcdcopy.la ./videoEncoding/libvideoEncoding.la ./plugin/libk3bplugin.la $(OGG_VORBISLIBS) -lartskde  -lkio -lkparts $(RESMGR_LIB)
 
@@ -23,7 +25,7 @@ apps_DATA = k3b.desktop
 appsdir = $(kde_appsdir)/Multimedia
 
 
-####### kdevelop will overwrite this part!!! (end)############
+###################
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
 # kde_appsdir       Where your application file (.kdelnk) should go to.
@@ -38,7 +40,10 @@ appsdir = $(kde_appsdir)/Multimedia
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(srcdir)/tools -I$(srcdir)/device
+AM_CPPFLAGS= -I$(srcdir)/tools -I$(srcdir)/device $(all_includes)
+
+# K3b does not compile filne with --enable-final
+KDE_OPTIONS = nofinal
 
 METASOURCES = AUTO
 

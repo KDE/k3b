@@ -43,7 +43,7 @@ class K3bBurnJob;
 class QDomDocument;
 class QDomElement;
 class KConfig;
-
+class K3bProjectInterface;
 
 
 /**
@@ -143,6 +143,9 @@ class K3bDoc : public QObject
    */
   virtual QString documentType() const = 0;
 
+  virtual K3bProjectInterface* dcopInterface();
+  QCString dcopId();
+
  public slots:
   void updateAllViews();
   void setDummy( bool d );
@@ -202,6 +205,8 @@ class K3bDoc : public QObject
 
   int m_docType;
 
+  K3bProjectInterface* m_dcopInterface;
+
  private:
   /** the modified flag of the current document */
   bool modified;
@@ -225,6 +230,8 @@ class K3bDoc : public QObject
   int m_writingMode;
 
   bool m_saved;
+
+  friend class K3bProjectManager;
 };
 
 #endif // K3BDOC_H

@@ -23,6 +23,7 @@
 
 class K3bMainWindow;
 class K3bCore;
+class K3bInterface;
 
 
 class K3bApplication : public KApplication
@@ -47,6 +48,8 @@ class K3bApplication : public KApplication
 
  private:
   K3bCore* m_core;
+  K3bInterface* m_interface;
+  K3bMainWindow* m_mainWindow;
   static K3bApplication* s_k3bApp;
 };
 

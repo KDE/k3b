@@ -17,6 +17,7 @@
 #include "k3bapplication.h"
 #include "k3b.h"
 #include "k3bcore.h"
+#include "k3binterface.h"
 
 #include <device/k3bdevicemanager.h>
 #include <tools/k3bexternalbinmanager.h>
@@ -30,6 +31,7 @@
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
+#include <dcopclient.h>
 
 
 K3bApplication* K3bApplication::s_k3bApp = 0;
@@ -37,7 +39,9 @@ K3bApplication* K3bApplication::s_k3bApp = 0;
 
 
 K3bApplication::K3bApplication()
-  : KApplication()
+  : KApplication(),
+    m_interface(0),
+    m_mainWindow(0)
 {
   m_core = new K3bCore( aboutData(), this );
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
@@ -50,12 +54,14 @@ K3bApplication::K3bApplication()
 
 K3bApplication::~K3bApplication()
 {
+  // we must not delete m_mainWindow here, QApplication takes care of it
+  delete m_interface;
 }
 
 
 K3bMainWindow* K3bApplication::k3bMainWindow() const
 {
-  return static_cast<K3bMainWindow*>( mainWidget() );
+  return m_mainWindow;
 }
 
 
@@ -65,10 +71,19 @@ void K3bApplication::init()
 
   emit initializationInfo( i18n("Creating GUI...") );
 
-  K3bMainWindow *k3bMainWidget = new K3bMainWindow();
-  setMainWidget( k3bMainWidget );
+  m_mainWindow = new K3bMainWindow();
+  setMainWidget( m_mainWindow );
 
-  k3bMainWidget->show();
+  if( dcopClient()->attach() ) {
+    dcopClient()->registerAs( "k3b" );
+    m_interface = new K3bInterface( m_mainWindow );
+    dcopClient()->setDefaultObject( m_interface->objId() );
+  }
+  else {
+    kdDebug() << "(K3bApplication) unable to attach to dcopserver!" << endl;
+  }
+
+  m_mainWindow->show();
 
   emit initializationInfo( i18n("Ready.") );
 
@@ -76,66 +91,66 @@ void K3bApplication::init()
 
   if( args->isSet( "data" ) ) {
     // create new data project and add all arguments
-    k3bMainWidget->slotNewDataDoc();
-    K3bDoc* doc = k3bMainWidget->activeDoc();
+    m_mainWindow->slotNewDataDoc();
+    K3bDoc* doc = m_mainWindow->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "audio" ) ) {
     // create new audio project and add all arguments
-    k3bMainWidget->slotNewAudioDoc();
-    K3bDoc* doc = k3bMainWidget->activeDoc();
+    m_mainWindow->slotNewAudioDoc();
+    K3bDoc* doc = m_mainWindow->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "mixed" ) ) {
     // create new audio project and add all arguments
-    k3bMainWidget->slotNewMixedDoc();
-    K3bDoc* doc = k3bMainWidget->activeDoc();
+    m_mainWindow->slotNewMixedDoc();
+    K3bDoc* doc = m_mainWindow->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "vcd" ) ) {
     // create new audio project and add all arguments
-    k3bMainWidget->slotNewVcdDoc();
-    K3bDoc* doc = k3bMainWidget->activeDoc();
+    m_mainWindow->slotNewVcdDoc();
+    K3bDoc* doc = m_mainWindow->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "emovix" ) ) {
     // create new audio project and add all arguments
-    k3bMainWidget->slotNewMovixDoc();
-    K3bDoc* doc = k3bMainWidget->activeDoc();
+    m_mainWindow->slotNewMovixDoc();
+    K3bDoc* doc = m_mainWindow->activeDoc();
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
   else if( args->isSet( "isoimage" ) ) {
     if ( args->count() == 1 )
-      k3bMainWidget->slotWriteIsoImage( args->url(0) );
+      m_mainWindow->slotWriteIsoImage( args->url(0) );
     else
-      k3bMainWidget->slotWriteIsoImage();
+      m_mainWindow->slotWriteIsoImage();
   }
   else if( args->isSet( "binimage" ) ) {
     if ( args->count() == 1 )
-      k3bMainWidget->slotWriteBinImage( args->url(0) );
+      m_mainWindow->slotWriteBinImage( args->url(0) );
     else
-      k3bMainWidget->slotWriteBinImage();
+      m_mainWindow->slotWriteBinImage();
   }
   else if(args->count()) {
     for( int i = 0; i < args->count(); i++ ) {
-      k3bMainWidget->openDocumentFile( args->url(i) );
+      m_mainWindow->openDocumentFile( args->url(i) );
     }
   }
 
   if( args->isSet("copy") )
-    k3bMainWidget->slotCdCopy();
+    m_mainWindow->slotCdCopy();
   else if( args->isSet("erase") )
-    k3bMainWidget->slotBlankCdrw();
+    m_mainWindow->slotBlankCdrw();
 
   args->clear();
 }
