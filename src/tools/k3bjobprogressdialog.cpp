@@ -43,6 +43,8 @@
 #include <qtimer.h>
 #include <qfont.h>
 #include <qeventloop.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -59,30 +61,31 @@
 #include <kmainwindow.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <kfiledialog.h>
 
 
-class K3bJobProgressDialog::PrivateDebugWidget : public KDialog
+
+class K3bJobProgressDialog::PrivateDebugWidget : public KDialogBase
 {
 public:
   PrivateDebugWidget( QMap<QString, QStringList>&, QWidget* parent );
+
+private:
+  void slotUser1();
+
+  QTextView* debugView;
 };
 
 
 K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStringList>& map, QWidget* parent )
-  : KDialog( parent, "debugViewDialog", true )
+  : KDialogBase( Plain, i18n("Debuggin Output"), Close|User1, Close, parent, "debugViewDialog", true,
+		 false, KGuiItem( i18n("Save to file"), "filesaveas" ) )
 {
-  setCaption( i18n("Debugging Output") );
-
-  KPushButton* okButton = new KPushButton( KStdGuiItem::ok(), this );
-  QTextView* debugView = new QTextView( this );
-  QGridLayout* grid = new QGridLayout( this );
-  grid->addMultiCellWidget( debugView, 0, 0, 0, 1 );
-  grid->addWidget( okButton, 1, 1 );
+  debugView = new QTextView( plainPage() );
+  QGridLayout* grid = new QGridLayout( plainPage() );
+  grid->addWidget( debugView, 0, 0 );
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
-  grid->setColStretch( 0, 1 );
-
-  connect( okButton, SIGNAL(pressed()), this, SLOT(accept()) );
 
   debugView->append( "System\n" );
   debugView->append( "-----------------------\n" );
@@ -109,6 +112,26 @@ K3bJobProgressDialog::PrivateDebugWidget::PrivateDebugWidget( QMap<QString, QStr
 }
 
 
+void K3bJobProgressDialog::PrivateDebugWidget::slotUser1()
+{
+  QString filename = KFileDialog::getSaveFileName();
+  if( !filename.isEmpty() ) {
+    QFile f( filename );
+    if( !f.exists() || KMessageBox::warningYesNo( this,
+						  i18n("Do you want to overwrite %1?").arg(filename),
+						  i18n("File Exists") )
+	== KMessageBox::Yes ) {
+
+      if( f.open( IO_WriteOnly ) ) {
+	QTextStream t( &f );
+	t << debugView->text();
+      }
+      else {
+	KMessageBox::error( this, i18n("Could not open file %1").arg(filename) );
+      }
+    }
+  }
+}
 
 
 
