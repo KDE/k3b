@@ -151,7 +151,7 @@ void K3bCdDevice::ScsiCommand::clear()
   ::memset( &d->sense, 0, sizeof(struct request_sense) );
 
   d->cmd.quiet = 1;
-  d->cmd.sense = &sense;
+  d->cmd.sense = &d->sense;
 #endif
 #ifdef Q_OS_FREEBSD
   memset (&d->ccb,0,sizeof(ccb));
