@@ -73,8 +73,9 @@ class K3bExternalBinManager : public QObject
   Q_OBJECT
 
  public:
-  K3bExternalBinManager( QObject* parent = 0 );
   ~K3bExternalBinManager();
+
+  static K3bExternalBinManager* self();
 
   void search();
 
@@ -102,6 +103,8 @@ class K3bExternalBinManager : public QObject
   void gatherOutput(KProcess*, char*, int);
 
  private:
+  K3bExternalBinManager();
+
   void createProgramContainer();
 
   K3bExternalBin* probeCdrecord( const QString& );

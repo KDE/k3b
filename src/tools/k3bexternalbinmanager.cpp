@@ -74,8 +74,8 @@ void K3bExternalBin::addUserParameter( const QString& p )
 // ///////////////////////////////////////////////////////////
 
 
-K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
-  : QObject( parent )
+K3bExternalBinManager::K3bExternalBinManager()
+  : QObject()
 {
 }
 
@@ -581,6 +581,15 @@ void K3bExternalProgram::addUserParameter( const QString& p )
 {
   if( !m_userParameters.contains( p ) )
     m_userParameters.append(p);
+}
+
+
+K3bExternalBinManager* K3bExternalBinManager::self()
+{
+  static K3bExternalBinManager* instance = 0;
+  if( !instance )
+    instance = new K3bExternalBinManager();
+  return instance;
 }
 
 
