@@ -2785,6 +2785,14 @@ QValueList<int> K3bCdDevice::CdDevice::determineSupportedWriteSpeeds() const
       if( dataLen > 32 ) {
 	// we have descriptors
 	int numDesc = from2Byte( mm->num_wr_speed_des );
+
+	// Some CDs writer returns the number of bytes that contain
+	// the descriptors rather than the number of descriptors
+	// Ensure number of descriptors claimed actually fits in the data
+	// returned by the mode sense command.
+	if( numDesc > ((dataLen - 32 - 8) / 4) )
+	  numDesc = (dataLen - 32 - 8) / 4;
+
 	cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;      
 
 	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
