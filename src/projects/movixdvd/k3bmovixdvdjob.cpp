@@ -16,7 +16,6 @@
 
 #include "k3bmovixdvdjob.h"
 #include "k3bmovixdvddoc.h"
-#include "k3bmovixinstallation.h"
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdocpreparer.h"
 
