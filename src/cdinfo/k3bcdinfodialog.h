@@ -1,7 +1,7 @@
 /***************************************************************************
-                          k3bcdinfotrack.h  -  description
+                          k3bcdinfodialog.h  -  description
                              -------------------
-    begin                : Sun Apr 22 2001
+    begin                : Mon Oct 29 2001
     copyright            : (C) 2001 by Sebastian Trueg
     email                : trueg@informatik.uni-freiburg.de
  ***************************************************************************/
@@ -15,18 +15,35 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef K3BCDINFOTRACK_H
-#define K3BCDINFOTRACK_H
+#ifndef K3BCDINFODIALOG_H
+#define K3BCDINFODIALOG_H
+
+#include <kdialogbase.h>
+
+class QComboBox;
+class K3bCdInfo;
+class QPushButton;
 
 
 /**
   *@author Sebastian Trueg
   */
+class K3bCdInfoDialog : public KDialogBase
+{
+ Q_OBJECT
 
-class K3bCDInfoTrack {
-public: 
-	K3bCDInfoTrack();
-	~K3bCDInfoTrack();
+ public: 
+  K3bCdInfoDialog( QWidget* parent = 0, const char* name = 0, bool modal = false );
+  ~K3bCdInfoDialog();
+
+ private slots:
+  void slotDeviceChanged();
+
+ private:
+  QComboBox* m_comboDevice;
+  QPushButton* m_buttonRefresh;
+
+  K3bCdInfo* m_cdInfo;
 };
 
 #endif
