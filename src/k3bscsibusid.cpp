@@ -22,12 +22,12 @@ K3bScsiBusId::K3bScsiBusId()
 {
 }
 
-K3bScsiBusId::K3bScsiBusId( int b, int t, int l, QString p )
+K3bScsiBusId::K3bScsiBusId( int b, int t, int l, const QString& p )
+  : product( p )
 {
   bus = b;
   target = t;
   lun = l;
-  product = p;
 }
 
 K3bScsiBusId::~K3bScsiBusId()
