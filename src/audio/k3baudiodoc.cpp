@@ -127,6 +127,26 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
     urlsToAdd.enqueue( new PrivateUrlToAdd( *it, position++ ) );
     //cerr <<  "adding url to queue: " << *it;
+
+    // append at the end by default
+//     if( position > m_tracks->count() )
+//       position = m_tracks->count();
+	
+//     if( !(*it).isLocalFile() ) {
+//       //      kdDebug() << item->url.path() << " no local file" << endl;
+//       return;
+//     }
+	
+//     if( !QFile::exists( (*it).path() ) ) {
+//       m_notFoundFiles.append( (*it).path() );
+//       return;
+//     }
+
+//     if( !readM3uFile( *it, position ) )
+//       if( K3bAudioTrack* newTrack = createTrack( *it ) )
+// 	addTrack( newTrack, position );
+
+//     position++;
   }
 
   m_urlAddingTimer->start(0);
@@ -157,6 +177,8 @@ void K3bAudioDoc::slotWorkUrlQueue()
 	addTrack( newTrack, lastAddedPosition );
 
     delete item;
+
+    emit newTracks();
   }
 
   else {

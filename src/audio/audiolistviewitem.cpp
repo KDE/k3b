@@ -86,7 +86,6 @@ void K3bAudioListViewItem::setText(int col, const QString& text )
     int f = text.toInt(&ok);
     if( ok )
       m_track->setPregap( f );
-    return;
   }
 
   KListViewItem::setText( col, text );
