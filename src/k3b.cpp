@@ -771,7 +771,7 @@ void K3bMainWindow::slotNewAudioDoc()
   doc->newDocument();
 
   m_audioUntitledCount++;
-  QString fileName = QString(i18n("Audio%1")).arg(m_audioUntitledCount);
+  QString fileName = i18n("Audio%1").arg(m_audioUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -789,8 +789,8 @@ void K3bMainWindow::slotNewDataDoc()
   doc->newDocument();
 
   m_dataUntitledCount++;
-  QString fileName = QString(i18n("Data%1")).arg(m_dataUntitledCount);
-  doc->isoOptions().setVolumeID( QString(i18n("Data%1")).arg(m_dataUntitledCount) );
+  QString fileName = i18n("Data%1").arg(m_dataUntitledCount);
+  doc->isoOptions().setVolumeID( i18n("Data%1").arg(m_dataUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -809,7 +809,7 @@ void K3bMainWindow::slotNewMixedDoc()
   doc->newDocument();
 
   m_mixedUntitledCount++;
-  QString fileName=QString(i18n("Mixed%1")).arg(m_mixedUntitledCount);
+  QString fileName=i18n("Mixed%1").arg(m_mixedUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
