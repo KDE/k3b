@@ -18,6 +18,7 @@
 #include "k3b.h"
 #include "k3binterface.h"
 #include "k3bwriterspeedverificationdialog.h"
+#include "k3bsplash.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -41,6 +42,9 @@
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
 #include <kstandarddirs.h>
+
+#include <qguardedptr.h>
+#include <qtimer.h>
 
 
 K3bApplication* K3bApplication::s_k3bApp = 0;
@@ -84,6 +88,19 @@ K3bMainWindow* K3bApplication::k3bMainWindow() const
 
 void K3bApplication::init()
 {
+  config()->setGroup( "General Options" );
+  QGuardedPtr<K3bSplash> splash;
+  if( config()->readBoolEntry("Show splash", true) ) {
+    splash = new K3bSplash( 0 );
+    splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+    
+    // kill the splash after 5 seconds
+    QTimer::singleShot( 5000, splash, SLOT(close()) );
+    
+    splash->show();
+  }
+
+
   // load the plugins before doing anything else
   // they might add external bins
   K3bPluginManager* pluginManager = new K3bPluginManager( this );
@@ -95,6 +112,9 @@ void K3bApplication::init()
   //
   m_core->externalBinManager()->addProgram( new K3bMovixProgram() );
 
+  //
+  // Load device, external programs, and stuff.
+  //
   m_core->init();
 
   emit initializationInfo( i18n("Reading local Song database...") );
@@ -139,27 +159,21 @@ void K3bApplication::init()
     // search the config
     config()->setGroup( "Devices" );
 
-    int devNum = 1;
-    QStringList list = config()->readListEntry( "Device1" );
-    devNum = 1;
-    while( !list.isEmpty() ) {
-      if( K3bDevice* dev = k3bcore->deviceManager()->deviceByName( list[0] ) ) {
-	if( dev->vendor() == list[1] && 
-	    dev->description() == list[2] &&
-	    list[4].toInt() > 175 ) {
-	  wlist.removeRef( dev );
-	}
-      }
-    
-      devNum++;
-      list = config()->readListEntry( QString( "Device%1" ).arg( devNum ) );
+    for( QPtrListIterator<K3bCdDevice::CdDevice> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
+      K3bCdDevice::CdDevice* dev = *it;
+      QString configEntryName = dev->vendor() + " " + dev->description();
+      QStringList list = config()->readListEntry( configEntryName );
+      if( list.count() > 1 && list[1].toInt() > 175 )
+	wlist.removeRef( dev );
     }
-
+    
     // the devices left in wlist are the once not verified yet
     needToVerify = !wlist.isEmpty();
   }
 
   if( needToVerify && !wlist.isEmpty() ) {
+    if( splash )
+      splash->close();
     K3bWriterSpeedVerificationDialog::verify( wlist, m_mainWindow );
   }
 
@@ -172,6 +186,7 @@ void K3bApplication::init()
 
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
+  bool closeSplash = true;
   if( args->isSet( "datacd" ) ) {
     // create new data project and add all arguments
     K3bDoc* doc = m_mainWindow->slotNewDataDoc();
@@ -239,19 +254,34 @@ void K3bApplication::init()
       m_mainWindow->openDocument( args->url(i) );
     }
   }
-
-  if( args->isSet("copycd") )
-    m_mainWindow->slotCdCopy();
-  else if( args->isSet("copydvd") )
-    m_mainWindow->slotDvdCopy();
-  else if( args->isSet("erasecd") )
-    m_mainWindow->slotBlankCdrw();
-  else if( args->isSet("formatdvd") )
-    m_mainWindow->slotFormatDvd();
   else
+    closeSplash = false;
+
+  bool closeSplash2 = true;
+  if( args->isSet("copycd") ) {
+    m_mainWindow->slotCdCopy();
+  }
+  else if( args->isSet("copydvd") ) {
+    m_mainWindow->slotDvdCopy();
+  }
+  else if( args->isSet("erasecd") ) {
+    m_mainWindow->slotBlankCdrw();
+  }
+  else if( args->isSet("formatdvd") ) {
+    m_mainWindow->slotFormatDvd();
+  }
+  else {
+    closeSplash2 = false;
     KTipDialog::showTip( m_mainWindow );
+  }
+
+  if( (closeSplash||closeSplash2) && splash ) {
+    splash->close();
+  }
 
   args->clear();
+
+  emit initializationDone();
 }
 
 

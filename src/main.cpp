@@ -27,14 +27,12 @@
 #include <kurl.h>
 
 #include <qfile.h>
-#include <qtimer.h>
 #include <qcstring.h>
 #include <qdatastream.h>
 
 #include <stdlib.h>
 
 #include "k3bapplication.h"
-#include "k3bsplash.h"
 #include "k3bsmartinstancereuser.h"
 #include <k3bglobals.h>
 
@@ -69,7 +67,7 @@ int main( int argc, char* argv[] )
 {
 
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-			"0.11.93", description, KAboutData::License_GPL,
+			"0.11.94", description, KAboutData::License_GPL,
 			I18N_NOOP("(c) 1999 - 2004, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );
   aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
@@ -103,8 +101,7 @@ int main( int argc, char* argv[] )
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-  // we need the app in both cases since KWin::forceActiveWindow will crash otherwise (although
-  // I have no idea why.... it does not use kapp)
+  // we need the app in both cases since KWin::forceActiveWindow will crash otherwise
   K3bApplication app;
 
   app.config()->setGroup( "General Options" );
@@ -120,17 +117,6 @@ int main( int argc, char* argv[] )
 	kdDebug() << "Unable to set to language " << args->getOption("lang") 
 		  << " current is: " << KGlobal::locale()->language() << endl;
 
-
-    K3bSplash* splash = 0;
-    if( app.config()->readBoolEntry("Show splash", true) ) {
-      splash = new K3bSplash( 0 );
-      splash->connect( &app, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
-	
-      // kill the splash after 5 seconds
-      QTimer::singleShot( 5000, splash, SLOT(close()) );
-	
-      splash->show();
-    }
 
     //
     // this will init everything
