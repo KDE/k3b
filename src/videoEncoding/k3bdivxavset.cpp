@@ -72,7 +72,7 @@ Regarding quality, try all the different codecs to find out which you prefer. Se
 (www.doom9.org, www.xvid.org, www.divx.net, ... ). The difference between a DivX4 and XviD 2-pass encoded movie \
 is quite small. Sometimes DivX4 (smoother) is better and other times XviD (sharper).\
 If the encoding process crashes you probably haven't used the codec you have installed. Due to the same name of the codec libraries you \
-can only use Divx4 or Divx5 and Xvid or Xvid (CVS). This will be fixed in future version so the codecs will auto dectect and \
+can only use Divx4 or Divx5 and Xvid or Xvid (CVS). This will be fixed in a future version so the codecs will auto dectect and \
 can be used with different install locations."));
     QWhatsThis::add( codec, wt_codec );
     QLabel *codecmode = new QLabel( i18n("Codec mode:"), this );
