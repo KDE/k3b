@@ -850,7 +850,7 @@ int K3bCdDevice::CdDevice::isEmpty() const
     return NO_INFO;
 
   if( !isReady() )
-    return NO_DISC;
+    return NO_DISK;
 
   unsigned char* data = 0;
   int dataLen = 0;
