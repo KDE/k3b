@@ -16,7 +16,7 @@
 #include <sys/ioctl.h>		// ioctls
 #include <unistd.h>		// lseek, read. etc
 #include <fcntl.h>		// O_RDONLY etc.
-#include <linux/cdrom.h>	// old ioctls for cdrom
+#include <linux/cdrom.h>	// ioctls for cdrom
 #include <stdlib.h>
 
 
@@ -65,6 +65,20 @@ void K3bDiskInfoDetector::finish(bool success)
 void K3bDiskInfoDetector::fetchDiskInfo()
 {
   struct cdrom_generic_command cmd;
+// struct cdrom_generic_command
+// {
+//         unsigned char           cmd[CDROM_PACKET_SIZE];
+//         unsigned char           *buffer;
+//         unsigned int            buflen;
+//         int                     stat;
+//         struct request_sense    *sense;
+//         unsigned char           data_direction;
+//         int                     quiet;
+//         int                     timeout;
+//         void                    *reserved[1];
+// };
+
+
   unsigned char inf[32];
 
   ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
@@ -74,9 +88,34 @@ void K3bDiskInfoDetector::fetchDiskInfo()
   cmd.buffer = inf;
   cmd.buflen = 32;
   cmd.data_direction = CGC_DATA_READ;
- 
+//
+// Disc Information Block
+// ======================
+// Byte   0-1: Disk Information Length
+// Byte     2: Bits 0-1 Disc Status: 0-empty,1-appendable,2-complete,3-other
+//             Bits 2-3 State of last Session: 0-empty,1-incomplete,2-reserved,3-complete
+//             Bit    4 Erasable, 1-cd-rw present
+//             Bits 5-7 Reserved
+// Byte     3: Number of first Track on Disk
+// Byte     4: Number of Sessions (LSB)
+// Byte     5: First Track in Last Session (LSB)
+// Byte     6: Last Track in Last Session (LSB)
+// Byte     7: Bits 0-4 Reserved
+//             Bit    5 URU Unrestricted Use Bit
+//             Bit    6 DBC_V Disc Bar Code Field is Valid 
+//             Bit    7 DID_V Disc Id Field is valid
+// Byte     8: Disc Type: 0x00 CD-DA or CD-ROM, 0x10 CD-I, 0x20 CD-ROM XA, 0xFF undefined
+//                        all other values reserved
+// Byte     9: Number of Sessions (MSB)
+// Byte    10: First Track in Last Session (MSB)
+// Byte    11: Last Track in Last Session (MSB)
+// Byte 12-15: Disc Identification
+// Byte 16-19: Last Session Lead-In Start Time MSF (16-MSB 19-LSB)
+// Byte 20-23: Last Possible Start Time for Start of Lead-Out MSF (20-MSB 23-LSB)
+// Byte 24-31: Disc Bar Code
+//        
   if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 ) {
-    m_info.appendable = ( (inf[2] & 0x03) < 2 );        // disc state incomplete
+    m_info.appendable = ( (inf[2] & 0x03) < 2 );        // disc empty or incomplete
     m_info.empty = ( (inf[2] & 0x03) == 0 );
     m_info.cdrw =( ((inf[2] >> 4 ) & 0x01) == 1 );      // erasable
     if ( inf[21] != 0xFF && inf[22] != 0xFF && inf[23] != 0xFF ) {
@@ -135,15 +174,28 @@ void K3bDiskInfoDetector::fetchTocInfo()
   ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
   ::memset(dat,0,4);
   cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP; 
-  cmd.cmd[2] = 1;
+// Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
+  cmd.cmd[2] = 1; 
   cmd.cmd[8] = 4;
   cmd.buffer = dat;
   cmd.buflen = 4;
   cmd.data_direction = CGC_DATA_READ;
+//
+// Session Info
+// ============
+// Byte 0-1: Data Length
+// Byte   2: First Complete Session Number (Hex) - always 1
+// Byte   3: Last Complete Session Number (Hex)
+//
   if ( ::ioctl(m_cdfd,CDROM_SEND_PACKET,&cmd) == 0 )
      m_info.sessions = dat[3];
   else 
     kdDebug() << "(K3bDiskInfoDetector) could not get session info !" << endl;
+// 
+// CDROMREADTOCHDR ioctl returns: 
+// cdth_trk0: First Track Number
+// cdth_trk1: Last Track Number
+//
   if ( ::ioctl(m_cdfd,CDROMREADTOCHDR,&tochdr) != 0 )
   {
      kdDebug() << "(K3bDiskInfoDetector) could not get toc header !" << endl;
@@ -153,8 +205,33 @@ void K3bDiskInfoDetector::fetchTocInfo()
   K3bTrack lastTrack;
   for (int i = tochdr.cdth_trk0; i <= tochdr.cdth_trk1 + 1; i++) {
     ::memset(&tocentry,0,sizeof (struct cdrom_tocentry));
+// get Lead-Out Information too
     tocentry.cdte_track = (i<=tochdr.cdth_trk1) ? i : CDROM_LEADOUT;
     tocentry.cdte_format = CDROM_LBA;
+//
+// CDROMREADTOCENTRY ioctl returns:
+// cdte_addr.lba: Start Sector Number (LBA Format requested)
+// cdte_ctrl:     4 ctrl bits
+//                   00x0b: 2 audio Channels(no pre-emphasis)
+//                   00x1b: 2 audio Channels(pre-emphasis)
+//                   10x0b: audio Channels(no pre-emphasis),reserved in cd-rw
+//                   10x1b: audio Channels(pre-emphasis),reserved in cd-rw
+//                   01x0b: data track, recorded uninterrupted
+//                   01x1b: data track, recorded incremental
+//                   11xxb: reserved
+//                   xx0xb: digital copy prohibited
+//                   xx1xb: digital copy permitted
+// cdte_addr:     4 addr bits (type of Q-Subchannel data)
+//                   0000b: no Information
+//                   0001b: current position data
+//                   0010b: MCN
+//                   0011b: ISRC
+//                   0100b-1111b:  reserved
+// cdte_datamode:  0: Data Mode1
+//                 1: CD-I
+//                 2: CD-XA Mode2
+//
+
     if ( ::ioctl(m_cdfd,CDROMREADTOCENTRY,&tocentry) != 0)
       kdDebug() << "(K3bDiskInfoDetector) error reading tocentry " << i << endl; 
     int startSec = tocentry.cdte_addr.lba;
