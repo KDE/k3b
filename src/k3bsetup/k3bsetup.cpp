@@ -60,6 +60,11 @@ bool K3bSetup::saveConfig( KConfig* c )
 
 uint K3bSetup::createCdWritingGroup()
 {
+  if( m_cdwritingGroup.isEmpty() ) {
+    qDebug("(K3bSetup) setting cd writing group to 'cdrecording'.");
+    m_cdwritingGroup = "cdrecording";
+  }
+
   // search group and create new if not found
   struct group* oldGroup = getgrnam( m_cdwritingGroup.latin1() );
   uint groupId;

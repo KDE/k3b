@@ -39,6 +39,9 @@ class K3bFillStatusDisplay : public QFrame  {
   K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent=0, const char *name=0);
   ~K3bFillStatusDisplay();
 
+  QSize sizeHint() const;
+  QSize minimumSizeHint() const;
+
  public slots:
   void showSize();
   void showTime();

@@ -53,6 +53,7 @@ class K3bSetupWizard : public KWizard
   void slotPermissionsDetails();
   void slotDeviceItemRenamed( QListViewItem*, const QString&, int );
   void slotExternalProgramItemRenamed( QListViewItem*, const QString&, int );
+  void slotMountPointChanged( QListViewItem*, const QString&, int );
   void slotSelectMountPoint();
   void slotSelectExternalBin();
 

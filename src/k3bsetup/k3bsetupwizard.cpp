@@ -155,8 +155,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_labelSetupDrives = new QLabel( m_page2, "m_labelSetupDrives" );
   m_labelSetupDrives->setText( i18n( "K3b Setup has detected the following CD drives. It tries hard to detect capabilities like the"
 				     " maximum read and write speed but does sometimes fail.\n"
-				     "Please check if all capabilities are detected correctly and change them manually if not."
-				     " You can add additional devices (like /dev/cdrom) if your drive has not been detected." ) );
+				     "Please check if all capabilities are detected correctly and change them manually if not"
+				     " by clicking twice on the value you want to change.\n"
+				     "You can add additional devices (like /dev/cdrom) if your drive has not been detected." ) );
   m_labelSetupDrives->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   QLabel* pixmapLabel2 = new QLabel( m_page2, "pixmapLabel2" );
@@ -173,7 +174,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   groupReaderLayout->setSpacing( KDialog::spacingHint() );
   groupReaderLayout->setMargin( KDialog::marginHint() );
 
-  m_viewSetupReader = new KListView( groupReader, "m_viewSetupDrives" );
+  m_viewSetupReader = new KListView( groupReader, "m_viewSetupReader" );
   groupReaderLayout->addWidget( m_viewSetupReader );
   m_viewSetupReader->addColumn( i18n( "system device" ) );
   m_viewSetupReader->addColumn( i18n( "value" ) );
@@ -194,7 +195,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   groupWriterLayout->setSpacing( KDialog::spacingHint() );
   groupWriterLayout->setMargin( KDialog::marginHint() );
 
-  m_viewSetupWriter = new KListView( groupWriter, "m_viewSetupDrives" );
+  m_viewSetupWriter = new KListView( groupWriter, "m_viewSetupWriter" );
   groupWriterLayout->addWidget( m_viewSetupWriter );
   m_viewSetupWriter->addColumn( i18n( "system device" ) );
   m_viewSetupWriter->addColumn( i18n( "value" ) );
@@ -218,6 +219,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pageLayout_2->addMultiCellLayout( buttonLayout, 2, 2, 1, 2 );
   pageLayout_2->addWidget( groupReader, 1, 1 );
   pageLayout_2->addWidget( groupWriter, 1, 2 );
+
+  QToolTip::add( m_viewSetupWriter, i18n("Click twice to change a value") );
+  QToolTip::add( m_viewSetupReader, i18n("Click twice to change a value") );
 
   addPage( m_page2, i18n( "Setup cd drives" ) );
   // -----------------------------------------------------------------------------------------------------------
@@ -285,9 +289,8 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pixmapLabel4->setScaledContents( TRUE );
 
   m_labelFstab = new QLabel( m_page4, "m_labelFstab" );
-  m_labelFstab->setText( i18n( "K3b Setup will create entries in /etc/fstab for each of the detected cd drives.\n"
-			       "You can change the mountpoint and create a new mountpoint or skip this step."
-			       " (Caution: K3b will not be able to mount the device if no fstab entry is available!)" ) );
+  m_labelFstab->setText( i18n( "K3b Setup can create entries in /etc/fstab for each of the detected cd drives.\n"
+			       "Every user and especially K3b  will then be able to mount the devices." ) );
   m_labelFstab->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 
   m_viewFstab = new KListView( m_page4, "m_viewFstab" );
@@ -295,6 +298,10 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_viewFstab->addColumn( i18n( "System device" ) );
   m_viewFstab->addColumn( i18n( "Mount point" ) );
   m_viewFstab->setAllColumnsShowFocus( true );
+  m_viewFstab->setItemsRenameable( true );
+  m_viewFstab->setRenameable( 0, false );
+  m_viewFstab->setRenameable( 1, false );
+  m_viewFstab->setRenameable( 2, true );
 
   m_checkFstab = new QCheckBox( i18n("Let K3b Setup create fstab entries."), m_page4 );
   m_checkFstab->setChecked( true );
@@ -309,6 +316,8 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pageLayout_4->addWidget( m_buttonSelectMountPoint, 2, 2 );
 
   pageLayout_4->setColStretch( 1, 1 );
+
+  QToolTip::add( m_viewFstab, i18n("Click twice to change a value") );
 
   addPage( m_page4, i18n( "Create /etc/fstab entries" ) );
   // -----------------------------------------------------------------------------------------------------------
@@ -326,7 +335,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   m_labelExternalPrograms = new QLabel( m_page5, "m_labelExternalPrograms" );
   m_labelExternalPrograms->setText( i18n( "K3b uses cdrdao, cdrecord and mkisofs to actually write the cds.\n"
 					  "It is recommended to install these programs. K3b will run without them but major"
-					  " functions will be disabled.\n"
+					  " functions (for example cd writing ;-) will be disabled.\n"
 					  "K3b Setup tries to find the executables. You can change the paths manually if you"
 					  " want other versions to be used or K3b Setup did not find your installation." ) );
   m_labelExternalPrograms->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
@@ -353,6 +362,8 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   pageLayout_5->addWidget( m_buttonSelectExternalBin, 2, 2 );
 
   pageLayout_5->setColStretch( 1, 1 );
+
+  QToolTip::add( m_viewExternalPrograms, i18n("Click twice to change a value") );
 
   addPage( m_page5, i18n( "Setup external programs" ) );
   // -----------------------------------------------------------------------------------------------------------
@@ -432,7 +443,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   groupWriterGroupLayout->setAlignment( Qt::AlignTop );
 
   m_editPermissionsGroup = new QLineEdit( m_groupWriterGroup, "LineEdit1" );
-  m_editPermissionsGroup->setText( i18n( "cdrecording" ) );
+  m_editPermissionsGroup->setText( "cdrecording" );
   groupWriterGroupLayout->addWidget( m_editPermissionsGroup );
 
 
@@ -466,7 +477,7 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
   QLabel* finishedLabel = new QLabel( m_page7, "finishedLabel" );
   finishedLabel->setText( i18n("<b>Congratulations.</b><p>"
 			       "You finished the K3b Setup. Just press the Finish button to save your changes and then enjoy "
-			       "the best cd writing program of the universe! ;-)") );
+			       "the new ease of cd writing with Linux/KDE.") );
 
   pageLayout_7->addWidget( pixmapLabel7, 0, 0 );
   pageLayout_7->addWidget( finishedLabel, 0, 1 );
@@ -494,6 +505,9 @@ K3bSetupWizard::K3bSetupWizard( QWidget* parent,  const char* name, bool modal, 
 
   connect( m_viewExternalPrograms, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
 	   this, SLOT(slotExternalProgramItemRenamed(QListViewItem*, const QString&, int)) );
+
+  connect( m_viewFstab, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)), 
+	   this, SLOT(slotMountPointChanged(QListViewItem*, const QString&, int)) );
 
   setFinishEnabled( m_page7, true );
 }
@@ -655,7 +669,10 @@ void K3bSetupWizard::init()
     m_setup->loadConfig( m_config );
   }
 
-  m_editPermissionsGroup->setText( m_setup->cdWritingGroup() );
+  if( !m_setup->cdWritingGroup().isEmpty())
+    m_editPermissionsGroup->setText( m_setup->cdWritingGroup() );
+  else
+    m_editPermissionsGroup->setText( "cdrecording" );
   for ( QStringList::ConstIterator it = m_setup->users().begin(); it != m_setup->users().end(); ++it ) {
     m_boxUsers->insertItem( *it );
   }
@@ -837,11 +854,10 @@ void K3bSetupWizard::slotSelectExternalBin()
     return;
 
   QString newPath;
-  bool ok = true;
   newPath = KFileDialog::getOpenFileName( QString::null, QString::null, this, 
 					  i18n("Please select %1 executable").arg(item->text(1)) );
 
-  if(ok)
+  if( !newPath.isEmpty() )
     slotExternalProgramItemRenamed( item, newPath, 2 );
 }
 
@@ -859,6 +875,21 @@ void K3bSetupWizard::slotSelectMountPoint()
       deviceItem->setText( 2, newMp );
       deviceItem->device->setMountPoint( newMp );
     }
+  }
+}
+
+
+void K3bSetupWizard::slotMountPointChanged( QListViewItem* item, const QString& str, int col )
+{
+  QString newMp(str);
+  PrivateDeviceViewItem* deviceItem = dynamic_cast<PrivateDeviceViewItem*>( item );
+  if( deviceItem != 0 ) {
+    // check if newMp is an absolute path
+    if( !newMp.startsWith("/") )
+      newMp.prepend("/");
+    
+    item->setText( 2, newMp );
+    deviceItem->device->setMountPoint( newMp );
   }
 }
 
@@ -1008,17 +1039,20 @@ void K3bSetupWizard::createNewFstab()
   K3bDevice* dev = m_deviceManager->allDevices().first();
   while( dev != 0 ) {
 
-    bool createMoutPoint = true;
+    bool createMountPoint = true;
+
+    // TODO: check if mountpoint is empty
+    // TODO: check if device mounted (unmount by default) KIO::findDeviceMountPoint
 
     // create mountpoint if it does not exist
     if( !QFile::exists( dev->mountPoint() ) ) {
       if( mkdir( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH ) != 0 ) {
 	KMessageBox::error( this, i18n("Could not create mount point '%1'\nNo fstab entry will be created for device %2").arg(dev->mountPoint()).arg(dev->ioctlDevice()) );
-	createMoutPoint = false;
+	createMountPoint = false;
       }
     }
 
-    if( createMoutPoint ) {
+    if( createMountPoint ) {
       // set the correct permissions for the mountpoint
       chmod( dev->mountPoint().latin1(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
 	
@@ -1052,7 +1086,7 @@ void K3bSetupWizard::accept()
     finishMessage.append( i18n("Your old /etc/group file has been saved to /etc/group.k3bsetup.\n") );
 
   finishMessage.append( i18n("If the configuration of your system changes "
-			     "just run K3b Setup again. Your settings will be remembered.\n"
+			     "just run K3b Setup again.\n"
 			     "Thanx for using K3b. Have a lot of fun!") );
 
   KMessageBox::information( this, finishMessage, i18n("K3b Setup finished") );

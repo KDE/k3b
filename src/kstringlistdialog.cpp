@@ -47,8 +47,7 @@ KStringListDialog::~KStringListDialog()
 
 QSize KStringListDialog::sizeHint() const
 {
-  // TODO: fixme
-  return KDialogBase::sizeHint();
+  return KDialogBase::sizeHint().expandedTo( QSize(350, 250) );
 }
 
 #include "kstringlistdialog.moc"

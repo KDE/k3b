@@ -36,8 +36,8 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* _doc, QWidget *parent, const 
   m_showTime = false;
 
   doc = _doc;
-	
-  setMinimumHeight( (int)((double)QFont::defaultFont().pixelSize() * 1.5) );
+
+  setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ) );	
   setFrameStyle( Panel | Sunken );
   setupPopupMenu();
 }
@@ -185,6 +185,19 @@ void K3bFillStatusDisplay::showTime()
 {
   m_showTime = true;
   update();
+}
+
+
+QSize K3bFillStatusDisplay::sizeHint() const
+{
+  return minimumSizeHint();
+}
+
+
+QSize K3bFillStatusDisplay::minimumSizeHint() const
+{
+  int margin = 2;
+  return QSize( -1, 2*frameWidth() + (int)((double)QFont::defaultFont().pixelSize() + 2*margin ) );
 }
 
 
