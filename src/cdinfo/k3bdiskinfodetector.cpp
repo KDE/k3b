@@ -493,14 +493,14 @@ void K3bDiskInfoDetector::fetchIdeInformation()
 	}
 	else {
 
-	  // cdte_format: or'ed combination of the following:
+	  // cdte_ctrl: or'ed combination of the following:
 	  // 0x01 - Audio with preemp
 	  // 0x02 - Audio copy permitted
 	  // 0x04 - Data track
 	  // 0x08 - 4 channel audio
 
 	  startSectors[j] = (int)tocE.cdte_addr.lba;
-	  dataTrack[j] = (bool)(tocE.cdte_format & 0x04);
+	  dataTrack[j] = (bool)(tocE.cdte_ctrl & CDROM_DATA_TRACK);
 	  modes[j] = (int)tocE.cdte_datamode; // this does not seem to provide valid data mode (1/2) info
 	  j++;
 	}
