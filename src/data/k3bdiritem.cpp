@@ -39,7 +39,16 @@ K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentD
 K3bDirItem::~K3bDirItem()
 {
   // delete all children
-  m_children->setAutoDelete( true );
+  // doing this by hand is much saver than using the 
+  // auto-delete feature since some of the items' destructors
+  // may change the list
+  K3bDataItem* i = m_children->first();
+  while( i ) {
+    m_children->take();
+    delete i;
+    i = m_children->first();
+  }    
+
   delete m_children;
 
   // this has to be done after deleting the children

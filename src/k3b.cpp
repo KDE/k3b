@@ -67,6 +67,7 @@
 #include "data/k3bdataview.h"
 #include "mixed/k3bmixeddoc.h"
 #include "vcd/k3bvcddoc.h"
+#include "movix/k3bmovixdoc.h"
 #include "k3bblankingdialog.h"
 #include "data/k3bisoimagewritingdialog.h"
 #include "data/k3bbinimagewritingdialog.h"
@@ -104,6 +105,7 @@ K3bMainWindow::K3bMainWindow()
   m_dataUntitledCount = 0;
   m_mixedUntitledCount = 0;
   m_vcdUntitledCount = 0;
+  m_movixUntitledCount = 0;
 
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
@@ -177,12 +179,15 @@ void K3bMainWindow::initActions()
 				   actionCollection(), "file_new_mixed");
   actionFileNewVcd = new KAction(i18n("New &Video Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
 				   actionCollection(), "file_new_vcd");
+  actionFileNewMovix = new KAction(i18n("New &eMovix Project"),"video", 0, this, SLOT(slotNewMovixDoc()),
+				   actionCollection(), "file_new_movix");
 
 
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->insert( actionFileNewMixed );
   actionFileNewMenu->insert( actionFileNewVcd );
+  actionFileNewMenu->insert( actionFileNewMovix );
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
@@ -823,6 +828,25 @@ void K3bMainWindow::slotNewVcdDoc()
 
   m_vcdUntitledCount++;
   QString fileName=QString(i18n("Video%1")).arg(m_vcdUntitledCount);
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+}
+
+
+void K3bMainWindow::slotNewMovixDoc()
+{
+  slotStatusMsg(i18n("Creating new eMovix Project."));
+
+  K3bMovixDoc* doc = new K3bMovixDoc( this );
+  pDocList->append(doc);
+  doc->newDocument();
+
+  m_movixUntitledCount++;
+  QString fileName=QString(i18n("eMovix%1")).arg(m_movixUntitledCount);
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);

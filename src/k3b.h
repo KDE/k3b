@@ -129,6 +129,7 @@ class K3bMainWindow : public KDockMainWindow
   void slotNewDataDoc();
   void slotNewMixedDoc();
   void slotNewVcdDoc();
+  void slotNewMovixDoc();
   void slotBlankCdrw();
   void slotWriteIsoImage();
   void slotWriteIsoImage( const KURL& url );
@@ -286,6 +287,7 @@ class K3bMainWindow : public KDockMainWindow
   int m_dataUntitledCount;
   int m_mixedUntitledCount;
   int m_vcdUntitledCount;
+  int m_movixUntitledCount;
 
   /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
    * removes this document from the list. The document list is checked for modified documents when the user
@@ -301,6 +303,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionFileNewData;
   KAction* actionFileNewMixed;
   KAction* actionFileNewVcd;
+  KAction* actionFileNewMovix;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;
