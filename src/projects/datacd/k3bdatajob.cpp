@@ -30,7 +30,6 @@
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 
-
 #include <kprocess.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -643,7 +642,10 @@ void K3bDataJob::waitForDisk()
 {
   if( waitForMedia( d->doc->burner(), 
 		    d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-		    d->doc->multiSessionMode() == K3bDataDoc::FINISH ) < 0 ) {
+		    d->doc->multiSessionMode() == K3bDataDoc::FINISH ?
+		    K3bCdDevice::STATE_INCOMPLETE :
+		    K3bCdDevice::STATE_EMPTY,
+		    K3bCdDevice::MEDIA_WRITABLE_CD ) < 0 ) {
     cancel();
   }
 }
