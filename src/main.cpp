@@ -64,10 +64,10 @@ int main(int argc, char *argv[])
 
 
   if( !QFile::exists( K3b::globalConfig() ) ) {
-    if( KMessageBox::warningYesNo( 0, i18n("It seems as if you have not run K3bSetup yet. It is recommended to do so. "
+    if( KMessageBox::warningYesNo( 0, i18n("It appears that you have not run K3bSetup yet. It is recommended to do so. "
 					   "Should K3bSetup be started?"),
 				   i18n("K3b Setup"), KStdGuiItem::yes(), KStdGuiItem::no(), 
-				   i18n("Don't bother me again.") ) == KMessageBox::Yes ) {
+				   i18n("Don't prompt me again.") ) == KMessageBox::Yes ) {
       KRun::runCommand( "kdesu k3bsetup" );
       exit(0);
     }

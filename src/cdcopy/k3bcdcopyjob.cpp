@@ -81,7 +81,7 @@ void K3bCdCopyJob::start()
 void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
 {
   if( info.noDisk ) {
-    emit infoMessage( i18n("No disk in reading drive"), K3bJob::ERROR );
+    emit infoMessage( i18n("No disk in CD reader"), K3bJob::ERROR );
     cancelAll();
     return;
   }
@@ -105,13 +105,13 @@ void K3bCdCopyJob::diskInfoReady( const K3bDiskInfo& info )
 
   switch( info.tocType ) {
   case K3bDiskInfo::DATA:
-    emit infoMessage( i18n("Source disk seems to be data CD"), K3bJob::INFO );
+    emit infoMessage( i18n("Source disk seems to be a data CD"), K3bJob::INFO );
     break;
   case K3bDiskInfo::AUDIO:
-    emit infoMessage( i18n("Source disk seems to be audio CD"), K3bJob::INFO );
+    emit infoMessage( i18n("Source disk seems to be an audio CD"), K3bJob::INFO );
     break;
   case K3bDiskInfo::MIXED:
-    emit infoMessage( i18n("Source disk seems to be mixed mode CD"), K3bJob::INFO );
+    emit infoMessage( i18n("Source disk seems to be a mixed mode CD"), K3bJob::INFO );
     break;
   }
 
@@ -557,9 +557,9 @@ void K3bCdCopyJob::cancelAll()
 
     // we need to unlock the writer because cdrdao/cdrecord locked it while writing
     if( !m_reader->block( false ) )
-      emit infoMessage( i18n("Could not unlock CD reader."), K3bJob::ERROR );
+      emit infoMessage( i18n("Unable to unlock CD reader"), K3bJob::ERROR );
     if( !m_writer->block( false ) )
-      emit infoMessage( i18n("Could not unlock CD writer."), K3bJob::ERROR );
+      emit infoMessage( i18n("Unable to unlock CD writer"), K3bJob::ERROR );
   }
 
   // remove toc-file

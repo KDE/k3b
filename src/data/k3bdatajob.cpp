@@ -415,11 +415,11 @@ void K3bDataJob::writeCD()
   else
     {
       if( m_doc->multiSessionMode() == K3bDataDoc::START )
-	emit infoMessage( i18n("Starting multi session disk."), K3bJob::PROCESS );
+	emit infoMessage( i18n("Starting multi-session disk."), K3bJob::PROCESS );
       else if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE )
 	emit infoMessage( i18n("Appending session"), K3bJob::PROCESS );
       else if( m_doc->multiSessionMode() == K3bDataDoc::FINISH )
-	emit infoMessage( i18n("Finishing multi session disk"), K3bJob::PROCESS );
+	emit infoMessage( i18n("Finishing multi-session disk"), K3bJob::PROCESS );
 
 
       if( m_doc->dummy() )
@@ -645,7 +645,7 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else if( (*str).startsWith( "Starting new" ) )
 	{
-	  emit newSubTask( i18n("Writing iso data") );
+	  emit newSubTask( i18n("Writing ISO data") );
 	}
       else if( (*str).startsWith( "Fixating" ) ) {
 	emit newSubTask( i18n("Fixating") );
@@ -723,16 +723,16 @@ void K3bDataJob::slotMkisofsFinished()
 	  break;
 				
 	default:
-	  emit infoMessage( i18n("Mkisofs returned some error. (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	  emit infoMessage( i18n("mkisofs returned an error. (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
 	  cancelAll();
 	  break;
 	}
     }
   else
     {
-      emit infoMessage( i18n("Mkisofs did not exit cleanly."), K3bJob::ERROR );
+      emit infoMessage( i18n("mkisofs did not exit cleanly."), K3bJob::ERROR );
       cancelAll();
     }
 
@@ -762,16 +762,16 @@ void K3bDataJob::slotCdrecordFinished()
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	  emit infoMessage( i18n("cdrecord returned an error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
 	  emit finished( false );
 	  break;
 	}
     }
   else
     {
-      emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
+      emit infoMessage( i18n("cdrecord did not exit cleanly."), K3bJob::ERROR );
       emit finished( false );
     }
 

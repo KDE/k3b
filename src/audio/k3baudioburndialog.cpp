@@ -219,7 +219,7 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->setMargin( marginHint() );
 
   m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-  m_checkDao->setText( i18n( "DiscAtOnce" ) );
+  m_checkDao->setText( i18n( "Disk at once" ) );
 
   m_checkSimulate = new QCheckBox( m_groupOptions, "m_checkSimulate" );
   m_checkSimulate->setText( i18n( "Simulate Writing" ) );
@@ -257,7 +257,7 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
 
   m_checkCdText = new QCheckBox( i18n( "Write CD-text" ), frame, "m_checkCdText" );
 
-  QLabel* labelDisc_id = new QLabel( i18n( "&Disc ID:" ), frame, "labelDisc_id" );
+  QLabel* labelDisc_id = new QLabel( i18n( "&Disk ID:" ), frame, "labelDisc_id" );
   QLabel* labelMessage = new QLabel( i18n( "&Message:" ), frame, "labelMessage" );
   QLabel* labelUpc_ean = new QLabel( i18n( "&UPC EAN:" ), frame, "labelUpc_ean" );
   QLabel* labelArranger = new QLabel( i18n( "&Arranger:" ), frame, "labelArranger" );

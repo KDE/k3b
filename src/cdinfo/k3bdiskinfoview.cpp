@@ -156,7 +156,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
   m_infoView->clear();
 
   if( !info.valid ) {
-    m_labelTocType->setText( i18n("Sorry, K3b was not able to retrieve disk information.") );
+    m_labelTocType->setText( i18n("K3b was unable to retrieve disk information.") );
     m_labelDiskPix->setPixmap( QPixmap(locate( "data", "k3b/pics/diskinfo_nodisk.png" )) );
   }
 

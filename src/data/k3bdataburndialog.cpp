@@ -356,11 +356,11 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   m_groupOptionsLayout->addWidget( m_checkDeleteImage );
 
   m_checkDao = new QCheckBox( m_groupOptions, "m_checkDao" );
-  m_checkDao->setText( i18n( "Disc at once" ) );
+  m_checkDao->setText( i18n( "Disk at once" ) );
   m_groupOptionsLayout->addWidget( m_checkDao );
 
   m_checkBurnProof = new QCheckBox( m_groupOptions, "m_checkBurnProof" );
-  m_checkBurnProof->setText( i18n( "use BURN-PROOF" ) );
+  m_checkBurnProof->setText( i18n( "Use BURN-PROOF" ) );
   m_groupOptionsLayout->addWidget( m_checkBurnProof );
 
   frameLayout->addWidget( m_groupOptions, 1, 0 );
@@ -388,7 +388,7 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
   // ToolTips
   // -------------------------------------------------------------------------
   QToolTip::add( m_checkDummy, i18n("Only simulate the writing process") );
-  QToolTip::add( m_checkOnTheFly, i18n("Write files directly to cd without creating an image") );
+  QToolTip::add( m_checkOnTheFly, i18n("Write files directly to CD without creating an image") );
   QToolTip::add( m_checkOnlyCreateImage, i18n("Only create an ISO9660 image") );
   QToolTip::add( m_checkDeleteImage, i18n("Remove images from harddisk when finished") );
   QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
@@ -401,25 +401,25 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 				      "laser turned off."
 				      "<p>This is useful, for example, to test a higher writing speed "
 				      "or if your system is able to write on-the-fly.") );
-  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked K3b will not create an image first but write "
+  QWhatsThis::add( m_checkOnTheFly, i18n("<p>If this option is checked, K3b will not create an image first but write "
 					 "the files directly to the CD."
-					 "<p><b>Caution:</b> Although this should work on most systems make sure "
-					 "the data is send to the writer fast enough.")
+					 "<p><b>Caution:</b> Although this should work on most systems, make sure "
+					 "the data is sent to the writer fast enough.")
 					 + i18n("<p>It is recommended to try a simulation first.") );
-  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked K3b will only create an ISO9660 "
-						"image and do no actual writing."
-						"<p>The image can later be written to a cd with most current cd writing "
-						"programs (including K3b for sure ;-).") );
-  QWhatsThis::add( m_checkDeleteImage, i18n("<p>If this option is checked K3b will remove any created images after the "
+  QWhatsThis::add( m_checkOnlyCreateImage, i18n("<p>If this option is checked, K3b will only create an ISO9660 "
+						"image and not do any actual writing."
+						"<p>The image can later be written to a CD with most current CD writing "
+						"programs (including K3b of course).") );
+  QWhatsThis::add( m_checkDeleteImage, i18n("<p>If this option is checked, K3b will remove any created images after the "
 					    "writing has finished."
 					    "<p>Uncheck this if you want to keep the images.") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the CD in 'disk at once' mode as "
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
 				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
 				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
 				    "in DAO mode.") );
-  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
-					  "a feature of the cd writer which avoids buffer underruns.") );
+  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked, K3b enables <em>BURN-PROOF</em>. This is "
+					  "a feature of the CD writer which avoids buffer underruns.") );
 }
 
 
@@ -452,12 +452,12 @@ void K3bDataBurnDialog::setupAdvancedTab( QFrame* frame )
   m_checkUntranslatedNames = new QCheckBox( i18n( "Allow untranslated filenames" ), groupIsoFilesystem, "m_checkUntranslatedNames" );
   m_checkAllow31           = new QCheckBox( i18n( "Allow 31 character filenames" ), groupIsoFilesystem, "m_checkAllow31" );
   m_checkMaxNames          = new QCheckBox( i18n( "Max length (37) filenames" ), groupIsoFilesystem, "m_checkMaxNames" );
-  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow beginning period" ), groupIsoFilesystem, "m_checkBeginPeriod" );
+  m_checkBeginPeriod       = new QCheckBox( i18n( "Allow leading period" ), groupIsoFilesystem, "m_checkBeginPeriod" );
   m_checkRelaxedNames      = new QCheckBox( i18n( "Relaxed filenames" ), groupIsoFilesystem, "m_checkRelaxedNames" );
   m_checkOmitVersion       = new QCheckBox( i18n( "Omit version numbers" ), groupIsoFilesystem, "m_checkOmitVersion" );
   m_checkOmitTrailingPeriod= new QCheckBox( i18n( "Omit trailing period" ), groupIsoFilesystem );
   m_checkNoISOTrans        = new QCheckBox( i18n( "Allow # and ~" ), groupIsoFilesystem, "m_checkNoISOTrans" );
-  m_checkMultiDot          = new QCheckBox( i18n( "Allow multible dots" ), groupIsoFilesystem, "m_checkMultiDot" );
+  m_checkMultiDot          = new QCheckBox( i18n( "Allow multiple dots" ), groupIsoFilesystem, "m_checkMultiDot" );
   m_checkLowercase         = new QCheckBox( i18n( "Allow lowercase filenames" ), groupIsoFilesystem, "m_checkLowercase" );
   m_checkFollowSymbolicLinks = new QCheckBox( i18n( "Follow symbolic links" ), groupIsoFilesystem );
 
@@ -620,7 +620,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
   // Multisession
   // ////////////////////////////////////////////////////////////////////////
-  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multisession"), frame );
+  m_groupMultiSession = new QButtonGroup( 0, Qt::Vertical, i18n("Multi-Session"), frame );
   m_groupMultiSession->layout()->setSpacing( 0 );
   m_groupMultiSession->layout()->setMargin( 0 );
   QGridLayout* m_groupMultiSessionLayout = new QGridLayout( m_groupMultiSession->layout() );
@@ -628,10 +628,10 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   m_groupMultiSessionLayout->setSpacing( spacingHint() );
   m_groupMultiSessionLayout->setMargin( marginHint() );
 
-  m_radioMultiSessionNone = new QRadioButton( i18n("&No multisession"), m_groupMultiSession );
-  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multisession"), m_groupMultiSession );
-  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multisession"), m_groupMultiSession );
-  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multisession"), m_groupMultiSession );
+  m_radioMultiSessionNone = new QRadioButton( i18n("&No multi-session"), m_groupMultiSession );
+  m_radioMultiSessionStart = new QRadioButton( i18n("&Start multi-session"), m_groupMultiSession );
+  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue multi-session"), m_groupMultiSession );
+  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish multi-session"), m_groupMultiSession );
 
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionNone, 0, 0 );
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionStart, 1, 0 );
@@ -650,7 +650,7 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   m_groupWhiteSpaceLayout->setSpacing( spacingHint() );
   m_groupWhiteSpaceLayout->setMargin( marginHint() );
 
-  m_radioSpaceLeave    = new QRadioButton( i18n( "Leave them" ), m_groupWhiteSpace, "m_radioSpaceLeave" );
+  m_radioSpaceLeave    = new QRadioButton( i18n( "Allow" ), m_groupWhiteSpace, "m_radioSpaceLeave" );
   m_radioSpaceReplace  = new QRadioButton( i18n( "Replace with underscores" ), m_groupWhiteSpace, "m_radioSpaceReplace" );
   m_radioSpaceStrip    = new QRadioButton( i18n( "Strip" ), m_groupWhiteSpace, "m_radioSpaceStrip" );
   m_radioSpaceExtended = new QRadioButton( i18n( "Extended strip" ), m_groupWhiteSpace, "m_radioSpaceExtended" );
@@ -671,23 +671,23 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
   // ToolTips
   // -------------------------------------------------------------------------
   QToolTip::add( m_checkDiscardSymLinks, i18n("Ignore all symlinks") );
-  QToolTip::add( m_radioSpaceLeave, i18n("Do not touch spaces in filenames") );
+  QToolTip::add( m_radioSpaceLeave, i18n("Do not change spaces in filenames") );
   QToolTip::add( m_radioSpaceReplace, i18n("Replace all spaces with an underscore") );
-  QToolTip::add( m_radioSpaceStrip, i18n("Just remove all spaces") );
-  QToolTip::add( m_radioSpaceExtended, i18n("Remove all spaces and continue with an upper letter") );
+  QToolTip::add( m_radioSpaceStrip, i18n("Remove all spaces") );
+  QToolTip::add( m_radioSpaceExtended, i18n("Remove all spaces and capitalize the letters following them") );
 
 
   // What's This info
   // -------------------------------------------------------------------------
   QWhatsThis::add( m_radioSpaceLeave, i18n("<p>If this option is checked K3b will leave all spaces in filenames "
-					   "like you know it.") );
+					   "as they are.") );
   QWhatsThis::add( m_radioSpaceReplace, i18n("<p>If this option is checked K3b will replace all spaces in all filenames "
 					     "with an underscore '_'."
 					     "<p>Example: 'my good file.ext' becomes 'my_good_file.ext'") );
   QWhatsThis::add( m_radioSpaceStrip, i18n("<p>If this option is checked K3b will remove all spaces from all filenames."
 					   "<p>Example: 'my good file.ext' becomes 'mygoodfile.ext'") );
   QWhatsThis::add( m_radioSpaceExtended, i18n("<p>If this option is checked K3b will remove all spaces in all filenames "
-					      "and convert all letters following a space to an upper one."
+					      "and capitalize all letters following a space."
 					      "<p>Example: 'my good file.ext' becomes 'myGoodFile.ext'") );
 }
 
@@ -703,7 +703,7 @@ void K3bDataBurnDialog::slotOk()
 {
   // check if enough space in tempdir if not on-the-fly
   if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
-    KMessageBox::sorry( this, i18n("Not enough space in temp directory. Either change the directory or select on-the-fly burning.") );
+    KMessageBox::sorry( this, i18n("Not enough space in temporary directory. Either change the directory or select on-the-fly burning.") );
     return;
   }
   else if( !m_checkOnTheFly->isChecked() ) {

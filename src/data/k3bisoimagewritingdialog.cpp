@@ -79,7 +79,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
   QToolTip::add( m_checkBurnProof, i18n("Enable BURN-PROOF to avoid buffer underruns") );
   QToolTip::add( m_checkUseCueFile, i18n("") );
-  QToolTip::add( m_checkNoFix, i18n("Allow to append further sessions") );
+  QToolTip::add( m_checkNoFix, i18n("Allow further sessions to be appended") );
 
   // What's This info
   // --------------------------------------------------------------------------------
@@ -87,17 +87,17 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 				      "laser turned off."
 				      "<p>This is useful, for example, to test a higher writing speed "
 				      "or if your system is able to write on-the-fly.") );
-  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked K3b will write the CD in 'disk at once' mode as "
+  QWhatsThis::add( m_checkDao, i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
 				    "compared to 'track at once' (TAO)."
 				    "<p>It is always recommended to use DAO where possible."
 				    "<p><b>Caution:</b> Track pregaps other than 2 seconds long are only supported "
 				    "in DAO mode.") );
-  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
-					  "a feature of the cd writer which avoids buffer underruns.") );
+  QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked, K3b enables <em>BURN-PROOF</em>. This is "
+					  "a feature of the CD writer which avoids buffer underruns.") );
   QWhatsThis::add( m_checkUseCueFile, i18n("") );
-  QWhatsThis::add( m_checkNoFix, i18n("<p>If this option is checked K3b will not close the cd meaning "
+  QWhatsThis::add( m_checkNoFix, i18n("<p>If this option is checked, K3b will not close the CD, meaning "
 				      "it will only write a temporary table of contents.</p>"
-				      "<p>This allows to append further sessions to the cd.</p>") );
+				      "<p>This allows further sessions to be appended to the CD.</p>") );
 }
 
 
@@ -211,9 +211,9 @@ void K3bIsoImageWritingDialog::setupGui()
   groupOptionsLayout->setSpacing( spacingHint() );
   groupOptionsLayout->setMargin( marginHint() );
 
-  m_checkBurnProof = new QCheckBox( i18n("Burnproof"), optionTab );
+  m_checkBurnProof = new QCheckBox( i18n("Burn-proof"), optionTab );
   m_checkDummy = new QCheckBox( i18n("Simulate"), optionTab );
-  m_checkDao = new QCheckBox( i18n("Disc at once"), optionTab );
+  m_checkDao = new QCheckBox( i18n("Disk at once"), optionTab );
 
   groupOptionsLayout->addWidget( m_checkDummy, 0, 0 );
   groupOptionsLayout->addWidget( m_checkDao, 1, 0 );
@@ -227,7 +227,7 @@ void K3bIsoImageWritingDialog::setupGui()
 
   //  m_checkRawWrite = new QCheckBox( i18n("Raw writing"), advancedTab );
   m_checkUseCueFile = new QCheckBox( i18n("Use cue-file"), advancedTab );
-  m_checkNoFix = new QCheckBox( i18n("Do not close cd"), advancedTab );
+  m_checkNoFix = new QCheckBox( i18n("Do not close CD"), advancedTab );
 
   advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
   //  advancedTabLayout->addWidget( m_checkRawWrite, 1, 0 );
@@ -418,7 +418,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
       
       m_isoInfoWidget->show();
       
-      m_generalInfoLabel->setText( i18n("Seems to be an iso9660 image") );
+      m_generalInfoLabel->setText( i18n("Seems to be an ISO9660 image") );
       m_checkUseCueFile->setChecked( false );
       //      m_checkRawWrite->setChecked( false );
     }

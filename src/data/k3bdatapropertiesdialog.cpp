@@ -140,18 +140,18 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 
   QToolTip::add( m_checkHideOnRockRidge, i18n("") );
   QToolTip::add( m_checkHideOnJoliet, i18n("") );
-  QWhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked the file or the directory "
-						"(and it's complete contents) will be hidden on the "
+  QWhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked, the file or directory "
+						"(and its entire contents) will be hidden on the "
 						"ISO9660 and RockRidge filesystem.</p>"
-						"<p>This is useful for example to have different README "
-						"files for RockRidge and Joliet which can be managed "
+						"<p>This is useful, for example, for having different README "
+						"files for RockRidge and Joliet, which can be managed "
 						"by hiding README.joliet on RockRidge and README.rr "
 						"on the Joliet filesystem.</p>") );
-  QWhatsThis::add( m_checkHideOnJoliet, i18n("<p>If this option is checked the file or the directory "
-					     "(and it's complete contents) will be hidden on the "
+  QWhatsThis::add( m_checkHideOnJoliet, i18n("<p>If this option is checked, the file or directory "
+					     "(and its entire contents) will be hidden on the "
 					     "Joliet filesystem.</p>"
-					     "<p>This is useful for example to have different README "
-					     "files for RockRidge and Joliet which can be managed "
+					     "<p>This is useful, for example, for having different README "
+					     "files for RockRidge and Joliet, which can be managed "
 					     "by hiding README.joliet on RockRidge and README.rr "
 					     "on the Joliet filesystem.</p>") );
 

@@ -448,7 +448,7 @@ void K3bIsoImageJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	}
       else if( (*str).startsWith( "Starting new" ) )
 	{
-	  emit newSubTask( i18n("Writing iso data") );
+	  emit newSubTask( i18n("Writing ISO data") );
 	}
       else if( (*str).startsWith( "Fixating" ) ) {
 	emit newSubTask( i18n("Fixating") );
@@ -497,9 +497,9 @@ void K3bIsoImageJob::slotCdrecordFinished()
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_cdrecordProcess->exitStatus()), K3bJob::ERROR );
-	  emit infoMessage( i18n("Sorry, no error handling yet! :-(("), K3bJob::ERROR );
-	  emit infoMessage( i18n("Please send me a mail with the last output..."), K3bJob::ERROR );
+	  emit infoMessage( i18n("cdrecord returned an error! (code %1)").arg(m_cdrecordProcess->exitStatus()), K3bJob::ERROR );
+	  emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
+	  emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
 	  emit finished( false );
 	  unblock = true;
 	  break;
@@ -507,7 +507,7 @@ void K3bIsoImageJob::slotCdrecordFinished()
     }
   else
     {
-      emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
+      emit infoMessage( i18n("cdrecord did not exit cleanly."), K3bJob::ERROR );
       emit finished( false );
       unblock = true;
     }

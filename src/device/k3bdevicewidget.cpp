@@ -147,7 +147,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   groupDeviceInfoLayout->setSpacing( KDialog::spacingHint() );
   groupDeviceInfoLayout->setMargin( KDialog::marginHint() );
 
-  QLabel* TextLabel1 = new QLabel( i18n( "System devicename:" ), m_groupDeviceInfo, "TextLabel1" );
+  QLabel* TextLabel1 = new QLabel( i18n( "System device name:" ), m_groupDeviceInfo, "TextLabel1" );
   m_labelDevicename = new QLabel( m_groupDeviceInfo, "m_labelDevicename" );
   QLabel* labelInterfaceText = new QLabel( i18n("Interface type:"), m_groupDeviceInfo, "interfaceText" );
   m_labelDeviceInterface = new QLabel( m_groupDeviceInfo );
@@ -166,7 +166,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
   m_labelWriteSpeed = new QLabel( i18n( "Max write speed:" ), m_groupDeviceInfo, "labelWriteSpeed" );
   m_spinWriteSpeed = new KIntNumInput( m_groupDeviceInfo, "m_spinWriteSpeed" );
   m_comboDriver = new QComboBox( FALSE, m_groupDeviceInfo, "m_comboDriver" );
-  m_labelDriver = new QLabel( i18n( "Cdrdao driver:" ), m_groupDeviceInfo, "labelDriver" );
+  m_labelDriver = new QLabel( i18n( "cdrdao driver:" ), m_groupDeviceInfo, "labelDriver" );
   m_comboCdText = new QComboBox( false, m_groupDeviceInfo, "m_comboCdText" );
   m_labelBurnProof = new QLabel( i18n( "BURN-Proof:" ), m_groupDeviceInfo, "labelBurnProof" );
   m_checkBurnProof = new QCheckBox( m_groupDeviceInfo, "m_checkBurnProof" );
@@ -396,7 +396,7 @@ void K3bDeviceWidget::updateDeviceInfoBox( PrivateTempDevice* tempDev )
 void K3bDeviceWidget::slotNewDevice()
 {
   bool ok;
-  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the devicename where K3b shall search\n for a new drive (example: /dev/mebecdrom):"), "/dev/", &ok, this );
+  QString newDevicename = KLineEditDlg::getText( i18n("Please enter the device name where K3b should search\n for a new drive (example: /dev/mebecdrom):"), "/dev/", &ok, this );
 
   if( ok ) {
     if( K3bDevice* dev = m_deviceManager->addDevice( newDevicename ) ) {
@@ -405,7 +405,7 @@ void K3bDeviceWidget::slotNewDevice()
       updateDeviceListViews();
     }
     else
-      KMessageBox::error( this, i18n("Sorry, could not find an additional device at\n%1").arg(newDevicename), i18n("Error"), false );
+      KMessageBox::error( this, i18n("Could not find an additional device at\n%1").arg(newDevicename), i18n("Error"), false );
   }
 }
 
