@@ -345,7 +345,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 						  "(or select as the default) a more recent version of %1.").arg("cdrdao"),
 					     false ) );
 	}
-	else {
+	else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi") ) {
 	  problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					     i18n("cdrdao has problems with ATAPI writers"),
 					     i18n("When K3b %1 was released no version of cdrdao "
