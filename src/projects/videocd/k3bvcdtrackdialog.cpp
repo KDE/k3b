@@ -554,7 +554,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     m_spin_times->setSpecialValueText( i18n( "forever" ) );
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    m_labelWait = new QLabel( i18n( "than wait" ), m_groupPlay, "m_labelWait" );
+    m_labelWait = new QLabel( i18n( "then wait" ), m_groupPlay, "m_labelWait" );
     m_spin_waittime = new QSpinBox( m_groupPlay, "m_spinSeconds" );
     m_spin_waittime->setMinValue( -1 );
     m_spin_waittime->setValue( 0 );
