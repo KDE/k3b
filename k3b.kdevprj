@@ -114,7 +114,7 @@ sub_dirs=data,cdinfo,audio,device,kiotree,option
 type=prog_main
 
 [src/audio/Makefile.am]
-files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h,src/audio/k3bmp3decodingjob.cpp,src/audio/k3bmp3decodingjob.h,src/audio/k3bmp3track.cpp,src/audio/k3bmp3track.h,src/audio/k3bwavetrack.cpp,src/audio/k3bwavetrack.h,src/audio/k3bcddb.cpp,src/audio/k3bcddb.h,src/audio/cddb.cpp,src/audio/cddb.h,src/audio/k3bcdview.cpp,src/audio/k3bcdview.h,src/audio/k3bcdviewitem.cpp,src/audio/k3bcdviewitem.h,src/audio/k3bcdda.cpp,src/audio/k3bcdda.h
+files=src/audio/audiolistview.cpp,src/audio/audiolistview.h,src/audio/audiolistviewitem.cpp,src/audio/audiolistviewitem.h,src/audio/k3baudiodoc.cpp,src/audio/k3baudiodoc.h,src/audio/k3baudiotrack.cpp,src/audio/k3baudiotrack.h,src/audio/k3baudioview.cpp,src/audio/k3baudioview.h,src/audio/k3baudioburndialog.cpp,src/audio/k3baudioburndialog.h,src/audio/k3baudiotrackdialog.cpp,src/audio/k3baudiotrackdialog.h,src/audio/k3baudiojob.cpp,src/audio/k3baudiojob.h,src/audio/k3bmp3decodingjob.cpp,src/audio/k3bmp3decodingjob.h,src/audio/k3bmp3track.cpp,src/audio/k3bmp3track.h,src/audio/k3bwavetrack.cpp,src/audio/k3bwavetrack.h,src/audio/k3bcddb.cpp,src/audio/k3bcddb.h,src/audio/cddb.cpp,src/audio/cddb.h,src/audio/k3bcdview.cpp,src/audio/k3bcdview.h,src/audio/k3bcdda.cpp,src/audio/k3bcdda.h
 sub_dirs=input
 type=static_library
 
@@ -304,18 +304,6 @@ install_location=
 type=SOURCE
 
 [src/audio/k3bcdview.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-
-[src/audio/k3bcdviewitem.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[src/audio/k3bcdviewitem.h]
 dist=true
 install=false
 install_location=
