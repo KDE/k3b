@@ -152,6 +152,15 @@ AC_SUBST(MAD_LIB)
 
 AM_CONDITIONAL(include_MP3, [test -n "$MAD_LIB"])
 
+
+
+dnl === test for FLAC++ ====
+have_flac=no
+KDE_CHECK_HEADERS(FLAC++/decoder.h, [
+	have_flac=yes])
+AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
+
+
 dnl === check for id3lib ============
 ID3_LIB=""
 KDE_CHECK_HEADERS(id3/tag.h, [

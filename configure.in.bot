@@ -26,6 +26,15 @@ fi
 
 echo ""
 
+if test x$have_flac = xyes; then
+	echo "FLAC support:                         yes"
+else
+	echo "FLAC support:                         no"
+	echo "    The FLAC decoding plugin won't be compiled."
+fi
+
+echo ""
+
 if test -n "$RESMGR_LIB"; then
 	echo "Resmgr support:                       yes"
 else

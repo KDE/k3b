@@ -1,5 +1,5 @@
 %define name    k3b
-%define version 0.10
+%define version 0.10.99
 %define release 1
 
 Summary:        Excellent CD-Burner for KDE3.1

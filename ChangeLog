@@ -16,6 +16,10 @@ merged cue/bin and isoimage burning in one dialog which provides image-type-dete
 	supported so far: iso, cue, cdrdao toc, cdrecord clone images
 better systemconfigcheck messages when cdrecord is not running with root privs
 proper automatic writing mode and writing app selection for non-DAO-capable writers
+overwriting of files in a new session
+default CD size is now 80 min
+generic resampling for all audio plugins
+FLAC decoding plugin (thanks to John Steele Scott)
 	
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
