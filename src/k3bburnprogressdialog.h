@@ -58,7 +58,7 @@ class K3bBurnProgressDialog : public KDialog  {
   QGroupBox* m_groupInfo;
   QTextView* m_viewInfo;
   QPushButton* m_buttonCancel;
-  QPushButton* m_buttonOk;
+  QPushButton* m_buttonClose;
   QGroupBox* m_groupBuffer;
   KProgress* m_progressBuffer;
   QGroupBox* m_groupProgress;
@@ -77,9 +77,6 @@ class K3bBurnProgressDialog : public KDialog  {
 
  private:
   K3bJob* m_job;
-  int alreadyWrittenMb;
-  int alreadyWrittenTrackMb;
-  int currentTrackNumber;
 
  protected slots:
 //  void updateCdTimeProgress( const QTime& processedTime );
@@ -89,12 +86,8 @@ class K3bBurnProgressDialog : public KDialog  {
   void displayInfo( const QString& infoString );
 
   void finished();
-  void nextTrack();
   void slotCancelPressed();
-
- public slots:
-//  void startWriting();
-//  void startDecoding();
+  void slotNewSubJob(const QString& name);
 };
 
 #endif

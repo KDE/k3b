@@ -44,9 +44,6 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name 
   	
   m_groupBuffer->setEnabled( false );
 
-  alreadyWrittenMb = 0;
-  alreadyWrittenTrackMb = 0;
-
   m_job = 0;
 }
 
@@ -62,7 +59,7 @@ void K3bBurnProgressDialog::setupGUI()
   mainLayout->setMargin( marginHint() );
 
   m_groupInfo = new QGroupBox( this, "m_groupInfo" );
-  m_groupInfo->setTitle( tr( "Information" ) );
+  m_groupInfo->setTitle( i18n( "Information" ) );
   m_groupInfo->setColumnLayout(0, Qt::Vertical );
   m_groupInfo->layout()->setSpacing( 0 );
   m_groupInfo->layout()->setMargin( 0 );
@@ -79,17 +76,17 @@ void K3bBurnProgressDialog::setupGUI()
   mainLayout->addMultiCellWidget( m_groupInfo, 0, 0, 0, 2 );
 
   m_buttonCancel = new QPushButton( this, "m_buttonCancel" );
-  m_buttonCancel->setText( tr( "Cancel" ) );
-  m_buttonOk = new QPushButton( this, "m_buttonOk" );
-  m_buttonOk->setText( tr( "OK" ) );
+  m_buttonCancel->setText( i18n( "Cancel" ) );
+  m_buttonClose = new QPushButton( this, "m_buttonClose" );
+  m_buttonClose->setText( i18n( "Close" ) );
 
   mainLayout->addWidget( m_buttonCancel, 3, 1 );
-  mainLayout->addWidget( m_buttonOk, 3, 1 );
+  mainLayout->addWidget( m_buttonClose, 3, 1 );
  	
-  m_buttonOk->hide();
+  m_buttonClose->hide();
 
   m_groupBuffer = new QGroupBox( this, "m_groupBuffer" );
-  m_groupBuffer->setTitle( tr( "Buffer Status" ) );
+  m_groupBuffer->setTitle( i18n( "Buffer Status" ) );
   m_groupBuffer->setColumnLayout(0, Qt::Vertical );
   m_groupBuffer->layout()->setSpacing( 0 );
   m_groupBuffer->layout()->setMargin( 0 );
@@ -112,7 +109,7 @@ void K3bBurnProgressDialog::setupGUI()
   mainLayout->addItem( spacer_2, 3, 2 );
 
   m_groupProgress = new QGroupBox( this, "m_groupProgress" );
-  m_groupProgress->setTitle( tr( "Progress" ) );
+  m_groupProgress->setTitle( i18n( "Progress" ) );
   m_groupProgress->setColumnLayout(0, Qt::Vertical );
   m_groupProgress->layout()->setSpacing( 0 );
   m_groupProgress->layout()->setMargin( 0 );
@@ -130,23 +127,19 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupProgressLayout->addMultiCellWidget( m_progressCd, 4, 4, 0, 1 );
 
   m_labelFileName = new QLabel( m_groupProgress, "m_labelFileName" );
-  m_labelFileName->setText( tr( "Writing Track 0 - " ) );
 
   m_groupProgressLayout->addWidget( m_labelFileName, 0, 0 );
 
   m_labelTrackProgress = new QLabel( m_groupProgress, "m_labelTrackProgress" );
-  m_labelTrackProgress->setText( tr( "0 of 00 MB written" ) );
   m_labelTrackProgress->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   m_groupProgressLayout->addWidget( m_labelTrackProgress, 0, 1 );
 
   m_labelCdTime = new QLabel( m_groupProgress, "m_labelCdTime" );
-  m_labelCdTime->setText( tr( "00:00:00 / 00:00:00" ) );
 
   m_groupProgressLayout->addWidget( m_labelCdTime, 3, 0 );
 
   m_labelCdProgress = new QLabel( m_groupProgress, "m_labelCdProgress" );
-  m_labelCdProgress->setText( tr( "0 of 0 MB written" ) );
   m_labelCdProgress->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
   m_groupProgressLayout->addWidget( m_labelCdProgress, 3, 1 );
@@ -158,7 +151,7 @@ void K3bBurnProgressDialog::setupGUI()
 void K3bBurnProgressDialog::setupConnections()
 {
 	connect( m_buttonCancel, SIGNAL(pressed()), this, SLOT(slotCancelPressed()) );
-	connect( m_buttonOk, SIGNAL(clicked()), this, SLOT(close()) );
+	connect( m_buttonClose, SIGNAL(clicked()), this, SLOT(close()) );
 }
 
 
@@ -192,52 +185,23 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString )
 }
 
 
-void K3bBurnProgressDialog::nextTrack()
-{
-  alreadyWrittenMb += alreadyWrittenTrackMb;
-  currentTrackNumber++;
-}
-
-
 void K3bBurnProgressDialog::finished()
 {
+  qDebug( "(K3bBurnProgressDialog) received finished signal!");
+
   m_labelFileName->setText("Writing finished");
   m_labelTrackProgress->setText("");
 //  m_groupBuffer->setEnabled( false );
 
   m_buttonCancel->hide();
-  m_buttonOk->show();
+  m_buttonClose->show();
 }
-
-//void K3bBurnProgressDialog::startDecoding()
-//{
-//	// hide some unuseful things here
-//	m_labelCdProgress->hide();
-//
-//	m_groupBuffer->setEnabled( false );
-//	currentAction = DECODING;
-//}
-
-
-//void K3bBurnProgressDialog::startWriting()
-//{
-//	m_labelCdProgress->show();
-//	m_progressTrack->setValue(0);
-//	m_labelFileName->setText( "Writing Pregap" );
-//	
-//	m_groupBuffer->setEnabled( true );
-//	
-//	if( K3bAudioDoc* a = dynamic_cast<K3bAudioDoc*>(doc) )
-//		currentAction = WRITING_AUDIO;
-//	else
-//		currentAction = WRITING_DATA;
-//}
 
 
 void K3bBurnProgressDialog::setJob( K3bJob* job )
 {
 	// clear everything
-	m_buttonOk->hide();
+	m_buttonClose->hide();
 	m_buttonCancel->show();
 	m_viewInfo->setText("");
 	m_progressBuffer->setValue(0);
@@ -250,8 +214,6 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 		disconnect( m_job );
 	m_job = job;
 	
-	currentTrackNumber = 0;
-
 	// connect to all the shit
 	connect( job, SIGNAL(infoMessage(const QString&)), this, SLOT(displayInfo(const QString&)) );
 	
@@ -261,8 +223,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 	connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(updateTrackSizeProgress(int, int)) );
 	connect( job, SIGNAL(processedSize(int, int)), this, SLOT(updateCdSizeProgress(int, int)) );
 
-//	connect( job, SIGNAL(newTrack()), this, SLOT(nextTrack()) );
-	connect( job, SIGNAL(newSubJob(const QString&)), m_labelFileName, SLOT(setText(const QString&)) );
+	connect( job, SIGNAL(newSubJob(const QString&)), this, SLOT(slotNewSubJob(const QString&)) );
 	connect( job, SIGNAL(finished(K3bJob*)), this, SLOT(finished()) );
 	
 
@@ -279,25 +240,25 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
 }
 
 
-//void K3bBurnProgressDialog::slotNewFile(const QString& fileName)
-//{
-//	if( dynamic_cast<K3bMp3DecodingJob*>(m_job) )
-//      m_labelFileName->setText( QString("Decoding Track %1 - '%2'").arg( currentTrackNumber ).arg( fileName ) );
-//	else if( dynamic_cast<K3bAudioJob*>(m_job) )
-//      m_labelFileName->setText( QString("Writing Track %1 - '%2'").arg( currentTrackNumber ).arg( fileName ) );
-//}
-
 void K3bBurnProgressDialog::slotCancelPressed()
 {
 	if( m_job )
 		if( KMessageBox::questionYesNo( this, "Do you really want to cancel?", "Cancel" ) == KMessageBox::Yes ) {
 			m_job->cancel();
 			m_buttonCancel->hide();
-			m_buttonOk->show();
+			m_buttonClose->show();
 		}
 }
 
 void K3bBurnProgressDialog::show()
 {
 	QWidget::show();
+}
+
+
+void K3bBurnProgressDialog::slotNewSubJob(const QString& name)
+{
+	m_labelFileName->setText(name);
+	m_labelTrackProgress->setText("");
+	m_progressTrack->setValue(0);
 }

@@ -642,20 +642,27 @@ void K3bApp::slotFileBurn()
 		if( K3bAudioView* _view = dynamic_cast<K3bAudioView*>(w) ) {
 			K3bAudioDoc* doc = (K3bAudioDoc*)_view->getDocument();
 				
-			if( doc && doc->burnDialog()->exec(true) == K3bAudioBurnDialog::Burn )
+			if( doc  )
 			{
-				if( !m_burnProgressDialog )
-					m_burnProgressDialog = new K3bBurnProgressDialog( this );
-				K3bJob* job;
+				// test if there is something to burn
+				if( doc->numOfTracks() == 0 ) {
+					KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
+					return;
+				}
+				
+				if( doc->burnDialog()->exec(true) == K3bAudioBurnDialog::Burn ) {
+					if( !m_burnProgressDialog )
+						m_burnProgressDialog = new K3bBurnProgressDialog( this );
 					
-				// first we have to decode all the mp3-files:
-				job = new K3bAudioJob( (K3bAudioDoc*)_view->getDocument() );
+					K3bJob* job = new K3bAudioJob( (K3bAudioDoc*)_view->getDocument() );
 				
-				connect( job, SIGNAL(finished( K3bJob* )), this, SLOT(slotJobFinished( K3bJob* )) );
-				
-				m_burnProgressDialog->setJob( job );
-				m_burnProgressDialog->show();
-				job->start();
+					m_burnProgressDialog->setJob( job );
+					
+					// BAD!!!! :-(( the job is deleted before the burnprocessdialog is hidden!!!
+					connect( job, SIGNAL(finished( K3bJob* )), this, SLOT(slotJobFinished( K3bJob* )) );
+					m_burnProgressDialog->show();
+					job->start();
+				}
 			}
 		}
 		else if( w->inherits( "K3bCopyWidget" ) ) {

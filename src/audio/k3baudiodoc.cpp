@@ -373,11 +373,6 @@ void K3bAudioDoc::addView(K3bView* view)
 
 K3bAudioBurnDialog* K3bAudioDoc::burnDialog()
 {
-	// test if there is something to burn
-	if( m_tracks->count() == 0 ) {
-		KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
-		return 0;
-	}
 	if( !m_burnDialog ) {
 		m_burnDialog = new K3bAudioBurnDialog( this, k3bMain(), "audioBurnDialog", true );
 	}

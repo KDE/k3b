@@ -31,7 +31,7 @@
 #include <qstring.h>
 
 #include <iostream>
-
+#include <cmath>
 
 K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc )
 	: K3bJob( )
@@ -143,10 +143,9 @@ void K3bAudioJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 		}
 		else if( (*str).startsWith( "Starting new" ) )
 		{
-			m_iNumTracksAlreadyWritten++;
 			emit newTrack();
 			if(!firstTrack)
-				m_doc->next();
+				m_iNumTracksAlreadyWritten++;
 			else
 				firstTrack = false;
 				
@@ -172,9 +171,18 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 	for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ )
 	{
 		*str = (*str).stripWhiteSpace();
-		if( (*str).startsWith( "Writing track" ) ) {
+		if( (*str).startsWith( "Warning" ) || (*str).startsWith( "ERROR" ) ) {
+			// TODO: parse the error messages!!
+			emit infoMessage( *str );
+		}
+		else if( (*str).startsWith( "Writing track" ) ) {
 			// a new track has been started
-				
+			emit newTrack();
+			if(!firstTrack)
+				m_iNumTracksAlreadyWritten++;
+			else
+				firstTrack = false;
+			
 			emit newSubJob( i18n("Writing track %1: '%2'").arg(m_iNumTracksAlreadyWritten + 1).arg(m_doc->at(m_iNumTracksAlreadyWritten)->fileName()) );
 			emit infoMessage( *str );
 		}
@@ -182,27 +190,50 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 			// percentage
 			int made, size, fifo;
 			bool ok;
-			made = (*str).mid( 6, 4 ).toInt( &ok );
+			
+			// --- parse already written mb ------
+			int pos1 = 6;
+			int pos2 = (*str).find("of");
+			
+			if( pos2 == -1 )
+				return; // there is one line at the end of the writing process that has no 'of'
+			
+			made = (*str).mid( 6, pos2-pos1-1 ).toInt( &ok );
 			if( !ok )
-				qDebug( "Parsing did not work for: " + (*str).mid( 6, 4 ) );
-			else {
-				size = (*str).mid( (*str).find("of")+2, 4 ).toInt(&ok);
-				if( !ok )
-					qDebug( "Parsing did not work for: " + (*str).mid( (*str).find("of")+2, 4 ) );
-				else {
-					fifo = (*str).mid( (*str).find('%')-3, 3 ).toInt(&ok);
-					if( !ok )
-						qDebug( "Parsing did not work for: " + (*str).mid( (*str).find('%')-3, 3 ) );
-					else {
-						emit bufferStatus( fifo );
-						emit percent( 100 * made/size );
-						emit processedSize( made, size );
-					}
-				}
+				qDebug( "Parsing did not work for: " + (*str).mid( 6, pos2-pos1-1 ) );
+			
+			// ---- parse size ---------------------------
+			pos1 = pos2 + 2;
+			pos2 = (*str).find("MB");
+			size = (*str).mid( pos1, pos2-pos1-1 ).toInt(&ok);
+			if( !ok )
+				qDebug( "Parsing did not work for: " + (*str).mid( pos1, pos2-pos1-1 ) );
+				
+			// ----- parsing fifo ---------------------------
+			pos1 = (*str).findRev(' ');
+			pos2 =(*str).findRev('%');
+			fifo = (*str).mid( pos1, pos2-pos1 ).toInt(&ok);
+			if( !ok )
+				qDebug( "Parsing did not work for: " + (*str).mid( pos1, pos2-pos1 ) );
+			
+			emit bufferStatus( fifo );
+			double _w = (double)m_doc->numOfTracks() / (double)(m_iNumFilesToDecode + m_doc->numOfTracks());
+			emit percent( (int)((100.0-100.0*_w) + _w * 100.0 * (double)made/(double)size) );  // HACK!!
+			emit processedSize( made, size );
+			
+			// HACK: calculating equal sizes for all tracks:
+			// -----------------------------------------------------------------------------
+			double trackSize = (double)size / (double)m_doc->numOfTracks();
+			double trackMade = fmod((double)made, trackSize);
+			if( made != size ) {
+				emit subPercent( (int)( 100.0 * trackMade/trackSize ) );
+				emit processedSubSize( (int)trackMade, (int)trackSize );
 			}
+			// ---------------------------------------------------------------- HACK ----
 		}
 		else if( (*str).startsWith( "Executing power" ) ) {
 			emit infoMessage( i18n( *str ) );
+			emit newSubJob( i18n(*str) );
 		}
 		else {
 			// debugging
@@ -214,16 +245,23 @@ void K3bAudioJob::slotParseCdrdaoOutput( KProcess*, char* output, int len )
 
 void K3bAudioJob::cancel()
 {
-	if( m_process.isRunning() ) {
+	if( error() == K3b::WORKING ) {
 		m_process.kill();
 		emit infoMessage("Writing canceled.");
-	}
-	else if( m_mp3Job && m_mp3Job->error() == K3b::WORKING ) {
-		m_mp3Job->cancel();
-	}
+		if( m_mp3Job )
+			if( m_mp3Job->error() == K3b::WORKING )
+				m_mp3Job->cancel();
 	
-	m_error = K3b::CANCELED;
-	emit finished( this );
+		// remove toc-file
+		if( QFile::exists( m_tocFile ) ) {
+			qDebug("(K3bAudioJob) Removing temporary TOC-file");
+			QFile::remove( m_tocFile );
+			m_tocFile = QString::null;
+		}
+				
+		m_error = K3b::CANCELED;
+		emit finished( this );
+	}
 }
 
 void K3bAudioJob::start()
@@ -304,6 +342,7 @@ void K3bAudioJob::slotCdrdaoFinished()
 	}
 
 	// remove toc-file
+	qDebug("(K3bAudioJob) Removing temporary TOC-file");
 	QFile::remove( m_tocFile );
 	m_tocFile = QString::null;
 	
@@ -343,14 +382,12 @@ void K3bAudioJob::decodeNextFile()
 
 void K3bAudioJob::startWriting()
 {
+	emit newSubJob( i18n("Preparing write process...") );
+
 	m_process.clearArguments();
 	m_process.disconnect();
 	
-	// set the pointer in the document
-	m_doc->at(0);
 	firstTrack = true;
-	
-//	m_currentProcessedTrack = at(0);
 	
 	if( m_doc->cdText() ) {
 		// write in dao-mode
@@ -375,8 +412,8 @@ void K3bAudioJob::startWriting()
 			m_process << "write";
 
 			// device
-			QString s = QString("--device %1").arg( m_doc->burner()->device() );
-			m_process << s << "--driver generic-mmc";    // !! use generic-mmc as default, TODO: give the option to choose
+			m_process << "--device" << m_doc->burner()->device();
+			m_process << "--driver" << "generic-mmc";    // !! use generic-mmc as default, TODO: give the option to choose
 			
 			// supress the 10 seconds gap to the writing
 			m_process << "-n";
@@ -387,8 +424,7 @@ void K3bAudioJob::startWriting()
 				m_process << "--eject";
 			
 			// writing speed
-			s = QString( "--speed %1").arg( m_doc->speed() );
-			m_process << s;
+			m_process << "--speed" << QString::number(  m_doc->speed() );
 			
 			// toc-file
 			m_process << m_tocFile;
@@ -427,7 +463,7 @@ void K3bAudioJob::startWriting()
 			else
 			{
 				m_error = K3b::WORKING;
-				emit infoMessage( QString("Start recording at %1x speed...").arg(m_doc->speed()) );
+				emit infoMessage( i18n("Start recording at %1x speed...").arg(m_doc->speed()) );
 				emit started();
 			}
 		}
@@ -504,7 +540,7 @@ void K3bAudioJob::startWriting()
 	else
 	{
 		m_error = K3b::WORKING;
-		emit infoMessage( QString("Start recording at %1x speed...").arg(m_doc->speed()) );
+		emit infoMessage( i18n("Start recording at %1x speed...").arg(m_doc->speed()) );
 		emit started();
 	}
 	
