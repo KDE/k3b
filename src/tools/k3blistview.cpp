@@ -469,16 +469,19 @@ void K3bListView::clear()
 
 void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
 {
-  if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
-    if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
-      showEditor( k3bItem, col );
+  if( item != m_currentEditItem ) {
+    doRename();
+    if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
+      if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
+	showEditor( k3bItem, col );
+      else
+	hideEditor();
+    }
     else
       hideEditor();
+    
+    m_lastClickedItem = item;
   }
-  else
-    hideEditor();
-
-  m_lastClickedItem = item;
 }
 
 
@@ -758,9 +761,7 @@ void K3bListView::updateEditorSize()
 
 void K3bListView::slotEditorLineEditReturnPressed()
 {
-  if( renameItem( m_currentEditItem, m_currentEditColumn, m_editorLineEdit->text() ) ) {
-    m_currentEditItem->setText( m_currentEditColumn, m_editorLineEdit->text() );
-    emit itemRenamed( m_currentEditItem, m_editorLineEdit->text(), m_currentEditColumn );
+  if( doRename() ) {
     // edit the next line
     // TODO: add config for this
     if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
@@ -768,48 +769,99 @@ void K3bListView::slotEditorLineEditReturnPressed()
     else
       hideEditor();
   }
-  else
-    m_editorLineEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
 }
 
 
-void K3bListView::slotEditorComboBoxActivated( const QString& str )
+void K3bListView::slotEditorComboBoxActivated( const QString& )
 {
-  if( renameItem( m_currentEditItem, m_currentEditColumn, str ) ) {
-    m_currentEditItem->setText( m_currentEditColumn, str );
-    emit itemRenamed( m_currentEditItem, str, m_currentEditColumn );
-  }
-  else {
-    for( int i = 0; i < m_editorComboBox->count(); ++i ) {
-      if( m_editorComboBox->text(i) == m_currentEditItem->text(m_currentEditColumn) ) {
-	m_editorComboBox->setCurrentItem( i );
-	break;
-      }
-    }
-  }
+  doRename();
+//   if( renameItem( m_currentEditItem, m_currentEditColumn, str ) ) {
+//     m_currentEditItem->setText( m_currentEditColumn, str );
+//     emit itemRenamed( m_currentEditItem, str, m_currentEditColumn );
+//   }
+//   else {
+//     for( int i = 0; i < m_editorComboBox->count(); ++i ) {
+//       if( m_editorComboBox->text(i) == m_currentEditItem->text(m_currentEditColumn) ) {
+// 	m_editorComboBox->setCurrentItem( i );
+// 	break;
+//       }
+//     }
+//   }
 }
 
 
-void K3bListView::slotEditorSpinBoxValueChanged( int value )
+void K3bListView::slotEditorSpinBoxValueChanged( int )
 {
-  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
-    m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
-    emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
-  }
-  else
-    m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
+//   if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
+//     m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
+//     emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
+//   }
+//   else
+//     m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
 }
 
 
-void K3bListView::slotEditorMsfEditValueChanged( int value )
+void K3bListView::slotEditorMsfEditValueChanged( int )
 {
   // FIXME: do we always need to update the value. Isn't it enough to do it at the end?
-  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
-    m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
-    emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
+//   if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) ) {
+//     m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
+//     emit itemRenamed( m_currentEditItem, QString::number(value), m_currentEditColumn );
+//   }
+//   else
+//     m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
+}
+
+
+bool K3bListView::doRename()
+{
+  if( m_currentEditItem ) {
+    QString newValue;
+    switch( m_currentEditItem->editorType( m_currentEditColumn ) ) {
+    case K3bListViewItem::COMBO:
+      newValue = m_editorComboBox->currentText();
+      break;
+    case K3bListViewItem::LINE:
+      newValue = m_editorLineEdit->text();
+      break;
+    case K3bListViewItem::SPIN:
+      newValue = QString::number(m_editorSpinBox->value());
+      break;
+    case K3bListViewItem::MSF:
+      newValue = QString::number(m_editorMsfEdit->value());
+      break;
+    }
+
+    if( renameItem( m_currentEditItem, m_currentEditColumn, newValue ) ) {
+      m_currentEditItem->setText( m_currentEditColumn, newValue );
+      emit itemRenamed( m_currentEditItem, newValue, m_currentEditColumn );
+      return true;
+    }
+    else {
+      switch( m_currentEditItem->editorType( m_currentEditColumn ) ) {
+      case K3bListViewItem::COMBO:
+	for( int i = 0; i < m_editorComboBox->count(); ++i ) {
+	  if( m_editorComboBox->text(i) == m_currentEditItem->text(m_currentEditColumn) ) {
+	    m_editorComboBox->setCurrentItem( i );
+	    break;
+	  }
+	}
+	break;
+      case K3bListViewItem::LINE:
+	m_editorLineEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
+	break;
+      case K3bListViewItem::SPIN:
+	m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
+	break;
+      case K3bListViewItem::MSF:
+	m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
+	break;
+      }
+    }      
   }
-  else
-    m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
+
+
+  return false;
 }
 
 
@@ -846,14 +898,14 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   if( e->type() == QEvent::KeyPress ) { 
      QKeyEvent* ke = static_cast<QKeyEvent*>(e);
      if( ke->key() == Key_Return ) {
-       if( o == m_editorLineEdit ) {
-	 slotEditorLineEditReturnPressed();
-       }
-       else if( o == m_editorMsfEdit || o == m_editorSpinBox ) {
-	 if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
-	   editItem( nextItem, currentEditColumn() );
-	 else
-	   hideEditor();
+       if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+	 doRename();
+	 if( m_currentEditItem ) {
+	   if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
+	     editItem( nextItem, currentEditColumn() );
+	   else
+	     hideEditor();
+	 }
        }
      }
      else if( ke->key() == Key_Escape ) {
@@ -864,8 +916,10 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   else if( e->type() == QEvent::FocusOut ) {
     if( o == m_editorSpinBox ||
 	o == m_editorMsfEdit ||
-	o == m_editorLineEdit )
+	o == m_editorLineEdit ) {
+      doRename();
       hideEditor();
+    }
     else if( o == m_editorComboBox ) {
       // make sure we did not lose the focus to one of the combobox children
       if( ( !m_editorComboBox->listBox() || !m_editorComboBox->listBox()->hasFocus() ) &&

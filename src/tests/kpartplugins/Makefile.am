@@ -1,1 +1,1 @@
-SUBDIRS = audiometainforenamer audioconverter
+SUBDIRS = audiometainforenamer audioconverter audioprojectcddb

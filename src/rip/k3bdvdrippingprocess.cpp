@@ -21,7 +21,6 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bcore.h>
-#include <kstdguiitem.h>
 #include "k3bdvdaudiogain.h"
 
 #include <qstring.h>
@@ -39,8 +38,8 @@
 #include <kio/job.h>
 #include <kmessagebox.h>
 
-K3bDvdRippingProcess::K3bDvdRippingProcess( K3bJobHandler* hdl, QObject *parent )
-  : K3bJob( hdl, parent ) {
+K3bDvdRippingProcess::K3bDvdRippingProcess( K3bJobHandler* jh, QObject *parent )
+  : K3bJob( jh, parent ) {
     //m_processAudio = processAudio;
   //    m_parent = parent;
 }
@@ -84,12 +83,21 @@ void K3bDvdRippingProcess::checkRippingMode() {
     m_title = QString::number( (*m_dvd).getTitleNumber() );
     if( (*m_dvd).getMaxAngle() == 1 ) {
         kdDebug() << "K3bDvdRippingProcess) Rip Title" << endl;
+        K3bVersion tccatVersion = k3bcore->externalBinManager()->binObject("tccat")->version;
+        kdDebug() << "(K3bDvdRippingProcess) Tccat Version: " << tccatVersion.majorVersion() << "." << tccatVersion.minorVersion() << "." << tccatVersion.patchLevel() << endl;
+        if( tccatVersion.majorVersion() == 0 && tccatVersion.minorVersion() == 6 && tccatVersion.patchLevel() < 12){
+            //transcode <= 0.6.11
         m_ripMode = "-P " + m_title;
+    } else {
+            //transcode >= 0.6.12
+            m_ripMode = "-T " + m_title + ",-1 -L";
+        }
     } else {
         kdDebug() << "K3bDvdRippingProcess) Rip Angle" << endl;
         // workaround due to buggy transcode, angle selection doesn't work with -1 (all chapters)
         // and it doesn't work with loop alone, chapters must be from - to = 0-4 or so.
         // combination of loop and chapter range works with transcode 0.6.2-20021107
+        // Is this still working with tccat >=0.6.12 ???
         m_ripMode = "-T " + m_title + ",0-1," + m_angle + " -L";
         //QStringList::Iterator titleList = (*m_dvd).getAngles()->at( m_currentRipAngle );
         //m_currentRipAngle++;
@@ -156,6 +164,9 @@ void K3bDvdRippingProcess::slotExited( KProcess* ) {
     kdDebug() << "(K3bDvdRippingProcess) Ripping task finsihed." << endl;
     m_outputFile.close();
     delete m_ripProcess;
+    if( m_interrupted )
+      return;
+
     kdDebug() << "(K3bDvdRippingProcess) Ripped bytes: " << m_summaryBytes << endl;
     //m_audioProcess->closeStdin();
     if( m_currentRipTitle < m_maxTitle ) {
@@ -175,25 +186,19 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
         m_outputFile.close();
         p->kill();
         //m_audioProcess->kill();
+	emit canceled();
         emit finished( false );
         return;
     }
-    m_stream->writeRawBytes( text, len );
-    //m_audioProcess->writeStdin( text, len );
-    m_rippedBytes += len;
-    m_summaryBytes += len;
-    if( m_titleBytes > 0 ) {
-        unsigned int pc = (unsigned int) ((( m_summaryBytes / m_titleBytes) *100)+0.5);
-        if ( pc > m_percent ) {
-            emit percent( pc );
-            m_percent = pc;
-            unsigned long b = (unsigned long) ( m_summaryBytes - m_dataRateBytes );
-            m_dataRateBytes = m_summaryBytes;
-            emit rippedBytesPerPercent( b );
-        }
-    }
-    if( m_rippedBytes >= 1073741824 ) {  // 24
-        m_rippedBytes = 0;
+    if( m_rippedBytes >= 1073740800 ) {  // 24, 1 (1073741824bytes) GB - 1024 bytes
+        kdDebug() << "(K3bDvdRippingProcess) Ripped bytes: " << m_rippedBytes << endl;
+        // only write amount of bytes to reach exacly 1 GB
+        int writeBytes = int (1073741824 - m_rippedBytes);
+        kdDebug() << "(K3bDvdRippingProcess) Write bytes " << writeBytes << " of " << len << endl;
+        m_stream->writeRawBytes( text, writeBytes );
+        // these amount of bytes must be write to the next file
+        m_rippedBytes = 1024 - writeBytes;
+        kdDebug() << "(K3bDvdRippingProcess) To much " << m_rippedBytes << endl;
         p->suspend();
         m_outputFile.close();
         delete m_stream;
@@ -210,12 +215,27 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
             emit canceled();
             return;
         }
-        p->resume(); // restart process
         m_outputFile.open( IO_WriteOnly );                     // open file for writing
         m_stream = new QDataStream( &m_outputFile );                        // serialize using f
+        char *ctext = text+writeBytes;
+        m_stream->writeRawBytes( ctext, (int)m_rippedBytes);
+        p->resume(); // restart process
+    } else {
+        m_stream->writeRawBytes( text, len );
+        //m_audioProcess->writeStdin( text, len );
+        m_rippedBytes += len;
+        m_summaryBytes += len;
+        if( m_titleBytes > 0 ) {
+            unsigned int pc = (unsigned int) ((( m_summaryBytes / m_titleBytes) *100)+0.5);
+            if ( pc > m_percent ) {
+                emit percent( pc );
+                m_percent = pc;
+                unsigned long b = (unsigned long) ( m_summaryBytes - m_dataRateBytes );
+                m_dataRateBytes = m_summaryBytes;
+                emit rippedBytesPerPercent( b );
+            }
+        }
     }
-
-
 }
 
 float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len) {
@@ -277,6 +297,8 @@ void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
 }
 
 void K3bDvdRippingProcess::slotPreProcessingDvd() {
+    emit newSubTask( i18n("Preprocessing Video DVD") );
+
     QString video;
     QDir video_ts( m_mountPoint + "/VIDEO_TS");
     if( video_ts.exists() ) {
@@ -339,8 +361,8 @@ void K3bDvdRippingProcess::slotIfoCopyFinished( KIO::Job *job ) {
     }
     kdDebug() << "(K3bDvdRippingProcess) Chmod: " << m_dirtmp << "/" << m_videoCaseSensitive << endl;
     kdDebug() << "(K3bDvdRippingProcess) Chmod: " << m_dirtmp << "/" << m_vobCaseSensitive << endl;
-    KIO::chmod( KURL::fromPathOrURL(m_dirtmp + "/" + m_videoCaseSensitive), 0644 );
-    KIO::chmod( KURL::fromPathOrURL(m_dirtmp + "/" + m_vobCaseSensitive), 0644 );
+    KIO::chmod( m_dirtmp + "/" + m_videoCaseSensitive, 0644 );
+    KIO::chmod( m_dirtmp + "/" + m_vobCaseSensitive, 0644 );
     connect( KIO::unmount( m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingFinished( KIO::Job* )) );
 }
 
@@ -369,7 +391,7 @@ QString K3bDvdRippingProcess::getFilename() {
 
     QFile destFile( result );
     if( destFile.exists() ) {
-        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), KStdGuiItem::cancel().text() );
+        int button = QMessageBox::critical( 0, i18n("Ripping Error"), i18n("%1 already exists." ).arg(result), i18n("Overwrite"), i18n("Cancel") );
         if( button == 0 )
             return result;
         else
@@ -450,7 +472,7 @@ float K3bDvdRippingProcess::getAudioGain() {
         }
         f.close();
     } else {
-        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), KStdGuiItem::ok().text() );
+        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Unable to get data for audio normalizing. Use default of 1.0."), i18n("&OK") );
     }
     return result;
 }

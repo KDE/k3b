@@ -27,8 +27,11 @@
 #include <kprogress.h>
 
 
-K3bProgressDialog::K3bProgressDialog( const QString& text, QWidget* parent, const char* name ) 
-  : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true )
+K3bProgressDialog::K3bProgressDialog( const QString& text,
+				      QWidget* parent, 
+				      const QString& caption,
+				      const char* name ) 
+  : KDialogBase( parent, name, true, caption, Cancel|Ok, Ok, true )
 {
   QFrame* main = makeMainWidget();
   QGridLayout* mainLayout = new QGridLayout( main );

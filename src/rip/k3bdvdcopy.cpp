@@ -38,10 +38,18 @@ K3bDvdCopy::K3bDvdCopy( K3bJobHandler* hdl, const QString& device, const QString
     //    m_parent = parent;
     m_successfulStarted = true;
     m_ripProcess = new K3bDvdRippingProcess( this, this );
+    connect( m_ripProcess, SIGNAL( infoMessage(const QString&, int) ), 
+	     this, SIGNAL( infoMessage(const QString&, int) ) );
+    connect( m_ripProcess, SIGNAL( newSubTask(const QString&) ), this, SIGNAL( newSubTask(const QString&) ) );
+    connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
+    connect( m_ripProcess, SIGNAL( percent( int ) ), this, SLOT( slotPercent( int ) ) );
+    connect( m_ripProcess, SIGNAL( rippedBytesPerPercent( unsigned long ) ), 
+	     this, SLOT( slotDataRate( unsigned long ) ) );
+    connect( m_ripProcess, SIGNAL( canceled() ), this, SIGNAL( canceled() ) );
 }
 
 K3bDvdCopy::~K3bDvdCopy(){
-    //delete m_ripProcess;
+  delete m_ripProcess;
 }
 
 void K3bDvdCopy::start(){
@@ -54,11 +62,6 @@ void K3bDvdCopy::start(){
     m_ripProcess->setAngle( m_angle );
     //m_ripProcess->setJob( m_ripJob );
     //    connect( m_ripProcess, SIGNAL( canceled() ), m_parent, SLOT( slotRipJobDeleted() ) );
-    connect( m_ripProcess, SIGNAL( infoMessage(const QString&, int) ), this, SIGNAL( infoMessage(const QString&, int) ) );
-    connect( m_ripProcess, SIGNAL( newSubTask(const QString&) ), this, SIGNAL( newSubTask(const QString&) ) );
-    connect( m_ripProcess, SIGNAL( finished( bool ) ), this, SLOT( ripFinished( bool ) ) );
-    connect( m_ripProcess, SIGNAL( percent( int ) ), this, SLOT( slotPercent( int ) ) );
-    connect( m_ripProcess, SIGNAL( rippedBytesPerPercent( unsigned long ) ), this, SLOT( slotDataRate( unsigned long ) ) );
 
     m_ripProcess->start();
     if( m_successfulStarted ) {

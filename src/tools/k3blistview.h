@@ -193,6 +193,7 @@ class K3bListView : public KListView
  private:
   QWidget* prepareEditor( K3bListViewItem* item, int col );
   void prepareButton( K3bListViewItem* item, int col );
+  bool doRename();
 
   QString m_noItemText;
   //  QPixmap m_noItemPixmap;

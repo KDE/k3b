@@ -96,7 +96,6 @@ private:
 private slots:
     void rip();
     void slotFindStaticDir();
-    void slotRipJobDeleted();
     void slotSetDependDirs( const QString& );
     void slotFreeTempSpace( const QString & mountPoint, unsigned long kBSize,
         unsigned long kBUsed, unsigned long kBAvail );

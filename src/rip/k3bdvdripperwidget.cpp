@@ -81,13 +81,12 @@ K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, c
   m_ripDialog = 0;
   setupGui();
   m_startEncoding = false;
-  m_ripProcess = 0;
-  m_ripJob = 0;
 
   slotLoadUserDefaults();
 }
 
 K3bDvdRipperWidget::~K3bDvdRipperWidget(){
+  delete m_ripDialog;
 }
 
 void K3bDvdRipperWidget::setupGui(){
@@ -187,39 +186,26 @@ void K3bDvdRipperWidget::rip(){
     m_ripDialog = new K3bJobProgressDialog( kapp->mainWidget(), "Ripping", false );
     m_ripStatus = new K3bDvdExtraRipStatus( m_ripDialog );
     m_ripDialog->setExtraInfo( m_ripStatus );
-    connect( m_ripDialog, SIGNAL( closeClicked()), this, SLOT( slotRipJobDeleted() ));
   }
 
-  m_ripJob = new K3bDvdCopy( m_ripDialog,
-			     m_device, 
-			     m_editStaticRipPath->url(), 
-			     m_editStaticRipPath->url()+"/vob", 
-			     m_editStaticRipPath->url()+"/tmp", 
-			     m_ripTitles, 
-			     this );
-  m_ripJob->setSettings( m_vobSize, m_comboAngle->currentText() );
-  connect( m_ripJob, SIGNAL( dataRate( float )), m_ripStatus, SLOT( slotDataRate( float )) );
-  connect( m_ripJob, SIGNAL( estimatedTime( unsigned int )), 
+  K3bDvdCopy ripJob( m_ripDialog,
+		     m_device, 
+		     m_editStaticRipPath->url(), 
+		     m_editStaticRipPath->url()+"/vob", 
+		     m_editStaticRipPath->url()+"/tmp", 
+		     m_ripTitles, 
+		     this );
+  ripJob.setSettings( m_vobSize, m_comboAngle->currentText() );
+  connect( &ripJob, SIGNAL( dataRate( float )), m_ripStatus, SLOT( slotDataRate( float )) );
+  connect( &ripJob, SIGNAL( estimatedTime( unsigned int )), 
 	   m_ripStatus, SLOT( slotEstimatedTime( unsigned int )) );
-  connect( m_ripJob, SIGNAL( finished( bool )), this, SLOT( slotOpenEncoding( bool )) );
+  connect( &ripJob, SIGNAL( finished( bool )), this, SLOT( slotOpenEncoding( bool )) );
   
   hide(); 
 
-  m_ripDialog->startJob( m_ripJob );
-  //} 
-
-  delete m_ripJob;
+  m_ripDialog->startJob( &ripJob );
 }
 
-void K3bDvdRipperWidget::slotRipJobDeleted(){
-    kdDebug() << "(K3bDvdRipperWidget) Rip job finished/interrupted." << endl;
-    m_ripJob->ripFinished( true );
-    m_ripDialog->close();
-    delete m_ripJob;
-    delete m_ripProcess;
-    m_ripJob = 0;
-    m_ripProcess = 0;
-}
 
 void K3bDvdRipperWidget::closeEvent( QCloseEvent *e){
     e->accept();
@@ -354,18 +340,8 @@ void K3bDvdRipperWidget::slotCheckStartEncoding( int state ){
 }
 
 void K3bDvdRipperWidget::slotOpenEncoding( bool result ){
-    kdDebug() << "(K3bDvdRipperWidget) Finished ripping status: " << result
-        << ", Initstatus: " << m_ripJob->isStartFailed() << endl;
-    if( !result ){
-        m_ripDialog->close();
-        delete m_ripProcess;
-        m_ripProcess = 0;
-    }
-    
     if( result && m_openEncoding ){
         m_ripDialog->close();
-        delete m_ripProcess;
-        m_ripProcess = 0;
         // fill data
         openEncodingDialog();
         // calculate final size depend on quality

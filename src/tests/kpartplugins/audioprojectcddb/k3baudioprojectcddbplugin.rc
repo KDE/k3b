@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="k3baudioprojectcddbplugin" library="libk3baudioprojectcddbplugin">
+<MenuBar>
+ <Menu name="project"><text>&amp;Project</text>
+  <Action name="audio_project_cddb_plugin"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>

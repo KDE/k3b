@@ -39,10 +39,9 @@ K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* p
   // greyed out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
 
-#warning FIXME: modify K3bListView to make this work
   // for zero items we make the length editable
-//   if( dynamic_cast<K3bAudioZeroData*>( source ) )
-//     setEditor( 4, MSF );
+  if( dynamic_cast<K3bAudioZeroData*>( source ) )
+    setEditor( 4, MSF );
 }
 
 
@@ -52,7 +51,7 @@ QString K3bAudioDataSourceViewItem::text( int i ) const
   case 3:
     return " " + m_source->type() + " ";
   case 4:
-    return " " + m_source->length().toString() + " ";
+    return m_source->length().toString();
   case 5:
     return " " + m_source->sourceComment() + " ";
   default:
@@ -66,7 +65,7 @@ void K3bAudioDataSourceViewItem::setText( int col, const QString& text )
   if( col == 4 ) {
     if( K3bAudioZeroData* zero = dynamic_cast<K3bAudioZeroData*>( source() ) ) {
       bool ok;
-      int f = text.toInt(&ok);
+      K3b::Msf f = K3b::Msf::fromString( text, &ok );
       if( ok )
 	zero->setLength( f );
     }

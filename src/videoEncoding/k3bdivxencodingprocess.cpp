@@ -27,7 +27,7 @@
 #include <kapplication.h>
 
 
-// we do not use a jobhandler here since no discwiting and no questioning is done anyway (this needs a lot of work!)
+// FIXME: we do not use a jobhandler here since no discwiting and no questioning is done anyway.
 K3bDivXEncodingProcess::K3bDivXEncodingProcess( K3bDivxCodecData *data, QWidget* parent, const char *name )
   : K3bJob( 0, parent, name ),
     m_process(0) {
@@ -46,10 +46,12 @@ void K3bDivXEncodingProcess::start() {
   m_speedInitialFlag = 0;
   m_interalInterrupt = false;
   emit started();
+  emit newTask( i18n("Generating video")  );
   checkVobDirectory(); // checks if other files than .vob are in vob dir
 }
 void K3bDivXEncodingProcess::slotFinishedCheckVobDirectory() {
-    if( m_data->isTcDvdMode() || ( m_data->isNormalize() && !m_data->isAc3Set() ) ) {
+    // if audio gain or dvd mode we need ifos
+    if( m_data->isTcDvdMode() || ( m_data->isNormalize() && !(m_data->getParaAc3().length() > 1) ) ) {
 	    kdDebug() << "(K3bDivXEncodingProcess) Start transcode in dvd mode or mp3 audio gain mode." << endl;
 	    copyIfos(); // old: code directly from slotFinishedCopyIfos, before change to transcode -x dvd
     } else {
@@ -61,11 +63,11 @@ void K3bDivXEncodingProcess::slotFinishedCopyIfos(KIO::Job* job){
     if ( job->error() > 0 ) {
         kdDebug() << "(K3bDivXEncodingProcess) Job error during copy: " << job->errorString() << endl;
     }
-    if ( m_data->getParaAc3().length() > 1 ) {
+    if ( m_data->getParaAc3().length() > 1 || !m_data->isNormalize() ) {
         // use ac3
         //deleteIfos(); // for using with transcode -x vob
         slotStartEncoding(); 
-    } else if ( m_data->isNormalize() ) {
+    } else {
         infoMessage( i18n( "Copy IFO files to vob directory." ), INFO );
         slotStartAudioProcessing(); // -> deleteIfos -> slotStartEncoding
         //copyIfos(); // for using with transcode -x vob
@@ -117,17 +119,17 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     const K3bExternalBin *transcodeBin = k3bcore->externalBinManager() ->binObject( "transcode" );
     if( m_process ) delete m_process;
     m_process = new KShellProcess;
-
-    //    *m_process << "nice" << "-10";
+    //TODO configurable
+    *m_process << "nice" << "-10";
     *m_process << transcodeBin->path; //"/usr/local/bin/transcode -i ";
     *m_process << " -i" << m_data->getProjectDir() + "/vob ";
     // -x vob
     if( m_data->isTcDvdMode() ){
-  	*m_process << "-x" << "dvd";
-	debugPass +="-x dvd ";
+      *m_process << " -x " << "dvd";
+    debugPass +=" -x dvd ";
     } else {	
-	*m_process << "-x" << "vob";
-	debugPass +="-x vob ";
+    *m_process << " -x " << "vob";
+    debugPass +=" -x vob ";
     }	
     *m_process << "-T" << m_data->getTitle() + ",-1,1" << m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + "," + m_data->getCrispness();
     kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + "," + m_data->getCrispness() << endl;
@@ -287,22 +289,19 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
       kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
       slotStartEncoding();
     } else {
-        if ( m_pass == 1 ) { // one pass mode is m_pass=0
-            kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
-            slotStartEncoding();
-        } else {
+        //delete m_process;
+        //if ( m_pass == 1 ) { // one pass mode is m_pass=0
+        //    kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
+        //   slotStartEncoding();
+        //} else {
             emit debuggingOutput( "videoencoding (transcode)", m_debugBuffer );
             restoreBackupFiles();
             if ( m_data->isShutdown() ) {
                 kdDebug() << "(K3bDivxEncodingProcess) Encoding finished. Shutting down now." << endl;
                 if ( !shutdown() ) {
                     infoMessage( i18n( "Couldn't shutdown the system." ), ERROR );
-                    emit finished( true );
                 }
             } else {
-                infoMessage( i18n( "Video generating successfully finished." ), SUCCESS );
-                emit finished( true );
-            }
             infoMessage( i18n("Video generating successfully finished."), SUCCESS );
             emit debuggingOutput("videoencoding (transcode)", m_debugBuffer);
             emit finished( true );
@@ -355,9 +354,10 @@ void K3bDivXEncodingProcess::slotAudioExited( KProcess * p ) {
 
 bool K3bDivXEncodingProcess::shutdown() {
   // not sure if KApplication::ShutdownModeSchedule is the one to use...
+  kdDebug() << "(K3bDivxEncodingProcess) Shutdown KApplication" << endl;
   return kapp->requestShutDown( KApplication::ShutdownConfirmNo, 
-				KApplication::ShutdownTypeHalt, 
-				KApplication::ShutdownModeInteractive );
+                KApplication::ShutdownTypeDefault,
+                KApplication::ShutdownModeDefault );
 }
 
 void K3bDivXEncodingProcess::checkVobDirectory() {
@@ -420,7 +420,7 @@ QString K3bDivXEncodingProcess::jobDetails() const
 {
   // TODO: here we could show a lot of info!
   //       choose wisely!
-  return m_data->getSize();
+  return QString::number(m_data->getResizeHeight()) +"x"+ QString::number(m_data->getResizeWidth());
 }
 
 #include "k3bdivxencodingprocess.moc"

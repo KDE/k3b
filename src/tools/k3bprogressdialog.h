@@ -37,7 +37,9 @@ class K3bProgressDialog : public KDialogBase
 
  public:
   K3bProgressDialog( const QString& text = QString::null,
-		     QWidget* parent = 0, const char* name = 0 );
+		     QWidget* parent = 0, 
+		     const QString& caption = QString::null,
+		     const char* name = 0 );
   ~K3bProgressDialog();
 
   int exec( bool showProgress );

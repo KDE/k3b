@@ -13,36 +13,35 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#ifndef K3BCDDBMULTIENTRIESDIALOG_H
-#define K3BCDDBMULTIENTRIESDIALOG_H
-
-#include <kdialogbase.h>
-
-#include "cddb/k3bcddbquery.h"
-#include "cddb/k3bcddbresult.h"
+#ifndef _K3B_AUDIO_PROJECT_CDDB_PLUGIN_H_
+#define _K3B_AUDIO_PROJECT_CDDB_PLUGIN_H_
 
 
-class QStringList;
-class KListBox;
+#include <kparts/plugin.h>
 
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCddbMultiEntriesDialog : public KDialogBase  
+class K3bCddb;
+class K3bAudioDoc;
+class K3bProgressDialog;
+
+class K3bAudioProjectCddbPlugin : public KParts::Plugin
 {
   Q_OBJECT
 
  public:
-  ~K3bCddbMultiEntriesDialog();
-  
-  static const K3bCddbResultHeader& selectCddbEntry( K3bCddbQuery* query, QWidget* parent = 0 );
+  K3bAudioProjectCddbPlugin( QObject* parent, const char* name, const QStringList& );
+  virtual ~K3bAudioProjectCddbPlugin();
 
- protected:
-  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
+ public slots:
+  void slotQuery();
+
+ private slots:
+  void slotCddbQueryFinished( int result );
 
  private:
-  KListBox *m_listBox;
+  K3bCddb* m_cddb;
+  K3bAudioDoc* m_doc;
+  K3bProgressDialog* m_progress;
 };
+
 
 #endif
