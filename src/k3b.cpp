@@ -488,8 +488,6 @@ void K3bApp::slotFileQuit()
 //  }	
 
   close();		
-
-  slotStatusMsg(i18n("Ready."));
 }
 
 
