@@ -6,6 +6,7 @@ fixed some i18n issues
 improved mp3 file detection
 added K3b project mimetype
 added konqueror servicemenu entries
+now KoStore is used for saving documents
 
 0.7.4
 fixed bug that caused stupid mountpoints to be assigned to the devices
