@@ -120,7 +120,7 @@ void K3bSoxEncoder::finishEncoderInternal()
 {
   if( d->process ) {
     if( d->process->isRunning() ) {
-      d->process->closeStdin();
+      ::close( d->process->closeStdin() );
 
       // this is kind of evil... 
       // but we need to be sure the process exited when this method returnes
