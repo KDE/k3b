@@ -419,6 +419,10 @@ bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevi
 {
   paranoiaFree();
 
+  // since we use cdparanoia to open the device it is important to close
+  // the device here
+  dev->close();
+
   d->device = dev;
   d->toc = toc;
   if( d->toc.isEmpty() ) {
