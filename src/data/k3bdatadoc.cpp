@@ -662,6 +662,7 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   // the header stuff
   // ----------------------------------------------------------------------
   QDomElement headerElem = doc.createElement( "header" );
+  saveDocumentDataHeader( headerElem );
   docElem->appendChild( headerElem );
 
 
