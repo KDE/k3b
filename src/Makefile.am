@@ -3,7 +3,7 @@ bin_PROGRAMS = k3b
 
 k3b_SOURCES = k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3btoolbox.cpp k3bisooptions.cpp k3b.cpp k3bprocess.cpp k3bwritingjob.cpp main.cpp k3bdiskerasinginfodialog.cpp k3bemptydiscwaiter.cpp k3babstractwriter.cpp k3bcdrecordwriter.cpp k3bcdrdaoparser.cpp k3bcdrdaowriter.cpp k3bstdguiitems.cpp 
 
-k3b_LDADD   = ./data/libdata.la ./mixed/libmixed.la ./vcd/libvcd.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./device/libdevice.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./tools/kostore/libkostore.la ./cdcopy/libcdcopy.la ./videoEncoding/libvideoEncoding.la $(CDPARANOIA_LIBS) $(OGG_VORBISLIBS) -lartskde  -lkio
+k3b_LDADD   = ./data/libdata.la ./mixed/libmixed.la ./vcd/libvcd.la ./cdinfo/libcdinfo.la ./audio/libaudio.la ./device/libdevice.la ./option/liboption.la ./rip/librip.la ./rip/songdb/libsongdb.la ./tools/libtools.la ./tools/kostore/libkostore.la ./cdcopy/libcdcopy.la ./videoEncoding/libvideoEncoding.la $(OGG_VORBISLIBS) -lartskde  -lkio
 
 SUBDIRS = tools device cddb data mixed vcd cdinfo audio option rip cdcopy videoEncoding pics icons konqi mimetypes k3bsetup
 
@@ -28,7 +28,7 @@ appsdir = $(kde_appsdir)/Multimedia
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) $(CDPARANOIA_INCS) -I$(srcdir)/tools -I$(srcdir)/device
+INCLUDES= $(all_includes) -I$(srcdir)/tools -I$(srcdir)/device
 
 METASOURCES = AUTO
 

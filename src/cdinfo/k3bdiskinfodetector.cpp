@@ -12,10 +12,12 @@
 #include <qtimer.h>
 #include <qfile.h>
 
-extern "C" {
-#include <cdda_interface.h>
-}
 
+#include <sys/ioctl.h>		// ioctls
+#include <unistd.h>		// lseek, read. etc
+#include <fcntl.h>		// O_RDONLY etc.
+#include <linux/cdrom.h>	// old ioctls for cdrom
+#include <stdlib.h>
 
 
 K3bDiskInfoDetector::K3bDiskInfoDetector( QObject* parent )
@@ -451,50 +453,101 @@ void K3bDiskInfoDetector::fetchIdeInformation()
   if( m_bCanceled )
     return;
 
-  // use cdparanoia-lib to retrieve toc
-
-  struct cdrom_drive* drive = cdda_identify( QFile::encodeName(m_device->devicename()), CDDA_MESSAGE_FORGETIT, 0 );
-  if( !drive ) {
-    kdDebug() << "(K3bDiskInfoDetector) Could not open drive." << endl;
-    // perhaps this is only the case if there is no disk in drive ??
+  int cdromfd = ::open( m_device->blockDeviceName().latin1(), O_RDONLY | O_NONBLOCK );
+  if (cdromfd < 0) {
+    kdDebug() << "(K3bDiskInfoDetector) could not open device" << endl;
     m_info.valid = false;
     emit diskInfoReady( m_info );
     return;
   }
 
-  cdda_open( drive );
+  int ret = ::ioctl(cdromfd, CDROM_DRIVE_STATUS, CDSL_CURRENT);
+  m_info.valid = true;
 
-  m_info.noDisk = false;
-  m_info.empty = ( drive->tracks == 0 );
+  switch(ret) {
+  case CDS_DISC_OK:
+    // read toc
+    struct cdrom_tochdr tocHdr;
+    if( ::ioctl(cdromfd, CDROMREADTOCHDR, &tocHdr ) ) {
+      kdDebug() << "disk empty?" << endl;
+      m_info.noDisk = true;
+      break;
+    }
+    else {
+      struct cdrom_tocentry tocE;
+      tocE.cdte_format = CDROM_LBA;
+      int numTracks = (int)tocHdr.cdth_trk1 - (int)tocHdr.cdth_trk0 + 1;
 
+      // we create this fields to have ending sector info later on
+      int* startSectors = new int[numTracks+1];
+      bool* dataTrack = new bool[numTracks+1];
+      int* modes = new int[numTracks+1];
 
-  // populate the toc
-  for( int i = 1; i <= drive->tracks; ++i ) {
-    long startSec = cdda_track_firstsector( drive, i );
-    long endSec = cdda_track_lastsector( drive, i );
-    int type = ( cdda_track_audiop( drive, i ) ? K3bTrack::AUDIO : K3bTrack::DATA );
-    int mode = K3bTrack::UNKNOWN;   // no idea
+      // read info for every single track
+      int j = 0;
+      for( int i = (int)tocHdr.cdth_trk0; i <= (int)tocHdr.cdth_trk1; ++i ) {
+	tocE.cdte_track = i;
+	if( ::ioctl(cdromfd, CDROMREADTOCENTRY, &tocE ) ) {
+	  m_info.valid = false;
+	  break;
+	}
+	else {
+	  startSectors[j] = (int)tocE.cdte_addr.lba;
+	  dataTrack[j] = (bool)tocE.cdte_datamode;
+	  modes[j] = (int)tocE.cdte_datamode; // this does not seem to provide valid data mode (1/2) info
+	  j++;
+	}
+      }
 
-    // due to an error in cdda_lib we need to fix the toc for multisession cds
-    // I hope this will do it.
-    if( cdda_track_audiop( drive, i-1 ) && !cdda_track_audiop( drive, i ) )
-      startSec += 11400;
+      if( m_info.valid ) {
+	// read leadout info
+	tocE.cdte_track = CDROM_LEADOUT;
+	::ioctl(cdromfd, CDROMREADTOCENTRY, &tocE );
+	startSectors[numTracks] = (int)tocE.cdte_addr.lba;
 
-    m_info.toc.append( K3bTrack( startSec, endSec, type, mode ) );
+	// now create the K3b structures	
+	for( int i = 0; i < numTracks; ++i ) {
+	  m_info.toc.append( K3bTrack( startSectors[i], 
+				       startSectors[i+1], 
+				       dataTrack[i] ? K3bTrack::DATA : K3bTrack::AUDIO, 
+				       K3bTrack::UNKNOWN ) );  // no valid mode info as far as I know
+	}
+	
+	m_info.empty = ( numTracks == 0 );
+	m_info.noDisk = false;
+      }
+
+      // cleanup
+      delete [] startSectors;
+      delete [] dataTrack;
+      delete [] modes;
+    }
+    break;
+  case CDS_NO_DISC:
+    kdDebug() << "no disk" << endl;
+    m_info.noDisk = true;
+    break;
+  case CDS_TRAY_OPEN:
+    kdDebug() << "tray open" << endl;
+  case CDS_NO_INFO:
+    kdDebug() << "no info" << endl;
+  case CDS_DRIVE_NOT_READY:
+    kdDebug() << "not ready" << endl;
+  default:
+    m_info.valid = false;
+    break;
   }
 
-  cdda_close( drive );
+  ::close( cdromfd );
+
+  if( !m_info.valid || m_info.empty ) {
+    emit diskInfoReady( m_info );
+    return;
+  }
 
   determineTocType();
 
-
-  // atip is only readable on cd-writers
-  if( m_device->burner() ) {
-    fetchDiskInfo();
-  }
-  else {
-    testForDvd();
-  }
+  testForDvd();
 }
 
 
