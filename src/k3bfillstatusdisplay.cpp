@@ -167,154 +167,204 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
 // ----------------------------------------------------------------------------------------------------
 
+
+class K3bFillStatusDisplay::Private
+{
+public:
+  KActionCollection* actionCollection;
+  KToggleAction* actionShowMinutes;
+  KToggleAction* actionShowMegs;
+  KToggleAction* action74Min;
+  KToggleAction* action80Min;
+  KToggleAction* action100Min;
+  KToggleAction* actionDvd4_7GB;
+  KToggleAction* actionCustomSize;
+  KAction* actionDetermineSize;
+
+  KPopupMenu* popup;
+  KPopupMenu* dvdPopup;
+
+  QToolButton* buttonMenu;
+
+  K3bFillStatusDisplayWidget* displayWidget;
+
+  bool showDvdSizes;
+};
+
+
 K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
   : QFrame(parent,name)
 {
+  d = new Private;
+  showDvdSizes( false );
+
   setFrameStyle( Panel | Sunken );
 
-  m_displayWidget = new K3bFillStatusDisplayWidget( doc, this );
-  m_buttonMenu = new QToolButton( this );
-  m_buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
-  m_buttonMenu->setAutoRaise(true);
-  QToolTip::add( m_buttonMenu, i18n("Fill display properties") );
-  connect( m_buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
+  d->displayWidget = new K3bFillStatusDisplayWidget( doc, this );
+  d->buttonMenu = new QToolButton( this );
+  d->buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
+  d->buttonMenu->setAutoRaise(true);
+  QToolTip::add( d->buttonMenu, i18n("Fill display properties") );
+  connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
 
   QGridLayout* layout = new QGridLayout( this );
   layout->setSpacing(5);
   layout->setMargin(frameWidth());
-  layout->addWidget( m_displayWidget, 0, 0 );
-  layout->addWidget( m_buttonMenu, 0, 1 );
+  layout->addWidget( d->displayWidget, 0, 0 );
+  layout->addWidget( d->buttonMenu, 0, 1 );
   layout->setColStretch( 0, 1 );
 
   setupPopupMenu();
 
   // defaults to megabytes
-  m_displayWidget->setShowTime(false);
-  m_actionShowMegs->setChecked( true );
+  d->displayWidget->setShowTime(false);
+  d->actionShowMegs->setChecked( true );
 
-  switch( m_displayWidget->cdSize().totalFrames()/75/60 ) {
+  switch( d->displayWidget->cdSize().totalFrames()/75/60 ) {
   case 74:
-    m_action74Min->setChecked( true );
+    d->action74Min->setChecked( true );
     break;
   case 80:
-    m_action80Min->setChecked( true );
+    d->action80Min->setChecked( true );
     break;
   case 100:
-    m_action100Min->setChecked( true );
+    d->action100Min->setChecked( true );
     break;
   default:
-    m_actionCustomSize->setChecked( true );
+    d->actionCustomSize->setChecked( true );
     break;
   }
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()
 {
+  delete d;
 }
 
 
 void K3bFillStatusDisplay::paintEvent(QPaintEvent* e)
 {
   // just to pass updates to the display
-  m_displayWidget->update();
+  d->displayWidget->update();
   QFrame::paintEvent(e);
 }
 
 void K3bFillStatusDisplay::setupPopupMenu()
 {
-  m_actionCollection = new KActionCollection( this );
+  d->actionCollection = new KActionCollection( this );
 
-  m_popup = new KPopupMenu( this, "popup" );
-  m_actionShowMinutes = new KToggleAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()), 
-					   m_actionCollection, "fillstatus_show_minutes" );
-  m_actionShowMegs = new KToggleAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()), 
-					m_actionCollection, "fillstatus_show_megabytes" );
+  // we use a nother popup for the dvd sizes
+  d->popup = new KPopupMenu( this, "popup" );
+  d->dvdPopup = new KPopupMenu( this, "dvdpopup" );
 
-  m_actionShowMegs->setExclusiveGroup( "show_size_in" );
-  m_actionShowMinutes->setExclusiveGroup( "show_size_in" );
+  d->actionShowMinutes = new KToggleAction( i18n("Minutes"), "kmidi", 0, this, SLOT(showTime()), 
+					   d->actionCollection, "fillstatus_show_minutes" );
+  d->actionShowMegs = new KToggleAction( i18n("Megabytes"), "kwikdisk", 0, this, SLOT(showSize()), 
+					d->actionCollection, "fillstatus_show_megabytes" );
 
-  m_action74Min = new KToggleAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()), 
-				     m_actionCollection, "fillstatus_74minutes" );
-  m_action80Min = new KToggleAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()), 
-				     m_actionCollection, "fillstatus_80minutes" );
-  m_action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), 
-				      m_actionCollection, "fillstatus_100minutes" );
-  m_actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
-					  m_actionCollection, "fillstatus_custom_size" );
+  d->actionShowMegs->setExclusiveGroup( "show_size_in" );
+  d->actionShowMinutes->setExclusiveGroup( "show_size_in" );
 
-  m_action74Min->setExclusiveGroup( "cd_size" );
-  m_action80Min->setExclusiveGroup( "cd_size" );
-  m_action100Min->setExclusiveGroup( "cd_size" );
-  m_actionCustomSize->setExclusiveGroup( "cd_size" );
+  d->action74Min = new KToggleAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()), 
+				     d->actionCollection, "fillstatus_74minutes" );
+  d->action80Min = new KToggleAction( i18n("%1 MB").arg(700), 0, this, SLOT(slot80Minutes()), 
+				     d->actionCollection, "fillstatus_80minutes" );
+  d->action100Min = new KToggleAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()), 
+				      d->actionCollection, "fillstatus_100minutes" );
+  d->actionDvd4_7GB = new KToggleAction( i18n("4.7 GB"), 0, this, SLOT(slotDvd4_7GB()), 
+					 d->actionCollection, "fillstatus_dvd_4_7gb" );
+  d->actionCustomSize = new KToggleAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
+					  d->actionCollection, "fillstatus_custom_size" );
 
-  m_actionDetermineSize = new KAction( i18n("From Disk..."), "cdrom_unmount", 0,
+  d->action74Min->setExclusiveGroup( "cd_size" );
+  d->action80Min->setExclusiveGroup( "cd_size" );
+  d->action100Min->setExclusiveGroup( "cd_size" );
+  d->actionDvd4_7GB->setExclusiveGroup( "cd_size" );
+  d->actionCustomSize->setExclusiveGroup( "cd_size" );
+
+  d->actionDetermineSize = new KAction( i18n("From Disk..."), "cdrom_unmount", 0,
 				       this, SLOT(slotDetermineSize()), 
-				       m_actionCollection, "fillstatus_size_from_disk" );
+				       d->actionCollection, "fillstatus_size_from_disk" );
  
-  m_popup->insertTitle( i18n("Show Size In") );
-  m_actionShowMinutes->plug( m_popup );
-  m_actionShowMegs->plug( m_popup );
-  m_popup->insertTitle( i18n("CD size") );
-  m_action74Min->plug( m_popup );
-  m_action80Min->plug( m_popup );
-  m_action100Min->plug( m_popup );
-  m_actionCustomSize->plug( m_popup );
-  m_actionDetermineSize->plug( m_popup );
+  d->popup->insertTitle( i18n("Show Size In") );
+  d->actionShowMinutes->plug( d->popup );
+  d->actionShowMegs->plug( d->popup );
+  d->popup->insertTitle( i18n("CD size") );
+  d->action74Min->plug( d->popup );
+  d->action80Min->plug( d->popup );
+  d->action100Min->plug( d->popup );
+  d->actionCustomSize->plug( d->popup );
+  d->actionDetermineSize->plug( d->popup );
 
-  connect( m_displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
+  d->dvdPopup->insertTitle( i18n("DVD Size") );
+  d->actionDvd4_7GB->plug( d->dvdPopup );
+  d->actionCustomSize->plug( d->dvdPopup );
+  d->actionDetermineSize->plug( d->dvdPopup );
+
+  connect( d->displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
 }
 
 
 void K3bFillStatusDisplay::showSize()
 {
-  m_actionShowMegs->setChecked( true );
+  d->actionShowMegs->setChecked( true );
 
-  m_action74Min->setText( i18n("650 MB"));
-  m_action80Min->setText( i18n("700 MB"));
-  m_action100Min->setText( i18n("880 MB") );
+  d->action74Min->setText( i18n("%1 MB").arg(650) );
+  d->action80Min->setText( i18n("%1 MB").arg(700) );
+  d->action100Min->setText( i18n("%1 MB").arg(880) );
 
-  m_displayWidget->setShowTime(false);
+  d->displayWidget->setShowTime(false);
 }
 	
 void K3bFillStatusDisplay::showTime()
 {
-  m_actionShowMinutes->setChecked( true );
+  d->actionShowMinutes->setChecked( true );
 
-  // if you have more than three strings, it might be easier to
-  // use i18n("unused", "%n minutes", 74);
-  m_action74Min->setText( i18n("74 minutes") );
-  m_action80Min->setText( i18n("80 minutes") );
-  m_action100Min->setText( i18n("100 minutes") );
+  d->action74Min->setText( i18n("unused", "%n minutes", 74) );
+  d->action80Min->setText( i18n("unused", "%n minutes", 80) );
+  d->action100Min->setText( i18n("unused", "%n minutes", 100) );
 
-  m_displayWidget->setShowTime(true);
+  d->displayWidget->setShowTime(true);
+}
+
+
+void K3bFillStatusDisplay::showDvdSizes( bool b )
+{
+  d->showDvdSizes = b;
 }
 
 
 void K3bFillStatusDisplay::slot74Minutes()
 {
-  m_displayWidget->setCdSize( 74*60*75 );
+  d->displayWidget->setCdSize( 74*60*75 );
 }
 
 
 void K3bFillStatusDisplay::slot80Minutes()
 {
-  m_displayWidget->setCdSize( 80*60*75 );
+  d->displayWidget->setCdSize( 80*60*75 );
 }
 
 
 void K3bFillStatusDisplay::slot100Minutes()
 {
-  m_displayWidget->setCdSize( 100*60*75 );
+  d->displayWidget->setCdSize( 100*60*75 );
 }
 
+
+void K3bFillStatusDisplay::slotDvd4_7GB()
+{
+  d->displayWidget->setCdSize( 510*60*75 );
+}
 
 void K3bFillStatusDisplay::slotCustomSize()
 {
   bool ok;
-  QString size = KLineEditDlg::getText( i18n("Custom CD Size"), i18n("Please specify the size of your CD in minutes:"), 
-					   "74", &ok, this, new QIntValidator( this ) );
+  QString size = KLineEditDlg::getText( i18n("Custom CD Size"), 
+					i18n("Please specify the size of your CD in minutes:"), 
+					"74", &ok, this, new QIntValidator( this ) );
   if( ok ) {
-    m_displayWidget->setCdSize( size.toInt()*60*75 );
+    d->displayWidget->setCdSize( size.toInt()*60*75 );
     update();
   }
 }
@@ -322,14 +372,18 @@ void K3bFillStatusDisplay::slotCustomSize()
 
 void K3bFillStatusDisplay::slotMenuButtonClicked()
 {
-  QSize size = m_popup->sizeHint();
-  slotPopupMenu( m_buttonMenu->mapToGlobal(QPoint(m_buttonMenu->width(), 0)) + QPoint(-1*size.width(), -1*size.height()) );
+  QSize size = d->showDvdSizes ? d->dvdPopup->sizeHint() : d->popup->sizeHint();
+  slotPopupMenu( d->buttonMenu->mapToGlobal(QPoint(d->buttonMenu->width(), 0)) +
+		 QPoint(-1*size.width(), -1*size.height()) );
 }
 
 
 void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 {
-  m_popup->popup(p);
+  if( d->showDvdSizes )
+    d->dvdPopup->popup(p);
+  else
+    d->popup->popup(p);
 }
 
 
@@ -348,8 +402,8 @@ void K3bFillStatusDisplay::slotRemainingSize( K3bCdDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
     K3b::Msf size = dh->remainingSize();
-    m_displayWidget->setCdSize( size );
-    m_actionCustomSize->setChecked(true);
+    d->displayWidget->setCdSize( size );
+    d->actionCustomSize->setChecked(true);
     update();
   }
   else {

@@ -16,6 +16,7 @@
 #include "k3bdvdview.h"
 #include "k3bdvddoc.h"
 #include "k3bdvdburndialog.h"
+#include <k3bfillstatusdisplay.h>
 
 
 K3bDvdView::K3bDvdView( K3bDvdDoc* doc, QWidget *parent, const char *name )
@@ -23,7 +24,7 @@ K3bDvdView::K3bDvdView( K3bDvdDoc* doc, QWidget *parent, const char *name )
 {
   m_doc = doc;
 
-  // TODO: set the default sizes of the fillstatusdisplay to DVD sizes
+  fillStatusDisplay()->showDvdSizes(true);
 }
 
 

@@ -39,19 +39,11 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
   : K3bView( doc, parent, name ),
     m_doc(doc)
 {
-  QGridLayout* grid = new QGridLayout( this );
-  grid->setSpacing( 5 );
-  grid->setMargin( 2 );
-
-  m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
   m_listView = new K3bMovixListView( m_doc, this );
+  setMainWidget( m_listView );
 
-  grid->addWidget( m_listView, 0, 0 );
-  grid->addWidget( m_fillStatusDisplay, 1, 0 );
-  grid->setRowStretch( 0, 1 );
-
-  connect( m_doc, SIGNAL(newFileItems()), m_fillStatusDisplay, SLOT(update()) );
-  connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc, SIGNAL(newFileItems()), fillStatusDisplay(), SLOT(update()) );
+  connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), fillStatusDisplay(), SLOT(update()) );
 
   connect( m_listView, SIGNAL(contextMenuRequested( QListViewItem*, const QPoint& , int )),
 	   this, SLOT(slotContextMenuRequested(QListViewItem*, const QPoint& , int )) );

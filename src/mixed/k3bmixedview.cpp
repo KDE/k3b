@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -48,24 +48,17 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   m_mixedDirTreeView->setFileView( m_dataFileView );
   m_audioListView = new K3bAudioListView( this, doc->audioDoc(), m_widgetStack );
 
-  m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
-
-  QVBoxLayout* box = new QVBoxLayout( this );
-  box->addWidget( splitter );
-  box->addWidget( m_fillStatusDisplay );
-  box->setStretchFactor( splitter, 1 );
-  box->setSpacing( 5 );
-  box->setMargin( 2 );
+  setMainWidget( splitter );
 
   connect( m_mixedDirTreeView, SIGNAL(audioTreeSelected()), 
 	   this, SLOT(slotAudioTreeSelected()) );
   connect( m_mixedDirTreeView, SIGNAL(dataTreeSelected()), 
 	   this, SLOT(slotDataTreeSelected()) );
 
-  connect( m_audioListView, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
-  connect( m_doc->audioDoc(), SIGNAL(newTracks()), m_fillStatusDisplay, SLOT(update()) );
-  connect( m_doc->dataDoc(), SIGNAL(itemRemoved(K3bDataItem*)), m_fillStatusDisplay, SLOT(update()) );
-  connect( m_doc->dataDoc(), SIGNAL(newFileItems()), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_audioListView, SIGNAL(lengthReady()), fillStatusDisplay(), SLOT(update()) );
+  connect( m_doc->audioDoc(), SIGNAL(newTracks()), fillStatusDisplay(), SLOT(update()) );
+  connect( m_doc->dataDoc(), SIGNAL(itemRemoved(K3bDataItem*)), fillStatusDisplay(), SLOT(update()) );
+  connect( m_doc->dataDoc(), SIGNAL(newFileItems()), fillStatusDisplay(), SLOT(update()) );
 
 
   m_widgetStack->raiseWidget( m_dataFileView );

@@ -26,7 +26,7 @@ class K3bDataDoc;
 class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
-class K3bFillStatusDisplay;
+
 
 namespace KIO {
   class Job;
@@ -60,7 +60,6 @@ class K3bDataView : public K3bView
  protected:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;
-   K3bFillStatusDisplay* m_fillStatusDisplay;
 		
  private:
    K3bDataDoc* m_doc;

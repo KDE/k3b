@@ -39,19 +39,11 @@ K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent, const char *name )
     QGridLayout* grid = new QGridLayout( this );
 
     m_vcdlist = new K3bVcdListView( this, pDoc, this );
-    m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
-    m_fillStatusDisplay->showSize();
-    m_burnDialog = 0;
+    setMainWidget( m_vcdlist );
+    fillStatusDisplay()->showSize();
 
-    grid->addWidget( m_vcdlist, 0, 0 );
-    grid->addWidget( m_fillStatusDisplay, 1, 0 );
-    grid->setRowStretch( 0, 1 );
-    grid->setSpacing( 5 );
-    grid->setMargin( 2 );
-
-
-    connect( m_vcdlist, SIGNAL( lengthReady() ), m_fillStatusDisplay, SLOT( update() ) );
-    connect( m_doc, SIGNAL( newTracks() ), m_fillStatusDisplay, SLOT( update() ) );
+    connect( m_vcdlist, SIGNAL( lengthReady() ), fillStatusDisplay(), SLOT( update() ) );
+    connect( m_doc, SIGNAL( newTracks() ), fillStatusDisplay(), SLOT( update() ) );
 }
 
 K3bVcdView::~K3bVcdView()

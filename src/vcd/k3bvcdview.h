@@ -29,7 +29,6 @@ class K3bVcdDoc;
 class K3bVcdTrack;
 class QListViewItem;
 class KListView;
-class K3bFillStatusDisplay;
 class K3bVcdBurnDialog;
 class K3bProjectBurnDialog;
 
@@ -49,9 +48,6 @@ class K3bVcdView : public K3bView
         K3bVcdDoc* m_doc;
 
         K3bVcdListView* m_vcdlist;
-
-        K3bFillStatusDisplay* m_fillStatusDisplay;
-        K3bVcdBurnDialog* m_burnDialog;
 };
 
 #endif

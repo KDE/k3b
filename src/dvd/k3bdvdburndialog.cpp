@@ -39,7 +39,7 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
   // no data mode setting for dvds
   m_groupDataMode->hide();
 
-  m_writerSelectionWidget->setSupportedWritingApps( K3b::DVDRECORD );
+  m_writerSelectionWidget->setDvd( true );
 
   readSettings();
 }
