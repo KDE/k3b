@@ -252,7 +252,8 @@ void K3bIsoImager::calculateSize()
   }
 
   // add empty dummy dir since one path-spec is needed
-  *m_process << dummyDir();
+  // ??? Seems it is not needed after all. At least mkisofs 1.14 and above don't need it. ???
+  //  *m_process << dummyDir();
 
   kdDebug() << "***** mkisofs calculate size parameters:\n";
   const QValueList<QCString>& args = m_process->args();

@@ -59,10 +59,12 @@ public:
 	return false;
       }
       else {
-	// TODO not sure yet why this is done...
 	::fcntl(inFdPair[0], F_SETFL, O_NONBLOCK);
 	::fcntl(outFd, F_SETFL, O_NONBLOCK);
       }
+    }
+    else {
+      ::fcntl(inFd, F_SETFL, O_NONBLOCK);
     }
 
     return true;
@@ -90,6 +92,7 @@ public:
     bool eof = false;
     bool error = false;
     canceled = false;
+    int oldPercent = 0;
     while( !canceled && !error && (!eof || dataLen > 0) ) {
       //
       // create two fd sets
@@ -116,6 +119,8 @@ public:
       //
       if( !canceled && ret > 0 ) {
 
+	int percent = -1;
+
 	//
 	// Read into the buffer
 	//
@@ -126,10 +131,10 @@ public:
 	  // never read more than xxx bytes
 	  // This is some tuning to prevent the reading from blocking the whole thread
 	  // 
-	  if( maxLen > 2048*100 ) // some dummy value below 1 MB
-	    maxLen = 2048*100;
+	  if( maxLen > 2048*16 ) // some dummy value below 1 MB
+	    maxLen = 2048*16;
 	  ret = ::read( usedInFd, &buffer[readPos], maxLen );
-	  if (ret < 0) {
+	  if( ret < 0 ) {
 	    if( (errno != EINTR) && (errno != EAGAIN) ) {
 	      kdDebug() << "(K3bPipeBuffer::WorkThread) error while reading from " << usedInFd << endl;
 	      error = true;
@@ -142,10 +147,10 @@ public:
 	  else {
 	    dataLen += ret;
 
-	    emitPercent( (int)((double)dataLen*100.0/(double)bufSize) );
+	    percent = (int)((double)dataLen*100.0/(double)bufSize);
 	  }
 	}
-
+ 
 	//
 	// Read from the buffer and write to the output
 	//
@@ -165,11 +170,16 @@ public:
 	    // we always emit before the reading from the buffer since
 	    // it makes way more sense to show the buffer before the reading.
 	    //
-	    emitPercent( (int)((double)dataLen*100.0/(double)bufSize) );
+	    percent = (int)((double)dataLen*100.0/(double)bufSize);
 
 	    bufPos = (bufPos + ret) % bufSize;
 	    dataLen -= ret;
 	  }
+	}
+
+	if( percent != -1 && percent != oldPercent ) {
+	  emitPercent( percent );
+	  oldPercent = percent;
 	}
       }
       else if( !canceled ) {

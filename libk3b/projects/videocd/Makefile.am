@@ -1,5 +1,5 @@
 AM_CPPFLAGS= 	-I$(srcdir)/../../core \
-		-I$(top_srcdir)/libk3bdevice \
+		-I$(srcdir)/../../../libk3bdevice \
 		-I$(srcdir)/../../tools \
 		-I$(srcdir)/.. \
 		$(all_includes)

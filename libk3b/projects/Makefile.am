@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/../core -I$(top_srcdir)/libk3bdevice -I$(srcdir)/../tools -I$(srcdir)/datacd -I$(srcdir)/audiocd -I$(srcdir)/mixedcd -I$(srcdir)/movixcd -I$(srcdir)/movixdvd -I$(srcdir)/datadvd -I$(srcdir)/videocd -I$(srcdir)/videodvd $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../tools -I$(srcdir)/datacd -I$(srcdir)/audiocd -I$(srcdir)/mixedcd -I$(srcdir)/movixcd -I$(srcdir)/movixdvd -I$(srcdir)/datadvd -I$(srcdir)/videocd -I$(srcdir)/videodvd $(all_includes)
 
 noinst_LTLIBRARIES = libk3bproject.la
 

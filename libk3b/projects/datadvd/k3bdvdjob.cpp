@@ -242,7 +242,9 @@ void K3bDvdJob::slotGrowisofsImagerPercent( int p )
 void K3bDvdJob::slotIsoImagerFinished( bool success )
 {
   if( m_canceled ) {
-    if( !numRunningSubJobs() ) {
+    if( !numRunningSubJobs() ||
+	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_isoImager) ) ||
+	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_growisofsImager) ) ) {
       emit canceled();
       emit finished(false);
     }
@@ -390,7 +392,8 @@ void K3bDvdJob::slotWriterJobPercent( int p )
 void K3bDvdJob::slotWritingFinished( bool success )
 {
   if( m_canceled ) {
-    if( !numRunningSubJobs() ) {
+    if( !numRunningSubJobs() ||
+	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_isoImager) ) ) {
       emit canceled();
       emit finished(false);
     }
@@ -464,7 +467,8 @@ void K3bDvdJob::slotVerificationProgress( int p )
 void K3bDvdJob::slotVerificationFinished( bool success )
 {
   if( m_canceled ) {
-    if( !numRunningSubJobs() ) {
+    if( !numRunningSubJobs() ||
+	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_isoImager) ) ) {
       emit canceled();
       emit finished(false);
     }

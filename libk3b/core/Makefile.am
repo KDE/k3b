@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(top_srcdir)/libk3bdevice -I$(srcdir)/../plugin $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../plugin $(all_includes)
 
 noinst_LTLIBRARIES = libk3bcore.la
 

@@ -1,6 +1,6 @@
 # we need the ../datacd and ../audiocd for the uic generated header files
 AM_CPPFLAGS=	-I$(srcdir)/../../core \
-		-I$(top_srcdir)/libk3bdevice \
+		-I$(srcdir)/../../../libk3bdevice \
 		-I$(srcdir)/../../tools \
 		-I$(srcdir)/.. \
 		-I$(srcdir)/../datacd \

@@ -52,9 +52,19 @@ class K3bJob : public QObject, public K3bJobHandler
   /**
    * @returns the number of running subjobs.
    * this is useful for proper canceling of jobs.
+   *
+   * BE AWARE that the slots connected to the finished signal
+   * are called in an arbitrary order. Since the running subjob
+   * list is maintained via the started() and finished() signals
+   * you cannot rely on numRunningSubJobs() to be acurat when called
+   * from a slot connected to a subjob's finished signal.
+   * You may do something like this:
+   * 
+   * if( numRunningSubJobs() == 0 || ( numRunningSubJobs() == 1 && runningSubJobs().containsRef(job) ) )
    */
   unsigned int numRunningSubJobs() const;
 
+  const QPtrList<K3bJob>& runningSubJobs() const { return m_runningSubJobs; }
 
   /**
    * Setup the following connections:
