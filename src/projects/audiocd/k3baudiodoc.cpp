@@ -501,7 +501,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	    for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
 	      if( trackNodes.item(trackJ).nodeName() == "cd-text" ) {
 
-		QDomNodeList cdTextNodes = e.childNodes();
+		QDomNodeList cdTextNodes = trackNodes.item(trackJ).childNodes();
 		for( uint trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
 		  if( cdTextNodes.item(trackCdTextJ).nodeName() == "title" )
 		    track->setTitle( cdTextNodes.item(trackCdTextJ).toElement().text() );
