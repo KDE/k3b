@@ -178,7 +178,7 @@ K3bCddbQuery* K3bCddb::getQuery( const QString& s )
     m_httpQuery->setUseProxy( m_bUseProxyServer );
     m_httpQuery->setProxy( m_proxyServer, m_proxyPort );
     m_httpQuery->setUseKdeProxySettings( m_bUseKdeSettings );
-    m_httpQuery->setCgiPath( m_bUseManualCgiPath ? m_cgiPath : "~cddb/cddb.cgi" );
+    m_httpQuery->setCgiPath( m_bUseManualCgiPath ? m_cgiPath : QString::fromLatin1("~cddb/cddb.cgi") );
     //    m_httpQuery->setTimeout( m_timeout );
 
     return m_httpQuery;
