@@ -28,7 +28,7 @@ A: If you are using the rpm from SuSE your version of K3bSetup is not able to se
 
 Q: Everytime K3b starts it asks for K3bSetup to be run although I completed it.
 A: Most likely you installed K3b in the wrong directory. All KDE programs are installed in the 
-   KDE dirtree (which should be /opt/kde3 but is not on all distros). If you compile K3b from source it defaults 
+   KDE dirtree (SuSE: /opt/kde3, RedHat: /usr). If you compile K3b from source it defaults 
    to either $KDEDIR or /usr/local (which is strange since /opt/kde3 should be the default; but this is part of
    the KDE build system). To install in the correct directory you need to specify the prefix to configure
    like this:
