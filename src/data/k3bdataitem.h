@@ -34,7 +34,7 @@ class K3bDataItem
   K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
   virtual ~K3bDataItem();
 	
-  K3bDirItem* parent() { return m_parentDir; }
+  K3bDirItem* parent() const { return m_parentDir; }
 	
   K3bDataDoc* doc() const { return m_doc; }
   const QString& k3bName();
@@ -62,6 +62,12 @@ class K3bDataItem
 
   virtual bool isDir() const { return false; }
 	
+  bool hideOnRockRidge() const;
+  bool hideOnJoliet() const;
+
+  virtual void setHideOnRockRidge( bool b );
+  virtual void setHideOnJoliet( bool b );
+
  protected:
   QString m_k3bName;
   /**
@@ -72,6 +78,9 @@ class K3bDataItem
  private:
   K3bDirItem* m_parentDir;
   K3bDataDoc* m_doc;
+
+  bool m_bHideOnRockRidge;
+  bool m_bHideOnJoliet;
 };
 
 #endif

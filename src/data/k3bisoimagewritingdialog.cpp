@@ -79,7 +79,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   QToolTip::add( m_checkDao, i18n("Write in disk at once mode") );
   QToolTip::add( m_checkBurnProof, i18n("Enable BURN-PROOF to avoid buffer underruns") );
   QToolTip::add( m_checkUseCueFile, i18n("") );
-  QToolTip::add( m_checkNoFix, i18n("") );
+  QToolTip::add( m_checkNoFix, i18n("Allow to append further sessions") );
 
   // What's This info
   // --------------------------------------------------------------------------------
@@ -95,7 +95,9 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   QWhatsThis::add( m_checkBurnProof, i18n("<p>If this option is checked K3b enables <em>BURN-PROOF</em>. This is "
 					  "a feature of the cd writer which avoids buffer underruns.") );
   QWhatsThis::add( m_checkUseCueFile, i18n("") );
-  QWhatsThis::add( m_checkNoFix, i18n("") );
+  QWhatsThis::add( m_checkNoFix, i18n("<p>If this option is checked K3b will not close the cd meaning "
+				      "it will only write a temporary table of contents.</p>"
+				      "<p>This allows to append further sessions to the cd.</p>") );
 }
 
 
@@ -225,7 +227,7 @@ void K3bIsoImageWritingDialog::setupGui()
 
   //  m_checkRawWrite = new QCheckBox( i18n("Raw writing"), advancedTab );
   m_checkUseCueFile = new QCheckBox( i18n("Use cue-file"), advancedTab );
-  m_checkNoFix = new QCheckBox( i18n("Do not close session"), advancedTab );
+  m_checkNoFix = new QCheckBox( i18n("Do not close cd"), advancedTab );
 
   advancedTabLayout->addWidget( m_checkNoFix, 0, 0 );
   //  advancedTabLayout->addWidget( m_checkRawWrite, 1, 0 );

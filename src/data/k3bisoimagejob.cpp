@@ -185,7 +185,7 @@ void K3bIsoImageJob::slotWrite()
   else if( m_dao )
     *m_cdrecordProcess << "-dao";
   if( m_noFix )
-    *m_cdrecordProcess << "-nofix";
+    *m_cdrecordProcess << "-multi";
   if( k3bMain()->eject() )
     *m_cdrecordProcess << "-eject";
   if( m_burnproof && m_device->burnproof() )

@@ -66,6 +66,8 @@ class K3bDataJob : public K3bBurnJob
 
   K3bDataDoc* m_doc;
   QString m_pathSpecFile;
+  QString m_rrHideFile;
+  QString m_jolietHideFile;
   KProcess* m_process;
 
   bool m_imageFinished;
@@ -76,6 +78,7 @@ class K3bDataJob : public K3bBurnJob
 		
   bool addMkisofsParameters();
   bool writePathSpec( const QString& filename );
+  bool writeRRHideFile( const QString& filename );
 };
 
 #endif

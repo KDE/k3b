@@ -24,6 +24,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qframe.h>
+#include <qcheckbox.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -74,7 +77,6 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 
   grid->addColSpacing( 1, 50 );
   grid->setColStretch( 2, 1 );
-  grid->setRowStretch( 8, 1 );
 
 
 
@@ -110,6 +112,47 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     location = "/";
   m_labelLocation->setText( location );
 
+
+  // OPTIONS
+  // /////////////////////////////////////////////////
+  line = new QFrame( plainPage() );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  grid->addMultiCellWidget( line, 8, 8, 0, 2 );
+  m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), plainPage() );
+  m_checkHideOnJoliet = new QCheckBox( i18n("Hide on Joliet"), plainPage() );
+
+  grid->addMultiCellWidget( m_checkHideOnRockRidge, 9, 9, 0, 2 );
+  grid->addMultiCellWidget( m_checkHideOnJoliet, 10, 10, 0, 2 );
+  grid->setRowStretch( 11, 1 );
+
+
+  m_checkHideOnJoliet->setChecked( dataItem->hideOnJoliet() );
+  m_checkHideOnRockRidge->setChecked( dataItem->hideOnRockRidge() );
+
+  // if the parent is hidden the value cannot be changed (see K3bDataItem::setHide...)
+  if( dataItem->parent() ) {
+    m_checkHideOnRockRidge->setDisabled( dataItem->parent()->hideOnRockRidge() );
+    m_checkHideOnJoliet->setDisabled( dataItem->parent()->hideOnJoliet() );
+  }
+
+  QToolTip::add( m_checkHideOnRockRidge, i18n("") );
+  QToolTip::add( m_checkHideOnJoliet, i18n("") );
+  QWhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked the file or the directory "
+						"(and it's complete contents) will be hidden on the "
+						"ISO9660 and RockRidge filesystem.</p>"
+						"<p>This is useful for example to have different README "
+						"files for RockRidge and Joliet which can be managed "
+						"by hiding README.joliet on RockRidge and README.rr "
+						"on the Joliet filesystem.</p>") );
+  QWhatsThis::add( m_checkHideOnJoliet, i18n("<p>If this option is checked the file or the directory "
+					     "(and it's complete contents) will be hidden on the "
+					     "Joliet filesystem.</p>"
+					     "<p>This is useful for example to have different README "
+					     "files for RockRidge and Joliet which can be managed "
+					     "by hiding README.joliet on RockRidge and README.rr "
+					     "on the Joliet filesystem.</p>") );
+
+
   m_editName->setFocus();
 }
 
@@ -123,6 +166,8 @@ void K3bDataPropertiesDialog::slotOk()
 {
   // save filename
   m_dataItem->setK3bName( m_editName->text() );
+  m_dataItem->setHideOnRockRidge( m_checkHideOnRockRidge->isChecked() );
+  m_dataItem->setHideOnJoliet( m_checkHideOnJoliet->isChecked() );
 
   KDialogBase::slotOk();
 }

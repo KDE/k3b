@@ -130,6 +130,8 @@ void K3bDataDoc::addUrls( const KURL::List& urls )
 void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
 {
   if( !dirItem ) {
+    kdDebug() << "(K3bDataDoc) DirItem = 0 !!!!!" << endl;
+
     // get current dir from first view (it should better be the current active view)
     K3bDataView* view = (K3bDataView*)firstView();
     dirItem = view->currentDir();
@@ -245,7 +247,16 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 
   K3bDirItem* newDirItem = new K3bDirItem( newName, this, parent );
   
-  QStringList dlist = QDir( f.absFilePath() ).entryList();
+  KConfig* c = kapp->config();
+  c->setGroup( "Data project settings" );
+
+  int dirFilter = QDir::All;
+  if( c->readBoolEntry( "List hidden files", false ) )
+    dirFilter |= QDir::Hidden;
+  if( c->readBoolEntry( "List system files", false ) )
+    dirFilter |= QDir::System;
+
+  QStringList dlist = QDir( f.absFilePath() ).entryList( dirFilter );
   dlist.remove(".");
   dlist.remove("..");
   

@@ -27,7 +27,10 @@ class K3bDataView;
 class K3bDataItem;
 class QDropEvent;
 class KListViewLineEdit;
-
+class KActionCollection;
+class KActionMenu;
+class KAction;
+class K3bDataDirTreeView;
 
 /**
   *@author Sebastian Trueg
@@ -38,10 +41,12 @@ class K3bDataFileView : public KListView
   Q_OBJECT
 
  public:
-  K3bDataFileView( K3bDataView*, K3bDataDoc*, QWidget* parent );
+  K3bDataFileView( K3bDataDirTreeView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataFileView();
 	
   K3bDirItem* currentDir() const { return m_currentDir; }
+
+  KActionCollection* actionCollection() const { return m_actionCollection; }
 
  signals:
   void dirSelected( K3bDirItem* );
@@ -54,14 +59,32 @@ class K3bDataFileView : public KListView
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
   void slotExecuted( QListViewItem* );
+  void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
+  void showPopupMenu( QListViewItem* _item, const QPoint& );
+  void slotRenameItem();
+  void slotRemoveItem();
+  void slotNewDir();
+  void slotParentDir();
+  void slotProperties();
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
 
  private:
+  void setupActions();
+
+  KActionCollection* m_actionCollection;
+  KActionMenu* m_popupMenu;
+  KAction* m_actionParentDir;
+  KAction* m_actionRemove;
+  KAction* m_actionRename;
+  KAction* m_actionNewDir;
+  KAction* m_actionProperties;
+
+
   K3bDataDoc* m_doc;
   K3bDirItem* m_currentDir;
-  K3bDataView* m_view;
+  K3bDataDirTreeView* m_treeView;
   KListViewLineEdit* m_editor;
 };
 

@@ -21,25 +21,30 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bisovalidator.h"
+#include "k3bdatapropertiesdialog.h"
+#include "k3bdataviewitem.h"
 
 #include <qdragobject.h>
 #include <qheader.h>
 
 #include <klocale.h>
+#include <kaction.h>
+#include <kurldrag.h>
+#include <klineeditdlg.h>
 
 #include "../klistviewlineedit.h"
 #include <kdebug.h>
 
 
-K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWidget* parent )
+K3bDataDirTreeView::K3bDataDirTreeView( K3bDataDoc* doc, QWidget* parent )
   : KListView( parent )
 {
-  m_view = view;
+  m_fileView = 0;
 
   setAcceptDrops( true );
   setDropVisualizer( false );
   setDropHighlighter( true );
-  setRootIsDecorated( true );
+  setRootIsDecorated( false );
   setFullWidth();
   setDragEnabled( true );
   setItemsMovable( false );
@@ -60,7 +65,14 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bDataView* view, K3bDataDoc* doc, QWid
   connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
+  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(updateContents()) );
   connect( m_editor, SIGNAL(done(QListViewItem*,int)), this, SLOT(doneEditing(QListViewItem*,int)) );
+  connect( this, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
+	   this, SLOT(slotDropped(QDropEvent*, QListViewItem*, QListViewItem*)) );
+
+  setupActions();
 }
 
 
@@ -83,7 +95,53 @@ void K3bDataDirTreeView::slotExecuted( QListViewItem* item )
 
 
 bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || QUriDrag::canDecode(e) || m_view->acceptDrag(e) );
+  return ( e->source() == viewport() || QUriDrag::canDecode(e) || 
+	   ( m_fileView && e->source() == m_fileView->viewport() ) );
+}
+
+
+void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem* parentViewItem )
+{
+  if( !e->isAccepted() )
+    return;
+
+  // determine K3bDirItem to add the items to
+  K3bDirItem* parent = 0;
+  if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( parentViewItem ) ) {
+    parent = dirViewItem->dirItem();
+  }
+
+  if( parent ) {
+
+    // check if items have been moved
+    if( m_fileView &&
+	e->source() == m_fileView->viewport() ) {
+      // move all selected items
+      QPtrList<QListViewItem> selectedViewItems = m_fileView->selectedItems();
+      QPtrList<K3bDataItem> selectedDataItems;
+      QListIterator<QListViewItem> it( selectedViewItems );
+      for( ; it.current(); ++it ) {
+	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
+	if( dataViewItem )
+	  selectedDataItems.append( dataViewItem->dataItem() );
+	else
+	  kdDebug() << "no dataviewitem" << endl;
+      }
+	
+      m_doc->moveItems( selectedDataItems, parent );
+    }
+    else if( e->source() == viewport() ) {
+      // move the selected dir
+      if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( selectedItem() ) )
+	m_doc->moveItem( dirItem->dirItem(), parent );
+    }
+    else {
+      // seems that new items have been dropped
+      KURL::List urls;
+      if( KURLDrag::decode( e, urls ) )
+	m_doc->slotAddUrlsToDir( urls, parent );
+    }
+  }
 }
 
 
@@ -178,5 +236,93 @@ void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
   }
 }
 
+
+void K3bDataDirTreeView::setupActions()
+{
+  m_actionCollection = new KActionCollection( this );
+
+  m_actionProperties = new KAction( i18n("Properties..."), "misc", 0, this, SLOT(slotProperties()), 
+				    actionCollection(), "properties" );
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()), 
+				actionCollection(), "new_dir" );
+  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()), 
+				actionCollection(), "remove" );
+  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()), 
+				actionCollection(), "rename" );
+
+  m_popupMenu = new KActionMenu( m_actionCollection, "contextMenu" );
+  m_popupMenu->insert( m_actionRename );
+  m_popupMenu->insert( m_actionRemove );
+  m_popupMenu->insert( m_actionNewDir );
+  m_popupMenu->insert( new KActionSeparator( this ) );
+  m_popupMenu->insert( m_actionProperties );
+}
+
+
+void K3bDataDirTreeView::showPopupMenu( QListViewItem* item, const QPoint& point )
+{
+  if( item ) {
+    m_actionRemove->setEnabled( true );
+    m_actionRename->setEnabled( true );
+    m_actionProperties->setEnabled( true );
+  }
+  else {
+    m_actionRemove->setEnabled( false );
+    m_actionRename->setEnabled( false );
+    m_actionProperties->setEnabled( false );
+  }
+
+  m_popupMenu->popup( point );
+}
+
+
+void K3bDataDirTreeView::slotNewDir()
+{
+  if( K3bDataDirViewItem* vI = dynamic_cast<K3bDataDirViewItem*>(currentItem()) ) {
+    K3bDirItem* parent = vI->dirItem();
+    
+    QString name;
+    bool ok;
+    
+    name = KLineEditDlg::getText( i18n("Please insert the name for the new directory"),
+				  "New directory", &ok, this );
+    
+    while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
+      name = KLineEditDlg::getText( i18n("A file with that name already exists.\nPlease insert the name for the new directory"),
+				    "New directory", &ok, this );
+    }
+    
+    if( !ok )
+      return;
+    
+    
+    m_doc->addEmptyDir( name, parent );
+  }
+}
+
+
+void K3bDataDirTreeView::slotRenameItem()
+{
+  rename( currentItem(), 0 );
+}
+
+
+void K3bDataDirTreeView::slotRemoveItem()
+{
+  if( currentItem() ) {
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( currentItem() ) )
+      m_doc->removeItem( dirViewItem->dirItem() );
+  }
+}
+
+
+void K3bDataDirTreeView::slotProperties()
+{
+  if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( currentItem() ) ) {
+    K3bDataPropertiesDialog d( viewItem->dataItem(), this );
+    if( d.exec() )
+      viewItem->widthChanged();
+  }
+}
 
 #include "k3bdatadirtreeview.moc"

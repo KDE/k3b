@@ -25,6 +25,7 @@ class K3bDataItem;
 class KLineEdit;
 class QPushButton;
 class QLabel;
+class QCheckBox;
 
 
 /**
@@ -49,6 +50,9 @@ Q_OBJECT
 
   QLabel* m_labelLocalName;
   QLabel* m_labelLocalLocation;
+
+  QCheckBox* m_checkHideOnRockRidge;
+  QCheckBox* m_checkHideOnJoliet;
 
   K3bDataItem* m_dataItem;
 };

@@ -83,6 +83,14 @@ void K3bDataJob::start()
     return;
   }
 
+  if( m_doc->createRockRidge() ) {
+    m_rrHideFile = locateLocal( "appdata", "temp/k3b_rr_hide.mkisofs" );
+    if( !writeRRHideFile( m_rrHideFile ) ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
+      cancelAll();
+      return;
+    }
+  }
 
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
@@ -721,7 +729,7 @@ void K3bDataJob::slotMkisofsFinished()
 
   // remove toc-file
   if( QFile::exists( m_pathSpecFile ) ) {
-    QFile::remove( m_pathSpecFile );
+    //    QFile::remove( m_pathSpecFile );
     m_pathSpecFile = QString::null;
   }
 }
@@ -760,7 +768,7 @@ void K3bDataJob::slotCdrecordFinished()
 
   // remove path-spec-file
   if( QFile::exists( m_pathSpecFile ) ) {
-    QFile::remove( m_pathSpecFile );
+    //    QFile::remove( m_pathSpecFile );
     m_pathSpecFile = QString::null;
   }
 
@@ -808,8 +816,11 @@ bool K3bDataJob::addMkisofsParameters()
   if( !m_doc->systemId().isEmpty() )
     *m_process << "-sysid" << "\"" + m_doc->systemId() + "\"";
 		
-  if( m_doc->createRockRidge() )
+  if( m_doc->createRockRidge() ) {
     *m_process << "-r";
+    *m_process << "-hide-list" << m_rrHideFile;
+  }
+
   if( m_doc->createJoliet() )
     *m_process << "-J";
 
@@ -1004,6 +1015,38 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 }
 
 
+
+bool K3bDataJob::writeRRHideFile( const QString& filename )
+{
+  QFile file( filename );
+  if( !file.open( IO_WriteOnly ) )
+    return false;
+
+  QTextStream stream( &file );
+
+  K3bDataItem* item = m_doc->root();
+  while( item ) {
+    if( item->hideOnRockRidge() ) {
+      stream << escapeGraftPoint( item->localPath() ) << "\n";
+      if( item->isDir() ) {
+	K3bDirItem* parent = item->parent();
+	if( parent )
+	  item = parent->nextChild( item );
+	else 
+	  item = 0;
+      }
+      else
+	item = item->nextSibling();
+    }
+    else
+      item = item->nextSibling();
+  }
+
+  file.close();
+  return true;
+}
+
+
 /*
   void K3bDataJob::splitDoc()
   {
@@ -1051,7 +1094,7 @@ void K3bDataJob::cancelAll()
 
   // remove path-spec-file
   if( QFile::exists( m_pathSpecFile ) ) {
-    QFile::remove( m_pathSpecFile );
+    //    QFile::remove( m_pathSpecFile );
     m_pathSpecFile = QString::null;
   }
 
@@ -1072,8 +1115,8 @@ QString K3bDataJob::escapeGraftPoint( const QString& str )
 {
   QString newStr( str );
 
-  newStr.replace( QRegExp( "\\\\\\\\" ), "\\\\\\\\" );
-  newStr.replace( QRegExp( "=" ), "\\\\=" );
+  newStr.replace( QRegExp( "\\\\\\\\" ), "\\\\\\\\\\\\\\\\" );
+  newStr.replace( QRegExp( "=" ), "\\=" );
     
   return newStr;
 }

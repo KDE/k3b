@@ -23,6 +23,7 @@
 K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
 {
   m_doc = doc;
+  m_bHideOnRockRidge = m_bHideOnJoliet = false;
 	
   // add automagically like a qlistviewitem
   if( parent )
@@ -120,4 +121,40 @@ void K3bDataItem::reparent( K3bDirItem* newParent )
   }
 
   m_parentDir = newParent->addDataItem( this );
+}
+
+
+bool K3bDataItem::hideOnRockRidge() const
+{ 
+  if( parent() )
+    return m_bHideOnRockRidge || parent()->hideOnRockRidge();
+  else 
+    return m_bHideOnRockRidge;
+}
+
+
+bool K3bDataItem::hideOnJoliet() const
+{
+  if( parent() ) 
+    return m_bHideOnJoliet || parent()->hideOnJoliet();
+  else
+    return m_bHideOnJoliet;
+}
+
+
+void K3bDataItem::setHideOnRockRidge( bool b ) 
+{
+  // there is no use in changing the value if 
+  // it is already set by the parent
+  if( !parent() || !parent()->hideOnRockRidge() )
+    m_bHideOnRockRidge = b;
+}
+
+
+void K3bDataItem::setHideOnJoliet( bool b ) 
+{ 
+  // there is no use in changing the value if 
+  // it is already set by the parent
+  if( !parent() || !parent()->hideOnJoliet() )
+    m_bHideOnJoliet = b;
 }
