@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I../core -I../core/device $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../core/device $(all_includes)
 METASOURCES = AUTO
 
 # Install this plugin in the KDE modules directory
