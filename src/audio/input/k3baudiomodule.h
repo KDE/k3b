@@ -46,6 +46,7 @@ class K3bAudioModule : public QObject
   virtual int analyseTrack( const QString& filename, 
 			    unsigned long& size ) = 0;
 
+  // TODO: use KFileMetaInfo in this method as a backup
   virtual bool metaInfo( const QString&,
 			 K3bAudioTitleMetaInfo& ) { return false; }
 

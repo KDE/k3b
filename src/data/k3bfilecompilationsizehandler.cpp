@@ -22,9 +22,6 @@
 #include <qmap.h>
 #include <qptrlist.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-
 
 // TODO: remove the items from the project if the savedSize differs
 // with some info-widget: "Files xxx have changed on disk. Removing them from the project."
@@ -70,7 +67,7 @@ public:
   /**
    * This maps from inodes to the number of occurrences of the inode.
    */
-  QMap<ino_t, InodeInfo> inodeMap;
+  QMap<int, InodeInfo> inodeMap;
 
   KIO::filesize_t size;
 
@@ -107,23 +104,16 @@ void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
     d->specialItems.append( item );
   }
   else if( item->isFile() ) {
-    // symlinks are also properly handled here
-    struct stat s;
-    if( ::lstat( QFile::encodeName( item->localPath() ), &s ) ) {
-      kdError() << "(K3bFileCompilationSizeHandler) Error while determining inode of "
-		<< item->localPath() << endl;
-      return;
-    }
-    InodeInfo& inodeInfo = d->inodeMap[s.st_ino];
+    InodeInfo& inodeInfo = d->inodeMap[item->localInode()];
 
     inodeInfo.items.append( item );
 
     if( inodeInfo.number == 0 ) {
-      inodeInfo.savedSize = (KIO::filesize_t)s.st_size;
-      d->size += (KIO::filesize_t)s.st_size;
+      inodeInfo.savedSize = item->k3bSize();
+      d->size += item->k3bSize();
     }
 
-    if( (KIO::filesize_t)s.st_size != inodeInfo.savedSize ) {
+    if( item->k3bSize() != inodeInfo.savedSize ) {
       kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
     }
 
@@ -148,13 +138,7 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
     }
   }
   else if( item->isFile() ) {
-    struct stat s;
-    if( ::lstat( QFile::encodeName( item->localPath() ), &s ) ) {
-      kdError() << "(K3bFileCompilationSizeHandler) Error while determining inode of "
-		<< item->localPath() << endl;
-      return;
-    }
-    InodeInfo& inodeInfo = d->inodeMap[s.st_ino];
+    InodeInfo& inodeInfo = d->inodeMap[item->localInode()];
     
     if( inodeInfo.items.findRef( item ) == -1 ) {
       kdError() << "(K3bFileCompilationSizeHandler) " 
@@ -162,7 +146,7 @@ void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
 		<< " has been removed without being added!" << endl;
     }
     else {
-      if( (KIO::filesize_t)s.st_size != inodeInfo.savedSize ) {
+      if( item->k3bSize() != inodeInfo.savedSize ) {
 	kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
       }
 

@@ -104,7 +104,7 @@ void K3bIsoImageWritingDialog::setupGui()
 {
   QWidget* frame = mainWidget();
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, frame );
 
   // image group box
   // -----------------------------------------------------------------------

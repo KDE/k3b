@@ -56,7 +56,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[]) {
 
     KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-                          "0.9", description, KAboutData::License_GPL,
+                          "0.10", description, KAboutData::License_GPL,
                           I18N_NOOP("(c) 1999 - 2003, Sebastian Trueg and the K3b Team"), 0, "http://www.k3b.org" );
     aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
     aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
@@ -69,8 +69,12 @@ int main(int argc, char *argv[]) {
     aboutData.addCredit("Christoph Thielecke",
 			I18N_NOOP("For extensive testing and the first German translation."),
 			"crissi99@gmx.de");
-    aboutData.addCredit("Joerg Schilling",
-			I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
+    aboutData.addCredit("Andy Polyakov",
+			I18N_NOOP("For the great dvd+rw-tools and the nice cooperation."),
+			"appro@fy.chalmers.se" );
+    aboutData.addCredit("Roberto De Leo",
+			I18N_NOOP("For the very cool eMovix package and his accommodating work."),
+			"peggish@users.sf.net" );
 
 
     KCmdLineArgs::init( argc, argv, &aboutData );

@@ -90,6 +90,9 @@ K3bSetup::~K3bSetup()
 
 bool K3bSetup::saveConfig()
 {
+  m_config->setGroup( "General Options" );
+  m_config->writeEntry( "config version", "0.10" );
+
   emit writingSettings();
 
   // save devices

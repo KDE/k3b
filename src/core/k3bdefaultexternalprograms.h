@@ -122,4 +122,22 @@ class K3bNormalizeProgram : public K3bExternalProgram
   bool scan( const QString& );
 };
 
+
+class K3bGrowisofsProgram : public K3bExternalProgram
+{
+ public:
+  K3bGrowisofsProgram();
+
+  bool scan( const QString& );
+};
+
+
+class K3bDvdformatProgram : public K3bExternalProgram
+{
+ public:
+  K3bDvdformatProgram();
+
+  bool scan( const QString& );
+};
+
 #endif

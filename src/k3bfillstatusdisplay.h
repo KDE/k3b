@@ -81,7 +81,8 @@ class K3bFillStatusDisplay : public QFrame  {
  public slots:
   void showSize();
   void showTime();
-	
+  void showDvdSizes( bool );
+
  protected:
   void setupPopupMenu();
   void paintEvent(QPaintEvent*);
@@ -90,6 +91,7 @@ class K3bFillStatusDisplay : public QFrame  {
   void slot74Minutes();
   void slot80Minutes();
   void slot100Minutes();
+  void slotDvd4_7GB();
   void slotCustomSize();
   void slotMenuButtonClicked();
   void slotPopupMenu(const QPoint&);
@@ -97,22 +99,12 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotRemainingSize( K3bCdDevice::DeviceHandler* );
   void slotDocSizeChanged();
 
+  void slotLoadUserDefaults();
+  void slotSaveUserDefaults();
+
  private:
-  KActionCollection* m_actionCollection;
-  KToggleAction* m_actionShowMinutes;
-  KToggleAction* m_actionShowMegs;
-  KToggleAction* m_action74Min;
-  KToggleAction* m_action80Min;
-  KToggleAction* m_action100Min;
-  KToggleAction* m_actionCustomSize;
-  KAction* m_actionDetermineSize;
-
-  KPopupMenu* m_popup;
-
-  QToolButton* m_buttonMenu;
-
-  K3bFillStatusDisplayWidget* m_displayWidget;
-  K3bDoc* m_doc;
+  class Private;
+  Private* d;
 };
 
 #endif

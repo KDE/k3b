@@ -402,6 +402,8 @@ K3bCdrdaoWriter* K3bCdrdaoWriter::addArgument( const QString& arg )
 
 void K3bCdrdaoWriter::start()
 {
+  emit started();
+
   if( m_process )
     delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
@@ -419,12 +421,15 @@ void K3bCdrdaoWriter::start()
 
   m_cdrdaoBinObject = k3bcore->externalBinManager()->binObject("cdrdao");
 
-  if( !m_cdrdaoBinObject )
-    {
-      emit infoMessage( i18n("Could not find cdrdao executable."), ERROR );
-      emit finished(false);
-      return;
-    }
+  if( !m_cdrdaoBinObject ) {
+    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrdao"), ERROR );
+    emit finished(false);
+    return;
+  }
+
+  if( !m_cdrdaoBinObject->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrdaoBinObject->name()).arg(m_cdrdaoBinObject->version).arg(m_cdrdaoBinObject->copyright), INFO );
+
 
   switch ( m_command )
     {
@@ -531,8 +536,6 @@ void K3bCdrdaoWriter::start()
 	  emit infoMessage(i18n("Starting blanking..."), K3bJob::PROCESS );
 	  emit newTask( i18n("Blanking") );
 	}
-
-      emit started();
     }
 }
 

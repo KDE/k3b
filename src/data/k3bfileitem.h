@@ -47,7 +47,8 @@ public:
 
   /** reimplemented from K3bDataItem */
   QString localPath();
-	
+  int localInode() const { return m_inode; }
+
   KIO::filesize_t k3bSize() const;
 
   K3bDirItem* getDirItem();
@@ -61,6 +62,7 @@ public:
 
  private:
   KIO::filesize_t m_size;
+  int m_inode;
 };
 
 #endif

@@ -35,7 +35,11 @@ class K3bWriterSelectionWidget : public QWidget
    Q_OBJECT
 
  public: 
-  K3bWriterSelectionWidget(QWidget *parent=0, const char *name=0);
+  /**
+   * Creates a writerselectionwidget
+   * @param dvd if true only dvd writers are presented for selection
+   */
+  K3bWriterSelectionWidget( bool dvd, QWidget* parent = 0, const char* name = 0 );
   ~K3bWriterSelectionWidget();
 
   int writerSpeed() const;
@@ -43,21 +47,28 @@ class K3bWriterSelectionWidget : public QWidget
 
   /**
    * returns K3b::WritingApp
-   * DEFAULT, CDRECORD, CDRDAO
    */
   int writingApp() const;
 
   void loadConfig( KConfig* );
   void saveConfig( KConfig* );
 
+  static int writingAppFromString( const QString& );
+
  public slots:
   void setWriterDevice( K3bCdDevice::CdDevice* );
   void setSpeed( int );
+  void setWritingApp( int );
 
   /**
-   * K3b::CDRDAO and K3b::CDRECORD or'ed together
+   * K3b::WritingApp or'ed together
    */
   void setSupportedWritingApps( int );
+
+  /**
+   * if dvd is true only DVD writers are presented for selection
+   */
+  void setDvd( bool );
 
  signals:
   void writerChanged();

@@ -49,11 +49,12 @@
 
 
 
-K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
+K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const char *name, bool modal, bool dvd )
   : K3bInteractionDialog( parent, name, i18n("Project"), QString::null, 
 			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON, modal ),
     m_writerSelectionWidget(0),
-    m_tempDirSelectionWidget(0)
+    m_tempDirSelectionWidget(0),
+    m_dvd(dvd)
 {
   m_doc = doc;
 
@@ -85,19 +86,37 @@ void K3bProjectBurnDialog::slotWritingAppChanged( int )
 void K3bProjectBurnDialog::toggleAllOptions()
 {
   if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
-    if( dev->burnproof() ) {
-      if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
-	// no possibility to disable burnfree yet
-	m_checkBurnproof->setChecked(true);
-	m_checkBurnproof->setEnabled(false);
+    if( !m_dvd ) {
+      if( dev->burnproof() ) {
+	if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
+	  // no possibility to disable burnfree yet
+	  m_checkBurnproof->setChecked(true);
+	  m_checkBurnproof->setEnabled(false);
+	}
+	else {
+	  m_checkBurnproof->setEnabled(!m_checkOnlyCreateImage->isChecked());
+	}
       }
       else {
-	m_checkBurnproof->setEnabled(!m_checkOnlyCreateImage->isChecked());
+	m_checkBurnproof->setChecked( false );
+	m_checkBurnproof->setEnabled( false );
       }
     }
     else {
-      m_checkBurnproof->setChecked( false );
-      m_checkBurnproof->setEnabled( false );
+      if( (dev->type() & (K3bCdDevice::CdDevice::DVDPR|K3bCdDevice::CdDevice::DVDPRW)) &&
+	  !(dev->type() & (K3bCdDevice::CdDevice::DVDR|K3bCdDevice::CdDevice::DVDRW)) ) {
+	// no simulation support for DVD+R(W) only drives
+	m_checkSimulate->setChecked(false);
+	m_checkSimulate->setEnabled(false);
+
+	// what about the writing mode? Wy just say "overwrite" for DVD+R(W) for now
+	m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR );
+      }
+      else {
+	// DVD-R(W) supported
+	m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR|K3b::WRITING_MODE_INCR_SEQ|K3b::DAO );
+	m_checkSimulate->setEnabled(true);
+      }
     }
 
     m_buttonStart->setDisabled(false);
@@ -116,10 +135,13 @@ void K3bProjectBurnDialog::toggleAllOptions()
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
 
-  if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
-    m_writingModeWidget->setSupportedModes( K3b::DAO );
-  else
-    m_writingModeWidget->setSupportedModes( 0xFF );  // default is cdrecord and cdrecord supports all modes
+  if( !m_dvd ) {
+    // default is cdrecord and cdrecord supports all modes
+    if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
+      m_writingModeWidget->setSupportedModes( K3b::DAO );
+    else
+      m_writingModeWidget->setSupportedModes( K3b::DAO | K3b::TAO | K3b::RAW );
+  }
 }
 
 
@@ -200,7 +222,7 @@ void K3bProjectBurnDialog::prepareGui()
   setMainWidget( m_tabWidget );
   QWidget* w = new QWidget( m_tabWidget );
   m_tabWidget->addTab( w, i18n("Writing") );
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( m_dvd, w );
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( w );
 
   QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
@@ -244,8 +266,12 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+
+  if( m_dvd )
+    m_checkBurnproof->hide();
 }
 
 

@@ -58,6 +58,7 @@ class K3bWritingModeWidget : public KComboBox
 
  private:
   void init();
+  void initWhatsThisHelp();
 
   class Private;
   Private* d;

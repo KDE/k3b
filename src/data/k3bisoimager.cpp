@@ -37,19 +37,20 @@
 
 #include <errno.h>
 #include <string.h>
+#include <cmath>
 
 
 K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
   : K3bJob( parent, name ),
-    m_doc( doc ),
     m_pathSpecFile(0),
     m_rrHideFile(0),
     m_jolietHideFile(0),
-    m_noDeepDirectoryRelocation( false ),
-    m_importSession( false ),
     m_process( 0 ),
     m_processSuspended(false),
     m_processExited(false),
+    m_doc( doc ),
+    m_noDeepDirectoryRelocation( false ),
+    m_importSession( false ),
     m_lastOutput(0),
     m_mkisofsPrintSizeResult( 0 ),
     m_fdToWriteTo(-1)
@@ -132,18 +133,15 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
   if( !line.isEmpty() ) {
     emit debuggingOutput( "mkisofs", line );
 
-    if( line.contains( "done, estimate" ) ) {
+    //
+    // in multisession mode mkisofs' progress does not start at 0 but at (X+Y)/X
+    // where X is the data already on the cd and Y the data to create
+    // This is not very dramatic but kind or ugly.
+    // We just save the first emitted progress value and to some math ;)
+    //
 
-      QString perStr = line;
-      perStr.truncate( perStr.find('%') );
-      bool ok;
-      double p = perStr.toDouble( &ok );
-      if( !ok ) {
-	kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
-      }
-      else {
-	emit percent( (int)p );
-      }
+    if( line.contains( "done, estimate" ) ) {
+      parseProgress( line );
     }
     else if( line.contains( "extents written" ) ) {
       emit percent( 100 );
@@ -153,6 +151,25 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     }
   }
 }
+
+
+void K3bIsoImager::parseProgress( const QString& line ) 
+{
+  QString perStr = line;
+  perStr.truncate( perStr.find('%') );
+  bool ok;
+  double p = perStr.toDouble( &ok );
+  if( !ok ) {
+    kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
+  }
+  else {
+    if( m_firstProgressValue < 0 )
+      m_firstProgressValue = p;
+    
+    emit percent( (int)::ceil( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
+  }
+}
+
 
 void K3bIsoImager::slotProcessExited( KProcess* p )
 {
@@ -229,7 +246,21 @@ void K3bIsoImager::calculateSize()
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
 
-  if( !prepareMkisofsFiles() ||
+  const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  if( !mkisofsBin ) {
+    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
+    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+    cleanup();
+    emit sizeCalculated( ERROR, 0 );
+    return;
+  }
+
+  if( !mkisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
+
+  *m_process << mkisofsBin->path;
+
+  if( !prepareMkisofsFiles() || 
       !addMkisofsParameters() ) {
     cleanup();
     emit sizeCalculated( ERROR, 0 );
@@ -331,16 +362,37 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 }
 
 
+void K3bIsoImager::init()
+{
+  m_containsFilesWithMultibleBackslashes = false;
+  m_firstProgressValue = -1;
+  m_processExited = false;
+  m_processSuspended = false;
+  m_canceled = false;
+}
+
 
 void K3bIsoImager::start()
 {
   emit started();
 
   cleanup();
-
-  m_containsFilesWithMultibleBackslashes = false;
+  init();
 
   m_process = new K3bProcess();
+  const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  if( !mkisofsBin ) {
+    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
+    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+    cleanup();
+    emit finished( false );
+    return;
+  }
+
+  if( !mkisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
+
+  *m_process << mkisofsBin->path;
 
   if( !prepareMkisofsFiles() ||
       !addMkisofsParameters() ) {
@@ -375,14 +427,9 @@ void K3bIsoImager::start()
     // something went wrong when starting the program
     // it "should" be the executable
     kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
-    emit infoMessage( i18n("Could not start mkisofs."), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     emit finished( false );
     cleanup();
-  }
-  else {
-    m_processExited = false;
-    m_processSuspended = false;
-    m_canceled = false;
   }
 }
 
@@ -413,14 +460,6 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice* dev )
 
 bool K3bIsoImager::addMkisofsParameters()
 {
-  if( !k3bcore->externalBinManager()->foundBin( "mkisofs" ) ) {
-    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
-    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
-    return false;
-  }
-
-  *m_process << k3bcore->externalBinManager()->binPath( "mkisofs" );
-
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
     *m_process << "-C" << m_multiSessionInfo;

@@ -20,27 +20,17 @@
 #include <k3bview.h>
 
 #include <qstringlist.h>
-#include <qptrlist.h>
 
 
-class K3bAudioListView;
-class K3bAudioListViewItem;
-class QWidget;
 class K3bAudioDoc;
-class K3bAudioTrack;
-class QListViewItem;
-class KListView;
-class K3bFillStatusDisplay;
-class K3bAudioBurnDialog;
-class K3bProjectBurnDialog;
+class K3bAudioListView;
 
 
 /**
   *@author Sebastian Trueg
   */
-
-class K3bAudioView : public K3bView  {
-
+class K3bAudioView : public K3bView
+{
   Q_OBJECT
 	
  public: 
@@ -53,9 +43,6 @@ class K3bAudioView : public K3bView  {
   K3bAudioDoc* m_doc;
 	
   K3bAudioListView* m_songlist;
-
-  K3bFillStatusDisplay* m_fillStatusDisplay;
-  K3bAudioBurnDialog* m_burnDialog;
 };
 
 #endif

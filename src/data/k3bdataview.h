@@ -26,7 +26,7 @@ class K3bDataDoc;
 class K3bDataItem;
 class K3bFileItem;
 class K3bDirItem;
-class K3bFillStatusDisplay;
+
 
 namespace KIO {
   class Job;
@@ -43,9 +43,9 @@ class K3bDataView : public K3bView
 
  public:
    K3bDataView(K3bDataDoc* doc, QWidget *parent=0, const char *name=0);
-   ~K3bDataView();
+   virtual ~K3bDataView();
 	
-   void burnDialog( bool );
+   virtual void burnDialog( bool );
 
    K3bDirItem* currentDir() const;
 
@@ -57,11 +57,11 @@ class K3bDataView : public K3bView
  private slots:
    void slotMountFinished( KIO::Job* job );
 
- private:
+ protected:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;
-   K3bFillStatusDisplay* m_fillStatusDisplay;
 		
+ private:
    K3bDataDoc* m_doc;
 
    // used for mounting when importing old session

@@ -51,10 +51,10 @@ public:
     maxWriteSpeed = d->maxWriteSpeed();
     cdTextCapable = ( d->cdTextCapable() != 2 );
     writer = d->burner();
-    cdrw = d->writesCdrw();
+    //    cdrw = d->writesCdrw();
     burnproof = d->burnproof();
     bufferSize = d->bufferSize();
-    dao = d->dao();
+    //    dao = d->dao();
   }
 
   K3bDevice* device;
@@ -63,9 +63,9 @@ public:
   QString cdrdaoDriver;
   bool cdTextCapable;
   bool writer;
-  bool cdrw;
+  //  bool cdrw;
   bool burnproof;
-  bool dao;
+  //  bool dao;
   int bufferSize;
 };
 
@@ -90,48 +90,48 @@ public:
   QString text( int col ) const {
     if( col == 0 ) {
       switch(m_type) {
-      case t_cdrw:
-	return i18n("CD/RW drive");
+//       case t_cdrw:
+// 	return i18n("CD/RW drive");
       case t_burnproof:
 	return i18n("Supports Burnfree");
-      case t_dao:
-	return i18n("Supports DAO writing");
+//       case t_dao:
+// 	return i18n("Supports DAO writing");
       }
     }
     return "";
   }
 
-  enum itemType { t_cdrw, t_burnproof, t_dao };
+  enum itemType { /*t_cdrw,*/ t_burnproof/*, t_dao */};
 
   PrivateTempDevice* dev;
 
 protected:
   void stateChange( bool on ) {
     switch(m_type) {
-    case t_cdrw:
-      dev->cdrw = on;
-      break;
+//     case t_cdrw:
+//       dev->cdrw = on;
+//       break;
     case t_burnproof:
       dev->burnproof = on;
       break;
-    case t_dao:
-      dev->dao = on;
-      break;
+//     case t_dao:
+//       dev->dao = on;
+//       break;
     }
   }
 
 private:
   void init() {
     switch(m_type) {
-    case t_cdrw:
-      setOn(dev->cdrw);
-      break;
+//     case t_cdrw:
+//       setOn(dev->cdrw);
+//       break;
     case t_burnproof:
       setOn(dev->burnproof);
       break;
-    case t_dao:
-      setOn(dev->dao);
-      break;
+//     case t_dao:
+//       setOn(dev->dao);
+//       break;
     }
   }
 
@@ -323,17 +323,10 @@ void K3bDeviceWidget::init()
   m_tempDevices.clear();
 
   // add the reading devices
-  K3bDevice* dev = m_deviceManager->readingDevices().first();
+  K3bDevice* dev = m_deviceManager->allDevices().first();
   while( dev ) {
     m_tempDevices.append( new PrivateTempDevice( dev ) );
-    dev = m_deviceManager->readingDevices().next();
-  }
-
-  // add the writing devices
-  dev = m_deviceManager->burningDevices().first();
-  while( dev ) {
-    m_tempDevices.append( new PrivateTempDevice( dev ) );
-    dev = m_deviceManager->burningDevices().next();
+    dev = m_deviceManager->allDevices().next();
   }
 
   updateDeviceListViews();
@@ -393,11 +386,32 @@ void K3bDeviceWidget::updateDeviceListViews()
     versionItem->setForegroundColor( 1, gray );
 
 
+    // drive type
+    // --------------------------------
+    K3bListViewItem* typeItem = new K3bListViewItem( devRoot, versionItem,
+						     i18n("Writes CDs:"),
+						     dev->device->burner() ? i18n("yes") : i18n("no") );
+    typeItem->setForegroundColor( 1, gray );
+    typeItem = new K3bListViewItem( devRoot, typeItem,
+				    i18n("Writes CD/RWs:"),
+				    dev->device->writesCdrw() ? i18n("yes") : i18n("no") );
+    typeItem->setForegroundColor( 1, gray );
+    typeItem = new K3bListViewItem( devRoot, typeItem, 
+				    i18n("Reads DVDs:"),
+				    dev->device->readsDvd() ? i18n("yes") : i18n("no") );
+    typeItem->setForegroundColor( 1, gray );
+    typeItem = new K3bListViewItem( devRoot, typeItem,
+				    i18n("Writes DVDs:"),
+				    dev->device->writesDvd() ? i18n("yes") : i18n("no") );
+    typeItem->setForegroundColor( 1, gray );
+    // --------------------------------
+
+
     // now add the reader (both interfaces) items
     PrivateDeviceViewItem1* maxReadSpeedItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxReadSpeed,
 									   dev,
 									   devRoot,
-									   versionItem );
+									   typeItem );
     PrivateDeviceViewItem1* cdrdaoDriverItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdrdaoDriver,
 									   dev,
 									   devRoot,
@@ -420,16 +434,12 @@ void K3bDeviceWidget::updateDeviceListViews()
 									 dev,
 									 devRoot,
 									 cdTextItem );
-
-      PrivateDeviceViewItem2* cdrwItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_cdrw,
-								     dev,
-								     devRoot,
-								     burnfreeItem );
-
-      PrivateDeviceViewItem2* daoItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_dao,
-								    dev,
-								    devRoot,
-								    cdrwItem );
+      
+      
+//       PrivateDeviceViewItem2* daoItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_dao,
+// 								    dev,
+// 								    devRoot,
+// 								    cdrwItem );
 
       // and at last the write modes
       QString wm;
@@ -443,14 +453,16 @@ void K3bDeviceWidget::updateDeviceListViews()
 	wm += "PACKET ";
       if( dev->device->supportsWriteMode( K3bDevice::TAO ) )
 	wm += "TAO ";
+      if( dev->device->supportsWriteMode( K3bDevice::RAW ) )
+	wm += "RAW ";
       if( dev->device->supportsWriteMode( K3bDevice::RAW_R16 ) )
 	wm += "RAW/R16 ";
       if( dev->device->supportsWriteMode( K3bDevice::RAW_R96R ) )
 	wm += "RAW/R96R ";
       if( dev->device->supportsWriteMode( K3bDevice::RAW_R96P ) )
 	wm += "RAW/R96P ";
-
-      (new K3bListViewItem( devRoot, daoItem, i18n("Write modes:"), wm ))->setForegroundColor( 1, gray );
+      
+      (new K3bListViewItem( devRoot, burnfreeItem, i18n("Write modes:"), wm ))->setForegroundColor( 1, gray );
     }
 
     devRoot->setOpen(true);
@@ -489,10 +501,7 @@ void K3bDeviceWidget::apply()
     tempDev->device->setMaxWriteSpeed( tempDev->maxWriteSpeed );
     tempDev->device->setCdrdaoDriver( tempDev->cdrdaoDriver );
     tempDev->device->setCdTextCapability( tempDev->cdTextCapable );
-    tempDev->device->setIsWriter( tempDev->writer );
     tempDev->device->setBurnproof( tempDev->burnproof );
-    tempDev->device->setWritesCdrw( tempDev->cdrw );
-    tempDev->device->setDao( tempDev->dao );
     tempDev->device->setBufferSize( tempDev->bufferSize );
 
     tempDev = m_tempDevices.next();

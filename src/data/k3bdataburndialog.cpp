@@ -174,8 +174,8 @@ void K3bDataBurnDialog::setupSettingsTab()
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
-  m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+  m_groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+  m_dataModeWidget = new K3bDataModeWidget( m_groupDataMode );
 
   // Multisession
   // ////////////////////////////////////////////////////////////////////////
@@ -198,7 +198,7 @@ void K3bDataBurnDialog::setupSettingsTab()
   m_groupMultiSessionLayout->addWidget( m_radioMultiSessionFinish, 1, 1 );
 
 
-  frameLayout->addWidget( groupDataMode, 0, 0 );
+  frameLayout->addWidget( m_groupDataMode, 0, 0 );
   frameLayout->addWidget( m_groupMultiSession, 1, 0 );
 
 

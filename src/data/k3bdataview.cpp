@@ -55,20 +55,12 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
   m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
   m_dataDirTree->setFileView( m_dataFileView );
-  m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
+  setMainWidget( mainSplitter );
 	
-  QVBoxLayout* box = new QVBoxLayout( this );
-  box->addWidget( mainSplitter );
-  box->addWidget( m_fillStatusDisplay );
-  box->setStretchFactor( mainSplitter, 1 );
-  box->setSpacing( 5 );
-  box->setMargin( 2 );
-
 
   connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
-
-  connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), m_fillStatusDisplay, SLOT(update()) );
-  connect( m_doc, SIGNAL(newFileItems()), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), fillStatusDisplay(), SLOT(update()) );
+  connect( m_doc, SIGNAL(newFileItems()), fillStatusDisplay(), SLOT(update()) );
 
   m_dataDirTree->updateContents();
   m_dataFileView->updateContents();

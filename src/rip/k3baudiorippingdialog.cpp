@@ -17,6 +17,7 @@
 #include "k3baudiorippingdialog.h"
 #include "k3bcddacopy.h"
 #include "k3bpatternparser.h"
+#include "k3bcddbpatternwidget.h"
 #include <k3bjobprogressdialog.h>
 #include "songdb/k3bsong.h"
 #include "songdb/k3bsongmanager.h"
@@ -128,15 +129,12 @@ void K3bAudioRippingDialog::setupGui()
   QFrame* line1 = new QFrame( groupOptions, "line1" );
   line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   m_checkUsePattern = new QCheckBox( i18n("Use directory and filename pattern"), groupOptions );
-  m_buttonPattern = new QToolButton( groupOptions, "m_buttonPattern" );
-  m_buttonPattern->setIconSet( SmallIconSet( "gear" ) );
 
   groupOptionsLayout->addMultiCellWidget( destLabel, 0, 0, 0, 1 );
   groupOptionsLayout->addMultiCellWidget( m_editStaticRipPath, 1, 1, 0, 1 );
   groupOptionsLayout->addMultiCellWidget( line1, 2, 2, 0, 1 );
-  groupOptionsLayout->addWidget( m_checkUsePattern, 3, 0 );
-  groupOptionsLayout->addWidget( m_buttonPattern, 3, 1 );
-  groupOptionsLayout->setColStretch( 0, 1 );
+  groupOptionsLayout->addMultiCellWidget( m_checkUsePattern, 3, 3, 0, 1 );
+  groupOptionsLayout->setRowStretch( 4, 1 );
 
 
   m_groupFileType = new QButtonGroup( 4, Qt::Vertical, i18n("File Type"), optionPage );
@@ -148,6 +146,14 @@ void K3bAudioRippingDialog::setupGui()
   optionPageLayout->addWidget( m_groupFileType );
   optionPageLayout->setStretchFactor( groupOptions, 1 );
 
+
+  // setup filename pattern page
+  // -------------------------------------------------------------------------------------------
+  m_patternWidget = new K3bCddbPatternWidget( mainTab );
+  mainTab->addTab( m_patternWidget, i18n("File Naming") );
+  connect( m_patternWidget, SIGNAL(changed()), this, SLOT(refresh()) );
+
+  connect( m_checkUsePattern, SIGNAL(toggled(bool)), m_patternWidget, SLOT(setEnabled(bool)) );
 
   // setup advanced page
   // -------------------------------------------------------------------------------------------
@@ -187,7 +193,6 @@ void K3bAudioRippingDialog::setupGui()
 
   setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts copying the selected tracks") );
 
-  connect( m_buttonPattern, SIGNAL(clicked() ), this, SLOT(showPatternDialog()) );
   connect( m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_radioWav, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_radioOgg, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
@@ -225,6 +230,8 @@ void K3bAudioRippingDialog::init()
 {
   slotLoadUserDefaults();
   refresh();
+
+  m_patternWidget->setEnabled( m_checkUsePattern->isChecked() );
 }
 
 void K3bAudioRippingDialog::slotStartClicked()
@@ -243,9 +250,6 @@ void K3bAudioRippingDialog::slotStartClicked()
 
   c->writeEntry( "last used filetype", filetype );
 
-//   // save all entries with artist title, path filename and so on
-//   setSongList();
-
 
   K3bCddaCopy* job = new K3bCddaCopy( this );
   job->setDevice( m_diskInfo.device );
@@ -253,6 +257,12 @@ void K3bAudioRippingDialog::slotStartClicked()
   job->setCddbEntry( m_cddbEntry );
   job->setUsePattern( m_checkUsePattern->isChecked() );
   job->setBaseDirectory( m_editStaticRipPath->url() );
+  job->setDirectoryPattern( m_patternWidget->directoryPattern() );
+  job->setFilenamePattern( m_patternWidget->filenamePattern() );
+  job->setDirectoryReplaceString( m_patternWidget->directoryReplaceString() );
+  job->setFilenameReplaceString( m_patternWidget->filenameReplaceString() );
+  job->setReplaceBlanksInDir( m_patternWidget->replaceBlanksInDirectory() );
+  job->setReplaceBlanksInFilename( m_patternWidget->replaceBlanksInFilename() );
   job->setCopyTracks( m_trackNumbers );
   job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
   job->setMaxRetries( m_spinRetries->value() );
@@ -313,14 +323,14 @@ void K3bAudioRippingDialog::refresh()
 
     if( m_checkUsePattern->isChecked() && (int)m_cddbEntry.titles.count() >= *it ) {
       filename = K3bPatternParser::parsePattern( m_cddbEntry, *it,
-						 c->readEntry( "filename pattern", "%a - %t" ),
-						 c->readBoolEntry( "replace blank in filename", false ),
-						 c->readEntry( "filename replace string", "_" ) ) + extension;
+						 m_patternWidget->filenamePattern(),
+						 m_patternWidget->replaceBlanksInFilename(),
+						 m_patternWidget->filenameReplaceString() ) + extension;
 
       directory = K3bPatternParser::parsePattern( m_cddbEntry, *it,
-						  c->readEntry( "directory pattern", "%r/%m" ),
-						  c->readBoolEntry( "replace blank in directory", false ),
-						  c->readEntry( "directory replace string", "_" ) );
+						  m_patternWidget->directoryPattern(),
+						  m_patternWidget->replaceBlanksInDirectory(),
+						  m_patternWidget->directoryReplaceString() );
     }
     else {
       filename = i18n("Track%1").arg( QString::number( *it ).rightJustify( 2, '0' ) ) + extension;
@@ -353,6 +363,8 @@ void K3bAudioRippingDialog::slotLoadK3bDefaults()
   m_spinRetries->setValue(20);
   m_checkNeverSkip->setChecked( false );
   m_checkSingleFile->setChecked( false );
+
+  m_patternWidget->loadDefaults();
 }
 
 void K3bAudioRippingDialog::slotLoadUserDefaults()
@@ -367,6 +379,8 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
   m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
   m_checkSingleFile->setChecked( c->readBoolEntry( "single_file", false ) );
+
+  m_patternWidget->loadConfig( c );
 }
 
 void K3bAudioRippingDialog::slotSaveUserDefaults()
@@ -381,6 +395,8 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   c->writeEntry( "read_retries", m_spinRetries->value() );
   c->writeEntry( "never_skip", m_checkNeverSkip->isChecked() );
   c->writeEntry( "single_file", m_checkSingleFile->isChecked() );
+
+  m_patternWidget->saveConfig( c );
 }
 
 #include "k3baudiorippingdialog.moc"

@@ -40,17 +40,25 @@ class K3bDataJob : public K3bBurnJob
 	
  public:
   K3bDataJob( K3bDataDoc*, QObject* parent = 0 );
-  ~K3bDataJob();
+  virtual ~K3bDataJob();
 	
   K3bDoc* doc() const;
   K3bCdDevice::CdDevice* writer() const;
 
-  QString jobDescription() const;
-  QString jobDetails() const;
+  virtual QString jobDescription() const;
+  virtual QString jobDetails() const;
 		
  public slots:
   void cancel();
   void start();
+
+  /**
+   * Used to specify a non-default writer.
+   * If this does notget called K3bDataJob determines
+   * the writer itself.
+   */
+  void setWriterJob( K3bAbstractWriter* );
+  void setImager( K3bIsoImager* );
 
  protected slots:
   void slotReceivedIsoImagerData( const char* data, int len );
@@ -64,9 +72,22 @@ class K3bDataJob : public K3bBurnJob
   void slotMsInfoFetched(bool);
   void writeImage();
   void cancelAll();
+
+  /**
+   * Just a little helper method that makes subclassing easier.
+   * Basicly used for DVD writing.
+   */
+  virtual void waitForDisk();
 		
+ protected:
+  virtual bool prepareWriterJob();
+  virtual void prepareImager();
+
+  K3bAbstractWriter* m_writerJob;
+  K3bIsoImager* m_isoImager;
+  K3bMsInfoFetcher* m_msInfoFetcher;
+
  private:
-  bool prepareWriterJob();
   bool startWriting();
   void determineWritingMode();
 
@@ -79,9 +100,6 @@ class K3bDataJob : public K3bBurnJob
 
   QFile m_imageFile;
   QDataStream m_imageFileStream;
-  K3bAbstractWriter* m_writerJob;
-  K3bIsoImager* m_isoImager;
-  K3bMsInfoFetcher* m_msInfoFetcher;
 
   int m_usedDataMode;
   int m_usedWritingApp;

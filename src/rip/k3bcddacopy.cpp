@@ -36,7 +36,6 @@
 #include <klocale.h>
 #include <kio/global.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kapplication.h>
 
 
@@ -244,9 +243,6 @@ void K3bCddaCopy::slotTrackFinished( bool success )
 
 void K3bCddaCopy::createFilenames()
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "Audio Ripping" );
-
   m_list.clear();
   
   if( m_baseDirectory[m_baseDirectory.length()-1] != '/' )
@@ -256,7 +252,7 @@ void K3bCddaCopy::createFilenames()
        it != m_tracksToCopy.end(); ++it ) {
     int index = *it - 1;
    
-    QString extension = "." + c->readEntry( "last used filetype", "wav" );
+    QString extension = ".wav";
 
     if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
       extension = ".iso";
@@ -268,9 +264,9 @@ void K3bCddaCopy::createFilenames()
 
     if( m_bUsePattern ) {
       dir += K3bPatternParser::parsePattern( m_cddbEntry, *it, 
-					     c->readEntry( "directory pattern", "%r/%m" ),
-					     c->readBoolEntry( "replace blank in directory", false ),
-					     c->readEntry( "directory replace string", "_" ) );
+					     m_dirPattern,
+					     m_replaceBlanksInDir,
+					     m_dirReplaceString );
     }
 
     if( dir[dir.length()-1] != '/' )
@@ -278,9 +274,9 @@ void K3bCddaCopy::createFilenames()
 
     if( m_bUsePattern ) {
       filename = K3bPatternParser::parsePattern( m_cddbEntry, *it, 
-						 c->readEntry( "filename pattern", "%a - %t" ),
-						 c->readBoolEntry( "replace blank in filename", false ),
-						 c->readEntry( "filename replace string", "_" ) ) + extension;
+						 m_filenamePattern,
+						 m_replaceBlanksInFilename,
+						 m_filenameReplaceString ) + extension;
     }
     else {
       filename = i18n("Track%1").arg( QString::number(*it).rightJustify( 2, '0' ) ) + extension;
@@ -322,7 +318,7 @@ QString K3bCddaCopy::jobDescription() const
 
 QString K3bCddaCopy::jobDetails() const 
 {
-  return i18n("%1 tracks").arg(m_tracksToCopy.count());
+  return i18n("1 track", "%n tracks", m_tracksToCopy.count() );
 }
 
 

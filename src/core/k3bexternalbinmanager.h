@@ -38,6 +38,7 @@ class K3bExternalBin
 
   K3bVersion version;
   QString path;
+  QString copyright;
 
   const QString& name() const;
   bool isEmpty() const;

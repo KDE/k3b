@@ -210,12 +210,61 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
     }
 
 
-
+    // media type
+    if( info.mediaType != K3bCdDevice::MEDIA_NONE ) {
+      KListViewItem* mediaItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Media") );
+      QString typeStr;
+      switch( info.mediaType ) {
+      case K3bCdDevice::MEDIA_DVD_ROM:
+	typeStr = "DVD-ROM";
+	break;
+      case K3bCdDevice::MEDIA_DVD_R:
+	typeStr = "DVD-R";
+	break;
+      case K3bCdDevice::MEDIA_DVD_RW:
+	typeStr = "DVD-RW";
+	break;
+      case K3bCdDevice::MEDIA_DVD_R_SEQ:
+	typeStr = "DVD-R Sequential";
+	break;
+      case K3bCdDevice::MEDIA_DVD_RAM:
+	typeStr = "DVD-RAM";
+	break;
+      case K3bCdDevice::MEDIA_DVD_RW_OVWR: 
+	typeStr = "DVD-RW Restricted Overwrite";
+	break;
+      case K3bCdDevice::MEDIA_DVD_RW_SEQ:
+	typeStr = "DVD-RW Sequential";
+	break;
+      case K3bCdDevice::MEDIA_DVD_PLUS_RW:
+	typeStr = "DVD+RW";
+	break;
+      case K3bCdDevice::MEDIA_DVD_PLUS_R:
+	typeStr = "DVD+R";
+	break;
+      case K3bCdDevice::MEDIA_CD_ROM:
+	typeStr = "CD-ROM";
+	break;
+      case K3bCdDevice::MEDIA_CD_R:
+	typeStr = "CD-R";
+	break;
+      case K3bCdDevice::MEDIA_CD_RW:
+	typeStr = "CD-RW";
+	break;
+      default:
+	typeStr = i18n("Unknown (probably CD-ROM)");
+      }
+      (void)new KListViewItem( mediaItem, i18n("Type:"), typeStr );
+      mediaItem->setOpen( true );
+    }
 
     // check if we have some atip info
     if( info.size > 0 || !info.mediumManufactor.isEmpty() ) {
 
-      KListViewItem* atipItem = new HeaderViewItem( m_infoView, i18n("Disk") );
+      if( m_infoView->childCount() )
+        (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+
+      KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Disk") );
       KListViewItem* atipChild = 0;
 
       if( info.size > 0 )
@@ -238,7 +287,7 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       }
 
       atipChild = new KListViewItem( atipItem, atipChild,
-                                     i18n("CDRW:"),
+                                     i18n("Rewritable:"),
                                      info.cdrw ? i18n("yes") : i18n("no") );
 
       atipChild = new KListViewItem( atipItem, atipChild,
@@ -261,7 +310,8 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
       if( m_infoView->childCount() )
         (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-      KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("ISO9660 Info") );
+      KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), 
+						       i18n("ISO9660 Filesystem Info") );
       KListViewItem* iso9660Child = 0;
 
 //       iso9660Child = new KListViewItem( iso9660Item, iso9660Child,

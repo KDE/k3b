@@ -47,6 +47,7 @@
 #include <kedittoolbar.h>
 #include <ksystemtray.h>
 #include <kaboutdata.h>
+#include <ktip.h>
 
 #include <stdlib.h>
 
@@ -63,6 +64,7 @@
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
 #include "data/k3bdatadoc.h"
+#include "dvd/k3bdvddoc.h"
 #include "data/k3bdataview.h"
 #include "mixed/k3bmixeddoc.h"
 #include "vcd/k3bvcddoc.h"
@@ -71,7 +73,6 @@
 #include "data/k3bisoimagewritingdialog.h"
 #include "data/k3bbinimagewritingdialog.h"
 #include <k3bexternalbinmanager.h>
-//#include "tools/k3bdefaultexternalprograms.h"
 #include "k3bprojecttabwidget.h"
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
@@ -120,6 +121,7 @@ K3bMainWindow::K3bMainWindow()
   m_mixedUntitledCount = 0;
   m_vcdUntitledCount = 0;
   m_movixUntitledCount = 0;
+  m_dvdUntitledCount = 0;
 
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
@@ -194,6 +196,9 @@ void K3bMainWindow::initActions()
   actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
+  // the tip action
+  (void)KStdAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection(), "show_tips" );
+
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
   setStandardToolBarMenuEnabled(true);
 
@@ -211,6 +216,8 @@ void K3bMainWindow::initActions()
 				   actionCollection(), "file_new_vcd");
   actionFileNewMovix = new KAction(i18n("New &eMovix Project"),"video", 0, this, SLOT(slotNewMovixDoc()),
 				   actionCollection(), "file_new_movix");
+  actionFileNewDvd = new KAction(i18n("New Dvd Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
+				 actionCollection(), "file_new_dvd");
 
 
   actionFileNewMenu->insert( actionFileNewAudio );
@@ -218,6 +225,7 @@ void K3bMainWindow::initActions()
   actionFileNewMenu->insert( actionFileNewMixed );
   actionFileNewMenu->insert( actionFileNewVcd );
   actionFileNewMenu->insert( actionFileNewMovix );
+  actionFileNewMenu->insert( actionFileNewDvd );
   actionFileNewMenu->setDelayed( false );
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
@@ -759,22 +767,18 @@ void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
 
-  if( K3bView* view = activeView() )
-    {
-      if (view->getDocument()->docType() == K3bDoc::DATA) {
-        actionDataClearImportedSession->setEnabled(false);
-        actionDataImportSession->setEnabled(false);
-        actionDataEditBootImages->setEnabled(false);
-      }
-      view->close(true);
-    }
-
+  if( K3bView* view = activeView() ) {
+    view->close(true);
+  }
+  
   if( pDocList->isEmpty() ) {
     actionFileSave->setEnabled(false);
     actionFileSaveAs->setEnabled(false);
     actionFileBurn->setEnabled( false );
     actionProjectAddFiles->setEnabled( false );
   }
+
+  slotCurrentDocChanged(0);
 }
 
 
@@ -861,6 +865,26 @@ void K3bMainWindow::slotNewDataDoc()
   QString fileName = i18n("Data%1").arg(m_dataUntitledCount);
   if( doc->isoOptions().volumeID().isEmpty() )
     doc->isoOptions().setVolumeID( i18n("Data%1").arg(m_dataUntitledCount) );
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+}
+
+
+void K3bMainWindow::slotNewDvdDoc()
+{
+  slotStatusMsg(i18n("Creating new Dvd Project."));
+
+  K3bDvdDoc* doc = new K3bDvdDoc( this );
+  initializeNewDoc( doc );
+
+  m_dvdUntitledCount++;
+  QString fileName = i18n("Dvd%1").arg(m_dvdUntitledCount);
+  if( doc->isoOptions().volumeID().isEmpty() )
+    doc->isoOptions().setVolumeID( i18n("Dvd%1").arg(m_dvdUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);
@@ -986,6 +1010,7 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 
     switch( view->getDocument()->docType() ) {
     case K3bDoc::DATA:
+    case K3bDoc::DVD:
       actionDataClearImportedSession->setEnabled(true);
       actionDataImportSession->setEnabled(true);
       actionDataEditBootImages->setEnabled(true);
@@ -1129,6 +1154,12 @@ void K3bMainWindow::slotShowProjectView()
 {
   mainDock->changeHideShowState();
   slotCheckDockWidgetStatus();
+}
+
+
+void K3bMainWindow::slotShowTips()
+{
+  KTipDialog::showTip( this, QString::null, true );
 }
 
 

@@ -198,6 +198,38 @@ void K3bSystemProblemDialog::checkSystem()
 				       true ) );
   }
 
+  if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
+    if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Unable to find %1 executable").arg("growisofs"),
+					 i18n("K3b uses growisofs to actually write dvds. "
+					      "Without growisofs you won't be able to write dvds. "
+					      "Make sure to install at least version 5.10."),
+					 i18n("Install the growisofs package."),
+					 false ) );
+    }
+    else {
+      if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 10 ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+					   i18n("K3b needs at least growisofs version 5.10 to write dvds. "
+						"All older versions will not work and K3b will refuse to use them."),
+					   i18n("Install a more recent version of growisofs."),
+					   false ) );
+      }
+
+      if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("%1 does not run with root privileges").arg("growisofs"),
+					   i18n("It is recommended to run growisofs with "
+						"root privileges so it is able to access "
+						"all devices. Another solution would be to give "
+						"the user write access to the devices."),
+					   i18n("Use K3bSetup to solve this problem."),
+					   true ) );
+      }
+    }
+  }
 
   // 2. ATAPI devices
   bool atapiReader = false;
@@ -227,8 +259,10 @@ void K3bSystemProblemDialog::checkSystem()
 					      "writer in your system not configured to use "
 					      "SCSI emulation."),
 					 i18n("The best and recommended solution is to enable "
-					      "ide-scsi (SCSI emulation) for all writer devices. "
-					      "This way you won't have any problems."),
+					      "ide-scsi (SCSI emulation) for all devices. "
+					      "This way you won't have any problems."
+					      "Be aware that you may still enable DMA on ide-scsi "
+					      "emulated drives."),
 					 false ) );
     }
     else {
@@ -248,7 +282,7 @@ void K3bSystemProblemDialog::checkSystem()
 						  "in your system not configured to use "
 						  "SCSI emulation.").arg("cdrecord"),
 					     i18n("The best and recommended solution is to enable "
-						  "ide-scsi (SCSI emulation) for all writer devices. "
+						  "ide-scsi (SCSI emulation) for all devices. "
 						  "This way you won't have any problems. Or you install "
 						  "(or select as the default) a more recent version of %1.").arg("cdrtools"),
 					     false ) );

@@ -37,21 +37,12 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 {
   m_doc = pDoc;
 
-  QGridLayout* grid = new QGridLayout( this );
-  grid->setSpacing( 5 );
-  grid->setMargin( 2 );
-	
   m_songlist = new K3bAudioListView( this, pDoc, this );
-  m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
-  m_fillStatusDisplay->showTime();
-  m_burnDialog = 0;
-	
-  grid->addWidget( m_songlist, 0, 0 );
-  grid->addWidget( m_fillStatusDisplay, 1, 0 );
-  grid->setRowStretch( 0, 1 );
+  setMainWidget( m_songlist );
+  fillStatusDisplay()->showTime();
 
-  connect( m_songlist, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
-  connect( m_doc, SIGNAL(newTracks()), m_fillStatusDisplay, SLOT(update()) );
+  connect( m_songlist, SIGNAL(lengthReady()), fillStatusDisplay(), SLOT(update()) );
+  connect( m_doc, SIGNAL(newTracks()), fillStatusDisplay(), SLOT(update()) );
 }
 
 K3bAudioView::~K3bAudioView(){
@@ -63,11 +54,5 @@ void K3bAudioView::burnDialog( bool withWriting )
   K3bAudioBurnDialog d( (K3bAudioDoc*)getDocument(), this, "audioburndialog", true );
   d.exec( withWriting );
 }
-
-
-
-
-
-
 
 #include "k3baudioview.moc"

@@ -142,7 +142,7 @@ void K3bFileView::setUrl(const KURL& url, bool forward)
   m_dirOp->setURL( url, forward );
 }
 
-KURL K3bFileView::Url()
+KURL K3bFileView::url()
 {
   return m_dirOp->url();
 }

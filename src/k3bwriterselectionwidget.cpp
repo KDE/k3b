@@ -40,13 +40,15 @@ class K3bWriterSelectionWidget::Private
 {
 public:
   int maxSpeed;
+  bool dvd;
 };
 
 
-K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *name )
+K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, const char *name )
   : QWidget( parent, name )
 {
   d = new Private;
+  d->dvd = dvd;
 
   QGroupBox* groupWriter = new QGroupBox( this );
   groupWriter->setTitle( i18n( "Burning Device" ) );
@@ -98,30 +100,6 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 
-
-
-  // ToolTips
-  // --------------------------------------------------------------------------------
-  QToolTip::add( m_comboWriter, i18n("The CD writer that will write the CD") );
-  QToolTip::add( m_comboSpeed, i18n("The speed at which to write the CD") );
-  QToolTip::add( m_comboWritingApp, i18n("The external application to acually write the CD") );
-
-  // What's This info
-  // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD writer that you want to write the CD."
-				       "<p>In most cases there will only be one writer available which "
-				       "does not leave much choice.") );
-  QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
-				      "<p>1x speed means 150 KB/s."
-				      "<p><b>Caution:</b> Make sure your system is able to send the data "
-				      "fast enough to prevent buffer underruns.") );
-  QWhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord and cdrdao "
-					   "to actually write the CDs. Normally K3b chooses the best "
-					   "suited application for every task but in some cases it "
-					   "may be possible that one of the applications does not "
-					   "support a writer. In this case one may select the "
-					   "application manually.") );
-
   init();
 }
 
@@ -132,12 +110,23 @@ K3bWriterSelectionWidget::~K3bWriterSelectionWidget()
 }
 
 
+void K3bWriterSelectionWidget::setDvd( bool b )
+{
+  if( b != d->dvd ) {
+    d->dvd = true;
+    init();
+  }
+}
+
 void K3bWriterSelectionWidget::init()
 {
   m_comboWriter->clear();
 
   // -- read cd-writers ----------------------------------------------
-  QPtrList<K3bDevice> devices = k3bcore->deviceManager()->burningDevices();
+  QPtrList<K3bDevice>& devices = ( d->dvd 
+				   ? k3bcore->deviceManager()->dvdWriter() 
+				   : k3bcore->deviceManager()->cdWriter() );
+
   K3bDevice* dev = devices.first();
   while( dev ) {
     m_comboWriter->addDevice( dev );
@@ -153,12 +142,71 @@ void K3bWriterSelectionWidget::init()
   
   slotRefreshWriterSpeeds();
   
-  // set to saved speed
-  if( writerDevice() )
-    setSpeed( writerDevice()->currentWriteSpeed() );
-
   slotConfigChanged(k3bcore->config());
-  setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
+
+  if( d->dvd )
+    setSupportedWritingApps( K3b::GROWISOFS );
+  else
+    setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
+
+
+  // ToolTips
+  // --------------------------------------------------------------------------------
+  QToolTip::remove( m_comboWriter );
+  QToolTip::remove( m_comboSpeed );
+  QToolTip::remove( m_comboWritingApp );
+
+  if( d->dvd ) {
+    QToolTip::add( m_comboWriter, i18n("The DVD writer that will write the DVD") );
+    QToolTip::add( m_comboSpeed, i18n("The speed at which to write the DVD") );
+    QToolTip::add( m_comboWritingApp, i18n("The external application to acually write the DVD") );
+  }
+  else {
+    QToolTip::add( m_comboWriter, i18n("The CD writer that will write the CD") );
+    QToolTip::add( m_comboSpeed, i18n("The speed at which to write the CD") );
+    QToolTip::add( m_comboWritingApp, i18n("The external application to acually write the CD") );
+  }
+
+  // What's This info
+  // --------------------------------------------------------------------------------
+  QWhatsThis::remove( m_comboWriter );
+  QWhatsThis::remove( m_comboSpeed );
+  QWhatsThis::remove( m_comboWritingApp );
+
+  if( d->dvd ) {
+    QWhatsThis::add( m_comboWriter, i18n("<p>Select the DVD writer that you want to use."
+					 "<p>In most cases there will only be one writer available which "
+					 "does not leave much choice.") );
+    QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
+					"<p><b>Auto</b><br>"
+					"Let the DVD writer decide which speed to use for the media. "
+					"This is the recommended selection for most media.</p>"
+					"<p><b>1x</b><br>"
+					"Some DVD writers reportedly fail to determine optimal speed "
+					"for no-name media and pick one higher than the media can stand "
+					"which results in corrupted recordings. This option forces the "
+					"writer to switch to 1x speed to be on the save side. When using "
+					"no-name media it is recommended to use this option.</p>"
+					"<p>1x refers to 1380 KB/s.</p>"
+					"<p><b>Caution:</b> Be aware that the speed selection only makes "
+					"sense for DVD-R(W) writers since DVD+R(W) writers always choose "
+					"the speed automagically.") );
+  }
+  else {
+    QWhatsThis::add( m_comboWriter, i18n("<p>Select the CD/DVD writer that you want to use."
+					 "<p>In most cases there will only be one writer available which "
+					 "does not leave much choice.") );
+    QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want the writer to burn."
+					"<p>1x speed means 150 KB/s for CD-Writers and 1380 KB/s for DVD-Writers."
+					"<p><b>Caution:</b> Make sure your system is able to send the data "
+					"fast enough to prevent buffer underruns.") );
+  }
+  QWhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "
+					   "to actually write a CD/DVD. Normally K3b chooses the best "
+					   "suited application for every task but in some cases it "
+					   "may be possible that one of the applications does not "
+					   "support a writer. In this case one may select the "
+					   "application manually.") );
 }
 
 
@@ -179,7 +227,12 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfig* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-  if( K3bDevice* dev = writerDevice() ) {
+  if( d->dvd ) {
+    m_comboSpeed->clear();
+    m_comboSpeed->insertItem( i18n("Auto") );
+    m_comboSpeed->insertItem( "1x" );
+  }
+  else if( K3bDevice* dev = writerDevice() ) {
     // add speeds to combobox
     m_comboSpeed->clear();
     m_comboSpeed->insertItem( "1x" );
@@ -214,16 +267,51 @@ void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
 
 void K3bWriterSelectionWidget::setSpeed( int s )
 {
-  m_comboSpeed->setCurrentItem( QString("%1x").arg(s), false );
+  if( d->dvd && s == 0 )
+    m_comboSpeed->setCurrentItem( 0 ); // Auto
+  else
+    m_comboSpeed->setCurrentItem( QString("%1x").arg(s), false );
+}
+
+
+void K3bWriterSelectionWidget::setWritingApp( int app )
+{
+  switch( app ) {
+  case K3b::CDRECORD:
+    m_comboWritingApp->setCurrentItem( "cdrecord" );
+    break;
+  case K3b::CDRECORD_PRODVD:
+    m_comboWritingApp->setCurrentItem( "cdrecord-prodvd" );
+    break;
+  case K3b::CDRDAO:
+    m_comboWritingApp->setCurrentItem( "cdrdao" );
+    break;
+  case K3b::DVDRECORD:
+    m_comboWritingApp->setCurrentItem( "dvdrecord" );
+    break;
+  case K3b::GROWISOFS:
+    m_comboWritingApp->setCurrentItem( "growisofs" );
+    break;
+  default:
+    m_comboWritingApp->setCurrentItem( 0 );  // Auto
+    break;
+  }
 }
 
 
 int K3bWriterSelectionWidget::writerSpeed() const
 {
-  QString strSpeed = m_comboSpeed->currentText();
-  strSpeed.truncate( strSpeed.find('x') );
-
-  return strSpeed.toInt();
+  if( d->dvd ) {
+    // 0 for Auto
+    // 1 for 1x
+    return m_comboSpeed->currentItem();
+  }
+  else {
+    QString strSpeed = m_comboSpeed->currentText();
+    strSpeed.truncate( strSpeed.find('x') );
+    
+    return strSpeed.toInt();
+  }
 }
 
 
@@ -241,7 +329,12 @@ int K3bWriterSelectionWidget::writingApp() const
 
 int K3bWriterSelectionWidget::selectedWritingApp() const
 {
-  QString s = m_comboWritingApp->currentText();
+  return writingAppFromString( m_comboWritingApp->currentText() );
+}
+
+// static
+int K3bWriterSelectionWidget::writingAppFromString( const QString& s )
+{
   if( s == "cdrdao" )
     return K3b::CDRDAO;
   else if( s == "cdrecord" )
@@ -250,6 +343,8 @@ int K3bWriterSelectionWidget::selectedWritingApp() const
     return K3b::CDRECORD_PRODVD;
   else if( s == "dvdrecord" )
     return K3b::DVDRECORD;
+  else if( s == "growisofs" )
+    return K3b::GROWISOFS;
   else
     return K3b::DEFAULT;
 }
@@ -286,6 +381,8 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
     m_comboWritingApp->insertItem( "cdrecord-prodvd" );
   if( i & K3b::DVDRECORD )
     m_comboWritingApp->insertItem( "dvdrecord" );
+  if( i & K3b::GROWISOFS )
+    m_comboWritingApp->insertItem( "growisofs" );
 }
 
 
@@ -293,6 +390,7 @@ void K3bWriterSelectionWidget::loadConfig( KConfig* c )
 {
   setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
   setSpeed( writerDevice() ? c->readNumEntry( "writing_speed",  writerDevice()->currentWriteSpeed() ) : 1 );
+  setWritingApp( writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 
 
@@ -300,6 +398,7 @@ void K3bWriterSelectionWidget::saveConfig( KConfig* c )
 {
   c->writeEntry( "writing_speed", writerSpeed() );
   c->writeEntry( "writer_device", writerDevice() ? writerDevice()->devicename() : QString::null );
+  c->writeEntry( "writing_app", m_comboWritingApp->currentText() );
 }
 
 #include "k3bwriterselectionwidget.moc"

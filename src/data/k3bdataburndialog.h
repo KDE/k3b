@@ -39,7 +39,7 @@ class K3bDataModeWidget;
   *@author Sebastian Trueg
   */
 
-class K3bDataBurnDialog : public K3bProjectBurnDialog  
+class K3bDataBurnDialog : public K3bProjectBurnDialog
 {
  Q_OBJECT
 
@@ -68,6 +68,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioMultiSessionFinish;
    // ---------------------------------------------
 
+   QGroupBox* m_groupDataMode;
    K3bDataModeWidget* m_dataModeWidget;
 
  protected slots:

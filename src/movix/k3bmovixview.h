@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -22,7 +22,6 @@
 
 class K3bMovixDoc;
 class K3bMovixListView;
-class K3bFillStatusDisplay;
 class KAction;
 class KPopupMenu;
 class QListViewItem;
@@ -48,7 +47,6 @@ class K3bMovixView : public K3bView
 
  private:
   K3bMovixListView* m_listView;
-  K3bFillStatusDisplay* m_fillStatusDisplay;
 
   K3bMovixDoc* m_doc;
 

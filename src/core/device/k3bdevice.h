@@ -23,7 +23,6 @@
 
 #include "k3bmsf.h"
 
-#define SUPPORT_IDE
 
 namespace K3bCdDevice
 {
@@ -43,7 +42,7 @@ namespace K3bCdDevice
     enum DeviceType    { CDR = 1,
                          CDRW = 2,
                          CDROM = 4,
-                         DVDROM = 8,
+                         DVD = 8,
                          DVDRAM = 16,
                          DVDR = 32,
                          DVDRW = 64,
@@ -56,12 +55,14 @@ namespace K3bCdDevice
                       NO_INFO = -2 };
     enum WriteMode { SAO = 1,
                      TAO = 2,
-                     PACKET = 4,
-                     SAO_R96P = 8,
-                     SAO_R96R = 16,
-                     RAW_R16 = 32,
-                     RAW_R96P = 64,
-                     RAW_R96R = 128 };
+		     RAW = 4,
+                     PACKET = 8,
+                     SAO_R96P = 16,
+                     SAO_R96R = 32,
+                     RAW_R16 = 64,
+                     RAW_R96P = 128,
+                     RAW_R96R = 256 };
+
 
     /**
       * create a K3bDevice from a cdrom_drive struct
@@ -78,10 +79,13 @@ namespace K3bCdDevice
     const QString& vendor() const { return m_vendor; }
     const QString& description() const { return m_description; }
     const QString& version() const { return m_version; }
-    bool           burner() const { return m_burner; }
-    bool           writesCdrw() const { return m_bWritesCdrw; }
-    bool           burnproof() const { return m_burnproof; }
-    bool           dao() const { return m_dao; }
+    bool           burner() const;
+    bool           writesCdrw() const;
+    bool           writesDvd() const;
+    bool           readsDvd() const;
+    bool           burnproof() const;
+    bool           burnfree() const;
+    bool           dao() const;
     int            maxReadSpeed() const { return m_maxReadSpeed; }
     int            currentWriteSpeed() const { return m_currentWriteSpeed; }
 
@@ -142,9 +146,6 @@ namespace K3bCdDevice
     /** internally K3b value. */
     void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
 
-
-    void setIsWriter( bool b ) { m_burner = b; }
-
     /**
      * Use this if the speed was not detected correctly.
      */
@@ -169,7 +170,6 @@ namespace K3bCdDevice
 
     void setBurnproof( bool );
     void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
-    void setDao( bool b ) { m_dao = b; }
     void setBufferSize( int b ) { m_bufferSize = b; }
 
     void setMountPoint( const QString& );
@@ -273,6 +273,23 @@ namespace K3bCdDevice
     bool supportsWriteMode( WriteMode );
 
     /**
+     * Get a list of supported profiles. See enumeration MediaType.
+     */
+    int supportedProfiles() const;
+
+    /**
+     * Tries to get the current profile from the drive.
+     * @returns -1 on error (command failed or unknown profile)
+     *          MediaType otherwise (MEDIA_NONE means: no current profile)
+     */
+    int currentProfile();
+
+    /**
+     * This is the method to use!
+     */
+    NextGenerationDiskInfo ngDiskInfo();
+
+    /**
      * @return fd on success; -1 on failure
      */
     int open() const;
@@ -283,6 +300,7 @@ namespace K3bCdDevice
     bool furtherInit();
 
     bool getDiscInfo( K3bCdDevice::disc_info_t* info ) const;
+    bool readModePage2A( struct K3bCdDevice::mm_cap_page_2A* p ) const;
 
     QString m_vendor;
     QString m_description;
@@ -290,7 +308,6 @@ namespace K3bCdDevice
     bool m_burner;
     bool m_bWritesCdrw;
     bool m_burnproof;
-    bool m_dao;
     QString m_cdrdaoDriver;
     int m_cdTextCapable;
     int m_maxReadSpeed;

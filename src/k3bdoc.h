@@ -60,8 +60,15 @@ class K3bDoc : public QObject
   K3bDoc( QObject* );
   virtual ~K3bDoc();
 
-  enum DocType { AUDIO = 1, DATA, BACKUP, MIXED, VCD, MOVIX };
-
+  enum DocType { 
+    AUDIO = 1, 
+    DATA, 
+    MIXED, 
+    VCD, 
+    MOVIX,
+    DVD,
+    VIDEODVD 
+  };
 
   virtual void disable();
   virtual void enable();

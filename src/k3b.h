@@ -126,6 +126,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotNewMixedDoc();
   void slotNewVcdDoc();
   void slotNewMovixDoc();
+  void slotNewDvdDoc();
+
   void slotBlankCdrw();
   void slotWriteIsoImage();
   void slotWriteIsoImage( const KURL& url );
@@ -264,6 +266,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotDataClearImportedSession();
   void slotEditBootImages();
 
+  void slotShowTips();
+
   void setProjectsHidable( bool );
 
  private:
@@ -296,6 +300,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   int m_mixedUntitledCount;
   int m_vcdUntitledCount;
   int m_movixUntitledCount;
+  int m_dvdUntitledCount;
 
   /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
    * removes this document from the list. The document list is checked for modified documents when the user
@@ -311,6 +316,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileNewMixed;
   KAction* actionFileNewVcd;
   KAction* actionFileNewMovix;
+  KAction* actionFileNewDvd;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;

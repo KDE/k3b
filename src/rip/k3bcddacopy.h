@@ -68,6 +68,13 @@ class K3bCddaCopy : public K3bJob
   void setNeverSkip( bool b ) { m_audioRip->setNeverSkip(b); }
   void setSingleFile( bool b ) { m_singleFile = b; }
 
+  void setDirectoryPattern( const QString& s ) { m_dirPattern = s; }
+  void setFilenamePattern( const QString& s ) { m_filenamePattern = s; }
+  void setDirectoryReplaceString( const QString& s ) { m_dirReplaceString = s; }
+  void setFilenameReplaceString( const QString& s ) { m_filenameReplaceString = s; }
+  void setReplaceBlanksInDir( bool b ) { m_replaceBlanksInDir = b; }
+  void setReplaceBlanksInFilename( bool b ) { m_replaceBlanksInFilename = b; }
+
   void start();
   void cancel();
 
@@ -96,7 +103,13 @@ class K3bCddaCopy : public K3bJob
   K3bDiskInfoDetector* m_diskInfoDetector;
 
   QString m_baseDirectory;
-
+  QString m_dirPattern;
+  QString m_filenamePattern;
+  QString m_dirReplaceString;
+  QString m_filenameReplaceString;
+  bool m_replaceBlanksInDir;
+  bool m_replaceBlanksInFilename
+;
   QStringList m_list;
 
   K3bWaveFileWriter m_waveFileWriter;

@@ -31,7 +31,8 @@ QCheckBox* K3bStdGuiItems::simulateCheckbox( QWidget* parent, const char* name )
   QWhatsThis::add( c, i18n("<p>If this option is checked K3b will perform all writing steps with the "
 			   "laser turned off."
 			   "<p>This is useful, for example, to test a higher writing speed "
-			   "or if your system is able to write on-the-fly.") );
+			   "or if your system is able to write on-the-fly."
+			   "<p><b>Caution:</b> DVD+R(W) does not support simulation write.") );
   QToolTip::add( c, i18n("Only simulate the writing process") );
   return c;
 }

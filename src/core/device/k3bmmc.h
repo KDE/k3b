@@ -91,9 +91,13 @@ namespace K3bCdDevice
     unsigned char did_v     : 1;
     unsigned char dbc_v     : 1;
     unsigned char uru       : 1;
-    unsigned char reserved2 : 5;
+    unsigned char reserved2 : 2;
+    unsigned char dbit      : 1;
+    unsigned char bg_f_status : 1;
 #elif __BYTE_ORDER == __LITTLE_ENDIAN
-    unsigned char reserved2 : 5;
+    unsigned char bg_f_status : 1;
+    unsigned char dbit      : 1;
+    unsigned char reserved2 : 2;
     unsigned char uru       : 1;
     unsigned char dbc_v     : 1;
     unsigned char did_v     : 1;
@@ -228,6 +232,102 @@ namespace K3bCdDevice
     uint8_t last;
     toc_track_descriptor_t descriptor;
   } toc_pma_atip_t;
+
+
+  struct cd_wr_speed_performance {
+    unsigned char res0;                   /* Reserved                          */
+    unsigned char rot_ctl_sel     : 2;    /* Rotational control selected       */
+    unsigned char res_1_27        : 6;    /* Reserved                          */
+    unsigned char wr_speed_supp[2];       /* Supported write speed             */
+  };
+  
+  /**
+   * Based on the cdrecord struct cd_mode_page_2A
+   * MM Capabilities and Mechanical Status Page
+   */
+  struct mm_cap_page_2A {
+    unsigned char PS               : 1;
+    unsigned char res_1            : 1;
+    unsigned char page_code        : 6;
+    unsigned char page_len;             /* 0x14 = 20 Bytes (MMC) */
+                                        /* 0x18 = 24 Bytes (MMC-2) */
+                                        /* 0x1C >= 28 Bytes (MMC-3) */
+    unsigned char res_2_67         : 2; /* Reserved        */
+    unsigned char dvd_ram_read     : 1; /* Reads DVD-RAM media       */
+    unsigned char dvd_r_read       : 1; /* Reads DVD-R media       */
+    unsigned char dvd_rom_read     : 1; /* Reads DVD ROM media       */
+    unsigned char method2          : 1; /* Reads fixed packet method2 media  */
+    unsigned char cd_rw_read       : 1; /* Reads CD-RW media       */
+    unsigned char cd_r_read        : 1; /* Reads CD-R  media       */
+    unsigned char res_3_67         : 2; /* Reserved        */
+    unsigned char dvd_ram_write    : 1; /* Supports writing DVD-RAM media    */
+    unsigned char dvd_r_write      : 1; /* Supports writing DVD-R media      */
+    unsigned char res_3_3          : 1; /* Reserved        */
+    unsigned char test_write       : 1; /* Supports emulation write      */
+    unsigned char cd_rw_write      : 1; /* Supports writing CD-RW media      */
+    unsigned char cd_r_write       : 1; /* Supports writing CD-R  media      */
+    unsigned char BUF              : 1; /* Supports Buffer under. free rec.  */
+    unsigned char multi_session    : 1; /* Reads multi-session media      */
+    unsigned char mode_2_form_2    : 1; /* Reads Mode-2 form 2 media      */
+    unsigned char mode_2_form_1    : 1; /* Reads Mode-2 form 1 media (XA)    */
+    unsigned char digital_port_1   : 1; /* Supports digital output on port 1 */
+    unsigned char digital_port_2   : 1; /* Supports digital output on port 2 */
+    unsigned char composite        : 1; /* Deliveres composite A/V stream    */
+    unsigned char audio_play       : 1; /* Supports Audio play operation     */
+    unsigned char read_bar_code    : 1; /* Supports reading bar codes      */
+    unsigned char UPC              : 1; /* Reads media catalog number (UPC)  */
+    unsigned char ISRC             : 1; /* Reads ISRC information      */
+    unsigned char c2_pointers      : 1; /* Supports C2 error pointers      */
+    unsigned char rw_deint_corr    : 1; /* Reads de-interleved R-W sub chan  */
+    unsigned char rw_supported     : 1; /* Reads R-W sub channel information */
+    unsigned char cd_da_accurate   : 1; /* READ CD data stream is accurate   */
+    unsigned char cd_da_supported  : 1; /* Reads audio data with READ CD cmd */
+    unsigned char loading_type     : 3; /* Loading mechanism type      */
+    unsigned char res_6_4          : 1; /* Reserved        */
+    unsigned char eject            : 1; /* Ejects disc/cartr with STOP LoEj  */
+    unsigned char prevent_jumper   : 1; /* State of prev/allow jumper 0=pres */
+    unsigned char lock_state       : 1; /* Lock state 0=unlocked 1=locked    */
+    unsigned char lock             : 1; /* PREVENT/ALLOW may lock media      */
+    unsigned char res_7            : 2; /* Reserved        */
+    unsigned char rw_in_lead_in    : 1; /* Reads raw R-W subcode from lead in */
+    unsigned char side_change      : 1; /* Side change capable       */
+    unsigned char sw_slot_sel      : 1; /* Load empty slot in changer      */
+    unsigned char disk_present_rep : 1; /* Changer supports disk present rep */
+    unsigned char sep_chan_mute    : 1; /* Mute controls each channel separat*/
+    unsigned char sep_chan_vol     : 1; /* Vol controls each channel separat */
+    unsigned char max_read_speed[2];    /* Max. read speed in KB/s      */
+                                        /* obsolete in MMC-4 */
+    unsigned char num_vol_levels[2];    /* # of supported volume levels      */
+    unsigned char buffer_size[2];       /* Buffer size for the data in KB    */
+    unsigned char cur_read_speed[2];    /* Current read speed in KB/s      */
+                                        /* obsolete in MMC-4 */
+    unsigned char res_16;               /* Reserved        */
+    unsigned char res_17           : 2; /* Reserved        */
+    unsigned char length           : 2; /* 0=32BCKs 1=16BCKs 2=24BCKs 3=24I2c*/
+    unsigned char LSBF             : 1; /* Set: LSB first Clear: MSB first   */
+    unsigned char RCK              : 1; /* Set: HIGH high LRCK=left channel  */
+    unsigned char BCK              : 1; /* Data valid on falling edge of BCK */
+    unsigned char res_17_0         : 1; /* Reserved        */
+    unsigned char max_write_speed[2];   /* Max. write speed supported in KB/s*/
+                                        /* obsolete in MMC-4 */
+    unsigned char cur_write_speed[2];   /* Current write speed in KB/s      */
+                                        /* obsolete in MMC-4 */
+
+    /* Byte 22 ... Only in MMC-2      */
+    unsigned char copy_man_rev[2];      /* Copy management revision supported*/
+    unsigned char res_24;               /* Reserved        */
+    unsigned char res_25;               /* Reserved        */
+
+    /* Byte 26 ... Only in MMC-3      */
+    unsigned char res_26;               /* Reserved        */
+    unsigned char res_27_27        : 6; /* Reserved        */
+    unsigned char rot_ctl_sel      : 2; /* Rotational control selected      */
+    unsigned char v3_cur_write_speed[2]; /* Current write speed in KB/s      */
+    unsigned char num_wr_speed_des[2];  /* # of wr speed perf descr. tables  */
+    struct cd_wr_speed_performance
+    wr_speed_des[1];                    /* wr speed performance descriptor   */
+                                        /* Actually more (num_wr_speed_des)  */
+  };
 }
 
 

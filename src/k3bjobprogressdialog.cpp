@@ -324,6 +324,8 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
       if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
 	w->setPlainCaption( m_plainCaption );
   }
+  else
+    e->ignore();
 }
 
 

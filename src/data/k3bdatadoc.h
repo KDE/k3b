@@ -147,7 +147,7 @@ class K3bDataDoc : public K3bDoc
 
   virtual QString documentType() const;
 
-  void loadDefaultSettings( KConfig* );
+  virtual void loadDefaultSettings( KConfig* );
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
 

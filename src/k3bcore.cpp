@@ -31,6 +31,7 @@
 #include <kstandarddirs.h>
 
 
+
 class K3bCore::Private {
 public:
   Private( const KAboutData* about )
@@ -104,6 +105,9 @@ void K3bCore::init()
   emit initializationInfo( i18n("Reading Options...") );
 
   KConfig globalConfig( K3b::globalConfig() );
+  config()->setGroup( "General Options" );
+  K3bVersion globalConfigVersion( globalConfig.readEntry( "config version", "0.1" ) );
+  K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
 
   // external bin manager
   // ===============================================================================
@@ -126,6 +130,9 @@ void K3bCore::init()
 
   // device manager
   // ===============================================================================
+  // The device configuration layout changed in 0.10
+  //
+
   emit initializationInfo( i18n("Scanning for CD devices...") );
 
   if( !d->deviceManager->scanbus() )
@@ -133,6 +140,7 @@ void K3bCore::init()
 
   if( globalConfig.hasGroup("Devices") ) {
     globalConfig.setGroup( "Devices" );
+
     d->deviceManager->readConfig( &globalConfig );
   }
 

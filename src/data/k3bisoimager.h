@@ -37,13 +37,13 @@ class K3bIsoImager : public K3bJob
 
  public:
   K3bIsoImager( K3bDataDoc*, QObject* parent = 0, const char* name = 0 );
-  ~K3bIsoImager();
+  virtual ~K3bIsoImager();
 
   int size() const { return m_mkisofsPrintSizeResult; }
 
  public slots:
-  void start();
-  void cancel();
+  virtual void start();
+  virtual void cancel();
   void calculateSize();
 
   /**
@@ -64,7 +64,10 @@ class K3bIsoImager : public K3bJob
    * after data has been emitted image creation will
    * be suspended until resume() is called
    */
-  void resume();
+  virtual void resume();
+
+  K3bCdDevice::CdDevice* device() const { return m_device; }
+  K3bDataDoc* doc() const { return m_doc; }
 
   /**
    * This will set jolietName of all dataItems that are direct
@@ -85,10 +88,41 @@ class K3bIsoImager : public K3bJob
    */
   //  void data( char* data, int len );
 
- private slots:
+ protected:
+  bool addMkisofsParameters();
+
+  /**
+   * calls writePathSpec, writeRRHideFile, and writeJolietHideFile
+   */
+  bool prepareMkisofsFiles();
+
+  void outputData();
+  void init();
+  virtual void cleanup();
+  bool writePathSpec();
+  bool writeRRHideFile();
+  bool writeJolietHideFile();
+  bool writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+  QString escapeGraftPoint( const QString& str );
+
+  void parseProgress( const QString& );
+
+  KTempFile* m_pathSpecFile;
+  KTempFile* m_rrHideFile;
+  KTempFile* m_jolietHideFile;
+
+  K3bProcess* m_process;
+
+  bool m_processSuspended;
+  bool m_processExited;
+  bool m_canceled;
+
+ protected slots:
   void slotReceivedStdout( KProcess*, char*, int );
-  void slotReceivedStderr( const QString& );
-  void slotProcessExited( KProcess* );
+  virtual void slotReceivedStderr( const QString& );
+  virtual void slotProcessExited( KProcess* );
+
+ private slots:
   void slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int);
   void slotCollectMkisofsPrintSizeStdout(KProcess*, char*, int);
   void slotMkisofsPrintSizeFinished();
@@ -96,19 +130,12 @@ class K3bIsoImager : public K3bJob
  private:
   K3bDataDoc* m_doc;
 
-  KTempFile* m_pathSpecFile;
-  KTempFile* m_rrHideFile;
-  KTempFile* m_jolietHideFile;
-
   bool m_noDeepDirectoryRelocation;
 
   bool m_importSession;
   QString m_multiSessionInfo;
   K3bCdDevice::CdDevice* m_device;
 
-  K3bProcess* m_process;
-  bool m_processSuspended;
-  bool m_processExited;
   QPtrQueue<QByteArray> m_data;
   QByteArray* m_lastOutput;
 
@@ -117,24 +144,13 @@ class K3bIsoImager : public K3bJob
   QString m_collectedMkisofsPrintSizeStderr;
   int m_mkisofsPrintSizeResult;
 
-  bool writePathSpec();
-  bool writeRRHideFile();
-  bool writeJolietHideFile();
-  bool writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
-  QString escapeGraftPoint( const QString& str );
-  bool addMkisofsParameters();
-  bool prepareMkisofsFiles();
-  void outputData();
-
-  void cleanup();
-
-  bool m_canceled;
-
   QStringList m_tempFiles;
 
   int m_fdToWriteTo;
 
   bool m_containsFilesWithMultibleBackslashes;
+
+  double m_firstProgressValue;
 };
 
 

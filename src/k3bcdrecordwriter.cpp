@@ -73,8 +73,8 @@ void K3bCdrecordWriter::setDao( bool b )
 
 void K3bCdrecordWriter::setCueFile( const QString& s)
 {
-    m_cue = true;
-    m_cueFile = s;
+  m_cue = true;
+  m_cueFile = s;
 }
   
 void K3bCdrecordWriter::setClone( bool b )
@@ -217,22 +217,28 @@ void K3bCdrecordWriter::clearArguments()
 
 void K3bCdrecordWriter::start()
 {
+  emit started();
+
   prepareProcess();
 
   if( !m_cdrecordBinObject ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg(m_cdrecordBinObject->name()), ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), ERROR );
     emit finished(false);
     return;
   }
 
-  kdDebug() << "***** cdrecord parameters:\n";
+  if( !m_cdrecordBinObject->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrecordBinObject->name()).arg(m_cdrecordBinObject->version).arg(m_cdrecordBinObject->copyright), INFO );
+
+
+  kdDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
   const QValueList<QCString>& args = m_process->args();
   QString s;
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
-  emit debuggingOutput("cdrecord comand:", s);
+  emit debuggingOutput( m_cdrecordBinObject->name() + " comand:", s);
 
   m_currentTrack = 0;
   m_cdrecordError = UNKNOWN;
@@ -246,7 +252,7 @@ void K3bCdrecordWriter::start()
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bCdrecordWriter) could not start cdrecord" << endl;
+    kdDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name() << endl;
     emit infoMessage( i18n("Could not start %1.").arg(m_cdrecordBinObject->name()), K3bJob::ERROR );
     emit finished(false);
   }
@@ -275,7 +281,6 @@ void K3bCdrecordWriter::start()
     }
 
     m_writeSpeedInitialized = false;
-    emit started();
   }
 }
 
@@ -296,7 +301,10 @@ void K3bCdrecordWriter::cancel()
 
 bool K3bCdrecordWriter::write( const char* data, int len )
 {
-  return m_process->writeStdin( data, len );
+  if( m_process )
+    return m_process->writeStdin( data, len );
+  else
+    return -1;
 }
 
 
@@ -479,7 +487,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit newSubTask( i18n("Writing pregap") );
   }
   else if( line.startsWith( "Performing OPC" ) ) {
-    emit infoMessage( i18n("Performing OPC"), K3bJob::PROCESS );
+    emit infoMessage( i18n("Performing Optimum Power Calibration"), K3bJob::PROCESS );
   }
   else if( line.startsWith( "Sending" ) ) {
     emit infoMessage( i18n("Sending CUE sheet"), K3bJob::PROCESS );
@@ -505,7 +513,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     // parse option
     int pos = line.find( "Bad Option" ) + 13;
     int len = line.length() - pos - 1;
-    emit infoMessage( i18n("No valid cdrecord option: %1").arg(line.mid(pos, len)), ERROR );
+    emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrecordBinObject->name()).arg(line.mid(pos, len)), 
+		      ERROR );
   }
   else if( line.contains("shmget failed") ) {
     m_cdrecordError = SHMGET_FAILED;
@@ -524,10 +533,6 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else if( line.contains("Input/output error.") ) {
     emit infoMessage( i18n("Input/output error. Not necessarily serious."), ERROR );
-  }
-  else if( line.startsWith( "Cdrecord " ) ) {
-    // display some credit for Joerg ;)
-    emit infoMessage( line, INFO );
   }
   else if( line.startsWith( "Re-load disk and hit" ) ) {
     // this happens on some notebooks where cdrecord is not able to close the
@@ -575,7 +580,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	// error message has already been emited earlier since we needed the actual line
 	break;
       case SHMGET_FAILED:
-	emit infoMessage( i18n("Cdrecord could not reserve shared memory segment of requested size."), ERROR );
+	emit infoMessage( i18n("%1 could not reserve shared memory segment of requested size.").arg(m_cdrecordBinObject->name()), ERROR );
 	emit infoMessage( i18n("Probably you chose a too large buffer size."), ERROR );
 	break;
       case OPC_FAILED:
@@ -610,7 +615,8 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
     }
   }
   else {
-    emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_cdrecordBinObject->name()), 
+		      ERROR );
     emit finished( false );
   }
 }

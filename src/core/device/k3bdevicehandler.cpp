@@ -29,7 +29,7 @@ public:
 
 
   void run() {
-    success = true;
+    success = false;
 
     if( dev ) {
       switch( command ) {
@@ -37,8 +37,13 @@ public:
 	info = dev->diskInfo();
 	success = info.valid;
 	break;
+      case NG_DISKINFO:
+	ngInfo = dev->ngDiskInfo();
+	success = (ngInfo.diskState() != STATE_UNKNOWN);
+	break;
       case TOC:
 	info.toc = dev->readToc();
+	success = true;
 	break;
       case DISKSIZE:
 	info.size = dev->discSize();
@@ -54,6 +59,7 @@ public:
 	break;
       case NUMSESSIONS:
 	info.sessions = dev->numSessions();
+	success = true;
 	break;
       case BLOCK:
 	success = dev->block( true );
@@ -77,7 +83,10 @@ public:
 	success = (errorCode >= 0 );
         break;
       case MEDIUM_STATE:
+	dev->open();
+	//	info.mediaType = dev->mediaType();
 	errorCode = dev->isEmpty();
+	dev->close();
 	success = ( errorCode != K3bCdDevice::CdDevice::NO_INFO );
 	break;
       default:
@@ -91,6 +100,7 @@ public:
   int errorCode;
   int command;
   DiskInfo info;
+  NextGenerationDiskInfo ngInfo;
   CdDevice* dev;
 };
 
@@ -144,6 +154,13 @@ const K3bCdDevice::DiskInfo& K3bCdDevice::DeviceHandler::diskInfo() const
 {
   return m_thread->info;
 }
+
+
+const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DeviceHandler::ngDiskInfo() const
+{
+  return m_thread->ngInfo;
+}
+
 
 const K3bCdDevice::Toc& K3bCdDevice::DeviceHandler::toc() const
 {

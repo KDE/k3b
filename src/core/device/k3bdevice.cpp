@@ -17,7 +17,8 @@
 #include "k3bdevice.h"
 #include "k3btrack.h"
 #include "k3btoc.h"
-
+#include "k3bdiskinfo.h"
+#include "k3bmmc.h"
 
 #include <qstring.h>
 #include <qfile.h>
@@ -96,30 +97,38 @@ int K3bCdDevice::openDevice( const char* name )
 
 class K3bCdDevice::CdDevice::Private
 {
-  public:
-    Private()
-    {
-      deviceFd = -1;
-    }
-
-    QString blockDeviceName;
-    QString genericDevice;
-    int deviceType;
-    interface interfaceType;
-    QString mountPoint;
-    QString mountDeviceName;
-    QStringList allNodes;
-    int deviceFd;
+public:
+  Private()
+    : deviceType(0),
+      supportedProfiles(0),
+      deviceFd(-1),
+      burnfree(false) {
+  }
+  
+  QString blockDeviceName;
+  QString genericDevice;
+  int deviceType;
+  int supportedProfiles;
+  interface interfaceType;
+  QString mountPoint;
+  QString mountDeviceName;
+  QStringList allNodes;
+  int deviceFd;
+  bool burnfree;
+  bool writesDvdPlusR;
+  bool writesDvdR;
 };
 
 
 K3bCdDevice::CdDevice::CdDevice( const QString& devname )
+  : m_writeModes(0)
 {
   d = new Private;
 
   d->interfaceType = OTHER;
   d->blockDeviceName = devname;
   d->allNodes.append(devname);
+  d->writesDvdPlusR = d->writesDvdR = false;
 
   m_cdrdaoDriver = "auto";
   m_cdTextCapable = 0;
@@ -129,25 +138,6 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   m_burner = false;
   m_bWritesCdrw = false;
   m_bus = m_target = m_lun = -1;
-
-  //   QString model( drive->drive_model );
-
-  //   // the cd_paranoia-lib puts vendor, model, and version in one string
-  //   // we need to split it
-  //   int i;
-  //   if( (i = model.find("ATAPI")) != -1 )
-  //     model.remove( i, 5 );
-  //   if( (i = model.find("compatible")) != -1 )
-  //     model.remove( i, 10 );
-
-  //   model = model.stripWhiteSpace();
-
-  //   // we assume that all letters up to the first white space
-  //   // belong to the vendor string and the rest is the model
-  //   // description
-
-  //   m_vendor = model.left( model.find(' ') ).stripWhiteSpace();
-  //   m_description = model.mid( model.find(' ') ).stripWhiteSpace();
 }
 
 
@@ -162,15 +152,380 @@ bool K3bCdDevice::CdDevice::init()
   if(open() < 0)
     return false;
 
+  //
+  // We probe all features of the device. Since not all devices support the GET CONFIGURATION command
+  // we also query the mode page 2A and use the cdrom.h stuff to get as much information as possible
+  //
+
+  d->deviceType = 0;
+  d->supportedProfiles = 0;
+
+  struct cdrom_generic_command cmd;
+  unsigned char header[8];
+  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  ::memset( header, 0, 8 );
+  cmd.cmd[0] = 0x46;	// GET CONFIGURATION
+  cmd.cmd[8] = 8;
+  cmd.buffer = header;
+  cmd.buflen = 8;
+  cmd.data_direction = CGC_DATA_READ;
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+
+    //
+    // Now that we know the length of the returned data we just do it again with the
+    // correct buffer size
+    //
+
+    int len = header[0]<<24 | header[1]<<16 | header[2]<<8 | header[3];
+    unsigned char* profiles = new unsigned char[len];
+    ::memset( profiles, 0, len );
+    cmd.cmd[6] = len>>16;
+    cmd.cmd[7] = len>>8;
+    cmd.cmd[8] = len;
+    cmd.buffer = profiles;
+    cmd.buflen = len;
+    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+
+      for( int i = 8; i < len; ) {
+	short feature = profiles[i]<<8 | profiles[i+1];
+	int featureLen = profiles[i+3];
+	i+=4; // skip feature header
+
+	//
+	// now i indexes the first byte of the feature dependant data
+	//
+
+	switch( feature ) {
+	case 0x000: // Profile List
+	  for( int j = 0; j < featureLen; j+=4 ) {
+	    short profile = profiles[i+j]<<8|profiles[i+1+j];
+
+	    switch (profile) {
+	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM;
+	    case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ;
+	    case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM;
+	    case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; 
+	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
+	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
+	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R;
+	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM;
+	    case 0x09: d->supportedProfiles |= MEDIA_CD_R;
+	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW;
+	    default: 
+	      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: " 
+			<< profile << endl;
+	    }
+	  }
+	  break;
+
+	case 0x001: // Core
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Core" << endl;
+	  break;
+
+	case 0x002: // Morphing
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Morphing" << endl;
+	  break;
+
+	case 0x003: // Removable Medium
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Removable Medium" << endl;
+	  break;
+
+	case 0x004: // Write Protect
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Write Protect" << endl;
+	  break;
+
+	  // 0x05 - 0x0F reserved
+
+	case 0x010: // Random Readable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Random Readable" << endl;
+	  break;
+
+	  // 0x11 - 0x1C reserved
+
+	case 0x01D: // Multi-Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Multi-Read" << endl;
+	  break;
+
+	case 0x01E: // CD Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Read" << endl;
+	  break;
+
+	case 0x01F: // DVD Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
+	  d->deviceType |= DVD;
+	  break;
+
+	case 0x020: // Random Writable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Random Writable" << endl;
+	  break;
+
+	case 0x021: // Incremental Streaming Writable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Incremental Streaming Writable" << endl;
+	  break;
+
+	case 0x022: // Sector Erasable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Sector Erasable" << endl;
+	  break;
+
+	case 0x023: // Formattable
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Formattable" << endl;
+	  break;
+
+	case 0x024: // Defect Management
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Defect Management" << endl;
+	  break;
+
+	case 0x025: // Write Once
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Write Once" << endl;
+	  break;
+
+	case 0x026: // Restricted Overwrite
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Restricted Overwrite" << endl;
+	  break;
+
+	case 0x027: // CD-RW CAV Write
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD-RW CAV Write" << endl;
+	  d->deviceType |= CDRW;
+	  break;
+
+	case 0x028: // MRW
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "MRW" << endl;
+	  break;
+
+	case 0x029: // Enhanced Defect Reporting
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Enhanced Defect Reporting" << endl;
+	  break;
+
+	case 0x02A: // DVD+RW
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
+	    struct dvd_plus_rw_feature {
+	      unsigned char reserved1   : 7;
+	      unsigned char write       : 1;
+	      unsigned char reserved2   : 6;
+	      unsigned char quick_start : 1;
+	      unsigned char close_only  : 1;
+	      // and some stuff we do not use here...
+	    };
+	    
+	    struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&profiles[i];
+	    if( p->write ) d->deviceType |= DVDPRW;
+	    break;
+	  }
+
+	case 0x02B: // DVD+R
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+	    struct dvd_plus_r_feature {
+	      unsigned char reserved1 : 7;
+	      unsigned char write     : 1;
+	      unsigned char reserved2[3];
+	      // and some stuff we do not use here...
+	    };
+
+	    struct dvd_plus_r_feature* p = (struct dvd_plus_r_feature*)&profiles[i];
+	    if( p->write ) d->deviceType |= DVDPR;
+	    break;
+	  }
+
+	case 0x02C: // Rigid Restricted Overwrite
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
+	  break;
+
+	case 0x02D: // CD Track At Once
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
+	    struct cd_track_at_once_feature {
+	      unsigned char reserved1 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved2 : 1;
+	      unsigned char rw_raw    : 1;  // Writing R-W subcode in Raw mode
+	      unsigned char rw_pack   : 1;  // Writing R-W subcode in Packet mode
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char reserved3;
+	      unsigned char data_type[2];
+	    };
+	    
+	    struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&profiles[i];
+	    m_writeModes |= TAO;
+	    if( p->BUF ) d->burnfree = true;
+	    d->deviceType |= CDR;
+	    if( p->cd_rw ) d->deviceType |= CDRW;
+	    break;
+	  }
+
+	case 0x02E: // CD Mastering
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
+	    struct cd_mastering_feature {
+	      unsigned char reserved1 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char SAO       : 1;  // Session At Once writing
+	      unsigned char raw_ms    : 1;  // Writing Multisession in Raw Writing Mode
+	      unsigned char raw       : 1;  // Writing in RAW mode
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char cd_rw     : 1;  // CD-RW support
+	      unsigned char rw_sub    : 1;  // Write R-W sub channels with user data
+	      unsigned char max_cue_length[3];
+	    };
+	    
+	    struct cd_mastering_feature* p = (struct cd_mastering_feature*)&profiles[i];
+	    if( p->BUF ) d->burnfree = true;
+	    d->deviceType |= CDR;
+	    if( p->cd_rw ) d->deviceType |= CDRW;
+	    if( p->SAO ) m_writeModes |= SAO;
+	    if( p->raw || p->raw_ms ) m_writeModes |= RAW;  // perhaps we should extend this to RAW/R96P|R
+	    break;
+	  }
+
+	case 0x02F: // DVD-R/-RW Write
+	  {
+	    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+	    struct dvd_r_rw_write_feature {
+	      unsigned char reserved1 : 1;
+	      unsigned char BUF       : 1;  // Burnfree
+	      unsigned char reserved2 : 3;
+	      unsigned char testwrite : 1;  // Simulation write support
+	      unsigned char dvd_rw    : 1;  // DVD-RW Writing
+	      unsigned char reserved3 : 1;
+	      unsigned char reserved4[3];
+	    };
+
+	    struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&profiles[i];
+	    if( p->BUF ) d->burnfree = true;
+	    d->deviceType |= DVDR;
+	    if( p->dvd_rw ) d->deviceType |= DVDRW;
+	    break;
+	  }
+
+	case 0x030: // DDCD Read
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD Read" << endl;
+	  break;
+
+	case 0x031: // DDCD-R Write
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD-R Write" << endl;
+	  break;
+
+	case 0x032: // DDCD-RW Write
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
+	  break;
+
+	  // 0x33 0x38
+
+	case 0x037: // CD-RW Media Write Support
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
+	  d->deviceType |= CDRW;
+	  break;
+
+	  // 0x38- 0xFF reserved
+
+	case 0x100: // Power Management
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Power Management" << endl;
+	  break;
+
+	  // 0x101 reserved
+
+	case 0x102: // Embedded Changer
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Embedded Changer" << endl;
+	  break;
+
+	case 0x103: // CD Audio analog play
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "CD Audio analog play" << endl;
+	  break;
+
+	case 0x104: // Microcode Upgrade
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Microcode Upgrade" << endl;
+	  break;
+
+	case 0x105: // Timeout
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Timeout" << endl;
+	  break;
+
+	case 0x106: // DVD-CSS
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD-CSS" << endl;
+	  break;
+
+	case 0x107: // Read Time Streaming
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Read Time Streaming" << endl;
+	  break;
+
+	case 0x108: // Logical Unit Serial Number
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Logical Unit Serial Number" << endl;
+	  break;
+
+	  // 0x109 reserved
+
+	case 0x10A: // Disc Control Blocks
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Disc Control Blocks" << endl;
+	  break;
+
+	case 0x10B: // DVD CPRM
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "DVD CPRM" << endl;
+	  break;
+
+	  //  0x10C - 0x1FE reserved
+
+	case 0x1FF: // Firmware Date
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " feature: " << "Firmware Date" << endl;
+	  break;
+
+	  // 0x200 - 0xFEFF reserved
+
+	  // 0xFF00 - 0xFFFF vendor specific
+
+	default:
+	  kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": unknown feature: " 
+		    << feature << endl;
+	  break;
+	}
+
+	// skip feature dependent data
+	i += featureLen;
+      }
+    }
+
+    delete [] profiles;
+  }
+
+
+  //
+  // TODO: We try getting the write modes as cdrecord does: just by trying to set them
+  //
+
+
+
+  //
+  // Most current drives support the 2A mode page
+  // Here we can get some more information (cdrecord -prcap does exactly this)
+  //
+  mm_cap_page_2A mm_p;
+  if( readModePage2A( &mm_p ) ) {
+    if( mm_p.BUF ) d->burnfree = true;
+    if( mm_p.cd_rw_write ) d->deviceType |= CDRW;
+    m_maxWriteSpeed = (int)( (mm_p.max_write_speed[0]<<8 | mm_p.max_write_speed[1]) * 1000.0 / ( 2352.0 * 75.0 ) );
+    m_maxReadSpeed = (int)( (mm_p.max_read_speed[0]<<8 | mm_p.max_read_speed[1]) * 1000.0 / ( 2352.0 * 75.0 ) );
+  }
+  else {
+    kdDebug() << "(K3bCdDevice) " << blockDeviceName() << ": read mode page 2A failed!" << endl;
+  }
+
+
+
+  //
+  // This is the backup if the drive does not support the GET CONFIGURATION command
+  // In this case we do not as much information
+  //
   int drivetype = ::ioctl(d->deviceFd, CDROM_GET_CAPABILITY, CDSL_CURRENT);
   if( drivetype < 0 ) {
     kdDebug() << "Error while retrieving capabilities." << endl;
     close();
     return false;
   }
-
+    
   d->deviceType = CDROM;  // all drives should be able to read cdroms
-
+  
   if (drivetype & CDC_CD_R) {
     d->deviceType |= CDR;
   }
@@ -184,7 +539,30 @@ bool K3bCdDevice::CdDevice::init()
     d->deviceType |= DVDRAM;
   }
   if (drivetype & CDC_DVD) {
-    d->deviceType |= DVDROM;
+    d->deviceType |= DVD;
+  }
+  
+
+
+  // inquiry
+  unsigned char inq[36];
+  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  ::memset( inq, 0, sizeof(inq) );
+  cmd.cmd[0] = GPCMD_INQUIRY; // 0x12
+  cmd.cmd[4] = sizeof(inq);
+  cmd.cmd[5] = 0;
+  cmd.buffer = inq;
+  cmd.buflen = sizeof(inq);
+  cmd.data_direction = CGC_DATA_READ;
+  if( ::ioctl( open(), CDROM_SEND_PACKET, &cmd) ) {
+    kdError() << "(K3bCdDevice) Unable to do inquiry." << endl;
+    close();
+    return false;
+  }
+  else {
+    m_vendor = QString::fromLocal8Bit( (char*)(inq+8), 8 ).stripWhiteSpace();
+    m_description = QString::fromLocal8Bit( (char*)(inq+16), 16 ).stripWhiteSpace();
+    m_version = QString::fromLocal8Bit( (char*)(inq+32), 4 ).stripWhiteSpace();
   }
 
   close();
@@ -197,24 +575,9 @@ bool K3bCdDevice::CdDevice::init()
 
 bool K3bCdDevice::CdDevice::furtherInit()
 {
-  if (d->interfaceType == IDE) {
-    if (open() < 0)
-      return false;
-    else {
-      struct hd_driveid hdId;
-      ::ioctl( d->deviceFd, HDIO_GET_IDENTITY, &hdId );
-
-      m_description = QString::fromLatin1((const char*)hdId.model, 40).stripWhiteSpace();
-      m_vendor = m_description.left( m_description.find( " " ) );
-      m_description = m_description.mid( m_description.find(" ")+1 );
-      m_version = QString::fromLatin1((const char*)hdId.fw_rev, 8).stripWhiteSpace();
-
-      close();
-      return true;
-    }
-  } else
-    return true;
+  return true;
 }
+
 
 K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
 {
@@ -242,6 +605,36 @@ K3bCdDevice::CdDevice::interface K3bCdDevice::CdDevice::interfaceType()
   }
   return d->interfaceType;
 }
+
+
+bool K3bCdDevice::CdDevice::dao() const 
+{
+  return m_writeModes & SAO;
+}
+
+
+bool K3bCdDevice::CdDevice::burner() const
+{
+  return d->deviceType & CDR;
+}
+
+
+bool K3bCdDevice::CdDevice::writesCdrw() const
+{
+  return d->deviceType & CDRW;
+}
+
+
+bool K3bCdDevice::CdDevice::writesDvd() const
+{
+  return d->deviceType & (DVDR|DVDPR|DVDRW|DVDPRW);
+}
+
+bool K3bCdDevice::CdDevice::readsDvd() const
+{
+  return d->deviceType & (DVD|DVDR|DVDRAM);
+}
+
 
 int K3bCdDevice::CdDevice::type() const
 {
@@ -321,6 +714,19 @@ void K3bCdDevice::CdDevice::setBurnproof( bool b )
   m_burnproof = b;
 }
 
+
+bool K3bCdDevice::CdDevice::burnproof() const
+{
+  return burnfree();
+}
+
+
+bool K3bCdDevice::CdDevice::burnfree() const
+{
+  return d->burnfree;
+}
+
+
 K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
 {
   // if the device is already opened we do not close it
@@ -367,7 +773,7 @@ bool K3bCdDevice::CdDevice::isDVD() const
   if (open() < 0)
     return ret;
 
-  if( d->deviceType & (DVDR | DVDRAM | DVDROM) ) {
+  if( d->deviceType & (DVDR | DVDRAM | DVD) ) {
     //     try to read the physical dvd-structure
     //     if this fails, we probably cannot take any further (useful) dvd-action
     dvd_struct dvdinfo;
@@ -385,6 +791,7 @@ bool K3bCdDevice::CdDevice::isDVD() const
     close();
   return ret;
 }
+
 
 int K3bCdDevice::CdDevice::isReady() const
 {
@@ -520,7 +927,8 @@ bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info ) const
 
   if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
     success = false;
-    kdDebug() << "(K3bCdDevice::CdDevice) could not get disk info !" << endl;
+    kdDebug() << "(K3bCdDevice::CdDevice) could not get disk info (size: "
+	      << sizeof(disc_info_t) << ")" << endl;
   }
 
   if( needToClose )
@@ -570,29 +978,41 @@ int K3bCdDevice::CdDevice::numSessions() const
   if (open() < 0)
     return ret;
 
-  struct cdrom_generic_command cmd;
-  unsigned char dat[4];
+  // 
+  // Althought disk_info should get the real value without ide-scsi
+  // I keep getting wrong values (the value is too high. I think the leadout
+  // gets counted as session)
+  //
 
-  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
-  ::memset(dat,0,4);
-  cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP;
-  // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
-  cmd.cmd[2] = 1;
-  cmd.cmd[8] = 4;
-  cmd.buffer = dat;
-  cmd.buflen = 4;
-  cmd.data_direction = CGC_DATA_READ;
-  //
-  // Session Info
-  // ============
-  // Byte 0-1: Data Length
-  // Byte   2: First Complete Session Number (Hex) - always 1
-  // Byte   3: Last Complete Session Number (Hex)
-  //
-  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
-    ret = dat[3];
-  else
-    kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
+//   disc_info_t inf;
+//   if( getDiscInfo( &inf ) ) {
+//     ret = inf.n_sessions_l | (inf.n_sessions_m << 8);
+//   }
+//   else {
+    struct cdrom_generic_command cmd;
+    unsigned char dat[4];
+
+    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+    ::memset(dat,0,4);
+    cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP;
+    // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
+    cmd.cmd[2] = 1;
+    cmd.cmd[8] = 4;
+    cmd.buffer = dat;
+    cmd.buflen = 4;
+    cmd.data_direction = CGC_DATA_READ;
+    //
+    // Session Info
+    // ============
+    // Byte 0-1: Data Length
+    // Byte   2: First Complete Session Number (Hex) - always 1
+    // Byte   3: Last Complete Session Number (Hex)
+    //
+    if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 )
+      ret = dat[3];
+    else
+      kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
+    //  }
 
   if( needToClose )
     close();
@@ -959,10 +1379,13 @@ bool K3bCdDevice::CdDevice::isOpen() const
 
 K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
 {
+  kdDebug() << "(K3bCdDevice) DEPRECATED! USE NextGenerationDiskInfo!" << endl;
+
   DiskInfo info;
   info.device = this;
 
   if( open() != -1 ) {
+    info.mediaType = 0;  // removed the mediaType method. use ngDiskInfo
     int ready = isReady();
     if( ready == 0 ) {
       info.tocType = diskType();
@@ -1004,9 +1427,311 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
     }
   }
 
+
+  ngDiskInfo().debug();
+
   close();
   return info;
 }
+
+
+int K3bCdDevice::CdDevice::supportedProfiles() const
+{
+  return d->supportedProfiles;
+}
+
+
+int K3bCdDevice::CdDevice::currentProfile()
+{
+  struct cdrom_generic_command cmd;
+  unsigned char profileBuf[8];
+  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  ::memset( profileBuf, 0, 8 );
+  cmd.cmd[0] = 0x46;	// GET CONFIGURATION
+  cmd.cmd[1] = 1;
+  cmd.cmd[8] = 8;
+  cmd.buffer = profileBuf;
+  cmd.buflen = 8;
+  cmd.data_direction = CGC_DATA_READ;
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+    kdDebug() << "(K3bCdDevice) GET_CONFIGURATION failed." << endl;
+    return -1;
+  }
+  else {
+    unsigned short profile = profileBuf[6]<<8 | profileBuf[7];
+    switch (profile) {
+    case 0x00: return MEDIA_NONE;
+    case 0x10: return MEDIA_DVD_ROM;
+    case 0x11: return MEDIA_DVD_R_SEQ;
+    case 0x12: return MEDIA_DVD_RAM;
+    case 0x13: return MEDIA_DVD_RW_OVWR; 
+    case 0x14: return MEDIA_DVD_RW_SEQ;
+    case 0x1A: return MEDIA_DVD_PLUS_RW;
+    case 0x1B: return MEDIA_DVD_PLUS_R;
+    case 0x08: return MEDIA_CD_ROM;
+    case 0x09: return MEDIA_CD_R;
+    case 0x0A: return MEDIA_CD_RW;
+    default: return -1;
+    }
+  }
+}
+
+
+K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
+{
+  NextGenerationDiskInfo inf;
+  inf.m_diskState = STATE_UNKNOWN;
+
+  if( open() != -1 ) {
+
+    //
+    // The first thing to do should be: checking if a media is loaded
+    // We do this with requesting the current profile. If it is 0 no media
+    // should be loaded. On an error we just go on.
+    //
+    int profile = currentProfile();
+    if( profile == MEDIA_NONE ) {
+      inf.m_diskState = STATE_NO_MEDIA;
+      inf.m_mediaType = MEDIA_NONE;
+    }
+    inf.m_currentProfile = profile;
+
+    struct cdrom_generic_command cmd;
+
+    if( inf.diskState() != STATE_NO_MEDIA ) {
+      disc_info_t dInf;
+      if( getDiscInfo( &dInf ) ) {
+
+	//
+	// Copy the needed values from the disk_info struct
+	//
+	switch( dInf.status ) {
+	case 0:
+	  inf.m_diskState = STATE_EMPTY;
+	  break;
+	case 1:
+	  inf.m_diskState = STATE_INCOMPLETE;
+	  break;
+	case 2:
+	  inf.m_diskState = STATE_COMPLETE;
+	  break;
+	default:
+	  inf.m_diskState = STATE_UNKNOWN;
+	  break;
+	}
+
+	switch( dInf.border ) {
+	case 0x00:
+	  inf.m_lastSessionState = STATE_EMPTY;
+	  break;
+	case 0x01:
+	  inf.m_lastSessionState = STATE_INCOMPLETE;
+	  break;
+	case 0x11:
+	  inf.m_lastSessionState = STATE_COMPLETE;
+	  break;
+	default:
+	  inf.m_lastSessionState = STATE_UNKNOWN;
+	  break;
+	}
+
+	inf.m_rewritable = dInf.erasable;
+
+	// we set it here so we have the info even if the call to GPCMD_READ_TOC_PMA_ATIP failes
+	inf.m_numSessions = dInf.n_sessions_l | (dInf.n_sessions_m << 8);
+
+	// the value in dInf includes the lead-out.
+	inf.m_numTracks = ( (dInf.last_track_m<<8) | dInf.last_track_l) - 1;
+
+	// MMC-4 says that only CD-R(W) should return proper sizes here. 
+	// Does that means that lead_out_r is rather useless?
+	inf.m_capacity = K3b::Msf( dInf.lead_out_m + dInf.lead_out_r*60, 
+				   dInf.lead_out_s, 
+				   dInf.lead_out_f ) - 150;
+
+	// Why do we need to substract 4500 again??
+	if( inf.appendable() )
+	  inf.m_remaining = inf.capacity() - K3b::Msf( dInf.lead_in_m + dInf.lead_in_r*60, 
+						       dInf.lead_in_s, 
+						       dInf.lead_in_f ) - 4500;
+      }
+
+      //
+      // Now we determine the size:
+      // for empty and appendable CD-R(W) and DVD+R media this should be in the dInf.lead_out_X fields
+      // for all empty and appendable media READ FORMAT CAPACITIES should return the proper unformatted size
+      // for complete disks we may use the READ_CAPACITY command or the start sector from the leadout
+      //
+
+      if( inf.diskState() == STATE_EMPTY ||
+	  inf.diskState() == STATE_INCOMPLETE ) {
+
+	// try the READ FORMAT CAPACITIES command
+	unsigned char buffer[254]; // for reading the size of the returned data
+	::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+	::memset( buffer, 0, 12 );
+	cmd.cmd[0] = GPCMD_READ_FORMAT_CAPACITIES;
+	cmd.cmd[8] = 12;
+	cmd.cmd[9] = 0;
+	cmd.buffer = buffer;
+	cmd.buflen = 12;
+	cmd.data_direction = CGC_DATA_READ;
+	if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	  kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed." << endl;
+	}
+	else {
+	  int realLength = buffer[3];
+	  if( realLength + 4 > 256 ) {
+	    kdDebug() << "(K3bCdDevice) ERROR: READ_FORMAT_CAPACITIES data length > 256!" << endl;
+	    realLength = 251;
+	  }
+	  ::memset( buffer, 0, realLength+4 );
+	  cmd.cmd[7] = (realLength+4) >> 8;
+	  cmd.cmd[8] = (realLength+4) & 0xFF;
+	  cmd.buffer = buffer;
+	  cmd.buflen = realLength+4;
+	  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	    kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed." << endl;
+	  }
+	  else {
+
+	    //
+	    // now find the 00h format type since that contains the number of adressable blocks
+	    // and the block size used for formatting the whole media.
+	    // There may be multible occurences of this descriptor (MMC4 says so) but I think it's
+	    // sufficient to read the first one
+	    //
+	    for( int i = 12; i < realLength; ++i ) {
+	      if( (buffer[i+4]>>2) == 0 /*00h*/ ) {
+		// found the descriptor
+		inf.m_capacity = buffer[i]<<24 | buffer[i+1]<<16 | buffer[i+2]<<8 | buffer[i+3];
+		break;
+	      }
+	    }
+	  }
+	}
+      }
+      else {
+
+	//
+	// We first try READ TRACK INFO MMC command since the cdrom.h toc stuff seems not to work
+	// properly on DVD media.
+	//
+	if( inf.numTracks() == 1 ) {
+	  // read the last track's last sector
+	  unsigned char trackHeader[32];
+	  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+	  ::memset( trackHeader, 0, 32 );
+	  cmd.cmd[0] = 0x52;	// READ TRACK INFORMATION
+	  cmd.cmd[1] = inf.numTracks();
+	  cmd.cmd[2] = inf.numTracks()>>24;
+	  cmd.cmd[3] = inf.numTracks()>>16;
+	  cmd.cmd[4] = inf.numTracks()>>8;
+	  cmd.cmd[5] = inf.numTracks();
+	  cmd.cmd[8] = 32;
+	  cmd.cmd[9] = 0;
+	  cmd.buffer = trackHeader;
+	  cmd.data_direction = CGC_DATA_READ;
+	  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	    kdDebug() << "(K3bCdDevice) READ_TRACK_INFORMATION failed." << endl;
+
+	    kdDebug() << "(K3bCdDevice) getting disk size via toc." << endl;
+	    struct cdrom_tocentry tocentry;
+	    tocentry.cdte_track = CDROM_LEADOUT;
+	    tocentry.cdte_format = CDROM_LBA;
+	    if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) )
+	      kdDebug() << "(K3bCdDevice) error reading lead out " << endl;
+	    else {
+	      inf.m_capacity = tocentry.cdte_addr.lba;
+	      inf.m_capacity -= 1;  // we need the last sector of the last track, not the first from the lead-out
+	    }
+	  }
+	  else {
+	    inf.m_capacity = trackHeader[24]<<24|trackHeader[25]<<16|trackHeader[26]<<8|trackHeader[27];
+	  }
+	}
+      }
+
+
+      // 
+      // The mediatype needs to be set
+      //
+
+      // no need to test for dvd if the device does not support it
+      inf.m_mediaType = -1;
+      if( readsDvd() ) {
+	unsigned char dvdheader[20];
+	::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+	::memset( dvdheader, 0, 20 );
+	cmd.cmd[0] = GPCMD_READ_DVD_STRUCTURE;
+	cmd.cmd[9] = 20;
+	cmd.buffer = dvdheader;
+	cmd.buflen = 20;
+	cmd.data_direction = CGC_DATA_READ;
+	if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+	}
+	else {
+	  switch( dvdheader[4]&0xF0 ) {
+	  case 0x00: inf.m_mediaType = MEDIA_DVD_ROM; break;
+	  case 0x10: inf.m_mediaType = MEDIA_DVD_RAM; break;
+	  case 0x20: inf.m_mediaType = MEDIA_DVD_R; break;
+	  case 0x30: inf.m_mediaType = MEDIA_DVD_RW; break;
+	  case 0x90: inf.m_mediaType = MEDIA_DVD_PLUS_RW; break;
+	  case 0xA0: inf.m_mediaType = MEDIA_DVD_PLUS_R; break;
+	  default: inf.m_mediaType = -1; break; // unknown
+	  }
+
+	  //
+	  // There is some other information which we can gain here:
+	  // remaining blocks for appendable DVD disks or the size of the user data
+	  //
+
+	  long userDataStartingSector = dvdheader[4+5]<<16 | dvdheader[4+6]<<8 | dvdheader[4+7];
+	  long userDataEndSector = dvdheader[4+9]<<16 | dvdheader[4+10]<<8 | dvdheader[4+11];
+	  if( inf.appendable() ) {
+	    inf.m_remaining = inf.capacity() - userDataEndSector + userDataStartingSector;
+	  }
+	  else if( !inf.empty() ) {
+	    // in case the disk is complete (or if we have no info which may happen with some DVD-ROMs,
+	    // that's why we do not use diskState() == COMPLETE here)
+	    inf.m_capacity = userDataEndSector - userDataStartingSector;
+	  }
+	}
+      }
+
+      if( inf.m_mediaType == -1 ) {
+	// probably it is a CD
+	if( inf.rewritable() )
+	  inf.m_mediaType = MEDIA_CD_RW;
+	else if( inf.empty() || inf.appendable() )
+	  inf.m_mediaType = MEDIA_CD_R;
+	else
+	  inf.m_mediaType = MEDIA_CD_ROM;
+      }
+    
+
+      // fix the number of sessions (since I get wrong values from disk_info with non-ide-scsi emulated drives
+      int sessions = numSessions();
+      if( sessions >= 0 ) {
+	inf.m_numSessions = sessions;
+      }
+      else {
+	kdDebug() << "(K3bCdDevice) could not get session info via GPCMD_READ_TOC_PMA_ATIP." << endl;
+	if( inf.empty() ) {
+	  // just to fix the info for empty disks
+	  inf.m_numSessions = 0;
+	}
+      }
+    }
+   
+
+    close();
+  }
+
+  return inf;
+}
+
 
 
 // this is stolen from cdrdao's GenericMMC driver
@@ -1102,3 +1827,45 @@ bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
   else
     return false;
 }
+
+
+bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  // to be as compatible as posiible we just use the MMC-1 part of the
+  // mode page. Since we do not use the new stuff yet this is not a problem at all.
+  // the MMC-1 part is 22 bytesin size.
+
+  bool ret = false;
+
+  struct cdrom_generic_command cmd;
+  unsigned char data[22+8]; // MMC-1: 22 byte, header: 8 byte
+  ::memset( &cmd, 0, sizeof(struct cdrom_generic_command) );
+  ::memset( data, 0, sizeof(struct mm_cap_page_2A) );
+  cmd.cmd[0] = 0x5A;	// MODE SENSE
+  cmd.cmd[2] = 0x2A;    // MM Capabilities and Mechanical Status Page
+  cmd.cmd[7] = (22+8)<<8;
+  cmd.cmd[8] = 22+8;
+  cmd.buffer = data;
+  cmd.buflen = 22+8;
+  cmd.data_direction = CGC_DATA_READ;
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) {
+    //
+    // this might be not perfect regarding performance but this
+    // way we do not need to keep the MODE SENSE header in the
+    // mm_cap_page_2A struct
+    //
+    ::memcpy( p, data+8, 22 );
+
+    ret = true;
+  }
+
+  if( needToClose )
+    close();
+
+  return ret;
+}
+

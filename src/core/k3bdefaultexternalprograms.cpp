@@ -57,6 +57,8 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bCdrdaoProgram() );
   m->addProgram( new K3bEMovixProgram() );
   m->addProgram( new K3bNormalizeProgram() );
+  m->addProgram( new K3bGrowisofsProgram() );
+  m->addProgram( new K3bDvdformatProgram() );
 }
 
 
@@ -112,6 +114,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    pos = out.output().find( "Copyright") + 14;
+    endPos = out.output().find( "\n", pos );
+    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
@@ -153,6 +159,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
     delete bin;
     return false;
   }
+
+  if( !m_dvdPro && bin->version.suffix().endsWith( "-dvd" ) )
+    bin->addFeature( "dvd-patch" );
 
   // FIXME: are these version correct?
   if( bin->version >= K3bVersion("1.11a38") )
@@ -699,6 +708,10 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
+
+    pos = out.output().find( "Copyright" ) + 14;
+    endPos = out.output().find( "\n", pos );
+    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bVcdbuilderProgram) could not start " << path << endl;
@@ -713,7 +726,6 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
 K3bNormalizeProgram::K3bNormalizeProgram()
   : K3bExternalProgram( "normalize" )
 {
-
 }
 
 
@@ -756,6 +768,10 @@ bool K3bNormalizeProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    pos = out.output().find( "Copyright" )+14;
+    endPos = out.output().find( "\n", pos );
+    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
@@ -765,3 +781,145 @@ bool K3bNormalizeProgram::scan( const QString& p )
   addBin( bin );
   return true;
 }
+
+
+K3bGrowisofsProgram::K3bGrowisofsProgram()
+  : K3bExternalProgram( "growisofs" )
+{
+}
+
+bool K3bGrowisofsProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("growisofs");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  OutputCollector out( &vp );
+
+  vp << path << "-version";
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "growisofs" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( QRegExp("\\d"), pos );
+    if( pos < 0 )
+      return false;
+
+    int endPos = out.output().find( ",", pos+1 );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bGrowisofsProgram) could not start " << path << endl;
+    return false;
+  }
+
+  // fixed Copyright:
+  bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
+
+  // check if we run growisofs as root
+  if( !getuid() )
+    bin->addFeature( "suidroot" );
+  else {
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
+    }
+  }
+
+  addBin( bin );
+  return true;
+}
+
+
+K3bDvdformatProgram::K3bDvdformatProgram()
+  : K3bExternalProgram( "dvd+rw-format" )
+{
+}
+
+bool K3bDvdformatProgram::scan( const QString& p )
+{
+  if( p.isEmpty() )
+    return false;
+
+  QString path = p;
+  QFileInfo fi( path );
+  if( fi.isDir() ) {
+    if( path[path.length()-1] != '/' )
+      path.append("/");
+    path.append("dvd+rw-format");
+  }
+
+  if( !QFile::exists( path ) )
+    return false;
+
+  K3bExternalBin* bin = 0;
+
+  // probe version
+  KProcess vp;
+  OutputCollector out( &vp );
+
+  vp << path;
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    int pos = out.output().find( "DVD±RW format utility" );
+    if( pos < 0 )
+      return false;
+
+    pos = out.output().find( "version", pos );
+    if( pos < 0 )
+      return false;
+
+    pos += 8;
+
+    // the version ends in a dot.
+    int endPos = out.output().find( QRegExp("\\.\\D"), pos );
+    if( endPos < 0 )
+      return false;
+
+    bin = new K3bExternalBin( this );
+    bin->path = path;
+    bin->version = out.output().mid( pos, endPos-pos );
+  }
+  else {
+    kdDebug() << "(K3bDvdformatProgram) could not start " << path << endl;
+    return false;
+  }
+
+  // fixed Copyright:
+  bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
+
+  // check if we run dvd+rw-format as root
+  if( !getuid() )
+    bin->addFeature( "suidroot" );
+  else {
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
+    }
+  }
+
+  addBin( bin );
+  return true;
+}
+
