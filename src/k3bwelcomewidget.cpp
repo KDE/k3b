@@ -46,7 +46,7 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   QFont fnt(font());
   fnt.setBold(true);
   fnt.setPointSize( 16 );
-  m_header = new QSimpleRichText( i18n("Welcome to K3b %1 - The CD/DVD Burning Facility")
+  m_header = new QSimpleRichText( i18n("Welcome to K3b %1 - The CD and DVD Kreator")
 				  .arg( k3bcore->version() ), fnt );
   // set a large width just to be sure no linebreak occurs
   m_header->setWidth( 800 );

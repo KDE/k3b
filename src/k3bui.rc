@@ -59,6 +59,7 @@
 		<Action name="file_save" />
 		<Action name="file_save_as" />
 		<Action name="file_close" />
+		<Action name="file_close_all" />
 	  	<Action name="project_add_files" />		
 		<Action name="project_clear_project" />
 	</enable>

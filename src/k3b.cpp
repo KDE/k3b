@@ -156,7 +156,7 @@ K3bMainWindow::K3bMainWindow()
 
   s_k3bMainWindow = this;
 
-  setPlainCaption( i18n("K3b - The CD Kreator") );
+  setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
   m_config = kapp->config();
   m_audioUntitledCount = 0;
@@ -221,6 +221,8 @@ void K3bMainWindow::initActions()
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
   actionFileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
   actionFileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
+  actionFileCloseAll = new KAction( i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()), 
+				    actionCollection(), "file_close_all" );
   actionFileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
   actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
   actionSettingsConfigure = KStdAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
@@ -746,6 +748,22 @@ void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
   if( K3bView* pView = activeView() ) {
+    if( pView ) {
+      K3bDoc* pDoc = pView->doc();
+
+      if( canCloseDocument(pDoc) ) {
+	closeProject(pDoc);
+      }
+    }
+  }
+
+  slotCurrentDocChanged();
+}
+
+
+void K3bMainWindow::slotFileCloseAll()
+{
+  while( K3bView* pView = activeView() ) {
     if( pView ) {
       K3bDoc* pDoc = pView->doc();
 
