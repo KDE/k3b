@@ -18,9 +18,10 @@
 
 bool K3bExceptions::brokenDaoAudio( K3bCdDevice::CdDevice* dev )
 {
-  if( dev->vendor().upper().startsWith("PIONEER") &&
-      dev->description().upper().startsWith("DVR-106D") )
-    return true;
+  if( dev->vendor().upper().startsWith("PIONEER") )
+    if( dev->description().upper().startsWith("DVR-106D") ||
+	dev->description().upper().startsWith("DVD-RW  DVR-K12D") )
+      return true;
 
   if( dev->vendor().upper().startsWith("HL-DT-ST") )
     if( dev->description().upper().startsWith("RW/DVD GCC-4320B") ||
