@@ -75,6 +75,7 @@ void K3bCueFileParser::readFile()
   }
   else {
     kdDebug() << "(K3bCueFileParser) could not open file " << filename() << endl;
+    setValid(false);
   }
 }
 
