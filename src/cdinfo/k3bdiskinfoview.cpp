@@ -37,6 +37,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kio/global.h>
 
 
 
@@ -216,13 +217,13 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
         atipChild = new KListViewItem( atipItem, atipChild,
                                        i18n("Size:"),
                                        i18n("%1 min").arg(info.size.toString()),
-                                       i18n("%2 MB").arg((unsigned long)(info.size.mode1Form1Bytes()/1024/1024) ));
+                                       KIO::convertSize(info.size.mode1Bytes()) );
 
       if( info.remaining > 0 )
         atipChild = new KListViewItem( atipItem, atipChild,
                                        i18n("Remaining:"),
                                        i18n("%1 min").arg( info.remaining.toString() ),
-                                       i18n("%2 MB").arg((unsigned long)(info.remaining.mode1Form1Bytes()/1024/1024) ));
+                                       KIO::convertSize(info.remaining.mode1Bytes()) );
 
       if( !info.mediumManufactor.isEmpty() ) {
         atipChild = new TwoColumnViewItem( atipItem, atipChild,
