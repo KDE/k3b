@@ -72,8 +72,6 @@ class K3bMadDecoder : public K3bAudioDecoder
  private:
   unsigned long countFrames();
   inline unsigned short linearRound( mad_fixed_t fixed );
-  bool madDecodeNextFrame();
-  bool decodeNextHeader();
   bool createPcmSamples( mad_synth* );
 
   static int MaxAllowedRecoverableErrors;

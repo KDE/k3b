@@ -163,7 +163,7 @@ bool K3bMadDecoder::initDecoderInternal()
   if( !d->handle->open( filename() ) )
     return false;
 
-  if( !d->handle->skipJunk() )
+  if( !d->handle->skipTag() )
     return false;
 
   return true;
@@ -183,9 +183,7 @@ unsigned long K3bMadDecoder::countFrames()
 
   while( !error && d->handle->findNextHeader() ) {
 
-    mad_timer_add( d->handle->madTimer, d->handle->madFrame->header.duration );
-
-    if( !bFirstHeaderSaved ) {
+     if( !bFirstHeaderSaved ) {
       bFirstHeaderSaved = true;
       d->firstHeader = d->handle->madFrame->header;
     }
@@ -246,7 +244,7 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
     if( d->outputBufferEnd - d->outputPointer < 4*1152 ) {
       bOutputBufferFull = true;
     }
-    else if( madDecodeNextFrame() ) {
+    else if( d->handle->decodeNextFrame() ) {
       // 
       // Once decoded the frame is synthesized to PCM samples. No errors
       // are reported by mad_synth_frame();
@@ -267,64 +265,6 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
   size_t buffersize = d->outputPointer - d->outputBuffer;
 
   return buffersize;
-}
-
-
-bool K3bMadDecoder::madDecodeNextFrame()
-{
-  if( d->handle->inputError() || !d->handle->fillStreamBuffer() )
-    return false;
-
-  if( mad_frame_decode( d->handle->madFrame, d->handle->madStream ) ) {
-    if( d->handle->madStream->error == MAD_ERROR_BUFLEN ) {
-      return madDecodeNextFrame();
-    }
-    if( MAD_RECOVERABLE( d->handle->madStream->error )  ) {
-      kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
-		<< mad_stream_errorstr(d->handle->madStream) << ")" << endl;
-
-      return madDecodeNextFrame();
-    }
-    else {
-      kdDebug() << "(K3bMadDecoder) unrecoverable frame level error ("
-		<< mad_stream_errorstr(d->handle->madStream) << endl;
-      
-      return false;
-    }
-  }
-  else {
-    mad_timer_add( d->handle->madTimer, d->handle->madFrame->header.duration );
-    return true;
-  }
-}
-
-
-bool K3bMadDecoder::decodeNextHeader()
-{
-  if( d->handle->inputError() || !d->handle->fillStreamBuffer() )
-    return false;
-
-  if( mad_header_decode( &d->handle->madFrame->header, d->handle->madStream ) ) {
-    if( d->handle->madStream->error == MAD_ERROR_BUFLEN ) {
-      return decodeNextHeader();
-    }
-    else if( MAD_RECOVERABLE( d->handle->madStream->error ) ) {
-      kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
-		<< mad_stream_errorstr(d->handle->madStream) << ")" << endl;
-      
-      return decodeNextHeader();
-    }
-    else {
-      kdDebug() << "(K3bMadDecoder) unrecoverable frame level error ("
-		<< mad_stream_errorstr(d->handle->madStream) << endl;
-      
-      return false;
-    }
-  }
-  else {
-    mad_timer_add( d->handle->madTimer, d->handle->madFrame->header.duration );
-    return true;
-  }
 }
 
 
@@ -564,106 +504,30 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
   if( !handle.open( url.path() ) )
     return false;
 
-  return handle.findNextHeader();
+  handle.skipTag();
 
-  QFile f(url.path());
-  if( !f.open(IO_ReadOnly) ) {
-    kdDebug() << "(K3bMadDecoder) could not open file " << url.path() << endl;
-    return false;
-  }
+  if( handle.findNextHeader() ) {
+    int c = MAD_NCHANNELS( &handle.madFrame->header );
+    int layer = handle.madFrame->header.layer;
+    unsigned int s = handle.madFrame->header.samplerate;
 
-  // there seem to be mp3 files starting with a lot of zeros
-  // we try to skip these.
-  // there might still be files with more than bufLen zeros...
-  const int bufLen = 4096;
-  char buf[bufLen];
-  if( f.readBlock( buf, bufLen ) < bufLen ) {
-    kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << url.path() << endl;
-    return false;
-  }
-
-  // skip any 0
-  int i = 0;
-  while( i < bufLen && buf[i] == '\0' ) i++;
-  if( i == bufLen ) {
-    kdDebug() << "(K3bMadDecoder) only zeros found in the beginning of " << url.path() << endl;
-    return false;
-  }
-
-
-
-  //
-  // now skip any id3 tags
-  //
-  while( i < bufLen-10 && 
-      ( buf[i] == 'I' && buf[i+1] == 'D' && buf[i+2] == '3' ) &&
-      ( (unsigned short)buf[i+3] < 0xff && (unsigned short)buf[i+4] < 0xff ) ) {
-    kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
-	      << (unsigned short)buf[i+3] << "." << (unsigned short)buf[i+4] << endl;
-
-    int pos = i + ((buf[i+6]<<21)|(buf[i+7]<<14)|(buf[i+8]<<7)|buf[i+9]) + 10;
-
-    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << pos << endl;
-
-    if( !f.at(pos) ) {
-      kdDebug() << "(K3bMadDecoder) " << url.path() << ": couldn't seek to " << pos << endl;
-      return false;
-    }
-
-    if( f.readBlock( buf, bufLen ) < bufLen ) {
-      kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << url.path() << endl;
-      return false;
-    }
-  
-    // again skip any 0
-    i = 0;
-    while( i < bufLen && buf[i] == '\0' ) i++;
-    if( i == bufLen ) {
-      kdDebug() << "(K3bMadDecoder) only zeros found after the id3 tag in " << url.path() << endl;
-      return false;
+    //
+    // find a second header
+    // This way we get most of the mp3 files while sorting out
+    // for example wave files.
+    //
+    if( handle.findNextHeader() ) {
+      // compare the two found headers
+      if( MAD_NCHANNELS( &handle.madFrame->header ) == c &&
+	  handle.madFrame->header.layer == layer &&
+	  handle.madFrame->header.samplerate == s )
+	return true;
     }
   }
 
+  kdDebug() << "(K3bMadDecoder) unsupported format: " << url.path() << endl;
 
-  // check if we have a RIFF MPEG header
-  // libmad seems to be able to decode such files but not to decode these first bytes
-  if( ( buf[i] == 'R' && buf[i+1] == 'I' && buf[i+2] == 'F' && buf[i+3] == 'F' &&
-	buf[i+8] == 'W' && buf[i+9] == 'A' && buf[i+10] == 'V' && buf[i+11] == 'E' &&
-	buf[i+12] == 'f' && buf[i+13] == 'm' &&	buf[i+14] == 't' ) ) {
-    kdDebug() << "(K3bMadDecoder) found RIFF, WAVE, and fmt." << endl;
-    short m = (short)( buf[i+20] | (buf[i+21]<<8) );
-    if( m == 80 ) {
-      kdDebug() << "(K3bMadDecoder) found RIFF MPEG magic." << endl;
-      return true;
-    }
-    else if( m == 85 ) {
-      kdDebug() << "(K3bMadDecoder) found RIFF MPEG III magic." << endl;
-      return true;
-    }
-    else
-      return false;
-  }
-      
-
-
-  // let libmad try to decode one frame header
-  mad_stream stream;;
-  mad_header header;
-  mad_stream_init( &stream );
-  mad_header_init( &header );
-
-  mad_stream_buffer( &stream, (unsigned char*)&buf[i], bufLen-i );
-  stream.error = MAD_ERROR_NONE;
-  bool success = true;
-  if( mad_header_decode( &header, &stream ) ) {
-    kdDebug() << "(K3bMadDecoder) could not find mpeg header." << endl;
-    success = false;
-  }
-
-  mad_header_finish( &header );
-  mad_stream_finish( &stream );
-  
-  return success;
+  return false;
 }
 
 #include "k3bmaddecoder.moc"

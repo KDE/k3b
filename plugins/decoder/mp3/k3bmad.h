@@ -39,9 +39,9 @@ public:
   bool fillStreamBuffer();
 
   /**
-   * Skip id3 tags and other junk like zeros
+   * Skip id3 tags.
    */
-  bool skipJunk();
+  bool skipTag();
 
   bool eof() const;
   bool inputError() const;
@@ -51,6 +51,7 @@ public:
   void initMad();
   void cleanup();
 
+  bool decodeNextFrame();
   bool findNextHeader();
   bool checkFrameHeader( mad_header* header ) const;
 

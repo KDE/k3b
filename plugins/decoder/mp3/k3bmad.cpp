@@ -122,7 +122,7 @@ bool K3bMad::fillStreamBuffer()
 }
 
 
-bool K3bMad::skipJunk()
+bool K3bMad::skipTag()
 {
   //
   // now check if the file starts with an id3 tag and skip it if so
@@ -245,8 +245,10 @@ bool K3bMad::findNextHeader()
       return findNextHeader();
     }
 
-    if( !checkFrameHeader( &madFrame->header ) )
-      return findNextHeader();
+    // FIXME probably we should not do this here since we son't do it
+    // in the frame decoding
+//     if( !checkFrameHeader( &madFrame->header ) )
+//       return findNextHeader();
 
     return false;
   }
@@ -255,6 +257,38 @@ bool K3bMad::findNextHeader()
     m_channels = MAD_NCHANNELS(&madFrame->header);
     m_sampleRate = madFrame->header.samplerate;
   }
+
+  mad_timer_add( madTimer, madFrame->header.duration );
+
+  return true;
+}
+
+
+bool K3bMad::decodeNextFrame()
+{
+  if( !fillStreamBuffer() )
+    return false;
+
+  //
+  // MAD_RECOVERABLE == true:  frame was read, decoding failed (about to skip frame)
+  // MAD_RECOVERABLE == false: frame was not read, need data
+  //
+
+  if( mad_frame_decode( madFrame, madStream ) < 0 ) {
+    if( !MAD_RECOVERABLE( madStream->error ) ||
+	madStream->error == MAD_ERROR_LOSTSYNC ) {
+      return decodeNextFrame();
+    }
+
+    return false;
+  }
+
+  if( !m_channels ) {
+    m_channels = MAD_NCHANNELS(&madFrame->header);
+    m_sampleRate = madFrame->header.samplerate;
+  }
+
+  mad_timer_add( madTimer, madFrame->header.duration );
 
   return true;
 }
@@ -275,3 +309,5 @@ bool K3bMad::checkFrameHeader( mad_header* header ) const
     
   return true;
 }
+
+
