@@ -679,18 +679,18 @@ void K3bListView::setCurrentItem( QListViewItem* i )
   if( !i || i == currentItem() )
     return;
 
-  if( m_currentEditItem )
-    if( m_currentEditItem->editorType(m_currentEditColumn) == K3bListViewItem::LINE ) {
-      if( m_editorLineEdit->validator() ) {
-	QString str = m_editorLineEdit->text();
-	int pos = 0;
-	if( m_editorLineEdit->validator()->validate( str, pos ) == QValidator::Acceptable )
-	  slotEditorLineEditReturnPressed();
-      }
-      else
-	slotEditorLineEditReturnPressed();
-    }
-
+//   if( m_currentEditItem )
+//     if( m_currentEditItem->editorType(m_currentEditColumn) == K3bListViewItem::LINE ) {
+//       if( m_editorLineEdit->validator() ) {
+// 	QString str = m_editorLineEdit->text();
+// 	int pos = 0;
+// 	if( m_editorLineEdit->validator()->validate( str, pos ) == QValidator::Acceptable )
+// 	  slotEditorLineEditReturnPressed();
+//       }
+//       else
+// 	slotEditorLineEditReturnPressed();
+//     }
+  doRename();
   hideEditor();
   m_currentEditItem = 0;
   KListView::setCurrentItem( i );
@@ -929,7 +929,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
     }
   }
 
-    return KListView::eventFilter( o, e );
+  return KListView::eventFilter( o, e );
 }
 
 
