@@ -105,6 +105,9 @@ void K3bDataJob::start()
       cancel();
       return;
     }
+    // just to be sure we did not get canceled during the async discWaiting
+    if( m_canceled )
+      return;
 
     if( !KIO::findDeviceMountPoint( m_doc->burner()->mountDevice() ).isEmpty() ) {
       emit infoMessage( i18n("Unmounting disk"), INFO );
@@ -277,6 +280,9 @@ bool K3bDataJob::startWriting()
       cancel();
       return false;
     }
+    // just to be sure we did not get canceled during the async discWaiting
+    if( m_canceled )
+      return;
   }
 	
   m_writerJob->start();
