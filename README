@@ -1,4 +1,4 @@
-K3b Version 0.7
+K3b Version 0.8
 
 Thanx for downloading K3b - The CD Kreator
 
@@ -22,6 +22,12 @@ These are the features so far:
    - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
    - multisession support (including importing old sessions)
+
+ - writing Video CDs
+   - VCD 1.1, 2.0, SVCD
+
+ - writing mixed-mode cds
+   - CD-Extra (CD-Plus, Enhanced Audio CD) support
 
  - writing existing iso-images and cue/bin images to cd
 

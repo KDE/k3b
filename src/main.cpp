@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
     aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Video-ripping and encoding"), "tfroescher@k3b.org");
     aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VCD Project"), "chris@k3b.org");
-    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Cdrdao handling and cd-copy") );
+    aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Cdrdao handling and cd-copy"), "kd@k3b.org" );
 
     aboutData.addCredit("Ayo", I18N_NOOP("For his bombastic artwork."), "73lab@free.fr" );
     aboutData.addCredit("Crissi", I18N_NOOP("For extensive testing and the first German translation."), "crissi99@gmx.de");
