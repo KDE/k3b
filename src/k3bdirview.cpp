@@ -272,6 +272,10 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
 void K3bDirView::slotMountFinished(K3bCdDevice::DeviceHandler * )
 {
    KURL url = KURL(m_lastDevice->mountPoint());
+   KFileTreeViewItem* item = m_fileTreeView->currentKFileTreeViewItem();
+   item->branch()->openURL(url);
+   item->branch()->setAutoUpdate(true);
+   item->branch()->updateDirectory(url);
    slotDirActivated( url );
 }
 
@@ -294,16 +298,22 @@ void K3bDirView::slotUnmountDisk()
 {
   k3bMain()->showBusyInfo( i18n("Unmounting disk.") );
   if( m_lastDevice ) {
-    k3bMain()->endBusy();
+    KFileTreeViewItem* item = m_fileTreeView->currentKFileTreeViewItem();
+    item->branch()->setAutoUpdate(false);
     if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
     	home();
     connect( K3bCdDevice::unmount(m_lastDevice),SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
-	     this, SLOT( slotUnmountFinished(K3bCdDevice::DeviceHandler *) ) );
-  }
+	           this, SLOT( slotUnmountFinished(K3bCdDevice::DeviceHandler *) ) );
+    m_fileTreeView->setCurrentItem( item );
+ }
 }
 
 void K3bDirView::slotUnmountFinished(K3bCdDevice::DeviceHandler *)
 {
+  KFileTreeViewItem* item = m_fileTreeView->currentKFileTreeViewItem();
+
+  item->branch()->updateDirectory(KURL(m_lastDevice->mountPoint()));
+
   k3bMain()->endBusy();
 }
 
