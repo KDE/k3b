@@ -15,7 +15,6 @@
 
 #include "k3bpluginmanager.h"
 #include "k3bplugin.h"
-#include "k3bpluginfactory.h"
 #include "k3bpluginconfigwidget.h"
 
 #include <kdebug.h>
@@ -25,6 +24,7 @@
 #include <kstandarddirs.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>
+#include <klibloader.h>
 
 #include <qptrlist.h>
 #include <qmap.h>
@@ -35,7 +35,7 @@
 class K3bPluginManager::Private
 {
 public:
-  QMap<K3bPluginFactory*, QString> factories;
+  QPtrList<K3bPlugin> plugins;
 };
 
 
@@ -66,24 +66,24 @@ QStringList K3bPluginManager::groups() const
 {
   QStringList grps;
 
-  QPtrList<K3bPluginFactory> fl;
-  for( QMapConstIterator<K3bPluginFactory*, QString> it = d->factories.begin();
-       it != d->factories.end(); ++it ) {
-    if( !grps.contains( it.key()->group() ) )
-	grps.append( it.key()->group() );
+  QPtrList<K3bPlugin> fl;
+  for( QPtrListIterator<K3bPlugin> it( d->plugins );
+       it.current(); ++it ) {
+    if( !grps.contains( it.current()->group() ) )
+	grps.append( it.current()->group() );
   }
 
   return grps;
 }
 
 
-QPtrList<K3bPluginFactory> K3bPluginManager::factories( const QString& group ) const
+QPtrList<K3bPlugin> K3bPluginManager::plugins( const QString& group ) const
 {
-  QPtrList<K3bPluginFactory> fl;
-  for( QMapConstIterator<K3bPluginFactory*, QString> it = d->factories.begin();
-       it != d->factories.end(); ++it ) {
-    if( it.key()->group() == group || group.isEmpty() )
-      fl.append( it.key() );
+  QPtrList<K3bPlugin> fl;
+  for( QPtrListIterator<K3bPlugin> it( d->plugins );
+       it.current(); ++it ) {
+    if( it.current()->group() == group || group.isEmpty() )
+      fl.append( it.current() );
   }
   return fl;
 }
@@ -103,22 +103,23 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
   // read the lib
   KLibFactory* factory = KLibLoader::self()->factory( libName.latin1() );
   if( factory ) {
-    K3bPluginFactory* k3bFactory = dynamic_cast<K3bPluginFactory*>( factory );
-    if( k3bFactory ) {
-      k3bFactory->setName( c.readEntry( "Name" ) );
-      k3bFactory->setAuthor( c.readEntry( "Author" ) );
-      k3bFactory->setEmail( c.readEntry( "Email" ) );
-      k3bFactory->setVersion( c.readEntry( "Version" ) );
-      k3bFactory->setComment( c.readEntry( "Comment" ) );
-      k3bFactory->setLicense( c.readEntry( "License" ) );
-
+    K3bPlugin* plugin = dynamic_cast<K3bPlugin*>( factory->create( this ) );
+    if( plugin ) {
       // FIXME: improve this versioning stuff
-      if( k3bFactory->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
-	delete k3bFactory;
-	kdDebug() << "(K3bPluginFactory) plugin system does not fit lib " << libName << endl;
+      if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
+	delete plugin;
+	kdDebug() << "(K3bPluginManager) plugin system does not fit lib " << libName << endl;
       }
-      else
-	d->factories.insert( k3bFactory, libName );
+      else {
+	plugin->m_pluginInfo = K3bPluginInfo( libName,
+					      c.readEntry( "Name" ),
+					      c.readEntry( "Author" ),
+					      c.readEntry( "Email" ),
+					      c.readEntry( "Comment" ),
+					      c.readEntry( "Version" ),
+					      c.readEntry( "Licence" ) );
+	d->plugins.append( plugin );
+      }
     }
     else
       kdDebug() << "(K3bPluginManager) lib " << libName << " not a K3b plugin" << endl;
@@ -143,32 +144,20 @@ void K3bPluginManager::loadAll()
   }
 }
 
-
-
-void K3bPluginManager::unloadPlugin( K3bPluginFactory* factory )
-{
-  // TODO: is it enough to just unload the lib or do we need to delete all objects?
-  QString lib = d->factories[factory];
-  d->factories.erase( factory );
-
-  KLibLoader::self()->unloadLibrary( lib.latin1() );
-}
-
-
 int K3bPluginManager::pluginSystemVersion() const
 {
-  return 1;
+  return K3B_PLUGIN_SYSTEM_VERSION;
 }
 
 
-int K3bPluginManager::execPluginDialog( K3bPluginFactory* f, QWidget* parent, const char* name )
+int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent, const char* name )
 {
   KDialogBase dlg( parent, 
 		   name, 
 		   true,
-		   i18n("Configure plugin %1").arg( f->name() ) );
+		   i18n("Configure plugin %1").arg( plugin->pluginInfo().name() ) );
   
-  K3bPluginConfigWidget* configWidget = f->createConfigWidget( &dlg );
+  K3bPluginConfigWidget* configWidget = plugin->createConfigWidget( &dlg );
   if( configWidget ) {
     dlg.setMainWidget( configWidget );
     connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
@@ -179,7 +168,7 @@ int K3bPluginManager::execPluginDialog( K3bPluginFactory* f, QWidget* parent, co
     return r;
   }
   else {
-    KMessageBox::sorry( parent, i18n("No settings available for plugin %1.").arg( f->name() ) );
+    KMessageBox::sorry( parent, i18n("No settings available for plugin %1.").arg( plugin->pluginInfo().name() ) );
     return 0;
   }
 }

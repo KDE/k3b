@@ -16,19 +16,23 @@
 
 #include "k3boggvorbisdecoder.h"
 
+#include <k3bpluginfactory.h>
+
 #include <qfile.h>
 #include <qstringlist.h>
 
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kinstance.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
+
+
+K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisdecoder, K3bPluginFactory<K3bOggVorbisDecoderFactory>( "libk3boggvorbisdecoder" ) )
 
 
 class K3bOggVorbisDecoder::Private
@@ -208,7 +212,6 @@ QString K3bOggVorbisDecoder::fileType() const
 K3bOggVorbisDecoderFactory::K3bOggVorbisDecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3boggvorbisdecoder" );
 }
 
 
@@ -217,9 +220,8 @@ K3bOggVorbisDecoderFactory::~K3bOggVorbisDecoderFactory()
 }
 
 
-K3bPlugin* K3bOggVorbisDecoderFactory::createPluginObject( QObject* parent, 
-							   const char* name,
-							   const QStringList& )
+K3bAudioDecoder* K3bOggVorbisDecoderFactory::createDecoder( QObject* parent, 
+							    const char* name ) const
 {
   return new K3bOggVorbisDecoder( parent, name );
 }

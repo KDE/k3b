@@ -4,4 +4,4 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libcdcopy.la
 
-libcdcopy_la_SOURCES = k3bcdcopydialog.cpp k3bcdcopyjob.cpp k3bclonejob.cpp k3baudiosessionreadingjob.cpp
+libcdcopy_la_SOURCES = k3bcdcopydialog.cpp k3bcdcopyjob.cpp k3bclonejob.cpp k3baudiosessionreadingjob.cpp k3bdatasessionreadingjob.cpp

@@ -27,9 +27,10 @@
 #include "k3bmaddecoder.h"
 #include "k3bmad.h"
 
+#include <k3bpluginfactory.h>
+
 #include <kurl.h>
 #include <kdebug.h>
-#include <kinstance.h>
 #include <klocale.h>
 
 #include <qstring.h>
@@ -45,6 +46,9 @@
 #ifdef HAVE_LIBID3
 #include <id3/misc_support.h>
 #endif
+
+
+K_EXPORT_COMPONENT_FACTORY( libk3bmaddecoder, K3bPluginFactory<K3bMadDecoderFactory>( "k3bmaddecoder" ) )
 
 
 int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
@@ -475,7 +479,6 @@ QString K3bMadDecoder::technicalInfo( const QString& name ) const
 K3bMadDecoderFactory::K3bMadDecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3bmaddecoder" );
 }
 
 
@@ -484,12 +487,12 @@ K3bMadDecoderFactory::~K3bMadDecoderFactory()
 }
 
 
-K3bPlugin* K3bMadDecoderFactory::createPluginObject( QObject* parent, 
-						     const char* name,
-						     const QStringList& )
+K3bAudioDecoder* K3bMadDecoderFactory::createDecoder( QObject* parent, 
+						      const char* name ) const
 {
   return new K3bMadDecoder( parent, name );
 }
+
 
 bool K3bMadDecoderFactory::canDecode( const KURL& url )
 {

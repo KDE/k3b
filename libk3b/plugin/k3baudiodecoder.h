@@ -18,7 +18,6 @@
 
 
 #include <k3bplugin.h>
-#include <k3bpluginfactory.h>
 #include <k3bmsf.h>
 
 #include <kurl.h>
@@ -26,42 +25,13 @@
 
 
 /**
- * PluginFactory that needs to be subclassed in order to create an
- * audio decoder.
- */
-class K3bAudioDecoderFactory : public K3bPluginFactory
-{
-  Q_OBJECT
-
- public:
-  K3bAudioDecoderFactory( QObject* parent = 0, const char* name = 0 )
-    : K3bPluginFactory( parent, name ) {
-  }
-
-  virtual ~K3bAudioDecoderFactory() {
-  }
-
-  QString group() const { return "AudioDecoder"; }
-
-  /**
-   * This is the most important method of the AudioDecoderFactory.
-   * It is used to determine if a certain file can be decoded by the
-   * decoder this factory creates.
-   * It is important that this method does not work lazy since it will
-   * be called with urls to every kind of files and if it returns true
-   * a decoder of this type is used for the file.
-   */
-  virtual bool canDecode( const KURL& filename ) = 0;
-};
-
-
-
-/**
  * Abstract streaming class for all the audio input.
  * Has to output data in the following format:
  * MSBLeft LSBLeft MSBRight LSBRight (big endian byte order)
+ *
+ * Instances are created by K3bAudioDecoderFactory
  **/
-class K3bAudioDecoder : public K3bPlugin
+class K3bAudioDecoder : public QObject
 {
   Q_OBJECT
 
@@ -228,5 +198,39 @@ class K3bAudioDecoder : public K3bPlugin
   Private* d;
 };
 
+
+
+/**
+ * PluginFactory that needs to be subclassed in order to create an
+ * audio decoder.
+ * We need this because K3b uses multiple AudioDecoders of the same type at the 
+ * same time.
+ */
+class K3bAudioDecoderFactory : public K3bPlugin
+{
+  Q_OBJECT
+
+ public:
+  K3bAudioDecoderFactory( QObject* parent = 0, const char* name = 0 )
+    : K3bPlugin( parent, name ) {
+  }
+
+  virtual ~K3bAudioDecoderFactory() {
+  }
+
+  QString group() const { return "AudioDecoder"; }
+
+  /**
+   * This is the most important method of the AudioDecoderFactory.
+   * It is used to determine if a certain file can be decoded by the
+   * decoder this factory creates.
+   * It is important that this method does not work lazy since it will
+   * be called with urls to every kind of files and if it returns true
+   * a decoder of this type is used for the file.
+   */
+  virtual bool canDecode( const KURL& filename ) = 0;
+
+  virtual K3bAudioDecoder* createDecoder( QObject* parent = 0, const char* name = 0 ) const = 0;
+};
 
 #endif

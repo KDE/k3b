@@ -40,9 +40,6 @@ class K3bAudioConverterPluginDialog : public K3bInteractionDialog
   void addFiles( const KURL::List& urls );
 
  protected slots:
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
   void slotStartClicked();
 
   void slotAddFiles();
@@ -53,6 +50,9 @@ class K3bAudioConverterPluginDialog : public K3bInteractionDialog
   void slotDropped( QDropEvent* );
 
  private:
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
   void loadAudioEncoder();
 
   base_K3bAudioConverterWidget* m_w;

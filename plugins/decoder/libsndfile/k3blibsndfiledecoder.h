@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2004 Matthieu Bedouet <mbedouet@no-log.org>
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -32,14 +32,10 @@ class K3bLibsndfileDecoderFactory : public K3bAudioDecoderFactory
 
   bool canDecode( const KURL& filename );
 
-  int pluginSystemVersion() const { return 2; }
+  int pluginSystemVersion() const { return 3; }
 
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-
- private:
-  KInstance* s_instance;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
+				  const char* name = 0 ) const;
 };
 
 
@@ -67,7 +63,5 @@ class K3bLibsndfileDecoder : public K3bAudioDecoder
   Private* d;
   
 };
-
-K_EXPORT_COMPONENT_FACTORY( libk3blibsndfiledecoder, K3bLibsndfileDecoderFactory )
 
 #endif

@@ -21,37 +21,6 @@
 #include <k3bpluginconfigwidget.h>
 
 
-class KInstance;
-
-
-class K3b<name>EncoderFactory : public K3bAudioEncoderFactory
-{
-  Q_OBJECT
-
- public:
-  K3b<name>EncoderFactory( QObject* parent = 0, const char* name = 0 );
-  ~K3b<name>EncoderFactory();
-
-  QStringList extensions() const;
-  
-  QString fileTypeComment( const QString& ) const;
-
-  long long fileSize( const QString&, const K3b::Msf& msf ) const;
-
-  int pluginSystemVersion() const { return 1; }
-
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-  K3bPluginConfigWidget* createConfigWidgetObject( QWidget* parent = 0, 
-						   const char* name = 0,
-						   const QStringList &args = QStringList() );
-
- private:
-  KInstance* s_instance;
-};
-
-
 class K3b<name>Encoder : public K3bAudioEncoder
 {
   Q_OBJECT
@@ -59,6 +28,17 @@ class K3b<name>Encoder : public K3bAudioEncoder
  public:
   K3b<name>Encoder( QObject* parent = 0, const char* name = 0 );
   ~K3b<name>Encoder();
+
+  QStringList extensions() const;
+  
+  QString fileTypeComment( const QString& ) const;
+
+  long long fileSize( const QString&, const K3b::Msf& msf ) const;
+
+  int pluginSystemVersion() const { return 3; }
+
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
+					     const char* name = 0 ) const;
 
  private:
   void finishEncoderInternal();
@@ -80,8 +60,5 @@ class K3b<name>EncoderSettingsWidget : public K3bPluginConfigWidget
   void loadConfig();
   void saveConfig();
 };
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3b<name>encoder, K3b<name>EncoderFactory )
 
 #endif

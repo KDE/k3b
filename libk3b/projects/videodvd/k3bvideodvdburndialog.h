@@ -39,9 +39,10 @@ class K3bVideoDvdBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   void slotLoadK3bDefaults();
-   void slotLoadUserDefaults();
-   void slotSaveUserDefaults();
+ protected:
+   void loadK3bDefaults();
+   void loadUserDefaults( KConfig* );
+   void saveUserDefaults( KConfig* );
 
  private:
    K3bDataVolumeDescWidget* m_volumeDescWidget;

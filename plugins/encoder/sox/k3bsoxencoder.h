@@ -22,38 +22,7 @@
 
 
 class base_K3bSoxEncoderConfigWidget;
-class KInstance;
 class KProcess;
-
-
-
-class K3bSoxEncoderFactory : public K3bAudioEncoderFactory
-{
-  Q_OBJECT
-
- public:
-  K3bSoxEncoderFactory( QObject* parent = 0, const char* name = 0 );
-  ~K3bSoxEncoderFactory();
-
-  QStringList extensions() const;
-  
-  QString fileTypeComment( const QString& ) const;
-
-  long long fileSize( const QString&, const K3b::Msf& msf ) const;
-
-  int pluginSystemVersion() const { return 2; }
-
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-  K3bPluginConfigWidget* createConfigWidgetObject( QWidget* parent = 0, 
-						   const char* name = 0,
-						   const QStringList &args = QStringList() );
-
- private:
-  KInstance* s_instance;
-};
-
 
 class K3bSoxEncoder : public K3bAudioEncoder
 {
@@ -62,6 +31,17 @@ class K3bSoxEncoder : public K3bAudioEncoder
  public:
   K3bSoxEncoder( QObject* parent = 0, const char* name = 0 );
   ~K3bSoxEncoder();
+
+  QStringList extensions() const;
+  
+  QString fileTypeComment( const QString& ) const;
+
+  long long fileSize( const QString&, const K3b::Msf& msf ) const;
+
+  int pluginSystemVersion() const { return 3; }
+
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
+					     const char* name = 0 ) const;
 
   /**
    * reimplemented since sox writes the file itself
@@ -98,8 +78,5 @@ class K3bSoxEncoderSettingsWidget : public K3bPluginConfigWidget
  private:
   base_K3bSoxEncoderConfigWidget* w;
 };
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3bsoxencoder, K3bSoxEncoderFactory )
 
 #endif

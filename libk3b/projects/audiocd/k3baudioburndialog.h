@@ -50,6 +50,9 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
  protected:
    void saveSettings();
    void readSettings();
+   void loadK3bDefaults();
+   void loadUserDefaults( KConfig* );
+   void saveUserDefaults( KConfig* );
 
    QCheckBox* m_checkHideFirstTrack;
    QCheckBox* m_checkNormalize;
@@ -57,9 +60,6 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    K3bAudioDoc* m_doc;
 
  protected slots:
-   void slotLoadK3bDefaults();
-   void slotLoadUserDefaults();
-   void slotSaveUserDefaults();
    void toggleAllOptions();
 };
 

@@ -22,37 +22,7 @@
 
 
 class base_K3bExternalEncoderConfigWidget;
-class KInstance;
 class KProcess;
-
-
-
-class K3bExternalEncoderFactory : public K3bAudioEncoderFactory
-{
-  Q_OBJECT
-
- public:
-  K3bExternalEncoderFactory( QObject* parent = 0, const char* name = 0 );
-  ~K3bExternalEncoderFactory();
-
-  QStringList extensions() const;
-  
-  QString fileTypeComment( const QString& ) const;
-
-  //  long long fileSize( const QString&, const K3b::Msf& msf ) const;
-
-  int pluginSystemVersion() const { return 2; }
-
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-  K3bPluginConfigWidget* createConfigWidgetObject( QWidget* parent = 0, 
-						   const char* name = 0,
-						   const QStringList &args = QStringList() );
-
- private:
-  KInstance* s_instance;
-};
 
 
 class K3bExternalEncoder : public K3bAudioEncoder
@@ -62,6 +32,15 @@ class K3bExternalEncoder : public K3bAudioEncoder
  public:
   K3bExternalEncoder( QObject* parent = 0, const char* name = 0 );
   ~K3bExternalEncoder();
+
+  QStringList extensions() const;
+  
+  QString fileTypeComment( const QString& ) const;
+
+  int pluginSystemVersion() const { return 3; }
+
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent, 
+					     const char* name ) const;
 
   /**
    * reimplemented since the external program is intended to write the file
@@ -114,8 +93,5 @@ class K3bExternalEncoderSettingsWidget : public K3bPluginConfigWidget
   class Private;
   Private* d;
 };
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, K3bExternalEncoderFactory )
 
 #endif

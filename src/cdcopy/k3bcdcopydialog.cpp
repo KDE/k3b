@@ -65,6 +65,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   : K3bInteractionDialog( parent, name, i18n("CD Copy"), i18n("and CD Cloning"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
+			  "CD Copy",
 			  modal )
 {
   QWidget* main = mainWidget();
@@ -234,9 +235,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 			  "not care about the content but simply copies the CD bit by bit. It may be used "
 			  "to copy VideoCDs or CDs which contain erroneous sectors."
 			  "<p><b>Caution:</b> Only single session CDs can be cloned.") );
-
-
-  slotLoadUserDefaults();
 }
 
 
@@ -382,11 +380,8 @@ void K3bCdCopyDialog::slotToggleAll()
 }
 
 
-void K3bCdCopyDialog::slotLoadUserDefaults()
+void K3bCdCopyDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "CD Copy" );
-
   m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
@@ -417,11 +412,8 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
   slotToggleAll();
 }
 
-void K3bCdCopyDialog::slotSaveUserDefaults()
+void K3bCdCopyDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "CD Copy" );
-
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
@@ -451,7 +443,7 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
   c->writeEntry( "copy mode", s );
 }
 
-void K3bCdCopyDialog::slotLoadK3bDefaults()
+void K3bCdCopyDialog::loadK3bDefaults()
 {
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_writerSelectionWidget->loadDefaults();

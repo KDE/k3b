@@ -14,6 +14,8 @@
 
 #include "k3bflacdecoder.h"
 
+#include <k3bpluginfactory.h>
+
 #include <qbuffer.h>
 #include <qfile.h>
 #include <qstringlist.h>
@@ -21,7 +23,6 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kinstance.h>
 
 #include <string.h>
 #include <math.h>
@@ -33,6 +34,9 @@
 #ifdef HAVE_LIBID3
 #include <id3/misc_support.h>
 #endif
+
+K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, K3bPluginFactory<K3bFLACDecoderFactory>( "libk3bflacdecoder" ) )
+
 
 class K3bFLACDecoder::Private
   : public FLAC::Decoder::SeekableStream
@@ -325,7 +329,6 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
 K3bFLACDecoderFactory::K3bFLACDecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3bflacdecoder" );
 }
 
 
@@ -334,9 +337,8 @@ K3bFLACDecoderFactory::~K3bFLACDecoderFactory()
 }
 
 
-K3bPlugin* K3bFLACDecoderFactory::createPluginObject( QObject* parent, 
-                                                      const char* name,
-                                                      const QStringList& )
+K3bAudioDecoder* K3bFLACDecoderFactory::createDecoder( QObject* parent, 
+						 const char* name ) const
 {
   return new K3bFLACDecoder( parent, name );
 }

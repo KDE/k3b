@@ -59,12 +59,11 @@ Q_OBJECT
   void slotWritingAppChanged( int );
   void slotJobFinished( bool );
 
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
-
  private:
   void setupGui();
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
 

@@ -44,6 +44,10 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    K3bMixedBurnDialog( K3bMixedDoc*, QWidget *parent=0, const char *name=0, bool modal = true );
 
  protected:
+   void loadK3bDefaults();
+   void loadUserDefaults( KConfig* );
+   void saveUserDefaults( KConfig* );
+
    K3bDataVolumeDescWidget* m_volumeDescWidget;
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
@@ -53,9 +57,6 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   void slotLoadK3bDefaults();
-   void slotLoadUserDefaults();
-   void slotSaveUserDefaults();
    void toggleAllOptions();
 
  private:

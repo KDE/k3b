@@ -67,12 +67,6 @@ void K3bDivxView::setupGui()
 {
   setStartButtonText( i18n("Encode"), i18n("Start encoding") );
 
-  // no default settings yet
-  m_buttonK3bDefaults->setDisabled(true);
-  m_buttonUserDefaults->setDisabled(true);
-  m_buttonSaveUserDefaults->setDisabled(true);
-
-
   QTabWidget* mainTab = new QTabWidget( this );
   setMainWidget( mainTab );
   /*

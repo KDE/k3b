@@ -36,11 +36,11 @@ class K3bDvdFormattingDialog : public K3bInteractionDialog
   void slotStartClicked();
   void slotWriterChanged();
 
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
-  void slotLoadK3bDefaults();
-
  private:
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
+  void loadK3bDefaults();
+
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bWritingModeWidget* m_writingModeWidget;
   QCheckBox* m_checkForce;

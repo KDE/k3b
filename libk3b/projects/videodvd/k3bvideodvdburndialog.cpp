@@ -122,9 +122,9 @@ void K3bVideoDvdBurnDialog::toggleAllOptions()
 }
 
 
-void K3bVideoDvdBurnDialog::slotLoadK3bDefaults()
+void K3bVideoDvdBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::slotLoadK3bDefaults();
+  K3bProjectBurnDialog::loadK3bDefaults();
 
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
   //  m_checkVerify->setChecked( false );
@@ -133,11 +133,9 @@ void K3bVideoDvdBurnDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bVideoDvdBurnDialog::slotLoadUserDefaults()
+void K3bVideoDvdBurnDialog::loadUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
-
-  KConfig* c = k3bcore->config();
+  K3bProjectBurnDialog::loadUserDefaults( c );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_volumeDescWidget->load( o );
@@ -148,11 +146,9 @@ void K3bVideoDvdBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bVideoDvdBurnDialog::slotSaveUserDefaults()
+void K3bVideoDvdBurnDialog::saveUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
-
-  KConfig* c = k3bcore->config();
+  K3bProjectBurnDialog::saveUserDefaults(c);
 
   K3bIsoOptions o;
   m_volumeDescWidget->save( o );

@@ -44,6 +44,7 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 			  i18n("DVD-RW and DVD+RW"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
+			  "DVD Formatting", // config group
 			  modal )
 {
   setCancelButtonText( i18n("Close") );
@@ -97,7 +98,6 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 					    "quick format is enabled." ) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
 
-  slotLoadUserDefaults();
   slotWriterChanged();
 } 
 
@@ -139,11 +139,8 @@ void K3bDvdFormattingDialog::slotWriterChanged()
 } 
 
 
-void K3bDvdFormattingDialog::slotLoadUserDefaults()
+void K3bDvdFormattingDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "DVD Formatting" );
-
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
   m_checkQuickFormat->setChecked( c->readBoolEntry( "quick format", true ) );
   m_writerSelectionWidget->loadConfig( c );
@@ -151,11 +148,8 @@ void K3bDvdFormattingDialog::slotLoadUserDefaults()
 } 
 
 
-void K3bDvdFormattingDialog::slotSaveUserDefaults()
+void K3bDvdFormattingDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "DVD Formatting" );
-
   c->writeEntry( "force", m_checkForce->isChecked() );
   c->writeEntry( "quick format", m_checkQuickFormat->isChecked() );
   m_writerSelectionWidget->saveConfig( c );
@@ -163,7 +157,7 @@ void K3bDvdFormattingDialog::slotSaveUserDefaults()
 } 
 
 
-void K3bDvdFormattingDialog::slotLoadK3bDefaults()
+void K3bDvdFormattingDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_checkForce->setChecked( false );

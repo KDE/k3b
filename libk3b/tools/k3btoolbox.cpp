@@ -36,6 +36,7 @@ K3bToolBoxButton::K3bToolBoxButton( KAction* action, QWidget* parent )
   setTextLabel( action->toolTip(), true );
   setTextLabel( action->text() );
   setAutoRaise( true );
+  setEnabled( action->isEnabled() );
 
   QWhatsThis::add( this, action->whatsThis() );
 
@@ -102,8 +103,16 @@ void K3bToolBox::addSpacing()
 {
   int lastStretch = m_mainLayout->colStretch( m_mainLayout->numCols()-1 );
   m_mainLayout->setColStretch( m_mainLayout->numCols()-1, 0 );
-  m_mainLayout->addColSpacing( m_mainLayout->numCols()-1, 5 );
+  m_mainLayout->addColSpacing( m_mainLayout->numCols()-1, 8 );
   m_mainLayout->setColStretch( m_mainLayout->numCols(), lastStretch );
+}
+
+
+void K3bToolBox::addLineSpacing()
+{
+  QFrame* line = new QFrame( this );
+  line->setFrameStyle( QFrame::VLine|QFrame::Sunken );
+  addWidget( line );
 }
 
 
@@ -126,7 +135,8 @@ void K3bToolBox::addLabel( const QString& text )
 
 void K3bToolBox::addWidget( QWidget* w )
 {
-  // TODO: reparent??
+  w->reparent( this, QPoint() );
+
   m_mainLayout->setColStretch( m_mainLayout->numCols()-1, 0 );
 
   m_mainLayout->addWidget( w, 0, m_mainLayout->numCols()-1 );
@@ -144,6 +154,5 @@ void K3bToolBox::addToggleButton( KToggleAction* action )
 {
   addButton( action );
 }
-
 
 #include "k3btoolbox.moc"

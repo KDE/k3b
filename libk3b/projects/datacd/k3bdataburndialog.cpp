@@ -107,9 +107,6 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
       path.append( _doc->isoOptions().volumeID() + ".iso" );
   }
   m_tempDirSelectionWidget->setTempPath( path );
-
-
-  qDebug( "blocks: %d bytes: %d\n", _doc->sizeHandler()->blocks().lba(), _doc->sizeHandler()->size() );
 }
 
 K3bDataBurnDialog::~K3bDataBurnDialog(){
@@ -259,9 +256,9 @@ void K3bDataBurnDialog::slotStartClicked()
 }
 
 
-void K3bDataBurnDialog::slotLoadK3bDefaults()
+void K3bDataBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::slotLoadK3bDefaults();
+  K3bProjectBurnDialog::loadK3bDefaults();
 
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
@@ -275,11 +272,9 @@ void K3bDataBurnDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bDataBurnDialog::slotLoadUserDefaults()
+void K3bDataBurnDialog::loadUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
-
-  KConfig* c = k3bcore->config();
+  K3bProjectBurnDialog::loadUserDefaults(c);
 
   m_dataModeWidget->loadConfig(c);
 
@@ -294,11 +289,9 @@ void K3bDataBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bDataBurnDialog::slotSaveUserDefaults()
+void K3bDataBurnDialog::saveUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
-
-  KConfig* c = k3bcore->config();
+  K3bProjectBurnDialog::saveUserDefaults(c);
 
   m_dataModeWidget->saveConfig(c);
 

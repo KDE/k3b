@@ -71,7 +71,11 @@
 
 K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, const char *name )
   : K3bInteractionDialog( parent, name,
-			  i18n("Ripping DVD") )
+			  i18n("Ripping DVD"),
+			  QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  "VideoDVD ripping" )
 {
   m_device = k3bcore->deviceManager()->deviceByName( device )->blockDeviceName();
   m_bytes = 0;
@@ -81,8 +85,6 @@ K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, c
   m_ripDialog = 0;
   setupGui();
   m_startEncoding = false;
-
-  slotLoadUserDefaults();
 }
 
 K3bDvdRipperWidget::~K3bDvdRipperWidget(){
@@ -413,7 +415,7 @@ void K3bDvdRipperWidget::slotEncodingFinished( bool ){
 }
 
 
-void K3bDvdRipperWidget::slotLoadK3bDefaults()
+void K3bDvdRipperWidget::loadK3bDefaults()
 {
   m_editStaticRipPath->setURL( QDir::homeDirPath() );
   m_checkOpenEncoding->setChecked(false);
@@ -421,22 +423,16 @@ void K3bDvdRipperWidget::slotLoadK3bDefaults()
 }
 
 
-void K3bDvdRipperWidget::slotLoadUserDefaults()
+void K3bDvdRipperWidget::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "DVD ripping" );
-
   m_editStaticRipPath->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkOpenEncoding->setChecked( c->readBoolEntry( "open_encoding", false ) );
   m_checkStartEncoding->setChecked( c->readBoolEntry( "start_encoding", false ) );
 }
 
 
-void K3bDvdRipperWidget::slotSaveUserDefaults()
+void K3bDvdRipperWidget::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = kapp->config();
-  c->setGroup( "DVD ripping" );
-
   c->writePathEntry( "last ripping directory", m_editStaticRipPath->url() );
   c->writeEntry( "open_encoding", m_checkOpenEncoding->isChecked() );
   c->writeEntry( "start_encoding", m_checkStartEncoding->isChecked() );

@@ -18,8 +18,10 @@
 #include "k3btitlelabel.h"
 #include "kcutlabel.h"
 #include "k3bstdguiitems.h"
+#include "k3bpushbutton.h"
 
 #include "k3bthememanager.h"
+#include <k3bcore.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -29,12 +31,14 @@
 #include <qstring.h>
 #include <qpoint.h>
 #include <qfont.h>
+#include <qpopupmenu.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <kconfig.h>
 
 
 
@@ -44,11 +48,13 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 					    const QString& subTitle,
 					    int buttonMask,
 					    int defaultButton,
+					    const QString& configGroup,
 					    bool modal,
 					    WFlags fl )
   : KDialog( parent, name, modal, fl ),
     m_mainWidget(0),
-    m_defaultButton(defaultButton)
+    m_defaultButton(defaultButton),
+    m_configGroup(configGroup)
 {
   mainGrid = new QGridLayout( this );
   mainGrid->setSpacing( spacingHint() );
@@ -114,18 +120,23 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // settings buttons
   // ---------------------------------------------------------------------------------------------------
-  QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
-  m_buttonK3bDefaults = new QPushButton( i18n("K3b Defaults"), this, "m_buttonK3bDefaults" );
-  layout2->addWidget( m_buttonK3bDefaults );
-  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-  layout2->addItem( spacer );
-  m_buttonUserDefaults = new QPushButton( i18n("User Defaults"), this, "m_buttonUserDefaults" );
-  layout2->addWidget( m_buttonUserDefaults );
-  m_buttonSaveUserDefaults = new QPushButton( i18n("Save User Defaults"), this, "m_buttonSaveUserDefaults" );
-  layout2->addWidget( m_buttonSaveUserDefaults );
+  if( !m_configGroup.isEmpty() ) {
+    QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
+    m_buttonK3bDefaults = new QPushButton( i18n("K3b Defaults"), this, "m_buttonK3bDefaults" );
+    layout2->addWidget( m_buttonK3bDefaults );
+    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout2->addItem( spacer );
+    m_buttonUserDefaults = new K3bPushButton( i18n("User Defaults"), this, "m_buttonUserDefaults" );
+    QPopupMenu* userDefaultsPopup = new QPopupMenu( m_buttonUserDefaults );
+    userDefaultsPopup->insertItem( i18n("Default Settings"), this, SLOT(slotLoadUserDefaults()) );
+    userDefaultsPopup->insertItem( i18n("Last Used Settings"), this, SLOT(slotLoadLastSettings()) );
+    ((K3bPushButton*)m_buttonUserDefaults)->setDelayedPopupMenu( userDefaultsPopup );
+    layout2->addWidget( m_buttonUserDefaults );
+    m_buttonSaveUserDefaults = new QPushButton( i18n("Save User Defaults"), this, "m_buttonSaveUserDefaults" );
+    layout2->addWidget( m_buttonSaveUserDefaults );
 
-  mainGrid->addLayout( layout2, 2, 0 );
-
+    mainGrid->addLayout( layout2, 2, 0 );
+  }
 
   mainGrid->setRowStretch( 1, 1 );
 
@@ -142,6 +153,7 @@ K3bInteractionDialog::~K3bInteractionDialog()
 
 void K3bInteractionDialog::show()
 {
+  slotLoadUserDefaults();
   KDialog::show();
   init();
 }
@@ -161,41 +173,52 @@ QSize K3bInteractionDialog::sizeHint() const
 
 void K3bInteractionDialog::initConnections()
 {
-  if( m_buttonStart )
+  if( m_buttonStart ) {
     connect( m_buttonStart, SIGNAL(clicked()),
 	     this, SLOT(slotStartClicked()) );
-  if( m_buttonSave )
+    connect( m_buttonStart, SIGNAL(clicked()),
+	     this, SLOT(slotSaveLastSettings()) );
+  }
+  if( m_buttonSave ) {
     connect( m_buttonSave, SIGNAL(clicked()),
 	     this, SLOT(slotSaveClicked()) );
+    connect( m_buttonSave, SIGNAL(clicked()),
+	     this, SLOT(slotSaveLastSettings()) );
+  }
   if( m_buttonCancel )
     connect( m_buttonCancel, SIGNAL(clicked()),
 	     this, SLOT(slotCancelClicked()) );
-  connect( m_buttonK3bDefaults, SIGNAL(clicked()),
-	   this, SLOT(slotLoadK3bDefaults()) );
-  connect( m_buttonUserDefaults, SIGNAL(clicked()),
-	   this, SLOT(slotLoadUserDefaults()) );
-  connect( m_buttonSaveUserDefaults, SIGNAL(clicked()),
-	   this, SLOT(slotSaveUserDefaults()) );
+
+  if( !m_configGroup.isEmpty() ) {
+    connect( m_buttonK3bDefaults, SIGNAL(clicked()),
+	     this, SLOT(slotLoadK3bDefaults()) );
+    connect( m_buttonUserDefaults, SIGNAL(clicked()),
+	     this, SLOT(slotLoadUserDefaults()) );
+    connect( m_buttonSaveUserDefaults, SIGNAL(clicked()),
+	     this, SLOT(slotSaveUserDefaults()) );
+  }
 }
 
 
 void K3bInteractionDialog::initToolTipsAndWhatsThis()
 {
-  // ToolTips
-  // -------------------------------------------------------------------------
-  QToolTip::add( m_buttonK3bDefaults, i18n("Load K3b default settings") );
-  QToolTip::add( m_buttonUserDefaults, i18n("Load user default settings") );
-  QToolTip::add( m_buttonSaveUserDefaults, i18n("Save user default settings for new projects") );
+  if( !m_configGroup.isEmpty() ) {
+    // ToolTips
+    // -------------------------------------------------------------------------
+    QToolTip::add( m_buttonK3bDefaults, i18n("Load K3b default settings") );
+    QToolTip::add( m_buttonUserDefaults, i18n("Load user default settings") );
+    QToolTip::add( m_buttonSaveUserDefaults, i18n("Save user default settings for new projects") );
 
-  // What's This info
-  // -------------------------------------------------------------------------
-  QWhatsThis::add( m_buttonK3bDefaults, i18n("<p>This sets all options back to K3b defaults.") );
-  QWhatsThis::add( m_buttonUserDefaults, i18n("<p>This loads the settings saved with the <em>Save User Defaults</em> "
-						  "button.") );
-  QWhatsThis::add( m_buttonSaveUserDefaults, i18n("<p>Saves the current settings as the default for all new projects."
-						  "<p>These settings can also be loaded with the <em>User Defaults</em> "
-						  "button."
-						  "<p><b>The K3b defaults are not overwritten by this.</b>") );
+    // What's This info
+    // -------------------------------------------------------------------------
+    QWhatsThis::add( m_buttonK3bDefaults, i18n("<p>This sets all options back to K3b defaults.") );
+    QWhatsThis::add( m_buttonUserDefaults, i18n("<p>This loads the settings saved with the <em>Save User Defaults</em> "
+						"button.") );
+    QWhatsThis::add( m_buttonSaveUserDefaults, i18n("<p>Saves the current settings as the default for all new projects."
+						    "<p>These settings can also be loaded with the <em>User Defaults</em> "
+						    "button."
+						    "<p><b>The K3b defaults are not overwritten by this.</b>") );
+  }
 }
 
 
@@ -227,33 +250,62 @@ QWidget* K3bInteractionDialog::mainWidget()
 
 void K3bInteractionDialog::slotLoadK3bDefaults()
 {
-  emit loadK3bDefaults();
+  loadK3bDefaults();
 }
 
 void K3bInteractionDialog::slotLoadUserDefaults()
 {
-  emit loadUserDefaults();
+  KConfig* c = k3bcore->config();
+  QString lastGroup = c->group();
+  c->setGroup( m_configGroup );
+  loadUserDefaults( c );
+  c->setGroup( lastGroup );
 }
 
 void K3bInteractionDialog::slotSaveUserDefaults()
 {
-  emit saveUserDefaults();
+  KConfig* c = k3bcore->config();
+  QString lastGroup = c->group();
+  c->setGroup( m_configGroup );
+  saveUserDefaults( c );
+  c->setGroup( lastGroup );
 }
+
+
+void K3bInteractionDialog::slotLoadLastSettings()
+{
+  KConfig* c = k3bcore->config();
+  QString lastGroup = c->group();
+  c->setGroup( "last used " + m_configGroup );
+  loadUserDefaults( c );
+  c->setGroup( lastGroup );
+}
+
+
+void K3bInteractionDialog::slotSaveLastSettings()
+{
+  KConfig* c = k3bcore->config();
+  QString lastGroup = c->group();
+  c->setGroup( "last used " + m_configGroup );
+  saveUserDefaults( c );
+  c->setGroup( lastGroup );
+}
+
 
 void K3bInteractionDialog::slotStartClicked()
 {
-  emit startClicked();
+  emit started();
 }
 
 void K3bInteractionDialog::slotCancelClicked()
 {
-  emit cancelClicked();
+  emit canceled();
   close();
 }
 
 void K3bInteractionDialog::slotSaveClicked()
 {
-  emit saveClicked();
+  emit saved();
 }
 
 
@@ -279,7 +331,7 @@ void K3bInteractionDialog::keyPressEvent( QKeyEvent* e )
     }
     else if( m_defaultButton == SAVE_BUTTON ) {
       if( m_buttonSave->isEnabled() )
-	saveClicked();
+	slotSaveClicked();
     }
     break;
   case Key_Escape:
@@ -340,5 +392,21 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
     QWhatsThis::add( m_buttonSave, whatsthis );
   }
 }
+
+
+void K3bInteractionDialog::saveUserDefaults( KConfig* )
+{
+}
+
+
+void K3bInteractionDialog::loadUserDefaults( KConfig* )
+{
+}
+
+
+void K3bInteractionDialog::loadK3bDefaults()
+{
+}
+
 
 #include "k3binteractiondialog.moc"

@@ -16,7 +16,6 @@
 
 #include "k3bfileview.h"
 #include "k3b.h"
-#include "k3baudioplayer.h"
 #include "k3bdiroperator.h"
 #include "k3btoolbox.h"
 
@@ -75,10 +74,6 @@ void K3bFileView::setupGUI()
 
 
   // setup actions
-  KAction* actionPlay = new KAction( i18n("Play"), "player_play", 0, this, SLOT(slotAudioFilePlay()), 
-				     m_dirOp->actionCollection(), "audio_file_play");
-  KAction* actionEnqueue = new KAction( i18n("En&queue"), "player_play", 0, this, SLOT(slotAudioFileEnqueue()), 
-					m_dirOp->actionCollection(), "audio_file_enqueue");
   KAction* actionAddFilesToProject = new KAction( i18n("&Add to Project"), SHIFT+Key_Return, 
 						  this, SLOT(slotAddFilesToProject()), 
 						  m_dirOp->actionCollection(), "add_file_to_project");
@@ -94,8 +89,6 @@ void K3bFileView::setupGUI()
   m_toolBox->addButton( actionHome );
   m_toolBox->addButton( actionReload );
   m_toolBox->addSpacing();
-  m_toolBox->addButton( actionPlay );
-  m_toolBox->addSpacing();
   m_toolBox->addButton( m_dirOp->bookmarkMenu() );
   m_toolBox->addSpacing();
 
@@ -103,10 +96,6 @@ void K3bFileView::setupGUI()
   KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
   dirOpMenu->insert( actionAddFilesToProject, 0 );
   dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 1 );
-  dirOpMenu->insert( actionPlay, 2 );
-  dirOpMenu->insert( actionEnqueue, 3 );
-  dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 4 );
-
 
   // check if some actions should be enabled
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
@@ -160,58 +149,6 @@ void K3bFileView::setAutoUpdate( bool b )
 
 void K3bFileView::slotFileHighlighted( const KFileItem* )
 {
-  // check if there are audio files under the selected ones
-  bool play = false;
-  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
-    if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
-      play = true;
-      break;
-    }
-  }
-
-  if( play ) {
-    m_dirOp->actionCollection()->action( "audio_file_play" )->setEnabled( true );
-    m_dirOp->actionCollection()->action( "audio_file_enqueue" )->setEnabled( true );
-  }
-  else {
-    m_dirOp->actionCollection()->action( "audio_file_play" )->setEnabled( false );
-    m_dirOp->actionCollection()->action( "audio_file_enqueue" )->setEnabled( false );
-  }
-}
-
-
-void K3bFileView::slotAudioFilePlay()
-{
-  // play selected audio files
-  QStringList files;
-
-  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
-    if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
-      files.append( it.current()->url().path() );
-    }
-  }
-
-  if( !files.isEmpty() ) {
-    if( !k3bMain()->audioPlayer()->isVisible() )
-      k3bMain()->slotViewAudioPlayer();
-    k3bMain()->audioPlayer()->playFiles( files );
-  }
-}
-
-
-void K3bFileView::slotAudioFileEnqueue()
-{
-  // play selected audio files
-  QStringList files;
-
-  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
-    if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
-      files.append( it.current()->url().path() );
-    }
-  }
-
-  if( !files.isEmpty() )
-    k3bMain()->audioPlayer()->enqueueFiles( files );
 }
 
 

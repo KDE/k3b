@@ -27,4 +27,10 @@ K3bPlugin::~K3bPlugin()
 {
 }
 
+
+K3bPluginConfigWidget* K3bPlugin::createConfigWidget( QWidget*, const char* ) const
+{
+  return 0;
+}
+
 #include "k3bplugin.moc"

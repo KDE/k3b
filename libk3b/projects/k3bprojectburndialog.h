@@ -61,50 +61,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    virtual void slotCancelClicked();
 
    /**
-    * The default implementation loads the following defaults:
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    * </ul>
-    */
-   virtual void slotLoadK3bDefaults();
-
-   /**
-    * The default implementation loads the following settings from the apps KConfig.
-    * It opens the correct group.
-    * May be used in subclasses.
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    *   <li>writer</li>
-    *   <li>writing speed</li>
-    * </ul>
-    */
-   virtual void slotLoadUserDefaults();
-
-   /**
-    * The default implementation saves the following settings to the apps KConfig.
-    * It opens the correct group.
-    * May be used in subclasses.
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    *   <li>writer</li>
-    *   <li>writing speed</li>
-    * </ul>
-    */
-   virtual void slotSaveUserDefaults();
-
-   /**
     * gets called if the user changed the writer
     * default implementation just calls 
     * toggleAllOptions()
@@ -124,6 +80,48 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    void writerChanged();
 
  protected:
+   /**
+    * The default implementation loads the following defaults:
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    * </ul>
+    */
+   virtual void loadK3bDefaults();
+
+   /**
+    * The default implementation loads the following settings from the KConfig.
+    * May be used in subclasses.
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    *   <li>writer</li>
+    *   <li>writing speed</li>
+    * </ul>
+    */
+   virtual void loadUserDefaults( KConfig* );
+
+   /**
+    * The default implementation saves the following settings to the KConfig.
+    * May be used in subclasses.
+    * <ul>
+    *   <li>Writing mode</li>
+    *   <li>Simulate</li>
+    *   <li>on the fly</li>
+    *   <li>remove images</li>
+    *   <li>only create images</li>
+    *   <li>writer</li>
+    *   <li>writing speed</li>
+    * </ul>
+    */
+   virtual void saveUserDefaults( KConfig* );
+
    /**
     * The default implementation saves the following settings to the doc and may be called 
     * in subclasses:

@@ -240,9 +240,9 @@ void K3bMixedBurnDialog::readSettings()
 }
 
 
-void K3bMixedBurnDialog::slotLoadK3bDefaults()
+void K3bMixedBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::slotLoadK3bDefaults();
+  K3bProjectBurnDialog::loadK3bDefaults();
 
   m_cdtextWidget->setChecked( false );
   m_checkNormalize->setChecked(false);
@@ -259,11 +259,9 @@ void K3bMixedBurnDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bMixedBurnDialog::slotLoadUserDefaults()
+void K3bMixedBurnDialog::loadUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
-
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::loadUserDefaults( c );
 
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", false ) );
   m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
@@ -287,11 +285,9 @@ void K3bMixedBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bMixedBurnDialog::slotSaveUserDefaults()
+void K3bMixedBurnDialog::saveUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
-
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::saveUserDefaults(c);
 
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "normalize", m_checkNormalize->isChecked() );

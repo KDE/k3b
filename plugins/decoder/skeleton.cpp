@@ -15,11 +15,15 @@
 
 #include "k3b<name>decoder.h"
 
+#include <k3bpluginfactory.h>
+
+
+K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, K3bPluginFactory<K3b<name>DecoderFactory>( "libk3b<name>decoder" ) )
+
 
 K3b<name>DecoderFactory::K3b<name>DecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3b<name>decoder" );
 }
 
 
@@ -28,9 +32,8 @@ K3b<name>DecoderFactory::~K3b<name>DecoderFactory()
 }
 
 
-K3bPlugin* K3b<name>DecoderFactory::createPluginObject( QObject* parent, 
-							const char* name,
-							const QStringList& )
+K3bAudioDecoder* K3b<name>DecoderFactory::createDecoder( QObject* parent, 
+							 const char* name ) const
 {
   return new K3b<name>Decoder( parent, name );
 }

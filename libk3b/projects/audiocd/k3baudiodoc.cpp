@@ -384,15 +384,15 @@ K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url )
 
   // if not create one
   if( !decoder ) {
-    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
 
-    for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+    for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
       K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
       if( f && f->canDecode( url ) ) {
 	kdDebug() << "(K3bAudioDoc) using " << it.current()->className()
 		  << " for decoding of " << url.path() << endl;
 	
-	decoder = static_cast<K3bAudioDecoder*>(f->createPlugin());
+	decoder = f->createDecoder();
 	decoder->setFilename( url.path() );
 
 	//

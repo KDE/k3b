@@ -186,8 +186,8 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   m_buttonStop->setIconSet( SmallIconSet("player_stop") );
   m_buttonForward = new QToolButton( this );
   m_buttonBack = new QToolButton( this );
-  m_buttonForward->setIconSet( SmallIconSet("player_fwd") );
-  m_buttonBack->setIconSet( SmallIconSet("player_rew") );
+  m_buttonForward->setIconSet( SmallIconSet("player_end") );
+  m_buttonBack->setIconSet( SmallIconSet("player_start") );
 
   m_seekSlider = new QSlider( QSlider::Horizontal, this );
 
@@ -247,7 +247,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   connect( m_buttonForward, SIGNAL(clicked()), this, SLOT(forward()) );
   connect( m_buttonBack, SIGNAL(clicked()), this, SLOT(back()) );
 
-  connect( m_seekSlider, SIGNAL(valueChanged(int)), this, SLOT(seek(int)) );
+  connect( m_seekSlider, SIGNAL(sliderMoved(int)), this, SLOT(seek(int)) );
   connect( m_seekSlider, SIGNAL(valueChanged(int)), this, SLOT(slotUpdateCurrentTime(int)) );
 
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
@@ -616,10 +616,7 @@ void K3bAudioPlayer::slotUpdateDisplay()
       m_viewPlayList->viewport()->update();
     }
 
-    // we need to disconnect here to avoid recursive value setting
-    m_seekSlider->disconnect( this, SLOT(seek(int)) );
     m_seekSlider->setValue( position() );
-    connect( m_seekSlider, SIGNAL(valueChanged(int)), this, SLOT(seek(int)) );
   }
 }
 

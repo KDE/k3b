@@ -28,11 +28,10 @@
 class K3bAudioConverterJob::WorkThread : public K3bThread
 {
 public:
-  WorkThread( QListView* view, K3bAudioEncoderFactory* f, const QString& type, const QString& dest )
+  WorkThread( QListView* view, K3bAudioEncoder* f, const QString& type, const QString& dest )
     : K3bThread(),
       m_view(view),
-      m_encoderFactory(f),
-      m_encoder(0),
+      m_encoder(f),
       m_waveFileWriter(0),
       m_encoderExtension(type),
       m_destDir(dest) {
@@ -41,7 +40,6 @@ public:
 
   ~WorkThread() {
     delete m_waveFileWriter;
-    delete m_encoder;
   }
 
 
@@ -52,12 +50,7 @@ public:
     emitStarted();
     emitNewTask( i18n("Converting") );
 
-    //
-    // Get the encoder
-    //
-    if( m_encoderFactory )
-      m_encoder = static_cast<K3bAudioEncoder*>(m_encoderFactory->createPlugin());
-    else
+    if( !m_encoder )
       m_waveFileWriter = new K3bWaveFileWriter();
 
 
@@ -99,9 +92,9 @@ public:
 	isOpen = m_encoder->openFile( m_encoderExtension, destFilename, converterItem->decoder()->length() );
       
  	m_encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST,
-				converterItem->decoder()->metaInfo(K3bAudioDecoder::META_TITLE) );
- 	m_encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE,
 				converterItem->decoder()->metaInfo(K3bAudioDecoder::META_ARTIST) );
+ 	m_encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE,
+				converterItem->decoder()->metaInfo(K3bAudioDecoder::META_TITLE) );
  	m_encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT,
 				converterItem->decoder()->metaInfo(K3bAudioDecoder::META_COMMENT) );
       }
@@ -198,15 +191,14 @@ public:
   }
 
   QString jobDetails() const {
-    return i18n("Encoding to %1").arg( m_encoderFactory 
-				       ? m_encoderFactory->fileTypeComment(m_encoderExtension)
+    return i18n("Encoding to %1").arg( m_encoder 
+				       ? m_encoder->fileTypeComment(m_encoderExtension)
 				       : i18n("Wave") );
   }
 
 
   bool m_canceled;
   QListView* m_view;
-  K3bAudioEncoderFactory* m_encoderFactory;
   K3bAudioEncoder* m_encoder;
   K3bWaveFileWriter* m_waveFileWriter;
   QString m_encoderExtension;
@@ -215,7 +207,7 @@ public:
 
 
 K3bAudioConverterJob::K3bAudioConverterJob( QListView* view, 
-					    K3bAudioEncoderFactory* f, 
+					    K3bAudioEncoder* f, 
 					    const QString& type,
 					    const QString& dest,
 					    K3bJobHandler* jh, 

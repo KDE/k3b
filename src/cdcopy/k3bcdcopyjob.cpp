@@ -611,21 +611,6 @@ void K3bCdCopyJob::readNextSession()
     d->audioSessionReader->start();
   }
   else {
-//     if( !d->readcdReader ) {
-//       d->readcdReader = new K3bReadcdReader( this, this );
-//       connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-//       connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
-//       connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
-//       connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-//       connect( d->readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-// 	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-//     }
-
-//     d->readcdReader->setReadDevice( m_readerDevice );
-//     d->readcdReader->setAbortOnError( !m_ignoreReadErrors );
-//     d->readcdReader->setClone( false );
-//     d->readcdReader->setRetries( m_readRetries );
-
     if( !d->dataTrackReader ) {
       d->dataTrackReader = new K3bDataTrackReader( this, this );
       connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
@@ -654,10 +639,8 @@ void K3bCdCopyJob::readNextSession()
     // HACK: if the track is TAO recorded cut the two run-out sectors
     if( d->dataSessionProbablyTAORecorded.count() > dataTrackIndex &&
 	d->dataSessionProbablyTAORecorded[dataTrackIndex] )
-      //      d->readcdReader->setSectorRange( track->firstSector(), track->lastSector() - 2 );
       d->dataTrackReader->setSectorRange( track->firstSector(), track->lastSector() - 2 );
     else
-      //      d->readcdReader->setSectorRange( track->firstSector(), track->lastSector() );
       d->dataTrackReader->setSectorRange( track->firstSector(), track->lastSector() );
 
     int trackNum = d->currentReadSession;
@@ -665,17 +648,13 @@ void K3bCdCopyJob::readNextSession()
       trackNum = d->toc.count();
 
     if( m_onTheFly )
-      //      d->readcdReader->writeToFd( d->cdrecordWriter->fd() );
       d->dataTrackReader->writeToFd( d->cdrecordWriter->fd() );
-    else {
-      //      d->readcdReader->setImagePath( d->imageNames[trackNum-1] );
+    else
       d->dataTrackReader->setImagePath( d->imageNames[trackNum-1] );
-    }
-
+    
     d->dataReaderRunning = true;
     if( !m_onTheFly || m_onlyCreateImages )
       slotReadingNextTrack( 1, 1 );
-    //    d->readcdReader->start();
     d->dataTrackReader->start();
   }
 }
@@ -709,7 +688,8 @@ bool K3bCdCopyJob::writeNextSession()
 		    ? K3bDevice::STATE_INCOMPLETE
 		    : K3bDevice::STATE_EMPTY,
 		    K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
-    d->canceled = true;
+
+    finishJob( true, false );
     return false;
   }
 
@@ -863,10 +843,15 @@ bool K3bCdCopyJob::writeNextSession()
     bool multi = d->doNotCloseLastSession || (d->numSessions > 1 && d->currentWrittenSession < d->toc.count());
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
-      //      if( !m_writerDevice->dao() || d->toc.count() > 1 || multi )
+      // use DAO in overwriting mode when not writing multi-session or multi-track
+      k3bcore->config()->setGroup("General Options");
+      if( k3bcore->config()->readBoolEntry( "Allow overburning", false ) &&
+	  m_writerDevice->dao() &&
+	  d->toc.count() == 1 && 
+	  !multi )
+ 	usedWritingMode = K3b::DAO;
+      else
 	usedWritingMode = K3b::TAO;
-//       else
-// 	usedWritingMode = K3b::DAO;
     }
     d->cdrecordWriter->setWritingMode( usedWritingMode );
 

@@ -17,7 +17,7 @@
 
 
 #include <k3bpluginmanager.h>
-#include <k3bpluginfactory.h>
+#include <k3bplugin.h>
 #include <k3bpluginconfigwidget.h>
 
 #include <k3bcore.h>
@@ -36,22 +36,23 @@
 class K3bPluginOptionTab::PluginViewItem : public KListViewItem
 {
 public:
-  PluginViewItem( K3bPluginFactory* factory, KListViewItem* parent )
+  PluginViewItem( K3bPlugin* p, KListViewItem* parent )
     : KListViewItem( parent ),
-      pluginFactory(factory) {
-    setText( 0, factory->name() );
-    if( !factory->author().isEmpty() ) {
-      if( factory->email().isEmpty() )
-	setText( 1, factory->author() );
+      plugin(p) {
+    const K3bPluginInfo& info = p->pluginInfo();
+    setText( 0, info.name() );
+    if( !info.author().isEmpty() ) {
+      if( info.email().isEmpty() )
+	setText( 1, info.author() );
       else
-	setText( 1, factory->author() + " <" + factory->email() + ">" );
+	setText( 1, info.author() + " <" + info.email() + ">" );
     }
-    setText( 2, factory->version() );
-    setText( 3, factory->comment() );
-    setText( 4, factory->license() );
+    setText( 2, info.version() );
+    setText( 3, info.comment() );
+    setText( 4, info.licence() );
   }
 
-  K3bPluginFactory* pluginFactory;
+  K3bPlugin* plugin;
 };
 
 
@@ -81,8 +82,8 @@ void K3bPluginOptionTab::readSettings()
     KListViewItem* groupViewItem = new KListViewItem( m_viewPlugins,
 						      m_viewPlugins->lastChild(),
 						      group );
-    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( group );
-    for( QPtrListIterator<K3bPluginFactory> fit( fl ); fit.current(); ++fit )
+    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( group );
+    for( QPtrListIterator<K3bPlugin> fit( fl ); fit.current(); ++fit )
       (void)new PluginViewItem( fit.current(), groupViewItem );
 
     groupViewItem->setOpen(true);
@@ -102,7 +103,7 @@ void K3bPluginOptionTab::slotConfigureButtonClicked()
 {
   QListViewItem* item = m_viewPlugins->selectedItem();
   if( PluginViewItem* pi = dynamic_cast<PluginViewItem*>( item ) )
-    k3bpluginmanager->execPluginDialog( pi->pluginFactory, this );
+    k3bpluginmanager->execPluginDialog( pi->plugin, this );
 }
 
 

@@ -17,51 +17,8 @@
 #define _K3B_AUDIO_ENCODER_H_
 
 #include <k3bplugin.h>
-#include <k3bpluginfactory.h>
 
 #include <k3bmsf.h>
-
-
-
-/**
- * PluginFactory that needs to be subclassed in order to create an
- * audio encoder.
- */
-class K3bAudioEncoderFactory : public K3bPluginFactory
-{
-  Q_OBJECT
-
- public:
-  K3bAudioEncoderFactory( QObject* parent = 0, const char* name = 0 )
-    : K3bPluginFactory( parent, name ) {
-  }
-
-  virtual ~K3bAudioEncoderFactory() {
-  }
-
-  QString group() const { return "AudioEncoder"; }
-
-  /**
-   * This should return the fileextensions supported by the filetype written in the
-   * encoder.
-   * May return an empty list in which case the encoder will not be usable (this may come
-   * in handy if the encoder is based on some external program or lib which is not 
-   * available on runtime.)
-   */
-  virtual QStringList extensions() const = 0;
-
-  /**
-   * The filetype as presented to the user.
-   */
-  virtual QString fileTypeComment( const QString& extension ) const = 0;
-
-  /**
-   * Determine the filesize of the encoded file (~)
-   * default implementation returnes -1 (unknown)
-   * First parameter is the extension to be used
-   */
-  virtual long long fileSize( const QString&, const K3b::Msf& ) const { return -1; }
-};
 
 
 
@@ -94,6 +51,29 @@ class K3bAudioEncoder : public K3bPlugin
    * Force the plugin to read it's configuration
    */
   // virtual void readConfig( KConfig* );
+
+  QString group() const { return "AudioEncoder"; }
+
+  /**
+   * This should return the fileextensions supported by the filetype written in the
+   * encoder.
+   * May return an empty list in which case the encoder will not be usable (this may come
+   * in handy if the encoder is based on some external program or lib which is not 
+   * available on runtime.)
+   */
+  virtual QStringList extensions() const = 0;
+
+  /**
+   * The filetype as presented to the user.
+   */
+  virtual QString fileTypeComment( const QString& extension ) const = 0;
+
+  /**
+   * Determine the filesize of the encoded file (~)
+   * default implementation returnes -1 (unknown)
+   * First parameter is the extension to be used
+   */
+  virtual long long fileSize( const QString&, const K3b::Msf& ) const { return -1; }
 
   /**
    * The default implementation openes the file for writing with 

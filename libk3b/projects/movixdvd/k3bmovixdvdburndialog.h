@@ -37,9 +37,6 @@ class K3bMovixDvdBurnDialog : public K3bProjectBurnDialog
   ~K3bMovixDvdBurnDialog();
 
  protected slots:
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
   void slotStartClicked();
 
   void toggleAllOptions();
@@ -47,6 +44,9 @@ class K3bMovixDvdBurnDialog : public K3bProjectBurnDialog
  protected:
   void saveSettings();
   void readSettings();
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
 
  private:
   K3bMovixDvdDoc* m_doc;

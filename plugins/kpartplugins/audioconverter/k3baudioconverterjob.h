@@ -19,13 +19,13 @@
 #include <k3bthreadjob.h>
 
 class QListView;
-class K3bAudioEncoderFactory;
+class K3bAudioEncoder;
 
 class K3bAudioConverterJob : public K3bThreadJob
 {
  public:
   K3bAudioConverterJob( QListView* view, 
-			K3bAudioEncoderFactory*,
+			K3bAudioEncoder*,
 			const QString& type,
 			const QString& dest,
 			K3bJobHandler*, 

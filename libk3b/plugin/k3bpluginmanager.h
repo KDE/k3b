@@ -24,7 +24,7 @@
 #define k3bpluginmanager K3bPluginManager::k3bPluginManager()
 
 
-class K3bPluginFactory;
+class K3bPlugin;
 class QWidget;
 
 
@@ -45,7 +45,7 @@ class K3bPluginManager : public QObject
   /**
    * if group is empty all plugins are returned
    */
-  QPtrList<K3bPluginFactory> factories( const QString& group = QString::null ) const;
+  QPtrList<K3bPlugin> plugins( const QString& group = QString::null ) const;
 
   /**
    * Returnes a list of the available groups.
@@ -64,12 +64,7 @@ class K3bPluginManager : public QObject
 
   void loadPlugin( const QString& fileName );
 
-  /**
-   * Removes the plugin from memory.
-   */
-  void unloadPlugin( K3bPluginFactory* );
-
-  int execPluginDialog( K3bPluginFactory*, QWidget* parent = 0, const char* name = 0 );
+  int execPluginDialog( K3bPlugin*, QWidget* parent = 0, const char* name = 0 );
 
  private:
   class Private;

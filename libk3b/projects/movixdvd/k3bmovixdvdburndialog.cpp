@@ -100,9 +100,9 @@ K3bMovixDvdBurnDialog::~K3bMovixDvdBurnDialog()
 }
 
 
-void K3bMovixDvdBurnDialog::slotLoadK3bDefaults()
+void K3bMovixDvdBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::slotLoadK3bDefaults();
+  K3bProjectBurnDialog::loadK3bDefaults();
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
@@ -116,11 +116,9 @@ void K3bMovixDvdBurnDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bMovixDvdBurnDialog::slotLoadUserDefaults()
+void K3bMovixDvdBurnDialog::loadUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
-
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::loadUserDefaults(c);
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
@@ -135,11 +133,9 @@ void K3bMovixDvdBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bMovixDvdBurnDialog::slotSaveUserDefaults()
+void K3bMovixDvdBurnDialog::saveUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
-
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::saveUserDefaults(c);
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );

@@ -45,12 +45,16 @@
 #include <k3bstdguiitems.h>
 
 K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent, const char* name )
-        : K3bInteractionDialog( parent, name ), m_videooptions( options )
+  : K3bInteractionDialog( parent, name,
+			  i18n( "Video CD Ripping" ),
+			  QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  "Video CD Ripping" ), // config group
+    m_videooptions( options )
 {
-    setupGui();
-    setupContextHelp();
-
-    setTitle( i18n( "Video CD Ripping" ) );
+  setupGui();
+  setupContextHelp();
 }
 
 
@@ -120,8 +124,6 @@ void K3bVideoCdRippingDialog::setupGui()
     // ----------------------------------------------------------------------------------
 
     connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeSpace()) );
-
-    slotLoadUserDefaults();
 
     m_labelNecessarySize ->setText( KIO::convertSize( m_videooptions ->getVideoCdSize() ) );    
 }
@@ -217,7 +219,7 @@ void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
         m_labelFreeSpace->setText("-");
 }
 
-void K3bVideoCdRippingDialog::slotLoadK3bDefaults()
+void K3bVideoCdRippingDialog::loadK3bDefaults()
 {
     m_editDirectory->setURL( QDir::homeDirPath() );
     m_ignoreExt ->setChecked( false );
@@ -227,11 +229,8 @@ void K3bVideoCdRippingDialog::slotLoadK3bDefaults()
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::slotLoadUserDefaults()
+void K3bVideoCdRippingDialog::loadUserDefaults( KConfig* c )
 {
-    KConfig* c = k3bcore->config();
-    c->setGroup( "Video CD Ripping" );
-
     m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
     m_ignoreExt ->setChecked( c->readBoolEntry( "ignore ext", false ) );
     m_sector2336 ->setChecked( c->readBoolEntry( "sector 2336", false ) );
@@ -240,11 +239,8 @@ void K3bVideoCdRippingDialog::slotLoadUserDefaults()
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::slotSaveUserDefaults()
+void K3bVideoCdRippingDialog::saveUserDefaults( KConfig* c )
 {
-    KConfig* c = k3bcore->config();
-    c->setGroup( "Video CD Ripping" );
-
     c->writePathEntry( "last ripping directory", m_editDirectory->url() );
     c->writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );
     c->writeEntry( "sector 2336", m_sector2336 ->isChecked( ) );

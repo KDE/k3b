@@ -78,15 +78,15 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void setupGui();
   void setupContextHelp();
 
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
+
   class Private;
   Private* d;
   
  private slots:
   void slotStartClicked();
-
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
 };
 
 #endif

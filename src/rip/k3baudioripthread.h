@@ -25,7 +25,7 @@
 #include <k3bcddbquery.h>
 
 
-class K3bAudioEncoderFactory;
+class K3bAudioEncoder;
 class K3bCdparanoiaLib;
 namespace K3bDevice {
   class Device;
@@ -57,7 +57,7 @@ class K3bAudioRipThread : public QObject, public K3bThread
   void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
 
   // if 0 (default) wave files are created
-  void setEncoderFactory( K3bAudioEncoderFactory* f );
+  void setEncoder( K3bAudioEncoder* f );
 
   /**
    * Used for encoders that support multiple formats

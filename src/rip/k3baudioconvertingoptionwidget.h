@@ -21,7 +21,7 @@
 #include <qcheckbox.h>
 
 
-class K3bAudioEncoderFactory;
+class K3bAudioEncoder;
 class KConfig;
 
 
@@ -41,7 +41,7 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
   /**
    * @returns 0 if wave is selected
    */
-  K3bAudioEncoderFactory* encoderFactory() const;
+  K3bAudioEncoder* encoder() const;
   QString extension() const;
 
   QString baseDir() const;

@@ -86,7 +86,6 @@
 #include "images/k3bisoimagewritingdialog.h"
 #include <k3bexternalbinmanager.h>
 #include "k3bprojecttabwidget.h"
-#include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
 #include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
@@ -103,7 +102,7 @@
 #include <k3bprojectmanager.h>
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
-#include <k3bpluginfactory.h>
+#include <k3bplugin.h>
 #include "k3bsystemproblemdialog.h"
 #include <k3baudiodecoder.h>
 #include <k3bthememanager.h>
@@ -146,6 +145,11 @@ public:
 K3bMainWindow::K3bMainWindow()
   : DockMainWindow(0,"K3bMainwindow")
 {
+  //setup splitter behavior
+  manager()->setSplitterHighResolution(true);
+  manager()->setSplitterOpaqueResize(true);
+  manager()->setSplitterKeepSize(true);
+
   d = new Private;
   d->projectManager = new K3bProjectManager( this );
   d->lastDoc = 0;
@@ -163,11 +167,6 @@ K3bMainWindow::K3bMainWindow()
   m_movixDvdUntitledCount = 0;
   m_dvdUntitledCount = 0;
   m_videoDvdUntitledCount = 0;
-
-  //setup splitter behavior
-  manager()->setSplitterHighResolution(true);
-  manager()->setSplitterOpaqueResize(true);
-  manager()->setSplitterKeepSize(true);
 
   resize(780,520);  // default optimized for 800x600
 
@@ -202,7 +201,6 @@ K3bMainWindow::K3bMainWindow()
 K3bMainWindow::~K3bMainWindow()
 {
   delete mainDock;
-  delete m_audioPlayerDock;
   delete m_contentsDock;
 
   delete d;
@@ -277,9 +275,6 @@ void K3bMainWindow::initActions()
 
   actionViewProjectView = new KToggleAction(i18n("Show Project View"), 0, this, SLOT(slotShowProjectView()),
 					    actionCollection(), "view_show_project_view");
-
-  actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()),
-					    actionCollection(), "view_audio_player");
 
   actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
 					       actionCollection(), "view_document_header");
@@ -460,19 +455,6 @@ void K3bMainWindow::initView()
 
   connect( m_contentsDock, SIGNAL(iMBeingClosed()), this, SLOT(slotContentsDockHidden()) );
   connect( m_contentsDock, SIGNAL(hasUndocked()), this, SLOT(slotContentsDockHidden()) );
-  // ---------------------------------------------------------------------------------------------
-
-
-  // --- Audioplayer Dock ------------------------------------------------------------------------
-  m_audioPlayerDock = createDockWidget( "audio_player", SmallIcon("1rightarrow"), 0,
-					kapp->makeStdCaption( i18n("Audioplayer") ), i18n("Audioplayer") );
-  m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
-  m_audioPlayerDock->setWidget( m_audioPlayer );
-  //  m_audioPlayerDock->setEnableDocking( KDockWidget::DockFullDocking/*DockCorner*/ );
-  //  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockRight, 8000 );
-
-  connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
-  connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
   // ---------------------------------------------------------------------------------------------
 
   // --- filetreecombobox-toolbar -------------------------------------------------------------------
@@ -872,7 +854,7 @@ void K3bMainWindow::showOptionDialog( int index )
 
 K3bDoc* K3bMainWindow::slotNewAudioDoc()
 {
-  if( k3bpluginmanager->factories( "AudioDecoder" ).isEmpty() )
+  if( k3bpluginmanager->plugins( "AudioDecoder" ).isEmpty() )
     KMessageBox::error( this, i18n("No audio decoder plugins found. You won't be able to add any files "
 				   "to the audio project!") );
 
@@ -1267,13 +1249,6 @@ void K3bMainWindow::slotDvdCopy()
 // }
 
 
-void K3bMainWindow::slotViewAudioPlayer()
-{
-  m_audioPlayerDock->changeHideShowState();
-  slotCheckDockWidgetStatus();
-}
-
-
 void K3bMainWindow::slotShowDirTreeView()
 {
   m_dirTreeDock->changeHideShowState();
@@ -1301,12 +1276,6 @@ void K3bMainWindow::slotShowTips()
 }
 
 
-void K3bMainWindow::slotAudioPlayerHidden()
-{
-  actionViewAudioPlayer->setChecked( false );
-}
-
-
 void K3bMainWindow::slotDirTreeDockHidden()
 {
   actionViewDirTreeView->setChecked( false );
@@ -1327,7 +1296,6 @@ void K3bMainWindow::slotProjectDockHidden()
 
 void K3bMainWindow::slotCheckDockWidgetStatus()
 {
-  actionViewAudioPlayer->setChecked( m_audioPlayerDock->isVisible() );
   actionViewContentsView->setChecked( m_contentsDock->isVisible() );
   actionViewProjectView->setChecked( mainDock->isVisible() );
   actionViewDirTreeView->setChecked( m_dirTreeDock->isVisible() );
@@ -1423,7 +1391,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
   else {
     // check if the files are all audio we can handle. If so create an audio project
     bool audio = true;
-    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
+    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
     for( KURL::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
       const KURL& url = *it;
 
@@ -1433,8 +1401,8 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
       }
 
       bool a = false;
-      for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
-	if( ((K3bAudioDecoderFactory*)it.current())->canDecode( url ) ) {
+      for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+	if( static_cast<K3bAudioDecoderFactory*>(it.current())->canDecode( url ) ) {
 	  a = true;
 	  break;
 	}

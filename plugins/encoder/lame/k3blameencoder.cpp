@@ -16,6 +16,7 @@
 #include "k3blameencoder.h"
 
 #include <k3bcore.h>
+#include <k3bpluginfactory.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -34,6 +35,9 @@
 
 
 #include <lame/lame.h>
+
+
+K_EXPORT_COMPONENT_FACTORY( libk3blameencoder, K3bPluginFactory<K3bLameEncoder>( "libk3blameencoder" ) )
 
 
 class K3bLameEncoder::Private
@@ -396,31 +400,19 @@ void K3bLameEncoderSettingsWidget::saveConfig()
 
 
 
-K3bLameEncoderFactory::K3bLameEncoderFactory( QObject* parent, const char* name )
-  : K3bAudioEncoderFactory( parent, name )
-{
-  s_instance = new KInstance( "k3blameencoder" );
-}
-
-
-K3bLameEncoderFactory::~K3bLameEncoderFactory()
-{
-}
-
-
-QStringList K3bLameEncoderFactory::extensions() const
+QStringList K3bLameEncoder::extensions() const
 {
   return QStringList( "mp3" );
 }
 
 
-QString K3bLameEncoderFactory::fileTypeComment( const QString& ) const
+QString K3bLameEncoder::fileTypeComment( const QString& ) const
 {
   return "MPEG1 Layer III (mp3)";
 }
 
 
-long long K3bLameEncoderFactory::fileSize( const QString&, const K3b::Msf& msf ) const
+long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   // FIXME!
   KConfig* c = k3bcore->config();
@@ -431,17 +423,8 @@ long long K3bLameEncoderFactory::fileSize( const QString&, const K3b::Msf& msf )
 }
 
 
-K3bPlugin* K3bLameEncoderFactory::createPluginObject( QObject* parent, 
-						      const char* name,
-						      const QStringList& )
-{
-  return new K3bLameEncoder( parent, name );
-}
-
-
-K3bPluginConfigWidget* K3bLameEncoderFactory::createConfigWidgetObject( QWidget* parent, 
-									const char* name,
-									const QStringList& )
+K3bPluginConfigWidget* K3bLameEncoder::createConfigWidget( QWidget* parent, 
+							   const char* name ) const
 {
   return new K3bLameEncoderSettingsWidget( parent, name );
 }

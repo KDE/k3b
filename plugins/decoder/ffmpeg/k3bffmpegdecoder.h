@@ -31,14 +31,10 @@ class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
 
   bool canDecode( const KURL& filename );
 
-  int pluginSystemVersion() const { return 2; }
+  int pluginSystemVersion() const { return 3; }
 
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-
- private:
-  KInstance* s_instance;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
+				  const char* name = 0 ) const;
 };
 
 
@@ -65,7 +61,5 @@ class K3bFFMpegDecoder : public K3bAudioDecoder
   K3bFFMpegFile* m_file;
   QString m_type;
 };
-
-K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, K3bFFMpegDecoderFactory )
 
 #endif

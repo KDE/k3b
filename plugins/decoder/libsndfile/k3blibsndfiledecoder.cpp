@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2004 Matthieu Bedouet <mbedouet@no-log.org>
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -16,6 +16,8 @@
 
 #include "k3blibsndfiledecoder.h"
 
+#include <k3bpluginfactory.h>
+
 #include <qfile.h>
 #include <qstringlist.h>
 
@@ -29,6 +31,8 @@
 #include <stdio.h>
 #include <sndfile.h>
 
+
+K_EXPORT_COMPONENT_FACTORY( libk3blibsndfiledecoder, K3bPluginFactory<K3bLibsndfileDecoderFactory>( "libk3blibsndfiledecoder" ) )
 
 
 class K3bLibsndfileDecoder::Private
@@ -199,7 +203,6 @@ void K3bLibsndfileDecoder::cleanup()
 K3bLibsndfileDecoderFactory::K3bLibsndfileDecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3blibsndfiledecoder" );
 }
 
 
@@ -208,9 +211,8 @@ K3bLibsndfileDecoderFactory::~K3bLibsndfileDecoderFactory()
 }
 
 
-K3bPlugin* K3bLibsndfileDecoderFactory::createPluginObject( QObject* parent, 
-							    const char* name,
-							    const QStringList& )
+K3bAudioDecoder* K3bLibsndfileDecoderFactory::createDecoder( QObject* parent, 
+							     const char* name ) const
 {
   return new K3bLibsndfileDecoder( parent, name );
 }

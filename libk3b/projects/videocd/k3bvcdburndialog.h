@@ -53,6 +53,10 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         void saveSettings();
         void readSettings();
 
+        void loadK3bDefaults();
+        void loadUserDefaults( KConfig* );
+        void saveUserDefaults( KConfig* );
+
         // -----------------------------------------------------------
         // the video-cd-tab
         // -----------------------------------------------------------
@@ -125,10 +129,6 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
     protected slots:
         void slotStartClicked();
-
-        void slotLoadK3bDefaults();
-        void slotLoadUserDefaults();
-        void slotSaveUserDefaults();
 
         void slotGapsChecked( bool );
         void slotSpinVolumeCount();

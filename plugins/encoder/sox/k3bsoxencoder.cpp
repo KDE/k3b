@@ -19,6 +19,7 @@
 #include <k3bprocess.h>
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bpluginfactory.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -36,6 +37,7 @@
 #include <sys/wait.h>
 
 
+K_EXPORT_COMPONENT_FACTORY( libk3bsoxencoder, K3bPluginFactory<K3bSoxEncoder>( "libk3bsoxencoder" ) )
 
 
 // the sox external program
@@ -105,6 +107,9 @@ public:
 K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const char* name )
   : K3bAudioEncoder( parent, name )
 {
+  if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
+    k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
+
   d = new Private();
 }
 
@@ -245,23 +250,7 @@ void K3bSoxEncoder::slotSoxOutputLine( const QString& line )
 }
 
 
-
-K3bSoxEncoderFactory::K3bSoxEncoderFactory( QObject* parent, const char* name )
-  : K3bAudioEncoderFactory( parent, name )
-{
-  if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
-    k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
-
-  s_instance = new KInstance( "k3bsoxencoder" );
-}
-
-
-K3bSoxEncoderFactory::~K3bSoxEncoderFactory()
-{
-}
-
-
-QStringList K3bSoxEncoderFactory::extensions() const
+QStringList K3bSoxEncoder::extensions() const
 {
   static QStringList s_extensions;
   if( s_extensions.isEmpty() ) {
@@ -293,7 +282,7 @@ QStringList K3bSoxEncoderFactory::extensions() const
 }
 
 
-QString K3bSoxEncoderFactory::fileTypeComment( const QString& ext ) const
+QString K3bSoxEncoder::fileTypeComment( const QString& ext ) const
 {
   if( ext == "au" )
     return i18n("Sun AU");
@@ -338,7 +327,7 @@ QString K3bSoxEncoderFactory::fileTypeComment( const QString& ext ) const
 }
 
 
-long long K3bSoxEncoderFactory::fileSize( const QString&, const K3b::Msf& msf ) const
+long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   // for now we make a rough assumption based on the settings
     KConfig* c = k3bcore->config();
@@ -357,17 +346,8 @@ long long K3bSoxEncoderFactory::fileSize( const QString&, const K3b::Msf& msf ) 
 }
 
 
-K3bPlugin* K3bSoxEncoderFactory::createPluginObject( QObject* parent, 
-						     const char* name,
-						     const QStringList& )
-{
-  return new K3bSoxEncoder( parent, name );
-}
-
-
-K3bPluginConfigWidget* K3bSoxEncoderFactory::createConfigWidgetObject( QWidget* parent, 
-								       const char* name,
-								       const QStringList& )
+K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent, 
+							  const char* name ) const
 {
   return new K3bSoxEncoderSettingsWidget( parent, name );
 }

@@ -48,7 +48,6 @@ class K3bOptionDialog;
 class K3bJob;
 class K3bProjectTabWidget;
 class K3bSongManager;
-class K3bAudioPlayer;
 class K3bBusyWidget;
 class KSystemTray;
 class K3bStatusBarManager;
@@ -95,7 +94,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   K3bDevice::DeviceManager*      deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
-  K3bAudioPlayer*        audioPlayer() const       { return m_audioPlayer; }
   KConfig*               config() const            { return m_config; }
   // return main window with browser/cd/dvd view, used for DND
   K3bDirView*            mainWindow() const        { return m_dirView; }
@@ -152,8 +150,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotErrorMessage(const QString&);
   /** No descriptions */
   void slotWarningMessage(const QString&);
-
-  void slotViewAudioPlayer();
 
   void slotConfigureKeys();
   void slotShowTips();
@@ -249,7 +245,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotViewDocumentHeader();
 
-  void slotAudioPlayerHidden();
   void slotCheckDockWidgetStatus();
 
   /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
@@ -314,8 +309,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   int m_dvdUntitledCount;
   int m_videoDvdUntitledCount;
 
-  K3bAudioPlayer*        m_audioPlayer;
-
   // KAction pointers to enable/disable actions
   KActionMenu* actionFileNewMenu;
   KAction* actionFileNewAudio;
@@ -344,7 +337,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   KToggleAction* actionViewDirTreeView;
   KToggleAction* actionViewContentsView;
   KToggleAction* actionViewProjectView;
-  KToggleAction* actionViewAudioPlayer;
   KToggleAction* actionViewDocumentHeader;
 
   // project actions
@@ -357,7 +349,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   KDockWidget* mainDock;
   KDockWidget* m_contentsDock;
   KDockWidget* m_dirTreeDock;
-  KDockWidget* m_audioPlayerDock;
 
   // The K3b-specific widgets
   K3bDirView* m_dirView;

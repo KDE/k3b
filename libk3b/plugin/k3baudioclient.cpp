@@ -18,7 +18,8 @@
 
 
 K3bAudioClient::K3bAudioClient( K3bAudioServer* s )
-  : m_audioServer(s)
+  : m_audioServer(s),
+    m_attached(false)
 {
 }
 
@@ -28,13 +29,19 @@ K3bAudioClient::~K3bAudioClient()
 }
 
 
-void K3bAudioClient::play()
+void K3bAudioClient::startStreaming()
 {
-  m_audioServer->attachClient( this );
+  if( !m_attached ) {
+    m_audioServer->attachClient( this );
+    m_attached = true;
+  }
 }
 
 
-void K3bAudioClient::stop()
+void K3bAudioClient::stopStreaming()
 {
-  m_audioServer->detachClient( this );
+  if( m_attached ) {
+    m_audioServer->detachClient( this );
+    m_attached = false;
+  }
 }

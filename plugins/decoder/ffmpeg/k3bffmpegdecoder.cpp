@@ -17,12 +17,15 @@
 #include "k3bffmpegwrapper.h"
 
 #include <kdebug.h>
+#include <k3bpluginfactory.h>
+
+
+K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, K3bPluginFactory<K3bFFMpegDecoderFactory>( "k3bffmpegdecoder" ) )
 
 
 K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3bffmpegdecoder" );
 }
 
 
@@ -31,9 +34,8 @@ K3bFFMpegDecoderFactory::~K3bFFMpegDecoderFactory()
 }
 
 
-K3bPlugin* K3bFFMpegDecoderFactory::createPluginObject( QObject* parent, 
-							const char* name,
-							const QStringList& )
+K3bAudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent, 
+							 const char* name ) const
 {
   return new K3bFFMpegDecoder( parent, name );
 }

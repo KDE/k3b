@@ -47,6 +47,10 @@ class K3bAudioTrackView : public K3bListView
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
+  void showPlayerIndicator( K3bAudioTrack* );
+  void togglePauseIndicator();
+  void removePlayerIndicator();
+
  private:
   void setupColumns();
   void setupActions();
@@ -75,6 +79,9 @@ class K3bAudioTrackView : public K3bListView
   QTimer* m_animationTimer;
 
   KPopupMenu* m_popupMenu;
+
+  // used for the audiotrackplayer indicator
+  K3bAudioTrack* m_currentlyPlayingTrack;
 
  private slots:
   void slotAnimation();

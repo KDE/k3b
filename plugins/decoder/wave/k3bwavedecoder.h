@@ -36,14 +36,10 @@ class K3bWaveDecoderFactory : public K3bAudioDecoderFactory
 
   bool canDecode( const KURL& filename );
 
-  int pluginSystemVersion() const { return 2; }
+  int pluginSystemVersion() const { return 3; }
 
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-
- private:
-  KInstance* s_instance;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
+				  const char* name = 0 ) const;
 };
 
 
@@ -74,8 +70,5 @@ class K3bWaveDecoder : public K3bAudioDecoder
   class Private;
   Private* d;
 };
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3bwavedecoder, K3bWaveDecoderFactory )
 
 #endif

@@ -39,7 +39,7 @@
 class K3bAudioConvertingOptionWidget::Private
 {
 public:
-  QIntDict<K3bAudioEncoderFactory> factoryMap;
+  QIntDict<K3bAudioEncoder> encoderMap;
   QMap<int, QString> extensionMap;
 
   QTimer freeSpaceUpdateTimer;
@@ -67,22 +67,22 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent,
   m_editBaseDir->setMode( KFile::Directory );
   m_buttonConfigurePlugin->setIconSet( SmallIconSet( "gear" ) );
 
-  d->factoryMap.clear();
+  d->encoderMap.clear();
   d->extensionMap.clear();
   m_comboFileType->clear();
   m_comboFileType->insertItem( i18n("Wave") );
   d->extensionMap[0] = "wav";
 
   // check the available encoding plugins
-  QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioEncoder" );
-  for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
-    K3bAudioEncoderFactory* f = (K3bAudioEncoderFactory*)it.current();
+  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioEncoder" );
+  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+    K3bAudioEncoder* f = (K3bAudioEncoder*)it.current();
     QStringList exL = f->extensions();
 
     for( QStringList::const_iterator exIt = exL.begin();
 	 exIt != exL.end(); ++exIt ) {
       d->extensionMap.insert( m_comboFileType->count(), *exIt );
-      d->factoryMap.insert( m_comboFileType->count(), f );
+      d->encoderMap.insert( m_comboFileType->count(), f );
       m_comboFileType->insertItem( f->fileTypeComment(*exIt) );
     }
   }
@@ -114,9 +114,9 @@ void K3bAudioConvertingOptionWidget::setBaseDir( const QString& path )
 void K3bAudioConvertingOptionWidget::slotConfigurePlugin()
 {
   // 0 for wave
-  K3bAudioEncoderFactory* factory = d->factoryMap[m_comboFileType->currentItem()];
-  if( factory )
-    k3bpluginmanager->execPluginDialog( factory, this );
+  K3bAudioEncoder* encoder = d->encoderMap[m_comboFileType->currentItem()];
+  if( encoder )
+    k3bpluginmanager->execPluginDialog( encoder, this );
 }
 
 
@@ -138,13 +138,13 @@ void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 void K3bAudioConvertingOptionWidget::slotEncoderChanged()
 {
   // 0 for wave
-  m_buttonConfigurePlugin->setEnabled( d->factoryMap[m_comboFileType->currentItem()] != 0 );
+  m_buttonConfigurePlugin->setEnabled( d->encoderMap[m_comboFileType->currentItem()] != 0 );
 }
 
 
-K3bAudioEncoderFactory* K3bAudioConvertingOptionWidget::encoderFactory() const
+K3bAudioEncoder* K3bAudioConvertingOptionWidget::encoder() const
 {
-  return d->factoryMap[m_comboFileType->currentItem()];  // 0 for wave
+  return d->encoderMap[m_comboFileType->currentItem()];  // 0 for wave
 }
 
 

@@ -53,7 +53,7 @@
 class K3bAudioConverterPluginDialog::Private
 {
 public:
-  QIntDict<K3bAudioEncoderFactory> factoryMap;
+  QIntDict<K3bAudioEncoder> encoderMap;
   QMap<int, QString> extensionMap;
 };
 
@@ -63,7 +63,9 @@ K3bAudioConverterPluginDialog::K3bAudioConverterPluginDialog( QWidget* parent,
   : K3bInteractionDialog( parent, name,
 			  i18n("Convert Audio Files"),
 			  i18n("from all into all supported audio formats"),
-			  START_BUTTON|CANCEL_BUTTON )
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  "Audio File Converter" ) // config group
 {
   d = new Private();
 
@@ -89,7 +91,6 @@ K3bAudioConverterPluginDialog::K3bAudioConverterPluginDialog( QWidget* parent,
 	   this, SLOT(slotDropped(QDropEvent*)) );
 
   loadAudioEncoder();
-  slotLoadUserDefaults();
   slotToggleAll();
 }
 
@@ -102,20 +103,20 @@ K3bAudioConverterPluginDialog::~K3bAudioConverterPluginDialog()
 
 void K3bAudioConverterPluginDialog::loadAudioEncoder()
 {
-  d->factoryMap.clear();
+  d->encoderMap.clear();
   m_w->comboFormat->clear();
   m_w->comboFormat->insertItem( i18n("Wave") );
 
   // check the available encoding plugins
-  QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioEncoder" );
-  for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
-    K3bAudioEncoderFactory* f = (K3bAudioEncoderFactory*)it.current();
+  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioEncoder" );
+  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+    K3bAudioEncoder* f = (K3bAudioEncoder*)it.current();
     QStringList exL = f->extensions();
 
     for( QStringList::const_iterator exIt = exL.begin();
 	 exIt != exL.end(); ++exIt ) {
       d->extensionMap.insert( m_w->comboFormat->count(), *exIt );
-      d->factoryMap.insert( m_w->comboFormat->count(), f );
+      d->encoderMap.insert( m_w->comboFormat->count(), f );
       m_w->comboFormat->insertItem( f->fileTypeComment(*exIt) );
     }
   }
@@ -154,30 +155,27 @@ void K3bAudioConverterPluginDialog::slotClear()
 
 void K3bAudioConverterPluginDialog::slotConfigureEncoder()
 {
-  K3bAudioEncoderFactory* factory = d->factoryMap[m_w->comboFormat->currentItem()];  // 0 for wave
-  if( factory )
-    k3bpluginmanager->execPluginDialog( factory, this );
+  K3bAudioEncoder* encoder = d->encoderMap[m_w->comboFormat->currentItem()];  // 0 for wave
+  if( encoder )
+    k3bpluginmanager->execPluginDialog( encoder, this );
 }
 
 
 void K3bAudioConverterPluginDialog::slotToggleAll()
 {
-  m_w->buttonConfigure->setEnabled( d->factoryMap[m_w->comboFormat->currentItem()] != 0 );  // 0 for wave
+  m_w->buttonConfigure->setEnabled( d->encoderMap[m_w->comboFormat->currentItem()] != 0 );  // 0 for wave
 }
 
 
-void K3bAudioConverterPluginDialog::slotLoadK3bDefaults()
+void K3bAudioConverterPluginDialog::loadK3bDefaults()
 {
   m_w->comboFormat->setCurrentItem(0);
   m_w->editDir->setURL( K3b::defaultTempPath() );
 }
 
 
-void K3bAudioConverterPluginDialog::slotLoadUserDefaults()
+void K3bAudioConverterPluginDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Audio File Converter" );
-
   QString filetype = c->readEntry( "filetype", "wav" );
   if( filetype == "wav" )
     m_w->comboFormat->setCurrentItem(0);
@@ -195,11 +193,8 @@ void K3bAudioConverterPluginDialog::slotLoadUserDefaults()
 }
 
 
-void K3bAudioConverterPluginDialog::slotSaveUserDefaults()
+void K3bAudioConverterPluginDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Audio File Converter" );
-
   if( d->extensionMap.contains(m_w->comboFormat->currentItem()) )
     c->writeEntry( "filetype", d->extensionMap[m_w->comboFormat->currentItem()] );
   else
@@ -215,13 +210,13 @@ void K3bAudioConverterPluginDialog::slotStartClicked()
     KMessageBox::sorry( this, i18n("Please provide an existing destination directory.") );
   }
   else {
-    K3bAudioEncoderFactory* factory = d->factoryMap[m_w->comboFormat->currentItem()];  // 0 for wave
+    K3bAudioEncoder* encoder = d->encoderMap[m_w->comboFormat->currentItem()];  // 0 for wave
     QString type;
-    if( factory )
+    if( encoder )
       type = d->extensionMap[m_w->comboFormat->currentItem()];
 
     K3bJobProgressDialog* dlg = new K3bJobProgressDialog( this );
-    K3bAudioConverterJob* job = new K3bAudioConverterJob( m_w->viewFiles, factory, type, m_w->editDir->url(), dlg );
+    K3bAudioConverterJob* job = new K3bAudioConverterJob( m_w->viewFiles, encoder, type, m_w->editDir->url(), dlg );
 
     hide();
 
@@ -243,11 +238,11 @@ void K3bAudioConverterPluginDialog::addFiles( const KURL::List& urls )
 
 void K3bAudioConverterPluginDialog::addFile( const KURL& url )
 {
-  QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioDecoder" );
-  for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
+  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
+  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioDecoderFactory* f = static_cast<K3bAudioDecoderFactory*>( it.current() );
     if( f->canDecode( url ) ) {
-      (void)new K3bAudioConverterViewItem( url.path(), static_cast<K3bAudioDecoder*>(f->createPlugin()),
+      (void)new K3bAudioConverterViewItem( url.path(), f->createDecoder(),
 					   m_w->viewFiles, m_w->viewFiles->lastItem() );
       return;
     }

@@ -99,6 +99,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 			  "iso cue toc",
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
+			  "image writing", // config group
 			  modal )
 {
   d = new Private();
@@ -125,8 +126,6 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 	   this, SLOT(slotUpdateImage(const QString&)) );
   connect( m_checkDummy, SIGNAL(toggled(bool)),
 	   this, SLOT(slotToggleAll()) );
-
-  slotLoadUserDefaults();
 }
 
 
@@ -772,11 +771,8 @@ void K3bCdImageWritingDialog::slotMd5SumCompare()
 }
 
 
-void K3bCdImageWritingDialog::slotLoadUserDefaults()
+void K3bCdImageWritingDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "image writing" );
-
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
@@ -809,11 +805,8 @@ void K3bCdImageWritingDialog::slotLoadUserDefaults()
 }
 
 
-void K3bCdImageWritingDialog::slotSaveUserDefaults()
+void K3bCdImageWritingDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "image writing" );
-
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
@@ -850,7 +843,7 @@ void K3bCdImageWritingDialog::slotSaveUserDefaults()
   c->writeEntry( "image type", imageType );
 }
 
-void K3bCdImageWritingDialog::slotLoadK3bDefaults()
+void K3bCdImageWritingDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );

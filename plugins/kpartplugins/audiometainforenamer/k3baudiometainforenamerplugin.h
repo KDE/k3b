@@ -38,13 +38,13 @@ class K3bAudioMetainfoRenamerPluginDialog : public K3bInteractionDialog
   ~K3bAudioMetainfoRenamerPluginDialog();
 
  protected slots:
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
   void slotStartClicked();
   void slotSaveClicked();
 
  private:
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
   void scanDir( K3bDirItem*, QListViewItem* parent );
   QString createNewName( K3bFileItem* );
   bool find( K3bDirItem*, const QString& );

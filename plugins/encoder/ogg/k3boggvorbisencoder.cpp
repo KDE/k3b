@@ -17,12 +17,12 @@
 #include "base_k3boggvorbisencodersettingswidget.h"
 
 #include <k3bcore.h>
+#include <k3bpluginfactory.h>
 
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <knuminput.h>
-#include <kinstance.h>
 
 #include <qlayout.h>
 #include <qradiobutton.h>
@@ -37,6 +37,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+
+K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, K3bPluginFactory<K3bOggVorbisEncoder>( "libk3boggvorbisencoder" ) )
 
 
 // THIS IS BASED ON THE OGG VORBIS LIB EXAMPLE 
@@ -441,26 +443,13 @@ void K3bOggVorbisEncoderSettingsWidget::saveConfig()
 }
 
 
-
-K3bOggVorbisEncoderFactory::K3bOggVorbisEncoderFactory( QObject* parent, const char* name )
-  : K3bAudioEncoderFactory( parent, name )
-{
-  s_instance = new KInstance( "k3boggvorbisencoder" );
-}
-
-
-K3bOggVorbisEncoderFactory::~K3bOggVorbisEncoderFactory()
-{
-}
-
-
-QString K3bOggVorbisEncoderFactory::fileTypeComment( const QString& ) const
+QString K3bOggVorbisEncoder::fileTypeComment( const QString& ) const
 {
   return i18n("Ogg-Vorbis");
 }
 
 
-long long K3bOggVorbisEncoderFactory::fileSize( const QString&, const K3b::Msf& msf ) const
+long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   KConfig* c = k3bcore->config();
   c->setGroup( "K3bOggVorbisEncoderPlugin" );
@@ -489,17 +478,8 @@ long long K3bOggVorbisEncoderFactory::fileSize( const QString&, const K3b::Msf& 
 }
 
 
-K3bPlugin* K3bOggVorbisEncoderFactory::createPluginObject( QObject* parent, 
-							   const char* name,
-							   const QStringList& )
-{
-  return new K3bOggVorbisEncoder( parent, name );
-}
-
-
-K3bPluginConfigWidget* K3bOggVorbisEncoderFactory::createConfigWidgetObject( QWidget* parent, 
-									     const char* name,
-									     const QStringList& )
+K3bPluginConfigWidget* K3bOggVorbisEncoder::createConfigWidget( QWidget* parent, 
+								const char* name ) const
 {
   return new K3bOggVorbisEncoderSettingsWidget( parent, name );
 }

@@ -45,8 +45,7 @@ class K3bAudioRipThread::Private
 {
 public:
   Private()
-    : encoderFactory(0),
-      encoder(0),
+    : encoder(0),
       waveFileWriter(0),
       paranoiaLib(0),
       canceled(false) {
@@ -61,7 +60,6 @@ public:
   int paranoiaRetries;
   int neverSkip;
 
-  K3bAudioEncoderFactory* encoderFactory;
   K3bAudioEncoder* encoder;
   K3bWaveFileWriter* waveFileWriter;
 
@@ -87,7 +85,6 @@ K3bAudioRipThread::K3bAudioRipThread()
 
 K3bAudioRipThread::~K3bAudioRipThread()
 {
-  delete d->encoder;
   delete d->waveFileWriter;
   delete d->paranoiaLib;
   delete d;
@@ -118,9 +115,9 @@ void K3bAudioRipThread::setNeverSkip( bool b )
 }
 
 
-void K3bAudioRipThread::setEncoderFactory( K3bAudioEncoderFactory* f )
+void K3bAudioRipThread::setEncoder( K3bAudioEncoder* f )
 {
-  d->encoderFactory = f;
+  d->encoder = f;
 }
 
 
@@ -159,13 +156,10 @@ void K3bAudioRipThread::run()
   d->paranoiaLib->setMaxRetries( d->paranoiaRetries );
 
 
-  if( d->encoderFactory ) {
-    delete d->encoder;
-    d->encoder = static_cast<K3bAudioEncoder*>(d->encoderFactory->createPlugin());
-  }
-  else if( !d->waveFileWriter ) {
-    d->waveFileWriter = new K3bWaveFileWriter();
-  }
+  if( !d->encoder )
+    if( !d->waveFileWriter ) {
+      d->waveFileWriter = new K3bWaveFileWriter();
+    }
 
 
   if( m_useIndex0 ) {
@@ -598,10 +592,10 @@ QString K3bAudioRipThread::jobDescription() const
 
 QString K3bAudioRipThread::jobDetails() const 
 {
-  if( d->encoderFactory )
+  if( d->encoder )
     return i18n("1 track (encoding to %1)", 
 		"%n tracks (encoding to %1)", 
-		m_tracks.count() ).arg(d->encoderFactory->fileTypeComment(d->fileType));
+		m_tracks.count() ).arg(d->encoder->fileTypeComment(d->fileType));
   else
     return i18n("1 track", "%n tracks", m_tracks.count() );
 }

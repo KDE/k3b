@@ -43,6 +43,10 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
  private:
   void setupGui();
   void setupContextHelp();
+
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
   
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 
@@ -60,10 +64,6 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
 
  private slots:
   void slotStartClicked();
-
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
 
   void slotUpdateFreeSpace();
   void slotFreeSpace(const QString&, unsigned long, unsigned long, unsigned long);

@@ -591,7 +591,7 @@ void K3bVcdBurnDialog::slotStartClicked()
 }
 
 
-void K3bVcdBurnDialog::slotLoadK3bDefaults()
+void K3bVcdBurnDialog::loadK3bDefaults()
 {
     K3bVcdOptions o = K3bVcdOptions::defaults();
 
@@ -794,12 +794,9 @@ void K3bVcdBurnDialog::readSettings()
     loadCdiConfig();
 }
 
-void K3bVcdBurnDialog::slotLoadUserDefaults()
+void K3bVcdBurnDialog::loadUserDefaults( KConfig* c )
 {
-    K3bProjectBurnDialog::slotLoadUserDefaults();
-
-    // the group is set in K3bProjectBurnDialog
-    KConfig * c = kapp ->config();
+    K3bProjectBurnDialog::loadUserDefaults(c);
 
     K3bVcdOptions o = K3bVcdOptions::load( c );
 
@@ -849,12 +846,10 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bVcdBurnDialog::slotSaveUserDefaults()
+void K3bVcdBurnDialog::saveUserDefaults( KConfig* c )
 {
-    K3bProjectBurnDialog::slotSaveUserDefaults();
+    K3bProjectBurnDialog::saveUserDefaults(c);
 
-    // the group is set in K3bProjectBurnDialog
-    KConfig * c = kapp ->config();
     K3bVcdOptions o;
 
     o.setVolumeId( m_editVolumeId->text() );

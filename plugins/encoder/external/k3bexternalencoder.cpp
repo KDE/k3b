@@ -19,6 +19,7 @@
 #include "k3bexternalencoder.h"
 #include "base_k3bexternalencoderconfigwidget.h"
 
+#include <k3bpluginfactory.h>
 #include <k3bprocess.h>
 #include <k3bcore.h>
 
@@ -37,6 +38,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+
+K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, K3bPluginFactory<K3bExternalEncoder>( "libk3bexternalencoder" ) )
 
 class K3bExternalEncoder::Command
 {
@@ -319,20 +322,7 @@ void K3bExternalEncoder::slotExternalProgramOutputLine( const QString& line )
 }
 
 
-
-K3bExternalEncoderFactory::K3bExternalEncoderFactory( QObject* parent, const char* name )
-  : K3bAudioEncoderFactory( parent, name )
-{
-  s_instance = new KInstance( "k3bexternalencoder" );
-}
-
-
-K3bExternalEncoderFactory::~K3bExternalEncoderFactory()
-{
-}
-
-
-QStringList K3bExternalEncoderFactory::extensions() const
+QStringList K3bExternalEncoder::extensions() const
 {
   QStringList el;
   QValueList<K3bExternalEncoder::Command> cmds( readCommands() );
@@ -343,27 +333,11 @@ QStringList K3bExternalEncoderFactory::extensions() const
 }
 
 
-QString K3bExternalEncoderFactory::fileTypeComment( const QString& ext ) const
+QString K3bExternalEncoder::fileTypeComment( const QString& ext ) const
 {
   return commandByExtension( ext ).name;
 }
 
-
-
-K3bPlugin* K3bExternalEncoderFactory::createPluginObject( QObject* parent, 
-						     const char* name,
-						     const QStringList& )
-{
-  return new K3bExternalEncoder( parent, name );
-}
-
-
-K3bPluginConfigWidget* K3bExternalEncoderFactory::createConfigWidgetObject( QWidget* parent, 
-								       const char* name,
-								       const QStringList& )
-{
-  return new K3bExternalEncoderSettingsWidget( parent, name );
-}
 
 
 
@@ -596,6 +570,13 @@ void K3bExternalEncoderSettingsWidget::saveConfig()
     cmdNames << it.data().name;
   }
   c->writeEntry( "commands", cmdNames );
+}
+
+
+K3bPluginConfigWidget* K3bExternalEncoder::createConfigWidget( QWidget* parent, 
+							       const char* name ) const
+{
+  return new K3bExternalEncoderSettingsWidget( parent, name );
 }
 
 

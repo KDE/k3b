@@ -48,7 +48,8 @@
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const char* name )
   : K3bListView( parent, name ),
     m_doc(doc),
-    m_updatingColumnWidths(false)
+    m_updatingColumnWidths(false),
+    m_currentlyPlayingTrack(0)
 {
   setAcceptDrops( true );
   setDropVisualizer( true );
@@ -130,23 +131,23 @@ void K3bAudioTrackView::setupActions()
   m_popupMenu = new KPopupMenu( this );
 
   m_actionProperties = new KAction( i18n("Properties"), "misc",
-				    0, this, SLOT(slotProperties()), 
+				    KShortcut(), this, SLOT(slotProperties()), 
 				    actionCollection(), "track_properties" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
 				Key_Delete, this, SLOT(slotRemove()), 
 				actionCollection(), "track_remove" );
 
   m_actionAddSilence = new KAction( i18n("Add Silence"), "misc",
-				    0, this, SLOT(slotAddSilence()),
+				    KShortcut(), this, SLOT(slotAddSilence()),
 				    actionCollection(), "track_add_silence" );
   m_actionMergeTracks = new KAction( i18n("Merge Tracks"), "misc",
-				     0, this, SLOT(slotMergeTracks()),
+				     KShortcut(), this, SLOT(slotMergeTracks()),
 				     actionCollection(), "track_merge" );
   m_actionSplitSource = new KAction( i18n("Source to Track"), "misc",
-				     0, this, SLOT(slotSplitSource()),
+				     KShortcut(), this, SLOT(slotSplitSource()),
 				     actionCollection(), "source_split" );
   m_actionSplitTrack = new KAction( i18n("Split Track..."), 0,
-				    0, this, SLOT(slotSplitTrack()),
+				    KShortcut(), this, SLOT(slotSplitTrack()),
 				    actionCollection(), "track_split" );
 }
 
@@ -565,7 +566,6 @@ void K3bAudioTrackView::resizeColumns()
 
 void K3bAudioTrackView::slotAnimation()
 {
-  kdDebug() << "(K3bAudioTrackView::slotAnimation)" << endl;
   resizeColumns();
   QListViewItem* item = firstChild();
 
@@ -573,7 +573,6 @@ void K3bAudioTrackView::slotAnimation()
 
   while( item ) {
     K3bAudioTrackViewItem* trackItem = dynamic_cast<K3bAudioTrackViewItem*>(item);
-    kdDebug() << "(K3bAudioTrackView::slotAnimation) for: " << trackItem << endl;
     if( trackItem->animate() )
       animate = true;
     else
@@ -763,6 +762,26 @@ void K3bAudioTrackView::slotProperties()
   else {
     m_doc->slotProperties();
   }
+}
+
+
+void K3bAudioTrackView::showPlayerIndicator( K3bAudioTrack* track )
+{
+  removePlayerIndicator();
+  m_currentlyPlayingTrack = track;
+  getTrackViewItem( track )->setPixmap( 1, SmallIcon( "player_play" ) );  
+}
+
+
+void K3bAudioTrackView::togglePauseIndicator()
+{
+  if( m_currentlyPlayingTrack )
+    getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, SmallIcon( "player_play" ) );  
+}
+
+
+void K3bAudioTrackView::removePlayerIndicator()
+{
 }
 
 #include "k3baudiotrackview.moc"

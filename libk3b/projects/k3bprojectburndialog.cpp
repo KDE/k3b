@@ -53,7 +53,8 @@
 
 K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const char *name, bool modal, bool dvd )
   : K3bInteractionDialog( parent, name, i18n("Project"), QString::null, 
-			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON, modal ),
+			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON, 
+			  "default " + doc->documentType() + " settings", modal ),
     m_writerSelectionWidget(0),
     m_tempDirSelectionWidget(0),
     m_dvd(dvd)
@@ -307,12 +308,8 @@ void K3bProjectBurnDialog::readSettings()
 }
 
 
-void K3bProjectBurnDialog::slotSaveUserDefaults()
+void K3bProjectBurnDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-
-  c->setGroup( "default " + doc()->documentType() + " settings" );
-
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
@@ -327,12 +324,9 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
 }
 
 
-void K3bProjectBurnDialog::slotLoadUserDefaults()
+void K3bProjectBurnDialog::loadUserDefaults( KConfig* c )
 {
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
-
-  KConfig* c = k3bcore->config();
-  c->setGroup( "default " + doc()->documentType() + " settings" );
 
   m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
@@ -344,7 +338,7 @@ void K3bProjectBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bProjectBurnDialog::slotLoadK3bDefaults()
+void K3bProjectBurnDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );

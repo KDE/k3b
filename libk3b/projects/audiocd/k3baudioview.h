@@ -23,7 +23,9 @@
 
 
 class K3bAudioDoc;
+class K3bAudioTrack;
 class K3bAudioTrackView;
+class K3bAudioTrackPlayer;
 
 
 /**
@@ -37,10 +39,15 @@ class K3bAudioView : public K3bView
   K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name = 0 );
   ~K3bAudioView();
 
+ private slots:
+  void slotPlayerPlayingTrack( K3bAudioTrack* track );
+  void slotPlayerStopped();
+
  private:
   K3bAudioDoc* m_doc;
 	
   K3bAudioTrackView* m_songlist;
+  K3bAudioTrackPlayer* m_player;
 };
 
 #endif

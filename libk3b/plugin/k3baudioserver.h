@@ -17,29 +17,8 @@
 #define _K3B_AUDIO_SERVER_H_
 
 #include <k3bplugin.h>
-#include <k3bpluginfactory.h>
 
 class K3bAudioClient;
-
-
-class K3bAudioServerFactory : public K3bPluginFactory
-{
- public:
-  K3bAudioServerFactory( QObject* parent = 0, const char* name = 0 )
-    : K3bPluginFactory( parent, name ) {
-  }
-
-  ~K3bAudioServerFactory() {
-  }
-
-  QString group() const { return "AudioServer"; }
-
-  /**
-   * Is the sound system available on this sytem.
-   */
-  virtual bool isAvailable() const = 0;
-};
-
 
 
 /**
@@ -54,6 +33,13 @@ class K3bAudioServer : public K3bPlugin
  public:
   virtual ~K3bAudioServer() {
   }
+
+  QString group() const { return "AudioServer"; }
+
+  /**
+   * Is the sound system available on this sytem.
+   */
+  virtual bool isAvailable() const = 0;
 
  public slots:
   /**

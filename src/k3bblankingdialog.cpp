@@ -64,7 +64,12 @@ public:
 
 
 K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
-  : K3bInteractionDialog( parent, name, i18n("Erase CD-RW") )
+  : K3bInteractionDialog( parent, name, 
+			  i18n("Erase CD-RW"),
+			  QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  "CDRW Erasing" )
 {
   d = new Private();
 
@@ -73,7 +78,6 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
-  slotLoadUserDefaults();
   slotWriterChanged();
 }
 
@@ -271,18 +275,15 @@ void K3bBlankingDialog::slotWritingAppChanged(int app)
 }
 
 
-void K3bBlankingDialog::slotLoadK3bDefaults()
+void K3bBlankingDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_comboEraseMode->setCurrentItem( d->typeComboMap[K3bBlankingJob::Fast] );
   //  m_checkForce->setChecked(false);
 }
 
-void K3bBlankingDialog::slotLoadUserDefaults()
+void K3bBlankingDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "CDRW Erasing" );
-
   m_writerSelectionWidget->loadConfig( c );
   slotWritingAppChanged( m_writerSelectionWidget->writingApp() );
 
@@ -303,11 +304,8 @@ void K3bBlankingDialog::slotLoadUserDefaults()
   //  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
 }
 
-void K3bBlankingDialog::slotSaveUserDefaults()
+void K3bBlankingDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "CDRW Erasing" );
-
   QString mode;
   switch( d->comboTypeMap[m_comboEraseMode->currentItem()] ) {
   case K3bBlankingJob::Complete:

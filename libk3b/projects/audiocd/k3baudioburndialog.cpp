@@ -143,9 +143,9 @@ void K3bAudioBurnDialog::readSettings()
 }
 
 
-void K3bAudioBurnDialog::slotLoadK3bDefaults()
+void K3bAudioBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::slotLoadK3bDefaults();
+  K3bProjectBurnDialog::loadK3bDefaults();
 
   m_cdtextWidget->setChecked( true );
   m_checkHideFirstTrack->setChecked( false );
@@ -155,11 +155,9 @@ void K3bAudioBurnDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bAudioBurnDialog::slotLoadUserDefaults()
+void K3bAudioBurnDialog::loadUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
-
-  KConfig* c = k3bcore->config();
+  K3bProjectBurnDialog::loadUserDefaults( c );
 
   m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", true ) );
   m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
@@ -169,11 +167,9 @@ void K3bAudioBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bAudioBurnDialog::slotSaveUserDefaults()
+void K3bAudioBurnDialog::saveUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
-
-  KConfig* c = k3bcore->config();
+  K3bProjectBurnDialog::saveUserDefaults( c );
 
   c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );

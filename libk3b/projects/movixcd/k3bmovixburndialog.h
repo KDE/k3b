@@ -38,9 +38,6 @@ class K3bMovixBurnDialog : public K3bProjectBurnDialog
   ~K3bMovixBurnDialog();
 
  protected slots:
-  void slotLoadK3bDefaults();
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
   void slotStartClicked();
 
   void toggleAllOptions();
@@ -48,6 +45,9 @@ class K3bMovixBurnDialog : public K3bProjectBurnDialog
  protected:
   void saveSettings();
   void readSettings();
+  void loadK3bDefaults();
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
 
  private:
   void setupSettingsPage();

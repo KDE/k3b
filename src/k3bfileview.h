@@ -54,8 +54,6 @@ class K3bFileView : public K3bCdContentsView
 
  public slots:
   void setDir( const QString& );
-  void slotAudioFilePlay();
-  void slotAudioFileEnqueue();
   void slotAddFilesToProject();
   void saveConfig( KConfig* c );
   void setAutoUpdate( bool );

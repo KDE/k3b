@@ -75,7 +75,9 @@ K3bAudioMetainfoRenamerPluginDialog::K3bAudioMetainfoRenamerPluginDialog( K3bDat
   : K3bInteractionDialog( parent, name,
 			  i18n("Rename Audio Files"),
 			  i18n("Based on meta info"),
-			  START_BUTTON|CANCEL_BUTTON|SAVE_BUTTON )
+			  START_BUTTON|CANCEL_BUTTON|SAVE_BUTTON,
+			  START_BUTTON,
+			  "audio_metainfo_renamer_plugin" )
 {
   d = new Private();
   d->doc = doc;
@@ -140,8 +142,6 @@ K3bAudioMetainfoRenamerPluginDialog::K3bAudioMetainfoRenamerPluginDialog( K3bDat
   
   // we cannot apply without scanning first
   m_buttonSave->setEnabled( false );
-					       
-  slotLoadUserDefaults();
 }
 
 
@@ -151,7 +151,7 @@ K3bAudioMetainfoRenamerPluginDialog::~K3bAudioMetainfoRenamerPluginDialog()
 }
 
 
-void K3bAudioMetainfoRenamerPluginDialog::slotLoadK3bDefaults()
+void K3bAudioMetainfoRenamerPluginDialog::loadK3bDefaults()
 {
   d->checkCompleteDoc->setChecked( false );
   d->checkRecursive->setChecked( false );
@@ -159,22 +159,16 @@ void K3bAudioMetainfoRenamerPluginDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bAudioMetainfoRenamerPluginDialog::slotLoadUserDefaults()
+void K3bAudioMetainfoRenamerPluginDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "audio_metainfo_renamer_plugin" );
-
   d->checkCompleteDoc->setChecked( c->readBoolEntry( "complete doc", false ) );
   d->checkRecursive->setChecked( c->readBoolEntry( "recursive", false ) );
   d->comboPattern->setEditText( c->readEntry( "rename pattern", "%a - %t" ) );
 }
 
 
-void K3bAudioMetainfoRenamerPluginDialog::slotSaveUserDefaults()
+void K3bAudioMetainfoRenamerPluginDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "audio_metainfo_renamer_plugin" );
-
   c->writeEntry( "complete doc", d->checkCompleteDoc->isChecked() );
   c->writeEntry( "recursive", d->checkRecursive->isChecked() );
   c->writeEntry( "rename pattern", d->comboPattern->currentText() );

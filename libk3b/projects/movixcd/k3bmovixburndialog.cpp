@@ -122,9 +122,9 @@ void K3bMovixBurnDialog::setupSettingsPage()
 }
 
 
-void K3bMovixBurnDialog::slotLoadK3bDefaults()
+void K3bMovixBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::slotLoadK3bDefaults();
+  K3bProjectBurnDialog::loadK3bDefaults();
 
   m_checkStartMultiSesssion->setChecked( false );
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
@@ -141,11 +141,9 @@ void K3bMovixBurnDialog::slotLoadK3bDefaults()
 }
 
 
-void K3bMovixBurnDialog::slotLoadUserDefaults()
+void K3bMovixBurnDialog::loadUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotLoadUserDefaults();
-
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::loadUserDefaults(c);
 
   m_checkStartMultiSesssion->setChecked( c->readBoolEntry( "start_multisession", false ) );
 
@@ -164,11 +162,9 @@ void K3bMovixBurnDialog::slotLoadUserDefaults()
 }
 
 
-void K3bMovixBurnDialog::slotSaveUserDefaults()
+void K3bMovixBurnDialog::saveUserDefaults( KConfig* c )
 {
-  K3bProjectBurnDialog::slotSaveUserDefaults();
-
-  KConfig* c = kapp->config();
+  K3bProjectBurnDialog::saveUserDefaults(c);
 
   c->writeEntry( "start_multisession", m_checkStartMultiSesssion->isChecked() );
 

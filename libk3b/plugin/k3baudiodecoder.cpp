@@ -103,7 +103,7 @@ public:
 
 
 K3bAudioDecoder::K3bAudioDecoder( QObject* parent, const char* name )
-  : K3bPlugin( parent, name )
+  : QObject( parent, name )
 {
   d = new Private();
 }

@@ -30,16 +30,6 @@ class K3bAudioClient
   virtual ~K3bAudioClient();
 
   /**
-   * This will start the streaming.
-   */
-  void play();
-
-  /**
-   * This stops the streaming,
-   */
-  void stop();
-
-  /**
    * if this method returns a value below 0 streaming is stopped.
    */
   virtual int read( char* data, int maxlen ) = 0;
@@ -47,8 +37,19 @@ class K3bAudioClient
  protected:
   K3bAudioClient( K3bAudioServer* );
 
+  /**
+   * This will start the streaming.
+   */
+  void startStreaming();
+
+  /**
+   * This stops the streaming,
+   */
+  void stopStreaming();
+
  private:
   K3bAudioServer* m_audioServer;
+  bool m_attached;
 };
 
 #endif

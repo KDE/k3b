@@ -18,112 +18,81 @@
 #define _K3B_PLUGIN_FACTORY_H_
 
 #include <klibloader.h>
-
-class QWidget;
-class K3bPlugin;
-class K3bPluginConfigWidget;
-
+#include <kinstance.h>
+#include <kglobal.h>
 
 
 /**
- * The base class for all k3b pluginfactories
- * Instead of reimplementing the createObject method
- * one needs to reimplement the createPlugin() and if
- * needed the createConfigWidget() methods
- * You should return a pointer to your factory. The K_EXPORT_COMPONENT_FACTORY
- * macro is provided for this purpose:
- * <pre>
- *   K_EXPORT_COMPONENT_FACTORY( libk3bwavedecoder, K3bWaveDecoderFactory )
- * </pre>
+ * Template based on KGenericFactory. This is just here to avoid using the QStringList args parameter
+ * in every plugin's constructor.
  *
- * In the constructor of your factory you should create an instance of KInstance like this: 
- * <pre>
- *   s_global = new KInstance( "k3bwavedecoder" );
- * </pre>
+ * Use this as follows:
+ * K_EXPORT_COMPONENT_FACTORY( libk3bartsaudioserver, K3bPluginFactory<K3bArtsAudioServer>( "k3bartsaudioserver" ) )
  *
- * Every plugin needs to install a XXX.plugin file in the k3b/plugins directory.
- * The plugin group and the library have to set at least.
+ * See KGenericFactory for more information.
  */
+template <class T>
 class K3bPluginFactory : public KLibFactory
 {
-  Q_OBJECT
-
  public:
-  K3bPluginFactory( QObject* parent = 0, const char* name = 0 );
-  virtual ~K3bPluginFactory();
+  K3bPluginFactory( const char* instanceName )
+    : m_instanceName(instanceName) {
+    s_self = this;
+    m_catalogueInitialized = false;
+  }
 
-  /**
-   * just calls createPluginObject() and emits the objectCreated signal
-   */
-  K3bPlugin* createPlugin( QObject* parent = 0, 
-			   const char* name = 0,
-			   const QStringList &args = QStringList() );
-  
-  /**
-   * just calls createConfigWidgetObject() and emits the objectCreated signal
-   */
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
-					     const char* name = 0,
-					     const QStringList &args = QStringList() );
+  ~K3bPluginFactory() {
+    if ( s_instance )
+      KGlobal::locale()->removeCatalogue( s_instance->instanceName() );
+    delete s_instance;
+    s_instance = 0;
+    s_self = 0;
+  }
 
-  virtual QString name() const;
-  virtual QString author() const { return m_author; }  
-  virtual QString email() const { return m_email; }
-  virtual QString version() const { return m_version; }
-  virtual QString comment() const { return m_comment; }
-  virtual QString license() const { return m_license; }
-
-  /**
-   * Version of the plugin system this plugin was written for.
-   */
-  virtual int pluginSystemVersion() const = 0;
-
-  /**
-   * The plugin group.
-   */
-  virtual QString group() const = 0;
-
- public slots:
-  void setName( const QString& s ) { m_name = s; }
-  void setAuthor( const QString& s ) { m_author = s; }
-  void setEmail( const QString& s ) { m_email = s; }
-  void setVersion( const QString& s ) { m_version = s; }
-  void setComment( const QString& s ) { m_comment = s; }
-  void setLicense( const QString& s ) { m_license = s; }
-
+  static KInstance* instance();
+ 
  protected:
-  virtual K3bPlugin* createPluginObject( QObject* parent = 0, 
-					 const char* name = 0,
-					 const QStringList &args = QStringList() ) = 0;
+  virtual void setupTranslations( void ) {
+    if( instance() )
+      KGlobal::locale()->insertCatalogue( instance()->instanceName() );
+  }
+  
+  void initializeMessageCatalogue() {
+    if( !m_catalogueInitialized ) {
+      m_catalogueInitialized = true;
+      setupTranslations();
+    }
+  }
 
-  virtual K3bPluginConfigWidget* createConfigWidgetObject( QWidget* parent = 0, 
-							   const char* name = 0,
-							   const QStringList &args = QStringList() );
-
-  /**
-   * This normally does not need to be reimplemented or used
-   * the default implementation just calls createPlugin() or createConfigWidget()
-   * depending on classname
-   */
-  virtual QObject* createObject( QObject* parent = 0, 
-				 const char* name = 0, 
-				 const char* classname = "Plugin", 
-				 const QStringList &args = QStringList() );
-
- private slots:
-  void slotObjectCreated( QObject* );
-  void slotObjectDestroyed();
+  virtual QObject* createObject( QObject *parent, const char *name,
+				 const char*, const QStringList& ) {
+    initializeMessageCatalogue();
+    return new T( parent, name );
+  }
 
  private:
-  QString m_name;
-  QString m_author;
-  QString m_email;
-  QString m_comment;
-  QString m_version;
-  QString m_license;
+  QCString m_instanceName;
+  bool m_catalogueInitialized;
 
-  class Private;
-  Private* d;
+  static KInstance* s_instance;
+  static K3bPluginFactory<T> *s_self;
 };
+
+
+template <class T>
+KInstance* K3bPluginFactory<T>::s_instance = 0;
+
+
+template <class T>
+K3bPluginFactory<T>* K3bPluginFactory<T>::s_self = 0;
+
+
+template <class T>
+KInstance* K3bPluginFactory<T>::instance()
+{
+  if( !s_instance && s_self )
+    s_instance = new KInstance( s_self->m_instanceName );
+  return s_instance;
+}
 
 #endif

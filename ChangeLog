@@ -33,9 +33,12 @@ Big parts of the audio project have been rewritten to have a way better design:
         - Improved track dialog.
 K3b now always writes a logfile in $(KDEHOME)/share/apps/k3b/lastlog.log
 New device configuration format which solves all issues with removable devices like USB.
-Using a ringbuffer for growisofs (based on pipebuf2)
 Copy CSS encrypted DVDs if libdvdcss is installed.
 Libsndfile decoder plugin. This includes support for AIFF audio files.
+ffmpeg decoder plugin. This includes support for wma audio files.
+Use DAO writing mode for data CDs when overwrite is enabled.
+Added option to load the last used settings in addition to the default user settings in every
+	action dialog.
 	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.

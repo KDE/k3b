@@ -59,6 +59,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
 			  i18n("No video transcoding!"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
+			  "default dvd copy settings",
 			  modal ),
     m_job(0)
 {
@@ -190,8 +191,6 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
 						 "source CD/DVD it will be replaced with zeros on the resulting copy.") );
-
-  slotLoadUserDefaults();
 }
 
 
@@ -244,12 +243,9 @@ void K3bDvdCopyDialog::slotStartClicked()
 }
 
 
-void K3bDvdCopyDialog::slotLoadUserDefaults()
+void K3bDvdCopyDialog::loadUserDefaults( KConfig* c )
 {
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
-
-  KConfig* c = k3bcore->config();
-  c->setGroup( "default dvd copy settings" );
 
   m_writingModeWidget->loadConfig( c );
 
@@ -271,13 +267,9 @@ void K3bDvdCopyDialog::slotLoadUserDefaults()
 }
 
 
-void K3bDvdCopyDialog::slotSaveUserDefaults()
+void K3bDvdCopyDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-
   m_tempDirSelectionWidget->saveConfig();
-
-  c->setGroup( "default dvd copy settings" );
 
   m_writingModeWidget->saveConfig( c );
 
@@ -298,7 +290,7 @@ void K3bDvdCopyDialog::slotSaveUserDefaults()
 }
 
 
-void K3bDvdCopyDialog::slotLoadK3bDefaults()
+void K3bDvdCopyDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_tempDirSelectionWidget->setTempPath( KGlobal::dirs()->resourceDirs( "tmp" ).first() );

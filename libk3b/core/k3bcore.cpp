@@ -79,7 +79,6 @@ K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const 
 
 K3bCore::~K3bCore()
 {
-  delete d->audioServer;
   delete d;
 }
 
@@ -101,22 +100,22 @@ K3bAudioServer* K3bCore::audioServer() const
   if( !d->audioServer ) {
     K3bCore* that = const_cast<K3bCore*>(this);
 
-    QPtrList<K3bPluginFactory> fl = k3bpluginmanager->factories( "AudioServer" );
+    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioServer" );
 
     // we always prefere the arts audio server so we need a little hacking
-    for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
-      K3bAudioServerFactory* f = dynamic_cast<K3bAudioServerFactory*>( it.current() );
-      if( f && f->isA( "K3bArtsAudioServerFactory" ) && f->isAvailable() ) {
-	that->d->audioServer = static_cast<K3bAudioServer*>(f->createPlugin());
+    for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+      K3bAudioServer* f = dynamic_cast<K3bAudioServer*>( it.current() );
+      if( f && f->isA( "K3bArtsAudioServer" ) && f->isAvailable() ) {
+	that->d->audioServer = f;
 	return d->audioServer;
       }
     }
 
     // arts was not available. so search for another one
-    for( QPtrListIterator<K3bPluginFactory> it( fl ); it.current(); ++it ) {
-      K3bAudioServerFactory* f = dynamic_cast<K3bAudioServerFactory*>( it.current() );
+    for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+      K3bAudioServer* f = dynamic_cast<K3bAudioServer*>( it.current() );
       if( f && f->isAvailable() ) {
-	that->d->audioServer = static_cast<K3bAudioServer*>(f->createPlugin());
+	that->d->audioServer = f;
 	return d->audioServer;
       }
     }

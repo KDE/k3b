@@ -53,11 +53,11 @@ class K3bCdCopyDialog : public K3bInteractionDialog
 
   void slotToggleAll();
 
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
-  void slotLoadK3bDefaults();
-
  private:
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
+  void loadK3bDefaults();
+
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   QCheckBox* m_checkSimulate;

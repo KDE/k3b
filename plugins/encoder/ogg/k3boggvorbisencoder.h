@@ -22,35 +22,6 @@
 
 
 class base_K3bOggVorbisEncoderSettingsWidget;
-class KInstance;
-
-
-class K3bOggVorbisEncoderFactory : public K3bAudioEncoderFactory
-{
-  Q_OBJECT
-
- public:
-  K3bOggVorbisEncoderFactory( QObject* parent = 0, const char* name = 0 );
-  ~K3bOggVorbisEncoderFactory();
-
-  QStringList extensions() const { return QStringList("ogg"); }
-  
-  QString fileTypeComment( const QString& ) const;
-
-  long long fileSize( const QString&, const K3b::Msf& msf ) const;
-
-  int pluginSystemVersion() const { return 2; }
-
-  K3bPlugin* createPluginObject( QObject* parent = 0, 
-				 const char* name = 0,
-				 const QStringList& = QStringList() );
-  K3bPluginConfigWidget* createConfigWidgetObject( QWidget* parent = 0, 
-						   const char* name = 0,
-						   const QStringList &args = QStringList() );
-
- private:
-  KInstance* s_instance;
-};
 
 
 class K3bOggVorbisEncoder : public K3bAudioEncoder
@@ -60,6 +31,17 @@ class K3bOggVorbisEncoder : public K3bAudioEncoder
  public:
   K3bOggVorbisEncoder( QObject* parent = 0, const char* name = 0 );
   ~K3bOggVorbisEncoder();
+
+  QStringList extensions() const { return QStringList("ogg"); }
+  
+  QString fileTypeComment( const QString& ) const;
+
+  long long fileSize( const QString&, const K3b::Msf& msf ) const;
+
+  int pluginSystemVersion() const { return 3; }
+
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
+					     const char* name = 0 ) const;
 
  private:
   void loadConfig();
@@ -92,8 +74,5 @@ class K3bOggVorbisEncoderSettingsWidget : public K3bPluginConfigWidget
  private:
   base_K3bOggVorbisEncoderSettingsWidget* w;
 };
-
-
-K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, K3bOggVorbisEncoderFactory )
 
 #endif

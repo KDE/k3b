@@ -79,6 +79,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 			  i18n("to DVD"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
+			  "DVD image writing",
 			  modal )
 {
   d = new Private();
@@ -95,9 +96,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 	   this, SLOT(slotMd5JobFinished(bool)) );
   connect( m_md5Job, SIGNAL(percent(int)),
 	   this, SLOT(slotMd5JobPercent(int)) );
-
-
-  slotLoadUserDefaults();
 
   updateImageSize( imagePath() );
 
@@ -428,11 +426,8 @@ void K3bIsoImageWritingDialog::slotMd5SumCompare()
 }
 
 
-void K3bIsoImageWritingDialog::slotLoadUserDefaults()
+void K3bIsoImageWritingDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "DVD image writing" );
-
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
@@ -445,11 +440,8 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
 }
 
 
-void K3bIsoImageWritingDialog::slotSaveUserDefaults()
+void K3bIsoImageWritingDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "DVD image writing" );
-
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "verify_data", m_checkVerify->isChecked() );
@@ -460,7 +452,7 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
 }
 
 
-void K3bIsoImageWritingDialog::slotLoadK3bDefaults()
+void K3bIsoImageWritingDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );

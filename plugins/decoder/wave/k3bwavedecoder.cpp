@@ -15,13 +15,17 @@
 
 #include "k3bwavedecoder.h"
 
+#include <k3bpluginfactory.h>
+
 #include <qfile.h>
 #include <qcstring.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kinstance.h>
 
+
+
+K_EXPORT_COMPONENT_FACTORY( libk3bwavedecoder, K3bPluginFactory<K3bWaveDecoderFactory>( "libk3bwavedecoder" ) )
 
 
 static unsigned short le_a_to_u_short( unsigned char* a ) {
@@ -341,7 +345,6 @@ QString K3bWaveDecoder::technicalInfo( const QString& name ) const
 K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent, const char* name )
   : K3bAudioDecoderFactory( parent, name )
 {
-  s_instance = new KInstance( "k3bwavedecoder" );
 }
 
 
@@ -350,9 +353,8 @@ K3bWaveDecoderFactory::~K3bWaveDecoderFactory()
 }
 
 
-K3bPlugin* K3bWaveDecoderFactory::createPluginObject( QObject* parent, 
-						      const char* name,
-						      const QStringList& )
+K3bAudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent, 
+						       const char* name ) const
 {
   return new K3bWaveDecoder( parent, name );
 }

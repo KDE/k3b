@@ -83,7 +83,12 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
 					     const K3bCddbResultEntry& entry, 
 					     const QValueList<int>& tracks,
 					     QWidget *parent, const char *name )
-  : K3bInteractionDialog( parent, name ),
+  : K3bInteractionDialog( parent, name,
+			  QString::null,
+			  QString::null,
+			  START_BUTTON|CANCEL_BUTTON,
+			  START_BUTTON,
+			  "Audio Ripping" ), // config group
     m_toc( toc ), 
     m_device( device ),
     m_cddbEntry( entry ), 
@@ -203,7 +208,6 @@ void K3bAudioRippingDialog::setupContextHelp()
 
 void K3bAudioRippingDialog::init()
 {
-  slotLoadUserDefaults();
   refresh();
 }
 
@@ -258,7 +262,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   }
 
 
-  K3bAudioEncoderFactory* factory = m_optionWidget->encoderFactory();
+  K3bAudioEncoder* encoder = m_optionWidget->encoder();
 
   K3bAudioRipThread* thread = new K3bAudioRipThread();
   thread->setDevice( m_device );
@@ -269,12 +273,12 @@ void K3bAudioRippingDialog::slotStartClicked()
   thread->setNeverSkip( m_checkNeverSkip->isChecked() );
   thread->setSingleFile( m_optionWidget->createSingleFile() );
   thread->setWriteCueFile( m_optionWidget->createCueFile() );
-  thread->setEncoderFactory( factory );
+  thread->setEncoder( encoder );
   thread->setWritePlaylist( m_optionWidget->createPlaylist() );
   thread->setPlaylistFilename( d->playlistFilename );
   thread->setUseRelativePathInPlaylist( m_optionWidget->playlistRelativePath() );
   thread->setUseIndex0( m_checkUseIndex0->isChecked() );
-  if( factory )
+  if( encoder )
     thread->setFileType( m_optionWidget->extension() );
 
   K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
@@ -312,13 +316,13 @@ void K3bAudioRippingDialog::refresh()
     QString filename;
     QString extension;
     long long fileSize = 0;
-    if( m_optionWidget->encoderFactory() == 0 ) {
+    if( m_optionWidget->encoder() == 0 ) {
       extension = "wav";
       fileSize = length * 2352 + 44;
     }
     else {
       extension = m_optionWidget->extension();
-      fileSize = m_optionWidget->encoderFactory()->fileSize( extension, length );
+      fileSize = m_optionWidget->encoder()->fileSize( extension, length );
     }
 
     if( (int)m_cddbEntry.titles.count() >= 1 ) {
@@ -359,13 +363,13 @@ void K3bAudioRippingDialog::refresh()
       K3b::Msf trackLength = ( m_checkUseIndex0->isChecked() 
 			       ? m_toc[index].realAudioLength()
 			       : m_toc[index].length() );
-      if( m_optionWidget->encoderFactory() == 0 ) {
+      if( m_optionWidget->encoder() == 0 ) {
 	extension = "wav";
 	fileSize = trackLength.audioBytes() + 44;
       }
       else {
 	extension = m_optionWidget->extension();
-	fileSize = m_optionWidget->encoderFactory()->fileSize( extension, trackLength );
+	fileSize = m_optionWidget->encoder()->fileSize( extension, trackLength );
       }
 
       if( m_toc[index].type() == K3bTrack::DATA ) {
@@ -422,7 +426,7 @@ void K3bAudioRippingDialog::setStaticDir( const QString& path )
 }
 
 
-void K3bAudioRippingDialog::slotLoadK3bDefaults()
+void K3bAudioRippingDialog::loadK3bDefaults()
 {
   m_comboParanoiaMode->setCurrentItem( 3 );
   m_spinRetries->setValue(20);
@@ -433,11 +437,8 @@ void K3bAudioRippingDialog::slotLoadK3bDefaults()
   m_patternWidget->loadDefaults();
 }
 
-void K3bAudioRippingDialog::slotLoadUserDefaults()
+void K3bAudioRippingDialog::loadUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Audio Ripping" );
-
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
   m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
   m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
@@ -447,11 +448,8 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   m_patternWidget->loadConfig( c );
 }
 
-void K3bAudioRippingDialog::slotSaveUserDefaults()
+void K3bAudioRippingDialog::saveUserDefaults( KConfig* c )
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Audio Ripping" );
-
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
   c->writeEntry( "read_retries", m_spinRetries->value() );
   c->writeEntry( "never_skip", m_checkNeverSkip->isChecked() );

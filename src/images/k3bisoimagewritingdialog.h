@@ -55,11 +55,11 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void slotMd5JobFinished( bool );
   void slotMd5SumCompare();
 
-  void slotLoadUserDefaults();
-  void slotSaveUserDefaults();
-  void slotLoadK3bDefaults();
-
  protected:
+  void loadUserDefaults( KConfig* );
+  void saveUserDefaults( KConfig* );
+  void loadK3bDefaults();
+
   void calculateMd5Sum( const QString& );
   void dragEnterEvent( QDragEnterEvent* );
   void dropEvent( QDropEvent* );
