@@ -73,7 +73,7 @@
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
 #include "cdcopy/k3bcdcopydialog.h"
-#include "dvd/k3bdvdview.h"
+#include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
 #include "k3bbusywidget.h"
 
@@ -811,9 +811,9 @@ void K3bMainWindow::slotNewDataDoc()
 }
 
 void K3bMainWindow::slotDivxEncoding(){
-  slotStatusMsg(i18n("Creating new DVD Project."));
-   K3bDvdView d( this, "divx");
-   d.exec();
+    slotStatusMsg(i18n("Creating new video encoding project."));
+    K3bDivxView d( this, "divx");
+    d.exec();
 }
 
 void K3bMainWindow::slotFileBurn()
