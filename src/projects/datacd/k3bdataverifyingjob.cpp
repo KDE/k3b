@@ -299,7 +299,7 @@ void K3bDataVerifyingJob::finishVerification( bool success )
 
 void K3bDataVerifyingJob::slotUnmountFinished( KIO::Job* job )
 {
-  if( job->error() ) {
+  if( job->error() && !d->device->supermount() ) {
     // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
     job->showErrorDialog( qApp->activeWindow() );
     emit infoMessage( i18n("Unmounting failed."), ERROR );

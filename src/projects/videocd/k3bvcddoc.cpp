@@ -54,7 +54,7 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
         : K3bDoc( parent )
 {
     m_tracks = 0L;
-    m_vcdOptions = 0L;
+    m_vcdOptions = new K3bVcdOptions();
 
     m_docType = VCD;
     m_vcdType = NONE;
@@ -74,9 +74,7 @@ K3bVcdDoc::~K3bVcdDoc()
         delete m_tracks;
     }
 
-    if ( m_vcdOptions )
-        delete m_vcdOptions;
-
+    delete m_vcdOptions;
 }
 
 bool K3bVcdDoc::newDocument()
@@ -87,8 +85,6 @@ bool K3bVcdDoc::newDocument()
   else
     m_tracks = new QPtrList<K3bVcdTrack>;
   m_tracks->setAutoDelete( false );
-
-  m_vcdOptions = new K3bVcdOptions();
 
   return K3bDoc::newDocument();
 }
@@ -128,11 +124,6 @@ K3b::Msf K3bVcdDoc::length() const
     return K3b::Msf( size() / 2048 );
 }
 
-void K3bVcdDoc::addUrl( const KURL& url )
-{
-  // make sure we add them at the end even if urls are in the queue
-  addTrack( url, 99 );
-}
 
 bool K3bVcdDoc::isImage( const KURL& url )
 {
@@ -142,7 +133,8 @@ bool K3bVcdDoc::isImage( const KURL& url )
 
 void K3bVcdDoc::addUrls( const KURL::List& urls )
 {
-    addTracks( urls, m_tracks->count() );
+  // make sure we add them at the end even if urls are in the queue
+  addTracks( urls, 99 );
 }
 
 void K3bVcdDoc::addTracks( const KURL::List& urls, uint position )
@@ -170,6 +162,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
         }
 
         if ( !QFile::exists( item->url.path() ) ) {
+	  kdDebug() << "(K3bVcdDoc) file not found: " << item->url.path() << endl;
             m_notFoundFiles.append( item->url.path() );
             return ;
         }
@@ -593,9 +586,9 @@ void K3bVcdDoc::loadDefaultSettings( KConfig* c )
 {
   K3bDoc::loadDefaultSettings(c);
 
-	// FIXME: This are userdefined k3b defaults. should this move to general vcd options?
+  // FIXME: This are userdefined k3b defaults. should this move to general vcd options?
 
-	c->setGroup( "Video project settings" );
+  c->setGroup( "Video project settings" );
   vcdOptions()->setPbcEnabled( c->readBoolEntry("Use Playback Control", false) );
   vcdOptions()->setPbcNumKeys( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
   vcdOptions()->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );

@@ -1,14 +1,14 @@
 <tip category="K3b">
 <html>
 <p>...that you do not need to erase a CDRW before rewriting it manually
-since K3b can do so before writing automatically.</p>
+since K3b can do that automatically before writing.</p>
 </html>
 </tip>
 
 <tip category="K3b">
 <html>
 <p>...that you do not need to bother with any settings if you do not know
-what they mean. K3b is able of choosing the best suited settings for you.</p>
+what they mean. K3b is able to choose the settings best suited for you.</p>
 </html>
 </tip>
 
@@ -27,6 +27,6 @@ are appropriate.</p>
 <tip category="K3b">
 <html>
 <p>...that you don't need to bother changing the settings marked as <em>advanced</em> if you 
-don't know what they mean. K3b's defaults are suitable for most daily use cases.</p>
+don't know what they mean. K3b's defaults are suitable for most daily use.</p>
 </html>
 </tip>

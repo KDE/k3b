@@ -43,7 +43,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   connect( m_doc, SIGNAL(changed()), m_fillStatusDisplay, SLOT(update()) );
 
   QToolButton* m_buttonBurn = new QToolButton( this );
-  m_buttonBurn->setIconSet( SmallIcon("cdwriter_unmount") );
+  m_buttonBurn->setIconSet( SmallIcon("cdburn") );
   m_buttonBurn->setTextLabel( i18n("Burn") + "..." );
   m_buttonBurn->setAutoRaise(true);
   m_buttonBurn->setTextPosition( QToolButton::Right ); // TODO: QT 3.2: QToolButton::BesideIcon

@@ -88,7 +88,6 @@ class K3bVcdDoc : public K3bDoc
          * the process is finished and check error()
          * to know about the result.
          **/
-        void addUrl( const KURL& url );
         void addUrls( const KURL::List& );
         void addTrack( const KURL&, uint );
         void addTracks( const KURL::List&, uint );

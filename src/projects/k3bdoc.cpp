@@ -82,7 +82,7 @@ K3bDoc::K3bDoc( QObject* parent )
 
   m_actionCollection = new KActionCollection( this );
 
-  (void)new KAction( i18n("&Burn..."), "cdwriter_unmount", CTRL + Key_B, this, SLOT(slotBurn()),
+  (void)new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
 		     actionCollection(), "project_burn");
   (void)new KAction( i18n("&Properties..."), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
 		     actionCollection(), "project_properties");
