@@ -1,5 +1,6 @@
 #include "k3bexternalbinmanager.h"
 
+#include <kdebug.h>
 #include <kprocess.h>
 #include <kconfig.h>
 
@@ -58,7 +59,7 @@ void K3bExternalBinManager::searchVersion( int programArrayIndex ){
     // search for program
     for( int i = 0; i < NUM_SEARCH_PATHS; i++ ) {
         QString bin = QString("%1%2").arg(searchPaths[i]).arg( binPrograms[ programArrayIndex ] );
-        qDebug("(K3bExternalBinManager) Check program " + bin);
+        qDebug("(K3bExternalBinManager) Check program %s", bin.latin1());
         if( QFile::exists( bin ) ) {
             // shit kde3, hangs up when parsing output each second time, fucking bullshit kde3,
             // seems to be working if deleting and creating new instance of kprocess.
@@ -75,10 +76,10 @@ void K3bExternalBinManager::searchVersion( int programArrayIndex ){
             m_process->start( KProcess::Block, KProcess::AllOutput );
             qDebug("Process started, go on");
             if( m_binMap[  binPrograms[ programArrayIndex ] ]->version.isEmpty() ) {
-                qDebug("(K3bExternalBinManager) " + bin + " seems not to be "+
-                binPrograms[ programArrayIndex ]+" version >= " + binVersions[ programArrayIndex ] );
+                kdDebug() << "(K3bExternalBinManager) " << bin << " seems not to be "<<
+                binPrograms[ programArrayIndex ]<<" version >= " << binVersions[ programArrayIndex ];
             } else {
-                qDebug("(K3bExternalBinManager) Set path " + bin);
+                qDebug("(K3bExternalBinManager) Set path %s", bin.latin1());
                 m_binMap[ binPrograms[ programArrayIndex ] ]->path = bin;
                 break;  // bin found
             }
@@ -106,7 +107,7 @@ void K3bExternalBinManager::checkVersions()
 	       this, SLOT(slotParseCdrtoolsVersion(KProcess*, char*, int)) );
       m_process->start( KProcess::Block, KProcess::Stdout );
       if( m_binMap["mkisofs"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be mkisofs.");
+	qDebug("(K3bExternalBinManager) %s seems not to be mkisofs.", binO->path.latin1());
       }
     }
   }
@@ -125,7 +126,7 @@ void K3bExternalBinManager::checkVersions()
 	       this, SLOT(slotParseCdrtoolsVersion(KProcess*, char*, int)) );
       m_process->start( KProcess::Block, KProcess::Stdout );
       if( m_binMap["cdrecord"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be cdrecord.");
+	qDebug("(K3bExternalBinManager) %s seems not to be cdrecord.", binO->path.latin1());
       }
     }
   }
@@ -144,7 +145,7 @@ void K3bExternalBinManager::checkVersions()
 	       this, SLOT(slotParseCdrdaoVersion(KProcess*, char*, int)) );
       m_process->start( KProcess::Block, KProcess::Stderr );
       if( m_binMap["cdrdao"]->version.isEmpty() ) {
-	qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be cdrdao.");
+	qDebug("(K3bExternalBinManager) %s seems not to be cdrdao.",  binO->path.latin1());
       }
     }
   }
@@ -178,7 +179,7 @@ void K3bExternalBinManager::checkTranscodeVersion(){
                 wrongVersion=true;
             }
             if( wrongVersion )
-                qDebug("(K3bExternalBinManager) " + binO->path + " seems not to be at least version 0.6.0pre3.");
+                qDebug("(K3bExternalBinManager) %s seems not to be at least version 0.6.0pre3.",  binO->path.latin1());
         } else {
             qDebug("K3bExternalBinManager) Fatal Error: can't initialize %s", binPrograms[i] );
         }
@@ -187,7 +188,7 @@ void K3bExternalBinManager::checkTranscodeVersion(){
 
 void K3bExternalBinManager::slotParseOutputVersion( KProcess* p, char* data, int len ) {
     QString task( p->name() );
-    qDebug("(K3bExternalBinManager) Check output of bin " + task );
+    qDebug("(K3bExternalBinManager) Check output of bin %s", task.latin1() );
     int index = 0;
     for( int i=0; i< NUM_BIN_PROGRAMS; i++) {
         if( task == binPrograms[ i ] )
@@ -234,7 +235,7 @@ void K3bExternalBinManager::slotParseCdrtoolsVersion( KProcess*p, char* data, in
     int start = buffer.find( QRegExp("[0-9]") );
     int findStart = ( start > -1 ? start : 0 );
     int end   = buffer.find( ' ', findStart );
-    qDebug("Check cdrtools:"+ buffer);
+    qDebug("Check cdrtools: %s", buffer.latin1());
     if( start > -1 && end > -1 ) {
         if( buffer.contains( "mkisofs" ) ) {
             if( m_binMap.contains( "mkisofs" ) ) {
@@ -304,7 +305,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
         if( QFile::exists( path ) ) {
             m_binMap[ binPrograms[ i ] ]->path = path;
         } else {
-            qDebug( "(K3bExternalBinManager) config contains invalid" + QString( binPrograms[ i ] ) +" path");
+            qDebug( "(K3bExternalBinManager) config contains invalid %s path", binPrograms[ i ] );
         }
     }
   }
