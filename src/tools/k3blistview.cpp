@@ -31,7 +31,7 @@ A KlistView with feature to display text and pixmap if no item is in the view.
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
-
+#include <qevent.h>
 
 
 // ///////////////////////////////////////////////
@@ -48,17 +48,24 @@ public:
     editorType = NONE;
     button = false;
     comboEditable = false;
+    next = 0;
+  }
+
+  ~ColumnInfo() {
+    if( next )
+      delete next;
   }
 
   bool button;
   int editorType;
   QStringList comboItems;
   bool comboEditable;
+  ColumnInfo* next;
 };
 
 
 
-K3bListViewItem::K3bListViewItem(K3bListView *parent)
+K3bListViewItem::K3bListViewItem(QListView *parent)
   : KListViewItem( parent )
 { 
   init();
@@ -70,7 +77,7 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent)
   init();
 }
 
-K3bListViewItem::K3bListViewItem(K3bListView *parent, QListViewItem *after)
+K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after)
   : KListViewItem( parent, after )
 { 
   init();
@@ -83,7 +90,7 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after)
 }
 
 
-K3bListViewItem::K3bListViewItem(K3bListView *parent,
+K3bListViewItem::K3bListViewItem(QListView *parent,
 				 QString s1, QString s2,
 				 QString s3, QString s4,
 				 QString s5, QString s6,
@@ -105,7 +112,7 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent,
 }
 
 
-K3bListViewItem::K3bListViewItem(K3bListView *parent, QListViewItem *after,
+K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after,
 				 QString s1, QString s2,
 				 QString s3, QString s4,
 				 QString s5, QString s6,
@@ -129,108 +136,70 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after,
 
 K3bListViewItem::~K3bListViewItem()
 {
-  delete m_editorButton;
-  delete m_editorComboBox;
-  delete m_editorSpinBox;
-  delete m_editorLineEdit;
-  m_columns.setAutoDelete( true );
+  if( m_columns )
+    delete m_columns;
 }
 
 void K3bListViewItem::setEditor( int column, int editor, const QStringList& cs )
 {
-  createColumnInfo(column);
+  ColumnInfo* colInfo = getColumnInfo(column);
 
-  m_columns.at(column)->editorType = editor;
+  colInfo->editorType = editor;
   if( !cs.isEmpty() )
-    m_columns.at(column)->comboItems = cs;
+    colInfo->comboItems = cs;
 }
 
 
 void K3bListViewItem::setButton( int column, bool on )
 {
-  createColumnInfo(column);
+  ColumnInfo* colInfo = getColumnInfo(column);
 
-  m_columns.at(column)->button = on;
+  colInfo->button = on;
 }
 
 
-void K3bListViewItem::createColumnInfo( int col )
+K3bListViewItem::ColumnInfo* K3bListViewItem::getColumnInfo( int col ) const
 {
-  // create ColumnInfos up to column col
-}
+  if( !m_columns )
+    m_columns = new ColumnInfo();
 
-void K3bListViewItem::showEditor( int col )
-{
-  if( col >= 0 )
-    m_editorColumn = col;
-
-  placeEditor();
-
-  if( m_columns.size() > col ) {
-    switch( m_columns.at(col)->editorType ) {
-    case COMBO:
-      m_editorComboBox->show();
-      break;
-    case LINE:
-      m_editorLineEdit->show();
-      break;
-    case SPIN:
-      m_editorSpinBox->show();
-      break;
-    default:
-      break;
-    }
+  ColumnInfo* info = m_columns;
+  int i = 0;
+  while( i < col ) {
+    if( !info->next )
+      info->next = new ColumnInfo();
+    info = info->next;
+    ++i;
   }
-}
 
-void K3bListViewItem::hideEditor()
-{
-  if( m_editorSpinBox )
-    m_editorSpinBox->hide();
-  if( m_editorLineEdit )
-    m_editorLineEdit->hide();
-  if( m_editorComboBox )
-    m_editorComboBox->hide();
-}
-
-void K3bListViewItem::placeEditor()
-{
-//   QRect r = listView()->itemRect( this );
-//   if ( !r.size().isValid() ) {
-//     listView()->ensureItemVisible( this );
-//     r = listView()->itemRect( this );
-//   }
-
-//   r.setX( listView()->header()->sectionPos( m_editorColumn ) );
-//   r.setWidth( listView()->header()->sectionSize( m_editorColumn ) - 1 );
-//   r = QRect( listView()->viewportToContents( r.topLeft() ), r.size() );
-
-//   if( m_editorButton ) {
-//     m_editorButton->setFixedHeight( r.height() );
-//     int ww = m_editorButton->sizeHint().width();
-//     if( ww <= r.width() )
-//       m_editorButton->setFixedWidth( ww );
-//     else
-//       m_editorButton->setFixedWidth( r.width() );
-//     r.setWidth( r.width() - m_editorButton->width() );
-//     listView()->moveChild( m_editorButton, r.right(), r.y() );
-//   }
-
-
-//   if( m_editor ) {
-//     m_editor->resize( r.size() );
-//     listView()->moveChild( m_editor, r.x(), r.y() );
-//   }
+  return info;
 }
 
 
 void K3bListViewItem::init()
 {
-  m_editorComboBox = 0;
-  m_editorSpinBox = 0;
-  m_editorLineEdit = 0;
-  m_editorButton = 0;
-  m_editorColumn = 1;
+  m_columns = 0;
+}
+
+
+int K3bListViewItem::editorType( int col ) const
+{
+  ColumnInfo* info = getColumnInfo( col );
+  return info->editorType;
+}
+
+
+bool K3bListViewItem::needButton( int col ) const
+{
+  ColumnInfo* info = getColumnInfo( col );
+  return info->button;
+}
+
+
+const QStringList& K3bListViewItem::comboStrings( int col ) const
+{
+  ColumnInfo* info = getColumnInfo( col );
+  return info->comboItems;
 }
 
 
@@ -249,22 +218,184 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
 {
   connect( header(), SIGNAL( sizeChange( int, int, int ) ),
 	   this, SLOT( updateEditorSize() ) );
+  connect( this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),
+	   this, SLOT(slotClicked(QListViewItem*, const QPoint&, int)) );
+
+  m_editorButton = 0;
+  m_editorComboBox = 0;
+  m_editorSpinBox = 0;
+  m_editorLineEdit = 0;
+  m_currentEditItem = 0;
+  m_currentEditColumn = 0;
 }
 
 K3bListView::~K3bListView()
 {
+  delete m_editorButton;
+  delete m_editorComboBox;
+  delete m_editorSpinBox;
+  delete m_editorLineEdit;
+}
+
+void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
+{
+  hideEditor();
+
+  if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
+    if( k3bItem->needButton(col) || k3bItem->editorType( col ) != K3bListViewItem::NONE ) {
+      showEditor( k3bItem, col );
+    }
+  }
 }
 
 
+void K3bListView::hideEditor()
+{
+  if( m_editorSpinBox )
+    m_editorSpinBox->hide();
+  if( m_editorLineEdit )
+    m_editorLineEdit->hide();
+  if( m_editorComboBox )
+    m_editorComboBox->hide();
+  if( m_editorButton )
+    m_editorButton->hide();
+}
+
+void K3bListView::showEditor( K3bListViewItem* item, int col )
+{
+  if( item->needButton( col ) || item->editorType(col) != K3bListViewItem::NONE ) {
+    m_currentEditColumn = col;
+    m_currentEditItem = item;
+  }
+
+  placeEditor( item, col );
+  if( item->needButton( col ) ) {
+    m_editorButton->show();
+  }
+  switch( item->editorType(col) ) {
+  case K3bListViewItem::COMBO:
+    m_editorComboBox->show();
+    m_editorComboBox->setFocus();
+    break;
+  case K3bListViewItem::LINE:
+    m_editorLineEdit->show();
+    m_editorLineEdit->setFocus();
+    break;
+  case K3bListViewItem::SPIN:
+    m_editorSpinBox->show();
+    m_editorSpinBox->setFocus();
+    break;
+  default:
+    break;
+  }
+}
+
+
+void K3bListView::placeEditor( K3bListViewItem* item, int col )
+{
+  QRect r = itemRect( item );
+  if ( !r.size().isValid() ) {
+    ensureItemVisible( item );
+    r = itemRect( item );
+  }
+
+  r.setX( header()->sectionPos( col ) );
+  r.setWidth( header()->sectionSize( col ) - 1 );
+  r = QRect( viewportToContents( r.topLeft() ), r.size() );
+
+  if( item->pixmap( col ) ) {
+    r.setX( r.x() + item->pixmap(col)->width() );
+  }
+
+  if( item->needButton(col) ) {
+    prepareButton( item, col );
+    m_editorButton->setFixedHeight( r.height() );
+    // for now we make a square button
+    m_editorButton->setFixedWidth( m_editorButton->height() );
+    r.setWidth( r.width() - m_editorButton->width() );
+    moveChild( m_editorButton, r.right(), r.y() );
+  }
+
+  if( QWidget* editor = prepareEditor( item, col ) ) {
+    editor->resize( r.size() );
+    moveChild( editor, r.x(), r.y() );
+  }
+}
+
+
+void K3bListView::prepareButton( K3bListViewItem* item, int col )
+{
+  if( !m_editorButton ) {
+    m_editorButton = new QPushButton( viewport() );
+    connect( m_editorButton, SIGNAL(clicked()),
+	     this, SLOT(slotEditorButtonClicked()) );
+  }
+
+  // TODO: do some useful things
+  m_editorButton->setText( "..." );
+}
+
+
+QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
+{
+  switch( item->editorType(col) ) {
+  case K3bListViewItem::COMBO:
+    if( !m_editorComboBox ) {
+      m_editorComboBox = new QComboBox( viewport() );
+      connect( m_editorComboBox, SIGNAL(activated(const QString&)), 
+	       this, SLOT(slotEditorComboBoxActivated(const QString&)) );
+    }
+    m_editorComboBox->clear();
+    if( item->comboStrings( col ).isEmpty() ) {
+      m_editorComboBox->insertItem( item->text( col ) );
+    }
+    else {
+      m_editorComboBox->insertStringList( item->comboStrings(col) );
+      int current = item->comboStrings(col).findIndex( item->text(col) );
+      if( current != -1 )
+	m_editorComboBox->setCurrentItem( current );
+    }
+    return m_editorComboBox;
+
+  case K3bListViewItem::LINE:
+    if( !m_editorLineEdit ) {
+      m_editorLineEdit = new QLineEdit( viewport() );
+      connect( m_editorLineEdit, SIGNAL(returnPressed()),
+	       this, SLOT(slotEditorLineEditReturnPressed()) );
+      m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
+      m_editorLineEdit->setLineWidth(1);
+    }
+
+    m_editorLineEdit->setText( item->text( col ) );
+    return m_editorLineEdit;
+
+  case K3bListViewItem::SPIN:
+    if( !m_editorSpinBox ) {
+      m_editorSpinBox = new QSpinBox( viewport() );
+      connect( m_editorSpinBox, SIGNAL(valueChanged(int)),
+	       this, SLOT(slotEditorSpinBoxValueChanged(int)) );
+    }
+    // set the range
+    m_editorSpinBox->setValue( item->text(col).toInt() );
+    return m_editorSpinBox;
+
+  default:
+    return 0;
+  }
+}
+
 void K3bListView::setCurrentItem( QListViewItem* i )
 {
-  if( !i )
+  if( !i || i == currentItem() )
     return;
 
-  if( K3bListViewItem* ki = dynamic_cast<K3bListViewItem*>(currentItem()) )
-    ki->hideEditor();
+  if( m_currentEditItem )
+    if( m_currentEditItem->editorType(m_currentEditColumn) == K3bListViewItem::LINE )
+      slotEditorLineEditReturnPressed();
+
+  hideEditor();
+  m_currentEditItem = 0;
   KListView::setCurrentItem( i );
-  updateEditorSize();
 }
 
 
@@ -275,32 +406,11 @@ void K3bListView::setNoItemText( const QString& text )
 }
 
 
-// void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
-// {
-//   KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
-
-//   if( childCount() == 0 && !m_noItemText.isEmpty()) {
-
-//     p->setPen( Qt::darkGray );
-
-//     QStringList lines = QStringList::split( "\n", m_noItemText );
-//     int xpos = m_noItemHMargin;
-//     int ypos = m_noItemVMargin + p->fontMetrics().height();
-
-//     for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
-//       p->drawText( xpos, ypos, *str );
-//       ypos += p->fontMetrics().lineSpacing();
-//     }
-//   }
-// }
-
-void K3bListView::paintEmptyArea( QPainter* p, const QRect& rect )
+void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
 {
-  KListView::paintEmptyArea( p, rect );
+  KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
 
   if( childCount() == 0 && !m_noItemText.isEmpty()) {
-
-    p->fillRect( viewport()->rect(), viewport()->paletteBackgroundColor() );
 
     p->setPen( Qt::darkGray );
 
@@ -315,6 +425,29 @@ void K3bListView::paintEmptyArea( QPainter* p, const QRect& rect )
   }
 }
 
+void K3bListView::paintEmptyArea( QPainter* p, const QRect& rect )
+{
+  KListView::paintEmptyArea( p, rect );
+
+//   if( childCount() == 0 && !m_noItemText.isEmpty()) {
+
+//     QPainter pp( viewport() );
+//     pp.fillRect( viewport()->rect(), viewport()->paletteBackgroundColor() );
+//     pp.end();
+
+//     p->setPen( Qt::darkGray );
+
+//     QStringList lines = QStringList::split( "\n", m_noItemText );
+//     int xpos = m_noItemHMargin;
+//     int ypos = m_noItemVMargin + p->fontMetrics().height();
+
+//     for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+//       p->drawText( xpos, ypos, *str );
+//       ypos += p->fontMetrics().lineSpacing();
+//  }
+//   }
+}
+
 void K3bListView::resizeEvent( QResizeEvent* e )
 {
   KListView::resizeEvent( e );
@@ -324,8 +457,70 @@ void K3bListView::resizeEvent( QResizeEvent* e )
 
 void K3bListView::updateEditorSize()
 {
-  if( K3bListViewItem* ki = dynamic_cast<K3bListViewItem*>(currentItem()) )
-    ki->showEditor();
+  if( m_currentEditItem )
+    placeEditor( m_currentEditItem, m_currentEditColumn );
+}
+
+
+void K3bListView::slotEditorLineEditReturnPressed()
+{
+  if( renameItem( m_currentEditItem, m_currentEditColumn, m_editorLineEdit->text() ) ) {
+    m_currentEditItem->setText( m_currentEditColumn, m_editorLineEdit->text() );
+    hideEditor();
+  }
+  else
+    m_editorLineEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
+}
+
+
+void K3bListView::slotEditorComboBoxActivated( const QString& str )
+{
+  if( renameItem( m_currentEditItem, m_currentEditColumn, str ) )
+    m_currentEditItem->setText( m_currentEditColumn, str );
+  else {
+    for( int i = 0; i < m_editorComboBox->count(); ++i ) {
+      if( m_editorComboBox->text(i) == m_currentEditItem->text(m_currentEditColumn) ) {
+	m_editorComboBox->setCurrentItem( i );
+	break;
+      }
+    }
+  }
+}
+
+
+void K3bListView::slotEditorSpinBoxValueChanged( int value )
+{
+  if( renameItem( m_currentEditItem, m_currentEditColumn, QString::number(value) ) )
+    m_currentEditItem->setText( m_currentEditColumn, QString::number(value) );
+  else
+    m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
+}
+
+
+void K3bListView::slotEditorButtonClicked()
+{
+  slotEditorButtonClicked( m_currentEditItem, m_currentEditColumn );
+}
+
+
+bool K3bListView::renameItem( K3bListViewItem*, int, const QString& )
+{
+  return true;
+}
+
+
+void K3bListView::slotEditorButtonClicked( K3bListViewItem* item, int col )
+{
+  emit editorButtonClicked( item, col );
+}
+
+
+void K3bListView::focusOutEvent( QFocusEvent* e )
+{
+  // This should be enabled but due to the problem with the document view always loosing
+  // the focus it's not.
+  //  hideEditor();
+  KListView::focusOutEvent( e );
 }
 
 

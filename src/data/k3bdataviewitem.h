@@ -1,7 +1,7 @@
 #ifndef K3BDATAVIEWITEM_H
 #define K3BDATAVIEWITEM_H
 
-#include <klistview.h>
+#include "../tools/k3blistview.h"
 
 class K3bDataItem;
 class K3bFileItem;
@@ -13,7 +13,7 @@ class QColorGroup;
 
 
 
-class K3bDataViewItem : public KListViewItem
+class K3bDataViewItem : public K3bListViewItem
 {
  public:
   K3bDataViewItem( QListView* parent );
@@ -23,6 +23,9 @@ class K3bDataViewItem : public KListViewItem
   virtual K3bDataItem* dataItem() const { return 0; }
 
   virtual void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
+
+ private:
+  void init();
 };
 
 

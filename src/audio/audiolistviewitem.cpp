@@ -22,19 +22,26 @@
 #include "../tools/k3bglobals.h"
 
 
-K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent )
-  : KListViewItem( parent )
+K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent )
+  : K3bListViewItem( parent ), m_track(track)
 {
-  m_track = track;
-  animationIconNumber = 1;
+  init();
 }
 
-K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after )
-  : KListViewItem( parent, after )
+K3bAudioListViewItem::K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent, QListViewItem* after )
+  : K3bListViewItem( parent, after ), m_track(track)
 {
-  m_track = track;
-  animationIconNumber = 1;
+  init();
 }
+
+
+void K3bAudioListViewItem::init()
+{
+  animationIconNumber = 1;
+  setEditor( 1, LINE );
+  setEditor( 2, LINE );
+}
+
 
 K3bAudioListViewItem::~K3bAudioListViewItem()
 {

@@ -65,7 +65,7 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   addColumn( i18n("Local Path") );
   addColumn( i18n("Link") );
 
-  setItemsRenameable( true );
+//   setItemsRenameable( true );
   setSelectionModeExt( KListView::Extended );
 
   m_editor = new KListViewLineEdit( this );
@@ -220,6 +220,7 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 void K3bDataFileView::slotExecuted( QListViewItem* item )
 {
   if( K3bDataDirViewItem* k = dynamic_cast<K3bDataDirViewItem*>( item ) ) {
+    hideEditor();  // disable the K3bListView Editor
     slotSetCurrentDir( k->dirItem() );
     emit dirSelected( currentDir() );
   }

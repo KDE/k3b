@@ -63,6 +63,13 @@ int main(int argc, char *argv[])
   KApplication app;
 
 
+//   if (app.isRestored())
+//     {
+//       RESTORE(K3bMainWindow);
+//     }
+//   else 
+//     {
+
   if( !QFile::exists( K3b::globalConfig() ) ) {
     if( KMessageBox::warningYesNo( 0, i18n("It appears that you have not run K3bSetup yet. It is recommended to do so. "
 					   "Should K3bSetup be started?"),
@@ -72,15 +79,7 @@ int main(int argc, char *argv[])
       exit(0);
     }
   }
-  
 
-
-//   if (app.isRestored())
-//     {
-//       RESTORE(K3bMainWindow);
-//     }
-//   else 
-//     {
       K3bMainWindow *k3bMainWidget = new K3bMainWindow();
       app.setMainWidget( k3bMainWidget );
       k3bMainWidget->initView();  // needs a kapp instance

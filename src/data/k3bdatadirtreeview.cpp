@@ -56,7 +56,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   addColumn( i18n("Directory") );
   header()->hide();
 	
-  setItemsRenameable( true );
+//   setItemsRenameable( true );
 
   m_editor = new KListViewLineEdit( this );
   m_editor->setValidator( new K3bIsoValidator( m_editor ) );

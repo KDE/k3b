@@ -18,7 +18,7 @@
 #ifndef AUDIOLISTVIEWITEM_H
 #define AUDIOLISTVIEWITEM_H
 
-#include <klistview.h>
+#include "../tools/k3blistview.h"
 
 class K3bAudioTrack;
 
@@ -27,11 +27,11 @@ class K3bAudioTrack;
   *@author Sebastian Trueg
   */
 
-class K3bAudioListViewItem : public KListViewItem  {
+class K3bAudioListViewItem : public K3bListViewItem  {
 
  public:
-  K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent );
-  K3bAudioListViewItem( K3bAudioTrack* track, QListView* parent, QListViewItem* after );
+  K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent );
+  K3bAudioListViewItem( K3bAudioTrack* track, K3bListView* parent, QListViewItem* after );
   ~K3bAudioListViewItem();
 
   /** reimplemented from QListViewItem */
@@ -48,6 +48,7 @@ class K3bAudioListViewItem : public KListViewItem  {
   int animationIconNumber;
 		
  private:
+  void init();
   K3bAudioTrack* m_track;
 };
 

@@ -16,18 +16,25 @@
 
 
 K3bDataViewItem::K3bDataViewItem( QListView* parent )
-  : KListViewItem( parent )
+  : K3bListViewItem( parent )
 {
+  init();
 }
 
 K3bDataViewItem::K3bDataViewItem( QListViewItem* parent )
-  : KListViewItem( parent )
+  : K3bListViewItem( parent )
 {
+  init();
 }
 
 K3bDataViewItem::~K3bDataViewItem()
 {}
 
+
+void K3bDataViewItem::init()
+{
+  setEditor( 0, LINE );
+}
 
 void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {

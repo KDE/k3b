@@ -95,10 +95,10 @@ void K3bAudioListView::setupColumns(){
   addColumn( i18n("Pregap") );
   addColumn( i18n("Filename") );
 	
-  setItemsRenameable( true );
-  setRenameable( 0, false );
-  setRenameable( 1 );
-  setRenameable( 2 );
+//   setItemsRenameable( true );
+//   setRenameable( 0, false );
+//   setRenameable( 1 );
+//   setRenameable( 2 );
 }
 
 

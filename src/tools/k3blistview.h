@@ -34,55 +34,20 @@ class QResizeEvent;
 class QComboBox;
 class QSpinBox;
 class QLineEdit;
+class QFocusEvent;
 
-
-
-class K3bListView : public KListView
-{
-  Q_OBJECT
-
- public:
-  K3bListView (QWidget *parent = 0, const char *name = 0);
-  virtual ~K3bListView();
-
-  virtual void setCurrentItem( QListViewItem* );
-
- public slots:
-  void setNoItemText( const QString& );
-  //  void setNoItemPixmap( const QPixmap& );
-  void setNoItemVerticalMargin( int i ) { m_noItemVMargin = i; }
-  void setNoItemHorizontalMargin( int i ) { m_noItemHMargin = i; }
-
- public slots:
-  void updateEditorSize();
-
- protected:
-  /**
-   * calls KListView::drawContentsOffset
-   * and paints a the noItemText if no item is in the list
-   */
- //  virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
-  virtual void resizeEvent( QResizeEvent* );
-  virtual void paintEmptyArea( QPainter*, const QRect& rect );
-
- private:
-  QString m_noItemText;
-  //  QPixmap m_noItemPixmap;
-  int m_noItemVMargin;
-  int m_noItemHMargin;
-};
-
+class K3bListView;
 
 
 class K3bListViewItem : public KListViewItem
 {
  public:
-  K3bListViewItem(K3bListView *parent);
+  K3bListViewItem(QListView *parent);
   K3bListViewItem(QListViewItem *parent);
-  K3bListViewItem(K3bListView *parent, QListViewItem *after);
+  K3bListViewItem(QListView *parent, QListViewItem *after);
   K3bListViewItem(QListViewItem *parent, QListViewItem *after);
 
-  K3bListViewItem(K3bListView *parent,
+  K3bListViewItem(QListView *parent,
 		  QString, QString = QString::null,
 		  QString = QString::null, QString = QString::null,
 		  QString = QString::null, QString = QString::null,
@@ -94,7 +59,7 @@ class K3bListViewItem : public KListViewItem
 		  QString = QString::null, QString = QString::null,
 		  QString = QString::null, QString = QString::null);
 
-  K3bListViewItem(K3bListView *parent, QListViewItem *after,
+  K3bListViewItem(QListView *parent, QListViewItem *after,
 		  QString, QString = QString::null,
 		  QString = QString::null, QString = QString::null,
 		  QString = QString::null, QString = QString::null,
@@ -108,26 +73,99 @@ class K3bListViewItem : public KListViewItem
 
   virtual ~K3bListViewItem();
 
-  void setEditor( int, int, const QStringList& = QStringList() );
-  void setButton( int, bool );
+  void setEditor( int col, int type, const QStringList& = QStringList() );
+  void setButton( int col, bool );
 
-  void showEditor( int col = -1 );
-  void hideEditor();
-  void placeEditor();
+  int editorType( int col ) const;
+  bool needButton( int col ) const;
+  const QStringList& comboStrings( int col ) const;
+
+  enum EditorType { NONE, COMBO, LINE, SPIN };
 
  private:
-  void init();
-  void createColumnInfo( int );
-
   class ColumnInfo;
-  QPtrVector<ColumnInfo> m_columns;
-  enum EditorType { NONE, COMBO, LINE, SPIN };
+  mutable ColumnInfo* m_columns;
+
+  ColumnInfo* getColumnInfo( int ) const;
+  void init();
+};
+
+
+
+
+class K3bListView : public KListView
+{
+  Q_OBJECT
+
+ public:
+  K3bListView (QWidget *parent = 0, const char *name = 0);
+  virtual ~K3bListView();
+
+  virtual void setCurrentItem( QListViewItem* );
+
+ signals:
+  void editorButtonClicked( K3bListViewItem*, int );
+
+ public slots:
+  void setNoItemText( const QString& );
+  //  void setNoItemPixmap( const QPixmap& );
+  void setNoItemVerticalMargin( int i ) { m_noItemVMargin = i; }
+  void setNoItemHorizontalMargin( int i ) { m_noItemHMargin = i; }
+
+ private slots:
+  void updateEditorSize();
+  void slotClicked( QListViewItem*, const QPoint&, int );
+  virtual void slotEditorLineEditReturnPressed();
+  virtual void slotEditorComboBoxActivated( const QString& );
+  virtual void slotEditorSpinBoxValueChanged( int );
+  virtual void slotEditorButtonClicked();
+
+ protected slots:
+  void showEditor( K3bListViewItem*, int col );
+  void placeEditor( K3bListViewItem*, int col );
+  void hideEditor();
+
+  /**
+   * This is called whenever one of the editor's contents changes
+   * the default implementation just returnes true
+   */
+  virtual bool renameItem( K3bListViewItem*, int, const QString& );
+
+  /**
+   * default impl just emits signal
+   * editorButtonClicked(...)
+   */
+  virtual void slotEditorButtonClicked( K3bListViewItem*, int );
+
+ protected:
+  /**
+   * calls KListView::drawContentsOffset
+   * and paints a the noItemText if no item is in the list
+   */
+  virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );
+  virtual void resizeEvent( QResizeEvent* );
+  virtual void paintEmptyArea( QPainter*, const QRect& rect );
+  virtual void focusOutEvent( QFocusEvent* );
+
+  K3bListViewItem* currentEditItem() const { return m_currentEditItem; }
+  int currentEditColumn() const { return m_currentEditColumn; }
+
+ private:
+  QWidget* prepareEditor( K3bListViewItem* item, int col );
+  void prepareButton( K3bListViewItem* item, int col );
+
+  QString m_noItemText;
+  //  QPixmap m_noItemPixmap;
+  int m_noItemVMargin;
+  int m_noItemHMargin;
+
+  K3bListViewItem* m_currentEditItem;
+  int m_currentEditColumn;
 
   QPushButton* m_editorButton;
   QComboBox* m_editorComboBox;
   QSpinBox* m_editorSpinBox;
   QLineEdit* m_editorLineEdit;
-  int m_editorColumn;
 };
 
 
