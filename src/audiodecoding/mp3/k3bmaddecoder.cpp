@@ -267,7 +267,6 @@ unsigned long K3bMadDecoder::countFrames()
   bool bFirstHeaderSaved = false;
 
   d->seekPositions.clear();
-  d->seekPositions.append(0);
 
   while( !error && decodeNextHeader() ) {
 
@@ -291,7 +290,7 @@ unsigned long K3bMadDecoder::countFrames()
     //
     // position in stream: postion in file minus the not yet used buffer
     //
-    unsigned long long seekPos = d->inputFile.at() - (d->madStream->bufend - d->madStream->this_frame);
+    unsigned long long seekPos = d->inputFile.at() - (d->madStream->bufend - d->madStream->this_frame + 1);
 
     // save the number of bytes to be read to decode i-1 frames at position i
     // in other words: when seeking to seekPos the next decoded frame will be i
@@ -472,8 +471,12 @@ void K3bMadDecoder::cleanup()
   d->id3Tag = 0;
 #endif
 
-  if( d->inputFile.isOpen() )
+  if( d->inputFile.isOpen() ) {
+    kdDebug() << "(K3bMadDecoder) cleanup at offset: " 
+	      << ( d->inputFile.at() - (d->madStream->bufend - d->madStream->this_frame + 1) ) 
+	      << " with size: " << d->inputFile.size() << endl;
     d->inputFile.close();
+  }
 
   if( d->madStructuresInitialized ) {
     mad_frame_finish( d->madFrame );
@@ -503,32 +506,45 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
 
   double posSecs = static_cast<double>(pos.totalFrames()) / 75.0;
 
-  // seekPosition to seek before frame i
-  unsigned int i = static_cast<unsigned int>( posSecs / mp3FrameSecs );
+  // seekPosition to seek after frame i
+  unsigned int frame = static_cast<unsigned int>( posSecs / mp3FrameSecs );
 
-  kdDebug() << "(K3bMadDecoder) SEEKING. Mp3 frame len: " << mp3FrameSecs << endl
-	    << "                         seek pos: " << posSecs << endl
-	    << "                         Mp3 frame to seek to: " << i << endl;
+  // Rob said: 29 frames is the theoretically max frame reservoir limit (whatever that means...)
+  // it seems that mad needs at most 29 frames to get ready
+  unsigned int frameReservoirProtect = ( frame > 29 ? 29 : frame );
 
-  // set the timer to the already decoded data which is i-1 frames
-  *d->madTimer = d->firstHeader.duration;
-  mad_timer_multiply( d->madTimer, i-1 );
+  frame -= frameReservoirProtect;
 
   // seek in the input file behind the already decoded data
-  d->inputFile.at( d->seekPositions[i] );
+  d->inputFile.at( d->seekPositions[frame] );
 
-  // convert pos to mad_timer_t
-  mad_timer_t madPos;
-  madPos.seconds = pos.totalFrames()/75;
-  madPos.fraction = (pos.frames() * MAD_TIMER_RESOLUTION) / 75;
+  kdDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with " << frameReservoirProtect << " reservoir frames." << endl;
 
-  //
-  // Now we try to get as close to the requested position as possible by decoding
-  // some headers
-  //
-  while( mad_timer_compare( *d->madTimer, madPos ) < 0 )
-    if( !decodeNextHeader() )
-      return false;  // here EOF is also an error since we cannot seek beyond the file end
+  // decode some frames ignoring MAD_ERROR_BADDATAPTR errors
+  unsigned int i = 1;
+  while( i <= frameReservoirProtect ) {
+    madStreamBuffer();
+    if( mad_frame_decode( d->madFrame, d->madStream ) ) {
+      if( MAD_RECOVERABLE( d->madStream->error ) ) {
+	if( d->madStream->error == MAD_ERROR_BUFLEN )
+	  continue;
+	else if( d->madStream->error != MAD_ERROR_BADDATAPTR ) {
+	  kdDebug() << "(K3bMadDecoder) Seeking: recoverable mad error (" << mad_stream_errorstr(d->madStream) << ")" << endl;
+	  continue;
+	}
+	else {
+	  kdDebug() << "(K3bMadDecoder) Seeking: ignoring (" << mad_stream_errorstr(d->madStream) << ")" << endl;
+	}
+      }
+      else
+	return false;
+    }
+
+    if( i == frameReservoirProtect )  // synth only the last frame (Rob said so ;)
+      mad_synth_frame( d->madSynth, d->madFrame );
+
+    ++i;
+  }
 
   return true;
 }
@@ -536,16 +552,16 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
 
 QString K3bMadDecoder::fileType() const
 {
-    switch( d->firstHeader.layer ) {
-    case MAD_LAYER_I:
-      return "MPEG1 Layer I";
-    case MAD_LAYER_II:
-      return "MPEG1 Layer II";
-    case MAD_LAYER_III:
-      return "MPEG1 Layer III";
-    default:
-      return "Mp3";
-    }
+  switch( d->firstHeader.layer ) {
+  case MAD_LAYER_I:
+    return "MPEG1 Layer I";
+  case MAD_LAYER_II:
+    return "MPEG1 Layer II";
+  case MAD_LAYER_III:
+    return "MPEG1 Layer III";
+  default:
+    return "Mp3";
+  }
 }
 
 QStringList K3bMadDecoder::supportedTechnicalInfos() const
