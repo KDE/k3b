@@ -54,11 +54,11 @@ void K3bDivXEncodingProcess::slotStartAudioProcessing(KIO::Job *job){
      K3bExternalBin *tcdecodeBin = k3bMain()->externalBinManager()->binObject("tcdecode");
      K3bExternalBin *tcscanBin = k3bMain()->externalBinManager()->binObject("tcscan");
       // parse audio for gain to normalize
-     *m_process << "nice -10 ";
-     *m_process << tccatBin->path + " -i " + m_data->getProjectDir() + "/vob -t vob -P " + m_data->getTitle();
-     *m_process << " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob ";
-     *m_process << " | " + tcdecodeBin->path + " -x ac3 ";
-     *m_process << " | " + tcscanBin->path + " -x pcm";
+     *m_process << "nice" << "-10";
+     *m_process << tccatBin->path << " -i" << m_data->getProjectDir() + "/vob" << "-t" << "vob" <<"-P" << m_data->getTitle();
+     *m_process << "|" << tcextractBin->path << m_data->getParaAudioLanguage() << "-x" << "ac3" << "-t" << "vob";
+     *m_process << "|" << tcdecodeBin->path << "-x" << "ac3";
+     *m_process << "|" << tcscanBin->path << "-x" << "pcm";
 
      kdDebug() << "(K3bDivXEncodingProcess)" +  tccatBin->path + " -i " + m_data->getProjectDir() + "/vob -t vob -P " + m_data->getTitle()
      + " | " + tcextractBin->path + m_data->getParaAudioLanguage() + " -x ac3  -t vob "
@@ -89,18 +89,18 @@ void K3bDivXEncodingProcess::startEncoding(){
      K3bExternalBin *transcodeBin = k3bMain()->externalBinManager()->binObject("transcode");
      m_process = new KShellProcess;
 
-     *m_process << "nice -10 ";
+     *m_process << "nice" << "-10";
      *m_process << transcodeBin->path; //"/usr/local/bin/transcode -i ";
-     *m_process << " -i " << m_data->getProjectDir() + "/vob ";
+     *m_process << " -i" << m_data->getProjectDir() + "/vob ";
 
-     *m_process << " -x dvd -T " + m_data->getTitle() +",-1,1" + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness();
+     *m_process << "-x" << "dvd" << "-T" << m_data->getTitle() +",-1,1" << m_data->getParaCodec() << m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness();
      kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaCodec() + m_data->getParaVideoBitrate() + "," + m_data->getKeyframes() + ","+ m_data->getCrispness()<< endl;
-     *m_process << m_data->getParaYuv() + m_data->getParaAudioLanguage();
+     *m_process << m_data->getParaYuv() << m_data->getParaAudioLanguage();
      kdDebug() << "(K3bDivXEncodingProcess) Video: " + m_data->getParaYuv() + m_data->getParaAudioLanguage()<< endl;
-     *m_process << m_data->getParaAudioResample()  + m_data->getParaAudioBitrate() + m_data->getParaAudioGain();
-     kdDebug() << "(K3bDivXEncodingProcess)  Audio: " + m_data->getParaAudioResample()  + m_data->getParaAudioBitrate() + m_data->getParaAudioGain()<< endl;
+     *m_process << m_data->getParaAudioResample()  << m_data->getParaAudioBitrate() << m_data->getParaAudioGain();
+     kdDebug() << "(K3bDivXEncodingProcess)  Audio: " << m_data->getParaAudioResample()  << m_data->getParaAudioBitrate() + m_data->getParaAudioGain()<< endl;
      *m_process << m_data->getParaDeinterlace();
-     *m_process << " -o " + m_data->getAviFile();
+     *m_process << " -o " << m_data->getAviFile();
      kdDebug() << "(K3bDivXEncodingProcess)  Out: " + m_data->getParaDeinterlace() + " -o " + m_data->getAviFile()<< endl;
      
      int top = m_data->getCropTop();
@@ -109,8 +109,8 @@ void K3bDivXEncodingProcess::startEncoding(){
      int right = m_data->getCropRight();
      kdDebug() << "(K3bDivXEncodingProcess) Crop values t=" << top << ",l=" << left << ",b=" << bottom << ",r=" << right << endl;
      kdDebug() << "(K3bDivXEncodingProcess) Resize factor height=" << m_data->getResizeHeight() << ", width=" << m_data->getResizeWidth() << endl;
-     *m_process << "-j " + QString::number(top) +","+ QString::number(left) +","+ QString::number(bottom)+","+QString::number( right );
-     *m_process << "-B " + QString::number(m_data->getResizeHeight()) + "," + QString::number(m_data->getResizeWidth()) + ",8";
+     *m_process << "-j" << QString::number(top) +","+ QString::number(left) +","+ QString::number(bottom)+","+QString::number( right );
+     *m_process << "-B" << QString::number(m_data->getResizeHeight()) + "," + QString::number(m_data->getResizeWidth()) + ",8";
      QString debugPass("");
      if( m_data->getCodecMode() == 2 ){
          if( m_pass == 0 ){
