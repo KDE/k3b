@@ -103,8 +103,9 @@ void K3bDataJob::start()
     m_usedWritingApp = K3b::CDRDAO;
 
 
-  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+  if( !m_doc->onlyCreateImage() && 
+      ( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
     m_msInfoFetcher->setDevice( m_doc->burner() );
     K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
     if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
@@ -206,14 +207,14 @@ void K3bDataJob::cancel()
 
 void K3bDataJob::slotReceivedIsoImagerData( char* data, int len )
 {
-  if( m_doc->onTheFly() ) {
+  if( !m_doc->onlyCreateImage() && m_doc->onTheFly() ) {
     if( !m_writerJob ) {
-      kdDebug() << "ERROR" << endl;
+      kdError() << "(K3bDataJob) ERROR: no writer job" << endl;
       cancelAll();
       return;
     }
     if( !m_writerJob->write( data, len ) )
-      kdDebug() << "(K3bDatJob) Error while writing data to Writer" << endl;
+      kdError() << "(K3bDataJob) Error while writing data to Writer" << endl;
   }
   else {
     m_imageFileStream.writeRawBytes( data, len );
@@ -240,7 +241,8 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
   if( m_canceled )
     return;
 
-  if( !m_doc->onTheFly() ) {
+  if( !m_doc->onTheFly() ||
+      m_doc->onlyCreateImage() ) {
     m_imageFile.close();
     if( success ) {
       emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );

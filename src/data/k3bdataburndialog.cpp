@@ -282,7 +282,8 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
 void K3bDataBurnDialog::slotOk()
 {
-  if( !m_checkOnTheFly->isChecked() ) {
+  if( m_checkOnlyCreateImage->isChecked() ||
+      !m_checkOnTheFly->isChecked() ) {
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
