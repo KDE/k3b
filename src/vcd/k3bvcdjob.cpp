@@ -60,6 +60,9 @@ K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, QObject* parent, const char* name )
 K3bVcdJob::~K3bVcdJob()
 {
     delete m_process;
+
+    if ( m_writerJob )
+        delete m_writerJob;
 }
 
 
