@@ -88,14 +88,9 @@ typedef unsigned char u8;
 #include <cam/cam.h>
 #include <cam/scsi/scsi_pass.h>
 #include <camlib.h>
-
-// Some Linux constants for ioctl() that
-// we don't have (and don't need).
-#define SCSI_BLK_MAJOR(M) (0)
-#define SCSI_IOCTL_GET_IDLUN (0)
-#define SCSI_IOCTL_GET_BUS_NUMBER (0)
-
 #endif
+
+
 
 class K3bCdDevice::DeviceManager::Private
 {
@@ -106,6 +101,8 @@ public:
   QPtrList<K3bCdDevice::CdDevice> dvdReader;
   QPtrList<K3bCdDevice::CdDevice> dvdWriter;
 };
+
+
 
 K3bCdDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
   : QObject( parent, name )
@@ -147,8 +144,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::findDevice( int bus, int id, 
 
 K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::findDevice( const QString& devicename )
 {
-  if( devicename.isEmpty() )
-  {
+  if( devicename.isEmpty() ) {
     kdDebug() << "(K3bCdDevice::DeviceManager) request for empty device!" << endl;
     return 0;
   }
@@ -218,6 +214,7 @@ int K3bCdDevice::DeviceManager::scanbus()
 
   return m_foundDevices;
 }
+
 
 void K3bCdDevice::DeviceManager::LinuxDeviceScan()
 {
@@ -310,8 +307,8 @@ void K3bCdDevice::DeviceManager::LinuxDeviceScan()
 //     if( addDevice( QString("/dev/sr%1").arg(i).ascii() ) )
 //       m_foundDevices++;
 //   }
-
 }
+
 
 void K3bCdDevice::DeviceManager::BSDDeviceScan()
 {
@@ -473,8 +470,6 @@ void K3bCdDevice::DeviceManager::printDevices()
 
 void K3bCdDevice::DeviceManager::clear()
 {
-  kdDebug() << "(K3bCdDevice::DeviceManager::clear)" << endl;
-
   // clear current devices
   d->cdReader.clear();
   d->cdWriter.clear();
@@ -484,8 +479,6 @@ void K3bCdDevice::DeviceManager::clear()
 
   emit changed();
   emit changed( this );
-
-  kdDebug() << "(K3bCdDevice::DeviceManager::clear) done" << endl;
 }
 
 
@@ -581,12 +574,11 @@ bool K3bCdDevice::DeviceManager::saveConfig( KConfig* c )
 
 bool K3bCdDevice::DeviceManager::testForCdrom(const QString& devicename)
 {
-  bool ret = false;
-
 #ifdef Q_OS_FREEBSD
-  return false;
+  return true;
 #endif
 
+  bool ret = false;
   int cdromfd = K3bCdDevice::openDevice( devicename.ascii() );
   if (cdromfd < 0) {
     kdDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
@@ -634,6 +626,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
 {
   K3bCdDevice::CdDevice* device = 0;
 
+  // FIXME: is this check really nessessary? If so it won't do harm on linux either.
 #ifdef Q_OS_FREEBSD
   if( findDevice(devicename) )
     return 0;
@@ -643,10 +636,8 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
   QString resolved = resolveSymLink( devicename );
   kdDebug() << devicename << " resolved to " << resolved << endl;
 
-#ifndef Q_OS_FREEBSD
   if( !testForCdrom(resolved) )
     return 0;
-#endif
 
   if ( K3bCdDevice::CdDevice* oldDev = findDevice(resolved) ) {
     kdDebug() << "(K3bCdDevice::DeviceManager) dev " << resolved  << " already found" << endl;
@@ -655,12 +646,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
   }
 
   int bus = -1, target = -1, lun = -1;
-  bool scsi = false;
-
-#ifndef Q_OS_FREEBSD
-  scsi = determineBusIdLun( resolved, bus, target, lun );
-#endif
-
+  bool scsi = determineBusIdLun( resolved, bus, target, lun );
   if(scsi) {
     if ( K3bCdDevice::CdDevice* oldDev = findDevice(bus, target, lun) ) {
       kdDebug() << "(K3bCdDevice::DeviceManager) dev " << resolved  << " already found" << endl;
@@ -678,6 +664,7 @@ K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( const QString& dev
 
   return addDevice(device);
 }
+
 
 K3bCdDevice::CdDevice* K3bCdDevice::DeviceManager::addDevice( K3bCdDevice::CdDevice *device)
 {
@@ -756,10 +743,43 @@ void K3bCdDevice::DeviceManager::scanFstab()
 
     kdDebug() << "(K3bCdDevice::DeviceManager) scanning fstab: " << md << endl;
 
-    if( K3bCdDevice::CdDevice* dev = findDevice( resolveSymLink(md) ) ) {
-      bool useMountPoint = false;
+
+    //
+    // Try finding the device
+    //
+    // compare bus, id, lun since the same device can for example be
+    // determined as /dev/srX or /dev/scdX
+    //
+    int bus = -1, id = -1, lun = -1;
+    K3bCdDevice::CdDevice* dev = findDevice( resolveSymLink(md) );
+    if( !dev && determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
+      dev = findDevice( bus, id, lun );
+
+#ifdef Q_OS_FREEBSD
+    // FIXME: is this nessessary? Don't we resolve all symlinks on bsd, too?
+    //        and shouldn't we do an addDevice anywhere here in case the fstab
+    //        contains a device which we did not find before?
+    if( !dev )
+      dev = findDevice( md );
+#endif
+      
+    //
+    // Maybe the fstab contains a device we did not find before?
+    //
+    if( !dev )
+      dev = addDevice( md );
+
+    //
+    // Did we find a device?
+    //
+    if( dev ) {
+      bool isPreferredMountPoint = false;
       kdDebug() << "(K3bCdDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
 
+      // FIXME: this does also make sense on linux. Shouldn't we check for the "users" option?
+      //        (like I now implemented for linux)
+      //        Does checking if we own the mountpoint really make sense? At least on linux this has
+      //        no influence on us beeing able to mount the device.
 #ifdef Q_OS_FREEBSD
       // Several mount points for one device might exist. If more than one are found, the one with
       // user permission should have a higher priority.
@@ -767,37 +787,18 @@ void K3bCdDevice::DeviceManager::scanFstab()
       if (mountInfo->fs_file &&
 	  !stat(mountInfo->fs_file, &filestat) &&
 	  filestat.st_uid == geteuid())	{
-	useMountPoint = true;
+	isPreferredMountPoint = true;
       }
 #else
-      useMountPoint = true;
+      if( mountInfo->fs_file &&
+	  QString::fromLocal8Bit(mountInfo->fs_mntops).contains("users") )
+	isPreferredMountPoint = true;
 #endif
 
-      if( useMountPoint || dev->mountDevice().isEmpty() ) {
+      if( isPreferredMountPoint || dev->mountDevice().isEmpty() ) {
         dev->setMountPoint( mountInfo->fs_file );
         dev->setMountDevice( md );
 	dev->m_supermount = supermount;
-      }
-    }
-    else {
-      // compare bus, id, lun since the same device can for example be
-      // determined as /dev/srX or /dev/scdX
-      int bus = -1, id = -1, lun = -1;
-      K3bCdDevice::CdDevice * dev = 0;
-
-#ifdef Q_OS_FREEBSD
-      dev = findDevice( mountInfo->fs_spec );
-#else      
-      if( determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
-	dev = findDevice( bus, id, lun );
-#endif
-
-      if( dev ) {
-	if( dev->mountDevice().isEmpty() ) {
-	  dev->setMountPoint( mountInfo->fs_file );
-	  dev->setMountDevice( md );
-	  dev->m_supermount = supermount;
-	}
       }
     }
   } // while mountInfo
@@ -823,6 +824,7 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
   /* NOTREACHED */
 #endif
 
+#ifdef Q_OS_LINUX
   int ret = false;
   int cdromfd = K3bCdDevice::openDevice( dev.ascii() );
   if (cdromfd < 0) {
@@ -833,8 +835,7 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
   struct stat cdromStat;
   ::fstat( cdromfd, &cdromStat );
 
-  if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) )
-  {
+  if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ) {
     struct ScsiIdLun
     {
       int id;
@@ -844,13 +845,11 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
 
     // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
     if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
-         (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) )
-    {
+         (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
       kdDebug() << "Need a filename that resolves to a SCSI device" << endl;
       ret = false;
     }
-    else
-    {
+    else {
       id  = idLun.id & 0xff;
       lun = (idLun.id >> 8) & 0xff;
       kdDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
@@ -858,9 +857,9 @@ bool K3bCdDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus
     }
   }
 
-
   ::close(cdromfd);
   return ret;
+#endif
 }
 
 
