@@ -66,7 +66,7 @@ rcdir = $(kde_datadir)/k3b
 rc_DATA = k3bui.rc eventsrc tips
 
 messages: rc.cpp
-	$(EXTRACTRC) `find . -name \*.rc -o -name \*.ui` > rc.cpp
+	$(EXTRACTRC) `find . -name \*.rc -o -name \*.ui` `find ../plugins -name \*.rc -o -name \*.ui`> rc.cpp
 	$(PREPARETIPS) > tips.cpp
 	$(XGETTEXT) `find . -name \*.cpp -o -name \*.h` `find ../plugins -name \*.cpp -o -name \*.h` -o $(podir)/k3b.pot
 	rm -f tips.cpp 
