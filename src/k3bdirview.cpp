@@ -258,12 +258,10 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
   const QString& mountPoint = device->mountPoint();
 
   if( !mountPoint.isEmpty() ){
+    m_lastDevice = device;
     connect( K3bCdDevice::mount(device),
              SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
-	     this, SLOT(reload()) );
-
-    KURL url = KURL( mountPoint );
-    slotDirActivated( url );
+	     this, SLOT( slotMountFinished(K3bCdDevice::DeviceHandler *) ) );
   }
   else {
     KMessageBox::error( this, i18n("K3b could not mount %1. Please run K3bSetup.").arg(device->mountDevice()),
@@ -271,6 +269,11 @@ void K3bDirView::slotMountDevice( K3bDevice* device )
   }
 }
 
+void K3bDirView::slotMountFinished(K3bCdDevice::DeviceHandler * )
+{
+   KURL url = KURL(m_lastDevice->mountPoint());
+   slotDirActivated( url );
+}
 
 void K3bDirView::slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p )
 {
@@ -289,28 +292,28 @@ void K3bDirView::slotShowDiskInfo()
 
 void K3bDirView::slotUnmountDisk()
 {
+  k3bMain()->showBusyInfo( i18n("Unmounting disk.") );
   if( m_lastDevice ) {
-//    m_diskInfoDetector->cancel();
     k3bMain()->endBusy();
     if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
     	home();
-    K3bCdDevice::unmount(m_lastDevice);
+    connect( K3bCdDevice::unmount(m_lastDevice),SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
+	     this, SLOT( slotUnmountFinished(K3bCdDevice::DeviceHandler *) ) );
   }
 }
 
+void K3bDirView::slotUnmountFinished(K3bCdDevice::DeviceHandler *)
+{
+  k3bMain()->endBusy();
+}
 
 void K3bDirView::slotEjectDisk()
 {
-  // cancel any previous disk info retrieval
-//  m_diskInfoDetector->cancel();
-  k3bMain()->endBusy();
+    if ( m_lastDevice )
+      if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
+        home();
 
-  if( m_lastDevice ) {
-     if ( m_fileView->Url().path().startsWith(m_lastDevice->mountPoint()) )
-    	home();
      K3bCdDevice::eject( m_lastDevice );
-    // TODO: check if this was the currently displayed device and if so return to home dir
-  }
 }
 
 
