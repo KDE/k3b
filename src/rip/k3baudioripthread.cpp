@@ -428,7 +428,7 @@ void K3bAudioRipThread::cleanupAfterCancellation()
 
 QString K3bAudioRipThread::jobDescription() const 
 {
-  if( m_cddbEntry.titles.count() == 0 )
+  if( m_cddbEntry.cdTitle.isEmpty() )
     return i18n("Ripping audio tracks");
   else
     return i18n("Ripping audio tracks from %1").arg(m_cddbEntry.cdTitle);

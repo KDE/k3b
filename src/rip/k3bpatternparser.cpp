@@ -41,10 +41,14 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       if( i < pattern.length() ) {
 	switch( pattern[i] ) {
 	case 'a':
-	  dir.append( entry.artists[trackNumber-1].isEmpty() ? i18n("unknown") : entry.artists[trackNumber-1] );
+	  dir.append( entry.artists[trackNumber-1].isEmpty() 
+		      ? i18n("unknown") + QString(" %1").arg(trackNumber)
+		      : entry.artists[trackNumber-1] );
 	  break;
 	case 't':
-	  dir.append( entry.titles[trackNumber-1].isEmpty() ? i18n("unknown") : entry.titles[trackNumber-1] );
+	  dir.append( entry.titles[trackNumber-1].isEmpty() 
+		      ? i18n("Track %1").arg(trackNumber) 
+		      : entry.titles[trackNumber-1] );
 	  break;
 	case 'n':
 	  dir.append( QString::number(trackNumber).rightJustify( 2, '0' ) );
@@ -56,10 +60,12 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
 	  dir.append( entry.genre.isEmpty() ? entry.category : entry.genre );
 	  break;
 	case 'r':
-	  dir.append( entry.cdArtist.isEmpty() ? i18n("unknown") : entry.cdArtist );
+	  dir.append( entry.cdArtist.isEmpty() 
+		      ? i18n("unknown") : entry.cdArtist );
 	  break;
 	case 'm':
-	  dir.append( entry.cdTitle.isEmpty() ? i18n("unknown") : entry.cdTitle );
+	  dir.append( entry.cdTitle.isEmpty() 
+		      ? i18n("unknown") : entry.cdTitle );
 	  break;
 	case 'x':
 	  dir.append( entry.cdExtInfo ); // I think it makes more sense to allow empty extinfos
