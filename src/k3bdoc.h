@@ -26,7 +26,6 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qlist.h>
-#include <qfile.h>
 
 
 // include files for KDE
@@ -40,6 +39,8 @@ class K3bDevice;
 class KProcess;
 class K3bApp;
 class K3bBurnJob;
+class QDomDocument;
+
 
 
 
@@ -96,10 +97,18 @@ class K3bDoc : public QObject
   virtual bool newDocument();
   /** closes the acutal document */
   void closeDocument();
-  /** loads the document by filename and format and emits the updateViews() signal */
-  bool openDocument(const KURL &url, const char *format=0);
-  /** saves the document under filename and format.*/	
-  bool saveDocument(const KURL &url, const char *format=0);
+
+  /** 
+   * loads the document by filename and format and emits the updateViews() signal 
+   */
+  bool openDocument(const KURL &url);
+
+
+  /**
+   * saves the document under filename and format.
+   */	
+  bool saveDocument(const KURL &url);
+
   /** returns the KURL of the document */
   const KURL& URL() const;
   /** sets the URL of the document */
@@ -129,10 +138,10 @@ class K3bDoc : public QObject
   virtual K3bBurnJob* newBurnJob() = 0;
 	
  public slots:
-    /** calls repaint() on all views connected to the document object and is called 
-     *	by the view by which the document has been changed.
-     *  As this view normally repaints itself, it is excluded from the paintEvent.
-     */
+  /** calls repaint() on all views connected to the document object and is called 
+   *	by the view by which the document has been changed.
+   *  As this view normally repaints itself, it is excluded from the paintEvent.
+   */
   void updateAllViews(K3bView *sender);
   void setDummy( bool d );
   void setDao( bool d );
@@ -142,20 +151,24 @@ class K3bDoc : public QObject
   void setBurnProof( bool b ) { m_burnProof = b; }
 	
  signals:
-	void errorMessage( const QString& );
-	void warningMessage( const QString& );
-	void infoMessage( const QString& );
-	void result();
-	void percent( int percent );
+  void errorMessage( const QString& );
+  void warningMessage( const QString& );
+  void infoMessage( const QString& );
+  void result();
+  void percent( int percent );
 	 	
  protected:
-  /** when deriving from K3bDoc this method really opens the document since
-      openDocument only opens a tempfile and calls this method. */
-  virtual bool loadDocumentData( QFile& f ) = 0;
+  /** 
+   * when deriving from K3bDoc this method really opens the document since
+   * openDocument only opens a tempfile and calls this method. 
+   */
+  virtual bool loadDocumentData( QDomDocument* ) = 0;
 	
-  /** when deriving from K3bDoc this method really saves the document since
-      saveDocument only opens the file and calls this method. */
-  virtual bool saveDocumentData( QFile& f ) = 0;
+  /** 
+   * when deriving from K3bDoc this method really saves the document since
+   * saveDocument only opens the file and calls this method. 
+   */
+  virtual bool saveDocumentData( QDomDocument* ) = 0;
 
   KProcess* m_process;
 	

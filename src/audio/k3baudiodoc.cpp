@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qdom.h>
 #include <qdatetime.h>
 #include <qtextstream.h>
 
@@ -300,13 +301,13 @@ K3bView* K3bAudioDoc::newView( QWidget* parent )
 }
 
 
-bool K3bAudioDoc::loadDocumentData( QFile& )
+bool K3bAudioDoc::loadDocumentData( QDomDocument* )
 {
   // TODO: so what? load the shit! ;-)
   return true;
 }
 
-bool K3bAudioDoc::saveDocumentData( QFile& )
+bool K3bAudioDoc::saveDocumentData( QDomDocument* )
 {
   // TODO: some saving work...
   return true;

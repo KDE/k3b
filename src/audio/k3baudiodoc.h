@@ -31,143 +31,145 @@
 class K3bApp;
 class K3bAudioTrack;
 class QWidget;
+class QDomDocument;
+
 
 /**Document class for an audio project. 
   *@author Sebastian Trueg
   */
 
-class K3bAudioDoc : public K3bDoc  {
-
-	Q_OBJECT
+class K3bAudioDoc : public K3bDoc  
+{
+  Q_OBJECT
 	
-public:
-	K3bAudioDoc( QObject* );
-	~K3bAudioDoc();
+ public:
+  K3bAudioDoc( QObject* );
+  ~K3bAudioDoc();
 	
-	/** reimplemented from K3bDoc */
-	K3bView* newView( QWidget* parent );
-	/** reimplemented from K3bDoc */
-	void addView(K3bView* view);
+  /** reimplemented from K3bDoc */
+  K3bView* newView( QWidget* parent );
+  /** reimplemented from K3bDoc */
+  void addView(K3bView* view);
 
-	bool newDocument();
+  bool newDocument();
 
-	/** obsolet! USE length() ! **/
-	QTime audioSize() const;
+  /** obsolet! USE length() ! **/
+  QTime audioSize() const;
 
-	bool padding() const;
-	int numberOfTracks() const { return m_tracks->count(); }
+  bool padding() const;
+  int numberOfTracks() const { return m_tracks->count(); }
 
-	K3bAudioTrack* current() const { return m_tracks->current(); }
-	K3bAudioTrack* next() { return m_tracks->next(); }
-	K3bAudioTrack* prev() { return m_tracks->prev(); }
-	K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
-	K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
+  K3bAudioTrack* current() const { return m_tracks->current(); }
+  K3bAudioTrack* next() { return m_tracks->next(); }
+  K3bAudioTrack* prev() { return m_tracks->prev(); }
+  K3bAudioTrack* at( uint i ) { return m_tracks->at( i ); }
+  K3bAudioTrack* take( uint i ) { return m_tracks->take( i ); }
 
-	/** get the current size of the project */
-	int size() const;
-	int length() const;
+  /** get the current size of the project */
+  int size() const;
+  int length() const;
 	
-	// CD-Text
-	bool cdText() const { return m_cdText; }
-	const QString& title() const { return m_cdTextTitle; }
-	const QString& artist() const { return m_cdTextArtist; }
-	const QString& disc_id() const { return m_cdTextDisc_id; }
-	const QString& arranger() const { return m_cdTextArranger; }
-	const QString& songwriter() const { return m_cdTextSongwriter; }
-	const QString& upc_ean() const { return m_cdTextUpc_Ean; }
-	const QString& cdTextMessage() const { return m_cdTextMessage; }
+  // CD-Text
+  bool cdText() const { return m_cdText; }
+  const QString& title() const { return m_cdTextTitle; }
+  const QString& artist() const { return m_cdTextArtist; }
+  const QString& disc_id() const { return m_cdTextDisc_id; }
+  const QString& arranger() const { return m_cdTextArranger; }
+  const QString& songwriter() const { return m_cdTextSongwriter; }
+  const QString& upc_ean() const { return m_cdTextUpc_Ean; }
+  const QString& cdTextMessage() const { return m_cdTextMessage; }
 
-	QString writeTOC( const QString& filename );
-	int numOfTracks() const;
-	int allMp3Decoded() const;
-	K3bAudioTrack* nextTrackToDecode() const;
+  QString writeTOC( const QString& filename );
+  int numOfTracks() const;
+  int allMp3Decoded() const;
+  K3bAudioTrack* nextTrackToDecode() const;
 
-	K3bBurnJob* newBurnJob();
+  K3bBurnJob* newBurnJob();
 		
-public slots:
-	/**
-	 * will test the file and add it to the project.
-	 * connect to at least result() to know when
-	 * the process is finished and check error()
-	 * to know about the result.
-	 **/
-	void addTrack( const QString&, uint );
-	void addTracks( const QStringList&, uint );
-	/** adds a track without any testing */
-	void addTrack( K3bAudioTrack* track, uint position = 0 );
-//	void addTracks( QList<K3bAudioTrack>& tracks );
-	void removeTrack( int position );
-	void moveTrack( uint oldPos, uint newPos );
+ public slots:
+  /**
+   * will test the file and add it to the project.
+   * connect to at least result() to know when
+   * the process is finished and check error()
+   * to know about the result.
+   **/
+  void addTrack( const QString&, uint );
+  void addTracks( const QStringList&, uint );
+  /** adds a track without any testing */
+  void addTrack( K3bAudioTrack* track, uint position = 0 );
+  //	void addTracks( QList<K3bAudioTrack>& tracks );
+  void removeTrack( int position );
+  void moveTrack( uint oldPos, uint newPos );
 
-	void setPadding( bool p ) { m_padding = p; }
-//	void cancel();
+  void setPadding( bool p ) { m_padding = p; }
+  //	void cancel();
 
-	// CD-Text
-	void writeCdText( bool b ) { m_cdText = b; }
-	void setTitle( const QString& v ) { m_cdTextTitle = v; }
-	void setArtist( const QString& v ) { m_cdTextArtist = v; }
-	void setDisc_id( const QString& v ) { m_cdTextDisc_id = v; }
-	void setArranger( const QString& v ) { m_cdTextArranger = v; }
-	void setSongwriter( const QString& v ) { m_cdTextSongwriter = v; }
-	void setUpc_ean( const QString& v ) { m_cdTextUpc_Ean = v; }
-	void setCdTextMessage( const QString& v ) { m_cdTextMessage = v; }
+  // CD-Text
+  void writeCdText( bool b ) { m_cdText = b; }
+  void setTitle( const QString& v ) { m_cdTextTitle = v; }
+  void setArtist( const QString& v ) { m_cdTextArtist = v; }
+  void setDisc_id( const QString& v ) { m_cdTextDisc_id = v; }
+  void setArranger( const QString& v ) { m_cdTextArranger = v; }
+  void setSongwriter( const QString& v ) { m_cdTextSongwriter = v; }
+  void setUpc_ean( const QString& v ) { m_cdTextUpc_Ean = v; }
+  void setCdTextMessage( const QString& v ) { m_cdTextMessage = v; }
 
-protected slots:
- 	/** processes queue "urlsToAdd" **/
- 	void addNextTrack();
- 	void addMp3File( const QString& fileName, uint position );
-	void addWavFile( const QString& fileName, uint position );
+ protected slots:
+  /** processes queue "urlsToAdd" **/
+  void addNextTrack();
+  void addMp3File( const QString& fileName, uint position );
+  void addWavFile( const QString& fileName, uint position );
 	
-	void mp3FileTestingFinished();
+  void mp3FileTestingFinished();
 
-signals:
-	void newTrack( K3bAudioTrack* );
-	void trackRemoved( uint );
+ signals:
+  void newTrack( K3bAudioTrack* );
+  void trackRemoved( uint );
 
-protected:
- 	/** reimplemented from K3bDoc */
- 	bool loadDocumentData( QFile& f );
- 	/** reimplemented from K3bDoc */
- 	bool saveDocumentData( QFile& f );
+ protected:
+  /** reimplemented from K3bDoc */
+  bool loadDocumentData( QDomDocument* );
+  /** reimplemented from K3bDoc */
+  bool saveDocumentData( QDomDocument* );
 
-private:
-	class PrivateUrlToAdd
-	{
-	public:
-		PrivateUrlToAdd( const QString& _url, int _pos )
-			: url( _url ), position(_pos) {}
-		QString url;
-		int position;
-	};
-	/** Holds all the urls that have to be added to the list of tracks. **/
-	QQueue<PrivateUrlToAdd> urlsToAdd;
+ private:
+  class PrivateUrlToAdd
+    {
+    public:
+      PrivateUrlToAdd( const QString& _url, int _pos )
+	: url( _url ), position(_pos) {}
+      QString url;
+      int position;
+    };
+  /** Holds all the urls that have to be added to the list of tracks. **/
+  QQueue<PrivateUrlToAdd> urlsToAdd;
 	
-	/** The last added file. This is saved even if the file not exists or
+  /** The last added file. This is saved even if the file not exists or
 	the url is malformed. */
-	KURL addedFile;
+  KURL addedFile;
 
-	QList<K3bAudioTrack>* m_tracks;
-	K3bAudioTrack* m_lastAddedTrack;
+  QList<K3bAudioTrack>* m_tracks;
+  K3bAudioTrack* m_lastAddedTrack;
 	
- 	uint lastAddedPosition;
+  uint lastAddedPosition;
  	
- 	// settings
- 	/** if true the adding of files will take longer */
- 	bool testFiles;
- 	bool m_padding;
- 	bool m_fileDecodingSuccessful;
+  // settings
+  /** if true the adding of files will take longer */
+  bool testFiles;
+  bool m_padding;
+  bool m_fileDecodingSuccessful;
  	
- 	// CD-Text
- 	// --------------------------------------------------
- 	bool m_cdText;
- 	QString m_cdTextTitle;
- 	QString m_cdTextArtist;
- 	QString m_cdTextDisc_id;
- 	QString m_cdTextArranger;
- 	QString m_cdTextUpc_Ean;
- 	QString m_cdTextSongwriter;
- 	QString m_cdTextMessage;
- 	// --------------------------------------------------
+  // CD-Text
+  // --------------------------------------------------
+  bool m_cdText;
+  QString m_cdTextTitle;
+  QString m_cdTextArtist;
+  QString m_cdTextDisc_id;
+  QString m_cdTextArranger;
+  QString m_cdTextUpc_Ean;
+  QString m_cdTextSongwriter;
+  QString m_cdTextMessage;
+  // --------------------------------------------------
 };
 
 

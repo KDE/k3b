@@ -23,6 +23,8 @@
 #include <qdatetime.h>
 #include <qfile.h>
 #include <qtimer.h>
+#include <qdom.h>
+#include <qtextstream.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -171,7 +173,7 @@ bool K3bDoc::newDocument()
   return true;
 }
 
-bool K3bDoc::openDocument(const KURL& url, const char* )
+bool K3bDoc::openDocument(const KURL& url )
 {
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile );
@@ -180,36 +182,47 @@ bool K3bDoc::openDocument(const KURL& url, const char* )
   QFile f( tmpfile );
   if ( !f.open( IO_ReadOnly ) )
     return false;
-	
-  // load the data into the document	
-  bool success = loadDocumentData( f );
-	
+
+  QDomDocument xmlDoc;
+  if( !xmlDoc.setContent( &f ) ) {
+    f.close();
+    return false;
+  }
+
   f.close();
 
   /////////////////////////////////////////////////
   KIO::NetAccess::removeTempFile( tmpfile );
-  doc_url=url;
+  doc_url = url;
 	
-  modified=false;
+  // load the data into the document	
+  bool success = loadDocumentData( &xmlDoc );
+	
+  modified = false;
+
   return success;
 }
 
-bool K3bDoc::saveDocument(const KURL&, const char* )
+bool K3bDoc::saveDocument(const KURL& url )
 {
-  //  KTempFile( locateLocal( "tmp", "k3b"
-  //	QFile f( filename );
-  //	if ( !f.open( IO_WriteOnly ) )
-  //		return false;
-  //
-  //  bool success = saveDocumentData( f );
-  //
-  //  f.close();
-  //
-  //  modified=false;
-  //	m_filename=filename;
-  //	m_title=QFileInfo(f).fileName();
-  //  return success;
-  return true;
+  QFile f( url.path() );
+  if ( !f.open( IO_WriteOnly ) )
+    return false;
+  
+  QDomDocument xmlDoc;
+  bool success = saveDocumentData( &xmlDoc );
+  
+  if( success ) {
+    QTextStream xmlStream( &f );
+    xmlDoc.save( xmlStream, 0 );
+
+    modified = false;
+    doc_url = url;
+  }
+
+  f.close();
+
+  return success;
 }
 
 void K3bDoc::deleteContents()

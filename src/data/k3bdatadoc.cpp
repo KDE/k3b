@@ -29,6 +29,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <qdom.h>
 
 #include <kstddirs.h>
 #include <kurl.h>
@@ -206,14 +207,14 @@ int K3bDataDoc::length() const
 }
 
 
-bool K3bDataDoc::loadDocumentData( QFile& )
+bool K3bDataDoc::loadDocumentData( QDomDocument* )
 {
   // TODO: so what? load the shit! ;-)
   return true;
 }
 
 
-bool K3bDataDoc::saveDocumentData( QFile& )
+bool K3bDataDoc::saveDocumentData( QDomDocument* )
 {
   // TODO: some saving work...
   return true;

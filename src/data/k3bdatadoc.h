@@ -33,6 +33,9 @@ class K3bView;
 class QString;
 class QStringList;
 class QWidget;
+class QDomDocument;
+
+
 
 /**
  *@author Sebastian Trueg
@@ -149,9 +152,9 @@ class K3bDataDoc : public K3bDoc
 
  protected:
   /** reimplemented from K3bDoc */
-  bool loadDocumentData( QFile& f );
+  bool loadDocumentData( QDomDocument* );
   /** reimplemented from K3bDoc */
-  bool saveDocumentData( QFile& f );
+  bool saveDocumentData( QDomDocument* );
 
   QString treatWhitespace( const QString& );
  	 		
