@@ -27,6 +27,7 @@
 #include <tools/k3bdatamodewidget.h>
 #include <tools/k3bglobals.h>
 #include <tools/k3bwritingmodewidget.h>
+#include <k3bcore.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -467,6 +468,7 @@ void K3bIsoImageWritingDialog::slotLoadUserDefaults()
   m_checkBurnProof->setChecked( c->readBoolEntry("burnproof", true ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
 
+  m_writerSelectionWidget->loadConfig( c );
   m_dataModeWidget->loadConfig(c);
 }
 
@@ -480,6 +482,7 @@ void K3bIsoImageWritingDialog::slotSaveUserDefaults()
   c->writeEntry( "burnproof", m_checkBurnProof->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
 
+  m_writerSelectionWidget->saveConfig( c );
   m_dataModeWidget->saveConfig(c);
 }
 

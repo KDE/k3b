@@ -290,8 +290,7 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
 
-  c->writeEntry( "writing_speed", m_writerSelectionWidget->writerSpeed() );
-  c->writeEntry( "writer_device", m_writerSelectionWidget->writerDevice()->devicename() );
+  m_writerSelectionWidget->saveConfig( c );
 }
 
 
@@ -307,8 +306,7 @@ void K3bProjectBurnDialog::slotLoadUserDefaults()
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
-  m_writerSelectionWidget->setSpeed( c->readNumEntry( "writing_speed", 1 ) );
-  m_writerSelectionWidget->setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+  m_writerSelectionWidget->loadConfig( c );
 }
 
 

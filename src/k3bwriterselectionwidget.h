@@ -46,6 +46,9 @@ class K3bWriterSelectionWidget : public QWidget
    */
   int writingApp() const;
 
+  void loadConfig( KConfig* );
+  void saveConfig( KConfig* );
+
  public slots:
   void setWriterDevice( K3bDevice* );
   void setSpeed( int );

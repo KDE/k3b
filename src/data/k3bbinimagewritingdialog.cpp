@@ -22,6 +22,7 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3bburnprogressdialog.h>
 #include <k3bstdguiitems.h>
+#include <k3bcore.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -241,6 +242,8 @@ void K3bBinImageWritingDialog::slotLoadUserDefaults()
   m_checkMulti->setChecked( c->readBoolEntry( "multisession", false ) );
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+
+  m_writerSelectionWidget->loadConfig( c );
 }
 
 
@@ -253,6 +256,8 @@ void K3bBinImageWritingDialog::slotSaveUserDefaults()
   c->writeEntry( "multisession", m_checkMulti->isChecked() );
   c->writeEntry( "force", m_checkForce->isChecked() );
   c->writeEntry( "copies", m_spinCopies->value() );
+
+  m_writerSelectionWidget->saveConfig( c );
 }
 
 void K3bBinImageWritingDialog::slotLoadK3bDefaults()

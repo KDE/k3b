@@ -21,6 +21,7 @@
 #include "k3bwriterselectionwidget.h"
 #include "k3bdiskerasinginfodialog.h"
 #include "tools/k3bglobals.h"
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -261,6 +262,8 @@ void K3bBlankingDialog::slotLoadUserDefaults()
     m_radioFastBlank->setChecked(true);
 
   m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
+
+  m_writerSelectionWidget->loadConfig( c );
 }
 
 void K3bBlankingDialog::slotSaveUserDefaults()
@@ -282,6 +285,8 @@ void K3bBlankingDialog::slotSaveUserDefaults()
   c->writeEntry( "erase_mode", mode );
 
   c->writeEntry( "force", m_checkForce->isChecked() );
+
+  m_writerSelectionWidget->saveConfig( c );
 }
 
 #include "k3bblankingdialog.moc"

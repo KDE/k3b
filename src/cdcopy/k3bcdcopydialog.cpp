@@ -368,8 +368,8 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
 
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
-  m_writerSelectionWidget->setSpeed( c->readNumEntry( "writing_speed", 1 ) );
-  m_writerSelectionWidget->setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+  m_writerSelectionWidget->loadConfig( c );
+
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
 }
 
@@ -391,8 +391,8 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
   c->writeEntry( "subchannel_mode", m_comboSubchanMode->currentText() );
   c->writeEntry( "copies", m_spinCopies->value() );
 
-  c->writeEntry( "writing_speed", m_writerSelectionWidget->writerSpeed() );
-  c->writeEntry( "writer_device", m_writerSelectionWidget->writerDevice()->devicename() );
+  m_writerSelectionWidget->saveConfig( c );
+
   c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 }
 
