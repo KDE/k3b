@@ -1,6 +1,7 @@
 0.11.18
 Fixed Cd-Text loading in audio projects.
-FIxed data project character restrictions.
+Fixed data project character restrictions.
+Little improvements to the device capabilities detection.
 
 0.11.17
 Fixed some DVD writing speed detection issues.

@@ -255,17 +255,49 @@ bool K3bCdDevice::CdDevice::init()
 	    short profile = from2Byte( &profiles[i+j] );
 
 	    switch (profile) {
-	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM; break;
-	    case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ; break;
-	    case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM; break;
-	    case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; break;
-	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
-	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
-	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
-	    case 0x2B: d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL; break;
-	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
-	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
-	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
+	    case 0x10:
+	      d->supportedProfiles |= MEDIA_DVD_ROM;
+	      d->deviceType |= DVD;
+	      break;
+	    case 0x11:
+	      d->supportedProfiles |= MEDIA_DVD_R_SEQ;
+	      d->deviceType |= DVDR;
+	      break;
+	    case 0x12:
+	      d->supportedProfiles |= MEDIA_DVD_RAM;
+	      break;
+	    case 0x13:
+	      d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
+	      d->deviceType |= DVDRW;
+	      break;
+	    case 0x14:
+	      d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
+	      d->deviceType |= DVDRW;
+	      break;
+	    case 0x1A:
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
+	      d->deviceType |= DVDPRW;
+	      break;
+	    case 0x1B: 
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_R;
+	      d->deviceType |= DVDPR;
+	      break;
+	    case 0x2B:
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
+	      d->deviceType |= DVDPR;
+	      break;
+	    case 0x08:
+	      d->supportedProfiles |= MEDIA_CD_ROM;
+	      d->deviceType |= CDROM;
+	      break;
+	    case 0x09:
+	      d->supportedProfiles |= MEDIA_CD_R;
+	      d->deviceType |= CDR;
+	      break;
+	    case 0x0A:
+	      d->supportedProfiles |= MEDIA_CD_RW;
+	      d->deviceType |= CDRW;
+	      break;
 	    default: 
 	      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: " 
 			<< profile << endl;
