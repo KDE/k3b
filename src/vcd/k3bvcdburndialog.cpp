@@ -298,6 +298,8 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     m_checkSegmentFolder = new QCheckBox( i18n( "SEGMENT Folder must always be present" ), m_groupGeneric );
     m_checkRelaxedAps = new QCheckBox( i18n( "Relaxed aps" ), m_groupGeneric );
     m_checkUpdateScanOffsets = new QCheckBox( i18n( "Update scan offsets" ), m_groupGeneric );
+    m_checkUpdateScanOffsets->setEnabled( false );
+
 
     // -------------------------------------------- gaps & margins group ----
     m_groupGaps = new QGroupBox( 0, Qt::Vertical, i18n( "Gaps" ), w );
@@ -933,6 +935,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkNonCompliant->setEnabled( false );
             m_checkNonCompliant->setChecked( false );
             m_checkUpdateScanOffsets->setEnabled( false );
+            m_checkUpdateScanOffsets->setChecked( false );
             break;
         case 1:
             //vcd 2.0
@@ -942,6 +945,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
             m_checkNonCompliant->setEnabled( false );
             m_checkNonCompliant->setChecked( false );
             m_checkUpdateScanOffsets->setEnabled( false );
+            m_checkUpdateScanOffsets->setChecked( false );
             break;
         case 2:
             //svcd 1.0

@@ -158,6 +158,7 @@ void K3bVcdJob::xmlGen()
     }
 
     emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::STATUS );
+    emit debuggingOutput("K3bVcdXml:", xmlView.xmlString() );
 
     vcdxBuild();
 
