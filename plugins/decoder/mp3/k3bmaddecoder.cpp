@@ -44,8 +44,8 @@
 #include <config.h>
 
 #if HAVE_TAGLIB
-#include <tag.h>
-#include <fileref.h>
+#include <taglib/tag.h>
+#include <taglib/mpegfile.h>
 #endif
 
 
@@ -63,6 +63,7 @@ public:
     : outputBuffer(0),
       outputPointer(0),
       outputBufferEnd(0) {
+    mad_header_init( &firstHeader );
   }
 
   K3bMad* handle;
@@ -102,7 +103,7 @@ K3bMadDecoder::~K3bMadDecoder()
 QString K3bMadDecoder::metaInfo( MetaDataField f )
 {
 #if HAVE_TAGLIB
-  TagLib::FileRef file( QFile::encodeName( filename() ) );
+  TagLib::MPEG::File file( QFile::encodeName( filename() ).data() );
 
   switch( f ) {
   case META_TITLE:
