@@ -58,7 +58,7 @@ K3b<name>Decoder::~K3b<name>Decoder()
 }
 
 
-QString K3b<name>Decoder::fileType() const;
+QString K3b<name>Decoder::fileType() const
 {
   // PUT YOUR CODE HERE
 }

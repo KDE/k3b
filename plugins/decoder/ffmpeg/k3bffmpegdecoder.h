@@ -13,19 +13,21 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_<name>_DECODER_H_
-#define _K3B_<name>_DECODER_H_
+#ifndef _K3B_FFMPEG_DECODER_H_
+#define _K3B_FFMPEG_DECODER_H_
 
 #include <k3baudiodecoder.h>
 
+class K3bFFMpegFile;
 
-class K3b<name>DecoderFactory : public K3bAudioDecoderFactory
+
+class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
 {
   Q_OBJECT
 
  public:
-  K3b<name>DecoderFactory( QObject* parent = 0, const char* name = 0 );
-  ~K3b<name>DecoderFactory();
+  K3bFFMpegDecoderFactory( QObject* parent = 0, const char* name = 0 );
+  ~K3bFFMpegDecoderFactory();
 
   bool canDecode( const KURL& filename );
 
@@ -40,15 +42,17 @@ class K3b<name>DecoderFactory : public K3bAudioDecoderFactory
 };
 
 
-class K3b<name>Decoder : public K3bAudioDecoder
+class K3bFFMpegDecoder : public K3bAudioDecoder
 {
   Q_OBJECT
 
  public:
-  K3b<name>Decoder( QObject* parent = 0, const char* name = 0 );
-  ~K3b<name>Decoder();
+  K3bFFMpegDecoder( QObject* parent = 0, const char* name = 0 );
+  ~K3bFFMpegDecoder();
 
   QString fileType() const;
+
+  void cleanup();
 
  protected:
   bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
@@ -56,8 +60,12 @@ class K3b<name>Decoder : public K3bAudioDecoder
   bool seekInternal( const K3b::Msf& );
 
   int decodeInternal( char* _data, int maxLen );
+
+ private:
+  K3bFFMpegFile* m_file;
+  QString m_type;
 };
 
-K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, K3b<name>DecoderFactory )
+K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, K3bFFMpegDecoderFactory )
 
 #endif

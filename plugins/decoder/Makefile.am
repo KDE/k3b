@@ -15,4 +15,8 @@ if include_AIFF
 DECAIFFDIR = libsndfile
 endif
 
-SUBDIRS = wave $(DECOGGDIR) $(DECMP3DIR) $(DECFLACDIR) $(DECAIFFDIR)
+if include_FFMPEG
+FFMPEGDIR = ffmpeg
+endif
+
+SUBDIRS = wave $(DECOGGDIR) $(DECMP3DIR) $(DECFLACDIR) $(DECAIFFDIR) $(FFMPEGDIR)

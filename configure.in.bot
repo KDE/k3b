@@ -6,7 +6,7 @@ if test x$ogg_vorbis = xyes; then
 	echo "Ogg Vorbis support:                    yes"
 else
 	echo "Ogg Vorbis support:                     no"
-	echo "    You are missing the Ogg-Vorbis headers and libraries"
+	echo "    You are missing the Ogg-Vorbis headers and libraries."
 	echo "    The Ogg Vorbis decoding and encoding plugins won't be compiled."
 fi
 
@@ -22,17 +22,17 @@ if test -n "$MAD_LIB"; then
 	fi
 else
 	echo "Mp3 decoding support (libmad):          no"
-	echo "    You are missing the libmad headers and libraries"
+	echo "    You are missing the libmad headers and libraries."
 	echo "    The Mp3 decoding plugin won't be compiled."
 fi
 
 echo ""
 
 if $av_cv_sndfile; then
-	echo "libsndfile audio decoding support:      yes"
+	echo "libsndfile audio decoding support:     yes"
 else
 	echo "libsndfile audio decoding support:      no"
-	echo "    You are missing the libsndfile headers and libraries"
+	echo "    You are missing the libsndfile headers and libraries."
 	echo "    The libsndfile audio decoding plugin won't be compiled."
 fi
 
@@ -42,7 +42,7 @@ if test x$have_flac = xyes; then
 	echo "FLAC support:                          yes"
 else
 	echo "FLAC support:                           no"
-	echo "    You are missing the FLAC++ headers and libraries"
+	echo "    You are missing the FLAC++ headers and libraries."
 	echo "    The FLAC decoding plugin won't be compiled."
 fi
 
@@ -52,16 +52,30 @@ if test x$have_lame = xyes; then
 	echo "Lame Mp3 encoder plugin:               yes"
 else
 	echo "Lame Mp3 encoder plugin                 no"
-	echo "    You are missing the Lame headers and libraries"
+	echo "    You are missing the Lame headers and libraries."
 	echo "    The Lame Mp3 encoding plugin won't be compiled."
 fi
 
 echo ""
 
+echo "Audio resampling:"
 if test -n "$LIBSAMPLERATE"; then
-        echo "Audio resampling:  using installed version"
+	echo "                   using installed version"
 else
-        echo "Audio resampling:        using version bundled with K3b"
+        echo "            using version bundled with K3b"
+fi
+
+echo ""
+
+echo "FFMpeg decoder plugin (decodes wma and others):"
+if test  x$have_ffmpeg = xyes; then
+        echo "                                       yes"
+else
+        echo "                                        no"
+	echo "    You are missing the ffmpeg headers and libraries"
+	echo "    version 0.4.9 or higher."
+	echo "    The ffmpeg audio decoding plugin (decodes wma and"
+	echo "    others) won't be compiled."
 fi
 
 echo ""

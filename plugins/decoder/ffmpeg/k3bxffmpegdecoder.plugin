@@ -1,0 +1,9 @@
+[K3b Plugin]
+Lib=libk3bffmpegdecoder
+Group=AudioDecoder
+Name=K3b FFMpeg Decoder
+Author=Sebastian Trueg
+Email=trueg@k3b.org
+Version=0.9
+Comment=Decoding module to decode wma files
+License=GPL
