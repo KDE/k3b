@@ -311,7 +311,11 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 		       .arg( track.type() == K3bTrack::AUDIO 
 			    ? ( track.preEmphasis() ?  i18n("preemp") : i18n("no preemp") )
 			    : ( track.preEmphasis() ?  i18n("incremental") : i18n("uninterrupted") ) ) );
-        item->setText( 2, QString("%1 - %2").arg(track.firstSector().lba()).arg(track.lastSector().lba()) );
+        item->setText( 2, 
+		       QString("%1 - %2 (%3)")
+		       .arg(track.firstSector().lba())
+		       .arg(track.lastSector().lba())
+		       .arg(track.index0() > 0 ? track.index0()-track.firstSector().lba() : -1) );
         item->setText( 3, QString::number( track.length().lba() ) + " (" + track.length().toString() + ")" );
         ++index;
       }

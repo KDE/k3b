@@ -28,6 +28,11 @@
 #include <qdict.h>
 
 
+namespace K3bCdDevice {
+  class CdDevice;
+}
+
+
 /**
  * Simplyfied primary descriptor which just contains the fields
  * used by K3b.
@@ -114,6 +119,12 @@ class K3bIso9660 : public KArchive
    * Creates an instance that operates on the given device.
    */
   K3bIso9660( QIODevice * dev );
+
+  /**
+   * Special case which always reads the TOC from the specified sector
+   * thus supporting multisession CDs.
+   */
+  K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned long startSector );
 
   /**
    * @param fd open file descriptor

@@ -128,24 +128,24 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
   //
 
   if( d->info.tocType == DiskInfo::DATA ||
-      /*      d->info.tocType == DiskInfo::MIXED || */
+      d->info.tocType == DiskInfo::MIXED || 
       d->info.tocType == DiskInfo::DVD ) {
     if( d->device->open() != -1 ) {
 
-      // in mixed mode we seek to the first data track
-      // FIXME: this does not work. We need to create a QIODevice for this
-      //        which reads via MMC from the medium.
-//       if( d->info.tocType == DiskInfo::MIXED ) {
-// 	Toc::const_iterator it = toc().begin();
-// 	while( it != toc().end() && (*it).type() != Track::DATA )
-// 	  ++it;
-// 	if( !d->device->seek( (*it).firstSector().lba() ) )
-// 	  kdDebug() << "(K3bDiskInfoDetector) seeking to first data track failed." << endl;
-//       }
+      // We always use the last data track
+      // this way we get the latest session on a ms cd
+      Toc::const_iterator it = toc().end();
+      --it; // this is valid since there is at least one data track
+      while( it != toc().begin() && (*it).type() != Track::DATA )
+	--it;
 
       delete d->iso9660;
-      d->iso9660 = new K3bIso9660( d->device->open() );
+
+      d->iso9660 = new K3bIso9660( d->device, (*it).firstSector().lba() );
+
       if( d->iso9660->open( IO_ReadOnly ) ) {
+	d->iso9660->debug();
+
 	d->info.isoId = "CD001";
 	d->info.isoSystemId = d->iso9660->primaryDescriptor().systemId;
 	d->info.isoVolumeId = d->iso9660->primaryDescriptor().volumeId;

@@ -14,6 +14,12 @@
  */
 
 #include "k3biso9660.h"
+#include "k3bdevicewrapperqiodevice.h"
+
+#include <k3bdevice.h>
+#include <k3btoc.h>
+#include <k3btrack.h>
+#include <k3bmsf.h>
 
 #include "libisofs/isofs.h"
 
@@ -139,7 +145,9 @@ class K3bIso9660::Private
 {
 public:
   Private() 
-    : rootDir(0) {
+    : rootDir(0),
+      cdDevice(0),
+      startSector(0) {
   }
 
   bool deleteDev;
@@ -150,6 +158,11 @@ public:
 
   K3bIso9660Directory* rootDir;
   K3bIso9660SimplePrimaryDescriptor primaryDesc;
+
+  K3bCdDevice::CdDevice* cdDevice;
+
+  // only used for direkt K3bDevice access
+  unsigned long startSector;
 };
 
 
@@ -178,6 +191,16 @@ K3bIso9660::K3bIso9660( QIODevice * dev )
 }
 
 
+K3bIso9660::K3bIso9660( K3bCdDevice::CdDevice* dev, unsigned long startSector )
+  : KArchive( new K3bDeviceWrapperQIODevice(dev) )
+{
+  d = new Private();
+  d->deleteDev = true;
+  d->cdDevice = dev;
+  d->startSector = startSector;
+}
+
+
 K3bIso9660::~K3bIso9660()
 {
   // KArchive takes care of deleting the entries
@@ -198,9 +221,11 @@ static int readf(char *buf, int start, int len,void *udata)
   if( dev->at(start<<11) ) {
     if( dev->readBlock(buf, len<<11) != -1 )
       return len;
+    else
+      kdDebug() << "(K3bIso9660::ReadRequest) read with size " << (len<<11) << " failed." << endl;
   }
   else
-    kdDebug() << "(K3bIso9660::ReadRequest) seek failed." << endl;
+    kdDebug() << "(K3bIso9660::ReadRequest) seek to " << (start<<11) << " failed." << endl;
   kdDebug() << "(K3bIso9660::ReadRequest) failed start: " << start << " len: " << len << endl;
 
   return -1;
@@ -359,9 +384,10 @@ bool K3bIso9660::openArchive( int mode )
 
 
   int c_b=1;
-  c_i=1;c_j=1;       
+  c_i=1;c_j=1;
 
-  desc = ReadISO9660( &readf, 0, this );
+  desc = ReadISO9660( &readf, d->startSector, this );
+
   if (!desc) {
     kdDebug() << "K3bIso9660::openArchive no volume descriptors" << endl;
     return false;

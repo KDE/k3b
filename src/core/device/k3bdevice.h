@@ -311,8 +311,8 @@ namespace K3bCdDevice
     void close() const;
     bool isOpen() const;
 
-  protected:
-    bool furtherInit();
+
+    // MMC commands
 
     /**
      * if true is returned dataLen specifies the actual length of *data which needs to be
@@ -390,6 +390,10 @@ namespace K3bCdDevice
      * Seek to the specified sector.
      */
     bool seek( unsigned long lba ) const;
+
+
+  protected:
+    bool furtherInit();
 
     /**
      * Fallback method that uses the evil cdrom.h stuff

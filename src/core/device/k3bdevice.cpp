@@ -1247,7 +1247,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
 
   int i = 1;
   for( Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
-    K3bTrack& track = *it;
+    Track& track = *it;
     if( track.type() == Track::AUDIO ) {
       long sec = 0;
       if( searchIndex0( track.firstSector().lba(), track.lastSector().lba(), sec ) ) {
