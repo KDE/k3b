@@ -66,7 +66,7 @@ void K3bCddb::readConfig( KConfig* c )
   // new config
   m_cddbServer = c->readListEntry( "cddb server" );
 
-  m_localCddbDirs = c->readListEntry( "local cddb dirs" );
+  m_localCddbDirs = c->readPathListEntry( "local cddb dirs" );
   m_proxyServer = c->readEntry( "proxy server" );
   m_proxyPort = c->readNumEntry( "proxy port" );
   m_bUseProxyServer = c->readBoolEntry( "use proxy server", false );

@@ -245,7 +245,7 @@ void K3bVideoCdRippingDialog::slotSaveUserDefaults()
     KConfig* c = k3bcore->config();
     c->setGroup( "Video CD Ripping" );
 
-    c->writeEntry( "last ripping directory", m_editDirectory->url() );
+    c->writePathEntry( "last ripping directory", m_editDirectory->url() );
     c->writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );
     c->writeEntry( "sector 2336", m_sector2336 ->isChecked( ) );
     c->writeEntry( "extract xml", m_extractXML ->isChecked( ) );

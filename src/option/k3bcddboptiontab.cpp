@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -151,7 +151,7 @@ void K3bCddbOptionTab::readSettings()
   // new config
   QStringList cddbServer = c->readListEntry( "cddb server" );
 
-  QStringList localCddbDirs = c->readListEntry( "local cddb dirs" );
+  QStringList localCddbDirs = c->readPathListEntry( "local cddb dirs" );
 
   m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", false ) );
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
@@ -247,7 +247,7 @@ void K3bCddbOptionTab::apply()
   if( c->hasKey( "cddbp server" ) )
     c->deleteEntry( "cddbp server" );
 
-  c->writeEntry( "local cddb dirs", localCddbDirs );
+  c->writePathEntry( "local cddb dirs", localCddbDirs );
 }
 
 

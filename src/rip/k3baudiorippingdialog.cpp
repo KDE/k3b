@@ -510,7 +510,7 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
-  c->writeEntry( "last ripping directory", m_optionWidget->m_editBaseDir->url() );
+  c->writePathEntry( "last ripping directory", m_optionWidget->m_editBaseDir->url() );
   c->writeEntry( "use_pattern", m_optionWidget->m_checkUsePattern->isChecked() );
 
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );

@@ -177,7 +177,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
   loadDefaultSearchPath();
 
   if( c->hasKey( "search path" ) )
-    setSearchPath( c->readListEntry( "search path" ) );
+    setSearchPath( c->readPathListEntry( "search path" ) );
 
   search();
 
@@ -198,7 +198,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
 
 bool K3bExternalBinManager::saveConfig( KConfig* c )
 {
-  c->writeEntry( "search path", m_searchPath );
+  c->writePathEntry( "search path", m_searchPath );
 
   for ( QMap<QString, K3bExternalProgram*>::iterator it = m_programs.begin(); it != m_programs.end(); ++it ) {
     K3bExternalProgram* p = it.data();

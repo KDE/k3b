@@ -449,7 +449,7 @@ void K3bDvdRipperWidget::slotLoadUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "DVD ripping" );
 
-  m_editStaticRipPath->setURL( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
+  m_editStaticRipPath->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkOpenEncoding->setChecked( c->readBoolEntry( "open_encoding", false ) );
   m_checkStartEncoding->setChecked( c->readBoolEntry( "start_encoding", false ) );
 }
@@ -460,7 +460,7 @@ void K3bDvdRipperWidget::slotSaveUserDefaults()
   KConfig* c = kapp->config();
   c->setGroup( "DVD ripping" );
 
-  c->writeEntry( "last ripping directory", m_editStaticRipPath->url() );
+  c->writePathEntry( "last ripping directory", m_editStaticRipPath->url() );
   c->writeEntry( "open_encoding", m_checkOpenEncoding->isChecked() );
   c->writeEntry( "start_encoding", m_checkStartEncoding->isChecked() );
 }
