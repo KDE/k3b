@@ -48,8 +48,8 @@
 
 
 
-K3bDataJob::K3bDataJob( K3bDataDoc* doc )
-  : K3bBurnJob()
+K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
+  : K3bBurnJob(parent)
 {
   m_doc = doc;
   m_writerJob = 0;
