@@ -22,7 +22,7 @@
 ## Process this file with automake to produce Makefile.in
 
 noinst_LTLIBRARIES =	libmad.la
-#include_HEADERS =	mad.h
+noinst_HEADERS =	mad.h
 
 exported_headers =  \
 	version.h fixed.h bit.h timer.h stream.h frame.h synth.h decoder.h
