@@ -759,8 +759,10 @@ bool K3bCdCopyJob::writeNextSession()
 	delete d->cdTextFile;
 	d->cdTextFile = new KTempFile;
 	d->cdTextFile->setAutoDelete(true);
-	*d->cdTextFile->dataStream() << d->cdTextRaw;
+	d->cdTextFile->file()->writeBlock( d->cdTextRaw );
 	d->cdTextFile->close();
+
+	kdDebug() << "(K3bCdCopyJob) cdtext file size: " << (long)K3b::filesize( d->cdTextFile->name() ) << endl;
 
 	// use the raw CDTEXT data
 	d->cdrecordWriter->addArgument( "textfile=" + d->cdTextFile->name() );
