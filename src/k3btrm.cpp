@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #if HAVE_MUSICBRAINZ
 
 #include "k3btrm.h"
