@@ -16,7 +16,6 @@
 
 #include "k3baudiorippingdialog.h"
 #include "k3bcddacopy.h"
-#include "k3bcdview.h"
 #include "k3bpatternparser.h"
 #include <k3bjobprogressdialog.h>
 #include "songdb/k3bsong.h"
