@@ -34,7 +34,7 @@ class K3bMadDecoderFactory : public K3bAudioDecoderFactory
 
   bool canDecode( const KURL& filename );
 
-  int pluginSystemVersion() const { return 1; }
+  int pluginSystemVersion() const { return 2; }
 
   K3bPlugin* createPluginObject( QObject* parent = 0, 
 				 const char* name = 0,
@@ -70,15 +70,9 @@ class K3bMadDecoder : public K3bAudioDecoder
   int decodeInternal( char* _data, int maxLen );
  
  private:
-  void initMadStructures();
   unsigned long countFrames();
   inline unsigned short linearRound( mad_fixed_t fixed );
-  void madStreamBuffer();
-  bool madDecodeNextFrame();
-  bool decodeNextHeader();
   bool createPcmSamples( mad_synth* );
-
-  static const int INPUT_BUFFER_SIZE = 5*8192;
 
   static int MaxAllowedRecoverableErrors;
 

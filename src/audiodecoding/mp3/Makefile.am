@@ -2,7 +2,7 @@ AM_CPPFLAGS = -I$(srcdir)/../../plugin -I$(srcdir)/../../device $(all_includes)
 
 kde_module_LTLIBRARIES = libk3bmaddecoder.la
 
-libk3bmaddecoder_la_SOURCES = k3bmaddecoder.cpp
+libk3bmaddecoder_la_SOURCES = k3bmad.cpp k3bmaddecoder.cpp
 
 libk3bmaddecoder_la_LIBADD = $(LIB_KDECORE) $(MAD_LIB) $(ID3_LIB) ../../plugin/libk3bplugin.la
 # ../../core/libk3bcore.la

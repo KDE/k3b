@@ -25,6 +25,7 @@
 //
 
 #include "k3bmaddecoder.h"
+#include "k3bmad.h"
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -46,43 +47,28 @@
 #endif
 
 
-typedef unsigned char k3b_mad_char;
-
 int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
+
 
 
 class K3bMadDecoder::Private
 {
 public:
-  Private()
-    : madStructuresInitialized(false)
+  Private() {
 #ifdef HAVE_LIBID3
-      , id3Tag(0)
+    id3Tag = 0;
 #endif
-  {
   }
+
+  K3bMad* handle;
 
   QValueVector<unsigned long long> seekPositions;
 
-  k3b_mad_char* inputBuffer;
-
-  bool madStructuresInitialized;
-
-  mad_stream*   madStream;
-  mad_frame*    madFrame;
-  mad_header*   madHeader;
-  mad_synth*    madSynth;
-  mad_timer_t*  madTimer;
-
-  bool bEndOfInput;
-  bool bInputError;
   bool bOutputFinished;
 
   char* outputBuffer;
   char* outputPointer;
   char* outputBufferEnd;
-
-  QFile inputFile;
 
 #ifdef HAVE_LIBID3
   ID3_Tag* id3Tag;
@@ -94,33 +80,20 @@ public:
 };
 
 
+
+
 K3bMadDecoder::K3bMadDecoder( QObject* parent, const char* name )
   : K3bAudioDecoder( parent, name )
 {
   d = new Private();
-
-  d->inputBuffer  = new k3b_mad_char[INPUT_BUFFER_SIZE];
-
-  d->madStream = new mad_stream;
-  d->madFrame  = new mad_frame;
-  d->madHeader = new mad_header;
-  d->madSynth  = new mad_synth;
-  d->madTimer  = new mad_timer_t;
+  d->handle = new K3bMad();
 }
 
 
 K3bMadDecoder::~K3bMadDecoder()
 {
   cleanup();
-
-  delete [] d->inputBuffer;
-
-  delete d->madStream;
-  delete d->madFrame;
-  delete d->madHeader;
-  delete d->madSynth;
-  delete d->madTimer;
-
+  delete d->handle;
   delete d;
 }
 
@@ -166,20 +139,6 @@ QString K3bMadDecoder::metaInfo( MetaDataField f )
 }
 
 
-void K3bMadDecoder::initMadStructures()
-{
-  if( !d->madStructuresInitialized ) {
-    mad_stream_init( d->madStream );
-    mad_timer_reset( d->madTimer );
-    mad_frame_init( d->madFrame );
-    mad_header_init( d->madHeader );
-    mad_synth_init( d->madSynth );
-
-    d->madStructuresInitialized = true;
-  }
-}
-
-
 bool K3bMadDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
 {
   initDecoderInternal();
@@ -200,119 +159,21 @@ bool K3bMadDecoder::initDecoderInternal()
   cleanup();
 
   d->bOutputFinished = false;
-  d->bEndOfInput = false;
-  d->bInputError = false;
     
-  d->inputFile.setName( filename() );
-  if( !d->inputFile.open( IO_ReadOnly ) ) {
-    kdError() << "(K3bMadDecoder) could not open file " << filename() << endl;
+  if( !d->handle->open( filename() ) )
     return false;
-  }
 
-
-  //
-  // now check if the file starts with an id3 tag and skip it if so
-  //
-  char buf[4096];
-  int bufLen = 4096;
-  if( d->inputFile.readBlock( buf, bufLen ) < bufLen ) {
-    kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << filename() << endl;
-    d->inputFile.close();
+  if( !d->handle->skipTag() )
     return false;
-  }
-
-  int offset = 0;
-
-  //
-  // We use a loop here since an mp3 file may contain multible id3 tags
-  //
-  while( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
-	 ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
-    kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
-	      << (unsigned short)buf[3] << "." << (unsigned short)buf[4] 
-	      << " at offset " << offset << endl;
-
-    offset = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
-
-    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << offset << endl;
-
-    // skip the id3 tag
-    if( !d->inputFile.at(offset) ) {
-      kdDebug() << "(K3bMadDecoder) " << filename() << ": couldn't seek to " << offset << endl;
-      d->inputFile.close();
-      return false;
-    }
-
-    // read further to check for additional id3 tags
-    if( d->inputFile.readBlock( buf, bufLen ) < bufLen ) {
-      kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << filename() << endl;
-      d->inputFile.close();
-      return false;
-    }
-  }
-
-  // skip any id3 stuff
-  if( !d->inputFile.at(offset) ) {
-    kdDebug() << "(K3bMadDecoder) " << filename() << ": couldn't seek to " << offset << endl;
-    d->inputFile.close();
-    return false;
-  }
-
-
-  memset( d->inputBuffer, 0, INPUT_BUFFER_SIZE );
-
-  initMadStructures();
 
   return true;
-}
-
-// streams data from file into stream
-void K3bMadDecoder::madStreamBuffer()
-{
-  if( d->bEndOfInput )
-    return;
-
-  /* The input bucket must be filled if it becomes empty or if
-   * it's the first execution of the loop.
-   */
-  if( d->madStream->buffer == 0 || d->madStream->error == MAD_ERROR_BUFLEN ) {
-    long readSize, remaining;
-    unsigned char* readStart;
-
-    if( d->madStream->next_frame != 0 ) {
-      remaining = d->madStream->bufend - d->madStream->next_frame;
-      memmove( d->inputBuffer, d->madStream->next_frame, remaining );
-      readStart = d->inputBuffer + remaining;
-      readSize = INPUT_BUFFER_SIZE - remaining;
-    }
-    else {
-      readSize  = INPUT_BUFFER_SIZE;
-      readStart = d->inputBuffer;
-      remaining = 0;
-    }
-			
-    // Fill-in the buffer. 
-    Q_LONG result = d->inputFile.readBlock( (char*)readStart, readSize );
-    if( result < 0 ) {
-      kdDebug() << "(K3bMadDecoder) read error on bitstream)" << endl;
-      d->bInputError = true;
-      return;
-    }
-    else if( result == 0 ) {
-      kdDebug() << "(K3bMadDecoder) end of input stream" << endl;
-      d->bEndOfInput = true;
-    }
-    else {
-      // Pipe the new buffer content to libmad's stream decoder facility.
-      mad_stream_buffer( d->madStream, d->inputBuffer, result + remaining );
-      d->madStream->error = MAD_ERROR_NONE;
-    }
-  }
 }
 
 
 unsigned long K3bMadDecoder::countFrames()
 {
+  kdDebug() << "(K3bMadDecoder::countFrames)" << endl << flush;
+
   unsigned long frames = 0;
   bool error = false;
   d->vbr = false;
@@ -320,21 +181,21 @@ unsigned long K3bMadDecoder::countFrames()
 
   d->seekPositions.clear();
 
-  while( !error && decodeNextHeader() ) {
+  while( !error && d->handle->findNextHeader() ) {
 
-    if( !bFirstHeaderSaved ) {
+     if( !bFirstHeaderSaved ) {
       bFirstHeaderSaved = true;
-      d->firstHeader = *d->madHeader;
+      d->firstHeader = d->handle->madFrame->header;
     }
     else {
-      if( d->madHeader->bitrate != d->firstHeader.bitrate )
+      if( d->handle->madFrame->header.bitrate != d->firstHeader.bitrate )
 	d->vbr = true;
 
-      if( mad_timer_compare( d->firstHeader.duration, d->madHeader->duration ) ) {
+      if( 0 && mad_timer_compare( d->firstHeader.duration, d->handle->madFrame->header.duration ) ) {
 	// The Mp3 standard needs every frame to have the same duration
 	kdDebug() << "(K3bMadDecoder) frame len differs: old: " 
 		  << d->firstHeader.duration.seconds << ":" << d->firstHeader.duration.fraction
-		  << " new: " << d->madHeader->duration.seconds << ":" << d->madHeader->duration.fraction << endl;
+		  << " new: " << d->handle->madFrame->header.duration.seconds << ":" << d->handle->madFrame->header.duration.fraction << endl;
 	error = true;
       }
     }
@@ -342,21 +203,25 @@ unsigned long K3bMadDecoder::countFrames()
     //
     // position in stream: postion in file minus the not yet used buffer
     //
-    unsigned long long seekPos = d->inputFile.at() - (d->madStream->bufend - d->madStream->this_frame + 1);
+    unsigned long long seekPos = d->handle->inputPos() - 
+      (d->handle->madStream->bufend - d->handle->madStream->this_frame + 1);
 
     // save the number of bytes to be read to decode i-1 frames at position i
     // in other words: when seeking to seekPos the next decoded frame will be i
     d->seekPositions.append( seekPos );
   }
 
-  if( !d->bInputError && !error ) {
+  if( !d->handle->inputError() && !error ) {
     // we need the length of the track to be multible of frames (1/75 second)
-    float seconds = (float)d->madTimer->seconds + (float)d->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
+    float seconds = (float)d->handle->madTimer->seconds + 
+      (float)d->handle->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
     frames = (unsigned long)ceil(seconds * 75.0);
     kdDebug() << "(K3bMadDecoder) length of track " << seconds << endl;
   }
 
   cleanup();
+
+  kdDebug() << "(K3bMadDecoder::countFrames) end" << endl;
 
   return frames;
 }
@@ -370,7 +235,7 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
 
   bool bOutputBufferFull = false;
 
-  while( !bOutputBufferFull && !d->bEndOfInput ) {
+  while( !bOutputBufferFull && d->handle->fillStreamBuffer() ) {
 
     // a mad_synth contains of the data of one mad_frame
     // one mad_frame represents a mp3-frame which is always 1152 samples
@@ -379,19 +244,19 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
     if( d->outputBufferEnd - d->outputPointer < 4*1152 ) {
       bOutputBufferFull = true;
     }
-    else if( madDecodeNextFrame() ) {
+    else if( d->handle->decodeNextFrame() ) {
       // 
       // Once decoded the frame is synthesized to PCM samples. No errors
       // are reported by mad_synth_frame();
       //
-      mad_synth_frame( d->madSynth, d->madFrame );
+      mad_synth_frame( d->handle->madSynth, d->handle->madFrame );
       
       // this fills the output buffer
-      if( !createPcmSamples( d->madSynth ) ) {
+      if( !createPcmSamples( d->handle->madSynth ) ) {
 	return -1;
       }
     }
-    else if( d->bInputError ) {
+    else if( d->handle->inputError() ) {
       return -1;
     }
   }
@@ -400,70 +265,6 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
   size_t buffersize = d->outputPointer - d->outputBuffer;
 
   return buffersize;
-}
-
-
-bool K3bMadDecoder::madDecodeNextFrame()
-{
-  if( d->bInputError || d->bEndOfInput ) {
-    return false;
-  }
-
-  madStreamBuffer();
-
-  if( mad_frame_decode( d->madFrame, d->madStream ) ) {
-    if( d->madStream->error == MAD_ERROR_BUFLEN ) {
-      return madDecodeNextFrame();
-    }
-    if( MAD_RECOVERABLE( d->madStream->error )  ) {
-      kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
-		<< mad_stream_errorstr(d->madStream) << ")" << endl;
-
-      return madDecodeNextFrame();
-    }
-    else {
-      kdDebug() << "(K3bMadDecoder) unrecoverable frame level error ("
-		<< mad_stream_errorstr(d->madStream) << endl;
-      
-      return false;
-    }
-  }
-  else {
-    mad_timer_add( d->madTimer, d->madFrame->header.duration );
-    return true;
-  }
-}
-
-
-bool K3bMadDecoder::decodeNextHeader()
-{
-  if( d->bInputError || d->bEndOfInput ) {
-    return false;
-  }
-
-  madStreamBuffer();
-
-  if( mad_header_decode( d->madHeader, d->madStream ) ) {
-    if( d->madStream->error == MAD_ERROR_BUFLEN ) {
-      return decodeNextHeader();
-    }
-    else if( MAD_RECOVERABLE( d->madStream->error ) ) {
-      kdDebug() << "(K3bMadDecoder) recoverable frame level error ("
-		<< mad_stream_errorstr(d->madStream) << ")" << endl;
-      
-      return decodeNextHeader();
-    }
-    else {
-      kdDebug() << "(K3bMadDecoder) unrecoverable frame level error ("
-		<< mad_stream_errorstr(d->madStream) << endl;
-      
-      return false;
-    }
-  }
-  else {
-    mad_timer_add( d->madTimer, d->madHeader->duration );
-    return true;
-  }
 }
 
 
@@ -523,21 +324,7 @@ void K3bMadDecoder::cleanup()
   d->id3Tag = 0;
 #endif
 
-  if( d->inputFile.isOpen() ) {
-    kdDebug() << "(K3bMadDecoder) cleanup at offset: " 
-	      << ( d->inputFile.at() - (d->madStream->bufend - d->madStream->this_frame + 1) ) 
-	      << " with size: " << d->inputFile.size() << endl;
-    d->inputFile.close();
-  }
-
-  if( d->madStructuresInitialized ) {
-    mad_frame_finish( d->madFrame );
-    mad_header_finish( d->madHeader );
-    mad_synth_finish( d->madSynth );
-    mad_stream_finish( d->madStream );
-  }
-
-  d->madStructuresInitialized = false;
+  d->handle->cleanup();
 }
 
 
@@ -568,24 +355,27 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
   frame -= frameReservoirProtect;
 
   // seek in the input file behind the already decoded data
-  d->inputFile.at( d->seekPositions[frame] );
+  d->handle->inputSeek( d->seekPositions[frame] );
 
-  kdDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with " << frameReservoirProtect << " reservoir frames." << endl;
+  kdDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with " 
+	    << frameReservoirProtect << " reservoir frames." << endl;
 
   // decode some frames ignoring MAD_ERROR_BADDATAPTR errors
   unsigned int i = 1;
   while( i <= frameReservoirProtect ) {
-    madStreamBuffer();
-    if( mad_frame_decode( d->madFrame, d->madStream ) ) {
-      if( MAD_RECOVERABLE( d->madStream->error ) ) {
-	if( d->madStream->error == MAD_ERROR_BUFLEN )
+    d->handle->fillStreamBuffer();
+    if( mad_frame_decode( d->handle->madFrame, d->handle->madStream ) ) {
+      if( MAD_RECOVERABLE( d->handle->madStream->error ) ) {
+	if( d->handle->madStream->error == MAD_ERROR_BUFLEN )
 	  continue;
-	else if( d->madStream->error != MAD_ERROR_BADDATAPTR ) {
-	  kdDebug() << "(K3bMadDecoder) Seeking: recoverable mad error (" << mad_stream_errorstr(d->madStream) << ")" << endl;
+	else if( d->handle->madStream->error != MAD_ERROR_BADDATAPTR ) {
+	  kdDebug() << "(K3bMadDecoder) Seeking: recoverable mad error ("
+		    << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
 	  continue;
 	}
 	else {
-	  kdDebug() << "(K3bMadDecoder) Seeking: ignoring (" << mad_stream_errorstr(d->madStream) << ")" << endl;
+	  kdDebug() << "(K3bMadDecoder) Seeking: ignoring (" 
+		    << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
 	}
       }
       else
@@ -593,7 +383,7 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
     }
 
     if( i == frameReservoirProtect )  // synth only the last frame (Rob said so ;)
-      mad_synth_frame( d->madSynth, d->madFrame );
+      mad_synth_frame( d->handle->madSynth, d->handle->madFrame );
 
     ++i;
   }
@@ -702,112 +492,42 @@ K3bMadDecoderFactory::~K3bMadDecoderFactory()
 
 
 K3bPlugin* K3bMadDecoderFactory::createPluginObject( QObject* parent, 
-							   const char* name,
-							   const QStringList& )
+						     const char* name,
+						     const QStringList& )
 {
   return new K3bMadDecoder( parent, name );
 }
 
 bool K3bMadDecoderFactory::canDecode( const KURL& url )
 {
-  QFile f(url.path());
-  if( !f.open(IO_ReadOnly) ) {
-    kdDebug() << "(K3bMadDecoder) could not open file " << url.path() << endl;
+  K3bMad handle;
+  if( !handle.open( url.path() ) )
     return false;
-  }
 
-  // there seem to be mp3 files starting with a lot of zeros
-  // we try to skip these.
-  // there might still be files with more than bufLen zeros...
-  const int bufLen = 4096;
-  char buf[bufLen];
-  if( f.readBlock( buf, bufLen ) < bufLen ) {
-    kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << url.path() << endl;
-    return false;
-  }
+  handle.skipTag();
 
-  // skip any 0
-  int i = 0;
-  while( i < bufLen && buf[i] == '\0' ) i++;
-  if( i == bufLen ) {
-    kdDebug() << "(K3bMadDecoder) only zeros found in the beginning of " << url.path() << endl;
-    return false;
-  }
+  if( handle.findNextHeader() ) {
+    int c = MAD_NCHANNELS( &handle.madFrame->header );
+    int layer = handle.madFrame->header.layer;
+    unsigned int s = handle.madFrame->header.samplerate;
 
-
-
-  //
-  // now skip any id3 tags
-  //
-  while( i < bufLen-10 && 
-      ( buf[i] == 'I' && buf[i+1] == 'D' && buf[i+2] == '3' ) &&
-      ( (unsigned short)buf[i+3] < 0xff && (unsigned short)buf[i+4] < 0xff ) ) {
-    kdDebug() << "(K3bMadDecoder) found id3 magic: ID3 " 
-	      << (unsigned short)buf[i+3] << "." << (unsigned short)buf[i+4] << endl;
-
-    int pos = i + ((buf[i+6]<<21)|(buf[i+7]<<14)|(buf[i+8]<<7)|buf[i+9]) + 10;
-
-    kdDebug() << "(K3bMadDecoder) skipping past ID3 tag to " << pos << endl;
-
-    if( !f.at(pos) ) {
-      kdDebug() << "(K3bMadDecoder) " << url.path() << ": couldn't seek to " << pos << endl;
-      return false;
-    }
-
-    if( f.readBlock( buf, bufLen ) < bufLen ) {
-      kdDebug() << "(K3bMadDecoder) unable to read " << bufLen << " bytes from " << url.path() << endl;
-      return false;
-    }
-  
-    // again skip any 0
-    i = 0;
-    while( i < bufLen && buf[i] == '\0' ) i++;
-    if( i == bufLen ) {
-      kdDebug() << "(K3bMadDecoder) only zeros found after the id3 tag in " << url.path() << endl;
-      return false;
+    //
+    // find a second header
+    // This way we get most of the mp3 files while sorting out
+    // for example wave files.
+    //
+    if( handle.findNextHeader() ) {
+      // compare the two found headers
+      if( MAD_NCHANNELS( &handle.madFrame->header ) == c &&
+	  handle.madFrame->header.layer == layer &&
+	  handle.madFrame->header.samplerate == s )
+	return true;
     }
   }
 
+  kdDebug() << "(K3bMadDecoder) unsupported format: " << url.path() << endl;
 
-  // check if we have a RIFF MPEG header
-  // libmad seems to be able to decode such files but not to decode these first bytes
-  if( ( buf[i] == 'R' && buf[i+1] == 'I' && buf[i+2] == 'F' && buf[i+3] == 'F' &&
-	buf[i+8] == 'W' && buf[i+9] == 'A' && buf[i+10] == 'V' && buf[i+11] == 'E' &&
-	buf[i+12] == 'f' && buf[i+13] == 'm' &&	buf[i+14] == 't' ) ) {
-    kdDebug() << "(K3bMadDecoder) found RIFF, WAVE, and fmt." << endl;
-    short m = (short)( buf[i+20] | (buf[i+21]<<8) );
-    if( m == 80 ) {
-      kdDebug() << "(K3bMadDecoder) found RIFF MPEG magic." << endl;
-      return true;
-    }
-    else if( m == 85 ) {
-      kdDebug() << "(K3bMadDecoder) found RIFF MPEG III magic." << endl;
-      return true;
-    }
-    else
-      return false;
-  }
-      
-
-
-  // let libmad try to decode one frame header
-  mad_stream stream;;
-  mad_header header;
-  mad_stream_init( &stream );
-  mad_header_init( &header );
-
-  mad_stream_buffer( &stream, (unsigned char*)&buf[i], bufLen-i );
-  stream.error = MAD_ERROR_NONE;
-  bool success = true;
-  if( mad_header_decode( &header, &stream ) ) {
-    kdDebug() << "(K3bMadDecoder) could not find mpeg header." << endl;
-    success = false;
-  }
-
-  mad_header_finish( &header );
-  mad_stream_finish( &stream );
-  
-  return success;
+  return false;
 }
 
 #include "k3bmaddecoder.moc"
