@@ -1,0 +1,998 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bDivxOptions</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>K3b_DivX_Options</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>tabVideo</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Video</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="0" column="0">
+                        <property name="name">
+                            <cstring>m_buttonCodecMode</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Codec Mode</string>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton3</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>20</y>
+                                    <width>107</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>1-pass</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton4</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>120</x>
+                                    <y>20</y>
+                                    <width>107</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>2-pass</string>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBox4</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Size</string>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>20</y>
+                                    <width>91</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>AVI Size:</string>
+                            </property>
+                        </widget>
+                        <widget class="KIntSpinBox">
+                            <property name="name">
+                                <cstring>m_inputAvisize</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>100</x>
+                                    <y>20</y>
+                                    <width>120</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                            <property name="suffix">
+                                <string> MByte</string>
+                            </property>
+                            <property name="specialValueText">
+                                <string></string>
+                            </property>
+                            <property name="buttonSymbols">
+                                <enum>UpDownArrows</enum>
+                            </property>
+                            <property name="maxValue">
+                                <number>2100</number>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The defaut size of the final AVI video including video and audio. </string>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QGroupBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>groupBox3</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Codec</string>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>20</y>
+                                    <width>71</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>Codec:</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>m_comboCodec</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>100</x>
+                                    <y>20</y>
+                                    <width>120</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QGroupBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>groupBox5</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Video Processing</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel5</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Crispness:</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_checkYuv</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>YUV Colorspace</string>
+                                </property>
+                            </widget>
+                            <spacer row="0" column="5">
+                                <property name="name">
+                                    <cstring>spacer8</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>30</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="1" column="5">
+                                <property name="name">
+                                    <cstring>spacer7</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>30</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KIntSpinBox" row="0" column="4">
+                                <property name="name">
+                                    <cstring>m_spinKeyframes</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="3">
+                                <property name="name">
+                                    <cstring>textLabel4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Interlace:</string>
+                                </property>
+                            </widget>
+                            <widget class="KComboBox" row="1" column="4">
+                                <property name="name">
+                                    <cstring>m_comboInterlace</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="3">
+                                <property name="name">
+                                    <cstring>textLabel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Keyframes:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="2">
+                                <property name="name">
+                                    <cstring>m_labelCrispnessPercent</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>100 %</string>
+                                </property>
+                            </widget>
+                            <widget class="QSlider" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_sliderCrispness</cstring>
+                                </property>
+                                <property name="maxValue">
+                                    <number>100</number>
+                                </property>
+                                <property name="value">
+                                    <number>100</number>
+                                </property>
+                                <property name="tracking">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer row="4" column="0">
+                        <property name="name">
+                            <cstring>spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>60</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Audio</string>
+                </attribute>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>groupBox6_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>80</y>
+                            <width>554</width>
+                            <height>60</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>MP3 Settings</string>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>m_checkResample</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>20</y>
+                                <width>210</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Resample to 44.1 kHz</string>
+                        </property>
+                    </widget>
+                </widget>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>groupBox7_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>150</y>
+                            <width>554</width>
+                            <height>70</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Language</string>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel6_2</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>20</y>
+                                <width>80</width>
+                                <height>30</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Language:</string>
+                        </property>
+                    </widget>
+                    <widget class="KComboBox">
+                        <property name="name">
+                            <cstring>m_comboLanguage</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>110</x>
+                                <y>20</y>
+                                <width>120</width>
+                                <height>30</height>
+                            </rect>
+                        </property>
+                        <property name="editable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="sizeLimit">
+                            <number>5</number>
+                        </property>
+                        <property name="autoCompletion">
+                            <bool>true</bool>
+                        </property>
+                        <property name="duplicatesEnabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Choose the default language. If your choice isn't available you can edit your language short. If the language are not found, K3b will use english as fallback default.</string>
+                        </property>
+                    </widget>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>90</height>
+                        </size>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>270</x>
+                            <y>250</y>
+                            <width>20</width>
+                            <height>90</height>
+                        </rect>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>m_buttonAudio</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>11</y>
+                            <width>554</width>
+                            <height>60</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Audio format</string>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>radioAc3</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>11</x>
+                                <y>22</y>
+                                <width>55</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>AC3</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>radioMp3</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>72</x>
+                                <y>22</y>
+                                <width>56</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>MP3</string>
+                        </property>
+                    </widget>
+                </widget>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Crop/Resize</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="0" column="0">
+                        <property name="name">
+                            <cstring>m_buttonResize</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Resize mode</string>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton9</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>11</x>
+                                    <y>22</y>
+                                    <width>123</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>Fast (-B)</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton10</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>140</x>
+                                    <y>22</y>
+                                    <width>123</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>Exact (-Z)</string>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>m_buttonTranscode</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Transcode's input mode</string>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton11</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>11</x>
+                                    <y>22</y>
+                                    <width>110</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>VOB</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton12</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>140</x>
+                                    <y>20</y>
+                                    <width>130</width>
+                                    <height>30</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>DVD</string>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QGroupBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>groupBox9</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Cropping</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkAutoCrop</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Automatically crop</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <spacer row="4" column="0">
+                        <property name="name">
+                            <cstring>spacer5</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QGroupBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>groupBox18</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Quality</string>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>11</x>
+                                    <y>22</y>
+                                    <width>120</width>
+                                    <height>24</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>Video Quality:</string>
+                            </property>
+                        </widget>
+                        <widget class="QButtonGroup">
+                            <property name="name">
+                                <cstring>m_buttonAutoQuality</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>11</x>
+                                    <y>52</y>
+                                    <width>532</width>
+                                    <height>50</height>
+                                </rect>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="title">
+                                <string></string>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>120</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>341</x>
+                                        <y>16</y>
+                                        <width>188</width>
+                                        <height>20</height>
+                                    </rect>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioButton14</cstring>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>218</x>
+                                        <y>16</y>
+                                        <width>83</width>
+                                        <height>21</height>
+                                    </rect>
+                                </property>
+                                <property name="text">
+                                    <string>AVI size</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioButton13</cstring>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>159</x>
+                                        <y>16</y>
+                                        <width>59</width>
+                                        <height>21</height>
+                                    </rect>
+                                </property>
+                                <property name="text">
+                                    <string>width</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioButton15</cstring>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>301</x>
+                                        <y>16</y>
+                                        <width>40</width>
+                                        <height>21</height>
+                                    </rect>
+                                </property>
+                                <property name="text">
+                                    <string>off</string>
+                                </property>
+                            </widget>
+                            <widget class="Line">
+                                <property name="name">
+                                    <cstring>line1</cstring>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>-4</x>
+                                        <y>0</y>
+                                        <width>541</width>
+                                        <height>20</height>
+                                    </rect>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>HLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>2</number>
+                                </property>
+                                <property name="midLineWidth">
+                                    <number>0</number>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel2_2</cstring>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>1</x>
+                                        <y>16</y>
+                                        <width>158</width>
+                                        <height>21</height>
+                                    </rect>
+                                </property>
+                                <property name="text">
+                                    <string>Video quality based on: </string>
+                                </property>
+                            </widget>
+                        </widget>
+                        <widget class="KDoubleNumInput">
+                            <property name="name">
+                                <cstring>m_inputVideoQuality</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>160</x>
+                                    <y>20</y>
+                                    <width>160</width>
+                                    <height>24</height>
+                                </rect>
+                            </property>
+                            <property name="value">
+                                <number>0.2</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0.1</number>
+                            </property>
+                            <property name="maxValue">
+                                <number>0.99</number>
+                            </property>
+                            <property name="suffix">
+                                <string> bits/pixel</string>
+                            </property>
+                            <property name="prefix">
+                                <string></string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The video quality is a identifier how many kbits used for a pixel to encode.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel3_2</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>100</y>
+                                    <width>120</width>
+                                    <height>24</height>
+                                </rect>
+                            </property>
+                            <property name="text">
+                                <string>Width:</string>
+                            </property>
+                        </widget>
+                        <widget class="KIntNumInput">
+                            <property name="name">
+                                <cstring>m_inputWidth</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>160</x>
+                                    <y>100</y>
+                                    <width>160</width>
+                                    <height>24</height>
+                                </rect>
+                            </property>
+                            <property name="value">
+                                <number>640</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="maxValue">
+                                <number>1920</number>
+                            </property>
+                            <property name="suffix">
+                                <string> pixel</string>
+                            </property>
+                        </widget>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>File/Directory</string>
+                </attribute>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel4_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>11</y>
+                            <width>470</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Search K3b ripping file in:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel5_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>68</y>
+                            <width>470</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Save AVIs in:</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer6</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>190</height>
+                        </size>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>236</x>
+                            <y>125</y>
+                            <width>20</width>
+                            <height>292</height>
+                        </rect>
+                    </property>
+                </spacer>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>m_lineAviDir</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>93</y>
+                            <width>470</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>m_lineInputDir</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>36</y>
+                            <width>470</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget class="KIconButton">
+                    <property name="name">
+                        <cstring>m_buttonAviDir</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>490</x>
+                            <y>90</y>
+                            <width>40</width>
+                            <height>29</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KIconButton">
+                    <property name="name">
+                        <cstring>m_buttonInputDir</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>490</x>
+                            <y>30</y>
+                            <width>40</width>
+                            <height>29</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </widget>
+        </widget>
+    </hbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kicondialog.h</includehint>
+    <includehint>kicondialog.h</includehint>
+</includehints>
+</UI>
