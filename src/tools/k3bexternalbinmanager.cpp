@@ -16,6 +16,7 @@
 
 static const char* vcdTools[] =  { "vcdxgen",
 				   "vcdxbuild",
+           "vcdxminfo",
 				   0 };
 
 static const char* transcodeTools[] =  { "transcode",
