@@ -87,22 +87,22 @@ void K3bVcdTrackDialog::slotApply()
   // TODO: apply button :)
   K3bVcdTrack* selectedTrack = m_selectedTracks.first();
 
-  if (m_pbc_previous->currentItem() > m_tracks.count())
+  if (m_pbc_previous->currentItem() > (int)m_tracks.count())
     selectedTrack->setPrevious();
   else
     selectedTrack->setPrevious( m_tracks.at( m_pbc_previous->currentItem()) );
 
-  if (m_pbc_next->currentItem() > m_tracks.count())
+  if (m_pbc_next->currentItem() > (int)m_tracks.count())
     selectedTrack->setNext();
   else
     selectedTrack->setNext( m_tracks.at( m_pbc_next->currentItem()) );
 
-  if (m_pbc_return->currentItem() > m_tracks.count())
+  if (m_pbc_return->currentItem() > (int)m_tracks.count())
     selectedTrack->setReturn();
   else
     selectedTrack->setReturn( m_tracks.at( m_pbc_return->currentItem()) );
     
-  if (m_pbc_default->currentItem() > m_tracks.count())
+  if (m_pbc_default->currentItem() > (int)m_tracks.count())
     selectedTrack->setDefault();
   else
     selectedTrack->setDefault( m_tracks.at( m_pbc_default->currentItem()) );
