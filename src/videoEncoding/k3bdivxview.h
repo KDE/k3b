@@ -29,6 +29,7 @@ class K3bDivxBaseTab;
 class K3bDivxSizeTab;
 class K3bDivXEncodingProcess;
 class K3bBurnProgressDialog;
+class K3bDivxAdvancedTab;
 /**
   *@author Sebastian Trueg
   */
@@ -37,7 +38,10 @@ class K3bDivxView : public KDialogBase  {
      Q_OBJECT
 public:
     K3bDivxView( QWidget* parent=0, const char *name=0 );
+    K3bDivxView( K3bDivxCodecData *data, QWidget* parent=0, const char *name=0);
     ~K3bDivxView();
+public slots:
+    void slotUpdateView();
 private slots:
     void slotUser1();
     void slotUser2();
@@ -48,6 +52,7 @@ private:
     //K3bDivxDoc* m_doc;
     K3bDivxBaseTab *m_baseTab;
     K3bDivxSizeTab *m_sizeTab;
+    K3bDivxAdvancedTab *m_advancedTab;
     K3bDivXEncodingProcess *m_divxJob;
     K3bBurnProgressDialog *m_divxDialog;
 

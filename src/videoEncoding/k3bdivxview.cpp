@@ -19,6 +19,7 @@
 #include "k3bdivxcodecdata.h"
 #include "k3bdivxbasetab.h"
 #include "k3bdivxsizetab.h"
+#include "k3bdivxadvancedtab.h"
 #include "k3bdivxencodingprocess.h"
 #include "../k3bburnprogressdialog.h"
 
@@ -35,6 +36,7 @@
 #include <kstdguiitem.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 K3bDivxView::K3bDivxView( QWidget* parent, const char *name)
     : KDialogBase( KDialogBase::Tabbed, i18n("Encoding Video"), User1|User2,
@@ -43,28 +45,41 @@ K3bDivxView::K3bDivxView( QWidget* parent, const char *name)
            //KDialogBase::Close|KDialogBase::Apply, KDialogBase::Apply, parent, name ) {
 
   setButtonBoxOrientation( Qt::Vertical );
+  m_codingData = new K3bDivxCodecData();
+  setupGui();
+}
+
+K3bDivxView::K3bDivxView(K3bDivxCodecData *data, QWidget* parent, const char *name)
+    : KDialogBase( KDialogBase::Tabbed, i18n("Encoding Video"), User1|User2,
+		 User1, 0, 0, true, false, KGuiItem( i18n("Encode"), "encode", i18n("Start encoding") ), KStdGuiItem::close() ){
+
+           //KDialogBase::Close|KDialogBase::Apply, KDialogBase::Apply, parent, name ) {
+
+  setButtonBoxOrientation( Qt::Vertical );
+  m_codingData = data; 
   setupGui();
 }
 
 K3bDivxView::~K3bDivxView(){
+    delete m_codingData;
 }
 
 void K3bDivxView::setupGui(){
     QGrid *gridBasic = addGridPage(0, Horizontal, i18n("Basic Audio/Video settings") );
-    //QGridLayout *basicLayout = new QGridLayout( gridBasic );
     gridBasic->layout()->setSpacing( KDialog::spacingHint() );
-    //basicLayout->setMargin( KDialog::marginHint() );
     gridBasic->layout()->setMargin( 0 );//KDialog::marginHint() );
 
     QGrid *gridSize = addGridPage(1, Horizontal, i18n("Advanced Audio/Video settings") );
-    //QGridLayout *sizeLayout = new QGridLayout( gridSize );
     gridSize->layout()->setSpacing( KDialog::spacingHint() );
     gridSize->layout()->setMargin( 0 );//  KDialog::marginHint() );
 
-    m_codingData = new K3bDivxCodecData();
+    QGrid *gridAdvanced = addGridPage(1, Horizontal, i18n("Expert settings") );
+    gridAdvanced->layout()->setSpacing( KDialog::spacingHint() );
+    gridAdvanced->layout()->setMargin( 0 );//  KDialog::marginHint() );
 
     m_baseTab = new K3bDivxBaseTab( m_codingData, gridBasic, "basetab" );
     m_sizeTab = new K3bDivxSizeTab( m_codingData, gridSize, "sizetab");
+    m_advancedTab = new K3bDivxAdvancedTab( m_codingData, gridAdvanced, "advancedtab");
     m_baseTab->setMinimumWidth( 750 );
     m_baseTab->setMinimumHeight( 500 );
 
@@ -72,7 +87,8 @@ void K3bDivxView::setupGui(){
     enableButton( KDialogBase::User1, false );
 
     (QGridLayout(gridBasic->layout())).addWidget( m_baseTab, 0,0 );
-    (QGridLayout(gridBasic->layout())).addWidget( m_sizeTab, 0,0 );
+    (QGridLayout(gridSize->layout())).addWidget( m_sizeTab, 0,0 );
+    (QGridLayout(gridAdvanced->layout())).addWidget( m_advancedTab, 0,0 );
 
     connect( m_baseTab, SIGNAL( projectLoaded() ), this, SLOT( slotEnableSizeTab() ) );
 }
@@ -96,9 +112,11 @@ int K3bDivxView::checkSettings(){
 }
 
 void K3bDivxView::slotEnableSizeTab(){
+    kdDebug() << "(K3bDivxView::slotEnableSizeTab)" << endl;
     m_sizeTab->setEnabled( true );
-    m_sizeTab->resetView();
-    m_sizeTab->updateView();
+    //m_sizeTab->resetView();
+    //m_sizeTab->updateView();
+    m_advancedTab->slotUpdateView();
     enableButton( KDialogBase::User1, true );
 }
 
@@ -124,6 +142,11 @@ void K3bDivxView::slotUser1(){
 
 void K3bDivxView::slotUser2(){
     slotClose();
+}
+
+void K3bDivxView::slotUpdateView(){
+    kdDebug() << "(K3bDivxView::slotUpdateView)" << endl;
+    m_baseTab->slotUpdateView();
 }
 
 #include "k3bdivxview.moc"
