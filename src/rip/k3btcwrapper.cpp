@@ -26,6 +26,7 @@
 
 #include <kprocess.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 K3bTcWrapper::K3bTcWrapper( QObject* parent )
   : QObject( parent )
@@ -105,6 +106,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         }
         // chekc
         QString titles = errorLines[ 1 ];
+        kdDebug() << titles << endl;
         int index = titles.find("DVD title");
         titles = titles.mid(index+10);
         index= titles.find("/");
@@ -123,6 +125,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
     if( m_currentTitle <= m_allTitle ){
         K3bDvdContent con( *parseTcprobe() );
         QString titles = errorLines[ 1 ];
+        kdDebug() << titles << endl;
         int index = titles.find(":");
         int end = titles.find("chap");
         kdDebug() << "Title: " << titles.mid(index+1, end-index) << endl;
@@ -135,7 +138,14 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *p){
         index = titles.find("angle");
         m_allAngle = titles.mid(0, index).stripWhiteSpace().toInt();
         con.setMaxAngle( m_allAngle );
+        for( int a=1; a <= m_allAngle; a++){
+            con.addAngle( QString::number(a) );
+        }
         kdDebug() << "Angles " << m_allAngle << endl;
+        index = titles.find( "title set");
+        titles = titles.mid( index+10).stripWhiteSpace();
+        con.setTitleSet( titles.toInt() );
+
         m_dvdTitles.append( con );
         m_currentTitle++;
         if( m_currentTitle <= m_allTitle) {
@@ -152,22 +162,32 @@ K3bDvdContent* K3bTcWrapper::parseTcprobe(){
     int dvdreaderIndex = 0;
     K3bDvdContent *title = new K3bDvdContent();
     for( QStringList::Iterator str = outputLines.begin(); str != outputLines.end(); str++ ) {
+        kdDebug() << (*str) << endl;
         if( (*str).contains( "dvd_reader.c" ) ) {
             int index = (*str).find( ")" );
             QString tmp = (*str).mid( index+1 );
             if( dvdreaderIndex > 0 ){
                 // audio channels
                 title->getAudioList()->append( tmp );
-            } else if ( (*str).contains( "title set") ) {
-                int index = (*str).find( "title set" );
-                QString tmp = (*str).mid( index+10).stripWhiteSpace();
-                title->setTitleSet( tmp.toInt() );
             } else {
                 // input mode
                 QStringList mode = QStringList::split( " ", tmp );
                 title->setInput( mode[0] );
                 title->setMode( mode[1] );
-            }
+                QStringList extension = mode.grep("letterboxed");
+                if ( extension.count() > 0 ) {
+                    title->setAspectExtension( extension[0] );
+                    title->setAspectAnamorph( "anamorph" );
+                } else {
+                    title->setAspectAnamorph( "" );
+                    extension = mode.grep("scan");
+                    if ( extension.count() > 0 ) {
+                        title->setAspectExtension( extension[0] );
+                    } else {
+                        title->setAspectExtension( "" );
+                    }
+                }
+            } // end input mode
             dvdreaderIndex++;
         } else if( (*str).contains("frame size") ){
             int index = (*str).find(": -g");

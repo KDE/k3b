@@ -45,12 +45,12 @@ class K3bTcWrapper : public QObject
   void isDvdInsert( K3bDevice* device );
   QValueList<K3bDvdContent> getDvdTitles() const;
 
- private slots:
+private slots:
   void slotParseTcprobeOutput( KProcess *p, char *text, int index);
   void slotParseTcprobeError( KProcess *p, char *text, int index);
   void slotTcprobeExited( KProcess* );
-	
- signals:
+
+signals:
   void notSupportedDisc();
   void successfulDvdCheck( bool );
   void tcprobeTitleParsed( int );
@@ -67,9 +67,6 @@ class K3bTcWrapper : public QObject
   int m_allTitle;
   int m_allAngle;
   K3bDevice*  m_device;
-
-
-
   K3bDvdContent* parseTcprobe();
   void runTcprobe();
 };
