@@ -23,6 +23,7 @@
 
 K3bDivXProjectParser::K3bDivXProjectParser( K3bDivxCodecData *data ) : QXmlDefaultHandler() {
     m_data = data;
+    m_data->resetAudioLanguages();
 }
 
 K3bDivXProjectParser::~K3bDivXProjectParser(){
