@@ -33,6 +33,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kurlcompletion.h>
 
 
 class K3bFileTreeComboBox::Private
@@ -44,6 +45,8 @@ public:
   }
   bool poppedUp;
   bool ignoreNextMouseClick; // used when the view was hidden with the arrow button
+
+  KURLCompletion* urlCompletion;
 };
 
 
@@ -51,6 +54,9 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
   : KComboBox( true, parent, name )
 {
   d = new Private;
+
+  d->urlCompletion = new KURLCompletion();
+  setCompletionObject( d->urlCompletion );
 
   m_fileTreeView = new K3bFileTreeView( this );
   m_fileTreeView->hide();
@@ -78,6 +84,7 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
 
 K3bFileTreeComboBox::~K3bFileTreeComboBox()
 {
+  delete d->urlCompletion;
   delete d;
 }
 
