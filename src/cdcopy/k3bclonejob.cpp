@@ -27,6 +27,7 @@
 #include <klocale.h>
 
 #include <qfile.h>
+#include <qfileinfo.h>
 
 
 
