@@ -43,8 +43,9 @@
 
 #include <config.h>
 
-#ifdef HAVE_LIBID3
-#include <id3/misc_support.h>
+#if HAVE_TAGLIB
+#include <tag.h>
+#include <fileref.h>
 #endif
 
 
@@ -59,9 +60,6 @@ class K3bMadDecoder::Private
 {
 public:
   Private() {
-#ifdef HAVE_LIBID3
-    id3Tag = 0;
-#endif
   }
 
   K3bMad* handle;
@@ -73,10 +71,6 @@ public:
   char* outputBuffer;
   char* outputPointer;
   char* outputBufferEnd;
-
-#ifdef HAVE_LIBID3
-  ID3_Tag* id3Tag;
-#endif
 
   // the first frame header for technical info
   mad_header firstHeader;
@@ -104,35 +98,21 @@ K3bMadDecoder::~K3bMadDecoder()
 
 QString K3bMadDecoder::metaInfo( MetaDataField f )
 {
-#ifdef HAVE_LIBID3
-  // use id3 stuff
-  if( !d->id3Tag ) {
-    d->id3Tag = new ID3_Tag( QFile::encodeName(filename()) );
-  }
-
-  char* str = 0;
+#if HAVE_TAGLIB
+  TagLib::FileRef file( QFile::encodeName( filename() ) );
 
   switch( f ) {
   case META_TITLE:
-    str = ID3_GetTitle( d->id3Tag );
+    return TStringToQString( file.tag()->title() );
     break;
   case META_ARTIST:
-    str = ID3_GetArtist( d->id3Tag );
-    break;
-  case META_SONGWRITER:
-    str = ID3_GetLyricist( d->id3Tag );
+    return TStringToQString( file.tag()->artist() );
     break;
   case META_COMMENT:
-    str = ID3_GetComment( d->id3Tag );
+    return TStringToQString( file.tag()->comment() );
     break;
   default:
     break;
-  }
-
-  if( str != 0 ) {
-    QString s(str);
-    delete [] str;
-    return s;
   }
 
   return QString::null;
@@ -316,11 +296,6 @@ bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
 
 void K3bMadDecoder::cleanup()
 {
-#ifdef HAVE_LIBID3
-  delete d->id3Tag;
-  d->id3Tag = 0;
-#endif
-
   d->handle->cleanup();
 }
 

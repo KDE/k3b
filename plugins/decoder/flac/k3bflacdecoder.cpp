@@ -31,8 +31,9 @@
 
 #include <config.h>
 
-#ifdef HAVE_LIBID3
-#include <id3/misc_support.h>
+#if HAVE_TAGLIB
+#include <tag.h>
+#include <fileref.h>
 #endif
 
 K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, K3bPluginFactory<K3bFLACDecoderFactory>( "libk3bflacdecoder" ) )
@@ -228,15 +229,15 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
         addMetaInfo( META_COMMENT, value );
     }
   }
-#ifdef HAVE_LIBID3
+#if HAVE_TAGLIB
   if ((d->comments == 0) || (d->comments->get_num_comments() == 0)) {
     // no Vorbis comments, check for ID3 tags
-    kdDebug() << "(K3bFLACDecoder) using id3lib to read tag" << endl;
-    ID3_Tag id3Tag( QFile::encodeName(filename()) );
+    kdDebug() << "(K3bFLACDecoder) using taglib to read tag" << endl;
+    TagLib::FileRef f( QFile::encodeName(filename()) );
 
-    addMetaInfo( META_TITLE, ID3_GetTitle( &id3Tag ) );
-    addMetaInfo( META_ARTIST,  ID3_GetArtist( &id3Tag ) );
-    addMetaInfo( META_COMMENT, ID3_GetComment( &id3Tag ) );
+    addMetaInfo( META_TITLE, TStringToQString( f.tag()->title() ) );
+    addMetaInfo( META_ARTIST, TStringToQString( f.tag()->artist() ) );
+    addMetaInfo( META_COMMENT, TStringToQString( f.tag()->comment() ) );
   }
 #endif
 

@@ -14,16 +14,21 @@ echo ""
 
 if test -n "$MAD_LIB"; then
 	echo "Mp3 decoding support (libmad):         yes"
-	if test -n "$ID3_LIB"; then
-		echo "    ID3 Tag handling with libid3:      yes"
-	else
-		echo "    ID3 Tag handling with libid3:       no"
-		echo "    Using KFileMetaInfo instead."
-	fi
 else
 	echo "Mp3 decoding support (libmad):          no"
 	echo "    You are missing the libmad headers and libraries."
 	echo "    The Mp3 decoding plugin won't be compiled."
+fi
+
+echo ""
+
+if $have_taglib; then
+	echo "Audio meta data reading with Taglib:   yes"
+else
+	echo "Audio meta data reading with Taglib:    no"
+	echo "    You are missing the Taglib headers and libraries."
+	echo "    The mp3 and flac decoder plugins will fall back to"
+	echo "    using KMetaFileInfo."
 fi
 
 echo ""

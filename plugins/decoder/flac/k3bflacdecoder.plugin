@@ -4,6 +4,6 @@ Group=AudioDecoder
 Name=K3b FLAC Decoder
 Author=John Steele Scott
 Email=toojays@toojays.net
-Version=2.0
+Version=2.1
 Comment=Decoding module to decode FLAC files
 Licence=GPL

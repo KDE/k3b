@@ -1,4 +1,4 @@
-Installing K3b 0.11
+Installing K3b 0.12
 -------------------
 
 
@@ -17,7 +17,7 @@ What you need to run K3b:
  - optional ogg-vorbis libraries for encoding and decoding
  - optional the FLAC++ libraries for flac-decoding
  - optional the eMovix package
-
+ - optional TagLib by Scott Wheeler for reading Meta data tags
 
 
 After that it's all the same:

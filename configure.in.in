@@ -221,15 +221,6 @@ AC_CHECK_HEADERS(lame/lame.h, [
 AM_CONDITIONAL(include_LAME, [test x$have_lame = xyes])
 
 
-dnl === check for id3lib ============
-ID3_LIB=""
-KDE_CHECK_HEADERS(id3/tag.h, [
-	ID3_LIB="-lid3"
-	AC_DEFINE(HAVE_LIBID3,1,[defined if you have libid3 headers and libraries])
-])
-AC_SUBST(ID3_LIB)
-
-
 dnl === check for resmgr ============
 RESMGR_LIB=""
 AC_CHECK_HEADERS(resmgr.h, [
@@ -256,12 +247,10 @@ AM_CONDITIONAL(compile_libsamplerate, [test -z "$LIBSAMPLERATE"])
 ARTS_LIBS=""
 if test "x$build_arts" = "xyes"; then
 	dnl Find aRts
-	KDE_CHECK_HEADERS(arts/artsflow.h,
-		[KDE_CHECK_HEADERS(arts/kmedia2.h,
-			[arts_available=yes
-		 	 ARTS_LIBS="-lartskde"],
-			[arts_available=no]
-		)]
+	KDE_CHECK_HEADERS(arts/artsc.h,
+		[arts_available=yes
+	 	 ARTS_LIBS="-lartsc"],
+		[arts_available=no]
 	)
 fi
 AC_SUBST(ARTS_LIBS)
@@ -315,3 +304,34 @@ int main() {
 AC_LANG_RESTORE
 AC_MSG_RESULT($have_ffmpeg)
 AM_CONDITIONAL(include_FFMPEG, [test x$have_ffmpeg = xyes])
+
+
+dnl ---------- TAGLIB CHECK ----------
+
+AC_DEFUN([AC_HAVE_TAGLIB],
+[
+    AC_DEFINE(HAVE_TAGLIB, 1, [have TagLib])
+    taglib_includes=[`$TAGLIB_CONFIG --cflags`]
+    taglib_libs=[`$TAGLIB_CONFIG --libs`]
+    have_taglib=true
+])
+
+AC_DEFUN([AC_NO_TAGLIB],
+[
+    AC_DEFINE(HAVE_TAGLIB, 0, [don't have TagLib])
+    taglib_includes=""
+    taglib_libs=""
+    have_taglib=false
+])
+
+AC_PATH_PROG(TAGLIB_CONFIG, taglib-config, [no], [$PATH:$prefix/bin])
+if test "x$TAGLIB_CONFIG" = "xno" ; then
+    AC_NO_TAGLIB
+else
+    AC_HAVE_TAGLIB
+fi
+
+AC_SUBST(taglib_includes)
+AC_SUBST(taglib_libs)
+
+dnl ---------- END TAGLIB CHECK ----------
