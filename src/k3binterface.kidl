@@ -1,0 +1,12 @@
+<!DOCTYPE DCOP-IDL><DCOP-IDL>
+<SOURCE>./k3binterface.h</SOURCE>
+<INCLUDE>dcopobject.h</INCLUDE>
+<CLASS>
+    <NAME>K3bInterface</NAME>
+    <SUPER>DCOPObject</SUPER>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>createDataProject</NAME>
+     </FUNC>
+</CLASS>
+</DCOP-IDL>
