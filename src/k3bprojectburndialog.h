@@ -45,9 +45,15 @@ class K3bProjectBurnDialog : public KDialogBase
    K3bDoc* doc() const { return m_doc; }
 	
  protected slots:
+   virtual void slotOk();
    virtual void slotUser1();
    virtual void slotUser2();
+   virtual void slotUser3();
    virtual void slotCancel();
+
+ protected:
+   virtual void loadDefaults() = 0;
+   virtual void saveDefaults() = 0;
 
  signals:
    void writerChanged();

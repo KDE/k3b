@@ -180,6 +180,8 @@ class K3bDataDoc : public K3bDoc
 
   QString documentType() const;
 
+  void loadDefaultSettings();
+
  private:
   /**
    * load recursivly

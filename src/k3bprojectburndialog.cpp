@@ -27,18 +27,24 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-
+#include <kguiitem.h>
+#include <kstdguiitem.h>
 
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
-  : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), User1|User2|Cancel, 
-		 User2, parent, name, modal, true, i18n("Write"), i18n("Save") )
+  : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), Ok|User1|User2|User3|Cancel, 
+		 User1, parent, name, modal, true, 
+		 KGuiItem( i18n("Save"), "filesave", i18n("Save Settings and close"), 
+			   i18n("Saves the settings to the project and closes the burn dialog.") ), 
+		 KStdGuiItem::defaults(), 
+		 KGuiItem( i18n("Save Defaults"), QString::null, i18n("Save current settings as default"),
+			   i18n("Saves the current project settings as the default that will be loaded ehen creating a new project.") ) )
 {
   m_doc = doc;
 	
   setButtonBoxOrientation( Vertical );
-
+  setButtonText( Ok, i18n("Write") );
   m_job = 0;
 }
 
@@ -50,16 +56,16 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 int K3bProjectBurnDialog::exec( bool burn )
 {
   if( burn && m_job == 0 ) {
-    showButton(User1, true );
-    actionButton(User1)->setDefault(true);
-    actionButton(User2)->setDefault(false);
-    actionButton(User2)->clearFocus();
+    showButton(Ok, true );
+    actionButton(Ok)->setDefault(true);
+    actionButton(User1)->setDefault(false);
+    actionButton(User1)->clearFocus();
   }
   else {
-    showButton(User1, false );
-    actionButton(User2)->setDefault(false);
-    actionButton(User1)->setDefault(true);
-    actionButton(User1)->clearFocus();
+    showButton(Ok, false );
+    actionButton(User1)->setDefault(false);
+    actionButton(Ok)->setDefault(true);
+    actionButton(Ok)->clearFocus();
   }
 
   readSettings();
@@ -68,11 +74,23 @@ int K3bProjectBurnDialog::exec( bool burn )
 }
 
 
-void K3bProjectBurnDialog::slotUser2()
+void K3bProjectBurnDialog::slotUser1()
 {
   saveSettings();
   m_doc->updateAllViews();
   done( Saved );
+}
+
+
+void K3bProjectBurnDialog::slotUser2()
+{
+  loadDefaults();
+}
+
+
+void K3bProjectBurnDialog::slotUser3()
+{
+  saveDefaults();
 }
 
 
@@ -81,7 +99,7 @@ void K3bProjectBurnDialog::slotCancel()
   done( Canceled );
 }
 
-void K3bProjectBurnDialog::slotUser1()
+void K3bProjectBurnDialog::slotOk()
 {
   if( m_job ) {
     KMessageBox::sorry( k3bMain(), i18n("Sorry, K3b is already working on this project!"), i18n("Sorry") );

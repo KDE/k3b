@@ -72,13 +72,6 @@ bool K3bDataDoc::newDocument()
   m_applicationID = "K3B";    // thy name on every cd!
   m_isoImage = QString::null;
 
-  m_createRockRidge = true;
-  m_createJoliet = false;
-  m_deleteImage = true;
-  m_onlyCreateImage = false;
-  m_isoLevel = 1;
-  m_whiteSpaceTreatment = K3bDataDoc::normal;
-
   m_multisessionMode = NONE;
 
 
@@ -933,6 +926,35 @@ void K3bDataDoc::informAboutNotFoundFiles()
     m_mkisofsBuggyFiles.clear();
   }
   // -----------------------------------------------------------------------
+}
+
+
+void K3bDataDoc::loadDefaultSettings()
+{
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default data settings" );
+
+  setDummy( c->readBoolEntry( "dummy_mode", false ) );
+  setDao( c->readBoolEntry( "dao", true ) );
+  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
+  setBurnproof( c->readBoolEntry( "burnproof", true ) );
+
+  m_createRockRidge = c->readBoolEntry( "rock_ridge", true );
+  m_createJoliet = c->readBoolEntry( "joliet", false );
+  m_deleteImage = c->readBoolEntry( "remove_image", true );
+  m_onlyCreateImage = c->readBoolEntry( "only_create_image", false );
+  m_isoLevel = c->readNumEntry( "iso_level", 1 );
+
+  QString w = c->readEntry( "white_space_treatment", "normal" );
+  if( w == "convert" )
+    m_whiteSpaceTreatment = K3bDataDoc::convertToUnderScore;
+  else if( w == "strip" )
+    m_whiteSpaceTreatment = K3bDataDoc::strip;
+  else if( w == "extended" )
+    m_whiteSpaceTreatment = K3bDataDoc::extendedStrip;
+  else
+    m_whiteSpaceTreatment = K3bDataDoc::normal;
 }
 
 

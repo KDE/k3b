@@ -34,8 +34,16 @@ void K3bBurnJob::parseCdrdaoStdoutLine( const QString& str )
   // find some messages from cdrdao
   // -----------------------------------------------------------------------------------------
   if( (str).startsWith( "Warning" ) || (str).startsWith( "ERROR" ) ) {
-    // TODO: parse the error messages!!
-    emit infoMessage( str, K3bJob::ERROR );
+    if( str.contains( "No driver found" ) ) {
+      emit infoMessage( i18n("No cdrdao driver found."), K3bJob::ERROR );
+      emit infoMessage( i18n("Please select one manually in the device settings."), K3bJob::ERROR );
+      emit infoMessage( i18n("For most current drives this would be 'generic-mmc'."), K3bJob::ERROR );
+    }
+    else if( str.contains( "Cannot setup device" ) ) {
+      // no nothing...
+    }
+    else
+      emit infoMessage( str, K3bJob::ERROR );
   }
   else if( (str).startsWith( "Executing power" ) ) {
     emit newSubTask( i18n("Executing Power calibration") );

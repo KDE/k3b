@@ -80,11 +80,6 @@ bool K3bAudioDoc::newDocument()
   m_tracks = new QPtrList<K3bAudioTrack>;
   m_tracks->setAutoDelete( false );
 	
-  m_cdText = true;
-  m_padding = false;
-  m_hideFirstTrack = false;
-  m_removeBufferFiles = true;
-	
   return K3bDoc::newDocument();
 }
 
@@ -876,6 +871,24 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 
     m_notFoundFiles.clear();
   }
+}
+
+
+void K3bAudioDoc::loadDefaultSettings()
+{
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default audio settings" );
+
+  setDummy( c->readBoolEntry( "dummy_mode", false ) );
+  setDao( c->readBoolEntry( "dao", true ) );
+  setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
+  //  setBurnproof( c->readBoolEntry( "burnproof", true ) );
+
+  m_cdText = c->readBoolEntry( "cd_text", true );
+  m_padding = c->readBoolEntry( "padding", false );
+  m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
+  m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );
 }
 
 

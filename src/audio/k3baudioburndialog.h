@@ -53,6 +53,9 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
+   void loadDefaults();
+   void saveDefaults();
+
    // the burn tab
    // ---------------------------------------------------------
    QCheckBox* m_checkCdText;
@@ -78,7 +81,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    // -----------------------------------------------------------
 
  protected slots:
-   void slotUser1();
+   void slotOk();
 };
 
 #endif

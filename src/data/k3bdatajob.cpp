@@ -840,8 +840,10 @@ bool K3bDataJob::addMkisofsParameters()
     *m_process << "-T";	
   if( m_doc->hideTRANS_TBL()  )
     *m_process << "-hide-joliet-trans-tbl";	
-  if( m_doc->padding()  )
-    *m_process << "-pad";	
+
+  // This is enabled by default and so should it stay
+//   if( m_doc->padding()  )
+//     *m_process << "-pad";	
 
   *m_process << "-iso-level" << QString::number(m_doc->ISOLevel());
 

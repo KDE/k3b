@@ -172,6 +172,11 @@ class K3bDoc : public QObject
    */
   virtual QString documentType() const = 0;
 
+  /**
+   * load the default project settings from the app configuration
+   */
+  virtual void loadDefaultSettings() = 0;
+
   int m_docType;
 
  private:

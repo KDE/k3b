@@ -36,6 +36,7 @@
 #include <kapp.h>
 #include <kstddirs.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 // application specific includes
 #include "k3b.h"
@@ -149,15 +150,13 @@ const KURL& K3bDoc::URL() const
 
 bool K3bDoc::newDocument()
 {
-  m_dummy = false;
-  m_dao = true;
-  m_onTheFly = true;
-  m_overburn = false;
-  m_burnproof = true;
-	
   modified=false;
+
+  loadDefaultSettings();
+
   return true;
 }
+
 
 K3bDoc* K3bDoc::openDocument(const KURL& url )
 {

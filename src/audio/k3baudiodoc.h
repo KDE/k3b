@@ -152,6 +152,8 @@ class K3bAudioDoc : public K3bDoc
    */
   QString prepareForTocFile( const QString& str );
 
+  void loadDefaultSettings();
+
  private:
   K3bAudioTrack* createTrack( const KURL& url );
   void informAboutNotFoundFiles();

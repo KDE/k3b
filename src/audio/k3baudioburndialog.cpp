@@ -91,6 +91,7 @@ void K3bAudioBurnDialog::saveSettings()
 void K3bAudioBurnDialog::readSettings()
 {
   m_checkDao->setChecked( doc()->dao() );
+  m_checkOnTheFly->setChecked( doc()->onTheFly() );
   m_checkSimulate->setChecked( doc()->dummy() );
   m_checkPadding->setChecked( ((K3bAudioDoc*)doc())->padding() );
   m_checkCdText->setChecked( ((K3bAudioDoc*)doc())->cdText() );
@@ -176,116 +177,57 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
 
 void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
 {
-  QHBoxLayout* frameLayout = new QHBoxLayout( frame );
-  frameLayout->setSpacing( spacingHint() );
-  frameLayout->setMargin( marginHint() );
+  QGridLayout* mainGrid = new QGridLayout( frame );
+  mainGrid->setSpacing( spacingHint() );
+  mainGrid->setMargin( marginHint() );
 
-  QFrame* _mainGroup = new QFrame( frame, "_mainGroup" );
-  _mainGroup->setFrameShape( QFrame::Box );
-  _mainGroup->setFrameShadow( QFrame::Sunken );
-  QGridLayout* _mainGroupLayout = new QGridLayout( _mainGroup );
-  _mainGroupLayout->setSpacing( spacingHint() );
-  _mainGroupLayout->setMargin( marginHint() );
 
-  QGridLayout* _layout3 = new QGridLayout;
-  _layout3->setSpacing( spacingHint() );
-  _layout3->setMargin( 0 );
+  QLabel* labelDisc_id = new QLabel( i18n( "&Disc ID" ), frame, "labelDisc_id" );
+  QLabel* labelMessage = new QLabel( i18n( "&Message" ), frame, "labelMessage" );
+  labelMessage->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
+  QLabel* labelUpc_ean = new QLabel( i18n( "&UPC EAN" ), frame, "labelUpc_ean" );
+  QLabel* labelArranger = new QLabel( i18n( "&Arranger" ), frame, "labelArranger" );
+  QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter" ), frame, "labelSongwriter" );
+  QLabel* labelPerformer = new QLabel( i18n( "&Performer" ), frame, "labelPerformer" );
+  QLabel* labelTitle = new QLabel( i18n( "&Title" ), frame, "labelTitle" );
 
-  m_editDisc_id = new QLineEdit( _mainGroup, "m_editDisc_id" );
+  m_editDisc_id = new QLineEdit( frame, "m_editDisc_id" );
   QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
-
-  _layout3->addWidget( m_editDisc_id, 2, 1 );
-
-  QLabel* _labelDisc_id = new QLabel( _mainGroup, "_labelDisc_id" );
-  _labelDisc_id->setText( i18n( "&Disc ID" ) );
-  QToolTip::add(  _labelDisc_id, i18n( "" ) );
-
-  _layout3->addWidget( _labelDisc_id, 2, 0 );
-
-  m_editUpc_ean = new QLineEdit( _mainGroup, "m_editUpc_ean" );
-
-  _layout3->addWidget( m_editUpc_ean, 1, 1 );
-
-  m_editMessage = new QMultiLineEdit( _mainGroup, "m_editMessage" );
+  m_editUpc_ean = new QLineEdit( frame, "m_editUpc_ean" );
+  m_editMessage = new QMultiLineEdit( frame, "m_editMessage" );
   m_editMessage->setWordWrap( QMultiLineEdit::WidgetWidth );
+  m_editPerformer = new QLineEdit( frame, "m_editPerformer" );
+  m_editArranger = new QLineEdit( frame, "m_editArranger" );
+  m_editTitle = new QLineEdit( frame, "m_editTitle" );
+  m_editSongwriter = new QLineEdit( frame, "m_editSongwriter" );
 
-  _layout3->addWidget( m_editMessage, 0, 1 );
 
-  QLabel* _labelMessage = new QLabel( _mainGroup, "_labelMessage" );
-  _labelMessage->setText( i18n( "&Message" ) );
-  _labelMessage->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
+  mainGrid->addWidget( labelPerformer, 0, 0 );
+  mainGrid->addWidget( m_editPerformer, 0, 1 );
+  mainGrid->addWidget( labelTitle, 1, 0 );
+  mainGrid->addWidget( m_editTitle, 1, 1 );
+  mainGrid->addWidget( labelArranger, 2, 0 );
+  mainGrid->addWidget( m_editArranger, 2, 1 );
+  mainGrid->addWidget( labelSongwriter, 3, 0 );
+  mainGrid->addWidget( m_editSongwriter, 3, 1 );
+  mainGrid->addWidget( labelUpc_ean, 5, 0 );
+  mainGrid->addWidget( m_editUpc_ean, 5, 1 );
+  mainGrid->addWidget( labelDisc_id, 6, 0 );
+  mainGrid->addWidget( m_editDisc_id, 6, 1 );
+  mainGrid->addWidget( labelMessage, 7, 0 );
+  mainGrid->addWidget( m_editMessage, 7, 1 );
 
-  _layout3->addWidget( _labelMessage, 0, 0 );
-
-  QLabel* _labelUpc_ean = new QLabel( _mainGroup, "_labelUpc_ean" );
-  _labelUpc_ean->setText( i18n( "&UPC EAN" ) );
-
-  _layout3->addWidget( _labelUpc_ean, 1, 0 );
-
-  _mainGroupLayout->addMultiCellLayout( _layout3, 0, 1, 2, 2 );
-  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-  _mainGroupLayout->addMultiCell( spacer, 1, 2, 0, 0 );
-
-  QFrame* _line1 = new QFrame( _mainGroup, "_line1" );
-  _line1->setMargin( 0 );
-  _line1->setFrameStyle( QFrame::VLine | QFrame::Sunken );
-
-  _mainGroupLayout->addMultiCellWidget( _line1, 0, 2, 1, 1 );
-
-  QGridLayout* _layout2 = new QGridLayout;
-  _layout2->setSpacing( spacingHint() );
-  _layout2->setMargin( 0 );
-
-  m_editPerformer = new QLineEdit( _mainGroup, "m_editPerformer" );
-
-  _layout2->addWidget( m_editPerformer, 1, 1 );
-
-  QLabel* _labelArranger = new QLabel( _mainGroup, "_labelArranger" );
-  _labelArranger->setText( i18n( "&Arranger" ) );
-
-  _layout2->addWidget( _labelArranger, 2, 0 );
-
-  m_editArranger = new QLineEdit( _mainGroup, "m_editArranger" );
-
-  _layout2->addWidget( m_editArranger, 2, 1 );
-
-  QLabel* _labelSongwriter = new QLabel( _mainGroup, "_labelSongwriter" );
-  _labelSongwriter->setText( i18n( "&Songwriter" ) );
-
-  _layout2->addWidget( _labelSongwriter, 3, 0 );
-
-  QLabel* _labelPerformer = new QLabel( _mainGroup, "_labelPerformer" );
-  _labelPerformer->setText( i18n( "&Performer" ) );
-
-  _layout2->addWidget( _labelPerformer, 1, 0 );
-
-  m_editTitle = new QLineEdit( _mainGroup, "m_editTitle" );
-  QToolTip::add(  m_editTitle, i18n( "" ) );
-
-  _layout2->addWidget( m_editTitle, 0, 1 );
-
-  QLabel* _labelTitle = new QLabel( _mainGroup, "_labelTitle" );
-  _labelTitle->setText( i18n( "&Title" ) );
-
-  _layout2->addWidget( _labelTitle, 0, 0 );
-
-  m_editSongwriter = new QLineEdit( _mainGroup, "m_editSongwriter" );
-
-  _layout2->addWidget( m_editSongwriter, 3, 1 );
-
-  _mainGroupLayout->addLayout( _layout2, 0, 0 );
-  QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-  _mainGroupLayout->addItem( spacer_2, 2, 2 );
-  frameLayout->addWidget( _mainGroup );
+  mainGrid->addRowSpacing( 4, 20 );
+  mainGrid->setRowStretch( 7, 1 );
 
   // buddies
-  _labelDisc_id->setBuddy( m_editDisc_id );
-  _labelMessage->setBuddy( m_editMessage );
-  _labelUpc_ean->setBuddy( m_editUpc_ean );
-  _labelArranger->setBuddy( m_editArranger );
-  _labelSongwriter->setBuddy( m_editSongwriter );
-  _labelPerformer->setBuddy( m_editPerformer );
-  _labelTitle->setBuddy( m_editTitle );
+  labelDisc_id->setBuddy( m_editDisc_id );
+  labelMessage->setBuddy( m_editMessage );
+  labelUpc_ean->setBuddy( m_editUpc_ean );
+  labelArranger->setBuddy( m_editArranger );
+  labelSongwriter->setBuddy( m_editSongwriter );
+  labelPerformer->setBuddy( m_editPerformer );
+  labelTitle->setBuddy( m_editTitle );
 
 
   // tab order
@@ -298,13 +240,48 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
 }
 
 
-void K3bAudioBurnDialog::slotUser1()
+void K3bAudioBurnDialog::slotOk()
 {
   // check if enough space in tempdir if not on-the-fly
   if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() )
     KMessageBox::sorry( this, "Not enough space in temp directory." );
   else
-    K3bProjectBurnDialog::slotUser1();
+    K3bProjectBurnDialog::slotOk();
+}
+
+
+void K3bAudioBurnDialog::loadDefaults()
+{
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default audio settings" );
+
+  m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
+  m_checkDao->setChecked( c->readBoolEntry( "dao", true ) );
+  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
+  //  m_checkBurnProof->setChecked( c->readBoolEntry( "burnproof", true ) );
+
+  m_checkCdText->setChecked( c->readBoolEntry( "cd_text", true ) );
+  m_checkPadding->setChecked( c->readBoolEntry( "padding", false ) );
+  m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
+  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_buffer_files", true ) );
+}
+
+
+void K3bAudioBurnDialog::saveDefaults()
+{
+  KConfig* c = k3bMain()->config();
+
+  c->setGroup( "default audio settings" );
+
+  c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
+  c->writeEntry( "dao", m_checkDao->isChecked() );
+  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+
+  c->writeEntry( "cd_text", m_checkCdText->isChecked() );
+  c->writeEntry( "padding", m_checkPadding->isChecked() );
+  c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
+  c->writeEntry( "remove_buffer_files", m_checkRemoveBufferFiles->isChecked() );
 }
 
 
