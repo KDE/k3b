@@ -23,3 +23,7 @@ Comment[pt_BR]=O processo terminou com erros
 default_sound=
 default_presentation=1
 
+[UnknownAudioFileFormat]
+Name=Unknown format
+Comment=Unknown audiofile format
+default_presentation=2

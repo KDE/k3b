@@ -48,6 +48,7 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 #include <kdebug.h>
+#include <knotifyclient.h>
 
 #include <iostream>
 
@@ -241,8 +242,9 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
     return newTrack;
   }
   else {
-    KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
-			i18n("Wrong File Format") );		
+    KNotifyClient::event( "UnknownAudioFileFormat", i18n("Unknown file format: '%1'").arg(url.path()) );
+//     KMessageBox::error( kapp->mainWidget(), "(" + url.path() + ")\n" +
+// 			i18n("Wrong File Format") );		
     return 0;
   }
 }
