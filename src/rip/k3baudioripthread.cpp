@@ -77,7 +77,8 @@ public:
 K3bAudioRipThread::K3bAudioRipThread()
   : QObject(),
     K3bThread(),
-    m_device(0)
+    m_device(0),
+    m_useIndex0(false)
 {
   d = new Private();
 }
@@ -169,8 +170,12 @@ void K3bAudioRipThread::run()
   d->canceled = false;
   d->overallSectorsRead = 0;
   d->overallSectorsToRead = 0;
-  for( unsigned int i = 0; i < m_tracks.count(); ++i ) 
-    d->overallSectorsToRead += d->toc[m_tracks[i].first-1].length().lba();
+  for( unsigned int i = 0; i < m_tracks.count(); ++i ) {
+    if( m_useIndex0 )
+      d->overallSectorsToRead -= d->toc[m_tracks[i].first-1].realAudioLength().lba();
+    else
+      d->overallSectorsToRead += d->toc[m_tracks[i].first-1].length().lba();
+  }
 
 
   if( m_singleFile ) {
@@ -259,7 +264,10 @@ void K3bAudioRipThread::run()
 
 bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 {
-  if( d->paranoiaLib->initReading( track ) ) {
+  const K3bTrack& tt = d->toc[track-1];
+
+  if( d->paranoiaLib->initReading( tt.firstSector().lba(), 
+				   ( m_useIndex0 && tt.index0() > 0 ? tt.index0()-1 : tt.lastSector().lba() ) ) ) {
 
     long trackSectorsRead = 0;
 

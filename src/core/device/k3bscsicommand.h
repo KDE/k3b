@@ -24,6 +24,8 @@
 
 namespace K3bCdDevice
 {
+  class CdDevice;
+
 
   // inspired by dvd+rw-tools
   // see transport.hxx for a BSD version
@@ -38,6 +40,8 @@ namespace K3bCdDevice
     {
     public:
       ScsiCommand( int fd );
+      ScsiCommand( const CdDevice* );
+      ~ScsiCommand();
 
       void clear();
 
@@ -52,6 +56,8 @@ namespace K3bCdDevice
       struct request_sense m_sense;
 
       int m_fd;
+      const CdDevice* m_device;
+      bool m_needToCloseDevice;
     };
 }
 

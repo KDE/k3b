@@ -18,7 +18,8 @@
 
 
 K3bCdDevice::Track::Track()
-  : m_type(-1),
+  : m_index0(-1),
+    m_type(-1),
     m_mode(-1),
     m_copyPermitted(true),
     m_preEmphasis(false),
@@ -30,6 +31,7 @@ K3bCdDevice::Track::Track()
 K3bCdDevice::Track::Track( const Track& track )
   : m_firstSector( track.firstSector() ),
     m_lastSector( track.lastSector() ),
+    m_index0(-1),
     m_type( track.type() ),
     m_mode( track.mode() ),
     m_copyPermitted( track.copyPermitted() ),
@@ -47,6 +49,7 @@ K3bCdDevice::Track::Track( const K3b::Msf& firstSector,
 			   const QString& title )
   : m_firstSector( firstSector ), 
     m_lastSector( lastSector ), 
+    m_index0(-1),
     m_type( type ), 
     m_mode( mode ), 
     m_copyPermitted(true),
@@ -61,6 +64,7 @@ K3bCdDevice::Track& K3bCdDevice::Track::operator=( const K3bTrack& track )
 {
   m_firstSector = track.firstSector();
   m_lastSector = track.lastSector();
+  m_index0 = track.index0();
   m_type = track.type();
   m_mode = track.mode();
   m_title = track.title();
@@ -73,6 +77,15 @@ K3b::Msf K3bCdDevice::Track::length() const
 {
   // +1 since the last sector is included
   return m_lastSector - m_firstSector + 1;
+}
+
+
+K3b::Msf K3bCdDevice::Track::realAudioLength() const
+{
+  if( type() == DATA || index0() < firstSector().lba() )
+    return length();
+  else
+    return length() - ( lastSector() - index0() + 1 );
 }
 
 

@@ -196,7 +196,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
   if( !info.valid ) {
     m_labelTocType->setText( i18n("K3b was unable to retrieve disk information.") );
     if( K3bTheme* theme = k3bthememanager->currentTheme() )
-      m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_nodisk" ) );
+      m_labelDiskPix->setPixmap( theme->pixmap( "diskinfo_right" ) );
   } 
   else if( info.noDisk ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );

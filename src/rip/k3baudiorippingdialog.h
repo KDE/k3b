@@ -62,6 +62,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinRetries;
   QCheckBox* m_checkNeverSkip;
+  QCheckBox* m_checkUseIndex0;
 
   K3bCddbPatternWidget* m_patternWidget;
 

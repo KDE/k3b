@@ -73,6 +73,13 @@ namespace K3bCdDevice
     const K3b::Msf& firstSector() const { return m_firstSector; }
     const K3b::Msf& lastSector() const { return m_lastSector; }
     K3b::Msf length() const;
+
+    /**
+     * This takes index0 into account
+     */
+    K3b::Msf realAudioLength() const;
+
+    long index0() const { return m_index0; }
     
     /**
      * 0 if unknown
@@ -84,6 +91,9 @@ namespace K3bCdDevice
   private:
     K3b::Msf m_firstSector;
     K3b::Msf m_lastSector;
+
+    long m_index0;
+
     int m_type;
     int m_mode;
     bool m_copyPermitted;

@@ -14,6 +14,7 @@
  */
 
 #include "k3bscsicommand.h"
+#include "k3bdevice.h"
 
 #include <kdebug.h>
 
@@ -22,9 +23,30 @@
 
 
 K3bCdDevice::ScsiCommand::ScsiCommand( int fd )
-  : m_fd(fd)
+  : m_fd(fd),
+    m_device(0)
 {
   clear();
+}
+
+
+K3bCdDevice::ScsiCommand::ScsiCommand( const K3bCdDevice::CdDevice* dev )
+  : m_device(dev)
+{
+  clear();
+
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  m_needToCloseDevice = !m_device->isOpen();
+
+  m_fd = m_device->open();
+}
+
+
+K3bCdDevice::ScsiCommand::~ScsiCommand()
+{
+  if( m_device && m_needToCloseDevice )
+    m_device->close();
 }
 
 
@@ -48,6 +70,10 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
 					 void* data,
 					 size_t len )
 {
+  if( m_fd == -1 ) {
+    return -1;
+  }
+
   m_cmd.buffer = (unsigned char*)data;
   m_cmd.buflen = len;
   if( dir == TR_DIR_READ )
@@ -60,7 +86,7 @@ int K3bCdDevice::ScsiCommand::transport( TransportDirection dir,
   if( ::ioctl( m_fd, CDROM_SEND_PACKET, &m_cmd ) ) {
     kdDebug() << "(K3bCdDevice::ScsiCommand) failed: fd: " << m_fd 
 	      << " errorcode: " << m_sense.error_code << endl;
-    return ( m_sense.error_code != 0 ? m_sense.error_code : -1 );
+    return( m_sense.error_code != 0 ? m_sense.error_code : -1 );
   }
   else
     return 0;

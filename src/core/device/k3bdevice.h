@@ -311,8 +311,6 @@ namespace K3bCdDevice
     void close() const;
     bool isOpen() const;
 
-    bool seek( long long pos ) const;
-
   protected:
     bool furtherInit();
 
@@ -372,6 +370,26 @@ namespace K3bCdDevice
 		 bool edcEcc,
 		 int c2,
 		 int subChannel ) const;
+
+    /**
+     * @param subchannelParam: 01h - CD current position
+     *                         02h - Media Catalog number (UPC/bar code)
+     *                         03h - ISRC
+     * @param trackNumber only valid if subchannelParam == 03h
+     */
+    bool readSubChannel( unsigned char** data, 
+			 int& dataLen,
+			 unsigned int subchannelParam,
+			 unsigned int trackNumber ) const;
+
+    int getIndex( unsigned long lba ) const;
+
+    bool searchIndex0( unsigned long startSec, unsigned long endSec, long& pregapStart ) const;
+
+    /**
+     * Seek to the specified sector.
+     */
+    bool seek( unsigned long lba ) const;
 
     /**
      * Fallback method that uses the evil cdrom.h stuff

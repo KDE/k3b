@@ -123,6 +123,10 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 
   bool success = true;
 
+  //
+  // FIXME: blank DVD+RW media already has a track so this method tries to open ido9660...
+  //
+
   if( d->info.tocType == DiskInfo::DATA ||
       /*      d->info.tocType == DiskInfo::MIXED || */
       d->info.tocType == DiskInfo::DVD ) {
@@ -204,8 +208,8 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 
 	d->iso9660->close();
       }  // opened m_iso9660
-      else
-	success = false;
+//       else
+// 	success = false;
 
       d->device->close();
     }  // opened device

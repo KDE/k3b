@@ -77,8 +77,19 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
+  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
   readSettings();
+
+  QString path = m_doc->tempDir();
+  if( path.isEmpty() ) {
+    path = K3b::defaultTempPath();
+    if( m_doc->isoOptions().volumeID().isEmpty() )
+      path.append( "image.iso" );
+    else
+      path.append( m_doc->isoOptions().volumeID() + ".iso" );
+  }
+  m_tempDirSelectionWidget->setTempPath( path );
 }
 
 

@@ -159,13 +159,15 @@ void K3bAudioRippingDialog::setupGui()
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedPage );
   m_spinRetries = new QSpinBox( advancedPage );
   m_checkNeverSkip = new QCheckBox( i18n("Never skip"), advancedPage );
+  m_checkUseIndex0 = new QCheckBox( i18n("Don't read pregaps"), advancedPage );
 
   advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
   advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
   advancedPageLayout->addWidget( new QLabel( i18n("Read retries:"), advancedPage ), 1, 0 );
   advancedPageLayout->addWidget( m_spinRetries, 1, 1 );
   advancedPageLayout->addMultiCellWidget( m_checkNeverSkip, 2, 2, 0, 1 );
-  advancedPageLayout->setRowStretch( 3, 1 );
+  advancedPageLayout->addMultiCellWidget( m_checkUseIndex0, 3, 3, 0, 1 );
+  advancedPageLayout->setRowStretch( 4, 1 );
   advancedPageLayout->setColStretch( 2, 1 );
 
   // -------------------------------------------------------------------------------------------
@@ -180,6 +182,7 @@ void K3bAudioRippingDialog::setupGui()
   connect( m_optionWidget->m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_checkCreatePlaylist, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_checkSingleFile, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
+  connect( m_checkUseIndex0, SIGNAL(toggled(bool)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_comboFileType, SIGNAL(activated(int)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_editBaseDir, SIGNAL(textChanged(const QString&)), this, SLOT(refresh()) );
   connect( m_optionWidget->m_buttonConfigurePlugin, SIGNAL(clicked()), this, SLOT(slotConfigurePlugin()) );
@@ -201,6 +204,14 @@ void K3bAudioRippingDialog::setupContextHelp()
 					  "an audio sector if it was not readable (see retries)."
 					  "<p>K3b will stop the ripping process if a read error "
 					  "occurs.") );
+  QToolTip::add( m_checkUseIndex0, i18n("Do not read the pregaps at the end of every track") );
+  QWhatsThis::add( m_checkUseIndex0, i18n("<p>If this option is checked K3b will not rip the audio "
+					  "data in the pregaps. Most audio tracks contain an empty "
+					  "pregap which does not belong to the track itself.</p>"
+					  "<p>Although the default behaviour of nearly all ripping "
+					  "software is to include the pregaps for most CDs it makes more "
+					  "sense to ignore them. When creating a K3b audio project you "
+					  "will regenerate these pregaps anyway.</p>") );
 }
 
 
@@ -296,6 +307,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   thread->setWritePlaylist( m_optionWidget->m_checkCreatePlaylist->isChecked() );
   thread->setPlaylistFilename( d->playlistFilename );
   thread->setUseRelativePathInPlaylist( m_optionWidget->m_checkPlaylistRelative->isChecked() );
+  thread->setUseIndex0( m_checkUseIndex0->isChecked() );
   if( factory )
     thread->setFileType( d->extensionMap[m_optionWidget->m_comboFileType->currentItem()] );
   K3bThreadJob job( thread, this );
@@ -325,7 +337,9 @@ void K3bAudioRippingDialog::refresh()
     long length = 0;
     for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
-      length += m_diskInfo.toc[*it-1].length().lba();
+      length += ( m_checkUseIndex0->isChecked() 
+		  ? m_diskInfo.toc[*it-1].realAudioLength().lba()
+		  : m_diskInfo.toc[*it-1].length().lba() );
     }
 
     QString filename;
@@ -367,13 +381,16 @@ void K3bAudioRippingDialog::refresh()
 
       QString extension;
       long long fileSize = 0;
+      K3b::Msf trackLength = ( m_checkUseIndex0->isChecked() 
+			       ? m_diskInfo.toc[index].realAudioLength()
+			       : m_diskInfo.toc[index].length() );
       if( m_optionWidget->m_comboFileType->currentItem() == 0 ) {
 	extension = "wav";
-	fileSize = m_diskInfo.toc[index].length().audioBytes() + 44;
+	fileSize = trackLength.audioBytes() + 44;
       }
       else {
 	extension = d->extensionMap[m_optionWidget->m_comboFileType->currentItem()];
-	fileSize = d->factoryMap[m_optionWidget->m_comboFileType->currentItem()]->fileSize( extension, m_diskInfo.toc[index].length() );
+	fileSize = d->factoryMap[m_optionWidget->m_comboFileType->currentItem()]->fileSize( extension, trackLength );
       }
 
       if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
@@ -397,7 +414,7 @@ void K3bAudioRippingDialog::refresh()
       (void)new KListViewItem( m_viewTracks,
 			       m_viewTracks->lastItem(),
 			       filename,
-			       K3b::Msf(m_diskInfo.toc[index].length()).toString(),
+			       trackLength.toString(),
 			       fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
 			       (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
 
@@ -439,6 +456,8 @@ void K3bAudioRippingDialog::slotLoadK3bDefaults()
   m_comboParanoiaMode->setCurrentItem( 3 );
   m_spinRetries->setValue(20);
   m_checkNeverSkip->setChecked( false );
+  m_checkUseIndex0->setChecked( false );
+  
   m_optionWidget->m_checkSingleFile->setChecked( false );
 
   m_optionWidget->m_comboFileType->setCurrentItem(0); // Wave
@@ -462,6 +481,8 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
   m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
   m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
+  m_checkUseIndex0->setChecked( c->readBoolEntry( "use_index0", false ) );
+
   m_optionWidget->m_checkSingleFile->setChecked( c->readBoolEntry( "single_file", false ) );
 
   m_optionWidget->m_checkCreatePlaylist->setChecked( c->readBoolEntry( "create_playlist", false ) );
@@ -495,6 +516,8 @@ void K3bAudioRippingDialog::slotSaveUserDefaults()
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
   c->writeEntry( "read_retries", m_spinRetries->value() );
   c->writeEntry( "never_skip", m_checkNeverSkip->isChecked() );
+  c->writeEntry( "use_index0", m_checkUseIndex0->isChecked() );
+
   c->writeEntry( "single_file", m_optionWidget->m_checkSingleFile->isChecked() );
 
   c->writeEntry( "create_playlist", m_optionWidget->m_checkCreatePlaylist->isChecked() );

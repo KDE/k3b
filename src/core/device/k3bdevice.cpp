@@ -178,7 +178,7 @@ bool K3bCdDevice::CdDevice::init()
   d->deviceType = 0;
   d->supportedProfiles = 0;
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   unsigned char header[8];
   ::memset( header, 0, 8 );
   cmd[0] = 0x46;	// GET CONFIGURATION
@@ -218,16 +218,16 @@ bool K3bCdDevice::CdDevice::init()
 	    short profile = from2Byte( &profiles[i+j] );
 
 	    switch (profile) {
-	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM;
-	    case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ;
-	    case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM;
-	    case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; 
-	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
-	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
-	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R;
-	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM;
-	    case 0x09: d->supportedProfiles |= MEDIA_CD_R;
-	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW;
+	    case 0x10: d->supportedProfiles |= MEDIA_DVD_ROM; break;
+	    case 0x11: d->supportedProfiles |= MEDIA_DVD_R_SEQ; break;
+	    case 0x12: d->supportedProfiles |= MEDIA_DVD_RAM; break;
+	    case 0x13: d->supportedProfiles |= MEDIA_DVD_RW_OVWR; break;
+	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
+	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
+	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
+	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
+	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
+	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
 	    default: 
 	      kdDebug() << "(K3bCdDevice) " << blockDeviceName() << " unknown profile: " 
 			<< profile << endl;
@@ -812,35 +812,25 @@ bool K3bCdDevice::CdDevice::burnfree() const
 
 bool K3bCdDevice::CdDevice::isDVD() const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  bool ret = false;
-  if (open() < 0)
-    return ret;
-
   if( d->deviceType & (DVDR | DVDRAM | DVD) ) {
     // try to read the physical dvd-structure
     // if this fails, we probably cannot take any further (useful) dvd-action
 
     unsigned char dvdheader[20];
     ::memset( dvdheader, 0, 20 );
-    ScsiCommand cmd( open() );
+    ScsiCommand cmd( this );
     cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
     cmd[9] = 20;
     if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
       kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
     }
     else
-      ret = true;
+      return true;
   }
   else
     kdDebug() << "(K3bCdDevice::CdDevice) no DVD drive" << endl;
 
-  if( needToClose )
-    close();
-  return ret;
+  return false;
 }
 
 
@@ -1001,19 +991,10 @@ K3b::Msf K3bCdDevice::CdDevice::discSize() const
 
 bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  bool success = false;
-
-  if (open() < 0)
-    return false;
-
   unsigned char header[2];
   ::memset( header, 0, 2 );
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0x51;   // READ DISC INFORMATION
   cmd[8] = 2;
 
@@ -1027,7 +1008,7 @@ bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) c
     cmd[7] = dataLen>>8;
     cmd[8] = dataLen;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
-      success = true;
+      return true;
     else {
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
 		<< dataLen << " failed." << endl;
@@ -1038,10 +1019,7 @@ bool K3bCdDevice::CdDevice::readDiscInfo( unsigned char** data, int& dataLen ) c
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
   }
 
-  if( needToClose )
-    close();
-
-  return success;
+  return false;
 }
 
 
@@ -1081,14 +1059,6 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize() const
 
 int K3bCdDevice::CdDevice::numSessions() const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  int ret=-1;
-  if (open() < 0)
-    return ret;
-
   // 
   // Althought disk_info should get the real value without ide-scsi
   // I keep getting wrong values (the value is too high. I think the leadout
@@ -1106,14 +1076,11 @@ int K3bCdDevice::CdDevice::numSessions() const
   unsigned char* dat = 0;
   int len = 0;
   if( readTocPmaAtip( &dat, len, 1, 0, 0 ) )
-    ret = dat[3];
-  else
+    return dat[3];
+  else {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": could not get session info !" << endl;
-  
-  if( needToClose )
-    close();
-
-  return ret;
+    return -1;
+  }
 }
 
 
@@ -1278,6 +1245,21 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
     fixupToc( toc );
   }
 
+  int i = 1;
+  for( Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
+    K3bTrack& track = *it;
+    if( track.type() == Track::AUDIO ) {
+      long sec = 0;
+      if( searchIndex0( track.firstSector().lba(), track.lastSector().lba(), sec ) ) {
+	kdDebug() << "Pregap for track " << i << ": " << sec << " offset: " << (sec != -1 ? sec-track.firstSector().lba() : -1 ) << endl;
+	track.m_index0 = sec;
+      }
+      else
+	kdDebug() << "Unable to determine index0 for Track " << i << endl;
+    }
+    ++i;
+  }
+  
   if( needToClose )
     close();
 
@@ -1691,24 +1673,19 @@ bool K3bCdDevice::CdDevice::fixupToc( K3bCdDevice::Toc& toc ) const
 
 bool K3bCdDevice::CdDevice::block( bool b ) const
 {
-  if( open() != -1 ) {
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x1E;   // ALLOW MEDIA REMOVAL
-    cmd[4] = b ? 0x1 : 0x0;
-    int r = cmd.transport();
-    if( r ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) MMC ALLOW MEDIA REMOVAL failed. Falling back to cdrom.h." << endl;
-      r = ::ioctl(d->deviceFd,CDROM_LOCKDOOR, b ? 1 : 0 );
-    }
-
-    if( r )
-      kdDebug() << "(K3bCdDevice) Cannot block/unblock device " << devicename() << endl;
-
-    close();
-    return ( r == 0 );
+  ScsiCommand cmd( this );
+  cmd[0] = 0x1E;   // ALLOW MEDIA REMOVAL
+  cmd[4] = b ? 0x1 : 0x0;
+  int r = cmd.transport();
+  if( r ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) MMC ALLOW MEDIA REMOVAL failed. Falling back to cdrom.h." << endl;
+    r = ::ioctl(d->deviceFd,CDROM_LOCKDOOR, b ? 1 : 0 );
   }
-  else
-    return false;
+
+  if( r )
+    kdDebug() << "(K3bCdDevice) Cannot block/unblock device " << devicename() << endl;
+
+  return ( r == 0 );
 }
 
 bool K3bCdDevice::CdDevice::rewritable() const
@@ -1732,39 +1709,30 @@ bool K3bCdDevice::CdDevice::eject() const
 {
   block(false);
 
-  if( open() != -1 ) {
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x1B;   // START/STOP UNIT
-    cmd[4] = 0x2;    // LoEj = 1, Start = 0
-    int r = cmd.transport();
-    if( r ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
-      r = ::ioctl( d->deviceFd, CDROMEJECT );
-    }
-    
-    close();
-    return (r == 0);
+  ScsiCommand cmd( this );
+  cmd[0] = 0x1B;   // START/STOP UNIT
+  cmd[4] = 0x2;    // LoEj = 1, Start = 0
+  int r = cmd.transport();
+  if( r ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
+    r = ::ioctl( d->deviceFd, CDROMEJECT );
   }
-  else
-    return false;
+  
+  return (r == 0);
 }
 
 
 bool K3bCdDevice::CdDevice::load() const
 {
-  if( open() != -1 ) {
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x1B;   // START/STOP UNIT
-    cmd[4] = 0x3;    // LoEj = 1, Start = 1
-    int r = cmd.transport();
-    if( r ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
-      r = ::ioctl( d->deviceFd, CDROMCLOSETRAY );
-    }
-    close();
-    return (r == 0);
+  ScsiCommand cmd( this );
+  cmd[0] = 0x1B;   // START/STOP UNIT
+  cmd[4] = 0x3;    // LoEj = 1, Start = 1
+  int r = cmd.transport();
+  if( r ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) MMC START/STOP UNIT failed. Falling back to cdrom.h." << endl;
+    r = ::ioctl( d->deviceFd, CDROMCLOSETRAY );
   }
-  return false;
+  return (r == 0);
 }
 
 
@@ -1807,12 +1775,6 @@ void K3bCdDevice::CdDevice::close() const
     ::close( d->deviceFd );
     d->deviceFd = -1;
   }
-}
-
-
-bool K3bCdDevice::CdDevice::seek( long long pos ) const
-{
-  return (::lseek( open(), pos, SEEK_SET ) != -1);
 }
 
 
@@ -1908,14 +1870,10 @@ int K3bCdDevice::CdDevice::supportedProfiles() const
 
 int K3bCdDevice::CdDevice::currentProfile() const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
   unsigned char profileBuf[8];
   ::memset( profileBuf, 0, 8 );
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0x46;	// GET CONFIGURATION
   cmd[1] = 1;
   cmd[8] = 8;
@@ -1923,15 +1881,9 @@ int K3bCdDevice::CdDevice::currentProfile() const
   if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
     kdDebug() << "(K3bCdDevice) GET_CONFIGURATION failed." << endl;
 
-    if( needToClose )
-      close();
-
     return -1;
   }
   else {
-    if( needToClose )
-      close();
-
     short profile = from2Byte( &profileBuf[6] );
     switch (profile) {
     case 0x00: return MEDIA_NONE;
@@ -1974,7 +1926,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
     }
     inf.m_currentProfile = profile;
 
-    ScsiCommand cmd( open() );
+    ScsiCommand cmd( this );
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
 
@@ -2150,73 +2102,46 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 
 int K3bCdDevice::CdDevice::dvdMediaType() const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
+  int m = -1;
 
-  if( open() != -1 ) {
-
-    int m = -1;
-
-    unsigned char dvdheader[20];
-    ::memset( dvdheader, 0, 20 );
-    ScsiCommand cmd( open() );
-    cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
-    cmd[9] = 20;
-    if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
-    }
-    else {
-      switch( dvdheader[4]&0xF0 ) {
-      case 0x00: m = MEDIA_DVD_ROM; break;
-      case 0x10: m = MEDIA_DVD_RAM; break;
-      case 0x20: m = MEDIA_DVD_R; break;
-      case 0x30: m = MEDIA_DVD_RW; break;
-      case 0x90: m = MEDIA_DVD_PLUS_RW; break;
-      case 0xA0: m = MEDIA_DVD_PLUS_R; break;
-      default: m = -1; break; // unknown
-      }
-    }
-    
-    if( needToClose )
-      close();
-
-    return m;
+  unsigned char dvdheader[20];
+  ::memset( dvdheader, 0, 20 );
+  ScsiCommand cmd( this );
+  cmd[0] = 0xad;  // GPCMD_READ_DVD_STRUCTURE;
+  cmd[9] = 20;
+  if( cmd.transport( TR_DIR_READ, dvdheader, 20 ) ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
   }
-  else
-    return -1;
+  else {
+    switch( dvdheader[4]&0xF0 ) {
+    case 0x00: m = MEDIA_DVD_ROM; break;
+    case 0x10: m = MEDIA_DVD_RAM; break;
+    case 0x20: m = MEDIA_DVD_R; break;
+    case 0x30: m = MEDIA_DVD_RW; break;
+    case 0x90: m = MEDIA_DVD_PLUS_RW; break;
+    case 0xA0: m = MEDIA_DVD_PLUS_R; break;
+    default: m = -1; break; // unknown
+    }
+  }
+
+  return m;
 }
 
 
 // does only make sense for complete media
 bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() != -1 ) {
-
-    bool success = true;
-
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x25;  // READ CAPACITY
-    unsigned char buf[8];
-    ::memset( buf, 0, 8 );
-    if( cmd.transport( TR_DIR_READ, buf, 8 ) == 0 ) {
-      r = 
-	( (buf[0]<<24) & 0xFF000000 ) |
-	( (buf[1]<<16) & 0xFF0000 ) |
-	( (buf[2]<<8) & 0xFF00 ) |
-	( buf[3] & 0xFF );
-    }
-    else
-      success = false;
-
-    if( needToClose )
-      close();
-
-    return success;
+  ScsiCommand cmd( this );
+  cmd[0] = 0x25;  // READ CAPACITY
+  unsigned char buf[8];
+  ::memset( buf, 0, 8 );
+  if( cmd.transport( TR_DIR_READ, buf, 8 ) == 0 ) {
+    r = 
+      ( (buf[0]<<24) & 0xFF000000 ) |
+      ( (buf[1]<<16) & 0xFF0000 ) |
+      ( (buf[2]<<8) & 0xFF00 ) |
+      ( buf[3] & 0xFF );
+    return true;
   }
   else
     return false;
@@ -2225,71 +2150,59 @@ bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
 
 bool K3bCdDevice::CdDevice::readFormatCapacity( K3b::Msf& r ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
+  bool success = false;
 
-  if( open() != -1 ) {
+  unsigned char header[4]; // for reading the size of the returned data
+  ::memset( header, 0, 4 );
 
-    bool success = false;
+  ScsiCommand cmd( this );
+  cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
+  cmd[8] = 4;
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+    int realLength = header[3] + 4;
 
-    unsigned char header[4]; // for reading the size of the returned data
-    ::memset( header, 0, 4 );
+    unsigned char* buffer = new unsigned char[realLength];
+    ::memset( buffer, 0, realLength );
 
-    ScsiCommand cmd( open() );
-    cmd[0] = 0x23;  // GPCMD_READ_FORMAT_CAPACITIES;
-    cmd[8] = 4;
-    if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
-      int realLength = header[3] + 4;
-
-      unsigned char* buffer = new unsigned char[realLength];
-      ::memset( buffer, 0, realLength );
-
-      cmd[7] = realLength >> 8;
-      cmd[8] = realLength & 0xFF;
-      if( cmd.transport( TR_DIR_READ, buffer, realLength ) == 0 ) {
-	//
-	// now find the 00h format type since that contains the number of adressable blocks
-	// and the block size used for formatting the whole media.
-	// There may be multible occurences of this descriptor (MMC4 says so) but I think it's
-	// sufficient to read the first one
-	// 00h may not be supported by the unit (e.g. CD-RW)
-	// for this case we fall back to the first descriptor (the current/maximum descriptor)
-	//
-	for( int i = 12; i < realLength-4; ++i ) {
-	  if( (buffer[i+4]>>2) == 0 ) {
-	    // found the descriptor
-	    r = from4Byte( &buffer[i] );
-	    success = true;
-	    break;
-	  }
-	}
-
-	if( !success ) {
-	  // try the current/maximum descriptor
-	  int descType = buffer[8] & 0x03;
-	  if( descType == 1 || descType == 2 ) {
-	    // 1: unformatted :)
-	    // 2: formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
-	    r = from4Byte( &buffer[4] );
-	    success = true;
-
-	    // FIXME: we assume a blocksize of 2048 here. Is that correct? Wouldn' it be better to use
-	    //        the blocksize from the descriptor?
-	  }
+    cmd[7] = realLength >> 8;
+    cmd[8] = realLength & 0xFF;
+    if( cmd.transport( TR_DIR_READ, buffer, realLength ) == 0 ) {
+      //
+      // now find the 00h format type since that contains the number of adressable blocks
+      // and the block size used for formatting the whole media.
+      // There may be multible occurences of this descriptor (MMC4 says so) but I think it's
+      // sufficient to read the first one
+      // 00h may not be supported by the unit (e.g. CD-RW)
+      // for this case we fall back to the first descriptor (the current/maximum descriptor)
+      //
+      for( int i = 12; i < realLength-4; ++i ) {
+	if( (buffer[i+4]>>2) == 0 ) {
+	  // found the descriptor
+	  r = from4Byte( &buffer[i] );
+	  success = true;
+	  break;
 	}
       }
 
-      delete [] buffer;
+      if( !success ) {
+	// try the current/maximum descriptor
+	int descType = buffer[8] & 0x03;
+	if( descType == 1 || descType == 2 ) {
+	  // 1: unformatted :)
+	  // 2: formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
+	  r = from4Byte( &buffer[4] );
+	  success = true;
+
+	  // FIXME: we assume a blocksize of 2048 here. Is that correct? Wouldn' it be better to use
+	  //        the blocksize from the descriptor?
+	}
+      }
     }
 
-    if( needToClose )
-      close();
-
-    return success;
+    delete [] buffer;
   }
-  else
-    return false;
+  
+  return success;
 }
 
 
@@ -2312,19 +2225,10 @@ bool K3bCdDevice::CdDevice::readSectorsRaw(unsigned char *buf, int start, int co
 
 bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, int page ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() < 0 )
-    return false;
-
-  bool ret = false;
-
   unsigned char header[8];
   ::memset( header, 0, 8 );
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0x5A;	// MODE SENSE
   cmd[1] = 0x08;        // Disable Block Descriptors
   cmd[2] = page;
@@ -2339,41 +2243,24 @@ bool K3bCdDevice::CdDevice::modeSense( unsigned char** pageData, int& pageLen, i
     cmd[7] = pageLen>>8;
     cmd[8] = pageLen;
     if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 )
-      ret = true;
+      return true;
     else
       delete [] *pageData;
   }
 
-  if( needToClose )
-    close();
-
-  return ret;
+  return false;
 }
 
 
 bool K3bCdDevice::CdDevice::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() < 0 )
-    return false;
-
-  bool ret = false;
-
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0x55;	// MODE SELECT
   cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
   cmd[7] = pageLen>>8;
   cmd[8] = pageLen;
   cmd[9] = 0;
-  ret = ( cmd.transport( TR_DIR_WRITE, page, pageLen ) == 0 );
-
-  if( needToClose )
-    close();
-
-  return ret;
+  return( cmd.transport( TR_DIR_WRITE, page, pageLen ) == 0 );
 }
 
 
@@ -2474,19 +2361,10 @@ void K3bCdDevice::CdDevice::checkWriteModes()
 
 bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() < 0 )
-    return false;
-
-  bool ret = false;
-
   unsigned char header[2];
   ::memset( header, 0, 2 );
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0x43;  // READ TOC/PMA/ATIP
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
@@ -2504,7 +2382,7 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
     cmd[7] = dataLen>>8;
     cmd[8] = dataLen;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
-      ret = true;
+      return true;
     else {
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
 		<< format << " with real length "
@@ -2515,30 +2393,18 @@ bool K3bCdDevice::CdDevice::readTocPmaAtip( unsigned char** data, int& dataLen, 
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
 
-  if( needToClose )
-    close();
-
-  return ret;
+  return false;
 }
 
 
 bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() < 0 )
-    return false;
-
-  bool ret = false;
-
   unsigned char header[8];
   ::memset( header, 0, 8 );
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0xbd;  // MECHANISM STATUS
-  cmd[8] = 8;  // first we read the header
+  cmd[9] = 8;     // first we read the header
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( &header[6] ) + 8;
@@ -2551,8 +2417,8 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
 
     cmd[8] = dataLen>>8;
     cmd[9] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, 8 ) == 0 ) {
-      ret = true;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+      return true;
     }
     else {
       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS with real length "
@@ -2563,23 +2429,13 @@ bool K3bCdDevice::CdDevice::mechanismStatus( unsigned char** data, int& dataLen 
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
 
-  if( needToClose )
-    close();
-
-  return ret;
+  return false;
 }
 
 
 int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
 {
   // we simply try and return 0 if it fails
-
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() < 0 )
-    return 0;
 
   int ret = 0;
 
@@ -2608,9 +2464,6 @@ int K3bCdDevice::CdDevice::determineOptimalWriteSpeed() const
     delete [] data;
   }
 
-  if( needToClose )
-    close();
-
   return ret;
 }
 
@@ -2629,18 +2482,9 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 				    int c2,
 				    int subChannel ) const
 {
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  if( open() < 0 )
-    return false;
-
-  bool ret = true;
-
   ::memset( data, 0, dataLen );
 
-  ScsiCommand cmd( open() );
+  ScsiCommand cmd( this );
   cmd[0] = 0xbe;  // READ CD
   cmd[1] = (sectorType<<2 & 0x1c) | ( dap ? 0x2 : 0x0 );
   cmd[2] = startAdress>>24;
@@ -2660,7 +2504,161 @@ bool K3bCdDevice::CdDevice::readCd( unsigned char* data,
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ CD failed!" << endl;
-    ret = false;
+    return false;
+  }
+  else
+    return true;
+}
+
+
+bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
+					    unsigned int subchannelParam,
+					    unsigned int trackNumber ) const
+{
+  unsigned char header[4];
+  ::memset( header, 0, 4 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = 0x42;    // READ SUB-CHANNEL
+  cmd[2] = (1<<6);  // SUBQ
+  cmd[3] = subchannelParam;
+  cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
+  cmd[8] = 4;      // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+    // again with real length
+    dataLen = from2Byte( &header[2] ) + 4;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[7] = dataLen>>8;
+    cmd[8] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
+		<< dataLen << " failed." << endl;
+      delete [] *data;
+    }
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed." << endl;
+
+  return false;
+}
+
+
+int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return -1;
+
+  int ret = -1;
+
+  //
+  // first try readCd
+  //
+  unsigned char readData[16];
+  ::memset( readData, 0, 16 );
+
+  if( readCd( readData, 
+	      16,
+	      1, // CD-DA
+	      0, // no DAP
+	      lba,
+	      1,
+	      false,
+	      false,
+	      false,
+	      false,
+	      false,
+	      0,
+	      2 // Q-Subchannel
+	      ) ) {
+    ret = readData[2];
+  }
+  else {
+    kdDebug() << "(K3bCdDevice::CdDevice::getIndex) readCd failed. Trying seek." << endl;
+
+    unsigned char* data = 0;
+    int dataLen = 0;
+    if( seek( lba ) && readSubChannel( &data, dataLen, 1, 0 ) ) {
+      if( dataLen > 7 )
+	ret = data[7];
+      
+      delete [] data;
+    }
+    else
+      kdDebug() << "(K3bCdDevice::CdDevice::getIndex) seek or readSubChannel failed." << endl;
+  }
+
+  if( needToClose )
+    close();
+  
+  return ret;
+}
+
+
+bool K3bCdDevice::CdDevice::seek( unsigned long lba ) const
+{
+  ScsiCommand cmd( this );
+  cmd[0] = 0x2b;    // SEEK (10)
+  cmd[2] = lba>>24;
+  cmd[3] = lba>>16;
+  cmd[4] = lba>>8;
+  cmd[5] = lba;
+
+  return !cmd.transport();
+}
+
+
+bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
+					  unsigned long endSec,
+					  long& pregapStart ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  if( open() < 0 )
+    return false;
+
+  bool ret = false;
+
+  int lastIndex = getIndex( endSec );
+  if( lastIndex == 0 ) {
+    // there is a pregap
+    // let's find the position where the index turns to 0
+    // we jump in 1 sec steps backwards until we find an index > 0
+    unsigned long sector = endSec;
+    while( lastIndex == 0 && sector > startSec ) {
+      sector -= 75;
+      if( sector < startSec )
+	sector = startSec;
+      lastIndex = getIndex(sector);
+    }
+
+    if( lastIndex == 0 ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) warning: no index != 0 found." << endl;
+    }
+    else {
+      // search forward to the first index = 0
+      while( getIndex( sector ) != 0 && sector < endSec )
+	sector++;
+
+      pregapStart = sector;
+      ret = true;
+    }
+  }
+  else if( lastIndex > 0 ) {
+    // no pregap
+    pregapStart = -1;
+    ret = true;
   }
   
   if( needToClose )

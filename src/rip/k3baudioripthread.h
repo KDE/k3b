@@ -50,6 +50,8 @@ class K3bAudioRipThread : public QObject, public K3bThread
 
   void setSingleFile( bool b ) { m_singleFile = b; }
 
+  void setUseIndex0( bool b ) { m_useIndex0 = b; }
+
   void setDevice( K3bCdDevice::CdDevice* dev ) { m_device = dev; }
 
   void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
@@ -94,6 +96,7 @@ class K3bAudioRipThread : public QObject, public K3bThread
 
   bool m_bUsePattern;
   bool m_singleFile;
+  bool m_useIndex0;
 
   bool m_writePlaylist;
   bool m_relativePathInPlaylist;
