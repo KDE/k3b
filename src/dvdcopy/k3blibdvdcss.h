@@ -47,6 +47,21 @@ class K3bLibDvdCss
   int read( void* buffer, int sectors, int flags );
 
   /**
+   * This method optimized the seek calls to maximize reading performance.
+   * It also makes sure we never read unscrambled and scrambled data at the same time.
+   *
+   * You have to call crackAllKeys() before using this. Do never call this in combination
+   * with seek or read!
+   */
+  int readWrapped( void* buffer, int firstSector, int sectors );
+
+  /**
+   * Cache all CSS keys to guarantee smooth reading further on.
+   * This method also creates a title offset list which is needed by readWrapped.
+   */
+  bool crackAllKeys();
+
+  /**
    * returns 0 if the libdvdcss could not
    * be found on the system.
    * Otherwise you have to take care of

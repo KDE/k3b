@@ -62,9 +62,6 @@ public:
       return;
     }
 
-    // block the tray while we are reading
-    m_device->block(true);
-
     // 1. determine sector size by checking the first sectors mode
     //    if impossible or MODE2 (mode2 formless) finish(false)
 
@@ -93,6 +90,13 @@ public:
 	
 	if( !m_libcss->open(m_device) ) {
 	  emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()), K3bJob::ERROR );
+	  emitFinished(false);
+	  return;
+	}
+
+	emitInfoMessage( i18n("Retrieving all CSS keys. This might take a while."), K3bJob::INFO );
+	if( !m_libcss->crackAllKeys() ) {
+	  emitInfoMessage( i18n("Failed to retrieve all CSS keys."), K3bJob::ERROR );
 	  emitFinished(false);
 	  return;
 	}
@@ -153,6 +157,7 @@ public:
 
     // 2. get it on
     K3b::Msf currentSector = m_firstSector;
+    m_nextReadSector = 0;
     bool writeError = false;
     bool readError = false;
     int lastPercent = 0;
@@ -160,17 +165,20 @@ public:
     int bufferLen = s_bufferSizeSectors*m_sectorSize;
     while( !m_canceled && currentSector <= m_lastSector ) {
 
-      int readSectors = QMIN( bufferLen/m_sectorSize, m_lastSector.lba()-currentSector.lba()+1 );
+      int maxReadSectors = QMIN( bufferLen/m_sectorSize, m_lastSector.lba()-currentSector.lba()+1 );
 
-      if( !read( buffer, 
-		 currentSector.lba(), 
-		 readSectors ) ) {
+      int readSectors = read( buffer, 
+			      currentSector.lba(), 
+			      maxReadSectors );
+      if( readSectors < 0 ) {
 	if( !retryRead( buffer,
 			currentSector.lba(), 
-			readSectors ) ) {
+			maxReadSectors ) ) {
 	  readError = true;
 	  break;
 	}
+	else
+	  readSectors = maxReadSectors;
       }
 
       int readBytes = readSectors * m_sectorSize;
@@ -192,7 +200,11 @@ public:
 	}
       }
       
-      int percent = 100 * (currentSector.lba() - m_firstSector.lba() + 1 ) / (m_lastSector.lba() - m_firstSector.lba() + 1 );
+      currentSector += readSectors;
+
+      int percent = 100 * (currentSector.lba() - m_firstSector.lba() + 1 ) / 
+	(m_lastSector.lba() - m_firstSector.lba() + 1 );
+
       if( percent > lastPercent ) {
 	lastPercent = percent;
 	emitPercent( percent );
@@ -203,12 +215,9 @@ public:
 	lastReadMb = readMb;
 	emitProcessedSize( readMb, ( m_lastSector.lba() - m_firstSector.lba() + 1 ) / 512 );
       }
-      
-      currentSector += readSectors;
     }
 
     // cleanup
-    m_device->block(false);
     m_device->close();
     delete [] buffer;
 
@@ -219,47 +228,44 @@ public:
   }
 
 
-  bool read( unsigned char* buffer, unsigned long sector, unsigned int len ) {
+  int read( unsigned char* buffer, unsigned long sector, unsigned int len ) {
+
+    //
+    // Encrypted DVD reading with libdvdcss
+    //
     if( m_useLibdvdcss ) {
-
-      // FIXME: only seek when necessary to avoid useless key calculation (or at least test it since
-      //        maybe it doe not work without the seeking...)
-
-      if( m_libcss->seek( sector, K3bLibDvdCss::DVDCSS_SEEK_MPEG ) >= 0 ) {
-	int ret = m_libcss->read( (void*)buffer, len, K3bLibDvdCss::DVDCSS_READ_DECRYPT );
-	if( ret == (int)len )
-	  return true;
-	else if( ret <= 0 ) {
-	  kdDebug() << "(K3bDataTrackReader::WorkThread) libdvdcss::read failed." << endl;
-	  return false;
-	}
-	else {
-	  kdDebug() << "(K3bDataTrackReader::WorkThread) libdvdcss::read only read " << ret << " sectors." << endl;
-	  return false;
-	}
-      }
-      else {
-  	kdDebug() << "(K3bDataTrackReader::WorkThread) libdvdcss::seek failed" << endl;
-	return false;
-      }
+      return m_libcss->readWrapped( reinterpret_cast<void*>(buffer), sector, len );
     }
-    else if( m_sectorSize == 2048 )
-      return m_device->read10( buffer, len*2048, sector, len );
-    else
-      return m_device->readCd( buffer, 
-			       len*m_sectorSize,
-			       0,     // all sector types
-			       false, // no dap
-			       sector,
-			       len,
-			       false, // no sync
-			       false, // no header
-			       true,  // subheader
-			       true,  // user data
-			       false, // no edc/ecc
-			       0,     // no c2 error info... FIXME: should we check this??
-			       0      // no subchannel data
-			       );
+
+
+    //
+    // Standard reading
+    //
+    else {
+      bool success = false;
+      if( m_sectorSize == 2048 )
+	success = m_device->read10( buffer, len*2048, sector, len );
+      else
+	success = m_device->readCd( buffer, 
+				    len*m_sectorSize,
+				    0,     // all sector types
+				    false, // no dap
+				    sector,
+				    len,
+				    false, // no sync
+				    false, // no header
+				    true,  // subheader
+				    true,  // user data
+				    false, // no edc/ecc
+				    0,     // no c2 error info... FIXME: should we check this??
+				    0      // no subchannel data
+				    );
+
+      if( success )
+	return len;
+      else
+	return -1;
+    }
   }
 
 
@@ -268,12 +274,15 @@ public:
 
     emitInfoMessage( i18n("Problem while reading. Retrying from sector %1.").arg(startSector), K3bJob::WARNING );
 
-    bool success = false;
+    int sectorsRead = -1;
+    bool success = true;
     int i = 0;
     for( unsigned long sector = startSector; sector < startSector+len; ++sector ) {
       int retry = m_retries;
-      while( !m_canceled && retry && !(success = read( &buffer[i], sector, 1 )) )
+      while( !m_canceled && retry && (sectorsRead = read( &buffer[i], sector, 1 )) < 0 )
 	--retry;
+
+      success = ( sectorsRead > 0 );
 
       if( m_canceled )
 	return false;
@@ -307,6 +316,7 @@ public:
   K3bDevice::Device* m_device;
   K3b::Msf m_firstSector;
   K3b::Msf m_lastSector;
+  K3b::Msf m_nextReadSector;
   int m_fd;
   QString m_imagePath;
   int m_sectorSize;
