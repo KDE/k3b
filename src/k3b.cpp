@@ -104,10 +104,9 @@ void K3bApp::initActions()
 
   fileBurn = new KAction( i18n("&Burn..."), 0, this, SLOT(slotFileBurn()), actionCollection(), "file_burn");
 
-//  SmallIconSet("filenew")
-  fileNewMenu = new KActionMenu( i18n("&New Project"), 0, actionCollection(), "file_new" );
-  fileNewAudio = new KAction(i18n("New &Audio project"), 0, 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
-  fileNewData = new KAction(i18n("New &Data project"), 0, 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
+  fileNewMenu = new KActionMenu( i18n("&New Project"), SmallIconSet("filenew"), actionCollection(), "file_new" );
+  fileNewAudio = new KAction(i18n("New &Audio project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewAudioDoc()), actionCollection(), "file_new_audio");
+  fileNewData = new KAction(i18n("New &Data project"), SmallIconSet("filenew"), 0, this, SLOT(slotNewDataDoc()), actionCollection(), "file_new_data");
   fileNewMenu->insert( fileNewAudio );
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
@@ -128,7 +127,6 @@ void K3bApp::initActions()
   viewDirView->setChecked( true );
 
   createGUI();
-
 }
 
 
@@ -176,7 +174,8 @@ void K3bApp::createClient(K3bDoc* doc)
   w->installEventFilter(this);
   doc->addView(w);
   w->setIcon(kapp->miniIcon());
-  m_documentTab->addTab( w, w->caption() );
+  m_documentTab->insertTab( w, w->caption(), 0 );
+  m_documentTab->showPage( w );
 
   fileBurn->setEnabled( true );
 }

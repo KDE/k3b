@@ -31,6 +31,7 @@
 #include <qlist.h>
 #include <qgroupbox.h>
 #include <qstringlist.h>
+#include <qpoint.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -40,6 +41,7 @@
 #include <kapp.h>
 #include <kmessagebox.h>
 #include <kstddirs.h>
+#include <kaction.h>
 
 
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
@@ -193,25 +195,15 @@ void K3bOptionDialog::setupDevicePage()
     m_labelDevicesInfo->setText( i18n( "Normally K3b should detect all your SCSI-devices properly. If it does not, here you can change or add devices manually." ) );
     m_labelDevicesInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
-    frameLayout->addMultiCellWidget( m_labelDevicesInfo, 0, 0, 0, 3 );
-
-    m_buttonNewDevice = new QPushButton( frame, "m_buttonNewDevice" );
-    m_buttonNewDevice->setText( i18n( "New" ) );
-
-    frameLayout->addWidget( m_buttonNewDevice, 3, 0 );
-
-    m_buttonRemoveDevice = new QPushButton( frame, "m_buttonRemoveDevice" );
-    m_buttonRemoveDevice->setText( i18n( "Remove" ) );
-
-    frameLayout->addWidget( m_buttonRemoveDevice, 3, 1 );
+    frameLayout->addMultiCellWidget( m_labelDevicesInfo, 0, 0, 0, 1 );
 
     m_buttonRefreshDevices = new QPushButton( frame, "m_buttonRefreshDevices" );
     m_buttonRefreshDevices->setText( i18n( "Refresh" ) );
     QToolTip::add(  m_buttonRefreshDevices, i18n( "Scan for SCSI-Devices" ) );
 
-    frameLayout->addWidget( m_buttonRefreshDevices, 3, 3 );
+    frameLayout->addWidget( m_buttonRefreshDevices, 3, 1 );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    frameLayout->addItem( spacer, 3, 2 );
+    frameLayout->addItem( spacer, 3, 0 );
 
     m_groupReader = new QGroupBox( frame, "m_groupReader" );
     m_groupReader->setTitle( i18n( "Reading Devices" ) );
@@ -224,6 +216,7 @@ void K3bOptionDialog::setupDevicePage()
     m_groupReaderLayout->setMargin( marginHint() );
 
     m_viewDevicesReader = new KListView( m_groupReader, "m_viewDevicesReader" );
+//	m_viewDevicesReader->addColumn( "" );
     m_viewDevicesReader->addColumn( i18n( "Device" ) );
     m_viewDevicesReader->addColumn( i18n( "Vendor" ) );
     m_viewDevicesReader->addColumn( i18n( "Description" ) );
@@ -232,7 +225,7 @@ void K3bOptionDialog::setupDevicePage()
     m_viewDevicesReader->setAllColumnsShowFocus( TRUE );
     m_groupReaderLayout->addWidget( m_viewDevicesReader );
 
-    frameLayout->addMultiCellWidget( m_groupReader, 1, 1, 0, 3 );
+    frameLayout->addMultiCellWidget( m_groupReader, 1, 1, 0, 1 );
 
     m_groupWriter = new QGroupBox( frame, "m_groupWriter" );
     m_groupWriter->setTitle( i18n( "Writing Devices" ) );
@@ -245,6 +238,7 @@ void K3bOptionDialog::setupDevicePage()
     m_groupWriterLayout->setMargin( marginHint() );
 
     m_viewDevicesWriter = new KListView( m_groupWriter, "m_viewDevicesWriter" );
+//	m_viewDevicesWriter->addColumn( "" );
     m_viewDevicesWriter->addColumn( i18n( "Device" ) );
     m_viewDevicesWriter->addColumn( i18n( "Vendor" ) );
     m_viewDevicesWriter->addColumn( i18n( "Description" ) );
@@ -254,7 +248,7 @@ void K3bOptionDialog::setupDevicePage()
     m_viewDevicesWriter->setAllColumnsShowFocus( TRUE );
     m_groupWriterLayout->addWidget( m_viewDevicesWriter );
 
-    frameLayout->addMultiCellWidget( m_groupWriter, 2, 2, 0, 3 );
+    frameLayout->addMultiCellWidget( m_groupWriter, 2, 2, 0, 1 );
 
     m_viewDevicesReader->setItemsRenameable( true );
     m_viewDevicesReader->setRenameable( 0, true );
@@ -271,10 +265,22 @@ void K3bOptionDialog::setupDevicePage()
 	m_viewDevicesWriter->setRenameable( 4, true );
 	m_viewDevicesWriter->setRenameable( 5, true );
 
+	// POPUP Menu
+	m_menuDevices = new KActionMenu( "Devices", this, "DevicesPopup" );
+	m_actionNewDevice = new KAction( "New Device", 0, this, SLOT(slotNewDevice()), this );
+	m_actionRemoveDevice = new KAction( "Remove Device", 0, this, SLOT(slotRemoveDevice()), this );
+	m_menuDevices->insert( m_actionNewDevice );
+	m_menuDevices->insert( new KActionSeparator(this) );
+	m_menuDevices->insert( new KAction( "Refresh Devices", 0, this, SLOT(slotRefreshDevices()), this ) );
+	
+		
+	connect( m_viewDevicesReader, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+		this, SLOT(slotDevicesPopup(QListViewItem*, const QPoint&)) );
+	connect( m_viewDevicesWriter, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+		this, SLOT(slotDevicesPopup(QListViewItem*, const QPoint&)) );
+	
 	connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
-	connect( m_buttonNewDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
-	connect( m_buttonRemoveDevice, SIGNAL(clicked()), this, SLOT(slotRemoveDevice()) );
-
+	
 	connect( m_viewDevicesReader, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotDevicesChanged()) );
 	connect( m_viewDevicesWriter, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotDevicesChanged()) );
 }
@@ -296,6 +302,7 @@ void K3bOptionDialog::readDevices()
 	while( dev ) {
 		// add item to m_viewDevices
 		item = new QListViewItem( m_viewDevicesReader );
+		item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
 		item->setText( 0, dev->device );
 		item->setText( 1, dev->vendor );
 		item->setText( 2, dev->description );
@@ -310,6 +317,7 @@ void K3bOptionDialog::readDevices()
 	while( dev ) {
 		// add item to m_viewDevices
 		item = new QListViewItem( m_viewDevicesWriter );
+		item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
 		item->setText( 0, dev->device );
 		item->setText( 1, dev->vendor );
 		item->setText( 2, dev->description );
@@ -327,6 +335,10 @@ void K3bOptionDialog::slotRefreshDevices()
 	if( cfg.hasGroup( "Devices" ) ) {
 		// remove all old device entrys
 		cfg.deleteGroup("Devices");
+		cfg.sync();
+		
+		// let the main config know about it!
+		kapp->config()->reparseConfiguration();
 	}
 
 	// clear the lists
@@ -344,11 +356,35 @@ void K3bOptionDialog::slotRefreshDevices()
 
 void K3bOptionDialog::slotNewDevice()
 {
+	// check what kind of device
+	if( m_viewDevicesReader->hasFocus() ) {
+		QListViewItem* _item = new QListViewItem( m_viewDevicesReader );
+		_item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdrom_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+		m_viewDevicesReader->setSelected( _item, true );
+	}
+	else if( m_viewDevicesWriter->hasFocus() ) {
+		QListViewItem* _item = new QListViewItem( m_viewDevicesWriter );
+		_item->setPixmap( 0, KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeSmall ) );
+		m_viewDevicesWriter->setSelected( _item, true );
+	}
 }
 
 
 void K3bOptionDialog::slotRemoveDevice()
 {
+	// check if there is a device selected
+	if( m_viewDevicesReader->hasFocus() ) {
+		if( QListViewItem* _item = m_viewDevicesReader->selectedItem() ) {
+			delete _item;
+			devicesChanged = true;
+		}
+	}
+	else if( m_viewDevicesWriter->hasFocus() ) {
+		if( QListViewItem* _item = m_viewDevicesWriter->selectedItem() ) {
+			delete _item;
+			devicesChanged = true;
+		}
+	}
 }
 
 
@@ -395,8 +431,20 @@ void K3bOptionDialog::saveDevices()
 			entryNum++;
 		}
 		
+		c->sync();
+		
 		// update Device Manager
 		k3bMain()->deviceManager()->clear();
 		k3bMain()->deviceManager()->readConfig();
 	}
+}
+
+
+void K3bOptionDialog::slotDevicesPopup( QListViewItem* item, const QPoint& p )
+{
+	m_menuDevices->remove( m_actionRemoveDevice );
+	if( item )
+		m_menuDevices->insert( m_actionRemoveDevice, 1 );
+	
+	m_menuDevices->popup(p);	
 }

@@ -21,6 +21,8 @@
 #include <kdialogbase.h>
 
 class KListView;
+class KActionMenu;
+class KAction;
 class QLabel;
 class QListViewItem;
 class QPushButton;
@@ -44,17 +46,21 @@ protected slots:
 	void slotApply();
 	
 private:
+	// programs Tab
     KListView* m_viewPrograms;
     QPushButton* m_buttonSearch;
     QLabel* m_labelInfo;
+
+    // devices Tab
     QLabel* m_labelDevicesInfo;
     KListView* m_viewDevicesReader;
 	KListView* m_viewDevicesWriter;
     QGroupBox* m_groupReader;
     QGroupBox* m_groupWriter;
-    QPushButton* m_buttonNewDevice;
-    QPushButton* m_buttonRemoveDevice;
     QPushButton* m_buttonRefreshDevices;
+	KActionMenu* m_menuDevices;
+	KAction* m_actionNewDevice;
+	KAction* m_actionRemoveDevice;
 
     void setupProgramsPage();
     void readPrograms();
@@ -71,6 +77,7 @@ private slots:
 	void slotNewDevice();
 	void slotRemoveDevice();
 	void slotDevicesChanged();
+	void slotDevicesPopup( QListViewItem*, const QPoint& );
 
 };
 
