@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -45,8 +45,6 @@ class K3bVcdJob : public K3bBurnJob
   void cancelAll();
 
  protected slots:
-  void slotCollectOutput( KProcess*, char*, int );
-  void slotVcdxGenFinished();
   void slotVcdxBuildFinished();
   void slotParseVcdxBuildOutput( KProcess*, char* output, int len );
 
@@ -58,7 +56,7 @@ class K3bVcdJob : public K3bBurnJob
  private:
   bool prepareWriterJob();
   
-  void vcdxGen();
+  void xmlGen();
   void vcdxBuild();
   
   int m_copies;

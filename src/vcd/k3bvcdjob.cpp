@@ -18,6 +18,8 @@
 
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
+#include "k3bvcdxmlview.h"
+
 #include "../k3b.h"
 #include "../k3bdoc.h"
 #include "../k3bprocess.h"
@@ -133,179 +135,33 @@ void K3bVcdJob::start()
   if ( vcdDoc()->onlyCreateImage())
     m_createimageonlypercent = 50.0;
 
-  vcdxGen();
+  // vcdxGen();
+  xmlGen();
 }
 
-void K3bVcdJob::vcdxGen()
+void K3bVcdJob::xmlGen()
 {
-  /*
-  Usage: vcdxgen [OPTION...]
-    -o, --output-file=FILE              specify xml file for output (default:
-                                        'videocd.xml')
-    -t, --type=TYPE                     select VideoCD type ('vcd11', 'vcd2',
-                                        'svcd' or 'hqvcd') (default: 'vcd2')
-    -l, --iso-volume-label=LABEL        specify ISO volume label for video cd
-                                        (default: 'VIDEOCD')
-    --iso-application-id=LABEL          specify ISO application id for video cd
-                                        (default: '')
-    --info-album-id=LABEL               specify album id for video cd set
-                                        (default: '')
-    --volume-count=NUMBER               specify number of volumes in album set
-    --volume-number=NUMBER              specify album set sequence number (<
-                                        volume-count)
-    --broken-svcd-mode                  enable non-compliant compatibility mode
-                                        for broken devices
-    --update-scan-offsets               update scan data offsets in video mpeg2
-                                        stream
-    --nopbc                             don't create PBC
-    --add-dirtree=DIR                   add directory contents recursively to
-                                        ISO fs root
-    --add-dir=ISO_DIRNAME               add empty dir to ISO fs
-    --add-file=FILE,ISO_FILENAME        add single file to ISO fs
-    --add-file-2336=FILE,ISO_FILENAME   add file containing full 2336 byte
-                                        sectors to ISO fs
-    -v, --verbose                       be verbose
-    -q, --quiet                         show only critical messages
-    -V, --version                       display version and copyright
-                                        information and exit
-  */
-  delete m_process;
-  m_process = new KProcess();
-
+  
   KTempFile tempF;
   m_xmlFile = tempF.name();
   tempF.unlink();
 
-  // remove old xml-file
-  if( QFile::exists( m_xmlFile ) )
-    QFile::remove( m_xmlFile );
-
-  if( !k3bMain()->externalBinManager()->foundBin( "vcdxgen" ) ) {
-    kdDebug() << "(K3bVcdJob) could not find vcdxgen executable" << endl;
-    emit infoMessage( i18n("vcdxgen executable not found."), K3bJob::ERROR );
-    cancelAll();
-    emit finished( false );
-    return;
-  }
-
   emit infoMessage( i18n("Create XML-file"), K3bJob::INFO );
-  *m_process << k3bMain()->externalBinManager()->binPath( "vcdxgen" );
-
-  // additional user parameters from config
-  QStringList params = k3bMain()->externalBinManager()->program( "vcdxgen" )->userParameters();
-  for( QStringList::Iterator it = params.begin(); it != params.end(); ++it )
-    *m_process << *it;
-
-  // Label
-  *m_process << "-l" << QString("%1").arg(m_doc->vcdOptions()->volumeId());
-  // AlbumID
-  *m_process << QString("--info-album-id=%1").arg(m_doc->vcdOptions()->albumId());
-  // VolumeCount
-  *m_process << QString("--volume-count=%1").arg(m_doc->vcdOptions()->volumeCount());
-  // VolumeNumber
-  *m_process << QString("--volume-number=%1").arg(m_doc->vcdOptions()->volumeNumber());
   
-  if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() )
-    *m_process << "--broken-svcd-mode";
-
-  // set vcdType
-  switch( vcdDoc()->vcdType() ) {
-  case K3bVcdDoc::VCD11:
-        *m_process << "-t" << "vcd11";
-    break;
-  case K3bVcdDoc::VCD20:
-        *m_process << "-t" << "vcd2";
-    break;
-  case K3bVcdDoc::SVCD10:
-        *m_process << "-t" << "svcd";
-    break;
-  case K3bVcdDoc::HQVCD:
-        *m_process << "-t" << "hqvcd";
-    break;
-  default:
-        *m_process << "-t" << "vcd2";
-    break;
-  }
-
-  // check for cd-i application
-  if ( vcdDoc()->vcdOptions()->CdiSupport() && vcdDoc()->vcdOptions()->checkCdiFiles()) {
-    *m_process << "--iso-application-id" << QString("%1").arg(QFile::encodeName(vcdDoc()->vcdOptions()->applicationId()));
-    *m_process << "--add-file-2336" << QString("%1,CDI/CDI_IMAG.RTF").arg(locate("data", "k3b/cdi/cdi_imag.rtf"));
-    *m_process << "--add-file" << QString("%1,,CDI/CDI_TEXT.FNT").arg(locate("data", "k3b/cdi/cdi_text.fnt"));
-    *m_process << "--add-file" << QString("%1,,CDI/CDI_VCD.APP").arg(locate("data", "k3b/cdi/cdi_vcd.app"));
-    QString usercdicfg = locateLocal("appdata", "cdi/cdi_vcd.cfg");
-    if (QFile::exists(usercdicfg))
-      *m_process << "--add-file" << QString("%1,,CDI/CDI_VCD.CFG").arg(usercdicfg);
-    else
-      *m_process << "--add-file" << QString("%1,,CDI/CDI_VCD.CFG").arg(locate("data", "k3b/cdi/cdi_vcd.cfg"));
-  }
-
-  kdDebug() << QString("(K3bVcdJob) xmlfile = \"%1\"").arg(QFile::encodeName(m_xmlFile)) << endl;
-  *m_process << "-o" << QString("%1").arg(QFile::encodeName(m_xmlFile));
-
-  // Add Tracks to XML
-  QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    kdDebug() << QString("%1").arg(QFile::encodeName(it.current()->absPath())) << endl;
-    *m_process << QString("%1").arg(QFile::encodeName(it.current()->absPath()));
-  }
-
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-    this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-    this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-    this, SLOT(slotVcdxGenFinished()) );
-
-
-  kdDebug() << "***** vcdxgen parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
-  QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-      s += *it + " ";
-  }
-  kdDebug() << s << endl << flush;
-
-
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    kdDebug() << "(K3bVcdJob) could not start vcdxgen" << endl;
-    emit infoMessage( i18n("Could not start vcdxgen!"), K3bJob::ERROR );
+  K3bVcdXmlView xmlView( m_doc );
+  
+  if( !xmlView.write( m_xmlFile )) {
+    kdDebug() << "(K3bVcdJob) could not write xmlfile." << endl;
+    emit infoMessage( i18n("Could not write correct XML-file."), K3bJob::ERROR );
     cancelAll();
     emit finished( false );
   }
+  
+  emit infoMessage( i18n("XML-file successfully created"), K3bJob::STATUS );
+  
+  vcdxBuild();
+  
 }
-
-void K3bVcdJob::slotVcdxGenFinished()
-{
-  if( m_process->normalExit() ) {
-    if( !QFile::exists( m_xmlFile ) ){
-      kdDebug() << QString("(K3bVcdJob) Could not write XML-file.").arg(m_xmlFile) << endl;
-      emit infoMessage( i18n("Could not write correct XML-file."), K3bJob::ERROR );
-      emit finished( false );
-      return;
-    }
-
-    // TODO: check the process' exitStatus()
-    switch( m_process->exitStatus() ) {
-      case 0:
-        emit infoMessage( i18n("XML-file successfully created"), K3bJob::STATUS );
-        break;
-    default:
-      // no recording device and also other errors!! :-(
-      emit infoMessage( i18n("vcdxgen returned an error! (code %1)").arg(m_process->exitStatus()), K3bJob::ERROR );
-      emit infoMessage( i18n("No error handling yet!"), K3bJob::ERROR );
-      emit infoMessage( i18n("Please send me an email with the last output..."), K3bJob::ERROR );
-      emit finished( false );
-      break;
-    }
-  }
-  else {
-    emit infoMessage( i18n("vcdxgen not exit cleanly."), K3bJob::ERROR );
-    emit finished( false );
-  }
-  this->vcdxBuild();
-}
-
 
 void K3bVcdJob::vcdxBuild()
 {
@@ -351,7 +207,7 @@ void K3bVcdJob::vcdxBuild()
 
 
   if ( vcdDoc()->vcdOptions()->BrokenSVcdMode() ) {
-    kdDebug() << "(K3bVcdJop) Write 2336 Sectors = on" << endl;
+    kdDebug() << "(K3bVcdJob) Write 2336 Sectors = on" << endl;
     *m_process << "--sector-2336";
   }
 
@@ -521,15 +377,6 @@ void K3bVcdJob::slotVcdxBuildFinished()
     emit finished( true );
   }
 }
-
-
-void K3bVcdJob::slotCollectOutput( KProcess*, char* output, int len )
-{
-  emit debuggingOutput( "vcdimager", QString::fromLocal8Bit( output, len ) );
-
-  m_collectedOutput += QString::fromLocal8Bit( output, len );
-}
-
 
 bool K3bVcdJob::prepareWriterJob()
 {

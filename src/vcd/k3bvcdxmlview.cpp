@@ -129,7 +129,8 @@ bool K3bVcdXmlView::write(const QString& fname)
   }
 
   QString xmlString = xmlDoc.toString();
-  kdDebug() << QString("(K3bVcdXmlView) Write Data to %1:\n").arg(fname) << xmlString << endl;
+  kdDebug() << QString("(K3bVcdXmlView) Write Data to %1:\n").arg(fname) << endl;
+  kdDebug() << xmlString << endl;
       
   QFile xmlFile( fname );
   if ( xmlFile.open( IO_WriteOnly )) {

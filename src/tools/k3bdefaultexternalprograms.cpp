@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -33,8 +33,8 @@
 
 void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
-  static const char* vcdTools[] =  { "vcdxgen",
-				     "vcdxbuild",
+  // dont't know if we need more vcdTools in the future (vcdxrip)
+  static const char* vcdTools[] =  { "vcdxbuild",
 				     0 };
   
   static const char* transcodeTools[] =  { "transcode",
