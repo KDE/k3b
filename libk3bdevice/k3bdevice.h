@@ -485,7 +485,7 @@ namespace K3bDevice
      * @return an open file descriptor on success or -1 on failure
      * @see close()
      */
-    int open() const;
+    int open( bool write = false ) const;
 
     /**
      * Close the files descriptor.
@@ -780,7 +780,7 @@ namespace K3bDevice
    *
    * @internal
    */
-  int openDevice( const char* name );
+  int openDevice( const char* name, bool write = false );
 #endif
 }
 

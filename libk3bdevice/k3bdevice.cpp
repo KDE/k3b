@@ -103,17 +103,23 @@ const char* K3bDevice::Device::cdrdao_drivers[] =
 
 
 #ifdef Q_OS_LINUX
-int K3bDevice::openDevice( const char* name )
+int K3bDevice::openDevice( const char* name, bool write )
 {
   int fd = -1;
+  int flags = O_NONBLOCK;
+  if( write )
+    flags |= O_RDWR;
+  else
+    flags |= O_RDONLY;
+
 #ifdef HAVE_RESMGR
   // first try resmgr
-  fd = ::rsm_open_device( name, O_RDONLY | O_NONBLOCK );
+  fd = ::rsm_open_device( name, flags );
   kdDebug() << "(K3bDevice::Device) resmgr open: " << fd << endl;
 #endif
 
   if( fd < 0 )
-    fd = ::open( name, O_RDONLY | O_NONBLOCK );
+    fd = ::open( name, flags );
 
   if( fd < 0 ) {
     kdDebug() << "(K3bDevice::Device) Error: could not open device " << name << endl;
@@ -1950,17 +1956,20 @@ bool K3bDevice::Device::supportsWriteMode( WriteMode w )
 }
 
 
-int K3bDevice::Device::open() const
+int K3bDevice::Device::open( bool write ) const
 {
 #ifdef Q_OS_FREEBSD
+  // FIXME: perhaps we should also use write here and open with O_RDONLY if false
+  if( !d->cam ) {
     d->cam = cam_open_pass (m_passDevice.latin1(),O_RDWR,0 /* NULL */);
     kdDebug() << "(K3bDevice::openDevice) open device " << m_passDevice
 	      << ((d->cam)?" succeeded.":" failed.") << endl;
-    return (d->cam ? 0 : -1);
+  }
+  return (d->cam ? 0 : -1);
 #endif
 #ifdef Q_OS_LINUX
   if( d->deviceFd == -1 )
-    d->deviceFd = openDevice( QFile::encodeName(devicename()) );
+    d->deviceFd = openDevice( QFile::encodeName(devicename()), write );
 
   return d->deviceFd;
 #endif
@@ -1970,8 +1979,7 @@ int K3bDevice::Device::open() const
 void K3bDevice::Device::close() const
 {
 #ifdef Q_OS_FREEBSD
-  if (d->cam)
-  {
+  if( d->cam ) {
     cam_close_device(d->cam);
     d->cam = 0;
   }

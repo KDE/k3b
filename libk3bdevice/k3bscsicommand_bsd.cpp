@@ -68,7 +68,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 					 void* data,
 					 size_t len )
 {
-  if( !m_device || !m_device->cam() )
+  if( !m_device || m_device->open() == -1 )
     return -1;
 
   kdDebug() << "(K3bDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;

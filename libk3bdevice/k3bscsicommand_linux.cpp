@@ -53,9 +53,19 @@ unsigned char& K3bDevice::ScsiCommand::operator[]( size_t i )
 
 
 int K3bDevice::ScsiCommand::transport( TransportDirection dir,
-					 void* data,
-					 size_t len )
+				       void* data,
+				       size_t len )
 {
+  //
+  // As of kernel 2.6.8 we are not allowed to issue WRITE commands
+  // anymore if the device was opened O_RDONLY
+  //
+  if( dir == TR_DIR_WRITE ) {
+    m_device->close();
+    m_fd = m_device->open( true );
+    m_needToCloseDevice = true;
+  }
+
   if( m_fd == -1 ) {
     return -1;
   }

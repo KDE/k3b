@@ -532,12 +532,18 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
 
   c->setGroup( "Devices" );
   QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
+  // remove duplicate entries (caused by buggy old implementations)
+  QStringList saveDeviceSearchPath;
+  for( QStringList::iterator it = deviceSearchPath.begin(); it != deviceSearchPath.end(); ++it )
+    if( !saveDeviceSearchPath.contains( *it ) )
+      saveDeviceSearchPath.append( *it );
 
   for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
 
     // update device search path
-    deviceSearchPath.append( dev->blockDeviceName() );
+    if( !saveDeviceSearchPath.contains( dev->blockDeviceName() ) )
+      saveDeviceSearchPath.append( dev->blockDeviceName() );
 
     // save the device type settings
     QString configEntryName = dev->vendor() + " " + dev->description();
@@ -554,7 +560,7 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
     c->writeEntry( configEntryName, list );
   }
 
-  c->writeEntry( "device_search_path", deviceSearchPath );
+  c->writeEntry( "device_search_path", saveDeviceSearchPath );
 
   c->sync();
 
