@@ -311,8 +311,7 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
                         elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
 		    }
                     break;
-            }
-        } else {
+	} else {
             // jump to <endlist> otherwise do noop while disabled
             if ( track->getNonPbcTrack( i ) == K3bVcdTrack::VIDEOEND ) {
                 switch ( i ) {
@@ -338,9 +337,8 @@ void K3bVcdXmlView::doPbc(QDomDocument& doc, QDomElement& parent, K3bVcdTrack* t
                             elemPbcSelectionPNRDT.setAttribute( "ref", "end");
 			}
                         break;
-                }
-            }
-        }
+	    }
+	}
     }
 
     addSubElement( doc, elemSelection, "wait", track->getWaitTime() );
