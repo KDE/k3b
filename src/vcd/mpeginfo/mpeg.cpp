@@ -975,9 +975,11 @@ bool mpeg::ParseSystem() {
 		// May 2
 	}
 	//end May 2
-
-
-
+  
+  // we do not find any and can't handle this file. return false
+  if (offset < 0)
+    return false;
+    
 	// okay let's save this...
 	System->first_video_packet = new byte[xB3_offset-offset];
 	System->first_video_packet_length = xB3_offset-offset;
