@@ -22,10 +22,20 @@
 // the best approach is to #include <qglobal.h> and use Q_OS_LINUX
 // instead.
 #include <qglobal.h>
+
 #ifdef Q_OS_LINUX
 #include <inttypes.h>
+
+/* Fix definitions for 2.5 kernels */
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
+typedef unsigned long long __u64;
+typedef unsigned char u8;
+#endif
+
 #include <linux/cdrom.h>
 #include <endian.h>
+
 #else
 // Assume FreeBSD, 4.x
 #include <inttypes.h>
