@@ -62,7 +62,7 @@ public:
   K3bReadcdReader* readcdReader;
   K3bDataTrackReader* dataTrackReader;
 
-  //  QFile bufferFile;
+  K3bCdDevice::NextGenerationDiskInfo sourceDiskInfo;
 
   K3b::Msf lastSector;
 
@@ -129,28 +129,14 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
     d->running = false;
   }
 
+  d->sourceDiskInfo = dh->ngDiskInfo();
+
   if( dh->ngDiskInfo().empty() || dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
     emit infoMessage( i18n("No source media found."), ERROR );
     emit finished(false);
     d->running = false;
   }
   else {
-    if( dh->ngDiskInfo().capacity() > K3b::Msf( 510*60*75 ) ) {
-      kdDebug() << "(K3bDvdCopyJob) DVD too large." << endl;
-
-      if( KMessageBox::warningYesNo( qApp->activeWindow(), 
-				     i18n("The source DVD seems to be too large (%1) to make its contents fit on "
-					  "a normal writable DVD media which have a capacity of approximately "
-					  "4.3 Gigabytes. Do you really want to continue?")
-				     .arg(KIO::convertSize( dh->ngDiskInfo().capacity().mode1Bytes() ) ),
-				     i18n("Source DVD too large") ) == KMessageBox::No ) {
-	emit canceled();
-	emit finished(false);
-	d->running = false;
-	return;
-      }
-    }
-
     //
     // We cannot rely on the kernel to determine the size of the DVD for some reason
     // On the other hand it is not always a good idea to rely on the size from the ISO9660
@@ -171,6 +157,22 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bCdDevice::DeviceHandler* dh )
 
     switch( dh->ngDiskInfo().mediaType() ) {
     case K3bCdDevice::MEDIA_DVD_ROM:
+    case K3bCdDevice::MEDIA_DVD_PLUS_R_DL:
+      if( dh->ngDiskInfo().numLayers() > 1 ) {
+	if( !(m_writerDevice->supportedProfiles() & K3bCdDevice::MEDIA_DVD_PLUS_R_DL) ) {
+	  emit infoMessage( i18n("The writer does not support writing double layer DVDs."), ERROR );
+	  d->running = false;
+	  emit finished(false);
+	  return;
+	}
+	else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+		 k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
+	  emit infoMessage( i18n("Growisofs >= 5.20 is needed to write double layer DVDs."), ERROR );
+	  d->running = false;
+	  emit finished(false);
+	  return;
+	}
+      }
     case K3bCdDevice::MEDIA_DVD_R:
     case K3bCdDevice::MEDIA_DVD_R_SEQ:
     case K3bCdDevice::MEDIA_DVD_RW:
@@ -371,8 +373,13 @@ void K3bDvdCopyJob::prepareWriter()
   d->writerJob->setBurnSpeed( m_speed );
   d->writerJob->setWritingMode( d->usedWritingMode );
  
-  // this is only used in DAO mode with growisofs >= 5.15
-  d->writerJob->setTrackSize( d->lastSector.lba()+1 );
+  if( d->sourceDiskInfo.numLayers() > 1 ) {
+    d->writerJob->setLayerBreak( d->sourceDiskInfo.firstLayerSize().lba() );
+  }
+  else {
+    // this is only used in DAO mode with growisofs >= 5.15
+    d->writerJob->setTrackSize( d->lastSector.lba()+1 );
+  }
  
   if( m_onTheFly )
     d->writerJob->setImageToWrite( QString::null ); // write to stdin
@@ -548,7 +555,7 @@ bool K3bDvdCopyJob::waitForDvd()
   }
 
   else {
-    if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R) ) {
+    if( m & (K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R|K3bCdDevice::MEDIA_DVD_PLUS_R_DL) ) {
 
       // just for a clean code
       d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;

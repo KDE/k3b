@@ -128,6 +128,25 @@ int K3bCdDevice::NextGenerationDiskInfo::numTracks() const
 }
 
 
+int K3bCdDevice::NextGenerationDiskInfo::numLayers() const
+{
+  if( isDvdMedia() )
+    return m_numLayers;
+  else
+    return 1;
+}
+
+
+K3b::Msf K3bCdDevice::NextGenerationDiskInfo::firstLayerSize() const
+{
+  if( numLayers() > 1 )
+    return m_firstLayerSize;
+  else
+    return size();
+}
+
+
+
 K3bMsf K3bCdDevice::NextGenerationDiskInfo::remainingSize() const
 {
   if( empty() )

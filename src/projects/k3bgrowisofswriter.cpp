@@ -44,7 +44,8 @@ public:
     : writingMode( 0 ),
       process( 0 ),
       growisofsBin( 0 ),
-      trackSize(-1) {
+      trackSize(-1),
+      layerBreak(0) {
   }
 
   int writingMode;
@@ -68,6 +69,7 @@ public:
 
   // used in DAO with growisofs >= 5.15
   long trackSize;
+  long layerBreak;
 };
 
 
@@ -146,6 +148,22 @@ bool K3bGrowisofsWriter::prepareProcess()
   // The growisofs bin is ready. Now we add the parameters
   //
 
+  //
+  // growisofs < 5.20 wants the tracksize to be a multiple of 16 (1 ECC block: 16*2048 bytes)
+  // we simply pad ourselves.
+  //
+  // But since the writer itself properly pads or writes a longer lead-out we don't really need
+  // to write zeros. We just tell growisofs to reserve a multiple of 16 blocks.
+  // This is only releveant in DAO mode anyway.
+  //
+  int trackSizePadding = 0;
+  if( d->trackSize > 0 && d->growisofsBin->version < K3bVersion( 5, 20 ) ) {
+    if( d->trackSize % 16 ) {
+      trackSizePadding = (16 - d->trackSize%16);
+      kdDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks." << endl;
+    }
+  }
+
   *d->process << d->growisofsBin;
 
   QString s = burnDevice()->blockDeviceName() + "=";
@@ -163,15 +181,21 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
-  if( d->growisofsBin->version > K3bVersion( 5, 17, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
-    *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize);
+  // DL writing with forced layer break
+  if( d->layerBreak > 0 )
+    *d->process << "-use-the-force-luke=break:" + QString::number(d->layerBreak);
+
+  // the tracksize parameter takes priority over the dao:tracksize parameter since growisofs 5.18
+  else if( d->growisofsBin->version > K3bVersion( 5, 17 ) && d->trackSize > 0 )
+    *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize + trackSizePadding);
 
   // this only makes sense for DVD-R(W) media
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
+
   if( d->writingMode == K3b::DAO ) {
-    if( d->growisofsBin->version >= K3bVersion( 5, 15, -1 ) && d->trackSize > 0 && d->image.isEmpty() )
-      *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize);
+    if( d->growisofsBin->version >= K3bVersion( 5, 15 ) && d->trackSize > 0 )
+      *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize + trackSizePadding);
     else
       *d->process << "-use-the-force-luke=dao";
     d->gh->reset(true);
@@ -284,6 +308,12 @@ void K3bGrowisofsWriter::setWritingMode( int m )
 void K3bGrowisofsWriter::setTrackSize( long size )
 {
   d->trackSize = size;
+}
+
+
+void K3bGrowisofsWriter::setLayerBreak( long lb )
+{
+  d->layerBreak = lb;
 }
 
 

@@ -406,9 +406,13 @@ bool K3bDvdJob::waitForDvd()
   if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
     mt = K3bCdDevice::MEDIA_DVD_RW_SEQ|K3bCdDevice::MEDIA_DVD_R_SEQ;
   else if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
-    mt = K3bCdDevice::MEDIA_DVD_RW_OVWR|K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R;
+    mt = K3bCdDevice::MEDIA_DVD_RW_OVWR|K3bCdDevice::MEDIA_DVD_PLUS_RW|K3bCdDevice::MEDIA_DVD_PLUS_R|K3bCdDevice::MEDIA_DVD_PLUS_R_DL;
   else
     mt = K3bCdDevice::MEDIA_WRITABLE_DVD;
+
+  // double layer media
+  if( m_doc->size() > 4700372992LL )
+    mt = K3bCdDevice::MEDIA_DVD_PLUS_R_DL;
 
   int m = K3bEmptyDiscWaiter::wait( m_doc->burner(), 
 				    m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||

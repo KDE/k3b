@@ -6,7 +6,8 @@ Properly disable all buttons in the copy dialogs if no writer is installed and o
 Fixed VideoDVD on-the-fly writing problem.
 Select appropriate raw writing mode if raw96r is not supported.
 Properly save the device search path. Now hotplug devices should be detected properly.
-	
+BACKPORT: DVD+R Double Layer writing.
+
 0.11.12
 Another qt 3.1 compile fix
 Mkisofs 2.02 obsoletes the use of -L, -H, and -P. Replaced them by the long versions.

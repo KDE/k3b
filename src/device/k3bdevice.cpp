@@ -2096,7 +2096,56 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	else
 	  inf.m_mediaType = MEDIA_CD_ROM;
       }
-    
+          else {
+	// FIXME: introduce a proper readDvdStructure method
+	// 4 bytes header + 2048 bytes layer descriptor
+	unsigned char dvdheader[4+2048];
+	::memset( dvdheader, 0, 4+2048 );
+	ScsiCommand cmd( this );
+	cmd[0] = MMC::READ_DVD_STRUCTURE;
+	cmd[8] = (4+2048)>>8;
+	cmd[9] = 4+2048;
+	if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice) Unable to read DVD structure." << endl;
+	  inf.m_numLayers = 1;
+	}
+	else {
+	  // some debugging stuff
+	  K3b::Msf sda, eda, ea0;
+	  sda = ( dvdheader[4+5]<<16 | dvdheader[4+6] << 8 | dvdheader[4+7] );
+	  eda = ( dvdheader[4+9]<<16 | dvdheader[4+10] << 8 | dvdheader[4+11] );
+	  ea0 = ( dvdheader[4+13]<<16 | dvdheader[4+14] << 8 | dvdheader[4+15] );
+
+	  kdDebug() << "First sec data area: " << sda.toString()
+		    << " (LBA " << QString::number(sda.lba())
+		    << ") (" << QString::number(sda.mode1Bytes()) << " Bytes) ("
+		    << KIO::convertSize(sda.mode1Bytes()) << ")" << endl;
+	  kdDebug() << "Last sec data area: " << eda.toString()
+		    << " (LBA " << QString::number(eda.lba())
+		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes) ("
+		    << KIO::convertSize(eda.mode1Bytes()) << ")" << endl;
+	  kdDebug() << "Last sec layer 1: " << ea0.toString()
+		    << " (LBA " << QString::number(ea0.lba())
+		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes) ("
+		    << KIO::convertSize(ea0.mode1Bytes()) << ")" << endl;
+
+
+	  K3b::Msf da0 = ea0 - sda + 1;
+	  K3b::Msf da1 = eda - ea0;
+	  kdDebug() << "Layer 1 length: " << da0.toString()
+		    << " (LBA " << QString::number(da0.lba())
+		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes) ("
+		    << KIO::convertSize(da0.mode1Bytes()) << ")" << endl;
+	  kdDebug() << "Layer 2 length: " << da1.toString()
+		    << " (LBA " << QString::number(da1.lba())
+		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) ("
+		    << KIO::convertSize(da1.mode1Bytes()) << ")" << endl;
+
+	  inf.m_numLayers = ((dvdheader[6]&0x60) == 0 ? 1 : 2);
+	  inf.m_firstLayerSize = da0;
+	}
+      }
+
 
       //
       // Number of sessions for non-empty disks

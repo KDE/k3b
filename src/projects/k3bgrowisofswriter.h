@@ -53,6 +53,15 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void setTrackSize( long size );
 
   /**
+   * Use this in combination with setTrackSize when writing double layer media.
+   * @param lb The number of data sectors in the first layer. It needs to be less or equal
+   *           to tracksize/2. The writer will pad the second layer with zeros if
+   *           break < tracksize/2.
+   *           If set to 0 this setting will be ignored.
+   */
+  void setLayerBreak( long lb );
+
+  /**
    * set this to QString::null or an empty string to let the writer
    * read it's data from fd()
    */

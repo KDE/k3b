@@ -225,6 +225,11 @@ namespace K3bCdDevice
       int numTracks() const;
 
       /**
+       * Number of layers on a DVD media. For CD media this is always 1.
+       */
+      int numLayers() const;
+
+      /**
        * Does only make sense for appendable disks.
        */
       K3b::Msf remainingSize() const;
@@ -241,6 +246,15 @@ namespace K3bCdDevice
        */
       K3b::Msf size() const;
 
+      /**
+       * Returns the size of Data area in the first layer for DL DVD media.
+       * Otherwise size() is returned.
+       *
+       * This does not specify the layer change sector as the data area on DVD media does
+       * not start at sector 0 but at sector 30000h or 31000h depending on the type.
+       */
+      K3b::Msf firstLayerSize() const;
+
       void debug() const;
 
     private:
@@ -252,10 +266,12 @@ namespace K3bCdDevice
       int m_bgFormatState;
       int m_numSessions;
       int m_numTracks;
+      int m_numLayers;  // only for DVD media
       int m_rewritable;
 
       K3b::Msf m_capacity;
       K3b::Msf m_usedCapacity;
+      K3b::Msf m_firstLayerSize;
 
       friend class CdDevice;
     };
