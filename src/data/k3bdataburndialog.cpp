@@ -53,6 +53,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 {
   setupBurnTab( addPage( i18n("Burning") ) );
   setupSettingsTab( addPage( i18n("Settings") ) );
+  setupMultisessionTab( addPage( i18n("Multisession") ) );
   setupAdvancedTab( addPage( i18n("Advanced") ) );
 	
   readSettings();
@@ -132,13 +133,21 @@ void K3bDataBurnDialog::saveSettings()
 
   // save image file path
   ((K3bDataDoc*)doc())->setIsoImage( tempPath() );  
+
+  // save multisession settings
+  if( m_groupMultiSession->selected() == m_radioMultiSessionStart )
+    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::START );
+  else if( m_groupMultiSession->selected() == m_radioMultiSessionContinue )
+    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::CONTINUE );
+  else if( m_groupMultiSession->selected() == m_radioMultiSessionFinish )
+    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::FINISH );
+  else
+    ((K3bDataDoc*)doc())->setMultiSessionMode( K3bDataDoc::NONE );
 }
 
 
 void K3bDataBurnDialog::readSettings()
 {
-  // we do not read the mkisofs-options!!!
-
   m_checkDao->setChecked( doc()->dao() );
   m_checkDummy->setChecked( doc()->dummy() );
   m_checkOnTheFly->setChecked( doc()->onTheFly() );
@@ -150,6 +159,75 @@ void K3bDataBurnDialog::readSettings()
   m_editApplicationID->setText(  ((K3bDataDoc*)doc())->applicationID() );
   m_editPublisher->setText(  ((K3bDataDoc*)doc())->publisher() );
   m_editPreparer->setText(  ((K3bDataDoc*)doc())->preparer() );
+
+
+  // read multisession 
+  switch( ((K3bDataDoc*)doc())->multiSessionMode() ) {
+  case K3bDataDoc::START:
+    m_radioMultiSessionStart->setChecked(true);
+    break;
+  case K3bDataDoc::CONTINUE:
+    m_radioMultiSessionContinue->setChecked(true);
+    break;
+  case K3bDataDoc::FINISH:
+    m_radioMultiSessionFinish->setChecked(true);
+    break;
+  default:
+    m_radioMultiSessionNone->setChecked(true);
+    break;
+  }
+
+
+  // -- read mkisofs-options -------------------------------------
+  m_checkCreateRR->setChecked( ((K3bDataDoc*)doc())->createRockRidge() );
+  m_checkCreateJoliet->setChecked( ((K3bDataDoc*)doc())->createJoliet() );
+  m_checkLowercase->setChecked( ((K3bDataDoc*)doc())->ISOallowLowercase() );
+  m_checkBeginPeriod->setChecked( ((K3bDataDoc*)doc())->ISOallowPeriodAtBegin() );
+  m_checkAllow31->setChecked( ((K3bDataDoc*)doc())->ISOallow31charFilenames() );
+  m_checkOmitVersion->setChecked( ((K3bDataDoc*)doc())->ISOomitVersionNumbers() );
+  m_checkMaxNames->setChecked( ((K3bDataDoc*)doc())->ISOmaxFilenameLength() );
+  m_checkRelaxedNames->setChecked( ((K3bDataDoc*)doc())->ISOrelaxedFilenames() );
+  m_checkNoISOTrans->setChecked( ((K3bDataDoc*)doc())->ISOnoIsoTranslate() );
+  m_checkMultiDot->setChecked( ((K3bDataDoc*)doc())->ISOallowMultiDot() );
+  m_checkUntranslatedNames->setChecked( ((K3bDataDoc*)doc())->ISOuntranslatedFilenames() );
+  m_checkNoDeepDirRel->setChecked( ((K3bDataDoc*)doc())->noDeepDirectoryRelocation() );
+
+  m_checkHideRR_MOVED->setChecked( ((K3bDataDoc*)doc())->hideRR_MOVED() );
+  m_checkCreateTRANS_TBL->setChecked( ((K3bDataDoc*)doc())->createTRANS_TBL() );
+  m_checkHideTRANS_TBL->setChecked( ((K3bDataDoc*)doc())->hideTRANS_TBL() );
+  m_checkPadding->setChecked( ((K3bDataDoc*)doc())->padding() );
+  // ------------------------------------- read mkisofs-options --
+
+
+  // read iso-level
+  switch( ((K3bDataDoc*)doc())->ISOLevel() ) {
+  case 1:
+    m_radioIsoLevel1->setChecked(true);
+    break;
+  case 2:
+    m_radioIsoLevel2->setChecked(true);
+    break;
+  case 3:
+    m_radioIsoLevel3->setChecked(true);
+    break;
+  }
+
+
+  // read whitespace treatment
+  switch( ((K3bDataDoc*)doc())->whiteSpaceTreatment() ) {
+  case K3bDataDoc::strip:
+    m_radioSpaceStrip->setChecked(true);
+    break;
+  case K3bDataDoc::extendedStrip:
+    m_radioSpaceExtended->setChecked(true);
+    break;
+  case K3bDataDoc::convertToUnderScore:
+    m_radioSpaceReplace->setChecked(true);
+    break;
+  default:
+    m_radioSpaceLeave->setChecked(true);
+  }
+
 	
   K3bProjectBurnDialog::readSettings();
 }
@@ -511,6 +589,26 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 //   connect( m_editApplicationID, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
 //   connect( m_editPreparer, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
 //   connect( m_editPublisher, SIGNAL(textChanged(const QString&)), this, SLOT(slotConvertAllToUpperCase()) );
+}
+
+
+void K3bDataBurnDialog::setupMultisessionTab( QFrame* frame )
+{
+  QGridLayout* frameLayout = new QGridLayout( frame );
+  frameLayout->setSpacing( spacingHint() );
+  frameLayout->setMargin( marginHint() );
+
+  m_groupMultiSession = new QButtonGroup( 4, Qt::Vertical, QString::null, frame );
+  m_groupMultiSession->setInsideSpacing( spacingHint() );
+  m_groupMultiSession->setInsideMargin( 0 );
+  m_groupMultiSession->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+
+  m_radioMultiSessionNone = new QRadioButton( i18n("&No Multisession"), m_groupMultiSession );
+  m_radioMultiSessionStart = new QRadioButton( i18n("&Start Multisession"), m_groupMultiSession );
+  m_radioMultiSessionContinue = new QRadioButton( i18n("&Continue Multisession"), m_groupMultiSession );
+  m_radioMultiSessionFinish = new QRadioButton( i18n("&Finish Multisession"), m_groupMultiSession );
+
+  frameLayout->addWidget( m_groupMultiSession, 0, 0 );
 }
 
 

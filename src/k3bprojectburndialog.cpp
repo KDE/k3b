@@ -58,6 +58,7 @@ K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const c
 	
   setButtonBoxOrientation( Vertical );
 
+  m_freeTempSpaceTimer = 0;
   m_writerSelectionWidget = 0;
   m_groupTempDir = 0;
   m_labelCdSize = 0;
@@ -140,8 +141,6 @@ QWidget* K3bProjectBurnDialog::tempDirBox( QWidget* parent )
       connect( m_freeTempSpaceTimer, SIGNAL(timeout()), this, SLOT(slotUpdateFreeTempSpace()) );
       connect( m_buttonFindIsoImage, SIGNAL(clicked()), this, SLOT(slotTempDirButtonPressed()) );
       connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeTempSpace()) );
-
-      m_freeTempSpaceTimer->start( 1000 );
     }
   
   return m_groupTempDir;
@@ -167,6 +166,10 @@ int K3bProjectBurnDialog::exec( bool burn )
     actionButton(User1)->clearFocus();
   }
 
+  if( m_freeTempSpaceTimer ) {
+    slotUpdateFreeTempSpace();
+    m_freeTempSpaceTimer->start( 1000 );
+  }
 
   readSettings();
 		

@@ -50,6 +50,8 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   m_process = 0;
 
   m_imageFinished = true;
+
+  m_process = new KShellProcess();
 }
 
 K3bDataJob::~K3bDataJob()
@@ -71,10 +73,50 @@ K3bDevice* K3bDataJob::writer() const
 
 void K3bDataJob::start()
 {
-  if( m_process ) {
-    delete m_process;
-    m_process = 0;
+  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+    // check msinfo
+    m_process->clearArguments();
+    m_process->disconnect();
+
+    if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+      qDebug("(K3bAudioJob) could not find cdrecord executable" );
+      emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+      cancelAll();
+      emit finished( false );
+      return;
+    }
+
+    *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
+    *m_process << "-msinfo";
+
+    // add the device (e.g. /dev/sg1)
+    *m_process << QString("dev=%1").arg( m_doc->burner()->genericDevice() );
+
+    connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+	     this, SLOT(slotParseMsInfo(KProcess*, char*, int)) );
+    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotParseMsInfo(KProcess*, char*, int)) );
+
+    if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
+      qDebug( "(K3bDataJob) could not start cdrecord" );
+      emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+      cancelAll();
+      emit finished( false );
+      return;
+    }
+		
+    if( m_msInfo.isEmpty() ) {
+      emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
+      emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
+      cancelAll();
+      emit finished( false );
+    }
   }
+
+
+
+
   if( m_doc->onTheFly() ) {
     m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
     if( !writePathSpec( m_pathSpecFile ) ) {
@@ -84,7 +126,9 @@ void K3bDataJob::start()
     }
 		
     // determine iso-size
-    m_process = new KProcess();
+    m_process->clearArguments();
+    m_process->disconnect();
+
     if( !addMkisofsParameters() )
       return;
 
@@ -100,14 +144,11 @@ void K3bDataJob::start()
     if( !m_process->start( KProcess::Block, KProcess::AllOutput ) ) {
       qDebug( "(K3bDataJob) could not start mkisofs: %s", kapp->config()->readEntry( "mkisofs path" ).latin1() );
       emit infoMessage( i18n("Could not start mkisofs!"), K3bJob::ERROR );
-      delete m_process;
       cancelAll();
       emit finished( false );
       return;
     }
 		
-    delete m_process;
-
     if( m_isoSize.isEmpty() ) {
       emit infoMessage( i18n("Could not retrieve size of data. On-the-fly writing did not work."), K3bJob::ERROR );
       emit infoMessage( i18n("Please creata an image first!"), K3bJob::ERROR );
@@ -115,34 +156,36 @@ void K3bDataJob::start()
       emit finished( false );
     }
     else {
-      // wait for the user to put an empty disk in the drive
-      K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
-      connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWritingOnTheFly()) );
-      connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
-      waiter->waitForEmptyDisc();
+      writeCD();
     }
   }
   else {
-    m_process = new KProcess();
     writeImage();
   }
 }
 
 
-void K3bDataJob::slotStartWritingOnTheFly()
+void K3bDataJob::slotStartWriting()
 {
   emit newSubTask( i18n("Preparing write process...") );
 
   // start the writing process -------------------------------------------------------------
   // create a kshellprocess and do it on the fly!
-  m_process = new KShellProcess();
 
-  if( !addMkisofsParameters() )
-    return;
+  m_process->clearArguments();
+  m_process->disconnect();
+
+  if( m_doc->onTheFly() ) {
+    if( !addMkisofsParameters() ) {
+      cancelAll();
+      emit finished( false );
+      return;
+    }
 				
-  // add empty dummy dir since one path-spec is needed
-  *m_process << m_doc->dummyDir();
-  *m_process << "|";
+    // add empty dummy dir since one path-spec is needed
+    *m_process << m_doc->dummyDir();
+    *m_process << "|";
+  }
 		
   // use cdrecord to burn the cd
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
@@ -167,8 +210,16 @@ void K3bDataJob::slotStartWritingOnTheFly()
 
   if( m_doc->dummy() )
     *m_process << "-dummy";
-  if( m_doc->dao() )
+
+  // multisession
+  if( m_doc->multiSessionMode() == K3bDataDoc::START ||
+      m_doc->multiSessionMode() == K3bDataDoc::CONTINUE )
+    *m_process << "-multi";
+  else if( m_doc->multiSessionMode() == K3bDataDoc::NONE && m_doc->dao() )
     *m_process << "-dao";
+
+
+
   if( k3bMain()->eject() )
     *m_process << "-eject";
   if( m_doc->burnproof() && m_doc->burner()->burnproof() )
@@ -179,7 +230,7 @@ void K3bDataJob::slotStartWritingOnTheFly()
   *m_process << s;
 
   // add the device (e.g. /dev/sg1)
-  s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
+  s = QString("dev=%1").arg( m_doc->burner()->genericDevice() );
   *m_process << s;
 
   // additional parameters from config
@@ -187,11 +238,16 @@ void K3bDataJob::slotStartWritingOnTheFly()
   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
     *m_process << *it;
 
-  // cdrecord needs to know that it should receive data from stdin
-  s = "-tsize=" + m_isoSize;
-  *m_process << s;
-  *m_process << "-";
-			
+  if( m_doc->onTheFly() ) {
+    // cdrecord needs to know that it should receive data from stdin
+    s = "-tsize=" + m_isoSize;
+    *m_process << s;
+    *m_process << "-";
+  }
+  else
+    *m_process << m_doc->isoImage();
+
+		
   // debugging output
 //   cout << "***** mkisofs parameters:\n";
 //   QStrList* _args = m_process->args();
@@ -222,6 +278,14 @@ void K3bDataJob::slotStartWritingOnTheFly()
     }
   else
     {
+      if( m_doc->multiSessionMode() == K3bDataDoc::START )
+	emit infoMessage( i18n("Starting multi session disk."), K3bJob::PROCESS );
+      else if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE )
+	emit infoMessage( i18n("Appending session"), K3bJob::PROCESS );
+      else if( m_doc->multiSessionMode() == K3bDataDoc::FINISH )
+	emit infoMessage( i18n("Finishing multi session disk"), K3bJob::PROCESS );
+
+
       if( m_doc->dummy() )
 	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
       else
@@ -248,8 +312,11 @@ void K3bDataJob::writeImage()
   m_process->clearArguments();
   m_process->disconnect();
 			
-  if( !addMkisofsParameters() )
+  if( !addMkisofsParameters() ) {
+    cancelAll();
+    emit finished( false );
     return;
+  }
 	
   *m_process << "-o" << m_doc->isoImage();
 	
@@ -290,103 +357,105 @@ void K3bDataJob::writeImage()
 
 void K3bDataJob::writeCD()
 {
+  bool appendable = (m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+		     m_doc->multiSessionMode() == K3bDataDoc::FINISH );
   K3bEmptyDiscWaiter* waiter = new K3bEmptyDiscWaiter( m_doc->burner(), k3bMain() );
   connect( waiter, SIGNAL(discReady()), this, SLOT(slotStartWriting()) );
   connect( waiter, SIGNAL(canceled()), this, SLOT(cancel()) );
-  waiter->waitForEmptyDisc();
+  waiter->waitForEmptyDisc( appendable );
 }
 
 
-void K3bDataJob::slotStartWriting()
-{
-  emit newSubTask( i18n("Preparing write process...") );
+// void K3bDataJob::slotStartWriting()
+// {
+//   emit newSubTask( i18n("Preparing write process...") );
 
-  m_process->clearArguments();
-  m_process->disconnect();
+//   m_process->clearArguments();
+//   m_process->disconnect();
 	
-  // use cdrecord to burn the cd
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    qDebug("(K3bAudioJob) could not find cdrecord executable" );
-    emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
-    cancelAll();
-    emit finished( false );
-    return;
-  }
-
-  // OK, we need a new cdrecord process...
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
-	
-  // and now we add the needed arguments...
-  // display progress
-  *m_process << "-v";
-
-  k3bMain()->config()->setGroup( "General Options" );
-  bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
-  if( manualBufferSize ) {
-    *m_process << QString("fs=%1").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
-  }
-
-  if( m_doc->dummy() )
-    *m_process << "-dummy";
-  if( m_doc->dao() )
-    *m_process << "-dao";
-  if( k3bMain()->eject() )
-    *m_process << "-eject";
-  if( m_doc->burnproof() && m_doc->burner()->burnproof() )
-    *m_process << "driveropts=burnproof";
-
-  // add speed
-  QString s = QString("-speed=%1").arg( m_doc->speed() );
-  *m_process << s;
-
-  // add the device (e.g. /dev/sg1)
-  s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
-  *m_process << s;
-
-  // additional parameters from config
-  QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
-  for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
-    *m_process << *it;
-			
-  // debugging output
-//   cout << "***** cdrecord parameters:\n";
-//   QStrList* _args = m_process->args();
-//   QStrListIterator _it(*_args);
-//   while( _it ) {
-//     cout << *_it << " ";
-//     ++_it;
+//   // use cdrecord to burn the cd
+//   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
+//     qDebug("(K3bAudioJob) could not find cdrecord executable" );
+//     emit infoMessage( i18n("Cdrecord executable not found."), K3bJob::ERROR );
+//     cancelAll();
+//     emit finished( false );
+//     return;
 //   }
-//   cout << endl << flush;
 
-  *m_process << m_doc->isoImage();
-				
-  // connect to the cdrecord slots
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotCdrecordFinished()) );
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
+//   // OK, we need a new cdrecord process...
+//   *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
 	
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
-    {
-      // something went wrong when starting the program
-      // it "should" be the executable
-      qDebug("(K3bDataJob) could not start cdrecord");
-      emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
-      cancelAll();
-      emit finished( false );
-    }
-  else
-    {
-      if( m_doc->dummy() )
-	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
-      else
-	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+//   // and now we add the needed arguments...
+//   // display progress
+//   *m_process << "-v";
 
-      emit newTask( i18n("Writing ISO") );
-    }
-}
+//   k3bMain()->config()->setGroup( "General Options" );
+//   bool manualBufferSize = k3bMain()->config()->readBoolEntry( "Manual buffer size", false );
+//   if( manualBufferSize ) {
+//     *m_process << QString("fs=%1").arg( k3bMain()->config()->readNumEntry( "Cdrecord buffer", 4 ) );
+//   }
+
+//   if( m_doc->dummy() )
+//     *m_process << "-dummy";
+//   if( m_doc->dao() )
+//     *m_process << "-dao";
+//   if( k3bMain()->eject() )
+//     *m_process << "-eject";
+//   if( m_doc->burnproof() && m_doc->burner()->burnproof() )
+//     *m_process << "driveropts=burnproof";
+
+//   // add speed
+//   QString s = QString("-speed=%1").arg( m_doc->speed() );
+//   *m_process << s;
+
+//   // add the device (e.g. /dev/sg1)
+//   s = QString("dev=%1").arg( m_doc->burner()->genericDevice() );
+//   *m_process << s;
+
+//   // additional parameters from config
+//   QStringList _params = kapp->config()->readListEntry( "cdrecord parameters" );
+//   for( QStringList::Iterator it = _params.begin(); it != _params.end(); ++it )
+//     *m_process << *it;
+			
+//   // debugging output
+// //   cout << "***** cdrecord parameters:\n";
+// //   QStrList* _args = m_process->args();
+// //   QStrListIterator _it(*_args);
+// //   while( _it ) {
+// //     cout << *_it << " ";
+// //     ++_it;
+// //   }
+// //   cout << endl << flush;
+
+//   *m_process << m_doc->isoImage();
+				
+//   // connect to the cdrecord slots
+//   connect( m_process, SIGNAL(processExited(KProcess*)),
+// 	   this, SLOT(slotCdrecordFinished()) );
+//   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+// 	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
+//   connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+// 	   this, SLOT(slotParseCdrecordOutput(KProcess*, char*, int)) );
+	
+//   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+//     {
+//       // something went wrong when starting the program
+//       // it "should" be the executable
+//       qDebug("(K3bDataJob) could not start cdrecord");
+//       emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
+//       cancelAll();
+//       emit finished( false );
+//     }
+//   else
+//     {
+//       if( m_doc->dummy() )
+// 	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+//       else
+// 	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()), K3bJob::STATUS );
+
+//       emit newTask( i18n("Writing ISO") );
+//     }
+// }
 
 
 void K3bDataJob::cancel()
@@ -737,8 +806,6 @@ bool K3bDataJob::addMkisofsParameters()
   if( !k3bMain()->externalBinManager()->foundBin( "mkisofs" ) ) {
     qDebug("(K3bAudioJob) could not find mkisofs executable" );
     emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
-    cancelAll();
-    emit finished( false );
     return false;
   }
 
@@ -806,6 +873,17 @@ bool K3bDataJob::addMkisofsParameters()
   *m_process << "-iso-level" << QString::number(m_doc->ISOLevel());
 
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile);
+
+
+  // add multisession info
+  if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+
+    // it has to be the device we are writing to cause only this makes sense
+    *m_process << "-M" << m_doc->burner()->genericDevice();
+    *m_process << "-C" << m_msInfo;
+  }
+
 	
   // additional parameters from config
   QStringList _params = kapp->config()->readListEntry( "mkisofs parameters" );
@@ -835,6 +913,32 @@ void K3bDataJob::slotParseMkisofsSize(KProcess*, char* output, int len)
   }
 
   qDebug("ISO-Size should be: " + m_isoSize );
+}
+
+
+void K3bDataJob::slotParseMsInfo( KProcess*, char* output, int len )
+{
+  QString buffer = QString::fromLatin1( output, len ).stripWhiteSpace();
+  if( buffer.startsWith("cdrecord:") ) {
+    qDebug("(K3bDataJob) msinfo error: " + buffer );
+    m_msInfo = QString::null;
+  }
+  else if( buffer.contains(",") ) {
+    qDebug("(K3bDataJob) found msinfo? " + buffer );
+    QStringList list = QStringList::split( ",", buffer );
+    if( list.count() == 2 ) {
+      bool ok1, ok2;
+      list.first().toInt( &ok1 );
+      list[1].toInt( &ok2 );
+      if( ok1 && ok2 )
+	m_msInfo = buffer;
+      else
+	m_msInfo = QString::null;
+    }
+    else {
+      m_msInfo = QString::null;
+    }
+  }
 }
 
 

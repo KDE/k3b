@@ -107,7 +107,6 @@ void K3bFileView::setupGUI()
 
   // add some actions to the toolbar
   m_dirOp->actionCollection()->action("up")->plug( toolBar );
-  toolBar->insertSeparator();
   actionPlay->plug( toolBar );
   toolBar->insertSeparator();
 
@@ -128,6 +127,7 @@ void K3bFileView::setupGUI()
   // create filter selection combobox
   QLabel* filterLabel = new QLabel( i18n("&Filter:"), toolBar, "filterLabel" );
   m_filterWidget = new KFileFilterCombo( toolBar, "filterwidget" );
+
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All files");
   filter += "\n" + i18n("audio/x-mp3 application/x-ogg audio/wav |Sound files");

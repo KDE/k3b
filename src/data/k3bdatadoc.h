@@ -53,6 +53,7 @@ class K3bDataDoc : public K3bDoc
   ~K3bDataDoc();
 
   enum whiteSpaceTreatments { normal = 0, convertToUnderScore = 1, strip = 2, extendedStrip = 3 };
+  enum mutiSessionModes { NONE, START, CONTINUE, FINISH };
 
   K3bRootItem* root() const { return m_root; }
 
@@ -146,6 +147,9 @@ class K3bDataDoc : public K3bDoc
 	
   // ----------------------------------------------------------------- mkisofs-options -----------
 	
+  int multiSessionMode() const { return m_multisessionMode; }
+  void setMultiSessionMode( int mode ) { m_multisessionMode = mode; }
+
 
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
@@ -239,6 +243,8 @@ class K3bDataDoc : public K3bDoc
   bool m_padding;           // -pad
 	
   int m_isoLevel;
+
+  int m_multisessionMode;
 };
 
 #endif

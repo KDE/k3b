@@ -99,11 +99,12 @@ K3bDataView::~K3bDataView(){
 
 K3bProjectBurnDialog* K3bDataView::burnDialog()
 {
-  if( !m_burnDialog ) {
-    m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
-  }
+//   if( !m_burnDialog ) {
+//     m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
+//   }
 		
-  return m_burnDialog;
+  return new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
+  //return m_burnDialog;
 }
 
 

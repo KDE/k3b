@@ -136,7 +136,6 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   setupGUI();
   setupConnections();
 
-
   // FIXME: this is bad hacking (although it should work!)
   // -----
   if( !showSubProgress ) {
@@ -222,9 +221,9 @@ void K3bBurnProgressDialog::setupGUI()
   m_viewInfo->addColumn( "type" );
   m_viewInfo->addColumn( "info" );
   m_viewInfo->header()->hide();
+  m_viewInfo->setSorting( -1 );
   m_groupInfoLayout->addWidget( m_viewInfo );
 
-  mainLayout->addMultiCellWidget( m_groupInfo, 0, 0, 0, 3 );
 
   m_buttonCancel = new QPushButton( this, "m_buttonCancel" );
   m_buttonCancel->setText( i18n( "Cancel" ) );
@@ -233,11 +232,6 @@ void K3bBurnProgressDialog::setupGUI()
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this, "m_buttonShowDebug" );
   m_buttonBackground = new QPushButton( i18n("To Background"), this, "m_buttonBackground" );
 
-  mainLayout->addWidget( m_buttonCancel, 3, 1 );
-  mainLayout->addWidget( m_buttonClose, 3, 1 );
-  mainLayout->addWidget( m_buttonShowDebug, 3, 2 );
-  mainLayout->addWidget( m_buttonBackground, 3, 2 );
- 	
   m_groupBuffer = new QGroupBox( this, "m_groupBuffer" );
   m_groupBuffer->setTitle( i18n( "Buffer Status" ) );
   m_groupBuffer->setColumnLayout(0, Qt::Vertical );
@@ -255,12 +249,6 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupBufferLayout->addWidget( m_labelWriter );
   m_groupBufferLayout->addWidget( m_progressBuffer );
 
-  mainLayout->addMultiCellWidget( m_groupBuffer, 2, 2, 0, 3 );
-  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-  mainLayout->addItem( spacer, 3, 0 );
-  QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-  mainLayout->addItem( spacer_2, 3, 3 );
-
   m_groupProgress = new QGroupBox( this, "m_groupProgress" );
   m_groupProgress->setTitle( i18n( "Progress" ) );
   m_groupProgress->setColumnLayout(0, Qt::Vertical );
@@ -272,32 +260,33 @@ void K3bBurnProgressDialog::setupGUI()
   m_groupProgressLayout->setMargin( marginHint() );
 
   m_progressTrack = new KProgress( m_groupProgress, "m_progressTrack" );
-
   m_groupProgressLayout->addMultiCellWidget( m_progressTrack, 1, 1, 0, 1 );
-
   m_progressCd = new KProgress( m_groupProgress, "m_progressCd" );
-
   m_groupProgressLayout->addMultiCellWidget( m_progressCd, 4, 4, 0, 1 );
-
   m_labelFileName = new KCutLabel( m_groupProgress );
-
   m_groupProgressLayout->addWidget( m_labelFileName, 0, 0 );
 
   m_labelTrackProgress = new QLabel( m_groupProgress, "m_labelTrackProgress" );
   m_labelTrackProgress->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-
   m_groupProgressLayout->addWidget( m_labelTrackProgress, 0, 1 );
-
   m_labelCdTime = new QLabel( m_groupProgress, "m_labelCdTime" );
-
   m_groupProgressLayout->addWidget( m_labelCdTime, 3, 0 );
-
   m_labelCdProgress = new QLabel( m_groupProgress, "m_labelCdProgress" );
   m_labelCdProgress->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-
   m_groupProgressLayout->addWidget( m_labelCdProgress, 3, 1 );
 
+
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  mainLayout->addItem( spacer, 4, 0 );
+  QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  mainLayout->addItem( spacer_2, 4, 3 );
+  mainLayout->addMultiCellWidget( m_groupInfo, 0, 0, 0, 3 );
+  mainLayout->addWidget( m_buttonCancel, 4, 1 );
+  mainLayout->addWidget( m_buttonClose, 4, 1 );
+  mainLayout->addWidget( m_buttonShowDebug, 4, 2 );
+  mainLayout->addWidget( m_buttonBackground, 4, 2 );
   mainLayout->addMultiCellWidget( m_groupProgress, 2, 2, 0, 3 );
+  mainLayout->addMultiCellWidget( m_groupBuffer, 3, 3, 0, 3 );
 }
 
 
@@ -324,22 +313,22 @@ void K3bBurnProgressDialog::updateTrackSizeProgress( int processedTrackSize, int
 
 void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
 {
-  QListViewItem* item = new QListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
+  QListViewItem* currentInfoItem = new QListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
 
   // set the icon
   switch( type ) {
   case K3bJob::ERROR:
-    item->setPixmap( 0, SmallIcon( "stop" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "stop" ) );
     break;
   case K3bJob::PROCESS:
-    item->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
     break;
   case K3bJob::STATUS:
   default:
-    item->setPixmap( 0, SmallIcon( "ok" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "ok" ) );
   }
 
-  m_viewInfo->ensureVisible( 0, m_viewInfo->itemPos(item) + item->height() );
+  m_viewInfo->ensureVisible( 0, m_viewInfo->itemPos(currentInfoItem) + currentInfoItem->height() );
 }
 
 

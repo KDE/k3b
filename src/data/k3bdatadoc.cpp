@@ -75,9 +75,28 @@ bool K3bDataDoc::newDocument()
   m_createJoliet = false;
   m_deleteImage = true;
   m_onlyCreateImage = false;
-  m_followSymbolicLinks = false;
   m_isoLevel = 1;
   m_whiteSpaceTreatment = K3bDataDoc::normal;
+
+  m_multisessionMode = NONE;
+
+
+  m_ISOallowLowercase = false;   // -allow-lowercase
+  m_ISOallowPeriodAtBegin = false;   // -L
+  m_ISOallow31charFilenames = false;  // -I
+  m_ISOomitVersionNumbers = false;   // -N
+  m_ISOmaxFilenameLength = false;     // -max-iso9660-filenames (forces -N)
+  m_ISOrelaxedFilenames = false;      // -relaxed-filenames
+  m_ISOnoIsoTranslate = false;        // -no-iso-translate
+  m_ISOallowMultiDot = false;          // -allow-multidot
+  m_ISOuntranslatedFilenames = false;   // -U (forces -d, -I, -L, -N, -relaxed-filenames, -allow-lowercase, -allow-multidot, -no-iso-translate)
+  m_noDeepDirectoryRelocation = false;   // -D
+  m_followSymbolicLinks = false;       // -f
+  m_hideRR_MOVED = false;  // -hide-rr-moved
+  m_createTRANS_TBL = false;    // -T
+  m_hideTRANS_TBL = false;    // -hide-joliet-trans-tbl
+  m_padding = false;           // -pad
+
 	
   return K3bDoc::newDocument();
 }

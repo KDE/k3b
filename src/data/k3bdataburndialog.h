@@ -48,6 +48,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void setupBurnTab( QFrame* frame );
    void setupAdvancedTab( QFrame* frame );
    void setupSettingsTab( QFrame* frame );
+   void setupMultisessionTab( QFrame* frame );
 
    // --- general tab -------------------------	
    QLabel* TextLabel1;
@@ -100,6 +101,14 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkLowercase;
    // ---------------------------------------------
 	
+   // --- multisession tab -------------------------
+   QButtonGroup* m_groupMultiSession;
+   QRadioButton* m_radioMultiSessionNone;
+   QRadioButton* m_radioMultiSessionStart;
+   QRadioButton* m_radioMultiSessionContinue;
+   QRadioButton* m_radioMultiSessionFinish;
+   // ---------------------------------------------
+
  protected slots:
    void slotUser1();
    void saveSettings();

@@ -90,10 +90,11 @@ K3bAudioView::~K3bAudioView(){
 
 K3bProjectBurnDialog* K3bAudioView::burnDialog()
 {
-  if( !m_burnDialog )
-    m_burnDialog = new K3bAudioBurnDialog( (K3bAudioDoc*)getDocument(), k3bMain(), "audioburndialog", true );
+//   if( !m_burnDialog )
+//     m_burnDialog = new K3bAudioBurnDialog( (K3bAudioDoc*)getDocument(), k3bMain(), "audioburndialog", true );
 		
-  return m_burnDialog;
+//   return m_burnDialog;
+  return new K3bAudioBurnDialog( (K3bAudioDoc*)getDocument(), k3bMain(), "audioburndialog", true );
 }
 
 

@@ -20,7 +20,7 @@ class K3bDiskInfoView : public K3bCdContentsView
   void displayInfo( const K3bDiskInfo& info );
 
  private:
-
+ QLabel* m_label;
 };
 
 

@@ -781,7 +781,9 @@ void K3bMainWindow::slotFileBurn()
 	KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
       }
       else {
-	view->burnDialog()->exec(true);
+	K3bProjectBurnDialog* d = view->burnDialog();
+	d->exec(true);
+	delete d;
       }
     }
   }

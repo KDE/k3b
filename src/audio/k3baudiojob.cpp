@@ -805,7 +805,7 @@ void K3bAudioJob::cdrecordWrite()
   *m_process << s;
     
   // add the device
-  s = QString("-dev=%1").arg( m_doc->burner()->genericDevice() );
+  s = QString("dev=%1").arg( m_doc->burner()->genericDevice() );
   *m_process << s;
     
   if( m_doc->padding() )

@@ -39,10 +39,10 @@ class K3bJob;
 class KCutLabel;
 class QCloseEvent;
 
+
 /**
   *@author Sebastian Trueg
   */
-
 class K3bBurnProgressDialog : public KDialog  {
 
   Q_OBJECT

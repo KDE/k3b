@@ -51,7 +51,7 @@ class K3bDataJob : public K3bBurnJob
   void slotMkisofsFinished();
   void slotCdrecordFinished();
   void slotParseMkisofsSize(KProcess*, char*, int);
-  void slotStartWritingOnTheFly();
+  void slotParseMsInfo(KProcess*, char*, int);
   void slotStartWriting();
 		
  private:
@@ -62,6 +62,7 @@ class K3bDataJob : public K3bBurnJob
   bool m_imageFinished;
 
   QString m_isoSize;
+  QString m_msInfo;
 		
   void writeImage();
   void writeCD();
