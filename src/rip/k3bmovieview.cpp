@@ -129,7 +129,7 @@ void K3bMovieView::reload()
     return;
   }
   KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WDestructiveClose );
-  infoDialog->setCaption( i18n("Please wait...") );
+  infoDialog->setCaption( i18n("Please Wait...") );
   QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
   infoLayout->setSpacing( KDialog::spacingHint() );
   infoLayout->setMargin( KDialog::marginHint() );

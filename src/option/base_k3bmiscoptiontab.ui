@@ -112,7 +112,7 @@
                         <cstring>m_checkShowSplash</cstring>
                     </property>
                     <property name="text">
-                        <string>Show splashscreen</string>
+                        <string>Show splash screen</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Show the splash screen when K3b starts</string>

@@ -51,7 +51,7 @@
                                     <cstring>m_checkCopyright</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Mark Copyrighted</string>
+                                    <string>Mark copyrighted</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Mark the encoded file as being copyrighted.</string>
@@ -62,7 +62,7 @@
                                     <cstring>m_checkOriginal</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Mark as Original</string>
+                                    <string>Mark as original</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Mark the encoded file as being a copy.</string>
@@ -88,7 +88,7 @@ This  results  in  many  wasted bits for high bitrate encodings but will ensure 
                                     <cstring>m_checkError</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Error Protection</string>
+                                    <string>Error protection</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Turn on CRC error protection.</string>
@@ -232,7 +232,7 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
                                                     <cstring>m_radioQualityLevel</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Quality Level:</string>
+                                                    <string>Quality level:</string>
                                                 </property>
                                                 <property name="checked">
                                                     <bool>true</bool>

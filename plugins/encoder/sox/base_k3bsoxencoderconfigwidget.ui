@@ -25,7 +25,7 @@
                 <cstring>m_checkManual</cstring>
             </property>
             <property name="text">
-                <string>Manual settings (used for all filetypes)</string>
+                <string>Manual settings (used for all file types)</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -66,7 +66,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Samplerate:</string>
+                                <string>Sample rate:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="2" column="1">

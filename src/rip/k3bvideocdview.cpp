@@ -158,8 +158,8 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
     m_trackView->setAllColumnsShowFocus( true );
     m_trackView->setSelectionMode( QListView::Single );
     m_trackView->setDragEnabled( true );
-    m_trackView->addColumn( i18n( "Item name" ) );
-    m_trackView->addColumn( i18n( "Extracted name" ) );
+    m_trackView->addColumn( i18n( "Item Name" ) );
+    m_trackView->addColumn( i18n( "Extracted Name" ) );
     m_trackView->addColumn( i18n( "Length" ) );
     m_trackView->addColumn( i18n( "Size" ) );
 

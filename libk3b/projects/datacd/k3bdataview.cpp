@@ -50,14 +50,14 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   : K3bView(doc, parent,name)
 {
   m_doc = doc;
-	
+
   // --- setup GUI ---------------------------------------------------
-  QSplitter* mainSplitter = new QSplitter( this );	
+  QSplitter* mainSplitter = new QSplitter( this );
   m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
   m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
   m_dataDirTree->setFileView( m_dataFileView );
   setMainWidget( mainSplitter );
-	
+
 
   connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
 
@@ -71,7 +71,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   (void)new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
 		    SLOT(clearImportedSession()), actionCollection(),
 		    "project_data_clear_imported_session" );
-  (void)new KAction(i18n("&Edit Boot Images"), "cdtrack", 0, this,
+  (void)new KAction(i18n("&Edit Boot Images..."), "cdtrack", 0, this,
 		    SLOT(editBootImages()), actionCollection(),
 		    "project_data_edit_boot_images" );
 
@@ -133,11 +133,11 @@ K3bDirItem* K3bDataView::currentDir() const
 // 	    break;
 // 	  }
 // 	}
-			
+
 //       } // for _it2
 //   }
 
-//   m_fillStatusDisplay->repaint();	
+//   m_fillStatusDisplay->repaint();
 // }
 
 
@@ -162,7 +162,7 @@ void K3bDataView::clearImportedSession()
 
 void K3bDataView::editBootImages()
 {
-  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit Boot Images"), 
+  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit Boot Images"),
 				    KDialogBase::Ok, KDialogBase::Ok, true );
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();

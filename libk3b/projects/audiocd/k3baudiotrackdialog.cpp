@@ -302,7 +302,7 @@ void K3bAudioTrackDialog::setupGui()
 //     tabLayout->addWidget( m_editTrackStart, 1, 0 );
 //     tabLayout->addWidget( m_editTrackEnd, 1, 1 );
 
-//     mainTabbed->addTab( tab, i18n("Edit track") );
+//     mainTabbed->addTab( tab, i18n("Edit Track") );
 
 //     m_editTrackStart->setMsfValue( m_tracks.first()->trackStart() );
 //     m_editTrackEnd->setMsfValue( m_tracks.first()->trackEnd() );

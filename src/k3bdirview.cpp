@@ -93,8 +93,8 @@ protected:
       p.setPen( theme->foregroundColor() );
     }
 
-    p.drawText( pixSize.width() + 10, 
-		pixSize.height() /3, 
+    p.drawText( pixSize.width() + 10,
+		pixSize.height() /3,
 		i18n("K3b is trying to retrieve information about the inserted disk.") );
   }
 };
@@ -110,9 +110,9 @@ public:
 
 
 K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
-  : QVBox(parent, name), 
+  : QVBox(parent, name),
     m_fileTreeView(treeView),
-    m_bViewDiskInfo(false), 
+    m_bViewDiskInfo(false),
     m_lastDevice(0)
 {
   d = new Private;
@@ -131,7 +131,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
     m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
     m_viewStack    = new QWidgetStack( m_mainSplitter );
   }
-  else {  
+  else {
     m_viewStack    = new QWidgetStack( this );
     m_mainSplitter = 0;
   }
@@ -191,7 +191,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 				       m_actionCollection, "unlock" );
   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(slotLockDevice()),
 				     m_actionCollection, "lock" );
-  KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed"), "", 0, this, SLOT(slotSetReadSpeed()),
+  KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(slotSetReadSpeed()),
 					     m_actionCollection, "set_read_speed" );
 
   m_devicePopupMenu->insert( actionDiskInfo );
@@ -209,9 +209,9 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 //   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
 //   connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
 
-  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)), 
+  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)),
 	   this, SLOT(slotDirActivated(const KURL&)) );
-  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)), 
+  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
 	   this, SLOT(slotDetectDiskInfo(K3bDevice::Device*)) );
   connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
 	   this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
@@ -268,8 +268,8 @@ void K3bDirView::slotDetectDiskInfo( K3bDevice::Device* dev )
 
 void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
 {
-  if( m_bViewDiskInfo || 
-      did->diskInfo().diskState() == K3bDevice::STATE_EMPTY || 
+  if( m_bViewDiskInfo ||
+      did->diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
       did->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
 
     // show cd info
@@ -437,7 +437,7 @@ void K3bDirView::slotSetReadSpeed()
 //   K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
 //   if( branch ) {
 //     branch->setAutoUpdate(true);
-    
+
 //     K3bDevice::eject( branch->device() );
 //   }
 //   else {
@@ -474,7 +474,7 @@ void K3bDirView::slotDirActivated( const KURL& url )
 void K3bDirView::reload()
 {
   // TODO: the fileview should be a special case
-  //       and then the boolean withHeader parameter should be removed from 
+  //       and then the boolean withHeader parameter should be removed from
   //       K3bCdContentsView
   K3bCdContentsView* v = (K3bCdContentsView*)m_viewStack->visibleWidget();
 

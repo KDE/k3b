@@ -28,7 +28,7 @@
                 <cstring>groupBox4</cstring>
             </property>
             <property name="title">
-                <string>Theme selection</string>
+                <string>Theme Selection</string>
             </property>
             <vbox>
                 <property name="name">

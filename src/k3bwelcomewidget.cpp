@@ -279,12 +279,12 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
     int removeAction = -1;
     if( viewport()->childAt(e->pos())->inherits( "QToolButton" ) ) {
-      removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove button") );
-      pop.insertItem( i18n("Add button"), &addPop );
+      removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
+      pop.insertItem( i18n("Add Button"), &addPop );
       r = pop.exec( e->globalPos() );
     }
     else {
-      addPop.insertTitle( i18n("Add button"), -1, 0 );
+      addPop.insertTitle( i18n("Add Button"), -1, 0 );
       r = addPop.exec( e->globalPos() );
     }
 

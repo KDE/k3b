@@ -152,7 +152,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   groupGeneral->setInsideMargin( marginHint() );
   QHBox* box = new QHBox( groupGeneral );
   box->setSpacing( spacingHint() );
-  box->setStretchFactor( new QLabel( i18n("Read Retries:"), box ), 1 );
+  box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
   m_spinRetries = new QSpinBox( 1, 128, 1, box );
   m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
 

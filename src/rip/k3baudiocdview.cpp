@@ -245,7 +245,7 @@ void K3bAudioCdView::initActions()
   KAction* actionQueryCddb = new KAction( i18n("Query cddb"), "reload", 0, this,
 					  SLOT(queryCddb()), actionCollection(), "query_cddb" );
 
-  KAction* actionSaveCddbLocally = new KAction( i18n("Save Cddb entry locally"), "filesave", 0, this,
+  KAction* actionSaveCddbLocally = new KAction( i18n("Save Cddb Entry Locally"), "filesave", 0, this,
 						SLOT(slotSaveCddbLocally()), actionCollection(), "save_cddb_local" );
 
   // TODO: set the actions tooltips and whatsthis infos

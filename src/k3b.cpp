@@ -266,7 +266,7 @@ void K3bMainWindow::initActions()
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
 				       actionCollection(), "project_add_files");
 
-  (void)new KAction( i18n("&Clear Project"), "clear_left", 0, this, SLOT(slotClearProject()),
+  (void)new KAction( i18n("&Clear Project"), QApplication::reverseLayout() ? "clear_left" : "locationbar_erase", 0, this, SLOT(slotClearProject()),
 		     actionCollection(), "project_clear_project" );
 
   actionViewDirTreeView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirTreeView()),
@@ -545,16 +545,16 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 	doc->view()->setFocus();
 	return doc;
       }
-      
+
       doc = K3bDoc::openDocument( url );
-      
+
       if( doc == 0 ) {
 	KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
 	return 0;
       }
-      
+
       actionFileOpenRecent->addURL(url);
-    
+
       // create the window
       createClient(doc);
 
@@ -645,7 +645,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
 {
   if( !doc->isModified() )
     return true;
-  
+
   m_config->setGroup( "General Options" );
   if( !m_config->readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
     return true;
@@ -681,8 +681,8 @@ void K3bMainWindow::slotFileOpen()
   slotStatusMsg(i18n("Opening file..."));
 
   KURL url = KFileDialog::getOpenURL( QString::null,
-				      i18n("*.k3b|K3b Projects"), 
-				      this, 
+				      i18n("*.k3b|K3b Projects"),
+				      this,
 				      i18n("Open File") );
   if( !url.isEmpty() ) {
     openDocument(url);
@@ -955,12 +955,12 @@ K3bDoc* K3bMainWindow::slotNewVideoDvdDoc()
   // create the window
   createClient(doc);
 
-  KMessageBox::information( this, 
+  KMessageBox::information( this,
 			    i18n("Be aware that you need to provide the complete Video DVD filestructure. "
 				 "K3b does not support video transcoding and preparation of video object "
 				 "files yet. That means you need to already have the VTS_X_YY.VOB "
 				 "and VTS_X_YY.IFO files."),
-			    i18n("K3b Video DVD restrictions"),
+			    i18n("K3b Video DVD Restrictions"),
 			    "video_dvd_restrictions" );
 
   return doc;
@@ -1416,7 +1416,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
     if( isCdDvdImageAndIfSoOpenDialog( urls.first() ) )
       return;
   }
-  
+
   if( activeDoc() ) {
     activeDoc()->addUrls( urls );
   }
@@ -1512,7 +1512,7 @@ void K3bMainWindow::slotToolsDiskInfo()
   K3bDevice::Device* dev = K3bDeviceSelectionDialog::selectDevice( this, i18n("Please select a CD/DVD device") );
   if( dev ) {
     m_dirView->showDiskInfo( dev );
-  }			  
+  }
 }
 
 #include "k3b.moc"

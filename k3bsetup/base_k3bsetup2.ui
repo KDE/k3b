@@ -241,7 +241,7 @@
                                     <cstring>tab</cstring>
                                 </property>
                                 <attribute name="title">
-                                    <string>Found programs</string>
+                                    <string>Found Programs</string>
                                 </attribute>
                                 <vbox>
                                     <property name="name">
@@ -322,7 +322,7 @@
                                     <cstring>tab</cstring>
                                 </property>
                                 <attribute name="title">
-                                    <string>Search path</string>
+                                    <string>Search Path</string>
                                 </attribute>
                                 <vbox>
                                     <property name="name">

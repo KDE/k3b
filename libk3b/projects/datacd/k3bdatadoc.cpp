@@ -234,7 +234,7 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 	  QValidator* validator = K3bValidators::iso9660Validator( false, this );
 	  do {
 	    newName = KInputDialog::getText( i18n("Enter New Filename"),
-					     i18n("A file with that name already exists. Please enter a new name."),
+					     i18n("A file with that name already exists. Please enter a new name:"),
 					     newName, &ok, qApp->activeWindow(), "renamedialog", validator );
 
 	  } while( ok && parent->alreadyInDirectory( newName ) );
@@ -347,7 +347,7 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 	    QValidator* validator = K3bValidators::iso9660Validator( false, this );
 	    do {
 	      newName = KInputDialog::getText( i18n("Enter New Filename"),
-					       i18n("A file with that name already exists. Please enter a new name."),
+					       i18n("A file with that name already exists. Please enter a new name:"),
 					       newName, &ok, qApp->activeWindow(), "renameslg", validator );
 	    } while( ok && parent->alreadyInDirectory( newName ) );
 
@@ -608,7 +608,7 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
     }
 
     else if( e.nodeName() == "verify_data" )
-      setVerifyData( e.attributeNode( "activated" ).value() == "yes" );      
+      setVerifyData( e.attributeNode( "activated" ).value() == "yes" );
 
     else
       kdDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName() << endl;
@@ -677,9 +677,9 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       m_noPermissionFiles.append( urlElem.text() );
 
     else if( !elem.attribute( "bootimage" ).isEmpty() ) {
-      K3bBootItem* bootItem = new K3bBootItem( urlElem.text(), 
-					       this, 
-					       parent, 
+      K3bBootItem* bootItem = new K3bBootItem( urlElem.text(),
+					       this,
+					       parent,
 					       elem.attributeNode( "name" ).value() );
       if( elem.attribute( "bootimage" ) == "floppy" )
 	bootItem->setImageType( K3bBootItem::FLOPPY );
@@ -691,19 +691,19 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       bootItem->setBootInfoTable( elem.attribute( "boot_info_table" ) == "yes" );
       bootItem->setLoadSegment( elem.attribute( "load_segment" ).toInt() );
       bootItem->setLoadSize( elem.attribute( "load_size" ).toInt() );
-      
+
       m_bootImages.append(bootItem);
-      
+
       // TODO: save location of the cataloge file
       createBootCatalogeItem(parent);
-      
+
       newItem = bootItem;
     }
 
     else {
-      newItem = new K3bFileItem( urlElem.text(), 
-				 this, 
-				 parent, 
+      newItem = new K3bFileItem( urlElem.text(),
+				 this,
+				 parent,
 				 elem.attributeNode( "name" ).value() );
     }
   }
@@ -719,7 +719,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 	return false;
       }
     }
-	
+
     if( !newDirItem )
       newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
     QDomNodeList childNodes = elem.childNodes();
@@ -1241,7 +1241,7 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
       }
 
       int cnt = 1;
-      for( QPtrListIterator<K3bDataItem> it( sameNameList ); 
+      for( QPtrListIterator<K3bDataItem> it( sameNameList );
 	   it.current(); ++it ) {
 	it.current()->setWrittenName( K3b::appendNumberToFilename( it.current()->writtenName(), cnt++, maxlen ) );
       }
@@ -1305,9 +1305,9 @@ void K3bDataDoc::importSession( K3bDevice::Device* device )
   if( m_multisessionMode != FINISH )
     m_multisessionMode = CONTINUE;
 
-//   KProgressDialog d( qApp->activeWindow(), 
-// 		     0, 
-// 		     i18n("Importing session"), 
+//   KProgressDialog d( qApp->activeWindow(),
+// 		     0,
+// 		     i18n("Importing session"),
 // 		     i18n("Importing old session from %1").arg(device->blockDeviceName()) );
 //   d.show();
 
@@ -1321,7 +1321,7 @@ void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
   if( dh->success() ) {
     if( dh->toc().isEmpty() ) {
       KMessageBox::error( qApp->activeWindow(), i18n("Could not find a session to import."),
-			  i18n("Unable to import session") );
+			  i18n("Unable to Import Session") );
     }
     else {
       K3bDevice::Toc::const_iterator it = dh->toc().end();
@@ -1329,7 +1329,7 @@ void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
       while( it != dh->toc().begin() && (*it).type() != K3bDevice::Track::DATA )
 	--it;
       long startSec = (*it).firstSector().lba();
-    
+
       // since in iso9660 it is possible that two files share it's data
       // simply summing the file sizes could result in wrong values
       // that's why we use the size from the toc. This is more accurate
@@ -1496,12 +1496,12 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
     QValidator* validator = K3bValidators::iso9660Validator( false, this );
     do {
       newName = KInputDialog::getText( i18n("Enter New Filename"),
-				       i18n("A file with that name already exists. Please enter a new name."),
+				       i18n("A file with that name already exists. Please enter a new name:"),
 				       newName, &ok, qApp->activeWindow(), "renamdlg", validator );
     } while( ok && dir->alreadyInDirectory( newName ) );
 
     delete validator;
-    
+
     if( !ok )
       return 0;
   }

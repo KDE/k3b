@@ -104,8 +104,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_comboCopyMode->insertItem( i18n("Normal Copy") );
   m_comboCopyMode->insertItem( i18n("Clone Copy") );
 //   m_groupCopyMode->setExclusive( true );
-//   m_radioNormalCopy = new QRadioButton( i18n("Normal Copy"), m_groupCopyMode );
-//   m_radioCloneCopy = new QRadioButton( i18n("Clone Copy"), m_groupCopyMode );
+//   m_radioNormalCopy = new QRadioButton( i18n("Normal copy"), m_groupCopyMode );
+//   m_radioCloneCopy = new QRadioButton( i18n("Clone copy"), m_groupCopyMode );
 
   QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
   groupOptions->setInsideSpacing( spacingHint() );
@@ -161,7 +161,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupGeneral->setInsideMargin( marginHint() );
   QHBox* box = new QHBox( groupGeneral );
   box->setSpacing( spacingHint() );
-  box->setStretchFactor( new QLabel( i18n("Read Retries:"), box ), 1 );
+  box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
   m_spinRetries = new QSpinBox( 1, 128, 1, box );
 
   m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );

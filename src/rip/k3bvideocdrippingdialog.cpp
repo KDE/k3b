@@ -102,14 +102,14 @@ void K3bVideoCdRippingDialog::setupGui()
     // ---------------------------------------------------- Options group ---
     QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n( "Options" ), frame );
 
-    m_ignoreExt = new QCheckBox( i18n( "ignore /EXT/PSD_X.VCD" ), groupOptions );
+    m_ignoreExt = new QCheckBox( i18n( "Ignore /EXT/PSD_X.VCD" ), groupOptions );
 
-    m_sector2336 = new QCheckBox( i18n( "use 2336 byte sector mode for image file" ), groupOptions );
+    m_sector2336 = new QCheckBox( i18n( "Use 2336 byte sector mode for image file" ), groupOptions );
     // Only available for image file ripping
     m_sector2336->setEnabled( false );
     m_sector2336->setChecked( false );
 
-    m_extractXML = new QCheckBox( i18n( "extract XML structure" ), groupOptions );
+    m_extractXML = new QCheckBox( i18n( "Extract XML structure" ), groupOptions );
 
 
     MainLayout->addWidget( groupDirectory, 0, 0 );
@@ -166,7 +166,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
         if( KMessageBox::questionYesNoList( this,
                                 i18n("Continue although the folder is not empty?"),
                                 filesExists,
-                                i18n("Files exist") ) == KMessageBox::No )
+                                i18n("Files Exist") ) == KMessageBox::No )
         return;
 
     m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );

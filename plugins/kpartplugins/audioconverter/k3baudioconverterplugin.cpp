@@ -58,7 +58,7 @@ public:
 };
 
 
-K3bAudioConverterPluginDialog::K3bAudioConverterPluginDialog( QWidget* parent, 
+K3bAudioConverterPluginDialog::K3bAudioConverterPluginDialog( QWidget* parent,
 							      const char* name )
   : K3bInteractionDialog( parent, name,
 			  i18n("Convert Audio Files"),
@@ -73,7 +73,7 @@ K3bAudioConverterPluginDialog::K3bAudioConverterPluginDialog( QWidget* parent,
   m_w = new base_K3bAudioConverterWidget( this );
   setMainWidget( m_w );
   m_w->editDir->setMode( KFile::Directory );
-  m_w->editDir->setCaption( i18n("Please choose a destination directory") );
+  m_w->editDir->setCaption( i18n("Please Choose Destination Directory") );
 
   connect( m_w->buttonAddFiles, SIGNAL(clicked()),
 	   this, SLOT(slotAddFiles()) );
@@ -125,9 +125,9 @@ void K3bAudioConverterPluginDialog::loadAudioEncoder()
 void K3bAudioConverterPluginDialog::slotAddFiles()
 {
   KURL::List urls = KFileDialog::getOpenURLs( QString::null,
-					      "*|All Files", 
-					      this, 
-					      i18n("Select Audio Files to convert") );
+					      "*|All Files",
+					      this,
+					      i18n("Select Audio Files to Convert") );
   addFiles( urls );
 }
 
@@ -219,14 +219,14 @@ void K3bAudioConverterPluginDialog::slotStartClicked()
     QString type;
     if( factory )
       type = d->extensionMap[m_w->comboFormat->currentItem()];
-    
+
     K3bJobProgressDialog* dlg = new K3bJobProgressDialog( this );
     K3bAudioConverterJob* job = new K3bAudioConverterJob( m_w->viewFiles, factory, type, m_w->editDir->url(), dlg );
-    
+
     hide();
-    
+
     dlg->startJob( job );
-    
+
     delete job;
     delete dlg;
   }
@@ -259,12 +259,12 @@ void K3bAudioConverterPluginDialog::addFile( const KURL& url )
 
 
 
-K3bAudioConverterPlugin::K3bAudioConverterPlugin( QObject* parent, 
+K3bAudioConverterPlugin::K3bAudioConverterPlugin( QObject* parent,
 						  const char* name,
 						  const QStringList& )
   : KParts::Plugin( parent, name )
 {
-  (void) new KAction( i18n("&Convert Audio Files"),
+  (void) new KAction( i18n("&Convert Audio Files..."),
 		      0, 0,
 		      this, SLOT(slotConvert()),
 		      actionCollection(), "convert_audio_files_plugin" );

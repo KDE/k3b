@@ -656,7 +656,7 @@ void K3bVcdTrackDialog::setupVideoTab()
     QLabel* labelChromaFormat_Video = new QLabel( i18n( "Chroma format:" ), w, "labelChromaFormat_Video" );
     QLabel* labelFormat_Video = new QLabel( i18n( "Video format:" ), w, "labelFormat_Video" );
     QLabel* labelResolution_Video = new QLabel( i18n( "Resolution:" ), w, "labelSize_Video" );
-    QLabel* labelHighResolution_Video = new QLabel( i18n( "High Resolution:" ), w, "labelHighResolution_Video" );
+    QLabel* labelHighResolution_Video = new QLabel( i18n( "High resolution:" ), w, "labelHighResolution_Video" );
 
     m_mpegver_video = new QLabel( w, "m_mpegver_video" );
     m_rate_video = new QLabel( w, "m_rate_video" );

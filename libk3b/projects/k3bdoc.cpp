@@ -86,7 +86,7 @@ K3bDoc::K3bDoc( QObject* parent )
 
   (void)new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
 		     actionCollection(), "project_burn");
-  (void)new KAction( i18n("&Properties..."), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
+  (void)new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
 		     actionCollection(), "project_properties");
 }
 

@@ -43,7 +43,7 @@
                                 <cstring>buttonAddFiles</cstring>
                             </property>
                             <property name="text">
-                                <string>Add files...</string>
+                                <string>Add Files...</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Add files to be converted</string>
@@ -118,7 +118,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Audio Format:</string>
+                                <string>Audio format:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox">
@@ -163,7 +163,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Destination Directory:</string>
+                                <string>Destination directory:</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
