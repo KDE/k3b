@@ -3,7 +3,7 @@
 # the error to ian geiser <geiseri@msoe.edu>
 Summary:   
 Name:      k3b
-Version:   0.7.2
+Version:   0.7.3
 Release:   0.1
 Copyright: GPL
 Vendor:    Sebastian Trueg <trueg@informatik.uni-freiburg.de>
