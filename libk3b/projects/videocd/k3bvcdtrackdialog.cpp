@@ -141,16 +141,16 @@ void K3bVcdTrackDialog::fillGui()
 
     m_mpegver_video->setText( selectedTrack->mpegTypeS() );
     m_rate_video->setText( i18n( "%1 bit/s" ).arg( selectedTrack->video_bitrate() ) );
-    m_chromaformat_video->setText( "todo" );
-    m_format_video->setText( "todo" );
+    m_chromaformat_video->setText( selectedTrack->video_chroma() );
+    m_format_video->setText( selectedTrack->video_format() );
     m_highresolution_video->setText( selectedTrack->highresolution() );
     m_resolution_video->setText( selectedTrack->resolution() );
 
     m_mpegver_audio->setText( selectedTrack->mpegTypeS( true ) );
     m_rate_audio->setText( selectedTrack->audio_bitrate() );
-    
-    m_sampling_frequency_audio->setText( "todo" );
-    m_mode_audio->setText( "todo" );
+
+    m_sampling_frequency_audio->setText( selectedTrack->audio_sampfreq() );
+    m_mode_audio->setText( selectedTrack->audio_mode() );
     m_copyright_audio->setText( "todo" );
 
     fillPbcGui();

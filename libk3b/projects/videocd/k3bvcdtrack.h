@@ -110,6 +110,7 @@ class K3bVcdTrack
         const QString video_bitrate();
         const QString audio_layer();
         const QString audio_bitrate();
+        const QString audio_sampfreq();
 
         const QString duration()
         {
@@ -123,6 +124,9 @@ class K3bVcdTrack
         {
             return mpeg_info->muxrate;
         };
+        const QString video_format( );
+        const QString video_chroma( );
+        const QString audio_mode( );
         const QString mpegTypeS( bool audio = false );
         const int mpegType();
 
@@ -132,7 +136,7 @@ class K3bVcdTrack
 
     protected:
 
-        const QString audio_type2str( unsigned int , unsigned int );
+        const QString audio_type2str( unsigned int , unsigned int, unsigned int );
         QString SecsToHMS( double );
 
         enum mpeg_version { MPEG_VERS_INVALID = 0, MPEG_VERS_MPEG1 = 1, MPEG_VERS_MPEG2 = 2 };

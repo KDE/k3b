@@ -156,74 +156,157 @@ const QString K3bVcdTrack::resolution()
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
-                return QString( " %1 x %2" ).arg( mpeg_info->video[ i ].hsize ).arg( mpeg_info->video[ i ].vsize );
+                return QString( "%1 x %2" ).arg( mpeg_info->video[ i ].hsize ).arg( mpeg_info->video[ i ].vsize );
             }
         }
     }
 
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::highresolution()
 {
     if ( mpeg_info->has_video ) {
         if ( mpeg_info->video[ 2 ].seen ) {
-            return QString( " %1 x %2" ).arg( mpeg_info->video[ 2 ].hsize ).arg( mpeg_info->video[ 2 ].vsize );
+            return QString( "%1 x %2" ).arg( mpeg_info->video[ 2 ].hsize ).arg( mpeg_info->video[ 2 ].vsize );
         }
     }
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::video_frate()
 {
     if ( mpeg_info->has_video ) {
-        for ( int i = 2; i >= 0; i-- ) {
+        for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
                 return QString::number( mpeg_info->video[ i ].frate );
             }
         }
     }
 
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::video_bitrate()
 {
     if ( mpeg_info->has_video ) {
-        for ( int i = 2; i >= 0; i-- ) {
+        for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
                 return QString::number( mpeg_info->video[ i ].bitrate ) ;
             }
         }
     }
 
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
+}
+
+
+
+const QString K3bVcdTrack::video_format()
+{
+    if ( mpeg_info->has_video ) {
+        for ( int i = 0; i < 2; i++ ) {
+            if ( mpeg_info->video[ i ].seen ) {
+                switch ( mpeg_info->video[ i ].video_format ) {
+                    case 0 :
+                        return i18n( "Component" );
+                        break;
+                    case 1 :
+                        return "PAL";
+                        break;
+                    case 2 :
+                        return "NTSC";
+                        break;
+                    case 3 :
+                        return "SECAM";
+                        break;
+                    case 4 :
+                        return "MAC";
+                        break;
+                    case 5 :
+                        return i18n( "Unspecified" );
+                        break;
+                }
+            }
+        }
+
+        return i18n( "n/a" );
+    }
+}
+
+const QString K3bVcdTrack::video_chroma()
+{
+    if ( mpeg_info->has_video ) {
+        for ( int i = 0; i < 2; i++ ) {
+            if ( mpeg_info->video[ i ].seen ) {
+                switch ( mpeg_info->video[ i ].chroma_format ) {
+                    case 1 :
+                        return QString( "4:2:0" );
+                        break;
+                    case 2 :
+                        return QString( "4:2:2" );
+                        break;
+                    case 3 :
+                        return QString( "4:4:4" );
+                        break;
+
+                }
+            }
+        }
+    }
+
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::audio_layer()
 {
     if ( mpeg_info->has_audio ) {
-        for ( int i = 2; i >= 0; i-- ) {
+        for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->audio[ i ].seen ) {
                 return QString::number( mpeg_info->audio[ i ].layer );
             }
         }
     }
 
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::audio_bitrate()
 {
     if ( mpeg_info->has_audio ) {
-        for ( int i = 2; i >= 0; i-- ) {
+        for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->audio[ i ].seen ) {
                 return QString::number( mpeg_info->audio[ i ].bitrate ) ;
             }
         }
     }
 
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
+}
+
+const QString K3bVcdTrack::audio_sampfreq()
+{
+    if ( mpeg_info->has_audio ) {
+        for ( int i = 0; i < 2; i++ ) {
+            if ( mpeg_info->audio[ i ].seen ) {
+                return i18n( "%1 Hz" ).arg( mpeg_info->audio[ i ].sampfreq ) ;
+            }
+        }
+    }
+
+    return i18n( "n/a" );
+}
+
+const QString K3bVcdTrack::audio_mode( )
+{
+    if ( mpeg_info->has_audio ) {
+        for ( int i = 2; i >= 0; i-- )
+            if ( mpeg_info->audio[ i ].seen )
+                return QString( audio_type2str( mpeg_info->audio[ i ].version, mpeg_info->audio[ i ].mode, i ) );
+
+    }
+
+    return i18n( "n/a" );
 }
 
 const QString K3bVcdTrack::mpegTypeS( bool audio )
@@ -241,27 +324,11 @@ const QString K3bVcdTrack::mpegTypeS( bool audio )
     if ( mpeg_info->has_audio && audio ) {
         for ( int i = 0; i < 3; i++ )
             if ( mpeg_info->audio[ i ].seen ) {
-                if ( mpeg_info->audio[ i ].version == MPEG_VERS_MPEG2 ) {
-                    if ( mpeg_info->audio[ i ].seen ) {
-                        return "MPEG2 " + QString( i18n( "Layer %1" ) ).arg( mpeg_info->audio[ i ].layer ) + QString( audio_type2str( MPEG_VERS_MPEG2, i + 1 ) );
-                    }
-                } else
-                    switch ( mpeg_info->audio[ i ].mode ) {
-                            case MPEG_SINGLE_CHANNEL:
-                            return "MPEG1 " + QString( i18n( "Layer %1" ) ).arg( mpeg_info->audio[ i ].layer ) + QString( audio_type2str( MPEG_VERS_MPEG1, 1 ) );
-                            break;
-                            case MPEG_STEREO:
-                            case MPEG_JOINT_STEREO:
-                            return "MPEG1 " + QString( i18n( "Layer %1" ) ).arg( mpeg_info->audio[ i ].layer ) + QString( audio_type2str( MPEG_VERS_MPEG1, 2 ) );
-                            break;
-                            case MPEG_DUAL_CHANNEL:
-                            return "MPEG1 " + QString( i18n( "Layer %1" ) ).arg( mpeg_info->audio[ i ].layer ) + QString( audio_type2str( MPEG_VERS_MPEG1, 3 ) );
-                            break;
-                    }
+                return QString( "MPEG%1 " ).arg( mpeg_info->audio[ i ].version ) + i18n( "Layer %1" ).arg( mpeg_info->audio[ i ].layer );
             }
     }
 
-    return " " + i18n( "n/a" );
+    return i18n( "n/a" );
 }
 
 const int K3bVcdTrack::mpegType( )
@@ -285,44 +352,47 @@ const int K3bVcdTrack::mpegType( )
     return -1; // MPEG_UNKNOWN;
 }
 
-const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_type )
+const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mode, unsigned int audio_type )
 {
+    kdDebug() << "K3bVcdTrack::audio_type2str() version:" << version << " audio_mode:" << audio_mode << " audio_type:" << audio_type << endl;
+    
     const QString audio_types[ 3 ][ 5 ] = {
-                                              /* INVALID, VCD 1.0, or VCD 1.1 */
-                                              { i18n( "unknown" ), i18n( "invalid" ), "", "", "" },
-
-                                              /*VCD 2.0 */
-                                              { i18n( "no audio" ), i18n( "single channel" ), i18n( "stereo" ), i18n( "dual channel" ), i18n( "error" ) },
-
-                                              /* SVCD, HQVCD */
-                                              { i18n( "no stream" ), i18n( "1 stream" ), i18n( "2 streams" ),
-                                                i18n( "1 multi-channel stream (surround sound)" ), i18n( "error" ) },
+                                              {
+                                                  i18n( "unknown" ),
+                                                  i18n( "invalid" ),
+                                                  "",
+                                                  "",
+                                                  ""
+                                              },
+                                              {
+                                                  i18n( "no audio" ),
+                                                  i18n( "stereo" ),
+                                                  i18n( "joint stereo" ),
+                                                  i18n( "dual channel" ),
+                                                  i18n( "single channel" )
+                                              },
+                                              {
+                                                  "",
+                                                  i18n( "dual channel" ),
+                                                  i18n( "surround sound" ),
+                                                  "",
+                                                  ""
+                                              }
                                           };
-
-    unsigned int first_index = 0;
-
-    /* Get first index entry into above audio_type array from vcd_type */
     switch ( version ) {
-
-            case MPEG_VERS_MPEG1:
-            first_index = 1;
+        case MPEG_VERS_MPEG1:
+            return audio_types[ 1 ][ audio_mode ];
             break;
 
-            case MPEG_VERS_MPEG2:
-            first_index = 2;
+        case MPEG_VERS_MPEG2:
+            if ( audio_type > 0 ) {
+                return audio_types[ 2 ][ audio_type ];
+            }
+            return audio_types[ 1 ][ audio_mode ];
             break;
-            case MPEG_VERS_INVALID:
-            default:
-            audio_type = 4;
     }
 
-    /* We should also check that the second index is in range too. */
-    if ( audio_type > 3 ) {
-        first_index = 0;
-        audio_type = 1;
-    }
-
-    return audio_types[ first_index ][ audio_type ];
+    return i18n( "n/a" );
 }
 
 // convert a time in second to HH:mm:ss notation
@@ -342,61 +412,24 @@ QString K3bVcdTrack::SecsToHMS( double duration )
 
 void K3bVcdTrack::PrintInfo()
 {
-    kdDebug() << "K3bVcdTrack::PrintInfo()" << endl;
 
-    if ( mpeg_info->has_video ) {
-        kdDebug() << "Video Info:" << endl;
-        for ( int i = 0; i < 3; i++ )
-            if ( mpeg_info->video[ i ].seen ) {
-                if ( i == 0 ) {
-                    kdDebug() << QString( "Motion Video: MPEG%1" ).arg( mpeg_info->version ) << endl;
-                } else {
-                    kdDebug() << QString( "Still Video: MPEG%1" ).arg( mpeg_info->version ) << endl;
-                }
+    kdDebug() << "K3bVcdTrack::PrintInfo() ....................." << endl;
+    kdDebug() << "  version          : MPEG" << version() << endl;
+    kdDebug() << "  duration         : " << duration() << endl;
+    kdDebug() << "  muxrate          : " << muxrate() << endl;
+    kdDebug() << "  video ......................................" << endl;
+    kdDebug() << "    type           : " << mpegTypeS() << endl;
+    kdDebug() << "    resolution     : " << resolution() << endl;
+    kdDebug() << "    high resolution: " << highresolution() << endl;
+    kdDebug() << "    frate          : " << video_frate() << endl;
+    kdDebug() << "    bitrate        : " << video_bitrate() << endl;
+    kdDebug() << "    format         : " << video_format( ) << endl;
+    kdDebug() << "    chroma         : " << video_chroma( ) << endl;
+    kdDebug() << "  audio ......................................" << endl;
+    kdDebug() << "    type           : " << mpegTypeS( true ) << endl;
+    kdDebug() << "    mode           : " << audio_mode() << endl;
+    kdDebug() << "    layer          : " << audio_layer() << endl;
+    kdDebug() << "    bitrate        : " << audio_bitrate() << endl;
+    kdDebug() << "    sampfreq       : " << audio_sampfreq() << endl;
 
-                if ( i == 1 )
-                    kdDebug() << "Low Resolution Picture" << endl;
-                else if ( i == 2 )
-                    kdDebug() << "High Resolution Picture" << endl;
-
-                kdDebug() << QString( "hsize: %1" ).arg( mpeg_info->video[ i ].hsize ) << endl;
-                kdDebug() << QString( "vsize: %1" ).arg( mpeg_info->video[ i ].vsize ) << endl;
-                kdDebug() << QString( "aratio: %1" ).arg( mpeg_info->video[ i ].aratio ) << endl;
-                kdDebug() << QString( "frate: %1" ).arg( mpeg_info->video[ i ].frate ) << endl;
-                kdDebug() << QString( "bitrate: %1" ).arg( mpeg_info->video[ i ].bitrate ) << endl;
-                kdDebug() << QString( "vbvsize: %1" ).arg( mpeg_info->video[ i ].vbvsize ) << endl;
-                kdDebug() << QString( "constrained: %1" ).arg( mpeg_info->video[ i ].constrained_flag ) << endl;
-            }
-    }
-    if ( mpeg_info->has_audio ) {
-
-        kdDebug() << "Audio Info:" << endl;
-        for ( int i = 0; i < 3; i++ )
-            if ( mpeg_info->audio[ i ].seen ) {
-                kdDebug() << QString( "Audio # %1" ).arg( i ) << endl;
-                kdDebug() << QString( "version: %1" ).arg( mpeg_info->audio[ i ].version ) << endl;
-                kdDebug() << QString( "layer: %1" ).arg( mpeg_info->audio[ i ].layer ) << endl;
-                kdDebug() << QString( "bitrate: %1" ).arg( mpeg_info->audio[ i ].bitrate ) << endl;
-                kdDebug() << QString( "byterate: %1" ).arg( mpeg_info->audio[ i ].byterate ) << endl;
-                kdDebug() << QString( "sampfreq: %1" ).arg( mpeg_info->audio[ i ].sampfreq ) << endl;
-
-                if ( mpeg_info->audio[ i ].version == MPEG_VERS_MPEG2 ) {
-                    if ( mpeg_info->audio[ i ].seen ) {
-                        kdDebug() << QString( "mode: %1" ).arg( audio_type2str( MPEG_VERS_MPEG2, i + 1 ) ) << endl;
-                    }
-                } else
-                    switch ( mpeg_info->audio[ i ].mode ) {
-                            case MPEG_SINGLE_CHANNEL:
-                            kdDebug() << QString( "mode: %1" ).arg( audio_type2str( MPEG_VERS_MPEG1, 1 ) ) << endl;
-                            break;
-                            case MPEG_STEREO:
-                            case MPEG_JOINT_STEREO:
-                            kdDebug() << QString( "mode: %1" ).arg( audio_type2str( MPEG_VERS_MPEG1, 2 ) ) << endl;
-                            break;
-                            case MPEG_DUAL_CHANNEL:
-                            kdDebug() << QString( "mode: %1" ).arg( audio_type2str( MPEG_VERS_MPEG1, 3 ) ) << endl;
-                            break;
-                    }
-            }
-    }
 }

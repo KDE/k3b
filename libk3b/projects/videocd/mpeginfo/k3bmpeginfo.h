@@ -1,6 +1,6 @@
 /*
 *
-* $Id: $
+* $Id$
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
@@ -64,6 +64,9 @@ class video_info
         double frate;
         unsigned long bitrate;
         unsigned long vbvsize;
+        bool progressive;
+        unsigned char video_format;
+        unsigned char chroma_format;
         bool constrained_flag;
 };
 
