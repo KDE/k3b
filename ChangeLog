@@ -3,6 +3,8 @@ Fixed Cd-Text loading in audio projects.
 Fixed data project character restrictions.
 Little improvements to the device capabilities detection.
 Once again improved writing speed detection. Hopefully this is the last time. ;)
+Do not warn about cdrecord not running suid root on kernel 2.6.8 and above
+K3bSetup now removes the suid root bit on kernel 2.6.8 an above systems.
 	
 0.11.17
 Fixed some DVD writing speed detection issues.

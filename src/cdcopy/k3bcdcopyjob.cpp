@@ -656,7 +656,7 @@ bool K3bCdCopyJob::writeNextSession()
   emit newSubTask( i18n("Waiting for disk") );
 
   // if session > 1 we wait for an appendable CD
-  if( K3bEmptyDiscWaiter::wait( m_writerDevice, d->currentWrittenSession > 1 ) == K3bEmptyDiscWaiter::CANCELED ) {
+  if( K3bEmptyDiscWaiter::wait( m_writerDevice, d->currentWrittenSession > 1 && !m_simulate ) == K3bEmptyDiscWaiter::CANCELED ) {
     d->canceled = true;
     return false;
   }

@@ -190,7 +190,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 i18n("Install a more recent version of the cdrtools."),
 					 false ) );
     
-    if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+    if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) &&
+	K3b::kernelVersion() < K3bVersion( 2, 6, 8 ) )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("%1 does not run with root privileges").arg("cdrecord"),
 					 i18n("It is highly recommended to configure cdrecord "
@@ -211,7 +212,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 				       i18n("Install the cdrdao package."),
 				       false ) );
   }
-  else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) ) {
+  else if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) &&
+	   K3b::kernelVersion() < K3bVersion( 2, 6, 8 ) ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 				       i18n("%1 does not run with root privileges").arg("cdrdao"),
 				       i18n("It is highly recommended to configure cdrdao "
@@ -220,16 +222,6 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 				       i18n("Use K3bSetup to solve this problem."),
 				       true ) );
   }
-
-
-//   if( const K3bExternalBin* readcdBin = k3bcore->externalBinManager()->binObject( "readcd" ) )
-//     if( !readcdBin->hasFeature( "suidroot" ) )
-//       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-// 					 i18n("%1 does not run with root privileges").arg("readcd"),
-// 					 i18n("It is recommended to run readcd with root "
-// 					      "privileges."),
-// 					 i18n("Use K3bSetup to solve this problem."),
-// 					 true ) );
 
 
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {

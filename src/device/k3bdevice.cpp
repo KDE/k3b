@@ -2025,36 +2025,36 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
     // Set writing mode to TAO.
     // In RAW writing mode we do not get the values we want.
     //
-    if( modeSense( &data, dataLen, 0x05 ) ) {
-      wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
+//     if( modeSense( &data, dataLen, 0x05 ) ) {
+//       wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
 	    
-      // reset some stuff to be on the safe side
-      mp->PS = 0;
-      mp->BUFE = 0;
-      mp->multi_session = 0;
-      mp->test_write = 0;
-      mp->LS_V = 0;
-      mp->copy = 0;
-      mp->fp = 0;
-      mp->host_appl_code= 0;
-      mp->session_format = 0;
-      mp->audio_pause_len[0] = 0;
-      mp->audio_pause_len[1] = 150;
+//       // reset some stuff to be on the safe side
+//       mp->PS = 0;
+//       mp->BUFE = 0;
+//       mp->multi_session = 0;
+//       mp->test_write = 0;
+//       mp->LS_V = 0;
+//       mp->copy = 0;
+//       mp->fp = 0;
+//       mp->host_appl_code= 0;
+//       mp->session_format = 0;
+//       mp->audio_pause_len[0] = 0;
+//       mp->audio_pause_len[1] = 150;
 
-      mp->write_type = 0x01;  // TAO
-      mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
-      mp->dbtype = 8;         // Mode 1
+//       mp->write_type = 0x01;  // TAO
+//       mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
+//       mp->dbtype = 8;         // Mode 1
 
-      if( !modeSelect( data, dataLen, 1, 0 ) ) {
-	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
-		  << ": modeSelect 0x05 failed!" << endl;
-      }
+//       if( !modeSelect( data, dataLen, 1, 0 ) ) {
+// 	kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName()
+// 		  << ": modeSelect 0x05 failed!" << endl;
+//       }
 
-      delete [] data;
-    }
-    else
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-		<< ": modeSense 0x05 failed!" << endl;
+//       delete [] data;
+//     }
+//     else
+//       kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
+// 		<< ": modeSense 0x05 failed!" << endl;
 
 
     //
