@@ -429,7 +429,8 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
     // /////////////////////////////////////////////////////////////
 
     // we have exactly what was requested
-    else if( (d->wantedMediaType & dh->ngDiskInfo().mediaType()) &&
+    else if( (d->wantedMediaType & (dh->ngDiskInfo().mediaType()|
+				    dh->ngDiskInfo().currentProfile())) &&
 	     (d->wantedMediaState & dh->ngDiskInfo().diskState()) )
       finishWaiting( dh->ngDiskInfo().mediaType() );
 

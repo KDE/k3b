@@ -495,15 +495,22 @@ bool K3bDvdJob::waitForDvd()
 	emit infoMessage( i18n("Growing Iso9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
     }
     else if( m & (K3bCdDevice::MEDIA_DVD_RW_SEQ|
-		  K3bCdDevice::MEDIA_DVD_R_SEQ|
-		  K3bCdDevice::MEDIA_DVD_R|
 		  K3bCdDevice::MEDIA_DVD_RW) ) {
       if( m_doc->writingMode() == K3b::DAO ||
 	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
 	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
-   	emit infoMessage( i18n("Writing DVD-R(W) in DAO mode."), INFO );
+   	emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
       else
-	emit infoMessage( i18n("Writing DVD-R(W) in sequential mode."), INFO );	
+	emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );	
+    }
+    else if( m & (K3bCdDevice::MEDIA_DVD_R_SEQ|
+		  K3bCdDevice::MEDIA_DVD_R) ) {
+      if( m_doc->writingMode() == K3b::DAO ||
+	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+	    m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+	emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+      else
+	emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );	
     }
   }
 

@@ -204,7 +204,7 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->setColStretch( 3, 1 );
 
   QGroupBox* groupMisc = new QGroupBox( 2, Qt::Vertical, i18n("Miscellaneous"), advancedTab );
-  m_checkEject = new QCheckBox( i18n("Do not &eject CD after write process"), groupMisc );
+  m_checkEject = new QCheckBox( i18n("Do not &eject medium after write process"), groupMisc );
   m_checkAutoErasingRewritable = new QCheckBox( i18n("Automatically erase CD-RWs and DVD-RWs"), groupMisc );
 
   groupAdvancedLayout->addWidget( groupWritingApp, 0, 0 );
