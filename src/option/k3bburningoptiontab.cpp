@@ -140,7 +140,7 @@ void K3bBurningOptionTab::setupGui()
   groupAdvancedLayout->setMargin( KDialog::marginHint() );
 
   m_checkEject = new QCheckBox( i18n("Do not eject CD after write process"), advancedTab );
-  m_checkOverburn = new QCheckBox( i18n("Allow overburning"), advancedTab );
+  m_checkOverburn = new QCheckBox( i18n("Allow overburning (not supported by cdrecord <= 1.10)"), advancedTab );
   m_checkManualWritingBufferSize = new QCheckBox( i18n("Manual writing buffer size"), advancedTab );
   m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, advancedTab );
   m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, advancedTab );
