@@ -566,7 +566,11 @@ bool K3bMixedJob::writeTocFile()
     }
     *s << endl;
 
-    m_tempData->writeAudioTocCdTextHeader( *s );
+    // we do not need a cd-text header when writing the second session
+    // which only contains the iso image
+    if( !(m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION &&
+	  m_currentAction == WRITING_ISO_IMAGE ) )
+      m_tempData->writeAudioTocCdTextHeader( *s );
 
     if( ( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION &&
 	  m_currentAction == WRITING_AUDIO_IMAGE ) ||
@@ -611,8 +615,8 @@ bool K3bMixedJob::writeTocFile()
     m_tocFile->close();
 
     // backup for debugging
-    KIO::NetAccess::del("/home/trueg/tmp/tocfile_debug_backup.toc");
-    KIO::NetAccess::copy( m_tocFile->name(), "/home/trueg/tmp/tocfile_debug_backup.toc" );
+//     KIO::NetAccess::del("/home/trueg/tmp/tocfile_debug_backup.toc");
+//     KIO::NetAccess::copy( m_tocFile->name(), "/home/trueg/tmp/tocfile_debug_backup.toc" );
 
     return true;
   }
