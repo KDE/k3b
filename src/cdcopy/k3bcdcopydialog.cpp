@@ -1,4 +1,4 @@
-/*
+/* 
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -17,8 +17,7 @@
 
 #include "k3bcdcopydialog.h"
 
-#include "k3bcdcopythread.h"
-#include "k3bthreadjob.h"
+#include "k3bcdcopyjob.h"
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3b.h>
@@ -26,7 +25,6 @@
 #include <device/k3bdevice.h>
 #include <device/k3bdevicemanager.h>
 #include <k3bburnprogressdialog.h>
-#include <k3bemptydiscwaiter.h>
 
 #include <kguiitem.h>
 #include <klocale.h>
@@ -277,51 +275,43 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
  
   K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
   if( !dev )
-    kdDebug() << "(K3bCdCopyDialog) could not find device " << strDev << endl;
-
+    kdDebug() << "(K3bCdCopyDialog) could not find device " << s << endl;
+		
   return dev;
 }
 
 
 void K3bCdCopyDialog::slotUser1()
 {
-  K3bCdCopyThread *thread = new K3bCdCopyThread(this);
-  K3bThreadJob* job = new K3bThreadJob( thread, this );
-
-  thread->setWriter( m_writerSelectionWidget->writerDevice() );
-  thread->setSpeed( m_writerSelectionWidget->writerSpeed() );
-  thread->setReader( readingDevice() );
-  thread->setDummy( m_checkSimulate->isChecked() );
-  thread->setOnTheFly( m_checkOnTheFly->isChecked() );
-  thread->setKeepImage( !m_checkDeleteImages->isChecked() );
-  thread->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-  thread->setFastToc( m_checkFastToc->isChecked() );
-  thread->setTempPath( m_tempDirSelectionWidget->tempPath() );
+  K3bCdCopyJob* job = new K3bCdCopyJob( this );
+  
+  job->setWriter( m_writerSelectionWidget->writerDevice() );
+  job->setSpeed( m_writerSelectionWidget->writerSpeed() );
+  job->setReader( readingDevice() );
+  job->setDummy( m_checkSimulate->isChecked() );
+  job->setOnTheFly( m_checkOnTheFly->isChecked() );
+  job->setKeepImage( !m_checkDeleteImages->isChecked() );
+  job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+  job->setFastToc( m_checkFastToc->isChecked() );
+  job->setTempPath( m_tempDirSelectionWidget->tempPath() );
   if( !m_checkSimulate->isChecked() )
-    thread->setCopies( m_spinCopies->value() );
-  thread->setReadRaw( m_checkRawCopy->isChecked() );
-  thread->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+    job->setCopies( m_spinCopies->value() );
+  job->setReadRaw( m_checkRawCopy->isChecked() );
+  job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
   if ( m_checkTaoSource->isChecked() ) {
-    thread->setTaoSource(true);
+    job->setTaoSource(true);
     if (m_spinTaoSourceAdjust->value() != 2)
-      thread->setTaoSourceAdjust( m_spinTaoSourceAdjust->value() );
+      job->setTaoSourceAdjust( m_spinTaoSourceAdjust->value() );
   }
-  QString submode = m_comboSubchanMode->currentText();
+  QString submode = m_comboSubchanMode->currentText(); 
   if ( submode == "rw" )
-    thread->setReadSubchan(K3bCdrdaoWriter::RW);
+    job->setReadSubchan(K3bCdrdaoWriter::RW);
   else if ( submode == "rw_raw" )
-    thread->setReadSubchan(K3bCdrdaoWriter::RW_RAW);
-  thread->setForce(m_checkForce->isChecked());
+    job->setReadSubchan(K3bCdrdaoWriter::RW_RAW);
+  job->setForce(m_checkForce->isChecked());
 
-  if ( ! m_checkOnlyCreateImage->isChecked() ) {
-    K3bEmptyDiscWaiter waiter( m_writerSelectionWidget->writerDevice(), k3bMain() );
-    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-      slotClose();
-      return;
-    }
-  }
   // create a progresswidget
-  K3bBurnProgressDialog  d( k3bMain(), "burnProgress",
+  K3bBurnProgressDialog d( k3bMain(), "burnProgress", 
 			   true /*!m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked()*/,
 			   !m_checkOnlyCreateImage->isChecked() );
 
@@ -331,8 +321,6 @@ void K3bCdCopyDialog::slotUser1()
 
   job->start();
   d.exec();
-  delete thread;
-  delete job;
 
   slotClose();
 }
