@@ -80,11 +80,12 @@ class K3bVcdDoc : public K3bDoc
   K3bVcdOptions* vcdOptions() const { return m_vcdOptions; }
 
   bool deleteImage() const { return m_deleteImage; }
-
+  bool onlyCreateImage() const { return m_onlyCreateImage; }
+  
   int vcdType() const { return m_vcdType; }
   void setVcdType( int type );
   void setDeleteImage( bool b ) { m_deleteImage = b; }
-      
+  void setOnlyCreateImage( bool b) { m_onlyCreateImage = b; }      
 
  public slots:
   /**
@@ -149,6 +150,8 @@ class K3bVcdDoc : public K3bDoc
   K3bVcdOptions* m_vcdOptions;
 
   bool m_deleteImage;
+  bool m_onlyCreateImage;
+  
   int m_vcdType;
   uint lastAddedPosition;
 };

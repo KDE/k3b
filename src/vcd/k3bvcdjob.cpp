@@ -472,14 +472,18 @@ void K3bVcdJob::slotVcdxBuildFinished()
   if( QFile::exists( m_xmlFile ) )
     QFile::remove( m_xmlFile );
 
-  kdDebug() << "(K3bVcdJob) call prepareWriterJob()" << endl;      
-  if( prepareWriterJob() ) {
-    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-    if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
-      cancel();
-      return;
+  if ( !vcdDoc()->onlyCreateImage() ) {
+    if( prepareWriterJob() ) {
+      K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+      if( waiter.waitForEmptyDisc() == K3bEmptyDiscWaiter::CANCELED ) {
+        cancel();
+        return;
+      }
+      m_writerJob->start();
     }
-    m_writerJob->start();
+  }
+  else {
+    emit finished( true );
   }
 }
 

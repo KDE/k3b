@@ -23,6 +23,7 @@
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
+#include "../k3bstdguiitems.h"
 #include "../tools/k3bglobals.h"
 
 #include <qcheckbox.h>
@@ -55,6 +56,9 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   m_checkDao->hide();
   m_checkOnTheFly->hide();
 
+  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
+  m_optionGroupLayout->addWidget( m_checkOnlyCreateImage );
+  
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -73,9 +77,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
     path.append("/");
 
   path.append( vcdDoc()->vcdOptions()->volumeId() + ".bin" );
-  m_tempDirSelectionWidget->setTempPath( path );
-
-  m_tempDirSelectionWidget->setNeededSize( doc()->size() );
+  // m_tempDirSelectionWidget->setTempPath( path );
 
   readSettings();
   if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() )
@@ -85,6 +87,13 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
   connect( m_spinVolumeCount, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeCount()) );
   connect( m_spinVolumeNumber, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeNumber()) );
+
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnproof, SLOT(setDisabled(bool)) );
+  // connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
     
   // ToolTips
   // -------------------------------------------------------------------------
@@ -214,7 +223,6 @@ void K3bVcdBurnDialog::setupLabelTab()
   
   m_spinVolumeNumber->setMinValue(1);
   m_spinVolumeCount->setMinValue(1);
-  m_spinVolumeNumber->setMaxValue(m_spinVolumeCount->value());
 
   QFrame* line = new QFrame( w );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
@@ -291,14 +299,20 @@ void K3bVcdBurnDialog::loadDefaults()
 {
   m_checkSimulate->setChecked( false );
   m_checkBurnproof->setChecked( true );
-
   m_checkRemoveBufferFiles->setChecked( true );
+  m_checkOnlyCreateImage->setChecked( false );
 
-  m_checkApplicationId->setChecked( true );
+  m_checkApplicationId->setChecked( false );
 
-  m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
-  m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
+  m_editVolumeId->setText( "VIDEOCD" );
+  m_editAlbumId->setText( "" );
 
+  m_check2336->setChecked( false );
+  m_checkNonCompliant->setChecked( false );
+
+  m_spinVolumeNumber->setValue( 1 );
+  m_spinVolumeCount->setValue( 1 );
+  
   // TODO: for the future
   // m_editPublisher->setText( o->publisher() );
   // m_editPreparer->setText( o->preparer() );
@@ -311,7 +325,6 @@ void K3bVcdBurnDialog::saveSettings()
   doc()->setDao( true );
   doc()->setDummy( m_checkSimulate->isChecked() );
   doc()->setOnTheFly( false );
-  ((K3bVcdDoc*)doc())->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
 
   // -- saving current speed --------------------------------------
   doc()->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -319,19 +332,25 @@ void K3bVcdBurnDialog::saveSettings()
   // -- saving current device --------------------------------------
   doc()->setBurner( m_writerSelectionWidget->writerDevice() );
 
+  vcdDoc()->setDeleteImage( m_checkRemoveBufferFiles->isChecked() );
   // save image file path (.bin)
-  ((K3bVcdDoc*)doc())->setVcdImage( m_tempDirSelectionWidget->tempPath() );
+  vcdDoc()->setVcdImage( m_tempDirSelectionWidget->tempPath() );
 
   // TODO: save vcdType
   vcdDoc()->vcdOptions()->setVolumeId( m_editVolumeId->text() );
   vcdDoc()->vcdOptions()->setAlbumId( m_editAlbumId->text() );
+
+  vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
+  vcdDoc()->vcdOptions()->setSector2336(m_check2336->isChecked());
+
 }
 
 
 void K3bVcdBurnDialog::readSettings()
 {
   m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkRemoveBufferFiles->setChecked( ((K3bVcdDoc*)doc())->deleteImage() );
+  m_checkRemoveBufferFiles->setChecked( vcdDoc()->deleteImage() );
+  m_checkBurnproof->setChecked( doc()->burnproof() );
 
   // read vcdType
   switch( ((K3bVcdDoc*)doc())->vcdType() ) {
@@ -353,6 +372,18 @@ void K3bVcdBurnDialog::readSettings()
     break;
   }
 
+  m_spinVolumeCount->setValue( vcdDoc()->vcdOptions()->volumeCount() );
+  m_spinVolumeNumber->setValue( vcdDoc()->vcdOptions()->volumeNumber() );
+
+  m_check2336->setChecked( vcdDoc()->vcdOptions()->Sector2336() );
+
+  if ( m_radioSvcd10->isChecked() ) {
+    m_checkNonCompliant->setChecked( vcdDoc()->vcdOptions()->BrokenSVcdMode() );
+  }
+  else {
+    m_checkNonCompliant->setChecked( false );
+    m_checkNonCompliant->setEnabled( false );
+  }
 
   m_editVolumeId->setText( vcdDoc()->vcdOptions()->volumeId() );
   m_editAlbumId->setText( vcdDoc()->vcdOptions()->albumId() );
@@ -364,23 +395,53 @@ void K3bVcdBurnDialog::loadUserDefaults()
 {
   KConfig* c = k3bMain()->config();
 
-  c->setGroup( "default vcd settings" );
+  c->setGroup( "Videocd settings" );
 
+  K3bVcdOptions o = K3bVcdOptions::load( c );
+  
+  m_check2336->setChecked( o.Sector2336() );
+    
+  if ( m_radioSvcd10->isChecked() ) {
+    m_checkNonCompliant->setChecked( o.BrokenSVcdMode() );
+  }
+  else {
+    m_checkNonCompliant->setChecked( false );
+    m_checkNonCompliant->setEnabled( false );
+  }
+
+  m_spinVolumeCount->setValue( o.volumeCount() );
+  m_spinVolumeNumber->setValue( o.volumeNumber() );
+
+  m_editVolumeId->setText( o.volumeId() );
+  m_editAlbumId->setText( o.albumId() );
+        
   m_checkSimulate->setChecked( c->readBoolEntry( "dummy_mode", false ) );
   m_checkBurnproof->setChecked( c->readBoolEntry( "burnproof", true ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
+  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+
 }
 
 
 void K3bVcdBurnDialog::saveUserDefaults()
 {
   KConfig* c = k3bMain()->config();
+  K3bVcdOptions o;
 
-  c->setGroup( "default vcd settings" );
+  c->setGroup( "Videocd settings" );
 
   c->writeEntry( "dummy_mode", m_checkSimulate->isChecked() );
   c->writeEntry( "burnproof", m_checkBurnproof->isChecked() );
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
+  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+
+  o.setVolumeId( m_editVolumeId->text() );
+  o.setAlbumId( m_editAlbumId->text() );
+  o.setBrokenSVcdMode(m_checkNonCompliant->isChecked());
+  o.setSector2336(m_check2336->isChecked());
+  o.setVolumeCount(m_spinVolumeCount->value());
+  o.setVolumeNumber(m_spinVolumeNumber->value());  
+  o.save( c );
 
   m_tempDirSelectionWidget->saveConfig();
 }
@@ -388,7 +449,7 @@ void K3bVcdBurnDialog::saveUserDefaults()
 void K3bVcdBurnDialog::slotNonCompliantToggled()
 {
   // trueg: shouldn't this be done when the user clicks "save" or "burn"?
-  vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());  
+  vcdDoc()->vcdOptions()->setBrokenSVcdMode(m_checkNonCompliant->isChecked());
 }
 
 void K3bVcdBurnDialog::slot2336Toggled()
@@ -407,6 +468,22 @@ void K3bVcdBurnDialog::slotSpinVolumeCount()
 void K3bVcdBurnDialog::slotSpinVolumeNumber()
 {
   vcdDoc()->vcdOptions()->setVolumeNumber(m_spinVolumeNumber->value());  
+}
+
+void K3bVcdBurnDialog::slotOnlyCreateImageChecked( bool c )
+{
+  if( c ) {
+    m_checkRemoveBufferFiles->setChecked( false );
+    m_checkBurnproof->setChecked( false );
+    m_checkSimulate->setChecked( false );
+  }
+  else {
+    m_checkSimulate->setChecked( doc()->dummy() );
+    m_checkRemoveBufferFiles->setChecked( vcdDoc()->deleteImage() );
+    m_checkBurnproof->setChecked( doc()->burnproof() );
+  }
+
+  vcdDoc()->setOnlyCreateImage( c );
 }
 
 #include "k3bvcdburndialog.moc"

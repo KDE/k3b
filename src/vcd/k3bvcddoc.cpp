@@ -383,11 +383,13 @@ void K3bVcdDoc::loadDefaultSettings()
 {
   KConfig* c = k3bMain()->config();
 
-  c->setGroup( "default vcd settings" );
+  c->setGroup( "Videocd settings" );
 
   setDummy( c->readBoolEntry( "dummy_mode", false ) );
   setDao( c->readBoolEntry( "dao", true ) );
   setOnTheFly( c->readBoolEntry( "on_the_fly", false ) );
+  setBurnproof( c->readBoolEntry( "burnproof", true ) );
+  setDeleteImage( c->readBoolEntry( "only_create_image", false ) );
 
   m_deleteImage = c->readBoolEntry( "remove_image", true );  
 

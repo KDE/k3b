@@ -25,8 +25,11 @@
 K3bVcdOptions::K3bVcdOptions()
   : m_volumeID( i18n("Project name", "VIDEOCD") ),
     m_applicationID( "K3B" ),
-    m_volumeCount(1 ),
-    m_volumeNumber(1 )
+    m_volumeSetId( "" ),
+    m_brokensvcdmode( false ),
+    m_sector2336( false ),
+    m_volumeCount( 1 ),
+    m_volumeNumber( 1 )
 {
 
 }
@@ -34,14 +37,16 @@ K3bVcdOptions::K3bVcdOptions()
 
 void K3bVcdOptions::save( KConfig* c )
 {
-  c->writeEntry( "volume id", m_volumeID );
-  c->writeEntry( "album id", m_albumID );
+  c->writeEntry( "volume_id", m_volumeID );
+  c->writeEntry( "album_id", m_albumID );
   c->writeEntry( "preparer", m_preparer );
   c->writeEntry( "publisher", m_publisher );
-  c->writeEntry( "system id", m_systemId );
-  c->writeEntry( "volume set id", m_volumeSetId );
-  // c->writeEntry( "volume count", m_volumeCount );  
-  // c->writeEntry( "volume number", m_volumeNumber );  
+  c->writeEntry( "system_id", m_systemId );
+  c->writeEntry( "volume_set_id", m_volumeSetId );
+  c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
+  c->writeEntry( "2336_sectors", m_sector2336 );
+  c->writeEntry( "volume_count", m_volumeCount );  
+  c->writeEntry( "volume_number", m_volumeNumber );  
 }
 
 
@@ -49,14 +54,16 @@ K3bVcdOptions K3bVcdOptions::load( KConfig* c )
 {
   K3bVcdOptions options;
 
-  options.setVolumeId( c->readEntry( "volume id", options.volumeId() ) );
-  options.setAlbumId( c->readEntry( "album id", options.albumId() ) );
+  options.setVolumeId( c->readEntry( "volume_id", options.volumeId() ) );
+  options.setAlbumId( c->readEntry( "album_id", options.albumId() ) );
   options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
   options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-  options.setSystemId( c->readEntry( "system id", options.systemId() ) );
-  options.setVolumeSetId( c->readEntry( "volume set id", options.volumeSetId() ) );
-  // options.setVolumeCount( c->readEntry( "volume count", options.volumeCount() ) );
-  // options.setVolumeNumber( c->readEntry( "volume number", options.volumeNumber() ) );
+  options.setSystemId( c->readEntry( "system_id", options.systemId() ) );
+  options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
+  options.setBrokenSVcdMode( c->readBoolEntry( "broken_svcd_mode", options.BrokenSVcdMode() ) );
+  options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
+  options.setVolumeCount( ( c->readEntry( "volume_count", QString("%1").arg(options.volumeCount()) )).toInt() );
+  options.setVolumeNumber( ( c->readEntry( "volume_number", QString("%1").arg(options.volumeNumber()) )).toInt() );
   
   return options;
 }

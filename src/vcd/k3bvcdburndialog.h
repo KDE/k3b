@@ -50,6 +50,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
+   QCheckBox* m_checkOnlyCreateImage;
+   
    // -----------------------------------------------------------
    // the video-cd-tab
    // -----------------------------------------------------------
@@ -89,6 +91,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void slot2336Toggled();
    void slotSpinVolumeCount();
    void slotSpinVolumeNumber();
+   void slotOnlyCreateImageChecked(bool);
 };
 
 #endif
