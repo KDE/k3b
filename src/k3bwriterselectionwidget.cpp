@@ -257,7 +257,8 @@ int K3bWriterSelectionWidget::selectedWritingApp() const
 
 void K3bWriterSelectionWidget::slotSpeedChanged( int )
 {
-  writerDevice()->setCurrentWriteSpeed( writerSpeed() );
+  if( K3bCdDevice::CdDevice* dev = writerDevice() )
+    dev->setCurrentWriteSpeed( writerSpeed() );
 }
 
 

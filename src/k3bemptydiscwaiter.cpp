@@ -149,7 +149,6 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( bool success )
   if( success ) {
     int x = d->deviceHandler->errorCode();
     if( x == K3bDevice::EMPTY || ( x == K3bDevice::APPENDABLE && d->appendable ) ) {
-      
       finishWaiting( DISK_READY );
     }
     else {
@@ -179,23 +178,29 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( bool success )
 	}
       }
       else {
-	// we need to show the dialog if not done already
-	if( !d->dialogVisible ) {
-	  d->dialogVisible = true;
-	  clearWFlags( WDestructiveClose );
-	  setWFlags( WShowModal );
-	  show();
-	}
+	showDialog();
       }
       
       QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
     }
   }
   else { // success == false
+    showDialog();
     QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
   }
 }
 
+
+void K3bEmptyDiscWaiter::showDialog()
+{
+  // we need to show the dialog if not done already
+  if( !d->dialogVisible ) {
+    d->dialogVisible = true;
+    clearWFlags( WDestructiveClose );
+    setWFlags( WShowModal );
+    show();
+  }
+}
 
 void K3bEmptyDiscWaiter::slotCancel()
 {
