@@ -43,6 +43,7 @@ class K3bVcdXmlView
     private:
         QString m_xmlstring;
 
+        void addComment( QDomDocument& doc, QDomElement& parent, const QString& text );
         QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const QString& value = QString::null );
         QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const int& value );
 
@@ -52,6 +53,7 @@ class K3bVcdXmlView
         void setNumkeyBSN( QDomDocument& , QDomElement&, K3bVcdTrack* );
         void setNumkeySEL( QDomDocument& , QDomElement&, K3bVcdTrack* );
         K3bVcdDoc* m_doc;
+        int m_startkey;
 };
 
 #endif

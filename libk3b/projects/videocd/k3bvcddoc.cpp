@@ -641,6 +641,8 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
                 track ->setWaitTime( trackElem.attribute( "waittime", "2" ).toInt() );
                 track ->setReactivity( trackElem.attribute( "reactivity", "0" ).toInt() );
+                track -> setPbcNumKeys( ( trackElem.attribute( "numkeys", "yes" ).contains( "yes" ) ) ? true : false );
+                track -> setPbcNumKeysUserdefined( ( trackElem.attribute( "userdefinednumkeys", "no" ).contains( "yes" ) ) ? true : false );
 
                 addTrack( track, m_tracks->count() );
             }
@@ -658,45 +660,60 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         for ( uint trackId = 0; trackId < trackNodes.length(); trackId++ ) {
             QDomElement trackElem = trackNodes.item( trackId ).toElement();
             QDomNodeList trackNodes = trackElem.childNodes();
-            kdDebug() << "PBC Element Type: " << trackElem.attribute ( "type" ) << endl;
-            kdDebug() << "PBC Element PbcTrack: " << trackElem.attribute ( "pbctrack" ) << endl;
-            kdDebug() << "PBC Element Value: " << trackElem.attribute ( "val" ) << endl;
-            kdDebug() << "------------------------------------" << endl;
             for ( uint i = 0; i < trackNodes.length(); i++ ) {
                 QDomElement trackElem = trackNodes.item( i ).toElement();
-                if ( trackElem.hasAttribute ( "type" ) ) {
-                    type = trackElem.attribute ( "type" ).toInt();
-                    if ( trackElem.hasAttribute ( "pbctrack" ) ) {
-                        pbctrack = ( trackElem.attribute ( "pbctrack" ) == "yes" );
+                QString name = trackElem.tagName();
+                if ( name.contains( "pbc" ) ) {
+                    if ( trackElem.hasAttribute ( "type" ) ) {
+                        type = trackElem.attribute ( "type" ).toInt();
+                        if ( trackElem.hasAttribute ( "pbctrack" ) ) {
+                            pbctrack = ( trackElem.attribute ( "pbctrack" ) == "yes" );
+                            if ( trackElem.hasAttribute ( "val" ) ) {
+                                val = trackElem.attribute ( "val" ).toInt();
+                                K3bVcdTrack* track = m_tracks->at( trackId );
+                                K3bVcdTrack* pbcTrack = m_tracks->at( val );
+                                if ( pbctrack ) {
+                                    pbcTrack->addToRevRefList( track );
+                                    track->setPbcTrack( type, pbcTrack );
+                                    track->setUserDefined( type, true );
+                                } else {
+                                    track->setPbcTrack( type );
+                                    track->setPbcNonTrack( type, val );
+                                    track->setUserDefined( type, true );
+                                }
+                            }
+                        }
+                    }
+                } else if ( name.contains( "numkeys" ) ) {
+                    if ( trackElem.hasAttribute ( "key" ) ) {
+                        int key = trackElem.attribute ( "key" ).toInt();
                         if ( trackElem.hasAttribute ( "val" ) ) {
-                            val = trackElem.attribute ( "val" ).toInt();
+                            int val = trackElem.attribute ( "val" ).toInt() - 1;
                             K3bVcdTrack* track = m_tracks->at( trackId );
-                            K3bVcdTrack* pbcTrack = m_tracks->at( val );
-                            if ( pbctrack ) {
-                                pbcTrack->addToRevRefList( track );
-                                track->setPbcTrack( type, pbcTrack );
-                                track->setUserDefined( type, true );
+                            if ( val >= 0 ) {
+                                K3bVcdTrack * numkeyTrack = m_tracks->at( val );
+                                track->setDefinedNumKey( key, numkeyTrack );
                             } else {
-                                track->setPbcTrack( type );
-                                track->setPbcNonTrack( type, val );
-                                track->setUserDefined( type, true );
+                                track->setDefinedNumKey( key, 0L );
                             }
                         }
                     }
                 }
+
             }
+
         }
         setPbcTracks();
         setModified( false );
     }
 
     informAboutNotFoundFiles();
-
     return true;
 }
 
 
-bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
+
+bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
 {
     QDomDocument doc = docElem->ownerDocument();
     saveGeneralDocumentData( docElem );
@@ -824,8 +841,12 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
         trackElem.setAttribute( "playtime", track->getPlayTime() );
         trackElem.setAttribute( "waittime", track->getWaitTime() );
         trackElem.setAttribute( "reactivity", track->Reactivity() );
+        trackElem.setAttribute( "numkeys", ( track->PbcNumKeys() ) ? "yes" : "no" );
+        trackElem.setAttribute( "userdefinednumkeys", ( track->PbcNumKeysUserdefined() ) ? "yes" : "no" );
 
-        for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+        for ( int i = 0;
+                i < K3bVcdTrack::_maxPbcTracks;
+                i++ ) {
             if ( track->isPbcUserDefined( i ) ) {
                 // save pbcTracks
                 QDomElement pbcElem = doc.createElement( "pbc" );
@@ -840,6 +861,22 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
                 trackElem.appendChild( pbcElem );
             }
         }
+        QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
+        QMap<int, K3bVcdTrack*>::const_iterator trackIt;
+
+        for ( trackIt = numKeyMap.begin();
+                trackIt != numKeyMap.end();
+                ++trackIt ) {
+            QDomElement numElem = doc.createElement( "numkeys" );
+            if ( trackIt.data() ) {
+                numElem.setAttribute( "key", trackIt.key() );
+                numElem.setAttribute( "val", trackIt.data() ->index() + 1 );
+            } else {
+                numElem.setAttribute( "key", trackIt.key() );
+                numElem.setAttribute( "val", 0 );
+            }
+            trackElem.appendChild( numElem );
+        }
 
         contentsElem.appendChild( trackElem );
     }
@@ -851,7 +888,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement* docElem )
 }
 
 
-K3bProjectBurnDialog* K3bVcdDoc::newBurnDialog( QWidget* parent, const char* name )
+K3bProjectBurnDialog* K3bVcdDoc::newBurnDialog( QWidget * parent, const char * name )
 {
     return new K3bVcdBurnDialog( this, parent, name, true );
 }

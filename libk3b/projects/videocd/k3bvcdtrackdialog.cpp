@@ -70,8 +70,12 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QPtrList<K3bVcdTrack>& tr
         m_displayFileName->setText( selectedTrack->fileName() );
         m_displayLength->setText( selectedTrack->duration() );
         m_displaySize->setText( KIO::convertSize( selectedTrack->size() ) );
+        m_muxrate->setText( i18n( "%1 bit/s" ).arg( selectedTrack->muxrate() ) );
 
-        m_labelMimeType->setPixmap( KMimeType::pixmapForURL( KURL( selectedTrack->absPath() ), 0, KIcon::Desktop, 48 ) );
+        if ( selectedTrack->isSegment() )
+            m_labelMimeType->setPixmap( SmallIcon( "image", KIcon::SizeMedium ) );
+        else
+            m_labelMimeType->setPixmap( SmallIcon( "video", KIcon::SizeMedium ) );
 
         fillGui();
     }
@@ -79,7 +83,6 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QPtrList<K3bVcdTrack>& tr
 
 K3bVcdTrackDialog::~K3bVcdTrackDialog()
 {}
-
 
 void K3bVcdTrackDialog::slotOk()
 {
@@ -260,9 +263,14 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_numkeysmap.insert( displayName( selectedTrack ) , selectedTrack );
 
     for ( track = m_tracks.first(); track; track = m_tracks.next() ) {
-        QPixmap pm = KMimeType::pixmapForURL( KURL( track->absPath() ), 0, KIcon::Desktop, 16 );
+        QPixmap pm;
+        if ( track->isSegment() )
+            pm = SmallIcon( "image" );
+        else
+            pm = SmallIcon( "video" );
+
         QString s = displayName( track );
-        if ( track != selectedTrack )            // donot insert selectedTrack, it was as "ItSelf" inserted to the begin of map
+        if ( track != selectedTrack )              // donot insert selectedTrack, it was as "ItSelf" inserted to the begin of map
             m_numkeysmap.insert( s, track );
 
         m_pbc_previous->insertItem( pm, s );
@@ -383,6 +391,7 @@ void K3bVcdTrackDialog::prepareGui()
 
     QLabel* labelSize = new QLabel( i18n( "Size:" ), groupFileInfo, "labelSize" );
     QLabel* labelLength = new QLabel( i18n( "Length:" ), groupFileInfo, "labelLength" );
+    QLabel* labelMuxrate = new QLabel( i18n( "Muxrate:" ), groupFileInfo, "labelMuxrate" );
 
     m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
     m_displaySize->setText( "0.0 MB" );
@@ -392,6 +401,10 @@ void K3bVcdTrackDialog::prepareGui()
     m_displayLength->setText( "0:0:0" );
     m_displayLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
+    m_muxrate = new QLabel( groupFileInfo, "m_muxrate" );
+    m_muxrate->setText( i18n( "%1 bit/s" ).arg( 0 ) );
+    m_muxrate->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+
     QFrame* fileInfoLine = new QFrame( groupFileInfo );
     fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
@@ -400,16 +413,19 @@ void K3bVcdTrackDialog::prepareGui()
     groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 1 );
     groupFileInfoLayout->addWidget( labelLength, 3, 0 );
     groupFileInfoLayout->addWidget( labelSize, 4, 0 );
+    groupFileInfoLayout->addWidget( labelMuxrate, 5, 0 );
     groupFileInfoLayout->addWidget( m_displayLength, 3, 1 );
     groupFileInfoLayout->addWidget( m_displaySize, 4, 1 );
+    groupFileInfoLayout->addWidget( m_muxrate, 5, 1 );
 
-    groupFileInfoLayout->setRowStretch( 5, 1 );
+    groupFileInfoLayout->setRowStretch( 6, 1 );
     groupFileInfoLayout->setColStretch( 1, 1 );
 
     QFont f( m_displayLength->font() );
     f.setBold( true );
     m_displayLength->setFont( f );
     m_displaySize->setFont( f );
+    m_muxrate->setFont( f );
     ///////////////////////////////////////////////////
 
     mainLayout->addWidget( groupFileInfo, 0, 0 );

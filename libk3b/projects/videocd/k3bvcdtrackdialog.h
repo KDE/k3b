@@ -65,6 +65,7 @@ class K3bVcdTrackDialog : public KDialogBase
         QLabel* m_labelMimeType;
         QLabel* m_displaySize;
         QLabel* m_displayLength;
+        QLabel* m_muxrate;
 
         QLabel* m_mpegver_audio;
         QLabel* m_rate_audio;

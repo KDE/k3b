@@ -35,7 +35,6 @@ K3bVcdXmlView::K3bVcdXmlView( K3bVcdDoc* pDoc )
 K3bVcdXmlView::~K3bVcdXmlView()
 {}
 
-
 bool K3bVcdXmlView::write( const QString& fname )
 {
 
@@ -217,7 +216,6 @@ bool K3bVcdXmlView::write( const QString& fname )
 
     m_xmlstring = xmlDoc.toString();
     kdDebug() << QString( "(K3bVcdXmlView) Write Data to %1:" ).arg( fname ) << endl;
-    kdDebug() << endl << m_xmlstring << endl;
 
     QFile xmlFile( fname );
     if ( xmlFile.open( IO_WriteOnly ) ) {
@@ -228,6 +226,12 @@ bool K3bVcdXmlView::write( const QString& fname )
     }
 
     return false;
+}
+
+void K3bVcdXmlView::addComment( QDomDocument& doc, QDomElement& parent, const QString& text )
+{
+    QDomComment comment = doc.createComment( text );
+    parent.appendChild( comment );
 }
 
 QDomElement K3bVcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent, const QString& name, const QString& value )
@@ -357,7 +361,19 @@ void K3bVcdXmlView::setNumkeyBSN( QDomDocument& doc, QDomElement& parent, K3bVcd
 {
     if ( track->PbcNumKeys() ) {
         if ( track->PbcNumKeysUserdefined() ) {
-            // TODO: get userdefined key startnumber
+            QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
+            QMap<int, K3bVcdTrack*>::const_iterator trackIt;
+
+            m_startkey = 0;
+            trackIt = numKeyMap.begin();
+            if ( trackIt != numKeyMap.end() )
+                m_startkey = trackIt.key();
+
+            if ( m_startkey > 0 )
+                addSubElement( doc, parent, "bsn", m_startkey );
+            else // user has no numKeys defined for this track
+                track->setPbcNumKeys( false );
+
         } else {
             // default start with key #1
             addSubElement( doc, parent, "bsn", 1 );
@@ -370,8 +386,33 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
     if ( track->PbcNumKeys() ) {
         QDomElement elemPbcSelectionNumKeySEL;
         QString ref = ( track->isSegment() ) ? "segment" : "sequence";
+        int none = m_startkey;
         if ( track->PbcNumKeysUserdefined() ) {
-            // TODO: get userdefined keys
+            QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
+            QMap<int, K3bVcdTrack*>::const_iterator trackIt;
+
+            for ( trackIt = numKeyMap.begin(); trackIt != numKeyMap.end(); ++trackIt ) {
+
+                kdDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none ) << endl;
+                while ( none < trackIt.key() ) {
+                    elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+                    addComment( doc, parent, QString( "key %1 -> %2 (normal none)" ).arg( none ).arg( QFile::encodeName( track->absPath() ) ) );
+                    none++;
+                }
+
+                if ( trackIt.data() ) {
+                    QString ref = ( trackIt.data() ->isSegment() ) ? "segment" : "sequence";
+                    elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.data() ->index() ).rightJustify( 3, '0' ) ) );
+                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( QFile::encodeName( trackIt.data() ->absPath() ) ) );
+                } else {
+                    elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", "end" );
+                    addComment( doc, parent, QString( "key %1 -> end" ).arg( trackIt.key() ) );
+                }
+                none++;
+            }
         } else {
             // default reference to itSelf
             elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );

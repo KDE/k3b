@@ -84,7 +84,7 @@ void K3bVcdListView::setupColumns()
     addColumn( i18n( "Resolution" ) );
     addColumn( i18n( "High Resolution" ) );
     addColumn( i18n( "Framerate" ) );
-    addColumn( i18n( "Bitrate" ) );
+    addColumn( i18n( "Muxrate" ) );
     addColumn( i18n( "Duration" ) );
     addColumn( i18n( "File Size" ) );
     addColumn( i18n( "Filename" ) );
