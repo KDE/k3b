@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -43,7 +43,7 @@ K3bIsoOptions::K3bIsoOptions()
   m_followSymbolicLinks = false;
   m_createTRANS_TBL = false;
   m_hideTRANS_TBL = false;
-  m_isoLevel = 3;
+  m_isoLevel = 2;
 
   m_discardSymlinks = false;
   m_discardBrokenSymlinks = false;
