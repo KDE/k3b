@@ -50,7 +50,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
 
    // the burn tab
    // ---------------------------------------------------------
-   QCheckBox* m_checkDao;
+   // QCheckBox* m_checkDao;
    QCheckBox* m_checkOnTheFly;
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkRemoveBufferFiles;
