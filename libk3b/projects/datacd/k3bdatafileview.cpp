@@ -132,6 +132,13 @@ void K3bDataFileView::checkForNewItems()
 	m_itemMap[it.current()] = vi;
     }
   }
+
+  // now check if some of the items have been moved out of the currently showing dir.
+  for( QListViewItemIterator it( this ); it.current(); ++it ) {
+    K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
+    if( dataViewItem && dataViewItem->dataItem()->parent() != currentDir() )
+      delete dataViewItem;
+  }  
 }
 
 

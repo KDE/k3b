@@ -23,9 +23,9 @@
 #include <k3bcore.h>
 #include <k3baudiodecoder.h>
 #include <k3baudioencoder.h>
-#include <k3bpluginmanager.h>
 #include <k3bjobprogressdialog.h>
 #include <k3bglobals.h>
+#include <k3bpluginmanager.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -238,17 +238,12 @@ void K3bAudioConverterPluginDialog::addFiles( const KURL::List& urls )
 
 void K3bAudioConverterPluginDialog::addFile( const KURL& url )
 {
-  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
-  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-    K3bAudioDecoderFactory* f = static_cast<K3bAudioDecoderFactory*>( it.current() );
-    if( f->canDecode( url ) ) {
-      (void)new K3bAudioConverterViewItem( url.path(), f->createDecoder(),
-					   m_w->viewFiles, m_w->viewFiles->lastItem() );
-      return;
-    }
-  }
-
-  KMessageBox::sorry( this, i18n("Unknown format: %1").arg(url.path()) );
+  K3bAudioDecoder* decoder = K3bAudioDecoderFactory::createDecoder( url );
+  if( decoder )
+    (void)new K3bAudioConverterViewItem( url.path(), decoder,
+					 m_w->viewFiles, m_w->viewFiles->lastItem() );
+  else
+    KMessageBox::sorry( this, i18n("Unknown format: %1").arg(url.path()) );
 }
 
 

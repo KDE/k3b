@@ -20,9 +20,11 @@
 
 #include "k3bdataitem.h"
 
-#include <kfileitem.h>
 #include <kio/global.h>
 #include <qstring.h>
+
+#include <sys/stat.h>
+
 
 class K3bDataDoc;
 class K3bDirItem;
@@ -32,7 +34,7 @@ class K3bDirItem;
   */
 
 
-class K3bFileItem : public KFileItem, public K3bDataItem
+class K3bFileItem : public K3bDataItem
 {
 public:
   /**
@@ -67,6 +69,7 @@ public:
   K3bDirItem* getDirItem();
 	
   bool isSymLink() const;
+  QString linkDest() const;
   bool isFile() const { return true; }
 
   /** returns true if the item is not a link or 
@@ -81,6 +84,9 @@ public:
 
   KIO::filesize_t m_size;
   Id m_id;
+
+  QString m_localPath;
+  bool m_bLocalFile;
 };
 
 bool operator==( const K3bFileItem::Id&, const K3bFileItem::Id& );

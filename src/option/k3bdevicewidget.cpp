@@ -255,23 +255,25 @@ void K3bDeviceWidget::updateDeviceListViews()
 
   // create the parent view items
   // -----------------------------------------
-  m_writerParentViewItem = new QListViewItem( m_viewDevices, i18n("Writer") );
+  m_writerParentViewItem = new QListViewItem( m_viewDevices, i18n("Writer Drives") );
   m_writerParentViewItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
   // spacer item
   (void)new QListViewItem( m_viewDevices );
-  m_readerParentViewItem = new QListViewItem( m_viewDevices, i18n("Reader") );
+  m_readerParentViewItem = new QListViewItem( m_viewDevices, i18n("Readonly Drives") );
   m_readerParentViewItem->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
   // -----------------------------------------
 
+  QFont fBold( m_viewDevices->font() );
+  fBold.setBold(true);
+  QFont fItalic( m_viewDevices->font() );
+  fItalic.setItalic(true);
 
   PrivateTempDevice* dev = m_tempDevices.first();
   while( dev ) {
     // create the root device item
     K3bListViewItem* devRoot = new K3bListViewItem( (dev->writer ? m_writerParentViewItem : m_readerParentViewItem),
 						    dev->device->vendor() + " " + dev->device->description() );
-    QFont f( m_viewDevices->font() );
-    f.setBold(true);
-    devRoot->setFont( 0, f );
+    devRoot->setFont( 0, fBold );
 
     // create the read-only info items
     K3bListViewItem* systemDeviceItem = new K3bListViewItem( devRoot, i18n("System device name:") );
@@ -297,7 +299,7 @@ void K3bDeviceWidget::updateDeviceListViews()
 						   dev->device->description() );
     modelItem->setForegroundColor( 1, gray );
     K3bListViewItem* versionItem = new K3bListViewItem( devRoot, modelItem,
-						   i18n("Version:"),
+						   i18n("Firmware:"),
 						   dev->device->version() );
     versionItem->setForegroundColor( 1, gray );
 
@@ -388,6 +390,16 @@ void K3bDeviceWidget::updateDeviceListViews()
     dev = m_tempDevices.next();
   }
 
+  // create empty items
+  if( m_writerParentViewItem->childCount() == 0 ) {
+    K3bListViewItem* item = new K3bListViewItem( m_writerParentViewItem, i18n("none") );
+    item->setFont( 0, fItalic );
+  }
+  if( m_readerParentViewItem->childCount() == 0 ) {
+    K3bListViewItem* item = new K3bListViewItem( m_readerParentViewItem, i18n("none") );
+    item->setFont( 0, fItalic );
+  }
+
   m_writerParentViewItem->setOpen( true );
   m_readerParentViewItem->setOpen( true );
 }
@@ -397,7 +409,7 @@ void K3bDeviceWidget::slotNewDevice()
 {
   bool ok;
   QString newDevicename = KInputDialog::getText( i18n("Location of New Drive"),
-						 i18n("Please enter the device name where K3b should search\nfor a new drive (example: /dev/mebecdrom):"),
+						 i18n("Please enter the device name where K3b should search\nfor a new drive (example: /dev/cdrom):"),
 						 "/dev/", &ok, this );
 
   if( ok ) {

@@ -8,7 +8,7 @@ libk3bffmpegdecoder_la_LIBADD = ../../../libk3b/libk3b.la $(LIB_KDEUI) -lavcodec
 libk3bffmpegdecoder_la_LDFLAGS = -avoid-version -module -no-undefined $(all_libraries)
 
 pluginsdir = $(kde_datadir)/k3b/plugins
-plugins_DATA = k3bxffmpegdecoder.plugin
+plugins_DATA = k3bffmpegdecoder.plugin
 
 METASOURCES = AUTO
 

@@ -19,6 +19,7 @@
 #define _K3B_MOVIX_LISTVIEW_H_
 
 #include <k3blistview.h>
+#include <kfileitem.h>
 
 #include <qmap.h>
 
@@ -46,7 +47,7 @@ class K3bMovixListViewItem : public K3bListViewItem
 };
 
 
-class K3bMovixFileViewItem : public K3bMovixListViewItem
+class K3bMovixFileViewItem : public K3bMovixListViewItem, public KFileItem
 {
  public:
   K3bMovixFileViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, QListView* parent, QListViewItem* );
@@ -58,7 +59,7 @@ class K3bMovixFileViewItem : public K3bMovixListViewItem
   QString key( int, bool ) const;
 };
 
-class K3bMovixSubTitleViewItem : public K3bMovixListViewItem
+class K3bMovixSubTitleViewItem : public K3bMovixListViewItem, public KFileItem
 {
  public:
   K3bMovixSubTitleViewItem( K3bMovixDoc*, K3bMovixFileItem* item, K3bMovixListViewItem* parent );

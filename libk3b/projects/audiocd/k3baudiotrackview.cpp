@@ -187,7 +187,8 @@ QDragObject* K3bAudioTrackView::dragObject()
     QListViewItem* item = *it;
     // we simply ignore open track items to not include files twice
     // we also don't want the invisible source items
-    if( !item->isOpen() && K3bListView::parentItem(item)->isOpen() ) {
+    QListViewItem* parentItem = K3bListView::parentItem(item);
+    if( !item->isOpen() && ( !parentItem || parentItem->isOpen() ) ) {
       if( K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item ) ) {
 	if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( sourceItem->source() ) )
 	  urls.append( KURL::fromPathOrURL(file->filename()) );
@@ -277,6 +278,12 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
 	  track->copy()->moveAfter( trackAfter );
 	else
 	  track->moveAfter( trackAfter );
+      }
+      else {
+	if( copyItems )
+	  track->copy()->moveAhead( m_doc->firstTrack() );
+	else
+	  track->moveAhead( m_doc->firstTrack() );
       }
     }
 

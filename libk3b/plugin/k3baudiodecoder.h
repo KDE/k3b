@@ -221,6 +221,15 @@ class K3bAudioDecoderFactory : public K3bPlugin
   QString group() const { return "AudioDecoder"; }
 
   /**
+   * K3b uses this flag to decide which plugins to test first
+   * when searching for an audio decoder.
+   *
+   * Decoders that are specialized on one format are favored over
+   * multi-format-decoders.
+   */
+  virtual bool multiFormatDecoder() const { return false; }
+
+  /**
    * This is the most important method of the AudioDecoderFactory.
    * It is used to determine if a certain file can be decoded by the
    * decoder this factory creates.
@@ -231,6 +240,15 @@ class K3bAudioDecoderFactory : public K3bPlugin
   virtual bool canDecode( const KURL& filename ) = 0;
 
   virtual K3bAudioDecoder* createDecoder( QObject* parent = 0, const char* name = 0 ) const = 0;
+
+  /**
+   * Searching for an audiodecoder for @p filename.
+   *
+   * It first searches the single format decoder and the the multiformat decoder.
+   *
+   * @returns a newly created decoder on success and 0 when no decoder could be found.
+   */
+  static K3bAudioDecoder* createDecoder( const KURL& url );
 };
 
 #endif

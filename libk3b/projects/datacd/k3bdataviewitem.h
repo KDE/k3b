@@ -17,6 +17,7 @@
 #define K3BDATAVIEWITEM_H
 
 #include <k3blistview.h>
+#include <kfileitem.h>
 
 class K3bDataItem;
 class K3bFileItem;
@@ -74,7 +75,7 @@ class K3bDataDirViewItem : public K3bDataViewItem
 };
 
 
-class K3bDataFileViewItem : public K3bDataViewItem
+class K3bDataFileViewItem : public K3bDataViewItem, public KFileItem
 {
  public:
   K3bDataFileViewItem( K3bFileItem*, QListView* parent );

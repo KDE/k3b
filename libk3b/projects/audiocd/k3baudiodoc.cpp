@@ -29,7 +29,6 @@
 #include <k3bthread.h>
 #include <k3bthreadjob.h>
 #include <k3bcore.h>
-#include <k3bpluginmanager.h>
 #include <k3baudiodecoder.h>
 
 
@@ -378,42 +377,37 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url )
 {
   K3bAudioDecoder* decoder = 0;
+
   // check if we already have a proper decoder
-  if( m_decoderPresenceMap.contains( url.path() ) )
+  if( m_decoderPresenceMap.contains( url.path() ) ) {
     decoder = m_decoderPresenceMap[url.path()];
-
-  // if not create one
-  if( !decoder ) {
-    QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
-
-    for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-      K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
-      if( f && f->canDecode( url ) ) {
-	kdDebug() << "(K3bAudioDoc) using " << it.current()->className()
-		  << " for decoding of " << url.path() << endl;
-	
-	decoder = f->createDecoder();
-	decoder->setFilename( url.path() );
-
-	//
-	// start a thread to analyse the file
-	//
-	AudioFileAnalyzerThread* thread = new AudioFileAnalyzerThread( decoder );
-	thread->start();
-	m_audioTrackStatusThreads.append( thread );
-	QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
-	return decoder;
-      }
-    }
   }
-
+  else if( (decoder = K3bAudioDecoderFactory::createDecoder( url )) ) {
+    kdDebug() << "(K3bAudioDoc) using " << decoder->className()
+	      << " for decoding of " << url.path() << endl;
+    
+    decoder->setFilename( url.path() );
+    
+    //
+    // start a thread to analyse the file
+    //
+    AudioFileAnalyzerThread* thread = new AudioFileAnalyzerThread( decoder );
+    thread->start();
+    m_audioTrackStatusThreads.append( thread );
+    QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
+  }
+  
   return decoder;
 }
 
 
 K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
 {
-  kdDebug() << "(K3bAudioDoc::createAudioFile( " << url.path() << " )" << endl;
+  if( !QFile::exists( url.path() ) ) {
+    m_notFoundFiles.append( url.path() );
+    return 0;
+  }
+  
   K3bAudioDecoder* decoder = getDecoderForUrl( url );
   if( decoder ) {
     return new K3bAudioFile( decoder, this );
@@ -573,6 +567,19 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 
 	// first of all we need a track
 	K3bAudioTrack* track = new K3bAudioTrack();
+
+
+	// backwards compatibility
+	// -----------------------------------------------------------------------------------------------------
+	QDomAttr oldUrlAttr = trackElem.attributeNode( "url" );
+	if( !oldUrlAttr.isNull() ) {
+	  if( K3bAudioFile* file = 
+	      createAudioFile( KURL::fromPathOrURL( oldUrlAttr.value() ) ) ) {
+	    track->addSource( file );
+	  }
+	}
+	// -----------------------------------------------------------------------------------------------------
+
 
 	QDomNodeList trackNodes = trackElem.childNodes();
 	for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {

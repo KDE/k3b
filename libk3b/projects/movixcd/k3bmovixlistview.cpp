@@ -58,9 +58,10 @@ K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
 					    K3bMovixFileItem* item, 
 					    QListView* parent, 
 					    QListViewItem* after )
-  : K3bMovixListViewItem( doc, item, parent, after )
+  : K3bMovixListViewItem( doc, item, parent, after ),
+    KFileItem( 0, 0, KURL::fromPathOrURL(item->localPath()) )
 {
-  setPixmap( 1, item->pixmap(16) );
+  setPixmap( 1, KFileItem::pixmap(16) );
   setEditor( 1, LINE );
 }
 
@@ -81,9 +82,9 @@ QString K3bMovixFileViewItem::text( int col ) const
   case 2:
     {
       if( fileItem()->isSymLink() )
-	return i18n("Link to %1").arg(fileItem()->mimeComment()) + "  ";
+	return i18n("Link to %1").arg(const_cast<K3bMovixFileViewItem*>(this)->mimeComment()) + "  ";
       else
-	return fileItem()->mimeComment() + "  ";
+	return const_cast<K3bMovixFileViewItem*>(this)->mimeComment() + "  ";
     }
   case 3:
     return KIO::convertSize( fileItem()->k3bSize() ) + "  ";
@@ -117,7 +118,8 @@ QString K3bMovixFileViewItem::key( int, bool ) const
 K3bMovixSubTitleViewItem::K3bMovixSubTitleViewItem( K3bMovixDoc* doc, 
 						    K3bMovixFileItem* item, 
 						    K3bMovixListViewItem* parent )
-  : K3bMovixListViewItem( doc, item, parent )
+  : K3bMovixListViewItem( doc, item, parent ),
+    KFileItem( 0, 0, KURL::fromPathOrURL(item->subTitleItem()->localPath()) )
 {
 }
 
@@ -135,9 +137,9 @@ QString K3bMovixSubTitleViewItem::text( int c ) const
   case 2:
     {
       if( fileItem()->subTitleItem()->isSymLink() )
-	return i18n("Link to %1").arg(fileItem()->subTitleItem()->mimeComment());
+	return i18n("Link to %1").arg(const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment());
       else
-	return fileItem()->subTitleItem()->mimeComment();
+	return const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment();
     }
   case 3:
     return KIO::convertSize( fileItem()->subTitleItem()->k3bSize() );

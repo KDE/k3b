@@ -28,7 +28,6 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-#include <sys/stat.h>
 
 
 bool operator==( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
@@ -54,8 +53,10 @@ bool operator>( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
 
 
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-  : KFileItem( 0, 0, KURL::fromPathOrURL(filePath) ), K3bDataItem( doc, dir ),
-    m_replacedItemFromOldSession(0)
+  : K3bDataItem( doc, dir ),
+    m_replacedItemFromOldSession(0),
+    m_localPath(filePath),
+    m_bLocalFile( true ) // for now there are only local files
 {
   if( k3bName.isEmpty() )
     m_k3bName = QFileInfo(filePath).fileName();
@@ -68,7 +69,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   // instead the size of the link.
   struct stat statBuf;
   if( lstat( QFile::encodeName(filePath), &statBuf ) ) {
-    m_size = size();
+    m_size = QFileInfo(filePath).size();
     kdError() << "(KFileItem) lstat failed." << endl;
   }
   else {
@@ -108,7 +109,7 @@ KIO::filesize_t K3bFileItem::k3bSize() const
 
 bool K3bFileItem::exists() const
 {
-  return isLocalFile();
+  return m_bLocalFile;
 }
 
 QString K3bFileItem::absIsoPath()
@@ -153,7 +154,7 @@ QString K3bFileItem::absIsoPath()
 
 QString K3bFileItem::localPath() const
 {
-  return url().path();
+  return m_localPath;
 }
 
 K3bDirItem* K3bFileItem::getDirItem()
@@ -167,6 +168,12 @@ bool K3bFileItem::isSymLink() const
   // KFileItem::isLink seems to be broken
   return QFileInfo( localPath() ).isSymLink();
   //  return KFileItem::isLink();
+}
+
+
+QString K3bFileItem::linkDest() const
+{
+  return QFileInfo(localPath()).readLink();
 }
 
 

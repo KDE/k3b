@@ -33,6 +33,7 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kgenericfactory.h>
+#include <kmimetype.h>
 
 #include <qstring.h>
 #include <qfile.h>
@@ -282,8 +283,10 @@ void K3bAudioMetainfoRenamerPluginDialog::slotSaveClicked()
 
 QString K3bAudioMetainfoRenamerPluginDialog::createNewName( K3bFileItem* item )
 {
+  KMimeType::Ptr mimetype = KMimeType::findByPath( item->localPath() );
   // sometimes ogg-vorbis files go as "application/x-ogg"
-  if( item->mimetype().contains( "audio" ) || item->mimetype().contains("ogg") ) {
+  if( mimetype != 0 && 
+      ( mimetype->name().contains( "audio" ) || mimetype->name().contains("ogg") ) ) {
 
     QString artist, title,track;
 

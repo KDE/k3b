@@ -143,17 +143,20 @@ int K3bAudioFile::read( char* data, unsigned int max )
 // been calculated
 void K3bAudioFile::fixupOffsets()
 {
+
+  // HMMM.... if we emitChange here every opened project will be modified after the length have been calculated.
+
   if( m_startOffset >= fileLength() ) {
     m_startOffset = 0;
-    emitChange();
+    //    emitChange();
   }
   if( m_endOffset > fileLength() ) {
     m_endOffset = 0; // whole file
-    emitChange();
+    //    emitChange();
   }
   if( m_endOffset > 0 && m_endOffset <= m_startOffset ) {
     m_endOffset = m_startOffset;
-    emitChange();
+    //    emitChange();
   }
 }
 

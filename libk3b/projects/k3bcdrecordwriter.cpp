@@ -24,6 +24,7 @@
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
+#include <k3bdeviceglobals.h>
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 
@@ -332,25 +333,17 @@ void K3bCdrecordWriter::start()
   else {
     if( simulate() ) {
       emit newTask( i18n("Simulating") );
-      if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting DAO simulation at %1x speed...").arg(d->usedSpeed), 
-			  K3bJob::INFO );
-      else if( m_writingMode == K3b::RAW )
-	emit infoMessage( i18n("Starting raw simulation at %1x speed...").arg(d->usedSpeed), 
-			  K3bJob::INFO );
-      else
-	emit infoMessage( i18n("Starting TAO simulation at %1x speed...").arg(d->usedSpeed), 
-			  K3bJob::INFO );
+      emit infoMessage( i18n("Starting %1 simulation at %2x speed...")
+			.arg(K3bDevice::writingModeString(m_writingMode))
+			.arg(d->usedSpeed), 
+			K3bJob::INFO );
     }
     else {
       emit newTask( i18n("Writing") );
-
-      if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting DAO writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
-      else if( m_writingMode == K3b::RAW )
-	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
-      else
-	emit infoMessage( i18n("Starting TAO writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
+      emit infoMessage( i18n("Starting %1 writing at %2x speed...")
+			.arg(K3bDevice::writingModeString(m_writingMode))
+			.arg(d->usedSpeed), 
+			K3bJob::INFO );
     }
   }
 }
@@ -725,11 +718,16 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 			    .arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
 			    K3bJob::ERROR );
 	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	  
-	  emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
-	  emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
-	  emit infoMessage( i18n("...and the K3b FAQ does not help you..."), ERROR );
-	  emit infoMessage( i18n("...please include the debugging output in your problem report."), ERROR );
+
+	  if( p->exitStatus() >= 254 && m_writingMode == K3b::DAO ) {
+	    emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
+	  }
+	  else {
+	    emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
+	    emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
+	    emit infoMessage( i18n("...and the K3b FAQ does not help you..."), ERROR );
+	    emit infoMessage( i18n("...please include the debugging output in your problem report."), ERROR );
+	  }
 	}
 	break;
       }

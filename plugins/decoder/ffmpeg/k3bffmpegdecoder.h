@@ -33,6 +33,8 @@ class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
 
   int pluginSystemVersion() const { return 3; }
 
+  bool multiFormatDecoder() const { return true; }
+
   K3bAudioDecoder* createDecoder( QObject* parent = 0, 
 				  const char* name = 0 ) const;
 };

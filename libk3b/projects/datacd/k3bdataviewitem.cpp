@@ -182,18 +182,20 @@ QString K3bDataDirViewItem::text( int index ) const
 
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
-  : K3bDataViewItem( file, parent )
+  : K3bDataViewItem( file, parent ),
+    KFileItem( 0, 0, KURL::fromPathOrURL(file->localPath()) )
 {
   m_fileItem = file;
-  setPixmap( 0, file->pixmap(16) );
+  setPixmap( 0, KFileItem::pixmap(16) );
 }
 
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
-  : K3bDataViewItem( file, parent )
+  : K3bDataViewItem( file, parent ),
+    KFileItem( 0, 0, KURL::fromPathOrURL(file->localPath()) )
 {
   m_fileItem = file;
-  setPixmap( 0, file->pixmap(16) );
+  setPixmap( 0, KFileItem::pixmap(16) );
 }
 
 	
@@ -205,9 +207,9 @@ QString K3bDataFileViewItem::text( int index ) const
   case 1:
     {
       if( m_fileItem->isSymLink() )
-	return i18n("Link to %1").arg(m_fileItem->mimeComment());
+	return i18n("Link to %1").arg(const_cast<K3bDataFileViewItem*>(this)->mimeComment());
       else
-	return m_fileItem->mimeComment();
+	return const_cast<K3bDataFileViewItem*>(this)->mimeComment();
     }
   case 2:
     return KIO::convertSize( m_fileItem->k3bSize() );
@@ -215,8 +217,8 @@ QString K3bDataFileViewItem::text( int index ) const
     return m_fileItem->localPath();
   case 4:
     return ( m_fileItem->isValid()
-	     ? m_fileItem->linkDest()
-	     : m_fileItem->linkDest() + " (" + i18n("outside of project") + ")" );
+	     ? linkDest()
+	     : linkDest() + " (" + i18n("outside of project") + ")" );
   default:
     return "";
   }

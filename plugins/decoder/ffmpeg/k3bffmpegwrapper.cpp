@@ -153,7 +153,13 @@ int K3bFFMpegFile::channels() const
 }
 
 
-QString K3bFFMpegFile::type() const
+int K3bFFMpegFile::type() const
+{
+  return d->formatContext->streams[0]->codec.codec_id;
+}
+
+
+QString K3bFFMpegFile::typeComment() const
 {
   switch( d->formatContext->streams[0]->codec.codec_id ) {
   case CODEC_ID_WMAV1:

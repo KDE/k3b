@@ -16,6 +16,7 @@
 #include <config.h>
 
 #include "k3baudiodecoder.h"
+#include "k3bpluginmanager.h"
 
 #include <kdebug.h>
 #include <kfilemetainfo.h>
@@ -549,5 +550,30 @@ void K3bAudioDecoder::addTechnicalInfo( const QString& key, const QString& value
   d->technicalInfoMap[key] = value;
 }
 
+
+K3bAudioDecoder* K3bAudioDecoderFactory::createDecoder( const KURL& url )
+{
+  kdDebug() << "(K3bAudioDecoderFactory::createDecoder( " << url.path() << " )" << endl;
+  QPtrList<K3bPlugin> fl = k3bpluginmanager->plugins( "AudioDecoder" );
+
+  // first search for a single format decoder
+  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+    K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
+    if( f && !f->multiFormatDecoder() && f->canDecode( url ) ) {
+      kdDebug() << "1" << endl; return f->createDecoder();}
+  }
+  
+  // no single format decoder. Search for a multi format decoder
+  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+    K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
+    if( f && f->multiFormatDecoder() && f->canDecode( url ) ) {
+      kdDebug() << "2" << endl; return f->createDecoder();}
+  }
+
+  kdDebug() << "(K3bAudioDecoderFactory::createDecoder( " << url.path() << " ) no success" << endl;
+
+  // nothing found
+  return 0;  
+}
 
 #include "k3baudiodecoder.moc"

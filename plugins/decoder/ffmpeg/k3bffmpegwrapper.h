@@ -39,7 +39,11 @@ class K3bFFMpegFile
   int sampleRate() const;
   int channels() const;
 
-  QString type() const;
+  /**
+   * ffmpeg internal enumeration
+   */
+  int type() const;
+  QString typeComment() const;
 
   QString title() const;
   QString author() const;
