@@ -57,9 +57,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   m_checkDao->hide();
   m_checkOnTheFly->hide();
 
-  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
-  m_optionGroupLayout->addWidget( m_checkOnlyCreateImage );
-  
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -77,14 +74,9 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotVolumeIdChanged()) );
   connect( m_editVolumeId, SIGNAL(textChanged(const QString&)), this, SLOT(slotSetImagePath()) );
   
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
   connect( m_checkNonCompliant, SIGNAL(toggled(bool)), this, SLOT(slotNonCompliantToggled()) );
   connect( m_check2336, SIGNAL(toggled(bool)), this, SLOT(slot2336Toggled()) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnproof, SLOT(setDisabled(bool)) );
-  // connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_groupVcdFormat, SIGNAL(clicked(int)), this, SLOT(slotVcdTypeClicked(int)) );
   connect( m_checkCdiSupport, SIGNAL(toggled(bool)), this, SLOT(slotCdiSupportChecked(bool)) );
 
@@ -630,17 +622,6 @@ void K3bVcdBurnDialog::slotAlbumIdChanged()
 
 void K3bVcdBurnDialog::slotOnlyCreateImageChecked( bool c )
 {
-  if( c ) {
-    m_checkRemoveBufferFiles->setChecked( false );
-    m_checkBurnproof->setChecked( false );
-    m_checkSimulate->setChecked( false );
-  }
-  else {
-    m_checkSimulate->setChecked( doc()->dummy() );
-    m_checkRemoveBufferFiles->setChecked( vcdDoc()->deleteImage() );
-    m_checkBurnproof->setChecked( doc()->burnproof() );
-  }
-
   vcdDoc()->setOnlyCreateImage( c );
 }
 

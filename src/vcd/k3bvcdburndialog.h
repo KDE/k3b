@@ -52,8 +52,6 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   QCheckBox* m_checkOnlyCreateImage;
-   
    // -----------------------------------------------------------
    // the video-cd-tab
    // -----------------------------------------------------------

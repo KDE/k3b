@@ -104,19 +104,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   QFrame* f3 = new QFrame( this );
   QFrame* f4 = new QFrame( this );
 
-  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
-  m_optionGroupLayout->addWidget( m_checkOnlyCreateImage );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
-
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
-  // we do not need writer settings when only creating the image
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkOnTheFly, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnproof, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageToggled(bool)) );
 
   setupVolumeInfoTab( f2 );
   setupSettingsTab( f3 );
@@ -309,12 +298,6 @@ void K3bDataBurnDialog::slotOk()
   }
     
   K3bProjectBurnDialog::slotOk();
-}
-
-
-void K3bDataBurnDialog::slotOnlyCreateImageToggled( bool on )
-{
-  m_checkRemoveBufferFiles->setChecked( !on );
 }
 
 

@@ -53,10 +53,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void setupSettingsTab( QFrame* frame );
    void setupVolumeInfoTab( QFrame* frame );
 
-   // --- general tab -------------------------	
-   QCheckBox* m_checkOnlyCreateImage;
-   // ----------------------------------------------
-
    K3bDataVolumeDescWidget* m_volumeDescWidget;
 
    // --- settings tab ---------------------------
@@ -83,8 +79,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void loadDefaults();
    void loadUserDefaults();
    void saveUserDefaults();
-
-   void slotOnlyCreateImageToggled( bool on );
 };
 
 #endif

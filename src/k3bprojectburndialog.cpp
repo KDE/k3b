@@ -121,41 +121,46 @@ void K3bProjectBurnDialog::slotWritingAppChanged( int )
 
 void K3bProjectBurnDialog::toggleAllOptions()
 {
- if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
-   if( dev->burnproof() ) {
-     if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
-       // no possibility to disable burnfree yet
-       m_checkBurnproof->setEnabled(false);
-       m_checkBurnproof->setChecked(true);
-     }
-     else {
-       m_checkBurnproof->setEnabled(true);
-     }
-   }
-   else {
-     m_checkBurnproof->setEnabled( false );
-     m_checkBurnproof->setChecked( false );
-   }
+  if( K3bDevice* dev = m_writerSelectionWidget->writerDevice() ) {
+    if( dev->burnproof() ) {
+      if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
+	// no possibility to disable burnfree yet
+	m_checkBurnproof->setChecked(true);
+	m_checkBurnproof->setEnabled(false);
+      }
+      else {
+	m_checkBurnproof->setEnabled(!m_checkOnlyCreateImage->isChecked());
+      }
+    }
+    else {
+      m_checkBurnproof->setChecked( false );
+      m_checkBurnproof->setEnabled( false );
+    }
  
-   if( dev->dao() ) {
-     if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
-       // cdrdao only writes in DAO mode
-       m_checkDao->setEnabled(false);
-       m_checkDao->setChecked(true);
-     }
-     else {
-       m_checkDao->setEnabled(true);
-     }
-   }
-   else {
-     m_checkDao->setEnabled( false );
-     m_checkDao->setChecked( false );
-   }
+    if( dev->dao() ) {
+      if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO ) {
+	// cdrdao only writes in DAO mode
+	m_checkDao->setChecked(true);
+	m_checkDao->setEnabled(false);
+      }
+      else {
+	m_checkDao->setEnabled(!m_checkOnlyCreateImage->isChecked());
+      }
+    }
+    else {
+      m_checkDao->setChecked( false );
+      m_checkDao->setEnabled( false );
+    }
 
-   actionButton(Ok)->setDisabled(false);
- }
- else
-   actionButton(Ok)->setDisabled(true);
+    actionButton(Ok)->setDisabled(false);
+  }
+  else
+    actionButton(Ok)->setDisabled(true);
+
+  m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
 }
 
 
@@ -259,11 +264,13 @@ void K3bProjectBurnDialog::prepareGui()
   m_checkBurnproof = K3bStdGuiItems::burnproofCheckbox( m_optionGroup );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( m_optionGroup );
   m_checkRemoveBufferFiles = K3bStdGuiItems::removeImagesCheckbox( m_optionGroup );
+  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
 
   m_optionGroupLayout->addWidget(m_checkSimulate);
   m_optionGroupLayout->addWidget(m_checkOnTheFly);
   m_optionGroupLayout->addWidget(m_checkDao);
   m_optionGroupLayout->addWidget(m_checkBurnproof);
+  m_optionGroupLayout->addWidget(m_checkOnlyCreateImage);
   m_optionGroupLayout->addWidget(m_checkRemoveBufferFiles);
 
   // arrange it
@@ -278,9 +285,9 @@ void K3bProjectBurnDialog::prepareGui()
 
   // some default connections that should always be useful
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWriterSettingsChanged()) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
 
   m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 }

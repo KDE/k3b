@@ -54,6 +54,8 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 {
   prepareGui();
 
+  m_checkOnlyCreateImage->hide();
+
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -197,10 +199,10 @@ void K3bAudioBurnDialog::slotToggleEverything()
 
   // currently we do not support writing on the fly with cdrecord
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
-    m_checkOnTheFly->setEnabled( false );
     m_checkOnTheFly->setChecked( false );
-    m_checkHideFirstTrack->setEnabled(false);
+    m_checkOnTheFly->setEnabled( false );
     m_checkHideFirstTrack->setChecked(false);
+    m_checkHideFirstTrack->setEnabled(false);
     m_cdtextWidget->setChecked(false);
     m_cdtextWidget->setEnabled(false);
   }

@@ -108,6 +108,7 @@ class K3bProjectBurnDialog : public KDialogBase
    QCheckBox* m_checkBurnproof;
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkRemoveBufferFiles;
+   QCheckBox* m_checkOnlyCreateImage;
 
  private:
    K3bDoc* m_doc;

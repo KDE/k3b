@@ -40,6 +40,8 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 {
   prepareGui();
 
+  m_checkOnlyCreateImage->hide();
+
   setupSettingsPage();
 
   // create cd-text page
@@ -300,8 +302,8 @@ void K3bMixedBurnDialog::slotToggleEverything()
 
   // currently we do not support writing on the fly with cdrecord
   if( !m_checkDao->isChecked() || m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
-    m_checkOnTheFly->setEnabled( false );
     m_checkOnTheFly->setChecked( false );
+    m_checkOnTheFly->setEnabled( false );
     m_cdtextWidget->setChecked(false);
     m_cdtextWidget->setEnabled(false);
   }
