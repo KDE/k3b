@@ -1,6 +1,6 @@
 /*
  *
- * $Id$
+ * $Id.cpp,v 1.82 2005/02/04 09:27:19 trueg Exp $
  * Copyright (C) 2003-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -32,7 +32,6 @@
 #include <k3bcddbquery.h>
 #include <k3bcore.h>
 #include <k3binffilewriter.h>
-#include <k3bexceptions.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -787,10 +786,23 @@ bool K3bCdCopyJob::writeNextSession()
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
       //
-      // There are some writers that fail to create proper audio cds
-      // in DAO mode. For those we choose the raw writing mode.
+      // there are a lot of writers out there which produce coasters
+      // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
       //
-      if( K3bExceptions::brokenDaoAudio( m_writerDevice ) ) {
+      bool zeroPregap = false;
+      if( d->numSessions == 1 ) {
+        for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+          const K3bDevice::Track& track = *it;
+          if( track.index0() == 0 ) {
+            ++it;
+            if( it != d->toc.end() )
+              zeroPregap = true;
+            --it;
+          }
+        }
+      }
+
+      if( zeroPregap && m_writerDevice->supportsRawWriting() ) {
 	if( d->numSessions == 1 )
 	  usedWritingMode = K3b::RAW;
 	else

@@ -98,7 +98,7 @@ bool K3bDataDoc::newDocument()
 
   m_name = "Dummyname";
 
-  m_multisessionMode = NONE;
+  m_multisessionMode = AUTO;
   m_dataMode = K3b::DATA_MODE_AUTO;
 
   m_isoOptions = K3bIsoOptions();
@@ -398,10 +398,6 @@ KIO::filesize_t K3bDataDoc::size() const
 
 KIO::filesize_t K3bDataDoc::burningSize() const
 {
-  if( m_multisessionMode == NONE ||
-      m_multisessionMode == START )
-    return size();
-
   return size() - m_oldSessionSize; //m_oldSessionSizeHandler->size();
 }
 
@@ -598,8 +594,10 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 	setMultiSessionMode( CONTINUE );
       else if( mode == "finish" )
 	setMultiSessionMode( FINISH );
-      else
+      else if( mode == "none" )
 	setMultiSessionMode( NONE );
+      else
+	setMultiSessionMode( AUTO );
     }
 
     else if( e.nodeName() == "verify_data" )
@@ -916,8 +914,11 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
   case FINISH:
     topElem.appendChild( doc.createTextNode( "finish" ) );
     break;
-  default:
+  case NONE:
     topElem.appendChild( doc.createTextNode( "none" ) );
+    break;
+  default:
+    topElem.appendChild( doc.createTextNode( "auto" ) );
     break;
   }
   optionsElem.appendChild( topElem );
@@ -1284,12 +1285,12 @@ void K3bDataDoc::loadDefaultSettings( KConfig* c )
 }
 
 
-void K3bDataDoc::setMultiSessionMode( int mode )
+void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 {
-  m_multisessionMode = mode;
-
   if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
     clearImportedSession();
+
+  m_multisessionMode = mode;
 }
 
 
@@ -1461,6 +1462,8 @@ void K3bDataDoc::clearImportedSession()
 
     item = m_oldSession.next();
   }
+
+  m_multisessionMode = AUTO;
 
   emit changed();
 }

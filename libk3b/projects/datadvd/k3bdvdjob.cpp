@@ -49,6 +49,8 @@ public:
   int copiesDone;
 
   int foundMedia;
+
+  K3bDataDoc::MultiSessionMode usedMultiSessionMode;
 };
 
 
@@ -99,6 +101,7 @@ void K3bDvdJob::start()
   m_writingStarted = false;
   d->copies = m_doc->copies();
   d->copiesDone = 0;
+  d->usedMultiSessionMode = m_doc->multiSessionMode();
 
   if( m_doc->dummy() ) {
     m_doc->setVerifyData( false );
@@ -110,7 +113,10 @@ void K3bDvdJob::start()
     emit burning(false);
     writeImage();
   }
-  else if( m_doc->multiSessionMode() != K3bDataDoc::NONE ) {
+  else if( d->usedMultiSessionMode == K3bDataDoc::AUTO ) {
+    determineMultiSessionMode();
+  }
+  else if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
     if( !startWriting() ) {
       cleanup();
       emit finished( false );
@@ -306,7 +312,7 @@ bool K3bDvdJob::startWriting()
 
   emit burning(true);
 
-  if( m_doc->multiSessionMode() != K3bDataDoc::NONE ) {
+  if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
     prepareGrowisofsImager();
     
     if( waitForDvd() ) {
@@ -341,11 +347,11 @@ bool K3bDvdJob::prepareWriterJob()
 
   if( m_doc->writingMode() == K3b::DAO ||
       ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+	d->usedMultiSessionMode == K3bDataDoc::NONE ) )
     writer->setWritingMode( K3b::DAO );
 
-  writer->setCloseDvd( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
-		       m_doc->multiSessionMode() == K3bDataDoc::FINISH );
+  writer->setCloseDvd( d->usedMultiSessionMode == K3bDataDoc::NONE ||
+		       d->usedMultiSessionMode == K3bDataDoc::FINISH );
 
   if( m_doc->onTheFly() ) {
     writer->setImageToWrite( QString::null );  // read from stdin
@@ -508,10 +514,64 @@ void K3bDvdJob::cleanup()
 }
 
 
-bool K3bDvdJob::waitForDvd()
+void K3bDvdJob::determineMultiSessionMode()
 {
-  emit infoMessage( i18n("Waiting for media") + "...", INFO );
+  // default is always no since most dvd-roms cannot read ms DVDs.
+  // so we simply have to check if a DVD is appendable
 
+  int m = requestMedia( K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY );
+
+  if( m < 0 ) {
+    cancel();
+  }
+  else {
+     connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, m_doc->burner() ), 
+	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	     this, 
+	     SLOT(slotDetermineMultiSessionMode(K3bDevice::DeviceHandler*)) );
+  }
+}
+
+
+void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
+{
+  const K3bDevice::DiskInfo& info = dh->diskInfo();
+
+  if( info.appendable() ) {
+    // FIXME: maybe we need to handle DVD+RW media differently?
+
+    //
+    // 3 cases:
+    //  1. the project does not fit -> no multisession (resulting in asking for another media above)
+    //  2. the project does fit and fills up the CD -> finish multisession
+    //  3. the project does fit and does not fill up the CD -> continue multisession
+    //
+    if( m_doc->size() > info.remainingSize().mode1Bytes() )
+      d->usedMultiSessionMode = K3bDataDoc::NONE;
+    else if( m_doc->size() >= info.remainingSize().mode1Bytes()*9/10 )
+      d->usedMultiSessionMode = K3bDataDoc::FINISH;
+    else
+      d->usedMultiSessionMode = K3bDataDoc::CONTINUE;
+  }
+  else {
+    d->usedMultiSessionMode = K3bDataDoc::NONE;
+  }
+
+  if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
+    if( !startWriting() ) {
+      cleanup();
+      emit finished( false );
+    }
+  }
+  else {
+    prepareIsoImager();
+    m_isoImager->calculateSize();    
+  }
+}
+
+
+int K3bDvdJob::requestMedia( int state )
+{
   int mt = 0;
   if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
     mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
@@ -524,12 +584,21 @@ bool K3bDvdJob::waitForDvd()
   if( m_doc->size() > 4700372992LL )
     mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
-  d->foundMedia = waitForMedia( m_doc->burner(), 
-				m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-				m_doc->multiSessionMode() == K3bDataDoc::FINISH ?
+  return waitForMedia( m_doc->burner(),
+		       state, 
+		       mt );
+}
+
+
+bool K3bDvdJob::waitForDvd()
+{
+  emit infoMessage( i18n("Waiting for media") + "...", INFO );
+
+  d->foundMedia = requestMedia( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
+				d->usedMultiSessionMode == K3bDataDoc::FINISH ?
 				K3bDevice::STATE_INCOMPLETE :
-				K3bDevice::STATE_EMPTY,
-				mt );
+				K3bDevice::STATE_EMPTY );
+
   if( d->foundMedia < 0 ) {
     cancel();
     return false;
@@ -558,8 +627,8 @@ bool K3bDvdJob::waitForDvd()
 	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 
       if( d->foundMedia & K3bDevice::MEDIA_DVD_PLUS_RW ) {
-	  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
-	      m_doc->multiSessionMode() == K3bDataDoc::START )
+	  if( d->usedMultiSessionMode == K3bDataDoc::NONE ||
+	      d->usedMultiSessionMode == K3bDataDoc::START )
 	    emit infoMessage( i18n("Writing DVD+RW."), INFO );
 	  else
 	    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), INFO );
@@ -587,8 +656,8 @@ bool K3bDvdJob::waitForDvd()
 
 
       if( d->foundMedia & K3bDevice::MEDIA_DVD_RW_OVWR ) {
-	if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
-	    m_doc->multiSessionMode() == K3bDataDoc::START )
+	if( d->usedMultiSessionMode == K3bDataDoc::NONE ||
+	    d->usedMultiSessionMode == K3bDataDoc::START )
 	  emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
 	else
 	  emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
@@ -597,10 +666,10 @@ bool K3bDvdJob::waitForDvd()
 		    K3bDevice::MEDIA_DVD_RW) ) {
 	if( m_doc->writingMode() == K3b::DAO ||
 	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	      m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+	      d->usedMultiSessionMode == K3bDataDoc::NONE ) )
 	  emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
-	else if( m_doc->multiSessionMode() == K3bDataDoc::START ||
-		 m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
+	else if( d->usedMultiSessionMode == K3bDataDoc::START ||
+		 d->usedMultiSessionMode == K3bDataDoc::CONTINUE ) {
 	  // check if the writer supports writing sequential and thus multisession
 	  if( !m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) ) {
 	    if( KMessageBox::warningYesNo( qApp->activeWindow(),
@@ -621,11 +690,11 @@ bool K3bDvdJob::waitForDvd()
 				K3bDevice::MEDIA_DVD_R) ) {
 	if( m_doc->writingMode() == K3b::DAO ||
 	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	      m_doc->multiSessionMode() == K3bDataDoc::NONE ) )
+	      d->usedMultiSessionMode == K3bDataDoc::NONE ) )
 	  emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
 	else {
-	  if( m_doc->multiSessionMode() == K3bDataDoc::START ||
-	      m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ) {
+	  if( d->usedMultiSessionMode == K3bDataDoc::START ||
+	      d->usedMultiSessionMode == K3bDataDoc::CONTINUE ) {
 	    // check if the writer supports writing sequential and thus multisession
 	    if( !m_doc->burner()->supportsFeature( 0x21 ) ) {
 	      if( KMessageBox::warningYesNo( qApp->activeWindow(),
@@ -658,7 +727,8 @@ QString K3bDvdJob::jobDescription() const
   if( m_doc->onlyCreateImages() ) {
     return i18n("Creating Data Image File");
   }
-  else if( m_doc->multiSessionMode() == K3bDataDoc::NONE ) {
+  else if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
+	   m_doc->multiSessionMode() == K3bDataDoc::AUTO ) {
     return i18n("Writing Data DVD")
       + ( m_doc->isoOptions().volumeID().isEmpty()
 	  ? QString::null

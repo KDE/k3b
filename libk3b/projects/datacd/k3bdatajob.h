@@ -29,6 +29,9 @@ class K3bIsoImager;
 class KTempFile;
 class K3bMsInfoFetcher;
 
+namespace K3bDevice {
+  class DeviceHandler;
+}
 
 /**
   *@author Sebastian Trueg
@@ -69,6 +72,7 @@ class K3bDataJob : public K3bBurnJob
   void slotVerificationProgress( int );
   void slotVerificationFinished( bool );
   void slotMsInfoFetched(bool);
+  void slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh );
   void writeImage();
   void cancelAll();
 
@@ -89,7 +93,9 @@ class K3bDataJob : public K3bBurnJob
  private:
   bool startWriterJob();
   void determineWritingMode();
+  void determineMultiSessionMode();
   bool startOnTheFlyWriting();
+  void prepareWriting();
 
   class Private;
   Private* d;

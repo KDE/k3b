@@ -50,22 +50,13 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
 		     CANCELED = -1 };
 
   /**
-   * starts the emptydiskwaiter.
-   * @param mediaState a bitwise combination of the K3bDevice::State enum
-   * @param mediaType a bitwise combination of the MediaType enum
-   * @returns the found MediaType on success, 0 if forced and -1 if canceled
-   */
-  int waitForDisc( int mediaState = K3bDevice::STATE_EMPTY,
-		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-		   const QString& message = QString::null );
-
-  /**
    * the same as waitForEmptyDisc( false );
    */
   int exec();
 
   /**
    * @reimplemented from K3bJobHandler
+   * \internal do not use!
    */
   int waitForMedia( K3bDevice::Device*,
 		    int mediaState = K3bDevice::STATE_EMPTY,
@@ -87,6 +78,13 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
 		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 		   QWidget* parent = 0 );
 
+  /**
+   * Starts the emptydiskwaiter.
+   *
+   * \param mediaState a bitwise combination of the K3bDevice::State enum
+   * \param mediaType a bitwise combination of the K3bDevice::MediaType enum
+   * \return the found MediaType on success, 0 if forced and -1 if canceled
+   */
   static int wait( K3bDevice::Device*,
 		   int mediaState,
 		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
@@ -109,6 +107,11 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
    * Use the static wait methods.
    */
   explicit K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent = 0, const char* name = 0 );
+
+  int waitForDisc( int mediaState = K3bDevice::STATE_EMPTY,
+		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+		   const QString& message = QString::null );
+
 
   /**
    * Nobody closes this dialog but itself!

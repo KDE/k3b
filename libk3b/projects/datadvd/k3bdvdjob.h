@@ -25,6 +25,9 @@ class K3bDataDoc;
 class K3bGrowisofsImager;
 class K3bGrowisofsWriter;
 class K3bIsoImager;
+namespace K3bDevice {
+  class DeviceHandler;
+}
 
 
 /**
@@ -58,9 +61,12 @@ class K3bDvdJob : public K3bBurnJob
   void prepareGrowisofsImager();
   void cleanup();
   void writeImage();
+  void determineMultiSessionMode();
 
   bool waitForDvd();
   bool startWriting();
+
+  int requestMedia( int state );
 
   K3bIsoImager* m_isoImager;
   K3bGrowisofsImager* m_growisofsImager;
@@ -80,6 +86,8 @@ class K3bDvdJob : public K3bBurnJob
 
   void slotVerificationProgress( int p );
   void slotVerificationFinished( bool success );
+
+  void slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh );
 
  private:
   K3bDataDoc* m_doc;

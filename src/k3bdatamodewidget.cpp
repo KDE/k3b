@@ -36,7 +36,10 @@ K3bDataModeWidget::K3bDataModeWidget( QWidget* parent, const char* name )
   insertItem( i18n("Mode2"), s_mode2Index );
 
   QToolTip::add( this,i18n("Select the mode for the data-track") );
-  QWhatsThis::add( this, i18n("<p>Data tracks may be written in two different modes:</p>"
+  QWhatsThis::add( this, i18n("<p><b>Data Mode</b>"
+			      "<p>Data tracks may be written in two different modes:</p>"
+			      "<p><b>Auto</b><br>"
+			      "Let K3b select the best suited data mode.</p>"
 			      "<p><b>Mode 1</b><br>"
 			      "This is the <em>original</em> writing mode as introduced in the "
 			      "<em>Yellow Book</em> standard. It is the preferred mode when writing "
@@ -44,8 +47,6 @@ K3bDataModeWidget::K3bDataModeWidget( QWidget* parent, const char* name )
 			      "<p><b>Mode 2</b><br>"
 			      "To be exact <em>XA Mode 2 Form 1</em>, but since the "
 			      "other modes are rarely used it is common to refer to it as <em>Mode 2</em>.</p>"
-			      "<p><b>Auto</b><br>"
-			      "lets K3b select the best suited data mode.</p>"
 			      "<p><b>Be aware:</b> Do not mix different modes on one CD. "
 			      "Some older drives may have problems reading mode 1 multisession CDs.") );
 }

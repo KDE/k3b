@@ -66,7 +66,19 @@ class K3bDataDoc : public K3bDoc
 
   virtual int docType() const { return DATA; }
 
-  enum mutiSessionModes { NONE, START, CONTINUE, FINISH };
+  enum MultiSessionMode { 
+    /**
+     * Let the K3bDataJob decide if to close the CD or not.
+     * The decision is based on the state of the inserted media
+     * (appendable/closed), the size of the project (will it fill 
+     * up the CD?), and the free space on the inserted media.
+     */
+    AUTO,
+    NONE, 
+    START, 
+    CONTINUE, 
+    FINISH
+  };
 
   K3bRootItem* root() const { return m_root; }
 
@@ -91,8 +103,8 @@ class K3bDataDoc : public K3bDoc
 	
   virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent = 0 );
 	
-  int multiSessionMode() const { return m_multisessionMode; }
-  void setMultiSessionMode( int mode );
+  MultiSessionMode multiSessionMode() const { return m_multisessionMode; }
+  void setMultiSessionMode( MultiSessionMode mode );
 
   int dataMode() const { return m_dataMode; }
   void setDataMode( int m ) { m_dataMode = m; }
@@ -215,7 +227,7 @@ class K3bDataDoc : public K3bDoc
 		
   K3bIsoOptions m_isoOptions;
 
-  int m_multisessionMode;
+  MultiSessionMode m_multisessionMode;
   QPtrList<K3bDataItem> m_oldSession;
 
   // boot cd stuff

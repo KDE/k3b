@@ -34,7 +34,6 @@
 #include <k3bcore.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
-#include <k3bexceptions.h>
 #include <k3btocfilewriter.h>
 #include <k3binffilewriter.h>
 
@@ -139,15 +138,27 @@ void K3bAudioJob::start()
       // choose TAO if the user wants to use cdrecord since
       // there are none-DAO writers that are supported by cdrdao
       //
-      // There are some writers that fail to create proper audio cds
-      // in DAO mode. For those we choose the raw writing mode.
-      //
       if( !writer()->dao() && writingApp() == K3b::CDRECORD )
-	m_usedWritingMode = K3b::TAO;
-      else if( K3bExceptions::brokenDaoAudio( writer() ) )
-	m_usedWritingMode = K3b::RAW;
-      else
-	m_usedWritingMode = K3b::DAO;
+        m_usedWritingMode = K3b::TAO;
+      else {
+	//
+        // there are a lot of writers out there which produce coasters
+        // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
+	//
+        bool zeroPregap = false;
+	K3bAudioTrack* track = m_doc->firstTrack();
+        while( track ) {
+          if( track->postGap() == 0 && track->next() != 0 ) { // the last track's postgap is always 0
+            zeroPregap = true;
+            break;
+          }
+	  track = track->next();
+        }
+        if( zeroPregap && writer()->supportsRawWriting() )
+          m_usedWritingMode = K3b::RAW;
+        else
+          m_usedWritingMode = K3b::DAO;
+      }
     }
     else
       m_usedWritingMode = m_doc->writingMode();

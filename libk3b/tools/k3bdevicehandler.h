@@ -166,13 +166,15 @@ namespace K3bDevice
 
   /**
    * Usage: 
-   * <pre> 
-   *  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::MOUNT, dev ), SIGNAL(finished(DeviceHandler*)),
+   * \code 
+   *  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::MOUNT, dev ), 
+   *           SIGNAL(finished(DeviceHandler*)),
    *           this, SLOT(someSlot(DeviceHandler*)) );
    *
    *  void someSlot( DeviceHandler* dh ) {
    *     if( dh->success() ) {
-   * </pre>
+   * \endcode
+   *
    * Be aware that the DeviceHandler will get destroyed once the signal has been 
    * emited.
    */
