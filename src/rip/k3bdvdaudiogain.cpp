@@ -88,17 +88,17 @@ void K3bDvdAudioGain::closeStdin( ){
     }
 }
 
-void K3bDvdAudioGain::slotParseOutput( KProcess *p, char *buffer, int len ){
+void K3bDvdAudioGain::slotParseOutput( KProcess *, char *buffer, int len ){
     QString tmp = QString::fromLocal8Bit( buffer, len );
     kdDebug() << "(K3bDvdAudioGain) AudioProcessing output: " << tmp << endl;
 }
 
-void K3bDvdAudioGain::slotParseError( KProcess *p, char *buffer, int len ){
+void K3bDvdAudioGain::slotParseError( KProcess *, char *buffer, int len ){
     QString tmp = QString::fromLocal8Bit( buffer, len );
     kdDebug() << "(K3bDvdAudioGain) AudioProcessing error: " << tmp << endl;
 }
 
-void K3bDvdAudioGain::slotExited( KProcess *p){
+void K3bDvdAudioGain::slotExited( KProcess *){
     kdDebug() << "(K3bDvdAudioGain) AudioProcessing finished." << endl;
     emit finished();
 }

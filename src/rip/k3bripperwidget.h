@@ -47,7 +47,7 @@ class K3bRipperWidget : public KDialogBase
   K3bRipperWidget( const K3bDiskInfo&, const K3bCddbResultEntry&, const QValueList<int>&, 
 		   QWidget *parent = 0, const char *name = 0 );
   ~K3bRipperWidget();
-
+  void setStaticDir( QString path );
  public slots:  
   void refresh();
   void init();

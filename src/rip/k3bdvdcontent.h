@@ -47,8 +47,8 @@ public:
     void setMaxChapter( int i ){ m_maxChapters = i; };
     void setMaxAudio( int i ){ m_maxAudio = i; };
     void setMaxAngle( unsigned int i ){ m_maxAngle = i; };
-    void setSelectedChapters( QStringList );
-    void setSelectedAudio( QStringList );
+    //void setSelectedChapters( QStringList );
+    //void setSelectedAudio( QStringList );
 
     void setTitleNumber( int t ){ m_title = t; };
     void setTitleSet( int t ){ m_titleset = t; };

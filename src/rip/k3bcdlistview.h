@@ -19,7 +19,7 @@
 #define K3BCDLISTVIEW_H
 
 #include <klistview.h>
-class QDragObject;
+//class QDragObject;
 
 /**
   *@author Sebastian Trueg
@@ -31,7 +31,7 @@ public:
     ~K3bCDListView();
 protected:
     virtual void startDrag();
-    virtual QDragObject *dragObject( );
+//    virtual QDragObject *dragObject( );
 };
 
 #endif

@@ -16,13 +16,16 @@
  ***************************************************************************/
 
 #include "k3bcdview.h"
+#include "k3bcdlistview.h"
+#include "k3bripperwidget.h"
+
 #include "../k3b.h"
 #include "../tools/k3bglobals.h"
-#include "k3bripperwidget.h"
 #include "../k3bcddbmultientriesdialog.h"
 #include "../kcutlabel.h"
 #include "../k3btoolbox.h"
-#include "k3bcdlistview.h"
+#include "../k3bdirview.h"
+#include "../k3bfiletreeview.h"
 
 #include <cddb/k3bcddb.h>
 #include <cddb/k3bcddbquery.h>
@@ -47,7 +50,6 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-
 
 
 K3bCdView::K3bCdView( QWidget* parent, const char *name )
@@ -111,6 +113,7 @@ void K3bCdView::setupGUI()
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
   connect( m_listView, SIGNAL(selectionChanged()),
 	   this, SLOT(slotSelectionChanged()) );
+
   K3bToolBox* toolBox = new K3bToolBox( this );
   toolBox->addButton( m_copyAction );
 }
@@ -158,6 +161,8 @@ void K3bCdView::showCdView( const K3bDiskInfo& info )
   KConfig* c = kapp->config();
   c->setGroup("Cddb");
 
+  m_cddb->readConfig( c );
+
   if( c->readBoolEntry( "use local cddb query", true ) || c->readBoolEntry( "use remote cddb", false ) ) {
     m_lastQuery = K3bCddbResult();
     m_cddb->readConfig( c );
@@ -181,14 +186,11 @@ void K3bCdView::slotCddbQueryFinished( bool success )
       if( m_lastQuery.foundEntries() > 1 ) {
 	m_lastSelectedCddbEntry = K3bCddbMultiEntriesDialog::selectCddbEntry( m_lastQuery, this );
       }
-
       const K3bCddbResultEntry& entry = m_lastQuery.entry( m_lastSelectedCddbEntry );
-
 
       // save the entry locally
       // K3bCddb only saves if it is configured, otherwise does nothing
       m_cddb->saveEntry( entry );
-
 
       kdDebug() << "cddb info:" << endl;
       kdDebug() << "DTITLE:  '" << entry.cdTitle << "'" << endl;
@@ -234,7 +236,8 @@ void K3bCdView::slotCddbQueryFinished( bool success )
 }
 
 
-void K3bCdView::slotPrepareRipping()
+
+void K3bCdView::slotPrepareRipping( QString path )
 {
   QPtrList<QListViewItem> selectedList = m_listView->selectedItems();
   if( selectedList.isEmpty() ){
@@ -248,7 +251,9 @@ void K3bCdView::slotPrepareRipping()
   }
 
   K3bRipperWidget rip( m_lastDiskInfo, m_lastQuery.entry( m_lastSelectedCddbEntry ), trackNumbers, this );
-
+  if( !path.isEmpty() ){
+      rip.setStaticDir( path );
+  }
   rip.exec();
 }
 

@@ -55,6 +55,7 @@ class QLabel;
 class KAction;
 class KPopupMenu;
 
+static const char* CD_DRAG="cdDrag";
 
 /**
   *@author Sebastian Trueg
@@ -74,6 +75,7 @@ class K3bCdView : public K3bCdContentsView
  public slots:
    /** */
   void showCdView( const K3bDiskInfo& );
+  void slotPrepareRipping( QString path="");
   void reload();
 
  signals:
@@ -82,7 +84,7 @@ class K3bCdView : public K3bCdContentsView
 
  private slots:
   void slotCddbQueryFinished( bool );
-  void slotPrepareRipping();
+  //void slotPrepareRipping();
   void slotSelectAll();
   void slotDeselectAll();
   void slotContextMenu( KListView* l, QListViewItem* i, const QPoint& p );

@@ -16,11 +16,13 @@
  ***************************************************************************/
 
 #include "k3bcdlistview.h"
+#include "k3bcdview.h"
 
 #include <qevent.h>
 #include <qdragobject.h>
 
 #include <kdebug.h>
+
 
 
 K3bCDListView::K3bCDListView(QWidget* parent, const char *name): KListView( parent, name ) {
@@ -29,13 +31,31 @@ K3bCDListView::~K3bCDListView(){
 }
 
 void K3bCDListView::startDrag(){
-    kdDebug() << "EnterDragEvent" << endl;
-    QDragObject *d = new QTextDrag( "Test", this );
+    
+    /*
+    QPtrList<QListViewItem> selectedList = selectedItems();
+    if( selectedList.isEmpty() ){
+        kdDebug() << "(K3bCDListView) no item selected. " << endl;
+        //KMessageBox::critical( this, i18n("Ripping Error"), i18n("Please select the title to rip."), i18n("OK") );
+        return;
+    }
+
+    //QValueList<int> trackNumbers;
+    for( QPtrListIterator<QListViewItem> it( selectedList ); it.current(); ++it ) {
+        buf.append( it.current()->text(0) + "," );
+        //trackNumbers.append( it.current()->text(0).toInt() );
+        kdDebug() << "(K3bCDListView) Tracknumber to rip: "<<  it.current()->text(0) << endl;
+    }
+    buf = buf.left( buf.length() -1 );
+    */
+    QString buf( CD_DRAG );
+    QDragObject *d = new QTextDrag( buf, this );
     d->dragCopy(); // do NOT delete d.
 }
 
+/*
 QDragObject * K3bCDListView::dragObject(){
     kdDebug() << "(K3bCDListView:dragObject)" << endl;
     return new QTextDrag( "DragObject in ListView", this );
 }
-
+*/

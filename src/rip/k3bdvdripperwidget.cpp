@@ -156,7 +156,10 @@ void K3bDvdRipperWidget::rip(){
     m_ripDialog->setExtraInfo( ripStatus );
 
     m_ripJob->start();
-    m_ripDialog->exec();
+    // doesn't work proper, TODO later
+    //if ( !m_ripJob->isStartFailed() ){
+        m_ripDialog->exec();
+    //} 
 }
 
 void K3bDvdRipperWidget::slotRipJobDeleted(){
@@ -313,6 +316,13 @@ void K3bDvdRipperWidget::slotCheckStartEncoding( int state ){
 }
 
 void K3bDvdRipperWidget::slotOpenEncoding( bool result ){
+    kdDebug() << "(K3bDvdRipperWidget) Finished ripping status: " << result
+        << ", Initstatus: " << m_ripJob->isStartFailed() << endl;
+    /* TODO fix
+    if( !result && m_ripJob->isStartFailed() ){
+        m_ripDialog->close();
+    }
+    */
     if( result && m_openEncoding ){
         m_ripDialog->close();
         delete m_ripJob;

@@ -279,5 +279,9 @@ void K3bRipperWidget::slotFindStaticDir() {
   }
 }
 
+void K3bRipperWidget::setStaticDir( QString path ){
+    m_editStaticRipPath->setText( path );
+}
+
 
 #include "k3bripperwidget.moc"
