@@ -22,6 +22,7 @@
 
 #include <data/k3bdatadoc.h>
 #include <data/k3bisoimager.h>
+#include <data/k3bmsinfofetcher.h>
 #include <audio/k3baudiodecoder.h>
 #include <audio/k3baudiodoc.h>
 #include <audio/k3baudiotrack.h>
@@ -30,6 +31,7 @@
 #include <device/k3bdevice.h>
 #include <tools/k3bwavefilewriter.h>
 #include <tools/k3bglobals.h>
+#include <tools/k3bexternalbinmanager.h>
 #include <k3bemptydiscwaiter.h>
 #include <k3b.h>
 #include <k3bcdrecordwriter.h>
@@ -70,6 +72,10 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, QObject* parent )
   connect( m_audioDecoder, SIGNAL(subPercent(int)), this, SLOT(slotAudioDecoderSubPercent(int)) );
   connect( m_audioDecoder, SIGNAL(finished(bool)), this, SLOT(slotAudioDecoderFinished(bool)) );
   connect( m_audioDecoder, SIGNAL(nextTrack(int, int)), this, SLOT(slotAudioDecoderNextTrack(int, int)) );
+
+  m_msInfoFetcher = new K3bMsInfoFetcher( this );
+  connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
+  connect( m_msInfoFetcher, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
 
   m_waveFileWriter = new K3bWaveFileWriter();
 
@@ -113,6 +119,7 @@ void K3bMixedJob::start()
 
   // set some flags that are needed
   m_doc->audioDoc()->setOnTheFly( m_doc->onTheFly() );  // for the toc writer
+  m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
   // depending on the mixed type and if it's onthefly or not we
   // decide what to do first
@@ -122,25 +129,34 @@ void K3bMixedJob::start()
   // if onthefly calculate the iso size
   if( m_doc->onTheFly() ) {
     emit newTask( i18n("Preparing write process") );
-    m_isoImager->calculateSize();
+
+    if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
+      m_isoImager->calculateSize();
+    }
+    else {
+      // we cannot calculate the size since we don't have the msinfo yet
+      // so first write the audio session
+      m_currentAction = WRITING_AUDIO_IMAGE;
+      if( !prepareWriter() ) {
+	// no cleanup necessary since nothing has been started yet
+	emit finished(false);
+	return;
+      }
+      
+      startWriting();
+      m_audioDecoder->start();
+    }
   }
   else {
-    // prepare iso image file
-    m_isoImageFile = new QFile( k3bMain()->findTempFile( "iso", m_doc->imagePath() ) );
-    if( !m_isoImageFile->open( IO_WriteOnly ) ) {
-      emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_isoImageFile->name()), ERROR );
-      cleanupAfterError();
-      emit finished( false );
-      return;
-    }
-
-    m_isoImageFileStream = new QDataStream( m_isoImageFile );
-
     emit newTask( i18n("Creating image files") );
-    emit newSubTask( i18n("Creating iso image in %1").arg(m_isoImageFile->name()) );
-    emit infoMessage( i18n("Creating iso image in %1").arg(m_isoImageFile->name()), INFO );
-    m_currentAction = CREATING_ISO_IMAGE;
-    m_isoImager->start();
+
+    if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
+      createIsoImage();
+    }
+    else {
+      m_currentAction = CREATING_AUDIO_IMAGE;
+      m_audioDecoder->start();
+    }
   }
 }
 
@@ -153,9 +169,32 @@ void K3bMixedJob::cancel()
     m_writer->cancel();
   m_isoImager->cancel();
   m_audioDecoder->cancel();
+  m_msInfoFetcher->cancel();
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   removeBufferFiles();
   emit finished(false);
+}
+
+
+void K3bMixedJob::slotMsInfoFetched( bool success )
+{
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
+
+  if( success ) {
+    m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
+    if( m_doc->onTheFly() ) {
+      m_isoImager->calculateSize();
+    }
+    else {
+      createIsoImage();
+    }
+  }
+  else {
+    // the MsInfoFetcher already emitted failure info
+    cleanupAfterError();
+    emit finished(false);
+  }
 }
 
 
@@ -178,11 +217,11 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 
 
     // the prepareWriter method needs the action to be set    
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
-      m_currentAction = WRITING_ISO_IMAGE;
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) {
+      m_currentAction = WRITING_AUDIO_IMAGE;
     }
     else {
-      m_currentAction = WRITING_AUDIO_IMAGE;
+      m_currentAction = WRITING_ISO_IMAGE;
     }
 
     if( !prepareWriter() ) {
@@ -193,11 +232,11 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
 
     startWriting();
 
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
-      m_isoImager->start();
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK ) {
+      m_audioDecoder->start();
     }
     else {
-      m_audioDecoder->start();
+      m_isoImager->start();
     }
   }
   else {
@@ -251,8 +290,22 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
   else {
     m_isoImageFile->close();
     emit infoMessage( i18n("Iso image successfully created."), INFO );
-    m_currentAction = CREATING_AUDIO_IMAGE;
-    m_audioDecoder->start();
+
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      m_currentAction = WRITING_ISO_IMAGE;
+
+      if( !prepareWriter() ) {
+	cleanupAfterError();
+	emit finished(false);
+	return;
+      }
+    
+      startWriting();
+    }
+    else {
+      m_currentAction = CREATING_AUDIO_IMAGE;
+      m_audioDecoder->start();
+    }
   }
 }
 
@@ -275,16 +328,8 @@ void K3bMixedJob::slotWriterFinished( bool success )
     qApp->processEvents();
     m_doc->burner()->load();
 
-    m_currentAction = WRITING_ISO_IMAGE;
-    if( !prepareWriter() ) {
-      cleanupAfterError();
-      emit finished(false);
-      return;
-    }
-
-    startWriting();
-    if( m_doc->onTheFly() )
-      m_isoImager->start();
+    m_msInfoFetcher->setDevice( m_doc->burner() );
+    m_msInfoFetcher->start();
   }
   else {
     if( !m_doc->onTheFly() && m_doc->removeBufferFiles() )
@@ -315,6 +360,10 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
   }
   else {
     m_waveFileWriter->close();
+
+    // TODO: enable me after message freeze
+    //    emit infoMessage( i18n("Audio images successfully created."), INFO );
+
     if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
       m_currentAction = WRITING_ISO_IMAGE;
     else
@@ -584,9 +633,9 @@ void K3bMixedJob::slotWriterNextTrack( int t, int tt )
   }
   else {
     if( m_currentAction == WRITING_AUDIO_IMAGE )
-      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt+1).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(tt).arg(m_doc->audioDoc()->at(t-1)->fileName()) );
     else
-      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(m_doc->numOfTracks()).arg(m_doc->numOfTracks()).arg(i18n("Iso9660 data")) );
+      emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(1).arg(1).arg(i18n("Iso9660 data")) );
   }
 }
 
@@ -680,6 +729,28 @@ void K3bMixedJob::startWriting()
   }
 	
   m_writer->start();
+}
+
+
+void K3bMixedJob::createIsoImage()
+{
+  m_currentAction = CREATING_ISO_IMAGE;
+
+  // prepare iso image file
+  m_isoImageFile = new QFile( k3bMain()->findTempFile( "iso", m_doc->imagePath() ) );
+  if( !m_isoImageFile->open( IO_WriteOnly ) ) {
+    emit infoMessage( i18n("Could not open file %1 for writing.").arg(m_isoImageFile->name()), ERROR );
+    cleanupAfterError();
+    emit finished( false );
+    return;
+  }
+  
+  m_isoImageFileStream = new QDataStream( m_isoImageFile );
+
+  emit newSubTask( i18n("Creating iso image in %1").arg(m_isoImageFile->name()) );
+  emit infoMessage( i18n("Creating iso image in %1").arg(m_isoImageFile->name()), INFO );
+  
+  m_isoImager->start();
 }
 
 

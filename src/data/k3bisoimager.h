@@ -9,7 +9,7 @@ class K3bDataDoc;
 class K3bDirItem;
 class QTextStream;
 class K3bProcess;
-
+class K3bDevice;
 
 
 class K3bIsoImager : public K3bJob
@@ -27,7 +27,11 @@ class K3bIsoImager : public K3bJob
   void cancel();
   void calculateSize();
 
-  void setMultiSessionInfo( const QString& );
+  /**
+   * If dev == 0 K3bIsoImager will ignore the data in the previous session. 
+   * This is usable for CD-Extra.
+   */
+  void setMultiSessionInfo( const QString&, K3bDevice* dev = 0 );
 
   /**
    * after data has been emitted image creation will
@@ -63,6 +67,7 @@ class K3bIsoImager : public K3bJob
 
   bool m_importSession;
   QString m_multiSessionInfo;
+  K3bDevice* m_device;
 
   K3bProcess* m_process;
   bool m_processSuspended;

@@ -339,9 +339,10 @@ void K3bIsoImager::cancel()
 }
 
 
-void K3bIsoImager::setMultiSessionInfo( const QString& info )
+void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice* dev )
 {
   m_multiSessionInfo = info;
+  m_device = dev;
 }
 
 
@@ -357,10 +358,9 @@ bool K3bIsoImager::addMkisofsParameters()
 
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
-
-    // it has to be the device we are writing to cause only this makes sense
-    *m_process << "-M" << m_doc->burner()->busTargetLun();
     *m_process << "-C" << m_multiSessionInfo;
+    if( m_device )
+      *m_process << "-M" << m_device->busTargetLun();
   }
 
   // add the arguments

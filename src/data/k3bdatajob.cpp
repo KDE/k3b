@@ -26,6 +26,7 @@
 #include "../k3bcdrecordwriter.h"
 #include "../k3bcdrdaowriter.h"
 #include "k3bisoimager.h"
+#include "k3bmsinfofetcher.h"
 
 
 #include <kprocess.h>
@@ -49,7 +50,6 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   : K3bBurnJob()
 {
   m_doc = doc;
-  m_process = 0;
   m_writerJob = 0;
   m_tocFile = 0;
 
@@ -62,12 +62,15 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
+  m_msInfoFetcher = new K3bMsInfoFetcher( this );
+  connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
+  connect( m_msInfoFetcher, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+
   m_imageFinished = true;
 }
 
 K3bDataJob::~K3bDataJob()
 {
-  delete m_process;
   if( m_tocFile )
     delete m_tocFile;
 }
@@ -94,7 +97,13 @@ void K3bDataJob::start()
 
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
-    fetchMultiSessionInfo();
+    m_msInfoFetcher->setDevice( m_doc->burner() );
+    K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
+    if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
+      cancel();
+      return;
+    }
+    m_msInfoFetcher->start();
   }
   else {
     m_isoImager->setMultiSessionInfo( QString::null );
@@ -103,83 +112,19 @@ void K3bDataJob::start()
 }
 
 
-void K3bDataJob::fetchMultiSessionInfo()
+void K3bDataJob::slotMsInfoFetched(bool success)
 {
-  K3bEmptyDiscWaiter waiter( m_doc->burner(), k3bMain() );
-  if( waiter.waitForEmptyDisc( true ) == K3bEmptyDiscWaiter::CANCELED ) {
-    cancel();
+  if( m_canceled )
     return;
-  }
 
-  emit infoMessage( i18n("Searching previous session"), K3bJob::PROCESS );
-
-  // check msinfo
-  delete m_process;
-  m_process = new KProcess();
-
-  if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
-    kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
-    emit infoMessage( i18n("cdrecord executable not found."), K3bJob::ERROR );
-    cancelAll();
-    return;
-  }
-
-  *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
-  *m_process << "-msinfo";
-
-  // add the device (e.g. /dev/sg1)
-  *m_process << QString("dev=%1").arg( m_doc->burner()->busTargetLun() );//genericDevice() );
-
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotMsInfoFetched()) );
-
-  m_msInfo = QString::null;
-  m_collectedOutput = QString::null;
-
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    kdDebug() << "(K3bDataJob) could not start cdrecord" << endl;
-    emit infoMessage( i18n("Could not start cdrecord!"), K3bJob::ERROR );
-    cancelAll();
-    return;
-  }
-}
-
-
-void K3bDataJob::slotMsInfoFetched()
-{
-  kdDebug() << "(K3bDataJob) msinfo fetched" << endl;
-
-  // now parse the output
-  QString firstLine = m_collectedOutput.left( m_collectedOutput.find("\n") );
-  QStringList list = QStringList::split( ",",  firstLine );
-  if( list.count() == 2 ) {
-    bool ok1, ok2;
-    list.first().toInt( &ok1 );
-    list[1].toInt( &ok2 );
-    if( ok1 && ok2 )
-      m_msInfo = firstLine.stripWhiteSpace();
-    else
-      m_msInfo = QString::null;
+  if( success ) {
+    m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo(), m_doc->burner() );
+    writeImage();
   }
   else {
-    m_msInfo = QString::null;
-  }
-
-  kdDebug() << "(K3bDataJob) msinfo parsed: " << m_msInfo << endl;
-
-  if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
     emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
     cancelAll();
-    return;
-  }
-  else {
-    m_isoImager->setMultiSessionInfo( m_msInfo );
-    writeImage();
   }
 }
 
@@ -484,19 +429,12 @@ bool K3bDataJob::prepareWriterJob()
 }
 
 
-void K3bDataJob::slotCollectOutput( KProcess*, char* output, int len )
-{
-  emit debuggingOutput( "misc", QString::fromLocal8Bit( output, len ) );
-
-  m_collectedOutput += QString::fromLocal8Bit( output, len );
-}
-
-
 void K3bDataJob::cancelAll()
 {
   m_canceled = true;
 
   m_isoImager->cancel();
+  m_msInfoFetcher->cancel();
   if( m_writerJob )
     m_writerJob->cancel();
 

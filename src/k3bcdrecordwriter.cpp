@@ -325,7 +325,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     emit newSubTask( i18n("Fixating") );
   }
   else if( line.contains("seconds.") ) {
-    emit infoMessage( "in " + line.mid( line.find("seconds") - 2 ), K3bJob::PROCESS );
+    int pos2 = line.find("seconds.") - 2;
+    int pos1 = line.findRev( QRegExp("\\D"), pos2 ) + 1;
+    emit infoMessage( i18n("Starting in 1 second", 
+			   "Starting in %n seconds", 
+			   line.mid(pos1, pos2-pos1+1).toInt()), K3bJob::PROCESS );
   }
   else if( line.startsWith( "Writing pregap" ) ) {
     emit newSubTask( i18n("Writing pregap") );

@@ -30,6 +30,7 @@ class K3bAbstractWriter;
 class K3bWaveFileWriter;
 class KTempFile;
 class K3bCdrecordWriter;
+class K3bMsInfoFetcher;
 
 /**
   *@author Sebastian Trueg
@@ -63,6 +64,7 @@ class K3bMixedJob : public K3bBurnJob
   void slotAudioDecoderPercent(int);
   void slotAudioDecoderSubPercent( int );
   void slotIsoImagerPercent(int);
+  void slotMsInfoFetched(bool);
 
  private:
   bool prepareWriter();
@@ -72,12 +74,14 @@ class K3bMixedJob : public K3bBurnJob
   void addDataTrack( K3bCdrecordWriter* writer );
   void cleanupAfterError();
   void removeBufferFiles();
+  void createIsoImage();
 
   K3bMixedDoc* m_doc;
   K3bIsoImager* m_isoImager;
   K3bAudioDecoder* m_audioDecoder;
   K3bWaveFileWriter* m_waveFileWriter;
   K3bAbstractWriter* m_writer;
+  K3bMsInfoFetcher* m_msInfoFetcher;
 
   QFile* m_isoImageFile;
   QDataStream* m_isoImageFileStream;
@@ -86,7 +90,8 @@ class K3bMixedJob : public K3bBurnJob
   enum Action { CREATING_ISO_IMAGE,
 		CREATING_AUDIO_IMAGE,
 		WRITING_ISO_IMAGE,
-		WRITING_AUDIO_IMAGE };
+		WRITING_AUDIO_IMAGE,
+		FETCHING_MSINFO };
 
   int m_currentAction;
   double m_audioDocPartOfProcess;

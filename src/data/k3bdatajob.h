@@ -20,7 +20,6 @@
 
 #include "../k3bjob.h"
 
-#include <kprocess.h>
 #include <qfile.h>
 
 class K3bDataDoc;
@@ -29,6 +28,7 @@ class QDataStream;
 class K3bAbstractWriter;
 class K3bIsoImager;
 class KTempFile;
+class K3bMsInfoFetcher;
 
 /**
   *@author Sebastian Trueg
@@ -58,9 +58,7 @@ class K3bDataJob : public K3bBurnJob
   void slotWriterJobPercent( int p );
   void slotWriterNextTrack( int t, int tt );
   void slotWriterJobFinished( bool success );
-  void slotCollectOutput( KProcess*, char*, int );
-  void fetchMultiSessionInfo();
-  void slotMsInfoFetched();
+  void slotMsInfoFetched(bool);
   void writeImage();
   void startWriting();
   void cancelAll();
@@ -69,13 +67,9 @@ class K3bDataJob : public K3bBurnJob
   bool prepareWriterJob();
 
   K3bDataDoc* m_doc;
-  KProcess* m_process;
 
   bool m_imageFinished;
   bool m_canceled;
-
-  QString m_msInfo;
-  QString m_collectedOutput;
 
   KTempFile* m_tocFile;
 
@@ -83,6 +77,7 @@ class K3bDataJob : public K3bBurnJob
   QDataStream m_imageFileStream;
   K3bAbstractWriter* m_writerJob;
   K3bIsoImager* m_isoImager;
+  K3bMsInfoFetcher* m_msInfoFetcher;
 };
 
 #endif
