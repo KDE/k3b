@@ -103,7 +103,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 			"is possible to have longer pregaps that contain some audio. In this case "
 			"the first pregap will contain the complete first track."
 			"<p>You will need to seek back from the beginning of the CD to listen to "
-			"the first track. Try it, it's quite amusing!"
+			"the first track. Try it, it is quite amusing."
 			"<p><b>This feature is only available in DAO mode when writing with cdrdao.") );
 }
 

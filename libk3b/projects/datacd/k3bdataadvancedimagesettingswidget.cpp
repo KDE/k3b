@@ -108,7 +108,7 @@ public:
 		   "directory nesting level is restricted to 8 and the maximum path length is limited "
 		   "to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers)." );
     else
-      return i18n("Set special Iso9660 Filesystem preferences.");
+      return i18n("Set special ISO9660 Filesystem preferences.");
   }
   
 private:

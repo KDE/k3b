@@ -333,24 +333,24 @@ void K3bCdrecordWriter::start()
     if( simulate() ) {
       emit newTask( i18n("Simulating") );
       if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting dao simulation at %1x speed...").arg(d->usedSpeed), 
+	emit infoMessage( i18n("Starting DAO simulation at %1x speed...").arg(d->usedSpeed), 
 			  K3bJob::INFO );
       else if( m_writingMode == K3b::RAW )
 	emit infoMessage( i18n("Starting raw simulation at %1x speed...").arg(d->usedSpeed), 
 			  K3bJob::INFO );
       else
-	emit infoMessage( i18n("Starting tao simulation at %1x speed...").arg(d->usedSpeed), 
+	emit infoMessage( i18n("Starting TAO simulation at %1x speed...").arg(d->usedSpeed), 
 			  K3bJob::INFO );
     }
     else {
       emit newTask( i18n("Writing") );
 
       if( m_writingMode == K3b::DAO )
-	emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
+	emit infoMessage( i18n("Starting DAO writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
       else if( m_writingMode == K3b::RAW )
 	emit infoMessage( i18n("Starting raw writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
       else
-	emit infoMessage( i18n("Starting tao writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
+	emit infoMessage( i18n("Starting TAO writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
     }
   }
 }
@@ -704,13 +704,13 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	    emit infoMessage( i18n("Please choose a lower burning speed."), ERROR );
 	break;
       case HIGH_SPEED_MEDIUM:
-	emit infoMessage( i18n("Found a high speed medium not suitable for the writer being used."), ERROR );
+	emit infoMessage( i18n("Found a high-speed medium not suitable for the writer being used."), ERROR );
 	break;
       case LOW_SPEED_MEDIUM:
-	emit infoMessage( i18n("Found a low speed medium not suitable for the writer being used."), ERROR );
+	emit infoMessage( i18n("Found a low-speed medium not suitable for the writer being used."), ERROR );
 	break;
       case MEDIUM_ERROR:
-	emit infoMessage( i18n("Most likely the burning failed due to low quality media."), ERROR );
+	emit infoMessage( i18n("Most likely the burning failed due to low-quality media."), ERROR );
 	break;
       case UNKNOWN:
 	if( !wasSourceUnreadable() ) {
@@ -729,7 +729,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	  else {
 	    emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
 	    emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
-	    emit infoMessage( i18n("...please send me an email incuding the debugging output."), ERROR );
+	    emit infoMessage( i18n("...please send me an email including the debugging output."), ERROR );
 	  }
 	}
 	break;

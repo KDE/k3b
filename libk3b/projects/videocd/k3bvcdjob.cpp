@@ -183,7 +183,7 @@ void K3bVcdJob::vcdxBuild()
     if ( !bin ) {
         kdDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
         emit infoMessage( i18n("Could not find %1 executable.").arg("vcdxbuild"), K3bJob::ERROR );
-        emit infoMessage(i18n( "To create VideoCD's you must install VcdImager Version %1." ).arg(">= 0.7.12"), K3bJob::INFO );
+        emit infoMessage(i18n( "To create VideoCDs you must install VcdImager Version %1." ).arg(">= 0.7.12"), K3bJob::INFO );
         emit infoMessage(i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ),K3bJob::INFO );
         cancelAll();
         emit finished( false );
@@ -192,7 +192,7 @@ void K3bVcdJob::vcdxBuild()
 
     if( bin->version < K3bVersion("0.7.12") ) {
         kdDebug() << "(K3bVcdJob) vcdxbuild executable too old!" << endl;
-        emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" ).arg( "Vcdxbuild" ).arg( "0.7.12" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ).arg( "Vcdxbuild" ).arg( "0.7.12" ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         emit finished( false );
@@ -512,7 +512,7 @@ void K3bVcdJob::parseInformation( QString text )
 
     else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
         emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3bJob::INFO );
-        emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already!" ), K3bJob::INFO );
+        emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already." ), K3bJob::INFO );
     }
 
     else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
@@ -535,7 +535,7 @@ QString K3bVcdJob::jobDescription() const
         case K3bVcdDoc::SVCD10:
             return i18n( "Writing Super Video CD" );
         case K3bVcdDoc::HQVCD:
-            return i18n( "Writing High Quality Video CD" );
+            return i18n( "Writing High-Quality Video CD" );
         default:
             return i18n( "Writing Video CD" );
     }

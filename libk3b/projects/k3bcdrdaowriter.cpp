@@ -310,7 +310,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     if( m_cdrdaoBinObject->hasFeature("overburn") )
       *m_process << "--overburn";
     else
-      emit infoMessage( i18n("Cdrdao %1 does not support overburning!").arg(m_cdrdaoBinObject->version), WARNING );
+      emit infoMessage( i18n("Cdrdao %1 does not support overburning.").arg(m_cdrdaoBinObject->version), WARNING );
   }
 
 }
@@ -578,13 +578,13 @@ void K3bCdrdaoWriter::start()
 	case WRITE:
 	  if( simulate() )
 	    {
-	      emit infoMessage(i18n("Starting dao simulation at %1x speed...").arg(d->usedSpeed), 
+	      emit infoMessage(i18n("Starting DAO simulation at %1x speed...").arg(d->usedSpeed), 
 			       K3bJob::INFO );
 	      emit newTask( i18n("Simulating") );
 	    }
 	  else
 	    {
-	      emit infoMessage( i18n("Starting dao writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
+	      emit infoMessage( i18n("Starting DAO writing at %1x speed...").arg(d->usedSpeed), K3bJob::INFO );
 	      emit newTask( i18n("Writing") );
 	    }
 	  break;

@@ -49,7 +49,7 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
     setSelectionModeExt( KListView::Extended );
     setItemsMovable( false );
 
-    setNoItemText( i18n( "Use drag'n'drop to add mpeg video files to the project." ) + "\n"
+    setNoItemText( i18n( "Use drag'n'drop to add MPEG video files to the project." ) + "\n"
                    + i18n( "After that press the burn button to write the CD." ) );
 
     setSorting( 0 );

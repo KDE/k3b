@@ -141,14 +141,14 @@ void K3bVcdTrackDialog::fillGui()
 
     if ( selectedTrack->mpegVideoVersion() == 1 ) {
         if ( selectedTrack->hasAudio() )
-            m_mpegver_video->setText( i18n( "Mpeg 1 System File [Video/Audio]" ) );
+            m_mpegver_video->setText( i18n( "MPEG 1 System File [Video/Audio]" ) );
         else
-            m_mpegver_video->setText( i18n( "Mpeg 1 System File [Video]" ) );
+            m_mpegver_video->setText( i18n( "MPEG 1 System File [Video]" ) );
     } else {
         if ( selectedTrack->hasAudio() )
-            m_mpegver_video->setText( i18n( "Mpeg Program Stream File [Video/Audio]" ) );
+            m_mpegver_video->setText( i18n( "MPEG Program Stream File [Video/Audio]" ) );
         else
-            m_mpegver_video->setText( i18n( "Mpeg Program Stream File [Video]" ) );
+            m_mpegver_video->setText( i18n( "MPEG Program Stream File [Video]" ) );
     }
 
     m_rate_video->setText( i18n( "%1 Mbps" ).arg( selectedTrack->mpegMbps() ) );
@@ -227,9 +227,9 @@ void K3bVcdTrackDialog::fillGui()
 
     if ( selectedTrack->hasAudio() ) {
         if ( selectedTrack->MpegAudioType() != 3 )
-            m_mpegver_audio->setText( i18n( "Mpeg %1 layer %2" ).arg( selectedTrack->MpegAudioType() ).arg( selectedTrack->MpegAudioLayer() ) );
+            m_mpegver_audio->setText( i18n( "MPEG %1 layer %2" ).arg( selectedTrack->MpegAudioType() ).arg( selectedTrack->MpegAudioLayer() ) );
         else
-            m_mpegver_audio->setText( i18n( "Mpeg 2.5 (rare) layer %1" ).arg( selectedTrack->MpegAudioLayer() ) );
+            m_mpegver_audio->setText( i18n( "MPEG 2.5 (rare) layer %1" ).arg( selectedTrack->MpegAudioLayer() ) );
 
         if ( !selectedTrack->MpegAudioKbps().isNull() )
             m_rate_audio->setText( i18n( "%1 kbps %2 Hz" ).arg( selectedTrack->MpegAudioKbps() ).arg( selectedTrack->MpegAudioHz() ) );

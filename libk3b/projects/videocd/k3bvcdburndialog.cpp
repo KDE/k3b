@@ -63,7 +63,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
         case K3bVcdDoc::SVCD10:
             vcdType = i18n( "Super Video CD" );
         case K3bVcdDoc::HQVCD:
-            vcdType = i18n( "High Quality Video CD" );
+            vcdType = i18n( "High-Quality Video CD" );
         default:
             vcdType = i18n( "Video CD" );
     }
@@ -139,7 +139,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
         ( m_labelRestriction, i18n( "This element allows to set viewing restrictions which may be interpreted by the playing device." ) );
 
     QToolTip::add
-        ( m_checkGaps, i18n( "This option enable customizing of Gaps and Margins." ) );
+        ( m_checkGaps, i18n( "This option allows customization of Gaps and Margins." ) );
     QToolTip::add
         ( m_labelPreGapLeadout, i18n( "Used to set the amount of empty sectors added before the lead-out area begins." ) );
     QToolTip::add
@@ -231,7 +231,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     QWhatsThis::add
         ( m_editCdiCfg, i18n( "<p>Configuration parameters only available for VideoCD 2.0"
-                              "<p>The engine works perfectly well when used as is."
+                              "<p>The engine works perfectly well when used as-is."
                               "<p>You have the option to configure the VCD application."
                               "<p>You can adapt the color and/or the shape of the cursor and lots more." ) );
 
@@ -241,18 +241,18 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
 
     QWhatsThis::add
-        ( m_checkSegmentFolder, i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> be always present."
-                                      "<p>Some DVD player needs the folder around a faultless rendition to grant." ) );
+        ( m_checkSegmentFolder, i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> should always always present."
+                                      "<p>Some DVD players need the folder to give a faultless rendition." ) );
 
     QWhatsThis::add
         ( m_checkRelaxedAps, i18n( "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
-                                   "<p>APS are required for entry points and scantables. APS have to fulfill the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
-                                   "<p>The start codes of these 3 items are required to be contained all in the same mpeg pack/sector, thus forming a so-called access point sector."
+                                   "<p>APS are required for entry points and scantables. APS have to fulfil the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
+                                   "<p>The start codes of these 3 items are required to be contained all in the same MPEG pack/sector, thus forming a so-called access point sector."
                                    "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
                                    "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points." ) );
 
     QWhatsThis::add
-        ( m_checkUpdateScanOffsets, i18n( "<p>According to the specification, it is mandatory for Super Video CD's to encode scan information data into user data blocks in the picture layer of all intra coded picture."
+        ( m_checkUpdateScanOffsets, i18n( "<p>According to the specification, it is mandatory for Super Video CDs to encode scan information data into user data blocks in the picture layer of all intra coded picture."
                                           "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
                                           "<p>The already existing scan information data can be updated by enabling the update scan offsets option." ) );
 
@@ -261,15 +261,15 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                     "<p>The allowed range goes from 0 to 3."
                                     "<ul><li>0 = unrestricted, free to view for all</li>"
                                     "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
-                                    "<p>Actually the exact meaning is not defined and is player dependant!"
+                                    "<p>Actually, the exact meaning is not defined and is player dependant."
                                     "<p><b>Most players ignore that value.<b>" ) );
 
     QWhatsThis::add
-        ( m_checkGaps, i18n( "<p>This option enable customizing of Gaps and Margins." ) );
+        ( m_checkGaps, i18n( "<p>This option allows customization of Gaps and Margins." ) );
     QWhatsThis::add
         ( m_labelPreGapLeadout, i18n( "<p>This option allows to set the amount of empty sectors added before the lead-out area begins, i.e. the amount of post-gap sectors."
                                       "<p>The ECMA-130 specification requires the last data track before the lead-out to carry a post-gap of at least 150 sectors, which is used as default for this parameter."
-                                      "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last mpeg track if this parameter is set to low."
+                                      "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last MPEG track if this parameter is set too low."
                                       "<p>Allowed value content: [0..300]. Default: 150." ) );
 
     QWhatsThis::add
@@ -278,12 +278,12 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                     "<p>Allowed value content: [0..300]. Default: 150." ) );
 
     QWhatsThis::add
-        ( m_labelFrontMarginTrack, i18n( "Margins seem to be used, in order to compensate for inaccurate sector addressing issues on CD-ROM media. Interestingly, they have been abandoned for the Super Video CD."
+        ( m_labelFrontMarginTrack, i18n( "Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
                                          "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                          "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0." ) );
 
     QWhatsThis::add
-        ( m_labelRearMarginTrack, i18n( "<p>Margins seem to be used, in order to compensate for inaccurate sector addressing issues on CD-ROM media. Interestingly, they have been abandoned for the Super Video CD."
+        ( m_labelRearMarginTrack, i18n( "<p>Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
                                         "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                         "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, otherwise 0." ) );
 

@@ -205,13 +205,13 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 					     "by hiding README.joliet on RockRidge and README.rr "
 					     "on the Joliet filesystem.</p>") );
   QWhatsThis::add( m_editSortWeight, i18n("<p>This value modifies the physical sort order of the files "
-					  "in the Iso9660 filesystem. A higher weighting means that the "
+					  "in the ISO9660 filesystem. A higher weighting means that the "
 					  "file will be located closer to the beginning of the image "
 					  "(and the disk)."
 					  "<p>This option is useful in order to optimize the data layout "
 					  "on a CD/DVD."
 					  "<p><b>Caution:</b> This does not sort the order of the file "
-					  "names that appear in the Iso9660 directory."
+					  "names that appear in the ISO9660 directory."
 					  "It sorts the order in which the file data is "
 					  "written to the image.") );
 

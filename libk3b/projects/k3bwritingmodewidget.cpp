@@ -85,13 +85,13 @@ void K3bWritingModeWidget::initWhatsThisHelp()
   static QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
 				  "or a DVD+RW. The media may just be overwritten. It is not possible "
 				  "to write multisession DVD-RWs in this mode but K3b uses growisofs "
-				  "to grow an Iso9660 filesystem within the first session.");
+				  "to grow an ISO9660 filesystem within the first session.");
 
   QWhatsThis::remove( this );
   QString wh =
     "<p><b>" + i18n("Writing mode") + "</b></p>" +
     "<p><b>" + i18n("Auto") + "</b><br>" +
-    i18n("Let K3b select the best suited mode. This is the recommended selection.") + "</p>";
+    i18n("Let K3b select the best-suited mode. This is the recommended selection.") + "</p>";
 
   if( d->modes & K3b::DAO )
     wh += "<p><b>" + i18n("DAO") + "</b><br>" + s_daoHelp + "</p>";
