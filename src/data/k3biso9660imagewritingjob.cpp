@@ -110,8 +110,12 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     writer->setBurnSpeed( m_speed );
     writer->prepareArgumentList();
 
-    if( m_noFix )
+    if( m_noFix ) {
       writer->addArgument("-multi");
+      writer->addArgument("-xa2");
+    }
+    else
+      writer->addArgument("-data");
 
     writer->addArgument( m_imagePath );
 
@@ -131,9 +135,16 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     m_tocFile->setAutoDelete(true);
 
     if( QTextStream* s = m_tocFile->textStream() ) {
-      *s << "CD_ROM" << "\n";
-      *s << "\n";
-      *s << "TRACK MODE1" << "\n";
+      if( m_noFix ) {
+	*s << "CD_ROM_XA" << "\n";
+	*s << "\n";
+	*s << "TRACK MODE2" << "\n";
+      }
+      else {
+	*s << "CD_ROM" << "\n";
+	*s << "\n";
+	*s << "TRACK MODE1" << "\n";
+      }
       *s << "DATAFILE \"" << m_imagePath << "\" 0 \n";
 
       m_tocFile->close();
