@@ -109,15 +109,21 @@ void K3bCddb::query( const K3bToc& toc )
 
   if( m_bLocalCddbQuery ) {
     m_iCurrentQueriedLocalDir = 0;
-    localQuery();
+    QTimer::singleShot( 0, this, SLOT(localQuery()) );
   }
   else if( m_bRemoteCddbQuery ) {
     m_iCurrentQueriedServer = 0;
-    remoteQuery();
+    QTimer::singleShot( 0, this, SLOT(remoteQuery()) );
   }
   else {
-    emit queryFinished( K3bCddbQuery::NO_ENTRY_FOUND );
+    QTimer::singleShot( 0, this, SLOT(slotNoEntry()) );
   }
+}
+
+
+void K3bCddb::slotNoEntry()
+{
+  emit queryFinished( K3bCddbQuery::NO_ENTRY_FOUND );
 }
 
 
