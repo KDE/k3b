@@ -40,7 +40,7 @@ class K3bDvdRippingProcess : public QObject {
 public:
     K3bDvdRippingProcess( QWidget *parent );
     ~K3bDvdRippingProcess();
-    void setDvdTitle( const QValueList<K3bDvdContent> &titles );
+    void setDvdTitle( const QValueList<K3bDvdContent>& titles );
     void setDirectories( const QString& f, const QString& v, const QString& t ){ m_dirname = f; m_dirvob=v; m_dirtmp=t; };
     void setDevice( const QString& f ){ m_device = f; };
     //void setJob( K3bDvdCopy *job );

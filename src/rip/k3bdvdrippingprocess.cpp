@@ -30,6 +30,7 @@
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qmessagebox.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <kprocess.h>
@@ -64,7 +65,7 @@ void K3bDvdRippingProcess::start( ){
     m_interrupted = false;
     m_delAudioProcess = false;
     m_dvdOrgFilenameDetected = false;
-                m_dvdAlreadyMounted = false;
+    m_dvdAlreadyMounted = false;
     if( m_maxTitle > 0 ){
         checkRippingMode();
     } else {
@@ -204,8 +205,9 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
 float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     QString tmp = QString::fromLatin1( text, len );
     float blocks = 0;
-    if( tmp.contains("blocks (0") ){
-        int index = tmp.find("blocks (0");
+    if( tmp.contains("blocks (") ){
+        // TODO parse for start to end blocks( x-y) and use only difference
+        int index = tmp.find("blocks (");
         tmp = tmp.mid(index +10);
         int end = tmp.find( ")" );
         tmp= tmp.mid( 0, end);
@@ -278,6 +280,7 @@ QString K3bDvdRippingProcess::formattedTitleset(){
          titleset = QString::number( s );
     return titleset;
 }
+
 QString K3bDvdRippingProcess::getFilename(){
     QString result = m_dirvob + "/vts_" + formattedTitleset() + "_" + QString::number( m_currentVobIndex ) + ".vob";
     kdDebug() << "(K3bDvdRippingProcess) Vob filename: " << result << endl;
@@ -317,6 +320,11 @@ void K3bDvdRippingProcess::saveConfig(){
         f.open( IO_WriteOnly | IO_Append );
     }
     QTextStream t( &f );
+    /*
+    QString extension( (*m_dvd).getStrAspectExtension() );
+    if( extension.contains( "&" ) ){
+        extension.replace( QRegExp("&"), "&amp" );
+    } */
     t << "<k3bDVDTitles>\n";
     t << "    <title number=\"" << (*m_dvd).getTitleNumber() << "\">\n";
     t << "        " << "<frames>" << (*m_dvd).getFrames() << "</frames>\n";
@@ -327,7 +335,7 @@ void K3bDvdRippingProcess::saveConfig(){
 //    t << "        " << "<audiogain>" << getAudioGain() << "</audiogain>\n";
     t << "        " << "<aspectratio>" << (*m_dvd).getStrAspect() << "</aspectratio>\n";
     t << "        " << "<aspectratioAnamorph>" << (*m_dvd).getStrAspectAnamorph() << "</aspectratioAnamorph>\n";
-    t << "        " << "<aspectratioExtension>" << (*m_dvd).getStrAspectExtension() << "</aspectratioExtension>\n";
+// & not supported, TODO    t << "        " << "<aspectratioExtension>" << extension << "</aspectratioExtension>\n";
     t << "        " << "<width>" << (*m_dvd).getRes().width() << "</width>\n";
     t << "        " << "<height>" << (*m_dvd).getRes().height() << "</height>\n";
     t << "        " << "<chapters>" << (*m_dvd).getMaxChapters() << "</chapters>\n";
