@@ -214,7 +214,7 @@ AM_CONDITIONAL(include_FLAC, [test x$have_flac = xyes])
 
 
 have_lame=no
-AC_CHECK_HEADERS(lame/lame.h, [
+KDE_CHECK_HEADERS(lame/lame.h, [
 	AC_CHECK_LIB(mp3lame, lame_init, [
 		have_lame=yes
 		AC_DEFINE(HAVE_LAME,1,[defined if you have the lame header and lib])
