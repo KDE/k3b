@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -28,6 +28,7 @@ class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
 class K3bPluginOptionTab;
 // class  K3bPatternOptionTab;
+class K3bDivxOptionTab;
 
 /**
   *@author Sebastian Trueg
@@ -39,19 +40,19 @@ class K3bOptionDialog : public KDialogBase
  public:
   K3bOptionDialog(QWidget *parent=0, const char *name=0, bool modal = true);
   ~K3bOptionDialog();
-	
+
   enum m_configPageIndex { Burning = 0, Devices = 1, Programs = 2, Cddb = 3 };
-		
+
 /*   void addOptionPage( QWidget* widget, */
 /* 		      const QString& name, */
 /* 		      const QString& header, */
 /* 		      const QPixmap& icon ); */
-		      
+
  protected slots:
   void slotOk();
   void slotApply();
   void slotDefault();
-	
+
  private:
   bool saveSettings();
 
@@ -60,7 +61,7 @@ class K3bOptionDialog : public KDialogBase
   void setupProgramsPage();
 
   // device tab
-  K3bDeviceOptionTab* m_deviceOptionTab;	
+  K3bDeviceOptionTab* m_deviceOptionTab;
   void setupDevicePage();
 
   // burning tab
@@ -70,7 +71,7 @@ class K3bOptionDialog : public KDialogBase
   // cddb tabs
   K3bCddbOptionTab *m_cddbOptionTab;
   K3bCddbLocalDBTab *m_cddbLocalTab;
-  void setupCddbPage();		
+  void setupCddbPage();
 
   // pattern tab
 /*   K3bPatternOptionTab *m_patternOptionTab; */
@@ -79,7 +80,7 @@ class K3bOptionDialog : public KDialogBase
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;
   void setupMiscPage();
-  
+
   // notify options
   K3bNotifyOptionTab* m_notifyOptionTab;
   void setupNotifyPage();
@@ -87,6 +88,11 @@ class K3bOptionDialog : public KDialogBase
   // plugin options
   K3bPluginOptionTab* m_pluginOptionTab;
   void setupPluginPage();
+
+    // divx options
+  K3bDivxOptionTab* m_divxOptionTab;
+  void setupDivxPage();
+
 };
 
 #endif
