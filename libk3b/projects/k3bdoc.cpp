@@ -106,8 +106,8 @@ void K3bDoc::addUrl( const KURL& url )
 void K3bDoc::setURL( const KURL& url )
 {
   doc_url = url;
-  if( view() )
-    view()->setCaption( url.fileName() );
+
+  emit changed();
 }
 
 const KURL& K3bDoc::URL() const

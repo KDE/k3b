@@ -30,3 +30,11 @@ are appropriate.</p>
 do not know what they mean. K3b's defaults are suitable for most daily use.</p>
 </html>
 </tip>
+
+<tip category="K3b">
+<html>
+<p>Just left-click one of your devices in the device and file tree and see what happens. K3b opens a specific
+window based on the media's contents. For an audio CD for example you will be given a list of the tracks with
+the possibility to rip these tracks to any format supported by K3b (like mp3 or Ogg-Vorbis).</p>
+</html>
+</tip>

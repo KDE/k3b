@@ -58,7 +58,7 @@ K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidg
 
   connect( this, SIGNAL(selectionChanged(QListViewItem*)),
 	   this, SLOT(slotSelectionChanged(QListViewItem*)) );
-  connect( m_doc->audioDoc(), SIGNAL(newTracks()), this, SLOT(slotNewAudioTracks()) );
+  connect( m_doc->audioDoc(), SIGNAL(changed()), this, SLOT(slotNewAudioTracks()) );
 }
 
 

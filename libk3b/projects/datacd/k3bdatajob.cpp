@@ -695,25 +695,35 @@ void K3bDataJob::determineWritingMode()
 
 void K3bDataJob::determineMultiSessionMode()
 {
-  emit newSubTask( i18n("Searching for old session") );
-
-  // 1. size of the project
-  // 2. size of the media
-  // 3. space left on appendable media >= project size (otherwise no ms)
-  // 4. size of the project >= size of the media*90% (fill up?)
-
-  int m = waitForMedia( d->doc->burner(), 
-			K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
-			K3bDevice::MEDIA_WRITABLE_CD );
-
-  if( m < 0 )
-    cancel();
+  if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ||
+      d->doc->writingMode() == K3b::TAO ) {
+    emit newSubTask( i18n("Searching for old session") );
+    
+    // 1. size of the project
+    // 2. size of the media
+    // 3. space left on appendable media >= project size (otherwise no ms)
+    // 4. size of the project >= size of the media*90% (fill up?)
+    
+    int m = waitForMedia( d->doc->burner(), 
+			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
+			  K3bDevice::MEDIA_WRITABLE_CD );
+    
+    if( m < 0 )
+      cancel();
+    else {
+      // now we need to determine the media's size
+      connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->doc->burner() ), 
+	       SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	       this, 
+	       SLOT(slotDetermineMultiSessionMode(K3bDevice::DeviceHandler*)) );
+    }
+  }
   else {
-    // now we need to determine the media's size
-    connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->doc->burner() ), 
-	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	     this, 
-	     SLOT(slotDetermineMultiSessionMode(K3bDevice::DeviceHandler*)) );
+    // we need TAO for multisession
+    d->usedMultiSessionMode = K3bDataDoc::NONE;
+
+    // carry on with the writing
+    prepareWriting();
   }
 }
 

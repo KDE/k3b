@@ -847,9 +847,6 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 	  return;
 	}
 
-	QWidget* view = doc->view();
-	m_documentTab->changeTab( view, view->caption() );
-
 	actionFileOpenRecent->addURL(url);
       }
     }

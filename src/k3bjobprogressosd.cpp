@@ -36,8 +36,7 @@ K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent, const char* name )
     m_dirty(true),
     m_dragging(false),
     m_screen(0),
-    m_offset(s_outerMargin),
-    m_alignment(TOP)
+    m_position(s_outerMargin, s_outerMargin)
 {
   setFocusPolicy( NoFocus );
   setBackgroundMode( NoBackground );
@@ -85,16 +84,9 @@ void K3bJobProgressOSD::setProgress( int p )
 }
 
 
-void K3bJobProgressOSD::setOffset( int o )
+void K3bJobProgressOSD::setPosition( const QPoint& p )
 {
-  m_offset = o;
-  reposition();
-}
-
-
-void K3bJobProgressOSD::setAlignment( K3bJobProgressOSD::Alignment a )
-{
-  m_alignment = a;
+  m_position = p;
   reposition();
 }
 
@@ -175,36 +167,19 @@ void K3bJobProgressOSD::reposition( QSize newSize )
   if( !newSize.isValid() )
     newSize = size();
 
-  QPoint newPos( s_outerMargin, s_outerMargin );
-  const QRect screen = QApplication::desktop()->screenGeometry( m_screen );
+  QPoint newPos = m_position;
+  const QRect& screen = QApplication::desktop()->screenGeometry( m_screen );
 
-  // make sure m_offset is valid
-  if( m_alignment == TOP || m_alignment == BOTTOM ) {
-    if( m_offset > screen.width() - 2*s_outerMargin - newSize.width() )
-      m_offset = screen.width() - 2*s_outerMargin - newSize.width();
-  }
-  else {
-    if( m_offset > screen.height() - 2*s_outerMargin - newSize.height() )
-      m_offset = screen.height() - 2*s_outerMargin - newSize.height();
-  }
+  // now to properly resize if put into one of the corners we interpret the position
+  // depending on the quadrant
+  int midH = screen.width()/2;
+  int midV = screen.height()/2;
+  if( newPos.x() > midH )
+    newPos.rx() -= newSize.width();
+  if( newPos.y() > midV )
+    newPos.ry() -= newSize.height();
 
-  switch( m_alignment ) {
-  case RIGHT:
-    newPos.rx() = screen.width() - s_outerMargin - newSize.width();
-    // fallthrough
-
-  case LEFT:
-    newPos.ry() = m_offset + s_outerMargin;
-    break;
-
-  case BOTTOM:
-    newPos.ry() = screen.height() - s_outerMargin - newSize.height();
-    // fallthrough
-
-  case TOP:
-    newPos.rx() = m_offset + s_outerMargin;
-    break;
-  }
+  newPos = fixupPosition( newPos );
  
   // correct for screen position
   newPos += screen.topLeft();
@@ -240,63 +215,58 @@ void K3bJobProgressOSD::mouseReleaseEvent( QMouseEvent* )
   if( m_dragging ) {
     m_dragging = false;
     releaseMouse();
-
-    // compute current Position && offset
-    QDesktopWidget *desktop = QApplication::desktop();
-    int currentScreen = desktop->screenNumber( pos() );
-    
-    if( currentScreen != -1 ) {
-      // set new data
-      m_screen = currentScreen;
-    }
   }
 }
 
 
 void K3bJobProgressOSD::mouseMoveEvent( QMouseEvent* e )
 {
-  // FIXME: allow movement along the edges of the screen
   if( m_dragging && this == mouseGrabber() ) {
-    const QRect screen      = QApplication::desktop()->screenGeometry( m_screen );
-    const uint  hcenter     = screen.width() / 2;
-    const uint  eGlobalPosX = e->globalPos().x() - screen.left();
-    const uint  snapZone    = screen.width() / 8;
+
+    // check if the osd has been dragged out of the current screen
+    int currentScreen = QApplication::desktop()->screenNumber( e->globalPos() );
+    if( currentScreen != -1 )
+      m_screen = currentScreen;
+
+    const QRect& screen = QApplication::desktop()->screenGeometry( m_screen );
     
-    QPoint destination = e->globalPos() - m_dragOffset - screen.topLeft();
-    int maxY = screen.height() - height() - s_outerMargin;
-    if( destination.y() < s_outerMargin ) destination.ry() = s_outerMargin;
-    if( destination.y() > maxY ) destination.ry() = maxY;
+    // make sure the position is valid
+    m_position = fixupPosition( e->globalPos() - m_dragOffset - screen.topLeft() );
 
-    if( eGlobalPosX < (hcenter-snapZone) ) {
-      m_alignment = LEFT;
-      destination.rx() = s_outerMargin;
-    }
-    else if( eGlobalPosX > (hcenter+snapZone) ) {
-      m_alignment = RIGHT;
-      destination.rx() = screen.width() - s_outerMargin - width();
-    }
-    else {
-      const uint eGlobalPosY = e->globalPos().y() - screen.top();
-      const uint vcenter     = screen.height()/2;
+    // move us to the new position
+    move( m_position );
 
-      destination.rx() = hcenter - width()/2;
-
-      if( eGlobalPosY < (vcenter-snapZone) ) {
-	m_alignment = TOP;
-	destination.ry() = s_outerMargin;
-      }
-      else {
- 	m_alignment = BOTTOM;
-	destination.ry() = screen.height() - s_outerMargin - height();
-      }
-    }
-
-    destination += screen.topLeft();
-
-    m_offset = ( m_alignment == TOP || m_alignment == BOTTOM ? destination.x() : destination.y() ) - s_outerMargin;
-
-    move( destination );
+    // fix the position
+    int midH = screen.width()/2;
+    int midV = screen.height()/2;
+    if( m_position.x() + width() > midH )
+      m_position.rx() += width();
+    if( m_position.y() + height() > midV )
+      m_position.ry() += height();
   }
+}
+
+
+QPoint K3bJobProgressOSD::fixupPosition( const QPoint& pp )
+{
+  QPoint p(pp);
+  const QRect& screen = QApplication::desktop()->screenGeometry( m_screen );
+  int maxY = screen.height() - height() - s_outerMargin;
+  int maxX = screen.width() - width() - s_outerMargin;
+
+  if( p.y() < s_outerMargin )
+    p.ry() = s_outerMargin;
+  else if( p.y() > maxY )
+    p.ry() = maxY;
+
+  if( p.x() < s_outerMargin )
+    p.rx() = s_outerMargin;
+  else if( p.x() > maxX )
+    p.rx() = screen.width() - s_outerMargin - width();
+
+  p += screen.topLeft();
+
+  return p;
 }
 
 
@@ -305,18 +275,8 @@ void K3bJobProgressOSD::readSettings( KConfig* c )
   QString oldGroup = c->group();
   c->setGroup( "OSD Position" );
 
-  setOffset( c->readNumEntry( "Offset", 0 ) );
+  setPosition( c->readPointEntry( "Position", 0 ) );
   setScreen( c->readNumEntry( "Screen", 0 ) );
-
-  QString alignS = c->readEntry( "Alignment", "top" );
-  if( alignS == "left" )
-    setAlignment( LEFT );
-  else if( alignS == "right" )
-    setAlignment( RIGHT );
-  else if( alignS == "bottom" )
-    setAlignment( BOTTOM );
-  else
-    setAlignment( TOP );
     
   c->setGroup( oldGroup );
 }
@@ -327,25 +287,8 @@ void K3bJobProgressOSD::saveSettings( KConfig* c )
   QString oldGroup = c->group();
   c->setGroup( "OSD Position" );
 
-  c->writeEntry( "Offset", m_offset );
+  c->writeEntry( "Position", m_position );
   c->writeEntry( "Screen", m_screen );
-
-  QString alignS;
-  switch( m_alignment ) {
-  case TOP:
-    alignS = "top";
-    break;
-  case BOTTOM:
-    alignS = "bottom";
-    break;
-  case LEFT:
-    alignS = "tleft";
-    break;
-  case RIGHT:
-    alignS = "right";
-    break;
-  }
-  c->writeEntry( "Alignment", alignS );
 
   c->setGroup( oldGroup );
 }

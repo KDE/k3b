@@ -405,7 +405,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     }
 
     else if( s_progressRx.exactMatch( line ) ) {
-      int num = s_progressRx.cap(1).toInt();
+      //      int num = s_progressRx.cap(1).toInt();
       int made = s_progressRx.cap(2).toInt();
       int size = s_progressRx.cap(3).toInt();
       int fifo = s_progressRx.cap(4).toInt();

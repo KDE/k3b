@@ -36,16 +36,8 @@ class K3bJobProgressOSD : public QWidget
   K3bJobProgressOSD( QWidget* parent = 0, const char* name = 0 );
   ~K3bJobProgressOSD();
 
-  enum Alignment {
-    TOP,
-    LEFT,
-    RIGHT,
-    BOTTOM
-  };
-
   int screen() const { return m_screen; }
-  Alignment alignment() const { return m_alignment; }
-  int offset() const { return m_offset; }
+  const QPoint& position() const { return m_position; }
 
   void readSettings( KConfig* );
   void saveSettings( KConfig* );
@@ -54,11 +46,14 @@ class K3bJobProgressOSD : public QWidget
   void setScreen( int );
   void setText( const QString& );
   void setProgress( int );
+
   /**
-   * The offset's meaning depends on the alignment
+   * The position refers to one of the corners of the widget
+   * regarding on the value of the x and y coordinate.
+   * If for example the x coordinate is bigger than half the screen
+   * width it refers to the left edge of the widget.
    */
-  void setOffset( int );
-  void setAlignment( Alignment );
+  void setPosition( const QPoint& );
 
   void show();
 
@@ -72,6 +67,10 @@ class K3bJobProgressOSD : public QWidget
   void reposition( QSize size = QSize() );
 
  private:
+  /**
+   * Ensure that the position is inside m_screen 
+   */
+  QPoint fixupPosition( const QPoint& p );
   static const int s_outerMargin = 15;
 
   QPixmap m_osdBuffer;
@@ -81,8 +80,7 @@ class K3bJobProgressOSD : public QWidget
   bool m_dragging;
   QPoint m_dragOffset;
   int m_screen;
-  int m_offset;
-  Alignment m_alignment;
+  QPoint m_position;
 };
 
 #endif
