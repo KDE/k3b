@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -20,6 +20,7 @@
 #include "device/k3bdevicemanager.h"
 #include "k3b.h"
 #include "tools/k3bglobals.h"
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -32,11 +33,23 @@
 #include <qhbuttongroup.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qmap.h>
+#include <qptrvector.h>
+
+
+class K3bWriterSelectionWidget::Private
+{
+public:
+  QMap<QString, int> indexMap;
+  QPtrVector<K3bDevice> devices;
+};
 
 
 K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *name )
   : QWidget( parent, name )
 {
+  d = new Private;
+
   QGroupBox* groupWriter = new QGroupBox( this );
   groupWriter->setTitle( i18n( "Burning Device" ) );
   groupWriter->setColumnLayout(0, Qt::Vertical );
@@ -86,20 +99,11 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
   connect( m_comboWriter, SIGNAL(activated(int)), this, SLOT(slotRefreshWriterSpeeds()) );
   connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
   connect( m_groupCdWritingApp, SIGNAL(clicked(int)), this, SLOT(slotWritingAppSelected(int)) );
+  connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
 
-
-  // -- read cd-writers ----------------------------------------------
-  QPtrList<K3bDevice> _devices = k3bMain()->deviceManager()->burningDevices();
-  K3bDevice* _dev = _devices.first();
-  while( _dev ) {
-    m_comboWriter->insertItem( _dev->vendor() + " " + _dev->description() + " (" + _dev->ioctlDevice() + ")" );
-    _dev = _devices.next();
-  }
-
-  slotRefreshWriterSpeeds();
-  slotConfigChanged(k3bMain()->config());
   m_groupCdWritingApp->setButton( 0 );
 
+  // TODO: probably use KApplication::settingsChanged
   connect( k3bMain(), SIGNAL(configChanged(KConfig*)), this, SLOT(slotConfigChanged(KConfig*)) );
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 
@@ -119,11 +123,39 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget(QWidget *parent, const char *
 				      "<p>1x speed means 150 KB/s."
 				      "<p><b>Caution:</b> Make sure your system is able to send the data "
 				      "fast enough to prevent buffer underruns.") );
+  init();
 }
 
 
 K3bWriterSelectionWidget::~K3bWriterSelectionWidget()
 {
+  delete d;
+}
+
+
+void K3bWriterSelectionWidget::init()
+{
+  d->indexMap.clear();
+  d->devices.clear();
+  m_comboWriter->clear();
+
+  // -- read cd-writers ----------------------------------------------
+  QPtrList<K3bDevice> devices = k3bcore->deviceManager()->burningDevices();
+  d->devices.resize( devices.count() );
+  K3bDevice* dev = devices.first();
+  int i = 0;
+  while( dev ) {
+    m_comboWriter->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")", i );
+    d->indexMap[dev->devicename()] = i;
+    d->devices.insert(i, dev);
+    ++i;
+    dev = devices.next();
+  }
+
+  slotRefreshWriterSpeeds();
+  slotConfigChanged(kapp->config());
+  kapp->config()->setGroup( "General Settings" );
+  setWriterDevice( k3bcore->deviceManager()->deviceByName( kapp->config()->readEntry( "current_writer" ) ) );
 }
 
 
@@ -181,15 +213,16 @@ void K3bWriterSelectionWidget::slotWritingAppSelected( int id )
 
 K3bDevice* K3bWriterSelectionWidget::writerDevice() const
 {
-  const QString& s = m_comboWriter->currentText();
+  return d->devices[m_comboWriter->currentItem()];
+}
 
-  QString strDev = s.mid( s.find('(') + 1, s.find(')') - s.find('(') - 1 );
 
-  K3bDevice* dev =  k3bMain()->deviceManager()->deviceByName( strDev );
-  if( !dev )
-    kdDebug() << "(K3bWriterSelectionWidget) could not find device " << s << endl;
-
-  return dev;
+void K3bWriterSelectionWidget::setWriterDevice( K3bDevice* dev )
+{
+  if( dev ) {
+    if( d->indexMap.contains(dev->devicename()) )
+      m_comboWriter->setCurrentItem( d->indexMap[dev->devicename()] );
+  }
 }
 
 
@@ -227,5 +260,14 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int )
   writerDevice()->setCurrentWriteSpeed( writerSpeed() );
 }
 
+
+void K3bWriterSelectionWidget::slotWriterChanged()
+{
+  // save last selected writer
+  if( writerDevice() ) {
+    kapp->config()->setGroup( "General Settings" );
+    kapp->config()->writeEntry( "current_writer", writerDevice()->devicename() );
+  }
+}
 
 #include "k3bwriterselectionwidget.moc"

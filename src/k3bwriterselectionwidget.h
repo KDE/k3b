@@ -47,6 +47,9 @@ class K3bWriterSelectionWidget : public QWidget
    */
   int writingApp() const;
 
+ public slots:
+  void setWriterDevice( K3bDevice* );
+
  signals:
   void writerChanged();
   void writingAppChanged( int app );
@@ -56,8 +59,11 @@ class K3bWriterSelectionWidget : public QWidget
   void slotWritingAppSelected( int id );
   void slotConfigChanged( KConfig* c );
   void slotSpeedChanged( int index );
+  void slotWriterChanged();
 
  private:
+  void init();
+
   QComboBox* m_comboSpeed;
   QComboBox* m_comboWriter;
 
@@ -65,6 +71,9 @@ class K3bWriterSelectionWidget : public QWidget
   QRadioButton* m_selectDefault;
   QRadioButton* m_selectCdrecord;
   QRadioButton* m_selectCdrdao;
+
+  class Private;
+  Private* d;
 };
 
 #endif
