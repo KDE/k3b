@@ -104,6 +104,11 @@ class K3bExternalBinVersion
 
 
 bool operator<( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 );
+bool operator>( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 );
+bool operator==( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 );
+bool operator<=( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 );
+bool operator>=( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 );
+
 
 
 class K3bExternalBin

@@ -190,17 +190,17 @@ bool operator<( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2
     // 1 == 1.0
     if( ( v1.minorVersion() == v2.minorVersion() )
 	||
-	( v1.minorVersion() == 1 && v2.minorVersion() == 0 )
+	( v1.minorVersion() == -1 && v2.minorVersion() == 0 )
 	||
-	( v2.minorVersion() == 1 && v1.minorVersion() == 0 ) 
+	( v2.minorVersion() == -1 && v1.minorVersion() == 0 ) 
 	)
       {
 	// 1.0 == 1.0.0
 	if( ( v1.patchLevel() == v2.patchLevel() )
 	    ||
-	    ( v1.patchLevel() == 1 && v2.patchLevel() == 0 )
+	    ( v1.patchLevel() == -1 && v2.patchLevel() == 0 )
 	    ||
-	    ( v2.patchLevel() == 1 && v1.patchLevel() == 0 )
+	    ( v2.patchLevel() == -1 && v1.patchLevel() == 0 )
 	    )
 	  {
 	    return ( v1.suffix() < v2.suffix() );
@@ -215,6 +215,27 @@ bool operator<( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2
     return ( v1.majorVersion() < v2.majorVersion() );
 }
 
+bool operator>( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 )
+{
+  return operator<( v2, v1 );
+}
+
+
+bool operator==( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 )
+{
+  return (!operator<( v2, v1 ) && !operator<( v1, v2 ));
+}
+
+
+bool operator<=( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 )
+{
+  return operator<( v1, v2 ) || operator==( v1, v2 );
+}
+
+bool operator>=( const K3bExternalBinVersion& v1, const K3bExternalBinVersion& v2 )
+{
+  return operator>( v1, v2 ) || operator==( v1, v2 );
+}
 
 
 // ///////////////////////////////////////////////////////////
@@ -281,8 +302,14 @@ K3bExternalProgram::~K3bExternalProgram()
 void K3bExternalProgram::addBin( K3bExternalBin* bin )
 {
   if( !m_bins.contains( bin ) ) {
+    // insertion sort
+    // the first bin in the list is always the one used 
+    // so we default to using the newest one
+    K3bExternalBin* oldBin = m_bins.first();
+    while( oldBin && oldBin->version > bin->version )
+      oldBin = m_bins.next();
 
-    m_bins.append( bin );
+    m_bins.insert( oldBin ? m_bins.at() : m_bins.count(), bin );
   }
 }
 
@@ -291,6 +318,7 @@ void K3bExternalProgram::setDefault( K3bExternalBin* bin )
   if( m_bins.contains( bin ) )
     m_bins.take( m_bins.find( bin ) );
 
+  // the first bin in the list is always the one used 
   m_bins.insert( 0, bin );
 }
 
