@@ -35,7 +35,7 @@
 
 #include <iostream>
 
-using namespace std;
+
 
 K3bIsoImageJob::K3bIsoImageJob()
   : K3bBurnJob()
@@ -208,12 +208,12 @@ void K3bIsoImageJob::slotWrite()
   *m_cdrecordProcess << "-data" << m_imagePath;
 			
 
-  cout << "***** cdrecord parameters:\n";
+  kdDebug() << "***** cdrecord parameters:\n";
   const QValueList<QCString>& args = m_cdrecordProcess->args();
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    cout << *it << " ";
+    kdDebug() << *it << " ";
   }
-  cout << endl << flush;
+  kdDebug() << endl << flush;
 
 
 

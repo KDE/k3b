@@ -44,7 +44,7 @@
 
 #include <iostream>
 
-using namespace std;
+
 
 K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   : K3bBurnJob()
@@ -53,8 +53,6 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   m_process = 0;
 
   m_imageFinished = true;
-
-  m_process = new KShellProcess();
 }
 
 K3bDataJob::~K3bDataJob()
@@ -113,8 +111,8 @@ void K3bDataJob::fetchMultiSessionInfo()
   emit infoMessage( i18n("Searching previous session"), K3bJob::PROCESS );
 
   // check msinfo
-  m_process->clearArguments();
-  m_process->disconnect();
+  delete m_process;
+  m_process = new KProcess();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bAudioJob) could not find cdrecord executable" << endl;
@@ -187,8 +185,8 @@ void K3bDataJob::slotMsInfoFetched()
 void K3bDataJob::fetchIsoSize()
 {
   // determine iso-size
-  m_process->clearArguments();
-  m_process->disconnect();
+  delete m_process;
+  m_process = new KProcess();
 
   kdDebug() << "(K3bDataJob) process cleared" << endl;
 
@@ -201,12 +199,12 @@ void K3bDataJob::fetchIsoSize()
   // add empty dummy dir since one path-spec is needed
   *m_process << m_doc->dummyDir();
 
-  cout << "***** mkisofs parameters:\n";
+  kdDebug() << "***** mkisofs parameters:\n";
   const QValueList<QCString>& args = m_process->args();
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    cout << *it << " ";
+    kdDebug() << *it << " ";
   }
-  cout << endl << flush;
+  kdDebug() << endl << flush;
 
 	
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
@@ -280,8 +278,8 @@ void K3bDataJob::writeCD()
   // start the writing process -------------------------------------------------------------
   // create a kshellprocess and do it on the fly!
 
-  m_process->clearArguments();
-  m_process->disconnect();
+  delete m_process;
+  m_process = new KShellProcess();
 
   if( m_doc->onTheFly() ) {
     if( !addMkisofsParameters() ) {
@@ -416,8 +414,8 @@ void K3bDataJob::writeImage()
   if( m_doc->isoImage().isEmpty() )
     m_doc->setIsoImage( k3bMain()->findTempFile( "iso" ) );
 		
-  m_process->clearArguments();
-  m_process->disconnect();
+  delete m_process;
+  m_process = new KProcess();
 			
   if( !addMkisofsParameters() ) {
     cancelAll();
@@ -718,8 +716,6 @@ void K3bDataJob::slotMkisofsFinished()
     QFile::remove( m_pathSpecFile );
     m_pathSpecFile = QString::null;
   }
-
-  //	m_process->disconnect();
 }
 
 
@@ -764,8 +760,6 @@ void K3bDataJob::slotCdrecordFinished()
     QFile::remove( m_doc->isoImage() );
     m_doc->setIsoImage("");
   }
-		
-  m_process->disconnect();
 }
 
 
@@ -870,7 +864,9 @@ bool K3bDataJob::addMkisofsParameters()
 
 void K3bDataJob::slotCollectOutput( KProcess*, char* output, int len )
 {
-  // we only need the last line
+  emit debuggingOutput( "misc", QString::fromLatin1( output, len ) );
+
+  // we only need the last line (SURE???)
   m_collectedOutput = QString::fromLatin1( output, len );
 }
 
@@ -945,7 +941,7 @@ void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 	kdDebug() << "K3bDataJob) found " << sameNameCount << " files with same joliet name" << endl;
 
 	unsigned int charsForNumber = QString::number(sameNameCount).length();
-	for( int i = begin; i < begin + sameNameCount; i++ ) {
+	for( unsigned int i = begin; i < begin + sameNameCount; i++ ) {
 	  // we always reserve 5 chars for the extension
 	  QString extension = sortedChildren.at(i)->k3bName().right(5);
 	  if( !extension.contains(".") )
