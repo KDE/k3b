@@ -40,7 +40,6 @@
 #include <limits.h>
 
 
-static QProgressBar* s_dummyProgressBar = 0;
 
 // ///////////////////////////////////////////////
 //
@@ -266,11 +265,13 @@ void K3bListViewItem::setDisplayProgressBar( int col, bool displ )
 
 void K3bListViewItem::setProgress( int col, int p )
 {
-  setDisplayProgressBar( col, true );
   ColumnInfo* info = getColumnInfo( col );
-  info->progressValue = p;
-
-  repaint();
+  if( !info->showProgress )
+    setDisplayProgressBar( col, true );
+  if( info->progressValue != p ) {
+    info->progressValue = p;
+    repaint();
+  }
 }
 
 
@@ -316,15 +317,24 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
     // the QPainter is translated so 0, 0 is the upper left of our paint rect
     QRect r( 0, 0, width, height() );
 
+    // create the double buffer pixmap
+    static QPixmap *doubleBuffer = 0;
+    if( !doubleBuffer )
+      doubleBuffer = new QPixmap;
+    doubleBuffer->resize( width, height() );
+
+    QPainter dbPainter( doubleBuffer );
+
      // clear the background (we cannot use paintEmptyArea since it's protected in QListView)
      if( K3bListView* lv = dynamic_cast<K3bListView*>(listView()) )
-       lv->paintEmptyArea( p, r );
+       lv->paintEmptyArea( &dbPainter, r );
      else
-       p->fillRect( 0, 0, width, height(), 
- 		   cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
+       dbPainter.fillRect( 0, 0, width, height(), 
+			   cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
 
     // this might be a stupid hack but most styles do not reimplement drawPrimitive PE_ProgressBarChunk
     // so this way the user is happy....
+    static QProgressBar* s_dummyProgressBar = 0;
     if( !s_dummyProgressBar ) {
       s_dummyProgressBar = new QProgressBar();
     }
@@ -341,9 +351,11 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
     // some styles use the widget's geometry
     s_dummyProgressBar->setGeometry( r );
 
-    listView()->style().drawControl(QStyle::CE_ProgressBarContents, p, s_dummyProgressBar, r, cgh, flags );
-    listView()->style().drawControl(QStyle::CE_ProgressBarLabel, p, s_dummyProgressBar, r, cgh, flags );
+    listView()->style().drawControl(QStyle::CE_ProgressBarContents, &dbPainter, s_dummyProgressBar, r, cgh, flags );
+    listView()->style().drawControl(QStyle::CE_ProgressBarLabel, &dbPainter, s_dummyProgressBar, r, cgh, flags );
 
+    // now we really paint the progress in the listview
+    p->drawPixmap( 0, 0, *doubleBuffer );
 
     //
     // Since the QStyle API is so unflexible we need to copy the functionality of
