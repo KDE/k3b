@@ -706,15 +706,32 @@ bool K3bCdDevice::CdDevice::furtherInit()
 
 void K3bCdDevice::CdDevice::checkForAncientWriters()
 {
-  if( vendor() == "TEAC" ) {
-    if( description() == "CD-R50S" || description() == "CD-R55S" ) {
-      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() 
-		<< " found ancient drive: " << vendor() << " " << description() << endl;
+  // TODO: add a boolean which determines if this device is non-MMC so we may warn the user at K3b startup about it
 
+  if( vendor().left(4) == "TEAC" ) {
+    if( description().left(7) == "CD-R50S" || description().left(7) == "CD-R55S" ) {
       m_writeModes = TAO;
       d->deviceType = CDROM|CDR;
       m_maxWriteSpeed = 4;
       m_maxReadSpeed = 12;
+      m_bufferSize = 1024;
+      d->burnfree = false;
+    }
+  }
+  else if( vendor().left(8) == "MATSHITA" ) {
+    if( description().left(14) == "CD-R   CW-7501" ) {
+      m_writeModes = TAO|SAO;
+      d->deviceType = CDROM|CDR;
+      m_maxWriteSpeed = 2;
+      m_maxReadSpeed = 4;
+      m_bufferSize = 1024;
+      d->burnfree = false;
+    }
+    if( description().left(14) == "CD-R   CW-7502" ) {
+      m_writeModes = TAO|SAO;
+      d->deviceType = CDROM|CDR;
+      m_maxWriteSpeed = 4;
+      m_maxReadSpeed = 8;
       m_bufferSize = 1024;
       d->burnfree = false;
     }
