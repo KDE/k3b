@@ -348,23 +348,33 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
     K3bDevice::Toc toc;
     K3bDevice::Device* dev = 0;
     K3bCddbResultEntry cddb;
-    int trackNumber;
+    QValueList<int> trackNumbers;
 
-    K3bAudioCdTrackDrag::decode( e, toc, trackNumber, cddb, &dev );
+    K3bAudioCdTrackDrag::decode( e, toc, trackNumbers, cddb, &dev );
 
     // for now we just create one source
-    K3bAudioCdTrackSource* source = new K3bAudioCdTrackSource( toc, trackNumber, cddb, dev );
-    if( trackParent )
-      source->moveAfter( sourceAfter );
-    else {
-      K3bAudioTrack* track = new K3bAudioTrack();
-      track->setPerformer( cddb.artists[trackNumber-1] );
-      track->setTitle( cddb.titles[trackNumber-1] );
-      track->addSource( source );
-      if( trackAfter )
-	track->moveAfter( trackAfter );
-      else
-	m_doc->addTrack( track, 0 );
+    for( QValueList<int>::const_iterator it = trackNumbers.begin();
+	 it != trackNumbers.end(); ++it ) {
+      int trackNumber = *it;
+
+      K3bAudioCdTrackSource* source = new K3bAudioCdTrackSource( toc, trackNumber, cddb, dev );
+      if( trackParent ) {
+	source->moveAfter( sourceAfter );
+	if( sourceAfter )
+	  sourceAfter = source;
+      }
+      else {
+	K3bAudioTrack* track = new K3bAudioTrack();
+	track->setPerformer( cddb.artists[trackNumber-1] );
+	track->setTitle( cddb.titles[trackNumber-1] );
+	track->addSource( source );
+	if( trackAfter )
+	  track->moveAfter( trackAfter );
+	else
+	  m_doc->addTrack( track, 0 );
+
+	trackAfter = track;
+      }
     }
   }
   else{
@@ -904,6 +914,11 @@ void K3bAudioTrackView::slotQueryMusicBrainz()
     KMessageBox::sorry( this, i18n("Please select an audio track.") );
     return;
   }
+
+  // only one may use the tracks at the same time
+  if( m_currentlyPlayingTrack &&
+      tracks.containsRef( m_currentlyPlayingTrack ) )
+    m_player->stop();
 
   // now do the lookup on the files.
   K3bAudioTrackTRMLookupDialog dlg( this );

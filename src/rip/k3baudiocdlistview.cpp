@@ -28,7 +28,7 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, c
   setFullWidth(true);
   setSorting(-1);
   setAllColumnsShowFocus( true );
-  setSelectionMode( QListView::Single );
+  setSelectionModeExt( KListView::Extended );
   setDragEnabled( true );
   addColumn( "" );
   addColumn( "" );

@@ -38,7 +38,7 @@
 
 #include <errno.h>
 #include <string.h>
-#include <cmath>
+
 
 
 class K3bIsoImager::Private
@@ -47,7 +47,6 @@ public:
   QString imagePath;
   QFile imageFile;
   const K3bExternalBin* mkisofsBin;
-  bool readError;
 };
 
 
@@ -98,56 +97,19 @@ void K3bIsoImager::writeToImageFile( const QString& path )
 
 void K3bIsoImager::slotReceivedStderr( const QString& line )
 {
-  if( !line.isEmpty() ) {
-    emit debuggingOutput( "mkisofs", line );
-
-    if( line.startsWith( d->mkisofsBin->path ) ) {
-      // error or warning
-      QString errorLine = line.mid( d->mkisofsBin->path.length() + 2 );
-      if( errorLine.startsWith( "Input/output error. cannot read from" ) ) {
-	emit infoMessage( i18n("Read error from file '%1'").arg( errorLine.mid( 38, errorLine.length()-40 ) ), 
-			  ERROR );
-	d->readError = true;
-      }
-    }
-    else if( line.contains( "done, estimate" ) ) {
-      int p = parseProgress( line );
-      if( p != -1 )
-	emit percent( p );
-    }
-    else if( line.contains( "extents written" ) ) {
-      emit percent( 100 );
-    }
-    else {
-      kdDebug() << "(mkisofs) " << line << endl;
-    }
-  }
+  handleMkisofsOutput( line );
 }
 
 
-int K3bIsoImager::parseProgress( const QString& line ) 
+void K3bIsoImager::handleMkisofsProgress( int p )
 {
-  //
-  // in multisession mode mkisofs' progress does not start at 0 but at (X+Y)/X
-  // where X is the data already on the cd and Y the data to create
-  // This is not very dramatic but kind or ugly.
-  // We just save the first emitted progress value and to some math ;)
-  //
+  emit percent( p );
+}
 
-  QString perStr = line;
-  perStr.truncate( perStr.find('%') );
-  bool ok;
-  double p = perStr.toDouble( &ok );
-  if( !ok ) {
-    kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
-    return -1;
-  }
-  else {
-    if( m_firstProgressValue < 0 )
-      m_firstProgressValue = p;
-    
-    return( (int)::ceil( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
-  }
+
+void K3bIsoImager::handleMkisofsInfoMessage( const QString& line, int type )
+{
+  emit infoMessage( line, type );
 }
 
 
@@ -188,7 +150,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  // otherwise just fall through
 
 	default:
-	  if( !d->readError ) {
+	  if( !mkisofsReadError() ) {
 	    emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
 			      K3bJob::ERROR );
 	    emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
@@ -246,6 +208,8 @@ void K3bIsoImager::calculateSize()
     emit sizeCalculated( ERROR, 0 );
     return;
   }
+
+  initMkisofs( d->mkisofsBin );
 
   emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
 
@@ -363,10 +327,8 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 void K3bIsoImager::init()
 {
   m_containsFilesWithMultibleBackslashes = false;
-  m_firstProgressValue = -1;
   m_processExited = false;
   m_canceled = false;
-  d->readError = false;
 }
 
 
@@ -393,6 +355,7 @@ void K3bIsoImager::start()
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
 		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
 
+  initMkisofs( d->mkisofsBin );
 
   *m_process << d->mkisofsBin;
 

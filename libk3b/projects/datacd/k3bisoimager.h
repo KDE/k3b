@@ -17,6 +17,7 @@
 #define K3B_ISO_IMAGER_H
 
 #include <k3bjob.h>
+#include "k3bmkisofshandler.h"
 
 #include <qptrqueue.h>
 #include <qstringlist.h>
@@ -32,7 +33,7 @@ class K3bDevice::Device;
 class KTempFile;
 
 
-class K3bIsoImager : public K3bJob
+class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 {
  Q_OBJECT
 
@@ -82,6 +83,9 @@ class K3bIsoImager : public K3bJob
   void sizeCalculated( int exitCode, int size );
 
  protected:
+  virtual void handleMkisofsProgress( int );
+  virtual void handleMkisofsInfoMessage( const QString&, int );
+
   virtual bool addMkisofsParameters( bool printSize = false );
 
   /**
@@ -105,8 +109,6 @@ class K3bIsoImager : public K3bJob
   virtual int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   virtual void writePathSpecForFile( K3bFileItem*, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
-
-  int parseProgress( const QString& );
 
   KTempFile* m_pathSpecFile;
   KTempFile* m_rrHideFile;
@@ -149,8 +151,6 @@ class K3bIsoImager : public K3bJob
   int m_fdToWriteTo;
 
   bool m_containsFilesWithMultibleBackslashes;
-
-  double m_firstProgressValue;
 };
 
 

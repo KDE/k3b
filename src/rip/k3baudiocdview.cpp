@@ -589,9 +589,14 @@ void K3bAudioCdView::enableInteraction( bool b )
 QDragObject* K3bAudioCdView::dragObject()
 {
   QPtrList<QListViewItem> items = m_trackView->selectedItems();
+  QValueList<int> tracks;
+  for( QPtrListIterator<QListViewItem> it( items );
+       it.current(); ++it )
+    tracks.append( static_cast<AudioTrackViewItem*>(it.current())->trackNumber );
+
   if( !items.isEmpty() ) {
     return new K3bAudioCdTrackDrag( m_toc, 
-				    static_cast<AudioTrackViewItem*>(items.first())->trackNumber, 
+				    tracks, 
 				    m_cddbInfo,
 				    m_device,
 				    this );

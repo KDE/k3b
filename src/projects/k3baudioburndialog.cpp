@@ -132,7 +132,6 @@ K3bAudioBurnDialog::~K3bAudioBurnDialog(){
 
 void K3bAudioBurnDialog::slotStartClicked()
 {
-  // FIXME: this should not be done via the doc. So remove all gui stuff from the doc
   static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
   K3bProjectBurnDialog::slotStartClicked();
 }

@@ -74,6 +74,7 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
   void slotTrackChanged( K3bAudioTrack* track );
   void slotTrackRemoved( K3bAudioTrack* track );
   void slotUpdateSlider();
+  void slotDocChanged();
 
  private:
   K3bAudioDoc* m_doc;

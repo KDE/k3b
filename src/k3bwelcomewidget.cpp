@@ -304,7 +304,6 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 {
   if( e->button() == QMouseEvent::RightButton ) {
     QMap<int, KAction*> map;
-    KPopupMenu pop;
     KPopupMenu addPop;
 
     KActionPtrList actions = m_mainWindow->actionCollection()->actions();
@@ -319,10 +318,14 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 	map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
     }
     
-    int r = -1;
+    // menu identifiers in QT are always < 0 (when automatically generated)
+    // and unique throughout the entire application!
+    int r = 0;
+    int removeAction = 0;
 
-    int removeAction = -1;
-    if( viewport()->childAt(e->pos())->inherits( "K3bFlatButton" ) ) {
+    QWidget* widgetAtPos = viewport()->childAt(e->pos());
+    if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
+      KPopupMenu pop;
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
       pop.insertItem( i18n("Add Button"), &addPop );
       r = pop.exec( e->globalPos() );
@@ -332,9 +335,9 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
       r = addPop.exec( e->globalPos() );
     }
 
-    if( r != -1 ) {
+    if( r != 0 ) {
       if( r == removeAction )
-	main->removeButton( (K3bFlatButton*)viewport()->childAt(e->pos()) );
+	main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
       else
 	main->addAction( map[r] );
     }

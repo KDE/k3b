@@ -441,7 +441,7 @@ void K3bAudioDoc::addTrack( const KURL& url, uint position )
 K3bAudioTrack* K3bAudioDoc::getTrack( unsigned int trackNum )
 {
   K3bAudioTrack* track = m_firstTrack;
-  int i = 1;
+  unsigned int i = 1;
   while( track ) {
     if( i == trackNum )
       return track;

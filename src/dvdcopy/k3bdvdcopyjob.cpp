@@ -503,26 +503,31 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
       emit finished(true);
       d->running = false;
     }
-    else if( !m_onTheFly ) {
-      if( waitForDvd() ) {
-	prepareWriter();
-	if( m_copies > 1 )
-	  emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
-	else
-	  emit newTask( i18n("Writing DVD copy") );
+    else {
+      if( m_writerDevice == m_readerDevice )
+	m_readerDevice->eject();
 
-	emit burning(true);
-
-	d->writerRunning = true;
-	d->writerJob->start();
-      }
-      else {
-	if( m_removeImageFiles )
-	  removeImageFiles();
-	if( d->canceled )
-	  emit canceled();
-	emit finished(false);
-	d->running = false;
+      if( !m_onTheFly ) {
+	if( waitForDvd() ) {
+	  prepareWriter();
+	  if( m_copies > 1 )
+	    emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+	  else
+	    emit newTask( i18n("Writing DVD copy") );
+	  
+	  emit burning(true);
+	  
+	  d->writerRunning = true;
+	  d->writerJob->start();
+	}
+	else {
+	  if( m_removeImageFiles )
+	    removeImageFiles();
+	  if( d->canceled )
+	    emit canceled();
+	  emit finished(false);
+	  d->running = false;
+	}
       }
     }
   }

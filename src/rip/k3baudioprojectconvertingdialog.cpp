@@ -21,6 +21,8 @@
 #include "k3baudioconvertingoptionwidget.h"
 
 #include <k3baudiodoc.h>
+#include <k3baudioview.h>
+#include <k3baudiotrackplayer.h>
 #include <k3baudiotrack.h>
 #include <k3bjobprogressdialog.h>
 #include <k3bcore.h>
@@ -126,6 +128,9 @@ void K3bAudioProjectConvertingDialog::setupGui()
 
 void K3bAudioProjectConvertingDialog::slotStartClicked()
 {
+  // make sure we have the tracks just for ourselves
+  static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
+
   // check if all filenames differ
   if( d->filenames.count() > 1 ) {
     bool differ = true;

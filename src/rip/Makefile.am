@@ -7,6 +7,7 @@ AM_CPPFLAGS = 	-I$(srcdir)/../../libk3b/core \
 		-I$(srcdir)/../../libk3b/projects/audiocd \
 		-I$(srcdir)/../../libk3b/cddb \
 		-I$(srcdir)/.. \
+		-I$(srcdir)/../projects \
 		$(all_includes)
 
 METASOURCES = AUTO

@@ -108,6 +108,8 @@ void K3bGrowisofsImager::start()
     return;
   }
   
+  initMkisofs( m_mkisofsBin );
+
   if( m_growisofsBin->version < K3bVersion( 5, 10 ) ) {
     emit infoMessage( i18n("Growisofs version %1 is too old. "
 			   "K3b needs at least version 5.10.").arg(m_growisofsBin->version), 
@@ -287,7 +289,7 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
     // imported a session.
     //
 
-    int p = K3bIsoImager::parseProgress( line );
+    int p = parseMkisofsProgress( line );
     if( p != -1 ) {
       d->speedEst->dataWritten( p*m_doc->burningSize()/1024/100 );
       if( p > d->lastPercent ) {

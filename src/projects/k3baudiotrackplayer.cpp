@@ -61,7 +61,7 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
   d->paused = false;
   d->playing = false;
 
-  // TODO: handle the shortcuts: pass a widget to the action collection
+  // TODO: handle the shortcuts: pass a widget to the action collection (perhaps the trackview?)
   d->actionCollection = new KActionCollection( 0, this );
 
   // create the actions
@@ -125,6 +125,8 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
   d->actionPrev->setEnabled(false);
   d->actionSeek->setEnabled(false);
 
+  connect( m_doc, SIGNAL(changed()), 
+	   this, SLOT(slotDocChanged()) );
   connect( m_doc, SIGNAL(trackChanged(K3bAudioTrack*)),
 	   this, SLOT(slotTrackChanged(K3bAudioTrack*)) );
   connect( m_doc, SIGNAL(trackRemoved(K3bAudioTrack*)),
@@ -344,5 +346,15 @@ void K3bAudioTrackPlayer::slotUpdateSlider()
   d->seekSlider->setValue( m_currentPosition.totalFrames() );
 }
 
+
+void K3bAudioTrackPlayer::slotDocChanged()
+{
+  // update the controls in case a new track has been added before or after
+  // the current one and it has been the first or last track
+  if( m_currentTrack ) {
+    d->actionNext->setEnabled( m_currentTrack->next() != 0 );
+    d->actionPrev->setEnabled( m_currentTrack->prev() != 0 );
+  }
+}
 
 #include "k3baudiotrackplayer.moc"

@@ -26,11 +26,12 @@
 
 
 // FIXME: multiple tracks
-K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, int cdTrackNumber, const K3bCddbResultEntry& cddb,
+K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QValueList<int>& cdTrackNumbers, 
+					  const K3bCddbResultEntry& cddb,
 					  K3bDevice::Device* lastDev, QWidget* dragSource, const char* name )
     : QStoredDrag( "k3b/audio_track_drag", dragSource, name ),
     m_toc(toc),
-    m_cdTrackNumber(cdTrackNumber),
+    m_cdTrackNumbers(cdTrackNumbers),
     m_cddb(cddb),
     m_device(lastDev)
 {
@@ -49,7 +50,11 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, int cdTrack
       << cddb.titles[i] << endl;
   }
 
-  s << cdTrackNumber;
+  s << cdTrackNumbers.count();
+
+  for( QValueList<int>::const_iterator it = cdTrackNumbers.begin();
+       it != cdTrackNumbers.end(); ++it )
+    s << *it;
 
   if( lastDev )
     t << lastDev->blockDeviceName() << endl;
@@ -62,7 +67,8 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, int cdTrack
 
 
 bool K3bAudioCdTrackDrag::decode( const QMimeSource* e, 
-				  K3bDevice::Toc& toc, int& trackNumber, K3bCddbResultEntry& cddb, K3bDevice::Device** dev )
+				  K3bDevice::Toc& toc, QValueList<int>& trackNumbers, 
+				  K3bCddbResultEntry& cddb, K3bDevice::Device** dev )
 {
   QByteArray data = e->encodedData( "k3b/audio_track_drag" );
 
@@ -87,7 +93,13 @@ bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
     cddb.titles.append( t.readLine() );
   }
 
-  s >> trackNumber;
+  s >> trackCnt;
+  trackNumbers.clear();
+  for( int i = 0; i < trackCnt; ++i ) {
+    int trackNumber = 0;
+    s >> trackNumber;
+    trackNumbers.append( trackNumber );
+  }
 
   QString devName = t.readLine();
   if( dev && !devName.isEmpty() )
