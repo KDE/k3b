@@ -8,4 +8,4 @@ libvcd_la_SOURCES = k3bvcddoc.cpp k3bvcdtrack.cpp k3bvcdjob.cpp k3bvcdview.cpp k
 
 libvcd_la_LIBADD = mpeginfo/libmpeginfo.la
 
-SUBDIRS = mpeginfo
+SUBDIRS = mpeginfo cdi
