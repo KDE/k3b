@@ -111,7 +111,7 @@ void K3bApp::initActions()
   fileNewMenu->insert( fileNewData );
   fileNewMenu->setDelayed( false );
 
-  viewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
+  viewDirView = new KToggleAction(i18n("Show Directories"), SmallIconSet("view_sidetree"), 0, this, SLOT(slotShowDirView()), actionCollection(), "view_dir");
 
   fileNewMenu->setStatusText(i18n("Creates a new project"));
   fileOpen->setStatusText(i18n("Opens an existing project"));

@@ -12,21 +12,23 @@ class KProcess;
 class K3bDevice
 {
 public:
-	K3bDevice( int _id,
-				 const QString& _device,
+	K3bDevice( int _bus, int _target, int _lun,
 				 const QString& _description,
 				 const QString& _vendor,
 				 const QString& _version,
 				 bool _burner,
 				 int _maxReadSpeed,
 				 int _maxBurnSpeed = 0)
-		:id(_id), device(_device), description(_description), vendor(_vendor), version(_version), burner(_burner),
+		:bus(_bus), target(_target), lun(_lun), description(_description), vendor(_vendor), version(_version), burner(_burner),
 			maxReadSpeed(_maxReadSpeed), maxWriteSpeed(_maxBurnSpeed) {}
 			
 //	~K3bDevice();
 
-	int id;
-	QString device;
+	QString device();
+	
+	int bus;
+	int target;
+	int lun;
 	QString description;
 	QString vendor;
 	QString version;
@@ -50,6 +52,8 @@ public:
 	K3bDeviceManager( QObject* parent );
 	~K3bDeviceManager();
 
+	K3bDevice* deviceByBus( int, int, int );
+	
 	QList<K3bDevice>& burningDevices();
 	/**
 	 * Note that all burning devices can also be used as
