@@ -204,7 +204,10 @@ void K3bMixedDoc::setImagePath( const QString& path )
 {
   // check if it's a file and if so just take the dir
   QFileInfo info( path );
-  m_imagePath = info.dirPath(true);
+  if( info.isDir() )
+    m_imagePath = path;
+  else
+    m_imagePath = info.dirPath(true);
 }
 
 
