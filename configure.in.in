@@ -257,7 +257,7 @@ AM_CONDITIONAL(compile_libsamplerate, [test -z "$LIBSAMPLERATE"])
 ARTS_LIBS=""
 if test "x$build_arts" = "xyes"; then
 	dnl Find aRts
-	KDE_CHECK_HEADERS(arts/artsc.h,
+	KDE_CHECK_HEADERS(artsc/artsc.h,
 		[arts_available=yes
 	 	 ARTS_LIBS="-lartsc"],
 		[arts_available=no]
