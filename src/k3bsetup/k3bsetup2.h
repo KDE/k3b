@@ -32,7 +32,6 @@ class K3bSetup2: public KCModule
   K3bSetup2( QWidget* parent = 0, const char* name = 0, const QStringList& args = QStringList() );
   ~K3bSetup2();
 
-  int buttons();
   QString quickHelp() const;
   const KAboutData* aboutData() { return m_aboutData; };
 

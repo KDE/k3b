@@ -81,6 +81,8 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
 			       I18N_NOOP("(c) 2003 Sebastian Trueg"));
   m_aboutData->addAuthor("Sebastian Trueg", 0, "trueg@k3b.org");
 
+  setButtons( KCModule::Apply|KCModule::Cancel|KCModule::Ok|KCModule::Default );
+
   QHBoxLayout* box = new QHBoxLayout( this );
   box->setAutoAdd(true);
   box->setMargin(0);
@@ -208,7 +210,8 @@ void K3bSetup2::updatePrograms()
 	      fi.owner() != "root" ||
 	      fi.group() != burningGroup() ) {
 	    bi->setText( 4, "4710 root." + burningGroup() );
-	    d->changesNeeded = bi->isOn();
+	    if( bi->isOn() )
+	      d->changesNeeded = true;
 	  }
 	  else
 	    bi->setText( 4, i18n("no change") );
@@ -218,7 +221,8 @@ void K3bSetup2::updatePrograms()
 	      fi.owner() != "root" ||
 	      fi.group() != "root" ) {
 	    bi->setText( 4, "4711 root.root" );
-	    d->changesNeeded = bi->isOn();
+	    if( bi->isOn() )
+	      d->changesNeeded = true;
 	  }
 	  else
 	    bi->setText( 4, i18n("no change") );
@@ -272,7 +276,8 @@ void K3bSetup2::updateDevices()
 	if( perm != 0000660 ||
 	    fi.group() != burningGroup() ) {
 	  bi->setText( 3, "660 " + fi.owner() + "." + burningGroup() );
-	  d->changesNeeded = bi->isOn();
+	  if( bi->isOn() )
+	    d->changesNeeded = true;
 	}
 	else
 	  bi->setText( 3, i18n("no change") );
@@ -281,7 +286,8 @@ void K3bSetup2::updateDevices()
 	// we ignore the device's owner and group here
 	if( perm != 0000666 ) {
 	  bi->setText( 3, "666 " + fi.owner() + "." + fi.group()  );
-	  d->changesNeeded = bi->isOn();
+	  if( bi->isOn() )
+	    d->changesNeeded = true;
 	}
 	else
 	  bi->setText( 3, i18n("no change") );
@@ -320,10 +326,7 @@ void K3bSetup2::defaults()
   w->m_checkUseBurningGroup->setChecked(false);
   w->m_editBurningGroup->setText( "burning" );
 
-  updatePrograms();
-  updateDevices();
-
-  emit changed( d->changesNeeded );
+  updateViews();
 }
 
 
@@ -413,12 +416,6 @@ void K3bSetup2::save()
   // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group
 
   updateViews();
-}
-
-
-int K3bSetup2::buttons()
-{
-  return KCModule::Apply;
 }
 
 
