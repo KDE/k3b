@@ -42,8 +42,7 @@ class K3bExternalBinModule : public K3bAudioModule
  protected slots:
    /**
     * This will be started by a timer and should
-    * calculate length of the track and eventually 
-    * other data.
+    * calculate length.
     */
   virtual void slotGatherInformation() = 0;
 

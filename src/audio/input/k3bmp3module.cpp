@@ -125,7 +125,7 @@ void K3bMp3Module::slotWriteToWavFinished()
 }
 
 
-void K3bMp3Module::slotGatherInformation()
+void K3bMp3Module::init()
 {
   ID3_Tag _tag( audioTrack()->absPath().latin1() );
   ID3_Frame* _frame = _tag.Find( ID3FID_TITLE );
@@ -135,7 +135,12 @@ void K3bMp3Module::slotGatherInformation()
   _frame = _tag.Find( ID3FID_LEADARTIST );
   if( _frame )
     audioTrack()->setArtist( QString(ID3_GetString(_frame, ID3FN_TEXT )) );
-  
+}
+
+
+void K3bMp3Module::slotGatherInformation()
+{
+  ID3_Tag _tag( audioTrack()->absPath().latin1() );
   int _id3TagSize = _tag.Size();
 
 

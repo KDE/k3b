@@ -778,7 +778,6 @@ bool K3bDataJob::writePathSpec( const QString& filename )
     return false;
   }
 	
-  /*
   QTextStream t(&file);
 
   // start writing the path-specs
@@ -793,7 +792,7 @@ bool K3bDataJob::writePathSpec( const QString& filename )
 	
 
   file.close();
-  */
+  
   return filename;
 }
 

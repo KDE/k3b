@@ -307,7 +307,7 @@ void K3bProjectBurnDialog::slotUpdateFreeTempSpace()
 void K3bProjectBurnDialog::slotTempDirButtonPressed()
 {
   // TODO: ask for confirmation if already exists
-  QString dir = KFileDialog::getExistingDirectory( m_editDirectory->text(), k3bMain(), "Select Temp Directory" );
+  QString dir = KFileDialog::getExistingDirectory( m_editDirectory->text(), k3bMain(), i18n("Select Temp Directory") );
   if( !dir.isEmpty() ) {
     setTempDir( dir );
   }

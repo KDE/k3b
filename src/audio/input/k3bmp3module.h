@@ -21,6 +21,8 @@ class K3bMp3Module : public K3bExternalBinModule
 
   KURL writeToWav( const KURL& url );
 
+  void init();
+
  public slots:
   void cancel();
 

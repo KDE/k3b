@@ -25,6 +25,7 @@
 #include "k3baudiojob.h"
 #include "k3baudioontheflyjob.h"
 #include "input/k3baudiomodulefactory.h"
+#include "input/k3baudiomodule.h"
 
 
 // QT-includes
@@ -146,7 +147,9 @@ void K3bAudioDoc::slotWorkUrlQueue()
     }
 	
     if( K3bAudioModuleFactory::moduleAvailable( addedFile ) ) {
-      addTrack( new K3bAudioTrack( m_tracks, addedFile.path() ), lastAddedPosition );
+      K3bAudioTrack* newTrack =  new K3bAudioTrack( m_tracks, addedFile.path() );
+      newTrack->module()->init();   // read special data like id3-tags
+      addTrack( newTrack, lastAddedPosition );
     }
     else {
       KMessageBox::information( kapp->mainWidget(), "Only mp3 and wav audio files are supported!", 
@@ -178,7 +181,7 @@ void K3bAudioDoc::addTrack( K3bAudioTrack* _track, uint position )
     lastAddedPosition = m_tracks->count();
     m_tracks->insert( m_tracks->count(), _track );
   }
-	
+  
   setModified( true );
 }
 
@@ -290,14 +293,32 @@ bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
 
       K3bAudioTrack* track = new K3bAudioTrack( m_tracks, url );
       
+      QDomNodeList trackNodes = trackElem.childNodes();
+
       // set cd-text
+      QDomElement cdTextElem = trackNodes.item(0).toElement();
+
+      cdTextNodes = cdTextElem.childNodes();
+      track->setTitle( cdTextNodes.item(0).toElement().text() );
+      track->setArtist( cdTextNodes.item(1).toElement().text() );
+      track->setArranger( cdTextNodes.item(2).toElement().text() );
+      track->setSongwriter( cdTextNodes.item(3).toElement().text() );
+      track->setIsrc( cdTextNodes.item(4).toElement().text() );
+      track->setAlbum( cdTextNodes.item(5).toElement().text() );
+      track->setCdTextMessage( cdTextNodes.item(6).toElement().text() );
       
 
       // set pregap
+      QDomElement pregapElem = trackNodes.item(1).toElement();
+      track->setPregap( pregapElem.text().toInt() );
 
-      // set copy-protection
+      // set copy-protection      
+      QDomElement copyProtectElem = trackNodes.item(2).toElement();
+      track->setCopyProtection( copyProtectElem.text() == "yes" );
 
       // set pre-emphasis
+      QDomElement preEmpElem = trackNodes.item(3).toElement();
+      track->setPreEmp( preEmpElem.text() == "yes" );
 
       addTrack( track, m_tracks->count() );
     }
