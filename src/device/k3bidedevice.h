@@ -16,9 +16,13 @@ class K3bIdeDevice : public K3bDevice
 
   int interfaceType() const { return K3bDevice::IDE; }
 
+#ifdef SUPPORT_IDE
+  QString busTargetLun() const;
+#else
   bool burnproof() const { return false; }
   bool writer() const { return false; }
   int maxWriteSpeed() const { return 0; }
+#endif
 
  protected:
   bool furtherInit();

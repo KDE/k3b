@@ -23,10 +23,16 @@ K3bIdeDevice::~K3bIdeDevice()
 {
 }
 
+#ifdef SUPPORT_IDE
+QString K3bIdeDevice::busTargetLun() const
+{
+  return QString("ATAPI:%1,%2,%3").arg(m_bus).arg(m_target).arg(m_lun);
+}
+#endif
 
 bool K3bIdeDevice::furtherInit()
 {
-  int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
+ int cdromfd = ::open( devicename().latin1(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bIdeDevice) Error: could not open device." << endl;
     return false;
@@ -42,4 +48,5 @@ bool K3bIdeDevice::furtherInit()
 
     return true;
   }
+ 
 }

@@ -9,9 +9,9 @@
 #include <qptrlist.h>
 
 #include <kdebug.h>
+#include "k3bdevice.h"
 
 class KProcess;
-class K3bDevice;
 class KConfig;
 class K3bExternalBinManager;
 class cdrom_drive;
@@ -89,7 +89,9 @@ class K3bDeviceManager : public QObject
    **/
   K3bDeviceManager();
 
-  bool determineBusIdLun( int cdromfd, int& bus, int& id, int& lun );
+  K3bDevice::interface determineInterfaceType(struct stat);
+  bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
+  void determineCapabilities(K3bDevice *dev);
   QString resolveSymLink( const QString& path );
 
   K3bExternalBinManager* m_externalBinManager;
@@ -101,8 +103,8 @@ class K3bDeviceManager : public QObject
 
   QString m_processOutput;
 
-  K3bDevice* initializeScsiDevice( const QString& devname, int bus, int target, int lun );
-  K3bDevice* initializeIdeDevice( const QString& );
+  K3bDevice* initializeScsiDevice( const QString& devname);
+  K3bDevice* initializeIdeDevice( const QString& devname);
 };
 
 #endif
