@@ -59,8 +59,7 @@ Q_OBJECT
   QCheckBox*    m_checkAutoErasingRewritable;
   QCheckBox*    m_checkOverburn;
   QCheckBox*    m_checkManualWritingBufferSize;
-  KIntNumInput* m_editWritingBufferSizeCdrecord;
-  KIntNumInput* m_editWritingBufferSizeCdrdao;
+  KIntNumInput* m_editWritingBufferSize;
   QCheckBox*    m_checkAllowWritingAppSelection;
 
   QCheckBox* m_checkUsePbc;

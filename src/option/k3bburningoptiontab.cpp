@@ -179,20 +179,14 @@ void K3bBurningOptionTab::setupGui()
 
   m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
   m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
-  m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size"), groupWritingApp );
-  m_editWritingBufferSizeCdrecord = new KIntNumInput( 4, groupWritingApp );
-  m_editWritingBufferSizeCdrdao = new KIntNumInput( 32, groupWritingApp );
+  m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
+  m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
 
   bufferLayout->addMultiCellWidget( m_checkOverburn, 0, 0, 0, 3 );
-  bufferLayout->addMultiCellWidget( m_checkManualWritingBufferSize, 1, 1, 0, 3 );
-  bufferLayout->addWidget( new QLabel( "Cdrecord:", groupWritingApp ), 2, 1 );
-  bufferLayout->addWidget( new QLabel( "Cdrdao:", groupWritingApp ), 3, 1 );
-  bufferLayout->addWidget( m_editWritingBufferSizeCdrecord, 2, 2 );
-  bufferLayout->addWidget( m_editWritingBufferSizeCdrdao, 3, 2 );
-  bufferLayout->addWidget( new QLabel( i18n("MB"), groupWritingApp ), 2, 3 );
-  bufferLayout->addWidget( new QLabel( i18n("blocks"), groupWritingApp ), 3, 3 );
-  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 4, 4, 0, 3 );
-  bufferLayout->addMultiCell( new QSpacerItem( 30, 10, QSizePolicy::Fixed, QSizePolicy::Minimum ), 1, 2, 0, 0 );
+  bufferLayout->addWidget( m_checkManualWritingBufferSize, 1, 0 );
+  bufferLayout->addWidget( m_editWritingBufferSize, 1, 2 );
+  bufferLayout->addWidget( new QLabel( i18n("MB"), groupWritingApp ), 1, 3 );
+  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 2, 2, 0, 3 );
   bufferLayout->setColStretch( 3, 1 );
 
   QGroupBox* groupMisc = new QGroupBox( 2, Qt::Vertical, i18n("Miscellaneous"), advancedTab );
@@ -205,15 +199,12 @@ void K3bBurningOptionTab::setupGui()
 
 
   connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
-	   m_editWritingBufferSizeCdrecord, SLOT(setEnabled(bool)) );
-  connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
-	   m_editWritingBufferSizeCdrdao, SLOT(setEnabled(bool)) );
+	   m_editWritingBufferSize, SLOT(setEnabled(bool)) );
   connect( m_checkManualWritingBufferSize, SIGNAL(toggled(bool)),
 	   this, SLOT(slotSetDefaultBufferSizes(bool)) );
 
 
-  m_editWritingBufferSizeCdrecord->setDisabled( true );
-  m_editWritingBufferSizeCdrdao->setDisabled( true );
+  m_editWritingBufferSize->setDisabled( true );
   // -----------------------------------------------------------------------
 
 
@@ -287,8 +278,7 @@ void K3bBurningOptionTab::readSettings()
   bool manualBufferSize = c->readBoolEntry( "Manual buffer size", false );
   m_checkManualWritingBufferSize->setChecked( manualBufferSize );
   if( manualBufferSize ) {
-    m_editWritingBufferSizeCdrecord->setValue( c->readNumEntry( "Cdrecord buffer", 4 ) );
-    m_editWritingBufferSizeCdrdao->setValue( c->readNumEntry( "Cdrdao buffer", 32 ) );
+    m_editWritingBufferSize->setValue( c->readNumEntry( "Fifo buffer", 4 ) );
   }
   m_checkAllowWritingAppSelection->setChecked( c->readBoolEntry( "Manual writing app selection", false ) );
 }
@@ -320,8 +310,7 @@ void K3bBurningOptionTab::saveSettings()
   c->writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
   c->writeEntry( "Allow overburning", m_checkOverburn->isChecked() );
   c->writeEntry( "Manual buffer size", m_checkManualWritingBufferSize->isChecked() );
-  c->writeEntry( "Cdrecord buffer", m_editWritingBufferSizeCdrecord->value() );
-  c->writeEntry( "Cdrdao buffer", m_editWritingBufferSizeCdrdao->value() );
+  c->writeEntry( "Fifo buffer", m_editWritingBufferSize->value() );
   c->writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
 }
 
@@ -329,8 +318,7 @@ void K3bBurningOptionTab::saveSettings()
 void K3bBurningOptionTab::slotSetDefaultBufferSizes( bool b )
 {
   if( !b ) {
-    m_editWritingBufferSizeCdrecord->setValue( 4 );
-    m_editWritingBufferSizeCdrdao->setValue( 32 );
+    m_editWritingBufferSize->setValue( 4 );
   }
 }
 
