@@ -68,15 +68,15 @@ void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
 void K3bProcess::splitOutput( char* data, int len, bool stdout )
 {
   QString buffer = QString::fromLocal8Bit( data, len );
-  QStringList lines = QStringList::split( "\n", buffer );
+  QStringList lines = QStringList::split( "\n", buffer, true );
 
   QString* unfinishedLine = ( stdout ? &m_unfinishedStdoutLine : &m_unfinishedStderrLine );
 
   if( !unfinishedLine->isEmpty() ) {
-    kdDebug() << "(K3bProcess) joining line: " << (*unfinishedLine + lines.front()) << endl;
-
     lines.first().prepend( *unfinishedLine );
     *unfinishedLine = "";
+
+    kdDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'" << endl;
   }
 
   QStringList::iterator it;
@@ -84,20 +84,21 @@ void K3bProcess::splitOutput( char* data, int len, bool stdout )
   // check if line ends with a newline
   // if not save the last line because it is not finished
   QChar c = buffer.right(1).at(0);
-  bool hasUnfinishedLine = ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
+  bool hasUnfinishedLine = !lines.isEmpty() && ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
   if( hasUnfinishedLine ) {
-    kdDebug() << "(K3bProcess) found unfinished line: " << lines.last() << endl;
-    kdDebug() << "(K3bProcess) last char: '" << buffer.right(1) << "'" << endl;
+    kdDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'" << endl;
+    kdDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'" << endl;
     *unfinishedLine = lines.last();
-    it = lines.end();
-    --it;
-    lines.remove( it );
+    lines.pop_back();
   }
 
   for( it = lines.begin(); it != lines.end(); ++it ) {
     QString& str = *it;
     if( str[0] == '\r' )
       str = str.mid( 1 );
+
+    kdDebug() << "(K3bProcess)         emitting line: '" << str << "'" << endl;
+
     if( stdout )
       emit stdoutLine( str );
     else
