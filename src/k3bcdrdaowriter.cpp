@@ -435,7 +435,7 @@ void K3bCdrdaoWriter::cancel() {
                 else if( k3bMain()->eject() )
                     burnDevice()->eject();
             }
-            if ( m_sourceDevice ) {
+            if ( m_command == COPY || m_command == READ ) {
                 bool block = m_sourceDevice->block( false );
                 if( !block )
                     emit infoMessage( i18n("Could not unlock CD drive."), K3bJob::ERROR );
