@@ -98,7 +98,7 @@ void K3bDeviceBranch::unmount()
 
 void K3bDeviceBranch::slotMountFinished( KIO::Job* job )
 {
-  if( job->error() && !m_device->supermount() ) {
+  if( job->error() && !m_device->automount() ) {
     job->showErrorDialog();
     emit mountFinished( this, QString::null );
   }
