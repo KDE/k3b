@@ -358,7 +358,7 @@ int K3bDevice::isEmpty()
 }
 
 K3b::Msf K3bDevice::discSize() {
-  K3b::Msf ret(-1);
+  K3b::Msf ret(0);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
@@ -390,7 +390,7 @@ K3b::Msf K3bDevice::discSize() {
 }
 
 K3b::Msf K3bDevice::remainingSize() {
-  K3b::Msf ret(-1);
+  K3b::Msf ret(0);
   int cdromfd = ::open( devicename().ascii(), O_RDONLY | O_NONBLOCK );
   if (cdromfd < 0) {
     kdDebug() << "(K3bDevice) Error: could not open device." << endl;
