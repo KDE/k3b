@@ -227,6 +227,7 @@ void K3bBinImageWritingDialog::slotUser2()
 void K3bBinImageWritingDialog::setTocFile( const KURL& url )
 {
   m_tocPath = url.path();
+  m_editTocPath->setText(m_tocPath);
 }
 
 void K3bBinImageWritingDialog::slotFindTocFile()
