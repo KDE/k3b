@@ -212,20 +212,215 @@ K3bView* K3bAudioDoc::newView( QWidget* parent )
 }
 
 
-bool K3bAudioDoc::loadDocumentData( QDomDocument* )
+QString K3bAudioDoc::documentType() const
 {
-  // TODO: so what? load the shit! ;-)
+  return "k3b_audio_project";
+}
+
+
+bool K3bAudioDoc::loadDocumentData( QDomDocument* doc )
+{
+  newDocument();
+
+  // we will parse the dom-tree and create a K3bAudioTrack for all entries immediately
+  // this should not take long and so not block the gui
+
+  if( doc->doctype().name() != documentType() )
+    return false;
+
+  QDomNodeList nodes = doc->documentElement().childNodes();
+
+  if( nodes.length() < 4 )
+    return false;
+
+  if( nodes.item(0).nodeName() != "general" )
+    return false;
+  if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
+    return false;
+
+  // parse padding
+  if( nodes.item(1).nodeName() != "padding" ) 
+    return false;
+  else {
+    QDomElement e = nodes.item(1).toElement();
+    if( e.isNull() )
+      return false;
+    else
+      setPadding( e.text() == "yes" );
+  }
+
+  // parse cd-text
+  if( nodes.item(2).nodeName() != "cd-text" )
+    return false;
+  else {
+    QDomElement e = nodes.item(2).toElement();
+    if( e.isNull() )
+      return false;
+    if( !e.hasAttribute( "activated" ) )
+      return false;
+	
+    writeCdText( e.attributeNode( "activated" ).value() == "yes" );
+  }
+
+  QDomNodeList cdTextNodes = nodes.item(2).childNodes();
+  setTitle( cdTextNodes.item(0).toElement().text() );
+  setArtist( cdTextNodes.item(1).toElement().text() );
+  setArranger( cdTextNodes.item(2).toElement().text() );
+  setSongwriter( cdTextNodes.item(3).toElement().text() );
+  setDisc_id( cdTextNodes.item(4).toElement().text() );
+  setUpc_ean( cdTextNodes.item(5).toElement().text() );
+  setCdTextMessage( cdTextNodes.item(6).toElement().text() );
+
+  if( nodes.item(3).nodeName() != "contents" )
+    return false;
+
+  QDomNodeList trackNodes = nodes.item(3).childNodes();
+
+  for( uint i = 0; i< trackNodes.length(); i++ ) {
+
+    // check if url is available
+    QDomElement trackElem = trackNodes.item(i).toElement();
+    QString url = trackElem.attributeNode( "url" ).value();
+    if( !QFile::exists( url ) )
+      qDebug( "(K3bAudioDoc) Could not find file: " + url );
+    else if( !K3bAudioModuleFactory::moduleAvailable( KURL(url) ) )
+      qDebug( "(K3bAudioDoc) No module available for file: " + url );
+    else {
+
+      K3bAudioTrack* track = new K3bAudioTrack( m_tracks, url );
+      
+      // set cd-text
+      
+
+      // set pregap
+
+      // set copy-protection
+
+      // set pre-emphasis
+
+      addTrack( track, m_tracks->count() );
+    }
+  }
+
+
+  emit newTracks();
+
   return true;
 }
 
 bool K3bAudioDoc::saveDocumentData( QDomDocument* doc )
 {
-  saveGeneralDocumentData( doc );
+  QDomElement docElem = doc->createElement( documentType() );
 
-  //  QDomElement mainElem = doc->createElement(   );
+  saveGeneralDocumentData( &docElem );
+
+  // add padding
+  QDomElement paddingElem = doc->createElement( "padding" );
+  paddingElem.appendChild( doc->createTextNode( padding() ? "yes" : "no" ) );
+  docElem.appendChild( paddingElem );
 
 
-  // TODO: some saving work...
+  // save disc cd-text
+  // -------------------------------------------------------------
+  QDomElement cdTextMain = doc->createElement( "cd-text" );
+  cdTextMain.setAttribute( "activated", cdText() ? "yes" : "no" );
+  QDomElement cdTextElem = doc->createElement( "title" );
+  cdTextElem.appendChild( doc->createTextNode(title()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  cdTextElem = doc->createElement( "artist" );
+  cdTextElem.appendChild( doc->createTextNode(artist()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  cdTextElem = doc->createElement( "arranger" );
+  cdTextElem.appendChild( doc->createTextNode(arranger()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  cdTextElem = doc->createElement( "songwriter" );
+  cdTextElem.appendChild( doc->createTextNode(songwriter()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  cdTextElem = doc->createElement( "disc_id" );
+  cdTextElem.appendChild( doc->createTextNode(disc_id()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  cdTextElem = doc->createElement( "upc_ean" );
+  cdTextElem.appendChild( doc->createTextNode(upc_ean()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  cdTextElem = doc->createElement( "message" );
+  cdTextElem.appendChild( doc->createTextNode(cdTextMessage()) );
+  cdTextMain.appendChild( cdTextElem );
+
+  docElem.appendChild( cdTextMain );
+  // -------------------------------------------------------------
+
+  // save the tracks
+  // -------------------------------------------------------------
+  QDomElement contentsElem = doc->createElement( "contents" );
+
+  for( K3bAudioTrack* track = first(); track != 0; track = next() ) {
+
+    QDomElement trackElem = doc->createElement( "track" );
+    trackElem.setAttribute( "url", track->absPath() );
+
+    // add cd-text
+    cdTextMain = doc->createElement( "cd-text" );
+    cdTextElem = doc->createElement( "title" );
+    cdTextElem.appendChild( doc->createTextNode(track->title()) );
+    cdTextMain.appendChild( cdTextElem );
+    
+    cdTextElem = doc->createElement( "artist" );
+    cdTextElem.appendChild( doc->createTextNode(track->artist()) );
+    cdTextMain.appendChild( cdTextElem );
+    
+    cdTextElem = doc->createElement( "arranger" );
+    cdTextElem.appendChild( doc->createTextNode(track->arranger()) );
+    cdTextMain.appendChild( cdTextElem );
+    
+    cdTextElem = doc->createElement( "songwriter" );
+    cdTextElem.appendChild( doc->createTextNode(track->songwriter()) );
+    cdTextMain.appendChild( cdTextElem );
+    
+    cdTextElem = doc->createElement( "isrc" );
+    cdTextElem.appendChild( doc->createTextNode(track->isrc()) );
+    cdTextMain.appendChild( cdTextElem );
+    
+    cdTextElem = doc->createElement( "album" );
+    cdTextElem.appendChild( doc->createTextNode(track->album()) );
+    cdTextMain.appendChild( cdTextElem );
+    
+    cdTextElem = doc->createElement( "message" );
+    cdTextElem.appendChild( doc->createTextNode(track->cdTextMessage()) );
+    cdTextMain.appendChild( cdTextElem );
+
+    trackElem.appendChild( cdTextMain );
+
+
+    // add pregap
+    QDomElement pregapElem = doc->createElement( "pregap" );    
+    pregapElem.appendChild( doc->createTextNode( QString::number(track->pregap()) ) );
+    trackElem.appendChild( pregapElem );
+
+    // add copy protection
+    QDomElement copyElem = doc->createElement( "copy_protection" );    
+    copyElem.appendChild( doc->createTextNode( track->copyProtection() ? "yes" : "no" ) );
+    trackElem.appendChild( copyElem );
+
+    // add pre emphasis
+    copyElem = doc->createElement( "pre_emphasis" );    
+    copyElem.appendChild( doc->createTextNode( track->preEmp() ? "yes" : "no" ) );
+    trackElem.appendChild( copyElem );
+
+
+    contentsElem.appendChild( trackElem );
+  }
+  // -------------------------------------------------------------
+
+  docElem.appendChild( contentsElem );
+
+  doc->appendChild( docElem );
+
   return true;
 }
 
@@ -239,13 +434,15 @@ void K3bAudioDoc::addView(K3bView* view)
 }
 
 
-QString K3bAudioDoc::writeTOC( const QString& filename )
+bool K3bAudioDoc::writeTOC( const QString& filename )
 {
   QFile file( filename );
   if( !file.open( IO_WriteOnly ) ) {
     qDebug( "(K3bAudioDoc) Could not open toc-file %s", filename.latin1() );
     return QString::null;
   }
+
+  bool success = true;
 
   int _trackStart = 0;
 	
@@ -300,7 +497,9 @@ QString K3bAudioDoc::writeTOC( const QString& filename )
     }
     else {
       if( _track->bufferFile().isEmpty() ) {
-	t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
+// 	t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
+	qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
+	success = false;
       }
       else
 	t << "\"" << _track->bufferFile() << "\"" << " 0" << "\n";
@@ -311,7 +510,8 @@ QString K3bAudioDoc::writeTOC( const QString& filename )
   // --------------------------------- TOC --	
 	
   file.close();
-  return filename;
+
+  return success;
 }
 
 

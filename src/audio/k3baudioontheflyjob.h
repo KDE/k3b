@@ -48,6 +48,8 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
   void cancel();
 	
  protected slots:
+   void slotTryStart();
+
   void slotParseCdrdaoOutput( KProcess*, char* output, int len );
   void slotCdrdaoFinished();
 
@@ -58,6 +60,7 @@ class K3bAudioOnTheFlyJob : public K3bBurnJob  {
 
  private:
   QTimer* m_streamingTimer;
+  QTimer* m_waitingForLengthTimer;
   KProcess m_process;
   K3bAudioDoc* m_doc;
 

@@ -80,6 +80,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   m_displayRefreshTimer = new QTimer( this );
   connect( m_displayRefreshTimer, SIGNAL(timeout()), this, SLOT(update()) );
   m_displayRefreshTimer->start(1000);
+
+  slotUpdateItems();
 }
 
 K3bAudioView::~K3bAudioView(){

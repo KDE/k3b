@@ -151,6 +151,8 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
+
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), tempDirBox(), SLOT(setEnabled(bool)) );
 }
 
 

@@ -212,11 +212,11 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
       newDoc->setURL( url );
       return newDoc;
     }
-    else {
-      delete newDoc;
-      return 0;
-    }
   }
+  
+
+  delete newDoc;
+  return 0;
 }
 
 bool K3bDoc::saveDocument(const KURL& url )
@@ -225,9 +225,8 @@ bool K3bDoc::saveDocument(const KURL& url )
   if ( !f.open( IO_WriteOnly ) )
     return false;
   
-  QDomDocument xmlDoc( "k3b_doc" );
-  //  bool success = saveDocumentData( &xmlDoc );
-  bool success = saveGeneralDocumentData( &xmlDoc );
+  QDomDocument xmlDoc( documentType() );
+  bool success = saveDocumentData( &xmlDoc );
   
   if( success ) {
     QTextStream xmlStream( &f );
@@ -303,26 +302,34 @@ bool K3bDoc::canCloseFrame(K3bView* pFrame)
 }
 
 
-bool K3bDoc::saveGeneralDocumentData( QDomDocument* doc )
+bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
 {
-  QDomElement mainElem = doc->createElement( "general" );
+  QDomDocument doc = part->ownerDocument();
+  QDomElement mainElem = doc.createElement( "general" );
 
-  QDomElement propElem = doc->createElement( "dao" );
-  QDomText textElem = doc->createTextNode( dao() ? "yes" : "no" );
+  QDomElement propElem = doc.createElement( "dao" );
+  QDomText textElem = doc.createTextNode( dao() ? "yes" : "no" );
   propElem.appendChild( textElem );
   mainElem.appendChild( propElem );
 
-  propElem = doc->createElement( "dummy" );
-  textElem = doc->createTextNode( dummy() ? "yes" : "no" );
+  propElem = doc.createElement( "dummy" );
+  textElem = doc.createTextNode( dummy() ? "yes" : "no" );
   propElem.appendChild( textElem );
   mainElem.appendChild( propElem );
 
-  propElem = doc->createElement( "on_the_fly" );
-  textElem = doc->createTextNode( onTheFly() ? "yes" : "no" );
+  propElem = doc.createElement( "on_the_fly" );
+  textElem = doc.createTextNode( onTheFly() ? "yes" : "no" );
   propElem.appendChild( textElem );
   mainElem.appendChild( propElem );
 
-  doc->appendChild( mainElem );
+  part->appendChild( mainElem );
+
+  return true;
+}
+
+
+bool K3bDoc::readGeneralDocumentData( const QDomElement& )
+{
 
   return true;
 }

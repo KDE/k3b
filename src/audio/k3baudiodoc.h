@@ -78,7 +78,7 @@ class K3bAudioDoc : public K3bDoc
   const QString& upc_ean() const { return m_cdTextUpc_Ean; }
   const QString& cdTextMessage() const { return m_cdTextMessage; }
 
-  QString writeTOC( const QString& filename );
+  bool writeTOC( const QString& filename );
   int numOfTracks() const;
 
   K3bBurnJob* newBurnJob();
@@ -126,6 +126,8 @@ class K3bAudioDoc : public K3bDoc
   bool loadDocumentData( QDomDocument* );
   /** reimplemented from K3bDoc */
   bool saveDocumentData( QDomDocument* );
+
+  QString documentType() const;
 
  private:
   class PrivateUrlToAdd

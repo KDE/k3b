@@ -207,6 +207,12 @@ int K3bDataDoc::length() const
 }
 
 
+QString K3bDataDoc::documentType() const
+{
+  return "k3b_data_project";
+}
+
+
 bool K3bDataDoc::loadDocumentData( QDomDocument* )
 {
   // TODO: so what? load the shit! ;-)

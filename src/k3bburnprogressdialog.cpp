@@ -241,6 +241,8 @@ void K3bBurnProgressDialog::finished()
   m_buttonShowDebug->show();
   m_buttonClose->show();
   m_timer->stop();
+
+  m_progressBuffer->setValue(0);
 }
 
 

@@ -156,6 +156,8 @@ class K3bDataDoc : public K3bDoc
   /** reimplemented from K3bDoc */
   bool saveDocumentData( QDomDocument* );
 
+  QString documentType() const;
+
   QString treatWhitespace( const QString& );
  	 		
  private:

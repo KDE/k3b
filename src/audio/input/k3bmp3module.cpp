@@ -92,7 +92,7 @@ KURL K3bMp3Module::writeToWav( const KURL& url )
   m_decodingProcess->clearArguments();
   m_decodingProcess->disconnect();
   connect( m_decodingProcess, SIGNAL(processExited(KProcess*)),
-	   this, SIGNAL(slotWriteToWavFinished()) );
+	   this, SLOT(slotWriteToWavFinished()) );
   connect( m_decodingProcess, SIGNAL(receivedStderr(KProcess*, char*, int)), 
 	   this, SLOT(slotParseStdErrOutput(KProcess*, char*, int)) );
   // TODO: we need some error shit: parse some error messages like "disc full"
@@ -105,7 +105,7 @@ KURL K3bMp3Module::writeToWav( const KURL& url )
 
   *m_decodingProcess << "-v" << "-w";
   *m_decodingProcess << url.path();
-  *m_decodingProcess << audioTrack()->absPath();
+  *m_decodingProcess << QString( "\"%1\"" ).arg( audioTrack()->absPath() );
 
   if( !m_decodingProcess->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     qDebug( "(K3bMp3Module) could not start mpg123 process." );

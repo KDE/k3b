@@ -40,7 +40,7 @@ class KProcess;
 class K3bApp;
 class K3bBurnJob;
 class QDomDocument;
-
+class QDomElement;
 
 
 
@@ -166,7 +166,13 @@ class K3bDoc : public QObject
    */
   virtual bool saveDocumentData( QDomDocument* ) = 0;
 
-  bool saveGeneralDocumentData( QDomDocument* );
+  bool saveGeneralDocumentData( QDomElement* );
+  bool readGeneralDocumentData( const QDomElement& );
+  /**
+   * should return the name of the document type
+   * for saving the contents in a XML file
+   */
+  virtual QString documentType() const = 0;
 
   KProcess* m_process;
 	

@@ -68,6 +68,8 @@ void K3bFillStatusDisplay::mousePressEvent( QMouseEvent* e )
 
 void K3bFillStatusDisplay::drawContents( QPainter* p )
 {
+  erase( contentsRect() );
+
   if(m_showTime)
     drawTime(p);
   else

@@ -97,9 +97,6 @@ K3bApp::K3bApp()
   m_optionDialog = 0;
   m_burnProgressDialog = 0;
 
-  // not implemented yet
-  fileOpen->setEnabled(false);
-
   // setup audio cd drives here because we need access to the device manager
   init();
   m_dirView->setupAudioDrives(m_deviceManager);
@@ -466,7 +463,7 @@ void K3bApp::slotFileExport()
   if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( m_documentTab->currentPage() ) ) {
     QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc-file") );
     if( !file.isEmpty() ) {
-      if( ((K3bAudioDoc*)m->getDocument())->writeTOC( file ).isEmpty() )
+      if( !((K3bAudioDoc*)m->getDocument())->writeTOC( file ) )
 	KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
     }
   }

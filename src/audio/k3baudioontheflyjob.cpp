@@ -54,6 +54,9 @@ K3bAudioOnTheFlyJob::K3bAudioOnTheFlyJob( K3bAudioDoc* doc )
   m_streamingTimer = new QTimer( this );
   connect( m_streamingTimer, SIGNAL(timeout()), this, SLOT(slotTryWritingToProcess()) );
 
+  m_waitingForLengthTimer = new QTimer( this );
+  connect( m_waitingForLengthTimer, SIGNAL(timeout()), this, SLOT(slotTryStart()) );
+
   //  m_ringBuffer = 0;
 
 
@@ -235,8 +238,31 @@ void K3bAudioOnTheFlyJob::start()
 	
   m_error = K3b::WORKING;
 
-  emit newTask( i18n("Writing on the fly") );
+  emit infoMessage( i18n("Wainting for all tracks' length to be calculated.") );
+  emit infoMessage( i18n("This might take a while on slow systems.") );
   emit newSubTask( i18n("Preparing write process...") );
+
+  m_waitingForLengthTimer->start(100);
+}
+
+
+void K3bAudioOnTheFlyJob::slotTryStart()
+{
+  bool ready = true;
+  for( K3bAudioTrack* track = m_doc->first(); track != 0; track = m_doc->next() ) {
+    if( !track->isAccurateLength() ) {
+      ready = false;
+      break;
+    }
+  }
+
+  if( !ready )
+    return;
+
+  m_waitingForLengthTimer->stop();
+
+
+  emit newTask( i18n("Writing on the fly") );
 
   m_iDocSize = m_doc->size();
 	
