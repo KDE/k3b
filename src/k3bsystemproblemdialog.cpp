@@ -28,6 +28,8 @@
 #include <k3bversion.h>
 #include <k3bglobals.h>
 
+#include <k3bthememanager.h>
+
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
@@ -71,20 +73,26 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   layout4->setMargin( 2 ); // to make sure the frame gets displayed
   layout4->setSpacing( 0 );
   QLabel* pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-  pixmapLabelLeft->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  pixmapLabelLeft->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_left.png" )) );
   pixmapLabelLeft->setScaledContents( FALSE );
   layout4->addWidget( pixmapLabelLeft );
   K3bTitleLabel* labelTitle = new K3bTitleLabel( headerFrame, "m_labelTitle" );
-  labelTitle->setTitle( i18n("System Configuration Problems"), i18n("1 problem", "%n problems", problems.count() ) );
-  labelTitle->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
+  labelTitle->setTitle( i18n("System Configuration Problems"), 
+			i18n("1 problem", "%n problems", problems.count() ) );
   layout4->addWidget( labelTitle );
   layout4->setStretchFactor( labelTitle, 1 );
   QLabel* pixmapLabelRight = new QLabel( headerFrame, "pixmapLabelRight" );
-  pixmapLabelRight->setPaletteBackgroundColor( QColor( 205, 210, 255 ) );
-  pixmapLabelRight->setPixmap( QPixmap(locate( "appdata", "pics/diskinfo_right.png" )) );
   pixmapLabelRight->setScaledContents( FALSE );
   layout4->addWidget( pixmapLabelRight );
+
+
+  if( K3bTheme* theme = k3bthememanager->currentTheme() ) {
+    pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
+    pixmapLabelLeft->setPixmap( theme->pixmap( "diskinfo_left" ) );
+    pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
+    pixmapLabelRight->setPixmap( theme->pixmap( "diskinfo_right" ) );
+    labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
+    labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
+  }
 
 
   m_closeButton = new QPushButton( i18n("Close"), this );

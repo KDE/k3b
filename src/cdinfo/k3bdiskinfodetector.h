@@ -51,6 +51,20 @@ namespace K3bCdDevice
 
     const K3bIso9660* iso9660() const;
 
+    /**
+     * This is a temp solution. We should introduce some
+     * contents representing class
+     */
+    bool isVideoDvd() const;
+
+    /**
+     * This is a temp solution. We should introduce some
+     * contents representing class
+     */
+    bool isVideoCd() const;
+
+    CdDevice* device() const;
+
   public slots:
     void detect( CdDevice* dev );
 

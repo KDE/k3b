@@ -156,7 +156,7 @@ void K3bDiskInfoView::displayInfo( const K3bCdDevice::DiskInfo& )
 
 void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 {
-  const K3bCdDevice::DiskInfo& info = did->diskInfo();
+  //  const K3bCdDevice::DiskInfo& info = did->diskInfo();
   const K3bCdDevice::NextGenerationDiskInfo& ngInfo = did->ngDiskInfo();
   const K3bCdDevice::Toc& toc = did->toc();
 
@@ -176,21 +176,23 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
     } 
     else {
       switch( toc.contentType() ) {
-      case K3bDiskInfo::AUDIO:
+      case K3bCdDevice::AUDIO:
         setTitle( i18n("Audio CD") );
 	setRightPixmap( "diskinfo_audio" );
         break;
-      case K3bDiskInfo::DATA:
-        setTitle( info.isVCD ? i18n("Video CD") : i18n("Data CD") );
-	setRightPixmap( "diskinfo_data" );
+      case K3bCdDevice::DATA:
+	if( K3bCdDevice::isDvdMedia( ngInfo.mediaType() ) ) {
+	  setTitle( did->isVideoDvd() ? i18n("Video DVD") : i18n("DVD") );
+	  setRightPixmap( "diskinfo_dvd" );
+	}
+	else {
+	  setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Data CD") );
+	  setRightPixmap( "diskinfo_data" );
+	}
         break;
-      case K3bDiskInfo::MIXED:
-        setTitle( info.isVCD ? i18n("Video CD") : i18n("Mixed mode CD") );
+      case K3bCdDevice::MIXED:
+        setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Mixed mode CD") );
 	setRightPixmap( "diskinfo_mixed" );
-        break;
-      case K3bDiskInfo::DVD:
-        setTitle( info.isVideoDvd ? i18n("Video DVD") : i18n("DVD") );
-	setRightPixmap( "diskinfo_dvd" );
         break;
       }
     }

@@ -159,7 +159,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
   QString docSizeText;
   if( d->showTime )
-    docSizeText = K3b::Msf( d->doc->length() ).toString(false) + " " + i18n("min");
+    docSizeText = d->doc->length().toString(false) + " " + i18n("min");
   else
     docSizeText = KIO::convertSize( d->doc->size() );
 
@@ -238,7 +238,7 @@ public:
 };
 
 
-K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const char *name )
+K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const char *name )
   : QFrame(parent,name)
 {
   d = new Private;
@@ -264,6 +264,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent, const c
 
   showDvdSizes( false );
 
+  connect( d->doc, SIGNAL(changed()), this, SLOT(update()) );
   connect( d->doc, SIGNAL(changed()), this, SLOT(slotDocSizeChanged()) );
 }
 
@@ -530,7 +531,7 @@ void K3bFillStatusDisplay::slotDocSizeChanged()
   QToolTip::add( this, 
 		 KIO::convertSize( d->doc->size() ) + 
 		 " (" + KGlobal::locale()->formatNumber( d->doc->size(), 0 ) + "), " +
-		 K3b::Msf( d->doc->length() ).toString(false) + " min" );
+		 d->doc->length().toString(false) + " " + i18n("min") );
 }
 
 

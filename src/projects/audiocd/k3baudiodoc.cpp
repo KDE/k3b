@@ -107,6 +107,8 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
   m_trackMetaInfoJob->setThread( m_trackStatusThread );
   connect( m_trackMetaInfoJob, SIGNAL(finished(bool)),
 	   this, SLOT(slotDetermineTrackStatus()) );
+  connect( m_trackMetaInfoJob, SIGNAL(finished(bool)),
+	   this, SIGNAL(changed()) );
 
   // FIXME: remove the newTracks() signal and replace it with the changed signal
   connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );

@@ -238,7 +238,7 @@ void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 {
   // to speed things up we first check if the media is already mounted
   QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
-  if( !mp.isEmpty() ) {
+  if( !m_bViewDiskInfo && !mp.isEmpty() ) {
     slotDirActivated( mp );
   }
   else {
@@ -259,18 +259,18 @@ void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
     m_bViewDiskInfo = false;
   }
   else if( did->diskInfo().tocType == K3bDiskInfo::DVD  ) {
-    if( did->diskInfo().isVideoDvd ) {
-      m_movieView->setDevice( did->diskInfo().device );
+    if( did->isVideoDvd() ) {
+      m_movieView->setDevice( did->device() );
       m_viewStack->raiseWidget( m_movieView );
       m_movieView->reload();
     }
     else
-      slotMountDevice( did->diskInfo().device );
+      slotMountDevice( did->device() );
   }
   else if( did->diskInfo().tocType == K3bDiskInfo::DATA  ) {
     // check for VCD and ask
     bool mount = true;
-    if( did->diskInfo().isVCD ) {
+    if( did->isVideoCd() ) {
       mount = ( KMessageBox::questionYesNo( this,
 					    i18n("Found %1. Do you want K3b to mount the data part "
 						 "or show all the tracks?").arg( i18n("Video CD") ),
@@ -280,7 +280,7 @@ void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
     }
 
     if( mount )
-      slotMountDevice( did->diskInfo().device );
+      slotMountDevice( did->device() );
     else {
       m_viewStack->raiseWidget( m_videoView );
       m_videoView->setDisk( did );

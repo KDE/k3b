@@ -395,7 +395,7 @@ bool K3bVcdJob::prepareWriterJob()
         delete m_writerJob;
 
     const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-    if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") )
+    if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") && m_doc->burner()->dao() )
         setWritingApp( K3b::CDRECORD );
 
     if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {

@@ -27,6 +27,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bburnprogressdialog.h>
 #include <k3bwritingmodewidget.h>
+#include <k3bthememanager.h>
 
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -105,7 +106,8 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
-  pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
+  if( K3bTheme* theme = k3bthememanager->currentTheme() )
+    pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );

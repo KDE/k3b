@@ -104,6 +104,9 @@ void K3bCdrecordWriter::setCueFile( const QString& s)
 {
   m_cue = true;
   m_cueFile = s;
+
+  // cuefile only works in DAO mode
+  setWritingMode( K3b::DAO );
 }
   
 void K3bCdrecordWriter::setClone( bool b )
@@ -192,7 +195,7 @@ void K3bCdrecordWriter::prepareProcess()
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), WARNING );
   }
   
-  if ( m_cue && !m_cueFile.isEmpty() ) {
+  if( m_cue && !m_cueFile.isEmpty() ) {
       m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
     *m_process << QString("cuefile=%1").arg( m_cueFile );
   }

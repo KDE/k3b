@@ -31,7 +31,10 @@ class K3bDiskInfoDetector::Private
 public:
   Private()
     : device(0),
-      iso9660(0) {
+      iso9660(0),
+      isVideoDvd(false),
+      isVideoCd(false),
+      runningHandler(0) {
   }
 
   CdDevice* device;
@@ -39,6 +42,11 @@ public:
   NextGenerationDiskInfo ngDiskInfo;
   AlbumCdText cdText;
   K3bIso9660* iso9660;
+
+  bool isVideoDvd;
+  bool isVideoCd;
+
+  K3bCdDevice::DeviceHandler* runningHandler;
 };
 
 
@@ -54,6 +62,12 @@ K3bCdDevice::DiskInfoDetector::~DiskInfoDetector()
 {
   delete d->iso9660;
   delete d;
+}
+
+
+K3bCdDevice::CdDevice* K3bCdDevice::DiskInfoDetector::device() const
+{
+  return d->device;
 }
 
 
@@ -101,7 +115,12 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   d->iso9660 = 0;
   d->info = DiskInfo();
   d->info.device = d->device;
-  connect( K3bCdDevice::diskInfo(d->device),
+
+  // we don't want the old info to overrun us...
+  if( d->runningHandler )
+    d->runningHandler->disconnect( this );
+
+  connect( (d->runningHandler = K3bCdDevice::diskInfo(d->device)),
            SIGNAL(finished(K3bCdDevice::DeviceHandler *)),
            this,
 	   SLOT(slotDeviceHandlerFinished(K3bCdDevice::DeviceHandler *)) );
@@ -168,7 +187,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 	
 
 	if( d->info.tocType == DiskInfo::DVD ) {
-	  d->info.isVideoDvd = false;
+	  d->isVideoDvd = false;
 
 	  // We check for the VIDEO_TS directory and at least one .IFO file
 	  const KArchiveEntry* videoTsEntry = d->iso9660->directory()->entry( "VIDEO_TS" );
@@ -181,14 +200,14 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 	      for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it ) {
 		if( (*it).right(4) == ".IFO" ) {
 		  kdDebug() << "(K3bDiskInfoDetector) found .IFO file: " << *it << endl;
-		  d->info.isVideoDvd = true;
+		  d->isVideoDvd = true;
 		  break;
 		}
 	      }
 	    }
 	}
 	else {
-	  d->info.isVCD = false;
+	  d->isVideoCd = false;
 
 	  kdDebug() << "(K3bDiskInfoDetector) checking for VCD." << endl;
 
@@ -214,7 +233,7 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 	    if ( info == QString("VIDEO_CD") ||
 		 info == QString("SUPERVCD") ||
 		 info == QString("HQ-VCD  ") )
-	      d->info.isVCD = true;
+	      d->isVideoCd = true;
 	  }
 	}
 
@@ -235,6 +254,8 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 
 void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler *handler)
 {
+  d->runningHandler = 0;
+
   kdDebug() << "(K3bCdDevice::DiskInfoDetector) slotDeviceHandlerFinished()" << endl;
 
   bool success = handler->success();
@@ -247,6 +268,18 @@ void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::Devi
   }
   else
     finish( false );
+}
+
+
+bool K3bDiskInfoDetector::isVideoDvd() const
+{
+  return d->isVideoDvd;
+}
+
+
+bool K3bDiskInfoDetector::isVideoCd() const
+{
+  return d->isVideoCd;
 }
 
 #include "k3bdiskinfodetector.moc"

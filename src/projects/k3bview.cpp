@@ -40,8 +40,6 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
 
   m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
 
-  connect( m_doc, SIGNAL(changed()), m_fillStatusDisplay, SLOT(update()) );
-
   QToolButton* m_buttonBurn = new QToolButton( this );
   m_buttonBurn->setIconSet( SmallIcon("cdburn") );
   m_buttonBurn->setTextLabel( i18n("Burn") + "..." );
