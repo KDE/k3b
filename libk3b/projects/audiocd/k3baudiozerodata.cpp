@@ -21,8 +21,8 @@
 #include <string.h>
 
 
-K3bAudioZeroData::K3bAudioZeroData( K3bAudioDoc* doc, const K3b::Msf& len )
-  : K3bAudioDataSource(doc),
+K3bAudioZeroData::K3bAudioZeroData( const K3b::Msf& len )
+  : K3bAudioDataSource(),
     m_length(len),
     m_writtenData(0)
 {
@@ -86,7 +86,7 @@ int K3bAudioZeroData::read( char* data, unsigned int max )
 
 K3bAudioDataSource* K3bAudioZeroData::copy() const
 {
-  K3bAudioZeroData* zero = new K3bAudioZeroData( doc(), length() );
+  K3bAudioZeroData* zero = new K3bAudioZeroData( length() );
   return zero;
 }
 
@@ -94,7 +94,7 @@ K3bAudioDataSource* K3bAudioZeroData::copy() const
 K3bAudioDataSource* K3bAudioZeroData::split( const K3b::Msf& pos )
 {
   if( pos < length() ) {
-    K3bAudioZeroData* zero = new K3bAudioZeroData( doc(), length()-pos );
+    K3bAudioZeroData* zero = new K3bAudioZeroData( length()-pos );
     setLength( pos );
     zero->moveAfter( this );
     emitChange();

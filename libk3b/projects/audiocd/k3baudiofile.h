@@ -28,7 +28,7 @@ class K3bAudioTrack;
 class K3bAudioFile : public K3bAudioDataSource
 {
  public:
-  K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* doc );
+  K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* );
   ~K3bAudioFile();
 
   const QString& filename() const;
@@ -79,6 +79,7 @@ class K3bAudioFile : public K3bAudioDataSource
  private:
   void fixupOffsets();
   K3bAudioDecoder* m_decoder;
+  K3bAudioDoc* m_doc;
   K3b::Msf m_startOffset;
   K3b::Msf m_endOffset;
 

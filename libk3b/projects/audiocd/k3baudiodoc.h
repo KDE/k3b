@@ -145,7 +145,7 @@ class K3bAudioDoc : public K3bDoc
 
  private slots:
   void slotTrackChanged( K3bAudioTrack* );
-  void slotTrackDestroyed( QObject* o );
+  void slotTrackRemoved( K3bAudioTrack* );
   void slotHouseKeeping();
 
  signals:

@@ -18,9 +18,8 @@
 #include "k3baudiodoc.h"
 
 
-K3bAudioDataSource::K3bAudioDataSource( K3bAudioDoc* doc )
-  : m_doc(doc),
-    m_track(0),
+K3bAudioDataSource::K3bAudioDataSource()
+  : m_track(0),
     m_prev(0),
     m_next(0)
 {
@@ -30,6 +29,15 @@ K3bAudioDataSource::K3bAudioDataSource( K3bAudioDoc* doc )
 K3bAudioDataSource::~K3bAudioDataSource()
 {
   take();
+}
+
+
+K3bAudioDoc* K3bAudioDataSource::doc() const
+{
+  if( m_track )
+    return m_track->doc();
+  else
+    return 0;
 }
 
 
@@ -57,9 +65,6 @@ K3bAudioDataSource* K3bAudioDataSource::take()
 
 void K3bAudioDataSource::moveAfter( K3bAudioDataSource* source )
 {
-  if( source->doc() != doc() )
-    return;
-
   // cannot create a list outside a track!
   if( !source->track() )
     return;
@@ -88,9 +93,6 @@ void K3bAudioDataSource::moveAfter( K3bAudioDataSource* source )
 
 void K3bAudioDataSource::moveAhead( K3bAudioDataSource* source )
 {
-  if( source->doc() != doc() )
-    return;
-
   // cannot create a list outside a track!
   if( !source->track() )
     return;

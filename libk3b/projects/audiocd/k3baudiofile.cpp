@@ -21,7 +21,8 @@
 
 
 K3bAudioFile::K3bAudioFile( K3bAudioDecoder* dec, K3bAudioDoc* doc )
-  : K3bAudioDataSource( doc ),
+  : K3bAudioDataSource(),
+    m_doc(doc),
     m_decoder(dec),
     m_startOffset(0),
     m_endOffset(0),
@@ -33,7 +34,7 @@ K3bAudioFile::K3bAudioFile( K3bAudioDecoder* dec, K3bAudioDoc* doc )
 
 K3bAudioFile::~K3bAudioFile()
 {
-  doc()->decreaseDecoderUsage( m_decoder );
+  m_doc->decreaseDecoderUsage( m_decoder );
 }
 
 
@@ -159,7 +160,7 @@ void K3bAudioFile::fixupOffsets()
 
 K3bAudioDataSource* K3bAudioFile::copy() const
 {
-  K3bAudioFile* file = new K3bAudioFile( decoder(), doc() );
+  K3bAudioFile* file = new K3bAudioFile( decoder(), m_doc );
   file->m_startOffset = m_startOffset;
   file->m_endOffset = m_endOffset;
   return file;
@@ -169,7 +170,7 @@ K3bAudioDataSource* K3bAudioFile::copy() const
 K3bAudioDataSource* K3bAudioFile::split( const K3b::Msf& pos )
 {
   if( pos < length() ) {
-    K3bAudioFile* file = new K3bAudioFile( decoder(), doc() );
+    K3bAudioFile* file = new K3bAudioFile( decoder(), m_doc );
     file->m_startOffset = m_startOffset + pos;
     file->m_endOffset = m_endOffset;
     m_endOffset = m_startOffset + pos;

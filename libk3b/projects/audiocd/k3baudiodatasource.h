@@ -27,11 +27,7 @@ class K3bAudioDataSource
   friend class K3bAudioTrack;
 
  public:
-  /**
-   * @param doc the corresponding doc. For internal reasons this can 
-   * never change.
-   */
-  K3bAudioDataSource( K3bAudioDoc* doc );
+  K3bAudioDataSource();
   virtual ~K3bAudioDataSource();
 
   virtual K3b::Msf length() const = 0;
@@ -67,7 +63,7 @@ class K3bAudioDataSource
   /**
    * For internal reasons this does never change.
    */
-  K3bAudioDoc* doc() const { return m_doc; }
+  K3bAudioDoc* doc() const;
   K3bAudioTrack* track() const { return m_track; }
 
   K3bAudioDataSource* prev() const { return m_prev; }

@@ -27,9 +27,8 @@
 
 
 
-K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
-  : QObject(),
-    m_parent(parent),
+K3bAudioTrack::K3bAudioTrack()
+  : m_parent(0),
     m_copy(false),
     m_preEmp(false),
     m_index0Offset(150),
@@ -40,9 +39,21 @@ K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
     m_alreadyReadBytes(0),
     m_currentlyDeleting(false)
 {
-  // housekeeping stuff
-  connect( this, SIGNAL(changed(K3bAudioTrack*)), parent, SLOT(slotTrackChanged(K3bAudioTrack*)) );
-  connect( this, SIGNAL(destroyed(QObject*)), parent, SLOT(slotTrackDestroyed(QObject*)) );
+}
+
+
+K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
+  : m_parent(parent),
+    m_copy(false),
+    m_preEmp(false),
+    m_index0Offset(150),
+    m_prev(0),
+    m_next(0),
+    m_firstSource(0),
+    m_currentSource(0),
+    m_alreadyReadBytes(0),
+    m_currentlyDeleting(false)
+{
 }
 
 
@@ -55,14 +66,21 @@ K3bAudioTrack::~K3bAudioTrack()
   //
   m_currentlyDeleting = true;
 
+  // fix the list
+  remove();
+
   // delete all sources
   while( m_firstSource )
     delete m_firstSource; // this will remove the source from the list
 
-  // fix the list
-  remove();
-
   kdDebug() << "(K3bAudioTrack::~K3bAudioTrack) finished" << endl;
+}
+
+
+void K3bAudioTrack::emitChanged()
+{
+  if( m_parent )
+    m_parent->slotTrackChanged( this );
 }
 
 
@@ -77,7 +95,10 @@ K3bAudioDataSource* K3bAudioTrack::lastSource() const
 
 bool K3bAudioTrack::inList() const
 {
-  return ( doc()->firstTrack() == this || m_prev != 0 );
+  if( doc() )
+    return ( doc()->firstTrack() == this || m_prev != 0 );
+  else
+    return false;
 }
 
 
@@ -146,6 +167,11 @@ void K3bAudioTrack::remove()
       m_next->m_prev = m_prev;
     
     m_prev = m_next = 0;
+
+    // remove from doc
+    if( m_parent )
+      m_parent->slotTrackRemoved(this);
+    m_parent = 0;
   }
 }
 
@@ -154,7 +180,7 @@ K3bAudioTrack* K3bAudioTrack::take()
 {
   if( inList() ) {
     remove();    
-    emit changed(this);
+    emitChanged();
   }
 
   return this;
@@ -165,6 +191,11 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
 {
   kdDebug() << "(K3bAudioTrack::moveAfter( " << track << " )" << endl;
   if( !track ) {
+    if( !doc() ) {
+      kdDebug() << "(K3bAudioTrack::moveAfter) no parent set" << endl;
+      return;
+    }
+      
     // make sure we do not mess up the list
     if( doc()->firstTrack() )
       moveAhead( doc()->firstTrack() );
@@ -178,11 +209,11 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
     return;
   }
 
-  if( track->doc() != doc() )
-    return;
-
   // remove this from the list
   remove();
+
+  // set the new parent doc
+  m_parent = track->doc();
 
   K3bAudioTrack* oldNext = track->m_next;
 
@@ -198,13 +229,18 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
   if( !m_next )
     doc()->setLastTrack( this );
 
-  emit changed(this);
+  emitChanged();
 }
 
 
 void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
 {
   if( !track ) {
+    if( !doc() ) {
+      kdDebug() << "(K3bAudioTrack::moveAfter) no parent set" << endl;
+      return;
+    }
+
     // make sure we do not mess up the list
     if( doc()->lastTrack() )
       moveAfter( doc()->lastTrack() );
@@ -224,6 +260,9 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
   // remove this from the list
   remove();
 
+  // set the new parent doc
+  m_parent = track->doc();
+
   K3bAudioTrack* oldPrev = track->m_prev;
 
   // set track as next
@@ -238,7 +277,7 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
   if( !m_prev )
     doc()->setFirstTrack( this );
 
-  emit changed(this);
+  emitChanged();
 }
 
 
@@ -250,11 +289,12 @@ void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sour
     return;
   }
 
-  if( trackToMerge->doc() != doc() )
-    return;
+  // remove the track to merge to make sure it does not get deleted by the doc too early
+  trackToMerge->take();
 
   // in case we prepend all of trackToMerge's sources
   if( !sourceAfter ) {
+    kdDebug() << "(K3bAudioTrack::merge) merging " << trackToMerge->firstSource() << endl;
     if( m_firstSource ) {
       trackToMerge->firstSource()->moveAhead( m_firstSource );
     }
@@ -264,26 +304,29 @@ void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sour
     sourceAfter = m_firstSource;
   }
 
+  kdDebug() << "(K3bAudioTrack::merge) now merge the other sources." << endl;
   // now merge all sources into this track
   while( trackToMerge->firstSource() ) {
     K3bAudioDataSource* s = trackToMerge->firstSource();
+    kdDebug() << "(K3bAudioTrack::merge) merging source " << s << " from track " << s->track() << " into track " 
+	      << this << " after source " << sourceAfter << endl;
     s->moveAfter( sourceAfter );
     sourceAfter = s;
   }
   
   // TODO: should we also merge the indices?
 
-  // since trackToMerge is empty now it will be deleted in the doc
+  // now we can savely delete the track we merged
+  delete trackToMerge;
 
-  emit changed(this);
+  kdDebug() << "(K3bAudioTrack::merge) finished"  << endl;
+
+  emitChanged();
 }
 
 
 void K3bAudioTrack::setFirstSource( K3bAudioDataSource* source )
 {
-  if( source && source->doc() != doc() )
-    return;
-
   // reset the reading stuff since this might be a completely new source list
   m_currentSource = 0;
   m_alreadyReadBytes = 0;
@@ -293,15 +336,14 @@ void K3bAudioTrack::setFirstSource( K3bAudioDataSource* source )
     source->m_track = this;
     source = source->next();
   }
+
+  emitChanged();
 }
 
 
 void K3bAudioTrack::addSource( K3bAudioDataSource* source )
 {
   if( !source )
-    return;
-
-  if( source->doc() != doc() )
     return;
 
   K3bAudioDataSource* s = m_firstSource;
@@ -324,7 +366,7 @@ void K3bAudioTrack::sourceChanged( K3bAudioDataSource* )
   if( m_index0Offset > length() )
     m_index0Offset = length()-1;
 
-  emit changed( this );
+  emitChanged();
 }
 
 
@@ -387,7 +429,7 @@ int K3bAudioTrack::read( char* data, unsigned int max )
 
 K3bAudioTrack* K3bAudioTrack::copy() const
 {
-  K3bAudioTrack* track = new K3bAudioTrack( doc() );
+  K3bAudioTrack* track = new K3bAudioTrack();
 
   track->m_copy = m_copy;
   track->m_preEmp = m_preEmp;
@@ -425,15 +467,13 @@ K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
     }
 
     // the new track should include all sources from splitSource and below
-    K3bAudioTrack* splitTrack = new K3bAudioTrack( doc() );
+    K3bAudioTrack* splitTrack = new K3bAudioTrack();
     source = splitSource;
     while( source ) {
       K3bAudioDataSource* addSource = source;
       source = source->next();
       splitTrack->addSource( addSource );
     }
-
-    emit changed( this );
 
     splitTrack->moveAfter( this );
 
@@ -474,6 +514,20 @@ K3bDevice::Track K3bAudioTrack::toCdTrack() const
   //    cdTrack.setIsrc( isrc() );
   
   return cdTrack;
+}
+
+
+void K3bAudioTrack::debug()
+{
+  kdDebug() << "Track " << this << endl
+	    << "  Prev: " << m_prev << endl
+	    << "  Next: " << m_next << endl
+	    << "  Sources:" << endl;
+  K3bAudioDataSource* s = m_firstSource;
+  while( s ) {
+    kdDebug() << "  " << s << " - Prev: " << s->prev() << " Next: " << s->next() << endl;
+    s = s->next();
+  }
 }
 
 

@@ -461,6 +461,7 @@ K3bAudioTrack* K3bAudioDoc::getTrack( unsigned int index )
 void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 {
   kdDebug() << "(K3bAudioDoc::addTrack( " << track << ", " << position << " )" << endl;
+  track->m_parent = this;
   if( !m_firstTrack )
     m_firstTrack = m_lastTrack = track;
   else if( position == 0 )
@@ -571,7 +572,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	QDomElement trackElem = contentNodes.item(j).toElement();
 
 	// first of all we need a track
-	K3bAudioTrack* track = new K3bAudioTrack( this );
+	K3bAudioTrack* track = new K3bAudioTrack();
 
 	QDomNodeList trackNodes = trackElem.childNodes();
 	for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
@@ -589,7 +590,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 		}
 	      }
 	      else if( sourceElem.nodeName() == "silence" ) {
-		K3bAudioZeroData* zero = new K3bAudioZeroData( this );
+		K3bAudioZeroData* zero = new K3bAudioZeroData();
 		zero->setLength( K3b::Msf::fromString( sourceElem.attributeNode( "length" ).value() ) );
 		track->addSource( zero );
 	      }
@@ -638,8 +639,10 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	// add the track
 	if( track->numberSources() > 0 )
 	  addTrack( track, 99 ); // append to the end // TODO improve
-	else
+	else {
+	  kdDebug() << "(K3bAudioDoc) no sources. deleting track " << track << endl;
 	  delete track;
+	}
       }
     }
   }
@@ -869,22 +872,22 @@ K3bProjectBurnDialog* K3bAudioDoc::newBurnDialog( QWidget* parent, const char* n
 
 void K3bAudioDoc::slotTrackChanged( K3bAudioTrack* track )
 {
+  kdDebug() << "(K3bAudioDoc::slotTrackChanged " << track << endl;
   setModified( true );
   emit changed();
   // if the track is empty now we simply delete it
   if( track->firstSource() )
     emit trackChanged(track);
   else {
-    kdDebug() << "(K3bAudioTrack::slotTrackChanged) track " << track << " empty. Deleting." << endl;
+    kdDebug() << "(K3bAudioDoc::slotTrackChanged) track " << track << " empty. Deleting." << endl;
     delete track; // this will emit the proper signal
   }
 }
 
 
-void K3bAudioDoc::slotTrackDestroyed( QObject* o )
+void K3bAudioDoc::slotTrackRemoved( K3bAudioTrack* track )
 {
   setModified( true );
-  K3bAudioTrack* track = static_cast<K3bAudioTrack*>(o);
   emit trackRemoved(track);
   emit changed();
 }

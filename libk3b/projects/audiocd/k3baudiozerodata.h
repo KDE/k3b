@@ -21,7 +21,7 @@
 class K3bAudioZeroData : public K3bAudioDataSource
 {
  public:
-  K3bAudioZeroData( K3bAudioDoc* doc, const K3b::Msf& msf = 150 );
+  K3bAudioZeroData( const K3b::Msf& msf = 150 );
   ~K3bAudioZeroData();
 
   K3b::Msf length() const { return m_length; }

@@ -17,7 +17,6 @@
 #ifndef K3BAUDIOTRACK_H
 #define K3BAUDIOTRACK_H
 
-#include <qobject.h>
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
@@ -39,13 +38,13 @@ class K3bAudioDoc;
 /**
  * @author Sebastian Trueg
  */
-class K3bAudioTrack : public QObject
+class K3bAudioTrack
 {
-  Q_OBJECT
-
   friend class K3bAudioDataSource;
+  friend class K3bAudioDoc;
 
  public:
+  K3bAudioTrack();
   K3bAudioTrack( K3bAudioDoc* parent );
   ~K3bAudioTrack();
 
@@ -75,19 +74,19 @@ class K3bAudioTrack : public QObject
   /**
    * @obsolete use setPerformer
    **/
-  void setArtist( const QString& a ) { m_cdText.setPerformer(a); emit changed(this); }
-  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); emit changed(this); }
-  void setTitle( const QString& t ) { m_cdText.setTitle(t); emit changed(this); }
-  void setArranger( const QString& t ) { m_cdText.setArranger(t); emit changed(this); }
-  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); emit changed(this); }
-  void setComposer( const QString& t ) { m_cdText.setComposer(t); emit changed(this); }
-  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emit changed(this); }
-  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emit changed(this); }
+  void setArtist( const QString& a ) { m_cdText.setPerformer(a); emitChanged(); }
+  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); emitChanged(); }
+  void setTitle( const QString& t ) { m_cdText.setTitle(t); emitChanged(); }
+  void setArranger( const QString& t ) { m_cdText.setArranger(t); emitChanged(); }
+  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); emitChanged(); }
+  void setComposer( const QString& t ) { m_cdText.setComposer(t); emitChanged(); }
+  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emitChanged(); }
+  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emitChanged(); }
 
-  void setCdText( const K3bDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emit changed(this); }
+  void setCdText( const K3bDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emitChanged(); }
 
-  void setPreEmp( bool b ) { m_preEmp = b; emit changed(this); }
-  void setCopyProtection( bool b ) { m_copy = b; emit changed(this); }
+  void setPreEmp( bool b ) { m_preEmp = b; emitChanged(); }
+  void setCopyProtection( bool b ) { m_copy = b; emitChanged(); }
 
   K3b::Msf index0() const;
   /**
@@ -174,17 +173,18 @@ class K3bAudioTrack : public QObject
    */
   bool inList() const;
 
- signals:
-  /**
-   * Emitted if the track has been changed.
-   */
-  void changed( K3bAudioTrack* );
-
  private:	
   /**
    * Removes the track from the list
    */
   void remove();
+
+  /**
+   * Tells the doc that the track has changed
+   */
+  void emitChanged();
+
+  void debug();
 
   K3bAudioDoc* m_parent;
 

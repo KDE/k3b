@@ -654,7 +654,7 @@ void K3bAudioTrackView::slotAddSilence()
 {
   QListViewItem* item = selectedItems().first();
   if( item ) {
-    K3bAudioZeroData* zero = new K3bAudioZeroData( m_doc );
+    K3bAudioZeroData* zero = new K3bAudioZeroData();
     if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
       tv->track()->addSource( zero );
     }
@@ -735,7 +735,7 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
     m_popupMenu->insertSeparator();
     m_actionSplitTrack->plug( m_popupMenu );
   }
-  else if( numTracks > 1 && numSources == 0 ) {
+  else if( numTracks > 1 ) {
     m_popupMenu->insertSeparator();
     m_actionMergeTracks->plug( m_popupMenu );
   }
