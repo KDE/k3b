@@ -52,9 +52,9 @@ int main(int argc, char *argv[])
 			"(c) 2001, Sebastian Trueg", 0, 0, "trueg@informatik.uni-freiburg.de");
   aboutData.addAuthor("Sebastian Trueg",I18N_NOOP("Maintainer"), "trueg@informatik.uni-freiburg.de");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("Developer"), "tfroescher@gmx.de");
+  aboutData.addCredit("Ayo", I18N_NOOP("For his bombastic artwork."), "73lab@free.fr" );
   aboutData.addCredit("Crissi", I18N_NOOP("For heavy Testing and the first german translation."), "crissi99@gmx.de");
   aboutData.addCredit("Joerg Schilling", I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
-  aboutData.addCredit("Ayo", I18N_NOOP("For his bombastic artwork."), "73lab@free.fr" );
 	
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.

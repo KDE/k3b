@@ -55,7 +55,7 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
   : K3bDoc( parent )
 {
   m_tracks = 0L;
-  m_cdText = true;
+  m_cdText = false;
 	
   m_docType = AUDIO;
 
@@ -889,7 +889,7 @@ void K3bAudioDoc::loadDefaultSettings()
   setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
   //  setBurnproof( c->readBoolEntry( "burnproof", true ) );
 
-  m_cdText = c->readBoolEntry( "cd_text", true );
+  m_cdText = c->readBoolEntry( "cd_text", false );
   m_padding = c->readBoolEntry( "padding", true );
   m_hideFirstTrack = c->readBoolEntry( "hide_first_track", false );
   m_removeBufferFiles = c->readBoolEntry( "remove_buffer_files", true );

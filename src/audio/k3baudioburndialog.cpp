@@ -201,7 +201,6 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
 
   QLabel* labelDisc_id = new QLabel( i18n( "&Disc ID:" ), frame, "labelDisc_id" );
   QLabel* labelMessage = new QLabel( i18n( "&Message:" ), frame, "labelMessage" );
-  labelMessage->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
   QLabel* labelUpc_ean = new QLabel( i18n( "&UPC EAN:" ), frame, "labelUpc_ean" );
   QLabel* labelArranger = new QLabel( i18n( "&Arranger:" ), frame, "labelArranger" );
   QLabel* labelSongwriter = new QLabel( i18n( "&Songwriter:" ), frame, "labelSongwriter" );
@@ -211,8 +210,7 @@ void K3bAudioBurnDialog::setupCdTextTab( QFrame* frame )
   m_editDisc_id = new QLineEdit( frame, "m_editDisc_id" );
   QToolTip::add(  m_editDisc_id, i18n( "International Standard Recording Code" ) );
   m_editUpc_ean = new QLineEdit( frame, "m_editUpc_ean" );
-  m_editMessage = new QMultiLineEdit( frame, "m_editMessage" );
-  m_editMessage->setWordWrap( QMultiLineEdit::WidgetWidth );
+  m_editMessage = new QLineEdit( frame, "m_editMessage" );
   m_editPerformer = new QLineEdit( frame, "m_editPerformer" );
   m_editArranger = new QLineEdit( frame, "m_editArranger" );
   m_editTitle = new QLineEdit( frame, "m_editTitle" );

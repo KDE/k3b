@@ -69,8 +69,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 
   connect( m_songlist, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
 	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
-  connect( m_songlist, SIGNAL(moved( QPtrList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& )),
-	   this, SLOT(slotItemsMoved( QPtrList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& )) );
+  connect( m_songlist, SIGNAL(moved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& )),
+	   this, SLOT(slotItemsMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& )) );
   connect( m_songlist, SIGNAL(lengthReady()), m_fillStatusDisplay, SLOT(update()) );
 	
   connect( m_songlist, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
@@ -281,22 +281,27 @@ void K3bAudioView::slotUpdateItems()
 void K3bAudioView::slotPlaySelected()
 {
   QPtrList<K3bAudioTrack> selected = selectedTracks();
-  QListIterator<K3bAudioTrack> it( selected );
-  k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
 
-  for( ++it; it.current(); ++it ) {
-    k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
+  if( !selected.isEmpty() ) {
+    QListIterator<K3bAudioTrack> it( selected );
+    k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
+    
+    for( ++it; it.current(); ++it ) {
+      k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
+    }
   }
 }
 
 
 void K3bAudioView::slotPlayAll()
 {
-  QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
-  
-  for( ++it; it.current(); ++it ) {
-    k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
+  if( !m_doc->tracks()->isEmpty() ) {
+    QListIterator<K3bAudioTrack> it( *m_doc->tracks() );
+    k3bMain()->audioPlayer()->playFile( it.current()->absPath() );
+    
+    for( ++it; it.current(); ++it ) {
+      k3bMain()->audioPlayer()->enqueueFile( it.current()->absPath() );
+    }
   }
 }
 

@@ -77,7 +77,7 @@ class K3bAudioView : public K3bView  {
  protected slots:
   void slotUpdateItems();
   void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
-  void slotItemsMoved( QList<QListViewItem>&, QList<QListViewItem>&, QList<QListViewItem>& );
+  void slotItemsMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& );
   void showPopupMenu( QListViewItem* item, const QPoint& );
   void showPropertiesDialog();
   void slotRemoveTracks();
