@@ -1,6 +1,8 @@
 0.4.3
 Fixed bug that caused K3b to crash while detecting devices
-some little improvements
+highly improved adding of files and directories to a data project
+adding empty directories to data project via context menu
+disabled audio on-the-fly burning due to a problem that caused faulty cds
 	
 0.4.2
 added new DirTree (code from Konqueror)

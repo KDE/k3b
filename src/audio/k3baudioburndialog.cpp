@@ -151,6 +151,9 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
+
+  // disable until version 0.5 where it will be completed
+  m_checkOnTheFly->setDisabled( true );
 }
 
 
