@@ -81,10 +81,10 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
 
-  m_checkSimulate = new QCheckBox( i18n("&Simulate writing"), groupOptions );
-  m_checkOnTheFly = new QCheckBox( i18n("&Writing on the fly"), groupOptions );
-  m_checkOnlyCreateImage = new QCheckBox( i18n("Only create images"),groupOptions );
-  m_checkDeleteImages = new QCheckBox( i18n("&Delete images"), groupOptions );
+  m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
+  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
+  m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
+  m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
 
   QLabel* pixLabel = new QLabel( groupCopies );
   pixLabel->setPixmap( locate( "appdata", "pics/k3b_cd_copy.png" ) );
