@@ -17,6 +17,8 @@
 #include <kiconloader.h>
 #include <qfont.h>
 #include <qpainter.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 
 class K3bExternalBinViewItem;
@@ -122,6 +124,11 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   programTabLayout->setSpacing( KDialog::spacingHint() );
   m_programView = new KListView( programTab );
   m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
+  QToolTip::add( m_defaultButton, i18n("Change the versions K3b should use.") );
+  QWhatsThis::add( m_defaultButton, i18n("<p>If K3b found more than one installed version of a program "
+					 "it will choose one as the <em>default</em> which will be used "
+					 "to do the work. If you want to change the default select the "
+					 "wanted version and press this button.") );
   programTabLayout->addMultiCellWidget( m_programView, 1, 1, 0, 1 );
   programTabLayout->addWidget( m_defaultButton, 0, 1 );
   programTabLayout->addWidget( new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."), 

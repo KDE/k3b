@@ -228,8 +228,8 @@ void K3bVcdBurnDialog::setupLabelTab()
   grid->addWidget( labelVolumeNumber, 5, 0 );
   grid->addWidget( m_spinVolumeNumber, 5, 1 );
 
-  grid->addRowSpacing( 5, 15 );
-  grid->setRowStretch( 5, 1 );
+  //  grid->addRowSpacing( 5, 15 );
+  grid->setRowStretch( 6, 1 );
 
   // buddies
   labelVolumeId->setBuddy( m_editVolumeId );
