@@ -40,7 +40,8 @@ K3bCdDevice::Track& K3bCdDevice::Track::operator=( const K3bTrack& track )
 
 int K3bCdDevice::Track::length() const
 {
-  return m_lastSector - m_firstSector;
+  // +1 since the last sector is included
+  return m_lastSector - m_firstSector + 1;
 }
 
 

@@ -7,7 +7,7 @@ K3bCdDevice::Toc::Toc()
   : QValueList<K3bCdDevice::Track>()
 {
   m_discId = 0;
-  m_firstSector = -1;
+  m_firstSector = 0;
 }
 
 
@@ -60,7 +60,8 @@ int K3bCdDevice::Toc::lastSector() const
 
 int K3bCdDevice::Toc::length() const
 {
-  return lastSector() - m_firstSector;
+  // +1 since the last sector is included
+  return lastSector() - m_firstSector + 1;
 }
 
 
