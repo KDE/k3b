@@ -48,6 +48,7 @@ class K3bDevice
   virtual bool           writesCdrw() const { return m_bWritesCdrw; }
   virtual bool           burnproof() const { return m_burnproof; }
   virtual int            maxReadSpeed() const { return m_maxReadSpeed; }
+  virtual int            currentWriteSpeed() const { return m_currentWriteSpeed; }
 
   virtual int            bufferSize() const { return m_bufferSize; }
 
@@ -72,7 +73,6 @@ class K3bDevice
 
   virtual int            maxWriteSpeed() const { return m_maxWriteSpeed; }
   virtual const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
-  virtual bool           cdrecordDriver() const { return false; }
 
   const QString& mountPoint() const { return m_mountPoint; }
 
@@ -82,6 +82,13 @@ class K3bDevice
    *          2 no
    */
   virtual int cdTextCapable() const;
+
+
+  /** internally K3b value. */
+  virtual void setCurrentWriteSpeed( int s ) { m_currentWriteSpeed = s; }
+
+
+  virtual void setIsWriter( bool b ) { m_burner = b; }
 
   /**
    * Use this if the speed was not detected correctly.
@@ -105,7 +112,9 @@ class K3bDevice
    */
   virtual void setCdTextCapability( bool );
 
-  void setBurnproof( bool );
+  virtual void setBurnproof( bool );
+  virtual void setWritesCdrw( bool b ) { m_bWritesCdrw = b; }
+  virtual void setBufferSize( int b ) { m_bufferSize = b; }
 
   void setMountPoint( const QString& );
 
@@ -160,6 +169,7 @@ class K3bDevice
   int m_cdTextCapable;
   int m_maxReadSpeed;
   int m_maxWriteSpeed;
+  int m_currentWriteSpeed;
 
   cdrom_drive* m_cdromStruct;
 

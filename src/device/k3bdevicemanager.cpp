@@ -113,7 +113,7 @@ void K3bDeviceManager::printDevices()
 
 void K3bDeviceManager::clear()
 {
-    // clear current devices
+  // clear current devices
   m_reader.clear();
   m_writer.clear();
   m_allDevices.clear();
@@ -177,6 +177,14 @@ bool K3bDeviceManager::readConfig( KConfig* c )
 	dev->setCdrdaoDriver( list[3] );
       if( list.count() > 4 )
 	dev->setCdTextCapability( list[4] == "yes" );
+      if( list.count() > 5 )
+	dev->setWritesCdrw( list[5] == "yes" );
+      if( list.count() > 6 )
+	dev->setBurnproof( list[6] == "yes" );
+      if( list.count() > 7 )
+	dev->setBufferSize( list[7].toInt() );
+      if( list.count() > 8 )
+	dev->setCurrentWriteSpeed( list[8].toInt() );
     }
 
     if( dev == 0 )
@@ -194,6 +202,18 @@ bool K3bDeviceManager::readConfig( KConfig* c )
 
 bool K3bDeviceManager::saveConfig( KConfig* c )
 {
+  //////////////////////////////////
+  // Clear config
+  /////////////////////////////////
+
+  if( c->hasGroup( "Devices" ) ) {
+    // remove all old device entrys
+    c->deleteGroup("Devices");
+  }
+
+
+  c->setGroup( "Devices" );
+
   int i = 1;
   K3bDevice* dev = m_reader.first();
   while( dev != 0 ) {
@@ -216,14 +236,24 @@ bool K3bDeviceManager::saveConfig( KConfig* c )
 	 << QString::number(dev->maxReadSpeed())
 	 << QString::number(dev->maxWriteSpeed()) 
 	 << dev->cdrdaoDriver();
+
     if( dev->cdrdaoDriver() != "auto" )
       list << ( dev->cdTextCapable() ? "yes" : "no" );
+    else
+      list << "auto";
+
+    list << ( dev->writesCdrw() ? "yes" : "no" )
+	 << ( dev->burnproof() ? "yes" : "no" )
+	 << QString::number( dev->bufferSize() )
+	 << QString::number( dev->currentWriteSpeed() );
 
     c->writeEntry( QString("Writer%1").arg(i), list );
 
     i++;
     dev = m_writer.next();
   }
+
+  c->sync();
 
   return true;
 }
@@ -268,19 +298,28 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
   if( m_externalBinManager->foundBin( "cdrecord" ) ) {
     qDebug("(K3bDeviceManager) probing capabilities for device " + dev->genericDevice() );
 
-    KProcess driverProc;
-    
-      // check drive capabilities
+    KProcess driverProc, capProc;
     driverProc << m_externalBinManager->binPath( "cdrecord" );
     driverProc << QString("dev=%1").arg(dev->busTargetLun());
-    driverProc << "-prcap";
+    driverProc << "-checkdrive";
+    driverProc.start( KProcess::Block, KProcess::Stdout );
+    // this should work for all drives
+    // so we are always able to say if a drive is a writer or not
+    dev->m_burner = ( driverProc.exitStatus() == 0 );
+
+
+    // check drive capabilities
+    // does only work for generic-mmc drives
+    capProc << m_externalBinManager->binPath( "cdrecord" );
+    capProc << QString("dev=%1").arg(dev->busTargetLun());
+    capProc << "-prcap";
     
-    connect( &driverProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
+    connect( &capProc, SIGNAL(receivedStdout(KProcess*, char*, int)),
 	     this, SLOT(slotCollectStdout(KProcess*, char*, int)) );
     
     m_processOutput = "";
     
-    driverProc.start( KProcess::Block, KProcess::Stdout );
+    capProc.start( KProcess::Block, KProcess::Stdout );
     
     QStringList lines = QStringList::split( "\n", m_processOutput );
 
@@ -295,7 +334,8 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 	else if( line.contains("write CD-RW media") )
 	  dev->m_bWritesCdrw = !line.contains( "not" );
 	
-	else if( line.contains("Buffer-Underrun-Free recording") )
+	else if( line.contains("Buffer-Underrun-Free recording") ||
+		 line.contains("support BURN-Proof") )
 	  dev->m_burnproof = !line.contains( "not" );
 	
 	else if( line.contains( "Maximum read  speed" ) )
@@ -305,7 +345,7 @@ K3bDevice* K3bDeviceManager::initializeScsiDevice( cdrom_drive* drive )
 	  dev->m_maxWriteSpeed = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1000.0 / ( 2352.0 * 75.0 ) );
 	
 	else if( line.contains( "Buffer size" ) )
-	  dev->m_bufferSize = K3b::round( line.mid( line.find(":")+1 ).toDouble() * 1024.0 / ( 2352.0 * 75.0 ) );
+	  dev->m_bufferSize = line.mid( line.find(":")+1 ).toInt();
 	else
 	  qDebug("(K3bDeviceManager) unusable cdrecord output: " + line );
 	
