@@ -53,7 +53,8 @@ K3bDvdJob::K3bDvdJob( K3bDataDoc* doc, QObject* parent )
     m_doc( doc ),
     m_isoImager( 0 ),
     m_growisofsImager( 0 ),
-    m_writerJob( 0 )
+    m_writerJob( 0 ),
+    m_videoDvd(false)
 {
   d = new Private();
 }
@@ -144,6 +145,7 @@ void K3bDvdJob::prepareIsoImager()
 {
   if( !m_isoImager ) {
     m_isoImager = new K3bIsoImager( m_doc, this );
+    m_isoImager->setVideoDvd( m_videoDvd );
     connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), 
 	     this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_isoImager, SIGNAL(data(const char*, int)), 

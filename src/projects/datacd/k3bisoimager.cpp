@@ -55,7 +55,8 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
     m_device(0),
     m_lastOutput(0),
     m_mkisofsPrintSizeResult( 0 ),
-    m_fdToWriteTo(-1)
+    m_fdToWriteTo(-1),
+    m_dvdVideo(false)
 {
 }
 
@@ -564,6 +565,9 @@ bool K3bIsoImager::addMkisofsParameters()
 
   if( m_doc->isoOptions().createUdf() )
     *m_process << "-udf";
+
+  if( m_dvdVideo )
+    *m_process << "-dvd-video";
 
   if( m_doc->isoOptions().ISOuntranslatedFilenames()  ) {
     *m_process << "-U";

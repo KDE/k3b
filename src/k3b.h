@@ -131,6 +131,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   K3bDoc* slotNewMovixDoc();
   K3bDoc* slotNewMovixDvdDoc();
   K3bDoc* slotNewDvdDoc();
+  K3bDoc* slotNewVideoDvdDoc();
 
   void slotClearProject();
 
@@ -307,6 +308,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   int m_movixUntitledCount;
   int m_movixDvdUntitledCount;
   int m_dvdUntitledCount;
+  int m_videoDvdUntitledCount;
 
   K3bAudioPlayer*        m_audioPlayer;
 
@@ -319,6 +321,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileNewMovix;
   KAction* actionFileNewMovixDvd;
   KAction* actionFileNewDvd;
+  KAction* actionFileNewVideoDvd;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;

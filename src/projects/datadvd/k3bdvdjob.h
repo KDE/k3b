@@ -56,6 +56,11 @@ class K3bDvdJob : public K3bBurnJob
   void cleanup();
   void writeImage();
 
+  /**
+   * Only used by the VideoDvdJob
+   */
+  void setVideoDvd( bool b ) { m_videoDvd = b; }
+
  protected slots:
   void slotReceivedIsoImagerData( const char* data, int len );
   void slotIsoImagerFinished( bool success );
@@ -79,6 +84,8 @@ class K3bDvdJob : public K3bBurnJob
 
   bool m_canceled;
   bool m_writingStarted;
+
+  bool m_videoDvd;
 
   bool waitForDvd();
 

@@ -74,6 +74,7 @@
 #include "k3bprojectburndialog.h"
 #include "datacd/k3bdatadoc.h"
 #include "datadvd/k3bdvddoc.h"
+#include "videodvd/k3bvideodvddoc.h"
 #include "datacd/k3bdataview.h"
 #include "mixedcd/k3bmixeddoc.h"
 #include "videocd/k3bvcddoc.h"
@@ -156,6 +157,7 @@ K3bMainWindow::K3bMainWindow()
   m_movixUntitledCount = 0;
   m_movixDvdUntitledCount = 0;
   m_dvdUntitledCount = 0;
+  m_videoDvdUntitledCount = 0;
 
   //setup splitter behavior
   manager()->setSplitterHighResolution(true);
@@ -247,6 +249,8 @@ void K3bMainWindow::initActions()
 				      actionCollection(), "file_new_movix_dvd");
   actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
 				 actionCollection(), "file_new_dvd");
+  actionFileNewVideoDvd = new KAction(i18n("New V&ideo DVD Project"), "video", 0, this, SLOT(slotNewVideoDvdDoc()),
+				      actionCollection(), "file_new_video_dvd");
 
 
   actionFileNewMenu->insert( actionFileNewAudio );
@@ -255,6 +259,7 @@ void K3bMainWindow::initActions()
   actionFileNewMenu->insert( actionFileNewVcd );
   actionFileNewMenu->insert( actionFileNewMovix );
   actionFileNewMenu->insert( actionFileNewDvd );
+  actionFileNewMenu->insert( actionFileNewVideoDvd );
   actionFileNewMenu->insert( actionFileNewMovixDvd );
   actionFileNewMenu->setDelayed( false );
 
@@ -857,6 +862,10 @@ void K3bMainWindow::showOptionDialog( int index )
 
 K3bDoc* K3bMainWindow::slotNewAudioDoc()
 {
+  if( k3bpluginmanager->factories( "AudioDecoder" ).isEmpty() )
+    KMessageBox::error( this, i18n("No audio decoder plugins found. You won't be able to add any files "
+				   "to the audio project!") );
+
   slotStatusMsg(i18n("Creating new Audio CD Project."));
 
   K3bAudioDoc* doc = new K3bAudioDoc( this );
@@ -907,6 +916,28 @@ K3bDoc* K3bMainWindow::slotNewDvdDoc()
   QString fileName = i18n("DataDVD%1").arg(m_dvdUntitledCount);
   if( doc->isoOptions().volumeID().isEmpty() )
     doc->isoOptions().setVolumeID( i18n("DataDVD%1").arg(m_dvdUntitledCount) );
+  KURL url;
+  url.setFileName(fileName);
+  doc->setURL(url);
+
+  // create the window
+  createClient(doc);
+
+  return doc;
+}
+
+
+K3bDoc* K3bMainWindow::slotNewVideoDvdDoc()
+{
+  slotStatusMsg(i18n("Creating new VideoDVD Project."));
+
+  K3bVideoDvdDoc* doc = new K3bVideoDvdDoc( this );
+  initializeNewDoc( doc );
+
+  m_videoDvdUntitledCount++;
+  QString fileName = i18n("VideoDVD%1").arg(m_videoDvdUntitledCount);
+  if( doc->isoOptions().volumeID().isEmpty() )
+    doc->isoOptions().setVolumeID( i18n("VideoDVD%1").arg(m_dvdUntitledCount) );
   KURL url;
   url.setFileName(fileName);
   doc->setURL(url);

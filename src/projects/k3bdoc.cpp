@@ -55,6 +55,7 @@
 #include <k3bmovixdoc.h>
 #include <k3bmovixdvddoc.h>
 #include <k3bdvddoc.h>
+#include <k3bvideodvddoc.h>
 #include <k3bcore.h>
 #include <device/k3bdevicemanager.h>
 
@@ -232,6 +233,8 @@ K3bDoc* K3bDoc::openDocument(const KURL& url )
     newDoc = new K3bMovixDvdDoc( 0 );
   else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
     newDoc = new K3bDvdDoc( 0 );
+  else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
+    newDoc = new K3bVideoDvdDoc( 0 );
   else {
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
     return 0;

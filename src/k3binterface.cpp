@@ -66,6 +66,12 @@ DCOPRef K3bInterface::createDataDVDProject()
 		  m_main->dcopInterface( m_main->slotNewDvdDoc() )->objId() );
 }
 
+DCOPRef K3bInterface::createVideoDVDProject()
+{
+  return DCOPRef( kapp->dcopClient()->appId(),
+		  m_main->dcopInterface( m_main->slotNewVideoDvdDoc() )->objId() );
+}
+
 DCOPRef K3bInterface::createMovixDVDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),

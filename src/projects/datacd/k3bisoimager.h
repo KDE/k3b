@@ -63,6 +63,11 @@ class K3bIsoImager : public K3bJob
   void setMultiSessionInfo( const QString&, K3bCdDevice::CdDevice* dev = 0 );
 
   /**
+   * Set to true to pass -dvd-video to mkisofs
+   */
+  void setVideoDvd( bool b ) { m_dvdVideo = b; }
+
+  /**
    * after data has been emitted image creation will
    * be suspended until resume() is called
    */
@@ -152,6 +157,8 @@ class K3bIsoImager : public K3bJob
   bool m_containsFilesWithMultibleBackslashes;
 
   double m_firstProgressValue;
+
+  bool m_dvdVideo;
 };
 
 
