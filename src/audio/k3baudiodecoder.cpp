@@ -109,10 +109,12 @@ public:
 		  success = false;
 		}
 
-		decodedDataSize += length;
-		decodedTrackSize += length;
-		emitPercent( (int)( (double)decodedDataSize/(double)docSize*100.0 ) );
-		emitSubPercent( (int)( (double)decodedTrackSize/(double)track->size()*100.0 ) );
+		if( !m_canceled ) {
+		  decodedDataSize += length;
+		  decodedTrackSize += length;
+		  emitPercent( (int)( (double)decodedDataSize/(double)docSize*100.0 ) );
+		  emitSubPercent( (int)( (double)decodedTrackSize/(double)track->size()*100.0 ) );
+		}
 	      }
 	    }
 
