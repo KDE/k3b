@@ -197,11 +197,17 @@ void K3bDataBurnDialog::setupBurnTab( QFrame* frame )
 
   frameLayout->addWidget( m_groupOptions, 1, 0 );
 
-  // signals and slots connections
-  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkDeleteImage, SLOT( setDisabled(bool) ) );
-  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), tempDirBox(), SLOT( setDisabled(bool) ) );
-  connect( m_checkOnTheFly, SIGNAL( toggled(bool) ), m_checkOnlyCreateImage, SLOT( setDisabled(bool) ) );
+  // we do not need a tempdir or image settings when writing on-the-fly
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImage, SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), tempDirBox(), SLOT(setDisabled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkOnlyCreateImage, SLOT(setDisabled(bool)) );
 
+  // we do not need writer settings when only creating the image
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), writerBox(), SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkOnTheFly, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkBurnProof, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDao, SLOT(setDisabled(bool)) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDummy, SLOT(setDisabled(bool)) );
 
   frameLayout->setRowStretch( 1, 1 );
   frameLayout->setColStretch( 1, 1 );
@@ -506,7 +512,6 @@ void K3bDataBurnDialog::setupSettingsTab( QFrame* frame )
 
 void K3bDataBurnDialog::slotTempDirButtonPressed()
 {
-  // TODO: ask for confirmation if already exists
   QString dir = KFileDialog::getSaveFileName( tempDir() + "image.iso", QString::null, k3bMain(), "Select Iso Image" );
   if( !dir.isEmpty() ) {
     setTempDir( dir );
@@ -631,10 +636,16 @@ void K3bDataBurnDialog::slotWriterChanged()
 void K3bDataBurnDialog::slotUser1()
 {
   // check if enough space in tempdir if not on-the-fly
-  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > freeTempSpace() )
+  if( !m_checkOnTheFly->isChecked() && doc()->size()/1024 > freeTempSpace() ) {
     KMessageBox::sorry( this, "Not enough space in temp directory. Either change the directory or select on-the-fly burning." );
-  else
-    K3bProjectBurnDialog::slotUser1();
+    return;
+  }
+  else if( !m_checkOnTheFly->isChecked() && QFile::exists( tempPath() ) )
+    if( KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1").arg(tempPath()), i18n("File exists...") ) 
+	!= KMessageBox::Yes )
+      return;
+    
+  K3bProjectBurnDialog::slotUser1();
 }
 
 

@@ -189,8 +189,6 @@ void K3bDataJob::start()
 
 void K3bDataJob::writeImage()
 {
-  emit newTask( "Writing ISO-image" );
-	
   m_pathSpecFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".mkisofs";
   m_doc->writePathSpec( m_pathSpecFile );
 	
@@ -227,15 +225,15 @@ void K3bDataJob::writeImage()
       QFile::remove( m_pathSpecFile );
       m_pathSpecFile = QString::null;
 		
-      emit infoMessage( "Could not start mkisofs!" );
+      emit infoMessage( i18n("Could not start mkisofs!") );
       emit finished( this );
     }
   else
     {
       m_error = K3b::WORKING;
       m_imageFinished = false;
-      emit infoMessage( i18n("Start writing iso-image to %1").arg(m_doc->isoImage()) );
-      emit newTask( i18n("Writing ISO-image") );
+      emit infoMessage( i18n("Creating ISO-image in %1").arg(m_doc->isoImage()) );
+      emit newSubTask( i18n("Creating ISO-image") );
       emit started();
     }
 }
@@ -308,7 +306,11 @@ void K3bDataJob::writeCD()
   else
     {
       m_error = K3b::WORKING;
-      emit infoMessage( i18n("Start recording at %1x speed...").arg(m_doc->speed()) );
+      if( m_doc->dummy() )
+	emit infoMessage( i18n("Starting simulation at %1x speed...").arg(m_doc->speed()) );
+      else
+	emit infoMessage( i18n("Starting recording at %1x speed...").arg(m_doc->speed()) );
+
       emit newTask( i18n("Writing ISO") );
     }
 }
@@ -331,6 +333,7 @@ void K3bDataJob::cancel()
       if( m_doc->deleteImage() || !m_imageFinished ) {
 	emit infoMessage( i18n("Removing iso-image %s", m_doc->isoImage().latin1() ) );
 	QFile::remove( m_doc->isoImage() );
+	m_doc->setIsoImage("");
 	m_pathSpecFile = QString::null;
       }
       else {
@@ -363,13 +366,27 @@ void K3bDataJob::slotParseMkisofsOutput( KProcess*, char* output, int len )
 	QString _perStr = *str;
 	_perStr.truncate( _perStr.find('%') );
 	bool ok;
-	int _percent = (int)_perStr.toDouble( &ok );
+	double _percent = _perStr.toDouble( &ok );
 	if( !ok ) {
 	  qDebug( "Parsing did not work for " + _perStr );
 	}
-	else
-	  emit percent( _percent );
+	else {
+	  emit subPercent( (int)_percent );
+	  if( m_doc->onlyCreateImage() )
+	    emit percent( (int)_percent );
+	  else
+	    emit percent( (int)(_percent / 2.0) );
+	}
       }
+      else if( (*str).contains( "extents written" ) ) {
+
+	emit subPercent( 100 );
+	if( m_doc->onlyCreateImage() )
+	  emit percent( 100 );
+	else
+	  emit percent( 50 );
+      }
+
       else {
 	cout << (*str).latin1() << endl;
       }
@@ -467,10 +484,22 @@ void K3bDataJob::slotParseCdrecordOutput( KProcess*, char* output, int len )
 	      // -------------------------------------------------------------------
 	      // -------- parsing finished --------------------------------------
 
-				
-	      emit percent( 100*made/size );
-	      emit processedSize( made, size );
 	      emit bufferStatus( fifo );
+	      emit processedSize( made, size );
+
+	      // when writing an image the image creating process
+	      // is treated as half of the whole process
+	      // when writing on-the-fly subPercent is parsed
+	      // from the mkisofs output 
+
+	      if( m_doc->onTheFly() ) {
+		emit percent( 100*made/size );
+	      }
+	      else {
+		emit subPercent( 100*made/size );
+		emit percent( 50 + 50*made/size );
+	      }
+
 	    }
 	}
       else if( (*str).startsWith( "Starting new" ) )
@@ -534,12 +563,18 @@ void K3bDataJob::slotMkisofsFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit percent( 100 );
-	  emit infoMessage( "Image successfully created" );
+	  emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()) );
 	  m_imageFinished = true;
 				
 	  if( m_doc->onlyCreateImage() ) {
-	    emit infoMessage( i18n("Image successfully created in ") + m_doc->isoImage() );
+
+	    // weird, but possible
+	    if( m_doc->deleteImage() ) {
+	      QFile::remove( m_doc->isoImage() );
+	      m_doc->setIsoImage("");
+	      emit infoMessage( i18n("Removed image file %1").arg(m_doc->isoImage()) );
+	    }
+
 	    emit finished(this);
 	  }
 	  else {
@@ -549,7 +584,7 @@ void K3bDataJob::slotMkisofsFinished()
 	  break;
 				
 	default:
-	  emit infoMessage( "Mkisofs returned some error!" );
+	  emit infoMessage( i18n("Mkisofs returned some error. (code %1)").arg(m_process->exitStatus()) );
 	  emit infoMessage( "Sorry, no error handling yet! :-((" );
 	  emit infoMessage( "Please send me a mail with the last output..." );
 	  m_error = K3b::MKISOFS_ERROR;
@@ -559,7 +594,7 @@ void K3bDataJob::slotMkisofsFinished()
   else
     {
       m_error = K3b::MKISOFS_ERROR;
-      emit infoMessage( "Mkisofs did not exit cleanly!" );
+      emit infoMessage( i18n("Mkisofs did not exit cleanly.") );
     }
 
   // remove toc-file
@@ -583,12 +618,15 @@ void K3bDataJob::slotCdrecordFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( "Burning successfully finished" );
+	  if( m_doc->dummy() )
+	    emit infoMessage( i18n("Simulation successfully finished") );
+	  else
+	    emit infoMessage( i18n("Writing successfully finished") );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( "Cdrecord returned some error!" );
+	  emit infoMessage( i18n("Cdrecord returned some error! (code %1)").arg(m_process->exitStatus()) );
 	  emit infoMessage( "Sorry, no error handling yet! :-((" );
 	  emit infoMessage( "Please send me a mail with the last output..." );
 	  m_error = K3b::CDRECORD_ERROR;
@@ -598,7 +636,7 @@ void K3bDataJob::slotCdrecordFinished()
   else
     {
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( "cdrecord did not exit cleanly!" );
+      emit infoMessage( i18n("Cdrecord did not exit cleanly.") );
     }
 
   // remove path-spec-file
@@ -607,7 +645,6 @@ void K3bDataJob::slotCdrecordFinished()
     m_pathSpecFile = QString::null;
   }
 
-  // remove image-file
   if( m_doc->deleteImage() ) {
     QFile::remove( m_doc->isoImage() );
     m_doc->setIsoImage("");
