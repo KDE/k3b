@@ -3,7 +3,7 @@
 # the error to ian geiser <geiseri@msoe.edu>
 Summary:   
 Name:      k3b
-Version:   0.7.3
+Version:   0.7.4
 Release:   0.1
 Copyright: GPL
 Vendor:    Sebastian Trueg <trueg@informatik.uni-freiburg.de>
@@ -11,7 +11,7 @@ Url:       http://k3b.sourceforge.net
 Icon:     k3b.xpm
 Packager:  Sebastian Trueg <trueg@informatik.uni-freiburg.de>
 Group:     Archiving/Cd burning
-Source:    k3b-0.7.2.tar.gz
+Source:    k3b-0.7.4.tar.gz
 BuildRoot: 
 
 %description

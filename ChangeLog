@@ -1,3 +1,8 @@
+0.7.4
+fixed bug that caused stupid mountpoint to be assigned to the devices
+beautified cddb setup
+internal cddb change (rewrite)
+
 0.7.3
 fixed compile problems with gcc 3.x
 
