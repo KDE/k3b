@@ -111,8 +111,6 @@ QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* na
   QToolTip::add( c, i18n("Set the paranoia level for reading audio cds") );
   QWhatsThis::add( c, i18n("<p>Sets the correction mode for digital audio extraction."
 			   "<ul><li>0: No checking, data is copied directly from the drive. "
-			   "This should work with all current drives as they include their own "
-			   "hardware based correction.</li>"
 			   "<li>1: Perform overlapped reading to avoid jitter.</li>"
 			   "<li>2: Like 1 but with additional checks of the read audio data.</li>"
 			   "<li>3: Like 2 but with additional scratch detection and repair.</li></ul>"

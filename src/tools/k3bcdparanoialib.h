@@ -21,6 +21,7 @@ class K3bCdparanoiaLib
 
   /** default: 3 */
   void setParanoiaMode( int );
+  void setNeverSkip( bool b );
 
   /** default: 20 */
   void setMaxRetries( int );

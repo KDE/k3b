@@ -2,8 +2,9 @@
 #define K3B_AUDIO_RIP
 
 
-#include <qobject.h>
+#include <k3bjob.h>
 #include <qcstring.h>
+
 
 
 class K3bDevice;
@@ -11,7 +12,7 @@ class QTimer;
 class K3bCdparanoiaLib;
 
 
-class K3bAudioRip : public QObject
+class K3bAudioRip : public K3bJob
 {
   Q_OBJECT
 
@@ -19,17 +20,17 @@ class K3bAudioRip : public QObject
   K3bAudioRip( QObject* parent = 0 );
   ~K3bAudioRip();
 
-  bool ripTrack( K3bDevice*, unsigned int track );
-
  public slots:
+  void start();
   void cancel();
   void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
   void setMaxRetries( int r ) { m_paranoiaRetries = r; }
+  void setNeverSkip( bool b ) { m_neverSkip = b; }
+  void setDevice( K3bDevice* dev ) { m_device = dev; }
+  void setTrackToRip( unsigned int track ) { m_track = track; }
 
  signals:
   void output( const QByteArray& );
-  void percent( int );
-  void finished( bool );
 
  protected slots:
   void slotParanoiaRead();
@@ -47,9 +48,17 @@ class K3bAudioRip : public QObject
 
   int m_paranoiaMode;
   int m_paranoiaRetries;
+  bool m_neverSkip;
+
+  unsigned int m_track;
 
   bool m_bInterrupt;
   bool m_bError;
+
+  void createStatus(long, int);
+
+  // this friend function will call createStatus(long,int)
+  friend void paranoiaCallback(long, int);
 };
 
 #endif

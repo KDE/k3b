@@ -71,6 +71,7 @@ class K3bRipperWidget : public KDialogBase
 
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinRetries;
+  QCheckBox* m_checkNeverSkip;
 
   void setupGui();
   void setupContextHelp();

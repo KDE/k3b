@@ -55,6 +55,8 @@ public:
   Private() {
     drive = 0;
     paranoia = 0;
+    paranoiaMode = 3;
+    neverSkip = false;
     maxRetries = 20;
   }
   ~Private() {
@@ -63,6 +65,7 @@ public:
   cdrom_drive* drive;
   cdrom_paranoia* paranoia;
   int paranoiaMode;
+  bool neverSkip;
   int maxRetries;
 };
 
@@ -84,6 +87,8 @@ bool K3bCdparanoiaLib::paranoiaInit( const QString& devicename )
     paranoiaFree();
     return false;
   }
+
+  setParanoiaMode( d->paranoiaMode );
 
   return true;
 }
@@ -122,10 +127,19 @@ void K3bCdparanoiaLib::setParanoiaMode( int mode )
     break;
   }
 
+  if( d->neverSkip )
+    d->paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
+
   if( d->paranoia )
     cdda_paranoia_modeset( d->paranoia, d->paranoiaMode );
 }
 
+
+void K3bCdparanoiaLib::setNeverSkip( bool b )
+{
+  d->neverSkip = b;
+  setParanoiaMode( d->paranoiaMode );
+}
 
 
   /** default: 20 */

@@ -10,17 +10,39 @@
 #include <kmessagebox.h>
 
 
-void paranoiaCallback(long, int){
-  // Do we want to show info somewhere ?
-  // Not yet.
+// from cdda_paranoia.h
+#define PARANOIA_CB_READ           0
+#define PARANOIA_CB_VERIFY         1
+#define PARANOIA_CB_FIXUP_EDGE     2
+#define PARANOIA_CB_FIXUP_ATOM     3
+#define PARANOIA_CB_SCRATCH        4
+#define PARANOIA_CB_REPAIR         5
+#define PARANOIA_CB_SKIP           6
+#define PARANOIA_CB_DRIFT          7
+#define PARANOIA_CB_BACKOFF        8
+#define PARANOIA_CB_OVERLAP        9
+#define PARANOIA_CB_FIXUP_DROPPED 10
+#define PARANOIA_CB_FIXUP_DUPED   11
+#define PARANOIA_CB_READERR       12
+
+
+static K3bAudioRip* s_audioRip = 0;
+
+void paranoiaCallback(long sector, int status)
+{
+  s_audioRip->createStatus(sector, status);
 }
 
 
+
 K3bAudioRip::K3bAudioRip( QObject* parent )
-  : QObject( parent ),
+  : K3bJob( parent ),
     m_paranoiaLib(0),
+    m_device(0),
     m_paranoiaMode(3),
-    m_paranoiaRetries(20)
+    m_paranoiaRetries(20),
+    m_neverSkip(false),
+    m_track(1)
 {
   m_rippingTimer = new QTimer( this );
   connect( m_rippingTimer, SIGNAL(timeout()), this, SLOT(slotParanoiaRead()) );
@@ -33,40 +55,46 @@ K3bAudioRip::~K3bAudioRip()
 }
 
 
-bool K3bAudioRip::ripTrack( K3bDevice* dev, unsigned int track )
+void K3bAudioRip::start()
 {
-  if( !m_paranoiaLib )
-    m_paranoiaLib = K3bCdparanoiaLib::create();
-
   if( !m_paranoiaLib ) {
-    KMessageBox::error( 0, i18n("Could not load libcd_paranoia. Please install.") );
-    return false;
+    m_paranoiaLib = K3bCdparanoiaLib::create();
   }
 
-  m_device = dev;
+  if( !m_paranoiaLib ) {
+    emit infoMessage( i18n("Could not load libcdparanoia."), ERROR );
+    emit finished(false);
+    return;
+  }
 
   // try to open the device
-  if( !dev )
-    return false;
+  if( !m_device ) {
+    emit finished(false);
+    return;
+  }
 
-  if( !m_paranoiaLib->paranoiaInit( dev->blockDeviceName() ) ) {
-    kdDebug() << "(K3bAudioRip) Could not open device" << endl;
-    return false;
+  if( !m_paranoiaLib->paranoiaInit( m_device->blockDeviceName() ) ) {
+    emit infoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()), ERROR );
+    emit finished(false);
+    return;
   }
 
   m_bInterrupt = m_bError = false;
 
-  long firstSector = m_paranoiaLib->firstSector( track );
-  m_lastSector = m_paranoiaLib->lastSector( track );
+  long firstSector = m_paranoiaLib->firstSector( m_track );
+  m_lastSector = m_paranoiaLib->lastSector( m_track );
   
-  if( firstSector < 0 || m_lastSector < 0 )
-    return false;
+  if( firstSector < 0 || m_lastSector < 0 ) {
+    emit finished(false);
+    return;
+  }
 
   // track length
   m_sectorsAll = m_lastSector - firstSector;
   m_sectorsRead = 0;
   
   m_paranoiaLib->setParanoiaMode( m_paranoiaMode );
+  m_paranoiaLib->setNeverSkip( m_neverSkip );
   m_paranoiaLib->setMaxRetries( m_paranoiaRetries );
 
   m_paranoiaLib->paranoiaSeek( firstSector, SEEK_SET );
@@ -74,7 +102,7 @@ bool K3bAudioRip::ripTrack( K3bDevice* dev, unsigned int track )
 
   m_rippingTimer->start(0);
 
-  return true;
+  return;
 }
 
 
@@ -85,6 +113,9 @@ void K3bAudioRip::slotParanoiaRead()
     slotParanoiaFinished();
   } 
   else {
+    // let the global paranoia callback have access to this
+    // to emit signals
+    s_audioRip = this;
     int16_t* buf = m_paranoiaLib->paranoiaRead( paranoiaCallback );
 
     if( 0 == buf ) {
@@ -127,5 +158,10 @@ void K3bAudioRip::cancel()
   m_bInterrupt = true;
 }
 
+
+void K3bAudioRip::createStatus( long sector, int status )
+{
+ 
+}
 
 #include "k3baudiorip.moc"

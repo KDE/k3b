@@ -25,23 +25,18 @@
 #include "../k3bjob.h"
 #include "../tools/k3bwavefilewriter.h"
 #include "../cdinfo/k3bdiskinfo.h"
+#include "k3baudiorip.h"
 
 #include <cddb/k3bcddbquery.h>
 
 typedef Q_INT16 size16;
 typedef Q_INT32 size32;
 
-extern "C" {
-#include <cdda_interface.h>
-#include <cdda_paranoia.h>
-}
-
 
 class QStringList;
 class QFile;
 class K3bDevice;
 class K3bDiskInfoDetector;
-class K3bAudioRip;
 
 
 /**
@@ -61,8 +56,10 @@ class K3bCddaCopy : public K3bJob
   void setCopyTracks( const QValueList<int>& t ) { m_tracksToCopy = t; }
   void setUsePattern( bool b ) { m_bUsePattern = b; }
   void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
-  void setParanoiaMode( int mode ) { m_paranoiaMode = mode; }
-  void setMaxRetries( int r ) { m_paranoiaRetries = r; }
+
+  void setParanoiaMode( int mode ) { m_audioRip->setParanoiaMode(mode); }
+  void setMaxRetries( int r ) { m_audioRip->setMaxRetries(r); }
+  void setNeverSkip( bool b ) { m_audioRip->setNeverSkip(b); }
 
   void start();
   void cancel();
@@ -103,9 +100,6 @@ class K3bCddaCopy : public K3bJob
   QValueList<int> m_tracksToCopy;
   long m_bytes;
   long m_bytesAll;
-
-  int m_paranoiaMode;
-  int m_paranoiaRetries;
 };
 
 #endif

@@ -41,9 +41,7 @@
 
 K3bCddaCopy::K3bCddaCopy( QObject* parent ) 
   : K3bJob( parent ),
-    m_bUsePattern( true ),
-    m_paranoiaMode(3),
-    m_paranoiaRetries(20)
+    m_bUsePattern( true )
 {
   m_device = 0;
   
@@ -51,7 +49,8 @@ K3bCddaCopy::K3bCddaCopy( QObject* parent )
   connect( m_audioRip, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
   connect( m_audioRip, SIGNAL(output(const QByteArray&)), this, SLOT(slotTrackOutput(const QByteArray&)) );
   connect( m_audioRip, SIGNAL(finished(bool)), this, SLOT(slotTrackFinished(bool)) );
-  
+  connect( m_audioRip, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)), 
 	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
@@ -141,14 +140,10 @@ bool K3bCddaCopy::startRip( unsigned int i )
 
   kdDebug() << "(K3bCddaCopy) starting K3bAudioRip" << endl;
 
-  m_audioRip->setParanoiaMode( m_paranoiaMode );
-  m_audioRip->setMaxRetries( m_paranoiaRetries );
+  m_audioRip->setTrackToRip( m_tracksToCopy[i] );
+  m_audioRip->setDevice( m_device );
 
-  if( !m_audioRip->ripTrack( m_device, m_tracksToCopy[i] ) ) {
-    m_waveFileWriter.close();
-    emit infoMessage( i18n("Unable to read track %1").arg(i), ERROR );
-    return false;
-  }
+  m_audioRip->start();
 
   emit newSubTask( i18n("Reading track %1").arg(m_tracksToCopy[i]) );
 

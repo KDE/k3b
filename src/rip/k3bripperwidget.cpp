@@ -147,12 +147,14 @@ void K3bRipperWidget::setupGui()
   m_spinRetries = new QSpinBox( advancedPage );
   m_spinRetries->setValue(20);
 
+  m_checkNeverSkip = new QCheckBox( i18n("Never skip"), advancedPage );
+
   advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
   advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
   advancedPageLayout->addWidget( new QLabel( i18n("Read retries:"), advancedPage ), 1, 0 );
   advancedPageLayout->addWidget( m_spinRetries, 1, 1 );
-
-  advancedPageLayout->setRowStretch( 2, 1 );
+  advancedPageLayout->addMultiCellWidget( m_checkNeverSkip, 2, 2, 0, 1 );
+  advancedPageLayout->setRowStretch( 3, 1 );
   advancedPageLayout->setColStretch( 2, 1 );
 
 
@@ -174,10 +176,15 @@ void K3bRipperWidget::setupGui()
 void K3bRipperWidget::setupContextHelp()
 {
   QToolTip::add( m_spinRetries, i18n("Maximal number of read retries") );
-  QWhatsThis::add( m_spinRetries, i18n("<p>The maximum number of read retries. After this K3b will "
-				       "stop trying."
-				       "<p>Does only make sense in combination with paranoia mode 3"
-				       "<p><b>FIX ME: I'm not sure if I'm making sense.</b>") );
+  QWhatsThis::add( m_spinRetries, i18n("<p>This specifies the maximum number of retries to "
+				       "read a sector of audio data from the cd. After that "
+				       "K3b will either skip the sector or stop the process "
+				       "if the <em>never-skip</em> option is enabled.") );
+  QToolTip::add( m_checkNeverSkip, i18n("Never skip a sector on error") );
+  QWhatsThis::add( m_checkNeverSkip, i18n("<p>If this option is checked K3b will never skip "
+					  "an audio sector if it was not readable (see retries)."
+					  "<p>K3b will stop the ripping process if a read error "
+					  "occurs.") );
 }
 
 
@@ -237,6 +244,7 @@ void K3bRipperWidget::slotOk()
   job->setCopyTracks( m_trackNumbers );
   job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
   job->setMaxRetries( m_spinRetries->value() );
+  job->setNeverSkip( m_checkNeverSkip->isChecked() );
 
   K3bBurnProgressDialog ripDialog( this, "Ripping" );
   ripDialog.setJob( job );

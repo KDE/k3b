@@ -61,6 +61,9 @@ K3bVcdBurnDialog::K3bVcdBurnDialog(K3bVcdDoc* _doc, QWidget *parent, const char 
   m_checkDao->hide();
   m_checkOnTheFly->hide();
 
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  m_optionGroupLayout->addItem( spacer );
+
   setupVideoCdTab();
   setupLabelTab();
 
