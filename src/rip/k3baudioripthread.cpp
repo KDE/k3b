@@ -189,6 +189,7 @@ void K3bAudioRipThread::run()
 
     QString dir = filename.left( filename.findRev("/") );
     if( !KStandardDirs::makeDir( dir ) ) {
+      d->paranoiaLib->close();
       emitInfoMessage( i18n("Unable to create directory %1").arg(dir), K3bJob::ERROR );
       emitFinished(false);
       return;
@@ -200,19 +201,21 @@ void K3bAudioRipThread::run()
       isOpen = d->encoder->openFile( d->fileType, filename );
       
       // here we use cd Title and Artist
-      d->encoder->setMetaData( "Artist", m_cddbEntry.cdArtist );
-      d->encoder->setMetaData( "Title", m_cddbEntry.cdTitle );
-      d->encoder->setMetaData( "Comment", m_cddbEntry.cdExtInfo );
-      d->encoder->setMetaData( "AlbumTitle", m_cddbEntry.cdTitle );
-      d->encoder->setMetaData( "AlbumArtist", m_cddbEntry.cdTitle );
-      d->encoder->setMetaData( "AlbumComment", m_cddbEntry.cdExtInfo );
-      d->encoder->setMetaData( "Year", QString::number(m_cddbEntry.year) );
+      d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.cdArtist );
+      d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.cdTitle );
+      d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.cdExtInfo );
+      d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
+      d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
+      d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
+      d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
+      d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
     }
     else {
       isOpen = d->waveFileWriter->open( filename );
     }
 
     if( !isOpen ) {
+      d->paranoiaLib->close();
       emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(filename), K3bJob::ERROR );
       emitFinished(false);
       return;
@@ -295,13 +298,15 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
       if( d->encoder ) {
 	isOpen = d->encoder->openFile( d->fileType, filename );
 	
-	d->encoder->setMetaData( "Artist", m_cddbEntry.artists[track-1] );
-	d->encoder->setMetaData( "Title", m_cddbEntry.titles[track-1] );
-	d->encoder->setMetaData( "Comment", m_cddbEntry.extInfos[track-1] );
-	d->encoder->setMetaData( "AlbumArtist", m_cddbEntry.cdArtist );
-	d->encoder->setMetaData( "AlbumTitle", m_cddbEntry.cdTitle );
-	d->encoder->setMetaData( "AlbumComment", m_cddbEntry.cdExtInfo );
-	d->encoder->setMetaData( "Year", QString::number(m_cddbEntry.year) );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.artists[track-1] );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.titles[track-1] );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.extInfos[track-1] );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(track) );
+	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
+	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
+	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
+	d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
+	d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
       }
       else {
 	isOpen = d->waveFileWriter->open( filename );

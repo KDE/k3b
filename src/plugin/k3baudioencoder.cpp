@@ -94,10 +94,10 @@ const QString& K3bAudioEncoder::filename() const
 
 
 
-void K3bAudioEncoder::setMetaData( const QString& type, const QString& data )
+void K3bAudioEncoder::setMetaData( K3bAudioEncoder::MetaDataField f, const QString& data )
 {
   if( !data.isEmpty() )
-    return setMetaDataInternal( type, data );
+    return setMetaDataInternal( f, data );
 }
 
 
@@ -137,7 +137,7 @@ bool K3bAudioEncoder::initEncoderInternal( const QString& )
 }
 
 
-void K3bAudioEncoder::setMetaDataInternal( const QString&, const QString& )
+void K3bAudioEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField, const QString& )
 {
   // do nothing
 }

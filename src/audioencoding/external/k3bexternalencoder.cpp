@@ -125,7 +125,12 @@ public:
   QString artist;
   QString title;
   QString comment;
+  QString trackNumber;
+  QString cdArtist;
+  QString cdTitle;
+  QString cdComment;
   QString year;
+  QString genre;
 
   QWaitCondition exitWaiter;
 };
@@ -145,16 +150,37 @@ K3bExternalEncoder::~K3bExternalEncoder()
 }
 
 
-void K3bExternalEncoder::setMetaDataInternal( const QString& key, const QString& value )
+void K3bExternalEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
 {
-  if( key.lower() == "title" )
+  switch( f ) {
+  case META_TRACK_TITLE:
     d->title = value;
-  else if( key.lower() == "artist" )
+    break;
+  case META_TRACK_ARTIST:
     d->artist = value;
-  else if( key.lower() == "comment" )
+    break;
+  case META_TRACK_COMMENT:
     d->comment = value;
-  else if( key.lower() == "year" )
+    break;
+  case META_TRACK_NUMBER:
+    d->trackNumber = value;
+    break;
+  case META_ALBUM_TITLE:
+    d->cdTitle = value;
+    break;
+  case META_ALBUM_ARTIST:
+    d->cdArtist = value;
+    break;
+  case META_ALBUM_COMMENT:
+    d->cdComment = value;
+    break;
+  case META_YEAR:
     d->year = value;
+    break;
+  case META_GENRE:
+    d->genre = value;
+    break;
+  }
 }
 
 
@@ -228,6 +254,11 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
     (*it).replace( "%t", d->title );
     (*it).replace( "%c", d->comment );
     (*it).replace( "%y", d->year );
+    (*it).replace( "%m", d->cdTitle );
+    (*it).replace( "%r", d->cdArtist );
+    (*it).replace( "%x", d->cdComment );
+    (*it).replace( "%n", d->trackNumber );
+    (*it).replace( "%g", d->genre );
 
     *d->process << *it;
   }

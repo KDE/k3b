@@ -97,14 +97,23 @@ class K3bAudioEncoder : public K3bPlugin
    */
   virtual const QString& filename() const;
 
+  enum MetaDataField {
+    META_TRACK_TITLE,
+    META_TRACK_ARTIST,
+    META_TRACK_COMMENT,
+    META_TRACK_NUMBER,
+    META_ALBUM_TITLE,
+    META_ALBUM_ARTIST,
+    META_ALBUM_COMMENT,
+    META_YEAR,
+    META_GENRE };
+
   /**
-   * K3b uses the following types:
-   * Title, Artist, Comment, Year
    * Calling this method does only make sense after successfully
    * calling openFile and before calling encode.
    * This calls setMetaDataInternal.
    */
-  void setMetaData( const QString&, const QString& );
+  void setMetaData( MetaDataField, const QString& );
 
   /**
    * Returnes the amount of actually written bytes or -1 if an error
@@ -158,7 +167,7 @@ class K3bAudioEncoder : public K3bPlugin
    * default implementation does nothing
    * this may already write data.
    */
-  virtual void setMetaDataInternal( const QString&, const QString& );
+  virtual void setMetaDataInternal( MetaDataField, const QString& );
 
  private:
   class Private;

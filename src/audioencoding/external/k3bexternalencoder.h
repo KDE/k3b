@@ -80,7 +80,7 @@ class K3bExternalEncoder : public K3bAudioEncoder
   void finishEncoderInternal();
   bool initEncoderInternal( const QString& extension );
   long encodeInternal( const char* data, Q_ULONG len );
-  void setMetaDataInternal( const QString&, const QString& );
+  void setMetaDataInternal( MetaDataField, const QString& );
 
   class Private;
   Private* d;

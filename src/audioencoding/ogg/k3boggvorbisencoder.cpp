@@ -38,7 +38,6 @@
 
 
 
-
 // THIS IS BASED ON THE OGG VORBIS LIB EXAMPLE 
 // BECAUSE OF THE LACK OF DOCUMENTATION
 
@@ -155,7 +154,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString& )
   vorbis_comment_init( d->vorbisComment );
 
   // add the encoder tag (so everybody knows we did it! ;)
-  setMetaDataInternal( "ENCODER", "K3bOggVorbisEncoderPlugin" );
+  vorbis_comment_add_tag( d->vorbisComment, "ENCODER", "K3bOggVorbisEncoderPlugin" );
 
   // set up the analysis state and auxiliary encoding storage
   d->vorbisDspState = new vorbis_dsp_state;
@@ -289,13 +288,39 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
 }
 
 
-void K3bOggVorbisEncoder::setMetaDataInternal( const QString& key, const QString& value )
+void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
 {
   if( d->vorbisComment ) {
-    char* key_ = qstrdup( key.local8Bit() );
     char* value_ = qstrdup( value.local8Bit() );
+    char* key = 0;
 
-    vorbis_comment_add_tag( d->vorbisComment, key_, value_ );
+    switch( f ) {
+    case META_TRACK_TITLE:
+      key = "TITLE";
+      break;
+    case META_TRACK_ARTIST:
+      key = "ARTIST";
+      break;
+    case META_ALBUM_TITLE:
+      key = "ALBUM";
+      break;
+    case META_ALBUM_COMMENT:
+      key = "DESCRIPTION";
+      break;
+    case META_YEAR:
+      key = "DATE";
+      break;
+    case META_TRACK_NUMBER:
+      key = "TRACKNUMBER";
+      break;
+    case META_GENRE:
+      key = "GENRE";
+      break;
+    default:
+      return;
+    }
+
+    vorbis_comment_add_tag( d->vorbisComment, key, value_ );
   }
   else
     kdDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init." << endl;

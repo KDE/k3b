@@ -95,6 +95,7 @@ class K3bAudioDecoder : public K3bPlugin
    */
   bool initDecoder( const K3b::Msf& startOffset, const K3b::Msf& length );
 
+  // TODO: use an enumeration like the K3bAudioEncoder instead of string keys
   /**
    * This should at least support "Title" and "Artist"
    * The default implementation uses KFileMetaInfo
