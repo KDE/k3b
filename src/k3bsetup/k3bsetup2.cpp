@@ -113,7 +113,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   d->deviceManager->scanbus();
 
   load();
-  if (getuid() != 0 || !d->config->checkConfigFilesWritable( true )) {
+  if (getuid() != 0 /*|| !d->config->checkConfigFilesWritable( true )*/) {
       makeReadOnly();
   }
 };
