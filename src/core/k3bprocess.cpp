@@ -387,7 +387,7 @@ void K3bProcess::OutputCollector::setProcess( KProcess* p )
 
 void K3bProcess::OutputCollector::slotGatherOutput( KProcess*, char* data, int len )
 {
-  m_gatheredOutput.append( QString::fromLatin1( data, len ) );
+  m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
 }
 
 
