@@ -1,66 +1,20 @@
-/***************************************************************************
-                          k3boptioncddb.h  -  description
-                             -------------------
-    begin                : Fri Nov 2 2001
-    copyright            : (C) 2001 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
+#ifndef K3B_CDDB_OPTIONTAB_H
+#define K3B_CDDB_OPTIONTAB_H
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+#include "base_k3bcddboptiontab.h"
 
-#ifndef K3B_CDDB_OPTION_TAB_H
-#define K3B_CDDB_OPTION_TAB_H
 
-#include <qtabwidget.h>
+class K3bCddbOptionTab : public base_K3bCddbOptionTab
+{
+  Q_OBJECT
 
-class QFrame;
-class QCheckBox;
-class QGroupBox;
-class QPushButton;
-class QListBoxItem;
-class QString;
+ public:
+  K3bCddbOptionTab( QWidget* parent = 0, const char* name = 0 );
+  ~K3bCddbOptionTab();
 
-class KLineEdit;
-class KListBox;
-
-/**
-  *@author Thomas Froescher
-  */
-
-class K3bCddbOptionTab : public QWidget {
-    Q_OBJECT
-
-public: 
-    K3bCddbOptionTab(QFrame *parent, const char *name);
-    ~K3bCddbOptionTab();
-    void apply();
-    void readSettings();
-
-private slots:
-    void toggled(bool);
-    void addCddbServer();
-    void delCddbServer();
-    void serverSelected(QListBoxItem*);
-
- private:
-    QCheckBox *m_cddbLockup;
-    QPushButton *m_addButton;
-    QPushButton *m_delButton;
-    KLineEdit *m_cddbServerInput;
-    KLineEdit *m_cddbPortInput;
-    KLineEdit *m_songListPath;
-    KListBox *m_cddbServerList;
-    QGroupBox *m_groupCddbServer;
-
-    void setup();
-    void fillInputFields(QString hostString);
+ public slots:
+  void readSettings();
+  void apply();
 };
 
 #endif

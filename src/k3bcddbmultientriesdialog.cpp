@@ -16,66 +16,49 @@
  ***************************************************************************/
 
 #include "k3bcddbmultientriesdialog.h"
-#include "k3bcddb.h"
 
-#include <qstringlist.h>
 #include <qlayout.h>
 #include <qframe.h>
-#include <qmessagebox.h>
-#include <qhgroupbox.h>
+#include <qlabel.h>
 
 #include <klistbox.h>
 #include <klocale.h>
 
-K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog(  QStringList &entries, const char name=0 )
-   : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Apply, 0, "CDDB_selection" ) 
+
+
+K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const char* name )
+   : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok, Ok, parent, name ) 
 {
-   setup( entries );
+  QFrame* frame = plainPage();
+  QVBoxLayout* layout = new QVBoxLayout( frame );
+  layout->setAutoAdd( true );
+  layout->setSpacing( spacingHint() );
+  layout->setMargin( 0 );
+
+  QLabel* infoLabel = new QLabel( i18n("K3b found multible inexact cddb entries. Please select one."), frame );
+  infoLabel->setAlignment( WordBreak );
+
+  m_listBox = new KListBox( frame, "list_box");
+
+  setMinimumSize( 280, 200 );
 }
+
+int K3bCddbMultiEntriesDialog::selectCddbEntry( const K3bCddbQuery& query, QWidget* parent = 0 )
+{
+  K3bCddbMultiEntriesDialog d( parent );
+
+  for( int i = 0; i < query.foundEntries(); i++ ) {
+    d.m_listBox->insertItem( QString::number(i) + " " + query.entry(i).cdArtist + " - " + query.entry(i).cdTitle );
+  }
+
+  d.m_listBox->setSelected( 0, true );
+
+  d.exec();
+  return ( d.m_listBox->currentItem() >= 0 ? d.m_listBox->currentItem() : 0 );
+}
+
 
 K3bCddbMultiEntriesDialog::~K3bCddbMultiEntriesDialog(){
-}
-
-void K3bCddbMultiEntriesDialog::setup( QStringList &entries ){
-
-    QFrame *_frame = plainPage( );
-    setMainWidget(_frame);
-    setMinimumWidth(400);
-    setMinimumHeight(150);
-    QHGroupBox *_box = new QHGroupBox( _frame, "group_box");
-    _box->setTitle( i18n( "Inexact cddb requests" ) );
-    QGridLayout *frameLayout = new QGridLayout( _frame );
-    frameLayout->setSpacing( KDialog::spacingHint() );
-    frameLayout->setMargin( KDialog::marginHint() );
-
-    m_listBox = new KListBox( _box, "list_box");
-    QStringList::Iterator it;
-    for( it = entries.begin(); it != entries.end(); ++it ){
-          if( *it != ".")
-            m_listBox->insertItem( *it );
-    }
-
-    frameLayout->addWidget( _box, 0, 0);
-}
-
-
-void K3bCddbMultiEntriesDialog::slotOk( ){
-    unsigned int id = 0;
-    // get selected entry
-    int selected = m_listBox->currentItem();
-    if ( selected != -1 ){
-        QString entry = m_listBox->currentText();
-        qDebug("Entry: " + entry);
-        QStringList line = QStringList::split( " ", entry );
-        bool ok;
-        id = (*line.at( 1 )).toUInt( &ok, 16);
-        qDebug("(K3bCddbMultiEntriesDialog) Chosen Id: " + QString::number(id, 16) );
-    } else {
-        QMessageBox::critical( this, i18n("CDDB Error"), i18n("You must choose an entry."), i18n("Ok") );
-        return;
-    }
-    emit chosenId( id );
-    done(0);
 }
 
 

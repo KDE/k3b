@@ -1,60 +1,18 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3b
-
-## INCLUDES were found outside kdevelop specific part
-
-k3b_SOURCES = k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp kstringlistdialog.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bcddb.cpp cddb.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp
+k3b_SOURCES = k3bbusywidget.cpp k3bdiroperator.cpp kdndfileview.cpp k3btempdirselectionwidget.cpp k3bfiletreeview.cpp kstringlistdialog.cpp k3bcddbmultientriesdialog.cpp k3baudioplayer.cpp k3bprojecttabbar.cpp k3bprojecttabwidget.cpp k3bwriterselectionwidget.cpp k3bsplash.cpp k3bblankingjob.cpp k3bblankingdialog.cpp k3bcddb.cpp k3bfileview.cpp kcutlabel.cpp k3bprojectburndialog.cpp k3bjob.cpp k3bburnprogressdialog.cpp k3bfillstatusdisplay.cpp k3bdirview.cpp k3bview.cpp k3bdoc.cpp k3b.cpp main.cpp 
 k3b_LDADD   = ./data/libdata.a ./cdinfo/libcdinfo.a ./audio/libaudio.a ./device/libdevice.a ./audio/input/libinput.a ./option/liboption.a ./rip/librip.a ./libwm/liblibwm.a ./rip/songdb/libsongdb.a ./tools/libtools.a ./cdcopy/libcdcopy.a ./dvd/libdvd.a $(ID3LIB_LIBS) $(CDPARANOIA_LIBS) $(OGG_VORBISLIBS) -lmad -lartskde -lqt-mt $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIBSOCKET)
 
-SUBDIRS = data cdinfo audio device option rip libwm tools cdcopy dvd k3bsetup
+SUBDIRS = data cdinfo audio device option rip libwm tools cdcopy dvd pics icons 
 
-EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop lo32-app-k3b.png lo16-app-k3b.png k3bdirview.cpp k3bdirview.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h k3bjob.cpp k3bjob.h k3bprojectburndialog.cpp k3bprojectburndialog.h kcutlabel.cpp kcutlabel.h hi16-app-k3b.png hi32-app-k3b.png hi48-app-k3b.png kdiskfreesp.h k3bfileview.cpp k3bfileview.h cddb.h cddb.cpp k3bcddb.cpp k3bcddb.h k3bblankingdialog.cpp k3bblankingdialog.h k3bblankingjob.cpp k3bblankingjob.h k3bsplash.h k3bsplash.cpp k3b-splash-naive.png hi16-tools-cdinfo.png hi22-tools-cdinfo.png hi16-tools-cdrwblank.png hi22-tools-cdrwblank.png k3bwriterselectionwidget.cpp k3bwriterselectionwidget.h k3bprojecttabwidget.cpp k3bprojecttabwidget.h k3bprojecttabbar.cpp k3bprojecttabbar.h k3baudioplayer.cpp k3baudioplayer.h k3bcddbmultientriesdialog.cpp k3bcddbmultientriesdialog.h kstringlistdialog.cpp kstringlistdialog.h klistviewlineedit.h k3bfiletreeview.cpp k3bfiletreeview.h k3bcdcontentsview.h k3b_cd_copy.png k3btempdirselectionwidget.cpp k3btempdirselectionwidget.h hi22-tools-cdcopy.png hi32-tools-cdcopy.png kdndfileview.cpp kdndfileview.h k3bdiroperator.cpp k3bdiroperator.h
+EXTRA_DIST = main.cpp k3b.cpp k3b.h k3bdoc.cpp k3bdoc.h k3bview.cpp k3bview.h k3bui.rc k3b.desktop k3bdirview.cpp k3bdirview.h k3bfillstatusdisplay.cpp k3bfillstatusdisplay.h k3bburnprogressdialog.cpp k3bburnprogressdialog.h k3bjob.cpp k3bjob.h k3bprojectburndialog.cpp k3bprojectburndialog.h kcutlabel.cpp kcutlabel.h kdiskfreesp.h k3bfileview.cpp k3bfileview.h k3bcddb.cpp k3bcddb.h k3bblankingdialog.cpp k3bblankingdialog.h k3bblankingjob.cpp k3bblankingjob.h k3bsplash.h k3bsplash.cpp k3bwriterselectionwidget.cpp k3bwriterselectionwidget.h k3bprojecttabwidget.cpp k3bprojecttabwidget.h k3bprojecttabbar.cpp k3bprojecttabbar.h k3baudioplayer.cpp k3baudioplayer.h k3bcddbmultientriesdialog.cpp k3bcddbmultientriesdialog.h kstringlistdialog.cpp kstringlistdialog.h klistviewlineedit.h k3bfiletreeview.cpp k3bfiletreeview.h k3bcdcontentsview.h k3btempdirselectionwidget.cpp k3btempdirselectionwidget.h kdndfileview.cpp kdndfileview.h k3bdiroperator.cpp k3bdiroperator.h k3bbusywidget.cpp k3bbusywidget.h 
 
 install-data-local:
-	$(mkinstalldirs) $(kde_appsdir)/Applications/
-	$(INSTALL_DATA) $(srcdir)/k3b.desktop $(kde_appsdir)/Applications/k3b.desktop
-	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
-	$(INSTALL_DATA) $(srcdir)/lo32-app-k3b.png $(kde_icondir)/locolor/32x32/apps/k3b.png
-	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
-	$(INSTALL_DATA) $(srcdir)/lo16-app-k3b.png $(kde_icondir)/locolor/16x16/apps/k3b.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
-	$(INSTALL_DATA) $(srcdir)/hi16-app-k3b.png $(kde_icondir)/hicolor/16x16/apps/k3b.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
-	$(INSTALL_DATA) $(srcdir)/hi32-app-k3b.png $(kde_icondir)/hicolor/32x32/apps/k3b.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/48x48/apps/
-	$(INSTALL_DATA) $(srcdir)/hi48-app-k3b.png $(kde_icondir)/hicolor/48x48/apps/k3b.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/pics/
-	$(INSTALL_DATA) $(srcdir)/k3b-splash-naive.png $(kde_datadir)/k3b/pics/k3bsplash.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/16x16/actions/
-	$(INSTALL_DATA) $(srcdir)/hi16-tools-cdinfo.png $(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/22x22/actions/
-	$(INSTALL_DATA) $(srcdir)/hi22-tools-cdinfo.png $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/16x16/actions/
-	$(INSTALL_DATA) $(srcdir)/hi16-tools-cdrwblank.png $(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdrwblank.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/22x22/actions/
-	$(INSTALL_DATA) $(srcdir)/hi22-tools-cdrwblank.png $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdrwblank.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/pics/
-	$(INSTALL_DATA) $(srcdir)/k3b_cd_copy.png $(kde_datadir)/k3b/pics/k3b_cd_copy.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/22x22/actions/
-	$(INSTALL_DATA) $(srcdir)/hi22-tools-cdcopy.png $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdcopy.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/icons/hicolor/32x32/actions/
-	$(INSTALL_DATA) $(srcdir)/hi32-tools-cdcopy.png $(kde_datadir)/k3b/icons/hicolor/32x32/actions/cdcopy.png
+	$(mkinstalldirs) $$(kde_appsdir)/Applications/
+	$(INSTALL_DATA) $(srcdir)/k3b.desktop $$(kde_appsdir)/Applications/k3b.desktop
 
 uninstall-local:
-	-rm -f $(kde_appsdir)/Applications/k3b.desktop
-	-rm -f $(kde_icondir)/locolor/32x32/apps/k3b.png
-	-rm -f $(kde_icondir)/locolor/16x16/apps/k3b.png
-	-rm -f $(kde_icondir)/hicolor/16x16/apps/k3b.png
-	-rm -f $(kde_icondir)/hicolor/32x32/apps/k3b.png
-	-rm -f $(kde_icondir)/hicolor/48x48/apps/k3b.png
-	-rm -f $(kde_datadir)/k3b/pics/k3bsplash.png
-	-rm -f $(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdinfo.png
-	-rm -f $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdinfo.png
-	-rm -f $(kde_datadir)/k3b/icons/hicolor/16x16/actions/cdrwblank.png
-	-rm -f $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdrwblank.png
-	-rm -f $(kde_datadir)/k3b/pics/k3b_cd_copy.png
-	-rm -f $(kde_datadir)/k3b/icons/hicolor/22x22/actions/cdcopy.png
-	-rm -f $(kde_datadir)/k3b/icons/hicolor/32x32/actions/cdcopy.png
+	-rm -f $$(kde_appsdir)/Applications/k3b.desktop
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:

@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "k3btempdirselectionwidget.h"
-#include "k3b.h"
 
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -26,6 +25,7 @@
 #include <qtimer.h>
 #include <qhbox.h>
 
+#include <kapp.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdialog.h>
@@ -71,8 +71,8 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   m_mode = DIR;
 
-  k3bMain()->config()->setGroup( "General Options" );
-  QString tempdir = k3bMain()->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+  kapp->config()->setGroup( "General Options" );
+  QString tempdir = kapp->config()->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
   m_editDirectory->setText( tempdir );
   slotUpdateFreeTempSpace();
 
@@ -126,9 +126,9 @@ void K3bTempDirSelectionWidget::slotTempDirButtonPressed()
 {
   QString path;
   if( m_mode == DIR )
-    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), k3bMain(), i18n("Select temp directory") );
+    path = KFileDialog::getExistingDirectory( m_editDirectory->text(), this, i18n("Select temp directory") );
   else
-    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, k3bMain(), i18n("Select temp file") );
+    path = KFileDialog::getSaveFileName( m_editDirectory->text(), QString::null, this, i18n("Select temp file") );
 
   if( !path.isEmpty() ) {
     setTempPath( path );

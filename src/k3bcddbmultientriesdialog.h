@@ -20,32 +20,29 @@
 
 #include <kdialogbase.h>
 
-class K3bCddb;
+#include "k3bcddb.h"
+
+
 class QStringList;
 class KListBox;
 
 /**
   *@author Sebastian Trueg
   */
-
 class K3bCddbMultiEntriesDialog : public KDialogBase  
 {
   Q_OBJECT
 
-public:
-  K3bCddbMultiEntriesDialog( QStringList &entries, const char name=0);
+ public:
   ~K3bCddbMultiEntriesDialog();
   
- protected slots:
-  void slotOk();
+  static int selectCddbEntry( const K3bCddbQuery& query, QWidget* parent = 0 );
 
- signals:
-  void chosenId( unsigned int );
+ protected:
+  K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
 
  private:
-  QStringList *m_cddbEntries;
   KListBox *m_listBox;
-  void setup( QStringList& );
 };
 
 #endif

@@ -20,10 +20,13 @@
 
 
 #include <qobject.h>
+#include <qstringlist.h>
 
 #include "../k3bjob.h"
 #include "../tools/k3bwavefilewriter.h"
 #include "k3bcdview.h"
+#include "../k3bcddb.h"
+#include "../cdinfo/k3bdiskinfo.h"
 
 
 typedef Q_INT16 size16;
@@ -40,6 +43,8 @@ class QFile;
 class QDataStream;
 class QTimer;
 class KProgress;
+class K3bDevice;
+
 
 /**
   *@author Sebastian Trueg
@@ -49,17 +54,22 @@ class K3bCddaCopy : public K3bJob
   Q_OBJECT
 
  public:
-  K3bCddaCopy(int arraySize);
+  K3bCddaCopy( QObject* parent = 0 );
   ~K3bCddaCopy();
   //void start();
-  void setDrive(QString device);
-  void setCopyTracks( QArray<int> tracks );
-  void setCopyFiles( QStringList list );
+/*   void setDrive(QString device); */
+/*   void setCopyTracks( QArray<int> tracks ); */
+/*   void setCopyFiles( QStringList list ); */
   //void setCopyDirs( QStringList list );
-  void setCopyCount( int );
-  void setFinish(bool stop);
-  void setBytes( long);
+/*   void setCopyCount( int ); */
+/*   void setFinish(bool stop); */
+/*   void setBytes( long); */
   //bool isFinished() { return m_finished; };
+
+  void setDevice( K3bDevice* dev ) { m_device = dev; }
+  void setCddbEntry( const K3bCddbEntry& e ) { m_cddbEntry = e; }
+  void setCopyTracks( const QValueList<int>& t ) { m_tracksToCopy = t; }
+
 
  public slots:
   void start();
@@ -69,9 +79,11 @@ class K3bCddaCopy : public K3bJob
   void slotReadData();
 
  private:
+ K3bCddbEntry m_cddbEntry;
+ K3bDevice* m_device;
+
   QStringList m_list;
   //QStringList m_directories;
-  QString m_device;
 
   K3bWaveFileWriter m_waveFileWriter;
   QString m_currentWrittenFile;
@@ -85,7 +97,7 @@ class K3bCddaCopy : public K3bJob
   long m_currentSector;
   long m_lastSector;
   bool m_interrupt;
-  QArray<int> m_track;
+  QValueList<int> m_tracksToCopy;
   struct cdrom_drive *m_drive;
   K3bCdda *m_cdda;
   long m_bytes;
@@ -95,7 +107,6 @@ class K3bCddaCopy : public K3bJob
   QTimer *t;
   cdrom_paranoia *m_paranoia;
   bool paranoiaRead(struct cdrom_drive *drive, int track, QString dest);
-  void writeWavHeader(QDataStream *s, long byteCount);
   void readDataFinished();
   bool startRip(int i);
   void finishedRip();

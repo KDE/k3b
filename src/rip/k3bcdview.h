@@ -23,9 +23,11 @@
 #define DEFAULT_TITLE      "title"
 
 #include "../k3bcdcontentsview.h"
+#include "../cdinfo/k3bdiskinfo.h"
+#include "../k3bcddb.h"
 
-#include <qmemarray.h>
-#include <qstringlist.h>
+/* #include <qmemarray.h> */
+/* #include <qstringlist.h> */
 
 //extern "C" {
 //#include <cdda_interface.h>
@@ -35,16 +37,20 @@ class QString;
 //struct cdrom_drive;
 
 
-struct cdrom_drive;
 class K3bCddb;
 class K3bCdda;
 class K3bCddaCopy;
 class K3bPatternParser;
 class KListView;
 class QListViewItem;
-class QPoint;
+//class QPoint;
 class KActionCollection;
 class K3bDevice;
+class K3bDiskInfo;
+class K3bCddbQuery;
+class QLabel;
+class KAction;
+class KPopupMenu;
 
 
 /**
@@ -58,61 +64,62 @@ class K3bCdView : public K3bCdContentsView
   K3bCdView(QWidget *, const char *);
   ~K3bCdView();
 
-  void showCdContent();
-  void setFilePatternList(QStringList p){ m_filePatternList = p; };
-  void setDirPatternList(QStringList p){ m_dirPatternList = p; };
+/*   void showCdContent(); */
+/*   void setFilePatternList(QStringList p){ m_filePatternList = p; }; */
+/*   void setDirPatternList(QStringList p){ m_dirPatternList = p; }; */
 
  public slots:
    /** */
-  void showCdView( K3bDevice* dev );
+  void showCdView( const K3bDiskInfo& );
   void reload();
 
  signals:
   void notSupportedDisc( const QString& );
 
+ private slots:
+  void slotCddbQueryFinished( K3bCddb* );
+  void slotPrepareRipping();
+  void slotSelectAll();
+  void slotDeselectAll();
+  void slotContextMenu( KListView* l, QListViewItem* i, const QPoint& p );
+  void slotSelectionChanged();
+
  private:
-  struct cdrom_drive *m_drive;
+  void setupGUI();
+  void setupActions();
+
   K3bCddb *m_cddb;
   K3bCdda *m_cdda;
+
   KListView *m_listView;
-  QListViewItem *m_testItemPattern;
-  K3bDevice* m_device;
-  QString m_album;
-  QStringList m_titles;
-  QMemArray<long> m_size;
+  //  QListViewItem *m_testItemPattern;
+
+  K3bCddbQuery m_lastQuery;
+  int m_lastSelectedCddbEntry;
+  K3bDiskInfo m_lastDiskInfo;
+
+  QLabel* m_labelCdArtist;
+  QLabel* m_labelCdTitle;
+  QLabel* m_labelCdExtInfo;
+
+  KPopupMenu* m_popupMenu;
+  KAction* m_copyAction;
+  KAction* m_selectAllAction;
+  KAction* m_deselectAllAction;
+
+  //  K3bDevice* m_device;
+/*   QString m_album; */
+/*   QStringList m_titles; */
+/*   QMemArray<long> m_size; */
   K3bPatternParser *m_parser;
-  bool m_initialized;
+  //  bool m_initialized;
   //bool m_useFilePattern;
   //bool m_useDirectoryPattern;
-  bool m_usePattern;
-  QStringList m_filePatternList;
-  QStringList m_dirPatternList;
+/*   bool m_usePattern; */
+/*   QStringList m_filePatternList; */
+/*   QStringList m_dirPatternList; */
 
   KActionCollection* m_actionCollection;
-
-  void addItem( int, const QString&, const QString&, const QString&, long, const QString& );
-  //QString prepareFilename(QString);
-  void setupGUI();
-  void applyOptions();
-  void checkTitlesOnCd( );
-  //void askForView();
-  int checkCDType( const QStringList& titles);
-  void readSettings();
-  //QString prepareDirectory( QListViewItem *item );
-  //QString getRealDirectory(int, QListViewItem* );
-
- private slots:
-  // reads title from cddb after cddb is ready, user select of mulit entries
-  void slotCheckView();
-  /** No descriptions */
-  // Toolbar Button actions
-  void prepareRipping();
-  void changeSelectionMode();
-  void play();
-  void stop();
-  // PopupMenu actions
-  void slotMenuActivated(QListViewItem*, const QPoint &, int);
-  void slotMenuItemActivated(int itemId);
 
 };
 

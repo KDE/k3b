@@ -20,14 +20,7 @@
 
 #include <kdialogbase.h>
 
-class QCheckBox;
-class QString;
-class QLabel;
-class QListViewItem;
-
-class KLineEdit;
 class K3bPatternWidget;
-class K3bRipperWidget;
 
 
 /**
@@ -38,13 +31,12 @@ class K3bFilenamePatternDialog : public KDialogBase
   Q_OBJECT
 
  public: 
-  K3bFilenamePatternDialog(K3bRipperWidget *parent=0, const char *name=0);
+  K3bFilenamePatternDialog( QWidget *parent=0, const char *name=0);
   ~K3bFilenamePatternDialog();
 
   void init( const QString& album, const QString& artist, const QString& title, const QString& number);
 
  private:
-  K3bRipperWidget *m_parent;
   K3bPatternWidget *m_frame;	
   
  private slots:

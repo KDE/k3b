@@ -12,14 +12,11 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/lo32-app-k3bsetup.png $(kde_icondir)/locolor/32x32/apps/k3bsetup.png
 	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
 	$(INSTALL_DATA) $(srcdir)/lo16-app-k3bsetup.png $(kde_icondir)/locolor/16x16/apps/k3bsetup.png
-	$(mkinstalldirs) $(kde_datadir)/k3b/pics/
-	$(INSTALL_DATA) $(srcdir)/k3bsetup.png $(kde_datadir)/k3b/pics/k3bsetup.png
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/k3bsetup.desktop
 	-rm -f $(kde_icondir)/locolor/32x32/apps/k3bsetup.png
 	-rm -f $(kde_icondir)/locolor/16x16/apps/k3bsetup.png
-	-rm -f $(kde_datadir)/k3b/pics/k3bsetup.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:

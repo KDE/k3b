@@ -63,6 +63,8 @@ class K3bBurnProgressDialog : public KDialog  {
   void mapDebuggingOutput( const QString&, const QString& );
 
   void finished(bool);
+  void canceled();
+
   void slotCancelPressed();
   void slotNewSubTask(const QString& name);
   void slotNewTask(const QString& name);
@@ -109,6 +111,7 @@ class K3bBurnProgressDialog : public KDialog  {
   QMap<QString, QStringList> m_debugOutputMap;
 
   bool m_showBuffer;
+  bool m_bCanceled;
 };
 
 #endif

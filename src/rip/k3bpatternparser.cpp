@@ -31,104 +31,111 @@
 
 #define COLUMN_ARTIST         1
 
-K3bPatternParser::K3bPatternParser( QStringList *dirs, QStringList *files, K3bCddb *cddb ){
-    m_dirPattern = dirs;
-    m_filePattern = files;
-    //m_listView = view;
-    m_cddb = cddb;
-    m_artist = m_cddb->getArtist();
+K3bPatternParser::K3bPatternParser()
+{
+//   m_dirPattern = dirs;
+//   m_filePattern = files;
+  //m_listView = view;
+
+  KConfig* c = kapp->config();
+  c->setGroup("Ripping");
+  //m_useFilePattern = c->readBoolEntry("useFilePattern", false);
+  //  m_useConfigDirectoryPattern = c->readBoolEntry("usePattern", false);
+  m_filePattern = c->readListEntry("filePattern");
+  m_dirPattern = c->readEntry("dirBasePath");
+  m_dirPattern += c->readEntry("dirGroup1");
+  m_dirPattern += c->readEntry("dirGroup2");
+//   m_spaceDir = c->readBoolEntry("spaceReplaceDir", false);
+//   m_spaceFile = c->readBoolEntry("spaceReplaceFile", false);
+//   m_parseMixed = c->readBoolEntry("checkSlashFile", true);
+//   m_editFile = c->readEntry("spaceReplaceCharFile", "");
+//   m_editDir = c->readEntry("spaceReplaceCharDir", "");
 }
 
 K3bPatternParser::~K3bPatternParser(){
 
 }
 
-QString K3bPatternParser::prepareFilename( QString title, int no, bool parseMixed=false ){
-    QString fn[5] = { "","","","","" };
-    int trackIndex=-1;
-    int titleIndex=-1;
-    int index=0;
-    for( QStringList::Iterator it = m_filePattern->begin(); it != m_filePattern->end(); ++it ) {
-        //qDebug("(K3bPatternParser) Filepattern: " + (*it) );
-        if( (*it).find(i18n("Artist")) >= 0){
-            //fn[index] = m_cddb->getArtist(); //prepareReplaceFilename( m_cddb->getParsedArtist() );
-            QString tmpArtist;
-            prepareParsedName( title, m_cddb->getArtist(), tmpArtist , parseMixed);
-            fn[index] = tmpArtist;
-        } else if( (*it).find(i18n("Album")) >= 0 )
-            fn[index] = m_cddb->getAlbum();//prepareReplaceFilename( m_cddb->getAlbum() );
-        else if( (*it).find(i18n("Track No"))  >= 0 )
-            trackIndex = index;
-        else if( (*it).find(i18n("Title"))  >= 0 )
-            titleIndex = index;
-        else
-             fn[index] = (*it).latin1();
-        ++index;
-    }
-    if( titleIndex != -1){
-        QString newArtist;
-        fn[titleIndex] = KIO::decodeFileName( prepareParsedName( title, m_cddb->getArtist(), newArtist , parseMixed) );
-    }
-    if( trackIndex != -1 ){
-        if (no < 10)
-            fn[trackIndex] = "0" + QString::number(no);
-        else
-            fn[trackIndex] = QString::number(no);
-    }
-    //fn[titleIndex] = prepareReplaceFilename( fn[titleIndex] );
-    return fn[0] + fn[1] + fn[2] + fn[3] + fn[4] + ".wav"; //prepareFilename( (*it).latin1() );
+QString K3bPatternParser::prepareFilename( const K3bCddbEntry& entry, int no )
+{
+  KConfig* c = kapp->config();
+  c->setGroup("Ripping");
+  m_filePattern = c->readListEntry("filePattern");
+
+  QString fn[5] = { "","","","","" };
+  int trackIndex=-1;
+  int titleIndex=-1;
+  int index=0;
+  for( QStringList::Iterator it = m_filePattern.begin(); it != m_filePattern.end(); ++it ) {
+    
+    if( (*it).find(i18n("Artist")) >= 0)
+      fn[index] = entry.artists[no-1];
+    else if( (*it).find(i18n("Album")) >= 0 )
+      fn[index] = entry.cdTitle;
+    else if( (*it).find(i18n("Track No"))  >= 0 )
+      fn[index] = QString::number(no).rightJustify( 2, '0' );
+    else if( (*it).find(i18n("Title"))  >= 0 )
+      fn[index] = entry.titles[no-1];
+    else
+      fn[index] = (*it).latin1();
+    ++index;
+  }
+  
+  return fn[0] + fn[1] + fn[2] + fn[3] + fn[4];
 }
 
-/*
-QString K3bPatternParser::prepareParsedFilename( QString title, int no, QString& newTitle, QString& newArtist ){
-    parseTitle( title, m_artist, newTitle, newArtist );
-    newArtist = m_artist;
-    newTitle = m_title;
-    return prepareFilename( title, no, true );
-}
-*/
-QString K3bPatternParser::prepareDirectory( QListViewItem *item ){
-    QString result = 0;
-        if( !m_dirPattern->isEmpty() ){
-            result = (*m_dirPattern->at(0)).latin1();
-            if( m_cddb->useCddb() ){
-                for( int i=1; i<3; i++ ){
-                    QStringList::Iterator it = m_dirPattern->at( i );
-                    int index = (*it).toInt();
-                    QString tmp = getRealDirectory( index, item );
-                    if( !tmp.isEmpty() )
-                        result += '/' + tmp;
-                }
-            }
-        } else {
-            result = QDir::homeDirPath();
-        }
-    //qDebug("(K3bPatternParser) Destination directory: "+ result);
-    return result; //prepareReplaceDirectory( result );
-}
 
-QString K3bPatternParser::getRealDirectory( int i, QListViewItem *item ){
-    QString result;
-    switch( i ){
-        case 0:
-            result = item->text( COLUMN_ARTIST );
-            break;
-        case 1:
-            result = m_cddb->getAlbum();
-            break;
-        default:
-            result = "";
-            break;
+QString K3bPatternParser::prepareDirectory( const K3bCddbEntry& entry )
+{
+  QString result;
+  if( !m_dirPattern.isEmpty() ) {
+    result = (*m_dirPattern.at(0)).latin1();
+
+
+    // FIXME: we have to save the cddb flag somewhere
+    
+    if( !entry.cdTitle.isEmpty() ) {
+      for( int i=1; i<3; i++ ){
+	QStringList::Iterator it = m_dirPattern.at( i );
+	int index = (*it).toInt();
+	QString tmp = getRealDirectory( index, entry );
+	if( !tmp.isEmpty() )
+	  result += '/' + tmp;
+      }
     }
-    return result;
+  } else {
+    result = QDir::homeDirPath();
+  }
+  //qDebug("(K3bPatternParser) Destination directory: "+ result);
+  return result; //prepareReplaceDirectory( result );
 }
 
-QString K3bPatternParser::prepareReplaceDirectory( QString name ){
+QString K3bPatternParser::getRealDirectory( int i, const K3bCddbEntry& entry ){
+  QString result;
+  switch( i ){
+  case 0:
+    result = entry.cdArtist;//item->text( COLUMN_ARTIST );
+    break;
+  case 1:
+    result = entry.cdTitle;
+    break;
+  default:
+    result = "";
+    break;
+  }
+  return result;
+}
+
+QString K3bPatternParser::prepareReplaceDirectory( const QString& name ){
     QString result = "";
     KConfig* c = kapp->config();
     c->setGroup("Ripping");
     bool replace = c->readBoolEntry( "spaceReplaceDir", false );
-    if( m_cddb->useCddb() )
+
+
+    // FIXME: we have to save the cddb flag somewhere
+    
+    if( !m_cddb.cdTitle.isEmpty() )
         return replaceSpaces( name, replace, true );
     return name;
 }
@@ -137,12 +144,12 @@ QString K3bPatternParser::prepareReplaceName( QString title, QString newChar, bo
     return replaceSpaces( title, enabled, false, &newChar );
 }
 
-QString K3bPatternParser::prepareReplaceFilename( QString title ){
-    QString result = "";
-    KConfig* c = kapp->config();
-    c->setGroup("Ripping");
-    bool replace = c->readBoolEntry( "spaceReplaceFile", false );
-    return replaceSpaces( title, replace, false );
+QString K3bPatternParser::prepareReplaceFilename( const QString& title )
+{
+  KConfig* c = kapp->config();
+  c->setGroup("Ripping");
+  bool replace = c->readBoolEntry( "spaceReplaceFile", false );
+  return replaceSpaces( title, replace, false );
 }
 
 QString K3bPatternParser::replaceSpaces( QString title, bool replaceSpaces, bool isDirectory, QString *newChar ){
@@ -189,16 +196,3 @@ QString K3bPatternParser::prepareParsedName( const QString& title, const QString
     //qDebug("Artist:" + newArtist);
     return refTitle;
 }
-
-/*
-void K3bPatternParser::parseTitle( const QString& title, const QString& artist, QString& refTitle, QString& refArtist ){
-    int index = title.find("/");
-    if( index > 0 ){
-        refArtist = (title.left( index -1 )).stripWhiteSpace();
-        refTitle = (title.right( title.length() - index -1 )).stripWhiteSpace();
-    } else {
-        refArtist = artist;
-        refTitle = title;
-    }
-}
-*/

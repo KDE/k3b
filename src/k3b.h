@@ -48,7 +48,7 @@ class K3bJob;
 class K3bProjectTabWidget;
 class K3bSongManager;
 class K3bAudioPlayer;
-
+class K3bBusyWidget;
 
 
 /** Access to the "lonely" K3bMainWindow Object */
@@ -132,6 +132,9 @@ class K3bMainWindow : public KDockMainWindow
   void slotErrorMessage(const QString&);
   /** No descriptions */
   void slotWarningMessage(const QString&);
+
+  void showBusyInfo( const QString& str );
+  void endBusy();
 
  protected:
   /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
@@ -311,6 +314,8 @@ class K3bMainWindow : public KDockMainWindow
   // The K3b-specific widgets
   K3bDirView* m_dirView;
   K3bOptionDialog* m_optionDialog;
+
+  K3bBusyWidget* m_busyWidget;
 	
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;

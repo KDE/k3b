@@ -103,7 +103,7 @@ K3bProjectBurnDialog* K3bDataView::burnDialog()
 //     m_burnDialog = new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
 //   }
 		
-  return new K3bDataBurnDialog( m_doc, k3bMain(), "databurndialog", true );
+  return new K3bDataBurnDialog( m_doc, this, "databurndialog", true );
   //return m_burnDialog;
 }
 

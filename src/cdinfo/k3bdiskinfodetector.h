@@ -22,6 +22,11 @@ class K3bDiskInfoDetector : public QObject
 
  public slots:
   void detect( K3bDevice* dev );
+ 
+  /**
+   * no diskInfoReady signal will be emitted 
+   */
+  void cancel();
 
  signals:
   void diskInfoReady( const K3bDiskInfo& info );
@@ -37,6 +42,7 @@ class K3bDiskInfoDetector : public QObject
   void testForDvd();
   void fetchIsoInfo();
   void fetchIdeInformation();
+  void calculateDiscId();
 
  private:
   K3bDevice* m_device;
@@ -46,6 +52,8 @@ class K3bDiskInfoDetector : public QObject
 
   QString m_collectedStdout;
   QString m_collectedStderr;
+
+  bool m_bCanceled;
 };
 
 

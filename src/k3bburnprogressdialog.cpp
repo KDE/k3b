@@ -269,7 +269,8 @@ void K3bBurnProgressDialog::displayInfo( const QString& infoString, int type )
     currentInfoItem->setPixmap( 0, SmallIcon( "info" ) );
   }
 
-  m_viewInfo->ensureVisible( 0, currentInfoItem->itemPos() + currentInfoItem->height() );
+  // This should scroll down (hopefully!)
+  m_viewInfo->ensureItemVisible( currentInfoItem );
 }
 
 
@@ -288,7 +289,11 @@ void K3bBurnProgressDialog::finished( bool success )
     m_progressBuffer->setValue(0);
   }
   else {
-    m_groupProgress->setTitle( i18n("Error") );
+
+    if( m_bCanceled )
+      m_groupProgress->setTitle( i18n("Canceled") );
+    else
+      m_groupProgress->setTitle( i18n("Error") );
   }
 
   m_buttonCancel->hide();
@@ -298,8 +303,16 @@ void K3bBurnProgressDialog::finished( bool success )
 }
 
 
+void K3bBurnProgressDialog::canceled()
+{
+  m_bCanceled = true;
+}
+
+
 void K3bBurnProgressDialog::setJob( K3bJob* job )
 {
+  m_bCanceled = false;
+
   // clear everything
   m_buttonClose->hide();
   m_buttonShowDebug->hide();
@@ -335,6 +348,7 @@ void K3bBurnProgressDialog::setJob( K3bJob* job )
   connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
   connect( job, SIGNAL(started()), this, SLOT(started()) );
   connect( job, SIGNAL(finished(bool)), this, SLOT(finished(bool)) );
+  connect( job, SIGNAL(canceled()), this, SLOT(canceled()) );
 	
   connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	   this, SLOT(mapDebuggingOutput(const QString&, const QString&)) );

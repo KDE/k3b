@@ -51,7 +51,7 @@ void KCutLabel::cutTextToLabel()
       if( squeezedText != *it )
 	QToolTip::add( this, m_fullText );
     }
-    newText.truncate( newText.length() - 2 ); // get rid of the last newline
+    newText.truncate( newText.length() - 1 ); // get rid of the last newline
 
     QLabel::setText( newText );
   }

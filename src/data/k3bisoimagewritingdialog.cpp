@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "k3bisoimagewritingdialog.h"
-#include "../k3b.h"
 #include "../device/k3bdevicemanager.h"
 #include "../device/k3bdevice.h"
 #include "../k3bwriterselectionwidget.h"
@@ -24,6 +23,7 @@
 #include "k3bisoimagejob.h"
 #include "../kcutlabel.h"
 
+#include <kapp.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -65,8 +65,8 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 
   slotWriterChanged();
 
-  k3bMain()->config()->setGroup("General Options");
-  m_editImagePath->setText( k3bMain()->config()->readEntry( "last written image", "" ) );
+  kapp->config()->setGroup("General Options");
+  m_editImagePath->setText( kapp->config()->readEntry( "last written image", "" ) );
   updateImageSize( m_editImagePath->text() );
 }
 
@@ -239,8 +239,8 @@ void K3bIsoImageWritingDialog::slotUser1()
   }
 
   // save the path
-  k3bMain()->config()->setGroup("General Options");
-  k3bMain()->config()->writeEntry( "last written image", m_editImagePath->text() );
+  kapp->config()->setGroup("General Options");
+  kapp->config()->writeEntry( "last written image", m_editImagePath->text() );
 
 //   if( m_bIsoImage && m_checkRawWrite->isChecked() && !m_checkUseCueFile->isChecked() )
 //     if( KMessageBox::warningContinueCancel( this, i18n("Writing an Iso9660 image in raw mode will lead to an unusable disk. "
@@ -271,7 +271,7 @@ void K3bIsoImageWritingDialog::slotUser1()
   }
 
   // create a progresswidget
-  K3bBurnProgressDialog* d = new K3bBurnProgressDialog( k3bMain(), "burnProgress", false );
+  K3bBurnProgressDialog* d = new K3bBurnProgressDialog( this, "burnProgress", false );
 
   d->setJob( m_job );
   hide();

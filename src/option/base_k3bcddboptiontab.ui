@@ -1,0 +1,731 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>base_K3bCddbOptionTab</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bCddbOptionTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>879</width>
+            <height>691</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>K3b Cddb Options</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>m_mainTabbed</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>General</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupLocalDir</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Local</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkLocalCddb</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Use local cddb directory</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkSaveLocalEntries</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Save entries in local directory (entries are saved to the first directory in the list)</string>
+                                </property>
+                            </widget>
+                            <widget class="Line">
+                                <property name="name">
+                                    <cstring>Line1</cstring>
+                                </property>
+                                <property name="frameShape" stdset="0">
+                                    <enum>HLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget class="QFrame">
+                                <property name="name">
+                                    <cstring>m_boxLocalDirectory</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>NoFrame</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Raised</enum>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>0</number>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="spacing">
+                                        <number>6</number>
+                                    </property>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>TextLabel1</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Directory:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QListBox" row="1" column="0" rowspan="4" colspan="2">
+                                        <property name="name">
+                                            <cstring>m_listLocalDir</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>m_editLocalDir</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>~/.cddb/</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="1" column="2">
+                                        <property name="name">
+                                            <cstring>m_buttonRemoveLocalDir</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Remove</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>m_buttonAddLocalDir</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Add</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="2" column="2">
+                                        <property name="name">
+                                            <cstring>m_buttonLocalDirUp</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Up</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="3" column="2">
+                                        <property name="name">
+                                            <cstring>m_buttonLocalDirDown</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Down</string>
+                                        </property>
+                                    </widget>
+                                    <spacer row="4" column="2">
+                                        <property name="name" stdset="0">
+                                            <cstring>Spacer1</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </grid>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupCddbp</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Remote</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkRemoteCddb</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Enable remote cddb queries</string>
+                                </property>
+                            </widget>
+                            <widget class="Line">
+                                <property name="name">
+                                    <cstring>Line3</cstring>
+                                </property>
+                                <property name="frameShape" stdset="0">
+                                    <enum>HLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget class="QFrame">
+                                <property name="name">
+                                    <cstring>m_boxCddbpServer</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>NoFrame</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Raised</enum>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>0</number>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="spacing">
+                                        <number>6</number>
+                                    </property>
+                                    <widget class="QListBox" row="1" column="0" rowspan="4" colspan="4">
+                                        <property name="name">
+                                            <cstring>m_listCddbpServer</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="0" column="4">
+                                        <property name="name">
+                                            <cstring>m_buttonAddCddbpServer</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Add</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="1" column="4">
+                                        <property name="name">
+                                            <cstring>m_buttonRemoveCddbpServer</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Remove</string>
+                                        </property>
+                                    </widget>
+                                    <spacer row="4" column="4">
+                                        <property name="name" stdset="0">
+                                            <cstring>Spacer1_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QPushButton" row="2" column="4">
+                                        <property name="name">
+                                            <cstring>m_buttonCddbpServerUp</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Up</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>m_editCddbpServer</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>freedb.org</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>TextLabel2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Port:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>TextLabel1_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Server:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton" row="3" column="4">
+                                        <property name="name">
+                                            <cstring>m_buttonCddbpServerDown</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Down</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KIntNumInput" row="0" column="3">
+                                        <property name="name">
+                                            <cstring>m_editCddbpPort</cstring>
+                                        </property>
+                                        <property name="value">
+                                            <number>8880</number>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Advanced</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupAdvancedOptions</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Options</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkUseHttp</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Use http to access the cddb server</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupProxy</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Proxy settings</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkUseProxy</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Use proxy for http access</string>
+                                </property>
+                            </widget>
+                            <widget class="Line">
+                                <property name="name">
+                                    <cstring>Line3_2</cstring>
+                                </property>
+                                <property name="frameShape" stdset="0">
+                                    <enum>HLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>m_groupProxySettingsSource</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>NoFrame</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Plain</enum>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>0</number>
+                                </property>
+                                <property name="title">
+                                    <string></string>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="spacing">
+                                        <number>6</number>
+                                    </property>
+                                    <widget class="QRadioButton" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>m_radioUseKdeProxy</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Use KDE proxy settings</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <spacer row="0" column="1">
+                                        <property name="name" stdset="0">
+                                            <cstring>Spacer4</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QPushButton" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>PushButton9</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Change...</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
+                                        <property name="name">
+                                            <cstring>m_radioUseManualProxy</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Use manual proxy settings</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QFrame" row="2" column="0" rowspan="1" colspan="3">
+                                        <property name="name">
+                                            <cstring>m_boxProxyServer</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="frameShape">
+                                            <enum>NoFrame</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                            <enum>Raised</enum>
+                                        </property>
+                                        <property name="lineWidth">
+                                            <number>0</number>
+                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <property name="margin">
+                                                <number>0</number>
+                                            </property>
+                                            <property name="spacing">
+                                                <number>6</number>
+                                            </property>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>TextLabel1_3</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Server:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="KLineEdit">
+                                                <property name="name">
+                                                    <cstring>m_editProxyServer</cstring>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>TextLabel2_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Port:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="KIntNumInput">
+                                                <property name="name">
+                                                    <cstring>m_editProxyPort</cstring>
+                                                </property>
+                                                <property name="value">
+                                                    <number>8080</number>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                </grid>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupCgi</cstring>
+                        </property>
+                        <property name="title">
+                            <string>cgi</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_checkManualCgiPath</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Manual cgi-path</string>
+                                </property>
+                            </widget>
+                            <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>Line4</cstring>
+                                </property>
+                                <property name="frameShape" stdset="0">
+                                    <enum>HLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>m_editManualCgiPath</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>~/cddb/cddb.cgi</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel3</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Path:</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name" stdset="0">
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>m_checkManualCgiPath</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editManualCgiPath</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioUseKdeProxy</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>PushButton9</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkUseProxy</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_groupProxySettingsSource</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkLocalCddb</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_boxLocalDirectory</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkRemoteCddb</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_boxCddbpServer</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkManualCgiPath</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TextLabel3</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkLocalCddb</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkSaveLocalEntries</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioUseManualProxy</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_boxProxyServer</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>m_mainTabbed</tabstop>
+    <tabstop>m_checkLocalCddb</tabstop>
+    <tabstop>m_checkSaveLocalEntries</tabstop>
+    <tabstop>m_editLocalDir</tabstop>
+    <tabstop>m_buttonAddLocalDir</tabstop>
+    <tabstop>m_buttonRemoveLocalDir</tabstop>
+    <tabstop>m_buttonLocalDirUp</tabstop>
+    <tabstop>m_buttonLocalDirDown</tabstop>
+    <tabstop>m_listLocalDir</tabstop>
+    <tabstop>m_checkRemoteCddb</tabstop>
+    <tabstop>m_editCddbpServer</tabstop>
+    <tabstop>m_buttonAddCddbpServer</tabstop>
+    <tabstop>m_buttonRemoveCddbpServer</tabstop>
+    <tabstop>m_buttonCddbpServerUp</tabstop>
+    <tabstop>m_buttonCddbpServerDown</tabstop>
+    <tabstop>m_listCddbpServer</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

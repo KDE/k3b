@@ -46,6 +46,7 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
+#include <ksystemtray.h>
 
 #include <stdlib.h>
 
@@ -73,6 +74,7 @@
 #include "cdcopy/k3bcdcopydialog.h"
 #include "dvd/k3bdvdview.h"
 #include "k3btempdirselectionwidget.h"
+#include "k3bbusywidget.h"
 
 K3bMainWindow* k3bMain()
 {
@@ -95,6 +97,13 @@ K3bMainWindow::K3bMainWindow()
   untitledCount = 0;
   pDocList = new QPtrList<K3bDoc>();
   pDocList->setAutoDelete(true);
+
+
+  // the system tray widget
+  KSystemTray* m_systemTray = new KSystemTray( this );
+  m_systemTray->setPixmap( kapp->iconLoader()->loadIcon( "k3b", KIcon::Panel, 24 ) );
+  m_systemTray->show();
+
 
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
@@ -201,10 +210,27 @@ void K3bMainWindow::initActions()
 
 void K3bMainWindow::initStatusBar()
 {
-  ///////////////////////////////////////////////////////////////////
-  // STATUSBAR
-  // TODO: add your own items you need for displaying current application status.
-  //  statusBar()->insertItem(i18n("Ready."),1);
+  m_busyWidget = new K3bBusyWidget( statusBar() );
+
+  statusBar()->insertItem( "               ", 100, 1 ); // for showing some info
+  statusBar()->addWidget( m_busyWidget, 0, true );
+  statusBar()->insertFixedItem( QString("K3b %1").arg(VERSION), 0, true );
+
+  statusBar()->setItemAlignment( 100, Qt::AlignVCenter|AlignLeft );
+}
+
+
+void K3bMainWindow::showBusyInfo( const QString& str )
+{
+  statusBar()->changeItem( str, 100 );
+  m_busyWidget->showBusy( true );
+}
+
+
+void K3bMainWindow::endBusy()
+{
+  statusBar()->changeItem( "               ", 100 );
+  m_busyWidget->showBusy( false );
 }
 
 
@@ -220,38 +246,64 @@ void K3bMainWindow::initView()
 
   // --- Document Dock ----------------------------------------------------------------------------
   // create styled document box
-  QFrame* documentBox = new QFrame( mainDock );
-  documentBox->setFrameStyle( QFrame::Box | QFrame::Plain );
-  documentBox->setLineWidth( 5 );
-  QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
-  documentLayout->setAutoAdd( true );
-  documentLayout->setMargin( 5 );
+//   QFrame* documentBox = new QFrame( mainDock );
+//   documentBox->setFrameStyle( QFrame::Box | QFrame::Plain );
+//   documentBox->setLineWidth( 5 );
+//   QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
+//   documentLayout->setAutoAdd( true );
+//   documentLayout->setMargin( 5 );
 
-  QLabel* projectHeader = new QLabel( documentBox );
-  projectHeader->setText( i18n("Current Projects") );
-  //  projectHeader->setAlignment( AlignHCenter | AlignVCenter );
-  projectHeader->setFont( KGlobalSettings::windowTitleFont() );
-  projectHeader->setMargin( 2 );
+//   QLabel* projectHeader = new QLabel( documentBox );
+//   projectHeader->setText( i18n("Current Projects") );
+//   //  projectHeader->setAlignment( AlignHCenter | AlignVCenter );
+//   projectHeader->setFont( KGlobalSettings::windowTitleFont() );
+//   projectHeader->setMargin( 2 );
 
-  QPalette oldPal( documentBox->palette() );
-  QPalette p( documentBox->palette() );
-  p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTitleColor() );
-  documentBox->setPalette( p );
-  p.setColor( QColorGroup::Background, KGlobalSettings::activeTitleColor() );
-  p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTextColor() );
-  projectHeader->setPalette( p );
+//   QPalette oldPal( documentBox->palette() );
+//   QPalette p( documentBox->palette() );
+//   p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTitleColor() );
+//   documentBox->setPalette( p );
+//   p.setColor( QColorGroup::Background, KGlobalSettings::activeTitleColor() );
+//   p.setColor( QColorGroup::Foreground, KGlobalSettings::activeTextColor() );
+//   projectHeader->setPalette( p );
 
-  QFrame* documentHull = new QFrame( documentBox );
-  documentHull->setFrameStyle( QFrame::Box | QFrame::Plain );
-  documentHull->setLineWidth( 5 );
-  QHBoxLayout* hullLayout = new QHBoxLayout( documentHull );
-  hullLayout->setAutoAdd( true );
-  hullLayout->setMargin( 10 );
+//   QFrame* documentHull = new QFrame( documentBox );
+//   documentHull->setFrameStyle( QFrame::Box | QFrame::Plain );
+//   documentHull->setLineWidth( 5 );
+//   QHBoxLayout* hullLayout = new QHBoxLayout( documentHull );
+//   hullLayout->setAutoAdd( true );
+//   hullLayout->setMargin( 10 );
+
+  QWidget* documentHull = new QWidget( mainDock );
+  QGridLayout* documentHullLayout = new QGridLayout( documentHull );
+  documentHullLayout->setMargin( 0 );
+  documentHullLayout->setSpacing( 0 );
+
+  QLabel* leftDocPicLabel = new QLabel( documentHull );
+  QLabel* centerDocLabel = new QLabel( documentHull );
+  QLabel* rightDocPicLabel = new QLabel( documentHull );
+
+  leftDocPicLabel->setPixmap( DesktopIcon( "k3b" ) );
+  rightDocPicLabel->setPixmap( DesktopIcon( "k3b" ) );
+  centerDocLabel->setText( i18n("Current Projects") );
+  centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+  centerDocLabel->setPaletteBackgroundColor( QColor(197, 0, 49) );
+  centerDocLabel->setPaletteForegroundColor( Qt::white );
+  QFont f(centerDocLabel->font());
+  f.setBold(true);
+  centerDocLabel->setFont(f);
 
   // add the document tab to the styled document box
   m_documentTab = new K3bProjectTabWidget( documentHull );
-  m_documentTab->setPalette( oldPal );
-  mainDock->setWidget( documentBox );
+  //  m_documentTab->setPalette( oldPal );
+
+  documentHullLayout->addWidget( leftDocPicLabel, 0, 0 );
+  documentHullLayout->addWidget( centerDocLabel, 0, 1 );
+  documentHullLayout->addWidget( rightDocPicLabel, 0, 2 );
+  documentHullLayout->addMultiCellWidget( m_documentTab, 1, 1, 0, 2 );
+  documentHullLayout->setColStretch( 1, 1 );
+
+  mainDock->setWidget( documentHull );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 
   // fill the tabs action menu

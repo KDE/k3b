@@ -148,9 +148,10 @@ void K3bFileTreeView::followUrl( const KURL& url )
 
 void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QPoint& p )
 {
-  KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
-  if( m_deviceBranchesMap.contains( treeItem->branch() ) )
-    emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
+  KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
+  if( treeItem )
+    if( m_deviceBranchesMap.contains( treeItem->branch() ) )
+      emit contextMenu( m_deviceBranchesMap[treeItem->branch()], p );
 }
 
 

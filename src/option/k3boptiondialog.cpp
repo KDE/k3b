@@ -49,7 +49,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
-  m_cddbLocalTab->readSettings();
+  //  m_cddbLocalTab->readSettings();
   m_deviceOptionTab->readDevices();
   m_burningOptionTab->readSettings();
   m_rippingPatternOptionTab->readSettings();
@@ -83,7 +83,7 @@ bool K3bOptionDialog::saveSettings()
 {
   // save all the shit!
   m_cddbOptionTab->apply();
-  m_cddbLocalTab->apply();
+  //  m_cddbLocalTab->apply();
   m_deviceOptionTab->saveDevices();
   m_burningOptionTab->saveSettings();
   m_rippingPatternOptionTab->apply();
@@ -143,19 +143,19 @@ void K3bOptionDialog::setupProgramsPage()
 
 void K3bOptionDialog::setupCddbPage()
 {
-  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the cddb server"),
+  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the Cddb server"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "connect_established", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QGridLayout* mainGrid = new QGridLayout( frame );
   mainGrid->setSpacing(0);
   mainGrid->setMargin(0);
-  QTabWidget *_tab = new QTabWidget( frame );
+  //  QTabWidget *_tab = new QTabWidget( frame );
   m_cddbOptionTab = new K3bCddbOptionTab( frame, "cddbremotepage");
-  m_cddbLocalTab = new K3bCddbLocalDBTab( frame, "cddblocalpage");
-  _tab->addTab( m_cddbOptionTab, i18n("Remote") );
-  _tab->addTab( m_cddbLocalTab, i18n("Local") );
+  //  m_cddbLocalTab = new K3bCddbLocalDBTab( frame, "cddblocalpage");
+//   _tab->addTab( m_cddbOptionTab, i18n("Remote") );
+//   _tab->addTab( m_cddbLocalTab, i18n("Local") );
   //mainGrid->addWidget( m_cddbOptionTab, 0, 0 );
-  mainGrid->addWidget( _tab, 0, 0 );
+  mainGrid->addWidget( m_cddbOptionTab, 0, 0 );
 }
 
 

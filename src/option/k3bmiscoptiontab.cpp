@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "k3bmiscoptiontab.h"
-#include "../k3b.h"
 
 #include <qcheckbox.h>
 #include <qlayout.h>
@@ -25,6 +24,7 @@
 #include <qlabel.h>
 #include <qgroupbox.h>
 
+#include <kapp.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
@@ -68,7 +68,7 @@ K3bMiscOptionTab::~K3bMiscOptionTab()
 
 void K3bMiscOptionTab::readSettings()
 {
-  KConfig* c = k3bMain()->config();
+  KConfig* c = kapp->config();
   c->setGroup( "General Options" );
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
 
@@ -80,7 +80,7 @@ void K3bMiscOptionTab::readSettings()
 
 bool K3bMiscOptionTab::saveSettings()
 {
-  KConfig* c = k3bMain()->config();
+  KConfig* c = kapp->config();
   c->setGroup( "General Options" );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
 
@@ -124,7 +124,7 @@ bool K3bMiscOptionTab::saveSettings()
 
 void K3bMiscOptionTab::slotGetTempDir()
 {
-  QString dir = KFileDialog::getExistingDirectory( m_editTempDir->text(), k3bMain(), "Select Temp Directory" );
+  QString dir = KFileDialog::getExistingDirectory( m_editTempDir->text(), this, "Select Temp Directory" );
   if( !dir.isEmpty() ) {
     m_editTempDir->setText( dir );
   }

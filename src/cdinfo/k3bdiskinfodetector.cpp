@@ -34,6 +34,9 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
     return;
   }
 
+  cancel();
+
+  m_bCanceled = false;
 
   m_device = device;
 
@@ -54,8 +57,19 @@ void K3bDiskInfoDetector::detect( K3bDevice* device )
 }
 
 
+void K3bDiskInfoDetector::cancel()
+{
+  m_bCanceled = true;
+  if( m_process->isRunning() )
+    m_process->kill();
+}
+
+
 void K3bDiskInfoDetector::fetchDiskInfo()
 {
+  if( m_bCanceled )
+    return;
+
   m_process->clearArguments();
   m_process->disconnect();
 
@@ -134,10 +148,14 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
       }
 
       else if( str.startsWith("CD-R medium") ) {
-	// here we have to parse two lines
+	// here we have to parse two lines if not "n/a"
 	m_info.mediumManufactor = str.mid( str.find(":")+1 ).stripWhiteSpace();
-	++it;
-	m_info.mediumType = (*it).stripWhiteSpace();
+	if( m_info.mediumManufactor != "n/a" ) {
+	  ++it;
+	  m_info.mediumType = (*it).stripWhiteSpace();
+	}
+	else
+	  m_info.mediumManufactor = "";
       }
 
       else if( str.startsWith("CD-R empty") ) {
@@ -194,13 +212,17 @@ void K3bDiskInfoDetector::slotDiskInfoFinished()
 
 void K3bDiskInfoDetector::fetchTocInfo()
 {
+  if( m_bCanceled )
+    return;
+
   m_process->clearArguments();
   m_process->disconnect();
 
   if( !k3bMain()->externalBinManager()->foundBin( "cdrecord" ) ) {
     qDebug("(K3bAudioJob) could not find cdrecord executable.. not toc info will be available" );
     m_info.valid = false;
-    emit diskInfoReady( m_info );
+    if( !m_bCanceled )
+      emit diskInfoReady( m_info );
   }
   else {
     *m_process << k3bMain()->externalBinManager()->binPath( "cdrecord" );
@@ -221,7 +243,8 @@ void K3bDiskInfoDetector::fetchTocInfo()
     if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
       qDebug("(K3bDiskInfoDetector) could not start cdrecord. No toc info will be available");
       m_info.valid = false;
-      emit diskInfoReady( m_info );
+      if( !m_bCanceled )
+	emit diskInfoReady( m_info );
     }
   }
 }
@@ -233,12 +256,14 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
   if( m_collectedStdout.isEmpty() ) {
     qDebug("(K3bDiskInfoDetector) cdrecord -toc gave no result... :-(");
     m_info.valid = false;
-    emit diskInfoReady( m_info );
+    if( !m_bCanceled )
+      emit diskInfoReady( m_info );
   }
   else if( m_collectedStderr.contains( "No disk" ) ) {
     m_info.noDisk = true;
     m_info.valid = true;
-    emit diskInfoReady( m_info );
+    if( !m_bCanceled )
+      emit diskInfoReady( m_info );
   }
   else {
     // parse the track list    
@@ -344,6 +369,8 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
     if( audioTracks + dataTracks > 0 ) {
       m_info.empty = false;
       m_info.noDisk = false;
+
+      calculateDiscId();
     }
     else {
       m_info.empty = true;
@@ -362,13 +389,16 @@ void K3bDiskInfoDetector::slotTocInfoFinished()
 
 void K3bDiskInfoDetector::fetchIsoInfo()
 {
+  if( m_bCanceled )
+    return;
+
   QFile f( m_device->ioctlDevice() );
   f.open( IO_Raw | IO_ReadOnly );
 
   char buf[17*2048];
 
   if( f.readBlock( buf, 17*2048 ) == 17*2048 ) {
-    m_info.isoId = QString::fromLatin1( &buf[16*2048+1], 5 ).stripWhiteSpace();  // is it really 5 or 6?
+    m_info.isoId = QString::fromLatin1( &buf[16*2048+1], 5 ).stripWhiteSpace();
     m_info.isoSystemId = QString::fromLatin1( &buf[16*2048+8], 32 ).stripWhiteSpace();
     m_info.isoVolumeId = QString::fromLatin1( &buf[16*2048+40], 32 ).stripWhiteSpace();
     m_info.isoVolumeSetId = QString::fromLatin1( &buf[16*2048+190], 128 ).stripWhiteSpace();
@@ -383,6 +413,9 @@ void K3bDiskInfoDetector::fetchIsoInfo()
 
 void K3bDiskInfoDetector::testForDvd()
 {
+  if( m_bCanceled )
+    return;
+
   if( m_info.tocType == K3bDiskInfo::DATA && K3bTcWrapper::supportDvd() ) {
     // check if it is a dvd we can display
 
@@ -398,7 +431,8 @@ void K3bDiskInfoDetector::testForDvd()
   else {
     // we are finished
     m_info.valid = true;
-    emit diskInfoReady( m_info );
+    if( !m_bCanceled )
+      emit diskInfoReady( m_info );
   }
 }
 
@@ -412,7 +446,8 @@ void K3bDiskInfoDetector::slotIsDvd( bool dvd )
   }
 
   m_info.valid = true;
-  emit diskInfoReady( m_info );
+  if( !m_bCanceled )
+    emit diskInfoReady( m_info );
 }
 
 
@@ -429,11 +464,35 @@ void K3bDiskInfoDetector::slotCollectStderr( KProcess*, char* data, int len )
 
 void K3bDiskInfoDetector::fetchIdeInformation()
 {
+  if( m_bCanceled )
+    return;
+
   // TODO: use cdparanoia-lib to retrieve toc
 
   m_info.valid = false;
-  emit diskInfoReady( m_info );
+  if( !m_bCanceled )
+    emit diskInfoReady( m_info );
 }
 
+
+void K3bDiskInfoDetector::calculateDiscId()
+{
+  // calculate cddb-id
+  unsigned int id = 0;
+  for( K3bToc::iterator it = m_info.toc.begin(); it != m_info.toc.end(); ++it ) {
+    unsigned int n = (*it).firstSector() + 150;
+    n /= 75;
+    while( n > 0 ) {
+      id += n % 10;
+      n /= 10;
+    }
+  }
+  unsigned int l = m_info.toc.lastSector() - m_info.toc.firstSector();
+  l /= 75;
+  id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | m_info.toc.count();
+  m_info.toc.setDiscId( id );
+  
+  qDebug("(K3bDiskInfoDetector) calculated disk id: %08x", id );
+}
 
 #include "k3bdiskinfodetector.moc"

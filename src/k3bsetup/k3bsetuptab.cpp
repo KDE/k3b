@@ -12,6 +12,33 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <qpixmap.h>
+#include <qpainter.h>
+
+
+class K3bSetupTab::PrivatePicLabel : public QLabel
+{
+public:
+  PrivatePicLabel( const QString& text, QWidget* parent )
+    : QLabel( parent ), m_text( text ) {}
+
+protected:
+  void drawContents( QPainter* p )
+  {
+    QLabel::drawContents(p);
+
+    QRect rect = contentsRect();
+    rect.setLeft( rect.left() + 20 );
+    rect.setRight( rect.right() - 20 );
+    rect.setTop( rect.top() + 10 );
+    rect.setBottom( rect.top() + 40 );
+
+    p->drawText( rect, AlignTop|AlignHCenter|WordBreak, m_text );
+  }
+
+private:
+  QString m_text;
+};
+
 
 
 K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupWizard* parent, const char* name )
@@ -22,25 +49,13 @@ K3bSetupTab::K3bSetupTab( int index, int overall, const QString& info, K3bSetupW
   m_setup = parent->setup();
 
 
-  static QPixmap setupLogo( locate( "data", "k3b/pics/k3bsetup.png" ) );
+  static QPixmap setupLogo( locate( "data", "k3b/pics/k3bsetup_1.png" ) );
 
-  m_labelInfoText = new QLabel( info, this, "setuptabinfolabel" );
-  m_labelInfoText->setAlignment( AlignCenter | WordBreak );
-  m_labelInfoText->setIndent( 10 );
-  QFont font( m_labelInfoText->font() );
-  font.setBold( true );
-  m_labelInfoText->setFont( font );
-  m_labelInfoText->setPaletteBackgroundColor( QColor(131, 206, 255) );
-  m_labelInfoText->setPaletteForegroundColor( white );
-
-  m_labelSetupLogo = new QLabel( this, "setuplogolabel" );
+  m_labelSetupLogo = new PrivatePicLabel( info, this );
   m_labelSetupLogo->setPixmap( setupLogo );
-  m_labelSetupLogo->setScaledContents( false );
-  m_labelSetupLogo->setAlignment( AlignCenter );
 
   m_mainLayout = new QGridLayout( this );
   m_mainLayout->addWidget( m_labelSetupLogo, 0, 0 );
-  m_mainLayout->addWidget( m_labelInfoText, 1, 0 );
 
   m_mainLayout->setMargin( KDialog::marginHint() );
   m_mainLayout->setSpacing( 0 );
@@ -58,7 +73,7 @@ K3bSetupTab::~K3bSetupTab()
 void K3bSetupTab::setMainWidget( QWidget* mainWidget )
 {
   m_mainWidget = mainWidget;
-  m_mainLayout->addMultiCellWidget( mainWidget, 0, 1, 2, 2 );
+  m_mainLayout->addMultiCellWidget( mainWidget, 0, 0, 2, 2 );
 }
 
 void K3bSetupTab::readSettings()

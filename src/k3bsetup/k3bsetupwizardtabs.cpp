@@ -19,6 +19,7 @@
 #include <qwhatsthis.h>
 #include <qpixmap.h>
 #include <qptrlist.h>
+#include <qpixmap.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -823,6 +824,8 @@ void PermissionTab::slotPermissionsDetails()
 FinishTab::FinishTab( int i, int o, K3bSetupWizard* wizard )
   : K3bSetupTab( i, o, i18n("Save your settings"), wizard )
 {
+  ((QLabel*)m_labelSetupLogo)->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bsetup_2.png" )) );
+
   QWidget* main = new QWidget( this );
   QGridLayout* mainGrid = new QGridLayout( main );
   mainGrid->setSpacing( KDialog::spacingHint() );

@@ -78,6 +78,8 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 {
   m_diskInfoDetector = new K3bDiskInfoDetector( this );
   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
+	   k3bMain(), SLOT(endBusy()) );
+  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
 	   this, SLOT(slotDiskInfoReady(const K3bDiskInfo&)) );
 
   KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
@@ -90,6 +92,17 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_cdView       = new K3bCdView(m_viewStack, "cdview");
   m_filmView     = new K3bFilmView(m_viewStack, "filmview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
+
+  m_noViewView = new QWidget( m_viewStack );
+  QHBoxLayout* noViewLayout = new QHBoxLayout( m_noViewView );
+  noViewLayout->setAutoAdd( true );
+  m_noViewView->setPaletteBackgroundColor( QColor(139, 24, 57) );
+  QLabel* penguinLabel = new QLabel( m_noViewView );
+  penguinLabel->setPixmap( QPixmap("/home/trueg/k3b/artwork/penguin_separated.png") );
+  m_noViewLabel = new QLabel( i18n("K3b is trying to retrieve information about the inserted disk."), m_noViewView );
+  m_noViewLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter | Qt::WordBreak );
+  m_noViewLabel->setPaletteForegroundColor( Qt::white );
+
 
   m_viewStack->raiseWidget( m_fileView );
 
@@ -145,7 +158,6 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
 
 K3bDirView::~K3bDirView()
 {
-  qDebug("(K3bDirView) deleted........");
 }
 
 void K3bDirView::setupFinalize( K3bDeviceManager *dm )
@@ -156,22 +168,24 @@ void K3bDirView::setupFinalize( K3bDeviceManager *dm )
 
 void K3bDirView::slotDetectDiskInfo( K3bDevice* dev )
 {
-  KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WDestructiveClose );
-  infoDialog->setCaption( i18n("Please wait...") );
-  QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
-  infoLayout->setSpacing( KDialog::spacingHint() );
-  infoLayout->setMargin( KDialog::marginHint() );
-  infoLayout->setAutoAdd( true );
-  QLabel* picLabel = new QLabel( infoDialog );
-  picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
-  QLabel* infoLabel = new QLabel( i18n("K3b is trying to fetch information about the inserted disk."), infoDialog );
+//   KDialog* infoDialog = new KDialog( this, "waitForDiskInfoDialog", true, WDestructiveClose );
+//   infoDialog->setCaption( i18n("Please wait...") );
+//   QHBoxLayout* infoLayout = new QHBoxLayout( infoDialog );
+//   infoLayout->setSpacing( KDialog::spacingHint() );
+//   infoLayout->setMargin( KDialog::marginHint() );
+//   infoLayout->setAutoAdd( true );
+//   QLabel* picLabel = new QLabel( infoDialog );
+//   picLabel->setPixmap( DesktopIcon( "cdwriter_unmount" ) );
+//   QLabel* infoLabel = new QLabel( i18n("K3b is trying to fetch information about the inserted disk."), infoDialog );
 
+  m_viewStack->raiseWidget( m_noViewView );
+  k3bMain()->showBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
 
   m_diskInfoDetector->detect( dev );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
-	   infoDialog, SLOT(close()) );
+//   connect( m_diskInfoDetector, SIGNAL(diskInfoReady(const K3bDiskInfo&)),
+// 	   infoDialog, SLOT(close()) );
 
-  infoDialog->show();
+//   infoDialog->show();
 }
 
 
@@ -192,8 +206,22 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
     slotMountDevice( info.device );
   }
   else {
-    m_viewStack->raiseWidget( m_cdView );
-    m_cdView->showCdView( info.device );
+    // check for MIXED_MODE and ask
+    bool mount = false;
+    if( info.tocType == K3bDiskInfo::MIXED  ) {
+      mount = ( KMessageBox::questionYesNo( this, 
+					    i18n("Found Mixed-mode CD. Do you want K3b to mount the data part or show all the tracks?"),
+					    i18n("Mixed-mode CD"), 
+					    i18n("Mount cd"),
+					    i18n("Show tracks") ) == KMessageBox::Yes );
+    }
+
+    if( mount )
+      slotMountDevice( info.device );
+    else {
+      m_viewStack->raiseWidget( m_cdView );
+      m_cdView->showCdView( info );
+    }
   }
 }
 
@@ -242,6 +270,9 @@ void K3bDirView::slotUnmountDisk()
 
 void K3bDirView::slotEjectDisk()
 {
+  // cancel any previous disk info retrieval
+  m_diskInfoDetector->cancel();
+
   if( m_lastDevice ) {
     m_lastDevice->eject();
   }
@@ -263,6 +294,9 @@ void K3bDirView::slotDirActivated( const QString& url )
 
 void K3bDirView::slotDirActivated( const KURL& url )
 {
+  // cancel any previous disk info retrieval
+  m_diskInfoDetector->cancel();
+
   m_fileView->setUrl(url, true);
   m_urlCombo->setEditText( url.path() );
 
@@ -280,8 +314,7 @@ void K3bDirView::reload()
 
 void K3bDirView::home()
 {
-  m_viewStack->raiseWidget( m_fileView );
-  m_fileView->actionCollection()->action("home")->activate();
+  slotDirActivated( QDir::homeDirPath() );
 }
 
 

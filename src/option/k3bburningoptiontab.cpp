@@ -66,8 +66,8 @@ void K3bBurningOptionTab::setupGui()
   QLabel* labelDefaultPregap = new QLabel( i18n("Default pregap:"), m_groupAudio );
 
   groupAudioLayout->addWidget( labelDefaultPregap, 0, 0 );
-  groupAudioLayout->addWidget( m_editDefaultPregap, 1, 0 );
-  groupAudioLayout->addWidget( m_comboPregapFormat, 1, 1 );
+  groupAudioLayout->addWidget( m_editDefaultPregap, 0, 1 );
+  groupAudioLayout->addWidget( m_comboPregapFormat, 0, 2 );
 
   m_comboPregapFormat->insertItem( i18n( "Seconds" ) );
   m_comboPregapFormat->insertItem( i18n( "Frames" ) );
@@ -124,8 +124,8 @@ void K3bBurningOptionTab::setupGui()
 
   projectGrid->addWidget( m_groupAudio, 0, 0 );
   projectGrid->addWidget( m_groupData, 1, 0 );
-  projectGrid->addMultiCellWidget( groupCdSize, 0, 1, 1, 1 );
-  projectGrid->setRowStretch( 2, 1 );
+  projectGrid->addWidget( groupCdSize, 2, 0 );
+  projectGrid->setRowStretch( 3, 1 );
 
   // ///////////////////////////////////////////////////////////////////////
 

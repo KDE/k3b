@@ -22,87 +22,123 @@
 #include <qstringlist.h>
 #include <qobject.h>
 
-struct cdrom_drive;
-
-class CDDB;
-class K3bToc;
+#include "device/k3btoc.h"
 
 
+class QSocket;
+class KConfig;
 
-class K3bCddb : public QObject {
-    Q_OBJECT
-  public:
-    K3bCddb( );
-    K3bCddb( bool, QString, unsigned int );
-    ~K3bCddb(  );
-    /**
-	* Searches for a cd in a drive and open the drive.
-	*/
-    //struct cdrom_drive *pickDrive( QString newPath );
-    /**
-	* Reads the content and parses for cddb entries if enabled.
-	*/
-    void updateCD( struct cdrom_drive * );
-    /**
-	* Gets the disc id of the cd in the drive.
-	*/
-    unsigned int get_discid( struct cdrom_drive *drive );
-    /**
-    * Gets disc id, cd in the drive must be successful accessed one time.
-    */
-    unsigned int get_discid( ) { return m_discid; };
-    /**
-    *
-    */
-    void update( QString *device );
-	/**
-	* Closes the current connection to drive. Must be called if cd has changed.
-	*/
-    //void closeDrive(struct cdrom_drive *drive);
+namespace KIO {
+  class Job;
+}
 
-    void setServer(QString server) { m_cddbServer = server; };
-    void setPort(unsigned int port) { m_cddbPort = port; };
-    /**
-    * Generates instance of cddb and enables cddb use.
-    */
-    void setUseCddb(bool useCddb);
-    bool useCddb() { return m_useCddb; };
 
-    QStringList getTitles() { return m_titles; };
-    QString getAlbum() { return m_cd_album; };
-    QString getArtist() { return m_cd_artist; };
+class K3bCddbEntry
+{
+ public:
+  QStringList titles;
+  QStringList artists;
+  QStringList extInfos;
 
-    void setTitles( const QStringList& list) { m_titles = list; };
-    void setAlbum( const QString& album ) {m_cd_album = album; };
-    void setArtist( const QString& artist ) { m_cd_artist = artist; };
+  QString cdTitle;
+  QString cdArtist;
+  QString cdExtInfo;
+
+  QString category;
+  QString discid;
+};
+
+
+class K3bCddbQuery
+{
+ public:
+  K3bCddbQuery();
+  //  K3bCddbQuery( const K3bCddbQuery& );
+
+  void clear();
+  void addEntry( const K3bCddbEntry& = K3bCddbEntry() );
+  const K3bCddbEntry& entry( int number = 0 ) const;
+  int foundEntries() const;
+
+ private:
+  QValueList<K3bCddbEntry> m_entries;
+
+  K3bCddbEntry m_emptyEntry;
+};
+
+
+class K3bCddb : public QObject 
+{
+  Q_OBJECT
+
+ public:
+  K3bCddb( QObject* parent = 0, const char* name = 0 );
+  ~K3bCddb();
+
+  int error() const { return m_error; }
+  int queryType() const { return m_queryType; }
+  const K3bCddbQuery& queryResult() const { return m_query; }
+
+  enum Error { SUCCESS = 0, NO_ENTRY_FOUND, FAILURE, WORKING };
+  enum QueryType { CDDBP, HTTP, LOCAL };
+
+ public slots:  
+  /** query a cd and connect to the queryFinished signal */
+  void query( const K3bToc& );
+  void localQuery( const K3bToc& );
+/*   void httpQuery( const K3bToc& ); */
+  void readConfig( KConfig* c );
 
  signals:
-   void updatedCD();
+  void queryFinished( K3bCddb* );
+  void infoMessage( const QString& );
 
-  private:
-    bool m_useCddb;
-    CDDB *m_cddb;
-    QString m_cddbServer;
-    unsigned int m_cddbPort;
-    struct cdrom_drive *m_drive;
+ private slots:
+  void searchLocalDir();
+  void queryCdOnServer();
 
-    int m_trackIndex;
-    unsigned int m_discid;
-    int m_tracks;
-    QString m_cd_album;
-    QString m_cd_artist;
-    QStringList m_titles;
-    bool m_is_audio[100];
-    //bool m_based_on_cddb;
-    QString m_s_track;
+  void slotHostFound();
+  void slotConnected();
+  void slotConnectionClosed();
+  void slotReadyRead();
+  void slotError( int e );
 
-    QValueList<int>* getTrackList( );
-    void readQuery();
+  void statJobFinished( KIO::Job* );
 
-private slots:
-    void prepareQuery( unsigned int );
-    void queryTracks( );
+ private:
+  K3bCddbEntry parseEntry( QTextStream& );
+  bool readFirstEntry();
+  int  getCode( const QString& );
+  bool splitServerPort( const QString&, QString& server, int& port );
 
+  void cddbpQuit();
+
+  enum state { GREETING, HANDSHAKE, QUERY, QUERY_DATA, READ, READ_DATA, QUIT };
+
+  int m_state;
+  int m_error;
+  int m_queryType;
+
+  K3bCddbQuery m_query;
+  QValueList<K3bCddbEntry> m_matches;
+  K3bToc m_toc;
+  QSocket* m_socket;
+  K3bCddbEntry m_currentEntry;
+  QString m_parsingBuffer;
+
+  int m_iCurrentQueriedServer;
+  int m_iCurrentLocalDir;
+
+  QString m_localCddbFile;
+
+  // config
+  QStringList m_cddbpServer;
+  QStringList m_httpServer;
+  QString m_proxyServer;
+  bool m_bUseProxyServer;
+  QStringList m_localCddbDirs;
+  bool m_bSaveCddbEntriesLocally;
 };
+  
 
 #endif

@@ -42,6 +42,8 @@ class KActionCollection;
 class K3bDiskInfoDetector;
 class KActionMenu;
 class QScrollView;
+class QLabel;
+
 
 /**
   *@author Sebastian Trueg
@@ -77,6 +79,10 @@ class K3bDirView : public QVBox
   K3bFilmView* m_filmView;
   K3bFileView* m_fileView;
   K3bDiskInfoView* m_infoView;
+
+  // these are used to display a message while retrieving disk information
+  QWidget* m_noViewView;
+  QLabel* m_noViewLabel;
 
   KComboBox* m_urlCombo;
   QSplitter* m_mainSplitter;

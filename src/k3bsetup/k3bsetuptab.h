@@ -32,12 +32,15 @@ class K3bSetupTab : public QWidget
   virtual void aboutToShow();
 
  protected:
+  class PrivatePicLabel;
+  PrivatePicLabel* m_labelSetupLogo;
+
   void setMainWidget( QWidget* );
   K3bSetup* setup() { return m_setup; }
 
  private:
-  QLabel* m_labelSetupLogo;
-  QLabel* m_labelInfoText;
+/*   QLabel* m_labelSetupLogo; */
+/*   QLabel* m_labelInfoText; */
 
   QWidget* m_mainWidget;
 

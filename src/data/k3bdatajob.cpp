@@ -952,9 +952,6 @@ void K3bDataJob::cancelAll()
       QFile::remove( m_doc->isoImage() );
       m_doc->setIsoImage("");
     }
-    else {
-      emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->isoImage()), K3bJob::STATUS );
-    }
   }
 
   emit finished( false );
