@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -37,6 +37,7 @@ K3bMsInfoFetcher::K3bMsInfoFetcher( QObject* parent, const char* name )
 
 K3bMsInfoFetcher::~K3bMsInfoFetcher()
 {
+    delete m_process;
 }
 
 
