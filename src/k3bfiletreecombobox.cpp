@@ -92,7 +92,7 @@ K3bFileTreeComboBox::~K3bFileTreeComboBox()
 
 void K3bFileTreeComboBox::slotDeviceExecuted( K3bCdDevice::CdDevice* dev )
 {
-  setEditText( SmallIcon("cdrom_unmount"), dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
+  setEditText( SmallIcon("cdrom_unmount"), dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
   popdown();
   emit deviceExecuted( dev );
 }

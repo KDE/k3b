@@ -68,7 +68,7 @@ K3bDeviceSelectionDialog::~K3bDeviceSelectionDialog()
 
 void K3bDeviceSelectionDialog::addDevice( K3bCdDevice::CdDevice* dev )
 {
-  d->comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->ioctlDevice() + ")" );
+  d->comboDevices->insertItem( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
 }
 
 

@@ -73,7 +73,7 @@ K3bDvdRipperWidget::K3bDvdRipperWidget(const QString& device, QWidget *parent, c
   : K3bInteractionDialog( parent, name,
 			  i18n("Ripping DVD") )
 {
-  m_device = k3bcore->deviceManager()->deviceByName( device )->ioctlDevice();
+  m_device = k3bcore->deviceManager()->deviceByName( device )->blockDeviceName();
   m_bytes = 0;
   m_finalClose = false;
   m_openEncoding = false;
