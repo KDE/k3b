@@ -9,7 +9,9 @@ Properly save the device search path. Now hotplug devices should be detected pro
 BACKPORT: DVD+R Double Layer writing.
 Properly close a DVD when the user did not want multisession.
 Properly find dvd+rw-format version >= 4.10.
-	
+Improved the raw toc data hex/bcd check. This should fix problems with drives providing
+	totally bogus raw data.
+
 0.11.12
 Another qt 3.1 compile fix
 Mkisofs 2.02 obsoletes the use of -L, -H, and -P. Replaced them by the long versions.

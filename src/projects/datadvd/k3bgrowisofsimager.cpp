@@ -293,7 +293,7 @@ void K3bGrowisofsImager::slotReceivedStderr( const QString& line )
 	emit percent( p );
 	d->lastPercent = p;
       }
-      int ps = p*m_doc->size()/1024/1024/100;
+      int ps = p*m_doc->burningSize()/1024/1024/100;
       if( ps > d->lastProcessedSize ) {
 	emit processedSize( ps, m_doc->burningSize()/1024/1024 );
 	d->lastProcessedSize = ps;
