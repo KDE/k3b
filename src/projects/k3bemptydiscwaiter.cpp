@@ -53,8 +53,6 @@ public:
   }
 
   K3bCdDevice::CdDevice* device;
-  QPushButton* buttonCancel;
-  QPushButton* buttonForce;
 
   int wantedMediaType;
   int wantedMediaState;
@@ -77,8 +75,8 @@ public:
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, i18n("Waiting for disk"), KDialogBase::Cancel | KDialogBase::User1, 
-		 KDialogBase::Cancel, parent, name, true, true, i18n("Force") )
+  : KDialogBase( KDialogBase::Plain, i18n("Waiting for disk"), KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2, 
+		 KDialogBase::Cancel, parent, name, true, true, i18n("Force"), i18n("Eject") )
 {
   d = new Private();
   d->device = device;
@@ -550,6 +548,12 @@ void K3bEmptyDiscWaiter::slotUser1()
 {
   d->forced = true;
   finishWaiting( DISK_READY );
+}
+
+
+void K3bEmptyDiscWaiter::slotUser2()
+{
+  K3bCdDevice::eject( d->device );
 }
 
 

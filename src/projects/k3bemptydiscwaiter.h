@@ -84,6 +84,7 @@ class K3bEmptyDiscWaiter : public KDialogBase
  protected slots:
   void slotCancel();
   void slotUser1();
+  void slotUser2();
   void startDeviceHandler();
   void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
   void showDialog();
