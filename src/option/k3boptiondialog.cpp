@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -25,6 +25,8 @@
 #include "k3bmiscoptiontab.h"
 #include "k3bpluginoptiontab.h"
 #include <k3bsystemproblemdialog.h>
+#include "k3bdivxoptiontab.h"
+
 
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -57,6 +59,8 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
 
   setupPluginPage();
   setupMiscPage();
+  //not yet enabled for the next version
+  //setupDivxPage();
 
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
@@ -67,6 +71,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_miscOptionTab->readSettings();
   m_notifyOptionTab->readSettings();
   m_pluginOptionTab->readSettings();
+  m_divxOptionTab->readSettings();
 
   // if we don't do this the dialog start really huge
   // because of the label in the device-tab
@@ -108,6 +113,7 @@ bool K3bOptionDialog::saveSettings()
   //  m_patternOptionTab->apply();
   m_externalBinOptionTab->saveSettings();
   m_notifyOptionTab->saveSettings();
+  m_divxOptionTab->saveSettings();
 
   if( !m_miscOptionTab->saveSettings() )
     return false;
@@ -137,7 +143,7 @@ void K3bOptionDialog::setupBurningPage()
 {
   QFrame* frame = addPage( i18n("Writing"), i18n("Writing Settings"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
-		
+
   QGridLayout* _frameLayout = new QGridLayout( frame );
   _frameLayout->setSpacing( 0 );
   _frameLayout->setMargin( 0 );
@@ -237,7 +243,7 @@ void K3bOptionDialog::setupNotifyPage()
 void K3bOptionDialog::setupPluginPage()
 {
   QFrame* frame = addPage( i18n("Plugins"), i18n("K3b Plugin Configuration"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "gear", 
+			   KGlobal::instance()->iconLoader()->loadIcon( "gear",
 									KIcon::NoGroup, KIcon::SizeMedium ) );
   QVBoxLayout* box = new QVBoxLayout( frame );
   box->setSpacing( 0 );
@@ -245,6 +251,19 @@ void K3bOptionDialog::setupPluginPage()
 
   m_pluginOptionTab = new K3bPluginOptionTab( frame );
   box->addWidget( m_pluginOptionTab );
+}
+
+void K3bOptionDialog::setupDivxPage()
+{
+  QFrame* frame = addPage( i18n("MPEG4"), i18n("MPEG-4 Encoding Settings"),
+			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
+
+  QVBoxLayout* box = new QVBoxLayout( frame );
+  box->setSpacing( 0 );
+  box->setMargin( 0 );
+
+  m_divxOptionTab = new K3bDivxOptionTab( frame, "divxOptiontab" );
+  box->addWidget( m_divxOptionTab );
 }
 
 
