@@ -352,6 +352,7 @@ void K3bMainWindow::initActions()
   actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
   actionToolsBlankCdrw->setToolTip( i18n("Opens CD-blanking dialog") );
   actionCdCopy->setToolTip( i18n("Open the CD Copy dialog") );
+  actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD Copy dialog") );
   //  actionToolsVideoDvdCopy->setToolTip( i18n("Open the VideoDVD Copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
@@ -360,6 +361,9 @@ void K3bMainWindow::initActions()
   actionFileSaveAs->setToolTip(i18n("Saves the actual project as..."));
   actionFileClose->setToolTip(i18n("Closes the actual project"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
+
+  // make sure the tooltips are used for the menu
+  actionCollection()->setHighlightingEnabled( true );
 }
 
 

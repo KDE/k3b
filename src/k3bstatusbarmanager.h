@@ -41,6 +41,8 @@ class K3bStatusBarManager : public QObject
 
  private slots:
   void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
+  void showActionStatusText( const QString& text );
+  void clearActionStatusText();
 
  private:
   bool eventFilter( QObject* o, QEvent* e );

@@ -68,6 +68,10 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   m_mainWindow->statusBar()->addWidget( m_versionBox, 0, true );
 
   connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );
+  connect( m_mainWindow->actionCollection(), SIGNAL(actionStatusText(const QString&)),
+	   this, SLOT(showActionStatusText(const QString&)) );
+  connect( m_mainWindow->actionCollection(), SIGNAL(clearStatusText()),
+	   this, SLOT(clearActionStatusText()) );
 
   update();
 }
@@ -128,6 +132,18 @@ void K3bStatusBarManager::endBusy()
 {
   m_labelInfoMessage->setText( " " );
   m_busyWidget->showBusy( false );
+}
+
+
+void K3bStatusBarManager::showActionStatusText( const QString& text )
+{
+  m_mainWindow->statusBar()->message( text );
+}
+
+
+void K3bStatusBarManager::clearActionStatusText()
+{
+  m_mainWindow->statusBar()->clear();
 }
 
 
