@@ -123,7 +123,7 @@ QString K3bFileItem::absIsoPath()
 //}
 
 
-QString K3bFileItem::localPath()
+QString K3bFileItem::localPath() const
 {
   return url().path();
 }
@@ -134,9 +134,17 @@ K3bDirItem* K3bFileItem::getDirItem()
 }
 
 
+bool K3bFileItem::isSymLink() const
+{
+  // KFileItem::isLink seems to be broken
+  return QFileInfo( localPath() ).isSymLink();
+  //  return KFileItem::isLink();
+}
+
+
 bool K3bFileItem::isValid() const
 {
-  if( isLink() ) {
+  if( isSymLink() ) {
     QString dest = linkDest();
 
     if( dest[0] == '/' )

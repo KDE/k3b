@@ -81,6 +81,8 @@ K3bDataDoc::~K3bDataDoc()
 
 bool K3bDataDoc::newDocument()
 {
+  clearImportedSession();
+
   m_bootImages.clear();
   m_bootCataloge = 0;
   m_oldSessionSize = 0;
@@ -1287,19 +1289,23 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
     K3bDataItem* oldItem = parent->find( entry->name() );
     if( entry->isDirectory() ) {
       K3bDirItem* dir = 0;
-      if( oldItem ) {
+      if( oldItem && oldItem->isDir() ) {
 	dir = (K3bDirItem*)oldItem;
       }
       else {
+	// we overwrite without warning!
+	if( oldItem )
+	  removeItem( oldItem );
 	dir = new K3bDirItem( entry->name(), this, parent );
-	dir->setRemoveable(false);
-	dir->setRenameable(false);
-	dir->setMoveable(false);
-	dir->setHideable(false);
-	dir->setWriteToCd(false);
-	dir->setExtraInfo( i18n("From previous session") );
-	m_oldSession.append( dir );
       }
+
+      dir->setRemoveable(false);
+      dir->setRenameable(false);
+      dir->setMoveable(false);
+      dir->setHideable(false);
+      dir->setWriteToCd(false);
+      dir->setExtraInfo( i18n("From previous session") );
+      m_oldSession.append( dir );
 
       createSessionImportItems( (KArchiveDirectory*)entry, dir );
     }
@@ -1307,7 +1313,7 @@ void K3bDataDoc::createSessionImportItems( const KArchiveDirectory* importDir, K
       const K3bIso9660File* file = (const K3bIso9660File*)entry;
 
       // we overwrite without warning!
-      if( K3bDataItem* oldItem = parent->find( file->name() ) )
+      if( oldItem )
 	removeItem( oldItem );
 
       K3bSessionImportItem* item = new K3bSessionImportItem( file, this, parent );

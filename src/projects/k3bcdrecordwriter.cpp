@@ -565,6 +565,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains( "Permission denied. Cannot open" ) ) {
     m_cdrecordError = PERMISSION_DENIED;
   }
+  else if( line.contains( "Trying to use ultra high speed medium on improper writer" ) ) {
+    m_cdrecordError = HIGH_SPEED_MEDIUM;
+  }
   else if( line.startsWith( "Re-load disk and hit" ) ) {
     // this happens on some notebooks where cdrecord is not able to close the
     // tray itself, so we need to ask the user to do so
@@ -647,6 +650,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	    emit infoMessage( i18n("Please enable Burnfree or choose a lower burning speed."), ERROR );
 	  else
 	    emit infoMessage( i18n("Please choose a lower burning speed."), ERROR );
+	break;
+      case HIGH_SPEED_MEDIUM:
+	emit infoMessage( i18n("Found a high speed medium not suitable for the used burner."), ERROR );
 	break;
       case UNKNOWN:
 	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 

@@ -329,6 +329,16 @@ namespace K3bCdDevice
     bool readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const;
 
     /**
+     * @param type specifies what value means:
+     *             00b - value refers to a logical block adress
+     *             01b - value refers to a track number where 0 will treat the lead-in as if it 
+     *                   were a logical track and ffh will read the invisible or incomplete track.
+     *             10b - value refers to a session number
+     *             
+     */
+    bool readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const;
+
+    /**
      * if true is returned dataLen specifies the actual length of *data which needs to be
      * deleted after using.
      */

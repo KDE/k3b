@@ -16,6 +16,7 @@
 
 #include "k3bmd5job.h"
 #include <k3biso9660.h>
+#include <k3bglobals.h>
 
 #include <kmdcodec.h>
 #include <klocale.h>
@@ -99,15 +100,7 @@ void K3bMd5Job::start()
       return;
     }
 
-    // we use KIO since QFile does provide the size as unsigned int which is way too small for DVD images
-    KIO::UDSEntry uds;
-    KIO::NetAccess::stat( d->filename, uds );
-    for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
-      if( (*it).m_uds == KIO::UDS_SIZE ) {
-	d->imageSize = (*it).m_long;
-	break;
-      }
-    }
+    d->imageSize = K3b::filesize( d->filename );
   }
   else
     d->imageSize = 0;

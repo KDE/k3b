@@ -124,47 +124,48 @@ namespace K3bCdDevice
    * struct track_info taken from cdrwtool.h
    */
   typedef struct track_info {
-    Q_UINT16 info_length;
+    unsigned char data_length[2];
     unsigned char track_number_l;
     unsigned char session_number_l;
     unsigned char reserved1;
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
-    unsigned char reserved2               : 2;
+    unsigned char reserved2       : 2;
     unsigned char damage          : 1;
     unsigned char copy            : 1;
-    unsigned char track_mode              : 4;
-    unsigned char rt                      : 1;
+    unsigned char track_mode      : 4;
+    unsigned char rt              : 1;
     unsigned char blank           : 1;
     unsigned char packet          : 1;
-    unsigned char fp                      : 1;
-    unsigned char data_mode               : 4;
-    unsigned char reserved3               : 6;
+    unsigned char fp              : 1;
+    unsigned char data_mode       : 4;
+    unsigned char reserved3       : 6;
     unsigned char lra_v           : 1;
     unsigned char nwa_v           : 1;
 #else
-    unsigned char track_mode              : 4;
+    unsigned char track_mode      : 4;
     unsigned char copy            : 1;
     unsigned char damage          : 1;
-    unsigned char reserved2               : 2;
-    unsigned char data_mode               : 4;
-    unsigned char fp                      : 1;
+    unsigned char reserved2       : 2;
+    unsigned char data_mode       : 4;
+    unsigned char fp              : 1;
     unsigned char packet          : 1;
     unsigned char blank           : 1;
-    unsigned char rt                      : 1;
+    unsigned char rt              : 1;
     unsigned char nwa_v           : 1;
     unsigned char lra_v           : 1;
-    unsigned char reserved3               : 6;
+    unsigned char reserved3       : 6;
 #endif
-    Q_UINT32 track_start;
-    Q_UINT32 next_writable;
-    Q_UINT32 free_blocks;
-    Q_UINT32 packet_size;
-    Q_UINT32 track_size;
-    Q_UINT32 last_recorded;
+    unsigned char track_start[4];
+    unsigned char next_writable[4];
+    unsigned char free_blocks[4];
+    unsigned char packet_size[4];
+    unsigned char track_size[4];
+    unsigned char last_recorded[4];
     unsigned char track_number_m;
     unsigned char session_number_m;
     unsigned char reserved4;
     unsigned char reserved5;
+    unsigned char read_compatibility[4];
   } track_info_t;
 
 

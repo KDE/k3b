@@ -79,9 +79,9 @@ void K3bFileView::setupGUI()
 
 
   // setup actions
-  KAction* actionPlay = new KAction( i18n("Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
+  KAction* actionPlay = new KAction( i18n("Play"), "player_play", 0, this, SLOT(slotAudioFilePlay()), 
 				     m_dirOp->actionCollection(), "audio_file_play");
-  KAction* actionEnqueue = new KAction( i18n("En&queue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
+  KAction* actionEnqueue = new KAction( i18n("En&queue"), "player_play", 0, this, SLOT(slotAudioFileEnqueue()), 
 					m_dirOp->actionCollection(), "audio_file_enqueue");
   KAction* actionAddFilesToProject = new KAction( i18n("&Add to Project"), SHIFT+Key_Return, 
 						  this, SLOT(slotAddFilesToProject()), 

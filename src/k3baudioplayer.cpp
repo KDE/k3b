@@ -182,13 +182,13 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   m_buttonPlay = new QToolButton( this );
   m_buttonPause = new QToolButton( this );
   m_buttonStop = new QToolButton( this );
-  m_buttonPlay->setIconSet( SmallIconSet("1rightarrow") );
+  m_buttonPlay->setIconSet( SmallIconSet("player_play") );
   m_buttonPause->setIconSet( SmallIconSet("player_pause") );
   m_buttonStop->setIconSet( SmallIconSet("player_stop") );
   m_buttonForward = new QToolButton( this );
   m_buttonBack = new QToolButton( this );
-  m_buttonForward->setIconSet( SmallIconSet("player_end") );
-  m_buttonBack->setIconSet( SmallIconSet("player_start") );
+  m_buttonForward->setIconSet( SmallIconSet("player_fwd") );
+  m_buttonBack->setIconSet( SmallIconSet("player_rew") );
 
   m_seekSlider = new QSlider( QSlider::Horizontal, this );
 

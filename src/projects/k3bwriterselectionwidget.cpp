@@ -93,7 +93,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
   mainLayout->addWidget( groupWriter, 0, 0 );
 
 
-  connect( m_comboWriter, SIGNAL(activated(int)), this, SIGNAL(writerChanged()) );
+  connect( m_comboWriter, SIGNAL(selectionChanged(K3bDevice*)), this, SIGNAL(writerChanged()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
 
@@ -186,7 +186,7 @@ void K3bWriterSelectionWidget::init()
 					"Some DVD writers reportedly fail to determine optimal speed "
 					"for no-name media and pick one higher than the media can stand "
 					"which results in corrupted recordings. This option forces the "
-					"writer to switch to 1x speed to be on the save side. When using "
+					"writer to switch to 1x speed to be on the safe side. When using "
 					"no-name media it is recommended to use this option.</p>"
 					"<p>1x refers to 1385 KB/s.</p>"
 					"<p><b>Caution:</b> Be aware that the speed selection only makes "

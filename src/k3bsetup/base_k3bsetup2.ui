@@ -134,7 +134,7 @@ to mess up your system no guarantee can be given.</string>
                                         <string>Use burning group:</string>
                                     </property>
                                     <property name="whatsThis" stdset="0">
-                                        <string>&lt;p&gt;If this option is checked onyl the users in the specified group will be able to burn CDs and DVDs since only them will have access to the devices and the CD recording programs used by K3b.&lt;/p&gt;
+                                        <string>&lt;p&gt;If this option is checked only the users in the specified group will be able to burn CDs and DVDs since only those will have access to the devices and the CD recording programs used by K3b.&lt;/p&gt;
 &lt;p&gt;Otherwise all users on the system have access to the devices and to all K3b functionality.</string>
                                     </property>
                                 </widget>

@@ -180,10 +180,13 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	
   // draw the text marks
   crect = rect();
-  QString text = d->showTime 
-    ? K3b::Msf( cdSize*60*75 ).toString(false) + " " + i18n("min")
-    : KIO::convertSizeFromKB( cdSize * 1024 );
-  text = i18n("Available") + ": " + text;
+  QString text = i18n("Available: %1 of %2")
+    .arg( d->showTime 
+	  ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
+	  : KIO::convertSize( QMAX( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
+    .arg( d->showTime 
+	  ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
+	  : KIO::convertSizeFromKB( cdSize * 1024 ) );
 
   QFont fnt(font());
   fnt.setPointSize(8);
@@ -473,7 +476,7 @@ void K3bFillStatusDisplay::slotLoadUserDefaults()
   d->actionShowMinutes->setChecked( d->showTime );
 
 
-  long size = c->readNumEntry( "default media size", d->showDvdSizes ? 510*60*75 : 74*60*75 );
+  long size = c->readNumEntry( "default media size", d->showDvdSizes ? 510*60*75 : 80*60*75 );
   d->displayWidget->setCdSize( size );
 
   switch( d->displayWidget->cdSize().totalFrames()/75/60 ) {

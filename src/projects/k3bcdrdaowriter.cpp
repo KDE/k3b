@@ -24,6 +24,7 @@
 #include <device/k3bdevice.h>
 #include <device/k3bdevicehandler.h>
 #include <k3bthroughputestimator.h>
+#include <k3bglobals.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -279,12 +280,13 @@ void K3bCdrdaoWriter::setWriteArguments()
   if( m_force )
     *m_process << "--force";
 
-  /*
-  FIX: Do not work now :(
   // burnproof
-  if ( !m_burnproof )
-    *m_process << "--buffer-under-run-protection 0";
-  */
+  if ( !m_burnproof ) {
+    if( m_cdrdaoBinObject->hasFeature( "disable-burnproof" ) )
+      *m_process << "--buffer-under-run-protection" << "0";
+    else
+      emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.").arg(m_cdrdaoBinObject->version), INFO );
+  }
   
   k3bcore->config()->setGroup("General Options");
 
@@ -677,7 +679,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
         KIO::NetAccess::del(m_cueFileLnk);
         KIO::NetAccess::del(m_binFileLnk);
     }
-    else if( !QFile::exists( m_tocFile ) && !m_onTheFly )
+    else if( (!QFile::exists( m_tocFile ) || K3b::filesize( m_tocFile ) == 0 ) && !m_onTheFly )
     {
       // cdrdao removed the tocfile :(
       // we need to recover it

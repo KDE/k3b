@@ -50,7 +50,7 @@ class K3bDirItem : public K3bDataItem
   K3bDataItem* nextSibling();
   K3bDataItem* nextChild( K3bDataItem* );
   /** returns an empty dummy directory */
-  QString localPath();
+  QString localPath() const;
 
   bool alreadyInDirectory( const QString& fileName ) const;
   K3bDataItem* find( const QString& filename ) const;

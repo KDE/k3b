@@ -246,7 +246,7 @@ void K3bDivXEncodingProcess::slotParseEncoding( KProcess *, char *buffer, int le
     m_speedFlag = 0;
     QString tmp = QString::fromLocal8Bit( buffer, len );
     if ( tmp.contains( "file read error" ) ) {
-      infoMessage( i18n( "Starting transcode failed. K3b hasn't successful backuped unused files.Verify that there are no other files than *.vob-files in %1. K3b should have backuped all files in %2. " ).arg( m_data->getProjectDir() + "/vob" ).arg( m_data->getProjectDir() + "/tmp" ), K3bJob::ERROR );
+      infoMessage( i18n( "Starting transcode failed. K3b hasn't successful backed up unused files.Verify that there are no other files than *.vob-files in %1. K3b should have backuped all files in %2. " ).arg( m_data->getProjectDir() + "/vob" ).arg( m_data->getProjectDir() + "/tmp" ), K3bJob::ERROR );
       cancel( );
       m_interalInterrupt = true;
       return ;
@@ -299,7 +299,7 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
                     emit finished( true );
                 }
             } else {
-                infoMessage( i18n( "Video generating successful finished." ), STATUS );
+                infoMessage( i18n( "Video generating successfully finished." ), STATUS );
                 emit finished( true );
             }
             infoMessage( i18n("Video generating successfully finished."), STATUS );
@@ -393,7 +393,7 @@ void K3bDivXEncodingProcess::restoreBackupFiles() {
   QStringList files;
   for ( QStringList::Iterator it = m_movefiles.begin(); it != m_movefiles.end(); ++it ) {
     kdDebug() << "(K3bDivXEncodingProcess) Check file <" << ( *it ) << ">." << endl;
-    infoMessage( i18n( "Restore backuped file %1 to %2." ).arg( *it ).arg( m_data->getProjectDir() + "/vob/" + ( *it ) ), INFO );
+    infoMessage( i18n( "Restore backed up file %1 to %2." ).arg( *it ).arg( m_data->getProjectDir() + "/vob/" + ( *it ) ), INFO );
     ( *it ) = m_data->getProjectDir() + "/tmp/" + ( *it );
     files.append( *it );
   }
@@ -401,7 +401,7 @@ void K3bDivXEncodingProcess::restoreBackupFiles() {
     KURL::List fileList( files );
     KURL dest( m_data->getProjectDir() + "/vob/" );
     connect( KIO::move( fileList, dest, false ), SIGNAL( result( KIO::Job * ) ), this, SLOT( slotFinishedRestoreBackup() ) );
-    infoMessage( i18n( "Restore backuped files to %1." ).arg( m_data->getProjectDir() + "/vob" ), INFO );
+    infoMessage( i18n( "Restore backed up files to %1." ).arg( m_data->getProjectDir() + "/vob" ), INFO );
     kdDebug() << "(K3bDivxEncodingProcess) Restore backuped files to vob directory." << endl;
   }
 }

@@ -61,6 +61,11 @@ class K3bInteractionDialog : public KDialog
   void setDefaultButton( int b );
 
   /**
+   * reimplemented to allow initialization after the dialog has been opened.
+   */
+  void show();
+
+  /**
    * If no mainWidget has been set a plain page will be created.
    */
   QWidget* mainWidget();
@@ -106,6 +111,13 @@ class K3bInteractionDialog : public KDialog
   virtual void slotSaveClicked();
 
  protected:
+  /**
+   * This is called after the dialog has been shown.
+   * Use this for initialization that should happen
+   * when the user already sees the dialog.
+   */
+  virtual void init() {}
+
   /**
    * reimplemented from QDialog
    */

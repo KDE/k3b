@@ -141,10 +141,10 @@ void K3bVideoCdRippingDialog::setupContextHelp()
                                                             "<b>Note: This option is slated to disappear.</b>") );
 
     QToolTip::add( m_extractXML, i18n("Create XML description file.") );
-    QWhatsThis::add( m_extractXML, i18n("<p>This option create a XML description file with all Video CD infos.</p>"
-                                                            "<p>There are always all infos in this description file.</p>"
-                                                            "<p>Example: If you only extract sequences, the description file also hold the infos for files and segments.</p>"
-                                                            "<p>The Filename is the same as the Video CD name with .xml extension. default is VIDEOCD.xml</p>") );
+    QWhatsThis::add( m_extractXML, i18n("<p>This option create an XML description file with all Video CD infos.</p>"
+					"<p>There are always all infos in this description file.</p>"
+					"<p>Example: If you only extract sequences, the description file also hold the infos for files and segments.</p>"
+					"<p>The Filename is the same as the Video CD name with .xml extension. default is VIDEOCD.xml</p>") );
 }
 
 void K3bVideoCdRippingDialog::slotStartClicked()

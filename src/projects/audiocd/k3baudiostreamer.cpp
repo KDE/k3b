@@ -116,6 +116,9 @@ void K3bAudioStreamer::cancel()
 
 void K3bAudioStreamer::resume()
 {
+  if( d->canceled )
+    return;
+
   if( !d->finished ) {
     // we do not write a pregap for the first track
     // this is done by cdrecord/cdrdao
@@ -185,6 +188,9 @@ void K3bAudioStreamer::startModule()
 
 void K3bAudioStreamer::decode()
 {
+  if( d->canceled )
+    return;
+
   long len = d->currentModule->decode( d->buffer.data(), d->buffer.size() );
 
   if( len < 0 ) {
@@ -216,6 +222,9 @@ void K3bAudioStreamer::cancelAll()
 
 void K3bAudioStreamer::writePregap()
 {
+  if( d->canceled )
+    return;
+
   long pSize = d->currentTrack->pregap().audioBytes() - d->writtenTrackPregapData;
   if( pSize > 0 ) {
     d->buffer.fill( '\0' );

@@ -391,7 +391,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
   if( k3bcore->config()->readBoolEntry( "No cd eject", false ) )
     emit finished(d->success);
   else {
-    emit infoMessage( i18n("Ejecting DVD..."), INFO );
+    emit newSubTask( i18n("Ejecting DVD") );
     connect( K3bCdDevice::eject( m_doc->burner() ), 
 	     SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	     this, 

@@ -126,7 +126,7 @@ int K3bIso9660File::read( long long pos, char* data, int len ) const
     return -1;
   }
   else
-    return archive()->device()->readBlock( data, ((pos+len) < size()) ? len : size()-pos );
+    return archive()->device()->readBlock( data, QMIN( len, size()-pos )/*((pos+len) < size()) ? len : size()-pos */);
 }
 
 

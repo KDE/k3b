@@ -1147,6 +1147,10 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
   if( open() == -1 )
     return toc;
 
+//   if( isDVD() ) {
+//     readDvdToc( toc );
+//   }
+//  else
   if( !readRawToc( toc ) ) {
     kdDebug() << "(K3bCdDevice::CdDevice) MMC READ RAW TOC failed." << endl;
 
@@ -1276,6 +1280,28 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 
   return success;
 }
+
+
+// void K3bCdDevice::CdDevice::readDvdToc( K3bCdDevice::Toc& toc ) const
+// {
+//   int mediaType = dvdMediaType();
+//   switch( mediaType ) {
+//   case MEDIA_DVD_ROM:
+//     // only one track
+//   case MEDIA_DVD_R:
+//   case MEDIA_DVD_R_SEQ:
+//   case MEDIA_DVD_RAM:
+//   case MEDIA_DVD_RW:
+//   case MEDIA_DVD_RW_OVWR:
+//     // only one track
+//   case MEDIA_DVD_RW_SEQ:
+//   case MEDIA_DVD_PLUS_RW:
+//     // only one track
+//   case MEDIA_DVD_PLUS_R:
+//   default:
+//     kdDebug() << "(K3bCdDevice::readDvdToc) no dvd." << endl;
+//   }
+// }
 
 
 K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCount ) const
@@ -2227,7 +2253,7 @@ void K3bCdDevice::CdDevice::checkWriteModes()
     mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
     mp->dbtype = 8;         // Mode 1
 
-    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeselect TAO data: " << endl;
+    //    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": modeselect TAO data: " << endl;
     //    debugBitfield( buffer, dataLen );
 
 
@@ -2516,6 +2542,55 @@ bool K3bCdDevice::CdDevice::readSubChannel( unsigned char** data, int& dataLen,
   }
   else
     kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed." << endl;
+
+  return false;
+}
+
+
+bool K3bCdDevice::CdDevice::readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const
+{
+  unsigned char header[4];
+  ::memset( header, 0, 4 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = 0x52;    // READ TRACK INFORMATION
+
+  switch( type ) {
+  case 0:
+  case 1:
+  case 2:
+    cmd[1] = type & 0x3;
+    cmd[2] = value>>24;
+    cmd[3] = value>>16;
+    cmd[4] = value>>8;
+    cmd[5] = value;
+    break;
+  default:
+    kdDebug() << "(K3bCdDevice::readTrackInformation) wrong type parameter: " << type << endl;
+    return false;
+  }
+
+  cmd[8] = 4;      // first we read the header
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
+    // again with real length
+    dataLen = from2Byte( header ) + 2;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[7] = dataLen>>8;
+    cmd[8] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
+		<< dataLen << " failed." << endl;
+      delete [] *data;
+    }
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed." << endl;
 
   return false;
 }

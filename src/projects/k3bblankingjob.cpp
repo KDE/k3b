@@ -20,6 +20,7 @@
 #include <k3bglobals.h>
 #include <device/k3bdevice.h>
 #include <device/k3bdevicehandler.h>
+#include <k3bemptydiscwaiter.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -124,6 +125,18 @@ void K3bBlankingJob::slotStartErasing()
   connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
   connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
+
+  if( K3bEmptyDiscWaiter::wait( m_device,  
+				K3bCdDevice::STATE_COMPLETE|K3bCdDevice::STATE_INCOMPLETE,
+				K3bCdDevice::MEDIA_CD_RW,
+				i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.")
+				.arg(m_device->vendor())
+				.arg(m_device->description())
+				.arg(m_device->devicename()) ) == -1 ) {
+    emit canceled();
+    emit finished(false);
+    return;
+  }
 
   m_writerJob->start();
 }

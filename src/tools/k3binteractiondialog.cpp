@@ -140,6 +140,13 @@ K3bInteractionDialog::~K3bInteractionDialog()
 }
 
 
+void K3bInteractionDialog::show()
+{
+  KDialog::show();
+  init();
+}
+
+
 QSize K3bInteractionDialog::sizeHint() const
 {
   QSize s = KDialog::sizeHint();

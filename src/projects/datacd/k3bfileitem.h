@@ -46,14 +46,14 @@ public:
   QString absIsoPath();
 
   /** reimplemented from K3bDataItem */
-  QString localPath();
+  QString localPath() const;
   int localInode() const { return m_inode; }
 
   KIO::filesize_t k3bSize() const;
 
   K3bDirItem* getDirItem();
 	
-  bool isSymLink() const { return isLink(); }
+  bool isSymLink() const;
   bool isFile() const { return true; }
 
   /** returns true if the item is not a link or 

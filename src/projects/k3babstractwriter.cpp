@@ -70,7 +70,7 @@ void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 
   if( success ) {
     if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
-      emit infoMessage( i18n("Ejecting CD..."), INFO );
+      emit newSubTask( i18n("Ejecting CD") );
       connect( K3bCdDevice::eject( burnDevice() ), SIGNAL(finished(bool)),
 	       this, SLOT(slotEjectWhileCancellationFinished(bool)) );
       return;

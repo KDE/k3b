@@ -226,7 +226,7 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
     if (ok) {
         if ( m_onlyCreateImage ) {
             emit infoMessage(
-                i18n("Image '%1' and toc-file '%2' succsessfully created").arg(m_tempPath).arg(m_tocFile),
+                i18n("Image '%1' and toc-file '%2' successfully created").arg(m_tempPath).arg(m_tocFile),
                 K3bJob::INFO );
             if ( ++m_finishedSessions == m_sessions )
                 finishAll();
@@ -246,8 +246,8 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                m_cdrdaowriter->setSession(m_finishedSessions+1);
                cdrdaoDirectCopy();
             } else if ( ++m_finishedCopies == m_copies ) {
-	      emit infoMessage( i18n("1 copy succsessfully created",
-				     "%n copies succsessfully created",
+	      emit infoMessage( i18n("1 copy successfully created",
+				     "%n copies successfully created",
 				     m_copies),
 				K3bJob::INFO );
                 finishAll();

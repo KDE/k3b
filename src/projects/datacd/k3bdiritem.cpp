@@ -70,7 +70,7 @@ K3bDirItem* K3bDirItem::getDirItem()
 
 K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
-  if( m_children->find( item ) == -1 ) {
+  if( m_children->findRef( item ) == -1 ) {
     m_children->append( item );
     updateSize( item->k3bSize() );
     if( item->isDir() )
@@ -94,7 +94,7 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 
 K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 {
-  int x = m_children->find( item );
+  int x = m_children->findRef( item );
   if( x > -1 ) {
     return takeDataItem(x);
   }
@@ -147,7 +147,7 @@ K3bDataItem* K3bDirItem::nextSibling()
 K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev )
 {
   // search for prev in children
-  if( m_children->find( prev ) < 0 ) {
+  if( m_children->findRef( prev ) < 0 ) {
     return 0;
   }
   else
@@ -155,9 +155,9 @@ K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev )
 }
 
 
-QString K3bDirItem::localPath()
+QString K3bDirItem::localPath() const
 {
-  return doc()->dummyDir();
+  return K3bDataDoc::dummyDir();
 }
 
 

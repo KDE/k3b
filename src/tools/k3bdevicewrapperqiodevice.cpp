@@ -16,6 +16,7 @@
 #include "k3bdevicewrapperqiodevice.h"
 
 #include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
 
 #include <kdebug.h>
 
@@ -37,6 +38,9 @@ public:
 
   bool readCdFailed;
   bool read12Failed;
+
+  bool resetErrorRecoveryParametersOnClose;
+  unsigned char savedErrorRecoveryParameters;
 };
 
 
@@ -64,13 +68,54 @@ void K3bDeviceWrapperQIODevice::setTrackBorders( unsigned long start, unsigned l
 
 bool K3bDeviceWrapperQIODevice::open( int )
 {
-  return ( m_device->open() != -1 );
+  if( m_device->open() != -1 ) {
+    unsigned char* data;
+    int dataLen;
+    if( m_device->modeSense( &data, dataLen, 0x01 ) ) {
+      kdDebug() << "(K3bDeviceWrapperQIODevice) ERROR RECOVERY PARAMETERS MODE PAGE:" << endl;
+      K3bCdDevice::debugBitfield( &data[2], 1 );
+
+      d->savedErrorRecoveryParameters = data[2];
+
+      // Enable error correction
+      data[2] = 0x20;//(1<<7|1<<6|1<<3);
+
+      K3bCdDevice::debugBitfield( &data[2], 1 );
+
+      if( m_device->modeSelect( data, dataLen, true, false ) ) {
+	d->resetErrorRecoveryParametersOnClose = true;
+      }
+      else {
+	kdDebug() << "(K3bDeviceWrapperQIODevice) Unable to set ERROR RECOVERY PARAMETERS." << endl;
+	d->resetErrorRecoveryParametersOnClose = false;
+      }
+    }
+
+    return true;
+  }
+  else
+    return false;
 }
 
 
 void K3bDeviceWrapperQIODevice::close()
 {
-  m_device->close();
+  if( m_device->isOpen() ) {
+    if( d->resetErrorRecoveryParametersOnClose ) {
+      unsigned char* data;
+      int dataLen;
+      if( m_device->modeSense( &data, dataLen, 0x01 ) ) {
+	kdDebug() << "(K3bDeviceWrapperQIODevice) ERROR RECOVERY PARAMETERS MODE PAGE:" << endl;
+	K3bCdDevice::debugBitfield( &data[2], 1 );
+	
+	data[2] = d->savedErrorRecoveryParameters;
+	if( !m_device->modeSelect( data, dataLen, true, false ) )
+	  kdDebug() << "(K3bDeviceWrapperQIODevice) Unable to reset ERROR RECOVERY PARAMETERS." << endl;
+      }
+    }
+    
+    m_device->close();
+  }
 }
 
 
@@ -108,8 +153,8 @@ Q_LONG K3bDeviceWrapperQIODevice::readBlock( char* data, Q_ULONG maxlen )
   if( maxlen == 0 )
     return 0;
 
-  kdDebug() << "(K3bDeviceWrapperQIODevice) readBlock( " << (void*)data << ", " << maxlen << " ) at position " << d->pos << endl;
-  kdDebug() << "(K3bDeviceWrapperQIODevice) readCd from " << (d->start+d->pos)/2048 << endl;
+//   kdDebug() << "(K3bDeviceWrapperQIODevice) readBlock( " << (void*)data << ", " << maxlen << " ) at position " << d->pos << endl;
+//   kdDebug() << "(K3bDeviceWrapperQIODevice) readCd from " << (d->start+d->pos)/2048 << endl;
 
   unsigned long startSec = d->start+d->pos;
   int startSecOffset = 0;
@@ -122,60 +167,21 @@ Q_LONG K3bDeviceWrapperQIODevice::readBlock( char* data, Q_ULONG maxlen )
   }
 
   unsigned long bufferLen = maxlen+startSecOffset;
-  if( bufferLen%2048 > 0 ) {
+  if( startSec%2048 || bufferLen%2048 ) {
     buffered = true;
     bufferLen = bufferLen+(2048-(bufferLen%2048));
     buffer = new unsigned char[bufferLen];
-    kdDebug() << "(K3bDeviceWrapperQIODevice) using buffer of size: " << bufferLen << endl;
+    //    kdDebug() << "(K3bDeviceWrapperQIODevice) using buffer of size: " << bufferLen << endl;
   }
   long read = -1;
 
-
-  //
-  // SOME EXPLANATION FOR THE FOLLOWING WEIRD CODE:
-  // There seems to be a max value for the read buffer (somthing with DMA)
-  // which I don't know how to obtain yet. So we simply split our read into
-  // mutiple reads of one sector which will always work.
-  //
-//   d->read12Failed = d->readCdFailed = false;
-//   unsigned char* currentBufPos = buffer;
-//   long currentSec = startSec/2048;
-//   while( currentBufPos < buffer+bufferLen ) {
-//     if( !readSector( currentSec, currentBufPos ) )
-//       break;
-
-//     currentSec++;
-//     currentBufPos += 2048;
-//   }
-//   if( currentBufPos > buffer )
-//     read = currentBufPos-buffer;
-//   else
-//     read = -1;
-
-  // FIXME: some drives may not support read12 but read10 which would be a better fallback
-  //        but the strange thing is that the readCd command has been in the MMC since the first
-  //        version while read12 came in MMC 3 and read10 in MMC 4
-  if( m_device->readCd( buffer,
+  if( m_device->read10( buffer,
 			bufferLen,
-			0,
-			false,
 			startSec/2048,
- 			bufferLen/2048,
-			false,
-			false,
-			false,
-			true,
-			false,
-			0,
-			0 ) ) {
-    read = maxlen;
-  }
-  else if( m_device->read12( buffer,
-			     bufferLen,
-			     startSec/2048,
-			     bufferLen/2048 ) )
+			bufferLen/2048 ) )
     read = maxlen;
 
+  
   // fallback
   if( read < 0 ) {
     kdDebug() << "(K3bDeviceWrapperQIODevice) falling back to stdlib read" << endl;
@@ -189,12 +195,10 @@ Q_LONG K3bDeviceWrapperQIODevice::readBlock( char* data, Q_ULONG maxlen )
   }
 
   if( buffered ) {
-    if( read > 0 ) {
-      ::memcpy( data, buffer+startSecOffset, read-startSecOffset );
-      read -= startSecOffset;
-    }
+    if( read > 0 )
+      ::memcpy( data, buffer+startSecOffset, read );
     delete [] buffer;
-    kdDebug() << "(K3bDeviceWrapperQIODevice) deleted buffer." << endl;
+    //    kdDebug() << "(K3bDeviceWrapperQIODevice) deleted buffer." << endl;
   }
 
   return read;

@@ -657,6 +657,8 @@ void K3bDataJob::cancelAll()
   m_msInfoFetcher->cancel();
   if( m_writerJob )
     m_writerJob->cancel();
+  if( d->verificationJob )
+    d->verificationJob->cancel();
 
   // remove iso-image if it is unfinished or the user selected to remove image
   if( QFile::exists( d->doc->tempDir() ) ) {
