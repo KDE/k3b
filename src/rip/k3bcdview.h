@@ -20,12 +20,18 @@
 
 #include <qwidget.h>
 #include <qvbox.h>
+#include <qarray.h>
 class QString;
+class QStringList;
 struct cdrom_drive;
 class K3bCddb;
 class K3bCdda;
 class K3bCddaCopy;
+class K3bPatternParser;
 class KListView;
+class QListViewItem;
+class QPoint;
+
 /**
   *@author Sebastian Trueg
   */
@@ -35,47 +41,57 @@ class K3bCdView : public QVBox  {
 public:
 	K3bCdView(QWidget *, const char *);
 	~K3bCdView();
-	void showCdContent(struct cdrom_drive *drive);
-	void closeDrive();
-	void show();
-	class CopyFiles;
+    void show();
+    void showCdContent();
+    void refresh();
+    void setFilePatternList(QStringList p){ m_filePatternList = p; };
+    void setDirPatternList(QStringList p){ m_dirPatternList = p; };
+
 public slots:
 	/** */
-	void showCdView(QString device);
+    void showCdView(QString device);
+    void reload();
+signals:
+    void showDirView( QString );
+
 private:
     struct cdrom_drive *m_drive;
     K3bCddb *m_cddb;
     K3bCdda *m_cdda;
-    //K3bCddaCopy *m_copy;
     KListView *m_listView;
+    QListViewItem *m_testItemPattern;
     QString m_device;
+    QString m_album;
+    QStringList m_titles;
+    QArray<long> *m_size;
+    K3bPatternParser *m_parser;
     bool m_initialized;
+    //bool m_useFilePattern;
+    //bool m_useDirectoryPattern;
+    bool m_usePattern;
+    QStringList m_filePatternList;
+    QStringList m_dirPatternList;
     void addItem(int, QString, QString, QString, long, QString);
-    QString prepareFilename(QString);
-    void grab();
+    //QString prepareFilename(QString);
     void setupGUI();
+    void applyOptions();
+    void checkView();
+    void askForView();
+    int checkCDType(QStringList titles);
+    void readSettings();
+    //QString prepareDirectory( QListViewItem *item );
+    //QString getRealDirectory(int, QListViewItem* );
 
 private slots: // Private slots
   /** No descriptions */
   // Toolbar Button actions
-  void reload();
   void prepareRipping();
   void changeSelectionMode();
-  void editFilenames();
-  void applyOptions();
-  struct cdrom_drive* pickDrive( QString device);
+  void play();
+  void stop();
+  // PopupMenu actions
+  void slotMenuActivated(QListViewItem*, const QPoint &, int);
+  void slotMenuItemActivated(int itemId);
 
 };
-/*
-class K3bCdView::CopyFiles
-{
-public:
-    CopyFiles( int _track, QString _filename) : m_track(_track), m_filename(_filename) {} ;
-    int getTrack(){ return m_track; };
-    QString getFilename(){ return m_filename; };
-private:
-    int m_track;
-    QString m_filename;
-}; // class CopyFiles
-*/
 #endif

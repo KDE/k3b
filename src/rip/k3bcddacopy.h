@@ -20,53 +20,72 @@
 
 #include "config.h"
 
-#include <qthread.h>
-#include <qarray.h>
+#include <qobject.h>
 
 #include "k3bcdview.h"
+typedef Q_INT16 size16;
+typedef Q_INT32 size32;
+
+extern "C" {
+#include <cdda_interface.h>
+#include <cdda_paranoia.h>
+}
 
 struct cdrom_drive;
 class QStringList;
+class QFile;
+class QDataStream;
+class QTimer;
 class KProgress;
 
 /**
   *@author Sebastian Trueg
   */
-#ifdef QT_THREAD_SUPPORT
-class K3bCddaCopy : public QThread {
-#else
-class K3bCddaCopy {
-#endif
-
+class K3bCddaCopy : public QWidget {
+    Q_OBJECT
 public:
   K3bCddaCopy(int arraySize);
   ~K3bCddaCopy();
-#ifdef QT_THREAD_SUPPORT
-    virtual void run();
-#else
-    void run();
-#endif
+    bool run();
     void setDrive(QString device);
     void setCopyTracks( QArray<int> tracks );
     void setCopyFiles( QStringList list );
     void setCopyCount( int );
     void setFinish(bool stop);
     void setProgressBar(KProgress*, long);
+    bool finished() { return m_finished; };
+
+signals:
+    void endRipping();
+
+private slots:
+    void slotReadData();
 
 private:
     QStringList m_list;
     QString m_device;
+    QFile *m_f;
+    QDataStream *m_stream;
     int m_count;
+    int m_progressBarValue;
+    int m_currentTrackIndex;
+    long m_currentSector;
+    long m_lastSector;
     bool m_interrupt;
     QArray<int> m_track;
     struct cdrom_drive *m_drive;
     K3bCdda *m_cdda;
     long m_bytes;
     long m_bytesAll;
+    bool m_finished;
     KProgress *m_progress;
+    QTimer *t;
+    cdrom_paranoia *m_paranoia;
     bool paranoiaRead(struct cdrom_drive *drive, int track, QString dest);
     void writeWavHeader(QDataStream *s, long byteCount);
-
+    void readDataFinished();
+    bool startRip(int i);
+    void finishedRip();
 };
 
 #endif
