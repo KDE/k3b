@@ -138,6 +138,7 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
 
 K3bCdDevice::CdDevice::~CdDevice()
 {
+  close();
   delete d;
 }
 
@@ -249,6 +250,7 @@ bool K3bCdDevice::CdDevice::init()
 	    case 0x14: d->supportedProfiles |= MEDIA_DVD_RW_SEQ; break;
 	    case 0x1A: d->supportedProfiles |= MEDIA_DVD_PLUS_RW; break;
 	    case 0x1B: d->supportedProfiles |= MEDIA_DVD_PLUS_R; break;
+	    case 0x2B: d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL; break;
 	    case 0x08: d->supportedProfiles |= MEDIA_CD_ROM; break;
 	    case 0x09: d->supportedProfiles |= MEDIA_CD_R; break;
 	    case 0x0A: d->supportedProfiles |= MEDIA_CD_RW; break;
@@ -2189,6 +2191,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
       }
 
       case MEDIA_DVD_PLUS_R:
+      case MEDIA_DVD_PLUS_R_DL:
 	if( inf.appendable() || inf.empty() ) {
 	  //
 	  // get remaining space via the invisible track
@@ -2390,6 +2393,7 @@ int K3bCdDevice::CdDevice::dvdMediaType() const
 	case 0x30: m = MEDIA_DVD_RW; break;
 	case 0x90: m = MEDIA_DVD_PLUS_RW; break;
 	case 0xA0: m = MEDIA_DVD_PLUS_R; break;
+	case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
 	default: break; // unknown
 	}
       }

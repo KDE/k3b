@@ -59,18 +59,20 @@ namespace K3bCdDevice
 		   MEDIA_DVD_RW_SEQ = 64,
 		   MEDIA_DVD_PLUS_RW = 128,
 		   MEDIA_DVD_PLUS_R = 256,
+		   MEDIA_DVD_PLUS_R_DL = 4096,
 		   MEDIA_CD_ROM = 512,
 		   MEDIA_CD_R = 1024,
 		   MEDIA_CD_RW = 2048,
 		   MEDIA_WRITABLE_CD = MEDIA_CD_R | 
 		                       MEDIA_CD_RW,
 		   MEDIA_WRITABLE_DVD = MEDIA_DVD_R | 
-      		                        MEDIA_DVD_R_SEQ | 
+		                        MEDIA_DVD_R_SEQ | 
 		                        MEDIA_DVD_RW |
 		                        MEDIA_DVD_RW_OVWR |
 		                        MEDIA_DVD_RW_SEQ |
 		                        MEDIA_DVD_PLUS_RW |
-		   MEDIA_DVD_PLUS_R,
+		                        MEDIA_DVD_PLUS_R |
+		                        MEDIA_DVD_PLUS_R_DL,
 		   MEDIA_UNKNOWN = 32768
   };
 
@@ -82,7 +84,8 @@ namespace K3bCdDevice
 	     mediaType == MEDIA_DVD_RW_OVWR || 
 	     mediaType == MEDIA_DVD_RW_SEQ || 
 	     mediaType == MEDIA_DVD_PLUS_RW || 
-	     mediaType == MEDIA_DVD_PLUS_R );
+	     mediaType == MEDIA_DVD_PLUS_R ||
+	     mediaType == MEDIA_DVD_PLUS_R_DL );
   }
 
   inline bool isRewritableMedia( int mediaType ) {
