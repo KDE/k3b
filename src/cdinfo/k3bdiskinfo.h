@@ -16,13 +16,13 @@ class K3bDiskInfo
     : empty(false), 
     cdrw(false), 
     appendable(false), 
-    noDisk(false), 
+    noDisk(true), 
     size(0), 
     remaining(0),
     speed(0), 
     sessions(0),
     tocType(UNKNOWN),
-    valid(true),
+    valid(false),
     device(0)
     { }
 
