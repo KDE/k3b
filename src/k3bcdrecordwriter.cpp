@@ -369,7 +369,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 
     default:
       switch( m_cdrecordError ) {
-      case OVERSIZE:
+      case OVERSIZE:  // It seems as if this is error code 254 but I'm not sure...
 	if( k3bMain()->config()->readBoolEntry( "Allow overburning", false ) &&
 	    m_cdrecordBinObject->hasFeature("overburn") )
 	  emit infoMessage( i18n("Data did not fit on disk."), ERROR );

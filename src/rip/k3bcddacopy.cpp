@@ -24,6 +24,7 @@
 #include "../device/k3bdevice.h"
 #include "../cdinfo/k3bdiskinfodetector.h"
 #include "k3baudiorip.h"
+#include <tools/k3bcdparanoialib.h>
 
 #include <qptrlist.h>
 #include <qstringlist.h>
@@ -97,6 +98,15 @@ void K3bCddaCopy::slotDiskInfoReady( const K3bDiskInfo& info )
   m_bytesAll = 0;
 
   createFilenames();
+
+  // check if libcdparanoia is available
+  K3bCdparanoiaLib* lib = K3bCdparanoiaLib::create();
+  if( !lib ) {
+    emit infoMessage( i18n("Could not dlopen libcdda_paranoia. Please install."), ERROR );
+    emit finished(false);
+    return;
+  }
+  delete lib;
 
   if( !startRip( m_currentTrackIndex = 0 ) ) {
     emit finished( false );
