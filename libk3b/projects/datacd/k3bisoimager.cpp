@@ -254,7 +254,7 @@ void K3bIsoImager::calculateSize()
   // add empty dummy dir since one path-spec is needed
   *m_process << dummyDir();
 
-  kdDebug() << "***** mkisofs parameters:\n";
+  kdDebug() << "***** mkisofs calculate size parameters:\n";
   const QValueList<QCString>& args = m_process->args();
   QString s;
   for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {

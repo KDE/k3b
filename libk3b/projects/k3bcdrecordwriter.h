@@ -93,7 +93,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       PERMISSION_DENIED,
 		       BUFFER_UNDERRUN,
 		       HIGH_SPEED_MEDIUM,
-		       LOW_SPEED_MEDIUM };
+		       LOW_SPEED_MEDIUM,
+		       MEDIUM_ERROR };
 
   QStringList m_arguments;
 

@@ -57,7 +57,7 @@ class K3bIsoImager : public K3bJob
  public slots:
   virtual void start();
   virtual void cancel();
-  void calculateSize();
+  virtual void calculateSize();
 
   /**
    * lets the isoimager write directly into fd instead of writing

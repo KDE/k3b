@@ -606,6 +606,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     if( ok )
       emit infoMessage( i18n("Buffer was low 1 time.", "Buffer was low %n times.", num), INFO );
   }
+  else if( line.contains("Medium Error") ) {
+    m_cdrecordError = MEDIUM_ERROR;
+  }
   else {
     // debugging
     kdDebug() << "(" << m_cdrecordBinObject->name() << ") " << line << endl;
@@ -695,6 +698,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case LOW_SPEED_MEDIUM:
 	emit infoMessage( i18n("Found a low speed medium not suitable for the writer being used."), ERROR );
+	break;
+      case MEDIUM_ERROR:
+	emit infoMessage( i18n("Most likely the burning failed due to low quality media."), ERROR );
 	break;
       case UNKNOWN:
 	if( !wasSourceUnreadable() ) {

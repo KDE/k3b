@@ -1,4 +1,5 @@
 0.12
+FreeBSD cupport (thanks to Adriaan De Groot)
 Support for all global CD-Text fields with cdrecord.
 Some GUI changes: cleaned up the action dialogs, moved the burnfree option to the global settings dialog
 	since turning it off should be a very seldomly used task.

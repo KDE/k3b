@@ -64,6 +64,15 @@ void K3bVideoDvdImager::start()
 }
 
 
+void K3bVideoDvdImager::calculateSize()
+{
+  // we need this for the VIDEO_TS HACK
+  d->doc->isoOptions().setFollowSymbolicLinks(true);
+
+  K3bIsoImager::calculateSize();
+}
+
+
 int K3bVideoDvdImager::writePathSpec()
 {
   //

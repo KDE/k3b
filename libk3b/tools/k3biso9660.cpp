@@ -318,6 +318,7 @@ int K3bIso9660::read( unsigned int sector, char* data, int count )
       read = count;
 
   
+#ifdef Q_OS_LINUX
     // fallback
     if( read < 0 ) {
       kdDebug() << "(K3bIso9660) falling back to stdlib read" << endl;
@@ -331,6 +332,7 @@ int K3bIso9660::read( unsigned int sector, char* data, int count )
 	  read /= 2048;
       }
     }
+#endif
 
     return read;
   }
