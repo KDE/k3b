@@ -144,7 +144,7 @@ QDragObject* K3bPlayListView::dragObject()
 
   QPtrListIterator<QListViewItem> it(list);
   KURL::List urls;
-	
+
   for( ; it.current(); ++it )
     urls.append( KURL( ((K3bPlayListViewItem*)it.current())->filename() ) );
 
@@ -200,7 +200,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   grid->addColSpacing( 3, 5 );
   grid->addWidget( m_buttonBack, 1, 4 );
   grid->addWidget( m_buttonForward, 1, 5 );
-  
+
   grid->addMultiCellWidget( m_labelFilename, 0, 0, 0, 6 );
 
   grid->addMultiCellWidget( m_seekSlider, 1, 1, 6, 8 );
@@ -216,9 +216,9 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   // actions
   // ------------------------------------------------------------------------
-  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", 
+  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
 				Key_Delete, this, SLOT(slotRemoveSelected()), this );
-  m_actionClear = new KAction( i18n( "Clear list" ), "editclear", 
+  m_actionClear = new KAction( i18n( "Clear list" ), "editclear",
 			       0, this, SLOT(clear()), this );
 
   m_contextMenu = new KActionMenu( this );
@@ -238,14 +238,14 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   connect( m_buttonForward, SIGNAL(clicked()), this, SLOT(forward()) );
   connect( m_buttonBack, SIGNAL(clicked()), this, SLOT(back()) );
-  
+
   connect( m_seekSlider, SIGNAL(valueChanged(int)), this, SLOT(seek(int)) );
   connect( m_seekSlider, SIGNAL(valueChanged(int)), this, SLOT(slotUpdateCurrentTime(int)) );
 
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotCheckEnd()) );
 
-  connect( m_viewPlayList, SIGNAL(doubleClicked(QListViewItem*)), 
+  connect( m_viewPlayList, SIGNAL(doubleClicked(QListViewItem*)),
 	   this, SLOT(slotPlayItem(QListViewItem*)) );
   connect( m_viewPlayList, SIGNAL(dropped(QDropEvent*,QListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*,QListViewItem*)) );
@@ -625,8 +625,10 @@ void K3bAudioPlayer::slotRemoveSelected()
 }
 
 
-void K3bAudioPlayer::slotShowContextMenu( KListView*, QListViewItem* item, const QPoint& p )
+void K3bAudioPlayer::slotShowContextMenu( KListView*lstView, QListViewItem* item, const QPoint& p )
 {
+    if( lstView->childCount()==0 )
+        return;
   if( item )
     m_actionRemove->setEnabled( true );
   else
