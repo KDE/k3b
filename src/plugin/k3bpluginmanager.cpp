@@ -120,7 +120,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 void K3bPluginManager::loadAll()
 {
   // we simply search the K3b plugin dir for now
-  QStringList dirs = KGlobal::instance()->dirs()->findDirs( "data", "k3b/plugins/" );
+  QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/plugins/" );
 
   for( QStringList::const_iterator it = dirs.begin();
        it != dirs.end(); ++it ) {
