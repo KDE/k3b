@@ -483,7 +483,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr.startsWith("Cannot send CUE sheet") ) {
       m_cdrecordError = CANNOT_SEND_CUE_SHEET;
     }
-    else if( errStr.startsWith( "Trying to use ultra high speed medium on improper writer" ) ) {
+    else if( errStr.startsWith( "Trying to use ultra high speed medium on improper writer" ) ||
+	     errStr.startsWith( "Trying to use high speed medium on low speed writer" ) ) {
       m_cdrecordError = HIGH_SPEED_MEDIUM;
     }
     else if( errStr.startsWith( "Permission denied. Cannot open" ) ) {
