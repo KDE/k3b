@@ -57,3 +57,9 @@ Comment[pt]=Formato desconhecido de ficheiro áudio
 Comment[pt_BR]=Formato de arquivo de áudio desconhecido
 Comment[sv]=Okänt ljudfilsformat
 default_presentation=2
+
+[NotInstalled]
+Name=Not installed
+Comment=Needed binary not installed
+default_sound=
+default_presentation=2
