@@ -43,7 +43,6 @@
 #include <klineeditdlg.h>
 #include <kmimemagic.h>
 #include <kmessagebox.h>
-#include <kfilemetainfo.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kprogress.h>
@@ -120,7 +119,10 @@ void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
 
     // get current dir from first view (it should better be the current active view)
     K3bDataView* view = (K3bDataView*)firstView();
-    dirItem = view->currentDir();
+    if( view )
+      dirItem = view->currentDir();
+    else
+      dirItem = root();
   }
 
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
@@ -202,7 +204,7 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
 
     // symLink resolved
     if( f.absFilePath().startsWith( link.absFilePath() ) ) {
-      KMessageBox::error( firstView(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
+      KMessageBox::error( qApp->activeWindow(), i18n("Found recursion in directory tree. Omitting\n%1").arg(f.absFilePath()) );
       return 0;
     }
   }
@@ -217,7 +219,7 @@ K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
     bool ok = true;
     while( ok && nameAlreadyInDir( newName, parent ) ) {
       newName = KLineEditDlg::getText( i18n("A directory with that name already exists. Please enter a new name."),
-				       newName, &ok, firstView() );
+				       newName, &ok, qApp->activeWindow() );
     }
     if( !ok )
       return 0;
@@ -270,28 +272,6 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
 //     }
 //   }
 
-  QString mimetype = KMimeMagic::self()->findFileType(f.absFilePath())->mimeType();
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Data project settings" );
-
-
-  // sometimes ogg-vorbis files go as "application/x-ogg"
-  if( c->readBoolEntry( "Use ID3 Tag for mp3 renaming", false ) &&
-      ( mimetype.contains( "audio" ) || mimetype.contains("ogg") ) ) {
-
-    KFileMetaInfo metaInfo( f.absFilePath() );
-    if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
-
-      KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
-      KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
-
-      if( artistItem.isValid() && titleItem.isValid() ) {
-	newName = artistItem.string() + " - " + titleItem.string() + "." + f.extension(false);
-      }
-    }
-  }
-
-
   if( nameAlreadyInDir( newName, parent ) ) {
     k3bcore->config()->setGroup("Data project settings");
     bool dropDoubles = k3bcore->config()->readBoolEntry( "Drop doubles", false );
@@ -301,7 +281,7 @@ K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
     bool ok = true;
     do {
       newName = KLineEditDlg::getText( i18n("A file with that name already exists. Please enter a new name."),
-				       newName, &ok, firstView() );
+				       newName, &ok, qApp->activeWindow() );
     } while( ok && nameAlreadyInDir( newName, parent ) );
 
     if( !ok )
@@ -1099,7 +1079,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
 void K3bDataDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
-    KMessageBox::informationList( firstView(), i18n("Could not find the following files:"),
+    KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
  				  m_notFoundFiles, i18n("Not found") );
     m_notFoundFiles.clear();
   }

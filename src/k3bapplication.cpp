@@ -46,7 +46,7 @@ K3bApplication::K3bApplication()
     m_interface(0),
     m_mainWindow(0)
 {
-  m_core = new K3bCore( aboutData(), this );
+  m_core = new K3bCore( aboutData()->version(), config(), this );
 
   m_songManager = K3bSongManager::instance();  // this is bad stuff!!!
 

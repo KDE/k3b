@@ -22,13 +22,15 @@ libk3bproject_la_SOURCES = k3babstractwriter.cpp \
                            k3bcdrecordwriter.cpp \
                            k3bfillstatusdisplay.cpp \
                            k3btempdirselectionwidget.cpp \
-			   k3bdiskerasinginfodialog.cpp
+			   k3bdiskerasinginfodialog.cpp \
+			   k3bprojectmanager.cpp
 
 include_HEADERS =          k3bview.h \
                            k3bblankingjob.h \
                            k3bdoc.h \
 	                   k3bwriterselectionwidget.h \
-                           k3bemptydiscwaiter.h
+                           k3bemptydiscwaiter.h \
+			   k3bprojectmanager.h
 
 SUBDIRS = kostore songdb datacd audiocd mixedcd movixcd videocd datadvd
 

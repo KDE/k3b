@@ -108,12 +108,10 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   K3bDoc* activeDoc() const;
 
-  QPtrList<K3bDoc>* projects() { return pDocList; }
+  const QPtrList<K3bDoc>& projects() const;
 
   bool eject();
   void showOptionDialog( int = 0 );
-  bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
-  void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
 
   /** Creates the main view of the KDockMainWindow instance and initializes the MDI view area including any needed
    *  connections.
@@ -308,11 +306,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   int m_movixUntitledCount;
   int m_dvdUntitledCount;
 
-  /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
-   * removes this document from the list. The document list is checked for modified documents when the user
-   * is about to close the application. */
-  QPtrList<K3bDoc> *pDocList;
-
   K3bAudioPlayer*        m_audioPlayer;
 
   // KAction pointers to enable/disable actions
@@ -365,7 +358,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   KSystemTray* m_systemTray;
 
-  bool m_useID3TagForMp3Renaming;
   bool m_initialized;
 
   // the funny header

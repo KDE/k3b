@@ -163,6 +163,28 @@ K3bDataItem* K3bDirItem::find( const QString& filename ) const
 }
 
 
+K3bDataItem* K3bDirItem::findByPath( const QString& p ) const
+{
+  if( p.isEmpty() || p == "/" )
+    return this;
+
+  QString path = p;
+  if( path.startsWith("/") )
+    path = path.mid(1);
+  int pos = path.find( "/" );
+  if( pos < 0 )
+    return find( path );
+  else {
+    // do it recursivly
+    K3bDataItem* item = find( path.left(pos) );
+    if( item && item->isDir() )
+      return ((K3bDirItem*)item)->findByPath( path.mid( pos+1 ) );
+    else
+      return 0;
+  }
+}
+
+
 KIO::filesize_t K3bDirItem::k3bSize() const
 {
   return m_size;

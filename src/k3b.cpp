@@ -88,6 +88,7 @@
 #include "datadvd/k3bdvdformattingdialog.h"
 #include "cdclone/k3bclonedialog.h"
 #include "k3bprojectinterface.h"
+#include <k3bprojectmanager.h>
 
 
 static K3bMainWindow* s_k3bMainWindow = 0;
@@ -107,6 +108,8 @@ class K3bMainWindow::Private
 {
 public:
   QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
+
+  K3bProjectManager* projectManager;
 };
 
 
@@ -115,6 +118,7 @@ K3bMainWindow::K3bMainWindow()
 
 {
   d = new Private;
+  d->projectManager = new K3bProjectManager( this );
 
   s_k3bMainWindow = this;
 
@@ -127,9 +131,6 @@ K3bMainWindow::K3bMainWindow()
   m_vcdUntitledCount = 0;
   m_movixUntitledCount = 0;
   m_dvdUntitledCount = 0;
-
-  pDocList = new QPtrList<K3bDoc>();
-  pDocList->setAutoDelete(true);
 
   //setup splitter behaviour
   manager()->setSplitterHighResolution(true);
@@ -177,7 +178,6 @@ K3bMainWindow::K3bMainWindow()
 
 K3bMainWindow::~K3bMainWindow()
 {
-  delete pDocList;
   delete mainDock;
   delete m_audioPlayerDock;
   delete m_contentsDock;
@@ -323,9 +323,16 @@ void K3bMainWindow::initActions()
 }
 
 
+
+const QPtrList<K3bDoc>& K3bMainWindow::projects() const
+{
+  return d->projectManager->projects();
+}
+
+
 void K3bMainWindow::slotConfigureKeys()
 {
-    KKeyDialog::configure( actionCollection(), this );
+  KKeyDialog::configure( actionCollection(), this );
 }
 
 void K3bMainWindow::initStatusBar()
@@ -461,13 +468,9 @@ void K3bMainWindow::createClient(K3bDoc* doc)
 
 K3bView* K3bMainWindow::activeView() const
 {
-  if( !pDocList->isEmpty() ) {
-    QWidget* w = m_documentTab->currentPage();
-    if( K3bView* view = dynamic_cast<K3bView*>(w) )
-      return view;
-    else
-      return 0;
-  }
+  QWidget* w = m_documentTab->currentPage();
+  if( K3bView* view = dynamic_cast<K3bView*>(w) )
+    return view;
   else
     return 0;
 }
@@ -485,16 +488,15 @@ K3bDoc* K3bMainWindow::activeDoc() const
 K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
-  K3bDoc* doc;
-  // check, if document already open. If yes, set the focus to the first view
-  for( doc = pDocList->first(); doc > 0; doc = pDocList->next() ) {
-    if( doc->URL() == url ) {
-      K3bView* view = doc->firstView();
-      view->setFocus();
-      return doc;
-    }
-  }
 
+  // check, if document already open. If yes, set the focus to the first view
+  K3bDoc* doc = d->projectManager->findByUrl( url );
+  if( doc ) {
+    K3bView* view = doc->firstView();
+    view->setFocus();
+    return doc;
+  }
+  
   doc = K3bDoc::openDocument( url );
 
   if( doc == 0 ) {
@@ -504,7 +506,7 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 
   actionFileOpenRecent->addURL(url);
 
-  pDocList->append(doc);
+  d->projectManager->addProject(doc);
 
   // create the window
   createClient(doc);
@@ -546,9 +548,6 @@ void K3bMainWindow::readOptions()
     manager()->readConfig( m_config, "Docking Config" );
   else
     kdDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion << endl;
-
-  m_config->setGroup("ISO Options");
-  m_useID3TagForMp3Renaming = m_config->readBoolEntry("Use ID3 Tag for mp3 renaming", false);
 
   applyMainWindowSettings( m_config, "main_window_settings" );
 
@@ -620,7 +619,7 @@ bool K3bMainWindow::eventFilter(QObject* object, QEvent* event)
 	      delete it.data();
 	      d->projectInterfaceMap.remove( it );
 	    }
-	    pDocList->remove( pDoc );
+	    d->projectManager->closeProject( pDoc );
 	  }
 	  e->accept();
 	  return false;
@@ -777,7 +776,7 @@ void K3bMainWindow::slotFileClose()
     view->close(true);
   }
   
-  if( pDocList->isEmpty() ) {
+  if( d->projectManager->isEmpty() ) {
     actionFileSave->setEnabled(false);
     actionFileSaveAs->setEnabled(false);
     actionFileBurn->setEnabled( false );
@@ -983,7 +982,7 @@ K3bDoc* K3bMainWindow::slotNewMovixDoc()
 
 void K3bMainWindow::initializeNewDoc( K3bDoc* doc )
 {
-  pDocList->append(doc);
+  d->projectManager->addProject(doc);
   doc->newDocument();
   doc->loadDefaultSettings( config() );
 
@@ -1040,6 +1039,8 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
   // check the doctype
   K3bView* view = activeView();
   if( view ) {
+    d->projectManager->setActive( view->getDocument() );
+
     unplugActionList( "data_project_actions" );
 
     switch( view->getDocument()->docType() ) {

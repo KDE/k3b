@@ -79,8 +79,8 @@ DCOPRef K3bInterface::openDocument( const KURL& url )
 QValueList<DCOPRef> K3bInterface::projects()
 {
   QValueList<DCOPRef> lst;
-  QPtrList<K3bDoc>* docs = m_main->projects();
-  for( QPtrListIterator<K3bDoc> it( *docs ); it.current(); ++it )
+  const QPtrList<K3bDoc>& docs = m_main->projects();
+  for( QPtrListIterator<K3bDoc> it( docs ); it.current(); ++it )
     lst.append( DCOPRef( kapp->dcopClient()->appId(), m_main->dcopInterface( it.current() )->objId() ) );
 
   return lst;

@@ -22,20 +22,20 @@
 #include <k3bglobals.h>
 #include <k3bversion.h>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kstandarddirs.h>
-
+#include <kapplication.h>
 
 
 class K3bCore::Private {
 public:
-  Private( const KAboutData* about )
-    : version( about->version() ) {
+  Private( const K3bVersion& about )
+    : version( about ) {
   }
 
+  KConfig* config;
   K3bVersion version;
   K3bDeviceManager* deviceManager;
   K3bExternalBinManager* externalBinManager;
@@ -47,10 +47,18 @@ K3bCore* K3bCore::s_k3bCore = 0;
 
 
 
-K3bCore::K3bCore( const KAboutData* about, QObject* parent, const char* name)
+K3bCore::K3bCore( const K3bVersion& version, KConfig* c, QObject* parent, const char* name )
   : QObject( parent, name )
 {
-  d = new Private( about );
+  d = new Private( version );
+  d->config = c;
+  if( !c )
+    d->config = kapp->config();
+
+  if( s_k3bCore ) {
+    qFatal("ONLY ONE INSTANCE OF K3BCORE ALLOWED!");
+  }
+
   s_k3bCore = this;
 
   d->externalBinManager = new K3bExternalBinManager( this );
@@ -85,7 +93,7 @@ const K3bVersion& K3bCore::version() const
 
 KConfig* K3bCore::config() const
 {
-  return kapp->config();
+  return d->config;
 }
 
 

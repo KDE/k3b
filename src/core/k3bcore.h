@@ -46,7 +46,7 @@ class K3bCore : public QObject
   Q_OBJECT
 
  public:
-  K3bCore( const KAboutData*, QObject* parent = 0, const char* name = 0 );
+  K3bCore( const K3bVersion&, KConfig* = 0, QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCore();
 
   void init();

@@ -54,6 +54,7 @@ class K3bDirItem : public K3bDataItem
 
   bool alreadyInDirectory( const QString& fileName ) const;
   K3bDataItem* find( const QString& filename ) const;
+  K3bDataItem* findByPath( const QString& ) const;
 
   KIO::filesize_t k3bSize() const;
 
