@@ -628,3 +628,5 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
 
   e->accept();
 }
+
+#include "k3bjobprogressdialog.moc"
