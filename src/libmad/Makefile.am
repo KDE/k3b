@@ -99,7 +99,7 @@ version_info =		$(version_current):$(version_revision):$(version_age)
 #libmad_a_LDFLAGS =		-version-info $(version_info)
 ##				-release $(VERSION)
 
-mad.h: $(top_srcdir)/config.status $(top_srcdir)/config.h Makefile.am  \
+mad.h: $(top_builddir)/config.status $(top_builddir)/config.h Makefile.am  \
 		$(srcdir)/COPYRIGHT $(srcdir)/mad.h.sed $(exported_headers)
 	(sed -e '1s|.*|/*|' -e '1b' -e '$$s|.*| */|' -e '$$b'  \
 		-e 's/^.*/ *&/' $(srcdir)/COPYRIGHT; echo;  \
