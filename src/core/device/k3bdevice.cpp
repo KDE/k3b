@@ -1275,7 +1275,7 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc()
         int startSec = tocentry.cdte_addr.lba;
         int control  = tocentry.cdte_ctrl & 0x0f;
         int mode     = tocentry.cdte_datamode;
-        if( !lastTrack.isEmpty() ) {
+        if( i > tochdr.cdth_trk0 ) {
           toc.append( Track( lastTrack.firstSector(), startSec-1, lastTrack.type(), lastTrack.mode() ) );
         }
         int trackType = 0;

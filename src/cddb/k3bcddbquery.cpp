@@ -234,10 +234,10 @@ QString K3bCddbQuery::queryString() const
   query.sprintf( "cddb query %08x %d", m_toc.discId(), m_toc.count() );
   
   for( K3bToc::const_iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
-    query.append( QString( " %1" ).arg( (*it).firstSector() ) );
+    query.append( QString( " %1" ).arg( (*it).firstSector().lba() ) );
   }
   
-  query.append( QString( " %1" ).arg( m_toc.length() / 75 ) );
+  query.append( QString( " %1" ).arg( m_toc.length().lba() / 75 ) );
   
   return query;
 }

@@ -454,7 +454,7 @@ bool K3bCdparanoiaLib::initReading( unsigned int track )
     if( track < d->toc.count() ) {
       const K3bCdDevice::Track& k3bTrack = d->toc[track-1];
       if( k3bTrack.type() == K3bCdDevice::Track::AUDIO ) {
-	return initReading( k3bTrack.firstSector(), k3bTrack.lastSector() );
+	return initReading( k3bTrack.firstSector().lba(), k3bTrack.lastSector().lba() );
       }
       else {
 	kdDebug() << "(K3bCdparanoiaLib) Track " << track << " no audio track." << endl;
@@ -476,8 +476,8 @@ bool K3bCdparanoiaLib::initReading( unsigned int track )
 bool K3bCdparanoiaLib::initReading( long start, long end )
 {
   if( d->device ) {
-    if( d->toc.firstSector() <= start &&
-	d->toc.lastSector() >= end ) {
+    if( d->toc.firstSector().lba() <= start &&
+	d->toc.lastSector().lba() >= end ) {
       d->startSector = d->currentSector = start;
       d->lastSector = end;
 

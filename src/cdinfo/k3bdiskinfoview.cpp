@@ -384,9 +384,9 @@ void K3bDiskInfoView::displayInfo( const K3bDiskInfo& info )
 	    text = i18n("Data");
         }
         item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, ' ' )).arg(text) );
-        item->setText( 1, QString::number( track.firstSector() ) );
-        item->setText( 2, QString::number( track.lastSector() ) );
-        item->setText( 3, QString::number( track.length() ) );
+        item->setText( 1, QString::number( track.firstSector().lba() ) );
+        item->setText( 2, QString::number( track.lastSector().lba() ) );
+        item->setText( 3, QString::number( track.length().lba() ) + " (" + track.length().toString() + ")" );
 
         ++index;
       }

@@ -51,6 +51,8 @@ namespace K3b
       int totalFrames() const { return ( m_minutes*60 + m_seconds )*75 + m_frames; }
       int lba() const { return totalFrames(); }
 
+      //      operator int () const { return lba(); }
+
       void addMinutes( int m );
       void addSeconds( int s );
       void addFrames( int f );
@@ -76,6 +78,8 @@ namespace K3b
   bool operator!=( const Msf&, const Msf& );
   bool operator<( const Msf&, const Msf& );
   bool operator>( const Msf&, const Msf& );
+  bool operator<=( const Msf&, const Msf& );
+  bool operator>=( const Msf&, const Msf& );
 
   kdbgstream& operator<<( kdbgstream&, const Msf& );
 }

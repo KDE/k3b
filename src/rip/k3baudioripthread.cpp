@@ -161,7 +161,7 @@ void K3bAudioRipThread::run()
   d->overallSectorsRead = 0;
   d->overallSectorsToRead = 0;
   for( unsigned int i = 0; i < m_tracks.count(); ++i ) 
-    d->overallSectorsToRead += d->toc[m_tracks[i].first-1].length();
+    d->overallSectorsToRead += d->toc[m_tracks[i].first-1].length().lba();
 
 
   if( m_singleFile ) {
@@ -332,7 +332,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 
 	  trackSectorsRead++;
 	  d->overallSectorsRead++;
-	  emitSubPercent( 100*trackSectorsRead/d->toc[track-1].length() );
+	  emitSubPercent( 100*trackSectorsRead/d->toc[track-1].length().lba() );
 	  emitPercent( 100*d->overallSectorsRead/d->overallSectorsToRead );
 	}
       }

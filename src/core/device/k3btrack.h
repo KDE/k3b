@@ -1,7 +1,26 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+
+
 #ifndef K3BTRACK_H
 #define K3BTRACK_H
 
 #include <qstring.h>
+
+#include <k3bmsf.h>
 
 namespace K3bCdDevice
 {
@@ -24,26 +43,28 @@ namespace K3bCdDevice
 
     Track();
     Track( const Track& );
-    Track( int firstSector, int lastSector, int type, int mode = UNKNOWN, const QString& = QString::null );
+    Track( const K3b::Msf& firstSector, 
+	   const K3b::Msf& lastSector, 
+	   int type, 
+	   int mode = UNKNOWN, 
+	   const QString& = QString::null );
     Track& operator=( const Track& );
 
     const QString& title() const { return m_title; }
     int type() const { return m_type; }
     int mode() const { return m_mode; }
-    int firstSector() const { return m_firstSector; }
-    int lastSector() const { return m_lastSector; }
-    int length() const;
+    const K3b::Msf& firstSector() const { return m_firstSector; }
+    const K3b::Msf& lastSector() const { return m_lastSector; }
+    K3b::Msf length() const;
 
-    void setFirstSector( int s ) { m_firstSector = s; }
-    void setLastSector( int s ) { m_lastSector = s; }
+    void setFirstSector( const K3b::Msf& s ) { m_firstSector = s; }
+    void setLastSector( const K3b::Msf& s ) { m_lastSector = s; }
 
     void setTitle( const QString& );
 
-    bool isEmpty() const;
-
   private:
-    int m_firstSector;
-    int m_lastSector;
+    K3b::Msf m_firstSector;
+    K3b::Msf m_lastSector;
     int m_type;
     int m_mode;
     QString m_title;

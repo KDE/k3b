@@ -361,7 +361,7 @@ void K3bAudioRippingDialog::refresh()
     long length = 0;
     for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
-      length += m_diskInfo.toc[*it-1].length();
+      length += m_diskInfo.toc[*it-1].length().lba();
     }
 
     QString filename, directory;
@@ -412,7 +412,7 @@ void K3bAudioRippingDialog::refresh()
       long long fileSize = 0;
       if( m_comboFileType->currentItem() == 0 ) {
 	extension = "wav";
-	fileSize = m_diskInfo.toc[index].length() * 2352 + 44;
+	fileSize = m_diskInfo.toc[index].length().audioBytes() + 44;
       }
       else {
 	extension = d->factoryMap[m_comboFileType->currentItem()]->extension();

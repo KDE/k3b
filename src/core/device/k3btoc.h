@@ -1,7 +1,25 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+
 #ifndef K3BTOC_H
 #define K3BTOC_H
 
 #include <qvaluelist.h>
+
+#include <k3bmsf.h>
 
 #include "k3btrack.h"
 
@@ -51,17 +69,17 @@ namespace K3bCdDevice
      * The first track's first sector could differ from the disc's
      * first sector if there is a pregap before index 1
      */
-    int firstSector() const;
-    int lastSector() const;
-    int length() const;
+    const K3b::Msf& firstSector() const;
+    K3b::Msf lastSector() const;
+    K3b::Msf length() const;
 
     void setDiscId( unsigned int id ) { m_discId = id; }
     void setFirstSector( int i ) { m_firstSector = i; }
 
   private:
     unsigned int m_discId;
-    int m_firstSector;
-    //  int m_lastSector;
+    K3b::Msf m_firstSector;
+    //  K3b::Msf int m_lastSector;
   };
 }
 

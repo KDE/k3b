@@ -1,13 +1,28 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+
 #include "k3btoc.h"
 
 #include <qstring.h>
 
 
 K3bCdDevice::Toc::Toc()
-  : QValueList<K3bCdDevice::Track>()
+  : QValueList<K3bCdDevice::Track>(),
+    m_discId(0)
 {
-  m_discId = 0;
-  m_firstSector = 0;
 }
 
 
@@ -43,13 +58,13 @@ unsigned int K3bCdDevice::Toc::discId() const
 }
 
 
-int K3bCdDevice::Toc::firstSector() const
+const K3b::Msf& K3bCdDevice::Toc::firstSector() const
 {
   return m_firstSector;
 }
 
 
-int K3bCdDevice::Toc::lastSector() const
+K3b::Msf K3bCdDevice::Toc::lastSector() const
 {
   if( isEmpty() )
     return 0;
@@ -58,10 +73,10 @@ int K3bCdDevice::Toc::lastSector() const
 }
 
 
-int K3bCdDevice::Toc::length() const
+K3b::Msf K3bCdDevice::Toc::length() const
 {
   // +1 since the last sector is included
-  return lastSector() - m_firstSector + 1;
+  return lastSector() - firstSector() + 1;
 }
 
 
@@ -70,14 +85,14 @@ unsigned int K3bCdDevice::Toc::calculateDiscId()
   // calculate cddb-id
   unsigned int id = 0;
   for( K3bToc::iterator it = begin(); it != end(); ++it ) {
-    unsigned int n = (*it).firstSector() + 150;
+    unsigned int n = (*it).firstSector().lba() + 150;
     n /= 75;
     while( n > 0 ) {
       id += n % 10;
       n /= 10;
     }
   }
-  unsigned int l = length();
+  unsigned int l = length().lba();
   l /= 75;
   id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | count();
 

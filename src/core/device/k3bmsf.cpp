@@ -128,22 +128,22 @@ QString K3b::Msf::toString( bool showFrames ) const
 
 KIO::filesize_t K3b::Msf::mode1Bytes() const
 {
-  return (KIO::filesize_t)2048 * ( (KIO::filesize_t)totalFrames() );
+  return (KIO::filesize_t)2048 * ( (KIO::filesize_t)lba() );
 }
 
 KIO::filesize_t K3b::Msf::mode2Form1Bytes() const
 {
-  return (KIO::filesize_t)2048 * ( (KIO::filesize_t)totalFrames() );
+  return (KIO::filesize_t)2048 * ( (KIO::filesize_t)lba() );
 }
 
 KIO::filesize_t K3b::Msf::mode2Form2Bytes() const
 {
-  return (KIO::filesize_t)2324 * ( (KIO::filesize_t)totalFrames() );
+  return (KIO::filesize_t)2324 * ( (KIO::filesize_t)lba() );
 }
 
 KIO::filesize_t K3b::Msf::audioBytes() const
 {
-  return (KIO::filesize_t)2352 * ( (KIO::filesize_t)totalFrames() );
+  return (KIO::filesize_t)2352 * ( (KIO::filesize_t)lba() );
 }
 
 
@@ -204,17 +204,27 @@ bool K3b::operator==( const K3b::Msf& m1, const K3b::Msf& m2 )
 
 bool K3b::operator!=( const K3b::Msf& m1, const K3b::Msf& m2 )
 {
-	  return !operator==(m1,m2);
+  return !operator==( m1, m2 );
 }
 
 bool K3b::operator<( const K3b::Msf& m1, const K3b::Msf& m2 )
 {
-  return ( m1.totalFrames() < m2.totalFrames() );
+  return ( m1.lba() < m2.lba() );
 }
 
 bool K3b::operator>( const K3b::Msf& m1, const K3b::Msf& m2 )
 {
-  return ( m1.totalFrames() > m2.totalFrames() );
+  return ( m1.lba() > m2.lba() );
+}
+
+bool K3b::operator<=( const K3b::Msf& m1, const K3b::Msf& m2 )
+{
+  return ( m1.lba() <= m2.lba() );
+}
+
+bool K3b::operator>=( const K3b::Msf& m1, const K3b::Msf& m2 )
+{
+  return ( m1.lba() >= m2.lba() );
 }
 
 kdbgstream& K3b::operator<<( kdbgstream& s, const Msf& m )

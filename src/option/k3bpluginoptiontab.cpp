@@ -111,6 +111,7 @@ void K3bPluginOptionTab::slotConfigureButtonClicked()
       dlg.setMainWidget( configWidget );
       connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
       connect( &dlg, SIGNAL(okClicked()), configWidget, SLOT(saveConfig()) );
+      configWidget->loadConfig();
       dlg.exec();
       delete configWidget;
     }

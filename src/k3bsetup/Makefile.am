@@ -11,7 +11,7 @@ apps_DATA = k3bsetup.desktop
 appsdir = $(kde_appsdir)/Multimedia
 
 # set the include path for X, qt and KDE
-AM_CPPFLAGS = -I$(srcdir)/../core $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../core/device $(all_includes)
 
 METASOURCES = AUTO
 
