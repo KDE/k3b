@@ -90,10 +90,8 @@ bool K3bFFMpegDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, i
     addMetaInfo( META_ARTIST, m_file->author() );
     addMetaInfo( META_COMMENT, m_file->comment() );
 
-    frames = m_file->length();
     samplerate = m_file->sampleRate();
     ch = m_file->channels();
-
     m_type = m_file->typeComment();
 
     // ffmpeg cannot handle vbr mp3 files properly (their length)
@@ -108,6 +106,8 @@ bool K3bFFMpegDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, i
       
       frames = (unsigned long)ceil((double)bytes/2048.0);
     }
+    else
+      frames = m_file->length();
 
     // cleanup;
     delete m_file;

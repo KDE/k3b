@@ -70,6 +70,8 @@ namespace K3b
     WRITING_MODE_RES_OVWR = 32 // Restricted Overwrite
   };
 
+  QString writingModeString( int );
+
   QString framesToString( int h, bool showFrames = true );
   QString sizeToTime( long size );
 

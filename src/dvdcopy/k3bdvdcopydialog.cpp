@@ -245,6 +245,10 @@ void K3bDvdCopyDialog::slotStartClicked()
 
 void K3bDvdCopyDialog::loadUserDefaults( KConfig* c )
 {
+  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
+
+  m_writerSelectionWidget->loadConfig( c );
+
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
 
   m_writingModeWidget->loadConfig( c );
@@ -258,10 +262,6 @@ void K3bDvdCopyDialog::loadUserDefaults( KConfig* c )
   m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
   m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
-
-  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
-
-  m_writerSelectionWidget->loadConfig( c );
 
   slotToggleAll();
 }

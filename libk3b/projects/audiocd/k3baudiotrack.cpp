@@ -71,7 +71,7 @@ K3bAudioTrack::~K3bAudioTrack()
 
   // delete all sources
   while( m_firstSource )
-    delete m_firstSource; // this will remove the source from the list
+    delete m_firstSource->take();
 
   kdDebug() << "(K3bAudioTrack::~K3bAudioTrack) finished" << endl;
 }

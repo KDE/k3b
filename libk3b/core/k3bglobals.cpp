@@ -21,6 +21,7 @@
 #include <k3bexternalbinmanager.h>
 
 #include <kglobal.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kapplication.h>
@@ -400,4 +401,25 @@ int K3b::writingAppFromString( const QString& s )
     return K3b::DVD_RW_FORMAT;
   else
     return K3b::DEFAULT;
+}
+
+
+QString K3b::writingModeString( int mode )
+{
+  switch( mode ) {
+  case WRITING_MODE_AUTO:
+    return i18n("Auto");
+  case TAO:
+    return i18n("TAO");
+  case DAO:
+    return i18n("DAO");
+  case RAW:
+    return i18n("Raw");
+  case WRITING_MODE_INCR_SEQ:
+    return i18n("Incremental Sequential");
+  case WRITING_MODE_RES_OVWR:
+    return i18n("Restricted Overwrite");
+  default:
+    return i18n("Unknown writing mode");
+  }
 }

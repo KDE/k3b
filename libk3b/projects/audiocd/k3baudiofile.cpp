@@ -28,6 +28,7 @@ K3bAudioFile::K3bAudioFile( K3bAudioDecoder* dec, K3bAudioDoc* doc )
     m_endOffset(0),
     m_decodedData(0)
 {
+  // FIXME: somehow make it possible to switch docs
   doc->increaseDecoderUsage( m_decoder );
 }
 

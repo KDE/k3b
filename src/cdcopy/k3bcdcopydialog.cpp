@@ -383,6 +383,8 @@ void K3bCdCopyDialog::slotToggleAll()
 
 void K3bCdCopyDialog::loadUserDefaults( KConfig* c )
 {
+  m_writerSelectionWidget->loadConfig( c );
+  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
   m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
@@ -392,11 +394,7 @@ void K3bCdCopyDialog::loadUserDefaults( KConfig* c )
 
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
-  m_writerSelectionWidget->loadConfig( c );
-
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
-
-  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
 
   if( c->readEntry( "copy mode", "normal" ) == "normal" )
     m_comboCopyMode->setCurrentItem( 0 );

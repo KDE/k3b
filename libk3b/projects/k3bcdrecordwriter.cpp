@@ -24,7 +24,6 @@
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
-#include <k3bdeviceglobals.h>
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 
@@ -334,14 +333,14 @@ void K3bCdrecordWriter::start()
     if( simulate() ) {
       emit newTask( i18n("Simulating") );
       emit infoMessage( i18n("Starting %1 simulation at %2x speed...")
-			.arg(K3bDevice::writingModeString(m_writingMode))
+			.arg(K3b::writingModeString(m_writingMode))
 			.arg(d->usedSpeed), 
 			K3bJob::INFO );
     }
     else {
       emit newTask( i18n("Writing") );
       emit infoMessage( i18n("Starting %1 writing at %2x speed...")
-			.arg(K3bDevice::writingModeString(m_writingMode))
+			.arg(K3b::writingModeString(m_writingMode))
 			.arg(d->usedSpeed), 
 			K3bJob::INFO );
     }
