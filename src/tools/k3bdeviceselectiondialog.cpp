@@ -64,6 +64,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
 
 K3bDeviceSelectionDialog::~K3bDeviceSelectionDialog()
 {
+		delete d;
 }
 
 
