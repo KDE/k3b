@@ -138,7 +138,7 @@ void K3bProjectBurnDialog::slotCancel()
 void K3bProjectBurnDialog::slotOk()
 {
   if( m_job ) {
-    KMessageBox::sorry( k3bMain(), i18n("Sorry, K3b is already working on this project!"), i18n("Sorry") );
+    KMessageBox::sorry( k3bMain(), i18n("K3b is already working on this project!"), i18n("Error") );
     return;
   }
 

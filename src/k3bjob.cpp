@@ -103,7 +103,7 @@ void K3bBurnJob::parseCdrdaoLine( const QString& str )
     emit newSubTask( i18n("Flushing cache") );
   }
   else if( (str).startsWith( "Writing CD-TEXT lead" ) ) {
-    emit newSubTask( i18n("Writing CD-Text leadin...") );
+    emit newSubTask( i18n("Writing CD-Text lead-in...") );
   }
   else if( (str).startsWith( "Turning BURN-Proof on" ) ) {
     emit infoMessage( i18n("Turning BURN-Proof on"), K3bJob::PROCESS );

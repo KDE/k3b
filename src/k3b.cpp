@@ -183,7 +183,7 @@ void K3bMainWindow::initActions()
 			       actionCollection(), "tools_blank_cdrw" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
-  actionToolsWriteIsoImage = new KAction(i18n("&Write Iso Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
+  actionToolsWriteIsoImage = new KAction(i18n("&Write ISO Image..."), "gear", 0, this, SLOT(slotWriteIsoImage()),
 					 actionCollection(), "tools_write_iso" );
 
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
@@ -868,7 +868,7 @@ void K3bMainWindow::init()
 
   // device manager
   // ===============================================================================
-  emit initializationInfo( i18n("Scanning for cd devices...") );
+  emit initializationInfo( i18n("Scanning for CD devices...") );
 
   m_deviceManager = new K3bDeviceManager( m_externalBinManager, this );
 
@@ -888,7 +888,7 @@ void K3bMainWindow::init()
   m_deviceManager->printDevices();
   // ===============================================================================
 
-  emit initializationInfo( i18n("Initializing cd view...") );
+  emit initializationInfo( i18n("Initializing CD view...") );
 
   m_dirView->setupFinalize( m_deviceManager );
 

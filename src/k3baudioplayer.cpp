@@ -339,7 +339,7 @@ void K3bAudioPlayer::play()
       m_playObject = factory.createPlayObject( string(QFile::encodeName(m_currentItem->filename()) ) );
       if( m_playObject.isNull() ) {
 	kdDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename() << endl;
-	m_labelFilename->setText( i18n("Unknown fileformat") );
+	m_labelFilename->setText( i18n("Unknown file format") );
 
 	// play the next if there is any
 	if( m_currentItem->itemBelow() ) {

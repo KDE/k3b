@@ -110,7 +110,7 @@ void K3bBlankingDialog::setupGui()
   groupOptionsLayout->setMargin( marginHint() );
 
   m_checkForce = new QCheckBox( m_groupOptions );
-  m_checkForce->setText( i18n("Force\n(Try this if K3b\nis not able to\nblank a cdrw in\nnormal mode)") );
+  m_checkForce->setText( i18n("Force\n(Try this if K3b\nis not able to\nblank a CD-RW in\nnormal mode)") );
 
   groupOptionsLayout->addWidget( m_checkForce );
   // ------------------------------------------------------------------------

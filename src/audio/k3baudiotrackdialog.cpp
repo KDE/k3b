@@ -289,7 +289,7 @@ void K3bAudioTrackDialog::setupGui()
 
   m_labelMimeType = new QLabel( groupFileInfo, "m_labelMimeType" );
   m_displayFileName = new KCutLabel( groupFileInfo );
-  m_displayFileName->setText( i18n( "filename" ) );
+  m_displayFileName->setText( i18n( "Filename" ) );
   m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
   QLabel* labelSize = new QLabel( i18n( "Size" ), groupFileInfo, "labelSize" );
   QLabel* labelLength = new QLabel( i18n( "Length"), groupFileInfo, "labelLength" );

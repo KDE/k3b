@@ -150,7 +150,7 @@ void K3bBlankingJob::slotCdrecordFinished()
       switch( m_process->exitStatus() )
 	{
 	case 0:
-	  emit infoMessage( i18n("Process successfully finished"), K3bJob::STATUS );
+	  emit infoMessage( i18n("Process completed successfully"), K3bJob::STATUS );
 	  emit finished( true );
 	  break;
 				
@@ -164,7 +164,7 @@ void K3bBlankingJob::slotCdrecordFinished()
     }
   else
     {
-      emit infoMessage( i18n("Cdrecord did not exit cleanly."), K3bJob::ERROR );
+      emit infoMessage( i18n("cdrecord did not exit cleanly."), K3bJob::ERROR );
       emit finished( false );
     }
 }

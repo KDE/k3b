@@ -213,7 +213,7 @@ void K3bDirView::slotDiskInfoReady( const K3bDiskInfo& info )
       mount = ( KMessageBox::questionYesNo( this, 
 					    i18n("Found Mixed-mode CD. Do you want K3b to mount the data part or show all the tracks?"),
 					    i18n("Mixed-mode CD"), 
-					    i18n("Mount cd"),
+					    i18n("Mount CD"),
 					    i18n("Show tracks") ) == KMessageBox::Yes );
     }
 
