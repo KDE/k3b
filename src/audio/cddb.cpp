@@ -19,6 +19,8 @@
 #include <config.h>
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
+#else
+#define __need_timeval
 #endif
 #include <sys/types.h>
 #ifdef HAVE_SYS_SOCKET_H
@@ -34,6 +36,7 @@
 #include <klocale.h>
 
 #include "cddb.h"
+
 
 #ifdef __need_timeval
 #undef __need_timeval
