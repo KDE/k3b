@@ -188,10 +188,20 @@ void K3bBurningOptionTab::setupGui()
   mainTabbed->addTab( projectTab, i18n("&Projects") );
   mainTabbed->addTab( advancedTab, i18n("&Advanced") );
 
-
+  QToolTip::add( m_checkUseID3Tag, i18n("Rename audio files based on meta information") );
+  QToolTip::add( m_checkDropDoubles, i18n("Do not ask to rename already existing files") );
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
 
+  QWhatsThis::add( m_checkUseID3Tag, i18n("<p>If this option is checked K3b will rename audio files "
+					  "that contain meta information (for example id3 tags in mp3 "
+					  "files) to the following format:"
+					  "<p><em>Artist - Title.extention</em>") );
+  QWhatsThis::add( m_checkDropDoubles, i18n("<p>If this option is checked K3b will not ask how to "
+					    "handle a file that already exists in the project "
+					    "but just ignore it."
+					    "<p>The default is off which means that the user is "
+					    "asked to rename or ignore the file." ) );
   QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked, hidden files "
 						"in directories added to a data project will "
 						"also be added.</p>" ) );

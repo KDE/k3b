@@ -65,7 +65,7 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
   mainGrid->addWidget( m_editMessage, 10, 1 );
 
   mainGrid->addRowSpacing( 7, 20 );
-  mainGrid->setRowStretch( 10, 1 );
+  mainGrid->setRowStretch( 11, 1 );
 
   // buddies
   labelDisc_id->setBuddy( m_editDisc_id );

@@ -64,6 +64,9 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   sizes[1] = all*2/3;
   sizes[0] = all - sizes[1];
   splitter->setSizes( sizes );
+
+  m_dataDirTreeView->updateContents();
+  m_dataFileView->updateContents();
 }
 
 

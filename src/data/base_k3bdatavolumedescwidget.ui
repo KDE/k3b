@@ -26,28 +26,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Volume Descriptor used for both the Iso9660 and the Joliet filesystem</string>
-            </property>
-        </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line1</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
         <widget class="QLabel" row="6" column="0">
             <property name="name">
                 <cstring>TextLabel5</cstring>
