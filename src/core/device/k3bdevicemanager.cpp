@@ -359,13 +359,13 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
       else {
 	// device found, apply changes
 	if( list.count() > 3 )
-	  dev->setMaxReadSpeed( list[1].toInt() );
+	  dev->setMaxReadSpeed( list[3].toInt() );
 	if( list.count() > 4 )
-	  dev->setMaxWriteSpeed( list[2].toInt() );
+	  dev->setMaxWriteSpeed( list[4].toInt() );
 	if( list.count() > 5 )
-	  dev->setCdrdaoDriver( list[3] );
+	  dev->setCdrdaoDriver( list[5] );
 	if( list.count() > 6 )
-	  dev->setCdTextCapability( list[4] == "yes" );
+	  dev->setCdTextCapability( list[6] == "yes" );
       }
     }
     else
