@@ -296,8 +296,10 @@ void K3bCdCopyJob::cdrdaoFinished(bool ok) {
                          K3bJob::INFO );
                     cdrdaoWrite();
                 } else if ( ++m_finishedCopies > m_copies ) {
-                    emit infoMessage(
-                        i18n("%1 copies succsessfully created").arg(m_copies),K3bJob::INFO );
+		  emit infoMessage( i18n("1 copy succsessfully created", 
+					 "%n copies succsessfully created", 
+					 m_copies),
+				    K3bJob::INFO );
                     finishAll();
                 } else {
                     m_cdrdaowriter->burnDevice()->eject();
