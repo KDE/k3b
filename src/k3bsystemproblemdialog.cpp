@@ -280,7 +280,7 @@ void K3bSystemProblemDialog::checkSystem()
 					     i18n("When K3b %1 was released no version of cdrdao "
 						  "was able to write without SCSI emulation. "
 						  "Although it is possible that there actually "
-						  "is a version with ATAPI support it is unlikely."),
+						  "is a version with ATAPI support it is unlikely.").arg(k3bcore->version()),
 					     i18n("The best and recommended solution is to enable "
 						  "ide-scsi (SCSI emulation) for all writer devices. "
 						  "This way you won't have any problems."),
