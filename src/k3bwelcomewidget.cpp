@@ -278,7 +278,8 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     int r = -1;
 
     int removeAction = -1;
-    if( viewport()->childAt(e->pos())->inherits( "QToolButton" ) ) {
+    QWidget* widgetAtPos = viewport()->childAt(e->pos());
+    if( widgetAtPos && widgetAtPos->inherits( "QToolButton" ) ) {
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove button") );
       pop.insertItem( i18n("Add button"), &addPop );
       r = pop.exec( e->globalPos() );
@@ -290,7 +291,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
     if( r != -1 ) {
       if( r == removeAction )
-	main->removeButton( (QToolButton*)viewport()->childAt(e->pos()) );
+	main->removeButton( (QToolButton*)widgetAtPos );
       else
 	main->addAction( map[r] );
     }

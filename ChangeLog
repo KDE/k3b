@@ -1,6 +1,7 @@
 0.11.23
 Fixed session import.
-
+Fixed seldom crash in the welcome widget.
+	
 0.11.22
 Flac 1.1.2 compile fix.
 
