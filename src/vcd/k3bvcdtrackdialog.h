@@ -16,7 +16,7 @@
 #ifndef K3BVCDTRACKDIALOG_H
 #define K3BVCDTRACKDIALOG_H
 
-
+#include <k3bvcddoc.h>
 #include <kdialogbase.h>
 #include <qptrlist.h>
 #include <qtabwidget.h>
@@ -35,13 +35,14 @@ class K3bVcdTrackDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bVcdTrackDialog( QList<K3bVcdTrack>&, QWidget *parent=0, const char *name=0);
+  K3bVcdTrackDialog( K3bVcdDoc*, QList<K3bVcdTrack>&, QWidget *parent=0, const char *name=0);
   ~K3bVcdTrackDialog();
 
  protected slots:
   void slotOk();
 
  private:
+  K3bVcdDoc* m_doc;
   QList<K3bVcdTrack> m_tracks;
   QTabWidget* m_mainTabbed;
   
@@ -76,9 +77,14 @@ class K3bVcdTrackDialog : public KDialogBase
   QComboBox* m_nav_next;
   QComboBox* m_nav_return;
   QComboBox* m_nav_default;
+  QComboBox* m_comboAfterTimeout;
   
   QCheckBox* m_check_usekeys;
+  QCheckBox* m_check_overwritekeys;
   QListView* m_list_keys;
+
+  QSpinBox* m_spin_times;
+  QSpinBox* m_spin_waittime;
   
   void prepareGui();
   void setupNavigationTab();

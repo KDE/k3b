@@ -26,6 +26,7 @@
 #include <qhbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qpixmap.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -41,7 +42,7 @@
 #include "../device/k3bmsf.h"
 
 
-K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QWidget *parent, const char *name )
+K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* pDoc, QPtrList<K3bVcdTrack>& tracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Video Track Properties"), KDialogBase::Ok,
 		 KDialogBase::Ok, parent, name )
 {
@@ -52,6 +53,7 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( QPtrList<K3bVcdTrack>& tracks, QWidget *pa
   setupAudioTab();
 
   m_tracks = tracks;
+  m_doc = pDoc;
 
   if( !m_tracks.isEmpty() ) {
 
@@ -194,6 +196,34 @@ void K3bVcdTrackDialog::fillGui()
 
     m_copyright_audio->setText(tmp);
   }
+
+
+  // TODO: make this better :) only for testing now
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  QPixmap pm = SmallIcon( "stop" );
+  m_nav_previous->insertItem(pm, i18n("Event Disabled"));
+  m_nav_next->insertItem(pm, i18n("Event Disabled"));
+  m_nav_return->insertItem(pm, i18n("Event Disabled"));
+  m_nav_default->insertItem(pm, i18n("Event Disabled"));
+
+  QListIterator<K3bVcdTrack> it( *m_doc->tracks() );
+  for( ; it.current(); ++it ) {
+    QPixmap pm = KMimeType::pixmapForURL( KURL(it.current()->absPath()), 0, KIcon::Desktop, 16 );
+    QString s = i18n("Sequence-%1 - %2").arg(it.current()->index() +1).arg(it.current()->title());
+    m_nav_previous->insertItem(pm, s);
+    m_nav_next->insertItem(pm, s);
+    m_nav_return->insertItem(pm, s);
+    m_nav_default->insertItem(pm, s);
+  }
+
+  pm = SmallIcon( "cdrom_unmount" );
+  m_nav_previous->insertItem(pm, i18n("VideoCD END"));
+  m_nav_next->insertItem(pm, i18n("VideoCD END"));
+  m_nav_return->insertItem(pm, i18n("VideoCD END"));
+  m_nav_default->insertItem(pm, i18n("VideoCD END"));
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  
 }
 
 void K3bVcdTrackDialog::prepareGui()
@@ -274,49 +304,62 @@ void K3bVcdTrackDialog::setupNavigationTab()
   grid->setMargin( marginHint() );
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  QButtonGroup* groupPlay = new QButtonGroup( 4, Qt::Vertical, i18n("Play track ..."), w );
-  QGridLayout*  groupPlayLayout = new QGridLayout( groupPlay );
+  QButtonGroup* groupPlay = new QButtonGroup(i18n("Playing track ..."), w );
+  groupPlay->setColumnLayout(0, Qt::Vertical );
+  groupPlay->setExclusive(true);
+  groupPlay->layout()->setSpacing( spacingHint() );
+  groupPlay->layout()->setMargin( marginHint() );
+
+  QGridLayout*  groupPlayLayout = new QGridLayout( groupPlay->layout() );
   groupPlayLayout->setAlignment( Qt::AlignTop );
-  groupPlayLayout->setSpacing( spacingHint() );
-  groupPlayLayout->setMargin( marginHint() );
   
-  m_radio_playtime = new QRadioButton( i18n("%1 times").arg(1), groupPlay, "m_radio_playtime" );
-  groupPlayLayout->addWidget( m_radio_playtime, 0, 0 );
+  m_spin_times = new QSpinBox( groupPlay, "m_spin_times" );
+  m_spin_times->setMinValue(1);
   
-  QSpinBox* spinTimes = new QSpinBox( groupPlay, "m_spinTimes" );
-  groupPlayLayout->addWidget( spinTimes, 0, 1 );
-  
+  m_radio_playtime = new QRadioButton( i18n("%1 times").arg(m_spin_times->value()), groupPlay, "m_radio_playtime" );
   m_radio_playforever = new QRadioButton( i18n("forever"), groupPlay, "m_radio_playforever" );
-  groupPlayLayout->addWidget( m_radio_playforever, 1, 0 );
+
+  groupPlayLayout->addWidget( m_radio_playtime, 1, 0 );
+  groupPlayLayout->addWidget( m_spin_times, 1, 1 );
+  groupPlayLayout->addMultiCellWidget( m_radio_playforever, 2, 2, 0, 1 );
+
+  groupPlayLayout->setRowStretch( 5, 1 );
   
   //////////////////////////////////////////////////////////////////////////////////////////
-  QButtonGroup* groupWait = new QButtonGroup( 4, Qt::Vertical, i18n("than wait ..."), w );
-  QGridLayout*  groupWaitLayout = new QGridLayout( groupWait );
+  QButtonGroup* groupWait = new QButtonGroup(i18n("than wait ..."), w );
+  groupWait->setColumnLayout(0, Qt::Vertical );
+  groupWait->setExclusive(true);
+  groupWait->layout()->setSpacing( spacingHint() );
+  groupWait->layout()->setMargin( marginHint() );
+  
+  QGridLayout*  groupWaitLayout = new QGridLayout( groupWait->layout() );
   groupWaitLayout->setAlignment( Qt::AlignTop );
-  groupWaitLayout->setSpacing( spacingHint() );
-  groupWaitLayout->setMargin( marginHint() );
+  
+  m_spin_waittime = new QSpinBox( groupWait, "m_spinSeconds" );
   
   m_radio_waitinfinite = new QRadioButton( i18n("infinite"), groupWait, "m_radio_waitinfinite" );
-  groupWaitLayout->addWidget(m_radio_waitinfinite, 0, 0);
+  m_radio_waittime = new QRadioButton( i18n("%1 seconds").arg(m_spin_waittime->value()), groupWait, "m_radio_waittime" );
   
-  m_radio_waittime = new QRadioButton( i18n("%1 seconds").arg(0), groupWait, "m_radio_waittime" );
-  groupWaitLayout->addWidget(m_radio_waittime, 1, 0);
-  
-  QSpinBox* spinSeconds = new QSpinBox( groupWait, "m_spinSeconds" );
-  groupWaitLayout->addWidget(spinSeconds, 1, 1);
-  
-  QLabel* labelAfterTimeout = new QLabel( i18n( "after timeout play" ), groupWait, "labelTimeout" );
-  groupWaitLayout->addWidget(labelAfterTimeout, 2, 1);
-  
-  QComboBox* comboAfterTimeout = new QComboBox( groupWait, "comboAfterTimeout" );
-  groupWaitLayout->addWidget(comboAfterTimeout, 3, 1);  
-  
+  QLabel* labelAfterTimeout = new QLabel( i18n( "after timeout playing" ), groupWait, "labelTimeout" );
+
+  m_comboAfterTimeout = new QComboBox( groupWait, "m_comboAfterTimeout" );
+
+  groupWaitLayout->addMultiCellWidget(m_radio_waitinfinite, 1, 1, 0, 1);
+  groupWaitLayout->addWidget(m_radio_waittime, 2, 0);
+  groupWaitLayout->addWidget(m_spin_waittime, 2, 1);
+  groupWaitLayout->addMultiCellWidget(labelAfterTimeout, 3, 3, 1, 1);
+  groupWaitLayout->addMultiCellWidget(m_comboAfterTimeout, 4, 4, 1, 1);
+
+  groupWaitLayout->setRowStretch( 5, 1 );
+
   //////////////////////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupNav = new QGroupBox( 4, Qt::Vertical, i18n("Navigation"), w );
-  QGridLayout*  groupNavLayout = new QGridLayout( groupNav );
+  QGroupBox* groupNav = new QGroupBox(i18n("Key pressed interaction"), w );
+  groupNav->setColumnLayout(0, Qt::Vertical );
+  groupNav->layout()->setSpacing( spacingHint() );
+  groupNav->layout()->setMargin( marginHint() );
+
+  QGridLayout*  groupNavLayout = new QGridLayout( groupNav->layout() );
   groupNavLayout->setAlignment( Qt::AlignTop );
-  groupNavLayout->setSpacing( spacingHint() );
-  groupNavLayout->setMargin( marginHint() );
   
   QLabel* labelNav_previous = new QLabel( i18n( "Privious:" ), groupNav, "labelNav_previous" );
   QLabel* labelNav_next  = new QLabel( i18n( "Next:" ), groupNav, "labelNav_next" );
@@ -328,29 +371,34 @@ void K3bVcdTrackDialog::setupNavigationTab()
   m_nav_return = new QComboBox( groupNav, "m_nav_return" );
   m_nav_default = new QComboBox( groupNav, "m_nav_default" );
   
-  groupNavLayout->addWidget(labelNav_previous, 0, 0);
-  groupNavLayout->addWidget(m_nav_previous, 0, 1);
+  groupNavLayout->addWidget(labelNav_previous, 2, 0);
+  groupNavLayout->addWidget(m_nav_previous, 2, 1);
 
-  groupNavLayout->addWidget(labelNav_next, 1, 0);
-  groupNavLayout->addWidget(m_nav_next, 1, 1);
+  groupNavLayout->addWidget(labelNav_next, 3, 0);
+  groupNavLayout->addWidget(m_nav_next, 3, 1);
 
-  groupNavLayout->addWidget(labelNav_return, 2, 0);
-  groupNavLayout->addWidget(m_nav_return, 2, 1);
+  groupNavLayout->addWidget(labelNav_return, 4, 0);
+  groupNavLayout->addWidget(m_nav_return, 4, 1);
 
-  groupNavLayout->addWidget(labelNav_default, 3, 0);
-  groupNavLayout->addWidget(m_nav_default, 3, 1);
+  groupNavLayout->addWidget(labelNav_default, 5, 0);
+  groupNavLayout->addWidget(m_nav_default, 5, 1);
+
   
-  groupNavLayout->setRowStretch( 4, 1 );
-      
-  QGroupBox* groupKey = new QGroupBox( 4, Qt::Vertical, i18n("numeric keys"), w );
+  //////////////////////////////////////////////////////////////////////////////////////////
+  QGroupBox* groupKey = new QGroupBox( 6, Qt::Vertical, i18n("Numeric keys"), w );
+  groupKey->layout()->setSpacing( spacingHint() );
+  groupKey->layout()->setMargin( marginHint() );
+
   m_check_usekeys = new QCheckBox( i18n("Use numeric keys"), groupKey, "m_check_usekeys" );
   m_list_keys = new QListView( groupKey, "m_list_keys" );
-  
+  m_check_overwritekeys = new QCheckBox( i18n("Overwrite default assignment"), groupKey, "m_check_overwritekeys" );
+
+  //////////////////////////////////////////////////////////////////////////////////////////
   grid->addWidget( groupPlay, 0, 0 );
   grid->addWidget( groupWait, 0, 1 );
   grid->addWidget( groupNav, 1, 0 );
   grid->addWidget( groupKey, 1, 1 );
-  
+
   grid->setRowStretch( 2, 1 );
 
   m_mainTabbed->addTab( w, i18n("Navigation") );  

@@ -203,7 +203,7 @@ void K3bVcdListView::showPropertiesDialog()
 {
   QPtrList<K3bVcdTrack> selected = selectedTracks();
   if( !selected.isEmpty() && selected.count() == 1 ) {
-    K3bVcdTrackDialog d( selected, this );
+    K3bVcdTrackDialog d( m_doc, selected, this );
     if( d.exec() ) {
       repaint();
     }
