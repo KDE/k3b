@@ -74,7 +74,7 @@ class K3bApplication : public KUniqueApplication
  */
 class K3bApplication::Core : public K3bCore
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   Core( QObject* parent );
