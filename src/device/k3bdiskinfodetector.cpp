@@ -35,7 +35,7 @@
 
 
 K3bCdDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
-  : QObject( parent ), QThread(),
+  : QObject( parent ),
   m_tcWrapper(0)
 {
 }
@@ -45,10 +45,6 @@ K3bCdDevice::DiskInfoDetector::~DiskInfoDetector()
 {
 }
 
-void K3bCdDevice::DiskInfoDetector::run() {
-  fetchTocInfo();
-kdDebug()<< "(DiskInfoDetector) exit" << endl;
-}
 
 void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
 {
@@ -62,10 +58,8 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   // reset
   m_info = DiskInfo();
   m_info.device = m_device;
-  if ( running() )
-    finish(false);
-  else
-    start();
+
+  QTimer::singleShot(0,this,SLOT(fetchTocInfo()));
 }
 
 
@@ -74,7 +68,7 @@ void K3bCdDevice::DiskInfoDetector::finish(bool success)
   m_info.valid=success;
   ::close(m_cdfd);
   emit diskInfoReady(m_info);
-kdDebug()<< "(DiskInfoDetector) finish" << endl;
+
 }
 
 
@@ -112,7 +106,8 @@ void K3bCdDevice::DiskInfoDetector::fetchTocInfo()
 
   int ready = m_device->isReady();
   if (ready == 3) {  // no disk or tray open
-    finish(true);
+    m_info.valid=true;
+    emit diskInfoReady(m_info);
     return;
   }
   m_info.tocType = m_device->diskType();
@@ -265,7 +260,7 @@ void K3bCdDevice::DiskInfoDetector::testForVideoDvd()
     }
 
     m_tcWrapper->isDvdInsert( m_device );
-    ready.wait();
+
   }
   else
     finish(true);
@@ -278,8 +273,8 @@ void K3bCdDevice::DiskInfoDetector::slotIsVideoDvd( bool dvd )
     m_info.noDisk = false;
     m_info.isVideoDvd = true;
   }
+
   finish(true);
-  ready.wakeAll();
 }
 
 

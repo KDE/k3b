@@ -19,8 +19,6 @@
 #define K3BDISKINFO_DETECTOR_H
 
 #include <qobject.h>
-#include <qthread.h>
-#include <qwaitcondition.h>
 
 typedef Q_INT32 size32;
 
@@ -31,14 +29,13 @@ typedef Q_INT32 size32;
 namespace K3bCdDevice
 {
 
-  class DiskInfoDetector : public QObject, public QThread
+  class DiskInfoDetector : public QObject
   {
     Q_OBJECT
 
   public:
     DiskInfoDetector( QObject* parent = 0 );
     ~DiskInfoDetector();
-    virtual void run();
 
   public slots:
     void detect( CdDevice* dev );
@@ -63,7 +60,6 @@ namespace K3bCdDevice
     DiskInfo m_info;
     K3bTcWrapper* m_tcWrapper;
     int m_cdfd;
-    QWaitCondition ready;
   };
 };
 
