@@ -132,16 +132,28 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
       d->info.tocType == DiskInfo::DVD ) {
     if( d->device->open() != -1 ) {
 
-      // We always use the last data track
-      // this way we get the latest session on a ms cd
-      Toc::const_iterator it = toc().end();
-      --it; // this is valid since there is at least one data track
-      while( it != toc().begin() && (*it).type() != Track::DATA )
-	--it;
+      unsigned long startSec = 0;
+
+      if( d->info.sessions > 1 ) {
+	// We use the last data track
+	// this way we get the latest session on a ms cd
+	Toc::const_iterator it = toc().end();
+	--it; // this is valid since there is at least one data track
+	while( it != toc().begin() && (*it).type() != Track::DATA )
+	  --it;
+	startSec = (*it).firstSector().lba();
+      }
+      else {
+	// use first data track
+	Toc::const_iterator it = toc().begin();
+	while( it != toc().end() && (*it).type() != Track::DATA )
+	  ++it;
+	startSec = (*it).firstSector().lba();
+      }
 
       delete d->iso9660;
 
-      d->iso9660 = new K3bIso9660( d->device, (*it).firstSector().lba() );
+      d->iso9660 = new K3bIso9660( d->device, startSec );
 
       if( d->iso9660->open( IO_ReadOnly ) ) {
 	d->iso9660->debug();

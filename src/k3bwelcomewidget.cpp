@@ -183,7 +183,7 @@ void K3bWelcomeWidget::loadConfig( KConfig* c )
 
   KActionPtrList actions;
   for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
-    if( KAction* a = m_mainWindow->actionCollection()->action( *it ) )
+    if( KAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
       actions.append(a);
 
   main->rebuildGui( actions );
