@@ -22,6 +22,7 @@
 #include "k3bdatajob.h"
 #include "../k3b.h"
 #include "../tools/kstringlistdialog.h"
+#include "k3bbootimage.h"
 
 
 #include <stdlib.h>
@@ -1169,5 +1170,42 @@ void K3bDataDoc::clearImportedSession()
   }
 }
 
+
+QString K3bDataDoc::bootCatalogePath()
+{
+  if( m_bootCataloge ) {
+    return m_bootCataloge->k3bPath();
+  }
+  else 
+    return QString::null;
+}
+
+
+K3bDirItem* K3bDataDoc::bootImageDir()
+{
+  K3bDataItem* b = m_root->find( "boot" );
+  if( !b ) {
+    b = new K3bDirItem( "boot", this, m_root );
+    setModified( true );
+    emit newFileItems();
+  }
+
+  // if we cannot create the dir because there is a file named boot just use the root dir
+  if( !b->isDir() )
+    return m_root;
+  else 
+    return static_cast<K3bDirItem*>(b);
+}
+
+
+K3bFileItem* K3bDataDoc::createBootItem( const QString& filename )
+{
+  K3bFileItem* boot = new K3bFileItem( filename, 
+				       this, bootImageDir() );
+  m_size += boot->k3bSize();
+  emit newFileItems();
+
+  return boot;
+}
 
 #include "k3bdatadoc.moc"

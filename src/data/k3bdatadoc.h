@@ -34,6 +34,7 @@ class K3bRootItem;
 class K3bDirItem;
 class K3bFileItem;
 class K3bJob;
+class K3bBootImage;
 
 class KProgressDialog;
 class K3bView;
@@ -108,6 +109,12 @@ class K3bDataDoc : public K3bDoc
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
   K3bIsoOptions& isoOptions() { return m_isoOptions; }
+
+  QPtrList<K3bBootImage>& bootImages() { return m_bootImages; }
+  QString bootCatalogePath();
+
+  K3bDirItem* bootImageDir();
+  K3bFileItem* createBootItem( const QString& filename );
 
  public slots:
   /** add urls to the compilation.
@@ -194,6 +201,10 @@ class K3bDataDoc : public K3bDoc
 
   int m_multisessionMode;
   QPtrList<K3bDataItem> m_oldSession;
+
+  // boot cd stuff
+  K3bDataItem* m_bootCataloge;
+  QPtrList<K3bBootImage> m_bootImages;
 };
 
 #endif

@@ -22,6 +22,7 @@
 #include "../k3bwriterselectionwidget.h"
 #include "../k3btempdirselectionwidget.h"
 #include "../k3bisooptions.h"
+#include "../k3bjob.h"
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
@@ -513,5 +514,10 @@ void K3bDataBurnDialog::saveUserDefaults()
   }
 }
 
+
+void K3bDataBurnDialog::prepareJob( K3bBurnJob* job )
+{
+  job->setWritingApp( m_writerSelectionWidget->writingApp() );
+}
 
 #include "k3bdataburndialog.moc"

@@ -20,6 +20,7 @@
 #include "../k3bfillstatusdisplay.h"
 #include "../k3b.h"
 #include "k3bdataburndialog.h"
+#include "k3bbootimageview.h"
 #include <device/k3bdevice.h>
 #include <tools/k3bdeviceselectiondialog.h>
 
@@ -32,6 +33,7 @@
 #include <kmessagebox.h>
 #include <kio/global.h>
 #include <kio/job.h>
+#include <kdialogbase.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
@@ -135,13 +137,15 @@ void K3bDataView::importSession()
   // get the writer
   m_device = K3bDeviceSelectionDialog::selectWriter( this, i18n("Please select the appendable disk") );
 
-  // TODO: check if it's a data cd and appendable
+  if( m_device ) {
+    // TODO: check if it's a data cd and appendable
 
-  k3bMain()->showBusyInfo( i18n("Mounting disk...") );
+    k3bMain()->showBusyInfo( i18n("Mounting disk...") );
 
-  // mount the cd
-  connect( KIO::mount( true, 0L, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	   this, SLOT(slotMountFinished(KIO::Job*)) );
+    // mount the cd
+    connect( KIO::mount( true, 0L, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+	     this, SLOT(slotMountFinished(KIO::Job*)) );
+  }
 }
 
 
@@ -167,6 +171,14 @@ void K3bDataView::clearImportedSession()
 {
   m_doc->clearImportedSession();
   m_doc->setMultiSessionMode( K3bDataDoc::NONE );
+}
+
+
+void K3bDataView::editBootImages()
+{
+  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit boot images"), KDialogBase::Ok, KDialogBase::Ok, true );
+  d->setMainWidget( new K3bBootImageView( m_doc, d ) );
+  d->exec();
 }
 
 #include "k3bdataview.moc"

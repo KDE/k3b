@@ -54,6 +54,7 @@ class K3bDataView : public K3bView
  public slots:
    void importSession();
    void clearImportedSession();
+   void editBootImages();
 
  private slots:
    void slotMountFinished( KIO::Job* job );

@@ -65,6 +65,8 @@ class K3bDirItem : public K3bDataItem
   bool isSubItem( K3bDataItem* item ) const;
 
   bool isDir() const { return true; }
+
+  virtual bool isRemoveable() const;
 	
  private:
   QPtrList<K3bDataItem>* m_children;

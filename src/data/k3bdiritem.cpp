@@ -201,3 +201,15 @@ int K3bDirItem::numDirs() const
   return m_children->count() - numFiles();
 }
 
+
+bool K3bDirItem::isRemoveable() const
+{
+  if( !K3bDataItem::isRemoveable() )
+    return false;
+
+  bool rem = true;
+  QListIterator<K3bDataItem> it( *m_children );
+  for( ; it.current(); ++it )
+    rem = rem && it.current()->isRemoveable();
+  return rem;
+}

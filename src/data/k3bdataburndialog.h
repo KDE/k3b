@@ -49,6 +49,8 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    ~K3bDataBurnDialog();
 
  protected:
+   void prepareJob( K3bBurnJob* );
+
    void setupBurnTab( QFrame* frame );
    void setupAdvancedTab( QFrame* frame );
    void setupSettingsTab( QFrame* frame );

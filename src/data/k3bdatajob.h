@@ -28,7 +28,7 @@ class QString;
 class QDataStream;
 class K3bAbstractWriter;
 class K3bIsoImager;
-
+class KTempFile;
 
 /**
   *@author Sebastian Trueg
@@ -74,6 +74,8 @@ class K3bDataJob : public K3bBurnJob
 
   QString m_msInfo;
   QString m_collectedOutput;
+
+  KTempFile* m_tocFile;
 
   QFile m_imageFile;
   QDataStream m_imageFileStream;

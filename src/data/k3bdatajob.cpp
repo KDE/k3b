@@ -24,6 +24,7 @@
 #include "../k3bemptydiscwaiter.h"
 #include "../tools/k3bexternalbinmanager.h"
 #include "../k3bcdrecordwriter.h"
+#include "../k3bcdrdaowriter.h"
 #include "k3bisoimager.h"
 
 
@@ -32,6 +33,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <ktempfile.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -49,6 +51,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
   m_doc = doc;
   m_process = 0;
   m_writerJob = 0;
+  m_tocFile = 0;
 
   m_isoImager = new K3bIsoImager( m_doc, this );
   connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
@@ -65,6 +68,8 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc )
 K3bDataJob::~K3bDataJob()
 {
   delete m_process;
+  if( m_tocFile )
+    delete m_tocFile;
 }
 
 
@@ -347,6 +352,11 @@ void K3bDataJob::slotWriterJobFinished( bool success )
     emit infoMessage( i18n("Removed image file %1").arg(m_doc->isoImage()), K3bJob::STATUS );
   }
 
+  if( m_tocFile ) {
+    delete m_tocFile;
+    m_tocFile = 0;
+  }
+
   if( success ) {
     // allright
     // the writerJob should have emited the "simulation/writing successful" signal
@@ -360,22 +370,15 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
 void K3bDataJob::prepareWriterJob()
 {
-  //  if( use cdrecordjob ) {
+  if( m_writerJob )
+    delete m_writerJob;
 
+  if( writingApp() == K3b::CDRECORD || writingApp() == K3b::DEFAULT ) {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
-    connect( writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( writer, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
-    connect( writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
-    connect( writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
-    connect( writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-    connect( writer, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
-    connect( writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-    connect( writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( writer, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
     writer->setDao( m_doc->multiSessionMode() == K3bDataDoc::NONE && m_doc->dao() );
     writer->setSimulate( m_doc->dummy() );
+    writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
     writer->prepareArgumentList();
 
@@ -396,12 +399,58 @@ void K3bDataJob::prepareWriterJob()
     }
 
     m_writerJob = writer;
+  }
+  else {
+    // create cdrdao job
+    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this );
+    writer->setSimulate( m_doc->dummy() );
+    writer->setBurnSpeed( m_doc->speed() );
+    // multisession
+    writer->setMulti( m_doc->multiSessionMode() == K3bDataDoc::START ||
+		      m_doc->multiSessionMode() == K3bDataDoc::CONTINUE );
 
+    if( m_doc->onTheFly() ) {
+      writer->setProvideStdin(true);
+    }
 
-  // }
-  // else {
-  // TODO: create cdrdao job
-  // }
+    // now write the tocfile
+    if( m_tocFile ) delete m_tocFile;
+    m_tocFile = new KTempFile( QString::null, "toc" );
+    m_tocFile->setAutoDelete(true);
+
+    if( QTextStream* s = m_tocFile->textStream() ) {
+      *s << "CD_ROM" << "\n";
+      *s << "\n";
+      *s << "TRACK MODE1" << "\n";
+      if( m_doc->onTheFly() )
+	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
+      else
+	*s << "DATAFILE \"" << m_doc->isoImage() << "\" 0 \n";
+
+      m_tocFile->close();
+    }
+    else {
+      kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
+      emit infoMessage( i18n("IO Error"), ERROR );
+      cancelAll();
+      return;
+    }
+
+    writer->setTocFile( m_tocFile->name() );
+
+    m_writerJob = writer;
+  }
+    
+  connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
+  connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+  connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+  connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
+  connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
+  connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+  connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 }
 
 
@@ -428,6 +477,11 @@ void K3bDataJob::cancelAll()
       QFile::remove( m_doc->isoImage() );
       m_doc->setIsoImage("");
     }
+  }
+
+  if( m_tocFile ) {
+    delete m_tocFile;
+    m_tocFile = 0;
   }
 
   emit finished(false);
