@@ -88,6 +88,8 @@ namespace K3bCdDevice
     bool           burnproof() const;
     bool           burnfree() const;
     bool           dao() const;
+    bool           dvdMinusTestwrite() const { return m_dvdMinusTestwrite; }
+
     int            maxReadSpeed() const { return m_maxReadSpeed; }
     int            currentWriteSpeed() const { return m_currentWriteSpeed; }
 
@@ -273,6 +275,11 @@ namespace K3bCdDevice
     int currentProfile() const;
 
     /**
+     * @returns true if the requested feature is supported with the mounted media.
+     */
+    bool supportsFeature( unsigned int feature ) const;
+
+    /**
      * This is the method to use!
      */
     NextGenerationDiskInfo ngDiskInfo() const;
@@ -343,6 +350,12 @@ namespace K3bCdDevice
      * deleted after using.
      */
     bool mechanismStatus( unsigned char** data, int& dataLen ) const;
+
+    /**
+     * Read a single feature.
+     * data will be filled with the feature header and the descriptor
+     */
+    bool getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const;
 
     /**
      * @param sectorType: 000b - all types
@@ -433,6 +446,7 @@ namespace K3bCdDevice
      * undefined for DVDs.
      */
     bool readRawToc( Toc& ) const;
+    bool readFormattedToc( Toc&, bool dvd = false ) const;
 
     /**
      * Fixes the last block on CD-Extra disks. This is needed if the readRawToc failed since
@@ -455,6 +469,7 @@ namespace K3bCdDevice
     int m_maxWriteSpeed;
     int m_currentWriteSpeed;
 
+    bool m_dvdMinusTestwrite;
 
     // only needed for scsi devices
     int m_bus;

@@ -40,6 +40,7 @@ namespace K3bCdDevice
       MODE2, 
       XA_FORM1, 
       XA_FORM2, 
+      DVD,
       UNKNOWN
     };
 

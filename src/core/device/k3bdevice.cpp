@@ -152,6 +152,7 @@ K3bCdDevice::CdDevice::CdDevice( const QString& devname )
   m_burner = false;
   m_bWritesCdrw = false;
   m_bus = m_target = m_lun = -1;
+  m_dvdMinusTestwrite = true;
 }
 
 
@@ -475,7 +476,7 @@ bool K3bCdDevice::CdDevice::init()
 	    d->deviceType |= DVDR;
 	    if( p->dvd_rw ) d->deviceType |= DVDRW;
 
-	    // TODO: p->testwrite tells us if the writer supports DVD-R(W) dummy writes!!!
+	    m_dvdMinusTestwrite = p->testwrite;
 	    break;
 	  }
 
@@ -1147,42 +1148,158 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
   if( open() == -1 )
     return toc;
 
-//   if( isDVD() ) {
-//     readDvdToc( toc );
-//   }
-//  else
-  if( !readRawToc( toc ) ) {
-    kdDebug() << "(K3bCdDevice::CdDevice) MMC READ RAW TOC failed." << endl;
+  if( isDVD() ) {
+    int mediaType = dvdMediaType();
+    switch( mediaType ) {
 
-    unsigned char* data = 0;
-    int dataLen = 0;
-    if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
-      int lastTrack = data[3];
-      toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
-      for( int i = 0; i < lastTrack; ++i ) {
-	Track track( from4Byte( td[i].start_adr ),
-		     from4Byte( td[i+1].start_adr )-1,
-		     (td[i].control & 0x4) ? Track::DATA : Track::AUDIO,
-		     getTrackDataMode( from4Byte( td[i].start_adr ) ) );
-	track.m_copyPermitted = ( td[i].control & 0x2 );
-	track.m_preEmphasis = ( td[i].control & 0x1 );
-	toc.append( track );
+    case MEDIA_DVD_ROM:
+    case MEDIA_DVD_RW_OVWR:
+    case MEDIA_DVD_PLUS_RW:
+      {
+	K3b::Msf size;
+	if( readCapacity( size ) ) {
+	  Track track;
+	  track.m_firstSector = 0;
+	  track.m_lastSector = size.lba();
+	  track.m_session = 1;
+	  track.m_type = Track::DATA;
+	  track.m_mode = Track::DVD;
+	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
+	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
+
+	  toc.append( track );
+	}
+	else {
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << "READ CAPACITY failed." << endl;
+	  readFormattedToc( toc );
+	}
       }
-      
-      delete [] data;
-    }
-    else {
-      kdDebug() << "(K3bCdDevice::CdDevice) MMC READ TOC failed. falling back to cdrom.h." << endl;
-      readTocLinux(toc);
-    }
+      break;
 
-    fixupToc( toc );
+    case MEDIA_DVD_R:
+    case MEDIA_DVD_R_SEQ:
+      // multisession possible
+      readFormattedToc( toc, true );
+      break;
+
+    case MEDIA_DVD_RW:
+    case MEDIA_DVD_RW_SEQ:
+      // is multisession possible??
+      readFormattedToc( toc, true );
+      break;
+
+    case MEDIA_DVD_PLUS_R:
+      //
+      // a DVD+R disk may have multible sessions
+      // every session may contain up to 16 fragments
+      // if the disk is open there is one open session
+      // every closed session is viewed as a track whereas
+      // every fragment of the open session is viewed as a track
+      //
+      // We may use 
+      // READ DISK INFORMATION
+      // READ TRACK INFORMATION: track number FFh refers to the incomplete fragment (track)
+      // READ TOC/PMA/ATIP: form 0 refers to all closed sessions
+      //                    form 1 refers to the last closed session
+      //
+      readFormattedToc( toc, true );
+      break;
+
+    case MEDIA_DVD_RAM:
+      kdDebug() << "(K3bCdDevice::readDvdToc) no dvdram support" << endl;
+      break;
+    default:
+      kdDebug() << "(K3bCdDevice::readDvdToc) no dvd." << endl;
+    }
+  }
+  else {
+    if( !readRawToc( toc ) ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) MMC READ RAW TOC failed." << endl;
+
+      if( !readFormattedToc( toc ) ) {
+	kdDebug() << "(K3bCdDevice::CdDevice) MMC READ TOC failed. falling back to cdrom.h." << endl;
+	readTocLinux(toc);
+	fixupToc( toc );
+      }
+    }
   }
 
   if( needToClose )
     close();
 
   return toc;
+}
+
+
+bool K3bCdDevice::CdDevice::readFormattedToc( K3bCdDevice::Toc& toc, bool dvd ) const
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  bool success = false;
+
+  toc.clear();
+
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
+    int lastTrack = data[3];
+    toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
+    for( int i = 0; i < lastTrack; ++i ) {
+
+      Track track;
+      unsigned int control = 0;
+
+      unsigned char* trackData = 0;
+      int trackDataLen = 0;
+      if( readTrackInformation( &trackData, trackDataLen, 1, i+1 ) ) {
+	track_info_t* trackInfo = (track_info_t*)trackData;
+
+	track.m_firstSector = from4Byte( trackInfo->track_start );
+	track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
+	track.m_session = trackInfo->session_number_m;
+
+	control = trackInfo->track_mode;
+
+	delete [] trackData;
+      }
+      else {
+	//
+	// READ TRACK INFORMATION failed
+	// no session number info
+	// no track length and thus possibly incorrect last sector for
+	// multisession disks
+	//
+	track.m_firstSector = from4Byte( td[i].start_adr );
+	track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
+	control = td[i].control;
+      }
+
+      if( dvd ) {
+	track.m_type = Track::DATA;
+	track.m_mode = Track::DVD;
+      }
+      else {
+	track.m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
+	track.m_mode = getTrackDataMode( track.firstSector().lba() );
+      }
+      track.m_copyPermitted = ( control & 0x2 );
+      track.m_preEmphasis = ( control & 0x1 );
+
+      toc.append( track );
+    }
+    
+    delete [] data;
+
+    success = true;
+  }
+
+
+  if( needToClose )
+    close();
+
+  return success;
 }
 
 
@@ -1280,28 +1397,6 @@ bool K3bCdDevice::CdDevice::readRawToc( K3bCdDevice::Toc& toc ) const
 
   return success;
 }
-
-
-// void K3bCdDevice::CdDevice::readDvdToc( K3bCdDevice::Toc& toc ) const
-// {
-//   int mediaType = dvdMediaType();
-//   switch( mediaType ) {
-//   case MEDIA_DVD_ROM:
-//     // only one track
-//   case MEDIA_DVD_R:
-//   case MEDIA_DVD_R_SEQ:
-//   case MEDIA_DVD_RAM:
-//   case MEDIA_DVD_RW:
-//   case MEDIA_DVD_RW_OVWR:
-//     // only one track
-//   case MEDIA_DVD_RW_SEQ:
-//   case MEDIA_DVD_PLUS_RW:
-//     // only one track
-//   case MEDIA_DVD_PLUS_R:
-//   default:
-//     kdDebug() << "(K3bCdDevice::readDvdToc) no dvd." << endl;
-//   }
-// }
 
 
 K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCount ) const
@@ -1952,7 +2047,12 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	if( readCapacity( readCap ) ) {
 	  kdDebug() << "(K3bCdDevice::CdDevice) READ CAPACITY: " << readCap.toString()
 		    << " other capacity: " << inf.m_capacity.toString() << endl;
-	  inf.m_capacity = readCap;
+
+	  //
+	  // READ CAPACITY returns the last written sector
+	  // that means the size is actually readCap + 1
+	  //
+	  inf.m_capacity = readCap + 1;
 	}
 	else {
 	  kdDebug() << "(K3bCdDevice) READ_FORMAT_CAPACITIES failed. Falling back to READ TRACK INFO." << endl;
@@ -2076,11 +2176,7 @@ bool K3bCdDevice::CdDevice::readCapacity( K3b::Msf& r ) const
   unsigned char buf[8];
   ::memset( buf, 0, 8 );
   if( cmd.transport( TR_DIR_READ, buf, 8 ) == 0 ) {
-    r = 
-      ( (buf[0]<<24) & 0xFF000000 ) |
-      ( (buf[1]<<16) & 0xFF0000 ) |
-      ( (buf[2]<<8) & 0xFF00 ) |
-      ( buf[3] & 0xFF );
+    r = from4Byte( buf );
     return true;
   }
   else
@@ -2742,4 +2838,58 @@ void K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
 		      sec ) )
       (*it).m_index0 = sec;
   }
+}
+
+
+bool K3bCdDevice::CdDevice::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
+{
+  unsigned char header[8];
+  ::memset( header, 0, 8 );
+
+  ScsiCommand cmd( this );
+  cmd[0] = 0x46;   // GET CONFIGURATION
+  cmd[1] = 2;      // read only specified feature
+  cmd[2] = feature>>8;
+  cmd[3] = feature;
+  cmd[8] = 8;      // we only read the data length first
+  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
+    // again with real length
+    dataLen = from4Byte( header ) + 4;
+
+    *data = new unsigned char[dataLen];
+    ::memset( *data, 0, dataLen );
+
+    cmd[7] = dataLen>>8;
+    cmd[8] = dataLen;
+    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": GET CONFIGURATION with real length "
+		<< dataLen << " failed." << endl;
+      delete [] *data;
+    }
+  }
+  else
+    kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": GET CONFIGURATION length det failed." << endl;
+
+  return false; 
+}
+
+
+bool K3bCdDevice::CdDevice::supportsFeature( unsigned int feature ) const
+{
+  unsigned char* data = 0;
+  int dataLen = 0;
+  if( getFeature( &data, dataLen, feature ) ) {
+    bool success = false;
+    if( dataLen >= 11 )
+      success = ( data[10]&1 );  // check the current flag
+
+    delete [] data;      
+
+    return success;
+  }
+  else
+    return false;
 }
