@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -62,7 +62,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
   connect( m_isoImager, SIGNAL(data(const char*, int)), this, SLOT(slotReceivedIsoImagerData(const char*, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   m_msInfoFetcher = new K3bMsInfoFetcher( this );
@@ -74,7 +74,6 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
 
 K3bDataJob::~K3bDataJob()
 {
-  if( m_tocFile )
     delete m_tocFile;
 }
 
@@ -98,7 +97,7 @@ void K3bDataJob::start()
   m_canceled = false;
   m_imageFinished = false;
 
-  if( !m_doc->onlyCreateImages() && 
+  if( !m_doc->onlyCreateImages() &&
       ( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
     m_msInfoFetcher->setDevice( m_doc->burner() );
@@ -133,7 +132,7 @@ void K3bDataJob::slotMsInfoFetched(bool success)
     return;
 
   if( success ) {
-    // we call this here since in ms mode we might want to check 
+    // we call this here since in ms mode we might want to check
     // the last track's datamode
     determineWritingMode();
 
@@ -162,7 +161,7 @@ void K3bDataJob::writeImage()
     // get image file path
     if( m_doc->tempDir().isEmpty() )
       m_doc->setTempDir( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
-    
+
     // TODO: check if the image file is part of the project and if so warn the user
     //       and append some number to make the path unique.
 
@@ -256,7 +255,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
     if( success ) {
       emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::STATUS );
       m_imageFinished = true;
-    
+
       if( m_doc->onlyCreateImages() ) {
 	emit finished( true );
       }
@@ -279,7 +278,7 @@ bool K3bDataJob::startWriting()
   // if we append a new session we asked for an appendable cd already
   if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
       m_doc->multiSessionMode() == K3bDataDoc::START ) {
-	  
+
     if( K3bEmptyDiscWaiter::wait( m_doc->burner() ) == K3bEmptyDiscWaiter::CANCELED ) {
       cancel();
       return false;
@@ -288,7 +287,7 @@ bool K3bDataJob::startWriting()
     if( m_canceled )
       return false;
   }
-	
+
   m_writerJob->start();
   return true;
 }
@@ -344,7 +343,6 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
 bool K3bDataJob::prepareWriterJob()
 {
-  if( m_writerJob )
     delete m_writerJob;
 
   // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
@@ -443,7 +441,7 @@ bool K3bDataJob::prepareWriterJob()
 
     m_writerJob = writer;
   }
-    
+
   connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
   connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
@@ -456,7 +454,7 @@ bool K3bDataJob::prepareWriterJob()
   connect( m_writerJob, SIGNAL(dataWritten()), this, SLOT(slotDataWritten()) );
   connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   return true;
@@ -467,7 +465,7 @@ void K3bDataJob::determineWritingMode()
 {
   // first of all we determine the data mode
   if( m_doc->dataMode() == K3b::DATA_MODE_AUTO ) {
-    if( !m_doc->onlyCreateImages() && 
+    if( !m_doc->onlyCreateImages() &&
 	( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
 
@@ -489,7 +487,7 @@ void K3bDataJob::determineWritingMode()
 	else
 	  m_usedDataMode = K3b::MODE2;
 
-	kdDebug() << "(K3bDataJob) using datamode: " 
+	kdDebug() << "(K3bDataJob) using datamode: "
 		  << (m_usedDataMode == K3b::MODE1 ? "mode1" : "mode2")
 		  << endl;
       }
@@ -527,7 +525,7 @@ void K3bDataJob::determineWritingMode()
     else
       m_usedWritingApp = K3b::CDRECORD;
   }
-  else 
+  else
     m_usedWritingApp = writingApp();
 }
 
