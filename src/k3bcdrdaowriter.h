@@ -130,6 +130,8 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   bool m_stdin;
   bool m_writeSpeedInitialized;
 
+  bool m_canceled;
+
 // parser
 
   int m_size;
