@@ -28,6 +28,7 @@
 
 namespace K3bCdDevice {
   class CdDevice;
+  class Toc;
 }
 
 
@@ -51,7 +52,19 @@ class K3bCdparanoiaLib
    */
   bool initParanoia( K3bCdDevice::CdDevice* dev );
 
+  /**
+   * Use for faster initialization without reading the toc
+   */
+  bool initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevice::Toc& );
+
   void close();
+
+  /**
+   * Call this after initParanoia to set the data to rip.
+   *
+   * Rip all audio tracks.
+   */
+  bool initReading();
 
   /**
    * Call this after initParanoia to set the data to rip.
@@ -66,8 +79,9 @@ class K3bCdparanoiaLib
   /**
    * Read data.
    * if errorCode is set it will be filled.
+   * @param track the tracknumer the data belongs to
    */
-  Q_INT16* read( int* statusCode );
+  Q_INT16* read( int* statusCode = 0, unsigned int* track = 0 );
 
   /**
    * This onyy is valid after a call to read()
@@ -79,6 +93,13 @@ class K3bCdparanoiaLib
     S_ERROR
     // to be extended with Jitter and stuff...
   };
+
+  /**
+   * Only valid after a call to initParanoia()
+   */
+  const K3bCdDevice::Toc& toc() const;
+
+  long rippedDataLength() const;
   // ------------------------------------
 
 

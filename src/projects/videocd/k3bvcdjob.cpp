@@ -175,7 +175,7 @@ void K3bVcdJob::vcdxBuild()
     m_stage = stageUnknown;
     firstTrack = true;
     delete m_process;
-    m_process = new KProcess();
+    m_process = new K3bProcess();
 
     emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3bJob::INFO );
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
@@ -201,7 +201,7 @@ void K3bVcdJob::vcdxBuild()
     if( !bin->copyright.isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(bin->name()).arg(bin->version).arg(bin->copyright), INFO );
 
-    *m_process << bin->path;
+    *m_process << bin;
 
     // additional user parameters from config
     const QStringList& params = k3bcore->externalBinManager()->program( "vcdxbuild" )->userParameters();

@@ -158,13 +158,14 @@ K3bAudioCdView::~K3bAudioCdView()
 
 void K3bAudioCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 {
-  m_diskInfo = did->diskInfo();
+  m_toc = did->toc();
+  m_device = did->device();
 
   // initialize cddb info for editing
   m_cddbInfo = K3bCddbResultEntry();
   m_cddbInfo.discid = QString::number( did->toc().discId(), 16 );
 
-  for( int i = 0; i < (int)m_diskInfo.toc.count(); ++i ) {
+  for( int i = 0; i < (int)m_toc.count(); ++i ) {
     m_cddbInfo.titles.append("");
     m_cddbInfo.artists.append("");
     m_cddbInfo.extInfos.append("");
@@ -175,8 +176,8 @@ void K3bAudioCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 
   // create a listviewItem for every audio track
   int index = 1;
-  for( K3bToc::const_iterator it = m_diskInfo.toc.begin(); 
-       it != m_diskInfo.toc.end(); ++it ) {
+  for( K3bToc::const_iterator it = m_toc.begin(); 
+       it != m_toc.end(); ++it ) {
 
     // for now skip data tracks since we are not able to rip them to iso
     if( (*it).type() == K3bTrack::AUDIO ) {
@@ -324,7 +325,8 @@ void K3bAudioCdView::startRip()
 			i18n("No Tracks Selected") );
   }
   else {
-    K3bAudioRippingDialog rip( m_diskInfo, 
+    K3bAudioRippingDialog rip( m_toc,
+			       m_device, 
 			       m_cddbInfo, 
 			       trackNumbers, 
 			       this );
@@ -444,7 +446,7 @@ void K3bAudioCdView::queryCddb()
 
     enableInteraction(false);
  
-    m_cddb->query( m_diskInfo.toc );
+    m_cddb->query( m_toc );
   }
 }
 
@@ -584,7 +586,7 @@ void K3bAudioCdView::updateDisplay()
 
   m_labelLength->setText( i18n("1 track (%1)", 
 			       "%n tracks (%1)", 
-			       m_diskInfo.toc.count()).arg(K3b::Msf(m_diskInfo.toc.length()).toString()) );
+			       m_toc.count()).arg(K3b::Msf(m_toc.length()).toString()) );
 }
 
 

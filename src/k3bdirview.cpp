@@ -252,22 +252,21 @@ void K3bDirView::slotDetectDiskInfo( K3bCdDevice::CdDevice* dev )
 
 void K3bDirView::slotDiskInfoReady( K3bCdDevice::DiskInfoDetector* did )
 {
-  if( m_bViewDiskInfo || did->diskInfo().empty || did->diskInfo().noDisk ) {
+  if( m_bViewDiskInfo || 
+      did->ngDiskInfo().diskState() == K3bCdDevice::STATE_EMPTY || 
+      did->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
     m_infoView->displayInfo( did );
     m_bViewDiskInfo = false;
   }
-  else if( did->diskInfo().tocType == K3bDiskInfo::DVD  ) {
-    if( did->isVideoDvd() ) {
-      m_movieView->setDevice( did->device() );
-      m_viewStack->raiseWidget( m_movieView );
-      m_movieView->reload();
-    }
-    else
-      slotMountDevice( did->device() );
+  else if( did->isVideoDvd() ) {
+    m_movieView->setDevice( did->device() );
+    m_viewStack->raiseWidget( m_movieView );
+    m_movieView->reload();
   }
-  else if( did->diskInfo().tocType == K3bDiskInfo::DATA  ) {
+  else if( did->toc().contentType() == K3bCdDevice::DATA ) {
     // check for VCD and ask
     bool mount = true;
     if( did->isVideoCd() ) {

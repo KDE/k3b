@@ -20,7 +20,10 @@
 
 
 #include <k3binteractiondialog.h>
-#include <device/k3bdevice.h>
+
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
@@ -28,6 +31,9 @@ class K3bDeviceComboBox;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
+class K3bWritingModeWidget;
+class QButtonGroup;
+class QRadioButton;
 
 
 /**
@@ -41,36 +47,37 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   K3bCdCopyDialog(QWidget *parent = 0, const char *name = 0, bool modal = true );
   ~K3bCdCopyDialog();
 
-  K3bDevice* readingDevice() const;
+  K3bCdDevice::CdDevice* readingDevice() const;
 
  private slots:
-  void slotSourceSelected();
-  void slotOnlyCreateImageChecked(bool);
   void slotStartClicked();
+
+  void slotToggleAll();
 
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
   void slotLoadK3bDefaults();
 
  private:
-  void initReadingDevices();
-
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   QCheckBox* m_checkSimulate;
+  QCheckBox* m_checkBurnfree;
   QCheckBox* m_checkOnTheFly;
   QCheckBox* m_checkDeleteImages;
-  QCheckBox* m_checkFastToc;
-  QCheckBox* m_checkRawCopy;
-  QCheckBox* m_checkTaoSource;
-  QCheckBox* m_checkForce;
-  QSpinBox*  m_spinTaoSourceAdjust;
-
   QCheckBox* m_checkOnlyCreateImage;
+  QCheckBox* m_checkQueryCddb;
+  QCheckBox* m_checkPrefereCdText;
+  QCheckBox* m_checkIgnoreReadErrors;
+  QCheckBox* m_checkNoCorrection;
   K3bDeviceComboBox* m_comboSourceDevice;
   QComboBox* m_comboParanoiaMode;
-  QComboBox* m_comboSubchanMode;
   QSpinBox* m_spinCopies;
+  QSpinBox* m_spinRetries;
+  K3bWritingModeWidget* m_writingModeWidget;
+  QButtonGroup* m_groupCopyMode;
+  QRadioButton* m_radioNormalCopy;
+  QRadioButton* m_radioCloneCopy;
 };
 
 #endif

@@ -44,7 +44,7 @@ namespace K3bCdDevice
     DiskInfoDetector( QObject* parent = 0 );
     ~DiskInfoDetector();
 
-    const DiskInfo& diskInfo() const;
+    //    const DiskInfo& diskInfo() const;
     const NextGenerationDiskInfo& ngDiskInfo() const;
     const AlbumCdText& cdText() const;
     const Toc& toc() const;

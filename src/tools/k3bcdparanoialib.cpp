@@ -167,6 +167,7 @@ public:
   long startSector;
   long lastSector;
   int status;
+  unsigned int currentTrack;
 };
 
 
@@ -412,12 +413,12 @@ K3bCdparanoiaLib* K3bCdparanoiaLib::create()
 }
 
 
-bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
+bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev, const K3bCdDevice::Toc& toc )
 {
   paranoiaFree();
 
   d->device = dev;
-  d->toc = dev->readToc();
+  d->toc = toc;
   if( d->toc.isEmpty() ) {
     kdDebug() << "(K3bCdparanoiaLib) empty toc." << endl;
     cleanup();
@@ -442,6 +443,12 @@ bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
 }
 
 
+bool K3bCdparanoiaLib::initParanoia( K3bCdDevice::CdDevice* dev )
+{
+  return initParanoia( dev, dev->readToc() );
+}
+
+
 void K3bCdparanoiaLib::close()
 {
   cleanup();
@@ -453,6 +460,33 @@ void K3bCdparanoiaLib::cleanup()
   paranoiaFree();
   d->device = 0;
   d->currentSector = 0;
+}
+
+
+bool K3bCdparanoiaLib::initReading()
+{
+  if( d->device ) {
+    // find first audio track
+    K3bCdDevice::Toc::const_iterator trackIt = d->toc.begin();
+    while( (*trackIt).type() != K3bCdDevice::Track::AUDIO ) {
+      ++trackIt;
+    }
+
+    long start = (*trackIt).firstSector().lba();
+
+    // find last audio track
+    while( trackIt != d->toc.end() && (*trackIt).type() == K3bCdDevice::Track::AUDIO )
+      ++trackIt;
+    --trackIt;
+
+    long end = (*trackIt).lastSector().lba();
+
+    return initReading( start, end );
+  }
+  else {
+    kdDebug() << "(K3bCdparanoiaLib) initReading without initParanoia." << endl;
+    return false;
+  }
 }
 
 
@@ -491,6 +525,11 @@ bool K3bCdparanoiaLib::initReading( long start, long end )
       d->startSector = d->currentSector = start;
       d->lastSector = end;
 
+      // determine track number
+      d->currentTrack = 1;
+      while( d->toc[d->currentTrack-1].lastSector() < start )
+	d->currentTrack++;
+
       // let the paranoia stuff point to the startSector
       paranoiaSeek( start, SEEK_SET );
       return true;
@@ -507,7 +546,7 @@ bool K3bCdparanoiaLib::initReading( long start, long end )
 }
 
 
-Q_INT16* K3bCdparanoiaLib::read( int* statusCode )
+Q_INT16* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track )
 {
   if( d->currentSector > d->lastSector ) {
     kdDebug() << "(K3bCdparanoiaLib) finished ripping. read " 
@@ -529,7 +568,13 @@ Q_INT16* K3bCdparanoiaLib::read( int* statusCode )
   if( statusCode )
     *statusCode = d->status;
 
+  if( track )
+    *track = d->currentTrack;
+
   d->currentSector++;
+
+  if( d->toc[d->currentTrack-1].lastSector() < d->currentSector )
+    d->currentTrack++;
 
   return data;
 }
@@ -538,4 +583,16 @@ Q_INT16* K3bCdparanoiaLib::read( int* statusCode )
 int K3bCdparanoiaLib::status() const
 {
   return d->status;
+}
+
+
+const K3bCdDevice::Toc& K3bCdparanoiaLib::toc() const
+{
+  return d->toc;
+}
+
+
+long K3bCdparanoiaLib::rippedDataLength() const
+{
+  return d->lastSector - d->startSector + 1;
 }

@@ -162,6 +162,11 @@ namespace K3bCdDevice
     bool dao() const;
 
     /**
+     * Shortcut for (writingModes() & (RAW|RAW_R16|RAW_R96P|RAW_R96R))
+     */
+    bool supportsRawWriting() const;
+
+    /**
      * @return true if the device is a DVD-R(W) writer which supports test writing.
      */
     bool dvdMinusTestwrite() const { return m_dvdMinusTestwrite; }
@@ -526,6 +531,10 @@ namespace K3bCdDevice
 			 unsigned int subchannelParam,
 			 unsigned int trackNumber ) const;
 
+    bool readIsrc( unsigned int track, QCString& isrc ) const;
+
+    bool readMcn( QCString& mcn ) const;
+
     /**
      * @returns the index number on success
      *          -1 on general error
@@ -597,6 +606,8 @@ namespace K3bCdDevice
     bool m_supermount;
 
   private:
+    void searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const;
+
     class Private;
     Private* d;
     friend class DeviceManager;

@@ -21,6 +21,7 @@
 class K3bVcdDoc;
 class K3bVcdTrack;
 class QString;
+class K3bProcess;
 class KProcess;
 class QDataStream;
 class K3bAbstractWriter;
@@ -102,7 +103,7 @@ class K3bVcdJob : public K3bBurnJob
         QString m_collectedOutput;
 
         K3bAbstractWriter* m_writerJob;
-        KProcess* m_process;
+        K3bProcess* m_process;
 };
 
 #endif

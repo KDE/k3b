@@ -23,7 +23,11 @@
 
 #include <cddb/k3bcddbquery.h>
 
-#include <device/k3bdiskinfo.h>
+namespace K3bCdDevice {
+  class CdDevice;
+  class Toc;
+}
+
 
 class KListView;
 class QCheckBox;
@@ -42,8 +46,11 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bAudioRippingDialog( const K3bDiskInfo&, const K3bCddbResultEntry&, const QValueList<int>&, 
-		   QWidget *parent = 0, const char *name = 0 );
+  K3bAudioRippingDialog( const K3bCdDevice::Toc&, 
+			 K3bCdDevice::CdDevice*,
+			 const K3bCddbResultEntry&, 
+			 const QValueList<int>&, 
+			 QWidget *parent = 0, const char *name = 0 );
   ~K3bAudioRippingDialog();
 
   void setStaticDir( const QString& path );
@@ -53,7 +60,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void init();
 
  private:
-  K3bDiskInfo m_diskInfo;
+  K3bCdDevice::Toc m_toc;
+  K3bCdDevice::CdDevice* m_device;
   K3bCddbResultEntry m_cddbEntry;
   QValueList<int> m_trackNumbers;
 

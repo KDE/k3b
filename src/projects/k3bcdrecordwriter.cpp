@@ -68,8 +68,8 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const cha
   : K3bAbstractWriter( dev, parent, name ),
     m_stdin(false),
     m_clone(false),
-    m_forceNoEject(false),
-    m_cue(false)
+    m_cue(false),
+    m_forceNoEject(false)
 {
   d = new Private();
   d->speedEst = new K3bThroughputEstimator( this );
@@ -153,7 +153,7 @@ void K3bCdrecordWriter::prepareProcess()
 
   k3bcore->config()->setGroup("General Options");
 
-  *m_process << m_cdrecordBinObject->path;
+  *m_process << m_cdrecordBinObject;
 
   // display progress
   *m_process << "-v";
@@ -556,6 +556,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     }
     else if( errStr.startsWith( "Permission denied. Cannot open" ) ) {
       m_cdrecordError = PERMISSION_DENIED;
+    }
+    else if( errStr.startsWith( "Can only copy session # 1") ) {
+      emit infoMessage( i18n("Only session 1 will be cloned."), WARNING );
     }
   }
 

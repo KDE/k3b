@@ -85,11 +85,26 @@ K3b::Msf K3bCdDevice::Track::realAudioLength() const
 }
 
 
+long K3bCdDevice::Track::index( int i, bool absolute ) const
+{
+  if( (int)m_indices.count() > i && m_indices[i] >= 0 ) {
+    if( absolute )
+      return m_indices[i];
+    else
+      return m_indices[i] - firstSector().lba();
+  }
+  else
+    return -1;
+}
+
+
 long K3bCdDevice::Track::index0() const
 {
-  // TODO: if there is an index 0 has it to be the first??
-  for( QValueListConstIterator<Index> it = m_indices.begin(); it != m_indices.end(); ++it )
-    if( (*it).number() == 0 )
-      return (*it).position().lba();
-  return -1;
+  return index( 0, true );
+}
+
+
+int K3bCdDevice::Track::indexCount() const
+{
+  return m_indices.count()-1;
 }

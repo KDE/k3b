@@ -40,6 +40,7 @@ public:
   CdDevice* device;
   DiskInfo info;
   NextGenerationDiskInfo ngDiskInfo;
+  Toc toc;
   AlbumCdText cdText;
   K3bIso9660* iso9660;
 
@@ -71,10 +72,10 @@ K3bCdDevice::CdDevice* K3bCdDevice::DiskInfoDetector::device() const
 }
 
 
-const K3bCdDevice::DiskInfo& K3bCdDevice::DiskInfoDetector::diskInfo() const
-{
-  return d->info;
-}
+// const K3bCdDevice::DiskInfo& K3bCdDevice::DiskInfoDetector::diskInfo() const
+// {
+//   return d->info;
+// }
 
 
 const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DiskInfoDetector::ngDiskInfo() const
@@ -91,7 +92,7 @@ const K3bCdDevice::AlbumCdText& K3bCdDevice::DiskInfoDetector::cdText() const
 
 const K3bCdDevice::Toc& K3bCdDevice::DiskInfoDetector::toc() const
 {
-  return d->info.toc;
+  return d->toc;
 }
 
 
@@ -113,8 +114,8 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
   // reset
   delete d->iso9660;
   d->iso9660 = 0;
-  d->info = DiskInfo();
-  d->info.device = d->device;
+  //  d->info = DiskInfo();
+  //  d->info.device = d->device;
 
   // we don't want the old info to overrun us...
   if( d->runningHandler )
@@ -129,7 +130,7 @@ void K3bCdDevice::DiskInfoDetector::detect( CdDevice* device )
 
 void K3bCdDevice::DiskInfoDetector::finish(bool success)
 {
-  d->info.valid=success;
+  //  d->info.valid=success;
   emit diskInfoReady(this);
 }
 
@@ -138,7 +139,8 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
 {
   kdDebug() << "(K3bCdDevice::DiskInfoDetector) fetchExtraInfo()" << endl;
 
-  d->info.toc.calculateDiscId();
+  d->toc.calculateDiscId();
+  //  d->device->indexScan( d->toc );
 
   bool success = true;
 
@@ -146,14 +148,13 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
   // FIXME: blank DVD+RW media already has a track so this method tries to open ido9660...
   //
 
-  if( d->info.tocType == DiskInfo::DATA ||
-      d->info.tocType == DiskInfo::MIXED || 
-      d->info.tocType == DiskInfo::DVD ) {
+  if( d->toc.contentType() == K3bCdDevice::DATA ||
+      d->toc.contentType() == K3bCdDevice::MIXED ) {
     if( d->device->open() != -1 ) {
 
       unsigned long startSec = 0;
 
-      if( d->info.sessions > 1 ) {
+      if( d->ngDiskInfo.numSessions() > 1 ) {
 	// We use the last data track
 	// this way we get the latest session on a ms cd
 	Toc::const_iterator it = toc().end();
@@ -177,16 +178,16 @@ void K3bCdDevice::DiskInfoDetector::fetchExtraInfo()
       if( d->iso9660->open() ) {
 	//	d->iso9660->debug();
 
-	d->info.isoId = "CD001";
-	d->info.isoSystemId = d->iso9660->primaryDescriptor().systemId;
-	d->info.isoVolumeId = d->iso9660->primaryDescriptor().volumeId;
-	d->info.isoVolumeSetId = d->iso9660->primaryDescriptor().volumeSetId;
-	d->info.isoPublisherId = d->iso9660->primaryDescriptor().publisherId;
-	d->info.isoPreparerId = d->iso9660->primaryDescriptor().preparerId;
-	d->info.isoApplicationId = d->iso9660->primaryDescriptor().applicationId;
+// 	d->info.isoId = "CD001";
+// 	d->info.isoSystemId = d->iso9660->primaryDescriptor().systemId;
+// 	d->info.isoVolumeId = d->iso9660->primaryDescriptor().volumeId;
+// 	d->info.isoVolumeSetId = d->iso9660->primaryDescriptor().volumeSetId;
+// 	d->info.isoPublisherId = d->iso9660->primaryDescriptor().publisherId;
+// 	d->info.isoPreparerId = d->iso9660->primaryDescriptor().preparerId;
+// 	d->info.isoApplicationId = d->iso9660->primaryDescriptor().applicationId;
 	
 
-	if( d->info.tocType == DiskInfo::DVD ) {
+	if( K3bCdDevice::isDvdMedia( d->ngDiskInfo.mediaType() ) ) {
 	  d->isVideoDvd = false;
 
 	  // We check for the VIDEO_TS directory and at least one .IFO file
@@ -261,10 +262,11 @@ void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::Devi
 
   bool success = handler->success();
   if( success ) {
-    d->info = handler->diskInfo();
+    //    d->info = handler->diskInfo();
     d->ngDiskInfo = handler->ngDiskInfo();
     d->ngDiskInfo.debug();
     d->cdText = handler->cdText();
+    d->toc = handler->toc();
     fetchExtraInfo();
   }
   else

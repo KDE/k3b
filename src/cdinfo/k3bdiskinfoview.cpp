@@ -156,7 +156,6 @@ void K3bDiskInfoView::displayInfo( const K3bCdDevice::DiskInfo& )
 
 void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 {
-  //  const K3bCdDevice::DiskInfo& info = did->diskInfo();
   const K3bCdDevice::NextGenerationDiskInfo& ngInfo = did->ngDiskInfo();
   const K3bCdDevice::Toc& toc = did->toc();
 
@@ -256,6 +255,15 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
         if( track.type() == K3bTrack::AUDIO ) {
           item->setPixmap( 0, SmallIcon( "sound" ) );
           text = i18n("Audio");
+
+	  // DEBUGGING:
+// 	  for( unsigned int i = 0; i <= track.indexCount(); ++i )
+// 	    (void)new KListViewItem( item, 
+// 				     QString::number( i ),
+// 				     QString("%1 (%2)").arg(track.index(i)).arg(K3b::Msf(track.index(i)).toString()) );
+
+// 	  item->setOpen(true);
+
         } else {
           item->setPixmap( 0, SmallIcon( "tar" ) );
           if( track.mode() == K3bTrack::MODE1 )
@@ -274,7 +282,7 @@ void K3bDiskInfoView::displayInfo( K3bCdDevice::DiskInfoDetector* did )
 		       .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
 		       .arg( track.type() == K3bTrack::AUDIO 
 			    ? ( track.preEmphasis() ?  i18n("preemp") : i18n("no preemp") )
-			    : ( track.preEmphasis() ?  i18n("incremental") : i18n("uninterrupted") ) ) );
+			    : ( track.recordedIncremental() ?  i18n("incremental") : i18n("uninterrupted") ) ) );
         item->setText( 2, 
 		       QString("%1 - %2")
 		       .arg(track.firstSector().lba())
@@ -411,15 +419,15 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660* iso )
 				    iso->primaryDescriptor().applicationId.isEmpty()
 				    ? QString("-") 
 				    : iso->primaryDescriptor().applicationId );
-//   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
-// 				    i18n("Volume Size:"),
-// 				    QString( "%1 (%2*%3)" )
-// 				    .arg(iso->primaryDescriptor().logicalBlockSize
-// 					 *iso->primaryDescriptor().volumeSpaceSize)
-// 				    .arg(iso->primaryDescriptor().logicalBlockSize)
-// 				    .arg(iso->primaryDescriptor().volumeSpaceSize),
-// 				    KIO::convertSize(iso->primaryDescriptor().logicalBlockSize
-// 						     *iso->primaryDescriptor().volumeSpaceSize)  );
+  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+				    i18n("Volume Size:"),
+				    QString( "%1 (%2*%3)" )
+				    .arg(iso->primaryDescriptor().logicalBlockSize
+					 *iso->primaryDescriptor().volumeSpaceSize)
+				    .arg(iso->primaryDescriptor().logicalBlockSize)
+				    .arg(iso->primaryDescriptor().volumeSpaceSize),
+				    KIO::convertSize(iso->primaryDescriptor().logicalBlockSize
+						     *iso->primaryDescriptor().volumeSpaceSize)  );
 
   iso9660Item->setOpen( true );
 }

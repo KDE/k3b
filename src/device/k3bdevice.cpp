@@ -23,10 +23,12 @@
 #include "k3bdiskinfo.h"
 #include "k3bmmc.h"
 #include "k3bscsicommand.h"
+#include "k3bcrc.h"
 
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qglobal.h>
+#include <qvaluevector.h>
 
 #include <kdebug.h>
 
@@ -712,6 +714,12 @@ bool K3bCdDevice::CdDevice::dao() const
 }
 
 
+bool K3bCdDevice::CdDevice::supportsRawWriting() const
+{
+  return( writingModes() & (RAW|RAW_R16|RAW_R96P|RAW_R96R) );
+}
+
+
 bool K3bCdDevice::CdDevice::writesCd() const
 {
   return ( d->deviceType & CDR ) && ( m_writeModes & TAO );
@@ -1201,10 +1209,11 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
     }
   }
   else {
-    if( !readRawToc( toc ) ) {
+    bool success = readRawToc( toc );
+    if( !success ) {
       kdDebug() << "(K3bCdDevice::CdDevice) MMC READ RAW TOC failed." << endl;
 
-      bool success = readFormattedToc( toc );
+      success = readFormattedToc( toc );
 
 #ifdef Q_OS_LINUX
       if( !success ) {
@@ -1213,8 +1222,29 @@ K3bCdDevice::Toc K3bCdDevice::CdDevice::readToc() const
       }
 #endif
 
-    if( success )
-      fixupToc( toc );
+      if( success )
+	fixupToc( toc );
+    }
+
+    if( success ) {
+      // read MCN and ISRC of all tracks
+      QCString mcn;
+      if( readMcn( mcn ) ) {
+	toc.setMcn( mcn );
+	kdDebug() << "(K3bCdDevice::CdDevice) found MCN: " << mcn << endl;
+      }
+      else
+	kdDebug() << "(K3bCdDevice::CdDevice) no MCN found." << endl;
+
+      for( unsigned int i = 1; i <= toc.count(); ++i ) {
+	QCString isrc;
+	if( readIsrc( i, isrc ) ) {
+	  kdDebug() << "(K3bCdDevice::CdDevice) found ISRC for track " << i << ": " << isrc << endl;
+	  toc[i-1].setIsrc( isrc );
+	}
+	else
+	  kdDebug() << "(K3bCdDevice::CdDevice) no ISRC found for track " << i << endl;
+      }
     }
   }
 
@@ -1252,7 +1282,8 @@ bool K3bCdDevice::CdDevice::readFormattedToc( K3bCdDevice::Toc& toc, bool dvd ) 
 
 	track.m_firstSector = from4Byte( trackInfo->track_start );
 	track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
-	track.m_session = trackInfo->session_number_m;
+	track.m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
+				trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD??
 
 	control = trackInfo->track_mode;
 
@@ -1421,129 +1452,132 @@ K3bCdDevice::AlbumCdText K3bCdDevice::CdDevice::readCdText( unsigned int trackCo
     // if we failed to determine the trackCount it's still <= 0
     if( trackCount > 0 ) {
       if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
+	if( dataLen > 4 ) {
+	  textData.resize( trackCount );
+
+	  cdtext_pack* pack = (cdtext_pack*)&data[4];
+
+	  kdDebug() << endl << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": CD_TEXT:" << endl;
+	  kdDebug() << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
       
-	textData.resize( trackCount );
-
-	cdtext_pack* pack = (cdtext_pack*)&data[4];
-
-	kdDebug() << endl << "(K3bCdDevice::CdDevice) " << blockDeviceName() << ": CD_TEXT:" << endl;
-	kdDebug() << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
-      
-	for( int i = 0; i < (dataLen-4)/18; ++i ) {
-	  QString s;
-	  s += QString( " %1 |" ).arg( pack[i].id1, 6, 16 );
-	  s += QString( " %1 |" ).arg( pack[i].id2, 6 );
-	  s += QString( " %1 |" ).arg( pack[i].id3, 6 );
-	  s += QString( " %1 |" ).arg( pack[i].charpos, 6 );
-	  s += QString( " %1 |" ).arg( pack[i].blocknum, 6 );
-	  s += QString( " %1 |" ).arg( pack[i].dbcc, 4 );
-	  char str[12];
-	  sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
-		   pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
-		   pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
-		   pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
-		   pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
-		   pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
-		   pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
-		   pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
-		   pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
-		   pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
-		   pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
-		   pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
-		   pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
-	  s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
-	  //      s += QString( " %1 |" ).arg( QString::fromLatin1( (char*)pack[i].crc, 2 ), 3 );
-	  kdDebug() << s << endl;
+	  for( int i = 0; i < (dataLen-4)/18; ++i ) {
+	    QString s;
+	    s += QString( " %1 |" ).arg( pack[i].id1, 6, 16 );
+	    s += QString( " %1 |" ).arg( pack[i].id2, 6 );
+	    s += QString( " %1 |" ).arg( pack[i].id3, 6 );
+	    s += QString( " %1 |" ).arg( pack[i].charpos, 6 );
+	    s += QString( " %1 |" ).arg( pack[i].blocknum, 6 );
+	    s += QString( " %1 |" ).arg( pack[i].dbcc, 4 );
+	    char str[12];
+	    sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
+		     pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
+		     pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
+		     pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
+		     pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
+		     pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
+		     pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
+		     pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
+		     pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
+		     pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
+		     pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
+		     pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
+		     pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
+	    s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
+	    //      s += QString( " %1 |" ).arg( QString::fromLatin1( (char*)pack[i].crc, 2 ), 3 );
+	    kdDebug() << s << endl;
 
 
-	  //
-	  // pack.data has a length of 12
-	  //
-	  // id1 tells us the tracknumber of the data (0 for global)
-	  // data may contain multible \0. In that case after every \0 the track number increases 1
-	  //
+	    //
+	    // pack.data has a length of 12
+	    //
+	    // id1 tells us the tracknumber of the data (0 for global)
+	    // data may contain multible \0. In that case after every \0 the track number increases 1
+	    //
 
-	  char* nullPos = (char*)pack[i].data - 1;
+	    char* nullPos = (char*)pack[i].data - 1;
 	
-	  unsigned int trackNo = pack[i].id2;
-	  while( nullPos && trackNo <= trackCount ) {
-	    char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
-	    QString txtstr;	    
-	    if( nextNullPos ) // take all chars up to the next null
-	      txtstr = QString::fromLocal8Bit( (char*)nullPos+1, nextNullPos - nullPos - 1 );
-	    else // take all chars to the end of the pack data (12 bytes)
-	      txtstr = QString::fromLocal8Bit( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
+	    unsigned int trackNo = pack[i].id2;
+	    while( nullPos && trackNo <= trackCount ) {
+	      char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
+	      QString txtstr;	    
+	      if( nextNullPos ) // take all chars up to the next null
+		txtstr = QString::fromLocal8Bit( (char*)nullPos+1, nextNullPos - nullPos - 1 );
+	      else // take all chars to the end of the pack data (12 bytes)
+		txtstr = QString::fromLocal8Bit( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
 	  
-	    switch( pack[i].id1 ) {
-	    case 0x80: // Title
-	      if( trackNo == 0 )
-		textData.m_title.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_title.append( txtstr );
-	      break;
+	      switch( pack[i].id1 ) {
+	      case 0x80: // Title
+		if( trackNo == 0 )
+		  textData.m_title.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_title.append( txtstr );
+		break;
 
-	    case 0x81: // Performer
-	      if( trackNo == 0 )
-		textData.m_performer.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_performer.append( txtstr );
-	      break;
+	      case 0x81: // Performer
+		if( trackNo == 0 )
+		  textData.m_performer.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_performer.append( txtstr );
+		break;
 
-	    case 0x82: // Writer
-	      if( trackNo == 0 )
-		textData.m_songwriter.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_songwriter.append( txtstr );
-	      break;
+	      case 0x82: // Writer
+		if( trackNo == 0 )
+		  textData.m_songwriter.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_songwriter.append( txtstr );
+		break;
 
-	    case 0x83: // Composer
-	      if( trackNo == 0 )
-		textData.m_composer.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_composer.append( txtstr );
-	      break;
+	      case 0x83: // Composer
+		if( trackNo == 0 )
+		  textData.m_composer.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_composer.append( txtstr );
+		break;
 
-	    case 0x84: // Arranger
-	      if( trackNo == 0 )
-		textData.m_arranger.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_arranger.append( txtstr );
-	      break;
+	      case 0x84: // Arranger
+		if( trackNo == 0 )
+		  textData.m_arranger.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_arranger.append( txtstr );
+		break;
 
-	    case 0x85: // Message
-	      if( trackNo == 0 )
-		textData.m_message.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_message.append( txtstr );
-	      break;
+	      case 0x85: // Message
+		if( trackNo == 0 )
+		  textData.m_message.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_message.append( txtstr );
+		break;
 
-	    case 0x86: // Disc identification
-	      // only global
-	      if( trackNo == 0 )
-		textData.m_discId.append( txtstr );
-	      break;
+	      case 0x86: // Disc identification
+		// only global
+		if( trackNo == 0 )
+		  textData.m_discId.append( txtstr );
+		break;
 
-	    case 0x8e: // Upc or isrc
-	      if( trackNo == 0 )
-		textData.m_upcEan.append( txtstr );
-	      else
-		textData.m_trackCdText[trackNo-1].m_isrc.append( txtstr );
-	      break;
+	      case 0x8e: // Upc or isrc
+		if( trackNo == 0 )
+		  textData.m_upcEan.append( txtstr );
+		else
+		  textData.m_trackCdText[trackNo-1].m_isrc.append( txtstr );
+		break;
 
-	      // TODO: support for binary data
-	      // 0x88: TOC 
-	      // 0x89: second TOC
-	      // 0x8f: Size information
+		// TODO: support for binary data
+		// 0x88: TOC 
+		// 0x89: second TOC
+		// 0x8f: Size information
 
-	    default:
-	      break;
+	      default:
+		break;
+	      }
+	  
+	      trackNo++;
+	      nullPos = nextNullPos;
 	    }
-	  
-	    trackNo++;
-	    nullPos = nextNullPos;
 	  }
 	}
-    
+	else
+	  kdDebug() << "(K3bCdDevice::CdDevice) " << blockDeviceName() << " zero-sized CD-TEXT." << endl; 
+
 	delete [] data;
 
 	success = true;
@@ -2051,7 +2085,18 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
 	else {
 	  kdDebug() << "(K3bCdDevice) READ CAPACITY failed. Falling back to READ TRACK INFO." << endl;
 
-	  inf.m_capacity = readToc().length();
+	  unsigned char* trackData = 0;
+	  int trackDataLen = 0;
+	  if( readTrackInformation( &trackData, trackDataLen, 0x1, 0xff ) ) {
+	    track_info_t* trackInfo = (track_info_t*)trackData;
+	    inf.m_capacity = from4Byte( trackInfo->track_start );
+
+	    delete [] data;
+	  }
+	  else {
+	    kdDebug() << "(K3bCdDevice) Falling back to readToc." << endl;
+	    inf.m_capacity = readToc().length();
+	  }
 	}
       }
 
@@ -2095,7 +2140,7 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo() const
   }
   
   return inf;
-}
+  }
 
 
 int K3bCdDevice::CdDevice::cdMediaType() const
@@ -2716,6 +2761,8 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
   // The index is found in the Mode-1 Q which occupies at least 9 out of 10 successive CD frames
   // It can be indentified by ADR == 1
   //
+  // So if the current sector does not provide Mode-1 Q subchannel we try the previous.
+  //
   
   if( readCd( readData, 
 	      16,
@@ -2731,23 +2778,48 @@ int K3bCdDevice::CdDevice::getIndex( unsigned long lba ) const
 	      0,
 	      2 // Q-Subchannel
 	      ) ) {
-    // byte 0: 4 bits CONTROL + 4 bits ADR 
-    if( (readData[0]<<4 & 0x0F) == 1 )
+    // byte 0: 4 bits CONTROL (MSB) + 4 bits ADR (LSB) 
+    if( (readData[0]&0x0f) == 0x1 )
       ret = readData[2];
-    else
-      ret = -2;
+
+    // search previous sector for Mode1 Q Subchannel
+    else if( readCd( readData, 
+	      16,
+	      1, // CD-DA
+	      0, // no DAP
+	      lba-1,
+	      1,
+	      false,
+	      false,
+	      false,
+	      false,
+	      false,
+	      0,
+	      2 // Q-Subchannel
+	      ) ) {
+      if( (readData[0]&0x0f) == 0x1 )
+	ret = readData[2];
+      else
+	ret = -2;
+    }
   }
+
   else {
     kdDebug() << "(K3bCdDevice::CdDevice::getIndex) readCd failed. Trying seek." << endl;
 
     unsigned char* data = 0;
     int dataLen = 0;
     if( seek( lba ) && readSubChannel( &data, dataLen, 1, 0 ) ) {
-      // byte 5: 4 bits ADR + 4 bits CONTROL
-      if( dataLen > 7 && (data[5]>>4 & 0x0F) == 1 )
+      // byte 5: 4 bits ADR (MSB) + 4 bits CONTROL (LSB)
+      if( dataLen > 7 && (data[5]>>4 & 0x0F) == 0x1 ) {
 	ret = data[7];
-      else
-	ret = -2;
+      }
+      else if( seek( lba-1 ) && readSubChannel( &data, dataLen, 1, 0 ) ) {
+	if( dataLen > 7 && (data[5]>>4 & 0x0F) == 0x1 )
+	  ret = data[7];
+	else
+	  ret = -2;
+      }
       
       delete [] data;
     }
@@ -2799,12 +2871,6 @@ bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
       if( sector < startSec )
 	sector = startSec;
       lastIndex = getIndex(sector);
-
-      // there may be a frame without index info
-      if( lastIndex == -2 ) {
-	sector--;
-	lastIndex = getIndex(sector);
-      }
     }
 
     if( lastIndex == 0 ) {
@@ -2831,7 +2897,7 @@ bool K3bCdDevice::CdDevice::searchIndex0( unsigned long startSec,
   return ret;
 }
 
-// FIXME: do a binary search for all indices.
+
 bool K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
@@ -2844,15 +2910,18 @@ bool K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
   bool ret = true;
 
   for( Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
-    long sec = -1;
-    if( searchIndex0( (*it).firstSector().lba(),
-		      (*it).lastSector().lba(),
-		      sec ) ) {
-      (*it).m_indices.append( K3bCdDevice::Index( 0,sec ) );
-    }
-    else {
-      ret = false;
-      break;
+    Track& track = *it;
+    if( track.type() == Track::AUDIO ) {
+      track.m_indices.clear();
+      long index0 = -1;
+      if( searchIndex0( track.firstSector().lba(), track.lastSector().lba(), index0 ) ) {
+	kdDebug() << "(K3bCdDevice::CdDevice) found index 0: " << index0 << endl;
+      }
+      track.m_indices.append( index0 );
+      if( index0 > 0 )
+	searchIndexTransitions( track.firstSector().lba(), index0-1, track );
+      else
+	searchIndexTransitions( track.firstSector().lba(), track.lastSector().lba(), track );
     }
   }
 
@@ -2860,6 +2929,34 @@ bool K3bCdDevice::CdDevice::indexScan( K3bCdDevice::Toc& toc ) const
     close();
 
   return ret;
+}
+
+
+void K3bCdDevice::CdDevice::searchIndexTransitions( long start, long end, K3bCdDevice::Track& track ) const
+{
+  kdDebug() << "(K3bCdDevice::CdDevice) searching for index transitions betweeen " 
+	    << start << " and " << end << endl;
+  int startIndex = getIndex( start );
+  int endIndex = getIndex( end );
+
+  if( startIndex < 0 || endIndex < 0 ) {
+    kdDebug() << "(K3bCdDevice::CdDevice) could not retrieve index values." << endl;
+  }
+  
+  kdDebug() << "(K3bCdDevice::CdDevice) indices: " << start << " - " << startIndex
+	    << " and " << end << " - " << endIndex << endl;
+
+  if( startIndex != endIndex ) {
+    if( start+1 == end ) {
+      kdDebug() << "(K3bCdDevice::CdDevice) found index transition: " << endIndex << " " << end << endl;
+      track.m_indices.resize( endIndex+1 );
+      track.m_indices[endIndex] = end;
+    }
+    else {
+      searchIndexTransitions( start, start+(end-start)/2, track );
+      searchIndexTransitions( start+(end-start)/2, end, track );
+    }
+  }
 }
 
 
@@ -2911,6 +3008,58 @@ bool K3bCdDevice::CdDevice::supportsFeature( unsigned int feature ) const
     delete [] data;      
 
     return success;
+  }
+  else
+    return false;
+}
+
+
+bool K3bCdDevice::CdDevice::readIsrc( unsigned int track, QCString& isrc ) const
+{
+  unsigned char* data = 0;
+  int dataLen = 0;
+
+  if( readSubChannel( &data, dataLen, 0x3, track ) ) {
+    bool isrcValid = false;
+
+    if( dataLen >= 8+18 ) {
+      isrcValid = (data[8+4]>>7 & 0x1);
+      
+      if( isrcValid ) {
+	isrc = QCString( reinterpret_cast<char*>(data[8+5]), 13 );
+
+	// TODO: check the range of the chars
+	
+      }
+    }
+    
+    delete [] data;
+
+    return isrcValid;
+  }
+  else
+    return false;
+}
+
+
+bool K3bCdDevice::CdDevice::readMcn( QCString& mcn ) const
+{
+  unsigned char* data = 0;
+  int dataLen = 0;
+
+  if( readSubChannel( &data, dataLen, 0x2, 0 ) ) {
+    bool mcnValid = false;
+
+    if( dataLen >= 8+18 ) {
+      mcnValid = (data[8+4]>>7 & 0x1);
+      
+      if( mcnValid )
+	mcn = QCString( reinterpret_cast<char*>(data[8+5]), 14 );
+    }
+    
+    delete [] data;
+
+    return mcnValid;
   }
   else
     return false;

@@ -1,0 +1,9 @@
+[K3b Plugin]
+Lib=libk3b<name>encoder
+Group=AudioEncoder
+Name=K3b ??? Encoder
+Author=???
+Email=???
+Version=??
+Comment=Encoding module to encode <name> files
+License=???

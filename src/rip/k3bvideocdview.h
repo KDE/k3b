@@ -21,7 +21,6 @@
 
 #include <k3bcdcontentsview.h>
 
-#include <device/k3bdiskinfo.h>
 #include "k3bvideocdinfo.h"
 
 class KActionCollection;
@@ -37,7 +36,9 @@ class K3bVideoCdRippingOptions;
 
 namespace K3bCdDevice
 {
-    class DiskInfoDetector;
+  class DiskInfoDetector;
+  class Toc;
+  class CdDevice;
 }
 
 
@@ -51,10 +52,10 @@ class K3bVideoCdView : public K3bCdContentsView
 
         void setDisk( K3bCdDevice::DiskInfoDetector* );
 
-        const K3bCdDevice::DiskInfo& displayedDisk() const
-        {
-            return m_diskInfo;
-        }
+/*         const K3bCdDevice::DiskInfo& displayedDisk() const */
+/*         { */
+/*             return m_diskInfo; */
+/*         } */
 
         KActionCollection* actionCollection() const
         {
@@ -83,7 +84,8 @@ class K3bVideoCdView : public K3bCdContentsView
         void enableInteraction( bool );
         void buildTree( QListViewItem *parentItem, const QDomElement &parentElement, QString pname = QString::null );
 
-        K3bCdDevice::DiskInfo m_diskInfo;
+        K3bCdDevice::Toc m_toc;
+        K3bCdDevice::CdDevice* m_device;
 
         KActionCollection* m_actionCollection;
         KActionMenu* m_popupMenu;

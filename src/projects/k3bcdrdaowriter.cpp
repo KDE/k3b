@@ -210,7 +210,7 @@ void K3bCdrdaoWriter::prepareArgumentList()
 {
 
   // binary
-  *m_process << m_cdrdaoBinObject->path;
+  *m_process << m_cdrdaoBinObject;
 
   // command
   switch ( m_command )

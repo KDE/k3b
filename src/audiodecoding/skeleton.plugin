@@ -1,0 +1,9 @@
+[K3b Plugin]
+Lib=lib<name>decoder
+Group=AudioDecoder
+Name=K3b ??? Decoder
+Author=???
+Email=???
+Version=0.1
+Comment=Decoding module to decode ??? files
+License=???

@@ -18,6 +18,7 @@
 #define K3BTOC_H
 
 #include <qvaluelist.h>
+#include <qcstring.h>
 
 #include <k3bmsf.h>
 
@@ -58,6 +59,7 @@ namespace K3bCdDevice
     unsigned int discId() const;
     unsigned int calculateDiscId();
 
+    const QCString& mcn() const { return m_mcn; }
 
     /**
      * determine the contents type based on the tracks' types.
@@ -76,10 +78,14 @@ namespace K3bCdDevice
     void setDiscId( unsigned int id ) { m_discId = id; }
     void setFirstSector( int i ) { m_firstSector = i; }
 
+    void setMcn( const QCString& mcn ) { m_mcn = mcn; }
+
   private:
     unsigned int m_discId;
     K3b::Msf m_firstSector;
     //  K3b::Msf int m_lastSector;
+
+    QCString m_mcn;
   };
 }
 

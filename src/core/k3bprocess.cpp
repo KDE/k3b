@@ -16,6 +16,7 @@
 
 
 #include "k3bprocess.h"
+#include "k3bexternalbinmanager.h"
 
 #include <qstringlist.h>
 #include <qsocketnotifier.h>
@@ -55,6 +56,36 @@ K3bProcess::K3bProcess()
 K3bProcess::~K3bProcess()
 {
   delete d;
+}
+
+
+K3bProcess& K3bProcess::operator<<( const K3bExternalBin* bin )
+{
+  return this->operator<<( bin->path );
+}
+
+K3bProcess& K3bProcess::operator<<( const QString& arg )
+{
+  static_cast<KProcess*>(this)->operator<<( arg );
+  return *this;
+}
+
+K3bProcess& K3bProcess::operator<<( const char* arg )
+{
+  static_cast<KProcess*>(this)->operator<<( arg );
+  return *this;
+}
+
+K3bProcess& K3bProcess::operator<<( const QCString& arg )
+{
+  static_cast<KProcess*>(this)->operator<<( arg );
+  return *this;
+}
+
+K3bProcess& K3bProcess::operator<<( const QStringList& args )
+{
+  static_cast<KProcess*>(this)->operator<<( args );
+  return *this;
 }
 
 

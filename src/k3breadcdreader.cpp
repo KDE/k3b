@@ -139,7 +139,7 @@ void K3bReadcdReader::start()
   connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
 
 
-  *d->process << d->readcdBinObject->path;
+  *d->process << d->readcdBinObject;
 
   // display progress
   *d->process << "-v";
@@ -176,8 +176,9 @@ void K3bReadcdReader::start()
 
   *d->process << QString("retries=%1").arg(m_retries);
 
+  // readcd does not read the last sector specified
   if( d->firstSector < d->lastSector )
-    *d->process << QString("sectors=%1-%2").arg(d->firstSector.lba()).arg(d->lastSector.lba());
+    *d->process << QString("sectors=%1-%2").arg(d->firstSector.lba()).arg(d->lastSector.lba()+1);
 
   // additional user parameters from config
   const QStringList& params = d->readcdBinObject->userParameters();
@@ -227,6 +228,8 @@ void K3bReadcdReader::slotStdLine( const QString& line )
   if( line.startsWith( "end:" ) ) {
     bool ok;
     d->blocksToRead = line.mid(4).toInt(&ok);
+    if( d->firstSector < d->lastSector )
+      d->blocksToRead -= d->firstSector.lba();
     if( !ok )
       kdError() << "(K3bReadcdReader) blocksToRead parsing error in line: " 
 		<< line.mid(4) << endl;
@@ -235,6 +238,8 @@ void K3bReadcdReader::slotStdLine( const QString& line )
   else if( line.startsWith( "addr:" ) ) {
     bool ok;
     long currentReadBlock = line.mid( 6, line.find("cnt")-7 ).toInt(&ok);
+    if( d->firstSector < d->lastSector )
+      currentReadBlock -= d->firstSector.lba();
     if( ok ) {
       int p = (int)(100.0 * (double)currentReadBlock / (double)d->blocksToRead);
       if( p > d->lastProgress ) {
@@ -260,10 +265,10 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     // parse the sector
     pos += 21;
     bool ok;
-    int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos-1 ).toInt(&ok);
+    int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ).toInt(&ok);
     if( !ok ) {
       kdError() << "(K3bReadcdReader) problemSector parsing error in line: " 
-		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos-1 ) << endl;
+		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
     }
     emit infoMessage( i18n("Retrying from sector %1.").arg(problemSector), INFO );
   }
@@ -273,10 +278,10 @@ void K3bReadcdReader::slotStdLine( const QString& line )
 
     pos += 16;
     bool ok;
-    int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos-1 ).toInt(&ok);
+    int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ).toInt(&ok);
     if( !ok ) {
       kdError() << "(K3bReadcdReader) problemSector parsing error in line: " 
-		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos-1 ) << endl;
+		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
     }
 
     if( line.contains( "not corrected") ) {

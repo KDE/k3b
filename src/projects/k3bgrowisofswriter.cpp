@@ -151,7 +151,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   // The growisofs bin is ready. Now we add the parameters
   //
 
-  *d->process << d->growisofsBin->path;
+  *d->process << d->growisofsBin;
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->image.isEmpty() )

@@ -52,7 +52,6 @@ K3bAudioJobTempData::K3bAudioJobTempData( K3bAudioDoc* doc, QObject* parent, con
 
 K3bAudioJobTempData::~K3bAudioJobTempData()
 {
-  cleanup();
   delete d;
 }
 
@@ -97,6 +96,11 @@ const QString& K3bAudioJobTempData::infFileName( K3bAudioTrack* track )
 // WE ONLY HAVE PERFORMER AND TITLE IN THE GLOBAL CDTEXT SECTION
 bool K3bAudioJobTempData::writeInfFiles()
 {
+  //
+  // TODO: USE K3BINFFILEWRITER
+  //
+
+
   if( (int)d->infFiles.count() < d->doc->numberOfTracks() )
     prepareTempFileNames();
 
@@ -482,6 +486,11 @@ void K3bAudioJobTempData::cleanup()
   for( uint i = 0; i < d->infFiles.count(); ++i ) {
     if( QFile::exists( d->infFiles[i] ) )
       QFile::remove(  d->infFiles[i] );
+  }
+
+  for( uint i = 0; i < d->bufferFiles.count(); ++i ) {
+    if( QFile::exists( d->bufferFiles[i] ) )
+      QFile::remove(  d->bufferFiles[i] );
   }
 
   if( QFile::exists( d->tocFile ) )

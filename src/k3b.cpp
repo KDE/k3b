@@ -95,7 +95,6 @@
 #include "k3bfiletreeview.h"
 #include "k3bstdguiitems.h"
 #include "datadvd/k3bdvdformattingdialog.h"
-#include "cdclone/k3bclonedialog.h"
 #include "dvdcopy/k3bdvdcopydialog.h"
 //#include "dvdcopy/k3bvideodvdcopydialog.h"
 #include "k3bprojectinterface.h"
@@ -300,9 +299,6 @@ void K3bMainWindow::initActions()
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
 
-  KAction* actionToolsCloneCd = new KAction(i18n("C&lone CD..."), "cdcopy", 0, this, SLOT(slotCdClone()),
-					    actionCollection(), "tools_clone_cd" );
-
   KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
 					    actionCollection(), "tools_copy_dvd" );
 
@@ -362,7 +358,6 @@ void K3bMainWindow::initActions()
   actionCdCopy->setToolTip( i18n("Open the CD Copy dialog") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD Copy dialog") );
   //  actionToolsVideoDvdCopy->setToolTip( i18n("Open the VideoDVD Copy dialog") );
-  actionToolsCloneCd->setToolTip( i18n("Open the CD Cloning dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
   actionFileSave->setToolTip(i18n("Saves the actual project"));
@@ -709,10 +704,8 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
   if( doc != 0 ) {
     if( !doc->saved() )
       fileSaveAs( doc );
-    else
-      if( !doc->saveDocument(doc->URL()) )
-	KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
-//    doc->setSaved(true);
+    else if( !doc->saveDocument(doc->URL()) )
+      KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
   }
 }
 
@@ -1237,13 +1230,6 @@ void K3bMainWindow::slotK3bSetup()
 void K3bMainWindow::slotCdCopy()
 {
   K3bCdCopyDialog d( this );
-  d.exec();
-}
-
-
-void K3bMainWindow::slotCdClone()
-{
-  K3bCloneDialog d( this );
   d.exec();
 }
 

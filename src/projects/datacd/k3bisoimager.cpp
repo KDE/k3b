@@ -287,7 +287,7 @@ void K3bIsoImager::calculateSize()
   if( !mkisofsBin->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
 
-  *m_process << mkisofsBin->path;
+  *m_process << mkisofsBin;
 
   // prepare the filenames as written to the image
   m_doc->prepareFilenames();
@@ -425,7 +425,7 @@ void K3bIsoImager::start()
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
 
 
-  *m_process << mkisofsBin->path;
+  *m_process << mkisofsBin;
 
   // prepare the filenames as written to the image
   m_doc->prepareFilenames();

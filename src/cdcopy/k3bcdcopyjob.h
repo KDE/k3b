@@ -2,7 +2,6 @@
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
- *                    Klaus-Dieter Krannich <kd@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -15,15 +14,15 @@
  */
 
 
-#ifndef K3BCDCOPYJOB_H
-#define K3BCDCOPYJOB_H
+#ifndef _K3BCDCOPYJOB_H_
+#define _K3BCDCOPYJOB_H_
 
 #include <k3bjob.h>
-#include <k3bcdrdaowriter.h>
 
-class K3bProcess;
-class K3bCdDevice::CdDevice;
-class QUrlOperator;
+namespace K3bCdDevice {
+  class CdDevice;
+  class DeviceHandler;
+}
 
 
 /**
@@ -37,7 +36,8 @@ class K3bCdCopyJob : public K3bBurnJob
   K3bCdCopyJob( QObject* parent = 0 );
   ~K3bCdCopyJob();
 
-  K3bCdDevice::CdDevice* writer() const { return m_cdrdaowriter->burnDevice(); };
+  K3bCdDevice::CdDevice* writer() const { return m_writerDevice; }
+  K3bCdDevice::CdDevice* reader() const { return m_readerDevice; }
 	
   QString jobDescription() const;
   QString jobDetails() const;
@@ -47,61 +47,65 @@ class K3bCdCopyJob : public K3bBurnJob
   void cancel();
 
  public:
-  void setWriter( K3bCdDevice::CdDevice* dev ) { m_cdrdaowriter->setBurnDevice(dev); }
-  void setReader( K3bCdDevice::CdDevice* dev ) { m_cdrdaowriter->setSourceDevice(dev); }
-  void setSpeed( int s ) { m_cdrdaowriter->setBurnSpeed(s); }
+  void setWriterDevice( K3bCdDevice::CdDevice* dev ) { m_writerDevice = dev; }
+  void setReaderDevice( K3bCdDevice::CdDevice* dev ) { m_readerDevice = dev; }
+  void setWritingMode( int m ) { m_writingMode = m; }
+  void setSpeed( int s ) { m_speed = s; }
   void setOnTheFly( bool b ) { m_onTheFly = b; }
   void setKeepImage( bool b ) { m_keepImage = b; }
-  void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
-  void setDummy( bool b ) { m_cdrdaowriter->setSimulate(b); }
-  /** not usable for cdrdao (enabled by default) */
+  void setOnlyCreateImage( bool b ) { m_onlyCreateImages = b; }
+  void setSimulate( bool b ) { m_simulate = b; }
   void setTempPath( const QString& path ) { m_tempPath= path; }
-  void setCopies( int c ) { m_copies = c; }
-
-  void setFastToc( bool b ) { m_cdrdaowriter->setFastToc(b); }
-  void setReadRaw( bool b ) { m_cdrdaowriter->setReadRaw(b); }
-  void setParanoiaMode( int i ) { m_cdrdaowriter->setParanoiaMode(i); }
-  void setReadSubchan(K3bCdrdaoWriter::SubMode m) { m_cdrdaowriter->setReadSubchan(m); };
-  void setTaoSource(bool b) { m_cdrdaowriter->setTaoSource(b); };
-  void setTaoSourceAdjust(int a) { m_cdrdaowriter->setTaoSourceAdjust(a); };
-  void setForce(bool b) { m_cdrdaowriter->setForce(b); };
+  void setCopies( unsigned int c ) { m_copies = c; }
+  void setParanoiaMode( int i ) { m_paranoiaMode = i; }
+  void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
+  void setReadRetries( int i ) { m_readRetries = i; }
+  void setQueryCddb( bool b ) { m_queryCddb =b; }
+  void setPreferCdText( bool b ) { m_preferCdText = b; }
+  void setBurnfree( bool b ) { m_burnfree = b; }
 
  private slots:
-  void cdrdaoFinished(bool);
-
-  void copyPercent(int p);
-  void copySubPercent(int p);
-  void slotNextTrack( int, int );
-
- private:
-  void getSourceDiskInfo(K3bCdDevice::CdDevice *dev);
-  void cdrdaoDirectCopy();
-  void cdrdaoRead();
-  void cdrdaoWrite();
-  void removeImages();
-  void finishAll();
-  void cancelAll();
-  void fixTocFile(QString &);
+  void slotDiskInfoReady( K3bCdDevice::DeviceHandler* );
+  void slotCdTextReady( K3bCdDevice::DeviceHandler* );
+  void slotMediaReloadedForNextSession( K3bCdDevice::DeviceHandler* dh );
+  void slotCddbQueryFinished(int);
+  void slotWritingNextTrack( int t, int tt );
+  void slotReadingNextTrack( int t, int tt );
+  void slotSessionReaderFinished( bool success );
+  void slotWriterFinished( bool success );
+  void slotReaderProgress( int p );
+  void slotReaderSubProgress( int p );
+  void slotWriterProgress( int p );
+  void slotReaderProcessedSize( int p, int pp );
 
  private:
-  int m_copies;
-  int m_finishedCopies;
+  void startCopy();
+  void queryCddb();
+  bool writeNextSession();
+  void readNextSession();
+  bool prepareImageFiles();
+  void cleanup();
+  void finishJob( bool canceled, bool error );
 
-  int m_sessions;
-  int m_finishedSessions;
-
+  K3bCdDevice::CdDevice* m_writerDevice;
+  K3bCdDevice::CdDevice* m_readerDevice;
+  bool m_simulate;
+  int m_speed;
+  int m_paranoiaMode;
+  unsigned int m_copies;
   bool m_keepImage;
-  bool m_onlyCreateImage;
+  bool m_onlyCreateImages;
   bool m_onTheFly;
-
+  bool m_ignoreReadErrors;
+  int m_readRetries;
+  bool m_queryCddb;
+  bool m_preferCdText;
   QString m_tempPath;
-  QString m_tocFile;
+  int m_writingMode;
+  bool m_burnfree;
 
-  enum Task { READING, WRITING };
-
-  int m_job; // Task
-
-  K3bCdrdaoWriter *m_cdrdaowriter;
+  class Private;
+  Private* d;
 };
 
 #endif

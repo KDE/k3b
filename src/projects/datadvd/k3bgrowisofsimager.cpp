@@ -131,7 +131,7 @@ void K3bGrowisofsImager::start()
   //
   m_process->setEnvironment( "MKISOFS", m_mkisofsBin->path );
 
-  *m_process << m_growisofsBin->path;
+  *m_process << m_growisofsBin;
 
   //
   // add the growisofs options

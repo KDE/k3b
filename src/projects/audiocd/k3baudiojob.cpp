@@ -232,7 +232,7 @@ void K3bAudioJob::slotWriterFinished( bool success )
     return;
   }
   else {
-    if( !m_doc->onTheFly() && m_doc->removeImages() )
+    if( m_doc->onTheFly() || m_doc->removeImages() )
       removeBufferFiles();
 
     emit finished(true);
@@ -501,14 +501,7 @@ void K3bAudioJob::removeBufferFiles()
 {
   emit infoMessage( i18n("Removing buffer files."), INFO );
 
-  QPtrListIterator<K3bAudioTrack> it( *m_doc->tracks() );
-  for( ; it.current(); ++it ) {
-    K3bAudioTrack* track = it.current();
-    const QString& f = m_tempData->bufferFileName(track);
-    if( QFile::exists( f ) )
-      if( !QFile::remove( f ) )
-	emit infoMessage( i18n("Could not delete file %1.").arg(f), ERROR );
-  }
+  m_tempData->cleanup();
 }
 
 

@@ -16,8 +16,8 @@
 
 #include "k3baudioripthread.h"
 #include "k3bpatternparser.h"
-#include "k3bcdparanoialib.h"
 
+#include <k3bcdparanoialib.h>
 #include <k3bjob.h>
 #include <k3baudioencoder.h>
 #include <k3bwavefilewriter.h>
@@ -147,7 +147,7 @@ void K3bAudioRipThread::run()
   emitInfoMessage( i18n("Reading CD table of contents."), K3bJob::INFO );
   d->toc = m_device->readToc();
 
-  if( !d->paranoiaLib->initParanoia( m_device ) ) {
+  if( !d->paranoiaLib->initParanoia( m_device, d->toc ) ) {
     emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()),
 		     K3bJob::ERROR );
     emitFinished(false);
@@ -412,6 +412,8 @@ void K3bAudioRipThread::cancel()
 void K3bAudioRipThread::slotCheckIfThreadStillRunning()
 {
   if( running() ) {
+    d->paranoiaLib->close();
+
     // this could happen if the thread is stuck in paranoia_read
     // because of an unreadable cd
     terminate();

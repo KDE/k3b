@@ -19,6 +19,8 @@
 
 #include "k3bdevicecombobox.h"
 #include "k3bcdcopyjob.h"
+#include "k3bclonejob.h"
+
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
 #include <k3bcore.h>
@@ -29,6 +31,7 @@
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bthememanager.h>
+#include <k3bwritingmodewidget.h>
 
 #include <kguiitem.h>
 #include <klocale.h>
@@ -50,16 +53,18 @@
 #include <qwhatsthis.h>
 #include <qhbox.h>
 #include <qpushbutton.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
+#include <k3biso9660.h>
+#include <qfile.h>
 
 K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : K3bInteractionDialog( parent, name, i18n("CD Copy"), QString::null,
+  : K3bInteractionDialog( parent, name, i18n("CD Copy"), i18n("and CD Cloning"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  modal )
 {
-  setStartButtonText( i18n("Start CD Copy") );
-
   QWidget* main = mainWidget();
 
   QGridLayout* mainGrid = new QGridLayout( main );
@@ -67,36 +72,48 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setMargin( 0 );
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( false, main );
-  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
+  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
   QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("CD Reader Device"), main );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
 
   m_comboSourceDevice = new K3bDeviceComboBox( groupSource );
-
+  m_comboSourceDevice->addDevices( k3bcore->deviceManager()->cdReader() );
 
   // tab widget --------------------
   QTabWidget* tabWidget = new QTabWidget( main );
 
+  //
   // option tab --------------------
+  //
   QWidget* optionTab = new QWidget( tabWidget );
   QGridLayout* optionTabGrid = new QGridLayout( optionTab );
   optionTabGrid->setSpacing( spacingHint() );
   optionTabGrid->setMargin( marginHint() );
 
+  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
+  groupWritingMode->setInsideMargin( marginHint() );
+  m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
+
+  m_groupCopyMode = new QButtonGroup( 2, Qt::Horizontal, i18n("Copy Mode"), optionTab );
+  m_groupCopyMode->setInsideMargin( marginHint() );
+  m_groupCopyMode->setInsideSpacing( spacingHint() );
+  m_groupCopyMode->setExclusive( true );
+  m_radioNormalCopy = new QRadioButton( i18n("Normal Copy"), m_groupCopyMode );
+  m_radioCloneCopy = new QRadioButton( i18n("Clone Copy"), m_groupCopyMode );
+
   QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Options"), optionTab );
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
-
-  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
-  groupCopies->setInsideSpacing( spacingHint() );
-  groupCopies->setInsideMargin( marginHint() );
-
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
+  m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupOptions );
   m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
 
+  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
+  groupCopies->setInsideSpacing( spacingHint() );
+  groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
   if( K3bTheme* theme = k3bthememanager->currentTheme() )
     pixLabel->setPixmap( theme->pixmap( "k3b_cd_copy" ) );
@@ -107,66 +124,53 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( optionTab );
 
-
-  optionTabGrid->addWidget( groupOptions, 0, 0 );
-  optionTabGrid->addWidget( groupCopies, 1, 0 );
-  optionTabGrid->addMultiCellWidget( m_tempDirSelectionWidget, 0, 1, 1, 1 );
-  optionTabGrid->setRowStretch( 1, 1 );
+  optionTabGrid->addWidget( groupWritingMode, 0, 0 );
+  optionTabGrid->addWidget( m_groupCopyMode, 0, 1 );
+  optionTabGrid->addWidget( groupOptions, 1, 0 );
+  optionTabGrid->addWidget( groupCopies, 2, 0 );
+  optionTabGrid->addMultiCellWidget( m_tempDirSelectionWidget, 1, 2, 1, 1 );
+  optionTabGrid->setRowStretch( 2, 1 );
   optionTabGrid->setColStretch( 1, 1 );
-
 
   tabWidget->addTab( optionTab, i18n("&Options") );
 
-
+  //
   // advanced tab ------------------
+  //
   QWidget* advancedTab = new QWidget( tabWidget );
   QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  QGroupBox* groupAudio = new QGroupBox( 2, Qt::Vertical, i18n("Audio Extraction"), advancedTab ); 
+  QGroupBox* groupGeneral = new QGroupBox( 2, Qt::Vertical, i18n("General"), advancedTab ); 
+  groupGeneral->setInsideSpacing( spacingHint() );
+  groupGeneral->setInsideMargin( marginHint() );
+  QHBox* box = new QHBox( groupGeneral );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor(new QLabel( i18n("Read Retries:"), box ), 1 );
+  m_spinRetries = new QSpinBox( 1, 128, 1, box );
+  m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
+
+  QGroupBox* groupAudio = new QGroupBox( 3, Qt::Vertical, i18n("Audio"), advancedTab ); 
   groupAudio->setInsideSpacing( spacingHint() );
   groupAudio->setInsideMargin( marginHint() );
-  m_checkFastToc = new QCheckBox( i18n("Fast TOC"), groupAudio );
-  QHBox *p = new QHBox( groupAudio );
-  p->setStretchFactor(new QLabel( i18n("Paranoia mode:"), p ), 1 );
-  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( p );
+  box = new QHBox( groupAudio );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
+  m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
+  m_checkQueryCddb = new QCheckBox( i18n("Query cddb"), groupAudio );
+  m_checkPrefereCdText = new QCheckBox( i18n("Prefer CD-Text"), groupAudio );
 
-  QGroupBox* groupRaw   = new QGroupBox( 2, Qt::Vertical, i18n("Read Raw"), advancedTab ); 
-  groupRaw->setInsideSpacing( spacingHint() );
-  groupRaw->setInsideMargin( marginHint() );
-  m_checkRawCopy = new QCheckBox( i18n("Raw copy"), groupRaw );
-  QHBox *s = new QHBox( groupRaw );
-  s->setStretchFactor(new QLabel( i18n("Read subchan mode:"), s ), 1 );
-  m_comboSubchanMode = new QComboBox( s );
-  m_comboSubchanMode->insertItem( "none" );
-  m_comboSubchanMode->insertItem( "rw" );
-  m_comboSubchanMode->insertItem( "rw_raw" );
- 
-  QGroupBox* groupTao   = new QGroupBox( 2, Qt::Vertical, i18n("Track at Once Source"), advancedTab ); 
-  groupTao->setInsideSpacing( spacingHint() );
-  groupTao->setInsideMargin( marginHint() );
-  m_checkTaoSource = new QCheckBox( i18n("TAO source"), groupTao );
-  QHBox *t = new QHBox( groupTao );
-  QLabel* taoSourceAdjustLabel = new QLabel( i18n("Tao source adjust:"), t);
-  t->setStretchFactor( taoSourceAdjustLabel, 1 );
-  m_spinTaoSourceAdjust = new QSpinBox( t );
-  m_spinTaoSourceAdjust->setMinValue( 1 );
-  m_spinTaoSourceAdjust->setMaxValue( 99 );
-  m_spinTaoSourceAdjust->setValue( 2 );
-  m_spinTaoSourceAdjust->setDisabled( true );
-  taoSourceAdjustLabel->setDisabled( true );
+  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Data"), advancedTab ); 
+  groupData->setInsideSpacing( spacingHint() );
+  groupData->setInsideMargin( marginHint() );
+  m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
 
-  QGroupBox* groupOther = new QGroupBox( 2, Qt::Vertical, i18n("Other"), advancedTab ); 
-  groupOther->setInsideSpacing( spacingHint() );
-  groupOther->setInsideMargin( marginHint() );
-  m_checkForce = new QCheckBox( i18n("Force write"), groupOther );
-
-  advancedTabGrid->addWidget( groupAudio, 0, 0 );  
-  advancedTabGrid->addWidget( groupRaw,   0, 1 );
-  advancedTabGrid->addWidget( groupTao,   1, 0 );
-  advancedTabGrid->addWidget( groupOther, 1, 1 );
-
+  advancedTabGrid->addMultiCellWidget( groupGeneral, 0, 0, 0, 1 );  
+  advancedTabGrid->addWidget( groupAudio, 1, 0 );
+  advancedTabGrid->addWidget( groupData,   1, 1 );
+  advancedTabGrid->setRowStretch( 1, 1 );
+  advancedTabGrid->setColStretch( 1, 1 );
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
@@ -176,69 +180,33 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setRowStretch( 2, 1 );
 
 
-  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice*)), this, SLOT(slotSourceSelected()) );
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotSourceSelected()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bCdDevice::CdDevice*)), this, SLOT(slotToggleAll()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkQueryCddb, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_radioCloneCopy, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_radioNormalCopy, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
 
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkDeleteImages, SLOT(setDisabled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRawCopy, SLOT(setDisabled(bool)) );
+  // TODO: add tooltips and whatsthis
 
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotOnlyCreateImageChecked(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_writerSelectionWidget, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_spinCopies, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkSimulate, SLOT(setDisabled(bool)) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), m_checkDeleteImages, SLOT(setDisabled(bool)) );
+  QToolTip::add( m_radioNormalCopy, i18n("Normal copy for most CD types") );
+  QToolTip::add( m_radioCloneCopy, i18n("Raw clone copy") );
+  QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
+  QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
+  QToolTip::add( m_checkQueryCddb, i18n("Query the cddb database for audio titles") );
+  QToolTip::add( m_checkPrefereCdText, i18n("Use CD-Text instead of cddb if available.") );
 
-  connect( m_checkTaoSource, SIGNAL(toggled(bool)), m_spinTaoSourceAdjust, SLOT(setEnabled(bool)) );
-  connect( m_checkTaoSource, SIGNAL(toggled(bool)), taoSourceAdjustLabel, SLOT(setEnabled(bool)) );
 
-  initReadingDevices();
+  QWhatsThis::add( m_checkNoCorrection, i18n("<p>If this option is checked K3b will disable the "
+					     "source drive's ECC/EDC error correction. This way sectors "
+					     "that are unreadable by intention can be read."
+					     "<p>This may be useful for cloning CDs with copy "
+					     "protection based on corrupted sectors.") );
+  
+
   slotLoadUserDefaults();
-  slotSourceSelected();
-
-
-  // ToolTips
-  // --------------------------------------------------------------------------------
-  QToolTip::add( m_checkFastToc, i18n("Do not extract pre-gaps and index marks") );
-  QToolTip::add( m_comboSourceDevice, i18n("Select the drive with the CD to duplicate") );
-  QToolTip::add( m_spinCopies, i18n("Number of copies") );
-  QToolTip::add( m_checkRawCopy, i18n("Write all data sectors as 2352 byte blocks") );
-  QToolTip::add( m_comboSubchanMode, i18n("Set the sub-channel data to be extracted") );
-  QToolTip::add( m_checkTaoSource, i18n("Set this for discs written in TAO mode") );
-  QToolTip::add( m_spinTaoSourceAdjust, i18n("Set the number of link blocks for TAO sources") );
-  QToolTip::add( m_checkForce, i18n("Force write operation") );
-
-
-  // What's This info
-  // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_checkFastToc, i18n("<p>If this option is checked, K3b will ignore any pregaps and index marks "
-					"on an audio CD. "
-					"The copy will sound exactly like the original. The only difference is that "
-					"the display of your audio cd player might show different values."
-					"<p><b>Caution:</b> This may result in faster reading but does not guarantee "
-					"an exact copy.") );
-  QWhatsThis::add( m_comboSourceDevice, i18n("<p>Here you should select the drive which contains the CD to copy.") );
-  QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the CD.") );
-  QWhatsThis::add( m_checkRawCopy, i18n("<p>If this option is checked, K3b will write all data sectors as 2352 byte "
-					"blocks. No error correction will be applied. Use this if you have problems "
-					"with reading data cds."
-					"<p>Has no effect on audio cds."
-					"<p>Does not work in on-the-fly mode.") );
-  QWhatsThis::add( m_comboSubchanMode, i18n("<p>Specifies the type of sub-channel data " 
-              "that is extracted from the source CD."
-              "<ul><li><b>rw</b>: packed R-W sub-channel data, deinterleaved and error corrected.</li>"
-              "<li><b>rw_raw</b>: raw R-W sub-channel data, not de-interleaved, not error corrected, "
-              "L-EC data included in the track image.</li></ul>"
-              "<p>If this option is not selected, no sub-channel data will be extracted." ) );
-  QWhatsThis::add( m_checkTaoSource, i18n("<p>Select this option, if the source CD was written in TAO mode. "
-              "It will be  assumed  that the  pre-gap length between all tracks (except between two audio "
-              "tracks) is the standard 150  blocks  plus  the  number  of  link blocks  (usually 2). "
-              "The number of link blocks can be controlled with option <b>TAO&nbsp Source&nbsp Adjust</b>. "
-              "<p>Use this option only if you get error  messages in the transition areas between two tracks. "
-              "<p>If you use this option with pressed CDs or CDs written in DAO mode "
-              "you will get wrong results." ) );
-  QWhatsThis::add( m_spinTaoSourceAdjust, i18n("see <b>TAO&nbsp Source") );
-  QWhatsThis::add( m_checkForce, i18n("<p>Forces the execution of an operation that otherwise would not be performed") );
 }
 
 
@@ -247,44 +215,7 @@ K3bCdCopyDialog::~K3bCdCopyDialog()
 }
 
 
-void K3bCdCopyDialog::initReadingDevices()
-{
-  // simple thing: if the used cdrdao version and the kernel do support
-  // ATAPI we use it, otherwise we can only use SCSI devices
-  const K3bExternalBin* cdrdaoBin = k3bcore->externalBinManager()->binObject("cdrdao");
-
-  if( cdrdaoBin ) {
-    QPtrList<K3bDevice> devices = k3bcore->deviceManager()->cdReader();
-    K3bDevice* dev = devices.first();
-    while( dev ) {
-      if( dev->interfaceType() == K3bDevice::SCSI ||
-	  (K3b::plainAtapiSupport() && cdrdaoBin->hasFeature("plain-atapi")) ||
-	  (K3b::hackedAtapiSupport() && cdrdaoBin->hasFeature("hacked-atapi")) )
-	m_comboSourceDevice->addDevice( dev );
-      dev = devices.next();
-    }
-      
-    if ( m_comboSourceDevice->count() == 0 )
-      m_buttonStart->setEnabled(false);
-  }
-  else {
-    kdError() << "(K3bCdCopyDialog) Could not find cdrdao." << endl;
-    m_buttonStart->setEnabled(false);
-  }
-}
-
-void K3bCdCopyDialog::slotSourceSelected()
-{
-  K3bDevice* writer = m_writerSelectionWidget->writerDevice();
-  K3bDevice* reader = readingDevice();
-
-  if( writer == reader || m_checkOnlyCreateImage->isChecked() )
-    m_checkOnTheFly->setChecked( false );
-  m_checkOnTheFly->setDisabled( writer == reader || m_checkOnlyCreateImage->isChecked() );
-}
-
-
-K3bDevice* K3bCdCopyDialog::readingDevice() const
+K3bCdDevice::CdDevice* K3bCdCopyDialog::readingDevice() const
 {
   return m_comboSourceDevice->selectedDevice();
 }
@@ -292,53 +223,132 @@ K3bDevice* K3bCdCopyDialog::readingDevice() const
 
 void K3bCdCopyDialog::slotStartClicked()
 {
-  K3bCdCopyJob* job = new K3bCdCopyJob( this );
-  
-  job->setWriter( m_writerSelectionWidget->writerDevice() );
-  job->setSpeed( m_writerSelectionWidget->writerSpeed() );
-  job->setReader( readingDevice() );
-  job->setDummy( m_checkSimulate->isChecked() );
-  job->setOnTheFly( m_checkOnTheFly->isChecked() );
-  job->setKeepImage( !m_checkDeleteImages->isChecked() );
-  job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-  job->setFastToc( m_checkFastToc->isChecked() );
-  job->setTempPath( m_tempDirSelectionWidget->tempPath() );
-  if( !m_checkSimulate->isChecked() )
-    job->setCopies( m_spinCopies->value() );
-  job->setReadRaw( m_checkRawCopy->isChecked() );
-  job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
-  if ( m_checkTaoSource->isChecked() ) {
-    job->setTaoSource(true);
-    if (m_spinTaoSourceAdjust->value() != 2)
-      job->setTaoSourceAdjust( m_spinTaoSourceAdjust->value() );
+  K3bBurnJob* burnJob = 0;
+
+  if( m_radioCloneCopy->isChecked() ) {
+
+    //
+    // check for m_tempDirSelectionWidget->tempPath() and
+    // m_tempDirSelectionWidget-tempPath() + ".toc"
+    //
+    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+      if( KMessageBox::warningYesNo( this,
+				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+				     i18n("File Exists") )
+	  != KMessageBox::Yes )
+	return;
+    }
+    
+    if( QFile::exists( m_tempDirSelectionWidget->tempPath() + ".toc" ) ) {
+      if( KMessageBox::warningYesNo( this,
+				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
+				     i18n("File Exists") )
+	  != KMessageBox::Yes )
+	return;
+    }
+    
+    K3bCloneJob* job = new K3bCloneJob( this );
+
+    job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
+    job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
+    job->setImagePath( m_tempDirSelectionWidget->tempPath() );
+    job->setNoCorrection( m_checkNoCorrection->isChecked() );
+    job->setRemoveImageFiles( m_checkDeleteImages->isChecked() );
+    job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+    job->setSimulate( m_checkSimulate->isChecked() );
+    job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
+    job->setBurnfree( m_checkBurnfree->isChecked() );
+    job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
+    job->setReadRetries( m_spinRetries->value() );
+
+    burnJob = job;
   }
-  QString submode = m_comboSubchanMode->currentText(); 
-  if ( submode == "rw" )
-    job->setReadSubchan(K3bCdrdaoWriter::RW);
-  else if ( submode == "rw_raw" )
-    job->setReadSubchan(K3bCdrdaoWriter::RW_RAW);
-  job->setForce(m_checkForce->isChecked());
+  else {
+    K3bCdCopyJob* job = new K3bCdCopyJob( this );
+    
+    job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
+    job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
+    job->setSpeed( m_writerSelectionWidget->writerSpeed() );
+    job->setSimulate( m_checkSimulate->isChecked() );
+    job->setOnTheFly( m_checkOnTheFly->isChecked() );
+    job->setKeepImage( !m_checkDeleteImages->isChecked() );
+    job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+    job->setTempPath( m_tempDirSelectionWidget->tempPath() );
+    job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
+    job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+    job->setReadRetries( m_spinRetries->value() );
+    job->setQueryCddb( m_checkQueryCddb->isChecked() );
+    job->setPreferCdText( m_checkPrefereCdText->isChecked() );
+    job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
+    job->setBurnfree( m_checkBurnfree->isChecked() );
+    job->setWritingMode( m_writingModeWidget->writingMode() );
 
-  // create a progresswidget
-  K3bBurnProgressDialog d( kapp->mainWidget() );
+    burnJob = job;
+  }
 
+  K3bJobProgressDialog* dlg = 0;
+  if( m_checkOnlyCreateImage->isChecked() ) {
+    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
+  }
+  else {
+    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
+  }
+   
   hide();
-
-  d.startJob(job);
-
-  show();
+  dlg->startJob( burnJob );
+  delete dlg;
+  delete burnJob;
 }
 
 
-void K3bCdCopyDialog::slotOnlyCreateImageChecked( bool c )
+void K3bCdCopyDialog::slotToggleAll()
 {
-  if( c ) 
+  K3bCdDevice::CdDevice* dev = m_writerSelectionWidget->writerDevice();
+  if( dev ) {
+    if( dev->burnfree() )
+      m_checkBurnfree->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+    else {
+      m_checkBurnfree->setEnabled( false );
+      m_checkBurnfree->setChecked( false );
+    }
+  }
+
+  m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+  m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkOnTheFly->isChecked() );
+  m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
+  m_checkOnlyCreateImage->setEnabled( !m_checkOnTheFly->isChecked() );
+
+  if ( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
-  if ( !m_writerSelectionWidget->writerDevice() )
-    m_buttonStart->setEnabled(c);
-    
-  // check if we can enable on-the-fly
-  slotSourceSelected();
+
+   if( m_groupCopyMode->selected() == m_radioCloneCopy ) {
+     // cdrecord does not support cloning on-the-fly
+     m_checkOnTheFly->setChecked(false);
+     m_checkOnTheFly->setEnabled(false);
+
+     m_writingModeWidget->setSupportedModes( K3b::RAW );
+   }
+   else {
+     if( dev == m_comboSourceDevice->selectedDevice() ) {
+       m_checkOnTheFly->setChecked( false );
+       m_checkOnTheFly->setEnabled( false );
+     }
+     else
+       m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+     m_checkPrefereCdText->setEnabled( m_checkQueryCddb->isChecked() );
+
+     m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
+   }
+
+   m_comboParanoiaMode->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkQueryCddb->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkPrefereCdText->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkIgnoreReadErrors->setDisabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_checkNoCorrection->setEnabled( m_groupCopyMode->selected() == m_radioCloneCopy );
+   m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+
+   m_buttonStart->setEnabled( dev || m_checkOnlyCreateImage->isChecked() );
 }
 
 
@@ -348,29 +358,31 @@ void K3bCdCopyDialog::slotLoadUserDefaults()
   c->setGroup( "CD Copy" );
 
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
+  m_checkBurnfree->setChecked( c->readBoolEntry( "burnfree", true ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
   m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
-  m_checkFastToc->setChecked( c->readBoolEntry( "fast_toc", false ) );
-  m_checkRawCopy->setChecked( c->readBoolEntry( "raw_copy", false ) );
-  m_checkTaoSource->setChecked( c->readBoolEntry( "tao_source", false ) );
-  m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
-  m_spinTaoSourceAdjust->setValue( c->readNumEntry( "tao_source_adjust", 2 ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );
-
-  QString subChMode = c->readEntry( "subchannel_mode", "none" );
-  if( subChMode == "rw" )
-    m_comboSubchanMode->setCurrentItem(1);
-  else if( subChMode == "rw_raw" )
-    m_comboSubchanMode->setCurrentItem(2);
-  else
-    m_comboSubchanMode->setCurrentItem(0); // none
 
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
   m_writerSelectionWidget->loadConfig( c );
 
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
+
+  if( c->readEntry( "copy mode", "normal" ) == "normal" )
+    m_radioNormalCopy->setChecked(true);
+  else
+    m_radioCloneCopy->setChecked(true);
+
+  m_checkQueryCddb->setChecked( c->readBoolEntry( "query cddb", false ) );
+  m_checkPrefereCdText->setChecked( c->readBoolEntry( "prefer cdtext", false ) );
+  m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
+  m_checkNoCorrection->setChecked( c->readBoolEntry( "no correction", false ) );
+
+  m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
+
+  slotToggleAll();
 }
 
 void K3bCdCopyDialog::slotSaveUserDefaults()
@@ -379,38 +391,49 @@ void K3bCdCopyDialog::slotSaveUserDefaults()
   c->setGroup( "CD Copy" );
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
+  c->writeEntry( "burnfree", m_checkBurnfree->isChecked() );
   c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
   c->writeEntry( "delete_images", m_checkDeleteImages->isChecked() );
-  c->writeEntry( "fast_toc", m_checkFastToc->isChecked() );
-  c->writeEntry( "raw_copy", m_checkRawCopy->isChecked() );
-  c->writeEntry( "tao_source", m_checkTaoSource->isChecked() );
-  c->writeEntry( "force", m_checkForce->isChecked() );
-  c->writeEntry( "tao_source_adjust", m_spinTaoSourceAdjust->value() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
-  c->writeEntry( "subchannel_mode", m_comboSubchanMode->currentText() );
   c->writeEntry( "copies", m_spinCopies->value() );
 
   m_writerSelectionWidget->saveConfig( c );
 
   c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
+
+  c->writeEntry( "query cddb", m_checkQueryCddb->isChecked() );
+  c->writeEntry( "prefer cdtext", m_checkPrefereCdText->isChecked() );
+  c->writeEntry( "ignore read errors", m_checkIgnoreReadErrors->isChecked() );
+  c->writeEntry( "no correction", m_checkNoCorrection->isChecked() );
+  c->writeEntry( "retries", m_spinRetries->value() );
+
+  QString s;
+  if( m_radioCloneCopy->isChecked() )
+    s = "clone";
+  else
+    s = "normal";
+  c->writeEntry( "copy mode", s );
 }
 
 void K3bCdCopyDialog::slotLoadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
   m_checkSimulate->setChecked( false );
+  m_checkBurnfree->setChecked(true);
   m_checkOnTheFly->setChecked( false );
   m_checkDeleteImages->setChecked( true );
-  m_checkFastToc->setChecked( false );
-  m_checkRawCopy->setChecked( false );
-  m_checkTaoSource->setChecked( false );
-  m_checkForce->setChecked( false );
-  m_spinTaoSourceAdjust->setValue(2);
   m_checkOnlyCreateImage->setChecked( false );
-  m_comboParanoiaMode->setCurrentItem(3);
-  m_comboSubchanMode->setCurrentItem(0); // none
+  m_comboParanoiaMode->setCurrentItem(0);
   m_spinCopies->setValue(1);
+  m_checkQueryCddb->setChecked(false);
+  m_checkPrefereCdText->setChecked(false);
+  m_checkIgnoreReadErrors->setChecked(false);
+  m_checkNoCorrection->setChecked(false);
+  m_radioNormalCopy->setChecked(true);
+  m_spinRetries->setValue(128);
+
+  slotToggleAll();
 }
 
 #include "k3bcdcopydialog.moc"

@@ -143,7 +143,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   // encoding dialog for transcode encoding utility
   void slotDivxEncoding();
   void slotCdCopy();
-  void slotCdClone();
   void slotDvdCopy();
   //  void slotVideoDvdCopy();
   void slotK3bSetup();

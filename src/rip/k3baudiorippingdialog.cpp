@@ -82,12 +82,14 @@ public:
 };
 
 
-K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo, 
+K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bCdDevice::Toc& toc, 
+					     K3bCdDevice::CdDevice* device,
 					     const K3bCddbResultEntry& entry, 
 					     const QValueList<int>& tracks,
 					     QWidget *parent, const char *name )
   : K3bInteractionDialog( parent, name ),
-    m_diskInfo( diskInfo ), 
+    m_toc( toc ), 
+    m_device( device ),
     m_cddbEntry( entry ), 
     m_trackNumbers( tracks )
 {
@@ -101,7 +103,7 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDiskInfo& diskInfo,
   K3b::Msf length;
   for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
        it != m_trackNumbers.end(); ++it ) {
-    length += m_diskInfo.toc[*it-1].length();
+    length += m_toc[*it-1].length();
   }
   setTitle( i18n("CD Ripping"), 
 	    i18n("1 track (%1)", "%n tracks (%1)", 
@@ -296,7 +298,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   K3bAudioEncoderFactory* factory = d->factoryMap[m_optionWidget->m_comboFileType->currentItem()];  // 0 for wave
 
   K3bAudioRipThread* thread = new K3bAudioRipThread();
-  thread->setDevice( m_diskInfo.device );
+  thread->setDevice( m_device );
   thread->setCddbEntry( m_cddbEntry );
   thread->setTracksToRip( tracksToRip );
   thread->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
@@ -338,8 +340,8 @@ void K3bAudioRippingDialog::refresh()
     for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
       length += ( m_checkUseIndex0->isChecked() 
-		  ? m_diskInfo.toc[*it-1].realAudioLength().lba()
-		  : m_diskInfo.toc[*it-1].length().lba() );
+		  ? m_toc[*it-1].realAudioLength().lba()
+		  : m_toc[*it-1].length().lba() );
     }
 
     QString filename;
@@ -382,8 +384,8 @@ void K3bAudioRippingDialog::refresh()
       QString extension;
       long long fileSize = 0;
       K3b::Msf trackLength = ( m_checkUseIndex0->isChecked() 
-			       ? m_diskInfo.toc[index].realAudioLength()
-			       : m_diskInfo.toc[index].length() );
+			       ? m_toc[index].realAudioLength()
+			       : m_toc[index].length() );
       if( m_optionWidget->m_comboFileType->currentItem() == 0 ) {
 	extension = "wav";
 	fileSize = trackLength.audioBytes() + 44;
@@ -393,7 +395,7 @@ void K3bAudioRippingDialog::refresh()
 	fileSize = d->factoryMap[m_optionWidget->m_comboFileType->currentItem()]->fileSize( extension, trackLength );
       }
 
-      if( m_diskInfo.toc[index].type() == K3bTrack::DATA ) {
+      if( m_toc[index].type() == K3bTrack::DATA ) {
 	extension = ".iso";
 	continue;  // TODO: find out how to rip the iso data
       }
@@ -416,7 +418,7 @@ void K3bAudioRippingDialog::refresh()
 			       filename,
 			       trackLength.toString(),
 			       fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
-			       (m_diskInfo.toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
+			       (m_toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
 
       d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
     }

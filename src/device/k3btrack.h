@@ -18,8 +18,8 @@
 #ifndef K3BTRACK_H
 #define K3BTRACK_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
+#include <qcstring.h>
+#include <qvaluevector.h>
 
 #include <k3bmsf.h>
 
@@ -101,6 +101,12 @@ namespace K3bCdDevice
      */
     bool preEmphasis() const { return m_preEmphasis; }
 
+    bool recordedIncremental() const { return m_preEmphasis; }
+    bool recordedUninterrupted() const { return !recordedIncremental(); }
+
+    const QCString& isrc() const { return m_isrc; }
+    void setIsrc( const QCString& s ) { m_isrc = s; }
+
     const K3b::Msf& firstSector() const { return m_firstSector; }
     const K3b::Msf& lastSector() const { return m_lastSector; }
     K3b::Msf length() const;
@@ -111,16 +117,28 @@ namespace K3bCdDevice
     K3b::Msf realAudioLength() const;
 
     /**
-     * Returns the lba value of the position of index 0 if it is there.
-     */
-    long index0() const;
-    
-    /**
      * 0 if unknown
      */
     int session() const { return m_session; }
 
-    const QValueList<Index>& indices() const { return m_indices; }
+    /**
+     * @return number of indices. This does not include index 0.
+     */
+    int indexCount() const;
+
+    /**
+     * @return starting sector (lba) of index @p i or -1 if no index i
+     *
+     * We use long instead of Msf here to be able to return -1
+     */
+    long index( int i, bool absolute = false ) const;
+
+    /**
+     * Returns the lba value of the position of index 0 if it is there.
+     */
+    long index0() const;
+
+    const QValueVector<long>& indices() const { return m_indices; }
 
   private:
     K3b::Msf m_firstSector;
@@ -133,7 +151,9 @@ namespace K3bCdDevice
 
     int m_session;
 
-    QValueList<Index> m_indices;
+    QValueVector<long> m_indices;
+
+    QCString m_isrc;
   };
 }
 

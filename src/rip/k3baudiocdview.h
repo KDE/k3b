@@ -19,7 +19,7 @@
 
 #include <k3bcdcontentsview.h>
 
-#include <device/k3bdiskinfo.h>
+#include <k3btoc.h>
 #include <cddb/k3bcddbresult.h>
 #include <k3bcdtext.h>
 
@@ -35,6 +35,7 @@ class K3bToolBox;
 
 namespace K3bCdDevice {
   class DiskInfoDetector;
+  class CdDevice;
 }
 
 
@@ -48,7 +49,7 @@ class K3bAudioCdView : public K3bCdContentsView
 
   void setDisk( K3bCdDevice::DiskInfoDetector* );
 
-  const K3bCdDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
+  //  const K3bCdDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
@@ -76,7 +77,9 @@ class K3bAudioCdView : public K3bCdContentsView
   void updateDisplay();
   void enableInteraction( bool );
 
-  K3bCdDevice::DiskInfo m_diskInfo;
+  K3bCdDevice::Toc m_toc;
+  K3bCdDevice::CdDevice* m_device;
+
   K3bCddbResultEntry m_cddbInfo;
 
   KActionCollection* m_actionCollection;

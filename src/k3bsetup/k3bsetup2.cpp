@@ -128,7 +128,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   d->deviceManager = new K3bCdDevice::DeviceManager( this );
 
   // these are the only programs that need special permissions
-  d->externalBinManager->addProgram( new K3bReadcdProgram() );
+  //  d->externalBinManager->addProgram( new K3bReadcdProgram() );
   d->externalBinManager->addProgram( new K3bCdrdaoProgram() );
   d->externalBinManager->addProgram( new K3bCdrecordProgram(false) );
 

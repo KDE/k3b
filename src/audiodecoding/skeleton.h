@@ -1,0 +1,63 @@
+/* 
+ *
+ * $Id$
+ * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+#ifndef _K3B_<name>_DECODER_H_
+#define _K3B_<name>_DECODER_H_
+
+#include <k3baudiodecoder.h>
+
+
+class K3b<name>DecoderFactory : public K3bAudioDecoderFactory
+{
+  Q_OBJECT
+
+ public:
+  K3b<name>DecoderFactory( QObject* parent = 0, const char* name = 0 );
+  ~K3b<name>DecoderFactory();
+
+  bool canDecode( const KURL& filename );
+
+  int pluginSystemVersion() const { return 1; }
+
+  K3bPlugin* createPluginObject( QObject* parent = 0, 
+				 const char* name = 0,
+				 const QStringList& = QStringList() );
+
+ private:
+  KInstance* s_instance;
+};
+
+
+class K3b<name>Decoder : public K3bAudioDecoder
+{
+  Q_OBJECT
+
+ public:
+  K3b<name>Decoder( QObject* parent = 0, const char* name = 0 );
+  ~K3b<name>Decoder();
+
+  QString fileType() const;
+
+ protected:
+  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
+  bool initDecoderInternal();
+  bool seekInternal( const K3b::Msf& );
+
+  int decodeInternal( char* _data, int maxLen );
+};
+
+K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, K3b<name>DecoderFactory )
+
+#endif

@@ -150,8 +150,15 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
     //
     // We do not cover every case here but just the once that really make sense
     //
-    if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE || d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE )
+    if( (d->wantedMediaState & K3bCdDevice::STATE_COMPLETE) && (d->wantedMediaState & K3bCdDevice::STATE_INCOMPLETE) )
       d->labelRequest->setText( i18n("Please insert a complete or appendable medium (%4) "
+				     "into drive<p><b>%1 %2 (%3)</b>.")
+				.arg(d->device->vendor())
+				.arg(d->device->description())
+				.arg(d->device->devicename())
+				.arg( m ) );
+    else if( d->wantedMediaState & K3bCdDevice::STATE_COMPLETE )
+      d->labelRequest->setText( i18n("Please insert a complete medium (%4) "
 				     "into drive<p><b>%1 %2 (%3)</b>.")
 				.arg(d->device->vendor())
 				.arg(d->device->description())

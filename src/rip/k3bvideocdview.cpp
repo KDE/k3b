@@ -34,7 +34,9 @@
 // k3b includes
 #include "k3bvideocdview.h"
 #include "k3bvideocdrippingdialog.h"
+
 #include <cdinfo/k3bdiskinfodetector.h>
+#include <k3bdevice.h>
 #include <k3bmsf.h>
 #include <k3btoc.h>
 #include <k3bcore.h>
@@ -198,7 +200,8 @@ K3bVideoCdView::~K3bVideoCdView()
 
 void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 {
-    m_diskInfo = did->diskInfo();
+  m_toc = did->toc();
+    m_device = did->device();
 
     m_trackView->clear();
     enableInteraction( false );
@@ -215,8 +218,8 @@ void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
             
     K3b::Msf sequenceSize;
 
-    for ( K3bToc::const_iterator it = m_diskInfo.toc.begin();
-            it != m_diskInfo.toc.end(); ++it ) {
+    for ( K3bToc::const_iterator it = m_toc.begin();
+            it != m_toc.end(); ++it ) {
 
         if ( index > 0 ) {
             K3b::Msf length( ( *it ).length() );
@@ -236,10 +239,10 @@ void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 
     ( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ] ) ->updateData( sequenceSize, true );
 
-    m_videooptions ->setVideoCdSource( m_diskInfo.device->devicename() );
+    m_videooptions ->setVideoCdSource( m_device->devicename() );
     
     m_videocdinfo = new K3bVideoCdInfo( this );
-    m_videocdinfo->info( m_diskInfo.device->devicename() );
+    m_videocdinfo->info( m_device->devicename() );
 
     connect( m_videocdinfo, SIGNAL( infoFinished( bool ) ),
              this, SLOT( slotVideoCdInfoFinished( bool ) ) );
@@ -302,7 +305,7 @@ void K3bVideoCdView::updateDisplay()
     else
         setTitle( i18n( "Video CD" ) );
 
-    m_labelLength->setText( i18n( "1 track (%1)", "%n tracks (%1)", m_diskInfo.toc.count() ).arg( K3b::Msf( m_diskInfo.toc.length() ).toString() ) );
+    m_labelLength->setText( i18n( "1 track (%1)", "%n tracks (%1)", m_toc.count() ).arg( K3b::Msf( m_toc.length() ).toString() ) );
 }
 
 

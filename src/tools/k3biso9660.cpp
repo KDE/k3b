@@ -419,8 +419,8 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
       entry = new K3bIso9660Directory( iso, path, access | S_IFDIR, time, adate, cdate,
 				       user, group, symlink );
     } else {
-      kdDebug() << "(K3bIso9660) creating file: " << path << " start: " << isonum_733(idr->extent)
-		<< " size: " << isonum_733(idr->size) << endl;
+//       kdDebug() << "(K3bIso9660) creating file: " << path << " start: " << isonum_733(idr->extent)
+// 		<< " size: " << isonum_733(idr->size) << endl;
       entry = new K3bIso9660File( iso, path, access, time, adate, cdate,
 				  user, group, symlink, isonum_733(idr->extent), isonum_733(idr->size) );
       if (z_size)

@@ -129,8 +129,8 @@ void K3bApplication::init()
   // the writing speeds if any writers are installed
   //
   // To check if there is a writer whose config has not been verified yet we search for a config
-  // entry for every writer. If there is a config entry from a K3b version >= 0.10.99 it should
-  // already be verified.
+  // entry for every writer containing a valid writing speed entry (we changed from cd writing 
+  // speed multiplicator to KB/s)
   //
   K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
   QPtrList<K3bCdDevice::CdDevice> wlist( k3bcore->deviceManager()->cdWriter() );
@@ -144,7 +144,9 @@ void K3bApplication::init()
     devNum = 1;
     while( !list.isEmpty() ) {
       if( K3bDevice* dev = k3bcore->deviceManager()->deviceByName( list[0] ) ) {
-	if( dev->vendor() == list[1] || dev->description() == list[2] ) {
+	if( dev->vendor() == list[1] && 
+	    dev->description() == list[2] &&
+	    list[4].toInt() > 175 ) {
 	  wlist.removeRef( dev );
 	}
       }
@@ -219,6 +221,13 @@ void K3bApplication::init()
       doc->addUrl( args->url(i) );
     }
   }
+  else if( args->isSet( "videodvd" ) ) {
+    // create new audio project and add all arguments
+    K3bDoc* doc = m_mainWindow->slotNewVideoDvdDoc();
+    for( int i = 0; i < args->count(); i++ ) {
+      doc->addUrl( args->url(i) );
+    }
+  }
   else if( args->isSet( "cdimage" ) ) {
     if ( args->count() == 1 )
       m_mainWindow->slotWriteCdImage( args->url(0) );
@@ -233,8 +242,6 @@ void K3bApplication::init()
 
   if( args->isSet("copycd") )
     m_mainWindow->slotCdCopy();
-  else if( args->isSet("clonecd") )
-    m_mainWindow->slotCdClone();
   else if( args->isSet("erasecd") )
     m_mainWindow->slotBlankCdrw();
   else if( args->isSet("formatdvd") )

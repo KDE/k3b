@@ -36,24 +36,46 @@ public:
       dev->open();
       switch( command ) {
       case DISKINFO:
-	info = dev->diskInfo();
 	ngInfo = dev->ngDiskInfo();
-	if( info.toc.contentType() == AUDIO ||
-	    info.toc.contentType() == MIXED )
-	  cdText = dev->readCdText();
-	success = info.valid;
+	if( !ngInfo.empty() ) {
+	  toc = dev->readToc();
+	  if( toc.contentType() == AUDIO ||
+	      toc.contentType() == MIXED )
+	    cdText = dev->readCdText();
+	}
+	success = (ngInfo.diskState() != STATE_UNKNOWN);
 	break;
       case NG_DISKINFO:
 	ngInfo = dev->ngDiskInfo();
 	success = (ngInfo.diskState() != STATE_UNKNOWN);
 	break;
       case TOC:
-	info.toc = dev->readToc();
+      case TOCTYPE:
+	toc = dev->readToc();
 	success = true;
 	break;
       case CD_TEXT:
 	cdText = dev->readCdText();
 	success = !cdText.isEmpty();
+	break;
+      case CD_TEXT_RAW:
+	{
+	  unsigned char* data = 0;
+	  int dataLen = 0;
+	  if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
+	    // we need more than the header to have valid CD-TEXT
+	    if( dataLen > 4 ) {
+	      cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
+	      success = true;
+	    }
+	    else {
+	      delete [] data;
+	      success = false;
+	    }
+	  }
+	  else
+	    success = false;
+	}
 	break;
       case DISKSIZE:
 	info.size = dev->discSize();
@@ -62,10 +84,6 @@ public:
       case REMAININGSIZE:
 	info.remaining = dev->remainingSize();
 	success = (info.remaining != 0);
-	break;
-      case TOCTYPE:
-	info.tocType = dev->readToc().contentType();
-	success = ( info.tocType != DiskInfo::UNKNOWN );
 	break;
       case NUMSESSIONS:
 	info.sessions = dev->numSessions();
@@ -102,7 +120,9 @@ public:
   int command;
   DiskInfo info;
   NextGenerationDiskInfo ngInfo;
+  Toc toc;
   AlbumCdText cdText;
+  QByteArray cdTextRaw;
   CdDevice* dev;
 };
 
@@ -152,10 +172,10 @@ bool K3bCdDevice::DeviceHandler::success() const
   return m_thread->success;
 }
 
-const K3bCdDevice::DiskInfo& K3bCdDevice::DeviceHandler::diskInfo() const
-{
-  return m_thread->info;
-}
+// const K3bCdDevice::DiskInfo& K3bCdDevice::DeviceHandler::diskInfo() const
+// {
+//   return m_thread->info;
+// }
 
 
 const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DeviceHandler::ngDiskInfo() const
@@ -166,13 +186,20 @@ const K3bCdDevice::NextGenerationDiskInfo& K3bCdDevice::DeviceHandler::ngDiskInf
 
 const K3bCdDevice::Toc& K3bCdDevice::DeviceHandler::toc() const
 {
-  return m_thread->info.toc;
+  return m_thread->toc;
 }
 
 const K3bCdDevice::AlbumCdText& K3bCdDevice::DeviceHandler::cdText() const
 {
   return m_thread->cdText;
 }
+
+
+const QByteArray& K3bCdDevice::DeviceHandler::cdTextRaw() const
+{
+  return m_thread->cdTextRaw;
+}
+
 
 const K3b::Msf& K3bCdDevice::DeviceHandler::diskSize() const
 {
@@ -186,7 +213,7 @@ const K3b::Msf& K3bCdDevice::DeviceHandler::remainingSize() const
 
 int K3bCdDevice::DeviceHandler::tocType() const
 {
-  return m_thread->info.tocType;
+  return m_thread->toc.contentType();
 }
 
 int K3bCdDevice::DeviceHandler::numSessions() const

@@ -22,6 +22,9 @@
 #include <qstring.h>
 
 
+class K3bExternalBin;
+
+
 /**
  * This is an enhanced KProcess.
  * It splits the stderr output to lines making sure the client gets every line as it 
@@ -39,6 +42,16 @@ class K3bProcess : public KProcess
  public:
   K3bProcess();
   ~K3bProcess();
+
+  /**
+   * In the future this might also set the nice value
+   */
+  K3bProcess& operator<<( const K3bExternalBin* );
+
+  K3bProcess& operator<<( const QString& arg );
+  K3bProcess& operator<<( const char* arg );
+  K3bProcess& operator<<( const QCString& arg );
+  K3bProcess& operator<<( const QStringList& args );
 
   bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
 
