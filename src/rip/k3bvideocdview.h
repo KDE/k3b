@@ -55,13 +55,13 @@ class K3bVideoCdView : public K3bCdContentsView
   void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
   void slotTrackSelectionChanged( QListViewItem* );
   void slotVideoCdInfoFinished( bool );
-  
+
   void startRip();
   void slotSelectAll();
   void slotDeselectAll();
   void slotSelect();
   void slotDeselect();
-  
+
  private:
 
   class VideoTrackViewCheckItem;
@@ -71,7 +71,7 @@ class K3bVideoCdView : public K3bCdContentsView
   void updateDisplay();
   void enableInteraction( bool );
 
-  
+
   K3bCdDevice::DiskInfo m_diskInfo;
 
   KActionCollection* m_actionCollection;
@@ -79,12 +79,15 @@ class K3bVideoCdView : public K3bCdContentsView
 
   K3bVideoCdInfoResult m_videocdinfoResult;
   K3bVideoCdInfo* m_videocdinfo;
-    
+
   K3bListView* m_trackView;
   K3bToolBox* m_toolBox;
   QLabel* m_labelLength;
 
   QValueList<VideoTrackViewCheckItem *> m_contentList;
+
+  long m_videocdsize;
+
 };
 
 #endif

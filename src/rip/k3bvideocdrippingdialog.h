@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -37,14 +37,14 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bVideoCdRippingDialog( const K3bDiskInfo& diskInfo, QWidget *parent = 0, const char *name = 0 );
+  K3bVideoCdRippingDialog( const long size, QWidget* parent = 0, const char* name = 0 );
   ~K3bVideoCdRippingDialog();
 
 
  private:
   void setupGui();
   void setupContextHelp();
-  void setVideoCdLength( K3b::Msf l) { m_videocdlength = l; };
+  void setVideoCdSize( long s) { m_videocdsize = s; };
 
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 
@@ -56,7 +56,7 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   QCheckBox* m_sector2336;
   QCheckBox* m_extractXML;
 
-  K3b::Msf m_videocdlength;
+  long m_videocdsize;
   
  private slots:
   void slotStartClicked();

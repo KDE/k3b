@@ -1,6 +1,6 @@
 /*
 *
-* $Id: $
+* $Id$
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
@@ -32,7 +32,7 @@ class K3bVideoCdRip : public K3bJob
         ~K3bVideoCdRip();
 
         void setDestination( QString dest) { m_destPath = dest; };
-        void setVideoCdLength( K3b::Msf l ) {m_videocdlength = l; };
+        void setVideoCdSize( long s ) {m_videocdsize = s; };
 
     public slots:
         void start();
@@ -54,7 +54,7 @@ class K3bVideoCdRip : public K3bJob
         int m_stage;
         int m_bytesFinished;
         long m_subPosition;
-        K3b::Msf m_videocdlength;
+        long m_videocdsize;
         
         QString m_collectedOutput;
         QString m_destPath;

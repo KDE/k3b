@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -63,13 +63,13 @@
 #include <k3bstdguiitems.h>
 #include <k3btempdirselectionwidget.h>
 
-K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( const K3bDiskInfo& diskInfo, QWidget *parent, const char *name )
+K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( const long size, QWidget *parent, const char *name )
   : K3bInteractionDialog( parent, name )
 {
   setupGui();
   setupContextHelp();
   
-  setVideoCdLength( K3b::Msf( diskInfo.toc.length()) );
+  setVideoCdSize( size );
   setTitle( i18n("VideoCd Ripping") );
 }
 
@@ -153,6 +153,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
 
   K3bVideoCdRip* rip = new K3bVideoCdRip();
   rip->setDestination( m_editDirectory->url() );
+  rip->setVideoCdSize(m_videocdsize);
   
   K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
 

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -160,24 +160,22 @@ void K3bVideoCdInfo::parseXmlData()
                     for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                         QDomElement sel = snode.toElement();
                         QString seqElement = sel.tagName().lower();
-                        m_Result.sequence << sel.attribute( "src" );
-                        m_Result.sequenceId << sel.attribute( "id" );
+                        m_Result.addEntry( K3bVideoCdInfoResultEntry(
+                                    sel.attribute( "src" ),
+                                    sel.attribute( "id" )),
+                                    K3bVideoCdInfoResult::SEQUENCE
+                                    );
                     }
         }
         else if ( tagName == "segment-items" ) {
                     for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                         QDomElement sel = snode.toElement();
                         QString seqElement = sel.tagName().lower();
-                        m_Result.sequence << sel.attribute( "src" );
-                        m_Result.sequenceId << sel.attribute( "id" );
-                    }
-        }
-        else if ( tagName == "sequence-items" ) {
-                    for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
-                        QDomElement sel = snode.toElement();
-                        QString seqElement = sel.tagName().lower();
-                        m_Result.sequence << sel.attribute( "src" );
-                        m_Result.sequenceId << sel.attribute( "id" );
+                        m_Result.addEntry( K3bVideoCdInfoResultEntry(
+                                    sel.attribute( "src" ),
+                                    sel.attribute( "id" )),
+                                    K3bVideoCdInfoResult::SEGMENT
+                                    );
                     }
         }
         else {
@@ -189,6 +187,62 @@ void K3bVideoCdInfo::parseXmlData()
 const K3bVideoCdInfoResult& K3bVideoCdInfo::result() const
 {
   return m_Result;
+}
+
+const K3bVideoCdInfoResultEntry& K3bVideoCdInfoResult::entry( unsigned int number, int type ) const
+{
+  switch (type) {
+    case K3bVideoCdInfoResult::FILE:
+        if( number >= m_fileEntry.count() )
+            return m_emptyEntry;
+        return m_fileEntry[number];
+    case K3bVideoCdInfoResult::SEGMENT:
+        if( number >= m_segmentEntry.count() )
+            return m_emptyEntry;
+        return m_segmentEntry[number];
+    case K3bVideoCdInfoResult::SEQUENCE:
+        if( number >= m_sequenceEntry.count() )
+            return m_emptyEntry;
+        return m_sequenceEntry[number];
+    default:
+        kdDebug() << "(K3bVideoCdInfoResult::entry) not supported entrytype." << endl;
+    }
+
+    return m_emptyEntry;
+
+}
+
+
+void K3bVideoCdInfoResult::addEntry( const K3bVideoCdInfoResultEntry& entry, int type )
+{
+  switch (type) {
+    case K3bVideoCdInfoResult::FILE:
+        m_fileEntry.append( entry );
+        break;
+    case K3bVideoCdInfoResult::SEGMENT:
+        m_segmentEntry.append( entry );
+        break;
+    case K3bVideoCdInfoResult::SEQUENCE:
+        m_sequenceEntry.append( entry );
+        break;
+    default:
+        kdDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype." << endl;    
+    }
+}
+
+int K3bVideoCdInfoResult::foundEntries( int type ) const
+{
+  switch (type) {
+    case K3bVideoCdInfoResult::FILE:
+        return m_fileEntry.count();
+    case K3bVideoCdInfoResult::SEGMENT:
+        return m_segmentEntry.count();    
+    case K3bVideoCdInfoResult::SEQUENCE:
+        return m_sequenceEntry.count();    
+    default:
+        kdDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype." << endl;
+    }
+    return 0;
 }
 
 #include "k3bvideocdinfo.moc"

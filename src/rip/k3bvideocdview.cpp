@@ -43,14 +43,15 @@
 #include <k3btoolbox.h>
 
 
-class K3bVideoCdView::VideoTrackViewItem : public QListViewItem
+class K3bVideoCdView::VideoTrackViewItem  : public QListViewItem
 {
 public:
   VideoTrackViewItem( QListViewItem* parent,
+                      QString name,
 		      int _trackNumber,
 		      const K3b::Msf& length)
  :QListViewItem( parent ) {
-    setText( 0, i18n("%1. Sequence-%2").arg(_trackNumber).arg(_trackNumber) );
+    setText( 0, i18n("%1. %2-%3").arg(_trackNumber).arg(name).arg(_trackNumber) );
     setText( 1, i18n("n/a") );
     setText( 2, length.toString() );
     setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
@@ -62,9 +63,9 @@ public:
 
   int trackNumber;
 
-  void updateData( const K3bVideoCdInfoResult& result ) {
-    setText( 0, QString("%1. %2").arg( trackNumber ).arg( result.sequenceId[trackNumber-1] ) );
-    setText( 1, result.sequence[trackNumber-1] );
+  void updateData( const K3bVideoCdInfoResultEntry& resultEntry ) {
+    setText( 0, QString("%1. %2").arg( trackNumber ).arg( resultEntry.id ) );
+    setText( 1, resultEntry.name );
   }
 
 };
@@ -171,16 +172,19 @@ void K3bVideoCdView::setDisk( K3bCdDevice::DiskInfoDetector* did )
 
   // create a listviewItem for every video track
   int index = 0;
+  m_videocdsize = 0;
+  
   for( K3bToc::const_iterator it = m_diskInfo.toc.begin();
        it != m_diskInfo.toc.end(); ++it ) {
 
-    // for now skip data tracks since we are not able to rip them to iso
     if( index > 0 ) {
       K3b::Msf length( (*it).length() );
-      (void)new VideoTrackViewItem( (VideoTrackViewCheckItem*) m_contentList[ 0 ], index, length );
+      m_videocdsize += (length.mode2Form1Bytes() + 2047) / 2048;
+      (void)new VideoTrackViewItem( (VideoTrackViewCheckItem*) m_contentList[ 0 ], "Sequence", index, length );
     }
     else {
         K3b::Msf length( (*it).length() );
+        m_videocdsize += (length.mode2Form2Bytes() + 2351) / 2352;
         ((VideoTrackViewCheckItem*)m_contentList[ 1 ])->updateData( length );
         (void)new VideoTrackViewCheckItem( (VideoTrackViewCheckItem*) m_contentList[ 1 ], "Files" );
         (void)new VideoTrackViewCheckItem( (VideoTrackViewCheckItem*) m_contentList[ 1 ], "Segments" );
@@ -213,11 +217,26 @@ void K3bVideoCdView::updateDisplay()
   // update the listview
 
   VideoTrackViewItem* item = (VideoTrackViewItem*) m_contentList[ 0 ]->firstChild();
+  int index = 0;
   while ( item ) {
-      item->updateData( m_videocdinfoResult );
+      item->updateData( m_videocdinfoResult.entry( index, K3bVideoCdInfoResult::SEQUENCE ));
       item = (VideoTrackViewItem*) item->nextSibling();
+      index++;
   }
-  
+
+  VideoTrackViewCheckItem* check_item = (VideoTrackViewCheckItem*) m_contentList[ 1 ]->firstChild();
+  while ( check_item ) {
+      if ( check_item->key( 0, false ).compare("Files") == 0 ) {
+      }
+      else {
+          index = 0;
+          for ( index = 0; index < m_videocdinfoResult.foundEntries(K3bVideoCdInfoResult::SEGMENT); index++) {
+            (void)new VideoTrackViewItem( check_item, m_videocdinfoResult.entry(index, K3bVideoCdInfoResult::SEGMENT).name ,index, 0 );
+          }
+      }
+      check_item = (VideoTrackViewCheckItem*) check_item->nextSibling();
+  }
+    
   if( !m_videocdinfoResult.volumeId.isEmpty() )
     setTitle( m_videocdinfoResult.volumeId + " (" + m_videocdinfoResult.type +  " " + m_videocdinfoResult.version + ")");
   else
@@ -278,7 +297,7 @@ void K3bVideoCdView::slotTrackSelectionChanged( QListViewItem* item )
 
 void K3bVideoCdView::startRip()
 {
-    K3bVideoCdRippingDialog rip( m_diskInfo, this );
+    K3bVideoCdRippingDialog rip( m_videocdsize, this );
     rip.exec();
 }
 

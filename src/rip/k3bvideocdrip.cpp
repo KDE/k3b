@@ -1,6 +1,6 @@
 /*
 *
-* $Id: $
+* $Id$
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.
@@ -176,18 +176,20 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
             if ( tagName == "progress" ) {
                 const QString oper = el.attribute( "operation" ).lower();
                 const long long overallPos = el.attribute( "position" ).toLong();
-                const long long pos = overallPos - m_subPosition;                
+                const long long pos = overallPos - m_subPosition;
                 const long long size = el.attribute( "size" ).toLong() - m_subPosition;
 
                 if ( oper == "extract" ) {
-                    emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
-                    emit processedSubSize( pos , size );
+                    emit subPercent( ( int ) ( 100.0 * ( double ) pos  / ( double ) size) );
+                    emit processedSubSize( (pos * 2352) / 1024 / 1024 , (size * 2352) / 1024 / 1024 );
 
                     m_bytesFinished = pos;
 
-                    double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videocdlength.frames() ;
-                    emit percent( ( int ) ( relOverallWritten ) );
-                    
+                    double relOverallWritten = ( ( double ) overallPos ) / ( double ) m_videocdsize ;
+                    emit percent( ( int ) ( 100 * relOverallWritten ) );
+
+                    kdDebug() << QString("(K3bVideoCdRip::slotParseVcdXRipOutput) overallPos = %1, relOverallWritten = %2, videolen = ").arg(overallPos).arg(relOverallWritten) << m_videocdsize << endl;
+                                    
                 }
                 else {
                     return;

@@ -1,6 +1,6 @@
 /*
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
  *
  * This file is part of the K3b project.
@@ -26,6 +26,24 @@
 
 class KProcess;
 
+class K3bVideoCdInfoResultEntry
+{
+    public:
+        K3bVideoCdInfoResultEntry() : name(0), id(0)
+        {
+        }
+
+        K3bVideoCdInfoResultEntry( const QString& name, const QString& id)
+            : name(name), id(id)
+        {
+        }
+
+        QString name;
+        QString id;
+
+        long size;
+};
+
 class K3bVideoCdInfoResult
 {
  public:
@@ -33,16 +51,25 @@ class K3bVideoCdInfoResult
   {
   }
 
-  QStringList sequence;
-  QStringList sequenceId;
+  enum type {NONE=0, FILE, SEGMENT, SEQUENCE};
   
+  void addEntry( const K3bVideoCdInfoResultEntry& = K3bVideoCdInfoResultEntry(), int type = K3bVideoCdInfoResult::SEQUENCE);
+  const K3bVideoCdInfoResultEntry& entry( unsigned int number = 0 , int type = K3bVideoCdInfoResult::SEQUENCE) const;
+  int foundEntries( int type  = K3bVideoCdInfoResult::SEQUENCE) const;
+
   QString volumeId;
   QString type;
   QString version;
 
   QString rawData;
-};
 
+  private:
+  QValueList<K3bVideoCdInfoResultEntry> m_fileEntry;
+  QValueList<K3bVideoCdInfoResultEntry> m_segmentEntry;
+  QValueList<K3bVideoCdInfoResultEntry> m_sequenceEntry;
+
+  K3bVideoCdInfoResultEntry m_emptyEntry;
+};
 
 class K3bVideoCdInfo : public QObject
 {
