@@ -44,6 +44,7 @@ public:
     void setBaseFilename( const QString& f ){ m_filename = f; };
     void setDevice( const QString& f ){ m_device = f; };
     void setRipSize( double size );
+    bool isStartFailed(){ return m_preProcessingFailed; };
 
 public slots:
     void start();
@@ -76,6 +77,7 @@ private:
     QTime m_timeEstimated;
     QTime m_timeDataRate;
     bool m_successfulStarted;
+    bool m_preProcessingFailed;
 
 };
 	

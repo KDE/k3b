@@ -70,7 +70,8 @@ void K3bDvdCopy::start(){
 
 void K3bDvdCopy::ripFinished( bool result ){
     m_successfulStarted = result; // if start failed it returns immedatitely finsihed with false;
-    kdDebug() << "(K3bDvdCopy) Send finished." << endl;
+    m_preProcessingFailed = m_ripProcess->isInitFailed();
+    kdDebug() << "(K3bDvdCopy) Send finished. Status: " << result << ", Initstatus: " << m_preProcessingFailed << endl;
     emit finished( result );
 }
 
