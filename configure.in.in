@@ -181,6 +181,18 @@ AC_CHECK_HEADERS(resmgr.h, [
 AC_SUBST(RESMGR_LIB)
 
 
+dnl === check for libsamplerate ==========
+LIBSAMPLERATE=""
+AC_CHECK_HEADERS(samplerate.h, [
+	AC_CHECK_LIB(samplerate, src_new, [
+		LIBSAMPLERATE="-lsamplerate"	
+		AC_DEFINE(HAVE_LIBSAMPLERATE,1,[defined if you have libsamplerate library and header])
+	])
+])
+AC_SUBST(LIBSAMPLERATE)
+AM_CONDITIONAL(compile_libsamplerate, [test -z "$LIBSAMPLERATE"])
+
+
 dnl Find aRts
 ARTS_LIBS=""
 KDE_CHECK_HEADERS(arts/artsflow.h,

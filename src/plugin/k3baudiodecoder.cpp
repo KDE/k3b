@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include "k3baudiodecoder.h"
 
@@ -21,7 +22,16 @@
 
 #include <math.h>
 
+#ifdef HAVE_LIBSAMPLERATE
+#include <samplerate.h>
+#else
 #include "libsamplerate/samplerate.h"
+#endif
+
+#if !(HAVE_LRINT && HAVE_LRINTF)
+#define lrint(dbl)              ((int) (dbl))
+#define lrintf(flt)             ((int) (flt))
+#endif
 
 class K3bAudioDecoder::Private
 {
@@ -45,6 +55,8 @@ public:
 
   KFileMetaInfo* metaInfo;
 
+  // set to true once decodeInternal() returned 0
+  bool decoderFinished;
 
   // resampling
   SRC_STATE* resampleState;
@@ -77,10 +89,10 @@ K3bAudioDecoder::K3bAudioDecoder( QObject* parent, const char* name )
 
 K3bAudioDecoder::~K3bAudioDecoder()
 {
+  delete d->metaInfo;
   if( d->inBuffer ) delete [] d->inBuffer;
   if( d->outBuffer ) delete [] d->outBuffer;
   if( d->monoBuffer ) delete [] d->monoBuffer;
-  delete d->metaInfo;
   delete d->resampleData;
   if( d->resampleState )
     src_delete( d->resampleState );
@@ -117,6 +129,7 @@ bool K3bAudioDecoder::initDecoder()
 
   d->alreadyDecoded = 0;
   d->decodingStartPos = 0;
+  d->decoderFinished = false;
 
   return initDecoderInternal();
 }
@@ -131,47 +144,55 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 
   int read = 0;
 
-  if( d->samplerate != 44100 ) {
+  if( !d->decoderFinished ) {
+    if( d->samplerate != 44100 ) {
 
-    // check if we have data left from some previous conversion
-    if( d->inBufferLen > 0 ) {
-      read = resample( _data, maxLen );
+      // check if we have data left from some previous conversion
+      if( d->inBufferLen > 0 ) {
+	read = resample( _data, maxLen );
+      }
+      else {
+	// FIXME: change this so the buffer is never deleted here. Use QMIN(d->inBufferSize, maxLen) instead
+	if( d->inBufferSize < maxLen/2 ) {
+	  if( d->inBuffer )
+	    delete [] d->inBuffer;
+	  d->inBuffer = new float[maxLen];
+	  d->inBufferSize = maxLen;
+	}
+
+	if( (read = decodeInternal( _data, maxLen )) == 0 )
+	  d->decoderFinished = true;
+
+	d->inBufferLen = read/2;
+	d->inBufferPos = d->inBuffer;
+	from16bitBeSignedToFloat( _data, d->inBuffer, d->inBufferLen );
+      
+	read = resample( _data, maxLen );
+      }
     }
-    else {    
-      if( d->inBufferSize < maxLen/2 ) {
-	if( d->inBuffer )
-	  delete [] d->inBuffer;
-	d->inBuffer = new float[maxLen];
-	d->inBufferSize = maxLen;
+    else if( d->channels == 1 ) {
+      // FIXME: change this so the buffer is never deleted here. Use QMIN(d->monoBufferSize, maxLen) instead
+      if( d->monoBufferSize < maxLen/2 ) {
+	if( d->monoBuffer )
+	  delete [] d->monoBuffer;
+	d->monoBuffer = new char[maxLen/2];
       }
 
-      read = decodeInternal( _data, maxLen );
+      // we simply duplicate every frame
+      if( (read = decodeInternal( d->monoBuffer, maxLen/2 )) == 0 )
+	d->decoderFinished = true;
 
-      d->inBufferLen = read/2;
-      d->inBufferPos = d->inBuffer;
-      from16bitBeSignedToFloat( _data, d->inBuffer, d->inBufferLen );
-      
-      read = resample( _data, maxLen );
-    }
-  }
-  else if( d->channels == 1 ) {
-    if( d->monoBufferSize < maxLen/2 ) {
-      if( d->monoBuffer )
-	delete [] d->monoBuffer;
-      d->monoBuffer = new char[maxLen/2];
-    }
+      for( int i = 0; i < read; i+=2 ) {
+	_data[2*i] = _data[2*i+2] = d->monoBuffer[i];
+	_data[2*i+1] = _data[2*i+3] = d->monoBuffer[i+1];
+      }
 
-    // we simply duplicate every frame
-    read = decodeInternal( d->monoBuffer, maxLen/2 );
-    for( int i = 0; i < read; i+=2 ) {
-      _data[2*i] = _data[2*i+2] = d->monoBuffer[i];
-      _data[2*i+1] = _data[2*i+3] = d->monoBuffer[i+1];
+      read *= 2;
     }
-
-    read *= 2;
-  }
-  else {
-    read = decodeInternal( _data, maxLen );
+    else {
+      if( (read = decodeInternal( d->monoBuffer, maxLen/2 )) == 0 )
+	d->decoderFinished = true;
+    }
   }
 
 
@@ -239,7 +260,10 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
   d->resampleData->input_frames = d->inBufferLen/d->channels;
   d->resampleData->output_frames = maxLen/2/2;  // in case of mono files we need the space anyway
   d->resampleData->src_ratio = 44100.0/(double)d->samplerate;
-  d->resampleData->end_of_input = 0;  // FIXME: at the end of the input this needs to be set to 1
+  if( d->inBufferLen == 0 )
+    d->resampleData->end_of_input = 1;  // this should force libsamplerate to output the last frames
+  else
+    d->resampleData->end_of_input = 0;
 
   int len = 0;
   if( (len = src_process( d->resampleState, d->resampleData ) ) ) {
@@ -293,9 +317,9 @@ void K3bAudioDecoder::fromFloatTo16BitBeSigned( float* src, char* dest, int samp
       val = -32768;
 
     else if( src[i] <= 0 )
-      val = (Q_INT16)(src[i] * 32768.0);
+      val = (Q_INT16)lrintf(src[i] * 32768.0);
     else
-      val = (Q_INT16)(src[i] * 32767.0);
+      val = (Q_INT16)lrintf(src[i] * 32767.0);
 
     dest[2*i]   = val>>8;
     dest[2*i+1] = val;
@@ -317,9 +341,9 @@ void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int sample
       val = -32768;
 
     else if( fval <= 0 )
-      val = (Q_INT16)(fval * 32768.0);
+      val = (Q_INT16)lrintf(fval * 32768.0);
     else
-      val = (Q_INT16)(fval * 32767.0);
+      val = (Q_INT16)lrintf(fval * 32767.0);
 
     dest[2*i]   = val>>8;
     dest[2*i+1] = val;
