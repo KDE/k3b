@@ -28,20 +28,24 @@ class KListBox;
   *@author Sebastian Trueg
   */
 
-class K3bCddbMultiEntriesDialog : public KDialogBase  {
-    Q_OBJECT
-public: 
-	K3bCddbMultiEntriesDialog( QStringList &entries, const char name=0);
-	~K3bCddbMultiEntriesDialog();
-private slots:
-    void apply();
-signals:
-    void chosenId( unsigned int );
-private:
-    QStringList *m_cddbEntries;
-    KListBox *m_listBox;
-    void init();
-    void setup( QStringList& );
+class K3bCddbMultiEntriesDialog : public KDialogBase  
+{
+  Q_OBJECT
+
+ public: 
+  K3bCddbMultiEntriesDialog( QStringList &entries, const char name=0);
+  ~K3bCddbMultiEntriesDialog();
+  
+ protected slots:
+  void slotOk();
+
+ signals:
+  void chosenId( unsigned int );
+
+ private:
+  QStringList *m_cddbEntries;
+  KListBox *m_listBox;
+  void setup( QStringList& );
 };
 
 #endif

@@ -94,6 +94,8 @@ void K3bEmptyDiscWaiter::slotCancel()
 
 void K3bEmptyDiscWaiter::slotUser1()
 {
+  m_timer->stop();
+  m_timer->disconnect();
   delayedDestruct();
 
   emit discReady();

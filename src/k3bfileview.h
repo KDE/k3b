@@ -50,6 +50,8 @@ class K3bFileView : public QVBox
 
  public slots:
   void slotAudioFilePlay();
+  void slotAudioFileEnqueue();
+  void slotAddFilesToProject();
 
  private:
   class PrivateFileView;
@@ -61,6 +63,7 @@ class K3bFileView : public QVBox
  private slots:
   void slotFilterChanged();
   void slotFileHighlighted( const KFileViewItem* item );
+  void slotCheckActions();
 };
 
 

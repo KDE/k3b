@@ -117,27 +117,27 @@ void K3bCddbLocalDBTab::clearDb(){
     qDebug("(K3bCddbLocalDBTab) Clear Database.");
     K3bSongManager *sm = k3bMain()->songManager();
     QStringList::Iterator it;
-    for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
-        sm->deleteSong( (*it) );
-    }
+//     for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
+//         sm->deleteSong( (*it) );
+//     }
     sm->save();
 
 }
 void K3bCddbLocalDBTab::verifyDb(){
     qDebug("(K3bCddbLocalDBTab) Verify Database.");
-    K3bSongManager *sm = k3bMain()->songManager();
-    QFile f( m_songListPath->text() );
-    if( f.exists() ) {
-        sm->load( m_songListPath->text() );
-        m_missingSongList = sm->verify();
-        qDebug("(K3bCddbLocalDBTab) Have missing songs.");
-        QStringList::Iterator it;
-        for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
-            m_logOutput->insertLine( (*it).latin1() );
-        }
-    } else {
-        QMessageBox::critical( this, i18n("Database Error"), i18n("File doesn't exists <") + m_songListPath->text() + ">.", i18n("Ok") );
-    }
+//     K3bSongManager *sm = k3bMain()->songManager();
+//     QFile f( m_songListPath->text() );
+//     if( f.exists() ) {
+//         sm->load( m_songListPath->text() );
+//         m_missingSongList = sm->verify();
+//         qDebug("(K3bCddbLocalDBTab) Have missing songs.");
+//         QStringList::Iterator it;
+//         for( it = m_missingSongList.begin(); it != m_missingSongList.end(); ++it ){
+//             m_logOutput->insertLine( (*it).latin1() );
+//         }
+//     } else {
+//         QMessageBox::critical( this, i18n("Database Error"), i18n("File doesn't exists <") + m_songListPath->text() + ">.", i18n("Ok") );
+//     }
 }
 void K3bCddbLocalDBTab::findDbEntries(){
     qDebug("(K3bCddbLocalDBTab) find Database.");

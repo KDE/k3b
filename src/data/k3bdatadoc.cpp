@@ -92,10 +92,26 @@ void K3bDataDoc::addView(K3bView* view)
   K3bDoc::addView( view );
 }
 
-void K3bDataDoc::slotAddURLs( const QStringList& urls, K3bDirItem* dirItem )
+
+void K3bDataDoc::addUrl( const QString& url )
 {
-  if( !dirItem )
-    dirItem = m_root;
+  slotAddUrlsToDir( QStringList(url) );
+}
+
+
+void K3bDataDoc::addUrls( const QStringList& urls )
+{
+  slotAddUrlsToDir( urls );
+}
+
+
+void K3bDataDoc::slotAddUrlsToDir( const QStringList& urls, K3bDirItem* dirItem )
+{
+  if( !dirItem ) {
+    // get current dir from first view (it should better be the current active view)
+    K3bDataView* view = (K3bDataView*)firstView();
+    dirItem = view->currentDir();
+  }
 
   for( QStringList::ConstIterator it = urls.begin(); it != urls.end(); ++it ) 
     {

@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="k3b" version="0.5">
+<kpartgui name="k3b" version="0.6">
 <MenuBar>
   <Action name="window_menu"/>
-  <Menu name="file">
+  <Menu name="file"><text>&amp;Project</text>
   	<Action name="file_burn"/>
   	<Action name="file_export" append="save_merge"/>
+  	<Action name="project_add_files" append="print_merge"/>
   </Menu>
   <Menu name="tools"><text>&amp;Tools</text>
   	<Action name="tools_cd_info"/>

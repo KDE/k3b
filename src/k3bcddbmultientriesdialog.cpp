@@ -28,9 +28,8 @@
 #include <klocale.h>
 
 K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog(  QStringList &entries, const char name=0 )
-   : KDialogBase( Plain, i18n("CDDB Database Entry"), Apply|Cancel, Apply, 0, "CDDB_selection" ) {
-
-   init( );
+   : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Apply, 0, "CDDB_selection" ) 
+{
    setup( entries );
 }
 
@@ -57,14 +56,10 @@ void K3bCddbMultiEntriesDialog::setup( QStringList &entries ){
     }
 
     frameLayout->addWidget( _box, 0, 0);
-    setButtonApplyText( i18n( "Ok" ) );
 }
 
-void K3bCddbMultiEntriesDialog::init( ){
-    connect(this, SIGNAL(applyClicked()), this, SLOT( apply()) );
-}
 
-void K3bCddbMultiEntriesDialog::apply( ){
+void K3bCddbMultiEntriesDialog::slotOk( ){
     unsigned int id = 0;
     // get selected entry
     int selected = m_listBox->currentItem();
@@ -83,7 +78,5 @@ void K3bCddbMultiEntriesDialog::apply( ){
     done(0);
 }
 
+
 #include "k3bcddbmultientriesdialog.moc"
-
-
-

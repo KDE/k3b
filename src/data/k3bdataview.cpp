@@ -105,6 +105,12 @@ K3bProjectBurnDialog* K3bDataView::burnDialog()
 }
 
 
+K3bDirItem* K3bDataView::currentDir() const
+{
+  return m_dataFileView->currentDir();
+}
+
+
 void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem* after, QListViewItem* parentViewItem )
 {
   if( !e->isAccepted() )
@@ -156,7 +162,7 @@ void K3bDataView::slotDropped( KListView* listView, QDropEvent* e, QListViewItem
       QTextDrag::decode( e, droppedText );
       QStringList urls = QStringList::split("\r\n", droppedText );
     
-      m_doc->slotAddURLs( urls, parent );
+      m_doc->slotAddUrlsToDir( urls, parent );
     }
   }
 }

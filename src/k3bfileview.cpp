@@ -18,6 +18,7 @@
 #include "k3bfileview.h"
 #include "k3b.h"
 #include "k3baudioplayer.h"
+#include "k3bdoc.h"
 
 #include <qwidget.h>
 #include <qdragobject.h>
@@ -36,6 +37,7 @@
 #include <kfilefilter.h>
 #include <klocale.h>
 #include <kfileviewitem.h>
+#include <kmessagebox.h>
 
 
 
@@ -87,13 +89,17 @@ void K3bFileView::setupGUI()
   m_dirOp           = new KDirOperator( QDir::home().absPath(), this );
   KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
 
-  // PrivateFileView just adds d'n'd support (replace with default detailView in KDE3)
+  // PrivateFileView just adds d'n'd support (can hopefully be replaced with default detailView in KDE3)
   PrivateFileView* fileView = new PrivateFileView( m_dirOp, "fileview" );
   m_dirOp->setView( fileView );
   fileView->setSelectionMode( KFile::Extended );
 
   KAction* actionPlay = new KAction( i18n("&Play"), "1rightarrow", 0, this, SLOT(slotAudioFilePlay()), 
 				     m_dirOp->actionCollection(), "audio_file_play");
+  KAction* actionEnqueue = new KAction( i18n("&Enqueue"), "1rightarrow", 0, this, SLOT(slotAudioFileEnqueue()), 
+					m_dirOp->actionCollection(), "audio_file_enqueue");
+  KAction* actionAddFilesToProject = new KAction( i18n("&Add to project"), 0, this, SLOT(slotAddFilesToProject()), 
+						  m_dirOp->actionCollection(), "add_file_to_project");
 
   // add some actions to the toolbar
 //   m_dirOp->actionCollection()->action("up")->plug( toolBar );
@@ -104,12 +110,18 @@ void K3bFileView::setupGUI()
   toolBar->insertSeparator();
 
   KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
-  dirOpMenu->insert( actionPlay, 0 );
+  dirOpMenu->insert( actionAddFilesToProject, 0 );
   dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 1 );
+  dirOpMenu->insert( actionPlay, 2 );
+  dirOpMenu->insert( actionEnqueue, 3 );
+  dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 4 );
 
   // this has to be disabled since the user must NEVER change the fileview because
-  // that would disable the dragging support! (obsolete in KDE3)
+  // that would disable the dragging support! (hopefully obsolete in KDE3)
   m_dirOp->actionCollection()->action("view menu")->setEnabled( false );
+
+  // check if some actions should be enabled
+  connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
   QLabel* filterLabel = new QLabel( i18n("&Filter:"), toolBar, "filterLabel" );
@@ -148,9 +160,11 @@ void K3bFileView::slotFileHighlighted( const KFileViewItem* item )
 
   if( play ) {
     m_dirOp->actionCollection()->action( "audio_file_play" )->setEnabled( true );
+    m_dirOp->actionCollection()->action( "audio_file_enqueue" )->setEnabled( true );
   }
   else {
     m_dirOp->actionCollection()->action( "audio_file_play" )->setEnabled( false );
+    m_dirOp->actionCollection()->action( "audio_file_enqueue" )->setEnabled( false );
   }
 }
 
@@ -158,12 +172,47 @@ void K3bFileView::slotFileHighlighted( const KFileViewItem* item )
 void K3bFileView::slotAudioFilePlay()
 {
   // play selected audio files
+  QStringList files;
+
   for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
     if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
-      if( k3bMain()->audioPlayer()->playFile( it.current()->url().path() ) ) {
-	break;
-      }
+      files.append( it.current()->url().path() );
     }
+  }
+
+  if( !files.isEmpty() )
+    k3bMain()->audioPlayer()->playFiles( files );
+}
+
+
+void K3bFileView::slotAudioFileEnqueue()
+{
+  // play selected audio files
+  QStringList files;
+
+  for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+    if( k3bMain()->audioPlayer()->supportsMimetype(it.current()->mimetype()) ) {
+      files.append( it.current()->url().path() );
+    }
+  }
+
+  if( !files.isEmpty() )
+    k3bMain()->audioPlayer()->enqueueFiles( files );
+}
+
+
+void K3bFileView::slotAddFilesToProject()
+{
+  if( !k3bMain()->activeDoc() )
+    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No active Project"));
+  else {
+    QStringList files;
+    for( QListIterator<KFileViewItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
+      files.append( it.current()->url().path() );
+    }
+    
+    if( !files.isEmpty() )
+      k3bMain()->activeDoc()->addUrls( files );
   }
 }
 
@@ -183,6 +232,12 @@ void K3bFileView::slotFilterChanged()
   
   m_dirOp->rereadDir();
   //  emit filterChanged( filter );
+}
+
+
+void K3bFileView::slotCheckActions()
+{
+  m_dirOp->actionCollection()->action("add_file_to_project")->setEnabled( k3bMain()->activeView() != 0 );
 }
 
 

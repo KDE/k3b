@@ -58,7 +58,6 @@ K3bDoc::K3bDoc( QObject* parent )
   m_onTheFly = true;
   m_overburn = false;
   m_burnproof = true;
-  m_error = K3b::NOT_STARTED;
   m_speed = 1;
 
   m_writingApp = K3b::DEFAULT;

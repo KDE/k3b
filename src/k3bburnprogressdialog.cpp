@@ -345,6 +345,8 @@ void K3bBurnProgressDialog::finished( bool success )
   m_timer->stop();
 
   m_progressBuffer->setValue(0);
+  m_progressCd->setValue(100);
+  m_progressTrack->setValue(100);
 
   // remove the statusbar-widgets
   k3bMain()->statusBar()->removeWidget( m_statusBarProgress );

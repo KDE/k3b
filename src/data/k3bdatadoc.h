@@ -147,7 +147,9 @@ class K3bDataDoc : public K3bDoc
   /** add urls to the compilation.
    * @param dir the directory where to add the urls, by default this is the root directory.
    **/
-  void slotAddURLs( const QStringList&, K3bDirItem* dir = 0 );
+  void slotAddUrlsToDir( const QStringList&, K3bDirItem* dir = 0 );
+  void addUrl( const QString& url );
+  void addUrls( const QStringList& urls );
 
  signals:
   void itemRemoved( K3bDataItem* );

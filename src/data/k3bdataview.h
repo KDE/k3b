@@ -55,6 +55,8 @@ class K3bDataView : public K3bView
     */
    bool acceptDrag( QDropEvent* e ) const;
 
+   K3bDirItem* currentDir() const;
+
  protected slots:
    /** generates a dropped signal */
    void slotDropped( KListView*, QDropEvent* e, QListViewItem* after, QListViewItem* parent );

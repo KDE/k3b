@@ -110,7 +110,7 @@ class K3bDoc : public QObject
   /** Create a new view */
   virtual K3bView* newView( QWidget* parent ) = 0;
 
-  const QString& projectName() const { return m_projectName; }
+  virtual const QString& projectName() const { return m_projectName; }
   bool dao() const { return m_dao; }
   bool dummy() const { return m_dummy; }
   bool onTheFly() const { return m_onTheFly; }
@@ -123,12 +123,6 @@ class K3bDoc : public QObject
 
   const QString& tempDir() const { return m_tempDir; }
 
-  /**
-   * After result() has been emitted this returns the error-code
-   * to check the result.
-   **/
-  int error() const;
-  QString errorString() const;
   virtual int numOfTracks() const { return 1; }
 	
   virtual K3bBurnJob* newBurnJob() = 0;
@@ -146,6 +140,9 @@ class K3bDoc : public QObject
   void setBurner( K3bDevice* dev );
   void setBurnproof( bool b ) { m_burnproof = b; }
   void setTempDir( const QString& dir ) { m_tempDir = dir; }
+
+  virtual void addUrl( const QString& url ) = 0;
+  virtual void addUrls( const QStringList& urls ) = 0;
 	
  signals:
   void errorMessage( const QString& );
@@ -175,7 +172,6 @@ class K3bDoc : public QObject
    */
   virtual QString documentType() const = 0;
 
-  int m_error;
   int m_docType;
 
  private:

@@ -18,7 +18,7 @@
 // include files for QT
 #include <qdir.h>
 #include <qfile.h>
-#include <qvbox.h>
+#include <qlayout.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qtoolbutton.h>
@@ -69,7 +69,7 @@
 #include "k3bprojecttabwidget.h"
 #include "rip/songdb/k3bsongmanager.h"
 #include "k3baudioplayer.h"
-#include "k3baudioplayerwidget.h"
+
 
 
 
@@ -106,13 +106,12 @@ K3bMainWindow::K3bMainWindow()
   actionFileSaveAs->setEnabled(false);
   actionFileBurn->setEnabled( false );
   actionFileExport->setEnabled( false );
+  actionProjectAddFiles->setEnabled( false );
 
   m_optionDialog = 0;
 
   // since the icons are not that good activate the text on the toolbar
   toolBar()->setIconText( KToolBar::IconTextRight );
-
-  m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -155,6 +154,9 @@ void K3bMainWindow::initActions()
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->setDelayed( false );
 
+  actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()), 
+				       actionCollection(), "project_add_files");
+
   actionViewDirView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirView()), 
 				  actionCollection(), "view_dir");
 
@@ -172,6 +174,7 @@ void K3bMainWindow::initActions()
 
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()), 
 				       actionCollection(), "settings_k3bsetup" );
+
 
   actionFileNewMenu->setStatusText(i18n("Creates a new project"));
   actionFileNewData->setStatusText( i18n("Creates a new data project") );
@@ -211,26 +214,30 @@ void K3bMainWindow::initView()
   mainDock->setDockSite( KDockWidget::DockCorner );
   mainDock->setEnableDocking( KDockWidget::DockNone );
 
-//   QFrame* documentBox = new QFrame( mainDock );
-//   documentBox->setFrameStyle( QFrame::Sunken | QFrame::StyledPanel );
-//   QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
-//   documentLayout->setAutoAdd( true );
 
-//   QLabel* projectHeader = new QLabel( documentBox );
-//   projectHeader->setText( i18n("Current Projects") );
-//   projectHeader->setAlignment( AlignHCenter | AlignVCenter );
-//   QFont f(projectHeader->font());
-//   f.setBold(true);
-//   projectHeader->setFont( f );
+  // --- Document Dock ----------------------------------------------------------------------------
+  // create styled document box
+  QFrame* documentBox = new QFrame( mainDock );
+  documentBox->setFrameStyle( QFrame::Sunken | QFrame::StyledPanel );
+  QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
+  documentLayout->setAutoAdd( true );
+  documentLayout->setMargin( 6 );
+  documentLayout->setSpacing( 6 );
 
-//   QPalette p( documentBox->palette() );
-//   p.setColor( QColorGroup::Background, QColor(Qt::blue).light(120) );
-//   p.setColor( QColorGroup::Foreground, white );
-//   projectHeader->setPalette( p );
-//   documentBox->setPalette( p );
+  QLabel* projectHeader = new QLabel( documentBox );
+  projectHeader->setText( i18n("Current Projects") );
+  projectHeader->setAlignment( AlignHCenter | AlignVCenter );
+  QFont f(projectHeader->font());
+  f.setBold(true);
+  projectHeader->setFont( f );
 
-  m_documentTab = new K3bProjectTabWidget( mainDock );
-  mainDock->setWidget( m_documentTab );
+  QPalette p( documentBox->palette() );
+  p.setColor( QColorGroup::Background, QColor(Qt::white) );
+  projectHeader->setPalette( p );
+
+  // add the document tab to the styled document box
+  m_documentTab = new K3bProjectTabWidget( documentBox );
+  mainDock->setWidget( documentBox );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 
   // fill the tabs action menu
@@ -238,7 +245,10 @@ void K3bMainWindow::initView()
   m_documentTab->insertAction( actionFileSaveAs );
   m_documentTab->insertAction( actionFileClose );
   m_documentTab->insertAction( actionFileBurn );
+  // ---------------------------------------------------------------------------------------------
 
+
+  // --- Directory Dock --------------------------------------------------------------------------
   dirDock = createDockWidget( i18n("Dir View"), SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
   dirDock->setWidget( m_dirView );
@@ -247,15 +257,19 @@ void K3bMainWindow::initView()
 
   connect( dirDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirDockHidden()) );
   connect( dirDock, SIGNAL(hasUndocked()), this, SLOT(slotDirDockHidden()) );
+  // ---------------------------------------------------------------------------------------------
 
+
+  // --- Audioplayer Dock ------------------------------------------------------------------------
   m_audioPlayerDock = createDockWidget( i18n("Audio Player"), SmallIcon("1rightarrow") );
-  m_audioPlayerWidget = new K3bAudioPlayerWidget( audioPlayer(), false, m_audioPlayerDock );
-  m_audioPlayerDock->setWidget( m_audioPlayerWidget );
-  m_audioPlayerDock->setEnableDocking( KDockWidget::DockBottom | KDockWidget::DockTop | KDockWidget::DockDesktop );
-  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockBottom, m_audioPlayerWidget->height() );
+  m_audioPlayer = new K3bAudioPlayer( this, "k3b_audio_player" );
+  m_audioPlayerDock->setWidget( m_audioPlayer );
+  m_audioPlayerDock->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop );
+  m_audioPlayerDock->manualDock( mainDock, KDockWidget::DockBottom, m_audioPlayer->height() );
 
   connect( m_audioPlayerDock, SIGNAL(iMBeingClosed()), this, SLOT(slotAudioPlayerHidden()) );
   connect( m_audioPlayerDock, SIGNAL(hasUndocked()), this, SLOT(slotAudioPlayerHidden()) );
+  // ---------------------------------------------------------------------------------------------
 }
 
 
@@ -272,8 +286,32 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   actionFileExport->setEnabled( true );
   actionFileSave->setEnabled( true );
   actionFileSaveAs->setEnabled( true );
+  actionProjectAddFiles->setEnabled( true );
 
   slotCurrentDocChanged( m_documentTab->currentPage() );
+}
+
+
+K3bView* K3bMainWindow::activeView() const
+{
+  if( !pDocList->isEmpty() ) {
+    QWidget* w = m_documentTab->currentPage();
+    if( K3bView* view = dynamic_cast<K3bView*>(w) )
+      return view;
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+
+K3bDoc* K3bMainWindow::activeDoc() const
+{
+  if( activeView() )
+    return activeView()->getDocument();
+  else
+    return 0;
 }
 
 
@@ -383,7 +421,7 @@ bool K3bMainWindow::queryClose()
   // the user is asked for every modified doc to save the changes
   // ---------------------------------
 
-  while( K3bView* view = (K3bView*)m_documentTab->currentPage() )
+  while( K3bView* view = activeView() )
   {
     if( !view->close(true) )
       return false;
@@ -500,12 +538,9 @@ void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 
 void K3bMainWindow::slotFileSave()
 {
-  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-  if( m ) {
-    K3bDoc* doc = m->getDocument();
+  if( K3bDoc* doc = activeDoc() ) {
     fileSave( doc );
   }
-
 }
 
 void K3bMainWindow::fileSave( K3bDoc* doc )
@@ -513,9 +548,7 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
   slotStatusMsg(i18n("Saving file..."));
 
   if( doc == 0 ) {
-    K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-    if( m )
-      doc = m->getDocument();
+    doc = activeDoc();
   }
   if( doc != 0 ) {
     if( doc->URL().fileName().contains(i18n("Untitled")) )
@@ -529,9 +562,7 @@ void K3bMainWindow::fileSave( K3bDoc* doc )
 
 void K3bMainWindow::slotFileSaveAs()
 {
-  K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-  if( m ) {
-    K3bDoc* doc = m->getDocument();
+  if( K3bDoc* doc = activeDoc() ) {
     fileSaveAs( doc );
   }
 }
@@ -542,9 +573,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
   if( doc == 0 ) {
-    K3bView* m = dynamic_cast<K3bView*>(m_documentTab->currentPage() );
-    if( m )
-      doc = m->getDocument();
+    doc = activeDoc();
   }
 
   if( doc != 0 ) {
@@ -586,14 +615,14 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
 void K3bMainWindow::slotFileExport()
 {
-  if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( m_documentTab->currentPage() ) ) {
+  if( K3bAudioView* m = dynamic_cast<K3bAudioView*>( activeView() ) ) {
     QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.toc", k3bMain(), i18n("Export to cdrdao-toc-file") );
     if( !file.isEmpty() ) {
       if( !((K3bAudioDoc*)m->getDocument())->writeTOC( file ) )
 	KMessageBox::error( this, i18n("Could not write to file %1").arg( file ), i18n("I/O Error") );
     }
   }
-  else if( K3bDataView* m = dynamic_cast<K3bDataView*>( m_documentTab->currentPage() ) ) {
+  else if( K3bDataView* m = dynamic_cast<K3bDataView*>( activeView() ) ) {
     QString file = KFileDialog::getSaveFileName( QDir::home().absPath(), "*.mkisofs", k3bMain(), i18n("Export to mkisofs-pathspec-file") );
     if( !file.isEmpty() ) {
       if( ((K3bDataDoc*)m->getDocument())->writePathSpec( file ).isEmpty() )
@@ -607,11 +636,18 @@ void K3bMainWindow::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
 
-  K3bView* m = dynamic_cast<K3bView*>( m_documentTab->currentPage() );
-  if( m )
+  if( K3bView* view = activeView() )
     {
-      m->close(true);
+      view->close(true);
     }
+
+  if( pDocList->isEmpty() ) {
+    actionFileSave->setEnabled(false);
+    actionFileSaveAs->setEnabled(false);
+    actionFileBurn->setEnabled( false );
+    actionFileExport->setEnabled( false );
+    actionProjectAddFiles->setEnabled( false );
+  }
 }
 
 
@@ -726,20 +762,18 @@ void K3bMainWindow::slotNewDataDoc()
 
 void K3bMainWindow::slotFileBurn()
 {
-  QWidget* w = m_documentTab->currentPage();
+  K3bView* view = activeView();
 
-  if( w ) {
-    if( K3bView* _view = dynamic_cast<K3bView*>(w) ) {
-      K3bDoc* doc = _view->getDocument();
-      
-      if( doc ) {
-	// test if there is something to burn
-	if( doc->numOfTracks() == 0 ) {
-	  KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
-	}
-	else {
-	  _view->burnDialog()->exec(true);
-	}
+  if( view ) {
+    K3bDoc* doc = view->getDocument();
+    
+    if( doc ) {
+      // test if there is something to burn
+      if( doc->numOfTracks() == 0 ) {
+	KMessageBox::information( kapp->mainWidget(), "There is nothing to burn!", "So what?", QString::null, false );
+      }
+      else {
+	view->burnDialog()->exec(true);
       }
     }
   }
@@ -809,29 +843,17 @@ void K3bMainWindow::init()
 
   // ===============================================================================
   emit initializationInfo( i18n("Reading local CDDB database...") );
-  globalConfig.setGroup("Cddb");
-  QString filename = globalConfig.readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
-  m_songManager = new K3bSongManager( );
-  m_songManager->load( filename );
+  config()->setGroup("Cddb");
+  QString filename = config()->readEntry("songlistPath", locateLocal("data", "k3b") + "/songlist.xml");
+  m_songManager = new K3bSongManager(filename );
+  //  m_songManager->load( filename );
 
   emit initializationInfo( i18n("Ready") );
 }
 
 
-void K3bMainWindow::slotCurrentDocChanged( QWidget* w )
+void K3bMainWindow::slotCurrentDocChanged( QWidget* )
 {
-  if( K3bView* view = dynamic_cast<K3bView*>(w) ) {
-    // activate actions for file-handling
-    actionFileClose->setEnabled( true );
-    actionFileSave->setEnabled( true );
-    actionFileSaveAs->setEnabled( true );
-    actionFileExport->setEnabled( true );
-  }
-  else {
-    actionFileClose->setEnabled( false );
-    actionFileSave->setEnabled( false );
-    actionFileSaveAs->setEnabled( false );
-  }
 }
 
 
@@ -892,6 +914,20 @@ void K3bMainWindow::slotWriteIsoImage()
   K3bIsoImageWritingDialog* d = new K3bIsoImageWritingDialog( this, "isodialog" );
   d->exec();
   delete d;
+}
+
+
+void K3bMainWindow::slotProjectAddFiles()
+{
+  K3bDoc* doc = activeDoc();
+
+  if( doc ) {
+    QStringList urls = KFileDialog::getOpenFileNames( ".", "*", this, i18n("Select files to add to the project") );
+    if( !urls.isEmpty() )
+      doc->addUrls( urls );
+  }
+  else
+    KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No active Project"));
 }
 
 

@@ -48,7 +48,7 @@ class K3bJob;
 class K3bProjectTabWidget;
 class K3bSongManager;
 class K3bAudioPlayer;
-class K3bAudioPlayerWidget;
+
 
 
 /** Access to the "lonely" K3bMainWindow Object */
@@ -90,7 +90,16 @@ class K3bMainWindow : public KDockMainWindow
   K3bSongManager*        songManager()        { return m_songManager; }
   K3bAudioPlayer*        audioPlayer()        { return m_audioPlayer; }
   KConfig*               config()             { return m_config; }
-	
+
+  /**
+   * @returns a pointer to the currently visible view or 0 if no project was created
+   */
+  K3bView* activeView() const;
+  /**
+   * @returns a pointer to the doc associated with the currently visible view or 0 if no project was created
+   */
+  K3bDoc* activeDoc() const;
+
   /** does some initialisation like searching for external programs */
   void init();
 	
@@ -224,6 +233,8 @@ class K3bMainWindow : public KDockMainWindow
   void slotNewAudioDoc();
   void slotNewDataDoc();
 
+  void slotProjectAddFiles();
+
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );
@@ -277,6 +288,7 @@ class K3bMainWindow : public KDockMainWindow
   KAction* actionToolsCdInfo;
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsWriteIsoImage;
+  KAction* actionProjectAddFiles;
 	
   KToggleAction* actionViewToolBar;
   KToggleAction* actionViewStatusBar;
@@ -290,7 +302,6 @@ class K3bMainWindow : public KDockMainWindow
   // The K3b-specific widgets
   K3bDirView* m_dirView;
   K3bOptionDialog* m_optionDialog;
-  K3bAudioPlayerWidget* m_audioPlayerWidget;
 	
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;
