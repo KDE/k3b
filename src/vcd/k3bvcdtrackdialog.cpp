@@ -524,8 +524,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     groupOptions->layout() ->setSpacing( spacingHint() );
     groupOptions->layout() ->setMargin( marginHint() );
 
-		m_check_pbc = new QCheckBox( i18n( "Enable Playback Control (PBC)" ), groupOptions, "m_check_pbc" );
-		m_check_pbc->hide();
+		m_check_pbc = new QCheckBox( i18n( "Enable Playback Control (for the hole CD)" ), groupOptions, "m_check_pbc" );
 
 		m_check_usekeys = new QCheckBox( i18n( "Use numeric keys" ), groupOptions, "m_check_usekeys" );
 		m_check_usekeys->setEnabled( false );
