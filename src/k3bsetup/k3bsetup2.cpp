@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qscrollview.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -135,6 +136,13 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *name, const QStringList& )
   d->deviceManager->scanbus();
 
   load();
+
+  //
+  // This is a hack to work around a kcm bug which causes every kc module to start
+  // with disabled apply button
+  //
+  QTimer::singleShot( 0, this, SLOT(updateViews()) );
+
   if (getuid() != 0 
 #if KDE_IS_VERSION(3,1,90)
       || !d->config->checkConfigFilesWritable( true )
