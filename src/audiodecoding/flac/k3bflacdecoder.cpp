@@ -95,8 +95,7 @@ protected:
 };
 
 bool K3bFLACDecoder::Private::seekToFrame(int frame) {
-  FLAC__uint64 sample;
-  sample = frame * 75 * rate;
+  FLAC__uint64 sample = frame * rate / 75;
   return seek_absolute(sample);
 }
 
