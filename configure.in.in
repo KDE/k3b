@@ -1,7 +1,5 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(k3b,0.7.0)
-
 #AS=gcc
 #ASFLAGS="-c"
 AS=$(CC)

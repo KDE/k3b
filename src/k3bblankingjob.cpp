@@ -138,7 +138,7 @@ void K3bBlankingJob::cancel()
 
 void K3bBlankingJob::slotParseCdrecordOutput( KProcess*, char* data, int len )
 {
-  qDebug( QString::fromLatin1( data, len ) );
+  qDebug( "%s", QString::fromLatin1( data, len ).latin1() );
 }
 
 

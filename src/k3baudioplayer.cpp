@@ -331,7 +331,7 @@ void K3bAudioPlayer::play()
       Arts::PlayObjectFactory factory = Arts::Reference("global:Arts_PlayObjectFactory");
       m_playObject = factory.createPlayObject( string(m_currentItem->filename().latin1()) );
       if( m_playObject.isNull() ) {
-	qDebug( "(K3bAudioPlayer) no aRts module available for: " + m_currentItem->filename() );
+	qDebug( "(K3bAudioPlayer) no aRts module available for: %s", m_currentItem->filename().latin1() );
 
 	// play the next if there is any
 	if( m_currentItem->itemBelow() ) {

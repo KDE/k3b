@@ -19,6 +19,7 @@
 #include <config.h>
 #endif
 
+#include <stdlib.h>
 
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -279,7 +280,7 @@ void K3bCddb::queryCdOnServer()
     emit infoMessage( i18n("Searching %1 on port %2").arg(server).arg(port) );
   }
   else {
-    qDebug( "(K3bCddb) parsing problem: " + m_cddbpServer[m_iCurrentQueriedServer] );
+    qDebug( "(K3bCddb) parsing problem: %s", m_cddbpServer[m_iCurrentQueriedServer].latin1() );
     m_iCurrentQueriedServer++;
     queryCdOnServer();
   }
@@ -342,7 +343,7 @@ void K3bCddb::slotReadyRead()
 
 	QString handshake = QString("cddb hello %1 %2 k3b %3").arg(user).arg(host).arg(VERSION);
 
-	qDebug("(K3bCddb) handshake: " + handshake );
+	qDebug("(K3bCddb) handshake: %s", handshake.latin1() );
 
 	QTextStream stream( m_socket );
 	stream << handshake << "\n";
@@ -369,7 +370,7 @@ void K3bCddb::slotReadyRead()
 
 	query.append( QString( " %1" ).arg( m_toc.length() / 75 ) );
 
-	qDebug("(K3bCddb) Query: " + query );
+	qDebug("(K3bCddb) Query: %s", query.latin1() );
 
 	m_state = QUERY;
 
@@ -396,7 +397,7 @@ void K3bCddb::slotReadyRead()
 	buffer = buffer.mid( pos + 1 );
 	QString title = buffer.stripWhiteSpace();
 
-	qDebug("(K3bCddb) Found exact match: '" + cat + "' '" + discid + "' '" + title + "'");
+	qDebug("(K3bCddb) Found exact match: '%s' '%s' '%s'", cat.latin1(), discid.latin1(), title.latin1());
 
 	emit infoMessage( i18n("Found exact match") );
 
@@ -447,7 +448,7 @@ void K3bCddb::slotReadyRead()
       else {
 	QStringList match = QStringList::split( " ", line );
 
-	qDebug("(K3bCddb) inexact match: " + line );
+	qDebug("(K3bCddb) inexact match: %s", line.latin1() );
 
 	K3bCddbEntry entry;
 	entry.category = match[0];
@@ -472,7 +473,7 @@ void K3bCddb::slotReadyRead()
 
     case READ_DATA:
 
-      qDebug("parsing line: " + line );
+      qDebug("parsing line: %s", line.latin1() );
 
       if( line.startsWith( "." ) ) {
 	
@@ -512,7 +513,7 @@ bool K3bCddb::readFirstEntry()
   m_state = READ;
   m_parsingBuffer = "";
   
-  qDebug( "(K3bCddb) Read: " + read );
+  qDebug( "(K3bCddb) Read: %s", read.latin1() );
   
   QTextStream stream( m_socket );
   stream << read << "\n";
@@ -545,7 +546,7 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
       bool ok;
       int trackNum = line.mid( 6, eqSgnPos - 6 ).toInt( &ok );
       if( !ok )
-	qDebug("(K3bCddb) !!! PARSE ERROR: " + line );
+	qDebug("(K3bCddb) !!! PARSE ERROR: %s", line.latin1() );
       else {
 	qDebug("(K3bCddb) Track title for track %i", trackNum );
 	
@@ -554,7 +555,7 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
 	  entry.titles.append( "" );
 	
 	entry.titles[trackNum] += line.mid( eqSgnPos+1 );
-	qDebug("set title to: " + line.mid( eqSgnPos+1 ) + " is now: " + entry.titles[trackNum] );
+	qDebug("set title to: %s is now: %s", line.mid( eqSgnPos+1 ).latin1(), entry.titles[trackNum].latin1() );
       }
     }
     
@@ -567,7 +568,7 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
       bool ok;
       int trackNum = line.mid( 4, eqSgnPos - 4 ).toInt( &ok );
       if( !ok )
-	qDebug("(K3bCddb) !!! PARSE ERROR: " + line );
+	qDebug("(K3bCddb) !!! PARSE ERROR: %s", line.latin1() );
       else {
 	qDebug("(K3bCddb) Track extr track %i", trackNum );
 
@@ -580,11 +581,11 @@ K3bCddbEntry K3bCddb::parseEntry( QTextStream& stream )
     }
     
     else if( line.startsWith( "#" ) ) {
-      qDebug( "(K3bCddb) comment: " + line );
+      qDebug( "(K3bCddb) comment: %s", line.latin1() );
     }
     
     else {
-      qDebug( "(K3bCddb) Unknown field: " + line );
+      qDebug( "(K3bCddb) Unknown field: %s", line.latin1() );
     }
   }
 
@@ -646,15 +647,15 @@ void K3bCddb::slotError( int e )
 {
   switch(e) {
   case QSocket::ErrConnectionRefused:
-    qDebug( i18n("Connection to %1 refused").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
+    qDebug( "%s", i18n("Connection to %1 refused").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() );
     emit infoMessage( i18n("Connection to %1 refused").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
     break;
   case QSocket::ErrHostNotFound:
-    qDebug( i18n("Could not find host %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
+    qDebug( "%s", i18n("Could not find host %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() );
     emit infoMessage( i18n("Could not find host %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
     break;
   case QSocket::ErrSocketRead:
-    qDebug( i18n("Error while reading from %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
+    qDebug( "%s", i18n("Error while reading from %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ).local8Bit().data() );
     emit infoMessage( i18n("Error while reading from %1").arg( m_cddbpServer[m_iCurrentQueriedServer] ) );
     break;
   }

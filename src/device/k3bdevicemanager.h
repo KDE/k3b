@@ -8,6 +8,8 @@
 #include <qarray.h>
 #include <qlist.h>
 
+#include <kdebug.h>
+
 class KProcess;
 class K3bDevice;
 class KConfig;
@@ -48,10 +50,8 @@ class K3bDeviceManager : public QObject
   QList<K3bDevice>& allDevices();
 
 
-#if 0
-  /** writes to stdout **/
+  /** writes to stderr **/
   void printDevices();
-#endif
 
   /**
    * Returns number of found devices and constructs

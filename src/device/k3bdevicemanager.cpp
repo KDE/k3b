@@ -95,23 +95,21 @@ int K3bDeviceManager::scanbus()
 }
 
 
-#if 0
 void K3bDeviceManager::printDevices()
 {
-  cout << "\nReader:" << endl;
+  kdDebug() << "\nReader:" << endl;
   for( K3bDevice * dev = m_reader.first(); dev != 0; dev = m_reader.next() ) {
-    cout << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
+    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
 	 << dev->description() << " " << dev->version() << endl << "    " << dev->mountPoint() << endl;
   }
-  cout << "\nWriter:" << endl;
+  kdDebug() << "\nWriter:" << endl;
   for( K3bDevice * dev = m_writer.first(); dev != 0; dev = m_writer.next() ) {
-    cout << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
+    kdDebug() << "  " << ": " << dev->ioctlDevice() << " " << dev->genericDevice() << " " << dev->vendor() << " " 
 	 << dev->description() << " " << dev->version() << " " << dev->maxWriteSpeed() << endl
 	 << "    " << dev->mountPoint() << endl;
   }
-  cout << flush;
+  kdDebug() << flush;
 }
-#endif
 
 
 void K3bDeviceManager::clear()
