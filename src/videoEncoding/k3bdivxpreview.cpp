@@ -13,22 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-/***************************************************************************
-                          k3bdvdpreview.cpp  -  description
-                             -------------------
-    begin                : Tue Apr 2 2002
-    copyright            : (C) 2002 by Sebastian Trueg
-    email                : trueg@informatik.uni-freiburg.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
 
 #include "k3bdivxpreview.h"
 
@@ -41,7 +25,9 @@
 
 #include <kdebug.h>
 
-K3bDivxPreview::K3bDivxPreview(QCanvas* c, QWidget *parent, const char *name ) : QCanvasView( c, parent,name) {
+K3bDivxPreview::K3bDivxPreview(QCanvas* c, QWidget *parent, const char *name ) 
+  : QCanvasView( c, parent,name),
+    m_sprite(0) {
     can = c;
     m_initialized = false;
     m_imageScale = 2.0;
@@ -62,10 +48,12 @@ K3bDivxPreview::K3bDivxPreview(QCanvas* c, QWidget *parent, const char *name ) :
     //QCanvasPixmap *preview = new QCanvasPixmap( canvas
 }
 
-K3bDivxPreview::~K3bDivxPreview(){
+K3bDivxPreview::~K3bDivxPreview()
+{
+  if( m_sprite ) delete m_sprite;
 }
 
-void K3bDivxPreview::drawContents( QPainter* p ){
+void K3bDivxPreview::drawContents( QPainter* ){
     kdDebug(  ) << "(K3bDivxPreview::drawContents)" << endl;
     if( !m_initialized )
          return;
@@ -114,21 +102,22 @@ void K3bDivxPreview::updateLineOffsets(bool upScale){
     } else {
         scale = 0.66666;
     }
-    m_offsetTop = m_offsetTop * scale;
-    m_offsetLeft = m_offsetLeft * scale;
-    m_offsetBottom = m_offsetBottom * scale;
-    m_offsetRight = m_offsetRight * scale;
+    m_offsetTop = (int)((float)m_offsetTop * scale);
+    m_offsetLeft = (int)((float)m_offsetLeft * scale);
+    m_offsetBottom = (int)((float)m_offsetBottom * scale);
+    m_offsetRight = (int)((float)m_offsetRight * scale);
 }
 void K3bDivxPreview::setPreviewPicture( const QString &image ){
     kdDebug(  ) << "(K3bDivxPreview::setPreviewPicture)" << endl;
     m_imageSource = image;
-    if( m_initialized ){
+    if( m_sprite ) {
         delete m_sprite;
+	m_sprite = 0;
     }
     QValueList<QCanvasItem*> cl = can->allItems();
     kdDebug() << "(K3bDivxPreview) CanvasItems: " << QString::number( cl.count() ) << endl;
     QImage i( image );
-    QImage preview = i.scale( 720/m_imageScale, 576/m_imageScale );
+    QImage preview = i.scale( (int)(720.0/m_imageScale), (int)(576.0/m_imageScale) );
     m_previewPixmap = new QCanvasPixmap( preview );
     m_previewPixmapArray = new QCanvasPixmapArray();
     m_previewPixmapArray->setImage(0, m_previewPixmap);
@@ -211,42 +200,42 @@ void K3bDivxPreview::setCroppingLines(){
 
 void K3bDivxPreview::setTopLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setTopLine)" << endl;
-    offset = (int) offset/m_imageScale;
+    offset = (int)( (float)offset/m_imageScale );
     int old = (int) m_lineTop->y();
     m_lineTop->setY( m_sprite->topEdge() + offset );
     repaintContents( 0, old, visibleWidth(), 2 ); // old line
     repaintContents( 0, m_sprite->topEdge()+offset, visibleWidth(), 2 ); // new line
-    m_offsetTop = m_lineTop->y() - m_sprite->topEdge();
+    m_offsetTop = (int)(m_lineTop->y() - m_sprite->topEdge());
 }
 
 void K3bDivxPreview::setLeftLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setLeftLine)" << endl;
-    offset = (int) offset/m_imageScale;
+    offset = (int)( (float)offset/m_imageScale );
     int old = (int) m_lineLeft->x();
     m_lineLeft->setX( m_sprite->leftEdge() + offset );
     repaintContents( old, 0, 2, visibleHeight() ); // old line
     repaintContents( m_sprite->leftEdge()+offset, 0, 2, visibleHeight() ); // new line
-    m_offsetLeft = m_lineLeft->x() - m_sprite->leftEdge();
+    m_offsetLeft = (int)(m_lineLeft->x() - m_sprite->leftEdge());
 }
 
 void K3bDivxPreview::setBottomLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setBottomLine)" << endl;
-    offset = (int) offset/m_imageScale;
+    offset = (int)( (float)offset/m_imageScale );
     int old = (int) m_lineBottom->y();
     m_lineBottom->setY( m_sprite->bottomEdge() - offset );
     repaintContents( 0, old, visibleWidth(), 2 ); // old line
     repaintContents( 0, m_sprite->bottomEdge()-offset, visibleWidth(), 2 ); // new line
-    m_offsetBottom = m_sprite->bottomEdge() - m_lineBottom->y();
+    m_offsetBottom = (int)(m_sprite->bottomEdge() - m_lineBottom->y());
 }
 
 void K3bDivxPreview::setRightLine( int offset ){
     kdDebug() << "(K3bDivxPreview::setRightLine)" << endl;
-    offset = (int) offset/m_imageScale;
-    int old = m_lineRight->x();
+    offset = (int)( (float)offset/m_imageScale );
+    int old = (int)m_lineRight->x();
     m_lineRight->setX( m_sprite->rightEdge() - offset );
     repaintContents( old, 0, 2, visibleHeight() ); // old line
     repaintContents( m_sprite->rightEdge()-offset, 0, 2, visibleHeight() ); // new line
-    m_offsetRight = m_sprite->rightEdge() - m_lineRight->x();
+    m_offsetRight = (int)(m_sprite->rightEdge() - m_lineRight->x());
 }
 
 #include "k3bdivxpreview.moc"

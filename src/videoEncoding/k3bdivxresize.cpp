@@ -64,19 +64,19 @@ correct the height of the video to fit it."));
     QWhatsThis::add( groupSize, i18n("The aspect ratio error shows the difference from the original aspect ratio. If cropping is used, the apsect \
 ratio error shows the difference from the \"best match\" aspect ratio (i.e. 4:3, 16:9 or letterbox 1:2.35). To correct the aspect ratio manually change \
 the height."));
-    QLabel *width = new QLabel( i18n("Width:"), groupSize );
+    (void)new QLabel( i18n("Width:"), groupSize );
     m_labelWidth = new QLabel( "", groupSize );
-    QLabel *height = new QLabel( i18n("Height:"), groupSize );
+    (void)new QLabel( i18n("Height:"), groupSize );
     m_comboHeight = new KComboBox( groupSize );
     QStringList heights;
     for( int i=576; i > 63; i=i-8){
         heights << QString::number( i );
     }
     m_comboHeight->insertStringList( heights );
-    QLabel *aspectRatio = new QLabel( i18n("Aspect ratio:"), groupSize);
+    (void)new QLabel( i18n("Aspect ratio:"), groupSize);
     m_labelAspectRatio = new QLabel( "", groupSize );
 
-    QLabel *aspectError = new QLabel( i18n("Aspect ratio error:"), groupSize );
+    (void)new QLabel( i18n("Aspect ratio error:"), groupSize );
     m_labelAspectError = new QLabel( "", groupSize );
 
     QFrame* line = new QFrame( this, "line" );

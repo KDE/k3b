@@ -106,8 +106,8 @@ picture only to cut off black borders." ) );
     //m_tcDvdModeGroup->layout() ->setSpacing( KDialog::spacingHint() );
     tcDvdModeGroup->layout() ->setMargin( KDialog::marginHint() );
     //m_tcDvdModeGroup->setFrameStyle( Plain | NoFrame );
-    QRadioButton *vobmode = new QRadioButton( i18n( "Read data from VOB-files", "VOB" ), tcDvdModeGroup );
-    QRadioButton *dvdmode = new QRadioButton( i18n( "Read data in form of DVD", "DVD" ), tcDvdModeGroup );
+    (void)new QRadioButton( i18n( "Read data from VOB-files", "VOB" ), tcDvdModeGroup );
+    (void)new QRadioButton( i18n( "Read data in form of DVD", "DVD" ), tcDvdModeGroup );
     tcDvdModeGroup->setButton( 0 );
 
     QString wt_transcodemode = i18n( "Input mode of transcode given by parameter -x." );
@@ -151,7 +151,7 @@ Values greater than 0.15 are adequate for letterbox movies. For 16:9 you should 
     rightLayout->addMultiCellWidget( groupFinal, 3, 3, 0, 0 );
     rightLayout->setRowStretch( 4, 20 );
 
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    (void)new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     mainLayout->addMultiCellWidget( m_preview, 0, 3, 0, 1 );
     mainLayout->addMultiCellWidget( m_sliderPreview, 4, 4, 0, 1 );
     mainLayout->addMultiCellWidget( rightColGroup, 0, 4, 2, 2 );
@@ -348,7 +348,7 @@ void K3bDivxCrop::slotUpdateFinalSize() {
     emit cropChanged();
 }
 
-void K3bDivxCrop::slotPreviewChanged( int v ) {
+void K3bDivxCrop::slotPreviewChanged( int ) {
     kdDebug( ) << "(K3bDivxCrop::slotPreviewChanged)" << endl;
     if ( m_tcDvdModeChanged ) {
         m_tcDvdModeChanged = false;
