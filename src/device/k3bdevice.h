@@ -219,6 +219,11 @@ namespace K3bCdDevice
     DiskInfo diskInfo();
 
     /**
+    *  returnes the discType from the Full-TOC mmc-command.
+    */
+    int tocType();
+
+    /**
      *  returns the number of sessions on disk
      */
     int numSessions();

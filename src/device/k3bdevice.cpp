@@ -343,6 +343,9 @@ K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
   if ( isDVD() )
     ret =  K3bDiskInfo::DVD;
 
+  if (tocType() == 32)  
+    kdDebug() << "(K3bCdDevice) CD_XA disc found !" << endl; 
+
   if( needToClose )
     close();
   return ret;
@@ -625,6 +628,64 @@ int K3bCdDevice::CdDevice::numSessions()
     ret = dat[3];
   else
     kdDebug() << "(K3bCdDevice) could not get session info !" << endl;
+
+  if( needToClose )
+    close();
+  return ret;
+}
+
+int K3bCdDevice::CdDevice::tocType()
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+  int ret=-1;
+  if (open() < 0)
+    return ret;
+
+  struct cdrom_generic_command cmd;
+  unsigned char dat[15];
+
+  ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+  ::memset(dat,0,15);
+  cmd.cmd[0] = GPCMD_READ_TOC_PMA_ATIP;
+  // Format Field: 0-TOC, 1-Session Info, 2-Full TOC, 3-PMA, 4-ATIP, 5-CD-TEXT
+  cmd.cmd[1] = 2;
+  cmd.cmd[2] = 2;
+  cmd.cmd[8] = 15;
+  cmd.buffer = dat;
+  cmd.buflen = 15;
+  cmd.data_direction = CGC_DATA_READ;
+  //
+  // Full Toc
+  // ============
+  // Byte 0-1: Data Length
+  // Byte   2: First Complete Session Number (Hex) - always 1
+  // Byte   3: Last Complete Session Number (Hex)
+  //   TOC Track Descriptors
+  // Byte   4: Session Number
+  // Byte   5: ADR | CTRL
+  // Byte   6: TNO
+  // Byte   7; POINT
+  // Byte   8: Min
+  // Byte   9: Sec
+  // Byte  10: Frame
+  // Byte  11: Zero
+  // Byte  12: PMIN
+  // Byte  13: PSEC
+  // Byte  14: PFRAME
+  //
+  // We are interested in POINT A0 (always first) PSEC field
+  // 0x00 - CD_DA or CD_ROM
+  // 0x10 - CD-I
+  // 0x20 - CD_XA
+  //
+  if( ::ioctl(d->deviceFd,CDROM_SEND_PACKET,&cmd) == 0 ) 
+    if ( dat[7] == 0xA0 )
+      ret = dat[13];
+    else
+      kdDebug() << "(K3bCdDevice) could not get toc type !" << endl;
 
   if( needToClose )
     close();
