@@ -79,7 +79,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 
 
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-  if ( writingApp() == K3b::DEFAULT && cdrecordBin->hasFeature("cuefile") )
+  if ( writingApp() == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") )
         setWritingApp( K3b::CDRECORD );
 
   if ( writingApp() == K3b::CDRDAO || writingApp() == K3b::DEFAULT ) {

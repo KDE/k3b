@@ -654,7 +654,7 @@ void K3bMixedJob::addDataTrack( K3bCdrecordWriter* writer )
 {
   // add data track
   if(  m_usedDataMode == K3b::MODE2 ) {
-    if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+    if( k3bcore->externalBinManager()->binObject("cdrecord") && (k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) ))
       writer->addArgument( "-xa" );
     else
       writer->addArgument( "-xa1" );
@@ -866,116 +866,118 @@ void K3bMixedJob::removeBufferFiles()
 
 void K3bMixedJob::determineWritingMode()
 {
-  // at first we determine the data mode
-  // --------------------------------------------------------------
-  if( m_doc->dataDoc()->dataMode() == K3b::DATA_MODE_AUTO ) {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
-      m_usedDataMode = K3b::MODE2;
+    // at first we determine the data mode
+    // --------------------------------------------------------------
+    if( m_doc->dataDoc()->dataMode() == K3b::DATA_MODE_AUTO ) {
+        if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+            m_usedDataMode = K3b::MODE2;
+        else
+            m_usedDataMode = K3b::MODE1;
+    }
     else
-      m_usedDataMode = K3b::MODE1;
-  }
-  else
-    m_usedDataMode = m_doc->dataDoc()->dataMode();
+        m_usedDataMode = m_doc->dataDoc()->dataMode();
 
 
+    if ( k3bcore->externalBinManager()->binObject("cdrecord") )
+    {
+        // we try to use cdrecord if possible
+        bool cdrecordOnTheFly =
+            k3bcore->externalBinManager()->binObject("cdrecord")->version
+            >= K3bVersion( 2, 1, -1, "a13" );
+        bool cdrecordCdText =
+            k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+        bool cdrecordUsable =
+            !( !cdrecordOnTheFly && m_doc->onTheFly() ) &&
+            !( m_doc->audioDoc()->cdText() &&
+               // the inf-files we use do only support artist and title in the global section
+               ( !m_doc->audioDoc()->arranger().isEmpty() ||
+                 !m_doc->audioDoc()->songwriter().isEmpty() ||
+                 !m_doc->audioDoc()->composer().isEmpty() ||
+                 !m_doc->audioDoc()->cdTextMessage().isEmpty() ||
+                 !cdrecordCdText )
+                );
 
-  // we try to use cdrecord if possible
-  bool cdrecordOnTheFly =
-    k3bcore->externalBinManager()->binObject("cdrecord")->version
-    >= K3bVersion( 2, 1, -1, "a13" );
-  bool cdrecordCdText =
-    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
-  bool cdrecordUsable =
-    !( !cdrecordOnTheFly && m_doc->onTheFly() ) &&
-    !( m_doc->audioDoc()->cdText() &&
-       // the inf-files we use do only support artist and title in the global section
-       ( !m_doc->audioDoc()->arranger().isEmpty() ||
-	 !m_doc->audioDoc()->songwriter().isEmpty() ||
-	 !m_doc->audioDoc()->composer().isEmpty() ||
-	 !m_doc->audioDoc()->cdTextMessage().isEmpty() ||
-	 !cdrecordCdText )
-       );
+
+        // Writing Application
+        // --------------------------------------------------------------
+        // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
+        if( writingApp() == K3b::DEFAULT ) {
+            if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+                if( m_doc->writingMode() == K3b::DAO ||
+                    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO && !cdrecordUsable ) ) {
+                    m_usedAudioWritingApp = K3b::CDRDAO;
+                    m_usedDataWritingApp = K3b::CDRDAO;
+                }
+                else {
+                    m_usedAudioWritingApp = K3b::CDRECORD;
+                    m_usedDataWritingApp = K3b::CDRECORD;
+                }
+            }
+            else {
+                if( cdrecordUsable ) {
+                    m_usedAudioWritingApp = K3b::CDRECORD;
+                    m_usedDataWritingApp = K3b::CDRECORD;
+                }
+                else {
+                    m_usedAudioWritingApp = K3b::CDRDAO;
+                    m_usedDataWritingApp = K3b::CDRDAO;
+                }
+            }
+        }
+        else {
+            m_usedAudioWritingApp = writingApp();
+            m_usedDataWritingApp = writingApp();
+        }
 
 
-  // Writing Application
-  // --------------------------------------------------------------
-  // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
-  if( writingApp() == K3b::DEFAULT ) {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( m_doc->writingMode() == K3b::DAO ||
-	  ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO && !cdrecordUsable ) ) {
-	m_usedAudioWritingApp = K3b::CDRDAO;
-	m_usedDataWritingApp = K3b::CDRDAO;
-      }
-      else {
-	m_usedAudioWritingApp = K3b::CDRECORD;
-	m_usedDataWritingApp = K3b::CDRECORD;
-      }
+        // Writing Mode (TAO/DAO/RAW)
+        // --------------------------------------------------------------
+        if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+
+            if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+                if( m_usedDataWritingApp == K3b::CDRECORD )
+                    m_usedDataWritingMode = K3b::TAO;
+                else
+                    m_usedDataWritingMode = K3b::DAO;
+
+                // default to Session at once for the audio part
+                m_usedAudioWritingMode = K3b::DAO;
+            }
+            else {
+                m_usedDataWritingMode = K3b::DAO;
+                m_usedAudioWritingMode = K3b::DAO;
+            }
+        }
+        else {
+            m_usedAudioWritingMode = m_doc->writingMode();
+            m_usedDataWritingMode = m_doc->writingMode();
+        }
+
+
+        if( m_usedDataWritingApp == K3b::CDRECORD ) {
+            if( !cdrecordOnTheFly && m_doc->onTheFly() ) {
+                m_doc->setOnTheFly( false );
+                emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
+            }
+
+            if( m_doc->audioDoc()->cdText() ) {
+                if( !cdrecordCdText ) {
+                    m_doc->audioDoc()->writeCdText( false );
+                    emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+                }
+                else {
+                    if( !m_doc->audioDoc()->arranger().isEmpty() )
+                        emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
+                    if( !m_doc->audioDoc()->songwriter().isEmpty() )
+                        emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
+                    if( !m_doc->audioDoc()->composer().isEmpty() )
+                        emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
+                    if( !m_doc->audioDoc()->cdTextMessage().isEmpty() )
+                        emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
+                }
+            }
+        }
     }
-    else {
-      if( cdrecordUsable ) {
-	m_usedAudioWritingApp = K3b::CDRECORD;
-	m_usedDataWritingApp = K3b::CDRECORD;
-      }
-      else {
-	m_usedAudioWritingApp = K3b::CDRDAO;
-	m_usedDataWritingApp = K3b::CDRDAO;
-      }
-    }
-  }
-  else {
-    m_usedAudioWritingApp = writingApp();
-    m_usedDataWritingApp = writingApp();
-  }
-
-
-  // Writing Mode (TAO/DAO/RAW)
-  // --------------------------------------------------------------
-  if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
-
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( m_usedDataWritingApp == K3b::CDRECORD )
-	m_usedDataWritingMode = K3b::TAO;
-      else
-	m_usedDataWritingMode = K3b::DAO;
-
-      // default to Session at once for the audio part
-      m_usedAudioWritingMode = K3b::DAO;
-    }
-    else {
-      m_usedDataWritingMode = K3b::DAO;
-      m_usedAudioWritingMode = K3b::DAO;
-    }
-  }
-  else {
-    m_usedAudioWritingMode = m_doc->writingMode();
-    m_usedDataWritingMode = m_doc->writingMode();
-  }
-
-
-  if( m_usedDataWritingApp == K3b::CDRECORD ) {
-    if( !cdrecordOnTheFly && m_doc->onTheFly() ) {
-      m_doc->setOnTheFly( false );
-      emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
-    }
-
-    if( m_doc->audioDoc()->cdText() ) {
-      if( !cdrecordCdText ) {
-	m_doc->audioDoc()->writeCdText( false );
-	emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
-      }
-      else {
-	if( !m_doc->audioDoc()->arranger().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album arranger CD-Text with cdrecord."), ERROR );
-	if( !m_doc->audioDoc()->songwriter().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album songwriter CD-Text with cdrecord."), ERROR );
-	if( !m_doc->audioDoc()->composer().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album composer CD-Text with cdrecord."), ERROR );
-	if( !m_doc->audioDoc()->cdTextMessage().isEmpty() )
-	  emit infoMessage( i18n("K3b does not support Album comment CD-Text with cdrecord."), ERROR );
-      }
-    }
-  }
 }
 
 
