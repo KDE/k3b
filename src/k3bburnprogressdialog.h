@@ -23,6 +23,7 @@
 #include <qvariant.h>
 #include <qmap.h>
 #include <qstringlist.h>
+#include <qdatetime.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -39,6 +40,8 @@ class K3bJob;
 class KCutLabel;
 class QCloseEvent;
 class KSystemTray;
+
+
 
 /**
   *@author Sebastian Trueg
@@ -113,7 +116,7 @@ class K3bBurnProgressDialog : public KDialog  {
  private:
   K3bJob* m_job;
   QTimer* m_timer;
-  int m_time;
+  QTime m_startTime;
 
   QMap<QString, QStringList> m_debugOutputMap;
 

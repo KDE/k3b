@@ -427,24 +427,15 @@ void K3bBurnProgressDialog::slotNewTask(const QString& name)
 void K3bBurnProgressDialog::started()
 {
   m_timer->start( 1000 );
-  m_time = 0;
+  m_startTime = QTime::currentTime();
 }
 
 
 void K3bBurnProgressDialog::slotUpdateTime()
 {
-  m_time++;
-  int min = m_time / 60;
-  int sec = m_time % 60;
-	
-  QString timeStr = QString::number(sec);
-  if( sec < 10 )
-    timeStr = "0" + timeStr;
-  timeStr = QString::number(min) + ":" + timeStr;
-  if( min < 10 )
-    timeStr = "0" + timeStr;	
-		
-  m_labelCdTime->setText( i18n("Overall progress (%1)").arg(timeStr) );	
+  int elapsed = m_startTime.secsTo( QTime::currentTime() );
+
+  m_labelCdTime->setText( i18n("Overall progress (%1)").arg( QTime().addSecs(elapsed).toString() ) );	
 }
 
 
