@@ -81,8 +81,8 @@ void K3bMsInfoFetcher::slotProcessExited()
   QStringList list = QStringList::split( ",",  firstLine );
   if( list.count() == 2 ) {
     bool ok1, ok2;
-    list.first().toInt( &ok1 );
-    list[1].toInt( &ok2 );
+    m_lastSessionStart = list.first().toInt( &ok1 );
+    m_nextSessionStart = list[1].toInt( &ok2 );
     if( ok1 && ok2 )
       m_msInfo = firstLine.stripWhiteSpace();
     else

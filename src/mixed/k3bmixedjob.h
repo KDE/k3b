@@ -101,6 +101,8 @@ class K3bMixedJob : public K3bBurnJob
 
   int m_fifo;
   bool m_usingFifo;
+
+  int m_usedWritingApp;
 };
 
 #endif

@@ -95,6 +95,14 @@ void K3bDataJob::start()
   m_canceled = false;
   m_imageFinished = false;
 
+
+  if( writingApp() == K3b::CDRECORD || 
+      (writingApp() == K3b::DEFAULT && !(m_doc->dao() && !m_doc->multiSessionMode() == K3bDataDoc::NONE)) )
+    m_usedWritingApp = K3b::CDRECORD;
+  else 
+    m_usedWritingApp = K3b::CDRDAO;
+
+
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
     m_msInfoFetcher->setDevice( m_doc->burner() );
@@ -118,12 +126,15 @@ void K3bDataJob::slotMsInfoFetched(bool success)
     return;
 
   if( success ) {
-    m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo(), m_doc->burner() );
+    if( m_usedWritingApp == K3b::CDRECORD )
+      m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo(), m_doc->burner() );
+    else  // cdrdao seems to write a 150 blocks pregap that is not used by cdrecord
+      m_isoImager->setMultiSessionInfo( QString("%1,%2").arg(m_msInfoFetcher->lastSessionStart()).arg(m_msInfoFetcher->nextSessionStart()+150), m_doc->burner() );
+
     writeImage();
   }
   else {
-    emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
-    emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
+    // the MsInfoFetcher already emitted failure info
     cancelAll();
   }
 }
@@ -324,12 +335,15 @@ bool K3bDataJob::prepareWriterJob()
     delete m_writerJob;
 
   // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
-  if( writingApp() == K3b::CDRECORD || 
-      (writingApp() == K3b::DEFAULT && !(m_doc->dao() && !m_doc->multiSessionMode() == K3bDataDoc::NONE)) )  {
+  if( m_usedWritingApp == K3b::CDRECORD )  {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
     // cdrecord manpage says that "not all" writers are able to write
     // multisession disks in dao mode. That means there are writers that can.
+
+    // Does it really make sence to write DAta ms cds in DAO mode since writing the
+    // first session of a cd-extra in DAO mode is no problem with my writer while
+    // writing the second data session is only possible in TAO mode.
     writer->setDao( m_doc->dao() );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
@@ -394,7 +408,7 @@ bool K3bDataJob::prepareWriterJob()
       if( m_doc->onTheFly() )
 	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
       else
-	*s << "DATAFILE \"" << m_doc->isoImage() << "\" 0 \n";
+	*s << "DATAFILE \"" << m_doc->isoImage() << "\"\n";
 
       m_tocFile->close();
     }

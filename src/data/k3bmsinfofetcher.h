@@ -16,6 +16,8 @@ class K3bMsInfoFetcher : public K3bJob
   ~K3bMsInfoFetcher();
 
   const QString& msInfo() const { return m_msInfo; }
+  int lastSessionStart() const { return m_lastSessionStart; }
+  int nextSessionStart() const { return m_nextSessionStart; }
 
  public slots:
   void start();
@@ -29,6 +31,8 @@ class K3bMsInfoFetcher : public K3bJob
 
  private:
   QString m_msInfo;
+  int m_lastSessionStart;
+  int m_nextSessionStart;
   QString m_collectedOutput;
 
   KProcess* m_process;

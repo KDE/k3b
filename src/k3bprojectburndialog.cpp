@@ -24,7 +24,7 @@
 #include "k3bwriterselectionwidget.h"
 #include "k3bstdguiitems.h"
 #include "device/k3bdevice.h"
-
+#include "tools/k3bglobals.h"
 
 #include <qstring.h>
 #include <qpushbutton.h>
@@ -126,6 +126,24 @@ void K3bProjectBurnDialog::slotWriterChanged()
   }
   else
     actionButton(Ok)->setDisabled(true);
+}
+
+
+void K3bProjectBurnDialog::slotWritingAppChanged( int app )
+{
+  if( app == K3b::CDRDAO ) {
+    // no possibility to disable burnfree yet
+    m_checkBurnproof->setEnabled(false);
+    m_checkBurnproof->setChecked(true);
+
+    // cdrdao only writes in DAO mode
+    m_checkDao->setEnabled(false);
+    m_checkDao->setChecked(true);
+  }
+  else {
+    m_checkBurnproof->setEnabled(true);
+    m_checkDao->setEnabled(true);
+  }
 }
 
 
@@ -248,6 +266,7 @@ void K3bProjectBurnDialog::prepareGui()
 
   // some default connections that should always be useful
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWriterSettingsChanged()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_checkRemoveBufferFiles, SLOT(setDisabled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), m_tempDirSelectionWidget, SLOT(setDisabled(bool)) );
 

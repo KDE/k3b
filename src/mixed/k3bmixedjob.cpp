@@ -121,6 +121,14 @@ void K3bMixedJob::start()
   m_doc->audioDoc()->setOnTheFly( m_doc->onTheFly() );  // for the toc writer
   m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
+
+  if( writingApp() == K3b::CDRECORD ||
+      ( writingApp() == K3b::DEFAULT && !m_doc->dao() ) )
+    m_usedWritingApp = K3b::CDRECORD;
+  else
+    m_usedWritingApp = K3b::CDRDAO;
+
+
   // depending on the mixed type and if it's onthefly or not we
   // decide what to do first
 
@@ -182,7 +190,11 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
     return;
 
   if( success ) {
-    m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
+    if( m_usedWritingApp == K3b::CDRECORD )
+      m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
+    else  // cdrdao seems to write a 150 blocks pregap that is not used by cdrecord
+      m_isoImager->setMultiSessionInfo( QString("%1,%2").arg(m_msInfoFetcher->lastSessionStart()).arg(m_msInfoFetcher->nextSessionStart()+150) );
+
     if( m_doc->onTheFly() ) {
       m_isoImager->calculateSize();
     }
@@ -431,12 +443,13 @@ bool K3bMixedJob::prepareWriter()
 {
   if( m_writer ) delete m_writer;
 
-  if( writingApp() == K3b::CDRECORD ||
-      ( writingApp() == K3b::DEFAULT && !m_doc->dao() ) ) {
+  if( m_usedWritingApp == K3b::CDRECORD ) {
 
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this );
 
-    writer->setDao( m_doc->dao() );
+    // only write the audio tracks in DAO mode
+    writer->setDao( m_doc->dao() && (m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION 
+				     || m_currentAction == WRITING_AUDIO_IMAGE) );
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnproof( m_doc->burnproof() );
     writer->setBurnSpeed( m_doc->speed() );
@@ -537,7 +550,7 @@ bool K3bMixedJob::writeTocFile()
 	if( m_doc->onTheFly() )
 	  *s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
 	else
-	  *s << "DATAFILE \"" << m_isoImageFile->name() << "\" 0 \n";
+	  *s << "DATAFILE \"" << m_isoImageFile->name() << "\"\n";
       }
     }
     else {
@@ -562,6 +575,10 @@ bool K3bMixedJob::writeTocFile()
 	K3bAudioTocfileWriter::writeAudioToc( m_doc->audioDoc(), *s );
     }
     m_tocFile->close();
+
+
+    // debugging
+    KIO::NetAccess::copy( m_tocFile->name(), k3bMain()->findTempFile( "toc" ) );
 
     return true;
   }
