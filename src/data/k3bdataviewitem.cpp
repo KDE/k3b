@@ -71,20 +71,16 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
 K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
   : K3bDataViewItem( parent )
 {
-  assert( dir );
-
   m_dirItem = dir;
-  setPixmap( 0, KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) );
+  setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
 }
 
 
 K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
   : K3bDataViewItem( parent )
 {
-  assert( dir );
-
   m_dirItem = dir;
-  setPixmap( 0, KMimeType::pixmapForURL( KURL( "/" ), 0, KIcon::Small ) );
+  setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
 }
 
 
@@ -98,7 +94,13 @@ K3bDataDirViewItem::~K3bDataDirViewItem()
 {
 }
 
-	
+
+void K3bDataDirViewItem::dragEntered()
+{
+  setOpen( true );
+}
+
+
 QString K3bDataDirViewItem::text( int index ) const
 {
   switch( index ) {
@@ -135,8 +137,6 @@ QString K3bDataDirViewItem::key( int col, bool a ) const
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
   : K3bDataViewItem( parent )
 {
-  assert( file );
-
   m_fileItem = file;
   setPixmap( 0, file->pixmap(16) );
 }
@@ -145,8 +145,6 @@ K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
   : K3bDataViewItem( parent )
 {
-  assert( file );
-	
   m_fileItem = file;
   setPixmap( 0, file->pixmap(16) );
 }

@@ -79,6 +79,7 @@ class K3bDataJob : public K3bBurnJob
   bool addMkisofsParameters();
   bool writePathSpec( const QString& filename );
   bool writeRRHideFile( const QString& filename );
+  bool writeJolietHideFile( const QString& filename );
 };
 
 #endif

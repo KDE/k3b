@@ -246,7 +246,7 @@ void K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
   }
 
   K3bDirItem* newDirItem = new K3bDirItem( newName, this, parent );
-  
+
   KConfig* c = kapp->config();
   c->setGroup( "Data project settings" );
 
@@ -937,7 +937,7 @@ void K3bDataDoc::informAboutNotFoundFiles()
   // -----------------------------------------------------------------------
   if( !m_mkisofsBuggyFiles.isEmpty() ) {
     KStringListDialog d( m_mkisofsBuggyFiles, i18n("Sorry"), i18n("Due to a bug in mkisofs K3b is not able to handle "
-								  "filenames that contain one or more backslashes:"), 
+								  "filenames that contain more than one backslash:"), 
 			 true, k3bMain() );
     d.exec();
 
@@ -957,6 +957,9 @@ void K3bDataDoc::loadDefaultSettings()
   setDao( c->readBoolEntry( "dao", true ) );
   setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
   setBurnproof( c->readBoolEntry( "burnproof", true ) );
+  setForceInputCharset( c->readBoolEntry( "force input charset", false ) );
+  if( forceInputCharset() )
+    setInputCharset( c->readEntry( "input charset", "iso8859-1" ) );
 
   m_createRockRidge = c->readBoolEntry( "rock_ridge", true );
   m_createJoliet = c->readBoolEntry( "joliet", false );
@@ -973,6 +976,22 @@ void K3bDataDoc::loadDefaultSettings()
     m_whiteSpaceTreatment = K3bDataDoc::extendedStrip;
   else
     m_whiteSpaceTreatment = K3bDataDoc::normal;
+
+  c->setGroup( "Default ISO Settings" );
+  m_noDeepDirectoryRelocation = c->readBoolEntry( "no deep dir relocation", false );
+  //  m_isoPadding = c->readBoolEntry( "padding", false );
+  m_hideRR_MOVED = c->readBoolEntry( "hide RR_MOVED", false );
+  m_createTRANS_TBL = c->readBoolEntry( "create TRANS_TBL", false );
+  m_hideTRANS_TBL = c->readBoolEntry( "hide TRANS_TBL", false );
+  m_ISOuntranslatedFilenames = c->readBoolEntry( "untranslated filenames", false );
+  m_ISOallow31charFilenames = c->readBoolEntry( "allow 31 character filenames", false );
+  m_ISOmaxFilenameLength = c->readBoolEntry( "max ISO filenames", false );
+  m_ISOallowPeriodAtBegin = c->readBoolEntry( "allow beginning period", false );
+  m_ISOrelaxedFilenames = c->readBoolEntry( "relaxed filenames", false );
+  m_ISOomitVersionNumbers = c->readBoolEntry( "omit version numbers", false );
+  m_ISOnoIsoTranslate = c->readBoolEntry( "no iSO translation", false );
+  m_ISOallowMultiDot = c->readBoolEntry( "allow multible dots", false );
+  m_ISOallowLowercase = c->readBoolEntry( "allow lowercase filenames", false );
 }
 
 

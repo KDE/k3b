@@ -92,6 +92,15 @@ void K3bDataJob::start()
     }
   }
 
+  if( m_doc->createJoliet() ) {
+    m_jolietHideFile = locateLocal( "appdata", "temp/k3b_joliet_hide.mkisofs" );
+    if( !writeJolietHideFile( m_jolietHideFile ) ) {
+      emit infoMessage( i18n("Could not write to temporary file %1").arg( m_rrHideFile ), K3bJob::ERROR );
+      cancelAll();
+      return;
+    }
+  }
+
   if( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_doc->multiSessionMode() == K3bDataDoc::FINISH ) {
     fetchMultiSessionInfo();
@@ -821,8 +830,10 @@ bool K3bDataJob::addMkisofsParameters()
     *m_process << "-hide-list" << m_rrHideFile;
   }
 
-  if( m_doc->createJoliet() )
+  if( m_doc->createJoliet() ) {
     *m_process << "-J";
+    *m_process << "-hide-joliet-list" << m_jolietHideFile;
+  }
 
   if( m_doc->ISOuntranslatedFilenames()  ) {
     *m_process << "-U";
@@ -923,6 +934,11 @@ bool K3bDataJob::writePathSpec( const QString& filename )
 
 void K3bDataJob::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
+  if( dirItem->depth() > 7 ) {
+    kdDebug() << "(K3bDataJob) found directory depth > 7. Enabling no deep directory relocation." << endl;
+    m_doc->setNoDeepDirectoryRelocation( true );
+  }
+
   // if joliet is enabled we need to cut long names since mkisofs is not able to do it
 
   if( m_doc->createJoliet() ) {
@@ -1027,19 +1043,42 @@ bool K3bDataJob::writeRRHideFile( const QString& filename )
   K3bDataItem* item = m_doc->root();
   while( item ) {
     if( item->hideOnRockRidge() ) {
-      stream << escapeGraftPoint( item->localPath() ) << "\n";
-      if( item->isDir() ) {
-	K3bDirItem* parent = item->parent();
-	if( parent )
-	  item = parent->nextChild( item );
-	else 
-	  item = 0;
-      }
-      else
-	item = item->nextSibling();
+      if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
+	stream << escapeGraftPoint( item->localPath() ) << "\n";
+//       if( item->isDir() ) {
+// 	K3bDirItem* parent = item->parent();
+// 	if( parent )
+// 	  item = parent->nextChild( item );
+// 	else 
+// 	  item = 0;
+//       }
+//       else
+//	item = item->nextSibling();
     }
-    else
+    //    else
       item = item->nextSibling();
+  }
+
+  file.close();
+  return true;
+}
+
+
+bool K3bDataJob::writeJolietHideFile( const QString& filename )
+{
+  QFile file( filename );
+  if( !file.open( IO_WriteOnly ) )
+    return false;
+
+  QTextStream stream( &file );
+
+  K3bDataItem* item = m_doc->root();
+  while( item ) {
+    if( item->hideOnRockRidge() ) {
+      if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
+	stream << escapeGraftPoint( item->localPath() ) << "\n";
+    }
+    item = item->nextSibling();
   }
 
   file.close();

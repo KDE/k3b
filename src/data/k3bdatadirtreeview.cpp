@@ -23,6 +23,7 @@
 #include "k3bisovalidator.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdataviewitem.h"
+#include "../k3b.h"
 
 #include <qdragobject.h>
 #include <qheader.h>
@@ -31,6 +32,7 @@
 #include <kaction.h>
 #include <kurldrag.h>
 #include <klineeditdlg.h>
+#include <kiconloader.h>
 
 #include "../klistviewlineedit.h"
 #include <kdebug.h>
@@ -206,6 +208,16 @@ void K3bDataDirTreeView::updateContents()
       item = item->nextSibling();
     }
 
+
+  // check the directory depth
+  QListViewItemIterator it(this);
+  while( it.current() != 0 ) {
+    K3bDirItem* dirItem = ((K3bDataDirViewItem*)it.current())->dirItem();
+    it.current()->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+    
+    ++it;
+  }
+
   // always show the first level
   m_root->setOpen( true );
 }
@@ -256,6 +268,8 @@ void K3bDataDirTreeView::setupActions()
   m_popupMenu->insert( m_actionNewDir );
   m_popupMenu->insert( new KActionSeparator( this ) );
   m_popupMenu->insert( m_actionProperties );
+  m_popupMenu->insert( new KActionSeparator( this ) );
+  m_popupMenu->insert( k3bMain()->actionCollection()->action("file_burn") );
 }
 
 
@@ -288,7 +302,8 @@ void K3bDataDirTreeView::slotNewDir()
 				  "New directory", &ok, this );
     
     while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
-      name = KLineEditDlg::getText( i18n("A file with that name already exists.\nPlease insert the name for the new directory"),
+      name = KLineEditDlg::getText( i18n("A file with that name already exists. ")
+				    + i18n("Please insert the name for the new directory"),
 				    "New directory", &ok, this );
     }
     

@@ -25,6 +25,7 @@
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdataviewitem.h"
+#include "../k3b.h"
 
 #include "../klistviewlineedit.h"
 
@@ -239,6 +240,8 @@ void K3bDataFileView::setupActions()
   m_popupMenu->insert( m_actionNewDir );
   m_popupMenu->insert( new KActionSeparator( this ) );
   m_popupMenu->insert( m_actionProperties );
+  m_popupMenu->insert( new KActionSeparator( this ) );
+  m_popupMenu->insert( k3bMain()->actionCollection()->action("file_burn") );
 }
 
 
@@ -272,7 +275,8 @@ void K3bDataFileView::slotNewDir()
 				"New directory", &ok, this );
 
   while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
-    name = KLineEditDlg::getText( i18n("A file with that name already exists.\nPlease insert the name for the new directory"),
+    name = KLineEditDlg::getText( i18n("A file with that name already exists. ")
+				  + i18n("Please insert the name for the new directory"),
 				  "New directory", &ok, this );
   }
 

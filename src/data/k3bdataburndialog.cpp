@@ -715,6 +715,8 @@ void K3bDataBurnDialog::loadDefaults()
 
   m_radioSpaceLeave->setChecked(true);
 
+  m_checkForceInputCharset->setChecked( false );
+  m_comboInputCharset->setEditText( "iso8859-1" );
 
   m_checkNoDeepDirRel->setChecked( false );
   m_checkHideRR_MOVED->setChecked( false );
@@ -770,6 +772,9 @@ void K3bDataBurnDialog::loadUserDefaults()
   else
     m_radioSpaceLeave->setChecked(true);
 
+  m_checkForceInputCharset->setChecked( c->readBoolEntry( "force input charset", false ) );
+  m_comboInputCharset->setEditText( c->readEntry( "input charset", "iso8859-1" ) );
+
 
   kapp->config()->setGroup( "Default ISO Settings" );
   m_checkNoDeepDirRel->setChecked( kapp->config()->readBoolEntry( "no deep dir relocation", false ) );
@@ -824,6 +829,8 @@ void K3bDataBurnDialog::saveUserDefaults()
   else
     c->writeEntry( "white_space_treatment", "normal" );
 
+  c->writeEntry( "force input charset", m_checkForceInputCharset->isChecked() );
+  c->writeEntry( "input charset", m_comboInputCharset->currentText() );
 
   kapp->config()->setGroup( "Default ISO Settings" );
   kapp->config()->writeEntry( "no deep dir relocation", m_checkNoDeepDirRel->isChecked( ) );

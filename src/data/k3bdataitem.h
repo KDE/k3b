@@ -68,6 +68,8 @@ class K3bDataItem
   virtual void setHideOnRockRidge( bool b );
   virtual void setHideOnJoliet( bool b );
 
+  virtual int depth() const;
+
  protected:
   QString m_k3bName;
   /**

@@ -46,6 +46,9 @@ class K3bDataDirViewItem : public K3bDataViewItem
    */
   QString key( int, bool ) const;
 
+ protected:
+  virtual void dragEntered();
+
  private:
   K3bDirItem* m_dirItem;
 };

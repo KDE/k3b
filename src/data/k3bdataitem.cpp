@@ -158,3 +158,12 @@ void K3bDataItem::setHideOnJoliet( bool b )
   if( !parent() || !parent()->hideOnJoliet() )
     m_bHideOnJoliet = b;
 }
+
+
+int K3bDataItem::depth() const
+{
+  if( parent() )
+    return parent()->depth() + 1;
+  else
+    return 0;
+}
