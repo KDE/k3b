@@ -16,6 +16,7 @@
   <Menu name="settings">
   	<Action name="view_dir" append="show_merge"/>
   	<Action name="view_audio_player" append="show_merge"/>
+  	<Action name="view_document_header" append="show_merge"/>
 	<Action name="settings_k3bsetup"/>
   </Menu>
 </MenuBar>

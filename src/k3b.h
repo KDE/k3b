@@ -225,6 +225,8 @@ class K3bMainWindow : public KDockMainWindow
    */
   void slotViewStatusBar();
 
+  void slotViewDocumentHeader();
+
   void slotViewAudioPlayer();
   void slotAudioPlayerHidden();
   void slotCheckDockWidgetStatus();
@@ -311,6 +313,7 @@ class K3bMainWindow : public KDockMainWindow
   KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirView;
   KToggleAction* actionViewAudioPlayer;
+  KToggleAction* actionViewDocumentHeader;
 
   KDockWidget* mainDock;
   KDockWidget* dirDock;
@@ -325,6 +328,9 @@ class K3bMainWindow : public KDockMainWindow
 	
   bool m_useID3TagForMp3Renaming;
   bool m_initialized;
+
+  // the funny header
+  QWidget* m_documentHeader;
 };
 
 #endif // K3B_H

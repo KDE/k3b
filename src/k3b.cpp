@@ -181,6 +181,9 @@ void K3bMainWindow::initActions()
   actionViewAudioPlayer = new KToggleAction(i18n("Show Audio Player"), 0, this, SLOT(slotViewAudioPlayer()), 
 					    actionCollection(), "view_audio_player");
 
+  actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()), 
+					       actionCollection(), "view_document_header");
+
   actionToolsBlankCdrw = new KAction(i18n("&Blank CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
 			       actionCollection(), "tools_blank_cdrw" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
@@ -256,9 +259,14 @@ void K3bMainWindow::initView()
   documentHullLayout->setMargin( 0 );
   documentHullLayout->setSpacing( 0 );
 
-  QLabel* leftDocPicLabel = new QLabel( documentHull );
-  QLabel* centerDocLabel = new QLabel( documentHull );
-  QLabel* rightDocPicLabel = new QLabel( documentHull );
+  m_documentHeader = new QWidget( documentHull );
+  QGridLayout* documentHeaderLayout = new QGridLayout( m_documentHeader );
+  documentHeaderLayout->setMargin( 0 );
+  documentHeaderLayout->setSpacing( 0 );
+
+  QLabel* leftDocPicLabel = new QLabel( m_documentHeader );
+  QLabel* centerDocLabel = new QLabel( m_documentHeader );
+  QLabel* rightDocPicLabel = new QLabel( m_documentHeader );
 
   leftDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_left.png" )) );
   rightDocPicLabel->setPixmap( QPixmap(locate( "data", "k3b/pics/k3bprojectview_right.png" )) );
@@ -270,15 +278,17 @@ void K3bMainWindow::initView()
   f.setBold(true);
   centerDocLabel->setFont(f);
 
+  documentHeaderLayout->addWidget( leftDocPicLabel, 0, 0 );
+  documentHeaderLayout->addWidget( centerDocLabel, 0, 1 );
+  documentHeaderLayout->addWidget( rightDocPicLabel, 0, 2 );
+  documentHeaderLayout->setColStretch( 1, 1 );
+
   // add the document tab to the styled document box
   m_documentTab = new K3bProjectTabWidget( documentHull );
   //  m_documentTab->setPalette( oldPal );
 
-  documentHullLayout->addWidget( leftDocPicLabel, 0, 0 );
-  documentHullLayout->addWidget( centerDocLabel, 0, 1 );
-  documentHullLayout->addWidget( rightDocPicLabel, 0, 2 );
-  documentHullLayout->addMultiCellWidget( m_documentTab, 1, 1, 0, 2 );
-  documentHullLayout->setColStretch( 1, 1 );
+  documentHullLayout->addWidget( m_documentHeader, 0, 0 );
+  documentHullLayout->addWidget( m_documentTab, 1, 0 );
 
   mainDock->setWidget( documentHull );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
@@ -396,6 +406,7 @@ void K3bMainWindow::saveOptions()
   m_config->writeEntry("Geometry", size());
   m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
   m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
+  m_config->writeEntry("Show Document Header", m_documentHeader->isVisible());
   m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
   actionFileOpenRecent->saveEntries(m_config,"Recent Files");
 
@@ -422,6 +433,10 @@ void K3bMainWindow::readOptions()
   bool bViewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
   actionViewStatusBar->setChecked(bViewStatusbar);
   slotViewStatusBar();
+
+  bool bViewDocumentHeader = m_config->readBoolEntry("Show Document Header", true);
+  actionViewDocumentHeader->setChecked(bViewDocumentHeader);
+  slotViewDocumentHeader();
 
   // bar position settings
   KToolBar::BarPosition toolBarPos;
@@ -703,27 +718,23 @@ void K3bMainWindow::slotFileQuit()
 void K3bMainWindow::slotViewToolBar()
 {
   // turn Toolbar on or off
-  if(!actionViewToolBar->isChecked())
-    {
-      toolBar("mainToolBar")->hide();
-    }
-  else
-    {
-      toolBar("mainToolBar")->show();
-    }		
+  if(actionViewToolBar->isChecked()) {
+    toolBar("mainToolBar")->show();
+  }
+  else {
+    toolBar("mainToolBar")->hide();
+  }		
 }
 
 void K3bMainWindow::slotViewStatusBar()
 {
   //turn Statusbar on or off
-  if(!actionViewStatusBar->isChecked())
-    {
-      statusBar()->hide();
-    }
-  else
-    {
-      statusBar()->show();
-    }
+  if(actionViewStatusBar->isChecked()) {
+    statusBar()->show();
+  }
+  else {
+    statusBar()->hide();
+  }
 }
 
 
@@ -1033,5 +1044,15 @@ void K3bMainWindow::slotCheckDockWidgetStatus()
   actionViewDirView->setChecked( dirDock->isVisible() );
 }
 
+
+void K3bMainWindow::slotViewDocumentHeader()
+{
+  if(actionViewDocumentHeader->isChecked()) {
+    m_documentHeader->show();
+  }
+  else {
+    m_documentHeader->hide();
+  }		
+}
 
 #include "k3b.moc"
