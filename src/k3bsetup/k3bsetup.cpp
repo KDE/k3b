@@ -260,13 +260,13 @@ void K3bSetup::doApplyDevicePermissions( uint groupId )
   while( dev != 0 ) {
 
     if( dev->interfaceType() == K3bDevice::SCSI ) {
-      if( QFile::exists( dev->genericDevice() ) ) {
-	chown( QFile::encodeName(dev->genericDevice()), 0, groupId );
-	chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
+      if( QFile::exists( dev->blockDeviceName() ) ) {
+	chown( QFile::encodeName(dev->blockDeviceName()), 0, groupId );
+	chmod( QFile::encodeName(dev->blockDeviceName()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP );
       }
       else {
-	kdDebug() << "(K3bSetup) Could not find generic device: " << dev->genericDevice() << endl;
-	emit error( i18n("Could not find generic device (%1)").arg(dev->genericDevice()) );
+	kdDebug() << "(K3bSetup) Could not find generic device: " << dev->blockDeviceName() << endl;
+	emit error( i18n("Could not find generic device (%1)").arg(dev->blockDeviceName()) );
       }
 
       // TODO: serach for additionell devices like scdX, srX
