@@ -420,6 +420,12 @@ void K3bVcdDoc::setVcdType( int type )
       vcdOptions()->setVcdClass("svcd");
       vcdOptions()->setVcdVersion("1.0");
       break;
+    case 3:
+      //hqvcd 1.0
+      vcdOptions()->setVcdClass("hqvcd");
+      vcdOptions()->setVcdVersion("1.0");
+      break;
+
   }
 }
 

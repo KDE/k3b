@@ -58,7 +58,8 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    QRadioButton* m_radioVcd11;
    QRadioButton* m_radioVcd20;
    QRadioButton* m_radioSvcd10;
-
+   QRadioButton* m_radioHqVcd10;
+   
    QGroupBox* m_groupOptions;
    QCheckBox* m_checkAutoDetect;
    QCheckBox* m_checkNonCompliant;
@@ -86,18 +87,31 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    // -----------------------------------------------------------
 
    QGroupBox* m_groupGeneric;
+   QGroupBox* m_groupGaps;
+   QGroupBox* m_groupMisc;
+   
    QCheckBox* m_checkPbc;
    QCheckBox* m_checkSegmentFolder;
    QCheckBox* m_checkRelaxedAps;
    QCheckBox* m_checkUpdateScanOffsets;
+   QCheckBox* m_checkGaps;
 
-   QGroupBox* m_groupMisc;
    QSpinBox* m_spinRestriction;
+   QSpinBox* m_spinPreGapLeadout;
+   QSpinBox* m_spinPreGapTrack;
+   QSpinBox* m_spinFrontMarginTrack;
+   QSpinBox* m_spinRearMarginTrack;
 
+   QLabel* m_labelPreGapLeadout;
+   QLabel* m_labelPreGapTrack;
+   QLabel* m_labelFrontMarginTrack;
+   QLabel* m_labelRearMarginTrack;
+   
    // -----------------------------------------------------------
 
  private:
   K3bVcdDoc* m_vcdDoc;
+  void MarginChecked(bool);
   void saveCdiConfig();
   void loadCdiConfig();
   void loadDefaultCdiConfig();
@@ -109,6 +123,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
    void loadUserDefaults();
    void saveUserDefaults();
 
+   void slotGapsChecked(bool);
    void slotSpinVolumeCount();
    void slotSetImagePath();
    void slotVcdTypeClicked(int);
