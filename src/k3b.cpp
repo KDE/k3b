@@ -930,6 +930,7 @@ void K3bMainWindow::slotCurrentDocChanged( QWidget* )
       actionDataClearImportedSession->setEnabled(true);
       actionDataImportSession->setEnabled(true);
       actionDataEditBootImages->setEnabled(true);
+      unplugActionList( "data_project_actions" );
       plugActionList( "data_project_actions", m_dataProjectActions );
       break;
     default:
