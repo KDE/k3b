@@ -223,6 +223,8 @@ void K3bVideoCdRippingDialog::slotLoadK3bDefaults()
     m_ignoreExt ->setChecked( false );
     m_sector2336 ->setChecked( false );
     m_extractXML ->setChecked( false );
+
+    slotUpdateFreeSpace();
 }
 
 void K3bVideoCdRippingDialog::slotLoadUserDefaults()
@@ -234,6 +236,8 @@ void K3bVideoCdRippingDialog::slotLoadUserDefaults()
     m_ignoreExt ->setChecked( c->readBoolEntry( "ignore ext", false ) );
     m_sector2336 ->setChecked( c->readBoolEntry( "sector 2336", false ) );
     m_extractXML ->setChecked( c->readBoolEntry( "extract xml", false ) );
+
+    slotUpdateFreeSpace();
 }
 
 void K3bVideoCdRippingDialog::slotSaveUserDefaults()
