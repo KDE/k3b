@@ -1,3 +1,21 @@
+0.5.0
+-fixed mkisofs 1.14 problems
+-audio on-the-fly burning (even corrupted mp3-files)
+-saving/loading of projects
+-atip and toc info
+-cd-ripping (wav) with extended pattern support
+-cddb support
+-play audio cds
+-extended option-dialog
+-hide first track on audio-cds
+-detection of ide-devices as cd-rom
+-blanking of cdrws
+-writing of existing iso-images
+-optional setting of cdrdao driver for every scsi-device
+-burn in the background (it's even possible to write on two writers simultaneous or write a cd and create an image (if your system is fast enough ;-))
+-K3b checks for an empty disk before writing!
+-and like everytime some other stuff i cannot remember ;-)
+
 0.4.3
 Fixed bug that caused K3b to crash while detecting devices
 highly improved adding of files and directories to a data project

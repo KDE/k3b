@@ -36,9 +36,9 @@ modifyMakefiles=true
 project_name=K3b
 project_type=mdi_kde2
 sgml_file=/home/trueg/dev/kde/k3b/doc/en/index.docbook
-short_info=K3b is intended to fulfill all your burning needs under KDE.
+short_info=K3b - The CD Creator - The best software to write cds under linux.
 sub_dir=src/
-version=0.4.3
+version=0.5.0
 version_control=CVS
 workspace=1
 

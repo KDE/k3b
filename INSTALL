@@ -1,7 +1,7 @@
-Install K3b 0.4.3
+Install K3b 0.5.0
 -----------------
 
-K3b 0.4.3 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
+K3b 0.5.0 requires the ID3Lib which can be downloaded from id3lib.sourceforge.net.
 First you need to install (configure/make/make install) the id3lib.
 
 Then install K3b like every other KDE app:
@@ -34,9 +34,10 @@ You need to either run K3b as root (bad) or gain write-access to the /dev/sgX de
 This could be done as root by typing the following commands (using the same group as above):
 
 	chgrp cdrecording /dev/sg*
-	chmod g+rw /dev/sg*
+	chmod 660 /dev/sg*
 
-Sorry for that, but now K3b is able to detect the speed of most drives and if they support BURN-PROOF.
+Sorry for that, but now K3b is able to detect the speed of most drives and if they support BURN-PROOF and if
+the cd is empty and stuff like that.
 
 Have fun
 Sebastian Trueg

@@ -203,6 +203,11 @@ void K3bIsoImageWritingDialog::slotFindImageFile()
 
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
-  if( !m_writerSelectionWidget->writerDevice()->burnproof() )
+  if( !m_writerSelectionWidget->writerDevice()->burnproof() ) {
     m_checkBurnProof->setChecked( false );
+    m_checkBurnProof->setDisabled( true );
+  }
+  else {
+    m_checkBurnProof->setEnabled( true );
+  }
 }

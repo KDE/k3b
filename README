@@ -1,17 +1,32 @@
-K3b Version 0.4.3
+K3b Version 0.5.0
 
 Thanx for downloading my very first KDE-project.
 
-Since this is an early version some things might not work correct!
-This is what should work so far:
-	- burning audio-cds from mp3 and wav files.
-	- cd-text (with ID3-tag support)
-	- burning ISO-cds (with Joliet/Rockridge) (create image/write image or writing on-the-fly)
-	- creating of file-tree via drag'n'drop
-   - removing files and directories from data tree
-   - adding new empty directories to data tree
-	- renaming of files (manually or automatically for mp3-files)
-	- support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
+With version 0.5 K3b becomes a grown-up program.
+These are the features:
+   - the most userfriendly interface ever ;-)
+	- writing audio-cds from mp3 and wav files (on-the-fly or with images)
+   	 - cd-text support
+       - ID3-tag support
+       - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
+	- writing ISO-cds
+       - Joliet/Rockridge support
+       - create image/write image
+       - writing on-the-fly
+	    - creating of file-tree via drag'n'drop (as easy as it could be)
+            - removing files and directories from data tree
+            - adding new empty directories to data tree
+            - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
+	    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
+   - writing existing iso-images
+   - blanking of cdrws
+   - cd ripping to wav
+        - cddb support
+        - sophisticated pattern system to automatically organize the ripped tracks
+   - cd writing in the backgroud
+   - K3b checks if the user inserted an empty disk (I think K3b is the only program under linux with that feature!)
+   - Retrieving cd info and toc
+   - Support for ATAPI drives without SCSI-emulation for reading
 
 Please, please report bugs (with k3b output!) and tell me what you like/dislike
 about the user-interface!
