@@ -35,6 +35,8 @@
 #include <vorbis/vorbisfile.h>
 
 
+// TODO: only open an OggVorbis_File at in one method that returnes the structure or null on failure
+
 K3bOggVorbisModule::K3bOggVorbisModule( QObject* parent, const char* name )
   : K3bAudioModule( parent, name )
 {
@@ -146,7 +148,7 @@ bool K3bOggVorbisModule::canDecode( const KURL& url )
 }
 
 
-int K3bOggVorbisModule::analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& info )
+int K3bOggVorbisModule::analyseTrack( const QString& filename, unsigned long& size )
 {
   int ret = K3bAudioTitleMetaInfo::OK;
 
@@ -175,6 +177,31 @@ int K3bOggVorbisModule::analyseTrack( const QString& filename, unsigned long& si
 	size = (unsigned long)ceil(seconds * 75.0);
       }
 
+      ov_clear( &oggVorbisFile );
+    }
+  }
+
+  return ret;
+}
+
+
+bool K3bOggVorbisModule::metaInfo( const QString& filename, K3bAudioTitleMetaInfo& info )
+{
+  // do some initialization
+  FILE* file = fopen( QFile::encodeName(filename), "r" );
+  if( !file ) {
+    kdDebug() << "(K3bOggVorbisModule) Could not open file " << filename << endl;
+    return false;
+  }
+  else {
+    OggVorbis_File oggVorbisFile;
+    if( ov_open( file, &oggVorbisFile, 0, 0 ) ) {
+      kdDebug() << "(K3bOggVorbisModule) " << filename << " seems to to be an ogg vorbis file." << endl;
+
+      fclose( file );
+      return false;
+    }
+    else {
       // search for artist,title information
       vorbis_comment* vComment = ov_comment( &oggVorbisFile, -1 );
       if( !vComment ) {
@@ -193,14 +220,15 @@ int K3bOggVorbisModule::analyseTrack( const QString& filename, unsigned long& si
 	      info.setAlbumTitle( values[1] );
 	  }
 	}
-   }
+      }
 
       ov_clear( &oggVorbisFile );
     }
   }
 
-  return ret;
+  return true;
 }
+
 
 void K3bOggVorbisModule::cleanup()
 {

@@ -100,6 +100,13 @@ void K3bDoc::setBurner( K3bDevice* dev )
 }
 
 
+void K3bDoc::addUrl( const KURL& url )
+{
+  KURL::List urls(url);
+  addUrls( urls );
+}
+
+
 void K3bDoc::addView(K3bView *view)
 {
   pViewList->append(view);

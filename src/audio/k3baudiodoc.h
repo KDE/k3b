@@ -97,7 +97,6 @@ class K3bAudioDoc : public K3bDoc
    * the process is finished and check error()
    * to know about the result.
    **/
-  void addUrl( const KURL& url );
   void addUrls( const KURL::List& );
   void addTrack( const KURL&, uint );
   void addTracks( const KURL::List&, uint );
@@ -131,7 +130,9 @@ class K3bAudioDoc : public K3bDoc
  protected slots:
   /** processes queue "urlsToAdd" **/
   void slotWorkUrlQueue();
-  void slotDetermineTrackMetaInfo();
+  void slotDetermineTrackStatus();
+
+  void determineAudioMetaInfo( K3bAudioTrack* );
 	
  signals:
   void newTracks();
@@ -197,8 +198,8 @@ class K3bAudioDoc : public K3bDoc
 
   friend class K3bMixedDoc;
 
-  class AudioTrackMetaInfoThread;
-  AudioTrackMetaInfoThread* m_trackMetaInfoThread;
+  class AudioTrackStatusThread;
+  AudioTrackStatusThread* m_trackStatusThread;
   K3bThreadJob* m_trackMetaInfoJob;
 };
 

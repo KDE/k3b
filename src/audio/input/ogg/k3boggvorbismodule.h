@@ -39,7 +39,8 @@ class K3bOggVorbisModule : public K3bAudioModule
   ~K3bOggVorbisModule();
 
   bool canDecode( const KURL& url );
-  int analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& );
+  int analyseTrack( const QString& filename, unsigned long& size );
+  bool metaInfo( const QString& filename, K3bAudioTitleMetaInfo& );
 
   void cleanup();
 

@@ -120,7 +120,6 @@ class K3bDataDoc : public K3bDoc
    * @param dir the directory where to add the urls, by default this is the root directory.
    **/
   void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
-  virtual void addUrl( const KURL& url );
   virtual void addUrls( const KURL::List& urls );
 
   void importSession( const QString& path );

@@ -37,7 +37,8 @@ class K3bMp3Module : public K3bAudioModule
 
   bool canDecode( const KURL& url );
 
-  int analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& info );
+  int analyseTrack( const QString& filename, unsigned long& size );
+  bool metaInfo( const QString& filename, K3bAudioTitleMetaInfo& info );
 
   void cleanup();
 

@@ -56,11 +56,11 @@
 
 
 // this simple thread is just used to asynchronously determine the
-// metainfo of the tracks
-class K3bAudioDoc::AudioTrackMetaInfoThread : public K3bThread
+// length and integrety of the tracks
+class K3bAudioDoc::AudioTrackStatusThread : public K3bThread
 {
 public:
-  AudioTrackMetaInfoThread()
+  AudioTrackStatusThread()
     : K3bThread(),
       m_track(0) {
   }
@@ -77,21 +77,10 @@ public:
 protected:
   void run() {
     unsigned long size = 0;
-    K3bAudioTitleMetaInfo info;
-    int status = m_track->module()->analyseTrack( m_track->absPath(), size, info );
+    int status = m_track->module()->analyseTrack( m_track->absPath(), size );
     m_track->setStatus( status );
     if( status != K3bAudioTitleMetaInfo::CORRUPT ) {
       m_track->setLength( size );
-      m_track->setCdText( info );
-
-      // FIXME: this whole thread sux!
-      K3bSong *song = k3bcore->songManager()->findSong( m_track->absPath() );
-      if( song != 0 ){
-	m_track->setArtist( song->getArtist() );
-	//      newTrack->setAlbum( song->getAlbum() );
-	m_track->setTitle( song->getTitle() );
-      }
-
     }
     emitFinished(true);
   }
@@ -114,11 +103,11 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
   m_urlAddingTimer = new QTimer( this );
   connect( m_urlAddingTimer, SIGNAL(timeout()), this, SLOT(slotWorkUrlQueue()) );
 
-  m_trackMetaInfoThread = new AudioTrackMetaInfoThread();
+  m_trackStatusThread = new AudioTrackStatusThread();
   m_trackMetaInfoJob = new K3bThreadJob( this );
-  m_trackMetaInfoJob->setThread( m_trackMetaInfoThread );
+  m_trackMetaInfoJob->setThread( m_trackStatusThread );
   connect( m_trackMetaInfoJob, SIGNAL(finished(bool)),
-	   this, SLOT(slotDetermineTrackMetaInfo()) );
+	   this, SLOT(slotDetermineTrackStatus()) );
 }
 
 K3bAudioDoc::~K3bAudioDoc()
@@ -127,7 +116,7 @@ K3bAudioDoc::~K3bAudioDoc()
     m_tracks->setAutoDelete( true );
 
   delete m_tracks;
-  delete m_trackMetaInfoThread;
+  delete m_trackStatusThread;
 }
 
 bool K3bAudioDoc::newDocument()
@@ -164,12 +153,6 @@ K3b::Msf K3bAudioDoc::length() const
   }	
 
   return length;
-}
-
-
-void K3bAudioDoc::addUrl( const KURL& url )
-{
-  addTrack( url, m_tracks->count() );
 }
 
 
@@ -232,7 +215,8 @@ void K3bAudioDoc::slotWorkUrlQueue()
     if( !readM3uFile( item->url, lastAddedPosition ) )
       if( K3bAudioTrack* newTrack = createTrack( item->url ) ) {
         addTrack( newTrack, lastAddedPosition );
-	slotDetermineTrackMetaInfo();
+	determineAudioMetaInfo( newTrack );
+	slotDetermineTrackStatus();
       }
 
     delete item;
@@ -346,8 +330,8 @@ void K3bAudioDoc::removeTrack( K3bAudioTrack* track )
     // take the current item
     track = m_tracks->take();
 
-    // if the AudioTrackMetaInfoThread currently works this file we kill and restart it
-    if( m_trackMetaInfoThread->track() == track && m_trackMetaInfoThread->running() )
+    // if the AudioTrackStatusThread currently works this file we kill and restart it
+    if( m_trackStatusThread->track() == track && m_trackStatusThread->running() )
       m_trackMetaInfoJob->cancel(); // this will emit a finished signal
       
     // emit signal before deleting the track to avoid crashes
@@ -486,7 +470,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 
   emit newTracks();
 
-  slotDetermineTrackMetaInfo();
+  slotDetermineTrackStatus();
 
   informAboutNotFoundFiles();
 
@@ -672,22 +656,42 @@ void K3bAudioDoc::removeCorruptTracks()
 }
 
 
-void K3bAudioDoc::slotDetermineTrackMetaInfo()
+void K3bAudioDoc::slotDetermineTrackStatus()
 {
-  kdDebug() << "(K3bAudioDoc) slotDetermineTrackMetaInfo()" << endl;
-  if( !m_trackMetaInfoThread->running() ) {
-    kdDebug() << "(K3bAudioDoc) AudioTrackMetaInfoThread not running." << endl;
+  kdDebug() << "(K3bAudioDoc) slotDetermineTrackStatus()" << endl;
+  if( !m_trackStatusThread->running() ) {
+    kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread not running." << endl;
     // find the next track to meta-info
     for( QPtrListIterator<K3bAudioTrack> it( *m_tracks ); *it; ++it ) {
       if( it.current()->length() == 0 && it.current()->status() != K3bAudioTitleMetaInfo::CORRUPT ) {
-	kdDebug() << "(K3bAudioDoc) starting AudioTrackMetaInfoThread for " << it.current()->absPath() << endl;
-	m_trackMetaInfoThread->analyseTrack( it.current() );
+	kdDebug() << "(K3bAudioDoc) starting AudioTrackStatusThread for " << it.current()->absPath() << endl;
+	m_trackStatusThread->analyseTrack( it.current() );
 	return;
       }
     }
   }
   else
-    kdDebug() << "(K3bAudioDoc) AudioTrackMetaInfoThread running." << endl;
+    kdDebug() << "(K3bAudioDoc) AudioTrackStatusThread running." << endl;
 }
+
+
+void K3bAudioDoc::determineAudioMetaInfo( K3bAudioTrack* track )
+{
+  // first search the songdb
+  K3bSong *song = k3bcore->songManager()->findSong( track->absPath() );
+  if( song != 0 ){
+    track->setArtist( song->getArtist() );
+    //      newTrack->setAlbum( song->getAlbum() );
+    track->setTitle( song->getTitle() );
+  }
+  else {
+    // no song found, try the module
+    K3bAudioTitleMetaInfo info;
+    if( track->module()->metaInfo( track->absPath(), info ) ) {
+      track->setCdText( info );
+    }
+  }
+}
+
 
 #include "k3baudiodoc.moc"

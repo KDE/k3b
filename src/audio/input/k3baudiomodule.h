@@ -46,8 +46,10 @@ class K3bAudioModule : public QObject
    * at least size has to be set in all derived classes
    */
   virtual int analyseTrack( const QString& filename, 
-			    unsigned long& size, 
-			    K3bAudioTitleMetaInfo& info ) = 0;
+			    unsigned long& size ) = 0;
+
+  virtual bool metaInfo( const QString& filename,
+			 K3bAudioTitleMetaInfo& info ) { return false; }
 
   bool initDecoding( const QString& filename, unsigned long trackSize );
 

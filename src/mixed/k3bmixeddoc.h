@@ -59,7 +59,6 @@ class K3bMixedDoc : public K3bDoc
 
  public slots:
   void setMixedType( MixedType t ) { m_mixedType = t; }
-  void addUrl( const KURL& url );
   void addUrls( const KURL::List& urls );
   void setImagePath( const QString& );
 

@@ -156,7 +156,11 @@ class K3bDoc : public QObject
   void setRemoveImages( bool b ) { m_removeImages = b; }
   void setOnlyCreateImages( bool b ) { m_onlyCreateImages = b; }
 
-  virtual void addUrl( const KURL& url ) = 0;
+  /**
+   * the default implementation just calls addUrls with
+   * list containing the url
+   */
+  virtual void addUrl( const KURL& url );
   virtual void addUrls( const KURL::List& urls ) = 0;
 
  signals:

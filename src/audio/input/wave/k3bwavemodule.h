@@ -41,7 +41,7 @@ class K3bWaveModule : public K3bAudioModule
   /**
    * retrieve information about the track like the length
    */
-  int analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& );
+  int analyseTrack( const QString& filename, unsigned long& size );
 
   void cleanup();
 

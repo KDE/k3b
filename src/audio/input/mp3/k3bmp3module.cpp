@@ -579,7 +579,14 @@ bool K3bMp3Module::canDecode( const KURL& url )
 }
 
 
-int K3bMp3Module::analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& info )
+int K3bMp3Module::analyseTrack( const QString& filename, unsigned long& size )
+{
+  initDecodingInternal( filename );
+  return countFrames( size );
+}
+
+
+bool K3bMp3Module::metaInfo( const QString& filename, K3bAudioTitleMetaInfo& info )
 {
   KFileMetaInfo metaInfo( filename );
   if( !metaInfo.isEmpty() && metaInfo.isValid() ) {
@@ -593,9 +600,7 @@ int K3bMp3Module::analyseTrack( const QString& filename, unsigned long& size, K3
     if( titleItem.isValid() )
       info.setTitle( titleItem.string() );
   }
-
-  initDecodingInternal( filename );
-  return countFrames( size );
+  return true;
 }
 
 #include "k3bmp3module.moc"

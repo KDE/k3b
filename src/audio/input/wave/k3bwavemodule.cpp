@@ -104,7 +104,7 @@ void K3bWaveModule::cleanup()
 }
 
 
-int K3bWaveModule::analyseTrack( const QString& filename, unsigned long& size, K3bAudioTitleMetaInfo& )
+int K3bWaveModule::analyseTrack( const QString& filename, unsigned long& size )
 {
   QFile f( filename );
   if( !f.open( IO_ReadOnly ) ) {

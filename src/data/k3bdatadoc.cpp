@@ -101,14 +101,6 @@ void K3bDataDoc::addView(K3bView* view)
 }
 
 
-void K3bDataDoc::addUrl( const KURL& url )
-{
-  KURL::List urls;
-  urls.append(url);
-  slotAddUrlsToDir( urls );
-}
-
-
 void K3bDataDoc::addUrls( const KURL::List& urls )
 {
   slotAddUrlsToDir( urls );

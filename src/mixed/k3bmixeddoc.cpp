@@ -81,13 +81,6 @@ K3bBurnJob* K3bMixedDoc::newBurnJob()
 }
 
 
-void K3bMixedDoc::addUrl( const KURL& url )
-{
-  KURL::List urls(url);
-  addUrls(urls);
-}
-
-
 void K3bMixedDoc::addUrls( const KURL::List& urls )
 {
   K3bMixedView* view = (K3bMixedView*)firstView();
