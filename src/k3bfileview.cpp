@@ -76,10 +76,16 @@ K3bFileView::~K3bFileView()
 }
 
 
+KActionCollection* K3bFileView::actionCollection() const
+{
+  return m_dirOp->actionCollection();
+}
+
+
 void K3bFileView::setupGUI()
 {
-  KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
   m_dirOp           = new KDirOperator( QDir::home().absPath(), this );
+  KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
 
   // PrivateFileView just adds d'n'd support (replace with default detailView in KDE3)
   PrivateFileView* fileView = new PrivateFileView( m_dirOp, "fileview" );
@@ -90,10 +96,10 @@ void K3bFileView::setupGUI()
 				     m_dirOp->actionCollection(), "audio_file_play");
 
   // add some actions to the toolbar
-  m_dirOp->actionCollection()->action("up")->plug( toolBar );
-  m_dirOp->actionCollection()->action("home")->plug( toolBar );
-  m_dirOp->actionCollection()->action("reload")->plug( toolBar );
-  toolBar->insertSeparator();
+//   m_dirOp->actionCollection()->action("up")->plug( toolBar );
+//   m_dirOp->actionCollection()->action("home")->plug( toolBar );
+//   m_dirOp->actionCollection()->action("reload")->plug( toolBar );
+//   toolBar->insertSeparator();
   actionPlay->plug( toolBar );
   toolBar->insertSeparator();
 
@@ -119,6 +125,7 @@ void K3bFileView::setupGUI()
   connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileViewItem*)), this, SLOT(slotFileHighlighted(const KFileViewItem*)) );
+  connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
 }
 
 

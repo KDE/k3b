@@ -441,6 +441,7 @@ void K3bAudioJob::slotTryStart()
   }
   m_decodingPercentage = (int)( 50.0 * (double)m_dataToDecode / (double)m_doc->size() );
 
+  qDebug("(K3bAudioJob) data to decode: %li", m_dataToDecode );
 
   // now decide what to do
   // what program to use (cdrdao or cdrecord)
@@ -473,12 +474,11 @@ void K3bAudioJob::slotTryStart()
 
   m_onTheFly = m_doc->onTheFly();
 
-  QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
-
   if( m_onTheFly ) {
     startWriting();
   }
   else {
+    QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
     emit infoMessage( i18n("Buffering files"), K3bJob::STATUS );
     emit newTask( i18n("Buffering files") );
   }
@@ -507,6 +507,8 @@ void K3bAudioJob::slotStartWriting()
 
   if( m_onTheFly )
     connect( m_process, SIGNAL(wroteStdin(KProcess*)), this, SLOT(slotWroteData()) );
+
+  QTimer::singleShot(0, this, SLOT(slotDecodeNextFile()) );
 
   if( m_writingApp == K3b::CDRDAO )
     cdrdaoWrite();

@@ -34,11 +34,12 @@ class K3bCdView;
 class K3bFileView;
 class K3bDeviceManager;
 class KProcess;
+class KComboBox;
+
+
 /**
   *@author Sebastian Trueg
   */
-
-
 class K3bDirView : public QVBox  
 {
   Q_OBJECT
@@ -50,11 +51,14 @@ class K3bDirView : public QVBox
 
  protected slots:
   void slotDirActivated( const KURL& );
+  void slotDirActivated( const QString& );
   void slotCDDirActivated( const QString&  );
+  void slotUpdateURLCombo( const KURL& url );
 
  private:
   K3bCdView* m_cdView;
   K3bFileView* m_fileView;
+  KComboBox* m_urlCombo;
   QSplitter* m_mainSplitter;
   KioTree* m_kiotree;
   bool m_initialized;

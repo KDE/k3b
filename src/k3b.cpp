@@ -27,6 +27,8 @@
 #include <qevent.h>
 #include <qtabwidget.h>
 #include <qvaluelist.h>
+#include <qfont.h>
+#include <qpalette.h>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -186,7 +188,6 @@ void K3bMainWindow::initActions()
   actionViewToolBar->setStatusText(i18n("Enables/disables the toolbar"));
   actionViewStatusBar->setStatusText(i18n("Enables/disables the statusbar"));
 
-  actionViewDirView->setChecked( true );
 
   createGUI();
 }
@@ -210,9 +211,26 @@ void K3bMainWindow::initView()
   mainDock->setDockSite( KDockWidget::DockCorner );
   mainDock->setEnableDocking( KDockWidget::DockNone );
 
-  QHBox* documentBox = new QHBox( mainDock );
-  m_documentTab = new K3bProjectTabWidget( documentBox );
-  mainDock->setWidget( documentBox );
+//   QFrame* documentBox = new QFrame( mainDock );
+//   documentBox->setFrameStyle( QFrame::Sunken | QFrame::StyledPanel );
+//   QVBoxLayout* documentLayout = new QVBoxLayout( documentBox );
+//   documentLayout->setAutoAdd( true );
+
+//   QLabel* projectHeader = new QLabel( documentBox );
+//   projectHeader->setText( i18n("Current Projects") );
+//   projectHeader->setAlignment( AlignHCenter | AlignVCenter );
+//   QFont f(projectHeader->font());
+//   f.setBold(true);
+//   projectHeader->setFont( f );
+
+//   QPalette p( documentBox->palette() );
+//   p.setColor( QColorGroup::Background, QColor(Qt::blue).light(120) );
+//   p.setColor( QColorGroup::Foreground, white );
+//   projectHeader->setPalette( p );
+//   documentBox->setPalette( p );
+
+  m_documentTab = new K3bProjectTabWidget( mainDock );
+  mainDock->setWidget( m_documentTab );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 
   // fill the tabs action menu

@@ -40,5 +40,6 @@ void K3bProjectTabWidget::insertAction( KAction* action )
   m_tabBar->insertAction( action );
 }
 
+
 #include "k3bprojecttabwidget.moc"
 

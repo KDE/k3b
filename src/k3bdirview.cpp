@@ -53,6 +53,7 @@
 #include <krun.h>
 #include <kprocess.h>
 #include <kio/job.h>
+#include <kcombobox.h>
 
 #include "kiotree/kiotree.h"
 #include "kiotree/kiotreemodule.h"
@@ -71,13 +72,14 @@
 K3bDirView::K3bDirView(QWidget *parent, const char *name )
   : QVBox(parent, name)
 {
-  m_mainSplitter = new QSplitter( this );
-  QVBox* box = new QVBox( m_mainSplitter );
-  QVBox *box2 = new QVBox( m_mainSplitter );
+  KToolBar* toolBar = new KToolBar( k3bMain(), this, "dirviewtoolbar" );
+  m_mainSplitter    = new QSplitter( this );
+  QVBox* box  = new QVBox( m_mainSplitter );
+  QVBox* box2 = new QVBox( m_mainSplitter );
 
   m_kiotree = new KioTree( box );
-  m_kiotree->addTopLevelDir( KURL( QDir::homeDirPath() ), "Home" );
-  m_kiotree->addTopLevelDir( KURL( "/" ), "Root" );
+  m_kiotree->addTopLevelDir( KURL( QDir::homeDirPath() ), i18n("Home") );
+  m_kiotree->addTopLevelDir( KURL( "/" ), i18n("Root") );
   //KURL url = KURL();
   //url.setProtocol("k3b_cdview");
   //m_kiotree->addTopLevelDir( url, "Audio CD Init");
@@ -88,8 +90,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_cdView = new K3bCdView(box2, "cdview");
   m_cdView->hide();
   m_initialized = false;
-  connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
-  connect( m_cdView, SIGNAL(showDirView(const QString&)), this, SLOT(slotCDDirActivated(const QString&)) );
+
 
   // split in the middle
   QValueList<int> sizes = m_mainSplitter->sizes();
@@ -97,6 +98,26 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   sizes[0] = all/2 + (all%2);
   sizes[1] = all/2;
   m_mainSplitter->setSizes( sizes );
+
+
+  // add some actions to the toolbar
+  m_fileView->actionCollection()->action("up")->plug( toolBar );
+  m_fileView->actionCollection()->action("home")->plug( toolBar );
+  m_fileView->actionCollection()->action("reload")->plug( toolBar );
+  toolBar->insertSeparator();
+
+  // add a url combobox to the toolbar
+  (void)new QLabel( i18n("Location"), toolBar );
+  m_urlCombo = new KComboBox( true, toolBar );
+  m_urlCombo->setEditText( QDir::homeDirPath() );
+  m_urlCombo->setDuplicatesEnabled( false );
+
+  connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
+  connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
+  connect( m_cdView, SIGNAL(showDirView(const QString&)), this, SLOT(slotCDDirActivated(const QString&)) );
+  connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
+  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_kiotree, SLOT(followURL(const KURL&)) );
+  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SLOT(slotUpdateURLCombo(const KURL&)) );
 }
 
 K3bDirView::~K3bDirView()
@@ -106,7 +127,7 @@ K3bDirView::~K3bDirView()
 void K3bDirView::setupFinalize( K3bDeviceManager *dm )
 {
   // perhaps this should go into a slot and be called everytime the devices change
-  // for that we need a signal in K3bDeviceManager that informs about changes
+  // for that we need a signal (or better an event) in K3bDeviceManager that informs about changes
 
   m_fileView->show();
   K3bDevice *dev;
@@ -173,10 +194,24 @@ void K3bDirView::slotCDDirActivated(const QString& device)
 }
 
 
+void K3bDirView::slotUpdateURLCombo( const KURL& url )
+{
+  m_urlCombo->setEditText( url.path() );
+}
+
+
+void K3bDirView::slotDirActivated( const QString& url )
+{
+  m_urlCombo->insertItem( url, 0 );
+  slotDirActivated( KURL(url) );
+}
+
+
 void K3bDirView::slotDirActivated( const KURL& url )
 {
   if( url.protocol().compare("k3b_cdview") !=0 ){
     m_fileView->setUrl(url, true);
+    m_urlCombo->setEditText( url.path() );
     m_fileView->show();
     m_cdView->hide();
   } else {

@@ -27,6 +27,7 @@ class QDragObject;
 class KURL;
 class KFileFilter;
 class KFileViewItem;
+class KActionCollection;
 
 
 
@@ -41,6 +42,11 @@ class K3bFileView : public QVBox
   K3bFileView(QWidget *parent=0, const char *name=0);
   ~K3bFileView();
   void setUrl(const KURL &url, bool forward);
+
+  KActionCollection* actionCollection() const;
+
+ signals:
+  void urlEntered( const KURL& url );
 
  public slots:
   void slotAudioFilePlay();
