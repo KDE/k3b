@@ -37,7 +37,8 @@ user commands for external programs are seperated by space now since the comma j
    as "--driver, generic-mmc"
 support for newer versions of cdrecord which have a slighly changed user interface
 support for cuefile writing with cdrecord > 2.01a14
-
+support for writing CD-Text with cdrecord
+support for writing audio CDs on-the-fly with cdrecord >= 2.01a13
 
 0.8.1
 fixed compiling problems with kernel < 2.4.3
