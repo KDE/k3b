@@ -15,7 +15,7 @@
 
 
 #include "k3boptiondialog.h"
-#include "../k3b.h"
+#include <k3bcore.h>
 #include "k3bcddboptiontab.h"
 #include "k3bcddblocaldbtab.h"
 #include "k3bdeviceoptiontab.h"
@@ -77,8 +77,8 @@ void K3bOptionDialog::slotOk()
   if( saveSettings() ) {
     accept();
 
-    kapp->config()->setGroup( "General Options" );
-    if( kapp->config()->readBoolEntry( "check system config", true ) )
+    k3bcore->config()->setGroup( "General Options" );
+    if( k3bcore->config()->readBoolEntry( "check system config", true ) )
       k3bcore->checkSystem();
   }
 }
@@ -103,7 +103,7 @@ bool K3bOptionDialog::saveSettings()
   if( !m_miscOptionTab->saveSettings() )
     return false;
 
-  kapp->config()->sync();
+  k3bcore->config()->sync();
 
   return true;
 }
@@ -147,7 +147,7 @@ void K3bOptionDialog::setupProgramsPage()
   _frameLayout->setSpacing( 0 );
   _frameLayout->setMargin( 0 );
 
-  m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bMain()->externalBinManager(), frame );
+  m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bcore->externalBinManager(), frame );
   _frameLayout->addWidget( m_externalBinOptionTab, 0, 0 );
 }
 
