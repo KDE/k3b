@@ -227,6 +227,15 @@ void K3bVcdJob::vcdxBuild()
     connect( m_process, SIGNAL( processExited( KProcess* ) ),
              this, SLOT( slotVcdxBuildFinished() ) );
 
+    // vcdxbuild comandline parameters 
+    kdDebug() << "***** vcdxbuild parameters:" << endl;;
+    const QValueList<QCString>& args = m_process->args();
+    QString s;
+    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+        s += *it + " ";
+    }
+    kdDebug() << s << flush << endl;
+    emit debuggingOutput("vcdxbuild comand:", s);
 
     if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
         kdDebug() << "(K3bVcdJob) could not start vcdxbuild" << endl;
