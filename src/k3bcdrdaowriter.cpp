@@ -375,7 +375,7 @@ void K3bCdrdaoWriter::setCommonArguments()
   // display debug info
   *m_process << "-n" << "-v" << "2";
   // eject
-  if( m_eject )
+  if( m_eject && !m_forceNoEject )
     *m_process << "--eject";
 
   // remote

@@ -3,6 +3,7 @@ DVD writing support with growisofs
 CD Cloning with cdrtools >= 2.01a17
 device capabilities detection without cdrecord. This solves the long startup problem with ATAPI devices.
 moved audio ripping pattern configuration from options dialog to audio ripping dialog
+option to automatically erase CD-RWs and DVD-RWs without asking before writing
 
 0.9
 support for eMovix 0.8.0rc2

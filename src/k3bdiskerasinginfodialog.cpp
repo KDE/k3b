@@ -26,7 +26,7 @@
 #include <kprogress.h>
 
 
-K3bErasingInfoDialog::K3bErasingInfoDialog( bool progress, QWidget* parent, const char* name ) 
+K3bErasingInfoDialog::K3bErasingInfoDialog( bool progress, const QString& text, QWidget* parent, const char* name ) 
   : KDialogBase( parent, name, true, i18n("Erasing"), Cancel|Ok, Ok, true ),
     m_progress(progress)
 {
@@ -35,7 +35,7 @@ K3bErasingInfoDialog::K3bErasingInfoDialog( bool progress, QWidget* parent, cons
   mainLayout->setMargin( marginHint() );
   mainLayout->setSpacing( spacingHint() );
 
-  m_label = new QLabel( i18n("Erasing CD-RW"), main );
+  m_label = new QLabel( text, main );
   if( m_progress )
     m_progressBar = new KProgress( main );
   else

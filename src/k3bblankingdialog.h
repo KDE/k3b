@@ -41,6 +41,7 @@ Q_OBJECT
   void slotInfoMessage( const QString& msg, int type );
   void slotWriterChanged();
   void slotWritingAppChanged( int );
+  void slotJobFinished( bool );
 
   void slotLoadK3bDefaults();
   void slotLoadUserDefaults();

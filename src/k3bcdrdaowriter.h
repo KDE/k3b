@@ -86,6 +86,12 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   void setProvideStdin( bool b ) { m_stdin = b; }
 
+  /**
+   * If set true the job ignores the global K3b setting
+   * and does not eject the CD-RW after finishing
+   */
+  void setForceNoEject( bool b ) { m_forceNoEject = b; }
+
  private slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
@@ -146,6 +152,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   struct ProgressMsg* m_oldMsg;
   struct ProgressMsg* m_newMsg;
 
+  bool m_forceNoEject;
 };
 
 #endif

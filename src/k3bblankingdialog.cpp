@@ -42,6 +42,7 @@
 #include <qmap.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qapplication.h>
 
 
 
@@ -147,9 +148,10 @@ void K3bBlankingDialog::slotStartClicked()
   d->job->setWritingApp(m_writerSelectionWidget->writingApp());
   d->job->setMode( d->comboTypeMap[m_comboEraseMode->currentItem()] );
 
-  K3bErasingInfoDialog dlg;
+  K3bErasingInfoDialog dlg( false, i18n("Erasing CD-RW"), this );
 
-  connect( d->job, SIGNAL(finished(bool)), &dlg, SLOT(slotFinished(bool)) );
+  connect( d->job, SIGNAL(finished(bool)), &dlg, SLOT(close()) );
+  connect( d->job, SIGNAL(finished(bool)), this, SLOT(slotJobFinished(bool)) );
   connect( &dlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
   d->job->start();
@@ -173,6 +175,16 @@ void K3bBlankingDialog::slotInfoMessage( const QString& str, int type )
   default:
     item->setPixmap( 0, SmallIcon( "ok" ) );
   }
+}
+
+
+void K3bBlankingDialog::slotJobFinished( bool success )
+{
+  if( success )
+    KMessageBox::error( qApp->activeWindow(), i18n("Erasing failed.") );
+  else
+    KMessageBox::information( qApp->activeWindow(), i18n("Successfully erased CD-RW."),
+			      i18n("Success") );
 }
 
 

@@ -43,6 +43,12 @@ class K3bBlankingJob : public K3bJob
   void setMode( int m ) { m_mode = m; }
   void setWritingApp (int app) { m_writingApp = app; }
 
+  /**
+   * If set true the job ignores the global K3b setting
+   * and does not eject the CD-RW after finishing
+   */
+  void setForceNoEject( bool b ) { m_forceNoEject = b; }
+
  private slots:
   void slotFinished(bool);
   void slotStartErasing();
@@ -55,6 +61,7 @@ class K3bBlankingJob : public K3bJob
   int m_mode;
   int m_writingApp;
   bool m_canceled;
+  bool m_forceNoEject;
 };
 
 #endif

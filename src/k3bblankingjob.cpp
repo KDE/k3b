@@ -32,13 +32,16 @@
 
 
 K3bBlankingJob::K3bBlankingJob( QObject* parent )
-  : K3bJob( parent )
+  : K3bJob( parent ),
+    m_writerJob(0),
+    m_force(false),
+    m_device(0),
+    m_speed(1),
+    m_mode(Fast),
+    m_writingApp(K3b::DEFAULT),
+    m_canceled(false),
+    m_forceNoEject(false)
 {
-  m_device = 0;
-  m_mode = Fast;
-  m_speed = 1;
-  m_writingApp = K3b::DEFAULT;
-  m_writerJob = 0;
 }
 
 
@@ -86,6 +89,7 @@ void K3bBlankingJob::slotStartErasing()
     writer->setBlankMode( m_mode == Fast ? K3bCdrdaoWriter::MINIMAL : K3bCdrdaoWriter::FULL );
     writer->setForce(m_force);
     writer->setBurnSpeed(m_speed);
+    writer->setForceNoEject( m_forceNoEject );
   }
   else {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
@@ -115,6 +119,7 @@ void K3bBlankingJob::slotStartErasing()
     if (m_force)
       writer->addArgument("-force");
     writer->setBurnSpeed(m_speed);
+    writer->setForceNoEject( m_forceNoEject );
   }
 
   connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));

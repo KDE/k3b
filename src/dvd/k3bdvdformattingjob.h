@@ -60,6 +60,12 @@ class K3bDvdFormattingJob : public K3bJob
    */
   void setForce( bool b );
 
+  /**
+   * If set true the job ignores the global K3b setting
+   * and does not eject the CD-RW after finishing
+   */
+  void setForceNoEject( bool );
+
  private slots:
   void slotStderrLine( const QString& );
   void slotProcessFinished( KProcess* );

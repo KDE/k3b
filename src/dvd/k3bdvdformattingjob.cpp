@@ -48,7 +48,8 @@ public:
       process(0),
       dvdFormatBin(0),
       lastProgressValue(0),
-      running(false) {
+      running(false),
+      forceNoEject(false) {
   }
 
   bool quick;
@@ -64,6 +65,8 @@ public:
   bool success;
   bool canceled;
   bool running;
+
+  bool forceNoEject;
 };
 
 
@@ -78,6 +81,12 @@ K3bDvdFormattingJob::~K3bDvdFormattingJob()
 {
   delete d->process;
   delete d;
+}
+
+
+void K3bDvdFormattingJob::setForceNoEject( bool b )
+{
+  d->forceNoEject = b;
 }
 
 
@@ -226,7 +235,8 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
   }
 
   k3bcore->config()->setGroup("General Options");
-  if( k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
+  if( d->forceNoEject ||
+      k3bcore->config()->readBoolEntry( "No cd eject", false ) ) {
     emit finished(d->success);
     d->running = false;
   }

@@ -19,6 +19,7 @@
 
 #include <kdialogbase.h>
 
+
 class K3bBusyWidget;
 class QLabel;
 class KProgress;
@@ -29,7 +30,8 @@ class K3bErasingInfoDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bErasingInfoDialog( bool progress = false, QWidget* parent = 0, const char* name = 0 );
+  K3bErasingInfoDialog( bool progress, const QString& text,
+			QWidget* parent = 0, const char* name = 0 );
   ~K3bErasingInfoDialog();
 
  public slots:

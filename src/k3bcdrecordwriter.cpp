@@ -42,7 +42,8 @@
 K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice* dev, QObject* parent, const char* name )
   : K3bAbstractWriter( dev, parent, name ),
     m_stdin(false),
-    m_clone(false)
+    m_clone(false),
+    m_forceNoEject(false)
 {
   m_process = 0;
   m_writingMode = K3b::TAO;
@@ -155,7 +156,8 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_clone )
     *m_process << "-clone";
   
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) &&
+      !m_forceNoEject )
     *m_process << "-eject";
 
   bool manualBufferSize = k3bcore->config()->readBoolEntry( "Manual buffer size", false );

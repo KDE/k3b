@@ -58,6 +58,7 @@ Q_OBJECT
   bool          m_bPregapSeconds;
 
   QCheckBox*    m_checkEject;
+  QCheckBox*    m_checkAutoErasingRewritable;
   QCheckBox*    m_checkOverburn;
   QCheckBox*    m_checkManualWritingBufferSize;
   KIntNumInput* m_editWritingBufferSizeCdrecord;

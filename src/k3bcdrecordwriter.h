@@ -57,6 +57,12 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   void setCueFile( const QString& s);
   void setClone( bool b );
 
+  /**
+   * If set true the job ignores the global K3b setting
+   * and does not eject the CD-RW after finishing
+   */
+  void setForceNoEject( bool b ) { m_forceNoEject = b; }
+
  protected slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
@@ -99,6 +105,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   bool m_writeSpeedInitialized;
 
   QValueList<int> m_trackSizes;
+
+  bool m_forceNoEject;
 };
 
 #endif

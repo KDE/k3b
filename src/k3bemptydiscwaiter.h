@@ -87,6 +87,8 @@ class K3bEmptyDiscWaiter : public KDialogBase
   void startDeviceHandler();
   void slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* );
   void showDialog();
+  void slotErasingFinished( bool );
+  void slotReloadingAfterErasingFinished( K3bCdDevice::DeviceHandler* );
 
  protected:
   void closeEvent( QCloseEvent* ) {}

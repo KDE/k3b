@@ -204,8 +204,9 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->addMultiCell( new QSpacerItem( 30, 10, QSizePolicy::Fixed, QSizePolicy::Minimum ), 1, 2, 0, 0 );
   bufferLayout->setColStretch( 3, 1 );
 
-  QGroupBox* groupMisc = new QGroupBox( 1, Qt::Vertical, i18n("Miscellaneous"), advancedTab );
+  QGroupBox* groupMisc = new QGroupBox( 2, Qt::Vertical, i18n("Miscellaneous"), advancedTab );
   m_checkEject = new QCheckBox( i18n("Do not &eject CD after write process"), groupMisc );
+  m_checkAutoErasingRewritable = new QCheckBox( i18n("Automatically erase CD-RWs and DVD-RWs"), groupMisc );
 
   groupAdvancedLayout->addWidget( groupWritingApp, 0, 0 );
   groupAdvancedLayout->addWidget( groupMisc, 1, 0 );
@@ -236,6 +237,9 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
   QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose betweeen cdrecord and cdrdao") );
+
+  QToolTip::add( m_checkAutoErasingRewritable, i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
+
   QToolTip::add( m_checkUsePbc, i18n("Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats.") );
   QToolTip::add( m_checkUseNumKey, i18n("Use numeric keys to navigate chapters by default (In addition to 'Previous' and 'Next')") );
   QToolTip::add( m_labelWaitTime, i18n("Time to wait after each sequence/segment by default.") );
@@ -264,6 +268,11 @@ void K3bBurningOptionTab::setupGui()
 							 "does not support the used writer."
 							 "<p><b>Be aware that K3b does not support both "
 							 "programs in all project types.</b>") );
+
+  QWhatsThis::add( m_checkAutoErasingRewritable, i18n("<p>If this option is checked K3b will automatically "
+						      "erase CD-RWs and format DVD-RWs if one is found instead "
+						      "of an empty media before writing.") );
+
   QWhatsThis::add( m_checkUsePbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                              "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
 }
@@ -292,6 +301,7 @@ void K3bBurningOptionTab::readSettings()
 
   c->setGroup( "General Options" );
   m_checkEject->setChecked( c->readBoolEntry( "No cd eject", false ) );
+  m_checkAutoErasingRewritable->setChecked( c->readBoolEntry( "auto rewritable erasing", false ) );
   m_checkOverburn->setChecked( c->readBoolEntry( "Allow overburning", false ) );
   bool manualBufferSize = c->readBoolEntry( "Manual buffer size", false );
   m_checkManualWritingBufferSize->setChecked( manualBufferSize );
@@ -326,6 +336,7 @@ void K3bBurningOptionTab::saveSettings()
 
   c->setGroup( "General Options" );
   c->writeEntry( "No cd eject", m_checkEject->isChecked() );
+  c->writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
   c->writeEntry( "Allow overburning", m_checkOverburn->isChecked() );
   c->writeEntry( "Manual buffer size", m_checkManualWritingBufferSize->isChecked() );
   c->writeEntry( "Cdrecord buffer", m_editWritingBufferSizeCdrecord->value() );
