@@ -194,7 +194,7 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 }
 
 
-void K3bTempDirSelectionWidget::setNeededSize( unsigned long bytes )
+void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 {
   m_requestedSize = bytes;
   m_labelCdSize->setText( KIO::convertSize(bytes) );

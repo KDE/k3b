@@ -19,6 +19,7 @@
 
 #include <device/k3bdiskinfo.h>
 #include <device/k3bcdtext.h>
+#include <device/k3bdeviceglobals.h>
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
 #include <k3blistview.h>
@@ -355,46 +356,12 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bCdDevice::NextGenerationDis
 {
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
   QString typeStr;
-  switch( info.mediaType() ) {
-  case K3bCdDevice::MEDIA_DVD_ROM:
-    typeStr = "DVD-ROM";
-    break;
-  case K3bCdDevice::MEDIA_DVD_R:
-    typeStr = "DVD-R";
-    break;
-  case K3bCdDevice::MEDIA_DVD_RW:
-    typeStr = "DVD-RW";
-    break;
-  case K3bCdDevice::MEDIA_DVD_R_SEQ:
-    typeStr = "DVD-R Sequential";
-    break;
-  case K3bCdDevice::MEDIA_DVD_RAM:
-    typeStr = "DVD-RAM";
-    break;
-  case K3bCdDevice::MEDIA_DVD_RW_OVWR: 
-    typeStr = "DVD-RW Restricted Overwrite";
-    break;
-  case K3bCdDevice::MEDIA_DVD_RW_SEQ:
-    typeStr = "DVD-RW Sequential";
-    break;
-  case K3bCdDevice::MEDIA_DVD_PLUS_RW:
-    typeStr = "DVD+RW";
-    break;
-  case K3bCdDevice::MEDIA_DVD_PLUS_R:
-    typeStr = "DVD+R";
-    break;
-  case K3bCdDevice::MEDIA_CD_ROM:
-    typeStr = "CD-ROM";
-    break;
-  case K3bCdDevice::MEDIA_CD_R:
-    typeStr = "CD-R";
-    break;
-  case K3bCdDevice::MEDIA_CD_RW:
-    typeStr = "CD-RW";
-    break;
-  default:
+  if( info.currentProfile() != -1 )
+    typeStr = K3bCdDevice::mediaTypeString( info.currentProfile() );
+  else if( info.mediaType() == -1 )
     typeStr = i18n("Unknown (probably CD-ROM)");
-  }
+  else
+    typeStr = K3bCdDevice::mediaTypeString( info.mediaType() );
 
   KListViewItem* atipChild = new KListViewItem( atipItem, i18n("Type:"), typeStr );
 

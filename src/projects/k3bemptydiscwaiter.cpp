@@ -224,6 +224,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
   if( d->forced || d->canceled )
     return;
 
+  if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_NO_MEDIA ) {
+    d->labelFoundMedia->setText( i18n("No media") );
+    showDialog();
+    QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
+    return;
+  }
+
   QString mediaState;
   if( dh->ngDiskInfo().diskState() == K3bCdDevice::STATE_COMPLETE )
     mediaState = i18n("complete");

@@ -18,6 +18,7 @@
 #define K3BTEMPDIRSELECTIONWIDGET_H
 
 #include <qgroupbox.h>
+#include <kio/global.h>
 
 class QTimer;
 class QLabel;
@@ -45,7 +46,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
  public slots:
   void setTempPath( const QString& );
   void setSelectionMode( int mode );
-  void setNeededSize( unsigned long kb );
+  void setNeededSize( KIO::filesize_t bytes );
   void saveConfig();
 
  private slots:
