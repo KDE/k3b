@@ -254,7 +254,7 @@ class K3bIso9660File : public K3bIso9660Entry
  * Due to the stupid Qt which does not support large files as default
  * we cannot use QIODevice with DVDs! That's why we have our own 
  * reading code which is not allowed by KArchive (which is limited to int
- * by the way... who the hell designed this???)
+ * by the way... who the hell designed this?)
  * I also removed the KArchive inheritance because of the named reasons.
  * So this stuff contains a lot KArchive code which has been made usable.
  */
