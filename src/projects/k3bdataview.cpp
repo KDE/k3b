@@ -151,4 +151,10 @@ void K3bDataView::slotBurn()
   }
 }
 
+
+void K3bDataView::slotDocChanged()
+{
+  m_dataDirTree->firstChild()->repaint();
+}
+
 #include "k3bdataview.moc"

@@ -887,7 +887,7 @@ void K3bAudioTrackView::removePlayerIndicator()
 
 void K3bAudioTrackView::slotQueryMusicBrainz()
 {
-#if HAVE_MUSICBRAINZ
+#ifdef HAVE_TUNEPIMP
   // we can only do a query on a single source but on the other hand we can only
   // use meta info for tracks, so we need
   // tracks with a single source

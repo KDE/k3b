@@ -109,7 +109,7 @@ fi
 
 echo ""
 
-if $have_musicbrainz; then
+if $have_tunepimp; then
 	echo "Tag guessing using MusicBrainz         yes"
 else
 	echo "Tag guessing using MusicBrainz          no"

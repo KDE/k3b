@@ -110,7 +110,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   else
     m_buttonSave = 0;
   if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "m_buttonCancel" );
+    m_buttonCancel = new KPushButton( KStdGuiItem::close(), this, "m_buttonCancel" );
     layout5->addWidget( m_buttonCancel );
   }
   else

@@ -153,7 +153,7 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
       filesToOverwrite.append( d->filenames[i] );
   }
 
-  if( QFile::exists( d->playlistFilename ) )
+  if( m_optionWidget->createPlaylist() && QFile::exists( d->playlistFilename ) )
     filesToOverwrite.append( d->playlistFilename );
 
   if( !filesToOverwrite.isEmpty() )

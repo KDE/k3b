@@ -19,6 +19,7 @@
 #include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
 #include "k3bdatamultisessioncombobox.h"
+#include "k3bdataview.h"
 
 #include <k3bisooptions.h>
 #include <k3bdatadoc.h>
@@ -133,6 +134,10 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setDataMode( m_dataModeWidget->dataMode() );
 
   ((K3bDataDoc*)doc())->setVerifyData( m_checkVerify->isChecked() );
+
+  // make sure the volume id in the view is updated
+  // we need to do this since the doc does not properly emit changed signals yet (as the audiodoc does)
+  static_cast<K3bDataView*>( doc()->view() )->slotDocChanged();
 }
 
 

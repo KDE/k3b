@@ -50,6 +50,7 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
   m_comboFilenamePattern->insertItem( i18n( "%A/%T/%a - %t" ) );
   m_comboFilenamePattern->insertItem( i18n( "%g/%A - %T/Track%n" ) );
   m_comboFilenamePattern->insertItem( i18n( "music/ripped-tracks/%a - %t" ) );
+  m_comboFilenamePattern->insertItem( i18n("%A - %T/!a='%A'{%a - }%t") );
 
   m_comboPlaylistPattern->insertItem( i18n( "%A - %T" ) );
   m_comboPlaylistPattern->insertItem( i18n( "Playlist" ) );

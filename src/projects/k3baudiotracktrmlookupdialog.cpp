@@ -15,7 +15,7 @@
 
 #include <config.h>
 
-#if HAVE_MUSICBRAINZ
+#ifdef HAVE_TUNEPIMP
 
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3btrm.h"

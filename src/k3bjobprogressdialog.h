@@ -118,12 +118,12 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   void setupGUI();
   void setupConnections();
 	
-  QLabel* m_labelJob;
-  QLabel* m_labelJobDetails;
+  KCutLabel* m_labelJob;
+  KCutLabel* m_labelJobDetails;
   KListView* m_viewInfo;
-  QLabel* m_labelTask;
+  KCutLabel* m_labelTask;
   QLabel* m_labelElapsedTime;
-  QLabel* m_labelSubTask;
+  KCutLabel* m_labelSubTask;
   QLabel* m_labelSubProcessedSize;
   KProgress* m_progressSubPercent;
   QLabel* m_labelProcessedSize;

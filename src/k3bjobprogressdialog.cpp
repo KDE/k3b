@@ -17,6 +17,7 @@
 #include "k3bjobprogressdialog.h"
 #include "k3bjobprogresssystemtray.h"
 #include "k3bapplication.h"
+#include "k3bemptydiscwaiter.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
@@ -26,7 +27,6 @@
 #include <k3bstdguiitems.h>
 #include <k3bversion.h>
 #include <k3bthememanager.h>
-#include <k3bemptydiscwaiter.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -216,7 +216,8 @@ void K3bJobProgressDialog::setupGUI()
   frame4->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout"); 
 
-  m_labelJob = new QLabel( frame4, "m_labelJob" );
+  m_labelJob = new KCutLabel( frame4, "m_labelJob" );
+  m_labelJob->setMinimumVisibleText( 40 );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
   m_labelJob_font.setBold( TRUE );
@@ -224,7 +225,7 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
-  m_labelJobDetails = new QLabel( frame4, "m_labelJobDetails" );
+  m_labelJobDetails = new KCutLabel( frame4, "m_labelJobDetails" );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
   m_labelJobDetails->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJobDetails );
@@ -457,7 +458,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
     m_progressSubPercent->setValue(100);
     slotUpdateCaption(100);
 
-    KNotifyClient::event( "SuccessfullyFinished" );
+    KNotifyClient::event( 0, "SuccessfullyFinished", i18n("Successfully finished.") );
   }
   else {
     m_pixLabel->setPixmap( k3bappcore->themeManager()->currentTheme()->pixmap( K3bTheme::PROGRESS_FAIL ) );
@@ -469,7 +470,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
     else
       m_labelTask->setText( i18n("Error.") );
    
-    KNotifyClient::event( "FinishedWithError" );
+    KNotifyClient::event( 0, "FinishedWithError", i18n("Finished with errors") );
   }
 
   m_buttonCancel->hide();

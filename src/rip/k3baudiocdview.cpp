@@ -53,7 +53,7 @@
 #include <qfont.h>
 #include <qdragobject.h>
 
-
+// FIXME: use a K3bListViewItem which can be checked
 class K3bAudioCdView::AudioTrackViewItem : public QCheckListItem
 {
 public:

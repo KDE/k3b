@@ -18,6 +18,7 @@ Import Audio Cue files into an audio project.
 It is now possible to open an iso image or an audio cue file just like a project file.
 Create cue files for an audio CD ripped into one single file
 Show writer buffer state in addition to fifo buffer when writing CDs.
+Show device buffer state for DVD writing.
 Fixed read and save setting in VideoCD project.
 Big parts of the audio project have been rewritten to have a way better design:
 	- K3b now does not create additional silence between the tracks by default

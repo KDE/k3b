@@ -22,15 +22,35 @@
 #include <qbuttongroup.h>
 #include <qlineedit.h>
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
 
 K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const char* name )
   : base_K3bDataImageSettings( parent, name )
 {
+  connect( m_checkJoliet, SIGNAL(toggled(bool)),
+	   this, SLOT(slotJolietToggled(bool)) );
 }
 
 
 K3bDataImageSettingsWidget::~K3bDataImageSettingsWidget()
 {
+}
+
+
+void K3bDataImageSettingsWidget::slotJolietToggled( bool on )
+{
+  if( !on ) {
+    KMessageBox::information( this, 
+			      i18n("<p>Be aware that without the Joliet extensions Windows "
+				   "systems will not be able to display long filenames. You "
+				   "will only see the ISO9660 filenames."
+				   "<p>If you do not intend to use the CD/DVD on a Windows "
+				   "system it is safe to disable Joliet."),
+			      i18n("Joliet extensions disabled"),
+			      "warning_about_joliet" );
+  }
 }
 
 

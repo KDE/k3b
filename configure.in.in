@@ -377,20 +377,35 @@ AC_SUBST(taglib_libs)
 dnl ---------- END TAGLIB CHECK ----------
 
 
-# musicbrainz check from juk (thanks scott)
+
+dnl ----------- TUNEPIMP/MUSICBRAINZ CHECK -----------
+
+have_tunepimp=false
+TUNEPIMP_LIBS=""
 KDE_CHECK_HEADER(tunepimp/tp_c.h,
 [
-        AC_DEFINE(HAVE_MUSICBRAINZ, 1, [have MusicBrainz])
-	have_musicbrainz=true
-        MB_LIBS="-lmusicbrainz -ltunepimp"
-], [
-        AC_DEFINE(HAVE_MUSICBRAINZ, 0, [have MusicBrainz])
-	have_musicbrainz=false
-        MB_LIBS=""
-])
+	LIBS_save=$LIBS
+	LIBS="-lz"
+	KDE_CHECK_LIB(tunepimp,tp_New,[
+        	AC_DEFINE(HAVE_TUNEPIMP, 1, [have TunePimp])
+        	TUNEPIMP_LIBS="-ltunepimp"
+		have_tunepimp=true
+        ])
+	LIBS=$LIBS_save
+], [])
+AC_SUBST(TUNEPIMP_LIBS)
 
-#AM_CONDITIONAL(link_lib_MB, test x$have_musicbrainz = xtrue)
-AC_SUBST(MB_LIBS)
+MUSICBRAINZ_LIBS=""
+KDE_CHECK_HEADER(musicbrainz/mb_c.h,
+[
+	KDE_CHECK_LIB(musicbrainz,mb_New,[
+        	AC_DEFINE(HAVE_MUSICBRAINZ, 1, [have MusicBrainz])
+        	MUSICBRAINZ_LIBS="-lmusicbrainz"
+        ])
+], [])
+AC_SUBST(MUSICBRAINZ_LIBS)
+
+dnl --------- TUNEPIMP/MUSICBRAINZ CHECK END -----------
 
 
 #AC_DEFINE(LIBK3B_VERSION, "0.11.98", [k3b library version])

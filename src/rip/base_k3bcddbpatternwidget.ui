@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>399</width>
-            <height>154</height>
+            <height>133</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,7 +25,7 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>layout8</cstring>
             </property>
@@ -54,34 +54,28 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="KURLLabel" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_specialStringsLabel</cstring>
-            </property>
-            <property name="text">
-                <string>See special strings</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="KURLLabel" row="3" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_conditionalInclusionLabel</cstring>
-            </property>
-            <property name="text">
-                <string>About conditional inclusion</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
         <widget class="QLabel" row="1" column="0">
             <property name="name">
                 <cstring>textLabel2</cstring>
             </property>
             <property name="text">
                 <string>Playlist pattern:</string>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="1" column="1">
+            <property name="name">
+                <cstring>m_comboPlaylistPattern</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
@@ -111,24 +105,59 @@
                 <string>Insert your custom pattern here</string>
             </property>
         </widget>
-        <widget class="KComboBox" row="1" column="1">
+        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>m_comboPlaylistPattern</cstring>
+                <cstring>layout2</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="editable">
-                <bool>true</bool>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>31</width>
+                            <height>2</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KURLLabel">
+                    <property name="name">
+                        <cstring>m_specialStringsLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>See special strings</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="KURLLabel">
+                    <property name="name">
+                        <cstring>m_conditionalInclusionLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>About conditional inclusion</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>m_checkBlankReplace</sender>
@@ -137,14 +166,15 @@
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>m_comboFilenamePattern</tabstop>
+    <tabstop>m_comboPlaylistPattern</tabstop>
+    <tabstop>m_checkBlankReplace</tabstop>
+    <tabstop>m_editBlankReplace</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
     <includehint>kurllabel.h</includehint>
     <includehint>kurllabel.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

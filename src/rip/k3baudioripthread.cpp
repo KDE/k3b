@@ -21,6 +21,8 @@
 #include <k3bjob.h>
 #include <k3baudioencoder.h>
 #include <k3bwavefilewriter.h>
+#include <k3bglobalsettings.h>
+#include <k3bcore.h>
 #include "k3bcuefilewriter.h"
 
 #include <k3bdevice.h>
@@ -29,6 +31,7 @@
 #include <k3bglobals.h>
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qtimer.h>
 
 #include <kdebug.h>
@@ -139,12 +142,22 @@ void K3bAudioRipThread::run()
     return;
   }
 
+  m_device->block(true);
+
   emitInfoMessage( i18n("Reading CD table of contents."), K3bJob::INFO );
   d->toc = m_device->readToc();
 
   if( !d->paranoiaLib->initParanoia( m_device, d->toc ) ) {
     emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()),
 		     K3bJob::ERROR );
+    m_device->block(false);
+
+    // check if we have write access to the generic device
+    if( m_device->interfaceType() == K3bDevice::SCSI &&
+	!m_device->genericDevice().isEmpty() &&
+	!QFileInfo( m_device->genericDevice() ).isWritable() )
+      emitInfoMessage( i18n("You need write access to %1").arg( m_device->genericDevice() ), K3bJob::ERROR );
+    
     emitFinished(false);
     return;
   }
@@ -183,6 +196,7 @@ void K3bAudioRipThread::run()
     if( !KStandardDirs::makeDir( dir ) ) {
       d->paranoiaLib->close();
       emitInfoMessage( i18n("Unable to create directory %1").arg(dir), K3bJob::ERROR );
+      m_device->block(false);
       emitFinished(false);
       return;
     }
@@ -209,6 +223,7 @@ void K3bAudioRipThread::run()
     if( !isOpen ) {
       d->paranoiaLib->close();
       emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(filename), K3bJob::ERROR );
+      m_device->block(false);
       emitFinished(false);
       return;
     }
@@ -252,13 +267,18 @@ void K3bAudioRipThread::run()
   }
 
   d->paranoiaLib->close();
+  m_device->block(false);
 
   if( d->canceled ) {
     emitCanceled();
     emitFinished(false);
   }
-  else
+  else {
+  if( k3bcore->globalSettings()->ejectMedia() )
+    m_device->eject();
+
     emitFinished(success);
+  }
 }
 
 
@@ -389,6 +409,7 @@ void K3bAudioRipThread::slotCheckIfThreadStillRunning()
 {
   if( running() ) {
     d->paranoiaLib->close();
+    m_device->block(false);
 
     // this could happen if the thread is stuck in paranoia_read
     // because of an unreadable cd

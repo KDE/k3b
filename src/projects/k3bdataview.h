@@ -55,6 +55,8 @@ class K3bDataView : public K3bView
    void clearImportedSession();
    void editBootImages();
 
+   void slotDocChanged();
+
  protected:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;

@@ -33,6 +33,7 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qfileinfo.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -374,6 +375,31 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 	}
       }
     }
+  }
+
+
+  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
+       it.current(); ++it ) {
+    if( !QFileInfo( it.current()->blockDeviceName() ).isWritable() )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("No write access to device %1").arg(it.current()->blockDeviceName()),
+					 i18n("K3b needs write access to all the devices to perform certain tasks. "
+					      "Without you might encounter problems with %1 - %2").arg(it.current()->vendor()).arg(it.current()->description()),
+					 i18n("Make sure you have write access to %1. In case you are not using "
+					      "devfs or udev K3bSetup is able to do this for you.").arg(it.current()->blockDeviceName()),
+					 false ) );
+
+
+    if( it.current()->interfaceType() == K3bDevice::SCSI &&
+	!it.current()->genericDevice().isEmpty() &&
+	!QFileInfo( it.current()->genericDevice() ).isWritable() )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("No write access to generic SCSI device %1").arg(it.current()->genericDevice()),
+					 i18n("Without write access to the generic device you might "
+					      "encounter problems with Audio CD ripping from %1 - %2").arg(it.current()->vendor()).arg(it.current()->description()),
+					 i18n("Make sure you have write access to %1. In case you are not using "
+					      "devfs or udev K3bSetup is able to do this for you.").arg(it.current()->genericDevice()),
+					 false ) );
   }
 
 

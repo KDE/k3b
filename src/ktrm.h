@@ -29,7 +29,7 @@
 
 #include <config.h>
 
-#if HAVE_MUSICBRAINZ
+#ifdef HAVE_TUNEPIMP
 
 #include <qstring.h>
 #include <qvaluelist.h>

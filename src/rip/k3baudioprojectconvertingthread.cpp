@@ -98,7 +98,7 @@ void K3bAudioProjectConvertingThread::run()
 
   d->canceled = false;
   d->overallBytesRead = 0;
-  d->overallBytesToRead = m_doc->size();
+  d->overallBytesToRead = m_doc->length().audioBytes();
 
   if( m_singleFile ) {
     QString& filename = m_tracks[0].second;

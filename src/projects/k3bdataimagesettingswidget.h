@@ -32,6 +32,9 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
 
   void load( const K3bIsoOptions& );
   void save( K3bIsoOptions& );
+
+ private slots:
+  void slotJolietToggled( bool );
 };
 
 

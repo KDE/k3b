@@ -18,7 +18,7 @@
 
 #include <config.h>
 
-#if HAVE_MUSICBRAINZ
+#ifdef HAVE_TUNEPIMP
 
 #include <qobject.h>
 #include "ktrm.h"
