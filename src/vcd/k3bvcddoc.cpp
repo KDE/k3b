@@ -334,11 +334,77 @@ void K3bVcdDoc::loadDefaultSettings()
 
 bool K3bVcdDoc::loadDocumentData( QDomDocument* doc )
 {
+  newDocument();
+
+  if( doc->doctype().name() != documentType() )
+    return false;
+
+  QDomNodeList nodes = doc->documentElement().childNodes();
+
+  if( nodes.length() < 2 )
+    return false;
+
+  if( nodes.item(0).nodeName() != "general" )
+    return false;
+  if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
+    return false;
+    
+  if( nodes.item(1).nodeName() != "contents" )                     
+    return false;
+
+  QDomNodeList trackNodes = nodes.item(1).childNodes();
+
+  for( uint i = 0; i< trackNodes.length(); i++ ) {
+
+    // check if url is available
+    QDomElement trackElem = trackNodes.item(i).toElement();
+    QString url = trackElem.attributeNode( "url" ).value();
+    if( !QFile::exists( url ) )
+      m_notFoundFiles.append( url );
+    else {
+      KURL k;
+      k.setPath( url );
+      if( K3bVcdTrack* track = createTrack( k ) ) {
+        QDomNodeList trackNodes = trackElem.childNodes();
+        addTrack( track, m_tracks->count() );
+      }
+    }
+  }
+
+  emit newTracks();
+
+  informAboutNotFoundFiles();
+
+  return true;
 }
 
 
-bool K3bVcdDoc::saveDocumentData( QDomDocument* )
+bool K3bVcdDoc::saveDocumentData( QDomDocument* doc)
 {
+  doc->appendChild( doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+  QDomElement docElem = doc->createElement( documentType() );
+
+  saveGeneralDocumentData( &docElem );
+
+  // save the tracks
+  // -------------------------------------------------------------
+  QDomElement contentsElem = doc->createElement( "contents" );
+
+  for( K3bVcdTrack* track = first(); track != 0; track = next() ) {
+
+    QDomElement trackElem = doc->createElement( "track" );
+    trackElem.setAttribute( "url", KIO::decodeFileName(track->absPath()) );
+
+    contentsElem.appendChild( trackElem );
+  }
+  // -------------------------------------------------------------
+
+  docElem.appendChild( contentsElem );
+
+  doc->appendChild( docElem );
+
+  return true;
 }
 
 
