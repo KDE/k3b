@@ -43,7 +43,7 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
   setSpacing( 0 );
 
   QLabel* copyrightLabel = new QLabel( kapp->aboutData()->copyrightStatement(), this );
-  copyrightLabel->setMargin( 2 );
+  copyrightLabel->setMargin( 5 );
   copyrightLabel->setPaletteBackgroundColor( black );
   copyrightLabel->setPaletteForegroundColor( white );
   copyrightLabel->setAlignment( AlignRight );

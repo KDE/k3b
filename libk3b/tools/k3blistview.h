@@ -179,6 +179,8 @@ class K3bListView : public KListView
   /**
    * This is called whenever one of the editor's contents changes
    * the default implementation just returnes true
+   *
+   * FIXME: should be called something like mayRename
    */
   virtual bool renameItem( K3bListViewItem*, int, const QString& );
 

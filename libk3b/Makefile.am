@@ -15,4 +15,4 @@ SUBDIRS = core plugin tools projects cddb
 
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
-	$(XGETTEXT) `find -name "*.cpp" -or -name "*.h"` -o $(podir)/libk3b.pot
+	$(XGETTEXT) `find -name "*.cpp" -or -name "*.h"` --from-code=UTF-8 -o $(podir)/libk3b.pot

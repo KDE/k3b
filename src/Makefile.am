@@ -51,6 +51,6 @@ rc_DATA = k3bui.rc eventsrc tips
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
 	$(PREPARETIPS) tips > tips.cpp
-	$(XGETTEXT) `find . -name "*.cpp" -or -name "*.h"` -o $(podir)/k3b.pot
+	$(XGETTEXT) `find . -name "*.cpp" -or -name "*.h"` --from-code=UTF-8 -o $(podir)/k3b.pot
 	$(XGETTEXT) `find ../plugins -name "*.cpp" -or -name "*.h"` -j -o $(podir)/k3b.pot
 	rm -f tips.cpp 
