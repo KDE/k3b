@@ -59,7 +59,7 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
   m->addProgram( new K3bNormalizeProgram() );
   m->addProgram( new K3bGrowisofsProgram() );
   m->addProgram( new K3bDvdformatProgram() );
-  m->addProgram( new K3bCdda2wavProgram() );
+//  m->addProgram( new K3bCdda2wavProgram() );
 }
 
 
