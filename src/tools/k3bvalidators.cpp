@@ -72,9 +72,9 @@ K3bValidator* K3bValidators::cdTextValidator( QObject* parent, const char* name 
 K3bValidator* K3bValidators::iso9660Validator( bool allowEmpty, QObject* parent, const char* name )
 {
   if( allowEmpty )
-    return new K3bValidator( QRegExp( "[^/$\\\"%]*" ), parent, name );
+    return new K3bValidator( QRegExp( "[^/]*" ), parent, name );
   else
-    return new K3bValidator( QRegExp( "[^/$\\\"%]+" ), parent, name );
+    return new K3bValidator( QRegExp( "[^/]+" ), parent, name );
 }
 
 

@@ -46,8 +46,7 @@ K3bDataItem::~K3bDataItem()
 
 void K3bDataItem::setK3bName( const QString& name ) {
   // test for not-allowed characters
-  // TODO: use QRegExp
-  if( name.contains('/') || name.contains('*') ) {
+  if( name.contains('/') ) {
     kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
     return;
   }
