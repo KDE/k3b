@@ -33,6 +33,7 @@ class QCheckBox;
 class K3bDevice;
 class K3bOptionCddb;
 class K3bDeviceOptionTab;
+class K3bBurningOptionTab;
 
 
 /**
@@ -46,7 +47,7 @@ class K3bOptionDialog : public KDialogBase
   K3bOptionDialog(QWidget *parent=0, const char *name=0, bool modal = true);
   ~K3bOptionDialog();
 	
-  enum m_configPageIndex { Devices = 0, Programs = 1, Cddb = 2 };
+  enum m_configPageIndex { Burning = 0, Devices = 1, Programs = 2, Cddb = 3 };
 		
  protected slots:
   void slotOk();
@@ -59,9 +60,6 @@ class K3bOptionDialog : public KDialogBase
   QPushButton* m_buttonSearch;
   QLabel* m_labelInfo;
 
-  // burning tab
-  QCheckBox* m_checkUseID3Tag;
-		
   void setupProgramsPage();
   void readPrograms();
   bool savePrograms();
@@ -70,10 +68,10 @@ class K3bOptionDialog : public KDialogBase
   K3bDeviceOptionTab* m_deviceOptionTab;	
   void setupDevicePage();
 
+  // burning tab
   void setupBurningPage();
-  void readBurningSettings();
-  void saveBurningSettings();
-	
+  K3bBurningOptionTab* m_burningOptionTab;
+
   // cddb tab
   K3bOptionCddb *m_cddbPage;
   void setupCddbPage();		

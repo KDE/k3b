@@ -170,7 +170,7 @@ bool K3bDoc::newDocument()
 {
   m_dummy = false;
   m_dao = true;
-  m_onTheFly = false;
+  m_onTheFly = true;
 	
   modified=false;
   return true;

@@ -19,6 +19,7 @@
 #include "../k3b.h"
 #include "k3boptioncddb.h"
 #include "k3bdeviceoptiontab.h"
+#include "k3bburningoptiontab.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -65,10 +66,10 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   setupCddbPage();
   //	setupPermissionPage();
 	
-  readBurningSettings();
   readPrograms();
   m_cddbPage->readSettings();
   m_deviceOptionTab->readDevices();
+  m_burningOptionTab->readSettings();
 }
 
 
@@ -93,10 +94,12 @@ void K3bOptionDialog::slotOk()
 void K3bOptionDialog::slotApply()
 {
   // save all the shit!
-  saveBurningSettings();
   savePrograms();
   m_cddbPage->apply();
   m_deviceOptionTab->saveDevices();
+  m_burningOptionTab->saveSettings();
+
+  kapp->config()->sync();
 }
 
 
@@ -244,29 +247,13 @@ void K3bOptionDialog::setupBurningPage()
 			   KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
 		
   QGridLayout* _frameLayout = new QGridLayout( frame );
-  _frameLayout->setSpacing( spacingHint() );
-  _frameLayout->setMargin( marginHint() );
+  _frameLayout->setSpacing( 0 );
+  _frameLayout->setMargin( 0 );
 
-  m_checkUseID3Tag = new QCheckBox( "Use ID3 Tags for filenames", frame );
-  _frameLayout->addWidget( m_checkUseID3Tag, 0, 0 );
+  m_burningOptionTab = new K3bBurningOptionTab( frame );
+  _frameLayout->addWidget( m_burningOptionTab, 0, 0 );
 }
 
-
-void K3bOptionDialog::readBurningSettings()
-{
-  kapp->config()->setGroup("ISO Options");
-  m_checkUseID3Tag->setChecked( kapp->config()->readBoolEntry("Use ID3 Tag for mp3 renaming", false) );
-	
-}
-
-
-void K3bOptionDialog::saveBurningSettings()
-{
-  kapp->config()->setGroup("ISO Options");
-  kapp->config()->writeEntry( "Use ID3 Tag for mp3 renaming", m_checkUseID3Tag->isChecked() );
-	
-  k3bMain()->setUseID3TagForMp3Renaming( m_checkUseID3Tag->isChecked() );
-}
 
 void K3bOptionDialog::setupCddbPage()
 {

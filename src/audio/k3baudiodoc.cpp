@@ -83,6 +83,7 @@ bool K3bAudioDoc::newDocument()
 
   m_cdText = true;
   m_padding = false;
+  m_hideFirstTrack = false;
 	
   return K3bDoc::newDocument();
 }
@@ -468,7 +469,75 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
   }
 	
   // tracks
-  for( K3bAudioTrack* _track = at(0); _track != 0; _track = next() ) {
+  K3bAudioTrack* _track = first();
+  if( hideFirstTrack() ) {
+    K3bAudioTrack* hiddenTrack = _track;
+    _track = next();
+    if( _track == 0 ) {
+      // we cannot hide a lonely track
+      _track = first();
+    }
+    else {
+      t << "TRACK AUDIO" << "\n";
+      if( cdText() ) {
+	t << "CD_TEXT {" << "\n";
+	t << "  LANGUAGE 0 {" << "\n";
+	t << "    TITLE " << "\"" << _track->title() << "\"" << "\n";
+	t << "    PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
+	t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
+	t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
+	t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
+	t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
+	t << "  }" << "\n";
+	t << "}" << "\n";
+      }
+
+      t << "FILE ";
+      if( onTheFly() ) {
+	t << "\"-\" ";   // read from stdin
+	t << K3b::framesToString( _trackStart );        // where does the track start in stdin
+	t << " " << K3b::framesToString( hiddenTrack->length() );   // here we need the perfect length !!!!!
+	t << "\n";
+	
+	_trackStart += hiddenTrack->length();
+      }
+      else {
+	if( hiddenTrack->bufferFile().isEmpty() ) {
+	  t << "\"" << hiddenTrack->absPath() << "\"" << " 0" << "\n";
+	  qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
+	  success = false;
+	}
+	else
+	  t << "\"" << hiddenTrack->bufferFile() << "\"" << " 0" << "\n";
+      }
+      t << "START" << "\n"; // use the whole file as pregap
+
+      t << "FILE ";
+      if( onTheFly() ) {
+	t << "\"-\" ";   // read from stdin
+	t << K3b::framesToString( _trackStart );        // where does the track start in stdin
+	t << " " << K3b::framesToString( _track->length() );   // here we need the perfect length !!!!!
+	t << "\n";
+	
+	_trackStart += _track->length();
+      }
+      else {
+	if( _track->bufferFile().isEmpty() ) {
+	  t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
+	  qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
+	  success = false;
+	}
+	else
+	  t << "\"" << _track->bufferFile() << "\"" << " 0" << "\n";
+      }
+
+      t << "\n";
+    }
+
+    _track = next();
+  }
+  
+  for( ; _track != 0; _track = next() ) {
     t << "TRACK AUDIO" << "\n";
     if( cdText() ) {
       t << "CD_TEXT {" << "\n";
@@ -482,6 +551,7 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
       t << "  }" << "\n";
       t << "}" << "\n";
     }
+
     if( _track->pregap() > 0 ) {
       t << "PREGAP " << K3b::framesToString( _track->pregap() ) << "\n";
     }
@@ -497,7 +567,7 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     }
     else {
       if( _track->bufferFile().isEmpty() ) {
-// 	t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
+ 	t << "\"" << _track->absPath() << "\"" << " 0" << "\n";
 	qDebug( "(K3bAudioDoc) not all files buffered. toc-file cannot be used for writing." );
 	success = false;
       }

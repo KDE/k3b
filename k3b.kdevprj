@@ -1024,11 +1024,23 @@ install_location=$$(kde_datadir)/k3b/pics/nonsticky.png
 type=DATA
 
 [src/option/Makefile.am]
-files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h,src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h
+files=src/option/k3boptioncddb.cpp,src/option/k3boptioncddb.h,src/option/k3bdeviceoptiontab.h,src/option/k3bdeviceoptiontab.cpp,src/option/k3boptiondialog.cpp,src/option/k3boptiondialog.h,src/option/k3bburningoptiontab.h,src/option/k3bburningoptiontab.cpp
 sharedlib_LDFLAGS=-version-info 0:5:0
 sharedlib_rootname=option
 sub_dirs=
 type=static_library
+
+[src/option/k3bburningoptiontab.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/option/k3bburningoptiontab.h]
+dist=true
+install=false
+install_location=
+type=HEADER
 
 [src/option/k3bdeviceoptiontab.cpp]
 dist=true

@@ -346,14 +346,14 @@ void K3bAudioJob::slotCdrecordFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( "Burning successfully finished" );
+	  emit infoMessage( i18n("Burning successfully finished") );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( "Cdrecord returned some error!" );
-	  emit infoMessage( "Sorry, no error handling yet! :-((" );
-	  emit infoMessage( "Please send me a mail with the last output..." );
+	  emit infoMessage( i18n("Cdrecord returned some error!") );
+	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((" );
+	  emit infoMessage( i18n("Please send me a mail with the last output...") );
 	  m_error = K3b::CDRECORD_ERROR;
 	  break;
 	}
@@ -361,7 +361,7 @@ void K3bAudioJob::slotCdrecordFinished()
   else
     {
       m_error = K3b::CDRECORD_ERROR;
-      emit infoMessage( "cdrecord did not exit cleanly!" );
+      emit infoMessage( i18n("Cdrecord did not exit cleanly!") );
     }
 
 
@@ -383,14 +383,14 @@ void K3bAudioJob::slotCdrdaoFinished()
 	{
 	case 0:
 	  m_error = K3b::SUCCESS;
-	  emit infoMessage( "Burning successfully finished" );
+	  emit infoMessage( i18n("Burning successfully finished") );
 	  break;
 				
 	default:
 	  // no recording device and also other errors!! :-(
-	  emit infoMessage( "Cdrdao returned some error!" );
-	  emit infoMessage( "Sorry, no error handling yet! :-((" );
-	  emit infoMessage( "Please send me a mail with the last output..." );
+	  emit infoMessage( i18n("Cdrdao returned some error!") );
+	  emit infoMessage( i18n("Sorry, no error handling yet!") + " :-((" );
+	  emit infoMessage( i18n("Please send me a mail with the last output...") );
 	  m_error = K3b::CDRDAO_ERROR;
 	  break;
 	}
@@ -398,7 +398,7 @@ void K3bAudioJob::slotCdrdaoFinished()
   else
     {
       m_error = K3b::CDRDAO_ERROR;
-      emit infoMessage( "cdrdao did not exit cleanly!" );
+      emit infoMessage( i18n("Cdrdao did not exit cleanly!") );
     }
 
   // remove toc-file
@@ -434,7 +434,7 @@ void K3bAudioJob::decodeNextFile()
 
     emit newSubTask( i18n("Buffering file (Track %1) %2").arg(m_currentTrackInfo->track->index() + 1).arg( m_currentTrackInfo->track->fileName() ) );
 
-    KURL bufferFile = audioModule->writeToWav( k3bMain()->findTempFile( "wav" ) );
+    KURL bufferFile = audioModule->writeToWav( k3bMain()->findTempFile( "wav", doc()->tempDir() ) );
     if( bufferFile.isEmpty() ) {
       qDebug( "(K3bAudioJob) Could not buffer file: " + m_currentTrackInfo->track->absPath() );
       emit infoMessage( i18n("Could not buffer file: '%1'").arg( m_currentTrackInfo->track->fileName() ) );
@@ -465,7 +465,7 @@ void K3bAudioJob::slotModuleFinished( bool success )
 
 void K3bAudioJob::startWriting()
 {
-  emit newTask( "Writing" );
+  emit newTask( i18n("Writing") );
   emit newSubTask( i18n("Preparing write process...") );
 
   m_iDocSize = m_doc->size();
@@ -486,16 +486,21 @@ void K3bAudioJob::startWriting()
   if( m_doc->onTheFly() )
     m_doc->setOnTheFly( false );
 	
-  if( m_doc->dao() || m_doc->cdText() ) {
+  if( m_doc->dao() || m_doc->cdText() || m_doc->hideFirstTrack() ) {
     // write in dao-mode
     if( m_doc->cdText() && !m_doc->dao() ) {
-      emit infoMessage( "CD-Text is only supported in DAO-mode.");
-      emit infoMessage("Swiching to DAO-mode.");
+      emit infoMessage( i18n("CD-Text is only supported in DAO-mode.") );
+      emit infoMessage( i18n("Swiching to DAO-mode.") );
+      m_doc->setDao( true );
+    }
+    else if( m_doc->hideFirstTrack() && !m_doc->dao() ) {
+      emit infoMessage( i18n("Hiding first track is only supported in DAO-mode.") );
+      emit infoMessage( i18n("Swiching to DAO-mode.") );
       m_doc->setDao( true );
     }
 		
     // use cdrdao to burn the cd
-    emit infoMessage( "Writing TOC-file" );
+    emit infoMessage( i18n("Writing TOC-file") );
     m_tocFile = locateLocal( "appdata", "temp/" ) + "k3b_" + QTime::currentTime().toString() + ".toc";
     if( !m_doc->writeTOC( m_tocFile ) ) {
 
@@ -562,7 +567,7 @@ void K3bAudioJob::startWriting()
 	  QFile::remove( m_tocFile );
 	  m_tocFile = QString::null;
 
-	  emit infoMessage( "could not start cdrdao!" );
+	  emit infoMessage( i18n("Could not start cdrdao!") );
 	  emit finished( this );
 	}
       else
@@ -645,7 +650,7 @@ void K3bAudioJob::startWriting()
 	// it "should" be the executable
 	qDebug("(K3bAudioJob) could not start cdrecord");
 	m_error = K3b::CDRECORD_ERROR;
-	emit infoMessage( "could not start cdrecord!" );
+	emit infoMessage( i18n("Could not start cdrecord!") );
 	emit finished( this );
       }
     else

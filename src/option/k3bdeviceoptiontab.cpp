@@ -194,9 +194,6 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   frameLayout->addMultiCellWidget( m_groupDeviceInfo, 1, 2, 1, 1 );
   // ------------------------------------------------
 
-  // disable stuff by default
-  m_groupDeviceInfo->setDisabled( true );
-
   showWriterSpecificProps( false );
   // -------------------------------------
 

@@ -59,16 +59,13 @@ K3bAudioBurnDialog::~K3bAudioBurnDialog(){
 
 void K3bAudioBurnDialog::saveSettings()
 {
-  // save temp dir
-  k3bMain()->config()->setGroup( "General Options" );
-  k3bMain()->config()->writeEntry( "Temp Dir", tempDir() );
-  k3bMain()->config()->sync();
-
+  doc()->setTempDir( tempPath() );
   doc()->setDao( m_checkDao->isChecked() );
   doc()->setDummy( m_checkSimulate->isChecked() );
   doc()->setOnTheFly( m_checkOnTheFly->isChecked() );
   ((K3bAudioDoc*)doc())->setPadding( m_checkPadding->isChecked() );
   ((K3bAudioDoc*)doc())->writeCdText( m_checkCdText->isChecked() );
+  ((K3bAudioDoc*)doc())->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
 	
   // -- saving current speed --------------------------------------
   doc()->setSpeed( writerSpeed() );
@@ -92,6 +89,7 @@ void K3bAudioBurnDialog::readSettings()
   m_checkSimulate->setChecked( doc()->dummy() );
   m_checkPadding->setChecked( ((K3bAudioDoc*)doc())->padding() );
   m_checkCdText->setChecked( ((K3bAudioDoc*)doc())->cdText() );
+  m_checkHideFirstTrack->setChecked( ((K3bAudioDoc*)doc())->hideFirstTrack() );
 
   // read CD-Text ------------------------------------------------------------
   m_editTitle->setText( ((K3bAudioDoc*)doc())->title() );
@@ -134,15 +132,19 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
 
   m_checkOnTheFly = new QCheckBox( m_groupOptions, "m_checkOnTheFly" );
   m_checkOnTheFly->setText( i18n( "Writing on the fly" ) );
-  m_groupOptionsLayout->addWidget( m_checkOnTheFly );
 
   m_checkPadding = new QCheckBox( m_groupOptions, "m_checkPadding" );
   m_checkPadding->setText( i18n( "Use Padding" ) );
 
+  m_checkHideFirstTrack = new QCheckBox( m_groupOptions, "m_checkHideFirstTrack" );
+  m_checkHideFirstTrack->setText( i18n( "Hide first track" ) );
+
   m_groupOptionsLayout->addWidget( m_checkSimulate );
+  m_groupOptionsLayout->addWidget( m_checkOnTheFly );
   m_groupOptionsLayout->addWidget( m_checkCdText );
   m_groupOptionsLayout->addWidget( m_checkPadding );
   m_groupOptionsLayout->addWidget( m_checkDao );
+  m_groupOptionsLayout->addWidget( m_checkHideFirstTrack );
   // --------------------------------------------------- options group ---
 
   frameLayout->addWidget( tempDirBox( frame ), 1, 1 );
@@ -153,6 +155,8 @@ void K3bAudioBurnDialog::setupBurnTab( QFrame* frame )
   frameLayout->setColStretch( 1, 1 );
 
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), tempDirBox(), SLOT(setEnabled(bool)) );
+  connect( m_checkDao, SIGNAL(toggled(bool)), m_checkHideFirstTrack, SLOT(setEnabled(bool)) );
+  connect( m_checkDao, SIGNAL(toggled(bool)), m_checkCdText, SLOT(setEnabled(bool)) );
 }
 
 

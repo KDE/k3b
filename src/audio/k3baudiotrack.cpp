@@ -47,8 +47,8 @@ K3bAudioTrack::K3bAudioTrack( QList<K3bAudioTrack>* parent, const QString& filen
   m_length = 0;
   m_isAccurateLength = false;
   
-  kapp->config()->setGroup( "Audio Defaults" );
-  m_pregap = kapp->config()->readNumEntry( "Pregap", 150 );
+  kapp->config()->setGroup( "Audio project settings" );
+  m_pregap = kapp->config()->readNumEntry( "default pregap", 150 );
   
 
   // create a module for decoding and so on

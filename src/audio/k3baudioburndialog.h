@@ -59,6 +59,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    QCheckBox* m_checkOnTheFly;
    QCheckBox* m_checkPadding;
    QCheckBox* m_checkSimulate;
+   QCheckBox* m_checkHideFirstTrack;
    // -----------------------------------------------------------
 	
    // the cd-text-tab

@@ -123,6 +123,8 @@ class K3bDoc : public QObject
   virtual int size() const = 0;
   virtual int length() const = 0;
 
+  const QString& tempDir() const { return m_tempDir; }
+
   /**
    * After result() has been emitted this returns the error-code
    * to check the result.
@@ -145,6 +147,7 @@ class K3bDoc : public QObject
   void setSpeed( int speed );
   void setBurner( K3bDevice* dev );
   void setBurnProof( bool b ) { m_burnProof = b; }
+  void setTempDir( const QString& dir ) { m_tempDir = dir; }
 	
  signals:
   void errorMessage( const QString& );
@@ -186,6 +189,7 @@ class K3bDoc : public QObject
   /** the list of the views currently connected to the document */
   QList<K3bView> *pViewList;	
   QString m_projectName;
+  QString m_tempDir;
   K3bDevice* m_burner;
   bool m_dao;
   bool m_dummy;

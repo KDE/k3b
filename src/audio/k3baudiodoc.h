@@ -55,6 +55,7 @@ class K3bAudioDoc : public K3bDoc
   bool newDocument();
 
   bool padding() const;
+  bool hideFirstTrack() const { return m_hideFirstTrack; }
   int numberOfTracks() const { return m_tracks->count(); }
 
   K3bAudioTrack* first() { return m_tracks->first(); }
@@ -102,6 +103,8 @@ class K3bAudioDoc : public K3bDoc
 
   void setPadding( bool p ) { m_padding = p; }
   //	void cancel();
+
+  void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
 
   // CD-Text
   void writeCdText( bool b ) { m_cdText = b; }
@@ -155,6 +158,7 @@ class K3bAudioDoc : public K3bDoc
   /** if true the adding of files will take longer */
   bool testFiles;
   bool m_padding;
+  bool m_hideFirstTrack;
  	
   // CD-Text
   // --------------------------------------------------
