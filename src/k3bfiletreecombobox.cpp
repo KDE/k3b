@@ -30,6 +30,7 @@
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qdrawutil.h>
+#include <qdir.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -198,6 +199,8 @@ void K3bFileTreeComboBox::slotGoUrl()
   }
 
   // no device -> select url
+  p.replace( "~", QDir::homeDirPath() );
+  lineEdit()->setText( p );
   KURL url;
   url.setPath( p );
   emit urlExecuted( url );
