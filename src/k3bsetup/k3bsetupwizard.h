@@ -57,6 +57,7 @@ class K3bSetupWizard : public KWizard
  private:
   K3bSetup* m_setup;
   FstabEntriesTab* m_fstabTab;
+  bool m_accepted;
 };
 
 #endif // K3BSETUPWIZARD_H

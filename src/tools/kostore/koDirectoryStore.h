@@ -47,8 +47,6 @@ private:
     // Path to current directory
     QString m_currentPath;
 
-    // Current File
-    QFile* m_file;
 };
 
 #endif

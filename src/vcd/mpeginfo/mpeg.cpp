@@ -159,7 +159,7 @@ mpeg::mpeg( const char* filename, int verbosity )
     SExt = 0;
     DExt = 0;
 
-    // keep track of filename (usefull for debugging)
+    // keep track of filename (useful for debugging)
     // TODO : only on mpeg_VERBOSE ?
 
     FileName = new char[ strlen( filename ) + 1 ];

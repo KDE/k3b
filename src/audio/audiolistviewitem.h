@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -35,17 +35,17 @@ class K3bAudioListViewItem : public K3bListViewItem  {
 
   /** reimplemented from QListViewItem */
   QString text(int i) const;
-	
+
   /** reimplemented from QListViewItem */
   void setText(int col, const QString& text );
-	
+
   /** reimplemented from QListViewItem */
   QString key( int column, bool a ) const;
-	
-  K3bAudioTrack* audioTrack() { return m_track; }
+
+  K3bAudioTrack* audioTrack() const { return m_track; }
 
   int animationIconNumber;
-		
+
  private:
   void init();
   K3bAudioTrack* m_track;

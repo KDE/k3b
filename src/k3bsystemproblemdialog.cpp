@@ -208,13 +208,26 @@ void K3bSystemProblemDialog::checkSystem()
 					 i18n("Install the growisofs package."),
 					 false ) );
     }
-    else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 10 ) ) {
-      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
-					 i18n("K3b needs at least growisofs version 5.10 to write dvds. "
-					      "All older versions will not work and K3b will refuse to use them."),
-					 i18n("Install a more recent version of growisofs."),
-					 false ) );
+    else {
+      if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 10 ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+					   i18n("K3b needs at least growisofs version 5.10 to write dvds. "
+						"All older versions will not work and K3b will refuse to use them."),
+					   i18n("Install a more recent version of growisofs."),
+					   false ) );
+      }
+
+      if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("%1 does not run with root privileges").arg("growisofs"),
+					   i18n("It is recommended to run growisofs with "
+						"root privileges so it is able to access "
+						"all devices. Another solution would be to give "
+						"the user write access to the devices."),
+					   i18n("Use K3bSetup to solve this problem."),
+					   true ) );
+      }
     }
   }
 

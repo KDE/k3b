@@ -86,9 +86,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   delete d->process;
   d->process = new K3bProcess();
   d->process->setRunPrivileged(true);
-  d->process->setSplitStdout(true);
-  connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
+  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
   connect( d->process, SIGNAL(wroteStdin(KProcess*)), this, SIGNAL(dataWritten()) );
 
@@ -104,6 +102,9 @@ bool K3bGrowisofsWriter::prepareProcess()
 		      ERROR );
     return false;
   }
+
+  if( !d->growisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("growisofs").arg(d->growisofsBin->version).arg(d->growisofsBin->copyright), INFO );
 
   //
   // The growisofs bin is ready. Now we add the parameters
@@ -218,7 +219,7 @@ void K3bGrowisofsWriter::setImageToWrite( const QString& filename )
 }
 
 
-void K3bGrowisofsWriter::slotStdLine( const QString& line )
+void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 {
   emit debuggingOutput( d->growisofsBin->name(), line );
 
@@ -232,13 +233,13 @@ void K3bGrowisofsWriter::slotStdLine( const QString& line )
     emit processedSize( done/1024/1024, size/1024/1024  );
   }
   else if( line.contains( "flushing cache" ) ) {
-    emit infoMessage( i18n("Flushing Cache"), PROCESS );
+    emit newSubTask( i18n("Flushing Cache")  );
   }
   else if( line.contains( "updating RMA" ) ) {
-    emit infoMessage( i18n("Updating RMA"), PROCESS );
+    emit newSubTask( i18n("Updating RMA") );
   }
   else if( line.contains( "closing session" ) ) {
-    emit infoMessage( i18n("Closing Session"), PROCESS );
+    emit newSubTask( i18n("Closing Session") );
   }
   else {
     kdDebug() << "(growisofs) " << line << endl;
@@ -265,23 +266,27 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
       // The growisofs error codes:
       //
       // 128 + errno: fatal error upon program startup
-      // 
+      // errno      : fatal error during recording
       //
       
       if( p->exitStatus() > 128 ) {
 	// for now we just emit a message with the error
 	// in the future when I know more about what kinds of errors may occure
 	// we will enhance this
-	emit infoMessage( i18n("Fatal error: %1 (%2)").arg(strerror(errno)).arg(errno), ERROR );
+	emit infoMessage( i18n("Fatal error at startup: %1").arg(strerror(p->exitStatus()-128)), 
+			  ERROR );
       }
       else if( p->exitStatus() == 1 ) {
-	emit infoMessage( i18n("I/O Error"), ERROR );
+	// Doku says: warning at exit
+	// Example: mkisofs error
+	//          unable to reload
+	// So basicly this is just for mkisofs failure since we do not let growisofs reload the media
+	emit infoMessage( i18n("Warning at exit: (1)"), ERROR );
+	emit infoMessage( i18n("Most likely mkisofs failed in some way."), ERROR );
       }
       else {
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(d->growisofsBin->name()).arg(p->exitStatus()), 
-			  K3bJob::ERROR );
-	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
-	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+	emit infoMessage( i18n("Fatal error during recording: %1").arg(strerror(p->exitStatus())), 
+			  ERROR );
       }
 
       emit finished( false );

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -35,7 +35,7 @@ class K3bDirItem : public K3bDataItem
 {
  public: 
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
-  ~K3bDirItem();
+  virtual ~K3bDirItem();
 	
   K3bDirItem* getDirItem();
 
@@ -72,7 +72,16 @@ class K3bDirItem : public K3bDataItem
   virtual bool isRemoveable() const;
 	
  private:
+  /**
+   * this recursivly updates the size of the directories.
+   * The size of this dir and the parent dir is updated.
+   * These values are just used for user information.
+   */
   void updateSize( KIO::filesize_t s );
+  /**
+   * Updates the number of files and directories. These values are
+   * just used for user information.
+   */
   void updateFiles( long files, long dirs );
 
   QPtrList<K3bDataItem>* m_children;

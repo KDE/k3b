@@ -44,6 +44,9 @@ K3bCdDevice::DiskInfo::DiskInfo()
 
 QString K3bCdDevice::mediaTypeString( int m )
 {
+  if( m == -1 )
+    return i18n("Error");
+
   QStringList s;
   if( m & MEDIA_NONE )
     s += i18n("No media");

@@ -137,7 +137,7 @@ void K3bCddbHttpQuery::slotConnectionClosed()
   emit infoMessage( i18n("Connection closed") );
 
   if( m_state != FINISHED ) {
-    // some error occured
+    // some error occurred
     setError( FAILURE );
     emitQueryFinished();
   }

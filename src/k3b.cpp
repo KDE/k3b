@@ -1,5 +1,4 @@
 /*
- *
  * $Id$
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -27,7 +26,7 @@
 #include <qvaluelist.h>
 #include <qfont.h>
 #include <qpalette.h>
-
+#include <kkeydialog.h>
 // include files for KDE
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -185,6 +184,8 @@ void K3bMainWindow::showEvent( QShowEvent* e )
 
 void K3bMainWindow::initActions()
 {
+    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+
   actionFileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
@@ -306,6 +307,11 @@ void K3bMainWindow::initActions()
   actionFileQuit->setStatusText(i18n("Quits the application"));
 }
 
+
+void K3bMainWindow::slotConfigureKeys()
+{
+    KKeyDialog::configure( actionCollection(), this );
+}
 
 void K3bMainWindow::initStatusBar()
 {
@@ -810,7 +816,7 @@ void K3bMainWindow::slotSettingsConfigure()
 
   d.exec();
 
-  // emit a changed signal everytime since we do not know if the user selected
+  // emit a changed signal every time since we do not know if the user selected
   // "apply" and "cancel" or "ok"
   emit configChanged( m_config );
 }
@@ -824,7 +830,7 @@ void K3bMainWindow::showOptionDialog( int index )
 
   d.exec();
 
-  // emit a changed signal everytime since we do not know if the user selected
+  // emit a changed signal every time since we do not know if the user selected
   // "apply" and "cancel" or "ok"
   emit configChanged( m_config );
 }

@@ -158,7 +158,7 @@ void K3bCore::init()
   emit initializationInfo( i18n("Reading local Song database...") );
   config()->setGroup( "General Options" );
 
-  QString filename = config()->readEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
+  QString filename = config()->readPathEntry( "songlistPath", locateLocal("data", "k3b") + "/songlist.xml" );
   d->songManager->load( filename );
 
   emit initializationInfo( i18n("Ready.") );

@@ -759,7 +759,7 @@ K3bDiskInfo::type  K3bCdDevice::CdDevice::diskType()
   return ret;
 }
 
-bool K3bCdDevice::CdDevice::isDVD()
+bool K3bCdDevice::CdDevice::isDVD() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -771,7 +771,7 @@ bool K3bCdDevice::CdDevice::isDVD()
 
   if( d->deviceType & (DVDR | DVDRAM | DVD) ) {
     //     try to read the physical dvd-structure
-    //     if this fails, we probably cannot take any further (usefull) dvd-action
+    //     if this fails, we probably cannot take any further (useful) dvd-action
     dvd_struct dvdinfo;
     ::memset(&dvdinfo,0,sizeof(dvd_struct));
     dvdinfo.type = DVD_STRUCT_PHYSICAL;
@@ -814,7 +814,7 @@ int K3bCdDevice::CdDevice::isReady() const
 }
 
 
-int K3bCdDevice::CdDevice::isEmpty()
+int K3bCdDevice::CdDevice::isEmpty() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -900,7 +900,7 @@ K3b::Msf K3bCdDevice::CdDevice::discSize()
 }
 
 
-bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info )
+bool K3bCdDevice::CdDevice::getDiscInfo( K3bCdDevice::disc_info_t* info ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -964,7 +964,7 @@ K3b::Msf K3bCdDevice::CdDevice::remainingSize()
     return 0;
 }
 
-int K3bCdDevice::CdDevice::numSessions()
+int K3bCdDevice::CdDevice::numSessions() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1015,7 +1015,7 @@ int K3bCdDevice::CdDevice::numSessions()
   return ret;
 }
 
-int K3bCdDevice::CdDevice::tocType()
+int K3bCdDevice::CdDevice::tocType() const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1257,7 +1257,7 @@ bool K3bCdDevice::CdDevice::block( bool b) const
   return ret;
 }
 
-bool K3bCdDevice::CdDevice::rewritable()
+bool K3bCdDevice::CdDevice::rewritable() const
 {
   if( !burner() )  // no chance to detect empty discs in readers
     return false;
@@ -1731,8 +1731,8 @@ K3bCdDevice::NextGenerationDiskInfo K3bCdDevice::CdDevice::ngDiskInfo()
 
 
 // this is stolen from cdrdao's GenericMMC driver
-bool K3bCdDevice::CdDevice::getTrackIndex( long lba, 
-					   int *trackNr, 
+bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
+					   int *trackNr,
 					   int *indexNr,
 					   unsigned char *ctl )
 {
@@ -1825,11 +1825,17 @@ bool K3bCdDevice::CdDevice::getTrackIndex( long lba,
 }
 
 
-bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p )
+bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p ) const
 {
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
   // to be as compatible as posiible we just use the MMC-1 part of the
   // mode page. Since we do not use the new stuff yet this is not a problem at all.
   // the MMC-1 part is 22 bytesin size.
+
+  bool ret = false;
 
   struct cdrom_generic_command cmd;
   unsigned char data[22+8]; // MMC-1: 22 byte, header: 8 byte
@@ -1850,9 +1856,12 @@ bool K3bCdDevice::CdDevice::readModePage2A( struct mm_cap_page_2A* p )
     //
     ::memcpy( p, data+8, 22 );
 
-    return true;
+    ret = true;
   }
-  else
-    return false;
+
+  if( needToClose )
+    close();
+
+  return ret;
 }
 

@@ -49,7 +49,8 @@ public:
   QPushButton* buttonForce;
 
   bool appendable;
-  bool waitForDvd;
+
+  int wantedMediaType;
 
   int result;
   int dialogVisible;
@@ -105,7 +106,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice* device, QWidget* parent, cons
 
 
   QToolTip::add( actionButton(KDialogBase::User1), 
-		 i18n("Force K3b to continue if it seems not to detect your empty CD-R(W)/DVD+-R(W).") );
+		 i18n("Force K3b to continue if it seems not to detect your empty CD-R(W)/DVD±R(W).") );
 }
 
 
@@ -115,7 +116,7 @@ K3bEmptyDiscWaiter::~K3bEmptyDiscWaiter()
 }
 
 
-int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, bool dvd )
+int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, int mediaType )
 {
   if ( d->inLoop ) {
     kdError() << "(K3bEmptyDiscWaiter) Recursive call detected." << endl;
@@ -123,17 +124,26 @@ int K3bEmptyDiscWaiter::waitForEmptyDisc( bool appendable, bool dvd )
   }
 
   d->appendable = appendable;
-  d->waitForDvd = dvd;
+  d->wantedMediaType = mediaType;
   d->dialogVisible = false;
   d->forced = false;
   d->canceled = false;
 
-  if( appendable )
-    d->labelRequest->setText( i18n("Please insert an appendable %4 medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( dvd ? i18n("DVD") : i18n("CDR") ) );
+  QString m;
+  if( (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD) &&
+      (d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_CD) )
+    m = i18n("CDR or DVDR");
+  else if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
+    m = i18n("DVDR(W)");
   else
-    d->labelRequest->setText( i18n("Please insert an empty %4 medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( dvd ? i18n("DVD") : i18n("CDR") ) );
+    m = i18n("CDR(W)");
 
-  if( dvd )
+  if( appendable )
+    d->labelRequest->setText( i18n("Please insert an appendable medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+  else
+    d->labelRequest->setText( i18n("Please insert an empty medium (%4) into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()).arg( m ) );
+
+  if( d->wantedMediaType & K3bCdDevice::MEDIA_WRITABLE_DVD )
     d->pixLabel->setPixmap( KGlobal::instance()->iconLoader()->loadIcon( "dvd_unmount", 
 									 KIcon::NoGroup, KIcon::SizeMedium ) );
   else
@@ -194,17 +204,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 			       + mediaState );
 
   if( dh->success() ) {
-    if( ((d->waitForDvd && dh->ngDiskInfo().isDvdMedia() )
-	 ||
-	 (!d->waitForDvd && !dh->ngDiskInfo().isDvdMedia() )
-	 )
-	&&
-	( dh->ngDiskInfo().empty()
+    if( d->wantedMediaType & dh->ngDiskInfo().mediaType() 
+      &&
+	( (dh->ngDiskInfo().empty() && !d->appendable)
 	  ||
-	  ( dh->ngDiskInfo().appendable() && d->appendable )
-	  )
-	)
-      finishWaiting( DISK_READY );
+	  (dh->ngDiskInfo().appendable() && d->appendable)
+	  ) )
+	finishWaiting( dh->ngDiskInfo().mediaType() );
     else {
       if( dh->ngDiskInfo().rewritable() ) {
 	
@@ -217,6 +223,10 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bCdDevice::DeviceHandler* 
 	    // start a k3bblankingjob
 	    K3bErasingInfoDialog infoDialog( qApp->activeWindow() );
 	    
+	    //
+	    // TODO: check for DVD and use a DVDErasingJob if so
+	    //
+
 	    K3bBlankingJob job;
 	    job.setDevice( d->device );
 	    job.setMode( K3bBlankingJob::Fast );
@@ -291,10 +301,10 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
 }
 
 
-int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, bool dvd )
+int K3bEmptyDiscWaiter::wait( K3bDevice* device, bool appendable, int mediaType )
 {
   K3bEmptyDiscWaiter d( device, qApp->activeWindow() );
-  return d.waitForEmptyDisc( appendable, dvd );
+  return d.waitForEmptyDisc( appendable, mediaType );
 }
 
 #include "k3bemptydiscwaiter.moc"

@@ -167,7 +167,7 @@ void K3bSetup2::accept()
     KDialog::accept();
   }
   else
-    KMessageBox::error( this, i18n("An error occured while applying the tasks. "
+    KMessageBox::error( this, i18n("An error occurred while applying the tasks. "
 				   "See the taskview for further details."), i18n("Error") );
 }
 

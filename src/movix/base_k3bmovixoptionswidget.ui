@@ -131,7 +131,7 @@
                         <string>The files are played in random order</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked the order in which the files are played is determined randomly everytime it is played.</string>
+                        <string>&lt;p&gt;If this option is checked the order in which the files are played is determined randomly every time it is played.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
@@ -145,7 +145,7 @@
                         <string>Do not use DMA for CD access</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked the resulting eMovix CD will not use DMA for accessing the drive. This will slow down reading from the CD but may be neccessary on some systems that do not support DMA.&lt;/p&gt;</string>
+                        <string>&lt;p&gt;If this option is checked the resulting eMovix CD will not use DMA for accessing the drive. This will slow down reading from the CD but may be necessary on some systems that do not support DMA.&lt;/p&gt;</string>
                     </property>
                 </widget>
             </grid>

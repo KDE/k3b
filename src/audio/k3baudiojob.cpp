@@ -100,14 +100,18 @@ void K3bAudioJob::start()
   else
     m_usedWritingMode = m_doc->writingMode();
 
-  bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
-  bool cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  bool cdrecordOnTheFly = false;
+  bool cdrecordCdText = false;
+  if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  }    
 
   // determine writing app
   if( writingApp() == K3b::DEFAULT ) {
     if( m_usedWritingMode == K3b::DAO ) {
       if( ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
-	  ( m_doc->cdText() && 
+	  ( m_doc->cdText() &&
 	    // the inf-files we use do only support artist and title in the global section
 	    ( !m_doc->arranger().isEmpty() ||
 	      !m_doc->songwriter().isEmpty() ||
@@ -115,7 +119,7 @@ void K3bAudioJob::start()
 	      !m_doc->cdTextMessage().isEmpty() ||
 	      !cdrecordCdText )
 	    ) ||
-	  m_doc->hideFirstTrack() 
+	  m_doc->hideFirstTrack()
 	  )
 	m_usedWritingApp = K3b::CDRDAO;
       else
@@ -128,8 +132,8 @@ void K3bAudioJob::start()
     m_usedWritingApp = writingApp();
 
   // on-the-fly writing with cdrecord >= 2.01a13
-  if( m_usedWritingApp == K3b::CDRECORD && 
-      m_doc->onTheFly() && 
+  if( m_usedWritingApp == K3b::CDRECORD &&
+      m_doc->onTheFly() &&
       !cdrecordOnTheFly ) {
     emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
     m_doc->setOnTheFly(false);
@@ -294,7 +298,7 @@ void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
       return;
     }
     else {
-      kdDebug() << "(K3bAudioJob) Successfully opened Wavefilewriter on " 
+      kdDebug() << "(K3bAudioJob) Successfully opened Wavefilewriter on "
 		<< m_waveFileWriter->filename() << endl;
 //       m_audioStreamer->writeToFd( m_waveFileWriter->fd() );
 //       m_audioStreamer->setLittleEndian(true);
@@ -412,8 +416,12 @@ void K3bAudioJob::slotAudioDecoderPercent( int p )
     else
       emit percent( p );
   }
-  else if( !m_doc->onTheFly() )
-    emit percent( p/2 );
+  else if( !m_doc->onTheFly() ) {
+    if( m_doc->normalize() )
+      emit percent( p/3 );
+    else
+      emit percent( p/2 );
+  }
 }
 
 

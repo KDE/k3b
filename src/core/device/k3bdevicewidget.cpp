@@ -41,7 +41,7 @@
 
 
 
-class K3bDeviceWidget::PrivateTempDevice 
+class K3bDeviceWidget::PrivateTempDevice
 {
 public:
   PrivateTempDevice( K3bDevice* d ) {
@@ -56,7 +56,7 @@ public:
     bufferSize = d->bufferSize();
     //    dao = d->dao();
   }
-  
+
   K3bDevice* device;
   int maxReadSpeed;
   int maxWriteSpeed;
@@ -70,19 +70,19 @@ public:
 };
 
 
-class K3bDeviceWidget::PrivateDeviceViewItem2 : public QCheckListItem 
+class K3bDeviceWidget::PrivateDeviceViewItem2 : public QCheckListItem
 {
 public:
   PrivateDeviceViewItem2( int type, PrivateTempDevice* dev, QListView* view, QListViewItem* after )
     : QCheckListItem( view, after, QString::null, CheckBox ),
-      m_type(type) { 
+      m_type(type) {
     this->dev = dev;
     init();
   }
 
   PrivateDeviceViewItem2( int type, PrivateTempDevice* dev, QListViewItem* item, QListViewItem* after )
     : QCheckListItem( item, after, QString::null, CheckBox ),
-      m_type(type) { 
+      m_type(type) {
     this->dev = dev;
     init();
   }
@@ -139,19 +139,19 @@ private:
 };
 
 
-class K3bDeviceWidget::PrivateDeviceViewItem1 : public K3bListViewItem 
+class K3bDeviceWidget::PrivateDeviceViewItem1 : public K3bListViewItem
 {
 public:
   PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, QListView* view, QListViewItem* after )
     : K3bListViewItem( view, after ),
-      m_type(type) { 
+      m_type(type) {
     this->dev = dev;
     init();
   }
 
   PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, QListViewItem* item, QListViewItem* after )
     : K3bListViewItem( item, after ),
-      m_type(type) { 
+      m_type(type) {
     this->dev = dev;
     init();
   }
@@ -206,7 +206,7 @@ public:
   }
 
   enum itemType { t_maxReadSpeed, t_maxWriteSpeed, t_cdrdaoDriver, t_bufferSize, t_cdTextCapable };
-  
+
   PrivateTempDevice* dev;
 
 private:
@@ -225,7 +225,7 @@ private:
       if( l.isEmpty() )
 	for( int i = 0; i < 13; i++ )
 	  l.append(K3bDevice::cdrdao_drivers[i]);
-      
+
       setEditor( 1, COMBO, l );
       break;
     case t_bufferSize:
@@ -303,7 +303,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDeviceManager* manager, QWidget *parent, co
 
 
   // connections
-  // ------------------------------------------------		
+  // ------------------------------------------------
   //  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
   connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
   connect( m_buttonAddDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
@@ -365,22 +365,22 @@ void K3bDeviceWidget::updateDeviceListViews()
       systemDeviceItem->setText( 1, dev->device->devicename() );
     systemDeviceItem->setForegroundColor( 1, gray );
 
-    K3bListViewItem* interfaceItem = new K3bListViewItem( devRoot, systemDeviceItem, 
+    K3bListViewItem* interfaceItem = new K3bListViewItem( devRoot, systemDeviceItem,
 							  i18n("Interface type:"),
-							  ( dev->device->interfaceType() == K3bDevice::SCSI ? 
-							    i18n("Generic SCSI") : 
+							  ( dev->device->interfaceType() == K3bDevice::SCSI ?
+							    i18n("Generic SCSI") :
 							    i18n("ATAPI") ) );
     interfaceItem->setForegroundColor( 1, gray );
 
-    K3bListViewItem* vendorItem = new K3bListViewItem( devRoot, interfaceItem, 
+    K3bListViewItem* vendorItem = new K3bListViewItem( devRoot, interfaceItem,
 						   i18n("Vendor:"),
 						   dev->device->vendor() );
     vendorItem->setForegroundColor( 1, gray );
-    K3bListViewItem* modelItem = new K3bListViewItem( devRoot, vendorItem, 
+    K3bListViewItem* modelItem = new K3bListViewItem( devRoot, vendorItem,
 						   i18n("Description:"),
 						   dev->device->description() );
     modelItem->setForegroundColor( 1, gray );
-    K3bListViewItem* versionItem = new K3bListViewItem( devRoot, modelItem, 
+    K3bListViewItem* versionItem = new K3bListViewItem( devRoot, modelItem,
 						   i18n("Version:"),
 						   dev->device->version() );
     versionItem->setForegroundColor( 1, gray );
@@ -424,12 +424,12 @@ void K3bDeviceWidget::updateDeviceListViews()
 					dev,
 					devRoot,
 					maxReadSpeedItem );
-      
+
       PrivateDeviceViewItem1* cdTextItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdTextCapable,
 								       dev,
 								       devRoot,
 								       cdrdaoDriverItem );
-      
+
       PrivateDeviceViewItem2* burnfreeItem = new PrivateDeviceViewItem2( PrivateDeviceViewItem2::t_burnproof,
 									 dev,
 									 devRoot,
@@ -466,7 +466,7 @@ void K3bDeviceWidget::updateDeviceListViews()
     }
 
     devRoot->setOpen(true);
-    
+
     dev = m_tempDevices.next();
   }
 
@@ -503,7 +503,7 @@ void K3bDeviceWidget::apply()
     tempDev->device->setCdTextCapability( tempDev->cdTextCapable );
     tempDev->device->setBurnproof( tempDev->burnproof );
     tempDev->device->setBufferSize( tempDev->bufferSize );
-    
+
     tempDev = m_tempDevices.next();
   }
 }

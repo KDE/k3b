@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -268,23 +268,23 @@ void K3bPatternOptionTab::slotUpdateExample()
   QString dir, file;
 
   if( m_mainTabbed->indexOf( m_mainTabbed->currentPage() ) == 0 ) {
-    dir = K3bPatternParser::parsePattern( m_exampleEntry, 1, 
+    dir = K3bPatternParser::parsePattern( m_exampleEntry, 1,
 					  basicDirectoryPattern(),
-					  m_checkDirectoryReplace->isChecked(), 
+					  m_checkDirectoryReplace->isChecked(),
 					  m_editDirectoryReplace->text() );
-    file = K3bPatternParser::parsePattern( m_exampleEntry, 1, 
+    file = K3bPatternParser::parsePattern( m_exampleEntry, 1,
 					   basicFilenamePattern(),
-					   m_checkFilenameReplace->isChecked(), 
+					   m_checkFilenameReplace->isChecked(),
 					   m_editFilenameReplace->text() );
   }
   else {
-    dir = K3bPatternParser::parsePattern( m_exampleEntry, 1, 
-					  m_comboAdvancedDirectoryPattern->currentText(), 
-					  m_checkDirectoryReplace->isChecked(), 
+    dir = K3bPatternParser::parsePattern( m_exampleEntry, 1,
+					  m_comboAdvancedDirectoryPattern->currentText(),
+					  m_checkDirectoryReplace->isChecked(),
 					  m_editDirectoryReplace->text() );
-    file = K3bPatternParser::parsePattern( m_exampleEntry, 1, 
-					   m_comboAdvancedFilenamePattern->currentText(), 
-					   m_checkFilenameReplace->isChecked(), 
+    file = K3bPatternParser::parsePattern( m_exampleEntry, 1,
+					   m_comboAdvancedFilenamePattern->currentText(),
+					   m_checkFilenameReplace->isChecked(),
 					   m_editFilenameReplace->text() );
   }
 
@@ -296,7 +296,7 @@ void K3bPatternOptionTab::slotUpdateExample()
 }
 
 
-QString K3bPatternOptionTab::basicFilenamePattern()
+QString K3bPatternOptionTab::basicFilenamePattern() const
 {
   QString filePattern = patternForName( m_comboBasicFilename1->currentText() );
   filePattern.append( m_editBasicFilename1->text() );
@@ -307,18 +307,18 @@ QString K3bPatternOptionTab::basicFilenamePattern()
   return filePattern;
 }
 
-QString K3bPatternOptionTab::basicDirectoryPattern()
+QString K3bPatternOptionTab::basicDirectoryPattern() const
 {
   QString dirPattern = patternForName( m_comboBasicDirectory1->currentText() );
   if( !dirPattern.isEmpty() )
     dirPattern.append( "/" );
   dirPattern.append( patternForName( m_comboBasicDirectory2->currentText() ) );
-  
+
   return dirPattern;
 }
 
 
-QString K3bPatternOptionTab::patternForName( const QString& name )
+QString K3bPatternOptionTab::patternForName( const QString& name ) const
 {
   if( name == i18n("Title") )
     return "%t";

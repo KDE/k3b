@@ -48,7 +48,7 @@ void K3bMiscOptionTab::readSettings()
   m_checkHideMainWindowWhileWriting->setChecked( c->readBoolEntry( "hide main window while writing", false ) );
   m_checkSystemConfig->setChecked( c->readBoolEntry( "check system config", true ) );
 
-  QString tempdir = c->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  QString tempdir = c->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   m_editTempDir->setURL( tempdir );
 }
 
@@ -98,7 +98,7 @@ bool K3bMiscOptionTab::saveSettings()
 
   m_editTempDir->setURL( fi.absFilePath() );
 
-  c->writeEntry( "Temp Dir", m_editTempDir->url() );
+  c->writePathEntry( "Temp Dir", m_editTempDir->url() );
 
   return true;
 }

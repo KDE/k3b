@@ -45,9 +45,11 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   struct stat statBuf;
   if( lstat( QFile::encodeName(filePath), &statBuf ) ) {
     m_size = size();
+    kdError() << "(KFileItem) lstat failed." << endl;
   }
   else {
     m_size = (KIO::filesize_t)statBuf.st_size;
+    m_inode = statBuf.st_ino;
   }
 
   // add automagically like a qlistviewitem

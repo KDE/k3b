@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2003 Sebastian Trueg <trueg@k3b.org>
@@ -57,7 +57,7 @@ K3bSetup2FinishPage::K3bSetup2FinishPage( QWidget* parent, const char* name )
 			   "<p>You finished all K3bSetup 2 steps. To apply all tasks you configured "
 			   "just press \"finish\" and enjoy using K3b."
 			   "<p><b>Caution:</b> If you configured a cdwriting group you should log out and log on again "
-			   "to aktivate it. (Sorry for that. I know this should not be neccessary in Linux... :(") );
+			   "to aktivate it. (Sorry for that. I know this should not be necessary in Linux... :(") );
 
   m_busyWidget = new K3bBusyWidget( mainWidget() );
 

@@ -7,7 +7,7 @@ MiniIcon=k3b.png
 DocPath=k3b/index.html
 Comment=Prepares the system for CD writing
 Comment[da]=Forbereder systemet for CD-skrivning
-Comment[de]=Vorbereitung für das Beschreiben von CDs
+Comment[de]=de]=Vorbereitung für das Beschreiben von CDs
 Comment[el]=Προετοιμάζει το σύστημα για εγγραφή CD
 Comment[es]=Prepara el sistema para la escritura de CDs
 Comment[fr]=Prépare le système pour l'écriture de CD
@@ -24,7 +24,7 @@ Comment[zu]=Ihlelela ukubhala kwi-CD kwesistimu
 Terminal=0
 Name=K3b Setup
 Name[da]=K3b opsætning
-Name[de]=K3b-Einrichtung
+Name[de]=de]=K3b-Einrichtung
 Name[el]=Ρύθμιση K3b
 Name[es]=Configuración de K3b
 Name[fr]=Réglages de K3b

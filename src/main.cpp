@@ -69,8 +69,12 @@ int main(int argc, char *argv[]) {
     aboutData.addCredit("Christoph Thielecke",
 			I18N_NOOP("For extensive testing and the first German translation."),
 			"crissi99@gmx.de");
-    aboutData.addCredit("Joerg Schilling",
-			I18N_NOOP("For his great cdrtools and the patient answers to all my questions.") );
+    aboutData.addCredit("Andy Polyakov",
+			I18N_NOOP("For the great dvd+rw-tools and the nice cooperation."),
+			"appro@fy.chalmers.se" );
+    aboutData.addCredit("Roberto De Leo",
+			I18N_NOOP("For the very cool eMovix package and his accommodating work."),
+			"peggish@users.sf.net" );
 
 
     KCmdLineArgs::init( argc, argv, &aboutData );

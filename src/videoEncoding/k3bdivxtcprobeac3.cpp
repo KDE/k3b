@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Thomas Froescher <tfroescher@k3b.org>
@@ -31,8 +31,8 @@ K3bDivXTcprobeAc3::K3bDivXTcprobeAc3()
 
 K3bDivXTcprobeAc3::~K3bDivXTcprobeAc3()
 {
-  if( m_process ) delete m_process;
-  if( m_util ) delete m_util;
+  delete m_process;
+  delete m_util;
 }
 
 void K3bDivXTcprobeAc3::parseAc3Bitrate( K3bDivxCodecData* data){
@@ -47,7 +47,7 @@ void K3bDivXTcprobeAc3::parseAc3Bitrate( K3bDivxCodecData* data){
 void K3bDivXTcprobeAc3::slotInternalParsing(){
      kdDebug() << "(K3bDivXTcprobeAc3:parseAc3Bitrate) Search ac3 bitrate." << endl;
      m_buffer = "";
-     if( m_process ) delete m_process;
+     delete m_process;
      m_process = new KShellProcess;
      const K3bExternalBin *tcprobeBin = k3bcore->externalBinManager()->binObject("tcprobe");
 

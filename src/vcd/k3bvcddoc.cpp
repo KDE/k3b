@@ -59,6 +59,9 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
 
     m_urlAddingTimer = new QTimer( this );
     connect( m_urlAddingTimer, SIGNAL( timeout() ), this, SLOT( slotWorkUrlQueue() ) );
+
+  // FIXME: remove the newTracks() signal and replace it with the changed signal
+  connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
 }
 
 K3bVcdDoc::~K3bVcdDoc()
@@ -300,7 +303,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             newTrack->setPlayTime( vcdOptions()->PbcPlayTime() );
             newTrack->setWaitTime( vcdOptions()->PbcWaitTime() );
 
-            // for debuging
+            // for debugging
             Mpeg->PrintInfos();
             delete Mpeg;
             return newTrack;

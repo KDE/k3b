@@ -60,6 +60,9 @@ void K3bAudioNormalizeJob::start()
     return;
   }
 
+  if( !bin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(bin->name()).arg(bin->version).arg(bin->copyright), INFO );
+
   // create the commandline
   *m_process << bin->path;
 
@@ -119,7 +122,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
   }
   
   else if( line.contains( "already normalized" ) ) {
-    // no normalization neccessary for the current track
+    // no normalization necessary for the current track
     emit infoMessage( i18n("Track %1 is already normalized.").arg(m_currentTrack), INFO );
     m_currentTrack++;
   }

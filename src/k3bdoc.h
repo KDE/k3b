@@ -153,6 +153,9 @@ class K3bDoc : public QObject
   virtual K3bProjectInterface* dcopInterface();
   QCString dcopId();
 
+ signals:
+  void changed();
+
  public slots:
   void updateAllViews();
   void setDummy( bool d );

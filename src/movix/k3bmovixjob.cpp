@@ -278,22 +278,37 @@ bool K3bMovixJob::addMovixFiles()
     QDir dir(path);
     QStringList helpFiles = dir.entryList(QDir::Files);
     for( QStringList::const_iterator it = helpFiles.begin();
-	 it != helpFiles.end(); ++it )
-      (void)new K3bFileItem( path + "/" + *it, m_doc, m_isolinuxDir );
+	 it != helpFiles.end(); ++it ) {
+      // some emovix installations include backup-files, no one's perfect ;)
+      if( !(*it).endsWith( "~" ) )
+	(void)new K3bFileItem( path + "/" + *it, m_doc, m_isolinuxDir );
+    }
 
 
     // add subtitle font dir
     if( !m_doc->subtitleFontset().isEmpty() &&
 	m_doc->subtitleFontset() != i18n("none") ) {
       m_mplayerDir = new K3bDirItem( "mplayer", m_doc, m_doc->root() );
-      K3bDirItem* fontDir = new K3bDirItem( "font", m_doc, m_mplayerDir );
 
       QString fontPath = m_installation->subtitleFontDir( m_doc->subtitleFontset() );
-      QDir d( fontPath );
-      QStringList fontFiles = d.entryList( QDir::Files );
-      for( QStringList::const_iterator it = fontFiles.begin();
-	   it != fontFiles.end(); ++it ) {
-	(void)new K3bFileItem( fontPath + "/" + *it, m_doc, fontDir );
+      QFileInfo fontType( fontPath );
+      if( fontType.isDir() ) {
+	K3bDirItem* fontDir = new K3bDirItem( "font", m_doc, m_mplayerDir );
+	QDir d( fontPath );
+	QStringList fontFiles = d.entryList( QDir::Files );
+	for( QStringList::const_iterator it = fontFiles.begin();
+	     it != fontFiles.end(); ++it ) {
+	  (void)new K3bFileItem( fontPath + "/" + *it, m_doc, fontDir );
+	}
+      }
+      else {
+	// just a ttf file
+	// needs to be named: subfont.ttf and needs to be placed in mplayer/
+	// instead of mplayer/font
+	(void)new K3bFileItem( fontPath, 
+			       m_doc, 
+			       m_mplayerDir,
+			       "subfont.ttf" );
       }
     }
 

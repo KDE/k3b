@@ -29,7 +29,8 @@ namespace K3b
     CDRECORD = 2, 
     CDRDAO = 4,
     CDRECORD_PRODVD = 8,
-    DVDRECORD = 16
+    DVDRECORD = 16,
+    GROWISOFS = 32
   };
 
   /**
@@ -55,7 +56,9 @@ namespace K3b
     WRITING_MODE_AUTO = 1, 
     TAO = 2, 
     DAO = 4, 
-    RAW = 8
+    RAW = 8,
+    WRITING_MODE_INCR_SEQ = 16,  // Incremental Sequential
+    WRITING_MODE_RES_OVWR = 32 // Restricted Overwrite
   };
 
   QString framesToString( int h, bool showFrames = true );

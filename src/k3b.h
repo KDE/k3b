@@ -145,6 +145,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   void showBusyInfo( const QString& str );
   void endBusy();
   void slotViewAudioPlayer();
+    void slotConfigureKeys();
 
  signals:
   void initializationInfo( const QString& );

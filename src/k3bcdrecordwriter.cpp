@@ -227,6 +227,10 @@ void K3bCdrecordWriter::start()
     return;
   }
 
+  if( !m_cdrecordBinObject->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrecordBinObject->name()).arg(m_cdrecordBinObject->version).arg(m_cdrecordBinObject->copyright), INFO );
+
+
   kdDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
   const QValueList<QCString>& args = m_process->args();
   QString s;
@@ -530,10 +534,6 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Input/output error.") ) {
     emit infoMessage( i18n("Input/output error. Not necessarily serious."), ERROR );
   }
-  else if( line.startsWith( "Cdrecord " ) ) {
-    // display some credit for Joerg ;)
-    emit infoMessage( line, INFO );
-  }
   else if( line.startsWith( "Re-load disk and hit" ) ) {
     // this happens on some notebooks where cdrecord is not able to close the
     // tray itself, so we need to ask the user to do so
@@ -600,7 +600,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case UNKNOWN:
 	if( m_lastFifoValue <= 3 ) {
-	  emit infoMessage( i18n("Probably a buffer underrun occured."), ERROR );
+	  emit infoMessage( i18n("Probably a buffer underrun occurred."), ERROR );
 	}
 	else {
 	  // no recording device and also other errors!! :-(

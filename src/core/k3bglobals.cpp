@@ -141,7 +141,7 @@ QString K3b::defaultTempPath()
 {
   QString url;
   kapp->config()->setGroup( "General Options" );
-  url = kapp->config()->readEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  url = kapp->config()->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   return prepareDir(url);
 }
 

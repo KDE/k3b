@@ -70,7 +70,7 @@ K3bAudioModule* K3bAudioModuleFactory::createModule( const KURL& url )
     }
   }
 
-  kdDebug() << "(K3bAudioModuleFactory) No K3bAudioModule availible." << endl;
+  kdDebug() << "(K3bAudioModuleFactory) No K3bAudioModule available." << endl;
   return 0;
 }
 

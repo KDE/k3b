@@ -54,6 +54,7 @@ class K3bDataItem
 	
   /** returns the path to the file on the local filesystem */
   virtual QString localPath() = 0;
+  virtual int localInode() const { return 0; }
 		
   virtual KIO::filesize_t k3bSize() const { return 0; }
 
@@ -64,6 +65,7 @@ class K3bDataItem
 
   virtual bool isDir() const { return false; }
   virtual bool isFile() const { return false; }
+  virtual bool isSpecialFile() const { return false; }
   virtual bool isSymLink() const { return false; }	
 
   bool hideOnRockRidge() const;

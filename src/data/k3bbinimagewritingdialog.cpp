@@ -80,10 +80,10 @@
 
 /*
     For CDRDAO is a workaround in K3bCdrDaoWriter (cueSheet()) which creates symlink in the tmp directory.
-    neccessary if filename extension is not .bin CDRDAO do not use the FILE-statement (now ??)
-    For CDRECORD it is neccessary to chdir to the directory where both files (cue/bin) is available.
+    necessary if filename extension is not .bin CDRDAO do not use the FILE-statement (now ??)
+    For CDRECORD it is necessary to chdir to the directory where both files (cue/bin) is available.
     CDRECORD works with the filename which is defined by the FILE-statement in the cue file.
-    TODO: check and rewrite the cue FILE-statement if neccessary.
+    TODO: check and rewrite the cue FILE-statement if necessary.
     check if cue-file has only one FILE-statement is not available.
 */
 
@@ -96,20 +96,20 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
    m_job = 0;
    cdrdao = k3bcore->externalBinManager()->binObject("cdrdao");
    cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-   
+
    setupGui();
 
-   if ( cdrecordBin->hasFeature("cuefile") )
+   if ( cdrecordBin && cdrecordBin->hasFeature("cuefile") )
        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
    else {
        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
        m_checkBurnproof->hide();
    }
-   
+
    slotLoadUserDefaults();
 
    kapp->config()->setGroup("General Options");
-   m_editTocPath->setURL( kapp->config()->readEntry( "last written bin/cue image", "" ) );
+   m_editTocPath->setURL( kapp->config()->readPathEntry( "last written bin/cue image", "" ) );
 
    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged( int )), this, SLOT(slotWritingAppChanged( int )) );
 
@@ -118,7 +118,7 @@ K3bBinImageWritingDialog::K3bBinImageWritingDialog( QWidget* parent, const char*
 
 K3bBinImageWritingDialog::~K3bBinImageWritingDialog()
 {
-   if (m_job) 
+   if (m_job)
       delete m_job;
 }
 
@@ -142,7 +142,7 @@ void K3bBinImageWritingDialog::setupGui()
 
   m_editTocPath = new KURLRequester( groupImage );
   m_editTocPath->setCaption( i18n("Choose TOC/CUE file") );
-  
+
   groupImageLayout->addWidget( m_editTocPath, 0, 0 );
 
   // options
@@ -161,7 +161,7 @@ void K3bBinImageWritingDialog::setupGui()
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
   m_checkMulti    = K3bStdGuiItems::startMultisessionCheckBox( groupOptions );
   m_checkBurnproof = K3bStdGuiItems::burnproofCheckbox( groupOptions );
-  
+
   QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
@@ -210,7 +210,7 @@ void K3bBinImageWritingDialog::setupGui()
 				      "performed. ") );
   QWhatsThis::add( m_spinCopies, i18n("<p>Select how many copies you want K3b to create from the Image.") );
 
-  slotWriterChanged();  
+  slotWriterChanged();
 }
 
 
@@ -231,15 +231,15 @@ void K3bBinImageWritingDialog::slotStartClicked()
   m_job->setForce(m_checkForce->isChecked());
   m_job->setCopies(m_spinCopies->value());
   m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
-  
+
   if (!m_editTocPath->url().isEmpty()) {
 
     // save the path
     kapp->config()->setGroup("General Options");
-    kapp->config()->writeEntry( "last written bin/cue image", m_editTocPath->url() );
+    kapp->config()->writePathEntry( "last written bin/cue image", m_editTocPath->url() );
 
     K3bBurnProgressDialog d( kapp->mainWidget(), "burnProgress", true );
-    
+
     hide();
     d.startJob(m_job);
     show();

@@ -190,17 +190,17 @@ namespace K3bCdDevice
     /**
      *  checks if disk is empty, returns DiskStatus:
      */
-    int isEmpty();
+    int isEmpty() const;
 
     /**
      *  checks if disk is rewritable
      */
-    bool rewritable();
+    bool rewritable() const;
 
     /**
      *  try to read physical DVD structure
      */
-    bool isDVD();
+    bool isDVD() const;
 
     /**
      *  checks the disk type, posiible return values:
@@ -222,12 +222,12 @@ namespace K3bCdDevice
     /**
     *  returnes the discType from the Full-TOC mmc-command.
     */
-    int tocType();
+    int tocType() const;
 
     /**
      *  returns the number of sessions on disk
      */
-    int numSessions();
+    int numSessions() const;
 
     /**
      *  returns the disc size
@@ -254,8 +254,8 @@ namespace K3bCdDevice
      */
     //    int getTrackHeader(int lba);
 
-    bool getTrackIndex( long lba, 
-			int *trackNr, 
+    bool getTrackIndex( long lba,
+			int *trackNr,
 			int *indexNr,
 			unsigned char *ctl );
 
@@ -299,8 +299,8 @@ namespace K3bCdDevice
   protected:
     bool furtherInit();
 
-    bool getDiscInfo( struct K3bCdDevice::disc_info_t* info );
-    bool readModePage2A( struct K3bCdDevice::mm_cap_page_2A* p );
+    bool getDiscInfo( K3bCdDevice::disc_info_t* info ) const;
+    bool readModePage2A( struct K3bCdDevice::mm_cap_page_2A* p ) const;
 
     QString m_vendor;
     QString m_description;

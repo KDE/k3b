@@ -16,6 +16,7 @@
 
 #include "k3bdiritem.h"
 #include "k3bdatadoc.h"
+#include "k3bfilecompilationsizehandler.h"
 
 #include <qstring.h>
 #include <qptrlist.h>
@@ -43,7 +44,9 @@ K3bDirItem::~K3bDirItem()
   // may change the list
   K3bDataItem* i = m_children->first();
   while( i ) {
-    m_children->take();
+    // it is important to use takeDataItem here to be sure
+    // the size gets updated properly
+    takeDataItem(i);
     delete i;
     i = m_children->first();
   }    
@@ -69,8 +72,11 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
     updateSize( item->k3bSize() );
     if( item->isDir() )
       updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
-    else
+    else {
+      // update the project size
+      doc()->sizeHandler()->addFile( item );
       updateFiles( 1, 0 );
+    }
   }
 	
   return this;
@@ -92,8 +98,11 @@ K3bDataItem* K3bDirItem::takeDataItem( int index )
   updateSize( -1*item->k3bSize() );
   if( item->isDir() )
     updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
-  else
+  else {
+    // update the project size
+    doc()->sizeHandler()->removeFile( item );
     updateFiles( -1, 0 );
+  }
 
   return item;
 }
@@ -134,43 +143,6 @@ K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev )
 QString K3bDirItem::localPath()
 {
   return doc()->dummyDir();
-}
-
-
-
-K3bRootItem::K3bRootItem( K3bDataDoc* doc )
-  : K3bDirItem( "root", doc, 0 )
-{
-}
-
-
-K3bRootItem::~K3bRootItem()
-{
-}
-
-QString K3bRootItem::k3bPath()
-{
-  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
-  return "";
-}
-
-
-QString K3bRootItem::jolietPath()
-{
-  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
-  return "";
-}
-
-
-const QString& K3bRootItem:: k3bName()
-{
-  return doc()->isoOptions().volumeID();
-}
-
-
-void K3bRootItem::setK3bName( const QString& text )
-{
-  doc()->isoOptions().setVolumeID( text );
 }
 
 
@@ -261,4 +233,40 @@ void K3bDirItem::updateFiles( long files, long dirs )
   m_dirs += dirs;
   if( parent() )
     parent()->updateFiles( files, dirs );
+}
+
+
+K3bRootItem::K3bRootItem( K3bDataDoc* doc )
+  : K3bDirItem( "root", doc, 0 )
+{
+}
+
+
+K3bRootItem::~K3bRootItem()
+{
+}
+
+QString K3bRootItem::k3bPath()
+{
+  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
+  return "";
+}
+
+
+QString K3bRootItem::jolietPath()
+{
+  // graft-points have to start with the name of the directory or the file, not with a slash or anything!
+  return "";
+}
+
+
+const QString& K3bRootItem:: k3bName()
+{
+  return doc()->isoOptions().volumeID();
+}
+
+
+void K3bRootItem::setK3bName( const QString& text )
+{
+  doc()->isoOptions().setVolumeID( text );
 }

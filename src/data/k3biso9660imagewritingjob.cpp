@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -51,7 +51,6 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob()
 
 K3bIso9660ImageWritingJob::~K3bIso9660ImageWritingJob()
 {
-  if( m_tocFile )
     delete m_tocFile;
 }
 
@@ -82,10 +81,8 @@ void K3bIso9660ImageWritingJob::start()
 
 void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
 {
-  if( m_tocFile ) {
     delete m_tocFile;
     m_tocFile = 0;
-  }
 
   if( success ) {
     // allright
@@ -105,7 +102,7 @@ void K3bIso9660ImageWritingJob::cancel()
   if( m_writer ) {
     emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
     emit canceled();
-    
+
     m_writer->cancel();
   }
 }
@@ -113,7 +110,6 @@ void K3bIso9660ImageWritingJob::cancel()
 
 bool K3bIso9660ImageWritingJob::prepareWriter()
 {
-  if( m_writer )
     delete m_writer;
 
   int usedWriteMode = m_writingMode;
@@ -128,7 +124,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
 
   int usedApp = writingApp();
   if( usedApp == K3b::DEFAULT ) {
-    if( usedWriteMode == K3b::DAO && 
+    if( usedWriteMode == K3b::DAO &&
 	( m_dataMode == K3b::MODE2 || m_noFix ) )
       usedApp = K3b::CDRDAO;
     else
@@ -155,7 +151,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
 
     if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	m_dataMode == K3b::MODE2 ) {
-      if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+      if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+	  k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
 	writer->addArgument( "-xa" );
       else
 	writer->addArgument( "-xa1" );
@@ -176,7 +173,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
     writer->setMulti( m_noFix );
 
     // now write the tocfile
-    if( m_tocFile ) delete m_tocFile;
+    delete m_tocFile;
     m_tocFile = new KTempFile( QString::null, "toc" );
     m_tocFile->setAutoDelete(true);
 
@@ -207,7 +204,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
 
     m_writer = writer;
   }
-    
+
   connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writer, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
   //  connect( m_writer, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
@@ -217,7 +214,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter()
   connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
   connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-  connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   return true;
@@ -234,7 +231,7 @@ QString K3bIso9660ImageWritingJob::jobDetails() const
 {
   return m_imagePath.section("/", -1);
 }
-		
+
 
 
 #include "k3biso9660imagewritingjob.moc"

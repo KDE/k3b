@@ -53,9 +53,12 @@ class K3bWriterSelectionWidget : public QWidget
   void loadConfig( KConfig* );
   void saveConfig( KConfig* );
 
+  static int writingAppFromString( const QString& );
+
  public slots:
   void setWriterDevice( K3bCdDevice::CdDevice* );
   void setSpeed( int );
+  void setWritingApp( int );
 
   /**
    * K3b::WritingApp or'ed together

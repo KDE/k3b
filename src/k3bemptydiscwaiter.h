@@ -19,6 +19,8 @@
 
 #include <kdialogbase.h>
 
+#include <device/k3bdiskinfo.h>
+
 namespace K3bCdDevice {
   class CdDevice;
   class DeviceHandler;
@@ -45,17 +47,18 @@ class K3bEmptyDiscWaiter : public KDialogBase
    * This should be replaced by the mediaType that was found or -1 for forced.
    * MEDIA_NONE if canceled.
    */
-  enum returnValue { DISK_READY, CANCELED };
+  enum returnValue { DISK_READY = 0,
+		     CANCELED = -1 };
 
   /**
    * starts the emptydiskwaiter.
    * @param appendable if true a not empty but appendable disk is also
    *                   considered as valid.
-   * @returns DISK_READY or CANCELED
-   *
-   * TODO: instead of the dvd flag an or-combination of MediaTypes should be used.
+   * @param mediaType a bitwise combination of the MediaType enum
+   * @returns the found MediaType on success, 0 if forced and -1 if canceled
    */
-  int waitForEmptyDisc( bool appendable = false, bool dvd = false );
+  int waitForEmptyDisc( bool appendable = false, 
+			int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD );
 
   /**
    * the same as waitForEmptyDisc( false );
@@ -65,7 +68,9 @@ class K3bEmptyDiscWaiter : public KDialogBase
   /**
    * This only openes a dialog if the first check failed.
    */
-  static int wait( K3bCdDevice::CdDevice* device, bool appendable = false, bool dvd = false );
+  static int wait( K3bCdDevice::CdDevice* device, 
+		   bool appendable = false, 
+		   int mediaType = K3bCdDevice::MEDIA_WRITABLE_CD );
 
  signals:
   void canceled();

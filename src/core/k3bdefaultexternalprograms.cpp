@@ -33,7 +33,7 @@
 
 void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
-  // dont't know if we need more vcdTools in the future (vcdxrip)
+  // don't know if we need more vcdTools in the future (vcdxrip)
   static const char* vcdTools[] =  { "vcdxbuild",
                                      "vcdxminfo",
 				            0 };
@@ -114,6 +114,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    pos = out.output().find( "Copyright") + 14;
+    endPos = out.output().find( "\n", pos );
+    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
@@ -704,6 +708,10 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
+
+    pos = out.output().find( "Copyright" ) + 14;
+    endPos = out.output().find( "\n", pos );
+    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bVcdbuilderProgram) could not start " << path << endl;
@@ -760,6 +768,10 @@ bool K3bNormalizeProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    pos = out.output().find( "Copyright" )+14;
+    endPos = out.output().find( "\n", pos );
+    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
@@ -821,6 +833,20 @@ bool K3bGrowisofsProgram::scan( const QString& p )
     return false;
   }
 
+  // fixed Copyright:
+  bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
+
+  // check if we run growisofs as root
+  if( !getuid() )
+    bin->addFeature( "suidroot" );
+  else {
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
+    }
+  }
+
   addBin( bin );
   return true;
 }
@@ -877,6 +903,20 @@ bool K3bDvdformatProgram::scan( const QString& p )
   else {
     kdDebug() << "(K3bDvdformatProgram) could not start " << path << endl;
     return false;
+  }
+
+  // fixed Copyright:
+  bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
+
+  // check if we run dvd+rw-format as root
+  if( !getuid() )
+    bin->addFeature( "suidroot" );
+  else {
+    struct stat s;
+    if( !::stat( QFile::encodeName(path), &s ) ) {
+      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+	bin->addFeature( "suidroot" );
+    }
   }
 
   addBin( bin );

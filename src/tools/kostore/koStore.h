@@ -124,7 +124,7 @@ public:
   QIODevice::Offset size() const;
 
   /**
-   * @return true if an error occured
+   * @return true if an error occurred
    */
   bool bad() const { return !m_bGood; } // :)
 

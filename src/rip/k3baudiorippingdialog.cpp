@@ -239,7 +239,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   KConfig* c = kapp->config();
   c->setGroup( "Ripping" );
 
-  c->writeEntry( "last ripping directory", m_editStaticRipPath->url() );
+  c->writePathEntry( "last ripping directory", m_editStaticRipPath->url() );
   QString filetype;
   if( m_radioOgg->isChecked() )
     filetype = "ogg";
@@ -372,7 +372,7 @@ void K3bAudioRippingDialog::slotLoadUserDefaults()
   KConfig* c = k3bcore->config();
   c->setGroup( "Audio Ripping" );
 
-  m_editStaticRipPath->setURL( c->readEntry( "last ripping directory", QDir::homeDirPath() ) );
+  m_editStaticRipPath->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
   m_checkUsePattern->setChecked( c->readBoolEntry( "use_pattern", true ) );
 
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 3 ) );

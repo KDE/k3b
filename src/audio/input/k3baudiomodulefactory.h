@@ -32,7 +32,7 @@ class K3bAudioModuleFactory : public QObject
 
   /** returns NULL if no Module for that type of file is available.
       for now these are static but in the future there could be some plugin
-      mode with dynamicly loaded audiomodules */
+      mode with dynamically loaded audiomodules */
   K3bAudioModule* createModule( const KURL& url );
   bool moduleAvailable( const KURL& url );
 

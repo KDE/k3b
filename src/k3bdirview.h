@@ -67,7 +67,7 @@ class K3bDirView : public QVBox
   void slotDirActivated( const QString& );
   void slotUpdateURLCombo( const KURL& url );
   void slotMountDevice( K3bDevice* dev );
-  void slotMountFinished();
+  void slotMountFinished(KIO::Job*);
   void slotDiskInfoReady( const K3bCdDevice::DiskInfo& info );
   void reload();
   void home();
@@ -75,7 +75,7 @@ class K3bDirView : public QVBox
   void slotShowDiskInfo();
   void slotUnlockDevice();
   void slotUnmountDisk();
-  void slotUnmountFinished();
+  void slotUnmountFinished(KIO::Job*);
   void slotEjectDisk();
   void slotEjectFinished();
   void slotFileTreeContextMenu( K3bDevice* dev, const QPoint& p );

@@ -37,19 +37,20 @@
 
 #include <errno.h>
 #include <string.h>
+#include <cmath>
 
 
 K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, QObject* parent, const char* name )
   : K3bJob( parent, name ),
-    m_doc( doc ),
     m_pathSpecFile(0),
     m_rrHideFile(0),
     m_jolietHideFile(0),
-    m_noDeepDirectoryRelocation( false ),
-    m_importSession( false ),
     m_process( 0 ),
     m_processSuspended(false),
     m_processExited(false),
+    m_doc( doc ),
+    m_noDeepDirectoryRelocation( false ),
+    m_importSession( false ),
     m_lastOutput(0),
     m_mkisofsPrintSizeResult( 0 ),
     m_fdToWriteTo(-1)
@@ -95,8 +96,8 @@ void K3bIsoImager::outputData()
     delete m_lastOutput;
     m_lastOutput = 0;
   }
-  
-  // we need to keep the data until we are resumed since the data will mostly be written to 
+
+  // we need to keep the data until we are resumed since the data will mostly be written to
   // a KProcess (see KProcess::writeStdin)
   m_lastOutput = m_data.dequeue();
   emit data( m_lastOutput->data(), m_lastOutput->size() );
@@ -106,7 +107,7 @@ void K3bIsoImager::outputData()
 void K3bIsoImager::resume()
 {
   // if mkisofs is writing directly to another fd the
-  // process never gets suspended since we are not connected to it's 
+  // process never gets suspended since we are not connected to it's
   // (non active anyway) stdout signal and m_data is always empty
 
   if( m_fdToWriteTo == -1 ) {
@@ -140,20 +141,7 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     //
 
     if( line.contains( "done, estimate" ) ) {
-
-      QString perStr = line;
-      perStr.truncate( perStr.find('%') );
-      bool ok;
-      double p = perStr.toDouble( &ok );
-      if( !ok ) {
-	kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
-      }
-      else {
-	if( m_firstProgressValue < 0 )
-	  m_firstProgressValue = p;
-
-	emit percent( (int)( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
-      }
+      parseProgress( line );
     }
     else if( line.contains( "extents written" ) ) {
       emit percent( 100 );
@@ -163,6 +151,25 @@ void K3bIsoImager::slotReceivedStderr( const QString& line )
     }
   }
 }
+
+
+void K3bIsoImager::parseProgress( const QString& line ) 
+{
+  QString perStr = line;
+  perStr.truncate( perStr.find('%') );
+  bool ok;
+  double p = perStr.toDouble( &ok );
+  if( !ok ) {
+    kdDebug() << "(K3bIsoImager) Parsing did not work for " << perStr << endl;
+  }
+  else {
+    if( m_firstProgressValue < 0 )
+      m_firstProgressValue = p;
+    
+    emit percent( ::ceil( (p - m_firstProgressValue)*100.0/(100.0 - m_firstProgressValue) ) );
+  }
+}
+
 
 void K3bIsoImager::slotProcessExited( KProcess* p )
 {
@@ -179,7 +186,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
       else  {
 	switch( p->exitStatus() ) {
 	case 2:
-	  // mkisofs seems to have a bug that prevents to use filenames 
+	  // mkisofs seems to have a bug that prevents to use filenames
 	  // that contain one or more backslashes
 	  // mkisofs 1.14 has the bug, 1.15a40 not
 	  // TODO: find out the version that fixed the bug
@@ -192,7 +199,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  }
 	  // otherwise just fall through
 	default:
-	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()), 
+	  emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
 			    K3bJob::ERROR );
 	  emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	  emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
@@ -214,9 +221,9 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 void K3bIsoImager::cleanup()
 {
   // remove all temp files
-  if( m_pathSpecFile ) delete m_pathSpecFile;
-  if( m_rrHideFile ) delete m_rrHideFile;
-  if( m_jolietHideFile ) delete m_jolietHideFile;
+  delete m_pathSpecFile;
+  delete m_rrHideFile;
+  delete m_jolietHideFile;
 
   // remove boot-images-temp files
   for( QStringList::iterator it = m_tempFiles.begin();
@@ -238,6 +245,20 @@ void K3bIsoImager::calculateSize()
 
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
+
+  const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  if( !mkisofsBin ) {
+    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
+    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+    cleanup();
+    emit sizeCalculated( ERROR, 0 );
+    return;
+  }
+
+  if( !mkisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
+
+  *m_process << mkisofsBin->path;
 
   if( !prepareMkisofsFiles() || 
       !addMkisofsParameters() ) {
@@ -341,19 +362,39 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 }
 
 
+void K3bIsoImager::init()
+{
+  m_containsFilesWithMultibleBackslashes = false;
+  m_firstProgressValue = -1;
+  m_processExited = false;
+  m_processSuspended = false;
+  m_canceled = false;
+}
+
 
 void K3bIsoImager::start()
 {
   emit started();
 
   cleanup();
-
-  m_containsFilesWithMultibleBackslashes = false;
-  m_firstProgressValue = -1;
+  init();
 
   m_process = new K3bProcess();
+  const K3bExternalBin* mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  if( !mkisofsBin ) {
+    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
+    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+    cleanup();
+    emit finished( false );
+    return;
+  }
 
-  if( !prepareMkisofsFiles() || 
+  if( !mkisofsBin->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(mkisofsBin->version).arg(mkisofsBin->copyright), INFO );
+
+  *m_process << mkisofsBin->path;
+
+  if( !prepareMkisofsFiles() ||
       !addMkisofsParameters() ) {
     cleanup();
     emit finished( false );
@@ -386,14 +427,9 @@ void K3bIsoImager::start()
     // something went wrong when starting the program
     // it "should" be the executable
     kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
-    emit infoMessage( i18n("Could not start mkisofs."), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     emit finished( false );
     cleanup();
-  }
-  else {
-    m_processExited = false;
-    m_processSuspended = false;
-    m_canceled = false;
   }
 }
 
@@ -424,14 +460,6 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice* dev )
 
 bool K3bIsoImager::addMkisofsParameters()
 {
-  if( !k3bcore->externalBinManager()->foundBin( "mkisofs" ) ) {
-    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
-    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
-    return false;
-  }
-
-  *m_process << k3bcore->externalBinManager()->binPath( "mkisofs" );
-
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
     *m_process << "-C" << m_multiSessionInfo;
@@ -456,26 +484,26 @@ bool K3bIsoImager::addMkisofsParameters()
   QString s = m_doc->isoOptions().volumeSetId();
   s.truncate(128);  // ensure max length
   *m_process << "-volset" << s;
-  
+
   s = m_doc->isoOptions().applicationID();
   s.truncate(128);  // ensure max length
   *m_process << "-A" << s;
-  
+
   s = m_doc->isoOptions().publisher();
   s.truncate(128);  // ensure max length
   *m_process << "-P" << s;
-  
+
   s = m_doc->isoOptions().preparer();
   s.truncate(128);  // ensure max length
   *m_process << "-p" << s;
-  
+
   s = m_doc->isoOptions().systemId();
   s.truncate(32);  // ensure max length
   *m_process << "-sysid" << s;
-  
+
   *m_process << "-volset-size" << QString::number(m_doc->isoOptions().volumeSetSize());
   *m_process << "-volset-seqno" << QString::number(m_doc->isoOptions().volumeSetNumber());
-  
+
   if( m_doc->isoOptions().createRockRidge() ) {
     if( m_doc->isoOptions().preserveFilePermissions() )
       *m_process << "-R";
@@ -588,15 +616,14 @@ bool K3bIsoImager::addMkisofsParameters()
 
 bool K3bIsoImager::writePathSpec()
 {
-  if( m_pathSpecFile )
     delete m_pathSpecFile;
-  m_pathSpecFile = new KTempFile();
-  m_pathSpecFile->setAutoDelete(true);
+    m_pathSpecFile = new KTempFile();
+    m_pathSpecFile->setAutoDelete(true);
 
   if( QTextStream* t = m_pathSpecFile->textStream() ) {
     // recursive path spec writing
     bool success = writePathSpecForDir( m_doc->root(), *t );
-    
+
     m_pathSpecFile->close();
     return success;
   }
@@ -620,20 +647,20 @@ bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
   // now create the graft points
   for( QPtrListIterator<K3bDataItem> it( *dirItem->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
-    if( 
+    if(
        item->writeToCd()
        &&
        !( item->isSymLink()
-	  && 
-	  ( m_doc->isoOptions().discardSymlinks() 
+	  &&
+	  ( m_doc->isoOptions().discardSymlinks()
 	    ||
-	    ( m_doc->isoOptions().discardBrokenSymlinks() 
+	    ( m_doc->isoOptions().discardBrokenSymlinks()
 	      && !item->isValid() )
 	    )
 	  )
        ) {
-	
-      // some versions of mkisofs seem to have a bug that prevents to use filenames 
+
+      // some versions of mkisofs seem to have a bug that prevents to use filenames
       // that contain one or more backslashes
       if( item->k3bPath().contains("\\") )
 	m_containsFilesWithMultibleBackslashes = true;
@@ -641,7 +668,7 @@ bool K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream
       if( m_doc->isoOptions().createJoliet() )
 	stream << escapeGraftPoint( m_doc->treatWhitespace(item->jolietPath()) );
       else
-	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) ); 
+	stream << escapeGraftPoint( m_doc->treatWhitespace(item->k3bPath()) );
       stream << "=";
       if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
 
@@ -703,7 +730,7 @@ bool K3bIsoImager::writeRRHideFile()
       //    else
       item = item->nextSibling();
     }
-    
+
     m_rrHideFile->close();
     return true;
   }
@@ -829,7 +856,7 @@ void K3bIsoImager::createJolietFilenames( K3bDirItem* dirItem )
 	  jolietName.append( QString::number( i-begin ).rightJustify( charsForNumber, '0') );
 	  jolietName.append( extension );
 	  sortedChildren.at(i)->setJolietName( jolietName );
-	    
+
 	  kdDebug() << "(K3bIsoImager) set joliet name for "
 		    << sortedChildren.at(i)->k3bName() << " to "
 		    << jolietName << endl;

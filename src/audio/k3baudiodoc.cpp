@@ -108,6 +108,9 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
   m_trackMetaInfoJob->setThread( m_trackStatusThread );
   connect( m_trackMetaInfoJob, SIGNAL(finished(bool)),
 	   this, SLOT(slotDetermineTrackStatus()) );
+
+  // FIXME: remove the newTracks() signal and replace it with the changed signal
+  connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
 }
 
 K3bAudioDoc::~K3bAudioDoc()
@@ -447,7 +450,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	    track->setArranger( cdTextNodes.item(2).toElement().text() );
 	    track->setSongwriter( cdTextNodes.item(3).toElement().text() );
 	    track->setIsrc( cdTextNodes.item(4).toElement().text() );
-	    track->setCdTextMessage( cdTextNodes.item(6).toElement().text() );
+	    track->setCdTextMessage( cdTextNodes.item(5).toElement().text() );
 	    
 	    // set pregap
 	    QDomElement pregapElem = trackNodes.item(1).toElement();

@@ -159,8 +159,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
     line->hide();
   }
 
-  QToolTip::add( m_checkHideOnRockRidge, i18n("") );
-  QToolTip::add( m_checkHideOnJoliet, i18n("") );
+//   QToolTip::add( m_checkHideOnRockRidge, i18n("") );
+//   QToolTip::add( m_checkHideOnJoliet, i18n("") );
   QWhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked, the file or directory "
 						"(and its entire contents) will be hidden on the "
 						"ISO9660 and RockRidge filesystem.</p>"

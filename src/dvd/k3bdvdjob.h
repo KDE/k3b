@@ -17,13 +17,18 @@
 #ifndef _K3B_DVD_JOB_H_
 #define _K3B_DVD_JOB_H_
 
-#include <k3bdatajob.h>
+#include <k3bjob.h>
 
+#include <qfile.h>
 
 class K3bDvdDoc;
+class K3bGrowisofsImager;
+class K3bGrowisofsWriter;
+class K3bIsoImager;
+class QDataStream;
 
 
-class K3bDvdJob : public K3bDataJob
+class K3bDvdJob : public K3bBurnJob
 {
   Q_OBJECT
 
@@ -31,17 +36,45 @@ class K3bDvdJob : public K3bDataJob
   K3bDvdJob( K3bDvdDoc*, QObject* parent = 0 );
   virtual ~K3bDvdJob();
 
+  K3bDoc* doc() const;
+  K3bCdDevice::CdDevice* writer() const;
+
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
 
+ public slots:
+  void start();
+  void cancel();
+
  protected:
   virtual bool prepareWriterJob();
+  void prepareIsoImager();
+  void prepareGrowisofsImager();
+  void cleanup();
+  void writeImage();
 
  protected slots:
-  virtual void waitForDisk();
+  void slotReceivedIsoImagerData( const char* data, int len );
+  void slotIsoImagerFinished( bool success );
+  void slotIsoImagerPercent(int);
+  void slotGrowisofsImagerPercent(int);
+
+  void slotWriterJobPercent( int );
+  void slotWritingFinished( bool );
 
  private:
   K3bDvdDoc* m_doc;
+  K3bIsoImager* m_isoImager;
+  K3bGrowisofsImager* m_growisofsImager;
+  K3bGrowisofsWriter* m_writerJob;
+
+  QFile m_imageFile;
+  QDataStream m_imageFileStream;
+
+  bool m_canceled;
+  bool m_writingStarted;
+
+  bool waitForDvd();
 };
 
 #endif

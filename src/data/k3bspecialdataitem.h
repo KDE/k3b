@@ -55,6 +55,8 @@ class K3bSpecialDataItem : public K3bDataItem
   void setMimeType( const QString& s ) { m_mimeType = s; }
   const QString& mimeType() const { return m_mimeType; }
 
+  virtual bool isSpecialFile() const { return true; }
+
  private:
   QString m_mimeType;
   KIO::filesize_t m_k3bSize;

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -56,8 +56,8 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 {
   prepareGui();
 
-  setTitle( i18n("Audio Project"), 
-	    i18n("1 track (%1 minutes)", "%n tracks (%1 minutes)", 
+  setTitle( i18n("Audio Project"),
+	    i18n("1 track (%1 minutes)", "%n tracks (%1 minutes)",
 		 m_doc->numOfTracks() ).arg(m_doc->length().toString()) );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -97,7 +97,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   // What's This info
   // -------------------------------------------------------------------------
-  QWhatsThis::add( m_checkHideFirstTrack, 
+  QWhatsThis::add( m_checkHideFirstTrack,
 		   i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
 			"<p>The audio CD standard uses pregaps before every track on the CD. "
 			"By default these last for 2 seconds and are silent. In DAO mode it "
@@ -185,13 +185,17 @@ void K3bAudioBurnDialog::slotSaveUserDefaults()
   }
 }
 
-
 void K3bAudioBurnDialog::toggleAllOptions()
 {
   K3bProjectBurnDialog::toggleAllOptions();
 
-  bool cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
-  bool cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  bool cdrecordOnTheFly = false;
+  bool cdrecordCdText = false;
+  if ( k3bcore->externalBinManager()->binObject("cdrecord") ) {
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version
+      >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  }
 
   if( m_writingModeWidget->writingMode() == K3b::TAO ||
       m_writingModeWidget->writingMode() == K3b::RAW ||

@@ -61,6 +61,9 @@ QString K3bMovixInstallation::languageDir( const QString& lang ) const
 
 QStringList K3bMovixInstallation::isolinuxFiles()
 {
+  // these files are fixed. That should not be a problem
+  // since Isolinux is quite stable as far as I know.
+
   static QStringList s_isolinuxFiles;
   if( s_isolinuxFiles.isEmpty() ) {
     s_isolinuxFiles.append( "initrd.gz" );
@@ -77,20 +80,25 @@ QStringList K3bMovixInstallation::isolinuxFiles()
 
 QStringList K3bMovixInstallation::movixFiles()
 {
-  static QStringList s_movixFiles;
-  if( s_movixFiles.isEmpty() ) {
-    s_movixFiles.append( "bugReport.sh" );
-    s_movixFiles.append( "input.conf" ); 
-    s_movixFiles.append( "lircrc" );
-    s_movixFiles.append( "manpage.txt" );
-    s_movixFiles.append( "menu.conf" );
-    s_movixFiles.append( "mixer.pl" );
-    s_movixFiles.append( "movix.pl" );
-    s_movixFiles.append( "profile" );
-    s_movixFiles.append( "rc.movix" );
-  }
+  // to be compatible with 0.8.0rc2 we just add all files in the movix directory
 
-  return s_movixFiles;
+  QDir dir( m_path + "/movix" );
+  return dir.entryList(QDir::Files);
+
+//   static QStringList s_movixFiles;
+//   if( s_movixFiles.isEmpty() ) {
+//     s_movixFiles.append( "bugReport.sh" );
+//     s_movixFiles.append( "input.conf" ); 
+//     s_movixFiles.append( "lircrc" );
+//     s_movixFiles.append( "manpage.txt" );
+//     s_movixFiles.append( "menu.conf" );
+//     s_movixFiles.append( "mixer.pl" );
+//     s_movixFiles.append( "movix.pl" );
+//     s_movixFiles.append( "profile" );
+//     s_movixFiles.append( "rc.movix" );
+//   }
+
+//   return s_movixFiles;
 }
 
 
@@ -129,14 +137,14 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
       return 0;
     }
   }
-  QStringList movixFiles = K3bMovixInstallation::movixFiles();
-  for( QStringList::const_iterator it = movixFiles.begin();
-       it != movixFiles.end(); ++it ) {
-    if( !QFile::exists( path + "/movix/" + *it ) ) {
-      kdDebug() << "(K3bMovixInstallation) Could not find file " << *it << endl;
-      return 0;
-    }
-  }
+//   QStringList movixFiles = K3bMovixInstallation::movixFiles();
+//   for( QStringList::const_iterator it = movixFiles.begin();
+//        it != movixFiles.end(); ++it ) {
+//     if( !QFile::exists( path + "/movix/" + *it ) ) {
+//       kdDebug() << "(K3bMovixInstallation) Could not find file " << *it << endl;
+//       return 0;
+//     }
+//   }
 
 
 
@@ -151,11 +159,14 @@ K3bMovixInstallation* K3bMovixInstallation::probeInstallation( const QString& pa
   dir.cdUp();
 
   // now check the supported mplayer-fontsets
+  // FIXME: every font dir needs to contain the "font.desc" file!
   dir.cd( "mplayer-fonts" );
   inst->m_supportedSubtitleFonts = dir.entryList( QDir::Dirs );
   inst->m_supportedSubtitleFonts.remove(".");
   inst->m_supportedSubtitleFonts.remove("..");
   inst->m_supportedSubtitleFonts.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
+  // new ttf fonts in 0.8.0rc2
+  inst->m_supportedSubtitleFonts += dir.entryList( "*.ttf", QDir::Files );
   inst->m_supportedSubtitleFonts.prepend( i18n("none") );
   dir.cdUp();
   

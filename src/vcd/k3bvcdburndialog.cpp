@@ -72,10 +72,10 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                              m_vcdDoc->tracks() ->count() ).arg( KIO::convertSize( m_vcdDoc->size() ) ) );
 
     const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-    if ( cdrecordBin->hasFeature("cuefile") )
+    if ( cdrecordBin && cdrecordBin->hasFeature("cuefile") )
         m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO|K3b::CDRECORD );
     else
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );    
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
     m_checkOnTheFly->hide();
 
@@ -130,7 +130,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     QToolTip::add
         ( m_checkPbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
     QToolTip::add
-        ( m_checkSegmentFolder, i18n( "Add allways an empty `/SEGMENT' directory" ) );
+        ( m_checkSegmentFolder, i18n( "Add always an empty `/SEGMENT' directory" ) );
     QToolTip::add
         ( m_checkRelaxedAps, i18n( "This controls whether APS constraints are strict or relaxed. " ) );
     QToolTip::add
@@ -467,13 +467,13 @@ void K3bVcdBurnDialog::setupLabelTab()
     // only ISO646 d-Characters
     m_editVolumeId->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_d, true, m_editVolumeId ) );
     m_editAlbumId->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_d, true, m_editVolumeId ) );
-        
+
     m_editVolumeId->setMaxLength( 32 );
     m_editAlbumId->setMaxLength( 16 );
     // only ISO646 a-Characters
     m_editPublisher->setValidator( new K3bIso646Validator( K3bIso646Validator::Iso646_a, true, m_editVolumeId ) );
     m_editPublisher->setMaxLength( 128 );
-    
+
     m_spinVolumeNumber->setMinValue( 1 );
     m_spinVolumeNumber->setMaxValue( 1 );
     m_spinVolumeCount->setMinValue( 1 );
@@ -482,7 +482,7 @@ void K3bVcdBurnDialog::setupLabelTab()
     line->setFrameShape( QFrame::HLine );
     line->setFrameShadow( QFrame::Sunken );
     line->setFrameShape( QFrame::HLine );
-    
+
 
     // ----------------------------------------------------------------------
     QGridLayout* grid = new QGridLayout( w );
@@ -519,7 +519,7 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     labelVolumeCount->setBuddy( m_spinVolumeCount );
     labelVolumeNumber->setBuddy( m_spinVolumeNumber );
-    
+
     // tab order
     setTabOrder( m_editVolumeId, m_editAlbumId );
     setTabOrder( m_editAlbumId, m_spinVolumeCount );
@@ -612,7 +612,7 @@ void K3bVcdBurnDialog::saveSettings()
         else
             m_editVolumeId->setText( i18n( "VIDEOCD" ) );
     }
-    
+
 
     doc() ->setTempDir( m_tempDirSelectionWidget->tempPath() );
     doc() ->setDummy( m_checkSimulate->isChecked() );
@@ -648,7 +648,7 @@ void K3bVcdBurnDialog::saveSettings()
     vcdDoc() ->vcdOptions() ->setPbcEnabled( m_checkPbc->isChecked() );
     if ( m_checkPbc->isChecked() )
         vcdDoc()-> setPbcTracks();
-        
+
     vcdDoc() ->vcdOptions() ->setSegmentFolder( m_checkSegmentFolder->isChecked() );
     vcdDoc() ->vcdOptions() ->setRelaxedAps( m_checkRelaxedAps->isChecked() );
     vcdDoc() ->vcdOptions() ->setUpdateScanOffsets( m_checkUpdateScanOffsets->isChecked() );
@@ -779,7 +779,7 @@ void K3bVcdBurnDialog::slotLoadUserDefaults()
     }
 
     m_spinVolumeCount->setValue( o.volumeCount() );
-    m_spinVolumeNumber->setMaxValue( o.volumeCount() );    
+    m_spinVolumeNumber->setMaxValue( o.volumeCount() );
     m_spinVolumeNumber->setValue( o.volumeNumber() );
 
     m_editVolumeId->setText( o.volumeId() );

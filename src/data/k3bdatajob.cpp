@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -55,6 +55,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
   m_doc = doc;
   m_writerJob = 0;
   m_tocFile = 0;
+
   m_isoImager = 0;
 
   m_msInfoFetcher = new K3bMsInfoFetcher( this );
@@ -68,7 +69,6 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, QObject* parent )
 
 K3bDataJob::~K3bDataJob()
 {
-  if( m_tocFile )
     delete m_tocFile;
 }
 
@@ -127,7 +127,7 @@ void K3bDataJob::slotMsInfoFetched(bool success)
     return;
 
   if( success ) {
-    // we call this here since in ms mode we might want to check 
+    // we call this here since in ms mode we might want to check
     // the last track's datamode
     determineWritingMode();
 
@@ -156,7 +156,10 @@ void K3bDataJob::writeImage()
     // get image file path
     if( m_doc->tempDir().isEmpty() )
       m_doc->setTempDir( K3b::findUniqueFilePrefix( m_doc->isoOptions().volumeID() ) + ".iso" );
-    
+
+    // TODO: check if the image file is part of the project and if so warn the user
+    //       and append some number to make the path unique.
+
     // open the file for writing
     m_imageFile.setName( m_doc->tempDir() );
     if( !m_imageFile.open( IO_WriteOnly ) ) {
@@ -192,7 +195,6 @@ void K3bDataJob::slotSizeCalculationFinished( int status, int size )
   else {
     cancelAll();
   }
-
 }
 
 
@@ -247,7 +249,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
     if( success ) {
       emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::STATUS );
       m_imageFinished = true;
-    
+
       if( m_doc->onlyCreateImages() ) {
 	emit finished( true );
       }
@@ -277,7 +279,7 @@ bool K3bDataJob::startWriting()
     if( m_canceled )
       return false;
   }
-	
+
   m_writerJob->start();
   return true;
 }
@@ -311,8 +313,10 @@ void K3bDataJob::slotWriterJobFinished( bool success )
     return;
 
   if( !m_doc->onTheFly() && m_doc->removeImages() ) {
-    QFile::remove( m_doc->tempDir() );
-    emit infoMessage( i18n("Removed image file %1").arg(m_doc->tempDir()), K3bJob::STATUS );
+    if( m_imageFile.exists() ) {
+      m_imageFile.remove();
+      emit infoMessage( i18n("Removed image file %1").arg(m_imageFile.name()), K3bJob::STATUS );
+    }
   }
 
   if( m_tocFile ) {
@@ -409,7 +413,8 @@ bool K3bDataJob::prepareWriterJob()
     if( m_usedDataMode == K3b::MODE1 )
       writer->addArgument( "-data" );
     else {
-      if( k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
+      if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+	  k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a12" ) )
 	writer->addArgument( "-xa" );
       else
 	writer->addArgument( "-xa1" );
@@ -472,7 +477,7 @@ bool K3bDataJob::prepareWriterJob()
 
     setWriterJob( writer );
   }
-    
+
   return true;
 }
 
@@ -481,7 +486,7 @@ void K3bDataJob::determineWritingMode()
 {
   // first of all we determine the data mode
   if( m_doc->dataMode() == K3b::DATA_MODE_AUTO ) {
-    if( !m_doc->onlyCreateImages() && 
+    if( !m_doc->onlyCreateImages() &&
 	( m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	  m_doc->multiSessionMode() == K3bDataDoc::FINISH ) ) {
 
@@ -503,7 +508,7 @@ void K3bDataJob::determineWritingMode()
 	else
 	  m_usedDataMode = K3b::MODE2;
 
-	kdDebug() << "(K3bDataJob) using datamode: " 
+	kdDebug() << "(K3bDataJob) using datamode: "
 		  << (m_usedDataMode == K3b::MODE1 ? "mode1" : "mode2")
 		  << endl;
       }
@@ -541,7 +546,7 @@ void K3bDataJob::determineWritingMode()
     else
       m_usedWritingApp = K3b::CDRECORD;
   }
-  else 
+  else
     m_usedWritingApp = writingApp();
 }
 

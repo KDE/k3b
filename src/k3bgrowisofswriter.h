@@ -54,7 +54,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   bool prepareProcess();
 
  protected slots:
-  void slotStdLine( const QString& line );
+  void slotReceivedStderr( const QString& );
   void slotProcessExited( KProcess* );
 
  private:

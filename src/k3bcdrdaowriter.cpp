@@ -421,12 +421,15 @@ void K3bCdrdaoWriter::start()
 
   m_cdrdaoBinObject = k3bcore->externalBinManager()->binObject("cdrdao");
 
-  if( !m_cdrdaoBinObject )
-    {
-      emit infoMessage( i18n("Could not find %1 executable.").arg("cdrdao"), ERROR );
-      emit finished(false);
-      return;
-    }
+  if( !m_cdrdaoBinObject ) {
+    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrdao"), ERROR );
+    emit finished(false);
+    return;
+  }
+
+  if( !m_cdrdaoBinObject->copyright.isEmpty() )
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrdaoBinObject->name()).arg(m_cdrdaoBinObject->version).arg(m_cdrdaoBinObject->copyright), INFO );
+
 
   switch ( m_command )
     {

@@ -119,7 +119,7 @@ void K3bProjectBurnDialog::toggleAllOptions()
   if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
     m_writingModeWidget->setSupportedModes( K3b::DAO );
   else
-    m_writingModeWidget->setSupportedModes( 0xFF );  // default is cdrecord and cdrecord supports all modes
+    m_writingModeWidget->setSupportedModes( K3b::DAO | K3b::TAO | K3b::RAW );  // default is cdrecord and cdrecord supports all modes
 }
 
 
@@ -286,7 +286,7 @@ void K3bProjectBurnDialog::slotSaveUserDefaults()
   KConfig* c = kapp->config();
 
   c->setGroup( "General Options" );
-  c->writeEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
+  c->writePathEntry( "Temp Dir", m_tempDirSelectionWidget->tempPath() );
 
   c->setGroup( "default " + doc()->documentType() + " settings" );
 

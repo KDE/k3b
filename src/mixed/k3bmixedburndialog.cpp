@@ -62,8 +62,8 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 {
   prepareGui();
 
-  setTitle( i18n("Mixed Project"), i18n("1 track (%1 minutes)", 
-					"%n tracks (%1 minutes)", 
+  setTitle( i18n("Mixed Project"), i18n("1 track (%1 minutes)",
+					"%n tracks (%1 minutes)",
 					m_doc->numOfTracks()).arg(m_doc->length().toString()) );
 
   m_checkOnlyCreateImage->hide();
@@ -118,7 +118,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
   // is this a standard?
   m_radioMixedTypeLastTrack = new QRadioButton( i18n("Data in last track"), m_groupMixedType );
 
-  // Enhanced music CD/CD Extra/CD Plus format (Blue Book) 
+  // Enhanced music CD/CD Extra/CD Plus format (Blue Book)
   // to fulfill the standard we also need the special file structure
   // but in the case of our simple mixed mode cd we allow to create blue book cds without
   // these special files and directories
@@ -197,10 +197,10 @@ void K3bMixedBurnDialog::saveSettings()
   m_advancedImageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
   m_volumeDescWidget->save( m_doc->dataDoc()->isoOptions() );
 
-  m_doc->dataDoc()->setDataMode( m_dataModeWidget->dataMode() );	
+  m_doc->dataDoc()->setDataMode( m_dataModeWidget->dataMode() );
 
   // save image file path
-  m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );  
+  m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 }
 
 
@@ -208,7 +208,7 @@ void K3bMixedBurnDialog::readSettings()
 {
   K3bProjectBurnDialog::readSettings();
 
-  m_checkNormalize->setChecked( m_doc->audioDoc()->normalize() );	
+  m_checkNormalize->setChecked( m_doc->audioDoc()->normalize() );
 
   if( !m_doc->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( m_doc->tempDir() );
@@ -243,15 +243,15 @@ void K3bMixedBurnDialog::slotLoadK3bDefaults()
 
   m_cdtextWidget->setChecked( false );
   m_checkNormalize->setChecked(false);
-  
+
   m_radioMixedTypeFirstTrack->setChecked(true);
-  
+
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
-  
+
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-  
+
   toggleAllOptions();
 }
 
@@ -317,13 +317,15 @@ void K3bMixedBurnDialog::slotSaveUserDefaults()
 
 void K3bMixedBurnDialog::toggleAllOptions()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+    K3bProjectBurnDialog::toggleAllOptions();
 
-  bool cdrecordOnTheFly = 
-    k3bcore->externalBinManager()->binObject("cdrecord")->version 
-    >= K3bVersion( 2, 1, -1, "a13" );
-  bool cdrecordCdText = 
-    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  bool cdrecordOnTheFly = false;
+  bool cdrecordCdText = false;
+  if ( k3bcore->externalBinManager()->binObject("cdrecord") ) {
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version
+      >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+  }
 
   if( m_writingModeWidget->writingMode() == K3b::TAO ||
       m_writingModeWidget->writingMode() == K3b::RAW ||

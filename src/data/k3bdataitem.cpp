@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: $
+ * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -149,7 +149,7 @@ bool K3bDataItem::hideOnJoliet() const
 }
 
 
-void K3bDataItem::setHideOnRockRidge( bool b ) 
+void K3bDataItem::setHideOnRockRidge( bool b )
 {
   // there is no use in changing the value if 
   // it is already set by the parent
