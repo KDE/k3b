@@ -157,7 +157,42 @@ AC_SUBST(MAD_LIB)
 AM_CONDITIONAL(include_MP3, [test -n "$MAD_LIB"])
 
 dnl === test for libsndfile ===
-PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.2, ac_cv_sndfile=1, ac_cv_sndfile=0)
+dnl
+dnl Don't use PKG_CHECK, since if there is no pkg-config installed,
+dnl then there is no auto* magic for it either.
+dnl
+dnl Tests copied from kdebase/kioslave/thumbnail/
+dnl
+if test -z "$PKG_CONFIG"; then
+    AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+fi
+
+SNDFILE_CFLAGS=""
+SNDFILE_LIBS=""
+if test "$PKG_CONFIG" = "no" ; then
+    ac_cv_sndfile=0
+    echo "*** The pkg-config script could not be found. Make sure it is"
+    echo "*** in your path, or set the PKG_CONFIG environment variable"
+    echo "*** to the full path to pkg-config."
+    echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+else
+    if !(`$PKG_CONFIG --exists sndfile`) ; then
+        echo "*** sndfile is not installed."
+        ac_cv_sndfile=0
+    else
+        if !(`$PKG_CONFIG --atleast-version="1.0.2" sndfile`) ; then
+            echo "*** You need at least version 1.0.2 of sndfile."
+            ac_cv_sndfile=0
+        else
+            ac_cv_sndfile=1
+            SNDFILE_CFLAGS=`$PKG_CONFIG --cflags sndfile`
+            SNDFILE_LIBS=`$PKG_CONFIG --libs sndfile`
+        fi
+    fi
+fi
+
+
+dnl PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.2, ac_cv_sndfile=1, ac_cv_sndfile=0)
 
 AC_DEFINE_UNQUOTED([HAVE_SNDFILE],${ac_cv_sndfile},
 			[Set to 1 if you have libsndfile.])
