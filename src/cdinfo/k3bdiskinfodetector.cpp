@@ -178,23 +178,11 @@ void K3bDiskInfoDetector::fetchTocInfo()
   else
     calculateDiscId();
 
-  int caps;
-
-// get capabilities
-  if ( (caps=::ioctl(m_cdfd,CDROM_GET_CAPABILITY)) >= 0 ) 
-// is the device dvd capable ?
-    if ( caps & (CDC_DVD | CDC_DVD_R | CDC_DVD_RAM) ) {
-//     try to read the physical dvd-structure
-//     if this fails, we probably cannot take any further (usefull) dvd-action
-       dvd_struct dvdinfo;
-       ::memset(&dvdinfo,0,sizeof(dvd_struct));
-       dvdinfo.type = DVD_STRUCT_PHYSICAL;
-       if ( ::ioctl(m_cdfd,DVD_READ_STRUCT,&dvdinfo) == 0 ) {
-          m_info.empty = false;
-          m_info.noDisk = false;
-          m_info.tocType = K3bDiskInfo::DVD;
-       }
-    }
+  if ( m_device->isDVD() ) {
+    m_info.empty = false;
+    m_info.noDisk = false;
+    m_info.tocType = K3bDiskInfo::DVD;
+  }    
 
   finish(true);
 }
