@@ -1,0 +1,197 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>base_K3bAudioRippingOptionWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>508</width>
+            <height>150</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Destination Base Directory</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>m_editBaseDir</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Filetype</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KComboBox">
+                    <property name="name">
+                        <cstring>m_comboFileType</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>m_buttonConfigurePlugin</cstring>
+                    </property>
+                    <property name="text">
+                        <string>...</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Configure Plugin</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="0" column="1" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>groupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>Options</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkUsePattern</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use filename pattern for ripped files</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkCreatePlaylist</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Create m3u Playlist</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Create playlist for the ripped files</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will create a playlist of the ripped files
+which can be used with programs like xmms or noatun.
+&lt;p&gt;You may use the special strings to give the playlist a unique filename.</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Fixed</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_checkPlaylistRelative</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Use relative paths</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Use relative paths instead of absolut</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;If this option is checked the playlist entries will be relative to it's location.
+&lt;p&gt;Example: Your playlist is located in &lt;em&gt;/home/myself/music&lt;/em&gt; and
+your audiofiles in &lt;em&gt;/home/myself/music/cool&lt;/em&gt;. Then the entries in the
+playlist will look like: &lt;em&gt;cool/track1.ogg&lt;/em&gt;.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkSingleFile</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Create single file</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Rip all tracks to a single file</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will create only one 
+audio file no matter how many tracks are ripped. This 
+file will contain all tracks one after the other.
+&lt;p&gt;This might be useful to rip a live album or a radio play.
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The file will have the name of the first track.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>m_checkCreatePlaylist</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkPlaylistRelative</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+</includehints>
+</UI>

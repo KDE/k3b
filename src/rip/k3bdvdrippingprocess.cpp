@@ -265,7 +265,9 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
 
 void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
   if( resultJob->error() > 0 ) {
-    emit infoMessage( i18n("Mounting failed: %1.").arg(resultJob->errorString()), ERROR );
+    // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
+    resultJob->showErrorDialog( qApp->activeWindow() );
+    emit infoMessage( i18n("Mounting failed."), ERROR );
     
     m_preProcessingFailed = true;
     emit finished( false );

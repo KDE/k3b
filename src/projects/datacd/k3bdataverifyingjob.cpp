@@ -118,7 +118,8 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 
   emit newTask( i18n("Mounting media") );
 
-  connect( KIO::mount( true, 0, d->device->mountDevice(), d->device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+  connect( KIO::mount( true, 0L, d->device->mountDevice(), d->device->mountPoint(), false ), 
+	   SIGNAL(result(KIO::Job*)),
 	   this, SLOT( slotMountFinished(KIO::Job*) ) );
 }
 
@@ -132,7 +133,9 @@ void K3bDataVerifyingJob::slotMountFinished( KIO::Job* job )
   }
 
   if( job->error() ) {
-    emit infoMessage( i18n("Mounting failed: %1.").arg(job->errorString()), ERROR );
+    // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
+    job->showErrorDialog( qApp->activeWindow() );
+    emit infoMessage( i18n("Mounting failed."), ERROR );
     d->running = false;
     emit finished(false);
   }
@@ -297,7 +300,9 @@ void K3bDataVerifyingJob::finishVerification( bool success )
 void K3bDataVerifyingJob::slotUnmountFinished( KIO::Job* job )
 {
   if( job->error() ) {
-    emit infoMessage( i18n("Unmounting failed: %1.").arg(job->errorString()), ERROR );
+    // do show a dialog instead of an infoMessage since the errorString spreads over multible lines. :(
+    job->showErrorDialog( qApp->activeWindow() );
+    emit infoMessage( i18n("Unmounting failed."), ERROR );
   }
   else {
     emit infoMessage( i18n("Successfully unmounted."), INFO );

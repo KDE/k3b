@@ -31,11 +31,9 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
   ~K3bCddbPatternWidget();
 
   QString filenamePattern() const;
-  QString directoryPattern() const;
-  QString filenameReplaceString() const;
-  QString directoryReplaceString() const;
-  bool replaceBlanksInFilename() const;
-  bool replaceBlanksInDirectory() const;
+  QString playlistPattern() const;
+  QString blankReplaceString() const;
+  bool replaceBlanks() const;
 
  signals:
   void changed();
@@ -44,9 +42,6 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
   void loadConfig( KConfig* );
   void saveConfig( KConfig* );
   void loadDefaults();
-
- protected slots:
-  void slotSeeSpecialStrings();
 };
 
 #endif

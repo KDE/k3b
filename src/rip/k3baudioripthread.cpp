@@ -25,6 +25,7 @@
 #include <k3bdevice.h>
 #include <k3btoc.h>
 #include <k3btrack.h>
+#include <k3bglobals.h>
 
 #include <songdb/k3bsong.h>
 #include <songdb/k3bsongmanager.h>
@@ -242,6 +243,11 @@ void K3bAudioRipThread::run()
     }
   }
 
+  if( !d->canceled && m_writePlaylist ) {
+    emitInfoMessage( i18n("Writing playlist."), K3bJob::INFO );
+    success = success && writePlaylist();
+  }
+
   if( d->canceled ) {
     emitCanceled();
     emitFinished(false);
@@ -363,43 +369,6 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 }
 
 
-// QString K3bAudioRipThread::createFileName( int track )
-// {
-//   QString extension = ".wav";
-
-//   if( d->encoderFactory )
-//     extension = "." + d->encoderFactory->extension();
-
-//   if( m_baseDirectory[m_baseDirectory.length()-1] != '/' )
-//     m_baseDirectory.append("/");
-
-//   QString dir = m_baseDirectory;
-//   QString filename;
-
-//   if( m_bUsePattern ) {
-//     dir += K3bPatternParser::parsePattern( m_cddbEntry, track, 
-// 					   m_dirPattern,
-// 					   m_replaceBlanksInDir,
-// 					   m_dirReplaceString );
-//   }
-
-//   if( dir[dir.length()-1] != '/' )
-//     dir.append("/");
-
-//   if( m_bUsePattern ) {
-//     filename = K3bPatternParser::parsePattern( m_cddbEntry, track, 
-// 					       m_filenamePattern,
-// 					       m_replaceBlanksInFilename,
-// 					       m_filenameReplaceString ) + extension;
-//   }
-//   else {
-//     filename = i18n("Track%1").arg( QString::number(track).rightJustify( 2, '0' ) ) + extension;
-//   }
-
-//   return dir + filename;
-// }
-
-
 void K3bAudioRipThread::cancel()
 {
   d->canceled = true;
@@ -437,6 +406,98 @@ void K3bAudioRipThread::cleanupAfterCancellation()
   }
 }
 
+
+bool K3bAudioRipThread::writePlaylist()
+{
+  // this is an absolut path so there is always a "/"
+  QString playlistDir = m_playlistFilename.left( m_playlistFilename.findRev( "/" ) );
+
+  if( !KStandardDirs::makeDir( playlistDir ) ) {
+    emitInfoMessage( i18n("Unable to create directory %1").arg(playlistDir), K3bJob::ERROR );
+    return false;
+  }
+
+  QFile f( m_playlistFilename );
+  if( f.open( IO_WriteOnly ) ) {
+    QTextStream t( &f );
+
+    // format descriptor
+    t << "#EXTM3U" << endl;
+
+    // now write the entries (or the entry if m_singleFile)
+    if( m_singleFile ) {
+      // extra info
+      t << "#EXTINF:" << d->overallSectorsToRead/75 << ",";
+      if( !m_cddbEntry.cdArtist.isEmpty() && !m_cddbEntry.cdTitle.isEmpty() )
+	t << m_cddbEntry.cdArtist << " - " << m_cddbEntry.cdTitle << endl;
+      else
+	t << m_tracks[0].second.mid(m_tracks[0].second.findRev("/") + 1, 
+				    m_tracks[0].second.length() - m_tracks[0].second.findRev("/") - 5)
+	  << endl; // filename without extension
+
+      // filename
+      if( m_relativePathInPlaylist )
+	t << findRelativePath( m_tracks[0].second, playlistDir )
+	  << endl;
+      else
+	t << m_tracks[0].second << endl;
+    }
+    else {
+      for( unsigned int i = 0; i < m_tracks.count(); ++i ) {
+	int trackIndex = m_tracks[i].first-1;
+
+	// extra info
+	t << "#EXTINF:" << d->toc[trackIndex].length().totalFrames()/75 << ",";
+
+	if( !m_cddbEntry.artists[trackIndex].isEmpty() && !m_cddbEntry.titles[trackIndex].isEmpty() )
+	  t << m_cddbEntry.artists[trackIndex] << " - " << m_cddbEntry.titles[trackIndex] << endl;
+	else
+	  t << m_tracks[i].second.mid(m_tracks[i].second.findRev("/") + 1, 
+				      m_tracks[i].second.length() 
+				      - m_tracks[i].second.findRev("/") - 5)
+	    << endl; // filename without extension
+
+	// filename
+	if( m_relativePathInPlaylist )
+	  t << findRelativePath( m_tracks[i].second, playlistDir )				 
+	    << endl;
+	else
+	  t << m_tracks[i].second << endl;
+      }
+    }
+   
+    return true;
+  }
+  else {
+    emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(m_playlistFilename), K3bJob::ERROR );
+    kdDebug() << "(K3bAudioRipThread) could not open file " << m_playlistFilename << " for writing." << endl;
+    return false;
+  }
+}
+
+
+QString K3bAudioRipThread::findRelativePath( const QString& absPath, const QString& baseDir )
+{
+  QString baseDir_ = K3b::prepareDir( K3b::fixupPath(baseDir) );
+  QString path = K3b::fixupPath( absPath );
+
+  // both paths have an equal beginning. That's just how it's configured by K3b
+  int pos = baseDir_.find( "/" );
+  int oldPos = pos;
+  while( pos != -1 && path.left( pos+1 ) == baseDir_.left( pos+1 ) ) {
+    oldPos = pos;
+    pos = baseDir_.find( "/", pos+1 );
+  }
+
+  // now the paths are equal up to oldPos, so that's how "deep" we go
+  path = path.mid( oldPos+1 );
+  baseDir_ = baseDir_.mid( oldPos+1 );
+  int numberOfDirs = baseDir_.contains( '/' );
+  for( int i = 0; i < numberOfDirs; ++i )
+    path.prepend( "../" );
+
+  return path;
+}
 
 
 QString K3bAudioRipThread::jobDescription() const 

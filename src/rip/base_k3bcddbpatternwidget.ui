@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>431</width>
-            <height>197</height>
+            <width>480</width>
+            <height>119</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,7 +25,36 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="KURLLabel" row="2" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkBlankReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace all blanks with:</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>m_editBlankReplace</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>_</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="KURLLabel" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>m_specialStringsLabel</cstring>
             </property>
@@ -36,97 +65,12 @@
                 <set>AlignVCenter|AlignRight</set>
             </property>
         </widget>
-        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="QLabel" row="1" column="0">
             <property name="name">
-                <cstring>m_checkFilenameReplace</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+                <cstring>textLabel2</cstring>
             </property>
             <property name="text">
-                <string>Replace all blanks in filename with:</string>
-            </property>
-        </widget>
-        <widget class="KLineEdit" row="3" column="2">
-            <property name="name">
-                <cstring>m_editDirectoryReplace</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="text">
-                <string>_</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_checkDirectoryReplace</cstring>
-            </property>
-            <property name="text">
-                <string>Replace all blanks in directory with:</string>
-            </property>
-        </widget>
-        <widget class="KLineEdit" row="4" column="2">
-            <property name="name">
-                <cstring>m_editFilenameReplace</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="text">
-                <string>_</string>
-            </property>
-        </widget>
-        <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
-            <item>
-                <property name="text">
-                    <string>%r/%m</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>%g/%r - %m</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>music/ripped-tracks</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>m_comboAdvancedDirectoryPattern</cstring>
-            </property>
-            <property name="editable">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Insert your custom pattern here</string>
-            </property>
-        </widget>
-        <widget class="KComboBox" row="1" column="1" rowspan="1" colspan="2">
-            <item>
-                <property name="text">
-                    <string>%a - %t</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Track %n - %t (%a)</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>m_comboAdvancedFilenamePattern</cstring>
-            </property>
-            <property name="editable">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Insert your custom pattern here</string>
+                <string>Playlist pattern:</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
@@ -134,38 +78,88 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Directory pattern:</string>
+                <string>Ripped files pattern:</string>
             </property>
         </widget>
-        <widget class="QLabel" row="1" column="0">
+        <widget class="KComboBox" row="0" column="1">
+            <item>
+                <property name="text">
+                    <string>%r/%m/%a - %t</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>%g/%r - %m/Track%n</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>music/ripped-tracks/%a - %t</string>
+                </property>
+            </item>
             <property name="name">
-                <cstring>textLabel2</cstring>
+                <cstring>m_comboFilenamePattern</cstring>
             </property>
-            <property name="text">
-                <string>Filename pattern:</string>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Insert your custom pattern here</string>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="1" column="1">
+            <item>
+                <property name="text">
+                    <string>%r - %m.m3u</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Playlist.m3u</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>playlists/%r/%m.m3u</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>m_comboPlaylistPattern</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
             </property>
         </widget>
     </grid>
 </widget>
 <connections>
     <connection>
-        <sender>m_checkDirectoryReplace</sender>
+        <sender>m_checkBlankReplace</sender>
         <signal>toggled(bool)</signal>
-        <receiver>m_editDirectoryReplace</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkFilenameReplace</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_editFilenameReplace</receiver>
+        <receiver>m_editBlankReplace</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
     <includehint>kurllabel.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>

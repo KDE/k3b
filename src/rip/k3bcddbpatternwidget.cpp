@@ -19,7 +19,6 @@
 #include <klocale.h>
 #include <kcombobox.h>
 #include <klineedit.h>
-#include <kurllabel.h>
 
 #include <qregexp.h>
 #include <qvalidator.h>
@@ -41,27 +40,18 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
   // and the dir should never start with a slash since it should always be a relative path
 
   QRegExpValidator* dirValidator = new QRegExpValidator( QRegExp( "[^/][^?\\*\\\"]*" ), this );
-  m_comboAdvancedDirectoryPattern->setValidator( dirValidator );
-  m_editDirectoryReplace->setValidator( dirValidator );
+  m_comboFilenamePattern->setValidator( dirValidator );
+  m_comboPlaylistPattern->setValidator( dirValidator );
+  m_editBlankReplace->setValidator( dirValidator );
 
-  QRegExpValidator* fileValidator = new QRegExpValidator( QRegExp( "[^/?\\*\\\"]*" ), this );
-  m_comboAdvancedFilenamePattern->setValidator( fileValidator );
-  m_editFilenameReplace->setValidator( fileValidator );
-
-  connect( m_comboAdvancedFilenamePattern, SIGNAL(textChanged(const QString&)),
+  connect( m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
-  connect( m_comboAdvancedDirectoryPattern, SIGNAL(textChanged(const QString&)),
+  connect( m_comboPlaylistPattern, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
-  connect( m_editFilenameReplace, SIGNAL(textChanged(const QString&)),
+  connect( m_editBlankReplace, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
-  connect( m_editDirectoryReplace, SIGNAL(textChanged(const QString&)),
+  connect( m_checkBlankReplace, SIGNAL(toggled(bool)),
 	   this, SIGNAL(changed()) );
-  connect( m_checkFilenameReplace, SIGNAL(toggled(bool)),
-	   this, SIGNAL(changed()) );
-  connect( m_checkDirectoryReplace, SIGNAL(toggled(bool)),
-	   this, SIGNAL(changed()) );
-
-  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()), this, SLOT(slotSeeSpecialStrings()) );
 }
 
 
@@ -72,88 +62,52 @@ K3bCddbPatternWidget::~K3bCddbPatternWidget()
 
 QString K3bCddbPatternWidget::filenamePattern() const
 {
-  return m_comboAdvancedFilenamePattern->currentText();
+  return m_comboFilenamePattern->currentText();
 }
 
 
-QString K3bCddbPatternWidget::directoryPattern() const
+QString K3bCddbPatternWidget::playlistPattern() const
 {
-  return m_comboAdvancedDirectoryPattern->currentText();
+  return m_comboPlaylistPattern->currentText();
 }
 
 
-QString K3bCddbPatternWidget::filenameReplaceString() const
+QString K3bCddbPatternWidget::blankReplaceString() const
 {
-  return m_editFilenameReplace->text();
+  return m_editBlankReplace->text();
 }
 
 
-QString K3bCddbPatternWidget::directoryReplaceString() const
+bool K3bCddbPatternWidget::replaceBlanks() const
 {
-  return m_editDirectoryReplace->text();
-}
-
-
-bool K3bCddbPatternWidget::replaceBlanksInFilename() const
-{
-  return m_checkFilenameReplace->isChecked();
-}
-
-
-bool K3bCddbPatternWidget::replaceBlanksInDirectory() const
-{
-  return m_checkDirectoryReplace->isChecked();
+  return m_checkBlankReplace->isChecked();
 }
 
 
 void K3bCddbPatternWidget::loadConfig( KConfig* c )
 {
-  m_comboAdvancedDirectoryPattern->setEditText( c->readEntry( "directory pattern", "%r/%m" ) );
-  m_comboAdvancedFilenamePattern->setEditText( c->readEntry( "filename pattern", "%a - %t" ) );
-  m_checkDirectoryReplace->setChecked( c->readBoolEntry( "replace blank in directory", false ) );
-  m_checkFilenameReplace->setChecked( c->readBoolEntry( "replace blank in filename", false ) );
-  m_editDirectoryReplace->setText( c->readEntry( "directory replace string", "_" ) );
-  m_editFilenameReplace->setText( c->readEntry( "filename replace string", "_" ) );
+  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%r - %m.m3u" ) );
+  m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%r - %m/%a - %t" ) );
+  m_checkBlankReplace->setChecked( c->readBoolEntry( "replace blanks", false ) );
+  m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );
 }
 
 
 void K3bCddbPatternWidget::saveConfig( KConfig* c )
 {
-  c->writeEntry( "directory pattern", m_comboAdvancedDirectoryPattern->currentText() );
-  c->writeEntry( "filename pattern", m_comboAdvancedFilenamePattern->currentText() );
-  c->writeEntry( "replace blank in directory", m_checkDirectoryReplace->isChecked() );
-  c->writeEntry( "replace blank in filename", m_checkFilenameReplace->isChecked() );
-  c->writeEntry( "directory replace string", m_editDirectoryReplace->text() );
-  c->writeEntry( "filename replace string", m_editFilenameReplace->text() );
+  c->writeEntry( "playlist pattern", m_comboPlaylistPattern->currentText() );
+  c->writeEntry( "filename pattern", m_comboFilenamePattern->currentText() );
+  c->writeEntry( "replace blanks", m_checkBlankReplace->isChecked() );
+  c->writeEntry( "blank replace string", m_editBlankReplace->text() );
 }
 
 
 void K3bCddbPatternWidget::loadDefaults()
 {
-  m_comboAdvancedDirectoryPattern->setEditText( "%r/%m" );
-  m_comboAdvancedFilenamePattern->setEditText( "%a - %t" );
-  m_checkDirectoryReplace->setChecked( false );
-  m_checkFilenameReplace->setChecked( false );
-  m_editDirectoryReplace->setText( "_" );
-  m_editFilenameReplace->setText( "_" );
-}
-
-
-void K3bCddbPatternWidget::slotSeeSpecialStrings()
-{
-  QWhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
-			     "<ul>\n"
-			     "<li>%a - artist of the track\n"
-			     "<li>%t - title of the track\n"
-			     "<li>%n - track number\n"
-			     "<li>%y - year of the CD\n"
-			     "<li>%e - extended information about the track\n"
-			     "<li>%g - genre of the CD\n"
-			     "<li>%r - album artist (differs from %a only on soundtracks or compilations)\n"
-			     "<li>%m - album title\n"
-			     "<li>%x - extended information about the CD\n"
-			     "<li>%d - current date\n"
-			     "</ul>" ) );
+  m_comboPlaylistPattern->setEditText( "%r - %m.m3u" );
+  m_comboFilenamePattern->setEditText( "%r - %m/%a - %t" );
+  m_checkBlankReplace->setChecked( false );
+  m_editBlankReplace->setText( "_" );
 }
 
 #include "k3bcddbpatternwidget.moc"

@@ -155,6 +155,27 @@ QString K3b::prepareDir( const QString& dir )
 }
 
 
+QString K3b::fixupPath( const QString& path )
+{
+  QString s;
+  bool lastWasSlash = false;
+  for( unsigned int i = 0; i < path.length(); ++i ) {
+    if( path[i] == '/' ) {
+      if( !lastWasSlash ) {
+	lastWasSlash = true;
+	s.append( "/" );
+      }
+    }
+    else {
+      lastWasSlash = false;
+      s.append( path[i] );
+    }
+  }
+
+  return s;
+}
+
+
 K3bVersion K3b::kernelVersion()
 {
   // initialize kernel version

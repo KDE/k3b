@@ -26,11 +26,12 @@
 #include <device/k3bdiskinfo.h>
 
 class KListView;
-class KURLRequester;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
 class K3bCddbPatternWidget;
+class QToolButton;
+class base_K3bAudioRippingOptionWidget;
 
 
 /**
@@ -57,17 +58,14 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   QValueList<int> m_trackNumbers;
 
   KListView*    m_viewTracks;
-  KURLRequester* m_editStaticRipPath;
-  QCheckBox*    m_checkUsePattern;
-
-  QComboBox* m_comboFileType;
 
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinRetries;
   QCheckBox* m_checkNeverSkip;
-  QCheckBox* m_checkSingleFile;
 
   K3bCddbPatternWidget* m_patternWidget;
+
+  base_K3bAudioRippingOptionWidget* m_optionWidget;
 
   void setupGui();
   void setupContextHelp();
@@ -81,6 +79,10 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void slotLoadK3bDefaults();
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
+
+  void slotConfigurePlugin();
+  void slotToggleAll();
+  void slotSeeSpecialStrings();
 };
 
 #endif

@@ -96,6 +96,11 @@ namespace K3b
    */
   QString prepareDir( const QString& dir );
 
+  /**
+   * For now this just replaces multible occurences of / with a single /
+   */
+  QString fixupPath( const QString& );
+
   K3bVersion kernelVersion();
   QString systemName();
 

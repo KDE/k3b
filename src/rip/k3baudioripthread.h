@@ -54,16 +54,6 @@ class K3bAudioRipThread : public QObject, public K3bThread
 
   void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
 
-  // file naming
-  void setUsePattern( bool b ) { m_bUsePattern = b; }
-  void setBaseDirectory( const QString& path ) { m_baseDirectory = path; }
-  void setDirectoryPattern( const QString& s ) { m_dirPattern = s; }
-  void setFilenamePattern( const QString& s ) { m_filenamePattern = s; }
-  void setDirectoryReplaceString( const QString& s ) { m_dirReplaceString = s; }
-  void setFilenameReplaceString( const QString& s ) { m_filenameReplaceString = s; }
-  void setReplaceBlanksInDir( bool b ) { m_replaceBlanksInDir = b; }
-  void setReplaceBlanksInFilename( bool b ) { m_replaceBlanksInFilename = b; }
-
   // if 0 (default) wave files are created
   void setEncoderFactory( K3bAudioEncoderFactory* f );
 
@@ -77,6 +67,10 @@ class K3bAudioRipThread : public QObject, public K3bThread
    */
   void setTracksToRip( const QValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
 
+  void setWritePlaylist( bool b ) { m_writePlaylist = b; }
+  void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
+  void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
+
   void cancel();
 
  private slots:
@@ -88,7 +82,12 @@ class K3bAudioRipThread : public QObject, public K3bThread
 
   bool ripTrack( int track, const QString& filename );
   void cleanupAfterCancellation();
-  //  QString createFileName( int track );
+  bool writePlaylist();
+
+  /**
+   * Finds a relative path from baseDir to absPath
+   */
+  QString findRelativePath( const QString& absPath, const QString& baseDir );
 
   K3bCddbResultEntry m_cddbEntry;
   K3bCdDevice::CdDevice* m_device;
@@ -96,13 +95,9 @@ class K3bAudioRipThread : public QObject, public K3bThread
   bool m_bUsePattern;
   bool m_singleFile;
 
-  QString m_baseDirectory;
-  QString m_dirPattern;
-  QString m_filenamePattern;
-  QString m_dirReplaceString;
-  QString m_filenameReplaceString;
-  bool m_replaceBlanksInDir;
-  bool m_replaceBlanksInFilename;
+  bool m_writePlaylist;
+  bool m_relativePathInPlaylist;
+  QString m_playlistFilename;
 
   QValueVector<QPair<int, QString> > m_tracks;
 
