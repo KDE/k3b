@@ -939,8 +939,8 @@ void K3bSetupWizard::apply()
 
   if( m_checkPermissionsDevices->isChecked() )
     m_setup->applyDevicePermissions( m_deviceManager );
-//   if( m_checkPermissionsExternalPrograms->isChecked() )
-//     m_setup->applyExternalProgramPermissions( m_externalBinManager );
+  if( m_checkPermissionsExternalPrograms->isChecked() )
+    m_setup->applyExternalProgramPermissions( m_externalBinManager );
   // -----------------------------------------------------------------------
 
 

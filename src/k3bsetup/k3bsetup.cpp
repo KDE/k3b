@@ -186,6 +186,17 @@ void K3bSetup::applyDevicePermissions( K3bDeviceManager* deviceManager )
 }
 
 
+void K3bSetup::applyExternalProgramPermissions( K3bExternalBinManager* manager )
+{
+  uint groupId = createCdWritingGroup();
+
+  // change permission, owner, and group for:
+  // cdrecord, mkisofs, cdrdao
+
+
+}
+
+
 const QString& K3bSetup::cdWritingGroup() const
 {
   return m_cdwritingGroup;

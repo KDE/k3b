@@ -26,7 +26,7 @@ class KConfig;
 
 
 class K3bDeviceManager;
-//class K3bExternalBinManager;
+class K3bExternalBinManager;
 
 /**
  * K3bSetup represents the setup status.
@@ -42,7 +42,7 @@ class K3bSetup
   bool saveConfig( KConfig* );
 
   void applyDevicePermissions( K3bDeviceManager* );
-  //void applyExternalProgramPermissions( K3bExternalBinManager* );
+  void applyExternalProgramPermissions( K3bExternalBinManager* );
 
   void setCdWritingGroup( const QString& );
   void addUser( const QString& );
