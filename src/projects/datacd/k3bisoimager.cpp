@@ -479,14 +479,14 @@ bool K3bIsoImager::addMkisofsParameters()
 
       //
       // To make sure that mkisofs does not need root permissions we open the device
-      // and pass the open device to mkisofs
+      // and pass the open device to mkisofsheader
       //
 
-      int fd = m_device->open();
-      if( fd == -1 ) {
-	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
-	return false;
-      }
+//       int fd = m_device->open();
+//       if( fd == -1 ) {
+// 	emit infoMessage( i18n("Unable to open device %1.").arg(m_device->blockDeviceName()), ERROR );
+// 	return false;
+//       }
 
       //
       // we want mkisofs to read from fd
@@ -494,14 +494,15 @@ bool K3bIsoImager::addMkisofsParameters()
       // but Andy told me that on FreeBSD we only have /dev/fd/0, 1, and 2
       // so if K3b will ever run well on FreeBSD we are ready...
       //
-      m_process->readFromFd( fd ); // make mkisofs's stdin a copy of fd
+      //      m_process->readFromFd( fd ); // make mkisofs's stdin a copy of fd
 
       // PROBLEM: when writing on the fly cdrecord waits for mkisofs to release the device
       //          Since we open and not close the device here it seems to happen sometimes
       //          that cdrecord is not able to open the device at all. So we need to close it
       //          somewhere...
 
-      *m_process << "-M" << QString("/dev/fd/0");
+      //      *m_process << "-M" << QString("/dev/fd/0");
+      *m_process << "-M" << m_device->blockDeviceName();
     }
   }
 
