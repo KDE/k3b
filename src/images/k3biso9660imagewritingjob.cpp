@@ -285,8 +285,12 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	  ( k3bcore->externalBinManager()->binObject( "cdrdao" )->version >= K3bVersion( 1, 1, 7 ) ||
 	   ( usedWriteMode == K3b::DAO && ( m_dataMode == K3b::MODE2 || m_noFix ) ) ) )
 	usedApp = K3b::CDRDAO;
-      else
+      else {
+	// fall back to TAO. Is there any backdraw? Except that the track will contain two bogus sectors?
 	usedApp = K3b::CDRECORD;
+	if( m_writingMode == K3b::WRITING_MODE_AUTO )
+	  usedWriteMode = K3b::TAO;
+      }
     }
 
 

@@ -613,6 +613,11 @@ void K3bDataJob::determineWritingMode()
   }
   else
     d->usedWritingApp = writingApp();
+
+  if( d->usedWritingApp == K3b::CDRECORD && d->doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+    // fall back to TAO. Is there any backdraw? Except that the track will contain two bogus sectors?
+    d->usedWritingMode = K3b::TAO;
+  }
 }
 
 
