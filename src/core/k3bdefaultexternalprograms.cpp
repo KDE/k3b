@@ -180,6 +180,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
 	bin->version > K3bVersion( 2, 1, -1, "a14") ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
     
+    if( out.output().contains( "-xamix" ) ||
+	bin->version >= K3bVersion( 2, 1, -1, "a12" ) )
+      bin->addFeature( "xamix" );
+
     // check if we run cdrecord as root
     if( !getuid() )
       bin->addFeature( "suidroot" );

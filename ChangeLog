@@ -1,3 +1,7 @@
+0.11.20
+Fixed handling of -xa and -xa1 options for dvd patched cdrecord versions in which case K3b
+	had problems with the -dvd suffix in the version string.
+
 0.11.19
 Finally fixed mp3 file detection (I feared I was never going to find the problem)
 Fixed bug which made the DataDvdJob delete an image even if none was created.
