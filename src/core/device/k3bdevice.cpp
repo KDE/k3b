@@ -575,6 +575,7 @@ bool K3bCdDevice::CdDevice::init()
   // Most current drives support the 2A mode page
   // Here we can get some more information (cdrecord -prcap does exactly this)
   //
+
   unsigned char* mm_cap_buffer = 0;
   int mm_cap_len = 0;
   if( modeSense( &mm_cap_buffer, mm_cap_len, 0x2A ) ) {
@@ -591,6 +592,26 @@ bool K3bCdDevice::CdDevice::init()
   }
 
 
+  //
+  // Check Just-Link via Ricoh mode page 0x30
+  //
+  if( !d->burnfree ) {
+    unsigned char* ricoh = 0;
+    int ricohLen = 0;
+    if( modeSense( &ricoh, ricohLen, 0x30 ) ) {
+
+      //
+      // 8 byte mode header + 6 byte page data
+      //
+
+      if( ricohLen >= 14 ) {
+	ricoh_mode_page_30* rp = (ricoh_mode_page_30*)(ricoh+8);
+	d->burnfree = rp->BUEFS;
+      }
+
+      delete [] ricoh;
+    }
+  }
 
   //
   // This is the backup if the drive does not support the GET CONFIGURATION command

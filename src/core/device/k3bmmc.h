@@ -664,6 +664,50 @@ namespace K3bCdDevice
     // bytes 74-95: reserved
     // bytes 96-n: vendor specific
   };
+
+
+  struct ricoh_mode_page_30 {
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char PS               : 1;
+    unsigned char res_1            : 1;
+    unsigned char page_code        : 6;
+#else
+    unsigned char page_code        : 6;
+    unsigned char res_1            : 1;
+    unsigned char PS               : 1;
+#endif
+    unsigned char page_len;                  /* 0xE = 14 Bytes */
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char res_2_67        :2;
+    unsigned char AWSCS           :1;     /* Auto write speed control supp. */
+    unsigned char ARSCS           :1;     /* Auto read speed control supp. */
+    unsigned char res_2_23        :2;
+    unsigned char TWBFS           :1;     /* Test Burn-Free sup.  */
+    unsigned char BUEFS           :1;     /* Burn-Free supported  */
+#else
+    unsigned char BUEFS           :1;     /* Burn-Free supported  */
+    unsigned char TWBFS           :1;     /* Test Burn-Free sup.  */
+    unsigned char res_2_23        :2;
+    unsigned char ARSCS           :1;     /* Auto read speed control supp. */
+    unsigned char AWSCS           :1;     /* Auto write speed control supp. */
+    unsigned char res_2_67        :2;
+#endif
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+    unsigned char res_3_67        :2;
+    unsigned char AWSCD           :1;     /* Auto write speed control disabled */
+    unsigned char ARSCE           :1;     /* Auto read speed control enabled */
+    unsigned char res_2_13        :3;
+    unsigned char BUEFE           :1;     /* Burn-Free enabled    */
+#else
+    unsigned char BUEFE           :1;     /* Burn-Free enabled    */
+    unsigned char res_2_13        :3;
+    unsigned char ARSCE           :1;     /* Auto read speed control enabled */
+    unsigned char AWSCD           :1;     /* Auto write speed control disabled */
+    unsigned char res_3_67        :2;
+#endif
+    unsigned char link_counter[2];        /* Burn-Free link counter */
+    unsigned char res[10];                /* Padding up to 16 bytes */
+  };
 }
 
 
