@@ -26,6 +26,7 @@
 #include <qsplitter.h>
 #include <qevent.h>
 #include <qtabwidget.h>
+#include <qvaluelist.h>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -39,6 +40,7 @@
 #include <kstddirs.h>
 #include <krun.h>
 #include <kurl.h>
+#include <ktoolbar.h>
 
 #include <stdlib.h>
 
@@ -89,7 +91,6 @@ K3bMainWindow::K3bMainWindow()
   // call inits to invoke all other construction parts
   initStatusBar();
   initActions();
-  initView();
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
@@ -101,9 +102,7 @@ K3bMainWindow::K3bMainWindow()
   m_optionDialog = 0;
 
   // since the icons are not that good activate the text on the toolbar
-  QListIterator<KToolBar> it = toolBarIterator();
-  for( ; it.current(); ++it )
-    it.current()->setIconText( KToolBar::IconTextRight );
+  toolBar()->setIconText( KToolBar::IconTextRight );
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -192,8 +191,11 @@ void K3bMainWindow::initView()
   setMainDockWidget( mainDock );
   mainDock->setEnableDocking( KDockWidget::DockNone );
 
-  m_documentTab = new K3bProjectTabWidget( mainDock );
-  mainDock->setWidget( m_documentTab );
+  QVBox* documentBox = new QVBox( mainDock );
+  m_viewsToolbar = new KToolBar( this, documentBox, "viewsToolBar" );
+  m_viewsToolbar->setEnableContextMenu(true); // seems not to work! :-(
+  m_documentTab = new K3bProjectTabWidget( documentBox );
+  mainDock->setWidget( documentBox );
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged(QWidget*)) );
 
   // fill the tabs action menu
@@ -201,7 +203,6 @@ void K3bMainWindow::initView()
   m_documentTab->insertAction( actionFileSaveAs );
   m_documentTab->insertAction( actionFileClose );
   m_documentTab->insertAction( actionFileBurn );
-
 
   dirDock = createDockWidget( "DirDock", SmallIcon("idea") );
   m_dirView = new K3bDirView( dirDock );
@@ -226,6 +227,8 @@ void K3bMainWindow::createClient(K3bDoc* doc)
   actionFileExport->setEnabled( true );
   actionFileSave->setEnabled( true );
   actionFileSaveAs->setEnabled( true );
+
+  slotCurrentDocChanged( m_documentTab->currentPage() );
 }
 
 
@@ -364,6 +367,8 @@ bool K3bMainWindow::eventFilter(QObject* object, QEvent* event)
 
 	  pDoc->removeView( pView );
 	  m_documentTab->removePage( pView );
+
+	  slotCurrentDocChanged( m_documentTab->currentPage() );
 
 	  // ---------------------------------
 	  // if it was the last view we removed the doc should be removed
@@ -860,18 +865,27 @@ void K3bMainWindow::slotDirDockHidden()
 
 void K3bMainWindow::slotCurrentDocChanged( QWidget* w )
 {
-  if( w->inherits( "K3bView" ) ) {
+  if( K3bView* view = dynamic_cast<K3bView*>(w) ) {
     // activate actions for file-handling
     actionFileClose->setEnabled( true );
     actionFileSave->setEnabled( true );
     actionFileSaveAs->setEnabled( true );
     actionFileExport->setEnabled( true );
+
+    // update view-toolbar
+    m_viewsToolbar->clear();
+    QValueList<KAction*> actions = view->actionCollection()->actions();
+    for( QValueList<KAction*>::Iterator it = actions.begin(); it != actions.end(); ++it ) {
+      (*it)->plug( m_viewsToolbar );
+    }
   }
   else {
-    // the active window does not represent a file (e.g. the copy-widget)
     actionFileClose->setEnabled( false );
     actionFileSave->setEnabled( false );
     actionFileSaveAs->setEnabled( false );
+
+    // update view-toolbar
+    m_viewsToolbar->clear();
   }
 }
 

@@ -27,6 +27,7 @@
 
 class K3bDoc;
 class K3bProjectBurnDialog;
+class KActionCollection;
 
 
 /** The K3bView class provides the view widget for the document instance connected to it and is displayed
@@ -68,6 +69,8 @@ class K3bView : public QWidget
 		
   virtual K3bProjectBurnDialog* burnDialog() = 0;
 
+  virtual KActionCollection* actionCollection() const;
+
  protected:
   /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for
    * K3bView's are processed by K3bMainWindow::eventFilter(), so this overwitten closeEvent is necessary
@@ -77,6 +80,7 @@ class K3bView : public QWidget
 	
   /** The document connected to the view, specified in the constructor */
   K3bDoc *doc;
+  KActionCollection* m_actionCollection;
 };
 
 #endif // K3BVIEW_H

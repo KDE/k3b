@@ -29,6 +29,7 @@ AudioListView::AudioListView(QWidget *parent, const char *name )
   setDropVisualizer( true );
   setAllColumnsShowFocus( true );
   setDragEnabled( true );
+  setSelectionModeExt( KListView::Konqueror );
 		
   setupColumns();
   header()->setClickEnabled( false );
@@ -49,11 +50,21 @@ void AudioListView::setupColumns(){
   setRenameable( 0, false );
   setRenameable( 1 );
   setRenameable( 2 );
-  // 	setRenameable( 4 );
 }
 
 bool AudioListView::acceptDrag(QDropEvent* e) const{
   return ( e->source() == viewport() || QTextDrag::canDecode(e) );
+}
+
+
+void AudioListView::insertItem( QListViewItem* item )
+{
+  KListView::insertItem( item );
+
+  // make sure at least one item is selected
+  if( selectedItems().isEmpty() ) {
+    setSelected( firstChild(), true );
+  }
 }
 
 

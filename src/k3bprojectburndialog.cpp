@@ -49,7 +49,7 @@
 
 K3bProjectBurnDialog::K3bProjectBurnDialog(K3bDoc* doc, QWidget *parent, const char *name, bool modal )
   : KDialogBase( KDialogBase::Tabbed, i18n("Write CD"), User1|User2|Cancel, 
-		 User1, parent, name, modal, true, i18n("Write"), i18n("Save") )
+		 User2, parent, name, modal, true, i18n("Write"), i18n("Save") )
 {
   m_doc = doc;
 	
@@ -160,6 +160,7 @@ int K3bProjectBurnDialog::exec( bool burn )
     showButton(User1, false );
     actionButton(User2)->setDefault(false);
     actionButton(User1)->setDefault(true);
+    actionButton(User1)->clearFocus();
   }
 
 
@@ -223,12 +224,16 @@ K3bDevice* K3bProjectBurnDialog::writerDevice() const
 {
   if( m_writerSelectionWidget )
     return m_writerSelectionWidget->writerDevice();
+  else
+    return 0;
 }
 
 int K3bProjectBurnDialog::writerSpeed() const
 {
   if( m_writerSelectionWidget )	
     return m_writerSelectionWidget->writerSpeed();
+  else
+    return 0;
 }
 
 void K3bProjectBurnDialog::readSettings()

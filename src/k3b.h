@@ -45,7 +45,7 @@ class K3bExternalBinManager;
 class K3bOptionDialog;
 class K3bJob;
 class K3bProjectTabWidget;
-
+class KToolBar;
 
 
 /** Access to the "lonely" K3bMainWindow Object */
@@ -97,6 +97,12 @@ class K3bMainWindow : public KDockMainWindow
   void showOptionDialog( int = 0 );
   bool useID3TagForMp3Renaming() const { return m_useID3TagForMp3Renaming; }
   void setUseID3TagForMp3Renaming( bool b ) { m_useID3TagForMp3Renaming = b; }
+
+  /** Creates the main view of the KDockMainWindow instance and initializes the MDI view area including any needed
+   *  connections.
+   *  must be called after construction
+   */
+  void initView();
 
  signals:
   void initializationInfo( const QString& );
@@ -223,10 +229,6 @@ class K3bMainWindow : public KDockMainWindow
    */
   void initStatusBar();
 
-  /** Creates the main view of the KDockMainWindow instance and initializes the MDI view area including any needed
-   * connections.  */
-  void initView();
-	
   void searchExternalProgs();
 
   /** the configuration object of the application */
@@ -234,6 +236,9 @@ class K3bMainWindow : public KDockMainWindow
 
   /** The MDI-Interface is managed by this tabbed view */
   K3bProjectTabWidget* m_documentTab;
+
+  /** The toolbar for the doc-specific actions */
+  KToolBar* m_viewsToolbar;
 
   /** a counter that gets increased each time the user creates a new document with "File"->"New" */
   int untitledCount;

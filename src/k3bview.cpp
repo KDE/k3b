@@ -21,6 +21,7 @@
 #include <qdir.h>
 #include <qtabwidget.h>
 
+#include <kaction.h>
 
 // application specific includes
 #include "k3b.h"
@@ -31,6 +32,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   : QWidget( parent, name )
 {
   doc = pDoc;
+  m_actionCollection = new KActionCollection( this );
 }
 
 K3bView::~K3bView()
@@ -45,6 +47,12 @@ K3bDoc *K3bView::getDocument() const
 void K3bView::update(K3bView* pSender){
   if(pSender != this)
     QWidget::update();
+}
+
+
+KActionCollection* K3bView::actionCollection() const
+{
+  return m_actionCollection; 
 }
 
 

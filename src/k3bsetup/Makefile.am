@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = k3bsetup
 k3bsetup_SOURCES = k3bsetupwizard.cpp k3bsetup.cpp main.cpp
-k3bsetup_LDADD   = ../k3bexternalbinmanager.o ../device/libdevice.a -lcdda_interface $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
+k3bsetup_LDADD   = k3bexternalbinmanager.o ../device/libdevice.a -lcdda_interface $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 EXTRA_DIST = main.cpp k3bsetup.cpp k3bsetup.h lo32-app-k3bsetup.png lo16-app-k3bsetup.png k3bsetupwizard.cpp k3bsetupwizard.h
 

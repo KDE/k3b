@@ -21,6 +21,7 @@
 #include <krun.h>
 #include <kmessagebox.h>
 #include <kstddirs.h>
+#include <kconfig.h>
 
 #include <qfile.h>
 #include <qtimer.h>
@@ -75,14 +76,18 @@ int main(int argc, char *argv[])
     {
       K3bMainWindow *k3bMainWidget = new K3bMainWindow();
       app.setMainWidget( k3bMainWidget );
+      k3bMainWidget->initView();  // needs a kapp instance
 
-      K3bSplash* splash = new K3bSplash( k3bMainWidget );
-      splash->connect( k3bMainWidget, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+      k3bMainWidget->config()->setGroup( "General Options" );
+      if( k3bMainWidget->config()->readBoolEntry("Show splash", true) ) {
+	K3bSplash* splash = new K3bSplash( k3bMainWidget );
+	splash->connect( k3bMainWidget, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
 
-      // kill the splash after 15 seconds
-      QTimer::singleShot( 15000, splash, SLOT(close()) );
+	// kill the splash after 15 seconds
+	QTimer::singleShot( 15000, splash, SLOT(close()) );
 
-      splash->show();
+	splash->show();
+      }
 
       k3bMainWidget->init();
       k3bMainWidget->show();

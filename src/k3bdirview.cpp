@@ -64,8 +64,9 @@
 #include "device/k3bdevice.h"
 #include "k3b.h"
 
-// K3bDirView
-////////////////////////////////////////////////////////////////////
+
+
+
 
 K3bDirView::K3bDirView(QWidget *parent, const char *name )
   : QVBox(parent, name)
@@ -88,7 +89,7 @@ K3bDirView::K3bDirView(QWidget *parent, const char *name )
   m_cdView->hide();
   m_initialized = false;
   connect( m_kiotree, SIGNAL(urlActivated(const KURL&)), this, SLOT(slotDirActivated(const KURL&)) );
-  connect( m_cdView, SIGNAL(showDirView( QString )), this, SLOT(slotCDDirActivated( QString )) );
+  connect( m_cdView, SIGNAL(showDirView(const QString&)), this, SLOT(slotCDDirActivated(const QString&)) );
 
   // split in the middle
   QValueList<int> sizes = m_mainSplitter->sizes();
@@ -104,6 +105,9 @@ K3bDirView::~K3bDirView()
 
 void K3bDirView::setupFinalize( K3bDeviceManager *dm )
 {
+  // perhaps this should go into a slot and be called everytime the devices change
+  // for that we need a signal in K3bDeviceManager that informs about changes
+
   m_fileView->show();
   K3bDevice *dev;
   KURL result;
@@ -137,48 +141,49 @@ void K3bDirView::setupFinalize( K3bDeviceManager *dm )
   //return result;
 }
 
-void K3bDirView::slotViewChanged( KFileView* newView )
+
+void K3bDirView::slotCDDirActivated(const QString& device)
 {
-  newView->setSelectionMode( KFile::Extended );
-  if( KListView* _x = dynamic_cast<KListView*>( newView->widget() ) )
-    _x->setDragEnabled( true );
+  /* without root right i dont know how to mount the device to a specific directory.
+     i can only mount devices listed in fstab. so i have to check if fstab devices are the
+     same as our sgX device and can mount then on the fstab directory but not temporary
+     for k3b. :-(  Any idea ??????
+  */
+
+  // YES: mount K3bDevice::ioctlDevice() if K3bDevice::mountPoint() is not empty! :-)
+  //      otherwise there is no possibility to mount (K3bDeviceManager searches fstb for us!
+
+  // But: should not K3bCdView take care of this?
+
+  KConfig* c = kapp->config();
+  c->setGroup( "General Options" );
+  QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
+  qDebug("(K3bDirView) Mount dir: " + tempdir);
+  QDir mt = QDir(tempdir);
+  if( !mt.exists() )
+    mt.mkdir("tempcd");
+  qDebug("(K3bDirView) new dir for cd.");
+  //KAutoMount *tempCdView = new KAutoMount ( true, "iso9660", "/dev/cdrecorder", "/abc", "/home/ft0001/bla", false );
+  //KRun::runCommand( "ls -l" );//mount -t iso9660 /dev/cdrecorder /abc");
+  //FileProtocol *fp = new FileProtocol("dummy", "k3b");
+  //fp->mount( true, "iso9660", device, "/abc" );
+  //KIO::mount( true, "iso9660", "/dev/cdrecorder", "/home/ft0001/cdr", true);
+  //const KURL url = KURL( tempdir + "tempcd");
+  //slotDirActivated( url );
 }
 
-void K3bDirView::slotCDDirActivated(QString device){
-    /* without root right i dont know how to mount the device to a specific directory.
-       i can only mount devices listed in fstab. so i have to check if fstab devices are the
-       same as our sgX device and can mount then on the fstab directory but not temporary
-       for k3b. :-(  Any idea ??????
-    */
-    KConfig* c = kapp->config();
-    c->setGroup( "General Options" );
-    QString tempdir = c->readEntry( "Temp Dir", locateLocal( "appdata", "temp/" ) );
-    qDebug("(K3bDirView) Mount dir: " + tempdir);
-    QDir mt = QDir(tempdir);
-    if( !mt.exists() )
-        mt.mkdir("tempcd");
-    qDebug("(K3bDirView) new dir for cd.");
-    //KAutoMount *tempCdView = new KAutoMount ( true, "iso9660", "/dev/cdrecorder", "/abc", "/home/ft0001/bla", false );
-    //KRun::runCommand( "ls -l" );//mount -t iso9660 /dev/cdrecorder /abc");
-    //FileProtocol *fp = new FileProtocol("dummy", "k3b");
-    //fp->mount( true, "iso9660", device, "/abc" );
-    //KIO::mount( true, "iso9660", "/dev/cdrecorder", "/home/ft0001/cdr", true);
-    //const KURL url = KURL( tempdir + "tempcd");
-    //slotDirActivated( url );
-}
 
 void K3bDirView::slotDirActivated( const KURL& url )
 {
-	  		
-     if( url.protocol().compare("k3b_cdview") !=0 ){
-          m_fileView->setUrl(url, true);
-          m_fileView->show();
-          m_cdView->hide();
-     } else {
-          m_fileView->hide();
-          m_cdView->show();
-          m_cdView->showCdView( url.path() );
-    }
+  if( url.protocol().compare("k3b_cdview") !=0 ){
+    m_fileView->setUrl(url, true);
+    m_fileView->show();
+    m_cdView->hide();
+  } else {
+    m_fileView->hide();
+    m_cdView->show();
+    m_cdView->showCdView( url.path() );
+  }
 }
 
 

@@ -172,13 +172,19 @@ void K3bAudioDoc::addTrack(const QString& url, uint position )
 
 
 
-void K3bAudioDoc::addTrack( K3bAudioTrack* _track, uint position )
+void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 {
+  if( m_tracks->count() >= 99 ) {
+    qDebug( "(K3bAudioDoc) Red Book only allows 99 tracks." );
+    delete track;
+    return;
+  }
+
   lastAddedPosition = position;
 	
-  if( !m_tracks->insert( position, _track ) ) {
+  if( !m_tracks->insert( position, track ) ) {
     lastAddedPosition = m_tracks->count();
-    m_tracks->insert( m_tracks->count(), _track );
+    m_tracks->insert( m_tracks->count(), track );
   }
   
   setModified( true );
@@ -478,12 +484,17 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
     t << "  LANGUAGE 0 {\n";
     t << "    TITLE " << "\"" << title() << "\"" << "\n";
     t << "    PERFORMER " << "\"" << artist() << "\"" << "\n";
-    t << "    DISC_ID " << "\"" <<	disc_id() << "\"" << "\n";
-    t << "    UPC_EAN " << "\"" << "\"" << "\n";
+    if( !disc_id().isEmpty() )
+      t << "    DISC_ID " << "\"" << disc_id() << "\"" << "\n";
+    if( !upc_ean().isEmpty() )
+      t << "    UPC_EAN " << "\"" << upc_ean() << "\"" << "\n";
     t << "\n";
-    t << "    ARRANGER " << "\"" << arranger() << "\"" << "\n";
-    t << "    SONGWRITER " << "\"" << songwriter() << "\"" << "\n";
-    t << "    MESSAGE " << "\"" << cdTextMessage() << "\"" << "\n";
+    if( !arranger().isEmpty() )
+      t << "    ARRANGER " << "\"" << arranger() << "\"" << "\n";
+    if( !songwriter().isEmpty() )
+      t << "    SONGWRITER " << "\"" << songwriter() << "\"" << "\n";
+    if( !cdTextMessage().isEmpty() )
+      t << "    MESSAGE " << "\"" << cdTextMessage() << "\"" << "\n";
     t << "  }" << "\n";
     t << "}" << "\n\n";
   }
@@ -504,10 +515,14 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
 	t << "  LANGUAGE 0 {" << "\n";
 	t << "    TITLE " << "\"" << _track->title() << "\"" << "\n";
 	t << "    PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
-	t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
-	t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
-	t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
-	t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
+	if( !_track->isrc().isEmpty() )
+	  t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
+	if( !_track->arranger().isEmpty() )
+	  t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
+	if( !_track->songwriter().isEmpty() )
+	  t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
+	if( !_track->cdTextMessage().isEmpty() )
+	  t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
 	t << "  }" << "\n";
 	t << "}" << "\n";
       }
@@ -559,15 +574,26 @@ bool K3bAudioDoc::writeTOC( const QString& filename )
   
   for( ; _track != 0; _track = next() ) {
     t << "TRACK AUDIO" << "\n";
+
+    if( _track->copyProtection() )
+      t << "COPY" << "\n";
+
+    if( _track->preEmp() )
+      t << "PRE_EMPHASIS" << "\n";
+
     if( cdText() ) {
       t << "CD_TEXT {" << "\n";
       t << "  LANGUAGE 0 {" << "\n";
       t << "    TITLE " << "\"" << _track->title() << "\"" << "\n";
       t << "    PERFORMER " << "\"" << _track->artist() << "\"" << "\n";
-      t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
-      t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
-      t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
-      t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
+      if( !_track->isrc().isEmpty() )
+	t << "    ISRC " << "\"" << _track->isrc() << "\"" << "\n";
+      if( !_track->arranger().isEmpty() )
+	t << "    ARRANGER " << "\"" << _track->arranger() << "\"" << "\n";
+      if( !_track->songwriter().isEmpty() )
+	t << "    SONGWRITER " << "\"" << _track->songwriter() << "\"" << "\n";
+      if( !_track->cdTextMessage().isEmpty() )
+	t << "    MESSAGE " << "\"" << _track->cdTextMessage() << "\"" << "\n";
       t << "  }" << "\n";
       t << "}" << "\n";
     }

@@ -27,17 +27,23 @@ class QDragEnterEvent;
   *@author Sebastian Trueg
   */
 
-class AudioListView : public KListView  {
-   Q_OBJECT
+class AudioListView : public KListView  
+{
+  Q_OBJECT
 
-public:
-	AudioListView(QWidget *parent=0, const char *name=0);
-	~AudioListView();
+ public:
+  AudioListView(QWidget *parent=0, const char *name=0);
+  ~AudioListView();
 
-private:
+  /**
+   * reimplemented from KListView
+   */
+  void insertItem( QListViewItem* );
+
+ private:
   void setupColumns();
 
-protected:
+ protected:
   bool acceptDrag(QDropEvent* e) const;
 };
 

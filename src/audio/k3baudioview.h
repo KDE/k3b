@@ -57,6 +57,7 @@ class K3bAudioView : public K3bView  {
 		
  private:
   void setupPopupMenu();
+  void setupActions();
 
   K3bAudioDoc* m_doc;
 	

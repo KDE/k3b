@@ -30,28 +30,33 @@ class KURL;
   *@author Sebastian Trueg
   */
 
-class K3bFileView : public QVBox  {
-   Q_OBJECT
-public: 
-	K3bFileView(QWidget *parent=0, const char *name=0);
-	~K3bFileView();
-	void setUrl(const KURL &url, bool forward);
-	void show();
-private:
-    class PrivateFileView;
-    KDirOperator *m_fileView;
-    bool m_initialized;
-    void setupGUI();
+class K3bFileView : public QVBox
+{
+  Q_OBJECT
+
+ public: 
+  K3bFileView(QWidget *parent=0, const char *name=0);
+  ~K3bFileView();
+  void setUrl(const KURL &url, bool forward);
+
+ private:
+  class PrivateFileView;
+  KDirOperator *m_dirOp;
+
+  void setupGUI();
 };
+
 
 class K3bFileView::PrivateFileView : public KFileDetailView
 {
-public:
-	PrivateFileView( QWidget* parent, const char* name );
-      	
-protected:
-	QDragObject* dragObject() const;
-}; // class PrivateFileView
+  Q_OBJECT
+
+ public:
+  PrivateFileView( QWidget* parent, const char* name );
+  
+ protected:
+  QDragObject* dragObject() const;
+};
 
 
 #endif

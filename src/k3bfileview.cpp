@@ -32,19 +32,13 @@
 #include <ktoolbarbutton.h>
 #include <kurl.h>
 
-#define UP_BUTTON_INDEX              0
-#define HOME_BUTTON_INDEX        1
-#define RELOAD_BUTTON_INDEX    2
 
-// K3bFileView::PrivateFileview
-/////////////////////////////////////////////////////////////////////
+
 
 K3bFileView::PrivateFileView::PrivateFileView( QWidget* parent, const char* name )
   : KFileDetailView( parent, name )
 {
   setDragEnabled( true );
-  KFileDetailView::setSelectionMode( KFile::Extended );
-  KListView::setSelectionModeExt( KListView::Extended );
 }
 
 	
@@ -64,53 +58,43 @@ QDragObject* K3bFileView::PrivateFileView::dragObject() const
 }
 
 
-K3bFileView::K3bFileView(QWidget *parent, const char *name ) : QVBox(parent,name) {
-    m_initialized=false;
+
+
+K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
+  : QVBox(parent,name) 
+{
+  setupGUI();
 }
 
-K3bFileView::~K3bFileView(){
+
+K3bFileView::~K3bFileView()
+{
 }
 
-void K3bFileView::setupGUI(){
-    KToolBar *toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
 
-  m_fileView = new KDirOperator( QDir::home().absPath(), this );
-  m_fileView->setView( new PrivateFileView( m_fileView, "fileview" ) );	
+void K3bFileView::setupGUI()
+{
+  KToolBar* toolBar = new KToolBar( k3bMain(), this, "fileviewtoolbar" );
+
+  m_dirOp = new KDirOperator( QDir::home().absPath(), this );
+  PrivateFileView* fileView = new PrivateFileView( m_dirOp, "fileview" );
+  m_dirOp->setView( fileView );
+  fileView->setSelectionMode( KFile::Extended );
 
   // add some actions to the toolbar
-  KAction* _actionUp = m_fileView->actionCollection()->action("up");
-  KAction* _actionHome = m_fileView->actionCollection()->action("home");
-  KAction* _actionReload = m_fileView->actionCollection()->action("reload");
+  m_dirOp->actionCollection()->action("up")->plug( toolBar );
+  m_dirOp->actionCollection()->action("home")->plug( toolBar );
+  m_dirOp->actionCollection()->action("reload")->plug( toolBar );
 
-  toolBar->insertButton(_actionUp->icon(), UP_BUTTON_INDEX);
-  toolBar->insertButton(_actionHome->icon(), HOME_BUTTON_INDEX);
-  toolBar->insertButton(_actionReload->icon(), RELOAD_BUTTON_INDEX);
-
-  KToolBarButton *_buttonUp = toolBar->getButton(UP_BUTTON_INDEX);
-  KToolBarButton *_buttonHome = toolBar->getButton(HOME_BUTTON_INDEX);
-  KToolBarButton *_buttonReload = toolBar->getButton(RELOAD_BUTTON_INDEX);
-	
-  // the buttons should be square
-  _buttonUp->setMaximumWidth( _buttonUp->height() );
-  _buttonHome->setMaximumWidth( _buttonUp->height() );
-  _buttonReload->setMaximumWidth( _buttonUp->height() );
-
-  // connect to the actions
-  connect( _buttonUp, SIGNAL(clicked()), _actionUp, SLOT(activate()) );
-  connect( _buttonHome, SIGNAL(clicked()), _actionHome, SLOT(activate()) );
-  connect( _buttonReload, SIGNAL(clicked()), _actionReload, SLOT(activate()) );
-
+  // this has to be disabled since the user must NEVER change the fileview because
+  // that would disable the dragging support! (obsolete in KDE3)
+  m_dirOp->actionCollection()->action("view menu")->setEnabled( false );
 }
 
-void K3bFileView::show(){
-    if( !m_initialized){
-        m_initialized=true;
-        setupGUI();
-    }
-    QWidget::show();
-}
-void K3bFileView::setUrl(const KURL& url, bool forward){
-	m_fileView->setURL( url, forward );
+
+void K3bFileView::setUrl(const KURL& url, bool forward)
+{
+  m_dirOp->setURL( url, forward );
 }
 
 

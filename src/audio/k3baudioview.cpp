@@ -53,7 +53,6 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   grid->setMargin( 2 );
 	
   m_songlist = new AudioListView( this );
-  m_songlist->setSelectionModeExt( KListView::Konqueror );
   m_fillStatusDisplay = new K3bFillStatusDisplay( doc, this );
   m_fillStatusDisplay->showTime();
   m_burnDialog = 0;
@@ -61,6 +60,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   grid->addWidget( m_songlist, 0, 0 );
   grid->addWidget( m_fillStatusDisplay, 1, 0 );
 
+  setupActions();
   setupPopupMenu();
 
   // TODO: create slot dropped that calculates the position where was dropped and passes it to the signal dropped( KURL&, int)
@@ -71,6 +71,8 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	
   connect( m_songlist, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
 	   this, SLOT(showPopupMenu(QListViewItem*, const QPoint&)) );
+  connect( m_songlist, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+	   this, SLOT(showPropertiesDialog()) );
 
 
   connect( pDoc, SIGNAL(newTracks()), this, SLOT(slotUpdateItems()) );
@@ -96,14 +98,23 @@ K3bProjectBurnDialog* K3bAudioView::burnDialog()
 }
 
 
+void K3bAudioView::setupActions()
+{
+  m_actionProperties = new KAction( i18n("Properties"), "misc", 
+				  0, this, SLOT(showPropertiesDialog()), actionCollection() );
+  m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", 
+			      Key_Delete, this, SLOT(slotRemoveTracks()), actionCollection() );
+
+  // disabled by default
+  m_actionRemove->setEnabled(false);
+  m_actionProperties->setEnabled(false);
+}
+
+
 void K3bAudioView::setupPopupMenu()
 {
   m_popupMenu = new KPopupMenu( m_songlist, "AudioViewPopupMenu" );
-  m_popupMenu->insertTitle( i18n( "Track Options" ) );
-  m_actionProperties = new KAction( i18n("&Properties"), SmallIcon( "edit" ), 
-				  CTRL+Key_P, this, SLOT(showPropertiesDialog()), this );
-  m_actionRemove = new KAction( i18n( "&Remove" ), SmallIcon( "editdelete" ), 
-			      Key_Delete, this, SLOT(slotRemoveTracks()), this );
+  //  m_popupMenu->insertTitle( i18n( "Track Options" ) );
   m_actionRemove->plug( m_popupMenu );
   m_actionProperties->plug( m_popupMenu);
 }
@@ -199,6 +210,11 @@ void K3bAudioView::slotRemoveTracks()
       delete viewItem;
     }
   }
+
+  if( m_doc->numOfTracks() == 0 ) {
+    m_actionRemove->setEnabled(false);
+    m_actionProperties->setEnabled(false);
+  }
 }
 
 
@@ -236,6 +252,15 @@ void K3bAudioView::slotUpdateItems()
   }
 
    m_fillStatusDisplay->update();
+
+   if( m_doc->numOfTracks() > 0 ) {
+     m_actionRemove->setEnabled(true);
+     m_actionProperties->setEnabled(true);
+   }
+   else {
+     m_actionRemove->setEnabled(false);
+     m_actionProperties->setEnabled(false);
+   }
 }
 
 

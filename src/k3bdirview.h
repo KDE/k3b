@@ -39,25 +39,25 @@ class KProcess;
   */
 
 
-class K3bDirView : public QVBox  {
-   Q_OBJECT
+class K3bDirView : public QVBox  
+{
+  Q_OBJECT
 
-public:
-        K3bDirView(QWidget *parent=0, const char *name=0);
-        ~K3bDirView();
-        void setupFinalize( K3bDeviceManager *dm);
+ public:
+  K3bDirView(QWidget *parent=0, const char *name=0);
+  ~K3bDirView();
+  void setupFinalize( K3bDeviceManager *dm);
 
-protected slots:
-        void slotViewChanged( KFileView* newView );
-        void slotDirActivated( const KURL& );
-        void slotCDDirActivated( QString  );
+ protected slots:
+  void slotDirActivated( const KURL& );
+  void slotCDDirActivated( const QString&  );
 
-private:
-        K3bCdView* m_cdView;
-        K3bFileView* m_fileView;
-        QSplitter* m_mainSplitter;
-        KioTree* m_kiotree;
-	  bool m_initialized;
+ private:
+  K3bCdView* m_cdView;
+  K3bFileView* m_fileView;
+  QSplitter* m_mainSplitter;
+  KioTree* m_kiotree;
+  bool m_initialized;
 };
 
 #endif
