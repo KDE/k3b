@@ -1966,6 +1966,7 @@ int K3bDevice::Device::currentProfile() const
     case 0x14: return MEDIA_DVD_RW_SEQ;
     case 0x1A: return MEDIA_DVD_PLUS_RW;
     case 0x1B: return MEDIA_DVD_PLUS_R;
+    case 0x2B: return MEDIA_DVD_PLUS_R_DL;
     case 0x08: return MEDIA_CD_ROM;
     case 0x09: return MEDIA_CD_R;
     case 0x0A: return MEDIA_CD_RW;
@@ -2146,8 +2147,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	cmd[8] = (4+2048)>>8;
 	cmd[9] = 4+2048;
 	if( cmd.transport( TR_DIR_READ, dvdheader, 4+2048 ) ) {
-	  kdDebug() << "(K3bDevice::Device) Unable to read DVD structure." << endl;
-	  inf.m_numLayers = 1;
+	  kdDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers." << endl;
+	  inf.m_numLayers = ( inf.m_mediaType == MEDIA_DVD_PLUS_R_DL ? 2 : 1 );
 	}
 	else {
 	  // some debugging stuff
