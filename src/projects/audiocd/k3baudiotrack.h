@@ -24,7 +24,7 @@
 
 #include <kio/global.h>
 
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 
 #include "k3bcdtext.h"
 

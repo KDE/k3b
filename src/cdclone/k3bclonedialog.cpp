@@ -189,8 +189,8 @@ void K3bCloneDialog::init()
   bool atapi = true;
 
   if( readcdBin ) {
-    atapi = ( (K3bCdDevice::plainAtapiSupport() && readcdBin->hasFeature("plain-atapi")) ||
-	      (K3bCdDevice::hackedAtapiSupport() && readcdBin->hasFeature("hacked-atapi")) );
+    atapi = ( (K3b::plainAtapiSupport() && readcdBin->hasFeature("plain-atapi")) ||
+	      (K3b::hackedAtapiSupport() && readcdBin->hasFeature("hacked-atapi")) );
   }
 
   if( cdrecordBin && !cdrecordBin->hasFeature( "clone" ) ) {

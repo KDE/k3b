@@ -230,7 +230,7 @@ void K3bCdrdaoWriter::prepareArgumentList()
     // source device and source driver
     if ( m_sourceDevice )
       *m_process << "--device"
-      << K3bCdDevice::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
+      << K3b::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
     if ( m_sourceDevice->cdrdaoDriver() != "auto" )
       *m_process << "--driver" << m_sourceDevice->cdrdaoDriver();
     else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
@@ -252,7 +252,7 @@ void K3bCdrdaoWriter::setWriteArguments()
 {
   // device and driver
   *m_process << "--device"
-	     << K3bCdDevice::externalBinDeviceParameter(burnDevice(), m_cdrdaoBinObject);
+	     << K3b::externalBinDeviceParameter(burnDevice(), m_cdrdaoBinObject);
 
   if( burnDevice()->cdrdaoDriver() != "auto" )
   {
@@ -364,7 +364,7 @@ void K3bCdrdaoWriter::setReadArguments()
 void K3bCdrdaoWriter::setCopyArguments()
 {
   // source device and source driver
-  *m_process << "--source-device" << K3bCdDevice::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
+  *m_process << "--source-device" << K3b::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
   if ( m_sourceDevice->cdrdaoDriver() != "auto" )
     *m_process << "--source-driver" << m_sourceDevice->cdrdaoDriver();
   else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
@@ -381,7 +381,7 @@ void K3bCdrdaoWriter::setBlankArguments()
 {
   // device and driver
   *m_process << "--device"
-	     << K3bCdDevice::externalBinDeviceParameter(burnDevice(), m_cdrdaoBinObject);
+	     << K3b::externalBinDeviceParameter(burnDevice(), m_cdrdaoBinObject);
 
   if( burnDevice()->cdrdaoDriver() != "auto" )
   {

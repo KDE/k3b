@@ -18,7 +18,7 @@
 #define _K3B_AUDIO_JOB_TEMPDATA_H_
 
 #include <qobject.h>
-#include <device/k3bmsf.h>
+#include <k3bmsf.h>
 
 class K3bAudioTrack;
 class K3bAudioDoc;

@@ -19,9 +19,6 @@
 #include "k3bdeviceglobals.h"
 #include "k3bmmc.h"
 #include "k3bscsicommand.h"
-#include <k3bexternalbinmanager.h>
-#include <k3bglobals.h>
-#include <k3bversion.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -327,16 +324,6 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
   if( !c->hasGroup( "Devices" ) )
     return false;
 
-  //
-  // We changed the config style in K3b 0.11. So we need to check this first
-  //
-  c->setGroup( "General Options" );
-  K3bVersion configVersion( c->readEntry( "config version", "0.1" ) );
-  if( configVersion < K3bVersion( 0, 10, 99 ) ) {
-    kdDebug() << "(K3bDeviceManager) ignoring device config from K3b version " << configVersion << endl;
-    return false;
-  }
-
   c->setGroup( "Devices" );
 
   int devNum = 1;
@@ -352,7 +339,10 @@ bool K3bCdDevice::DeviceManager::readConfig( KConfig* c )
 
     if( dev != 0 ) {
 
-      // first we check if the saved entry really corresponds to dev
+      //
+      // We changed the config style in K3b 0.11. This is covered by the following check
+      // if the saved entry really corresponds to dev
+      //
       if( dev->vendor() != list[1] || dev->description() != list[2] ) {
 	kdDebug() << "(K3bDeviceManager) found wrong device entry in config." << endl;
       }
@@ -670,30 +660,5 @@ QString K3bCdDevice::DeviceManager::resolveSymLink( const QString& path )
   return QString::fromLatin1( resolved );
 }
 
-
-bool K3bCdDevice::plainAtapiSupport()
-{
-  // IMPROVEME!!!
-  return ( K3b::kernelVersion() >= K3bVersion( 2, 5, 40 ) );
-}
-
-
-bool K3bCdDevice::hackedAtapiSupport()
-{
-  // IMPROVEME!!!
-  // FIXME: since when does the kernel support this?
-  return ( K3b::kernelVersion() >= K3bVersion( 2, 4, 0 ) );
-}
-
-
-QString K3bCdDevice::externalBinDeviceParameter( K3bDevice* dev, const K3bExternalBin* bin )
-{
-  if( dev->interfaceType() == K3bDevice::SCSI )
-    return dev->busTargetLun();
-  else if( (plainAtapiSupport() && bin->hasFeature("plain-atapi") ) )
-    return dev->blockDeviceName();
-  else
-    return QString("ATAPI:%1").arg(dev->blockDeviceName());
-}
 
 #include "k3bdevicemanager.moc"

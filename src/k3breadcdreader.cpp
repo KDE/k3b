@@ -22,6 +22,7 @@
 #include <k3bdevicemanager.h>
 #include <k3bprocess.h>
 #include <k3bmsf.h>
+#include <k3bglobals.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -144,7 +145,7 @@ void K3bReadcdReader::start()
   *d->process << "-v";
 
   // Again we assume the device to be set!
-  *d->process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(m_readDevice, 
+  *d->process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(m_readDevice, 
 									      d->readcdBinObject));
   if( m_speed > 0 )
     *d->process << QString("speed=%1").arg(m_speed);

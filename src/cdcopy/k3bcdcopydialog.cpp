@@ -258,8 +258,8 @@ void K3bCdCopyDialog::initReadingDevices()
     K3bDevice* dev = devices.first();
     while( dev ) {
       if( dev->interfaceType() == K3bDevice::SCSI ||
-	  (K3bCdDevice::plainAtapiSupport() && cdrdaoBin->hasFeature("plain-atapi")) ||
-	  (K3bCdDevice::hackedAtapiSupport() && cdrdaoBin->hasFeature("hacked-atapi")) )
+	  (K3b::plainAtapiSupport() && cdrdaoBin->hasFeature("plain-atapi")) ||
+	  (K3b::hackedAtapiSupport() && cdrdaoBin->hasFeature("hacked-atapi")) )
 	m_comboSourceDevice->addDevice( dev );
       dev = devices.next();
     }

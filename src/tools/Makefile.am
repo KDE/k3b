@@ -1,8 +1,8 @@
-AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../core/device -I$(srcdir)/.. $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../core -I$(srcdir)/../device -I$(srcdir)/.. $(all_includes)
 
 lib_LTLIBRARIES = libk3btools.la
 
-libk3btools_la_LIBADD = libisofs/libisofs.la ../core/libk3bcore.la
+libk3btools_la_LIBADD = libisofs/libisofs.la ../device/libk3bdevice.la ../core/libk3bcore.la
 
 # FIXME: improve that versioning stuff (info libtool -> versioning)
 libk3btools_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined

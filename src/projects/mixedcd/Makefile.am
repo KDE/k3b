@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/../../core -I$(srcdir)/../../core/device \
+AM_CPPFLAGS= -I$(srcdir)/../../core -I$(srcdir)/../../device \
 -I$(srcdir)/../../tools -I$(srcdir)/.. -I../datacd -I../audiocd \
 -I$(srcdir)/../datacd -I$(srcdir)/../audiocd $(all_includes)
 

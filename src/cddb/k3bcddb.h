@@ -21,7 +21,7 @@
 #include <qstringlist.h>
 #include <qobject.h>
 
-#include "device/k3btoc.h"
+#include <k3btoc.h>
 
 #include "k3bcddbresult.h"
 

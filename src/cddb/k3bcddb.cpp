@@ -30,8 +30,8 @@
 #include "k3bcddblocalquery.h"
 #include "k3bcddblocalsubmit.h"
 
-#include "device/k3btoc.h"
-#include "device/k3btrack.h"
+#include <k3btoc.h>
+#include <k3btrack.h>
 #include <k3bcddbmultientriesdialog.h>
 
 

@@ -26,6 +26,7 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bversion.h>
+#include <k3bglobals.h>
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -280,8 +281,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
 
   if( atapiWriter ) {
-    if( !K3bCdDevice::plainAtapiSupport() &&
-	!K3bCdDevice::hackedAtapiSupport() ) {
+    if( !K3b::plainAtapiSupport() &&
+	!K3b::hackedAtapiSupport() ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("No ATAPI writing support in kernel"),
 					 i18n("Your kernel does not support writing without "
@@ -301,9 +302,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       if( k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
 
 	if( !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "hacked-atapi" ) &&
-	       K3bCdDevice::hackedAtapiSupport() ) &&
+	       K3b::hackedAtapiSupport() ) &&
 	    !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "plain-atapi" ) &&
-	       K3bCdDevice::plainAtapiSupport() ) ) {
+	       K3b::plainAtapiSupport() ) ) {
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					     i18n("%1 %2 does not support ATAPI").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version),
 					     i18n("The configured version of %1 does not "
@@ -358,9 +359,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     if( k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
       
       if( !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "hacked-atapi" ) &&
-	     K3bCdDevice::hackedAtapiSupport() ) &&
+	     K3b::hackedAtapiSupport() ) &&
 	  !( k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi" ) &&
-	     K3bCdDevice::plainAtapiSupport() ) ) {
+	     K3b::plainAtapiSupport() ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
 					   i18n("No support for ATAPI with cdrdao"),
 					   i18n("You will not be able to use all your reading devices "

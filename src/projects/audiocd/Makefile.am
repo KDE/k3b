@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir)/.. -I$(srcdir)/../../core -I$(srcdir)/../../plugin -I$(srcdir)/../../core/device -I$(srcdir)/../../tools $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/.. -I$(srcdir)/../../core -I$(srcdir)/../../plugin -I$(srcdir)/../../device -I$(srcdir)/../../tools $(all_includes)
 
 METASOURCES = AUTO
 

@@ -1,9 +1,7 @@
-AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../core/device -I$(srcdir)/../plugin -I$(srcdir)/../tools -I$(srcdir)/.. $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../device -I$(srcdir)/../plugin -I$(srcdir)/../tools -I$(srcdir)/.. $(all_includes)
 
 METASOURCES = AUTO
 
 noinst_LTLIBRARIES = liboption.la
 
-liboption_la_SOURCES = base_k3bcddboptiontab.ui base_k3bmiscoptiontab.ui base_k3bpluginoptiontab.ui base_k3bdivxoptiontab.ui base_k3bthemeoptiontab.ui k3bmiscoptiontab.cpp k3bexternalbinoptiontab.cpp k3bcddboptiontab.cpp k3bburningoptiontab.cpp k3boptiondialog.cpp k3bdeviceoptiontab.cpp k3bnotifyoptiontab.cpp k3bpluginoptiontab.cpp k3bdivxoptiontab.cpp k3bthemeoptiontab.cpp
-
-#liboption_la_LIBADD = ../device/libdevice.la
+liboption_la_SOURCES = base_k3bcddboptiontab.ui base_k3bmiscoptiontab.ui base_k3bpluginoptiontab.ui base_k3bdivxoptiontab.ui base_k3bthemeoptiontab.ui k3bmiscoptiontab.cpp k3bexternalbinoptiontab.cpp k3bcddboptiontab.cpp k3bburningoptiontab.cpp k3boptiondialog.cpp k3bdeviceoptiontab.cpp k3bnotifyoptiontab.cpp k3bpluginoptiontab.cpp k3bdivxoptiontab.cpp k3bthemeoptiontab.cpp k3bdevicewidget.cpp k3bexternalbinwidget.cpp

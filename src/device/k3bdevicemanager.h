@@ -113,25 +113,6 @@ namespace K3bCdDevice {
       class Private;
       Private* d;
     };
-
-  /**
-   * true if the kernel supports ATAPI devices without SCSI emulation.
-   * use in combination with the K3bExternalProgram feature "plain-atapi"
-   */
-  bool plainAtapiSupport();
-  
-  /**
-   * true if the kernel supports ATAPI devices without SCSI emulation
-   * via the ATAPI: pseudo stuff
-   * use in combination with the K3bExternalProgram feature "hacked-atapi"
-   */
-  bool hackedAtapiSupport();
-
-  /**
-   * Used to create a parameter for cdrecord, cdrdao or readcd.
-   * Takes care of SCSI and ATAPI.
-   */
-  QString externalBinDeviceParameter( CdDevice* dev, const K3bExternalBin* );
 }
 
 typedef K3bCdDevice::DeviceManager K3bDeviceManager;

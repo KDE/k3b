@@ -20,6 +20,7 @@
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
 #include <k3bcore.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -92,7 +93,7 @@ void K3bMsInfoFetcher::getMsInfo()
   *m_process << bin->path;
 
   // add the device (e.g. /dev/sg1)
-  *m_process << QString("dev=%1").arg( K3bCdDevice::externalBinDeviceParameter(m_device, bin) );
+  *m_process << QString("dev=%1").arg( K3b::externalBinDeviceParameter(m_device, bin) );
 
   *m_process << "-msinfo";
 

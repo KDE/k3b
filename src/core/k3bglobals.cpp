@@ -17,6 +17,8 @@
 
 #include "k3bglobals.h"
 #include <k3bversion.h>
+#include <k3bdevice.h>
+#include <k3bexternalbinmanager.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -298,4 +300,30 @@ KIO::filesize_t K3b::filesize( const KURL& url )
   }
 
   return fSize;
+}
+
+
+bool K3b::plainAtapiSupport()
+{
+  // IMPROVEME!!!
+  return ( K3b::kernelVersion() >= K3bVersion( 2, 5, 40 ) );
+}
+
+
+bool K3b::hackedAtapiSupport()
+{
+  // IMPROVEME!!!
+  // FIXME: since when does the kernel support this?
+  return ( K3b::kernelVersion() >= K3bVersion( 2, 4, 0 ) );
+}
+
+
+QString K3b::externalBinDeviceParameter( K3bCdDevice::CdDevice* dev, const K3bExternalBin* bin )
+{
+  if( dev->interfaceType() == K3bCdDevice::CdDevice::SCSI )
+    return dev->busTargetLun();
+  else if( (plainAtapiSupport() && bin->hasFeature("plain-atapi") ) )
+    return dev->blockDeviceName();
+  else
+    return QString("ATAPI:%1").arg(dev->blockDeviceName());
 }

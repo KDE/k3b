@@ -66,7 +66,7 @@ void K3bDvdrecordWriter::prepareProcess()
     *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
    
   // Again we assume the device to be set!
-  *m_process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
+  *m_process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
   *m_process << QString("speed=%1").arg(burnSpeed());
   
   // DVDs are only written in DAO mode (and Packet, but we do not support that since it does not

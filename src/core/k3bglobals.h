@@ -23,6 +23,11 @@
 
 class KConfig;
 class K3bVersion;
+class K3bExternalBin;
+
+namespace K3bCdDevice {
+  class CdDevice;
+}
 
 namespace K3b
 {
@@ -109,6 +114,25 @@ namespace K3b
   unsigned long long toULongLong( const QString&, bool* ok = 0, int base = 10 );
 
   KIO::filesize_t filesize( const KURL& );
+
+  /**
+   * true if the kernel supports ATAPI devices without SCSI emulation.
+   * use in combination with the K3bExternalProgram feature "plain-atapi"
+   */
+  bool plainAtapiSupport();
+  
+  /**
+   * true if the kernel supports ATAPI devices without SCSI emulation
+   * via the ATAPI: pseudo stuff
+   * use in combination with the K3bExternalProgram feature "hacked-atapi"
+   */
+  bool hackedAtapiSupport();
+
+  /**
+   * Used to create a parameter for cdrecord, cdrdao or readcd.
+   * Takes care of SCSI and ATAPI.
+   */
+  QString externalBinDeviceParameter( K3bCdDevice::CdDevice* dev, const K3bExternalBin* );
 }
 
 #endif

@@ -151,7 +151,7 @@ void K3bCdrecordWriter::prepareProcess()
     *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
     
   // Again we assume the device to be set!
-  *m_process << QString("dev=%1").arg(K3bCdDevice::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
+  *m_process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
 
   d->usedSpeed = burnSpeed();
   if( d->usedSpeed == 0 ) {
