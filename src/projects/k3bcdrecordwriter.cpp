@@ -342,7 +342,18 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   // Progress and toc parsing
   //
 
-  if( line.startsWith( "Track " ) )
+  if( line.startsWith( "@01T" && m_totalSize == 0) ) // dvdrecord GUI mode
+    {
+      m_totalSize = line.mid(4).section(':', 0, 0).toInt();
+    }
+  else if( line.startsWith( "@" ) ) // dvdrecord GUI mode
+    {
+      m_currentTrack = line.mid(1, 2).toInt();
+      m_alreadyWritten = line.mid(4).section(':', 0, 0).toInt();
+      emit processedSubSize( m_alreadyWritten, m_totalSize );
+      emit subPercent( 100*m_alreadyWritten/m_totalSize );
+    }
+  else if( line.startsWith( "Track " ) )
     {
       if( !m_totalTracksParsed ) {
 	// this is not the progress display but the list of tracks that will get written
