@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libdata.a
 
 INCLUDES = $(all_includes)
 
 libdata_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libdata.a
 
 libdata_a_SOURCES = k3bdatapropertiesdialog.cpp k3bisoimagewritingdialog.cpp k3bisoimagejob.cpp k3bdatadirtreeview.cpp k3bdatafileview.cpp k3bdataburndialog.cpp k3bdatajob.cpp k3bdataview.cpp k3bdatadoc.cpp k3bdataitem.cpp k3bdiritem.cpp k3bfileitem.cpp 
 

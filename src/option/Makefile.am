@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = liboption.a
 
 INCLUDES = $(all_includes)
 
 liboption_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = liboption.a
 
 liboption_a_SOURCES = k3bcddbemptydbtab.cpp k3bcddblocaldbtab.cpp k3bmiscoptiontab.cpp k3bexternalbinoptiontab.cpp k3brippingpatternoptiontab.cpp k3bcddboptiontab.cpp k3bburningoptiontab.cpp k3boptiondialog.cpp k3bdeviceoptiontab.cpp 
 

@@ -109,6 +109,7 @@ void K3bDvdRippingProcess::rip( ){
         qDebug("(K3bDvdRippingProcess) Error starting rip.");
         m_outputFile.close();
     }
+    delete bin;
     // successful start
     m_parent->close();
 }
@@ -184,23 +185,22 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len){
 }
 
 void K3bDvdRippingProcess::slotParseError( KProcess *p, char *text, int len){
+    qDebug("(K3bDvdRippingProcess) Calculate bytes to rip.");
+    m_titleBytes = tccatParsedBytes( text, len );
+    m_ripProcess->disconnect( SIGNAL(receivedStderr(KProcess*, char*, int)), this );
+}
+
+long K3bDvdRippingProcess::tccatParsedBytes( char *text, int len){
     QString tmp = QString::fromLatin1( text, len );
-    QString bytes( tmp );
-    //qDebug("(K3bDvdRippingProcess) Tccat STDERR output: " + tmp);
+    long blocks = 0;
     if( tmp.contains("blocks (0") ){
-        qDebug("(K3bDvdRippingProcess) Calculate bytes to rip.");
-        int index = bytes.find("blocks (0");
-        bytes = bytes.mid(index + 10);
-        //qDebug("tmp: " + bytes );
-        int end = bytes.find( ")" );
-        //qDebug("end: %i", end);
-        bytes= bytes.mid( 0, end);
-        //qDebug("tmp2: " + bytes);
-        long blocks = bytes.toLong();
-        m_titleBytes = blocks*2048;
-        //qDebug("tmp3: "+ QString::number(m_titleBytes) ) ;
-        m_ripProcess->disconnect( SIGNAL(receivedStderr(KProcess*, char*, int)), this );
+        int index = tmp.find("blocks (0");
+        tmp = tmp.mid(index +10);
+        int end = tmp.find( ")" );
+        tmp= tmp.mid( 0, end);
+        blocks = tmp.toLong()*2048;
     }
+    return blocks;
 }
 
 QString K3bDvdRippingProcess::prepareFilename( ){
@@ -208,18 +208,6 @@ QString K3bDvdRippingProcess::prepareFilename( ){
     index = QString::number( m_currentRipTitle );
     if( index.length() == 1 )
         index = "0" + index;
-    QDir destDir( m_dirname );
-    if( !destDir.exists() ){
-        QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Destination directory <")+m_dirname+i18n("> doesn't exists." ), i18n("Ok") );
-        return QString::null;
-    }
-    QDir vobDir( m_dirvob );
-    if( !vobDir.exists() ){
-        if( !vobDir.mkdir( m_dirvob ) ){
-            QMessageBox::critical( 0, i18n("Ripping Error"), i18n("Couldn't create directory <")+m_dirvob, i18n("Ok") );
-            return QString::null;
-        }
-    }
     QString result = m_dirvob + "/" + "vts_"+index+ "_" + QString::number( m_currentVobIndex ) + ".vob";
     m_currentVobIndex++;
     QFile destFile( result );

@@ -112,9 +112,7 @@ void K3bCdView::setupGUI()
   playAction->plug( toolBar );
   stopAction->plug( toolBar );
 
-
   // TODO: create a KActionMenu (or KPopupMenu) from the actions
-
 
   m_cddb = new K3bCddb();
   m_cdda = new K3bCdda();
@@ -158,27 +156,28 @@ void K3bCdView::askForView(){
   }
 }
 void K3bCdView::showCdContent( ){
-  m_listView->clear();
-  m_album = m_cddb->getAlbum();
-  // print it out
-  int no = 1;
-  // raw file length (wav has +44 byte header data)
-  //long totalByteCount = 0;
-  QString filename;
-  int arraySize = m_titles.count();
-  m_size = new QArray<long>( arraySize );
-  for ( QStringList::Iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
-    m_size->at(no-1) = m_cdda->getRawTrackSize(no, m_drive);
-    if( m_usePattern ){
-      filename = m_parser->prepareFilename( *it, no );
-      filename = K3bPatternParser::prepareReplaceFilename( filename );
-    } else
-      filename =  KIO::decodeFileName(*it) + ".wav";
-    // add item to cdViewItem
-    long length = m_size->at(no-1);
-    addItem(no, m_cddb->getArtist(), KIO::decodeFileName(*it), K3b::sizeToTime( length ), length, filename);
-    no++;
-  }
+    m_listView->clear();
+    m_album = m_cddb->getAlbum();
+    // print it out
+    int no = 1;
+    // raw file length (wav has +44 byte header data)
+    //long totalByteCount = 0;
+    QString filename;
+    int arraySize = m_titles.count();
+    m_size = new QArray<long>( arraySize );
+    for ( QStringList::Iterator it = m_titles.begin(); it != m_titles.end(); ++it ) {
+        m_size->at(no-1) = m_cdda->getRawTrackSize(no, m_drive);
+        if( m_usePattern ){
+            filename = m_parser->prepareFilename( *it, no );
+            filename = K3bPatternParser::prepareReplaceFilename( filename );
+        } else {
+            filename =  KIO::decodeFileName(*it) + ".wav";
+        }
+        // add item to cdViewItem
+        long length = m_size->at(no-1);
+        addItem(no, m_cddb->getArtist(), KIO::decodeFileName(*it), K3b::sizeToTime( length ), length, filename);
+        no++;
+    }
 }
 
 void K3bCdView::showCdView( K3bDevice* device )

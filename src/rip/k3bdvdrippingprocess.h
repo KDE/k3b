@@ -45,6 +45,8 @@ public:
     //void setJob( K3bDvdCopy *job );
     void start( );
     void cancel();
+    static long tccatParsedBytes( char *text, int len);
+
 signals:
     void interrupted();
     void finished( bool );

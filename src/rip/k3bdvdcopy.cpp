@@ -45,8 +45,7 @@ K3bDvdCopy::~K3bDvdCopy(){
 
 void K3bDvdCopy::start(){
     m_ripProcess->setDvdTitle( m_ripTitles );
-    K3bDevice *dev = k3bMain()->deviceManager()->deviceByName( m_device );
-    m_ripProcess->setDevice( dev->ioctlDevice() );
+    m_ripProcess->setDevice( m_device );
     m_ripProcess->setDirectories( m_directory, m_dirvob, m_dirtmp );
     //m_ripProcess->setJob( m_ripJob );
     connect( m_ripProcess, SIGNAL( interrupted() ), m_parent, SLOT( slotRipJobDeleted() ) );

@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libaudio.a
 
 INCLUDES = $(all_includes)
 
 libaudio_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libaudio.a
 
 libaudio_a_SOURCES = k3baudiojob.cpp k3baudiotrackdialog.cpp k3baudioburndialog.cpp k3baudioview.cpp k3baudiotrack.cpp k3baudiodoc.cpp audiolistviewitem.cpp audiolistview.cpp 
 

@@ -29,6 +29,8 @@ class QLabel;
 class K3bBurnProgressDialog;
 class K3bDvdRippingProcess;
 class K3bDvdCopy;
+class KDiskFreeSp;
+class KProcess;
 /**
   *@author Sebastian Trueg
   */
@@ -63,7 +65,16 @@ private:
     K3bBurnProgressDialog *m_ripDialog;
     K3bDvdRippingProcess *m_ripProcess;
     K3bDvdCopy *m_ripJob;
+    bool m_enoughSpace;
+    long m_vobSize;
+    long m_titleSize;
+    KDiskFreeSp *m_df;
+    bool m_supportSizeDetection;
+
     void setupGui();
+    bool createDirs();
+    bool createDirectory( const QString& );
+    void checkSize(  );
 
 private slots:
     void rip();
@@ -71,6 +82,12 @@ private slots:
     void slotFindStaticDirVob();
     void slotFindStaticDirTmp();
     void slotRipJobDeleted();
+    void slotSetDependDirs( const QString& );
+    void slotFreeTempSpace( const QString & mountPoint, unsigned long kBSize,
+        unsigned long kBUsed, unsigned long kBAvail );
+    void slotParseError( KProcess *p, char *text, int len );
+
+
 };
 
 #endif

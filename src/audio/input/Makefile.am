@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libinput.a
 
 INCLUDES = $(all_includes)
 
 libinput_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libinput.a
 
 libinput_a_SOURCES = k3baudiomodule.cpp k3bmp3module.cpp k3baudiomodulefactory.cpp 
 

@@ -198,7 +198,11 @@ void K3bDirView::slotMountDevice( const QString& device )
   K3bDevice* dev = k3bMain()->deviceManager()->deviceByName( device );
   QString mountPoint = dev->mountPoint();
   if( !mountPoint.isEmpty() ){
-    KIO::mount( true, "autofs", dev->ioctlDevice(), mountPoint, true );
+      QDir alreadyMount( mountPoint );
+      qDebug("count: %i", alreadyMount.count() );
+      if( alreadyMount.count() <= 2 ){
+          KIO::mount( true, "autofs", dev->ioctlDevice(), mountPoint, true );
+      }
   }
   const KURL url = KURL( mountPoint);
   slotDirActivated( url );

@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libdevice.a
 
 INCLUDES = $(all_includes)
 
 libdevice_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libdevice.a
 
 libdevice_a_SOURCES = k3btrack.cpp k3btoc.cpp k3bscsidevice.cpp k3bidedevice.cpp k3bemptydiscwaiter.cpp k3bdevicemanager.cpp k3bdevice.cpp util.cc sg_err.cc ScsiIf-linux.cc ScsiIf-common.cc 
 

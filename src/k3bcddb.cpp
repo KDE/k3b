@@ -135,7 +135,7 @@ K3bCddb::K3bCddb( bool useCddb, QString server, unsigned int port )
     m_useCddb = useCddb;
     if (useCddb){
       m_cddb = new CDDB();
-		m_cddbServer = server;
+      m_cddbServer = server;
       m_cddbPort = port;
     }
 }

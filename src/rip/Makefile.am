@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = librip.a
 
 INCLUDES = $(all_includes)
 
 librip_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = librip.a
 
 librip_a_SOURCES = k3bdvdaudiogain.cpp k3bdvdcopy.cpp k3bdvdrippingprocess.cpp k3bdvdripperwidget.cpp k3bdvdcontent.cpp k3btcwrapper.cpp k3bfilmview.cpp k3bpatternwidget.cpp k3bpatternparser.cpp k3bcddacopy.cpp k3bripperwidget.cpp k3bfilenamepatterndialog.cpp k3bcdview.cpp k3bcdda.cpp 
 
