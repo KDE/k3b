@@ -153,7 +153,7 @@ void K3bMainWindow::initActions()
   actionFileNewData = new KAction(i18n("New &Data project"),"tar", 0, this, SLOT(slotNewDataDoc()), 
 			    actionCollection(), "file_new_data");
   actionFileNewDvd = new KAction(i18n("New D&VD project"),"tar", 0, this, SLOT(slotNewDvdDoc()),
-			    actionCollection(), "file_new_data");
+			    actionCollection(), "file_new_dvd");
 
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( actionFileNewData );
