@@ -52,8 +52,8 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   // Info Label
   // ------------------------------------------------
   m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
-  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. Sometimes this does not work for the read or the write speed. In this case you can change them manually. \nYou can add not detected devices and change the cdrdao driver for the generic scsi drives." ) );
   m_labelDevicesInfo->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignLeft ) );
+  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. Sometimes this does not work for the read or the write speed. In this case you can change them manually. \nYou can add not detected devices and change the cdrdao driver for the generic scsi drives." ) );
 
   frameLayout->addMultiCellWidget( m_labelDevicesInfo, 0, 0, 0, 1 );
   // ------------------------------------------------
@@ -462,38 +462,48 @@ void K3bDeviceOptionTab::slotDeviceSelected( QListViewItem* item )
 
 void K3bDeviceOptionTab::slotCdrdaoDriverChanged( const QString& driver )
 {
-  m_currentTempDevice->cdrdaoDriver = driver;
+  if( m_currentTempDevice != 0 ) {
+    m_currentTempDevice->cdrdaoDriver = driver;
+    
+    m_comboCdText->clear();
+    if( driver == "auto" ) {
+      m_comboCdText->insertItem( "auto" );
+    }
+    else {
+      m_comboCdText->insertItem( "yes", 0 );
+      m_comboCdText->insertItem( "no", 1 );
+      m_comboCdText->setCurrentItem( m_currentTempDevice->cdTextCapable ? 0 : 1 );
+    }
 
-  m_comboCdText->clear();
-  if( driver == "auto" ) {
-    m_comboCdText->insertItem( "auto" );
-  }
-  else {
-    m_comboCdText->insertItem( "yes", 0 );
-    m_comboCdText->insertItem( "no", 1 );
-    m_comboCdText->setCurrentItem( m_currentTempDevice->cdTextCapable ? 0 : 1 );
+    devicesChanged = true;
   }
 }
 
 
 void K3bDeviceOptionTab::slotCdTextCapabilityChanged( const QString& s )
 {
-  if( m_currentTempDevice != 0 )
+  if( m_currentTempDevice != 0 ) {
     m_currentTempDevice->cdTextCapable = ( s == "yes" );
+    devicesChanged = true;
+  }
 }
 
 
 void K3bDeviceOptionTab::slotWriteSpeedChanged( int i )
 {
-  if( m_currentTempDevice != 0 )
+  if( m_currentTempDevice != 0 ) {
     m_currentTempDevice->maxWriteSpeed = i;
+    devicesChanged = true;
+  }
 }
 
 
 void K3bDeviceOptionTab::slotReadSpeedChanged( int i )
 {
-  if( m_currentTempDevice != 0 )
+  if( m_currentTempDevice != 0 ) {
     m_currentTempDevice->maxReadSpeed = i;
+    devicesChanged = true;
+  }
 }
 
 

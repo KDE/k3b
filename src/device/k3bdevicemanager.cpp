@@ -70,8 +70,6 @@ QList<K3bDevice>& K3bDeviceManager::readingDevices()
 
 int K3bDeviceManager::scanbus()
 {
-  qDebug("***************************************+++scanbus");
-
   m_foundDevices = 0;
   for( int i = 0; i < DEV_ARRAY_SIZE; i++ ) {
     if( K3bDevice *dev = scanDevice( deviceNames[i] ) ) {
@@ -144,6 +142,8 @@ bool K3bDeviceManager::readConfig( KConfig* c )
       // device found, apply changes
       if( list.count() > 1 )
 	dev->setMaxReadSpeed( list[1].toInt() );
+      if( list.count() > 2 )
+	dev->setCdrdaoDriver( list[2] );
     }
 
     if( dev == 0 )
@@ -196,14 +196,42 @@ bool K3bDeviceManager::readConfig( KConfig* c )
 
 bool K3bDeviceManager::saveConfig( KConfig* c )
 {
-  // TODO: save the devices
+  int i = 1;
+  K3bDevice* dev = m_reader.first();
+  while( dev != 0 ) {
+    QStringList list;
+    list << dev->devicename() << QString::number(dev->maxReadSpeed());
+
+    c->writeEntry( QString("Reader%1").arg(i), list );
+
+    i++;
+    dev = m_reader.next();
+  }
+
+  i = 1;
+  dev = m_writer.first();
+  while( dev != 0 ) {
+    QStringList list;
+    list << dev->devicename()
+	 << QString::number(dev->maxReadSpeed())
+	 << QString::number(dev->maxWriteSpeed()) 
+	 << dev->cdrdaoDriver();
+    if( dev->cdrdaoDriver() != "auto" )
+      list << ( dev->cdTextCapable() ? "yes" : "no" );
+
+    c->writeEntry( QString("Writer%1").arg(i), list );
+
+    i++;
+    dev = m_writer.next();
+  }
+
   return true;
 }
 
 
 K3bDevice* K3bDeviceManager::scanDevice( const char *dev )
 {
-  cdrom_drive *drive = cdda_identify( dev, CDDA_MESSAGE_PRINTIT, 0 );
+  cdrom_drive *drive = cdda_identify( dev, CDDA_MESSAGE_FORGETIT, 0 );
   if( drive == 0 ) {
     qDebug( "(K3bDeviceManager) %s could not be opened.", dev );
     return 0;
