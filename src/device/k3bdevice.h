@@ -254,6 +254,11 @@ namespace K3bCdDevice
      */
     //    int getTrackHeader(int lba);
 
+    bool getTrackIndex( long lba, 
+			int *trackNr, 
+			int *indexNr,
+			unsigned char *ctl );
+
    /**
      * block or unblock the drive's tray
      * returns true on success and false on scsi-error

@@ -210,6 +210,34 @@ void K3bCdDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bCdDevice::Devi
   bool success = handler->success();
   if( success ) {
     m_info = handler->diskInfo();
+
+
+
+    int oldTrack = -1;
+    int track = 0;
+    int oldIndex = -1;
+    int index = 0;
+    int block = 0;
+    m_device->open();
+    while( block < m_info.toc.length() ) {
+      if( !m_device->getTrackIndex( block, &track, &index, 0 ) )
+	break;
+
+      if( oldTrack != track )
+	kdDebug() << "Track change in block " << block 
+		  << " from " << oldTrack << " to " << track << endl;
+      if( oldIndex != index )
+	kdDebug() << "Index change in block " << block 
+		  << " from " << oldIndex << " to " << index << endl;
+      
+      oldTrack = track;
+      oldIndex = index;
+    }
+    m_device->close();
+
+
+
+
     fetchExtraInfo();
   }
   else

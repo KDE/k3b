@@ -159,18 +159,21 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 //   m_urlCombo->setDuplicatesEnabled( false );
 
 
-  m_devicePopupMenu = new KActionMenu( this, "device_popup_menu" );
+  m_devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup_menu" );
   KAction* actionDiskInfo = new KAction( i18n("&Disk Info"), "info", 0, this, SLOT(slotShowDiskInfo()),
-					 this, "disk_info");
+					 m_actionCollection, "disk_info");
   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
-					this, "disk_unmount");
+					m_actionCollection, "disk_unmount");
   KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()),
-					this, "disk_eject");
+					m_actionCollection, "disk_eject");
+  KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(slotUnlockDevice()),
+				       m_actionCollection, "unlock" );
 
   m_devicePopupMenu->insert( actionDiskInfo );
   m_devicePopupMenu->insert( new KActionSeparator( this ) );
   m_devicePopupMenu->insert( actionUnmount );
   m_devicePopupMenu->insert( actionEject );
+  m_devicePopupMenu->insert( actionUnlock );
 
 
 //   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
@@ -291,6 +294,14 @@ void K3bDirView::slotShowDiskInfo()
     slotDetectDiskInfo( m_lastDevice );
   }
 }
+
+
+void K3bDirView::slotUnlockDevice()
+{
+  if( m_lastDevice )
+    K3bCdDevice::unblock( m_lastDevice );
+}
+
 
 void K3bDirView::slotUnmountDisk()
 {

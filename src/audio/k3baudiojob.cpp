@@ -21,6 +21,7 @@
 #include <audio/k3baudiotrack.h>
 #include <audio/k3baudiotocfilewriter.h>
 #include <audio/k3baudionormalizejob.h>
+#include "k3baudiojobtempdata.h"
 #include <device/k3bdevicemanager.h>
 #include <device/k3bdevice.h>
 #include <device/k3bmsf.h>
@@ -82,6 +83,13 @@ K3bDoc* K3bAudioJob::doc() const
 void K3bAudioJob::start()
 {
   emit started();
+
+  K3bAudioJobTempData td( m_doc );
+  td.writeInfFiles();
+  td.writeTocFile();
+  emit finished(true);
+  return;
+
 
   m_written = true;
   m_canceled = false;

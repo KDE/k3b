@@ -25,6 +25,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <linux/cdrom.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <errno.h>
+
 // from cdda_paranoia.h
 #define PARANOIA_CB_READ           0
 #define PARANOIA_CB_VERIFY         1
@@ -121,6 +127,8 @@ void K3bAudioRipThread::run()
   m_paranoiaLib->paranoiaSeek( firstSector, SEEK_SET );
   m_currentSector = firstSector;
 
+  m_device->open();
+
   while( m_currentSector <= m_lastSector ) {
     if( m_bInterrupt ) {
       kdDebug() << "(K3bAudioRipThread) Interrupt reading." << endl;
@@ -130,6 +138,31 @@ void K3bAudioRipThread::run()
     // let the global paranoia callback have access to this
     // to emit signals
     s_audioRip = this;
+
+    int track, index;
+    if( !m_device->getTrackIndex( m_currentSector, &track, &index, 0 ) ) {
+      kdError() << "(K3bAudioRipThread) could not read subchannel data" << endl;
+    }
+    else {
+      if( track != (int)m_track ) {
+	kdDebug() << "(K3bAudioRipThread) SUBCHANNEL TRACKNUMBER != RIPPED TRACKNUMBER. " << endl;
+	kdDebug() << "(K3bAudioRipThread) subchannel-data sector " << m_currentSector << endl
+		  << "                    Index:   " << index << endl
+		  << "                    Track:   " << track << endl;
+
+// 	kdDebug() << "(K3bAudioRipThread) subchannel-data sector " << m_currentSector << endl
+// 		  << "                    Index:   " << (int)sub.cdsc_ind << endl
+// 		  << "                    Track:   " << (int)sub.cdsc_trk << endl
+// 		  << "                    Control: " << (int)sub.cdsc_ctrl << endl
+// 		  << "                    Address: " << (int)sub.cdsc_adr << endl
+// 		  << "                    Status:  " << (int)sub.cdsc_audiostatus << endl;
+      }
+
+      if( index != 1 ) {
+	kdDebug() << "(K3bAudioRipThread) Index: " << index << endl;
+      }
+    }
+
     
     int16_t* buf = m_paranoiaLib->paranoiaRead( paranoiaCallback );
 
@@ -156,6 +189,8 @@ void K3bAudioRipThread::run()
       }
     }
   }
+
+  m_device->close();
 
   m_paranoiaLib->paranoiaFree();
   if( m_bInterrupt )

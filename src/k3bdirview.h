@@ -73,6 +73,7 @@ class K3bDirView : public QVBox
   void home();
   void slotDetectDiskInfo( K3bDevice* dev );
   void slotShowDiskInfo();
+  void slotUnlockDevice();
   void slotUnmountDisk();
   void slotUnmountFinished();
   void slotEjectDisk();

@@ -227,6 +227,7 @@ void K3bAudioCdView::initActions()
 						    m_actionCollection, "select_all" );
   KAction* actionDeselectAll = KStdAction::deselect( this, SLOT(slotDeselectAll()), 
 						     m_actionCollection, "deselect_all" );
+  actionDeselectAll->setText( i18n("Dese&lect All") );
   KAction* actionSelect = new KAction( i18n("Select Track"), 0, 0, this,
 				       SLOT(slotSelect()), actionCollection(),
 				       "select_track" );

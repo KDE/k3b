@@ -1007,3 +1007,98 @@ K3bCdDevice::DiskInfo K3bCdDevice::CdDevice::diskInfo()
   close();
   return info;
 }
+
+
+// this is stolen from cdrdao's GenericMMC driver
+bool K3bCdDevice::CdDevice::getTrackIndex( long lba, 
+					   int *trackNr, 
+					   int *indexNr,
+					   unsigned char *ctl )
+{
+  // if the device is already opened we do not close it
+  // to allow fast multible method calls in a row
+  bool needToClose = !isOpen();
+
+
+  if (open() != -1) {
+    struct cdrom_generic_command cmd;
+    unsigned short dataLen = 0x30;
+    unsigned char data[0x30];
+    int waitLoops = 10;
+    int waitFailed = 0;
+
+    // play one audio block
+    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+    cmd.cmd[0] = GPCMD_PLAY_AUDIO_10;
+    cmd.cmd[2] = lba >> 24;
+    cmd.cmd[3] = lba >> 16;
+    cmd.cmd[4] = lba >> 8;
+    cmd.cmd[5] = lba;
+    cmd.cmd[7] = 0;
+    cmd.cmd[8] = 1;
+
+    if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) ) {
+      kdError() << "(K3bCdDevice::CdDevice) Cannot play audio block." << endl;
+      return false;
+    }
+
+    // wait until the play command finished
+    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+    cmd.cmd[0] = GPCMD_MECHANISM_STATUS;
+    cmd.cmd[9] = 8;
+    cmd.buffer = data;
+    cmd.buflen = dataLen;
+    cmd.data_direction = CGC_DATA_READ;
+
+    while( waitLoops > 0 ) {
+      if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) == 0 ) {
+	if ((data[1] >> 5) == 1) // still playing?
+	  waitLoops--;
+	else
+	  waitLoops = 0;
+      }
+      else {
+	waitFailed = 1;
+	waitLoops = 0;
+      }
+    }
+
+    if(waitFailed) {
+      // The play operation immediately returns success status and the waiting
+      // loop above failed. Wait here for a while until the desired block is
+      // played. It takes ~13 msecs to play a block but access time is in the
+      // order of several 100 msecs
+      ::usleep(300000);
+    }
+
+    // read sub channel information
+    ::memset(&cmd,0,sizeof (struct cdrom_generic_command));
+    cmd.cmd[0] = GPCMD_READ_SUBCHANNEL;
+    cmd.cmd[2] = 0x40; // get sub channel data
+    cmd.cmd[3] = 0x01; // get sub Q channel data
+    cmd.cmd[6] = 0;
+    cmd.cmd[7] = dataLen >> 8;
+    cmd.cmd[8] = dataLen;
+    cmd.buffer = data;
+    cmd.buflen = dataLen;
+    cmd.data_direction = CGC_DATA_READ;
+
+    if( ::ioctl( d->deviceFd, CDROM_SEND_PACKET, &cmd ) ) {
+      kdError() << "(K3bCdDevice::CdDevice) Cannot read sub Q channel data." << endl;
+      return false;
+    }
+
+    *trackNr = data[6];
+    *indexNr = data[7];
+    if (ctl != 0) {
+      *ctl = data[5] & 0x0f;
+    }
+
+    if( needToClose )
+      close();
+
+    return true;
+  }
+  else
+    return false;
+}

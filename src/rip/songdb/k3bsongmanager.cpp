@@ -90,7 +90,7 @@ void K3bSongManager::load( const QString& filename )
   reader.setContentHandler( &handler );
   reader.parse( source );
   // debug output
-  debug();
+  //  debug();
 }
 
 const QStringList& K3bSongManager::verify()
