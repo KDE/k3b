@@ -59,6 +59,7 @@ in a video. All pictures following are only stored as differences to a keyframe.
 rarely be used, as the codec will automatically insert a keyframe on each scene change. Default is 300."));
     QWhatsThis::add( keyframes, wt_keyframes);
     QLabel *crispness = new QLabel( i18n("Crispness:"), this );
+    // xgettext:no-c-format
     QString wt_crispness( i18n("Here you can smooth the video during the encoding process. It is better to leave crispness at 100% for encoding and smooth \
 the video during playback instead."));
     QWhatsThis::add( crispness, wt_crispness);
