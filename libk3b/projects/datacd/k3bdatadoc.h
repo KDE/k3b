@@ -172,6 +172,7 @@ class K3bDataDoc : public K3bDoc
   virtual QString typeString() const;
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
+
   //  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
   KIO::filesize_t m_oldSessionSize;
 

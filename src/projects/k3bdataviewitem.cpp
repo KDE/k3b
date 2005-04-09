@@ -95,7 +95,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
   }
   else if( column == 4 ) {
     if( dataItem()->isSymLink() ) {
-      if( !dataItem()->isValid() ) {
+      if( !m_doc->isoOptions().followSymbolicLinks() && !dataItem()->isValid() ) {
 	// paint the link in red
 	_cg.setColor( QColorGroup::Text, Qt::red );
       }
@@ -125,10 +125,10 @@ QString K3bDataViewItem::key( int col, bool a ) const
 
     if( a )
       return ( dataItem()->isDir() ? QString("0") : QString("1") )
-	+ QString::number( (unsigned long)dataItem()->k3bSize() ).rightJustify( 16, '0' );
+	+ QString::number( (unsigned long)dataItem()->size() ).rightJustify( 16, '0' );
     else
       return ( dataItem()->isDir() ? QString("1") : QString("0") )
-	+ QString::number( (unsigned long)dataItem()->k3bSize() ).rightJustify( 16, '0' );
+	+ QString::number( (unsigned long)dataItem()->size() ).rightJustify( 16, '0' );
   }
 
   if( a )
@@ -173,7 +173,7 @@ QString K3bDataDirViewItem::text( int index ) const
   case 1:
     return i18n("Directory");
   case 2:
-    return KIO::convertSize( m_dirItem->k3bSize() );
+    return KIO::convertSize( m_dirItem->size() );
   default:
     return "";
   }
@@ -212,7 +212,7 @@ QString K3bDataFileViewItem::text( int index ) const
 	return const_cast<K3bDataFileViewItem*>(this)->mimeComment();
     }
   case 2:
-    return KIO::convertSize( m_fileItem->k3bSize() );
+    return KIO::convertSize( m_fileItem->size() );
   case 3:
     return m_fileItem->localPath();
   case 4:
@@ -268,7 +268,7 @@ QString K3bSpecialDataViewItem::text( int col ) const
   case 1:
     return ((K3bSpecialDataItem*)dataItem())->mimeType();
   case 2:
-    return KIO::convertSize( dataItem()->k3bSize() );
+    return KIO::convertSize( dataItem()->size() );
   default:
     return "";
   }
@@ -290,7 +290,7 @@ QString K3bSessionImportViewItem::text( int col ) const
   case 1:
     return i18n("From previous session");
   case 2:
-    return KIO::convertSize( dataItem()->k3bSize() );
+    return KIO::convertSize( dataItem()->size() );
   default:
     return "";
   }

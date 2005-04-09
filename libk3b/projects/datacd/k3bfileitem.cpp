@@ -68,7 +68,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
   // instead the size of the link.
   struct stat statBuf;
-  if( lstat( QFile::encodeName(filePath), &statBuf ) ) {
+  if( ::lstat( QFile::encodeName(filePath), &statBuf ) ) {
     m_size = QFileInfo(filePath).size();
     kdError() << "(KFileItem) lstat failed." << endl;
   }
@@ -81,6 +81,19 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
     //
     m_id.inode = statBuf.st_ino;
     m_id.device = statBuf.st_dev;
+
+    m_idFollowed = m_id;
+    m_sizeFollowed = m_size;
+  }
+
+  if( isSymLink() ) {
+    struct stat statBuf;
+    if( ::stat( QFile::encodeName(filePath), &statBuf ) == 0 ) {
+      m_idFollowed.inode = statBuf.st_ino;
+      m_idFollowed.device = statBuf.st_dev;
+
+      m_sizeFollowed = (KIO::filesize_t)statBuf.st_size;
+    }
   }
 
   // add automagically like a qlistviewitem
@@ -101,9 +114,33 @@ K3bFileItem::~K3bFileItem()
 }
 
 
-KIO::filesize_t K3bFileItem::k3bSize() const
+KIO::filesize_t K3bFileItem::size() const
 {
-  return m_size;
+  return size( doc() ? doc()->isoOptions().followSymbolicLinks() : false );
+}
+
+
+KIO::filesize_t K3bFileItem::size( bool followSymlinks ) const
+{
+  if( followSymlinks )
+    return m_sizeFollowed;
+  else
+    return m_size;
+}
+
+
+K3bFileItem::Id K3bFileItem::localId() const
+{
+  return localId( doc() ? doc()->isoOptions().followSymbolicLinks() : false );
+}
+
+
+K3bFileItem::Id K3bFileItem::localId( bool followSymlinks ) const
+{
+  if( followSymlinks )
+    return m_idFollowed;
+  else
+    return m_id;
 }
 
 
@@ -179,9 +216,6 @@ QString K3bFileItem::linkDest() const
 
 bool K3bFileItem::isValid() const
 {
-  //
-  // The link is always valid if the user wants all symlinks to be resolved
-  //
   if( isSymLink() && !doc()->isoOptions().followSymbolicLinks() ) {
     QString dest = linkDest();
 

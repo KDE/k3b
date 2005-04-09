@@ -87,7 +87,7 @@ QString K3bMovixFileViewItem::text( int col ) const
 	return const_cast<K3bMovixFileViewItem*>(this)->mimeComment() + "  ";
     }
   case 3:
-    return KIO::convertSize( fileItem()->k3bSize() ) + "  ";
+    return KIO::convertSize( fileItem()->size() ) + "  ";
   case 4:
     return fileItem()->localPath() + "  ";
   case 5:
@@ -142,7 +142,7 @@ QString K3bMovixSubTitleViewItem::text( int c ) const
 	return const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment();
     }
   case 3:
-    return KIO::convertSize( fileItem()->subTitleItem()->k3bSize() );
+    return KIO::convertSize( fileItem()->subTitleItem()->size() );
   case 4:
     return fileItem()->subTitleItem()->localPath();
   case 5:

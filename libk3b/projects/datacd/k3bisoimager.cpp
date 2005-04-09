@@ -528,7 +528,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   bool filesGreaterThan2Gb = false;
   K3bDataItem* item = m_doc->root();
   while( (item = item->nextSibling()) ) {
-    if( item->isFile() && item->k3bSize() > 2LL*1024LL*1024LL*1024LL ) {
+    if( item->isFile() && item->size() > 2LL*1024LL*1024LL*1024LL ) {
       filesGreaterThan2Gb = true;
       break;
     }
@@ -668,14 +668,16 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
     if(
        item->writeToCd()
        &&
-       !( item->isSymLink()
-	  &&
-	  ( m_doc->isoOptions().discardSymlinks()
-	    ||
-	    ( m_doc->isoOptions().discardBrokenSymlinks()
-	      && !item->isValid() )
+       ( m_doc->isoOptions().followSymbolicLinks() ||
+	 !( item->isSymLink()
+	    &&
+	    ( m_doc->isoOptions().discardSymlinks()
+	      ||
+	      ( m_doc->isoOptions().discardBrokenSymlinks()
+		&& !item->isValid() )
+	      )
 	    )
-	  )
+	 )
        ) {
 
       if( item->isDir() || QFile::exists(item->localPath()) ) {

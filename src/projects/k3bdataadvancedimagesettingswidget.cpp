@@ -193,9 +193,9 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   m_checkHideTransTbl = new QCheckListItem( m_viewIsoSettings, 
 					    i18n( "Hide TRANS.TBL files in Joliet" ),
 					    QCheckListItem::CheckBox );
-  m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
-						   i18n( "Follow symbolic links" ),
-						   QCheckListItem::CheckBox );
+//   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
+// 						   i18n( "Follow symbolic links" ),
+// 						   QCheckListItem::CheckBox );
 
 
   m_isoLevelController = new QCheckListItem( m_viewIsoSettings,
@@ -258,7 +258,7 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
   m_checkAllowOther->setOn( o.ISOnoIsoTranslate() );
   m_checkAllowMultiDot->setOn( o.ISOallowMultiDot() );
   m_checkAllowLowercaseCharacters->setOn( o.ISOallowLowercase() );
-  m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
+  //  m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
   m_checkJolietLong->setOn( o.jolietLong() );
 }
 
@@ -288,7 +288,7 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
   o.setISOnoIsoTranslate( m_checkAllowOther->isOn() );
   o.setISOallowMultiDot( m_checkAllowMultiDot->isOn() );
   o.setISOallowLowercase( m_checkAllowLowercaseCharacters->isOn() );
-  o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isOn() );
+  //  o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isOn() );
   o.setJolietLong( m_checkJolietLong->isOn() );
 }
 

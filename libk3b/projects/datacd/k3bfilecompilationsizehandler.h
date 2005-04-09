@@ -43,12 +43,12 @@ class K3bFileCompilationSizeHandler
    * This does NOT equal blocks() * 2048.
    * This is the sum of the actual file sizes.
    */
-  const KIO::filesize_t& size() const;
+  const KIO::filesize_t& size( bool followSymlinks = false ) const;
 
   /**
    * Number of blocks the files will occupy.
    */
-  const K3b::Msf& blocks() const;
+  const K3b::Msf& blocks( bool followSymlinks = false ) const;
 
   /**
    * This will increase the counter for the inode of
@@ -66,7 +66,8 @@ class K3bFileCompilationSizeHandler
 
  private:
   class Private;
-  Private* d;
+  Private* d_symlinks;
+  Private* d_noSymlinks;
 };
 
 #endif

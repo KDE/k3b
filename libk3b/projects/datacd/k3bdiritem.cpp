@@ -68,7 +68,7 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
   if( m_children.findRef( item ) == -1 ) {
     m_children.append( item );
-    updateSize( item->k3bSize() );
+    updateSize( item->size() );
     if( item->isDir() )
       updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
     else {
@@ -95,7 +95,7 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 K3bDataItem* K3bDirItem::takeDataItem( int index )
 {
   K3bDataItem* item = m_children.take( index );
-  updateSize( -1*item->k3bSize() );
+  updateSize( -1*item->size() );
   if( item->isDir() )
     updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
   else {
@@ -168,7 +168,7 @@ K3bDataItem* K3bDirItem::findByPath( const QString& p )
 }
 
 
-KIO::filesize_t K3bDirItem::k3bSize() const
+KIO::filesize_t K3bDirItem::size() const
 {
   return m_size;
 }

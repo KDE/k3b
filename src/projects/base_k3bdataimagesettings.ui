@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>507</width>
-            <height>330</height>
+            <width>498</width>
+            <height>277</height>
         </rect>
     </property>
     <property name="caption">
@@ -26,117 +26,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_groupWhitespace</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>1</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Whitespace Treatment</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>m_radioNoChange</cstring>
-                    </property>
-                    <property name="text">
-                        <string>No change</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Do not touch spaces in filenames</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will leave all spaces in filenames as they are.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>m_radioStrip</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Strip</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Just remove all spaces</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will remove all spaces from all filenames.
-&lt;p&gt;Example: 'my good file.ext' becomes 'mygoodfile.ext'</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>m_radioReplace</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Replace with:</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Replace all spaces</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will replace all spaces in all filenames with the specified characters.
-&lt;p&gt;For example with an underscore: 'my good file.ext' becomes 'my_good_file.ext'</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="2">
-                    <property name="name">
-                        <cstring>m_editReplace</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>_</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The string to replace spaces with</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="0" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>m_radioExtendedStrip</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Extended strip</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Remove all spaces and capitalize the letters following them</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will remove all spaces in all filenames and capitalize all letters following a space.
-&lt;p&gt;Example: 'my good file.ext' becomes 'myGoodFile.ext'</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
         <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>m_groupFilesystems</cstring>
@@ -264,6 +153,14 @@
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions.</string>
                     </property>
                 </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkFollowLinks</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Follow Symbolic Links</string>
+                    </property>
+                </widget>
             </vbox>
         </widget>
         <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
@@ -297,6 +194,117 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_groupWhitespace</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Whitespace Treatment</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>m_radioNoChange</cstring>
+                    </property>
+                    <property name="text">
+                        <string>No change</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Do not touch spaces in filenames</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked, K3b will leave all spaces in filenames as they are.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>m_radioStrip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Strip</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Just remove all spaces</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked, K3b will remove all spaces from all filenames.
+&lt;p&gt;Example: 'my good file.ext' becomes 'mygoodfile.ext'</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_radioReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace with:</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Replace all spaces</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked, K3b will replace all spaces in all filenames with the specified characters.
+&lt;p&gt;For example with an underscore: 'my good file.ext' becomes 'my_good_file.ext'</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="2">
+                    <property name="name">
+                        <cstring>m_editReplace</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>_</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The string to replace spaces with</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_radioExtendedStrip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Extended strip</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Remove all spaces and capitalize the letters following them</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will remove all spaces in all filenames and capitalize all letters following a space.
+&lt;p&gt;Example: 'my good file.ext' becomes 'myGoodFile.ext'</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -307,10 +315,10 @@
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>m_checkDiscardAllLinks</sender>
+        <sender>m_checkRockRidge</sender>
         <signal>toggled(bool)</signal>
-        <receiver>m_checkDiscardBrokenLinks</receiver>
-        <slot>setDisabled(bool)</slot>
+        <receiver>m_checkPreservePermissions</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
         <sender>m_checkRockRidge</sender>
@@ -319,10 +327,22 @@
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>m_checkRockRidge</sender>
+        <sender>m_checkDiscardAllLinks</sender>
         <signal>toggled(bool)</signal>
-        <receiver>m_checkPreservePermissions</receiver>
-        <slot>setEnabled(bool)</slot>
+        <receiver>m_checkDiscardBrokenLinks</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkFollowLinks</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkDiscardBrokenLinks</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkFollowLinks</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_checkDiscardAllLinks</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>

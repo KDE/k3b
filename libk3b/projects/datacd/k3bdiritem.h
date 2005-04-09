@@ -51,7 +51,7 @@ class K3bDirItem : public K3bDataItem
   K3bDataItem* find( const QString& filename ) const;
   K3bDataItem* findByPath( const QString& );
 
-  KIO::filesize_t k3bSize() const;
+  KIO::filesize_t size() const;
 
   long numFiles() const;
   long numDirs() const;

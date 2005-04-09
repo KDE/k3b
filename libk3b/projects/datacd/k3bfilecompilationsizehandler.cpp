@@ -78,6 +78,77 @@ public:
 class K3bFileCompilationSizeHandler::Private
 {
 public:
+  Private() 
+    : size(0) {
+  }
+
+  void clear() {
+    inodeMap.clear();
+    size = 0;
+    blocks = 0;
+  }
+
+  void addFile( K3bFileItem* item, bool followSymlinks ) {
+    InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
+
+    inodeInfo.items.append( item );
+
+    if( inodeInfo.number == 0 ) {
+      inodeInfo.savedSize = item->size( followSymlinks );
+
+      size += inodeInfo.savedSize;
+      blocks += inodeInfo.blocks();
+    }
+
+    inodeInfo.number++;
+  }
+
+  void addSpecialItem( K3bDataItem* item ) {
+    // special files do not have a corresponding local file
+    // so we just add their k3bSize
+    size += item->size();
+    blocks += usedBlocks(item->size());
+    specialItems.append( item );
+  }
+
+  void removeFile( K3bFileItem* item, bool followSymlinks ) {
+    InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
+    
+    if( inodeInfo.items.findRef( item ) == -1 ) {
+      kdError() << "(K3bFileCompilationSizeHandler) " 
+		<< item->localPath()
+		<< " has been removed without being added!" << endl;
+    }
+    else {
+      if( item->size(followSymlinks) != inodeInfo.savedSize ) {
+	kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
+      }
+      
+      inodeInfo.items.removeRef( item );
+      inodeInfo.number--;
+      if( inodeInfo.number == 0 ) {
+	size -= inodeInfo.savedSize;
+	blocks -= inodeInfo.blocks();
+      }
+    }
+  }
+
+  void removeSpecialItem( K3bDataItem* item ) {
+    // special files do not have a corresponding local file
+    // so we just substract their k3bSize
+    if( specialItems.findRef( item ) == -1 ) {
+      kdError() << "(K3bFileCompilationSizeHandler) Special item "
+		<< item->k3bName()
+		<< " has been removed without being added!" << endl;
+    }
+    else {
+      specialItems.removeRef( item );
+      size -= item->size();
+      blocks -= usedBlocks(item->size());
+    }
+  }
+
+
   /**
    * This maps from inodes to the number of occurrences of the inode.
    */
@@ -93,55 +164,45 @@ public:
 
 K3bFileCompilationSizeHandler::K3bFileCompilationSizeHandler()
 {
-  d = new Private;
-  d->size = 0;
+  d_symlinks = new Private;
+  d_noSymlinks = new Private;
 }
 
 K3bFileCompilationSizeHandler::~K3bFileCompilationSizeHandler()
 {
-  delete d;
+  delete d_symlinks;
+  delete d_noSymlinks;
 }
 
 
-const KIO::filesize_t& K3bFileCompilationSizeHandler::size() const
+const KIO::filesize_t& K3bFileCompilationSizeHandler::size( bool followSymlinks ) const
 {
-  return d->size;
+  if( followSymlinks )
+    return d_noSymlinks->size;
+  else
+    return d_symlinks->size;
 }
 
 
-const K3b::Msf& K3bFileCompilationSizeHandler::blocks() const
+const K3b::Msf& K3bFileCompilationSizeHandler::blocks( bool followSymlinks ) const
 {
-  return d->blocks;
+  if( followSymlinks )
+    return d_noSymlinks->blocks;
+  else
+    return d_symlinks->blocks;
 }
 
 
 void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
 {
   if( item->isSpecialFile() ) {
-    // special files do not have a corresponding local file
-    // so we just add their k3bSize
-    d->size += item->k3bSize();
-    d->blocks += usedBlocks(item->k3bSize());
-    d->specialItems.append( item );
+    d_symlinks->addSpecialItem( item );
+    d_noSymlinks->addSpecialItem( item );
   }
   else if( item->isFile() ) {
     K3bFileItem* fileItem = static_cast<K3bFileItem*>( item );
-    InodeInfo& inodeInfo = d->inodeMap[fileItem->localId()];
-
-    inodeInfo.items.append( item );
-
-    if( inodeInfo.number == 0 ) {
-      inodeInfo.savedSize = item->k3bSize();
-
-      d->size += item->k3bSize();
-      d->blocks += inodeInfo.blocks();
-    }
-
-    if( item->k3bSize() != inodeInfo.savedSize ) {
-      kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
-    }
-
-    inodeInfo.number++;
+    d_symlinks->addFile( fileItem, false );
+    d_noSymlinks->addFile( fileItem, true );
   }
 }
 
@@ -149,47 +210,19 @@ void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
 void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
 {
   if( item->isSpecialFile() ) {
-    // special files do not have a corresponding local file
-    // so we just substract their k3bSize
-    if( d->specialItems.findRef( item ) == -1 ) {
-      kdError() << "(K3bFileCompilationSizeHandler) Special item "
-		<< item->k3bName()
-		<< " has been removed without being added!" << endl;
-    }
-    else {
-      d->specialItems.removeRef( item );
-      d->size -= item->k3bSize();
-      d->blocks -= usedBlocks(item->k3bSize());
-    }
+    d_symlinks->removeSpecialItem( item );
+    d_noSymlinks->removeSpecialItem( item );
   }
   else if( item->isFile() ) {
     K3bFileItem* fileItem = static_cast<K3bFileItem*>( item );
-    InodeInfo& inodeInfo = d->inodeMap[fileItem->localId()];
-    
-    if( inodeInfo.items.findRef( item ) == -1 ) {
-      kdError() << "(K3bFileCompilationSizeHandler) " 
-		<< item->localPath()
-		<< " has been removed without being added!" << endl;
-    }
-    else {
-      if( item->k3bSize() != inodeInfo.savedSize ) {
-	kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
-      }
-
-      inodeInfo.items.removeRef( item );
-      inodeInfo.number--;
-      if( inodeInfo.number == 0 ) {
-	d->size -= inodeInfo.savedSize;
-	d->blocks -= inodeInfo.blocks();
-      }
-    }
+    d_symlinks->removeFile( fileItem, false );
+    d_noSymlinks->removeFile( fileItem, true );
   }
 }
 
 
 void K3bFileCompilationSizeHandler::clear()
 {
-  d->inodeMap.clear();
-  d->size = 0;
-  d->blocks = 0;
+  d_symlinks->clear();
+  d_noSymlinks->clear();
 }

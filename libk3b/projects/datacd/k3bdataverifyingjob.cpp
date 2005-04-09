@@ -264,7 +264,7 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
 	}
       }
 
-      d->alreadyCheckedData += d->currentItem->k3bSize();
+      d->alreadyCheckedData += d->currentItem->size();
 
       // go on with the next file
       compareNextFile();
@@ -300,7 +300,7 @@ void K3bDataVerifyingJob::slotMd5JobProgress( int p )
   if( d->originalCalculated )
     percentCurrentFile += 50.0;
 
-  double doneCurrentFile = (double)d->currentItem->k3bSize()*percentCurrentFile/100.0;
+  double doneCurrentFile = (double)d->currentItem->size()*percentCurrentFile/100.0;
   int newProgress = (int)( 100.0 * ((double)d->alreadyCheckedData + doneCurrentFile) / (double)d->doc->burningSize() );
 
   if( newProgress > d->lastProgress ) {

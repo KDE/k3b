@@ -31,7 +31,7 @@ class K3bSpecialDataItem : public K3bDataItem
  public:
   K3bSpecialDataItem( K3bDataDoc* doc, KIO::filesize_t size, K3bDirItem* parent = 0, const QString& k3bName = QString::null )
     : K3bDataItem( doc, parent ),
-    m_k3bSize( size )
+    m_size( size )
     {
       setK3bName( k3bName );
 
@@ -46,7 +46,7 @@ class K3bSpecialDataItem : public K3bDataItem
       parent()->takeDataItem( this );
   }
 
-  KIO::filesize_t k3bSize() const { return m_k3bSize; }
+  KIO::filesize_t size() const { return m_size; }
 
   K3bDirItem* getDirItem() { return parent(); }
 
@@ -57,7 +57,7 @@ class K3bSpecialDataItem : public K3bDataItem
 
  private:
   QString m_mimeType;
-  KIO::filesize_t m_k3bSize;
+  KIO::filesize_t m_size;
 };
 
 #endif

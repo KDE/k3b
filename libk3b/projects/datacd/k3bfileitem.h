@@ -62,9 +62,15 @@ public:
    * This is not the normal inode number but it also contains
    * the device number.
    */
-  Id localId() const { return m_id; }
+  Id localId() const;
 
-  KIO::filesize_t k3bSize() const;
+  /**
+   * The id of the file the symlink is pointing to
+   */
+  Id localId( bool followSymlinks ) const;
+
+  KIO::filesize_t size() const;
+  KIO::filesize_t size( bool followSymlinks ) const;
 
   K3bDirItem* getDirItem();
 	
@@ -83,7 +89,9 @@ public:
   K3bDataItem* m_replacedItemFromOldSession;
 
   KIO::filesize_t m_size;
+  KIO::filesize_t m_sizeFollowed;
   Id m_id;
+  Id m_idFollowed;
 
   QString m_localPath;
   bool m_bLocalFile;

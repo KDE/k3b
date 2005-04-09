@@ -60,8 +60,9 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
   m_checkJoliet->setChecked( o.createJoliet() );
   m_checkUdf->setChecked( o.createUdf() );
 
-  m_checkDiscardAllLinks->setChecked( o.discardSymlinks() );
   m_checkDiscardBrokenLinks->setChecked( o.discardBrokenSymlinks() );
+  m_checkDiscardAllLinks->setChecked( o.discardSymlinks() );
+  m_checkFollowLinks->setChecked( o.followSymbolicLinks() );
 
   m_checkPreservePermissions->setChecked( o.preserveFilePermissions() );
 
@@ -91,6 +92,7 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
 
   o.setDiscardSymlinks( m_checkDiscardAllLinks->isChecked() );
   o.setDiscardBrokenSymlinks( m_checkDiscardBrokenLinks->isChecked() );
+  o.setFollowSymbolicLinks( m_checkFollowLinks->isChecked() );
 
   o.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
 
