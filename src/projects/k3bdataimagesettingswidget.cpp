@@ -31,11 +31,29 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
 {
   connect( m_checkJoliet, SIGNAL(toggled(bool)),
 	   this, SLOT(slotJolietToggled(bool)) );
+  connect( m_checkRockRidge, SIGNAL(toggled(bool)),
+	   this, SLOT(slotRockRidgeToggled(bool)) );
 }
 
 
 K3bDataImageSettingsWidget::~K3bDataImageSettingsWidget()
 {
+}
+
+
+void K3bDataImageSettingsWidget::slotRockRidgeToggled( bool on )
+{
+  if( !on ) {
+    KMessageBox::information( this, 
+			      i18n("<p>Be aware that it is not recommended to disable the Rock Ridge "
+				   "Extensions. There is no disadvantage in enabling Rock Ridge (except "
+				   "for a very small space overhead) but a lot of advantages."
+				   "<p>Without Rock Ridge Extensions symbolic links are not supported "
+				   "and will always be followed as if the \"Follow Symbolic Links\" option "
+				   "was enabled."),
+			      i18n("Rock Ridge Extensions Disabled"),
+			      "warning_about_rock_ridge" );
+  }
 }
 
 

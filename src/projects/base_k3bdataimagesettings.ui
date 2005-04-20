@@ -158,7 +158,14 @@
                         <cstring>m_checkFollowLinks</cstring>
                     </property>
                     <property name="text">
-                        <string>Follow Symbolic Links</string>
+                        <string>Follow symbolic links</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Follow symbolic links for source files</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked every symbolic link in the project will be replaced with the contents of the file it is pointing to. This means that the resulting filesystem will not contain any symbolic links.
+&lt;p&gt;Be aware that in case Rock Ridge extensions are disabled (which is not recommended) symbolic links are always followed because ISO9660 does not support symbolic links.</string>
                     </property>
                 </widget>
             </vbox>

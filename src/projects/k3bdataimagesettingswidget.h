@@ -35,6 +35,7 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
 
  private slots:
   void slotJolietToggled( bool );
+  void slotRockRidgeToggled( bool );
 };
 
 

@@ -95,7 +95,9 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
   }
   else if( column == 4 ) {
     if( dataItem()->isSymLink() ) {
-      if( !dataItem()->doc()->isoOptions().followSymbolicLinks() && !dataItem()->isValid() ) {
+      if( !dataItem()->doc()->isoOptions().followSymbolicLinks() && 
+	  dataItem()->doc()->isoOptions().createRockRidge() &&
+	  !dataItem()->isValid() ) {
 	// paint the link in red
 	_cg.setColor( QColorGroup::Text, Qt::red );
       }

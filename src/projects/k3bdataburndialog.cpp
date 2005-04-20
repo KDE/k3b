@@ -281,14 +281,8 @@ void K3bDataBurnDialog::toggleAllOptions()
       m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
     m_spinCopies->setEnabled(false);
 
-  // for some reason I don't know yet when writing multisession volume set size needs to be 1
-//   if( m_groupMultiSession->selected() != m_radioMultiSessionNone ) {
-//     m_volumeDescWidget->m_spinVolumeSetSize->setValue( 1 );
-//     m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( false );
-//   }
-//   else {
-//     m_volumeDescWidget->m_spinVolumeSetSize->setEnabled( true );
-//   }
+  m_comboMultisession->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
 
