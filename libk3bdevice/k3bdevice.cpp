@@ -810,6 +810,9 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
       // fallthrough...
 
     case MEDIA_DVD_R:
+    case MEDIA_DVD_R_DL:
+    case MEDIA_DVD_R_DL_SEQ:
+    case MEDIA_DVD_R_DL_JUMP:
     case MEDIA_DVD_R_SEQ:
       // multisession possible
       readFormattedToc( toc, true );
@@ -1832,8 +1835,6 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       if( inf.currentProfile() == MEDIA_DVD_ROM )
 	media = MEDIA_DVD_ROM;
 
-      // FIXME: add DVD-R Dual Layer
-
       switch( media ) {
       case MEDIA_CD_R:
       case MEDIA_CD_RW:
@@ -1923,6 +1924,9 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
       case MEDIA_DVD_R:
       case MEDIA_DVD_R_SEQ:
+      case MEDIA_DVD_R_DL:
+      case MEDIA_DVD_R_DL_JUMP:
+      case MEDIA_DVD_R_DL_SEQ:
 	//
 	// get data from the incomplete track (which is NOT the invisible track 0xff)
 	// This will fail in case the media is complete!
@@ -2090,13 +2094,14 @@ int K3bDevice::Device::dvdMediaType() const
 	switch( data[4]&0xF0 ) {
 	case 0x00: m = MEDIA_DVD_ROM; break;
 	case 0x10: m = MEDIA_DVD_RAM; break;
-	case 0x20: m = MEDIA_DVD_R; break;
+	case 0x20: m = MEDIA_DVD_R; break; // there seems to be no value for DVD-R DL, it reports DVD-R
 	case 0x30: m = MEDIA_DVD_RW; break;
-	  // FIXME: add DVD-R Dual Layer
 	case 0x90: m = MEDIA_DVD_PLUS_RW; break;
 	case 0xA0: m = MEDIA_DVD_PLUS_R; break;
 	case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
-	default: break; // unknown
+	default: 
+	  kdDebug() << "(K3bDevice::Device) unknown dvd media type: " << QString::number(data[4]&0xF0, 8) << endl;
+	  break; // unknown
 	}
 
 	delete [] data;
@@ -2789,13 +2794,13 @@ void K3bDevice::Device::checkFeatures()
 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DDCD-RW Write" << endl;
 	break;
 
-	// 0x33 0x38
-
       case FEATURE_LAYER_JUMP_RECORDING:
 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording" << endl;
 	d->deviceType |= DEVICE_DVD_R_DL;
 	m_writeModes |= WRITINGMODE_LAYER_JUMP;
 	break;
+
+	// 0x38
 
       case FEATURE_CD_RW_MEDIA_WRITE_SUPPORT:
 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
@@ -2803,7 +2808,7 @@ void K3bDevice::Device::checkFeatures()
 	d->deviceType |= DEVICE_CD_R;
 	break;
 
-	// 0x38- 0xFF reserved
+	// 0x38 - 0xFF reserved
 
       case FEATURE_POWER_MANAGEMENT:
 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Power Management" << endl;
