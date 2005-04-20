@@ -574,7 +574,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   if( m_noDeepDirectoryRelocation  )
     *m_process << "-disable-deep-relocation";
 
-  if( m_doc->isoOptions().followSymbolicLinks() )
+  if( m_doc->isoOptions().followSymbolicLinks() || !m_doc->isoOptions().createRockRidge() )
     *m_process << "-follow-links";
 
   if( m_doc->isoOptions().createTRANS_TBL()  )
@@ -668,7 +668,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
     if(
        item->writeToCd()
        &&
-       ( m_doc->isoOptions().followSymbolicLinks() ||
+       ( ( m_doc->isoOptions().followSymbolicLinks() || !m_doc->isoOptions().createRockRidge() ) ||
 	 !( item->isSymLink()
 	    &&
 	    ( m_doc->isoOptions().discardSymlinks()

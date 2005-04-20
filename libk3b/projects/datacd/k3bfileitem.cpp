@@ -116,7 +116,7 @@ K3bFileItem::~K3bFileItem()
 
 KIO::filesize_t K3bFileItem::size() const
 {
-  return size( doc() ? doc()->isoOptions().followSymbolicLinks() : false );
+  return size( doc() ? doc()->isoOptions().followSymbolicLinks() || !doc()->isoOptions().createRockRidge() : false );
 }
 
 
@@ -131,7 +131,7 @@ KIO::filesize_t K3bFileItem::size( bool followSymlinks ) const
 
 K3bFileItem::Id K3bFileItem::localId() const
 {
-  return localId( doc() ? doc()->isoOptions().followSymbolicLinks() : false );
+  return localId( doc() ? doc()->isoOptions().followSymbolicLinks() || !doc()->isoOptions().createRockRidge() : false );
 }
 
 
@@ -216,7 +216,7 @@ QString K3bFileItem::linkDest() const
 
 bool K3bFileItem::isValid() const
 {
-  if( isSymLink() && !doc()->isoOptions().followSymbolicLinks() ) {
+  if( isSymLink() && !doc()->isoOptions().followSymbolicLinks() && doc()->isoOptions().createRockRidge() ) {
     QString dest = linkDest();
 
     if( dest[0] == '/' )
