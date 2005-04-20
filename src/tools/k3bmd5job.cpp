@@ -40,6 +40,7 @@ public:
       data(0),
       isoFile(0),
       maxSize(0) {
+    progress = 0;
   }
 
   KMD5 md5;
@@ -47,6 +48,7 @@ public:
   QTimer timer;
   QString filename;
   int fileDes;
+  int progress;
   K3bCdDevice::CdDevice* device;
 
   bool finished;
@@ -232,14 +234,21 @@ void K3bMd5Job::slotUpdate()
 	stop();
 	emit percent( 100 );
 	emit finished(true);
+	d->progress = 0;
       }
       else {
 	d->readData += read;
 	d->md5.update( d->data, read );
+	int currentProgress = 0;
 	if( d->isoFile || !d->filename.isEmpty() )
-	  emit percent( (int)((double)d->readData * 100.0 / (double)d->imageSize) );
+	  currentProgress = (int)((double)d->readData * 100.0 / (double)d->imageSize);
 	else if( d->maxSize > 0 )
-	  emit percent( (int)((double)d->readData * 100.0 / (double)d->maxSize) );
+	  currentProgress = (int)((double)d->readData * 100.0 / (double)d->maxSize) ;
+
+	if( currentProgress > d->progress ) {
+	  d->progress = currentProgress;
+	  emit percent( d->progress );
+	}
       }
     }
   }

@@ -1,6 +1,8 @@
 0.11.24
 K3b now ejects the source DVD when reader and writer device are the same (no more 
 accidently overwriting the rewritable source DVD)
+Fixed problem with very slow data verification (the progress was updated way too often) (thanks to Simon)
+BACKPORT: support for newer transcode versions.
 
 0.11.23
 Fixed session import.

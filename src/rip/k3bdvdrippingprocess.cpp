@@ -83,7 +83,15 @@ void K3bDvdRippingProcess::checkRippingMode() {
     m_title = QString::number( (*m_dvd).getTitleNumber() );
     if( (*m_dvd).getMaxAngle() == 1 ) {
         kdDebug() << "K3bDvdRippingProcess) Rip Title" << endl;
-        m_ripMode = "-P " + m_title;
+	K3bVersion tccatVersion = k3bcore->externalBinManager()->binObject("tccat")->version;
+	kdDebug() << "(K3bDvdRippingProcess) Tccat Version: " << tccatVersion.majorVersion() << "." << tccatVersion.minorVersion() << "." << tccatVersion.patchLevel() << endl;
+	if( tccatVersion.majorVersion() == 0 && tccatVersion.minorVersion() == 6 && tccatVersion.patchLevel() < 12){
+		//transcode <= 0.6.11
+        	m_ripMode = "-P " + m_title;
+	} else {
+		//transcode >= 0.6.12
+		m_ripMode = "-T " + m_title + ",-1 -L";
+	}
     } else {
         kdDebug() << "K3bDvdRippingProcess) Rip Angle" << endl;
         // workaround due to buggy transcode, angle selection doesn't work with -1 (all chapters)
@@ -119,13 +127,19 @@ void K3bDvdRippingProcess::startRippingProcess( ) {
     connect( m_audioProcess, SIGNAL( finished() ), this, SLOT( slotAudioProcessFinished() ) );
     m_delAudioProcess = true;
     */
+
     const K3bExternalBin *m_tccatBin = k3bcore->externalBinManager()->binObject("tccat");
+
+    /*
+     * This check probably not required any more
+     *
     if( m_tccatBin->version >= K3bVersion( 0, 6, 12 ) ) {
       emit infoMessage( i18n("Sorry, K3b does not support ripping Video DVDs with transcode >= 0.1.12 yet."),
 			ERROR );
       emit finished( false );
       return;
     }
+    */
 
     m_ripProcess = new KShellProcess();
     kdDebug() << "(K3bDvdRippingProcess)" << m_tccatBin->path << " -i " << m_device <<" "<< m_ripMode << endl;
