@@ -39,7 +39,8 @@ public:
       finished(true),
       data(0),
       isoFile(0),
-      maxSize(0) {
+      maxSize(0),
+      lastProgress(0) {
   }
 
   KMD5 md5;
@@ -55,6 +56,8 @@ public:
 
   unsigned long long maxSize;
   unsigned long long readData;
+
+  int lastProgress;
 
   KIO::filesize_t imageSize;
 
@@ -236,10 +239,16 @@ void K3bMd5Job::slotUpdate()
       else {
 	d->readData += read;
 	d->md5.update( d->data, read );
+	int progress = 0;
 	if( d->isoFile || !d->filename.isEmpty() )
-	  emit percent( (int)((double)d->readData * 100.0 / (double)d->imageSize) );
+	  progress = (int)((double)d->readData * 100.0 / (double)d->imageSize);
 	else if( d->maxSize > 0 )
-	  emit percent( (int)((double)d->readData * 100.0 / (double)d->maxSize) );
+	  progress = (int)((double)d->readData * 100.0 / (double)d->maxSize);
+
+	if( progress != d->lastProgress ) {
+	  d->lastProgress = progress;
+	  emit percent( progress );
+	}
       }
     }
   }
