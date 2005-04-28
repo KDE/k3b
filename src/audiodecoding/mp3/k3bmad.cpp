@@ -68,7 +68,7 @@ bool K3bMad::open( const QString& filename )
 
   initMad();
 
-  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE );
+  memset( m_inputBuffer, 0, INPUT_BUFFER_SIZE+MAD_BUFFER_GUARD );
 
   return true;
 }
@@ -118,7 +118,8 @@ bool K3bMad::fillStreamBuffer()
     else {
       readStart += result;
 
-      if( m_inputFile.atEnd() ) {
+      if( eof() ) {
+	kdDebug() << "(K3bMad::fillStreamBuffer) MAD_BUFFER_GUARD" << endl;
 	memset( readStart, 0, MAD_BUFFER_GUARD );
 	result += MAD_BUFFER_GUARD;
       }
@@ -179,7 +180,7 @@ bool K3bMad::seekFirstHeader()
 {
   //
   // A lot of mp3 files start with a lot of junk which confuses mad.
-  // We "allow" an mp3 file to start with at most 50 KB of junk. This is just
+  // We "allow" an mp3 file to start with at most 1 KB of junk. This is just
   // some random value since we do not want to search the hole file. That would
   // take way to long for non-mp3 files.
   //
@@ -281,8 +282,8 @@ bool K3bMad::findNextHeader()
   //
 
   if( mad_header_decode( &madFrame->header, madStream ) < 0 ) {
-    if( !MAD_RECOVERABLE( madStream->error ) ||
-	madStream->error == MAD_ERROR_LOSTSYNC ) {
+    if( MAD_RECOVERABLE( madStream->error ) ||
+	madStream->error == MAD_ERROR_BUFLEN ) {
       return findNextHeader();
     }
     else
@@ -313,8 +314,8 @@ bool K3bMad::decodeNextFrame()
     return false;
 
   if( mad_frame_decode( madFrame, madStream ) < 0 ) {
-    if( !MAD_RECOVERABLE( madStream->error ) ||
- 	madStream->error == MAD_ERROR_LOSTSYNC ) {
+    if( MAD_RECOVERABLE( madStream->error ) ||
+ 	madStream->error == MAD_ERROR_BUFLEN ) {
       return decodeNextFrame();
     }
 
