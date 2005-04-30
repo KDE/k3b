@@ -152,13 +152,11 @@ void K3bAudioProjectConvertingThread::run()
     ++i;
   }
 
-  if( m_singleFile ) {
-    if( d->encoder )
-      d->encoder->closeFile();
-    else
-      d->waveFileWriter->close();
-  }
-
+  if( d->encoder )
+    d->encoder->closeFile();
+  else
+    d->waveFileWriter->close();
+  
   if( !d->canceled && m_writePlaylist ) {
     success = success && writePlaylist();
   }
@@ -243,7 +241,7 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
 	buffer[i+1] = b;
       }
 
-      if( d->encoder->encode( buffer, readLength ) < 0 ) {
+      if( d->encoder->encode( buffer, readLength ) != readLength ) {
 	kdDebug() << "(K3bAudioProjectConvertingThread) error while encoding." << endl;
 	emitInfoMessage( i18n("Error while encoding track %1.").arg(d->currentTrackIndex+1), K3bJob::ERROR );
 	return false;
