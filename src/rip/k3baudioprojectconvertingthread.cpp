@@ -241,7 +241,7 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
 	buffer[i+1] = b;
       }
 
-      if( d->encoder->encode( buffer, readLength ) != readLength ) {
+      if( d->encoder->encode( buffer, readLength ) < 0 ) {
 	kdDebug() << "(K3bAudioProjectConvertingThread) error while encoding." << endl;
 	emitInfoMessage( i18n("Error while encoding track %1.").arg(d->currentTrackIndex+1), K3bJob::ERROR );
 	return false;
