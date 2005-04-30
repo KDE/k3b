@@ -190,6 +190,7 @@ bool K3bAudioDecoder::initDecoder()
   d->decodingBufferFill = 0;
   d->decodingBufferPos = 0;
   d->decodingStartPos = 0;
+  d->inBufferFill = 0;
 
   d->decoderFinished = false;
 
@@ -473,6 +474,18 @@ bool K3bAudioDecoder::seek( const K3b::Msf& pos )
     success = true;
   }
   else {
+    //
+    // Here we have to reset the resampling stuff since we restart decoding at another position.
+    //
+    if( d->resampleState )
+      src_reset( d->resampleState );
+    d->inBufferFill = 0;
+
+    //
+    // And also reset the decoding buffer to not return any garbage from previous decoding.
+    //
+    d->decodingBufferFill = 0;
+    
     success = seekInternal( pos );
   }
 
