@@ -266,7 +266,7 @@ void K3bMainWindow::initActions()
 
   actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
 				      actionCollection(), "tools_blank_cdrw" );
-  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD-RW/DVD+RW..."), "cdrwblank", 0, this, SLOT(slotFormatDvd()),
+  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "cdrwblank", 0, this, SLOT(slotFormatDvd()),
 							 actionCollection(), "tools_format_dvd" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
