@@ -5,5 +5,5 @@ Name=K3b Lame Mp3 Encoder
 Author=Sebastian Trueg
 Email=trueg@k3b.org
 Version=2.0
-Comment=Encoding module to encode Mpeg1 Layer II (mp3) files
+Comment=Encoding module to encode MPEG1 Layer III (mp3) files
 Licence=GPL
