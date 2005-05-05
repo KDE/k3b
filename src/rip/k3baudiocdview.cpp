@@ -114,8 +114,8 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );
   connect( m_trackView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
-  connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
-	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
+//   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
+// 	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
 
   mainGrid->addLayout( toolBoxLayout, 0, 0 );
   mainGrid->addWidget( m_trackView, 1, 0 );
@@ -131,7 +131,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 	   this, SLOT(slotCddbQueryFinished(int)) );
 
   initActions();
-  slotTrackSelectionChanged(0);
+  //  slotTrackSelectionChanged(0);
 
   setLeftPixmap( K3bTheme::MEDIA_LEFT );
   setRightPixmap( K3bTheme::MEDIA_AUDIO );
@@ -326,8 +326,10 @@ void K3bAudioCdView::startRip()
 
 void K3bAudioCdView::slotEditTrackCddb()
 {
-  if( QListViewItem* item = m_trackView->selectedItem() ) {
-    AudioTrackViewItem* a = (AudioTrackViewItem*)item;
+  QPtrList<QListViewItem> items( m_trackView->selectedItems() );
+  if( !items.isEmpty() ) {
+    AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.first());
+
     KDialogBase d( this, "trackCddbDialog", true, i18n("Cddb Track %1").arg(a->trackNumber),
 		   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
     QWidget* w = new QWidget( &d );
@@ -546,14 +548,18 @@ void K3bAudioCdView::slotDeselectAll()
 
 void K3bAudioCdView::slotSelect()
 {
-  if( QListViewItem* sel = m_trackView->selectedItem() )
-    ((AudioTrackViewItem*)sel)->setOn(true);
+  QPtrList<QListViewItem> items( m_trackView->selectedItems() );
+  for( QPtrListIterator<QListViewItem> it( items );
+       it.current(); ++it )
+    static_cast<AudioTrackViewItem*>(it.current())->setOn(true);
 }
 
 void K3bAudioCdView::slotDeselect()
 {
-  if( QListViewItem* sel = m_trackView->selectedItem() )
-    ((AudioTrackViewItem*)sel)->setOn(false);
+  QPtrList<QListViewItem> items( m_trackView->selectedItems() );
+  for( QPtrListIterator<QListViewItem> it( items );
+       it.current(); ++it )
+    static_cast<AudioTrackViewItem*>(it.current())->setOn(false);
 }
 
 void K3bAudioCdView::updateDisplay()
