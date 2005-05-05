@@ -520,6 +520,17 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
     else if( e.nodeName() == "hide_first_track" )
       setHideFirstTrack( e.text() == "yes" );
     
+    else if( e.nodeName() == "audio_ripping" ) {
+      QDomNodeList ripNodes = e.childNodes();
+      for( uint j = 0; j < ripNodes.length(); j++ ) {
+	if( ripNodes.item(j).nodeName() == "paranoia_mode" )
+	  setAudioRippingParanoiaMode( ripNodes.item(j).toElement().text().toInt() );
+	else if( ripNodes.item(j).nodeName() == "read_retries" )
+	  setAudioRippingRetries( ripNodes.item(j).toElement().text().toInt() );
+	else if( ripNodes.item(j).nodeName() == "ignore_read_errors" )
+	  setAudioRippingIgnoreReadErrors( ripNodes.item(j).toElement().text() == "yes" );
+      }
+    }
 
     // parse cd-text
     else if( e.nodeName() == "cd-text" ) {
@@ -675,6 +686,24 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
   hideFirstTrackElem.appendChild( doc.createTextNode( hideFirstTrack() ? "yes" : "no" ) );
   docElem->appendChild( hideFirstTrackElem );
 
+  // save the audio cd ripping settings
+  // paranoia mode, read retries, and ignore read errors
+  // ------------------------------------------------------------
+  QDomElement ripMain = doc.createElement( "audio_ripping" );
+  docElem->appendChild( ripMain );
+
+  QDomElement ripElem = doc.createElement( "paranoia_mode" );
+  ripElem.appendChild( doc.createTextNode( QString::number( audioRippingParanoiaMode() ) ) );
+  ripMain.appendChild( ripElem );
+
+  ripElem = doc.createElement( "read_retries" );
+  ripElem.appendChild( doc.createTextNode( QString::number( audioRippingRetries() ) ) );
+  ripMain.appendChild( ripElem );
+
+  ripElem = doc.createElement( "ignore_read_errors" );
+  ripElem.appendChild( doc.createTextNode( audioRippingIgnoreReadErrors() ? "yes" : "no" ) );
+  ripMain.appendChild( ripElem );
+  // ------------------------------------------------------------
 
   // save disc cd-text
   // -------------------------------------------------------------

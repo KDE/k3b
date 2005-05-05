@@ -145,17 +145,26 @@ void K3bAudioJob::start()
         // there are a lot of writers out there which produce coasters
         // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
 	//
+	// Also most writers do not accept cuesheets with tracks smaller than 4 seconds (a violation
+	// of the red book standard) in DAO mode.
+	//
         bool zeroPregap = false;
+	bool less4Sec = false;
 	K3bAudioTrack* track = m_doc->firstTrack();
         while( track ) {
-          if( track->postGap() == 0 && track->next() != 0 ) { // the last track's postgap is always 0
+          if( track->postGap() == 0 && track->next() != 0 ) // the last track's postgap is always 0
             zeroPregap = true;
-            break;
-          }
+
+	  if( track->length() < K3b::Msf( 0, 4, 0 ) )
+	    less4Sec = true;
+
 	  track = track->next();
         }
-        if( zeroPregap && writer()->supportsRawWriting() )
+        if( (zeroPregap||less4Sec) && writer()->supportsRawWriting() ) {
           m_usedWritingMode = K3b::RAW;
+	  if( less4Sec )
+	    emit infoMessage( i18n("Tracklength below 4 seconds violate the Red Book standard."), WARNING );
+	}
         else
           m_usedWritingMode = K3b::DAO;
       }
@@ -417,15 +426,15 @@ bool K3bAudioJob::prepareWriter()
       writer->setRawCdText( m_doc->cdTextData().rawPackData() );
     }
 
+    // add all the audio tracks
+    writer->addArgument( "-audio" );
+
     // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
     // it seems that normalize sometimes corrupts these lengths
-    writer->addArgument( "-pad" );
+//    writer->addArgument( "-pad" );
 
     // Allow tracks shorter than 4 seconds
     writer->addArgument( "-shorttrack" );
-
-    // add all the audio tracks
-    writer->addArgument( "-audio" );
 
     K3bAudioTrack* track = m_doc->firstTrack();
     while( track ) {

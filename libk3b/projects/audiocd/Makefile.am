@@ -15,7 +15,8 @@ libaudio_la_SOURCES = 	k3baudiojob.cpp \
 			k3baudioimager.cpp \
 			k3baudiomaxspeedjob.cpp \
 			k3baudiocdtracksource.cpp \
-			k3baudiocdtrackdrag.cpp
+			k3baudiocdtrackdrag.cpp \
+			k3baudiodatasourceiterator.cpp
 
 include_HEADERS = 	k3baudiodoc.h \
 			k3baudiojob.h \
@@ -24,4 +25,5 @@ include_HEADERS = 	k3baudiodoc.h \
 			k3baudiodatasource.h \
 			k3baudiofile.h \
 			k3baudiozerodata.h \
-			k3baudiocdtracksource.h
+			k3baudiocdtracksource.h \
+			k3baudiodatasourceiterator.h

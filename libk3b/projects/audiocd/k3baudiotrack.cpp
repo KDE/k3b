@@ -388,8 +388,7 @@ bool K3bAudioTrack::seek( const K3b::Msf& msf )
   if( source ) {
     m_currentSource = source;
     m_alreadyReadBytes = msf.audioBytes();
-    source->seek( msf - pos );
-    return true;
+    return source->seek( msf - pos );
   }
   else
     return false;

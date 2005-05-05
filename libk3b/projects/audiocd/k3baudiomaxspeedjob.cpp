@@ -18,6 +18,7 @@
 #include "k3baudiodatasource.h"
 #include "k3baudiodoc.h"
 #include "k3baudiocdtracksource.h"
+#include "k3baudiodatasourceiterator.h"
 
 #include <k3bdevice.h>
 
@@ -49,30 +50,29 @@ public:
 
     emitStarted();
 
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3bAudioDataSourceIterator it( m_doc );
 
     // count sources for minimal progress info
     int numSources = 0;
     int sourcesDone = 0;
-    while( track ) {
-      numSources += track->numberSources();
-      track = track->next();
+    while( it.current() ) {
+      ++numSources;
+      it.next();
     }
 
-    track = m_doc->firstTrack();
-    K3bAudioDataSource* source = track->firstSource();
     bool success = true;
     maxSpeed = 175*1000;
+    it.first();
 
-    while( source && !m_canceled ) {
-      if( !source->seek(0) ) {
+    while( it.current() && !m_canceled ) {
+      if( !it.current()->seek(0) ) {
 	kdDebug() << "(K3bAudioMaxSpeedJob) seek failed." << endl;
 	success = false;
 	break;
       }
       
       // read some data
-      int speed = speedTest( source );
+      int speed = speedTest( it.current() );
 
       ++sourcesDone;
       emitPercent( 100*numSources/sourcesDone );
@@ -86,13 +86,7 @@ public:
 	maxSpeed = QMIN( maxSpeed, speed );
       }
       
-      // next source
-      source = source->next();
-      if( !source ) {
-	track = track->next();
-	if( track )
-	  source = track->firstSource();
-      }
+      it.next();
     }
 
     if( m_canceled ) {
