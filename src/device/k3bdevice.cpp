@@ -215,6 +215,10 @@ bool K3bCdDevice::CdDevice::init()
     m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
   }
 
+  if( m_vendor.isEmpty() )
+    m_vendor = "UNKNOWN";
+  if( m_description.isEmpty() )
+    m_description = "UNKNOWN";
 
 
   //
