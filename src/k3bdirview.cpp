@@ -386,6 +386,13 @@ void K3bDirView::slotMountFinished( K3bDeviceBranch*, const QString& mp )
     slotDirActivated( mp );
     reload(); // HACK to get the contents shown... FIXME
   }
+  else {
+    // mounting failed.
+    // FIXME: use some silent message box like the amarok one here
+    // fallback to diskinfo
+    m_viewStack->raiseWidget( m_infoView );
+    m_infoView->displayInfo( m_diskInfoDetector );
+  }
 }
 
 void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p )
