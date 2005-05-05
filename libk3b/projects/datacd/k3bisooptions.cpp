@@ -26,7 +26,6 @@
 K3bIsoOptions::K3bIsoOptions()
   : m_volumeID( "K3b data project" ),
     m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2005 SEBASTIAN TRUEG AND THE K3B TEAM") ),
-    m_preparer( i18n("K3b - Version %1").arg(k3bcore->version()) ),
     m_systemId( K3b::systemName().upper() ),
     m_inputCharset( "iso8859-1" ),
     m_whiteSpaceTreatmentReplaceString( "_" )
