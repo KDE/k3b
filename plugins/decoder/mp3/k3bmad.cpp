@@ -282,8 +282,8 @@ bool K3bMad::findNextHeader()
   //
 
   if( mad_header_decode( &madFrame->header, madStream ) < 0 ) {
-    if( !MAD_RECOVERABLE( madStream->error ) ||
-	madStream->error == MAD_ERROR_LOSTSYNC ) {
+    if( MAD_RECOVERABLE( madStream->error ) ||
+	madStream->error == MAD_ERROR_BUFLEN ) {
       return findNextHeader();
     }
     else
@@ -314,8 +314,8 @@ bool K3bMad::decodeNextFrame()
     return false;
 
   if( mad_frame_decode( madFrame, madStream ) < 0 ) {
-    if( !MAD_RECOVERABLE( madStream->error ) ||
- 	madStream->error == MAD_ERROR_LOSTSYNC ) {
+    if( MAD_RECOVERABLE( madStream->error ) ||
+ 	madStream->error == MAD_ERROR_BUFLEN ) {
       return decodeNextFrame();
     }
 
