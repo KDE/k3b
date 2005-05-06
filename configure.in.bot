@@ -143,5 +143,17 @@ if test "$ac_cv_use_musicbrainz" != "yes"; then
 fi
 fi
 
+echo ""
+
+if test x$have_hal = xyes; then
+	echo "Compile HAL support                    yes"
+else
+	echo "Compile HAL support                     no"
+if test "x$ac_cv_use_hal" = "xyes" ; then
+	echo "    You are missing the HAL >= 0.4 headers and libraries"
+	echo "    or the DBus Qt bindings."
+fi
+fi
+
 echo "------------------------------------------"
 echo ""
