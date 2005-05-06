@@ -20,6 +20,7 @@
 #include <k3bdatatrackreader.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
 #include <k3bdevicehandler.h>
 #include <k3bdiskinfo.h>
 #include <k3bglobals.h>
@@ -633,7 +634,10 @@ bool K3bDvdCopyJob::waitForDvd()
   }
 
   else {
-    if( m & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL) ) {
+    // -------------------------------
+    // DVD Plus
+    // -------------------------------
+    if( m & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
 
       d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
 
@@ -660,6 +664,10 @@ bool K3bDvdCopyJob::waitForDvd()
       else
 	emit infoMessage( i18n("Writing DVD+R."), INFO );
     }
+
+    // -------------------------------
+    // DVD Minus
+    // -------------------------------
     else {
       if( m_simulate && !m_writerDevice->dvdMinusTestwrite() ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
@@ -701,12 +709,13 @@ bool K3bDvdCopyJob::waitForDvd()
 	  d->usedWritingMode = K3b::DAO;
 	}
 	else {
-	  emit infoMessage( i18n("Writing DVD-RW in sequential mode."), INFO );
+	  emit infoMessage( i18n("Writing DVD-RW in incremental mode."), INFO );
 	  d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
 	}
       }
-      else if( m & (K3bDevice::MEDIA_DVD_R_SEQ|
-		    K3bDevice::MEDIA_DVD_R) ) {
+      else {
+
+	// FIXME: DVD-R DL jump and stuff
 
 	if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
 	  emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
@@ -714,11 +723,11 @@ bool K3bDvdCopyJob::waitForDvd()
 	if( m_writingMode == K3b::DAO ||
 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
 	      ( sizeWithDao || !m_onTheFly ) ) ) {
-	  emit infoMessage( i18n("Writing DVD-R in DAO mode."), INFO );
+	  emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(m, true) ), INFO );
 	  d->usedWritingMode = K3b::DAO;
 	}
 	else {
-	  emit infoMessage( i18n("Writing DVD-R in sequential mode."), INFO );
+	  emit infoMessage( i18n("Writing %1 in incremental mode.").arg( K3bDevice::mediaTypeString(m, true) ), INFO );
 	  d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
 	}
       }
