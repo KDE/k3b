@@ -231,6 +231,11 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
     m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
   }
 
+  if( m_vendor.isEmpty() )
+    m_vendor = "UNKNOWN";
+  if( m_description.isEmpty() )
+    m_description = "UNKNOWN";
+
   //
   // We probe all features of the device. Since not all devices support the GET CONFIGURATION command
   // we also query the mode page 2A and use the cdrom.h stuff to get as much information as possible

@@ -152,6 +152,15 @@ namespace K3bDevice {
       QPtrList<Device>& dvdReader();
 
       /**
+       * Reads the device information from the config file.
+       */
+      bool readConfig( KConfig* );
+
+      bool saveConfig( KConfig* );
+
+
+    public slots:
+      /**
        * Writes a list of all devices to stderr.
        */
       void printDevices();
@@ -164,17 +173,10 @@ namespace K3bDevice {
       int scanBus();
 
       /**
-       * Searches for mountpoints of the devices. This methos will also add devices
+       * Searches for mountpoints of the devices. This method will also add devices
        * that have an entry in the fstab file and have not yet been found.
        */
       void scanFstab();
-
-      /**
-       * Reads the device information from the config file.
-       */
-      bool readConfig( KConfig* );
-
-      bool saveConfig( KConfig* );
 
       /**
        * Clears the writers and readers list of devices.
@@ -193,6 +195,8 @@ namespace K3bDevice {
        * \return The device if it could be found or 0 otherwise.
        */
       Device* addDevice( const QString& dev );
+
+      void removeDevice( const QString& dev );
 
     signals:
       /**

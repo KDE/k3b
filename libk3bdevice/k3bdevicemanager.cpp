@@ -13,12 +13,17 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 #include "k3bscsicommand.h"
 #include "k3bmmc.h"
+
+#ifdef HAVE_HAL
+#include "k3bhalconnection.h"
+#endif
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -106,6 +111,10 @@ public:
   QPtrList<K3bDevice::Device> dvdWriter;
 
   bool checkWritingModes;
+
+#ifdef HAVE_HAL
+  HalConnection hal;
+#endif
 };
 
 
@@ -115,12 +124,18 @@ K3bDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
 {
   d = new Private;
 
-  d->allDevices.setAutoDelete( true );
+#ifdef HAVE_HAL
+    connect( &d->hal, SIGNAL(deviceAdded(const QString&)),
+	     this, SLOT(addDevice(const QString&)) );
+    connect( &d->hal, SIGNAL(deviceRemoved(const QString&)),
+	     this, SLOT(removeDevice(const QString&)) );
+#endif
 }
 
 
 K3bDevice::DeviceManager::~DeviceManager()
 {
+  d->allDevices.setAutoDelete( true );
   delete d;
 }
 
@@ -215,6 +230,10 @@ QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices()
 int K3bDevice::DeviceManager::scanBus()
 {
   m_foundDevices = 0;
+
+#ifdef HAVE_HAL
+  d->hal.open();
+#endif
 
 #ifdef Q_OS_LINUX
   LinuxDeviceScan();
@@ -691,7 +710,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device *device)
+K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* device )
 {
   const QString devicename = device->devicename();
 
@@ -728,6 +747,23 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device *devic
   }
 
   return device;
+}
+
+
+void K3bDevice::DeviceManager::removeDevice( const QString& dev )
+{
+  if( Device* device = findDevice( dev ) ) {
+    d->cdReader.removeRef( device );
+    d->dvdReader.removeRef( device );
+    d->cdWriter.removeRef( device );
+    d->dvdWriter.removeRef( device );
+    d->allDevices.removeRef( device );
+
+    emit changed();
+    emit changed( this );
+
+    delete device;
+  }
 }
 
 
