@@ -59,8 +59,8 @@ public:
 
   bool changesNeeded;
 
-  QMap<QCheckListItem*, K3bDevice::Device*> listDeviceMap;
-  QMap<K3bDevice::Device*, QCheckListItem*> deviceListMap;
+  QMap<QCheckListItem*, QString> listDeviceMap;
+  QMap<QString, QCheckListItem*> deviceListMap;
 
   QMap<QCheckListItem*, K3bExternalBin*> listBinMap;
   QMap<K3bExternalBin*, QCheckListItem*> binListMap;
@@ -250,7 +250,7 @@ void K3bSetup2::updatePrograms()
 void K3bSetup2::updateDevices()
 {
   // first save which were checked
-  QMap<K3bDevice::Device*, bool> checkMap;
+  QMap<QString, bool> checkMap;
   QListViewItemIterator listIt( w->m_viewDevices );
   for( ; listIt.current(); ++listIt )
     checkMap.insert( d->listDeviceMap[(QCheckListItem*)*listIt], ((QCheckListItem*)*listIt)->isOn() );
@@ -262,51 +262,65 @@ void K3bSetup2::updateDevices()
   QPtrListIterator<K3bDevice::Device> it( d->deviceManager->allDevices() );
   for( ; it.current(); ++it ) {
     K3bDevice::Device* device = *it;
+    // check the item on first insertion or if it was checked before
+    QCheckListItem* item = createDeviceItem( device->blockDeviceName() );
+    item->setOn( checkMap.contains(device->blockDeviceName()) ? checkMap[device->blockDeviceName()] : true );
+    item->setText( 0, device->vendor() + " " + device->description() );
+  
+    if( !device->genericDevice().isEmpty() ) {
+      QCheckListItem* item = createDeviceItem( device->genericDevice() );
+      item->setOn( checkMap.contains(device->genericDevice()) ? checkMap[device->genericDevice()] : true );
+      item->setText( 0, device->vendor() + " " + device->description() );
+    }
+  }
+}
 
-    QFileInfo fi( device->blockDeviceName() );
-    struct stat s;
-    if( ::stat( QFile::encodeName(device->blockDeviceName()), &s ) ) {
-      kdDebug() << "(K3bSetup2) unable to stat " << device->blockDeviceName() << endl;
+
+QCheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
+{
+  QFileInfo fi( deviceNode );
+  struct stat s;
+  if( ::stat( QFile::encodeName(deviceNode), &s ) ) {
+    kdDebug() << "(K3bSetup2) unable to stat " << deviceNode << endl;
+    return 0;
+  }
+  else {
+    // create a checkviewitem
+    QCheckListItem* bi = new QCheckListItem( w->m_viewDevices,
+					     deviceNode,
+					     QCheckListItem::CheckBox );
+
+    d->listDeviceMap.insert( bi, deviceNode );
+    d->deviceListMap.insert( deviceNode, bi );
+
+    bi->setText( 1, deviceNode );
+
+    int perm = s.st_mode & 0000777;
+
+    bi->setText( 2, QString::number( perm, 8 ).rightJustify( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
+    if( w->m_checkUseBurningGroup->isChecked() ) {
+      // we ignore the device's owner here
+      if( perm != 0000660 ||
+	  fi.group() != burningGroup() ) {
+	bi->setText( 3, "660 " + fi.owner() + "." + burningGroup() );
+	if( bi->isOn() )
+	  d->changesNeeded = true;
+      }
+      else
+	bi->setText( 3, i18n("no change") );
     }
     else {
-      // create a checkviewitem
-      QCheckListItem* bi = new QCheckListItem( w->m_viewDevices,
-					       device->vendor() + " " + device->description(),
-					       QCheckListItem::CheckBox );
-
-      d->listDeviceMap.insert( bi, device );
-      d->deviceListMap.insert( device, bi );
-
-      // check the item on first insertion or if it was checked before
-      bi->setOn( checkMap.contains(device) ? checkMap[device] : true );
-
-      bi->setText( 1, device->blockDeviceName() );
-
-      int perm = s.st_mode & 0000777;
-
-      bi->setText( 2, QString::number( perm, 8 ).rightJustify( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
-      if( w->m_checkUseBurningGroup->isChecked() ) {
-	// we ignore the device's owner here
-	if( perm != 0000660 ||
-	    fi.group() != burningGroup() ) {
-	  bi->setText( 3, "660 " + fi.owner() + "." + burningGroup() );
-	  if( bi->isOn() )
-	    d->changesNeeded = true;
-	}
-	else
-	  bi->setText( 3, i18n("no change") );
+      // we ignore the device's owner and group here
+      if( perm != 0000666 ) {
+	bi->setText( 3, "666 " + fi.owner() + "." + fi.group()  );
+	if( bi->isOn() )
+	  d->changesNeeded = true;
       }
-      else {
-	// we ignore the device's owner and group here
-	if( perm != 0000666 ) {
-	  bi->setText( 3, "666 " + fi.owner() + "." + fi.group()  );
-	  if( bi->isOn() )
-	    d->changesNeeded = true;
-	}
-	else
-	  bi->setText( 3, i18n("no change") );
-      }
+      else
+	bi->setText( 3, i18n("no change") );
     }
+
+    return bi;
   }
 }
 
@@ -379,26 +393,18 @@ void K3bSetup2::save()
     QCheckListItem* checkItem = (QCheckListItem*)listIt.current();
 
     if( checkItem->isOn() ) {
-      K3bDevice::Device* dev = d->listDeviceMap[checkItem];
+      QString dev = d->listDeviceMap[checkItem];
 
       if( w->m_checkUseBurningGroup->isChecked() ) {
-	if( ::chmod( QFile::encodeName(dev->blockDeviceName()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
+	if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
 	  success = false;
 
-	if( ::chown( QFile::encodeName(dev->blockDeviceName()), (gid_t)-1, g->gr_gid ) )
+	if( ::chown( QFile::encodeName(dev), (gid_t)-1, g->gr_gid ) )
 	  success = false;
-
-	if( dev->interfaceType() == K3bDevice::SCSI && QFile::exists( dev->genericDevice() ) )
-	  if( ::chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
-	    success = false;
       }
       else {
-	if( ::chmod( QFile::encodeName(dev->blockDeviceName()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
+	if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
 	  success = false;
-
-	if( dev->interfaceType() == K3bDevice::SCSI && QFile::exists( dev->genericDevice() ) )
-	  if( ::chmod( QFile::encodeName(dev->genericDevice()), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
-	    success = false;
       }
     }
   }

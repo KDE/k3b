@@ -22,6 +22,7 @@
 
 
 class base_K3bSetup2;
+class QCheckListItem;
 
 
 class K3bSetup2: public KCModule
@@ -50,7 +51,8 @@ class K3bSetup2: public KCModule
   void updatePrograms();
   void updateDevices();
   QString burningGroup() const;
-    void makeReadOnly();
+  void makeReadOnly();
+  QCheckListItem* createDeviceItem( const QString& deviceNode );
 
   class Private;
   Private* d;
