@@ -305,7 +305,7 @@ int K3bAudioTrackPlayer::read( char* data, int maxlen )
     int len = m_currentTrack->read( data, maxlen );
     d->mutex.unlock();
     if( len > 0 ) {
-      m_currentPosition += len/2352;
+      m_currentPosition += (int)( (double)len / 2352.0 + 0.5 );
     }
     else if( m_currentTrack->next() ) {
       // play the next track
