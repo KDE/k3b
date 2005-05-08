@@ -55,6 +55,7 @@ bool K3bMovixProgram::scan( const QString& p )
     if( !out.output().isEmpty() ) {
       bin = new K3bMovixBin( this );
       bin->version = out.output().stripWhiteSpace();
+      bin->path = path;
     }
   }
   else {
@@ -62,14 +63,46 @@ bool K3bMovixProgram::scan( const QString& p )
     return false;
   }
 
+  if( bin->version >= K3bVersion( 0, 9, 0 ) )
+    return scanNewEMovix( bin, path );
+  else
+    return scanOldEMovix( bin, path );
+}
 
+
+bool K3bMovixProgram::scanNewEMovix( K3bMovixBin* bin, const QString& path )
+{
+  QStringList files = bin->files();
+  for( QStringList::iterator it = files.begin();
+       it != files.end(); ++it ) {
+    if( (*it).contains( "isolinux.cfg" ) ) {
+      bin->m_supportedBootLabels = determineSupportedBootLabels( QStringList::split( " ", *it )[1] );
+      break;
+    }
+  }
+
+  // here we simply check for the movix-conf program
+  if( QFile::exists( path + "movix-conf" ) ) {
+    bin->addFeature( "newfiles" );
+    addBin(bin);
+    return true;
+  }
+  else {
+    delete bin;
+    return false;
+  }
+}
+
+
+bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
+{
   //
   // we have a valid version
   // now search for the config (the movix files base dir)
   //
   KProcess cp;
   cp << path + "movix-conf";
-  out.setProcess( &cp );
+  K3bProcess::OutputCollector out( &cp );
   if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // now search the needed files in the given dir
     if( out.output().isEmpty() ) {
@@ -157,7 +190,6 @@ bool K3bMovixProgram::scan( const QString& p )
     //
     // now check the boot-messages languages
     //
-    // FIXME: since 0.9.0rc1 this is called "translations"
     dir.cd( "boot-messages" );
     bin->m_supportedLanguages = dir.entryList(QDir::Dirs);
     bin->m_supportedLanguages.remove(".");
@@ -184,23 +216,7 @@ bool K3bMovixProgram::scan( const QString& p )
     // now check the supported boot labels
     //
     dir.cd( "isolinux" );
-    QFile f( dir.filePath("isolinux.cfg") );
-    if( !f.open( IO_ReadOnly ) ) {
-      kdDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'" << endl;
-      delete bin;
-      return false;
-    }
-    QTextStream fs( &f );
-    QString line = fs.readLine();
-    while( !line.isNull() ) {
-      if( line.startsWith( "label" ) ) {
-	bin->m_supportedBootLabels.append( line.mid( 5 ).stripWhiteSpace() );
-      }
-      line = fs.readLine();
-    }
-    f.close();
-    bin->m_supportedBootLabels.prepend( i18n("default") );
-
+    bin->m_supportedBootLabels = determineSupportedBootLabels( dir.filePath("isolinux.cfg") );
 
     //
     // This seems to be a valid eMovix installation. :)
@@ -216,6 +232,29 @@ bool K3bMovixProgram::scan( const QString& p )
   }
 }
 
+
+QStringList K3bMovixProgram::determineSupportedBootLabels( const QString& isoConfigFile ) const
+{
+  QStringList list( i18n("default") );
+
+  QFile f( isoConfigFile );
+  if( !f.open( IO_ReadOnly ) ) {
+    kdDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'" << endl;
+  }
+  else {
+    QTextStream fs( &f );
+    QString line = fs.readLine();
+    while( !line.isNull() ) {
+      if( line.startsWith( "label" ) )
+	list.append( line.mid( 5 ).stripWhiteSpace() );
+      
+      line = fs.readLine();
+    }
+    f.close();
+  }
+
+  return list;
+}
 
 
 QString K3bMovixBin::subtitleFontDir( const QString& font ) const
@@ -237,4 +276,83 @@ QString K3bMovixBin::languageDir( const QString& lang ) const
     return path + "/boot-messages/" + lang;
   else
     return "";
+}
+
+
+QStringList K3bMovixBin::supportedSubtitleFonts() const
+{
+  if( version >= K3bVersion( 0, 9, 0 ) )
+    return QStringList( i18n("default") ) += supported( "font" );
+  else
+    return m_supportedSubtitleFonts;
+}
+
+
+QStringList K3bMovixBin::supportedLanguages() const
+{
+  if( version >= K3bVersion( 0, 9, 0 ) )
+    return QStringList( i18n("default") ) += supported( "lang" );
+  else
+    return m_supportedLanguages;
+}
+
+
+// only used for eMovix >= 0.9.0
+QStringList K3bMovixBin::supportedKbdLayouts() const
+{
+  return QStringList( i18n("default") ) += supported( "kbd" );
+}
+
+
+// only used for eMovix >= 0.9.0
+QStringList K3bMovixBin::supportedBackgrounds() const
+{
+  return QStringList( i18n("default") ) += supported( "background" );
+}
+
+
+// only used for eMovix >= 0.9.0
+QStringList K3bMovixBin::supportedCodecs() const
+{
+  return supported( "codecs" );
+}
+
+
+QStringList K3bMovixBin::supported( const QString& type ) const
+{
+  KProcess p;
+  K3bProcess::OutputCollector out( &p );
+  p << path + "movix-conf" << "--supported=" + type;
+  if( p.start( KProcess::Block, KProcess::AllOutput ) )
+    return QStringList::split( "\n", out.output() );
+  else
+    return QStringList();
+}
+
+
+QStringList K3bMovixBin::files( const QString& kbd,
+				const QString& font,
+				const QString& bg,
+				const QString& lang,
+				const QStringList& codecs ) const
+{
+  KProcess p;
+  K3bProcess::OutputCollector out( &p );
+  p << path + "movix-conf" << "--files";
+
+  if( !kbd.isEmpty() && kbd != i18n("default") )
+    p << "--kbd" << kbd;
+  if( !font.isEmpty() && kbd != i18n("default") )
+    p << "--font" << font;
+  if( !bg.isEmpty() && kbd != i18n("default") )
+    p << "--background" << bg;
+  if( !lang.isEmpty() && kbd != i18n("default") )
+    p << "--lang" << lang;
+  if( !codecs.isEmpty() )
+    p << "--codecs" << codecs.join( "," );
+
+  if( p.start( KProcess::Block, KProcess::AllOutput ) )
+    return QStringList::split( "\n", out.output() );
+  else
+    return QStringList();
 }

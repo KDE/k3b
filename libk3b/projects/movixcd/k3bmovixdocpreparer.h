@@ -19,6 +19,8 @@
 #include <k3bjob.h>
 
 class K3bMovixDoc;
+class K3bFileItem;
+class K3bDirItem;
 
 
 /**
@@ -51,9 +53,12 @@ class K3bMovixDocPreparer : public K3bJob
 
  private:
   bool writePlaylistFile();
-  bool writeIsolinuxConfigFile();
+  bool writeIsolinuxConfigFile( const QString& );
   bool writeMovixRcFile();
   bool addMovixFiles();
+  bool addMovixFilesNew();
+  K3bFileItem* createItem( const QString& localPath, const QString& docPath );
+  K3bDirItem* createDir( const QString& docPath );
 
   class Private;
   Private* d;

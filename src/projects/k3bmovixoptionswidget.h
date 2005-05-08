@@ -39,6 +39,11 @@ class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
   void loadConfig( KConfigBase* c );
   void saveConfig( KConfigBase* c );
   void loadDefaults();
+
+ private:
+  class LanguageSelectionHelper;
+  LanguageSelectionHelper* m_keyboardLangHelper;
+  LanguageSelectionHelper* m_helpLangHelper;
 };
 
 

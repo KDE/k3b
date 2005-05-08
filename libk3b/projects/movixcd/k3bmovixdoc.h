@@ -56,6 +56,9 @@ class K3bMovixDoc : public K3bDataDoc
   bool randomPlay() const { return m_randomPlay; }
   const QString& subtitleFontset() const { return m_subtitleFontset; }
   const QString& bootMessageLanguage() const { return m_bootMessageLanguage; }
+  const QString& audioBackground() const { return m_audioBackground; }
+  const QString& keyboardLayout() const { return m_keyboardLayout; }
+  const QStringList& codecs() const { return m_codecs; }
   const QString& defaultBootLabel() const { return m_defaultBootLabel; }
   const QString& additionalMPlayerOptions() const { return m_additionalMPlayerOptions; }
   const QString& unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
@@ -68,6 +71,9 @@ class K3bMovixDoc : public K3bDataDoc
   void setRandomPlay( bool v ) { m_randomPlay = v; }
   void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
   void setBootMessageLanguage( const QString& v ) { m_bootMessageLanguage = v; }
+  void setAudioBackground( const QString& b ) { m_audioBackground = b; }
+  void setKeyboardLayout( const QString& l ) { m_keyboardLayout = l; }
+  void setCodecs( const QStringList& c ) { m_codecs = c; }
   void setDefaultBootLabel( const QString& v ) { m_defaultBootLabel = v; }
   void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
   void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
@@ -106,6 +112,9 @@ class K3bMovixDoc : public K3bDataDoc
   bool m_randomPlay;
   QString m_subtitleFontset;
   QString m_bootMessageLanguage;
+  QString m_audioBackground;
+  QString m_keyboardLayout;
+  QStringList m_codecs;
   QString m_defaultBootLabel;
   QString m_additionalMPlayerOptions;
   QString m_unwantedMPlayerOptions;

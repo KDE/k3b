@@ -272,6 +272,9 @@ void K3bMovixBurnDialog::toggleAllOptions()
   }
   else
     m_checkVerify->setEnabled(true);
+
+  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkStartMultiSesssion->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
 #include "k3bmovixburndialog.moc"

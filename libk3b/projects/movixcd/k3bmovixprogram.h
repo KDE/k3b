@@ -27,19 +27,49 @@ class K3bMovixBin : public K3bExternalBin
   }
 
   const QStringList& supportedBootLabels() const { return m_supportedBootLabels; }
-  const QStringList& supportedSubtitleFonts() const { return m_supportedSubtitleFonts; }
-  const QStringList& supportedLanguages() const { return m_supportedLanguages; }
+  QStringList supportedSubtitleFonts() const;
+  QStringList supportedLanguages() const;
+  QStringList supportedKbdLayouts() const;
+  QStringList supportedBackgrounds() const;
+  QStringList supportedCodecs() const;
+
+  /*
+   * Unused for eMovix versions 0.9.0 and above
+   */
   const QStringList& movixFiles() const { return m_movixFiles; }
+
+  /*
+   * Unused for eMovix versions 0.9.0 and above
+   */
   const QStringList& isolinuxFiles() const { return m_isolinuxFiles; }
 
-  // TODO: add 0.9.0 codecs, backgrounds, remotes, and keyboard-i18n
-
-  /** returnes empty string if font was not found */
+  /**
+   * returnes empty string if font was not found
+   *
+   * Unused for eMovix versions 0.9.0 and above
+   */
   QString subtitleFontDir( const QString& font ) const;
-  /** returnes empty string if lang was not found */
+
+  /**
+   * returnes empty string if lang was not found
+   *
+   * Unused for eMovix versions 0.9.0 and above
+   */
   QString languageDir( const QString& lang ) const;
 
+  /**
+   * Interface for the movix-conf --files interface for
+   * versions >= 0.9.0
+   */
+  QStringList files( const QString& kbd = QString::null,
+		     const QString& font = QString::null,
+		     const QString& bg = QString::null,
+		     const QString& lang = QString::null,
+		     const QStringList& codecs = QStringList() ) const;
+
  private:
+  QStringList supported( const QString& ) const;
+
   QString m_movixPath;
   QStringList m_movixFiles;
   QStringList m_isolinuxFiles;
@@ -59,6 +89,11 @@ class K3bMovixProgram : public K3bExternalProgram
   bool scan( const QString& );
 
   bool supportsUserParameters() const { return false; }
+
+ private:
+  bool scanNewEMovix( K3bMovixBin* bin, const QString& );
+  bool scanOldEMovix( K3bMovixBin* bin, const QString& );
+  QStringList determineSupportedBootLabels( const QString& ) const;
 };
 
 

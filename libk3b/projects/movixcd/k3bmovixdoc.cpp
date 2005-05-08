@@ -180,6 +180,12 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
       setSubtitleFontset( e.text() );
     else if( e.nodeName() == "boot_message_language")
       setBootMessageLanguage( e.text() );
+    else if( e.nodeName() == "audio_background")
+      setAudioBackground( e.text() );
+    else if( e.nodeName() == "keyboard_language")
+      setKeyboardLayout( e.text() );
+    else if( e.nodeName() == "codecs")
+      setCodecs( QStringList::split( ',', e.text() ) );
     else if( e.nodeName() == "default_boot_label")
       setDefaultBootLabel( e.text() );
     else if( e.nodeName() == "additional_mplayer_options")
@@ -299,6 +305,18 @@ bool K3bMovixDoc::saveDocumentData( QDomElement* docElem )
 
   propElem = doc.createElement( "boot_message_language" );
   propElem.appendChild( doc.createTextNode( bootMessageLanguage() ) );
+  movixOptElem.appendChild( propElem );
+
+  propElem = doc.createElement( "audio_background" );
+  propElem.appendChild( doc.createTextNode( audioBackground() ) );
+  movixOptElem.appendChild( propElem );
+
+  propElem = doc.createElement( "keyboard_language" );
+  propElem.appendChild( doc.createTextNode( keyboardLayout() ) );
+  movixOptElem.appendChild( propElem );
+
+  propElem = doc.createElement( "codecs" );
+  propElem.appendChild( doc.createTextNode( codecs().join(",") ) );
   movixOptElem.appendChild( propElem );
 
   propElem = doc.createElement( "default_boot_label" );
