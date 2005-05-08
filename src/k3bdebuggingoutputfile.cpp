@@ -72,3 +72,5 @@ void K3bDebuggingOutputFile::addOutput( const QString& app, const QString& msg )
   s << "[" << app << "] " << msg << endl;
   flush();
 }
+
+#include "k3bdebuggingoutputfile.moc"
