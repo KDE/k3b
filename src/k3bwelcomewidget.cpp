@@ -41,6 +41,8 @@
 #include <kdebug.h>
 #include <kpopupmenu.h>
 #include <kaboutdata.h>
+#include <kactionclasses.h>
+
 
 K3bWelcomeWidget::Display::Display( QWidget* parent )
   : QWidget( parent )
@@ -48,19 +50,25 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   QFont fnt(font());
   fnt.setBold(true);
   fnt.setPointSize( 16 );
-  m_header = new QSimpleRichText( i18n("Welcome to K3b %1 - The CD and DVD Kreator")
-				  .arg( kapp->aboutData()->version() ), fnt );
+  m_header = new QSimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
+  m_infoText = new QSimpleRichText( i18n("<p align=\"center\">Change the welcome screen buttons with a "
+					 "right mouse click.<br>"
+					 "Every other project type and the tools "
+					 "like Image writing or Formatting are accessible via the K3b menu."), font() );
+
   // set a large width just to be sure no linebreak occurs
   m_header->setWidth( 800 );
 
   setAcceptDrops( true );
   setBackgroundMode( PaletteBase );
+  m_infoTextVisible = true;
 }
 
 
 K3bWelcomeWidget::Display::~Display()
 {
   delete m_header;
+  delete m_infoText;
 }
 
 
@@ -186,6 +194,7 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
 void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 {
+  m_infoText->setWidth( width() - 20 );
   QWidget::resizeEvent(e);
   repositionButtons();
 }
@@ -196,16 +205,35 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* e )
   QWidget::paintEvent( e );
 
   QPainter p( this );
+  p.setPen( m_headerFgColor );
+
+  // rect around the header
   QRect rect( 10, 10, QMAX( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
   p.fillRect( rect, m_headerBgColor );
-  p.setPen( m_headerFgColor );
   p.drawRect( rect );
+
+  // big rect around the whole thing
   p.drawRect( 10, 10, width()-20, height()-20 );
+
+  // draw the header text
   QColorGroup grp( colorGroup() );
   grp.setColor( QColorGroup::Text, m_headerFgColor );
   int pos = 20;
   pos += QMAX( (width()-40-m_header->widthUsed())/2, 0 );
   m_header->draw( &p, pos, 20, QRect(), grp );
+
+  if( m_infoTextVisible ) {
+    // draw the info box
+    //    int boxWidth = 20 + m_infoText->widthUsed();
+    int boxHeight = 20 + m_infoText->height();
+    QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
+		       height()-10-boxHeight,
+		       width()-20/*boxWidth*/, 
+		       boxHeight );
+    p.fillRect( infoBoxRect, m_headerBgColor );
+    p.drawRect( infoBoxRect );
+    m_infoText->draw( &p, infoBoxRect.left()+10, infoBoxRect.top()+10, QRect(), grp );
+  }
 }
 
 
@@ -247,6 +275,9 @@ K3bWelcomeWidget::~K3bWelcomeWidget()
 void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 {
   c->setGroup( "Welcome Widget" );
+
+  main->m_infoTextVisible = c->readBoolEntry( "show info text", true );
+
   QStringList sl = c->readListEntry( "welcome_actions" );
 
   if( sl.isEmpty() ) {
@@ -270,6 +301,8 @@ void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 void K3bWelcomeWidget::saveConfig( KConfigBase* c )
 {
   c->setGroup( "Welcome Widget" );
+
+  c->writeEntry( "show info text", main->m_infoTextVisible );
 
   QStringList sl;
   for( QPtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
@@ -322,22 +355,36 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     // and unique throughout the entire application!
     int r = 0;
     int removeAction = 0;
+    int infoTextAction = 0;
+    QString infoTextActionText;
+    if( main->m_infoTextVisible )
+      infoTextActionText = i18n("Hide Info Text");
+    else
+      infoTextActionText = i18n("Show Info Text");
 
     QWidget* widgetAtPos = viewport()->childAt(e->pos());
     if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
       KPopupMenu pop;
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
       pop.insertItem( i18n("Add Button"), &addPop );
+      pop.insertSeparator();
+      infoTextAction = pop.insertItem( infoTextActionText );
       r = pop.exec( e->globalPos() );
     }
     else {
       addPop.insertTitle( i18n("Add Button"), -1, 0 );
+      addPop.insertSeparator();
+      infoTextAction = addPop.insertItem( infoTextActionText );
       r = addPop.exec( e->globalPos() );
     }
 
     if( r != 0 ) {
       if( r == removeAction )
 	main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
+      else if( r == infoTextAction ) {
+	main->m_infoTextVisible = !main->m_infoTextVisible;
+	main->update();
+      }
       else
 	main->addAction( map[r] );
     }

@@ -95,6 +95,7 @@ class K3bWelcomeWidget::Display : public QWidget
   void repositionButtons();
 
   QSimpleRichText* m_header;
+  QSimpleRichText* m_infoText;
   QSize m_size;
   QSize m_buttonSize;
   int m_cols;
@@ -106,6 +107,8 @@ class K3bWelcomeWidget::Display : public QWidget
 
   QColor m_headerBgColor;
   QColor m_headerFgColor;
+
+  bool m_infoTextVisible;
 
   friend class K3bWelcomeWidget;
 };
