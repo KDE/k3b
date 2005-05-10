@@ -9,7 +9,6 @@ libk3bproject_la_LDFLAGS = $(all_libraries)
 libk3bproject_la_SOURCES = k3babstractwriter.cpp \
 	                   k3bgrowisofswriter.cpp \
 	                   k3bgrowisofshandler.cpp \
-                           k3bblankingjob.cpp \
                            k3bdoc.cpp \
                            k3bcdrdaowriter.cpp \
                            k3bcdrecordwriter.cpp \
@@ -19,8 +18,7 @@ libk3bproject_la_SOURCES = k3babstractwriter.cpp \
 			   k3bcuefileparser.cpp \
 			   k3bpipebuffer.cpp
 
-include_HEADERS =          k3bblankingjob.h \
-                           k3bdoc.h \
+include_HEADERS =          k3bdoc.h \
 	                   k3bgrowisofswriter.h \
                            k3bcdrdaowriter.h \
                            k3bcdrecordwriter.h \

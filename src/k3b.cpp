@@ -87,12 +87,12 @@
 #include "k3bmovixview.h"
 #include <k3bmovixdvddoc.h>
 #include "k3bmovixdvdview.h"
-#include "k3bblankingdialog.h"
-#include "images/k3bcdimagewritingdialog.h"
-#include "images/k3bisoimagewritingdialog.h"
+#include "misc/k3bblankingdialog.h"
+#include "misc/k3bcdimagewritingdialog.h"
+#include "misc/k3bisoimagewritingdialog.h"
 #include <k3bexternalbinmanager.h>
 #include "k3bprojecttabwidget.h"
-#include "cdcopy/k3bcdcopydialog.h"
+#include "misc/k3bcdcopydialog.h"
 #include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
 #include <k3bbusywidget.h>
@@ -101,8 +101,8 @@
 #include "k3bfiletreeview.h"
 #include "k3bsidepanel.h"
 #include "k3bstdguiitems.h"
-#include "k3bdvdformattingdialog.h"
-#include "dvdcopy/k3bdvdcopydialog.h"
+#include "misc/k3bdvdformattingdialog.h"
+#include "misc/k3bdvdcopydialog.h"
 //#include "dvdcopy/k3bvideodvdcopydialog.h"
 #include "k3bprojectmanager.h"
 #include "k3bwelcomewidget.h"

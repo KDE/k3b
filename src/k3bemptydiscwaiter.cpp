@@ -24,7 +24,7 @@
 #include "k3bblankingjob.h"
 #include <k3bbusywidget.h>
 #include <k3bprogressdialog.h>
-#include "datadvd/k3bdvdformattingjob.h"
+#include <k3bdvdformattingjob.h>
 
 #include <qtimer.h>
 #include <qlabel.h>

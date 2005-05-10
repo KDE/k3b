@@ -20,7 +20,7 @@
 #include "k3bcuefileparser.h"
 #include "k3bclonetocreader.h"
 #include "k3baudiocuefilewritingjob.h"
-#include <cdcopy/k3bclonejob.h>
+#include <k3bclonejob.h>
 
 #include <k3btempdirselectionwidget.h>
 #include <k3bdevicemanager.h>
