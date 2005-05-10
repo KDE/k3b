@@ -16,11 +16,13 @@
 
 #include "k3bdatafileview.h"
 #include "k3bdataview.h"
-#include "k3bdatadoc.h"
-#include "k3bdataitem.h"
-#include "k3bdiritem.h"
-#include "k3bfileitem.h"
-#include "k3bspecialdataitem.h"
+#include <k3bdatadoc.h>
+#include <k3bdataitem.h>
+#include <k3bdiritem.h>
+#include <k3bfileitem.h>
+#include <k3bspecialdataitem.h>
+#include <k3bsessionimportitem.h>
+#include "k3bdataurladdingdialog.h"
 #include <k3bvalidators.h>
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdatadirtreeview.h"
@@ -73,8 +75,7 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 
   connect( m_treeView, SIGNAL(dirSelected(K3bDirItem*)), this, SLOT(slotSetCurrentDir(K3bDirItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
-  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(checkForNewItems()) );
-  connect( m_doc, SIGNAL(changed()), this, SLOT(checkForNewItems()) );
+  connect( m_doc, SIGNAL(itemAdded(K3bDataItem*)), this, SLOT(slotItemAdded(K3bDataItem*)) );
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
@@ -109,6 +110,42 @@ void K3bDataFileView::clearItems()
 }
 
 
+void K3bDataFileView::slotItemAdded( K3bDataItem* item )
+{
+  if( item->parent() == currentDir() ) {
+    K3bDataViewItem* vi = 0;
+    if( item->isDir() )
+      vi = new K3bDataDirViewItem( static_cast<K3bDirItem*>(item), this );
+    else if( item->isFile() )
+      vi = new K3bDataFileViewItem( static_cast<K3bFileItem*>(item), this );
+    else if( item->isSpecialFile() )
+      vi = new K3bSpecialDataViewItem( static_cast<K3bSpecialDataItem*>(item), this );
+    else if( item->isFromOldSession() )
+      vi = new K3bSessionImportViewItem( static_cast<K3bSessionImportItem*>(item), this );
+    else
+      kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
+    
+    if( vi )
+      m_itemMap[item] = vi;
+  }
+}
+
+
+void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
+{
+  if( item->isDir() ) {
+    if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
+      slotSetCurrentDir( item->parent() );
+    }
+  }
+  
+  if( m_itemMap.contains( item ) ) {
+    delete m_itemMap[item];
+    m_itemMap.remove(item);
+  }
+}
+
+
 void K3bDataFileView::checkForNewItems()
 {
   hideEditor();
@@ -116,20 +153,7 @@ void K3bDataFileView::checkForNewItems()
   // add items that are not there yet
   for( QPtrListIterator<K3bDataItem> it( m_currentDir->children() ); it.current(); ++it ) {
     if( !m_itemMap.contains( it.current() ) ) {
-      K3bDataViewItem* vi = 0;
-      if( it.current()->isDir() )
-	vi = new K3bDataDirViewItem( (K3bDirItem*)it.current(), this );
-      else if( it.current()->isFile() )
-	vi = new K3bDataFileViewItem( (K3bFileItem*)it.current(), this );
-      else if( it.current()->isSpecialFile() )
-	vi = new K3bSpecialDataViewItem( (K3bSpecialDataItem*)it.current(), this );
-      else if( it.current()->isFromOldSession() )
-	vi = new K3bSessionImportViewItem( (K3bSessionImportItem*)it.current(), this );
-      else
-	kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
-
-      if( vi )
-	m_itemMap[it.current()] = vi;
+      slotItemAdded( it.current() );
     }
   }
 
@@ -149,9 +173,7 @@ QDragObject* K3bDataFileView::dragObject()
   for( QPtrListIterator<QListViewItem> it( selectedViewItems ); it.current(); ++it ) {
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
     if( dataViewItem ) {
-//       if( dataViewItem->dataItem()->isFile()
-// 	  &&  !dataViewItem->dataItem()->localPath().isEmpty() )
-	urls.append( KURL::fromPathOrURL(dataViewItem->dataItem()->localPath()) );
+      urls.append( KURL::fromPathOrURL(dataViewItem->dataItem()->localPath()) );
     }
     else
       kdDebug() << "no dataviewitem" << endl;
@@ -213,23 +235,8 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
       // seems that new items have been dropped
       KURL::List urls;
       if( KURLDrag::decode( e, urls ) )
-	m_doc->slotAddUrlsToDir( urls, parent );
+	K3bDataUrlAddingDialog::addUrls( urls, parent );
     }
-  }
-}
-
-
-void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
-{
-  if( item->isDir() ) {
-    if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
-      slotSetCurrentDir( item->parent() );
-    }
-  }
-  
-  if( m_itemMap.contains( item ) ) {
-    delete m_itemMap[item];
-    m_itemMap.remove(item);
   }
 }
 

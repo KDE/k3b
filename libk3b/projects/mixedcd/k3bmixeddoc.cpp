@@ -58,6 +58,14 @@ bool K3bMixedDoc::newDocument()
 }
 
 
+void K3bMixedDoc::setURL( const KURL& url )
+{
+  K3bDoc::setURL( url );
+  m_audioDoc->setURL( url );
+  m_dataDoc->setURL( url );
+}
+
+
 bool K3bMixedDoc::isModified() const
 {
   return ( m_audioDoc->isModified() || m_dataDoc->isModified() );

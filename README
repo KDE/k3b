@@ -7,14 +7,17 @@ These are the features so far:
    - themable (for now with Ayo's original theme and a crystal theme from Everaldo)
 
  - writing audio-cds
-   - from mp3, ogg vorbis, flac, and wav files (on-the-fly or with images)
-   - decoding plugin system
-   - cd-text support
-   - ID3-tag support
+   - On-the-fly decoding of many audio formats through plugin struxture
+     (decoding plugins for mp3, ogg vorbis, flac, wave, musepack, wma, aiff, and others)
+   - CD-Text support
+   - Metadata support, fill CD-Text from metadata
    - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
    - volume level normalization (only when writing with an image)
    - multiple sources for one track possible (merging of tracks, splitting of tracks, adding silence of arbitrary 
      length)
+   - Query Cddb servers for Metadata
+   - Query Musicbrainz for Metadata
+   - integrated "preview" player
    
  - writing ISO-cds
    - Joliet/Rockridge support
@@ -28,48 +31,53 @@ These are the features so far:
    - renaming of files (manually or automatically for mp3-files) (for joliet and rockrigde)
    - support for most of the mkisofs-options (I don't think anyone will ever use them! ;-))
    - multisession support (including importing old sessions and overwriting files from old sessions)
-   - El Torito bootable cd support
+     Automagically multisession handling: start, continue, or finish multisession CDs and DVDs based on 
+     the size of the project and the remaining capacity on the media.
+   - El Torito bootable CD support
 
  - writing Video CDs
    - VCD 1.1, 2.0, SVCD
    - CD-i support (Version 4)
    
- - writing mixed-mode cds
+ - writing mixed-mode CDs
    - CD-Extra (CD-Plus, Enhanced Audio CD) support
 
- - writing eMovix cds
+ - writing eMovix CDs and DVDs
    
- - writing data DVDs (support for DVD-R(W) and DVD+R(W) with the dvd+rw-tools)
+ - writing data DVDs 
+   - Support for DVD-R(W) and DVD+R(W)
+   - Support for DVD+R Double Layer media
 
  - formatting DVD-RWs and DVD+RWs
 
- - writing existing iso-images and cue/bin images to cd
+ - writing existing iso-images and cue/bin images to CD
+   - Writing of Audio cue file images on-the-fly (All audio formats supported)
 
- - cd copy (data, audio, mixed mode)
+ - CD copy (data, audio, mixed mode)
 
- - cd cloning with cdrecord >=2.01a17
+ - DVD copy
 
- - blanking of cdrws
+ - CD cloning with cdrecord >=2.01a17
 
- - cd ripping to wav, mp3, ogg-vorbis, flac, or whatever format needed
+ - blanking of CD-RWs
+   - Also automagically before writing a CD.
+
+ - CD ripping to wav, mp3, ogg-vorbis, flac, or whatever format needed
    - encoding plugin system
-   - cddb support
+   - Cddb support
    - sophisticated pattern system to automatically organize the ripped tracks
    - m3u playlist creation
    - CD-TEXT support
 
- - dvd ripping with the transcode tools
+ - DVD ripping with the transcode tools
 
  - DivX/XviD encoding
 
  - K3b checks if the user inserted an empty disk
 
- - Retrieving cd info and toc
+ - Retrieving CD/DVD info and toc
 
  - Support for ATAPI drives without SCSI-emulation
-
- - integrated full featured audio player
-
 
  
 See INSTALL for further information

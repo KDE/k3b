@@ -175,4 +175,17 @@ void K3bView::slotPluginButtonClicked()
   }
 }
 
+
+void K3bView::addUrl( const KURL& url )
+{
+  KURL::List urls(url);
+  addUrls( urls );
+}
+
+
+void K3bView::addUrls( const KURL::List& urls )
+{
+  doc()->addUrls( urls );
+}
+
 #include "k3bview.moc"

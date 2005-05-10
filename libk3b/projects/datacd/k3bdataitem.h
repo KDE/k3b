@@ -35,7 +35,13 @@ class K3bDataItem
   K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
   virtual ~K3bDataItem();
 	
-  K3bDirItem* parent() const { return m_parentDir; }
+  K3bDirItem* parent() { return m_parentDir; }
+  K3bDirItem* getParent() const { return m_parentDir; }
+
+  /**
+   * Remove this item from it's parent and return a pointer to it.
+   */
+  K3bDataItem* take();
 	
   K3bDataDoc* doc() const { return m_doc; }
   virtual const QString& k3bName() const;
@@ -72,15 +78,17 @@ class K3bDataItem
    */
   void setWrittenName( const QString& s ) { m_writtenName = s; }
 
-  virtual K3bDataItem* nextSibling();
+  virtual K3bDataItem* nextSibling() const;
 	
   /** returns the path to the file on the local filesystem */
   virtual QString localPath() const { return QString::null; }
 
   virtual KIO::filesize_t size() const { return 0; }
 
-  /** returnes the dir of the item (or the item if it's a dir) */
-  virtual K3bDirItem* getDirItem() = 0;
+  /** 
+   * \returne the dir of the item (or the item itself if it is a dir)
+   */
+  virtual K3bDirItem* getDirItem() const { return getParent(); }
 
   virtual void reparent( K3bDirItem* );
 
@@ -138,6 +146,8 @@ class K3bDataItem
   QString m_extraInfo;
 
   long m_sortWeigth;
+
+  friend class K3bDirItem;
 };
 
 #endif

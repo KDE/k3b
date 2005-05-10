@@ -35,7 +35,6 @@ class K3bSessionImportItem : public K3bDataItem
   K3bFileItem* replaceItem() const { return m_replaceItem; }
   void setReplaceItem( K3bFileItem* item ) { m_replaceItem = item; }
 
-  K3bDirItem* getDirItem() { return parent(); }
   KIO::filesize_t size() const { return m_size; }
 
   bool isFile() const { return false; }

@@ -44,7 +44,7 @@ public:
   virtual ~K3bFileItem();
 	
   bool exists() const;
-	
+
   QString absIsoPath();
 
   /** reimplemented from K3bDataItem */
@@ -72,7 +72,7 @@ public:
   KIO::filesize_t size() const;
   KIO::filesize_t size( bool followSymlinks ) const;
 
-  K3bDirItem* getDirItem();
+  K3bDirItem* getDirItem() const;
 	
   bool isSymLink() const;
   QString linkDest() const;

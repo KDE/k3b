@@ -20,6 +20,7 @@
 #include "k3bbootimageview.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
+#include "k3bdataurladdingdialog.h"
 #include <k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bfillstatusdisplay.h>
@@ -164,6 +165,12 @@ void K3bDataView::slotBurn()
 void K3bDataView::slotDocChanged()
 {
   m_dataDirTree->firstChild()->repaint();
+}
+
+
+void K3bDataView::addUrls( const KURL::List& urls )
+{
+  K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
 }
 
 #include "k3bdataview.moc"

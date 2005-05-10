@@ -22,6 +22,7 @@
 #include "k3bdiritem.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdataviewitem.h"
+#include "k3bdataurladdingdialog.h"
 #include <k3bview.h>
 #include <k3bvalidators.h>
 
@@ -66,7 +67,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   setDragEnabled( true );
   setItemsMovable( false );
   setAlternateBackground( QColor() );
-  setSorting(-1);
+  //  setSorting(-1);
 
   addColumn( i18n("Directory") );
   header()->hide();
@@ -81,7 +82,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
-  connect( m_doc, SIGNAL(newFileItems()), this, SLOT(checkForNewItems()) );
+  connect( m_doc, SIGNAL(itemAdded(K3bDataItem*)), this, SLOT(slotItemAdded(K3bDataItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*,QListViewItem*, const QPoint&)),
 	   this, SLOT(showPopupMenu(KListView*,QListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
@@ -154,12 +155,28 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
       // seems that new items have been dropped
       KURL::List urls;
       if( KURLDrag::decode( e, urls ) )
-	m_doc->slotAddUrlsToDir( urls, parent );
+	K3bDataUrlAddingDialog::addUrls( urls, parent );
     }
   }
 }
 
 
+void K3bDataDirTreeView::slotItemAdded( K3bDataItem* item )
+{
+  if( item->isDir() ) {
+    //
+    // We assume that we do not already have an item for the dir since the itemAdded signal
+    // should only be emitted once for every item
+    //
+    K3bDirItem* dirItem = static_cast<K3bDirItem*>( item );
+    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
+    K3bDataDirViewItem* newDirItem = new K3bDataDirViewItem( dirItem, parentViewItem );
+    m_itemMap.insert( dirItem, newDirItem );
+  }
+}
+
+
+// FIXME: remove this
 void K3bDataDirTreeView::checkForNewItems()
 {
   // check for removed items

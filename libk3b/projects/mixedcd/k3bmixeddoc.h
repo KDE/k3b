@@ -59,6 +59,8 @@ class K3bMixedDoc : public K3bDoc
   int mixedType() const { return m_mixedType; }
   int type() const { return MIXED; }
 
+  void setURL( const KURL& url );
+
   /**
    * Represent the structure of the doc as CD Table of Contents.
    * Be aware that the length of the data track is just an estimate

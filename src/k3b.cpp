@@ -1177,22 +1177,24 @@ void K3bMainWindow::slotWriteCdImage( const KURL& url )
 
 void K3bMainWindow::slotProjectAddFiles()
 {
-  K3bDoc* doc = activeDoc();
+  K3bView* view = activeView();
 
-  if( doc ) {
-    QStringList files = KFileDialog::getOpenFileNames( ".", "*|All Files", this, i18n("Select Files to Add to Project") );
+  if( view ) {
+    QStringList files = KFileDialog::getOpenFileNames( ".", 
+						       "*|All Files", 
+						       this, 
+						       i18n("Select Files to Add to Project") );
 
     KURL::List urls;
-    for (QStringList::ConstIterator it = files.begin();
-         it != files.end(); it++)
-    {
+    for( QStringList::ConstIterator it = files.begin();
+         it != files.end(); it++ ) {
       KURL url;
       url.setPath(*it);
       urls.append( url );
     }
 
     if( !urls.isEmpty() )
-      doc->addUrls( urls );
+      view->addUrls( urls );
   }
   else
     KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No Active Project"));
@@ -1338,8 +1340,8 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
       return;
   }
 
-  if( activeDoc() ) {
-    activeDoc()->addUrls( urls );
+  if( K3bView* view = activeView() ) {
+    view->addUrls( urls );
   }
   else {
     // check if the files are all audio we can handle. If so create an audio project
@@ -1375,9 +1377,9 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
     }
 
     if( audio )
-      slotNewAudioDoc()->addUrls( urls );
+      static_cast<K3bView*>(slotNewAudioDoc()->view())->addUrls( urls );
     else
-      slotNewDataDoc()->addUrls( urls );
+      static_cast<K3bView*>(slotNewDataDoc()->view())->addUrls( urls );
   }
 }
 

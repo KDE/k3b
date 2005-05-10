@@ -55,19 +55,18 @@
 #include <kapplication.h>
 
 
+/**
+ * There are two ways to fill a data project with files and folders:
+ * \li Use the addUrl and addUrls methods
+ * \li or create your own K3bDirItems and K3bFileItems. The doc will be properly updated
+ *     by the constructors of the items.
+ */
 K3bDataDoc::K3bDataDoc( QObject* parent )
   : K3bDoc( parent )
 {
   m_root = 0;
 
-  m_queuedToAddItemsTimer = new QTimer( this );
-  connect( m_queuedToAddItemsTimer, SIGNAL(timeout()), this, SLOT(slotAddQueuedItems()) );
-
   m_sizeHandler = new K3bFileCompilationSizeHandler();
-  //  m_oldSessionSizeHandler = new K3bFileCompilationSizeHandler();
-
-  // FIXME: remove the newFileItems() signal and replace it with the changed signal
-  connect( this, SIGNAL(newFileItems()), this, SIGNAL(changed()) );
 }
 
 K3bDataDoc::~K3bDataDoc()
@@ -109,261 +108,70 @@ bool K3bDataDoc::newDocument()
 
 void K3bDataDoc::addUrls( const KURL::List& urls )
 {
-  slotAddUrlsToDir( urls );
+  addUrls( urls, root() );
 }
 
 
-void K3bDataDoc::slotAddUrlsToDir( const KURL::List& urls, K3bDirItem* dirItem )
+void K3bDataDoc::addUrls( const KURL::List& urls, K3bDirItem* dir )
 {
-  if( !dirItem ) {
-    kdDebug() << "(K3bDataDoc) DirItem = 0 !!!!!" << endl;
-    dirItem = root();
-  }
+  if( !dir )
+    dir = root();
 
-  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
-    {
-      const KURL& url = *it;
-      if( url.isLocalFile() && QFile::exists(url.path()) ) {
-	m_queuedToAddItems.append( new PrivateItemToAdd(url.path(), dirItem ) );
+  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+    const KURL& url = *it;
+    QString k3bname = (*it).path().section( '/', -1 );
+    QFileInfo f( url.path() );
+    K3bDirItem* newDirItem = 0;
+
+    // rename the new item if an item with that name already exists
+    int cnt = 0;
+    bool ok = false;
+    while( !ok ) {
+      ok = true;
+      QString name( k3bname );
+      if( cnt > 0 )
+	name += QString("_%1").arg(cnt);
+      if( K3bDataItem* oldItem = dir->find( name ) ) {
+	if( f.isDir() && oldItem->isDir() ) {
+	  // ok, just reuse the dir
+	  newDirItem = static_cast<K3bDirItem*>(oldItem);
+	}
+	// directories cannot replace files in an old session (I think)
+	// and also directories can for sure never be replaced (only be reused as above)
+	// so we always rename if the old item is a dir.
+	else if( !oldItem->isFromOldSession() ||
+		 f.isDir() ||
+		 oldItem->isDir() ) {
+	  ++cnt;
+	  ok = false;
+	}
+      }
+    }
+    if( cnt > 0 )
+      k3bname += QString("_%1").arg(cnt);
+
+    if( f.exists() ) {
+      if( f.isDir() && !f.isSymLink() ) {
+	if( !newDirItem )
+	  newDirItem = new K3bDirItem( k3bname, this, dir );
+
+	// recursively add all the files in the directory
+	QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden|QDir::Readable );
+	dlist.remove(".");
+	dlist.remove("..");
+	KURL::List newUrls;
+	for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it )
+	  newUrls.append( KURL::fromPathOrURL( f.absFilePath() + "/" + *it ) );
+	addUrls( newUrls, newDirItem );
       }
       else
-	m_notFoundFiles.append( url.path() );
-    }
-
-  m_queuedToAddItemsTimer->start(0);
-}
-
-
-void K3bDataDoc::slotAddQueuedItems()
-{
-  m_queuedToAddItems.first();
-  PrivateItemToAdd* item = m_queuedToAddItems.take();
-  if( item ) {
-    m_queuedToAddItemsTimer->stop();
-
-    setModified( true );
-
-    if( !item->fileInfo.exists() )
-      return;
-
-    if( item->fileInfo.isDir() && !item->fileInfo.isSymLink() ) {
-      createDirItem( item->fileInfo, item->parent );
-    }
-    else {
-      createFileItem( item->fileInfo, item->parent );
-    }
-
-    m_numberAddedItems++;
-    if( m_numberAddedItems >= 500 ) {
-      emit newFileItems();
-      m_numberAddedItems = 0;
-    }
-
-    delete item;
-    m_queuedToAddItemsTimer->start(0);
-  }
-  else {
-    m_bExistingItemsIgnoreAll = m_bExistingItemsReplaceAll = false;
-    m_numberAddedItems = 0;
-    m_queuedToAddItemsTimer->stop();
-    emit newFileItems();
-    informAboutNotFoundFiles();
-  }
-}
-
-
-K3bDirItem* K3bDataDoc::createDirItem( QFileInfo& f, K3bDirItem* parent )
-{
-  QString newName = f.fileName();
-
-  if( newName.isEmpty() ) {
-    kdDebug() << "(K3bDataDoc) tried to create dir without name." << endl;
-    return 0;
-  }
-
-  K3bDirItem* newDirItem = 0;
-
-  if( K3bDataItem* oldItem = parent->find( newName ) ) {
-    if( oldItem->isDir() )
-      newDirItem = dynamic_cast<K3bDirItem*>(oldItem);
-    else if( oldItem->isFromOldSession() )
-      return 0;  // FIXME: This is not perfect at all
-    else if( m_bExistingItemsIgnoreAll )
-      return 0;
-    else if( m_bExistingItemsReplaceAll )
-      removeItem( oldItem );
-    else {
-      // TODO: use KGuiItems to add ToolTips
-      switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
-					    i18n("%1 already exists.").arg(newName),
-					    qApp->activeWindow(),
-					    0,
-					    5,
-					    i18n("Replace"),
-					    i18n("Replace All"),
-					    i18n("Ignore"),
-					    i18n("Ignore All"),
-					    i18n("Rename") ) ) {
-      case 1: // replace
-	removeItem( oldItem );
-	break;
-      case 2: // replace all
-	removeItem( oldItem );
-	m_bExistingItemsReplaceAll = true;
-	break;
-      case 3: // ignore
-	return 0;
-	break;
-      case 4: // ignore all
-	m_bExistingItemsIgnoreAll = true;
-	return 0;
-	break;
-      case 5: // rename
-	{
-	  bool ok = true;
-	  QValidator* validator = K3bValidators::iso9660Validator( false, this );
-	  do {
-	    newName = KInputDialog::getText( i18n("Enter New Filename"),
-					     i18n("A file with that name already exists. Please enter a new name:"),
-					     newName, &ok, qApp->activeWindow(), "renamedialog", validator );
-
-	  } while( ok && parent->alreadyInDirectory( newName ) );
-
-	  delete validator;
-
-	  if( !ok )
-	    return 0;
-	}
-	break;
-      }
+	(void)new K3bFileItem( url.path(), this, dir, k3bname );
     }
   }
 
-  if( !newDirItem )
-    newDirItem = new K3bDirItem( newName, this, parent );
+  emit changed();
 
-  KConfig* c = k3bcore->config();
-  c->setGroup( "Data project settings" );
-
-  int dirFilter = QDir::All;
-  if( c->readBoolEntry( "Add hidden files", true ) )
-    dirFilter |= QDir::Hidden;
-  if( c->readBoolEntry( "Add system files", false ) )
-    dirFilter |= QDir::System;
-
-  QStringList dlist = QDir( f.absFilePath() ).entryList( dirFilter );
-  dlist.remove(".");
-  dlist.remove("..");
-
-  for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-    QFileInfo newF(f.absFilePath() + "/" + *it);
-    if( newF.isDir() )
-      m_queuedToAddItems.append( new PrivateItemToAdd( newF, newDirItem ) );
-    else
-      createFileItem( newF, newDirItem );
-  }
-
-  return newDirItem;
-}
-
-
-K3bFileItem* K3bDataDoc::createFileItem( QFileInfo& f, K3bDirItem* parent )
-{
-  QString newName = f.fileName();
-
-
-  // filter symlinks and follow them
-//   while( f.isSymLink() ) {
-//     if( f.readLink().startsWith("/") )
-//       f.setFile( f.readLink() );
-//     else
-//       f.setFile( f.dirPath() + "/" + f.readLink() );
-
-//     // check if it was a corrupted symlink
-//     if( !f.exists() ) {
-//       kdDebug() << "(K3bDataDoc) corrupted symlink: " << f.absFilePath() << endl;
-//       m_notFoundFiles.append( f.absFilePath() );
-//       return;
-//     }
-//   }
-
-  // check if we have read access
-  if( f.isReadable() ) {
-
-    K3bSessionImportItem* oldSessionItem = 0;
-
-    if( K3bDataItem* oldItem = parent->find( newName ) ) {
-
-      if( oldItem->isFromOldSession() ) {
-	// in this case we remove this item from it's parent and save it in the new one
-	// to be able to recover it
-	parent->takeDataItem( oldItem );
-	emit itemRemoved( oldItem );
-	oldSessionItem = (K3bSessionImportItem*)oldItem;
-      }
-      else if( m_bExistingItemsIgnoreAll )
-	return 0;
-      else if( m_bExistingItemsReplaceAll )
-	removeItem( oldItem );
-      else {
-	// TODO: use KGuiItems to add ToolTips
- 	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
-					      i18n("%1 already exists.").arg(newName),
-					      qApp->activeWindow(),
-					      0,
-					      5,
-					      i18n("Replace"),
-					      i18n("Replace All"),
-					      i18n("Ignore"),
-					      i18n("Ignore All"),
-					      i18n("Rename") ) ) {
-	case 1: // replace
-	  removeItem( oldItem );
-	  break;
-	case 2: // replace all
-	  removeItem( oldItem );
-	  m_bExistingItemsReplaceAll = true;
-	  break;
-	case 3: // ignore
-	  return 0;
-	  break;
-	case 4: // ignore all
-	  m_bExistingItemsIgnoreAll = true;
-	  return 0;
-	  break;
-	case 5: // rename
-	  {
-	    bool ok = true;
-	    QValidator* validator = K3bValidators::iso9660Validator( false, this );
-	    do {
-	      newName = KInputDialog::getText( i18n("Enter New Filename"),
-					       i18n("A file with that name already exists. Please enter a new name:"),
-					       newName, &ok, qApp->activeWindow(), "renameslg", validator );
-	    } while( ok && parent->alreadyInDirectory( newName ) );
-
-	    delete validator;
-
-	    if( !ok )
-	      return 0;
-	  }
-	  break;
-	}
-      }
-    }
-
-    K3bFileItem* newK3bItem = new K3bFileItem( f.absFilePath(), this, parent, newName );
-
-    if( oldSessionItem ) {
-      oldSessionItem->setReplaceItem( newK3bItem );
-      newK3bItem->setReplacedItemFromOldSession( oldSessionItem );
-    }
-
-    return newK3bItem;
-  }
-  else {
-    m_noPermissionFiles.append( f.absFilePath() );
-    return 0;
-  }
+  setModified( true );
 }
 
 
@@ -381,8 +189,6 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
   K3bDirItem* item = new K3bDirItem( name, this, parent );
 
   setModified( true );
-
-  emit newFileItems();
 
   return item;
 }
@@ -475,8 +281,6 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
   }
 
   // -----------------------------------------------------------------
-
-  emit newFileItems();
 
   informAboutNotFoundFiles();
 
@@ -1025,37 +829,31 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
     return;
 
   if( item->isRemoveable() ) {
-    // the item takes care of it's parent!
-    //    m_sizeHandler->removeFile( item->localPath() );
-    emit itemRemoved( item );
-
-    // check if any items are pending to be added to this dir (if it's a dir)
-    if( item->isDir() ) {
-      PrivateItemToAdd* pi = m_queuedToAddItems.first();
-      while( pi ) {
-	if( ((K3bDirItem*)item)->isSubItem( pi->parent ) ) {
-	  PrivateItemToAdd* pi2 = m_queuedToAddItems.take();
-	  delete pi2;
-	  pi = m_queuedToAddItems.current();
-	}
-	else
-	  pi = m_queuedToAddItems.next();
-      }
-    }
-//     else if( item->isFile() ) {
-//       // restore the item imported from an old session
-//       if( K3bDataItem* oldSessionItem = ((K3bFileItem*)item)->replaceItemFromOldSession() ) {
-// 	item->parent()->addDataItem( oldSessionItem );
-//       }
-//     }
-
     delete item;
-
-    // This is a little HACK that is need to prevent a crash in the K3bDataFileView
-    QTimer::singleShot( 0, this, SIGNAL(changed()) );
   }
   else
     kdDebug() << "(K3bDataDoc) tried to remove non-removable entry!" << endl;
+}
+
+
+void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
+{
+  // update the project size
+  if( !removedItem->isFromOldSession() )
+    m_sizeHandler->removeFile( removedItem );
+
+  emit itemRemoved( removedItem );
+}
+
+
+void K3bDataDoc::itemAddedToDir( K3bDirItem*, K3bDataItem* item )
+{
+  // update the project size
+  if( !item->isFromOldSession() )
+    m_sizeHandler->addFile( item );
+
+  emit changed();
+  emit itemAdded( item );
 }
 
 
@@ -1080,8 +878,6 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 
 
   item->reparent( newParent );
-
-  emit newFileItems();
 }
 
 
@@ -1101,10 +897,9 @@ void K3bDataDoc::moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParen
       }
     }
 
-    it.current()->reparent( newParent );
+    if( it.current()->isMoveable() )
+      it.current()->reparent( newParent );
   }
-
-  emit newFileItems();
 }
 
 
@@ -1346,7 +1141,7 @@ void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
     // FIXME: inform the user. By the way: this all still sucks!
   }
 
-  emit newFileItems();
+  emit changed();
 }
 
 
@@ -1418,7 +1213,7 @@ void K3bDataDoc::clearImportedSession()
 	// this imported dir is not needed anymore
 	// since it is empty
 	m_oldSession.remove();
-	emit itemRemoved( item );
+	//	emit itemRemoved( item );
 	delete dir;
       }
       else {
@@ -1440,7 +1235,7 @@ void K3bDataDoc::clearImportedSession()
     else {
       m_oldSession.remove();
       //      m_sizeHandler->removeFile( item->localPath() );
-      emit itemRemoved( item );
+      //      emit itemRemoved( item );
       delete item;
     }
 
@@ -1459,7 +1254,6 @@ K3bDirItem* K3bDataDoc::bootImageDir()
   if( !b ) {
     b = new K3bDirItem( "boot", this, m_root );
     setModified( true );
-    emit newFileItems();
   }
 
   // if we cannot create the dir because there is a file named boot just use the root dir
@@ -1498,8 +1292,6 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
 
   createBootCatalogeItem(dir);
 
-  emit newFileItems();
-
   return boot;
 }
 
@@ -1531,7 +1323,7 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
 {
   m_bootImages.removeRef(item);
   if( m_bootImages.isEmpty() ) {
-    emit itemRemoved( m_bootCataloge );
+    //    emit itemRemoved( m_bootCataloge );
     delete m_bootCataloge;
     m_bootCataloge = 0;
 

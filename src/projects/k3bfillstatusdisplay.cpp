@@ -36,6 +36,7 @@
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -59,7 +60,7 @@ public:
 
 
 K3bFillStatusDisplayWidget::K3bFillStatusDisplayWidget( K3bDoc* doc, QWidget* parent )
-  : QWidget( parent )
+  : QWidget( parent, 0, WRepaintNoErase )
 {
   d = new Private();
   d->doc = doc;
@@ -116,9 +117,11 @@ void K3bFillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
 
 void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 {
-  erase( rect() );
-
-  QPainter p(this);
+  // double buffer
+  QPixmap buffer( size() );
+  buffer.fill( colorGroup().base() );
+  QPainter p;
+  p.begin( &buffer, this );
 
   long long docSize;
   long long cdSize;
@@ -178,7 +181,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
 
   p.drawLine( rect().left() + (int)(one*cdSize), rect().bottom(),
-	       rect().left() + (int)(one*cdSize), rect().top() + ((rect().bottom()-rect().top())/2) );
+	      rect().left() + (int)(one*cdSize), rect().top() + ((rect().bottom()-rect().top())/2) );
 
   // draw the text marks
   crect = rect();
@@ -204,12 +207,35 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   else
     crect.setLeft( (int)(one*cdSize) + 4 );
   p.drawText( crect, Qt::AlignLeft | Qt::AlignVCenter, text );
+
+  p.end();
+
+  bitBlt( this, 0, 0, &buffer );
 }
 
 
 
 // ----------------------------------------------------------------------------------------------------
 
+
+class K3bFillStatusDisplay::ToolTip : public QToolTip
+{
+public:
+  ToolTip( K3bDoc* doc, QWidget* parent )
+    : QToolTip( parent, 0 ),
+      m_doc(doc) {
+  }
+
+  void maybeTip( const QPoint& ) {
+    tip( parentWidget()->rect(),
+	 KIO::convertSize( m_doc->size() ) +
+	 " (" + KGlobal::locale()->formatNumber( m_doc->size(), 0 ) + "), " +
+	 m_doc->length().toString(false) + " " + i18n("min") );
+  }
+
+private:
+  K3bDoc* m_doc;
+};
 
 class K3bFillStatusDisplay::Private
 {
@@ -238,6 +264,8 @@ public:
   bool showTime;
 
   K3bDoc* doc;
+
+  QTimer updateTimer;
 };
 
 
@@ -246,6 +274,8 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const 
 {
   d = new Private;
   d->doc = doc;
+
+  m_toolTip = new ToolTip( doc, this );
 
   setFrameStyle( Panel | Sunken );
 
@@ -267,22 +297,16 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const 
 
   showDvdSizes( false );
 
-  connect( d->doc, SIGNAL(changed()), this, SLOT(update()) );
-  connect( d->doc, SIGNAL(changed()), this, SLOT(slotDocSizeChanged()) );
+  connect( d->doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
+  connect( &d->updateTimer, SIGNAL(timeout()), d->displayWidget, SLOT(update()) );
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()
 {
   delete d;
+  delete m_toolTip;
 }
 
-
-void K3bFillStatusDisplay::paintEvent(QPaintEvent* e)
-{
-  // just to pass updates to the display
-  d->displayWidget->update();
-  QFrame::paintEvent(e);
-}
 
 void K3bFillStatusDisplay::setupPopupMenu()
 {
@@ -583,16 +607,11 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
 }
 
 
-
-void K3bFillStatusDisplay::slotDocSizeChanged()
+void K3bFillStatusDisplay::slotDocChanged()
 {
-  // FIXME: properly localize this
-  QToolTip::remove( this );
-  QToolTip::add( this,
-		 KIO::convertSize( d->doc->size() ) +
-		 " (" + KGlobal::locale()->formatNumber( d->doc->size(), 0 ) + "), " +
-		 d->doc->length().toString(false) + " " + i18n("min") );
+  // cache updates
+  if( !d->updateTimer.isActive() )
+    d->updateTimer.start( 2000, false );
 }
-
 
 #include "k3bfillstatusdisplay.moc"

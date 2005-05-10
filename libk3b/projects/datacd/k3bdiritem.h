@@ -37,15 +37,14 @@ class K3bDirItem : public K3bDataItem
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
   virtual ~K3bDirItem();
 	
-  K3bDirItem* getDirItem();
+  K3bDirItem* getDirItem() const;
 
   const QPtrList<K3bDataItem>& children() const { return m_children; }
   K3bDirItem* addDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( K3bDataItem* item );
-  K3bDataItem* takeDataItem( int index );
 	
-  K3bDataItem* nextSibling();
-  K3bDataItem* nextChild( K3bDataItem* );
+  K3bDataItem* nextSibling() const;
+  K3bDataItem* nextChild( K3bDataItem* ) const;
 
   bool alreadyInDirectory( const QString& fileName ) const;
   K3bDataItem* find( const QString& filename ) const;
@@ -67,6 +66,11 @@ class K3bDirItem : public K3bDataItem
 
   virtual bool isRemoveable() const;
 
+  /**
+   * \return true if some child is from an old session.
+   */
+  virtual bool isFromOldSession() const;
+
  private:
   /**
    * this recursivly updates the size of the directories.
@@ -80,7 +84,7 @@ class K3bDirItem : public K3bDataItem
    */
   void updateFiles( long files, long dirs );
 
-  QPtrList<K3bDataItem> m_children;
+  mutable QPtrList<K3bDataItem> m_children;
 
   KIO::filesize_t m_size;
   long m_files;

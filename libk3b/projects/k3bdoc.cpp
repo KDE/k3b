@@ -56,6 +56,7 @@ K3bDoc::~K3bDoc()
 
 void K3bDoc::slotChanged()
 {
+  setModified( true );
   emit changed( this );
 }
 

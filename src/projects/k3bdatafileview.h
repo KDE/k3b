@@ -69,6 +69,7 @@ class K3bDataFileView : public K3bListView
   void slotParentDir();
   void slotProperties();
   void slotDoubleClicked( QListViewItem* item );
+  void slotItemAdded( K3bDataItem* );
 
  protected:
   bool acceptDrag(QDropEvent* e) const;

@@ -17,6 +17,8 @@
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdoc.h"
 
+#include <k3bdiritem.h>
+
 
 K3bMovixFileItem::K3bMovixFileItem( const QString& fileName, 
 				    K3bMovixDoc* doc, 
@@ -33,6 +35,13 @@ K3bMovixFileItem::~K3bMovixFileItem()
 {
   if( m_subTitleItem )
     m_doc->removeSubTitleItem( this );
+
+  // remove this from parentdir
+  // it is important to do it here and not
+  // rely on the K3bFileItem destructor becasue
+  // otherwise the doc is not informed early enough
+  if( parent() )
+    parent()->takeDataItem( this );
 }
 
 

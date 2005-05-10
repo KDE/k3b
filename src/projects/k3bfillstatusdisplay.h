@@ -19,6 +19,7 @@
 #define K3BFILLSTATUSDISPLAY_H
 
 #include <qframe.h>
+#include <qtooltip.h>
 
 
 class QPaintEvent;
@@ -86,7 +87,6 @@ class K3bFillStatusDisplay : public QFrame  {
 
  protected:
   void setupPopupMenu();
-  void paintEvent(QPaintEvent*);
 
  private slots:
   void slot74Minutes();
@@ -100,12 +100,14 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotPopupMenu(const QPoint&);
   void slotDetermineSize();
   void slotRemainingSize( K3bDevice::DeviceHandler* );
-  void slotDocSizeChanged();
+  void slotDocChanged();
 
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();
 
  private:
+  class ToolTip;
+  ToolTip* m_toolTip;
   class Private;
   Private* d;
 };

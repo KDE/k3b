@@ -41,9 +41,6 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
   m_listView = new K3bMovixListView( m_doc, this );
   setMainWidget( m_listView );
 
-  connect( m_doc, SIGNAL(newFileItems()), fillStatusDisplay(), SLOT(update()) );
-  connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), fillStatusDisplay(), SLOT(update()) );
-
   connect( m_listView, SIGNAL(contextMenuRequested( QListViewItem*, const QPoint& , int )),
 	   this, SLOT(slotContextMenuRequested(QListViewItem*, const QPoint& , int )) );
 

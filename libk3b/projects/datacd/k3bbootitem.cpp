@@ -34,5 +34,6 @@ K3bBootItem::K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* 
 
 K3bBootItem::~K3bBootItem()
 {
+  take();
   doc()->removeBootItem(this);
 }

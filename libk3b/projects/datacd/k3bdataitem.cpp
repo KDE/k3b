@@ -68,39 +68,48 @@ const QString& K3bDataItem::k3bName() const
 }
 
 
+K3bDataItem* K3bDataItem::take()
+{
+  if( parent() )
+    parent()->takeDataItem( this );
+
+  return this;
+}
+
+
 QString K3bDataItem::k3bPath() const
 {
-  if( !parent() )
+  if( !getParent() )
     return QString::null;  // the root item is the only one not having a parent
   else if( isDir() )
-    return parent()->k3bPath() + k3bName() + "/";
+    return getParent()->k3bPath() + k3bName() + "/";
   else
-    return parent()->k3bPath() + k3bName();
+    return getParent()->k3bPath() + k3bName();
 }
 
 
 QString K3bDataItem::writtenPath() const
 {
-  if( !parent() )
+  if( !getParent() )
     return QString::null;  // the root item is the only one not having a parent
   else if( isDir() )
-    return parent()->writtenPath() + writtenName() + "/";
+    return getParent()->writtenPath() + writtenName() + "/";
   else
-    return parent()->writtenPath() + writtenName();
+    return getParent()->writtenPath() + writtenName();
 }
 
 
-K3bDataItem* K3bDataItem::nextSibling()
+K3bDataItem* K3bDataItem::nextSibling() const
 {
-  K3bDataItem* item = this;
-  K3bDirItem* parentItem = parent();
+  K3bDataItem* item = const_cast<K3bDataItem*>(this); // urg, but we know that we don't mess with it, so...
+  K3bDirItem* parentItem = getParent();
 	
   while( parentItem ) {
     if( K3bDataItem* i = parentItem->nextChild( item ) )
       return i;
 		
     item = parentItem;
-    parentItem = item->parent();
+    parentItem = item->getParent();
   }
 
   return 0;
@@ -109,11 +118,7 @@ K3bDataItem* K3bDataItem::nextSibling()
 
 void K3bDataItem::reparent( K3bDirItem* newParent )
 {
-  if( m_parentDir ) {
-    m_parentDir->takeDataItem( this );
-  }
-
-  m_parentDir = newParent->addDataItem( this );
+  newParent->addDataItem( take() );
 }
 
 
@@ -121,8 +126,8 @@ bool K3bDataItem::hideOnRockRidge() const
 { 
   if( !isHideable() )
     return false;
-  if( parent() )
-    return m_bHideOnRockRidge || parent()->hideOnRockRidge();
+  if( getParent() )
+    return m_bHideOnRockRidge || getParent()->hideOnRockRidge();
   else 
     return m_bHideOnRockRidge;
 }
@@ -132,8 +137,8 @@ bool K3bDataItem::hideOnJoliet() const
 {
   if( !isHideable() )
     return false;
-  if( parent() ) 
-    return m_bHideOnJoliet || parent()->hideOnJoliet();
+  if( getParent() ) 
+    return m_bHideOnJoliet || getParent()->hideOnJoliet();
   else
     return m_bHideOnJoliet;
 }
@@ -143,7 +148,7 @@ void K3bDataItem::setHideOnRockRidge( bool b )
 {
   // there is no use in changing the value if 
   // it is already set by the parent
-  if( !parent() || !parent()->hideOnRockRidge() )
+  if( !getParent() || !getParent()->hideOnRockRidge() )
     m_bHideOnRockRidge = b;
 }
 
@@ -152,15 +157,15 @@ void K3bDataItem::setHideOnJoliet( bool b )
 { 
   // there is no use in changing the value if 
   // it is already set by the parent
-  if( !parent() || !parent()->hideOnJoliet() )
+  if( !getParent() || !getParent()->hideOnJoliet() )
     m_bHideOnJoliet = b;
 }
 
 
 int K3bDataItem::depth() const
 {
-  if( parent() )
-    return parent()->depth() + 1;
+  if( getParent() )
+    return getParent()->depth() + 1;
   else
     return 0;
 }

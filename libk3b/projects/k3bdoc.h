@@ -124,7 +124,7 @@ class K3bDoc : public QObject
   /** returns the KURL of the document */
   const KURL& URL() const;
   /** sets the URL of the document */
-  void setURL(const KURL& url);
+  virtual void setURL( const KURL& url );
 
   int writingMode() const { return m_writingMode; }
   bool dummy() const { return m_dummy; }

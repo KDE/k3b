@@ -103,6 +103,7 @@ class K3bDataDirTreeView : public K3bListView
   void slotNewDir();
   void slotProperties();
   void slotDropAnimate();
+  void slotItemAdded( K3bDataItem* );
 };
 
 #endif

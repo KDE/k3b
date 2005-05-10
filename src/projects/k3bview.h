@@ -26,6 +26,7 @@
 #include <qptrdict.h>
 
 #include <kxmlguiclient.h>
+#include <kurl.h>
 
 class K3bDoc;
 class KActionCollection;
@@ -68,6 +69,17 @@ class K3bView : public QWidget, public KXMLGUIClient
    * Default impl. brings up the burnDialog via newBurnDialog() without writing
    */
   virtual void slotProperties();
+
+  /**
+   * Add an url to the doc. The default implementation simply calls 
+   * addUrls.
+   */
+  virtual void addUrl( const KURL& );
+
+  /**
+   * Add urls to the doc. The default implementation calls doc()->addUrls.
+   */
+  virtual void addUrls( const KURL::List& );
 
  protected:
   /**

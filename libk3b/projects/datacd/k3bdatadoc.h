@@ -124,9 +124,6 @@ class K3bDataDoc : public K3bDoc
   /** this will just remove it from the list of boot items, not remove it from the doc */
   void removeBootItem( K3bBootItem* );
 
-  // This is just a temp solution and will be removed
-  K3bFileCompilationSizeHandler* sizeHandler() const { return m_sizeHandler; }
-
   /**
    * This will prepare the filenames as written to the image.
    * These filenames are saved in K3bDataItem::writtenName
@@ -141,21 +138,23 @@ class K3bDataDoc : public K3bDoc
   bool needToCutFilenames() const { return m_needToCutFilenames; }
 
  public slots:
-  /** add urls to the compilation.
-   * @param dir the directory where to add the urls, by default this is the root directory.
-   **/
-  void slotAddUrlsToDir( const KURL::List&, K3bDirItem* dir = 0 );
   virtual void addUrls( const KURL::List& urls );
+
+  /**
+   * Add urls syncroneously
+   * This method adds files recursively including symlinks, hidden, and system files.
+   * If a file already exists the new file's name will be appended a number.
+   */
+  virtual void addUrls( const KURL::List& urls, K3bDirItem* dir );
 
   void importSession( K3bDevice::Device* );
   void clearImportedSession();
 
  signals:
   void itemRemoved( K3bDataItem* );
-  void newFileItems();
-	
+  void itemAdded( K3bDataItem* );
+
  private slots:
-  void slotAddQueuedItems();
   void slotTocRead( K3bDevice::DeviceHandler* dh );
 
  protected:
@@ -176,13 +175,16 @@ class K3bDataDoc : public K3bDoc
   //  K3bFileCompilationSizeHandler* m_oldSessionSizeHandler;
   KIO::filesize_t m_oldSessionSize;
 
-  /** reimplemented from K3bDoc */
-  //  virtual K3bView* newView( QWidget* parent );
-
  private:
   void prepareFilenamesInDir( K3bDirItem* dir );
   void createSessionImportItems( const K3bIso9660Directory*, K3bDirItem* parent );
   K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
+
+  /**
+   * used by K3bDirItem to inform about removed items.
+   */
+  void itemRemovedFromDir( K3bDirItem* parent, K3bDataItem* removedItem );
+  void itemAddedToDir( K3bDirItem* parent, K3bDataItem* addedItem );
 
   /**
    * load recursivly
@@ -193,24 +195,7 @@ class K3bDataDoc : public K3bDoc
    */
   void saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent );
 
-  K3bDirItem* createDirItem( QFileInfo& f, K3bDirItem* parent );
-  K3bFileItem* createFileItem( QFileInfo& f, K3bDirItem* parent );
-
   void informAboutNotFoundFiles();
-
-  class PrivateItemToAdd {
-  public:
-    PrivateItemToAdd( const QString& p, K3bDirItem* i )
-      :fileInfo(p) { parent = i; }
-    PrivateItemToAdd( const QFileInfo& f, K3bDirItem* i )
-      :fileInfo(f) { parent = i; }
-    QFileInfo fileInfo;
-    K3bDirItem* parent;
-  };
-
-  QPtrList<PrivateItemToAdd> m_queuedToAddItems;
-  QTimer* m_queuedToAddItemsTimer;
-  int m_numberAddedItems;
 
   QStringList m_notFoundFiles;
   QStringList m_noPermissionFiles;
@@ -239,6 +224,7 @@ class K3bDataDoc : public K3bDoc
   bool m_needToCutFilenames;
 
   friend class K3bMixedDoc;
+  friend class K3bDirItem;
 };
 
 #endif

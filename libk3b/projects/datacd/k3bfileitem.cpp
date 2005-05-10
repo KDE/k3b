@@ -63,7 +63,6 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   else
     m_k3bName = k3bName;
 
-
   // we determine the size here to avoid problems with removed or renamed files
   // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
   // instead the size of the link.
@@ -105,12 +104,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
 K3bFileItem::~K3bFileItem()
 {
   // remove this from parentdir
-  if( parent() )
-    parent()->takeDataItem( this );
-
-  // restore the item imported from an old session
-  if( replaceItemFromOldSession() )
-    parent()->addDataItem( replaceItemFromOldSession() );
+  take();
 }
 
 
@@ -194,9 +188,9 @@ QString K3bFileItem::localPath() const
   return m_localPath;
 }
 
-K3bDirItem* K3bFileItem::getDirItem()
+K3bDirItem* K3bFileItem::getDirItem() const
 {
-  return parent();
+  return getParent();
 }
 
 
@@ -223,7 +217,7 @@ bool K3bFileItem::isValid() const
       return false;  // absolut links can never be part of the compilation!
 
     // parse the link
-    K3bDirItem* dir = parent();
+    K3bDirItem* dir = getParent();
 
     QStringList tokens = QStringList::split( QRegExp("/+"), dest );  // two slashes or more do the same as one does!
 

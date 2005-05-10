@@ -94,6 +94,7 @@ void K3bFileView::setupGUI()
   m_toolBox->addSpacing();
 
   // insert actions into diroperator menu
+  // FIXME: this does not work anymore since KDirOperator always clears the menu
   KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
   dirOpMenu->insert( actionAddFilesToProject, 0 );
   dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 1 );
@@ -102,10 +103,11 @@ void K3bFileView::setupGUI()
   connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
-  m_toolBox->addStretch();
+  m_toolBox->addSpacing();
   m_toolBox->addLabel( i18n("Filter:") );
   m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
   m_toolBox->addWidget( m_filterWidget );
+  m_toolBox->addStretch();
 
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All Files");

@@ -16,7 +16,8 @@
 
 #include "k3bdiritem.h"
 #include "k3bdatadoc.h"
-#include "k3bfilecompilationsizehandler.h"
+#include "k3bsessionimportitem.h"
+#include "k3bfileitem.h"
 
 #include <qstring.h>
 #include <qptrlist.h>
@@ -55,61 +56,77 @@ K3bDirItem::~K3bDirItem()
   // this has to be done after deleting the children
   // because the directory itself has a size of 0 in K3b
   // and all it's files' sizes have already been substracted
-  if( parent() )
-    parent()->takeDataItem(this);
+  take();
 }
 
-K3bDirItem* K3bDirItem::getDirItem()
+K3bDirItem* K3bDirItem::getDirItem() const
 {
-  return this;
+  return const_cast<K3bDirItem*>(this);
 }
 
 K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
   if( m_children.findRef( item ) == -1 ) {
-    m_children.append( item );
+    if( item->isFile() ) {
+      // do we replace an old item?
+      if( K3bDataItem* oldItem = find( item->k3bName() ) ) {
+	if( !oldItem->isDir() && oldItem->isFromOldSession() ) {
+	  // in this case we remove this item from it's parent and save it in the new one
+	  // to be able to recover it
+	  oldItem->take();
+	  static_cast<K3bSessionImportItem*>(oldItem)->setReplaceItem( static_cast<K3bFileItem*>(item) );
+	  static_cast<K3bFileItem*>(item)->setReplacedItemFromOldSession( oldItem );
+	}
+      }
+    }
+
+    m_children.append( item->take() );
     updateSize( item->size() );
     if( item->isDir() )
       updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
-    else {
-      // update the project size
-      if( !item->isFromOldSession() )
-	doc()->sizeHandler()->addFile( item );
+    else
       updateFiles( 1, 0 );
-    }
+
+    item->m_parentDir = this;
+
+    // inform the doc
+    doc()->itemAddedToDir( this, item );
   }
 
   return this;
 }
 
+
 K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 {
   int x = m_children.findRef( item );
   if( x > -1 ) {
-    return takeDataItem(x);
+    K3bDataItem* item = m_children.take();
+    updateSize( -1*item->size() );
+    if( item->isDir() )
+      updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
+    else
+      updateFiles( -1, 0 );
+
+    item->m_parentDir = 0;
+    
+    // inform the doc
+    doc()->itemRemovedFromDir( this, item );
+    
+    if( item->isFile() ) {
+      // restore the item imported from an old session
+      if( static_cast<K3bFileItem*>(item)->replaceItemFromOldSession() )
+	addDataItem( static_cast<K3bFileItem*>(item)->replaceItemFromOldSession() );
+    }
+
+    return item;
   }
   else
     return 0;
 }
 
-K3bDataItem* K3bDirItem::takeDataItem( int index )
-{
-  K3bDataItem* item = m_children.take( index );
-  updateSize( -1*item->size() );
-  if( item->isDir() )
-    updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
-  else {
-    // update the project size
-    if( !item->isFromOldSession() )
-      doc()->sizeHandler()->removeFile( item );
-    updateFiles( -1, 0 );
-  }
 
-  return item;
-}
-
-
-K3bDataItem* K3bDirItem::nextSibling()
+K3bDataItem* K3bDirItem::nextSibling() const
 {
   if( !m_children.isEmpty() )
     return m_children.getFirst();
@@ -118,7 +135,7 @@ K3bDataItem* K3bDirItem::nextSibling()
 }
 
 
-K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev )
+K3bDataItem* K3bDirItem::nextChild( K3bDataItem* prev ) const
 {
   // search for prev in children
   if( m_children.findRef( prev ) < 0 ) {
@@ -241,6 +258,15 @@ void K3bDirItem::updateFiles( long files, long dirs )
 }
 
 
+bool K3bDirItem::isFromOldSession() const
+{
+  QPtrListIterator<K3bDataItem> it( m_children );
+  for( ; it.current(); ++it )
+    if( (*it)->isFromOldSession() )
+      return true;
+  return false;
+}
+
 
 
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )
@@ -264,4 +290,3 @@ void K3bRootItem::setK3bName( const QString& text )
 {
   doc()->isoOptions().setVolumeID( text );
 }
-

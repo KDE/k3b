@@ -71,7 +71,6 @@ void K3bMovixDoc::addUrls( const KURL::List& urls )
   }
 
   emit newMovixFileItems();
-  emit newFileItems();
 }
 
 
@@ -106,7 +105,6 @@ void K3bMovixDoc::addMovixFile( const KURL& url, int pos )
   m_movixFiles.insert( pos, newK3bItem );
 
   emit newMovixFileItems();
-  emit newFileItems();
 
   setModified(true);
 }
@@ -256,7 +254,6 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
 
 
   emit newMovixFileItems();
-  emit newFileItems();
 
   return true;
 }
@@ -425,7 +422,6 @@ void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KURL& url )
   item->setSubTitleItem( subItem );
 
   emit newMovixFileItems();
-  emit newFileItems();
 
   setModified(true);
 }

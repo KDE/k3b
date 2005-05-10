@@ -56,7 +56,9 @@ MusicBrainz support (Query audio file tags over the internet)
 K3b now has a "smart" automatic multisession handling in Data projects.
 Replaced the system tray by an OSD inspired by the one in amaroK
 Better symlink handling with proper size information if "follow symlinks" is activated.
-
+HAL support (turn on your USB writer while K3b is running and see it getting detected automatically)
+eMovix 0.9.0 support
+	
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.
