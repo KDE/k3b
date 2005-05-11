@@ -21,7 +21,8 @@
 #include <qsignalmapper.h>
 #include <qptrlist.h>
 #include <qlabel.h>
-
+#include <qhbox.h>
+#include <qmessagebox.h>
 
 
 class K3bMultiChoiceDialog::Private
@@ -50,16 +51,32 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
   connect( d->mapper, SIGNAL(mapped(int)), this, SLOT(done(int)) );
 
   setCaption( caption );
-  QLabel* label = new QLabel( text, this );
-  label->setAlignment( int( QLabel::AlignCenter ) );
+
   QGridLayout* mainGrid = new QGridLayout( this );
-  d->buttonLayout = new QHBoxLayout;
-  mainGrid->addMultiCellWidget( label, 0, 0, 0, 2 );
-  mainGrid->addLayout( d->buttonLayout, 1, 1 );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
+
+  QHBox* contents = new QHBox( this );
+  contents->setSpacing(KDialog::spacingHint()*2);
+  contents->setMargin(KDialog::marginHint());
+
+  QLabel* pixLabel = new QLabel( contents );
+  pixLabel->setPixmap( QMessageBox::standardIcon( QMessageBox::Question ) );
+  QLabel* label = new QLabel( text, contents );
+  contents->setStretchFactor( label, 1 );
+
+  QFrame* line = new QFrame( this );
+  line->setFrameShape( QFrame::HLine );
+  line->setFrameShadow( QFrame::Sunken );
+
+  d->buttonLayout = new QHBoxLayout;
   d->buttonLayout->setSpacing( spacingHint() );
   d->buttonLayout->setMargin( 0 );
+
+  mainGrid->addMultiCellWidget( contents, 0, 0, 0, 2 );
+  mainGrid->addMultiCellWidget( line, 1, 1, 0, 2 );
+  mainGrid->addLayout( d->buttonLayout, 2, 1 );
+
   mainGrid->setColStretch( 0, 1 );
   mainGrid->setColStretch( 2, 1 );
   mainGrid->setRowStretch( 0, 1 );

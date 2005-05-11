@@ -65,16 +65,7 @@ class K3bDirOperator : public KDirOperator, public KBookmarkOwner
 
   KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 
- signals:
-  void doubleClicked( KFileItem* item );
-
- protected:
-  KFileView* createView( QWidget* parent, KFile::FileView view );
-
  protected slots:
-  void slotIconViewItemDoubleClicked( QIconViewItem* );
-  void slotListViewItemDoubleClicked( QListViewItem* );
-
   /**
    * reimplemented from KDirOperator
    */

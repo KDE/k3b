@@ -15,7 +15,6 @@
 
 
 #include "k3bdiroperator.h"
-#include "kdndfileview.h"
 
 #include <k3bcore.h>
 
@@ -32,11 +31,6 @@
 K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* name )
   : KDirOperator( url, parent, name )
 {
-  setViewConfig( k3bcore->config(), "file view" );
-  readConfig( k3bcore->config(), "file view" );
-  setMode( KFile::Files );
-  setView( KFile::Default );
-
   // disable the del-key since we still have a focus problem and users keep
   // deleting files when they want to remove project entries
   KAction* aDelete = actionCollection()->action("delete");
@@ -80,6 +74,8 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
   setURL( KURL::fromPathOrURL(lastUrl), true );
 
   cfg->setGroup( oldGroup );
+
+  emit urlEntered( url() );
 }
 
 
@@ -92,67 +88,6 @@ void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
   cfg->writePathEntry( "last url", url().path() );
 
   cfg->setGroup( oldGroup );
-}
-
-
-KFileView* K3bDirOperator::createView( QWidget* parent, KFile::FileView view )
-{
-  KFileView* new_view = 0L;
-  bool separateDirs = KFile::isSeparateDirs( view );
-  bool preview=( (view & KFile::PreviewInfo) == KFile::PreviewInfo ||
-		 (view & KFile::PreviewContents) == KFile::PreviewContents );
-  
-  if( separateDirs ) {
-    KCombiView *combi = new KCombiView( parent, "combi view" );
-    combi->setOnlyDoubleClickSelectsFiles( onlyDoubleClickSelectsFiles() );
-    KFileView* v = 0L;
-    if ( (view & KFile::Simple) == KFile::Simple )
-      v = createView( combi, KFile::Simple );
-    else
-      v = createView( combi, KFile::Detail );
-    combi->setRight( v );
-    new_view = combi;
-  }
-  else if( (view & KFile::Detail) == KFile::Detail && !preview ) {
-    new_view = new KDndFileDetailView( parent, "detail view");
-    connect( (KDndFileDetailView*)new_view, SIGNAL(doubleClicked(QListViewItem*)), 
-	     this, SLOT(slotListViewItemDoubleClicked(QListViewItem*)) );
-  }
-  else if ((view & KFile::Simple) == KFile::Simple && !preview ) {
-    new_view = new KDndFileIconView( parent, "simple view");
-    new_view->setViewName( i18n("Short View") );
-    connect( (KDndFileIconView*)new_view, SIGNAL(doubleClicked(QIconViewItem*)), 
-	     this, SLOT(slotIconViewItemDoubleClicked(QIconViewItem*)) );
-  }
-  else { // preview
-    KFileView* v = 0L; // will get reparented by KFilePreview
-    if ( (view & KFile::Simple ) == KFile::Simple )
-      v = createView( 0L, KFile::Simple );
-    else
-      v = createView( 0L, KFile::Detail );
-    
-    KFilePreview* pView = new KFilePreview( v, parent, "preview" );
-    pView->setOnlyDoubleClickSelectsFiles( onlyDoubleClickSelectsFiles() );
-    new_view = pView;
-  }
-
-  return new_view;
-}
-
-
-void K3bDirOperator::slotIconViewItemDoubleClicked( QIconViewItem* item )
-{
-  if( KFileIconViewItem* f = dynamic_cast<KFileIconViewItem*>( item ) )
-    if( f->fileInfo()->isFile() )
-      emit doubleClicked( f->fileInfo() );
-}
-
-
-void K3bDirOperator::slotListViewItemDoubleClicked( QListViewItem* item )
-{
-  if( KFileListViewItem* f = dynamic_cast<KFileListViewItem*>( item ) )
-    if( f->fileInfo()->isFile() )
-      emit doubleClicked( f->fileInfo() );
 }
 
 

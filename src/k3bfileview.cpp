@@ -66,6 +66,8 @@ void K3bFileView::setupGUI()
   //  layout->setAutoAdd( true );
 
   m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );
+  m_dirOp->setViewConfig( k3bcore->config(), "file view" );
+  m_dirOp->setMode( KFile::Files );
 
   m_toolBox = new K3bToolBox( this );
 
@@ -122,7 +124,7 @@ void K3bFileView::setupGUI()
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
   connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
-  connect( m_dirOp, SIGNAL(doubleClicked(KFileItem*)), this, SLOT(slotAddFilesToProject()) );
+  connect( m_dirOp, SIGNAL(fileSelected(const KFileItem*)), this, SLOT(slotAddFilesToProject()) );
 
   slotFileHighlighted(0);
 }
@@ -201,5 +203,10 @@ void K3bFileView::saveConfig( KConfig* c )
   m_dirOp->writeConfig( c, "file view" );
 }
 
+
+void K3bFileView::readConfig( KConfig* c )
+{
+  m_dirOp->readConfig( c, "file view" );
+}
 
 #include "k3bfileview.moc"

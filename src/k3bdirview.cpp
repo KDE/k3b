@@ -561,4 +561,9 @@ void K3bDirView::saveConfig( KConfig* c )
 }
 
 
+void K3bDirView::readConfig( KConfig* c )
+{
+  m_fileView->readConfig(c);
+}
+
 #include "k3bdirview.moc"

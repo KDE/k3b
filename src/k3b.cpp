@@ -595,6 +595,8 @@ void K3bMainWindow::readOptions()
 
   applyMainWindowSettings( m_config, "main_window_settings" );
 
+  m_dirView->readConfig( config() );
+
   slotViewDocumentHeader();
   slotCheckDockWidgetStatus();
 

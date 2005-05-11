@@ -64,6 +64,7 @@ class K3bDirView : public QVBox
 
  public slots:
   void saveConfig( KConfig* c );
+  void readConfig( KConfig* c );
   void showUrl( const KURL& );
   void showDevice( K3bDevice::Device* );
   void showDiskInfo( K3bDevice::Device* dev );

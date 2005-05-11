@@ -33,6 +33,9 @@
 #include <kurl.h>
 #include <kconfig.h>
 #include <kinputdialog.h>
+#include <kmessagebox.h>
+#include <kiconloader.h>
+#include <kglobal.h>
 
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
@@ -49,12 +52,20 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* nam
     m_bExistingItemsIgnoreAll(false)
 {
   QWidget* page = plainPage();
-  QVBoxLayout* lay = new QVBoxLayout( page );
-  lay->setSpacing( spacingHint() );
-  lay->setMargin( marginHint() );
-  lay->setAutoAdd( true );
+  QGridLayout* grid = new QGridLayout( page );
+  grid->setSpacing( spacingHint() );
+  grid->setMargin( marginHint() );
+
+//   QLabel* pixLabel = new QLabel( page );
+//   pixLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "editcopy", KIcon::NoGroup, 32 ) );
+//   pixLabel->setScaledContents( false );
+
   m_infoLabel = new QLabel( page );
   m_busyWidget = new K3bBusyWidget( page );
+
+  //  grid->addMultiCellWidget( pixLabel, 0, 1, 0, 0 );
+  grid->addWidget( m_infoLabel, 0, 0 );
+  grid->addWidget( m_busyWidget, 1, 0 );
 }
 
 
@@ -73,12 +84,30 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     dlg.m_urlQueue.append( qMakePair( *it, dir ) );
 
   dlg.slotAddUrls();
+  int ret = QDialog::Accepted;
   if( !dlg.m_urlQueue.isEmpty() ) {
     dlg.m_busyWidget->showBusy(true);
-    return dlg.exec();
+    ret = dlg.exec();
   }
 
-  return QDialog::Accepted;
+  QString message;
+  if( !dlg.m_unreadableFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("Unsufficient permissions to read the following files") )
+      .arg( dlg.m_unreadableFiles.join( "<br>" ) );
+  if( !dlg.m_notFoundFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("Unable to find the following files") )
+      .arg( dlg.m_notFoundFiles.join( "<br>" ) );
+  if( !dlg.m_nonLocalFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("No non-local files supported") )
+      .arg( dlg.m_unreadableFiles.join( "<br>" ) );
+
+  if( !message.isEmpty() )
+    KMessageBox::detailedSorry( parent, i18n("Could not add all files."), message );
+
+  return ret;
 }
 
 
@@ -89,16 +118,20 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   K3bDirItem* dir = m_urlQueue.first().second;
   m_urlQueue.remove( m_urlQueue.begin() );
 
-  // TODO: add lists of not found stuff and so on
-
   bool valid = true;
   QFileInfo f( url.path() );
-  if( !f.exists() )
+  if( !f.exists() ) {
     valid = false;
-  if( !url.isLocalFile() )
+    m_notFoundFiles.append( url.path() );
+  }
+  if( !url.isLocalFile() ) {
     valid = false;
-  if( !f.isReadable() )
+    m_nonLocalFiles.append( url.path() );
+  }
+  if( !f.isReadable() ) {
     valid = false;
+    m_unreadableFiles.append( url.path() );
+  }
 
   QString newName = url.fileName();
 
@@ -158,7 +191,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   if( valid ) {
     if( f.isDir() && !f.isSymLink() ) {
       if( !newDirItem )
-	newDirItem = new K3bDirItem( url.fileName() , dir->doc(), dir );
+	newDirItem = new K3bDirItem( newName , dir->doc(), dir );
 
       // TODO: ask the user if he wants the hidden files to be added and remove the option from the config dialog
       KConfig* c = k3bcore->config();
@@ -179,7 +212,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       }
     }
     else {
-      (void)new K3bFileItem( url.path(), dir->doc(), dir );
+      (void)new K3bFileItem( url.path(), dir->doc(), dir, newName );
     }
   }
 

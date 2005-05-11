@@ -18,7 +18,7 @@
 
 #include <kdialogbase.h>
 #include <kurl.h>
-#include <qvaluelist.h>
+#include <qstringlist.h>
 #include <qpair.h>
 
 class K3bBusyWidget;
@@ -54,6 +54,10 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;
+
+  QStringList m_unreadableFiles;
+  QStringList m_notFoundFiles;
+  QStringList m_nonLocalFiles;
 };
 
 #endif
