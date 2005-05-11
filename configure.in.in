@@ -430,7 +430,6 @@ AC_DEFUN([AC_HAVE_TAGLIB],
 
 AC_DEFUN([AC_NO_TAGLIB],
 [
-    AC_DEFINE(HAVE_TAGLIB, 0, [don't have TagLib])
     taglib_includes=""
     taglib_libs=""
     have_taglib=false

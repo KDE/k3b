@@ -93,7 +93,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 	  "<MenuBar>"
 	  " <Menu name=\"project\"><text>&amp;Project</text>"
 	  "  <Action name=\"project_audio_convert\"/>"
-#if HAVE_MUSICBRAINZ
+#ifdef HAVE_MUSICBRAINZ
 	  "  <Action name=\"project_audio_musicbrainz\"/>"
 #endif
 	  " </Menu>"

@@ -205,7 +205,7 @@ src_get_description (int converter_type)
 
 const char *
 src_get_version (void)
-{	return PACKAGE "-" VERSION ;
+{	return "libsamplerate-k3b";/*PACKAGE "-" VERSION ;*/
 } /* src_get_version */
 
 int
