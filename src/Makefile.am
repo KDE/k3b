@@ -19,8 +19,8 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3bdebuggingoutputdialog.cpp k3bdebuggingoutputfile.cpp
 
 k3b_LDADD = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la \
-	./cdcopy/libcdcopy.la ./dvdcopy/libdvdcopy.la ./videoEncoding/libvideoEncoding.la \
-	./images/libimagewriting.la ./projects/libprojects.la ../libk3bdevice/libk3bdevice.la \
+	./videoEncoding/libvideoEncoding.la \
+	./projects/libprojects.la ../libk3bdevice/libk3bdevice.la \
 	../libk3b/libk3b.la ./misc/libmisc.la \
 	-lkio -lkparts $(CAM_LIB) $(MUSICBRAINZ_LIBS)
 
