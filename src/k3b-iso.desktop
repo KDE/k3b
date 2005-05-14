@@ -1,4 +1,4 @@
-# KDE Config File  
+# KDE Config File
 [Desktop Entry]
 Type=Application
 Exec=k3b --image %U
