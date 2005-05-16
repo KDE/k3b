@@ -93,15 +93,15 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
   QString message;
   if( !dlg.m_unreadableFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Unsufficient permissions to read the following files") )
+      .arg( i18n("Insufficient permissions to read the following files:") )
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
   if( !dlg.m_notFoundFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Unable to find the following files") )
+      .arg( i18n("Unable to find the following files:") )
       .arg( dlg.m_notFoundFiles.join( "<br>" ) );
   if( !dlg.m_nonLocalFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("No non-local files supported") )
+      .arg( i18n("No non-local files supported:") )
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
