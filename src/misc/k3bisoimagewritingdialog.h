@@ -64,6 +64,8 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void dragEnterEvent( QDragEnterEvent* );
   void dropEvent( QDropEvent* );
 
+  void init();
+
  private:
   void setupGui();
   QString imagePath() const;

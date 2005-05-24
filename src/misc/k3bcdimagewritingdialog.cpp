@@ -146,6 +146,18 @@ K3bCdImageWritingDialog::~K3bCdImageWritingDialog()
 }
 
 
+void K3bCdImageWritingDialog::init()
+{
+  // when opening the dialog first the default settings are loaded and afterwards we set the 
+  // last written image because that's what most users want
+  KConfig* c = k3bcore->config();
+  c->setGroup( configGroup() );
+  QString image = c->readPathEntry( "last written image" );
+  if( QFile::exists( image ) )
+    m_editImagePath->setURL( image );
+}
+
+
 void K3bCdImageWritingDialog::setupGui()
 {
   QWidget* frame = mainWidget();
@@ -301,13 +313,17 @@ void K3bCdImageWritingDialog::setupGui()
 
 void K3bCdImageWritingDialog::slotStartClicked()
 {
+  // FIXME: this results in a call to slotMd5JobFinished
+  //        if this dialog is deleted becasue it is not opened with exec(false)
+  //        this results in a crash.
+  //        For now this is not a problem in K3b since the dialog is not deleted
+  //        when hiding (due to the exec(false) call in k3b.cpp
   d->md5Job->cancel();
 
   // save the path
   KConfig* c = k3bcore->config();
-  c->setGroup( "image writing" );
-  if( c->readPathEntry( "last written image" ).isEmpty() )
-    c->writePathEntry( "last written image", imagePath() );
+  c->setGroup( configGroup() );
+  c->writePathEntry( "last written image", imagePath() );
 
   if( d->imageFile.isEmpty() )
     d->imageFile = imagePath();

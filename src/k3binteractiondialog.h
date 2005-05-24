@@ -104,6 +104,8 @@ class K3bInteractionDialog : public KDialog
 
   QSize sizeHint() const;
 
+  const QString& configGroup() const { return m_configGroup; }
+
  signals:
   void started();
   void canceled();

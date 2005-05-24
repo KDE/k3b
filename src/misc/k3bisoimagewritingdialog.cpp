@@ -119,6 +119,18 @@ K3bIsoImageWritingDialog::~K3bIsoImageWritingDialog()
 }
 
 
+void K3bIsoImageWritingDialog::init()
+{
+  // when opening the dialog first the default settings are loaded and afterwards we set the 
+  // last written image because that's what most users want
+  KConfig* c = k3bcore->config();
+  c->setGroup( configGroup() );
+  QString image = c->readPathEntry( "last written image" );
+  if( QFile::exists( image ) )
+    m_editImagePath->setURL( image );
+}
+
+
 void K3bIsoImageWritingDialog::setupGui()
 {
   QWidget* frame = mainWidget();
@@ -208,11 +220,20 @@ void K3bIsoImageWritingDialog::setupGui()
 
 void K3bIsoImageWritingDialog::slotStartClicked()
 {
+  if( !d->isIsoImage ) {
+    if( KMessageBox::warningYesNo( this,
+				   i18n("The image you selected is not a valid ISO9660 image. "
+					"Are you sure you want to burn it anyway? "
+					"(There are other valid image types that are not detected by K3b but "
+					"will work fine.)") ) == KMessageBox::No )
+      return;
+  }
+
   m_md5Job->cancel();
 
   // save the path
   KConfig* c = k3bcore->config();
-  c->setGroup( "DVD image writing" );
+  c->setGroup( configGroup() );
   if( c->readPathEntry( "last written image" ).isEmpty() )
     c->writePathEntry( "last written image", imagePath() );
 
@@ -340,7 +361,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
   if( m_writerSelectionWidget->writerDevice() ) {
-    m_buttonStart->setEnabled( d->isIsoImage );
+    m_buttonStart->setEnabled( true );
 
     if( m_checkDummy->isChecked() ) {
       m_checkVerify->setEnabled( false );

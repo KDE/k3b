@@ -71,6 +71,8 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   void dragEnterEvent( QDragEnterEvent* );
   void dropEvent( QDropEvent* );
 
+  void init();
+
  private:
   enum {
     IMAGE_UNKNOWN,
