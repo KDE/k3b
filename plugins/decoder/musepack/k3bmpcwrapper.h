@@ -21,6 +21,7 @@
 #include <k3bmsf.h>
 
 #include <musepack/musepack.h>
+#include <musepack/config_types.h>
 
 class QFile;
 
