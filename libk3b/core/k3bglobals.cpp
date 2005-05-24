@@ -214,9 +214,7 @@ K3bVersion K3b::kernelVersion()
 
 K3bVersion K3b::simpleKernelVersion()
 {
-  K3bVersion v = kernelVersion();
-  v.setVersion( v.majorVersion(), v.minorVersion(), v.patchLevel() );
-  return v;
+  return kernelVersion().simplify();
 }
 
 

@@ -141,6 +141,13 @@ K3bVersion& K3bVersion::operator=( const QString& v )
   return *this;
 }
 
+K3bVersion K3bVersion::simplify() const
+{
+  K3bVersion v( *this );
+  v.m_suffix.truncate(0);
+  return v;
+}
+
 QString K3bVersion::createVersionString( int majorVersion, 
 					 int minorVersion, 
 					 int patchlevel, 

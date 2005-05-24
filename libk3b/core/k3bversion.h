@@ -89,6 +89,11 @@ class K3bVersion
   K3bVersion& operator=( const QString& v );
 
   /**
+   * \return A new K3bVersion object which equals this one except that the suffix is empty.
+   */
+  K3bVersion simplify() const;
+
+  /**
    * If minorVersion or pachlevel are -1 they will not be used when generating the version string.
    * If minorVersion is -1 patchlevel will be ignored.
    */
