@@ -106,6 +106,20 @@ bool K3bDataDoc::newDocument()
 }
 
 
+void K3bDataDoc::setIsoOptions( const K3bIsoOptions& o )
+{
+  m_isoOptions = o;
+  emit changed();
+}
+
+
+void K3bDataDoc::setVolumeID( const QString& v )
+{
+  m_isoOptions.setVolumeID( v );
+  emit changed();
+}
+
+
 void K3bDataDoc::addUrls( const KURL::List& urls )
 {
   addUrls( urls, root() );
@@ -297,87 +311,87 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
       return false;
 
     if( e.nodeName() == "rock_ridge")
-      isoOptions().setCreateRockRidge( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setCreateRockRidge( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "joliet")
-      isoOptions().setCreateJoliet( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setCreateJoliet( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "udf")
-      isoOptions().setCreateUdf( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setCreateUdf( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "joliet_allow_103_characters")
-      isoOptions().setJolietLong( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setJolietLong( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_allow_lowercase")
-      isoOptions().setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_allow_period_at_begin")
-      isoOptions().setISOallowPeriodAtBegin( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOallowPeriodAtBegin( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_allow_31_char")
-      isoOptions().setISOallow31charFilenames( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOallow31charFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_omit_version_numbers")
-      isoOptions().setISOomitVersionNumbers( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOomitVersionNumbers( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_omit_trailing_period")
-      isoOptions().setISOomitTrailingPeriod( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOomitTrailingPeriod( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_max_filename_length")
-      isoOptions().setISOmaxFilenameLength( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOmaxFilenameLength( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_relaxed_filenames")
-      isoOptions().setISOrelaxedFilenames( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOrelaxedFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_no_iso_translate")
-      isoOptions().setISOnoIsoTranslate( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOnoIsoTranslate( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_allow_multidot")
-      isoOptions().setISOallowMultiDot( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOallowMultiDot( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_untranslated_filenames")
-      isoOptions().setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "follow_symbolic_links")
-      isoOptions().setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "create_trans_tbl")
-      isoOptions().setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "hide_trans_tbl")
-      isoOptions().setHideTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setHideTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "iso_level")
-      isoOptions().setISOLevel( e.text().toInt() );
+      m_isoOptions.setISOLevel( e.text().toInt() );
 
     else if( e.nodeName() == "discard_symlinks")
-      isoOptions().setDiscardSymlinks( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setDiscardSymlinks( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "discard_broken_symlinks")
-      isoOptions().setDiscardBrokenSymlinks( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setDiscardBrokenSymlinks( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "preserve_file_permissions")
-      isoOptions().setPreserveFilePermissions( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setPreserveFilePermissions( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "force_input_charset")
-      isoOptions().setForceInputCharset( e.attributeNode( "activated" ).value() == "yes" );
+      m_isoOptions.setForceInputCharset( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "input_charset")
-      isoOptions().setInputCharset( e.text() );
+      m_isoOptions.setInputCharset( e.text() );
 
     else if( e.nodeName() == "whitespace_treatment" ) {
       if( e.text() == "strip" )
-	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::strip );
+	m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::strip );
       else if( e.text() == "extended" )
-	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::extended );
+	m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::extended );
       else if( e.text() == "extended" )
-	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::replace );
+	m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::replace );
       else
-	isoOptions().setWhiteSpaceTreatment( K3bIsoOptions::noChange );
+	m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::noChange );
     }
 
     else if( e.nodeName() == "whitespace_replace_string")
-      isoOptions().setWhiteSpaceTreatmentReplaceString( e.text() );
+      m_isoOptions.setWhiteSpaceTreatmentReplaceString( e.text() );
 
     else if( e.nodeName() == "data_track_mode" ) {
       if( e.text() == "mode1" )
@@ -423,28 +437,28 @@ bool K3bDataDoc::loadDocumentDataHeader( QDomElement headerElem )
       return false;
 
     if( e.nodeName() == "volume_id" )
-      isoOptions().setVolumeID( e.text() );
+      m_isoOptions.setVolumeID( e.text() );
 
     else if( e.nodeName() == "application_id" )
-      isoOptions().setApplicationID( e.text() );
+      m_isoOptions.setApplicationID( e.text() );
 
     else if( e.nodeName() == "publisher" )
-      isoOptions().setPublisher( e.text() );
+      m_isoOptions.setPublisher( e.text() );
 
     else if( e.nodeName() == "preparer" )
-      isoOptions().setPreparer( e.text() );
+      m_isoOptions.setPreparer( e.text() );
 
     else if( e.nodeName() == "volume_set_id" )
-      isoOptions().setVolumeSetId( e.text() );
+      m_isoOptions.setVolumeSetId( e.text() );
 
     else if( e.nodeName() == "volume_set_size" )
-      isoOptions().setVolumeSetSize( e.text().toInt() );
+      m_isoOptions.setVolumeSetSize( e.text().toInt() );
 
     else if( e.nodeName() == "volume_set_number" )
-      isoOptions().setVolumeSetNumber( e.text().toInt() );
+      m_isoOptions.setVolumeSetNumber( e.text().toInt() );
 
     else if( e.nodeName() == "system_id" )
-      isoOptions().setSystemId( e.text() );
+      m_isoOptions.setSystemId( e.text() );
 
     else
       kdDebug() << "(K3bDataDoc) unknown header entry: " << e.nodeName() << endl;
@@ -872,14 +886,6 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
     return;
   }
 
-  // check if newParent is subdir of item
-  if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(item) ) {
-    if( dirItem->isSubItem( newParent ) ) {
-      return;
-    }
-  }
-
-
   item->reparent( newParent );
 }
 
@@ -1126,8 +1132,8 @@ void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
       }
 
       // import some former settings
-      isoOptions().setCreateJoliet( iso.firstJolietDirEntry() != 0 );
-      isoOptions().setVolumeID( iso.primaryDescriptor().volumeId );
+      m_isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
+      m_isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
       // TODO: also import some other pd fields
 
       const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();

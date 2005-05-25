@@ -50,6 +50,8 @@ bool K3bVideoDvdDoc::newDocument()
     audioTsDir->setMoveable(false);
     audioTsDir->setHideable(false);
 
+    setModified( false );
+
     return true;
   }
   else

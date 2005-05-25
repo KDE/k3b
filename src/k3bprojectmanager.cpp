@@ -43,6 +43,7 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qapplication.h>
+#include <qcursor.h>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -332,7 +333,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::VIDEODVD: {
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
 
-    dataDoc->isoOptions() = K3bIsoOptions::load( c );
+    dataDoc->setIsoOptions( K3bIsoOptions::load( c ) );
 
     QString datamode = c->readEntry( "data_track_mode" );
     if( datamode == "mode1" )
@@ -369,10 +370,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     else
       mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_AUTO );
 
-    mixedDoc->dataDoc()->isoOptions() = K3bIsoOptions::load( c );
+    mixedDoc->dataDoc()->setIsoOptions( K3bIsoOptions::load( c ) );
 
     if( mixedDoc->dataDoc()->isoOptions().volumeID().isEmpty() )
-      mixedDoc->dataDoc()->isoOptions().setVolumeID( doc->URL().path() );
+      mixedDoc->dataDoc()->setVolumeID( doc->URL().path() );
 
     break;
   }
@@ -400,7 +401,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
       doc->type() == K3bDoc::VIDEODVD ||
       doc->type() == K3bDoc::DVD ) {
     if( static_cast<K3bDataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
-      static_cast<K3bDataDoc*>(doc)->isoOptions().setVolumeID( doc->URL().path() );
+      static_cast<K3bDataDoc*>(doc)->setVolumeID( doc->URL().path() );
   }
 }
 
@@ -428,6 +429,8 @@ K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
 
 K3bDoc* K3bProjectManager::openProject( const KURL& url )
 {
+  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile, 0L );
 
@@ -466,12 +469,14 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
       if( f.readBlock( test, 5 ) ) {
 	if( ::strncmp( test, "<?xml", 5 ) ) {
 	  kdDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file." << endl;
+	  QApplication::restoreOverrideCursor();
 	  return 0;
 	}
 	f.reset();
       }
       else {
 	kdDebug() << "(K3bDoc) could not read from file." << endl;
+	QApplication::restoreOverrideCursor();
 	return 0;
       }
       if( xmlDoc.setContent( &f ) )
@@ -485,6 +490,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
 
   if( !success ) {
     kdDebug() << "(K3bDoc) could not open file " << url.path() << endl;
+    QApplication::restoreOverrideCursor();
     return 0;
   }
 
@@ -508,6 +514,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
     type = K3bDoc::VIDEODVD;
   else {
     kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
+    QApplication::restoreOverrideCursor();
     return 0;
   }
 
@@ -529,14 +536,15 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
     // FIXME: find a better way to tell everyone (especially the projecttabwidget)
     //        that the doc is not changed
     emit projectSaved( newDoc );
-
-    return newDoc;
   }
   else {
     delete newDoc;
+    newDoc = 0;
   }
 
-  return 0;
+  QApplication::restoreOverrideCursor();
+
+  return newDoc;
 }
 
 
@@ -586,8 +594,8 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
 	QTextStream xmlStream( &dev );
 	xmlDoc.save( xmlStream, 0 );
 	
-	doc->setModified( false );
 	doc->setURL( url );
+	doc->setModified( false );
       }
       
       // close the document inside the store

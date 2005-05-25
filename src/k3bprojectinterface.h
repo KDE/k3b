@@ -46,12 +46,14 @@ class K3bProjectInterface : public DCOPObject
   /**
    * \return the length of the project in blocks (frames).
    */
-  virtual int length();
+  virtual int length() const;
 
   /**
    * \return size of the project in bytes.
    */
-  virtual KIO::filesize_t size();
+  virtual KIO::filesize_t size() const;
+
+  virtual const QString& imagePath() const;
 
   /**
    * \return A string representation of the project type. One of:

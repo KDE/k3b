@@ -85,7 +85,9 @@ void K3bVideoDvdBurnDialog::saveSettings()
   K3bProjectBurnDialog::saveSettings();
 
   // save iso image settings
-  m_volumeDescWidget->save( m_doc->isoOptions() );
+  K3bIsoOptions o = m_doc->isoOptions();
+  m_volumeDescWidget->save( o );
+  m_doc->setIsoOptions( o );
 
   // save image file path
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );

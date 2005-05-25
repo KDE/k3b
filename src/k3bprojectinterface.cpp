@@ -61,15 +61,21 @@ void K3bProjectInterface::burn()
 }
 
 
-int K3bProjectInterface::length()
+int K3bProjectInterface::length() const
 {
   return m_doc->length().lba();
 }
 
 
-KIO::filesize_t K3bProjectInterface::size()
+KIO::filesize_t K3bProjectInterface::size() const
 {
   return m_doc->size();
+}
+
+
+const QString& K3bProjectInterface::imagePath() const
+{
+  return m_doc->tempDir();
 }
 
 

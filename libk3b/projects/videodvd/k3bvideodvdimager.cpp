@@ -57,18 +57,12 @@ K3bVideoDvdImager::~K3bVideoDvdImager()
 
 void K3bVideoDvdImager::start()
 {
-  // we need this for the VIDEO_TS HACK
-  d->doc->isoOptions().setFollowSymbolicLinks(true);
-
   K3bIsoImager::start();
 }
 
 
 void K3bVideoDvdImager::calculateSize()
 {
-  // we need this for the VIDEO_TS HACK
-  d->doc->isoOptions().setFollowSymbolicLinks(true);
-
   K3bIsoImager::calculateSize();
 }
 
@@ -135,6 +129,7 @@ bool K3bVideoDvdImager::addMkisofsParameters( bool printSize )
   // parameters to the process. :(
   if( K3bIsoImager::addMkisofsParameters( printSize ) ) {
     *m_process << "-dvd-video";
+    *m_process << "-f"; // follow symlinks
     *m_process << d->tempPath;
     return true;
   }

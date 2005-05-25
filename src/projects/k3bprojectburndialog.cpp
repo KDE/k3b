@@ -76,6 +76,8 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 void K3bProjectBurnDialog::init()
 {
   readSettings();
+  if( !m_writerSelectionWidget->writerDevice() )
+    m_checkOnlyCreateImage->setChecked(true);
 }
 
 
@@ -101,7 +103,7 @@ void K3bProjectBurnDialog::toggleAllOptions()
 	m_checkSimulate->setChecked(false);
 	m_checkSimulate->setEnabled(false);
 
-	// what about the writing mode? Wy just say "overwrite" for DVD+R(W) for now
+	// what about the writing mode? We just say "overwrite" for DVD+R(W) for now
 	m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR );
       }
       else {

@@ -156,9 +156,11 @@ void K3bMovixDvdBurnDialog::saveSettings()
   m_movixOptionsWidget->saveSettings( m_doc );
 
   // save iso image settings
-  m_imageSettingsWidget->save( m_doc->isoOptions() );
-  m_advancedImageSettingsWidget->save( m_doc->isoOptions() );
-  m_volumeDescWidget->save( m_doc->isoOptions() );
+  K3bIsoOptions o = m_doc->isoOptions();
+  m_imageSettingsWidget->save( o );
+  m_advancedImageSettingsWidget->save( o );
+  m_volumeDescWidget->save( o );
+  m_doc->setIsoOptions( o );
 
   m_doc->setVerifyData( m_checkVerify->isChecked() );
 

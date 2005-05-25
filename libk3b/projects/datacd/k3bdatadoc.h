@@ -93,7 +93,16 @@ class K3bDataDoc : public K3bDoc
 
   const QString& name() const { return m_name; }
 
+  /**
+   * Simply deletes the item if it is removable (meaning isRemovable() returns true.
+   * Be aware that you can remove items simply by deleting them even if isRemovable()
+   * returns false.
+   */
   void removeItem( K3bDataItem* item );
+
+  /**
+   * Simply calls reparent.
+   */
   void moveItem( K3bDataItem* item, K3bDirItem* newParent );
   void moveItems( QPtrList<K3bDataItem> itemList, K3bDirItem* newParent );
 
@@ -114,7 +123,13 @@ class K3bDataDoc : public K3bDoc
 
   static bool nameAlreadyInDir( const QString&, K3bDirItem* );
 
-  K3bIsoOptions& isoOptions() { return m_isoOptions; }
+  /**
+   * Most of the options that map to the mkisofs parameters are grouped
+   * together in the K3bIsoOptions class to allow easy saving to and loading
+   * from a KConfig object.
+   */
+  const K3bIsoOptions& isoOptions() const { return m_isoOptions; }
+  void setIsoOptions( const K3bIsoOptions& );
 
   const QPtrList<K3bBootItem>& bootImages() { return m_bootImages; }
   K3bDataItem* bootCataloge() { return m_bootCataloge; }
@@ -149,6 +164,12 @@ class K3bDataDoc : public K3bDoc
 
   void importSession( K3bDevice::Device* );
   void clearImportedSession();
+
+  /**
+   * Just a convience method to prevent using setIsoOptions for this
+   * often used value.
+   */
+  void setVolumeID( const QString& );
 
  signals:
   void itemRemoved( K3bDataItem* );

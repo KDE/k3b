@@ -44,6 +44,7 @@
 #include <qdragobject.h>
 #include <qheader.h>
 #include <qptrlist.h>
+#include <qlineedit.h>
 
 #include <assert.h>
 #include <kdebug.h>
@@ -62,7 +63,9 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   setMainWidget( mainSplitter );
 
 
-  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
+  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), 
+	   m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
+  connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 
   m_dataDirTree->checkForNewItems();
   m_dataFileView->checkForNewItems();
@@ -87,6 +90,16 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   toolBox()->addSeparator();
 
   addPluginButtons( K3bProjectPlugin::DATA_CD );
+
+  toolBox()->addStretch();
+
+  m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
+  toolBox()->addLabel( i18n("Volume Name:") );
+  toolBox()->addSpacing();
+  toolBox()->addWidget( m_volumeIDEdit );
+  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)), 
+	   m_doc,
+	   SLOT(setVolumeID(const QString&)) );
 
   // this is just for testing (or not?)
   // most likely every project type will have it's rc file in the future
@@ -165,6 +178,7 @@ void K3bDataView::slotBurn()
 void K3bDataView::slotDocChanged()
 {
   m_dataDirTree->firstChild()->repaint();
+  m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
 }
 
 

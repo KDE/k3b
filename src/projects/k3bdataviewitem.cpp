@@ -250,7 +250,7 @@ QString K3bDataRootViewItem::text( int index ) const
 void K3bDataRootViewItem::setText( int col, const QString& text )
 {
   if( col == 0 )
-    m_doc->isoOptions().setVolumeID( text );
+    m_doc->setVolumeID( text );
 
   K3bDataViewItem::setText( col, text );
 }

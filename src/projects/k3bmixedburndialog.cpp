@@ -206,9 +206,11 @@ void K3bMixedBurnDialog::saveSettings()
   m_doc->audioDoc()->setNormalize( m_checkNormalize->isChecked() );
 
   // save iso image settings
-  m_imageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
-  m_advancedImageSettingsWidget->save( m_doc->dataDoc()->isoOptions() );
-  m_volumeDescWidget->save( m_doc->dataDoc()->isoOptions() );
+  K3bIsoOptions o = m_doc->dataDoc()->isoOptions();
+  m_imageSettingsWidget->save( o );
+  m_advancedImageSettingsWidget->save( o );
+  m_volumeDescWidget->save( o );
+  m_doc->dataDoc()->setIsoOptions( o );
 
   m_doc->dataDoc()->setDataMode( m_dataModeWidget->dataMode() );
 
@@ -326,7 +328,7 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigBase* c )
 
 void K3bMixedBurnDialog::toggleAllOptions()
 {
-    K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAllOptions();
 
   bool cdrecordOnTheFly = false;
   bool cdrecordCdText = false;
@@ -336,26 +338,30 @@ void K3bMixedBurnDialog::toggleAllOptions()
     cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
   }
 
+  // cdrdao always knows onthefly and cdtext
+  bool onTheFly = true;
+  bool cdText = true;
   if( m_writingModeWidget->writingMode() == K3b::TAO ||
       m_writingModeWidget->writingMode() == K3b::RAW ||
       m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
-    m_checkOnTheFly->setEnabled( cdrecordOnTheFly && !m_checkNormalize->isChecked() );
-    if( !cdrecordOnTheFly || m_checkNormalize->isChecked() )
-      m_checkOnTheFly->setChecked( false );
+    onTheFly = cdrecordOnTheFly;
+    cdText = cdrecordCdText;
+  }
 
-    m_cdtextWidget->setEnabled( cdrecordCdText && m_writingModeWidget->writingMode() != K3b::TAO );
-    if( !cdrecordCdText || m_writingModeWidget->writingMode() == K3b::TAO  )
-      m_cdtextWidget->setChecked( false );
-  }
-  else {
-    m_checkOnTheFly->setEnabled( !m_checkNormalize->isChecked() );
-    if( m_checkNormalize->isChecked() )
-      m_checkOnTheFly->setChecked( false );
-    m_cdtextWidget->setEnabled( true );
-  }
+  m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() && 
+			       onTheFly && 
+			       !m_checkNormalize->isChecked() );
+  if( !onTheFly || m_checkNormalize->isChecked() )
+    m_checkOnTheFly->setChecked( false );
+
+  m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
+			      cdText && 
+			      m_writingModeWidget->writingMode() != K3b::TAO );
+  if( !cdText || m_writingModeWidget->writingMode() == K3b::TAO  )
+    m_cdtextWidget->setChecked( false );
 
   // we are not able to normalize in on-the-fly mode
-  m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() );
+  m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
 }
 
 

@@ -35,6 +35,7 @@
 #include <kurldrag.h>
 #include <kinputdialog.h>
 #include <kiconloader.h>
+#include <kshortcut.h>
 
 #include <kdebug.h>
 
@@ -306,7 +307,9 @@ void K3bDataDirTreeView::setupActions()
 				actionCollection(), "new_dir" );
   m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
-  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()),
+  KShortcut renameShortCut( Key_F2 );
+  renameShortCut.append( KShortcut(CTRL+Key_R) ); // backwards compatibility
+  m_actionRename = new KAction( i18n("Rename"), "edit", renameShortCut, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
 
   m_popupMenu = new KActionMenu( m_actionCollection, "contextMenu" );

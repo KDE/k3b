@@ -160,6 +160,12 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    void prepareGui();
    void addPage( QWidget*, const QString& title );
 
+   /**
+    * Call this if you must reimplement it.
+    * \reimplemented from K3bInteractionDialog
+    */
+   virtual void init();
+
    K3bWriterSelectionWidget* m_writerSelectionWidget;
    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
    K3bWritingModeWidget* m_writingModeWidget;
@@ -172,8 +178,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    QSpinBox* m_spinCopies;
 
  private:
-   void init();
-
    K3bDoc* m_doc;
    K3bBurnJob* m_job;
    QTabWidget* m_tabWidget;

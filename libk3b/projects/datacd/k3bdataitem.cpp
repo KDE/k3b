@@ -118,7 +118,8 @@ K3bDataItem* K3bDataItem::nextSibling() const
 
 void K3bDataItem::reparent( K3bDirItem* newParent )
 {
-  newParent->addDataItem( take() );
+  // addDataItem will do all the stuff including taking this
+  newParent->addDataItem( this );
 }
 
 

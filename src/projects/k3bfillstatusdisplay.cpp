@@ -122,6 +122,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   buffer.fill( colorGroup().base() );
   QPainter p;
   p.begin( &buffer, this );
+  p.setPen( Qt::black ); // we use a fixed bar color (which is not very nice btw, so we also fix the text color)
 
   long long docSize;
   long long cdSize;
@@ -196,7 +197,6 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   QFont fnt(font());
   fnt.setPointSize(8);
   fnt.setBold(false);
-  p.setPen( Qt::gray );
   p.setFont(fnt);
 
   int textLength = QFontMetrics(fnt).width(text);
@@ -610,8 +610,10 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
 void K3bFillStatusDisplay::slotDocChanged()
 {
   // cache updates
-  if( !d->updateTimer.isActive() )
+  if( !d->updateTimer.isActive() ) {
+    d->displayWidget->update();
     d->updateTimer.start( 2000, false );
+  }
 }
 
 #include "k3bfillstatusdisplay.moc"

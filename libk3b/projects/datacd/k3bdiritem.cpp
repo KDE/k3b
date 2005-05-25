@@ -66,6 +66,14 @@ K3bDirItem* K3bDirItem::getDirItem() const
 
 K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
 {
+  // check if we are a subdir of item
+  if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(item) ) {
+    if( dirItem->isSubItem( this ) ) {
+      kdDebug() << "(K3bDirItem) trying to move a dir item down in it's own tree." << endl;
+      return this;
+    }
+  }
+
   if( m_children.findRef( item ) == -1 ) {
     if( item->isFile() ) {
       // do we replace an old item?
@@ -288,5 +296,5 @@ const QString& K3bRootItem:: k3bName()
 
 void K3bRootItem::setK3bName( const QString& text )
 {
-  doc()->isoOptions().setVolumeID( text );
+  doc()->setVolumeID( text );
 }

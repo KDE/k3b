@@ -121,9 +121,11 @@ void K3bDataBurnDialog::saveSettings()
   K3bProjectBurnDialog::saveSettings();
 
   // save iso image settings
-  m_imageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
-  m_advancedImageSettingsWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
-  m_volumeDescWidget->save( ((K3bDataDoc*)doc())->isoOptions() );
+  K3bIsoOptions o = ((K3bDataDoc*)doc())->isoOptions();
+  m_imageSettingsWidget->save( o );
+  m_advancedImageSettingsWidget->save( o );
+  m_volumeDescWidget->save( o );
+  ((K3bDataDoc*)doc())->setIsoOptions( o );
 
   // save image file path
   ((K3bDataDoc*)doc())->setTempDir( m_tempDirSelectionWidget->tempPath() );
@@ -134,10 +136,6 @@ void K3bDataBurnDialog::saveSettings()
   ((K3bDataDoc*)doc())->setDataMode( m_dataModeWidget->dataMode() );
 
   ((K3bDataDoc*)doc())->setVerifyData( m_checkVerify->isChecked() );
-
-  // make sure the volume id in the view is updated
-  // we need to do this since the doc does not properly emit changed signals yet (as the audiodoc does)
-  static_cast<K3bDataView*>( doc()->view() )->slotDocChanged();
 }
 
 

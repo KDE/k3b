@@ -25,6 +25,7 @@ class K3bFileItem;
 class K3bDirItem;
 class K3bDataDirTreeView;
 class K3bDataFileView;
+class QLineEdit;
 
 
 namespace KIO {
@@ -62,6 +63,7 @@ class K3bDataView : public K3bView
  protected:
    K3bDataDirTreeView* m_dataDirTree;
    K3bDataFileView* m_dataFileView;
+   QLineEdit* m_volumeIDEdit;
 
    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
 		

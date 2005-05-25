@@ -93,15 +93,15 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
   QString message;
   if( !dlg.m_unreadableFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Insufficient permissions to read the following files:") )
+      .arg( i18n("Insufficient permissions to read the following files") )
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
   if( !dlg.m_notFoundFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Unable to find the following files:") )
+      .arg( i18n("Unable to find the following files") )
       .arg( dlg.m_notFoundFiles.join( "<br>" ) );
   if( !dlg.m_nonLocalFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("No non-local files supported:") )
+      .arg( i18n("No non-local files supported") )
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
@@ -120,17 +120,22 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
   bool valid = true;
   QFileInfo f( url.path() );
-  if( !f.exists() ) {
-    valid = false;
-    m_notFoundFiles.append( url.path() );
-  }
   if( !url.isLocalFile() ) {
     valid = false;
     m_nonLocalFiles.append( url.path() );
   }
-  if( !f.isReadable() ) {
-    valid = false;
-    m_unreadableFiles.append( url.path() );
+
+  // QFileInfo::exists and QFileInfo::isReadable return false for broken symlinks :(
+  // and symlinks are always readable and can always be added to a project
+  else if( !f.isSymLink() ) {
+    if( !f.isReadable() ) {
+      valid = false;
+      m_unreadableFiles.append( url.path() );
+    }
+    if( !f.exists() ) {
+      valid = false;
+      m_notFoundFiles.append( url.path() );
+    }
   }
 
   QString newName = url.fileName();

@@ -39,6 +39,7 @@
 #include <kurldrag.h>
 #include <kinputdialog.h>
 #include <kdebug.h>
+#include <kshortcut.h>
 
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
@@ -261,7 +262,9 @@ void K3bDataFileView::setupActions()
 				actionCollection(), "new_dir" );
   m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
-  m_actionRename = new KAction( i18n("Rename"), "edit", CTRL+Key_R, this, SLOT(slotRenameItem()),
+  KShortcut renameShortCut( Key_F2 );
+  renameShortCut.append( KShortcut(CTRL+Key_R) ); // backwards compatibility
+  m_actionRename = new KAction( i18n("Rename"), "edit", renameShortCut, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
   m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()),
 				   actionCollection(), "parent_dir" );

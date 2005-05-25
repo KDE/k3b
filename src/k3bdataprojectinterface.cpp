@@ -78,7 +78,7 @@ void K3bDataProjectInterface::renameItem( const QString& path, const QString& ne
 
 void K3bDataProjectInterface::setVolumeID( const QString& id )
 {
-  m_dataDoc->isoOptions().setVolumeID( id );
+  m_dataDoc->setVolumeID( id );
 }
 
 bool K3bDataProjectInterface::isFolder( const QString& path ) const
