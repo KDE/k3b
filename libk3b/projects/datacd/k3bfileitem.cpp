@@ -18,6 +18,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 #include "k3bisooptions.h"
+#include <k3bglobals.h>
 
 #include <qfileinfo.h>
 #include <qstring.h>
@@ -210,7 +211,13 @@ QString K3bFileItem::linkDest() const
 
 bool K3bFileItem::isValid() const
 {
-  if( isSymLink() && !doc()->isoOptions().followSymbolicLinks() && doc()->isoOptions().createRockRidge() ) {
+  if( isSymLink() ) {
+
+    // this link is not valid if we cannot follow it if we want to
+    if( doc()->isoOptions().followSymbolicLinks() ) {
+      return QFile::exists( K3b::resolveLink( localPath() ) );
+    }
+
     QString dest = linkDest();
 
     if( dest[0] == '/' )

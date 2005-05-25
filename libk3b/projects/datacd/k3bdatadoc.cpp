@@ -150,23 +150,22 @@ void K3bDataDoc::addUrls( const KURL::List& urls, K3bDirItem* dir )
     if( cnt > 0 )
       k3bname += QString("_%1").arg(cnt);
 
-    if( f.exists() ) {
-      if( f.isDir() && !f.isSymLink() ) {
-	if( !newDirItem )
-	  newDirItem = new K3bDirItem( k3bname, this, dir );
-
-	// recursively add all the files in the directory
-	QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden|QDir::Readable );
-	dlist.remove(".");
-	dlist.remove("..");
-	KURL::List newUrls;
-	for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it )
-	  newUrls.append( KURL::fromPathOrURL( f.absFilePath() + "/" + *it ) );
-	addUrls( newUrls, newDirItem );
-      }
-      else
-	(void)new K3bFileItem( url.path(), this, dir, k3bname );
+    // QFileInfo::exists and QFileInfo::isReadable return false for broken symlinks :(
+    if( f.isDir() && !f.isSymLink() ) {
+      if( !newDirItem )
+	newDirItem = new K3bDirItem( k3bname, this, dir );
+      
+      // recursively add all the files in the directory
+      QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden|QDir::Readable );
+      dlist.remove(".");
+      dlist.remove("..");
+      KURL::List newUrls;
+      for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it )
+	newUrls.append( KURL::fromPathOrURL( f.absFilePath() + "/" + *it ) );
+      addUrls( newUrls, newDirItem );
     }
+    else if( f.isSymLink() || f.isFile() )
+      (void)new K3bFileItem( url.path(), this, dir, k3bname );
   }
 
   emit changed();
@@ -466,10 +465,14 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       return false;
     }
 
-    if( !QFile::exists( urlElem.text() ) )
+    QFileInfo f( urlElem.text() );
+
+    // We canot use exists() here since this always disqualifies broken symlinks
+    if( !f.isFile() && !f.isSymLink() )
       m_notFoundFiles.append( urlElem.text() );
 
-    else if( !QFileInfo( urlElem.text() ).isReadable() )
+    // broken symlinks are not readable according to QFileInfo which is wrong in our case
+    else if( f.isFile() && !f.isReadable() )
       m_noPermissionFiles.append( urlElem.text() );
 
     else if( !elem.attribute( "bootimage" ).isEmpty() ) {

@@ -129,6 +129,11 @@ namespace K3b
    */
   QString fixupPath( const QString& );
 
+  /**
+   * resolves a symlinks completely. Meaning it also handles links to links to links...
+   */
+  QString resolveLink( const QString& );
+
   K3bVersion kernelVersion();
 
   /**

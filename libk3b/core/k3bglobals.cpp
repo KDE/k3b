@@ -355,3 +355,16 @@ QString K3b::writingModeString( int mode )
   else
     return K3bDevice::writingModeString( mode );
 }
+
+
+QString K3b::resolveLink( const QString& file )
+{
+  QFileInfo f( file );
+  while( f.isSymLink() ) {
+    QString p = f.readLink();
+    if( !p.startsWith( "/" ) )
+      p.prepend( f.dirPath(true) + "/" );
+    f.setFile( p );
+  }
+  return f.absFilePath();
+}

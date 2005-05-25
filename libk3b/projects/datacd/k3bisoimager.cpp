@@ -22,6 +22,7 @@
 #include <k3bprocess.h>
 #include <k3bcore.h>
 #include <k3bversion.h>
+#include <k3bglobals.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -47,6 +48,15 @@ public:
   QString imagePath;
   QFile imageFile;
   const K3bExternalBin* mkisofsBin;
+
+  enum LinkHandling {
+    KEEP_ALL,
+    FOLLOW,
+    DISCARD_ALL,
+    DISCARD_BROKEN
+  };
+
+  int usedLinkHandling;
 };
 
 
@@ -196,6 +206,7 @@ void K3bIsoImager::calculateSize()
 {
   // determine iso-size
   cleanup();
+  init();
 
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
@@ -329,6 +340,23 @@ void K3bIsoImager::init()
   m_containsFilesWithMultibleBackslashes = false;
   m_processExited = false;
   m_canceled = false;
+
+  // determine symlink handling
+  // follow links superseeds discard all links which superseeds discard broken links
+  // without rockridge we follow the links or discard all
+  if( m_doc->isoOptions().followSymbolicLinks() )
+    d->usedLinkHandling = Private::FOLLOW;
+  else if( m_doc->isoOptions().discardSymlinks() )
+    d->usedLinkHandling = Private::DISCARD_ALL;
+  else if( m_doc->isoOptions().createRockRidge() ) {
+    if( m_doc->isoOptions().discardBrokenSymlinks() )
+      d->usedLinkHandling = Private::DISCARD_BROKEN;
+    else
+      d->usedLinkHandling = Private::KEEP_ALL;
+  }
+  else {
+    d->usedLinkHandling = Private::FOLLOW;
+  }
 }
 
 
@@ -574,8 +602,9 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   if( m_noDeepDirectoryRelocation  )
     *m_process << "-disable-deep-relocation";
 
-  if( m_doc->isoOptions().followSymbolicLinks() || !m_doc->isoOptions().createRockRidge() )
-    *m_process << "-follow-links";
+  // We do our own following
+//   if( m_doc->isoOptions().followSymbolicLinks() || !m_doc->isoOptions().createRockRidge() )
+//     *m_process << "-follow-links";
 
   if( m_doc->isoOptions().createTRANS_TBL()  )
     *m_process << "-translation-table";
@@ -665,47 +694,65 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
   int num = 0;
   for( QPtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
-    if(
-       item->writeToCd()
-       &&
-       ( ( m_doc->isoOptions().followSymbolicLinks() || !m_doc->isoOptions().createRockRidge() ) ||
-	 !( item->isSymLink()
-	    &&
-	    ( m_doc->isoOptions().discardSymlinks()
-	      ||
-	      ( m_doc->isoOptions().discardBrokenSymlinks()
-		&& !item->isValid() )
-	      )
-	    )
-	 )
-       ) {
+    bool writeItem = item->writeToCd();
 
-      if( item->isDir() || QFile::exists(item->localPath()) ) {
-	num++;
+    if( item->isSymLink() ) {
+      if( d->usedLinkHandling == Private::DISCARD_ALL ||
+	  ( d->usedLinkHandling == Private::DISCARD_BROKEN &&
+	    !item->isValid() ) )
+	writeItem = false;
 
-	// some versions of mkisofs seem to have a bug that prevents to use filenames
-	// that contain one or more backslashes
-	if( item->writtenPath().contains("\\") )
-	  m_containsFilesWithMultibleBackslashes = true;
-
-
-	if( item->isDir() ) {
-	  stream << escapeGraftPoint( item->writtenPath() )
-		 << "="
-		 << dummyDir( item->sortWeight() ) << endl;
-	  
-	  int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
-	  if( x >= 0 )
-	    num += x;
-	  else
-	    return -1;
+      else if( d->usedLinkHandling == Private::FOLLOW ) {
+	QFileInfo f( K3b::resolveLink( item->localPath() ) );
+	if( !f.exists() ) {
+	  emit infoMessage( i18n("Could not follow link %1 to non-existing file %2. Skipping...")
+			    .arg(item->k3bName())
+			    .arg(f.filePath()), WARNING );
+	  writeItem = false;
 	}
-	else {
-	  writePathSpecForFile( static_cast<K3bFileItem*>(item), stream );
+	else if( f.isDir() ) {
+	  emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is not able to follow links to folders.")
+			    .arg(item->k3bName())
+			    .arg(f.filePath()), WARNING );
+	  writeItem = false;
 	}
       }
-      else
-	emit infoMessage( i18n("Could not find %1. Skipping...").arg(item->localPath()), WARNING );
+    }
+    else if( item->isFile() ) {
+      QFileInfo f( item->localPath() );
+      if( !f.exists() ) {
+	emit infoMessage( i18n("Could not find file %1. Skipping...").arg(item->localPath()), WARNING );
+	writeItem = false;
+      }
+      else if( !f.isReadable() ) {
+	emit infoMessage( i18n("Could not read file %1. Skipping...").arg(item->localPath()), WARNING );
+	writeItem = false;
+      }
+    }
+
+    if( writeItem ) {
+      num++;
+
+      // some versions of mkisofs seem to have a bug that prevents to use filenames
+      // that contain one or more backslashes
+      if( item->writtenPath().contains("\\") )
+	m_containsFilesWithMultibleBackslashes = true;
+      
+      
+      if( item->isDir() ) {
+	stream << escapeGraftPoint( item->writtenPath() )
+	       << "="
+	       << dummyDir( item->sortWeight() ) << endl;
+	
+	int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
+	if( x >= 0 )
+	  num += x;
+	else
+	  return -1;
+      }
+      else {
+	writePathSpecForFile( static_cast<K3bFileItem*>(item), stream );
+      }
     }
   }
 
@@ -726,7 +773,7 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream 
     temp.unlink();
     
     if( !KIO::NetAccess::copy( KURL(item->localPath()), KURL::fromPathOrURL(tempPath) ) ) {
-      emit infoMessage( i18n("Could not write to temporary file %1").arg(tempPath), ERROR );
+      emit infoMessage( i18n("Failed to backup boot image file %1").arg(item->localPath()), ERROR );
       return;
     }
     
@@ -735,6 +782,8 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream 
     m_tempFiles.append(tempPath);
     stream << escapeGraftPoint( tempPath ) << endl;
   }
+  else if( item->isSymLink() && d->usedLinkHandling == Private::FOLLOW )
+    stream << escapeGraftPoint( K3b::resolveLink( item->localPath() ) ) << endl;
   else
     stream << escapeGraftPoint( item->localPath() ) << endl;
 }

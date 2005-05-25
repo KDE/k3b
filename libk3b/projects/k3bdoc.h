@@ -137,6 +137,7 @@ class K3bDoc : public QObject
   virtual KIO::filesize_t size() const = 0;
   virtual K3b::Msf length() const = 0;
 
+  // FIXME: rename this to something like imagePath
   const QString& tempDir() const { return m_tempDir; }
 
   virtual int numOfTracks() const { return 1; }
