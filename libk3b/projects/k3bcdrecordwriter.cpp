@@ -515,6 +515,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr.startsWith( "Can only copy session # 1") ) {
       emit infoMessage( i18n("Only session 1 will be cloned."), WARNING );
     }
+    else if( errStr == "Cannot fixate disk." ) {
+      emit infoMessage( i18n("Unable to fixate the disk."), ERROR );
+      if( m_cdrecordError == UNKNOWN )
+	m_cdrecordError = CANNOT_FIXATE_DISK;
+    }
+    else if( errStr == "A write error occured." ) {
+      m_cdrecordError = WRITE_ERROR;
+    }
   }
 
   //
@@ -686,6 +694,11 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Unable to open new session."), ERROR );
 	emit infoMessage( i18n("Probably a problem with the medium."), ERROR );
 	break;
+      case CANNOT_FIXATE_DISK:
+	emit infoMessage( i18n("The disk might still be readable."), ERROR );
+	if( m_writingMode == K3b::TAO && burnDevice()->dao() )
+	  emit infoMessage( i18n("Try DAO writing mode."), ERROR );
+	break;
       case PERMISSION_DENIED:
 	emit infoMessage( i18n("%1 has no permission to open the device.").arg("Cdrecord"), ERROR );
 	emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), ERROR );
@@ -708,6 +721,11 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case DEVICE_BUSY:
 	emit infoMessage( i18n("Another application is blocking the device (most likely automounting)."), ERROR );
+	break;
+      case WRITE_ERROR:
+	emit infoMessage( i18n("A write error occured."), ERROR );
+	if( m_writingMode == K3b::DAO )
+	  emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
 	break;
       case UNKNOWN:
 	if( p->exitStatus() == 12 && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {

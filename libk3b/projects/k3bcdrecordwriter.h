@@ -90,6 +90,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       CANNOT_SET_SPEED,
 		       CANNOT_SEND_CUE_SHEET,
 		       CANNOT_OPEN_NEW_SESSION,
+		       CANNOT_FIXATE_DISK,
+		       WRITE_ERROR,
 		       PERMISSION_DENIED,
 		       BUFFER_UNDERRUN,
 		       HIGH_SPEED_MEDIUM,
