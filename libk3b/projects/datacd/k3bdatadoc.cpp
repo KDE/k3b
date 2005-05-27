@@ -170,7 +170,7 @@ void K3bDataDoc::addUrls( const KURL::List& urls, K3bDirItem* dir )
 	newDirItem = new K3bDirItem( k3bname, this, dir );
       
       // recursively add all the files in the directory
-      QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden|QDir::Readable );
+      QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden );
       dlist.remove(".");
       dlist.remove("..");
       KURL::List newUrls;
