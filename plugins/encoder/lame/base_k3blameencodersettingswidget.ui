@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bLameEncoderSettingsWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,11 +9,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>375</width>
-            <height>445</height>
+            <width>331</width>
+            <height>454</height>
         </rect>
     </property>
-    <vbox>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -219,28 +222,75 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLayoutWidget">
+                                    <widget class="QRadioButton">
                                         <property name="name">
-                                            <cstring>layout8</cstring>
+                                            <cstring>m_radioQualityLevel</cstring>
                                         </property>
-                                        <hbox>
+                                        <property name="text">
+                                            <string>Quality level:</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QFrame">
+                                        <property name="name">
+                                            <cstring>m_qualityLevelFrame</cstring>
+                                        </property>
+                                        <property name="frameShape">
+                                            <enum>Box</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                            <enum>Plain</enum>
+                                        </property>
+                                        <property name="lineWidth">
+                                            <number>0</number>
+                                        </property>
+                                        <grid>
                                             <property name="name">
                                                 <cstring>unnamed</cstring>
                                             </property>
-                                            <widget class="QRadioButton">
+                                            <property name="margin">
+                                                <number>0</number>
+                                            </property>
+                                            <property name="spacing">
+                                                <number>0</number>
+                                            </property>
+                                            <widget class="QLabel" row="1" column="1">
                                                 <property name="name">
-                                                    <cstring>m_radioQualityLevel</cstring>
+                                                    <cstring>textLabel3</cstring>
+                                                </property>
+                                                <property name="font">
+                                                    <font>
+                                                        <italic>1</italic>
+                                                    </font>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Quality level:</string>
-                                                </property>
-                                                <property name="checked">
-                                                    <bool>true</bool>
+                                                    <string>small file</string>
                                                 </property>
                                             </widget>
-                                            <widget class="KIntNumInput">
+                                            <widget class="QLabel" row="1" column="2">
+                                                <property name="name">
+                                                    <cstring>textLabel4</cstring>
+                                                </property>
+                                                <property name="font">
+                                                    <font>
+                                                        <italic>1</italic>
+                                                    </font>
+                                                </property>
+                                                <property name="text">
+                                                    <string>high quality</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>AlignVCenter|AlignRight</set>
+                                                </property>
+                                            </widget>
+                                            <widget class="KIntNumInput" row="0" column="1" rowspan="1" colspan="2">
                                                 <property name="name">
                                                     <cstring>m_spinQualityLevel</cstring>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>&lt;- smaller file    better quality -&gt;</string>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Let LAME choose the proper settings for variable bitrate based on a quality setting.
@@ -248,8 +298,42 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
 &lt;p&gt;The default setting is 5 which provides a good quality at a moderate filesize.</string>
                                                 </property>
                                             </widget>
-                                        </hbox>
+                                            <spacer row="0" column="0" rowspan="2" colspan="1">
+                                                <property name="name">
+                                                    <cstring>spacer2_2</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Fixed</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>20</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                        </grid>
                                     </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer3</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>21</width>
+                                                <height>10</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
                                     <widget class="QRadioButton">
                                         <property name="name">
                                             <cstring>m_radioManual</cstring>
@@ -299,7 +383,7 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
                                                 <property name="sizeHint">
                                                     <size>
                                                         <width>20</width>
-                                                        <height>70</height>
+                                                        <height>20</height>
                                                     </size>
                                                 </property>
                                             </spacer>
@@ -477,9 +561,12 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
                         <property name="title">
                             <string>Encoder Quality</string>
                         </property>
-                        <hbox>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
                             </property>
                             <widget class="KIntNumInput">
                                 <property name="name">
@@ -497,15 +584,55 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
 &lt;p&gt;&lt;b&gt;This setting has no influence on the size of the resulting file.&lt;/b&gt;</string>
                                 </property>
                             </widget>
-                        </hbox>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout2</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1</cstring>
+                                        </property>
+                                        <property name="font">
+                                            <font>
+                                                <italic>1</italic>
+                                            </font>
+                                        </property>
+                                        <property name="text">
+                                            <string>fast encoding</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel2</cstring>
+                                        </property>
+                                        <property name="font">
+                                            <font>
+                                                <italic>1</italic>
+                                            </font>
+                                        </property>
+                                        <property name="text">
+                                            <string>high quality</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>AlignVCenter|AlignRight</set>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </vbox>
                     </widget>
                 </vbox>
             </widget>
         </widget>
-    </vbox>
+    </hbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>m_radioManual</sender>
@@ -534,12 +661,19 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
     <connection>
         <sender>m_radioQualityLevel</sender>
         <signal>toggled(bool)</signal>
-        <receiver>m_spinQualityLevel</receiver>
+        <receiver>m_qualityLevelFrame</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
