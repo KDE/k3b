@@ -82,26 +82,29 @@ void K3bDvdRippingProcess::checkRippingMode() {
     m_currentRipTitle++;
     m_title = QString::number( (*m_dvd).getTitleNumber() );
     if( (*m_dvd).getMaxAngle() == 1 ) {
-        kdDebug() << "K3bDvdRippingProcess) Rip Title" << endl;
-        K3bVersion tccatVersion = k3bcore->externalBinManager()->binObject("tccat")->version;
-        kdDebug() << "(K3bDvdRippingProcess) Tccat Version: " << tccatVersion.majorVersion() << "." << tccatVersion.minorVersion() << "." << tccatVersion.patchLevel() << endl;
-        if( tccatVersion.majorVersion() == 0 && tccatVersion.minorVersion() == 6 && tccatVersion.patchLevel() < 12){
-            //transcode <= 0.6.11
+      kdDebug() << "K3bDvdRippingProcess) Rip Title" << endl;
+      const K3bVersion& tccatVersion = k3bcore->externalBinManager()->binObject("tccat")->version;
+      K3bVersion simpleVersion = tccatVersion.simplify();
+      kdDebug() << "(K3bDvdRippingProcess) Tccat Version: " << tccatVersion.versionString() << endl;
+      if( simpleVersion <= K3bVersion( 0, 6, 11 ) ) {
+	//transcode <= 0.6.11
         m_ripMode = "-P " + m_title;
-    } else {
-            //transcode >= 0.6.12
-            m_ripMode = "-T " + m_title + ",-1 -L";
-        }
-    } else {
-        kdDebug() << "K3bDvdRippingProcess) Rip Angle" << endl;
-        // workaround due to buggy transcode, angle selection doesn't work with -1 (all chapters)
-        // and it doesn't work with loop alone, chapters must be from - to = 0-4 or so.
-        // combination of loop and chapter range works with transcode 0.6.2-20021107
-        // Is this still working with tccat >=0.6.12 ???
-        m_ripMode = "-T " + m_title + ",0-1," + m_angle + " -L";
-        //QStringList::Iterator titleList = (*m_dvd).getAngles()->at( m_currentRipAngle );
-        //m_currentRipAngle++;
-        //m_angle = *titleList;
+      }
+      else {
+	//transcode >= 0.6.12
+	m_ripMode = "-T " + m_title + ",-1 -L";
+      }
+    } 
+    else {
+      kdDebug() << "K3bDvdRippingProcess) Rip Angle" << endl;
+      // workaround due to buggy transcode, angle selection doesn't work with -1 (all chapters)
+      // and it doesn't work with loop alone, chapters must be from - to = 0-4 or so.
+      // combination of loop and chapter range works with transcode 0.6.2-20021107
+      // Is this still working with tccat >=0.6.12 ???
+      m_ripMode = "-T " + m_title + ",0-1," + m_angle + " -L";
+      //QStringList::Iterator titleList = (*m_dvd).getAngles()->at( m_currentRipAngle );
+      //m_currentRipAngle++;
+      //m_angle = *titleList;
     }
     preProcessingDvd();
 }

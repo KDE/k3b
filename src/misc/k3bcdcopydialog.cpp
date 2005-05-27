@@ -243,6 +243,13 @@ K3bCdCopyDialog::~K3bCdCopyDialog()
 }
 
 
+void K3bCdCopyDialog::init()
+{
+  if( !m_writerSelectionWidget->writerDevice() )
+    m_checkOnlyCreateImage->setChecked( true );
+}
+
+
 K3bDevice::Device* K3bCdCopyDialog::readingDevice() const
 {
   return m_comboSourceDevice->selectedDevice();

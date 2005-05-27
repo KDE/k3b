@@ -70,18 +70,7 @@ void K3bBurningOptionTab::setupGui()
   groupGeneral->setInsideMargin( KDialog::marginHint() );
 
   m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupGeneral );
-  m_checkSaveOnExit = new QCheckBox( i18n("Ask to save projects on exit"), groupGeneral );
   // -----------------------------------------------------------------------
-
-
-  // data settings group
-  // -----------------------------------------------------------------------
-  QGroupBox* m_groupData = new QGroupBox( 2, Qt::Vertical, i18n( "Data Project" ), projectTab, "m_groupData" );
-  m_groupData->layout()->setSpacing( KDialog::spacingHint() );
-  m_groupData->layout()->setMargin( KDialog::marginHint() );
-
-  m_checkListHiddenFiles = new QCheckBox( i18n("Add &hidden files"), m_groupData );
-  m_checkListSystemFiles = new QCheckBox( i18n("Add &system files"), m_groupData );
 
   // -----------------------------------------------------------------------
   // vcd settings group
@@ -140,9 +129,8 @@ void K3bBurningOptionTab::setupGui()
   projectGrid->setMargin( KDialog::marginHint() );
 
   projectGrid->addWidget( groupGeneral, 0, 0 );
-  projectGrid->addWidget( m_groupData, 1, 0 );
-  projectGrid->addWidget( groupVideo, 2, 0 );
-  projectGrid->setRowStretch( 3, 1 );
+  projectGrid->addWidget( groupVideo, 1, 0 );
+  projectGrid->setRowStretch( 2, 1 );
 
   // ///////////////////////////////////////////////////////////////////////
 
@@ -200,9 +188,6 @@ void K3bBurningOptionTab::setupGui()
   mainTabbed->addTab( projectTab, i18n("&Writing") );
   mainTabbed->addTab( advancedTab, i18n("&Advanced") );
 
-  QToolTip::add( m_checkSaveOnExit, i18n("Ask to save modified projects on exit") );
-  QToolTip::add( m_checkListHiddenFiles, i18n("Add hidden files in subdirectories") );
-  QToolTip::add( m_checkListSystemFiles, i18n("Add system files in subdirectories") );
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
 
   QToolTip::add( m_checkAutoErasingRewritable, i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
@@ -212,13 +197,6 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_labelWaitTime, i18n("Time to wait after each sequence/segment by default.") );
   QToolTip::add( m_labelPlayTime, i18n("Play each sequence/segment by default.") );
 
-  QWhatsThis::add( m_checkListHiddenFiles, i18n("<p>If this option is checked, hidden files "
-                                                "in directories added to a data project will "
-                                                "also be added.</p>" ) );
-  QWhatsThis::add( m_checkListSystemFiles, i18n("<p>If this option is checked, system files "
-                                                "(fifos, devices, sockets) "
-                                                "in directories added to a data project will "
-                                                "also be added.</p>" ) );
   QWhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
                                                          "the possibility to choose between cdrecord "
                                                          "and cdrdao when writing a cd."
@@ -240,18 +218,11 @@ void K3bBurningOptionTab::readSettings()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup("General Options");
-  m_checkSaveOnExit->setChecked( c->readBoolEntry( "ask_for_saving_changes_on_exit", true ) );
-
   c->setGroup( "Video project settings" );
   m_checkUsePbc->setChecked( c->readBoolEntry("Use Playback Control", false) );
   m_spinWaitTime->setValue( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
   m_spinPlayTime->setValue( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
   m_checkUseNumKey->setChecked( c->readBoolEntry("Use numeric keys to navigate chapters", false) );
-
-  c->setGroup( "Data project settings" );
-  m_checkListHiddenFiles->setChecked( c->readBoolEntry("Add hidden files", true ) );
-  m_checkListSystemFiles->setChecked( c->readBoolEntry("Add system files", false ) );
 
   c->setGroup( "General Options" );
   m_checkAutoErasingRewritable->setChecked( c->readBoolEntry( "auto rewritable erasing", false ) );
@@ -270,18 +241,11 @@ void K3bBurningOptionTab::saveSettings()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup("General Options");
-  c->writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
-
   c->setGroup( "Video project settings" );
   c->writeEntry( "Use Playback Control", m_checkUsePbc->isChecked() );
   c->writeEntry( "Time to wait after each Sequence/Segment", m_spinWaitTime->value() );
   c->writeEntry( "Play each Sequence/Segment", m_spinPlayTime->value() );
   c->writeEntry( "Use numeric keys to navigate chapters", m_checkUseNumKey->isChecked() );
-
-  c->setGroup( "Data project settings" );
-  c->writeEntry( "Add hidden files", m_checkListHiddenFiles->isChecked() );
-  c->writeEntry( "Add system files", m_checkListSystemFiles->isChecked() );
 
   c->setGroup( "General Options" );
   c->writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );

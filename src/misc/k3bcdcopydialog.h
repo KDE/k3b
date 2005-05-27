@@ -53,6 +53,9 @@ class K3bCdCopyDialog : public K3bInteractionDialog
 
   void slotToggleAll();
 
+ protected:
+  void init();
+
  private:
   void loadUserDefaults( KConfigBase* );
   void saveUserDefaults( KConfigBase* );

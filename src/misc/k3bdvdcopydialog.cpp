@@ -204,6 +204,13 @@ K3bDvdCopyDialog::~K3bDvdCopyDialog()
 }
 
 
+void K3bDvdCopyDialog::init()
+{
+  if( !m_writerSelectionWidget->writerDevice() )
+    m_checkOnlyCreateImage->setChecked( true );
+}
+
+
 void K3bDvdCopyDialog::slotStartClicked()
 {
   //

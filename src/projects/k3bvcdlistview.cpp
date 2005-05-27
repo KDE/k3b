@@ -164,6 +164,9 @@ void K3bVcdListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* afte
 
         m_doc->addTracks( urls, pos );
     }
+
+  // now grab that focus
+  setFocus();
 }
 
 

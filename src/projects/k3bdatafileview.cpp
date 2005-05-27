@@ -94,6 +94,14 @@ K3bDataFileView::~K3bDataFileView()
 }
 
 
+K3bDirItem* K3bDataFileView::currentDir() const
+{ 
+  if( !m_currentDir )
+    m_currentDir = m_doc->root();
+  return m_currentDir;
+}
+
+
 void K3bDataFileView::slotSetCurrentDir( K3bDirItem* dir )
 {
   if( dir ) {
@@ -136,7 +144,7 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
   if( item->isDir() ) {
     if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
-      slotSetCurrentDir( item->parent() );
+      slotSetCurrentDir( m_doc->root() );
     }
   }
   
@@ -239,6 +247,9 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 	K3bDataUrlAddingDialog::addUrls( urls, parent );
     }
   }
+
+  // now grab that focus
+  setFocus();
 }
 
 

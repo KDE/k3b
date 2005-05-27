@@ -292,6 +292,9 @@ void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* af
       m_doc->addMovixFile( *it, pos++ );
     }
   }
+
+  // now grab that focus
+  setFocus();
 }
 
 

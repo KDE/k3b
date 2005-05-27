@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>587</width>
-            <height>313</height>
+            <width>467</width>
+            <height>309</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>base_K3bMiscOptionTab</string>
     </property>
     <vbox>
         <property name="name">
@@ -24,59 +27,54 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Default Temporary Directory</string>
+                <string>Misc</string>
             </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KURLRequester">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>m_editTempDir</cstring>
+                        <cstring>m_checkSaveOnExit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Ask to save projects on exit</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>The directory where K3b stores temporary files</string>
+                        <string>Ask to save modified projects on exit</string>
                     </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;This is the default temporary directory. This is where K3b will store temporary files like iso images or decoded audio files.
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Default Temporary Directory:</string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester">
+                            <property name="name">
+                                <cstring>m_editTempDir</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>The directory where K3b stores temporary files</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;This is the default temporary directory. This is where K3b will store temporary files like iso images or decoded audio files.
 &lt;p&gt;Be aware that the temporary directory may also be changed in every project burn dialog.</string>
-                    </property>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-            </hbox>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox4</cstring>
-            </property>
-            <property name="title">
-                <string>Audio Output</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Used audio output system:</string>
-                    </property>
-                </widget>
-                <widget class="KComboBox">
-                    <property name="name">
-                        <cstring>m_comboAudioOutputSystem</cstring>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>m_buttonConfigureAudioOutput</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Configure...</string>
-                    </property>
-                </widget>
-            </hbox>
+            </vbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
@@ -102,6 +100,37 @@
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked K3b will check the system configuration for any problems on startup and when the the user changes the settings.</string>
                     </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Used audio output system:</string>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox">
+                            <property name="name">
+                                <cstring>m_comboAudioOutputSystem</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>m_buttonConfigureAudioOutput</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Configure...</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
             </vbox>
         </widget>
@@ -173,11 +202,11 @@
         </spacer>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

@@ -40,6 +40,9 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   void slotStartClicked();
   void slotToggleAll();
 
+ protected:
+  void init();
+
  private:
   void loadUserDefaults( KConfigBase* );
   void saveUserDefaults( KConfigBase* );

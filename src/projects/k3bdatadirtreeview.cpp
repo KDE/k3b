@@ -159,6 +159,9 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 	K3bDataUrlAddingDialog::addUrls( urls, parent );
     }
   }
+
+  // now grab that focus
+  setFocus();
 }
 
 

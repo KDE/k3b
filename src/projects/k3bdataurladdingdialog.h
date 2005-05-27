@@ -20,6 +20,7 @@
 #include <kurl.h>
 #include <qstringlist.h>
 #include <qpair.h>
+#include <qdir.h>
 
 class K3bBusyWidget;
 class QLabel;
@@ -47,6 +48,9 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
   bool getNewName( const QString& oldName, K3bDirItem* dir, QString& newName );
 
+  bool checkForHiddenFiles( const QDir& dir );
+  bool checkForSystemFiles( const QDir& dir );
+
   K3bBusyWidget* m_busyWidget;
   QLabel* m_infoLabel;
 
@@ -54,6 +58,8 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;
+  int m_iAddHiddenFiles;
+  int m_iAddSystemFiles;
 
   QStringList m_unreadableFiles;
   QStringList m_notFoundFiles;

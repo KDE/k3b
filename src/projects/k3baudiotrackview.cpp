@@ -391,6 +391,9 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
   }
 
   showAllSources();
+
+  // now grab that focus
+  setFocus();
 }
 
 

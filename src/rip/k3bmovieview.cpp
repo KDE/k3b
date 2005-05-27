@@ -53,6 +53,8 @@
 #include <kstdaction.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
+
 
 K3bMovieView::K3bMovieView(QWidget *parent, const char *name )
   : K3bCdContentsView( true, parent, name ) 
@@ -272,6 +274,17 @@ void K3bMovieView::slotUpdateInfoDialog( int i )
 
 void K3bMovieView::slotRip()
 {
+  KMessageBox::information( this, 
+			    i18n("<p><b>Warning!</b>"
+				 "<p>DVD Ripping in K3b is currently unmaintained. Depending on the "
+				 "version of transcode K3b may freeze and pollute "
+				 "~/.xsession-errors or stdin if you started K3b from a console."
+				 "<p>If you are interested in maintaining the DVD Ripping part "
+				 "of K3b please contact the project's maintainer Sebastian Trueg "
+				 "(trueg@k3b.org)."),
+			    i18n("DVD Ripping currently unstable"),
+			    "dvd_ripping_unmaintained_warning" );
+
   K3bDvdRipperWidget ripWidget( m_device->devicename(), this, "dvdrip");
   DvdTitle::Iterator dvd;
   int title = m_ripTitle->getHiddenTitle( );

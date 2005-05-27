@@ -47,7 +47,7 @@ class K3bDataFileView : public K3bListView
   K3bDataFileView( K3bView*, K3bDataDirTreeView*, K3bDataDoc*, QWidget* parent );
   ~K3bDataFileView();
 	
-  K3bDirItem* currentDir() const { return m_currentDir; }
+  K3bDirItem* currentDir() const;
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
@@ -90,7 +90,7 @@ class K3bDataFileView : public K3bListView
   K3bView* m_view;
 
   K3bDataDoc* m_doc;
-  K3bDirItem* m_currentDir;
+  mutable K3bDirItem* m_currentDir;
   K3bDataDirTreeView* m_treeView;
 
   QMap<K3bDataItem*, K3bDataViewItem*> m_itemMap;

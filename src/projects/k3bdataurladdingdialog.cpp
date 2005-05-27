@@ -31,11 +31,11 @@
 
 #include <klocale.h>
 #include <kurl.h>
-#include <kconfig.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <kglobal.h>
+#include <kstdguiitem.h>
 
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
@@ -49,7 +49,9 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* nam
 		 Cancel,
 		 true ),
     m_bExistingItemsReplaceAll(false),
-    m_bExistingItemsIgnoreAll(false)
+    m_bExistingItemsIgnoreAll(false),
+    m_iAddHiddenFiles(0),
+    m_iAddSystemFiles(0)
 {
   QWidget* page = plainPage();
   QGridLayout* grid = new QGridLayout( page );
@@ -105,7 +107,7 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
-    KMessageBox::detailedSorry( parent, i18n("Could not add all files."), message );
+    KMessageBox::detailedSorry( parent, i18n("Some files could not be added to the project."), message );
 
   return ret;
 }
@@ -159,17 +161,30 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       else if( m_bExistingItemsReplaceAll )
 	delete oldItem;
       else {
-	// TODO: use KGuiItems to add ToolTips
 	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
-					      i18n("%1 already exists.").arg(newName),
+					      i18n("<p>File <em>%1</em> already exists in "
+						   "project folder <em>%2</em>.")
+					      .arg(newName)
+					      .arg("/" + dir->k3bPath()),
 					      this,
 					      0,
-					      5,
-					      i18n("Replace"),
-					      i18n("Replace All"),
-					      i18n("Ignore"),
-					      i18n("Ignore All"),
-					      i18n("Rename") ) ) {
+					      6,
+					      KGuiItem( i18n("Replace"), 
+							QString::null,
+							i18n("Replace the existing file") ),
+					      KGuiItem( i18n("Replace All"),
+							QString::null,
+							i18n("Always replace existing files") ),
+					      KGuiItem( i18n("Ignore"),
+							QString::null,
+							i18n("Keep the existing file") ),
+					      KGuiItem( i18n("Ignore All"),
+							QString::null,
+							i18n("Always keep the existing file") ),
+					      KGuiItem( i18n("Rename"),
+							QString::null,
+							i18n("Rename the new file") ),
+					      KStdGuiItem::cancel() ) ) {
 	case 1: // replace
 	  delete oldItem;
 	  break;
@@ -188,6 +203,9 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	  if( !getNewName( newName, dir, newName ) )
 	    valid = false;
 	  break;
+	case 6: // cancel
+	  slotCancel();
+	  return;
 	}
       }
     }
@@ -198,17 +216,15 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       if( !newDirItem )
 	newDirItem = new K3bDirItem( newName , dir->doc(), dir );
 
-      // TODO: ask the user if he wants the hidden files to be added and remove the option from the config dialog
-      KConfig* c = k3bcore->config();
-      c->setGroup( "Data project settings" );
-      
+      QDir newDir( f.absFilePath() );      
+
       int dirFilter = QDir::All;
-      if( c->readBoolEntry( "Add hidden files", true ) )
+      if( checkForHiddenFiles( newDir ) )
 	dirFilter |= QDir::Hidden;
-      if( c->readBoolEntry( "Add system files", false ) )
+      if( checkForSystemFiles( newDir ) )
 	dirFilter |= QDir::System;
 	
-      QStringList dlist = QDir( f.absFilePath() ).entryList( dirFilter );
+      QStringList dlist = newDir.entryList( dirFilter );
       dlist.remove(".");
       dlist.remove("..");
 
@@ -243,6 +259,49 @@ bool K3bDataUrlAddingDialog::getNewName( const QString& oldName, K3bDirItem* dir
   delete validator;
 
   return ok;
+}
+
+
+bool K3bDataUrlAddingDialog::checkForHiddenFiles( const QDir& dir )
+{
+  if( m_iAddHiddenFiles == 0 ) {
+    // check for hidden files (QDir::Hidden does not include hidden directories :(
+    QStringList hiddenFiles = dir.entryList( ".*", QDir::Hidden|QDir::All );
+    hiddenFiles.remove(".");
+    hiddenFiles.remove("..");
+    if( hiddenFiles.count() > 0 ) {
+      if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
+				      i18n("Do you also want to add hidden files?"),
+				      i18n("Hidden files") ) == KMessageBox::Yes )
+	m_iAddHiddenFiles = 1;
+      else
+	m_iAddHiddenFiles = -1;
+    }
+  }
+  
+  return ( m_iAddHiddenFiles == 1 );
+}
+
+
+bool K3bDataUrlAddingDialog::checkForSystemFiles( const QDir& dir )
+{
+  if( m_iAddSystemFiles == 0 ) {
+    // QDir::System does include broken links
+    QStringList systemFiles = dir.entryList( QDir::System );
+    systemFiles.remove(".");
+    systemFiles.remove("..");
+    if( systemFiles.count() > 0 ) {
+      if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
+				      i18n("Do you also want to add system files "
+					   "(FIFOs, sockets, device files, and broken symlinks)?"),
+				      i18n("System files") ) == KMessageBox::Yes )
+	m_iAddSystemFiles = 1;
+      else
+	m_iAddSystemFiles = -1;
+    }
+  }
+  
+  return ( m_iAddSystemFiles == 1 );
 }
 
 #include "k3bdataurladdingdialog.moc"
