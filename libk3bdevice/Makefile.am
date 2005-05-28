@@ -1,4 +1,4 @@
-AM_CPPFLAGS= -I$(srcdir) $(all_includes) $(HAL_INCS) $(DBUS_INCS) $(DBUSQT_INCS)
+AM_CPPFLAGS= -I../src -I$(srcdir)  $(all_includes) $(HAL_INCS) $(DBUS_INCS) $(DBUSQT_INCS)
 
 KDE_CXXFLAGS = $(ENABLE_PERMISSIVE_FLAG)
 

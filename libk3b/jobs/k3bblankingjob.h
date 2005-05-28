@@ -17,14 +17,14 @@
 #define K3B_BLANKING_JOB_H
 
 #include <k3bjob.h>
-
+#include "k3b_export.h"
 class KProcess;
 class QString;
 class K3bDevice::Device;
 class K3bAbstractWriter;
 
 
-class K3bBlankingJob : public K3bJob
+class LIBK3BJOB_EXPORT K3bBlankingJob : public K3bJob
 {
   Q_OBJECT
 

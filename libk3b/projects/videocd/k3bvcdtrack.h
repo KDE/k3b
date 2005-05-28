@@ -27,8 +27,8 @@
 
 // K3b Includes
 #include "mpeginfo/k3bmpeginfo.h"
-
-class K3bVcdTrack
+#include "k3b_export.h"
+class LIBK3BPROJECT_EXPORT K3bVcdTrack
 {
     public:
         K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename );

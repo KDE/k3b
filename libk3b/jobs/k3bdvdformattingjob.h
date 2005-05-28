@@ -18,7 +18,7 @@
 
 
 #include <k3bjob.h>
-
+#include "k3b_export.h"
 
 class KProcess;
 namespace K3bDevice {
@@ -27,7 +27,7 @@ namespace K3bDevice {
 }
 
 
-class K3bDvdFormattingJob : public K3bJob
+class LIBK3BJOB_EXPORT K3bDvdFormattingJob : public K3bJob
 {
   Q_OBJECT
 

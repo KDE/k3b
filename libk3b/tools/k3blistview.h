@@ -19,7 +19,7 @@
 
 
 #include <klistview.h>
-
+#include "k3b_export.h"
 #include <qptrvector.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
@@ -38,7 +38,7 @@ class K3bMsfEdit;
 class K3bListView;
 
 
-class K3bListViewItem : public KListViewItem
+class LIBK3BTOOLS_EXPORT K3bListViewItem : public KListViewItem
 {
  public:
   K3bListViewItem(QListView *parent);
@@ -123,7 +123,7 @@ class K3bListViewItem : public KListViewItem
 
 
 
-class K3bListView : public KListView
+class LIBK3BTOOLS_EXPORT K3bListView : public KListView
 {
   friend class K3bListViewItem;
 

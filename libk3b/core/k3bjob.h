@@ -20,7 +20,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include "k3bjobhandler.h"
-
+#include "k3b_export.h"
 
 class K3bDoc;
 namespace K3bDevice {
@@ -37,7 +37,7 @@ namespace K3bDevice {
  *
  * @author Sebastian Trueg
  */
-class K3bJob : public QObject, public K3bJobHandler
+class LIBK3BCORE_EXPORT K3bJob : public QObject, public K3bJobHandler
 {
   Q_OBJECT
 
@@ -159,7 +159,7 @@ class K3bJob : public QObject, public K3bJobHandler
 };
 
 
-class K3bBurnJob : public K3bJob
+class LIBK3BCORE_EXPORT K3bBurnJob : public K3bJob
 {
   Q_OBJECT
 	

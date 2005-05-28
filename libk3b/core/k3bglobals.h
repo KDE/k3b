@@ -21,7 +21,7 @@
 #include <kio/global.h>
 #include <kurl.h>
 #include <k3bdevicetypes.h>
-
+#include "k3b_export.h"
 class KConfig;
 class K3bVersion;
 class K3bExternalBin;
@@ -41,7 +41,7 @@ namespace K3b
     DVD_RW_FORMAT = 32
   };
 
-  int writingAppFromString( const QString& );
+  LIBK3BCORE_EXPORT int writingAppFromString( const QString& );
 
   /**
    * DATA_MODE_AUTO - let K3b determine the best mode
@@ -71,7 +71,7 @@ namespace K3b
     WRITING_MODE_RES_OVWR = K3bDevice::WRITINGMODE_RES_OVWR // Restricted Overwrite
   };
 
-  QString writingModeString( int );
+  LIBK3BCORE_EXPORT QString writingModeString( int );
 
   QString framesToString( int h, bool showFrames = true );
   QString sizeToTime( long size );
@@ -86,7 +86,7 @@ namespace K3b
    * We use this since we encountered problems with the KDE version.
    * @returns true on success.
    */
-  bool kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail );
+  LIBK3BCORE_EXPORT bool kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail );
 
   /**
    * Cut a filename preserving the extension
@@ -109,12 +109,12 @@ namespace K3b
   /**
    * get the default K3b temp path to store image files
    */
-  QString defaultTempPath();
+  LIBK3BCORE_EXPORT QString defaultTempPath();
 
   /**
    * makes sure a path ends with a "/"
    */
-  QString prepareDir( const QString& dir );
+  LIBK3BCORE_EXPORT QString prepareDir( const QString& dir );
 
   /**
    * returns the parent dir of a path.
@@ -127,36 +127,36 @@ namespace K3b
   /**
    * For now this just replaces multible occurences of / with a single /
    */
-  QString fixupPath( const QString& );
+  LIBK3BCORE_EXPORT QString fixupPath( const QString& );
 
   /**
    * resolves a symlinks completely. Meaning it also handles links to links to links...
    */
   QString resolveLink( const QString& );
 
-  K3bVersion kernelVersion();
+  LIBK3BCORE_EXPORT K3bVersion kernelVersion();
 
   /**
    * Kernel version stripped of all suffixes
    */
-  K3bVersion simpleKernelVersion();
+  LIBK3BCORE_EXPORT K3bVersion simpleKernelVersion();
 
   QString systemName();
 
-  KIO::filesize_t filesize( const KURL& );
+  LIBK3BCORE_EXPORT KIO::filesize_t filesize( const KURL& );
 
   /**
    * true if the kernel supports ATAPI devices without SCSI emulation.
    * use in combination with the K3bExternalProgram feature "plain-atapi"
    */
-  bool plainAtapiSupport();
+  LIBK3BCORE_EXPORT bool plainAtapiSupport();
   
   /**
    * true if the kernel supports ATAPI devices without SCSI emulation
    * via the ATAPI: pseudo stuff
    * use in combination with the K3bExternalProgram feature "hacked-atapi"
    */
-  bool hackedAtapiSupport();
+  LIBK3BCORE_EXPORT bool hackedAtapiSupport();
 
   /**
    * Used to create a parameter for cdrecord, cdrdao or readcd.

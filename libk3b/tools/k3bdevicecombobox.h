@@ -18,13 +18,14 @@
 #define _K3B_DEVICE_COMBO_BOX_H_
 
 #include <kcombobox.h>
+#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
 }
 
 
-class K3bDeviceComboBox : public KComboBox
+class LIBK3BTOOLS_EXPORT K3bDeviceComboBox : public KComboBox
 {
   Q_OBJECT
 

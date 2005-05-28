@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_SERVER_H_
 
 #include <qobject.h>
-
+#include "k3b_export.h"
 class K3bAudioOutputPlugin;
 class K3bAudioClient;
 
@@ -26,7 +26,7 @@ class K3bAudioClient;
  * The AudioServer manages AudioClients to play audio data through
  * some output plugin.
  */
-class K3bAudioServer : public QObject
+class LIBK3BPLUGIN_EXPORT K3bAudioServer : public QObject
 {
   Q_OBJECT
 

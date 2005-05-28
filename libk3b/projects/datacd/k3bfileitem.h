@@ -24,7 +24,7 @@
 #include <qstring.h>
 
 #include <sys/stat.h>
-
+#include "k3b_export.h"
 
 class K3bDataDoc;
 class K3bDirItem;
@@ -34,7 +34,7 @@ class K3bDirItem;
   */
 
 
-class K3bFileItem : public K3bDataItem
+class LIBK3BPROJECT_EXPORT K3bFileItem : public K3bDataItem
 {
 public:
   /**

@@ -23,9 +23,9 @@
 #include <k3btoc.h>
 #include <k3bcddbresult.h>
 #include <k3bdevice.h>
+#include "k3b_export.h"
 
-
-class K3bAudioCdTrackDrag : public QStoredDrag
+class LIBK3BPROJECT_EXPORT K3bAudioCdTrackDrag : public QStoredDrag
 {
  public:
   K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QValueList<int>& cdTrackNumbers, const K3bCddbResultEntry& cddb,

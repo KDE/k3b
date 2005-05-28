@@ -24,7 +24,7 @@
 #include <qstring.h>
 
 #include <sys/types.h>
-
+#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
@@ -32,7 +32,7 @@ namespace K3bDevice {
 }
 
 
-class K3bCdparanoiaLib
+class LIBK3BTOOLS_EXPORT K3bCdparanoiaLib
 {
  public:
   ~K3bCdparanoiaLib();

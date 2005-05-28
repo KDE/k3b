@@ -19,14 +19,14 @@
 #define _K3B_DEFAULT_EXTERNAL_BIN_PROGRAMS_H_
 
 #include "k3bexternalbinmanager.h"
-
+#include "k3b_export.h"
 class K3bExternalBinManager;
 
 namespace K3b
 {
-  void addDefaultPrograms( K3bExternalBinManager* );
-  void addTranscodePrograms( K3bExternalBinManager* );
-  void addVcdimagerPrograms( K3bExternalBinManager* );
+  LIBK3BCORE_EXPORT void addDefaultPrograms( K3bExternalBinManager* );
+  LIBK3BCORE_EXPORT void addTranscodePrograms( K3bExternalBinManager* );
+  LIBK3BCORE_EXPORT void addVcdimagerPrograms( K3bExternalBinManager* );
 }
 
 
@@ -105,7 +105,7 @@ class K3bVcdbuilderProgram : public K3bExternalProgram
 };
 
 
-class K3bNormalizeProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bNormalizeProgram : public K3bExternalProgram
 {
  public:
   K3bNormalizeProgram();

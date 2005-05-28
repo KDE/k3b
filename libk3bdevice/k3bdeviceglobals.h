@@ -19,21 +19,21 @@
 
 #include <qstring.h>
 #include <k3bmsf.h>
-
+#include "k3b_export.h"
 
 namespace K3bDevice 
 {
   class Device;
 
-  QString deviceTypeString( int );
-  QString writingModeString( int );
+  LIBK3BDEVICE_EXPORT QString deviceTypeString( int );
+  LIBK3BDEVICE_EXPORT QString writingModeString( int );
   /**
    * @param simplyfied if true the formatting state of DVD media is left out.
    */
-  QString mediaTypeString( int, bool simplyfied = false );
+  LIBK3BDEVICE_EXPORT QString mediaTypeString( int, bool simplyfied = false );
   void debugBitfield( unsigned char* data, long len );
 
-  unsigned short from2Byte( unsigned char* );
+  LIBK3BDEVICE_EXPORT unsigned short from2Byte( unsigned char* );
   unsigned long from4Byte( unsigned char* );
   
   char fromBcd( const char& );

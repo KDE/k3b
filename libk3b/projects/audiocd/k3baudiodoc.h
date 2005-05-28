@@ -28,7 +28,7 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qtextstream.h>
-
+#include "k3b_export.h"
 #include <kurl.h>
 
 class K3bApp;
@@ -47,7 +47,7 @@ class K3bAudioFile;
  *@author Sebastian Trueg
  */
 
-class K3bAudioDoc : public K3bDoc  
+class LIBK3BPROJECT_EXPORT K3bAudioDoc : public K3bDoc  
 {
   Q_OBJECT
 

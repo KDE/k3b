@@ -28,7 +28,7 @@
 
 #include <k3bcdtext.h>
 #include <k3btrack.h>
-
+#include "k3b_export.h"
 
 class K3bAudioDecoder;
 class K3bAudioDataSource;
@@ -38,7 +38,7 @@ class K3bAudioDoc;
 /**
  * @author Sebastian Trueg
  */
-class K3bAudioTrack
+class LIBK3BAUDIOCD_EXPORT K3bAudioTrack
 {
   friend class K3bAudioDataSource;
   friend class K3bAudioDoc;

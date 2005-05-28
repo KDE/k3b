@@ -2,6 +2,7 @@ AM_CPPFLAGS= 	-I$(srcdir)/.. \
 		-I$(srcdir)/../../core \
 		-I$(srcdir)/../../plugin \
 		-I$(srcdir)/../../../libk3bdevice \
+		-I$(srcdir)/../../../src \
 		-I$(srcdir)/../../tools \
 		-I$(srcdir)/../.. \
 		$(all_includes)

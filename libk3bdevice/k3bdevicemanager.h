@@ -22,7 +22,7 @@
 #include <qstringlist.h>
 #include <qmemarray.h>
 #include <qptrlist.h>
-
+#include "k3b_export.h"
 #include <kdebug.h>
 
 class KProcess;
@@ -47,7 +47,7 @@ namespace K3bDevice {
    *   K3bDevice::Device* dev = manager->findDevice( "/dev/cdrom" );
    * \endcode
    */
-  class DeviceManager : public QObject
+  class LIBK3BDEVICE_EXPORT DeviceManager : public QObject
     {
       Q_OBJECT
 

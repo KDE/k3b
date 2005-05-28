@@ -6,7 +6,7 @@ USED_LIBSAMPLERATE=$(LIBSAMPLERATE)
 endif
 
 
-AM_CPPFLAGS = -I$(srcdir)/.. -I$(srcdir)/../core/ -I$(srcdir)/../../libk3bdevice $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/.. -I$(srcdir)/../core/ -I$(srcdir)/../../src -I$(srcdir)/../../libk3bdevice $(all_includes)
 
 METASOURCES = AUTO
 

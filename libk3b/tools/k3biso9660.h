@@ -24,7 +24,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdict.h>
-
+#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
@@ -37,7 +37,7 @@ class K3bIso9660;
  * Simplyfied primary descriptor which just contains the fields
  * used by K3b.
  */
-class K3bIso9660SimplePrimaryDescriptor
+class LIBK3BTOOLS_EXPORT K3bIso9660SimplePrimaryDescriptor
 {
  public:
   QString volumeId;
@@ -57,7 +57,7 @@ class K3bIso9660SimplePrimaryDescriptor
  * Base class for all entries in a K3bIso9660 archive. A lot has been copied
  * from KArchive.
  */
-class K3bIso9660Entry
+class LIBK3BTOOLS_EXPORT K3bIso9660Entry
 {
  public:
   K3bIso9660Entry( K3bIso9660* archive,
@@ -144,7 +144,7 @@ class K3bIso9660Entry
 };
 
 
-class K3bIso9660Directory : public K3bIso9660Entry
+class LIBK3BTOOLS_EXPORT K3bIso9660Directory : public K3bIso9660Entry
 {
  public: 
   K3bIso9660Directory( K3bIso9660* archive, const QString& name, int access, int date,
@@ -189,7 +189,7 @@ class K3bIso9660Directory : public K3bIso9660Entry
 };
 
 
-class K3bIso9660File : public K3bIso9660Entry
+class LIBK3BTOOLS_EXPORT K3bIso9660File : public K3bIso9660Entry
 {
  public: 
   /**
@@ -258,7 +258,7 @@ class K3bIso9660File : public K3bIso9660Entry
  * I also removed the KArchive inheritance because of the named reasons.
  * So this stuff contains a lot KArchive code which has been made usable.
  */
-class K3bIso9660
+class LIBK3BTOOLS_EXPORT K3bIso9660
 {
  public:
   /**

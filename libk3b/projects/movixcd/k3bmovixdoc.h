@@ -21,7 +21,7 @@
 #include <k3bdatadoc.h>
 
 #include <qptrlist.h>
-
+#include "k3b_export.h"
 //class K3bView;
 class KURL;
 class QDomElement;
@@ -31,7 +31,7 @@ class K3bDataItem;
 class KConfig;
 
 
-class K3bMovixDoc : public K3bDataDoc
+class LIBK3BPROJECT_EXPORT K3bMovixDoc : public K3bDataDoc
 {
   Q_OBJECT
 

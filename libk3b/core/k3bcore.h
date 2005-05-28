@@ -18,6 +18,7 @@
 #define _K3B_CORE_H_
 
 #include <qobject.h>
+#include "k3b_export.h"
 
 #define LIBK3B_VERSION "0.11.98"
 
@@ -45,7 +46,7 @@ namespace K3bDevice {
  * This is the heart of the K3b system. Every plugin may use this
  * to get the information it needs.
  */
-class K3bCore : public QObject
+class LIBK3BCORE_EXPORT K3bCore : public QObject
 {
   Q_OBJECT
 

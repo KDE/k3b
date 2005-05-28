@@ -1,6 +1,7 @@
 # we need the ../datacd for the uic generated header files
 AM_CPPFLAGS= 	-I$(srcdir)/../../core \
 		-I$(srcdir)/../../../libk3bdevice \
+		-I$(srcdir)/../../../src \
 		-I$(srcdir)/../../tools \
 		-I$(srcdir)/../../jobs \
 		-I$(srcdir)/../datacd \

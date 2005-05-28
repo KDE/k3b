@@ -20,7 +20,7 @@
 
 #include <k3btoc.h>
 #include <k3bcddbresult.h>
-
+#include "k3b_export.h"
 namespace K3bDevice {
   class Device;
 }
@@ -34,7 +34,7 @@ class K3bCdparanoiaLib;
  * the source relies on the audio CD being inserted before any read operations.
  * It will search all available devices for the CD starting with the last used drive.
  */
-class K3bAudioCdTrackSource : public K3bAudioDataSource
+class LIBK3BPROJECT_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
 {
  public:
   K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber, const K3bCddbResultEntry& cddb, 

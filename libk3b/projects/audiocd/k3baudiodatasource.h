@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_DATA_SOURCE_H_
 
 #include <k3bmsf.h>
-
+#include "k3b_export.h"
 class K3bAudioTrack;
 class K3bAudioDoc;
 
@@ -38,7 +38,7 @@ class K3bAudioDoc;
  *
  * When a source is deleted it automatically removes itself from it's list.
  */
-class K3bAudioDataSource 
+class LIBK3BPROJECT_EXPORT K3bAudioDataSource 
 {
   friend class K3bAudioTrack;
 

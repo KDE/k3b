@@ -15,7 +15,7 @@
 
 #ifndef _K3B_AUDIO_DATA_SOURCE_ITERATOR_H_
 #define _K3B_AUDIO_DATA_SOURCE_ITERATOR_H_
-
+#include "k3b_export.h"
 class K3bAudioDataSource;
 class K3bAudioTrack;
 class K3bAudioDoc;
@@ -30,7 +30,7 @@ class K3bAudioDoc;
  * too much overhead or the AudioDoc would need to have knowledge of all
  * the iterators which is also overhead that would be overkill.
  */
-class K3bAudioDataSourceIterator
+class LIBK3BPROJECT_EXPORT K3bAudioDataSourceIterator
 {
  public:
   /**

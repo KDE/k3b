@@ -24,14 +24,14 @@
 #include <kio/global.h>
 
 #include "k3bdataitem.h"
-
+#include "k3b_export.h"
 class K3bDataDoc;
 
 /**
  *@author Sebastian Trueg
  */
 
-class K3bDirItem : public K3bDataItem
+class LIBK3BPROJECT_EXPORT K3bDirItem : public K3bDataItem
 {
  public: 
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );

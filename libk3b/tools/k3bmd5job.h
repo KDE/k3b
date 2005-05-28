@@ -19,6 +19,8 @@
 
 #include <k3bjob.h>
 #include <qcstring.h>
+#include "k3b_export.h"
+
 namespace K3bDevice {
   class Device;
 }
@@ -26,7 +28,7 @@ namespace K3bDevice {
 class K3bIso9660File;
 
 
-class K3bMd5Job : public K3bJob
+class LIBK3BJOB_EXPORT K3bMd5Job : public K3bJob
 {
   Q_OBJECT
 

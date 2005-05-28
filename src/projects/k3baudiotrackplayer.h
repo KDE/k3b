@@ -22,7 +22,6 @@
 
 #include <k3bmsf.h>
 
-
 class K3bAudioDoc;
 class K3bAudioTrack;
 class KAction;

@@ -3,7 +3,8 @@
 dnl ============
 dnl Machine type
 dnl ============
- 
+#KDE_ENABLE_HIDDEN_VISIBILITY
+
 ARCH_CFLAGS="$CFLAGS -O2 -funroll-all-loops -finline-functions -ffast-math"
 
 case "$ARCH_TYPE" in
