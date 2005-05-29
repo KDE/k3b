@@ -18,7 +18,7 @@
 
 
 #include <k3baudiodecoder.h>
-
+#include "k3b_export.h"
 #include <kurl.h>
 #include <qcstring.h>
 
@@ -26,7 +26,7 @@
 class QFile;
 
 
-class K3bWaveDecoderFactory : public K3bAudioDecoderFactory
+class LIBK3BPLUGIN_EXPORT K3bWaveDecoderFactory : public K3bAudioDecoderFactory
 {
   Q_OBJECT
 
@@ -43,7 +43,7 @@ class K3bWaveDecoderFactory : public K3bAudioDecoderFactory
 };
 
 
-class K3bWaveDecoder : public K3bAudioDecoder
+class LIBK3BPLUGIN_EXPORT K3bWaveDecoder : public K3bAudioDecoder
 {
   Q_OBJECT
 
