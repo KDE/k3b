@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../../libk3bdevice $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../core -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../../src $(all_includes)
 
 METASOURCES = AUTO
 

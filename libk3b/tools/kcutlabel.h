@@ -18,13 +18,13 @@
 #define KCUTLABEL_H
 
 #include <qlabel.h>
-
+#include "k3b_export.h"
 
 
 /*
  * @ref QLabel
  */
-class KCutLabel : public QLabel 
+class LIBK3BTOOLS_EXPORT KCutLabel : public QLabel 
 {
   Q_OBJECT
 

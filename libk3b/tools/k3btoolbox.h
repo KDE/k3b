@@ -20,6 +20,7 @@
 #include <qstring.h>
 #include <qtoolbutton.h>
 #include <qptrlist.h>
+#include "k3b_export.h"
 
 class KAction;
 class KToggleAction;
@@ -32,7 +33,7 @@ class QResizeEvent;
 /**
  * internal class. Do not use!
  */
-class K3bToolBoxButton : public QToolButton
+class LIBK3BTOOLS_EXPORT K3bToolBoxButton : public QToolButton
 {
   Q_OBJECT
 
@@ -54,7 +55,7 @@ class K3bToolBoxButton : public QToolButton
 };
 
 
-class K3bToolBox : public QFrame
+class LIBK3BTOOLS_EXPORT K3bToolBox : public QFrame
 {
   Q_OBJECT
 

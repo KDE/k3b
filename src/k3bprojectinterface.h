@@ -20,13 +20,13 @@
 #include <dcopobject.h>
 #include <kurl.h>
 #include <kio/global.h>
-
+#include "k3b_export.h"
 class K3bDoc;
 
 /**
  * Base class for all project interfaces
  */
-class K3bProjectInterface : public DCOPObject
+class K3B_EXPORT K3bProjectInterface : public DCOPObject
 {
   K_DCOP
 

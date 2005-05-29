@@ -20,7 +20,7 @@
 
 #include <kprocess.h>
 #include <qstring.h>
-
+#include "k3b_export.h"
 
 class K3bExternalBin;
 
@@ -35,7 +35,7 @@ class K3bExternalBin;
  * K3bProcesses like used in K3bDataJob to duplicate mkisofs' stdout to the stdin of the writer 
  * (cdrecord or cdrdao)
  */
-class K3bProcess : public KProcess
+class LIBK3BCORE_EXPORT K3bProcess : public KProcess
 {
   Q_OBJECT
 

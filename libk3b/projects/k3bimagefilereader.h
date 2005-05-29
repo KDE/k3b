@@ -17,9 +17,9 @@
 #define _K3B_IMAGE_FILE_READER_H_
 
 #include <qstring.h>
+#include "k3b_export.h"
 
-
-class K3bImageFileReader
+class LIBK3BPROJECT_EXPORT K3bImageFileReader
 {
  public:
   K3bImageFileReader();

@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <kio/global.h>
-
+#include "k3b_export.h"
 
 namespace K3b
 {
@@ -31,7 +31,7 @@ namespace K3b
    * except in the set methods
    * A MSF is never < 0.
    */
-  class Msf
+  class LIBK3BDEVICE_EXPORT Msf
     {
     public:
       Msf();
@@ -99,19 +99,19 @@ namespace K3b
       int m_frames;
     };
 
-  Msf operator+( const Msf&, const Msf& );
-  Msf operator+( const Msf&, int );
-  Msf operator-( const Msf&, const Msf& );
-  Msf operator-( const Msf&, int );
-  bool operator==( const Msf&, const Msf& );
-  bool operator!=( const Msf&, const Msf& );
-  bool operator<( const Msf&, const Msf& );
-  bool operator>( const Msf&, const Msf& );
-  bool operator<=( const Msf&, const Msf& );
-  bool operator>=( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT Msf operator+( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT Msf operator+( const Msf&, int );
+  LIBK3BDEVICE_EXPORT Msf operator-( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT Msf operator-( const Msf&, int );
+  LIBK3BDEVICE_EXPORT bool operator==( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT bool operator!=( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT bool operator<( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT bool operator>( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT bool operator<=( const Msf&, const Msf& );
+  LIBK3BDEVICE_EXPORT bool operator>=( const Msf&, const Msf& );
 
-  kdbgstream& operator<<( kdbgstream&, const Msf& );
-  inline kndbgstream& operator<<( kndbgstream &stream, const Msf& ) { return stream; }
+  LIBK3BDEVICE_EXPORT kdbgstream& operator<<( kdbgstream&, const Msf& );
+  LIBK3BDEVICE_EXPORT inline kndbgstream& operator<<( kndbgstream &stream, const Msf& ) { return stream; }
 }
 
 typedef K3b::Msf K3bMsf;

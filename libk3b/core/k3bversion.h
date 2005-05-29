@@ -18,7 +18,7 @@
 #define _K3B_VERSION_H_
 
 #include <qstring.h>
-
+#include "k3b_export.h"
 /**
  * \brief Representation of a version.
  *
@@ -35,7 +35,7 @@
  * K3bVersion may also be used everywhere a QString is needed as it automatically converts to a
  * string representation using createVersionString().
  */
-class K3bVersion 
+class LIBK3BCORE_EXPORT K3bVersion 
 {
  public:
   /**
@@ -131,11 +131,11 @@ class K3bVersion
 };
 
 
-bool operator<( const K3bVersion& v1, const K3bVersion& v2 );
-bool operator>( const K3bVersion& v1, const K3bVersion& v2 );
-bool operator==( const K3bVersion& v1, const K3bVersion& v2 );
-bool operator<=( const K3bVersion& v1, const K3bVersion& v2 );
-bool operator>=( const K3bVersion& v1, const K3bVersion& v2 );
+LIBK3BCORE_EXPORT bool operator<( const K3bVersion& v1, const K3bVersion& v2 );
+LIBK3BCORE_EXPORT bool operator>( const K3bVersion& v1, const K3bVersion& v2 );
+LIBK3BCORE_EXPORT bool operator==( const K3bVersion& v1, const K3bVersion& v2 );
+LIBK3BCORE_EXPORT bool operator<=( const K3bVersion& v1, const K3bVersion& v2 );
+LIBK3BCORE_EXPORT bool operator>=( const K3bVersion& v1, const K3bVersion& v2 );
 
 
 #endif

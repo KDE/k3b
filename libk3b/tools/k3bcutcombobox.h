@@ -18,7 +18,7 @@
 #define _K3B_CUT_COMBOBOX_H_
 
 #include <kcombobox.h>
-
+#include "k3b_export.h"
 class QResizeEvent;
 
 
@@ -32,7 +32,7 @@ class QResizeEvent;
  * none of the insertStrList or insertStringList methods are implemeted
  * yet and also the removeItem methos does not work.
  */ 
-class K3bCutComboBox : public KComboBox
+class LIBK3BTOOLS_EXPORT K3bCutComboBox : public KComboBox
 {
   Q_OBJECT
 

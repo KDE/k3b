@@ -19,7 +19,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
-
+#include "k3b_export.h"
 
 
 class K3bPlugin;
@@ -32,7 +32,7 @@ class QWidget;
  * Like the K3bCore the single instance (which has to be created manually)
  * can be obtained with the k3bpluginmanager macro.
  */
-class K3bPluginManager : public QObject
+class LIBK3BPLUGIN_EXPORT K3bPluginManager : public QObject
 {
   Q_OBJECT
 

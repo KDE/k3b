@@ -15,7 +15,7 @@
 
 #ifndef K3B_STD_GUIITEMS_H
 #define K3B_STD_GUIITEMS_H
-
+#include "k3b_export.h"
 
 class QWidget;
 class QCheckBox;
@@ -25,26 +25,26 @@ class QFrame;
 
 namespace K3bStdGuiItems
 {
-  QCheckBox* simulateCheckbox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* daoCheckbox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* burnproofCheckbox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* onlyCreateImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* removeImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
-  QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* normalizeCheckBox( QWidget* parent = 0, const char* name = 0 );
-  QCheckBox* verifyCheckBox( QWidget* parent = 0, const char* name = 0 );
-  QFrame* horizontalLine( QWidget* parent = 0, const char* name = 0 );
-  QFrame* verticalLine( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* simulateCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* daoCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* burnproofCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* onlyCreateImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* removeImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
+  LIBK3BTOOLS_EXPORT QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* normalizeCheckBox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QCheckBox* verifyCheckBox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QFrame* horizontalLine( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QFrame* verticalLine( QWidget* parent = 0, const char* name = 0 );
 
   /**
    * Creates a sunken purple frame that can be used to display Ayo's artwork.
    * Mainly used as header in dialogs.
    * Make sure to set a layout margin of at least 2.
    */
-  QFrame* purpleFrame( QWidget* parent = 0, const char* name = 0 );
+  LIBK3BTOOLS_EXPORT QFrame* purpleFrame( QWidget* parent = 0, const char* name = 0 );
 }
 
 #endif

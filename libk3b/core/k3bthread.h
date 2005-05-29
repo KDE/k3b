@@ -18,7 +18,7 @@
 #define _K3B_THREAD_H_
 
 #include <qthread.h>
-
+#include "k3b_export.h"
 
 class QObject;
 
@@ -28,7 +28,7 @@ class QObject;
  * one has to use the emitXXX methods which will post
  * K3bProgressInfoEvents to the eventhandler
  */
-class K3bThread : public QThread
+class LIBK3BCORE_EXPORT K3bThread : public QThread
 {
  public:
   K3bThread( QObject* eventHandler = 0 );
