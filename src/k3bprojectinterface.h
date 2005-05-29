@@ -26,7 +26,7 @@ class K3bDoc;
 /**
  * Base class for all project interfaces
  */
-class K3B_EXPORT K3bProjectInterface : public DCOPObject
+class K3bProjectInterface : public DCOPObject
 {
   K_DCOP
 
