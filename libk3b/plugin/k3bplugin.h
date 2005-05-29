@@ -19,7 +19,7 @@
 
 #include <qobject.h>
 #include <kgenericfactory.h>
-
+#include "k3b_export.h"
 
 #define K3B_PLUGIN_SYSTEM_VERSION 3
 
@@ -77,7 +77,7 @@ class K3bPluginInfo
 /**
  * Base class for all plugins. You may use the K3bPluginFactory to make your plugin available.
  */
-class K3bPlugin : public QObject
+class LIBK3BPLUGIN_EXPORT K3bPlugin : public QObject
 {
   Q_OBJECT
 

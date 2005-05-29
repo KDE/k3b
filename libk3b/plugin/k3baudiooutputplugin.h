@@ -17,12 +17,12 @@
 #define _K3B_AUDIO_OUTPUTPLUGIN_H_
 
 #include <k3bplugin.h>
-
+#include "k3b_export.h"
 
 /**
  *
  */
-class K3bAudioOutputPlugin : public K3bPlugin
+class LIBK3BPLUGIN_EXPORT K3bAudioOutputPlugin : public K3bPlugin
 {
   Q_OBJECT
 

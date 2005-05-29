@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(srcdir)/../../../libk3b/plugin $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../../../src -I$(srcdir)/../../../libk3b/plugin $(all_includes)
 
 kde_module_LTLIBRARIES = libk3bartsoutputplugin.la
 

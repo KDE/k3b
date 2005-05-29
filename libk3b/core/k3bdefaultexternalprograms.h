@@ -30,7 +30,7 @@ namespace K3b
 }
 
 
-class K3bCdrecordProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bCdrecordProgram : public K3bExternalProgram
 {
  public:
   K3bCdrecordProgram( bool dvdPro );
@@ -42,7 +42,7 @@ class K3bCdrecordProgram : public K3bExternalProgram
 };
 
 
-class K3bDvdrecordProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bDvdrecordProgram : public K3bExternalProgram
 {
  public:
   K3bDvdrecordProgram();
@@ -51,7 +51,7 @@ class K3bDvdrecordProgram : public K3bExternalProgram
 };
 
 
-class K3bMkisofsProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bMkisofsProgram : public K3bExternalProgram
 {
  public:
   K3bMkisofsProgram();
@@ -60,7 +60,7 @@ class K3bMkisofsProgram : public K3bExternalProgram
 };
 
 
-class K3bReadcdProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bReadcdProgram : public K3bExternalProgram
 {
  public:
   K3bReadcdProgram();
@@ -69,7 +69,7 @@ class K3bReadcdProgram : public K3bExternalProgram
 };
 
 
-class K3bCdrdaoProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bCdrdaoProgram : public K3bExternalProgram
 {
  public:
   K3bCdrdaoProgram();
@@ -78,7 +78,7 @@ class K3bCdrdaoProgram : public K3bExternalProgram
 };
 
 
-class K3bTranscodeProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bTranscodeProgram : public K3bExternalProgram
 {
  public:
   K3bTranscodeProgram( const QString& transcodeProgram );
@@ -93,7 +93,7 @@ class K3bTranscodeProgram : public K3bExternalProgram
 };
 
 
-class K3bVcdbuilderProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bVcdbuilderProgram : public K3bExternalProgram
 {
  public:
   K3bVcdbuilderProgram( const QString& );
@@ -114,7 +114,7 @@ class LIBK3BCORE_EXPORT K3bNormalizeProgram : public K3bExternalProgram
 };
 
 
-class K3bGrowisofsProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bGrowisofsProgram : public K3bExternalProgram
 {
  public:
   K3bGrowisofsProgram();
@@ -123,7 +123,7 @@ class K3bGrowisofsProgram : public K3bExternalProgram
 };
 
 
-class K3bDvdformatProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bDvdformatProgram : public K3bExternalProgram
 {
  public:
   K3bDvdformatProgram();
@@ -132,7 +132,7 @@ class K3bDvdformatProgram : public K3bExternalProgram
 };
 
 
-class K3bDvdBooktypeProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bDvdBooktypeProgram : public K3bExternalProgram
 {
  public:
   K3bDvdBooktypeProgram();
@@ -141,7 +141,7 @@ class K3bDvdBooktypeProgram : public K3bExternalProgram
 };
 
 
-class K3bCdda2wavProgram : public K3bExternalProgram
+class LIBK3BCORE_EXPORT K3bCdda2wavProgram : public K3bExternalProgram
 {
  public:
   K3bCdda2wavProgram();
