@@ -18,9 +18,12 @@
 #define _K3B_CORE_H_
 
 #include <qobject.h>
+#include <qptrlist.h>
+
 #include "k3b_export.h"
 
-#define LIBK3B_VERSION "0.11.98"
+
+#define LIBK3B_VERSION "0.12"
 
 #define k3bcore K3bCore::k3bCore()
 
@@ -58,6 +61,11 @@ class LIBK3BCORE_EXPORT K3bCore : public QObject
   K3bCore( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCore();
 
+  const QPtrList<K3bJob>& runningJobs() const;
+
+  /**
+   * Equals to !runningJobs().isEmpty()
+   */
   bool jobsRunning() const;
 
   /**

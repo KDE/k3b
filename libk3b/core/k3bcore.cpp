@@ -199,4 +199,10 @@ bool K3bCore::jobsRunning() const
   return !d->runningJobs.isEmpty();
 }
 
+
+const QPtrList<K3bJob>& K3bCore::runningJobs() const
+{
+  return d->runningJobs;
+}
+
 #include "k3bcore.moc"

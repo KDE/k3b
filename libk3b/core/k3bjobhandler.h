@@ -32,6 +32,11 @@ class K3bJobHandler
   virtual ~K3bJobHandler() {}
 
   /**
+   * \return true if the handler itself is also a job
+   */
+  virtual bool isJob() const { return false; }
+
+  /**
    * @return K3bDevice::MediaType on success,
    *         0 if forced (no media info available),
    *         and -1 on error (canceled)

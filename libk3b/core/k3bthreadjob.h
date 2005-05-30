@@ -50,11 +50,12 @@ class LIBK3BJOB_EXPORT K3bThreadJob : public K3bJob
   K3bThread* thread() const { return m_thread; }
 
   /**
-   * This is not the same as QThread::running.
-   * It is true if the job has been started and has not yet
+   * \reimplemented from K3bJob
+   *
+   * \return true if the job has been started and has not yet
    * emitted the finished signal
    */
-  bool running() const { return m_running; }
+  virtual bool active() const { return m_running; }
 
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;

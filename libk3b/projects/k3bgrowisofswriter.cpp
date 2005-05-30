@@ -463,7 +463,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   d->inputFile.close();
 
   if( d->canceled ) {
-    if( !d->usingRingBuffer || !d->ringBuffer->running() ) {
+    if( !d->usingRingBuffer || !d->ringBuffer->active() ) {
       // this will unblock and eject the drive and emit the finished/canceled signals
       K3bAbstractWriter::cancel();
     }

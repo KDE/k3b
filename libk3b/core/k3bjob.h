@@ -44,7 +44,19 @@ class LIBK3BCORE_EXPORT K3bJob : public QObject, public K3bJobHandler
  public:
   virtual ~K3bJob();
 
-  virtual bool active() const { return false; }
+  /**
+   * \reimplemented from K3bJobHandler
+   */
+  bool isJob() const { return true; }
+
+  K3bJobHandler* jobHandler() const { return m_jobHandler; }
+
+  /**
+   * Is the job active?
+   * The default implementation uses the started and finished signals
+   * to set an internal flag.
+   */
+  virtual bool active() const { return m_active; }
 
   /**
    * The default implementation is based on the canceled() signal.
@@ -156,6 +168,7 @@ class LIBK3BCORE_EXPORT K3bJob : public QObject, public K3bJobHandler
   QPtrList<K3bJob> m_runningSubJobs;
 
   bool m_canceled;
+  bool m_active;
 };
 
 
