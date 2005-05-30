@@ -20,7 +20,7 @@
 #include <dcopobject.h>
 #include <kurl.h>
 #include <kio/global.h>
-#include "k3b_export.h"
+
 class K3bDoc;
 
 /**

@@ -114,7 +114,8 @@
 #include <k3biso9660.h>
 #include <k3bcuefileparser.h>
 #include <k3bdeviceselectiondialog.h>
-
+#include <k3bjob.h>
+#include <k3bsignalwaiter.h>
 
 
 class K3bMainWindow::Private
@@ -692,6 +693,74 @@ void K3bMainWindow::readProperties( KConfig* c )
 
 bool K3bMainWindow::queryClose()
 {
+  //
+  // Check if a job is currently running
+  // For now K3b only allows for one major job at a time which means that we only need to cancel
+  // this one job.
+  //
+  if( k3bcore->jobsRunning() ) {
+
+    // pitty, but I see no possibility to make this work. It always crashes because of the event
+    // management thing mentioned below. So until I find a solution K3b simply will refuse to close
+    // while a job i running
+    return false;
+
+//     kdDebug() << "(K3bMainWindow::queryClose) jobs running." << endl;
+//     K3bJob* job = k3bcore->runningJobs().getFirst();
+    
+//     // now search for the major job (to be on the safe side although for now no subjobs register with the k3bcore)
+//     K3bJobHandler* jh = job->jobHandler();
+//     while( jh->isJob() ) {
+//       job = static_cast<K3bJob*>( jh );
+//       jh = job->jobHandler();
+//     }
+
+//     kdDebug() << "(K3bMainWindow::queryClose) main job found: " << job->jobDescription() << endl;
+
+//     // now job is the major job and jh should be a widget
+//     QWidget* progressDialog = dynamic_cast<QWidget*>( jh );
+
+//     kdDebug() << "(K3bMainWindow::queryClose) job active: " << job->active() << endl;
+
+//     // now ask the user if he/she really wants to cancel this job
+//     if( job->active() ) {
+//       if( KMessageBox::questionYesNo( progressDialog ? progressDialog : this,
+// 				      i18n("Do you really want to cancel?"), 
+// 				      i18n("Cancel") ) == KMessageBox::Yes ) {
+// 	// cancel the job
+// 	kdDebug() << "(K3bMainWindow::queryClose) cancelling job." << endl;
+// 	job->cancel();
+
+// 	// wait for the job to finish
+// 	kdDebug() << "(K3bMainWindow::queryClose) waiting for job to finish." << endl;
+// 	K3bSignalWaiter::waitForJob( job );
+
+// 	// close the progress dialog
+// 	if( progressDialog ) {
+// 	  kdDebug() << "(K3bMainWindow::queryClose) closing progress dialog." << endl;
+// 	  progressDialog->close();
+// 	  //
+// 	  // now here we have the problem that due to the whole Qt event thing the exec call (or
+// 	  // in this case most likely the startJob call) does not return until we leave this method.
+// 	  // That means that the progress dialog might be deleted by it's parent below (when we 
+// 	  // close docs) before it is deleted by the creator (most likely a projectburndialog).
+// 	  // That would result in a double deletion and thus a crash.
+// 	  // So we just reparent the dialog to 0 here so it's (former) parent won't delete it.
+// 	  //
+// 	  progressDialog->reparent( 0, QPoint(0,0) );
+// 	}
+
+// 	kdDebug() << "(K3bMainWindow::queryClose) job cleanup done." << endl;
+//       }
+//       else
+// 	return false;
+//     }
+  }
+
+  //
+  // if we are closed by the session manager everything is fine since we store the
+  // current state in saveProperties
+  //
   if( kapp->sessionSaving() ) 
     return true;
 

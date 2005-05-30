@@ -187,23 +187,26 @@ void K3bProjectBurnDialog::slotStartClicked()
 	return;
     }
 
-  K3bJobProgressDialog* d = 0;
+  K3bJobProgressDialog* dlg = 0;
   if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
-    d = new K3bJobProgressDialog( kapp->mainWidget() );
+    dlg = new K3bJobProgressDialog( parentWidget() );
   else
-    d = new K3bBurnProgressDialog( kapp->mainWidget() );
+    dlg = new K3bBurnProgressDialog( parentWidget() );
 
-  m_job = m_doc->newBurnJob( d );
+  m_job = m_doc->newBurnJob( dlg );
 
   if( m_writerSelectionWidget )
     m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
   prepareJob( m_job );
 
   hide();
-  d->startJob(m_job);
+  dlg->startJob(m_job);
+
+  kdDebug() << "(K3bProjectBurnDialog) job done. cleaning up." << endl;
 
   delete m_job;
-  delete d;
+  m_job = 0;
+  delete dlg;
 
   done( Burn );
 }
