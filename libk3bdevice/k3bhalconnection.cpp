@@ -75,11 +75,11 @@ bool K3bDevice::HalConnection::open()
   dbus_error_init( &error );
   DBusConnection* dbus_connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
   if( dbus_error_is_set(&error) ) {
-    kdebug() << "(K3bDevice::HalConnection) unable to connect to DBUS." << endl;
+    kdDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS." << endl;
     return false;
   }
 
-  setupDBusQtConnection( dbusConnection );
+  setupDBusQtConnection( dbus_connection );
 
   libhal_ctx_set_dbus_connection( m_halContext, dbus_connection );
   
