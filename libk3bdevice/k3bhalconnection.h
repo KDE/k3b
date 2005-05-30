@@ -29,9 +29,6 @@
 #include <dbus/connection.h>
 #include <hal/libhal.h>
 
-// testing
-#define HAL_0_4
-
 
 // The HAL API changed between 0.4 and 0.5 series.
 // These defines enable backward compatibility
