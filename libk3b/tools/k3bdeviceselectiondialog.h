@@ -28,7 +28,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3BTOOLS_EXPORT K3bDeviceSelectionDialog : public KDialogBase
+class LIBK3B_EXPORT K3bDeviceSelectionDialog : public KDialogBase
 {
   Q_OBJECT
 

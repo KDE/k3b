@@ -21,7 +21,7 @@ class KConfig;
 /**
  * Some global settings used throughout K3b.
  */
-class LIBK3BCORE_EXPORT K3bGlobalSettings
+class LIBK3B_EXPORT K3bGlobalSettings
 {
  public:
   K3bGlobalSettings();

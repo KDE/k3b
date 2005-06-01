@@ -24,7 +24,7 @@ class QPainter;
 class QTimer;
 
 
-class LIBK3BTOOLS_EXPORT K3bBusyWidget : public QFrame
+class LIBK3B_EXPORT K3bBusyWidget : public QFrame
 {
   Q_OBJECT
 

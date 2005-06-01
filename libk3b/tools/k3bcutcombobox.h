@@ -32,7 +32,7 @@ class QResizeEvent;
  * none of the insertStrList or insertStringList methods are implemeted
  * yet and also the removeItem methos does not work.
  */ 
-class LIBK3BTOOLS_EXPORT K3bCutComboBox : public KComboBox
+class LIBK3B_EXPORT K3bCutComboBox : public KComboBox
 {
   Q_OBJECT
 

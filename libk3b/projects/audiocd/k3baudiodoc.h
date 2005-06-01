@@ -47,7 +47,7 @@ class K3bAudioFile;
  *@author Sebastian Trueg
  */
 
-class LIBK3BPROJECT_EXPORT K3bAudioDoc : public K3bDoc  
+class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc  
 {
   Q_OBJECT
 

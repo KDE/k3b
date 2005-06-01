@@ -27,7 +27,7 @@ class QTimer;
 /**
  * Fades an icon on a listview item in and out.
  */
-class LIBK3BTOOLS_EXPORT K3bListViewItemAnimator : public QObject
+class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
 {
   Q_OBJECT
 

@@ -21,7 +21,7 @@
 class KConfigBase;
 
 
-class LIBK3BPROJECT_EXPORT K3bIsoOptions
+class LIBK3B_EXPORT K3bIsoOptions
 {
  public:
   K3bIsoOptions();

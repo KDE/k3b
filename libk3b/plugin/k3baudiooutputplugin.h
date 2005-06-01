@@ -22,7 +22,7 @@
 /**
  *
  */
-class LIBK3BPLUGIN_EXPORT K3bAudioOutputPlugin : public K3bPlugin
+class LIBK3B_EXPORT K3bAudioOutputPlugin : public K3bPlugin
 {
   Q_OBJECT
 

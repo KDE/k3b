@@ -25,7 +25,7 @@
 #include <k3bdiskinfo.h>
 #include <k3bcdtext.h>
 #include <k3bmsf.h>
-#include "k3b_export.h"
+#include "k3bdevice_export.h"
 #ifdef Q_OS_FREEBSD
 struct cam_device;
 #endif

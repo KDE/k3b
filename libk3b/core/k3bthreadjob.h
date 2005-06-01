@@ -37,7 +37,7 @@ class K3bThread;
  * </pre>
  * Be aware that K3bThreadJob'd destructor does NOT delete the thread.
  */
-class LIBK3BJOB_EXPORT K3bThreadJob : public K3bJob
+class LIBK3B_EXPORT K3bThreadJob : public K3bJob
 {
   Q_OBJECT
 

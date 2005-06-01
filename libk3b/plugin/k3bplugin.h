@@ -77,7 +77,7 @@ class K3bPluginInfo
 /**
  * Base class for all plugins. You may use the K3bPluginFactory to make your plugin available.
  */
-class LIBK3BPLUGIN_EXPORT K3bPlugin : public QObject
+class LIBK3B_EXPORT K3bPlugin : public QObject
 {
   Q_OBJECT
 

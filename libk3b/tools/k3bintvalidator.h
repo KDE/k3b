@@ -28,7 +28,7 @@ class QString;
  * It differs from QIntValidator and KIntValidator in the fact that
  * it also accepts hex numbers prefixed with 0x.
  */
-class LIBK3BTOOLS_EXPORT K3bIntValidator : public QValidator
+class LIBK3B_EXPORT K3bIntValidator : public QValidator
 {
  public:
   /**

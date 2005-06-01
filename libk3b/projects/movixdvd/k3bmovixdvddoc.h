@@ -21,7 +21,7 @@
 class KConfig;
 
 
-class LIBK3BPROJECT_EXPORT K3bMovixDvdDoc : public K3bMovixDoc
+class LIBK3B_EXPORT K3bMovixDvdDoc : public K3bMovixDoc
 {
   Q_OBJECT
 

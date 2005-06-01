@@ -37,7 +37,7 @@ namespace K3bDevice {
  *
  * @author Sebastian Trueg
  */
-class LIBK3BCORE_EXPORT K3bJob : public QObject, public K3bJobHandler
+class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 {
   Q_OBJECT
 
@@ -172,7 +172,7 @@ class LIBK3BCORE_EXPORT K3bJob : public QObject, public K3bJobHandler
 };
 
 
-class LIBK3BCORE_EXPORT K3bBurnJob : public K3bJob
+class LIBK3B_EXPORT K3bBurnJob : public K3bJob
 {
   Q_OBJECT
 	

@@ -29,6 +29,8 @@
 #include <kurl.h>
 #include <kdebug.h>
 
+#include <errno.h>
+#include <string.h>
 
 
 bool operator==( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
@@ -56,11 +58,10 @@ bool operator>( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
 K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
   : K3bDataItem( doc, dir ),
     m_replacedItemFromOldSession(0),
-    m_localPath(filePath),
-    m_bLocalFile( true ) // for now there are only local files
+    m_localPath(filePath)
 {
   if( k3bName.isEmpty() )
-    m_k3bName = QFileInfo(filePath).fileName();
+    m_k3bName = filePath.section( '/', -1 );
   else
     m_k3bName = k3bName;
 
@@ -69,11 +70,13 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   // instead the size of the link.
   struct stat statBuf;
   if( ::lstat( QFile::encodeName(filePath), &statBuf ) ) {
-    m_size = QFileInfo(filePath).size();
-    kdError() << "(KFileItem) lstat failed." << endl;
+    m_size = K3b::filesize( filePath );
+    kdError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
   }
   else {
     m_size = (KIO::filesize_t)statBuf.st_size;
+
+    m_bSymLink = S_ISLNK(statBuf.st_mode);
 
     //
     // integrate the device number into the inode since files on different
@@ -141,7 +144,7 @@ K3bFileItem::Id K3bFileItem::localId( bool followSymlinks ) const
 
 bool K3bFileItem::exists() const
 {
-  return m_bLocalFile;
+  return true;
 }
 
 QString K3bFileItem::absIsoPath()
@@ -149,39 +152,6 @@ QString K3bFileItem::absIsoPath()
   //	return m_dir->absIsoPath() + m_isoName;
   return QString::null;
 }
-
-
-//K3bDataItem* K3bFileItem::nextSibling()
-//{
-//	K3bDataItem* _item = this;
-//	K3bDataItem* _parentItem = parent();
-//
-//	while( _parentItem ) {
-//		if( K3bDataItem* i = _parentItem->nextChild( _item ) )
-//			return i;
-//
-//		_item = _parentItem;
-//		_parentItem = _item->parent();
-//	}
-//
-//	return 0;
-//
-//	if( parent() ) {
-//		if( K3bDataItem* i = parent()->nextChild( this ) )
-//			return i;
-//		else {
-//			// test if parent() has a parent
-//			if( parent()->parent() )
-//				return parent()->parent()->nextChild( parent() );
-//			else
-//				return 0;
-//		}
-//	}
-//	else {
-//		kdDebug() << "(K3bFileItem) ERROR: K3bFileItem without parent dirItem!!" << endl;
-//		return 0;
-//	}
-//}
 
 
 QString K3bFileItem::localPath() const
@@ -197,15 +167,13 @@ K3bDirItem* K3bFileItem::getDirItem() const
 
 bool K3bFileItem::isSymLink() const
 {
-  // KFileItem::isLink seems to be broken
-  return QFileInfo( localPath() ).isSymLink();
-  //  return KFileItem::isLink();
+  return m_bSymLink;
 }
 
 
 QString K3bFileItem::linkDest() const
 {
-  return QFileInfo(localPath()).readLink();
+  return QFileInfo( localPath() ).readLink();
 }
 
 

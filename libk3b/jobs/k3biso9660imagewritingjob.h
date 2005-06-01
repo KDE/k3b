@@ -31,7 +31,7 @@ class K3bIsoImageVerificationJob;
 /**
   *@author Sebastian Trueg
   */
-class LIBK3BJOB_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
+class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
 {
   Q_OBJECT
 	

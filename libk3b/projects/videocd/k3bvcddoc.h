@@ -45,7 +45,7 @@ class KConfig;
 
 
 
-class LIBK3BPROJECT_EXPORT K3bVcdDoc : public K3bDoc
+class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
 {
         Q_OBJECT
 

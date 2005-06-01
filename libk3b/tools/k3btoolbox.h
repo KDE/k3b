@@ -33,7 +33,7 @@ class QResizeEvent;
 /**
  * internal class. Do not use!
  */
-class LIBK3BTOOLS_EXPORT K3bToolBoxButton : public QToolButton
+class LIBK3B_EXPORT K3bToolBoxButton : public QToolButton
 {
   Q_OBJECT
 
@@ -55,7 +55,7 @@ class LIBK3BTOOLS_EXPORT K3bToolBoxButton : public QToolButton
 };
 
 
-class LIBK3BTOOLS_EXPORT K3bToolBox : public QFrame
+class LIBK3B_EXPORT K3bToolBox : public QFrame
 {
   Q_OBJECT
 

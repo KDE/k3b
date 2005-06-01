@@ -21,7 +21,7 @@
 
 class KConfigBase;
 
-class LIBK3BPROJECT_EXPORT K3bVcdOptions
+class LIBK3B_EXPORT K3bVcdOptions
 {
     public:
         K3bVcdOptions();

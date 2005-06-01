@@ -23,7 +23,7 @@
 #include <k3bmsf.h>
 
 #include "k3btrack.h"
-#include "k3b_export.h"
+#include "k3bdevice_export.h"
 class QString;
 
 namespace K3bDevice

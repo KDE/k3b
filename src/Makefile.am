@@ -24,8 +24,6 @@ k3b_LDADD = ./cdinfo/libcdinfo.la ./option/liboption.la ./rip/librip.la \
 	../libk3b/libk3b.la ./misc/libmisc.la \
 	-lkio -lkparts $(CAM_LIB) $(MUSICBRAINZ_LIBS)
 
-include_HEADERS = k3b_export.h
-
 SUBDIRS = cdinfo option misc rip projects videoEncoding pics icons konqi mimetypes sounds
 
 xdg_apps_DATA = k3b.desktop

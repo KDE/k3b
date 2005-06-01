@@ -31,7 +31,7 @@ class K3bDataDoc;
  *@author Sebastian Trueg
  */
 
-class LIBK3BPROJECT_EXPORT K3bDirItem : public K3bDataItem
+class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
 {
  public: 
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );

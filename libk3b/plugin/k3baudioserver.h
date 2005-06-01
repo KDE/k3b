@@ -26,7 +26,7 @@ class K3bAudioClient;
  * The AudioServer manages AudioClients to play audio data through
  * some output plugin.
  */
-class LIBK3BPLUGIN_EXPORT K3bAudioServer : public QObject
+class LIBK3B_EXPORT K3bAudioServer : public QObject
 {
   Q_OBJECT
 

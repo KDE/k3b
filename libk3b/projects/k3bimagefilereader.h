@@ -19,7 +19,7 @@
 #include <qstring.h>
 #include "k3b_export.h"
 
-class LIBK3BPROJECT_EXPORT K3bImageFileReader
+class LIBK3B_EXPORT K3bImageFileReader
 {
  public:
   K3bImageFileReader();

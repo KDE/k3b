@@ -27,7 +27,7 @@ namespace K3bDevice {
 /**
   *@author Klaus-Dieter Krannich
   */
-class LIBK3BJOB_EXPORT K3bBinImageWritingJob : public K3bBurnJob
+class LIBK3B_EXPORT K3bBinImageWritingJob : public K3bBurnJob
 {
   Q_OBJECT
 

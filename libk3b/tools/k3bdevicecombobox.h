@@ -25,7 +25,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3BTOOLS_EXPORT K3bDeviceComboBox : public KComboBox
+class LIBK3B_EXPORT K3bDeviceComboBox : public KComboBox
 {
   Q_OBJECT
 

@@ -38,7 +38,7 @@ class K3bMsfEdit;
 class K3bListView;
 
 
-class LIBK3BTOOLS_EXPORT K3bListViewItem : public KListViewItem
+class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
 {
  public:
   K3bListViewItem(QListView *parent);
@@ -123,7 +123,7 @@ class LIBK3BTOOLS_EXPORT K3bListViewItem : public KListViewItem
 
 
 
-class LIBK3BTOOLS_EXPORT K3bListView : public KListView
+class LIBK3B_EXPORT K3bListView : public KListView
 {
   friend class K3bListViewItem;
 

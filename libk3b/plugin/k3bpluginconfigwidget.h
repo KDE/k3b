@@ -20,7 +20,7 @@
 #include <qwidget.h>
 #include "k3b_export.h"
 
-class LIBK3BPLUGIN_EXPORT K3bPluginConfigWidget : public QWidget
+class LIBK3B_EXPORT K3bPluginConfigWidget : public QWidget
 {
   Q_OBJECT
 

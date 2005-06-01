@@ -22,7 +22,7 @@
 
 class QCloseEvent;
 
-class LIBK3BTOOLS_EXPORT K3bMultiChoiceDialog : public KDialog
+class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
 {
   Q_OBJECT
 

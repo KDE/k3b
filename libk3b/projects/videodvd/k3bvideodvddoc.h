@@ -20,7 +20,7 @@
 #include "k3b_export.h"
 class KConfig;
 
-class LIBK3BPROJECT_EXPORT K3bVideoDvdDoc : public K3bDvdDoc
+class LIBK3B_EXPORT K3bVideoDvdDoc : public K3bDvdDoc
 {
  public:
   K3bVideoDvdDoc( QObject* parent = 0 );

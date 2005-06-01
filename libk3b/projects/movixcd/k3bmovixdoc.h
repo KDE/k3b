@@ -31,7 +31,7 @@ class K3bDataItem;
 class KConfig;
 
 
-class LIBK3BPROJECT_EXPORT K3bMovixDoc : public K3bDataDoc
+class LIBK3B_EXPORT K3bMovixDoc : public K3bDataDoc
 {
   Q_OBJECT
 

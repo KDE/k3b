@@ -27,7 +27,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3BJOB_EXPORT K3bDvdFormattingJob : public K3bJob
+class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bJob
 {
   Q_OBJECT
 

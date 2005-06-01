@@ -22,7 +22,7 @@
 #include <qvaluevector.h>
 
 #include <k3bmsf.h>
-#include "k3b_export.h"
+#include "k3bdevice_export.h"
 
 namespace K3bDevice
 {

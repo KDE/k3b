@@ -34,7 +34,7 @@ class K3bDirItem;
   */
 
 
-class LIBK3BPROJECT_EXPORT K3bFileItem : public K3bDataItem
+class LIBK3B_EXPORT K3bFileItem : public K3bDataItem
 {
 public:
   /**
@@ -94,7 +94,7 @@ public:
   Id m_idFollowed;
 
   QString m_localPath;
-  bool m_bLocalFile;
+  bool m_bSymLink;
 };
 
 bool operator==( const K3bFileItem::Id&, const K3bFileItem::Id& );

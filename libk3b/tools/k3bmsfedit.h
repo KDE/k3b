@@ -32,7 +32,7 @@ class K3bMsfValidator : public QRegExpValidator
 };
 
 
-class LIBK3BTOOLS_EXPORT K3bMsfEdit : public QSpinBox
+class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
 {
   Q_OBJECT
 

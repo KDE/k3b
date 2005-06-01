@@ -38,7 +38,7 @@ class K3bAudioDoc;
 /**
  * @author Sebastian Trueg
  */
-class LIBK3BAUDIOCD_EXPORT K3bAudioTrack
+class LIBK3B_EXPORT K3bAudioTrack
 {
   friend class K3bAudioDataSource;
   friend class K3bAudioDoc;

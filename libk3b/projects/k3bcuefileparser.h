@@ -26,7 +26,7 @@
  * Datatracks have either mode1 or mode2 where the latter contains xa form1/2.
  * The last track may not have a proper length!
  */
-class LIBK3BPROJECT_EXPORT K3bCueFileParser : public K3bImageFileReader
+class LIBK3B_EXPORT K3bCueFileParser : public K3bImageFileReader
 {
  public:
   K3bCueFileParser( const QString& filename = QString::null );

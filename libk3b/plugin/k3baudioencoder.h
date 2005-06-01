@@ -30,7 +30,7 @@
  *
  * see the skeleton files for further help.
  */
-class LIBK3BPLUGIN_EXPORT K3bAudioEncoder : public K3bPlugin
+class LIBK3B_EXPORT K3bAudioEncoder : public K3bPlugin
 {
   Q_OBJECT
 

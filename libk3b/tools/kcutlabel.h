@@ -24,7 +24,7 @@
 /*
  * @ref QLabel
  */
-class LIBK3BTOOLS_EXPORT KCutLabel : public QLabel 
+class LIBK3B_EXPORT KCutLabel : public QLabel 
 {
   Q_OBJECT
 

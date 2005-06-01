@@ -26,7 +26,7 @@
  *
  * Docu copied from kdelibs
  */
-class LIBK3BTOOLS_EXPORT K3bRadioAction : public KToggleAction
+class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
 {
   Q_OBJECT
 

@@ -54,7 +54,7 @@ namespace K3b {
  * K3bDoc is the base document class.
  * It takes care of writing to a KoStore and handles some general settings.
  */
-class LIBK3BPROJECT_EXPORT K3bDoc : public QObject
+class LIBK3B_EXPORT K3bDoc : public QObject
 {
   Q_OBJECT
 

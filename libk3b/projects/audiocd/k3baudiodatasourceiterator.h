@@ -30,7 +30,7 @@ class K3bAudioDoc;
  * too much overhead or the AudioDoc would need to have knowledge of all
  * the iterators which is also overhead that would be overkill.
  */
-class LIBK3BPROJECT_EXPORT K3bAudioDataSourceIterator
+class LIBK3B_EXPORT K3bAudioDataSourceIterator
 {
  public:
   /**

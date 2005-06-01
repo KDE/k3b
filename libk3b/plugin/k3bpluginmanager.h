@@ -32,7 +32,7 @@ class QWidget;
  * Like the K3bCore the single instance (which has to be created manually)
  * can be obtained with the k3bpluginmanager macro.
  */
-class LIBK3BPLUGIN_EXPORT K3bPluginManager : public QObject
+class LIBK3B_EXPORT K3bPluginManager : public QObject
 {
   Q_OBJECT
 

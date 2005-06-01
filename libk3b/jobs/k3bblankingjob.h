@@ -24,7 +24,7 @@ class K3bDevice::Device;
 class K3bAbstractWriter;
 
 
-class LIBK3BJOB_EXPORT K3bBlankingJob : public K3bJob
+class LIBK3B_EXPORT K3bBlankingJob : public K3bJob
 {
   Q_OBJECT
 

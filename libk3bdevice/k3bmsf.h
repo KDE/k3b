@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <kio/global.h>
-#include "k3b_export.h"
+#include "k3bdevice_export.h"
 
 namespace K3b
 {

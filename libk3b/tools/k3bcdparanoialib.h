@@ -32,7 +32,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3BTOOLS_EXPORT K3bCdparanoiaLib
+class LIBK3B_EXPORT K3bCdparanoiaLib
 {
  public:
   ~K3bCdparanoiaLib();

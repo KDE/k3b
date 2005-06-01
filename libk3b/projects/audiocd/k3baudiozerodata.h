@@ -19,7 +19,7 @@
 #include "k3baudiodatasource.h"
 #include "k3b_export.h"
 
-class LIBK3BPROJECT_EXPORT K3bAudioZeroData : public K3bAudioDataSource
+class LIBK3B_EXPORT K3bAudioZeroData : public K3bAudioDataSource
 {
  public:
   K3bAudioZeroData( const K3b::Msf& msf = 150 );

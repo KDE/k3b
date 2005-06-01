@@ -31,7 +31,7 @@ class QWidgetStack;
  * bar or a moving dot for tasks that do not provide any progress
  * information.
  */
-class LIBK3BTOOLS_EXPORT  K3bProgressDialog : public KDialogBase
+class LIBK3B_EXPORT  K3bProgressDialog : public KDialogBase
 {
   Q_OBJECT
 

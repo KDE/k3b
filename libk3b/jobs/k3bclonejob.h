@@ -28,7 +28,7 @@ class K3bCdrecordWriter;
 class K3bReadcdReader;
 
 
-class LIBK3BJOB_EXPORT K3bCloneJob : public K3bBurnJob
+class LIBK3B_EXPORT K3bCloneJob : public K3bBurnJob
 {
   Q_OBJECT
 

@@ -27,7 +27,7 @@
 #include "k3b_export.h"
 
 
-class LIBK3BCDDB_EXPORT K3bCddbQuery : public QObject
+class LIBK3B_EXPORT K3bCddbQuery : public QObject
 {
   Q_OBJECT
 

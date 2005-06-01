@@ -19,7 +19,7 @@
 #include <k3bexternalbinmanager.h>
 #include "k3b_export.h"
 
-class LIBK3BPROJECT_EXPORT K3bMovixBin : public K3bExternalBin
+class LIBK3B_EXPORT K3bMovixBin : public K3bExternalBin
 {
  public:
   K3bMovixBin( K3bExternalProgram* p )
@@ -81,7 +81,7 @@ class LIBK3BPROJECT_EXPORT K3bMovixBin : public K3bExternalBin
 };
 
 
-class LIBK3BPROJECT_EXPORT K3bMovixProgram : public K3bExternalProgram
+class LIBK3B_EXPORT K3bMovixProgram : public K3bExternalProgram
 {
  public:
   K3bMovixProgram();

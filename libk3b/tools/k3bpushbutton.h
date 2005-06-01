@@ -22,7 +22,7 @@
 /**
  * A pushbutton with delayed popu pmenu support just like the KToolBarButton
  */
-class LIBK3BTOOLS_EXPORT K3bPushButton : public KPushButton
+class LIBK3B_EXPORT K3bPushButton : public KPushButton
 {
  Q_OBJECT
 

@@ -31,7 +31,7 @@
  *
  * Instances are created by K3bAudioDecoderFactory
  **/
-class LIBK3BPLUGIN_EXPORT K3bAudioDecoder : public QObject
+class LIBK3B_EXPORT K3bAudioDecoder : public QObject
 {
   Q_OBJECT
 
@@ -206,7 +206,7 @@ class LIBK3BPLUGIN_EXPORT K3bAudioDecoder : public QObject
  * We need this because K3b uses multiple AudioDecoders of the same type at the 
  * same time.
  */
-class LIBK3BPLUGIN_EXPORT K3bAudioDecoderFactory : public K3bPlugin
+class LIBK3B_EXPORT K3bAudioDecoderFactory : public K3bPlugin
 {
   Q_OBJECT
 

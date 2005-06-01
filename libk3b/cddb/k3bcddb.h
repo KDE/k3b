@@ -35,7 +35,7 @@ class K3bCddbSubmit;
 class K3bCddbLocalSubmit;
 
 
-class LIBK3BCDDB_EXPORT K3bCddb : public QObject 
+class LIBK3B_EXPORT K3bCddb : public QObject 
 {
   Q_OBJECT
 

@@ -1,6 +1,7 @@
 /*
-    This file is part of digikam project
+    This file is part of the K3b project
     Copyright (c) 2005 Laurent Montel <montel@kde.org>
+    Copyright (c) 2005 Sebastian Trueg <trueg@k3b.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,34 +19,19 @@
     Boston, MA 02111-1307, USA.
 */
 
-#ifndef _K3B_EXPORT_H
-#define _K3B_EXPORT_H
+#ifndef _K3B_EXPORT_H_
+#define _K3B_EXPORT_H_
 
 #include <kdeversion.h>
 
-#if 0 /*KDE_IS_VERSION(3,3,90)*/
+#if 0 //KDE_IS_VERSION(3,3,90)
 
 #include <kdemacros.h>
 
-#define K3B_EXPORT KDE_EXPORT
-#define LIBK3BDEVICE_EXPORT KDE_EXPORT
-#define LIBK3BPROJECT_EXPORT KDE_EXPORT
-#define LIBK3BTOOLS_EXPORT KDE_EXPORT
-#define LIBK3BCORE_EXPORT KDE_EXPORT
-#define LIBK3BJOB_EXPORT KDE_EXPORT
-#define LIBK3BAUDIOCD_EXPORT KDE_EXPORT
-#define LIBK3BPLUGIN_EXPORT KDE_EXPORT
-#define LIBK3BCDDB_EXPORT KDE_EXPORT
+#define LIBK3B_EXPORT KDE_EXPORT
 #else
-#define K3B_EXPORT
-#define LIBK3BDEVICE_EXPORT
-#define LIBK3BPROJECT_EXPORT
-#define LIBK3BTOOLS_EXPORT
-#define LIBK3BCORE_EXPORT
-#define LIBK3BJOB_EXPORT
-#define LIBK3BAUDIOCD_EXPORT
-#define LIBK3BPLUGIN_EXPORT
-#define LIBK3BCDDB_EXPORT
+#define LIBK3B_EXPORT
 #endif
-#endif /* _K3B_EXPORT_H */
+
+#endif
 

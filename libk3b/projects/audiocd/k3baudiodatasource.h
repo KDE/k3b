@@ -38,7 +38,7 @@ class K3bAudioDoc;
  *
  * When a source is deleted it automatically removes itself from it's list.
  */
-class LIBK3BPROJECT_EXPORT K3bAudioDataSource 
+class LIBK3B_EXPORT K3bAudioDataSource 
 {
   friend class K3bAudioTrack;
 

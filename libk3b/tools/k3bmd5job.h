@@ -28,7 +28,7 @@ namespace K3bDevice {
 class K3bIso9660File;
 
 
-class LIBK3BJOB_EXPORT K3bMd5Job : public K3bJob
+class LIBK3B_EXPORT K3bMd5Job : public K3bJob
 {
   Q_OBJECT
 

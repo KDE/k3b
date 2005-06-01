@@ -26,7 +26,7 @@
  * Creates wave files from 16bit stereo little or big endian
  * sound samples
  */
-class LIBK3BTOOLS_EXPORT K3bWaveFileWriter 
+class LIBK3B_EXPORT K3bWaveFileWriter 
 {
  public: 
 

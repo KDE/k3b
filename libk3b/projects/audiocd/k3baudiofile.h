@@ -26,7 +26,7 @@ class K3bAudioDecoder;
 class K3bAudioTrack;
 
 
-class LIBK3BPROJECT_EXPORT K3bAudioFile : public K3bAudioDataSource
+class LIBK3B_EXPORT K3bAudioFile : public K3bAudioDataSource
 {
  public:
   K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* );

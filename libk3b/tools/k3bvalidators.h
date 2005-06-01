@@ -24,7 +24,7 @@
  * replace character. It only makes sense for QRegExps that simply
  * allow or forbid some characters.
  */
-class LIBK3BTOOLS_EXPORT K3bValidator : public QRegExpValidator
+class LIBK3B_EXPORT K3bValidator : public QRegExpValidator
 {
  public:
   K3bValidator( QObject* parent, const char * name = 0 );
@@ -47,7 +47,7 @@ namespace K3bValidators
    * replace character. It only makes sense for QRegExps that simply
    * allow or forbid some characters.
    */
-  LIBK3BTOOLS_EXPORT QString fixup( const QString&, const QRegExp&, const QChar& replaceChar = '_' );
+  LIBK3B_EXPORT QString fixup( const QString&, const QRegExp&, const QChar& replaceChar = '_' );
 
   /**
    * Validates an ISRC code of the form "CCOOOYYSSSSS" where:
@@ -58,13 +58,13 @@ namespace K3bValidators
    * <li>S: serial number (digits)</li>
    * </ul>
    */
-  LIBK3BTOOLS_EXPORT K3bValidator* isrcValidator( QObject* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT K3bValidator* isrcValidator( QObject* parent = 0, const char* name = 0 );
   
   /**
    * This needs to be replaced by something better in the future...
    * Even the name sucks!
    */
-  LIBK3BTOOLS_EXPORT K3bValidator* iso9660Validator( bool allowEmpty = true, QObject* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT K3bValidator* iso9660Validator( bool allowEmpty = true, QObject* parent = 0, const char* name = 0 );
 
   /**
    * (1) d-characters are: A-Z, 0-9, _ (see ISO-9660:1988, Annex A, Table 15)
@@ -76,7 +76,7 @@ namespace K3bValidators
     Iso646_d 
   };
 
-  LIBK3BTOOLS_EXPORT K3bValidator* iso646Validator( int type = Iso646_a, 
+  LIBK3B_EXPORT K3bValidator* iso646Validator( int type = Iso646_a, 
 				 bool AllowLowerCase = false, 
 				 QObject* parent = 0, const char* name = 0 );
 }

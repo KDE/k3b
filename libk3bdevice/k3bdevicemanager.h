@@ -22,7 +22,7 @@
 #include <qstringlist.h>
 #include <qmemarray.h>
 #include <qptrlist.h>
-#include "k3b_export.h"
+#include "k3bdevice_export.h"
 #include <kdebug.h>
 
 class KProcess;

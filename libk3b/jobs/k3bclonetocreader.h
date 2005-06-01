@@ -23,7 +23,7 @@
  * Reads a cdrecord clone toc file and searches for the 
  * corresponding image file.
  */
-class LIBK3BJOB_EXPORT  K3bCloneTocReader : public K3bImageFileReader
+class LIBK3B_EXPORT  K3bCloneTocReader : public K3bImageFileReader
 {
  public:
   K3bCloneTocReader( const QString& filename = QString::null );
