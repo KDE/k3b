@@ -723,7 +723,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Another application is blocking the device (most likely automounting)."), ERROR );
 	break;
       case WRITE_ERROR:
-	emit infoMessage( i18n("A write error occured."), ERROR );
+	emit infoMessage( i18n("A write error occurred."), ERROR );
 	if( m_writingMode == K3b::DAO )
 	  emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
 	break;
