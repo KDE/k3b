@@ -21,7 +21,7 @@
 
 #include <k3btoc.h>
 #include <k3bmsf.h>
-#include "k3bdevice_export.h"
+
 
 #include <qstring.h>
 
@@ -43,7 +43,7 @@ namespace K3bDevice
    * Writers should never give the STATE_UNKNOWN state. CD-ROM or DVD-ROM
    * drives on the other hand may have trouble determining the state of the disk.
    */
-  class LIBK3BDEVICE_EXPORT DiskInfo
+  class DiskInfo
     {
     public:
       DiskInfo();

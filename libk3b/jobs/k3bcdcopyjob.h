@@ -18,7 +18,7 @@
 #define _K3BCDCOPYJOB_H_
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 
 namespace K3bDevice {
   class Device;
@@ -29,7 +29,7 @@ namespace K3bDevice {
 /**
   *@author Sebastian Trueg
   */
-class LIBK3B_EXPORT K3bCdCopyJob : public K3bBurnJob
+class K3bCdCopyJob : public K3bBurnJob
 {
   Q_OBJECT
 

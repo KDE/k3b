@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_CUE_FILEWRITING_JOB_H_
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 class K3bAudioDoc;
 class K3bAudioJob;
 class K3bAudioDecoder;
@@ -27,7 +27,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3B_EXPORT K3bAudioCueFileWritingJob : public K3bBurnJob
+class K3bAudioCueFileWritingJob : public K3bBurnJob
 {
   Q_OBJECT
 

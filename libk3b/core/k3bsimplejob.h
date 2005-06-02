@@ -18,14 +18,14 @@
 #define _K3B_SIMPLE_JOB_H_
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 
 /**
  * A simple job which does not require a JobHandler.
  *
  * @author Sebastian Trueg
  */
-class LIBK3B_EXPORT K3bSimpleJob : public K3bJob
+class K3bSimpleJob : public K3bJob
 {
   Q_OBJECT
 	

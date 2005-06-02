@@ -20,13 +20,13 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qdatastream.h>
-#include "k3b_export.h"
+
 /**
  * @author Sebastian Trueg
  * Creates wave files from 16bit stereo little or big endian
  * sound samples
  */
-class LIBK3B_EXPORT K3bWaveFileWriter 
+class K3bWaveFileWriter 
 {
  public: 
 

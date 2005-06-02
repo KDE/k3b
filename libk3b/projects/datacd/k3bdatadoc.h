@@ -27,7 +27,7 @@
 
 #include <kurl.h>
 #include <kio/global.h>
-#include "k3b_export.h"
+
 class K3bDataItem;
 class K3bRootItem;
 class K3bDirItem;
@@ -56,7 +56,7 @@ namespace K3bDevice {
  *@author Sebastian Trueg
  */
 
-class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
+class K3bDataDoc : public K3bDoc
 {
   Q_OBJECT
 

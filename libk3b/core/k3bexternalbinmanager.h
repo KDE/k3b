@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
-#include "k3b_export.h"
+
 #include "k3bversion.h"
 
 class KConfig;
@@ -37,7 +37,7 @@ class K3bExternalProgram;
  *
  * A bin may have certain features that are represented by a string.
  */
-class LIBK3B_EXPORT K3bExternalBin
+class K3bExternalBin
 {
  public:
   K3bExternalBin( K3bExternalProgram* );
@@ -69,7 +69,7 @@ class LIBK3B_EXPORT K3bExternalBin
  * It manages a list of K3bExternalBin-objects that each represent
  * one installed version of the program.
  */
-class LIBK3B_EXPORT K3bExternalProgram
+class K3bExternalProgram
 {
  public:
   K3bExternalProgram( const QString& name );
@@ -111,7 +111,7 @@ class LIBK3B_EXPORT K3bExternalProgram
 };
 
 
-class LIBK3B_EXPORT K3bExternalBinManager : public QObject
+class K3bExternalBinManager : public QObject
 {
   Q_OBJECT
 

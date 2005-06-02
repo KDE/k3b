@@ -18,12 +18,12 @@
 #define _K3B_TITLE_LABEL_H_
 
 #include <qframe.h>
-#include "k3b_export.h"
+
 class QPainter;
 class QResizeEvent;
 
 
-class LIBK3B_EXPORT K3bTitleLabel : public QFrame
+class K3bTitleLabel : public QFrame
 {
   Q_OBJECT
 

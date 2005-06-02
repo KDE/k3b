@@ -24,10 +24,10 @@
 #include "k3bcddbresult.h"
 
 #include <k3btoc.h>
-#include "k3b_export.h"
 
 
-class LIBK3B_EXPORT K3bCddbQuery : public QObject
+
+class K3bCddbQuery : public QObject
 {
   Q_OBJECT
 

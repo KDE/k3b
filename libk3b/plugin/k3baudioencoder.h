@@ -19,7 +19,7 @@
 #include <k3bplugin.h>
 
 #include <k3bmsf.h>
-#include "k3b_export.h"
+
 
 
 /**
@@ -30,7 +30,7 @@
  *
  * see the skeleton files for further help.
  */
-class LIBK3B_EXPORT K3bAudioEncoder : public K3bPlugin
+class K3bAudioEncoder : public K3bPlugin
 {
   Q_OBJECT
 

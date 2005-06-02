@@ -17,11 +17,11 @@
 #define _K3B_MOVIX_DVD_DOC_H_
 
 #include <k3bmovixdoc.h>
-#include "k3b_export.h"
+
 class KConfig;
 
 
-class LIBK3B_EXPORT K3bMovixDvdDoc : public K3bMovixDoc
+class K3bMovixDvdDoc : public K3bMovixDoc
 {
   Q_OBJECT
 

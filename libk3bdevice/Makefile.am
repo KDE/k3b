@@ -22,8 +22,7 @@ libk3bdevice_la_SOURCES = k3bdevice.cpp k3bdevice_mmc.cpp k3bscsicommand.cpp \
 endif
 
 include_HEADERS = k3bdevicemanager.h k3bdevice.h k3btoc.h k3btrack.h \
-	k3bdeviceglobals.h k3bdiskinfo.h k3bcdtext.h k3bmsf.h k3bdevicetypes.h \
-	k3bdevice_export.h
+	k3bdeviceglobals.h k3bdiskinfo.h k3bcdtext.h k3bmsf.h k3bdevicetypes.h
 
 messages: rc.cpp
 	$(XGETTEXT) `find -name "*.cpp" -or -name "*.h"` -o $(podir)/libk3bdevice.pot

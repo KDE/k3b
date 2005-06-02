@@ -18,7 +18,7 @@
 #define K3BISO9660_IMAGE_WRITING_JOB_H
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 class QString;
 class K3bAbstractWriter;
 class KTempFile;
@@ -31,7 +31,7 @@ class K3bIsoImageVerificationJob;
 /**
   *@author Sebastian Trueg
   */
-class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
+class K3bIso9660ImageWritingJob : public K3bBurnJob
 {
   Q_OBJECT
 	

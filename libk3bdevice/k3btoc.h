@@ -23,7 +23,7 @@
 #include <k3bmsf.h>
 
 #include "k3btrack.h"
-#include "k3bdevice_export.h"
+
 class QString;
 
 namespace K3bDevice
@@ -42,7 +42,7 @@ namespace K3bDevice
    * The Toc deletes all its tracks when it is deleted and
    * deletes removed tracks.
    */
-  class LIBK3BDEVICE_EXPORT Toc : public QValueList<K3bTrack>
+  class Toc : public QValueList<K3bTrack>
   {
   public:
     Toc();

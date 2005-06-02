@@ -18,7 +18,7 @@
 #define _K3B_THREAD_JOB_H_
 
 #include "k3bjob.h"
-#include "k3b_export.h"
+
 class QCustomEvent;
 class K3bThread;
 
@@ -37,7 +37,7 @@ class K3bThread;
  * </pre>
  * Be aware that K3bThreadJob'd destructor does NOT delete the thread.
  */
-class LIBK3B_EXPORT K3bThreadJob : public K3bJob
+class K3bThreadJob : public K3bJob
 {
   Q_OBJECT
 

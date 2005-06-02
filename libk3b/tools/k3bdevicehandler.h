@@ -22,7 +22,7 @@
 #include "k3bdiskinfo.h"
 #include "k3bmsf.h"
 #include "k3bcdtext.h"
-#include "k3b_export.h"
+
 #include <qcstring.h>
 
 class QCustomEvent;
@@ -41,7 +41,7 @@ namespace K3bDevice
    * Be aware that all methods only return valid values if the corresponding info has
    * been successfully requested.
    */
-  class LIBK3B_EXPORT DeviceHandler : public K3bThreadJob
+  class DeviceHandler : public K3bThreadJob
     {
       Q_OBJECT
 
@@ -184,7 +184,7 @@ namespace K3bDevice
    * Be aware that the DeviceHandler will get destroyed once the signal has been 
    * emited.
    */
-  LIBK3B_EXPORT DeviceHandler* sendCommand( int command, Device* );
+  DeviceHandler* sendCommand( int command, Device* );
 
   inline DeviceHandler* diskInfo(Device* dev) {
     return sendCommand(DeviceHandler::DISKINFO,dev);

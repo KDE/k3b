@@ -18,11 +18,11 @@
 
 
 #include <kpushbutton.h>
-#include "k3b_export.h"
+
 /**
  * A pushbutton with delayed popu pmenu support just like the KToolBarButton
  */
-class LIBK3B_EXPORT K3bPushButton : public KPushButton
+class K3bPushButton : public KPushButton
 {
  Q_OBJECT
 

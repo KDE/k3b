@@ -26,7 +26,7 @@
 class QFile;
 
 
-class LIBK3B_EXPORT K3bWaveDecoderFactory : public K3bAudioDecoderFactory
+class K3bWaveDecoderFactory : public K3bAudioDecoderFactory
 {
   Q_OBJECT
 
@@ -43,7 +43,7 @@ class LIBK3B_EXPORT K3bWaveDecoderFactory : public K3bAudioDecoderFactory
 };
 
 
-class LIBK3B_EXPORT K3bWaveDecoder : public K3bAudioDecoder
+class K3bWaveDecoder : public K3bAudioDecoder
 {
   Q_OBJECT
 

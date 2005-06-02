@@ -17,7 +17,7 @@
 #define _K3B_RADIO_ACTION_H_
 
 #include <kactionclasses.h>
-#include "k3b_export.h"
+
 
 /**
  * This differs from KRadioAction only in the boolean 
@@ -26,7 +26,7 @@
  *
  * Docu copied from kdelibs
  */
-class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
+class K3bRadioAction : public KToggleAction
 {
   Q_OBJECT
 

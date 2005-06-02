@@ -17,11 +17,11 @@
 #define K3B_ISO_OPTIONS_H
 
 #include <qstring.h>
-#include "k3b_export.h"
+
 class KConfigBase;
 
 
-class LIBK3B_EXPORT K3bIsoOptions
+class K3bIsoOptions
 {
  public:
   K3bIsoOptions();

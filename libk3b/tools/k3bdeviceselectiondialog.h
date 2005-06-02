@@ -20,7 +20,7 @@
 
 
 #include <kdialogbase.h>
-#include "k3b_export.h"
+
 #include <qptrlist.h>
 
 namespace K3bDevice {
@@ -28,7 +28,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3B_EXPORT K3bDeviceSelectionDialog : public KDialogBase
+class K3bDeviceSelectionDialog : public KDialogBase
 {
   Q_OBJECT
 

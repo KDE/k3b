@@ -17,7 +17,7 @@
 #define _K3B_DVD_COPY_JOB_H_
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 #include <qstring.h>
 
 
@@ -27,7 +27,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
+class K3bDvdCopyJob : public K3bBurnJob
 {
   Q_OBJECT
 

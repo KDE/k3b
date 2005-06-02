@@ -22,11 +22,11 @@
 #include <qvaluevector.h>
 
 #include <k3bmsf.h>
-#include "k3bdevice_export.h"
+
 
 namespace K3bDevice
 {
-  class LIBK3BDEVICE_EXPORT Track
+  class Track
   {
     friend class Device;
 

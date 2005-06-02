@@ -18,7 +18,7 @@
 #define _K3B_PROGRESS_DIALOG_H_
 
 #include <kdialogbase.h>
-#include "k3b_export.h"
+
 
 class K3bBusyWidget;
 class QLabel;
@@ -31,7 +31,7 @@ class QWidgetStack;
  * bar or a moving dot for tasks that do not provide any progress
  * information.
  */
-class LIBK3B_EXPORT  K3bProgressDialog : public KDialogBase
+class  K3bProgressDialog : public KDialogBase
 {
   Q_OBJECT
 

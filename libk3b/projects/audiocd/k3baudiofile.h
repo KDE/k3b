@@ -20,13 +20,13 @@
 
 #include <k3bmsf.h>
 #include <kurl.h>
-#include "k3b_export.h"
+
 
 class K3bAudioDecoder;
 class K3bAudioTrack;
 
 
-class LIBK3B_EXPORT K3bAudioFile : public K3bAudioDataSource
+class K3bAudioFile : public K3bAudioDataSource
 {
  public:
   K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* );

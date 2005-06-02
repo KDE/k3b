@@ -18,7 +18,7 @@
 
 #include <qobject.h>
 #include <qpixmap.h>
-#include "k3b_export.h"
+
 
 class QListViewItem;
 class QTimer;
@@ -27,7 +27,7 @@ class QTimer;
 /**
  * Fades an icon on a listview item in and out.
  */
-class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
+class K3bListViewItemAnimator : public QObject
 {
   Q_OBJECT
 

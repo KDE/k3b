@@ -25,7 +25,7 @@
 #include <k3bdiskinfo.h>
 #include <k3bcdtext.h>
 #include <k3bmsf.h>
-#include "k3bdevice_export.h"
+
 #ifdef Q_OS_FREEBSD
 struct cam_device;
 #endif
@@ -39,7 +39,7 @@ namespace K3bDevice
    *
    * Devices are constructed by the DeviceManager.
    */
-  class LIBK3BDEVICE_EXPORT Device
+  class Device
     {
     public:
 #ifdef Q_OS_FREEBSD

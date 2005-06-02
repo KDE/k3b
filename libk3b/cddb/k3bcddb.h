@@ -24,7 +24,7 @@
 #include <k3btoc.h>
 
 #include "k3bcddbresult.h"
-#include "k3b_export.h"
+
 
 class KConfig;
 class K3bCddbQuery;
@@ -35,7 +35,7 @@ class K3bCddbSubmit;
 class K3bCddbLocalSubmit;
 
 
-class LIBK3B_EXPORT K3bCddb : public QObject 
+class K3bCddb : public QObject 
 {
   Q_OBJECT
 

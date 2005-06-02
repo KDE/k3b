@@ -20,13 +20,13 @@
 
 #include <k3btoc.h>
 #include <k3bcdtext.h>
-#include "k3b_export.h"
+
 /**
  * Parses a cue file.
  * Datatracks have either mode1 or mode2 where the latter contains xa form1/2.
  * The last track may not have a proper length!
  */
-class LIBK3B_EXPORT K3bCueFileParser : public K3bImageFileReader
+class K3bCueFileParser : public K3bImageFileReader
 {
  public:
   K3bCueFileParser( const QString& filename = QString::null );

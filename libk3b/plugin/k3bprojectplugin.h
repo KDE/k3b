@@ -18,7 +18,7 @@
 
 #include <k3bplugin.h>
 #include <qstring.h>
-#include "k3b_export.h"
+
 class K3bDoc;
 
 /**
@@ -63,7 +63,7 @@ class K3bProjectPluginGUIBase
  * Reimplement createGUI or activate and use setText, setToolTip, setWhatsThis, and setIcon
  * to specify the gui elements used when presenting the plugin to the user.
  */
-class LIBK3B_EXPORT K3bProjectPlugin : public K3bPlugin
+class K3bProjectPlugin : public K3bPlugin
 {
   Q_OBJECT
 

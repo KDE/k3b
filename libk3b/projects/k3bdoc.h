@@ -30,7 +30,7 @@
 // include files for KDE
 #include <kurl.h>
 #include <kio/global.h>
-#include "k3b_export.h"
+
 
 // forward declaration of the K3b classes
 class QTimer;
@@ -54,7 +54,7 @@ namespace K3b {
  * K3bDoc is the base document class.
  * It takes care of writing to a KoStore and handles some general settings.
  */
-class LIBK3B_EXPORT K3bDoc : public QObject
+class K3bDoc : public QObject
 {
   Q_OBJECT
 

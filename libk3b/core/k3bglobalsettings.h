@@ -15,13 +15,13 @@
 
 #ifndef _K3B_GLOBAL_SETTINGS_H_
 #define _K3B_GLOBAL_SETTINGS_H_
-#include "k3b_export.h"
+
 class KConfig;
 
 /**
  * Some global settings used throughout K3b.
  */
-class LIBK3B_EXPORT K3bGlobalSettings
+class K3bGlobalSettings
 {
  public:
   K3bGlobalSettings();

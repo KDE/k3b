@@ -23,7 +23,7 @@
 #include <qvalidator.h>
 
 #include <k3bmsf.h>
-#include "k3b_export.h"
+
 
 class K3bMsfValidator : public QRegExpValidator
 {
@@ -32,7 +32,7 @@ class K3bMsfValidator : public QRegExpValidator
 };
 
 
-class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
+class K3bMsfEdit : public QSpinBox
 {
   Q_OBJECT
 

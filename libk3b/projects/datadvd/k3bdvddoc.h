@@ -17,10 +17,10 @@
 #define _K3B_DVDDOC_H_
 
 #include <k3bdatadoc.h>
-#include "k3b_export.h"
+
 class KConfig;
 
-class LIBK3B_EXPORT K3bDvdDoc : public K3bDataDoc
+class K3bDvdDoc : public K3bDataDoc
 {
  public:
   K3bDvdDoc( QObject* parent = 0 );

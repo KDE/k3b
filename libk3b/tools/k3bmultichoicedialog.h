@@ -18,11 +18,11 @@
 
 #include <kdialog.h>
 #include <kstdguiitem.h>
-#include "k3b_export.h"
+
 
 class QCloseEvent;
 
-class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
+class K3bMultiChoiceDialog : public KDialog
 {
   Q_OBJECT
 

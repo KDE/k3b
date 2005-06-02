@@ -17,11 +17,11 @@
 #define K3B_VCD_OPTIONS_H
 
 #include <qstring.h>
-#include "k3b_export.h"
+
 
 class KConfigBase;
 
-class LIBK3B_EXPORT K3bVcdOptions
+class K3bVcdOptions
 {
     public:
         K3bVcdOptions();

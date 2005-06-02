@@ -16,12 +16,12 @@
 #ifndef _K3B_AUDIO_CLIENT_H_
 #define _K3B_AUDIO_CLIENT_H_
 
-#include "k3b_export.h"
+
 /**
  * Interface for all K3b audio client classes which may attach to 
  * a K3b Audio Server to play 44100 16bit stereo audio data.
  */
-class LIBK3B_EXPORT K3bAudioClient
+class K3bAudioClient
 {
  public:
   virtual ~K3bAudioClient();

@@ -18,9 +18,9 @@
 #define _K3B_PLUGIN_CONFIG_WIDGET_H_
 
 #include <qwidget.h>
-#include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bPluginConfigWidget : public QWidget
+
+class K3bPluginConfigWidget : public QWidget
 {
   Q_OBJECT
 

@@ -19,7 +19,7 @@
 
 #include <k3bplugin.h>
 #include <k3bmsf.h>
-#include "k3b_export.h"
+
 #include <kurl.h>
 
 
@@ -31,7 +31,7 @@
  *
  * Instances are created by K3bAudioDecoderFactory
  **/
-class LIBK3B_EXPORT K3bAudioDecoder : public QObject
+class K3bAudioDecoder : public QObject
 {
   Q_OBJECT
 
@@ -206,7 +206,7 @@ class LIBK3B_EXPORT K3bAudioDecoder : public QObject
  * We need this because K3b uses multiple AudioDecoders of the same type at the 
  * same time.
  */
-class LIBK3B_EXPORT K3bAudioDecoderFactory : public K3bPlugin
+class K3bAudioDecoderFactory : public K3bPlugin
 {
   Q_OBJECT
 

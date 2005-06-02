@@ -21,7 +21,7 @@
 #include <k3baudiodoc.h>
 
 #include <k3btoc.h>
-#include "k3b_export.h"
+
 class QDomDocument;
 class QDomElement;
 class K3bBurnJob;
@@ -30,7 +30,7 @@ class QWidget;
 class KConfig;
 
 
-class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
+class K3bMixedDoc : public K3bDoc
 {
   Q_OBJECT
 

@@ -18,7 +18,7 @@
 #define K3BBINIMAGEWRITINGJOB_H
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 class K3bAbstractWriter;
 namespace K3bDevice {
   class Device;
@@ -27,7 +27,7 @@ namespace K3bDevice {
 /**
   *@author Klaus-Dieter Krannich
   */
-class LIBK3B_EXPORT K3bBinImageWritingJob : public K3bBurnJob
+class K3bBinImageWritingJob : public K3bBurnJob
 {
   Q_OBJECT
 

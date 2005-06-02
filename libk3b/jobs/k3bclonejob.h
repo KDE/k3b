@@ -17,7 +17,7 @@
 #define _K3B_CLONE_JOB_H_
 
 #include <k3bjob.h>
-#include "k3b_export.h"
+
 #include <qstring.h>
 
 
@@ -28,7 +28,7 @@ class K3bCdrecordWriter;
 class K3bReadcdReader;
 
 
-class LIBK3B_EXPORT K3bCloneJob : public K3bBurnJob
+class K3bCloneJob : public K3bBurnJob
 {
   Q_OBJECT
 

@@ -506,5 +506,3 @@ dnl --------- MUSEPACK CHECK END -----------
 #AC_DEFINE(LIBK3B_VERSION, "0.11.98", [k3b library version])
 #AC_SUBST(LIBK3B_VERSION, 0.11.98)
 #AC_CONFIG_FILES([k3b/libk3b/libk3b.pc])
-
-#KDE_ENABLE_HIDDEN_VISIBILITY

@@ -24,12 +24,12 @@ class K3bDataDoc;
 #include <qstring.h>
 
 #include <kio/global.h>
-#include "k3b_export.h"
+
 /**
   *@author Sebastian Trueg
   */
 
-class LIBK3B_EXPORT K3bDataItem
+class K3bDataItem
 {
  public: 
   K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
