@@ -56,7 +56,7 @@ namespace K3bDevice {
        * Creates a new DeviceManager
        */
       DeviceManager( QObject* parent = 0, const char* name = 0 );
-      ~DeviceManager();
+      virtual ~DeviceManager();
 
       /**
        * By default the DeviceManager makes the Devices check their writing modes.
@@ -103,13 +103,13 @@ namespace K3bDevice {
        * \return List of all cd writer devices.
        * \deprecated use cdWriter()
        */
-      QPtrList<Device>& burningDevices();
+      QPtrList<Device>& burningDevices() const;
 
       /**
        * \return List of all reader devices without writer devices.
        * \deprecated use cdReader()
        **/
-      QPtrList<Device>& readingDevices();
+      QPtrList<Device>& readingDevices() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -117,7 +117,7 @@ namespace K3bDevice {
        *
        * \return List of all devices.
        */
-      QPtrList<Device>& allDevices();
+      QPtrList<Device>& allDevices() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -125,7 +125,7 @@ namespace K3bDevice {
        *
        * \return List of all cd writer devices.
        */
-      QPtrList<Device>& cdWriter();
+      QPtrList<Device>& cdWriter() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -133,7 +133,7 @@ namespace K3bDevice {
        *
        * \return List of all cd reader devices.
        */
-      QPtrList<Device>& cdReader();
+      QPtrList<Device>& cdReader() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -141,7 +141,7 @@ namespace K3bDevice {
        *
        * \return List of all DVD writer devices.
        */
-      QPtrList<Device>& dvdWriter();
+      QPtrList<Device>& dvdWriter() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -149,14 +149,14 @@ namespace K3bDevice {
        *
        * \return List of all DVD reader devices.
        */
-      QPtrList<Device>& dvdReader();
+      QPtrList<Device>& dvdReader() const;
 
       /**
        * Reads the device information from the config file.
        */
-      bool readConfig( KConfig* );
+      virtual bool readConfig( KConfig* );
 
-      bool saveConfig( KConfig* );
+      virtual bool saveConfig( KConfig* );
 
 
     public slots:
@@ -170,7 +170,7 @@ namespace K3bDevice {
        *
        * \return Number of found devices.
        **/
-      int scanBus();
+      virtual int scanBus();
 
       /**
        * Searches for mountpoints of the devices. This method will also add devices
@@ -181,7 +181,7 @@ namespace K3bDevice {
       /**
        * Clears the writers and readers list of devices.
        */
-      void clear();
+      virtual void clear();
 
       /**
        * Add a new device.
@@ -192,11 +192,13 @@ namespace K3bDevice {
        *            and added to the internal lists (meaning it can be accessed through
        *            emthods like cdReader()).
        *
+       * Called by scanBus()
+       *
        * \return The device if it could be found or 0 otherwise.
        */
-      Device* addDevice( const QString& dev );
+      virtual Device* addDevice( const QString& dev );
 
-      void removeDevice( const QString& dev );
+      virtual void removeDevice( const QString& dev );
 
     signals:
       /**
@@ -205,9 +207,6 @@ namespace K3bDevice {
       void changed( K3bDevice::DeviceManager* );
       void changed();
 
-    private slots:
-      void slotCollectStdout( KProcess*, char* data, int len );
-
     private:
       bool testForCdrom( const QString& );
       bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
@@ -215,12 +214,14 @@ namespace K3bDevice {
 
       int m_foundDevices;
 
-      QString m_processOutput;
-
       class Private;
       Private* d;
 
+      /**
+       * Add a device to the managers device lists and initialize the device.
+       */
       Device *addDevice( Device* );
+
       void BSDDeviceScan();
       void LinuxDeviceScan();
     };

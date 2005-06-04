@@ -188,40 +188,40 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
 {
   return d->cdWriter;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
 {
   return d->cdReader;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
 {
   return d->dvdWriter;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
 {
   return d->dvdReader;
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
 {
   return cdWriter();
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
 {
   return cdReader();
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
 {
   return d->allDevices;
 }
@@ -673,9 +673,10 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
   if( !testForCdrom(resolved) ) {
 #ifdef HAVE_RESMGR
     // With resmgr we might only be able to open the symlink name.
-    if (testForCdrom(devicename)) {
+    if( testForCdrom(devicename) ) {
       resolved = devicename;
-    } else {
+    } 
+    else {
       return 0;
     }
 #else
@@ -859,12 +860,6 @@ void K3bDevice::DeviceManager::scanFstab()
   } // while mountInfo
 
   ::endfsent();
-}
-
-
-void K3bDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int len )
-{
-  m_processOutput += QString::fromLocal8Bit( data, len );
 }
 
 
