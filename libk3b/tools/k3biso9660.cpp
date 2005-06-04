@@ -247,6 +247,7 @@ public:
     : cdDevice(0),
       fd(-1),
       closeFd(false),
+      isOpen(false),
       startSector(0) {
   }
 
@@ -262,6 +263,8 @@ public:
   K3bDevice::Device* cdDevice;
   int fd;
   bool closeFd;
+
+  bool isOpen;
 
   // only used for direkt K3bDevice::Device access
   unsigned int startSector;
@@ -487,6 +490,9 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
 
 bool K3bIso9660::open()
 {
+  if( d->isOpen )
+    return true;
+
   // open the file
   if( !m_filename.isEmpty() ) {
     d->fd = ::open( QFile::encodeName( m_filename ), O_RDONLY|O_LARGEFILE );
@@ -503,6 +509,8 @@ bool K3bIso9660::open()
   }
   else if( d->fd < 0 )
     return false;
+
+  d->isOpen = true;
 
   iso_vol_desc *desc;
   QString path,tmp,uid,gid;
@@ -531,6 +539,7 @@ bool K3bIso9660::open()
 
   if (!desc) {
     kdDebug() << "K3bIso9660::openArchive no volume descriptors" << endl;
+    close();
     return false;
   }
 
@@ -622,24 +631,28 @@ void K3bIso9660::createSimplePrimaryDesc( struct iso_primary_descriptor* desc )
 
 void K3bIso9660::close()
 {
-  if( d->closeFd ) {
-    ::close( d->fd );
-    d->closeFd = false;
-    d->fd = -1;
+  if( d->isOpen ) {
+    if( d->closeFd ) {
+      ::close( d->fd );
+      d->closeFd = false;
+      d->fd = -1;
+    }
+    else if( d->cdDevice )
+      d->cdDevice->close();
+
+    // Since the first isoDir is the KArchive
+    // root we must not delete it but all the
+    // others.
+    
+    d->elToritoDirs.setAutoDelete(true);
+    d->jolietDirs.setAutoDelete(true);
+    d->isoDirs.setAutoDelete(true);
+    d->elToritoDirs.clear();
+    d->jolietDirs.clear();
+    d->isoDirs.clear();
+
+    d->isOpen = false;
   }
-  else if( d->cdDevice )
-    d->cdDevice->close();
-
-  // Since the first isoDir is the KArchive
-  // root we must not delete it but all the
-  // others.
-
-  d->elToritoDirs.setAutoDelete(true);
-  d->jolietDirs.setAutoDelete(true);
-  d->isoDirs.setAutoDelete(true);
-  d->elToritoDirs.clear();
-  d->jolietDirs.clear();
-  d->isoDirs.clear();
 }
 
 
