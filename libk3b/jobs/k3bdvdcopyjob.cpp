@@ -220,7 +220,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       // growisofs only uses the size from the PVD for reserving
       // writable space in DAO mode
       // with version >= 5.15 growisofs supports specifying the size of the track
-      if( m_writingMode != K3b::DAO || !m_onTheFly || 
+      if( m_writingMode != K3b::DAO || !m_onTheFly || m_onlyCreateImage ||
 	  ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
 	    k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) ) ) {
 	d->lastSector = dh->toc()[0].lastSector();
