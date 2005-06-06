@@ -32,8 +32,11 @@ class KActionCollection;
 class KActionMenu;
 class KAction;
 class K3bDataDirTreeView;
+class K3bDataDirViewItem;
 class K3bView;
 class QPainter;
+class QDragMoveEvent;
+class QDragLeaveEvent;
 
 /**
   *@author Sebastian Trueg
@@ -73,6 +76,8 @@ class K3bDataFileView : public K3bListView
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
+  void contentsDragMoveEvent( QDragMoveEvent* e );
+  void contentsDragLeaveEvent( QDragLeaveEvent* e );
   QDragObject* dragObject();
 
  private:
@@ -92,6 +97,8 @@ class K3bDataFileView : public K3bListView
   K3bDataDoc* m_doc;
   mutable K3bDirItem* m_currentDir;
   K3bDataDirTreeView* m_treeView;
+
+  K3bDataDirViewItem* m_dropDirItem;
 
   QMap<K3bDataItem*, K3bDataViewItem*> m_itemMap;
 };

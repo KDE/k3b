@@ -44,10 +44,12 @@ class K3bDataDirTreeView::Private
 {
 public:
   Private() 
-    : animatedDirItem(0) {
+    : animatedDirItem(0),
+      dropDirItem(0) {
   }
 
   K3bDataDirViewItem* animatedDirItem;
+  K3bDataDirViewItem* dropDirItem;
   int animationCounter;
   QPixmap beforeAniPixmap;
 };
@@ -112,8 +114,42 @@ bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
 }
 
 
+void K3bDataDirTreeView::contentsDragMoveEvent( QDragMoveEvent* e )
+{
+  K3bListView::contentsDragMoveEvent( e );
+
+  // highlight the folder the items would be added to
+  if( d->dropDirItem )
+    d->dropDirItem->highlightIcon( false );
+
+  d->dropDirItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) );
+  if( !d->dropDirItem )
+    d->dropDirItem = m_root;
+
+  d->dropDirItem->highlightIcon( true );
+}
+
+
+void K3bDataDirTreeView::contentsDragLeaveEvent( QDragLeaveEvent* e )
+{
+  K3bListView::contentsDragLeaveEvent( e );
+
+  // remove any highlighting
+  if( d->dropDirItem ) {
+    d->dropDirItem->highlightIcon( false );
+    d->dropDirItem = 0;
+  }
+}
+
+
 void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem* )
 {
+  // remove any highlighting
+  if( d->dropDirItem ) {
+    d->dropDirItem->highlightIcon( false );
+    d->dropDirItem = 0;
+  }
+
   if( !e->isAccepted() )
     return;
 
@@ -128,7 +164,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 
   if( parent ) {
 
-    startDropAnimation( parent );
+    //    startDropAnimation( parent );
 
     // check if items have been moved
     if( m_fileView &&
@@ -177,89 +213,6 @@ void K3bDataDirTreeView::slotItemAdded( K3bDataItem* item )
     K3bDataDirViewItem* newDirItem = new K3bDataDirViewItem( dirItem, parentViewItem );
     m_itemMap.insert( dirItem, newDirItem );
   }
-}
-
-
-// FIXME: remove this
-void K3bDataDirTreeView::checkForNewItems()
-{
-  // check for removed items
-  K3bDataItem* item;
-
-  // this is very ugly but I don't know a better way so far...
-//   K3bDataDirViewItem* viewItem = (K3bDataDirViewItem*)firstChild();
-//   while( viewItem != 0 )
-//     {
-//       item = m_root->dirItem()->nextSibling();
-//       while( item != 0 )
-// 	{
-// 	  if( item == viewItem->dirItem() )
-// 	    break;
-
-// 	  item = item->nextSibling();
-// 	}
-
-//       if( item == 0 )
-// 	{
-// 	  K3bDataDirViewItem* viewItem2 = viewItem;
-// 	  viewItem = (K3bDataDirViewItem*)viewItem->nextSibling();
-// 	  m_itemMap.remove( viewItem->dirItem() );
-// 	  delete viewItem2;
-// 	}
-//       else
-// 	viewItem = (K3bDataDirViewItem*)viewItem->nextSibling();
-//     }
-
-
-
-  // check for new items
-  item = m_root->dirItem()->nextSibling();
-  while( item != 0 )
-    {
-      // check if we have an entry and if not, create one
-      // we can assume that a listViewItem for the parent exists
-      // since we go top to bottom
-      if( item->isDir() )
-	{
-	  K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item );
-
-	  QMapIterator<K3bDirItem*, K3bDataDirViewItem*> itDirItem = m_itemMap.find( dirItem );
-	  if( itDirItem == m_itemMap.end() ) {
-	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
-	    K3bDataDirViewItem* newDirItem = new K3bDataDirViewItem( dirItem, parentViewItem );
-	    m_itemMap.insert( dirItem, newDirItem );
-	  }
-	  else {
-	    // check if parent still correct (to get moved items)
-	    K3bDataDirViewItem* dirViewItem = itDirItem.data();
-	    K3bDataDirViewItem* parentViewItem = (K3bDataDirViewItem*)dirViewItem->parent();
-	    K3bDataDirViewItem* dirParentViewItem = m_itemMap[dirItem->parent()];
-	    if( dirParentViewItem != parentViewItem ) {
-	      // reparent it
-	      parentViewItem->takeItem( dirViewItem );
-	      dirParentViewItem->insertItem( dirViewItem );
-	    }
-	  }
-	}
-
-      item = item->nextSibling();
-    }
-
-
-  // check the directory depth
-  QListViewItemIterator it(root());
-  while( it.current() != 0 ) {
-    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>(it.current()) )
-      if( it.current() != m_root ) {
-	K3bDirItem* dirItem = dirViewItem->dirItem();
-	dirViewItem->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
-      }
-
-    ++it;
-  }
-
-  // always show the first level
-  m_root->setOpen( true );
 }
 
 
@@ -462,6 +415,59 @@ void K3bDataDirTreeView::stopDropAnimation()
     d->animatedDirItem->setPixmap( 0, d->beforeAniPixmap );
     d->animatedDirItem = 0;
   }
+}
+
+
+// FIXME: remove this
+void K3bDataDirTreeView::checkForNewItems()
+{
+  K3bDataItem* item = m_root->dirItem()->nextSibling();
+  while( item != 0 )
+    {
+      // check if we have an entry and if not, create one
+      // we can assume that a listViewItem for the parent exists
+      // since we go top to bottom
+      if( item->isDir() )
+	{
+	  K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item );
+
+	  QMapIterator<K3bDirItem*, K3bDataDirViewItem*> itDirItem = m_itemMap.find( dirItem );
+	  if( itDirItem == m_itemMap.end() ) {
+	    K3bDataDirViewItem* parentViewItem = m_itemMap[dirItem->parent()];
+	    K3bDataDirViewItem* newDirItem = new K3bDataDirViewItem( dirItem, parentViewItem );
+	    m_itemMap.insert( dirItem, newDirItem );
+	  }
+	  else {
+	    // check if parent still correct (to get moved items)
+	    K3bDataDirViewItem* dirViewItem = itDirItem.data();
+	    K3bDataDirViewItem* parentViewItem = (K3bDataDirViewItem*)dirViewItem->parent();
+	    K3bDataDirViewItem* dirParentViewItem = m_itemMap[dirItem->parent()];
+	    if( dirParentViewItem != parentViewItem ) {
+	      // reparent it
+	      parentViewItem->takeItem( dirViewItem );
+	      dirParentViewItem->insertItem( dirViewItem );
+	    }
+	  }
+	}
+
+      item = item->nextSibling();
+    }
+
+
+  // check the directory depth
+  QListViewItemIterator it(root());
+  while( it.current() != 0 ) {
+    if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>(it.current()) )
+      if( it.current() != m_root ) {
+	K3bDirItem* dirItem = dirViewItem->dirItem();
+	dirViewItem->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+      }
+
+    ++it;
+  }
+
+  // always show the first level
+  m_root->setOpen( true );
 }
 
 #include "k3bdatadirtreeview.moc"

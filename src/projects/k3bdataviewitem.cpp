@@ -26,10 +26,11 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kurl.h>
+#include <kpixmapeffect.h>
+#include <kpixmap.h>
 
 #include <qpainter.h>
 #include <qpalette.h>
-#include <qpixmap.h>
 
 
 K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, QListView* parent )
@@ -122,15 +123,13 @@ QString K3bDataViewItem::key( int col, bool a ) const
   if( col == 2 ) {
     // to have correct sorting we need to justify the size in bytes
     // 100 TB should be enough for the next year... ;-)
-    // but unsigned long is way to small for 100TB in bytes!! :(
-    // TODO: Qt 3.2 allows number(long long)
 
     if( a )
       return ( dataItem()->isDir() ? QString("0") : QString("1") )
-	+ QString::number( (unsigned long)dataItem()->size() ).rightJustify( 16, '0' );
+	+ QString::number( dataItem()->size() ).rightJustify( 16, '0' );
     else
       return ( dataItem()->isDir() ? QString("1") : QString("0") )
-	+ QString::number( (unsigned long)dataItem()->size() ).rightJustify( 16, '0' );
+	+ QString::number( dataItem()->size() ).rightJustify( 16, '0' );
   }
 
   if( a )
@@ -179,6 +178,15 @@ QString K3bDataDirViewItem::text( int index ) const
   default:
     return "";
   }
+}
+
+
+void K3bDataDirViewItem::highlightIcon( bool b )
+{
+  if( m_pixmap.isNull() )
+    m_pixmap = *pixmap(0);
+
+  setPixmap( 0, b ? KPixmapEffect::selectedPixmap( m_pixmap, listView()->colorGroup().highlight() ) : m_pixmap );
 }
 
 
