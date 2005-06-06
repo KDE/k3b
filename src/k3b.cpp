@@ -217,8 +217,6 @@ void K3bMainWindow::initActions()
   setStandardToolBarMenuEnabled(true);
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  KActionMenu* actionMenuCD = new KActionMenu( i18n("&CD Project"), "filenew", actionCollection(), "file_new_cd" );
-  KActionMenu* actionMenuDVD = new KActionMenu( i18n("&DVD Project"), "filenew", actionCollection(), "file_new_dvd" );
   actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
   actionFileNewData = new KAction(i18n("New Data &CD Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
@@ -237,17 +235,19 @@ void K3bMainWindow::initActions()
 				      actionCollection(), "file_new_video_dvd");
 
 
-  actionFileNewMenu->insert( actionMenuCD );
-  actionFileNewMenu->insert( actionMenuDVD );
   actionFileNewMenu->setDelayed( false );
-  actionMenuCD->insert( actionFileNewAudio );
-  actionMenuCD->insert( actionFileNewData );
-  actionMenuCD->insert( actionFileNewMixed );
-  actionMenuCD->insert( actionFileNewVcd );
-  actionMenuCD->insert( actionFileNewMovix );
-  actionMenuDVD->insert( actionFileNewDvd );
-  actionMenuDVD->insert( actionFileNewVideoDvd );
-  actionMenuDVD->insert( actionFileNewMovixDvd );
+  actionFileNewMenu->insert( actionFileNewData );
+  actionFileNewMenu->insert( actionFileNewDvd );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewAudio );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewMixed );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewVcd );
+  actionFileNewMenu->insert( actionFileNewVideoDvd );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewMovix );
+  actionFileNewMenu->insert( actionFileNewMovixDvd );
 
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
