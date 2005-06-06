@@ -491,12 +491,36 @@ AC_ARG_WITH(
 
 have_mpc=no
 if test "$ac_cv_use_mpc" = "yes"; then
-  KDE_CHECK_HEADERS(musepack/musepack.h, [
-  	AC_CHECK_LIB(musepack, mpc_decoder_setup, [
+
+  dnl - search for both the new and the old naming -
+
+  KDE_CHECK_HEADERS(mpcdec/mpcdec.h, [
+  	AC_CHECK_LIB(mpcdec, mpc_decoder_setup, [
   		have_mpc=yes
-  		], [], [])
+		MPC_LIBS="-lmpcdec"
+		AC_DEFINE(
+			MPC_HEADER_FILE, 
+			<mpcdec/mpcdec.h>, 
+			[The header to include for MPC decoding.])
+		],
+		[], [], [])
   ])
+	
+  if test "$have_mpc" = "no"; then
+    KDE_CHECK_HEADERS(musepack/musepack.h, [
+    	  AC_CHECK_LIB(musepack, mpc_decoder_setup, [
+  		  have_mpc=yes
+		  MPC_LIBS="-lmusepack"
+		  AC_DEFINE(
+			  MPC_HEADER_FILE, 
+			  <musepack/musepack.h>, 
+			  [The header to include for MPC decoding.]
+		  )
+  		  ], [], [])
+    ])
+  fi
 fi
+AC_SUBST(MPC_LIBS)
 
 AM_CONDITIONAL(include_MPC, [test x$have_mpc = xyes])
 

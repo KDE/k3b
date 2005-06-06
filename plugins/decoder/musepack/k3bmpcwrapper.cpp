@@ -19,6 +19,9 @@
 #include <qfile.h>
 
 
+#ifndef BOOL
+#define BOOL mpc_bool_t
+#endif
 
 mpc_int32_t read_impl( void* data, void* ptr, mpc_int32_t size )
 {
