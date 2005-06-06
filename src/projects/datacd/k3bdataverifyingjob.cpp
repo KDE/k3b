@@ -116,14 +116,20 @@ void K3bDataVerifyingJob::start()
 
 void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 {
-  if( !success )
-    KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
-			      i18n("Unable to close the tray") );
-
-  emit newTask( i18n("Reading TOC") );
-
-  connect( K3bCdDevice::toc( d->device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
+  if( d->canceled ) {
+    emit canceled();
+    finishVerification( false );
+  }
+  else {
+    if( !success )
+      KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
+				i18n("Unable to close the tray") );
+    
+    emit newTask( i18n("Reading TOC") );
+    
+    connect( K3bCdDevice::toc( d->device ), SIGNAL(finished(K3bCdDevice::DeviceHandler*)),
 	     this, SLOT(slotTocRead(K3bCdDevice::DeviceHandler*)) );
+  }
 }
 
 
@@ -133,8 +139,7 @@ void K3bDataVerifyingJob::slotTocRead( K3bCdDevice::DeviceHandler* dh )
     emit canceled();
     finishVerification(false);
   }
-
-  if( !dh->success() ) {
+  else if( !dh->success() ) {
     emit infoMessage( i18n("Reading TOC failed."), ERROR );
     finishVerification(false);
   }

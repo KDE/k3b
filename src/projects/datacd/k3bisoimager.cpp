@@ -677,7 +677,9 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 	  )
        ) {
 
-      if( item->isDir() || QFile::exists(item->localPath()) ) {
+      QFileInfo f( item->localPath() );
+      // QFile::exists returns false for broken symlinks which is not what we want
+      if( item->isDir() || f.isSymLink() || f.isFile() ) {
 	num++;
 
 	// some versions of mkisofs seem to have a bug that prevents to use filenames

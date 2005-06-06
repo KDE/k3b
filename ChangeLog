@@ -1,3 +1,7 @@
+0.11.25
+Do not discard broken symlinks if not explicitely requested by the user.
+Fixed crash when cancelling data verification during reloading of media.
+	
 0.11.24
 K3b now ejects the source DVD when reader and writer device are the same (no more 
 accidently overwriting the rewritable source DVD)
