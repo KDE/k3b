@@ -33,6 +33,8 @@ class KActionCollection;
 class KActionMenu;
 class KAction;
 class K3bView;
+class QDragMoveEvent;
+class QDragLeaveEvent;
 
 
 /**
@@ -63,6 +65,8 @@ class K3bDataDirTreeView : public K3bListView
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
+  void contentsDragMoveEvent( QDragMoveEvent* e );
+  void contentsDragLeaveEvent( QDragLeaveEvent* e );
 
   KActionCollection* m_actionCollection;
   KActionMenu* m_popupMenu;

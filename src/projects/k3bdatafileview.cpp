@@ -44,7 +44,8 @@
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
   : K3bListView( parent ), 
-    m_view(view)
+    m_view(view),
+    m_dropDirItem(0)
 {
   m_treeView = dirTreeView;
 
@@ -203,8 +204,40 @@ bool K3bDataFileView::acceptDrag(QDropEvent* e) const
 }
 
 
+void K3bDataFileView::contentsDragMoveEvent( QDragMoveEvent* e )
+{
+  K3bListView::contentsDragMoveEvent( e );
+
+  // highlight the folder the items would be added to
+  if( m_dropDirItem )
+    m_dropDirItem->highlightIcon( false );
+
+  m_dropDirItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) );
+  if( m_dropDirItem )
+    m_dropDirItem->highlightIcon( true );
+}
+
+
+void K3bDataFileView::contentsDragLeaveEvent( QDragLeaveEvent* e )
+{
+  K3bListView::contentsDragLeaveEvent( e );
+
+  // remove any highlighting
+  if( m_dropDirItem ) {
+    m_dropDirItem->highlightIcon( false );
+    m_dropDirItem = 0;
+  }
+}
+
+
 void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem* )
 {
+  // remove any highlighting
+  if( m_dropDirItem ) {
+    m_dropDirItem->highlightIcon( false );
+    m_dropDirItem = 0;
+  }
+
   if( !e->isAccepted() )
     return;
 

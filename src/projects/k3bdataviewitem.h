@@ -67,11 +67,14 @@ class K3bDataDirViewItem : public K3bDataViewItem
 	
   K3bDirItem* dirItem() const { return m_dirItem; }
 
+  void highlightIcon( bool );
+
  protected:
   virtual void dragEntered();
 
  private:
   K3bDirItem* m_dirItem;
+  QPixmap m_pixmap;
 };
 
 
