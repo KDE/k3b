@@ -140,26 +140,45 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     }
   }
 
+
   QString newName = url.fileName();
-
-
   K3bDirItem* newDirItem = 0;
+
+  //
+  // The source is valid. Now check if the project already contains a file with that name
+  // and if so handle it properly
+  //
   if( valid ) {
     if( K3bDataItem* oldItem = dir->find( newName ) ) {
+      //
+      // reuse an existing dir
+      //
       if( oldItem->isDir() && f.isDir() )
 	newDirItem = dynamic_cast<K3bDirItem*>(oldItem);
-      else if( oldItem->isFromOldSession() ) {
-	// we cannot replace files in the old session with dirs and vice versa (I think)
-	if( f.isDir() != oldItem->isDir() ) {
-	  if( !getNewName( newName, dir, newName ) )
-	    valid = false;
-	}
-	// else: Ok, files handled in K3bFileItem constructor and dirs handled above
+
+      //
+      // we cannot replace files in the old session with dirs and vice versa (I think)
+      // files are handled in K3bFileItem constructor and dirs handled above
+      //
+      else if( oldItem->isFromOldSession() &&
+	       f.isDir() != oldItem->isDir() ) {
+	if( !getNewName( newName, dir, newName ) )
+	  valid = false;
       }
+
       else if( m_bExistingItemsIgnoreAll )
 	valid = false;
-      else if( m_bExistingItemsReplaceAll )
-	delete oldItem;
+
+      else if( m_bExistingItemsReplaceAll ) {
+	// if we replace an item from an old session the K3bFileItem constructor takes care
+	// of replacing the item
+	if( !oldItem->isFromOldSession() )
+	  delete oldItem;
+      }
+
+      //
+      // Let the user choose
+      //
       else {
 	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
 					      i18n("<p>File <em>%1</em> already exists in "
@@ -185,18 +204,19 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 							QString::null,
 							i18n("Rename the new file") ),
 					      KStdGuiItem::cancel() ) ) {
-	case 1: // replace
-	  delete oldItem;
-	  break;
 	case 2: // replace all
-	  delete oldItem;
 	  m_bExistingItemsReplaceAll = true;
-	  break;
-	case 3: // ignore
-	  valid = false;
+	  // fallthrough
+	case 1: // replace
+	  // if we replace an item from an old session the K3bFileItem constructor takes care
+	  // of replacing the item
+	  if( !oldItem->isFromOldSession() )
+	    delete oldItem;
 	  break;
 	case 4: // ignore all
 	  m_bExistingItemsIgnoreAll = true;
+	  // fallthrough
+	case 3: // ignore
 	  valid = false;
 	  break;
 	case 5: // rename
@@ -211,9 +231,13 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     }
   }
 
+  //
+  // Project valid also (we overwrite or renamed)
+  // now create the new item
+  //
   if( valid ) {
     if( f.isDir() && !f.isSymLink() ) {
-      if( !newDirItem )
+      if( !newDirItem ) // maybe we reuse an already existing dir
 	newDirItem = new K3bDirItem( newName , dir->doc(), dir );
 
       QDir newDir( f.absFilePath() );      
