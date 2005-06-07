@@ -38,7 +38,7 @@
 
 #include <config.h>
 
-static const char* appVersion = "0.12-svn";
+static const char* appVersion = "0.12.90";
 static const char* description = I18N_NOOP("A CD and DVD burning application");
 
 
@@ -100,6 +100,9 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Jakob Petsovits",
 		      I18N_NOOP("For the very cool conditional audio ripping pattern."),
 		      "jpetso@gmx.at" );
+  aboutData.addCredit("Heiner Eichmann",
+		      I18N_NOOP("For his work on the BSD port and some great patches."),
+		      "h.eichmann@gmx.de" );
 
 
   KCmdLineArgs::init( argc, argv, &aboutData );
