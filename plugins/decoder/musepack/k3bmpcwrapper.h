@@ -16,12 +16,13 @@
 #ifndef _K3B_MPC_WRAPPER_H_
 #define _K3B_MPC_WRAPPER_H_
 
+#include <config.h>
+
 #include <qstring.h>
 
 #include <k3bmsf.h>
 
-#include <musepack/musepack.h>
-#include <musepack/config_types.h>
+#include MPC_HEADER_FILE
 
 class QFile;
 
