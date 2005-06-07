@@ -188,40 +188,40 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
 {
   return d->cdWriter;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
 {
   return d->cdReader;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
 {
   return d->dvdWriter;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
 {
   return d->dvdReader;
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
 {
   return cdWriter();
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
 {
   return cdReader();
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices()
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
 {
   return d->allDevices;
 }
@@ -402,15 +402,19 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 #if __FreeBSD_version < 500100
 	    dev += "c";
 #endif
-
-	    Device* device = new Device(dev.latin1());
-	    device->m_bus = bus;
-	    device->m_target = target;
-	    device->m_lun = lun;
-	    device->m_passDevice = "/dev/" + pass;
-	    kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
-	    addDevice(device);
+	    if (dev1 != "" && dev2 != "" && dev.startsWith("/dev/cd"))
+	    {
+	      Device* device = new Device(dev.latin1());
+	      device->m_bus = bus;
+	      device->m_target = target;
+	      device->m_lun = lun;
+	      device->m_passDevice = "/dev/" + pass;
+	      kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+	      addDevice(device);
+	    }
 	    need_close = 0;
+	    dev1="";
+	    dev2="";
 	  }
 	bus = dev_result->path_id;
 	target = dev_result->target_id;
@@ -457,13 +461,16 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 #if __FreeBSD_version < 500100
       dev += "c";
 #endif
-      Device* device = new Device(dev.latin1());
-      device->m_bus = bus;
-      device->m_target = target;
-      device->m_lun = lun;
-      device->m_passDevice = "/dev/" + pass;
-      kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
-      addDevice(device);
+      if (dev1 != "" && dev2 != "" && dev.startsWith("/dev/cd"))
+      {
+        Device* device = new Device(dev.latin1());
+        device->m_bus = bus;
+        device->m_target = target;
+        device->m_lun = lun;
+        device->m_passDevice = "/dev/" + pass;
+        kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+        addDevice(device);
+      }
     }
   close(fd);
 #endif
@@ -673,9 +680,10 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
   if( !testForCdrom(resolved) ) {
 #ifdef HAVE_RESMGR
     // With resmgr we might only be able to open the symlink name.
-    if (testForCdrom(devicename)) {
+    if( testForCdrom(devicename) ) {
       resolved = devicename;
-    } else {
+    } 
+    else {
       return 0;
     }
 #else
@@ -859,12 +867,6 @@ void K3bDevice::DeviceManager::scanFstab()
   } // while mountInfo
 
   ::endfsent();
-}
-
-
-void K3bDevice::DeviceManager::slotCollectStdout( KProcess*, char* data, int len )
-{
-  m_processOutput += QString::fromLocal8Bit( data, len );
 }
 
 

@@ -346,6 +346,24 @@ void K3bDevice::Device::checkForAncientWriters()
     m_bufferSize = 1024;
     d->burnfree = false;
   }
+  else if( vendor().startsWith("TEAC") ) { 
+    if( description().startsWith("CD-R56S") ) {
+      m_writeModes |= TAO;
+      d->deviceType |= CDROM|CDR;
+      m_maxWriteSpeed = 6;
+      m_maxReadSpeed = 24;
+      m_bufferSize = 1302;
+      d->burnfree = false;
+    }
+    if( description().startsWith("CD-R58S") ) {
+      m_writeModes |= TAO;
+      d->deviceType |= CDROM|CDR;
+      m_maxWriteSpeed = 8;
+      m_maxReadSpeed = 24;
+      m_bufferSize = 4096;
+      d->burnfree = false;
+    }
+  }
   else if( vendor().startsWith("MATSHITA") ) {
     if( description().startsWith("CD-R   CW-7501") ) {
       m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
@@ -1519,7 +1537,7 @@ bool K3bDevice::Device::open( bool write ) const
 
 #ifdef Q_OS_FREEBSD
   if( !d->cam ) {
-    d->cam = cam_open_pass (m_passDevice.latin1(), (write ? O_RDWR : O_RDONLY),0 /* NULL */);
+    d->cam = cam_open_pass (m_passDevice.latin1(), O_RDWR,0 /* NULL */);
     kdDebug() << "(K3bDevice::openDevice) open device " << m_passDevice
 	      << ((d->cam)?" succeeded.":" failed.") << endl;
   }
