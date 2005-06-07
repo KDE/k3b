@@ -146,7 +146,7 @@ void K3bDvdRipperWidget::setupGui(){
     mainLayout->addMultiCellWidget( ripOptions, 2, 2, 0, 1 );
 
     setStartButtonText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
-    connect( this, SIGNAL( startClicked() ), this, SLOT( rip() ) );
+    connect( this, SIGNAL( started() ), this, SLOT( rip() ) );
     //connect(m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
     connect(m_checkOpenEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckOpenEncoding( int ) ));
     connect(m_checkStartEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckStartEncoding( int ) ));
@@ -284,14 +284,15 @@ void K3bDvdRipperWidget::checkSize(  ){
   const K3bExternalBin *bin = k3bcore->externalBinManager()->binObject("tccat");
   for( int i = 0; i < max; i++ ){
     dvd = m_ripTitles.at( i );
-    if( (*dvd).isAllAngle() ){
+    if( (*dvd).isAllAngle() && bin->version <= K3bVersion( 0, 6, 11 ) ){
       m_detectTitleSizeDone = false;
       m_supportSizeDetection = true;
       int title = (*dvd).getTitleNumber();
       QString t( QString::number(title) );
       KShellProcess p;
       p << bin->path << "-d 1" << "-i" <<  m_device << "-P" << t;
-      connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseError(KProcess*, char*, int)) );
+      connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), 
+	       this, SLOT(slotParseError(KProcess*, char*, int)) );
       //connect( &p, SIGNAL(processExited(KProcess*)), this, SLOT(slotExited( KProcess* )) );
       if( !p.start( KProcess::Block, KProcess::Stderr ) ) {
 	kdDebug() << "(K3bDvdRipperWidget) Can't detect size of title" << endl;
