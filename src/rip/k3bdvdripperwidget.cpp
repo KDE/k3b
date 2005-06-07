@@ -284,20 +284,24 @@ void K3bDvdRipperWidget::checkSize(  ){
   const K3bExternalBin *bin = k3bcore->externalBinManager()->binObject("tccat");
   for( int i = 0; i < max; i++ ){
     dvd = m_ripTitles.at( i );
-    if( (*dvd).isAllAngle() && bin->version <= K3bVersion( 0, 6, 11 ) ){
+    if( (*dvd).isAllAngle() ){
       m_detectTitleSizeDone = false;
       m_supportSizeDetection = true;
       int title = (*dvd).getTitleNumber();
       QString t( QString::number(title) );
+
       KShellProcess p;
-      p << bin->path << "-d 1" << "-i" <<  m_device << "-P" << t;
       connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), 
 	       this, SLOT(slotParseError(KProcess*, char*, int)) );
-      //connect( &p, SIGNAL(processExited(KProcess*)), this, SLOT(slotExited( KProcess* )) );
+
+      if( bin->version <= K3bVersion( 0, 6, 11 ) )
+	p << bin->path << "-d 1" << "-i" <<  m_device << "-P" << t << "> /dev/null";
+      else
+	p << bin->path << "-d 1" << "-i" <<  m_device << "-T" << t << "-P" << "> /dev/null";
+
       if( !p.start( KProcess::Block, KProcess::Stderr ) ) {
 	kdDebug() << "(K3bDvdRipperWidget) Can't detect size of title" << endl;
       }
-      //kdDebug() << "VobSize: " << (float) m_vobSize << ", titlesize " << (float) m_titleSize << endl;
 
       m_vobSize += m_titleSize;
     } else {
@@ -312,7 +316,7 @@ void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
   kdDebug() << "(K3bDvdRipperWidget) Parse output for size: " << tmp << endl;
   // must be the first line, ignore other. NO, not for encrypted DVDs
   if( !m_detectTitleSizeDone ){
-    if( tmp.contains("blocks") ){
+    if( tmp.contains("blocks") || tmp.contains("From block") ) {
       m_detectTitleSizeDone = true;
       m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
       kdDebug() << "(K3bDvdRipperWidget) Titlesize to rip: " << m_titleSize << endl;

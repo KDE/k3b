@@ -84,7 +84,7 @@ void K3bDvdCopy::cancel( ){
     m_ripProcess->cancel();
 }
 
-void K3bDvdCopy::slotPercent( unsigned int i ){
+void K3bDvdCopy::slotPercent( int i ){
     QTime current = QTime::currentTime();
     int s = m_timeEstimated.msecsTo( current );
     m_timeEstimated = current;
