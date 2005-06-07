@@ -402,15 +402,19 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 #if __FreeBSD_version < 500100
 	    dev += "c";
 #endif
-
-	    Device* device = new Device(dev.latin1());
-	    device->m_bus = bus;
-	    device->m_target = target;
-	    device->m_lun = lun;
-	    device->m_passDevice = "/dev/" + pass;
-	    kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
-	    addDevice(device);
+	    if (dev1 != "" && dev2 != "" && dev.startsWith("/dev/cd"))
+	    {
+	      Device* device = new Device(dev.latin1());
+	      device->m_bus = bus;
+	      device->m_target = target;
+	      device->m_lun = lun;
+	      device->m_passDevice = "/dev/" + pass;
+	      kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+	      addDevice(device);
+	    }
 	    need_close = 0;
+	    dev1="";
+	    dev2="";
 	  }
 	bus = dev_result->path_id;
 	target = dev_result->target_id;
@@ -457,13 +461,16 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 #if __FreeBSD_version < 500100
       dev += "c";
 #endif
-      Device* device = new Device(dev.latin1());
-      device->m_bus = bus;
-      device->m_target = target;
-      device->m_lun = lun;
-      device->m_passDevice = "/dev/" + pass;
-      kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
-      addDevice(device);
+      if (dev1 != "" && dev2 != "" && dev.startsWith("/dev/cd"))
+      {
+        Device* device = new Device(dev.latin1());
+        device->m_bus = bus;
+        device->m_target = target;
+        device->m_lun = lun;
+        device->m_passDevice = "/dev/" + pass;
+        kdDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+        addDevice(device);
+      }
     }
   close(fd);
 #endif
