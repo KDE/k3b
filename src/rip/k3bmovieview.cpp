@@ -287,6 +287,7 @@ void K3bMovieView::slotRip()
 
   K3bDvdRipperWidget ripWidget( m_device->devicename(), this, "dvdrip");
   DvdTitle::Iterator dvd;
+  m_ripTitle = dynamic_cast<K3bDvdRipListViewItem*>( m_listView->selectedItem() );
   int title = m_ripTitle->getHiddenTitle( );
   kdDebug() << QString::number(title) << " Title" << endl;
   DvdTitle toRipTitles;

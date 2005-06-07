@@ -255,6 +255,19 @@ float K3bDvdRippingProcess::tccatParsedBytes( char *text, int len) {
         tmp= tmp.mid( 0, end); // end value
         blocks = (tmp.toFloat()-startBlocks)*2048;
     }
+    else if( tmp.contains("From block") ) {
+        int index = tmp.find("From block");
+        tmp = tmp.mid(index+11);
+        int end = tmp.find( " to block " );
+        QString start= tmp.mid( 0, end); // first value
+        float startBlocks = start.toFloat();
+        tmp=tmp.mid(end+10);
+        end = tmp.find( '\n' );
+        if (end > 0)
+           tmp= tmp.mid( 0, end); // end value
+
+        blocks = (tmp.toFloat()-startBlocks)*2048;
+    }
     kdDebug() << "(K3bDvdRippingProcess) Parsed bytes: " << QString::number(blocks, 'f') << endl;
     return blocks;
 }
@@ -270,7 +283,8 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
             if( mount.isEmpty() ) {
                 kdDebug() << "(K3bDvdRippingProcess) Try to mount <" << m_mountPoint << ">." << endl;
 		emit newSubTask( i18n("Mounting media") );
-                connect( KIO::mount( true, "autofs", "", m_mountPoint, true ),
+		// FIXME: why not use K3bAppDeviceManager
+                connect( KIO::mount( true, 0, dev->mountDevice(), dev->mountPoint(), false ),
                          SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingDvd(KIO::Job*) ) );
             } else {
                 m_mountPoint = mount;
@@ -305,18 +319,13 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     QString video;
     QDir video_ts( m_mountPoint + "/VIDEO_TS");
 
-    bool checkboth = true;
-#ifndef Q_OS_FREEBSD
-    // on FreeBSD both /VIDEO_TS and /video_ts exist on dvd devices ?!?
-    checkboth = false;
-#endif
-
-    if( checkboth && video_ts.exists() ) {
-        m_udfMount = true;
-        kdDebug() << "(K3bDvdRippingProcess) <" << m_mountPoint << "> has UDF filesystem." << endl;
+    if( !video_ts.exists() ) {
+      video_ts.setPath( m_mountPoint + "/video_ts");
+      m_udfMount = true;
+      kdDebug() << "(K3bDvdRippingProcess) <" << m_mountPoint << "> has UDF filesystem." << endl;
     }
-    video_ts.setPath( m_mountPoint + "/video_ts");
-    if( !video_ts.exists() && !m_udfMount){
+
+    if( !video_ts.exists() ){
         m_preProcessingFailed = true;
         KMessageBox::error(qApp->activeWindow(), i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
                            i18n("I/O Error") );
@@ -326,10 +335,10 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
     }
     bool result = false;
     // read directory from /dev/dvd
-    if( !m_mountPoint.isEmpty() && !m_udfMount) {
+    if( !m_mountPoint.isEmpty() && m_udfMount) {
         result = copyIfoFiles("video_ts", "vts", "ifo");
         video = "video_ts";
-    } else if (!m_mountPoint.isEmpty() && m_udfMount) {
+    } else if (!m_mountPoint.isEmpty() ) {
         kdDebug() << "(K3bDvdRippingProcess) UDF DVD mount filessystem." << endl;
         video = "VIDEO_TS";
         result = copyIfoFiles("VIDEO_TS", "VTS", "IFO");
@@ -366,14 +375,14 @@ void K3bDvdRippingProcess::slotIfoCopyFinished( KIO::Job *job ) {
     if( job->error() > 0 ) {
         kdDebug() << "(K3bDvdRippingProcess) Job error IFO copy: " << job->errorString() << endl;
         emit finished( false );
-        KIO::unmount( m_mountPoint, true );
+        KIO::unmount( m_mountPoint, false );
         return;
     }
     kdDebug() << "(K3bDvdRippingProcess) Chmod: " << m_dirtmp << "/" << m_videoCaseSensitive << endl;
     kdDebug() << "(K3bDvdRippingProcess) Chmod: " << m_dirtmp << "/" << m_vobCaseSensitive << endl;
     KIO::chmod( m_dirtmp + "/" + m_videoCaseSensitive, 0644 );
     KIO::chmod( m_dirtmp + "/" + m_vobCaseSensitive, 0644 );
-    connect( KIO::unmount( m_mountPoint, true ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingFinished( KIO::Job* )) );
+    connect( KIO::unmount( m_mountPoint, false ), SIGNAL(result(KIO::Job*)), this, SLOT( slotPreProcessingFinished( KIO::Job* )) );
 }
 
 void K3bDvdRippingProcess::slotPreProcessingFinished( KIO::Job *job ) {

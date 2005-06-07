@@ -51,7 +51,7 @@ public:
 public slots:
     void start();
     void cancel();
-    void slotPercent( unsigned int );
+    void slotPercent( int );
     void ripFinished( bool );
     void slotDataRate( unsigned long );
 

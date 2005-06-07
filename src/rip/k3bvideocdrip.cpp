@@ -41,7 +41,8 @@ K3bVideoCdRip::K3bVideoCdRip( K3bJobHandler* hdl, K3bVideoCdRippingOptions* opti
     m_ripsourceType( 0 ),
     m_videooptions( options ),
     m_canceled( false ),
-    m_process( 0 )
+    m_process( 0 ),
+    m_subPosition ( 0 )
 {}
 
 

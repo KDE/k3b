@@ -103,6 +103,7 @@ void K3bTcWrapper::slotParseTcprobeOutput( KProcess *, char *text, int len){
     }
 }
 
+// FIXME: use K3bProcess and K3bProcess::OutputCollector
 void K3bTcWrapper::slotParseTcprobeError( KProcess *, char *text, int len){
     m_errorBuffer += QString::fromLocal8Bit( text, len );
 }

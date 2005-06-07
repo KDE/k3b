@@ -146,7 +146,7 @@ void K3bDvdRipperWidget::setupGui(){
     mainLayout->addMultiCellWidget( ripOptions, 2, 2, 0, 1 );
 
     setStartButtonText( i18n( "Start Ripping" ), i18n( "This starts the DVD copy.") );
-    connect( this, SIGNAL( startClicked() ), this, SLOT( rip() ) );
+    connect( this, SIGNAL( started() ), this, SLOT( rip() ) );
     //connect(m_buttonStaticDir, SIGNAL(clicked()), this, SLOT(slotFindStaticDir()) );
     connect(m_checkOpenEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckOpenEncoding( int ) ));
     connect(m_checkStartEncoding, SIGNAL( stateChanged( int ) ), this, SLOT( slotCheckStartEncoding( int ) ));
@@ -289,14 +289,19 @@ void K3bDvdRipperWidget::checkSize(  ){
       m_supportSizeDetection = true;
       int title = (*dvd).getTitleNumber();
       QString t( QString::number(title) );
+
       KShellProcess p;
-      p << bin->path << "-d 1" << "-i" <<  m_device << "-P" << t;
-      connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotParseError(KProcess*, char*, int)) );
-      //connect( &p, SIGNAL(processExited(KProcess*)), this, SLOT(slotExited( KProcess* )) );
+      connect( &p, SIGNAL(receivedStderr(KProcess*, char*, int)), 
+	       this, SLOT(slotParseError(KProcess*, char*, int)) );
+
+      if( bin->version <= K3bVersion( 0, 6, 11 ) )
+	p << bin->path << "-d 1" << "-i" <<  m_device << "-P" << t << "> /dev/null";
+      else
+	p << bin->path << "-d 1" << "-i" <<  m_device << "-T" << t << "-P" << "> /dev/null";
+
       if( !p.start( KProcess::Block, KProcess::Stderr ) ) {
 	kdDebug() << "(K3bDvdRipperWidget) Can't detect size of title" << endl;
       }
-      //kdDebug() << "VobSize: " << (float) m_vobSize << ", titlesize " << (float) m_titleSize << endl;
 
       m_vobSize += m_titleSize;
     } else {
@@ -311,7 +316,7 @@ void K3bDvdRipperWidget::slotParseError( KProcess *p, char *text, int len ){
   kdDebug() << "(K3bDvdRipperWidget) Parse output for size: " << tmp << endl;
   // must be the first line, ignore other. NO, not for encrypted DVDs
   if( !m_detectTitleSizeDone ){
-    if( tmp.contains("blocks") ){
+    if( tmp.contains("blocks") || tmp.contains("From block") ) {
       m_detectTitleSizeDone = true;
       m_titleSize = (double) K3bDvdRippingProcess::tccatParsedBytes( text, len );
       kdDebug() << "(K3bDvdRipperWidget) Titlesize to rip: " << m_titleSize << endl;
