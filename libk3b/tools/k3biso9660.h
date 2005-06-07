@@ -31,6 +31,7 @@ namespace K3bDevice {
 }
 
 class K3bIso9660;
+class K3bIso9660Backend;
 
 
 /**
@@ -234,6 +235,11 @@ class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
    */
   int read( unsigned int pos, char* data, int len ) const;
 
+  /**
+   * Copy this file to a url.
+   */
+  bool copyTo( const QString& url ) const;
+
  private:
   char m_algo[2];
   char m_parms[2];
@@ -257,6 +263,8 @@ class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
  * by the way... who the hell designed this?)
  * I also removed the KArchive inheritance because of the named reasons.
  * So this stuff contains a lot KArchive code which has been made usable.
+ *
+ * That does not mean that this class is well designed. No, it's not. :)
  */
 class LIBK3B_EXPORT K3bIso9660
 {
@@ -281,11 +289,16 @@ class LIBK3B_EXPORT K3bIso9660
   K3bIso9660( int fd );
 
   /**
+   * Directly specify the backend to read from.
+   * K3bIso9660 will take ownership of the backend and delete it.
+   */
+  K3bIso9660( K3bIso9660Backend* );
+
+  /**
    * If the .iso is still opened, then it will be
    * closed automatically by the destructor.
    */
   virtual ~K3bIso9660();
-
 
   /**
    * Opens the archive for reading.
@@ -309,7 +322,7 @@ class LIBK3B_EXPORT K3bIso9660
 
   /**
    * The name of the os file, as passed to the constructor
-   * Null if you used the QIODevice constructor.
+   * Null if you did not use the QString constructor.
    */
   const QString& fileName() { return m_filename; }
 
@@ -343,11 +356,11 @@ class LIBK3B_EXPORT K3bIso9660
 
   void debugEntry( const K3bIso9660Entry*, int depth ) const;
 
-  QString m_filename;
-
   int m_joliet;
 
  private:
+  QString m_filename;
+
   class Private;
   Private * d;
 };

@@ -14,8 +14,8 @@
  */
 
 #include "k3bdatatrackreader.h"
-#include "k3blibdvdcss.h"
 
+#include <k3blibdvdcss.h>
 #include <k3bdevice.h>
 #include <k3bdeviceglobals.h>
 #include <k3btrack.h>

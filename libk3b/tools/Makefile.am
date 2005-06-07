@@ -15,7 +15,7 @@ libk3btools_la_SOURCES = k3bwavefilewriter.cpp k3bbusywidget.cpp k3bdeviceselect
 	k3bcdtextvalidator.cpp k3bintvalidator.cpp k3bexceptions.cpp \
 	k3bprogressdialog.cpp k3btoolbox.cpp k3bpushbutton.cpp \
 	k3blistviewitemanimator.cpp k3bthreadwidget.cpp k3bradioaction.cpp \
-	k3bsignalwaiter.cpp
+	k3bsignalwaiter.cpp k3blibdvdcss.cpp k3biso9660backend.cpp
 
 include_HEADERS = k3bwavefilewriter.h k3bbusywidget.h k3bdeviceselectiondialog.h \
 	k3bmd5job.h k3bcutcombobox.h k3bstringutils.h \
@@ -25,7 +25,8 @@ include_HEADERS = k3bwavefilewriter.h k3bbusywidget.h k3bdeviceselectiondialog.h
 	k3blistview.h k3bmsfedit.h k3bcdtextvalidator.h \
 	k3bintvalidator.h k3bexceptions.h k3bprogressdialog.h \
 	k3btoolbox.h k3bpushbutton.h k3blistviewitemanimator.h \
-	k3bthreadwidget.h k3bradioaction.h k3bsignalwaiter.h
+	k3bthreadwidget.h k3bradioaction.h k3bsignalwaiter.h \
+	k3biso9660backend.h
 
 METASOURCES = AUTO
 

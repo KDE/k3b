@@ -14,23 +14,11 @@
  */
 
 #include "k3biso9660.h"
+#include "k3biso9660backend.h"
 
 #include <k3bdevice.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bmsf.h>
 
 #include "libisofs/isofs.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <errno.h>
-#include <fcntl.h>
 
 #include <qcstring.h>
 #include <qdir.h>
@@ -38,10 +26,6 @@
 #include <qptrlist.h>
 
 #include <kdebug.h>
-
-#ifndef O_LARGEFILE
-#define O_LARGEFILE 0
-#endif
 
 
 
@@ -126,7 +110,8 @@ int K3bIso9660File::read( unsigned int pos, char* data, int maxlen ) const
     bufferLen = size() - pos + startSecOffset;
 
   // pad to 2048
-  bufferLen += (2048-(bufferLen%2048));
+  if( bufferLen%2048 )
+    bufferLen += (2048-(bufferLen%2048));
 
   // we need to buffer if we changed the startSec or need a bigger buffer
   if( startSecOffset || bufferLen > (unsigned int)maxlen ) {
@@ -157,6 +142,27 @@ int K3bIso9660File::read( unsigned int pos, char* data, int maxlen ) const
       read = size() - pos;
 
     return read;
+  }
+}
+
+
+bool K3bIso9660File::copyTo( const QString& url ) const
+{
+  QFile of( url );
+  if( of.open( IO_WriteOnly ) ) {
+    char buffer[2048*10];
+    unsigned int pos = 0;
+    int r = 0;
+    while( ( r = read( pos, buffer, 2048*10 ) ) > 0 ) {
+      of.writeBlock( buffer, r );
+      pos += r;
+    }
+
+    return !r;
+  }
+  else {
+    kdDebug() << "(K3bIso9660File) could not open " << url << " for writing." << endl;
+    return false;
   }
 }
 
@@ -246,12 +252,10 @@ public:
   Private() 
     : cdDevice(0),
       fd(-1),
-      closeFd(false),
       isOpen(false),
-      startSector(0) {
+      startSector(0),
+      backend(0) {
   }
-
-  bool deleteDev;
 
   QPtrList<K3bIso9660Directory> elToritoDirs;
   QPtrList<K3bIso9660Directory> jolietDirs;
@@ -262,12 +266,13 @@ public:
 
   K3bDevice::Device* cdDevice;
   int fd;
-  bool closeFd;
 
   bool isOpen;
 
   // only used for direkt K3bDevice::Device access
   unsigned int startSector;
+
+  K3bIso9660Backend* backend;
 };
 
 
@@ -285,6 +290,12 @@ K3bIso9660::K3bIso9660( int fd )
 }
 
 
+K3bIso9660::K3bIso9660( K3bIso9660Backend* backend )
+{
+  d = new Private();
+  d->backend = backend;
+}
+
 
 K3bIso9660::K3bIso9660( K3bDevice::Device* dev, unsigned int startSector )
 {
@@ -297,6 +308,7 @@ K3bIso9660::K3bIso9660( K3bDevice::Device* dev, unsigned int startSector )
 K3bIso9660::~K3bIso9660()
 {
   close();
+  delete d->backend;
   delete d;
 }
 
@@ -305,48 +317,10 @@ int K3bIso9660::read( unsigned int sector, char* data, int count )
 {
   if( count == 0 )
     return 0;
-
-  int read = -1;
-
-  if( d->cdDevice != 0 ) {
-
-    int retries = 10;  // TODO: no fixed value
-    while( retries && !d->cdDevice->read10( (unsigned char*)data,
-					    count*2048,
-					    sector,
-					    count ) )
-      retries--;
-
-    if( retries > 0 )
-      read = count;
-
-  
-#ifdef Q_OS_LINUX
-    // fallback
-    if( read < 0 ) {
-      kdDebug() << "(K3bIso9660) falling back to stdlib read" << endl;
-      if( ::lseek( d->cdDevice->handle(), static_cast<unsigned long long>(sector)*2048, SEEK_SET ) == -1 )
-	kdDebug() << "(K3bIso9660) seek failed." << endl;
-      else {
-	read = ::read( d->cdDevice->handle(), data, count*2048 );
-	if( read < 0 )
-	  kdDebug() << "(K3bIso9660) stdlib read failed." << endl;
-	else
-	  read /= 2048;
-      }
-    }
-#endif
-
-    return read;
-  }
-  else {
-    if( ::lseek( d->fd, static_cast<unsigned long long>(sector)*2048, SEEK_SET ) != -1 )
-      if( (read = ::read( d->fd, data, count*2048 )) != -1 )
-	return read / 2048;
-
-    return -1;
-  }
+  else
+    return d->backend->read( sector, data, count );
 }
+
 
 
 /* callback function for libisofs */
@@ -493,24 +467,37 @@ bool K3bIso9660::open()
   if( d->isOpen )
     return true;
 
-  // open the file
-  if( !m_filename.isEmpty() ) {
-    d->fd = ::open( QFile::encodeName( m_filename ), O_RDONLY|O_LARGEFILE );
-    if( d->fd < 0 )
-      return false;
-    d->closeFd = true;
-  }
-  else if( d->cdDevice ) {
-    if( !d->cdDevice->open() )
-      return false;
+  if( !d->backend ) {
+    // create a backend
 
-    // set optimal reading speed
-    d->cdDevice->setSpeed( 0xffff, 0xffff );
+    if( !m_filename.isEmpty() )
+      d->backend = new K3bIso9660FileBackend( m_filename );
+
+    else if( d->fd > 0 )
+      d->backend = new K3bIso9660FileBackend( d->fd );
+
+    else if( d->cdDevice ) {
+      // now check if we have a scrambled video dvd
+      if( d->cdDevice->copyrightProtectionSystemType() > 0 ) {
+      	
+	kdDebug() << "(K3bIso9660) found encrypted dvd. using libdvdcss." << endl;
+	
+	// open the libdvdcss stuff
+	d->backend = new K3bIso9660LibDvdCssBackend( d->cdDevice );
+	if( !d->backend->open() ) {
+	  // fallback to devicebackend
+	  delete d->backend;
+	  d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
+	}
+      }
+      else
+	d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
+    }
   }
-  else if( d->fd < 0 )
+
+  d->isOpen = d->backend->open();
+  if( !d->isOpen )
     return false;
-
-  d->isOpen = true;
 
   iso_vol_desc *desc;
   QString path,tmp,uid,gid;
@@ -632,13 +619,7 @@ void K3bIso9660::createSimplePrimaryDesc( struct iso_primary_descriptor* desc )
 void K3bIso9660::close()
 {
   if( d->isOpen ) {
-    if( d->closeFd ) {
-      ::close( d->fd );
-      d->closeFd = false;
-      d->fd = -1;
-    }
-    else if( d->cdDevice )
-      d->cdDevice->close();
+    d->backend->close();
 
     // Since the first isoDir is the KArchive
     // root we must not delete it but all the

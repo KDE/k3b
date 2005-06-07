@@ -14,7 +14,7 @@ noinst_LTLIBRARIES = libjobs.la
 
 libjobs_la_SOURCES = k3bdatatrackreader.cpp k3breadcdreader.cpp \
 	k3bcdcopyjob.cpp k3bclonejob.cpp k3baudiosessionreadingjob.cpp \
-	k3bdvdcopyjob.cpp k3blibdvdcss.cpp \
+	k3bdvdcopyjob.cpp \
 	k3baudiocuefilewritingjob.cpp k3bbinimagewritingjob.cpp \
 	k3biso9660imagewritingjob.cpp k3bisoimageverificationjob.cpp \
 	k3bdvdformattingjob.cpp k3bblankingjob.cpp k3bclonetocreader.cpp
