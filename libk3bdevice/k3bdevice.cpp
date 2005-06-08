@@ -786,48 +786,59 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
     case MEDIA_DVD_RW_OVWR:
     case MEDIA_DVD_PLUS_RW:
       {
-	unsigned char* data = 0;
-	int dataLen = 0;
-	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
-	  track_info_t* trackInfo = (track_info_t*)data;
+// 	unsigned char* data = 0;
+// 	int dataLen = 0;
+// 	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
+// 	  track_info_t* trackInfo = (track_info_t*)data;
 
-	  Track track;
-	  track.m_firstSector = 0;
-	  track.m_lastSector = from4Byte( trackInfo->track_size ) - 1;
-	  track.m_session = 1;
-	  track.m_type = Track::DATA;
-	  track.m_mode = Track::DVD;
-	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
-	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
+// 	  Track track;
+// 	  track.m_firstSector = 0;
+// 	  track.m_lastSector = from4Byte( trackInfo->track_size ) - 1;
+// 	  track.m_session = 1;
+// 	  track.m_type = Track::DATA;
+// 	  track.m_mode = Track::DVD;
+// 	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
+// 	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
 
-	  toc.append( track );
+// 	  delete [] data;
 
-	  delete [] data;
+// 	  //
+// 	  // There seem to be devices that report a bogus track length here...
+// 	  // In that case we just fall through :(
+// 	  // Maybe we should try readFormattedToc here and do this check there
+// 	  //
+// 	  if( track.length() > 1 ) {
+// 	    toc.append( track );	    
+// 	    break;
+// 	  }
+// 	}
+// 	else
+// 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+// 		    << "READ TRACK INFORMATION for toc failed." << endl;
 
-	  break;
+// FIXME: why not use this for all cases. In the end we always do a readFormattedToc anyway...
+	if( !readFormattedToc( toc, true ) ) {
+	  K3b::Msf size;
+	  if( readCapacity( size ) ) {
+	    Track track;
+	    track.m_firstSector = 0;
+	    track.m_lastSector = size.lba();
+	    track.m_session = 1;
+	    track.m_type = Track::DATA;
+	    track.m_mode = Track::DVD;
+	    track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
+	    track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
+	    
+	    toc.append( track );
+	    
+	    break;
+	  }
+	  else
+	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		      << "READ CAPACITY for toc failed." << endl;
 	}
 	else
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		    << "READ TRACK INFORMATION for toc failed." << endl;
-
-	K3b::Msf size;
-	if( readCapacity( size ) ) {
-	  Track track;
-	  track.m_firstSector = 0;
-	  track.m_lastSector = size.lba();
-	  track.m_session = 1;
-	  track.m_type = Track::DATA;
-	  track.m_mode = Track::DVD;
-	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
-	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
-
-	  toc.append( track );
-
 	  break;
-	}
-	else
-	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		    << "READ CAPACITY for toc failed." << endl;
       }
 
       // fallthrough...
@@ -950,30 +961,33 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
 	Track track;
 	unsigned int control = 0;
 
+	//
+	// In case READ TRACK INFORMATION failes:
+	// no session number info
+	// no track length and thus possibly incorrect last sector for
+	// multisession disks
+	//
+	track.m_firstSector = from4Byte( td[i].start_adr );
+	track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
+	control = td[i].control;
+
 	unsigned char* trackData = 0;
 	int trackDataLen = 0;
 	if( readTrackInformation( &trackData, trackDataLen, 1, i+1 ) ) {
 	  track_info_t* trackInfo = (track_info_t*)trackData;
 
 	  track.m_firstSector = from4Byte( trackInfo->track_start );
-	  track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
+
+	  // There are drives that return 0 track length here!
+	  if( from4Byte( trackInfo->track_size ) > 0 )
+	    track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
+
 	  track.m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
 				  trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD?
 
 	  control = trackInfo->track_mode;
 
 	  delete [] trackData;
-	}
-	else {
-	  //
-	  // READ TRACK INFORMATION failed
-	  // no session number info
-	  // no track length and thus possibly incorrect last sector for
-	  // multisession disks
-	  //
-	  track.m_firstSector = from4Byte( td[i].start_adr );
-	  track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
-	  control = td[i].control;
 	}
 
 	if( dvd ) {
