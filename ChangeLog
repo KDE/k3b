@@ -58,7 +58,106 @@ Replaced the system tray by an OSD inspired by the one in amaroK
 Better symlink handling with proper size information if "follow symlinks" is activated.
 HAL support (turn on your USB writer while K3b is running and see it getting detected automatically)
 eMovix 0.9.0 support
+
+0.11.25
+Do not discard broken symlinks if not explicitely requested by the user.
+Fixed crash when cancelling data verification during reloading of media.
 	
+0.11.24
+K3b now ejects the source DVD when reader and writer device are the same (no more 
+accidently overwriting the rewritable source DVD)
+Fixed problem with very slow data verification (the progress was updated way too often) (thanks to Simon)
+BACKPORT: support for newer transcode versions.
+Mp3-decoder plugin handles errors in mp3 files better now.
+
+0.11.23
+Fixed session import.
+Fixed seldom crash in the welcome widget.
+	
+0.11.22
+Flac 1.1.2 compile fix.
+
+0.11.21
+Little fix in capabilities detection (only affects buggy firmwares)
+Properly detect the Philips 2600
+Made multisession selection in DVD project visible.
+Fixed crash when importing session failed.
+Fixed compilation with flac 1.1.2
+
+0.11.20
+Fixed handling of -xa and -xa1 options for dvd patched cdrecord versions in which case K3b
+	had problems with the -dvd suffix in the version string.
+
+0.11.19
+Finally fixed mp3 file detection (I feared I was never going to find the problem)
+Fixed bug which made the DataDvdJob delete an image even if none was created.
+Fixed bug which made the iso image verification fail when writing in TAO mode.
+Fixed crash when no DVD writer is present.
+	
+0.11.18
+Fixed Cd-Text loading in audio projects.
+Fixed data project character restrictions.
+Little improvements to the device capabilities detection.
+Once again improved writing speed detection. Hopefully this is the last time. ;)
+Do not warn about cdrecord not running suid root on kernel 2.6.8 and above
+K3bSetup now removes the suid root bit on kernel 2.6.8 an above systems.
+K3bSetup now also sets the proper permissions on the generic devices.
+Fixed handling of boot load segment 0 for "none-emulation" boo images
+
+0.11.17
+Fixed some DVD writing speed detection issues.
+Always write pure Data CDs in TAO mode when using cdrecord since DAO fails on so many
+	writers. There should not be any drawback.
+Properly restrict the charset everywhere a file in a data project can be renamed.
+	
+0.11.16
+Open the device read-only in case opening read/write failes.
+
+0.11.15
+Fixed writer detection issues with kernel >= 2.6.8 (this only means that K3b now openes the device
+	read/write when issuing the MODE SELECT command. Nothing more. Tests with kernel 2.6.9-rc2
+	on my system still produced problems)
+Fixed Sox encoder plugin.
+Fixed editing range for audio track length.
+
+0.11.14
+QT 3.1 compile fix (I keep forgetting these...)
+Fixed ID3V2 Tag size calculation. This fixes mp3 file detection for some files.
+
+0.11.13
+Backported the new Mp3 file detection.
+Fixed cddb local file naming for disc ids with less than 8 digits.
+Properly disable all buttons in the copy dialogs if no writer is installed and only-create-image
+	is selected.
+Fixed VideoDVD on-the-fly writing problem.
+Select appropriate raw writing mode if raw96r is not supported.
+Properly save the device search path. Now hotplug devices should be detected properly.
+BACKPORT: DVD+R Double Layer writing.
+Properly close a DVD when the user did not want multisession.
+Properly find dvd+rw-format version >= 4.10.
+Improved the raw toc data hex/bcd check. This should fix problems with drives providing
+	totally bogus raw data.
+
+0.11.12
+Another qt 3.1 compile fix
+Mkisofs 2.02 obsoletes the use of -L, -H, and -P. Replaced them by the long versions.
+Fixed GET PERFORMANCE command which caused crashes on some systems and DMA problems on other.
+Default to RAW writing mode for Audio CDs which contain zero length pregaps since there are
+    so many buggy CD writers out there failing to create proper CDs in that case.
+Backported new device configuration format fixing all issues with removable devices (USB,...)
+Fix: Some writers return the number of bytes instead of the number of write speed descriptors
+     in mode page 2a data (thanks to <simon@munton.demon.co.uk>)
+Fixed a bug which caused the audio ripping window to stay greyed out if cddb queries are disabled.
+Always use single click in the tree view like konqi does.
+	
+0.11.11
+Qt 3.1 compile fix
+Honor the manual writing app selection for automatic CDRW erasing.
+K3b now refuses to use transcode >= 0.6.12 for dvd ripping. The next major version will
+	be able to use new transcode versions.
+Properly eject the written media between multiple cd (clone) copies
+Fix toc reading for old CD drives which report raw to data in bcd.
+
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.
