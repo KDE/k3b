@@ -301,6 +301,11 @@ class LIBK3B_EXPORT K3bIso9660
   virtual ~K3bIso9660();
 
   /**
+   * Set where to start reading in the source.
+   */
+  void setStartSector( unsigned int startSector );
+
+  /**
    * Opens the archive for reading.
    * Parses the directory listing of the archive
    * and creates the K3bIso9660Directory/K3bIso9660File entries.

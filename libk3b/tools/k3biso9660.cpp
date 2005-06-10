@@ -313,6 +313,12 @@ K3bIso9660::~K3bIso9660()
 }
 
 
+void K3bIso9660::setStartSector( unsigned int startSector )
+{
+  d->startSector = startSector;
+}
+
+
 int K3bIso9660::read( unsigned int sector, char* data, int count )
 {
   if( count == 0 )
