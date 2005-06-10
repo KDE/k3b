@@ -1,0 +1,10 @@
+[Protocol]
+exec=kio_videodvd
+protocol=videodvd
+input=none
+output=filesystem
+reading=true
+listing=Name,Type,Size,Date
+Icon=dvd_unmount
+Class=:local
+Description=A kioslave for that allows to copy files from a Video DVD (including decryption)
