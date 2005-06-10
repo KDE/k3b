@@ -1,5 +1,5 @@
 LIBS    = -lhal -ldbus-qt-1 -L/usr/kde/3.4/lib -lkdecore
-INCLUDEPATH = /usr/include/dbus-1.0 /usr/kde/3.4/include ../
+INCLUDEPATH = /usr/include/dbus-1.0 /usr/kde/3.4/include ../libk3bdevice
 CONFIG  = qt debug
 SOURCES = hal-test.cpp ../k3bhalconnection.cpp
 HEADERS = hal-test.h
