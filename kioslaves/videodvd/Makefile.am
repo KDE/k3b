@@ -1,4 +1,5 @@
 INCLUDES    = 	-I$(srcdir)/../../libk3b/tools \
+		-I$(srcdir)/../../libk3b/core \
 		-I$(srcdir)/../../libk3bdevice \
 		$(all_includes)
 
