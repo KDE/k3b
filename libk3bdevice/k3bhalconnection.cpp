@@ -101,7 +101,7 @@ bool K3bDevice::HalConnection::open()
 
   // report all already detected devices
   QStringList devs = devices();
-  for( QStringList::iterator it = devs.begin(); it != devs.end(); ++it )
+  for( QStringList::const_iterator it = devs.constBegin(); it != devs.constEnd(); ++it )
     emit deviceAdded( *it );
 
   return true;

@@ -2714,7 +2714,7 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
 
   QValueList<int> list = determineSupportedWriteSpeeds();
   if( !list.isEmpty() ) {
-    for( QValueList<int>::iterator it = list.begin(); it != list.end(); ++it )
+    for( QValueList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
       ret = QMAX( ret, *it );
   }
   else if( modeSense( &data, dataLen, 0x2A ) ) {

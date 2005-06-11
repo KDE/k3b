@@ -84,7 +84,7 @@ unsigned int K3bDevice::Toc::calculateDiscId()
 {
   // calculate cddb-id
   unsigned int id = 0;
-  for( K3bToc::iterator it = begin(); it != end(); ++it ) {
+  for( K3bToc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
     unsigned int n = (*it).firstSector().lba() + 150;
     n /= 75;
     while( n > 0 ) {
@@ -105,7 +105,7 @@ unsigned int K3bDevice::Toc::calculateDiscId()
 int K3bDevice::Toc::contentType() const
 {
   int audioCnt = 0, dataCnt = 0;
-  for( K3bToc::const_iterator it = begin(); it != end(); ++it ) {
+  for( K3bToc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
     if( (*it).type() == K3bDevice::Track::AUDIO )
       audioCnt++;
     else

@@ -530,8 +530,8 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c )
   c->setGroup( "Devices" );
 
   QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
-  for( QStringList::iterator it = deviceSearchPath.begin();
-       it != deviceSearchPath.end(); ++it )
+  for( QStringList::const_iterator it = deviceSearchPath.constBegin();
+       it != deviceSearchPath.constEnd(); ++it )
     addDevice( *it );
 
   //
@@ -579,7 +579,7 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
   QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
   // remove duplicate entries (caused by buggy old implementations)
   QStringList saveDeviceSearchPath;
-  for( QStringList::iterator it = deviceSearchPath.begin(); it != deviceSearchPath.end(); ++it )
+  for( QStringList::const_iterator it = deviceSearchPath.constBegin(); it != deviceSearchPath.constEnd(); ++it )
     if( !saveDeviceSearchPath.contains( *it ) )
       saveDeviceSearchPath.append( *it );
 
@@ -799,7 +799,7 @@ void K3bDevice::DeviceManager::scanFstab()
 
       // parse the device
       QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->fs_mntops) );
-      for( QStringList::const_iterator it = opts.begin(); it != opts.end(); ++it ) {
+      for( QStringList::const_iterator it = opts.constBegin(); it != opts.constEnd(); ++it ) {
 	if( (*it).startsWith("dev=") ) {
 	  md = (*it).mid( 4 );
 	  break;
