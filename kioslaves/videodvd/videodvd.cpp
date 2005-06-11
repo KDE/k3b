@@ -35,6 +35,8 @@
 
 using namespace KIO;
 
+// FIXME: Does it really make sense to use a static device manager? Are all instances
+// of videodvd started in another process?
 K3bDevice::DeviceManager* kio_videodvdProtocol::s_deviceManager = 0;
 int kio_videodvdProtocol::s_instanceCnt = 0;
 
@@ -45,6 +47,7 @@ kio_videodvdProtocol::kio_videodvdProtocol(const QCString &pool_socket, const QC
   if( !s_deviceManager )
   {
     s_deviceManager = new K3bDevice::DeviceManager();
+    s_deviceManager->setCheckWritingModes( false );
     s_deviceManager->scanBus();
   }
   s_instanceCnt++;
