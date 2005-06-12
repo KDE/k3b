@@ -108,6 +108,7 @@ void K3bIsoImager::writeToImageFile( const QString& path )
 void K3bIsoImager::slotReceivedStderr( const QString& line )
 {
   handleMkisofsOutput( line );
+  emit debuggingOutput( "mkisofs", line );
 }
 
 
