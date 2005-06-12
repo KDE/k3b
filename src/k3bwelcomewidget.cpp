@@ -159,10 +159,6 @@ void K3bWelcomeWidget::Display::rebuildGui()
       m_cols++;
 
     repositionButtons();
-
-    // calculate widget size
-    m_size = QSize( QMAX(40+m_header->widthUsed(), 160+((m_buttonSize.width()+4)*m_cols)),
-		    160+((m_buttonSize.height()+4)*m_rows) );
   }
 }
 
@@ -170,7 +166,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
 void K3bWelcomeWidget::Display::repositionButtons()
 {
   int leftMargin = QMAX( 80, (width() - ((m_buttonSize.width()+4)*m_cols))/2 );
-  int topOffset = m_header->height() + 40 + 10;//(height() - m_header->height() - 60 - (m_buttonSize.height()*m_rows))/2;
+  int topOffset = m_header->height() + 40 + 10;
 
   int row = 0;
   int col = 0;
@@ -189,6 +185,38 @@ void K3bWelcomeWidget::Display::repositionButtons()
       row++;
     }
   }
+}
+
+
+QSizePolicy K3bWelcomeWidget::Display::sizePolicy () const
+{
+  return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum, m_infoTextVisible );
+}
+
+
+int K3bWelcomeWidget::Display::heightForWidth ( int w ) const
+{
+  if( m_infoTextVisible ) {
+    int ow = m_infoText->width();
+    m_infoText->setWidth( w );
+    int h = m_infoText->height();
+    m_infoText->setWidth( ow );
+    return (20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*m_rows) + 20 + 10 + h + 10 + 10);
+  }
+  else
+    return 0;
+}
+
+
+QSize K3bWelcomeWidget::Display::sizeHint() const
+{
+  QSize size( QMAX(40+m_header->widthUsed(), 160+((m_buttonSize.width()+4)*m_cols)),
+	      20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*m_rows) + 20 + 10 );
+
+  if( m_infoTextVisible )
+    size.setHeight( size.height() + 10 + m_infoText->height() + 10 );
+
+  return size;
 }
 
 
@@ -315,6 +343,13 @@ void K3bWelcomeWidget::saveConfig( KConfigBase* c )
 void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 {
   QScrollView::resizeEvent( e );
+  fixSize();
+}
+
+
+void K3bWelcomeWidget::showEvent( QShowEvent* e )
+{
+  QScrollView::showEvent( e );
   fixSize();
 }
 

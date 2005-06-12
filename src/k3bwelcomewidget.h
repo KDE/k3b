@@ -33,6 +33,7 @@ class QResizeEvent;
 class QSimpleRichText;
 class KConfigBase;
 class QMouseEvent;
+class QShowEvent;
 
 
 class K3bWelcomeWidget : public QScrollView
@@ -50,6 +51,7 @@ class K3bWelcomeWidget : public QScrollView
 
  protected:
   void resizeEvent( QResizeEvent* );
+  void showEvent( QShowEvent* );
   void contentsMousePressEvent( QMouseEvent* e );
 
  private slots:
@@ -74,7 +76,9 @@ class K3bWelcomeWidget::Display : public QWidget
   void setHeaderBackgroundColor( const QColor& );
   void setHeaderForegroundColor( const QColor& );
 
-  QSize sizeHint() const { return m_size; }
+  QSize sizeHint() const;
+  QSizePolicy sizePolicy () const;
+  int heightForWidth ( int w ) const;
 
   void addAction( KAction* );
   void removeAction( KAction* );
@@ -96,7 +100,7 @@ class K3bWelcomeWidget::Display : public QWidget
 
   QSimpleRichText* m_header;
   QSimpleRichText* m_infoText;
-  QSize m_size;
+
   QSize m_buttonSize;
   int m_cols;
   int m_rows;
