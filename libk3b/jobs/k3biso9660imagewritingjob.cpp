@@ -366,7 +366,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     }
   }
   else {  // DVD
-    if( mediaType & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R) ) {
+    if( mediaType & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
       if( m_simulate ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
