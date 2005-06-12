@@ -104,14 +104,16 @@ void K3bCloneJob::start()
     return;
   }
 
-  if( !writer()->supportsWritingMode( K3bDevice::RAW_R96R ) &&
-      !writer()->supportsWritingMode( K3bDevice::RAW_R16 ) ) {
-    emit infoMessage( i18n("CD writer %1 does not support cloning.")
-		      .arg(writer()->vendor())
-		      .arg(writer()->description()), ERROR );
-    m_running = false;
-    emit finished(false);
-    return;
+  if( !m_onlyCreateImage ) {
+    if( !writer()->supportsWritingMode( K3bDevice::RAW_R96R ) &&
+	!writer()->supportsWritingMode( K3bDevice::RAW_R16 ) ) {
+      emit infoMessage( i18n("CD writer %1 does not support cloning.")
+			.arg(writer()->vendor())
+			.arg(writer()->description()), ERROR );
+      m_running = false;
+      emit finished(false);
+      return;
+    }
   }
 
   if( m_imagePath.isEmpty() ) {
