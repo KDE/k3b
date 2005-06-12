@@ -37,24 +37,10 @@ class K3bExternalBin;
  */
 class LIBK3B_EXPORT K3bProcess : public KProcess
 {
-Q_OBJECT
-		public:
-		class LIBK3B_EXPORT OutputCollector : public QObject
-{
-Q_OBJECT
+  Q_OBJECT
+    
  public:
-  OutputCollector( KProcess* );
-  void setProcess( KProcess* );
-
-  const QString& output() const { return m_gatheredOutput; }
-
- private slots:
-  void slotGatherOutput( KProcess*, char*, int );
-
- private:
-  QString m_gatheredOutput;
-  KProcess* m_process;
-};
+  class LIBK3B_EXPORT OutputCollector;
 
  public:
   K3bProcess();
@@ -192,23 +178,28 @@ Q_OBJECT
   bool m_bSplitStdout;
 };
 
-#if 0
+
 class K3bProcess::OutputCollector : public QObject
 {
   Q_OBJECT
-
+    
  public:
   OutputCollector( KProcess* );
   void setProcess( KProcess* );
-
+  
   const QString& output() const { return m_gatheredOutput; }
-
+  const QString& stderr() const { return m_stderrOutput; }
+  const QString& stdout() const { return m_stdoutOutput; }
+  
  private slots:
-  void slotGatherOutput( KProcess*, char*, int );
-
+  void slotGatherStderr( KProcess*, char*, int );
+  void slotGatherStdout( KProcess*, char*, int );
+  
  private:
   QString m_gatheredOutput;
+  QString m_stderrOutput;
+  QString m_stdoutOutput;
   KProcess* m_process;
 };
- #endif
+
 #endif

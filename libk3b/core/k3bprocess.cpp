@@ -398,19 +398,27 @@ void K3bProcess::OutputCollector::setProcess( KProcess* p )
   m_process = p;
   if( p ) {
     connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), 
-	     this, SLOT(slotGatherOutput(KProcess*, char*, int)) );
+	     this, SLOT(slotGatherStdout(KProcess*, char*, int)) );
     connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-	     this, SLOT(slotGatherOutput(KProcess*, char*, int)) );
+	     this, SLOT(slotGatherStderr(KProcess*, char*, int)) );
   }
 
-  m_gatheredOutput = "";
+  m_gatheredOutput.truncate( 0 );
+  m_stderrOutput.truncate( 0 );
+  m_stdoutOutput.truncate( 0 );
 }
 
-void K3bProcess::OutputCollector::slotGatherOutput( KProcess*, char* data, int len )
+void K3bProcess::OutputCollector::slotGatherStderr( KProcess*, char* data, int len )
 {
   m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
+  m_stderrOutput.append( QString::fromLocal8Bit( data, len ) );
 }
 
+void K3bProcess::OutputCollector::slotGatherStdout( KProcess*, char* data, int len )
+{
+  m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
+  m_stdoutOutput.append( QString::fromLocal8Bit( data, len ) );
+}
 
 
 #include "k3bprocess.moc"
