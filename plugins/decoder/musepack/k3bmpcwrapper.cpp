@@ -19,10 +19,6 @@
 #include <qfile.h>
 
 
-#ifndef BOOL
-#define BOOL mpc_bool_t
-#endif
-
 mpc_int32_t read_impl( void* data, void* ptr, mpc_int32_t size )
 {
   QFile* input = static_cast<QFile*>( data );
@@ -30,7 +26,7 @@ mpc_int32_t read_impl( void* data, void* ptr, mpc_int32_t size )
 }
 
 
-BOOL seek_impl( void* data, mpc_int32_t offset )
+mpc_bool_t seek_impl( void* data, mpc_int32_t offset )
 {
   QFile* input = static_cast<QFile*>( data );
   return input->at( offset );
@@ -48,7 +44,7 @@ mpc_int32_t get_size_impl( void* data )
   return input->size();
 }
 
-BOOL canseek_impl( void* )
+mpc_bool_t canseek_impl( void* )
 {
   return true;
 }
