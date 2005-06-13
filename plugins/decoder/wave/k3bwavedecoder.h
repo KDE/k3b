@@ -17,7 +17,6 @@
 #define _K3B_WAVE_DECODER_H_
 
 #include <k3baudiodecoder.h>
-#include <k3b_export.h>
 
 #include <kurl.h>
 #include <qcstring.h>
