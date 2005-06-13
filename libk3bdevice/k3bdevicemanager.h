@@ -205,9 +205,6 @@ namespace K3bDevice {
       void changed( K3bDevice::DeviceManager* );
       void changed();
 
-    private slots:
-      void slotCollectStdout( KProcess*, char* data, int len );
-
     private:
       bool testForCdrom( const QString& );
       bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
