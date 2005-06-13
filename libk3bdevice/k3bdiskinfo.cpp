@@ -118,7 +118,7 @@ int K3bDevice::DiskInfo::numLayers() const
 }
 
 
-K3bMsf K3bDevice::DiskInfo::remainingSize() const
+K3b::Msf K3bDevice::DiskInfo::remainingSize() const
 {
   if( empty() )
     return capacity();
@@ -136,13 +136,13 @@ K3bMsf K3bDevice::DiskInfo::remainingSize() const
 }
 
 
-K3bMsf K3bDevice::DiskInfo::capacity() const
+K3b::Msf K3bDevice::DiskInfo::capacity() const
 {
   return (m_capacity == 0 ? size() : m_capacity);
 }
 
 
-K3bMsf K3bDevice::DiskInfo::size() const
+K3b::Msf K3bDevice::DiskInfo::size() const
 {
   if( empty() )
     return 0;

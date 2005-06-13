@@ -114,6 +114,4 @@ namespace K3b
   LIBK3BDEVICE_EXPORT inline kndbgstream& operator<<( kndbgstream &stream, const Msf& ) { return stream; }
 }
 
-typedef K3b::Msf K3bMsf;
-
 #endif
