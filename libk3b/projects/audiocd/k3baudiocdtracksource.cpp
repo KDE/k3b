@@ -39,7 +39,6 @@ K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdT
     m_cdParanoiaLib( 0 ),
     m_initialized( false )
 {
-  m_toc.calculateDiscId();
 }
 
 
@@ -144,7 +143,6 @@ bool K3bAudioCdTrackSource::searchForAudioCD( K3bDevice::Device* dev ) const
 {
   kdDebug() << "(K3bAudioCdTrackSource::searchForAudioCD(" << dev->description() << ")" << endl;
   K3bDevice::Toc toc = dev->readToc();
-  toc.calculateDiscId();
   return ( toc.discId() == m_toc.discId() );
 }
 
