@@ -1,4 +1,7 @@
-AM_CPPFLAGS = -I$(srcdir)/../../../libk3b/plugin -I$(srcdir)/../../../libk3bdevice $(all_includes)
+AM_CPPFLAGS = -I$(srcdir)/../../../libk3b/plugin \
+	-I$(srcdir)/../../../libk3b/core \
+	-I$(srcdir)/../../../libk3bdevice \
+	$(all_includes)
 
 kde_module_LTLIBRARIES = libk3bmpcdecoder.la
 
