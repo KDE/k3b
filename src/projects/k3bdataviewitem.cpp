@@ -186,7 +186,10 @@ void K3bDataDirViewItem::highlightIcon( bool b )
   if( m_pixmap.isNull() )
     m_pixmap = *pixmap(0);
 
-  setPixmap( 0, b ? KPixmapEffect::selectedPixmap( m_pixmap, listView()->colorGroup().highlight() ) : m_pixmap );
+  if( b )
+    setPixmap( 0, KPixmapEffect::selectedPixmap( m_pixmap, listView()->colorGroup().highlight() ) );
+  else
+    setPixmap( 0, m_pixmap );
 }
 
 
