@@ -20,6 +20,7 @@
 #include <k3bglobals.h>
 #include <k3bdevicehandler.h>
 #include <k3biso9660.h>
+#include <k3biso9660backend.h>
 
 #include <kdebug.h>
 
@@ -131,8 +132,11 @@ void K3bDevice::DiskInfoDetector::detect( Device* device )
 
 void K3bDevice::DiskInfoDetector::finish(bool success)
 {
-  //  d->info.valid=success;
   emit diskInfoReady(this);
+
+  // close the iso stuff after informing the peers
+  if( d->iso9660 )
+    d->iso9660->close();
 }
 
 
@@ -140,7 +144,6 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 {
   kdDebug() << "(K3bDevice::DiskInfoDetector) fetchExtraInfo()" << endl;
 
-  d->toc.calculateDiscId();
   //  d->device->indexScan( d->toc );
 
   bool success = true;
@@ -174,7 +177,10 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 
       delete d->iso9660;
 
-      d->iso9660 = new K3bIso9660( d->device, startSec );
+      // force the backend since for the descriptors we don't need decryption
+      // which just slows down the whole thing
+      d->iso9660 = new K3bIso9660( new K3bIso9660DeviceBackend( d->device ) );
+      d->iso9660->setStartSector( startSec );
 
       if( d->iso9660->open() ) {
 	//	d->iso9660->debug();
@@ -240,7 +246,7 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 	  }
 	}
 
-	d->iso9660->close();
+	//	d->iso9660->close();
       }  // opened m_iso9660
 //       else
 // 	success = false;
