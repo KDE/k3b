@@ -163,7 +163,7 @@ void K3bAudioCdView::setDisk( K3bDevice::DiskInfoDetector* did )
 
   // create a listviewItem for every audio track
   int index = 1;
-  for( K3bToc::const_iterator it = m_toc.begin(); 
+  for( K3bDevice::Toc::const_iterator it = m_toc.begin(); 
        it != m_toc.end(); ++it ) {
 
     // for now skip data tracks since we are not able to rip them to iso

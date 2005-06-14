@@ -237,7 +237,7 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
 	trackItem = trackHeaderItem;
 
       // create items for the tracks
-      K3bToc::const_iterator it;
+      K3bDevice::Toc::const_iterator it;
       int index = 1;
       for( it = toc.begin(); it != toc.end(); ++it ) {
         const K3bTrack& track = *it;

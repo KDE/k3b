@@ -218,7 +218,7 @@ void K3bVideoCdView::setDisk( K3bDevice::DiskInfoDetector* did )
             
     K3b::Msf sequenceSize;
 
-    for ( K3bToc::const_iterator it = m_toc.begin();
+    for ( K3bDevice::Toc::const_iterator it = m_toc.begin();
             it != m_toc.end(); ++it ) {
 
         if ( index > 0 ) {

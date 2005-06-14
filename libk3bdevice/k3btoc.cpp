@@ -20,8 +20,7 @@
 
 
 K3bDevice::Toc::Toc()
-  : QValueList<K3bDevice::Track>(),
-    m_discId(0)
+  : QValueList<K3bDevice::Track>()
 {
 }
 
@@ -30,7 +29,6 @@ K3bDevice::Toc::Toc( const Toc& toc )
   : QValueList<K3bDevice::Track>( toc )
 {
   m_firstSector = toc.firstSector();
-  m_discId = toc.discId();
 }
 
 
@@ -44,17 +42,10 @@ K3bDevice::Toc& K3bDevice::Toc::operator=( const Toc& toc )
   if( &toc == this ) return *this;
 
   m_firstSector = toc.firstSector();
-  m_discId = toc.discId();
 
   QValueList<K3bDevice::Track>::operator=( toc );
 
   return *this;
-}
-
-
-unsigned int K3bDevice::Toc::discId() const
-{
-  return m_discId;
 }
 
 
@@ -80,11 +71,11 @@ K3b::Msf K3bDevice::Toc::length() const
 }
 
 
-unsigned int K3bDevice::Toc::calculateDiscId()
+unsigned int K3bDevice::Toc::discId() const
 {
   // calculate cddb-id
   unsigned int id = 0;
-  for( K3bToc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
+  for( Toc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
     unsigned int n = (*it).firstSector().lba() + 150;
     n /= 75;
     while( n > 0 ) {
@@ -96,16 +87,14 @@ unsigned int K3bDevice::Toc::calculateDiscId()
   l /= 75;
   id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | count();
 
-  setDiscId( id );
-
-  return discId();
+  return id;
 }
 
 
 int K3bDevice::Toc::contentType() const
 {
   int audioCnt = 0, dataCnt = 0;
-  for( K3bToc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
+  for( Toc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
     if( (*it).type() == K3bDevice::Track::AUDIO )
       audioCnt++;
     else
@@ -119,4 +108,15 @@ int K3bDevice::Toc::contentType() const
   if( dataCnt == 0 )
     return K3bDevice::AUDIO;
   return K3bDevice::MIXED;
+}
+
+
+int K3bDevice::Toc::sessions() const
+{
+  if( isEmpty() )
+    return 0;
+  else if( last().session() == 0 )
+    return 1; // default if unknown
+  else
+    return last().session();
 }

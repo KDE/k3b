@@ -57,7 +57,6 @@ namespace K3bDevice
      * CDDB disc Id
      */
     unsigned int discId() const;
-    unsigned int calculateDiscId();
 
     const QCString& mcn() const { return m_mcn; }
 
@@ -68,6 +67,11 @@ namespace K3bDevice
     int contentType() const;
 
     /**
+     * \return the number of sessions in this TOC.
+     */
+    int sessions() const;
+
+    /**
      * The first track's first sector could differ from the disc's
      * first sector if there is a pregap before index 1
      */
@@ -75,8 +79,6 @@ namespace K3bDevice
     K3b::Msf lastSector() const;
     K3b::Msf length() const;
 
-    // FIXME: what is this??
-    void setDiscId( unsigned int id ) { m_discId = id; }
     void setFirstSector( int i ) { m_firstSector = i; }
 
     void setMcn( const QCString& mcn ) { m_mcn = mcn; }
@@ -84,12 +86,9 @@ namespace K3bDevice
   private:
     unsigned int m_discId;
     K3b::Msf m_firstSector;
-    //  K3b::Msf int m_lastSector;
 
     QCString m_mcn;
   };
 }
-
-typedef K3bDevice::Toc K3bToc;
 
 #endif

@@ -92,12 +92,9 @@ void K3bCddb::readConfig( KConfig* c )
 }
 
 
-void K3bCddb::query( const K3bToc& toc )
+void K3bCddb::query( const K3bDevice::Toc& toc )
 {
   m_toc = toc;
-
-  // make sure we have a valid discId
-  m_toc.calculateDiscId();
 
   if( m_bLocalCddbQuery ) {
     m_iCurrentQueriedLocalDir = 0;
