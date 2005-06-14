@@ -516,6 +516,11 @@ if test "$ac_cv_use_mpc" = "yes"; then
 			  <musepack/musepack.h>, 
 			  [The header to include for MPC decoding.]
 		  )
+		  AC_DEFINE(
+			  mpc_bool_t,
+			  BOOL,
+			  [backwards compatibility stuff]
+		  )
   		  ], [], [])
     ])
   fi
