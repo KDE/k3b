@@ -726,6 +726,7 @@ void K3bCdImageWritingDialog::slotToggleAll()
 
     // some stuff is only available for iso images
     if( currentImageType() == IMAGE_ISO ) {
+      m_checkVerify->show();
       if( !d->advancedTabVisible )
 	d->optionTabbed->addTab( d->advancedTab, i18n("Advanced") );
       d->advancedTabVisible = true;
@@ -733,6 +734,8 @@ void K3bCdImageWritingDialog::slotToggleAll()
 	m_checkVerify->setEnabled( false );
 	m_checkVerify->setChecked( false );
       }
+      else
+	m_checkVerify->setEnabled( true );	
     }
     else {
       if( d->advancedTabVisible )
