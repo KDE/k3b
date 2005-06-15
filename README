@@ -11,10 +11,11 @@ These are the features so far:
      (decoding plugins for mp3, ogg vorbis, flac, wave, musepack, wma, aiff, and others)
    - CD-Text support
    - Metadata support, fill CD-Text from metadata
-   - little gimmick: hide the first track (so that you have to search back from the beginning of the cd to find it)
+   - little gimmick: hide the first track (so that you have to search back from the 
+     beginning of the cd to find it)
    - volume level normalization (only when writing with an image)
-   - multiple sources for one track possible (merging of tracks, splitting of tracks, adding silence of arbitrary 
-     length)
+   - multiple sources for one track possible (merging of tracks, splitting of tracks, 
+     adding silence of arbitrary length)
    - Query Cddb servers for Metadata
    - Query Musicbrainz for Metadata
    - integrated "preview" player
@@ -88,4 +89,3 @@ about the user-interface!
 
 Have fun
 Sebastian Trueg (trueg@k3b.org)
-
