@@ -103,6 +103,9 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Heiner Eichmann",
 		      I18N_NOOP("For his work on the BSD port and some great patches."),
 		      "h.eichmann@gmx.de" );
+  aboutData.addCredit("Adriaan De Groot",
+		      I18N_NOOP("For his work on the BSD port."),
+		      "" );
 
 
   KCmdLineArgs::init( argc, argv, &aboutData );

@@ -31,8 +31,6 @@ class KComboBox;
 class K3bFileTreeView;
 class QWidgetStack;
 class K3bDiskInfoView;
-class KActionCollection;
-class KActionMenu;
 class QScrollView;
 class QLabel;
 class KConfig;
@@ -67,26 +65,15 @@ class K3bDirView : public QVBox
   void readConfig( KConfig* c );
   void showUrl( const KURL& );
   void showDevice( K3bDevice::Device* );
-  void showDiskInfo( K3bDevice::Device* dev );
   
  protected slots:
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
-  void slotMountDevice( K3bDevice::Device* dev );
-  void slotMountFinished( K3bDeviceBranch*, const QString& );
+  void slotMountFinished( const QString& );
   void slotDiskInfoReady( K3bDevice::DiskInfoDetector* );
-  void slotDetectDiskInfo( K3bDevice::Device* dev );
+  void slotDetectingDiskInfo( K3bDevice::Device* dev );
   void reload();
   void home();
-  void slotShowDiskInfo();
-  void slotUnlockDevice();
-  void slotLockDevice();
-  void slotUnmountDisk();
-  void slotUnmountFinished( K3bDeviceBranch*, bool );
-  void slotEjectDisk();
-  void slotLoadDisk();
-  void slotSetReadSpeed();
-  //  void slotEjectFinished();
   void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
 
  signals:
@@ -111,12 +98,7 @@ class K3bDirView : public QVBox
   QSplitter* m_mainSplitter;
   K3bFileTreeView* m_fileTreeView;
 
-  KActionCollection* m_actionCollection;
-
-  K3bDevice::DiskInfoDetector* m_diskInfoDetector;
   bool m_bViewDiskInfo;
-  KActionMenu* m_devicePopupMenu;
-  K3bDevice::Device* m_lastDevice;
 
   class Private;
   Private* d;

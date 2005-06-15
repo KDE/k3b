@@ -69,7 +69,7 @@
 #include "k3bdirview.h"
 #include <k3baudiodoc.h>
 #include "k3baudioview.h"
-#include <k3bdevicemanager.h>
+#include "k3bappdevicemanager.h"
 #include "k3baudiotrackdialog.h"
 #include "option/k3boptiondialog.h"
 #include "k3bprojectburndialog.h"
@@ -148,8 +148,6 @@ K3bMainWindow::K3bMainWindow()
 
   m_config = kapp->config();
 
-  resize(780,520);  // default optimized for 800x600
-
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
   initActions();
@@ -165,8 +163,6 @@ K3bMainWindow::K3bMainWindow()
   m_documentTab->insertAction( actionFileSaveAs );
   m_documentTab->insertAction( actionFileClose );
 
-  readOptions();
-
   // /////////////////////////////////////////////////////////////////
   // disable actions at startup
   slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
@@ -176,6 +172,13 @@ K3bMainWindow::K3bMainWindow()
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+
+  // FIXME: now make sure the welcome screen is displayed completely
+  resize( 780, 550 );
+//   getMainDockWidget()->resize( getMainDockWidget()->size().expandedTo( d->welcomeWidget->sizeHint() ) );
+//   m_dirTreeDock->resize( QSize( m_dirTreeDock->sizeHint().width(), m_dirTreeDock->height() ) );
+
+  readOptions();
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -196,6 +199,12 @@ void K3bMainWindow::showEvent( QShowEvent* e )
 
 void K3bMainWindow::initActions()
 {
+  // merge in the device actions from the device manager
+  // operator+= is deprecated but I know no other way to do this. Why does the KDE app framework
+  // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
+  // see the correct solution?)
+  *actionCollection() += *k3bappcore->appDeviceManager()->actionCollection();
+
   actionFileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
@@ -217,8 +226,8 @@ void K3bMainWindow::initActions()
   setStandardToolBarMenuEnabled(true);
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  KActionMenu* actionMenuCD = new KActionMenu( i18n("&CD Project"), "filenew", actionCollection(), "file_new_cd" );
-  KActionMenu* actionMenuDVD = new KActionMenu( i18n("&DVD Project"), "filenew", actionCollection(), "file_new_dvd" );
+//   KActionMenu* actionMenuCD = new KActionMenu( i18n("&CD Project"), "filenew", actionCollection(), "file_new_cd" );
+//   KActionMenu* actionMenuDVD = new KActionMenu( i18n("&DVD Project"), "filenew", actionCollection(), "file_new_dvd" );
   actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
   actionFileNewData = new KAction(i18n("New Data &CD Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
@@ -237,17 +246,24 @@ void K3bMainWindow::initActions()
 				      actionCollection(), "file_new_video_dvd");
 
 
-  actionFileNewMenu->insert( actionMenuCD );
-  actionFileNewMenu->insert( actionMenuDVD );
+//   actionFileNewMenu->insert( actionMenuCD );
+//   actionFileNewMenu->insert( actionMenuDVD );
   actionFileNewMenu->setDelayed( false );
-  actionMenuCD->insert( actionFileNewAudio );
-  actionMenuCD->insert( actionFileNewData );
-  actionMenuCD->insert( actionFileNewMixed );
-  actionMenuCD->insert( actionFileNewVcd );
-  actionMenuCD->insert( actionFileNewMovix );
-  actionMenuDVD->insert( actionFileNewDvd );
-  actionMenuDVD->insert( actionFileNewVideoDvd );
-  actionMenuDVD->insert( actionFileNewMovixDvd );
+  actionFileNewMenu->insert( actionFileNewData );
+  actionFileNewMenu->insert( actionFileNewDvd );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewAudio );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewMixed );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewVcd );
+  actionFileNewMenu->insert( actionFileNewVideoDvd );
+  actionFileNewMenu->insert( new KActionSeparator( this ) );
+  actionFileNewMenu->insert( actionFileNewMovix );
+  actionFileNewMenu->insert( actionFileNewMovixDvd );
+
+
+
 
 
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
@@ -288,9 +304,6 @@ void K3bMainWindow::initActions()
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
 
-  KAction* actionToolsDiskInfo = new KAction( i18n("Diskinfo"), 0, 0, this, SLOT(slotToolsDiskInfo()),
-					      actionCollection(), "tools_disk_info" );
-
 #ifdef HAVE_K3BSETUP
   actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
@@ -313,10 +326,9 @@ void K3bMainWindow::initActions()
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
   actionFileSave->setToolTip(i18n("Saves the actual project"));
-  actionFileSaveAs->setToolTip(i18n("Saves the actual project as..."));
-  actionFileClose->setToolTip(i18n("Closes the actual project"));
+  actionFileSaveAs->setToolTip(i18n("Saves the active project as..."));
+  actionFileClose->setToolTip(i18n("Closes the active project"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
-  actionToolsDiskInfo->setToolTip( i18n("Retrieve information about inserted media") );
 
   // make sure the tooltips are used for the menu
   actionCollection()->setHighlightingEnabled( true );
@@ -1498,15 +1510,6 @@ bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KURL& url )
   }
   else
     return false;
-}
-
-
-void K3bMainWindow::slotToolsDiskInfo()
-{
-  K3bDevice::Device* dev = K3bDeviceSelectionDialog::selectDevice( this, i18n("Please select a CD/DVD device") );
-  if( dev ) {
-    m_dirView->showDiskInfo( dev );
-  }
 }
 
 #include "k3b.moc"

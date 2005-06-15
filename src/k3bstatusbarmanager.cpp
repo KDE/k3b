@@ -63,8 +63,8 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 
   // setup the statusbar
   m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1 ); // for showing some info
-  m_mainWindow->statusBar()->addWidget( boxFreeTemp, 0, true );
   m_mainWindow->statusBar()->addWidget( m_busyWidget, 0, true );
+  m_mainWindow->statusBar()->addWidget( boxFreeTemp, 0, true );
   m_mainWindow->statusBar()->addWidget( m_versionBox, 0, true );
 
   connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );

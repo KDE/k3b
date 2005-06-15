@@ -15,10 +15,9 @@
 
 
 #include "k3bfiletreeview.h"
-//#include "k3b.h"
-//#include "k3bdirview.h"
+#include "k3bappdevicemanager.h"
+#include "k3bapplication.h"
 
-#include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
 
@@ -60,6 +59,16 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 {
   setAutoUpdate(true);
   root()->setExpandable(false);
+}
+
+
+void K3bDeviceBranch::setCurrent( bool c )
+{
+  // FIXME: use K3bDeviceBranchViewItem to make the text bold and italic or something
+  if( c )
+    root()->setText( 0, "* " + name() );
+  else
+    root()->setText( 0, name() );
 }
 
 
@@ -200,13 +209,15 @@ class K3bFileTreeView::Private
 {
 public:
   Private()
-    : deviceManager(0) {
+    : deviceManager(0),
+      currentDeviceBranch(0) {
   }
 
   QPtrDict<K3bDeviceBranch> deviceBranchDict;
   QMap<KFileTreeBranch*, K3bDevice::Device*> branchDeviceMap;
 
   K3bDevice::DeviceManager* deviceManager;
+  K3bDeviceBranch* currentDeviceBranch;
 };
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
@@ -230,7 +241,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 
   // we always simulate the single click
   slotSettingsChangedK3b(KApplication::SETTINGS_MOUSE);
-  if (kapp)
+  if( kapp )
     connect( kapp, SIGNAL(settingsChanged(int)), SLOT(slotSettingsChangedK3b(int)) );
 
   initActions();
@@ -311,7 +322,15 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
     // make sure we get changes to the config
     connect( dm, SIGNAL(changed(K3bDevice::DeviceManager*)),
 	     this, SLOT(addCdDeviceBranches(K3bDevice::DeviceManager*)) );
+
+    if( K3bAppDeviceManager* appDevM = dynamic_cast<K3bAppDeviceManager*>( dm ) )
+      connect( appDevM, SIGNAL(currentDeviceChanged(K3bDevice::Device*)),
+	       this, SLOT(setCurrentDevice(K3bDevice::Device*)) );
   }
+
+  d->currentDeviceBranch = d->deviceBranchDict[k3bappcore->appDeviceManager()->currentDevice()];
+  if( d->currentDeviceBranch )
+    d->currentDeviceBranch->setCurrent( true );
 
   kdDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
 }
@@ -411,22 +430,21 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
   if( treeItem ) {
-    bool device = d->branchDeviceMap.contains( treeItem->branch() );
-
-//     if( m_menuEnabled ) {
-//       if( device )
-// 	m_devicePopupMenu->popup(p);
-//       else
-// 	m_urlPopupMenu->popup(p);
-//     }
-//     else {
-      setCurrentItem( treeItem );
-      setSelected( treeItem, true);
-      if( device )
-	emit contextMenu( d->branchDeviceMap[treeItem->branch()], p );
-      else
-	emit contextMenu( treeItem->url(), p );
-      //    }
+    K3bDevice::Device* device = 0;
+    QMap<KFileTreeBranch*, K3bDevice::Device*>::iterator devIt = 
+      d->branchDeviceMap.find( treeItem->branch() );
+    if( devIt != d->branchDeviceMap.end() )
+      device = devIt.data();
+   
+    setCurrentItem( treeItem );
+    setSelected( treeItem, true);
+    
+    if( device ) {
+      k3bappcore->appDeviceManager()->setCurrentDevice( device );
+      emit contextMenu( device, p );
+    }
+    else
+      emit contextMenu( treeItem->url(), p );
   }
   else
     kdWarning() << "(K3bFileTreeView) found viewItem that is no KFileTreeViewItem!" << endl;
@@ -454,18 +472,23 @@ KURL K3bFileTreeView::selectedUrl() const
   return KURL();
 }
 
-void K3bFileTreeView::setSelectedDevice(K3bDevice::Device* dev)
+
+void K3bFileTreeView::setCurrentDevice( K3bDevice::Device* dev )
 {
-  for(QMap<KFileTreeBranch*, K3bDevice::Device*>::iterator it = d->branchDeviceMap.begin();
-      it != d->branchDeviceMap.end(); ++it)
-  {
-    kdDebug() << "Select " << dev->devicename() << endl;
-    if ( *it == dev ) {
-      setCurrentItem( it.key()->root() );
-      setSelected( it.key()->root(), true);
-      return;
-    }
-  }
+  if( d->currentDeviceBranch )
+    d->currentDeviceBranch->setCurrent( false );
+
+  d->currentDeviceBranch = branch( dev );
+  d->currentDeviceBranch->setCurrent( true );
+}
+
+
+void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
+{
+  setCurrentDevice( dev );
+  K3bDeviceBranch* b = branch( dev );
+  setCurrentItem( b->root() );
+  setSelected( b->root(), true );
 }
 
 

@@ -28,6 +28,7 @@ class K3bInterface;
 class K3bAudioServer;
 class K3bThemeManager;
 class K3bProjectManager;
+class K3bAppDeviceManager;
 
 
 class K3bApplication : public KUniqueApplication
@@ -63,6 +64,10 @@ class K3bApplication : public KUniqueApplication
 };
 
 
+/**
+ * The application's core which extends K3bCore with some additional features
+ * like the thememanager or an enhanced device manager.
+ */
 class K3bApplication::Core : public K3bCore
 {
   Q_OBJECT
@@ -80,6 +85,13 @@ class K3bApplication::Core : public K3bCore
 
   void readSettings( KConfig* c = 0 );
   void saveSettings( KConfig* c = 0 );
+
+  /**
+   * \reimplemented from K3bCore. We use our own devicemanager here.
+   */
+  K3bDevice::DeviceManager* deviceManager() const;
+
+  K3bAppDeviceManager* appDeviceManager() const { return m_appDeviceManager; }
 
   K3bThemeManager* themeManager() const { return m_themeManager; }
 
@@ -128,6 +140,7 @@ class K3bApplication::Core : public K3bCore
   K3bThemeManager* m_themeManager;
   K3bMainWindow* m_mainWindow;
   K3bProjectManager* m_projectManager;
+  K3bAppDeviceManager* m_appDeviceManager;
 
   static Core* s_k3bAppCore;
 

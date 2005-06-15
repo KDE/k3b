@@ -22,11 +22,11 @@
 #include "k3bfileview.h"
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
+#include "k3bappdevicemanager.h"
 #include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
-#include <k3bdevicemanager.h>
 #include <k3bthememanager.h>
 
 #include <unistd.h>
@@ -169,7 +169,7 @@ private:
 class K3bDirView::Private
 {
 public:
-  bool ejectRequested;
+  bool contextMediaInfoRequested;
 };
 
 
@@ -177,19 +177,10 @@ public:
 K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
   : QVBox(parent, name),
     m_fileTreeView(treeView),
-    m_bViewDiskInfo(false),
-    m_lastDevice(0)
+    m_bViewDiskInfo(false)
 {
   d = new Private;
-
-  m_diskInfoDetector = new K3bDiskInfoDetector( this );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
-	   k3bappcore, SLOT(requestBusyFinish()) );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
-	   this, SLOT(slotDiskInfoReady(K3bDevice::DiskInfoDetector*)) );
-
-  //  KToolBar* toolBar = new KToolBar( this, "dirviewtoolbar" );
-
+  d->contextMediaInfoRequested = false;
 
   if( !m_fileTreeView ) {
     m_mainSplitter = new QSplitter( this );
@@ -227,65 +218,22 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
     m_mainSplitter->setSizes( sizes );
   }
 
-
-  m_actionCollection = new KActionCollection( this );
-
-  // add some actions to the toolbar
-  //  m_fileView->actionCollection()->action("up")->plug( toolBar );
-//   KStdAction::home( this, SLOT(home()), m_actionCollection )->plug( toolBar );
-//   KStdAction::redisplay( this, SLOT(reload()), m_actionCollection )->plug( toolBar );
-//   toolBar->insertSeparator();
-
-  // add a url combobox to the toolbar
-//   (void)new QLabel( i18n("Location"), toolBar );
-//   m_urlCombo = new KComboBox( true, toolBar );
-//   m_urlCombo->setEditText( QDir::homeDirPath() );
-//   m_urlCombo->setDuplicatesEnabled( false );
-
-
-  m_devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup_menu" );
-  KAction* actionDiskInfo = new KAction( i18n("&Disk Info"), "info", 0, this, SLOT(slotShowDiskInfo()),
-					 m_actionCollection, "disk_info");
-  KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
-					m_actionCollection, "disk_unmount");
-  KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()),
-					m_actionCollection, "disk_eject");
-  KAction* actionLoad = new KAction( i18n("L&oad"), "", 0, this, SLOT(slotLoadDisk()),
-					m_actionCollection, "disk_load");
-  KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(slotUnlockDevice()),
-				       m_actionCollection, "unlock" );
-  KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(slotLockDevice()),
-				     m_actionCollection, "lock" );
-  KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(slotSetReadSpeed()),
-					     m_actionCollection, "set_read_speed" );
-
-  m_devicePopupMenu->insert( actionDiskInfo );
-  m_devicePopupMenu->insert( new KActionSeparator( this ) );
-  m_devicePopupMenu->insert( actionUnmount );
-  m_devicePopupMenu->insert( actionEject );
-  m_devicePopupMenu->insert( actionLoad );
-  m_devicePopupMenu->insert( new KActionSeparator( this ) );
-  m_devicePopupMenu->insert( actionUnlock );
-  m_devicePopupMenu->insert( actionlock );
-  m_devicePopupMenu->insert( new KActionSeparator( this ) );
-  m_devicePopupMenu->insert( actionSetReadSpeed );
-
-
-//   connect( m_urlCombo, SIGNAL(returnPressed(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
-//   connect( m_urlCombo, SIGNAL(activated(const QString&)), this, SLOT(slotDirActivated(const QString&)) );
-
   connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)),
 	   this, SLOT(slotDirActivated(const KURL&)) );
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
-	   this, SLOT(slotDetectDiskInfo(K3bDevice::Device*)) );
+	   this, SLOT(showDevice(K3bDevice::Device*)) );
   connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
 	   this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
-  connect( m_fileTreeView, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
-	   this, SLOT(slotMountFinished(K3bDeviceBranch*, const QString&)) );
-  connect( m_fileTreeView, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
-	   this, SLOT(slotUnmountFinished(K3bDeviceBranch*, bool)) );
+
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
+
+  connect( k3bappcore->appDeviceManager(), SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
+	   this, SLOT(slotDiskInfoReady(K3bDevice::DiskInfoDetector*)) );
+  connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
+	   this, SLOT(slotMountFinished(const QString&)) );
+  connect( k3bappcore->appDeviceManager(), SIGNAL(detectingDiskInfo(K3bDevice::Device*)),
+	   this, SLOT(slotDetectingDiskInfo(K3bDevice::Device*)) );
 }
 
 K3bDirView::~K3bDirView()
@@ -302,51 +250,47 @@ void K3bDirView::showUrl( const KURL& url )
 
 void K3bDirView::showDevice( K3bDevice::Device* dev )
 {
-  slotDetectDiskInfo( dev );
-}
+  d->contextMediaInfoRequested = true;
 
-
-void K3bDirView::showDiskInfo( K3bDevice::Device* dev )
-{
-  m_bViewDiskInfo = true;
-  slotDetectDiskInfo( dev );
-}
-
-
-void K3bDirView::slotDetectDiskInfo( K3bDevice::Device* dev )
-{
   // to speed things up we first check if the media is already mounted
   if( !dev->automount() ) {
     QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
-    if( !m_bViewDiskInfo && !mp.isEmpty() ) {
+    if( !mp.isEmpty() ) {
       slotDirActivated( mp );
       return;
     }
   }
 
+  m_fileTreeView->setSelectedDevice( dev );
+  k3bappcore->appDeviceManager()->diskInfo( dev );
+}
+
+
+void K3bDirView::slotDetectingDiskInfo( K3bDevice::Device* dev )
+{
   m_noViewView->setDevice( dev );
   m_viewStack->raiseWidget( m_noViewView );
-  m_fileTreeView->setSelectedDevice( dev );
   k3bappcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
-  m_diskInfoDetector->detect( dev );
 }
 
 
 void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
 {
-  if( m_bViewDiskInfo ||
+  k3bappcore->requestBusyFinish();
+
+  if( !d->contextMediaInfoRequested ||
       did->diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
       did->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
-
+    
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
     m_infoView->displayInfo( did );
-    m_bViewDiskInfo = false;
   }
   else if( did->isVideoDvd() ) {
     m_movieView->setDevice( did->device() );
     m_viewStack->raiseWidget( m_movieView );
     m_movieView->reload();
+    d->contextMediaInfoRequested = false;
   }
   else if( did->toc().contentType() == K3bDevice::DATA ) {
     // check for VCD and ask
@@ -359,164 +303,45 @@ void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
 					    i18n("Mount CD"),
 					    i18n("Show Video Tracks") ) == KMessageBox::Yes );
     }
-
-    if( mount )
-      slotMountDevice( did->device() );
+    
+    if( mount ) {
+      k3bappcore->appDeviceManager()->mountDisk();
+    }
     else {
       m_viewStack->raiseWidget( m_videoView );
       m_videoView->setDisk( did );
+      d->contextMediaInfoRequested = false;
     }
   }
   else {
     m_viewStack->raiseWidget( m_cdView );
     m_cdView->setDisk( did );
+    d->contextMediaInfoRequested = false;
   }
 }
 
-void K3bDirView::slotMountDevice( K3bDevice::Device* device )
-{
-  m_lastDevice = device;
 
-  m_fileTreeView->branch( device )->mount();
-}
-
-void K3bDirView::slotMountFinished( K3bDeviceBranch*, const QString& mp )
+void K3bDirView::slotMountFinished( const QString& mp )
 {
   if( !mp.isEmpty() ) {
     slotDirActivated( mp );
     reload(); // HACK to get the contents shown... FIXME
   }
   else {
+    m_viewStack->raiseWidget( m_fileView );
     // mounting failed.
     // FIXME: use some silent message box like the amarok one here
     // fallback to diskinfo
-    m_viewStack->raiseWidget( m_infoView );
-    m_infoView->displayInfo( m_diskInfoDetector );
   }
 }
 
 void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p )
 {
-  m_lastDevice = dev;
-  m_devicePopupMenu->popup( p );
+  KAction* a = k3bappcore->appDeviceManager()->actionCollection()->action( "device_popup" );
+  if( KActionMenu* m = dynamic_cast<KActionMenu*>(a) )
+    m->popup( p );
 }
 
-
-void K3bDirView::slotShowDiskInfo()
-{
-  if( m_lastDevice ) {
-    showDiskInfo( m_lastDevice );
-  }
-}
-
-
-void K3bDirView::slotUnlockDevice()
-{
-  if( m_lastDevice )
-    K3bDevice::unblock( m_lastDevice );
-}
-
-
-void K3bDirView::slotLockDevice()
-{
-  if( m_lastDevice )
-    K3bDevice::block( m_lastDevice );
-}
-
-
-void K3bDirView::slotUnmountDisk()
-{
-  kdDebug() << "(K3bDirView) slotUnmountDisk()" << endl;
-
-  k3bappcore->requestBusyInfo( i18n("Unmounting disk.") );
-  K3bDeviceBranch* branch = m_fileTreeView->branch( m_lastDevice );
-  if( branch ) {
-    m_fileView->setAutoUpdate( false ); // in case we look at the mounted path
-    d->ejectRequested = false;
-    branch->unmount();
-  }
-  else {
-    KMessageBox::sorry( this, i18n("No device selected.") );
-  }
-}
-
-void K3bDirView::slotUnmountFinished( K3bDeviceBranch*, bool success )
-{
-  kdDebug() << "(K3bDirView) slotUnmountFinished()" << endl;
-
-  k3bappcore->requestBusyFinish();
-  m_fileView->setAutoUpdate( true );
-  m_fileView->reload();
-
-  if( success && d->ejectRequested )
-    K3bDevice::eject( m_lastDevice );
-}
-
-void K3bDirView::slotEjectDisk()
-{
-  kdDebug() << "(K3bDirView) slotEjectDisk()" << endl;
-
-  k3bappcore->requestBusyInfo( i18n("Ejecting disk.") );
-  K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
-  if( branch ) {
-    m_fileView->setAutoUpdate( false ); // in case we look at the mounted path
-    d->ejectRequested = true;
-    branch->unmount();
-  }
-  else {
-    KMessageBox::sorry( this, i18n("No device selected.") );
-  }
-}
-
-
-void K3bDirView::slotLoadDisk()
-{
-  if( m_lastDevice )
-    K3bDevice::reload( m_lastDevice );
-}
-
-
-void K3bDirView::slotSetReadSpeed()
-{
-  if( m_lastDevice ) {
-    bool ok = false;
-    int s = KInputDialog::getInteger( i18n("CD Read Speed"),
-				      i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
-					   "This speed will be used for the currently mounted "
-					   "medium."
-					   "<p>This is especially useful to slow down the drive when "
-					   "watching movies which are read directly from the drive "
-					   "and the spinning noise is intrusive."
-					   "<p>Be aware that this has no influence on K3b since it will "
-					   "change the reading speed again when copying CDs or DVDs.")
-				      .arg(m_lastDevice->vendor() + " " + m_lastDevice->description()),
-				      12,
-				      1,
-				      m_lastDevice->maxReadSpeed(),
-				      1,
-				      10,
-				      &ok,
-				      this );
-    if( ok ) {
-      if( !m_lastDevice->setSpeed( s*175, 0xFFFF ) )
-	KMessageBox::error( this, i18n("Setting the read speed failed.") );
-    }
-  }
-}
-
-
-// void K3bDirView::slotEjectFinished()
-// {
-//   K3bDeviceBranch *branch = m_fileTreeView->branch( m_lastDevice );
-//   if( branch ) {
-//     branch->setAutoUpdate(true);
-
-//     K3bDevice::eject( branch->device() );
-//   }
-//   else {
-//     KMessageBox::sorry( this, i18n("No device selected.") );
-//   }
-// }
 
 void K3bDirView::slotDirActivated( const QString& url )
 {

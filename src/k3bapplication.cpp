@@ -21,6 +21,7 @@
 #include "k3baudioserver.h"
 #include "k3binterface.h"
 #include "k3bprojectmanager.h"
+#include "k3bappdevicemanager.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -334,11 +335,20 @@ K3bApplication::Core::Core( QObject* parent )
   m_projectManager = new K3bProjectManager( this );
   // we need the themes on startup (loading them is fast anyway :)
   m_themeManager->loadThemes();
+
+  // our very own speial device manager
+  m_appDeviceManager = new K3bAppDeviceManager( this );
 }
 
 
 K3bApplication::Core::~Core()
 {
+}
+
+
+K3bDevice::DeviceManager* K3bApplication::Core::deviceManager() const
+{
+  return appDeviceManager();
 }
 
 

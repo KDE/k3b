@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="k3b" version="4">
+<kpartgui name="k3b" version="6">
 <MenuBar>
   <Menu name="project"><text>&amp;Project</text>
   	<Action name="project_add_files" />
@@ -7,19 +7,31 @@
   </Menu>
 
   <Menu name="tools"><text>&amp;Tools</text>
-	<Menu name="cd_tools"><text>&amp;CD</text>
-		<Action name="tools_copy_cd" />
-	  	<Action name="tools_clone_cd" />
-		<Action name="tools_blank_cdrw" />
-		<Action name="tools_write_cd_image" />
-	</Menu>
-	<Menu name="dvd_tools"><text>&amp;DVD</text>
-	  	<Action name="tools_copy_dvd" />
-		<Action name="tools_format_dvd" />
-		<Action name="tools_write_dvd_iso" />
-	</Menu>
+	<Action name="tools_copy_cd" />
+  	<Action name="tools_copy_dvd" />
+	<Separator />
+	<Action name="tools_blank_cdrw" />
+	<Action name="tools_format_dvd" />
+	<Separator />
+	<Action name="tools_write_cd_image" />
+	<Action name="tools_write_dvd_iso" />
+	<Separator />
 	<Action name="tools_encode_video" />
-	<Action name="tools_disk_info" />
+  </Menu>
+
+  <Menu name="device"><text>&amp;Device</text>
+	<Action name ="device_diskinfo" />
+	<Separator />
+	<Action name ="device_unmount" />
+	<Action name ="device_mount" />
+	<Separator />
+	<Action name ="device_eject" />
+	<Action name ="device_load" />
+	<Separator />
+	<Action name ="device_unlock" />
+	<Action name ="device_lock" />
+	<Separator />
+	<Action name ="device_set_read_speed" />
   </Menu>
 
   <Menu name="settings">

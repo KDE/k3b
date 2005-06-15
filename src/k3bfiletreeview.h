@@ -62,7 +62,7 @@ class K3bDeviceBranch : public KFileTreeBranch
   void mount();
   void unmount();
 
-//  bool populate( const KURL& url, KFileTreeViewItem* v );
+  void setCurrent( bool );
 
  private slots:
   void slotMountFinished( KIO::Job* );
@@ -133,7 +133,6 @@ class K3bFileTreeView : public KFileTreeView
    * returnes an empty url if no url is selected
    */
   KURL selectedUrl() const;
-  void setSelectedDevice(K3bDevice::Device* dev);
 
  public slots:
   /**
@@ -142,6 +141,18 @@ class K3bFileTreeView : public KFileTreeView
   void addDefaultBranches();
   void addCdDeviceBranches( K3bDevice::DeviceManager* );
   void addDeviceBranch( K3bDevice::Device* dev );
+
+  /**
+   * Make dev the current device. This does not mean that the device entry
+   * will be highlighted but marked otherwise since this means that it is the
+   * current device in the application and not the treeview.
+   */
+  void setCurrentDevice( K3bDevice::Device* dev );
+
+  /**
+   * his will highlight the device and also make it the current device.
+   */
+  void setSelectedDevice( K3bDevice::Device* dev );
 
   void followUrl( const KURL& url );
   void setTreeDirOnlyMode( bool b );
