@@ -281,7 +281,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
           isIncluded = !isIncluded;
       // Leave it when it's '@'.
 
-      dir.replace( offset, length, ( isIncluded ? inclusion : "" ) );
+      dir.replace( offset, length, ( isIncluded ? inclusion : QString("") ) );
 
       if( isIncluded == TRUE )
         i -= length - inclusion.length();

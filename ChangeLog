@@ -1,5 +1,6 @@
 0.12.1
 Fixed compilation problems with older musepack library version.
+Fixed compile problem with older gcc versions.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
