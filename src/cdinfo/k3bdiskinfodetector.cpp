@@ -35,7 +35,7 @@ public:
       iso9660(0),
       isVideoDvd(false),
       isVideoCd(false),
-      runningHandler(0) {
+      deviceHandler(0) {
   }
 
   Device* device;
@@ -47,7 +47,7 @@ public:
   bool isVideoDvd;
   bool isVideoCd;
 
-  K3bDevice::DeviceHandler* runningHandler;
+  K3bDevice::DeviceHandler* deviceHandler;
 };
 
 
@@ -56,6 +56,13 @@ K3bDevice::DiskInfoDetector::DiskInfoDetector( QObject* parent )
   : QObject( parent )
 {
   d = new Private();
+
+  d->deviceHandler = new K3bDevice::DeviceHandler( this );
+
+  connect( d->deviceHandler,
+           SIGNAL(finished(K3bDevice::DeviceHandler *)),
+           this,
+	   SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler *)) );
 }
 
 
@@ -70,12 +77,6 @@ K3bDevice::Device* K3bDevice::DiskInfoDetector::device() const
 {
   return d->device;
 }
-
-
-// const K3bDevice::DiskInfo& K3bDevice::DiskInfoDetector::diskInfo() const
-// {
-//   return d->info;
-// }
 
 
 const K3bDevice::DiskInfo& K3bDevice::DiskInfoDetector::diskInfo() const
@@ -116,17 +117,9 @@ void K3bDevice::DiskInfoDetector::detect( Device* device )
   // reset
   delete d->iso9660;
   d->iso9660 = 0;
-  //  d->info = DiskInfo();
-  //  d->info.device = d->device;
 
-  // we don't want the old info to overrun us...
-  if( d->runningHandler )
-    d->runningHandler->disconnect( this );
-
-  connect( (d->runningHandler = K3bDevice::diskInfo(d->device)),
-           SIGNAL(finished(K3bDevice::DeviceHandler *)),
-           this,
-	   SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler *)) );
+  d->deviceHandler->setDevice( device );
+  d->deviceHandler->sendCommand( K3bDevice::DeviceHandler::DISKINFO );
 }
 
 
@@ -261,10 +254,8 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 }
 
 
-void K3bDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bDevice::DeviceHandler *handler)
+void K3bDevice::DiskInfoDetector::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* handler )
 {
-  d->runningHandler = 0;
-
   kdDebug() << "(K3bDevice::DiskInfoDetector) slotDeviceHandlerFinished()" << endl;
 
   bool success = handler->success();
