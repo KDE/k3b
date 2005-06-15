@@ -45,12 +45,12 @@ void K3bJob::jobStarted()
   m_canceled = false;
   m_active = true;
 
-  if( jobHandler()->isJob() )
+  if( jobHandler() && jobHandler()->isJob() )
     static_cast<K3bJob*>(jobHandler())->registerSubJob( this );
   else
     k3bcore->registerJob( this );
 
-  jobStarted();
+  emit started();
 }
 
 
@@ -58,12 +58,12 @@ void K3bJob::jobFinished( bool success )
 {
   m_active = false;
 
-  if( jobHandler()->isJob() )
+  if( jobHandler() && jobHandler()->isJob() )
     static_cast<K3bJob*>(jobHandler())->unregisterSubJob( this );
   else
     k3bcore->unregisterJob( this );
 
-  jobFinished( success );
+  emit finished( success );
 }
 
 
