@@ -164,7 +164,7 @@ K3bMusicBrainzJob::~K3bMusicBrainzJob()
 
 void K3bMusicBrainzJob::start()
 {
-  emit started();
+  jobStarted();
 
   m_trmThread->track = m_tracks.first();
 
@@ -200,7 +200,7 @@ void K3bMusicBrainzJob::slotTrmJobFinished( bool success )
   else {
     if( hasBeenCanceled() )
       emit canceled();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -209,7 +209,7 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
 {
   if( hasBeenCanceled() ) {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
   }
   else {
     if( success ) {
@@ -262,7 +262,7 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
       m_trmJob->start();  
     }
     else
-      emit finished( true );
+      jobFinished( true );
   }
 }
 

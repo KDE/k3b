@@ -45,7 +45,7 @@ void K3bDivXEncodingProcess::start() {
   m_speedTrigger = 0;
   m_speedInitialFlag = 0;
   m_interalInterrupt = false;
-  emit started();
+  jobStarted();
   emit newTask( i18n("Generating video")  );
   checkVobDirectory(); // checks if other files than .vob are in vob dir
 }
@@ -103,7 +103,7 @@ void K3bDivXEncodingProcess::slotStartAudioProcessing( ) {
   if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     kdDebug() << "Error audio process starting" << endl;
   }
-  //emit started();
+  //jobStarted();
   //emit newTask( i18n("Generating video")  );
   emit newSubTask( i18n( "Preprocessing audio" ) );
   infoMessage( i18n( "Search for maximum audio gain to get normalized parameter." ), INFO );
@@ -188,7 +188,7 @@ void K3bDivXEncodingProcess::slotStartEncoding() {
     if ( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
         kdDebug() << "(K3bDivXEncodingProcess) Error process starting" << endl;
     }
-    //emit started();
+    //jobStarted();
     if ( m_pass == 1 ) {
         infoMessage( i18n( "Start first pass of video encoding." ), INFO );
         emit newSubTask( i18n( "Encoding video (Pass 1)" ) );
@@ -277,13 +277,13 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
   if ( m_interalInterrupt ) {
     restoreBackupFiles();
     emit debuggingOutput( "Videoencoding (transcode)", m_debugBuffer );
-    emit finished( false );
+    jobFinished( false );
   } else if ( !p->normalExit() ) {
     infoMessage( i18n( "Video generation aborted by user." ), SUCCESS );
     kdDebug() << "(K3bDivxEncodingProcess) Aborted encoding" << endl;
     restoreBackupFiles();
     emit debuggingOutput( "Videoencoding (transcode)", m_debugBuffer );
-    emit finished( false );
+    jobFinished( false );
   } else {
     if ( m_pass == 1 ) {
       kdDebug() << "(K3bDivxEncodingProcess) Start second pass." << endl;
@@ -304,7 +304,7 @@ void K3bDivXEncodingProcess::slotEncodingExited( KProcess *p ) {
             } else {
             infoMessage( i18n("Video generating successfully finished."), SUCCESS );
             emit debuggingOutput("videoencoding (transcode)", m_debugBuffer);
-            emit finished( true );
+            jobFinished( true );
         }
     }
   }

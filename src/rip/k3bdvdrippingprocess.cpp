@@ -116,7 +116,7 @@ void K3bDvdRippingProcess::startRippingProcess( ) {
     } else {
         kdDebug() << "(K3bDvdRippingProcess) Ripping not started due to vob already exists." << endl;
         //emit interrupted();
-        emit finished( false );
+        jobFinished( false );
         return;
     }
     m_outputFile.open( IO_WriteOnly );                     // open file for writing
@@ -179,7 +179,7 @@ void K3bDvdRippingProcess::slotExited( KProcess* ) {
         //postProcessingDvd();
         saveConfig();
 	emit infoMessage( i18n("Successfully ripped all video titles to %1.").arg(m_dirvob), SUCCESS );
-        emit finished( true );
+        jobFinished( true );
         //  postProcessingFinished();
     }
 }
@@ -190,7 +190,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
         p->kill();
         //m_audioProcess->kill();
 	emit canceled();
-        emit finished( false );
+        jobFinished( false );
         return;
     }
     if( m_rippedBytes >= 1073740800 ) {  // 24, 1 (1073741824bytes) GB - 1024 bytes
@@ -214,7 +214,7 @@ void K3bDvdRippingProcess::slotParseOutput( KProcess *p, char *text, int len) {
             p->kill();
             //m_audioProcess->kill();
             //Whats the difference ?? finished/canceled
-            //emit finished( false );
+            //jobFinished( false );
             emit canceled();
             return;
         }
@@ -294,7 +294,7 @@ void K3bDvdRippingProcess::preProcessingDvd( ) {
         } else {
             KMessageBox::error(qApp->activeWindow(), i18n("K3b could not mount <%1>. Please run K3bSetup.").arg(dev->mountDevice()),
                                i18n("I/O Error") );
-            emit finished( false );
+            jobFinished( false );
         }
     }
 }
@@ -306,7 +306,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd( KIO::Job *resultJob) {
     emit infoMessage( i18n("Mounting failed."), ERROR );
 
     m_preProcessingFailed = true;
-    emit finished( false );
+    jobFinished( false );
   } else {
     emit infoMessage( i18n("Successfully mounted media. Starting DVD Ripping."), INFO );
     slotPreProcessingDvd();
@@ -330,7 +330,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
         KMessageBox::error(qApp->activeWindow(), i18n("K3b could not mount the DVD-device. Ensure that you have the rights to mount the DVD-drive and that it supports either iso9660 or udf filesystem."),
                            i18n("I/O Error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Mount DVD-device failed." << endl;
-        emit finished( false );
+        jobFinished( false );
         return;
     }
     bool result = false;
@@ -348,7 +348,7 @@ void K3bDvdRippingProcess::slotPreProcessingDvd() {
         KMessageBox::error(qApp->activeWindow(), i18n("K3b could not copy the ifo-files from %1.").arg( m_mountPoint + "/" + video),
                            i18n("I/O Error") );
         kdDebug() << "(K3bDvdRippingProcess::slotPreProcessingDvD) Copy IFO files failed." << endl;
-        emit finished( false );
+        jobFinished( false );
     }
 }
 
@@ -374,7 +374,7 @@ bool K3bDvdRippingProcess::copyIfoFiles( const QString& video, const QString& vt
 void K3bDvdRippingProcess::slotIfoCopyFinished( KIO::Job *job ) {
     if( job->error() > 0 ) {
         kdDebug() << "(K3bDvdRippingProcess) Job error IFO copy: " << job->errorString() << endl;
-        emit finished( false );
+        jobFinished( false );
         KIO::unmount( m_mountPoint, false );
         return;
     }

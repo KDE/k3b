@@ -60,7 +60,7 @@ void K3bVideoCdRip::cancel()
 
     emit infoMessage( i18n( "Job canceled by user." ), K3bJob::ERROR );
     emit canceled();
-    emit finished( false );
+    jobFinished( false );
 }
 
 
@@ -79,7 +79,7 @@ void K3bVideoCdRip::start()
 {
     kdDebug() << "(K3bVideoCdRip) starting job" << endl;
 
-    emit started();
+    jobStarted();
     m_canceled = false;
 
     vcdxRip();
@@ -101,7 +101,7 @@ void K3bVideoCdRip::vcdxRip()
         emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." ).arg( ">= 0.7.12" ), K3bJob::INFO );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return ;
     }
 
@@ -110,7 +110,7 @@ void K3bVideoCdRip::vcdxRip()
         emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" ).arg( "Vcdxrip" ).arg( "0.7.12" ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return ;
     }
         
@@ -178,7 +178,7 @@ void K3bVideoCdRip::vcdxRip()
         kdDebug() << "(K3bVideoCdRip) could not start vcdxrip" << endl;
         emit infoMessage( i18n( "Could not start %1." ).arg( "vcdxrip" ), K3bJob::ERROR );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
     }
 }
 
@@ -272,17 +272,17 @@ void K3bVideoCdRip::slotVcdXRipFinished()
                 emit infoMessage( strerror( m_process->exitStatus() ), K3bJob::ERROR );
                 emit infoMessage( i18n( "Please send me an email with the last output..." ), K3bJob::ERROR );
                 cancelAll();
-                emit finished( false );
+                jobFinished( false );
                 return ;
         }
     } else {
         emit infoMessage( i18n( "%1 did not exit cleanly." ).arg( "Vcdxrip" ), K3bJob::ERROR );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return ;
     }
 
-    emit finished( true );
+    jobFinished( true );
 }
 
 void K3bVideoCdRip::parseInformation( QString text )
@@ -293,7 +293,7 @@ void K3bVideoCdRip::parseInformation( QString text )
         emit infoMessage( i18n( "%1 encountered non-form2 sector" ).arg("Vcdxrip"), K3bJob::ERROR );
         emit infoMessage( i18n( "leaving loop" ), K3bJob::ERROR );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return;
     }
     

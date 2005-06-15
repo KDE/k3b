@@ -65,7 +65,7 @@ void K3bDvdCopy::start(){
 
     m_ripProcess->start();
     if( m_successfulStarted ) {
-        emit started();
+        jobStarted();
         emit newTask( i18n("Ripping Video DVD")  );
         kdDebug() << "(K3bDvdCopy) Starting rip." << endl;
     } else {
@@ -77,7 +77,7 @@ void K3bDvdCopy::ripFinished( bool result ){
     m_successfulStarted = result; // if start failed it returns immedatitely finsihed with false;
     m_preProcessingFailed = m_ripProcess->isInitFailed();
     kdDebug() << "(K3bDvdCopy) Send finished. Status: " << result << ", Initstatus: " << m_preProcessingFailed << endl;
-    emit finished( result );
+    jobFinished( result );
 }
 
 void K3bDvdCopy::cancel( ){
