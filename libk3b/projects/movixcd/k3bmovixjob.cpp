@@ -77,7 +77,7 @@ K3bDoc* K3bMovixJob::doc() const
 
 void K3bMovixJob::start()
 {
-  emit started();
+  jobStarted();
 
   m_canceled = false;
   m_dataJob->setWritingApp( writingApp() );
@@ -87,7 +87,7 @@ void K3bMovixJob::start()
   }
   else {
     m_movixDocPreparer->removeMovixStructures();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -106,7 +106,7 @@ void K3bMovixJob::slotDataJobFinished( bool success )
   if( m_canceled )
     emit canceled();
 
-  emit finished( success );
+  jobFinished( success );
 }
 
 

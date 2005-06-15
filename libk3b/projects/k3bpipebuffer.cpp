@@ -235,7 +235,7 @@ void K3bPipeBuffer::start()
   // this method returns.
   //
   if( !m_thread->init() )
-    emit finished(false);
+    jobFinished(false);
   else
     K3bThreadJob::start();
 }

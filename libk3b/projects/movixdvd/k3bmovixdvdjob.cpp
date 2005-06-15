@@ -76,7 +76,7 @@ K3bDoc* K3bMovixDvdJob::doc() const
 
 void K3bMovixDvdJob::start()
 {
-  emit started();
+  jobStarted();
 
   m_canceled = false;
   m_dvdJob->setWritingApp( writingApp() );
@@ -86,7 +86,7 @@ void K3bMovixDvdJob::start()
   }
   else {
     m_movixDocPreparer->removeMovixStructures();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -105,7 +105,7 @@ void K3bMovixDvdJob::slotDvdJobFinished( bool success )
   if( m_canceled )
     emit canceled();
 
-  emit finished( success );
+  jobFinished( success );
 }
 
 

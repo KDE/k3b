@@ -453,7 +453,7 @@ K3bCdrdaoWriter* K3bCdrdaoWriter::addArgument( const QString& arg )
 
 void K3bCdrdaoWriter::start()
 {
-  emit started();
+  jobStarted();
 
   d->speedEst->reset();
 
@@ -474,7 +474,7 @@ void K3bCdrdaoWriter::start()
 
   if( !m_cdrdaoBinObject ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrdao"), ERROR );
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -518,7 +518,7 @@ void K3bCdrdaoWriter::start()
 	      {
 		kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
 		emit infoMessage( i18n("Could not backup tocfile."), ERROR );
-		emit finished(false);
+		jobFinished(false);
 		return;
 	      }
 	  }
@@ -567,7 +567,7 @@ void K3bCdrdaoWriter::start()
       // it "should" be the executable
       kdDebug() << "(K3bCdrdaoWriter) could not start cdrdao" << endl;
       emit infoMessage( i18n("Could not start %1.").arg("cdrdao"), K3bJob::ERROR );
-      emit finished(false);
+      jobFinished(false);
     }
   else
     {
@@ -757,7 +757,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
       }
 
-      emit finished( true );
+      jobFinished( true );
       break;
 
     default:
@@ -768,14 +768,14 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("Please include the debugging output in your problem report."), K3bJob::ERROR );
       }
 
-      emit finished( false );
+      jobFinished( false );
       break;
     }
   }
   else
   {
     emit infoMessage( i18n("%1 did not exit cleanly.").arg("cdrdao"), K3bJob::ERROR );
-    emit finished( false );
+    jobFinished( false );
   }
 }
 

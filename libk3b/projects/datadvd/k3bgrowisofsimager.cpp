@@ -81,7 +81,7 @@ K3bGrowisofsImager::~K3bGrowisofsImager()
 
 void K3bGrowisofsImager::start()
 {
-  emit started();
+  jobStarted();
 
   cleanup();
   init();
@@ -96,25 +96,23 @@ void K3bGrowisofsImager::start()
   m_process->setSuppressEmptyLines(true);
 
   m_growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
-  m_mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+  m_mkisofsBin = initMkisofs();
   if( !m_growisofsBin ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("growisofs"), ERROR );
-    emit finished( false );
+    jobFinished( false );
     return;
   }
   if( !m_mkisofsBin ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg("mkisofs"), ERROR );
-    emit finished( false );
+    // error message emitted by MkisofsHandler
+    jobFinished( false );
     return;
   }
-  
-  initMkisofs( m_mkisofsBin );
-
+ 
   if( m_growisofsBin->version < K3bVersion( 5, 10 ) ) {
     emit infoMessage( i18n("Growisofs version %1 is too old. "
 			   "K3b needs at least version 5.10.").arg(m_growisofsBin->version), 
 		      ERROR );
-    emit finished( false );
+    jobFinished( false );
     return;
   }
   if( m_doc->multiSessionMode() != K3bDataDoc::NONE ) {
@@ -123,7 +121,7 @@ void K3bGrowisofsImager::start()
 			     "For writing multisession DVDs "
 			     "K3b needs at least version 2.0.").arg(m_mkisofsBin->version), 
 			ERROR );
-      emit finished( false );
+      jobFinished( false );
       return;
     }
   }
@@ -133,8 +131,7 @@ void K3bGrowisofsImager::start()
 
   if( !m_growisofsBin->copyright.isEmpty() )
     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("growisofs").arg(m_growisofsBin->version).arg(m_growisofsBin->copyright), INFO );
-  if( !m_mkisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("mkisofs").arg(m_mkisofsBin->version).arg(m_mkisofsBin->copyright), INFO );
+  // mkisofs copyright info emitted by MkisofsHandler
 
   //
   // As growisofs calls mkisofs we need to make sure it calls "our" version.
@@ -211,7 +208,7 @@ void K3bGrowisofsImager::start()
   if( !prepareMkisofsFiles() || 
       !addMkisofsParameters() ) {
     cleanup();
-    emit finished( false );
+    jobFinished( false );
     return;
   }
 
@@ -247,7 +244,7 @@ void K3bGrowisofsImager::start()
     cleanup();
     kdDebug() << "(K3bIsoImager) could not start growisofs" << endl;
     emit infoMessage( i18n("Could not start %1.").arg("growisofs"), K3bJob::ERROR );
-    emit finished( false );
+    jobFinished( false );
   }
   else {
     if( m_doc->dummy() ) {
@@ -352,7 +349,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
   }
 
   if( !k3bcore->globalSettings()->ejectMedia() )
-    emit finished(d->success);
+    jobFinished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
     connect( K3bDevice::eject( m_doc->burner() ), 
@@ -368,7 +365,7 @@ void K3bGrowisofsImager::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
   if( !dh->success() )
     emit infoMessage( "Unable to eject media.", ERROR );
 
-  emit finished(d->success);
+  jobFinished(d->success);
 }
 
 

@@ -91,7 +91,7 @@ void K3bIsoImageVerificationJob::setImageFileName( const QString& f )
 
 void K3bIsoImageVerificationJob::start()
 {
-  emit started();
+  jobStarted();
 
   d->canceled = false;
   d->imageMd5SumCalculated = false;
@@ -193,7 +193,7 @@ void K3bIsoImageVerificationJob::finishVerification( bool success )
   if( d->canceled )
     emit canceled();
 
-  emit finished(success);
+  jobFinished(success);
 }
 
 #include "k3bisoimageverificationjob.moc"

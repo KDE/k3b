@@ -103,7 +103,7 @@ void K3bReadcdReader::start()
   d->readcdBinObject = k3bcore->externalBinManager()->binObject( "readcd" );
   if( !d->readcdBinObject ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("readcd"), ERROR );
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -126,7 +126,7 @@ void K3bReadcdReader::start()
 
       if( !foundCloneSupport ) {
 	emit infoMessage( i18n("Could not find readcd executable with cloning support."), ERROR );
-	emit finished(false);
+	jobFinished(false);
 	return;
       }
     }
@@ -204,7 +204,7 @@ void K3bReadcdReader::start()
     // it "should" be the executable
     kdError() << "(K3bReadcdReader) could not start readcd" << endl;
     emit infoMessage( i18n("Could not start readcd."), K3bJob::ERROR );
-    emit finished( false );
+    jobFinished( false );
   }
 }
 
@@ -302,20 +302,20 @@ void K3bReadcdReader::slotProcessExited( KProcess* p )
 {
   if( d->canceled ) {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
   }
   else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
-      emit finished( true );
+      jobFinished( true );
     }
     else {
       emit infoMessage( i18n("%1 returned error: %2").arg("Readcd").arg(p->exitStatus()), ERROR );
-      emit finished( false );
+      jobFinished( false );
     }
   }
   else {
     emit infoMessage( i18n("Readcd exited abnormally."), ERROR );
-    emit finished( false );
+    jobFinished( false );
   }
 }
 

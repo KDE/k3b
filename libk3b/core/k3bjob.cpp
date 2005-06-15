@@ -31,15 +31,6 @@ K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
     m_canceled(false),
     m_active(false)
 {
-  //
-  // Connect to the started and finished signals to properly register
-  // ourselves with the K3bCore.
-  // Be aware that this means a job always needs to emit those signals.
-  //
-  connect( this, SIGNAL(started()),
-	   this, SLOT(slotStarted()) );
-  connect( this, SIGNAL(finished(bool)),
-	   this, SLOT(slotFinished(bool)) );
   connect( this, SIGNAL(canceled()),
 	   this, SLOT(slotCanceled()) );
 }
@@ -49,26 +40,30 @@ K3bJob::~K3bJob()
 }
 
 
-void K3bJob::slotStarted()
+void K3bJob::jobStarted()
 {
   m_canceled = false;
   m_active = true;
 
-  if( parent() && parent()->inherits( "K3bJob" ) )
-    static_cast<K3bJob*>(parent())->registerSubJob( this );
+  if( jobHandler()->isJob() )
+    static_cast<K3bJob*>(jobHandler())->registerSubJob( this );
   else
     k3bcore->registerJob( this );
+
+  jobStarted();
 }
 
 
-void K3bJob::slotFinished( bool )
+void K3bJob::jobFinished( bool success )
 {
   m_active = false;
 
-  if( parent() && parent()->inherits( "K3bJob" ) )
-    static_cast<K3bJob*>(parent())->unregisterSubJob( this );
+  if( jobHandler()->isJob() )
+    static_cast<K3bJob*>(jobHandler())->unregisterSubJob( this );
   else
     k3bcore->unregisterJob( this );
+
+  jobFinished( success );
 }
 
 

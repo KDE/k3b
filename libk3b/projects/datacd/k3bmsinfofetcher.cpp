@@ -51,13 +51,13 @@ void K3bMsInfoFetcher::start()
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     kdDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), K3bJob::ERROR );
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
   if( m_device == 0 ) {
     kdDebug() << "(K3bMsInfoFetcher) internal error: No device set!" << endl;
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -86,7 +86,7 @@ void K3bMsInfoFetcher::getMsInfo()
  
   if( !bin ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg( m_dvd ? "dvdrecord" : "cdrecord" ), ERROR );
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -120,7 +120,7 @@ void K3bMsInfoFetcher::getMsInfo()
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
     emit infoMessage( i18n("Could not start %1.").arg(bin->name()), K3bJob::ERROR );
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -167,10 +167,10 @@ void K3bMsInfoFetcher::slotProcessExited()
   if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
     emit infoMessage( i18n("The disk is either empty or not appendable."), K3bJob::ERROR );
-    emit finished(false);
+    jobFinished(false);
   }
   else {
-    emit finished(true);
+    jobFinished(true);
   }
 }
 
@@ -192,7 +192,7 @@ void K3bMsInfoFetcher::cancel()
       m_canceled = true;
       m_process->kill();
       emit canceled();
-      emit finished(false);
+      jobFinished(false);
     }
 }
 

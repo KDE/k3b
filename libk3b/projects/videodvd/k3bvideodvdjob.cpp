@@ -45,7 +45,7 @@ K3bVideoDvdJob::~K3bVideoDvdJob()
 
 // void K3bVideoDvdJob::start()
 // {
-//   emit started();
+//   jobStarted();
 
 //   m_canceled = false;
 //   m_writingStarted = false;
@@ -69,10 +69,10 @@ K3bVideoDvdJob::~K3bVideoDvdJob()
 // 	m_isoImager->start();
 //       }
 //       else
-// 	emit finished(false);
+// 	jobFinished(false);
 //     }
 //     else
-//       emit finished(false);
+//       jobFinished(false);
 //   }
 // }
 

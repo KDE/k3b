@@ -97,7 +97,7 @@ K3bDvdCopyJob::~K3bDvdCopyJob()
 
 void K3bDvdCopyJob::start()
 {
-  emit started();
+  jobStarted();
   emit burning(false);
 
   d->canceled = false;
@@ -126,7 +126,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 {
   if( d->canceled ) {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
   }
 
@@ -134,7 +134,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
   if( dh->diskInfo().empty() || dh->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
     emit infoMessage( i18n("No source media found."), ERROR );
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
   }
   else {
@@ -156,7 +156,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       if( !haveLibdvdcss ) {
 	emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );
 	d->running = false;
-	emit finished( false );
+	jobFinished( false );
 	return;
       }
     }
@@ -191,7 +191,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	  if( !(m_writerDevice->type() & (K3bDevice::DEVICE_DVD_R_DL|K3bDevice::DEVICE_DVD_PLUS_R_DL)) ) {
 	    emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), ERROR );
 	    d->running = false;
-	    emit finished(false);
+	    jobFinished(false);
 	    return;
 	  }
 	  // FIXME: check for growisofs 5.22 (or whatever version is needed) for DVD-R DL
@@ -199,7 +199,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 		   k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
 	    emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), ERROR );
 	    d->running = false;
-	    emit finished(false);
+	    jobFinished(false);
 	    return;
 	  }
 	}
@@ -213,7 +213,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       if( dh->diskInfo().numSessions() > 1 ) {
 	emit infoMessage( i18n("K3b does not support copying multi-session DVDs."), ERROR );
 	d->running = false;
-	emit finished(false);
+	jobFinished(false);
 	return;
       }
 
@@ -241,7 +241,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	}
 	else {
 	  emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
-	  emit finished(false);
+	  jobFinished(false);
 	  d->running = false;
 	  return;
 	}
@@ -250,13 +250,13 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
     case K3bDevice::MEDIA_DVD_RAM:
       emit infoMessage( i18n("K3b does not support copying DVD-RAM."), ERROR );
-      emit finished(false);
+      jobFinished(false);
       d->running = false;
       return;
 
     default:
       emit infoMessage( i18n("Unable to determine DVD media type."), ERROR );
-      emit finished(false);
+      jobFinished(false);
       d->running = false;
       return;
     }
@@ -292,14 +292,14 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       QString pathToTest = m_imagePath.left( m_imagePath.findRev( '/' ) );
       if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
 	emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.").arg(pathToTest), ERROR );
-	emit finished(false);
+	jobFinished(false);
 	d->running = false;
 	return;
       }
       else {
 	if( avail < imageSpaceNeeded/1024 ) {
 	  emit infoMessage( i18n("Not enough space left in temporary directory."), ERROR );
-	  emit finished(false);
+	  jobFinished(false);
 	  d->running = false;
 	  return;
 	}
@@ -327,7 +327,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       else {
 	if( d->canceled )
 	  emit canceled();
-	emit finished(false);
+	jobFinished(false);
 	d->running = false;
 	return;
       }
@@ -494,14 +494,14 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
   if( d->canceled ) {
     removeImageFiles();
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
   }
 
   if( success ) {
     emit infoMessage( i18n("Successfully read source DVD."), SUCCESS );
     if( m_onlyCreateImage ) {
-      emit finished(true);
+      jobFinished(true);
       d->running = false;
     }
     else {
@@ -526,7 +526,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	    removeImageFiles();
 	  if( d->canceled )
 	    emit canceled();
-	  emit finished(false);
+	  jobFinished(false);
 	  d->running = false;
 	}
       }
@@ -534,7 +534,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
   }
   else {
     removeImageFiles();
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
   }
 }
@@ -552,7 +552,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
     if( m_removeImageFiles )
       removeImageFiles();
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
   }
 
@@ -575,7 +575,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
       else {
 	if( d->canceled )
 	  emit canceled();
-	emit finished(false);
+	jobFinished(false);
 	d->running = false;
 	return;
       }
@@ -590,14 +590,14 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
       if( m_removeImageFiles )
 	removeImageFiles();
       d->running = false;
-      emit finished(true);
+      jobFinished(true);
     }
   }
   else {
     if( m_removeImageFiles )
       removeImageFiles();
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

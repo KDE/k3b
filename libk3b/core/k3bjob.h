@@ -32,8 +32,6 @@ namespace K3bDevice {
  * This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
  * The K3bJob object takes care of registering with the k3bcore or with a parent K3bJob.
  *
- * A K3bJob ALWAYS has to emit the signals started() and finished(bool). All other signals are
- * optional but without these two the whole registering mechanism won't work.
  *
  * @author Sebastian Trueg
  */
@@ -72,28 +70,11 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   /**
    * @returns the number of running subjobs.
    * this is useful for proper canceling of jobs.
-   *
-   * BE AWARE that the slots connected to the finished signal
-   * are called in an arbitrary order. Since the running subjob
-   * list is maintained via the started() and finished() signals
-   * you cannot rely on numRunningSubJobs() to be acurat when called
-   * from a slot connected to a subjob's finished signal.
-   * You may do something like this:
-   * 
-   * FIXME: this blows!
-   *
-   * if( numRunningSubJobs() == 0 || ( numRunningSubJobs() == 1 && runningSubJobs().containsRef(job) ) )
    */
   unsigned int numRunningSubJobs() const;
 
   const QPtrList<K3bJob>& runningSubJobs() const { return m_runningSubJobs; }
 
-  /**
-   * Setup the following connections:
-   * <table>
-   * <th><td>subJob</td><td>this</td></th>
-   * </table>
-   */
   virtual void connectSubJob( K3bJob* subJob,
 			      const char* finishedSlot = 0,
 			      bool progress = false,
@@ -102,7 +83,20 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 			      const char* processedSizeSlot = 0,
 			      const char* processedSubSizeSlot = 0 );
 
-  enum MessageType { INFO, WARNING, ERROR, SUCCESS };
+  /**
+   * Message types to be used in combination with the infoMessage signal.
+   *
+   * \see infoMessage()
+   */
+  enum MessageType { 
+    INFO,     /**< Informational message. For example a message that informs the user about what is
+		 currently going on */
+    WARNING,  /**< A warning message. Something did not go perfectly but the job may continue. */
+    ERROR,    /**< An error. Only use this message type if the job will actually fail afterwards
+		 with a call to jobFinished( false ) */
+    SUCCESS   /**< This message type may be used to inform the user that a sub job has 
+		 been successfully finished. */
+  };
 
   /**
    * reimplemented from K3bJobHandler
@@ -119,19 +113,41 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 		      const QString& caption = QString::null );
 
  protected:
+  /**
+   * \param hdl the handler of the job. This allows for some user interaction without
+   *            specifying any details (like the GUI).
+   *            The job handler can also be another job. In that case this job is a sub job
+   *            and will be part of the parents running sub jobs.
+   *
+   * \see runningSubJobs()
+   * \see numRunningSubJobs()
+   */
   K3bJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
 
  public slots:
+  /**
+   * This is the slot that starts the job. The first call should always
+   * be jobStarted().
+   *
+   * Once the job has finished it has to call jobFinished() with the result as
+   * a parameter.
+   *
+   * \see jobStarted()
+   * \see jobFinished()
+   */
   virtual void start() = 0;
+
+  /**
+   * This slot should cancel the job. The job has to emit the canceled() signal and make a call
+   * to jobFinished().
+   * It is not important to do any of those two directly in this slot though.
+   */
   virtual void cancel() = 0;
 
  signals:
   void infoMessage( const QString& msg, int type );
   void percent( int p );
   void subPercent( int p );
-  void started();
-  void canceled();
-  void finished( bool success );
   void processedSize( int processed, int size );
   void processedSubSize( int processed, int size );
   void newTask( const QString& job );
@@ -140,30 +156,41 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   void data( const char* data, int len );
   void nextTrack( int track, int numTracks );
 
- protected slots:
-  /**
-   * simply converts into an infoMessage
-   */
-  void slotNewSubTask( const QString& str );
+  void canceled();
 
   /**
-   * Register a subjob. Do not call this directly. The Job takes care of it
-   * itself.
+   * Emitted once the job has been started. Never emit this signal directly.
+   * Use jobStarted() instead, otherwise the job will not be properly registered
    */
-  void registerSubJob( K3bJob* );
+  void started();
 
   /**
-   * Unregister a subjob. Do not call this directly. The Job takes care of it
-   * itself.
+   * Emitted once the job has been finshed. Never emit this signal directly.
+   * Use jobFinished() instead, otherwise the job will not be properly deregistered
    */
-  void unregisterSubJob( K3bJob* );
+  void finished( bool success );
+
+ protected:
+  /**
+   * Call this in start() to properly register the job and emit the started() signal.
+   * Do never emit the started() signal manually.
+   */
+  void jobStarted();
+
+  /**
+   * Call this at the end of the job to properly deregister the job and emit the finished() signal.
+   * Do never emit the started() signal manually.
+   */
+  void jobFinished( bool success );
 
  private slots:
-  void slotStarted();
-  void slotFinished( bool );
   void slotCanceled();
+  void slotNewSubTask( const QString& str );
 
  private:
+  void registerSubJob( K3bJob* );
+  void unregisterSubJob( K3bJob* );
+
   K3bJobHandler* m_jobHandler;
   QPtrList<K3bJob> m_runningSubJobs;
 
@@ -209,6 +236,8 @@ class LIBK3B_EXPORT K3bBurnJob : public K3bJob
   /**
    * @param speed current writing speed in Kb
    * @param multiplicator use 150 for CDs and 1380 for DVDs
+   * FIXME: maybe one should be able to ask the burnjob if it burns a CD or a DVD and remove the 
+   *        multiplicator parameter)
    */
   void writeSpeed( int speed, int multiplicator );
 

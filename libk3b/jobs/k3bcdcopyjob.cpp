@@ -151,7 +151,7 @@ void K3bCdCopyJob::start()
   d->dataSessionProbablyTAORecorded.clear();
   d->deleteTempDir = false;
 
-  emit started();
+  jobStarted();
 
   emit newTask( i18n("Checking Source Disk") );
 
@@ -1188,7 +1188,7 @@ void K3bCdCopyJob::finishJob( bool c, bool e )
     
     d->running = false;
     
-    emit finished( !(c||e) );
+    jobFinished( !(c||e) );
   }
 }
 

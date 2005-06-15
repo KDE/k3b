@@ -43,7 +43,7 @@ void K3bAudioNormalizeJob::start()
   m_currentAction = COMPUTING_LEVELS;
   m_currentTrack = 1;
     
-  emit started();
+  jobStarted();
 
   if( m_process )
     delete m_process;
@@ -56,7 +56,7 @@ void K3bAudioNormalizeJob::start()
 
   if( !bin ) {
     emit infoMessage( i18n("Could not find normalize executable."), ERROR );
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -84,7 +84,7 @@ void K3bAudioNormalizeJob::start()
     // it "should" be the executable
     kdDebug() << "(K3bAudioNormalizeJob) could not start normalize" << endl;
     emit infoMessage( i18n("Could not start normalize."), K3bJob::ERROR );
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -181,7 +181,7 @@ void K3bAudioNormalizeJob::slotProcessExited( KProcess* p )
     switch( p->exitStatus() ) {
     case 0:
       emit infoMessage( i18n("Successfully normalized all tracks."), SUCCESS );
-      emit finished(true);
+      jobFinished(true);
       break;
     default:
       if( !m_canceled ) {
@@ -193,13 +193,13 @@ void K3bAudioNormalizeJob::slotProcessExited( KProcess* p )
       }
       else
 	emit canceled();
-      emit finished(false);
+      jobFinished(false);
       break;
     }
   }
   else {
     emit infoMessage( i18n("%1 did not exit cleanly.").arg("Normalize"), K3bJob::ERROR );
-    emit finished( false );
+    jobFinished( false );
   }
 }
 

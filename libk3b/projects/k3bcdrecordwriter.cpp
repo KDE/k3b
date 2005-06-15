@@ -283,7 +283,7 @@ void K3bCdrecordWriter::clearArguments()
 
 void K3bCdrecordWriter::start()
 {
-  emit started();
+  jobStarted();
 
   d->canceled = false;
   d->speedEst->reset();
@@ -292,7 +292,7 @@ void K3bCdrecordWriter::start()
 
   if( !m_cdrecordBinObject ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), ERROR );
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -325,7 +325,7 @@ void K3bCdrecordWriter::start()
     // it "should" be the executable
     kdDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name() << endl;
     emit infoMessage( i18n("Could not start %1.").arg(m_cdrecordBinObject->name()), K3bJob::ERROR );
-    emit finished(false);
+    jobFinished(false);
   }
   else {
     if( simulate() ) {
@@ -651,7 +651,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
 	
-	emit finished( true );
+	jobFinished( true );
       }
       break;
 
@@ -750,13 +750,13 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	}
 	break;
       }
-      emit finished( false );
+      jobFinished( false );
     }
   }
   else {
     emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_cdrecordBinObject->name()), 
 		      ERROR );
-    emit finished( false );
+    jobFinished( false );
   }
 }
 

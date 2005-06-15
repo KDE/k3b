@@ -55,7 +55,7 @@ void K3bBinImageWritingJob::start()
     m_copies = 1;
   m_finishedCopies = 0;
 
-  emit started();
+  jobStarted();
   emit newTask( i18n("Write Binary Image") );
 
   if( prepareWriter() )
@@ -70,7 +70,7 @@ void K3bBinImageWritingJob::cancel()
   m_canceled = true;
   m_writer->cancel();
   emit canceled();
-  emit finished( false );
+  jobFinished( false );
 }
 
 bool K3bBinImageWritingJob::prepareWriter()
@@ -193,14 +193,14 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
     m_finishedCopies++;
     if ( m_finishedCopies == m_copies ) {
       emit infoMessage( i18n("%n copy successfully created", "%n copies successfully created", m_copies),K3bJob::INFO );
-      emit finished( true );
+      jobFinished( true );
     }
     else {
       writerStart();
     }
   }
   else {
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

@@ -95,7 +95,7 @@ void K3bDvdJob::start()
   // TODO: detemrine if we have tracksize option to write onthefly with the growisofswriter in dao mode
   //       that is if version (>= .17 or (>= .15 and DAO))
 
-  emit started();
+  jobStarted();
   emit newTask( i18n("Preparing data") );
 
   m_canceled = false;
@@ -120,7 +120,7 @@ void K3bDvdJob::start()
   else if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
     if( !startWriting() ) {
       cleanup();
-      emit finished( false );
+      jobFinished( false );
     }
   }
   else {
@@ -194,7 +194,7 @@ void K3bDvdJob::slotSizeCalculationFinished( int status, int size )
   //
   if( status == ERROR || !startWriting() ) {
     cleanup();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -249,11 +249,9 @@ void K3bDvdJob::slotGrowisofsImagerPercent( int p )
 void K3bDvdJob::slotIsoImagerFinished( bool success )
 {
   if( m_canceled ) {
-    if( !numRunningSubJobs() ||
-	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_isoImager) ) ||
-	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_growisofsImager) ) ) {
+    if( !numRunningSubJobs() ) {
       emit canceled();
-      emit finished(false);
+      jobFinished(false);
     }
     return;
   }
@@ -268,11 +266,11 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
       emit infoMessage( i18n("Image successfully created in %1").arg(m_doc->tempDir()), K3bJob::SUCCESS );
       
       if( m_doc->onlyCreateImages() ) {
-	emit finished( true );
+	jobFinished( true );
       }
       else if( !startWriting() ) {
 	cleanup();
-	emit finished(false);
+	jobFinished(false);
       }
     }
   }
@@ -280,7 +278,7 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
   else {
     emit infoMessage( i18n("Error while creating ISO image"), ERROR );
     cleanup();
-    emit finished( false );
+    jobFinished( false );
   }
 }
 
@@ -401,10 +399,9 @@ void K3bDvdJob::slotWriterJobPercent( int p )
 void K3bDvdJob::slotWritingFinished( bool success )
 {
   if( m_canceled ) {
-    if( !numRunningSubJobs() ||
-	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_isoImager) ) ) {
+    if( !numRunningSubJobs() ) {
       emit canceled();
-      emit finished(false);
+      jobFinished(false);
     }
     return;
   }
@@ -443,18 +440,18 @@ void K3bDvdJob::slotWritingFinished( bool success )
 
 	if( !startWriting() ) {
 	  cleanup();
-	  emit finished(false);
+	  jobFinished(false);
 	}
       }
       else {
 	cleanup();
-	emit finished(true);
+	jobFinished(true);
       }
     }
   }
   else {
     cleanup();
-    emit finished( false );
+    jobFinished( false );
   }
 }
 
@@ -476,10 +473,9 @@ void K3bDvdJob::slotVerificationProgress( int p )
 void K3bDvdJob::slotVerificationFinished( bool success )
 {
   if( m_canceled ) {
-    if( !numRunningSubJobs() ||
-	( numRunningSubJobs() == 1 && runningSubJobs().containsRef(m_isoImager) ) ) {
+    if( !numRunningSubJobs() ) {
       emit canceled();
-      emit finished(false);
+      jobFinished(false);
     }
     return;
   }
@@ -491,7 +487,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
     
     if( !startWriting() ) {
       cleanup();
-      emit finished(false);
+      jobFinished(false);
     }
   }
   else {
@@ -500,7 +496,7 @@ void K3bDvdJob::slotVerificationFinished( bool success )
     if( k3bcore->globalSettings()->ejectMedia() )
       K3bDevice::eject( m_doc->burner() );
   
-    emit finished( success );
+    jobFinished( success );
   }
 }
 
@@ -573,7 +569,7 @@ void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
   if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
     if( !startWriting() ) {
       cleanup();
-      emit finished( false );
+      jobFinished( false );
     }
   }
   else {

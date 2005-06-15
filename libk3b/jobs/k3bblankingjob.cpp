@@ -62,7 +62,7 @@ void K3bBlankingJob::start()
   if( m_device == 0 )
     return;
 
-  emit started();
+  jobStarted();
 
   if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() ) {
     emit infoMessage( i18n("Unmounting disk"), INFO );
@@ -137,7 +137,7 @@ void K3bBlankingJob::slotStartErasing()
 		    .arg(m_device->description())
 		    .arg(m_device->devicename()) ) < 0 ) {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -158,7 +158,7 @@ void K3bBlankingJob::slotFinished(bool success)
 {
   if( success ) {
     emit infoMessage( i18n("Process completed successfully"), K3bJob::SUCCESS );
-    emit finished( true );
+    jobFinished( true );
   }
   else {
     if( m_canceled ) {
@@ -169,7 +169,7 @@ void K3bBlankingJob::slotFinished(bool success)
       emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
       emit infoMessage( i18n("Sorry, no error handling yet."), K3bJob::ERROR );
     }
-    emit finished( false );
+    jobFinished( false );
   }
 }
 

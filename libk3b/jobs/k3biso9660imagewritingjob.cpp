@@ -67,14 +67,14 @@ void K3bIso9660ImageWritingJob::start()
   m_canceled = m_finished = false;
   m_currentCopy = 1;
 
-  emit started();
+  jobStarted();
 
   if( m_simulate )
     m_verifyData = false;
 
   if( !QFile::exists( m_imagePath ) ) {
     emit infoMessage( i18n("Could not find image %1").arg(m_imagePath), K3bJob::ERROR );
-    emit finished( false );
+    jobFinished( false );
     return;
   }
 
@@ -92,7 +92,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
   if( m_canceled ) {
     m_finished = true;
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -121,7 +121,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
     }
     else if( m_currentCopy >= m_copies ) {
       m_finished = true;
-      emit finished(true);
+      jobFinished(true);
     }
     else {
       m_currentCopy++;
@@ -130,7 +130,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
   }
   else {
     m_finished = true;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -140,7 +140,7 @@ void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
   if( m_canceled ) {
     m_finished = true;
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -156,7 +156,7 @@ void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
     K3bDevice::eject( m_device );
 
   m_finished = true;
-  emit finished( success );
+  jobFinished( success );
 }
 
 
@@ -250,7 +250,7 @@ void K3bIso9660ImageWritingJob::startWriting()
   if( media < 0 ) {
     m_finished = true;
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -260,7 +260,7 @@ void K3bIso9660ImageWritingJob::startWriting()
   }
   else {
     m_finished = true;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -366,7 +366,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     }
   }
   else {  // DVD
-    if( mediaType & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R) ) {
+    if( mediaType & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
       if( m_simulate ) {
 	if( KMessageBox::warningYesNo( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "

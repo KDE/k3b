@@ -107,7 +107,8 @@ void K3bIsoImager::writeToImageFile( const QString& path )
 
 void K3bIsoImager::slotReceivedStderr( const QString& line )
 {
-  handleMkisofsOutput( line );
+  parseMkisofsOutput( line );
+  emit debuggingOutput( "mkisofs", line );
 }
 
 
@@ -134,7 +135,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
     if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
-	emit finished( true );
+	jobFinished( true );
       }
       else  {
 	switch( p->exitStatus() ) {
@@ -168,12 +169,12 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  }
 	}
 
-	emit finished( false );
+	jobFinished( false );
       }
     }
     else {
       emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
-      emit finished( false );
+      jobFinished( false );
     }
   }
 
@@ -204,29 +205,20 @@ void K3bIsoImager::cleanup()
 
 void K3bIsoImager::calculateSize()
 {
-  // determine iso-size
   cleanup();
+
+  d->mkisofsBin = initMkisofs();
+  if( !d->mkisofsBin ) {
+    emit sizeCalculated( ERROR, 0 );
+    return;
+  }
+
   init();
 
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
 
-  d->mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
-  if( !d->mkisofsBin ) {
-    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
-    emit infoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
-    cleanup();
-    emit sizeCalculated( ERROR, 0 );
-    return;
-  }
-
-  initMkisofs( d->mkisofsBin );
-
   emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
-
-  if( !d->mkisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
-		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
 
   *m_process << d->mkisofsBin;
 
@@ -263,6 +255,8 @@ void K3bIsoImager::calculateSize()
   // mkisofs >= 1.13
   // everything is written to stderr
   // last line is: "Total extents scheduled to be written = XXXXX"
+
+  // TODO: use K3bProcess::OutputCollector instead iof our own two slots.
 
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	   this, SLOT(slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int)) );
@@ -362,28 +356,20 @@ void K3bIsoImager::init()
 
 void K3bIsoImager::start()
 {
-  emit started();
+  jobStarted();
 
   cleanup();
+
+  d->mkisofsBin = initMkisofs();
+  if( !d->mkisofsBin ) {
+    jobFinished( false );
+    return;
+  }
+
   init();
 
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
-
-  d->mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
-  if( !d->mkisofsBin ) {
-    kdDebug() << "(K3bIsoImager) could not find mkisofs executable" << endl;
-    emit infoMessage( i18n("Could not find %1 executable.").arg("mkisofs"), K3bJob::ERROR );
-    cleanup();
-    emit finished( false );
-    return;
-  }
-
-  if( !d->mkisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
-		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
-
-  initMkisofs( d->mkisofsBin );
 
   *m_process << d->mkisofsBin;
 
@@ -393,7 +379,7 @@ void K3bIsoImager::start()
   if( !prepareMkisofsFiles() ||
       !addMkisofsParameters() ) {
     cleanup();
-    emit finished( false );
+    jobFinished( false );
     return;
   }
 
@@ -412,7 +398,7 @@ void K3bIsoImager::start()
     else {
       emit infoMessage( i18n("Could not open %1 for writing").arg(d->imagePath), ERROR );
       cleanup();
-      emit finished(false);
+      jobFinished(false);
       return;
     }
   }
@@ -432,7 +418,7 @@ void K3bIsoImager::start()
 			     "of the Joliet extensions. Continue anyway?")
 			.arg( m_doc->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
       emit canceled();
-      emit finished( false );
+      jobFinished( false );
       cleanup();
       return;
     }
@@ -443,7 +429,7 @@ void K3bIsoImager::start()
     // it "should" be the executable
     kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
     emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
-    emit finished( false );
+    jobFinished( false );
     cleanup();
   }
 }
@@ -461,7 +447,7 @@ void K3bIsoImager::cancel()
 
   if( !m_processExited ) {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

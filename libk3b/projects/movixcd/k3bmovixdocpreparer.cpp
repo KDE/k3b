@@ -92,7 +92,7 @@ K3bMovixDoc* K3bMovixDocPreparer::doc() const
 void K3bMovixDocPreparer::start()
 {
   kdDebug() << k_funcinfo << endl;
-  emit started();
+  jobStarted();
 
   bool success = true;
   if( d->structuresCreated )
@@ -100,7 +100,7 @@ void K3bMovixDocPreparer::start()
   else
     success = createMovixStructures();
 
-  emit finished(success);
+  jobFinished(success);
 }
 
 

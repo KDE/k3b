@@ -16,6 +16,7 @@
 #include "k3bmkisofshandler.h"
 
 #include <k3bexternalbinmanager.h>
+#include <k3bcore.h>
 #include <k3bjob.h>
 
 #include <kdebug.h>
@@ -53,15 +54,29 @@ bool K3bMkisofsHandler::mkisofsReadError() const
 }
 
 
-void K3bMkisofsHandler::initMkisofs( const K3bExternalBin* bin )
+const K3bExternalBin* K3bMkisofsHandler::initMkisofs()
 {
-  d->mkisofsBin = bin;
-  d->firstProgressValue = -1;
-  d->readError = false;
+  d->mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+
+  if( d->mkisofsBin ) {
+    if( !d->mkisofsBin->copyright.isEmpty() )
+      handleMkisofsInfoMessage( i18n("Using %1 %2 - Copyright (C) %3")
+				.arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), 
+				K3bJob::INFO );
+
+    d->firstProgressValue = -1;
+    d->readError = false;
+  }
+  else {
+    kdDebug() << "(K3bMkisofsHandler) could not find mkisofs executable" << endl;
+    handleMkisofsInfoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
+  }
+
+  return d->mkisofsBin;
 }
 
 
-void K3bMkisofsHandler::handleMkisofsOutput( const QString& line )
+void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
 {
   if( !line.isEmpty() ) {
     if( line.startsWith( d->mkisofsBin->path ) ) {

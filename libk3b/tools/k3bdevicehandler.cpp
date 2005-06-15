@@ -284,7 +284,7 @@ void K3bDevice::DeviceHandler::customEvent( QCustomEvent* e )
   K3bThreadJob::customEvent(e);
 
   if( (int)e->type() == K3bProgressInfoEvent::Finished ) {
-    emit finished( this );
+    jobFinished( this );
     if( m_selfDelete ) {
       kdDebug() << "(K3bDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing" << endl;
       kdDebug() << "(K3bDevice::DeviceHandler) success: " << m_thread->success << endl;

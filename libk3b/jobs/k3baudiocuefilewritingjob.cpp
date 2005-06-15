@@ -113,7 +113,7 @@ QString K3bAudioCueFileWritingJob::jobDetails() const
 void K3bAudioCueFileWritingJob::start()
 {
   // FIXME: here we trust that a job won't be started twice :(
-  emit started();
+  jobStarted();
   m_canceled = false;
   m_audioJobRunning = false;
   importCueInProject();
@@ -184,7 +184,7 @@ void K3bAudioCueFileWritingJob::slotAnalyserThreadFinished( bool )
   if( !m_canceled ) {
     if( m_audioDoc->lastTrack()->length() == 0 ) {
       emit infoMessage( i18n("Analysing the audio file failed. Corrupt file?"), ERROR );
-      emit finished(false);
+      jobFinished(false);
     }
     else {
       // FIXME: m_audioJobRunning is never reset
@@ -194,7 +194,7 @@ void K3bAudioCueFileWritingJob::slotAnalyserThreadFinished( bool )
   }
   else {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -260,12 +260,12 @@ void K3bAudioCueFileWritingJob::importCueInProject()
     }
     else {
       emit infoMessage( i18n("Unable to handle '%1' due to an unsupported format.").arg( m_cueFile ), ERROR );
-      emit finished(false);
+      jobFinished(false);
     }
   }
   else {
     emit infoMessage( i18n("No valid audio cue file: '%1'").arg( m_cueFile ), ERROR );
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

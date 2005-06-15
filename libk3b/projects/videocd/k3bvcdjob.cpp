@@ -84,7 +84,7 @@ void K3bVcdJob::cancel()
     cancelAll();
 
     emit canceled();
-    emit finished( false );
+    jobFinished( false );
 }
 
 
@@ -126,7 +126,7 @@ void K3bVcdJob::start()
 {
     kdDebug() << "(K3bVcdJob) starting job" << endl;
 
-    emit started();
+    jobStarted();
     emit burning( false );
     m_canceled = false;
 
@@ -158,7 +158,7 @@ void K3bVcdJob::xmlGen()
         kdDebug() << "(K3bVcdJob) could not write xmlfile." << endl;
         emit infoMessage( i18n( "Could not write correct XML-file." ), K3bJob::ERROR );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
     }
 
     //    emit infoMessage( i18n( "XML-file successfully created" ), K3bJob::SUCCESS );
@@ -185,7 +185,7 @@ void K3bVcdJob::vcdxBuild()
         emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ).arg( ">= 0.7.12" ), K3bJob::INFO );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return ;
     }
 
@@ -194,7 +194,7 @@ void K3bVcdJob::vcdxBuild()
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ).arg( "Vcdxbuild" ).arg( "0.7.12" ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return ;
     }
 
@@ -244,7 +244,7 @@ void K3bVcdJob::vcdxBuild()
         kdDebug() << "(K3bVcdJob) could not start vcdxbuild" << endl;
         emit infoMessage( i18n( "Could not start %1." ).arg( "vcdxbuild" ), K3bJob::ERROR );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
     }
 }
 
@@ -355,13 +355,13 @@ void K3bVcdJob::slotVcdxBuildFinished()
                 emit infoMessage( strerror( m_process->exitStatus() ), K3bJob::ERROR );
                 emit infoMessage( i18n( "Please send me an email with the last output." ), K3bJob::ERROR );
                 cancelAll();
-                emit finished( false );
+                jobFinished( false );
                 return ;
         }
     } else {
         emit infoMessage( i18n( "%1 did not exit cleanly." ).arg( "Vcdxbuild" ), K3bJob::ERROR );
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
         return ;
     }
 
@@ -374,7 +374,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
     if ( !vcdDoc() ->onlyCreateImages() )
         startWriterjob();
     else
-        emit finished( true );
+        jobFinished( true );
 }
 
 void K3bVcdJob::startWriterjob()
@@ -493,14 +493,14 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
         // allright
         // the writerJob should have emited the "simulation/writing successful" signal
         if ( m_currentcopy >= m_doc->copies() ) {
-            emit finished( true );
+            jobFinished( true );
         } else {
             m_currentcopy++;
             startWriterjob();
         }
     } else {
         cancelAll();
-        emit finished( false );
+        jobFinished( false );
     }
 }
 

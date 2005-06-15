@@ -81,7 +81,7 @@ void K3bThreadJob::start()
   }
   else {
     kdError() << "(K3bThreadJob) no job set." << endl;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -118,7 +118,7 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
       emit infoMessage( be->firstString(), be->firstValue() ); 
       break;
     case K3bProgressInfoEvent::Started:
-      emit started();
+      jobStarted();
       break;
     case K3bProgressInfoEvent::Canceled:
       emit canceled();
@@ -132,7 +132,7 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
       m_thread->wait();
       kdDebug() << "(K3bThreadJob) thread finished." << endl;
       m_running = false;
-      emit finished( be->firstValue() );
+      jobFinished( be->firstValue() );
       break;
     case K3bProgressInfoEvent::NewTask:
       emit newTask( be->firstString() );

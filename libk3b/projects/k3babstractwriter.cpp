@@ -60,7 +60,7 @@ void K3bAbstractWriter::cancel()
   }
   else {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -80,7 +80,7 @@ void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
   }
 
   emit canceled();
-  emit finished( false );
+  jobFinished( false );
 }
 
 
@@ -91,7 +91,7 @@ void K3bAbstractWriter::slotEjectWhileCancellationFinished( bool success )
   }
 
   emit canceled();
-  emit finished( false );
+  jobFinished( false );
 }
 
 

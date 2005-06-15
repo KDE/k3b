@@ -24,7 +24,8 @@ include_HEADERS =          k3bdoc.h \
                            k3bcdrecordwriter.h \
 			   k3binffilewriter.h \
 			   k3btocfilewriter.h \
-			   k3bcuefileparser.h
+			   k3bcuefileparser.h \
+			   k3bimagefilereader.h
 
 SUBDIRS = datacd audiocd mixedcd movixcd videocd datadvd movixdvd videodvd
 

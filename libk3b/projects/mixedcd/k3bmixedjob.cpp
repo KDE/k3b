@@ -123,7 +123,7 @@ K3bDoc* K3bMixedJob::doc() const
 
 void K3bMixedJob::start()
 {
-  emit started();
+  jobStarted();
 
   m_canceled = false;
   m_errorOccuredAndAlreadyReported = false;
@@ -255,7 +255,7 @@ void K3bMixedJob::writeNextCopy()
     m_currentAction = WRITING_AUDIO_IMAGE;
     if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
-      emit finished(false);
+      jobFinished(false);
     }
     else if( m_doc->onTheFly() )
       m_audioImager->start();
@@ -269,7 +269,7 @@ void K3bMixedJob::writeNextCopy()
 
     if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
-      emit finished(false);
+      jobFinished(false);
     }
     else if( m_doc->onTheFly() ) {
       if( m_doc->mixedType() == K3bMixedDoc::DATA_LAST_TRACK )
@@ -296,7 +296,7 @@ void K3bMixedJob::cancel()
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   removeBufferFiles();
   emit canceled();
-  emit finished(false);
+  jobFinished(false);
 }
 
 
@@ -323,7 +323,7 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
   else {
     // the MsInfoFetcher already emitted failure info
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -359,7 +359,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
     else if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( !prepareWriter() || !startWriting() ) {
 	cleanupAfterError();
-	emit finished(false);
+	jobFinished(false);
       }
       else
 	m_isoImager->start();
@@ -369,7 +369,7 @@ void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
   }
   else {
     cleanupAfterError();
-    emit finished( false );
+    jobFinished( false );
   }
 }
 
@@ -383,7 +383,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
     emit infoMessage( i18n("Error while creating ISO image."), ERROR );
     cleanupAfterError();
 
-    emit finished( false );
+    jobFinished( false );
     return;
   }
 
@@ -401,7 +401,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
 
       if( !prepareWriter() || !startWriting() ) {
 	cleanupAfterError();
-	emit finished(false);
+	jobFinished(false);
       }
     }
     else {
@@ -420,7 +420,7 @@ void K3bMixedJob::slotWriterFinished( bool success )
 
   if( !success ) {
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -443,7 +443,7 @@ void K3bMixedJob::slotWriterFinished( bool success )
       if( !m_doc->onTheFly() && m_doc->removeImages() )
 	removeBufferFiles();
       
-      emit finished(true);
+      jobFinished(true);
     }
   }
 }
@@ -461,7 +461,7 @@ void K3bMixedJob::slotMediaReloadedForSecondSession( bool success )
     // we only create the image once. This should not be a problem???
     if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
-      emit finished(false);
+      jobFinished(false);
     }
     else if( m_doc->onTheFly() ) {
       m_isoImager->start();
@@ -489,7 +489,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
   if( !success ) {
     emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -513,7 +513,7 @@ void K3bMixedJob::slotAudioDecoderFinished( bool success )
 
       if( !prepareWriter() || !startWriting() ) {
 	cleanupAfterError();
-	emit finished(false);
+	jobFinished(false);
       }
     }
   }
@@ -1176,12 +1176,12 @@ void K3bMixedJob::slotNormalizeJobFinished( bool success )
 
     if( !prepareWriter() || !startWriting() ) {
       cleanupAfterError();
-      emit finished(false);
+      jobFinished(false);
     }
   }
   else {
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

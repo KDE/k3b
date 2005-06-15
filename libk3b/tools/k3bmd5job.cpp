@@ -86,7 +86,7 @@ void K3bMd5Job::start()
 {
   cancel();
 
-  emit started();
+  jobStarted();
   d->readData = 0;
 
   if( d->isoFile ) {
@@ -95,14 +95,14 @@ void K3bMd5Job::start()
   else if( !d->filename.isEmpty() ) {
     if( !QFile::exists( d->filename ) ) {
       emit infoMessage( i18n("Could not find file %1").arg(d->filename), ERROR );
-      emit finished(false);
+      jobFinished(false);
       return;
     }
 
     d->file.setName( d->filename );
     if( !d->file.open( IO_ReadOnly ) ) {
       emit infoMessage( i18n("Could not open file %1").arg(d->filename), ERROR );
-      emit finished(false);
+      jobFinished(false);
       return;
     }
 
@@ -124,7 +124,7 @@ void K3bMd5Job::cancel()
     stop();
 
     emit canceled();
-    emit finished( false );
+    jobFinished( false );
   }
 }
 
@@ -183,7 +183,7 @@ void K3bMd5Job::slotUpdate()
     if( readSize <= 0 ) {
       stop();
       emit percent( 100 );
-      emit finished(true);
+      jobFinished(true);
     }
     else {
       int read = 0;
@@ -229,12 +229,12 @@ void K3bMd5Job::slotUpdate()
       if( read < 0 ) {
 	emit infoMessage( i18n("Error while reading from file %1").arg(d->filename), ERROR );
 	stop();
-	emit finished(false);
+	jobFinished(false);
       }
       else if( read == 0 ) {
 	stop();
 	emit percent( 100 );
-	emit finished(true);
+	jobFinished(true);
       }
       else {
 	d->readData += read;

@@ -36,8 +36,22 @@ class K3bMkisofsHandler
   bool mkisofsReadError() const;
 
  protected:
-  void initMkisofs( const K3bExternalBin* );
-  void handleMkisofsOutput( const QString& line );
+  /**
+   * Initialize the MkisofsHandler.
+   * This method emits copyright information and an error message in case mkisofs is not installed
+   * through handleMkisofsInfoMessage.
+   *
+   * \return A mkisofs bin object to be used or 0 if mkisofs is not installed.
+   */
+  const K3bExternalBin* initMkisofs();
+
+  void parseMkisofsOutput( const QString& line );
+
+  /**
+   * Used internally by handleMkisofsOutput.
+   * May be used in case handleMkisofsOutput is not sufficient.
+   */
+  int parseMkisofsProgress( const QString& line );
 
   /**
    * Called by handleMkisofsOutput
@@ -50,8 +64,6 @@ class K3bMkisofsHandler
    * Uses K3bJob::MessageType
    */
   virtual void handleMkisofsInfoMessage( const QString&, int ) = 0;
-
-  int parseMkisofsProgress( const QString& line );
 
  private:
   class Private;

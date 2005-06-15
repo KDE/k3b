@@ -99,11 +99,11 @@ void K3bDvdBooktypeJob::start()
   d->canceled = false;
   d->running = true;
 
-  emit started();
+  jobStarted();
 
   if( !d->device ) {
     emit infoMessage( i18n("No device set"), ERROR );
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
     return;
   }
@@ -120,7 +120,7 @@ void K3bDvdBooktypeJob::start()
 		      i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.")
 		      .arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) ) == -1 ) {
       emit canceled();
-      emit finished(false);
+      jobFinished(false);
       d->running = false;
       return;
     }
@@ -145,7 +145,7 @@ void K3bDvdBooktypeJob::start( K3bDevice::DeviceHandler* dh )
   d->canceled = false;
   d->running = true;
 
-  emit started();
+  jobStarted();
 
   slotDeviceHandlerFinished( dh );
 }
@@ -212,7 +212,7 @@ void K3bDvdBooktypeJob::slotProcessFinished( KProcess* p )
     if( d->forceNoEject ||
 	!k3bcore->globalSettings()->ejectMedia() ) {
       d->running = false;
-      emit finished(d->success);
+      jobFinished(d->success);
     }
     else {
       emit infoMessage( i18n("Ejecting DVD..."), INFO );
@@ -224,7 +224,7 @@ void K3bDvdBooktypeJob::slotProcessFinished( KProcess* p )
   }
   else {
     d->running = false;
-    emit finished(d->success);
+    jobFinished(d->success);
   }
 }
 
@@ -235,7 +235,7 @@ void K3bDvdBooktypeJob::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
     emit infoMessage( i18n("Unable to eject media."), ERROR );
 
   d->running = false;
-  emit finished(d->success);
+  jobFinished(d->success);
 }
 
 
@@ -244,7 +244,7 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh 
   if( d->canceled ) {
     emit canceled();
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
   }
 
   if( dh->success() ) {
@@ -256,7 +256,7 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh 
 	startBooktypeChange();
       else {
 	emit infoMessage( i18n("Cannot change booktype on non-empty DVD+R media."), ERROR );
-	emit finished(false);
+	jobFinished(false);
       }
     }
     else if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_RW ) {
@@ -264,13 +264,13 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh 
     }
     else {
       emit infoMessage( i18n("No DVD+R(W) media found."), ERROR );
-      emit finished(false);
+      jobFinished(false);
     }
   }
   else {
     emit infoMessage( i18n("Unable to determine media state."), ERROR );
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -288,7 +288,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
   if( !d->dvdBooktypeBin ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("dvd+rw-booktype"), ERROR );
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -341,7 +341,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
     // it "should" be the executable
     emit infoMessage( i18n("Could not start %1.").arg(d->dvdBooktypeBin->name()), K3bJob::ERROR );
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
   }
   else {
     emit newTask( i18n("Changing Booktype") );

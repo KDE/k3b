@@ -91,7 +91,7 @@ void K3bDataVerifyingJob::start()
   d->canceled = false;
   d->running = true;
 
-  emit started();
+  jobStarted();
 
   // we cannot compare files if no rockridge has been created since we do not know the
   // filenames in that case.
@@ -320,7 +320,7 @@ void K3bDataVerifyingJob::finishVerification( bool success )
   d->running = false;
   if( d->iso9660 ) 
     d->iso9660->close();
-  emit finished(d->success);
+  jobFinished(d->success);
 }
 
 

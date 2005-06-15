@@ -107,7 +107,7 @@ K3bDoc* K3bAudioJob::doc() const
 
 void K3bAudioJob::start()
 {
-  emit started();
+  jobStarted();
 
   m_written = true;
   m_canceled = false;
@@ -237,7 +237,7 @@ void K3bAudioJob::start()
     else {
       if( !prepareWriter() ) {
 	cleanupAfterError();
-	emit finished(false);
+	jobFinished(false);
 	return;
       }
       
@@ -281,7 +281,7 @@ void K3bAudioJob::slotMaxSpeedJobFinished( bool success )
   // same code as above. See the commecnts there
   if( !prepareWriter() ) {
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
   
@@ -306,7 +306,7 @@ void K3bAudioJob::cancel()
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   removeBufferFiles();
   emit canceled();
-  emit finished(false);
+  jobFinished(false);
 }
 
 
@@ -317,7 +317,7 @@ void K3bAudioJob::slotWriterFinished( bool success )
 
   if( !success ) {
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
   else {
@@ -327,7 +327,7 @@ void K3bAudioJob::slotWriterFinished( bool success )
       if( m_doc->onTheFly() || m_doc->removeImages() )
 	removeBufferFiles();
 
-      emit finished(true);
+      jobFinished(true);
     }
     else {
       K3bDevice::eject( m_doc->burner() );
@@ -361,7 +361,7 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
 
     emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -375,13 +375,13 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
     else if( !m_doc->onlyCreateImages() ) {
       if( !prepareWriter() ) {
 	cleanupAfterError();
-	emit finished(false);
+	jobFinished(false);
       }
       else
 	startWriting();
     }
     else {
-      emit finished(true);
+      jobFinished(true);
     }
   }
 }
@@ -642,13 +642,13 @@ void K3bAudioJob::slotNormalizeJobFinished( bool success )
 
   if( success ) {
     if( m_doc->onlyCreateImages() ) {
-      emit finished(true);
+      jobFinished(true);
     }
     else {
       // start the writing
       if( !prepareWriter() ) {
 	cleanupAfterError();
-	emit finished(false);
+	jobFinished(false);
       }
       else
 	startWriting();
@@ -656,7 +656,7 @@ void K3bAudioJob::slotNormalizeJobFinished( bool success )
   }
   else {
     cleanupAfterError();
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

@@ -290,7 +290,7 @@ bool K3bGrowisofsWriter::prepareProcess()
 
 void K3bGrowisofsWriter::start()
 {
-  emit started();
+  jobStarted();
 
   d->lastWritingSpeed = 0;
   d->lastProgressed = 0;
@@ -302,7 +302,7 @@ void K3bGrowisofsWriter::start()
   d->speedEst->reset();
 
   if( !prepareProcess() ) {
-    emit finished( false );
+    jobFinished( false );
   }
   else {
 
@@ -323,7 +323,7 @@ void K3bGrowisofsWriter::start()
       // it "should" be the executable
       kdDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path << endl;
       emit infoMessage( i18n("Could not start %1.").arg(d->growisofsBin->name()), K3bJob::ERROR );
-      emit finished(false);
+      jobFinished(false);
     }
     else {
       if( simulate() ) {
@@ -496,7 +496,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   }
 
   if( !k3bcore->globalSettings()->ejectMedia() )
-    emit finished(d->success);
+    jobFinished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
     connect( K3bDevice::eject( burnDevice() ), 
@@ -521,7 +521,7 @@ void K3bGrowisofsWriter::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
   if( !dh->success() )
     emit infoMessage( i18n("Unable to eject media."), ERROR );
 
-  emit finished(d->success);
+  jobFinished(d->success);
 }
 
 

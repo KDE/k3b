@@ -109,12 +109,12 @@ void K3bDvdFormattingJob::start()
   d->canceled = false;
   d->running = true;
 
-  emit started();
+  jobStarted();
 
   if( !d->device ) {
     emit infoMessage( i18n("No device set"), ERROR );
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -129,7 +129,7 @@ void K3bDvdFormattingJob::start()
 		    i18n("Please insert a rewritable DVD medium into drive<p><b>%1 %2 (%3)</b>.").arg(d->device->vendor()).arg(d->device->description()).arg(d->device->devicename()) ) == -1 ) {
     emit canceled();
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -148,7 +148,7 @@ void K3bDvdFormattingJob::start( K3bDevice::DeviceHandler* dh )
   d->canceled = false;
   d->running = true;
 
-  emit started();
+  jobStarted();
 
   slotDeviceHandlerFinished( dh );
 }
@@ -263,7 +263,7 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
   if( d->forceNoEject ||
       !k3bcore->globalSettings()->ejectMedia() ) {
     d->running = false;
-    emit finished(d->success);
+    jobFinished(d->success);
   }
   else {
     emit infoMessage( i18n("Ejecting DVD..."), INFO );
@@ -281,7 +281,7 @@ void K3bDvdFormattingJob::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
     emit infoMessage( i18n("Unable to eject media."), ERROR );
 
   d->running = false;
-  emit finished(d->success);
+  jobFinished(d->success);
 }
 
 
@@ -289,7 +289,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
 {
   if( d->canceled ) {
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     d->running = false;
   }
 
@@ -313,7 +313,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
 					  K3bDevice::MEDIA_DVD_PLUS_RW)) ) {
       emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), ERROR );
       d->running = false;
-      emit finished(false);
+      jobFinished(false);
       return;
     }
 
@@ -425,7 +425,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
       else {
 	emit infoMessage( i18n("Unable to determine the current formatting state of the DVD-RW media."), ERROR );
 	d->running = false;
-	emit finished(false);
+	jobFinished(false);
 	return;
       }
     }
@@ -443,7 +443,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
       if( !d->dvdFormatBin ) {
 	emit infoMessage( i18n("Could not find %1 executable.").arg("dvd+rw-format"), ERROR );
 	d->running = false;
-	emit finished(false);
+	jobFinished(false);
 	return;
       }
       
@@ -489,7 +489,7 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
 	kdDebug() << "(K3bDvdFormattingJob) could not start " << d->dvdFormatBin->path << endl;
 	emit infoMessage( i18n("Could not start %1.").arg(d->dvdFormatBin->name()), K3bJob::ERROR );
 	d->running = false;
-	emit finished(false);
+	jobFinished(false);
       }
       else {
 	emit newTask( i18n("Formatting") );
@@ -498,13 +498,13 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
     else {
       // already formatted :)
       d->running = false;
-      emit finished(true);
+      jobFinished(true);
     }
   }
   else {
     emit infoMessage( i18n("Unable to determine media state."), ERROR );
     d->running = false;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 

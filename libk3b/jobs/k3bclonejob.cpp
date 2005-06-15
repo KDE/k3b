@@ -70,7 +70,7 @@ K3bCloneJob::~K3bCloneJob()
 
 void K3bCloneJob::start()
 {
-  emit started();
+  jobStarted();
 
   m_canceled = false;
   m_running = true;
@@ -85,33 +85,35 @@ void K3bCloneJob::start()
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject( "cdrecord" );
   if( !cdrecordBin ) {
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), ERROR );
-    emit finished(false);
+    jobFinished(false);
     m_running = false;
     return;
   }
   else if( !cdrecordBin->hasFeature( "clone" ) ) {
     emit infoMessage( i18n("Cdrecord version %1 does not have cloning support.").arg(cdrecordBin->version), ERROR );
-    emit finished(false);
+    jobFinished(false);
     m_running = false;
     return;
   }
 
   if( (!m_onlyCreateImage && !writer()) ||
-       (!m_onlyBurnExistingImage && !readingDevice()) ) {
+      (!m_onlyBurnExistingImage && !readingDevice()) ) {
     emit infoMessage( i18n("No device set."), ERROR );
-    emit finished(false);
+    jobFinished(false);
     m_running = false;
     return;
   }
 
-  if( !writer()->supportsWritingMode( K3bDevice::RAW_R96R ) &&
-      !writer()->supportsWritingMode( K3bDevice::RAW_R16 ) ) {
-    emit infoMessage( i18n("CD writer %1 does not support cloning.")
-		      .arg(writer()->vendor())
-		      .arg(writer()->description()), ERROR );
-    m_running = false;
-    emit finished(false);
-    return;
+  if( !m_onlyCreateImage ) {
+    if( !writer()->supportsWritingMode( K3bDevice::RAW_R96R ) &&
+	!writer()->supportsWritingMode( K3bDevice::RAW_R16 ) ) {
+      emit infoMessage( i18n("CD writer %1 does not support cloning.")
+			.arg(writer()->vendor())
+			.arg(writer()->description()), ERROR );
+      m_running = false;
+      jobFinished(false);
+      return;
+    }
   }
 
   if( m_imagePath.isEmpty() ) {
@@ -134,7 +136,7 @@ void K3bCloneJob::start()
 		      K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_CD_ROM ) < 0 ) {
       m_running = false;
       emit canceled();
-      emit finished(false);
+      jobFinished(false);
       return;
     }
 
@@ -229,7 +231,7 @@ void K3bCloneJob::slotWriterFinished( bool success )
     removeImageFiles();
     m_running = false;
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
@@ -246,13 +248,13 @@ void K3bCloneJob::slotWriterFinished( bool success )
       if( m_removeImageFiles )
 	removeImageFiles();
       m_running = false;
-      emit finished(true);
+      jobFinished(true);
     }
   }
   else {
     removeImageFiles();
     m_running = false;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -269,14 +271,14 @@ void K3bCloneJob::slotReadingFinished( bool success )
     removeImageFiles();
     m_running = false;
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
 
   if( success ) {
     emit infoMessage( i18n("Successfully read disk."), INFO );
     if( m_onlyCreateImage )
-      emit finished(true);
+      jobFinished(true);
     else {
       if( writer() == readingDevice() )
 	K3bDevice::eject( writer() );
@@ -287,7 +289,7 @@ void K3bCloneJob::slotReadingFinished( bool success )
     emit infoMessage( i18n("Error while reading disk."), ERROR );
     removeImageFiles();
     m_running = false;
-    emit finished(false);
+    jobFinished(false);
   }
 }
 
@@ -305,7 +307,7 @@ void K3bCloneJob::startWriting()
     removeImageFiles();
     m_running = false;
     emit canceled();
-    emit finished(false);
+    jobFinished(false);
     return;
   }
   

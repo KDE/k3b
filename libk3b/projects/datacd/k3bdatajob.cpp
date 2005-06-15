@@ -117,7 +117,7 @@ K3bDevice::Device* K3bDataJob::writer() const
 
 void K3bDataJob::start()
 {
-  emit started();
+  jobStarted();
 
   d->canceled = false;
   d->imageFinished = false;
@@ -295,7 +295,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       d->imageFinished = true;
 
       if( d->doc->onlyCreateImages() ) {
-	emit finished( true );
+	jobFinished( true );
       }
       else {
 	if( prepareWriterJob() )
@@ -425,7 +425,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 	  d->tocFile = 0;
 	}
 	
-	emit finished(true);
+	jobFinished(true);
       }
     }
   }
@@ -470,7 +470,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
       cancelAll();
   }
   else
-    emit finished( success );
+    jobFinished( success );
 }
 
 
@@ -801,7 +801,7 @@ void K3bDataJob::cancelAll()
 
   // TODO: wait for the subjobs to be finished
 
-  emit finished(false);
+  jobFinished(false);
 }
 
 

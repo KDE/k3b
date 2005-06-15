@@ -1104,10 +1104,12 @@ void K3bDataDoc::importSession( K3bDevice::Device* device )
 void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
 {
   if( dh->success() ) {
-    // FIXME: not only check for empty and audio but search for 
-    if( dh->toc().isEmpty() || 
-	dh->toc().last().type() != K3bDevice::Track::DATA ||
-	!dh->diskInfo().appendable() ) {
+    if( !dh->diskInfo().appendable() )
+      KMessageBox::error( view(), i18n("Disk is not appendable."),
+			  i18n("Unable to Import Session") );
+
+    else if( dh->toc().isEmpty() || 
+	     dh->toc().last().type() != K3bDevice::Track::DATA ) {
       KMessageBox::error( view(), i18n("Could not find a session to import."),
 			  i18n("Unable to Import Session") );
     }
