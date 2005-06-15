@@ -21,7 +21,6 @@
 #include <k3bcdtext.h>
 
 
-// TODO : allow a bitwise or of the command types
 
 class K3bDevice::DeviceHandler::DeviceHandlerThread : public K3bThread
 {
@@ -34,12 +33,13 @@ public:
 
   void run() {
     success = false;
+    m_bCanceled = false;
 
     if( dev ) {
       success = dev->open();
-      if( command & DISKINFO ) {
+      if( !m_bCanceled && command & DISKINFO ) {
 	ngInfo = dev->diskInfo();
-	if( !ngInfo.empty() ) {
+	if( !m_bCanceled && !ngInfo.empty() ) {
 	  toc = dev->readToc();
 	  if( toc.contentType() == AUDIO ||
 	      toc.contentType() == MIXED )
@@ -47,23 +47,23 @@ public:
 	}
       }
 
-      if( command & (NG_DISKINFO|
-		     DISKSIZE|
-		     REMAININGSIZE|
-		     NUMSESSIONS) ) {
+      if( !m_bCanceled && command & (NG_DISKINFO|
+				     DISKSIZE|
+				     REMAININGSIZE|
+				     NUMSESSIONS) ) {
 	ngInfo = dev->diskInfo();
       }
 
-      if( command & (TOC|TOCTYPE) ) {
+      if( !m_bCanceled && command & (TOC|TOCTYPE) ) {
 	toc = dev->readToc();
       }
 
-      if( command & CD_TEXT ) {
+      if( !m_bCanceled && command & CD_TEXT ) {
 	cdText = dev->readCdText();
 	success = (success && !cdText.isEmpty());
       }
 
-      if( command & CD_TEXT_RAW ) {
+      if( !m_bCanceled && command & CD_TEXT_RAW ) {
 	unsigned char* data = 0;
 	int dataLen = 0;
 	if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
@@ -81,10 +81,10 @@ public:
 	  success = false;
       }
 
-      if( command & BLOCK )
+      if( !m_bCanceled && command & BLOCK )
 	success = (success && dev->block( true ));
 
-      if( command & UNBLOCK )
+      if( !m_bCanceled && command & UNBLOCK )
 	success = (success && dev->block( false ));
 
       //
@@ -92,19 +92,30 @@ public:
       // since the RELOAD command is a combination of both
       //
 
-      if( command & EJECT )
+      if( !m_bCanceled && command & EJECT )
 	success = (success && dev->eject());
 
-      if( command & LOAD )
+      if( !m_bCanceled && command & LOAD )
 	success = (success && dev->load());
 
-      if( command & BUFFER_CAPACITY )
+      if( !m_bCanceled && command & BUFFER_CAPACITY )
 	success = dev->readBufferCapacity( bufferCapacity, availableBufferCapacity );
 	
       dev->close();
     }
-    emitFinished(success);
+
+    //
+    // This thread only gets cancelled if a new request was started.
+    // So we don't emit the finished signal for this (old) request.
+    //
+    if( !m_bCanceled )
+      emitFinished(success);
   }
+
+  void cancel() {
+    m_bCanceled = true;
+  }
+
 
   bool success;
   int errorCode;
@@ -116,6 +127,9 @@ public:
   long long bufferCapacity;
   long long availableBufferCapacity;
   Device* dev;
+
+private:
+  bool m_bCanceled;
 };
 
 
@@ -227,10 +241,22 @@ void K3bDevice::DeviceHandler::setDevice( Device* dev )
 
 void K3bDevice::DeviceHandler::sendCommand( int command )
 {
+  //
+  // We do not want the finished signal emitted in case the devicehandler was cancelled. This is a special case.
+  // That's why we do not use K3bThreadJob::start() becasue otherwise we would be registered twice.
+  //
+  if( m_thread->running() ) {
+    kdDebug() << "(K3bDevice::DeviceHandler) thread already running. canceling thread..." << endl;
+    m_thread->cancel();
+    m_thread->wait();
+  }
+  else
+    jobStarted();
+
   kdDebug() << "(K3bDevice::DeviceHandler) starting command: " << command << endl;
 
   m_thread->command = command;
-  start();
+  m_thread->start();
 }
 
 void K3bDevice::DeviceHandler::getToc()
@@ -284,7 +310,7 @@ void K3bDevice::DeviceHandler::customEvent( QCustomEvent* e )
   K3bThreadJob::customEvent(e);
 
   if( (int)e->type() == K3bProgressInfoEvent::Finished ) {
-    jobFinished( this );
+    emit finished( this );
     if( m_selfDelete ) {
       kdDebug() << "(K3bDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing" << endl;
       kdDebug() << "(K3bDevice::DeviceHandler) success: " << m_thread->success << endl;

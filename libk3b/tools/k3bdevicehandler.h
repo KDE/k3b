@@ -40,6 +40,9 @@ namespace K3bDevice
    * connect to the finished signal.
    * Be aware that all methods only return valid values if the corresponding info has
    * been successfully requested.
+   *
+   * Be aware that multiple requests in a row (without waiting for the job to finish) will
+   * only result in one finished() signal answering the last request.
    */
   class LIBK3B_EXPORT DeviceHandler : public K3bThreadJob
     {
