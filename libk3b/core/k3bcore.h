@@ -83,7 +83,7 @@ class LIBK3B_EXPORT K3bCore : public QObject
    */
   virtual void saveSettings( KConfig* c = 0 );
 
-  K3bDevice::DeviceManager* deviceManager() const;
+  virtual K3bDevice::DeviceManager* deviceManager() const;
 
   /**
    * Returns the external bin manager from K3bCore.
