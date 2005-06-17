@@ -167,7 +167,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
     return false;
   }
 
-
+  if( !m_dvdPro && bin->version.suffix().endsWith( "-dvd" ) ) {
+    bin->addFeature( "dvd-patch" );
+    bin->version = QString(bin->version.versionString()).remove("-dvd");
+  }
 
   // probe features
   KProcess fp;
@@ -209,9 +212,6 @@ bool K3bCdrecordProgram::scan( const QString& p )
     delete bin;
     return false;
   }
-
-  if( !m_dvdPro && bin->version.suffix().endsWith( "-dvd" ) )
-    bin->addFeature( "dvd-patch" );
 
   // FIXME: are these version correct?
   if( bin->version >= K3bVersion("1.11a38") )
