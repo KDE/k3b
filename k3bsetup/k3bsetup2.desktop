@@ -1,9 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup 2 - modify permission for CD/DVD burning with K3b
+Comment[sv]=Ställ in K3b 2: ändra rättigheter för att bränna cd/dvd med K3b
 Exec=k3bsetup
 Keywords=K3bSetup2,k3bsetup2
+Keywords[sv]=Ställ in K3b 2,k3bsetup2
 Name=K3bSetup
+Name[sv]=Ställ in K3b
 Terminal=false
 Type=Application
 Icon=k3b
@@ -13,3 +16,4 @@ X-KDE-ModuleType=Library
 X-KDE-RootOnly=true
 Categories=Application;System;X-KDE-System;
 GenericName=CD & DVD Burning Setup
+GenericName[sv]=Cd och dvd-bränninställning

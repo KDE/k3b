@@ -4,19 +4,26 @@ Comment=K3b
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[sv]=Processen lyckades
 Comment=Process successfully finished
+Comment[sv]=Processen avslutades med lyckat resultat
 default_sound=k3b_success1.wav
 default_presentation=1
 # None = 0, Sound = 1, Messagebox = 2, Logfile = 4, Stderr = 8, PassivePopup = 16, Execute = 32
 
 [FinishedWithError]
 Name=Process error
+Name[sv]=Processfel
 Comment=Process finished with errors
+Comment[sv]=Processen avslutades med fel
 default_sound=k3b_error1.wav
 default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
+Name[br]=Emaon o c'hortoz evit ar vedium
+Name[sv]=Väntar på media
 Comment=The user needs to insert a medium
+Comment[sv]=Användaren måste mata in media
 default_sound=k3b_wait_media1.wav
 default_presentation=1
