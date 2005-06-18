@@ -1,3 +1,8 @@
+0.13
+====
+ * New Device menu containing all the actions possible for a device (like eject, unmount, ...).
+   This includes the possibility of assigning shotcuts to these kind of actions.
+
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)
