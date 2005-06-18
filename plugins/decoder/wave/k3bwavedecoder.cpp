@@ -232,8 +232,8 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
     read = d->file->readBlock( _data, maxLen );
     if( read > 0 ) {
       if( read % 2 > 0 ) {
-	kdDebug() << "(K3bWaveDecoder) data length is not a multible of 2! Cannot write data." << endl;
-	return -1;
+	kdDebug() << "(K3bWaveDecoder) data length is not a multible of 2! Cutting data." << endl;
+	read -= 1;
       }
 
       // swap bytes
