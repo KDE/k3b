@@ -259,7 +259,7 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
     emitPercent( 100*d->overallBytesRead/d->overallBytesToRead );
   }
 
-  return true;
+  return ( readLength == 0 );
 }
 
 
