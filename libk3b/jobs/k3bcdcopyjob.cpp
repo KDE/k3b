@@ -153,12 +153,10 @@ void K3bCdCopyJob::start()
 
   jobStarted();
 
-  emit newTask( i18n("Checking Source Disk") );
-
-  // without this message the window looks quite empty and the user might think nothing is going on
-  emit infoMessage( i18n("Checking source disk"), INFO );
+  emit newTask( i18n("Checking Source Medium") );
 
   emit burning(false);
+  emit newSubTask( i18n("Waiting for source medium") );
 
   // wait for a source disk
   if( waitForMedia( m_readerDevice,
@@ -168,7 +166,7 @@ void K3bCdCopyJob::start()
     return;
   }
 
-  emit newSubTask( i18n("Reading Table of Contents") );
+  emit newSubTask( i18n("Checking source medium") );
 
   // FIXME: read ISRCs and MCN
 
@@ -578,7 +576,7 @@ void K3bCdCopyJob::readNextSession()
     if( d->numSessions > 1 )
       emit newTask( i18n("Reading Session %1").arg(d->currentReadSession) );
     else
-      emit newTask( i18n("Reading Source Disk") );
+      emit newTask( i18n("Reading Source Medium") );
 
     if( d->currentReadSession == 1 )
       emit newSubTask( i18n("Reading track %1 of %2").arg(1).arg(d->toc.count()) );

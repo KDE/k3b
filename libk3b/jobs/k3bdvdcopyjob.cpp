@@ -104,6 +104,8 @@ void K3bDvdCopyJob::start()
   d->running = true;
   d->readerRunning = d->writerRunning = false;
 
+  emit newTask( i18n("Checking Source Medium") );
+
   if( m_onTheFly && 
       k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
     m_onTheFly = false;
@@ -112,8 +114,19 @@ void K3bDvdCopyJob::start()
     emit infoMessage( i18n("Disabling on-the-fly writing."), INFO );
   }
 
-  emit infoMessage( i18n("Checking source media") + "...", INFO );
-  emit newSubTask( i18n("Checking source media") );
+  emit newSubTask( i18n("Waiting for source medium") );
+
+  // wait for a source disk
+  if( waitForMedia( m_readerDevice,
+		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+		    K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_DVD_ROM ) < 0 ) {
+    emit canceled();
+    d->running = false;
+    jobFinished( false );
+    return;
+  }
+
+  emit newSubTask( i18n("Checking source medium") );
 
   connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::DISKINFO, m_readerDevice ),
            SIGNAL(finished(K3bDevice::DeviceHandler*)),
@@ -133,7 +146,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
   d->sourceDiskInfo = dh->diskInfo();
 
   if( dh->diskInfo().empty() || dh->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
-    emit infoMessage( i18n("No source media found."), ERROR );
+    emit infoMessage( i18n("No source medium found."), ERROR );
     jobFinished(false);
     d->running = false;
   }
@@ -281,7 +294,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	// else the user specified a file in an existing dir
 
 	emit infoMessage( i18n("Writing image file to %1.").arg(m_imagePath), INFO );
-	emit newSubTask( i18n("Reading source media.") );
+	emit newSubTask( i18n("Reading source medium.") );
       }
 
       //
@@ -702,9 +715,9 @@ bool K3bDvdCopyJob::waitForDvd()
       }
       else if( m & (K3bDevice::MEDIA_DVD_RW_SEQ|
 		    K3bDevice::MEDIA_DVD_RW) ) {
-	if( m_writingMode == K3b::DAO ||
-	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
-	      ( sizeWithDao || !m_onTheFly ) ) ) {
+	if( m_writingMode == K3b::DAO ) {
+// 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
+// 	      ( sizeWithDao || !m_onTheFly ) ) ) {
 	  emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
 	  d->usedWritingMode = K3b::DAO;
 	}
@@ -720,9 +733,9 @@ bool K3bDvdCopyJob::waitForDvd()
 	if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
 	  emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
 
-	if( m_writingMode == K3b::DAO ||
-	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
-	      ( sizeWithDao || !m_onTheFly ) ) ) {
+	if( m_writingMode == K3b::DAO ) {
+// 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
+// 	      ( sizeWithDao || !m_onTheFly ) ) ) {
 	  emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(m, true) ), INFO );
 	  d->usedWritingMode = K3b::DAO;
 	}
