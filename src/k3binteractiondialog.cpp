@@ -156,9 +156,7 @@ K3bInteractionDialog::~K3bInteractionDialog()
 
 void K3bInteractionDialog::show()
 {
-  slotLoadUserDefaults();
   KDialog::show();
-  init();
 }
 
 
@@ -429,8 +427,10 @@ int K3bInteractionDialog::exec( bool returnOnHide )
   setWFlags( WShowModal );
   setResult( 0 );
 
+  slotLoadUserDefaults();
   show();
-  
+  init();
+
   m_inLoop = true;
   QApplication::eventLoop()->enterLoop();
   
