@@ -4,8 +4,10 @@ Comment=K3b
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[hu]=A művelet sikeresen befejeződött
 Name[sv]=Processen lyckades
 Comment=Process successfully finished
+Comment[hu]=A művelet sikeresen befejeződött
 Comment[sv]=Processen avslutades med lyckat resultat
 default_sound=k3b_success1.wav
 default_presentation=1
@@ -13,8 +15,10 @@ default_presentation=1
 
 [FinishedWithError]
 Name=Process error
+Name[hu]=A művelet során hiba történt
 Name[sv]=Processfel
 Comment=Process finished with errors
+Comment[hu]=A művelet hibajelzéssel fejeződött be
 Comment[sv]=Processen avslutades med fel
 default_sound=k3b_error1.wav
 default_presentation=1
@@ -22,8 +26,10 @@ default_presentation=1
 [WaitingForMedium]
 Name=Waiting for medium
 Name[br]=Emaon o c'hortoz evit ar vedium
+Name[hu]=Várakozás egy lemezre
 Name[sv]=Väntar på media
 Comment=The user needs to insert a medium
+Comment[hu]=Be kell helyezni egy lemezt
 Comment[sv]=Användaren måste mata in media
 default_sound=k3b_wait_media1.wav
 default_presentation=1
