@@ -60,8 +60,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  "default dvd copy settings",
-			  modal ),
-    m_job(0)
+			  modal )
 {
   QWidget* w = mainWidget();
 
@@ -233,24 +232,24 @@ void K3bDvdCopyDialog::slotStartClicked()
     dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
   }
 
-  if( !m_job )
-    m_job = new K3bDvdCopyJob( dlg, this );
+  K3bDvdCopyJob* job = new K3bDvdCopyJob( dlg, this );
 
-  m_job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
-  m_job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
-  m_job->setImagePath( m_tempDirSelectionWidget->tempPath() );
-  m_job->setRemoveImageFiles( m_checkDeleteImages->isChecked() );
-  m_job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-  m_job->setSimulate( m_checkSimulate->isChecked() );
-  m_job->setOnTheFly( m_checkOnTheFly->isChecked() );
-  m_job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
-  m_job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
-  m_job->setWritingMode( m_writingModeWidget->writingMode() );
-  m_job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
-  m_job->setReadRetries( m_spinRetries->value() );
+  job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
+  job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
+  job->setImagePath( m_tempDirSelectionWidget->tempPath() );
+  job->setRemoveImageFiles( m_checkDeleteImages->isChecked() );
+  job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+  job->setSimulate( m_checkSimulate->isChecked() );
+  job->setOnTheFly( m_checkOnTheFly->isChecked() );
+  job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
+  job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
+  job->setWritingMode( m_writingModeWidget->writingMode() );
+  job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
+  job->setReadRetries( m_spinRetries->value() );
   
   hide();
-  dlg->startJob( m_job );
+  dlg->startJob( job );
+  delete job;
   show();
   delete dlg;
 }
