@@ -24,7 +24,6 @@ class K3bWriterSelectionWidget;
 class K3bDeviceComboBox;
 class QCheckBox;
 class QSpinBox;
-class K3bDvdCopyJob;
 class K3bWritingModeWidget;
 
 
@@ -59,8 +58,6 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   QSpinBox* m_spinRetries;
   QCheckBox* m_checkIgnoreReadErrors;
   K3bWritingModeWidget* m_writingModeWidget;
-
-  K3bDvdCopyJob* m_job;
 };
 
 #endif

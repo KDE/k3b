@@ -1,7 +1,8 @@
 0.12.2
 ======
  * After for example copying a CD when the dialog comes up again keep the last settings.
- + Default to incremental sequential writing mode when copying a DVD to a DVD-R.
+ * Default to incremental sequential writing mode when copying a DVD to a DVD-R.
+ * Fixed a crash when the DVD copy dialog is reused.
 
 0.12.1
 Fixed compilation problems with older musepack library version.
