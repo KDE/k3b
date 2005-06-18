@@ -1,7 +1,13 @@
+0.12.2
+======
+ * After for example copying a CD when the dialog comes up again keep the last settings.
+ + Default to incremental sequential writing mode when copying a DVD to a DVD-R.
+
 0.12.1
 Fixed compilation problems with older musepack library version.
 Fixed compile problem with older gcc versions.
 Enable verification checkbox for ISO9660 images in the CD writing dialog.
+Do not report success even if audio project conversion failed.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
