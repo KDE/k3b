@@ -541,8 +541,9 @@ void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
 
     // try to check the filesystem size
     K3bIso9660 iso( m_doc->burner() );
-    if( iso.open() && info.capacity() - iso.primaryDescriptor().volumeSpaceSize >= m_doc->size() ) {
+    if( iso.open() && info.capacity() - iso.primaryDescriptor().volumeSpaceSize >= m_doc->length() ) {
       d->usedMultiSessionMode = K3bDataDoc::CONTINUE;
+      kdDebug() << "(K3bDvdJob) iso size: " << iso.primaryDescriptor().volumeSpaceSize << endl;
     }
     else {
       d->usedMultiSessionMode = K3bDataDoc::NONE;
