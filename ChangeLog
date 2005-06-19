@@ -3,6 +3,8 @@
  * After for example copying a CD when the dialog comes up again keep the last settings.
  * Default to incremental sequential writing mode when copying a DVD to a DVD-R.
  * Fixed a crash when the DVD copy dialog is reused.
+ * Properly default to DVD size in Video DVD project.
+ * Fixed automatic multisession handling for DVD+RW media
 
 0.12.1
 Fixed compilation problems with older musepack library version.
