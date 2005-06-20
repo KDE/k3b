@@ -5,6 +5,7 @@ Exec=k3b --cdimage %U
 Icon=k3b
 Terminal=false
 Name=K3b
+Name[hi]=के3बी
 MimeType=application/x-cue;
 
 Encoding=UTF-8
