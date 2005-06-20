@@ -4,10 +4,12 @@ Comment=K3b
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[da]=Processen lykkedes
 Name[hu]=A művelet sikeresen befejeződött
 Name[it]=Processo riuscito
 Name[sv]=Processen lyckades
 Comment=Process successfully finished
+Comment[da]=Processen afsluttedes korrekt
 Comment[hu]=A művelet sikeresen befejeződött
 Comment[it]=Processo riuscito e terminato
 Comment[sv]=Processen avslutades med lyckat resultat
@@ -17,10 +19,12 @@ default_presentation=1
 
 [FinishedWithError]
 Name=Process error
+Name[da]=Procesfejl
 Name[hu]=A művelet során hiba történt
 Name[it]=Errore di Processo
 Name[sv]=Processfel
 Comment=Process finished with errors
+Comment[da]=Processen afsluttede med fejl
 Comment[hu]=A művelet hibajelzéssel fejeződött be
 Comment[it]=Processo terminato con errori
 Comment[sv]=Processen avslutades med fel
@@ -30,10 +34,12 @@ default_presentation=1
 [WaitingForMedium]
 Name=Waiting for medium
 Name[br]=Emaon o c'hortoz evit ar vedium
+Name[da]=Venter på mediet
 Name[hu]=Várakozás egy lemezre
 Name[it]=Si è in attesa di un supporto
 Name[sv]=Väntar på media
 Comment=The user needs to insert a medium
+Comment[da]=Brugeren må indsætte et medie
 Comment[hu]=Be kell helyezni egy lemezt
 Comment[it]=L'utente deve inserire un supporto
 Comment[sv]=Användaren måste mata in media
