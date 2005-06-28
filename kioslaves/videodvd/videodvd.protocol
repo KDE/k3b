@@ -15,3 +15,4 @@ Description[it]=Un kioslave per permettere ai file di essere copiati da un DVD v
 Description[nl]=Een kioslave waarmee u bestanden van een video-dvd kunt kopiëren (inclusief versleuteling)
 Description[pa]=ਇੱਕ kioslave ਹੈ, ਜੋ ਕਿ ਫਾਇਲਾਂ ਨੂੰ ਇੱਕ DVD (ਡਿਸਕ੍ਰਿਪਸ਼ਨ ਸਮੇ) ਤੋਂ ਨਕਲ ਕਰਨ ਲਈ ਸਹਾਇਕ ਹੈ
 Description[sv]=En I/O-slav som gör det möjligt att kopiera filer från en video-dvd (inklusive avkodning)
+Description[zh_CN]=允许从视频 DVD(包括加密影碟)中复制文件的 kioslave
