@@ -162,7 +162,7 @@ class K3bDataDoc : public K3bDoc
    */
   virtual void addUrls( const KURL::List& urls, K3bDirItem* dir );
 
-  void importSession( K3bDevice::Device* );
+  bool importSession( K3bDevice::Device* );
   void clearImportedSession();
 
   /**
@@ -174,9 +174,6 @@ class K3bDataDoc : public K3bDoc
  signals:
   void itemRemoved( K3bDataItem* );
   void itemAdded( K3bDataItem* );
-
- private slots:
-  void slotTocRead( K3bDevice::DeviceHandler* dh );
 
  protected:
   /** reimplemented from K3bDoc */

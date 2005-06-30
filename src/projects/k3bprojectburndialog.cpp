@@ -248,7 +248,7 @@ void K3bProjectBurnDialog::prepareGui()
   QLabel* pixLabel = new QLabel( groupCopies );
   pixLabel->setPixmap( SmallIcon( "cdcopy", KIcon::SizeMedium ) );
   pixLabel->setScaledContents( false );
-  m_spinCopies = new QSpinBox( 1, 99, 1, groupCopies );
+  m_spinCopies = new QSpinBox( 1, 999, 1, groupCopies );
 
   // arrange it
   QGridLayout* grid = new QGridLayout( w );
