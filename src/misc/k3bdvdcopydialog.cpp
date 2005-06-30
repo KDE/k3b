@@ -112,7 +112,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );
-  m_spinCopies->setMaxValue( 99 );
+  m_spinCopies->setMaxValue( 999 );
 
   optionTabGrid->addWidget( groupWritingMode, 0, 0 );
   optionTabGrid->addMultiCellWidget( groupOptions, 0, 1, 1, 1 );

@@ -3,6 +3,15 @@
  * After for example copying a CD when the dialog comes up again keep the last settings.
  * Default to incremental sequential writing mode when copying a DVD to a DVD-R.
  * Fixed a crash when the DVD copy dialog is reused.
+ * Fixed inline editing in the audio CD view (without bigger changes this only works with a 
+   rather strange selection mode.)
+ * Show the configured splash screen image instead of the default.
+ * Fixed eMovix 0.9 default settings handling.
+ * Import session: disable RockRidge if the previous session does not contain RR extensions.
+   This fixes the problem with strange filenames if the new session is mounted via RR.
+ * Fixed the --cdimage parameter.
+ * Changed max copies from 99 to 999.
+ * Improved session import dialog.
  * Properly default to DVD size in Video DVD project.
  * Fixed automatic multisession handling for DVD+RW media
 
