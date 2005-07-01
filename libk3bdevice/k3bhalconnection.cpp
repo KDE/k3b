@@ -100,9 +100,10 @@ bool K3bDevice::HalConnection::open()
   s_contextMap[m_halContext] = this;
 
   // report all already detected devices
-  QStringList devs = devices();
-  for( QStringList::iterator it = devs.begin(); it != devs.end(); ++it )
-    emit deviceAdded( *it );
+  int numDevices;
+  char** halDeviceList = libhal_get_all_devices( m_halContext, &numDevices, 0 );
+  for( int i = 0; i < numDevices; ++i )
+    addDevice( halDeviceList[i] );
 
   return true;
 }
@@ -133,17 +134,7 @@ void K3bDevice::HalConnection::close()
 
 QStringList K3bDevice::HalConnection::devices() const
 {
-  QStringList devs;
-  if( m_halContext ) {
-    int numDevices;
-    char** halDeviceList = libhal_get_all_devices( m_halContext, &numDevices, 0 );
-    for( int i = 0; i < numDevices; ++i ) {
-      QString dev = getSystemDeviceForCdrom( halDeviceList[i] );
-      if( !dev.isEmpty() )
-	devs.append( dev );
-    }
-  }
-  return devs;
+  return QStringList( m_udiDeviceMap.values() );
 }
 
 
@@ -169,16 +160,22 @@ QString K3bDevice::HalConnection::getSystemDeviceForCdrom( const char* udi ) con
 void K3bDevice::HalConnection::addDevice( const char* udi )
 {
   QString s = getSystemDeviceForCdrom( udi );
-  if( !s.isEmpty() )
+  if( !s.isEmpty() ) {
+    //    kdDebug() << "Mapping udi " << udi << " to device " << s << endl;
+    m_udiDeviceMap[udi] = s;
     emit deviceAdded( s );
+  }
 }
 
 
 void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
-  QString s = getSystemDeviceForCdrom( udi );
-  if( !s.isEmpty() )
-    emit deviceRemoved( s );
+  QMapIterator<QCString, QString> it = m_udiDeviceMap.find( udi );
+  if( it != m_udiDeviceMap.end() ) {
+    //    kdDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
+    emit deviceRemoved( it.data() );
+    m_udiDeviceMap.erase( it );
+  }
 }
 
 
@@ -192,7 +189,7 @@ void K3bDevice::HalConnection::setupDBusQtConnection( DBusConnection* dbusConnec
 // CALLBACKS
 void K3bDevice::HalConnection::halDeviceAdded( LibHalContext* ctx, const char* udi )
 {
-  //  kdDebug() << k_funcinfo << endl;
+  //  kdDebug() << "adding udi   " << udi << endl;
   HalConnection* con = s_contextMap[ctx];
   con->addDevice( udi );
 }
@@ -200,7 +197,7 @@ void K3bDevice::HalConnection::halDeviceAdded( LibHalContext* ctx, const char* u
 
 void K3bDevice::HalConnection::halDeviceRemoved( LibHalContext* ctx, const char* udi )
 {
-  //  kdDebug() << k_funcinfo << endl;
+  //  kdDebug() << "removing udi " << udi << endl;
   HalConnection* con = s_contextMap[ctx];
   con->removeDevice( udi );
 }

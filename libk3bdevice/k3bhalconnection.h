@@ -85,6 +85,8 @@ namespace K3bDevice {
       LibHalFunctions m_halFunctions;
 #endif
 
+      QMap<QCString, QString> m_udiDeviceMap;
+
       /**
        * \return the system device for cdrom devices and an empty string for all other devices.
        */
