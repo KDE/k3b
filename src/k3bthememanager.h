@@ -1,6 +1,6 @@
 /* 
  *
- * $Id$
+ * $Id: k3bthememanager.h 401319 2005-03-28 16:26:58Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -78,6 +78,8 @@ class K3bTheme
   bool local() const { return m_local; }
 
   const QString& path() const { return m_path; }
+
+  static QString filenameForPixmapType( PixmapType );
 
  private:
   QString m_path;
