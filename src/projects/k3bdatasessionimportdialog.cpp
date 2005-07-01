@@ -164,7 +164,7 @@ void K3bDataSessionImportDialog::slotDiskInfoReady( K3bDevice::DiskInfoDetector*
 {
   // check for an appendable CD (DVD) with a non-empty toc
   if( did->diskInfo().appendable() &&
-      did->toc().isEmpty() &&
+      !did->toc().isEmpty() &&
       did->toc().last().type() == K3bDevice::Track::DATA ) {
 
     bool dvd = ( m_doc->type() == K3bDoc::DVD );
