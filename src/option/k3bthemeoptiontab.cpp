@@ -148,8 +148,17 @@ void K3bThemeOptionTab::slotInstallTheme()
   if( entries.count() > 0 ) {
     if( themeDir->entry(entries.first())->isDirectory() ) {
       const KArchiveDirectory* subDir = dynamic_cast<const KArchiveDirectory*>( themeDir->entry(entries.first()) );
-      if( subDir && subDir->entry( "k3b.theme" ) )
+      if( subDir && subDir->entry( "k3b.theme" ) ) {
 	validThemeArchive = true;
+
+	// check for all nessessary pixmaps (this is a little evil hacking)
+	for( int i = 0; i <= K3bTheme::WELCOME_BG; ++i ) {
+	  if( !subDir->entry( K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) ) ) {
+	    validThemeArchive = false;
+	    break;
+	  }
+	}
+      }
     }
   }
 
