@@ -1,4 +1,4 @@
-#include "../k3bhalconnection.h"
+#include "../libk3bdevice/k3bhalconnection.h"
 #include <qlabel.h>
 
 
