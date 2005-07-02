@@ -64,12 +64,15 @@ class K3bIsoImageWritingDialog::Private
 {
 public:
   Private()
-    : md5SumItem(0) {
+    : md5SumItem(0),
+      imageForced( false ) {
   }
 
   K3bListViewItem* md5SumItem;
   QString lastCheckedFile;
   bool isIsoImage;
+
+  bool imageForced;
 };
 
 
@@ -121,13 +124,15 @@ K3bIsoImageWritingDialog::~K3bIsoImageWritingDialog()
 
 void K3bIsoImageWritingDialog::init()
 {
-  // when opening the dialog first the default settings are loaded and afterwards we set the 
-  // last written image because that's what most users want
-  KConfig* c = k3bcore->config();
-  c->setGroup( configGroup() );
-  QString image = c->readPathEntry( "last written image" );
-  if( QFile::exists( image ) )
-    m_editImagePath->setURL( image );
+  if( !d->imageForced ) {
+    // when opening the dialog first the default settings are loaded and afterwards we set the 
+    // last written image because that's what most users want
+    KConfig* c = k3bcore->config();
+    c->setGroup( configGroup() );
+    QString image = c->readPathEntry( "last written image" );
+    if( QFile::exists( image ) )
+      m_editImagePath->setURL( image );
+  }
 }
 
 
@@ -186,7 +191,7 @@ void K3bIsoImageWritingDialog::setupGui()
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );
-  m_spinCopies->setMaxValue( 99 );
+  m_spinCopies->setMaxValue( 999 );
   // -------- copies
 
   QGroupBox* optionGroup = new QGroupBox( 3, Vertical, i18n("Options"), optionTab );
@@ -379,6 +384,7 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
 
 void K3bIsoImageWritingDialog::setImage( const KURL& url )
 {
+  d->imageForced = true;
   m_editImagePath->setURL( url.path() );
 }
 
