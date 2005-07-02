@@ -1072,98 +1072,78 @@ void K3bDataDoc::informAboutNotFoundFiles()
 
 void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 {
-  if( m_multisessionMode != CONTINUE && m_multisessionMode != FINISH )
+  if( m_multisessionMode == NONE || m_multisessionMode == START )
     clearImportedSession();
 
   m_multisessionMode = mode;
 }
 
 
-void K3bDataDoc::importSession( K3bDevice::Device* device )
+bool K3bDataDoc::importSession( K3bDevice::Device* device )
 {
-  // remove previous imported sessions
-  clearImportedSession();
+  K3bDevice::DiskInfo diskInfo = device->diskInfo();
+  if( !diskInfo.appendable() )
+    return false;
 
-  // set multisession option
-  if( m_multisessionMode != FINISH )
-    m_multisessionMode = CONTINUE;
+  K3bDevice::Toc toc = device->readToc();
+  if( toc.isEmpty() || 
+      toc.last().type() != K3bDevice::Track::DATA )
+    return false;
 
-//   KProgressDialog d( qApp->activeWindow(),
-// 		     0,
-// 		     i18n("Importing session"),
-// 		     i18n("Importing old session from %1").arg(device->blockDeviceName()) );
-//   d.show();
+  long startSec = toc.last().firstSector().lba();
+  K3bIso9660 iso( device, startSec );
 
-  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::TOC|K3bDevice::DeviceHandler::NG_DISKINFO, device ),
-	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	   this,
-	   SLOT(slotTocRead(K3bDevice::DeviceHandler*)) );
-}
-
-
-void K3bDataDoc::slotTocRead( K3bDevice::DeviceHandler* dh )
-{
-  if( dh->success() ) {
-    if( !dh->diskInfo().appendable() )
-      KMessageBox::error( view(), i18n("Disk is not appendable."),
-			  i18n("Unable to Import Session") );
-
-    else if( dh->toc().isEmpty() || 
-	     dh->toc().last().type() != K3bDevice::Track::DATA ) {
-      KMessageBox::error( view(), i18n("Could not find a session to import."),
-			  i18n("Unable to Import Session") );
+  if( iso.open() ) {
+    // remove previously imported sessions
+    clearImportedSession();
+    
+    // set multisession option
+    if( m_multisessionMode != FINISH && m_multisessionMode != AUTO )
+      m_multisessionMode = CONTINUE;
+    
+    // since in iso9660 it is possible that two files share it's data
+    // simply summing the file sizes could result in wrong values
+    // that's why we use the size from the toc. This is more accurate
+    // anyway since there might be files overwritten or removed
+    m_oldSessionSize = toc.last().lastSector().mode1Bytes();
+    
+    kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
+    
+    // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem 
+    // size. in that case we need to use the filesystem's size (which is ok since it's one track anyway,
+    // no real multisession)
+    if( diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+      m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize 
+	* iso.primaryDescriptor().logicalBlockSize;
     }
-    else {
-      long startSec = dh->toc().last().firstSector().lba();
+    
+    // import some former settings
+    m_isoOptions.setCreateRockRidge( iso.firstRRDirEntry() != 0 );
+    m_isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
+    m_isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
+    // TODO: also import some other pd fields
+    
+    const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
+    if( !rootDir )
+      rootDir = iso.firstJolietDirEntry();
+    if( !rootDir )
+      rootDir = iso.firstIsoDirEntry();
+    
+    createSessionImportItems( rootDir, root() );
 
-      // since in iso9660 it is possible that two files share it's data
-      // simply summing the file sizes could result in wrong values
-      // that's why we use the size from the toc. This is more accurate
-      // anyway since there might be files overwritten or removed
-      m_oldSessionSize = dh->toc().last().lastSector().mode1Bytes();
+    emit changed();
 
-      kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
-
-      K3bIso9660 iso( burner(), startSec );
-      iso.open();
-
-      // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem size
-      // in that case we need to use the filesystem's size (which is ok since it's one track anyway, no real multisession)
-      if( dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
-	m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize * iso.primaryDescriptor().logicalBlockSize;
-      }
-
-      // import some former settings
-      m_isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
-      m_isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
-      // TODO: also import some other pd fields
-
-      const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
-      if( !rootDir )
-	rootDir = iso.firstJolietDirEntry();
-      if( !rootDir )
-	rootDir = iso.firstIsoDirEntry();
-
-      createSessionImportItems( rootDir, root() );
-    }
+    return false;
   }
   else {
     kdDebug() << "(K3bDataDoc) unable to read toc." << endl;
-    // FIXME: inform the user. By the way: this all still sucks!
+    return false;
   }
-
-  emit changed();
 }
 
 
 void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir, K3bDirItem* parent )
 {
-  kapp->processEvents();
-
-//   if( d->wasCancelled() ) {
-//     return;
-//   }
-
   QStringList entries = importDir->entries();
   entries.remove( "." );
   entries.remove( ".." );

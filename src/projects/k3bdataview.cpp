@@ -21,6 +21,7 @@
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
+#include "k3bdatasessionimportdialog.h"
 #include <k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bfillstatusdisplay.h>
@@ -129,13 +130,7 @@ K3bDirItem* K3bDataView::currentDir() const
 
 void K3bDataView::importSession()
 {
-  // get the writer
-  m_device = K3bDeviceSelectionDialog::selectWriter( this, i18n("Please select the appendable disk") );
-
-  if( m_device ) {
-    m_doc->setBurner( m_device );
-    m_doc->importSession( m_device );
-  }
+  K3bDataSessionImportDialog::importSession( m_doc, this );
 }
 
 

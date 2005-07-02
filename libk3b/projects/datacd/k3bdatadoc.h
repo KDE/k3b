@@ -152,6 +152,20 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   bool needToCutFilenames() const { return m_needToCutFilenames; }
 
+  /**
+   * Imports a session into the project. This will create K3bSessionImportItems
+   * and properly set the imported session size.
+   * Some settings will be adjusted to the imported session (joliet, rr).
+   * 
+   * Be aware that this method is blocking.
+   *
+   * \return true if the old session was successfully imported, false if no
+   *         session could be found.
+   *
+   * \see clearImportedSession()
+   */
+  bool importSession( K3bDevice::Device* );
+
  public slots:
   virtual void addUrls( const KURL::List& urls );
 
@@ -162,7 +176,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   virtual void addUrls( const KURL::List& urls, K3bDirItem* dir );
 
-  void importSession( K3bDevice::Device* );
   void clearImportedSession();
 
   /**
@@ -174,9 +187,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
  signals:
   void itemRemoved( K3bDataItem* );
   void itemAdded( K3bDataItem* );
-
- private slots:
-  void slotTocRead( K3bDevice::DeviceHandler* dh );
 
  protected:
   /** reimplemented from K3bDoc */
