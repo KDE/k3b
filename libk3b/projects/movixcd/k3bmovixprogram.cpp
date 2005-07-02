@@ -340,13 +340,14 @@ QStringList K3bMovixBin::files( const QString& kbd,
   K3bProcess::OutputCollector out( &p );
   p << path + "movix-conf" << "--files";
 
+
   if( !kbd.isEmpty() && kbd != i18n("default") )
     p << "--kbd" << kbd;
-  if( !font.isEmpty() && kbd != i18n("default") )
+  if( !font.isEmpty() && font != i18n("default") )
     p << "--font" << font;
-  if( !bg.isEmpty() && kbd != i18n("default") )
+  if( !bg.isEmpty() && bg != i18n("default") )
     p << "--background" << bg;
-  if( !lang.isEmpty() && kbd != i18n("default") )
+  if( !lang.isEmpty() && lang != i18n("default") )
     p << "--lang" << lang;
   if( !codecs.isEmpty() )
     p << "--codecs" << codecs.join( "," );

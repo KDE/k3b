@@ -406,7 +406,7 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
       bootItem->setSortWeigth( 200 );
       bootItem->parent()->setSortWeigth( 100 );
     }
-    else {
+    else if( fileName != "movixrc" ) { // we create our own movixrc
       K3bFileItem* item = createItem( filePath, docPath );
 
       // Truetype subtitle fonts needs to be named subfont.ttf
