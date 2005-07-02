@@ -40,6 +40,12 @@ K3bJob::~K3bJob()
 }
 
 
+void K3bJob::setJobHandler( K3bJobHandler* jh )
+{
+  m_jobHandler = jh;
+}
+
+
 void K3bJob::jobStarted()
 {
   m_canceled = false;

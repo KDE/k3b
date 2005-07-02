@@ -51,8 +51,8 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 
   /**
    * Is the job active?
-   * The default implementation uses the started and finished signals
-   * to set an internal flag.
+   * The default implementation is based on the jobStarted() and jobFinished()
+   * methods and there is normally no need to reimplement this.
    */
   virtual bool active() const { return m_active; }
 
@@ -112,18 +112,6 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   bool questionYesNo( const QString& text,
 		      const QString& caption = QString::null );
 
- protected:
-  /**
-   * \param hdl the handler of the job. This allows for some user interaction without
-   *            specifying any details (like the GUI).
-   *            The job handler can also be another job. In that case this job is a sub job
-   *            and will be part of the parents running sub jobs.
-   *
-   * \see runningSubJobs()
-   * \see numRunningSubJobs()
-   */
-  K3bJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
-
  public slots:
   /**
    * This is the slot that starts the job. The first call should always
@@ -143,6 +131,8 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
    * It is not important to do any of those two directly in this slot though.
    */
   virtual void cancel() = 0;
+
+  void setJobHandler( K3bJobHandler* );
 
  signals:
   void infoMessage( const QString& msg, int type );
@@ -171,6 +161,17 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   void finished( bool success );
 
  protected:
+  /**
+   * \param hdl the handler of the job. This allows for some user interaction without
+   *            specifying any details (like the GUI).
+   *            The job handler can also be another job. In that case this job is a sub job
+   *            and will be part of the parents running sub jobs.
+   *
+   * \see runningSubJobs()
+   * \see numRunningSubJobs()
+   */
+  K3bJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
+
   /**
    * Call this in start() to properly register the job and emit the started() signal.
    * Do never emit the started() signal manually.
