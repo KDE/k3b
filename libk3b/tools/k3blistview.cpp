@@ -948,10 +948,10 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
        }
      }
      else if( ke->key() == Key_Escape ) {
-       if( o == m_editorLineEdit || o == m_editorSpinBox || o == m_editorMsfEdit )
+       if( o == m_editorLineEdit || o == m_editorSpinBox || o == m_editorMsfEdit ) {
 	 hideEditor();
-
-       return true;
+	 return true;
+       }
      }
   }
   else if( e->type() == QEvent::FocusOut ) {

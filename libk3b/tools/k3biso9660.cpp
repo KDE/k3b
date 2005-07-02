@@ -581,6 +581,13 @@ bool K3bIso9660::open()
 	dirent = new K3bIso9660Directory( this, path, access | S_IFDIR,
 					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
 
+	level=0;
+	mycallb( idr, this );
+	if (m_joliet)
+	  c_j++;
+	else
+	  c_i++;
+
 	if( m_joliet )
 	  d->jolietDirs.append( dirent );
 	else {
@@ -589,12 +596,6 @@ bool K3bIso9660::open()
 	  d->isoDirs.append( dirent );
 	}
 
-	level=0;
-	mycallb( idr, this );
-	if (m_joliet)
-	  c_j++;
-	else
-	  c_i++;
 	break;
       }
     }
