@@ -91,6 +91,9 @@ void K3bApplication::init()
 
     config()->setGroup( "General Options" );
     if( config()->readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
+      // we need the correct splash pic
+      m_core->m_themeManager->readConfig( config() );
+
       splash = new K3bSplash( 0 );
       splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
       
