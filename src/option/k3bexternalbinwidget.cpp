@@ -101,7 +101,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   mainGrid->setSpacing( KDialog::spacingHint() );
 
   m_mainTabWidget = new QTabWidget( this );
-  m_rescanButton = new QPushButton( i18n("Search"), this );
+  m_rescanButton = new QPushButton( i18n("&Search"), this );
   mainGrid->addMultiCellWidget( m_mainTabWidget, 0, 0, 0, 1 );
   mainGrid->addWidget( m_rescanButton, 1, 1 );
   mainGrid->setColStretch( 0, 1 );
