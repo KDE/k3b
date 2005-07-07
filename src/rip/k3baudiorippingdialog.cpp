@@ -246,7 +246,7 @@ void K3bAudioRippingDialog::slotStartClicked()
     if( KMessageBox::questionYesNoList( this, 
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
-					i18n("Files Exist") ) == KMessageBox::No )
+					i18n("Files Exist"), i18n("Overwrite"), KStdGuiItem::cancel() ) == KMessageBox::No )
       return;
 
 

@@ -481,7 +481,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 void K3bJobProgressDialog::slotCancelButtonPressed()
 {
   if( m_job )
-    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel") ) == KMessageBox::Yes ) {
+    if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
       if( m_job ) {
 	m_job->cancel();
 	m_buttonCancel->setDisabled(true);  // do not cancel twice

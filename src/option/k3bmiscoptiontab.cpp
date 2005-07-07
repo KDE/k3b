@@ -99,7 +99,7 @@ bool K3bMiscOptionTab::saveSettings()
 
   if( !fi.exists() ) {
     if( KMessageBox::questionYesNo( this, i18n("Directory (%1) does not exist. Create?").arg(tempDir),
-				    i18n("Create Directory") ) == KMessageBox::Yes ) {
+				    i18n("Create Directory"), i18n("Create"), KStdGuiItem::cancel() ) == KMessageBox::Yes ) {
       if( !KStandardDirs::makeDir( fi.absFilePath() ) ) {
 	KMessageBox::error( this, i18n("Unable to create directory %1").arg(tempDir) );
 	return false;

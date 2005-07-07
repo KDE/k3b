@@ -548,7 +548,7 @@ bool K3bCdCopyJob::prepareImageFiles()
     if( !fi.isFile() || 
 	KMessageBox::warningYesNo( qApp->activeWindow(),
 				   i18n("Do you want to overwrite %1?").arg(m_tempPath),
-				   i18n("File Exists") )
+				   i18n("File Exists"), i18n("Overwrite") )
 	== KMessageBox::Yes) {
       if( fi.isDir() )
 	m_tempPath = K3b::findTempFile( "iso", m_tempPath );

@@ -624,11 +624,11 @@ bool K3bDvdJob::waitForDvd()
     // -------------------------------
     if( d->foundMedia & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
       if( m_doc->dummy() ) {
-	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+	if( KMessageBox::warningContinueCancel( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
 					    "Do you really want to continue? The media will be written "
 					    "for real."),
-				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::Cancel ) {
 	  cancel();
 	  return false;
 	}
@@ -657,13 +657,13 @@ bool K3bDvdJob::waitForDvd()
     // -------------------------------
     else {
       if( m_doc->dummy() && !m_doc->burner()->dvdMinusTestwrite() ) {
-	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+	if( KMessageBox::warningContinueCancel( qApp->activeWindow(),
 				       i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
 					    "Do you really want to continue? The media will be written "
 					    "for real.")
 				       .arg(m_doc->burner()->vendor())
 				       .arg(m_doc->burner()->description()),
-				       i18n("No Simulation with DVD-R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD-R(W)") ) == KMessageBox::Cancel ) {
 	  cancel();
 	  return false;
 	}
@@ -695,13 +695,13 @@ bool K3bDvdJob::waitForDvd()
 	else {
 	  // check if the writer supports writing sequential and thus multisession
 	  if( !m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) ) {
-	    if( KMessageBox::warningYesNo( qApp->activeWindow(),
+	    if( KMessageBox::warningContinueCancel( qApp->activeWindow(),
 					   i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
 						"media. Multisession will not be possible. Continue anyway?")
 					   .arg(m_doc->burner()->vendor())
 					   .arg(m_doc->burner()->description())
 					   .arg( K3bDevice::mediaTypeString(d->foundMedia, true) ),
-					   i18n("No Incremental Streaming") ) == KMessageBox::No ) {
+					   i18n("No Incremental Streaming") ) == KMessageBox::Cancel ) {
 	      cancel();
 	      return false;
 	    }

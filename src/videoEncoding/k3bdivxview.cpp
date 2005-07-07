@@ -126,10 +126,10 @@ int K3bDivxView::checkSettings()
     return 2;
   }
   if( QFile::exists( m_codingData->getAviFile() )){
-    if( KMessageBox::warningYesNo( this, 
+    if( KMessageBox::warningContinueCancel( this, 
 				   i18n("File <%1> already exists. "
 					"Do you want to overwrite it?").arg( m_codingData->getAviFile()) ,
-				   i18n( "Settings Error" ) ) == KMessageBox::No ) {
+				   i18n( "Settings Error" ), i18n("Overwrite") ) == KMessageBox::Cancel ) {
       return 1;
     }
   }

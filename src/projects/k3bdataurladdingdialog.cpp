@@ -296,7 +296,7 @@ bool K3bDataUrlAddingDialog::checkForHiddenFiles( const QDir& dir )
     if( hiddenFiles.count() > 0 ) {
       if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
 				      i18n("Do you also want to add hidden files?"),
-				      i18n("Hidden files") ) == KMessageBox::Yes )
+				      i18n("Hidden Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
 	m_iAddHiddenFiles = 1;
       else
 	m_iAddHiddenFiles = -1;
@@ -318,7 +318,7 @@ bool K3bDataUrlAddingDialog::checkForSystemFiles( const QDir& dir )
       if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
 				      i18n("Do you also want to add system files "
 					   "(FIFOs, sockets, device files, and broken symlinks)?"),
-				      i18n("System files") ) == KMessageBox::Yes )
+				      i18n("System Files"), i18n("Add"), i18n("Do No Add") ) == KMessageBox::Yes )
 	m_iAddSystemFiles = 1;
       else
 	m_iAddSystemFiles = -1;

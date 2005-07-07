@@ -209,8 +209,8 @@ void K3bAudioCdView::reload()
 	KMessageBox::questionYesNo( this, 
 				    i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
 				    i18n("Found Cd-Text"), 
-				    KStdGuiItem::yes(),
-				    KStdGuiItem::no(),
+				    i18n("Use CD-Text"),
+				    i18n("Query CDDB"),
 				    "prefereCdTextOverCddb" ) == KMessageBox::No ) )
     queryCddb();
   else

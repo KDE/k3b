@@ -318,13 +318,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 
 	  if( formatWithoutAsking ||
 	      !hasIso ||
-	      KMessageBox::questionYesNo( parentWidgetToUse(),
+	      KMessageBox::warningContinueCancel( parentWidgetToUse(),
 					  i18n("Found %1 media in %2 - %3. "
 					       "Should it be overwritten?")
 					  .arg("DVD+RW")
 					  .arg(d->device->vendor())
 					  .arg(d->device->description()),
-					  i18n("Found %1").arg("DVD+RW") ) == KMessageBox::Yes ) {
+					  i18n("Found %1").arg("DVD+RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
 	    finishWaiting( K3bDevice::MEDIA_DVD_PLUS_RW );
 	  }
 	  else {
@@ -388,13 +388,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 
 	if( formatWithoutAsking ||
 	    !hasIso ||
-	    KMessageBox::questionYesNo( parentWidgetToUse(),
+	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
 					i18n("Found %1 media in %2 - %3. "
 					     "Should it be overwritten?")
 					.arg(K3bDevice::mediaTypeString(dh->diskInfo().currentProfile()))
 					.arg(d->device->vendor())
 					.arg(d->device->description()),
-					i18n("Found %1").arg("DVD-RW") ) == KMessageBox::Yes ) {
+					i18n("Found %1").arg("DVD-RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
 	  finishWaiting( K3bDevice::MEDIA_DVD_RW_OVWR );
 	}
 	else {
@@ -423,13 +423,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW needs to be formated." << endl;
 
 	if( formatWithoutAsking ||
-	    KMessageBox::questionYesNo( parentWidgetToUse(),
+	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
 					i18n("Found %1 media in %2 - %3. "
 					     "Should it be formatted?")
 					.arg( K3bDevice::mediaTypeString(dh->diskInfo().currentProfile()) )
 					.arg(d->device->vendor())
 					.arg(d->device->description()),
-					i18n("Found %1").arg("DVD-RW") ) == KMessageBox::Yes ) {
+					i18n("Found %1").arg("DVD-RW"), i18n("Format") ) == KMessageBox::Continue ) {
 
 	  kdDebug() << "(K3bEmptyDiscWaiter) ------ formatting DVD-RW." << endl;
 

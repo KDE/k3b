@@ -137,10 +137,10 @@ void K3bDebuggingOutputDialog::slotUser1()
   QString filename = KFileDialog::getSaveFileName();
   if( !filename.isEmpty() ) {
     QFile f( filename );
-    if( !f.exists() || KMessageBox::warningYesNo( this,
+    if( !f.exists() || KMessageBox::warningContinueCancel( this,
 						  i18n("Do you want to overwrite %1?").arg(filename),
-						  i18n("File Exists") )
-	== KMessageBox::Yes ) {
+						  i18n("File Exists"), i18n("Overwrite") )
+	== KMessageBox::Continue ) {
 
       if( f.open( IO_WriteOnly ) ) {
 	QTextStream t( &f );

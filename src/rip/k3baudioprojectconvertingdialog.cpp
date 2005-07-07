@@ -162,10 +162,10 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
     filesToOverwrite.append( d->playlistFilename );
 
   if( !filesToOverwrite.isEmpty() )
-    if( KMessageBox::questionYesNoList( this, 
+    if( KMessageBox::warningContinueCancelList( this, 
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
-					i18n("Files Exist") ) == KMessageBox::No )
+					i18n("Files Exist"), i18n("Overwrite") ) == KMessageBox::Cancel )
       return;
 
 

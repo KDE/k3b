@@ -582,8 +582,8 @@ void K3bVcdBurnDialog::slotStartClicked()
 {
 
     if ( QFile::exists( vcdDoc() ->vcdImage() ) ) {
-        if ( KMessageBox::questionYesNo( this, i18n( "Do you want to overwrite %1" ).arg( vcdDoc() ->vcdImage() ), i18n( "File Exists" ) )
-                != KMessageBox::Yes )
+        if ( KMessageBox::warningContinueCancel( this, i18n( "Do you want to overwrite %1" ).arg( vcdDoc() ->vcdImage() ), i18n( "File Exists" ), i18n("Overwrite") )
+                != KMessageBox::Continue )
             return ;
     }
 

@@ -182,8 +182,8 @@ void K3bProjectBurnDialog::slotStartClicked()
   if( m_tempDirSelectionWidget )
     if( (!doc()->onTheFly() || doc()->onlyCreateImages()) &&
 	doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
-      if( KMessageBox::warningYesNo( this, i18n("There seems to be not enough free space in temporary directory. "
-						"Write anyway?") ) == KMessageBox::No )
+      if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
+						"Write anyway?") ) == KMessageBox::Cancel )
 	return;
     }
 

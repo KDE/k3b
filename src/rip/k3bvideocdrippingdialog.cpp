@@ -168,7 +168,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
         if( KMessageBox::questionYesNoList( this,
                                 i18n("Continue although the folder is not empty?"),
                                 filesExists,
-                                i18n("Files Exist") ) == KMessageBox::No )
+                                i18n("Files Exist"),KStdGuiItem::cont(),KStdGuiItem::cancel() ) == KMessageBox::No )
         return;
 
     m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );

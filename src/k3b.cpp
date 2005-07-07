@@ -921,8 +921,8 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
       if( !QFile::exists(file) ||
 	  ( QFile::exists(file) &&
-	    KMessageBox::questionYesNo( this, i18n("Do you want to overwrite %1?").arg(file), i18n("File Exists") )
-	    == KMessageBox::Yes ) ) {
+	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?").arg(file), i18n("File Exists"), i18n("Overwrite") )
+	    == KMessageBox::Continue ) ) {
 
         KURL url;
         url.setPath(file);
@@ -1471,12 +1471,11 @@ void K3bMainWindow::slotClearProject()
 {
   K3bDoc* doc = k3bappcore->projectManager()->activeDoc();
   if( doc ) {
-    if( KMessageBox::questionYesNo( this,
+    if( KMessageBox::warningContinueCancel( this,
 				    i18n("Do you really want to clear the current project?"),
 				    i18n("Clear Project"),
-				    KStdGuiItem::yes(),
-				    KStdGuiItem::no(),
-				    "clear_current_project_dontAskAgain" ) == KMessageBox::Yes ) {
+				    i18n("Clear"),
+				    "clear_current_project_dontAskAgain" ) == KMessageBox::Continue ) {
       doc->newDocument();
       k3bappcore->projectManager()->loadDefaults( doc );
     }

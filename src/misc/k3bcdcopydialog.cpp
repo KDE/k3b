@@ -275,18 +275,18 @@ void K3bCdCopyDialog::slotStartClicked()
     // m_tempDirSelectionWidget-tempPath() + ".toc"
     //
     if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
-      if( KMessageBox::warningYesNo( this,
+      if( KMessageBox::warningContinueCancel( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				     i18n("File Exists") )
-	  != KMessageBox::Yes )
+				     i18n("File Exists"), i18n("Overwrite") )
+	  != KMessageBox::Continue )
 	return;
     }
     
     if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
-      if( KMessageBox::warningYesNo( this,
+      if( KMessageBox::warningContinueCancel( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
-				     i18n("File Exists") )
-	  != KMessageBox::Yes )
+				     i18n("File Exists"), i18n("Overwrite") )
+	  != KMessageBox::Continue )
 	return;
     }
     

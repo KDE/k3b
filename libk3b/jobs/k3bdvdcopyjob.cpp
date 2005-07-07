@@ -283,8 +283,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       if( !fi.isFile() || 
 	  KMessageBox::warningYesNo( qApp->activeWindow(),
 				     i18n("Do you want to overwrite %1?").arg(m_imagePath),
-				     i18n("File Exists") )
-	  != KMessageBox::Yes) {
+				     i18n("File Exists"), i18n("Overwrite") )
+	  != KMessageBox::Continue) {
 	if( fi.isDir() )
 	  m_imagePath = K3b::findTempFile( "iso", m_imagePath );
 	else if( !QFileInfo( m_imagePath.section( '/', 0, -2 ) ).isDir() ) {
@@ -655,11 +655,11 @@ bool K3bDvdCopyJob::waitForDvd()
       d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
 
       if( m_simulate ) {
-	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+	if( KMessageBox::warningContinueCancel( qApp->activeWindow(),
 				       i18n("K3b does not support simulation with DVD+R(W) media. "
 					    "Do you really want to continue? The media will actually be "
 					    "written to."),
-				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::Cancel ) {
 	  cancel();
 	  return false;
 	}
@@ -683,13 +683,13 @@ bool K3bDvdCopyJob::waitForDvd()
     // -------------------------------
     else {
       if( m_simulate && !m_writerDevice->dvdMinusTestwrite() ) {
-	if( KMessageBox::warningYesNo( qApp->activeWindow(),
+	if( KMessageBox::warningContinueCancel( qApp->activeWindow(),
 				       i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
 					    "Do you really want to continue? The media will be written "
 					    "for real.")
 				       .arg(m_writerDevice->vendor())
 				       .arg(m_writerDevice->description()),
-				       i18n("No Simulation with DVD-R(W)") ) == KMessageBox::No ) {
+				       i18n("No Simulation with DVD-R(W)") ) == KMessageBox::Cancel ) {
 	  cancel();
 	  return false;
 	}

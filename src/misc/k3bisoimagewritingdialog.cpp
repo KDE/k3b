@@ -226,11 +226,11 @@ void K3bIsoImageWritingDialog::setupGui()
 void K3bIsoImageWritingDialog::slotStartClicked()
 {
   if( !d->isIsoImage ) {
-    if( KMessageBox::warningYesNo( this,
+    if( KMessageBox::warningContinueCancel( this,
 				   i18n("The image you selected is not a valid ISO9660 image. "
 					"Are you sure you want to burn it anyway? "
 					"(There are other valid image types that are not detected by K3b but "
-					"will work fine.)") ) == KMessageBox::No )
+					"will work fine.)"), i18n("Burn") ) == KMessageBox::Cancel )
       return;
   }
 
