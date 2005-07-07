@@ -506,7 +506,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	  KMessageBox::questionYesNo( parentWidgetToUse(),
 				      i18n("Found rewritable media in %1 - %2. "
 					   "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
-				      i18n("Found Rewritable Disk") ) == KMessageBox::Yes ) {
+				      i18n("Found Rewritable Disk"), KGuiItem(i18n("&Erase"),"cdrwblank"), KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {
 
 
 	prepareErasingDialog();
