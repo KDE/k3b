@@ -57,6 +57,7 @@ X-KDE-RootOnly=true
 Categories=Application;System;X-KDE-System;
 GenericName=CD & DVD Burning Setup
 GenericName[bg]=Настройка на записа на CD и DVD
+GenericName[ca]=Configuració del cremat de CD i DVD
 GenericName[cs]=Nastavení vypalování CD a DVD
 GenericName[da]=CD & DVD opsætning til brænding
 GenericName[de]=CD & DVD-Brennen einrichten
