@@ -51,7 +51,6 @@
 #include <ktempfile.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>
-#include <kmessagebox.h>
 
 
 class K3bMixedJob::Private
@@ -452,8 +451,8 @@ void K3bMixedJob::slotWriterFinished( bool success )
 void K3bMixedJob::slotMediaReloadedForSecondSession( bool success )
 {
   if( !success )
-    KMessageBox::information( 0, i18n("Please reload the medium and press 'ok'"),
-			      i18n("Unable to close the tray") );
+    blockingInformation( i18n("Please reload the medium and press 'ok'"),
+			 i18n("Unable to close the tray") );
 
   // start the next session
   m_currentAction = WRITING_ISO_IMAGE;

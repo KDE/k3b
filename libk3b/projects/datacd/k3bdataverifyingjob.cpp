@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <kio/global.h>
 #include <kio/job.h>
-#include <kmessagebox.h>
 
 #include <qcstring.h>
 #include <qapplication.h>
@@ -121,8 +120,8 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
   }
   else {
     if( !success )
-      KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
-				i18n("Unable to close the tray") );
+      blockingInformation( i18n("Please reload the medium and press 'ok'"),
+			   i18n("Unable to close the tray") );
 
     emit newTask( i18n("Reading TOC") );
     

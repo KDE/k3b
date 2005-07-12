@@ -24,7 +24,6 @@
 #include <klocale.h>
 #include <kio/global.h>
 #include <kio/job.h>
-#include <kmessagebox.h>
 #include <kio/netaccess.h>
 
 #include <qcstring.h>
@@ -107,8 +106,8 @@ void K3bIsoImageVerificationJob::start()
 void K3bIsoImageVerificationJob::slotMediaReloaded( bool success )
 {
   if( !success )
-    KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
-			      i18n("Unable to Close the Tray") );
+    blockingInformation( i18n("Please reload the medium and press 'ok'"),
+			 i18n("Unable to Close the Tray") );
 
   emit newTask( i18n("Calculating the image's md5sum") );
   

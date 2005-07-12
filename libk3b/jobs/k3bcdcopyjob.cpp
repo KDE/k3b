@@ -41,7 +41,6 @@
 #include <kio/netaccess.h>
 #include <kio/job.h>
 #include <kio/global.h>
-#include <kmessagebox.h>
 
 #include <qtimer.h>
 #include <qstringlist.h>
@@ -546,10 +545,8 @@ bool K3bCdCopyJob::prepareImageFiles()
   else {
     // we only need a single image file
     if( !fi.isFile() || 
-	KMessageBox::warningYesNo( qApp->activeWindow(),
-				   i18n("Do you want to overwrite %1?").arg(m_tempPath),
-				   i18n("File Exists"), i18n("Overwrite") )
-	== KMessageBox::Yes) {
+	questionYesNo( i18n("Do you want to overwrite %1?").arg(m_tempPath),
+		       i18n("File Exists") ) ) {
       if( fi.isDir() )
 	m_tempPath = K3b::findTempFile( "iso", m_tempPath );
       else if( !QFileInfo( m_tempPath.section( '/', 0, -2 ) ).isDir() ) {
@@ -857,8 +854,7 @@ bool K3bCdCopyJob::writeNextSession()
     bool multi = d->doNotCloseLastSession || (d->numSessions > 1 && d->currentWrittenSession < d->toc.count());
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
-      // use DAO in overwriting mode when not writing multi-session or multi-track
-      k3bcore->config()->setGroup("General Options");
+      // FIXME: at least the NEC3540a does write 2056 byte sectors only in tao mode.
       if( m_writerDevice->dao() &&
 	  d->toc.count() == 1 && 
 	  !multi )
@@ -1037,8 +1033,8 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
 void K3bCdCopyJob::slotMediaReloadedForNextSession( K3bDevice::DeviceHandler* dh )
 {
   if( !dh->success() )
-    KMessageBox::information( qApp->activeWindow(), i18n("Please reload the medium and press 'ok'"),
-			      i18n("Unable to close the tray") );
+    blockingInformation( i18n("Please reload the medium and press 'ok'"),
+			 i18n("Unable to close the tray") );
 
   if( !writeNextSession() ) {
     // nothing is running here...

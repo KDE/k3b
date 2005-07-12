@@ -37,8 +37,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
 #include <ktempfile.h>
+#include <kglobal.h>
 
 #include <errno.h>
 #include <string.h>
@@ -594,8 +594,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.startsWith( "Re-load disk and hit" ) ) {
     // this happens on some notebooks where cdrecord is not able to close the
     // tray itself, so we need to ask the user to do so
-    KMessageBox::information( 0, i18n("Please reload the medium and press 'ok'"),
-			      i18n("Unable to close the tray") );
+    blockingInformation( i18n("Please reload the medium and press 'ok'"),
+			 i18n("Unable to close the tray") );
 
     // now send a <CR> to cdrecord
     // hopefully this will do it since I have no possibility to test it!

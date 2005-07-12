@@ -32,7 +32,6 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <ktempfile.h>
-#include <kmessagebox.h>
 #include <kio/global.h>
 
 #include <qstring.h>
@@ -368,11 +367,10 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
   else {  // DVD
     if( mediaType & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
       if( m_simulate ) {
-	if( KMessageBox::warningContinueCancel( qApp->activeWindow(),
-				       i18n("K3b does not support simulation with DVD+R(W) media. "
-					    "Do you really want to continue? The media will be written "
-					    "for real."),
-				       i18n("No Simulation with DVD+R(W)") ) == KMessageBox::Cancel ) {
+	if( questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
+				"Do you really want to continue? The media will be written "
+				"for real."),
+			   i18n("No Simulation with DVD+R(W)") ) ) {
 	  return false;
 	}
       }
