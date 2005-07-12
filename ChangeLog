@@ -2,7 +2,11 @@
 ====
  * New Device menu containing all the actions possible for a device (like eject, unmount, ...).
    This includes the possibility of assigning shotcuts to these kind of actions.
-
+ * K3b now warns if user parameters for external programs have been specified. This has been introduces
+   becasue there were some bug report that were caused by faulty user parameters.
+ * Cleaned up all the job classes: No job creates a widget anymore. This allows for non-GUI usage of libk3b.
+   For example in a kioslave.
+	
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)
