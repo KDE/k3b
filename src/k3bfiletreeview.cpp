@@ -38,7 +38,8 @@
 #include <qnamespace.h>
 #include <qmap.h>
 #include <qptrdict.h>
-
+#include <qpainter.h>
+#include <qfont.h>
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
@@ -64,11 +65,7 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 
 void K3bDeviceBranch::setCurrent( bool c )
 {
-  // FIXME: use K3bDeviceBranchViewItem to make the text bold and italic or something
-  if( c )
-    root()->setText( 0, "* " + name() );
-  else
-    root()->setText( 0, name() );
+  static_cast<K3bDeviceBranchViewItem*>( root() )->setCurrent( c );
 }
 
 
@@ -169,14 +166,39 @@ K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
 
 
 K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
-  : KFileTreeViewItem( parent, item, branch )
+  : KFileTreeViewItem( parent, item, branch ),
+    m_bCurrent( false )
 {
 }
 
 
 K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-  : KFileTreeViewItem( parent, item, branch )
+  : KFileTreeViewItem( parent, item, branch ),
+    m_bCurrent( false )
 {
+}
+
+
+void K3bDeviceBranchViewItem::setCurrent( bool c )
+{
+  m_bCurrent = c;
+  repaint();
+}
+
+
+void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+{
+  p->save();
+
+  if( m_bCurrent ) {
+    QFont f( p->font() );
+    f.setBold( true );
+    p->setFont( f );
+  }
+
+  KFileTreeViewItem::paintCell( p, cg, col, width, align );
+
+  p->restore();
 }
 
 

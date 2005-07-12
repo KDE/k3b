@@ -94,6 +94,13 @@ class K3bDeviceBranchViewItem : public KFileTreeViewItem
   K3bDeviceBranchViewItem( KFileTreeView *, KFileItem*, KFileTreeBranch* );
 
   QString key( int column, bool ascending ) const;
+
+  void setCurrent( bool );
+
+  void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
+
+ private:
+  bool m_bCurrent;
 };
 
 
