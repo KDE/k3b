@@ -52,6 +52,12 @@ Q_OBJECT
   bool questionYesNo( const QString& text,
 		      const QString& caption = QString::null );
 
+  /**
+   * reimplemented from K3bJobHandler
+   */
+  void blockingInformation( const QString& text,
+			    const QString& caption = QString::null );
+
  protected slots:
   void slotStartClicked();
   void slotWriterChanged();

@@ -714,4 +714,11 @@ bool K3bEmptyDiscWaiter::questionYesNo( const QString& text,
 }
 
 
+void K3bEmptyDiscWaiter::blockingInformation( const QString& text,
+					      const QString& caption )
+{
+  KMessageBox::information( this, text, caption );
+}
+
+
 #include "k3bemptydiscwaiter.moc"

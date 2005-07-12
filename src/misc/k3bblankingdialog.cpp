@@ -311,4 +311,10 @@ bool K3bBlankingDialog::questionYesNo( const QString& text,
 }
 
 
+void K3bBlankingDialog::blockingInformation( const QString& text,
+					     const QString& caption )
+{
+  KMessageBox::information( this, text, caption );
+}
+
 #include "k3bblankingdialog.moc"

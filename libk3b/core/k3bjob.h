@@ -32,6 +32,8 @@ namespace K3bDevice {
  * This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
  * The K3bJob object takes care of registering with the k3bcore or with a parent K3bJob.
  *
+ * A Job should never create any widgets. User interaction should be done through the methods
+ * questionYesNo, waitForMedia.
  *
  * @author Sebastian Trueg
  */
@@ -111,6 +113,12 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
    */
   bool questionYesNo( const QString& text,
 		      const QString& caption = QString::null );
+
+  /**
+   * reimplemented from K3bJobHandler
+   */
+  void blockingInformation( const QString& text,
+			    const QString& caption = QString::null );
 
  public slots:
   /**

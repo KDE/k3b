@@ -69,6 +69,11 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
   bool questionYesNo( const QString& text,
 		      const QString& caption = QString::null );
 
+  /**
+   * reimplemented from K3bJobHandler
+   */
+  void blockingInformation( const QString& text,
+			    const QString& caption = QString::null );
 
   /**
    * This only openes a dialog if the first check failed.

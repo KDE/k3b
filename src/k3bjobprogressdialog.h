@@ -93,6 +93,12 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
    */
   bool questionYesNo( const QString& text,
 		      const QString& caption = QString::null );
+
+  /**
+   * reimplemented from K3bJobHandler
+   */
+  void blockingInformation( const QString& text,
+			    const QString& caption = QString::null );
   
  protected slots:
   virtual void slotProcessedSize( int processed, int size );

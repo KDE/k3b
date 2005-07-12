@@ -48,6 +48,14 @@ class K3bJobHandler
   
   virtual bool questionYesNo( const QString& text,
 			      const QString& caption = QString::null ) = 0;
+
+  /**
+   * Use this if you need the user to do something before the job is able to continue.
+   * In all other cases an infoMessage should be used.
+   */
+  virtual void blockingInformation( const QString& text,
+				    const QString& caption = QString::null ) = 0;
+
 };
 
 #endif

@@ -96,6 +96,13 @@ bool K3bJob::questionYesNo( const QString& text,
 }
 
 
+void K3bJob::blockingInformation( const QString& text,
+				  const QString& caption )
+{
+  return m_jobHandler->blockingInformation( text, caption );
+}
+
+
 void K3bJob::connectSubJob( K3bJob* subJob,
 			    const char* finishedSlot,
 			    bool connectProgress,

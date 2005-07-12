@@ -661,4 +661,11 @@ bool K3bJobProgressDialog::questionYesNo( const QString& text,
   return ( KMessageBox::questionYesNo( this, text, caption ) == KMessageBox::Yes );
 }
 
+
+void K3bJobProgressDialog::blockingInformation( const QString& text,
+						const QString& caption )
+{
+  KMessageBox::information( this, text, caption );
+}
+
 #include "k3bjobprogressdialog.moc"
