@@ -290,7 +290,6 @@ void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
     m_movieView->setDevice( did->device() );
     m_viewStack->raiseWidget( m_movieView );
     m_movieView->reload();
-    d->contextMediaInfoRequested = false;
   }
   else if( did->toc().contentType() == K3bDevice::DATA ) {
     // check for VCD and ask
@@ -310,14 +309,14 @@ void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
     else {
       m_viewStack->raiseWidget( m_videoView );
       m_videoView->setDisk( did );
-      d->contextMediaInfoRequested = false;
     }
   }
   else {
     m_viewStack->raiseWidget( m_cdView );
     m_cdView->setDisk( did );
-    d->contextMediaInfoRequested = false;
   }
+
+  d->contextMediaInfoRequested = false;
 }
 
 
