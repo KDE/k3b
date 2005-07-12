@@ -601,7 +601,7 @@ void K3bMainWindow::readOptions()
 
   // do not read dock-positions from a config that has been saved by an old version
   K3bVersion configVersion( m_config->readEntry( "config version", "0.1" ) );
-  if( configVersion >= K3bVersion("0.9") )
+  if( configVersion >= K3bVersion("0.12") )
     manager()->readConfig( m_config, "Docking Config" );
   else
     kdDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion << endl;
@@ -1216,8 +1216,8 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 
 void K3bMainWindow::slotBlankCdrw()
 {
-  K3bBlankingDialog d( this, "blankingdialog" );
-  d.exec(false);
+  K3bBlankingDialog dlg( this, "blankingdialog" );
+  dlg.exec(false);
 }
 
 
