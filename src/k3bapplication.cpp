@@ -49,6 +49,8 @@
 
 #include <qguardedptr.h>
 #include <qtimer.h>
+#include <qvaluelist.h>
+#include <qcstring.h>
 
 
 K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
@@ -164,6 +166,8 @@ void K3bApplication::init()
       needToVerify = !wlist.isEmpty();
     }
 
+    emit initializationDone();
+
     if( needToVerify && !wlist.isEmpty() ) {
       if( splash )
 	splash->close();
@@ -179,8 +183,6 @@ void K3bApplication::init()
 
     if( processCmdLineArgs() )
       KTipDialog::showTip( m_mainWindow );
-
-    emit initializationDone();
   }
 }
 
@@ -383,6 +385,8 @@ void K3bApplication::Core::init()
 
   if( !deviceManager()->scanBus() )
     kdDebug() << "No Devices found!" << endl;
+  else
+    deviceManager()->printDevices();
 }
 
 
