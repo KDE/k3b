@@ -37,8 +37,8 @@ const QPixmap& K3bTheme::pixmap( const QString& name ) const
     return *it;
 
   // try loading the image
-  if( QFile::exists( m_path + name + ".png" ) )
-    return *m_pixmapMap.insert( name, QPixmap( m_path + name + ".png" ) );
+  if( QFile::exists( m_path + name ) )
+    return *m_pixmapMap.insert( name, QPixmap( m_path + name ) );
     
   kdDebug() << "(K3bTheme) " << m_name << ": could not load image " << name << endl;
 
@@ -47,6 +47,12 @@ const QPixmap& K3bTheme::pixmap( const QString& name ) const
 
 
 const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
+{
+  return pixmap( filenameForPixmapType( t ) );
+}
+
+
+QString K3bTheme::filenameForPixmapType( PixmapType t )
 {
   QString name;
 
@@ -109,8 +115,11 @@ const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
     break;
   }
 
-  return pixmap( name );
+  name.append( ".png" );
+
+  return name;
 }
+
 
 
 class K3bThemeManager::Private
@@ -221,9 +230,24 @@ void K3bThemeManager::loadThemes()
     entries.remove( "." );
     entries.remove( ".." );
     // every theme dir needs to contain a k3b.theme file
-    for( QStringList::const_iterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt )
-      if( QFile::exists( *dirIt + *entryIt + "/k3b.theme" ) )
-	themeNames.append( *entryIt );
+    for( QStringList::const_iterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt ) {
+      QString themeDir = *dirIt + *entryIt + "/";
+      if( !themeNames.contains( *entryIt ) && QFile::exists( themeDir + "k3b.theme" ) ) {
+	bool themeValid = true;
+
+	// check for all nessessary pixmaps (this is a little evil hacking)
+	for( int i = 0; i <= K3bTheme::WELCOME_BG; ++i ) {
+	  if( !QFile::exists( themeDir + K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) ) ) {
+	    kdDebug() << "(K3bThemeManager) theme misses pixmap: " << K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) << endl;
+	    themeValid = false;
+	    break;
+	  }
+	}
+
+	if( themeValid )
+	  themeNames.append( *entryIt );
+      }
+    }
   }
 
   // now load the themes

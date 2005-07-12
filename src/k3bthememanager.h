@@ -79,6 +79,8 @@ class K3bTheme
 
   const QString& path() const { return m_path; }
 
+  static QString filenameForPixmapType( PixmapType );
+
  private:
   QString m_path;
   bool m_local;
