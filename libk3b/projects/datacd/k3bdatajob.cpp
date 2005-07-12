@@ -98,8 +98,8 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
 
 K3bDataJob::~K3bDataJob()
 {
-  delete d;
   delete d->tocFile;
+  delete d;
 }
 
 
