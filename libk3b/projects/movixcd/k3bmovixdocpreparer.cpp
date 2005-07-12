@@ -115,8 +115,10 @@ bool K3bMovixDocPreparer::createMovixStructures()
   kdDebug() << k_funcinfo << endl;
   removeMovixStructures();
 
-  if( doc() )
+  if( doc() ) {
+    doc()->setMultiSessionMode( K3bDataDoc::NONE );
     doc()->prepareFilenames();
+  }
 
   d->eMovixBin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
   if( d->eMovixBin ) {
