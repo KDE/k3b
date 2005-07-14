@@ -318,7 +318,7 @@ bool K3bDataUrlAddingDialog::checkForSystemFiles( const QDir& dir )
       if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
 				      i18n("Do you also want to add system files "
 					   "(FIFOs, sockets, device files, and broken symlinks)?"),
-				      i18n("System Files"), i18n("Add"), i18n("Do No Add") ) == KMessageBox::Yes )
+				      i18n("System Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
 	m_iAddSystemFiles = 1;
       else
 	m_iAddSystemFiles = -1;
