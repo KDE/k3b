@@ -1,3 +1,7 @@
+0.12.3
+======
+ * Do not delete DVD project iso image if "remove image" is unchecked.
+
 0.12.2
 ======
  * After for example copying a CD when the dialog comes up again keep the last settings.

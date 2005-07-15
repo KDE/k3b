@@ -258,7 +258,7 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
     return;
   }
 
-  d->imageError = success;
+  d->imageError = !success;
 
   if( m_doc->onTheFly() && m_writerJob )
     m_writerJob->closeFd();
