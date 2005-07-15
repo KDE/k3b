@@ -35,8 +35,6 @@ class K3bSessionImportItem : public K3bDataItem
   K3bFileItem* replaceItem() const { return m_replaceItem; }
   void setReplaceItem( K3bFileItem* item ) { m_replaceItem = item; }
 
-  KIO::filesize_t size() const { return m_size; }
-
   bool isFile() const { return false; }
   bool isFromOldSession() const { return true; }
 
@@ -45,6 +43,14 @@ class K3bSessionImportItem : public K3bDataItem
   bool isRenameable() const { return false; }
   bool isHideable() const { return false; }
   bool writeToCd() const { return false; }
+
+ protected:
+  // the size of an item from an imported session does not depend
+  // on the value of followSymlinks
+  /**
+   * Normally one does not use this method but K3bDataItem::size()
+   */
+  KIO::filesize_t itemSize( bool ) const { return m_size; }
 
  private:
   K3bFileItem* m_replaceItem;

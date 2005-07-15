@@ -197,6 +197,9 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 // 						   i18n( "Follow symbolic links" ),
 // 						   QCheckListItem::CheckBox );
 
+  m_checkDoNotCacheInodes = new QCheckListItem( m_viewIsoSettings,
+						i18n("Do not cache inodes" ),
+						QCheckListItem::CheckBox );
 
   m_isoLevelController = new QCheckListItem( m_viewIsoSettings,
 					     i18n("ISO Level") );
@@ -260,6 +263,7 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
   m_checkAllowLowercaseCharacters->setOn( o.ISOallowLowercase() );
   //  m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
   m_checkJolietLong->setOn( o.jolietLong() );
+  m_checkDoNotCacheInodes->setOn( o.doNotCacheInodes() );
 }
 
 
@@ -290,6 +294,7 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
   o.setISOallowLowercase( m_checkAllowLowercaseCharacters->isOn() );
   //  o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isOn() );
   o.setJolietLong( m_checkJolietLong->isOn() );
+  o.setDoNotCacheInodes( m_checkDoNotCacheInodes->isOn() );
 }
 
 

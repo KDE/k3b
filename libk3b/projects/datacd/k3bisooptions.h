@@ -108,6 +108,8 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool discardBrokenSymlinks() const { return m_discardBrokenSymlinks; }
   void setDiscardBrokenSymlinks( bool b ) { m_discardBrokenSymlinks = b; }
 
+  bool doNotCacheInodes() const { return m_doNotCacheInodes; }
+  void setDoNotCacheInodes( bool b ) { m_doNotCacheInodes = b; }
 
   void save( KConfigBase* c );
 
@@ -149,6 +151,8 @@ class LIBK3B_EXPORT K3bIsoOptions
 
   bool m_preserveFilePermissions;   // if true -R instead of -r is used
   bool m_jolietLong;
+
+  bool m_doNotCacheInodes;
 	
   int m_isoLevel;
 

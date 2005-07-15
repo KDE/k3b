@@ -50,8 +50,6 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
   K3bDataItem* find( const QString& filename ) const;
   K3bDataItem* findByPath( const QString& );
 
-  KIO::filesize_t size() const;
-
   long numFiles() const;
   long numDirs() const;
 
@@ -71,13 +69,28 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
    */
   virtual bool isFromOldSession() const;
 
+ protected:
+  /**
+   * Normally one does not use this method but K3bDataItem::size()
+   *
+   * This method does not take into account the possibility to share the data
+   * between files with the same inode in an iso9660 filesystem.
+   * For that one has to use K3bFileCompilationSizeHandler.
+   */
+  KIO::filesize_t itemSize( bool followSymlinks ) const;
+
+  /*
+   * Normally one does not use this method but K3bDataItem::blocks()
+   */
+  K3b::Msf itemBlocks( bool followSymlinks ) const;
+
  private:
   /**
    * this recursivly updates the size of the directories.
    * The size of this dir and the parent dir is updated.
    * These values are just used for user information.
    */
-  void updateSize( KIO::filesize_t s );
+  void updateSize( K3bDataItem*, bool removed = false );
   /**
    * Updates the number of files and directories. These values are
    * just used for user information.
@@ -86,7 +99,14 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
 
   mutable QPtrList<K3bDataItem> m_children;
 
+  // size of the items simply added
   KIO::filesize_t m_size;
+  KIO::filesize_t m_followSymlinksSize;
+
+  // number of blocks (2048 bytes) used by all the items
+  long m_blocks;
+  long m_followSymlinksBlocks;
+
   long m_files;
   long m_dirs;
 };

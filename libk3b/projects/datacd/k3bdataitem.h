@@ -24,11 +24,14 @@ class K3bDataDoc;
 #include <qstring.h>
 
 #include <kio/global.h>
+
+#include <k3bmsf.h>
 #include "k3b_export.h"
+
+
 /**
   *@author Sebastian Trueg
   */
-
 class LIBK3B_EXPORT K3bDataItem
 {
  public: 
@@ -83,7 +86,16 @@ class LIBK3B_EXPORT K3bDataItem
   /** returns the path to the file on the local filesystem */
   virtual QString localPath() const { return QString::null; }
 
-  virtual KIO::filesize_t size() const { return 0; }
+  /**
+   * The size of the item
+   */
+  KIO::filesize_t size() const;
+
+  /**
+   * \return The number of blocks (2048 bytes) occupied by this item.
+   *         This value equals to ceil(size()/2048)
+   */
+  K3b::Msf blocks() const;
 
   /** 
    * \returne the dir of the item (or the item itself if it is a dir)
@@ -128,6 +140,17 @@ class LIBK3B_EXPORT K3bDataItem
   void setExtraInfo( const QString& i ) { m_extraInfo = i; }
 
  protected:
+  virtual KIO::filesize_t itemSize( bool followSymlinks ) const = 0;
+
+  /**
+   * \param followSymlinks If true symlinks will be followed and their
+   *                       size equals the size of the file they are
+   *                       pointing to.
+   *
+   * \return The number of blocks (2048 bytes) occupied by this item.
+   */
+  virtual K3b::Msf itemBlocks( bool followSymlinks ) const;
+
   QString m_k3bName;
 
  private:

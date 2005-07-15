@@ -94,7 +94,7 @@ public:
     inodeInfo.items.append( item );
 
     if( inodeInfo.number == 0 ) {
-      inodeInfo.savedSize = item->size( followSymlinks );
+      inodeInfo.savedSize = item->itemSize( followSymlinks );
 
       size += inodeInfo.savedSize;
       blocks += inodeInfo.blocks();
@@ -120,7 +120,7 @@ public:
 		<< " has been removed without being added!" << endl;
     }
     else {
-      if( item->size(followSymlinks) != inodeInfo.savedSize ) {
+      if( item->itemSize(followSymlinks) != inodeInfo.savedSize ) {
 	kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
       }
       

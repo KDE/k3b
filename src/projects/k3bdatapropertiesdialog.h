@@ -46,6 +46,7 @@ Q_OBJECT
   QLabel* m_labelType;
   QLabel* m_labelLocation;
   QLabel* m_labelSize;
+  QLabel* m_labelBlocks;
 
   QLabel* m_labelLocalName;
   QLabel* m_labelLocalLocation;

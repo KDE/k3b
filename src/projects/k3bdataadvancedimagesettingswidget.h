@@ -49,6 +49,7 @@ class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSetti
   QCheckListItem* m_checkAllow31CharFilenames;
   QCheckListItem* m_checkAllowBeginningPeriod;
   QCheckListItem* m_checkJolietLong;
+  QCheckListItem* m_checkDoNotCacheInodes;
 
   QCheckListItem* m_isoLevelController;
   QCheckListItem* m_radioIsoLevel1;

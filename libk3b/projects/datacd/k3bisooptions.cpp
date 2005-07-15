@@ -50,6 +50,8 @@ K3bIsoOptions::K3bIsoOptions()
   m_hideTRANS_TBL = false;
   m_jolietLong = false;
 
+  m_doNotCacheInodes = false;
+
   m_isoLevel = 2;
 
   m_discardSymlinks = false;
@@ -100,6 +102,8 @@ void K3bIsoOptions::save( KConfigBase* c )
 
   c->writeEntry( "force input charset", m_bForceInputCharset );
   c->writeEntry( "input charset", m_inputCharset );
+
+  c->writeEntry( "do not cache inodes", m_doNotCacheInodes );
 
   // save whitespace-treatment
   switch( m_whiteSpaceTreatment ) {
@@ -163,6 +167,8 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c )
   options.setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", options.followSymbolicLinks() ) );
 
   options.setJolietLong( c->readBoolEntry( "joliet long", options.jolietLong() ) );
+
+  options.setDoNotCacheInodes( c->readBoolEntry( "do not cache inodes", options.doNotCacheInodes() ) );
 
   QString w = c->readEntry( "white_space_treatment", "noChange" );
   if( w == "replace" )

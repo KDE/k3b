@@ -52,6 +52,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   m_labelType = new QLabel( plainPage() );
   m_labelLocation = new KCutLabel( plainPage() );
   m_labelSize = new QLabel( plainPage() );
+  m_labelBlocks = new QLabel( plainPage() );
   m_labelLocalName = new KCutLabel( plainPage() );
   m_labelLocalLocation = new KCutLabel( plainPage() );
 
@@ -68,19 +69,21 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   grid->addWidget( new QLabel( i18n("Type:"), plainPage() ), 2, 0 );
   grid->addWidget( new QLabel( i18n("Location:"), plainPage() ), 4, 0 );
   grid->addWidget( new QLabel( i18n("Size:"), plainPage() ), 5, 0 );
+  grid->addWidget( new QLabel( i18n("Used blocks:"), plainPage() ), 6, 0 );
   grid->addWidget( m_labelType, 2, 2 );
   grid->addWidget( extraInfoLabel, 3, 2 );
   grid->addWidget( m_labelLocation, 4, 2 );
   grid->addWidget( m_labelSize, 5, 2 );
+  grid->addWidget( m_labelBlocks, 6, 2 );
   line = new QFrame( plainPage() );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-  grid->addMultiCellWidget( line, 6, 6, 0, 2 );
+  grid->addMultiCellWidget( line, 7, 7, 0, 2 );
   QLabel* label1 = new QLabel( i18n("Local name:"), plainPage() );
-  grid->addWidget(  label1, 7, 0 );
+  grid->addWidget(  label1, 8, 0 );
   QLabel* label2 = new QLabel( i18n("Local location:"), plainPage() );
-  grid->addWidget( label2, 8, 0 );
-  grid->addWidget( m_labelLocalName, 7, 2 );
-  grid->addWidget( m_labelLocalLocation, 8, 2 );
+  grid->addWidget( label2, 9, 0 );
+  grid->addWidget( m_labelLocalName, 8, 2 );
+  grid->addWidget( m_labelLocalLocation, 9, 2 );
 
   grid->addColSpacing( 1, 50 );
   grid->setColStretch( 2, 1 );
@@ -124,6 +127,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   }
 
   m_editName->setText( dataItem->k3bName() );
+  m_labelBlocks->setText( QString::number(dataItem->blocks().lba()) );
 
   QString location = "/" + dataItem->k3bPath();
   if( location[location.length()-1] == '/' )
@@ -142,9 +146,9 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   line = new QFrame( plainPage() );
   line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-  grid->addMultiCellWidget( line, 9, 9, 0, 2 );
-  grid->addMultiCellWidget( optionTab, 11, 11, 0, 2 );
-  grid->setRowStretch( 10, 1 );
+  grid->addMultiCellWidget( line, 10, 10, 0, 2 );
+  grid->addMultiCellWidget( optionTab, 12, 12, 0, 2 );
+  grid->setRowStretch( 11, 1 );
 
   QWidget* hideBox = new QWidget( optionTab );
   QGridLayout* hideBoxGrid = new QGridLayout( hideBox );

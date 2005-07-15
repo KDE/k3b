@@ -28,6 +28,9 @@
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
   : K3bDataItem( doc, parentDir ),
     m_size(0),
+    m_followSymlinksSize(0),
+    m_blocks(0),
+    m_followSymlinksBlocks(0),
     m_files(0),
     m_dirs(0)
 {
@@ -89,7 +92,7 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
     }
 
     m_children.append( item->take() );
-    updateSize( item->size() );
+    updateSize( item, false );
     if( item->isDir() )
       updateFiles( ((K3bDirItem*)item)->numFiles(), ((K3bDirItem*)item)->numDirs()+1 );
     else
@@ -110,7 +113,7 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
   int x = m_children.findRef( item );
   if( x > -1 ) {
     K3bDataItem* item = m_children.take();
-    updateSize( -1*item->size() );
+    updateSize( item, true );
     if( item->isDir() )
       updateFiles( -1*((K3bDirItem*)item)->numFiles(), -1*((K3bDirItem*)item)->numDirs()-1 );
     else
@@ -193,9 +196,21 @@ K3bDataItem* K3bDirItem::findByPath( const QString& p )
 }
 
 
-KIO::filesize_t K3bDirItem::size() const
+KIO::filesize_t K3bDirItem::itemSize( bool followsylinks ) const
 {
-  return m_size;
+  if( followsylinks )
+    return m_followSymlinksSize;
+  else
+    return m_size;
+}
+
+
+K3b::Msf K3bDirItem::itemBlocks( bool followSymlinks ) const
+{
+  if( followSymlinks )
+    return m_followSymlinksBlocks;
+  else
+    return m_blocks;
 }
 
 
@@ -250,11 +265,23 @@ bool K3bDirItem::isRemoveable() const
 }
 
 
-void K3bDirItem::updateSize( KIO::filesize_t s )
+void K3bDirItem::updateSize( K3bDataItem* item, bool removed )
 {
-  m_size += s;
+  if( removed ) {
+    m_followSymlinksSize -= item->itemSize( true );
+    m_size -= item->itemSize( false );
+    m_followSymlinksBlocks -= item->itemBlocks( true ).lba();
+    m_blocks -= item->itemBlocks( false ).lba();
+  }
+  else {
+    m_followSymlinksSize += item->itemSize( true );
+    m_size += item->itemSize( false );
+    m_followSymlinksBlocks += item->itemBlocks( true ).lba();
+    m_blocks += item->itemBlocks( false ).lba();
+  }
+
   if( parent() )
-    parent()->updateSize( s );
+    parent()->updateSize( item, removed );
 }
 
 void K3bDirItem::updateFiles( long files, long dirs )

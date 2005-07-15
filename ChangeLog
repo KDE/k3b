@@ -6,7 +6,9 @@
    becasue there were some bug report that were caused by faulty user parameters.
  * Cleaned up all the job classes: No job creates a widget anymore. This allows for non-GUI usage of libk3b.
    For example in a kioslave.
-	
+ * New option in the data project to not cache the inodes. That means it is possible to have multiple
+   actual copies of the same file on one CD/DVD.
+
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)

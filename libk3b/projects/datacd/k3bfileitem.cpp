@@ -112,13 +112,7 @@ K3bFileItem::~K3bFileItem()
 }
 
 
-KIO::filesize_t K3bFileItem::size() const
-{
-  return size( doc() ? doc()->isoOptions().followSymbolicLinks() || !doc()->isoOptions().createRockRidge() : false );
-}
-
-
-KIO::filesize_t K3bFileItem::size( bool followSymlinks ) const
+KIO::filesize_t K3bFileItem::itemSize( bool followSymlinks ) const
 {
   if( followSymlinks )
     return m_sizeFollowed;

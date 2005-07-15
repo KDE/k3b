@@ -46,12 +46,16 @@ class K3bSpecialDataItem : public K3bDataItem
       parent()->takeDataItem( this );
   }
 
-  KIO::filesize_t size() const { return m_size; }
-
   void setMimeType( const QString& s ) { m_mimeType = s; }
   const QString& mimeType() const { return m_mimeType; }
 
   bool isSpecialFile() const { return true; }
+
+ protected:
+  /**
+   * Normally one does not use this method but K3bDataItem::size()
+   */
+  KIO::filesize_t itemSize( bool ) const { return m_size; }
 
  private:
   QString m_mimeType;

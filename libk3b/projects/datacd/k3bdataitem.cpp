@@ -19,6 +19,8 @@
 #include "k3bdatadoc.h"
 #include <kdebug.h>
 
+#include <math.h>
+
 
 K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
   : m_bHideOnRockRidge(true),
@@ -41,6 +43,30 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
 
 K3bDataItem::~K3bDataItem()
 {
+}
+
+
+KIO::filesize_t K3bDataItem::size() const
+{
+  return itemSize( m_doc 
+		   ? m_doc->isoOptions().followSymbolicLinks() || 
+		   !m_doc->isoOptions().createRockRidge()
+		   : false );
+}
+
+
+K3b::Msf K3bDataItem::blocks() const
+{
+  return itemBlocks( m_doc 
+		     ? m_doc->isoOptions().followSymbolicLinks() || 
+		     !m_doc->isoOptions().createRockRidge()
+		     : false );
+}
+
+
+K3b::Msf K3bDataItem::itemBlocks( bool followSymbolicLinks ) const
+{
+  return (long)::ceil( (double)itemSize( followSymbolicLinks ) / 2048.0 );
 }
 
 

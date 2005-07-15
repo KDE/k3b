@@ -209,8 +209,11 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 
 KIO::filesize_t K3bDataDoc::size() const
 {
-  return m_sizeHandler->blocks( m_isoOptions.followSymbolicLinks() ||
-				!m_isoOptions.createRockRidge() ).mode1Bytes() + m_oldSessionSize;
+  if( m_isoOptions.doNotCacheInodes() )
+    return root()->blocks().mode1Bytes() + m_oldSessionSize;
+  else
+    return m_sizeHandler->blocks( m_isoOptions.followSymbolicLinks() ||
+				  !m_isoOptions.createRockRidge() ).mode1Bytes() + m_oldSessionSize;
 }
 
 
@@ -378,6 +381,9 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 
     else if( e.nodeName() == "input_charset")
       m_isoOptions.setInputCharset( e.text() );
+
+    else if( e.nodeName() == "do_not_cache_inodes" )
+      m_isoOptions.setDoNotCacheInodes( e.attributeNode( "activated" ).value() == "yes" );
 
     else if( e.nodeName() == "whitespace_treatment" ) {
       if( e.text() == "strip" )
@@ -684,6 +690,10 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
 
   topElem = doc.createElement( "force_input_charset" );
   topElem.setAttribute( "activated", isoOptions().forceInputCharset() ? "yes" : "no" );
+  optionsElem.appendChild( topElem );
+
+  topElem = doc.createElement( "do_not_cache_inodes" );
+  topElem.setAttribute( "activated", isoOptions().doNotCacheInodes() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
   topElem = doc.createElement( "input_charset" );

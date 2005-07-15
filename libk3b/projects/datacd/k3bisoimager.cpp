@@ -536,6 +536,9 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
       *m_process << "-hide-joliet-list" << m_jolietHideFile->name();
   }
 
+  if( m_doc->isoOptions().doNotCacheInodes() )
+    *m_process << "-no-cache-inodes";
+
   //
   // Check if we have files > 2 GB and enable udf in that case.
   //

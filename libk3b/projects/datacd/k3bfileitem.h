@@ -69,9 +69,6 @@ public:
    */
   Id localId( bool followSymlinks ) const;
 
-  KIO::filesize_t size() const;
-  KIO::filesize_t size( bool followSymlinks ) const;
-
   K3bDirItem* getDirItem() const;
 	
   bool isSymLink() const;
@@ -84,6 +81,11 @@ public:
 
   K3bDataItem* replaceItemFromOldSession() const { return m_replacedItemFromOldSession; }
   void setReplacedItemFromOldSession( K3bDataItem* item ) { m_replacedItemFromOldSession = item; }
+
+  /**
+   * Normally one does not use this method but K3bDataItem::size()
+   */
+  KIO::filesize_t itemSize( bool followSymlinks ) const;
 
  private:
   K3bDataItem* m_replacedItemFromOldSession;
