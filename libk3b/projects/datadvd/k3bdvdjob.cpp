@@ -249,13 +249,12 @@ void K3bDvdJob::slotIsoImagerFinished( bool success )
 {
   if( m_canceled ) {
     if( !numRunningSubJobs() ) {
-      emit canceled();
       jobFinished(false);
     }
     return;
   }
 
-  d->imageError = success;
+  d->imageError = !success;
 
   if( m_doc->onTheFly() && m_writerJob )
     m_writerJob->closeFd();
@@ -296,6 +295,8 @@ void K3bDvdJob::cancel()
     d->verificationJob->cancel();
 
   cleanup();
+
+  emit canceled();
 }
 
 
@@ -399,7 +400,6 @@ void K3bDvdJob::slotWritingFinished( bool success )
 {
   if( m_canceled ) {
     if( !numRunningSubJobs() ) {
-      emit canceled();
       jobFinished(false);
     }
     return;
@@ -473,7 +473,6 @@ void K3bDvdJob::slotVerificationFinished( bool success )
 {
   if( m_canceled ) {
     if( !numRunningSubJobs() ) {
-      emit canceled();
       jobFinished(false);
     }
     return;
