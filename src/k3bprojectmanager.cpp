@@ -345,6 +345,18 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     
     dataDoc->setVerifyData( c->readBoolEntry( "verify data", false ) );
 
+    QString s = c->readEntry( "multisession mode" );
+    if( s == "none" )
+      dataDoc->setMultiSessionMode( K3bDataDoc::NONE );
+    else if( s == "start" )
+      dataDoc->setMultiSessionMode( K3bDataDoc::START );
+    else if( s == "continue" )
+      dataDoc->setMultiSessionMode( K3bDataDoc::CONTINUE );
+    else if( s == "finish" )
+      dataDoc->setMultiSessionMode( K3bDataDoc::FINISH );
+    else
+      dataDoc->setMultiSessionMode( K3bDataDoc::AUTO );
+
     break;
   }
 

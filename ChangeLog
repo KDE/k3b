@@ -1,6 +1,8 @@
 0.12.3
 ======
+ * Ignore dock config from K3b versions older than 0.12
  * Do not delete DVD project iso image if "remove image" is unchecked.
+ * Properly load multisession default settings.
 
 0.12.2
 ======
