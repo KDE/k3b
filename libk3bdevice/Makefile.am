@@ -13,12 +13,12 @@ libk3bdevice_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 
 if include_HAL
 libk3bdevice_la_SOURCES = k3bdevice.cpp k3bdevice_mmc.cpp k3bscsicommand.cpp \
-	k3btrack.cpp k3btoc.cpp k3bdevicemanager.cpp k3bmsf.cpp k3bdiskinfo.cpp \
-	k3bdeviceglobals.cpp k3bcrc.cpp k3bcdtext.cpp k3bhalconnection.cpp
+k3btrack.cpp k3btoc.cpp k3bdevicemanager.cpp k3bmsf.cpp k3bdiskinfo.cpp \
+k3bdeviceglobals.cpp k3bcrc.cpp k3bcdtext.cpp k3bhalconnection.cpp
 else
 libk3bdevice_la_SOURCES = k3bdevice.cpp k3bdevice_mmc.cpp k3bscsicommand.cpp \
-	k3btrack.cpp k3btoc.cpp k3bdevicemanager.cpp k3bmsf.cpp k3bdiskinfo.cpp \
-	k3bdeviceglobals.cpp k3bcrc.cpp k3bcdtext.cpp
+k3btrack.cpp k3btoc.cpp k3bdevicemanager.cpp k3bmsf.cpp k3bdiskinfo.cpp \
+k3bdeviceglobals.cpp k3bcrc.cpp k3bcdtext.cpp
 endif
 
 include_HEADERS = k3bdevicemanager.h k3bdevice.h k3btoc.h k3btrack.h \
