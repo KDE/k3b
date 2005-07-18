@@ -28,6 +28,7 @@
 #include <k3bfileitem.h>
 #include <k3bmultichoicedialog.h>
 #include <k3bvalidators.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -246,11 +247,29 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   //
   if( valid ) {
     if( f.isDir() && f.isSymLink() ) {
-      // FIXME: ask the user stuff based on m_doc->isoOptions().followSymbolicLinks() and also remember the 
-      //        answer with  "don't ask again". Then use K3b::resolveLink( f.absFilePath() ) to update f.
-      //      i18n("If you intend to make K3b follow symbolic links you should consider following this link since "
-      //	   "K3b will not be able to do so afterwards.")
-      // FIXME: take care of "symlink loops" by remembering the first folder url
+
+      QString resolved = K3b::resolveLink( f.absFilePath() );
+
+      // let's see if this link starts a loop
+      // that means if it points to some folder above this one
+      // if so we cannot follow it anyway
+      if( !f.absFilePath().startsWith( resolved ) &&
+	  ( dir->doc()->isoOptions().followSymbolicLinks() ||
+	    KMessageBox::warningYesNo( this,
+				       i18n("<p>'%1' is a symbolic link to folder '%1'."
+					    "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
+					    "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
+					    "K3b project cannot be resolved."
+					    "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may savely "
+					    "ignore this warning and choose to add the link to the project.</b>")
+				       .arg(f.absFilePath())
+				       .arg(resolved ),
+				       i18n("Adding link to folder"),
+				       i18n("Follow link now"),
+				       i18n("Add symbolic link to project"),
+				       "ask_to_follow_link_to_folder" ) == KMessageBox::Yes ) ) {
+	f.setFile( resolved );
+      }
     }
   }
 
