@@ -49,13 +49,6 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   m_toolBox = new K3bToolBox( this, "toolbox" );
   m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
 
-//   QToolButton* m_buttonBurn = new QToolButton( this );
-//   m_buttonBurn->setIconSet( SmallIcon("cdburn") );
-//   m_buttonBurn->setTextLabel( i18n("Burn") + "..." );
-//   m_buttonBurn->setAutoRaise(true);
-//   m_buttonBurn->setTextPosition( QToolButton::Right ); // TODO: QT 3.2: QToolButton::BesideIcon
-//   m_buttonBurn->setUsesTextLabel( true );
-
   grid->addMultiCellWidget( m_toolBox, 0, 0, 0, 1 );
   grid->addMultiCellWidget( m_fillStatusDisplay, 2, 2, 0, 1 );
   //  grid->addWidget( m_buttonBurn, 2, 1 );
@@ -64,20 +57,18 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
 
-  KAction* burnAction = new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
+  KAction* burnAction = new KAction( i18n("&Burn"), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
 				     actionCollection(), "project_burn");
   burnAction->setToolTip( i18n("Open the burning dialog") );
   KAction* propAction = new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
 				     actionCollection(), "project_properties");
   propAction->setToolTip( i18n("Open the properties dialog") );
 
-  m_toolBox->addButton( burnAction );
+  m_toolBox->addButton( burnAction, true );
   m_toolBox->addSeparator();
 
   // this is just for testing (or not?)
   // most likely every project type will have it's rc file in the future
-  // TODO: remove the toolbar since it only confuses with it's not-proper-configurability. Instead
-  //       use the view's toolbox (which has to be added like in the audio view)
   setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
 	  "<kpartgui name=\"k3bproject\" version=\"1\">"
 	  "<MenuBar>"
@@ -86,12 +77,6 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
 	  "  <Action name=\"project_properties\"/>"
 	  " </Menu>"
 	  "</MenuBar>"
-#if 0
-	  "<ToolBar name=\"projectToolBar\" index=\"1\">"
-	  "  <Action name=\"project_burn\"/>"
-	  "  <Action name=\"project_properties\"/>"
-	  " </ToolBar>"
-#endif
 	  "</kpartgui>", true );
 }
 
