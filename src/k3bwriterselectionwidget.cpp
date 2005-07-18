@@ -120,6 +120,10 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( bool dvd, QWidget *parent, c
 						"writing speeds supported with the mounted media."
 						"<p>Be aware that this only works with MMC3 compliant "
 						"writers.") );
+
+  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
+
   init();
 
   slotWriterChanged();
@@ -146,14 +150,9 @@ void K3bWriterSelectionWidget::init()
 
   // -- read cd-writers ----------------------------------------------
   QPtrList<K3bDevice::Device>& devices = ( d->dvd 
-				   ? k3bcore->deviceManager()->dvdWriter() 
-				   : k3bcore->deviceManager()->cdWriter() );
-
-  K3bDevice::Device* dev = devices.first();
-  while( dev ) {
-    m_comboWriter->addDevice( dev );
-    dev = devices.next();
-  }
+					   ? k3bcore->deviceManager()->dvdWriter() 
+					   : k3bcore->deviceManager()->cdWriter() );
+  m_comboWriter->addDevices( devices );
 
   k3bcore->config()->setGroup( "General Options" );
   K3bDevice::Device *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
@@ -498,5 +497,12 @@ void K3bWriterSelectionWidget::slotDetermineSupportedWriteSpeeds()
   }
 }
 
+
+void K3bWriterSelectionWidget::slotDeviceManagerChanged( K3bDevice::DeviceManager* dm )
+{
+  // we simply rebuild the device list
+  m_comboWriter->refreshDevices( d->dvd ? dm->dvdWriter() : dm->cdWriter() );
+  slotWriterChanged();
+}
 
 #include "k3bwriterselectionwidget.moc"

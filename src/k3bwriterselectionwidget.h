@@ -26,6 +26,7 @@ class K3bDeviceComboBox;
 class QToolButton;
 namespace K3bDevice {
   class Device;
+  class DeviceManager;
 }
 
 /**
@@ -86,6 +87,7 @@ class K3bWriterSelectionWidget : public QWidget
   void slotSpeedChanged( int index );
   void slotWriterChanged();
   void slotDetermineSupportedWriteSpeeds();
+  void slotDeviceManagerChanged( K3bDevice::DeviceManager* );
 
  private:
   void init();

@@ -23,6 +23,7 @@
 
 namespace K3bDevice {
   class Device;
+  class DeviceManager;
 }
 
 class K3bWriterSelectionWidget;
@@ -52,6 +53,8 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   void slotStartClicked();
 
   void slotToggleAll();
+
+  void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
 
  protected:
   void init();

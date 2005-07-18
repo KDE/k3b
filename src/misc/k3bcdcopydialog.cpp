@@ -204,6 +204,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_comboCopyMode, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkReadCdText, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
 
+  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
 
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
@@ -468,6 +470,12 @@ void K3bCdCopyDialog::loadK3bDefaults()
   m_spinRetries->setValue(128);
 
   slotToggleAll();
+}
+
+
+void K3bCdCopyDialog::slotDeviceManagerChanged( K3bDevice::DeviceManager* dm )
+{
+  m_comboSourceDevice->refreshDevices( dm->cdReader() );
 }
 
 #include "k3bcdcopydialog.moc"

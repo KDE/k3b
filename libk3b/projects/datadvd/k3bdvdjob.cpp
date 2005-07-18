@@ -522,6 +522,7 @@ void K3bDvdJob::determineMultiSessionMode()
 
   if( m < 0 ) {
     cancel();
+    jobFinished(false);
   }
   else {
      connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, m_doc->burner() ), 

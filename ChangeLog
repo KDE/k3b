@@ -3,7 +3,9 @@
  * Ignore dock config from K3b versions older than 0.12
  * Do not delete DVD project iso image if "remove image" is unchecked.
  * Properly load multisession default settings.
-
+ * Update device selection boxes when devices are added or removed via HAL.
+ * Properly cancel DVD project writing.
+	
 0.12.2
 ======
  * After for example copying a CD when the dialog comes up again keep the last settings.

@@ -18,14 +18,20 @@
 #define _K3B_DEVICE_COMBO_BOX_H_
 
 #include <kcombobox.h>
-
+#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
+  class DeviceManager;
 }
 
 
-class K3bDeviceComboBox : public KComboBox
+/**
+ * A combobox to select a K3b device.
+ *
+ * It automatically removes devices that are removed from the system.
+ */
+class LIBK3B_EXPORT K3bDeviceComboBox : public KComboBox
 {
   Q_OBJECT
 
@@ -41,11 +47,17 @@ class K3bDeviceComboBox : public KComboBox
  public slots:
   void addDevice( K3bDevice::Device* );
   void addDevices( const QPtrList<K3bDevice::Device>& );
+  /**
+   * Clears the device combo and tries to keep the current selection
+   */
+  void refreshDevices( const QPtrList<K3bDevice::Device>& );
+  void removeDevice( K3bDevice::Device* );
   void setSelectedDevice( K3bDevice::Device* );
   void clear();
 
  private slots:
   void slotActivated( int );
+  void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
 
  private:
   class Private;

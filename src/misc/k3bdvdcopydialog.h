@@ -19,6 +19,11 @@
 
 #include <k3binteractiondialog.h>
 
+namespace K3bDevice {
+  class Device;
+  class DeviceManager;
+}
+
 class K3bTempDirSelectionWidget;
 class K3bWriterSelectionWidget;
 class K3bDeviceComboBox;
@@ -38,6 +43,7 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
  private slots:
   void slotStartClicked();
   void slotToggleAll();
+  void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
 
  protected:
   void init();
