@@ -64,6 +64,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QStringList m_unreadableFiles;
   QStringList m_notFoundFiles;
   QStringList m_nonLocalFiles;
+  QStringList m_tooBigFiles;
 };
 
 #endif

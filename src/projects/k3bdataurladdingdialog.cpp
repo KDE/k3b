@@ -105,6 +105,10 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     message += QString("<p><b>%1:</b><br>%2")
       .arg( i18n("No non-local files supported") )
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
+  if( !dlg.m_tooBigFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("It is not possible to add files bigger than 4 GB") )
+      .arg( dlg.m_tooBigFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
     KMessageBox::detailedSorry( parent, i18n("Some files could not be added to the project."), message );
@@ -137,6 +141,10 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     if( !f.exists() ) {
       valid = false;
       m_notFoundFiles.append( url.path() );
+    }
+    if( f.isFile() && K3b::filesize( url ) > 4LL*1024LL*1024LL*1024LL ) {
+      valid = false;
+      m_tooBigFiles.append( url.path() );
     }
   }
 
@@ -230,6 +238,22 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       }
     }
   }
+
+
+  //
+  // One more thing to warn the user about: We cannot follow links to folders since that
+  // would change the doc. So we simply ask the user what to do with a link to a folder
+  //
+  if( valid ) {
+    if( f.isDir() && f.isSymLink() ) {
+      // FIXME: ask the user stuff based on m_doc->isoOptions().followSymbolicLinks() and also remember the 
+      //        answer with  "don't ask again". Then use K3b::resolveLink( f.absFilePath() ) to update f.
+      //      i18n("If you intend to make K3b follow symbolic links you should consider following this link since "
+      //	   "K3b will not be able to do so afterwards.")
+      // FIXME: take care of "symlink loops" by remembering the first folder url
+    }
+  }
+
 
   //
   // Project valid also (we overwrite or renamed)
