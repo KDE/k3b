@@ -191,6 +191,8 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 
+  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
 
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
@@ -365,5 +367,10 @@ void K3bDvdCopyDialog::slotToggleAll()
   m_buttonStart->setEnabled( dev || m_checkOnlyCreateImage->isChecked() );
 }
 
+
+void K3bDvdCopyDialog::slotDeviceManagerChanged( K3bDevice::DeviceManager* dm )
+{
+  m_comboSourceDevice->refreshDevices( dm->cdReader() );
+}
 
 #include "k3bdvdcopydialog.moc"

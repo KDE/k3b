@@ -15,6 +15,8 @@
 
 #include "k3bdevicecombobox.h"
 #include <k3bdevice.h>
+#include <k3bdevicemanager.h>
+#include <k3bcore.h>
 
 #include <klocale.h>
 
@@ -36,6 +38,8 @@ K3bDeviceComboBox::K3bDeviceComboBox( QWidget* parent, const char* name )
   d = new Private();
   connect( this, SIGNAL(activated(int)),
 	   this, SLOT(slotActivated(int)) );
+  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
 }
 
 
@@ -89,11 +93,43 @@ void K3bDeviceComboBox::addDevice( K3bDevice::Device* dev )
 }
 
 
+void K3bDeviceComboBox::removeDevice( K3bDevice::Device* dev )
+{
+  if( dev ) {
+    if( d->deviceIndexMap.contains(dev->devicename()) ) {
+      // let's make it easy and recreate the whole list
+      K3bDevice::Device* selDev = selectedDevice();
+      QPtrList<K3bDevice::Device> devices;
+      for( unsigned int i = 0; i < d->devices.size(); ++i )
+	devices.append( d->devices[i] );
+
+      clear();
+
+      devices.removeRef( dev );
+
+      addDevices( devices );
+      setSelectedDevice( selDev );
+    }
+  }
+}
+
+
 void K3bDeviceComboBox::addDevices( const QPtrList<K3bDevice::Device>& list )
 {
   for( QPtrListIterator<K3bDevice::Device> it( list );
        it.current(); ++it )
     addDevice( it.current() );
+}
+
+
+void K3bDeviceComboBox::refreshDevices( const QPtrList<K3bDevice::Device>& list )
+{
+  K3bDevice::Device* selDev = selectedDevice();
+  clear();
+  if( !list.containsRef( selDev ) )
+    selDev = 0;
+  addDevices( list );
+  setSelectedDevice( selDev );
 }
 
 
@@ -119,6 +155,20 @@ void K3bDeviceComboBox::clear()
 void K3bDeviceComboBox::slotActivated( int i )
 {
   emit selectionChanged( d->devices[i] );
+}
+
+
+void K3bDeviceComboBox::slotDeviceManagerChanged( K3bDevice::DeviceManager* dm )
+{
+  unsigned int i = 0;
+  while( i < d->devices.size() ) {
+    if( !dm->allDevices().containsRef( d->devices[i] ) ) {
+      removeDevice( d->devices[i] );
+      i = 0;
+    }
+    else
+      ++i;
+  }
 }
 
 #include "k3bdevicecombobox.moc"
