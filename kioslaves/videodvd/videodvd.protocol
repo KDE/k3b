@@ -14,6 +14,7 @@ Description[et]=KIO moodul, mis võimaldab kopeerida faile video DVD-lt (sealhul
 Description[it]=Un kioslave per permettere ai file di essere copiati da un DVD video (incluso decifrazione)
 Description[nl]=Een kioslave waarmee u bestanden van een video-dvd kunt kopiëren (inclusief versleuteling)
 Description[pa]=ਇੱਕ kioslave ਹੈ, ਜੋ ਕਿ ਫਾਇਲਾਂ ਨੂੰ ਇੱਕ DVD (ਡਿਸਕ੍ਰਿਪਸ਼ਨ ਸਮੇ) ਤੋਂ ਨਕਲ ਕਰਨ ਲਈ ਸਹਾਇਕ ਹੈ
+Description[ru]=Позволяет копировать файлы с Video DVD (с дешифровкой)
 Description[sr]=kioslave који омогућава копирање фајлова са видео DVD-а (укључујући дешифровање)
 Description[sr@Latn]=kioslave koji omogućava kopiranje fajlova sa video DVD-a (uključujući dešifrovanje)
 Description[sv]=En I/O-slav som gör det möjligt att kopiera filer från en video-dvd (inklusive avkodning)
