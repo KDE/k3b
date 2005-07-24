@@ -146,7 +146,7 @@ default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
-Name[bg]=Очаква се медия
+Name[bg]=Изчакване за диск
 Name[br]=Emaon o c'hortoz evit ar vedium
 Name[bs]=Čekam medij
 Name[ca]=S'espera un medi
@@ -180,7 +180,7 @@ Name[tr]=Ortam bekleniyor
 Name[uk]=Очікування носія
 Name[zh_CN]=等待存储介质
 Comment=The user needs to insert a medium
-Comment[bg]=Потребителят трябва да постави медия в устройството
+Comment[bg]=Потребителят трябва да постави диск в устройството
 Comment[bs]=Korisnik mora ubaciti medij
 Comment[ca]=L'usuari necessita inserir un medi
 Comment[cs]=Uživatel musí vložit médium

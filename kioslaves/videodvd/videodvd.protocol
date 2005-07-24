@@ -8,6 +8,7 @@ listing=Name,Type,Size,Date
 Icon=dvd_unmount
 Class=:local
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[bg]=kioslave, който Ви позволява да копирате файлове от видео DVD (включително декриптирането)
 Description[cs]=Kioslave umožňující kopírování video DVD (včetně dekódování)
 Description[da]=En kioslave som gør det muligt at kopiere filer fra en video-dvd (inklusive afkodning)
 Description[et]=KIO moodul, mis võimaldab kopeerida faile video DVD-lt (sealhulgas neid lahti krüptida)
