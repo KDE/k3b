@@ -26,6 +26,7 @@
 #include <k3bthroughputestimator.h>
 #include <k3bglobals.h>
 #include <k3bglobalsettings.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -123,6 +124,8 @@ public:
   ProgressMsg2 newMsg;
 
   unsigned int progressMsgSize;
+
+  K3bInterferingSystemsHandler* interferingSystemHndl;
 };
 
 
@@ -151,6 +154,10 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
+
+  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this );
+  connect( d->interferingSystemHndl, SIGNAL(infoMessage(const QString&, int)),
+	   this, SIGNAL(infoMessage(const QString&, int)) );
 
   m_eject = k3bcore->globalSettings()->ejectMedia();
 
@@ -561,6 +568,8 @@ void K3bCdrdaoWriter::start()
       break;
     }
 
+  d->interferingSystemHndl->disable( burnDevice() );
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
       // something went wrong when starting the program
@@ -695,6 +704,7 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line )
 
 void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 {
+  d->interferingSystemHndl->enable();
 
   switch ( m_command )
   {

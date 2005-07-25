@@ -54,6 +54,7 @@ class K3bInterferingSystemsHandler : public K3bJob
  private:
   int startStopMediaManager( bool start );
   int startStopSuSEPlugger( bool start );
+  int startStopAutomounting( bool start, K3bDevice::Device* dev );
 
   class Private;
   Private* d;

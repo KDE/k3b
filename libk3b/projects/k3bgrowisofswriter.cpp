@@ -27,6 +27,7 @@
 #include "k3bgrowisofshandler.h"
 #include <k3bpipebuffer.h>
 #include <k3bglobalsettings.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -83,6 +84,8 @@ public:
 
   bool usingRingBuffer;
   K3bPipeBuffer* ringBuffer;
+
+  K3bInterferingSystemsHandler* interferingSystemHndl;
 };
 
 
@@ -94,6 +97,10 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* h
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
+
+  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this );
+  connect( d->interferingSystemHndl, SIGNAL(infoMessage(const QString&, int)),
+	   this, SIGNAL(infoMessage(const QString&, int)) );
 
   d->gh = new K3bGrowisofsHandler( this );
   connect( d->gh, SIGNAL(infoMessage(const QString&, int)),
@@ -318,6 +325,8 @@ void K3bGrowisofsWriter::start()
 
     emit newSubTask( i18n("Preparing write process...") );
 
+    d->interferingSystemHndl->disable( burnDevice() );
+
     if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
       // something went wrong when starting the program
       // it "should" be the executable
@@ -461,6 +470,8 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 {
   d->inputFile.close();
+
+  d->interferingSystemHndl->enable();
 
   if( d->canceled ) {
     if( !d->usingRingBuffer || !d->ringBuffer->active() ) {

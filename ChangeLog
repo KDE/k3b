@@ -8,7 +8,9 @@
    For example in a kioslave.
  * New option in the data project to not cache the inodes. That means it is possible to have multiple
    actual copies of the same file on one CD/DVD.
-
+ * K3b now tries to disable stuff that might influence the burning process. This includes the KDED module
+   mediamanager, SuSEPlugger, and automounting (currently supported: subfs, supermount, and the kernel based autofs).
+	
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)

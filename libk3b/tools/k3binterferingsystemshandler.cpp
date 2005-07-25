@@ -78,6 +78,7 @@ void K3bInterferingSystemsHandler::disable( K3bDevice::Device* dev )
 }
 
 
+// TODO: maybe create a class K3bInterferingSystemModule which we simply keep in a list
 void K3bInterferingSystemsHandler::disable()
 {
   if( !d->disabled ) {
@@ -94,9 +95,18 @@ void K3bInterferingSystemsHandler::disable()
     r = startStopSuSEPlugger( false );
     d->disabledSuSEPlugger = ( r == 1 );
     if( r == 1 )
-      emit infoMessage( i18n("Shut down SuSEPlugger."), WARNING );
+      emit infoMessage( i18n("Shut down SuSEPlugger."), INFO );
     else if( r == -1 )
       emit infoMessage( i18n("Failed to shut down SuSEPlugger."), WARNING );
+
+    if( d->device ) {
+      r = startStopAutomounting( false, d->device );
+      d->disabledAutofs = ( r == 1 );
+      if( r == 1 )
+	emit infoMessage( i18n("Disabled Automounting."), INFO );
+      else if( r == -1 )
+	emit infoMessage( i18n("Failed to disable Automounting."), WARNING );
+    }
   }
 }
 
@@ -107,7 +117,7 @@ void K3bInterferingSystemsHandler::enable()
     if( d->disabledMediaManager ) {
       int r = startStopMediaManager( true );
       if( r == -1 )
-	emit infoMessage( i18n("Failed to enable KDED module mediamanager."), INFO );
+	emit infoMessage( i18n("Failed to enable KDED module mediamanager."), WARNING );
       else {
 	d->disabledMediaManager = false;
 	if( r == 1 )
@@ -122,7 +132,18 @@ void K3bInterferingSystemsHandler::enable()
       else {
 	d->disabledSuSEPlugger = false;
 	if( r == 1 )
-	  emit infoMessage( i18n("Restarted SuSEPlugger."), WARNING );
+	  emit infoMessage( i18n("Restarted SuSEPlugger."), INFO );
+      }
+    }
+
+    if( d->disabledAutofs ) {
+      int r = startStopAutomounting( true, d->device );
+      if( r == -1 )
+	emit infoMessage( i18n("Failed to enabled Automounting."), WARNING );
+      else {
+	d->disabledAutofs = false;
+	if( r == 1 )
+	  emit infoMessage( i18n("Enabled Automounting."), INFO );
       }
     }
 
@@ -243,6 +264,43 @@ int K3bInterferingSystemsHandler::startStopSuSEPlugger( bool start )
       kdDebug() << "(K3bInterferingSystemsHandler) unable to determine suseplugger pid." << endl;
       return -1;
     }
+  }
+}
+
+
+int K3bInterferingSystemsHandler::startStopAutomounting( bool start, K3bDevice::Device* dev )
+{
+  //
+  // here we simply call the script if we can find it and don't care if automounting is actually enabled
+  // or not since the script returns a proper error code telling us everything we need to know.
+  //
+  QString autoMountingScript = KStandardDirs::findExe( "autowhateverFIXME" );
+  if( autoMountingScript.isEmpty() ) {
+    kdDebug() << "(K3bInterferingSystemsHandler) could not find the automounting script" << endl;
+    return -1;
+  }
+
+  KProcess p;
+  p << autoMountingScript;
+  if( start )
+    p << "enable";
+  else
+    p << "disable";
+  p << dev->blockDeviceName();
+
+  if( p.start( KProcess::Block ) ) {
+    if( p.normalExit() ) {
+      // FIXME: either make the script really return 1, 0, or -1 or interpret the return code here
+      return p.exitStatus();
+    }
+    else {
+      kdDebug() << "(K3bInterferingSystemsHandler) the automounting script failed in some way." << endl;
+      return -1;
+    }
+  }
+  else {
+    kdDebug() << "(K3bInterferingSystemsHandler) could not start the automounting script." << endl;
+    return -1;
   }
 }
 
