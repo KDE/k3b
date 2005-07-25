@@ -76,7 +76,7 @@ int main( int argc, char* argv[] )
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
   aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer"), "kd@k3b.org" );
 
-  aboutData.addCredit("Ayo",
+  aboutData.addCredit("Alexis Younes aka Ayo",
 		      I18N_NOOP("For his bombastic artwork."),
 		      "73lab@free.fr" );
   aboutData.addCredit("Christoph Thielecke",
