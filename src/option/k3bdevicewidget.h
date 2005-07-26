@@ -56,6 +56,7 @@ class K3bDeviceWidget : public QWidget
 
  private slots:
   void slotNewDevice();
+  void updateDeviceListViews();
 
  private:
   class PrivateTempDevice;
@@ -63,8 +64,6 @@ class K3bDeviceWidget : public QWidget
 
   /** list to save changes to the devices before applying */
   QPtrList<PrivateTempDevice> m_tempDevices;
-
-  void updateDeviceListViews();
 
   QListViewItem* m_writerParentViewItem;
   QListViewItem* m_readerParentViewItem;

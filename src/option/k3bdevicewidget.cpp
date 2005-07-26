@@ -223,6 +223,8 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
   //  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
   connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
   connect( m_buttonAddDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
+
+  connect( m_deviceManager, SIGNAL(changed()), this, SLOT(updateDeviceListViews()) );
   // ------------------------------------------------
 }
 
