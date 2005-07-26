@@ -1082,7 +1082,9 @@ void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 bool K3bDataDoc::importSession( K3bDevice::Device* device )
 {
   K3bDevice::DiskInfo diskInfo = device->diskInfo();
-  if( !diskInfo.appendable() )
+  // DVD+RW media is reported as non-appendable
+  if( !diskInfo.appendable() &&
+      !(diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR)) )
     return false;
 
   K3bDevice::Toc toc = device->readToc();
