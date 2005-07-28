@@ -1264,7 +1264,7 @@ void K3bMainWindow::slotProjectAddFiles()
 
   if( view ) {
     QStringList files = KFileDialog::getOpenFileNames( ".", 
-						       "*|All Files", 
+						       i18n("*|All Files"), 
 						       this, 
 						       i18n("Select Files to Add to Project") );
 
