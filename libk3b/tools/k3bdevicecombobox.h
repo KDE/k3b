@@ -18,7 +18,6 @@
 #define _K3B_DEVICE_COMBO_BOX_H_
 
 #include <kcombobox.h>
-#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
@@ -31,7 +30,7 @@ namespace K3bDevice {
  *
  * It automatically removes devices that are removed from the system.
  */
-class LIBK3B_EXPORT K3bDeviceComboBox : public KComboBox
+class K3bDeviceComboBox : public KComboBox
 {
   Q_OBJECT
 
