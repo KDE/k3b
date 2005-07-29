@@ -26,7 +26,7 @@
  * Currently supported systems are:
  * \li KDED module mediamanager (disabled through dcop)
  * \li SuSEPlugger (killed by pid and fired up again by desktop service)
- * \li automounting systems subfs, supermount, and the kernel based autofs (handled through 
+ * \li automounting systems subfs, supermount (handled through 
  *     a script running suid root)
  *
  * Also the K3bInterferingSystemsHandler is a K3bJob it is not intended to be used as such.

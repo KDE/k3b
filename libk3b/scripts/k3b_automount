@@ -1,0 +1,54 @@
+#!/bin/bash
+
+#
+# This script is able to disable and enable automounting for a device.
+# It's usage is as follows:
+#
+#   k3b_automount disable /dev/cdrom
+# or
+#   k3b_automount enable /dev/cdrom
+#
+# /dev/cdrom needs to have an entry in /etc/fstab.
+# 
+# The supported automounting systems are subfs and supermount.
+#
+# Exit codes:
+#   0 - success
+#   1 - wrong usage
+#   2 - device not configured with subfs/supermount in /etc/fstab
+#   X - failed to mount/umount
+#
+
+DISABLE=1
+
+if [ $1 = "disable" ]; then
+	DISABLE=1
+elif [ $1 = "enable" ]; then
+	DISABLE=0
+else
+	echo "Usage: $0 disable|enable <device>"
+	exit 1
+fi
+
+DEVICE=$2
+
+if [ -z $DEVICE ]; then
+	echo "Usage: $0 disable|enable <device>"
+	exit 1
+fi
+
+# we have a mode and a device
+
+# open the fstab file and search the DEVICE
+S=`grep $DEVICE /etc/fstab | grep subfs\|supermount`
+if [ -z $S ]; then
+	# FIXME: disable autofs if it's running or enable it
+	exit 2
+else
+	if [ $DISABLE = 1 ]; then
+		umount $DEVICE
+	else
+		mount $DEVICE
+	fi
+	exit $?
+fi
