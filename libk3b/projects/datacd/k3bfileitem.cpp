@@ -72,6 +72,13 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   if( ::lstat( QFile::encodeName(filePath), &statBuf ) ) {
     m_size = K3b::filesize( filePath );
     kdError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
+
+    // since we have no proper inode info, disable the inode caching in the doc
+    if( doc ) {
+      K3bIsoOptions o( doc->isoOptions() );
+      o.setDoNotCacheInodes( true );
+      doc->setIsoOptions( o );
+    }
   }
   else {
     m_size = (KIO::filesize_t)statBuf.st_size;

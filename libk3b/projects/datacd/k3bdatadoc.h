@@ -166,6 +166,13 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   bool importSession( K3bDevice::Device* );
 
+  /**
+   * Searches for an item by it's local path.
+   *
+   * \return The items that correspond to the specified local path.
+   */
+  QValueList<K3bDataItem*> findItemByLocalPath( const QString& path ) const;
+
  public slots:
   virtual void addUrls( const KURL::List& urls );
 
