@@ -36,7 +36,7 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
     fi
   fi
 
-  search_libs="$kde_libraries /usr/lib /usr/local/lib"
+  search_libs="$kde_libraries /usr/lib64 /usr/lib /usr/local/lib"
   AC_FIND_FILE(libhal.so, $search_libs, hal_libdir)
 
   if [test -r $hal_libdir/libhal.so] ; then
@@ -67,7 +67,7 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
   search_incs="$kde_includes /usr/include /usr/include/dbus-1.0 /usr/local/include /usr/local/include/dbus-1.0"
   AC_FIND_FILE(dbus/dbus.h, $search_incs, dbus_incdir)
 
-  search_incs_arch_deps="$kde_includes /usr/lib/dbus-1.0/include /usr/local/lib/dbus-1.0/include"
+  search_incs_arch_deps="$kde_includes /usr/lib64/dbus-1.0/include /usr/lib/dbus-1.0/include /usr/local/lib/dbus-1.0/include"
   AC_FIND_FILE(dbus/dbus-arch-deps.h, $search_incs_arch_deps, dbus_incdir_arch_deps)
 
   if [test -r $dbus_incdir/dbus/dbus.h] && [test -r $dbus_incdir_arch_deps/dbus/dbus-arch-deps.h] ; then
@@ -75,7 +75,7 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
     dbus_inc=FOUND
   fi
 
-  search_libs="$kde_libraries /usr/lib /usr/local/lib"
+  search_libs="$kde_libraries /usr/lib64 /usr/lib /usr/local/lib"
   AC_FIND_FILE(libdbus-1.so, $search_libs, dbus_libdir)
 
   if test -r $dbus_libdir/libdbus-1.so ; then
