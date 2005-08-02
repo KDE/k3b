@@ -4,7 +4,7 @@ Encoding=UTF-8
 ServiceTypes=all/allfiles,inode/directory
 ExcludeServiceTypes=application/x-iso,kdedevice/*
 
-[Desktop Action CreateK3bDataProject]
+[Desktop Action CreateK3bDataCDProject]
 Exec=k3b --datacd %F
 Name=Create Data CD with K3b...
 Name[bg]=Създаване на CD с данни с K3b...

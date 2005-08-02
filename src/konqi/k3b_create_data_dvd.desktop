@@ -4,7 +4,7 @@ Encoding=UTF-8
 ServiceTypes=all/allfiles,inode/directory
 ExcludeServiceTypes=application/x-iso
 
-[Desktop Action CreateK3bDataProject]
+[Desktop Action CreateK3bDataDVDProject]
 Exec=k3b --datadvd %F
 Name=Create Data DVD with K3b...
 Name[ca]=Crea DVD de dades amb K3b...
