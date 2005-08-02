@@ -1,5 +1,5 @@
 [Desktop Entry]
-Actions=CreateK3bDataProject;
+Actions=CreateK3bDataCDProject;
 Encoding=UTF-8
 ServiceTypes=all/allfiles,inode/directory
 ExcludeServiceTypes=application/x-iso,kdedevice/*
