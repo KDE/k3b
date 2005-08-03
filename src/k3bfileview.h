@@ -54,7 +54,6 @@ class K3bFileView : public K3bCdContentsView
 
  public slots:
   void setDir( const QString& );
-  void slotAddFilesToProject();
   void saveConfig( KConfig* c );
   void readConfig( KConfig* c );
   void setAutoUpdate( bool );
@@ -69,7 +68,6 @@ class K3bFileView : public K3bCdContentsView
  private slots:
   void slotFilterChanged();
   void slotFileHighlighted( const KFileItem* item );
-  void slotCheckActions();
 };
 
 

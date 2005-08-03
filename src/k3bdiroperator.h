@@ -65,6 +65,9 @@ class K3bDirOperator : public KDirOperator, public KBookmarkOwner
 
   KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 
+ public slots:
+  void slotAddFilesToProject();
+
  protected slots:
   /**
    * reimplemented from KDirOperator

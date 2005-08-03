@@ -1,7 +1,8 @@
 0.12.4
 ======
  * Fixed --cdimage and --dvdimage parameters.
-
+ * Fixed the file browser menu. Now it contains the bookmarks and "add to project" actions again.
+	
 0.12.3
 ======
  * Ignore dock config from K3b versions older than 0.12
