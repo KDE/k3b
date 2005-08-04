@@ -37,7 +37,7 @@
 
 K3bDataSessionImportDialog::K3bDataSessionImportDialog( QWidget* parent )
   : KDialogBase( KDialogBase::Plain, 
-		 i18n("&Import Session..."), 
+		 i18n("Import Session..."), 
 		 KDialogBase::Ok|KDialogBase::Cancel,
 		 KDialogBase::Ok,
 		 parent, 
