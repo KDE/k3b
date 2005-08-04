@@ -177,9 +177,8 @@ void K3bBlankingDialog::slotWriterChanged()
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
 
   if( !dev )
-    return;
-
-  if( dev->writesCdrw() )
+	m_buttonStart->setEnabled( false );
+  else if( dev->writesCdrw() )
     m_buttonStart->setEnabled( true );
   else {
     m_buttonStart->setEnabled( false );
