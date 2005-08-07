@@ -402,7 +402,8 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
       KPopupMenu pop;
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
-      pop.insertItem( i18n("Add Button"), &addPop );
+      if ( addPop.count() > 0 )
+	  	pop.insertItem( i18n("Add Button"), &addPop );
       pop.insertSeparator();
       infoTextAction = pop.insertItem( infoTextActionText );
       r = pop.exec( e->globalPos() );
