@@ -229,8 +229,15 @@ void K3bCddbOptionTab::apply()
 void K3bCddbOptionTab::slotLocalDirAdd()
 {
   if( !m_editLocalDir->text().isEmpty() ) {
+      QString localDir( m_editLocalDir->text() );
+      QListViewItemIterator it( m_viewLocalDir );
+      while( it.current() ) {
+          if ( it.current()->text(0) == localDir )
+              return;
+          ++it;
+      }
     (void)new KListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(),
-			     m_editLocalDir->text() );
+			    localDir );
 
     enDisableButtons();
   }
