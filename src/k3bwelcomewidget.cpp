@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2005 Sebastian Trueg <trueg@k3b.org>
@@ -173,12 +173,12 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
   for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
     K3bFlatButton* b = it.current();
-    
-    b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ), 
+
+    b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
 				   topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
 			   m_buttonSize ) );
     b->show();
-    
+
     col++;
     if( col == m_cols ) {
       col = 0;
@@ -256,7 +256,7 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* e )
     int boxHeight = 20 + m_infoText->height();
     QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
 		       height()-10-boxHeight,
-		       width()-20/*boxWidth*/, 
+		       width()-20/*boxWidth*/,
 		       boxHeight );
     p.fillRect( infoBoxRect, m_headerBgColor );
     p.drawRect( infoBoxRect );
@@ -386,7 +386,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 	  !main->m_actions.containsRef(a) )
 	map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
     }
-    
+
     // menu identifiers in QT are always < 0 (when automatically generated)
     // and unique throughout the entire application!
     int r = 0;
@@ -402,7 +402,8 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
       KPopupMenu pop;
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
-      pop.insertItem( i18n("Add Button"), &addPop );
+      if ( addPop.count() > 0 )
+          pop.insertItem( i18n("Add Button"), &addPop );
       pop.insertSeparator();
       infoTextAction = pop.insertItem( infoTextActionText );
       r = pop.exec( e->globalPos() );
