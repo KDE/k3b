@@ -47,10 +47,10 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
 
   // setup actions
   m_actionProperties = new KAction( i18n("Properties"), "misc",
-				    0, this, SLOT(showPropertiesDialog()), 
+				    0, this, SLOT(showPropertiesDialog()),
 				    actionCollection(), "movix_show_props" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-				Key_Delete, this, SLOT(slotRemoveItems()), 
+				Key_Delete, this, SLOT(slotRemoveItems()),
 				actionCollection(), "movix_remove_item" );
   m_actionRemoveSubTitle = new KAction( i18n( "Remove Subtitle File" ), "editdelete",
 					0, this, SLOT(slotRemoveSubTitleItems()),
@@ -79,11 +79,13 @@ void K3bMovixView::slotContextMenuRequested(QListViewItem* item, const QPoint& p
 {
   if( item ) {
     m_actionRemove->setEnabled(true);
+    m_actionRemoveSubTitle->setEnabled( true );
   }
   else {
     m_actionRemove->setEnabled(false);
+    m_actionRemoveSubTitle->setEnabled( false );
   }
-  
+
   m_popupMenu->popup( p );
 }
 
