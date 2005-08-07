@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -37,11 +37,11 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
 
-  m_buttonCopyTitle->setPixmap( SmallIcon( "copy" ) );
-  m_buttonCopyPerformer->setPixmap( SmallIcon( "copy" ) );
-  m_buttonCopySongwriter->setPixmap( SmallIcon( "copy" ) );
-  m_buttonCopyComposer->setPixmap( SmallIcon( "copy" ) );
-  m_buttonCopyArranger->setPixmap( SmallIcon( "copy" ) );
+  m_buttonCopyTitle->setPixmap( SmallIcon( "editcopy" ) );
+  m_buttonCopyPerformer->setPixmap( SmallIcon( "editcopy" ) );
+  m_buttonCopySongwriter->setPixmap( SmallIcon( "editcopy" ) );
+  m_buttonCopyComposer->setPixmap( SmallIcon( "editcopy" ) );
+  m_buttonCopyArranger->setPixmap( SmallIcon( "editcopy" ) );
 
   QValidator* cdTextVal = new K3bCdTextValidator( this );
   m_editTitle->setValidator( cdTextVal );
