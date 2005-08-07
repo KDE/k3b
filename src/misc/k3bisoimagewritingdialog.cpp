@@ -43,6 +43,7 @@
 #include <kurl.h>
 #include <kinputdialog.h>
 #include <kurldrag.h>
+#include <klineedit.h>
 
 #include <qheader.h>
 #include <qgroupbox.h>
@@ -77,8 +78,8 @@ public:
 
 
 K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char* name, bool modal )
-  : K3bInteractionDialog( parent, name, 
-			  i18n("Burn Iso9660 Image"), 
+  : K3bInteractionDialog( parent, name,
+			  i18n("Burn Iso9660 Image"),
 			  i18n("to DVD"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
@@ -108,7 +109,7 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 	   this, SLOT(slotWriterChanged()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)),
 	   this, SLOT(slotWriterChanged()) );
-  connect( m_editImagePath, SIGNAL(textChanged(const QString&)), 
+  connect( m_editImagePath, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(updateImageSize(const QString&)) );
   connect( m_checkDummy, SIGNAL(toggled(bool)),
 	   this, SLOT(slotWriterChanged()) );
@@ -125,7 +126,7 @@ K3bIsoImageWritingDialog::~K3bIsoImageWritingDialog()
 void K3bIsoImageWritingDialog::init()
 {
   if( !d->imageForced ) {
-    // when opening the dialog first the default settings are loaded and afterwards we set the 
+    // when opening the dialog first the default settings are loaded and afterwards we set the
     // last written image because that's what most users want
     KConfig* c = k3bcore->config();
     c->setGroup( configGroup() );
@@ -147,6 +148,8 @@ void K3bIsoImageWritingDialog::setupGui()
   m_editImagePath->setCaption( i18n("Choose Image File") );
   m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
 			      + i18n("*|All Files") );
+
+  connect( m_editImagePath->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotWriterChanged() ) );
 
   // image info
   // -----------------------------------------------------------------------
@@ -298,50 +301,50 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 						   i18n("Filesize:"), KIO::convertSize( imageSize ) );
       item->setForegroundColor( 0, Qt::gray );
 
-      item = new K3bListViewItem( isoRootItem, 
+      item = new K3bListViewItem( isoRootItem,
 				  m_infoView->lastItem(),
-				  i18n("System Id:"), 
+				  i18n("System Id:"),
 				  isoF.primaryDescriptor().systemId.isEmpty()
-				  ? QString("-") 
+				  ? QString("-")
 				  : isoF.primaryDescriptor().systemId );
       item->setForegroundColor( 0, Qt::gray );
 
-      item = new K3bListViewItem( isoRootItem, 
+      item = new K3bListViewItem( isoRootItem,
 				  m_infoView->lastItem(),
-				  i18n("Volume Id:"), 
-				  isoF.primaryDescriptor().volumeId.isEmpty() 
-				  ? QString("-") 
+				  i18n("Volume Id:"),
+				  isoF.primaryDescriptor().volumeId.isEmpty()
+				  ? QString("-")
 				  : isoF.primaryDescriptor().volumeId );
       item->setForegroundColor( 0, Qt::gray );
 
-      item = new K3bListViewItem( isoRootItem, 
+      item = new K3bListViewItem( isoRootItem,
 				  m_infoView->lastItem(),
-				  i18n("Volume Set Id:"), 
+				  i18n("Volume Set Id:"),
 				  isoF.primaryDescriptor().volumeSetId.isEmpty()
 				  ? QString("-")
 				  : isoF.primaryDescriptor().volumeSetId );
       item->setForegroundColor( 0, Qt::gray );
 
-      item = new K3bListViewItem( isoRootItem, 
+      item = new K3bListViewItem( isoRootItem,
 				  m_infoView->lastItem(),
-				  i18n("Publisher Id:"), 
-				  isoF.primaryDescriptor().publisherId.isEmpty() 
-				  ? QString("-") 
+				  i18n("Publisher Id:"),
+				  isoF.primaryDescriptor().publisherId.isEmpty()
+				  ? QString("-")
 				  : isoF.primaryDescriptor().publisherId );
       item->setForegroundColor( 0, Qt::gray );
 
-      item = new K3bListViewItem( isoRootItem, 
+      item = new K3bListViewItem( isoRootItem,
 				  m_infoView->lastItem(),
-				  i18n("Preparer Id:"), 
-				  isoF.primaryDescriptor().preparerId.isEmpty() 
+				  i18n("Preparer Id:"),
+				  isoF.primaryDescriptor().preparerId.isEmpty()
 				  ? QString("-") : isoF.primaryDescriptor().preparerId );
       item->setForegroundColor( 0, Qt::gray );
 
-      item = new K3bListViewItem( isoRootItem, 
+      item = new K3bListViewItem( isoRootItem,
 				  m_infoView->lastItem(),
-				  i18n("Application Id:"), 
+				  i18n("Application Id:"),
 				  isoF.primaryDescriptor().applicationId.isEmpty()
-				  ? QString("-") 
+				  ? QString("-")
 				  : isoF.primaryDescriptor().applicationId );
       item->setForegroundColor( 0, Qt::gray );
 
@@ -365,7 +368,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
-  if( m_writerSelectionWidget->writerDevice() ) {
+  if( m_writerSelectionWidget->writerDevice() && !m_editImagePath->lineEdit()->text().isEmpty()) {
     m_buttonStart->setEnabled( true );
 
     if( m_checkDummy->isChecked() ) {
