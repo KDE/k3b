@@ -43,6 +43,7 @@
 #include <kurl.h>
 #include <kinputdialog.h>
 #include <kurldrag.h>
+#include <klineedit.h>
 
 #include <qheader.h>
 #include <qgroupbox.h>
@@ -148,6 +149,7 @@ void K3bIsoImageWritingDialog::setupGui()
   m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
 			      + i18n("*|All Files") );
 
+  connect( m_editImagePath->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotWriterChanged() ) );
   // image info
   // -----------------------------------------------------------------------
   m_infoView = new K3bListView( frame );
@@ -365,7 +367,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
-  if( m_writerSelectionWidget->writerDevice() ) {
+  if( m_writerSelectionWidget->writerDevice() && !m_editImagePath->lineEdit()->text().isEmpty() ) {
     m_buttonStart->setEnabled( true );
 
     if( m_checkDummy->isChecked() ) {
