@@ -83,7 +83,7 @@ void K3bMovixView::slotContextMenuRequested(QListViewItem* item, const QPoint& p
   }
   else {
     m_actionRemove->setEnabled(false);
-	m_actionRemoveSubTitle->setEnabled( false )
+	m_actionRemoveSubTitle->setEnabled( false );
   }
   
   m_popupMenu->popup( p );
