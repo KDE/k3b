@@ -290,7 +290,7 @@ bool K3bCueFileParser::parseLine( QString& line )
     K3b::Msf indexStart = K3b::Msf::fromString( indexRx.cap(2) );
 
     if( indexNumber == 0 ) {
-      if( d->currentParsedTrack < 2 ) {
+      if( d->currentParsedTrack < 2 && indexStart > 0 ) {
 	kdDebug() << "(K3bCueFileParser) first track is not allowed to have a pregap." << endl;
 	return false;
       }
