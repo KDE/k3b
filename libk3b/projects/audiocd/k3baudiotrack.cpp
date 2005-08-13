@@ -151,7 +151,10 @@ K3b::Msf K3bAudioTrack::postGap() const
 
 void K3bAudioTrack::setIndex0( const K3b::Msf& msf )
 {
-  m_index0Offset = length() - msf;
+  if( msf == 0 )
+    m_index0Offset = 0;
+  else
+    m_index0Offset = length() - msf;
 }
 
 
