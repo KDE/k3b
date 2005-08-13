@@ -199,10 +199,26 @@ bool K3bCueFileParser::parseLine( QString& line )
       QDir parentDir( K3b::parentDir(filename()) );
       QString filenamePrefix = filename().section( '/', -1 );
       filenamePrefix.truncate( filenamePrefix.length() - 3 ); // remove cue extension
-      QStringList possibleImageFiles = parentDir.entryList( filenamePrefix + "*", QDir::Files );
-      if( possibleImageFiles.count() == 1 )
-	setImageFilename( possibleImageFiles[0] );
-      setValid( QFileInfo( imageFilename() ).isFile() );
+      kdDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*" << endl;
+
+      //
+      // we cannot use the nameFilter in QDir becasue of the spaces that may occur in filenames
+      //
+      QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
+      int cnt = 0;
+      for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
+	if( (*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
+	  ++cnt;
+	  setImageFilename( K3b::parentDir(filename()) + *it );
+	}
+      }
+
+      //
+      // we only do this if there is one unique file which fits the requirements. 
+      // Otherwise we cannot be certain to have the right file.
+      //
+      setValid( cnt == 1 && QFileInfo( imageFilename() ).isFile() );
+
       m_imageFilenameInCue = false;
     }
     
