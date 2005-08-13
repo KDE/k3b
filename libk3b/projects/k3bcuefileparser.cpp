@@ -24,6 +24,7 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+#include <qdir.h>
 
 #include <kdebug.h>
 
@@ -39,9 +40,9 @@ public:
   int trackType;
   int trackMode;
   bool rawData;
-  bool haveIndex0;
   bool haveIndex1;
   K3b::Msf currentDataPos;
+  K3b::Msf index0;
 
   K3bDevice::Toc toc;
   int currentParsedTrack;
@@ -69,7 +70,7 @@ void K3bCueFileParser::readFile()
 {
   setValid(true);
 
-  d->inFile = d->inTrack = d->haveIndex0 = d->haveIndex1 = false;
+  d->inFile = d->inTrack = d->haveIndex1 = false;
   d->trackMode = K3bDevice::Track::UNKNOWN;
   d->toc.clear();
   d->cdText.clear();
@@ -173,7 +174,7 @@ bool K3bCueFileParser::parseLine( QString& line )
 
     // first try filename as a hole (absolut)
     if( QFile::exists( dataFile ) ) {
-      setImageFilename( dataFile );
+      setImageFilename( QFileInfo(dataFile).absFilePath() );
     }
     else if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) ).isFile() ) {
       kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
@@ -190,8 +191,34 @@ bool K3bCueFileParser::parseLine( QString& line )
     else {
       kdDebug() << "(K3bCueFileParser) no image file in: " << K3b::parentDir(filename()) + dataFile.section( '/', -1 ) << endl;
       kdDebug() << "(K3bCueFileParser) no image file in: " << K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() << endl;
-      setImageFilename( filename().left( filename().length() - 3 ) + "bin" );
-      setValid( QFileInfo( imageFilename() ).isFile() );
+
+      //
+      // we did not find the image specified in the cue.
+      // Search for another one having the same filename as the cue but a different extension
+      //
+      QDir parentDir( K3b::parentDir(filename()) );
+      QString filenamePrefix = filename().section( '/', -1 );
+      filenamePrefix.truncate( filenamePrefix.length() - 3 ); // remove cue extension
+      kdDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*" << endl;
+
+      //
+      // we cannot use the nameFilter in QDir becasue of the spaces that may occur in filenames
+      //
+      QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
+      int cnt = 0;
+      for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
+	if( (*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
+	  ++cnt;
+	  setImageFilename( K3b::parentDir(filename()) + *it );
+	}
+      }
+
+      //
+      // we only do this if there is one unique file which fits the requirements. 
+      // Otherwise we cannot be certain to have the right file.
+      //
+      setValid( cnt == 1 && QFileInfo( imageFilename() ).isFile() );
+
       m_imageFilenameInCue = false;
     }
     
@@ -257,6 +284,7 @@ bool K3bCueFileParser::parseLine( QString& line )
 
     d->haveIndex1 = false;
     d->inTrack = true;
+    d->index0 = 0;
 
     return true;
   }
@@ -290,22 +318,25 @@ bool K3bCueFileParser::parseLine( QString& line )
     K3b::Msf indexStart = K3b::Msf::fromString( indexRx.cap(2) );
 
     if( indexNumber == 0 ) {
-      if( d->currentParsedTrack < 2 ) {
-	kdDebug() << "(K3bCueFileParser) first track is not allowed to have a pregap." << endl;
+      d->index0 = indexStart;
+
+      if( d->currentParsedTrack < 2 && indexStart > 0 ) {
+	kdDebug() << "(K3bCueFileParser) first track is not allowed to have a pregap > 0." << endl;
 	return false;
       }
-
-      // set last track's index0 value (relative to track start)
-      d->toc[d->currentParsedTrack-2].setIndex0( indexStart-d->toc[d->currentParsedTrack-2].firstSector() );
     }
     else if( indexNumber == 1 ) {
       d->haveIndex1 = true;
       d->currentDataPos = indexStart;
-      if( d->currentParsedTrack > 1 )
+      if( d->currentParsedTrack > 1 ) {
 	d->toc[d->currentParsedTrack-2].setLastSector( indexStart-1 );
+	if( d->index0 > 0 && d->index0 < indexStart ) {
+	  d->toc[d->currentParsedTrack-2].setIndex0( d->index0 - d->toc[d->currentParsedTrack-2].firstSector() );
+	}
+      }
     }
     else {
-      // TODO: add index
+      // TODO: add index > 0
     }
 
     return true;

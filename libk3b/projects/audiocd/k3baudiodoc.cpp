@@ -339,7 +339,7 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
     if( !parser.cdText().performer().isEmpty() )
       setPerformer( parser.cdText().performer() );
 
-    K3bAudioDecoder* decoder = getDecoderForUrl( parser.imageFilename() );
+    K3bAudioDecoder* decoder = getDecoderForUrl( KURL::fromPathOrURL( parser.imageFilename() ) );
     if( decoder ) {
       K3bAudioFile* newFile = 0;
       unsigned int i = 0;
@@ -354,6 +354,12 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 	K3bAudioTrack* newTrack = new K3bAudioTrack( this );
 	newTrack->addSource( newFile );
 	newTrack->moveAfter( after );
+
+	// we do not know the length of the source yet so we have to force the index value
+	if( track.index0() > 0 )
+	  newTrack->m_index0Offset = track.length() - track.index0();
+	else
+	  newTrack->m_index0Offset = 0;
 
 	// cd-text
 	newTrack->setTitle( parser.cdText()[i].title() );

@@ -2,7 +2,10 @@
 ======
  * Fixed --cdimage and --dvdimage parameters.
  * Fixed the file browser menu. Now it contains the bookmarks and "add to project" actions again.
-	
+ * Fixed Index 0 (Pregap) handling in audio cue files.
+ * Improved handling of broken cue files: K3b now searches the directory for image files that could fit
+   the cue file in case the FILE entry is bogus.
+
 0.12.3
 ======
  * Ignore dock config from K3b versions older than 0.12

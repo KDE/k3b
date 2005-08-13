@@ -164,8 +164,7 @@ void K3bAudioTrackWidget::load()
       m_audioEditor->setLength( track->length() );
       setIndex0Editors( track->index0() );
 
-      // this will also create a new range if nessecary
-      m_checkIndex0->setChecked( track->index0() > 0 );
+      m_checkIndex0->setChecked( track->postGap() > 0 );
     }
     else {
       // allow the user to change all gaps at once
