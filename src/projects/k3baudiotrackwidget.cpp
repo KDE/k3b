@@ -24,6 +24,7 @@
 #include <qwhatsthis.h>
 #include <qwidgetstack.h>
 #include <qgroupbox.h>
+#include <qtabwidget.h>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -164,8 +165,7 @@ void K3bAudioTrackWidget::load()
       m_audioEditor->setLength( track->length() );
       setIndex0Editors( track->index0() );
 
-      // this will also create a new range if nessecary
-      m_checkIndex0->setChecked( track->index0() > 0 );
+      m_checkIndex0->setChecked( track->postGap() > 0 );
     }
     else {
       // allow the user to change all gaps at once
@@ -267,6 +267,5 @@ void K3bAudioTrackWidget::save()
     }    
   }
 }
-
 
 #include "k3baudiotrackwidget.moc"

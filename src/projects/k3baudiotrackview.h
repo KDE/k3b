@@ -74,6 +74,7 @@ class K3bAudioTrackView : public K3bListView
   KAction* m_actionMergeTracks;
   KAction* m_actionSplitSource;
   KAction* m_actionSplitTrack;
+  KAction* m_actionEditSource;
   KAction* m_actionPlayTrack;
   KActionCollection* m_actionCollection;
 
@@ -113,6 +114,7 @@ class K3bAudioTrackView : public K3bListView
   void slotProperties();
   void slotPlayTrack();
   void slotQueryMusicBrainz();
+  void slotEditSource();
 
  protected:
   void keyPressEvent( QKeyEvent* e );

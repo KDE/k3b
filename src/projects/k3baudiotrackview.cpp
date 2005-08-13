@@ -29,6 +29,7 @@
 #include "k3baudiocdtrackdrag.h"
 #include "k3baudiocdtracksource.h"
 #include "k3baudiotracktrmlookupdialog.h"
+#include "k3baudiodatasourceeditwidget.h"
 
 #include <k3bview.h>
 #include <k3bcdtextvalidator.h>
@@ -44,6 +45,8 @@
 #include <qevent.h>
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -53,6 +56,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <kdialogbase.h>
 
 
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const char* name )
@@ -167,6 +171,9 @@ void K3bAudioTrackView::setupActions()
   m_actionSplitTrack = new KAction( i18n("Split Track..."), 0,
 				    KShortcut(), this, SLOT(slotSplitTrack()),
 				    actionCollection(), "track_split" );
+  m_actionEditSource = new KAction( i18n("Edit Source..."), 0,
+				    KShortcut(), this, SLOT(slotEditSource()),
+				    actionCollection(), "source_edit" );
   m_actionPlayTrack = new KAction( i18n("Play Track"), "player_play",
 				   KShortcut(), this, SLOT(slotPlayTrack()),
 				   actionCollection(), "track_play" );
@@ -780,6 +787,7 @@ void K3bAudioTrackView::slotSplitSource()
     track->moveAfter( trackAfter );
 
     // let's see if it's a file because in that case we can reuse the metainfo :)
+    // TODO: maybe add meta data to sources
     if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( track->firstSource() ) ) {
       track->setArtist( file->decoder()->metaInfo( K3bAudioDecoder::META_ARTIST ) );
       track->setTitle( file->decoder()->metaInfo( K3bAudioDecoder::META_TITLE ) );
@@ -797,9 +805,43 @@ void K3bAudioTrackView::slotSplitTrack()
   if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
     K3b::Msf pos;
     if( K3bAudioTrackSplitDialog::getSplitPos( tv->track(), pos, this ) ) {
-      // TODO: should we fix the position to make sure tracks are at least 4 seconds long
       tv->track()->split( pos );
     }
+  }
+}
+
+
+void K3bAudioTrackView::slotEditSource()
+{
+  QListViewItem* item = selectedItems().first();
+
+  K3bAudioDataSource* source = 0;
+  if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>(item) )
+    source = sv->source();
+  else if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) )
+    source = tv->track()->firstSource();
+
+  if( source ) {
+    KDialogBase dlg( KDialogBase::Plain,
+		     i18n("Edit Audio Track Source"),
+		     KDialogBase::Ok|KDialogBase::Cancel,
+		     KDialogBase::Ok,
+		     this,
+		     0,
+		     true,
+		     true );
+    QVBoxLayout* lay = new QVBoxLayout( dlg.plainPage() );
+    lay->setMargin( 0 );
+    lay->setSpacing( KDialog::spacingHint() );
+    lay->setAutoAdd( true );
+//     (void)new QLabel( i18n("<p>Here you may change the used part of the source. "
+// 			   "Drag the start or end offset of the highlighted part "
+// 			   "to cut the source at the beginning or the end."),
+// 		      dlg.plainPage() );
+    K3bAudioDataSourceEditWidget* editW = new K3bAudioDataSourceEditWidget( dlg.plainPage() );
+    editW->loadSource( source );
+    if( dlg.exec() == QDialog::Accepted )
+      editW->saveSource();
   }
 }
 
@@ -830,10 +872,12 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
   if( numSources == 1 && numTracks == 0 ) {
     m_popupMenu->insertSeparator();
     m_actionSplitSource->plug( m_popupMenu );
+    m_actionEditSource->plug( m_popupMenu );
   }
   else if( numTracks == 1 && numSources == 0 ) {
     m_popupMenu->insertSeparator();
     m_actionSplitTrack->plug( m_popupMenu );
+    m_actionEditSource->plug( m_popupMenu );
   }
   else if( numTracks > 1 ) {
     m_popupMenu->insertSeparator();

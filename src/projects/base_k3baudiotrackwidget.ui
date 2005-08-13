@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>394</width>
-            <height>185</height>
+            <width>386</width>
+            <height>274</height>
         </rect>
     </property>
     <property name="caption">
@@ -20,155 +20,185 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
         <widget class="QTabWidget">
             <property name="name">
-                <cstring>tabWidget2</cstring>
+                <cstring>m_mainTab</cstring>
             </property>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>CD-Text</string>
+                    <string>C&amp;D-Text</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="KLineEdit" row="2" column="1">
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>m_editArranger</cstring>
+                            <cstring>layout9</cstring>
                         </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KLineEdit" row="4" column="1">
+                                <property name="name">
+                                    <cstring>m_editSongwriter</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="4" column="0">
+                                <property name="name">
+                                    <cstring>textLabel4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Songwriter:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editSongwriter</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="3" column="1">
+                                <property name="name">
+                                    <cstring>m_editArranger</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="3" column="3">
+                                <property name="name">
+                                    <cstring>m_editComposer</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="5" column="1" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>m_editMessage</cstring>
+                                </property>
+                            </widget>
+                            <widget class="Line" row="1" column="0" rowspan="1" colspan="4">
+                                <property name="name">
+                                    <cstring>line2</cstring>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>HLine</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0" rowspan="2" colspan="1">
+                                <property name="name">
+                                    <cstring>textLabel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Arranger:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editArranger</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="2" rowspan="2" colspan="1">
+                                <property name="name">
+                                    <cstring>textLabel5</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Composer:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editComposer</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="5" column="0">
+                                <property name="name">
+                                    <cstring>textLabel8</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Message:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editMessage</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_editTitle</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="2">
+                                <property name="name">
+                                    <cstring>textLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Performer:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editPerformer</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="4" column="2">
+                                <property name="name">
+                                    <cstring>textLabel6</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;ISRC:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editIsrc</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Title:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>m_editTitle</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="4" column="3">
+                                <property name="name">
+                                    <cstring>m_editIsrc</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="3">
+                                <property name="name">
+                                    <cstring>m_editPerformer</cstring>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
-                    <widget class="KLineEdit" row="0" column="3">
+                    <spacer>
                         <property name="name">
-                            <cstring>m_editPerformer</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="2">
-                        <property name="name">
-                            <cstring>textLabel5</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Composer:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editComposer</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>textLabel3</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Arranger:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editArranger</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="0" column="0">
-                        <property name="name">
-                            <cstring>textLabel1</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Title:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editTitle</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KLineEdit" row="2" column="3">
-                        <property name="name">
-                            <cstring>m_editComposer</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KLineEdit" row="4" column="1" rowspan="1" colspan="3">
-                        <property name="name">
-                            <cstring>m_editMessage</cstring>
-                        </property>
-                    </widget>
-                    <widget class="Line" row="1" column="0" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>line2</cstring>
-                        </property>
-                        <property name="frameShape">
-                            <enum>HLine</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>Sunken</enum>
+                            <cstring>spacer4</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Vertical</enum>
                         </property>
-                    </widget>
-                    <widget class="QLabel" row="0" column="2">
-                        <property name="name">
-                            <cstring>textLabel2</cstring>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
                         </property>
-                        <property name="text">
-                            <string>&amp;Performer:</string>
+                        <property name="sizeHint">
+                            <size>
+                                <width>350</width>
+                                <height>50</height>
+                            </size>
                         </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editPerformer</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="3" column="0">
-                        <property name="name">
-                            <cstring>textLabel4</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Songwriter:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editSongwriter</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KLineEdit" row="0" column="1">
-                        <property name="name">
-                            <cstring>m_editTitle</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KLineEdit" row="3" column="1">
-                        <property name="name">
-                            <cstring>m_editSongwriter</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="3" column="2">
-                        <property name="name">
-                            <cstring>textLabel6</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;ISRC:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editIsrc</cstring>
-                        </property>
-                    </widget>
-                    <widget class="KLineEdit" row="3" column="3">
-                        <property name="name">
-                            <cstring>m_editIsrc</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="4" column="0">
-                        <property name="name">
-                            <cstring>textLabel8</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Message:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>m_editMessage</cstring>
-                        </property>
-                    </widget>
-                </grid>
+                    </spacer>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Options</string>
+                    <string>Opt&amp;ions</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -214,7 +244,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Indices</string>
+                    <string>I&amp;ndices</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -334,7 +364,7 @@
                                         <cstring>m_checkModifyAllIndex0</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Modify Index 0 for all tracks. Gap size:</string>
+                                        <string>Modify Index &amp;0 for all tracks. Gap size:</string>
                                     </property>
                                 </widget>
                                 <widget class="K3bMsfEdit">
@@ -407,7 +437,7 @@
 </customwidgets>
 <images>
     <image name="image0">
-        <data format="PNG" length="881">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000033849444154388dad9431681c471486bf3353bc05096641c52d38700711e88a1417111772544890e6888b33b848828ba448235205dcb88ae354c6659242e0c64429ecd885402914a43477074a4e27706003173815821dd0c10ec4b0af58508ad149bac488147ab0c5ecce7cf3cddb7fb7d2dfeb43091858bcb178c21554bfdbaf543add0e6284172f5f9c34179a38efc85d4ef63afb5f10ef3da3e188deefbd20785a468cb07863f1e4f90fcf4912259e87a2f434014a2512a140898c20281821d7302e5022847408ac0bbd5ff51cac6518b8b123aec368fc13793e02947856c90bc11d09f95801219e83c6bc8204809660638893e993183161463ece294a8ffe3d023cf1acb03fb0f4363d83030f4c6c84da82d0ba63797719acd1009ff91778629cf98c264a5106e8ce366c7cef026a46a82f58c44076a41cfea97cf7b5a3f591e5e34f052b01fe46e3c844502af12cec0fe414aaac7c58a5d5169204d42894093b9b051beb8ead1f1db5eb3556db3162fc14f8dac4b8280b2281bc10765ffa33e8279f0bc95b1e351e3d16b69ee5dcbe13f1d9175540d878ea517fdea8371a1728de09e91f1e6b2dadb620e2c3a2d7966f1f29e981273f86b57b31bded3077f0ca62651a3c6d6c20730a2849edf4f8a7d0c70f3ce981c7ce094bcb0233058d66a065878a96d3e46b178d05988cad849eeab1e5f103253d081b8a40723d229e01cc0426c865c618886c98981e2994313bbf104cad50ad5adc91e7e1fd8cfddf62b261589bd4a2cb5391abd298576a6f0b877f293b9b05b7efc6e4c7caea8a1057231ede0777e8f9666d84aa62e78466b32077d3afef3f3d46a0d5b6006cac3b767ece59bb17d35886c67b395f7e55c7562dde7bb45456db55ea0b5c6e5c9c6eb2b402de59369e3a9e3c72f4b685e63b821ac886193a563001b0bfeb496f2558112e86eefccb1b674426ec2ca2b4ee0a325763eb5948437a706e63e78456bb4677d7e355a104379e6ec599f16838221d82c417e06d61f5833a835739f951b85fafc5349a39f50558bd9520a5a064a4836970a5d3ed7073e9e609069aef87ec8a70f6f3c780989094c9f143296204ef211d289953bcbbf0b8bfd70738b9eaeb2c15575dd7c408fd6ebf72e5602d43743addce95c1fb7bfdca3fdcb3ae17a3e19dbf0000000049454e44ae426082</data>
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
     </image>
 </images>
 <connections>
@@ -439,13 +469,6 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>k3baudioeditorwidget.h</includehint>
     <includehint>k3bmsfedit.h</includehint>
     <includehint>k3bmsfedit.h</includehint>

@@ -46,16 +46,18 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
 			      frame ), 0, 0, 0, 1 );
   layout->addMultiCellWidget( m_editorWidget, 1, 1, 0, 1 );
   layout->addWidget( m_msfEdit, 2, 1 );
-  layout->addWidget( new QLabel( i18n("Remaining length of split track:"), frame ), 2, 0 );
+  layout->addWidget( new QLabel( i18n("Split track at:"), frame ), 2, 0 );
   layout->setColStretch( 0, 1 );
 
   // load the track
   m_editorWidget->setLength( m_track->length() );
   m_msfEdit->setValue( m_track->length().lba() / 2 );
+
+  // default split
   m_firstRange = m_editorWidget->addRange( 0, m_track->length().lba() / 2-1, 
-					   true, false, Qt::red );
+					   true, false, colorGroup().highlight() );
   m_secondRange = m_editorWidget->addRange( m_track->length().lba() / 2, m_track->length()-1, 
-					    true, false, Qt::blue );
+					    true, false, colorGroup().base() );
 
 
   connect( m_editorWidget, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),

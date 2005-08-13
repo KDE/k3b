@@ -21,6 +21,8 @@
 #include <qcursor.h>
 
 
+// TODO: add tooltips for ranges and labels
+
 class K3bAudioEditorWidget::Range
 {
 public:
@@ -87,7 +89,7 @@ K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent, const char* name )
     m_draggedRange(0),
     m_draggedMarker(0)
 {
-  setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+  setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
   setFrameStyle( StyledPanel|Sunken );
   setMouseTracking(true);
   setCursor( Qt::PointingHandCursor );
@@ -108,8 +110,10 @@ K3bAudioEditorWidget::~K3bAudioEditorWidget()
 QSize K3bAudioEditorWidget::minimumSizeHint() const
 {
   constPolish();
-  // some fixed height
-  return QSize( -1, 40 + 2*frameWidth() );
+  // some fixed height minimum and enough space for a tickmark every minute
+  // FIXME: this is bad for long sources and there might be 60 minutes sources!
+  return QSize( 2*m_margin + 2*frameWidth() + (m_length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" ), 
+		2*m_margin + 12 /*12 for the tickmarks */ + fontMetrics().height() + 2*frameWidth() );
 }
 
 
@@ -156,6 +160,9 @@ bool K3bAudioEditorWidget::modifyRange( int identifier, const K3b::Msf& start, c
     if( start > end )
       return false;
 
+    if( end > m_length )
+      return false;
+
     int x1 = QMIN( fromPosToX( range->start ), fromPosToX( start ) );
     int x2 = QMAX( fromPosToX( range->end ), fromPosToX( end ) );
 
@@ -165,7 +172,7 @@ bool K3bAudioEditorWidget::modifyRange( int identifier, const K3b::Msf& start, c
     // this is faster then resorting the hole list
     m_ranges.removeRef( range );
     m_ranges.inSort( range );
-
+    
     // repaint only the part of the range
     QRect rect = contentsRect();
     rect.setLeft( x1 );
@@ -302,23 +309,26 @@ void K3bAudioEditorWidget::drawContents( QPainter* p )
     drawMarker( &pixP, *it );
 
 
-  // draw the timeline
-  // FIXME: variable height
-  pixP.drawLine( m_margin, m_margin, m_margin, 
-		 contentsRect().height()-m_margin );
-  pixP.drawLine( m_margin, 30, 
-		 contentsRect().width()-m_margin, 30 );
-  pixP.drawLine( contentsRect().width()-m_margin, m_margin, 
-		 contentsRect().width()-m_margin, contentsRect().height()-m_margin );
+  // left vline
+  pixP.drawLine( contentsRect().left() + m_margin, contentsRect().top() + m_margin, 
+		 contentsRect().left() + m_margin, contentsRect().bottom() - m_margin );
+
+  // timeline
+  pixP.drawLine( contentsRect().left() + m_margin, contentsRect().bottom() - m_margin, 
+		 contentsRect().right() - m_margin, contentsRect().bottom() - m_margin );
+
+  // right vline
+  pixP.drawLine( contentsRect().right() - m_margin, contentsRect().top() + m_margin, 
+		 contentsRect().right() - m_margin, contentsRect().bottom() - m_margin );
 
   // draw the timemark things every second
-  // FIXME: variable height
   // FIXME: seconds if enough space
   int pos = 1;
+  int markerVPos = contentsRect().bottom() - m_margin;
   while( pos*60*75 < m_length ) {
     int x = fromPosToX( pos*60*75 );
-    pixP.drawLine( x, 30, x, 25 );
-    pixP.drawText( x, 24, QString::number(pos) );
+    pixP.drawLine( x, markerVPos, x, markerVPos-5 );
+    pixP.drawText( x, markerVPos-6, QString::number(pos) );
     ++pos;
   }
 
