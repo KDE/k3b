@@ -5,6 +5,8 @@
  * Fixed Index 0 (Pregap) handling in audio cue files.
  * Improved handling of broken cue files: K3b now searches the directory for image files that could fit
    the cue file in case the FILE entry is bogus.
+ * Always try to create a new session in case the old one has been imported regardless of the inserted
+   medium's free space.
 
 0.12.3
 ======

@@ -1100,7 +1100,7 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device )
     clearImportedSession();
     
     // set multisession option
-    if( m_multisessionMode != FINISH && m_multisessionMode != AUTO )
+    if( m_multisessionMode != FINISH )
       m_multisessionMode = CONTINUE;
     
     // since in iso9660 it is possible that two files share it's data
