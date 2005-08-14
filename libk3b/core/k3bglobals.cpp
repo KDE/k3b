@@ -203,7 +203,7 @@ K3bVersion K3b::kernelVersion()
   K3bVersion v;
   utsname unameinfo;
   if( ::uname(&unameinfo) == 0 ) {
-    v = QString::fromLocal8Bit( unameinfo.release, sizeof(unameinfo.release) );
+    v = QString::fromLocal8Bit( unameinfo.release );
     kdDebug() << "linux kernel version: " << v << endl;
   }
   else
@@ -223,7 +223,7 @@ QString K3b::systemName()
   QString v;
   utsname unameinfo;
   if( ::uname(&unameinfo) == 0 ) {
-    v = QString::fromLocal8Bit( unameinfo.sysname, sizeof(unameinfo.sysname) );;
+    v = QString::fromLocal8Bit( unameinfo.sysname );
   }
   else
     kdError() << "could not determine system name." << endl;
