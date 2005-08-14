@@ -387,8 +387,8 @@ void K3bCdCopyDialog::slotToggleAll()
 
    m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
-	m_buttonStart->setEnabled( (k3bcore->deviceManager()->dvdReader().count() > 0) && (dev || m_checkOnlyCreateImage->isChecked()) );
-
+   m_buttonStart->setEnabled( m_comboSourceDevice->selectedDevice() && 
+			      (dev || m_checkOnlyCreateImage->isChecked()) );
 }
 
 

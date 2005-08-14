@@ -874,9 +874,11 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
 
   m_writerSelectionWidget->loadConfig( c );
 
-  QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image" ) );
-  if( QFile::exists( image ) )
-    m_editImagePath->setURL( image );
+  if( !d->imageForced ) {
+    QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image" ) );
+    if( QFile::exists( image ) )
+      m_editImagePath->setURL( image );
+  }
 
   QString imageType = c->readEntry( "image type", "auto" );
   int x = 0;
