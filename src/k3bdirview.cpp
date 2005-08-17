@@ -334,7 +334,7 @@ void K3bDirView::slotMountFinished( const QString& mp )
   }
 }
 
-void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p )
+void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoint& p )
 {
   KAction* a = k3bappcore->appDeviceManager()->actionCollection()->action( "device_popup" );
   if( KActionMenu* m = dynamic_cast<KActionMenu*>(a) )
