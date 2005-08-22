@@ -1,3 +1,7 @@
+
+#ifndef _TESTHAL_H_
+#define _TESTHAL_H_
+
 #include "../libk3bdevice/k3bhalconnection.h"
 #include <qlabel.h>
 
@@ -28,3 +32,5 @@ private slots:
 private:
   K3bDevice::HalConnection hal;
 };
+#endif
+
