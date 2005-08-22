@@ -68,7 +68,7 @@ class K3bVcdJob : public K3bBurnJob
 
         void xmlGen();
         void vcdxBuild();
-        void parseInformation( QString );
+        void parseInformation( const QString& );
         void startWriterjob();
 
         int m_copies;

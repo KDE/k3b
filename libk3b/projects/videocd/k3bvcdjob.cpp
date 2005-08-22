@@ -504,7 +504,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     }
 }
 
-void K3bVcdJob::parseInformation( QString text )
+void K3bVcdJob::parseInformation( const QString &text )
 {
     // parse warning
     if ( text.contains( "mpeg user scan data: one or more BCD fields out of range for" ) ) {
