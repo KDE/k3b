@@ -259,7 +259,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
     QDomElement xml_root;
 
     // do every line
-    for ( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+    for ( QStringList::Iterator str = lines.begin(); str != lines.end(); ++str ) {
         *str = ( *str ).stripWhiteSpace();
 
         emit debuggingOutput( "vcdxbuild", *str );

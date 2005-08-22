@@ -71,7 +71,8 @@ void K3bDebuggingOutputDialog::setOutput( const QMap<QString, QStringList>& map 
     for( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
        QStringList lines = QStringList::split( "\n", *it );
        // do every line
-       for( QStringList::ConstIterator str = lines.begin(); str != lines.end(); str++ )
+       QStringList::ConstIterator end( lines.end() );
+       for( QStringList::ConstIterator str = lines.begin(); str != end; ++str )
 	 debugView->append( *str + "\n" );
     }
     m_paragraphMap[itMap.key()] = debugView->paragraphs();

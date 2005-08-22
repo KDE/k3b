@@ -87,8 +87,8 @@ void K3bVideoCdInfo::slotParseOutput( KProcess*, char* output, int len )
 
     // split to lines
     QStringList lines = QStringList::split( "\n", buffer );
-
-    for ( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+    QStringList::Iterator end( lines.end());
+    for ( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
 
         if ( ( *str ).contains( "<?xml" ) )
             m_isXml = true;

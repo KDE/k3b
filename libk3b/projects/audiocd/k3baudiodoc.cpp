@@ -175,7 +175,8 @@ void K3bAudioDoc::addUrls( const KURL::List& urls )
 void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 {
   KURL::List allUrls = extractUrlList( urls );
-  for( KURL::List::iterator it = allUrls.begin(); it != allUrls.end(); it++, position++ ) {
+  KURL::List::iterator end( allUrls.end());
+  for( KURL::List::iterator it = allUrls.begin(); it != end; it++, position++ ) {
     KURL& url = *it;
     if( url.path().right(3).lower() == "cue" ) {
       // try adding a cue file
@@ -307,7 +308,8 @@ void K3bAudioDoc::addSources( K3bAudioTrack* parent,
 	    << urls.first().path() << ", " 
 	    << sourceAfter << " )" << endl;
   KURL::List allUrls = extractUrlList( urls );
-  for( KURL::List::const_iterator it = allUrls.begin(); it != allUrls.end(); it++ ) {
+  KURL::List::const_iterator end(allUrls.end());
+  for( KURL::List::const_iterator it = allUrls.begin(); it != end; ++it ) {
     if( K3bAudioFile* file = createAudioFile( *it ) ) {
       if( sourceAfter )
 	file->moveAfter( sourceAfter );

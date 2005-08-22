@@ -193,7 +193,8 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
     QDomElement xml_root;
 
     // do every line
-    for ( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+    QStringList::Iterator end( lines.end());
+    for ( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
         *str = ( *str ).stripWhiteSpace();
 
         emit debuggingOutput( "vcdxrip", *str );

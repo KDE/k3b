@@ -119,7 +119,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *){
     QStringList errorLines = QStringList::split( "\n", m_errorBuffer );
     if( !m_firstProbeDone ) {
         // check dvd
-        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
+        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); ++str ) {
             kdDebug() << (*str) << endl;
             if( !(*str).contains("tcprobe") || !(*str).contains("DVD image/device") ) {
                 continue;
@@ -140,7 +140,8 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *){
         }
         // chekc
         QString titles; // errorLines[ m_titleLineIndex ];
-        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
+	QStringList::Iterator end( errorLines.end() );
+        for( QStringList::Iterator str = errorLines.begin(); str != end; ++str ) {
             if( (*str).contains("DVD title") ) {
                 titles = (*str);
                 break;
@@ -165,7 +166,7 @@ void K3bTcWrapper::slotTcprobeExited( KProcess *){
     if( m_currentTitle <= m_allTitle ){
         K3bDvdContent con( parseTcprobe() );
         QString titles; // = errorLines[ m_titleLineIndex ];
-        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); str++ ) {
+        for( QStringList::Iterator str = errorLines.begin(); str != errorLines.end(); ++str ) {
             if( (*str).contains("DVD title") ) {
                 titles = (*str);
                 break;
@@ -207,7 +208,7 @@ K3bDvdContent K3bTcWrapper::parseTcprobe(){
     // check content
     int dvdreaderIndex = 0;
     K3bDvdContent title;
-    for( QStringList::Iterator str = outputLines.begin(); str != outputLines.end(); str++ ) {
+    for( QStringList::Iterator str = outputLines.begin(); str != outputLines.end(); ++str ) {
         kdDebug() << (*str) << endl;
         if( (*str).contains( "dvd_reader.c" ) ) {
             int index = (*str).find( ")" );

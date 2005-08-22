@@ -723,7 +723,8 @@ void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int 
     int xpos = m_noItemHMargin;
     int ypos = m_noItemVMargin + p->fontMetrics().height();
 
-    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+    QStringList::Iterator end ( lines.end() );
+    for( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
       p->drawText( xpos, ypos, *str );
       ypos += p->fontMetrics().lineSpacing();
     }

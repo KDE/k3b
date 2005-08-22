@@ -78,7 +78,7 @@ void K3bDivXTcprobeAc3::slotParsingExited( KProcess* ){
     int lindex = 0;
     bool nextTrack = false;
     QString bitrate = "";
-    for( QStringList::Iterator str = lines.begin(); str != lines.end(); str++ ) {
+    for( QStringList::Iterator str = lines.begin(); str != lines.end(); ++str ) {
         if ( nextTrack ){
             nextTrack = false;
             int index = (*str).find( "bitrate=" );
