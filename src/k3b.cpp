@@ -807,7 +807,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
   switch ( KMessageBox::warningYesNoCancel( this, 
 					    i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
 					    i18n("Closing Project"), 
-					    KGuiItem( i18n("&Save"), "filesave" ),
+					    KStdGuiItem::save(),
 					    KGuiItem( i18n("&Discard"), "editshred" ) ) )
     {
     case KMessageBox::Yes:
