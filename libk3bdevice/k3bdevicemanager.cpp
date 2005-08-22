@@ -402,7 +402,7 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 #if __FreeBSD_version < 500100
 	    dev += "c";
 #endif
-	    if (dev1 != "" && dev2 != "" && dev.startsWith("/dev/cd"))
+	    if (!dev1.isEmpty() && !dev2.isEmpty() && dev.startsWith("/dev/cd"))
 	    {
 	      Device* device = new Device(dev.latin1());
 	      device->m_bus = bus;
