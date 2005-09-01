@@ -6,6 +6,7 @@ Icon=k3b
 Terminal=false
 Name=K3b
 Name[hi]=के3बी
+Name[xx]=xxK3bxx
 MimeType=application/x-cue;
 
 Encoding=UTF-8

@@ -22,4 +22,5 @@ Description[sr]=kioslave који омогућава копирање фајло
 Description[sr@Latn]=kioslave koji omogućava kopiranje fajlova sa video DVD-a (uključujući dešifrovanje)
 Description[sv]=En I/O-slav som gör det möjligt att kopiera filer från en video-dvd (inklusive avkodning)
 Description[tr]= Bir Video DVD'sinden dosyaların kopyalanmasını (ve kodunun çözülmesini) sağlayan kioslave
+Description[xx]=xxA kioslave that allows files to be copied from a Video DVD (including decryption)xx
 Description[zh_CN]=允许从视频 DVD(包括加密影碟)中复制文件的 kioslave
