@@ -1,9 +1,9 @@
-Howto create a K3b release (hopefully in the future but not as of this writing since
-the whole stable brach thing is not resolved yet.)
+Howto create a K3b release (stable branch)
 
 1. create a package from the stable branch using the createPackage.sh script:
    createPackage.sh -a k3b -av 0.12 -ab branches/stable/extragear/multimedia --notoplevel -ib branches/stable/i10n
       -is extragear-multimedia --pofiles "k3b libk3b libk3bdevice k3bsetup" --postprocess postprocessk3b.sh --split
+      --admin /branches/KDE/3.4/kde-common/admin
       
 2. Make sure the version in src/main.cpp, k3b.lsm, README, INSTALL is valid.
 
@@ -17,7 +17,7 @@ the whole stable brach thing is not resolved yet.)
 
 6. Create a news entry on www.k3b.org and update the download page.
 
-7. Promote the release on www.kde-apps.org and freshmeat.net.
+7. Promote the release on www.kde-apps.org and freshmeat.net (the latter may also be done with releaseforge)
 
 8. Send an announcement email to:
     k3b-user@lists.sourceforge.net
@@ -26,4 +26,4 @@ the whole stable brach thing is not resolved yet.)
     kde-announce@kde.org
  
 
-(The whole idea of this readme file is inspired by the amaroK people and their incredible project management.)
+(The whole idea of this readme file is inspired by the amaroK people and their smooth project management.)
