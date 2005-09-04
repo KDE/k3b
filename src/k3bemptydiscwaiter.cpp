@@ -133,6 +133,9 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   d->forced = false;
   d->canceled = false;
 
+  //
+  // We do not cover every case here but just the ones that really make sense
+  //
   if( (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD) &&
 	   (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_CD) )
     d->wantedMediaTypeString = i18n("CD-R(W) or DVD±R(W)");
@@ -144,9 +147,6 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
     d->wantedMediaTypeString = i18n("CD-R(W)");
 
   if( message.isEmpty() ) {
-    //
-    // We do not cover every case here but just the once that really make sense
-    //
     if( (d->wantedMediaState & K3bDevice::STATE_COMPLETE) && (d->wantedMediaState & K3bDevice::STATE_INCOMPLETE) )
       d->labelRequest->setText( i18n("Please insert a complete or appendable %4 medium "
 				     "into drive<p><b>%1 %2 (%3)</b>.")
@@ -247,8 +247,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 
   if( dh->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
     d->labelFoundMedia->setText( i18n("No media") );
-    showDialog();
-    QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
+    continueWaiting();
     return;
   }
 
@@ -283,32 +282,40 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 
       if( dh->diskInfo().diskState() == K3bDevice::STATE_EMPTY ) {
-
-	// special case for the formatting job which wants to preformat itself!
-	if( d->wantedMediaState & K3bDevice::STATE_COMPLETE &&
-	    d->wantedMediaState & K3bDevice::STATE_EMPTY ) {
-	  kdDebug() << "(K3bEmptyDiscWaiter) special case: DVD*RW for the formatting job." << endl;
-	  finishWaiting( K3bDevice::MEDIA_DVD_PLUS_RW );
+	if( d->wantedMediaState & K3bDevice::STATE_EMPTY ) {
+	  // special case for the formatting job which wants to preformat on it's own!
+	  if( d->wantedMediaState & K3bDevice::STATE_COMPLETE &&
+	      d->wantedMediaState & K3bDevice::STATE_EMPTY ) {
+	    kdDebug() << "(K3bEmptyDiscWaiter) special case: DVD+RW for the formatting job." << endl;
+	    finishWaiting( K3bDevice::MEDIA_DVD_PLUS_RW );
+	  }
+	  else {
+	    // empty - preformat without asking
+	    prepareErasingDialog();
+	    
+	    K3bDvdFormattingJob job( this );
+	    job.setDevice( d->device );
+	    job.setQuickFormat( true );
+	    job.setForce( false );
+	    job.setForceNoEject( true );
+	    
+	    d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
+	    connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
+	    connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+	    connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
+	    job.start(dh);
+	    d->erasingInfoDialog->exec(true);
+	  }
 	}
 	else {
-	  // empty - preformat without asking
-	  prepareErasingDialog();
-
-	  K3bDvdFormattingJob job( this );
-	  job.setDevice( d->device );
-	  job.setQuickFormat( true );
-	  job.setForce( false );
-	  job.setForceNoEject( true );
-
-	  d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
-	  connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-	  connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
-	  connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
-	  job.start(dh);
-	  d->erasingInfoDialog->exec(true);
+	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: empty DVD+RW where a non-empty was requested." << endl;
+	  continueWaiting();
 	}
       }
       else {
+	//
+	// We have a DVD+RW medium which is already preformatted
+	//
 	if( d->wantedMediaState == K3bDevice::STATE_EMPTY ) {
 	  // check if the media contains a filesystem
 	  d->device->open();
@@ -329,15 +336,15 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	  }
 	  else {
 	    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD+RW overwrite" << endl;
-	    showDialog();
-	    connect( K3bDevice::eject( d->device ),
-		     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		     this,
-		     SLOT(startDeviceHandler()) );
+	    continueWaiting();
 	  }
 	}
-	else {  // complete or appendable media wanted
-	  // the isofs will be grown
+
+	//
+	// We want a DVD+RW not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
+	// are handled the same everywhere (isofs is grown).
+	//
+	else {
 	  finishWaiting( K3bDevice::MEDIA_DVD_PLUS_RW );
 	}
       }
@@ -357,8 +364,8 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 				    K3bDevice::MEDIA_DVD_RW_SEQ|
 				    K3bDevice::MEDIA_DVD_RW_OVWR) ) &&
 	     (dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW|
-					      K3bDevice::MEDIA_DVD_RW_SEQ|
-					      K3bDevice::MEDIA_DVD_RW_OVWR) ) ) {
+					    K3bDevice::MEDIA_DVD_RW_SEQ|
+					    K3bDevice::MEDIA_DVD_RW_OVWR) ) ) {
 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD-R(W) as wanted." << endl;
 
@@ -373,39 +380,61 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	finishWaiting( dh->diskInfo().currentProfile() );
       }
 
-      // DVD-RW in restr. overwrite may just------  be overwritten
+      // DVD-RW in restr. overwrite may just be overwritten
       else if( (dh->diskInfo().currentProfile() & K3bDevice::MEDIA_DVD_RW_OVWR) &&
-	  (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) &&
-	  (d->wantedMediaState == K3bDevice::STATE_EMPTY) ) {
+	       (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+	if( d->wantedMediaState == K3bDevice::STATE_EMPTY ) {
 
-	kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW restricted overwrite." << endl;
+	  kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW restricted overwrite." << endl;
+	  
+	  // check if the media contains a filesystem
+	  d->device->open();
+	  K3bIso9660 isoF( d->device );
+	  bool hasIso = isoF.open();
+	  d->device->close();
+	  
+	  if( formatWithoutAsking ||
+	      !hasIso ||
+	      KMessageBox::warningContinueCancel( parentWidgetToUse(),
+						  i18n("Found %1 media in %2 - %3. "
+						       "Should it be overwritten?")
+						  .arg(K3bDevice::mediaTypeString(dh->diskInfo().currentProfile()))
+						  .arg(d->device->vendor())
+						  .arg(d->device->description()),
+						  i18n("Found %1").arg("DVD-RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
+	    finishWaiting( K3bDevice::MEDIA_DVD_RW_OVWR );
+	  }
+	  else {
+	    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW overwrite." << endl;
+	    continueWaiting();
+	  }
+	}
 
-	// check if the media contains a filesystem
-	d->device->open();
-	K3bIso9660 isoF( d->device );
-	bool hasIso = isoF.open();
-	d->device->close();
+	else if( !(d->wantedMediaState & K3bDevice::STATE_EMPTY ) ) {
+	  // check if the media contains a filesystem
+	  d->device->open();
+	  K3bIso9660 isoF( d->device );
+	  bool hasIso = isoF.open();
+	  d->device->close();
 
-	if( formatWithoutAsking ||
-	    !hasIso ||
-	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
-					i18n("Found %1 media in %2 - %3. "
-					     "Should it be overwritten?")
-					.arg(K3bDevice::mediaTypeString(dh->diskInfo().currentProfile()))
-					.arg(d->device->vendor())
-					.arg(d->device->description()),
-					i18n("Found %1").arg("DVD-RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
+	  if( hasIso ) {
+	    finishWaiting( K3bDevice::MEDIA_DVD_RW_OVWR );
+	  }
+	  else {
+	    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: empty DVD-RW where a non-empty was requested." << endl;
+	    continueWaiting();
+	  }
+	}
+
+	//
+	// We want a DVD-RW overwrite not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
+	// are handled the same everywhere (isofs is grown).
+	//
+	else {
 	  finishWaiting( K3bDevice::MEDIA_DVD_RW_OVWR );
 	}
-	else {
-	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW overwrite." << endl;
-	  showDialog();
-	  connect( K3bDevice::eject( d->device ),
-		   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		   this,
-		   SLOT(startDeviceHandler()) );
-	}
       }
+
       // formatting
       else if( ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) &&
 		 (dh->diskInfo().currentProfile() & K3bDevice::MEDIA_DVD_RW_SEQ) &&
@@ -459,18 +488,12 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	}
 	else {
 	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW formatting." << endl;
-	  showDialog();
-	  connect( K3bDevice::eject( d->device ),
-		   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		   this,
-		   SLOT(startDeviceHandler()) );
+	  continueWaiting();
 	}
       }
       else {
 	kdDebug() << "(K3bEmptyDiscWaiter) ------ nothing useful found." << endl;
-
-	showDialog();
-	QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
+	continueWaiting();
       }
     } // --- DVD-RW ------
 
@@ -506,7 +529,9 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	  KMessageBox::questionYesNo( parentWidgetToUse(),
 				      i18n("Found rewritable media in %1 - %2. "
 					   "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
-				      i18n("Found Rewritable Disk"), KGuiItem(i18n("&Erase"),"cdrwblank"), KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {
+				      i18n("Found Rewritable Disk"), 
+				      KGuiItem(i18n("&Erase"), "cdrwblank"), 
+				      KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {
 
 
 	prepareErasingDialog();
@@ -536,19 +561,12 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
       }
       else {
 	kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no CD-RW overwrite." << endl;
-	showDialog();
-	connect( K3bDevice::eject( d->device ),
-		 SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		 this,
-		 SLOT(startDeviceHandler()) );
+	continueWaiting();
       }
     }
     else {
-
       kdDebug() << "(K3bEmptyDiscWaiter) ------ nothing useful found." << endl;
-
-      showDialog();
-      QTimer::singleShot( 1000, this, SLOT(startDeviceHandler()) );
+      continueWaiting();
     }
   }
   else { // success == false
@@ -572,6 +590,16 @@ void K3bEmptyDiscWaiter::showDialog()
     setResult( 0 );
     show();
   }
+}
+
+
+void K3bEmptyDiscWaiter::continueWaiting()
+{
+  showDialog();
+  connect( K3bDevice::eject( d->device ),
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	   this,
+	   SLOT(startDeviceHandler()) );
 }
 
 
