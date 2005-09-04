@@ -27,6 +27,10 @@ class QObject;
  * instead of emitting the information signals
  * one has to use the emitXXX methods which will post
  * K3bProgressInfoEvents to the eventhandler
+ *
+ * As in K3bJob it is important to call emitStarted and emitFinished.
+ *
+ * See K3bJob for more information.
  */
 class LIBK3B_EXPORT K3bThread : public QThread
 {

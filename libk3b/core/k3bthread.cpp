@@ -30,9 +30,12 @@ void K3bThread::waitUntilFinished()
 {
   QPtrListIterator<K3bThread> it( s_threads );
   while( it.current() ) {
+    kdDebug() << "Waiting for thread " << it.current() << endl;
     it.current()->wait();
     ++it;
   }
+
+  kdDebug() << "Thread waiting done." << endl;
 }
 
 

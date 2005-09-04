@@ -145,7 +145,8 @@ void K3bAudioEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField, const
 
 void K3bAudioEncoder::finishEncoder()
 {
-  finishEncoderInternal();
+  if( isOpen() )
+    finishEncoderInternal();
 }
 
 

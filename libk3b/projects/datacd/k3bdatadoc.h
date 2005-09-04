@@ -166,6 +166,8 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   bool importSession( K3bDevice::Device* );
 
+  bool sessionImported() const;
+
   /**
    * Searches for an item by it's local path.
    *

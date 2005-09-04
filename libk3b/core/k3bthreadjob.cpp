@@ -74,7 +74,6 @@ void K3bThreadJob::start()
     if( !m_running ) {
       m_thread->setProgressInfoEventHandler(this);
       m_running = true;
-      jobStarted();
       m_thread->start();
     }
     else

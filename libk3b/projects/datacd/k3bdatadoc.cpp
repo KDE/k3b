@@ -870,6 +870,7 @@ void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
     m_sizeHandler->removeFile( removedItem );
 
   emit itemRemoved( removedItem );
+  emit changed();
 }
 
 
@@ -879,8 +880,8 @@ void K3bDataDoc::itemAddedToDir( K3bDirItem*, K3bDataItem* item )
   if( !item->isFromOldSession() )
     m_sizeHandler->addFile( item );
 
-  emit changed();
   emit itemAdded( item );
+  emit changed();
 }
 
 
@@ -1216,7 +1217,6 @@ void K3bDataDoc::clearImportedSession()
 	// this imported dir is not needed anymore
 	// since it is empty
 	m_oldSession.remove();
-	//	emit itemRemoved( item );
 	delete dir;
       }
       else {
@@ -1237,8 +1237,6 @@ void K3bDataDoc::clearImportedSession()
     }
     else {
       m_oldSession.remove();
-      //      m_sizeHandler->removeFile( item->localPath() );
-      //      emit itemRemoved( item );
       delete item;
     }
 
@@ -1326,12 +1324,8 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
 {
   m_bootImages.removeRef(item);
   if( m_bootImages.isEmpty() ) {
-    //    emit itemRemoved( m_bootCataloge );
     delete m_bootCataloge;
     m_bootCataloge = 0;
-
-    // This is a little HACK that is need to prevent a crash in the K3bDataFileView
-    QTimer::singleShot( 0, this, SIGNAL(changed()) );
   }
 }
 
@@ -1340,5 +1334,12 @@ QValueList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) 
 {
 
 }
+
+
+bool K3bDataDoc::sessionImported() const
+{
+  return !m_oldSession.isEmpty();
+}
+
 
 #include "k3bdatadoc.moc"
