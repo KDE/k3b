@@ -704,8 +704,12 @@ void K3bDataJob::determineMultiSessionMode()
     // 3. space left on appendable media >= project size (otherwise no ms)
     // 4. size of the project >= size of the media*90% (fill up?)
     
+    int wantedMediaState = K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY;
+    if( d->doc->size() != d->doc->burningSize() ) // this means that an old session has been imported.
+      wantedMediaState = K3bDevice::STATE_INCOMPLETE;
+    
     int m = waitForMedia( d->doc->burner(), 
-			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
+			  wantedMediaState,
 			  K3bDevice::MEDIA_WRITABLE_CD );
     
     if( m < 0 )
@@ -730,18 +734,17 @@ void K3bDataJob::determineMultiSessionMode()
 
 void K3bDataJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
 {
-  // TODO: in the future we should also check the last session's datamode and reuse it for the next session
-
   const K3bDevice::DiskInfo& info = dh->diskInfo();
 
   if( info.appendable() ) {
     //
     // 3 cases:
     //  1. the project does not fit -> no multisession (resulting in asking for another media above)
+    //     Except if an old session has been imported.
     //  2. the project does fit and fills up the CD -> finish multisession
     //  3. the project does fit and does not fill up the CD -> continue multisession
     //
-    if( d->doc->size() > info.remainingSize().mode1Bytes() )
+    if( d->doc->size() > info.remainingSize().mode1Bytes() && d->doc->size() == d->doc->burningSize() )
       d->usedMultiSessionMode = K3bDataDoc::NONE;
     else if( d->doc->size() >= info.remainingSize().mode1Bytes()*9/10 )
       d->usedMultiSessionMode = K3bDataDoc::FINISH;
