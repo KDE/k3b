@@ -26,6 +26,7 @@ class KAction;
 class KPopupMenu;
 class QListViewItem;
 class QPoint;
+class QLineEdit;
 
 
 class K3bMovixView : public K3bView
@@ -42,6 +43,7 @@ class K3bMovixView : public K3bView
   void slotRemoveSubTitleItems();
   void showPropertiesDialog();
   void slotAddSubTitleFile();
+  void slotDocChanged();
 
  protected:
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
@@ -56,6 +58,8 @@ class K3bMovixView : public K3bView
   KAction* m_actionRemoveSubTitle;
   KAction* m_actionAddSubTitle;
   KPopupMenu* m_popupMenu;
+
+  QLineEdit* m_volumeIDEdit;
 };
 
 #endif

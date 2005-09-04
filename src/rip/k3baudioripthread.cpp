@@ -204,17 +204,17 @@ void K3bAudioRipThread::run()
     // initialize
     bool isOpen = true;
     if( d->encoder ) {
-      isOpen = d->encoder->openFile( d->fileType, filename, d->overallSectorsToRead );
-      
-      // here we use cd Title and Artist
-      d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.cdArtist );
-      d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.cdTitle );
-      d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.cdExtInfo );
-      d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
-      d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
-      d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
-      d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
-      d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
+      if( isOpen = d->encoder->openFile( d->fileType, filename, d->overallSectorsToRead ) ) {
+	// here we use cd Title and Artist
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.cdArtist );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.cdTitle );
+	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.cdExtInfo );
+	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
+	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
+	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
+	d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
+	d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
+      }
     }
     else {
       isOpen = d->waveFileWriter->open( filename );
@@ -304,19 +304,20 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
     bool isOpen = true;
     if( !m_singleFile ) {
       if( d->encoder ) {
-	isOpen = d->encoder->openFile( d->fileType, 
-				       filename, 
-				       m_useIndex0 ? d->toc[track-1].realAudioLength() : d->toc[track-1].length() );
+	if( isOpen = d->encoder->openFile( d->fileType, 
+					   filename, 
+					   m_useIndex0 ? d->toc[track-1].realAudioLength() : d->toc[track-1].length() ) ) {
 	
-	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.artists[track-1] );
-	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.titles[track-1] );
-	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.extInfos[track-1] );
-	d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustify( 2, '0' ) );
-	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
-	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
-	d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
-	d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
-	d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.artists[track-1] );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.titles[track-1] );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.extInfos[track-1] );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustify( 2, '0' ) );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
+	  d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
+	}
       }
       else {
 	isOpen = d->waveFileWriter->open( filename );

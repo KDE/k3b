@@ -22,6 +22,8 @@
 
 #include <k3bfillstatusdisplay.h>
 #include <k3bdatapropertiesdialog.h>
+#include <k3bprojectplugin.h>
+#include <k3btoolbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -32,6 +34,8 @@
 #include <kurl.h>
 
 #include <qlayout.h>
+#include <qlabel.h>
+#include <qlineedit.h>
 
 
 K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name )
@@ -67,6 +71,21 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
   m_actionProperties->plug( m_popupMenu );
   m_popupMenu->insertSeparator();
   //  k3bMain()->actionCollection()->action("file_burn")->plug( m_popupMenu );
+
+
+  addPluginButtons( K3bProjectPlugin::MOVIX_CD );
+
+  toolBox()->addStretch();
+
+  m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
+  toolBox()->addLabel( i18n("Volume Name:") );
+  toolBox()->addSpacing();
+  toolBox()->addWidget( m_volumeIDEdit );
+  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)), 
+	   m_doc,
+	   SLOT(setVolumeID(const QString&)) );
+
+  connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 }
 
 
@@ -160,6 +179,14 @@ void K3bMovixView::slotAddSubTitleFile()
 K3bProjectBurnDialog* K3bMovixView::newBurnDialog( QWidget* parent, const char* name )
 {
   return new K3bMovixBurnDialog( m_doc, parent, name, true );
+}
+
+
+void K3bMovixView::slotDocChanged()
+{
+  // do not update the editor in case it changed the volume id itself
+  if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
+    m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
 }
 
 #include "k3bmovixview.moc"

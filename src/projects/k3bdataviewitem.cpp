@@ -65,15 +65,6 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
   }
 
   if( column == 0 ) {
-    const QPixmap *pm = listView()->viewport()->backgroundPixmap();
-    if (pm && !pm->isNull())
-      {
-        _cg.setBrush(QColorGroup::Base, QBrush(backgroundColor(), *pm));
-        p->setBrushOrigin( -listView()->contentsX(), -listView()->contentsY() );
-      }
-    else if (isAlternate())
-      _cg.setColor(QColorGroup::Base, static_cast< KListView* >(listView())->alternateBackground());
-    
     QFontMetrics fm = p->fontMetrics();
 
     if( dataItem()->hideOnRockRidge() ) {
@@ -105,7 +96,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
     }
   }
 
-  KListViewItem::paintCell( p, _cg, column, width, align );
+  K3bListViewItem::paintCell( p, _cg, column, width, align );
 }
 
 
