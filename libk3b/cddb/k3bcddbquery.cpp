@@ -71,7 +71,7 @@ void K3bCddbQuery::queryMatch( const K3bCddbResultHeader& header )
 const QStringList& K3bCddbQuery::categories()
 {
   static QStringList s_cat = QStringList::split( ",", "rock,blues,misc,classical,"
-						 "country,data,folk,jazz,newage,reggea,soundtrack" );
+						 "country,data,folk,jazz,newage,reggae,soundtrack" );
   return s_cat;
 }
 
