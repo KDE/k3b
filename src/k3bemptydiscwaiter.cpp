@@ -593,6 +593,14 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
   }
 }
 
+void K3bEmptyDiscWaiter::continueWaiting()
+{
+  showDialog();
+  connect( K3bDevice::eject( d->device ),
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	   this,
+	   SLOT(startDeviceHandler()) );
+}
 
 void K3bEmptyDiscWaiter::showDialog()
 {
