@@ -37,6 +37,12 @@ K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
 
 K3bJob::~K3bJob()
 {
+  //
+  // Normally a job (or the user of a job should take care of this
+  // but we do this here for security reasons.
+  //
+  if( m_active )
+    jobFinished( false );
 }
 
 
