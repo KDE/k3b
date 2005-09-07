@@ -145,6 +145,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 
 K3bCdImageWritingDialog::~K3bCdImageWritingDialog()
 {
+  d->md5Job->cancel();
   delete d;
 }
 
