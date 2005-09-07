@@ -1154,7 +1154,8 @@ void K3bMainWindow::slotCurrentDocChanged()
       kdDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance." << endl;
   }
   else
-      k3bappcore->projectManager()->setActive( 0L );
+    k3bappcore->projectManager()->setActive( 0L );
+
   if( k3bappcore->projectManager()->isEmpty() ) {
     d->documentStack->raiseWidget( d->welcomeWidget );
     slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
