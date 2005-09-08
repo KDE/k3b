@@ -139,7 +139,11 @@ void K3bAudioJob::start()
       // there are none-DAO writers that are supported by cdrdao
       //
       if( !writer()->dao() && writingApp() == K3b::CDRECORD )
-        m_usedWritingMode = K3b::TAO;
+	if( !writer()->supportsRawWriting() )
+	  m_usedWritingMode = K3b::TAO;
+	else
+	  m_usedWritingMode = K3b::RAW;
+      }
       else {
 	//
         // there are a lot of writers out there which produce coasters
