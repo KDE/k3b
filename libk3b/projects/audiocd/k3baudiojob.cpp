@@ -135,11 +135,15 @@ void K3bAudioJob::start()
     if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
       //
       // DAO is always the first choice
-      // choose TAO if the user wants to use cdrecord since
+      // RAW second and TAO last
       // there are none-DAO writers that are supported by cdrdao
       //
-      if( !writer()->dao() && writingApp() == K3b::CDRECORD )
-        m_usedWritingMode = K3b::TAO;
+      if( !writer()->dao() && writingApp() == K3b::CDRECORD ) {
+	if( !writer()->supportsRawWriting() )
+	  m_usedWritingMode = K3b::TAO;
+	else
+	  m_usedWritingMode = K3b::RAW;
+      }
       else {
 	//
         // there are a lot of writers out there which produce coasters
