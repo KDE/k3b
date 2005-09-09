@@ -13,7 +13,7 @@ libk3b_la_LIBADD = 	core/libk3bcore.la \
 
 libk3b_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
-SUBDIRS = core plugin tools projects cddb jobs images
+SUBDIRS = core plugin tools projects cddb jobs 
 
 #pkgconfigdir = $(libdir)/pkgconfig
 #pkgconfig_DATA = libk3b.pc
