@@ -1,3 +1,28 @@
+
+dnl === check for resmgr - begin ============
+AC_ARG_WITH(
+	resmgr, 
+	AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), 
+	[ac_cv_use_resmgr=$withval], 
+	[ac_cv_use_resmgr=yes]
+)
+
+if test "$ac_cv_use_resmgr" = "yes"; then
+  RESMGR_LIB=""
+  KDE_CHECK_HEADERS(resmgr.h, [
+         KDE_CHECK_LIB(resmgr,rsm_open_device,[
+                 RESMGR_LIB="-lresmgr"
+                 AC_DEFINE(HAVE_RESMGR,1,[defined if you have resmgr libraries and headers])
+         ])
+  ])
+  AC_SUBST(RESMGR_LIB)
+fi
+dnl === check for resmgr - end ============
+
+
+
+
+
 # HAL check from kdebase/kioslave/media
 
 AC_ARG_WITH(

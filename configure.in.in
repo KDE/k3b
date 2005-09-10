@@ -206,26 +206,6 @@ AM_CONDITIONAL(include_LAME, [test x$have_lame = xyes])
 dnl === test for LAME - end ====
 
 
-dnl === check for resmgr - begin ============
-AC_ARG_WITH(
-	resmgr, 
-	AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), 
-	[ac_cv_use_resmgr=$withval], 
-	[ac_cv_use_resmgr=yes]
-)
-
-if test "$ac_cv_use_resmgr" = "yes"; then
-  RESMGR_LIB=""
-  KDE_CHECK_HEADERS(resmgr.h, [
-         KDE_CHECK_LIB(resmgr,rsm_open_device,[
-                 RESMGR_LIB="-lresmgr"
-                 AC_DEFINE(HAVE_RESMGR,1,[defined if you have resmgr libraries and headers])
-         ])
-  ])
-  AC_SUBST(RESMGR_LIB)
-fi
-dnl === check for resmgr - end ============
-
 
 AC_ARG_WITH(
 	external-libsamplerate,
@@ -291,43 +271,6 @@ if test "FreeBSD" = `uname -s` ; then
 	CAM_LIB="-lcam"
 fi
 AC_SUBST(CAM_LIB)
-
-
-dnl --------------- FFMPEG CHECK ---------------------------------
-
-AC_ARG_WITH(
-	ffmpeg, 
-	AS_HELP_STRING(
-		[--without-ffmpeg], 
-		[build without ffmpeg audio decoder support (default=no)]),
-	[ac_cv_use_ffmpeg=$withval], 
-	[ac_cv_use_ffmpeg=yes]
-)
-
-#
-# The ffmpeg decoder plugin needs ffmpeg 0.4.9 or higher
-#
-have_ffmpeg=no
-if test "$ac_cv_use_ffmpeg" = "yes"; then
-	AC_MSG_CHECKING(for ffmpeg >= 0.4.9)
-	AC_LANG_SAVE
-	AC_LANG_CPLUSPLUS
-	AC_COMPILE_IFELSE( 
-		#include <ffmpeg/avformat.h>
-		#include <ffmpeg/avcodec.h>
-
-		int main() {
-		  AVFormatContext* fc = 0;
-		  AVPacket* p = 0;
-		  return av_read_frame( fc, p );
-		},
-	[have_ffmpeg=yes], [] )
-	AC_LANG_RESTORE
-	AC_MSG_RESULT($have_ffmpeg)
-fi
-AM_CONDITIONAL(include_FFMPEG, [test x$have_ffmpeg = xyes])
-
-dnl --------------- FFMPEG CHECK END ------------------------------
 
 
 

@@ -94,29 +94,6 @@ fi
 
 echo ""
 
-echo "FFMpeg decoder plugin (decodes wma and others):"
-if test  x$have_ffmpeg = xyes; then
-        echo "                                       yes"
-else
-        echo "                                        no"
-if test "$ac_cv_use_ffmpeg" = "yes"; then
-	echo "    You are missing the ffmpeg headers and libraries"
-	echo "    version 0.4.9 or higher."
-	echo "    The ffmpeg audio decoding plugin (decodes wma and"
-	echo "    others) won't be compiled."
-fi
-fi
-
-echo ""
-
-if test -n "$RESMGR_LIB"; then
-	echo "Resmgr support:                        yes"
-else
-	echo "Resmgr support:                         no"
-fi
-
-echo ""
-
 if test x$arts_available = xyes; then
 	echo "Audioplayer available (aRts)           yes"
 else
@@ -143,17 +120,4 @@ if test "$ac_cv_use_musicbrainz" = "yes"; then
 fi
 fi
 
-echo ""
-
-if test x$have_hal = xyes; then
-	echo "Compile HAL support                    yes"
-else
-	echo "Compile HAL support                     no"
-if test "x$ac_cv_use_hal" = "xyes" ; then
-	echo "    You are missing the HAL >= 0.4 headers and libraries"
-	echo "    or the DBus Qt bindings."
-fi
-fi
-
-echo "------------------------------------------"
 echo ""
