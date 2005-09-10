@@ -256,7 +256,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       if( !f.absFilePath().startsWith( resolved ) &&
 	  ( dir->doc()->isoOptions().followSymbolicLinks() ||
 	    KMessageBox::warningYesNo( this,
-				       i18n("<p>'%1' is a symbolic link to folder '%1'."
+				       i18n("<p>'%1' is a symbolic link to folder '%2'."
 					    "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
 					    "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
 					    "K3b project cannot be resolved."
