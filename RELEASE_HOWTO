@@ -1,7 +1,7 @@
 Howto create a K3b release (stable branch)
 
 1. create a package from the stable branch using the createPackage.sh script:
-   createPackage.sh -a k3b -av 0.12 -ab branches/stable/extragear/multimedia --notoplevel -ib branches/stable/i10n
+   createPackage.sh -a k3b -av 0.12 -ab branches/stable/extragear/multimedia --notoplevel -ib branches/stable/l10n
       -is extragear-multimedia --pofiles "k3b libk3b libk3bdevice k3bsetup" --postprocess postprocessk3b.sh --split
       --admin /branches/KDE/3.4/kde-common/admin
       
