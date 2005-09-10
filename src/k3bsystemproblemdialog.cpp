@@ -310,6 +310,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       atapiWriter = true;
     }
 
+#if 0
     if( it.current()->automount() ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					 i18n("Writing device %1 - %2 is automounted.")
@@ -321,6 +322,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "ones."),
 					 false ) );
     }
+#endif
   }
 
   if( atapiWriter ) {
