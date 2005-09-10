@@ -138,7 +138,7 @@ void K3bAudioJob::start()
       // choose TAO if the user wants to use cdrecord since
       // there are none-DAO writers that are supported by cdrdao
       //
-      if( !writer()->dao() && writingApp() == K3b::CDRECORD )
+      if( !writer()->dao() && writingApp() == K3b::CDRECORD ) {
 	if( !writer()->supportsRawWriting() )
 	  m_usedWritingMode = K3b::TAO;
 	else
