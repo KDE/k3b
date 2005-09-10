@@ -9,6 +9,7 @@
    medium's free space.
  * Fixed DVD-RW Restricted Overwrite media handling
  * Use RAW writing mode for audio CDs in cse the writer does not support DAO but RAW.
+ * Fixed compile problems with latest ffmpeg builds.
 	
 0.12.3
 ======
