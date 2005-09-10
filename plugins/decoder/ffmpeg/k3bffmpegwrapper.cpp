@@ -23,6 +23,10 @@
 #include <klocale.h>
 
 
+#if LIBAVFORMAT_BUILD < 4629
+#define FFMPEG_BUILD_PRE_4629
+#endif
+
 
 K3bFFMpegWrapper* K3bFFMpegWrapper::s_instance = 0;
 
@@ -82,7 +86,11 @@ bool K3bFFMpegFile::open()
   }
 
   // urgh... ugly
+#ifdef FFMPEG_BUILD_PRE_4629
   AVCodecContext* codecContext =  &d->formatContext->streams[0]->codec;
+#else
+  AVCodecContext* codecContext =  d->formatContext->streams[0]->codec;
+#endif
   if( codecContext->codec_type != CODEC_TYPE_AUDIO ) {
     kdDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename << endl;
     return false;
@@ -124,7 +132,11 @@ void K3bFFMpegFile::close()
   d->packetData = 0;
 
   if( d->codec ) {
+#ifdef FFMPEG_BUILD_PRE_4629
     avcodec_close( &d->formatContext->streams[0]->codec );
+#else
+    avcodec_close( d->formatContext->streams[0]->codec );
+#endif
     d->codec = 0;
   }
 
@@ -143,25 +155,41 @@ K3b::Msf K3bFFMpegFile::length() const
 
 int K3bFFMpegFile::sampleRate() const
 {
+#ifdef FFMPEG_BUILD_PRE_4629
   return d->formatContext->streams[0]->codec.sample_rate;
+#else
+  return d->formatContext->streams[0]->codec->sample_rate;
+#endif
 }
 
 
 int K3bFFMpegFile::channels() const
 {
+#ifdef FFMPEG_BUILD_PRE_4629
   return d->formatContext->streams[0]->codec.channels;
+#else
+  return d->formatContext->streams[0]->codec->channels;
+#endif
 }
 
 
 int K3bFFMpegFile::type() const
 {
+#ifdef FFMPEG_BUILD_PRE_4629
   return d->formatContext->streams[0]->codec.codec_id;
+#else
+  return d->formatContext->streams[0]->codec->codec_id;
+#endif
 }
 
 
 QString K3bFFMpegFile::typeComment() const
 {
+#ifdef FFMPEG_BUILD_PRE_4629
   switch( d->formatContext->streams[0]->codec.codec_id ) {
+#else
+  switch( d->formatContext->streams[0]->codec->codec_id ) {
+#endif
   case CODEC_ID_WMAV1:
     return i18n("Windows Media v1");
   case CODEC_ID_WMAV2:
@@ -257,7 +285,11 @@ int K3bFFMpegFile::fillOutputBuffer()
 
     d->outputBufferPos = d->outputBuffer;
 
+#ifdef FFMPEG_BUILD_PRE_4629
     int len = avcodec_decode_audio( &d->formatContext->streams[0]->codec,
+#else
+    int len = avcodec_decode_audio( d->formatContext->streams[0]->codec,
+#endif
 				    (short*)d->outputBuffer, &d->outputBufferSize,
 				    d->packetData, d->packetSize );
 
