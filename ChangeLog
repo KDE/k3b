@@ -1,5 +1,8 @@
 0.13
 ====
+ * K3b now includes a VideoDVD kio slave. It can be used in Konqueror through the protocol videodvd:/
+   to copy the files from a VideoDVD with on-the-fly decryption if libdvdcss is installed.
+   (Be aware that in some contries it is not permitted to use libdvdcss.)
  * New Device menu containing all the actions possible for a device (like eject, unmount, ...).
    This includes the possibility of assigning shotcuts to these kind of actions.
  * K3b now warns if user parameters for external programs have been specified. This has been introduces
@@ -9,8 +12,9 @@
  * New option in the data project to not cache the inodes. That means it is possible to have multiple
    actual copies of the same file on one CD/DVD.
  * K3b now tries to disable stuff that might influence the burning process. This includes the KDED module
-   mediamanager, SuSEPlugger, and automounting (currently supported: subfs, supermount, and the kernel based autofs).
-	
+   mediamanager, SuSEPlugger, and automounting (currently supported: subfs, supermount).
+ * New Audio Track source editor dialog to cut audio track sources at the beginning and the end.
+
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)
