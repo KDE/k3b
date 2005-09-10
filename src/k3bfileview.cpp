@@ -75,17 +75,11 @@ void K3bFileView::setupGUI()
   layout->addWidget( m_dirOp );
   layout->setStretchFactor( m_dirOp, 1 );
 
-
   // setup actions
-  KAction* actionAddFilesToProject = new KAction( i18n("&Add to Project"), SHIFT+Key_Return, 
-						  this, SLOT(slotAddFilesToProject()), 
-						  m_dirOp->actionCollection(), "add_file_to_project");
-
   KAction* actionHome = m_dirOp->actionCollection()->action("home");
   KAction* actionBack = m_dirOp->actionCollection()->action("back");
   KAction* actionUp = m_dirOp->actionCollection()->action("up");
   KAction* actionReload = m_dirOp->actionCollection()->action("reload");
-
 
   m_toolBox->addButton( actionUp );
   m_toolBox->addButton( actionBack );
@@ -94,15 +88,6 @@ void K3bFileView::setupGUI()
   m_toolBox->addSpacing();
   m_toolBox->addButton( m_dirOp->bookmarkMenu() );
   m_toolBox->addSpacing();
-
-  // insert actions into diroperator menu
-  // FIXME: this does not work anymore since KDirOperator always clears the menu
-  KActionMenu* dirOpMenu = (KActionMenu*)m_dirOp->actionCollection()->action("popupMenu");
-  dirOpMenu->insert( actionAddFilesToProject, 0 );
-  dirOpMenu->insert( new KActionSeparator( m_dirOp->actionCollection() ), 1 );
-
-  // check if some actions should be enabled
-  connect( dirOpMenu, SIGNAL(activated()), this, SLOT(slotCheckActions()) );
 
   // create filter selection combobox
   m_toolBox->addSpacing();
@@ -124,7 +109,7 @@ void K3bFileView::setupGUI()
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
   connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
-  connect( m_dirOp, SIGNAL(fileSelected(const KFileItem*)), this, SLOT(slotAddFilesToProject()) );
+  connect( m_dirOp, SIGNAL(fileSelected(const KFileItem*)), m_dirOp, SLOT(slotAddFilesToProject()) );
 
   slotFileHighlighted(0);
 }
@@ -157,17 +142,6 @@ void K3bFileView::slotFileHighlighted( const KFileItem* )
 }
 
 
-void K3bFileView::slotAddFilesToProject()
-{
-  KURL::List files;
-  for( QPtrListIterator<KFileItem> it( *(m_dirOp->selectedItems()) ); it.current(); ++it ) {
-    files.append( it.current()->url() );
-  }    
-  if( !files.isEmpty() )
-    k3bappcore->k3bMainWindow()->addUrls( files );
-}
-
-
 void K3bFileView::slotFilterChanged()
 {
   QString filter = m_filterWidget->currentFilter();
@@ -183,12 +157,6 @@ void K3bFileView::slotFilterChanged()
   
   m_dirOp->rereadDir();
   //  emit filterChanged( filter );
-}
-
-
-void K3bFileView::slotCheckActions()
-{
-  m_dirOp->actionCollection()->action("add_file_to_project")->setEnabled( k3bappcore->k3bMainWindow()->activeView() != 0 );
 }
 
 

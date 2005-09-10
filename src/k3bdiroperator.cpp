@@ -16,7 +16,8 @@
 
 #include "k3bdiroperator.h"
 
-#include <k3bcore.h>
+#include <k3bapplication.h>
+#include <k3b.h>
 
 #include <kcombiview.h>
 #include <kfilepreview.h>
@@ -44,10 +45,11 @@ K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* nam
   bmMan->setShowNSBookmarks( false );
 
   m_bmPopup = new KActionMenu( i18n("Bookmarks"), "bookmark", this, "bookmarks" );
-  KActionMenu* dirOpMenu = (KActionMenu*)actionCollection()->action("popupMenu");
-  dirOpMenu->insert( new KActionSeparator( actionCollection() ) );
-  dirOpMenu->insert( m_bmPopup );
   m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection(), true );
+
+  (void)new KAction( i18n("&Add to Project"), SHIFT+Key_Return, 
+		     this, SLOT(slotAddFilesToProject()), 
+		     actionCollection(), "add_file_to_project");
 }
 
 
@@ -111,10 +113,35 @@ QString K3bDirOperator::currentURL() const
 
 void K3bDirOperator::activatedMenu( const KFileItem* item, const QPoint& pos )
 {
-  // TODO: use our own menu and remove or add play and stuff
-  return KDirOperator::activatedMenu( item, pos );
+  // both from KDirOperator
+  setupMenu();
+  updateSelectionDependentActions();
+
+  // insert our own actions
+  KActionMenu* dirOpMenu = (KActionMenu*)actionCollection()->action("popupMenu");
+  dirOpMenu->insert( new KActionSeparator( actionCollection() ) );
+  dirOpMenu->insert( m_bmPopup );
+
+  dirOpMenu->insert( actionCollection()->action("add_file_to_project"), 0 );
+  dirOpMenu->insert( new KActionSeparator( actionCollection() ), 1 );
+
+  bool hasSelection = view() && view()->selectedItems() &&
+                      !view()->selectedItems()->isEmpty();
+  actionCollection()->action("add_file_to_project")->setEnabled( hasSelection && k3bappcore->k3bMainWindow()->activeView() != 0 );
+
+  dirOpMenu->popup( pos );
 }
 
+
+void K3bDirOperator::slotAddFilesToProject()
+{
+  KURL::List files;
+  for( QPtrListIterator<KFileItem> it( *(selectedItems()) ); it.current(); ++it ) {
+    files.append( it.current()->url() );
+  }    
+  if( !files.isEmpty() )
+    k3bappcore->k3bMainWindow()->addUrls( files );
+}
 
 #include "k3bdiroperator.moc"
 
