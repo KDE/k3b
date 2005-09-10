@@ -115,6 +115,9 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( int error )
 
       ++i;
     }
+
+    // and enable cd-text
+    m_doc->writeCdText( true );
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
     KMessageBox::information( m_parentWidget, i18n("No CDDB entry found."), i18n("CDDB") );
