@@ -69,6 +69,7 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
    * @param dataMode mode of the data track (MODE1 or XA_FORM1)
    * @param dataTrackLength exact length of the dataTrack
    */
+
   K3bDevice::Toc toToc( int dataMode, const K3b::Msf& dataTrackLength = 0 ) const;
 
  public slots:
