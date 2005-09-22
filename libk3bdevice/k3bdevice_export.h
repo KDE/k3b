@@ -24,14 +24,14 @@
 
 #include <kdeversion.h>
 
-#if 0 //KDE_IS_VERSION(3,3,90)
+//#if 0 //KDE_IS_VERSION(3,3,90)
 
 #include <kdemacros.h>
 
 #define LIBK3BDEVICE_EXPORT KDE_EXPORT
-#else
-#define LIBK3BDEVICE_EXPORT
-#endif
+//#else
+//#define LIBK3BDEVICE_EXPORT
+//#endif
 
 #endif
 

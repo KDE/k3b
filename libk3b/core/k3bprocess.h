@@ -40,7 +40,7 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
   Q_OBJECT
     
  public:
-  class LIBK3B_EXPORT OutputCollector;
+  class OutputCollector;
 
  public:
   K3bProcess();
@@ -178,8 +178,7 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
   bool m_bSplitStdout;
 };
 
-
-class K3bProcess::OutputCollector : public QObject
+class K3bProcess::OutputCollector: public QObject
 {
   Q_OBJECT
     
@@ -201,5 +200,6 @@ class K3bProcess::OutputCollector : public QObject
   QString m_stdoutOutput;
   KProcess* m_process;
 };
+
 
 #endif

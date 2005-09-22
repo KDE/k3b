@@ -132,7 +132,7 @@ namespace K3b
   /**
    * resolves a symlinks completely. Meaning it also handles links to links to links...
    */
-  QString resolveLink( const QString& );
+  LIBK3B_EXPORT QString resolveLink( const QString& );
 
   LIBK3B_EXPORT K3bVersion kernelVersion();
 

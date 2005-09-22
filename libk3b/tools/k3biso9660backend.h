@@ -18,6 +18,8 @@
 
 #include <qstring.h>
 
+#include "k3b_export.h"
+
 namespace K3bDevice {
   class Device;
 }
@@ -41,7 +43,7 @@ class K3bIso9660Backend
 class K3bIso9660DeviceBackend : public K3bIso9660Backend
 {
  public:
-  K3bIso9660DeviceBackend( K3bDevice::Device* dev );
+  LIBK3B_EXPORT K3bIso9660DeviceBackend( K3bDevice::Device* dev );
   ~K3bIso9660DeviceBackend();
 
   bool open();
