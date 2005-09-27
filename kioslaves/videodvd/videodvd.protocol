@@ -13,6 +13,7 @@ Description[cs]=Kioslave umožňující kopírování video DVD (včetně dekód
 Description[da]=En kioslave som gør det muligt at kopiere filer fra en video-dvd (inklusive afkodning)
 Description[de]=Ein Ein-/Ausgabemodul mit dem man Dateien von einer Video-DVD kopieren kann (inkl. Entschlüsselung)
 Description[el]=Ένας kioslave που επιτρέπει την αντιγραφή αρχείων από ένα Βίντεο DVD (συμπεριλαμβάνεται αποκρυπτογράφηση)
+Description[es]=Un kioslave que permite copiar archivos de un Video DVD (incluyendo el descifrado)
 Description[et]=KIO moodul, mis võimaldab kopeerida faile video DVD-lt (sealhulgas neid lahti krüptida)
 Description[he]=עבד קלט/פלט של KDE המאפשר לקבצים להיות מועתקים מתקליטור וידאו של DVD (כולל פענוח)
 Description[it]=Un kioslave per permettere ai file di essere copiati da un DVD video (incluso decifrazione)
