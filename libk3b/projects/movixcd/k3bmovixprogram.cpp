@@ -49,7 +49,7 @@ bool K3bMovixProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path + "movix-version";
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // movix-version just gives us the version number on stdout
     if( !out.output().isEmpty() ) {
@@ -102,7 +102,7 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   //
   KProcess cp;
   cp << path + "movix-conf";
-  K3bProcess::OutputCollector out( &cp );
+  K3bProcessOutputCollector out( &cp );
   if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // now search the needed files in the given dir
     if( out.output().isEmpty() ) {
@@ -148,7 +148,7 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
       bin->addFeature( "files" );
 
       KProcess p;
-      K3bProcess::OutputCollector out( &p );
+      K3bProcessOutputCollector out( &p );
       p << bin->path + "movix-files";
       if( p.start( KProcess::Block, KProcess::AllOutput ) ) {
 	bin->m_movixFiles = QStringList::split( "\n", out.output() );
@@ -321,7 +321,7 @@ QStringList K3bMovixBin::supportedCodecs() const
 QStringList K3bMovixBin::supported( const QString& type ) const
 {
   KProcess p;
-  K3bProcess::OutputCollector out( &p );
+  K3bProcessOutputCollector out( &p );
   p << path + "movix-conf" << "--supported=" + type;
   if( p.start( KProcess::Block, KProcess::AllOutput ) )
     return QStringList::split( "\n", out.output() );
@@ -337,7 +337,7 @@ QStringList K3bMovixBin::files( const QString& kbd,
 				const QStringList& codecs ) const
 {
   KProcess p;
-  K3bProcess::OutputCollector out( &p );
+  K3bProcessOutputCollector out( &p );
   p << path + "movix-conf" << "--files";
 
 

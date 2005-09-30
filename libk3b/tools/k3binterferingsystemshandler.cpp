@@ -254,7 +254,7 @@ int K3bInterferingSystemsHandler::startStopSuSEPlugger( bool start )
     QString susePluggerPath = KStandardDirs::findExe( "suseplugger" );
     KProcess p;
     p << "pidof" << susePluggerPath;
-    K3bProcess::OutputCollector out( &p );
+    K3bProcessOutputCollector out( &p );
     p.start( KProcess::Block, KProcess::Stdout );
     int susePluggerPid = out.stdout().toInt();
     if( susePluggerPid > 0 ) {

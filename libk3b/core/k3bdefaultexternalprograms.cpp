@@ -132,7 +132,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -250,7 +250,7 @@ bool K3bDvdrecordProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -332,7 +332,7 @@ bool K3bMkisofsProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path << "-version";
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "mkisofs" );
     if( pos < 0 )
@@ -417,7 +417,7 @@ bool K3bReadcdProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path << "-version";
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "readcd" );
     if( pos < 0 )
@@ -501,7 +501,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path ;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "Cdrdao version" );
     if( pos < 0 )
@@ -598,7 +598,7 @@ bool K3bTranscodeProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path ;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "transcode v" );
     if( pos < 0 )
@@ -652,7 +652,7 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
   // probe version
   KProcess vp;
   vp << path << "-V";
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "GNU VCDImager" );
     if( pos < 0 )
@@ -708,7 +708,7 @@ bool K3bNormalizeProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path << "--version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -767,7 +767,7 @@ bool K3bGrowisofsProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -832,7 +832,7 @@ bool K3bDvdformatProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path;
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -902,7 +902,7 @@ bool K3bDvdBooktypeProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path;
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
@@ -951,7 +951,7 @@ bool K3bCdda2wavProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  K3bProcess::OutputCollector out( &vp );
+  K3bProcessOutputCollector out( &vp );
 
   vp << path << "-h";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {

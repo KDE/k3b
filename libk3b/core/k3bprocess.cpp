@@ -384,13 +384,13 @@ void K3bProcess::setSuppressEmptyLines( bool b )
 }
 
 
-K3bProcess::OutputCollector::OutputCollector( KProcess* p )
+K3bProcessOutputCollector::K3bProcessOutputCollector( KProcess* p )
   : m_process(0)
 {
   setProcess( p );
 }
 
-void K3bProcess::OutputCollector::setProcess( KProcess* p )
+void K3bProcessOutputCollector::setProcess( KProcess* p )
 {
   if( m_process )
     m_process->disconnect( this );
@@ -408,13 +408,13 @@ void K3bProcess::OutputCollector::setProcess( KProcess* p )
   m_stdoutOutput.truncate( 0 );
 }
 
-void K3bProcess::OutputCollector::slotGatherStderr( KProcess*, char* data, int len )
+void K3bProcessOutputCollector::slotGatherStderr( KProcess*, char* data, int len )
 {
   m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
   m_stderrOutput.append( QString::fromLocal8Bit( data, len ) );
 }
 
-void K3bProcess::OutputCollector::slotGatherStdout( KProcess*, char* data, int len )
+void K3bProcessOutputCollector::slotGatherStdout( KProcess*, char* data, int len )
 {
   m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
   m_stdoutOutput.append( QString::fromLocal8Bit( data, len ) );

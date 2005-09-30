@@ -178,12 +178,12 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
   bool m_bSplitStdout;
 };
 
-class K3bProcess::OutputCollector: public QObject
+class LIBK3B_EXPORT K3bProcessOutputCollector: public QObject
 {
   Q_OBJECT
     
  public:
-  OutputCollector( KProcess* );
+  K3bProcessOutputCollector( KProcess* );
   void setProcess( KProcess* );
   
   const QString& output() const { return m_gatheredOutput; }
