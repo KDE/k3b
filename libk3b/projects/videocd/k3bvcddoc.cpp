@@ -267,6 +267,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
             return newTrack;
         }
     } else if ( isImage( url ) ) { // image track
+        // woking on ...
         // for future use
         // photoalbum starts here
         // return here the new photoalbum track
