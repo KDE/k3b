@@ -1,3 +1,8 @@
+0.12.5
+======
+ * Fixed the progressbar in the file view
+ * It is possible to add the "New Data DVD Project" button to the welcome window again.
+
 0.12.4
 ======
  * Fixed --cdimage and --dvdimage parameters.
@@ -8,7 +13,7 @@
  * Always try to create a new session in case the old one has been imported regardless of the inserted
    medium's free space.
  * Fixed DVD-RW Restricted Overwrite media handling
- * Use RAW writing mode for audio CDs in cse the writer does not support DAO but RAW.
+ * Use RAW writing mode for audio CDs in case the writer does not support DAO but RAW.
  * Fixed compile problems with latest ffmpeg builds.
 	
 0.12.3

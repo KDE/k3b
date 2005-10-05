@@ -40,6 +40,7 @@
 #include <kfileitem.h>
 #include <kmessagebox.h>
 #include <kdirlister.h>
+#include <kprogress.h>
 
 
 K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
@@ -95,6 +96,7 @@ void K3bFileView::setupGUI()
   m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
   m_toolBox->addWidget( m_filterWidget );
   m_toolBox->addStretch();
+  m_toolBox->addWidget( m_dirOp->progressBar() );
 
   m_filterWidget->setEditable( true );
   QString filter = i18n("*|All Files");
