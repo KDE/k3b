@@ -113,7 +113,7 @@ int K3bDevice::openDevice( const char* name, bool write )
 #ifdef HAVE_RESMGR
   // first try resmgr
   fd = ::rsm_open_device( name, flags );
-  kdDebug() << "(K3bDevice::Device) resmgr open: " << fd << endl;
+  //  kdDebug() << "(K3bDevice::Device) resmgr open: " << fd << endl;
 #endif
 
   if( fd < 0 )

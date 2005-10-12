@@ -29,6 +29,7 @@ to make the code more readable.
 bool K3bDevice::Device::testUnitReady() const
 {
   ScsiCommand cmd( this );
+  cmd.enableErrorMessages( false );
   cmd[0] = MMC_TEST_UNIT_READY;
   return( cmd.transport() == 0 );
 }

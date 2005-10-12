@@ -508,6 +508,12 @@ void K3bDevice::DeviceManager::clear()
   d->cdWriter.clear();
   d->dvdReader.clear();
   d->dvdWriter.clear();
+
+  // to make sure no one crashes lets keep the devices around until the changed
+  // signals return
+  QPtrList<K3bDevice::Device> tmp = d->allDevices;
+  tmp.setAutoDelete( true );
+
   d->allDevices.clear();
 
   emit changed();
