@@ -38,11 +38,12 @@ class K3bApplication : public KUniqueApplication
   K3bApplication();
   ~K3bApplication();
 
-  void init();
-
   int newInstance();
 
   class Core;
+
+ public slots:
+  void init();
 
  signals:
   void initializationInfo( const QString& );

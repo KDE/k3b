@@ -29,6 +29,7 @@
 #include <qfile.h>
 #include <qcstring.h>
 #include <qdatastream.h>
+#include <qtimer.h>
 
 #include <stdlib.h>
 
@@ -113,7 +114,9 @@ int main( int argc, char* argv[] )
 		  << " current is: " << KGlobal::locale()->language() << endl;
   
     K3bApplication app;
-    app.init();
+
+    // we need a running app for the init method
+    QTimer::singleShot( 0, &app, SLOT(init()) );
 
     return app.exec();
   }

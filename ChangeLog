@@ -2,6 +2,10 @@
 ======
  * Fixed the progressbar in the file view
  * It is possible to add the "New Data DVD Project" button to the welcome window again.
+ * Fixed problems with unreadable items when using a non-standard color scheme
+ * Properly set the permissions on cdrecord versions >= 2.01.01a02
+ * Fixed the "Disabled start button in Copy dialog" bug.
+ * Little window layout fix in K3bSetup2.
 
 0.12.4
 ======

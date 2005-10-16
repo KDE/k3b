@@ -219,6 +219,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
   if( bin->version > K3bVersion("1.11a17") )
     bin->addFeature( "hacked-atapi" );
 
+  if( bin->version >= K3bVersion( 2, 1, 1, "a02" ) )
+    bin->addFeature( "short-track-raw" );
+
   addBin( bin );
   return true;
 }

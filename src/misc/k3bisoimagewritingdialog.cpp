@@ -293,12 +293,12 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
       K3bListViewItem* isoRootItem = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
 							  i18n("Iso9660 image") );
-      isoRootItem->setForegroundColor( 0, Qt::gray );
+      isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
       isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
       K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
 						   i18n("Filesize:"), KIO::convertSize( imageSize ) );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
@@ -306,7 +306,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 				  isoF.primaryDescriptor().systemId.isEmpty()
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().systemId );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
@@ -314,7 +314,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 				  isoF.primaryDescriptor().volumeId.isEmpty() 
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().volumeId );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
@@ -322,7 +322,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 				  isoF.primaryDescriptor().volumeSetId.isEmpty()
 				  ? QString("-")
 				  : isoF.primaryDescriptor().volumeSetId );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
@@ -330,14 +330,14 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 				  isoF.primaryDescriptor().publisherId.isEmpty() 
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().publisherId );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
 				  i18n("Preparer Id:"), 
 				  isoF.primaryDescriptor().preparerId.isEmpty() 
 				  ? QString("-") : isoF.primaryDescriptor().preparerId );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       item = new K3bListViewItem( isoRootItem, 
 				  m_infoView->lastItem(),
@@ -345,7 +345,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 				  isoF.primaryDescriptor().applicationId.isEmpty()
 				  ? QString("-") 
 				  : isoF.primaryDescriptor().applicationId );
-      item->setForegroundColor( 0, Qt::gray );
+      item->setForegroundColor( 0, palette().disabled().foreground() );
 
       isoRootItem->setOpen( true );
 
@@ -397,7 +397,7 @@ void K3bIsoImageWritingDialog::calculateMd5Sum( const QString& file )
     d->md5SumItem = new K3bListViewItem( m_infoView, m_infoView->firstChild() );
 
   d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
-  d->md5SumItem->setForegroundColor( 0, Qt::gray );
+  d->md5SumItem->setForegroundColor( 0, palette().disabled().foreground() );
   d->md5SumItem->setProgress( 1, 0 );
   d->md5SumItem->setPixmap( 0, SmallIcon( "exec") );
   d->md5SumItem->setButton( 1, false );
