@@ -14,8 +14,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 #ifndef __koStore_h_
@@ -25,14 +25,21 @@
 #include <qstringlist.h>
 #include <qiodevice.h>
 #include <qvaluestack.h>
+//#include <koffice_export.h>
+
+#define KOSTORE_EXPORT
+
+class QWidget;
+
+class KURL;
 
 /**
- * Saves and loads koffice documents using various backends. Currently supported
+ * Saves and loads KOffice documents using various backends. Currently supported
  * backends are ZIP, tar and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
-class KoStore
+class KOSTORE_EXPORT KoStore
 {
 public:
 
@@ -56,10 +63,33 @@ public:
   static KoStore* createStore( const QString& fileName, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 
   /**
-   * Create a store for any kind of iodevice: file, memory buffer...
+   * Create a store for any kind of QIODevice: file, memory buffer...
+   * KoStore will take care of opening the QIODevice.
    * This method doesn't support the Directory store!
    */
   static KoStore* createStore( QIODevice *device, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
+
+  /**
+   * Open a store (i.e. the representation on disk of a KOffice document).
+   *
+   * @param window associated window (for the progress bar dialog and authentification)
+   * @param url URL of the file to open
+   * @param mode if KoStore::Read, open an existing store to read it.
+   *             if KoStore::Write, create or replace a store.
+   * @param backend the backend to use for the data storage.
+   * Auto means automatically-determined for reading,
+   * and the current format (now Zip) for writing.
+   *
+   * @param appIdentification the application's mimetype,
+   * to be written in the file for "mime-magic" identification.
+   * Only meaningful if mode is Write, and if backend!=Directory.
+   *
+   * If the file is remote, the backend Directory cannot be used!
+   *
+   * @since 1.4
+   * @bug saving not completely implemented (fixed temporary file)
+   */
+  static KoStore* createStore( QWidget* window, const KURL& url, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)
@@ -75,7 +105,9 @@ public:
   bool open( const QString & name );
 
   /**
-   * Allows to check for an open storage.
+   * Check whether a file inside the store is currently opened with open(),
+   * ready to be read or written.
+   * @return true if a file is currently opened.
    */
   bool isOpen() const;
 
@@ -96,7 +128,7 @@ public:
    * Read data from the currently opened file. You can also use the streams
    * for this.
    */
-  QByteArray read( long unsigned int max );
+  QByteArray read( unsigned long int max );
 
   /**
    * Write data into the currently opened file. You can also use the streams
@@ -158,6 +190,13 @@ public:
   QString currentPath() const;
 
   /**
+   * Returns the current directory.
+   * Note: Returns a path in "internal name" style
+   */
+  QString currentDirectory() const;
+
+
+  /**
    * Stacks the current directory. Restore the current path using
    * @ref popDirectory .
    */
@@ -169,11 +208,48 @@ public:
    */
   void popDirectory();
 
-  // See QIODevice
+  /**
+   * @return true if the given file exists in the current directory,
+   * i.e. if open(fileName) will work.
+   */
+  bool hasFile( const QString& fileName ) const;
+
+  /**
+   * Imports a local file into a store
+   * @param fileName file on hard disk
+   * @param destName file in the store
+   */
+  bool addLocalFile( const QString &fileName, const QString &destName );
+
+  /**
+   * Imports a local directory
+   * @param dirPath path to the directory on a disk
+   * @param dest path in the store where the directory should get saved
+   * @return the directory index
+   */
+  QStringList addLocalDirectory( const QString &dirPath, const QString &dest );
+
+
+  /**
+   * Extracts a file out of the store
+   * @param srcName file in the store
+   * @param fileName file on a disk
+   */
+  bool extractFile( const QString &srcName, const QString &fileName );
+
+  //@{
+  /// See QIODevice
   bool at( QIODevice::Offset pos );
   QIODevice::Offset at() const;
   bool atEnd() const;
+  //@}
 
+  /**
+   * Do not expand file and directory names
+   * Useful when using KoStore on non-KOffice files.
+   * (This method should be called just after the constructor)
+   */
+  void disallowNameExpansion( void );
 
 protected:
 
@@ -220,7 +296,11 @@ protected:
    */
   virtual bool enterAbsoluteDirectory( const QString& path ) = 0;
 
-  virtual bool fileExists( const QString& absPath ) = 0;
+  /**
+   * Check if a file exists inside the store.
+   * @param absPath the absolute path inside the store, i.e. not relative to the current directory
+   */
+  virtual bool fileExists( const QString& absPath ) const = 0;
 
 private:
   static Backend determineBackend( QIODevice* dev );
@@ -238,56 +318,62 @@ private:
    *
    * see specification (koffice/lib/store/SPEC) for details.
    */
-  QString toExternalNaming( const QString & _internalNaming );
+  QString toExternalNaming( const QString & _internalNaming ) const;
 
-  // Expands a full path name for a stream (directories+filename)
-  QString expandEncodedPath( QString intern );
+  /**
+   *  Expands a full path name for a stream (directories+filename)
+   */
+  QString expandEncodedPath( QString intern ) const;
 
-  // Expans only directory names(!)
-  // Needed for the path handling code, as we only operate on internal names
-  QString expandEncodedDirectory( QString intern );
+  /**
+   * Expands only directory names(!)
+   * Needed for the path handling code, as we only operate on internal names
+   */
+  QString expandEncodedDirectory( QString intern ) const;
 
-  enum
+  mutable enum
   {
       NAMING_VERSION_2_1,
-      NAMING_VERSION_2_2
+      NAMING_VERSION_2_2,
+      NAMING_VERSION_RAW  ///< Never expand file and directory names
   } m_namingVersion;
 
-  // Enter *one* single directory. Nothing like foo/bar/bleh allowed.
-  // Performs some checking when in Read mode
+  /**
+   * Enter *one* single directory. Nothing like foo/bar/bleh allowed.
+   * Performs some checking when in Read mode
+   */
   bool enterDirectoryInternal( const QString& directory );
 
 protected:
 
   Mode m_mode;
 
-  // Store the filenames (with full path inside the archive) when writing, to avoid duplicates
+  /// Store the filenames (with full path inside the archive) when writing, to avoid duplicates
   QStringList m_strFiles;
 
-  // The "current directory" (path)
+  /// The "current directory" (path)
   QStringList m_currentPath;
 
-  // Used to push/pop directories to make it easy to save/restore
-  // the state
+  /// Used to push/pop directories to make it easy to save/restore the state
   QValueStack<QString> m_directoryStack;
 
-  // Current filename (between an open() and a close())
+  /// Current filename (between an open() and a close())
   QString m_sName;
-  // Current size of the file named m_sName
+  /// Current size of the file named m_sName
   QIODevice::Offset m_iSize;
 
-  // The stream for the current read or write operation
+  /// The stream for the current read or write operation
   QIODevice * m_stream;
 
   bool m_bIsOpen;
-  // Must be set by the constructor.
+  /// Must be set by the constructor.
   bool m_bGood;
 
   static const int s_area;
 
 private:
-  KoStore( const KoStore& store );  // don't copy
-  KoStore& operator=( const KoStore& store );  // don't assign
+  KoStore( const KoStore& store );  ///< don't copy
+  KoStore& operator=( const KoStore& store );  ///< don't assign
 
   class Private;
   Private * d;

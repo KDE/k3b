@@ -1,7 +1,7 @@
 // -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2002 David Faure <david@mandrakesoft.com>, Werner Trobin <trobin@kde.org>
+   Copyright (C) 2000-2002 David Faure <faure@kde.org>, Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,8 +15,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 #include <stdio.h>
@@ -24,14 +24,20 @@
 #include <stdlib.h>
 
 #include "koStore.h"
-#include "koTarStore.h"
+//#include "koTarStore.h"
 #include "koZipStore.h"
-#include "koDirectoryStore.h"
-
-#include <kdebug.h>
+//#include "koDirectoryStore.h"
 
 #include <qfileinfo.h>
 #include <qfile.h>
+#include <qdir.h>
+
+#include <kurl.h>
+#include <kdebug.h>
+#include <kdeversion.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
 
 //#define DefaultFormat KoStore::Tar
 #define DefaultFormat KoStore::Zip
@@ -72,12 +78,12 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QCStrin
   }
   switch ( backend )
   {
-  case Tar:
-    return new KoTarStore( fileName, mode, appIdentification );
+//   case Tar:
+//     return new KoTarStore( fileName, mode, appIdentification );
   case Zip:
     return new KoZipStore( fileName, mode, appIdentification );
-  case Directory:
-    return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
+//   case Directory:
+//     return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
   default:
     kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
     return 0L;
@@ -90,20 +96,70 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
   {
     if ( mode == KoStore::Write )
       backend = DefaultFormat;
-    else
-      backend = determineBackend( device );
+    else {
+      if ( device->open( IO_ReadOnly ) ) {
+        backend = determineBackend( device );
+        device->close();
+      }
+    }
   }
   switch ( backend )
   {
-  case Tar:
-    return new KoTarStore( device, mode, appIdentification );
-  case Directory:
-    kdError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
+//   case Tar:
+//     return new KoTarStore( device, mode, appIdentification );
+//   case Directory:
+//     kdError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
     // fallback
   case Zip:
     return new KoZipStore( device, mode, appIdentification );
   default:
     kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    return 0L;
+  }
+}
+
+KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, const QCString & appIdentification, Backend backend )
+{
+  if ( url.isLocalFile() )
+    return createStore(url.path(), mode,  appIdentification, backend );
+
+  QString tmpFile;
+  if ( mode == KoStore::Write )
+  {
+    if ( backend == Auto )
+      backend = DefaultFormat;
+  }
+  else
+  {
+    const bool downloaded =
+        KIO::NetAccess::download( url, tmpFile, window );
+
+    if (!downloaded)
+    {
+      kdError(s_area) << "Could not download file!" << endl;
+      backend = DefaultFormat; // will create a "bad" store (bad()==true)
+    }
+    else if ( backend == Auto )
+    {
+      QFile file( tmpFile );
+      if ( file.open( IO_ReadOnly ) )
+      {
+        backend = determineBackend( &file );
+        file.close();
+      }
+    }
+  }
+  switch ( backend )
+  {
+//   case Tar:
+//     return new KoTarStore( window, url, tmpFile, mode, appIdentification );
+  case Zip:
+    return new KoZipStore( window, url, tmpFile, mode, appIdentification );
+  default:
+    kdWarning(s_area) << "Unsupported backend requested for KoStore (KURL) : " << backend << endl;
+    KMessageBox::sorry( window,
+        i18n("The directory mode is not supported for remote locations."),
+        i18n("KOffice Storage"));
     return 0L;
   }
 }
@@ -306,12 +362,12 @@ QIODevice::Offset KoStore::size() const
   if ( !m_bIsOpen )
   {
     kdWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
-    return static_cast<Q_ULONG>(-1);
+    return static_cast<QIODevice::Offset>(-1);
   }
   if ( m_mode != Read )
   {
     kdWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
-    return static_cast<Q_ULONG>(-1);
+    return static_cast<QIODevice::Offset>(-1);
   }
   return m_iSize;
 }
@@ -342,6 +398,11 @@ bool KoStore::leaveDirectory()
   return enterAbsoluteDirectory( expandEncodedDirectory( currentPath() ) );
 }
 
+QString KoStore::currentDirectory() const
+{
+  return expandEncodedDirectory( currentPath() );
+}
+
 QString KoStore::currentPath() const
 {
   QString path;
@@ -366,6 +427,103 @@ void KoStore::popDirectory()
   enterDirectory( m_directoryStack.pop() );
 }
 
+bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
+{
+  QFileInfo fi( fileName );
+  uint size = fi.size();
+  QFile file( fileName );
+  if ( !file.open( IO_ReadOnly ))
+  {
+    return false;
+  }
+
+  if ( !open ( destName ) )
+  {
+    return false;
+  }
+
+  QByteArray data ( 8 * 1024 );
+
+  uint total = 0;
+  for ( int block = 0; ( block = file.readBlock ( data.data(), data.size() ) ) > 0; total += block )
+  {
+    data.resize(block);
+    if ( write( data ) != block )
+      return false;
+    data.resize(8*1024);
+  }
+  Q_ASSERT( total == size );
+
+  close();
+  file.close();
+
+  return true;
+}
+
+bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
+{
+  if ( !open ( srcName ) )
+    return false;
+
+  QFile file( fileName );
+
+  if( !file.open ( IO_WriteOnly ) )
+  {
+    close();
+    return false;
+  }
+
+  QByteArray data ( 8 * 1024 );
+  uint total = 0;
+  for( int block = 0; ( block = read ( data.data(), data.size() ) ) > 0; total += block )
+  {
+    file.writeBlock ( data.data(), block );
+  }
+
+  if( size() != static_cast<QIODevice::Offset>(-1) )
+  	Q_ASSERT( total == size() );
+
+  file.close();
+  close();
+
+  return true;
+}
+
+QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &destName )
+{
+  QString dot = ".";
+  QString dotdot = "..";
+  QStringList content;
+
+  QDir dir(dirPath);
+  if ( !dir.exists() )
+    return 0;
+
+  QStringList files = dir.entryList();
+  for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
+  {
+     if ( *it != dot && *it != dotdot )
+     {
+        QString currentFile = dirPath + "/" + *it;
+        QString dest = destName.isEmpty() ? *it : (destName + "/" + *it);
+
+        QFileInfo fi ( currentFile );
+        if ( fi.isFile() )
+        {
+          addLocalFile ( currentFile, dest );
+          content.append(dest);
+        }
+        else if ( fi.isDir() )
+        {
+          content += addLocalDirectory ( currentFile, dest );
+        }
+     }
+  }
+
+  return content;
+}
+
+
 bool KoStore::at( QIODevice::Offset pos )
 {
   return m_stream->at( pos );
@@ -382,7 +540,7 @@ bool KoStore::atEnd() const
 }
 
 // See the specification for details of what this function does.
-QString KoStore::toExternalNaming( const QString & _internalNaming )
+QString KoStore::toExternalNaming( const QString & _internalNaming ) const
 {
   if ( _internalNaming == ROOTPART )
     return expandEncodedDirectory( currentPath() ) + MAINNAME;
@@ -396,8 +554,11 @@ QString KoStore::toExternalNaming( const QString & _internalNaming )
   return expandEncodedPath( intern );
 }
 
-QString KoStore::expandEncodedPath( QString intern )
+QString KoStore::expandEncodedPath( QString intern ) const
 {
+  if ( m_namingVersion == NAMING_VERSION_RAW )
+    return intern;
+
   QString result;
   int pos;
 
@@ -427,8 +588,11 @@ QString KoStore::expandEncodedPath( QString intern )
   return result;
 }
 
-QString KoStore::expandEncodedDirectory( QString intern )
+QString KoStore::expandEncodedDirectory( QString intern ) const
 {
+  if ( m_namingVersion == NAMING_VERSION_RAW )
+    return intern;
+
   QString result;
   int pos;
   while ( ( pos = intern.find( '/' ) ) != -1 ) {
@@ -452,4 +616,14 @@ bool KoStore::enterDirectoryInternal( const QString& directory )
       return true;
     }
     return false;
+}
+
+void KoStore::disallowNameExpansion( void )
+{
+    m_namingVersion = NAMING_VERSION_RAW;
+}
+
+bool KoStore::hasFile( const QString& fileName ) const
+{
+  return fileExists( toExternalNaming( currentPath() + fileName ) );
 }

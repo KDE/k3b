@@ -13,24 +13,24 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 #ifndef koStoreDevice_h
 #define koStoreDevice_h
 
-#include "koStore.h"
+#include <koStore.h>
 
 /**
  * This class implements a QIODevice around KoStore, so that
- * it can be used to create a QDomDocument from it, or to be read
- * using QDataStream.
+ * it can be used to create a QDomDocument from it, to be written or read
+ * using QDataStream or to be written using QTextStream
  */
 class KoStoreDevice : public QIODevice
 {
 public:
-  // Note: KoStore::open() should be called before calling this.
+  /// Note: KoStore::open() should be called before calling this.
   KoStoreDevice( KoStore * store ) : m_store(store) {
       setType( IO_Direct );
   }
@@ -53,9 +53,10 @@ public:
       return 0xffffffff;
   }
 
-  Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
-  Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
-  Q_LONG readLine( char *, Q_ULONG  ) { return -1; } // unsupported
+  virtual Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
+  virtual Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
+  // Not virtual, only to uncover shadow
+  Q_LONG writeBlock( const QByteArray& data ) { return QIODevice::writeBlock( data ); }
 
   int getch() {
     char c[2];

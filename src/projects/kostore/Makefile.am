@@ -1,9 +1,11 @@
 
-noinst_LTLIBRARIES = libkostore.la
-AM_CPPFLAGS= $(all_includes)
+KDE_CXXFLAGS = $(USE_RTTI)
+lib_LTLIBRARIES = libkstore.la
+INCLUDES = $(all_includes)
 
 ####### Files
 
-#libkostore_la_LIBADD = $(LIB_KSYCOCA)
-libkostore_la_SOURCES = koStore.cc koTarStore.cc koDirectoryStore.cc koZipStore.cc kozip.cpp kofilterdev.cpp
-
+libkstore_la_LIBADD = $(LIB_KIO)
+libkstore_la_SOURCES = koStore.cc koZipStore.cc koStoreBase.cc
+libkstore_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 $(KDE_LDFLAGS) -no-undefined
+#include_HEADERS = koStore.h

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000-2002 David Faure <david@mandrakesoft.com>
+   Copyright (C) 2000-2002 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -13,14 +13,23 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 #include "koZipStore.h"
-#include <kozip.h> // make kzip.h later
-#include <kdebug.h>
+
 #include <qbuffer.h>
+
+#include <kzip.h>
+#include <kdebug.h>
+#include <kdeversion.h>
+#include <kurl.h>
+#include <kio/netaccess.h>
+#if ! KDE_IS_VERSION( 3, 4, 1 )
+#include <qdir.h>
+#include <qfileinfo.h>
+#endif
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
@@ -28,14 +37,56 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
                     << " mode = " << int(_mode)
                     << " mimetype = " << appIdentification << endl;
 
-    m_pZip = new KoZip( _filename );
-    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    m_pZip = new KZip( _filename );
+
+#if ! KDE_IS_VERSION( 3, 4, 1 )
+    // Workaround for KZip KSaveFile double deletion in kdelibs-3.4,
+    // when trying to write to a non-writable directory.
+    QDir dir( QFileInfo( _filename ).dir() );
+    if (_mode == Write && !QFileInfo( dir.path() ).isWritable()  )
+    {
+        kdWarning(s_area) << dir.path() << " isn't writable" << endl;
+        m_bGood = false;
+        m_currentDir = 0;
+        KoStore::init( _mode );
+    }
+    else
+#endif
+    {
+        m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    }
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
 {
-    m_pZip = new KoZip( dev );
+    m_pZip = new KZip( dev );
     m_bGood = init( mode, appIdentification );
+}
+
+KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+{
+    kdDebug(s_area) << "KoZipStore Constructor url" << _url.prettyURL()
+                    << " filename = " << _filename
+                    << " mode = " << int(_mode)
+                    << " mimetype = " << appIdentification << endl;
+
+    m_url = _url;
+    m_window = window;
+
+    if ( _mode == KoStore::Read )
+    {
+        m_fileMode = KoStoreBase::RemoteRead;
+        m_localFileName = _filename;
+
+    }
+    else
+    {
+        m_fileMode = KoStoreBase::RemoteWrite;
+        m_localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+    }
+
+    m_pZip = new KZip( m_localFileName );
+    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
@@ -43,6 +94,17 @@ KoZipStore::~KoZipStore()
     kdDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
     m_pZip->close();
     delete m_pZip;
+
+    // Now we have still some job to do for remote files.
+    if ( m_fileMode == KoStoreBase::RemoteRead )
+    {
+        KIO::NetAccess::removeTempFile( m_localFileName );
+    }
+    else if ( m_fileMode == KoStoreBase::RemoteWrite )
+    {
+        KIO::NetAccess::upload( m_localFileName, m_url, m_window );
+        // ### FIXME: delete temp file
+    }
 }
 
 bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
@@ -57,12 +119,14 @@ bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
     {
         //kdDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification << endl;
 
-        m_pZip->setCompression( KoZip::NoCompression );
+        m_pZip->setCompression( KZip::NoCompression );
+        m_pZip->setExtraField( KZip::NoExtraField );
         // Write identification
         (void)m_pZip->writeFile( "mimetype", "", "", appIdentification.length(), appIdentification.data() );
-        m_pZip->setCompression( KoZip::DeflateCompression );
+        m_pZip->setCompression( KZip::DeflateCompression );
+        // We don't need the extra field in KOffice - so we leave it as "no extra field".
     }
-    return true;
+    return good;
 }
 
 bool KoZipStore::openWrite( const QString& name )
@@ -93,8 +157,8 @@ bool KoZipStore::openRead( const QString& name )
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
-    // Must cast to KoZipFileEntry, not only KArchiveFile, because device() isn't virtual!
-    const KoZipFileEntry * f = static_cast<const KoZipFileEntry *>(entry);
+    // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual!
+    const KZipFileEntry * f = static_cast<const KZipFileEntry *>(entry);
     delete m_stream;
     m_stream = f->device();
     m_iSize = f->size();
@@ -166,7 +230,8 @@ bool KoZipStore::enterAbsoluteDirectory( const QString& path )
     return m_currentDir != 0;
 }
 
-bool KoZipStore::fileExists( const QString& absPath )
+bool KoZipStore::fileExists( const QString& absPath ) const
 {
-    return m_pZip->directory()->entry( absPath ) != 0;
+    const KArchiveEntry *entry = m_pZip->directory()->entry( absPath );
+    return entry && entry->isFile();
 }

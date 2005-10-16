@@ -104,7 +104,7 @@ Internal Name
     and saved with the proper extension (.kwd for KWord, .ksp for KSpread,
     etc.).
     The plan is to use relative paths everywhere, so please try not to use
-    absolute paths unless necessary.
+    absolute paths unless neccessary.
 
 - Relative references:
     To allow parts to be self-contained, and to ease the work of filter
