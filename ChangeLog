@@ -6,6 +6,9 @@
  * Properly set the permissions on cdrecord versions >= 2.01.01a02
  * Fixed the "Disabled start button in Copy dialog" bug.
  * Little window layout fix in K3bSetup2.
+ * Always use sector size 2048 when only creating an image in CD Copy. This means extracted
+   iso images from CDs with non-Mode1 tracks are useable again.
+ * Preserve directory permissions and user/group id in data projects when using the "backup" option.
 
 0.12.4
 ======

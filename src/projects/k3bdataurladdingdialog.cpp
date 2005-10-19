@@ -237,8 +237,10 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   //
   if( valid ) {
     if( f.isDir() && !f.isSymLink() ) {
-      if( !newDirItem ) // maybe we reuse an already existing dir
+      if( !newDirItem ) { // maybe we reuse an already existing dir
 	newDirItem = new K3bDirItem( newName , dir->doc(), dir );
+	newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
+      }
 
       QDir newDir( f.absFilePath() );      
 

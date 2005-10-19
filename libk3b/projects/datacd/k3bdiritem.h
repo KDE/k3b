@@ -71,6 +71,9 @@ class K3bDirItem : public K3bDataItem
    */
   virtual bool isFromOldSession() const;
 
+  void setLocalPath( const QString& p ) { m_localPath = p; }
+  QString localPath() const { return m_localPath; }
+
  private:
   /**
    * this recursivly updates the size of the directories.
@@ -89,6 +92,10 @@ class K3bDirItem : public K3bDataItem
   KIO::filesize_t m_size;
   long m_files;
   long m_dirs;
+
+  // HACK: store the original path to be able to use it's permissions
+  //        ´remove this once we have a backup project
+  QString m_localPath;
 };
 
 

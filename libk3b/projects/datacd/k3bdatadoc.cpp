@@ -166,8 +166,10 @@ void K3bDataDoc::addUrls( const KURL::List& urls, K3bDirItem* dir )
 
     // QFileInfo::exists and QFileInfo::isReadable return false for broken symlinks :(
     if( f.isDir() && !f.isSymLink() ) {
-      if( !newDirItem )
+      if( !newDirItem ) {
 	newDirItem = new K3bDirItem( k3bname, this, dir );
+      	newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
+      }
       
       // recursively add all the files in the directory
       QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden );
