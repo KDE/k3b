@@ -14,8 +14,8 @@
  */
 
 #include "k3bdatatrackreader.h"
-#include "k3blibdvdcss.h"
 
+#include <k3blibdvdcss.h>
 #include <k3bdevice.h>
 #include <k3bdeviceglobals.h>
 #include <k3btrack.h>
@@ -67,9 +67,9 @@ public:
     //    if impossible or MODE2 (mode2 formless) finish(false)
 
     m_useLibdvdcss = false;
-    m_sectorSize = 0;
+    m_usedSectorSize = m_sectorSize
     if( m_device->isDVD() ) {
-      m_sectorSize = 2048;
+      m_usedSectorSize = MODE1;
 
       //
       // In case of an encrypted VideoDVD we read with libdvdcss which takes care of decrypting the vobs
@@ -106,30 +106,32 @@ public:
       }
     }
     else {
-      switch( m_device->getDataMode( m_firstSector ) ) {
-      case K3bDevice::Track::MODE1:
-      case K3bDevice::Track::DVD:
-	m_sectorSize = 2048;
-	break;
-      case K3bDevice::Track::XA_FORM1:
-	m_sectorSize = 2056;
-	break;
-      case K3bDevice::Track::XA_FORM2:
-	m_sectorSize = 2332;
-	break;
-      case K3bDevice::Track::MODE2:
-	emitInfoMessage( i18n("No support for reading formless Mode2 sectors."), K3bJob::ERROR );
-      default:
-	emitInfoMessage( i18n("Unsupported sector type."), K3bJob::ERROR );
-	m_device->close();
-	emitFinished(false);
-	return;
+      if( m_usedSectorSize == AUTO ) {
+	switch( m_device->getDataMode( m_firstSector ) ) {
+	case K3bDevice::Track::MODE1:
+	case K3bDevice::Track::DVD:
+	  m_usedSectorSize = MODE1;
+	  break;
+	case K3bDevice::Track::XA_FORM1:
+	  m_usedSectorSize = MODE2FORM1;
+	  break;
+	case K3bDevice::Track::XA_FORM2:
+	  m_usedSectorSize = MODE2FORM2;
+	  break;
+	case K3bDevice::Track::MODE2:
+	  emitInfoMessage( i18n("No support for reading formless Mode2 sectors."), K3bJob::ERROR );
+	default:
+	  emitInfoMessage( i18n("Unsupported sector type."), K3bJob::ERROR );
+	  m_device->close();
+	  emitFinished(false);
+	  return;
+	}
       }
     }
 
-    emitInfoMessage( i18n("Reading with sector size %1.").arg(m_sectorSize), K3bJob::INFO );
+    emitInfoMessage( i18n("Reading with sector size %1.").arg(m_usedSectorSize), K3bJob::INFO );
     kdDebug() << "(K3bDataTrackReader::WorkThread) reading " << (m_lastSector.lba() - m_firstSector.lba() + 1)
-	      << " sectors with sector size: " << m_sectorSize << endl;
+	      << " sectors with sector size: " << m_usedSectorSize << endl;
 
     QFile file;
     if( m_fd == -1 ) {
@@ -154,7 +156,7 @@ public:
     m_device->setSpeed( 0xffff, 0xffff );
 
     s_bufferSizeSectors = 128;
-    unsigned char* buffer = new unsigned char[m_sectorSize*s_bufferSizeSectors];
+    unsigned char* buffer = new unsigned char[m_usedSectorSize*s_bufferSizeSectors];
     while( read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
       kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
 		<< s_bufferSizeSectors << " too high." << endl;
@@ -180,10 +182,10 @@ public:
     bool readError = false;
     int lastPercent = 0;
     unsigned long lastReadMb = 0;
-    int bufferLen = s_bufferSizeSectors*m_sectorSize;
+    int bufferLen = s_bufferSizeSectors*m_usedSectorSize;
     while( !m_canceled && currentSector <= m_lastSector ) {
 
-      int maxReadSectors = QMIN( bufferLen/m_sectorSize, m_lastSector.lba()-currentSector.lba()+1 );
+      int maxReadSectors = QMIN( bufferLen/m_usedSectorSize, m_lastSector.lba()-currentSector.lba()+1 );
 
       int readSectors = read( buffer, 
 			      currentSector.lba(), 
@@ -199,7 +201,7 @@ public:
 	  readSectors = maxReadSectors;
       }
 
-      int readBytes = readSectors * m_sectorSize;
+      int readBytes = readSectors * m_usedSectorSize;
 
       if( m_fd != -1 ) {
 	if( ::write( m_fd, reinterpret_cast<void*>(buffer), readBytes ) != readBytes ) {
@@ -268,18 +270,18 @@ public:
     else {
       bool success = false;
       //      setErrorRecovery( m_device, m_ignoreReadErrors ? 0x21 : 0x20 );
-      if( m_sectorSize == 2048 )
+      if( m_usedSectorSize == 2048 )
 	success = m_device->read10( buffer, len*2048, sector, len );
       else
 	success = m_device->readCd( buffer, 
-				    len*m_sectorSize,
+				    len*m_usedSectorSize,
 				    0,     // all sector types
 				    false, // no dap
 				    sector,
 				    len,
 				    false, // no sync
 				    false, // no header
-				    true,  // subheader
+				    m_usedSectorSize != MODE1,  // subheader
 				    true,  // user data
 				    false, // no edc/ecc
 				    0,     // no c2 error info... FIXME: should we check this??
@@ -380,6 +382,9 @@ public:
   int m_oldErrorRecoveryMode;
 
   int m_errorSectorCount;
+
+private:
+  m_usedSectorSize;
 };
 
 
@@ -438,4 +443,10 @@ void K3bDataTrackReader::setImagePath( const QString& p )
 {
   m_thread->m_imagePath = p;
   m_thread->m_fd = -1;
+}
+
+
+void K3bDataTrackReader::setSectorSize( SectorSize size )
+{
+  m_thread->m_sectorSize = size;
 }

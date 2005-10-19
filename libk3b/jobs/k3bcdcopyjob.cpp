@@ -627,7 +627,11 @@ void K3bCdCopyJob::readNextSession()
     d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
     d->dataTrackReader->setNoCorrection( m_noCorrection );
     d->dataTrackReader->setRetries( m_readRetries );
-    
+    if( m_onlyCreateImages )
+      d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
+    else
+      d->dataTrackReader->setSectorSize( K3bDataTrackReader::AUTO );
+
     K3bTrack* track = 0;
     unsigned int dataTrackIndex = 0;
     if( d->toc.contentType() == K3bDevice::MIXED ) {
