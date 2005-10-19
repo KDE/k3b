@@ -49,11 +49,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
    * The dummy dir is used to create dirs on the iso-filesystem.
    *
    * @return an empty dummy dir for use with K3bDirItems.
-   * @param weight Since the weight of files is determined by their local
-   *               path in mkisofs we need several dummy dirs for every 
-   *               weight.
    */
-  static QString dummyDir( int weight = 0 );
+  static QString dummyDir( K3bDirItem* );
 
  public slots:
   virtual void start();

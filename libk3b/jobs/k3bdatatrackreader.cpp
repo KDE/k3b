@@ -67,7 +67,7 @@ public:
     //    if impossible or MODE2 (mode2 formless) finish(false)
 
     m_useLibdvdcss = false;
-    m_usedSectorSize = m_sectorSize
+    m_usedSectorSize = m_sectorSize;
     if( m_device->isDVD() ) {
       m_usedSectorSize = MODE1;
 
@@ -384,7 +384,7 @@ public:
   int m_errorSectorCount;
 
 private:
-  m_usedSectorSize;
+  int m_usedSectorSize;
 };
 
 
