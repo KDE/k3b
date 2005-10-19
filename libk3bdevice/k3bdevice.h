@@ -63,7 +63,7 @@ namespace K3bDevice
        *
        * \return K3bDevice::SCSI or K3bDevice::IDE.
        */
-      Interface interfaceType();
+      Interface interfaceType() const;
 
       /**
        * The device type.

@@ -83,6 +83,8 @@ namespace K3bDevice
 
     void setMcn( const QCString& mcn ) { m_mcn = mcn; }
 
+    void clear();
+
   private:
     unsigned int m_discId;
     K3b::Msf m_firstSector;

@@ -188,40 +188,40 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
 {
   return d->cdWriter;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
 {
   return d->cdReader;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
 {
   return d->dvdWriter;
 }
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
 {
   return d->dvdReader;
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
 {
   return cdWriter();
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
 {
   return cdReader();
 }
 
 
-QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
 {
   return d->allDevices;
 }
@@ -323,7 +323,7 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   kdDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES." << endl;
   for( int i = 0; i < 16; i++ ) {
     QString sgDev = resolveSymLink( QString("/dev/sg%1").arg(i) );
-    int bus, id, lun;
+    int bus = -1, id = -1, lun = -1;
     if( determineBusIdLun( sgDev, bus, id, lun ) ) {
       if( Device* dev = findDevice( bus, id, lun ) ) {
 	dev->m_genericDevice = sgDev;

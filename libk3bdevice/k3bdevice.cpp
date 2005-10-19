@@ -146,6 +146,7 @@ public:
 #ifdef Q_OS_FREEBSD
       cam(0),
 #endif
+      openedReadWrite(false),
       burnfree(false) {
   }
 
@@ -413,7 +414,7 @@ void K3bDevice::Device::checkForAncientWriters()
 }
 
 
-K3bDevice::Interface K3bDevice::Device::interfaceType()
+K3bDevice::Interface K3bDevice::Device::interfaceType() const
 {
   if( m_bus != -1 && m_target != -1 && m_lun != -1 )
     return SCSI;

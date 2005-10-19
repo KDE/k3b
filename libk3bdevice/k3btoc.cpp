@@ -120,3 +120,11 @@ int K3bDevice::Toc::sessions() const
   else
     return last().session();
 }
+
+
+void K3bDevice::Toc::clear()
+{
+  QValueList<Track>::clear();
+  m_mcn.resize( 0 );
+  m_firstSector = 0;
+}
