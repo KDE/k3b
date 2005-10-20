@@ -103,13 +103,13 @@ namespace K3bDevice {
        * \return List of all cd writer devices.
        * \deprecated use cdWriter()
        */
-      const QPtrList<Device>& burningDevices() const;
+      QPtrList<Device>& burningDevices();
 
       /**
        * \return List of all reader devices without writer devices.
        * \deprecated use cdReader()
        **/
-      const QPtrList<Device>& readingDevices() const;
+      QPtrList<Device>& readingDevices();
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -117,7 +117,7 @@ namespace K3bDevice {
        *
        * \return List of all devices.
        */
-      const QPtrList<Device>& allDevices() const;
+      QPtrList<Device>& allDevices();
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -125,7 +125,7 @@ namespace K3bDevice {
        *
        * \return List of all cd writer devices.
        */
-      const QPtrList<Device>& cdWriter() const;
+      QPtrList<Device>& cdWriter();
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -133,7 +133,7 @@ namespace K3bDevice {
        *
        * \return List of all cd reader devices.
        */
-      const QPtrList<Device>& cdReader() const;
+      QPtrList<Device>& cdReader();
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -141,7 +141,7 @@ namespace K3bDevice {
        *
        * \return List of all DVD writer devices.
        */
-      const QPtrList<Device>& dvdWriter() const;
+      QPtrList<Device>& dvdWriter();
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -149,7 +149,7 @@ namespace K3bDevice {
        *
        * \return List of all DVD reader devices.
        */
-      const QPtrList<Device>& dvdReader() const;
+      QPtrList<Device>& dvdReader();
 
       /**
        * Reads the device information from the config file.

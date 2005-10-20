@@ -33,7 +33,7 @@ class K3bAbstractWriter : public K3bJob
  public:
   virtual ~K3bAbstractWriter();
 
-  K3bDevice::Device* burnDevice() const;
+  K3bDevice::Device* burnDevice();
   int burnSpeed() const { return m_burnSpeed; }
   bool simulate() const { return m_simulate; }
 

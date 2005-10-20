@@ -41,7 +41,7 @@ K3bAbstractWriter::~K3bAbstractWriter()
 }
 
 
-K3bDevice::Device* K3bAbstractWriter::burnDevice() const
+K3bDevice::Device* K3bAbstractWriter::burnDevice()
 {
   if( m_burnDevice )
     return m_burnDevice; 

@@ -188,40 +188,40 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter()
 {
   return d->cdWriter;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader()
 {
   return d->cdReader;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter()
 {
   return d->dvdWriter;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader()
 {
   return d->dvdReader;
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices()
 {
   return cdWriter();
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices()
 {
   return cdReader();
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
+QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices()
 {
   return d->allDevices;
 }
