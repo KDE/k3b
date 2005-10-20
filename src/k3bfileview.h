@@ -60,7 +60,7 @@ class K3bFileView : public K3bCdContentsView
 
  private:
   K3bToolBox* m_toolBox;
-  K3bDirOperator *m_dirOp;
+  K3bDirOperator* m_dirOp;
   KFileFilterCombo* m_filterWidget;
 
   void setupGUI();

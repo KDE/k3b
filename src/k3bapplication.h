@@ -20,6 +20,8 @@
 #include <kuniqueapplication.h>
 #include <k3bcore.h>
 
+#include <qmap.h>
+
 #define k3bappcore K3bApplication::Core::k3bAppCore()
 
 
@@ -29,6 +31,7 @@ class K3bAudioServer;
 class K3bThemeManager;
 class K3bProjectManager;
 class K3bAppDeviceManager;
+class K3bMediaCache;
 
 
 class K3bApplication : public KUniqueApplication
@@ -39,11 +42,12 @@ class K3bApplication : public KUniqueApplication
   K3bApplication();
   ~K3bApplication();
 
-  void init();
-
   int newInstance();
 
   class Core;
+
+ public slots:
+  void init();
 
  signals:
   void initializationInfo( const QString& );
@@ -97,6 +101,8 @@ class K3bApplication::Core : public K3bCore
 
   K3bProjectManager* projectManager() const { return m_projectManager; }
 
+  K3bMediaCache* mediaCache() const { return m_mediaCache; }
+
   K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
   static Core* k3bAppCore() { return s_k3bAppCore; }
@@ -136,11 +142,18 @@ class K3bApplication::Core : public K3bCore
    */
   void busyFinishRequested();
 
+ private slots:
+  void slotBurnJobStarted( K3bBurnJob* );
+  void slotBurnJobFinished( K3bBurnJob* );
+
  private:
   K3bThemeManager* m_themeManager;
   K3bMainWindow* m_mainWindow;
   K3bProjectManager* m_projectManager;
   K3bAppDeviceManager* m_appDeviceManager;
+  K3bMediaCache* m_mediaCache;
+
+  QMap<K3bJob*, int> m_deviceBlockMap;
 
   static Core* s_k3bAppCore;
 

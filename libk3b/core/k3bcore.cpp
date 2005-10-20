@@ -16,6 +16,7 @@
 #include <config.h>
 
 #include "k3bcore.h"
+#include "k3bjob.h"
 
 #include <k3bdevicemanager.h>
 #include <k3bexternalbinmanager.h>
@@ -53,7 +54,7 @@ public:
   K3bPluginManager* pluginManager;
   K3bGlobalSettings* globalSettings;
 
-  QPtrList<K3bJob> runningJobs;
+  QValueList<K3bJob*> runningJobs;
 };
 
 
@@ -185,12 +186,18 @@ void K3bCore::saveSettings( KConfig* cnf )
 void K3bCore::registerJob( K3bJob* job )
 {
   d->runningJobs.append( job );
+  emit jobStarted( job );
+  if( K3bBurnJob* bj = dynamic_cast<K3bBurnJob*>( job ) )
+    emit burnJobStarted( bj );
 }
 
 
 void K3bCore::unregisterJob( K3bJob* job )
 {
-  d->runningJobs.removeRef( job );
+  d->runningJobs.remove( job );
+  emit jobFinished( job );
+  if( K3bBurnJob* bj = dynamic_cast<K3bBurnJob*>( job ) )
+    emit burnJobFinished( bj );
 }
 
 
@@ -200,7 +207,7 @@ bool K3bCore::jobsRunning() const
 }
 
 
-const QPtrList<K3bJob>& K3bCore::runningJobs() const
+const QValueList<K3bJob*>& K3bCore::runningJobs() const
 {
   return d->runningJobs;
 }

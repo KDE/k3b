@@ -17,6 +17,9 @@
 #include "k3bfiletreeview.h"
 #include "k3bappdevicemanager.h"
 #include "k3bapplication.h"
+#include "k3bmediacache.h"
+#include "k3btooltip.h"
+#include "k3bthememanager.h"
 
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
@@ -40,6 +43,9 @@
 #include <qptrdict.h>
 #include <qpainter.h>
 #include <qfont.h>
+#include <qstyle.h>
+#include <qlabel.h>
+#include <qlayout.h>
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
@@ -51,15 +57,17 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 		       : SmallIcon("cdrom_unmount") ),
 		     false, 
 		     item == 0 
-		     ? new K3bDeviceBranchViewItem( view,
-						    new KFileItem( KURL(dev->mountPoint()), "inode/directory",
-								   S_IFDIR  ),
-						    this )
+		     ? new K3bDeviceBranchViewItem( view, dev, this )
 		     : item ), 
-    m_device( dev )
+    m_device( dev ),
+    m_showBlockDeviceName( false )
 {
   setAutoUpdate(true);
   root()->setExpandable(false);
+  updateLabel();
+
+  connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
+	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 }
 
 
@@ -69,19 +77,40 @@ void K3bDeviceBranch::setCurrent( bool c )
 }
 
 
-void K3bDeviceBranch::showBlockDeviceName( bool b )
+void K3bDeviceBranch::updateLabel()
 {
-  if( b )
-    setName( QString("%1 - %2 (%3)")
+  if( m_showBlockDeviceName )
+    setName( QString("%1 %2 (%3)")
 	     .arg(m_device->vendor())
 	     .arg(m_device->description())
 	     .arg(m_device->blockDeviceName()) );
   else
-    setName( QString("%1 - %2")
+    setName( QString("%1 %2")
 	     .arg(m_device->vendor())
 	     .arg(m_device->description()) );
 
-  root()->setText( 0, name() );
+  if( k3bappcore->mediaCache() ) {
+    root()->setMultiLinesEnabled( true );
+    root()->setText( 0, name() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
+  }
+  else {
+    root()->setMultiLinesEnabled( false );
+    root()->setText( 0, name() );
+  }
+}
+
+
+void K3bDeviceBranch::slotMediumChanged( K3bDevice::Device* dev )
+{
+  if( dev == m_device )
+    updateLabel();
+}
+
+
+void K3bDeviceBranch::showBlockDeviceName( bool b )
+{
+  m_showBlockDeviceName = b;
+  updateLabel();
 }
 
 
@@ -165,15 +194,27 @@ K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
 
 
 
-K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
-  : KFileTreeViewItem( parent, item, branch ),
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent, 
+						  K3bDevice::Device* dev,
+						  K3bDeviceBranch* branch )
+  : KFileTreeViewItem( parent, 
+		       new KFileItem( KURL(dev->mountPoint()), 
+				      "inode/directory",
+				      S_IFDIR  ),
+		       branch ),
     m_bCurrent( false )
 {
 }
 
 
-K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-  : KFileTreeViewItem( parent, item, branch ),
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent,
+						  K3bDevice::Device* dev,
+						  K3bDeviceBranch* branch )
+  : KFileTreeViewItem( parent,
+		       new KFileItem( KURL(dev->mountPoint()), 
+				      "inode/directory",
+				      S_IFDIR  ),
+		       branch ),
     m_bCurrent( false )
 {
 }
@@ -186,17 +227,64 @@ void K3bDeviceBranchViewItem::setCurrent( bool c )
 }
 
 
-void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int /* col */, int width, int align )
 {
   p->save();
 
+  int xpos = 1;
+  int ypos = 1;
+  QFontMetrics fm( p->fontMetrics() );
+
+  if( isSelected() ) {
+    p->fillRect( 0, 0, width, height(),
+		 cg.brush( QColorGroup::Highlight ) );
+    p->setPen( cg.highlightedText() );
+  }
+  else {
+    p->fillRect( 0, 0, width, height(), cg.base() ); 
+    p->setPen( cg.text() );
+  }
+
+  if( pixmap(0) ) {
+    p->drawPixmap( xpos, ypos, *pixmap(0) );
+    xpos += pixmap(0)->width() + 5;
+  }
+
   if( m_bCurrent ) {
-    QFont f( p->font() );
+    QFont f( listView()->font() );
     f.setBold( true );
     p->setFont( f );
   }
 
-  KFileTreeViewItem::paintCell( p, cg, col, width, align );
+  ypos += fm.ascent();
+  QString line1 = text(0).left( text(0).find('\n') );
+  p->drawText( xpos, ypos, line1 );
+
+  QFont f( listView()->font() );
+  f.setItalic( true );
+  f.setPointSize( f.pointSize() - 2 );
+  p->setFont( f );
+
+  ypos += p->fontMetrics().height() + 1;
+  QString line2 = text(0).mid( text(0).find('\n')+1 );
+  p->drawText( xpos - p->fontMetrics().leftBearing( line2[0] ), ypos, line2 );
+
+
+  // from QListViewItem
+  if( isOpen() && childCount() ) {
+    int textheight = fm.size( align, text(0) ).height() + 2 * listView()->itemMargin();
+    textheight = QMAX( textheight, QApplication::globalStrut().height() );
+    if ( textheight % 2 > 0 )
+      textheight++;
+    if ( textheight < height() ) {
+      int w = listView()->treeStepSize() / 2;
+      listView()->style().drawComplexControl( QStyle::CC_ListView, p, listView(),
+					      QRect( 0, textheight, w + 1, height() - textheight + 1 ), cg,
+					      QStyle::Style_Enabled,
+					      QStyle::SC_ListViewExpand,
+					      (uint)QStyle::SC_All, QStyleOption( this ) );
+    }
+  }
 
   p->restore();
 }
@@ -206,6 +294,7 @@ QString K3bDeviceBranchViewItem::key( int column, bool ascending ) const
 {
   return "0" + KFileTreeViewItem::key( column, ascending );
 }
+
 
 
 K3bFileTreeViewItem::K3bFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
@@ -226,6 +315,90 @@ QString K3bFileTreeViewItem::key( int column, bool ascending ) const
 }
 
 
+class K3bDeviceTreeToolTip : public K3bToolTip
+{
+public:
+  K3bDeviceTreeToolTip( QWidget* parent, K3bFileTreeView* lv );
+  
+  void maybeTip( const QPoint &pos );
+  
+private:
+  K3bFileTreeView* m_view;
+};
+
+
+K3bDeviceTreeToolTip::K3bDeviceTreeToolTip( QWidget* parent, K3bFileTreeView* lv )
+  : K3bToolTip( parent ),
+    m_view( lv )
+{
+  setTipTimeout( 500 );
+}
+
+
+void K3bDeviceTreeToolTip::maybeTip( const QPoint& pos )
+{
+  if( !parentWidget() || !m_view )
+    return;
+
+  K3bDeviceBranchViewItem* item = dynamic_cast<K3bDeviceBranchViewItem*>( m_view->itemAt( pos ) );
+  if( !item )
+    return;
+
+  K3bDevice::Device* dev = static_cast<K3bDeviceBranch*>( item->branch() )->device();
+
+  QFrame* tooltip = new QFrame( parentWidget() );
+  tooltip->setFrameStyle( QFrame::Panel | QFrame::Raised );
+  tooltip->setFrameShape( QFrame::StyledPanel );
+  QGridLayout* lay = new QGridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
+
+  QString text = k3bappcore->mediaCache()->medium( dev ).longString();
+  int detailsStart = text.find( "<p>", 3 );
+  QString details = text.mid( detailsStart );
+  text.truncate( detailsStart );
+
+  QLabel* label = new QLabel( text, tooltip );
+  label->setMargin( 9 );
+  lay->addMultiCellWidget( label, 0, 0, 0, 1 );
+  label = new QLabel( details, tooltip );
+  label->setMargin( 9 );
+  label->setAlignment( Qt::Vertical );
+  lay->addMultiCellWidget( label, 1, 2, 0, 0 );
+  label = new QLabel( tooltip );
+  lay->addWidget( label, 2, 1 );
+  lay->setColStretch( 0, 1 );
+
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    tooltip->setPaletteBackgroundColor( theme->backgroundColor() );
+    tooltip->setPaletteForegroundColor( theme->foregroundColor() );
+    K3bTheme::PixmapType pm;
+    K3bDevice::Toc toc = k3bappcore->mediaCache()->toc( dev );
+    switch( toc.contentType() ) {
+    case K3bDevice::DATA:
+      pm = K3bTheme::MEDIA_DATA;
+      break;
+    case K3bDevice::AUDIO:
+      pm = K3bTheme::MEDIA_AUDIO;
+      break;
+    case K3bDevice::MIXED:
+      pm = K3bTheme::MEDIA_MIXED;
+      break;
+    case K3bDevice::NONE: {
+      K3bDevice::DiskInfo di = k3bappcore->mediaCache()->diskInfo( dev );
+      if( di.diskState() == K3bDevice::STATE_EMPTY )
+	pm = K3bTheme::MEDIA_EMPTY;
+      else
+	pm = K3bTheme::MEDIA_NONE;
+      break;
+    }
+    }
+    label->setPixmap( theme->pixmap( pm ) );
+  }
+
+  // the tooltip will take care of deleting the widget
+  tip( m_view->itemRect( item ), tooltip );
+}
+
+
 
 class K3bFileTreeView::Private
 {
@@ -240,6 +413,8 @@ public:
 
   K3bDevice::DeviceManager* deviceManager;
   K3bDeviceBranch* currentDeviceBranch;
+
+  K3bDeviceTreeToolTip* toolTip;
 };
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
@@ -247,11 +422,13 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 {
   d = new Private();
 
+  d->toolTip = new K3bDeviceTreeToolTip( viewport(), this );
+
   addColumn( i18n("Directories") );
   setDragEnabled( true );
   setAlternateBackground( QColor() );
   setFullWidth(true);
-  setRootIsDecorated(true);
+  //  setRootIsDecorated(true);
   setSorting(0);
 
   m_dirOnlyMode = true;
@@ -332,9 +509,8 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
   d->branchDeviceMap.clear();
   d->deviceBranchDict.clear();
 
-  QPtrList<K3bDevice::Device>& devices = dm->allDevices();
-  for ( K3bDevice::Device* dev = devices.first(); dev != 0; dev = devices.next() )
-    addDeviceBranch( dev );
+  for( QPtrListIterator<K3bDevice::Device> it( dm->allDevices() ); *it; ++it )
+    addDeviceBranch( *it );
 
   if( dm != d->deviceManager ) {
     if( d->deviceManager )

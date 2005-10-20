@@ -35,6 +35,12 @@ public:
     success = false;
     m_bCanceled = false;
 
+    // clear data
+    toc.clear();
+    ngInfo = DiskInfo();
+    cdText.clear();
+    cdTextRaw.resize(0);
+
     if( dev ) {
       success = dev->open();
       if( !m_bCanceled && command & DISKINFO ) {

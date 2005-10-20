@@ -29,16 +29,17 @@
 #include <qfile.h>
 #include <qcstring.h>
 #include <qdatastream.h>
+#include <qtimer.h>
 
 #include <stdlib.h>
 
 #include "k3bapplication.h"
 #include <k3bglobals.h>
+#include <k3bcore.h>
 
 
 #include <config.h>
 
-static const char* appVersion = "0.12.90";
 static const char* description = I18N_NOOP("A CD and DVD burning application");
 
 
@@ -53,6 +54,7 @@ static KCmdLineOptions options[] =
         { "datadvd", I18N_NOOP("Create a new data DVD project and add all given files"), 0 },
         { "emovixdvd", I18N_NOOP("Create a new eMovix DVD project and add all given files"), 0 },
         { "videodvd", I18N_NOOP("Create a new Video DVD project and add all given files"), 0 },
+        { "burn", I18N_NOOP("Open the project burn dialog for the current project"), 0 },
         { "copycd", I18N_NOOP("Open the CD copy dialog"), 0 },
         { "copydvd", I18N_NOOP("Open the DVD copy dialog"), 0 },
         { "cdimage", I18N_NOOP("Write a CD image to a CD-R(W)"), 0 },
@@ -69,9 +71,9 @@ static KCmdLineOptions options[] =
 int main( int argc, char* argv[] )
 {
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
-			appVersion, description, KAboutData::License_GPL,
+			LIBK3B_VERSION, description, KAboutData::License_GPL,
 			I18N_NOOP("(c) 1999 - 2005, Sebastian Trüg and the K3b Team"), 0, "http://www.k3b.org" );
-  aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer"), "trueg@k3b.org");
+  aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
   aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer"), "kd@k3b.org" );
@@ -119,7 +121,9 @@ int main( int argc, char* argv[] )
 		  << " current is: " << KGlobal::locale()->language() << endl;
   
     K3bApplication app;
-    app.init();
+
+    // we need a running app for the init method
+    QTimer::singleShot( 0, &app, SLOT(init()) );
 
     return app.exec();
   }

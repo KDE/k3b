@@ -19,6 +19,7 @@
 
 #include <k3bthreadjob.h>
 #include <k3bmsf.h>
+#include <k3bglobals.h>
 
 namespace K3bDevice {
   class Device;
@@ -31,7 +32,7 @@ namespace K3bDevice {
  * by readcd and readcd is not very good to handle anyway.
  *
  * The sector size read is the following:
- * @li Mode1: 2048 bytes (onyl user data)
+ * @li Mode1: 2048 bytes (only user data)
  * @li Mode2 Form1: 2056 bytes containing the subheader and the user data
  * @li Mode2 Form2: 2332 bytes containing the subheader and the user data
  *
@@ -42,6 +43,15 @@ class K3bDataTrackReader : public K3bThreadJob
  public:
   K3bDataTrackReader( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bDataTrackReader();
+
+  enum SectorSize {
+    AUTO = 0,
+    MODE1 = K3b::SECTORSIZE_MODE1,
+    MODE2FORM1 = K3b::SECTORSIZE_XA_FORM1,
+    MODE2FORM2 = K3b::SECTORSIZE_XA_FORM2
+  };
+
+  void setSectorSize( SectorSize size );
 
   void setDevice( K3bDevice::Device* );
 

@@ -39,6 +39,8 @@
 #include <qprogressbar.h>
 #include <qimage.h>
 
+#include <kpixmapeffect.h>
+
 #include <limits.h>
 
 
@@ -1034,6 +1036,77 @@ QListViewItem* K3bListView::parentItem( QListViewItem* item )
     return item->parent();
   else
     return K3bListView::parentItem( item->itemAbove() );
+}
+
+
+KPixmap K3bListView::createDragPixmap( const QPtrList<QListViewItem>& items )
+{
+  //
+  // Create drag pixmap.
+  // If there are too many items fade the pixmap using the mask
+  // always fade invisible items
+  //
+  int width = header()->width();
+  int height = 0;
+  for( QPtrListIterator<QListViewItem> it( items ); *it; ++it ) {
+    QRect r = itemRect( *it );
+
+    if( r.isValid() ) {
+      height += ( *it )->height();
+    }
+  }
+
+  // now we should have a range top->bottom which includes all visible items
+  
+  // there are two situations in which we fade the pixmap on the top or the bottom:
+  // 1. there are invisible items above (below) the visible
+  // 2. the range is way too big
+
+  // FIXME: how do we determine if there are invisible items outside our range?
+
+  KPixmap pix;
+  pix.resize( width, height );
+  pix.fill( Qt::white );
+  //  QBitmap mask( width, bottom-top );
+
+  // now paint all the visible items into the pixmap
+  // FIXME: only paint the visible items
+  QPainter p( &pix );
+  for( QListViewItemIterator it( this ); *it; ++it ) {
+    QListViewItem* item = *it;
+
+    // FIXME: items on other than the top level have a smaller first column
+    //        the same goes for all items if root is decorated
+    bool alreadyDrawing = false;
+    QRect r = itemRect( item );
+    if( r.isValid() ) {
+      if( items.containsRef( item ) ) {
+	// paint all columns
+	int x = 0;
+	for( int i = 0; i < columns(); ++i ) {
+	  item->paintCell( &p, colorGroup(), i, columnWidth( i ), columnAlignment( i ) );
+	  p.translate( columnWidth( i ), 0 );
+	  x += columnWidth( i );
+	}
+
+	p.translate( -x, item->height() );
+
+	alreadyDrawing = true;
+      }
+      else if( alreadyDrawing )
+	p.translate( 0, item->height() );
+
+      if( p.worldMatrix().dy() >= pix.height() )
+	break;
+    }
+  }
+
+  // make it a little lighter
+  KPixmapEffect::fade( pix, 0.3, Qt::white );
+
+  // FIXME: fade the pixmap at the right side if the items are longer than width
+
+  return pix;
 }
 
 #include "k3blistview.moc"

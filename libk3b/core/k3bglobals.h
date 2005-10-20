@@ -55,6 +55,19 @@ namespace K3b
   };
 
   /**
+   * The sector size denotes the number of bytes K3b provides per sector.
+   * This is based on the sizes cdrecord's -data, -xa, and -xamix parameters
+   * demand.
+   */
+  enum SectorSize {
+    SECTORSIZE_AUDIO = 2352,
+    SECTORSIZE_MODE1 = 2048,
+    SECTORSIZE_XA_FORM1 = 2056,
+    SECTORSIZE_XA_FORM2 = 2332,
+    SECTORSIZE_RAW = 2448
+  };
+
+  /**
    * AUTO  - let K3b determine the best mode
    * TAO   - Track at once
    * DAO   - Disk at once (or session at once)

@@ -381,7 +381,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
       // the actionmenu containing all the other file_new actions and that would not make sense
       // on a toolbutton
       QString aname(a->name());
-      if( aname != "file_new"  && aname != "file_new_cd" && aname != "file_new_dvd" &&
+      if( aname != "file_new" &&
 	  ( aname.startsWith( "tools" ) || aname.startsWith( "file_new" ) ) &&
 	  !main->m_actions.containsRef(a) )
 	map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );

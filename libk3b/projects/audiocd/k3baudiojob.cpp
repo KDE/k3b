@@ -131,6 +131,27 @@ void K3bAudioJob::start()
   // we don't need this when only creating image and it is possible
   // that the burn device is null
   if( !m_doc->onlyCreateImages() ) {
+
+    //
+    // there are a lot of writers out there which produce coasters
+    // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
+    //
+    // Also most writers do not accept cuesheets with tracks smaller than 4 seconds (a violation
+    // of the red book standard) in DAO mode.
+    //
+    bool zeroPregap = false;
+    bool less4Sec = false;
+    K3bAudioTrack* track = m_doc->firstTrack();
+    while( track ) {
+      if( track->postGap() == 0 && track->next() != 0 ) // the last track's postgap is always 0
+	zeroPregap = true;
+
+      if( track->length() < K3b::Msf( 0, 4, 0 ) )
+	less4Sec = true;
+
+      track = track->next();
+    }
+
     // determine writing mode
     if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
       //
@@ -138,32 +159,16 @@ void K3bAudioJob::start()
       // RAW second and TAO last
       // there are none-DAO writers that are supported by cdrdao
       //
+      // older cdrecord versions do not support the -shorttrack option in RAW writing mode
+      //
       if( !writer()->dao() && writingApp() == K3b::CDRECORD ) {
-	if( !writer()->supportsRawWriting() )
-	  m_usedWritingMode = K3b::TAO;
-	else
+	if(!writer()->supportsRawWriting() &&
+	   ( !less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
 	  m_usedWritingMode = K3b::RAW;
+	else
+	  m_usedWritingMode = K3b::TAO;
       }
       else {
-	//
-        // there are a lot of writers out there which produce coasters
-        // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
-	//
-	// Also most writers do not accept cuesheets with tracks smaller than 4 seconds (a violation
-	// of the red book standard) in DAO mode.
-	//
-        bool zeroPregap = false;
-	bool less4Sec = false;
-	K3bAudioTrack* track = m_doc->firstTrack();
-        while( track ) {
-          if( track->postGap() == 0 && track->next() != 0 ) // the last track's postgap is always 0
-            zeroPregap = true;
-
-	  if( track->length() < K3b::Msf( 0, 4, 0 ) )
-	    less4Sec = true;
-
-	  track = track->next();
-        }
         if( (zeroPregap||less4Sec) && writer()->supportsRawWriting() ) {
           m_usedWritingMode = K3b::RAW;
 	  if( less4Sec )

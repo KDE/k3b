@@ -69,6 +69,14 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
    */
   virtual bool isFromOldSession() const;
 
+  /**
+   * Recursively creates a directory.
+   */
+  bool mkdir( const QString& dir );
+
+  void setLocalPath( const QString& p ) { m_localPath = p; }
+  QString localPath() const { return m_localPath; }
+
  protected:
   /**
    * Normally one does not use this method but K3bDataItem::size()
@@ -109,6 +117,10 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
 
   long m_files;
   long m_dirs;
+
+  // HACK: store the original path to be able to use it's permissions
+  //        ´remove this once we have a backup project
+  QString m_localPath;
 };
 
 

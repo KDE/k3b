@@ -23,14 +23,11 @@
 
 #include <k3bdevice.h>
 
-namespace K3bDevice {
-  class DiskInfoDetector;
-}
 
 class QLabel;
-class K3bBusyWidget;
 class KListBox;
 class K3bDataDoc;
+class K3bMediaSelectionComboBox;
 
 
 class K3bDataSessionImportDialog : public KDialogBase
@@ -57,24 +54,11 @@ class K3bDataSessionImportDialog : public KDialogBase
   void slotOk();
   void slotCancel();
 
-  void checkNextDevice();
-  void slotDiskInfoReady( K3bDevice::DiskInfoDetector* );
-
-  void slotSelectionChanged();
+  void slotSelectionChanged( K3bDevice::Device* );
 
  private:
-  K3bDevice::DiskInfoDetector* m_diskInfoDetector;
-
   K3bDataDoc* m_doc;
-
-  QLabel* m_processLabel;
-  K3bBusyWidget* m_busyWidget;
-  KListBox* m_selectionBox;
-
-  bool m_alreadySelected;
-
-  QPtrList<K3bDevice::Device> m_devices;
-  QMap<int, K3bDevice::Device*> m_deviceMap;
+  K3bMediaSelectionComboBox* m_comboMedia;
 };
 
 #endif

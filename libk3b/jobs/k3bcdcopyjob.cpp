@@ -622,7 +622,11 @@ void K3bCdCopyJob::readNextSession()
     d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
     d->dataTrackReader->setNoCorrection( m_noCorrection );
     d->dataTrackReader->setRetries( m_readRetries );
-    
+    if( m_onlyCreateImages )
+      d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
+    else
+      d->dataTrackReader->setSectorSize( K3bDataTrackReader::AUTO );
+
     K3bTrack* track = 0;
     unsigned int dataTrackIndex = 0;
     if( d->toc.contentType() == K3bDevice::MIXED ) {
@@ -851,13 +855,27 @@ bool K3bCdCopyJob::writeNextSession()
     //
     // Data Session
     //
+    K3bTrack* track = 0;
+    unsigned int dataTrackIndex = 0;
+    if( d->toc.contentType() == K3bDevice::MIXED ) {
+      track = &d->toc[d->toc.count()-1];
+      dataTrackIndex = 0;
+    }
+    else {
+      track = &d->toc[d->currentWrittenSession-1];
+      dataTrackIndex = d->currentWrittenSession-1;
+    }
+
     bool multi = d->doNotCloseLastSession || (d->numSessions > 1 && d->currentWrittenSession < d->toc.count());
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
-      // FIXME: at least the NEC3540a does write 2056 byte sectors only in tao mode.
+      // at least the NEC3540a does write 2056 byte sectors only in tao mode. Same for LG4040b
+      // since writing data tracks in TAO mode is no loss let's default to TAO in the case of 2056 byte
+      // sectors (which is when writing xa form1 sectors here)
       if( m_writerDevice->dao() &&
 	  d->toc.count() == 1 && 
-	  !multi )
+	  !multi &&
+	  track->mode() == K3bDevice::Track::MODE1 )
  	usedWritingMode = K3b::DAO;
       else
 	usedWritingMode = K3b::TAO;
@@ -874,17 +892,6 @@ bool K3bCdCopyJob::writeNextSession()
     // just to let the reader init
     if( m_onTheFly )
       d->cdrecordWriter->addArgument( "-waiti" );
-
-    K3bTrack* track = 0;
-    unsigned int dataTrackIndex = 0;
-    if( d->toc.contentType() == K3bDevice::MIXED ) {
-      track = &d->toc[d->toc.count()-1];
-      dataTrackIndex = 0;
-    }
-    else {
-      track = &d->toc[d->currentWrittenSession-1];
-      dataTrackIndex = d->currentWrittenSession-1;
-    }
 
     if( track->mode() == K3bDevice::Track::MODE1 )
       d->cdrecordWriter->addArgument( "-data" );

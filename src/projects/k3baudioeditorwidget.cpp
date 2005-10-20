@@ -300,37 +300,17 @@ void K3bAudioEditorWidget::drawContents( QPainter* p )
   QPainter pixP;
   pixP.begin( &pix, this );
 
-  // we simply draw the ranges one after the other.
-  // since K3b doesn't use multiple overlapping ranges anyway this is no problem
-  for( QPtrListIterator<Range> it( m_ranges ); *it; ++it )
-    drawRange( &pixP, *it );
-  
-  for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
-    drawMarker( &pixP, *it );
+  QRect drawRect( contentsRect() );
+  drawRect.setLeft( drawRect.left() + m_margin );
+  drawRect.setRight( drawRect.right() - m_margin );
 
+  // from minimumSizeHint()
+  int neededHeight = fontMetrics().height() + 12;
 
-  // left vline
-  pixP.drawLine( contentsRect().left() + m_margin, contentsRect().top() + m_margin, 
-		 contentsRect().left() + m_margin, contentsRect().bottom() - m_margin );
+  drawRect.setTop( drawRect.top() + (drawRect.height() - neededHeight)/2 );
+  drawRect.setHeight( neededHeight );
 
-  // timeline
-  pixP.drawLine( contentsRect().left() + m_margin, contentsRect().bottom() - m_margin, 
-		 contentsRect().right() - m_margin, contentsRect().bottom() - m_margin );
-
-  // right vline
-  pixP.drawLine( contentsRect().right() - m_margin, contentsRect().top() + m_margin, 
-		 contentsRect().right() - m_margin, contentsRect().bottom() - m_margin );
-
-  // draw the timemark things every second
-  // FIXME: seconds if enough space
-  int pos = 1;
-  int markerVPos = contentsRect().bottom() - m_margin;
-  while( pos*60*75 < m_length ) {
-    int x = fromPosToX( pos*60*75 );
-    pixP.drawLine( x, markerVPos, x, markerVPos-5 );
-    pixP.drawText( x, markerVPos-6, QString::number(pos) );
-    ++pos;
-  }
+  drawAll( &pixP, drawRect );
 
   pixP.end();
 
@@ -341,29 +321,63 @@ void K3bAudioEditorWidget::drawContents( QPainter* p )
 }
 
 
-void K3bAudioEditorWidget::drawRange( QPainter* p, K3bAudioEditorWidget::Range* r )
+void K3bAudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
+{
+  // we simply draw the ranges one after the other.
+  // since K3b doesn't use multiple overlapping ranges anyway this is no problem
+  for( QPtrListIterator<Range> it( m_ranges ); *it; ++it )
+    drawRange( p, drawRect, *it );
+  
+  for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
+    drawMarker( p, drawRect, *it );
+
+
+  // left vline
+  p->drawLine( drawRect.left(), drawRect.top(), 
+	       drawRect.left(), drawRect.bottom() );
+
+  // timeline
+  p->drawLine( drawRect.left(), drawRect.bottom(), 
+	       drawRect.right(), drawRect.bottom() );
+
+  // right vline
+  p->drawLine( drawRect.right(), drawRect.top(), 
+	       drawRect.right(), drawRect.bottom() );
+
+  // draw the timemark things every second
+  // FIXME: seconds if enough space
+  int pos = 1;
+  int markerVPos = drawRect.bottom();
+  while( pos*60*75 < m_length ) {
+    int x = fromPosToX( pos*60*75 );
+    p->drawLine( x, markerVPos, x, markerVPos-5 );
+    p->drawText( x, markerVPos-6, QString::number(pos) );
+    ++pos;
+  }
+}
+
+
+void K3bAudioEditorWidget::drawRange( QPainter* p, const QRect& drawRect, K3bAudioEditorWidget::Range* r )
 {
   p->save();
 
   int start = fromPosToX( r->start );
   int end = fromPosToX( r->end );
 
-  // draw the range
-  // FIXME: variable height
-  p->fillRect( start, m_margin, end-start+1, contentsRect().height()-2*m_margin, r->brush );
+  p->fillRect( start, drawRect.top(), end-start+1, drawRect.height(), r->brush );
 
   p->restore();
 }
 
 
-void K3bAudioEditorWidget::drawMarker( QPainter* p, K3bAudioEditorWidget::Marker* m )
+void K3bAudioEditorWidget::drawMarker( QPainter* p, const QRect& drawRect, K3bAudioEditorWidget::Marker* m )
 {
   p->save();
 
   p->setPen( m->color );
 
   int x = fromPosToX( m->pos );
-  p->drawLine( x, m_margin, x, contentsRect().height()-m_margin );
+  p->drawLine( x, drawRect.top(), x, drawRect.height() );
 
   p->restore();
 }

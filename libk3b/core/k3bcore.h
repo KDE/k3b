@@ -18,12 +18,12 @@
 #define _K3B_CORE_H_
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include "k3b_export.h"
 
 
-#define LIBK3B_VERSION "0.12"
+#define LIBK3B_VERSION "0.12.91"
 
 #define k3bcore K3bCore::k3bCore()
 
@@ -33,6 +33,7 @@ class K3bVersion;
 class KConfig;
 class KAboutData;
 class K3bJob;
+class K3bBurnJob;
 class K3bGlobalSettings;
 class K3bPluginManager;
 
@@ -61,7 +62,7 @@ class LIBK3B_EXPORT K3bCore : public QObject
   K3bCore( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCore();
 
-  const QPtrList<K3bJob>& runningJobs() const;
+  const QValueList<K3bJob*>& runningJobs() const;
 
   /**
    * Equals to !runningJobs().isEmpty()
@@ -115,6 +116,15 @@ class LIBK3B_EXPORT K3bCore : public QObject
   virtual KConfig* config() const;
 
   static K3bCore* k3bCore() { return s_k3bCore; }
+
+ signals:
+  /**
+   * Emitted once a new job has been started. This includes burn jobs.
+   */
+  void jobStarted( K3bJob* );
+  void burnJobStarted( K3bBurnJob* );
+  void jobFinished( K3bJob* );
+  void burnJobFinished( K3bBurnJob* );
 
  public slots:
   /**

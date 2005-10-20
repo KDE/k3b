@@ -22,6 +22,7 @@
 #include "k3binterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
+#include "k3bmediacache.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -36,6 +37,8 @@
 #include <k3bthememanager.h>
 #include <k3bmsf.h>
 #include <k3bmovixprogram.h>
+#include <k3bview.h>
+#include <k3bjob.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -295,6 +298,13 @@ bool K3bApplication::processCmdLineArgs()
     }
   }
 
+  if( args->isSet( "burn" ) ) {
+    if( m_core->projectManager()->activeDoc() ) {
+      showTips = false;
+      static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
+    }
+  }
+
   if( k3bcore->jobsRunning() == 0 ) {
     if( args->isSet("copycd") ) {
       showTips = false;
@@ -327,6 +337,7 @@ bool K3bApplication::processCmdLineArgs()
 
 void K3bApplication::slotShutDown()
 {
+  k3bappcore->mediaCache()->clearDeviceList();
   K3bThread::waitUntilFinished();
 }
 
@@ -341,8 +352,18 @@ K3bApplication::Core::Core( QObject* parent )
   // we need the themes on startup (loading them is fast anyway :)
   m_themeManager->loadThemes();
 
-  // our very own speial device manager
+  // our very own special device manager
   m_appDeviceManager = new K3bAppDeviceManager( this );
+
+  // create the media cache but do not connect it to the device manager
+  // yet to speed up application start. We connect it in init()
+  // once the devicemanager has scanned for devices.
+  m_mediaCache = new K3bMediaCache( this );
+
+  connect( this, SIGNAL(burnJobStarted(K3bBurnJob*)),
+	   this, SLOT(slotBurnJobStarted(K3bBurnJob*)) );
+  connect( this, SIGNAL(burnJobFinished(K3bBurnJob*)),
+	   this, SLOT(slotBurnJobFinished(K3bBurnJob*)) );
 }
 
 
@@ -387,6 +408,11 @@ void K3bApplication::Core::init()
     kdDebug() << "No Devices found!" << endl;
   else
     deviceManager()->printDevices();
+
+  mediaCache()->buildDeviceList( deviceManager() );
+
+  connect( deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+	   mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
 }
 
 
@@ -422,6 +448,25 @@ void K3bApplication::Core::requestBusyInfo( const QString& text )
 void K3bApplication::Core::requestBusyFinish()
 {
   emit busyFinishRequested();
+}
+
+
+void K3bApplication::Core::slotBurnJobStarted( K3bBurnJob* job )
+{
+  // block the device used in the burn job
+  // this way we get all the burn jobs
+  if( mediaCache() ) {
+    m_deviceBlockMap[job] = mediaCache()->blockDevice( job->writer() );
+  }
+}
+
+
+void K3bApplication::Core::slotBurnJobFinished( K3bBurnJob* job )
+{
+  if( mediaCache() ) {
+    mediaCache()->unblockDevice( job->writer(), m_deviceBlockMap[job] );
+    m_deviceBlockMap.erase( job );
+  }
 }
 
 #include "k3bapplication.moc"

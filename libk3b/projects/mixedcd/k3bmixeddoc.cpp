@@ -211,7 +211,7 @@ K3bDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength
       (*it).setLastSector( (*it).lastSector() + dataTrack.length() );
       (*it).setFirstSector( (*it).firstSector() + dataTrack.length() );
     }
-    toc.prepend( dataTrack );
+    toc.insert( toc.begin(), dataTrack );
   }
   else {
     // fix the datatrack's sectors

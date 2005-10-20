@@ -1,0 +1,164 @@
+<!--
+ This document describes the layout of the toc.xml file in a K3b image archive.
+ A K3b image archive is a ZIP archive with a simple layout as follows.
+
+ Every K3b image archive contains the toc.xml file as described in this document
+ which describes the layout of the CD or DVD saved in the K3b image archive.
+ Additionally the K3b image archive contains an arbitrary number of files which
+ contain the CD/DVD sector data. These files are referenced in the elements of
+ type "file".
+
+ The most simple K3b image archive may look as follows:
+ Archive
+   |- toc.xml
+   |- image.iso
+ and the toc.xml may look as follows:
+   <image>
+     <numsessions>1</numsessions>
+     <numtracks>1</numtracks>
+     <session number="1">
+       <numtracks>1</numtracks>
+       <track number="1" type="Data Mode1">
+         <data sectorsize="2048">
+           <filename>image.iso</filename>
+         </data>
+       </track>
+     </session>
+   </image>
+-->
+
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	   targetNamespace="http://www.k3b.org"
+	   xmlns="http://www.k3b.org"
+	   elementFormDefault="qualified">
+
+<!-- THE TYPES -->
+	<xs:simpleType name="tracktype">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Audio" />
+			<xs:enumeration value="Data Mode1" />
+			<xs:enumeration value="Data Mode2" />
+			<xs:enumeration value="Data XA Form1" />
+			<xs:enumeration value="Data XA Form2" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="sector_size">
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="2048"/> <!-- plain user data -->
+			<xs:enumeration value="2056"/> <!-- Mode2 form 1: 2048 bytes user data + 8 bytes sub header FIXME: or does this include 4 bytes crc? -->
+			<xs:enumeration value="2332"/> <!-- Mode2 form 2: 2324 bytes user data + 8 bytes sub header FIXME: or does this include 4 bytes crc? -->
+			<xs:enumeration value="2352"/> <!-- Audio data: 16bit, stereo, 44100Hz, big endian -->
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="file">
+		<xs:sequence>
+			<!-- Filename in the image archive. -->
+			<xs:element name="filename" type="xs:string" />
+
+			<!-- The start_sector allows for multiple tracks including the CD-TEXT to be defined in one file. Default: 0 -->
+			<xs:element name="start_offset" type="xs:nonNegativeInteger" minOccurs="0" />
+
+			<!-- The number of bytes to be used. Default: up to end of the file -->
+			<xs:element name="length" type="xs:positiveInteger" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="catalogname">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{13}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="isrcname">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z0-9]{5}[0-9]{7}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+
+
+<!-- THE IMAGE DEFINITION -->
+
+	<xs:element name="image">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- Number of session for convinience -->
+				<xs:element name="numsessions" type="xs:positiveInteger" />
+
+				<!-- Number of tracks for convinience -->
+				<xs:element name="numtracks" type="xs:positiveInteger" />
+
+				<!-- CD-TEXT is always stored in binary form -->
+				<xs:element name="cdtext" type="file" minOccurs="0" />
+
+				<!-- The optional catalog name. -->
+				<xs:element name="catalog" type="catalogname" minOccurs="0" />
+
+				<!-- The tracks are splitted into sessions. In most cases there will only be one session. -->
+				<xs:element name="session" maxOccurs="99"> <!-- FIXME: what is the real max here? -->
+					<xs:complexType>
+						<xs:sequence>
+							<!-- Number of tracks in this session for convinience -->
+							<xs:element name="numtracks" type="xs:positiveInteger" />
+
+							<!-- And here come the tracks. -->
+							<xs:element name="track" maxOccurs="99">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="data">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="file">
+														<xs:attribute name="sectorsize" type="sector_size" />
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										
+										<!-- The index tag contains the start sector of the index relative to the start of the track. -->
+										<xs:element name="index" minOccurs="0" maxOccurs="100">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:nonNegativeInteger">
+														<xs:attribute name="number" type="xs:nonNegativeInteger" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										
+										<!-- Pre emphasis. -->
+										<xs:element name="preemp" type="xs:boolean" minOccurs="0" default="false" />
+										
+										<!-- Copy permitted. -->
+										<xs:element name="copy" type="xs:boolean" minOccurs="0" default="true" />
+										
+										<!-- SCMS enabled (alternating copy control bit). Only useful in combination with
+										     copy=true. -->
+										<xs:element name="scms" type="xs:boolean" minOccurs="0" default="false" />
+										
+										<xs:element name="isrc" type="isrcname" minOccurs="0" />
+									</xs:sequence>
+
+									<!-- The track number for convinience. -->
+									<xs:attribute name="number" type="xs:positiveInteger" />
+
+									<!-- Type of the track as defined above. -->
+									<xs:attribute name="type" type="tracktype" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+
+						<!-- The session number for convinience. There is one special case in which the first session's number may be
+                                                     bigger than 1. It is used internally by K3b to indicate that the image contains a session to be appended
+                                                     to a multisession CD or DVD. It cannot be used in another situation since the data does only fit for the
+                                                     multisession CD or DVD it was created for. -->
+						<xs:attribute name="number" type="xs:positiveInteger" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

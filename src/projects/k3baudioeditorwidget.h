@@ -116,8 +116,9 @@ class K3bAudioEditorWidget : public QFrame
   void mouseDoubleClickEvent( QMouseEvent* e );
   void mouseMoveEvent( QMouseEvent* e );
   void drawContents( QPainter* );
-  void drawRange( QPainter* p, Range* r );
-  void drawMarker( QPainter* p, Marker* m );
+  void drawAll( QPainter*, const QRect& );
+  void drawRange( QPainter* p, const QRect&, Range* r );
+  void drawMarker( QPainter* p, const QRect&, Marker* m );
 
   Range* getRange( int i ) const;
   Marker* getMarker( int i ) const;

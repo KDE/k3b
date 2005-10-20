@@ -194,15 +194,16 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 #ifdef Q_OS_LINUX
 
     //
-    // Since kernel 2.6.8 cdrecord is not able to use the SCSI subsystem when running suid root anymore
-    // So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
+    // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
+    // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
     //
-    if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
+    if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
+	k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a02" ) ) {
       if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord"),
+					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a02"),
 					   i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
-						"root for security reasons anymore.").arg("cdrecord"),
+						"root for security reasons anymore.").arg("cdrecord <= 2.01.01a02"),
 					   i18n("Use K3bSetup to solve this problem."),
 					   true ) );
     }
@@ -230,8 +231,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
   else {
 #ifdef Q_OS_LINUX
-    if( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) &&
-	!k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
+    if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("%1 will be run without root privileges").arg("cdrdao"),
 					 i18n("It is highly recommended to configure cdrdao "

@@ -149,16 +149,16 @@ void K3bWriterSelectionWidget::init()
   m_comboWriter->clear();
 
   // -- read cd-writers ----------------------------------------------
-  QPtrList<K3bDevice::Device>& devices = ( d->dvd 
-					   ? k3bcore->deviceManager()->dvdWriter() 
-					   : k3bcore->deviceManager()->cdWriter() );
+  const QPtrList<K3bDevice::Device>& devices = ( d->dvd 
+						 ? k3bcore->deviceManager()->dvdWriter() 
+						 : k3bcore->deviceManager()->cdWriter() );
   m_comboWriter->addDevices( devices );
 
   k3bcore->config()->setGroup( "General Options" );
   K3bDevice::Device *current = k3bcore->deviceManager()->deviceByName( k3bcore->config()->readEntry( "current_writer" ) );
 
   if ( current == 0 )
-    current = devices.first();
+    current = devices.getFirst();
   setWriterDevice( current );
   
   slotRefreshWriterSpeeds();
@@ -248,8 +248,8 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
 
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
-  if( writerDevice())
-  insertWritingSpeedsUpTo( writerDevice()->maxWriteSpeed() );
+  if( writerDevice() )
+    insertWritingSpeedsUpTo( writerDevice()->maxWriteSpeed() );
 }
 
 

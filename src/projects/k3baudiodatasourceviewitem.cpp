@@ -36,7 +36,7 @@ K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* p
   f.setItalic( true );
   setFont( 3, f );
 
-  setMarginVertical( 2 );
+  //  setMarginVertical( 2 );
 
   // greyed out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
@@ -51,11 +51,11 @@ QString K3bAudioDataSourceViewItem::text( int i ) const
 {
   switch( i ) {
   case 3:
-    return " " + m_source->type() + " ";
+    return m_source->type();
   case 4:
     return m_source->length().toString();
   case 5:
-    return " " + m_source->sourceComment() + " ";
+    return m_source->sourceComment();
   default:
     return QString::null;
   }

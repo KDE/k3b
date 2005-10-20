@@ -9,7 +9,6 @@ libk3b_la_LIBADD = core/libk3bcore.la \
 	tools/libk3btools.la \
 	jobs/libjobs.la \
 	../libk3bdevice/libk3bdevice.la
-#	images/libimages.la
 
 libk3b_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 

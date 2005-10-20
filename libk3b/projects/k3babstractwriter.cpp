@@ -46,7 +46,7 @@ K3bDevice::Device* K3bAbstractWriter::burnDevice()
   if( m_burnDevice )
     return m_burnDevice; 
   else
-    return k3bcore->deviceManager()->burningDevices().first();
+    return k3bcore->deviceManager()->burningDevices().getFirst();
 }
 
 

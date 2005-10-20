@@ -46,7 +46,7 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
   setEditor( 1, LINE );
   setEditor( 2, LINE );
 
-  setMarginVertical( 5 );
+  //  setMarginVertical( 5 );
 
   // italic type
   QFont f(listView()->font());
@@ -55,6 +55,11 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
 
   // greyed out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
+
+  // smaller filename
+  f = listView()->font();
+  f.setPointSize( f.pointSize() - 2 );
+  setFont( 5, f );
 
   updateSourceItems();
 }
@@ -67,7 +72,8 @@ void K3bAudioTrackViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c
   // draw the separator
   if( listView()->firstChild() != this ) {
     p->save();
-    p->setPen(Qt::lightGray);
+    // FIXME: modify the value from palette().disabled().foreground() to be lighter (or darker, depending on the background color )
+    p->setPen( Qt::lightGray );
     p->drawLine( 0, 0, width, 0 );
     p->restore();
   }
@@ -104,14 +110,14 @@ QString K3bAudioTrackViewItem::text(int i) const
       if( m_showingSources )
 	return QString::null;
       else
-	return " " + m_track->firstSource()->type() + " ";
+	return m_track->firstSource()->type();
     case 4:
-      return " " + m_track->length().toString() + " ";
+      return m_track->length().toString();
     case 5:
       if( m_showingSources )
 	return QString::null;
       else
-	return " " + m_track->firstSource()->sourceComment() + " ";
+	return m_track->firstSource()->sourceComment();
     default:
       return KListViewItem::text(i);
     }

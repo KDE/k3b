@@ -39,7 +39,9 @@
 
 #include <errno.h>
 #include <string.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 
 class K3bIsoImager::Private
@@ -731,7 +733,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
       if( item->isDir() ) {
 	stream << escapeGraftPoint( item->writtenPath() )
 	       << "="
-	       << dummyDir( item->sortWeight() ) << endl;
+	       << dummyDir( static_cast<K3bDirItem*>(item) ) << endl;
 	
 	int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
 	if( x >= 0 )
@@ -851,7 +853,7 @@ bool K3bIsoImager::writeSortWeightFile()
 	  // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path 
 	  // for sorting we need to create a different dummy dir for every sort weight value.
 	  //
-	  *t << escapeGraftPoint( dummyDir( item->sortWeight() ) ) << " " << item->sortWeight() << endl;
+	  *t << escapeGraftPoint( dummyDir( static_cast<K3bDirItem*>(item) ) ) << " " << item->sortWeight() << endl;
 	}
 	else
 	  *t << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
@@ -914,12 +916,43 @@ bool K3bIsoImager::prepareMkisofsFiles()
 }
 
 
-QString K3bIsoImager::dummyDir( int weight )
+QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 {
+  //
+  // since we use virtual folders in order to have folders with different weight factors and different
+  // permissions we create different dummy dirs to be passed to mkisofs
+  //
+
   QDir _appDir( locateLocal( "appdata", "temp/" ) );
-  if( !_appDir.cd( QString("dummydir%1").arg(weight) ) ) {
-    _appDir.mkdir( QString("dummydir%1").arg(weight) );
-    _appDir.cd( QString("dummydir%1").arg(weight) );
+
+  QString name( "dummydir_" );
+  name += QString::number( dir->sortWeight() );
+
+  bool perm = false;
+  struct stat statBuf;
+  if( !dir->localPath().isEmpty() ) {
+    // permissions
+    if( ::stat( QFile::encodeName( dir->localPath() ), &statBuf ) == 0 ) {
+      name += "_";
+      name += QString::number( statBuf.st_uid );
+      name += "_";
+      name += QString::number( statBuf.st_gid );
+      name += "_";
+      name += QString::number( statBuf.st_mode );
+
+      perm = true;
+    }
+  }
+
+
+  if( !_appDir.cd( name ) ) {
+    _appDir.mkdir( name );
+    _appDir.cd( name );
+
+    if( perm ) {
+      ::chmod( QFile::encodeName( _appDir.absPath() ), statBuf.st_mode );
+      ::chown( QFile::encodeName( _appDir.absPath() ), statBuf.st_uid, statBuf.st_gid );
+    }
   }
 
   return _appDir.absPath() + "/";

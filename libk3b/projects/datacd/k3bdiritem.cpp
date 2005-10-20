@@ -196,6 +196,45 @@ K3bDataItem* K3bDirItem::findByPath( const QString& p )
 }
 
 
+bool K3bDirItem::mkdir( const QString& dirPath )
+{
+  // 
+  // An absolut path always starts at the root item
+  //
+  if( dirPath[0] == '/' ) {
+    if( parent() )
+      return parent()->mkdir( dirPath );
+    else
+      return mkdir( dirPath.mid( 1 ) );
+  }
+
+  if( findByPath( dirPath ) )
+    return false;
+
+  QString restPath;
+  QString dirName;
+  int pos = dirPath.find( '/' );
+  if( pos == -1 ) {
+    dirName = dirPath;
+  }
+  else {
+    dirName = dirPath.left( pos );
+    restPath = dirPath.mid( pos+1 );
+  }
+
+  K3bDataItem* dir = find( dirName );
+  if( !dir )
+    dir = new K3bDirItem( dirName, doc(), this );
+  else if( !dir->isDir() )
+    return false;
+
+  if( !restPath.isEmpty() )
+    return static_cast<K3bDirItem*>(dir)->mkdir( restPath );
+
+  return true;
+}
+
+
 KIO::filesize_t K3bDirItem::itemSize( bool followsylinks ) const
 {
   if( followsylinks )
@@ -301,7 +340,6 @@ bool K3bDirItem::isFromOldSession() const
       return true;
   return false;
 }
-
 
 
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )

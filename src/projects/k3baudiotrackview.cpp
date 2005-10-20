@@ -71,6 +71,7 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
   connect( m_player, SIGNAL(paused(bool)), this, SLOT(togglePauseIndicator(bool)) );
   connect( m_player, SIGNAL(stopped()), this, SLOT(removePlayerIndicator()) );
 
+  setItemMargin( 5 );
   setAcceptDrops( true );
   setDropVisualizer( true );
   setAllColumnsShowFocus( true );

@@ -699,7 +699,8 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case CANNOT_SEND_CUE_SHEET:
 	emit infoMessage( i18n("Unable to send CUE sheet."), ERROR );
-	emit infoMessage( i18n("This may be caused by wrong settings."), ERROR );
+	if( m_writingMode == K3b::DAO )
+	  emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
 	break;
       case CANNOT_OPEN_NEW_SESSION:
 	emit infoMessage( i18n("Unable to open new session."), ERROR );

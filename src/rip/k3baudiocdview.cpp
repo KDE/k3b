@@ -601,11 +601,13 @@ QDragObject* K3bAudioCdView::dragObject()
     tracks.append( static_cast<AudioTrackViewItem*>(it.current())->trackNumber );
 
   if( !items.isEmpty() ) {
-    return new K3bAudioCdTrackDrag( m_toc, 
-				    tracks, 
-				    m_cddbInfo,
-				    m_device,
-				    this );
+    QDragObject* drag = new K3bAudioCdTrackDrag( m_toc, 
+						 tracks, 
+						 m_cddbInfo,
+						 m_device,
+						 this );
+    drag->setPixmap( m_trackView->createDragPixmap( items ) );
+    return drag;
   }
   else
     return 0;

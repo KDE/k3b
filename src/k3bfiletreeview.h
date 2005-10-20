@@ -67,16 +67,18 @@ class K3bDeviceBranch : public KFileTreeBranch
  private slots:
   void slotMountFinished( KIO::Job* );
   void slotUnmountFinished( KIO::Job* );
+  void slotMediumChanged( K3bDevice::Device* );
 
  private:
+  void updateLabel();
+
   K3bDevice::Device* m_device;
+  bool m_showBlockDeviceName;
 };
 
 
 class K3bFileTreeBranch : public KFileTreeBranch
 {
-  Q_OBJECT
-
  public:
   K3bFileTreeBranch( KFileTreeView*,
 		     const KURL& url,
@@ -90,8 +92,8 @@ class K3bFileTreeBranch : public KFileTreeBranch
 class K3bDeviceBranchViewItem : public KFileTreeViewItem
 {
  public:
-  K3bDeviceBranchViewItem( KFileTreeViewItem*, KFileItem*, KFileTreeBranch* );
-  K3bDeviceBranchViewItem( KFileTreeView *, KFileItem*, KFileTreeBranch* );
+  K3bDeviceBranchViewItem( KFileTreeViewItem*, K3bDevice::Device*, K3bDeviceBranch* );
+  K3bDeviceBranchViewItem( KFileTreeView*, K3bDevice::Device*, K3bDeviceBranch* );
 
   QString key( int column, bool ascending ) const;
 

@@ -21,8 +21,9 @@
 #include <klistview.h>
 #include "k3b_export.h"
 #include <qptrvector.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
-#include <qpixmap.h>
+#include <kpixmap.h>
 
 class QPainter;
 class QPushButton;
@@ -147,6 +148,11 @@ class LIBK3B_EXPORT K3bListView : public KListView
    * @param pos position on the viewport.
    */
   void setK3bBackgroundPixmap( const QPixmap&, int pos = CENTER );
+
+  /**
+   * Create a faded pixmap showing the items.
+   */
+  KPixmap createDragPixmap( const QPtrList<QListViewItem>& items );
 
   /**
    * Searches for the first item above @p i which is one level higher.

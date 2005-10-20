@@ -42,7 +42,19 @@ fi
 # open the fstab file and search the DEVICE
 S=`grep $DEVICE /etc/fstab | grep subfs\|supermount`
 if [ -z $S ]; then
-	# FIXME: disable autofs if it's running or enable it
+	#
+	# Ok, not using subfs or supermount
+	# If some other userspace automounter (like ivman) is running it is sufficient
+	# to unmount the device now to get the burning started. This however does not
+	# fix the problem with DVD+RW burning which may be mounted once the burning has
+	# been started.
+	#
+	# So we unmount the device in case it is mounted with iso9660 or udf (just to
+	# some security to this suid script. :(
+	#
+	if [ $DISABLE = 1 && -n `grep $DEVICE /etc/mtab | grep iso9660\|udf` ]; then
+		umount $DEVICE
+	fi
 	exit 2
 else
 	if [ $DISABLE = 1 ]; then
