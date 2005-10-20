@@ -126,7 +126,7 @@ K3bDevice::Device* K3bAudioCdTrackSource::searchForAudioCD() const
   if( m_lastUsedDevice && searchForAudioCD( m_lastUsedDevice ) )
     return m_lastUsedDevice;
 
-  QPtrList<K3bDevice::Device>& devices = k3bcore->deviceManager()->readingDevices();
+  const QPtrList<K3bDevice::Device>& devices = k3bcore->deviceManager()->readingDevices();
   for( QPtrListIterator<K3bDevice::Device> it(devices); *it; ++it ) {
     if( searchForAudioCD( *it ) ) {
       return *it;
