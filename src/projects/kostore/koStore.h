@@ -26,8 +26,9 @@
 #include <qiodevice.h>
 #include <qvaluestack.h>
 //#include <koffice_export.h>
+#include <kdemacros.h>
 
-#define KOSTORE_EXPORT
+#define KOSTORE_EXPORT KDE_EXPORT
 
 class QWidget;
 
