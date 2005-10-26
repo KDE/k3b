@@ -28,6 +28,7 @@
 #include <k3bfileitem.h>
 #include <k3bmultichoicedialog.h>
 #include <k3bvalidators.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -83,7 +84,7 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
   K3bDataUrlAddingDialog dlg( parent );
   dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
-    dlg.m_urlQueue.append( qMakePair( *it, dir ) );
+    dlg.m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
 
   dlg.slotAddUrls();
   int ret = QDialog::Accepted;

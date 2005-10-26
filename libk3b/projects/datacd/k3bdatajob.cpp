@@ -756,7 +756,8 @@ void K3bDataJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
     //
     // We only close the CD if the project fills up the CD almost completely (90%)
     //
-    if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 )
+    if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 ||
+	d->doc->writingMode() == K3b::DAO )
       d->usedMultiSessionMode = K3bDataDoc::NONE;
     else
       d->usedMultiSessionMode = K3bDataDoc::START;
@@ -767,7 +768,8 @@ void K3bDataJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
     // Now we decide only based on the project size.
     // let's just use a 680 MB CD as our reference
     //
-    if( d->doc->size()/1024/1024 >= 680*9/10 )
+    if( d->doc->size()/1024/1024 >= 680*9/10 ||
+	d->doc->writingMode() == K3b::DAO )
       d->usedMultiSessionMode = K3bDataDoc::NONE;
     else
       d->usedMultiSessionMode = K3bDataDoc::START;

@@ -139,7 +139,7 @@ void K3bVcdDoc::addUrls( const KURL::List& urls )
 void K3bVcdDoc::addTracks( const KURL::List& urls, uint position )
 {
     for ( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); it++ ) {
-        urlsToAdd.enqueue( new PrivateUrlToAdd( *it, position++ ) );
+      urlsToAdd.enqueue( new PrivateUrlToAdd( K3b::convertToLocalUrl(*it), position++ ) );
     }
 
     m_urlAddingTimer->start( 0 );

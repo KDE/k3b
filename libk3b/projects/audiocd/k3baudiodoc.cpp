@@ -174,7 +174,7 @@ void K3bAudioDoc::addUrls( const KURL::List& urls )
 
 void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 {
-  KURL::List allUrls = extractUrlList( urls );
+  KURL::List allUrls = extractUrlList( K3b::convertToLocalUrls(urls) );
   for( KURL::List::iterator it = allUrls.begin(); it != allUrls.end(); it++, position++ ) {
     KURL& url = *it;
     if( url.path().right(3).lower() == "cue" ) {

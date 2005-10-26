@@ -1,3 +1,8 @@
+0.12.6
+======
+ * Copy XA Form1 tracks always in TAO writing mode.
+ * Support for media:/ urls.
+
 0.12.5
 ======
  * Fixed the progressbar in the file view

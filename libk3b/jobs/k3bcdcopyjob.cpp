@@ -860,6 +860,17 @@ bool K3bCdCopyJob::writeNextSession()
     //
     // Data Session
     //
+    K3bTrack* track = 0;
+    unsigned int dataTrackIndex = 0;
+    if( d->toc.contentType() == K3bDevice::MIXED ) {
+      track = &d->toc[d->toc.count()-1];
+      dataTrackIndex = 0;
+    }
+    else {
+      track = &d->toc[d->currentWrittenSession-1];
+      dataTrackIndex = d->currentWrittenSession-1;
+    }
+
     bool multi = d->doNotCloseLastSession || (d->numSessions > 1 && d->currentWrittenSession < d->toc.count());
     int usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
@@ -867,7 +878,8 @@ bool K3bCdCopyJob::writeNextSession()
       k3bcore->config()->setGroup("General Options");
       if( m_writerDevice->dao() &&
 	  d->toc.count() == 1 && 
-	  !multi )
+	  !multi &&
+	  track->mode() == K3bDevice::Track::MODE1 )
  	usedWritingMode = K3b::DAO;
       else
 	usedWritingMode = K3b::TAO;
@@ -884,17 +896,6 @@ bool K3bCdCopyJob::writeNextSession()
     // just to let the reader init
     if( m_onTheFly )
       d->cdrecordWriter->addArgument( "-waiti" );
-
-    K3bTrack* track = 0;
-    unsigned int dataTrackIndex = 0;
-    if( d->toc.contentType() == K3bDevice::MIXED ) {
-      track = &d->toc[d->toc.count()-1];
-      dataTrackIndex = 0;
-    }
-    else {
-      track = &d->toc[d->currentWrittenSession-1];
-      dataTrackIndex = d->currentWrittenSession-1;
-    }
 
     if( track->mode() == K3bDevice::Track::MODE1 )
       d->cdrecordWriter->addArgument( "-data" );

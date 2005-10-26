@@ -163,6 +163,12 @@ namespace K3b
    * Takes care of SCSI and ATAPI.
    */
   QString externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* );
+
+  /**
+   * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
+   */
+  KURL convertToLocalUrl( const KURL& url );
+  KURL::List convertToLocalUrls( const KURL::List& l );
 }
 
 #endif

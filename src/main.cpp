@@ -39,7 +39,7 @@
 
 #include <config.h>
 
-static const char* appVersion = "0.12.5-svn";
+static const char* appVersion = "0.12.6-svn";
 static const char* description = I18N_NOOP("A CD and DVD burning application");
 
 
