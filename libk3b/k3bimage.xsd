@@ -1,6 +1,6 @@
 <!--
  This document describes the layout of the toc.xml file in a K3b image archive.
- A K3b image archive is a ZIP archive with a simple layout as follows.
+ A K3b image archive is a TAR archive with a simple layout as follows.
 
  Every K3b image archive contains the toc.xml file as described in this document
  which describes the layout of the CD or DVD saved in the K3b image archive.
@@ -20,13 +20,21 @@
        <numtracks>1</numtracks>
        <track number="1" type="Data Mode1">
          <data sectorsize="2048">
-           <filename>image.iso</filename>
+           <file>image.iso</file>
          </data>
        </track>
      </session>
    </image>
+
+
+ We used tar as a backend because K3b image archives tend to get really big when it
+ comes to DVD images and ZIP does not support archives bigger than 2 GB.
+ Although tar supports files bigger than 2 GB (inside the archive) K3b splits every
+ track bigger than 1 GB into chunks of 1 GB to avoid any problems with big filesizes.
 -->
 
+   
+<!-- FIXME: introduce a version field! -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	   targetNamespace="http://www.k3b.org"
@@ -46,24 +54,26 @@
 
 	<xs:simpleType name="sector_size">
 		<xs:restriction base="xs:integer">
-			<xs:enumeration value="2048"/> <!-- plain user data -->
-			<xs:enumeration value="2056"/> <!-- Mode2 form 1: 2048 bytes user data + 8 bytes sub header FIXME: or does this include 4 bytes crc? -->
-			<xs:enumeration value="2332"/> <!-- Mode2 form 2: 2324 bytes user data + 8 bytes sub header FIXME: or does this include 4 bytes crc? -->
-			<xs:enumeration value="2352"/> <!-- Audio data: 16bit, stereo, 44100Hz, big endian -->
+			<xs:enumeration value="2048" /> <!-- Mode1/Mode2 Form1/DVD: plain user data -->
+			<xs:enumeration value="2056" /> <!-- Mode2 Form1: 2048 bytes user data + 8 bytes sub header FIXME: or does this include 4 bytes crc? -->
+			<xs:enumeration value="2324" /> <!-- Mode2 Form2: plain user data -->
+			<xs:enumeration value="2332" /> <!-- Mode2 Form2: 2324 bytes user data + 8 bytes sub header FIXME: or does this include 4 bytes crc? -->
+			<xs:enumeration value="2352" /> <!-- Audio: 16bit, stereo, 44100Hz, big endian -->
+			<xs:enumeration value="2448" /> <!-- Raw data -->
 		</xs:restriction>
 	</xs:simpleType>
 
-	<xs:complexType name="file">
-		<xs:sequence>
+	<xs:complexType name="filecontents">
+		<xs:simpleContent>
 			<!-- Filename in the image archive. -->
-			<xs:element name="filename" type="xs:string" />
-
-			<!-- The start_sector allows for multiple tracks including the CD-TEXT to be defined in one file. Default: 0 -->
-			<xs:element name="start_offset" type="xs:nonNegativeInteger" minOccurs="0" />
-
-			<!-- The number of bytes to be used. Default: up to end of the file -->
-			<xs:element name="length" type="xs:positiveInteger" minOccurs="0" />
-		</xs:sequence>
+			<xs:extension base="xs:string">
+				<!-- The start_sector allows for multiple tracks including the CD-TEXT to be defined in one file. Default: 0 -->
+				<xs:attribute name="start_offset" type="xs:nonNegativeInteger" use="optional" />
+				
+				<!-- The number of bytes to be used. Default: up to end of the file -->
+				<xs:attribute name="length" type="xs:positiveInteger" use="optional" />		
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 
 	<xs:simpleType name="catalogname">
@@ -92,7 +102,7 @@
 				<xs:element name="numtracks" type="xs:positiveInteger" />
 
 				<!-- CD-TEXT is always stored in binary form -->
-				<xs:element name="cdtext" type="file" minOccurs="0" />
+				<xs:element name="cdtext" type="filecontents" minOccurs="0" />
 
 				<!-- The optional catalog name. -->
 				<xs:element name="catalog" type="catalogname" minOccurs="0" />
@@ -108,13 +118,14 @@
 							<xs:element name="track" maxOccurs="99">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="data">
+										<!-- The data tag contains file elements specifying where to find the data for the track.
+										     The data may span over multiple files but all need to have the same sector size. -->
+										<xs:element name="data" minOccurs="1" maxOccurs="1">
 											<xs:complexType>
-												<xs:complexContent>
-													<xs:extension base="file">
-														<xs:attribute name="sectorsize" type="sector_size" />
-													</xs:extension>
-												</xs:complexContent>
+												<xs:sequence>
+													<xs:element name="file" type="filecontents" />
+												</xs:sequence>
+												<xs:attribute name="sectorsize" type="sector_size" />
 											</xs:complexType>
 										</xs:element>
 										
