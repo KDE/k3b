@@ -34,6 +34,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kdeversion.h>
+#include <ktextedit.h>
 
 #include "k3bsetup2.h"
 #include "base_k3bsetup2.h"
@@ -49,6 +50,21 @@
 #include <unistd.h>
 #include <grp.h>
 
+
+
+static bool shouldRunSuidRoot( K3bExternalBin* bin )
+{
+  //
+  // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
+  // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
+  //
+  // Seems as if cdrdao never had problems with suid root...
+  //
+  
+  return( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ||
+	  ( bin->name() == "cdrecord" && bin->version >= K3bVersion( 2, 1, 1, "a02" ) ) ||
+	  bin->name() == "cdrdao" );
+}
 
 
 class K3bSetup2::Private
@@ -89,25 +105,19 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   box->setMargin(0);
   box->setSpacing( KDialog::spacingHint() );
 
-  QScrollView* labelScroll = new QScrollView( this );
-  QLabel* label = new QLabel( i18n("<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
-				   "burn CDs and DVDs. "
-				   "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
-				   "problem but on some systems the permissions may be altered the next time you login or restart "
-				   "your computer. In those cases it is best to consult the distribution documentation."
-				   "<p><b>Caution:</b> Although K3bSetup 2 should not be able "
-				   "to mess up your system no guarantee can be given."), labelScroll->viewport() );
-  label->setMargin( 5 );
-  //  label->setBackgroundMode( PaletteBase );
-  labelScroll->addChild( label );
-  labelScroll->viewport()->setPaletteBackgroundPixmap( locate( "data", "k3b/pics/crystal/k3b_3d_logo.png" ) );
-  label->setPaletteBackgroundPixmap( locate( "data", "k3b/pics/crystal/k3b_3d_logo.png" ) );
-  labelScroll->setFixedWidth( 200 );
-  label->setFixedWidth( labelScroll->contentsRect().width() );
-  label->setFixedHeight( label->heightForWidth( labelScroll->contentsRect().width() ) );
+  KTextEdit* label = new KTextEdit( this );
+  label->setText( "<h2>" + i18n("K3bSetup") + "</h2>"
+		  + i18n("<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
+			 "burn CDs and DVDs. "
+			 "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
+			 "problem but on some systems the permissions may be altered the next time you login or restart "
+			 "your computer. In those cases it is best to consult the distribution documentation."
+			 "<p><b>Caution:</b> Although K3bSetup 2 should not be able "
+			 "to mess up your system no guarantee can be given.") );
+  label->setReadOnly( true );
+  label->setFixedWidth( 200 );
 
   w = new base_K3bSetup2( this );
-  //  w->m_pixLabel->setPixmap( locate( "data", "k3b/pics/k3bsetup_1.png" ) );
 
   // TODO: enable this and let root specify users
   w->m_editUsers->hide();
@@ -208,27 +218,22 @@ void K3bSetup2::updatePrograms()
 
 	int perm = s.st_mode & 0007777;
 
-	//
-	// Since kernel 2.6.8 cdrecord/cdrdao is not able to use the SCSI subsystem when running suid root anymore
-	// So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
-	//
-
 	QString wantedGroup("root");
 	if( w->m_checkUseBurningGroup->isChecked() )
 	  wantedGroup = burningGroup();
 
 	int wantedPerm = 0;
-	if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) ) {
-	  if( w->m_checkUseBurningGroup->isChecked() )
-	    wantedPerm = 0000750;
-	  else
-	    wantedPerm = 0000755;
-	}
-	else {
+	if( shouldRunSuidRoot( b ) ) {
 	  if( w->m_checkUseBurningGroup->isChecked() )
 	    wantedPerm = 0004710;
 	  else
 	    wantedPerm = 0004711;
+	}
+	else {
+	  if( w->m_checkUseBurningGroup->isChecked() )
+	    wantedPerm = 0000750;
+	  else
+	    wantedPerm = 0000755;
 	}
 
 	bi->setText( 3, QString::number( perm, 8 ).rightJustify( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
@@ -420,20 +425,15 @@ void K3bSetup2::save()
 
       K3bExternalBin* bin = d->listBinMap[checkItem];
 
-      //
-      // Since kernel 2.6.8 cdrecord/cdrdao is not able to use the SCSI subsystem when running suid root anymore
-      // So for now (until cdrecord has been properly patched) we ignore the suid root issue with kernel >= 2.6.8
-      //
-
       if( w->m_checkUseBurningGroup->isChecked() ) {
 	if( ::chown( QFile::encodeName(bin->path), (gid_t)0, g->gr_gid ) )
 	  success = false;
 
 	int perm = 0;
-	if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) )
-	  perm = S_IRWXU|S_IXGRP|S_IRGRP;
-	else
+	if( shouldRunSuidRoot( bin ) )
 	  perm = S_ISUID|S_IRWXU|S_IXGRP;
+	else
+	  perm = S_IRWXU|S_IXGRP|S_IRGRP;
 
 	if( ::chmod( QFile::encodeName(bin->path), perm ) )
 	  success = false;
@@ -443,10 +443,10 @@ void K3bSetup2::save()
 	  success = false;
 
 	int perm = 0;
-	if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) )
-	  perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
-	else
+	if( shouldRunSuidRoot( bin ) )
 	  perm = S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH;
+	else
+	  perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
 
 	if( ::chmod( QFile::encodeName(bin->path), perm ) )
 	  success = false;
