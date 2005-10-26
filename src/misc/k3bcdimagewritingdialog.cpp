@@ -230,7 +230,9 @@ void K3bCdImageWritingDialog::setupGui()
   optionTabLayout->setSpacing( spacingHint() );
   optionTabLayout->setMargin( marginHint() );
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, optionTab );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( optionTab );
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
 
   QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );

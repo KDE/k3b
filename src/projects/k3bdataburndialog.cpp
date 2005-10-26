@@ -69,6 +69,8 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 {
   prepareGui();
 
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
+
   setTitle( i18n("Data Project"), i18n("Size: %1").arg( KIO::convertSize(_doc->size()) ) );
 
   // for now we just put the verify checkbox on the main page...

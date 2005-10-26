@@ -64,11 +64,7 @@ void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
 
   if( K3bDevice::Device* dev = m_box->deviceAt( index ) ) {
     tip( m_box->listBox()->itemRect( item ),
-	 i18n("%1 in %2 %3 (%4)")
-	 .arg( k3bappcore->mediaCache()->mediumString( dev ) )
-	 .arg( dev->vendor() )
-	 .arg( dev->description() )
-	 .arg( dev->blockDeviceName() ) );
+	 m_box->mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
   }
 }
 
@@ -106,10 +102,12 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
 	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
   connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
+  connect( this, SIGNAL(selectionChanged(K3bDevice::Device*)),
+	   this, SLOT(slotUpdateToolTip(K3bDevice::Device*)) );
 
   updateMedia();
 
-  // initialize the tooltip
+  // initialize the tooltip for the dropdown box
   (void)new ToolTip( this );
 }
 
@@ -131,11 +129,9 @@ K3bDevice::Device* K3bMediaSelectionComboBox::selectedDevice() const
 
 void K3bMediaSelectionComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
-  if( dev ) {
-    if( d->deviceIndexMap.contains( dev ) ) {
-      setCurrentItem( d->deviceIndexMap[dev] );
-      emit selectionChanged( dev );
-    }
+  if( dev && d->deviceIndexMap.contains( dev ) ) {
+    setCurrentItem( d->deviceIndexMap[dev] );
+    emit selectionChanged( dev );
   }
 }
 
@@ -234,23 +230,9 @@ void K3bMediaSelectionComboBox::updateMedia()
 
   const QPtrList<K3bDevice::Device>& devices = k3bcore->deviceManager()->allDevices();
   for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
-    K3bDevice::DiskInfo diskInfo = k3bappcore->mediaCache()->diskInfo( *it );
-    //
-    // also use if wantedMediumState empty and medium rewritable
-    // because we can always format/erase/overwrite it
-    //
-    // DVD+RW is never reported as appendable
-    //
-    if( diskInfo.mediaType() & d->wantedMediumType &&
-	( diskInfo.diskState() & d->wantedMediumState 
-	  ||
-	  ( d->wantedMediumState & K3bDevice::STATE_EMPTY &&
-	    diskInfo.rewritable() ) 
-	  ||
-	  ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
-	    !diskInfo.empty() &&
-	    diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) ) 
-	)
+    K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
+
+    if( showMedium( medium ) )
       addMedium( *it );
   }
 
@@ -262,7 +244,7 @@ void K3bMediaSelectionComboBox::updateMedia()
     // inform that we have no medium at all
     emit selectionChanged( 0 );
   }
-  else if( selected )
+  else if( selected && d->deviceIndexMap.contains( selected ) )
     setSelectedDevice( selected );
   else
     emit selectionChanged( selectedDevice() );
@@ -287,7 +269,7 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
   // Otherwise we show the contents type since this might also be used
   // for source selection.
   //
-  insertItem( k3bappcore->mediaCache()->mediumString( dev, d->wantedMediumState != K3bDevice::STATE_EMPTY ) );
+  insertItem( mediumString( k3bappcore->mediaCache()->medium( dev ) ) );
 
   d->deviceIndexMap[dev] = count()-1;
   d->devices.resize( count() );
@@ -307,6 +289,51 @@ K3bDevice::Device* K3bMediaSelectionComboBox::deviceAt( unsigned int index )
     return d->devices[index];
   else
     return 0;
+}
+
+
+bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m )
+{
+  //
+  // also use if wantedMediumState empty and medium rewritable
+  // because we can always format/erase/overwrite it
+  //
+  // DVD+RW is never reported as appendable
+  //
+  return( m.diskInfo().mediaType() & d->wantedMediumType &&
+	  ( m.diskInfo().diskState() & d->wantedMediumState 
+	    ||
+	    ( d->wantedMediumState & K3bDevice::STATE_EMPTY &&
+	      m.diskInfo().rewritable() ) 
+	    ||
+	    ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
+	      !m.diskInfo().empty() &&
+	      m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) ) 
+	  );
+}
+
+
+QString K3bMediaSelectionComboBox::mediumString( const K3bMedium& medium )
+{
+  return medium.shortString( d->wantedMediumState != K3bDevice::STATE_EMPTY );
+}
+
+
+QString K3bMediaSelectionComboBox::mediumToolTip( const K3bMedium& m )
+{
+  QString s = m.longString();
+  if( !m.diskInfo().empty() && !(d->wantedMediumState & m.diskInfo().diskState()) )
+    s.append( "<p><i>" + i18n("Medium will be overwritten.") + "</i>" );
+  return s;
+}
+
+
+void K3bMediaSelectionComboBox::slotUpdateToolTip( K3bDevice::Device* dev )
+{
+  // update the tooltip for the combobox (the tooltip for the dropdown box is created in the constructor)
+  QToolTip::remove( this );
+  if( dev )
+    QToolTip::add( this, mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
 }
 
 #include "k3bmediaselectioncombobox.moc"

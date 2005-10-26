@@ -20,7 +20,7 @@
 #include <k3bwriterselectionwidget.h>
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
-#include <k3bdevicecombobox.h>
+#include <k3bmediaselectioncombobox.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
 #include <k3bcore.h>
@@ -70,15 +70,18 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("DVD Reader Device"), w );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
-  m_comboSourceDevice = new K3bDeviceComboBox( groupSource );
-  m_comboSourceDevice->addDevices( k3bcore->deviceManager()->dvdReader() );
+  m_comboSourceDevice = new K3bMediaSelectionComboBox( groupSource );
+  m_comboSourceDevice->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_DVD_ROM );
+  m_comboSourceDevice->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
   // //////////////////////////////////////////////////////////////////////////
 
   //
   // Writer group
   // //////////////////////////////////////////////////////////////////////////
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( true, w );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
   // //////////////////////////////////////////////////////////////////////////
 
   //
@@ -186,13 +189,12 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   // //////////////////////////////////////////////////////////////////////////
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
-
-  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
-	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
 
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
@@ -209,6 +211,8 @@ void K3bDvdCopyDialog::init()
 {
   if( !m_writerSelectionWidget->writerDevice() )
     m_checkOnlyCreateImage->setChecked( true );
+
+  slotSourceMediumChanged( m_comboSourceDevice->selectedDevice() );
 }
 
 
@@ -369,9 +373,9 @@ void K3bDvdCopyDialog::slotToggleAll()
 }
 
 
-void K3bDvdCopyDialog::slotDeviceManagerChanged( K3bDevice::DeviceManager* dm )
+void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
-  m_comboSourceDevice->refreshDevices( dm->cdReader() );
+  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning") );
 }
 
 #include "k3bdvdcopydialog.moc"

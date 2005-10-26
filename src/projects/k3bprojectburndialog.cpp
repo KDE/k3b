@@ -218,7 +218,9 @@ void K3bProjectBurnDialog::prepareGui()
   setMainWidget( m_tabWidget );
   QWidget* w = new QWidget( m_tabWidget );
   m_tabWidget->addTab( w, i18n("Writing") );
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( m_dvd, w );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
+  m_writerSelectionWidget->setWantedMediumType( m_dvd ? K3bDevice::MEDIA_WRITABLE_DVD : K3bDevice::MEDIA_WRITABLE_CD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
 
   QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
   groupWritingMode->setInsideMargin( marginHint() );

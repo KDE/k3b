@@ -18,6 +18,8 @@
 
 #include <kcombobox.h>
 
+#include "k3bmedium.h"
+
 namespace K3bDevice {
   class Device;
   class DeviceManager;
@@ -35,7 +37,7 @@ class K3bMediaSelectionComboBox : public KComboBox
 
  public:
   K3bMediaSelectionComboBox( QWidget* parent );
-  ~K3bMediaSelectionComboBox();
+  virtual ~K3bMediaSelectionComboBox();
 
   /**
    * Although the widget allows selection of media this
@@ -75,9 +77,15 @@ class K3bMediaSelectionComboBox : public KComboBox
   void slotMediumChanged( K3bDevice::Device* );
   void slotDeviceManagerChanged( K3bDevice::DeviceManager* );
   void slotActivated( int i );
+  void slotUpdateToolTip( K3bDevice::Device* );
+
+ protected:
+  void updateMedia();
+  virtual bool showMedium( const K3bMedium& );
+  virtual QString mediumString( const K3bMedium& );
+  virtual QString mediumToolTip( const K3bMedium& );
 
  private:
-  void updateMedia();
   void updateMedium( K3bDevice::Device* );
   void addMedium( K3bDevice::Device* );
   void showNoMediumMessage();
@@ -87,6 +95,7 @@ class K3bMediaSelectionComboBox : public KComboBox
   K3bDevice::Device* deviceAt( unsigned int index );
 
   class ToolTip;
+  friend class ToolTip;
 
   class Private;
   Private* d;

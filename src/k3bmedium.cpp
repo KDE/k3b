@@ -64,8 +64,21 @@ void K3bMedium::update()
 	m_cdText = m_device->readCdText();
     }
     
-    if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE )
+    if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE ) {
       m_writingSpeeds = m_device->determineSupportedWriteSpeeds();
+
+      // some older drives do not report the speeds properly
+      if( m_writingSpeeds.isEmpty() ) {
+	// add speeds up to the max
+	int max = m_device->determineMaximalWriteSpeed();
+	int i = 1;
+	int speed = ( m_diskInfo.isDvdMedia() ? 1385 : 175 );
+	while( i*speed <= max ) {
+	  m_writingSpeeds.append( i*speed );
+	  i = ( i == 1 ? 2 : i+2 );
+	}
+      }
+    }
 
     if( !toc().isEmpty() && toc().contentType() != K3bDevice::AUDIO ) {
       // determine volume id
@@ -128,17 +141,15 @@ QString K3bMedium::shortString( bool useContent ) const
 	else if( toc().contentType() == K3bDevice::AUDIO )
 	  return i18n("Audio CD");
 	else
-	  return i18n("Mixed Mode CD (%1)").arg( volumeId() );
+	  return i18n("%1 (mixed mode CD)").arg( volumeId() );
       }
       
       // DATA CD and DVD
       else {
-	//	  bool isDVD = K3bDevice::isDvdMedia( diskInfo().mediaType() );
-	// FIXME: use the volume id (once the media cache provides it)
 	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE )
-	  return i18n("Appendable data %1 (%2)").arg( mediaTypeString ).arg( volumeId() );
+	  return i18n("%1 (appendable data %2)").arg( volumeId(), mediaTypeString );
 	else
-	  return i18n("Full data %1 (%2)").arg( mediaTypeString ).arg( volumeId() );
+	  return i18n("%1 (full data %2)").arg( volumeId(), mediaTypeString );
       }
     }
     

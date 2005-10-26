@@ -17,7 +17,7 @@
 
 #include "k3bcdcopydialog.h"
 
-#include "k3bdevicecombobox.h"
+#include "k3bmediaselectioncombobox.h"
 #include "k3bcdcopyjob.h"
 #include "k3bclonejob.h"
 
@@ -74,13 +74,16 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( 0 );
 
-  QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("CD Reader Device"), main );
+  QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("Source Medium"), main );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
-  m_comboSourceDevice = new K3bDeviceComboBox( groupSource );
-  m_comboSourceDevice->addDevices( k3bcore->deviceManager()->cdReader() );
+  m_comboSourceDevice = new K3bMediaSelectionComboBox( groupSource );
+  m_comboSourceDevice->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_CD_ROM );
+  m_comboSourceDevice->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, main );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
 
   // tab widget --------------------
@@ -196,6 +199,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
 
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -203,9 +208,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_comboCopyMode, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkReadCdText, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-
-  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
-	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
 
   QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
   QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
@@ -249,6 +251,8 @@ void K3bCdCopyDialog::init()
 {
   if( !m_writerSelectionWidget->writerDevice() )
     m_checkOnlyCreateImage->setChecked( true );
+
+  slotSourceMediumChanged( m_comboSourceDevice->selectedDevice() );
 }
 
 
@@ -392,6 +396,12 @@ void K3bCdCopyDialog::slotToggleAll()
 }
 
 
+void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
+{
+  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning") );
+}
+
+
 void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writerSelectionWidget->loadConfig( c );
@@ -472,12 +482,6 @@ void K3bCdCopyDialog::loadK3bDefaults()
   m_spinRetries->setValue(128);
 
   slotToggleAll();
-}
-
-
-void K3bCdCopyDialog::slotDeviceManagerChanged( K3bDevice::DeviceManager* dm )
-{
-  m_comboSourceDevice->refreshDevices( dm->cdReader() );
 }
 
 #include "k3bcdcopydialog.moc"

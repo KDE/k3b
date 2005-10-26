@@ -52,7 +52,9 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 
   QWidget* frame = mainWidget();
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( true, frame );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_REWRITABLE_DVD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
   m_writerSelectionWidget->setForceAutoSpeed(true);
 

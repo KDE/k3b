@@ -26,7 +26,7 @@ namespace K3bDevice {
 
 class K3bTempDirSelectionWidget;
 class K3bWriterSelectionWidget;
-class K3bDeviceComboBox;
+class K3bMediaSelectionComboBox;
 class QCheckBox;
 class QSpinBox;
 class K3bWritingModeWidget;
@@ -43,7 +43,7 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
  private slots:
   void slotStartClicked();
   void slotToggleAll();
-  void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
+  void slotSourceMediumChanged( K3bDevice::Device* );
 
  protected:
   void init();
@@ -55,7 +55,7 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-  K3bDeviceComboBox* m_comboSourceDevice;
+  K3bMediaSelectionComboBox* m_comboSourceDevice;
   QCheckBox* m_checkSimulate;
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkOnlyCreateImage;

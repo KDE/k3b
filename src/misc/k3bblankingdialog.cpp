@@ -97,8 +97,9 @@ void K3bBlankingDialog::setupGui()
 {
   QWidget* frame = mainWidget();
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( false, frame );
-
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_CD_RW );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
 
   // --- setup the blanking type button group -----------------------------
   QGroupBox* groupBlankType = new QGroupBox( 1, Qt::Vertical, i18n("&Erase Type"), frame );

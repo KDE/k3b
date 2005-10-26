@@ -91,6 +91,8 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   setAcceptDrops(true);
   setupGui();
 
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
   m_writingModeWidget->setSupportedModes( K3b::DAO|K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR );
 
@@ -178,7 +180,7 @@ void K3bIsoImageWritingDialog::setupGui()
   optionTabLayout->setSpacing( spacingHint() );
   optionTabLayout->setMargin( marginHint() );
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( true, optionTab );
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( optionTab );
 
   QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );

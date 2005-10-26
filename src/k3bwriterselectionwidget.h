@@ -22,12 +22,12 @@
 class KComboBox;
 class KConfigBase;
 class QLabel;
-class K3bDeviceComboBox;
-class QToolButton;
+class K3bMediaSelectionComboBox;
 namespace K3bDevice {
   class Device;
   class DeviceManager;
 }
+
 
 /**
   *@author Sebastian Trueg
@@ -39,9 +39,8 @@ class K3bWriterSelectionWidget : public QWidget
  public: 
   /**
    * Creates a writerselectionwidget
-   * @param dvd if true only dvd writers are presented for selection
    */
-  K3bWriterSelectionWidget( bool dvd, QWidget* parent = 0, const char* name = 0 );
+  K3bWriterSelectionWidget( QWidget* parent = 0, const char* name = 0 );
   ~K3bWriterSelectionWidget();
 
   int writerSpeed() const;
@@ -63,18 +62,38 @@ class K3bWriterSelectionWidget : public QWidget
 
   /**
    * K3b::WritingApp or'ed together
+   *
+   * Defaults to cdrecord and cdrdao for CD and growisofs for DVD
    */
   void setSupportedWritingApps( int );
-
-  /**
-   * if dvd is true only DVD writers are presented for selection
-   */
-  void setDvd( bool );
 
   /**
    * A simple hack to disable the speed selection for DVD formatting
    */
   void setForceAutoSpeed( bool );
+
+  /**
+   * Set the wanted medium type. Defaults to writable CD.
+   * 
+   * \param type a bitwise combination of the K3bDevice::MediaType enum
+   */
+  void setWantedMediumType( int type );
+
+  /**
+   * Set the wanted medium state. Defaults to empty media.
+   *
+   * \param state a bitwise combination of the K3bDevice::State enum
+   */
+  void setWantedMediumState( int state );
+
+  /**
+   * This is a hack to allow the copy dialogs to use the same device for reading
+   * and writing without having the user to choose the same medium.
+   *
+   * \param overrideString A string which will be shown in place of the medium string.
+   *                       For example: "Burn to the same device"
+   */
+  void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString );
 
  signals:
   void writerChanged();
@@ -82,25 +101,23 @@ class K3bWriterSelectionWidget : public QWidget
 
  private slots:
   void slotRefreshWriterSpeeds();
+  void slotRefreshWritingApps();
   void slotWritingAppSelected( int id );
   void slotConfigChanged( KConfigBase* c );
   void slotSpeedChanged( int index );
   void slotWriterChanged();
-  void slotDetermineSupportedWriteSpeeds();
-  void slotDeviceManagerChanged( K3bDevice::DeviceManager* );
 
  private:
-  void init();
   void clearSpeedCombo();
   void insertSpeedItem( int );
   int selectedWritingApp() const;
-  void insertWritingSpeedsUpTo( int max );
+
+  class MediaSelectionComboBox;
 
   KComboBox* m_comboSpeed;
-  K3bDeviceComboBox* m_comboWriter;
+  MediaSelectionComboBox* m_comboMedium;
   KComboBox* m_comboWritingApp;
   QLabel* m_writingAppLabel;
-  QToolButton* m_buttonDetermineSpeed;
 
   class Private;
   Private* d;
