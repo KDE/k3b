@@ -61,9 +61,10 @@ namespace K3b
    */
   enum SectorSize {
     SECTORSIZE_AUDIO = 2352,
-    SECTORSIZE_MODE1 = 2048,
-    SECTORSIZE_XA_FORM1 = 2056,
-    SECTORSIZE_XA_FORM2 = 2332,
+    SECTORSIZE_DATA_2048 = 2048,
+    SECTORSIZE_DATA_2048_SUBHEADER = 2056,
+    SECTORSIZE_DATA_2324 = 2324,
+    SECTORSIZE_DATA_2324_SUBHEADER = 2332,
     SECTORSIZE_RAW = 2448
   };
 
@@ -176,6 +177,12 @@ namespace K3b
    * Takes care of SCSI and ATAPI.
    */
   QString externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* );
+
+  /**
+   * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
+   */
+  KURL convertToLocalUrl( const KURL& url );
+  KURL::List convertToLocalUrls( const KURL::List& l );
 }
 
 #endif

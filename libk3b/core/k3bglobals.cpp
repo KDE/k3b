@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
+#include <dcopref.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -367,4 +368,38 @@ QString K3b::resolveLink( const QString& file )
     f.setFile( p );
   }
   return f.absFilePath();
+}
+
+
+KURL K3b::convertToLocalUrl( const KURL& url )
+{
+  //
+  // Thanks to the amarok team for this piece of code. :)
+  //
+  if( url.protocol() == "media" ) {
+    // url looks like media:/device/path
+    DCOPRef mediamanager( "kded", "mediamanager" );
+    QString device = url.path( -1 ).mid( 1 ); // remove first slash
+    const int slash = device.find( '/' );
+    const QString filePath = device.mid( slash ); // extract relative path
+    device = device.left( slash ); // extract device
+    DCOPReply reply = mediamanager.call( "properties(QString)", device );
+    
+    if( reply.isValid() ) {
+      const QStringList properties = reply;
+      // properties[6] is the mount point
+      return KURL( properties[6] + filePath );
+    }
+  }
+
+  return url;
+}
+
+
+KURL::List K3b::convertToLocalUrls( const KURL::List& urls )
+{
+  KURL::List r;
+  for( KURL::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
+    r.append( convertToLocalUrl( *it ) );
+  return r;
 }

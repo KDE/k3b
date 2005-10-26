@@ -46,9 +46,9 @@ class K3bDataTrackReader : public K3bThreadJob
 
   enum SectorSize {
     AUTO = 0,
-    MODE1 = K3b::SECTORSIZE_MODE1,
-    MODE2FORM1 = K3b::SECTORSIZE_XA_FORM1,
-    MODE2FORM2 = K3b::SECTORSIZE_XA_FORM2
+    MODE1 = K3b::SECTORSIZE_DATA_2048,
+    MODE2FORM1 = K3b::SECTORSIZE_DATA_2048_SUBHEADER,
+    MODE2FORM2 = K3b::SECTORSIZE_DATA_2324_SUBHEADER
   };
 
   void setSectorSize( SectorSize size );

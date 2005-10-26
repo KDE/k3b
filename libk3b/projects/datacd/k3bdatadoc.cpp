@@ -126,10 +126,12 @@ void K3bDataDoc::addUrls( const KURL::List& urls )
 }
 
 
-void K3bDataDoc::addUrls( const KURL::List& urls, K3bDirItem* dir )
+void K3bDataDoc::addUrls( const KURL::List& l, K3bDirItem* dir )
 {
   if( !dir )
     dir = root();
+
+  KURL::List urls = K3b::convertToLocalUrls(l);
 
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     const KURL& url = *it;

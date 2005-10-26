@@ -20,6 +20,7 @@
 
 #include <k3bdiritem.h>
 #include <k3bfileitem.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -74,8 +75,10 @@ void K3bMovixDoc::addUrls( const KURL::List& urls )
 }
 
 
-void K3bMovixDoc::addMovixFile( const KURL& url, int pos )
+void K3bMovixDoc::addMovixFile( const KURL& _url, int pos )
 {
+  KURL url = K3b::convertToLocalUrl( _url );
+
   QFileInfo f( url.path() );
   if( !f.isFile() || !url.isLocalFile() )
     return;
