@@ -391,6 +391,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
       }
       d->verificationJob->setDoc( d->doc );
       d->verificationJob->setDevice( d->doc->burner() );
+      d->verificationJob->setUsedMultiSessionMode( d->usedMultiSessionMode );
 
       emit newTask( i18n("Verifying written data") );
       emit burning(false);
