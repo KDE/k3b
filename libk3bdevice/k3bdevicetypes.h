@@ -173,6 +173,10 @@ namespace K3bDevice {
                             MEDIA_DVD_PLUS_R_DL,
     MEDIA_WRITABLE_DVD = MEDIA_WRITABLE_DVD_SL |   /**< This is a bitwise or of media types representing all writable DVD media.*/
                          MEDIA_WRITABLE_DVD_DL,
+    MEDIA_REWRITABLE_DVD =  MEDIA_DVD_RW |
+                            MEDIA_DVD_RW_OVWR |
+                            MEDIA_DVD_RW_SEQ |
+                            MEDIA_DVD_PLUS_RW,
     MEDIA_WRITABLE = MEDIA_WRITABLE_CD |           /**< This is a bitwise or of media types representing all writable media.*/
                      MEDIA_WRITABLE_DVD,
     MEDIA_DVD_MINUS_ALL = MEDIA_DVD_R |            /**< This is a bitwise or of media types representing all DVD-R/W media.*/

@@ -345,6 +345,7 @@ bool K3bDvdJob::prepareWriterJob()
   writer->setBurnSpeed( m_doc->speed() );
 
   // Andy said incremental sequential is the default mode and it seems uses have more problems with DAO anyway
+  // BUT: I also had a report that incremental sequential produced unreadable media!
   if( m_doc->writingMode() == K3b::DAO )
 //     || ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
 // 	 d->usedMultiSessionMode == K3bDataDoc::NONE ) )
@@ -690,8 +691,9 @@ bool K3bDvdJob::waitForDvd()
 	  emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(d->foundMedia, true) ), INFO );
 
 	else {
-	  // check if the writer supports writing sequential and thus multisession
-	  if( !m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) ) {
+	  // check if the writer supports writing sequential and thus multisession (on -1 the burner cannot handle 
+	  // features and we simply ignore it and hope for the best)
+	  if( m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) == 0 ) {
 	    if( !questionYesNo( i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
 				     "media. Multisession will not be possible. Continue anyway?")
 				.arg(m_doc->burner()->vendor())

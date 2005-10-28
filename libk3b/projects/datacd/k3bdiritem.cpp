@@ -342,6 +342,17 @@ bool K3bDirItem::isFromOldSession() const
 }
 
 
+bool K3bDirItem::writeToCd() const
+{
+  // check if this dir contains items to write
+  QPtrListIterator<K3bDataItem> it( m_children );
+  for( ; it.current(); ++it )
+    if( (*it)->writeToCd() )
+      return true;
+  return K3bDataItem::writeToCd();
+}
+
+
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )
   : K3bDirItem( "root", doc, 0 )
 {

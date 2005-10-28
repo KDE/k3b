@@ -56,6 +56,7 @@ public:
   K3bDataDoc* doc;
   K3bDevice::Device* device;
   K3bIso9660* iso9660;
+  K3bDataDoc::MultiSessionMode usedMultiSessionMode;
 
   K3bDataItem* currentItem;
   bool originalCalculated;
@@ -146,8 +147,8 @@ void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
 
     delete d->iso9660;
     unsigned long startSec = 0;
-    if( d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-	d->doc->multiSessionMode() == K3bDataDoc::FINISH ) {
+    if( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
+	d->usedMultiSessionMode == K3bDataDoc::FINISH ) {
       // in this case we only compare the files from the new session
       K3bDevice::Toc::const_iterator it = dh->toc().end();
       --it; // this is valid since there is at least one data track
@@ -233,6 +234,12 @@ void K3bDataVerifyingJob::setDoc( K3bDataDoc* doc )
 void K3bDataVerifyingJob::setDevice( K3bDevice::Device* dev )
 {
   d->device = dev;
+}
+
+
+void K3bDataVerifyingJob::setUsedMultiSessionMode( K3bDataDoc::MultiSessionMode usedMultiSessionMode )
+{
+  d->usedMultiSessionMode = usedMultiSessionMode;
 }
 
 

@@ -84,27 +84,21 @@ bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned
 }
 
 
-bool K3bDevice::Device::featureCurrent( unsigned int feature ) const
+int K3bDevice::Device::featureCurrent( unsigned int feature ) const
 {
   unsigned char* data = 0;
   int dataLen = 0;
   if( getFeature( &data, dataLen, feature ) ) {
-    bool success = false;
+    int ret = -1;
     if( dataLen >= 11 )
-      success = ( data[8+2]&1 );  // check the current flag
+      ret = ( data[8+2]&1 ? 1 : 0 );  // check the current flag
 
     delete [] data;
 
-    return success;
+    return ret;
   }
   else
-    return false;
-}
-
-
-bool K3bDevice::Device::supportsFeature( unsigned int feature ) const
-{
-  return featureCurrent( feature );
+    return -1;
 }
 
 

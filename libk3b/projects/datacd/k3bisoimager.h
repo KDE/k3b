@@ -93,6 +93,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   void outputData();
   void init();
   virtual void cleanup();
+  void clearDummyDirs();
 
   /**
    * @returns The number of entries written or -1 on error
@@ -148,6 +149,9 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   int m_fdToWriteTo;
 
   bool m_containsFilesWithMultibleBackslashes;
+
+  // used to create a unique session id
+  static int s_imagerSessionCounter;
 };
 
 

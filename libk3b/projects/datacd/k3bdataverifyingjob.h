@@ -17,6 +17,8 @@
 #define _K3B_DATA_VERIFYING_JOB_H_
 
 #include <k3bjob.h>
+#include "k3bdatadoc.h"
+
 
 class K3bDataDoc;
 namespace KIO {
@@ -43,6 +45,7 @@ class K3bDataVerifyingJob : public K3bJob
 
   void setDoc( K3bDataDoc* );
   void setDevice( K3bDevice::Device* );
+  void setUsedMultiSessionMode( K3bDataDoc::MultiSessionMode );
 
  private slots:
   void slotMediaReloaded( bool );

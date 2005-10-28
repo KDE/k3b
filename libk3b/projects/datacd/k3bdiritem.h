@@ -77,6 +77,11 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
   void setLocalPath( const QString& p ) { m_localPath = p; }
   QString localPath() const { return m_localPath; }
 
+  /**
+   * \reimplemented
+   */
+  bool writeToCd() const;
+
  protected:
   /**
    * Normally one does not use this method but K3bDataItem::size()
