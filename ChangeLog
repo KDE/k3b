@@ -4,6 +4,7 @@
  * Support for media:/ urls.
  * No extra whitespace when renaming audio files in a data project anymore.
  * Fixed verification of multisession CDs (thanks to simon@munton.demon.co.uk)
+ * Preserve directory access time in data projects when using the "backup" option.
 
 0.12.5
 ======

@@ -36,14 +36,18 @@
 #include <qregexp.h>
 #include <qtimer.h>
 #include <qdir.h>
+#include <qapplication.h>
 
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <utime.h>
 
 
+
+int K3bIsoImager::s_imagerSessionCounter = 0;
 
 class K3bIsoImager::Private
 {
@@ -203,6 +207,8 @@ void K3bIsoImager::cleanup()
 
   delete m_process;
   m_process = 0;
+
+  clearDummyDirs();
 }
 
 
@@ -326,7 +332,6 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   }
 
 
-
   if( success ) {
     emit sizeCalculated( INFO, m_mkisofsPrintSizeResult );
   }
@@ -336,6 +341,8 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
     emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
     emit sizeCalculated( ERROR, 0 );
   }
+
+  cleanup();
 }
 
 
@@ -361,6 +368,8 @@ void K3bIsoImager::init()
   else {
     d->usedLinkHandling = Private::FOLLOW;
   }
+
+  s_imagerSessionCounter++;
 }
 
 
@@ -938,6 +947,18 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
   QDir _appDir( locateLocal( "appdata", "temp/" ) );
 
+  //
+  // create a unique isoimager session id
+  // This might become important in case we will allow multiple instances of the isoimager
+  // to run at the same time.
+  //
+  QString jobId = qApp->sessionId() + "_" + QString::number( s_imagerSessionCounter );
+
+  if( !_appDir.cd( jobId ) ) {
+    _appDir.mkdir( jobId );
+    _appDir.cd( jobId );
+  }
+
   QString name( "dummydir_" );
   name += QString::number( dir->sortWeight() );
 
@@ -952,6 +973,8 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
       name += QString::number( statBuf.st_gid );
       name += "_";
       name += QString::number( statBuf.st_mode );
+      name += "_";
+      name += QString::number( statBuf.st_mtime );
 
       perm = true;
     }
@@ -965,10 +988,27 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
     if( perm ) {
       ::chmod( QFile::encodeName( _appDir.absPath() ), statBuf.st_mode );
       ::chown( QFile::encodeName( _appDir.absPath() ), statBuf.st_uid, statBuf.st_gid );
+      struct utimbuf tb;
+      tb.actime = tb.modtime = statBuf.st_mtime;
+      ::utime( QFile::encodeName( _appDir.absPath() ), &tb );
     }
   }
 
   return _appDir.absPath() + "/";
+}
+
+
+void K3bIsoImager::clearDummyDirs()
+{
+  QString jobId = qApp->sessionId() + "_" + QString::number( s_imagerSessionCounter );
+  QDir appDir( locateLocal( "appdata", "temp/" ) );
+  if( appDir.cd( jobId ) ) {
+    QStringList dummyDirEntries = appDir.entryList( "dummydir*", QDir::Dirs );
+    for( QStringList::iterator it = dummyDirEntries.begin(); it != dummyDirEntries.end(); ++it )
+      appDir.rmdir( *it );
+    appDir.cdUp();
+    appDir.rmdir( jobId );
+  }
 }
 
 #include "k3bisoimager.moc"
