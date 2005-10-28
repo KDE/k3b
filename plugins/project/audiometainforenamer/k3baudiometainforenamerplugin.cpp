@@ -274,10 +274,10 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
       KFileMetaInfoItem trackItem = metaInfo.item( "Tracknumber" );
       
       if( artistItem.isValid() )
-	artist = artistItem.string();
+	artist = artistItem.string().stripWhiteSpace();
       
       if( titleItem.isValid() )
-	title = titleItem.string();
+	title = titleItem.string().stripWhiteSpace();
       
       if( trackItem.isValid() )
 	track = track.sprintf("%02d",trackItem.string().toInt());

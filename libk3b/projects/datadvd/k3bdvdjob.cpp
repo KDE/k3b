@@ -698,7 +698,7 @@ bool K3bDvdJob::waitForDvd()
 
 	else {
 	  // check if the writer supports writing sequential and thus multisession
-	  if( !m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) ) {
+	  if( m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) == 0 ) {
 	    if( KMessageBox::warningYesNo( qApp->activeWindow(),
 					   i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
 						"media. Multisession will not be possible. Continue anyway?")

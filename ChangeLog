@@ -2,6 +2,7 @@
 ======
  * Copy XA Form1 tracks always in TAO writing mode.
  * Support for media:/ urls.
+ * No extra whitespace when renaming audio files in a data project anymore.
 
 0.12.5
 ======
