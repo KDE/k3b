@@ -145,12 +145,6 @@ int K3bProjectBurnDialog::exec( bool burn )
   if( burn && m_job == 0 ) {
     m_buttonStart->show();
     setDefaultButton( START_BUTTON );
-    if( !m_writerSelectionWidget->writerDevice() )
-      KMessageBox::information( this, 
-				i18n("K3b did not find a suitable writer. "
-				     "You will only be able to create an image."),
-				i18n("No Writer Available"),
-				"project_no_writer" );
   }
   else {
     m_buttonStart->hide();

@@ -77,6 +77,9 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void readSettings();
 
    void toggleAllOptions();
+
+ private:
+   bool m_bInitializing;
 };
 
 #endif
