@@ -98,7 +98,10 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 					    "<p>Formatting a DVD-RW completely can take a very long "
 					    "time and some DVD writers perform a full format even if "
 					    "quick format is enabled." ) );
+
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
+	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
 
   slotWriterChanged();
 } 

@@ -99,7 +99,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
   connect( m_comboMultisession, SIGNAL(activated(int)),
-	   this, SLOT(toggleAllOptions()) );
+	   this, SLOT(slotMultiSessionModeChanged()) );
 
   m_bInitializing = false;
 
@@ -284,12 +284,26 @@ void K3bDataBurnDialog::toggleAllOptions()
   else
     m_checkVerify->setEnabled(true);
 
+  m_comboMultisession->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+}
+
+
+void K3bDataBurnDialog::slotMultiSessionModeChanged()
+{
   if( m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
       m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
     m_spinCopies->setEnabled(false);
 
-  m_comboMultisession->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  // wait for the proper medium
+  // we have to do this in another slot than toggleAllOptions to avoid an endless loop
+  if( m_comboMultisession->multiSessionMode() == K3bDataDoc::NONE )
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+  else if( m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	   m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_INCOMPLETE );
+  else
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
 }
 
 

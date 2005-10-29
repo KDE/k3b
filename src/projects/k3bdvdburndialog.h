@@ -41,6 +41,7 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
 
  protected slots:
    void toggleAllOptions();
+   void slotMultiSessionModeChanged();
 
    void saveSettings();
    void readSettings();

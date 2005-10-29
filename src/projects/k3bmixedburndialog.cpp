@@ -361,7 +361,8 @@ void K3bMixedBurnDialog::toggleAllOptions()
     m_cdtextWidget->setChecked( false );
 
   // we are not able to normalize in on-the-fly mode
-  m_checkNormalize->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+  m_checkNormalize->setDisabled( !k3bcore->externalBinManager()->foundBin( "normalize" ) ||
+				 ( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() ) );
 }
 
 

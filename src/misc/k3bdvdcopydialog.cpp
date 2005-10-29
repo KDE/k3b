@@ -335,18 +335,14 @@ void K3bDvdCopyDialog::slotToggleAll()
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
 
+    // FIXME: use the medium type for this (is there still no DVD+R(W) simulation?)
     if( (dev->type() & (K3bDevice::DVDPR|K3bDevice::DVDPRW)) &&
 	!(dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW)) ) {
       // no simulation support for DVD+R(W) only drives
       m_checkSimulate->setChecked(false);
       m_checkSimulate->setEnabled(false);
-      
-      // what about the writing mode? Wy just say "overwrite" for DVD+R(W) for now
-      m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR );
     }
     else {
-      // DVD-R(W) supported
-      m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR|K3b::WRITING_MODE_INCR_SEQ|K3b::DAO );
       m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
     }
 
@@ -357,6 +353,23 @@ void K3bDvdCopyDialog::slotToggleAll()
     else {
       m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
     }
+
+    // select the proper writing modes
+    // if writing and reading devices are the same we cannot use 
+    // K3bWritingModeWidget::determineSupportedModesFromMedium since the inserted medium is not the one we 
+    // will be using for burning. In that case we go the old fashioned way.
+    if( dev == m_comboSourceDevice->selectedDevice() ) {
+      int modes = 0;
+      if( dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW) ) {
+	modes |= K3b::DAO;
+	if( dev->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
+	  modes |= K3b::WRITING_MODE_INCR_SEQ;
+      }
+
+      m_writingModeWidget->setSupportedModes( modes );
+    }
+    else
+      m_writingModeWidget->determineSupportedModesFromMedium( dev );
   }
 
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );

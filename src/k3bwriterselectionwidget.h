@@ -97,6 +97,7 @@ class K3bWriterSelectionWidget : public QWidget
 
  signals:
   void writerChanged();
+  void writerChanged( K3bDevice::Device* );
   void writingAppChanged( int app );
 
  private slots:

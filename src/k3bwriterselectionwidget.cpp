@@ -71,6 +71,13 @@ public:
       return K3bMediaSelectionComboBox::mediumString( m );
   }
 
+  QString mediumToolTip( const K3bMedium& m ) {
+    if( m.device() == m_overrideDevice )
+      return m_overrideString;
+    else
+      return K3bMediaSelectionComboBox::mediumToolTip( m );
+  }
+
 private:
   K3bDevice::Device* m_overrideDevice;
   QString m_overrideString;
@@ -140,6 +147,8 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   setTabOrder( m_comboSpeed, m_comboWritingApp );
 
   connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
+  connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+	   this, SIGNAL(writerChanged(K3bDevice::Device*)) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );

@@ -128,7 +128,7 @@ void K3bDvdBurnDialog::setupSettingsTab()
   addPage( frame, i18n("Settings") );
 
   connect( m_comboMultisession, SIGNAL(activated(int)),
-	   this, SLOT(toggleAllOptions()) );
+	   this, SLOT(slotMultiSessionModeChanged()) );
 }
 
 
@@ -225,6 +225,24 @@ void K3bDvdBurnDialog::toggleAllOptions()
   }
   else
     m_checkVerify->setEnabled(true);
+}
+
+
+void K3bDvdBurnDialog::slotMultiSessionModeChanged()
+{
+  if( m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
+      m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
+    m_spinCopies->setEnabled(false);
+
+  // wait for the proper medium
+  // we have to do this in another slot than toggleAllOptions to avoid an endless loop
+  if( m_comboMultisession->multiSessionMode() == K3bDataDoc::NONE )
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+  else if( m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
+	   m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_INCOMPLETE );
+  else
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
 }
 
 

@@ -14,6 +14,8 @@
  */
 
 #include "k3bwritingmodewidget.h"
+#include "k3bmediacache.h"
+#include "k3bapplication.h"
 
 #include <k3bglobals.h>
 
@@ -232,6 +234,46 @@ void K3bWritingModeWidget::loadConfig( KConfigBase* c )
     setWritingMode( K3b::WRITING_MODE_RES_OVWR );
   else
     setWritingMode( K3b::WRITING_MODE_AUTO );
+}
+
+
+void K3bWritingModeWidget::determineSupportedModesFromMedium( const K3bMedium& m )
+{
+  int modes = 0;
+
+  if( m.diskInfo().mediaType() & (K3bDevice::MEDIA_CD_R|K3bDevice::MEDIA_CD_RW) ) {
+    modes |= K3b::TAO;
+    if( m.device()->supportsWritingMode( K3bDevice::WRITINGMODE_SAO ) )
+      modes |= K3b::DAO;
+    if( m.device()->supportsWritingMode( K3bDevice::WRITINGMODE_RAW ) )
+      modes |= K3b::RAW;
+  }
+
+  if( m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_R|
+				  K3bDevice::MEDIA_DVD_R_SEQ|
+				  K3bDevice::MEDIA_DVD_RW|
+				  K3bDevice::MEDIA_DVD_RW_SEQ|
+				  K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+    modes |= K3b::DAO;
+    if( m.device()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
+      modes |= K3b::WRITING_MODE_INCR_SEQ;
+  }
+
+  if( m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW|
+				  K3bDevice::MEDIA_DVD_RW_SEQ|
+				  K3bDevice::MEDIA_DVD_RW_OVWR) )
+    modes |= K3b::WRITING_MODE_RES_OVWR;
+
+  setSupportedModes( modes );
+}
+
+
+void K3bWritingModeWidget::determineSupportedModesFromMedium( K3bDevice::Device* dev )
+{
+  if( dev )
+    determineSupportedModesFromMedium( k3bappcore->mediaCache()->medium( dev ) );
+  else
+    determineSupportedModesFromMedium( K3bMedium() ); // no medium
 }
 
 #include "k3bwritingmodewidget.moc"

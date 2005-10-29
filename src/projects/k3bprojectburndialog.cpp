@@ -95,20 +95,16 @@ void K3bProjectBurnDialog::slotWritingAppChanged( int )
 
 void K3bProjectBurnDialog::toggleAllOptions()
 {
-  if( K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice() ) {
+  K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
+  if( dev ) {
     if( m_dvd ) {
       if( (dev->type() & (K3bDevice::DVDPR|K3bDevice::DVDPRW)) &&
 	  !(dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW)) ) {
 	// no simulation support for DVD+R(W) only drives
 	m_checkSimulate->setChecked(false);
 	m_checkSimulate->setEnabled(false);
-
-	// what about the writing mode? We just say "overwrite" for DVD+R(W) for now
-	m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR );
       }
       else {
-	// DVD-R(W) supported
-	m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RES_OVWR|K3b::WRITING_MODE_INCR_SEQ|K3b::DAO );
 	m_checkSimulate->setEnabled(true);
       }
     }
@@ -117,6 +113,8 @@ void K3bProjectBurnDialog::toggleAllOptions()
   }
   else
     m_buttonStart->setDisabled(true);
+
+  m_writingModeWidget->determineSupportedModesFromMedium( dev );
 
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
@@ -131,11 +129,9 @@ void K3bProjectBurnDialog::toggleAllOptions()
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
 
   if( !m_dvd ) {
-    // default is cdrecord and cdrecord supports all modes
+    // we only support DAO with cdrdao
     if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
       m_writingModeWidget->setSupportedModes( K3b::DAO );
-    else
-      m_writingModeWidget->setSupportedModes( K3b::DAO | K3b::TAO | K3b::RAW );
   }
 }
 
@@ -261,6 +257,8 @@ void K3bProjectBurnDialog::prepareGui()
 
   // some default connections that should always be useful
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
+	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );

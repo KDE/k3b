@@ -19,6 +19,7 @@
 
 #include <kcombobox.h>
 
+#include <k3bmedium.h>
 
 class KConfigBase;
 
@@ -49,6 +50,22 @@ class K3bWritingModeWidget : public KComboBox
    */
   void setWritingMode( int m );
   void setSupportedModes( int );
+
+  /**
+   * Set the writing modes which make sense with the provided medium.
+   *
+   * \param m The medium. May even be non-writable or no medium at all
+   *          in which case only the auto mode will be selected.
+   */
+  void determineSupportedModesFromMedium( const K3bMedium& m );
+
+  /**
+   * Convinience method. Does the same as the one above.
+   *
+   * \param dev The device which contains the medium. May even be 0 in
+   *            which case only the auto mode will be selected.
+   */
+  void determineSupportedModesFromMedium( K3bDevice::Device* dev );
 
  signals:
   void writingModeChanged( int );
