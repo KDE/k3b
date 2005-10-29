@@ -255,16 +255,6 @@ void K3bProjectBurnDialog::prepareGui()
   grid->setRowStretch( 2, 1 );
   grid->setColStretch( 1, 1 );
 
-  // some default connections that should always be useful
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
-	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
-  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
-  connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
-  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
-
   QWidget* tempW = new QWidget( m_tabWidget );
   grid = new QGridLayout( tempW );
   grid->setMargin( KDialog::marginHint() );
@@ -278,6 +268,20 @@ void K3bProjectBurnDialog::prepareGui()
   setTabOrder( m_writerSelectionWidget, m_writingModeWidget );
   setTabOrder( m_writingModeWidget, groupCopies );
   setTabOrder( groupCopies, m_optionGroup );
+}
+
+
+void K3bProjectBurnDialog::setupConnections()
+{
+  // some default connections that should always be useful
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
+	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
 }
 
 

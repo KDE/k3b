@@ -67,7 +67,6 @@
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
   : K3bProjectBurnDialog( _doc, parent, name, modal )
 {
-  m_bInitializing = true;
   prepareGui();
 
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
@@ -98,10 +97,9 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
 
+  setupConnections();
   connect( m_comboMultisession, SIGNAL(activated(int)),
 	   this, SLOT(slotMultiSessionModeChanged()) );
-
-  m_bInitializing = false;
 
   readSettings();
 
@@ -272,10 +270,6 @@ void K3bDataBurnDialog::saveUserDefaults( KConfigBase* c )
 void K3bDataBurnDialog::toggleAllOptions()
 {
   K3bProjectBurnDialog::toggleAllOptions();
-
-  // this slot may be toggled by the writerselectionwidget before all the gui is ready
-  if( m_bInitializing )
-    return;
 
   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
     m_checkVerify->setChecked(false);

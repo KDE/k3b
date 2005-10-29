@@ -78,9 +78,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
 
    void toggleAllOptions();
    void slotMultiSessionModeChanged();
-
- private:
-   bool m_bInitializing;
 };
 
 #endif

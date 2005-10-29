@@ -158,6 +158,14 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    virtual void prepareJob( K3bBurnJob* ) {};
 
    void prepareGui();
+
+   /**
+    * Setup the connections for the gui elements created in prepareGui().
+    * Should be called after creating all additional widgets since the
+    * writing selection widget may emit a changed() signal before.
+    */
+   void setupConnections();
+
    void addPage( QWidget*, const QString& title );
 
    /**
