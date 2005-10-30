@@ -181,7 +181,7 @@ namespace K3b
   /**
    * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
    */
-  KURL convertToLocalUrl( const KURL& url );
+  LIBK3B_EXPORT KURL convertToLocalUrl( const KURL& url );
   KURL::List convertToLocalUrls( const KURL::List& l );
 }
 
