@@ -331,6 +331,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
       m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStderr.mid( pos+33 ).toInt( &success );
   }
 
+  cleanup();
 
   if( success ) {
     emit sizeCalculated( INFO, m_mkisofsPrintSizeResult );
@@ -341,8 +342,6 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
     emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
     emit sizeCalculated( ERROR, 0 );
   }
-
-  cleanup();
 }
 
 
@@ -369,7 +368,7 @@ void K3bIsoImager::init()
     d->usedLinkHandling = Private::FOLLOW;
   }
 
-  s_imagerSessionCounter++;
+  m_sessionNumber = s_imagerSessionCounter++;
 }
 
 
@@ -952,7 +951,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
   // This might become important in case we will allow multiple instances of the isoimager
   // to run at the same time.
   //
-  QString jobId = qApp->sessionId() + "_" + QString::number( s_imagerSessionCounter );
+  QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
 
   if( !_appDir.cd( jobId ) ) {
     _appDir.mkdir( jobId );
@@ -1000,7 +999,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
 void K3bIsoImager::clearDummyDirs()
 {
-  QString jobId = qApp->sessionId() + "_" + QString::number( s_imagerSessionCounter );
+  QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
   QDir appDir( locateLocal( "appdata", "temp/" ) );
   if( appDir.cd( jobId ) ) {
     QStringList dummyDirEntries = appDir.entryList( "dummydir*", QDir::Dirs );

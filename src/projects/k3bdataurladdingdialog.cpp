@@ -41,18 +41,18 @@
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain,
-		 0,
-		 parent,
-		 name,
-		 true,
 		 i18n("Please be patient..."),
 		 Cancel,
 		 Cancel,
+		 parent,
+		 name,
+		 true,
 		 true ),
     m_bExistingItemsReplaceAll(false),
     m_bExistingItemsIgnoreAll(false),
     m_iAddHiddenFiles(0),
-    m_iAddSystemFiles(0)
+    m_iAddSystemFiles(0),
+    m_bCanceled(false)
 {
   QWidget* page = plainPage();
   QGridLayout* grid = new QGridLayout( page );
@@ -106,6 +106,10 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     message += QString("<p><b>%1:</b><br>%2")
       .arg( i18n("No non-local files supported") )
       .arg( dlg.m_unreadableFiles.join( "<br>" ) );
+  if( !dlg.m_tooBigFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("It is not possible to add files bigger than 4 GB") )
+      .arg( dlg.m_tooBigFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
     KMessageBox::detailedSorry( parent, i18n("Some files could not be added to the project."), message );
@@ -114,8 +118,18 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 }
 
 
+void K3bDataUrlAddingDialog::slotCancel()
+{
+  m_bCanceled = true;
+  KDialogBase::slotCancel();
+}
+
+
 void K3bDataUrlAddingDialog::slotAddUrls()
 {
+  if( m_bCanceled )
+    return;
+
   // add next url
   KURL url = m_urlQueue.first().first;
   K3bDirItem* dir = m_urlQueue.first().second;
@@ -138,6 +152,10 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     if( !f.exists() ) {
       valid = false;
       m_notFoundFiles.append( url.path() );
+    }
+    if( f.isFile() && K3b::filesize( url ) > 4LL*1024LL*1024LL*1024LL ) {
+      valid = false;
+      m_tooBigFiles.append( url.path() );
     }
   }
 
@@ -232,6 +250,40 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     }
   }
 
+
+  //
+  // One more thing to warn the user about: We cannot follow links to folders since that
+  // would change the doc. So we simply ask the user what to do with a link to a folder
+  //
+  if( valid ) {
+    if( f.isDir() && f.isSymLink() ) {
+
+      QString resolved = K3b::resolveLink( f.absFilePath() );
+
+      // let's see if this link starts a loop
+      // that means if it points to some folder above this one
+      // if so we cannot follow it anyway
+      if( !f.absFilePath().startsWith( resolved ) &&
+	  ( dir->doc()->isoOptions().followSymbolicLinks() ||
+	    KMessageBox::warningYesNo( this,
+				       i18n("<p>'%1' is a symbolic link to folder '%2'."
+					    "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
+					    "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
+					    "K3b project cannot be resolved."
+					    "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may savely "
+					    "ignore this warning and choose to add the link to the project.</b>")
+				       .arg(f.absFilePath())
+				       .arg(resolved ),
+				       i18n("Adding link to folder"),
+				       i18n("Follow link now"),
+				       i18n("Add symbolic link to project"),
+				       "ask_to_follow_link_to_folder" ) == KMessageBox::Yes ) ) {
+	f.setFile( resolved );
+      }
+    }
+  }
+
+
   //
   // Project valid also (we overwrite or renamed)
   // now create the new item
@@ -297,9 +349,10 @@ bool K3bDataUrlAddingDialog::checkForHiddenFiles( const QDir& dir )
     hiddenFiles.remove(".");
     hiddenFiles.remove("..");
     if( hiddenFiles.count() > 0 ) {
-      if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
+      // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
+      if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
 				      i18n("Do you also want to add hidden files?"),
-				      i18n("Hidden files") ) == KMessageBox::Yes )
+				      i18n("Hidden Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
 	m_iAddHiddenFiles = 1;
       else
 	m_iAddHiddenFiles = -1;
@@ -318,10 +371,10 @@ bool K3bDataUrlAddingDialog::checkForSystemFiles( const QDir& dir )
     systemFiles.remove(".");
     systemFiles.remove("..");
     if( systemFiles.count() > 0 ) {
-      if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
+      if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
 				      i18n("Do you also want to add system files "
 					   "(FIFOs, sockets, device files, and broken symlinks)?"),
-				      i18n("System files") ) == KMessageBox::Yes )
+				      i18n("System Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
 	m_iAddSystemFiles = 1;
       else
 	m_iAddSystemFiles = -1;

@@ -50,7 +50,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
    *
    * @return an empty dummy dir for use with K3bDirItems.
    */
-  static QString dummyDir( K3bDirItem* );
+  QString dummyDir( K3bDirItem* );
 
  public slots:
   virtual void start();
@@ -152,6 +152,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   // used to create a unique session id
   static int s_imagerSessionCounter;
+
+  int m_sessionNumber;
 };
 
 

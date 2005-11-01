@@ -1,3 +1,11 @@
+0.12.7
+======
+ * Fixed crash when refreshing the device list.
+ * Fixed cancellation of adding files to a data project.
+ * Fixed on-the-fly data project burning.	
+ * Backported a warning about following links to folders (K3b cannot do that after the link has
+   been added to the project).
+
 0.12.6
 ======
  * Copy XA Form1 tracks always in TAO writing mode.
