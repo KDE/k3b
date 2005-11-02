@@ -34,7 +34,6 @@
 
 #include <qfile.h>
 #include <qregexp.h>
-#include <qtimer.h>
 #include <qdir.h>
 #include <qapplication.h>
 
@@ -88,8 +87,8 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent
 
 K3bIsoImager::~K3bIsoImager()
 {
-  delete d;
   cleanup();
+  delete d;
 }
 
 
@@ -139,7 +138,6 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
     d->imageFile.close();
 
   if( !m_canceled ) {
-
     if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
 	jobFinished( true );
@@ -325,6 +323,8 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   }
 
 
+  cleanup();
+
 
   if( success ) {
     emit sizeCalculated( INFO, m_mkisofsPrintSizeResult );
@@ -335,8 +335,6 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
     emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
     emit sizeCalculated( ERROR, 0 );
   }
-
-  cleanup();
 }
 
 
@@ -363,7 +361,7 @@ void K3bIsoImager::init()
     d->usedLinkHandling = Private::FOLLOW;
   }
 
-  s_imagerSessionCounter++;
+  m_sessionNumber = s_imagerSessionCounter++;
 }
 
 
@@ -417,15 +415,6 @@ void K3bIsoImager::start()
   }
 
 
-  kdDebug() << "***** mkisofs parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
-  QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
-  }
-  kdDebug() << s << endl << flush;
-  emit debuggingOutput("mkisofs command:", s);
-
   if( m_doc->needToCutFilenames() ) {
     if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
 			     "of the Joliet extensions. Continue anyway?")
@@ -436,6 +425,15 @@ void K3bIsoImager::start()
       return;
     }
   }
+
+  kdDebug() << "***** mkisofs parameters:\n";
+  const QValueList<QCString>& args = m_process->args();
+  QString s;
+  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    s += *it + " ";
+  }
+  kdDebug() << s << endl << flush;
+  emit debuggingOutput("mkisofs command:", s);
   
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
@@ -941,7 +939,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
   // This might become important in case we will allow multiple instances of the isoimager
   // to run at the same time.
   //
-  QString jobId = qApp->sessionId() + "_" + QString::number( s_imagerSessionCounter );
+  QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
 
   if( !_appDir.cd( jobId ) ) {
     _appDir.mkdir( jobId );
@@ -971,6 +969,9 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
 
   if( !_appDir.cd( name ) ) {
+
+    kdDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absPath() << "/" << name << endl;
+
     _appDir.mkdir( name );
     _appDir.cd( name );
 
@@ -989,7 +990,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
 void K3bIsoImager::clearDummyDirs()
 {
-  QString jobId = qApp->sessionId() + "_" + QString::number( s_imagerSessionCounter );
+  QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
   QDir appDir( locateLocal( "appdata", "temp/" ) );
   if( appDir.cd( jobId ) ) {
     QStringList dummyDirEntries = appDir.entryList( "dummydir*", QDir::Dirs );
