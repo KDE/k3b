@@ -45,13 +45,6 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   int size() const { return m_mkisofsPrintSizeResult; }
 
-  /**
-   * The dummy dir is used to create dirs on the iso-filesystem.
-   *
-   * @return an empty dummy dir for use with K3bDirItems.
-   */
-  static QString dummyDir( K3bDirItem* );
-
  public slots:
   virtual void start();
   virtual void cancel();
@@ -89,6 +82,13 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
    * calls writePathSpec, writeRRHideFile, and writeJolietHideFile
    */
   bool prepareMkisofsFiles();
+
+  /**
+   * The dummy dir is used to create dirs on the iso-filesystem.
+   *
+   * @return an empty dummy dir for use with K3bDirItems.
+   */
+  QString dummyDir( K3bDirItem* );
 
   void outputData();
   void init();
@@ -152,6 +152,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   // used to create a unique session id
   static int s_imagerSessionCounter;
+
+  int m_sessionNumber;
 };
 
 
