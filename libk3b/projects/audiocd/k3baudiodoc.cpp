@@ -651,6 +651,9 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	    }
 	  }
 
+	  else if( trackNodes.item(trackJ).nodeName() == "index0" )
+	    track->setIndex0( K3b::Msf::fromString( trackNodes.item(trackJ).toElement().text() ) );
+
 	  // load options
 	  else if( trackNodes.item(trackJ).nodeName() == "copy_protection" )
 	    track->setCopyProtection( trackNodes.item(trackJ).toElement().text() == "yes" );

@@ -1,3 +1,7 @@
+0.12.8
+======
+ * Load index0 value in audio project.
+
 0.12.7
 ======
  * Fixed crash when refreshing the device list.
