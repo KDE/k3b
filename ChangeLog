@@ -1,6 +1,7 @@
 0.12.8
 ======
  * Load index0 value in audio project.
+ * Ignore case in cue files.
 
 0.12.7
 ======

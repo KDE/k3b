@@ -94,9 +94,9 @@ void K3bCueFileParser::readFile()
       // save last parsed track for which we do not have the proper length :(
       if( d->currentParsedTrack > 0 ) {
 	d->toc.append( K3bDevice::Track( d->currentDataPos, 
-					   d->currentDataPos,
-					   d->trackType,
-					   d->trackMode ) );
+					 d->currentDataPos,
+					 d->trackType,
+					 d->trackMode ) );
       }
       
       // debug the toc
@@ -207,7 +207,8 @@ bool K3bCueFileParser::parseLine( QString& line )
       QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
       int cnt = 0;
       for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
-	if( (*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
+	if( (*it).lower() == dataFile.section( '/', -1 ).lower() ||
+	    (*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
 	  ++cnt;
 	  setImageFilename( K3b::parentDir(filename()) + *it );
 	}
