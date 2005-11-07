@@ -42,6 +42,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
  private slots:
   void slotAddUrls();
+  void slotCancel();
 
  private:
   K3bDataUrlAddingDialog( QWidget* parent = 0, const char* name = 0 );
@@ -65,6 +66,8 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QStringList m_notFoundFiles;
   QStringList m_nonLocalFiles;
   QStringList m_tooBigFiles;
+
+  bool m_bCanceled;
 };
 
 #endif

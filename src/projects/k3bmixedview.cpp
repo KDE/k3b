@@ -126,7 +126,7 @@ void K3bMixedView::slotBurn()
   else {
     K3bProjectBurnDialog* dlg = newBurnDialog( this );
     if( dlg ) {
-      dlg->exec(true);
+      dlg->execBurnDialog(true);
       delete dlg;
     }
     else {

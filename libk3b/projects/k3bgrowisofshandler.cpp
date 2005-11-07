@@ -53,7 +53,7 @@ void K3bGrowisofsHandler::reset( K3bDevice::Device* dev, bool dao )
 
 void K3bGrowisofsHandler::handleStart()
 {
-  QTimer::singleShot( 2000, this, SLOT(slotCheckBufferStatus()) );
+//  QTimer::singleShot( 2000, this, SLOT(slotCheckBufferStatus()) );
 }
 
 

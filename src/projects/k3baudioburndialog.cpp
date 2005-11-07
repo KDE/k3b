@@ -103,8 +103,6 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   addPage( advancedTab, i18n("Advanced") );
 
-  setupConnections();
-
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
   connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
@@ -190,8 +188,8 @@ void K3bAudioBurnDialog::loadK3bDefaults()
   m_checkNormalize->setChecked(false);
 
   m_comboParanoiaMode->setCurrentItem( 0 );
-  m_checkAudioRippingIgnoreReadErrors->setChecked( false );
-  m_spinAudioRippingReadRetries->setValue( 128 );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( true );
+  m_spinAudioRippingReadRetries->setValue( 5 );
 
   toggleAllOptions();
 }
@@ -206,8 +204,8 @@ void K3bAudioBurnDialog::loadUserDefaults( KConfigBase* c )
   m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
 
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia mode", 0 ) );
-  m_checkAudioRippingIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
-  m_spinAudioRippingReadRetries->setValue( c->readNumEntry( "read retries", 128 ) );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", true ) );
+  m_spinAudioRippingReadRetries->setValue( c->readNumEntry( "read retries", 5 ) );
 
   toggleAllOptions();
 }

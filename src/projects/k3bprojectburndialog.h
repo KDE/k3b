@@ -47,9 +47,12 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
 
    enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
 
-   /** shows the dialog with exec()
-       @param burn If true the dialog shows the Burn-button */
-   int exec( bool burn );
+   /**
+    * shows the dialog with exec().
+    * Use this instead of K3bInteractionDialog::exec
+    * \param burn If true the dialog shows the Burn-button
+    */
+   int execBurnDialog( bool burn );
 
    K3bDoc* doc() const { return m_doc; }
 	
@@ -158,13 +161,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    virtual void prepareJob( K3bBurnJob* ) {};
 
    void prepareGui();
-
-   /**
-    * Setup the connections for the gui elements created in prepareGui().
-    * Should be called after creating all additional widgets since the
-    * writing selection widget may emit a changed() signal before.
-    */
-   void setupConnections();
 
    void addPage( QWidget*, const QString& title );
 

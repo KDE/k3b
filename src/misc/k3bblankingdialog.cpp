@@ -146,13 +146,18 @@ void K3bBlankingDialog::slotStartClicked()
 
   connect( d->erasingDlg, SIGNAL(cancelClicked()), d->job, SLOT(cancel()) );
 
-  hide();
+  if( !exitLoopOnHide() )
+    hide();
+
   d->jobRunning = true;
   d->job->start();
   if( d->jobRunning ) // in case the job already finished in the start slot
     d->erasingDlg->exec(false);
 
-  show();
+  if( !exitLoopOnHide() )
+    show();
+  else
+    close();
 }
 
 

@@ -14,7 +14,11 @@
  * K3b now tries to disable stuff that might influence the burning process. This includes the KDED module
    mediamanager, SuSEPlugger, and automounting (currently supported: subfs, supermount).
  * New Audio Track source editor dialog to cut audio track sources at the beginning and the end.
-
+ * Splitted "read reties" and "ignore read errors" for data and audio sectors in cd copy and set new
+   defaults for audio sectors which make more sense: 5 retires and skip unreadable sectors.
+ * New Mediamanager which makes K3b always know which device contains which medium. This makes medium handling 
+   more smooth and the user now selects a medium instead of a device.
+	
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)

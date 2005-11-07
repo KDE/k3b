@@ -145,7 +145,7 @@ public:
       paranoia(0),
       paranoiaMode(0),
       neverSkip(false),
-      maxRetries(20),
+      maxRetries(5),
       device(0),
       currentSector(0),
       startSector(0),

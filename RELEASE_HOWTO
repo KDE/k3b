@@ -6,6 +6,7 @@ Howto create a K3b release (stable branch)
       --admin /branches/KDE/3.4/kde-common/admin
       
 2. Make sure the version in src/main.cpp, k3b.lsm, README, INSTALL is valid.
+   Check the version in libk3b.
 
 3. Create the tarball.
 

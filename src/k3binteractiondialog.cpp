@@ -57,6 +57,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_mainWidget(0),
     m_defaultButton(defaultButton),
     m_configGroup(configGroup),
+    m_exitLoopOnHide(true),
     m_inLoop(false)
 {
   mainGrid = new QGridLayout( this );
@@ -470,5 +471,15 @@ bool K3bInteractionDialog::close( bool alsoDelete )
   return KDialog::close( alsoDelete );
 }
 
+
+void K3bInteractionDialog::done( int r )
+{
+  if( m_inLoop && !m_exitLoopOnHide ) {
+    m_inLoop = false;
+    QApplication::eventLoop()->exitLoop();
+  }
+
+  return KDialog::done( r );
+}
 
 #include "k3binteractiondialog.moc"

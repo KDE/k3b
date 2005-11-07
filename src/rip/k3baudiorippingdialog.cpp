@@ -155,14 +155,14 @@ void K3bAudioRippingDialog::setupGui()
 
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedPage );
   m_spinRetries = new QSpinBox( advancedPage );
-  m_checkNeverSkip = new QCheckBox( i18n("Never skip"), advancedPage );
+  m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), advancedPage );
   m_checkUseIndex0 = new QCheckBox( i18n("Don't read pregaps"), advancedPage );
 
   advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
   advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
   advancedPageLayout->addWidget( new QLabel( i18n("Read retries:"), advancedPage ), 1, 0 );
   advancedPageLayout->addWidget( m_spinRetries, 1, 1 );
-  advancedPageLayout->addMultiCellWidget( m_checkNeverSkip, 2, 2, 0, 1 );
+  advancedPageLayout->addMultiCellWidget( m_checkIgnoreReadErrors, 2, 2, 0, 1 );
   advancedPageLayout->addMultiCellWidget( m_checkUseIndex0, 3, 3, 0, 1 );
   advancedPageLayout->setRowStretch( 4, 1 );
   advancedPageLayout->setColStretch( 2, 1 );
@@ -186,13 +186,13 @@ void K3bAudioRippingDialog::setupContextHelp()
   QToolTip::add( m_spinRetries, i18n("Maximal number of read retries") );
   QWhatsThis::add( m_spinRetries, i18n("<p>This specifies the maximum number of retries to "
 				       "read a sector of audio data from the cd. After that "
-				       "K3b will either skip the sector or stop the process "
-				       "if the <em>never-skip</em> option is enabled.") );
-  QToolTip::add( m_checkNeverSkip, i18n("Never skip a sector on error") );
-  QWhatsThis::add( m_checkNeverSkip, i18n("<p>If this option is checked K3b will never skip "
-					  "an audio sector if it was not readable (see retries)."
-					  "<p>K3b will stop the ripping process if a read error "
-					  "occurs.") );
+				       "K3b will either skip the sector if the <em>Ignore Read Errors</em> "
+				       "option is enabled or stop the process.") );
+  QToolTip::add( m_checkIgnoreReadErrors, i18n("Never skip a sector on error") );
+  QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a audio sector from the "
+						 "source CD it will be replaced with zeros on the resulting copy."
+						 "<p>Since audio CD Player are able to interpolate small errors in the data it is "
+						 "no problem to let K3b skip unreadable sectors.") );
   QToolTip::add( m_checkUseIndex0, i18n("Do not read the pregaps at the end of every track") );
   QWhatsThis::add( m_checkUseIndex0, i18n("<p>If this option is checked K3b will not rip the audio "
 					  "data in the pregaps. Most audio tracks contain an empty "
@@ -268,7 +268,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   thread->setTracksToRip( tracksToRip );
   thread->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
   thread->setMaxRetries( m_spinRetries->value() );
-  thread->setNeverSkip( m_checkNeverSkip->isChecked() );
+  thread->setNeverSkip( !m_checkIgnoreReadErrors->isChecked() );
   thread->setSingleFile( m_optionWidget->createSingleFile() );
   thread->setWriteCueFile( m_optionWidget->createCueFile() );
   thread->setEncoder( encoder );
@@ -438,8 +438,8 @@ void K3bAudioRippingDialog::setStaticDir( const QString& path )
 void K3bAudioRippingDialog::loadK3bDefaults()
 {
   m_comboParanoiaMode->setCurrentItem( 0 );
-  m_spinRetries->setValue(20);
-  m_checkNeverSkip->setChecked( false );
+  m_spinRetries->setValue(5);
+  m_checkIgnoreReadErrors->setChecked( true );
   m_checkUseIndex0->setChecked( false );
   
   m_optionWidget->loadDefaults();
@@ -451,8 +451,8 @@ void K3bAudioRippingDialog::loadK3bDefaults()
 void K3bAudioRippingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
-  m_spinRetries->setValue( c->readNumEntry( "read_retries", 20 ) );
-  m_checkNeverSkip->setChecked( c->readBoolEntry( "never_skip", false ) );
+  m_spinRetries->setValue( c->readNumEntry( "read_retries", 5 ) );
+  m_checkIgnoreReadErrors->setChecked( !c->readBoolEntry( "never_skip", true ) );
   m_checkUseIndex0->setChecked( c->readBoolEntry( "use_index0", false ) );
 
   m_optionWidget->loadConfig( c );
@@ -465,7 +465,7 @@ void K3bAudioRippingDialog::saveUserDefaults( KConfigBase* c )
 {
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
   c->writeEntry( "read_retries", m_spinRetries->value() );
-  c->writeEntry( "never_skip", m_checkNeverSkip->isChecked() );
+  c->writeEntry( "never_skip", !m_checkIgnoreReadErrors->isChecked() );
   c->writeEntry( "use_index0", m_checkUseIndex0->isChecked() );
 
   m_optionWidget->saveConfig( c );

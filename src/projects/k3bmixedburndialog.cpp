@@ -96,8 +96,6 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
-  setupConnections();
-
   connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );

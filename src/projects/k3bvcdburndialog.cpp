@@ -88,8 +88,6 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     readSettings();
 
-    setupConnections();
-
     connect( m_spinVolumeCount, SIGNAL( valueChanged( int ) ), this, SLOT( slotSpinVolumeCount() ) );
     connect( m_groupVcdFormat, SIGNAL( clicked( int ) ), this, SLOT( slotVcdTypeClicked( int ) ) );
     connect( m_checkCdiSupport, SIGNAL( toggled( bool ) ), this, SLOT( slotCdiSupportChecked( bool ) ) );

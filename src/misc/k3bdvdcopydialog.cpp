@@ -361,7 +361,7 @@ void K3bDvdCopyDialog::slotToggleAll()
     if( dev == m_comboSourceDevice->selectedDevice() ) {
       int modes = 0;
       if( dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW) ) {
-	modes |= K3b::DAO;
+	modes |= K3b::DAO|K3b::WRITING_MODE_RES_OVWR;
 	if( dev->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
 	  modes |= K3b::WRITING_MODE_INCR_SEQ;
       }

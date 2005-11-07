@@ -59,8 +59,10 @@ class LIBK3B_EXPORT K3bCdCopyJob : public K3bBurnJob
   void setTempPath( const QString& path ) { m_tempPath= path; }
   void setCopies( unsigned int c ) { m_copies = c; }
   void setParanoiaMode( int i ) { m_paranoiaMode = i; }
-  void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
-  void setReadRetries( int i ) { m_readRetries = i; }
+  void setIgnoreDataReadErrors( bool b ) { m_ignoreDataReadErrors = b; }
+  void setDataReadRetries( int i ) { m_dataReadRetries = i; }
+  void setIgnoreAudioReadErrors( bool b ) { m_ignoreAudioReadErrors = b; }
+  void setAudioReadRetries( int i ) { m_audioReadRetries = i; }
   void setPreferCdText( bool b ) { m_preferCdText = b; }
   void setCopyCdText( bool b ) { m_copyCdText = b; }
   void setNoCorrection( bool b ) { m_noCorrection = b; }
@@ -98,9 +100,11 @@ class LIBK3B_EXPORT K3bCdCopyJob : public K3bBurnJob
   bool m_keepImage;
   bool m_onlyCreateImages;
   bool m_onTheFly;
-  bool m_ignoreReadErrors;
+  bool m_ignoreDataReadErrors;
+  bool m_ignoreAudioReadErrors;
   bool m_noCorrection;
-  int m_readRetries;
+  int m_dataReadRetries;
+  int m_audioReadRetries;
   bool m_preferCdText;
   bool m_copyCdText;
   QString m_tempPath;

@@ -160,24 +160,24 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  QGroupBox* groupGeneral = new QGroupBox( 2, Qt::Vertical, i18n("General"), advancedTab ); 
-  groupGeneral->setInsideSpacing( spacingHint() );
-  groupGeneral->setInsideMargin( marginHint() );
-  QHBox* box = new QHBox( groupGeneral );
-  box->setSpacing( spacingHint() );
-  box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-  m_spinRetries = new QSpinBox( 1, 128, 1, box );
-
-  m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), groupGeneral );
-
-  QGroupBox* groupData = new QGroupBox( 1, Qt::Vertical, i18n("Data"), advancedTab ); 
+  QGroupBox* groupData = new QGroupBox( 3, Qt::Vertical, i18n("Data"), advancedTab ); 
   groupData->setInsideSpacing( spacingHint() );
   groupData->setInsideMargin( marginHint() );
+  QHBox* box = new QHBox( groupData );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
+  m_spinDataRetries = new QSpinBox( 1, 128, 1, box );
+  m_checkIgnoreDataReadErrors = new QCheckBox( i18n("Ignore read errors"), groupData );
   m_checkNoCorrection = new QCheckBox( i18n("No error correction"), groupData );
 
-  QGroupBox* groupAudio = new QGroupBox( 3, Qt::Vertical, i18n("Audio"), advancedTab ); 
+  QGroupBox* groupAudio = new QGroupBox( 5, Qt::Vertical, i18n("Audio"), advancedTab, "audio_options" ); 
   groupAudio->setInsideSpacing( spacingHint() );
   groupAudio->setInsideMargin( marginHint() );
+  box = new QHBox( groupAudio );
+  box->setSpacing( spacingHint() );
+  box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
+  m_spinAudioRetries = new QSpinBox( 1, 128, 1, box );
+  m_checkIgnoreAudioReadErrors = new QCheckBox( i18n("Ignore read errors"), groupAudio );
   box = new QHBox( groupAudio );
   box->setSpacing( spacingHint() );
   box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
@@ -185,10 +185,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkReadCdText = new QCheckBox( i18n("Copy CD-Text"), groupAudio );
   m_checkPrefereCdText = new QCheckBox( i18n("Prefer CD-Text"), groupAudio );
 
-  advancedTabGrid->addWidget( groupGeneral, 0, 0 );
-  advancedTabGrid->addWidget( groupData, 1, 0 );
-  advancedTabGrid->addMultiCellWidget( groupAudio, 0, 1, 1, 1 );  
-  advancedTabGrid->setRowStretch( 1, 1 );
+  advancedTabGrid->addWidget( groupData, 0, 1 );
+  advancedTabGrid->addWidget( groupAudio, 0, 0 );  
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
@@ -209,7 +207,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_comboCopyMode, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkReadCdText, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
 
-  QToolTip::add( m_checkIgnoreReadErrors, i18n("Skip unreadable sectors") );
+  QToolTip::add( m_checkIgnoreDataReadErrors, i18n("Skip unreadable data sectors") );
+  QToolTip::add( m_checkIgnoreAudioReadErrors, i18n("Skip unreadable audio sectors") );
   QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
   QToolTip::add( m_checkPrefereCdText, i18n("Use CD-Text instead of cddb if available.") );
   QToolTip::add( m_checkReadCdText, i18n("Copy CD-Text from the source CD if available.") );
@@ -224,8 +223,12 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					   "to stick to Cddb info.") );
   QWhatsThis::add( m_checkPrefereCdText, i18n("<p>If this option is checked and K3b finds CD-Text on the source media it will be "
 					      "copied to the resulting CD ignoring any potentially existing Cddb entries.") );
-  QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a sector from the "
-						 "source CD/DVD it will be replaced with zeros on the resulting copy.") );
+  QWhatsThis::add( m_checkIgnoreDataReadErrors, i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
+						     "source CD/DVD it will be replaced with zeros on the resulting copy.") );
+  QWhatsThis::add( m_checkIgnoreAudioReadErrors, i18n("<p>If this option is checked and K3b is not able to read a audio sector from the "
+						      "source CD it will be replaced with zeros on the resulting copy."
+						      "<p>Since audio CD Player are able to interpolate small errors in the data it is "
+						      "no problem to let K3b skip unreadable sectors.") );
 
 
   QWhatsThis::add( m_comboCopyMode, 
@@ -307,7 +310,7 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setSimulate( m_checkSimulate->isChecked() );
     job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
     job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
-    job->setReadRetries( m_spinRetries->value() );
+    job->setReadRetries( m_spinDataRetries->value() );
 
     burnJob = job;
   }
@@ -324,22 +327,30 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setTempPath( m_tempDirSelectionWidget->plainTempPath() );
     job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
     job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
-    job->setReadRetries( m_spinRetries->value() );
+    job->setDataReadRetries( m_spinDataRetries->value() );
+    job->setAudioReadRetries( m_spinAudioRetries->value() );
     job->setCopyCdText( m_checkReadCdText->isChecked() );
     job->setPreferCdText( m_checkPrefereCdText->isChecked() );
-    job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
+    job->setIgnoreDataReadErrors( m_checkIgnoreDataReadErrors->isChecked() );
+    job->setIgnoreAudioReadErrors( m_checkIgnoreAudioReadErrors->isChecked() );
     job->setNoCorrection( m_checkNoCorrection->isChecked() );
     job->setWritingMode( m_writingModeWidget->writingMode() );
 
     burnJob = job;
   }
 
-  
-  hide();
+  if( !exitLoopOnHide() )
+    hide();
+
   dlg->startJob( burnJob );
-  show();
+
   delete dlg;
   delete burnJob;
+
+  if( !exitLoopOnHide() )
+    show();
+  else
+    close();
 }
 
 
@@ -376,16 +387,9 @@ void K3bCdCopyDialog::slotToggleAll()
      m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
    }
 
-   m_comboParanoiaMode->setDisabled( m_comboCopyMode->currentItem() == 1 );
+   static_cast<QWidget*>( child( "audio_options" ) )->setDisabled( m_comboCopyMode->currentItem() == 1 );
 
-   // no CD-TEXT in TAO mode
-   m_checkReadCdText->setDisabled( m_writingModeWidget->writingMode() == K3b::TAO ||
-				   m_comboCopyMode->currentItem() == 1 );
-   m_checkPrefereCdText->setDisabled( !m_checkReadCdText->isChecked() || 
-				      m_writingModeWidget->writingMode() == K3b::TAO ||
-				      m_comboCopyMode->currentItem() == 1 );
-
-   m_checkIgnoreReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
+   m_checkIgnoreDataReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
 
    //   m_checkNoCorrection->setEnabled( m_comboCopyMode->currentItem() == 1 );
 
@@ -424,13 +428,16 @@ void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
 
   m_checkReadCdText->setChecked( c->readBoolEntry( "copy cdtext", true ) );
   m_checkPrefereCdText->setChecked( c->readBoolEntry( "prefer cdtext", false ) );
-  m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
+  m_checkIgnoreDataReadErrors->setChecked( c->readBoolEntry( "ignore data read errors", false ) );
+  m_checkIgnoreAudioReadErrors->setChecked( c->readBoolEntry( "ignore audio read errors", true ) );
   m_checkNoCorrection->setChecked( c->readBoolEntry( "no correction", false ) );
 
-  m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
+  m_spinDataRetries->setValue( c->readNumEntry( "data retries", 128 ) );
+  m_spinAudioRetries->setValue( c->readNumEntry( "audio retries", 5 ) );
 
   slotToggleAll();
 }
+
 
 void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
 {
@@ -451,9 +458,11 @@ void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
 
   c->writeEntry( "copy cdtext", m_checkReadCdText->isChecked() );
   c->writeEntry( "prefer cdtext", m_checkPrefereCdText->isChecked() );
-  c->writeEntry( "ignore read errors", m_checkIgnoreReadErrors->isChecked() );
+  c->writeEntry( "ignore data read errors", m_checkIgnoreDataReadErrors->isChecked() );
+  c->writeEntry( "ignore audio read errors", m_checkIgnoreAudioReadErrors->isChecked() );
   c->writeEntry( "no correction", m_checkNoCorrection->isChecked() );
-  c->writeEntry( "retries", m_spinRetries->value() );
+  c->writeEntry( "data retries", m_spinDataRetries->value() );
+  c->writeEntry( "audio retries", m_spinAudioRetries->value() );
 
   QString s;
   if( m_comboCopyMode->currentItem() == 1 )
@@ -476,10 +485,12 @@ void K3bCdCopyDialog::loadK3bDefaults()
   m_spinCopies->setValue(1);
   m_checkReadCdText->setChecked(true);
   m_checkPrefereCdText->setChecked(false);
-  m_checkIgnoreReadErrors->setChecked(false);
+  m_checkIgnoreDataReadErrors->setChecked(false);
+  m_checkIgnoreAudioReadErrors->setChecked(true);
   m_checkNoCorrection->setChecked(false);
   m_comboCopyMode->setCurrentItem( 0 ); // normal
-  m_spinRetries->setValue(128);
+  m_spinDataRetries->setValue(128);
+  m_spinAudioRetries->setValue(5);
 
   slotToggleAll();
 }

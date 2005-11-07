@@ -418,13 +418,17 @@ void K3bCdImageWritingDialog::slotStartClicked()
   if( job ) {
     job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
-    hide();
+    if( !exitLoopOnHide() )
+      hide();
     
     dlg.startJob(job);
     
-    show();
-
     delete job;
+
+    if( !exitLoopOnHide() )
+      show();
+    else
+      close();
   }
 }
 

@@ -136,7 +136,7 @@ void K3bProjectBurnDialog::toggleAllOptions()
 }
 
 
-int K3bProjectBurnDialog::exec( bool burn )
+int K3bProjectBurnDialog::execBurnDialog( bool burn )
 {
   if( burn && m_job == 0 ) {
     m_buttonStart->show();
@@ -147,7 +147,7 @@ int K3bProjectBurnDialog::exec( bool burn )
     setDefaultButton( SAVE_BUTTON );
   }
 
-  return K3bInteractionDialog::exec();
+  return K3bInteractionDialog::exec(false);
 }
 
 
@@ -189,7 +189,9 @@ void K3bProjectBurnDialog::slotStartClicked()
     m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
   prepareJob( m_job );
 
-  hide();
+  if( !exitLoopOnHide() )
+    hide();
+
   dlg->startJob(m_job);
 
   kdDebug() << "(K3bProjectBurnDialog) job done. cleaning up." << endl;
@@ -268,11 +270,7 @@ void K3bProjectBurnDialog::prepareGui()
   setTabOrder( m_writerSelectionWidget, m_writingModeWidget );
   setTabOrder( m_writingModeWidget, groupCopies );
   setTabOrder( groupCopies, m_optionGroup );
-}
 
-
-void K3bProjectBurnDialog::setupConnections()
-{
   // some default connections that should always be useful
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 

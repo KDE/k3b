@@ -22,6 +22,8 @@
 #include <qlabel.h>
 #include <qstring.h>
 #include <qlayout.h>
+#include <qcursor.h>
+#include <qapplication.h>
 
 #include <kapplication.h>
 #include <kdialog.h>
@@ -82,10 +84,11 @@ void K3bDeviceOptionTab::saveDevices()
 
 void K3bDeviceOptionTab::slotRefreshButtonClicked()
 {
+  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
   k3bcore->deviceManager()->clear();
   k3bcore->deviceManager()->scanBus();
-  
   m_deviceWidget->init();
+  QApplication::restoreOverrideCursor();
 }
 
 #include "k3bdeviceoptiontab.moc"

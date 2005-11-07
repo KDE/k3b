@@ -113,8 +113,8 @@ bool K3bAudioDoc::newDocument()
   m_cdText = false;
   m_cdTextData.clear();
   m_audioRippingParanoiaMode = 0;
-  m_audioRippingRetries = 128;
-  m_audioRippingIgnoreReadErrors = false;
+  m_audioRippingRetries = 5;
+  m_audioRippingIgnoreReadErrors = true;
 
   return K3bDoc::newDocument();
 }
@@ -652,6 +652,11 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 		track->setCdTextMessage( cdTextNodes.item(trackCdTextJ).toElement().text() );
 	    }
 	  }
+
+	  else if( trackNodes.item(trackJ).nodeName() == "index0" )
+	    track->setIndex0( K3b::Msf::fromString( trackNodes.item(trackJ).toElement().text() ) );
+
+	  // TODO: load other indices
 
 	  // load options
 	  else if( trackNodes.item(trackJ).nodeName() == "copy_protection" )

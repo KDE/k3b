@@ -21,6 +21,7 @@
 #include <k3bdeviceglobals.h>
 #include <k3bexternalbinmanager.h>
 
+#include <kdeversion.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -29,7 +30,6 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
-#include <dcopref.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -373,23 +373,22 @@ QString K3b::resolveLink( const QString& file )
 
 KURL K3b::convertToLocalUrl( const KURL& url )
 {
-  //
-  // Thanks to the amarok team for this piece of code. :)
-  //
-  if( url.protocol() == "media" ) {
-    // url looks like media:/device/path
-    DCOPRef mediamanager( "kded", "mediamanager" );
-    QString device = url.path( -1 ).mid( 1 ); // remove first slash
-    const int slash = device.find( '/' );
-    const QString filePath = device.mid( slash ); // extract relative path
-    device = device.left( slash ); // extract device
-    DCOPReply reply = mediamanager.call( "properties(QString)", device );
-    
-    if( reply.isValid() ) {
-      const QStringList properties = reply;
-      // properties[6] is the mount point
-      return KURL( properties[6] + filePath );
+  if( !url.isLocalFile() ) {
+#if KDE_IS_VERSION(3,4,91)
+    return KIO::NetAccess::mostLocalURL( url );
+#else
+#ifndef UDS_LOCALPATH
+#define UDS_LOCALPATH (72 | KIO::UDS_STRING)
+#endif
+    KIO::UDSEntry e;
+    if( KIO::NetAccess::stat( url, e, 0 ) ) {
+      const KIO::UDSEntry::ConstIterator end = e.end();
+      for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) {
+	if( (*it).m_uds == KIO::UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
+	  return KURL::fromPathOrURL( (*it).m_str );
+      }
     }
+#endif
   }
 
   return url;

@@ -61,8 +61,6 @@ K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *pare
 
   m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
-  setupConnections();
-
   readSettings();
 
   QString path = m_doc->tempDir();

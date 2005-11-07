@@ -45,7 +45,9 @@ class K3bAudioRipThread::Private
 {
 public:
   Private()
-    : encoder(0),
+    : paranoiaRetries(5),
+      neverSkip(false),
+      encoder(0),
       waveFileWriter(0),
       paranoiaLib(0),
       canceled(false) {

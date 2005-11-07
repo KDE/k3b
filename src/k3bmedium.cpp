@@ -114,7 +114,7 @@ void K3bMedium::update()
 
 QString K3bMedium::shortString( bool useContent ) const
 {
-  QString mediaTypeString = K3bDevice::mediaTypeString( diskInfo().mediaType() );
+  QString mediaTypeString = K3bDevice::mediaTypeString( diskInfo().mediaType(), true );
   
   if( diskInfo().diskState() == K3bDevice::STATE_UNKNOWN ) {
     return i18n("No medium information...");

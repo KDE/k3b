@@ -128,13 +128,17 @@ void K3bDvdFormattingDialog::slotStartClicked()
   job->setForce( m_checkForce->isChecked() );
   job->setQuickFormat( m_checkQuickFormat->isChecked() );
 
-  hide();
+  if( !exitLoopOnHide() )
+    hide();
 
   d.startJob( job );
 
   delete job;
 
-  show();
+  if( !exitLoopOnHide() )
+    show();
+  else
+    close();
 } 
 
 

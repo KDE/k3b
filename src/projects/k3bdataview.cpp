@@ -164,7 +164,7 @@ void K3bDataView::slotBurn()
   }
   else {
     K3bProjectBurnDialog* dlg = newBurnDialog( this );
-    dlg->exec(true);
+    dlg->execBurnDialog(true);
     delete dlg;
   }
 }

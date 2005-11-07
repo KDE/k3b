@@ -41,10 +41,10 @@ class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bJob
  public slots:
   void start();
 
-  /**
-   * The devicehandler needs to have a valid NgDiskInfo
-   */
-  void start( K3bDevice::DeviceHandler* );
+ /**
+  * Use this to force the start of the formatting without checking for a usable medium.
+  */
+  void start( const K3bDevice::DiskInfo& );
 
   void cancel();
 
@@ -79,6 +79,8 @@ class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bJob
   void slotEjectingFinished( K3bDevice::DeviceHandler* );
 
  private:
+  void startFormatting( const K3bDevice::DiskInfo& );
+
   class Private;
   Private* d;
 };

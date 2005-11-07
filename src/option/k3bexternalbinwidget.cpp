@@ -29,6 +29,8 @@
 #include <qpainter.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qcursor.h>
+#include <qapplication.h>
 
 #include <kdialog.h>
 #include <kiconloader.h>
@@ -192,9 +194,11 @@ K3bExternalBinWidget::~K3bExternalBinWidget()
 
 void K3bExternalBinWidget::rescan()
 {
+  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
   saveSearchPath();
   m_manager->search();
   load();
+  QApplication::restoreOverrideCursor();
 }
 
 

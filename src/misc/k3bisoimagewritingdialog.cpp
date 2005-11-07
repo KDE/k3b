@@ -265,11 +265,15 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   // HACK (needed since if the medium is forced the stupid K3bIso9660ImageWritingJob defaults to cd writing)
   m_job->setWritingApp( K3b::GROWISOFS );
 
-  hide();
+  if( !exitLoopOnHide() )
+    hide();
 
   dlg.startJob(m_job);
 
-  show();
+  if( !exitLoopOnHide() )
+    show();
+  else
+    close();
 }
 
 

@@ -1,1 +1,1 @@
-SUBDIRS = videodvd
+SUBDIRS = videodvd kio_k3b

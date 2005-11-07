@@ -192,7 +192,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
       // seems that new items have been dropped
       KURL::List urls;
       if( KURLDrag::decode( e, urls ) )
-	K3bDataUrlAddingDialog::addUrls( urls, parent );
+	K3bDataUrlAddingDialog::addUrls( urls, parent, this );
     }
   }
 

@@ -121,9 +121,11 @@ K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
     m_copies(1),
     m_onlyCreateImages(false),
     m_onTheFly(true),
-    m_ignoreReadErrors(false),
+    m_ignoreDataReadErrors(false),
+    m_ignoreAudioReadErrors(true),
     m_noCorrection(false),
-    m_readRetries(128),
+    m_dataReadRetries(128),
+    m_audioReadRetries(5),
     m_preferCdText(false),
     m_copyCdText(true),
     m_writingMode( K3b::WRITING_MODE_AUTO )
@@ -597,8 +599,8 @@ void K3bCdCopyJob::readNextSession()
     d->audioSessionReader->setDevice( m_readerDevice );
     d->audioSessionReader->setToc( d->toc );
     d->audioSessionReader->setParanoiaMode( m_paranoiaMode );
-    d->audioSessionReader->setReadRetries( m_readRetries );
-    d->audioSessionReader->setNeverSkip( !m_ignoreReadErrors );
+    d->audioSessionReader->setReadRetries( m_audioReadRetries );
+    d->audioSessionReader->setNeverSkip( !m_ignoreAudioReadErrors );
     if( m_onTheFly )
       d->audioSessionReader->writeToFd( d->cdrecordWriter->fd() );
     else
@@ -619,9 +621,9 @@ void K3bCdCopyJob::readNextSession()
     }
 
     d->dataTrackReader->setDevice( m_readerDevice );
-    d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
+    d->dataTrackReader->setIgnoreErrors( m_ignoreDataReadErrors );
     d->dataTrackReader->setNoCorrection( m_noCorrection );
-    d->dataTrackReader->setRetries( m_readRetries );
+    d->dataTrackReader->setRetries( m_dataReadRetries );
     if( m_onlyCreateImages )
       d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
     else

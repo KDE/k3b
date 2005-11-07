@@ -41,18 +41,18 @@
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain,
-		 0,
-		 parent,
-		 name,
-		 true,
 		 i18n("Please be patient..."),
 		 Cancel,
 		 Cancel,
+		 parent,
+		 name,
+		 true,
 		 true ),
     m_bExistingItemsReplaceAll(false),
     m_bExistingItemsIgnoreAll(false),
     m_iAddHiddenFiles(0),
-    m_iAddSystemFiles(0)
+    m_iAddSystemFiles(0),
+    m_bCanceled(false)
 {
   QWidget* page = plainPage();
   QGridLayout* grid = new QGridLayout( page );
@@ -118,8 +118,18 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 }
 
 
+void K3bDataUrlAddingDialog::slotCancel()
+{
+  m_bCanceled = true;
+  KDialogBase::slotCancel();
+}
+
+
 void K3bDataUrlAddingDialog::slotAddUrls()
 {
+  if( m_bCanceled )
+    return;
+
   // add next url
   KURL url = m_urlQueue.first().first;
   K3bDirItem* dir = m_urlQueue.first().second;
@@ -339,7 +349,8 @@ bool K3bDataUrlAddingDialog::checkForHiddenFiles( const QDir& dir )
     hiddenFiles.remove(".");
     hiddenFiles.remove("..");
     if( hiddenFiles.count() > 0 ) {
-      if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
+      // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
+      if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
 				      i18n("Do you also want to add hidden files?"),
 				      i18n("Hidden Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
 	m_iAddHiddenFiles = 1;
@@ -360,7 +371,7 @@ bool K3bDataUrlAddingDialog::checkForSystemFiles( const QDir& dir )
     systemFiles.remove(".");
     systemFiles.remove("..");
     if( systemFiles.count() > 0 ) {
-      if( KMessageBox::questionYesNo( isVisible() ? this : parentWidget(),
+      if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
 				      i18n("Do you also want to add system files "
 					   "(FIFOs, sockets, device files, and broken symlinks)?"),
 				      i18n("System Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )

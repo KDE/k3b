@@ -100,7 +100,7 @@ void K3bView::slotBurn()
   else {
     K3bProjectBurnDialog* dlg = newBurnDialog( this );
     if( dlg ) {
-      dlg->exec(true);
+      dlg->execBurnDialog(true);
       delete dlg;
     }
     else {
@@ -114,7 +114,7 @@ void K3bView::slotProperties()
 {
   K3bProjectBurnDialog* dlg = newBurnDialog( this );
   if( dlg ) {
-    dlg->exec(false);
+    dlg->execBurnDialog(false);
     delete dlg;
   }
   else {

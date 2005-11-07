@@ -71,12 +71,14 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   QCheckBox* m_checkOnlyCreateImage;
   QCheckBox* m_checkReadCdText;
   QCheckBox* m_checkPrefereCdText;
-  QCheckBox* m_checkIgnoreReadErrors;
+  QCheckBox* m_checkIgnoreDataReadErrors;
+  QCheckBox* m_checkIgnoreAudioReadErrors;
   QCheckBox* m_checkNoCorrection;
   K3bMediaSelectionComboBox* m_comboSourceDevice;
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinCopies;
-  QSpinBox* m_spinRetries;
+  QSpinBox* m_spinDataRetries;
+  QSpinBox* m_spinAudioRetries;
   K3bWritingModeWidget* m_writingModeWidget;
   QComboBox* m_comboCopyMode;
 };
