@@ -375,7 +375,7 @@ KURL K3b::convertToLocalUrl( const KURL& url )
 {
   if( !url.isLocalFile() ) {
 #if KDE_IS_VERSION(3,4,91)
-    return KIO::NetAccess::mostLocalURL( url );
+    return KIO::NetAccess::mostLocalURL( url, 0 );
 #else
 #ifndef UDS_LOCALPATH
 #define UDS_LOCALPATH (72 | KIO::UDS_STRING)
