@@ -1337,6 +1337,7 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
 QValueList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) const
 {
 
+  return QValueList<K3bDataItem*>();
 }
 
 
