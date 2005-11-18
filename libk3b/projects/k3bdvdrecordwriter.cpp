@@ -90,7 +90,7 @@ void K3bDvdrecordWriter::prepareProcess()
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (BURNPROOF)"), INFO );
   }
   
-  if( !k3bcore->globalSettings()->ejectMedia() )
+  if( k3bcore->globalSettings()->ejectMedia() )
     *m_process << "-eject";
 
   bool manualBufferSize = k3bcore->globalSettings()->manualBufferSize();

@@ -2,6 +2,7 @@
 ======
  * Load index0 value in audio project.
  * Ignore case in cue files.
+ * The "eject media" setting was not used properly in some situations (thanks to simon@munton.demon.co.uk for the patch)
 
 0.12.7
 ======

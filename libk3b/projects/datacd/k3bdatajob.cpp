@@ -457,7 +457,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
 
   d->copiesDone++;
 
-  if( !k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )
+  if( k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )
     K3bDevice::eject( d->doc->burner() );
   
   if( d->copiesDone < d->copies ) {
