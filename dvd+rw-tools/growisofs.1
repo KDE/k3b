@@ -1,0 +1,215 @@
+.TH GROWISOFS 1m "15 July 2004" "growisofs 5.20"
+.SH NAME
+growisofs \- combined mkisofs frontend/DVD recording program.
+.SH SYNOPSIS
+.B growisofs
+[\fB\-dry\-run\fP]
+[\fB\-dvd\-compat\fP]
+[\fB\-overburn\fP]
+[\fB\-speed=1\fP]
+\-[\fBZ|M\fP]
+.I /dev/dvd
+.I <mkisofs-options>
+
+.SH DESCRIPTION
+\fBgrowisofs\fP was originally designed as a frontend to \fBmkisofs\fP
+to facilitate appending of data to ISO9660 volumes residing on
+random-access media such as DVD+RW, DVD\-RAM, plain files, hard disk
+partitions. In the course of development general purpose DVD recording
+support was implemented, and as of now \fBgrowisofs\fP supports not
+only random-access media, but even mastering of multi-session DVD media
+such as DVD+R and DVD\-R/\-RW. In addition \fBgrowisofs\fP supports
+first-/single-session recording of \fIarbitrary pre-mastered image\fP
+(formatted as UDF, ISO9660 or any other file system, if formatted at
+all) to all supported DVD media types.
+
+.SH OPTIONS
+.TP
+.BI \-Z\ /dev/dvd
+Burn an initial session to the selected device. A special form of this
+option is recognized to support burning of pre-mastered images. See
+EXAMPLES section for further details.
+.TP
+.BI \-M\ /dev/dvd
+Merge a new session to an existing one.
+.TP
+.BI \-version
+Print version information and invoke \fBmkisofs\fP, also with \-version
+option.
+.TP
+.BI \-dvd\-compat
+Provide maximum media compatibility with DVD\-ROM/\-Video. In write-once
+context (DVD+R and DVD\-R) this results in unappendable recording
+(closed disk). In DVD+RW context it instructs the logical unit to
+explicitly burn [otherwise optional] lead\-out.
+.TP
+.BI \-dry\-run
+At dry\-run \fBgrowisofs\fP performs all the steps till, but not
+including the first write operation. Most notably check for "overburn"
+condition is performed, which implies that mkisofs is invoked and
+terminated prematurely.
+.TP
+.BI \-overburn
+Normally DVD media can accommodate up to approximately 4.700.000.000
+bytes (in marketing speech 4.7GB). In other words a DVD can contain
+about 4.377 GiB or 4482 MiB. Growisofs won't start without this option,
+if "overburn" condition appears to be unavoidable.
+.TP
+.BI \-speed=N
+An option to control recording velocity. Most commonly you'll use
+\fB\-speed=1\fP with "no\-name" DVD\-R[W] media, if default speed
+settings messes up the media. Keep in mind that \fBN\fP essentially
+denotes speed \fIclosest\fP to N*1385KBps among those offered by unit
+for currently mounted media. The list can be found in
+\fBdvd+rw\-mediainfo\fP output.
+.TP
+.BI <mkisofs-options>
+More options can be found in the manpage for \fBmkisofs\fP.
+
+.P
+There're several undocumented options commonly denoted with
+\fB\-use\-the\-force\-luke\fP prefix. Some of them serve debugging
+purposes. Some require certain knowledge about recording process or
+even OS kernel internals and as being such can induce confusing
+behaviour. Some are to be used in very specific situations better
+recognized by front-ends or automated scripts. Rationale behind leaving
+these options undocumented is that those few users who would actually
+need to use them directly can as well consult the source code or obtain
+specific instructions elsewhere.
+
+.SH DIFFERENCES WITH RUNNING MKISOFS DIRECTLY
+.P
+When using growisofs you may not use the
+.B \-o 
+option for an output file.
+.B growisofs
+dumps the image directly to the media;
+.P
+You don't have to specify the
+.B \-C
+option to create a higher level session on a multi session disk,
+.B growisofs 
+will construct one for you;
+.P
+Otherwise everything that applies to 
+.I [multi-session] 
+mastering with 
+.B mkisofs 
+applies to 
+.B growisofs 
+as well. 
+.B growisofs
+needs at least 
+.B mkisofs
+version 1.14, version 2.0 is required for multi-session write-once
+recordings.
+
+.SH EXAMPLES
+Actual device names vary from one operating system to another. We use
+\fI/dev/dvd\fP as a collective name or as symbolic link to the actual
+device if you wish. Under Linux it will most likely be an ide\-scsi
+device  such as "/dev/scd0." Under NetBSD/OpenBSD it has to be a
+\fIcharacter\fP SCSI CD\-ROM device such as "/dev/rcd0c." Under Solaris
+it also has to be a \fIcharacter\fP SCSI/ATAPI CD\-ROM device, e.g.
+"/dev/rdsk/c0t1d0s2" or "/vol/dev/aliases/cdrom0." And likewise in
+HP\-UX and IRIX...
+
+To master and burn an ISO9660 volume with Joliet and Rock\-Ridge
+extensions on a DVD:
+
+	growisofs \fB\-Z\fP /dev/dvd \fB\-R \-J\fP /some/files
+
+To append more data to same DVD:
+
+ 	growisofs \fB\-M\fP /dev/dvd \fB\-R \-J\fP /more/files
+
+Make sure to use \fIthe same options\fP for both inital burning and
+following sessions.
+
+To use \fBgrowisofs\fP to write a pre-mastered ISO-image to a DVD:
+
+	growisofs \-dvd\-compat \-Z /dev/dvd\fB=\fPimage.iso
+
+where image.iso represents an arbitrary object in the filesystem, such
+as file, named pipe or device entry. Nothing is growing here and
+command name is not intuitive in this context.
+
+.SH NOTES
+If executed under sudo(8) growisofs refuses to start. This is done for
+the following reason. Naturally growisofs has to access the data set to
+be recorded to DVD media, either indirectly by letting mkisofs generate
+ISO9660 layout on-the-fly or directly if a pre-mastered image is to be
+recorded. Being executed under sudo(8), growisofs effectively grants
+sudoers read access to \fIany\fP file in the file system. The situation
+is intensified by the fact that growisofs parses MKISOFS environment
+variable in order to determine alternative path to mkisofs executable
+image. This means that being executed under sudo(8), growisofs
+effectively grants sudoers right to execute program of their choice
+with elevated privileges. If you for any reason still find the above
+acceptable and are willing to take the consequences, then consider
+running following wrapper script under sudo(8) in place for real
+growisofs binary.
+
+.nf
+	#!/bin/ksh
+	unset SUDO_COMMAND
+	export MKISOFS=/path/to/trusted/mkisofs
+	exec growisofs "$@"
+.fi
+
+But note that the recommended alternative to the above "workaround" is
+actually to install growisofs set\-root\-uid, in which case it will drop
+privileges prior accessing data or executing mkisofs in order to
+preclude unauthorized access to the data.
+
+If the media already carries isofs and \fBgrowisofs\fP is invoked with
+\fB\-Z\fP option non-interactively, e.g. through cron, it shall fail
+with "FATAL: /dev/dvd already carries isofs!" Note that only ISO9660 is
+recognized, you can perfectly zap e.g. an UDF filesystem
+non-interactively.
+
+"Overburn" protection in pre-mastered image context works only with
+plain files and ISO9660 formatted volumes. E.g. [given that /dev/root
+is an ext2 formatted file system larger than 4.7GB] /dev/dvd=/dev/root is
+bound to produce corrupted recording.
+
+Note that DVD+RW re-formatting procedure does not substitute for
+blanking. If you want to nullify the media, e.g. for privacy reasons,
+do it explicitly with 'growisofs \-Z /dev/dvd\fB=/dev/zero\fP'.
+
+Playback of re-writable DVD media, both DVD+RW and DVD\-RW, might be
+limited in legacy DVD\-ROM/\-Video units. In most cases this is due
+to lower reflectivity of such media.
+
+Even though growisofs supports it, playback of multi-session write-once
+DVD might be limited to the first session for two reasons:
+
+.TP
+\(bu
+not all DVD\-ROM players are capable of multi-border DVD\-R playback,
+even less are aware of DVD+R multi-sessioning, burner unit therefore
+might be the only one in your vicinity capable of accessing files
+written at different occasions;
+.TP
+\(bu
+OS might fail to mount multi-session DVD for various reasons;
+.PP
+The above is not applicable to DVD+RW, DVD\-RW Restricted Overwrite or
+DVD\-RAM, as volumes are grown within a single session.
+
+.SH SEE ALSO
+Most up-to-date information on dvd+rw\-tools is available at
+http://fy.chalmers.se/~appro/linux/DVD+RW/.
+.PP
+The manpage for \fBmkisofs\fP.
+
+.SH AUTHORS
+Andy Polyakov <appro@fy.chalmers.se> stands for programming and on-line
+information.
+
+This manpage is currently maintained by Huub Reuver
+<h_reuver@mantell.xs4all.nl>.
+
+.SH LICENSE
+\fBgrowisofs\fP is distributed under GNU GPL.
+
