@@ -136,6 +136,9 @@ bool K3bMad::fillStreamBuffer()
 
 bool K3bMad::skipTag()
 {
+  // skip the tag at the beginning of the file
+  m_inputFile.at( 0 );
+
   //
   // now check if the file starts with an id3 tag and skip it if so
   //
@@ -170,6 +173,10 @@ bool K3bMad::skipTag()
 		<< ": couldn't seek to " << offset << endl;
       return false;
     }
+  }
+  else {
+    // reset file
+    return m_inputFile.at( 0 );
   }
 
   return true;

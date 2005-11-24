@@ -40,6 +40,8 @@ public:
 
   /**
    * Skip id3 tags.
+   *
+   * This will reset the input file.
    */
   bool skipTag();
 
