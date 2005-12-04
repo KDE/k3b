@@ -1,3 +1,10 @@
+0.12.9
+======
+ * New project dcop calls:
+    directBurn() - directly starts the burn process without user interaction
+    setBurnDevice(QString) - set the burn device to be used
+ * Disable the cd-text fields if cd-text writing is disabled.
+
 0.12.8
 ======
  * Load index0 value in audio project.

@@ -41,7 +41,18 @@ class K3bProjectInterface : public DCOPObject
  k_dcop:
   virtual void addUrls( const KURL::List& urls );
   virtual void addUrl( const KURL& url );
+
+  /**
+   * Opens the burn dialog
+   */
   virtual void burn();
+
+  /**
+   * Starts the burning immedeately
+   */
+  virtual void directBurn();
+
+  virtual void setBurnDevice( const QString& blockdevicename );
 
   /**
    * \return the length of the project in blocks (frames).
