@@ -4,4 +4,8 @@ growisofs_SOURCES = growisofs.c growisofs_mmc.cpp
 dvd_rw_format_SOURCES = dvd+rw-format.cpp
 
 install-exec-hook:
-	@(chown 0 $(DESTDIR)$(bindir)/growisofs && chmod 4755 $(DESTDIR)$(bindir)/growisofs)
+	@(chown 0 $(DESTDIR)$(bindir)/growisofs && chmod 4755 $(DESTDIR)$(bindir)/growisofs) || echo "Please make growisofs setuid root" >&2
+	@echo ""
+	@echo "growisofs is by default installed with a set SETUID root bit!"
+	@echo ""
+
