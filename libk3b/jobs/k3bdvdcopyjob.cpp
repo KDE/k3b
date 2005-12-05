@@ -506,7 +506,17 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
     }
     else {
       if( m_writerDevice == m_readerDevice )
-	m_readerDevice->eject();
+	// eject the media (we do this blocking to know if it worked
+	// becasue if it did not it might happen that k3b overwrites a CD-RW
+	// source)
+	if( !m_readerDevice->eject() ) {
+	  emit infoMessage( i18n("Unable to eject media."), ERROR );
+	  if( m_removeImageFiles )
+	    removeImageFiles();
+	  d->running = false;
+	  emit finished(false);
+	  return;
+	}
 
       if( !m_onTheFly ) {
 	if( waitForDvd() ) {
@@ -526,8 +536,8 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	    removeImageFiles();
 	  if( d->canceled )
 	    emit canceled();
-	  emit finished(false);
 	  d->running = false;
+	  emit finished(false);
 	}
       }
     }
