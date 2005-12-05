@@ -230,7 +230,7 @@ void K3bMainWindow::initActions()
 //   KActionMenu* actionMenuDVD = new KActionMenu( i18n("&DVD Project"), "filenew", actionCollection(), "file_new_dvd" );
   actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
-  actionFileNewData = new KAction(i18n("New Data &CD Project"), "tar", 0, this, SLOT(slotNewDataDoc()),
+  actionFileNewData = new KAction(i18n("New Data &CD Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
 			    actionCollection(), "file_new_data");
   actionFileNewMixed = new KAction(i18n("New &Mixed Mode CD Project"), "mixedcd", 0, this, SLOT(slotNewMixedDoc()),
 				   actionCollection(), "file_new_mixed");
@@ -240,7 +240,7 @@ void K3bMainWindow::initActions()
 				   actionCollection(), "file_new_movix");
   actionFileNewMovixDvd = new KAction(i18n("New &eMovix DVD Project"), "emovix", 0, this, SLOT(slotNewMovixDvdDoc()),
 				      actionCollection(), "file_new_movix_dvd");
-  actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
+  actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "datadvd", 0, this, SLOT(slotNewDvdDoc()),
 				 actionCollection(), "file_new_dvd");
   actionFileNewVideoDvd = new KAction(i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
 				      actionCollection(), "file_new_video_dvd");
@@ -295,7 +295,7 @@ void K3bMainWindow::initActions()
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
 
-  KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
+  KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "dvdcopy", 0, this, SLOT(slotDvdCopy()),
 					    actionCollection(), "tools_copy_dvd" );
 
 //   KAction* actionToolsVideoDvdCopy = new KAction(i18n("Copy &VideoDVD..."), "cdcopy", 0, this, SLOT(slotVideoDvdCopy()),
@@ -305,7 +305,7 @@ void K3bMainWindow::initActions()
 		     actionCollection(), "help_check_system" );
 
 #ifdef HAVE_K3BSETUP
-  actionSettingsK3bSetup = new KAction(i18n("K3b &Setup"), "configure", 0, this, SLOT(slotK3bSetup()),
+  actionSettingsK3bSetup = new KAction(i18n("&Setup System Permissions..."), "configure", 0, this, SLOT(slotK3bSetup()),
 				       actionCollection(), "settings_k3bsetup" );
 #endif
 
