@@ -2,4 +2,8 @@ if include_arts
 ARTSDIR=arts
 endif
 
-SUBDIRS = $(ARTSDIR)
+if include_ALSA
+ALSADIR=alsa
+endif
+
+SUBDIRS = $(ARTSDIR) $(ALSADIR)

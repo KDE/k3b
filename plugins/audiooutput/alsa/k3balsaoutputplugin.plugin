@@ -1,0 +1,9 @@
+[K3b Plugin]
+Lib=libk3balsaoutputplugin
+Group=AudioOutput
+Name=K3b Alsa Audio Output Plugin
+Author=Sebastian Trueg
+Email=trueg@k3b.org
+Version=1.0
+Comment=Audio Output plugin which plays through alsa
+Licence=GPL

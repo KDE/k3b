@@ -1,0 +1,7 @@
+if test "x$have_alsa_0_9" = xyes || test "x$have_alsa_1" = xyes; then
+	echo "Audioplayer available (alsa)           yes"
+else
+	echo "Audioplayer available (alsa)            no"
+fi
+
+echo ""
