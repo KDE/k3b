@@ -155,5 +155,4 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
 fi
 fi
 
-echo "------------------------------------------"
 echo ""

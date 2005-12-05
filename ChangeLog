@@ -4,6 +4,7 @@
     directBurn() - directly starts the burn process without user interaction
     setBurnDevice(QString) - set the burn device to be used
  * Disable the cd-text fields if cd-text writing is disabled.
+ * New Alsa audio output plugin.
 
 0.12.8
 ======
