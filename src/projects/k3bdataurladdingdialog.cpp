@@ -161,6 +161,16 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
 
   QString newName = url.fileName();
+
+  // filenames cannot end in backslashes (mkisofs problem. See comments in k3bisoimager.cpp (escapeGraftPoint()))
+  while( newName[newName.length()-1] == '\\' ) {
+    newName.truncate( newName.length()-1 );
+  }
+  
+  // backup dummy name
+  if( newName.isEmpty() )
+    newName = "1";
+
   K3bDirItem* newDirItem = 0;
 
   //

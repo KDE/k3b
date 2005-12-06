@@ -5,6 +5,11 @@
     setBurnDevice(QString) - set the burn device to be used
  * Disable the cd-text fields if cd-text writing is disabled.
  * New Alsa audio output plugin.
+ * If a DVD project does not fill up the DVD completely do not close the DVD in automatic 
+   multisession mode.
+ * Fixed problems with filenames ending in backslashes.
+ * Fixed problems with special characters like umlauts on UTF systems (this does however not fix the
+   verification issues)
 
 0.12.8
 ======

@@ -889,14 +889,60 @@ bool K3bIsoImager::writeSortWeightFile()
 }
 
 
-QString K3bIsoImager::escapeGraftPoint( const QString& str )
+QCString K3bIsoImager::escapeGraftPoint( const QString& str )
 {
-  QString newStr( str );
+  QCString enc = QFile::encodeName( str );
 
-  newStr.replace( "\\\\", "\\\\\\\\" );
-  newStr.replace( "=", "\\=" );
+  //
+  // mkisofs manpage (-graft-points) is incorrect (as of mkisofs 2.01.01)
+  //
+  // Actually an equal sign needs to be escaped with one backslash only
+  // Single backslashes inside a filename can be used without change
+  // while single backslashes at the end of a filename need to be escaped
+  // with two backslashes.
+  //
+  // There is one more problem though: the name in the iso tree can never 
+  // in any number of backslashes. mkisofs simply cannot handle it. So we
+  // need to remove these slashes somewhere or ignore those files (we do 
+  // that in K3bDataDoc::addUrls)
+  //
 
-  return newStr;
+  //
+  // we do not use QCString::replace to have full control
+  // this might be slow since QCString::insert is slow but we don't care
+  // since this is only called to prepare the iso creation which is not 
+  // time critical. :)
+  //
+
+  int pos = 0;
+  while( pos < enc.length() ) {
+    // escape every equal sign with one backslash
+    if( enc[pos] == '=' ) {
+      enc.insert( pos, "\\" );
+      pos += 2;
+    }
+    else if( enc[pos] == '\\' ) {
+      // escape every occurence of two backslashes with two backslashes
+      if( pos+1 < enc.length() && enc[pos+1] == '\\' ) {
+	enc.insert( pos, "\\\\" );
+	pos += 4;
+      }
+      // escape the last single backslash in the filename (see above)
+      else if( pos == enc.length()-1 ) {
+	enc.insert( pos, "\\" );
+	pos += 2;
+      }
+      else
+	++pos;
+    }
+    else
+      ++pos;
+  }
+
+//   enc.replace( "\\\\", "\\\\\\\\" );
+//   enc.replace( "=", "\\=" );
+
+  return enc;
 }
 
 
