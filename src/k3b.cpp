@@ -217,21 +217,21 @@ void K3bMainWindow::initActions()
   setStandardToolBarMenuEnabled(true);
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-  actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "sound", 0, this, SLOT(slotNewAudioDoc()),
+  actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
-  actionFileNewData = new KAction(i18n("New Data &CD Project"),"tar", 0, this, SLOT(slotNewDataDoc()),
+  actionFileNewData = new KAction(i18n("New Data &CD Project"),"datacd", 0, this, SLOT(slotNewDataDoc()),
 			    actionCollection(), "file_new_data");
-  actionFileNewMixed = new KAction(i18n("New &Mixed Mode CD Project"),"tar", 0, this, SLOT(slotNewMixedDoc()),
+  actionFileNewMixed = new KAction(i18n("New &Mixed Mode CD Project"),"mixedcd", 0, this, SLOT(slotNewMixedDoc()),
 				   actionCollection(), "file_new_mixed");
-  actionFileNewVcd = new KAction(i18n("New &Video CD Project"),"video", 0, this, SLOT(slotNewVcdDoc()),
+  actionFileNewVcd = new KAction(i18n("New &Video CD Project"),"videocd", 0, this, SLOT(slotNewVcdDoc()),
 				   actionCollection(), "file_new_vcd");
-  actionFileNewMovix = new KAction(i18n("New &eMovix CD Project"),"video", 0, this, SLOT(slotNewMovixDoc()),
+  actionFileNewMovix = new KAction(i18n("New &eMovix CD Project"),"emovix", 0, this, SLOT(slotNewMovixDoc()),
 				   actionCollection(), "file_new_movix");
-  actionFileNewMovixDvd = new KAction(i18n("New &eMovix DVD Project"),"video", 0, this, SLOT(slotNewMovixDvdDoc()),
+  actionFileNewMovixDvd = new KAction(i18n("New &eMovix DVD Project"),"emovix", 0, this, SLOT(slotNewMovixDvdDoc()),
 				      actionCollection(), "file_new_movix_dvd");
-  actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "dvd_unmount", 0, this, SLOT(slotNewDvdDoc()),
+  actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "datadvd", 0, this, SLOT(slotNewDvdDoc()),
 				 actionCollection(), "file_new_dvd");
-  actionFileNewVideoDvd = new KAction(i18n("New V&ideo DVD Project"), "video", 0, this, SLOT(slotNewVideoDvdDoc()),
+  actionFileNewVideoDvd = new KAction(i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
 				      actionCollection(), "file_new_video_dvd");
 
 
@@ -265,21 +265,21 @@ void K3bMainWindow::initActions()
   actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
 					       actionCollection(), "view_document_header");
 
-  actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "cdrwblank", 0, this, SLOT(slotBlankCdrw()),
+  actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "erasecd", 0, this, SLOT(slotBlankCdrw()),
 				      actionCollection(), "tools_blank_cdrw" );
-  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "cdrwblank", 0, this, SLOT(slotFormatDvd()),
+  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "formatdvd", 0, this, SLOT(slotFormatDvd()),
 							 actionCollection(), "tools_format_dvd" );
   actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
 			    actionCollection(), "tools_encode_video");
-  actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "gear", 0, this, SLOT(slotWriteCdImage()),
+  actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
-  (void)new KAction(i18n("&Burn DVD ISO Image..."), "gear", 0, this, SLOT(slotWriteDvdIsoImage()),
+  (void)new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
 		    actionCollection(), "tools_write_dvd_iso" );
 
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
 
-  KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "cdcopy", 0, this, SLOT(slotDvdCopy()),
+  KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "dvdcopy", 0, this, SLOT(slotDvdCopy()),
 					    actionCollection(), "tools_copy_dvd" );
 
 //   KAction* actionToolsVideoDvdCopy = new KAction(i18n("Copy &VideoDVD..."), "cdcopy", 0, this, SLOT(slotVideoDvdCopy()),

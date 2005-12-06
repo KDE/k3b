@@ -11,6 +11,7 @@
  * Fixed problems with special characters like umlauts on UTF systems (this does however not fix the
    verification issues)
  * Automatically use a newly installed version of an external application at the next K3b start.
+ * Complete new set of K3b action icons for project types and tools. Many thanks to Marcel Dierkes.
 
 0.12.8
 ======
