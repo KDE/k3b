@@ -125,7 +125,7 @@ void K3bExternalProgram::addBin( K3bExternalBin* bin )
   }
 }
 
-void K3bExternalProgram::setDefault( K3bExternalBin* bin )
+void K3bExternalProgram::setDefault( const K3bExternalBin* bin )
 {
   if( m_bins.contains( bin ) )
     m_bins.take( m_bins.find( bin ) );
@@ -220,8 +220,8 @@ bool K3bExternalBinManager::saveConfig( KConfig* c )
     c->writeEntry( p->name() + " user parameters", p->userParameters() );
 
     const K3bExternalBin* newestBin = p->mostRecentBin();
-    if( newestBin ) {
-      c->writeEntry( p->name() + " last seen newest version", newestBin->version.toString() );
+    if( newestBin )
+      c->writeEntry( p->name() + " last seen newest version", newestBin->version );
   }
 
   return true;
