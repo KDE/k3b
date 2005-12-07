@@ -560,7 +560,7 @@ void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
     //  2. the project does fit and fills up the CD -> finish multisession
     //  3. the project does fit and does not fill up the CD -> continue multisession
     //
-    if( m_doc->size() > info.remainingSize().mode1Bytes() && !m_doc->sessionImported() )
+    if( m_doc->size() > info.remainingSize().mode1Bytes() && m_doc->size() == m_doc->burningSize() )
       d->usedMultiSessionMode = K3bDataDoc::NONE;
     else if( m_doc->size() >= info.remainingSize().mode1Bytes()*9/10 )
       d->usedMultiSessionMode = K3bDataDoc::FINISH;
