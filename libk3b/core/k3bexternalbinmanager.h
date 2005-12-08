@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
-#include "k3b_export.h"
+
 #include "k3bversion.h"
 
 class KConfig;
