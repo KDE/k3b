@@ -1654,6 +1654,12 @@ int main (int argc, char *argv[])
   if( setpriority( PRIO_PROCESS, 0/*getpid()*/, -20 ) )
     fprintf( stderr, ":-( Could not set priority.\n" );
 
+  /*
+   * Drop root privileges
+   */
+  if (setuid(getuid()) < 0)
+    fprintf( stderr, ":-( Could not set back effective uid.\n");
+
 #if !defined(I_KNOW_ALL_ABOUT_SUDO)
     if (getenv ("SUDO_COMMAND"))
     {	fprintf (stderr,":-( %s is being executed under sudo, "
