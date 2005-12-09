@@ -86,7 +86,7 @@ class LIBK3B_EXPORT K3bExternalProgram
 
   void addBin( K3bExternalBin* );
   void clear() { m_bins.clear(); }
-  void setDefault( K3bExternalBin* );
+  void setDefault( const K3bExternalBin* );
   void setDefault( const QString& path );
 
   const QPtrList<K3bExternalBin>& bins() const { return m_bins; }

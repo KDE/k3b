@@ -125,7 +125,7 @@ void K3bExternalProgram::addBin( K3bExternalBin* bin )
   }
 }
 
-void K3bExternalProgram::setDefault( K3bExternalBin* bin )
+void K3bExternalProgram::setDefault( const K3bExternalBin* bin )
 {
   if( m_bins.contains( bin ) )
     m_bins.take( m_bins.find( bin ) );
@@ -194,6 +194,14 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
       for( QStringList::iterator strIt = list.begin(); strIt != list.end(); ++strIt )
 	p->addUserParameter( *strIt );
     }
+    if( c->hasKey( p->name() + " last seen newest version" ) ) {
+      K3bVersion lastMax( c->readEntry( p->name() + " last seen newest version" ) );
+      // now search for a newer version and use it (because it was installed after the last
+      // K3b run and most users would probably expect K3b to use a newly installed version)
+      const K3bExternalBin* newestBin = p->mostRecentBin();
+      if( newestBin && newestBin->version > lastMax )
+	p->setDefault( newestBin );
+    }
   }
 
   return true;
@@ -210,6 +218,10 @@ bool K3bExternalBinManager::saveConfig( KConfig* c )
       c->writeEntry( p->name() + " default", p->defaultBin()->path );
 
     c->writeEntry( p->name() + " user parameters", p->userParameters() );
+
+    const K3bExternalBin* newestBin = p->mostRecentBin();
+    if( newestBin )
+      c->writeEntry( p->name() + " last seen newest version", newestBin->version );
   }
 
   return true;
