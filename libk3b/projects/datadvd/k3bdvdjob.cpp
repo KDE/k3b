@@ -543,7 +543,6 @@ void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
     K3bIso9660 iso( m_doc->burner() );
     if( iso.open() && info.capacity() - iso.primaryDescriptor().volumeSpaceSize >= m_doc->length() ) {
       d->usedMultiSessionMode = K3bDataDoc::CONTINUE;
-      kdDebug() << "(K3bDvdJob) iso size: " << iso.primaryDescriptor().volumeSpaceSize << endl;
     }
     else {
       d->usedMultiSessionMode = K3bDataDoc::NONE;
@@ -556,7 +555,7 @@ void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
     //  2. the project does fit and fills up the CD -> finish multisession
     //  3. the project does fit and does not fill up the CD -> continue multisession
     //
-    if( m_doc->size() > info.remainingSize().mode1Bytes() )
+    if( m_doc->size() > info.remainingSize().mode1Bytes() && !m_doc->sessionImported() )
       d->usedMultiSessionMode = K3bDataDoc::NONE;
     else if( m_doc->size() >= info.remainingSize().mode1Bytes()*9/10 )
       d->usedMultiSessionMode = K3bDataDoc::FINISH;
@@ -564,7 +563,14 @@ void K3bDvdJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
       d->usedMultiSessionMode = K3bDataDoc::CONTINUE;
   }
   else {
-    d->usedMultiSessionMode = K3bDataDoc::NONE;
+    //
+    // We only close the DVD if the project fills it up almost completely (90%)
+    //
+    if( m_doc->size() >= info.capacity().mode1Bytes()*9/10 ||
+	m_doc->writingMode() == K3b::DAO )
+      d->usedMultiSessionMode = K3bDataDoc::NONE;
+    else
+      d->usedMultiSessionMode = K3bDataDoc::START;
   }
 
   if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
