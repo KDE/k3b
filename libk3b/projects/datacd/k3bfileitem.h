@@ -41,6 +41,16 @@ public:
    * Creates a new K3bFileItem
    */
   K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
+
+  /**
+   * Constructor for optimized file item creation which does no additional stat.
+   *
+   * Used by K3b to speedup file item creation.
+   */
+  K3bFileItem( const struct stat64* stat, 
+	       const struct stat64* followedStat, 
+	       const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
+
   virtual ~K3bFileItem();
 	
   bool exists() const;

@@ -112,6 +112,44 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
 }
 
 
+K3bFileItem::K3bFileItem( const struct stat64* stat, 
+			  const struct stat64* followedStat,
+			  const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
+  : K3bDataItem( doc, dir ),
+    m_replacedItemFromOldSession(0),
+    m_localPath(filePath)
+{
+  if( k3bName.isEmpty() )
+    m_k3bName = filePath.section( '/', -1 );
+  else
+    m_k3bName = k3bName;
+
+  m_size = (KIO::filesize_t)stat->st_size;
+  m_bSymLink = S_ISLNK(stat->st_mode);
+
+  //
+  // integrate the device number into the inode since files on different
+  // devices may have the same inode number!
+  //
+  m_id.inode = stat->st_ino;
+  m_id.device = stat->st_dev;
+  
+  if( isSymLink() ) {
+    m_idFollowed.inode = followedStat->st_ino;
+    m_idFollowed.device = followedStat->st_dev;
+    
+    m_sizeFollowed = (KIO::filesize_t)followedStat->st_size;
+  }
+  else {
+    m_idFollowed = m_id;
+    m_sizeFollowed = m_size;
+  }
+
+  if( parent() )
+    parent()->addDataItem( this );
+}
+
+
 K3bFileItem::~K3bFileItem()
 {
   // remove this from parentdir
