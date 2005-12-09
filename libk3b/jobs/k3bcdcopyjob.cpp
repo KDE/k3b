@@ -955,8 +955,14 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 	d->readingSuccessful = true;
 	if( !m_onlyCreateImages ) {
 	  if( m_readerDevice == m_writerDevice ) {
-	    // eject the media
-	    K3bDevice::eject( m_readerDevice );
+	    // eject the media (we do this blocking to know if it worked
+	    // becasue if it did not it might happen that k3b overwrites a CD-RW
+	    // source)
+	    if( !m_readerDevice->eject() ) {
+	      emit infoMessage( i18n("Unable to eject media."), ERROR );
+	      finishJob( false, true );
+	      return;
+	    }
 	  }
 	  
 	  if( !writeNextSession() ) {
