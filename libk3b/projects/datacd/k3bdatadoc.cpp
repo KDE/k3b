@@ -135,8 +135,17 @@ void K3bDataDoc::addUrls( const KURL::List& l, K3bDirItem* dir )
 
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     const KURL& url = *it;
-    QString k3bname = (*it).path().section( '/', -1 );
     QFileInfo f( url.path() );
+    QString k3bname = f.absFilePath().section( "/", -1 );
+
+    // filenames cannot end in backslashes (mkisofs problem. See comments in k3bisoimager.cpp (escapeGraftPoint()))
+    while( k3bname[k3bname.length()-1] == '\\' )
+      k3bname.truncate( k3bname.length()-1 );
+
+    // backup dummy name
+    if( k3bname.isEmpty() )
+      k3bname = "1";
+
     K3bDirItem* newDirItem = 0;
 
     // rename the new item if an item with that name already exists
