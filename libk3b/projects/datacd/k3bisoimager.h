@@ -106,7 +106,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   // used by writePathSpec
   virtual int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
   virtual void writePathSpecForFile( K3bFileItem*, QTextStream& stream );
-  QCString escapeGraftPoint( const QString& str );
+  QString escapeGraftPoint( const QString& str );
 
   KTempFile* m_pathSpecFile;
   KTempFile* m_rrHideFile;

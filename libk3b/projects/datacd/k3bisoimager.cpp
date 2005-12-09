@@ -889,9 +889,9 @@ bool K3bIsoImager::writeSortWeightFile()
 }
 
 
-QCString K3bIsoImager::escapeGraftPoint( const QString& str )
+QString K3bIsoImager::escapeGraftPoint( const QString& str )
 {
-  QCString enc = QFile::encodeName( str );
+  QString enc = str);
 
   //
   // mkisofs manpage (-graft-points) is incorrect (as of mkisofs 2.01.01)
@@ -908,8 +908,8 @@ QCString K3bIsoImager::escapeGraftPoint( const QString& str )
   //
 
   //
-  // we do not use QCString::replace to have full control
-  // this might be slow since QCString::insert is slow but we don't care
+  // we do not use QString::replace to have full control
+  // this might be slow since QString::insert is slow but we don't care
   // since this is only called to prepare the iso creation which is not 
   // time critical. :)
   //
