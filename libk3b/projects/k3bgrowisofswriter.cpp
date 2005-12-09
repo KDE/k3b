@@ -202,7 +202,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   *d->process << d->growisofsBin;
 
   // set this var to true to enable the ringbuffer
-  d->usingRingBuffer = false;
+  d->usingRingBuffer = true;
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->usingRingBuffer || d->image.isEmpty() ) {

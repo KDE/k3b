@@ -29,7 +29,7 @@ class K3bPipeBuffer : public K3bThreadJob
   ~K3bPipeBuffer();
 
   /**
-   * Set the buffer size in MB. The default value is 1 MB.
+   * Set the buffer size in MB. The default value is 4 MB.
    */
   void setBufferSize( int );
 
