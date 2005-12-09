@@ -93,7 +93,7 @@ class K3bWriterSelectionWidget : public QWidget
    * \param overrideString A string which will be shown in place of the medium string.
    *                       For example: "Burn to the same device"
    */
-  void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString );
+  void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString, const QString& tooltip );
 
  signals:
   void writerChanged();

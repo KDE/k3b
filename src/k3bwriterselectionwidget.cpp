@@ -51,10 +51,10 @@ public:
       m_overrideDevice( 0 ) {
   }
 
-  void setOverrideDevice( K3bDevice::Device* dev, const QString& s ) {
+  void setOverrideDevice( K3bDevice::Device* dev, const QString& s, const QString& t ) {
     m_overrideDevice = dev;
     m_overrideString = s;
-
+    m_overrideToolTip = t;
     updateMedia();
   }
 
@@ -73,7 +73,7 @@ public:
 
   QString mediumToolTip( const K3bMedium& m ) {
     if( m.device() == m_overrideDevice )
-      return m_overrideString;
+      return m_overrideToolTip;
     else
       return K3bMediaSelectionComboBox::mediumToolTip( m );
   }
@@ -81,6 +81,7 @@ public:
 private:
   K3bDevice::Device* m_overrideDevice;
   QString m_overrideString;
+  QString m_overrideToolTip;
 };
 
 
@@ -446,9 +447,9 @@ void K3bWriterSelectionWidget::setForceAutoSpeed( bool b )
 }
 
 
-void K3bWriterSelectionWidget::setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString )
+void K3bWriterSelectionWidget::setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString, const QString& tooltip )
 {
-  m_comboMedium->setOverrideDevice( dev, overrideString );
+  m_comboMedium->setOverrideDevice( dev, overrideString, tooltip );
 }
 
 #include "k3bwriterselectionwidget.moc"
