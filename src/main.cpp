@@ -108,7 +108,9 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Adriaan De Groot",
 		      I18N_NOOP("For his work on the BSD port."),
 		      "" );
-
+  aboutData.addCredit("Marcel Dierkes",
+		      I18N_NOOP("For the great K3b icon eyecandy."),
+		      "marcel.dierkes@gmx.de" );
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
