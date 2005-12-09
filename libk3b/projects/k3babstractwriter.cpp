@@ -68,7 +68,7 @@ void K3bAbstractWriter::cancel()
 void K3bAbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 {
   if( success ) {
-    if( !k3bcore->globalSettings()->ejectMedia() ) {
+    if( k3bcore->globalSettings()->ejectMedia() ) {
       emit newSubTask( i18n("Ejecting CD") );  // FIXME: "media" instead of "CD"
       connect( K3bDevice::eject( burnDevice() ), SIGNAL(finished(bool)),
 	       this, SLOT(slotEjectWhileCancellationFinished(bool)) );
