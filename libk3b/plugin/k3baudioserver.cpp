@@ -56,9 +56,7 @@ protected:
       int len = m_server->m_client->read( buffer, 2048*10 );
       if( len > 0 ) {
 	if( m_server->m_pluginInitialized ) {
-	  int written = m_server->m_usedOutputPlugin->write( buffer, len );
-	  if( written != len )
-	    kdDebug() << "(K3bAudioServer) could only write " << written << " bytes of " << len << endl;
+	  write( buffer, len );
 	}
 	// else just drop the data into space...
       }
@@ -66,6 +64,14 @@ protected:
 	// FIXME: no data or error... what to do?
       }
     }
+  }
+
+  int write( char* buffer, int len ) {
+    int written = m_server->m_usedOutputPlugin->write( buffer, len );
+    if( written < len )
+      return write( buffer+written, len-written );
+    else
+      return len;
   }
 
 private:
