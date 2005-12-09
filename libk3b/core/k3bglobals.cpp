@@ -37,6 +37,7 @@
 
 #include <cmath>
 #include <sys/utsname.h>
+#include <sys/stat.h>
 
 #ifdef __FreeBSD__
 #include <sys/param.h>
@@ -252,13 +253,19 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 KIO::filesize_t K3b::filesize( const KURL& url )
 {
   KIO::filesize_t fSize = 0;
-  // we use KIO since QFileInfo does provide the size as unsigned int wich is way too small for DVD images
-  KIO::UDSEntry uds;
-  KIO::NetAccess::stat( url, uds, 0 );
-  for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
-    if( (*it).m_uds == KIO::UDS_SIZE ) {
-      fSize = (*it).m_long;
-      break;
+  if( url.isLocalFile() ) {
+    struct stat64 buf;
+    stat64( QFile::encodeName( url.path() ), &buf );
+    fSize = (KIO::filesize_t)buf.st_size;
+  }
+  else {
+    KIO::UDSEntry uds;
+    KIO::NetAccess::stat( url, uds, 0 );
+    for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
+      if( (*it).m_uds == KIO::UDS_SIZE ) {
+	fSize = (*it).m_long;
+	break;
+      }
     }
   }
 
