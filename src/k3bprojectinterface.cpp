@@ -15,9 +15,13 @@
 
 
 #include "k3bprojectinterface.h"
+#include "k3bburnprogressdialog.h"
 #include <k3bdoc.h>
 #include <k3bview.h>
 #include <k3bmsf.h>
+#include <k3bcore.h>
+#include <k3bdevicemanager.h>
+#include <k3bjob.h>
 
 #include <qtimer.h>
 
@@ -58,6 +62,30 @@ void K3bProjectInterface::burn()
 {
   // we want to return this method immediately
   QTimer::singleShot( 0, m_doc->view(), SLOT(slotBurn()) );
+}
+
+
+void K3bProjectInterface::directBurn()
+{
+  K3bJobProgressDialog* dlg = 0;
+  if( m_doc->onlyCreateImages() )
+    dlg = new K3bJobProgressDialog( m_doc->view() );
+  else
+    dlg = new K3bBurnProgressDialog( m_doc->view() );
+
+  K3bJob* job = m_doc->newBurnJob( dlg );
+
+  dlg->startJob( job );
+
+  delete job;
+  delete dlg;
+}
+
+
+void K3bProjectInterface::setBurnDevice( const QString& name )
+{
+  if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( name ) )
+    m_doc->setBurner( dev );
 }
 
 
