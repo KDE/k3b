@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bAudioCdTextWidget</class>
 <comment>Widget to edit the global CD-Text in a K3b audio project.</comment>
 <author>Sebastian Trueg</author>
@@ -10,18 +10,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>428</width>
-            <height>312</height>
+            <width>338</width>
+            <height>303</height>
         </rect>
     </property>
     <property name="caption">
         <string>K3bAudioCDTextWidget</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QCheckBox">
             <property name="name">
                 <cstring>m_checkCdText</cstring>
             </property>
@@ -39,268 +39,307 @@
 (if you specify CD-TEXT data).</string>
             </property>
         </widget>
-        <widget class="QLabel" row="3" column="0">
+        <widget class="QFrame">
             <property name="name">
-                <cstring>textLabel2</cstring>
+                <cstring>frame3</cstring>
             </property>
-            <property name="text">
-                <string>&amp;Performer:</string>
+            <property name="enabled">
+                <bool>false</bool>
             </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editPerformer</cstring>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
             </property>
-        </widget>
-        <widget class="QLayoutWidget" row="5" column="1">
-            <property name="name">
-                <cstring>layout3</cstring>
+            <property name="frameShadow">
+                <enum>Raised</enum>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KLineEdit">
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>m_editArranger</cstring>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>m_buttonCopyArranger</cstring>
+                        <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>...</string>
+                        <string>&amp;Performer:</string>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Copy to all tracks</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="6" column="1">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>m_editSongwriter</cstring>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>m_buttonCopySongwriter</cstring>
-                    </property>
-                    <property name="text">
-                        <string>...</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Copy to all tracks</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="7" column="1">
-            <property name="name">
-                <cstring>layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KLineEdit">
-                    <property name="name">
-                        <cstring>m_editComposer</cstring>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>m_buttonCopyComposer</cstring>
-                    </property>
-                    <property name="text">
-                        <string>...</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Copy to all tracks</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="KLineEdit" row="8" column="1">
-            <property name="name">
-                <cstring>m_editUpc_ean</cstring>
-            </property>
-        </widget>
-        <widget class="KLineEdit" row="9" column="1">
-            <property name="name">
-                <cstring>m_editDisc_id</cstring>
-            </property>
-        </widget>
-        <widget class="KLineEdit" row="10" column="1">
-            <property name="name">
-                <cstring>m_editMessage</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="10" column="0">
-            <property name="name">
-                <cstring>textLabel8</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Message:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editMessage</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="9" column="0">
-            <property name="name">
-                <cstring>textLabel7</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Disk id:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editDisc_id</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="8" column="0">
-            <property name="name">
-                <cstring>textLabel6</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;UPC EAN:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editUpc_ean</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="7" column="0">
-            <property name="name">
-                <cstring>textLabel5</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Composer:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editComposer</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="6" column="0">
-            <property name="name">
-                <cstring>textLabel4</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Songwriter:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editSongwriter</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="5" column="0">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Arranger:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editArranger</cstring>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget" row="3" column="1">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KLineEdit">
-                    <property name="name">
+                    <property name="buddy" stdset="0">
                         <cstring>m_editPerformer</cstring>
                     </property>
                 </widget>
-                <widget class="QToolButton">
+                <widget class="QLayoutWidget" row="4" column="1">
                     <property name="name">
-                        <cstring>m_buttonCopyPerformer</cstring>
+                        <cstring>layout3</cstring>
                     </property>
-                    <property name="text">
-                        <string>...</string>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>m_editArranger</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_buttonCopyArranger</cstring>
+                            </property>
+                            <property name="text">
+                                <string>...</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Copy to all tracks</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="5" column="1">
+                    <property name="name">
+                        <cstring>layout2</cstring>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Copy to all tracks</string>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>m_editSongwriter</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_buttonCopySongwriter</cstring>
+                            </property>
+                            <property name="text">
+                                <string>...</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Copy to all tracks</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="6" column="1">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>m_editComposer</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_buttonCopyComposer</cstring>
+                            </property>
+                            <property name="text">
+                                <string>...</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Copy to all tracks</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="KLineEdit" row="7" column="1">
+                    <property name="name">
+                        <cstring>m_editUpc_ean</cstring>
                     </property>
                 </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="2" column="1">
-            <property name="name">
-                <cstring>layout5</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KLineEdit">
+                <widget class="KLineEdit" row="8" column="1">
                     <property name="name">
+                        <cstring>m_editDisc_id</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="9" column="1">
+                    <property name="name">
+                        <cstring>m_editMessage</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="9" column="0">
+                    <property name="name">
+                        <cstring>textLabel8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Message:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_editMessage</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="8" column="0">
+                    <property name="name">
+                        <cstring>textLabel7</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Disk id:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_editDisc_id</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="7" column="0">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;UPC EAN:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_editUpc_ean</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="6" column="0">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Composer:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_editComposer</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Songwriter:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_editSongwriter</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Arranger:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_editArranger</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="2" column="1">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>m_editPerformer</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_buttonCopyPerformer</cstring>
+                            </property>
+                            <property name="text">
+                                <string>...</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Copy to all tracks</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>m_editTitle</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_buttonCopyTitle</cstring>
+                            </property>
+                            <property name="text">
+                                <string>...</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Copy to all tracks</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Title:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
                         <cstring>m_editTitle</cstring>
                     </property>
                 </widget>
-                <widget class="QToolButton">
+                <widget class="Line" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>m_buttonCopyTitle</cstring>
+                        <cstring>line3</cstring>
                     </property>
-                    <property name="text">
-                        <string>...</string>
+                    <property name="frameShape">
+                        <enum>HLine</enum>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Copy to all tracks</string>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="Line" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>line4</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <widget class="QLabel" row="2" column="0">
+        <spacer>
             <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Title:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_editTitle</cstring>
-            </property>
-        </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
+                <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Vertical</enum>
             </property>
-        </widget>
-        <widget class="Line" row="4" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line4</cstring>
+            <property name="sizeType">
+                <enum>Expanding</enum>
             </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>41</height>
+                </size>
             </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-    </grid>
+        </spacer>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -332,6 +371,12 @@
         <signal>clicked()</signal>
         <receiver>K3bAudioCDTextWidget</receiver>
         <slot>slotCopySongwriter()</slot>
+    </connection>
+    <connection>
+        <sender>m_checkCdText</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>frame3</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>
