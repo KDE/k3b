@@ -38,6 +38,9 @@
 #include <kglobal.h>
 #include <kstdguiitem.h>
 
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain,
@@ -110,9 +113,13 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     message += QString("<p><b>%1:</b><br>%2")
       .arg( i18n("It is not possible to add files bigger than 4 GB") )
       .arg( dlg.m_tooBigFiles.join( "<br>" ) );
+  if( !dlg.m_mkisofsLimitationRenamedFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("Some filenames had to be modified due to limitations in mkisofs") )
+      .arg( dlg.m_mkisofsLimitationRenamedFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
-    KMessageBox::detailedSorry( parent, i18n("Some files could not be added to the project."), message );
+    KMessageBox::detailedSorry( parent, i18n("Problems while adding files to the project."), message );
 
   return ret;
 }
@@ -134,33 +141,67 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   KURL url = m_urlQueue.first().first;
   K3bDirItem* dir = m_urlQueue.first().second;
   m_urlQueue.remove( m_urlQueue.begin() );
+  QString absFilePath( QFileInfo(url.path()).absFilePath() );
+  QString resolved( absFilePath );
+  QCString encodedPath = QFile::encodeName( absFilePath );
 
   bool valid = true;
-  QFileInfo f( url.path() );
+  struct stat64 statBuf, resolvedStatBuf;
+  bool isSymLink = false;
+  bool isDir = false;
+  bool isFile = false;
+
   if( !url.isLocalFile() ) {
     valid = false;
     m_nonLocalFiles.append( url.path() );
   }
 
-  // QFileInfo::exists and QFileInfo::isReadable return false for broken symlinks :(
-  // and symlinks are always readable and can always be added to a project
-  else if( !f.isSymLink() ) {
-    if( !f.isReadable() ) {
-      valid = false;
-      m_unreadableFiles.append( url.path() );
+  else if( lstat64( encodedPath, &statBuf ) != 0 ) {
+    valid = false;
+    m_notFoundFiles.append( url.path() );
+  }
+
+  else {
+    isSymLink = S_ISLNK(statBuf.st_mode);
+    isFile = S_ISREG(statBuf.st_mode);
+    isDir = S_ISDIR(statBuf.st_mode);
+
+    // symlinks are always readable and can always be added to a project
+    // but we need to know if the symlink points to a directory
+    if( isSymLink ) {
+      resolved = K3b::resolveLink( absFilePath );
+      ::stat64( QFile::encodeName( resolved ), &resolvedStatBuf );
+      isDir = S_ISDIR(resolvedStatBuf.st_mode);
     }
-    if( !f.exists() ) {
-      valid = false;
-      m_notFoundFiles.append( url.path() );
-    }
-    if( f.isFile() && K3b::filesize( url ) > 4LL*1024LL*1024LL*1024LL ) {
-      valid = false;
-      m_tooBigFiles.append( url.path() );
+
+    else {
+      if( ::access( encodedPath, R_OK ) != 0 ) {
+	valid = false;
+	m_unreadableFiles.append( url.path() );
+      }
+      else if( isFile && (long long)(statBuf.st_size) > 4LL*1024LL*1024LL*1024LL ) {
+	valid = false;
+	m_tooBigFiles.append( url.path() );
+      }
     }
   }
 
 
   QString newName = url.fileName();
+
+  // filenames cannot end in backslashes (mkisofs problem. See comments in k3bisoimager.cpp (escapeGraftPoint()))
+  bool bsAtEnd = false;
+  while( newName[newName.length()-1] == '\\' ) {
+    newName.truncate( newName.length()-1 );
+    bsAtEnd = true;
+  }
+  if( bsAtEnd )
+    m_mkisofsLimitationRenamedFiles.append( url.path() + " -> " + newName );
+  
+  // backup dummy name
+  if( newName.isEmpty() )
+    newName = "1";
+
   K3bDirItem* newDirItem = 0;
 
   //
@@ -172,7 +213,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       //
       // reuse an existing dir
       //
-      if( oldItem->isDir() && f.isDir() )
+      if( oldItem->isDir() && isDir )
 	newDirItem = dynamic_cast<K3bDirItem*>(oldItem);
 
       //
@@ -180,7 +221,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       // files are handled in K3bFileItem constructor and dirs handled above
       //
       else if( oldItem->isFromOldSession() &&
-	       f.isDir() != oldItem->isDir() ) {
+	       isDir != oldItem->isDir() ) {
 	if( !getNewName( newName, dir, newName ) )
 	  valid = false;
       }
@@ -194,7 +235,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	if( !oldItem->isFromOldSession() )
 	  delete oldItem;
       }
-
+      
       //
       // Let the user choose
       //
@@ -256,14 +297,11 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   // would change the doc. So we simply ask the user what to do with a link to a folder
   //
   if( valid ) {
-    if( f.isDir() && f.isSymLink() ) {
-
-      QString resolved = K3b::resolveLink( f.absFilePath() );
-
+    if( isDir && isSymLink ) {
       // let's see if this link starts a loop
       // that means if it points to some folder above this one
       // if so we cannot follow it anyway
-      if( !f.absFilePath().startsWith( resolved ) &&
+      if( !absFilePath.startsWith( resolved ) &&
 	  ( dir->doc()->isoOptions().followSymbolicLinks() ||
 	    KMessageBox::warningYesNo( this,
 				       i18n("<p>'%1' is a symbolic link to folder '%2'."
@@ -272,13 +310,14 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 					    "K3b project cannot be resolved."
 					    "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may savely "
 					    "ignore this warning and choose to add the link to the project.</b>")
-				       .arg(f.absFilePath())
+				       .arg(absFilePath)
 				       .arg(resolved ),
 				       i18n("Adding link to folder"),
 				       i18n("Follow link now"),
 				       i18n("Add symbolic link to project"),
 				       "ask_to_follow_link_to_folder" ) == KMessageBox::Yes ) ) {
-	f.setFile( resolved );
+	absFilePath = resolved;
+	isSymLink = false;
       }
     }
   }
@@ -289,13 +328,13 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   // now create the new item
   //
   if( valid ) {
-    if( f.isDir() && !f.isSymLink() ) {
+    if( isDir && !isSymLink ) {
       if( !newDirItem ) { // maybe we reuse an already existing dir
 	newDirItem = new K3bDirItem( newName , dir->doc(), dir );
 	newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
       }
 
-      QDir newDir( f.absFilePath() );      
+      QDir newDir( absFilePath );      
 
       int dirFilter = QDir::All;
       if( checkForHiddenFiles( newDir ) )
@@ -308,11 +347,11 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       dlist.remove("..");
 
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(f.absFilePath() + "/" + *it), newDirItem ) );
+	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(absFilePath + "/" + *it), newDirItem ) );
       }
     }
     else {
-      (void)new K3bFileItem( url.path(), dir->doc(), dir, newName );
+      (void)new K3bFileItem( &statBuf, &resolvedStatBuf, url.path(), dir->doc(), dir, newName );
     }
   }
 

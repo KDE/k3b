@@ -76,8 +76,8 @@ K3bProjectBurnDialog::~K3bProjectBurnDialog(){
 void K3bProjectBurnDialog::init()
 {
   readSettings();
-  if( !m_writerSelectionWidget->writerDevice() )
-    m_checkOnlyCreateImage->setChecked(true);
+//   if( !m_writerSelectionWidget->writerDevice() )
+//     m_checkOnlyCreateImage->setChecked(true);
 }
 
 
