@@ -22,16 +22,15 @@
 #ifndef _K3BDEVICE_EXPORT_H_
 #define _K3BDEVICE_EXPORT_H_
 
-#include <kdeversion.h>
+#include <config.h>
 
-//#if 0 //KDE_IS_VERSION(3,3,90)
-
-#include <kdemacros.h>
-
-#define LIBK3BDEVICE_EXPORT KDE_EXPORT
-//#else
-//#define LIBK3BDEVICE_EXPORT
-//#endif
+#ifdef __KDE_HAVE_GCC_VISIBILITY
+#define LIBK3BDEVICE_NO_EXPORT __attribute__ ((visibility("hidden")))
+#define LIBK3BDEVICE_EXPORT __attribute__ ((visibility("default")))
+#else
+#define LIBK3BDEVICE_NO_EXPORT
+#define LIBK3BDEVICE_EXPORT
+#endif
 
 #endif
 
