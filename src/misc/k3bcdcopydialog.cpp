@@ -252,9 +252,6 @@ K3bCdCopyDialog::~K3bCdCopyDialog()
 
 void K3bCdCopyDialog::init()
 {
-  if( !m_writerSelectionWidget->writerDevice() )
-    m_checkOnlyCreateImage->setChecked( true );
-
   slotSourceMediumChanged( m_comboSourceDevice->selectedDevice() );
 }
 
@@ -402,7 +399,8 @@ void K3bCdCopyDialog::slotToggleAll()
 
 void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
-  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning") );
+  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning"),
+					      i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
 }
 
 

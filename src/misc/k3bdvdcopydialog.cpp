@@ -23,11 +23,12 @@
 #include <k3bmediaselectioncombobox.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
-#include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bburnprogressdialog.h>
 #include <k3bwritingmodewidget.h>
 #include <k3bthememanager.h>
+#include <k3bapplication.h>
+#include <k3bmediacache.h>
 
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -209,9 +210,6 @@ K3bDvdCopyDialog::~K3bDvdCopyDialog()
 
 void K3bDvdCopyDialog::init()
 {
-  if( !m_writerSelectionWidget->writerDevice() )
-    m_checkOnlyCreateImage->setChecked( true );
-
   slotSourceMediumChanged( m_comboSourceDevice->selectedDevice() );
 }
 
@@ -388,7 +386,11 @@ void K3bDvdCopyDialog::slotToggleAll()
 
 void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
-  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning") );
+  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning"),
+					      i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+  m_writerSelectionWidget->setWantedMediumType( k3bappcore->mediaCache()->diskInfo( dev ).numLayers() == 1
+						? K3bDevice::MEDIA_WRITABLE_DVD_SL
+						: K3bDevice::MEDIA_WRITABLE_DVD_DL );
 }
 
 #include "k3bdvdcopydialog.moc"
