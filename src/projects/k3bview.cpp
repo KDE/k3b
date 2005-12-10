@@ -64,14 +64,14 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
 
-  KAction* burnAction = new KAction( i18n("&Burn..."), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
+  KAction* burnAction = new KAction( i18n("Burn"), "cdburn", CTRL + Key_B, this, SLOT(slotBurn()),
 				     actionCollection(), "project_burn");
   burnAction->setToolTip( i18n("Open the burning dialog") );
   KAction* propAction = new KAction( i18n("&Properties"), "edit", CTRL + Key_P, this, SLOT(slotProperties()),
 				     actionCollection(), "project_properties");
   propAction->setToolTip( i18n("Open the properties dialog") );
 
-  m_toolBox->addButton( burnAction );
+  m_toolBox->addButton( burnAction, true );
   m_toolBox->addSeparator();
 
   // this is just for testing (or not?)

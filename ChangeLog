@@ -11,6 +11,7 @@
  * Fixed verification problems with localized characters.
  * Automatically use a newly installed version of an external application at the next K3b start.
  * Complete new set of K3b action icons for project types and tools. Many thanks to Marcel Dierkes.
+ * Show text on the burn button to make it catch the eye.
 
 0.12.8
 ======
