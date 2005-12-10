@@ -22,6 +22,7 @@
 #include "k3bbootitem.h"
 #include "k3bspecialdataitem.h"
 #include "k3bfilecompilationsizehandler.h"
+#include "k3bmkisofshandler.h"
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3bmsf.h>
@@ -53,6 +54,20 @@
 #include <kprogress.h>
 #include <kconfig.h>
 #include <kapplication.h>
+
+
+// these defines are from the mkisofs source and are needed to handle the
+// iso9660 filenames created by mkisofs in prepareFilenamesInDir() and
+// iso9660FileNameUsedInMkisofs()
+#define      LEN_ISONAME             31
+#define      MAX_ISONAME_V1          37
+#define      MAX_ISONAME_V2          207
+#define      MAX_ISONAME_V2_RR       193
+#define      MAX_ISONAME             MAX_ISONAME_V2
+
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 
 /**
@@ -985,26 +1000,20 @@ void K3bDataDoc::prepareFilenames()
 {
   m_needToCutFilenames = false;
 
+  //
+  // if joliet is used cut the names and rename if neccessary
+  // 64 characters for standard joliet and 103 characters for long joliet names
+  //
+  // Rockridge supports the full 255 UNIX chars and in case Rockridge is disabled we leave
+  // it to mkisofs for now since handling all the options to alter the ISO9660 standard it just
+  // too much.
+  //
 
-  //
-  // 1. do the space replacing for all files and save the result in K3bDataItem::writtenName
-  //
   K3bDataItem* item = root();
   while( (item = item->nextSibling()) ) {
     item->setWrittenName( treatWhitespace( item->k3bName() ) );
-  }
-
-  //
-  // 2. if joliet is used cut the names and rename if neccessary
-  //    64 characters for standard joliet and 103 characters for long joliet names
-  //
-  //    Rockridge supports the full 255 UNIX chars and in case Rockridge is disabled we leave
-  //    it to mkisofs for now since handling all the options to alter the ISO9660 standard it just
-  //    too much.
-  //
-  if( isoOptions().createJoliet() ) {
-    item = root();
-    while( (item = item->nextSibling()) ) {
+    
+    if( isoOptions().createJoliet() ) {
       if( isoOptions().jolietLong() && item->writtenName().length() > 103 ) {
 	m_needToCutFilenames = true;
 	item->setWrittenName( K3b::cutFilename( item->writtenName(), 103 ) );
@@ -1030,47 +1039,172 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
   if( !dir )
     return;
 
-  // insertion sort
+  int             d1;
+  int             d2;
+  int             d3;
+  register int    new_reclen;
+  char            *c;
+  char            newname[MAX_ISONAME+1];
+  char            rootname[MAX_ISONAME+1];
+  char            extname[MAX_ISONAME+1];
+
+  int iso9660_namelen = LEN_ISONAME;
+  if( isoOptions().ISOLevel() == 4 )
+    iso9660_namelen = MAX_ISONAME_V2;
+  if( isoOptions().ISOmaxFilenameLength() )
+    iso9660_namelen = MAX_ISONAME_V1;
+  if( isoOptions().createRockRidge() && (iso9660_namelen > MAX_ISONAME_V2_RR) )
+    iso9660_namelen = MAX_ISONAME_V2_RR;
+
+  QDict<K3bDataItem> iso9660NameDict;
   QPtrList<K3bDataItem> sortedChildren;
   for( QPtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
 
+    QString isoName = iso9660FileNameUsedInMkisofs( item );
+    if( iso9660NameDict.find( isoName ) ) {
+
+      //
+      // The following code comes from the mkisofs source (tree.c)
+      //
+
+      /*
+       * OK, handle the conflicts.  Try substitute names until we
+       * come up with a winner
+       */
+      strcpy(rootname, isoName.local8Bit());
+      /*
+       * Strip off the non-significant part of the name so that we
+       * are left with a sensible root filename.  If we don't find
+       * a '.', then try a ';'.
+       */
+      c = strchr(rootname, '.');
+      /*
+       * In case we ever allow more than on dot, only modify the
+       * section past the last dot if the file name starts with a
+       * dot.
+       */
+      if (c != NULL && c == rootname && c != strrchr(rootname, '.')) {
+	c = strrchr(rootname, '.');
+      }
+      extname[0] = '\0';              /* In case we have no ext.  */
+      if (c) {
+	strcpy(extname, c);
+	*c = 0;                 /* Cut off complete ext.    */
+      } else {
+	/*
+	 * Could not find any '.'.
+	 */
+	c = strchr(rootname, ';');
+	if (c) {
+	  *c = 0;         /* Cut off version number    */
+	}
+      }
+
+      c = strchr(extname, ';');
+      if (c) {
+	*c = 0;                 /* Cut off version number    */
+      }
+      d1 = strlen(rootname);
+      if (isoOptions().ISOallow31charFilenames() || isoOptions().ISOLevel() > 1) {
+	d2 = strlen(extname);
+	/*
+	 * 31/37 chars minus the 3 characters we are
+	 * appending below to create unique filenames.
+	 */
+	if ((d1 + d2) > (iso9660_namelen - 3))
+	  rootname[iso9660_namelen - 3 - d2] = 0;
+      } else {
+	if (d1 > 5)
+	  rootname[5] = 0;
+      }
+      new_reclen = strlen(rootname);
+      sprintf(newname, "%s000%s%s",
+	      rootname,
+	      extname,
+	      (item->isDir() ||
+	       isoOptions().ISOomitVersionNumbers() ? "" : ";1"));
+
+      for (d1 = 0; d1 < 36; d1++) {
+	for (d2 = 0; d2 < 36; d2++) {
+	  for (d3 = 0; d3 < 36; d3++) {
+	    newname[new_reclen + 0] =
+	      (d1 <= 9 ? '0' + d1 : 'A' + d1 - 10);
+	    newname[new_reclen + 1] =
+	      (d2 <= 9 ? '0' + d2 : 'A' + d2 - 10);
+	    newname[new_reclen + 2] =
+	      (d3 <= 9 ? '0' + d3 : 'A' + d3 - 10);
+// 	    if (debug)
+// 	      error("NEW name '%s'\n", newname);
+
+#ifdef VMS
+	    /* Sigh.  VAXCRTL seems to be broken here */
+	    {
+	      int     ijk = 0;
+
+	      while (newname[ijk]) {
+		if (newname[ijk] == ' ')
+		  newname[ijk] = '0';
+		ijk++;
+	      }
+	    }
+#endif
+
+	    isoName = QString::fromLocal8Bit( newname );
+	    if( !iso9660NameDict.find( isoName ) ) {
+	      goto got_valid_name; // AAAAAHHHRGGG!
+	    }
+	  }
+	}
+      }
+
+      /* If we fell off the bottom here, we were in real trouble. */
+      kdError() << "(K3bDataDoc::prepareFilenamesInDir) could not find a proper replacement name!" << endl;
+    }
+
+  got_valid_name:
+    item->setIso9660Name( isoName );
+    iso9660NameDict.insert( isoName, item );
+
     if( item->isDir() )
       prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );
-
+    
+    // insertion sort
     unsigned int i = 0;
     while( i < sortedChildren.count() && item->writtenName() > sortedChildren.at(i)->writtenName() )
       ++i;
-
+    
     sortedChildren.insert( i, item );
   }
 
 
-  QPtrList<K3bDataItem> sameNameList;
-  while( !sortedChildren.isEmpty() ) {
+  if( isoOptions().createJoliet() || isoOptions().createRockRidge() ) {
+    QPtrList<K3bDataItem> sameNameList;
+    while( !sortedChildren.isEmpty() ) {
 
-    sameNameList.clear();
+      sameNameList.clear();
 
-    do {
-      sameNameList.append( sortedChildren.first() );
-      sortedChildren.removeFirst();
-    } while( !sortedChildren.isEmpty() &&
-	     sortedChildren.first()->writtenName() == sameNameList.first()->writtenName() );
+      do {
+	sameNameList.append( sortedChildren.first() );
+	sortedChildren.removeFirst();
+      } while( !sortedChildren.isEmpty() &&
+	       sortedChildren.first()->writtenName() == sameNameList.first()->writtenName() );
 
-    if( sameNameList.count() > 1 ) {
-      // now we need to rename the items
-      unsigned int maxlen = 255;
-      if( isoOptions().createJoliet() ) {
-	if( isoOptions().jolietLong() )
-	  maxlen = 103;
-	else
-	  maxlen = 64;
-      }
+      if( sameNameList.count() > 1 ) {
+	// now we need to rename the items
+	unsigned int maxlen = 255;
+	if( isoOptions().createJoliet() ) {
+	  if( isoOptions().jolietLong() )
+	    maxlen = 103;
+	  else
+	    maxlen = 64;
+	}
 
-      int cnt = 1;
-      for( QPtrListIterator<K3bDataItem> it( sameNameList );
-	   it.current(); ++it ) {
-	it.current()->setWrittenName( K3b::appendNumberToFilename( it.current()->writtenName(), cnt++, maxlen ) );
+	int cnt = 1;
+	for( QPtrListIterator<K3bDataItem> it( sameNameList );
+	     it.current(); ++it ) {
+	  it.current()->setWrittenName( K3b::appendNumberToFilename( it.current()->writtenName(), cnt++, maxlen ) );
+	}
       }
     }
   }
@@ -1355,5 +1489,452 @@ bool K3bDataDoc::sessionImported() const
   return !m_oldSession.isEmpty();
 }
 
+
+//
+// The following code is taken completely from the mkisofs source
+// The only changes are to the parameters and the use of K3bIsoOptions
+//
+
+// FIXME: is the priority of any relevance?
+QCString K3bDataDoc::iso9660FileNameUsedInMkisofs( K3bDataItem* item )
+{
+  char		c;
+  char		*cp;
+  int		before_dot = 8;
+  int		after_dot = 3;
+  int		chars_after_dot = 0;
+  int		chars_before_dot = 0;
+  int		current_length = 0;
+  int		extra = 0;
+  int		ignore = 0;
+  char		*last_dot;
+  const char	*pnt;
+  int		priority = 32767;
+  char		*result;
+  int		ochars_after_dot;
+  int		ochars_before_dot;
+  int		seen_dot = 0;
+  int		seen_semic = 0;
+  int		tildes = 0;
+
+  // recreate parameters from the original method
+  int dirflag = ( item->isDir() ? 1 : 0 );
+  char* name = strdup( item->k3bName().local8Bit() );
+
+  // for some reason I did not include the mkisofs option -use-fileversion in K3bIsoOptions
+  // so we use the default in mkisofs
+  int use_fileversion = 0;
+
+  K3bDataDoc* doc = item->doc();
+
+  int iso9660_namelen = LEN_ISONAME;
+  if( doc->isoOptions().ISOLevel() == 4 )
+    iso9660_namelen = MAX_ISONAME_V2;
+  if( doc->isoOptions().ISOmaxFilenameLength() )
+    iso9660_namelen = MAX_ISONAME_V1;
+  if( doc->isoOptions().createRockRidge() && (iso9660_namelen > MAX_ISONAME_V2_RR) )
+    iso9660_namelen = MAX_ISONAME_V2_RR;
+
+  //   if (sresult->priority)
+  //     priority = sresult->priority;
+  
+  // the result string itself (big enough just to be sure)
+  char* resultString = new char[ MAX_ISONAME+1 ];
+
+  // the pointer that will be used in the algorithm
+  result = resultString;
+
+  /*
+   * For the '.' entry, generate the correct record, and return 1 for
+   * the length.
+   */
+//   if (strcmp(name, ".") == 0) {
+//     *result = 0;
+//     return (1);
+//   }
+  /*
+   * For the '..' entry, generate the correct record, and return 1
+   * for the length.
+   */
+//   if (strcmp(name, "..") == 0) {
+//     *result++ = 1;
+//     *result++ = 0;
+//     return (1);
+//   }
+  /*
+   * Now scan the directory one character at a time, and figure out
+   * what to do.
+   */
+  pnt = name;
+
+  /*
+   * Find the '.' that we intend to use for the extension.
+   * Usually this is the last dot, but if we have . followed by nothing
+   * or a ~, we would consider this to be unsatisfactory, and we keep
+   * searching.
+   */
+  last_dot = strrchr(pnt, '.');
+  if ((last_dot != NULL) &&
+      ((last_dot[1] == '~') || (last_dot[1] == '\0'))) {
+    cp = last_dot;
+    *cp = '\0';
+    last_dot = strrchr(pnt, '.');
+    *cp = '.';
+    /*
+     * If we found no better '.' back up to the last match.
+     */
+    if (last_dot == NULL)
+      last_dot = cp;
+  }
+
+  if (last_dot != NULL) {
+    ochars_after_dot = strlen(last_dot);	/* dot counts */
+    ochars_before_dot = last_dot - pnt;
+  } else {
+    ochars_before_dot = 128;
+    ochars_after_dot = 0;
+  }
+  /*
+   * If we have full names, the names we generate will not work
+   * on a DOS machine, since they are not guaranteed to be 8.3.
+   * Nonetheless, in many cases this is a useful option.  We
+   * still only allow one '.' character in the name, however.
+   */
+  if (doc->isoOptions().ISOallow31charFilenames() || doc->isoOptions().ISOLevel() > 1) {
+    before_dot = iso9660_namelen;
+    after_dot = before_dot - 1;
+
+    if (!dirflag) {
+      if (ochars_after_dot > ((iso9660_namelen/2)+1)) {
+	/*
+	 * The minimum number of characters before
+	 * the dot is 3 to allow renaming.
+	 * Let us allow to have 15 characters after
+	 * dot to give more rational filenames.
+	 */
+	before_dot = iso9660_namelen/2;
+	after_dot = ochars_after_dot;
+      } else {
+	before_dot -= ochars_after_dot; /* dot counts */
+	after_dot = ochars_after_dot;
+      }
+    }
+  }
+
+  while (*pnt) {
+#ifdef VMS
+    if (strcmp(pnt, ".DIR;1") == 0) {
+      break;
+    }
+#endif
+
+#ifdef		Eric_code_does_not_work
+    /*
+     * XXX If we make this code active we get corrupted direcrory
+     * XXX trees with infinite loops.
+     */
+    /*
+     * This character indicates a Unix style of backup file
+     * generated by some editors.  Lower the priority of the file.
+     */
+    if (iso_translate && *pnt == '#') {
+      priority = 1;
+      pnt++;
+      continue;
+    }
+    /*
+     * This character indicates a Unix style of backup file
+     * generated by some editors.  Lower the priority of the file.
+     */
+    if (iso_translate && *pnt == '~') {
+      priority = 1;
+      tildes++;
+      pnt++;
+      continue;
+    }
+#endif
+    /*
+     * This might come up if we had some joker already try and put
+     * iso9660 version numbers into the file names.  This would be
+     * a silly thing to do on a Unix box, but we check for it
+     * anyways.  If we see this, then we don't have to add our own
+     * version number at the end. UNLESS the ';' is part of the
+     * filename and no valid version number is following.
+     */
+    if (use_fileversion && *pnt == ';' && seen_dot) {
+      /*
+       * Check if a valid version number follows.
+       * The maximum valid version number is 32767.
+       */
+      for (c = 1, cp = (char *)&pnt[1]; c < 6 && *cp; c++, cp++) {
+	if (*cp < '0' || *cp > '9')
+	  break;
+      }
+      if (c <= 6 && *cp == '\0' && atoi(&pnt[1]) <= 32767)
+	seen_semic++;
+    }
+    /*
+     * If we have a name with multiple '.' characters, we ignore
+     * everything after we have gotten the extension.
+     */
+    if (ignore) {
+      pnt++;
+      continue;
+    }
+    if (current_length >= iso9660_namelen) {
+#ifdef	nono
+      /*
+       * Does not work as we may truncate before the dot.
+       */
+      error("Truncating '%s' to '%.*s'.\n",
+	    name,
+	    current_length, sresult->isorec.name);
+      ignore++;
+#endif
+      pnt++;
+      continue;
+    }
+    /* Spin past any iso9660 version number we might have. */
+    if (seen_semic) {
+      if (seen_semic == 1) {
+	seen_semic++;
+	*result++ = ';';
+      }
+      if (*pnt >= '0' && *pnt <= '9') {
+	*result++ = *pnt;
+      }
+      extra++;
+      pnt++;
+      continue;
+    }
+
+    if (*pnt == '.') {
+      if (!doc->isoOptions().ISOallowMultiDot()) {
+	if (strcmp(pnt, ".tar.gz") == 0)
+	  pnt = last_dot = ".tgz";
+	if (strcmp(pnt, ".ps.gz") == 0)
+	  pnt = last_dot = ".psz";
+      }
+
+      if (!chars_before_dot && !doc->isoOptions().ISOallowPeriodAtBegin()) {
+	/*
+	 * DOS can't read files with dot first
+	 */
+	chars_before_dot++;
+	*result++ = '_'; /* Substitute underscore */
+
+      } else if (pnt == last_dot) {
+	if (seen_dot) {
+	  ignore++;
+	  continue;
+	}
+	*result++ = '.';
+	seen_dot++;
+      } else if (doc->isoOptions().ISOallowMultiDot()) {
+	if (chars_before_dot < before_dot) {
+	  chars_before_dot++;
+	  *result++ = '.';
+	}
+      } else {
+	/*
+	 * If this isn't the dot that we use
+	 * for the extension, then change the
+	 * character into a '_' instead.
+	 */
+	if (chars_before_dot < before_dot) {
+	  chars_before_dot++;
+	  *result++ = '_';
+	}
+      }
+    } else {
+      if ((seen_dot && (chars_after_dot < after_dot) &&
+	   ++chars_after_dot) ||
+	  (!seen_dot && (chars_before_dot < before_dot) &&
+	   ++chars_before_dot)) {
+
+	c = *pnt;
+	if (c & 0x80) {
+	  /*
+	   * We allow 8 bit chars if -iso-level
+	   * is at least 4
+	   *
+	   * XXX We should check if the output
+	   * XXX character set is a 7 Bit ASCI
+	   * extension.
+	   */
+	  // No iso-level 4 support in K3b yet
+// 	  if (doc->isoOptions().ISOLevel() >= 4) {
+// 	    c = conv_charset(c, in_nls, out_nls);
+// 	  } else {
+	    c = '_';
+// 	  }
+	} else if (!doc->isoOptions().ISOallowLowercase()) {
+	  c = islower((unsigned char)c) ?
+	    toupper((unsigned char)c) : c;
+	}
+	if (doc->isoOptions().ISOrelaxedFilenames()) {
+	  /*
+	   * Here we allow a more relaxed syntax.
+	   */
+	  if (c == '/')
+	    c = '_';
+	  *result++ = c;
+	} else switch (c) {
+	  /*
+	   * Dos style filenames.
+	   * We really restrict the names here.
+	   */
+
+	default:
+	  *result++ = c;
+	  break;
+
+	  /*
+	   * Descriptions of DOS's 'Parse Filename'
+	   * (function 29H) describes V1 and V2.0+
+	   * separator and terminator characters. These
+	   * characters in a DOS name make the file
+	   * visible but un-manipulable (all useful
+	   * operations error off.
+	   */
+	  /* separators */
+	case '+':
+	case '=':
+	case '%': /* not legal DOS */
+	  /* filename */
+	case ':':
+	case ';': /* already handled */
+	case '.': /* already handled */
+	case ',': /* already handled */
+	case '\t':
+	case ' ':
+	  /* V1 only separators */
+	case '/':
+	case '"':
+	case '[':
+	case ']':
+	  /* terminators */
+	case '>':
+	case '<':
+	case '|':
+	  /*
+	   * Other characters that are not valid ISO-9660
+	   * characters.
+	   */
+	case '!':
+	  /*				case '#':*/
+	case '$':
+	case '&':
+	case '\'':
+	case '(':
+	case ')':
+	case '*':
+	  /*				case '-':*/
+	case '?':
+	case '@':
+	case '\\':
+	case '^':
+	case '`':
+	case '{':
+	case '}':
+	  /*				case '~':*/
+	  /*
+	   * All characters below 32 (space) are not
+	   * allowed too.
+	   */
+	case 1: case 2: case 3: case 4:
+	case 5: case 6: case 7: case 8:
+	  /* case 9: */
+	case 10: case 11: case 12:
+	case 13: case 14: case 15:
+	case 16: case 17: case 18:
+	case 19: case 20: case 21:
+	case 22: case 23: case 24:
+	case 25: case 26: case 27:
+	case 28: case 29: case 30:
+	case 31:
+
+	  /*
+	   * Hmm - what to do here? Skip? Win95
+	   * looks like it substitutes '_'
+	   */
+	  *result++ = '_';
+	  break;
+
+	case '#':
+	case '-':
+	case '~':
+	  /*
+	   * Check if we should allow these
+	   * illegal characters used by
+	   * Microsoft.
+	   */
+	  if (!doc->isoOptions().ISOnoIsoTranslate())
+	    *result++ = '_';
+	  else
+	    *result++ = c;
+	  break;
+	}	/* switch (*pnt) */
+      } else {	/* if (chars_{after,before}_dot) ... */
+	pnt++;
+	continue;
+      }
+    }	/* else *pnt == '.' */
+    current_length++;
+    pnt++;
+  }	/* while (*pnt) */
+
+	/*
+	 * OK, that wraps up the scan of the name.  Now tidy up a few other
+	 * things.
+	 * Look for emacs style of numbered backups, like foo.c.~3~.  If we
+	 * see this, convert the version number into the priority number.
+	 * In case of name conflicts, this is what would end up being used as
+	 * the 'extension'.
+	 */
+  if (tildes == 2) {
+    int	prio1 = 0;
+
+    pnt = name;
+    while (*pnt && *pnt != '~') {
+      pnt++;
+    }
+    if (*pnt) {
+      pnt++;
+    }
+    while (*pnt && *pnt != '~') {
+      prio1 = 10 * prio1 + *pnt - '0';
+      pnt++;
+    }
+    priority = prio1;
+  }
+  /*
+   * If this is not a directory, force a '.' in case we haven't seen one,
+   * and add a version number if we haven't seen one of those either.
+   */
+  if (!dirflag) {
+    if (!seen_dot && !doc->isoOptions().ISOomitTrailingPeriod()) {
+      if (chars_before_dot >= (iso9660_namelen-1)) {
+	chars_before_dot--;
+	result--;
+      }
+      *result++ = '.';
+      extra++;
+    }
+    if (!doc->isoOptions().ISOomitVersionNumbers() && !seen_semic) {
+      *result++ = ';';
+      *result++ = '1';
+      extra += 2;
+    }
+  }
+  *result++ = 0;
+  //  sresult->priority = priority;
+
+  //  return (chars_before_dot + chars_after_dot + seen_dot + extra);
+  QCString r( resultString, chars_before_dot + chars_after_dot + seen_dot + extra + 1 );
+  free( name ); // name was allocated using malloc through strdup
+  delete [] resultString;
+  return r;
+}
 
 #include "k3bdatadoc.moc"

@@ -60,12 +60,16 @@ class LIBK3B_EXPORT K3bDataItem
   /**
    * Returns the name of the item as used on the CD or DVD image.
    *
-   * Only valid for Rockridge and Joliet since for now K3b does not determine
-   * the names as created by mkisofs when creating an ISO9660 only filesystem.
-   *
    * This is only valid after a call to @p K3bDataDoc::prepareFilenames()
    */
   const QString& writtenName() const { return m_writtenName; }
+
+  /**
+   * \return the pure name used in the Iso9660 tree.
+   *
+   * This is only valid after a call to @p K3bDataDoc::prepareFilenames()
+   */
+  const QString& iso9660Name() const { return m_rawIsoName; }
 
   /**
    * Returns the path of the item as written to the CD or DVD image.
@@ -76,10 +80,17 @@ class LIBK3B_EXPORT K3bDataItem
    */
   virtual QString writtenPath() const;
 
+  virtual QString iso9660Path() const;
+
   /**
    * Used to set the written name by @p K3bDataDoc::prepareFilenames()
    */
   void setWrittenName( const QString& s ) { m_writtenName = s; }
+
+  /**
+   * Used to set the pure Iso9660 name by @p K3bDataDoc::prepareFilenames()
+   */
+  void setIso9660Name( const QString& s ) { m_rawIsoName = s; }
 
   virtual K3bDataItem* nextSibling() const;
 	
@@ -155,6 +166,7 @@ class LIBK3B_EXPORT K3bDataItem
 
  private:
   QString m_writtenName;
+  QString m_rawIsoName;
 
   K3bDataDoc* m_doc;
   K3bDirItem* m_parentDir;

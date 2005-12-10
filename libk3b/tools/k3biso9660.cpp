@@ -30,6 +30,7 @@
 
 
 K3bIso9660Entry::K3bIso9660Entry( K3bIso9660* archive,
+				  const QString& isoName,
 				  const QString& name,
 				  int access,
 				  int date,
@@ -41,6 +42,7 @@ K3bIso9660Entry::K3bIso9660Entry( K3bIso9660* archive,
   : m_adate( adate ),
     m_cdate( cdate ),
     m_name( name ),
+    m_isoName( isoName ),
     m_date( date ),
     m_access( access ),
     m_user( user ),
@@ -61,6 +63,7 @@ K3bIso9660Entry::~K3bIso9660Entry()
 
 
 K3bIso9660File::K3bIso9660File( K3bIso9660* archive, 
+				const QString& isoName, 
 				const QString& name, 
 				int access,
 				int date, 
@@ -71,7 +74,7 @@ K3bIso9660File::K3bIso9660File( K3bIso9660* archive,
 				const QString& symlink, 
 				unsigned int pos, 
 				unsigned int size )
-  : K3bIso9660Entry( archive, name, access, date, adate, cdate, user, group, symlink ),
+  : K3bIso9660Entry( archive, isoName, name, access, date, adate, cdate, user, group, symlink ),
     m_startSector(pos),
     m_size(size)
 {
@@ -168,6 +171,7 @@ bool K3bIso9660File::copyTo( const QString& url ) const
 
 
 K3bIso9660Directory::K3bIso9660Directory( K3bIso9660* archive, 
+					  const QString& isoName, 
 					  const QString& name, 
 					  int access,
 					  int date, 
@@ -176,7 +180,7 @@ K3bIso9660Directory::K3bIso9660Directory( K3bIso9660* archive,
 					  const QString& user, 
 					  const QString& group,
 					  const QString& symlink )
-  : K3bIso9660Entry( archive, name, access, date, adate, cdate, user, group, symlink )
+  : K3bIso9660Entry( archive, isoName, name, access, date, adate, cdate, user, group, symlink )
 {
   m_entries.setAutoDelete( true );
 }
@@ -231,15 +235,55 @@ K3bIso9660Entry* K3bIso9660Directory::entry( const QString& n )
 }
 
 
+K3bIso9660Entry* K3bIso9660Directory::iso9660Entry( const QString& n )
+{
+  QString name(n);
+  int pos = name.find( '/' );
+  if( pos == 0 ) {
+    if( name.length() > 1 ) {
+      name = name.mid( 1 ); // remove leading slash
+      pos = name.find( '/' ); // look again
+    }
+    else // "/"
+      return this;
+  }
+
+  // trailing slash ? -> remove
+  if( pos != -1 && pos == (int)name.length()-1 ) {
+    name = name.left( pos );
+    pos = name.find( '/' ); // look again
+  }
+
+  if ( pos != -1 ) {
+    QString left = name.left( pos );
+    QString right = name.mid( pos + 1 );
+
+    K3bIso9660Entry* e = m_iso9660Entries[ left ];
+    if ( !e || !e->isDirectory() )
+      return 0;
+    return static_cast<K3bIso9660Directory*>(e)->iso9660Entry( right );
+  }
+
+  return m_iso9660Entries[ name ];
+}
+
+
 const K3bIso9660Entry* K3bIso9660Directory::entry( const QString& name ) const
 {
   return const_cast<K3bIso9660Directory*>(this)->entry( name );
 }
 
 
+const K3bIso9660Entry* K3bIso9660Directory::iso9660Entry( const QString& name ) const
+{
+  return const_cast<K3bIso9660Directory*>(this)->iso9660Entry( name );
+}
+
+
 void K3bIso9660Directory::addEntry( K3bIso9660Entry* entry )
 {
   m_entries.insert( entry->name(), entry );
+  m_iso9660Entries.insert( entry->isoName(), entry );
 }
 
 
@@ -341,7 +385,7 @@ static int readf( char* buf, sector_t start, int len, void* udata )
 static int mycallb(struct iso_directory_record *idr,void *udata) 
 {
   K3bIso9660 *iso = static_cast<K3bIso9660*> (udata);
-  QString path,user,group,symlink;
+  QString path, isoPath,user,group,symlink;
   int i;
   int access;
   int time,cdate,adate;
@@ -364,10 +408,23 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
 	break;
       }
     }
-    if(ParseRR(idr,&rr)>0) {
+    //
+    // First extract the raw iso9660 name
+    //
+    if( !special ) {
+      for( i = 0; i < isonum_711( idr->name_len ); i++ ) {
+	if( idr->name[i] )
+	  isoPath += idr->name[i];
+      }
+    }
+
+    //
+    // Now see if we have RockRidge
+    //
+    if( ParseRR(idr,&rr) > 0 ) {
       iso->m_rr = true;
       if (!special)
-	path=rr.name;
+	path = rr.name;
       symlink=rr.sl;
       access=rr.mode;
       time=0;//rr.st_mtime;
@@ -378,7 +435,8 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
       z_algo[0]=rr.z_algo[0];z_algo[1]=rr.z_algo[1];
       z_params[0]=rr.z_params[0];z_params[1]=rr.z_params[1];
       z_size=rr.z_size;
-    } else {
+    }
+    else {
       access=iso->dirent->permissions() & ~S_IFMT;
       adate=cdate=time=isodate_915(idr->date,0);
       user=iso->dirent->user();
@@ -392,22 +450,20 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
 	    path+=ch;
 	  }
 	} else {
-	  for (i=0;i<isonum_711(idr->name_len);i++) {
-	    if (idr->name[i]==';') break;
-	    if (idr->name[i]) path+=(idr->name[i]);
-	  }
+	  // no RR, no Joliet, just plain iso9660
+	  path = isoPath;
 	}
 	if (path.endsWith(".")) path.setLength(path.length()-1);
       }
     }
+
     FreeRR(&rr);
+
     if (idr->flags[0] & 2) {
-      entry = new K3bIso9660Directory( iso, path, access | S_IFDIR, time, adate, cdate,
+      entry = new K3bIso9660Directory( iso, isoPath, path, access | S_IFDIR, time, adate, cdate,
 				       user, group, symlink );
     } else {
-//       kdDebug() << "(K3bIso9660) creating file: " << path << " start: " << isonum_733(idr->extent)
-// 		<< " size: " << isonum_733(idr->size) << endl;
-      entry = new K3bIso9660File( iso, path, access, time, adate, cdate,
+      entry = new K3bIso9660File( iso, isoPath, path, access, time, adate, cdate,
 				  user, group, symlink, isonum_733(idr->extent), isonum_733(idr->size) );
       if (z_size)
 	(static_cast<K3bIso9660File*>(entry))->setZF( z_algo, z_params, z_size );
@@ -438,7 +494,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
   QString path;
   K3bIso9660File *entry;
     
-  entry=new K3bIso9660File( this, "Catalog", dirent->permissions() & ~S_IFDIR,
+  entry=new K3bIso9660File( this, "Catalog", "Catalog", dirent->permissions() & ~S_IFDIR,
 			    dirent->date(), dirent->adate(), dirent->cdate(),
 			    dirent->user(), dirent->group(), QString::null,
 			    isonum_731(bootdesc->boot_catalog), 2048 );
@@ -454,7 +510,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
 			 this);
       path="Default Image";
       if (i>1) path += " (" + QString::number(i) + ")";
-      entry=new K3bIso9660File( this, path, dirent->permissions() & ~S_IFDIR,
+      entry=new K3bIso9660File( this, path, path, dirent->permissions() & ~S_IFDIR,
 				dirent->date(), dirent->adate(), dirent->cdate(),
 				dirent->user(), dirent->group(), QString::null,
 				isonum_731(((struct default_entry*) be->data)->start), size<<9 );
@@ -549,7 +605,7 @@ bool K3bIso9660::open()
 	if( c_b > 1 )
 	  path += " (" + QString::number(c_b) + ")";
                         
-	dirent = new K3bIso9660Directory( this, path, access | S_IFDIR,
+	dirent = new K3bIso9660Directory( this, path, path, access | S_IFDIR,
 					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
 	d->elToritoDirs.append( dirent );
                         
@@ -578,7 +634,7 @@ bool K3bIso9660::open()
 	    path += " (" + QString::number(c_i) + ")";
 	}
 	
-	dirent = new K3bIso9660Directory( this, path, access | S_IFDIR,
+	dirent = new K3bIso9660Directory( this, path, path, access | S_IFDIR,
 					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
 
 	level=0;
@@ -605,6 +661,12 @@ bool K3bIso9660::open()
   FreeISO9660(desc);
   
   return true;
+}
+
+
+bool K3bIso9660::isOpen() const
+{
+  return d->isOpen;
 }
 
 
@@ -676,16 +738,35 @@ const K3bIso9660SimplePrimaryDescriptor& K3bIso9660::primaryDescriptor() const
 
 void K3bIso9660::debug() const
 {
-  kdDebug() << "System Id:         " << primaryDescriptor().systemId << endl;
-  kdDebug() << "Volume Id:         " << primaryDescriptor().volumeId << endl;
-  kdDebug() << "Volume Set Id:     " << primaryDescriptor().volumeSetId << endl;
-  kdDebug() << "Preparer Id:       " << primaryDescriptor().preparerId << endl;
-  kdDebug() << "Publisher Id:      " << primaryDescriptor().publisherId << endl;
-  kdDebug() << "Application Id:    " << primaryDescriptor().applicationId << endl;
-  kdDebug() << "Volume Set Size:   " << primaryDescriptor().volumeSetSize << endl;
-  kdDebug() << "Volume Set Number: " << primaryDescriptor().volumeSetNumber << endl;
+  if( isOpen() ) {
+    kdDebug() << "System Id:         " << primaryDescriptor().systemId << endl;
+    kdDebug() << "Volume Id:         " << primaryDescriptor().volumeId << endl;
+    kdDebug() << "Volume Set Id:     " << primaryDescriptor().volumeSetId << endl;
+    kdDebug() << "Preparer Id:       " << primaryDescriptor().preparerId << endl;
+    kdDebug() << "Publisher Id:      " << primaryDescriptor().publisherId << endl;
+    kdDebug() << "Application Id:    " << primaryDescriptor().applicationId << endl;
+    kdDebug() << "Volume Set Size:   " << primaryDescriptor().volumeSetSize << endl;
+    kdDebug() << "Volume Set Number: " << primaryDescriptor().volumeSetNumber << endl;
 
-  debugEntry( firstIsoDirEntry(), 0 );
+    if( firstIsoDirEntry() ) {
+      kdDebug() << "First ISO Dir entry:" << endl;
+      kdDebug() << "----------------------------------------------" << endl;
+      debugEntry( firstIsoDirEntry(), 0 );
+      kdDebug() << "----------------------------------------------" << endl << endl;
+    }
+    if( firstRRDirEntry() ) {
+      kdDebug() << "First RR Dir entry:" << endl;
+      kdDebug() << "----------------------------------------------" << endl;
+      debugEntry( firstRRDirEntry(), 0 );
+      kdDebug() << "----------------------------------------------" << endl << endl;
+    }
+    if( firstJolietDirEntry() ) {
+      kdDebug() << "First Joliet Dir entry:" << endl;
+      kdDebug() << "----------------------------------------------" << endl;
+      debugEntry( firstJolietDirEntry(), 0 );
+      kdDebug() << "----------------------------------------------" << endl << endl;
+    }
+  }
 }
 
 
@@ -693,8 +774,7 @@ void K3bIso9660::debugEntry( const K3bIso9660Entry* entry, int depth ) const
 {
   QString spacer;
   spacer.fill( ' ', depth*3 );
-
-  kdDebug() << spacer << "- " << entry->name() << endl;
+  kdDebug() << spacer << "- " << entry->name() << " (" << entry->isoName() << ")" << endl;
   if( entry->isDirectory() ) {
     const K3bIso9660Directory* dir = dynamic_cast<const K3bIso9660Directory*>(entry);
     QStringList entries = dir->entries();

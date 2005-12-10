@@ -62,6 +62,7 @@ class LIBK3B_EXPORT K3bIso9660Entry
 {
  public:
   K3bIso9660Entry( K3bIso9660* archive,
+		   const QString& isoName,
 		   const QString& name,
 		   int access,
 		   int date,
@@ -89,9 +90,14 @@ class LIBK3B_EXPORT K3bIso9660Entry
 
   /**
    * Name of the file without path.
-   * @return the file name without path
+   * @return The file name without path.
    */
   const QString& name() const { return m_name; }
+
+  /**
+   * \return The raw name as saved in the ISO9660 tree
+   */
+  const QString& isoName() const { return m_isoName; }
 
   /**
    * The permissions and mode flags as returned by the stat() function
@@ -136,6 +142,7 @@ class LIBK3B_EXPORT K3bIso9660Entry
   int m_adate;
   int m_cdate;
   QString m_name;
+  QString m_isoName;
   int m_date;
   mode_t m_access;
   QString m_user;
@@ -148,7 +155,7 @@ class LIBK3B_EXPORT K3bIso9660Entry
 class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
 {
  public: 
-  K3bIso9660Directory( K3bIso9660* archive, const QString& name, int access, int date,
+  K3bIso9660Directory( K3bIso9660* archive, const QString& isoName, const QString& name, int access, int date,
 		       int adate,int cdate, const QString& user, const QString& group,
 		       const QString& symlink);
   ~K3bIso9660Directory();
@@ -174,6 +181,22 @@ class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
   const K3bIso9660Entry* entry( const QString& name ) const;
 
   /**
+   * Returns the entry with the given name.
+   * Searches for Iso9660 names.
+   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+   * @return a pointer to the entry in the directory.
+   */
+  K3bIso9660Entry* iso9660Entry( const QString& name );
+
+  /**
+   * Returns the entry with the given name.
+   * Searches for Iso9660 names.
+   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+   * @return a pointer to the entry in the directory.
+   */
+  const K3bIso9660Entry* iso9660Entry( const QString& name ) const;
+
+  /**
    * @internal
    * Adds a new entry to the directory.
    */
@@ -187,6 +210,7 @@ class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
 
  private:
   QDict<K3bIso9660Entry> m_entries;
+  QDict<K3bIso9660Entry> m_iso9660Entries;
 };
 
 
@@ -197,6 +221,7 @@ class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
    * @param pos start sector
    */
   K3bIso9660File( K3bIso9660* archive, 
+		  const QString& isoName,
 		  const QString& name, 
 		  int access, 
 		  int date,
@@ -311,6 +336,8 @@ class LIBK3B_EXPORT K3bIso9660
    * and creates the K3bIso9660Directory/K3bIso9660File entries.
    */
   bool open();
+
+  bool isOpen() const;
 
   /**
    * Closes everything.
