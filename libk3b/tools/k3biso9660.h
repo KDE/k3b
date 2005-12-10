@@ -25,12 +25,12 @@
 #include <qstringlist.h>
 #include <qdict.h>
 
-
 namespace K3bDevice {
   class Device;
 }
 
 class K3bIso9660;
+class K3bIso9660Backend;
 
 
 /**
@@ -61,6 +61,7 @@ class K3bIso9660Entry
 {
  public:
   K3bIso9660Entry( K3bIso9660* archive,
+		   const QString& isoName,
 		   const QString& name,
 		   int access,
 		   int date,
@@ -88,9 +89,14 @@ class K3bIso9660Entry
 
   /**
    * Name of the file without path.
-   * @return the file name without path
+   * @return The file name without path.
    */
   const QString& name() const { return m_name; }
+
+  /**
+   * \return The raw name as saved in the ISO9660 tree
+   */
+  const QString& isoName() const { return m_isoName; }
 
   /**
    * The permissions and mode flags as returned by the stat() function
@@ -135,6 +141,7 @@ class K3bIso9660Entry
   int m_adate;
   int m_cdate;
   QString m_name;
+  QString m_isoName;
   int m_date;
   mode_t m_access;
   QString m_user;
@@ -147,7 +154,7 @@ class K3bIso9660Entry
 class K3bIso9660Directory : public K3bIso9660Entry
 {
  public: 
-  K3bIso9660Directory( K3bIso9660* archive, const QString& name, int access, int date,
+  K3bIso9660Directory( K3bIso9660* archive, const QString& isoName, const QString& name, int access, int date,
 		       int adate,int cdate, const QString& user, const QString& group,
 		       const QString& symlink);
   ~K3bIso9660Directory();
@@ -173,6 +180,22 @@ class K3bIso9660Directory : public K3bIso9660Entry
   const K3bIso9660Entry* entry( const QString& name ) const;
 
   /**
+   * Returns the entry with the given name.
+   * Searches for Iso9660 names.
+   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+   * @return a pointer to the entry in the directory.
+   */
+  K3bIso9660Entry* iso9660Entry( const QString& name );
+
+  /**
+   * Returns the entry with the given name.
+   * Searches for Iso9660 names.
+   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+   * @return a pointer to the entry in the directory.
+   */
+  const K3bIso9660Entry* iso9660Entry( const QString& name ) const;
+
+  /**
    * @internal
    * Adds a new entry to the directory.
    */
@@ -186,6 +209,7 @@ class K3bIso9660Directory : public K3bIso9660Entry
 
  private:
   QDict<K3bIso9660Entry> m_entries;
+  QDict<K3bIso9660Entry> m_iso9660Entries;
 };
 
 
@@ -196,6 +220,7 @@ class K3bIso9660File : public K3bIso9660Entry
    * @param pos start sector
    */
   K3bIso9660File( K3bIso9660* archive, 
+		  const QString& isoName,
 		  const QString& name, 
 		  int access, 
 		  int date,
@@ -234,6 +259,11 @@ class K3bIso9660File : public K3bIso9660Entry
    */
   int read( unsigned int pos, char* data, int len ) const;
 
+  /**
+   * Copy this file to a url.
+   */
+  bool copyTo( const QString& url ) const;
+
  private:
   char m_algo[2];
   char m_parms[2];
@@ -257,6 +287,8 @@ class K3bIso9660File : public K3bIso9660Entry
  * by the way... who the hell designed this?)
  * I also removed the KArchive inheritance because of the named reasons.
  * So this stuff contains a lot KArchive code which has been made usable.
+ *
+ * That does not mean that this class is well designed. No, it's not. :)
  */
 class K3bIso9660
 {
@@ -281,11 +313,21 @@ class K3bIso9660
   K3bIso9660( int fd );
 
   /**
+   * Directly specify the backend to read from.
+   * K3bIso9660 will take ownership of the backend and delete it.
+   */
+  K3bIso9660( K3bIso9660Backend* );
+
+  /**
    * If the .iso is still opened, then it will be
    * closed automatically by the destructor.
    */
   virtual ~K3bIso9660();
 
+  /**
+   * Set where to start reading in the source.
+   */
+  void setStartSector( unsigned int startSector );
 
   /**
    * Opens the archive for reading.
@@ -293,6 +335,8 @@ class K3bIso9660
    * and creates the K3bIso9660Directory/K3bIso9660File entries.
    */
   bool open();
+
+  bool isOpen() const;
 
   /**
    * Closes everything.
@@ -309,7 +353,7 @@ class K3bIso9660
 
   /**
    * The name of the os file, as passed to the constructor
-   * Null if you used the QIODevice constructor.
+   * Null if you did not use the QString constructor.
    */
   const QString& fileName() { return m_filename; }
 
@@ -343,11 +387,11 @@ class K3bIso9660
 
   void debugEntry( const K3bIso9660Entry*, int depth ) const;
 
-  QString m_filename;
-
   int m_joliet;
 
  private:
+  QString m_filename;
+
   class Private;
   Private * d;
 };
