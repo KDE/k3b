@@ -215,6 +215,8 @@ class K3bDataDoc : public K3bDoc
 
   void informAboutNotFoundFiles();
 
+  QCString iso9660FileNameUsedInMkisofs( K3bDataItem* item );
+
   QStringList m_notFoundFiles;
   QStringList m_noPermissionFiles;
 

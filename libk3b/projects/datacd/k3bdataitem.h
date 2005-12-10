@@ -65,6 +65,13 @@ class K3bDataItem
   const QString& writtenName() const { return m_writtenName; }
 
   /**
+   * \return the pure name used in the Iso9660 tree.
+   *
+   * This is only valid after a call to @p K3bDataDoc::prepareFilenames()
+   */
+  const QString& iso9660Name() const { return m_rawIsoName; }
+
+  /**
    * Returns the path of the item as written to the CD or DVD image.
    *
    * This is suited to be used for mkisofs graftpoints.
@@ -73,10 +80,18 @@ class K3bDataItem
    */
   virtual QString writtenPath() const;
 
+  virtual QString iso9660Path() const;
+
   /**
    * Used to set the written name by @p K3bDataDoc::prepareFilenames()
    */
   void setWrittenName( const QString& s ) { m_writtenName = s; }
+
+
+  /**
+   * Used to set the pure Iso9660 name by @p K3bDataDoc::prepareFilenames()
+   */
+  void setIso9660Name( const QString& s ) { m_rawIsoName = s; }
 
   virtual K3bDataItem* nextSibling() const;
 	
@@ -132,6 +147,7 @@ class K3bDataItem
 
  private:
   QString m_writtenName;
+  QString m_rawIsoName;
 
   K3bDataDoc* m_doc;
   K3bDirItem* m_parentDir;

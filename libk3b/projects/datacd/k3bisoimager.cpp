@@ -891,7 +891,7 @@ bool K3bIsoImager::writeSortWeightFile()
 
 QString K3bIsoImager::escapeGraftPoint( const QString& str )
 {
-  QString enc = str);
+  QString enc = str;
 
   //
   // mkisofs manpage (-graft-points) is incorrect (as of mkisofs 2.01.01)

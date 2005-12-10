@@ -10,7 +10,7 @@ libk3b_la_LIBADD = 	core/libk3bcore.la \
 			jobs/libjobs.la \
 			../libk3bdevice/libk3bdevice.la
 
-libk3b_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libk3b_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 SUBDIRS = core plugin tools projects cddb jobs
 
