@@ -18,13 +18,11 @@
 
 #include <qstring.h>
 
-#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
 }
 
-class K3bLibDvdCss;
 
 
 class K3bIso9660Backend
@@ -43,7 +41,7 @@ class K3bIso9660Backend
 class K3bIso9660DeviceBackend : public K3bIso9660Backend
 {
  public:
-  LIBK3B_EXPORT K3bIso9660DeviceBackend( K3bDevice::Device* dev );
+  K3bIso9660DeviceBackend( K3bDevice::Device* dev );
   ~K3bIso9660DeviceBackend();
 
   bool open();
@@ -73,23 +71,6 @@ class K3bIso9660FileBackend : public K3bIso9660Backend
   QString m_filename;
   int m_fd;
   bool m_closeFd;
-};
-
-
-class K3bIso9660LibDvdCssBackend : public K3bIso9660Backend
-{
- public:
-  K3bIso9660LibDvdCssBackend( K3bDevice::Device* );
-  ~K3bIso9660LibDvdCssBackend();
-
-  bool open();
-  void close();
-  bool isOpen() const;
-  int read( unsigned int sector, char* data, int len );
-
- private:
-  K3bDevice::Device* m_device;
-  K3bLibDvdCss* m_libDvdCss;
 };
 
 #endif

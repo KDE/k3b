@@ -14,7 +14,6 @@
  */
 
 #include "k3biso9660backend.h"
-#include "k3blibdvdcss.h"
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -152,77 +151,3 @@ int K3bIso9660FileBackend::read( unsigned int sector, char* data, int len )
 
   return -1;
 }
-
-
-
-// 
-// K3bIso9660LibDvdCssBackend -----------------------------------
-// 
-
-K3bIso9660LibDvdCssBackend::K3bIso9660LibDvdCssBackend( K3bDevice::Device* dev )
-  : m_device( dev ),
-    m_libDvdCss( 0 )
-{
-}
-
-
-K3bIso9660LibDvdCssBackend::~K3bIso9660LibDvdCssBackend()
-{
-  close();
-}
-
-
-bool K3bIso9660LibDvdCssBackend::open()
-{
-  if( !m_libDvdCss ) {
-    // open the libdvdcss stuff
-    m_libDvdCss = K3bLibDvdCss::create();
-	
-    if( m_libDvdCss ) {
-      
-      if( !m_libDvdCss->open( m_device ) ||
-	  !m_libDvdCss->crackAllKeys() ) {
-	kdDebug() << "(K3bIso9660LibDvdCssBackend) Failed to retrieve all CSS keys." << endl;
-	close();
-      }
-    }
-    else
-      kdDebug() << "(K3bIso9660LibDvdCssBackend) failed to open libdvdcss." << endl;
-  }
-
-  return ( m_libDvdCss != 0 );
-}
-
-
-void K3bIso9660LibDvdCssBackend::close()
-{
-  delete m_libDvdCss;
-  m_libDvdCss = 0;
-}
-
-
-
-bool K3bIso9660LibDvdCssBackend::isOpen() const
-{
-  return ( m_libDvdCss != 0 );
-}
-
-
-int K3bIso9660LibDvdCssBackend::read( unsigned int sector, char* data, int len )
-{
-  int read = -1;
-
-  if( isOpen() ) {  
-    int retries = 10;  // TODO: no fixed value
-    while( retries && !m_libDvdCss->readWrapped( reinterpret_cast<void*>(data),
-						 sector,
-						 len ) )
-      retries--;
-    
-    if( retries > 0 )
-      read = len;
-  }
-
-  return read;
-}
-

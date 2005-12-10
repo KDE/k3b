@@ -539,21 +539,7 @@ bool K3bIso9660::open()
       d->backend = new K3bIso9660FileBackend( d->fd );
 
     else if( d->cdDevice ) {
-      // now check if we have a scrambled video dvd
-      if( d->cdDevice->copyrightProtectionSystemType() > 0 ) {
-      	
-	kdDebug() << "(K3bIso9660) found encrypted dvd. using libdvdcss." << endl;
-	
-	// open the libdvdcss stuff
-	d->backend = new K3bIso9660LibDvdCssBackend( d->cdDevice );
-	if( !d->backend->open() ) {
-	  // fallback to devicebackend
-	  delete d->backend;
-	  d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
-	}
-      }
-      else
-	d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
+      d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
     }
   }
 
