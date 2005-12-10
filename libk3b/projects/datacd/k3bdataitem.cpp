@@ -99,6 +99,17 @@ QString K3bDataItem::writtenPath() const
 }
 
 
+QString K3bDataItem::iso9660Path() const
+{
+  if( !getParent() )
+    return QString::null;  // the root item is the only one not having a parent
+  else if( isDir() )
+    return getParent()->iso9660Path() + iso9660Name() + "/";
+  else
+    return getParent()->iso9660Path() + iso9660Name();
+}
+
+
 K3bDataItem* K3bDataItem::nextSibling() const
 {
   K3bDataItem* item = const_cast<K3bDataItem*>(this); // urg, but we know that we don't mess with it, so...
