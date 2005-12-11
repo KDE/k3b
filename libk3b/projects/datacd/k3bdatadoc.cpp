@@ -1046,11 +1046,16 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 
   QDict<K3bDataItem> iso9660NameDict;
   QPtrList<K3bDataItem> sortedChildren;
-  for( QPtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
+  QPtrListIterator<K3bDataItem> it( dir->children() );
+
+  //
+  // mkisofs iterates over the directory entries backwards. So we have to do the same.
+  //
+  for( it.toLast(); it.current(); --it ) {
     K3bDataItem* item = it.current();
 
     QString isoName = iso9660FileNameUsedInMkisofs( item );
-    if( iso9660NameDict.find( isoName ) ) {
+    if( K3bDataItem* sameNameItem = iso9660NameDict.find( isoName ) ) {
 
       //
       // The following code comes from the mkisofs source (tree.c)
@@ -1140,6 +1145,17 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 
 	    isoName = QString::fromLocal8Bit( newname );
 	    if( !iso9660NameDict.find( isoName ) ) {
+	      //
+	      // mkisofs replaces the filename of the item already in the hash
+	      // in case the priorities of both items are equal. Since this seems
+	      // to be the case for all our items...
+	      //
+	      QString s = sameNameItem->iso9660Name();
+	      sameNameItem->setIso9660Name( isoName );
+	      isoName = s;
+	      iso9660NameDict.remove( s );
+	      iso9660NameDict.insert( sameNameItem->iso9660Name(), sameNameItem );
+	      kdDebug() << "(K3bDataDoc) Using Isoname " << sameNameItem->iso9660Name() << " for " << sameNameItem->k3bPath() << endl;
 	      goto got_valid_name; // AAAAAHHHRGGG!
 	    }
 	  }
@@ -1496,7 +1512,7 @@ QCString K3bDataDoc::iso9660FileNameUsedInMkisofs( K3bDataItem* item )
   int		ignore = 0;
   char		*last_dot;
   const char	*pnt;
-  int		priority = 32767;
+//   int		priority = 32767;
   char		*result;
   int		ochars_after_dot;
   int		ochars_before_dot;
@@ -1879,22 +1895,22 @@ QCString K3bDataDoc::iso9660FileNameUsedInMkisofs( K3bDataItem* item )
 	 * In case of name conflicts, this is what would end up being used as
 	 * the 'extension'.
 	 */
-  if (tildes == 2) {
-    int	prio1 = 0;
+//   if (tildes == 2) {
+//     int	prio1 = 0;
 
-    pnt = name;
-    while (*pnt && *pnt != '~') {
-      pnt++;
-    }
-    if (*pnt) {
-      pnt++;
-    }
-    while (*pnt && *pnt != '~') {
-      prio1 = 10 * prio1 + *pnt - '0';
-      pnt++;
-    }
-    priority = prio1;
-  }
+//     pnt = name;
+//     while (*pnt && *pnt != '~') {
+//       pnt++;
+//     }
+//     if (*pnt) {
+//       pnt++;
+//     }
+//     while (*pnt && *pnt != '~') {
+//       prio1 = 10 * prio1 + *pnt - '0';
+//       pnt++;
+//     }
+//     priority = prio1;
+//   }
   /*
    * If this is not a directory, force a '.' in case we haven't seen one,
    * and add a version number if we haven't seen one of those either.
