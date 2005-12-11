@@ -462,11 +462,23 @@ char **_argv;
 
 #if defined(__linux)
 
+#ifdef __STRICT_ANSI__ 
+#undef __STRICT_ANSI__ 
+#define inline __inline__ 
+#define asm __asm__
+#include <asm/types.h>
 #include <linux/cdrom.h>
+#undef inline
+#undef asm
+#else
+#include <asm/types.h>
+#include <linux/cdrom.h>
+#endif
 #include <sys/ioctl.h>
 #include <linux/raw.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
+#define __STRICT_ANSI__ 
 #ifndef _LINUX_WAIT_H
 #define _LINUX_WAIT_H	/* linux headers are impaired */
 #endif
