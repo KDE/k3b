@@ -311,8 +311,19 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       cancelAll();
     }
   }
+  else if( !success ) {
+    //
+    // In case the imager failed let's make sure the writer does not emit an unusable
+    // error message.
+    //
+    if( m_writerJob->active() )
+      m_writerJob->setSourceUnreadable( true );
 
-  // in case we are writing on the fly we leave the error handling to slotWriterJobFinished
+    // there is one special case which we need to handle here: the iso imager might be cancelled 
+    // FIXME: the iso imager should not be able to cancel itself
+    if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
+      cancel();
+  }
 }
 
 

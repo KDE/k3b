@@ -232,11 +232,11 @@ void K3bIsoImager::calculateSize()
 
   initMkisofs( d->mkisofsBin );
 
-  emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
+//   emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
 
-  if( !d->mkisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
-		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
+//   if( !d->mkisofsBin->copyright.isEmpty() )
+//     emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
+// 		      .arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), INFO );
 
   *m_process << d->mkisofsBin;
 
@@ -280,6 +280,10 @@ void K3bIsoImager::calculateSize()
 	   this, SLOT(slotCollectMkisofsPrintSizeStdout(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotMkisofsPrintSizeFinished()) );
+
+  // we also want error messages
+  connect( m_process, SIGNAL(stderrLine( const QString& )),
+	   this, SLOT(slotReceivedStderr( const QString& )) );
 
   m_collectedMkisofsPrintSizeStdout = QString::null;
   m_collectedMkisofsPrintSizeStderr = QString::null;
