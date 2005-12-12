@@ -262,6 +262,10 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
 	if( fileDiffers ) {
 	  d->filesDiffer = true;
 	  emit infoMessage( i18n("%1 differs.").arg( d->currentItem->k3bPath() ), ERROR );
+	  emit debuggingOutput( "Invalid files", 
+				QString("%1 (%2)")
+				.arg( d->currentItem->k3bPath() )
+				.arg( d->currentItem->iso9660Path() ) );
 	}
       }
 

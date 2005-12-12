@@ -271,6 +271,10 @@ void K3bIsoImager::calculateSize()
 	   this, SLOT(slotCollectMkisofsPrintSizeStdout(KProcess*, char*, int)) );
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotMkisofsPrintSizeFinished()) );
+  
+  // we also want error messages
+  connect( m_process, SIGNAL(stderrLine( const QString& )),
+	   this, SLOT(slotReceivedStderr( const QString& )) );
 
   m_collectedMkisofsPrintSizeStdout = QString::null;
   m_collectedMkisofsPrintSizeStderr = QString::null;
@@ -997,10 +1001,10 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
   name += QString::number( dir->sortWeight() );
 
   bool perm = false;
-  struct stat statBuf;
+  struct stat64 statBuf;
   if( !dir->localPath().isEmpty() ) {
     // permissions
-    if( ::stat( QFile::encodeName( dir->localPath() ), &statBuf ) == 0 ) {
+    if( ::stat64( QFile::encodeName( dir->localPath() ), &statBuf ) == 0 ) {
       name += "_";
       name += QString::number( statBuf.st_uid );
       name += "_";

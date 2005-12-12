@@ -96,6 +96,13 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
     else if( line.contains( "extents written" ) ) {
       handleMkisofsProgress( 100 );
     }
+    else if( line.startsWith( "Incorrectly encoded string" ) ) {
+      handleMkisofsInfoMessage( i18n("Encountered an incorrectly encoded filename '%1'")
+				.arg(line.section( QRegExp("[\\(\\)]"), 1, 1 )), K3bJob::ERROR );
+      handleMkisofsInfoMessage( i18n("This may be caused by a system update which changed the local character set."), K3bJob::ERROR );
+      handleMkisofsInfoMessage( i18n("You may use convmv (http://j3e.de/linux/convmv/) to fix the filename encoding."), K3bJob::ERROR );
+      d->readError = true;
+    }
     else {
       kdDebug() << "(mkisofs) " << line << endl;
     }

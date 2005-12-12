@@ -311,11 +311,19 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       cancelAll();
     }
   }
+  else if( !success ) {
+    //
+    // In case the imager failed let's make sure the writer does not emit an unusable
+    // error message.
+    //
+    if( m_writerJob->active() )
+      m_writerJob->setSourceUnreadable( true );
 
-  // there is one special case which we need to handle here: the iso imager might be cancelled 
-  // FIXME: the iso imager should not be able to cancel itself
-  if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
-    cancel();
+    // there is one special case which we need to handle here: the iso imager might be cancelled 
+    // FIXME: the iso imager should not be able to cancel itself
+    if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
+      cancel();
+  }
 }
 
 
@@ -391,6 +399,9 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 		 this, SIGNAL(subPercent(int)) );
 	connect( d->verificationJob, SIGNAL(finished(bool)),
 		 this, SLOT(slotVerificationFinished(bool)) );
+	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+		 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+  
       }
       d->verificationJob->setDoc( d->doc );
       d->verificationJob->setDevice( d->doc->burner() );
