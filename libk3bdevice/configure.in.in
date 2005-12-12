@@ -139,7 +139,7 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
     fi
   fi
 
-  search_libs="$kde_libraries /usr/lib /usr/local/lib"
+  search_libs="$kde_libraries /usr/lib /usr/lib64 /usr/local/lib"
   AC_FIND_FILE(libdbus-qt-1.so, $search_libs, dbusqt_libdir)
 
   if test -r $dbusqt_libdir/libdbus-qt-1.so ; then
