@@ -13,6 +13,8 @@
  * Automatically use a newly installed version of an external application at the next K3b start.
  * Complete new set of K3b action icons for project types and tools. Many thanks to Marcel Dierkes.
  * Show text on the burn button to make it catch the eye.
+ * Support for media:// urls in the Image writing dialogs.
+ * Fixed problems with files bigger than 2 GB on some systems.
 
 0.12.8
 ======

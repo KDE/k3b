@@ -494,7 +494,7 @@ void K3bIsoImageWritingDialog::loadK3bDefaults()
 
 QString K3bIsoImageWritingDialog::imagePath() const
 {
-  return KURL::fromPathOrURL( m_editImagePath->url() ).path();
+  return K3b::convertToLocalUrl( KURL::fromPathOrURL( m_editImagePath->url() ) ).path();
 }
 
 

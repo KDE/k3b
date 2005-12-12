@@ -969,7 +969,7 @@ int K3bCdImageWritingDialog::currentImageType()
 
 QString K3bCdImageWritingDialog::imagePath() const
 {
-  return KURL::fromPathOrURL( m_editImagePath->url() ).path();
+  return K3b::convertToLocalUrl( KURL::fromPathOrURL( m_editImagePath->url() ) ).path();
 }
 
 
