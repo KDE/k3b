@@ -116,6 +116,7 @@
 #include <k3bdeviceselectiondialog.h>
 #include <k3bjob.h>
 #include <k3bsignalwaiter.h>
+#include "k3bmediaselectiondialog.h"
 
 
 class K3bMainWindow::Private
@@ -298,8 +299,8 @@ void K3bMainWindow::initActions()
   KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "dvdcopy", 0, this, SLOT(slotDvdCopy()),
 					    actionCollection(), "tools_copy_dvd" );
 
-//   KAction* actionToolsVideoDvdCopy = new KAction(i18n("Copy &VideoDVD..."), "cdcopy", 0, this, SLOT(slotVideoDvdCopy()),
-// 						 actionCollection(), "tools_copy_video_dvd" );
+  actionToolsCddaRip = new KAction( i18n("Rip Audio CD..."), "cddarip", 0, this, SLOT(slotCddaRip()),
+				    actionCollection(), "tools_cdda_rip" );
 
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
@@ -1513,6 +1514,15 @@ bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KURL& url )
   }
   else
     return false;
+}
+
+
+void K3bMainWindow::slotCddaRip()
+{
+  if( K3bDevice::Device* dev = K3bMediaSelectionDialog::selectCDMedium( K3bMediaSelectionDialog::TOC_AUDIO|K3bMediaSelectionDialog::TOC_MIXED, 
+									this,
+									i18n("Audio CD Rip") ) )
+    m_dirView->showDevice( dev );
 }
 
 #include "k3b.moc"

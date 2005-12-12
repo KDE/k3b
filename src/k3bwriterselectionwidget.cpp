@@ -59,23 +59,27 @@ public:
   }
 
  protected:
-  bool showMedium( const K3bMedium& m ) {
+  bool showMedium( const K3bMedium& m ) const {
     return ( m.device() == m_overrideDevice ||
 	     K3bMediaSelectionComboBox::showMedium( m ) );
   }
 
-  QString mediumString( const K3bMedium& m ) {
+  QString mediumString( const K3bMedium& m ) const {
     if( m.device() == m_overrideDevice )
       return m_overrideString;
     else
       return K3bMediaSelectionComboBox::mediumString( m );
   }
 
-  QString mediumToolTip( const K3bMedium& m ) {
+  QString mediumToolTip( const K3bMedium& m ) const {
     if( m.device() == m_overrideDevice )
       return m_overrideToolTip;
-    else
-      return K3bMediaSelectionComboBox::mediumToolTip( m );
+    else {
+      QString s = K3bMediaSelectionComboBox::mediumToolTip( m );
+      if( !m.diskInfo().empty() && !(wantedMediumState() & m.diskInfo().diskState()) )
+	s.append( "<p><i>" + i18n("Medium will be overwritten.") + "</i>" );
+      return s;
+    }
   }
 
 private:

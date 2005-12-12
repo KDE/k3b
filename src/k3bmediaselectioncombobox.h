@@ -45,6 +45,9 @@ class K3bMediaSelectionComboBox : public KComboBox
    */
   K3bDevice::Device* selectedDevice() const;
 
+  int wantedMediumType() const;
+  int wantedMediumState() const;
+
  signals:
   /**
    * Be aware that his signal will also be emitted in case
@@ -81,9 +84,10 @@ class K3bMediaSelectionComboBox : public KComboBox
 
  protected:
   void updateMedia();
-  virtual bool showMedium( const K3bMedium& );
-  virtual QString mediumString( const K3bMedium& );
-  virtual QString mediumToolTip( const K3bMedium& );
+  virtual bool showMedium( const K3bMedium& ) const;
+  virtual QString mediumString( const K3bMedium& ) const;
+  virtual QString mediumToolTip( const K3bMedium& ) const;
+  virtual QString noMediumMessage() const;
 
  private:
   void updateMedium( K3bDevice::Device* );

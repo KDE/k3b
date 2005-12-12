@@ -154,6 +154,18 @@ void K3bMediaSelectionComboBox::setWantedMediumState( int state )
 }
 
 
+int K3bMediaSelectionComboBox::wantedMediumType() const
+{
+  return d->wantedMediumType;
+}
+
+
+int K3bMediaSelectionComboBox::wantedMediumState() const
+{
+  return d->wantedMediumState;
+}
+
+
 void K3bMediaSelectionComboBox::slotActivated( int i )
 {
   if( d->devices.count() > 0 )
@@ -182,39 +194,7 @@ void K3bMediaSelectionComboBox::showNoMediumMessage()
   f.setItalic( true );
   setFont( f );
 
-  QString stateString;
-  if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
-    stateString = i18n("an empty %1 medium");
-  else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
-    stateString = i18n("an appendable %1 medium");
-  else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
-    stateString = i18n("a complete %1 medium");
-  else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
-	   !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
-    stateString = i18n("an empty or appendable %1 medium");
-  else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
-    stateString = i18n("a complete or appendable %1 medium");
-  else
-    stateString = i18n("a %1 medium");
-
-  // this is basicly the same as in K3bEmptyDiskWaiter
-  // FIXME: include things like only rewritable dvd or cd since we will probably need that
-  QString mediumString;
-  if( (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD) &&
-      (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD) )
-    mediumString = i18n("CD-R(W) or DVD±R(W)");
-  else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    mediumString = i18n("DVD±R(W)");
-  else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
-    mediumString = i18n("Double Layer DVD±R");
-  else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD )
-    mediumString = i18n("CD-R(W)");
-  else if( d->wantedMediumType & K3bDevice::MEDIA_DVD_ROM )
-    mediumString = i18n("DVD-ROM");
-  else
-    mediumString = i18n("CD-ROM");
-
-  insertItem( i18n("Please insert %1...").arg( stateString.arg( mediumString ) ) );
+  insertItem( noMediumMessage() );
 }
 
 
@@ -260,8 +240,6 @@ void K3bMediaSelectionComboBox::updateMedium( K3bDevice::Device* )
 
 void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
 {
-  // FIXME: add tooltips with full information including the device
-
   //
   // In case we only want an empty medium (this might happen in case the
   // the medium is rewritable) we do not care about the contents but tell 
@@ -292,7 +270,7 @@ K3bDevice::Device* K3bMediaSelectionComboBox::deviceAt( unsigned int index )
 }
 
 
-bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m )
+bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
 {
   //
   // also use if wantedMediumState empty and medium rewritable
@@ -313,18 +291,53 @@ bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m )
 }
 
 
-QString K3bMediaSelectionComboBox::mediumString( const K3bMedium& medium )
+QString K3bMediaSelectionComboBox::mediumString( const K3bMedium& medium ) const
 {
   return medium.shortString( d->wantedMediumState != K3bDevice::STATE_EMPTY );
 }
 
 
-QString K3bMediaSelectionComboBox::mediumToolTip( const K3bMedium& m )
+QString K3bMediaSelectionComboBox::mediumToolTip( const K3bMedium& m ) const
 {
-  QString s = m.longString();
-  if( !m.diskInfo().empty() && !(d->wantedMediumState & m.diskInfo().diskState()) )
-    s.append( "<p><i>" + i18n("Medium will be overwritten.") + "</i>" );
-  return s;
+  return m.longString();
+}
+
+
+QString K3bMediaSelectionComboBox::noMediumMessage() const
+{
+  QString stateString;
+  if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
+    stateString = i18n("an empty %1 medium");
+  else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
+    stateString = i18n("an appendable %1 medium");
+  else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
+    stateString = i18n("a complete %1 medium");
+  else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
+	   !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
+    stateString = i18n("an empty or appendable %1 medium");
+  else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
+    stateString = i18n("a complete or appendable %1 medium");
+  else
+    stateString = i18n("a %1 medium");
+
+  // this is basicly the same as in K3bEmptyDiskWaiter
+  // FIXME: include things like only rewritable dvd or cd since we will probably need that
+  QString mediumString;
+  if( (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD) &&
+      (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD) )
+    mediumString = i18n("CD-R(W) or DVD±R(W)");
+  else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
+    mediumString = i18n("DVD±R(W)");
+  else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
+    mediumString = i18n("Double Layer DVD±R");
+  else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD )
+    mediumString = i18n("CD-R(W)");
+  else if( d->wantedMediumType & K3bDevice::MEDIA_DVD_ROM )
+    mediumString = i18n("DVD-ROM");
+  else
+    mediumString = i18n("CD-ROM");
+
+  return i18n("Please insert %1...").arg( stateString.arg( mediumString ) );
 }
 
 

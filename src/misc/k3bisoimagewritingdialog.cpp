@@ -147,6 +147,7 @@ void K3bIsoImageWritingDialog::setupGui()
   // -----------------------------------------------------------------------
   QGroupBox* groupImageUrl = new QGroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
   m_editImagePath = new KURLRequester( groupImageUrl );
+  m_editImagePath->setMode( KFile::File|KFile::ExistingOnly );
   m_editImagePath->setCaption( i18n("Choose Image File") );
   m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
 			      + i18n("*|All Files") );
@@ -501,7 +502,7 @@ void K3bIsoImageWritingDialog::loadK3bDefaults()
 
 QString K3bIsoImageWritingDialog::imagePath() const
 {
-  return KURL::fromPathOrURL( m_editImagePath->url() ).path();
+  return K3b::convertToLocalUrl( KURL::fromPathOrURL( m_editImagePath->url() ) ).path();
 }
 
 

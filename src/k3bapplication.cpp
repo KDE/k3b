@@ -406,8 +406,6 @@ void K3bApplication::Core::init()
 
   if( !deviceManager()->scanBus() )
     kdDebug() << "No Devices found!" << endl;
-  else
-    deviceManager()->printDevices();
 
   mediaCache()->buildDeviceList( deviceManager() );
 

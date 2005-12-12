@@ -68,6 +68,8 @@ public:
   bool forced;
   bool canceled;
 
+  bool waitingDone;
+
   QLabel* labelRequest;
   QLabel* labelFoundMedia;
   QLabel* pixLabel;
@@ -136,6 +138,7 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   d->dialogVisible = false;
   d->forced = false;
   d->canceled = false;
+  d->waitingDone = false;
 
   //
   // We do not cover every case here but just the ones that really make sense
@@ -206,10 +209,17 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
 
   adjustSize();
 
-  QTimer::singleShot( 0, this, SLOT(slotStartup()) );
+  slotMediumChanged( d->device );
 
-  d->inLoop = true;
-  QApplication::eventLoop()->enterLoop();
+  //
+  // in case we already found a medium and thus the dialog is not shown entering
+  // the loop only causes problems (since there is no dialog yet the user could
+  // not have forced or canceled yet
+  //
+  if( !d->waitingDone ) {
+    d->inLoop = true;
+    QApplication::eventLoop()->enterLoop();
+  }
 
   return d->result;
 }
@@ -218,12 +228,6 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
 int K3bEmptyDiscWaiter::exec()
 {
   return waitForDisc();
-}
-
-
-void K3bEmptyDiscWaiter::slotStartup()
-{
-  slotMediumChanged( d->device );
 }
 
 
@@ -502,7 +506,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
   else if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
 	   (d->wantedMediaState & medium.diskInfo().diskState()) )
     finishWaiting( medium.diskInfo().mediaType() );
-
+  
   else if( (medium.diskInfo().currentProfile() != K3bDevice::MEDIA_UNKNOWN) &&
 	   (d->wantedMediaType & medium.diskInfo().currentProfile()) &&
 	   (d->wantedMediaState & medium.diskInfo().diskState()) )
@@ -619,7 +623,9 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
 {
   kdDebug() << "(K3bEmptyDiscWaiter) finishWaiting() " << endl;
 
+  d->waitingDone = true;
   d->result = code;
+
   if( d->dialogVisible )
     hide();
 

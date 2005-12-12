@@ -122,11 +122,10 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotDivxEncoding();
   void slotCdCopy();
   void slotDvdCopy();
-  //  void slotVideoDvdCopy();
+  void slotCddaRip();
   void slotK3bSetup();
-  /** No descriptions */
+
   void slotErrorMessage(const QString&);
-  /** No descriptions */
   void slotWarningMessage(const QString&);
 
   void slotConfigureKeys();
@@ -284,6 +283,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionToolsBlankCdrw;
   KAction* actionToolsDivxEncoding;
   KAction* actionToolsWriteCdImage;
+  KAction* actionToolsCddaRip;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewStatusBar;
