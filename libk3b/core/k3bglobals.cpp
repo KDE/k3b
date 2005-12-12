@@ -384,8 +384,10 @@ KURL K3b::convertToLocalUrl( const KURL& url )
 #if KDE_IS_VERSION(3,4,91)
     return KIO::NetAccess::mostLocalURL( url, 0 );
 #else
-#ifndef UDS_LOCALPATH
-#define UDS_LOCALPATH (72 | KIO::UDS_STRING)
+#ifndef UDS_LOCAL_PATH
+#define UDS_LOCAL_PATH (72 | KIO::UDS_STRING)
+#else
+    using namespace KIO;
 #endif
     KIO::UDSEntry e;
     if( KIO::NetAccess::stat( url, e, 0 ) ) {
