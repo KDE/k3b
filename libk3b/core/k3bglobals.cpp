@@ -37,6 +37,7 @@
 
 #include <cmath>
 #include <sys/utsname.h>
+#include <sys/stat.h>
 
 #ifdef __FreeBSD__
 #include <sys/param.h>
@@ -383,14 +384,16 @@ KURL K3b::convertToLocalUrl( const KURL& url )
 #if KDE_IS_VERSION(3,4,91)
     return KIO::NetAccess::mostLocalURL( url, 0 );
 #else
-#ifndef UDS_LOCALPATH
-#define UDS_LOCALPATH (72 | KIO::UDS_STRING)
+#ifndef UDS_LOCAL_PATH
+#define UDS_LOCAL_PATH (72 | KIO::UDS_STRING)
+#else
+    using namespace KIO;
 #endif
     KIO::UDSEntry e;
     if( KIO::NetAccess::stat( url, e, 0 ) ) {
       const KIO::UDSEntry::ConstIterator end = e.end();
       for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) {
-	if( (*it).m_uds == KIO::UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
+	if( (*it).m_uds == UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
 	  return KURL::fromPathOrURL( (*it).m_str );
       }
     }
