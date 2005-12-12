@@ -252,13 +252,19 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 KIO::filesize_t K3b::filesize( const KURL& url )
 {
   KIO::filesize_t fSize = 0;
-  // we use KIO since QFileInfo does provide the size as unsigned int wich is way too small for DVD images
-  KIO::UDSEntry uds;
-  KIO::NetAccess::stat( url, uds, 0 );
-  for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
-    if( (*it).m_uds == KIO::UDS_SIZE ) {
-      fSize = (*it).m_long;
-      break;
+  if( url.isLocalFile() ) {
+    struct stat64 buf;
+    stat64( QFile::encodeName( url.path() ), &buf );
+    fSize = (KIO::filesize_t)buf.st_size;
+  }
+  else {
+    KIO::UDSEntry uds;
+    KIO::NetAccess::stat( url, uds, 0 );
+    for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
+      if( (*it).m_uds == KIO::UDS_SIZE ) {
+	fSize = (*it).m_long;
+	break;
+      }
     }
   }
 
@@ -373,23 +379,22 @@ QString K3b::resolveLink( const QString& file )
 
 KURL K3b::convertToLocalUrl( const KURL& url )
 {
-  //
-  // Thanks to the amarok team for this piece of code. :)
-  //
-  if( url.protocol() == "media" ) {
-    // url looks like media:/device/path
-    DCOPRef mediamanager( "kded", "mediamanager" );
-    QString device = url.path( -1 ).mid( 1 ); // remove first slash
-    const int slash = device.find( '/' );
-    const QString filePath = device.mid( slash ); // extract relative path
-    device = device.left( slash ); // extract device
-    DCOPReply reply = mediamanager.call( "properties(QString)", device );
-    
-    if( reply.isValid() ) {
-      const QStringList properties = reply;
-      // properties[6] is the mount point
-      return KURL( properties[6] + filePath );
+  if( !url.isLocalFile() ) {
+#if KDE_IS_VERSION(3,4,91)
+    return KIO::NetAccess::mostLocalURL( url, 0 );
+#else
+#ifndef UDS_LOCALPATH
+#define UDS_LOCALPATH (72 | KIO::UDS_STRING)
+#endif
+    KIO::UDSEntry e;
+    if( KIO::NetAccess::stat( url, e, 0 ) ) {
+      const KIO::UDSEntry::ConstIterator end = e.end();
+      for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) {
+	if( (*it).m_uds == KIO::UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
+	  return KURL::fromPathOrURL( (*it).m_str );
+      }
     }
+#endif
   }
 
   return url;
