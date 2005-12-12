@@ -424,7 +424,7 @@ static int mycallb(struct iso_directory_record *idr,void *udata)
     if( ParseRR(idr,&rr) > 0 ) {
       iso->m_rr = true;
       if (!special)
-	path = rr.name;
+	path = QString::fromLocal8Bit( rr.name );
       symlink=rr.sl;
       access=rr.mode;
       time=0;//rr.st_mtime;
@@ -563,7 +563,7 @@ bool K3bIso9660::open()
 
   iso_vol_desc *desc;
   QString path,tmp,uid,gid;
-  struct stat buf;
+  struct stat64 buf;
   int access,c_i,c_j;
   struct el_torito_boot_descriptor* bootdesc;
 
@@ -571,7 +571,7 @@ bool K3bIso9660::open()
   /* We'll use the permission and user/group of the 'host' file except
    * in Rock Ridge, where the permissions are stored on the file system
    */
-  if (::stat( m_filename.local8Bit(), &buf )<0) {
+  if (::stat64( m_filename.local8Bit(), &buf )<0) {
     /* defaults, if stat fails */
     memset(&buf,0,sizeof(struct stat));
     buf.st_mode=0777;
