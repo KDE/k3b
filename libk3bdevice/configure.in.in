@@ -101,7 +101,7 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
   dbusqt_lib=NOTFOUND
   dbusqt=NOTFOUND
 
-  search_incs="$kde_includes /usr/include /usr/include/dbus-1.0 /usr/local/include /usr/local/include/dbus-1.0"
+  search_incs="$kde_includes /usr/include /usr/lib64/dbus-1.0/include /usr/include/dbus-1.0 /usr/local/include /usr/local/include/dbus-1.0"
   AC_FIND_FILE(dbus/connection.h, $search_incs, dbusqt_incdir)
 
   if test -r $dbusqt_incdir/dbus/connection.h ; then
@@ -114,7 +114,7 @@ if test "x$ac_cv_use_hal" = "xyes" ; then
     fi
   fi
 
-  search_libs="$kde_libraries /usr/lib /usr/local/lib"
+  search_libs="$kde_libraries /usr/lib /usr/lib64 /usr/local/lib"
   AC_FIND_FILE(libdbus-qt-1.so, $search_libs, dbusqt_libdir)
 
   if test -r $dbusqt_libdir/libdbus-qt-1.so ; then
