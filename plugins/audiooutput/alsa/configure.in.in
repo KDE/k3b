@@ -55,7 +55,6 @@ AC_DEFUN([KDE_CHECK_ALSA],
   fi
 
   AC_SUBST(LIBASOUND)
-  AM_CONDITIONAL(include_ALSA, [test "x$have_alsa_0_9" = xyes || test "x$have_alsa_1" = xyes])
 ])
 
 AC_ARG_WITH(alsa,
@@ -71,5 +70,7 @@ if test "x$with_alsa" != xno; then
     AC_MSG_FAILURE([--with-alsa was given, but test for ALSA failed])
   fi
 fi
+
+AM_CONDITIONAL(include_ALSA, [test "x$have_alsa_0_9" = xyes || test "x$have_alsa_1" = xyes])
 
 dnl --------- ALSA CHECK END ---------------
