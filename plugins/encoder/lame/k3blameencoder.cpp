@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3blameencoder.h"
 
 #include <k3bcore.h>

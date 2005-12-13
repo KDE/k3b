@@ -15,7 +15,6 @@
 
 #include <config.h>
 
-
 #include "k3bexternalencoder.h"
 #include "base_k3bexternalencoderconfigwidget.h"
 

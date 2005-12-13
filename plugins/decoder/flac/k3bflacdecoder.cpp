@@ -11,6 +11,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include "k3bflacdecoder.h"
 
@@ -28,8 +29,6 @@
 #include <math.h>
 #include <FLAC++/metadata.h>
 #include <FLAC++/decoder.h>
-
-#include <config.h>
 
 #ifdef HAVE_TAGLIB
 #include <taglib/tag.h>

@@ -24,6 +24,8 @@
 // per block (2352 bytes: 32*588 bit). 1 second are 75 blocks.
 //
 
+#include <config.h>
+
 #include "k3bmaddecoder.h"
 #include "k3bmad.h"
 
