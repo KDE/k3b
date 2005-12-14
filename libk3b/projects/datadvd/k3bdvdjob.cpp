@@ -182,6 +182,8 @@ void K3bDvdJob::prepareGrowisofsImager()
     connect( m_growisofsImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
+
+  m_growisofsImager->setUsedMultiSessionMode( d->usedMultiSessionMode );
 }
 
 

@@ -67,18 +67,20 @@ void K3bProjectInterface::burn()
 
 void K3bProjectInterface::directBurn()
 {
-  K3bJobProgressDialog* dlg = 0;
-  if( m_doc->onlyCreateImages() )
-    dlg = new K3bJobProgressDialog( m_doc->view() );
-  else
-    dlg = new K3bBurnProgressDialog( m_doc->view() );
-
-  K3bJob* job = m_doc->newBurnJob( dlg );
-
-  dlg->startJob( job );
-
-  delete job;
-  delete dlg;
+  if( m_doc->burner() ) {
+    K3bJobProgressDialog* dlg = 0;
+    if( m_doc->onlyCreateImages() )
+      dlg = new K3bJobProgressDialog( m_doc->view() );
+    else
+      dlg = new K3bBurnProgressDialog( m_doc->view() );
+    
+    K3bJob* job = m_doc->newBurnJob( dlg );
+    
+    dlg->startJob( job );
+    
+    delete job;
+    delete dlg;
+  }
 }
 
 

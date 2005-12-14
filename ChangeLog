@@ -1,3 +1,8 @@
+0.12.10
+=======
+ * Fixed Auto multisession mode in DVD projects
+ * Fixed crash in dcop call directBurn in case no valid burner device was set.
+
 0.12.9
 ======
  * New project dcop calls:

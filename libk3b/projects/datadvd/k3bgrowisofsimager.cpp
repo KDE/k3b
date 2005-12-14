@@ -49,6 +49,8 @@ public:
   int lastPercent;
   int lastProcessedSize;
 
+  int usedMultiSessionMode;
+
   K3bGrowisofsHandler* gh;
 };
 
@@ -59,6 +61,7 @@ K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, K3bJobHandler* jh, QObj
     m_doc(doc)
 {
   d = new Private;
+  d->usedMultiSessionMode = K3bDataDoc::NONE;
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
@@ -117,7 +120,7 @@ void K3bGrowisofsImager::start()
     emit finished( false );
     return;
   }
-  if( m_doc->multiSessionMode() != K3bDataDoc::NONE ) {
+  if( d->usedMultiSessionMode != K3bDataDoc::NONE ) {
     if( m_mkisofsBin->version < K3bVersion( 2, 0 ) ) {
       emit infoMessage( i18n("Mkisofs version %1 is too old. "
 			     "For writing multisession DVDs "
@@ -147,8 +150,8 @@ void K3bGrowisofsImager::start()
   //
   // add the growisofs options
   //
-  if( m_doc->multiSessionMode() == K3bDataDoc::NONE ||
-      m_doc->multiSessionMode() == K3bDataDoc::START )
+  if( d->usedMultiSessionMode == K3bDataDoc::NONE ||
+      d->usedMultiSessionMode == K3bDataDoc::START )
     *m_process << "-Z";
   else
     *m_process << "-M";
@@ -387,6 +390,12 @@ void K3bGrowisofsImager::cancel()
 void K3bGrowisofsImager::slotThroughput( int t )
 {
   emit writeSpeed( t, 1385 );
+}
+
+
+void K3bGrowisofsImager::setUsedMultiSessionMode( int m )
+{
+  d->usedMultiSessionMode = m;
 }
 
 #include "k3bgrowisofsimager.moc"
