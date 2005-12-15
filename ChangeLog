@@ -2,6 +2,7 @@
 =======
  * Fixed Auto multisession mode in DVD projects
  * Fixed crash in dcop call directBurn in case no valid burner device was set.
+ * Fixed verification of datacd projects when using the MaxIso9660 option without the OmitVersionNumber option
 
 0.12.9
 ======
