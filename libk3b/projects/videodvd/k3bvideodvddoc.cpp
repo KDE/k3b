@@ -27,7 +27,9 @@
 K3bVideoDvdDoc::K3bVideoDvdDoc( QObject* parent )
   : K3bDvdDoc( parent )
 {
+  setMultiSessionMode( NONE );
 }
+
 
 K3bVideoDvdDoc::~K3bVideoDvdDoc()
 {

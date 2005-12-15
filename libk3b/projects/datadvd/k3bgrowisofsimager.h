@@ -48,6 +48,7 @@ class K3bGrowisofsImager : public K3bIsoImager
  public slots:
   virtual void start();
   virtual void cancel();
+  void setUsedMultiSessionMode( int m );
 
  signals:
   void writeSpeed( int, int );
