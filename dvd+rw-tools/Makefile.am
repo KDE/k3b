@@ -9,3 +9,4 @@ install-exec-hook:
 	@echo "growisofs is by default installed with a set SETUID root bit!"
 	@echo ""
 
+KDE_CXXFLAGS= -U__STRICT_ANSI__
