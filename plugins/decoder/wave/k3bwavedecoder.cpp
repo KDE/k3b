@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3bwavedecoder.h"
 
 #include <k3bpluginfactory.h>
@@ -44,8 +46,7 @@ static unsigned long le_a_to_u_long( unsigned char* a ) {
 
 
 /**
- * Returns the length of the wave file in frames (1/75 second) if
- * it is a 16bit stereo wave file
+ * Returns the length of the wave file in bytes
  * Otherwise 0 is returned.
  * leave file seek pointer past WAV header.
  */
@@ -171,20 +172,6 @@ static unsigned long identifyWaveFile( QFile* f, int* samplerate = 0, int* chann
     size = (f->size() - f->at());
   }
 
-  if( sampleRate != 44100 )
-    size = (int)((double)size * 44100.0 / (double)sampleRate);
-
-  if( sampleSize == 8 )
-    size *= 2;
-  if( ch == 1 )
-    size *= 2;
-
-  // we pad to a multible of 2352 bytes
-  if( (size%2352) > 0 )
-    size = (size/2352) + 1;
-  else
-    size = size/2352;
-
   return size;
 }
 
@@ -203,6 +190,7 @@ public:
   int channels;
   int sampleSize;
   unsigned long size;
+  unsigned long alreadyRead;
 
   char* buffer;
   int bufferSize;
@@ -228,9 +216,13 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
 {
   int read = 0;
 
+  maxLen = QMIN( maxLen, (int)(d->size - d->alreadyRead) );
+
   if( d->sampleSize == 16 ) {
     read = d->file->readBlock( _data, maxLen );
     if( read > 0 ) {
+      d->alreadyRead += read;
+
       if( read % 2 > 0 ) {
 	kdDebug() << "(K3bWaveDecoder) data length is not a multible of 2! Cutting data." << endl;
 	read -= 1;
@@ -252,6 +244,7 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
     }
 
     read = d->file->readBlock( d->buffer, QMIN(maxLen/2, d->bufferSize) );
+    d->alreadyRead += read;
 
     // stretch samples to 16 bit
     from8BitTo16BitBeSigned( d->buffer, _data, read );
@@ -267,7 +260,29 @@ bool K3bWaveDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 {
   // handling wave files is very easy...
   if( initDecoderInternal() ) {
-    frames = d->size;
+
+    //
+    // d->size is the number of bytes in the wave file
+    //
+    unsigned long size = d->size;
+    if( d->sampleRate != 44100 )
+      size = (int)((double)size * 44100.0 / (double)d->sampleRate);
+
+    if( d->sampleSize == 8 )
+      size *= 2;
+    if( d->channels == 1 )
+      size *= 2;
+
+    //
+    // we pad to a multible of 2352 bytes 
+    // (the actual padding of zero data will be done by the K3bAudioDecoder class)
+    //
+    if( (size%2352) > 0 )
+      size = (size/2352) + 1;
+    else
+      size = size/2352;
+
+    frames = size;
     samplerate = d->sampleRate;
     channels = d->channels;
     return true;
@@ -296,6 +311,7 @@ bool K3bWaveDecoder::initDecoderInternal()
   }
 
   d->headerLength = d->file->at();
+  d->alreadyRead = 0;
 
   return true;
 }

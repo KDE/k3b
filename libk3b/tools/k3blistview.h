@@ -121,6 +121,24 @@ class K3bListViewItem : public KListViewItem
 };
 
 
+class K3bCheckListViewItem : public K3bListViewItem
+{
+ public:
+  K3bCheckListViewItem(QListView *parent);
+  K3bCheckListViewItem(QListViewItem *parent);
+  K3bCheckListViewItem(QListView *parent, QListViewItem *after);
+  K3bCheckListViewItem(QListViewItem *parent, QListViewItem *after);
+
+  virtual bool isChecked() const;
+  virtual void setChecked( bool checked );
+
+ protected:
+  virtual void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
+
+ private:
+  bool m_checked;
+};
+
 
 
 class K3bListView : public KListView

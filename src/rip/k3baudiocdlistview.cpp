@@ -28,7 +28,7 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, c
   setFullWidth(true);
   setSorting(-1);
   setAllColumnsShowFocus( true );
-  setSelectionModeExt( KListView::Multi );
+  setSelectionModeExt( Extended );
   setDragEnabled( true );
   addColumn( "" );
   addColumn( "" );
@@ -37,16 +37,12 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, c
   addColumn( i18n("Length") );
   addColumn( i18n("Size") );
 
+  setDoubleClickForEdit( false );
+
   header()->setClickEnabled(false);
   setColumnWidthMode( 0, QListView::Manual );
   setColumnWidth( 0, 20 );
   header()->setResizeEnabled( false,0 );
-
-  setItemsRenameable(true);
-  setRenameable(0, false);
-  setRenameable(1, false);
-  setRenameable(2, true);
-  setRenameable(3, true);
 
   setColumnAlignment( 4, Qt::AlignHCenter );
 }

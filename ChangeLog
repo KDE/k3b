@@ -1,3 +1,8 @@
+0.12.11
+=======
+ * Fixed selection in the audio CD ripping window.
+ * Fixed info block handling in WAVE audio file decoder: no more clicks at the end.
+
 0.12.10
 =======
  * Fixed Auto multisession mode in DVD projects

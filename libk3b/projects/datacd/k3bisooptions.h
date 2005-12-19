@@ -37,12 +37,12 @@ class K3bIsoOptions
   bool createRockRidge() const { return m_createRockRidge; }
   bool createJoliet() const { return m_createJoliet; }
   bool createUdf() const { return m_createUdf; }
-  bool ISOallowLowercase() const { return m_ISOallowLowercase; }
-  bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin; }
-  bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames || ISOmaxFilenameLength(); }
+  bool ISOallowLowercase() const { return m_ISOallowLowercase || ISOuntranslatedFilenames(); }
+  bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin || ISOuntranslatedFilenames(); }
+  bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames || ISOmaxFilenameLength() || ISOuntranslatedFilenames(); }
   bool ISOomitVersionNumbers() const { return m_ISOomitVersionNumbers || ISOmaxFilenameLength(); }
-  bool ISOomitTrailingPeriod() const { return m_ISOomitTrailingPeriod; }
-  bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength; }
+  bool ISOomitTrailingPeriod() const { return m_ISOomitTrailingPeriod || ISOuntranslatedFilenames(); }
+  bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength || ISOuntranslatedFilenames(); }
   bool ISOrelaxedFilenames() const { return m_ISOrelaxedFilenames; }
   bool ISOnoIsoTranslate() const { return m_ISOnoIsoTranslate; }
   bool ISOallowMultiDot() const { return m_ISOallowMultiDot; }

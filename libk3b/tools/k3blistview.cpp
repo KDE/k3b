@@ -421,6 +421,76 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
 }
 
 
+
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListView *parent)
+  : K3bListViewItem( parent ),
+    m_checked(false)
+{
+}
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListViewItem *parent)
+  : K3bListViewItem( parent ),
+    m_checked(false)
+{
+}
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListView *parent, QListViewItem *after)
+  : K3bListViewItem( parent, after ),
+    m_checked(false)
+{
+}
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListViewItem *parent, QListViewItem *after)
+  : K3bListViewItem( parent, after ),
+    m_checked(false)
+{
+}
+
+
+bool K3bCheckListViewItem::isChecked() const
+{
+  return m_checked;
+}
+
+
+void K3bCheckListViewItem::setChecked( bool checked )
+{
+  m_checked = checked;
+  repaint();
+}
+
+
+void K3bCheckListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+{
+  K3bListViewItem::paintCell( p, cg, col, width, align );
+
+  if( col == 0 ) {
+    if( m_checked ) {
+      QRect r( 0, 0, height(), height() );
+
+      QStyle::SFlags flags = QStyle::Style_Default;
+      if( listView()->isEnabled() )
+	flags |= QStyle::Style_Enabled;
+      if( listView()->hasFocus() )
+	flags |= QStyle::Style_HasFocus;
+      if( isChecked() )
+	flags |= QStyle::Style_On;
+      else
+	flags |= QStyle::Style_Off;
+
+      listView()->style().drawPrimitive( QStyle::PE_CheckMark, p, r, cg, flags );
+    }
+  }
+}
+
+
+
+
 // ///////////////////////////////////////////////
 //
 // K3BLISTVIEW
