@@ -470,28 +470,22 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     return;
   }
 
-  if( p->normalExit() ) {
-    if( p->exitStatus() == 0 ) {
+  if( p->exitStatus() == 0 ) {
 
-      int s = d->speedEst->average();
-      if( s > 0 )
-	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
+    int s = d->speedEst->average();
+    if( s > 0 )
+      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
 
-      if( simulate() )
-	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
-      else
-	emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
+    if( simulate() )
+      emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
+    else
+      emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
 
-      d->success = true;
-    }
-    else {
-      if( !wasSourceUnreadable() )
-	d->gh->handleExit( p->exitStatus() );
-      d->success = false;
-    }
+    d->success = true;
   }
   else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->growisofsBin->name()), ERROR );
+    if( !wasSourceUnreadable() )
+      d->gh->handleExit( p->exitStatus() );
     d->success = false;
   }
 

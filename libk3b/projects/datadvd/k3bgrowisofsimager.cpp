@@ -323,7 +323,7 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
     d->success = false;
   }
 
-  else if( p->normalExit() ) {
+  else {
     if( p->exitStatus() == 0 ) {
 
       //
@@ -348,10 +348,6 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
       d->gh->handleExit( p->exitStatus() );
       d->success = false;
     }
-  }
-  else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_growisofsBin->name()), ERROR );
-    d->success = false;
   }
 
   if( !k3bcore->globalSettings()->ejectMedia() )
