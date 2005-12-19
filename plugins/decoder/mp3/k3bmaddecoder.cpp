@@ -470,6 +470,25 @@ K3bAudioDecoder* K3bMadDecoderFactory::createDecoder( QObject* parent,
 
 bool K3bMadDecoderFactory::canDecode( const KURL& url )
 {
+  //
+  // HACK:
+  //
+  // I am simply no good at this and this detection code is no good as well
+  // It always takes waves for mp3 files so we introduce this hack to
+  // filter out wave files. :(
+  //
+  QFile f( url.path() );
+  if( !f.open( IO_ReadOnly ) )
+    return false;
+  char buffer[12];
+  if( f.readBlock( buffer, 12 ) != 12 )
+    return false;
+  if( !qstrncmp( buffer, "RIFF", 4 ) &&
+      !qstrncmp( buffer + 8, "WAVE", 4 ) )
+    return false;
+  f.close();
+
+
   K3bMad handle;
   if( !handle.open( url.path() ) )
     return false;

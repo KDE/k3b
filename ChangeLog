@@ -2,6 +2,7 @@
 =======
  * Fixed selection in the audio CD ripping window.
  * Fixed info block handling in WAVE audio file decoder: no more clicks at the end.
+ * Introduced a hack which fixes the "Wav detected as Mpeg file" bug.
 
 0.12.10
 =======
