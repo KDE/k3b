@@ -700,9 +700,9 @@ bool K3bDvdJob::waitForDvd()
 
 	// FIXME: DVD-R DL jump and stuff
 
-	if( m_doc->writingMode() == K3b::DAO ||
-	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-	      d->usedMultiSessionMode == K3bDataDoc::NONE ) )
+	if( m_doc->writingMode() == K3b::DAO )
+//	    ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO &&
+//	      d->usedMultiSessionMode == K3bDataDoc::NONE ) )
 	  emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(d->foundMedia, true) ), INFO );
 
 	else {
