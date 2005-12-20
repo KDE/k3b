@@ -13,7 +13,7 @@ libk3bcore_la_SOURCES = k3bcore.cpp k3bglobals.cpp k3bdefaultexternalprograms.cp
 include_HEADERS = k3bcore.h k3bdefaultexternalprograms.h k3bexternalbinmanager.h \
 	k3bprocess.h k3bversion.h k3bglobals.h k3bjob.h k3bthread.h \
 	k3bthreadjob.h k3bglobalsettings.h k3bsimplejob.h k3bjobhandler.h \
-	k3b_export.h
+	k3b_export.h k3bjobhandler.h
 
 METASOURCES = AUTO
 
