@@ -32,6 +32,14 @@ fi
 AC_LANG_RESTORE
 
 
+dnl - find stat64
+AC_TRY_COMPILE([
+	#include <sys/stat.h>
+	],
+	[struct stat64 b;],
+	[AC_CHECK_FUNCS(stat64)]
+)
+
 dnl - check the byte order -
 dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
