@@ -40,6 +40,13 @@ AC_TRY_COMPILE([
 	[AC_CHECK_FUNCS(stat64)]
 )
 
+dnl - find the cam_* functions
+AC_CHECK_FUNC(cam_close_device,
+	[CAM_LIB=""],
+	[AC_CHECK_LIB(cam, cam_close_device, [CAM_LIB=-lcam], [CAM_LIB=""])]
+	)
+AC_SUBST(CAM_LIB)
+
 dnl - check the byte order -
 dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
