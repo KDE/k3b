@@ -13,6 +13,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+#include <k3bglobals.h>
+
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
@@ -563,7 +566,7 @@ bool K3bIso9660::open()
 
   iso_vol_desc *desc;
   QString path,tmp,uid,gid;
-  struct stat64 buf;
+  K3bStatStruct buf;
   int access,c_i,c_j;
   struct el_torito_boot_descriptor* bootdesc;
 
@@ -571,7 +574,7 @@ bool K3bIso9660::open()
   /* We'll use the permission and user/group of the 'host' file except
    * in Rock Ridge, where the permissions are stored on the file system
    */
-  if (::stat64( m_filename.local8Bit(), &buf )<0) {
+  if ( buf.stat( m_filename ) < 0 ) {
     /* defaults, if stat fails */
     memset(&buf,0,sizeof(struct stat));
     buf.st_mode=0777;

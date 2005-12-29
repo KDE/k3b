@@ -13,6 +13,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+#include <k3bglobals.h>
+
 #include "k3bisoimager.h"
 #include "k3bdiritem.h"
 #include "k3bbootitem.h"
@@ -1001,10 +1004,10 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
   name += QString::number( dir->sortWeight() );
 
   bool perm = false;
-  struct stat64 statBuf;
+  K3bStatStruct statBuf;
   if( !dir->localPath().isEmpty() ) {
     // permissions
-    if( ::stat64( QFile::encodeName( dir->localPath() ), &statBuf ) == 0 ) {
+    if( statBuf.stat( dir->localPath() ) == 0 ) {
       name += "_";
       name += QString::number( statBuf.st_uid );
       name += "_";

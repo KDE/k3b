@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <k3bglobals.h>
+
 #include "k3bdataurladdingdialog.h"
 
 #include <qtimer.h>
@@ -143,10 +145,9 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   m_urlQueue.remove( m_urlQueue.begin() );
   QString absFilePath( QFileInfo(url.path()).absFilePath() );
   QString resolved( absFilePath );
-  QCString encodedPath = QFile::encodeName( absFilePath );
 
   bool valid = true;
-  struct stat64 statBuf, resolvedStatBuf;
+  K3bStatStruct statBuf, resolvedStatBuf;
   bool isSymLink = false;
   bool isDir = false;
   bool isFile = false;
@@ -156,7 +157,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     m_nonLocalFiles.append( url.path() );
   }
 
-  else if( lstat64( encodedPath, &statBuf ) != 0 ) {
+  else if( statBuf.lstat( absFilePath ) != 0 ) {
     valid = false;
     m_notFoundFiles.append( url.path() );
   }
@@ -170,12 +171,12 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     // but we need to know if the symlink points to a directory
     if( isSymLink ) {
       resolved = K3b::resolveLink( absFilePath );
-      ::stat64( QFile::encodeName( resolved ), &resolvedStatBuf );
+      resolvedStatBuf.stat( resolved );
       isDir = S_ISDIR(resolvedStatBuf.st_mode);
     }
 
     else {
-      if( ::access( encodedPath, R_OK ) != 0 ) {
+      if( ::access( QFile::encodeName( absFilePath ), R_OK ) != 0 ) {
 	valid = false;
 	m_unreadableFiles.append( url.path() );
       }

@@ -28,6 +28,7 @@
 
 class K3bDataDoc;
 class K3bDirItem;
+class K3bStatStruct;
 
 /**
   *@author Sebastian Trueg
@@ -47,8 +48,8 @@ public:
    *
    * Used by K3b to speedup file item creation.
    */
-  K3bFileItem( const struct stat64* stat, 
-	       const struct stat64* followedStat, 
+  K3bFileItem( const K3bStatStruct* stat, 
+	       const K3bStatStruct* followedStat, 
 	       const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
 
   virtual ~K3bFileItem();
