@@ -26,6 +26,16 @@ class KConfig;
 class K3bVersion;
 class K3bExternalBin;
 
+
+#include <sys/stat.h>
+// Must have included config.h
+#ifdef HAVE_STAT64
+typedef struct stat64 K3bStatStruct;
+#else
+typedef struct stat K3bStatStruct;
+#endif
+
+
 namespace K3bDevice {
   class Device;
 }

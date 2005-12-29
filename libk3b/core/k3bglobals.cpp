@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 
 #include "k3bglobals.h"
@@ -254,8 +255,12 @@ KIO::filesize_t K3b::filesize( const KURL& url )
 {
   KIO::filesize_t fSize = 0;
   if( url.isLocalFile() ) {
-    struct stat64 buf;
+    K3bStatStruct buf;
+#ifdef HAVE_STAT64
     stat64( QFile::encodeName( url.path() ), &buf );
+#else
+    stat( QFile::encodeName( url.path() ), &buf );
+#endif
     fSize = (KIO::filesize_t)buf.st_size;
   }
   else {
