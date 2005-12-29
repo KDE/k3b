@@ -18,6 +18,7 @@
 #define K3BGLOBALS_H
 
 #include <qstring.h>
+#include <qfile.h>
 #include <kio/global.h>
 #include <kurl.h>
 #include <k3bdevicetypes.h>
@@ -28,13 +29,28 @@ class K3bExternalBin;
 
 
 #include <sys/stat.h>
-// Must have included config.h
+
+
+// Must have included config.h for HAVE_STAT64. Here we encapsulate
+// stat and stat64 into a single class K3bStatStruct with methods
+// stat() and lstat() that DTRT in the presence of either size of system
+// stat() or stat64() functions.
+//
+//
 #ifdef HAVE_STAT64
 typedef struct stat64 K3bInternalStatStruct;
-class K3bStatStruct : public K3bInternalStatStruct {} ;
+class K3bStatStruct : public K3bInternalStatStruct {
+public:
+  int stat( const QString &filename ) { return ::stat64( QFile::encodeName( filename ), this ); }
+  int lstat( const QString &filename ) { return ::lstat64( QFile::encodeName( filename ), this ); }
+} ;
 #else
 typedef struct stat K3bInternalStatStruct;
-class K3bStatStruct : public K3bInternalStatStruct {} ;
+class K3bStatStruct : public K3bInternalStatStruct {
+public:
+  int stat( const QString &filename ) { return ::stat( QFile::encodeName( filename ), this ); }
+  int lstat( const QString &filename ) { return ::lstat( QFile::encodeName( filename ), this ); }
+} ;
 #endif
 
 
