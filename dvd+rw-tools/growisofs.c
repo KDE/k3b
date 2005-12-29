@@ -370,6 +370,11 @@
 #include <assert.h>
 #include <sys/time.h>
 
+#ifdef __FreeBSD__
+/* Defines for setpriority(2) */
+#include <sys/resource.h>
+#endif
+
 #define	FATAL_START(err)	(0x80|(err))
 #ifndef EMEDIUMTYPE
 #define EMEDIUMTYPE     EINVAL
