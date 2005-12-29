@@ -23,7 +23,7 @@ inline static unsigned short ByteSwap16(unsigned short x)
 
 inline static unsigned int ByteSwap32(unsigned int x)
 {
-#if __CPU__ > 386
+#if defined(__CPU__) && (__CPU__ > 386)
  __asm("bswap	%0":
       "=r" (x)     :
 #else
