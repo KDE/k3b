@@ -30,9 +30,11 @@ class K3bExternalBin;
 #include <sys/stat.h>
 // Must have included config.h
 #ifdef HAVE_STAT64
-typedef struct stat64 K3bStatStruct;
+typedef struct stat64 K3bInternalStatStruct;
+class K3bStatStruct : public K3bInternalStatStruct {} ;
 #else
-typedef struct stat K3bStatStruct;
+typedef struct stat K3bInternalStatStruct;
+class K3bStatStruct : public K3bInternalStatStruct {} ;
 #endif
 
 
