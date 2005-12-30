@@ -330,9 +330,9 @@ void K3bMainWindow::initActions()
   //  actionToolsVideoDvdCopy->setToolTip( i18n("Open the VideoDVD Copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
-  actionFileSave->setToolTip(i18n("Saves the actual project"));
-  actionFileSaveAs->setToolTip(i18n("Saves the active project as..."));
-  actionFileClose->setToolTip(i18n("Closes the active project"));
+  actionFileSave->setToolTip(i18n("Saves the current project"));
+  actionFileSaveAs->setToolTip(i18n("Saves the current project as..."));
+  actionFileClose->setToolTip(i18n("Closes the current project"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
 
   // make sure the tooltips are used for the menu
