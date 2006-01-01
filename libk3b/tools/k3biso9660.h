@@ -24,7 +24,11 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdict.h>
+
 #include "k3b_export.h"
+
+#include "libisofs/isofs.h"
+
 
 namespace K3bDevice {
   class Device;
@@ -155,9 +159,18 @@ class LIBK3B_EXPORT K3bIso9660Entry
 class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
 {
  public: 
-  K3bIso9660Directory( K3bIso9660* archive, const QString& isoName, const QString& name, int access, int date,
-		       int adate,int cdate, const QString& user, const QString& group,
-		       const QString& symlink);
+  K3bIso9660Directory( K3bIso9660* archive, 
+		       const QString& isoName,
+		       const QString& name, 
+		       int access, 
+		       int date,
+		       int adate,
+		       int cdate, 
+		       const QString& user,
+		       const QString& group,
+		       const QString& symlink,
+		       unsigned int pos = 0, 
+		       unsigned int size = 0 );
   ~K3bIso9660Directory();
 
   /**
@@ -179,6 +192,13 @@ class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
    * @return a pointer to the entry in the directory.
    */
   const K3bIso9660Entry* entry( const QString& name ) const;
+
+  /**
+   * Returns a list of sub-entries.
+   * Searches for Iso9660 names.
+   * @return the names of all entries in this directory (filenames, no path).
+   */
+  QStringList iso9660Entries() const;
 
   /**
    * Returns the entry with the given name.
@@ -209,8 +229,14 @@ class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
   bool isDirectory() const { return true; }
 
  private:
+  void expand();
+
   QDict<K3bIso9660Entry> m_entries;
   QDict<K3bIso9660Entry> m_iso9660Entries;
+
+  bool m_bExpanded;
+  unsigned int m_startSector;
+  unsigned int m_size;
 };
 
 
@@ -278,7 +304,7 @@ class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
 
 /**
  * This class is based on the KIso class by
- * György Szombathelyi <gyurco@users.sourceforge.net>.
+ * Gyï¿½gy Szombathelyi <gyurco@users.sourceforge.net>.
  * A lot has been changed and bugfixed.
  * The API has been improved to be useful.
  *
@@ -290,7 +316,10 @@ class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
  * So this stuff contains a lot KArchive code which has been made usable.
  *
  * That does not mean that this class is well designed. No, it's not. :)
- */
+ *
+ * Opening a K3bIso9660 object should be fast since creation of the directory 
+ * and file entries is not done until a call to K3bIso9660Directory::entries.
+*/
 class LIBK3B_EXPORT K3bIso9660
 {
  public:
@@ -373,12 +402,6 @@ class LIBK3B_EXPORT K3bIso9660
 
   void debug() const;
 
-  int level;
-  K3bIso9660Directory *dirent;
-
-  // temp thing
-  bool m_rr;
-
  private:
   /**
    * @internal
@@ -390,6 +413,13 @@ class LIBK3B_EXPORT K3bIso9660
 
   int m_joliet;
 
+  // only used for creation
+  static int read_callback( char* buf, sector_t start, int len, void* udata );
+  static int isofs_callback( struct iso_directory_record* idr, void *udata );
+  K3bIso9660Directory *dirent;
+  bool m_rr;
+  friend class K3bIso9660Directory;
+  
  private:
   QString m_filename;
 

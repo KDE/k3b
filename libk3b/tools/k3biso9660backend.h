@@ -60,7 +60,7 @@ class K3bIso9660DeviceBackend : public K3bIso9660Backend
 class K3bIso9660FileBackend : public K3bIso9660Backend
 {
  public:
-  K3bIso9660FileBackend( const QString& filename );
+  LIBK3B_EXPORT K3bIso9660FileBackend( const QString& filename );
   K3bIso9660FileBackend( int fd );
   ~K3bIso9660FileBackend();
 
@@ -79,7 +79,7 @@ class K3bIso9660FileBackend : public K3bIso9660Backend
 class K3bIso9660LibDvdCssBackend : public K3bIso9660Backend
 {
  public:
-  K3bIso9660LibDvdCssBackend( K3bDevice::Device* );
+  LIBK3B_EXPORT K3bIso9660LibDvdCssBackend( K3bDevice::Device* );
   ~K3bIso9660LibDvdCssBackend();
 
   bool open();
