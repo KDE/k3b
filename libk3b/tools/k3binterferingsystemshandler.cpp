@@ -139,7 +139,7 @@ void K3bInterferingSystemsHandler::enable()
     if( d->disabledAutofs ) {
       int r = startStopAutomounting( true, d->device );
       if( r == -1 )
-	emit infoMessage( i18n("Failed to enabled Automounting."), WARNING );
+	emit infoMessage( i18n("Failed to enable Automounting."), WARNING );
       else {
 	d->disabledAutofs = false;
 	if( r == 1 )

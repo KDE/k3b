@@ -719,7 +719,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 	  writeItem = false;
 	}
 	else if( f.isDir() ) {
-	  emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is not able to follow links to folders.")
+	  emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is unable to follow links to folders.")
 			    .arg(item->k3bName())
 			    .arg(f.filePath()), WARNING );
 	  writeItem = false;
