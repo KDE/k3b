@@ -371,25 +371,22 @@ void K3bDeviceTreeToolTip::maybeTip( const QPoint& pos )
     tooltip->setPaletteBackgroundColor( theme->backgroundColor() );
     tooltip->setPaletteForegroundColor( theme->foregroundColor() );
     K3bTheme::PixmapType pm;
-    K3bDevice::Toc toc = k3bappcore->mediaCache()->toc( dev );
-    switch( toc.contentType() ) {
-    case K3bDevice::DATA:
-      pm = K3bTheme::MEDIA_DATA;
-      break;
-    case K3bDevice::AUDIO:
-      pm = K3bTheme::MEDIA_AUDIO;
-      break;
-    case K3bDevice::MIXED:
+    int c = k3bappcore->mediaCache()->medium( dev ).content();
+    if( c & (K3bMedium::CONTENT_VIDEO_CD|K3bMedium::CONTENT_VIDEO_DVD) )
+      pm = K3bTheme::MEDIA_VIDEO;
+    else if( c & K3bMedium::CONTENT_AUDIO &&
+	      c & K3bMedium::CONTENT_DATA )
       pm = K3bTheme::MEDIA_MIXED;
-      break;
-    case K3bDevice::NONE: {
+    else if( c & K3bMedium::CONTENT_AUDIO )
+      pm = K3bTheme::MEDIA_AUDIO;
+    else if( c & K3bMedium::CONTENT_DATA )
+      pm = K3bTheme::MEDIA_DATA;
+    else {
       K3bDevice::DiskInfo di = k3bappcore->mediaCache()->diskInfo( dev );
       if( di.diskState() == K3bDevice::STATE_EMPTY )
 	pm = K3bTheme::MEDIA_EMPTY;
       else
 	pm = K3bTheme::MEDIA_NONE;
-      break;
-    }
     }
     label->setPixmap( theme->pixmap( pm ) );
   }
