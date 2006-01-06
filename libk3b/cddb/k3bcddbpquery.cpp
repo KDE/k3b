@@ -30,6 +30,8 @@ K3bCddbpQuery::K3bCddbpQuery( QObject* parent, const char* name )
 {
   m_socket = new QSocket( this );
   m_stream.setDevice( m_socket );
+  // FIXME: handle charsets
+  m_stream.setEncoding( QTextStream::Latin1 );
 
   connect( m_socket, SIGNAL(connected()), this, SLOT(slotConnected()) );
   connect( m_socket, SIGNAL(hostFound()), this, SLOT(slotHostFound()) );

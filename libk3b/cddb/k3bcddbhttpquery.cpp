@@ -97,8 +97,9 @@ void K3bCddbHttpQuery::performCommand( const QString& cmd )
 
 void K3bCddbHttpQuery::slotData( KIO::Job*, const QByteArray& data )
 {
+  // FIXME: handle charsets
   if( data.size() )
-    m_data += data;
+    m_data += QString::fromLatin1( data );
 }
 
 
