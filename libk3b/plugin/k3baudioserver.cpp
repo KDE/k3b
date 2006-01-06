@@ -43,7 +43,6 @@ public:
 
   void stop() {
     m_streaming = false;
-    wait();
   }
 
 protected:
@@ -113,8 +112,10 @@ void K3bAudioServer::setOutputPlugin( K3bAudioOutputPlugin* p )
 {
   if( p != m_usedOutputPlugin ) {
     bool restart = d->running();
-    if( restart )
+    if( restart ) {
       d->stop();
+      d->wait();
+    }
     
     if( m_usedOutputPlugin ) {
       m_usedOutputPlugin->cleanup();    
@@ -163,6 +164,7 @@ void K3bAudioServer::detachClient( K3bAudioClient* c )
     
     // stop the streaming
     d->stop();
+    d->wait();
     
     if( m_usedOutputPlugin && m_pluginInitialized ) {
       m_usedOutputPlugin->cleanup();
