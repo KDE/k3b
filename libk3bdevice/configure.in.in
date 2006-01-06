@@ -1,3 +1,40 @@
+dnl FIXME: only make the linux header check on linux systems.
+
+linux_scsi=no
+AC_MSG_CHECKING(for linux scsi headers)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+	#include <linux/version.h>
+	#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
+	typedef unsigned char u8;
+	#endif
+	#include <sys/types.h>
+	#include <linux/../scsi/scsi.h> /* cope with silly includes */
+	],
+	[],
+	[linux_scsi=yes])
+AC_MSG_RESULT($linux_scsi)
+
+if test "FreeBSD" = `uname -s` ; then
+	# I'll be damned if lousy coding prevents us from running
+	# this application.
+	linux_scsi=yes
+fi
+
+if test "x$linux_scsi" = "xno" ; then
+	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
+fi
+AC_LANG_RESTORE
+
+dnl - find the cam_* functions
+AC_CHECK_FUNC(cam_close_device,
+	[CAM_LIB=""],
+	[AC_CHECK_LIB(cam, cam_close_device, [CAM_LIB=-lcam], [CAM_LIB=""])]
+	)
+AC_SUBST(CAM_LIB)
+
+
 
 dnl === check for resmgr - begin ============
 AC_ARG_WITH(
