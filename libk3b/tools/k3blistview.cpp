@@ -337,14 +337,14 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
   if( info->backgroundColorSet )
     cgh.setColor( QColorGroup::Base, info->backgroundColor );
 
-  // the margin (we can only translate horizontally since height() is used for painting)
+  // FIXME: the margin (we can only translate horizontally since height() is used for painting)
   p->translate( info->margin, 0 );
 
   if( info->showProgress ) {
     paintProgressBar( p, cgh, col, width-2*info->margin );
   }
   else {
-    KListViewItem::paintCell( p, cgh, col, width-2*info->margin, align );
+    paintK3bCell( p, cgh, col, width-2*info->margin, align );
 
     // in case this is the selected row has a margin we need to repaint the selection bar
     if( isSelected() &&
@@ -368,6 +368,12 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
 }
 
 
+void K3bListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+{
+  KListViewItem::paintCell( p, cg, col, width, align );
+}
+
+
 void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int col, int width )
 {
   ColumnInfo* info = getColumnInfo( col );
@@ -378,7 +384,7 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
   if( listView()->hasFocus() )
     flags |= QStyle::Style_HasFocus;
 
-  // the QPainter is translated so 0, m_vMargin is the upper left of our paint rect
+  // FIXME: the QPainter is translated so 0, m_vMargin is the upper left of our paint rect
   QRect r( 0, m_vMargin, width, height()-2*m_vMargin );
 
   // create the double buffer pixmap
@@ -423,6 +429,80 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
 }
 
 
+
+
+
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListView *parent)
+  : K3bListViewItem( parent ),
+    m_checked(false)
+{
+}
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListViewItem *parent)
+  : K3bListViewItem( parent ),
+    m_checked(false)
+{
+}
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListView *parent, QListViewItem *after)
+  : K3bListViewItem( parent, after ),
+    m_checked(false)
+{
+}
+
+
+K3bCheckListViewItem::K3bCheckListViewItem(QListViewItem *parent, QListViewItem *after)
+  : K3bListViewItem( parent, after ),
+    m_checked(false)
+{
+}
+
+
+bool K3bCheckListViewItem::isChecked() const
+{
+  return m_checked;
+}
+
+
+void K3bCheckListViewItem::setChecked( bool checked )
+{
+  m_checked = checked;
+  repaint();
+}
+
+
+void K3bCheckListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
+{
+  K3bListViewItem::paintK3bCell( p, cg, col, width, align );
+
+  if( col == 0 ) {
+    if( m_checked ) {
+      QRect r( 0, 0, height(), height() );
+
+      QStyle::SFlags flags = QStyle::Style_Default;
+      if( listView()->isEnabled() )
+	flags |= QStyle::Style_Enabled;
+      if( listView()->hasFocus() )
+	flags |= QStyle::Style_HasFocus;
+      if( isChecked() )
+	flags |= QStyle::Style_On;
+      else
+	flags |= QStyle::Style_Off;
+
+      listView()->style().drawPrimitive( QStyle::PE_CheckMark, p, r, cg, flags );
+    }
+  }
+}
+
+
+
+
+
+
 // ///////////////////////////////////////////////
 //
 // K3BLISTVIEW
@@ -437,8 +517,6 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
 {
   connect( header(), SIGNAL( sizeChange( int, int, int ) ),
 	   this, SLOT( updateEditorSize() ) );
-  connect( this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),
-	   this, SLOT(slotClicked(QListViewItem*, const QPoint&, int)) );
 
   m_editorButton = 0;
   m_editorComboBox = 0;
@@ -467,24 +545,6 @@ void K3bListView::clear()
 {
   hideEditor();
   KListView::clear();
-}
-
-
-void K3bListView::slotClicked( QListViewItem* item, const QPoint&, int col )
-{
-  if( item != m_currentEditItem ) {
-    doRename();
-    if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
-      if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
-	showEditor( k3bItem, col );
-      else
-	hideEditor();
-    }
-    else
-      hideEditor();
-    
-    m_lastClickedItem = item;
-  }
 }
 
 
@@ -957,6 +1017,40 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
        }
      }
   }
+
+  else if( e->type() == QEvent::MouseButtonPress ) {
+
+    // first let's grab the focus
+    setFocus();
+
+    QMouseEvent* me = static_cast<QMouseEvent*>( e );
+    QListViewItem* item = itemAt( me->pos() );
+    int col = header()->sectionAt( me->pos().x() );
+    if( K3bCheckListViewItem* ci = dynamic_cast<K3bCheckListViewItem*>( item ) ) {
+      if( col == 0 ) {
+	// FIXME: improve this click area!
+	ci->setChecked( !ci->isChecked() );
+	return true;
+      }
+    }
+    if( me->button() == QMouseEvent::LeftButton ) {
+      if( item != m_currentEditItem ) {
+	doRename();
+	if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
+	  if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
+	    showEditor( k3bItem, col );
+	  else
+	    hideEditor();
+	}
+	else
+	  hideEditor();
+	
+	m_lastClickedItem = item;
+      }
+    }
+  }
+
+
   else if( e->type() == QEvent::FocusOut ) {
     if( o == m_editorSpinBox ||
 	o == m_editorMsfEdit ||

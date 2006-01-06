@@ -107,7 +107,12 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
    */
   void setMarginVertical( int margin );
 
+  /**
+   * Do not reimplement this but paintK3bCell to use the margin and background stuff.
+   */
   virtual void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
+
+  virtual void paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
  private:
   void paintProgressBar( QPainter* p, const QColorGroup& cgh, int col, int width );
@@ -121,6 +126,24 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
   int m_vMargin;
 };
 
+
+class LIBK3B_EXPORT K3bCheckListViewItem : public K3bListViewItem
+{
+ public:
+  K3bCheckListViewItem(QListView *parent);
+  K3bCheckListViewItem(QListViewItem *parent);
+  K3bCheckListViewItem(QListView *parent, QListViewItem *after);
+  K3bCheckListViewItem(QListViewItem *parent, QListViewItem *after);
+
+  virtual bool isChecked() const;
+  virtual void setChecked( bool checked );
+
+ protected:
+  virtual void paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
+
+ private:
+  bool m_checked;
+};
 
 
 
@@ -177,7 +200,6 @@ class LIBK3B_EXPORT K3bListView : public KListView
 
  private slots:
   void updateEditorSize();
-  void slotClicked( QListViewItem*, const QPoint&, int );
   virtual void slotEditorLineEditReturnPressed();
   virtual void slotEditorComboBoxActivated( const QString& );
   virtual void slotEditorSpinBoxValueChanged( int );
