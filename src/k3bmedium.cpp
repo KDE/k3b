@@ -16,6 +16,9 @@
 #include "k3bmedium.h"
 
 #include <k3bdeviceglobals.h>
+#include <k3bglobals.h>
+#include <k3biso9660.h>
+#include <k3biso9660backend.h>
 
 #include <klocale.h>
 #include <kio/global.h>
@@ -23,13 +26,17 @@
 
 
 K3bMedium::K3bMedium()
-  : m_device( 0 )
+  : m_device( 0 ),
+    m_isoDesc( 0 ),
+    m_content( CONTENT_NONE )
 {
 }
 
 
 K3bMedium::K3bMedium( K3bDevice::Device* dev )
-  : m_device( dev )
+  : m_device( dev ),
+    m_isoDesc( 0 ),
+    m_content( CONTENT_NONE )
 {
 }
 
@@ -45,7 +52,9 @@ void K3bMedium::reset()
   m_toc.clear();
   m_cdText.clear();
   m_writingSpeeds.clear();
-  m_volumeId.truncate(0);
+  delete m_isoDesc;
+  m_isoDesc = 0;
+  m_content = CONTENT_NONE;
 }
 
 
@@ -80,8 +89,51 @@ void K3bMedium::update()
       }
     }
 
-    if( !toc().isEmpty() && toc().contentType() != K3bDevice::AUDIO ) {
-      // determine volume id
+    analyseContent();
+
+//       unsigned char data[2048];
+//       if( m_device->read10( data, 2048, startSec+16, 1 ) ) {
+// 	m_isoDesc->systemId = QCString( (char*)&data[8], 32 ).stripWhiteSpace();
+// 	m_isoDesc->volumeId = QCString( (char*)&data[40], 32 ).stripWhiteSpace();
+// 	m_isoDesc->applicationId = QCString( (char*)&data[574], 128 ).stripWhiteSpace();
+// 	m_isoDesc->publisherId = QCString( (char*)&data[318], 128 ).stripWhiteSpace();
+// 	m_isoDesc->preparerId = QCString( (char*)&data[446], 128 ).stripWhiteSpace();
+// 	m_isoDesc->volumeSetId = QCString( (char*)&data[190], 128 ).stripWhiteSpace();
+// 	m_isoDesc->volumeSetSize = K3b::fromLe32( (char*)&data[120] );
+// 	m_isoDesc->volumeSetNumber = K3b::fromLe32( (char*)&data[124] );
+// 	m_isoDesc->logicalBlockSize = K3b::fromLe32( (char*)&data[128] );
+// 	m_isoDesc->volumeSpaceSize = K3b::fromLe64( (char*)&data[80] );
+// 
+// 	kdDebug() << "(K3bMedium) found volume id from start sector " << startSec 
+// 		  << ": '" << m_isoDesc->volumeId << "'" << endl;
+  }
+}
+
+
+void K3bMedium::analyseContent()
+{
+  // set basic content types
+  switch( toc().contentType() ) {
+    case K3bDevice::AUDIO:
+      m_content = CONTENT_AUDIO;
+      break;
+    case K3bDevice::DATA:
+    case K3bDevice::DVD:
+      m_content = CONTENT_DATA;
+      break;
+    case K3bDevice::MIXED:
+      m_content = CONTENT_AUDIO|CONTENT_DATA;
+      break;
+    default:
+      m_content = CONTENT_NONE;
+  }
+
+  // analyse filesystem
+  if( m_content & CONTENT_DATA ) {
+    //kdDebug() << "(K3bMedium) Checking file system." << endl;
+    if( !m_isoDesc )
+      m_isoDesc = new K3bIso9660SimplePrimaryDescriptor;
+
       unsigned long startSec = 0;
 
       if( diskInfo().numSessions() > 1 ) {
@@ -101,13 +153,55 @@ void K3bMedium::update()
 	startSec = (*it).firstSector().lba();
       }
 
-      unsigned char data[2048];
-      if( m_device->read10( data, 2048, startSec+16, 1 ) ) {
-	QCString s( (char*)&data[40], 33 );
-	m_volumeId = s.stripWhiteSpace();
-	kdDebug() << "(K3bMedium) found volume id from start sector " << startSec << ": '" << s << "'" << endl;
-      }
-    }
+      //kdDebug() << "(K3bMedium) Checking file system at " << startSec << endl;
+
+      // force the backend since we don't need decryption
+      // which just slows down the whole process
+      K3bIso9660 iso( new K3bIso9660DeviceBackend( m_device ) );
+      iso.setStartSector( startSec );
+      if( iso.open() ) {
+	*m_isoDesc = iso.primaryDescriptor();
+ 	kdDebug() << "(K3bMedium) found volume id from start sector " << startSec 
+ 		  << ": '" << m_isoDesc->volumeId << "'" << endl;
+
+	if( K3bDevice::isDvdMedia( diskInfo().mediaType() ) ) {
+	  // Every VideoDVD needs to have a VIDEO_TS.IFO file
+	if( iso.firstIsoDirEntry()->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
+	  m_content |= CONTENT_VIDEO_DVD;
+	}
+	else {
+	  kdDebug() << "(K3bMedium) checking for VCD." << endl;
+
+	  // check for VCD
+	  const K3bIso9660Entry* vcdEntry = iso.firstIsoDirEntry()->entry( "VCD/INFO.VCD" );
+	  const K3bIso9660Entry* svcdEntry = iso.firstIsoDirEntry()->entry( "SVCD/INFO.SVD" );
+	  const K3bIso9660File* vcdInfoFile = 0;
+	  if( vcdEntry ) {
+	    kdDebug() << "(K3bMedium) found vcd entry." << endl;
+	    if( vcdEntry->isFile() )
+	      vcdInfoFile = static_cast<const K3bIso9660File*>(vcdEntry);
+	  }
+	  if( svcdEntry && !vcdInfoFile ) {
+	    kdDebug() << "(K3bMedium) found svcd entry." << endl;
+	    if( svcdEntry->isFile() )
+	      vcdInfoFile = static_cast<const K3bIso9660File*>(svcdEntry);
+	  }
+
+	  if( vcdInfoFile ) {
+	    char buffer[8];
+	    
+	    if ( vcdInfoFile->read( 0, buffer, 8 ) == 8 &&
+		 ( !qstrncmp( buffer, "VIDEO_CD", 8 ) ||
+		   !qstrncmp( buffer, "SUPERVCD", 8 ) ||
+		   !qstrncmp( buffer, "HQ-VCD  ", 8 ) ) )
+	      m_content |= CONTENT_VIDEO_CD;
+	  }
+	}
+      }  // opened iso9660
+  }
+  else {
+    delete m_isoDesc;
+    m_isoDesc = 0;
   }
 }
 
@@ -145,11 +239,17 @@ QString K3bMedium::shortString( bool useContent ) const
       }
       
       // DATA CD and DVD
-      else {
+      else if( !volumeId().isEmpty() ) {
 	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE )
 	  return i18n("%1 (appendable data %2)").arg( volumeId(), mediaTypeString );
 	else
 	  return i18n("%1 (full data %2)").arg( volumeId(), mediaTypeString );
+      }
+      else {
+	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE )
+	  return i18n("Appendable data %1").arg( mediaTypeString );
+	else
+	  return i18n("Full data %1").arg( mediaTypeString );
       }
     }
     
@@ -191,4 +291,15 @@ QString K3bMedium::longString() const
       .arg( KIO::convertSize( diskInfo().capacity().mode1Bytes() ) );
 
   return s;
+}
+
+
+const QString& K3bMedium::volumeId() const
+{
+  if( iso9660Descriptor() )
+    return iso9660Descriptor()->volumeId;
+  else {
+    static QString dummy;
+    return dummy;
+  }
 }
