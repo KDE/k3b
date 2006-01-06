@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=Service
 Name=K3b Project Info
-Name[de]=K3b Projekt Informationen
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_k3b
 MimeType=application/x-k3b
