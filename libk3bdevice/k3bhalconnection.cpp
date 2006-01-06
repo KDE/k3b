@@ -18,7 +18,10 @@
 #include <kdebug.h>
 
 QMap<LibHalContext*, K3bDevice::HalConnection*> K3bDevice::HalConnection::s_contextMap;
+
+#ifdef HAL_0_4
 static K3bDevice::HalConnection* s_setupHal = 0;
+#endif
 
 K3bDevice::HalConnection::HalConnection( QObject* parent, const char* name )
   : QObject( parent, name ),
