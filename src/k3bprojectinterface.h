@@ -49,8 +49,11 @@ class K3bProjectInterface : public DCOPObject
 
   /**
    * Starts the burning immedeately
+   * \return true if the burning could be started. Be aware that the return
+   *         value does not say anything about the success of the burning
+   *         process.
    */
-  virtual void directBurn();
+  virtual bool directBurn();
 
   virtual void setBurnDevice( const QString& blockdevicename );
 
