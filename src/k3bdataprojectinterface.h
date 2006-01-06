@@ -37,16 +37,20 @@ class K3bDataProjectInterface : public K3bProjectInterface
    * Create a new folder in the root of the doc.
    * This is the same as calling createFolder( name, "/" )
    */
-  void createFolder( const QString& name );
+  bool createFolder( const QString& name );
 
   /**
    * Create a new folder with name @p name in the folder with the
    * absolute path @p parent. 
    *
+   * \return true if the folder was created successfully, false if 
+   *         an item with the same name already exists or the parent
+   *         directory could not be found.
+   *
    * Example: createFolder( "test", "/foo/bar" ) will create the
    *          folder /foo/bar/test.
    */
-  void createFolder( const QString& name, const QString& parent );
+  bool createFolder( const QString& name, const QString& parent );
 
   /**
    * Add urls to a specific folder in the project.
@@ -60,10 +64,17 @@ class K3bDataProjectInterface : public K3bProjectInterface
 
   /**
    * Remove an item
+   * \return true if the item was successfully removed.
    */
-  void removeItem( const QString& path );
+  bool removeItem( const QString& path );
 
-  void renameItem( const QString& path, const QString& newName );
+  /**
+   * Rename an item
+   * \return true if the item was successfully renamed, false if
+   *         no item could be found at \p path, \p newName is empty,
+   *         or the item cannot be renamed for some reason.
+   */
+  bool renameItem( const QString& path, const QString& newName );
 
   /**
    * Set the volume ID of the data project. This is the name shown by Windows
@@ -80,6 +91,12 @@ class K3bDataProjectInterface : public K3bProjectInterface
    * \return the names of the child elements of the item determined by path.
    */
   QStringList children( const QString& path ) const;
+
+  /**
+   * Set the sort weigth of an item
+   * \return false if the item at \p could not be found.
+   */
+  bool setSortWeight( const QString& path, int weight ) const;
 
  private:
   K3bDataDoc* m_dataDoc;
