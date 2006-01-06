@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include "k3bcdimagewritingdialog.h"
 #include "k3biso9660imagewritingjob.h"
@@ -456,6 +457,10 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
     // ------------------------------------------------
     K3bIso9660 isoF( path );
     if( isoF.open() ) {
+#ifdef K3B_DEBUG
+      isoF.debug();
+#endif
+
       createIso9660InfoItems( &isoF );
       isoF.close();
       calculateMd5Sum( path );
