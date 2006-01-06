@@ -227,9 +227,9 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
     return false;
   }
   else {
-    m_vendor = QString::fromLocal8Bit( (char*)(inq->vendor), 8 ).stripWhiteSpace();
-    m_description = QString::fromLocal8Bit( (char*)(inq->product), 16 ).stripWhiteSpace();
-    m_version = QString::fromLocal8Bit( (char*)(inq->revision), 4 ).stripWhiteSpace();
+    m_vendor = QString::fromLatin1( (char*)(inq->vendor), 8 ).stripWhiteSpace();
+    m_description = QString::fromLatin1( (char*)(inq->product), 16 ).stripWhiteSpace();
+    m_version = QString::fromLatin1( (char*)(inq->revision), 4 ).stripWhiteSpace();
   }
 
   if( m_vendor.isEmpty() )
@@ -2379,15 +2379,18 @@ void K3bDevice::Device::checkFeatures()
   }
 
 
-  cmd[2] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER>>8;
-  cmd[3] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER;
-  cmd[8] = 16;
-  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
-    int len = from4Byte( header );
-    if( len == 12 ) {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
-      if( header[12] & 0x1 )
-	d->deviceType |= DEVICE_DVD_PLUS_R_DL;
+  // some older DVD-ROM drives claim to support DVD+R DL
+  if( d->deviceType & DEVICE_DVD_PLUS_R ) {
+    cmd[2] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER>>8;
+    cmd[3] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER;
+    cmd[8] = 16;
+    if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+      int len = from4Byte( header );
+      if( len == 12 ) {
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
+	if( header[12] & 0x1 )
+	  d->deviceType |= DEVICE_DVD_PLUS_R_DL;
+      }
     }
   }
 
@@ -2524,8 +2527,11 @@ void K3bDevice::Device::checkFeatures()
 	    d->deviceType |= DEVICE_DVD_PLUS_R;
 	    break;
 	  case 0x2B:
-	    d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
-	    d->deviceType |= (DEVICE_DVD_PLUS_R|DEVICE_DVD_PLUS_R_DL);
+	    // some older DVD-ROM drives claim to support DVD+R DL
+	    if( d->deviceType & DEVICE_DVD_PLUS_R ) {
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
+	      d->deviceType |= (DEVICE_DVD_PLUS_R|DEVICE_DVD_PLUS_R_DL);
+	    }
 	    break;
 	  case 0x08:
 	    d->supportedProfiles |= MEDIA_CD_ROM;
@@ -3088,4 +3094,50 @@ int K3bDevice::Device::copyrightProtectionSystemType() const
   }
   else
     return -1;
+}
+
+
+bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, unsigned int& nextWritableAdress ) const
+{
+  bool success = false;
+
+  // FIXME: add CD media handling
+  int m = dvdMediaType();
+  if( m > 0 ) {
+    // DVD+RW always returns complete
+    if( m & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) )
+      return false;
+
+    unsigned char* data = 0;
+    int dataLen = 0;
+    
+    if( readDiscInfo( &data, dataLen ) ) {
+      disc_info_t* inf = (disc_info_t*)data;
+      
+      if( inf->border == 0x01 ) {
+	// the incomplete track number
+	unsigned int nextTrack = inf->last_track_l|inf->last_track_m<<8;
+
+	unsigned char* trackData = 0;
+	int trackDataLen = 0;
+
+	// Read start address of the incomplete track
+	if( readTrackInformation( &trackData, trackDataLen, 0x1, nextTrack ) ) {
+	  nextWritableAdress = from4Byte( &data[8] );
+	  delete [] trackData;
+	}
+
+	// Read start adress of the first track in the last session
+	if( readTocPmaAtip( &trackData, trackDataLen, 0x1, false, 0x0  ) ) {
+	  lastSessionStart = from4Byte( &trackData[8] );
+	  delete [] trackData;
+	  success = true;
+	}
+      }
+    }
+
+    delete [] data;
+  }
+  
+  return success;
 }

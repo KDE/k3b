@@ -691,6 +691,8 @@ namespace K3bDevice
        */
       bool seek( unsigned long lba ) const;
 
+      bool getNextWritableAdress( unsigned int& lastSessionStart, unsigned int& nextWritableAdress ) const;
+
     protected:
       bool furtherInit();
 
