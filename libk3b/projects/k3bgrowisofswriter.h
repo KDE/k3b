@@ -48,6 +48,11 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void setWritingMode( int );
 
   /**
+   * If true the growisofs parameter -M is used in favor of -Z.
+   */
+  void setMultiSession( bool b );
+
+  /**
    * Only used in DAO mode and only supported with growisofs >= 5.15
    * @param size size in blocks
    */

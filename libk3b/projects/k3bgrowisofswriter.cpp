@@ -45,6 +45,7 @@ public:
   Private() 
     : writingMode( 0 ),
       closeDvd(false),
+      multiSession(false),
       process( 0 ),
       growisofsBin( 0 ),
       trackSize(-1),
@@ -55,12 +56,14 @@ public:
 
   int writingMode;
   bool closeDvd;
+  bool multiSession;
   K3bProcess* process;
   const K3bExternalBin* growisofsBin;
   QString image;
 
   bool success;
   bool canceled;
+  bool finished;
 
   QTime lastSpeedCalculationTime;
   int lastSpeedCalculationBytes;
@@ -190,6 +193,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   // to write zeros. We just tell growisofs to reserve a multiple of 16 blocks.
   // This is only releveant in DAO mode anyway.
   //
+  // FIXME: seems as we also need this for double layer writing. Better make it the default and
+  //        actually write the pad bytes. The only possibility I see right now is to add a padding option
+  //        to the pipebuffer.
   int trackSizePadding = 0;
   if( d->trackSize > 0 && d->growisofsBin->version < K3bVersion( 5, 20 ) ) {
     if( d->trackSize % 16 ) {
@@ -212,8 +218,11 @@ bool K3bGrowisofsWriter::prepareProcess()
   else
     s += d->image;
 
-  // for now we do not support multisession
-  *d->process << "-Z" << s;
+  if( d->multiSession )
+    *d->process << "-M";
+  else
+    *d->process << "-Z";
+  *d->process << s;
 
 
   if( !d->image.isEmpty() && d->usingRingBuffer ) {
@@ -307,6 +316,7 @@ void K3bGrowisofsWriter::start()
   d->writingStarted = false;
   d->canceled = false;
   d->speedEst->reset();
+  d->finished = false;
 
   if( !prepareProcess() ) {
     jobFinished( false );
@@ -357,7 +367,7 @@ void K3bGrowisofsWriter::start()
 
 	d->ringBuffer->writeToFd( d->process->stdinFd() );
 	bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
-	int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 4 );
+	int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 20 );
 	d->ringBuffer->setBufferSize( bufSize );
 
 	if( !d->image.isEmpty() )
@@ -406,6 +416,12 @@ void K3bGrowisofsWriter::setCloseDvd( bool b )
 }
 
 
+void K3bGrowisofsWriter::setMultiSession( bool b )
+{
+  d->multiSession = b;
+}
+
+
 void K3bGrowisofsWriter::setImageToWrite( const QString& filename )
 {
   d->image = filename;
@@ -432,11 +448,13 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       int p = (int)(100 * done / d->overallSizeFromOutput);
       if( p > d->lastProgress ) {
 	emit percent( p );
+	emit subPercent( p );
 	d->lastProgress = p;
       }
       if( (unsigned int)(done/1024/1024) > d->lastProgressed ) {
 	d->lastProgressed = (unsigned int)(done/1024/1024);
 	emit processedSize( d->lastProgressed, (int)(d->overallSizeFromOutput/1024/1024)  );
+	emit processedSubSize( d->lastProgressed, (int)(d->overallSizeFromOutput/1024/1024)  );
       }
 
       // try parsing write speed (since growisofs 5.11)
@@ -474,35 +492,32 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   d->interferingSystemHndl->enable();
 
   if( d->canceled ) {
-    if( !d->usingRingBuffer || !d->ringBuffer->active() ) {
+    if( !d->finished ) {
+      d->finished = true;
       // this will unblock and eject the drive and emit the finished/canceled signals
       K3bAbstractWriter::cancel();
     }
     return;
   }
 
-  if( p->normalExit() ) {
-    if( p->exitStatus() == 0 ) {
+  d->finished = true;
 
-      int s = d->speedEst->average();
-      if( s > 0 )
-	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
+  if( p->exitStatus() == 0 ) {
 
-      if( simulate() )
-	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
-      else
-	emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
+    int s = d->speedEst->average();
+    if( s > 0 )
+      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
 
-      d->success = true;
-    }
-    else {
-      if( !wasSourceUnreadable() )
-	d->gh->handleExit( p->exitStatus() );
-      d->success = false;
-    }
+    if( simulate() )
+      emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
+    else
+      emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
+
+    d->success = true;
   }
   else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->growisofsBin->name()), ERROR );
+    if( !wasSourceUnreadable() )
+      d->gh->handleExit( p->exitStatus() );
     d->success = false;
   }
 
@@ -520,7 +535,8 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 
 void K3bGrowisofsWriter::slotRingBufferFinished( bool )
 {
-  if( d->canceled && !d->process->isRunning() ) {
+  if( !d->finished ) {
+    d->finished = true;
     // this will unblock and eject the drive and emit the finished/canceled signals
     K3bAbstractWriter::cancel();
   }
