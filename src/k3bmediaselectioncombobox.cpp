@@ -208,7 +208,27 @@ void K3bMediaSelectionComboBox::updateMedia()
   
   clear();
 
-  const QPtrList<K3bDevice::Device>& devices = k3bcore->deviceManager()->allDevices();
+  //
+  // We need to only check a selection of the available devices based on the
+  // wanted media type.
+  //
+  
+  // no ROM media -> we most likely want only CD/DVD writers
+  bool rwOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_DVD_ROM) );
+  bool dvdOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_WRITABLE_CD) );
+  
+  QPtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
+  if( dvdOnly ) {
+    if( rwOnly )
+      devices = k3bcore->deviceManager()->dvdWriter();
+    else
+      devices = k3bcore->deviceManager()->dvdReader();
+  }
+  else if( rwOnly )
+    devices = k3bcore->deviceManager()->cdWriter();
+  else
+    devices = k3bcore->deviceManager()->cdReader();
+  
   for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
     K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
