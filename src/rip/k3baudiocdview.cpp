@@ -53,29 +53,31 @@
 #include <qfont.h>
 #include <qdragobject.h>
 
-// FIXME: use a K3bListViewItem which can be checked
-class K3bAudioCdView::AudioTrackViewItem : public QCheckListItem
+
+class K3bAudioCdView::AudioTrackViewItem : public K3bCheckListViewItem
 {
 public:
   AudioTrackViewItem( QListView* parent, 
 		      QListViewItem* after,
 		      int _trackNumber,
 		      const K3b::Msf& length) 
-    : QCheckListItem( parent,
-		      after,
-		      QString::null,
-		      QCheckListItem::CheckBox ) {
+    : K3bCheckListViewItem( parent, after ) {
+
     setText( 1, QString::number(_trackNumber).rightJustify( 2, ' ' ) );
     setText( 3, i18n("Track %1").arg(_trackNumber) );
     setText( 4, " " + length.toString() + " " );
     setText( 5, " " + KIO::convertSize( length.audioBytes() ) + " " );
 
     trackNumber = _trackNumber;
-    setOn(true);
+
+    setEditor( 2, LINE );
+    setEditor( 3, LINE );
+
+    setChecked(true);
   }
 
   void setup() {
-    QCheckListItem::setup();
+    K3bCheckListViewItem::setup();
     
     setHeight( height() + 4 );
   }
@@ -222,18 +224,19 @@ void K3bAudioCdView::initActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  KAction* actionSelectAll = KStdAction::selectAll( this, SLOT(slotSelectAll()), 
-						    m_actionCollection, "select_all" );
-  KAction* actionDeselectAll = KStdAction::deselect( this, SLOT(slotDeselectAll()), 
-						     m_actionCollection, "deselect_all" );
-  actionDeselectAll->setText( i18n("Dese&lect All") );
-  KAction* actionSelect = new KAction( i18n("Select Track"), 0, 0, this,
+  KAction* actionSelectAll = new KAction( i18n("Check All"), 0, 0, this,
+					  SLOT(slotCheckAll()), actionCollection(),
+					  "check_all" );
+  KAction* actionDeselectAll = new KAction( i18n("Uncheck All"), 0, 0, this,
+					    SLOT(slotUncheckAll()), actionCollection(),
+					    "uncheck_all" );
+  KAction* actionSelect = new KAction( i18n("Check Track"), 0, 0, this,
 				       SLOT(slotSelect()), actionCollection(),
 				       "select_track" );
-  KAction* actionDeselect = new KAction( i18n("Deselect Track"), 0, 0, this,
+  KAction* actionDeselect = new KAction( i18n("Uncheck Track"), 0, 0, this,
 					 SLOT(slotDeselect()), actionCollection(),
 					 "deselect_track" );
-  KAction* actionEditTrackCddbInfo = new KAction( i18n("Edit cddb Info"), "edit", 0, this,
+  KAction* actionEditTrackCddbInfo = new KAction( i18n("Edit Track cddb Info"), "edit", 0, this,
 						  SLOT(slotEditTrackCddb()), actionCollection(),
 						  "edit_track_cddb" );
   KAction* actionEditAlbumCddbInfo = new KAction( i18n("Edit Album cddb Info"), "edit", 0, this,
@@ -305,7 +308,7 @@ void K3bAudioCdView::startRip()
   QValueList<int> trackNumbers;
   for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
     AudioTrackViewItem* a = (AudioTrackViewItem*)it.current();
-    if( a->isOn() )
+    if( a->isChecked() )
       trackNumbers.append( a->trackNumber );
   }
 
@@ -534,16 +537,16 @@ void K3bAudioCdView::slotSaveCddbLocally()
 }
 
 
-void K3bAudioCdView::slotSelectAll()
+void K3bAudioCdView::slotCheckAll()
 {
   for( QListViewItemIterator it( m_trackView ); it.current(); ++it )
-    ((AudioTrackViewItem*)it.current())->setOn(true);
+    ((AudioTrackViewItem*)it.current())->setChecked(true);
 }
 
-void K3bAudioCdView::slotDeselectAll()
+void K3bAudioCdView::slotUncheckAll()
 {
   for( QListViewItemIterator it( m_trackView ); it.current(); ++it )
-    ((AudioTrackViewItem*)it.current())->setOn(false);
+    ((AudioTrackViewItem*)it.current())->setChecked(false);
 }
 
 void K3bAudioCdView::slotSelect()
@@ -551,7 +554,7 @@ void K3bAudioCdView::slotSelect()
   QPtrList<QListViewItem> items( m_trackView->selectedItems() );
   for( QPtrListIterator<QListViewItem> it( items );
        it.current(); ++it )
-    static_cast<AudioTrackViewItem*>(it.current())->setOn(true);
+    static_cast<AudioTrackViewItem*>(it.current())->setChecked(true);
 }
 
 void K3bAudioCdView::slotDeselect()
@@ -559,7 +562,7 @@ void K3bAudioCdView::slotDeselect()
   QPtrList<QListViewItem> items( m_trackView->selectedItems() );
   for( QPtrListIterator<QListViewItem> it( items );
        it.current(); ++it )
-    static_cast<AudioTrackViewItem*>(it.current())->setOn(false);
+    static_cast<AudioTrackViewItem*>(it.current())->setChecked(false);
 }
 
 void K3bAudioCdView::updateDisplay()

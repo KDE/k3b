@@ -74,8 +74,8 @@ class K3bAudioCdView : public K3bCdContentsView
   void slotEditTrackCddb();
   void slotEditAlbumCddb();
   void startRip();
-  void slotSelectAll();
-  void slotDeselectAll();
+  void slotCheckAll();
+  void slotUncheckAll();
   void slotSelect();
   void slotDeselect();
 
