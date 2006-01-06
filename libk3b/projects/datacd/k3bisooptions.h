@@ -16,8 +16,17 @@
 #ifndef K3B_ISO_OPTIONS_H
 #define K3B_ISO_OPTIONS_H
 
+// these defines are from the mkisofs source and are needed to handle the
+// iso9660 filenames created by mkisofs
+#define      LEN_ISONAME             31
+#define      MAX_ISONAME_V1          37
+#define      MAX_ISONAME_V2          207
+#define      MAX_ISONAME_V2_RR       193
+#define      MAX_ISONAME             MAX_ISONAME_V2
+
 #include <qstring.h>
 #include "k3b_export.h"
+
 class KConfigBase;
 
 
@@ -37,12 +46,12 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool createRockRidge() const { return m_createRockRidge; }
   bool createJoliet() const { return m_createJoliet; }
   bool createUdf() const { return m_createUdf; }
-  bool ISOallowLowercase() const { return m_ISOallowLowercase; }
-  bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin; }
-  bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames || ISOmaxFilenameLength(); }
+  bool ISOallowLowercase() const { return m_ISOallowLowercase || ISOuntranslatedFilenames(); }
+  bool ISOallowPeriodAtBegin() const { return m_ISOallowPeriodAtBegin || ISOuntranslatedFilenames(); }
+  bool ISOallow31charFilenames() const { return m_ISOallow31charFilenames || ISOmaxFilenameLength() || ISOuntranslatedFilenames(); }
   bool ISOomitVersionNumbers() const { return m_ISOomitVersionNumbers || ISOmaxFilenameLength(); }
-  bool ISOomitTrailingPeriod() const { return m_ISOomitTrailingPeriod; }
-  bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength; }
+  bool ISOomitTrailingPeriod() const { return m_ISOomitTrailingPeriod || ISOuntranslatedFilenames(); }
+  bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength || ISOuntranslatedFilenames(); }
   bool ISOrelaxedFilenames() const { return m_ISOrelaxedFilenames; }
   bool ISOnoIsoTranslate() const { return m_ISOnoIsoTranslate; }
   bool ISOallowMultiDot() const { return m_ISOallowMultiDot; }
@@ -112,6 +121,11 @@ class LIBK3B_EXPORT K3bIsoOptions
   void setDoNotCacheInodes( bool b ) { m_doNotCacheInodes = b; }
 
   void save( KConfigBase* c );
+
+  /**
+   * \return the max length of a filename in the resulting iso9660 image as created my mkisofs
+   */
+  int maxIso9660FilenameLength() const;
 
   static K3bIsoOptions load( KConfigBase* c );
   static K3bIsoOptions defaults();

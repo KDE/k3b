@@ -96,7 +96,7 @@ void K3bIsoOptions::save( KConfigBase* c )
   c->writeEntry( "no iSO translation", m_ISOnoIsoTranslate );
   c->writeEntry( "allow multible dots", m_ISOallowMultiDot );
   c->writeEntry( "allow lowercase filenames", m_ISOallowLowercase );
-  c->writeEntry( "follow symbolic links", m_followSymbolicLinks );
+  //  c->writeEntry( "follow symbolic links", m_followSymbolicLinks );
 
   c->writeEntry( "joliet long", m_jolietLong );
 
@@ -154,17 +154,25 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c )
 
   options.setCreateTRANS_TBL( c->readBoolEntry( "create TRANS_TBL", options.createTRANS_TBL() ) );
   options.setHideTRANS_TBL( c->readBoolEntry( "hide TRANS_TBL", options.hideTRANS_TBL() ) );
-  options.setISOuntranslatedFilenames( c->readBoolEntry( "untranslated filenames", options.ISOuntranslatedFilenames() ) );
-  options.setISOallow31charFilenames( c->readBoolEntry( "allow 31 character filenames", options.ISOallow31charFilenames() ) );
-  options.setISOmaxFilenameLength( c->readBoolEntry( "max ISO filenames", options.ISOmaxFilenameLength() ) );
-  options.setISOallowPeriodAtBegin( c->readBoolEntry( "allow beginning period", options.ISOallowPeriodAtBegin() ) );
-  options.setISOrelaxedFilenames( c->readBoolEntry( "relaxed filenames", options.ISOrelaxedFilenames() ) );
-  options.setISOomitVersionNumbers( c->readBoolEntry( "omit version numbers", options.ISOomitVersionNumbers() ) );
-  options.setISOnoIsoTranslate( c->readBoolEntry( "no iSO translation", options.ISOnoIsoTranslate() ) );
-  options.setISOallowMultiDot( c->readBoolEntry( "allow multible dots", options.ISOallowMultiDot() ) );
-  options.setISOallowLowercase( c->readBoolEntry( "allow lowercase filenames", options.ISOallowLowercase() ) );
-  options.setISOomitTrailingPeriod( c->readBoolEntry( "omit trailing period", options.ISOomitTrailingPeriod() ) );
-  options.setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", options.followSymbolicLinks() ) );
+
+  //
+  // We need to use the memeber variables here instead of the access methods
+  // which do not return the actual value of the member variables but the value
+  // representing the use in mkisofs (i.e. ISOomitVersionNumbers is also enabled
+  // if ISOmaxFilenameLength is enabled.
+  //
+  options.setISOuntranslatedFilenames( c->readBoolEntry( "untranslated filenames", options.m_ISOuntranslatedFilenames ) );
+  options.setISOallow31charFilenames( c->readBoolEntry( "allow 31 character filenames", options.m_ISOallow31charFilenames ) );
+  options.setISOmaxFilenameLength( c->readBoolEntry( "max ISO filenames", options.m_ISOmaxFilenameLength ) );
+  options.setISOallowPeriodAtBegin( c->readBoolEntry( "allow beginning period", options.m_ISOallowPeriodAtBegin ) );
+  options.setISOrelaxedFilenames( c->readBoolEntry( "relaxed filenames", options.m_ISOrelaxedFilenames ) );
+  options.setISOomitVersionNumbers( c->readBoolEntry( "omit version numbers", options.m_ISOomitVersionNumbers ) );
+  options.setISOnoIsoTranslate( c->readBoolEntry( "no iSO translation", options.m_ISOnoIsoTranslate ) );
+  options.setISOallowMultiDot( c->readBoolEntry( "allow multible dots", options.m_ISOallowMultiDot ) );
+  options.setISOallowLowercase( c->readBoolEntry( "allow lowercase filenames", options.m_ISOallowLowercase ) );
+  options.setISOomitTrailingPeriod( c->readBoolEntry( "omit trailing period", options.m_ISOomitTrailingPeriod ) );
+
+  //  options.setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", options.m_followSymbolicLinks ) );
 
   options.setJolietLong( c->readBoolEntry( "joliet long", options.jolietLong() ) );
 
@@ -195,4 +203,17 @@ K3bIsoOptions K3bIsoOptions::defaults()
 {
   // let the constructor create defaults
   return K3bIsoOptions();
+}
+
+
+int K3bIsoOptions::maxIso9660FilenameLength() const
+{
+  int iso9660_namelen = LEN_ISONAME;
+  if( ISOLevel() == 4 )
+    iso9660_namelen = MAX_ISONAME_V2;
+  if( ISOmaxFilenameLength() )
+    iso9660_namelen = MAX_ISONAME_V1;
+  if( createRockRidge() && (iso9660_namelen > MAX_ISONAME_V2_RR) )
+    iso9660_namelen = MAX_ISONAME_V2_RR;
+  return iso9660_namelen;
 }
