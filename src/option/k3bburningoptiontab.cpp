@@ -210,7 +210,14 @@ void K3bBurningOptionTab::setupGui()
                                                       "of an empty media before writing.") );
 
   QWhatsThis::add( m_checkUsePbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
-                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
+					"<p>PBC allows control of the playback of play items and the possibility of interaction with "
+					"the user through the remote control or some other input device available." ) );
+
+  QWhatsThis::add( m_checkManualWritingBufferSize, i18n("<p>K3b uses a software buffer during the burning process to "
+							"avoid gaps in the data stream due to high system load. The default "
+							"sizes used are 4 MB for CD and 20 MB for DVD burning."
+							"<p>If this option is checked the value specified will be used for both "
+							"CD and DVD burning.") );
 }
 
 
