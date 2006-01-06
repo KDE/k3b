@@ -53,7 +53,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_labelWriter->setMargin( 3 );
 
   m_frameExtraInfoLayout->addMultiCellWidget( headerFrame, 0, 0, 0, 3 );
-  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("FIFO buffer:"), m_frameExtraInfo ), 1, 2 );
+  m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Software buffer:"), m_frameExtraInfo ), 1, 2 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device buffer:"), m_frameExtraInfo ), 2, 2 );
 
   m_progressWritingBuffer = new KProgress( m_frameExtraInfo, "m_progressWritingBuffer" );
