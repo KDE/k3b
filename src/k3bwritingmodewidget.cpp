@@ -124,7 +124,7 @@ int K3bWritingModeWidget::writingMode() const
     return K3b::RAW;
   else if( currentText() == i18n("Incremental") )
     return K3b::WRITING_MODE_INCR_SEQ;
-  else if( currentText() == i18n("Overwrite") )
+  else if( currentText() == i18n("Writing mode", "Overwrite") )
     return K3b::WRITING_MODE_RES_OVWR;
   else
     return K3b::WRITING_MODE_AUTO;
@@ -148,7 +148,7 @@ void K3bWritingModeWidget::setWritingMode( int m )
       setCurrentItem( i18n("Incremental"), false );
       break;
     case K3b::WRITING_MODE_RES_OVWR:
-      setCurrentItem( i18n("Overwrite") );
+      setCurrentItem( i18n("Writing mode", "Overwrite") );
       break;
     default:
       setCurrentItem( 0 ); // WRITING_MODE_AUTO
@@ -178,7 +178,7 @@ void K3bWritingModeWidget::setSupportedModes( int m )
   if( m & K3b::RAW )
     insertItem( i18n("RAW") );
   if( m & K3b::WRITING_MODE_RES_OVWR )
-    insertItem( i18n("Overwrite") );
+    insertItem( i18n("Writing mode", "Overwrite") );
   if( m & K3b::WRITING_MODE_INCR_SEQ )
     insertItem( i18n("Incremental") );
 
