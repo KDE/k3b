@@ -127,8 +127,8 @@ class LIBK3B_EXPORT K3bDataItem
   virtual void setHideOnRockRidge( bool b );
   virtual void setHideOnJoliet( bool b );
 
-  virtual long sortWeight() const { return m_sortWeigth; }
-  virtual void setSortWeigth( long w ) { m_sortWeigth = w; }
+  virtual long sortWeight() const { return m_sortWeight; }
+  virtual void setSortWeight( long w ) { m_sortWeight = w; }
 
   virtual int depth() const;
 
@@ -180,7 +180,7 @@ class LIBK3B_EXPORT K3bDataItem
   bool m_bWriteToCd;
   QString m_extraInfo;
 
-  long m_sortWeigth;
+  long m_sortWeight;
 
   friend class K3bDirItem;
 };

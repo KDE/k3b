@@ -92,7 +92,7 @@ public:
     if( m_text ) {
       // margin of width 9 + line of size 1 + margin of width 10
       // + width of the pixmap + max(widthused of the text, width of the pixmap)
-      // + max( heigth of the text, heigth of the pixmap )
+      // + max( height of the text, height of the pixmap )
       return QSize( 40 + m_messageWidth, 40 + m_messageHeight );
     }
     else

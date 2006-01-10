@@ -30,7 +30,7 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
     m_bMovable(true),
     m_bHideable(true),
     m_bWriteToCd(true),
-    m_sortWeigth(0)
+    m_sortWeight(0)
 {
   m_doc = doc;
   m_bHideOnRockRidge = m_bHideOnJoliet = false;

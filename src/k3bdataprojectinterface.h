@@ -93,10 +93,10 @@ class K3bDataProjectInterface : public K3bProjectInterface
   QStringList children( const QString& path ) const;
 
   /**
-   * Set the sort weigth of an item
+   * Set the sort weight of an item
    * \return false if the item at \p could not be found.
    */
-  bool setSortWeight( const QString& path, int weight ) const;
+  bool setSortWeight( const QString& path, long weight ) const;
 
  private:
   K3bDataDoc* m_dataDoc;

@@ -287,9 +287,9 @@ bool K3bMovixDocPreparer::addMovixFiles()
   bootItem->setBootInfoTable(true);
 
   // some sort weights as defined in isolinux
-  d->isolinuxDir->setSortWeigth( 100 );
-  kernelDir->setSortWeigth( 50 );
-  bootItem->setSortWeigth( 200 );
+  d->isolinuxDir->setSortWeight( 100 );
+  kernelDir->setSortWeight( 50 );
+  bootItem->setSortWeight( 200 );
 
   // rename the boot cataloge file
   d->doc->bootCataloge()->setK3bName( "isolinux.boot" );
@@ -405,8 +405,8 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
       bootItem->setBootInfoTable(true);
 
       // set the proper sort weight
-      bootItem->setSortWeigth( 200 );
-      bootItem->parent()->setSortWeigth( 100 );
+      bootItem->setSortWeight( 200 );
+      bootItem->parent()->setSortWeight( 100 );
     }
     else if( fileName != "movixrc" ) { // we create our own movixrc
       K3bFileItem* item = createItem( filePath, docPath );
@@ -416,7 +416,7 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
 	item->setK3bName( "subfont.ttf" );
       }
       else if( fileName == "vmlinuz" )
-	item->setSortWeigth( 50 );
+	item->setSortWeight( 50 );
     }
   }
 

@@ -586,7 +586,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
   // load the sort weight
   if( newItem )
-    newItem->setSortWeigth( elem.attribute( "sort_weight", "0" ).toInt() );
+    newItem->setSortWeight( elem.attribute( "sort_weight", "0" ).toInt() );
 
   return true;
 }

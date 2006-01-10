@@ -116,7 +116,7 @@ QStringList K3bDataProjectInterface::children( const QString& path ) const
 }
 
 
-bool K3bDataProjectInterface::setSortWeight( const QString& path, int weight ) const
+bool K3bDataProjectInterface::setSortWeight( const QString& path, long weight ) const
 {
   K3bDataItem* item =  m_dataDoc->root()->findByPath( path );
   if( item ) {

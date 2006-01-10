@@ -239,7 +239,7 @@ void K3bDataPropertiesDialog::slotOk()
   m_dataItem->setK3bName( m_editName->text() );
   m_dataItem->setHideOnRockRidge( m_checkHideOnRockRidge->isChecked() );
   m_dataItem->setHideOnJoliet( m_checkHideOnJoliet->isChecked() );
-  m_dataItem->setSortWeigth( m_editSortWeight->text().toInt() );
+  m_dataItem->setSortWeight( m_editSortWeight->text().toInt() );
 
   KDialogBase::slotOk();
 }
