@@ -56,7 +56,7 @@ class K3bCddbHttpQuery : public K3bCddbQuery
 
   QString m_currentlyConnectingServer;
 
-  QString m_data;
+  QByteArray m_data;
   QString m_parsingBuffer;
 };
 
