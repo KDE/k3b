@@ -14,6 +14,7 @@ Description[da]=En kioslave som gør det muligt at kopiere filer fra en video-dv
 Description[de]=Ein Ein-/Ausgabemodul mit dem man Dateien von einer Video-DVD kopieren kann (inkl. Entschlüsselung)
 Description[el]=Ένα kioslave που επιτρέπει την αντιγραφή αρχείων από ένα DVD βίντεο (δυνατότητα αποκρυπτογράφησης)
 Description[es]=Un kioslave que permite copiar archivos de un Video DVD (incluyendo el descifrado)
+Description[et]=KIO-moodul, mis võimaldab kopeerida faile video DVD-lt (vajadusel dekrüpteerib)
 Description[fr]=Un kioslave qui permet de copier des fichiers depuis un DVD Vidéo (incluant le déchiffrement)
 Description[he]=עבד קלט/פלט של KDE המאפשר לקבצים להיות מועתקים מתקליטור וידאו של DVD (כולל פענוח)
 Description[is]=Kioslave sem leyfir afritun af skrám frá vídeó DVD (með afkóðun)
