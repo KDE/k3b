@@ -30,6 +30,7 @@ K3bCddbpQuery::K3bCddbpQuery( QObject* parent, const char* name )
 {
   m_socket = new QSocket( this );
   m_stream.setDevice( m_socket );
+  m_stream.setEncoding( QTextStream::UnicodeUTF8 );
 
   connect( m_socket, SIGNAL(connected()), this, SLOT(slotConnected()) );
   connect( m_socket, SIGNAL(hostFound()), this, SLOT(slotHostFound()) );
@@ -128,7 +129,7 @@ void K3bCddbpQuery::slotReadyRead()
 
 	m_state = PROTO;
 
-	m_stream << "proto 5" << endl << flush;
+	m_stream << "proto 6" << endl << flush;
       }
 
       else {

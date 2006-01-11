@@ -72,7 +72,7 @@ void K3bCddbHttpQuery::performCommand( const QString& cmd )
 
   url.addQueryItem( "cmd", cmd );
   url.addQueryItem( "hello", handshakeString() );
-  url.addQueryItem( "proto", "5" );
+  url.addQueryItem( "proto", "6" );
 
   m_data.truncate(0);
 
@@ -98,7 +98,10 @@ void K3bCddbHttpQuery::performCommand( const QString& cmd )
 void K3bCddbHttpQuery::slotData( KIO::Job*, const QByteArray& data )
 {
   if( data.size() )
-    m_data += data;
+  {
+    QDataStream stream(m_data, IO_WriteOnly | IO_Append);
+    stream.writeRawBytes(data.data(), data.size());
+  }
 }
 
 
@@ -111,7 +114,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
     return;
   }
 
-  QStringList lines = QStringList::split( "\n", m_data );
+  QStringList lines = QStringList::split( "\n", QString::fromUtf8(m_data) );
 
   for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
     QString line = *it;
