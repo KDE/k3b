@@ -651,8 +651,8 @@ bool K3bDevice::DeviceManager::testForCdrom(const QString& devicename)
     if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
       kdError() << "(K3bDevice::Device) Unable to do inquiry." << endl;
     }
-    else if( (inq->p_device_type&0x1f) != 0x5 ) {
-      kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
+    else if( inq->p_device_type != 0x5 ) {
+      kdDebug() << devicename << " seems not to be a cdrom device: " << (int)inq->p_device_type << endl;
     }
     else {
       ret = true;

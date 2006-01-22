@@ -59,6 +59,8 @@ bool K3bDevice::HalConnection::open()
 
   if( libhal_device_property_watch_all( m_halContext, 0 ) ) {
     kdDebug() << "(K3bDevice::HalConnection) Failed to watch HAL properties!" << endl;
+    hal_shutdown( m_halContext );
+    m_halContext = 0;
     return false;
   }
 
@@ -76,6 +78,8 @@ bool K3bDevice::HalConnection::open()
   DBusConnection* dbus_connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
   if( dbus_error_is_set(&error) ) {
     kdDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS." << endl;
+    libhal_ctx_free( m_halContext );
+    m_halContext = 0;
     return false;
   }
 
@@ -92,6 +96,9 @@ bool K3bDevice::HalConnection::open()
   
   if( !libhal_ctx_init( m_halContext, 0 ) ) {
     kdDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!" << endl;
+    delete m_dBusQtConnection;
+    libhal_ctx_free( m_halContext );
+    m_halContext = 0;
     return false;
   }
 #endif
@@ -123,7 +130,6 @@ void K3bDevice::HalConnection::close()
     libhal_ctx_free( m_halContext );
 #endif
 
-    // delete the connection (may be 0 if open() failed)
     delete m_dBusQtConnection;
 
     m_halContext = 0;
