@@ -3,6 +3,11 @@
  * Fixed selection in the audio CD ripping window.
  * Fixed info block handling in WAVE audio file decoder: no more clicks at the end.
  * Introduced a hack which fixes the "Wav detected as Mpeg file" bug.
+ * Fixed Auto multisession mode for DVD+RW and DVD-RW in restricted overwrite mode in case
+   a previous session was imported.
+ * Fixed a crash with HAL >= 0.5 when exiting K3b.
+ * Allow copying of double layer DVDs with a size below 4.3 GB to single layer media.
+ * Support for the ring buffer in growisofs 6.0.
 
 0.12.10
 =======

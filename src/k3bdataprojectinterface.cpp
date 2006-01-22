@@ -41,7 +41,7 @@ void K3bDataProjectInterface::createFolder( const QString& name )
 void K3bDataProjectInterface::createFolder( const QString& name, const QString& parent )
 {
   K3bDataItem* p = m_dataDoc->root()->findByPath( parent );
-  if( p && p->isDir() )
+  if( p && p->isDir() && !static_cast<K3bDirItem*>(p)->find( name ) )
     m_dataDoc->addEmptyDir( name, static_cast<K3bDirItem*>(p) );
 }
 
@@ -102,4 +102,16 @@ QStringList K3bDataProjectInterface::children( const QString& path ) const
   }
 
   return l;
+}
+
+
+bool K3bDataProjectInterface::setSortWeight( const QString& path, int weight ) const
+{
+  K3bDataItem* item =  m_dataDoc->root()->findByPath( path );
+  if( item ) {
+    item->setSortWeigth( weight );
+    return true;
+  }
+  else
+    return false;
 }
