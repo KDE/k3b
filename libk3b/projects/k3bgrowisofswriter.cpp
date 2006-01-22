@@ -100,6 +100,8 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* h
 	   this,SIGNAL(infoMessage(const QString&, int)) );
   connect( d->gh, SIGNAL(newSubTask(const QString&)),
 	   this, SIGNAL(newSubTask(const QString&)) );
+  connect( d->gh, SIGNAL(buffer(int)),
+	   this, SIGNAL(buffer(int)) );
   connect( d->gh, SIGNAL(deviceBuffer(int)),
 	   this, SIGNAL(deviceBuffer(int)) );
   connect( d->gh, SIGNAL(flushingCache()),
@@ -195,7 +197,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   *d->process << d->growisofsBin;
 
   // set this var to true to enable the ringbuffer
-  d->usingRingBuffer = false;
+  d->usingRingBuffer = ( d->growisofsBin->version < K3bVersion( 6, 0 ) );
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->usingRingBuffer || d->image.isEmpty() ) {
@@ -278,6 +280,11 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( k3bcore->globalSettings()->overburn() )
     *d->process << "-overburn";
 
+  if( !d->usingRingBuffer && d->growisofsBin->version >= K3bVersion( 6, 0 ) ) {
+    bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
+    int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 40 );
+    *d->process << QString("-use-the-force-luke=bufsize:%1m").arg(bufSize);
+  }
 
   // additional user parameters from config
   const QStringList& params = d->growisofsBin->userParameters();
@@ -453,8 +460,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
   }
 
-  else
-    d->gh->handleLine( line );
+  d->gh->handleLine( line );
 }
 
 

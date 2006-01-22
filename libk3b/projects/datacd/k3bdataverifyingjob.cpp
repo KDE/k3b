@@ -155,6 +155,8 @@ void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
       finishVerification(false);
     }
     else {
+      d->iso9660->debug();
+
       // initialize some variables
       d->currentItem = d->doc->root();
       d->originalCalculated = false;
@@ -282,7 +284,7 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
       }
       else {
 	kdDebug() << "(K3bDataVerifyingJob) could not find " 
-		  << d->currentItem->writtenPath()
+		  << d->currentItem->iso9660Path()
 		  << " in filesystem." << endl;
 	emit infoMessage( i18n("Could not find file %1.").arg(d->currentItem->writtenName()), ERROR );
 	finishVerification(false);

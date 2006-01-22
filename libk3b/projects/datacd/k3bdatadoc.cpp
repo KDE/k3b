@@ -1155,7 +1155,8 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 	      isoName = s;
 	      iso9660NameDict.remove( s );
 	      iso9660NameDict.insert( sameNameItem->iso9660Name(), sameNameItem );
-	      //	      kdDebug() << "(K3bDataDoc) Using Isoname " << sameNameItem->iso9660Name() << " for " << sameNameItem->k3bPath() << endl;
+	      kdDebug() << "(K3bDataDoc) Using new Isoname " << sameNameItem->iso9660Name() 
+			<< " for " << sameNameItem->k3bPath() << endl;
 	      goto got_valid_name; // AAAAAHHHRGGG!
 	    }
 	  }
@@ -1169,6 +1170,8 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
   got_valid_name:
     item->setIso9660Name( isoName );
     iso9660NameDict.insert( isoName, item );
+
+    kdDebug() << "(K3bDataDoc) Using Isoname " << isoName << " for " << item->k3bPath() << endl;
 
     if( item->isDir() )
       prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );

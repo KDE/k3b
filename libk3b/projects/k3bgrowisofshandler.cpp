@@ -159,6 +159,16 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
+  else if( (pos = line.find( "RBU" )) > 0 ) {
+    // parse ring buffer fill for growisofs >= 6.0
+    pos += 4;
+    bool ok = true;
+    double val = line.mid( pos, line.find('%', pos+1 ) - pos ).toDouble( &ok );
+    if( ok )
+      emit buffer( (int)(val+0.5) );
+    else
+      kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, line.find('%', pos+1 ) - pos ) << "'" << endl;
+  }
   else if( line.startsWith("Buffer fill") ) {
     emit deviceBuffer( line.mid(13, line.find('%',13)-13).toInt() );
   }
