@@ -5,6 +5,7 @@ Comment[hi]=के3बी
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[af]=Proses suksesvol
 Name[bg]=Обработката е успешна
 Name[bs]=Proces je uspio
 Name[ca]=Procés amb èxit
@@ -38,6 +39,7 @@ Name[tr]=İşlem başarılı
 Name[uk]=Процес успішний
 Name[zh_CN]=处理成功
 Comment=Process successfully finished
+Comment[af]=Proses het suksesvol klaar gemaak
 Comment[bg]=Обработката приключи успешно
 Comment[bs]=Proces je uspješno završen
 Comment[ca]=Procés finalitzat amb èxit
@@ -75,6 +77,7 @@ default_presentation=1
 
 [FinishedWithError]
 Name=Process error
+Name[af]=Verwerking fout
 Name[bg]=Грешка при обработката
 Name[bs]=Greška u procesu
 Name[ca]=Procés amb error
@@ -107,6 +110,7 @@ Name[tr]=İşlemde hata var
 Name[uk]=Помилка процесу
 Name[zh_CN]=处理错误
 Comment=Process finished with errors
+Comment[af]=Die proses het met foute klaar gemaak
 Comment[bg]=Обработката приключи с грешки
 Comment[bs]=Proces je završen sa greškama
 Comment[ca]=Procés finalitzat amb errors
@@ -143,6 +147,7 @@ default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
+Name[af]=Wag vir medium
 Name[bg]=Очаква се медия
 Name[br]=Emaon o c'hortoz evit ar vedium
 Name[bs]=Čekam medij
@@ -176,6 +181,7 @@ Name[tr]=Ortam bekleniyor
 Name[uk]=Очікування носія
 Name[zh_CN]=等待存储介质
 Comment=The user needs to insert a medium
+Comment[af]=Die gebruiker moet 'n medium insit
 Comment[bg]=Потребителят трябва да постави медия в устройството
 Comment[bs]=Korisnik mora ubaciti medij
 Comment[ca]=L'usuari necessita inserir un medi
