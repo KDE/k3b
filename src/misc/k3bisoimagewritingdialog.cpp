@@ -395,7 +395,7 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
 void K3bIsoImageWritingDialog::setImage( const KURL& url )
 {
   d->imageForced = true;
-  m_editImagePath->setURL( url.path() );
+  m_editImagePath->setKURL( url );
 }
 
 
@@ -516,7 +516,7 @@ void K3bIsoImageWritingDialog::dropEvent( QDropEvent* e )
 {
   KURL::List urls;
   KURLDrag::decode( e, urls );
-  m_editImagePath->setURL( urls.first().path() );
+  m_editImagePath->setKURL( urls.first());
 }
 
 #include "k3bisoimagewritingdialog.moc"
