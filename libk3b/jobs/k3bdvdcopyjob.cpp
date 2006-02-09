@@ -188,7 +188,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     case K3bDevice::MEDIA_DVD_R_DL_JUMP:
       if( !m_onlyCreateImage ) {
 	if( dh->diskInfo().numLayers() > 1 && 
-	    dh->diskInfo().size().lba() > 4700372992LL ) {
+	    dh->diskInfo().size().mode1Bytes() > 4700372992LL ) {
 	  if( !(m_writerDevice->type() & (K3bDevice::DEVICE_DVD_R_DL|K3bDevice::DEVICE_DVD_PLUS_R_DL)) ) {
 	    emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), ERROR );
 	    d->running = false;
@@ -630,7 +630,7 @@ bool K3bDvdCopyJob::waitForDvd()
   // is capable of writing DVD+R-DL or DVD-R DL and here we wait for a DL DVD
   //
   if( d->sourceDiskInfo.numLayers() > 1  &&
-      d->sourceDiskInfo.size().lba() > 4700372992LL ) {
+      d->sourceDiskInfo.size().mode1Bytes() > 4700372992LL ) {
     mt = K3bDevice::MEDIA_WRITABLE_DVD_DL;
   }
 

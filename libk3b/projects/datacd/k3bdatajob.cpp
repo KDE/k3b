@@ -481,8 +481,21 @@ void K3bDataJob::slotVerificationFinished( bool success )
     if( failed )
       cancelAll();
   }
-  else
+  else {
+    if( !d->doc->onTheFly() && d->doc->removeImages() ) {
+      if( QFile::exists( d->doc->tempDir() ) ) {
+	QFile::remove( d->doc->tempDir() );
+	emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
+      }
+    }
+    
+    if( d->tocFile ) {
+      delete d->tocFile;
+      d->tocFile = 0;
+    }
+
     emit finished( success );
+  }
 }
 
 

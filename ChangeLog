@@ -8,6 +8,9 @@
  * Fixed a crash with HAL >= 0.5 when exiting K3b.
  * Allow copying of double layer DVDs with a size below 4.3 GB to single layer media.
  * Support for the ring buffer in growisofs 6.0.
+ * Use .iso extension for images instead of .img
+ * Properly remove the image file in case verification failed.
+ * Ignore mounting state of a medium when showing its contents.
 
 0.12.10
 =======

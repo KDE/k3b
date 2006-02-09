@@ -315,14 +315,14 @@ void K3bDirView::showDiskInfo( K3bDevice::Device* dev )
 
 void K3bDirView::slotDetectDiskInfo( K3bDevice::Device* dev )
 {
-  // to speed things up we first check if the media is already mounted
-  if( !dev->automount() ) {
-    QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
-    if( !m_bViewDiskInfo && !mp.isEmpty() ) {
-      slotDirActivated( mp );
-      return;
-    }
-  }
+//   // to speed things up we first check if the media is already mounted
+//   if( !dev->automount() ) {
+//     QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
+//     if( !m_bViewDiskInfo && !mp.isEmpty() ) {
+//       slotDirActivated( mp );
+//       return;
+//     }
+//   }
 
   m_noViewView->setDevice( dev );
   m_viewStack->raiseWidget( m_noViewView );
