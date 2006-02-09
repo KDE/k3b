@@ -19,22 +19,20 @@
 
 
 #include "k3bdataitem.h"
+#include <k3bglobals.h>
 
 #include <kio/global.h>
 #include <qstring.h>
 
-#include <sys/stat.h>
 #include "k3b_export.h"
 
 class K3bDataDoc;
 class K3bDirItem;
-class K3bStatStruct;
+
 
 /**
   *@author Sebastian Trueg
   */
-
-
 class LIBK3B_EXPORT K3bFileItem : public K3bDataItem
 {
 public:
@@ -48,8 +46,8 @@ public:
    *
    * Used by K3b to speedup file item creation.
    */
-  K3bFileItem( const K3bStatStruct* stat, 
-	       const K3bStatStruct* followedStat, 
+  K3bFileItem( const k3b_struct_stat* stat, 
+	       const k3b_struct_stat* followedStat, 
 	       const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
 
   virtual ~K3bFileItem();

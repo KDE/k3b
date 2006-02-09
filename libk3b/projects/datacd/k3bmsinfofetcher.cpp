@@ -21,6 +21,7 @@
 #include <k3bdevice.h>
 #include <k3bcore.h>
 #include <k3bglobals.h>
+#include <k3biso9660.h>
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -79,48 +80,50 @@ void K3bMsInfoFetcher::getMsInfo()
   m_process = new KProcess();
 
   const K3bExternalBin* bin = 0;
-  if( m_dvd )
-    bin = k3bcore->externalBinManager()->binObject( "dvdrecord" );
-  else
+  if( m_dvd ) {
+    // already handled
+  }
+  else {
     bin = k3bcore->externalBinManager()->binObject( "cdrecord" );
  
-  if( !bin ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg( m_dvd ? "dvdrecord" : "cdrecord" ), ERROR );
-    jobFinished(false);
-    return;
-  }
+    if( !bin ) {
+      emit infoMessage( i18n("Could not find %1 executable.").arg( m_dvd ? "dvdrecord" : "cdrecord" ), ERROR );
+      jobFinished(false);
+      return;
+    }
 
-  *m_process << bin->path;
+    *m_process << bin->path;
 
-  // add the device (e.g. /dev/sg1)
-  *m_process << QString("dev=%1").arg( K3b::externalBinDeviceParameter(m_device, bin) );
+    // add the device (e.g. /dev/sg1)
+    *m_process << QString("dev=%1").arg( K3b::externalBinDeviceParameter(m_device, bin) );
 
-  *m_process << "-msinfo";
+    *m_process << "-msinfo";
 
-  kdDebug() << "***** " << bin->name() << " parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
-  QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
-  }
-  kdDebug() << s << flush << endl;
-  emit debuggingOutput( "msinfo command:", s );
+    kdDebug() << "***** " << bin->name() << " parameters:\n";
+    const QValueList<QCString>& args = m_process->args();
+    QString s;
+    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+      s += *it + " ";
+    }
+    kdDebug() << s << flush << endl;
+    emit debuggingOutput( "msinfo command:", s );
 
 
-//   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-// 	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotProcessExited()) );
+    //   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
+    // 	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
+	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
+    connect( m_process, SIGNAL(processExited(KProcess*)),
+	     this, SLOT(slotProcessExited()) );
 
-  m_msInfo = QString::null;
-  m_collectedOutput = QString::null;
-  m_canceled = false;
+    m_msInfo = QString::null;
+    m_collectedOutput = QString::null;
+    m_canceled = false;
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
-    emit infoMessage( i18n("Could not start %1.").arg(bin->name()), K3bJob::ERROR );
-    jobFinished(false);
+    if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+      emit infoMessage( i18n("Could not start %1.").arg(bin->name()), K3bJob::ERROR );
+      jobFinished(false);
+    }
   }
 }
 
@@ -135,7 +138,40 @@ void K3bMsInfoFetcher::slotMediaDetectionFinished( K3bDevice::DeviceHandler* h )
     m_dvd = false;
   }
 
-  getMsInfo();
+  if( m_dvd ) {
+    if( h->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+      // get info from iso filesystem
+      K3bIso9660 iso( m_device, h->toc().last().firstSector().lba() );
+      if( iso.open() ) {
+	unsigned long long nextSession = iso.primaryDescriptor().volumeSpaceSize;
+	// pad to closest 32K boundary
+        nextSession += 15;
+        nextSession /= 16;
+        nextSession *= 16;
+	m_msInfo.sprintf( "16,%llu", nextSession );
+
+	jobFinished( true );	
+      }
+      else {
+	emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.")
+			  .arg( m_device->vendor() + " " + m_device->description() ), ERROR );
+	jobFinished( false );
+      }
+    }
+    else {
+      unsigned int lastSessionStart, nextWritableAdress;
+      if( m_device->getNextWritableAdress( lastSessionStart, nextWritableAdress ) ) {
+	m_msInfo.sprintf( "%u,%u", lastSessionStart+16, nextWritableAdress );
+	jobFinished( true );
+      }
+      else {
+	emit infoMessage( i18n("Could not determine next writable address."), ERROR );
+	jobFinished( false );
+      }
+    }
+  }
+  else // call cdrecord
+    getMsInfo();
 }
 
 

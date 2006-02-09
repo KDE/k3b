@@ -1,0 +1,9 @@
+[Desktop Entry]
+ServiceTypes=media/audiocd,media/mixedcd
+Actions=K3bRip;
+X-KDE-Priority=TopLevel
+
+[Desktop Action K3bRip]
+Name=Extract Digital Audio with K3b
+Exec=k3b --cddarip %u
+Icon=k3b

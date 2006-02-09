@@ -208,119 +208,108 @@ bool K3bApplication::processCmdLineArgs()
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
   bool showTips = true;
+  bool dialogOpen = false;
 
+  if( k3bcore->jobsRunning() > 0 ) {
+    return true;
+  }
+
+  K3bDoc* doc = 0;
   if( args->isSet( "datacd" ) ) {
-    // create new data project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewDataDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewDataDoc();
   }
   else if( args->isSet( "audiocd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewAudioDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewAudioDoc();
   }
   else if( args->isSet( "mixedcd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewMixedDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewMixedDoc();
   }
   else if( args->isSet( "videocd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewVcdDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewVcdDoc();
   }
   else if( args->isSet( "emovixcd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewMovixDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewMovixDoc();
   }
   else if( args->isSet( "datadvd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewDvdDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewDvdDoc();
   }
   else if( args->isSet( "emovixdvd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewMovixDvdDoc();
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    doc = m_mainWindow->slotNewMovixDvdDoc();
   }
   else if( args->isSet( "videodvd" ) ) {
-    // create new audio project and add all arguments
-    K3bDoc* doc = m_mainWindow->slotNewVideoDvdDoc();
+    doc = m_mainWindow->slotNewVideoDvdDoc();
+  }
+
+  // if we created a doc the urls are used to populate it
+  if( doc ) {
     for( int i = 0; i < args->count(); i++ ) {
       doc->addUrl( args->url(i) );
     }
   }
-  else if( args->isSet( "cdimage" ) ) {
-    showTips = false;
-    if( k3bcore->jobsRunning() == 0 ) {
-      if ( args->count() == 1 )
-	m_mainWindow->slotWriteCdImage( args->url(0) );
-      else
-	m_mainWindow->slotWriteCdImage();
-    }
-  }
-  else if( args->isSet( "dvdimage" ) ) {
-    showTips = false;
-    if( k3bcore->jobsRunning() == 0 ) {
-      if ( args->count() == 1 )
-	m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
-      else
-	m_mainWindow->slotWriteDvdIsoImage();
-    }
-  }
-  else if( args->isSet( "image" ) && args->count() == 1 ) {
-    showTips = false;
-    if( k3bcore->jobsRunning() == 0 ) {
-      if( K3b::filesize( args->url(0) ) > 1000*1024*1024 )
-	m_mainWindow->slotWriteDvdIsoImage( args->url(0) );
-      else
-	m_mainWindow->slotWriteCdImage( args->url(0) );
-    }
-  }
-  else if(args->count()) {
+  // otherwise we open them as documents
+  else {
     for( int i = 0; i < args->count(); i++ ) {
       m_mainWindow->openDocument( args->url(i) );
     }
   }
 
-  if( args->isSet( "burn" ) ) {
-    if( m_core->projectManager()->activeDoc() ) {
-      showTips = false;
-      static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
+  // we only allow one dialog to be opened
+  if( args->isSet( "cdimage" ) ) {
+    showTips = false;
+    dialogOpen = true;
+    if( k3bcore->jobsRunning() == 0 ) {
+      m_mainWindow->slotWriteCdImage( KURL::fromPathOrURL( args->getOption( "cdimage" ) ) );
     }
   }
+  else if( args->isSet( "dvdimage" ) ) {
+    showTips = false;
+    dialogOpen = true;
+    if( k3bcore->jobsRunning() == 0 ) {
+      m_mainWindow->slotWriteDvdIsoImage( KURL::fromPathOrURL( args->getOption( "dvdimage" ) ) );
+    }
+  }
+  else if( args->isSet( "image" ) ) {
+    showTips = false;
+    dialogOpen = true;
+    KURL url = KURL::fromPathOrURL( args->getOption( "image" ) );
+    if( k3bcore->jobsRunning() == 0 ) {
+      if( K3b::filesize( url ) > 1000*1024*1024 )
+	m_mainWindow->slotWriteDvdIsoImage( url );
+      else
+	m_mainWindow->slotWriteCdImage( url );
+    }
+  }
+  else if( args->isSet("copycd") ) {
+    showTips = false;
+    dialogOpen = true;
+    m_mainWindow->cdCopy( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "copycd" ) ) ) );
+  }
+  else if( args->isSet("copydvd") ) {
+    showTips = false;
+    dialogOpen = true;
+    m_mainWindow->dvdCopy( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "copydvd" ) ) ) );
+  }
+  else if( args->isSet("erasecd") ) {
+    showTips = false;
+    dialogOpen = true;
+    m_mainWindow->blankCdrw( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "erasecd" ) ) ) );
+  }
+  else if( args->isSet("formatdvd") ) {
+    showTips = false;
+    dialogOpen = true;
+    m_mainWindow->formatDvd( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "formatdvd" ) ) ) );
+  }
 
-  if( k3bcore->jobsRunning() == 0 ) {
-    if( args->isSet("copycd") ) {
+  // no dialog used here
+  if( args->isSet( "cddarip" ) ) {
+    m_mainWindow->cddaRip( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "cddarip" ) ) ) );
+  }
+
+  if( !dialogOpen && args->isSet( "burn" ) ) {
+    if( m_core->projectManager()->activeDoc() ) {
       showTips = false;
-      m_mainWindow->slotCdCopy();
-    }
-    else if( args->isSet("copydvd") ) {
-      showTips = false;
-      m_mainWindow->slotDvdCopy();
-    }
-    else if( args->isSet("erasecd") ) {
-      showTips = false;
-      m_mainWindow->slotBlankCdrw();
-    }
-    else if( args->isSet("formatdvd") ) {
-      showTips = false;
-      m_mainWindow->slotFormatDvd();
+      dialogOpen = true;
+      static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
     }
   }
 
@@ -344,31 +333,35 @@ void K3bApplication::slotShutDown()
 
 
 K3bApplication::Core::Core( QObject* parent )
-  : K3bCore( parent )
+  : K3bCore( parent ),
+    m_appDeviceManager(0),
+    m_mediaCache(0)
 {
   s_k3bAppCore = this;
   m_themeManager = new K3bThemeManager( this );
   m_projectManager = new K3bProjectManager( this );
   // we need the themes on startup (loading them is fast anyway :)
   m_themeManager->loadThemes();
-
-  // our very own special device manager
-  m_appDeviceManager = new K3bAppDeviceManager( this );
-
-  // create the media cache but do not connect it to the device manager
-  // yet to speed up application start. We connect it in init()
-  // once the devicemanager has scanned for devices.
-  m_mediaCache = new K3bMediaCache( this );
-
-  connect( this, SIGNAL(burnJobStarted(K3bBurnJob*)),
-	   this, SLOT(slotBurnJobStarted(K3bBurnJob*)) );
-  connect( this, SIGNAL(burnJobFinished(K3bBurnJob*)),
-	   this, SLOT(slotBurnJobFinished(K3bBurnJob*)) );
 }
 
 
 K3bApplication::Core::~Core()
 {
+}
+
+
+void K3bApplication::Core::initDeviceManager()
+{
+  if( !m_appDeviceManager ) {
+    // our very own special device manager
+    m_appDeviceManager = new K3bAppDeviceManager( this );
+  }
+  if( !m_mediaCache ) {
+    // create the media cache but do not connect it to the device manager
+    // yet to speed up application start. We connect it in init()
+    // once the devicemanager has scanned for devices.
+    m_mediaCache = new K3bMediaCache( this );
+  }
 }
 
 
@@ -386,26 +379,17 @@ KConfig* K3bApplication::Core::config() const
 
 void K3bApplication::Core::init()
 {
-  emit initializationInfo( i18n("Loading all plugins...") );
-  pluginManager()->loadAll();
-
-  emit initializationInfo( i18n("Searching for external programs...") );
-
   //
   // The eMovix program is a special case which is not part of
   // the default programs handled by K3bCore
   //
+  initExternalBinManager();
   externalBinManager()->addProgram( new K3bMovixProgram() );
   externalBinManager()->addProgram( new K3bNormalizeProgram() );
   K3b::addTranscodePrograms( externalBinManager() );
   K3b::addVcdimagerPrograms( externalBinManager() );
 
-  externalBinManager()->search();
-
-  emit initializationInfo( i18n("Scanning for CD devices...") );
-
-  if( !deviceManager()->scanBus() )
-    kdDebug() << "No Devices found!" << endl;
+  K3bCore::init();
 
   mediaCache()->buildDeviceList( deviceManager() );
 
@@ -449,22 +433,27 @@ void K3bApplication::Core::requestBusyFinish()
 }
 
 
-void K3bApplication::Core::slotBurnJobStarted( K3bBurnJob* job )
+bool K3bApplication::Core::blockDevice( K3bDevice::Device* dev )
 {
-  // block the device used in the burn job
-  // this way we get all the burn jobs
-  if( mediaCache() ) {
-    m_deviceBlockMap[job] = mediaCache()->blockDevice( job->writer() );
+  if( K3bCore::blockDevice( dev ) ) {
+    if( mediaCache() ) {
+      m_deviceBlockMap[dev] = mediaCache()->blockDevice( dev );
+    }
+    return true;
   }
+  else
+    return false;
 }
 
 
-void K3bApplication::Core::slotBurnJobFinished( K3bBurnJob* job )
+void K3bApplication::Core::unblockDevice( K3bDevice::Device* dev )
 {
   if( mediaCache() ) {
-    mediaCache()->unblockDevice( job->writer(), m_deviceBlockMap[job] );
-    m_deviceBlockMap.erase( job );
+    mediaCache()->unblockDevice( dev, m_deviceBlockMap[dev] );
+    m_deviceBlockMap.erase( dev );
   }
+
+  K3bCore::unblockDevice( dev );
 }
 
 #include "k3bapplication.moc"

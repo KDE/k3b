@@ -18,10 +18,10 @@
 #define K3BDATAJOB_H
 
 #include <k3bjob.h>
+#include <k3bdatadoc.h>
 
 #include <qfile.h>
 
-class K3bDataDoc;
 class QString;
 class QDataStream;
 class K3bAbstractWriter;
@@ -31,6 +31,7 @@ class K3bMsInfoFetcher;
 
 namespace K3bDevice {
   class DeviceHandler;
+  class DiskInfo;
 }
 
 /**
@@ -80,11 +81,17 @@ class K3bDataJob : public K3bBurnJob
    * Just a little helper method that makes subclassing easier.
    * Basically used for DVD writing.
    */
-  virtual void waitForDisk();
+  virtual bool waitForMedium();
 		
  protected:
+  virtual void prepareData();
   virtual bool prepareWriterJob();
   virtual void prepareImager();
+  virtual void determineMultiSessionMode();
+  virtual K3bDataDoc::MultiSessionMode getMultiSessionMode( const K3bDevice::DiskInfo& );
+  virtual void cleanup();
+
+  K3bDataDoc::MultiSessionMode usedMultiSessionMode() const;
 
   K3bAbstractWriter* m_writerJob;
   K3bIsoImager* m_isoImager;
@@ -92,8 +99,6 @@ class K3bDataJob : public K3bBurnJob
 
  private:
   bool startWriterJob();
-  void determineWritingMode();
-  void determineMultiSessionMode();
   bool startOnTheFlyWriting();
   void prepareWriting();
 

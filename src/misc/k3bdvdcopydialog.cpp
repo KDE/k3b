@@ -214,6 +214,18 @@ void K3bDvdCopyDialog::init()
 }
 
 
+void K3bDvdCopyDialog::setReadingDevice( K3bDevice::Device* dev )
+{
+  m_comboSourceDevice->setSelectedDevice( dev );
+}
+
+
+K3bDevice::Device* K3bDvdCopyDialog::readingDevice() const
+{
+  return m_comboSourceDevice->selectedDevice();
+}
+
+
 void K3bDvdCopyDialog::slotStartClicked()
 {
   //
@@ -388,9 +400,10 @@ void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
   m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning"),
 					      i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
-  m_writerSelectionWidget->setWantedMediumType( k3bappcore->mediaCache()->diskInfo( dev ).numLayers() == 1
-						? K3bDevice::MEDIA_WRITABLE_DVD_SL
-						: K3bDevice::MEDIA_WRITABLE_DVD_DL );
+  m_writerSelectionWidget->setWantedMediumType( k3bappcore->mediaCache()->diskInfo( dev ).numLayers() > 1 &&
+						k3bappcore->mediaCache()->diskInfo( dev ).size().mode1Bytes() > 4700372992LL
+						? K3bDevice::MEDIA_WRITABLE_DVD_DL
+						: K3bDevice::MEDIA_WRITABLE_DVD_SL );
 }
 
 #include "k3bdvdcopydialog.moc"

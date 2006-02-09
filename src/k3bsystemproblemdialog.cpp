@@ -294,9 +294,10 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
   }
 
-  // 2. ATAPI devices
+  // 2. device check
   bool atapiReader = false;
   bool atapiWriter = false;
+  bool dvd_r_dl = false;
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
        it.current(); ++it ) {
     if( it.current()->interfaceType() == K3bDevice::IDE ) {
@@ -306,9 +307,10 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->burningDevices() );
        it.current(); ++it ) {
-    if( it.current()->interfaceType() == K3bDevice::IDE ) {
+    if( it.current()->interfaceType() == K3bDevice::IDE )
       atapiWriter = true;
-    }
+    if( it.current()->type() & K3bDevice::DEVICE_DVD_R_DL )
+      dvd_r_dl = true;
 
 #if 0
     if( it.current()->automount() ) {
@@ -390,6 +392,15 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     }
   }
 
+  if( dvd_r_dl && k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
+    if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 6, 0 ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+					 i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+					 i18n("K3b won't be able to write DVD-R Dual Layer media using a growisofs "
+					      "version older than 6.0."),
+					 i18n("Install a more recent version of growisofs."),
+					 false ) );
+  }
 
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
        it.current(); ++it ) {

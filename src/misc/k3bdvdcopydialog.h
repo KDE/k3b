@@ -40,6 +40,9 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   K3bDvdCopyDialog( QWidget* parent = 0, const char* name = 0, bool modal = true );
   ~K3bDvdCopyDialog();
 
+  void setReadingDevice( K3bDevice::Device* );
+  K3bDevice::Device* readingDevice() const;
+
  private slots:
   void slotStartClicked();
   void slotToggleAll();

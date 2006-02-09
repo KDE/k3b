@@ -256,6 +256,12 @@ void K3bCdCopyDialog::init()
 }
 
 
+void K3bCdCopyDialog::setReadingDevice( K3bDevice::Device* dev )
+{
+  m_comboSourceDevice->setSelectedDevice( dev );
+}
+
+
 K3bDevice::Device* K3bCdCopyDialog::readingDevice() const
 {
   return m_comboSourceDevice->selectedDevice();

@@ -69,6 +69,8 @@ namespace K3bDevice {
       bool open();
       void close();
 
+      bool isOpen() const;
+
       /**
        * \return a list of CDROM devices as reported by HAL.
        */
@@ -84,6 +86,8 @@ namespace K3bDevice {
 #ifdef HAL_0_4
       LibHalFunctions m_halFunctions;
 #endif
+
+      bool m_bOpen;
 
       QMap<QCString, QString> m_udiDeviceMap;
 

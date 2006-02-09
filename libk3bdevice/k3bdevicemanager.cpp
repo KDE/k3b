@@ -176,8 +176,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
     return 0;
   }
   QPtrListIterator<K3bDevice::Device> it( d->allDevices );
-  while( it.current() )
-  {
+  while( it.current() ) {
     if( it.current()->deviceNodes().contains(devicename) )
       return it.current();
 
@@ -229,21 +228,29 @@ const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
 
 int K3bDevice::DeviceManager::scanBus()
 {
-  m_foundDevices = 0;
+  unsigned int numDevs = d->allDevices.count();
 
 #ifdef HAVE_HAL
   d->hal.open();
 #endif
 
+  //
+  // we cannot trust HAL yet. At least on my system
+  // it is not able to detect USB nd Firewire devices
+  // properly. We can though.
+  //
+  //  if( !d->hal.isOpen() ) {
 #ifdef Q_OS_LINUX
-  LinuxDeviceScan();
+    LinuxDeviceScan();
 #endif
 #ifdef Q_OS_FREEBSD
-  BSDDeviceScan();
+    BSDDeviceScan();
 #endif
+    //  }
+
   scanFstab();
 
-  return m_foundDevices;
+  return d->allDevices.count() - numDevs;
 }
 
 
@@ -266,7 +273,6 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
       {
         if( addDevice(QString("/dev/%1").arg(dev)) ) {
           devstring += dev + "|";
-          m_foundDevices++;
         }
 // according to the LINUX ALLOCATED DEVICES document (http://www.lanana.org/docs/device-list/),
 // the official device names for SCSI-CDROM's (block major 11) are /dev/sr*, the
@@ -277,7 +283,6 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
         if ( dev.startsWith("sr") )
           if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) ) {
             devstring += dev + "|";
-            m_foundDevices++;
         }
         ++i;
       }
@@ -316,7 +321,6 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   pclose(fd);
 
 
-#ifdef Q_OS_LINUX
   //
   // Scan the generic devices if we have scsi devices
   //
@@ -331,7 +335,6 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
     }
   }
   // FIXME: also scan /dev/scsi/hostX.... for devfs without symlinks
-#endif
 }
 
 
@@ -528,8 +531,6 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c )
   // for details see saveConfig()
   //
 
-  m_foundDevices = 0;
-
   if( !c->hasGroup( "Devices" ) )
     return false;
 
@@ -619,7 +620,7 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
 }
 
 
-bool K3bDevice::DeviceManager::testForCdrom(const QString& devicename)
+bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
 {
 #ifdef Q_OS_FREEBSD
   Q_UNUSED(devicename);
@@ -816,38 +817,22 @@ void K3bDevice::DeviceManager::scanFstab()
     if( md == "none" )
       continue;
 
-    kdDebug() << "(K3bDevice::DeviceManager) scanning fstab: " << md << endl;
-
+    //    kdDebug() << "(K3bDevice::DeviceManager) scanning fstab: " << md << endl;
 
     //
     // Try finding the device
-    //
-    // compare bus, id, lun since the same device can for example be
-    // determined as /dev/srX or /dev/scdX
     //
     int bus = -1, id = -1, lun = -1;
     K3bDevice::Device* dev = findDevice( resolveSymLink(md) );
     if( !dev && determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
       dev = findDevice( bus, id, lun );
 
-    // FIXME: is this nessessary? Don't we resolve all symlinks on bsd, too?
-    //        and shouldn't we do an addDevice anywhere here in case the fstab
-    //        contains a device which we did not find before?
-    if( !dev )
-      dev = findDevice( md );
-
-    //
-    // Maybe the fstab contains a device we did not find before?
-    //
-    if( !dev )
-      dev = addDevice( md );
-
     //
     // Did we find a device?
     //
     if( dev ) {
       bool isPreferredMountPoint = false;
-      kdDebug() << "(K3bDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
+      //      kdDebug() << "(K3bDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
 
 #ifdef Q_OS_FREEBSD
       // Several mount points for one device might exist. If more than one are found, the one with
@@ -891,7 +876,6 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
   int ret = false;
   int cdromfd = K3bDevice::openDevice( dev.ascii() );
   if (cdromfd < 0) {
-    kdDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
     return false;
   }
 

@@ -23,6 +23,7 @@
 #include <kurl.h>
 #include <k3bdevicetypes.h>
 #include "k3b_export.h"
+
 class KConfig;
 class K3bVersion;
 class K3bExternalBin;
@@ -31,26 +32,14 @@ class K3bExternalBin;
 #include <sys/stat.h>
 
 
-// Must have included config.h for HAVE_STAT64. Here we encapsulate
-// stat and stat64 into a single class K3bStatStruct with methods
-// stat() and lstat() that DTRT in the presence of either size of system
-// stat() or stat64() functions.
-//
-//
 #ifdef HAVE_STAT64
-typedef struct stat64 K3bInternalStatStruct;
-class K3bStatStruct : public K3bInternalStatStruct {
-public:
-  int stat( const QString &filename ) { return ::stat64( QFile::encodeName( filename ), this ); }
-  int lstat( const QString &filename ) { return ::lstat64( QFile::encodeName( filename ), this ); }
-} ;
+#define k3b_struct_stat struct stat64
+#define k3b_stat        ::stat64
+#define k3b_lstat       ::lstat64
 #else
-typedef struct stat K3bInternalStatStruct;
-class K3bStatStruct : public K3bInternalStatStruct {
-public:
-  int stat( const QString &filename ) { return ::stat( QFile::encodeName( filename ), this ); }
-  int lstat( const QString &filename ) { return ::lstat( QFile::encodeName( filename ), this ); }
-} ;
+#define k3b_struct_stat struct stat
+#define k3b_stat        ::stat
+#define k3b_lstat       ::lstat
 #endif
 
 
@@ -115,11 +104,12 @@ namespace K3b
 
   LIBK3B_EXPORT QString writingModeString( int );
 
-  QString framesToString( int h, bool showFrames = true );
-  QString sizeToTime( long size );
+  LIBK3B_EXPORT QString framesToString( int h, bool showFrames = true );
+  /*LIBK3B_EXPORT QString sizeToTime( long size );*/
 
-  Q_INT16 swapByteOrder( Q_INT16 i );
-  Q_INT32 swapByteOrder( Q_INT32 i );
+  LIBK3B_EXPORT Q_INT16 swapByteOrder( const Q_INT16& i );
+  LIBK3B_EXPORT Q_INT32 swapByteOrder( const Q_INT32& i );
+  LIBK3B_EXPORT Q_INT64 swapByteOrder( const Q_INT64& i );
 
   int round( double );
 
@@ -207,10 +197,20 @@ namespace K3b
   QString externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* );
 
   /**
+   * Convert an url pointing to a local device to a K3bDevice.
+   * Supports media:// and system::// urls.
+   */
+  LIBK3B_EXPORT K3bDevice::Device* K3b::urlToDevice( const KURL& deviceUrl );
+
+  /**
    * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
    */
   LIBK3B_EXPORT KURL convertToLocalUrl( const KURL& url );
-  KURL::List convertToLocalUrls( const KURL::List& l );
+  LIBK3B_EXPORT KURL::List convertToLocalUrls( const KURL::List& l );
+
+  LIBK3B_EXPORT Q_INT16 fromLe16( char* );
+  LIBK3B_EXPORT Q_INT32 fromLe32( char* );
+  LIBK3B_EXPORT Q_INT64 fromLe64( char* );
 }
 
 #endif

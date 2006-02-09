@@ -19,8 +19,10 @@
 #include "k3bglobals.h"
 #include <k3bversion.h>
 #include <k3bdevice.h>
+#include <k3bdevicemanager.h>
 #include <k3bdeviceglobals.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bcore.h>
 
 #include <kdeversion.h>
 #include <kglobal.h>
@@ -31,6 +33,7 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
+#include <dcopref.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -39,6 +42,7 @@
 #include <cmath>
 #include <sys/utsname.h>
 #include <sys/stat.h>
+#include <byteswap.h>
 
 #ifdef __FreeBSD__
 #include <sys/param.h>
@@ -48,7 +52,7 @@
 #endif
 
 
-
+/*
 struct Sample {
   unsigned char msbLeft;
   unsigned char lsbLeft;
@@ -70,6 +74,7 @@ struct Sample {
     lsbRight = d;
   }
 };
+*/
 
 QString K3b::framesToString( int h, bool showFrames )
 {
@@ -89,21 +94,30 @@ QString K3b::framesToString( int h, bool showFrames )
   return str;
 }
 
-QString K3b::sizeToTime(long size){
-	int h = size / sizeof(Sample) / 588;
-	return framesToString(h, false);
+/*QString K3b::sizeToTime(long size)
+{
+  int h = size / sizeof(Sample) / 588;
+  return framesToString(h, false);
+}*/
+
+
+Q_INT16 K3b::swapByteOrder( const Q_INT16& i )
+{
+  return bswap_16( i );
+  //((i << 8) & 0xff00) | ((i >> 8 ) & 0xff);
 }
 
 
-Q_INT16 K3b::swapByteOrder( Q_INT16 i )
+Q_INT32 K3b::swapByteOrder( const Q_INT32& i )
 {
-  return ((i << 8) & 0xff00) | ((i >> 8 ) & 0xff);
+  //return ((i << 24) & 0xff000000) | ((i << 8) & 0xff0000) | ((i >> 8) & 0xff00) | ((i >> 24) & 0xff );
+  return bswap_32( i );
 }
 
 
-Q_INT32 K3b::swapByteOrder( Q_INT32 i )
+Q_INT64 K3b::swapByteOrder( const Q_INT64& i )
 {
-  return ((i << 24) & 0xff000000) | ((i << 8) & 0xff0000) | ((i >> 8) & 0xff00) | ((i >> 24) & 0xff );
+  return bswap_64( i );
 }
 
 
@@ -255,12 +269,8 @@ KIO::filesize_t K3b::filesize( const KURL& url )
 {
   KIO::filesize_t fSize = 0;
   if( url.isLocalFile() ) {
-    K3bStatStruct buf;
-#ifdef HAVE_STAT64
-    stat64( QFile::encodeName( url.path() ), &buf );
-#else
-    stat( QFile::encodeName( url.path() ), &buf );
-#endif
+    k3b_struct_stat buf;
+    k3b_stat( QFile::encodeName( url.path() ), &buf );
     fSize = (KIO::filesize_t)buf.st_size;
   }
   else {
@@ -383,6 +393,27 @@ QString K3b::resolveLink( const QString& file )
 }
 
 
+K3bDevice::Device* K3b::urlToDevice( const KURL& deviceUrl )
+{
+  if( deviceUrl.protocol() == "media" || deviceUrl.protocol() == "system" ) {
+    kdDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName() << endl;
+    DCOPRef mediamanager("kded", "mediamanager");
+    DCOPReply reply = mediamanager.call("properties(QString)", deviceUrl.fileName());
+    QStringList properties = reply;
+    if( !reply.isValid() || properties.count() < 6 ) {
+      kdError() << "(K3b) Invalid reply from mediamanager" << endl;
+      return 0;
+    }
+    else {
+      kdDebug() << "(K3b) Reply from mediamanager " << properties[5] << endl;
+      return k3bcore->deviceManager()->findDevice( properties[5] );
+    }
+  }
+  
+  return k3bcore->deviceManager()->findDevice( deviceUrl.path() );
+}
+
+
 KURL K3b::convertToLocalUrl( const KURL& url )
 {
   if( !url.isLocalFile() ) {
@@ -398,7 +429,7 @@ KURL K3b::convertToLocalUrl( const KURL& url )
     if( KIO::NetAccess::stat( url, e, 0 ) ) {
       const KIO::UDSEntry::ConstIterator end = e.end();
       for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) {
-	if( (*it).m_uds == KIO::UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
+	if( (*it).m_uds == UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
 	  return KURL::fromPathOrURL( (*it).m_str );
       }
     }
@@ -415,4 +446,34 @@ KURL::List K3b::convertToLocalUrls( const KURL::List& urls )
   for( KURL::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
     r.append( convertToLocalUrl( *it ) );
   return r;
+}
+
+
+Q_INT16 K3b::fromLe16( char* data )
+{
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+  return swapByteOrder( *((Q_INT16*)data) );
+#else
+  return *((Q_INT16*)data);
+#endif
+}
+
+
+Q_INT32 K3b::fromLe32( char* data )
+{
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+  return swapByteOrder( *((Q_INT32*)data) );
+#else
+  return *((Q_INT32*)data);
+#endif
+}
+
+
+Q_INT64 K3b::fromLe64( char* data )
+{
+#ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
+  return swapByteOrder( *((Q_INT64*)data) );
+#else
+  return *((Q_INT64*)data);
+#endif
 }

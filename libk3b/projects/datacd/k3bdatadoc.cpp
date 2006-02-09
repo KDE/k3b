@@ -56,15 +56,6 @@
 #include <kapplication.h>
 
 
-// these defines are from the mkisofs source and are needed to handle the
-// iso9660 filenames created by mkisofs in prepareFilenamesInDir() and
-// iso9660FileNameUsedInMkisofs()
-#define      LEN_ISONAME             31
-#define      MAX_ISONAME_V1          37
-#define      MAX_ISONAME_V2          207
-#define      MAX_ISONAME_V2_RR       193
-#define      MAX_ISONAME             MAX_ISONAME_V2
-
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -257,7 +248,13 @@ K3b::Msf K3bDataDoc::length() const
   // and 1 block equals to 1 audio frame
   // so this is the way to calculate:
 
-  return K3b::Msf(size() / 2048);
+  return K3b::Msf( size() / 2048 );
+}
+
+
+K3b::Msf K3bDataDoc::burningLength() const
+{
+  return K3b::Msf( burningSize() / 2048 );
 }
 
 
@@ -1048,13 +1045,7 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
   char            rootname[MAX_ISONAME+1];
   char            extname[MAX_ISONAME+1];
 
-  int iso9660_namelen = LEN_ISONAME;
-  if( isoOptions().ISOLevel() == 4 )
-    iso9660_namelen = MAX_ISONAME_V2;
-  if( isoOptions().ISOmaxFilenameLength() )
-    iso9660_namelen = MAX_ISONAME_V1;
-  if( isoOptions().createRockRidge() && (iso9660_namelen > MAX_ISONAME_V2_RR) )
-    iso9660_namelen = MAX_ISONAME_V2_RR;
+  int iso9660_namelen = isoOptions().maxIso9660FilenameLength();
 
   QDict<K3bDataItem> iso9660NameDict;
   QPtrList<K3bDataItem> sortedChildren;
@@ -1551,13 +1542,7 @@ QCString K3bDataDoc::iso9660FileNameUsedInMkisofs( K3bDataItem* item )
 
   K3bDataDoc* doc = item->doc();
 
-  int iso9660_namelen = LEN_ISONAME;
-  if( doc->isoOptions().ISOLevel() == 4 )
-    iso9660_namelen = MAX_ISONAME_V2;
-  if( doc->isoOptions().ISOmaxFilenameLength() )
-    iso9660_namelen = MAX_ISONAME_V1;
-  if( doc->isoOptions().createRockRidge() && (iso9660_namelen > MAX_ISONAME_V2_RR) )
-    iso9660_namelen = MAX_ISONAME_V2_RR;
+  int iso9660_namelen = isoOptions().maxIso9660FilenameLength();
 
 //   if (*itemPrio)
 //     priority = *itemPrio;

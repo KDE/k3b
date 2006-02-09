@@ -167,6 +167,8 @@ namespace K3bDevice {
 
       /**
        * Scan the system for devices. Call this to initialize all devices.
+       * If HAL is available this will noly establish a connection to HAL
+       * and get the device list from there.
        *
        * \return Number of found devices.
        **/
@@ -211,8 +213,6 @@ namespace K3bDevice {
       bool testForCdrom( const QString& );
       bool determineBusIdLun( const QString &dev, int& bus, int& id, int& lun );
       QString resolveSymLink( const QString& path );
-
-      int m_foundDevices;
 
       class Private;
       Private* d;

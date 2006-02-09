@@ -24,6 +24,9 @@
 #include <kurl.h>
 
 class K3bMainWindow;
+namespace K3bDevice {
+  class Device;
+}
 
 
 class K3bInterface : public DCOPObject
@@ -62,10 +65,17 @@ class K3bInterface : public DCOPObject
 
   void copyCd();
   void copyDvd();
+  void copyCd( const KURL& dev );
+  void copyDvd( const KURL& dev );
   void eraseCdrw();
   void formatDvd();
   void burnCdImage( const KURL& url );
   void burnDvdImage( const KURL& url );
+
+  /**
+   * Open the audio ripping window for the specified device.
+   */
+  void cddaRip( const KURL& dev );
   
   /**
    * Add URLs to the current active project.
@@ -83,6 +93,8 @@ class K3bInterface : public DCOPObject
 
  private:
   K3bMainWindow* m_main;
+
+  K3bDevice::Device* m_lastDevice;
 };
 
 #endif

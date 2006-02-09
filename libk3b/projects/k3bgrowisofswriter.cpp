@@ -110,6 +110,8 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* h
 	   this,SIGNAL(infoMessage(const QString&, int)) );
   connect( d->gh, SIGNAL(newSubTask(const QString&)),
 	   this, SIGNAL(newSubTask(const QString&)) );
+  connect( d->gh, SIGNAL(buffer(int)),
+	   this, SIGNAL(buffer(int)) );
   connect( d->gh, SIGNAL(deviceBuffer(int)),
 	   this, SIGNAL(deviceBuffer(int)) );
   connect( d->gh, SIGNAL(flushingCache()),
@@ -208,7 +210,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   *d->process << d->growisofsBin;
 
   // set this var to true to enable the ringbuffer
-  d->usingRingBuffer = true;
+  d->usingRingBuffer = ( d->growisofsBin->version < K3bVersion( 6, 0 ) );
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->usingRingBuffer || d->image.isEmpty() ) {
@@ -294,6 +296,11 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( k3bcore->globalSettings()->overburn() )
     *d->process << "-overburn";
 
+  if( !d->usingRingBuffer && d->growisofsBin->version >= K3bVersion( 6, 0 ) ) {
+    bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
+    int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 40 );
+    *d->process << QString("-use-the-force-luke=bufsize:%1m").arg(bufSize);
+  }
 
   // additional user parameters from config
   const QStringList& params = d->growisofsBin->userParameters();
@@ -334,6 +341,9 @@ void K3bGrowisofsWriter::start()
 
 
     emit newSubTask( i18n("Preparing write process...") );
+
+    // FIXME: check the return value
+    k3bcore->blockDevice( burnDevice() );
 
     d->interferingSystemHndl->disable( burnDevice() );
 
@@ -480,7 +490,9 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
   }
 
-  else
+  //  else
+  // to be able to parse the ring buffer fill in growisofs 6.0 we need to do this all the time
+  // FIXME: get rid of the K3bGrowisofsHandler once it is sure that we do not need the K3bGrowisofsImager anymore
     d->gh->handleLine( line );
 }
 
@@ -490,6 +502,8 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
   d->inputFile.close();
 
   d->interferingSystemHndl->enable();
+
+  k3bcore->unblockDevice( burnDevice() );
 
   if( d->canceled ) {
     if( !d->finished ) {

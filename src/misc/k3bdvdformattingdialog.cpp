@@ -112,6 +112,12 @@ K3bDvdFormattingDialog::~K3bDvdFormattingDialog()
 } 
 
 
+void K3bDvdFormattingDialog::setDevice( K3bDevice::Device* dev )
+{
+  m_writerSelectionWidget->setWriterDevice( dev );
+}
+
+
 void K3bDvdFormattingDialog::slotStartClicked()
 {
   //

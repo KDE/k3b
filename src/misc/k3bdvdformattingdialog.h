@@ -22,7 +22,9 @@
 class QCheckBox;
 class K3bWritingModeWidget;
 class K3bWriterSelectionWidget;
-
+namespace K3bDevice {
+  class Device;
+}
 
 class K3bDvdFormattingDialog : public K3bInteractionDialog
 {
@@ -31,6 +33,9 @@ class K3bDvdFormattingDialog : public K3bInteractionDialog
  public:
   K3bDvdFormattingDialog( QWidget* = 0, const char* = 0, bool modal = true );
   ~K3bDvdFormattingDialog();
+
+ public slots:
+  void setDevice( K3bDevice::Device* );
 
  protected slots:
   void slotStartClicked();

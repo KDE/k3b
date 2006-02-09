@@ -43,7 +43,11 @@ public:
   Private()
     : version( LIBK3B_VERSION ),
       config(0),
-      deleteConfig(false) {
+      deleteConfig(false),
+      deviceManager(0),
+      externalBinManager(0),
+      pluginManager(0),
+      globalSettings(0) {
   }
 
   K3bVersion version;
@@ -55,6 +59,7 @@ public:
   K3bGlobalSettings* globalSettings;
 
   QValueList<K3bJob*> runningJobs;
+  QValueList<K3bDevice::Device*> blockedDevices;
 };
 
 
@@ -68,18 +73,9 @@ K3bCore::K3bCore( QObject* parent, const char* name )
 {
   d = new Private();
 
-  if( s_k3bCore ) {
+  if( s_k3bCore )
     qFatal("ONLY ONE INSTANCE OF K3BCORE ALLOWED!");
-  }
-
   s_k3bCore = this;
-
-  d->globalSettings = new K3bGlobalSettings();
-  d->externalBinManager = new K3bExternalBinManager( this );
-  d->deviceManager = new K3bDevice::DeviceManager( this );
-  d->pluginManager = new K3bPluginManager( this );
-
-  K3b::addDefaultPrograms( d->externalBinManager );
 
   // create the thread widget instance in the GUI thread
   K3bThreadWidget::instance();
@@ -88,6 +84,8 @@ K3bCore::K3bCore( QObject* parent, const char* name )
 
 K3bCore::~K3bCore()
 {
+  s_k3bCore = 0;
+
   delete d->globalSettings;
   delete d;
 }
@@ -138,13 +136,49 @@ KConfig* K3bCore::config() const
 
 void K3bCore::init()
 {
+  initGlobalSettings();
+  initExternalBinManager();
+  initDeviceManager();
+  initPluginManager();
+
   // load the plugins before doing anything else
   // they might add external bins
-  d->pluginManager->loadAll();
+  pluginManager()->loadAll();
 
-  d->externalBinManager->search();
-  if( !d->deviceManager->scanBus() )
+  externalBinManager()->search();
+
+  if( !deviceManager()->scanBus() )
     kdDebug() << "No Devices found!" << endl;
+}
+
+
+void K3bCore::initGlobalSettings()
+{
+  if( !d->globalSettings )
+    d->globalSettings = new K3bGlobalSettings();
+}
+
+
+void K3bCore::initExternalBinManager()
+{
+  if( !d->externalBinManager ) {
+    d->externalBinManager = new K3bExternalBinManager( this );
+    K3b::addDefaultPrograms( d->externalBinManager );
+  }
+}
+
+
+void K3bCore::initDeviceManager()
+{
+  if( !d->deviceManager )
+    d->deviceManager = new K3bDevice::DeviceManager( this );
+}
+
+
+void K3bCore::initPluginManager()
+{
+  if( !d->pluginManager )
+    d->pluginManager = new K3bPluginManager( this );
 }
 
 
@@ -156,9 +190,9 @@ void K3bCore::readSettings( KConfig* cnf )
 
   QString oldGrp = c->group();
 
-  d->globalSettings->readSettings( c );
-  d->deviceManager->readConfig( c );
-  d->externalBinManager->readConfig( c );
+  globalSettings()->readSettings( c );
+  deviceManager()->readConfig( c );
+  externalBinManager()->readConfig( c );
 
   c->setGroup( oldGrp );
 }
@@ -210,6 +244,23 @@ bool K3bCore::jobsRunning() const
 const QValueList<K3bJob*>& K3bCore::runningJobs() const
 {
   return d->runningJobs;
+}
+
+
+bool K3bCore::blockDevice( K3bDevice::Device* dev )
+{
+  if( !d->blockedDevices.contains( dev ) ) {
+    d->blockedDevices.append( dev );
+    return true;
+  }
+  else
+    return false;
+}
+
+
+void K3bCore::unblockDevice( K3bDevice::Device* dev )
+{
+  d->blockedDevices.remove( dev );
 }
 
 #include "k3bcore.moc"

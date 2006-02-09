@@ -47,6 +47,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   K3bCdCopyDialog(QWidget *parent = 0, const char *name = 0, bool modal = true );
   ~K3bCdCopyDialog();
 
+  void setReadingDevice( K3bDevice::Device* );
   K3bDevice::Device* readingDevice() const;
 
  private slots:

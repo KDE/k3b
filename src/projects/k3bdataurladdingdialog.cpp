@@ -40,7 +40,6 @@
 #include <kglobal.h>
 #include <kstdguiitem.h>
 
-#include <sys/stat.h>
 #include <unistd.h>
 
 
@@ -147,7 +146,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   QString resolved( absFilePath );
 
   bool valid = true;
-  K3bStatStruct statBuf, resolvedStatBuf;
+  k3b_struct_stat statBuf, resolvedStatBuf;
   bool isSymLink = false;
   bool isDir = false;
   bool isFile = false;
@@ -157,7 +156,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     m_nonLocalFiles.append( url.path() );
   }
 
-  else if( statBuf.lstat( absFilePath ) != 0 ) {
+  else if( k3b_lstat( QFile::encodeName(absFilePath), &statBuf ) != 0 ) {
     valid = false;
     m_notFoundFiles.append( url.path() );
   }
@@ -171,7 +170,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     // but we need to know if the symlink points to a directory
     if( isSymLink ) {
       resolved = K3b::resolveLink( absFilePath );
-      resolvedStatBuf.stat( resolved );
+      k3b_stat( QFile::encodeName(resolved), &resolvedStatBuf );
       isDir = S_ISDIR(resolvedStatBuf.st_mode);
     }
 

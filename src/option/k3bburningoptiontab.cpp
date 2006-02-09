@@ -215,7 +215,7 @@ void K3bBurningOptionTab::setupGui()
 
   QWhatsThis::add( m_checkManualWritingBufferSize, i18n("<p>K3b uses a software buffer during the burning process to "
 							"avoid gaps in the data stream due to high system load. The default "
-							"sizes used are 4 MB for CD and 20 MB for DVD burning."
+							"sizes used are 4 MB for CD and 40 MB for DVD burning."
 							"<p>If this option is checked the value specified will be used for both "
 							"CD and DVD burning.") );
 }

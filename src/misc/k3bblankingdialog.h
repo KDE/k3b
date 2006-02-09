@@ -58,6 +58,9 @@ Q_OBJECT
   void blockingInformation( const QString& text,
 			    const QString& caption = QString::null );
 
+ public slots:
+  void setDevice( K3bDevice::Device* );
+
  protected slots:
   void slotStartClicked();
   void slotWriterChanged();

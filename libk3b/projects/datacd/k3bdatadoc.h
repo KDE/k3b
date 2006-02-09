@@ -90,6 +90,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   virtual KIO::filesize_t burningSize() const;
   virtual K3b::Msf length() const;
+  virtual K3b::Msf burningLength() const;
 
   const QString& name() const { return m_name; }
 

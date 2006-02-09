@@ -120,8 +120,9 @@ int K3bDevice::openDevice( const char* name, bool write )
     fd = ::open( name, flags );
 
   if( fd < 0 ) {
-    kdDebug() << "(K3bDevice::Device) Error: could not open device " 
-	      << name << ( write ? "for writing" : "for reading" ) << endl;
+    kdDebug() << "(K3bDevice::Device) could not open device " 
+	      << name << ( write ? " for writing" : " for reading" ) << endl;
+    kdDebug() << "                    (" << strerror(errno) << ")" << endl;
     fd = -1;
 
     // at least open it read-only (which is sufficient for kernels < 2.6.8 anyway)
@@ -1810,28 +1811,23 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
 	  kdDebug() << "First sec data area: " << sda.toString()
 		    << " (LBA " << QString::number(sda.lba())
-		    << ") (" << QString::number(sda.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(sda.mode1Bytes()) << ")" << endl;
+		    << ") (" << QString::number(sda.mode1Bytes()) << endl;
 	  kdDebug() << "Last sec data area: " << eda.toString()
 		    << " (LBA " << QString::number(eda.lba())
-		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(eda.mode1Bytes()) << ")" << endl;
+		    << ") (" << QString::number(eda.mode1Bytes()) << " Bytes)" << endl;
 	  kdDebug() << "Last sec layer 1: " << ea0.toString()
 		    << " (LBA " << QString::number(ea0.lba())
-		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(ea0.mode1Bytes()) << ")" << endl;
+		    << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes)" << endl;
 
 
 	  K3b::Msf da0 = ea0 - sda + 1;
 	  K3b::Msf da1 = eda - ea0;
 	  kdDebug() << "Layer 1 length: " << da0.toString()
 		    << " (LBA " << QString::number(da0.lba())
-		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(da0.mode1Bytes()) << ")" << endl;
+		    << ") (" << QString::number(da0.mode1Bytes()) << " Bytes)" << endl;
 	  kdDebug() << "Layer 2 length: " << da1.toString()
 		    << " (LBA " << QString::number(da1.lba())
-		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes) ("
-		    << KIO::convertSize(da1.mode1Bytes()) << ")" << endl;
+		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes)" << endl;
 
 	  inf.m_numLayers = ((data[6]&0x60) == 0 ? 1 : 2);
 	  inf.m_firstLayerSize = da0;

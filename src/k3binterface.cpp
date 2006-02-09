@@ -23,6 +23,8 @@
 #include "k3bcore.h"
 #include "k3b.h"
 
+#include <k3bglobals.h>
+
 #include <dcopclient.h>
 #include <qptrlist.h>
 #include <qtimer.h>
@@ -126,6 +128,18 @@ void K3bInterface::addUrl( const KURL& url )
 }
 
 
+void K3bInterface::copyCd( const KURL& dev )
+{
+  m_main->cdCopy( K3b::urlToDevice( dev ) );
+}
+
+
+void K3bInterface::copyDvd( const KURL& dev )
+{
+  m_main->dvdCopy( K3b::urlToDevice( dev ) );
+}
+
+
 void K3bInterface::copyCd()
 {
   // HACK since we want this method to return immediately
@@ -169,4 +183,10 @@ void K3bInterface::burnDvdImage( const KURL& url )
 bool K3bInterface::blocked() const
 {
   return k3bcore->jobsRunning();
+}
+
+
+void K3bInterface::cddaRip( const KURL& dev )
+{
+  m_main->cddaRip( K3b::urlToDevice( dev ) );
 }

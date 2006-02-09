@@ -67,14 +67,14 @@ public:
       ::fcntl(inFd, F_SETFL, O_NONBLOCK);
     }
 
-    return true;
+    delete [] buffer;
+    buffer = new char[bufSize];
+
+    return (buffer != 0);
   }
 
   void run() {
     emitStarted();
-
-    delete [] buffer;
-    buffer = new char[bufSize];
 
     int usedInFd = -1;
     if( inFd > 0 )
@@ -93,6 +93,9 @@ public:
     bool error = false;
     canceled = false;
     int oldPercent = 0;
+
+    static const int MAX_BUFFER_READ = 2048*3;
+
     while( !canceled && !error && (!eof || dataLen > 0) ) {
       //
       // create two fd sets
@@ -122,17 +125,43 @@ public:
 	int percent = -1;
 
 	//
+	// Read from the buffer and write to the output
+	//
+	if( FD_ISSET(outFd, &writeFds) ) {
+	  unsigned int maxLen = QMIN(bufSize - bufPos, dataLen);
+
+	  ret = ::write( outFd, &buffer[bufPos], maxLen );
+	  
+	  if( ret < 0 ) {
+	    if( (errno != EINTR) && (errno != EAGAIN) ) {
+	      kdDebug() << "(K3bPipeBuffer::WorkThread) error while writing to " << outFd << endl;
+	      error = true;
+	    }
+	  }
+	  else {
+	    //
+	    // we always emit before the reading from the buffer since
+	    // it makes way more sense to show the buffer before the reading.
+	    //
+	    percent = (int)((double)dataLen*100.0/(double)bufSize);
+
+	    bufPos = (bufPos + ret) % bufSize;
+	    dataLen -= ret;
+	  }
+	}
+
+	//
 	// Read into the buffer
 	//
-	if( FD_ISSET(usedInFd, &readFds) ) {
+	else if( FD_ISSET(usedInFd, &readFds) ) {
 	  unsigned int readPos = (bufPos + dataLen) % bufSize;
 	  unsigned int maxLen = QMIN(bufSize - readPos, bufSize - dataLen);
 	  //
 	  // never read more than xxx bytes
 	  // This is some tuning to prevent the reading from blocking the whole thread
 	  // 
-	  if( maxLen > 2048*16 ) // some dummy value below 1 MB
-	    maxLen = 2048*16;
+	  if( maxLen > MAX_BUFFER_READ ) // some dummy value below 1 MB
+	    maxLen = MAX_BUFFER_READ;
 	  ret = ::read( usedInFd, &buffer[readPos], maxLen );
 	  if( ret < 0 ) {
 	    if( (errno != EINTR) && (errno != EAGAIN) ) {
@@ -151,31 +180,9 @@ public:
 	  }
 	}
  
-	//
-	// Read from the buffer and write to the output
-	//
-	if( FD_ISSET(outFd, &writeFds) ) {
-	  unsigned int maxLen = QMIN(bufSize - bufPos, dataLen);
-
-	  ret = ::write( outFd, &buffer[bufPos], maxLen );
-
-	  if( ret < 0 ) {
-	    if( (errno != EINTR) && (errno != EAGAIN) ) {
-	      kdDebug() << "(K3bPipeBuffer::WorkThread) error while writing to " << outFd << endl;
-	      error = true;
-	    }
-	  }
-	  else {
-	    //
-	    // we always emit before the reading from the buffer since
-	    // it makes way more sense to show the buffer before the reading.
-	    //
-	    percent = (int)((double)dataLen*100.0/(double)bufSize);
-
-	    bufPos = (bufPos + ret) % bufSize;
-	    dataLen -= ret;
-	  }
-	}
+	// A little hack to keep the buffer display from flickering
+	if( percent == 99 )
+	  percent = 100;
 
 	if( percent != -1 && percent != oldPercent ) {
 	  emitPercent( percent );

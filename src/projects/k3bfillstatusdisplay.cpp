@@ -186,13 +186,20 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
   // draw the text marks
   crect = rect();
-  QString text = i18n("Available: %1 of %2")
-    .arg( d->showTime
-	  ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
-	  : KIO::convertSize( QMAX( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
-    .arg( d->showTime
-	  ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
-	  : KIO::convertSizeFromKB( cdSize * 1024 ) );
+  QString text;
+  if( (cdSize * 1024LL * 1024LL) >= (long long)d->doc->size() )
+    text = i18n("Available: %1 of %2")
+      .arg( d->showTime
+	    ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
+	    : KIO::convertSize( QMAX( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
+      .arg( d->showTime
+	    ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
+	    : KIO::convertSizeFromKB( cdSize * 1024 ) );
+  else
+    text = i18n("Overfull: %1 too much")
+      .arg( d->showTime
+	    ? i18n("%1 min").arg( (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
+	    : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
 
   QFont fnt(font());
   fnt.setPointSize(8);

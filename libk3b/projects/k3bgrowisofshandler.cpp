@@ -93,6 +93,9 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else  
       emit infoMessage( line, K3bJob::ERROR );
   }
+  else if( line.startsWith( "PERFORM OPC" ) ) {
+    m_error = ERROR_OPC;
+  }
   else if( line.contains( "flushing cache" ) ) {
     // here is where we already should stop queriying the buffer fill
     // since the device is only used there so far...
@@ -149,7 +152,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
 
     pos += 24;
-    int endPos = line.find( "x", pos );
+    int endPos = line.find( 'x', pos+1 );
     bool ok = true;
     double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
     if( ok )
@@ -159,7 +162,19 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
+  else if( (pos = line.find( "RBU" )) > 0 ) {
+    // parse ring buffer fill for growisofs >= 6.0
+    pos += 4;
+    int endPos = line.find( '%', pos+1 );
+    bool ok = true;
+    double val = line.mid( pos, endPos-pos ).toDouble( &ok );
+    if( ok )
+      emit buffer( (int)(val+0.5) );
+    else
+      kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
+  }
   else if( line.startsWith("Buffer fill") ) {
+    // parse device buffer fill for K3b patched growisofs
     emit deviceBuffer( line.mid(13, line.find('%',13)-13).toInt() );
   }
 
@@ -188,6 +203,12 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
   case ERROR_SPEED_SET_FAILED:
     emit infoMessage( i18n("Unable to set writing speed."), K3bJob::ERROR );
     emit infoMessage( i18n("Please try again with the 'ignore speed' setting."), K3bJob::ERROR );
+    break;
+
+  case ERROR_OPC:
+    emit infoMessage( i18n("Optimum Power Calibration failed."), K3bJob::ERROR );
+    emit infoMessage( i18n("Try adding '-use-the-force-luke=noopc' to the "
+			   "growisofs user parameters in the K3b settings."), K3bJob::ERROR );
     break;
 
   default:

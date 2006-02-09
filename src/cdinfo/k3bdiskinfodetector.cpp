@@ -14,6 +14,9 @@
  */
 
 #include "k3bdiskinfodetector.h"
+#include "../k3bmediacache.h"
+#include "../k3bmedium.h"
+#include "../k3bapplication.h"
 
 #include <k3bdevice.h>
 #include <k3btoc.h>
@@ -135,16 +138,6 @@ void K3bDevice::DiskInfoDetector::finish(bool success)
 
 void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 {
-  kdDebug() << "(K3bDevice::DiskInfoDetector) fetchExtraInfo()" << endl;
-
-  //  d->device->indexScan( d->toc );
-
-  bool success = true;
-
-  //
-  // FIXME: blank DVD+RW media already has a track so this method tries to open ido9660...
-  //
-
   if( d->toc.contentType() == K3bDevice::DATA ||
       d->toc.contentType() == K3bDevice::MIXED ) {
     if( d->device->open() ) {
@@ -176,28 +169,17 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
       d->iso9660->setStartSector( startSec );
 
       if( d->iso9660->open() ) {
-	//	d->iso9660->debug();
-
-// 	d->info.isoId = "CD001";
-// 	d->info.isoSystemId = d->iso9660->primaryDescriptor().systemId;
-// 	d->info.isoVolumeId = d->iso9660->primaryDescriptor().volumeId;
-// 	d->info.isoVolumeSetId = d->iso9660->primaryDescriptor().volumeSetId;
-// 	d->info.isoPublisherId = d->iso9660->primaryDescriptor().publisherId;
-// 	d->info.isoPreparerId = d->iso9660->primaryDescriptor().preparerId;
-// 	d->info.isoApplicationId = d->iso9660->primaryDescriptor().applicationId;
-	
-
 	if( K3bDevice::isDvdMedia( d->diskInfo.mediaType() ) ) {
 	  d->isVideoDvd = false;
 
 	  // We check for the VIDEO_TS directory and at least one .IFO file
 	  const K3bIso9660Entry* videoTsEntry = d->iso9660->firstIsoDirEntry()->entry( "VIDEO_TS" );
-	  if( videoTsEntry )
+	  if( videoTsEntry ) {
 	    if( videoTsEntry->isDirectory() ) {
 	      kdDebug() << "(K3bDiskInfoDetector) found VIDEO_TS directory." << endl;
 
 	      const K3bIso9660Directory* videoTsDir = static_cast<const K3bIso9660Directory*>( videoTsEntry );
-	      QStringList entries = videoTsDir->entries();
+	      QStringList entries = videoTsDir->iso9660Entries();
 	      for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it ) {
 		if( (*it).right(4) == ".IFO" ) {
 		  kdDebug() << "(K3bDiskInfoDetector) found .IFO file: " << *it << endl;
@@ -206,6 +188,7 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 		}
 	      }
 	    }
+	  }
 	}
 	else {
 	  d->isVideoCd = false;
@@ -238,19 +221,13 @@ void K3bDevice::DiskInfoDetector::fetchExtraInfo()
 	      d->isVideoCd = true;
 	  }
 	}
-
-	//	d->iso9660->close();
       }  // opened m_iso9660
-//       else
-// 	success = false;
 
       d->device->close();
     }  // opened device
-    else
-      success = false;
   }
 
-  finish(success);
+  finish(true);
 }
 
 

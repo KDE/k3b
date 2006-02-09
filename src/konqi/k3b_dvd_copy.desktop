@@ -1,0 +1,9 @@
+[Desktop Entry]
+ServiceTypes=media/dvdrom_unmounted,media/dvdwriter_unmounted
+Actions=K3bDVDCopy;
+X-KDE-Priority=TopLevel
+
+[Desktop Action K3bDVDCopy]
+Name=Copy DVD with K3b
+Exec=k3b --copydvd %u
+Icon=dvdcopy

@@ -1,0 +1,9 @@
+[Desktop Entry]
+ServiceTypes=media/cdrom_unmounted,media/cdwriter_unmounted,media/audiocd
+Actions=K3bCDCopy;
+X-KDE-Priority=TopLevel
+
+[Desktop Action K3bCDCopy]
+Name=Copy CD with K3b
+Exec=k3b --copycd %u
+Icon=cdcopy

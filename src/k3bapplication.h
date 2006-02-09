@@ -105,6 +105,9 @@ class K3bApplication::Core : public K3bCore
 
   K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
+  virtual bool blockDevice( K3bDevice::Device* );
+  virtual void unblockDevice( K3bDevice::Device* );
+
   static Core* k3bAppCore() { return s_k3bAppCore; }
 
  public slots:
@@ -142,18 +145,16 @@ class K3bApplication::Core : public K3bCore
    */
   void busyFinishRequested();
 
- private slots:
-  void slotBurnJobStarted( K3bBurnJob* );
-  void slotBurnJobFinished( K3bBurnJob* );
-
  private:
+  void initDeviceManager();
+
   K3bThemeManager* m_themeManager;
   K3bMainWindow* m_mainWindow;
   K3bProjectManager* m_projectManager;
   K3bAppDeviceManager* m_appDeviceManager;
   K3bMediaCache* m_mediaCache;
 
-  QMap<K3bJob*, int> m_deviceBlockMap;
+  QMap<K3bDevice::Device*, int> m_deviceBlockMap;
 
   static Core* s_k3bAppCore;
 

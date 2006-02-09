@@ -2,6 +2,15 @@ echo ""
 echo ""
 echo "K3b Configure results:"
 echo "------------------------------------------"
+
+if test "$use_k3b_debug" = "yes"; then
+	echo 	""
+	echo	"K3B DEBUGGING ENABLED! THIS ENABLES ADDITIONAL DEBUGGING OUTPUT"
+	echo	"AND FUNCTIONALITY WHICH IS ONLY INTENDED FOR K3B DEVELOPERS!"
+	echo	"THIS MAY EVEN SLOW DOWN K3B IN SOME PLACES!"
+	echo 	""
+fi
+
 if test x$ogg_vorbis = xyes; then
 	echo "Ogg Vorbis support:                    yes"
 else

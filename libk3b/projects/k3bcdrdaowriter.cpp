@@ -568,6 +568,9 @@ void K3bCdrdaoWriter::start()
       break;
     }
 
+  // FIXME: check the return value
+  k3bcore->blockDevice( burnDevice() );
+
   d->interferingSystemHndl->disable( burnDevice() );
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
@@ -705,6 +708,8 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line )
 void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 {
   d->interferingSystemHndl->enable();
+
+  k3bcore->unblockDevice( burnDevice() );
 
   switch ( m_command )
   {

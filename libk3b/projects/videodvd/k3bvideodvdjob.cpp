@@ -43,53 +43,9 @@ K3bVideoDvdJob::~K3bVideoDvdJob()
 }
 
 
-// void K3bVideoDvdJob::start()
-// {
-//   jobStarted();
-
-//   m_canceled = false;
-//   m_writingStarted = false;
-
-//   if( m_doc->dummy() )
-//     m_doc->setVerifyData( false );
-
-//   if( !m_doc->onTheFly() || m_doc->onlyCreateImages() ) {
-//     emit newTask( i18n("Writing data") );
-//     emit burning(false);
-//     writeImage();
-//   }
-//   else {
-//     prepareIsoImager();
-    
-//     if( prepareWriterJob() ) {
-//       if( waitForDvd() ) {
-// 	emit burning(true);
-// 	m_writerJob->start();
-// 	m_isoImager->writeToFd( m_writerJob->fd() );
-// 	m_isoImager->start();
-//       }
-//       else
-// 	jobFinished(false);
-//     }
-//     else
-//       jobFinished(false);
-//   }
-// }
-
-
-void K3bVideoDvdJob::prepareIsoImager()
+void K3bVideoDvdJob::prepareImager()
 {
-  if( !m_isoImager ) {
-    m_isoImager = new K3bVideoDvdImager( m_doc, this );
-    connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), 
-	     this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
-    connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-    connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-    connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), 
-	     this, SLOT(slotSizeCalculationFinished(int, int)) );
-  }
+  setImager( new K3bVideoDvdImager( m_doc, this ) );
 }
 
 

@@ -169,6 +169,12 @@ void K3bDvdBurnDialog::readSettings()
   m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
+  // for now we do not support dual layer multisession (growisofs does not handle layer jump yet)
+  if( doc()->size() > 4700372992LL )
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
+  else
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_SL );
+
   toggleAllOptions();
 }
 
@@ -201,22 +207,22 @@ void K3bDvdBurnDialog::toggleAllOptions()
 
     m_comboMultisession->setEnabled(true);
 
-    if( !m_checkOnTheFly->isChecked() ) {
-      // no continue and finish multisession in non-the-fly mode since
-      // we can only continue ms with growisofsimager
-      if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
-	  m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH ||
-	  m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ) {
-	KMessageBox::information( this, i18n("K3b does only support writing multisession DVDs on-the-fly. "
-					     "Multisession has been disabled."),
-				  i18n("DVD Multisession"),
-				  "dvd_multisession_only_on_the_fly" );
-      }
-      m_comboMultisession->setForceNoMultisession( true );
-    }
-    else {
-      m_comboMultisession->setForceNoMultisession( false );
-    }
+//     if( !m_checkOnTheFly->isChecked() ) {
+//       // no continue and finish multisession in non-the-fly mode since
+//       // we can only continue ms with growisofsimager
+//       if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
+// 	  m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH ||
+// 	  m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ) {
+// 	KMessageBox::information( this, i18n("K3b does only support writing multisession DVDs on-the-fly. "
+// 					     "Multisession has been disabled."),
+// 				  i18n("DVD Multisession"),
+// 				  "dvd_multisession_only_on_the_fly" );
+//       }
+//       m_comboMultisession->setForceNoMultisession( true );
+//     }
+//     else {
+//       m_comboMultisession->setForceNoMultisession( false );
+//     }
   }
 
   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {

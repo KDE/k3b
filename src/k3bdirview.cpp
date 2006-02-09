@@ -251,16 +251,6 @@ void K3bDirView::showUrl( const KURL& url )
 void K3bDirView::showDevice( K3bDevice::Device* dev )
 {
   d->contextMediaInfoRequested = true;
-
-  // to speed things up we first check if the media is already mounted
-  if( !dev->automount() ) {
-    QString mp = KIO::findDeviceMountPoint( dev->mountDevice() );
-    if( !mp.isEmpty() ) {
-      slotDirActivated( mp );
-      return;
-    }
-  }
-
   m_fileTreeView->setSelectedDevice( dev );
   k3bappcore->appDeviceManager()->diskInfo( dev );
 }

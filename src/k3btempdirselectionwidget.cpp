@@ -153,7 +153,7 @@ QString K3bTempDirSelectionWidget::tempPath() const
       if( fi.isFile() )
 	return fi.absFilePath();
       else
-	return fi.absFilePath() + "/k3b_image.img";
+	return fi.absFilePath() + "/k3b_image.iso";
     }
   }
   else {

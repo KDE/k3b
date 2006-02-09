@@ -161,67 +161,7 @@ bool K3bCueFileParser::parseLine( QString& line )
   //
   if( fileRx.exactMatch( line ) ) {
 
-    QString dataFile = fileRx.cap(1);
-
-    //
-    // find data file
-    //
-
-    //
-    // CDRDAO does not use this image filename but replaces the extension from the cue file
-    // with "bin" to get the image filename, we should take this into account
-    //
-
-    // first try filename as a hole (absolut)
-    if( QFile::exists( dataFile ) ) {
-      setImageFilename( QFileInfo(dataFile).absFilePath() );
-    }
-    else if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) ).isFile() ) {
-      kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
-      setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) );
-      setValid( true );
-      m_imageFilenameInCue = true;
-    }
-    else if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() ).isFile() ) {
-      kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename().lower() << endl;
-      setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() );
-      setValid( true );
-      m_imageFilenameInCue = true;
-    }
-    else {
-      kdDebug() << "(K3bCueFileParser) no image file in: " << K3b::parentDir(filename()) + dataFile.section( '/', -1 ) << endl;
-      kdDebug() << "(K3bCueFileParser) no image file in: " << K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() << endl;
-
-      //
-      // we did not find the image specified in the cue.
-      // Search for another one having the same filename as the cue but a different extension
-      //
-      QDir parentDir( K3b::parentDir(filename()) );
-      QString filenamePrefix = filename().section( '/', -1 );
-      filenamePrefix.truncate( filenamePrefix.length() - 3 ); // remove cue extension
-      kdDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*" << endl;
-
-      //
-      // we cannot use the nameFilter in QDir becasue of the spaces that may occur in filenames
-      //
-      QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
-      int cnt = 0;
-      for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
-	if( (*it).lower() == dataFile.section( '/', -1 ).lower() ||
-	    (*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
-	  ++cnt;
-	  setImageFilename( K3b::parentDir(filename()) + *it );
-	}
-      }
-
-      //
-      // we only do this if there is one unique file which fits the requirements. 
-      // Otherwise we cannot be certain to have the right file.
-      //
-      setValid( cnt == 1 && QFileInfo( imageFilename() ).isFile() );
-
-      m_imageFilenameInCue = false;
-    }
+    setValid( findImageFileName( fileRx.cap(1) ) );
     
     if( d->inFile ) {
       kdDebug() << "(K3bCueFileParser) only one FILE statement allowed." << endl;
@@ -253,9 +193,9 @@ bool K3bCueFileParser::parseLine( QString& line )
     // TODO: use d->rawData in some way
     if( d->currentParsedTrack > 0 ) {
       d->toc.append( K3bDevice::Track( d->currentDataPos, 
-					 d->currentDataPos,
-					 d->trackType,
-					 d->trackMode ) );
+				       d->currentDataPos,
+				       d->trackType,
+				       d->trackMode ) );
     }
 
     d->currentParsedTrack++;
@@ -432,4 +372,73 @@ const K3bDevice::Toc& K3bCueFileParser::toc() const
 const K3bDevice::CdText& K3bCueFileParser::cdText() const
 {
   return d->cdText;
+}
+
+
+bool K3bCueFileParser::findImageFileName( const QString& dataFile )
+{
+  //
+  // CDRDAO does not use this image filename but replaces the extension from the cue file
+  // with "bin" to get the image filename, we should take this into account
+  //
+
+  m_imageFilenameInCue = true;
+
+  // first try filename as a hole (absolut)
+  if( QFile::exists( dataFile ) ) {
+    setImageFilename( QFileInfo(dataFile).absFilePath() );
+    return true;
+  }
+
+  // try the filename in the cue's directory
+  if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) ).isFile() ) {
+    setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) );
+    kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+    return true;
+  }
+
+  // try the filename ignoring case
+  if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() ).isFile() ) {
+    setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() );
+    kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+    return true;
+  }
+
+  m_imageFilenameInCue = false;
+
+  // try removing the ending from the cue file (image.bin.cue and image.bin)
+  if( QFileInfo( filename().left( filename().length()-4 ) ).isFile() ) {
+    setImageFilename( filename().left( filename().length()-4 ) );
+    kdDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+    return true;
+  }
+
+  //
+  // we did not find the image specified in the cue.
+  // Search for another one having the same filename as the cue but a different extension
+  //
+
+  QDir parentDir( K3b::parentDir(filename()) );
+  QString filenamePrefix = filename().section( '/', -1 );
+  filenamePrefix.truncate( filenamePrefix.length() - 3 ); // remove cue extension
+  kdDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*" << endl;
+
+  //
+  // we cannot use the nameFilter in QDir because of the spaces that may occure in filenames
+  //
+  QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
+  int cnt = 0;
+  for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
+    if( (*it).lower() == dataFile.section( '/', -1 ).lower() ||
+	(*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
+      ++cnt;
+      setImageFilename( K3b::parentDir(filename()) + *it );
+    }
+  }
+
+  //
+  // we only do this if there is one unique file which fits the requirements. 
+  // Otherwise we cannot be certain to have the right file.
+  //
+  return ( cnt == 1 && QFileInfo( imageFilename() ).isFile() );
 }

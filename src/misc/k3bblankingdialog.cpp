@@ -93,6 +93,12 @@ K3bBlankingDialog::~K3bBlankingDialog()
 }
 
 
+void K3bBlankingDialog::setDevice( K3bDevice::Device* dev )
+{
+  m_writerSelectionWidget->setWriterDevice( dev );
+}
+
+
 void K3bBlankingDialog::setupGui()
 {
   QWidget* frame = mainWidget();

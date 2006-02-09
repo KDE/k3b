@@ -61,8 +61,8 @@ class LIBK3B_EXPORT K3bThreadJob : public K3bJob
   virtual QString jobDetails() const;
 
  public slots:
-  void start();
-  void cancel();
+  virtual void start();
+  virtual void cancel();
 
  protected:
   /**

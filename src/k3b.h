@@ -56,6 +56,7 @@ class K3bProjectInterface;
 
 namespace K3bDevice {
   class DeviceManager;
+  class Device;
 }
 
 
@@ -112,7 +113,9 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotClearProject();
 
+  void blankCdrw( K3bDevice::Device* );
   void slotBlankCdrw();
+  void formatDvd( K3bDevice::Device* );
   void slotFormatDvd();
   void slotWriteCdImage();
   void slotWriteCdImage( const KURL& url );
@@ -120,8 +123,11 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotWriteDvdIsoImage( const KURL& url );
   // encoding dialog for transcode encoding utility
   void slotDivxEncoding();
+  void cdCopy( K3bDevice::Device* );
   void slotCdCopy();
+  void dvdCopy( K3bDevice::Device* );
   void slotDvdCopy();
+  void cddaRip( K3bDevice::Device* );
   void slotCddaRip();
   void slotK3bSetup();
 

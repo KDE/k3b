@@ -117,6 +117,8 @@
 #include <k3bjob.h>
 #include <k3bsignalwaiter.h>
 #include "k3bmediaselectiondialog.h"
+#include "k3bmediacache.h"
+#include "k3bmedium.h"
 
 
 class K3bMainWindow::Private
@@ -1219,20 +1221,6 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 }
 
 
-void K3bMainWindow::slotBlankCdrw()
-{
-  K3bBlankingDialog dlg( this, "blankingdialog" );
-  dlg.exec(false);
-}
-
-
-void K3bMainWindow::slotFormatDvd()
-{
-  K3bDvdFormattingDialog d( this );
-  d.exec(false);
-}
-
-
 void K3bMainWindow::slotWriteCdImage()
 {
   K3bCdImageWritingDialog d( this );
@@ -1299,17 +1287,59 @@ void K3bMainWindow::slotK3bSetup()
 }
 
 
-void K3bMainWindow::slotCdCopy()
+void K3bMainWindow::blankCdrw( K3bDevice::Device* dev )
+{
+  K3bBlankingDialog dlg( this, "blankingdialog" );
+  dlg.setDevice( dev );
+  dlg.exec(false);
+}
+
+
+void K3bMainWindow::slotBlankCdrw()
+{
+  blankCdrw( 0 );
+}
+
+
+void K3bMainWindow::formatDvd( K3bDevice::Device* dev )
+{
+  K3bDvdFormattingDialog d( this );
+  d.setDevice( dev );
+  d.exec(false);
+}
+
+
+void K3bMainWindow::slotFormatDvd()
+{
+  formatDvd( 0 );
+}
+
+
+void K3bMainWindow::cdCopy( K3bDevice::Device* dev )
 {
   K3bCdCopyDialog d( this );
+  d.setReadingDevice( dev );
+  d.exec(false);
+}
+
+
+void K3bMainWindow::slotCdCopy()
+{
+  cdCopy( 0 );
+}
+
+
+void K3bMainWindow::dvdCopy( K3bDevice::Device* dev )
+{
+  K3bDvdCopyDialog d( this );
+  d.setReadingDevice( dev );
   d.exec(false);
 }
 
 
 void K3bMainWindow::slotDvdCopy()
 {
-  K3bDvdCopyDialog d( this );
-  d.exec(false);
+  dvdCopy( 0 );
 }
 
 
@@ -1519,9 +1549,19 @@ bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KURL& url )
 
 void K3bMainWindow::slotCddaRip()
 {
-  if( K3bDevice::Device* dev = K3bMediaSelectionDialog::selectCDMedium( K3bMediaSelectionDialog::TOC_AUDIO|K3bMediaSelectionDialog::TOC_MIXED, 
-									this,
-									i18n("Audio CD Rip") ) )
+  cddaRip( 0 );
+}
+
+
+void K3bMainWindow::cddaRip( K3bDevice::Device* dev )
+{
+  if( !dev ||
+      !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_AUDIO ) )
+    dev = K3bMediaSelectionDialog::selectCDMedium( K3bMediaSelectionDialog::TOC_AUDIO|K3bMediaSelectionDialog::TOC_MIXED, 
+						   this,
+						   i18n("Audio CD Rip") );
+
+  if( dev )
     m_dirView->showDevice( dev );
 }
 

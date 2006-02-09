@@ -23,7 +23,7 @@
 #include "k3b_export.h"
 
 
-#define LIBK3B_VERSION "0.12.91"
+#define LIBK3B_VERSION "0.12.93"
 
 #define k3bcore K3bCore::k3bCore()
 
@@ -40,6 +40,7 @@ class K3bPluginManager;
 
 namespace K3bDevice {
   class DeviceManager;
+  class Device;
 }
 
 
@@ -70,7 +71,8 @@ class LIBK3B_EXPORT K3bCore : public QObject
   bool jobsRunning() const;
 
   /**
-   * The default implementation scans for devices, applications, and reads the global settings.
+   * The default implementation calls add four initXXX() methods,
+   * scans for devices, applications, and reads the global settings.
    */
   virtual void init();
 
@@ -84,6 +86,10 @@ class LIBK3B_EXPORT K3bCore : public QObject
    */
   virtual void saveSettings( KConfig* c = 0 );
 
+  /**
+   * If this is reimplemented it is recommended to also reimplement
+   * init().
+   */
   virtual K3bDevice::DeviceManager* deviceManager() const;
 
   /**
@@ -115,6 +121,13 @@ class LIBK3B_EXPORT K3bCore : public QObject
    */
   virtual KConfig* config() const;
 
+  /**
+   * Used by the writing jobs to block a device.
+   * This makes sure no device is used twice within libk3b
+   */
+  virtual bool blockDevice( K3bDevice::Device* );
+  virtual void unblockDevice( K3bDevice::Device* );
+
   static K3bCore* k3bCore() { return s_k3bCore; }
 
  signals:
@@ -134,6 +147,12 @@ class LIBK3B_EXPORT K3bCore : public QObject
    */
   void registerJob( K3bJob* job );
   void unregisterJob( K3bJob* job );
+
+ protected:
+  virtual void initGlobalSettings();
+  virtual void initExternalBinManager();
+  virtual void initDeviceManager();
+  virtual void initPluginManager();
 
  private:
   class Private;

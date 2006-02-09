@@ -383,20 +383,6 @@ ssize_t poor_mans_pwrite64 (int fd,const void *_buff,size_t size,off64_t foff)
 
     while (1)
     {	
-      cmd[0] = 0x5C;		// READ BUFFER CAPACITY
-      cmd[8] = sizeof(bcap);
-      cmd[9] = 0;
-      if(!cmd.transport (READ,bcap,sizeof(bcap))) {
-	bsize = bcap[4]<<24|bcap[5]<<16|bcap[6]<<8|bcap[7];
-	bfree = bcap[8]<<24|bcap[9]<<16|bcap[10]<<8|bcap[11];
-	int bufferFill = 100*(bsize-bfree)/bsize;
-	if( bufferFill != last_buffer_fill ) {
-	  last_buffer_fill = bufferFill;
-	  fprintf (stderr, "Buffer fill: %d\n", last_buffer_fill );
-	}
-      }
-
-
       cmd[0] = wrvfy?0x2E:0x2A;	// WRITE [AND VERIFY] (10)
 	cmd[2] = (lba>>24)&0xff;	// Logical Block Addrss
 	cmd[3] = (lba>>16)&0xff;
@@ -434,6 +420,20 @@ ssize_t poor_mans_pwrite64 (int fd,const void *_buff,size_t size,off64_t foff)
 	// Sending them down as milliseconds is just safer...
 	//
 	if (!(errcode=cmd.transport (WRITE,(void *)buff,size))) {
+
+	  cmd[0] = 0x5C;		// READ BUFFER CAPACITY
+	  cmd[8] = sizeof(bcap);
+	  cmd[9] = 0;
+	  if(!cmd.transport (READ,bcap,sizeof(bcap))) {
+	    bsize = bcap[4]<<24|bcap[5]<<16|bcap[6]<<8|bcap[7];
+	    bfree = bcap[8]<<24|bcap[9]<<16|bcap[10]<<8|bcap[11];
+	    int bufferFill = 100*(bsize-bfree)/bsize;
+	    if( bufferFill != last_buffer_fill ) {
+	      last_buffer_fill = bufferFill;
+	      fprintf (stderr, "Buffer fill: %d\n", last_buffer_fill );
+	    }
+	  }
+
 	  break;
 	}
 

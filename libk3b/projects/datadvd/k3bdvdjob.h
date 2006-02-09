@@ -17,24 +17,15 @@
 #ifndef _K3B_DVD_JOB_H_
 #define _K3B_DVD_JOB_H_
 
-#include <k3bjob.h>
+#include <k3bdatajob.h>
 
 #include <qfile.h>
 
 class K3bDataDoc;
-class K3bGrowisofsImager;
 class K3bGrowisofsWriter;
-class K3bIsoImager;
-namespace K3bDevice {
-  class DeviceHandler;
-}
 
 
-/**
- * Some of this classes methods are made virtual since the K3bVideoDvdJob
- * is derived from this one. This is no clean API at all!
- */
-class K3bDvdJob : public K3bBurnJob
+class K3bDvdJob : public K3bDataJob
 {
   Q_OBJECT
 
@@ -45,49 +36,16 @@ class K3bDvdJob : public K3bBurnJob
   K3bDvdJob( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
   virtual ~K3bDvdJob();
 
-  K3bDoc* doc() const;
-  K3bDevice::Device* writer() const;
-
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
 
- public slots:
-  virtual void start();
-  virtual void cancel();
-
  protected:
+  void prepareData();
   virtual bool prepareWriterJob();
-  virtual void prepareIsoImager();
-  void prepareGrowisofsImager();
-  void cleanup();
-  void writeImage();
   void determineMultiSessionMode();
-
-  bool waitForDvd();
-  bool startWriting();
-
+  K3bDataDoc::MultiSessionMode getMultiSessionMode( const K3bDevice::DiskInfo& );
+  bool waitForMedium();
   int requestMedia( int state );
-
-  K3bIsoImager* m_isoImager;
-  K3bGrowisofsImager* m_growisofsImager;
-  K3bGrowisofsWriter* m_writerJob;
-
-  bool m_canceled;
-  bool m_writingStarted;
-
- protected slots:
-  void slotSizeCalculationFinished(int, int);
-  void slotIsoImagerFinished( bool success );
-  void slotIsoImagerPercent(int);
-  void slotGrowisofsImagerPercent(int);
-
-  void slotWriterJobPercent( int );
-  void slotWritingFinished( bool );
-
-  void slotVerificationProgress( int p );
-  void slotVerificationFinished( bool success );
-
-  void slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh );
 
  private:
   K3bDataDoc* m_doc;

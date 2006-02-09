@@ -327,6 +327,9 @@ void K3bCdrecordWriter::start()
 
   emit newSubTask( i18n("Preparing write process...") );
 
+  // FIXME: check the return value
+  k3bcore->blockDevice( burnDevice() );
+
   d->interferingSystemHndl->disable( burnDevice() );
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
@@ -642,6 +645,8 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
   d->cdTextFile = 0;
 
   d->interferingSystemHndl->enable();
+
+  k3bcore->unblockDevice( burnDevice() );
 
   if( d->canceled ) {
     // this will unblock and eject the drive and emit the finished/canceled signals

@@ -26,7 +26,8 @@ static K3bDevice::HalConnection* s_setupHal = 0;
 K3bDevice::HalConnection::HalConnection( QObject* parent, const char* name )
   : QObject( parent, name ),
     m_halContext(0),
-    m_dBusQtConnection(0)
+    m_dBusQtConnection(0),
+    m_bOpen(false)
 {
 }
 
@@ -34,6 +35,12 @@ K3bDevice::HalConnection::HalConnection( QObject* parent, const char* name )
 K3bDevice::HalConnection::~HalConnection()
 {
   close();
+}
+
+
+bool K3bDevice::HalConnection::isOpen() const
+{
+  return m_bOpen;
 }
 
 
@@ -78,7 +85,7 @@ bool K3bDevice::HalConnection::open()
   dbus_error_init( &error );
   DBusConnection* dbus_connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
   if( dbus_error_is_set(&error) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS." << endl;
+    kdDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS: " << error.message << endl;
     return false;
   }
 
@@ -108,6 +115,8 @@ bool K3bDevice::HalConnection::open()
   for( int i = 0; i < numDevices; ++i )
     addDevice( halDeviceList[i] );
 
+  m_bOpen = true;
+
   return true;
 }
 
@@ -122,7 +131,9 @@ void K3bDevice::HalConnection::close()
 #ifdef HAL_0_4
     hal_shutdown( m_halContext );
 #else
-    libhal_ctx_shutdown( m_halContext, 0 );
+    if( isOpen() ) {
+      libhal_ctx_shutdown( m_halContext, 0 );
+    }
     libhal_ctx_free( m_halContext );
 #endif
 
@@ -131,6 +142,7 @@ void K3bDevice::HalConnection::close()
 
     m_halContext = 0;
     m_dBusQtConnection = 0;
+    m_bOpen = false;
   }
 }
 
@@ -164,7 +176,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
 {
   QString s = getSystemDeviceForCdrom( udi );
   if( !s.isEmpty() ) {
-    //    kdDebug() << "Mapping udi " << udi << " to device " << s << endl;
+    kdDebug() << "Mapping udi " << udi << " to device " << s << endl;
     m_udiDeviceMap[udi] = s;
     emit deviceAdded( s );
   }
@@ -175,7 +187,7 @@ void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
   QMapIterator<QCString, QString> it = m_udiDeviceMap.find( udi );
   if( it != m_udiDeviceMap.end() ) {
-    //    kdDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
+    kdDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
     emit deviceRemoved( it.data() );
     m_udiDeviceMap.erase( it );
   }
@@ -192,7 +204,7 @@ void K3bDevice::HalConnection::setupDBusQtConnection( DBusConnection* dbusConnec
 // CALLBACKS
 void K3bDevice::HalConnection::halDeviceAdded( LibHalContext* ctx, const char* udi )
 {
-  //  kdDebug() << "adding udi   " << udi << endl;
+  kdDebug() << "adding udi   " << udi << endl;
   HalConnection* con = s_contextMap[ctx];
   con->addDevice( udi );
 }
@@ -200,7 +212,7 @@ void K3bDevice::HalConnection::halDeviceAdded( LibHalContext* ctx, const char* u
 
 void K3bDevice::HalConnection::halDeviceRemoved( LibHalContext* ctx, const char* udi )
 {
-  //  kdDebug() << "removing udi " << udi << endl;
+  kdDebug() << "removing udi " << udi << endl;
   HalConnection* con = s_contextMap[ctx];
   con->removeDevice( udi );
 }

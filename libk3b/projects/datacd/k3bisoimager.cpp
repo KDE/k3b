@@ -1004,10 +1004,10 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
   name += QString::number( dir->sortWeight() );
 
   bool perm = false;
-  K3bStatStruct statBuf;
+  k3b_struct_stat statBuf;
   if( !dir->localPath().isEmpty() ) {
     // permissions
-    if( statBuf.stat( dir->localPath() ) == 0 ) {
+    if( k3b_stat( QFile::encodeName(dir->localPath()), &statBuf ) == 0 ) {
       name += "_";
       name += QString::number( statBuf.st_uid );
       name += "_";
