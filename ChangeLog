@@ -11,6 +11,8 @@
  * Use .iso extension for images instead of .img
  * Properly remove the image file in case verification failed.
  * Ignore mounting state of a medium when showing its contents.
+ * Fixed a bug in the iso options code which sometimes resulted in a failed verification.
+ * Properly handle cue files withan image file name like image.bin.cue + image.bin
 
 0.12.10
 =======

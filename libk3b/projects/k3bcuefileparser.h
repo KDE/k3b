@@ -46,6 +46,7 @@ class K3bCueFileParser : public K3bImageFileReader
   void readFile();
   bool parseLine( QString& line );
   void simplifyWhiteSpace( QString& s );
+  bool findImageFileName( const QString& fileEntry );
 
   bool m_imageFilenameInCue;
 
