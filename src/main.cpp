@@ -110,6 +110,9 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Adriaan De Groot",
 		      I18N_NOOP("For his work on the BSD port."),
 		      "" );
+  aboutData.addCredit("Thiago Macieira",
+		      I18N_NOOP("For his help with the many invalid k3b entries on bugs.kde.org."),
+		      "thiago@kde.org" );
   aboutData.addCredit("Marcel Dierkes",
 		      I18N_NOOP("For the great K3b icon eyecandy."),
 		      "marcel.dierkes@gmx.de" );
