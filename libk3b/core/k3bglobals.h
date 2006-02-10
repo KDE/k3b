@@ -200,7 +200,7 @@ namespace K3b
    * Convert an url pointing to a local device to a K3bDevice.
    * Supports media:// and system::// urls.
    */
-  LIBK3B_EXPORT K3bDevice::Device* K3b::urlToDevice( const KURL& deviceUrl );
+  LIBK3B_EXPORT K3bDevice::Device* urlToDevice( const KURL& deviceUrl );
 
   /**
    * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
