@@ -31,6 +31,11 @@ class K3bLameEncoder : public K3bAudioEncoder
   K3bLameEncoder( QObject* parent = 0, const char* name = 0 );
   ~K3bLameEncoder();
 
+  bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
+  bool isOpen() const;
+  void closeFile();
+  const QString& filename() const;
+
   QStringList extensions() const;
   
   QString fileTypeComment( const QString& ) const;

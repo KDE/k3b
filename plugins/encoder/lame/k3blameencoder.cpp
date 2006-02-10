@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3blameencoder.h"
 
 #include <k3bcore.h>
@@ -33,8 +35,9 @@
 #include <qgroupbox.h>
 #include <qbuttongroup.h>
 #include <qtextcodec.h>
+#include <qfile.h>
 
-
+#include <stdio.h>
 #include <lame/lame.h>
 
 
@@ -45,12 +48,16 @@ class K3bLameEncoder::Private
 {
 public:
   Private()
-    : flags(0) {
+    : flags(0),
+      fid(0) {
   }
 
   lame_global_flags* flags;
 
   char buffer[8000];
+
+  QString filename;
+  FILE* fid;
 };
 
 
@@ -65,14 +72,49 @@ K3bLameEncoder::K3bLameEncoder( QObject* parent, const char* name )
 
 K3bLameEncoder::~K3bLameEncoder()
 {
-  if( d->flags )
-    lame_close( d->flags );
+  closeFile();
 
   delete d;
 }
 
 
-bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
+bool K3bLameEncoder::openFile( const QString& extension, const QString& filename, const K3b::Msf& length )
+{
+  closeFile();
+
+  d->filename = filename;
+  d->fid = ::fopen( QFile::encodeName( filename ), "w" );
+  if( d->fid )
+    return initEncoder( extension, length );
+  else
+    return false;
+}
+
+
+bool K3bLameEncoder::isOpen() const
+{
+  return ( d->fid != 0 );
+}
+
+
+void K3bLameEncoder::closeFile()
+{
+  if( isOpen() ) {
+    finishEncoder();
+    ::fclose( d->fid );
+    d->fid = 0;
+    d->filename.truncate(0);
+  }
+}
+
+
+const QString& K3bLameEncoder::filename() const
+{
+  return d->filename;
+}
+
+
+bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length )
 {
   KConfig* c = k3bcore->config();
   c->setGroup( "K3bLameEncoderPlugin" );
@@ -83,6 +125,11 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
     kdDebug() << "(K3bLameEncoder) lame_init failed." << endl;
     return false;
   }
+
+  // set the format of the input data
+  lame_set_num_samples( d->flags, length.lba()*588 );
+  lame_set_in_samplerate( d->flags, 44100 );
+  lame_set_num_channels( d->flags, 2 );
 
   //
   // Mode
@@ -176,7 +223,7 @@ long K3bLameEncoder::encodeInternal( const char* data, Q_ULONG len )
     return -1;
   }
 
-  return writeData( d->buffer, size );
+  return ::fwrite( d->buffer, 1, size, d->fid );
 }
 
 
@@ -186,7 +233,9 @@ void K3bLameEncoder::finishEncoderInternal()
 				(unsigned char*)d->buffer,
 				8000 );
   if( size > 0 )
-    writeData( d->buffer, size );
+    ::fwrite( d->buffer, 1, size, d->fid );
+
+  lame_mp3_tags_fid( d->flags, d->fid );
 
   lame_close( d->flags );
   d->flags = 0;

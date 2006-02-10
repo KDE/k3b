@@ -103,11 +103,7 @@ void K3bAudioEncoder::setMetaData( K3bAudioEncoder::MetaDataField f, const QStri
 
 long K3bAudioEncoder::encode( const char* data, Q_ULONG len )
 {
-  long r =  encodeInternal( data, len );
-  if( r > 0 && r < (long)len )
-    return encode( data+r, len-r );
-  else
-    return r;
+  return encodeInternal( data, len );
 }
 
 
