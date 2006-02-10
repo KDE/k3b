@@ -311,11 +311,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	}
 	else {
 	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: empty DVD+RW where a non-empty was requested." << endl;
-	  showDialog();
-	  connect( K3bDevice::eject( d->device ),
-		   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		   this,
-		   SLOT(startDeviceHandler()) );
+	  ejectWrongMedium();
 	}
       }
       else {
@@ -339,11 +335,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	  }
 	  else {
 	    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD+RW overwrite" << endl;
-	    showDialog();
-	    connect( K3bDevice::eject( d->device ),
-		     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		     this,
-		     SLOT(startDeviceHandler()) );
+	    ejectWrongMedium();
 	  }
 	}
 	else {  // complete or appendable media wanted
@@ -409,11 +401,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	  }
 	  else {
 	    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW overwrite." << endl;
-	    showDialog();
-	    connect( K3bDevice::eject( d->device ),
-		     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		     this,
-		     SLOT(startDeviceHandler()) );
+	    ejectWrongMedium();
 	  }
 	}
 
@@ -494,11 +482,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
 	}
 	else {
 	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW formatting." << endl;
-	  showDialog();
-	  connect( K3bDevice::eject( d->device ),
-		   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		   this,
-		   SLOT(startDeviceHandler()) );
+	  ejectWrongMedium();
 	}
       }
       else {
@@ -571,11 +555,7 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
       }
       else {
 	kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no CD-RW overwrite." << endl;
-	showDialog();
-	connect( K3bDevice::eject( d->device ),
-		 SIGNAL(finished(K3bDevice::DeviceHandler*)),
-		 this,
-		 SLOT(startDeviceHandler()) );
+	ejectWrongMedium();
       }
     }
     else {
@@ -593,14 +573,13 @@ void K3bEmptyDiscWaiter::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh
   }
 }
 
+
 void K3bEmptyDiscWaiter::continueWaiting()
 {
   showDialog();
-  connect( K3bDevice::eject( d->device ),
-	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	   this,
-	   SLOT(startDeviceHandler()) );
+  startDeviceHandler();
 }
+
 
 void K3bEmptyDiscWaiter::showDialog()
 {
@@ -756,5 +735,22 @@ bool K3bEmptyDiscWaiter::questionYesNo( const QString& text,
   return ( KMessageBox::questionYesNo( parentWidgetToUse(), text, caption ) == KMessageBox::Yes );
 }
 
+
+void K3bEmptyDiscWaiter::ejectWrongMedium()
+{
+  connect( K3bDevice::eject( d->device ),
+	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	   this,
+	   SLOT(slotEjectingWrongMediumDone(K3bDevice::DeviceHandler*)) );
+}
+
+
+void K3bEmptyDiscWaiter::slotEjectingWrongMediumDone( K3bDevice::DeviceHandler* dh )
+{
+  if( !dh->success() )
+    KMessageBox::sorry( parentWidgetToUse(), i18n("Unable to eject media.") );
+
+  continueWaiting();
+}
 
 #include "k3bemptydiscwaiter.moc"

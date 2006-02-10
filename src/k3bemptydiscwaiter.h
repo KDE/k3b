@@ -100,6 +100,8 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
   void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );
   void showDialog();
   void continueWaiting();
+  void ejectWrongMedium();
+  void slotEjectingWrongMediumDone( K3bDevice::DeviceHandler* );
   void slotErasingFinished( bool );
   void slotReloadingAfterErasingFinished( K3bDevice::DeviceHandler* );
 

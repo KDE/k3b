@@ -199,6 +199,11 @@ void K3bGrowisofsImager::start()
   if( k3bcore->globalSettings()->overburn() )
     *m_process << "-overburn";
 
+  if( m_growisofsBin->version >= K3bVersion( 6, 0 ) ) {
+    bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
+    int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 40 );
+    *m_process << QString("-use-the-force-luke=bufsize:%1m").arg(bufSize);
+  }
 
   // additional user parameters from config
   const QStringList& params = m_growisofsBin->userParameters();
