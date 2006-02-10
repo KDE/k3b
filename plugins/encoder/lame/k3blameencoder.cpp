@@ -83,7 +83,7 @@ bool K3bLameEncoder::openFile( const QString& extension, const QString& filename
   closeFile();
 
   d->filename = filename;
-  d->fid = ::fopen( QFile::encodeName( filename ), "w" );
+  d->fid = ::fopen( QFile::encodeName( filename ), "w+" );
   if( d->fid )
     return initEncoder( extension, length );
   else
@@ -142,7 +142,6 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
   else // mono
     lame_set_mode( d->flags, MONO );
 
-
   //
   // Variable Bitrate
   //
@@ -172,7 +171,21 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
       int q = c->readNumEntry( "Bitrate Quality Level", 5 );
       if( q < 0 ) q = 0;
       if( q > 9 ) q = 9;
-      lame_set_VBR_q( d->flags, 9-q );
+
+      int presets[] = {
+	V9, // lowest quality, smallest file
+	V8,
+	V7,
+	V6,
+	V5,
+	V4,
+	V3,
+	V2,
+	V1,
+	V0 // highest quality, insane setting
+      };
+
+      lame_set_preset( d->flags, presets[q] );
     }
   }
 
