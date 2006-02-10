@@ -83,7 +83,7 @@ bool K3bLameEncoder::openFile( const QString& extension, const QString& filename
   closeFile();
 
   d->filename = filename;
-  d->fid = ::fopen( QFile::encodeName( filename ), "w" );
+  d->fid = ::fopen( QFile::encodeName( filename ), "w+" );
   if( d->fid )
     return initEncoder( extension, length );
   else
@@ -114,7 +114,7 @@ const QString& K3bLameEncoder::filename() const
 }
 
 
-bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
+bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length )
 {
   KConfig* c = k3bcore->config();
   c->setGroup( "K3bLameEncoderPlugin" );
@@ -126,6 +126,11 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
     return false;
   }
 
+  // set the format of the input data
+  lame_set_num_samples( d->flags, length.lba()*588 );
+  lame_set_in_samplerate( d->flags, 44100 );
+  lame_set_num_channels( d->flags, 2 );
+
   //
   // Mode
   //
@@ -136,7 +141,6 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
     lame_set_mode( d->flags, JOINT_STEREO );
   else // mono
     lame_set_mode( d->flags, MONO );
-
 
   //
   // Variable Bitrate
@@ -167,7 +171,21 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
       int q = c->readNumEntry( "Bitrate Quality Level", 5 );
       if( q < 0 ) q = 0;
       if( q > 9 ) q = 9;
-      lame_set_VBR_q( d->flags, 9-q );
+
+      int presets[] = {
+	V9, // lowest quality, smallest file
+	V8,
+	V7,
+	V6,
+	V5,
+	V4,
+	V3,
+	V2,
+	V1,
+	V0 // highest quality, insane setting
+      };
+
+      lame_set_preset( d->flags, presets[q] );
     }
   }
 
@@ -228,7 +246,7 @@ void K3bLameEncoder::finishEncoderInternal()
 				(unsigned char*)d->buffer,
 				8000 );
   if( size > 0 )
-    writeData( d->buffer, size );
+    ::fwrite( d->buffer, 1, size, d->fid );
 
   lame_mp3_tags_fid( d->flags, d->fid );
 
