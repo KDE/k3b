@@ -52,9 +52,9 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool ISOomitVersionNumbers() const { return m_ISOomitVersionNumbers || ISOmaxFilenameLength(); }
   bool ISOomitTrailingPeriod() const { return m_ISOomitTrailingPeriod || ISOuntranslatedFilenames(); }
   bool ISOmaxFilenameLength() const { return m_ISOmaxFilenameLength || ISOuntranslatedFilenames(); }
-  bool ISOrelaxedFilenames() const { return m_ISOrelaxedFilenames; }
+  bool ISOrelaxedFilenames() const { return m_ISOrelaxedFilenames || ISOuntranslatedFilenames(); }
   bool ISOnoIsoTranslate() const { return m_ISOnoIsoTranslate; }
-  bool ISOallowMultiDot() const { return m_ISOallowMultiDot; }
+  bool ISOallowMultiDot() const { return m_ISOallowMultiDot || ISOuntranslatedFilenames(); }
   bool ISOuntranslatedFilenames() const { return m_ISOuntranslatedFilenames; }
   bool followSymbolicLinks() const { return m_followSymbolicLinks; }
   bool createTRANS_TBL() const { return m_createTRANS_TBL; }
