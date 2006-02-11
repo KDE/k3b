@@ -23,7 +23,7 @@
 
 
 
-#define LIBK3B_VERSION "0.12.11"
+#define LIBK3B_VERSION "0.12.12"
 
 #define k3bcore K3bCore::k3bCore()
 
