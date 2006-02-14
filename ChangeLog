@@ -1,6 +1,7 @@
 0.12.12
 =======
  * Fixed another bug in the iso options code which sometimes resulted in a failed verification.
+ * Properly close the reading device when copying VideoDVDs. This bug resulted in a blocked device.
 
 0.12.11
 =======
