@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include <qcstring.h>
 #include <qdatetime.h>
@@ -30,10 +31,35 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3biso9660.h>
+#include <k3b_export.h>
 
 #include "videodvd.h"
 
 using namespace KIO;
+
+extern "C"
+{
+  LIBK3B_EXPORT int kdemain( int argc, char **argv )
+  {
+    KInstance instance( "kio_videodvd" );
+
+    kdDebug(7101) << "*** Starting kio_videodvd " << endl;
+
+    if (argc != 4)
+    {
+      kdDebug(7101) << "Usage: kio_videodvd  protocol domain-socket1 domain-socket2" << endl;
+      exit(-1);
+    }
+
+    kio_videodvdProtocol slave(argv[2], argv[3]);
+    slave.dispatchLoop();
+
+    kdDebug(7101) << "*** kio_videodvd Done" << endl;
+    return 0;
+  }
+}
+
+
 
 // FIXME: Does it really make sense to use a static device manager? Are all instances
 // of videodvd started in another process?
@@ -171,6 +197,7 @@ K3bIso9660* kio_videodvdProtocol::openIso( const KURL& url )
 
   // we have a device. Search for a data track
   K3bIso9660* iso = new K3bIso9660( dev );
+  iso->setPlainIso9660( true );
   if( iso->open() )
     return iso;
   else
@@ -315,28 +342,5 @@ void kio_videodvdProtocol::mimetype( const KURL& url )
       }
     }
     delete iso;
-  }
-}
-
-
-extern "C"
-{
-  int kdemain(int argc, char **argv)
-  {
-    KInstance instance( "kio_videodvd" );
-
-    kdDebug(7101) << "*** Starting kio_videodvd " << endl;
-
-    if (argc != 4)
-    {
-      kdDebug(7101) << "Usage: kio_videodvd  protocol domain-socket1 domain-socket2" << endl;
-      exit(-1);
-    }
-
-    kio_videodvdProtocol slave(argv[2], argv[3]);
-    slave.dispatchLoop();
-
-    kdDebug(7101) << "*** kio_videodvd Done" << endl;
-    return 0;
   }
 }
