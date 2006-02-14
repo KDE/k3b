@@ -17,6 +17,8 @@
 #ifndef K3BGLOBALS_H
 #define K3BGLOBALS_H
 
+#include <config.h>
+
 #include <qstring.h>
 #include <kio/global.h>
 #include <kurl.h>
@@ -29,6 +31,20 @@ class K3bExternalBin;
 namespace K3bDevice {
   class Device;
 }
+
+
+#include <sys/stat.h>
+
+#ifdef HAVE_STAT64
+#define k3b_struct_stat struct stat64
+#define k3b_stat        ::stat64
+#define k3b_lstat       ::lstat64
+#else
+#define k3b_struct_stat struct stat
+#define k3b_stat        ::stat
+#define k3b_lstat       ::lstat
+#endif
+
 
 namespace K3b
 {

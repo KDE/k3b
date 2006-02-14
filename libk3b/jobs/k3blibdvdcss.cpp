@@ -13,10 +13,13 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3blibdvdcss.h"
 
 #include <k3bdevice.h>
 #include <k3biso9660.h>
+#include <k3biso9660backend.h>
 
 #include <qfile.h>
 #include <qcstring.h>
@@ -129,6 +132,7 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
     int titleEnd = titleStart + d->titleOffsets[i].second - 1;
 
     // update key when entrering a new title
+    // FIXME: we also need this if we seek into a new title (not only the start of the title)
     if( titleStart == firstSector )
       startOfTitle = needToSeek = inTitle = true;
     
@@ -162,11 +166,15 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
     else if( inTitle )
       flags = DVDCSS_SEEK_MPEG;
 
-    kdDebug() << "(K3bLibDvdCss) need to seek to " << firstSector << " with " << flags << endl;
+    kdDebug() << "(K3bLibDvdCss) need to seek from " << d->currentSector << " to " << firstSector << " with " << flags << endl;
 
     d->currentSector = seek( firstSector, flags );
-    if( d->currentSector < 0 )
+    if( d->currentSector != firstSector ) {
+      kdDebug() << "(K3bLibDvdCss) seek failed: " << d->currentSector << endl;
       return -1;
+    }
+
+    kdDebug() << "(K3bLibDvdCss) seek done: " << d->currentSector << endl;
   }
 
 
@@ -193,11 +201,13 @@ bool K3bLibDvdCss::crackAllKeys()
 
   d->titleOffsets.clear();
 
-  K3bIso9660 iso( d->device );
+  K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
+  iso.setPlainIso9660( true );
   if( !iso.open() ) {
     kdDebug() << "(K3bLibDvdCss) could not open iso9660 fs." << endl;
     return false;
   }
+
   const K3bIso9660Directory* dir = iso.firstIsoDirEntry();
 
   int title = 0;
@@ -262,7 +272,7 @@ bool K3bLibDvdCss::crackAllKeys()
 
   kdDebug() << "(K3bLibDvdCss) found " << title << " titles." << endl;
 
-  return true;
+  return (title > 0);
 }
 
 
