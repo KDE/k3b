@@ -1018,7 +1018,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
      }
   }
 
-  else if( e->type() == QEvent::MouseButtonPress ) {
+  else if( e->type() == QEvent::MouseButtonPress && o == viewport() ) {
 
     // first let's grab the focus
     setFocus();
