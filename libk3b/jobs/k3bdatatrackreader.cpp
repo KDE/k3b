@@ -82,7 +82,8 @@ public:
 	kdDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss." << endl;
 	
 	// open the libdvdcss stuff
-	m_libcss = K3bLibDvdCss::create();
+	if( !m_libcss )
+	  m_libcss = K3bLibDvdCss::create();
 	if( !m_libcss ) {
 	  emitInfoMessage( i18n("Unable to open libdvdcss."), K3bJob::ERROR );
 	  emitFinished(false);
@@ -97,6 +98,7 @@ public:
 
 	emitInfoMessage( i18n("Retrieving all CSS keys. This might take a while."), K3bJob::INFO );
 	if( !m_libcss->crackAllKeys() ) {
+	  m_libcss->close();
 	  emitInfoMessage( i18n("Failed to retrieve all CSS keys."), K3bJob::ERROR );
 	  emitFinished(false);
 	  return;
@@ -138,6 +140,8 @@ public:
       file.setName( m_imagePath );
       if( !file.open( IO_WriteOnly ) ) {
 	m_device->close();
+	if( m_useLibdvdcss )	
+	  m_libcss->close();
 	emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(m_imagePath), K3bJob::ERROR );
 	emitFinished( false );
 	return;
@@ -245,6 +249,8 @@ public:
     setErrorRecovery( m_device, m_oldErrorRecoveryMode );
 
     // cleanup
+    if( m_useLibdvdcss )
+      m_libcss->close();
     m_device->close();
     delete [] buffer;
 

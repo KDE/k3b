@@ -17,6 +17,8 @@
 #ifndef K3BGLOBALS_H
 #define K3BGLOBALS_H
 
+#include <config.h>
+
 #include <qstring.h>
 #include <qfile.h>
 #include <kio/global.h>

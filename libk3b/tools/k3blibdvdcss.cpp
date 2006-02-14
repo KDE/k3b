@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3blibdvdcss.h"
 
 #include <k3bdevice.h>
@@ -200,10 +202,16 @@ bool K3bLibDvdCss::crackAllKeys()
   d->titleOffsets.clear();
 
   K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
+  iso.setPlainIso9660( true );
   if( !iso.open() ) {
     kdDebug() << "(K3bLibDvdCss) could not open iso9660 fs." << endl;
     return false;
   }
+
+#ifdef K3B_DEBUG
+  iso.debug();
+#endif
+
   const K3bIso9660Directory* dir = iso.firstIsoDirEntry();
 
   int title = 0;
@@ -268,7 +276,7 @@ bool K3bLibDvdCss::crackAllKeys()
 
   kdDebug() << "(K3bLibDvdCss) found " << title << " titles." << endl;
 
-  return true;
+  return (title > 0);
 }
 
 

@@ -81,7 +81,7 @@ int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
   //
   // Now see if we have RockRidge
   //
-  if( ParseRR(idr,&rr) > 0 ) {
+  if( !iso->plainIso9660() && ParseRR(idr,&rr) > 0 ) {
     iso->m_rr = true;
     if (!special)
       path = QString::fromLocal8Bit( rr.name );
@@ -103,7 +103,7 @@ int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
     group=iso->dirent->group();
     if (idr->flags[0] & 2) access |= S_IFDIR; else access |= S_IFREG;
     if (!special) {
-      if (iso->jolietLevel()) {
+      if( !iso->plainIso9660() && iso->jolietLevel() ) {
 	for (i=0;i<(isonum_711(idr->name_len)-1);i+=2) {
 	  QChar ch( be2me_16(*((ushort*)&(idr->name[i]))) );
 	  if (ch==';') break;
@@ -113,12 +113,18 @@ int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
       else {
 	// no RR, no Joliet, just plain iso9660
 	path = isoPath;
+
+	// remove the version field
+	int pos = path.find( ';' );
+	if( pos > 0 )
+	  path.truncate( pos );
       }
       if (path.endsWith(".")) path.setLength(path.length()-1);
     }
   }
 
-  FreeRR(&rr);
+  if( !iso->plainIso9660() )
+    FreeRR(&rr);
 
   if (idr->flags[0] & 2) {
       entry = new K3bIso9660Directory( iso, isoPath, path, access | S_IFDIR, time, adate, cdate,
@@ -452,6 +458,7 @@ public:
       fd(-1),
       isOpen(false),
       startSector(0),
+      plainIso9660(false),
       backend(0) {
   }
 
@@ -469,6 +476,8 @@ public:
 
   // only used for direkt K3bDevice::Device access
   unsigned int startSector;
+
+  bool plainIso9660;
 
   K3bIso9660Backend* backend;
 };
@@ -514,6 +523,18 @@ K3bIso9660::~K3bIso9660()
 void K3bIso9660::setStartSector( unsigned int startSector )
 {
   d->startSector = startSector;
+}
+
+
+void K3bIso9660::setPlainIso9660( bool b )
+{
+  d->plainIso9660 = b;
+}
+
+
+bool K3bIso9660::plainIso9660() const
+{
+  return d->plainIso9660;
 }
 
 
@@ -663,6 +684,11 @@ bool K3bIso9660::open()
 	struct iso_directory_record* idr = (struct iso_directory_record*)&primaryDesc->root_directory_record;
 
 	m_joliet = JolietLevel(&desc->data);
+
+	// skip joliet in plain iso mode
+	if( m_joliet && plainIso9660() )
+	  break;
+
 	if (m_joliet) {
 	  path = "Joliet level " + QString::number(m_joliet);
 	  if( c_j > 1 )

@@ -360,6 +360,14 @@ class LIBK3B_EXPORT K3bIso9660
   void setStartSector( unsigned int startSector );
 
   /**
+   * If set to true before opening K3bIso9660 will ignore RR and joliet extensions
+   * and only create plain iso9660 names.
+   */
+  void setPlainIso9660( bool );
+
+  bool plainIso9660() const;
+
+  /**
    * Opens the archive for reading.
    * Parses the directory listing of the archive
    * and creates the K3bIso9660Directory/K3bIso9660File entries.
