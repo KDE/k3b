@@ -404,6 +404,8 @@ void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 						k3bappcore->mediaCache()->diskInfo( dev ).size().mode1Bytes() > 4700372992LL
 						? K3bDevice::MEDIA_WRITABLE_DVD_DL
 						: K3bDevice::MEDIA_WRITABLE_DVD_SL );
+
+  m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + k3bappcore->mediaCache()->medium( dev ).volumeId().lower() + ".iso" );
 }
 
 #include "k3bdvdcopydialog.moc"

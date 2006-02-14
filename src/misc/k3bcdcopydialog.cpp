@@ -32,6 +32,8 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bthememanager.h>
 #include <k3bwritingmodewidget.h>
+#include <k3bapplication.h>
+#include <k3bmediacache.h>
 
 #include <kguiitem.h>
 #include <klocale.h>
@@ -407,6 +409,14 @@ void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
   m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning"),
 					      i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+
+  if( k3bappcore->mediaCache()->toc( dev ).contentType() == K3bDevice::DATA ) {
+    m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+    m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + k3bappcore->mediaCache()->medium( dev ).volumeId().lower() + ".iso" );
+  }
+  else {
+    m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );
+  }
 }
 
 
