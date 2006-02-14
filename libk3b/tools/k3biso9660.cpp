@@ -362,7 +362,7 @@ K3bIso9660Entry* K3bIso9660Directory::entry( const QString& n )
   QString name(n);
 
   // trailing slash ? -> remove
-  if( name[name.length()-1] == '/' ) {
+  if( name.length() > 1 && name[name.length()-1] == '/' ) {
     name.truncate( name.length()-1 );
   }
 
@@ -400,7 +400,7 @@ K3bIso9660Entry* K3bIso9660Directory::iso9660Entry( const QString& n )
   QString name(n);
 
   // trailing slash ? -> remove
-  if( name[name.length()-1] == '/' ) {
+  if( name.length() > 1 && name[name.length()-1] == '/' ) {
     name.truncate( name.length()-1 );
   }
 
