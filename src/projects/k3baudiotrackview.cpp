@@ -107,10 +107,6 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
 	   this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
 
   slotChanged();
-
-  // a little background pix hack because I am simply incapable of doing it another way. :(
-//   static QPixmap s_bgPix("/tmp/trueg/audio_bg.png");
-//   setK3bBackgroundPixmap( s_bgPix, TOP_LEFT );
 }
 
 

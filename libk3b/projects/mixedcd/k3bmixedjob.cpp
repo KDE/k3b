@@ -707,8 +707,8 @@ bool K3bMixedJob::writeTocFile()
     m_tocFile->close();
 
     // backup for debugging
-    KIO::NetAccess::del("/tmp/trueg/tocfile_debug_backup.toc",0L);
-    KIO::NetAccess::copy( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L );
+//    KIO::NetAccess::del("/tmp/trueg/tocfile_debug_backup.toc",0L);
+//    KIO::NetAccess::copy( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L );
 
     return success;
   }
