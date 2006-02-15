@@ -20,7 +20,11 @@
 #include <k3baudioencoder.h>
 #include <k3bpluginconfigwidget.h>
 
-#include <base_k3blameencodersettingswidget.h>
+#include "base_k3blameencodersettingswidget.h"
+#include "base_k3bmanualbitratesettingswidget.h"
+
+
+class KDialogBase;
 
 
 class K3bLameEncoder : public K3bAudioEncoder
@@ -71,10 +75,14 @@ class K3bLameEncoderSettingsWidget : public K3bPluginConfigWidget
   void saveConfig();
 
  private slots:
-  void slotToggleCbrVbr();
+  void slotQualityLevelChanged( int val );
+  void slotShowManualSettings();
+  void updateManualSettingsLabel();
 
  private:
   base_K3bLameEncoderSettingsWidget* m_w;
+  base_K3bManualBitrateSettingsWidget* m_brW;
+  KDialogBase* m_manualSettingsDlg;
 };
 
 #endif
