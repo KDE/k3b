@@ -62,6 +62,8 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void readSettings();
 
    void toggleAllOptions();
+   void slotOnTheFlyToggled( bool on );
+   void slotNormalizeToggled( bool on );
 
  private:
    void setupSettingsPage();

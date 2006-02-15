@@ -61,6 +61,8 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    */
   void slotStartClicked();
   void toggleAllOptions();
+  void slotOnTheFlyToggled( bool on );
+  void slotNormalizeToggled( bool on );
 
  private:
   /**

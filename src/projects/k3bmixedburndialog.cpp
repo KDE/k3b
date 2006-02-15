@@ -57,6 +57,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 
 K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const char *name, bool modal )
@@ -96,7 +97,8 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
-  connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(slotNormalizeToggled(bool)) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotOnTheFlyToggled(bool)) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
 
@@ -349,9 +351,8 @@ void K3bMixedBurnDialog::toggleAllOptions()
   }
 
   m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() && 
-			       onTheFly && 
-			       !m_checkNormalize->isChecked() );
-  if( !onTheFly || m_checkNormalize->isChecked() )
+			       onTheFly );
+  if( !onTheFly )
     m_checkOnTheFly->setChecked( false );
 
   m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
@@ -359,10 +360,52 @@ void K3bMixedBurnDialog::toggleAllOptions()
 			      m_writingModeWidget->writingMode() != K3b::TAO );
   if( !cdText || m_writingModeWidget->writingMode() == K3b::TAO  )
     m_cdtextWidget->setChecked( false );
+}
 
-  // we are not able to normalize in on-the-fly mode
-  m_checkNormalize->setDisabled( !k3bcore->externalBinManager()->foundBin( "normalize" ) ||
-				 ( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() ) );
+
+void K3bMixedBurnDialog::slotNormalizeToggled( bool on )
+{
+  if( on ) {
+    // we are not able to normalize in on-the-fly mode
+    if( !k3bcore->externalBinManager()->foundBin( "normalize" ) ) {
+      KMessageBox::sorry( this, i18n("<p><b>External program <em>normalize</em> is not installed.</b>"
+				     "<p>K3b uses <em>normalize</em> (http://www1.cs.columbia.edu/~cvaill/normalize/) "
+				     "to normalize audio tracks. In order to "
+				     "use this functionality, please install it first.") );
+      m_checkNormalize->setChecked( false );
+    }
+    else if( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() ) {
+      if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
+						"The external program used for this task only supports normalizing a set "
+						"of audio files."),
+				     QString::null,
+				     i18n("Disable normalization"),
+				     i18n("Disable on-the-fly burning"),
+				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
+	m_checkNormalize->setChecked( false );
+      else
+	m_checkOnTheFly->setChecked( false );
+    }
+  }
+}
+
+
+void K3bMixedBurnDialog::slotOnTheFlyToggled( bool on )
+{
+  if( on ) {
+    if( m_checkNormalize->isChecked() ) {
+      if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
+						"The external program used for this task only supports normalizing a set "
+						"of audio files."),
+				     QString::null,
+				     i18n("Disable normalization"),
+				     i18n("Disable on-the-fly burning"),
+				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
+	m_checkNormalize->setChecked( false );
+      else
+	m_checkOnTheFly->setChecked( false );
+    }
+  }
 }
 
 
