@@ -1,3 +1,7 @@
+0.12.13
+=======
+ * Honor umask when creating directories for Audio CD ripping.
+
 0.12.12
 =======
  * Fixed another bug in the iso options code which sometimes resulted in a failed verification.

@@ -193,7 +193,7 @@ void K3bAudioRipThread::run()
     QString& filename = m_tracks[0].second;
 
     QString dir = filename.left( filename.findRev("/") );
-    if( !KStandardDirs::makeDir( dir ) ) {
+    if( !KStandardDirs::makeDir( dir, 0777 ) ) {
       d->paranoiaLib->close();
       emitInfoMessage( i18n("Unable to create directory %1").arg(dir), K3bJob::ERROR );
       m_device->block(false);
@@ -297,7 +297,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
     long trackSectorsRead = 0;
 
     QString dir = filename.left( filename.findRev("/") );
-    if( !KStandardDirs::makeDir( dir ) ) {
+    if( !KStandardDirs::makeDir( dir, 0777 ) ) {
       emitInfoMessage( i18n("Unable to create directory %1").arg(dir), K3bJob::ERROR );
       return false;
     }
