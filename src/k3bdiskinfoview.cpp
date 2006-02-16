@@ -15,7 +15,6 @@
 
 
 #include "k3bdiskinfoview.h"
-#include "k3bdiskinfodetector.h"
 
 #include <k3bdiskinfo.h>
 #include <k3bcdtext.h>

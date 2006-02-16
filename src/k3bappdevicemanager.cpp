@@ -32,10 +32,6 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
     m_currentDevice(0),
     m_ejectRequested(false)
 {
-  m_diskInfoDetector = new K3bDiskInfoDetector( this );
-  connect( m_diskInfoDetector, SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
-	   this, SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)) );
-
   // FIXME: should we pass the mainwindow as watch window here?
   //        Is there a proper way to insert this actioncollection into the mainwindow's?
   m_actionCollection = new KActionCollection( this );
