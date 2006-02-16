@@ -18,8 +18,8 @@
 #define K3BDIRVIEW_H
 
 #include <qvbox.h>
-#include <qstring.h>
 
+#include <k3bmedium.h>
 
 class QSplitter;
 class KURL;
@@ -39,7 +39,6 @@ class K3bDeviceBranch;
 namespace K3bDevice {
   class Device;
   class DiskInfo;
-  class DiskInfoDetector;
 }
 
 namespace KIO {
@@ -70,7 +69,7 @@ class K3bDirView : public QVBox
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
   void slotMountFinished( const QString& );
-  void slotDiskInfoReady( K3bDevice::DiskInfoDetector* );
+  void showMediumInfo( const K3bMedium& );
   void slotDetectingDiskInfo( K3bDevice::Device* dev );
   void reload();
   void home();

@@ -23,11 +23,11 @@
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
 #include "k3bappdevicemanager.h"
-#include "cdinfo/k3bdiskinfodetector.h"
 #include "cdinfo/k3bdiskinfoview.h"
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
 #include <k3bthememanager.h>
+#include <k3bmediacache.h>
 
 #include <unistd.h>
 // QT-includes
@@ -228,8 +228,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
   connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
 
-  connect( k3bappcore->appDeviceManager(), SIGNAL(diskInfoReady(K3bDevice::DiskInfoDetector*)),
-	   this, SLOT(slotDiskInfoReady(K3bDevice::DiskInfoDetector*)) );
   connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
 	   this, SLOT(slotMountFinished(const QString&)) );
   connect( k3bappcore->appDeviceManager(), SIGNAL(detectingDiskInfo(K3bDevice::Device*)),
@@ -252,39 +250,37 @@ void K3bDirView::showDevice( K3bDevice::Device* dev )
 {
   d->contextMediaInfoRequested = true;
   m_fileTreeView->setSelectedDevice( dev );
-  k3bappcore->appDeviceManager()->diskInfo( dev );
+  showMediumInfo( k3bappcore->mediaCache()->medium( dev ) );
 }
 
 
 void K3bDirView::slotDetectingDiskInfo( K3bDevice::Device* dev )
 {
-  m_noViewView->setDevice( dev );
-  m_viewStack->raiseWidget( m_noViewView );
-  k3bappcore->requestBusyInfo( i18n("Trying to fetch information about the inserted disk.") );
+  d->contextMediaInfoRequested = false;
+  m_fileTreeView->setSelectedDevice( dev );
+  showMediumInfo( k3bappcore->mediaCache()->medium( dev ) );
 }
 
 
-void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
+void K3bDirView::showMediumInfo( const K3bMedium& medium )
 {
-  k3bappcore->requestBusyFinish();
-
   if( !d->contextMediaInfoRequested ||
-      did->diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
-      did->diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
+      medium.diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
+      medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
     
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
-    m_infoView->displayInfo( did );
+    m_infoView->displayInfo( medium );
   }
-  else if( did->isVideoDvd() ) {
-    m_movieView->setDevice( did->device() );
+  else if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
+    m_movieView->setDevice( medium.device() );
     m_viewStack->raiseWidget( m_movieView );
     m_movieView->reload();
   }
-  else if( did->toc().contentType() == K3bDevice::DATA ) {
+  else if( medium.toc().contentType() == K3bDevice::DATA ) {
     // check for VCD and ask
     bool mount = true;
-    if( did->isVideoCd() ) {
+    if( medium.content() & K3bMedium::CONTENT_VIDEO_CD ) {
       mount = ( KMessageBox::questionYesNo( this,
 					    i18n("Found %1. Do you want K3b to mount the data part "
 						 "or show all the tracks?").arg( i18n("Video CD") ),
@@ -298,12 +294,12 @@ void K3bDirView::slotDiskInfoReady( K3bDevice::DiskInfoDetector* did )
     }
     else {
       m_viewStack->raiseWidget( m_videoView );
-      m_videoView->setDisk( did );
+      m_videoView->setDisk( medium );
     }
   }
   else {
     m_viewStack->raiseWidget( m_cdView );
-    m_cdView->setDisk( did );
+    m_cdView->setDisk( medium );
   }
 
   d->contextMediaInfoRequested = false;

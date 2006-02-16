@@ -133,7 +133,7 @@ void K3bAppDeviceManager::diskInfo()
 {
   if( currentDevice() ) {
     emit detectingDiskInfo( currentDevice() );
-    m_diskInfoDetector->detect( currentDevice() );
+    //    m_diskInfoDetector->detect( currentDevice() );
   }
 }
 

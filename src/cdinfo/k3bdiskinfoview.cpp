@@ -148,49 +148,40 @@ K3bDiskInfoView::~K3bDiskInfoView()
 {}
 
 
-void K3bDiskInfoView::displayInfo( const K3bDevice::DiskInfo& )
+void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
 {
-  // TODO: drop this method
-}
-
-
-void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
-{
-  const K3bDevice::DiskInfo& ngInfo = did->diskInfo();
-  const K3bDevice::Toc& toc = did->toc();
-
   m_infoView->clear();
   //  m_infoView->header()->resizeSection( 0, 20 );
 
-  if( ngInfo.diskState() == K3bDevice::STATE_NO_MEDIA ) {
+  if( medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
     (void)new QListViewItem( m_infoView, i18n("No Disk") );
     setTitle( i18n("No disk in drive") );
     setRightPixmap( K3bTheme::MEDIA_NONE );
   }
   else {
 
-    if( ngInfo.empty() ) {
-      setTitle( i18n("Empty %1 Media").arg(K3bDevice::mediaTypeString( ngInfo.mediaType(), true )) );
+    if( medium.diskInfo().empty() ) {
+      setTitle( i18n("Empty %1 Media").arg(K3bDevice::mediaTypeString( medium.diskInfo().mediaType(), true )) );
       setRightPixmap( K3bTheme::MEDIA_EMPTY );
     } 
     else {
-      switch( toc.contentType() ) {
+      switch( medium.toc().contentType() ) {
       case K3bDevice::AUDIO:
         setTitle( i18n("Audio CD") );
 	setRightPixmap( K3bTheme::MEDIA_AUDIO );
         break;
       case K3bDevice::DATA:
-	if( K3bDevice::isDvdMedia( ngInfo.mediaType() ) ) {
-	  setTitle( did->isVideoDvd() ? i18n("Video DVD") : i18n("DVD") );
+	if( medium.diskInfo().isDvdMedia() ) {
+	  setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ? i18n("Video DVD") : i18n("DVD") );
 	  setRightPixmap( K3bTheme::MEDIA_VIDEO );
 	}
 	else {
-	  setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Data CD") );
+	  setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_CD ? i18n("Video CD") : i18n("Data CD") );
 	  setRightPixmap( K3bTheme::MEDIA_DATA );
 	}
         break;
       case K3bDevice::MIXED:
-        setTitle( did->isVideoCd() ? i18n("Video CD") : i18n("Mixed mode CD") );
+        setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_CD ? i18n("Video CD") : i18n("Mixed mode CD") );
 	setRightPixmap( K3bTheme::MEDIA_MIXED );
         break;
       default:
@@ -199,19 +190,19 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
       }
     }
 
-    createMediaInfoItems( ngInfo );
+    createMediaInfoItems( medium.diskInfo() );
 
 
     // iso9660 info
     // /////////////////////////////////////////////////////////////////////////////////////
-    if( did->iso9660() ) {
+    if( medium.iso9660Descriptor() ) {
       (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
-      createIso9660InfoItems( did->iso9660() );
+      createIso9660InfoItems( medium.iso9660Descriptor() );
     }
 
     // tracks
     // /////////////////////////////////////////////////////////////////////////////////////
-    if( !toc.isEmpty() ) {
+    if( !medium.toc().isEmpty() ) {
 
       if( m_infoView->childCount() )
 	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
@@ -229,7 +220,7 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
 
       // if we have multible sessions we create a header item for every session
       KListViewItem* trackItem = 0;
-      if( ngInfo.numSessions() > 1 && toc[0].session() > 0 ) {
+      if( medium.diskInfo().numSessions() > 1 && medium.toc()[0].session() > 0 ) {
 	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1").arg(1) );
 	lastSession = 1;
       }
@@ -239,10 +230,10 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
       // create items for the tracks
       K3bDevice::Toc::const_iterator it;
       int index = 1;
-      for( it = toc.begin(); it != toc.end(); ++it ) {
+      for( it = medium.toc().begin(); it != medium.toc().end(); ++it ) {
         const K3bTrack& track = *it;
 
-	if( ngInfo.numSessions() > 1 && track.session() != lastSession ) {
+	if( medium.diskInfo().numSessions() > 1 && track.session() != lastSession ) {
 	  lastSession = track.session();
 	  trackItem->setOpen(true);
 	  trackItem = new HeaderViewItem( trackHeaderItem, 
@@ -298,8 +289,8 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
 
     // CD-TEXT
     // /////////////////////////////////////////////////////////////////////////////////////
-    if( !did->cdText().isEmpty() ) {
-      did->cdText().debug();
+    if( !medium.cdText().isEmpty() ) {
+      medium.cdText().debug();
       if( m_infoView->childCount() )
 	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
@@ -315,19 +306,19 @@ void K3bDiskInfoView::displayInfo( K3bDevice::DiskInfoDetector* did )
 					       i18n("Composer") );
       item = new KListViewItem( cdTextHeaderItem, item );
       item->setText( 0, i18n("CD:") + " " +
-		     did->cdText().performer() );
-      item->setText( 1, did->cdText().title() );
-      item->setText( 2, did->cdText().songwriter() );
-      item->setText( 3, did->cdText().composer() );
+		     medium.cdText().performer() );
+      item->setText( 1, medium.cdText().title() );
+      item->setText( 2, medium.cdText().songwriter() );
+      item->setText( 3, medium.cdText().composer() );
       
       int index = 1;
-      for( unsigned int i = 0; i < did->cdText().count(); ++i ) {
+      for( unsigned int i = 0; i < medium.cdText().count(); ++i ) {
         item = new KListViewItem( cdTextHeaderItem, item );
 	item->setText( 0, QString::number(index).rightJustify( 2, ' ' ) + " " +
-		       did->cdText().at(i).performer() );
-	item->setText( 1, did->cdText().at(i).title() );
-	item->setText( 2, did->cdText().at(i).songwriter() );
-	item->setText( 3, did->cdText().at(i).composer() );
+		       medium.cdText().at(i).performer() );
+	item->setText( 1, medium.cdText().at(i).title() );
+	item->setText( 2, medium.cdText().at(i).songwriter() );
+	item->setText( 3, medium.cdText().at(i).composer() );
 	++index;
       }
 
@@ -358,6 +349,11 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
 
   KListViewItem* atipChild = new KListViewItem( atipItem, i18n("Type:"), typeStr );
 
+  if( info.isDvdMedia() )
+    atipChild = new KListViewItem( atipItem, atipChild,
+				   i18n("Media ID:"),
+				   !info.mediaId().isEmpty() ? QString::fromLatin1( info.mediaId() ) : i18n("unknown") );
+ 
 
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Size:"),
@@ -413,7 +409,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
 }
 
 
-void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660* iso )
+void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor* iso )
 {
   KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), 
 						   i18n("ISO9660 Filesystem Info") );
@@ -421,43 +417,43 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660* iso )
 
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("System Id:"),
-				    iso->primaryDescriptor().systemId.isEmpty() 
+				    iso->systemId.isEmpty() 
 				    ? QString("-")
-				    : iso->primaryDescriptor().systemId );
+				    : iso->systemId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Id:"),
-				    iso->primaryDescriptor().volumeId.isEmpty() 
+				    iso->volumeId.isEmpty() 
 				    ? QString("-")
-				    : iso->primaryDescriptor().volumeId );
+				    : iso->volumeId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Set Id:"),
-				    iso->primaryDescriptor().volumeSetId.isEmpty()
+				    iso->volumeSetId.isEmpty()
 				    ? QString("-")
-				    : iso->primaryDescriptor().volumeSetId );
+				    : iso->volumeSetId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Publisher Id:"),
-				    iso->primaryDescriptor().publisherId.isEmpty()
+				    iso->publisherId.isEmpty()
 				    ? QString("-") 
-				    : iso->primaryDescriptor().publisherId );
+				    : iso->publisherId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Preparer Id:"),
-				    iso->primaryDescriptor().preparerId.isEmpty()
+				    iso->preparerId.isEmpty()
 				    ? QString("-") 
-				    : iso->primaryDescriptor().preparerId );
+				    : iso->preparerId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Application Id:"),
-				    iso->primaryDescriptor().applicationId.isEmpty()
+				    iso->applicationId.isEmpty()
 				    ? QString("-") 
-				    : iso->primaryDescriptor().applicationId );
+				    : iso->applicationId );
 //   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 // 				    i18n("Volume Size:"),
 // 				    QString( "%1 (%2*%3)" )
-// 				    .arg(iso->primaryDescriptor().logicalBlockSize
-// 					 *iso->primaryDescriptor().volumeSpaceSize)
-// 				    .arg(iso->primaryDescriptor().logicalBlockSize)
-// 				    .arg(iso->primaryDescriptor().volumeSpaceSize),
-// 				    KIO::convertSize(iso->primaryDescriptor().logicalBlockSize
-// 						     *iso->primaryDescriptor().volumeSpaceSize)  );
+// 				    .arg(iso->logicalBlockSize
+// 					 *iso->volumeSpaceSize)
+// 				    .arg(iso->logicalBlockSize)
+// 				    .arg(iso->volumeSpaceSize),
+// 				    KIO::convertSize(iso->logicalBlockSize
+// 						     *iso->volumeSpaceSize)  );
 
   iso9660Item->setOpen( true );
 }

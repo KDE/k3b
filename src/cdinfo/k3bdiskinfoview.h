@@ -20,6 +20,8 @@
 
 #include "../k3bcdcontentsview.h"
 
+#include "../k3bmedium.h"
+
 class QLabel;
 class KListView;
 class K3bIso9660;
@@ -41,12 +43,11 @@ class K3bDiskInfoView : public K3bCdContentsView
   void reload();
 
  public slots:
-  void displayInfo( const K3bDevice::DiskInfo& info );
-  void displayInfo( K3bDevice::DiskInfoDetector* );
+  void displayInfo( const K3bMedium& );
 
  private:
   void createMediaInfoItems( const K3bDevice::DiskInfo& info );
-  void createIso9660InfoItems( const K3bIso9660* iso );
+  void createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor* );
 
   KListView* m_infoView;
 

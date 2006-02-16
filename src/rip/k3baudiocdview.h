@@ -18,6 +18,7 @@
 #define _K3B_AUDIOCD_VIEW_H_
 
 #include <k3bcdcontentsview.h>
+#include <k3bmedium.h>
 
 #include <k3btoc.h>
 #include <k3bcddbresult.h>
@@ -36,7 +37,6 @@ class QDragObject;
 
 
 namespace K3bDevice {
-  class DiskInfoDetector;
   class Device;
 }
 
@@ -49,7 +49,7 @@ class K3bAudioCdView : public K3bCdContentsView
   K3bAudioCdView( QWidget* parent = 0, const char * name = 0 );
   ~K3bAudioCdView();
 
-  void setDisk( K3bDevice::DiskInfoDetector* );
+  void setDisk( const K3bMedium& );
 
   //  const K3bDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
 

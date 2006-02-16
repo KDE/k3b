@@ -18,9 +18,13 @@
    defaults for audio sectors which make more sense: 5 retires and skip unreadable sectors.
  * New Mediamanager which makes K3b always know which device contains which medium. This makes medium handling 
    more smooth and the user now selects a medium instead of a device.
+   Other advantages:
+    - No waiting time anymore when asking for information on media (including for example Audio CD ripping)
  * dcop call directBurn() returns a boolean value now stating if the process could be started.
- * New dcop call cddaRip() with media:// url support including a mediadialog entry
+ * New dcop call cddaRip() with media:/ url support including a mediadialog entry
  * K3b can now handle media:/ urls from the commandline to specify devices
+ * Better Lame settings dialog. Easier to use for the novice user and better defaults.
+ * K3b now shows the DVD Medium ID in the disk information view.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project

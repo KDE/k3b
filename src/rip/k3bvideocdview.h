@@ -20,6 +20,7 @@
 #include <qdom.h>
 
 #include <k3bcdcontentsview.h>
+#include <k3bmedium.h>
 
 #include "k3bvideocdinfo.h"
 
@@ -50,7 +51,7 @@ class K3bVideoCdView : public K3bCdContentsView
         K3bVideoCdView( QWidget* parent = 0, const char * name = 0 );
         ~K3bVideoCdView();
 
-        void setDisk( K3bDevice::DiskInfoDetector* );
+        void setDisk( const K3bMedium& );
 
 /*         const K3bDevice::DiskInfo& displayedDisk() const */
 /*         { */

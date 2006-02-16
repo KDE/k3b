@@ -145,14 +145,14 @@ K3bAudioCdView::~K3bAudioCdView()
 }
 
 
-void K3bAudioCdView::setDisk( K3bDevice::DiskInfoDetector* did )
+void K3bAudioCdView::setDisk( const K3bMedium& medium )
 {
-  m_toc = did->toc();
-  m_device = did->device();
+  m_toc = medium.toc();
+  m_device = medium.device();
 
   // initialize cddb info for editing
   m_cddbInfo = K3bCddbResultEntry();
-  m_cddbInfo.discid = QString::number( did->toc().discId(), 16 );
+  m_cddbInfo.discid = QString::number( medium.toc().discId(), 16 );
 
   for( int i = 0; i < (int)m_toc.count(); ++i ) {
     m_cddbInfo.titles.append("");
@@ -180,7 +180,7 @@ void K3bAudioCdView::setDisk( K3bDevice::DiskInfoDetector* did )
     index++;
   }
 
-  m_cdText = did->cdText();
+  m_cdText = medium.cdText();
       
   reload();
 }

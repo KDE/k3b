@@ -55,6 +55,7 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   setDragEnabled( true );
   setItemsMovable( false );
   setAllColumnsShowFocus( true );
+  setShowSortIndicator( true );
 
   setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.\n"
 		      "To remove or rename files use the context menu.\n"

@@ -16,7 +16,8 @@
 #ifndef K3BMOVIEVIEW_H
 #define K3BMOVIEVIEW_H
 
-#include "../k3bcdcontentsview.h"
+#include <k3bcdcontentsview.h>
+
 #include <qvaluelist.h>
 #include <qstring.h>
 

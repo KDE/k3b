@@ -198,10 +198,10 @@ K3bVideoCdView::~K3bVideoCdView()
 }
 
 
-void K3bVideoCdView::setDisk( K3bDevice::DiskInfoDetector* did )
+void K3bVideoCdView::setDisk( const K3bMedium& medium )
 {
-  m_toc = did->toc();
-    m_device = did->device();
+  m_toc = medium.toc();
+    m_device = medium.device();
 
     m_trackView->clear();
     enableInteraction( false );
