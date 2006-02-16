@@ -103,6 +103,9 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
       handleMkisofsInfoMessage( i18n("You may use convmv (http://j3e.de/linux/convmv/) to fix the filename encoding."), K3bJob::ERROR );
       d->readError = true;
     }
+    else if( line.startsWith( "Size of boot image" ) && line.endsWith( "has not an allowable size." ) ) {
+      handleMkisofsInfoMessage( i18n("The boot image has an invalid size."), K3bJob::ERROR );      
+    }
     else {
       kdDebug() << "(mkisofs) " << line << endl;
     }

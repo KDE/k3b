@@ -66,6 +66,8 @@ public:
   };
 
   int usedLinkHandling;
+
+  bool knownError;
 };
 
 
@@ -130,6 +132,8 @@ void K3bIsoImager::handleMkisofsProgress( int p )
 void K3bIsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 {
   emit infoMessage( line, type );
+  if( type == ERROR )
+    d->knownError = true;
 }
 
 
@@ -145,7 +149,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
       if( p->exitStatus() == 0 ) {
 	jobFinished( true );
       }
-      else  {
+      else {
 	switch( p->exitStatus() ) {
 	case 104:
 	  // connection reset by peer
@@ -169,7 +173,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  // otherwise just fall through
 
 	default:
-	  if( !mkisofsReadError() ) {
+	  if( !d->knownError && !mkisofsReadError() ) {
 	    emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
 			      K3bJob::ERROR );
 	    emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
@@ -350,6 +354,7 @@ void K3bIsoImager::init()
   m_containsFilesWithMultibleBackslashes = false;
   m_processExited = false;
   m_canceled = false;
+  d->knownError = false;
 
   // determine symlink handling
   // follow links superseeds discard all links which superseeds discard broken links
