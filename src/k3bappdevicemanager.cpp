@@ -14,7 +14,6 @@
  */
 
 #include "k3bappdevicemanager.h"
-#include "cdinfo/k3bdiskinfodetector.h"
 
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
@@ -133,7 +132,6 @@ void K3bAppDeviceManager::diskInfo()
 {
   if( currentDevice() ) {
     emit detectingDiskInfo( currentDevice() );
-    //    m_diskInfoDetector->detect( currentDevice() );
   }
 }
 

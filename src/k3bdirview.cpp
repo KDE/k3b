@@ -23,7 +23,7 @@
 #include "rip/k3bmovieview.h"
 #include "k3bfiletreeview.h"
 #include "k3bappdevicemanager.h"
-#include "cdinfo/k3bdiskinfoview.h"
+#include "k3bdiskinfoview.h"
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
 #include <k3bthememanager.h>
