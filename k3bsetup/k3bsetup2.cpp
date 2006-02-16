@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include <qlayout.h>
 #include <qmap.h>
 #include <qfile.h>
