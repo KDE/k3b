@@ -35,7 +35,6 @@
 #include "k3bvideocdview.h"
 #include "k3bvideocdrippingdialog.h"
 
-#include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bdevice.h>
 #include <k3bmsf.h>
 #include <k3btoc.h>
