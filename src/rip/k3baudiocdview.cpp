@@ -29,7 +29,6 @@
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <k3bapplication.h>
-#include <cdinfo/k3bdiskinfodetector.h>
 #include <k3bthememanager.h>
 #include <k3baudiocdtrackdrag.h>
 
