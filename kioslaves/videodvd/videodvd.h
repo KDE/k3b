@@ -44,8 +44,9 @@ public:
   void listDir( const KURL& url );
 
 private:
-  K3bIso9660* openIso( const KURL& );
+  K3bIso9660* openIso( const KURL&, QString& plainIsoPath );
   KIO::UDSEntry createUDSEntry( const K3bIso9660Entry* e ) const;
+  void listVideoDVDs();
 
   static K3bDevice::DeviceManager* s_deviceManager;
   static int s_instanceCnt;
