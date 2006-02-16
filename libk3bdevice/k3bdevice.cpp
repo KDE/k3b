@@ -1854,6 +1854,42 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       else
 	inf.m_numSessions = 0;
 
+      //
+      // Media ID
+      //
+      switch( inf.mediaType() ) {
+      case MEDIA_CD_R:
+      case MEDIA_CD_RW:
+      case MEDIA_CD_ROM:
+	// FIXME:
+	break;
+
+      case MEDIA_DVD_R:
+      case MEDIA_DVD_R_SEQ:
+      case MEDIA_DVD_R_DL:
+      case MEDIA_DVD_R_DL_JUMP:
+      case MEDIA_DVD_R_DL_SEQ:
+      case MEDIA_DVD_RW:
+      case MEDIA_DVD_RW_SEQ:
+      case MEDIA_DVD_RW_OVWR:
+	if( readDvdStructure( &data, dataLen, 0x0E ) ) {
+	  if( data[4+16] == 3 && data[4+24] == 4 ) {
+	    inf.m_mediaId.sprintf( "%6.6s%-6.6s", data+4+17, data+4+25 );
+	  }
+	  delete [] data;
+	}
+	break;
+
+      case MEDIA_DVD_PLUS_R:
+      case MEDIA_DVD_PLUS_R_DL:
+      case MEDIA_DVD_PLUS_RW:
+	if( readDvdStructure( &data, dataLen, 0x11 ) ||
+	    readDvdStructure( &data, dataLen, 0x0 ) ) {
+	  inf.m_mediaId.sprintf( "%8.8s/%3.3s", data+23, data+31 );
+	  delete [] data;
+	}
+	break;
+      }
 
       //
       // Now we determine the size:
