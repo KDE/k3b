@@ -5,6 +5,7 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bCDCopy]
 Name=Copy CD with K3b
+Name[bg]=Копиране на CD с K3b
 Name[da]=Kopiér cd med K3b
 Name[el]=Αντιγραφή CD με το K3b
 Name[it]=Copia CD con K3b
