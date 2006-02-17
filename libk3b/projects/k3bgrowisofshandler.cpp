@@ -31,15 +31,25 @@
 #include <string.h>
 
 
+class K3bGrowisofsHandler::Private
+{
+public:
+  int lastBuffer;
+  int lastDeviceBuffer;
+};
+
+
 K3bGrowisofsHandler::K3bGrowisofsHandler( QObject* parent, const char* name )
   : QObject( parent, name )
 {
+  d = new Private;
   reset();
 }
 
 
 K3bGrowisofsHandler::~K3bGrowisofsHandler()
 {
+  delete d;
 }
 
 
@@ -48,12 +58,14 @@ void K3bGrowisofsHandler::reset( K3bDevice::Device* dev, bool dao )
   m_device = dev;
   m_error = ERROR_UNKNOWN;
   m_dao = dao;
+  d->lastBuffer = 0;
+  d->lastDeviceBuffer = 0;
 }
 
 
 void K3bGrowisofsHandler::handleStart()
 {
-  QTimer::singleShot( 2000, this, SLOT(slotCheckBufferStatus()) );
+//  QTimer::singleShot( 2000, this, SLOT(slotCheckBufferStatus()) );
 }
 
 
@@ -92,6 +104,9 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
 
     else  
       emit infoMessage( line, K3bJob::ERROR );
+  }
+  else if( line.startsWith( "PERFORM OPC" ) ) {
+    m_error = ERROR_OPC;
   }
   else if( line.contains( "flushing cache" ) ) {
     // here is where we already should stop queriying the buffer fill
@@ -149,7 +164,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
 
     pos += 24;
-    int endPos = line.find( "x", pos );
+    int endPos = line.find( 'x', pos+1 );
     bool ok = true;
     double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
     if( ok )
@@ -162,15 +177,26 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
   else if( (pos = line.find( "RBU" )) > 0 ) {
     // parse ring buffer fill for growisofs >= 6.0
     pos += 4;
+    int endPos = line.find( '%', pos+1 );
     bool ok = true;
-    double val = line.mid( pos, line.find('%', pos+1 ) - pos ).toDouble( &ok );
-    if( ok )
-      emit buffer( (int)(val+0.5) );
+    double val = line.mid( pos, endPos-pos ).toDouble( &ok );
+    if( ok ) {
+      int newBuffer = (int)(val+0.5);
+      if( newBuffer != d->lastBuffer ) {
+	d->lastBuffer = newBuffer;
+	emit buffer( newBuffer );
+      }
+    }
     else
-      kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, line.find('%', pos+1 ) - pos ) << "'" << endl;
+      kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
   else if( line.startsWith("Buffer fill") ) {
-    emit deviceBuffer( line.mid(13, line.find('%',13)-13).toInt() );
+    // parse device buffer fill for K3b patched growisofs
+    int newBuffer = line.mid(13, line.find('%',13)-13).toInt();
+    if( newBuffer != d->lastDeviceBuffer ) {
+      d->lastDeviceBuffer = newBuffer;
+      emit deviceBuffer( newBuffer );
+    }
   }
 
   else {
@@ -198,6 +224,12 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
   case ERROR_SPEED_SET_FAILED:
     emit infoMessage( i18n("Unable to set writing speed."), K3bJob::ERROR );
     emit infoMessage( i18n("Please try again with the 'ignore speed' setting."), K3bJob::ERROR );
+    break;
+
+  case ERROR_OPC:
+    emit infoMessage( i18n("Optimum Power Calibration failed."), K3bJob::ERROR );
+    emit infoMessage( i18n("Try adding '-use-the-force-luke=noopc' to the "
+			   "growisofs user parameters in the K3b settings."), K3bJob::ERROR );
     break;
 
   default:

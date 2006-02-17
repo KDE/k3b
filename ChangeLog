@@ -1,6 +1,7 @@
 0.12.13
 =======
  * Honor umask when creating directories for Audio CD ripping.
+ * Only update the buffer state for DVD burning if it really changes.
 
 0.12.12
 =======

@@ -41,7 +41,8 @@ class K3bGrowisofsHandler : public QObject
     ERROR_UNKNOWN,
     ERROR_MEDIA,
     ERROR_OVERSIZE,
-    ERROR_SPEED_SET_FAILED
+    ERROR_SPEED_SET_FAILED,
+    ERROR_OPC
   };
 
   int error() const { return m_error; }
@@ -73,6 +74,9 @@ class K3bGrowisofsHandler : public QObject
   void slotCheckBufferStatusDone( K3bDevice::DeviceHandler* );
 
  private:
+  class Private;
+  Private* d;
+
   int m_error;
   bool m_dao;
   K3bDevice::Device* m_device;
