@@ -58,6 +58,8 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
  public:
   K3bAudioDoc( QObject* );
   ~K3bAudioDoc();
+
+  QString name() const;
 	
   bool newDocument();
 

@@ -729,6 +729,7 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 
   // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
   // it seems that normalize sometimes corrupts these lengths
+  // FIXME: see K3bAudioJob for the whole less4secs and zeroPregap handling
   writer->addArgument( "-pad" );
 
   // Allow tracks shorter than 4 seconds

@@ -38,6 +38,8 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
   K3bMixedDoc( QObject* parent = 0 );
   ~K3bMixedDoc();
 
+  QString name() const;
+
   bool newDocument();
 
   bool isModified() const;

@@ -120,6 +120,15 @@ bool K3bAudioDoc::newDocument()
 }
 
 
+QString K3bAudioDoc::name() const
+{
+  if( !m_cdTextData.title().isEmpty() )
+    return m_cdTextData.title();
+  else
+    return K3bDoc::name();
+}
+
+
 K3bAudioTrack* K3bAudioDoc::firstTrack() const
 {
   return m_firstTrack;

@@ -65,8 +65,8 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
 			   "highly recommended to always choose an appropriate writing "
 			   "speed to prevent the usage of burnfree, especially for audio CDs</b> "
 			   "(in the worst case one would hear the gap)."
-			   "<p><em>Burnfree</em> was formally known as <em>Burnproof</em> but since "
-			   "it has become part of the MMC standard it was renamed.") );
+			   "<p><em>Burnfree</em> was formerly known as <em>Burnproof</em>, "
+			   "but has since been renamed when it became part of the MMC standard.") );
   return c;
 }
 

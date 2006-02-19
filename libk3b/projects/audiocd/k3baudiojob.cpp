@@ -59,6 +59,9 @@ class K3bAudioJob::Private
 
   bool useCdText;
   bool maxSpeed;
+
+  bool zeroPregap;
+  bool less4Sec;
 };
 
 
@@ -139,15 +142,15 @@ void K3bAudioJob::start()
     // Also most writers do not accept cuesheets with tracks smaller than 4 seconds (a violation
     // of the red book standard) in DAO mode.
     //
-    bool zeroPregap = false;
-    bool less4Sec = false;
+    d->zeroPregap = false;
+    d->less4Sec = false;
     K3bAudioTrack* track = m_doc->firstTrack();
     while( track ) {
       if( track->postGap() == 0 && track->next() != 0 ) // the last track's postgap is always 0
-	zeroPregap = true;
+	d->zeroPregap = true;
 
       if( track->length() < K3b::Msf( 0, 4, 0 ) )
-	less4Sec = true;
+	d->less4Sec = true;
 
       track = track->next();
     }
@@ -163,15 +166,15 @@ void K3bAudioJob::start()
       //
       if( !writer()->dao() && writingApp() == K3b::CDRECORD ) {
 	if(!writer()->supportsRawWriting() &&
-	   ( !less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
+	   ( !d->less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
 	  m_usedWritingMode = K3b::RAW;
 	else
 	  m_usedWritingMode = K3b::TAO;
       }
       else {
-        if( (zeroPregap||less4Sec) && writer()->supportsRawWriting() ) {
+        if( (d->zeroPregap||d->less4Sec) && writer()->supportsRawWriting() ) {
           m_usedWritingMode = K3b::RAW;
-	  if( less4Sec )
+	  if( d->less4Sec )
 	    emit infoMessage( i18n("Tracklengths below 4 seconds violate the Red Book standard."), WARNING );
 	}
         else
@@ -438,12 +441,17 @@ bool K3bAudioJob::prepareWriter()
     // add all the audio tracks
     writer->addArgument( "-audio" );
 
-    // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
-    // it seems that normalize sometimes corrupts these lengths
-//    writer->addArgument( "-pad" );
-
-    // Allow tracks shorter than 4 seconds
-    writer->addArgument( "-shorttrack" );
+    // we only need to pad in one case. cdrecord < 2.01.01a03 cannot handle shorttrack + raw
+    if( d->less4Sec ) {
+      if( m_usedWritingMode == K3b::RAW &&
+	  k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a03" ) ) {
+	writer->addArgument( "-pad" );
+      }
+      else {
+	// Allow tracks shorter than 4 seconds
+	writer->addArgument( "-shorttrack" );
+      }
+    }
 
     K3bAudioTrack* track = m_doc->firstTrack();
     while( track ) {

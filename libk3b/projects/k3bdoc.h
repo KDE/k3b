@@ -52,7 +52,7 @@ namespace K3b {
 
 /**
  * K3bDoc is the base document class.
- * It takes care of writing to a KoStore and handles some general settings.
+ * It handles some general settings.
  */
 class LIBK3B_EXPORT K3bDoc : public QObject
 {
@@ -74,6 +74,12 @@ class LIBK3B_EXPORT K3bDoc : public QObject
   };
 
   virtual int type() const { return m_docType; }
+
+  /**
+   * \return A name for the project which might for example be used as a suggestion for a file name
+   *         when saving. The default implementation extracts a name from the URL.
+   */
+  virtual QString name() const;
 
   /**
    * \return A string representation of the document type.

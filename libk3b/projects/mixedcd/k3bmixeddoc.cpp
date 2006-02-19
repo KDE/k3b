@@ -58,6 +58,12 @@ bool K3bMixedDoc::newDocument()
 }
 
 
+QString K3bMixedDoc::name() const
+{
+  return m_dataDoc->name();
+}
+
+
 void K3bMixedDoc::setURL( const KURL& url )
 {
   K3bDoc::setURL( url );

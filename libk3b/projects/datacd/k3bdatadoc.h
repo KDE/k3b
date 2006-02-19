@@ -66,6 +66,8 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
 
   virtual int type() const { return DATA; }
 
+  virtual QString name() const;
+
   enum MultiSessionMode { 
     /**
      * Let the K3bDataJob decide if to close the CD or not.
@@ -91,8 +93,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   virtual KIO::filesize_t burningSize() const;
   virtual K3b::Msf length() const;
   virtual K3b::Msf burningLength() const;
-
-  const QString& name() const { return m_name; }
 
   /**
    * Simply deletes the item if it is removable (meaning isRemovable() returns true.
@@ -244,7 +244,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   QStringList m_noPermissionFiles;
 
   K3bRootItem* m_root;
-  QString m_name;
 
   int m_dataMode;
 

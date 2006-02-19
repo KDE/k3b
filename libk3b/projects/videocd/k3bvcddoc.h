@@ -55,6 +55,8 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
 
 	int type() const { return VCD; }
 
+	QString name() const;
+
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
         bool newDocument();

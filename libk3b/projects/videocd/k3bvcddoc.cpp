@@ -88,6 +88,13 @@ bool K3bVcdDoc::newDocument()
     return K3bDoc::newDocument();
 }
 
+
+QString K3bVcdDoc::name() const
+{
+  return m_vcdOptions->volumeId();
+}
+
+
 KIO::filesize_t K3bVcdDoc::calcTotalSize() const
 {
     unsigned long long sum = 0;

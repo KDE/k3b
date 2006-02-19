@@ -107,6 +107,12 @@ const KURL& K3bDoc::URL() const
 }
 
 
+QString K3bDoc::name() const
+{
+  return URL().path().section( '/', -1 );
+}
+
+
 bool K3bDoc::newDocument()
 {
   setModified( false );

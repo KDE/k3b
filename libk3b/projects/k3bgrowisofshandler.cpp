@@ -31,15 +31,25 @@
 #include <string.h>
 
 
+class K3bGrowisofsHandler::Private
+{
+public:
+  int lastBuffer;
+  int lastDeviceBuffer;
+};
+
+
 K3bGrowisofsHandler::K3bGrowisofsHandler( QObject* parent, const char* name )
   : QObject( parent, name )
 {
+  d = new Private;
   reset();
 }
 
 
 K3bGrowisofsHandler::~K3bGrowisofsHandler()
 {
+  delete d;
 }
 
 
@@ -48,6 +58,8 @@ void K3bGrowisofsHandler::reset( K3bDevice::Device* dev, bool dao )
   m_device = dev;
   m_error = ERROR_UNKNOWN;
   m_dao = dao;
+  d->lastBuffer = 0;
+  d->lastDeviceBuffer = 0;
 }
 
 
@@ -168,14 +180,23 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     int endPos = line.find( '%', pos+1 );
     bool ok = true;
     double val = line.mid( pos, endPos-pos ).toDouble( &ok );
-    if( ok )
-      emit buffer( (int)(val+0.5) );
+    if( ok ) {
+      int newBuffer = (int)(val+0.5);
+      if( newBuffer != d->lastBuffer ) {
+	d->lastBuffer = newBuffer;
+	emit buffer( newBuffer );
+      }
+    }
     else
       kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
   else if( line.startsWith("Buffer fill") ) {
     // parse device buffer fill for K3b patched growisofs
-    emit deviceBuffer( line.mid(13, line.find('%',13)-13).toInt() );
+    int newBuffer = line.mid(13, line.find('%',13)-13).toInt();
+    if( newBuffer != d->lastDeviceBuffer ) {
+      d->lastDeviceBuffer = newBuffer;
+      emit deviceBuffer( newBuffer );
+    }
   }
 
   else {

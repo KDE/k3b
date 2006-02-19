@@ -94,7 +94,7 @@ public:
     canceled = false;
     int oldPercent = 0;
 
-    static const int MAX_BUFFER_READ = 2048*3;
+    static const unsigned int MAX_BUFFER_READ = 2048*3;
 
     while( !canceled && !error && (!eof || dataLen > 0) ) {
       //

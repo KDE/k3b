@@ -101,14 +101,18 @@ bool K3bDataDoc::newDocument()
 
   m_sizeHandler->clear();
 
-  m_name = "Dummyname";
-
   m_multisessionMode = AUTO;
   m_dataMode = K3b::DATA_MODE_AUTO;
 
   m_isoOptions = K3bIsoOptions();
 
   return K3bDoc::newDocument();
+}
+
+
+QString K3bDataDoc::name() const
+{
+  return m_isoOptions.volumeID();
 }
 
 
@@ -1530,7 +1534,7 @@ QCString K3bDataDoc::iso9660FileNameUsedInMkisofs( K3bDataItem* item )
   int		ochars_before_dot;
   int		seen_dot = 0;
   int		seen_semic = 0;
-  int		tildes = 0;
+  //  int		tildes = 0;
 
   // recreate parameters from the original method
   int dirflag = ( item->isDir() ? 1 : 0 );
