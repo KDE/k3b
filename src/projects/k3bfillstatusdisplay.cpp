@@ -197,7 +197,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	    ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
 	    : KIO::convertSizeFromKB( cdSize * 1024 ) );
   else
-    text = i18n("Overfull: %1 too much")
+    text = i18n("Capacity exceeded by %1")
       .arg( d->showTime
 	    ? i18n("%1 min").arg( (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
 	    : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
