@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -355,15 +355,22 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
  
 
   atipChild = new KListViewItem( atipItem, atipChild,
-				 i18n("Size:"),
+				 i18n("Capacity:"),
 				 i18n("%1 min").arg(info.capacity().toString()),
 				 KIO::convertSize(info.capacity().mode1Bytes()) );
 
-  atipChild = new KListViewItem( atipItem, atipChild,
-				 i18n("Remaining:"),
-				 i18n("%1 min").arg( info.remainingSize().toString() ),
-				 KIO::convertSize(info.remainingSize().mode1Bytes()) );
+  if( !info.empty() )
+    atipChild = new KListViewItem( atipItem, atipChild,
+				   i18n("Used Capacity:"),
+				   i18n("%1 min").arg(info.size().toString()),
+				   KIO::convertSize(info.size().mode1Bytes()) );
 
+  if( info.appendable() )
+    atipChild = new KListViewItem( atipItem, atipChild,
+				   i18n("Remaining:"),
+				   i18n("%1 min").arg( info.remainingSize().toString() ),
+				   KIO::convertSize(info.remainingSize().mode1Bytes()) );
+  
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Rewritable:"),
 				 info.rewritable() ? i18n("yes") : i18n("no") );

@@ -4,7 +4,7 @@
  * $Id$
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ int main( int argc, char* argv[] )
 {
   KAboutData aboutData( "k3b", I18N_NOOP("K3b"),
 			LIBK3B_VERSION, description, KAboutData::License_GPL,
-			I18N_NOOP("(c) 1999 - 2005, Sebastian Trüg and the K3b Team"), 0, "http://www.k3b.org" );
+			I18N_NOOP("(c) 1999 - 2006, Sebastian Trüg and the K3b Team"), 0, "http://www.k3b.org" );
   aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
   aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
