@@ -32,7 +32,7 @@ class KPopupMenu;
 class QToolButton;
 
 namespace K3bDevice {
-  class DeviceHandler;
+  class Device;
 }
 namespace K3b {
   class Msf;
@@ -89,6 +89,7 @@ class K3bFillStatusDisplay : public QFrame  {
   void setupPopupMenu();
 
  private slots:
+  void slotAutoSize();
   void slot74Minutes();
   void slot80Minutes();
   void slot100Minutes();
@@ -99,8 +100,8 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotMenuButtonClicked();
   void slotPopupMenu(const QPoint&);
   void slotDetermineSize();
-  void slotRemainingSize( K3bDevice::DeviceHandler* );
   void slotDocChanged();
+  void slotMediumChanged( K3bDevice::Device* dev );
 
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();

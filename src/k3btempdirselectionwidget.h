@@ -23,6 +23,7 @@
 class QTimer;
 class QLabel;
 class KURLRequester;
+class KConfigBase;
 
 
 /**
@@ -53,7 +54,14 @@ class K3bTempDirSelectionWidget : public QGroupBox
   void setTempPath( const QString& );
   void setSelectionMode( int mode );
   void setNeededSize( KIO::filesize_t bytes );
+
+  /**
+   * saves the current path as the global default tempd dir.
+   */
   void saveConfig();
+
+  void readConfig( KConfigBase* );
+  void saveConfig( KConfigBase* );
 
  private slots:
   void slotUpdateFreeTempSpace();

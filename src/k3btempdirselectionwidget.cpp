@@ -35,6 +35,7 @@
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kio/global.h>
+#include <kconfig.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
@@ -222,6 +223,18 @@ void K3bTempDirSelectionWidget::saveConfig()
   k3bcore->config()->setGroup( "General Options" );
   k3bcore->config()->writePathEntry( "Temp Dir", tempDirectory() );
   k3bcore->config()->setGroup( oldGroup );
+}
+
+
+void K3bTempDirSelectionWidget::readConfig( KConfigBase* c )
+{
+  setTempPath( c->readPathEntry( "image path", K3b::defaultTempPath() ) );
+}
+
+
+void K3bTempDirSelectionWidget::saveConfig( KConfigBase* c )
+{
+  c->writePathEntry( "image path", tempPath() );
 }
 
 #include "k3btempdirselectionwidget.moc"

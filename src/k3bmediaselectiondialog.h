@@ -59,7 +59,8 @@ class K3bMediaSelectionDialog : public KDialogBase
    */
   static K3bDevice::Device* selectMedium( int type, int state, QWidget* parent = 0,
 					  const QString& title = QString::null, 
-					  const QString& text = QString::null );
+					  const QString& text = QString::null,
+					  bool* canceled = 0 );
 
   // FIXME: make K3bDevice::ContentType bitwise combinable and rename it
   //        to TocType

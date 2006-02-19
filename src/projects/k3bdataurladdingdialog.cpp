@@ -85,6 +85,19 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 				     K3bDirItem* dir,
 				     QWidget* parent )
 {
+  //
+  // Set the volume id from the first added url
+  // FIXME: only do this once and not after the volume id was changed
+  //
+  if( urls.count() == 1 && dir->doc()->root()->children().count() == 0 ) {
+    QString v = urls.first().fileName();
+    // remove the extension
+    int dotpos = v.findRev( '.' );
+    if( dotpos > 0 )
+      v.truncate( dotpos );
+    dir->doc()->setVolumeID( v );
+  }
+
   K3bDataUrlAddingDialog dlg( parent );
   dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )

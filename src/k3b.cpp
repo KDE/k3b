@@ -58,6 +58,8 @@
 #include <kxmlguifactory.h>
 #include <kstdguiitem.h>
 #include <kio/global.h>
+#include <kio/netaccess.h>
+#include <krecentdocument.h>
 
 #include <stdlib.h>
 
@@ -845,7 +847,7 @@ void K3bMainWindow::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
 
-  KURL::List urls = KFileDialog::getOpenURLs( QString::null,
+  KURL::List urls = KFileDialog::getOpenURLs( ":k3b-projects-folder",
 					      i18n("*.k3b|K3b Projects"),
 					      this,
 					      i18n("Open Files") );
@@ -912,33 +914,30 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
   }
 
   if( doc != 0 ) {
+    // we do not use the static KFileDialog method here to be able to specify a filename suggestion
+    KFileDialog dlg( ":k3b-projects-folder", i18n("*.k3b|K3b Projects"), this, "filedialog", true );
+    dlg.setCaption( i18n("Save As") );
+    dlg.setOperationMode( KFileDialog::Saving );
+    dlg.setSelection( doc->name() );
+    dlg.exec();
+    KURL url = dlg.selectedURL();
 
-    QString file = KFileDialog::getSaveFileName(QDir::currentDirPath(),
-					       i18n("*.k3b|K3b Projects"), this, i18n("Save As"));
+    if( url.isValid() ) {
+      KRecentDocument::add( url );
 
-
-    if( !file.isEmpty() ) {
-
-      // default to ending ".k3b"
-      if( file.mid( file.findRev('.')+1 ) != "k3b" ) {
-	if( file[ file.length()-1 ] != '.' )
-	  file += ".";
-	file += "k3b";
-      }
-
-      if( !QFile::exists(file) ||
-	  ( QFile::exists(file) &&
-	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?").arg(file), i18n("File Exists"), i18n("Overwrite") )
+      bool exists = KIO::NetAccess::exists( url, false, 0 );
+      if( !exists ||
+	  ( exists &&
+	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?").arg( url.prettyURL() ), 
+						i18n("File Exists"), i18n("Overwrite") )
 	    == KMessageBox::Continue ) ) {
 
-        KURL url;
-        url.setPath(file);
 	if( !k3bappcore->projectManager()->saveProject( doc, url ) ) {
 	  KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
 	  return;
 	}
-
-	actionFileOpenRecent->addURL(url);
+	else
+	  actionFileOpenRecent->addURL(url);
       }
     }
   }
@@ -1256,7 +1255,7 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bView* view = activeView();
 
   if( view ) {
-    QStringList files = KFileDialog::getOpenFileNames( ".", 
+    QStringList files = KFileDialog::getOpenFileNames( ":k3b-project-add-files", 
 						       i18n("*|All Files"), 
 						       this, 
 						       i18n("Select Files to Add to Project") );

@@ -277,11 +277,9 @@ void K3bDvdCopyDialog::loadUserDefaults( KConfigBase* c )
 
   m_writerSelectionWidget->loadConfig( c );
 
-  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
-
   m_writingModeWidget->loadConfig( c );
 
-  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+  m_tempDirSelectionWidget->readConfig( c );
 
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
   m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
@@ -300,6 +298,7 @@ void K3bDvdCopyDialog::saveUserDefaults( KConfigBase* c )
   m_tempDirSelectionWidget->saveConfig();
 
   m_writingModeWidget->saveConfig( c );
+  m_tempDirSelectionWidget->saveConfig( c );
 
   c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 
@@ -321,7 +320,7 @@ void K3bDvdCopyDialog::saveUserDefaults( KConfigBase* c )
 void K3bDvdCopyDialog::loadK3bDefaults()
 {
   m_writerSelectionWidget->loadDefaults();
-  m_tempDirSelectionWidget->setTempPath( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
 
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
 

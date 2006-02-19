@@ -145,7 +145,8 @@ void K3bMediaSelectionDialog::slotSelectionChanged( K3bDevice::Device* dev )
 
 
 K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, QWidget* parent, 
-							  const QString& title, const QString& text )
+							  const QString& title, const QString& text,
+							  bool* canceled )
 {
   K3bMediaSelectionDialog dlg( parent, title, text );
   dlg.setWantedMediumType( type );
@@ -155,10 +156,16 @@ K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, Q
   // so it's not sufficient to check for just one entry to check if there only is a 
   // single useable medium
   if( ( dlg.selectedDevice() && dlg.m_combo->count() == 1 ) 
-      || dlg.exec() == Accepted )
+      || dlg.exec() == Accepted ) {
+    if( canceled )
+      *canceled = false;
     return dlg.selectedDevice();
-  else
+  }
+  else {
+    if( canceled )
+      *canceled = true;
     return 0;
+  }
 }
 
 

@@ -116,7 +116,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   void slotUpdateTime();
   void slotShowDebuggingOutput();
 
-  void slotUpdateCaption( int );
+  void slotProgress( int );
 
  protected:
   void closeEvent( QCloseEvent* );
@@ -150,6 +150,8 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   K3bJob* m_job;
   QTimer* m_timer;
   QTime m_startTime;
+  QTime m_lastProgressUpdateTime;
+
   K3bDebuggingOutputFile m_logFile;
 
   QMap<QString, QStringList> m_debugOutputMap;

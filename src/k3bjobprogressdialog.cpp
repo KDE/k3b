@@ -371,7 +371,10 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
     m_progressPercent->setValue(100);
     m_progressSubPercent->setValue(100);
-    slotUpdateCaption(100);
+    slotProgress(100);
+
+    // one last time update to be sure no remaining time is displayed anymore
+    slotUpdateTime();
 
     if( m_osd )
       m_osd->setText( i18n("Success.") );
@@ -429,7 +432,6 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
   m_labelTask->setPaletteForegroundColor( k3bappcore->themeManager()->currentTheme()->foregroundColor() );
   m_debugOutputMap.clear();
 
-
   // disconnect from the former job
   if( m_job )
     disconnect( m_job );
@@ -441,7 +443,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
     connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
     
     connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
-    connect( job, SIGNAL(percent(int)), this, SLOT(slotUpdateCaption(int)) );
+    connect( job, SIGNAL(percent(int)), this, SLOT(slotProgress(int)) );
     connect( job, SIGNAL(subPercent(int)), m_progressSubPercent, SLOT(setValue(int)) );
     
     connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(slotProcessedSubSize(int, int)) );
@@ -519,7 +521,13 @@ void K3bJobProgressDialog::slotUpdateTime()
 {
   int elapsed = m_startTime.secsTo( QTime::currentTime() );
 
-  m_labelElapsedTime->setText( i18n("Elapsed time: %1 h").arg( QTime().addSecs(elapsed).toString() ) );
+  QString s = i18n("Elapsed time: %1 h").arg( QTime().addSecs(elapsed).toString() );
+  if( d->lastProgress > 0 && d->lastProgress < 100 ) {
+    int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
+    s += " / " + i18n("Remaining: %1 h").arg( QTime().addSecs(rem).toString() );
+  }
+
+  m_labelElapsedTime->setText( s );
 }
 
 
@@ -538,10 +546,11 @@ void K3bJobProgressDialog::slotShowDebuggingOutput()
 }
 
 
-void K3bJobProgressDialog::slotUpdateCaption( int percent )
+void K3bJobProgressDialog::slotProgress( int percent )
 {
   if( percent > d->lastProgress ) {
     d->lastProgress = percent;
+    m_lastProgressUpdateTime = QTime::currentTime();
     if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) ) {
       w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
     }
