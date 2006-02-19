@@ -25,6 +25,11 @@
  * K3b can now handle media:/ urls from the commandline to specify devices
  * Better Lame settings dialog. Easier to use for the novice user and better defaults.
  * K3b now shows the DVD Medium ID in the disk information view.
+ * K3b now displays a rough estimate on the remaining time for the current job.
+ * New automatic media size mode for the projects. This means K3b uses the size from an inserted medium
+   for the project maximum size.
+ * Make a suggestion for the filename when saving a project based on the Volume ID (data projects) or the
+   CD-Text title (Audio CD)
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
