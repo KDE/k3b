@@ -1654,42 +1654,6 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
     unsigned char* data = 0;
     int dataLen = 0;
 
-//     //
-//     // Set writing mode to WRITINGMODE_TAO.
-//     // In WRITINGMODE_RAW writing mode we do not get the values we want.
-//     //
-//     if( modeSense( &data, dataLen, 0x05 ) ) {
-//       wr_param_page_05* mp = (struct wr_param_page_05*)(data+8);
-
-//       // reset some stuff to be on the safe side
-//       mp->PS = 0;
-//       mp->BUFE = 0;
-//       mp->multi_session = 0;
-//       mp->test_write = 0;
-//       mp->LS_V = 0;
-//       mp->copy = 0;
-//       mp->fp = 0;
-//       mp->host_appl_code= 0;
-//       mp->session_format = 0;
-//       mp->audio_pause_len[0] = 0;
-//       mp->audio_pause_len[1] = 150;
-
-//       mp->write_type = 0x01;  // WRITINGMODE_TAO
-//       mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ???
-//       mp->dbtype = 8;         // Mode 1
-
-//       if( !modeSelect( data, dataLen, 1, 0 ) ) {
-// 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-// 		  << ": modeSelect 0x05 failed!" << endl;
-//       }
-
-//       delete [] data;
-//     }
-//     else
-//       kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-// 		<< ": modeSense 0x05 failed!" << endl;
-
-
     //
     // The first thing to do should be: checking if a media is loaded
     // We do this with requesting the current profile. If it is 0 no media
@@ -1908,6 +1872,22 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       switch( media ) {
       case MEDIA_CD_R:
       case MEDIA_CD_RW:
+	// The code below does not produce valid values. I just leave it here so I won't try it again. ;)
+// 	if( inf.m_capacity == 0 ) {
+// 	  if( readTocPmaAtip( &data, dataLen, 0x100, true, 0 ) ) {
+
+// 	    struct atip_descriptor* atip = (struct atip_descriptor*)data;
+
+// 	    if( dataLen >= 11 ) {
+// 	      inf.m_capacity = K3b::Msf( atip->lead_out_m, atip->lead_out_s, atip->lead_out_f ) - 150;
+// 	      debugBitfield( &atip->lead_out_m, 3 );
+// 	      kdDebug() << blockDeviceName() << ": ATIP capacity: " << inf.m_capacity.toString() << endl;
+// 	    }
+
+// 	    delete [] data;
+// 	  }
+// 	}
+
 	//
 	// for empty and appendable media capacity and usedCapacity should be filled in from
 	// diskinfo above. If not they are both still 0
@@ -2027,15 +2007,23 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
 	break;
 
+      case MEDIA_DVD_RW_OVWR:
+	inf.m_numSessions = 1;
       case MEDIA_DVD_RW:
       case MEDIA_DVD_RW_SEQ:
 	// only one track on a DVD-RW media
 	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
 	  track_info_t* trackInfo = (track_info_t*)data;
-	  if( inf.empty() )
+	  if( inf.empty() ) {
 	    inf.m_capacity = from4Byte( trackInfo->track_size );
-	  else
+	  }
+	  else {
+	    if( readFormatCapacity( 0x10, inf.m_capacity ) )
+	      kdDebug() << blockDeviceName() << ": Format capacity 0x10: " << inf.m_capacity.toString() << endl;
+	  
 	    inf.m_usedCapacity = from4Byte( trackInfo->track_size );
+	  }
+
 	  delete [] data;
 	}
 	break;
@@ -2055,15 +2043,6 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
 	break;
       }
-
-      case MEDIA_DVD_RW_OVWR:
-	inf.m_numSessions = 1;
-	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
-	  track_info_t* trackInfo = (track_info_t*)data;
-	  inf.m_usedCapacity = inf.m_capacity = from4Byte( trackInfo->track_size );
-	  delete [] data;
-	}
-	break;
       }
 
 

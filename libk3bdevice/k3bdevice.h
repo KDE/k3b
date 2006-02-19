@@ -522,7 +522,7 @@ namespace K3bDevice
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const;
+      bool readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool msf, int track ) const;
 
       /**
        * @param type specifies what value means:
