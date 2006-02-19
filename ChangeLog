@@ -2,6 +2,7 @@
 =======
  * Honor umask when creating directories for Audio CD ripping.
  * Only update the buffer state for DVD burning if it really changes.
+ * Fixed a crash in verification if the CD/DVD does not contain RR extensions.
 
 0.12.12
 =======

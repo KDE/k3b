@@ -691,7 +691,7 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
   bool success = false;
 
   // the maximal length as stated in MMC4
-  static const unsigned int maxLen = 4 + (8*31);
+  static const unsigned int maxLen = 4 + (8*32);
 
   unsigned char buffer[maxLen];
   ::memset( buffer, 0, maxLen );

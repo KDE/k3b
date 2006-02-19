@@ -277,7 +277,7 @@ void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
       d->originalCalculated = true;
       d->originalMd5Sum = d->md5Job->hexDigest();
       const K3bIso9660File* isoFile = 
-	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstRRDirEntry()->iso9660Entry( d->currentItem->iso9660Path() ) );
+	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->iso9660Entry( d->currentItem->iso9660Path() ) );
       if( isoFile ) {
 	d->md5Job->setFile( isoFile );
 	d->md5Job->start();
