@@ -29,6 +29,8 @@ public:
 
   QFile* outputFile;
   QString outputFilename;
+
+  QString lastErrorString;
 };
 
 
@@ -153,6 +155,21 @@ void K3bAudioEncoder::finishEncoder()
 void K3bAudioEncoder::finishEncoderInternal()
 {
   // do nothing
+}
+
+
+void K3bAudioEncoder::setLastError( const QString& e )
+{
+  d->lastErrorString = e;
+}
+
+
+QString K3bAudioEncoder::lastErrorString() const
+{
+  if( d->lastErrorString.isEmpty() )
+    return i18n("An unknown error occured.");
+  else
+    return d->lastErrorString;
 }
 
 #include "k3baudioencoder.moc"

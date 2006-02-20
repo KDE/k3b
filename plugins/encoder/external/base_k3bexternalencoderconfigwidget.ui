@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bExternalEncoderConfigWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,9 +9,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>514</width>
-            <height>378</height>
+            <width>529</width>
+            <height>437</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -30,7 +33,7 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout9</cstring>
+                <cstring>layout8</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -122,7 +125,7 @@
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout8</cstring>
+                        <cstring>layout6</cstring>
                     </property>
                     <vbox>
                         <property name="name">
@@ -191,6 +194,31 @@ If you only hear noise you most likely need to swap the byte order.</string>
                                 </sizepolicy>
                             </property>
                         </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_checkSwapByteOrder</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Swap &amp;Byte Order</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+B</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_checkWriteWaveHeader</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Write W&amp;ave Header</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;If this option is checked K3b will write a wave header. This is useful in case the encoder application cannot read plain raw audio data.</string>
+                            </property>
+                        </widget>
                         <spacer>
                             <property name="name">
                                 <cstring>spacer2</cstring>
@@ -204,7 +232,7 @@ If you only hear noise you most likely need to swap the byte order.</string>
                             <property name="sizeHint">
                                 <size>
                                     <width>41</width>
-                                    <height>30</height>
+                                    <height>50</height>
                                 </size>
                             </property>
                         </spacer>
@@ -225,8 +253,5 @@ If you only hear noise you most likely need to swap the byte order.</string>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistbox.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

@@ -134,6 +134,12 @@ class LIBK3B_EXPORT K3bAudioEncoder : public K3bPlugin
    */
   long encode( const char*, Q_ULONG len );
 
+  /**
+   * Use this signal in case of an error to provide the user with information
+   * about the problem.
+   */
+  virtual QString lastErrorString() const;
+
  protected:
   /**
    * Called by the default implementation of openFile
@@ -183,6 +189,11 @@ class LIBK3B_EXPORT K3bAudioEncoder : public K3bPlugin
    * this may already write data.
    */
   virtual void setMetaDataInternal( MetaDataField, const QString& );
+
+  /**
+   * Use this in combination with the default implementation of lastError()
+   */
+  void setLastError( const QString& );
 
  private:
   class Private;

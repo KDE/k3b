@@ -30,6 +30,9 @@
    for the project maximum size.
  * Make a suggestion for the filename when saving a project based on the Volume ID (data projects) or the
    CD-Text title (Audio CD)
+ * The Audio encoder plugins are now able to provide user feedback in case of an error.
+ * New settings "Swap byte order" and "Write Wave header" in the audio encoding plugin using external apps.
+   This makes way for the usage of such programs as mppenc to encode Musepack files.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project

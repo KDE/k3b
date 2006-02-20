@@ -217,6 +217,8 @@ void K3bAudioRipThread::run()
 	d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
 	d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
       }
+      else
+	emitInfoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
     }
     else {
       isOpen = d->waveFileWriter->open( filename );
@@ -320,6 +322,8 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	  d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
 	  d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
 	}
+	else
+	  emitInfoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
       }
       else {
 	isOpen = d->waveFileWriter->open( filename );
@@ -366,6 +370,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	    if( d->encoder->encode( buf, 
 				    CD_FRAMESIZE_RAW ) < 0 ) {
 	      kdDebug() << "(K3bAudioRipThread) error while encoding." << endl;
+	      emitInfoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
 	      emitInfoMessage( i18n("Error while encoding track %1.").arg(track), K3bJob::ERROR );
 	      return false;
 	    }

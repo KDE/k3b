@@ -33,6 +33,7 @@
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qtoolbutton.h>
+#include <qcheckbox.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -40,12 +41,37 @@
 
 K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, K3bPluginFactory<K3bExternalEncoder>( "libk3bexternalencoder" ) )
 
+
+static const char s_riffHeader[] =
+{
+  0x52, 0x49, 0x46, 0x46, // 0  "RIFF"
+  0x00, 0x00, 0x00, 0x00, // 4  wavSize
+  0x57, 0x41, 0x56, 0x45, // 8  "WAVE"
+  0x66, 0x6d, 0x74, 0x20, // 12 "fmt "
+  0x10, 0x00, 0x00, 0x00, // 16
+  0x01, 0x00, 0x02, 0x00, // 20
+  0x44, 0xac, 0x00, 0x00, // 24
+  0x10, 0xb1, 0x02, 0x00, // 28
+  0x04, 0x00, 0x10, 0x00, // 32
+  0x64, 0x61, 0x74, 0x61, // 36 "data"
+  0x00, 0x00, 0x00, 0x00  // 40 byteCount
+};
+
+
 class K3bExternalEncoder::Command
 {
 public:
+  Command()
+    : swapByteOrder(false),
+      writeWaveHeader(false) {
+  }
+
   QString name;
   QString extension;
   QString command;
+
+  bool swapByteOrder;
+  bool writeWaveHeader;
 
   int index;  // just used by the config widget
 };
@@ -66,6 +92,12 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
     cmd.name = cmdString[0];
     cmd.extension = cmdString[1];
     cmd.command = cmdString[2];
+    for( unsigned int i = 3; i < cmdString.count(); ++i ) {
+      if( cmdString[i] == "swap" )
+	cmd.swapByteOrder = true;
+      else if( cmdString[i] == "wave" )
+	cmd.writeWaveHeader = true;
+    }
     cl.append(cmd);
   }
 
@@ -127,6 +159,7 @@ public:
   K3bProcess* process;
   QString fileName;
   QString extension;
+  K3b::Msf length;
 
   Command cmd;
 
@@ -214,11 +247,12 @@ void K3bExternalEncoder::slotExternalProgramFinished( KProcess* p )
 }
 
 
-bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& )
+bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
 {
   d->fileName = filename;
   d->extension = ext;
   d->initialized = false;
+  d->length = length;
   return true;
 }
 
@@ -237,7 +271,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
   d->cmd = commandByExtension( extension );
 
   if( d->cmd.command.isEmpty() ) {
-    kdDebug() << "(K3bExternalEncoder) empty command for extension " << extension << endl;
+    setLastError( i18n("Invalid command: the command is empty.") );
     return false;
   }
 
@@ -280,8 +314,67 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
+
+  // set one general error message
+  setLastError( i18n("Command failed: %1").arg( s ) );
   
-  return d->process->start( KProcess::NotifyOnExit, KProcess::All );
+  if( d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+    if( d->cmd.writeWaveHeader )
+      return writeWaveHeader();
+    else
+      return true;
+  }
+  else {
+    //
+    // FIXME: Let's first see if perhaps the program is not installed at all
+    //
+    return false;
+  }
+}
+
+
+bool K3bExternalEncoder::writeWaveHeader()
+{
+  kdDebug() << "(K3bExternalEncoder) writing wave header" << endl;
+
+  // write the RIFF thing
+  if( ::write( d->process->stdinFd(), s_riffHeader, 4 ) != 4 ) {
+    kdDebug() << "(K3bExternalEncoder) failed to write riff header." << endl;
+    return false;
+  }
+  
+  // write the wave size
+  Q_INT32 dataSize( d->length.audioBytes() );
+  Q_INT32 wavSize( dataSize + 44 - 8 );
+  char c[4];
+
+  c[0] = (wavSize   >> 0 ) & 0xff;
+  c[1] = (wavSize   >> 8 ) & 0xff;
+  c[2] = (wavSize   >> 16) & 0xff;
+  c[3] = (wavSize   >> 24) & 0xff;
+  
+  if( ::write( d->process->stdinFd(), c, 4 ) != 4 ) {
+    kdDebug() << "(K3bExternalEncoder) failed to write wave size." << endl;
+    return false;
+  }
+
+  // write static part of the header
+  if( ::write( d->process->stdinFd(), s_riffHeader+8, 32 ) != 32 ) {
+    kdDebug() << "(K3bExternalEncoder) failed to write wave header." << endl;
+    return false;
+  }
+
+  c[0] = (dataSize   >> 0 ) & 0xff;
+  c[1] = (dataSize   >> 8 ) & 0xff;
+  c[2] = (dataSize   >> 16) & 0xff;
+  c[3] = (dataSize   >> 24) & 0xff;
+
+  if( ::write( d->process->stdinFd(), c, 4 ) != 4 ) {
+    kdDebug() << "(K3bExternalEncoder) failed to write data size." << endl;
+    return false;
+  }
+
+  return true;
 }
 
 
@@ -294,16 +387,28 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
   if( d->process ) {
     if( d->process->isRunning() ) {
 
+      long written = 0;
+
+      //
       // we swap the bytes to reduce user irritation ;)
-      char* buffer = new char[len];
-      for( unsigned int i = 0; i < len-1; i+=2 ) {
-	buffer[i] = data[i+1];
-	buffer[i+1] = data[i];
+      // This is a little confused: We used to swap the byte order
+      // in older versions of this encoder since little endian seems
+      // to "feel" more natural.
+      // So now that we have a swap option we have to invert it to ensure
+      // compatibility
+      //
+      if( !d->cmd.swapByteOrder ) {
+	char* buffer = new char[len];
+	for( unsigned int i = 0; i < len-1; i+=2 ) {
+	  buffer[i] = data[i+1];
+	  buffer[i+1] = data[i];
+	}
+
+	written = ::write( d->process->stdinFd(), (const void*)buffer, len );
+	delete [] buffer;
       }
-
-      long written = ::write( d->process->stdinFd(), (const void*)buffer, len );
-
-      delete [] buffer;
+      else
+	written = ::write( d->process->stdinFd(), (const void*)data, len );
 
       return written;
     }
@@ -380,6 +485,10 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* par
 	   this, SLOT(updateCurrentCommand()) );
   connect( w->m_editCommand, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(updateCurrentCommand()) );
+  connect( w->m_checkSwapByteOrder, SIGNAL(toggled(bool)),
+	   this, SLOT(updateCurrentCommand()) );
+  connect( w->m_checkWriteWaveHeader, SIGNAL(toggled(bool)),
+	   this, SLOT(updateCurrentCommand()) );
 }
 
 
@@ -444,12 +553,16 @@ void K3bExternalEncoderSettingsWidget::loadCommand( int index )
     w->m_editName->setText( "" );
     w->m_editExtension->setText( "" );
     w->m_editCommand->setText( "" );
+    w->m_checkSwapByteOrder->setChecked( false );
+    w->m_checkWriteWaveHeader->setChecked( false );
   }
   else {
     K3bExternalEncoder::Command& cmd = d->indexMap[index];
     w->m_editName->setText( cmd.name );
     w->m_editExtension->setText( cmd.extension );
     w->m_editCommand->setText( cmd.command );
+    w->m_checkSwapByteOrder->setChecked( cmd.swapByteOrder );
+    w->m_checkWriteWaveHeader->setChecked( cmd.writeWaveHeader );
   }
   
   w->m_editName->setEnabled( index != -1 );
@@ -517,6 +630,8 @@ void K3bExternalEncoderSettingsWidget::updateCurrentCommand()
     cmd.name = name;
     cmd.extension = w->m_editExtension->text();
     cmd.command = w->m_editCommand->text();
+    cmd.swapByteOrder = w->m_checkSwapByteOrder->isChecked();
+    cmd.writeWaveHeader = w->m_checkWriteWaveHeader->isChecked();
 
     w->m_programList->blockSignals(true);
     w->m_programList->changeItem( cmd.name, cmd.index );
@@ -565,6 +680,10 @@ void K3bExternalEncoderSettingsWidget::saveConfig()
        it != d->indexMap.end(); ++it ) {
     QStringList cmd;
     cmd << it.data().name << it.data().extension << it.data().command;
+    if( it.data().swapByteOrder )
+      cmd << "swap";
+    if( it.data().writeWaveHeader )
+      cmd << "wave";
     c->writeEntry( "command_" + it.data().name, cmd );
     cmdNames << it.data().name;
   }
