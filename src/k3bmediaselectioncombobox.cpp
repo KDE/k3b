@@ -78,6 +78,9 @@ public:
   QMap<K3bDevice::Device*, int> deviceIndexMap;
   QPtrVector<K3bDevice::Device> devices;
 
+  // medium strings for every entry
+  QMap<QString, int> mediaStringMap;
+
   int wantedMediumType;
   int wantedMediumState;
 
@@ -182,6 +185,7 @@ void K3bMediaSelectionComboBox::slotMediumChanged( K3bDevice::Device* dev )
 void K3bMediaSelectionComboBox::clear()
 {
   d->deviceIndexMap.clear();
+  d->mediaStringMap.clear();
   d->devices.clear();
   KComboBox::clear();
 }
@@ -267,8 +271,43 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
   // Otherwise we show the contents type since this might also be used
   // for source selection.
   //
-  insertItem( mediumString( k3bappcore->mediaCache()->medium( dev ) ) );
+  QString s = mediumString( k3bappcore->mediaCache()->medium( dev ) );
 
+  //
+  // Now let's see if this string is already contained in the list
+  // and if so add the device name to both
+  //
+  if( d->mediaStringMap.contains( s ) ) {
+    //
+    // insert the modified string
+    //
+    insertItem( s + QString(" (%1 - %2)").arg(dev->vendor()).arg(dev->description()) );
+
+    //
+    // change the already existing string if we did not already do so
+    // (which happens if more than 2 entries have the same medium string)
+    //
+    int prevIndex = d->mediaStringMap[s];
+    if( prevIndex >= 0 )
+      changeItem( text(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description()), 
+		  prevIndex );
+
+    //
+    // mark the string as already changed
+    //
+    d->mediaStringMap[s] = -1;    
+  }
+  else {
+    //
+    // insert the plain medium string
+    //
+    insertItem( s );
+    d->mediaStringMap[s] = count()-1;
+  }
+
+  //
+  // update the helper structures
+  //
   d->deviceIndexMap[dev] = count()-1;
   d->devices.resize( count() );
   d->devices.insert(count()-1, dev);
