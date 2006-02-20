@@ -521,7 +521,7 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
 	  kdDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer 
 		    << " file with " << c << " channels and a samplerate of "
 		    << s << endl;
-	  return true;
+	  return ( layer == MAD_LAYER_III );
 	}
       }
       else
