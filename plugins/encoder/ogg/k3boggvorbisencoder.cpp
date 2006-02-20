@@ -32,6 +32,9 @@
 #include <qlcdnumber.h>
 #include <qcheckbox.h>
 #include <qcstring.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+#include <qlabel.h>
 
 #include <vorbis/vorbisenc.h>
 
@@ -41,6 +44,38 @@
 
 
 K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, K3bPluginFactory<K3bOggVorbisEncoder>( "libk3boggvorbisencoder" ) )
+
+// quality levels -1 to 10 map to 0 to 11
+static const int s_rough_average_quality_level_bitrates[] = {
+  45,
+  64,
+  80,
+  96,
+  112,
+  128,
+  160,
+  192,
+  224,
+  256,
+  320,
+  400
+};
+
+// quality levels -1 to 10 map to 0 to 11
+// static const char* s_ogg_quality_level_strings[] = {
+//   I18N_NOOP("Low quality"),
+//   I18N_NOOP(""),
+//   I18N_NOOP(""),
+//   I18N_NOOP(""),
+//   I18N_NOOP(""),
+//   I18N_NOOP("targetted %1 kbps"),
+//   I18N_NOOP("targetted %1 kbps"),
+//   I18N_NOOP("targetted %1 kbps"),
+//   I18N_NOOP(""),
+//   I18N_NOOP(""),
+//   I18N_NOOP(""),
+//   I18N_NOOP(""),
+// };
 
 
 // THIS IS BASED ON THE OGG VORBIS LIB EXAMPLE 
@@ -133,8 +168,8 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
 			      d->bitrateLower != -1 ? d->bitrateLower*1000 : -1 );
   }
   else {
-    if( d->qualityLevel < 0 )
-      d->qualityLevel = 0;
+    if( d->qualityLevel < -1 )
+      d->qualityLevel = -1;
     else if( d->qualityLevel > 10 )
       d->qualityLevel = 10;
 
@@ -396,15 +431,46 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
 {
   w = new base_K3bOggVorbisEncoderSettingsWidget( this );
 
+  QString ttQuality = i18n("Controls the quality of the encoded files.");
+  QString wsQuality = i18n("<p>Vorbis' audio quality is not best measured in kilobits per second, "
+			   "but on a scale from -1 to 10 called <em>quality</em>."
+			   "<p>For now, quality -1 is roughly equivalent to 45kbps average, "
+			   "5 is roughly 160kbps, and 10 gives about 400kbps. "
+			   "Most people seeking very-near-CD-quality audio encode at a quality of 5 or, "
+			   "for lossless stereo coupling, 6. The quality 3 gives, at "
+			   "approximately 110kbps a smaller filesize and significantly better fidelity "
+			   "than .mp3 compression at 128kbps."
+			   "<p><em>This explanation is based on the one from the www.vorbis.com FAQ.</em>");
+
+  QToolTip::add( w->m_radioQualityLevel, ttQuality );
+  QToolTip::add( w->m_labelQualityLevel, ttQuality );
+  QToolTip::add( w->m_slideQualityLevel, ttQuality );
+  QWhatsThis::add( w->m_radioQualityLevel, wsQuality );
+  QWhatsThis::add( w->m_labelQualityLevel, wsQuality );
+  QWhatsThis::add( w->m_slideQualityLevel, wsQuality );
+
+
   QHBoxLayout* lay = new QHBoxLayout( this );
   lay->setMargin( 0 );
 
   lay->addWidget( w );
+
+  connect( w->m_slideQualityLevel, SIGNAL(valueChanged(int)),
+	   this, SLOT(slotQualityLevelChanged(int)) );
+
+  slotQualityLevelChanged( 4 );
 }
 
 
 K3bOggVorbisEncoderSettingsWidget::~K3bOggVorbisEncoderSettingsWidget()
 {
+}
+
+
+void K3bOggVorbisEncoderSettingsWidget::slotQualityLevelChanged( int val )
+{
+  w->m_labelQualityLevel->setText( QString::number(val) + " " 
+				   + i18n("(targetted VBR of %1)").arg(s_rough_average_quality_level_bitrates[val+1]) );
 }
 
 
@@ -419,7 +485,6 @@ void K3bOggVorbisEncoderSettingsWidget::loadConfig()
   else
     w->m_radioQualityLevel->setChecked(true);
   w->m_slideQualityLevel->setValue( c->readNumEntry( "quality level", 4 ) );
-  w->m_labelQualityLevel->display( c->readNumEntry( "quality level", 4 ) );
   w->m_inputBitrateUpper->setValue( c->readNumEntry( "bitrate upper", -1 ) );
   w->m_checkBitrateUpper->setChecked( c->readNumEntry( "bitrate upper", -1 ) != -1 );
   w->m_inputBitrateNominal->setValue( c->readNumEntry( "bitrate nominal", -1 ) );

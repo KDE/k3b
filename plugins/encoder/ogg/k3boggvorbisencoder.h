@@ -71,6 +71,9 @@ class K3bOggVorbisEncoderSettingsWidget : public K3bPluginConfigWidget
   void loadConfig();
   void saveConfig();
 
+ private slots:
+  void slotQualityLevelChanged( int val );
+
  private:
   base_K3bOggVorbisEncoderSettingsWidget* w;
 };

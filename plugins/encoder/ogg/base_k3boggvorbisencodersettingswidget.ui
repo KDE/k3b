@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bOggVorbisEncoderSettingsWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,9 +9,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>460</width>
-            <height>215</height>
+            <width>335</width>
+            <height>271</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -27,30 +30,157 @@
             <property name="title">
                 <string>File Quality</string>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLCDNumber" row="0" column="3">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>m_labelQualityLevel</cstring>
+                        <cstring>layout7</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>m_radioQualityLevel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Quality level:</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+Q</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Controls the quality of the encoded files</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;Vorbis' audio quality is not best measured in kilobits per second, but on a scale from -1 to 10 called "quality". &lt;p&gt;For now, quality -1 is roughly equivalent to 45kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps. &lt;p&gt;&lt;em&gt;This explanation was copied from the www.vorbis.com FAQ.&lt;/em&gt;</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_labelQualityLevel</cstring>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <bold>1</bold>
+                                </font>
+                            </property>
+                            <property name="text">
+                                <string>textLabel1</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>frame6</cstring>
                     </property>
                     <property name="frameShape">
                         <enum>NoFrame</enum>
                     </property>
-                    <property name="numDigits">
-                        <number>2</number>
+                    <property name="frameShadow">
+                        <enum>Plain</enum>
                     </property>
-                    <property name="segmentStyle">
-                        <enum>Flat</enum>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer2_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Fixed</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout8</cstring>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSlider" row="0" column="0" rowspan="1" colspan="2">
+                                    <property name="name">
+                                        <cstring>m_slideQualityLevel</cstring>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>-1</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>10</number>
+                                    </property>
+                                    <property name="pageStep">
+                                        <number>3</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>3</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>textLabel4</cstring>
+                                    </property>
+                                    <property name="font">
+                                        <font>
+                                            <italic>1</italic>
+                                        </font>
+                                    </property>
+                                    <property name="text">
+                                        <string>high quality</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignVCenter|AlignRight</set>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>textLabel3_2</cstring>
+                                    </property>
+                                    <property name="font">
+                                        <font>
+                                            <italic>1</italic>
+                                        </font>
+                                    </property>
+                                    <property name="text">
+                                        <string>small file</string>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </hbox>
                 </widget>
-                <spacer row="2" column="0">
+                <spacer>
                     <property name="name">
-                        <cstring>spacer2</cstring>
+                        <cstring>spacer9</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Fixed</enum>
@@ -58,233 +188,180 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>21</height>
+                            <height>20</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QSlider" row="0" column="2">
-                    <property name="name">
-                        <cstring>m_slideQualityLevel</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>true</bool>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>10</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Below</enum>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Controls the quality of the encoded files</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;Vorbis' audio quality is not best measured in kilobits per second, but on a scale from 0 to 10 called "quality". &lt;p&gt;For now, quality 0 is roughly equivalent to 64kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps. &lt;p&gt;&lt;em&gt;This explanation was copied from the www.vorbis.com FAQ.&lt;/em&gt;</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+                <widget class="QRadioButton">
                     <property name="name">
                         <cstring>m_radioManual</cstring>
                     </property>
                     <property name="text">
-                        <string>Manual settings:</string>
+                        <string>M&amp;anual settings:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>m_radioQualityLevel</cstring>
+                        <cstring>layout6</cstring>
                     </property>
-                    <property name="text">
-                        <string>Quality level:</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Controls the quality of the encoded files</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;Vorbis' audio quality is not best measured in kilobits per second, but on a scale from 0 to 10 called "quality". &lt;p&gt;For now, quality 0 is roughly equivalent to 64kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps. &lt;p&gt;&lt;em&gt;This explanation was copied from the www.vorbis.com FAQ.&lt;/em&gt;</string>
-                    </property>
-                </widget>
-                <widget class="QFrame" row="2" column="1" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>frame3</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <grid>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <widget class="QCheckBox" row="0" column="0">
+                        <spacer>
                             <property name="name">
-                                <cstring>m_checkBitrateUpper</cstring>
+                                <cstring>spacer2</cstring>
                             </property>
-                            <property name="text">
-                                <string>Upper bitrate:</string>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
                             </property>
-                        </widget>
-                        <widget class="QCheckBox" row="2" column="0">
+                            <property name="sizeType">
+                                <enum>Fixed</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>21</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QFrame">
                             <property name="name">
-                                <cstring>m_checkBitrateLower</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Lower bitrate:</string>
-                            </property>
-                        </widget>
-                        <widget class="KIntNumInput" row="0" column="1">
-                            <property name="name">
-                                <cstring>m_inputBitrateUpper</cstring>
+                                <cstring>frame3</cstring>
                             </property>
                             <property name="enabled">
                                 <bool>false</bool>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
                             </property>
+                            <property name="frameShadow">
+                                <enum>Raised</enum>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <widget class="QCheckBox" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>m_checkBitrateUpper</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Upper bitrate:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox" row="2" column="0">
+                                    <property name="name">
+                                        <cstring>m_checkBitrateLower</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Lower &amp;bitrate:</string>
+                                    </property>
+                                </widget>
+                                <widget class="KIntNumInput" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>m_inputBitrateUpper</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>1</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                </widget>
+                                <widget class="KIntNumInput" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>m_inputBitrateNominal</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>1</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                </widget>
+                                <widget class="KIntNumInput" row="2" column="1">
+                                    <property name="name">
+                                        <cstring>m_inputBitrateLower</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="2">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>kbps</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="2" column="2">
+                                    <property name="name">
+                                        <cstring>textLabel3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>kbps</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="2">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>kbps</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>m_checkBitrateNominal</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>1</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>1</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Nominal bitrate:</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+N</string>
+                                    </property>
+                                </widget>
+                            </grid>
                         </widget>
-                        <widget class="KIntNumInput" row="1" column="1">
-                            <property name="name">
-                                <cstring>m_inputBitrateNominal</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="KIntNumInput" row="2" column="1">
-                            <property name="name">
-                                <cstring>m_inputBitrateLower</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="2">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>kbps</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="2">
-                            <property name="name">
-                                <cstring>textLabel3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>kbps</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="2">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>kbps</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox" row="1" column="0">
-                            <property name="name">
-                                <cstring>m_checkBitrateNominal</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>1</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Nominal bitrate:</string>
-                            </property>
-                        </widget>
-                    </grid>
+                    </hbox>
                 </widget>
-            </grid>
+            </vbox>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>101</width>
-                    <height>70</height>
-                </size>
-            </property>
-        </spacer>
     </vbox>
 </widget>
 <customwidgets>
 </customwidgets>
 <connections>
     <connection>
-        <sender>m_radioQualityLevel</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_slideQualityLevel</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
         <sender>m_radioManual</sender>
         <signal>toggled(bool)</signal>
         <receiver>frame3</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_slideQualityLevel</sender>
-        <signal>sliderMoved(int)</signal>
-        <receiver>m_labelQualityLevel</receiver>
-        <slot>display(int)</slot>
-    </connection>
-    <connection>
-        <sender>m_radioQualityLevel</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_labelQualityLevel</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
@@ -303,6 +380,18 @@
         <sender>m_checkBitrateLower</sender>
         <signal>toggled(bool)</signal>
         <receiver>m_inputBitrateLower</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioQualityLevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_labelQualityLevel</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioQualityLevel</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>frame6</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
