@@ -19,6 +19,8 @@
 #include "k3bemptydiscwaiter.h"
 #include "k3bjobprogressosd.h"
 #include "k3bdebuggingoutputdialog.h"
+#include "k3bapplication.h"
+#include "k3bjobinterface.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
@@ -598,6 +600,7 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
 {
   if( job ) {
     setJob( job );
+    k3bappcore->jobInterface()->setJob( job );
   }
   else if( !m_job ) {
     kdError() << "(K3bJobProgressDialog) null job!" << endl;

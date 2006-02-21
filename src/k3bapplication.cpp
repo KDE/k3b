@@ -20,6 +20,7 @@
 #include "k3bsplash.h"
 #include "k3baudioserver.h"
 #include "k3binterface.h"
+#include "k3bjobinterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
 #include "k3bmediacache.h"
@@ -61,7 +62,6 @@ K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
 
 K3bApplication::K3bApplication()
   : KUniqueApplication(),
-    m_interface(0),
     m_mainWindow(0),
     m_needToInit(true)
 {
@@ -124,9 +124,6 @@ void K3bApplication::init()
 
   m_mainWindow = new K3bMainWindow();
   m_core->m_mainWindow = m_mainWindow;
-
-  m_interface = new K3bInterface( m_mainWindow );
-  dcopClient()->setDefaultObject( m_interface->objId() );
 
   if( isRestored() ) {
     // we only have one single mainwindow to restore  
@@ -342,6 +339,10 @@ K3bApplication::Core::Core( QObject* parent )
   m_projectManager = new K3bProjectManager( this );
   // we need the themes on startup (loading them is fast anyway :)
   m_themeManager->loadThemes();
+
+  m_jobInterface = new K3bJobInterface( this );
+  m_interface = new K3bInterface( m_mainWindow );
+  dcopClient()->setDefaultObject( m_interface->objId() );
 }
 
 

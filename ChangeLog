@@ -33,7 +33,9 @@
  * The Audio encoder plugins are now able to provide user feedback in case of an error.
  * New settings "Swap byte order" and "Write Wave header" in the audio encoding plugin using external apps.
    This makes way for the usage of such programs as mppenc to encode Musepack files.
-
+ * New DCOP interface: K3bJobInterface which provides DCOP signals for the currently running job. It may,
+   for example, be used to provide information to a Karamba module.
+	
 0.12
 Added "Mpeg Still" support to Video-CD Project
 FreeBSD support (thanks to Adriaan De Groot)

@@ -5,8 +5,10 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3bprojecttabwidget.cpp k3bsplash.cpp \
 	k3bfileview.cpp k3bdirview.cpp k3b.cpp main.cpp \
 	k3bstatusbarmanager.cpp k3bfiletreecombobox.cpp \
-	k3binterface.cpp k3binterface.skel k3bprojectinterface.cpp \
-	k3bprojectinterface.skel k3bdataprojectinterface.cpp k3bdataprojectinterface.skel \
+	k3binterface.cpp k3binterface.skel \
+	k3bjobinterface.cpp k3bjobinterface.skel \
+	k3bprojectinterface.cpp k3bprojectinterface.skel \
+	k3bdataprojectinterface.cpp k3bdataprojectinterface.skel \
 	k3bsystemproblemdialog.cpp k3bcdcontentsview.cpp k3bwriterspeedverificationdialog.cpp \
 	k3bsidepanel.cpp \
 	k3bjobprogressdialog.cpp k3bburnprogressdialog.cpp k3btempdirselectionwidget.cpp \

@@ -27,6 +27,7 @@
 
 class K3bMainWindow;
 class K3bInterface;
+class K3bJobInterface;
 class K3bAudioServer;
 class K3bThemeManager;
 class K3bProjectManager;
@@ -59,7 +60,6 @@ class K3bApplication : public KUniqueApplication
  private:
   bool processCmdLineArgs();
 
-  K3bInterface* m_interface;
   Core* m_core;
   K3bAudioServer* m_audioServer;
   K3bMainWindow* m_mainWindow;
@@ -105,6 +105,8 @@ class K3bApplication::Core : public K3bCore
 
   K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
+  K3bJobInterface* jobInterface() const { return m_jobInterface; }
+
   virtual bool blockDevice( K3bDevice::Device* );
   virtual void unblockDevice( K3bDevice::Device* );
 
@@ -147,6 +149,9 @@ class K3bApplication::Core : public K3bCore
 
  private:
   void initDeviceManager();
+
+  K3bInterface* m_interface;
+  K3bJobInterface* m_jobInterface;
 
   K3bThemeManager* m_themeManager;
   K3bMainWindow* m_mainWindow;
