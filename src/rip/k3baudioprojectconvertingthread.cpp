@@ -168,6 +168,13 @@ void K3bAudioProjectConvertingThread::run()
   }
 
   if( d->canceled ) {
+    if( d->currentTrackIndex >= 0 && d->currentTrackIndex < (int)m_tracks.count() ) {
+      if( QFile::exists( m_tracks[d->currentTrackIndex].second ) ) {
+	QFile::remove( m_tracks[d->currentTrackIndex].second );
+	emitInfoMessage( i18n("Removed partial file '%1'.").arg(m_tracks[d->currentTrackIndex].second), K3bJob::INFO );
+      }
+    }
+
     emitCanceled();
     emitFinished(false);
   }
