@@ -4,6 +4,7 @@ Type=Link
 URL=videodvd:/
 Icon=dvd_unmount
 Name=Video DVD Browser
+Name[da]=Video-dvd browser
 Name[pt]=Navegador de DVD de Vídeo
 Name[pt_BR]=Navegador de DVD de Vídeo
 Name[sv]=Video-dvd bläddrare
