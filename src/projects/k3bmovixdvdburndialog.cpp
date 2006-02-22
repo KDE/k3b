@@ -178,6 +178,11 @@ void K3bMovixDvdBurnDialog::readSettings()
 
   m_checkVerify->setChecked( m_doc->verifyData() );
 
+  if( !doc()->tempDir().isEmpty() )
+    m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
+  else
+    m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
+
   // first of all we need a movix installation object
   const K3bMovixBin* bin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
   if( bin ) {

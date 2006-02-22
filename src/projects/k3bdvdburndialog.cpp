@@ -162,6 +162,8 @@ void K3bDvdBurnDialog::readSettings()
 
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
+  else
+    m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
 
   m_checkVerify->setChecked( m_doc->verifyData() );
 

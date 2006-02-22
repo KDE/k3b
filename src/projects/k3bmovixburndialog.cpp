@@ -219,6 +219,11 @@ void K3bMovixBurnDialog::readSettings()
 
   m_dataModeWidget->setDataMode( m_doc->dataMode() );
 
+  if( !doc()->tempDir().isEmpty() )
+    m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
+  else
+    m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
+
   // first of all we need a movix installation object
   const K3bMovixBin* bin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
   if( bin ) {

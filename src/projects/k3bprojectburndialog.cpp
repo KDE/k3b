@@ -352,7 +352,10 @@ void K3bProjectBurnDialog::loadK3bDefaults()
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
 
-  m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+  if( m_tempDirSelectionWidget->selectionMode() == K3bTempDirSelectionWidget::DIR )
+    m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+  else
+    m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
 }
 
 #include "k3bprojectburndialog.moc"
