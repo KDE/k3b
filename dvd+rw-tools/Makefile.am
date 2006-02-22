@@ -13,4 +13,5 @@ install-exec-hook:
 	@echo ""
 
 KDE_CXXFLAGS= -U__STRICT_ANSI__
+KDE_CFLAGS= -U__STRICT_ANSI__ -std=c99 
 
