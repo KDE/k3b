@@ -298,7 +298,7 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   if( !d->usingRingBuffer && d->growisofsBin->version >= K3bVersion( 6, 0 ) ) {
     bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
-    int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 40 );
+    int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 32 );
     *d->process << QString("-use-the-force-luke=bufsize:%1m").arg(bufSize);
   }
 

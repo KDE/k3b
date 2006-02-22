@@ -266,8 +266,25 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
 					   i18n("K3b won't be able to copy DVDs on-the-fly using a growisofs "
 						"version older than 5.12."),
-					   i18n("Install a more recent version of growisofs."),
+					   i18n("Install a more recent version of %1.").arg("growisofs"),
 					   false ) );
+      }
+      else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 6, 0 ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+					   i18n("It is highly recommended to use growisofs 6.0 or higher."),
+					   i18n("Install a more recent version of %1.").arg("growisofs"),
+					   false ) );
+      }
+      else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("%1 will be run without root privileges").arg("growisofs"),
+					   i18n("It is highly recommended to configure growisofs "
+						"to run with root privileges. Only then growisofs "
+						"runs with high priority which increases the overall "
+						"stability of the burning process."),
+					   i18n("Use K3bSetup to solve this problem."),
+					   true ) );
       }
     }
 

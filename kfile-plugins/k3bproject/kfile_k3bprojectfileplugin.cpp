@@ -41,7 +41,7 @@ K3bProjectFilePlugin::K3bProjectFilePlugin( QObject *parent, const char *name,
 
   KFileMimeTypeInfo::GroupInfo* group = addGroupInfo( info, "General", i18n("General") );
 
-  addItemInfo( group, "documenttype", i18n("Document type"), QVariant::String );
+  addItemInfo( group, "documenttype", i18n("Document Type"), QVariant::String );
 }
 
 
