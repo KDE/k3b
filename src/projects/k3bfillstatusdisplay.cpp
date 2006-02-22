@@ -633,7 +633,9 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
     for( QPtrListIterator<K3bDevice::Device> it( devs ); *it; ++it ) {
       const K3bMedium& medium = k3bappcore->mediaCache()->medium( *it );
 
-      if( ( medium.diskInfo().empty() || medium.diskInfo().appendable() || (medium.diskInfo().rewritable() && medium.diskInfo().isDvdMedia()) ) &&
+      if( ( medium.diskInfo().empty() || 
+	    medium.diskInfo().appendable() || 
+	    (medium.diskInfo().rewritable() && medium.diskInfo().isDvdMedia()) ) &&
 	  ( medium.diskInfo().isDvdMedia() == d->showDvdSizes ) &&
 	  d->doc->length() <= medium.diskInfo().capacity() ) {
 
@@ -681,6 +683,11 @@ void K3bFillStatusDisplay::slotDocChanged()
     d->displayWidget->update();
     d->updateTimer.start( 2000, false );
   }
+
+  //
+  // also update the medium list in case the docs size exceeds the capacity
+  //
+  slotMediumChanged( 0 );
 }
 
 #include "k3bfillstatusdisplay.moc"
