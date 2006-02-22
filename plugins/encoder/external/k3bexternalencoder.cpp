@@ -29,6 +29,7 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 #include <qlayout.h>
 #include <qregexp.h>
@@ -113,23 +114,47 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
     cl.append( lameCmd );
 #endif
 
-    K3bExternalEncoder::Command flacCmd;
-    flacCmd.name = "Flac";
-    flacCmd.extension = "flac";
-    flacCmd.command = "flac "
-      "-V "
-      "-o %f "
-      "--force-raw-format "
-      "--endian=big "
-      "--channels=2 "
-      "--sample-rate=44100 "
-      "--sign=signed "
-      "--bps=16 "
-      "-T ARTIST=%a "
-      "-T TITLE=%t "
-      "-";
+    if( !KStandardDirs::findExe( "flac" ).isEmpty() ) {
+      K3bExternalEncoder::Command flacCmd;
+      flacCmd.name = "Flac";
+      flacCmd.extension = "flac";
+      flacCmd.command = "flac "
+	"-V "
+	"-o %f "
+	"--force-raw-format "
+	"--endian=big "
+	"--channels=2 "
+	"--sample-rate=44100 "
+	"--sign=signed "
+	"--bps=16 "
+	"-T ARTIST=%a "
+	"-T TITLE=%t "
+	"-";
+      
+      cl.append( flacCmd );
+    }
 
-    cl.append( flacCmd );
+    if( !KStandardDirs::findExe( "mppenc" ).isEmpty() ) {
+      K3bExternalEncoder::Command mppCmd;
+      mppCmd.name = "Musepack";
+      mppCmd.extension = "mpc";
+      mppCmd.command = "mppenc "
+	"--standard "
+	"--overwrite "
+	"--silent "
+	"--artist %a "
+	"--title %t "
+	"--track %n "
+	"--album %m "
+	"--comment %c "
+	"--year %y "
+	"- "
+	"%f";
+      mppCmd.swapByteOrder = true;
+      mppCmd.writeWaveHeader = true;
+      
+      cl.append( mppCmd );
+    }
   }
 
   return cl;
@@ -325,9 +350,10 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
       return true;
   }
   else {
-    //
-    // FIXME: Let's first see if perhaps the program is not installed at all
-    //
+    QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
+    if( !KStandardDirs::findExe( commandName ).isEmpty() )
+      setLastError( i18n("Could not find program '%1'").arg(commandName) );
+
     return false;
   }
 }
