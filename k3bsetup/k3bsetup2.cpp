@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include <qlayout.h>
 #include <qmap.h>
 #include <qfile.h>
@@ -61,9 +63,21 @@ static bool shouldRunSuidRoot( K3bExternalBin* bin )
   // Seems as if cdrdao never had problems with suid root...
   //
   
-  return( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ||
-	  ( bin->name() == "cdrecord" && bin->version >= K3bVersion( 2, 1, 1, "a02" ) ) ||
-	  bin->name() == "cdrdao" );
+  if( bin->name() == "cdrecord" ) {
+    return ( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ||
+	     bin->version >= K3bVersion( 2, 1, 1, "a02" ) );
+  }
+  else if( bin->name() == "cdrdao" ) {
+    return true;
+  }
+  else if( bin->name() == "growisofs" ) {
+    //
+    // starting with 6.0 growiofs raises it's priority using nice(-20)
+    //
+    return bin->version >= K3bVersion( 6, 0 );
+  }
+  else
+    return false;
 }
 
 
@@ -138,9 +152,9 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   d->deviceManager = new K3bDevice::DeviceManager( this );
 
   // these are the only programs that need special permissions
-  //  d->externalBinManager->addProgram( new K3bReadcdProgram() );
   d->externalBinManager->addProgram( new K3bCdrdaoProgram() );
   d->externalBinManager->addProgram( new K3bCdrecordProgram(false) );
+  d->externalBinManager->addProgram( new K3bGrowisofsProgram() );
 
   d->externalBinManager->search();
   d->deviceManager->scanBus();
@@ -523,13 +537,13 @@ void K3bSetup2::slotAddDevice()
 
 void K3bSetup2::makeReadOnly()
 {
-    w->m_checkUseBurningGroup->setEnabled( false );
-    w->m_editBurningGroup->setEnabled( false );
-    w->m_editUsers->setEnabled( false );
-    w->m_viewDevices->setEnabled( false );
-    w->m_buttonAddDevice->setEnabled( false );
-    w->m_viewPrograms->setEnabled( false );
-    w->m_editSearchPath->setEnabled( false );
+  w->m_checkUseBurningGroup->setEnabled( false );
+  w->m_editBurningGroup->setEnabled( false );
+  w->m_editUsers->setEnabled( false );
+  w->m_viewDevices->setEnabled( false );
+  w->m_buttonAddDevice->setEnabled( false );
+  w->m_viewPrograms->setEnabled( false );
+  w->m_editSearchPath->setEnabled( false );
 }
 
 
