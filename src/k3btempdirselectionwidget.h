@@ -40,6 +40,8 @@ class K3bTempDirSelectionWidget : public QGroupBox
   /** determines if the selection dialog should ask for a dir or a file */
   enum mode { DIR, FILE };
 
+  int selectionMode() const { return m_mode; }
+
   unsigned long freeTempSpace() const { return m_freeTempSpace; }
   QString tempPath() const;
   QString tempDirectory() const;
