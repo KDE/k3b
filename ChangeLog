@@ -3,6 +3,8 @@
  * Honor umask when creating directories for Audio CD ripping.
  * Only update the buffer state for DVD burning if it really changes.
  * Fixed a crash in verification if the CD/DVD does not contain RR extensions.
+ * Lowered default DVD writing buffer size to 32 MB to avoid "memorylock limit" problems
+   as described on http://fy.chalmers.se/~appro/linux/DVD+RW/tools/
 
 0.12.12
 =======
