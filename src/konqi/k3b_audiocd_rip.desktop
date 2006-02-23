@@ -13,5 +13,6 @@ Name[it]=Estrai audio digitale con K3b
 Name[pt]=Extrair o Áudio Digital com o K3b
 Name[pt_BR]=Extrair o Áudio Digital com o K3b
 Name[sv]=Lagra digitalljud med K3b
+Name[xx]=xxExtract Digital Audio with K3bxx
 Exec=k3b --cddarip %u
 Icon=k3b
