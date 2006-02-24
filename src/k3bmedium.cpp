@@ -1,3 +1,4 @@
+
 /* 
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
@@ -12,6 +13,8 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
+
+#include <config.h>
 
 #include "k3bmedium.h"
 
@@ -159,15 +162,16 @@ void K3bMedium::analyseContent()
       // which just slows down the whole process
       K3bIso9660 iso( new K3bIso9660DeviceBackend( m_device ) );
       iso.setStartSector( startSec );
+      iso.setPlainIso9660( true );
       if( iso.open() ) {
 	*m_isoDesc = iso.primaryDescriptor();
  	kdDebug() << "(K3bMedium) found volume id from start sector " << startSec 
  		  << ": '" << m_isoDesc->volumeId << "'" << endl;
 
-	if( K3bDevice::isDvdMedia( diskInfo().mediaType() ) ) {
+	if( diskInfo().isDvdMedia() ) {
 	  // Every VideoDVD needs to have a VIDEO_TS.IFO file
-	if( iso.firstIsoDirEntry()->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
-	  m_content |= CONTENT_VIDEO_DVD;
+	  if( iso.firstIsoDirEntry()->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
+	    m_content |= CONTENT_VIDEO_DVD;
 	}
 	else {
 	  kdDebug() << "(K3bMedium) checking for VCD." << endl;
