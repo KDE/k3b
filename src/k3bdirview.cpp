@@ -16,6 +16,7 @@
 
 #include "k3bdirview.h"
 #include "k3bapplication.h"
+#include "k3b.h"
 
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
@@ -273,9 +274,41 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     m_infoView->displayInfo( medium );
   }
   else if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
-    m_movieView->setDevice( medium.device() );
-    m_viewStack->raiseWidget( m_movieView );
-    m_movieView->reload();
+    KMessageBox::ButtonCode r = KMessageBox::Yes;
+    if( KMessageBox::shouldBeShownYesNo( "videodvdripping", r ) ) {
+      r = (KMessageBox::ButtonCode)
+	KMessageBox::questionYesNoCancel( this,
+					  i18n("<p>You have selected the K3b Video DVD ripping tool."
+					       "<p>It is intended to <em>rip single titles</em> from a video DVD for further "
+					       "processing like compression. Menu structures are completely ignored."
+					       "<p>If you intend to copy the plain Video DVD vob files from the DVD "
+					       "(including decryption) for further processing with another application, "
+					       "please use the following link to access the Video DVD file structure: "
+					       "<a href=\"videodvd:/\">videodvd:/</a>"
+					       "<p>If you intend to make a copy of the entire Video DVD including all menus "
+					       "and extras it is recommended to use the K3b DVD Copy tool."),
+					  i18n("Video DVD ripping"),
+					  i18n("Continue"),
+					  i18n("Open DVD Copy Dialog"),
+					  "videodvdripping",
+					  KMessageBox::AllowLink );
+    }
+    else { // if we do not show the dialog we always continue with the ripping. Everything else would be confusing
+      r = KMessageBox::Yes;
+    }
+
+    if( r == KMessageBox::Cancel ) {
+      m_viewStack->raiseWidget( m_fileView );
+    }
+    else if( r == KMessageBox::No ) {
+      m_viewStack->raiseWidget( m_fileView );
+      static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotDvdCopy();
+    }
+    else {
+      m_movieView->setDevice( medium.device() );
+      m_viewStack->raiseWidget( m_movieView );
+      m_movieView->reload();
+    }
   }
   else if( medium.toc().contentType() == K3bDevice::DATA ) {
     // check for VCD and ask
