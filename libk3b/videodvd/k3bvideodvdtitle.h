@@ -1,0 +1,82 @@
+/* 
+ *
+ * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
+ * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
+
+#ifndef _K3B_VIDEODVD_TITLE_H_
+#define _K3B_VIDEODVD_TITLE_H_
+
+#include <k3b_export.h>
+
+#include <k3bvideodvdtime.h>
+#include <k3bvideodvdvideostream.h>
+#include <k3bvideodvdaudiostream.h>
+#include <k3bvideodvdsubpicturestream.h>
+
+#include <qvaluevector.h>
+
+
+namespace K3bVideoDVD
+{
+  class LIBK3B_EXPORT Title
+    {
+    public:
+      Title() {}
+      
+      unsigned int titleNumber() const { return m_titleNum; }
+      
+      /**
+       * \return The number of PTTs (Part of Title), commonly known
+       *         as chapters
+       */
+      unsigned int numPTTs() const { return m_numPTTs; }
+      unsigned int numAngles() const { return m_numAngles; }
+
+      /**
+       * \return The number of the titleset this title is a part of.
+       */
+      unsigned int titleSet() const { return m_titleSet; }
+
+      /**
+       * \return Number of the title in it's titleset.
+       */
+      unsigned int ttn() const { return m_ttn; }
+      
+      unsigned int numAudioStreams() const { return m_audioStreams.count(); }
+      unsigned int numSubPictureStreams() const { return m_subPictureStreams.count(); }
+      
+      const VideoStream& videoStream() const { return m_videoStream; }
+      const AudioStream& audioStream( unsigned int i ) const { return m_audioStreams[i]; }
+      const SubPictureStream& subPictureStream( unsigned int i ) const { return m_subPictureStreams[i]; }
+
+      const Time& playbackTime() const { return m_playbackTime; }
+      
+    private:
+      unsigned int m_titleNum;
+      unsigned int m_numPTTs;
+      unsigned int m_titleSet;
+      // FIXME: find a proper name for ttn
+      unsigned int m_ttn;
+      unsigned int m_numAngles;
+
+      Time m_playbackTime;
+      
+      VideoStream m_videoStream;
+      QValueVector<AudioStream> m_audioStreams;
+      QValueVector<SubPictureStream> m_subPictureStreams;
+
+      friend class K3bVideoDVD::VideoDVD;
+    };
+}
+
+#endif

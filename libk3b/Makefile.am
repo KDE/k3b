@@ -8,11 +8,12 @@ libk3b_la_LIBADD = core/libk3bcore.la \
 	plugin/libk3bplugin.la \
 	tools/libk3btools.la \
 	jobs/libjobs.la \
+	videodvd/libvideodvd.la \
 	../libk3bdevice/libk3bdevice.la
 
 libk3b_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 
-SUBDIRS = core plugin tools projects cddb jobs scripts
+SUBDIRS = core plugin tools projects cddb jobs videodvd scripts
 
 #pkgconfigdir = $(libdir)/pkgconfig
 #pkgconfig_DATA = libk3b.pc
