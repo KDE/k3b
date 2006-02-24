@@ -21,7 +21,6 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bcore.h>
-#include "k3bdvdaudiogain.h"
 
 #include <qstring.h>
 #include <qdatastream.h>
