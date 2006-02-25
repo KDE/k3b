@@ -26,7 +26,7 @@ class KURL;
 class K3bAudioCdView;
 class K3bVideoCdView;
 class K3bFileView;
-class K3bMovieView;
+class K3bVideoDVDRippingView;
 class KComboBox;
 class K3bFileTreeView;
 class QWidgetStack;
@@ -84,7 +84,7 @@ class K3bDirView : public QVBox
 
   K3bAudioCdView*   m_cdView;
   K3bVideoCdView*   m_videoView;
-  K3bMovieView* m_movieView;
+  K3bVideoDVDRippingView* m_movieView;
   K3bFileView* m_fileView;
   K3bDiskInfoView* m_infoView;
 

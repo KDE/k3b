@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 
 #include "k3bdiskinfoview.h"
 
@@ -44,7 +46,10 @@
 #include <kdebug.h>
 #include <kio/global.h>
 
-
+#ifdef K3B_DEBUG
+// only for debugging
+#include <k3bvideodvd.h>
+#endif
 
 class K3bDiskInfoView::HeaderViewItem : public KListViewItem
 {
@@ -171,8 +176,19 @@ void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
         break;
       case K3bDevice::DATA:
 	if( medium.diskInfo().isDvdMedia() ) {
-	  setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ? i18n("Video DVD") : i18n("DVD") );
-	  setRightPixmap( K3bTheme::MEDIA_VIDEO );
+	  if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
+	    setTitle( i18n("Video DVD") );
+	    setRightPixmap( K3bTheme::MEDIA_VIDEO );
+	    K3bVideoDVD::VideoDVD dvd;
+#ifdef K3B_DEBUG
+	    if( dvd.open( medium.device() ) )
+	      dvd.debug();
+#endif
+	  }
+	  else {
+	    setTitle( i18n("DVD") );
+	    setRightPixmap( K3bTheme::MEDIA_DATA );
+	  }
 	}
 	else {
 	  setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_CD ? i18n("Video CD") : i18n("Data CD") );

@@ -21,7 +21,7 @@
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
 #include "k3bfileview.h"
-#include "rip/k3bmovieview.h"
+#include "rip/k3bvideodvdrippingview.h"
 #include "k3bfiletreeview.h"
 #include "k3bappdevicemanager.h"
 #include "k3bdiskinfoview.h"
@@ -198,7 +198,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
   m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
-  m_movieView    = new K3bMovieView(m_viewStack, "movieview");
+  m_movieView    = new K3bVideoDVDRippingView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
 
   m_noViewView = new NoViewView( m_viewStack );
@@ -305,9 +305,8 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotDvdCopy();
     }
     else {
-      m_movieView->setDevice( medium.device() );
+      m_movieView->setMedium( medium );
       m_viewStack->raiseWidget( m_movieView );
-      m_movieView->reload();
     }
   }
   else if( medium.toc().contentType() == K3bDevice::DATA ) {
