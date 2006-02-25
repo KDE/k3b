@@ -9,7 +9,8 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = libvideodvd.la
 libvideodvd_la_LIBADD = -ldvdread
 
-libvideodvd_la_SOURCES = k3bvideodvd.cpp k3bvideodvdtime.cpp
+libvideodvd_la_SOURCES = k3bvideodvd.cpp k3bvideodvdtime.cpp \
+	k3bvideodvdvideostream.cpp
 
 include_HEADERS = k3bvideodvd.h k3bvideodvdtitle.h \
 	k3bvideodvdaudiostream.h k3bvideodvdsubpicturestream.h \

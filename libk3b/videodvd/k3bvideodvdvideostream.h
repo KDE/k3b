@@ -61,12 +61,15 @@ namespace K3bVideoDVD
 
       unsigned int permittedDf() const { return m_permittedDf; }
       unsigned int displayAspectRatio() const { return m_displayAspectRatio; }
-      unsigned int videoFormat() const { return m_videoFormat; }
+      unsigned int format() const { return m_videoFormat; }
       unsigned int mpegVersion() const { return m_mpegVersion; }
       unsigned int filmMode() const { return m_filmMode; }
       unsigned int letterboxed() const { return m_letterboxed; }
       unsigned int pictureSize() const { return m_pictureSize; }
       unsigned int bitRate() const { return m_bitRate; }
+
+      unsigned int pictureWidth() const;
+      unsigned int pictureHeight() const;
       
     private:
       unsigned int m_permittedDf:2;

@@ -218,7 +218,7 @@ void K3bVideoDVD::VideoDVD::buildAudioStream( K3bVideoDVD::AudioStream* stream, 
   stream->m_sampleFrequency = attr->sample_frequency;
   stream->m_codeExtension = attr->code_extension;
   stream->m_multiChannelExt = attr->multichannel_extension;
-  stream->m_channels = attr->channels;
+  stream->m_channels = attr->channels+1;
   if( attr->lang_type == 1 )
     stream->m_langCode.sprintf( "%c%c", attr->lang_code>>8, attr->lang_code & 0xff );
   else

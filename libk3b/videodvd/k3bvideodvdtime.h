@@ -42,7 +42,7 @@ namespace K3bVideoDVD
       // FIXME: is this useful?
       double frameRate() const;
 
-      QString toString() const;
+      QString toString( bool includeFrames = true ) const;
 
     private:
       unsigned int m_hour;
