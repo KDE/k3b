@@ -314,6 +314,18 @@ void K3bListViewItem::setMarginVertical( int margin )
 }
 
 
+int K3bListViewItem::marginHorizontal( int col ) const
+{
+  return getColumnInfo( col )->margin;
+}
+
+
+int K3bListViewItem::marginVertical() const
+{
+  return m_vMargin;
+}
+
+
 void K3bListViewItem::setup()
 {
   KListViewItem::setup();
@@ -337,6 +349,23 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
   if( info->backgroundColorSet )
     cgh.setColor( QColorGroup::Base, info->backgroundColor );
 
+  // in case this is the selected row has a margin we need to repaint the selection bar
+  if( isSelected() &&
+      (col == 0 || listView()->allColumnsShowFocus()) &&
+      info->margin > 0 ) {
+    
+    p->fillRect( 0, 0, info->margin, height(),
+		 cg.brush( QColorGroup::Highlight ) );
+    p->fillRect( width-info->margin, 0, info->margin, height(),
+		 cg.brush( QColorGroup::Highlight ) );
+  }
+  else { // in case we use the KListView alternate color stuff
+    p->fillRect( 0, 0, info->margin, height(),
+		 cg.brush( QColorGroup::Base ) );
+    p->fillRect( width-info->margin, 0, info->margin, height(),
+		 cg.brush( QColorGroup::Base ) );
+  }
+
   // FIXME: the margin (we can only translate horizontally since height() is used for painting)
   p->translate( info->margin, 0 );
 
@@ -345,23 +374,6 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
   }
   else {
     paintK3bCell( p, cgh, col, width-2*info->margin, align );
-
-    // in case this is the selected row has a margin we need to repaint the selection bar
-    if( isSelected() &&
-	(col == 0 || listView()->allColumnsShowFocus()) &&
-	info->margin > 0 ) {
-
-      p->fillRect( -1*info->margin, 0, 0, height(),
-		   cg.brush( QColorGroup::Highlight ) );
-      p->fillRect( width, 0, width+info->margin, height(),
-		   cg.brush( QColorGroup::Highlight ) );
-    }
-    else { // in case we use the KListView alternate color stuff
-      p->fillRect( -1*info->margin, 0, 0, height(),
-		   cg.brush( QColorGroup::Base ) );
-      p->fillRect( width, 0, width+info->margin, height(),
-		   cg.brush( QColorGroup::Base ) );
-    }
   }
 
   p->restore();
@@ -481,7 +493,7 @@ void K3bCheckListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int
 
   if( col == 0 ) {
     if( m_checked ) {
-      QRect r( 0, 0, height(), height() );
+      QRect r( 0, 0, width, height() );
 
       QStyle::SFlags flags = QStyle::Style_Default;
       if( listView()->isEnabled() )

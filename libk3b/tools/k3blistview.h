@@ -107,6 +107,9 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
    */
   void setMarginVertical( int margin );
 
+  int marginHorizontal( int col ) const;
+  int marginVertical() const;
+
   /**
    * Do not reimplement this but paintK3bCell to use the margin and background stuff.
    */
