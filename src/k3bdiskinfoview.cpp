@@ -179,8 +179,8 @@ void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
 	  if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
 	    setTitle( i18n("Video DVD") );
 	    setRightPixmap( K3bTheme::MEDIA_VIDEO );
-	    K3bVideoDVD::VideoDVD dvd;
 #ifdef K3B_DEBUG
+	    K3bVideoDVD::VideoDVD dvd;
 	    if( dvd.open( medium.device() ) )
 	      dvd.debug();
 #endif
