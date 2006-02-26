@@ -75,7 +75,7 @@ namespace K3bVideoDVD
       QValueVector<AudioStream> m_audioStreams;
       QValueVector<SubPictureStream> m_subPictureStreams;
 
-      friend class K3bVideoDVD::VideoDVD;
+      friend class VideoDVD;
     };
 }
 
