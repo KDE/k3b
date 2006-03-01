@@ -890,7 +890,10 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 	 it != m_unknownFileFormatFiles.end(); ++it )
       l.append( (*it).path() );
     KMessageBox::informationList( qApp->activeWindow(), 
-				  i18n("Unable to handle the following files due to an unsupported format:"),
+				  i18n("<p>Unable to handle the following files due to an unsupported format:"
+				       "<p>You may manually convert these audio files to wave using another "
+				       "application supporting the audio format and then add the wave files "
+				       "to the K3b project."),
  				  l,
 				  i18n("Unsupported Format") );
 
