@@ -5,6 +5,7 @@
  * Fixed a crash in verification if the CD/DVD does not contain RR extensions.
  * Lowered default DVD writing buffer size to 32 MB to avoid "memorylock limit" problems
    as described on http://fy.chalmers.se/~appro/linux/DVD+RW/tools/
+ * Fixed loading of libdvdcss.
 
 0.12.12
 =======
