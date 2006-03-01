@@ -53,6 +53,7 @@ silentdir = $(kde_appsdir)/.hidden/
 AM_CPPFLAGS = 	-I$(srcdir)/../libk3b/tools \
 		-I$(srcdir)/../libk3b/core \
 		-I$(srcdir)/../libk3b/cddb \
+		-I$(srcdir)/../libk3b/videodvd \
 		-I$(srcdir)/../libk3b/jobs \
 		-I$(srcdir)/../libk3bdevice \
 		-I$(srcdir)/../libk3b/projects \
