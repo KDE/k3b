@@ -36,6 +36,26 @@ K3bVideoDVD::Time::Time( unsigned short hour,
 }
 
 
+double K3bVideoDVD::Time::totalSeconds() const
+{
+  double s = (double)second();
+  s += 60.0 * (double)minute();
+  s += 3600.0 * (double)hour();
+
+  return s * (double)( frame() / frameRate() );
+}
+
+
+unsigned int K3bVideoDVD::Time::totalFrames() const
+{
+  double f = (double)second();
+  f += 60.0 * (double)minute();
+  f += 3600.0 * (double)hour();
+
+  return (int)( f * frameRate() ) + frame();
+}
+
+
 double K3bVideoDVD::Time::frameRate() const
 {
   //

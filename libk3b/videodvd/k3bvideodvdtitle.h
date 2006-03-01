@@ -22,6 +22,7 @@
 #include <k3bvideodvdvideostream.h>
 #include <k3bvideodvdaudiostream.h>
 #include <k3bvideodvdsubpicturestream.h>
+#include <k3bvideodvdptt.h>
 
 #include <qvaluevector.h>
 
@@ -32,7 +33,7 @@ namespace K3bVideoDVD
     {
     public:
       Title() {}
-      
+    
       unsigned int titleNumber() const { return m_titleNum; }
       
       /**
@@ -59,7 +60,27 @@ namespace K3bVideoDVD
       const AudioStream& audioStream( unsigned int i ) const { return m_audioStreams[i]; }
       const SubPictureStream& subPictureStream( unsigned int i ) const { return m_subPictureStreams[i]; }
 
+      /**
+       * Access to the PTTs of the title
+       */
+      const PTT& operator[]( int i ) const { return ptt( i ); }
+
+      /**
+       * Access to the PTTs of the title
+       */
+      const PTT& ptt( int i ) const { return m_ptts[i]; }
+
+      /**
+       * Access to the PTTs (chapters) of the title
+       */
+      const PTT& chapter( int i ) const { return ptt( i ); }
+
       const Time& playbackTime() const { return m_playbackTime; }
+
+      /**
+       * \return A video capture
+       */
+      //      QBitmap videoCapture( const Time& ) const;
       
     private:
       unsigned int m_titleNum;
@@ -74,6 +95,10 @@ namespace K3bVideoDVD
       VideoStream m_videoStream;
       QValueVector<AudioStream> m_audioStreams;
       QValueVector<SubPictureStream> m_subPictureStreams;
+
+      QValueVector<PTT> m_ptts;
+
+      //      VideoDVD* m_videoDVD;
 
       friend class VideoDVD;
     };

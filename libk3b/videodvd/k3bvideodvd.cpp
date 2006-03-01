@@ -89,6 +89,8 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   for( unsigned int i = 0; i < vmg->tt_srpt->nr_of_srpts; ++i ) {
     title_info_t& title = vmg->tt_srpt->title[i];
 
+    //    m_titles[i].m_videoDVD = this;
+
     //
     // general title info
     //
@@ -142,8 +144,18 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
       buildSubPictureStream( &m_titles[i].m_subPictureStreams[j], &titleIfo->vtsi_mat->vts_subp_attr[j] );
 
     //
-    // TODO: add chapter info
+    // add chapter info
     //
+    m_titles[i].m_ptts.resize( m_titles[i].numPTTs() );
+    for( unsigned int j = 0; j < m_titles[i].numPTTs(); ++j ) {
+      m_titles[i].m_ptts[j].m_pttNum = j+1;
+      m_titles[i].m_ptts[j].m_playbackTime = Time( cur_pgc->cell_playback[j].playback_time.hour,
+						   cur_pgc->cell_playback[j].playback_time.minute,
+						   cur_pgc->cell_playback[j].playback_time.second,
+						   cur_pgc->cell_playback[j].playback_time.frame_u );
+      m_titles[i].m_ptts[j].m_firstSector = cur_pgc->cell_playback[j].first_sector;
+      m_titles[i].m_ptts[j].m_lastSector = cur_pgc->cell_playback[j].last_sector;
+    }
 
     ifoClose( titleIfo );
   }

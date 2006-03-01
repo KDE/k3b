@@ -39,6 +39,9 @@ namespace K3bVideoDVD
       unsigned short second() const { return m_second; }
       unsigned short frame() const { return m_frame; }
 
+      double totalSeconds() const;
+      unsigned int totalFrames() const;
+
       // FIXME: is this useful?
       double frameRate() const;
 
