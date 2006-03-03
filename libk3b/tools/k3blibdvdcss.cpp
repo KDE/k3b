@@ -283,7 +283,7 @@ bool K3bLibDvdCss::crackAllKeys()
 K3bLibDvdCss* K3bLibDvdCss::create()
 {
   if( s_libDvdCss == 0 ) {
-    s_libDvdCss = dlopen( "libdvdcss.so", RTLD_NOW|RTLD_GLOBAL );
+    s_libDvdCss = dlopen( "libdvdcss.so.2", RTLD_LAZY|RTLD_GLOBAL );
     if( s_libDvdCss ) {
       dvdcss_open = (dvdcss_t (*)(char*))dlsym( s_libDvdCss, "dvdcss_open" );
       dvdcss_close = (int (*)( dvdcss_t ))dlsym( s_libDvdCss, "dvdcss_close" );

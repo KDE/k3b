@@ -493,7 +493,7 @@ void K3bCheckListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int
 
   if( col == 0 ) {
     if( m_checked ) {
-      QRect r( 0, 0, width, height() );
+      QRect r( 0, marginVertical(), width, /*listView()->style().pixelMetric( QStyle::PM_CheckListButtonSize )*/height()-2*marginVertical() );
 
       QStyle::SFlags flags = QStyle::Style_Default;
       if( listView()->isEnabled() )
