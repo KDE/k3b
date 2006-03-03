@@ -27,6 +27,8 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kaction.h>
+
 
 
 K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
@@ -36,28 +38,37 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
 
   // toolbox
   // ----------------------------------------------------------------------------------
-//   QHBoxLayout* toolBoxLayout = new QHBoxLayout( 0, 0, 0, "toolBoxLayout" );
-//   m_toolBox = new K3bToolBox( mainWidget() );
-//   toolBoxLayout->addWidget( m_toolBox );
-//   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-//   toolBoxLayout->addItem( spacer );
-//   m_labelLength = new QLabel( mainWidget() );
-//   m_labelLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
-//   toolBoxLayout->addWidget( m_labelLength );
+  QHBoxLayout* toolBoxLayout = new QHBoxLayout( 0, 0, 0, "toolBoxLayout" );
+  m_toolBox = new K3bToolBox( mainWidget() );
+  toolBoxLayout->addWidget( m_toolBox );
+  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  toolBoxLayout->addItem( spacer );
+  m_labelLength = new QLabel( mainWidget() );
+  m_labelLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  toolBoxLayout->addWidget( m_labelLength );
 
 
-  // the track view
+  // the title view
   // ----------------------------------------------------------------------------------
   m_titleView = new K3bVideoDVDRippingTitleListView( mainWidget() );
 
 //   connect( m_titleView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 // 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
-  //  mainGrid->addLayout( toolBoxLayout, 0, 0 );
+  // general layout
+  // ----------------------------------------------------------------------------------
+  mainGrid->addLayout( toolBoxLayout, 0, 0 );
   mainGrid->addWidget( m_titleView, 1, 0 );
 
 
-  //  initActions();
+  // init actions
+  // ----------------------------------------------------------------------------------
+  KActionCollection* actionCollection = new KActionCollection( this );
+  KAction* actionStartRip = new KAction( i18n("Start Ripping"), "gear", 0, this,
+					 SLOT(slotStartRipping()), actionCollection, "start_rip" );
+  actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
+
+  m_toolBox->addButton( actionStartRip );
 
   setLeftPixmap( K3bTheme::MEDIA_LEFT );
   setRightPixmap( K3bTheme::MEDIA_VIDEO );
@@ -76,6 +87,7 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
   K3bVideoDVD::VideoDVD dvd;
   if( dvd.open( medium.device() ) ) {
     setTitle( dvd.volumeIdentifier() + " (" + i18n("Video DVD") + ")" );
+    m_labelLength->setText( i18n("%n title", "%n titles", dvd.numTitles() ) );
     m_titleView->setVideoDVD( dvd );
     QApplication::restoreOverrideCursor();
   }
@@ -83,6 +95,13 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
     QApplication::restoreOverrideCursor();
     KMessageBox::error( this, i18n("Unable to read Video DVD contents.") );
   }
+}
+
+
+void K3bVideoDVDRippingView::slotStartRipping()
+{
+  // fire up the ripping dialog
+
 }
 
 #include "k3bvideodvdrippingview.moc"

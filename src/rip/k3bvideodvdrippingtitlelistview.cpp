@@ -30,7 +30,7 @@
 #include <kglobal.h>
 
 
-static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999 )
+static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
 {
   QString s = "<p>";
   for( unsigned int i = 0; i < QMIN( title.numAudioStreams(), maxLines ); ++i ) {
@@ -43,7 +43,7 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
       .arg( title.audioStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
 	    : KGlobal::locale()->twoAlphaToLanguageName( title.audioStream(i).langCode() ) )
-      .arg( title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
+      .arg( includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
 	    ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
 	    : QString::null );
   }
@@ -54,7 +54,7 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
 }
 
 
-static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999 )
+static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
 {
   QString s = "<p>";
   for( unsigned int i = 0; i < QMIN( title.numSubPictureStreams(), maxLines ); ++i ) {
@@ -68,7 +68,7 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
       .arg( title.subPictureStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
 	    : KGlobal::locale()->twoAlphaToLanguageName( title.subPictureStream(i).langCode() ) )
-      .arg( title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED 
+      .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED 
 	    ? QString(" ") + K3bVideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
 	    : QString::null );
   }
@@ -188,14 +188,14 @@ private:
     case 3:
       // audio streams info
       if( m_title.numAudioStreams() > 0 )
-	return audioStreamString( m_title, 2 );
+	return audioStreamString( m_title, 2, false );
       else
 	return "<p><small><em>" + i18n("No audio streams") + "</em>";
 
     case 4:
       // subpicture streams info
       if( m_title.numSubPictureStreams() > 0 )
-	return subpictureStreamString( m_title, 2 );
+	return subpictureStreamString( m_title, 2, false );
       else
 	return "<p><small><em>" + i18n("No Subpicture streams") + "</em>";
 
@@ -230,12 +230,10 @@ public:
 
     switch( col ) {
     case 3:
-      if( item->videoDVDTitle().numAudioStreams() > 2 )
-	tip( r, "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( item->videoDVDTitle() ) );
+      tip( r, "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( item->videoDVDTitle() ) );
       break;
     case 4:
-      if( item->videoDVDTitle().numSubPictureStreams() > 2 )
-	tip( r, "<p><b>" + i18n("Subpicture Streams") + "</b><p>" + subpictureStreamString( item->videoDVDTitle() ) );
+      tip( r, "<p><b>" + i18n("Subpicture Streams") + "</b><p>" + subpictureStreamString( item->videoDVDTitle() ) );
       break;
     }
   }

@@ -20,6 +20,9 @@
 #include <k3bmedium.h>
 
 class K3bVideoDVDRippingTitleListView;
+class K3bToolBox;
+class QLabel;
+
 
 class K3bVideoDVDRippingView : public K3bCdContentsView
 {
@@ -31,7 +34,12 @@ class K3bVideoDVDRippingView : public K3bCdContentsView
 
   void setMedium( const K3bMedium& medium );
 
+ private slots:
+  void slotStartRipping();
+
  private:
+  K3bToolBox* m_toolBox;
+  QLabel* m_labelLength;
   K3bVideoDVDRippingTitleListView* m_titleView;  
 };
 
