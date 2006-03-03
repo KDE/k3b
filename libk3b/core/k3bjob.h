@@ -77,6 +77,9 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 
   const QPtrList<K3bJob>& runningSubJobs() const { return m_runningSubJobs; }
 
+  /**
+   * \deprecated
+   */
   virtual void connectSubJob( K3bJob* subJob,
 			      const char* finishedSlot = 0,
 			      bool progress = false,
@@ -84,6 +87,28 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 			      const char* subProgressSot = 0,
 			      const char* processedSizeSlot = 0,
 			      const char* processedSubSizeSlot = 0 );
+
+  static const char* DEFAULT_SIGNAL_CONNECTION;
+
+  /**
+   * \param newTaskSlot    If DEFAULT_SIGNAL_CONNECTION the newTask signal from the subjob will 
+   *                       be connected to the newSubTask signal
+   * \param newSubTaskSlot If DEFAULT_SIGNAL_CONNECTION the newSubTask signal from the subjob 
+   *                       will create an infoMessage signal
+   * \param progressSlot   If DEFAULT_SIGNAL_CONNECTION the percent signal of the subjob will be 
+   *                       connected to the subPercent signal.
+   * debuggingOutput and infoMessage will always be direcctly connected.
+   *
+   * If a parameter is set to 0 it will not be connected at all
+   */
+  virtual void connectSubJob( K3bJob* subJob,
+			      const char* finishedSlot = DEFAULT_SIGNAL_CONNECTION,
+			      const char* newTaskSlot = DEFAULT_SIGNAL_CONNECTION,
+			      const char* newSubTaskSlot = DEFAULT_SIGNAL_CONNECTION,
+			      const char* progressSlot = DEFAULT_SIGNAL_CONNECTION,
+			      const char* subProgressSlot = DEFAULT_SIGNAL_CONNECTION,
+			      const char* processedSizeSlot = DEFAULT_SIGNAL_CONNECTION,
+			      const char* processedSubSizeSlot = DEFAULT_SIGNAL_CONNECTION );
 
   /**
    * Message types to be used in combination with the infoMessage signal.

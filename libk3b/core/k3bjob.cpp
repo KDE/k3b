@@ -25,6 +25,9 @@
 #include <kdebug.h>
 
 
+const char* K3bJob::DEFAULT_SIGNAL_CONNECTION = "K3bJobDefault";
+
+
 K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
   : QObject( parent, name ),
     m_jobHandler( handler ),
@@ -135,6 +138,55 @@ void K3bJob::connectSubJob( K3bJob* subJob,
     if( processedSubSizeSlot )
       connect( subJob, SIGNAL(processedSubSize(int, int)), this, processedSubSizeSlot );
   }
+}
+
+
+void K3bJob::connectSubJob( K3bJob* subJob,
+			    const char* finishedSlot,
+			    const char* newTaskSlot,
+			    const char* newSubTaskSlot,
+			    const char* progressSlot,
+			    const char* subProgressSlot,
+			    const char* processedSizeSlot,
+			    const char* processedSubSizeSlot )
+{
+  // standard connections
+  connect( subJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+  connect( subJob, SIGNAL(infoMessage(const QString&, int)),
+	   this, SIGNAL(infoMessage(const QString&, int)) );
+
+  // task connections
+  if( newTaskSlot == DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+  else if( newTaskSlot )
+    connect( subJob, SIGNAL(newTask(const QString&)), this, newTaskSlot );
+
+  if( newSubTaskSlot == DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
+  else if( newSubTaskSlot )
+    connect( subJob, SIGNAL(newSubTask(const QString&)), this, newSubTaskSlot );
+
+  if( finishedSlot && finishedSlot != DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(finished(bool)), this, finishedSlot );
+
+  // progress
+  if( progressSlot == DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
+  else if( progressSlot )
+    connect( subJob, SIGNAL(percent(int)), this, progressSlot );
+
+  if( subProgressSlot && subProgressSlot != DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(subPercent(int)), this, subProgressSlot );
+
+  // processed size
+  if( processedSizeSlot == DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+  else if( processedSizeSlot )
+    connect( subJob, SIGNAL(processedSize(int, int)), this, processedSizeSlot );
+
+  if( processedSubSizeSlot && processedSubSizeSlot != DEFAULT_SIGNAL_CONNECTION )
+    connect( subJob, SIGNAL(processedSubSize(int, int)), this, processedSubSizeSlot );
 }
 
 
