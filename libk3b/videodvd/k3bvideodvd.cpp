@@ -22,21 +22,14 @@
 #include <klocale.h>
 
 
-class K3bVideoDVD::VideoDVD::Private
-{
-public:
-};
-
 
 K3bVideoDVD::VideoDVD::VideoDVD()
 {
-  d = new Private;
 }
 
 
 K3bVideoDVD::VideoDVD::~VideoDVD()
 {
-  delete d;
 }
 
 
@@ -234,7 +227,7 @@ void K3bVideoDVD::VideoDVD::buildAudioStream( K3bVideoDVD::AudioStream* stream, 
   if( attr->lang_type == 1 )
     stream->m_langCode.sprintf( "%c%c", attr->lang_code>>8, attr->lang_code & 0xff );
   else
-    stream->m_langCode = 0;
+    stream->m_langCode = QString::null;
 }
 
 
@@ -245,7 +238,7 @@ void K3bVideoDVD::VideoDVD::buildSubPictureStream( K3bVideoDVD::SubPictureStream
   if( attr->type == 1 )
     stream->m_langCode.sprintf( "%c%c", attr->lang_code>>8, attr->lang_code & 0xff );
   else
-    stream->m_langCode = 0;
+    stream->m_langCode = QString::null;
 }
 
 

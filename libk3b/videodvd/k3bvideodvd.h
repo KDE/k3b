@@ -88,9 +88,6 @@ namespace K3bVideoDVD
       K3bDevice::Device* m_device;
       QValueVector<Title> m_titles;
       QString m_volumeIdentifier;
-
-      class Private;
-      Private* d;
     };
 
   QString audioFormatString( int format );

@@ -18,7 +18,7 @@
 
 #include <k3b_export.h>
 
-#include <qcstring.h>
+#include <qstring.h>
 
 
 namespace K3bVideoDVD
@@ -54,11 +54,11 @@ namespace K3bVideoDVD
        * \return A two chars language code or the empty string
        * if the language is undefined.
        */
-      const QCString& langCode() const { return m_langCode; }
+      const QString& langCode() const { return m_langCode; }
 
     private:
       unsigned int m_codeMode:3;
-      QCString m_langCode;
+      QString m_langCode;
       unsigned int m_codeExtension;
 
       friend class VideoDVD;
