@@ -1,3 +1,8 @@
+0.12.14
+=======
+ * Make sure new projects are not already marked as modified.
+ * Fixed (hopefully) the last bug related to Data project verification.
+
 0.12.13
 =======
  * Honor umask when creating directories for Audio CD ripping.

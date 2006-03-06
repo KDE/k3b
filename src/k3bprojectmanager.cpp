@@ -415,6 +415,8 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     if( static_cast<K3bDataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
       static_cast<K3bDataDoc*>(doc)->setVolumeID( doc->URL().path() );
   }
+
+  doc->setModified( false );
 }
 
 
