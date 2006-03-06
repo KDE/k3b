@@ -1,4 +1,4 @@
- /* 
+/* 
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -315,7 +315,8 @@ void K3bIso9660Directory::expand()
 {
   if( !m_bExpanded ) {
     archive()->dirent = this;
-    ProcessDir( &K3bIso9660::read_callback, m_startSector, m_size, &K3bIso9660::isofs_callback, archive() );
+    if( ProcessDir( &K3bIso9660::read_callback, m_startSector, m_size, &K3bIso9660::isofs_callback, archive() ) )
+      kdDebug() << "(K3bIso9660) failed to expand dir: " << name() << " with size: " << m_size << endl;
 
     m_bExpanded = true;
   }

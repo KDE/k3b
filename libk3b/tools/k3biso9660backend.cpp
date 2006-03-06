@@ -69,21 +69,32 @@ void K3bIso9660DeviceBackend::close()
 
 int K3bIso9660DeviceBackend::read( unsigned int sector, char* data, int len )
 {
-  int read = -1;
-
   if( isOpen() ) {
+    //
+    // split the number of sectors to be read
+    // FIXME: use a "real" value, not some arbitrary one
+    //
+    static const int maxReadSectors = 20;
+    int sectorsRead = 0;
     int retries = 10;  // TODO: no fixed value
-    while( retries && !m_device->read10( (unsigned char*)data,
-					 len*2048,
-					 sector,
-					 len ) )
-      retries--;
-    
-    if( retries > 0 )
-      read = len;
+    while( retries ) {
+      int read = QMIN(len-sectorsRead, maxReadSectors);
+      if( !m_device->read10( (unsigned char*)(data+sectorsRead*2048),
+			     read*2048,
+			     sector+sectorsRead,
+			     read ) ) {
+	retries--;
+      }
+      else {
+	sectorsRead += read;
+	retries = 10; // new retires for every read part
+	if( sectorsRead == len )
+	  return len;
+      }
+    }
   }
 
-  return read;
+  return -1;
 }
 
 
