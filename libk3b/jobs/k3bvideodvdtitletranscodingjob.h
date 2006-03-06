@@ -110,7 +110,8 @@ class K3bVideoDVDTitleTranscodingJob : public K3bJob
    */
   enum VideoCodec {
     VIDEO_CODEC_XVID,
-    VIDEO_CODEC_FFMPEG_MPEG4
+    VIDEO_CODEC_FFMPEG_MPEG4,
+    VIDEO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
   };
 
   /**
@@ -141,7 +142,8 @@ class K3bVideoDVDTitleTranscodingJob : public K3bJob
   enum AudioCodec {
     AUDIO_CODEC_MP3,
     /*    AUDIO_CODEC_OGG_VORBIS,*/
-    AUDIO_CODEC_AC3
+    AUDIO_CODEC_AC3,
+    AUDIO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
   };
 
   /**

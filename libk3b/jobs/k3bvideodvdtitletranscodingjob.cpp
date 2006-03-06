@@ -199,11 +199,17 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   if( m_lowPriority )
     *d->process << "--nice" << "19";
 
+  // we only need 100 steps, but to make sure we use 150
+  *d->process << "--print_status" << QString::number(m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150);
+
   // the input
   *d->process << "-i" << m_dvd.device()->blockDeviceName();
 
+  // just to make sure
+  *d->process << "-x" << "dvd";
+
   // select the title number
-  *d->process << "-T" << QString::number( m_titleNumber );
+  *d->process << "-T" << QString("%1,-1,1").arg( m_titleNumber );
 
   // select the audio stream to extract
   *d->process << "-a" << QString::number( m_audioStreamIndex );
