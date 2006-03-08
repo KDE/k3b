@@ -42,6 +42,7 @@
    but may be extended to show arbitrary information.
  * K3b now chooses default image names based on the project name or the volumeid/cdtext title in case of
    CD/DVD copy.
+ * The K3b Project DCOP Interface now uses the QString type for url parameters instead of KURL.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
