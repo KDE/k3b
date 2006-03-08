@@ -18,6 +18,7 @@
 
 #include <k3bcdcontentsview.h>
 #include <k3bmedium.h>
+#include <k3bvideodvd.h>
 
 class K3bVideoDVDRippingTitleListView;
 class K3bToolBox;
@@ -41,6 +42,8 @@ class K3bVideoDVDRippingView : public K3bCdContentsView
   K3bToolBox* m_toolBox;
   QLabel* m_labelLength;
   K3bVideoDVDRippingTitleListView* m_titleView;  
+
+  K3bVideoDVD::VideoDVD m_dvd;
 };
 
 #endif

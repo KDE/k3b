@@ -15,6 +15,7 @@
 
 #include "k3bvideodvdrippingview.h"
 #include "k3bvideodvdrippingtitlelistview.h"
+#include "k3bvideodvdrippingdialog.h"
 
 #include <k3bvideodvd.h>
 #include <k3btoolbox.h>
@@ -84,11 +85,10 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
 {
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-  K3bVideoDVD::VideoDVD dvd;
-  if( dvd.open( medium.device() ) ) {
-    setTitle( dvd.volumeIdentifier() + " (" + i18n("Video DVD") + ")" );
-    m_labelLength->setText( i18n("%n title", "%n titles", dvd.numTitles() ) );
-    m_titleView->setVideoDVD( dvd );
+  if( m_dvd.open( medium.device() ) ) {
+    setTitle( m_dvd.volumeIdentifier() + " (" + i18n("Video DVD") + ")" );
+    m_labelLength->setText( i18n("%n title", "%n titles", m_dvd.numTitles() ) );
+    m_titleView->setVideoDVD( m_dvd );
     QApplication::restoreOverrideCursor();
   }
   else {
@@ -100,8 +100,14 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
 
 void K3bVideoDVDRippingView::slotStartRipping()
 {
-  // fire up the ripping dialog
+  QValueList<int> titles;
+  int i = 1;
+  for( QListViewItemIterator it( m_titleView ); *it; ++it, ++i )
+    if( static_cast<K3bCheckListViewItem*>( *it )->isChecked() )
+      titles.append( i );
 
+  K3bVideoDVDRippingDialog dlg( m_dvd, titles, this );
+  dlg.exec();
 }
 
 #include "k3bvideodvdrippingview.moc"

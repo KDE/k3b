@@ -17,6 +17,7 @@ METASOURCES = AUTO
 noinst_LTLIBRARIES = librip.la
 
 librip_la_SOURCES = base_k3baudiorippingoptionwidget.ui base_k3bcddbpatternwidget.ui \
+	base_k3bvideodvdrippingwidget.ui \
 	k3bdvdriplistviewitem.cpp k3bmovieview.cpp k3bdvdextraripstatus.cpp \
 	k3bdvdfilldisplay.cpp k3bdvdcopy.cpp \
 	k3bdvdrippingprocess.cpp k3bdvdripperwidget.cpp k3bdvdcontent.cpp \
@@ -27,4 +28,5 @@ librip_la_SOURCES = base_k3baudiorippingoptionwidget.ui base_k3bcddbpatternwidge
 	k3baudiocdlistview.cpp k3baudioprojectconvertingdialog.cpp \
 	k3baudioprojectconvertingthread.cpp \
 	k3bvideodvdrippingview.cpp k3bvideodvdrippingtitlelistview.cpp \
-	k3bvideodvdrippingjob.cpp
+	k3bvideodvdrippingjob.cpp k3bvideodvdrippingwidget.cpp \
+	k3bvideodvdrippingdialog.cpp
