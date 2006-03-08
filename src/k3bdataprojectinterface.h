@@ -58,9 +58,9 @@ class K3bDataProjectInterface : public K3bProjectInterface
    * Example: addUrl( "test.txt", "/foo/bar" ) will add the file test.txt
    *          to folder /foo/bar.
    */
-  void addUrl( const KURL& url, const QString& parent );
+  void addUrl( const QString& url, const QString& parent );
 
-  void addUrls( const KURL::List& urls, const QString& parent );
+  void addUrls( const QStringList& urls, const QString& parent );
 
   /**
    * Remove an item

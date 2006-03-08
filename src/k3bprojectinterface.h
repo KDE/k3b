@@ -18,8 +18,8 @@
 #define _K3B_PROJECT_INTERFACE_H_
 
 #include <dcopobject.h>
-#include <kurl.h>
 #include <kio/global.h>
+#include <qstringlist.h>
 
 class K3bDoc;
 
@@ -39,8 +39,8 @@ class K3bProjectInterface : public DCOPObject
   static QCString newIfaceName();
 
  k_dcop:
-  virtual void addUrls( const KURL::List& urls );
-  virtual void addUrl( const KURL& url );
+  virtual void addUrls( const QStringList& urls );
+  virtual void addUrl( const QString& url );
 
   /**
    * Opens the burn dialog

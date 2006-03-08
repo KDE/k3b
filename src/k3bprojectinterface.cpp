@@ -48,14 +48,14 @@ K3bProjectInterface::~K3bProjectInterface()
 {
 }
 
-void K3bProjectInterface::addUrls( const KURL::List& urls )
+void K3bProjectInterface::addUrls( const QStringList& urls )
 {
-  m_doc->addUrls( urls );
+  m_doc->addUrls( KURL::List(urls) );
 }
 
-void K3bProjectInterface::addUrl( const KURL& url )
+void K3bProjectInterface::addUrl( const QString& url )
 {
-  m_doc->addUrl( url );
+  m_doc->addUrl( KURL(url) );
 }
 
 void K3bProjectInterface::burn()

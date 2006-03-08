@@ -49,17 +49,17 @@ bool K3bDataProjectInterface::createFolder( const QString& name, const QString& 
 }
 
 
-void K3bDataProjectInterface::addUrl( const KURL& url, const QString& parent )
+void K3bDataProjectInterface::addUrl( const QString& url, const QString& parent )
 {
-  addUrls( KURL::List(url), parent );
+  addUrls( QStringList(url), parent );
 }
 
 
-void K3bDataProjectInterface::addUrls( const KURL::List& urls, const QString& parent )
+void K3bDataProjectInterface::addUrls( const QStringList& urls, const QString& parent )
 {
   K3bDataItem* p = m_dataDoc->root()->findByPath( parent );
   if( p && p->isDir() )
-    m_dataDoc->addUrls( urls, static_cast<K3bDirItem*>(p) );
+    m_dataDoc->addUrls( KURL::List(urls), static_cast<K3bDirItem*>(p) );
 }
 
 
