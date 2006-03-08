@@ -41,6 +41,11 @@ namespace K3bVideoDVD
        *         as chapters
        */
       unsigned int numPTTs() const { return m_numPTTs; }
+
+      /**
+       * This method is just here for convenience. It returns the same as the above.
+       */
+      unsigned int numChapters() const { return m_numPTTs; }
       unsigned int numAngles() const { return m_numAngles; }
 
       /**
