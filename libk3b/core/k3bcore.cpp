@@ -93,24 +93,28 @@ K3bCore::~K3bCore()
 
 K3bDevice::DeviceManager* K3bCore::deviceManager() const
 {
+  const_cast<K3bCore*>(this)->initDeviceManager();
   return d->deviceManager;
 }
 
 
 K3bExternalBinManager* K3bCore::externalBinManager() const
 {
+  const_cast<K3bCore*>(this)->initExternalBinManager();
   return d->externalBinManager;
 }
 
 
 K3bPluginManager* K3bCore::pluginManager() const
 {
+  const_cast<K3bCore*>(this)->initPluginManager();
   return d->pluginManager;
 }
 
 
 K3bGlobalSettings* K3bCore::globalSettings() const
 {
+  const_cast<K3bCore*>(this)->initGlobalSettings();
   return d->globalSettings;
 }
 
