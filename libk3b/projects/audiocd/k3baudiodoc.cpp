@@ -20,6 +20,7 @@
 #include "k3baudiojob.h"
 #include "k3baudiofile.h"
 #include "k3baudiozerodata.h"
+#include "k3baudiocdtracksource.h"
 #include <k3bcuefileparser.h>
 
 #include <k3bthread.h>
@@ -628,6 +629,42 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 		zero->setLength( K3b::Msf::fromString( sourceElem.attributeNode( "length" ).value() ) );
 		track->addSource( zero );
 	      }
+	      else if( sourceElem.nodeName() == "cdtrack" ) {
+		K3b::Msf length = K3b::Msf::fromString( sourceElem.attributeNode( "length" ).value() );
+		int titlenum = 0;
+		unsigned int discid = 0;
+		QString title, artist, cdTitle, cdArtist;
+
+		QDomNodeList cdTrackSourceNodes = sourceElem.childNodes();
+		for( unsigned int cdTrackSourceIndex = 0; cdTrackSourceIndex < cdTrackSourceNodes.length(); ++cdTrackSourceIndex ) {
+		  QDomElement cdTrackSourceItemElem = cdTrackSourceNodes.item(cdTrackSourceIndex).toElement();
+		  if( cdTrackSourceItemElem.nodeName() == "title_number" )
+		    titlenum = cdTrackSourceItemElem.text().toInt();
+		  else if( cdTrackSourceItemElem.nodeName() == "disc_id" )
+		    discid = cdTrackSourceItemElem.text().toUInt( 0, 16 );
+		  else if( cdTrackSourceItemElem.nodeName() == "title" )
+		    title = cdTrackSourceItemElem.text().toInt();
+		  else if( cdTrackSourceItemElem.nodeName() == "artist" )
+		    artist = cdTrackSourceItemElem.text().toInt();
+		  else if( cdTrackSourceItemElem.nodeName() == "cdtitle" )
+		    cdTitle = cdTrackSourceItemElem.text().toInt();
+		  else if( cdTrackSourceItemElem.nodeName() == "cdartist" )
+		    cdArtist = cdTrackSourceItemElem.text().toInt();
+		}
+
+		if( discid != 0 && titlenum > 0 ) {
+		  K3bAudioCdTrackSource* cdtrack = new K3bAudioCdTrackSource( discid, length, titlenum, 
+									      artist, title,
+									      cdArtist, cdTitle );
+		  cdtrack->setStartOffset( K3b::Msf::fromString( sourceElem.attributeNode( "start_offset" ).value() ) );
+		  cdtrack->setEndOffset( K3b::Msf::fromString( sourceElem.attributeNode( "end_offset" ).value() ) );
+		  track->addSource( cdtrack );
+		}
+		else {
+		  kdDebug() << "(K3bAudioDoc) invalid cdtrack source." << endl;
+		  return false;
+		}
+	      }
 	      else {
 		kdDebug() << "(K3bAudioDoc) unknown source type: " << sourceElem.nodeName() << endl;
 		return false;
@@ -790,6 +827,38 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
       else if( K3bAudioZeroData* zero = dynamic_cast<K3bAudioZeroData*>(source) ) {
 	QDomElement sourceElem = doc.createElement( "silence" );
 	sourceElem.setAttribute( "length", zero->length().toString() );
+	sourcesParent.appendChild( sourceElem );
+      }
+      else if( K3bAudioCdTrackSource* cdTrack = dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
+	QDomElement sourceElem = doc.createElement( "cdtrack" );
+	sourceElem.setAttribute( "length", cdTrack->originalLength().toString() );	
+	sourceElem.setAttribute( "start_offset", cdTrack->startOffset().toString() );
+	sourceElem.setAttribute( "end_offset", cdTrack->endOffset().toString() );
+
+	QDomElement subElem = doc.createElement( "title_number" );
+	subElem.appendChild( doc.createTextNode( QString::number(cdTrack->cdTrackNumber()) ) );
+	sourceElem.appendChild( subElem );
+
+	subElem = doc.createElement( "disc_id" );
+	subElem.appendChild( doc.createTextNode( QString::number(cdTrack->discId(), 16) ) );
+	sourceElem.appendChild( subElem );
+
+	subElem = doc.createElement( "title" );
+	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().titles[cdTrack->cdTrackNumber()-1] ) );
+	sourceElem.appendChild( subElem );
+
+	subElem = doc.createElement( "artist" );
+	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().artists[cdTrack->cdTrackNumber()-1] ) );
+	sourceElem.appendChild( subElem );
+
+	subElem = doc.createElement( "cdtitle" );
+	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().cdTitle ) );
+	sourceElem.appendChild( subElem );
+
+	subElem = doc.createElement( "cdartist" );
+	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().cdArtist ) );
+	sourceElem.appendChild( subElem );
+
 	sourcesParent.appendChild( sourceElem );
       }
       else {

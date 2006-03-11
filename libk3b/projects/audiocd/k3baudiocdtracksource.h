@@ -20,7 +20,10 @@
 
 #include <k3btoc.h>
 #include <k3bcddbresult.h>
+
 #include "k3b_export.h"
+
+
 namespace K3bDevice {
   class Device;
 }
@@ -37,10 +40,24 @@ class K3bCdparanoiaLib;
 class LIBK3B_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
 {
  public:
+  /**
+   * Default constructor to create a new source.
+   */
   K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber, const K3bCddbResultEntry& cddb, 
 			 K3bDevice::Device* dev = 0 );
+
+  /**
+   * Constructor to create sources when loading from a project file without toc information
+   */
+  K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber, 
+			 const QString& artist, const QString& title,
+			 const QString& cdartist, const QString& cdtitle );
   K3bAudioCdTrackSource( const K3bAudioCdTrackSource& );
   ~K3bAudioCdTrackSource();
+
+  unsigned int discId() const { return m_discId; }
+  int cdTrackNumber() const { return m_cdTrackNumber; }
+  const K3bCddbResultEntry& metaInfo() const { return m_cddbEntry; }
 
   K3b::Msf originalLength() const;
   bool seek( const K3b::Msf& );
@@ -65,6 +82,8 @@ class LIBK3B_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
   void closeParanoia();
   bool searchForAudioCD( K3bDevice::Device* ) const;
 
+  unsigned int m_discId;
+  K3b::Msf m_length;
   K3bDevice::Toc m_toc;
   int m_cdTrackNumber;
   K3bCddbResultEntry m_cddbEntry;

@@ -32,6 +32,8 @@
 K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber, 
 					      const K3bCddbResultEntry& cddb, K3bDevice::Device* dev )
   : K3bAudioDataSource(),
+    m_discId( toc.discId() ),
+    m_length( toc[cdTrackNumber-1].length() ),
     m_toc( toc ),
     m_cdTrackNumber( cdTrackNumber ),
     m_cddbEntry( cddb ),
@@ -42,8 +44,31 @@ K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdT
 }
 
 
+K3bAudioCdTrackSource::K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber, 
+					      const QString& artist, const QString& title,
+					      const QString& cdArtist, const QString& cdTitle )
+  : K3bAudioDataSource(),
+    m_discId( discid ),
+    m_length( length ),
+    m_cdTrackNumber( cdTrackNumber ),
+    m_lastUsedDevice( 0 ),
+    m_cdParanoiaLib( 0 ),
+    m_initialized( false )
+{
+  for( int i = 1; i < cdTrackNumber; ++i ) {
+    m_cddbEntry.titles.append( QString::null );
+    m_cddbEntry.artists.append( QString::null );
+  }
+  m_cddbEntry.titles.append( title );
+  m_cddbEntry.artists.append( artist );
+  m_cddbEntry.cdTitle = cdTitle;
+  m_cddbEntry.cdArtist = cdArtist;
+}
+
+
 K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bAudioCdTrackSource& source )
   : K3bAudioDataSource( source ),
+    m_discId( source.m_discId ),
     m_toc( source.m_toc ),
     m_cdTrackNumber( source.m_cdTrackNumber ),
     m_cddbEntry( source.m_cddbEntry ),
@@ -73,7 +98,7 @@ bool K3bAudioCdTrackSource::initParanoia()
       if( !m_lastUsedDevice ) {
 	// could not find the CD, so ask for it
 	QString s = i18n("Please insert Audio CD %1%2")
-	  .arg(m_toc.discId(), 0, 16)
+	  .arg(m_discId, 0, 16)
 	  .arg(m_cddbEntry.cdTitle.isEmpty() || m_cddbEntry.cdArtist.isEmpty() 
 	       ? QString::null 
 	       : " (" + m_cddbEntry.cdArtist + " - " + m_cddbEntry.cdTitle + ")");
@@ -89,6 +114,9 @@ bool K3bAudioCdTrackSource::initParanoia()
       // user canceled
       if( !m_lastUsedDevice )
 	return false;
+
+      if( m_toc.isEmpty() )
+	m_toc = m_lastUsedDevice->readToc();
 
       if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) )
 	return false;
@@ -143,7 +171,7 @@ bool K3bAudioCdTrackSource::searchForAudioCD( K3bDevice::Device* dev ) const
 {
   kdDebug() << "(K3bAudioCdTrackSource::searchForAudioCD(" << dev->description() << ")" << endl;
   K3bDevice::Toc toc = dev->readToc();
-  return ( toc.discId() == m_toc.discId() );
+  return ( toc.discId() == m_discId );
 }
 
 
@@ -159,7 +187,7 @@ void K3bAudioCdTrackSource::setDevice( K3bDevice::Device* dev )
 
 K3b::Msf K3bAudioCdTrackSource::originalLength() const
 {
-  return m_toc[m_cdTrackNumber-1].length();
+  return m_length;
 }
 
 
@@ -215,7 +243,7 @@ QString K3bAudioCdTrackSource::type() const
 
 QString K3bAudioCdTrackSource::sourceComment() const
 {
-  return i18n("Track %1 from Audio CD %2").arg(m_cdTrackNumber).arg(m_toc.discId(),0,16);
+  return i18n("Track %1 from Audio CD %2").arg(m_cdTrackNumber).arg(m_discId,0,16);
 }
 
 

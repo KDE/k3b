@@ -41,6 +41,11 @@ K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* p
   // greyed out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
 
+  // smaller filename
+  f = listView()->font();
+  f.setPointSize( f.pointSize() - 2 );
+  setFont( 5, f );
+
   // for zero items we make the length editable
   if( dynamic_cast<K3bAudioZeroData*>( source ) )
     setEditor( 4, MSF );

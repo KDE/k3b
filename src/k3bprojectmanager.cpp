@@ -569,22 +569,6 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
 
   bool success = false;
 
-  // for now we cannot save audio and mixed projects containing audio cd track sources
-  if( doc->type() == K3bDoc::AUDIO ||
-      doc->type() == K3bDoc::MIXED ) {
-    K3bAudioDataSourceIterator it( doc->type() == K3bDoc::AUDIO ?
-				   static_cast<K3bAudioDoc*>( doc ) :
-				   static_cast<K3bMixedDoc*>( doc )->audioDoc() );
-    while( it.current() ) {
-      if( dynamic_cast<K3bAudioCdTrackSource*>(it.current()) ) {
-	KMessageBox::sorry( qApp->mainWidget(), i18n("It is not yet possible to save projects containing audio CD track "
-						     "sources.") );
-	return false;
-      }
-      it.next();
-    }
-  }
-
   // create the store
   KoStore* store = KoStore::createStore( tmpfile, KoStore::Write, "application/x-k3b" );
   if( store ) {
