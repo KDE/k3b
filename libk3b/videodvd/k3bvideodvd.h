@@ -95,10 +95,10 @@ namespace K3bVideoDVD
       QString m_volumeIdentifier;
     };
 
-  QString audioFormatString( int format );
-  QString audioCodeExtensionString( int ext );
-  QString subPictureCodeModeString( int mode );
-  QString subPictureCodeExtensionString( int ext );
+  LIBK3B_EXPORT QString audioFormatString( int format );
+  LIBK3B_EXPORT QString audioCodeExtensionString( int ext );
+  LIBK3B_EXPORT QString subPictureCodeModeString( int mode );
+  LIBK3B_EXPORT QString subPictureCodeExtensionString( int ext );
 }
 
 #endif

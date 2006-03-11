@@ -16,6 +16,7 @@
 #ifndef _K3B_VIDEODVD_TITLE_DETECTCLIPPING_JOB_H_
 #define _K3B_VIDEODVD_TITLE_DETECTCLIPPING_JOB_H_
 
+#include <k3b_export.h>
 #include <k3bjob.h>
 #include <k3bvideodvd.h>
 
@@ -24,7 +25,7 @@ class KProcess;
 /**
  * Job to detect the clipping values for a Video DVD title.
  */
-class K3bVideoDVDTitleDetectClippingJob : public K3bJob
+class LIBK3B_EXPORT K3bVideoDVDTitleDetectClippingJob : public K3bJob
 {
   Q_OBJECT
 
