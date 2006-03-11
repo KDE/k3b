@@ -23,6 +23,11 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS //needed for *_MAX macros in dvdread headers
+#endif
+
+#include <inttypes.h> //needed by dvdreads headers
 #include <dvdread/dvd_reader.h>
 #include <dvdread/ifo_types.h>
 #include <dvdread/ifo_read.h>
