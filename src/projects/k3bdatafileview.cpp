@@ -33,6 +33,7 @@
 #include <qdragobject.h>
 #include <qpainter.h>
 #include <qfontmetrics.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -243,15 +244,15 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
     return;
 
   // determine K3bDirItem to add the items to
-  K3bDirItem* parent = 0;
+  m_addParentDir = 0;
   if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) ) ) {
-    parent = dirViewItem->dirItem();
+    m_addParentDir = dirViewItem->dirItem();
   }
   else {
-    parent = currentDir();
+    m_addParentDir = currentDir();
   }
 
-  if( parent ) {
+  if( m_addParentDir ) {
 
     // check if items have been moved
     if( e->source() == viewport() ) {
@@ -267,23 +268,34 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 	  kdDebug() << "no dataviewitem" << endl;
       }
 
-      m_doc->moveItems( selectedDataItems, parent );
+      m_doc->moveItems( selectedDataItems, m_addParentDir );
     }
     else if( e->source() == m_treeView->viewport() ) {
       // move the selected dir
       if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( m_treeView->selectedItem() ) )
-	m_doc->moveItem( dirItem->dirItem(), parent );
+	m_doc->moveItem( dirItem->dirItem(), m_addParentDir );
     }
     else {
       // seems that new items have been dropped
-      KURL::List urls;
-      if( KURLDrag::decode( e, urls ) )
-	K3bDataUrlAddingDialog::addUrls( urls, parent, this );
+      if( KURLDrag::decode( e, m_addUrls ) ) {
+	//
+	// This is a small (not to ugly) hack to circumvent problems with the
+	// event queues: the url adding dialog will be non-modal regardless of
+	// the settings.
+	//
+	QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+      }
     }
   }
 
   // now grab that focus
   setFocus();
+}
+
+
+void K3bDataFileView::slotAddUrls()
+{
+  K3bDataUrlAddingDialog::addUrls( m_addUrls, m_addParentDir, this );
 }
 
 
@@ -423,7 +435,7 @@ void K3bDataFileView::slotProperties()
 }
 
 
-void K3bDataFileView::slotDoubleClicked( QListViewItem* item )
+void K3bDataFileView::slotDoubleClicked( QListViewItem* )
 {
   if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( selectedItems().first() ) ) {
     if( !viewItem->dataItem()->isDir() ) {

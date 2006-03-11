@@ -52,6 +52,10 @@ public:
   K3bDataDirViewItem* dropDirItem;
   int animationCounter;
   QPixmap beforeAniPixmap;
+
+  // used for the urladdingdialog hack
+  KURL::List addUrls;
+  K3bDirItem* addParentDir;
 };
 
 
@@ -154,15 +158,14 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
     return;
 
   // determine K3bDirItem to add the items to
-  K3bDirItem* parent = 0;
   if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) ) ) {
-    parent = dirViewItem->dirItem();
+    d->addParentDir = dirViewItem->dirItem();
   }
   else {
-    parent = m_doc->root();
+    d->addParentDir = m_doc->root();
   }
 
-  if( parent ) {
+  if( d->addParentDir ) {
 
     //    startDropAnimation( parent );
 
@@ -181,23 +184,34 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 	  kdDebug() << "no dataviewitem" << endl;
       }
 
-      m_doc->moveItems( selectedDataItems, parent );
+      m_doc->moveItems( selectedDataItems, d->addParentDir );
     }
     else if( e->source() == viewport() ) {
       // move the selected dir
       if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( selectedItem() ) )
-	m_doc->moveItem( dirItem->dirItem(), parent );
+	m_doc->moveItem( dirItem->dirItem(), d->addParentDir );
     }
     else {
       // seems that new items have been dropped
-      KURL::List urls;
-      if( KURLDrag::decode( e, urls ) )
-	K3bDataUrlAddingDialog::addUrls( urls, parent, this );
+      if( KURLDrag::decode( e, d->addUrls ) ) {
+	//
+	// This is a small (not to ugly) hack to circumvent problems with the
+	// event queues: the url adding dialog will be non-modal regardless of
+	// the settings.
+	//
+	QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+      }
     }
   }
 
   // now grab that focus
   setFocus();
+}
+
+
+void K3bDataDirTreeView::slotAddUrls()
+{
+  K3bDataUrlAddingDialog::addUrls( d->addUrls, d->addParentDir, this );
 }
 
 

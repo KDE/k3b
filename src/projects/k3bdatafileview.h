@@ -19,6 +19,8 @@
 
 #include <k3blistview.h>
 
+#include <kurl.h>
+
 #include <qmap.h>
 
 
@@ -73,6 +75,7 @@ class K3bDataFileView : public K3bListView
   void slotProperties();
   void slotDoubleClicked( QListViewItem* item );
   void slotItemAdded( K3bDataItem* );
+  void slotAddUrls();
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
@@ -101,6 +104,10 @@ class K3bDataFileView : public K3bListView
   K3bDataDirViewItem* m_dropDirItem;
 
   QMap<K3bDataItem*, K3bDataViewItem*> m_itemMap;
+
+  // used for the urladdingdialog hack
+  KURL::List m_addUrls;
+  K3bDirItem* m_addParentDir;
 };
 
 #endif
