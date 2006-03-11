@@ -18,6 +18,7 @@
 
 #include <k3b_export.h>
 
+#include <k3bvideodvd.h>
 #include <k3bvideodvdtime.h>
 
 
@@ -42,7 +43,7 @@ namespace K3bVideoDVD
       unsigned int m_firstSector;
       unsigned int m_lastSector;
 
-      friend class K3bVideoDVD::VideoDVD;
+      friend class VideoDVD;
     };
 }
 
