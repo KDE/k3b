@@ -16,16 +16,46 @@
 #include "k3bvideodvdrippingdialog.h"
 #include "k3bvideodvdrippingwidget.h"
 #include <k3bjobprogressdialog.h>
+#include <k3bapplication.h>
+#include <k3bmedium.h>
+#include <k3bmediacache.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kurlrequester.h>
+#include <kcombobox.h>
+#include <klineedit.h>
 
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
 
+
+class K3bVideoDVDRippingDialog::AudioStreamViewItem : public QCheckListItem
+{
+public:
+  AudioStreamViewItem( K3bVideoDVDRippingDialog* dlg,
+		       QCheckListItem* parent, QListViewItem* after, const QString& text, 
+		       int audioStream )
+    : QCheckListItem( parent, after, text, RadioButton ),
+      m_audioStream( audioStream ),
+      m_dlg( dlg ) {
+  }
+
+private:
+  void stateChange( bool ) {
+    if( state() == On ) {
+      m_dlg->m_titleRipInfos[static_cast<QCheckListItem*>(parent())].audioStream = m_audioStream;
+      m_dlg->slotUpdateFilenames();
+    }
+  }
+
+  int m_audioStream;
+  K3bVideoDVDRippingDialog* m_dlg;
+};
 
 
 K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
@@ -45,8 +75,12 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
   frameLayout->setAutoAdd( true );
   m_w = new K3bVideoDVDRippingWidget( frame );
 
+  connect( m_w->m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
+	   this, SLOT(slotUpdateFilenames()) );
+
   setTitle( i18n("Video DVD Ripping"), 
-	    i18n("1 title from %1", "%n titles from %1", titles.count()).arg(m_dvd.volumeIdentifier()) );
+	    i18n("1 title from %1", "%n titles from %1", titles.count())
+	    .arg( k3bappcore->mediaCache()->medium(m_dvd.device()).beautifiedVolumeId() ) );
 
   // populate list map
   populateTitleView( titles );
@@ -66,13 +100,14 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
   for( QValueList<int>::const_iterator it = titles.begin(); it != titles.end(); ++it ) {
     QCheckListItem* rootItem = new QCheckListItem( m_w->m_titleView, 
 						   m_w->m_titleView->lastItem(),
-						   i18n("Title %1")
-						   .arg(*it),
+						   i18n("Title %1 (%2)")
+						   .arg(*it)
+						   .arg(m_dvd[*it-1].playbackTime().toString()),
 						   QCheckListItem::RadioButtonController );
     rootItem->setText( 1, QString("%1x%2")
 		       .arg(m_dvd[*it-1].videoStream().pictureWidth())
 		       .arg(m_dvd[*it-1].videoStream().pictureHeight()) );
-    rootItem->setText( 3, QString("%1 Title %2.avi").arg(m_dvd.volumeIdentifier()).arg(titles[*it]) );
+    rootItem->setText( 3, QString("%1 Title %2.avi").arg(m_dvd.volumeIdentifier()).arg(*it) );
 
     // now for the rip info
     K3bVideoDVDRippingJob::TitleRipInfo ri( *it );
@@ -89,18 +124,20 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
       }
     }
 
+    QCheckListItem* asI = 0;
     for( unsigned int i = 0; i < m_dvd[*it-1].numAudioStreams(); ++i ) {
-      QCheckListItem* asI = new QCheckListItem( rootItem,
-						i18n("%1 %2Ch (%3%4)")
-						.arg( K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ) )
-						.arg( m_dvd[*it-1].audioStream(i).channels() )
-						.arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
-						      ? i18n("unknown language")
-						      : KGlobal::locale()->twoAlphaToLanguageName( m_dvd[*it-1].audioStream(i).langCode() ) )
-						.arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
-						      ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
-						      : QString::null ),
-						QCheckListItem::RadioButton );
+      asI = new AudioStreamViewItem( this,
+				     rootItem, asI,
+				     i18n("%1 %2Ch (%3%4)")
+				     .arg( K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ) )
+				     .arg( m_dvd[*it-1].audioStream(i).channels() )
+				     .arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
+					   ? i18n("unknown language")
+					   : KGlobal::locale()->twoAlphaToLanguageName( m_dvd[*it-1].audioStream(i).langCode() ) )
+				     .arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
+					   ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
+					   : QString::null ),
+				     i );
       if( ri.audioStream == (int)i )
 	asI->setState( QCheckListItem::On );
     }
@@ -112,8 +149,159 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 }
 
 
+void K3bVideoDVDRippingDialog::slotUpdateFilenames()
+{
+  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+       it != m_titleRipInfos.end(); ++it ) {
+    QString f = createFilename( it.data(), m_w->m_comboFilenamePattern->currentText() );
+    if( m_w->m_checkBlankReplace->isChecked() )
+      f.replace( QRegExp( "\\s" ), m_w->m_editBlankReplace->text() );
+    it.data().filename = K3b::prepareDir( m_w->m_editBaseDir->url() ) + f;
+    it.key()->setText( 3, f );
+  }
+}
+
+
 void K3bVideoDVDRippingDialog::setBaseDir( const QString& path )
 {
+  m_w->m_editBaseDir->setURL( path );
+}
+
+
+QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const
+{
+  QString f;
+
+  const K3bVideoDVD::Title& title = m_dvd[info.title-1];
+
+  for( unsigned int i = 0; i < pattern.length(); ++i ) {
+    //
+    // every pattern starts with a % sign
+    //
+    if( pattern[i] == '%' ) {
+      ++i; // skip the %
+      QChar c = pattern[i];
+
+      //
+      // first check if we have a long keyword instead of a one-char
+      //
+      if( pattern[i] == '{' ) {
+	int j = pattern.find( '}', i );
+	if( j < 0 ) // no closing bracket -> no valid pattern
+	  c = '*';
+	else {
+	  QString keyword = pattern.mid( i+1, j-i-1 );
+	  if( keyword == "titlenumber"  || 
+	      keyword == "title_number" || 
+	      keyword == "title" ) {
+	    c = PATTERN_TITLE_NUMBER;
+	  }
+	  else if( keyword == "volumeid"  || 
+		   keyword == "volume_id" || 
+		   keyword == "volid"     || 
+		   keyword == "vol_id" ) {
+	    c = PATTERN_VOLUME_ID;
+	  }
+	  else if( keyword == "beautifiedvolumeid"   || 
+		   keyword == "beautified_volumeid"  || 
+		   keyword == "beautified_volume_id" ||
+		   keyword == "beautifiedvolid"      ||
+		   keyword == "beautified_volid"     ||
+		   keyword == "beautified_vol_id"    ||
+		   keyword == "nicevolid"            ||
+		   keyword == "nice_volid"           ||
+		   keyword == "nice_vol_id" ) {
+	    c = PATTERN_BEAUTIFIED_VOLUME_ID;
+	  }
+	  else if( keyword == "languagecode"  ||
+		   keyword == "language_code" ||
+		   keyword == "langcode"      ||
+		   keyword == "lang_code" ) {
+	    c = PATTERN_LANGUAGE_CODE;
+
+	  }
+	  else if( keyword == "lang" ||
+		   keyword == "language" ||
+		   keyword == "langname" ||
+		   keyword == "languagename" ||
+		   keyword == "lang_name" ||
+		   keyword == "language_name" ) {
+	    c = PATTERN_LANGUAGE_NAME;
+	  }
+	  else if( keyword == "audioformat"  ||
+		   keyword == "audio_format" ||
+		   keyword == "audio" ) {
+	    c = PATTERN_AUDIO_FORMAT;
+	  }
+	  else if( keyword == "videosize"  ||
+		   keyword == "video_size" ||
+		   keyword == "vsize" ) {
+	    c = PATTERN_VIDEO_SIZE;
+	  }
+	  else {
+	    // unusable pattern
+	    c = '*';
+	  }
+
+	  //
+	  // skip the keyword and the closing bracket
+	  //
+	  if( c != '*' ) {
+	    i += keyword.length() + 1;
+	  }
+	}
+      }
+
+      switch( c ) {
+      case PATTERN_TITLE_NUMBER:
+	f.append( QString::number(info.title).rightJustify( 2, '0' ) );
+	break;
+      case PATTERN_VOLUME_ID:
+	f.append( m_dvd.volumeIdentifier() );
+	break;
+      case PATTERN_BEAUTIFIED_VOLUME_ID:
+	f.append( k3bappcore->mediaCache()->medium( m_dvd.device() ).beautifiedVolumeId() );
+	break;
+      case PATTERN_LANGUAGE_CODE:
+	f.append( title.audioStream( info.audioStream ).langCode() );
+	break;
+      case PATTERN_LANGUAGE_NAME:
+	f.append( KGlobal::locale()->twoAlphaToLanguageName( title.audioStream( info.audioStream ).langCode() ) );
+	break;
+      case PATTERN_AUDIO_FORMAT:
+	f.append( K3bVideoDVD::audioFormatString( title.audioStream( info.audioStream ).format() ) );
+	break;
+      case PATTERN_VIDEO_SIZE:
+	// FIXME: this size is bogus in case of automatic clipping! (at least the height)
+	if( info.width != 0 )
+	  f.append( QString("%1x%2")
+		    .arg(info.width)
+		    .arg(info.height) );
+	else
+	  f.append( QString("%1x%2")
+		    .arg(title.videoStream().pictureWidth())
+		    .arg(title.videoStream().pictureHeight()) );
+	break;
+      default:
+	f.append( pattern[i-1] );
+	f.append( pattern[i] );
+      }
+    }
+
+    //
+    // normal character -> just append to filename
+    //
+    else {
+      f.append( pattern[i] );
+    }
+  }
+
+  //
+  // and the extension (for now only avi)
+  //
+  f.append( ".avi" );
+
+  return f;
 }
 
 
@@ -134,7 +322,6 @@ void K3bVideoDVDRippingDialog::saveUserDefaults( KConfigBase* )
 
 void K3bVideoDVDRippingDialog::slotStartClicked()
 {
-  // FIXME: prepare title infos, audio streams and clipping
   int i = 0;
   QValueVector<K3bVideoDVDRippingJob::TitleRipInfo> titles( m_titleRipInfos.count() );
   for( QMapConstIterator<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> it = m_titleRipInfos.begin();

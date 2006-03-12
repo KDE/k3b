@@ -218,7 +218,7 @@ void K3bProjectBurnDialog::prepareGui()
   groupWritingMode->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 
-  m_optionGroup = new QGroupBox( 0, Qt::Vertical, i18n("Options"), w );
+  m_optionGroup = new QGroupBox( 0, Qt::Vertical, i18n("Settings"), w );
   m_optionGroup->layout()->setMargin(0);
   m_optionGroup->layout()->setSpacing(0);
   m_optionGroupLayout = new QVBoxLayout( m_optionGroup->layout() );

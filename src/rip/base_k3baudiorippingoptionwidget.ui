@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bAudioRippingOptionWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -10,8 +10,11 @@
             <x>0</x>
             <y>0</y>
             <width>436</width>
-            <height>181</height>
+            <height>182</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <grid>
         <property name="name">
@@ -70,7 +73,7 @@
                         <cstring>m_checkCreatePlaylist</cstring>
                     </property>
                     <property name="text">
-                        <string>Create m3u playlist</string>
+                        <string>Create m&amp;3u playlist</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Create playlist for the ripped files</string>
@@ -114,7 +117,7 @@ which can be used with programs like xmms or noatun.
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Use relative paths</string>
+                                <string>&amp;Use relative paths</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Use relative paths instead of absolute</string>
@@ -133,7 +136,7 @@ playlist will look something like: &lt;em&gt;cool/track1.ogg&lt;/em&gt;.</string
                         <cstring>m_checkSingleFile</cstring>
                     </property>
                     <property name="text">
-                        <string>Create single file</string>
+                        <string>Create si&amp;ngle file</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Rip all tracks to a single file</string>
@@ -179,7 +182,7 @@ file will contain all tracks one after the other.
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Write cue file</string>
+                                <string>Write &amp;cue file</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Write a cuefile</string>

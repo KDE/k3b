@@ -42,7 +42,7 @@
 // TODO: handle the default-settings
 
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
-  : KDialogBase( IconList, i18n("Options"), Apply|Ok|Cancel, Ok, parent,name, modal, true)
+  : KDialogBase( IconList, i18n("Settings"), Apply|Ok|Cancel, Ok, parent,name, modal, true)
 {
   setupBurningPage();
   setupDevicePage();	

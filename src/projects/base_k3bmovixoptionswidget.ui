@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bMovixOptionsWidget</class>
 <author>Sebastian trueg</author>
 <widget class="QWidget">
@@ -12,6 +12,9 @@
             <width>427</width>
             <height>429</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -28,7 +31,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Playback Options</string>
+                <string>Playback Settings</string>
             </property>
             <grid>
                 <property name="name">
@@ -71,7 +74,7 @@
                                 <cstring>m_checkRandomPlay</cstring>
                             </property>
                             <property name="text">
-                                <string>Pl&amp;ay files randomly</string>
+                                <string>Pla&amp;y files randomly</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>The files are played in random order</string>

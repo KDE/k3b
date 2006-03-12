@@ -65,7 +65,7 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 						  groupWritingMode );
 
 
-  QGroupBox* groupOptions = new QGroupBox( 2, Qt::Vertical, i18n("Options"), frame );
+  QGroupBox* groupOptions = new QGroupBox( 2, Qt::Vertical, i18n("Settings"), frame );
   groupOptions->layout()->setMargin( marginHint() );
   groupOptions->layout()->setSpacing( spacingHint() );
   m_checkForce = new QCheckBox( i18n("Force"), groupOptions );

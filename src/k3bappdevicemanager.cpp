@@ -38,7 +38,7 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
 
   // setup actions
   KActionMenu* devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup" );
-  KAction* actionDiskInfo = new KAction( i18n("&Disk Info"), "info", 0, this, SLOT(diskInfo()),
+  KAction* actionDiskInfo = new KAction( i18n("Media &Info"), "info", 0, this, SLOT(diskInfo()),
 					 m_actionCollection, "device_diskinfo");
   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(unmountDisk()),
 					m_actionCollection, "device_unmount");

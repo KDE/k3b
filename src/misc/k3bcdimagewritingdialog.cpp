@@ -253,7 +253,7 @@ void K3bCdImageWritingDialog::setupGui()
   m_spinCopies->setMaxValue( 999 );
   // -------- copies
 
-  QGroupBox* optionGroup = new QGroupBox( 3, Vertical, i18n("Options"), optionTab );
+  QGroupBox* optionGroup = new QGroupBox( 3, Vertical, i18n("Settings"), optionTab );
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
@@ -267,7 +267,7 @@ void K3bCdImageWritingDialog::setupGui()
   optionTabLayout->setRowStretch( 2, 1 );
   optionTabLayout->setColStretch( 1, 1 );
 
-  d->optionTabbed->addTab( optionTab, i18n("Options") );
+  d->optionTabbed->addTab( optionTab, i18n("Settings") );
 
 
   // image tab ------------------------------------

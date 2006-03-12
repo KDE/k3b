@@ -20,6 +20,9 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel4</cstring>
@@ -200,7 +203,10 @@
                                     <cstring>groupBox6</cstring>
                                 </property>
                                 <property name="title">
-                                    <string>Video Quality</string>
+                                    <string>Manual Video Quality</string>
+                                </property>
+                                <property name="checkable">
+                                    <bool>true</bool>
                                 </property>
                                 <vbox>
                                     <property name="name">
@@ -237,20 +243,6 @@
                                                 </property>
                                             </widget>
                                         </hbox>
-                                    </widget>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>m_checkAutoClipping</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Automatic &amp;Video Clipping</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+V</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
                                     </widget>
                                 </vbox>
                             </widget>
@@ -310,6 +302,127 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>File Namin&amp;g</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout14</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ripped files pattern:</string>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox">
+                                <property name="name">
+                                    <cstring>m_comboFilenamePattern</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>1</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="acceptDrops">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="duplicatesEnabled">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="KURLLabel">
+                        <property name="name">
+                            <cstring>m_specialStringsLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>See special strings</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignVCenter|AlignRight</set>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout8</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkBlankReplace</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Replace all &amp;blanks with:</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit">
+                                <property name="name">
+                                    <cstring>m_editBlankReplace</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>1</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>_</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer5</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>5</width>
+                                <height>1</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
@@ -335,6 +448,20 @@
                     </widget>
                     <widget class="QCheckBox">
                         <property name="name">
+                            <cstring>m_checkAutoClipping</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Automatic &amp;Video Clipping</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+V</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
                             <cstring>m_checkAudioResampling</cstring>
                         </property>
                         <property name="text">
@@ -352,10 +479,10 @@
                             <cstring>m_checkLowPriority</cstring>
                         </property>
                         <property name="text">
-                            <string>Low scheduling priority for the &amp;video transcoding process</string>
+                            <string>Low s&amp;cheduling priority for the video transcoding process</string>
                         </property>
                         <property name="accel">
-                            <string>Alt+V</string>
+                            <string>Alt+C</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>
@@ -374,7 +501,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>120</height>
+                                <height>1</height>
                             </size>
                         </property>
                     </spacer>
@@ -390,5 +517,6 @@
     <includehint>klistview.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kurllabel.h</includehint>
 </includehints>
 </UI>

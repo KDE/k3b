@@ -113,7 +113,7 @@ void K3bDvdRipperWidget::setupGui(){
     //dirsLayout->addMultiCellWidget( m_editStaticRipPath, 0,0,0,2 );
     //dirsLayout->addMultiCellWidget( m_buttonStaticDir, 0,0,3,3 );
 
-    QGroupBox *ripOptions = new QGroupBox( i18n( "Options" ), frame, "ripOptions" );
+    QGroupBox *ripOptions = new QGroupBox( i18n( "Settings" ), frame, "ripOptions" );
     ripOptions->setColumnLayout(0, Qt::Vertical );
     QGridLayout *optionsLayout = new QGridLayout( ripOptions->layout() );
     optionsLayout->setSpacing( KDialog::spacingHint() );

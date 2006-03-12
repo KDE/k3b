@@ -135,7 +135,7 @@ void K3bAudioRippingDialog::setupGui()
   QTabWidget* mainTab = new QTabWidget( frame );
 
   m_optionWidget = new K3bAudioConvertingOptionWidget( mainTab );
-  mainTab->addTab( m_optionWidget, i18n("Options") );
+  mainTab->addTab( m_optionWidget, i18n("Settings") );
 
 
   // setup filename pattern page

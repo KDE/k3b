@@ -188,7 +188,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   // draw the text marks
   crect = rect();
   QString text;
-  if( d->cdSize.mode1Bytes() >= (long long)d->doc->size() )
+  if( d->cdSize.mode1Bytes() >= d->doc->size() )
     text = i18n("Available: %1 of %2")
       .arg( d->showTime
 	    ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))

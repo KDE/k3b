@@ -104,7 +104,7 @@ void K3bVideoCdRippingDialog::setupGui()
     groupDirectoryLayout->addWidget( necessarySizeBox, 2, 1 );
 
     // ---------------------------------------------------- Options group ---
-    QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n( "Options" ), frame );
+    QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n( "Settings" ), frame );
 
     m_ignoreExt = new QCheckBox( i18n( "Ignore /EXT/PSD_X.VCD" ), groupOptions );
 

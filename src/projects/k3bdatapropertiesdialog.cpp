@@ -174,7 +174,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
   sortingBoxGrid->setColStretch( 1, 1 );
   sortingBoxGrid->setRowStretch( 1, 1 );
 
-  optionTab->addTab( hideBox, i18n("Options") );
+  optionTab->addTab( hideBox, i18n("Settings") );
   optionTab->addTab( sortingBox, i18n("Advanced") );
 
 

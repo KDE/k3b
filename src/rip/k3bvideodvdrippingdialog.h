@@ -39,11 +39,24 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 
   void setBaseDir( const QString& path );
 
+  enum FileNamingPattern {
+    PATTERN_TITLE_NUMBER         = 't',
+    PATTERN_VOLUME_ID            = 'v',
+    PATTERN_BEAUTIFIED_VOLUME_ID = 'b',
+    PATTERN_LANGUAGE_CODE        = 'c',
+    PATTERN_LANGUAGE_NAME        = 'l',
+    PATTERN_AUDIO_FORMAT         = 'a',
+    PATTERN_VIDEO_SIZE           = 'r'
+  };
+
  private slots:
   void slotStartClicked();
+  void slotUpdateFilenames();
 
  private:
   void populateTitleView( const QValueList<int>& titles );
+
+  QString createFilename( const K3bVideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
 
   void loadK3bDefaults();
   void loadUserDefaults( KConfigBase* );
@@ -53,6 +66,8 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 
   K3bVideoDVD::VideoDVD m_dvd;
   QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
+
+  class AudioStreamViewItem;
 };
 
 #endif

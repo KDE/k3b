@@ -449,7 +449,7 @@ void K3bVcdTrackDialog::setupPbcTab()
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    QGroupBox* groupOptions = new QGroupBox( 3, Qt::Vertical, i18n( "Options" ), w );
+    QGroupBox* groupOptions = new QGroupBox( 3, Qt::Vertical, i18n( "Settings" ), w );
     groupOptions->layout() ->setSpacing( spacingHint() );
     groupOptions->layout() ->setMargin( marginHint() );
 

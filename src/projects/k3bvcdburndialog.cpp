@@ -445,7 +445,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
     // ---------------------------------------------------- Options group ---
 
-    m_groupOptions = new QGroupBox( 5, Qt::Vertical, i18n( "Options" ), w );
+    m_groupOptions = new QGroupBox( 5, Qt::Vertical, i18n( "Settings" ), w );
     m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
 
     m_checkNonCompliant = new QCheckBox( i18n( "Enable broken SVCD mode" ), m_groupOptions );
