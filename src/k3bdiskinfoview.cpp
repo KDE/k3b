@@ -46,11 +46,8 @@
 #include <kdebug.h>
 #include <kio/global.h>
 
-#ifdef K3B_DEBUG
-// only for debugging
-#include <k3bvideodvd.h>
-#endif
 
+// FIXME: use K3bListViewItem instead
 class K3bDiskInfoView::HeaderViewItem : public KListViewItem
 {
 public:
@@ -155,48 +152,32 @@ K3bDiskInfoView::~K3bDiskInfoView()
 void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
 {
   m_infoView->clear();
-  //  m_infoView->header()->resizeSection( 0, 20 );
+
+  setTitle( medium.shortString( true ) );
 
   if( medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
-    (void)new QListViewItem( m_infoView, i18n("No Disk") );
-    setTitle( i18n("No disk in drive") );
+    (void)new QListViewItem( m_infoView, i18n("No medium present") );
     setRightPixmap( K3bTheme::MEDIA_NONE );
   }
   else {
-
     if( medium.diskInfo().empty() ) {
-      setTitle( i18n("Empty %1 Media").arg(K3bDevice::mediaTypeString( medium.diskInfo().mediaType(), true )) );
       setRightPixmap( K3bTheme::MEDIA_EMPTY );
     } 
     else {
       switch( medium.toc().contentType() ) {
       case K3bDevice::AUDIO:
-        setTitle( i18n("Audio CD") );
 	setRightPixmap( K3bTheme::MEDIA_AUDIO );
         break;
-      case K3bDevice::DATA:
-	if( medium.diskInfo().isDvdMedia() ) {
-	  if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
-	    setTitle( i18n("Video DVD") );
-	    setRightPixmap( K3bTheme::MEDIA_VIDEO );
-#ifdef K3B_DEBUG
-	    K3bVideoDVD::VideoDVD dvd;
-	    if( dvd.open( medium.device() ) )
-	      dvd.debug();
-#endif
-	  }
-	  else {
-	    setTitle( i18n("DVD") );
-	    setRightPixmap( K3bTheme::MEDIA_DATA );
-	  }
+      case K3bDevice::DATA: {
+	if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
+	  setRightPixmap( K3bTheme::MEDIA_VIDEO );
 	}
 	else {
-	  setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_CD ? i18n("Video CD") : i18n("Data CD") );
 	  setRightPixmap( K3bTheme::MEDIA_DATA );
 	}
         break;
+      }
       case K3bDevice::MIXED:
-        setTitle( medium.content() & K3bMedium::CONTENT_VIDEO_CD ? i18n("Video CD") : i18n("Mixed mode CD") );
 	setRightPixmap( K3bTheme::MEDIA_MIXED );
         break;
       default:
@@ -353,7 +334,7 @@ void K3bDiskInfoView::reload()
 
 void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
 {
-  KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Media") );
+  KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Medium") );
   QString typeStr;
   if( info.currentProfile() != K3bDevice::MEDIA_UNKNOWN )
     typeStr = K3bDevice::mediaTypeString( info.currentProfile() );
