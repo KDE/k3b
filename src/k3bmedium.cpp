@@ -215,11 +215,11 @@ QString K3bMedium::shortString( bool useContent ) const
   QString mediaTypeString = K3bDevice::mediaTypeString( diskInfo().mediaType(), true );
   
   if( diskInfo().diskState() == K3bDevice::STATE_UNKNOWN ) {
-    return i18n("No medium information...");
+    return i18n("No medium information");
   }
 
   else if( diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
-    return i18n("No medium");
+    return i18n("No medium present");
   }
 
   else if( diskInfo().diskState() == K3bDevice::STATE_EMPTY ) {
@@ -231,38 +231,53 @@ QString K3bMedium::shortString( bool useContent ) const
       // AUDIO + MIXED
       if( toc().contentType() == K3bDevice::AUDIO ||
 	  toc().contentType() == K3bDevice::MIXED ) {
-	if( !cdText().isEmpty() )
+	if( !cdText().isEmpty() ) {
 	  return QString("%1 - %2 (%3)")
 	    .arg( cdText().performer() )
 	    .arg( cdText().title() )
 	    .arg( toc().contentType() == K3bDevice::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
-	else if( toc().contentType() == K3bDevice::AUDIO )
+	}
+	else if( toc().contentType() == K3bDevice::AUDIO ) {
 	  return i18n("Audio CD");
-	else
-	  return i18n("%1 (mixed mode CD)").arg( volumeId() );
+	}
+	else {
+	  return i18n("%1 (Mixed CD)").arg( beautifiedVolumeId() );
+	}
       }
       
       // DATA CD and DVD
       else if( !volumeId().isEmpty() ) {
-	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE )
-	  return i18n("%1 (appendable data %2)").arg( volumeId(), mediaTypeString );
-	else
-	  return i18n("%1 (full data %2)").arg( volumeId(), mediaTypeString );
+	if( content() & CONTENT_VIDEO_DVD ) {
+	  return QString("%1 (%2)").arg( beautifiedVolumeId() ).arg( i18n("Video DVD") );
+	}
+	else if( content() & CONTENT_VIDEO_CD ) {
+	  return QString("%1 (%2)").arg( beautifiedVolumeId() ).arg( i18n("Video CD") );
+	}
+	else if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+	  return i18n("%1 (Appendable Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
+	}
+	else {
+	  return i18n("%1 (Full Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
+	}
       }
       else {
-	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE )
-	  return i18n("Appendable data %1").arg( mediaTypeString );
-	else
-	  return i18n("Full data %1").arg( mediaTypeString );
+	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+	  return i18n("Appendable Data %1").arg( mediaTypeString );
+	}
+	else {
+	  return i18n("Full Data %1").arg( mediaTypeString );
+	}
       }
     }
     
     // without content
     else {
-      if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE )
+      if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
 	return i18n("Appendable %1 medium").arg( mediaTypeString );
-      else
+      }
+      else {
 	return i18n("Full %1 medium").arg( mediaTypeString );
+      }
     }
   }
 }
@@ -306,4 +321,51 @@ const QString& K3bMedium::volumeId() const
     static QString dummy;
     return dummy;
   }
+}
+
+
+QString K3bMedium::beautifiedVolumeId() const
+{
+  const QString& oldId = volumeId();
+  QString newId;
+
+  bool newWord = true;
+  for( unsigned int i = 0; i < oldId.length(); ++i ) {
+    QChar c = oldId[i];
+    //
+    // first let's handle the cases where we do not change
+    // the id anyway
+    //
+    // In case the id already contains spaces or lower case chars
+    // it is likely that it already looks good and does ignore
+    // the restricted iso9660 charset (like almost every project
+    // created with K3b)
+    //
+    if( c.isLetter() && c.lower() == c )
+      return oldId;
+    else if( c.isSpace() )
+      return oldId;
+
+    // replace underscore with space
+    else if( c.unicode() == 95 ) {
+      newId.append( ' ' );
+      newWord = true;
+    }
+
+    // from here on only upper case chars and numbers and stuff
+    else if( c.isLetter() ) {
+      if( newWord ) {
+	newId.append( c );
+	newWord = false;
+      }
+      else {
+	newId.append( c.lower() );
+      }
+    }
+    else {
+      newId.append( c );
+    }
+  }
+
+  return newId;
 }

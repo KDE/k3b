@@ -55,6 +55,15 @@ class K3bMedium
   const QValueList<int>& writingSpeeds() const { return m_writingSpeeds; }
   const QString& volumeId() const;
 
+  /**
+   * This method tries to make a volume identificator witch uses a reduced character set
+   * look more beautiful by, for example, replacing '_' with a space or replacing all upper
+   * case words.
+   *
+   * Volume ids already containing spaces or lower case characters are left unchanged.
+   */
+  QString beautifiedVolumeId() const;
+
   enum MediumContent {
     CONTENT_NONE = 0x0,
     CONTENT_AUDIO = 0x1,
