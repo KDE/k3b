@@ -1538,7 +1538,7 @@ QCString K3bDataDoc::iso9660FileNameUsedInMkisofs( K3bDataItem* item )
 
   // recreate parameters from the original method
   int dirflag = ( item->isDir() ? 1 : 0 );
-  char* name = strdup( item->k3bName().local8Bit() );
+  char* name = strdup( item->writtenName().local8Bit() );
 
   // for some reason I did not include the mkisofs option -use-fileversion in K3bIsoOptions
   // so we use the default in mkisofs
