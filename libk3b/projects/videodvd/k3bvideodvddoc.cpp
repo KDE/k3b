@@ -27,7 +27,6 @@
 K3bVideoDvdDoc::K3bVideoDvdDoc( QObject* parent )
   : K3bDvdDoc( parent )
 {
-  setMultiSessionMode( NONE );
 }
 
 
@@ -51,6 +50,8 @@ bool K3bVideoDvdDoc::newDocument()
     audioTsDir->setRenameable(false);
     audioTsDir->setMoveable(false);
     audioTsDir->setHideable(false);
+
+    setMultiSessionMode( NONE );
 
     setModified( false );
 
