@@ -169,13 +169,30 @@ void K3bProjectBurnDialog::slotStartClicked()
   saveSettings();
 
   // check if enough space in tempdir if not on-the-fly
-  if( m_tempDirSelectionWidget )
+  if( m_tempDirSelectionWidget ) {
     if( (!doc()->onTheFly() || doc()->onlyCreateImages()) &&
 	doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
       if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
 						"Write anyway?") ) == KMessageBox::Cancel )
 	return;
     }
+
+    // check if the temp dir exists
+    if( !m_checkOnTheFly->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
+      QString tempDir = m_tempDirSelectionWidget->tempDirectory();
+      if( !QFile::exists( tempDir ) ) {
+	if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?").arg( tempDir ) )
+	    == KMessageBox::Yes ) {
+	  if( !KStandardDirs::makeDir( tempDir ) ) {
+	    KMessageBox::error( this, i18n("Failed to create folder '%1'.").arg( tempDir ) );
+	    return;
+	  }
+	}
+	else
+	  return;
+      }
+    }
+  }
 
   K3bJobProgressDialog* dlg = 0;
   if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
