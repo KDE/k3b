@@ -1,8 +1,16 @@
+have_libdvdread=no
 KDE_CHECK_HEADERS(dvdread/dvd_reader.h, [
 	AC_CHECK_LIB(dvdread,
 		DVDOpen,
-		AC_DEFINE(HAVE_LIBDVDREAD,1,[Defined if you have libdvdread headers and libs installed.]),
-	        AC_ERROR(Could not find libdvdread. Please install.)
-	)],
-	[AC_ERROR(Could not find libdvdread headers.)]
+		[
+                   AC_DEFINE(HAVE_LIBDVDREAD,1,[Defined if you have libdvdread headers and libs installed.]),
+	           have_libdvdread=yes
+		])
+	)]
 )
+
+if test "$have_libdvdread" = no; then	
+   AC_MSG_WARN([Could not find libdvdread. Please install.])
+   DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
+fi
+
