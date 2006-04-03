@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>base_K3bVideoDVDRippingWidget</class>
 <author>Seastian Trueg</author>
 <widget class="QWidget">
@@ -12,9 +12,6 @@
             <width>738</width>
             <height>633</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -264,9 +261,6 @@
                                         <property name="text">
                                             <string>Variable &amp;Bitrate</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+B</string>
-                                        </property>
                                     </widget>
                                     <widget class="QLayoutWidget">
                                         <property name="name">
@@ -377,9 +371,6 @@
                                 <property name="text">
                                     <string>Replace all &amp;blanks with:</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
-                                </property>
                             </widget>
                             <widget class="KLineEdit">
                                 <property name="name">
@@ -453,9 +444,6 @@
                         <property name="text">
                             <string>Automatic &amp;Video Clipping</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+V</string>
-                        </property>
                         <property name="checked">
                             <bool>true</bool>
                         </property>
@@ -480,9 +468,6 @@
                         </property>
                         <property name="text">
                             <string>Low s&amp;cheduling priority for the video transcoding process</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+C</string>
                         </property>
                         <property name="checked">
                             <bool>true</bool>
