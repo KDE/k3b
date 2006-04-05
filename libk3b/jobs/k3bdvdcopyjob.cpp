@@ -144,14 +144,14 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       bool haveLibdvdcss = false;
       kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
       if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
-	kdDebug() << "(K3bLibDvdCss) succeeded." << endl;
-	kdDebug() << "(K3bLibDvdCss) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
+	kdDebug() << "(K3bDvdCopyJob) succeeded." << endl;
+	kdDebug() << "(K3bDvdCopyJob) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
 		  << libcss->open(m_readerDevice) << endl;
 	haveLibdvdcss = true;
 	delete libcss;
       }
       else
-	kdDebug() << "(K3bLibDvdCss) failed." << endl;
+	kdDebug() << "(K3bDvdCopyJob) failed." << endl;
 
       if( !haveLibdvdcss ) {
 	emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );

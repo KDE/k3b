@@ -37,10 +37,10 @@ extern "C" {
   struct dvdcss_s;
   typedef struct dvdcss_s* dvdcss_t;
 
-  dvdcss_t (*dvdcss_open)(char*);
-  int (*dvdcss_close)( dvdcss_t );
-  int (*dvdcss_seek)( dvdcss_t, int, int );
-  int (*dvdcss_read)( dvdcss_t, void*, int, int );
+  dvdcss_t (*k3b_dvdcss_open)(char*);
+  int (*k3b_dvdcss_close)( dvdcss_t );
+  int (*k3b_dvdcss_seek)( dvdcss_t, int, int );
+  int (*k3b_dvdcss_read)( dvdcss_t, void*, int, int );
 }
 
 
@@ -82,7 +82,7 @@ bool K3bLibDvdCss::open( K3bDevice::Device* dev )
 {
   d->device = dev;
   dev->close();
-  d->dvd = dvdcss_open( const_cast<char*>( QFile::encodeName(dev->blockDeviceName()).data() ) );
+  d->dvd = k3b_dvdcss_open( const_cast<char*>( QFile::encodeName(dev->blockDeviceName()).data() ) );
   d->currentSector = 0;
   d->currentSectorInTitle = false;
   return ( d->dvd != 0 );
@@ -92,20 +92,20 @@ bool K3bLibDvdCss::open( K3bDevice::Device* dev )
 void K3bLibDvdCss::close()
 {
   if( d->dvd )
-    dvdcss_close( d->dvd );
+    k3b_dvdcss_close( d->dvd );
   d->dvd = 0;
 }
 
 
 int K3bLibDvdCss::seek( int sector, int flags )
 {
-  return dvdcss_seek( d->dvd, sector, flags );
+  return k3b_dvdcss_seek( d->dvd, sector, flags );
 }
 
 
 int K3bLibDvdCss::read( void* buffer, int sectors, int flags )
 {
-  return dvdcss_read( d->dvd, buffer, sectors, flags );
+  return k3b_dvdcss_read( d->dvd, buffer, sectors, flags );
 }
 
 
@@ -208,6 +208,10 @@ bool K3bLibDvdCss::crackAllKeys()
     return false;
   }
 
+#ifdef K3B_DEBUG
+  iso.debug();
+#endif
+
   const K3bIso9660Directory* dir = iso.firstIsoDirEntry();
 
   int title = 0;
@@ -222,7 +226,7 @@ bool K3bLibDvdCss::crackAllKeys()
 
     const K3bIso9660File* file = dynamic_cast<const K3bIso9660File*>( dir->entry( filename ) );
     if( file && file->size() > 0 ) {
-      d->titleOffsets.append( qMakePair( (int)file->startSector(), (int)file->size() / 2048 ) );
+      d->titleOffsets.append( qMakePair( (int)file->startSector(), (int)(file->size() / 2048U) ) );
       kdDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector() << endl;
       if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
 	kdDebug() << "(K3bLibDvdCss) unable to seek to " << file->startSector() << endl;
@@ -281,12 +285,12 @@ K3bLibDvdCss* K3bLibDvdCss::create()
   if( s_libDvdCss == 0 ) {
     s_libDvdCss = dlopen( "libdvdcss.so.2", RTLD_LAZY|RTLD_GLOBAL );
     if( s_libDvdCss ) {
-      dvdcss_open = (dvdcss_t (*)(char*))dlsym( s_libDvdCss, "dvdcss_open" );
-      dvdcss_close = (int (*)( dvdcss_t ))dlsym( s_libDvdCss, "dvdcss_close" );
-      dvdcss_seek = (int (*)( dvdcss_t, int, int ))dlsym( s_libDvdCss, "dvdcss_seek" );
-      dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))dlsym( s_libDvdCss, "dvdcss_read" );
+      k3b_dvdcss_open = (dvdcss_t (*)(char*))dlsym( s_libDvdCss, "dvdcss_open" );
+      k3b_dvdcss_close = (int (*)( dvdcss_t ))dlsym( s_libDvdCss, "dvdcss_close" );
+      k3b_dvdcss_seek = (int (*)( dvdcss_t, int, int ))dlsym( s_libDvdCss, "dvdcss_seek" );
+      k3b_dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))dlsym( s_libDvdCss, "dvdcss_read" );
 
-      if( !dvdcss_open || !dvdcss_close || !dvdcss_seek || !dvdcss_read ) {
+      if( !k3b_dvdcss_open || !k3b_dvdcss_close || !k3b_dvdcss_seek || !k3b_dvdcss_read ) {
 	kdDebug() << "(K3bLibDvdCss) unable to resolve libdvdcss." << endl;
 	dlclose( s_libDvdCss );
 	s_libDvdCss = 0;
