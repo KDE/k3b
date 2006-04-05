@@ -169,6 +169,10 @@ void K3bGrowisofsImager::start()
   if( m_doc->dummy() )
     *m_process << "-use-the-force-luke=dummy";
 
+  if( d->usedMultiSessionMode == K3bDataDoc::NONE ||
+      d->usedMultiSessionMode == K3bDataDoc::FINISH )
+    *m_process << "-dvd-compat";
+
   //
   // The imager is only used in multisession mode, so we never use DAO and do not need to care about the
   // size of the track or anything.
