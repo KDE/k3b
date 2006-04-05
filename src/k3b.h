@@ -221,6 +221,7 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotShowDirTreeView();
   void slotShowContentsView();
+  void slotShowMenuBar();
 
   void slotProjectAddFiles();
 

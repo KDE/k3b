@@ -229,6 +229,7 @@ void K3bMainWindow::initActions()
 
   KStdAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
   setStandardToolBarMenuEnabled(true);
+  KStdAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
 //   KActionMenu* actionMenuCD = new KActionMenu( i18n("&CD Project"), "filenew", actionCollection(), "file_new_cd" );
@@ -1360,6 +1361,15 @@ void K3bMainWindow::slotShowContentsView()
 {
   m_contentsDock->changeHideShowState();
   slotCheckDockWidgetStatus();
+}
+
+
+void K3bMainWindow::slotShowMenuBar() 
+{ 
+  if( menuBar()->isVisible() ) 
+    menuBar()->hide(); 
+  else 
+    menuBar()->show(); 
 }
 
 
