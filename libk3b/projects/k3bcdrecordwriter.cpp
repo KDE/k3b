@@ -616,7 +616,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   else if( line.contains("Medium Error") ) {
     m_cdrecordError = MEDIUM_ERROR;
   }
-  else if( line.startsWith( "Error trying to open" ) && line.contains( "(Device or resource busy)" ) ) {
+  else if( line.startsWith( "Error trying to open" ) && line.contains( "Device or resource busy" ) ) {
     m_cdrecordError = DEVICE_BUSY;
   }
   else {
