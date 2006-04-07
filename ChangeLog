@@ -5,7 +5,9 @@
  * Fixed data project verification in case filenames had to be shortened due to Joliet limitations.
  * Use -dvd-compat parameter to close DVDs in on-the-fly mode.
  * Fixed libdvdcss handling (again), no crashes anymore.
-	
+ * Use SG IO for scsi commands with newer linux kernels. This should fix problems with scsi device
+   detection.
+
 0.12.14
 =======
  * Make sure new projects are not already marked as modified.
