@@ -53,7 +53,7 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   m_header = new QSimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
   m_infoText = new QSimpleRichText( i18n("<p align=\"center\">Change the welcome screen buttons with a "
 					 "right mouse click.<br>"
-					 "Every other project type and the tools "
+					 "All other project types and the tools "
 					 "like Image writing or Formatting are accessible via the K3b menu."), font() );
 
   // set a large width just to be sure no linebreak occurs
