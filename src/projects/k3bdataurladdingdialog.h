@@ -69,6 +69,8 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QStringList m_mkisofsLimitationRenamedFiles;
 
   bool m_bCanceled;
+
+  int m_urlCounter;
 };
 
 #endif

@@ -277,11 +277,12 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
     }
     else {
       // seems that new items have been dropped
+      m_addUrls.clear();
       if( KURLDrag::decode( e, m_addUrls ) ) {
 	//
 	// This is a small (not to ugly) hack to circumvent problems with the
 	// event queues: the url adding dialog will be non-modal regardless of
-	// the settings.
+	// the settings in case we open it directly.
 	//
 	QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
       }

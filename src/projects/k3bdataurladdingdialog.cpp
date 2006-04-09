@@ -56,7 +56,8 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* nam
     m_bExistingItemsIgnoreAll(false),
     m_iAddHiddenFiles(0),
     m_iAddSystemFiles(0),
-    m_bCanceled(false)
+    m_bCanceled(false),
+    m_urlCounter(0)
 {
   QWidget* page = plainPage();
   QGridLayout* grid = new QGridLayout( page );
@@ -150,6 +151,25 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 {
   if( m_bCanceled )
     return;
+
+  //
+  // Adding one url after the other and updating the gui after
+  // each single one results in a evry slow adding of urls.
+  // Thus, we use a counter to add urls in blocks.
+  // The values used here are only based on experiments and
+  // may need improvement
+  //
+  if( m_urlCounter == 0 ) {
+    //
+    // We want at least three updates during the adding of many urls
+    //
+    m_urlCounter = QMAX( 1, m_urlQueue.count() );
+
+    //
+    // But to avoid a too long blocking of the GUI choose some upper max
+    //
+    m_urlCounter = QMIN( m_urlCounter, 50 );
+  }
 
   // add next url
   KURL url = m_urlQueue.first().first;
@@ -368,10 +388,17 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     }
   }
 
-  if( m_urlQueue.isEmpty() )
+  if( m_urlQueue.isEmpty() ) {
+    m_urlCounter = 0;
     accept();
-  else
-    QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+  }
+  else {
+    --m_urlCounter;
+    if( m_urlCounter == 0 ) // GUI update -> slow
+      QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+    else                    // no GUI update -> fast
+      slotAddUrls();
+  }
 }
 
 
