@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kconfig.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
 
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -206,6 +208,11 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
   if( e->button() == LeftButton && !m_dragging ) {
     grabMouse( KCursor::sizeAllCursor() );
     m_dragging = true;
+  }
+  else if( e->button() == RightButton ) {
+    KPopupMenu m;
+    if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->pos() ) )
+      hide();
   }
 }
 
