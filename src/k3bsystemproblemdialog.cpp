@@ -26,6 +26,8 @@
 #include <k3bdevice.h>
 #include <k3bversion.h>
 #include <k3bglobals.h>
+#include <k3bpluginmanager.h>
+#include <k3bplugin.h>
 
 #include <k3bthememanager.h>
 
@@ -462,6 +464,32 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
     }
   }
+
+  //
+  // Way too many users are complaining about K3b not being able to decode mp3 files. So just warn them about
+  // the legal restrictions with many distros
+  //
+  QPtrList<K3bPlugin> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+  bool haveMp3Decoder = false;
+  for( QPtrListIterator<K3bPlugin> it( plugins ); *it; ++it ) {
+    if( it.current()->pluginInfo().name() == "K3b MAD Decoder" ) {
+      haveMp3Decoder = true;
+      break;
+    }
+  }
+  if( !haveMp3Decoder ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+					 i18n("Mp3 Audio Decoder plugin not found."),
+					 i18n("K3b could not load or find the Mp3 decoder plugin. This means that you will not "
+					      "be able to create Audio CDs from Mp3 files. Many Linux distributions do not "
+					      "include Mp3 support for legal reasons."),
+					 i18n("To enable Mp3 support, please install the MAD Mp3 decoding library as well as the "
+					      "K3b MAD Mp3 decoder plugin (the latter may already be installed but not functional "
+					      "due to the missing libmad). Some distributions allow installation of Mp3 support "
+					      "via an online update tool (i.e. SuSE's YOU)."),
+					 false ) );
+  }
+
 
   kdDebug() << "(K3bCore) System problems:" << endl;
   for( QValueList<K3bSystemProblem>::const_iterator it = problems.begin();
