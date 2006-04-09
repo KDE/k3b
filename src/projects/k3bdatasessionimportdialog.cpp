@@ -18,12 +18,14 @@
 
 #include <k3bdatadoc.h>
 #include <k3bcore.h>
+#include <k3biso9660.h>
 
 #include <qpushbutton.h>
 #include <qcursor.h>
 #include <qapplication.h>
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 
 K3bDataSessionImportDialog::K3bDataSessionImportDialog( QWidget* parent )
@@ -66,6 +68,25 @@ void K3bDataSessionImportDialog::slotOk()
   // find the selected device, show a busy mouse cursor and call K3bDataDoc::importSession
   if( K3bDevice::Device* dev = m_comboMedia->selectedDevice() ) {
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+
+    //
+    // Mkisofs does not properly import joliet filenames from an old session
+    //
+    // See bug 79215 for details
+    //
+    K3bIso9660 iso( dev );
+    if( iso.open() ) {
+      if( iso.firstRRDirEntry() == 0 && iso.jolietLevel() > 0 )
+	KMessageBox::sorry( this, 
+			    i18n("<p>K3b found session containing Joliet information for long filenames "
+				 "but no Rock Ridge extensions."
+				 "<p>Due to a limitation in mkisofs the filenames "
+				 "in the imported session will be converted to a restricted character set in "
+				 "the new session. This character set is based on the ISO9660 settings in the "
+				 "K3b project. K3b is not able to display these converted filenames yet."), 
+			    i18n("Session Import Warning") );
+      iso.close();
+    }
 
     m_doc->setBurner( dev );    
     m_doc->importSession( dev );
