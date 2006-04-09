@@ -363,7 +363,7 @@ void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoi
 void K3bDirView::slotDirActivated( const QString& url )
 {
 //   m_urlCombo->insertItem( url, 0 );
-  slotDirActivated( KURL(url) );
+  slotDirActivated( KURL::fromPathOrURL(url) );
 }
 
 
