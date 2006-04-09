@@ -45,6 +45,7 @@
  * The K3b Project DCOP Interface now uses the QString type for url parameters instead of KURL.
  * Save/load audio cd track sources in audio projects
  * Display a beautified volume id. For example: THE_TRANSPORTER -> The Transporter
+ * Check if the image directory exists before starting to create a project image
 
 0.12
 Added "Mpeg Still" support to Video-CD Project

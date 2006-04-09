@@ -84,14 +84,26 @@ K3bTempDirSelectionWidget::~K3bTempDirSelectionWidget()
 }
 
 
-void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
-						  unsigned long,
-						  unsigned long,
-						  unsigned long kbAvail)
+unsigned long K3bTempDirSelectionWidget::freeTempSpace() const
 {
-  m_labelFreeSpace->setText( KIO::convertSizeFromKB(kbAvail) );
+  QString path = m_editDirectory->url();
 
-  m_freeTempSpace = kbAvail;
+  if( !QFile::exists( path ) )
+    path.truncate( path.findRev('/') );
+
+  unsigned long size;
+  K3b::kbFreeOnFs( path, size, m_freeTempSpace );
+  
+  return m_freeTempSpace;
+}
+
+
+void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
+{
+  // update the temp space
+  freeTempSpace();
+
+  m_labelFreeSpace->setText( KIO::convertSizeFromKB(m_freeTempSpace) );
 
   if( m_labelCdSize ) {
     if( m_freeTempSpace < m_requestedSize/1024 )
@@ -100,21 +112,6 @@ void K3bTempDirSelectionWidget::slotFreeTempSpace(const QString&,
       m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
   }
   QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeTempSpace()) );
-}
-
-
-void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
-{
-  QString path = m_editDirectory->url();
-
-  if( !QFile::exists( path ) )
-    path.truncate( path.findRev('/') );
-
-  unsigned long size, avail;
-  if( K3b::kbFreeOnFs( path, size, avail ) )
-    slotFreeTempSpace( path, size, 0, avail );
-  else
-    m_labelFreeSpace->setText("-");
 }
 
 

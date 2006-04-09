@@ -42,7 +42,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
 
   int selectionMode() const { return m_mode; }
 
-  unsigned long freeTempSpace() const { return m_freeTempSpace; }
+  unsigned long freeTempSpace() const;
   QString tempPath() const;
   QString tempDirectory() const;
 
@@ -67,7 +67,6 @@ class K3bTempDirSelectionWidget : public QGroupBox
 
  private slots:
   void slotUpdateFreeTempSpace();
-  void slotFreeTempSpace(const QString&, unsigned long, unsigned long, unsigned long);
   void slotTempDirButtonPressed( KURLRequester* );
 
  private:
@@ -76,7 +75,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
   QLabel* m_labelFreeSpace;
   KURLRequester* m_editDirectory;
 
-  unsigned long m_freeTempSpace;
+  mutable unsigned long m_freeTempSpace;
   unsigned long m_requestedSize;
 
   int m_mode;
