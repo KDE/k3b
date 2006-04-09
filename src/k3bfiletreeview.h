@@ -62,7 +62,7 @@ class K3bDeviceBranch : public KFileTreeBranch
   void mount();
   void unmount();
 
-//  bool populate( const KURL& url, KFileTreeViewItem* v );
+  bool populate( const KURL& url,  KFileTreeViewItem *currItem );
 
  private slots:
   void slotMountFinished( KIO::Job* );

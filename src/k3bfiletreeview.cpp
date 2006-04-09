@@ -63,6 +63,19 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 }
 
 
+
+bool K3bDeviceBranch::populate( const KURL& url,  KFileTreeViewItem *currItem )
+{
+  // make sure we do not try to populate in case we are not mounted
+  if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() )
+    return KFileTreeBranch::populate( url, currItem );
+  else
+    populateFinished( currItem );
+
+  return true;
+}
+
+
 void K3bDeviceBranch::showBlockDeviceName( bool b )
 {
   if( b )
