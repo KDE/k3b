@@ -64,6 +64,8 @@ class K3bDeviceBranch : public KFileTreeBranch
 
   void setCurrent( bool );
 
+  bool populate( const KURL& url,  KFileTreeViewItem *currItem );
+
  private slots:
   void slotMountFinished( KIO::Job* );
   void slotUnmountFinished( KIO::Job* );
