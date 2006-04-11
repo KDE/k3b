@@ -48,6 +48,8 @@ class K3bDvdJob : public K3bBurnJob
   K3bDoc* doc() const;
   K3bDevice::Device* writer() const;
 
+  virtual bool hasBeenCanceled() const;
+
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
 

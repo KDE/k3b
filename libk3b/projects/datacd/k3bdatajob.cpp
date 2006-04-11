@@ -134,6 +134,17 @@ void K3bDataJob::start()
 
   emit newTask( i18n("Preparing data") );
 
+  d->doc->prepareFilenames();
+  if( d->doc->needToCutFilenames() ) {
+    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
+			     "of the Joliet extensions. Continue anyway?")
+			.arg( d->doc->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
+      emit canceled();
+      emit finished( false );
+      return;
+    }
+  }
+  
   if( d->usedMultiSessionMode == K3bDataDoc::AUTO && !d->doc->onlyCreateImages() )
     determineMultiSessionMode();
   else
@@ -883,6 +894,12 @@ QString K3bDataJob::jobDetails() const
   else
     return i18n("ISO9660 Filesystem (Size: %1)")
       .arg(KIO::convertSize( d->doc->size() ));
+}
+
+
+bool K3bDataJob::hasBeenCanceled() const
+{
+  return d->canceled;
 }
 
 #include "k3bdatajob.moc"

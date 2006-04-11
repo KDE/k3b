@@ -8,6 +8,7 @@
  * Fixed the "invalid url" bug.
  * Use SG IO for scsi commands with newer linux kernels. This should fix problems with scsi device
    detection.
+ * Warn about shortened filenames due to Joliet restrictions before starting the burning process.
 
 0.12.14
 =======
