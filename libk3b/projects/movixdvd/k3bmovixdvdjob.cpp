@@ -102,7 +102,7 @@ void K3bMovixDvdJob::slotDvdJobFinished( bool success )
 {
   m_movixDocPreparer->removeMovixStructures();
 
-  if( m_canceled )
+  if( m_canceled || m_dvdJob->hasBeenCanceled() )
     emit canceled();
 
   jobFinished( success );

@@ -103,7 +103,7 @@ void K3bMovixJob::slotDataJobFinished( bool success )
 {
   m_movixDocPreparer->removeMovixStructures();
 
-  if( m_canceled )
+  if( m_canceled || m_dataJob->hasBeenCanceled() )
     emit canceled();
 
   jobFinished( success );

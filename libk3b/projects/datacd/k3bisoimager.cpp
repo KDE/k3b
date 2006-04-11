@@ -426,19 +426,6 @@ void K3bIsoImager::start()
     }
   }
 
-
-  // FIXME: move this out of here so the data jobs won't start the burning before this question
-  if( m_doc->needToCutFilenames() ) {
-    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
-			     "of the Joliet extensions. Continue anyway?")
-			.arg( m_doc->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
-      emit canceled();
-      jobFinished( false );
-      cleanup();
-      return;
-    }
-  }
-
   kdDebug() << "***** mkisofs parameters:\n";
   const QValueList<QCString>& args = m_process->args();
   QString s;

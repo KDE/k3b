@@ -135,6 +135,17 @@ void K3bDataJob::start()
 
   emit newTask( i18n("Preparing data") );
 
+  d->doc->prepareFilenames();
+  if( d->doc->needToCutFilenames() ) {
+    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
+			     "of the Joliet extensions. Continue anyway?")
+			.arg( d->doc->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
+      emit canceled();
+      jobFinished( false );
+      return;
+    }
+  }
+
   if( d->usedMultiSessionMode == K3bDataDoc::AUTO && !d->doc->onlyCreateImages() )
     determineMultiSessionMode();
   else
@@ -888,6 +899,12 @@ void K3bDataJob::cleanup()
     delete d->tocFile;
     d->tocFile = 0;
   }
+}
+
+
+bool K3bDataJob::hasBeenCanceled() const
+{
+  return d->canceled;
 }
 
 #include "k3bdatajob.moc"

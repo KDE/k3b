@@ -141,7 +141,18 @@ void K3bMixedJob::start()
   m_doc->audioDoc()->setHideFirstTrack( false );   // unsupported
   m_doc->dataDoc()->setBurner( m_doc->burner() );  // so the isoImager can read ms data
 
-  emit newTask( i18n("Preparing write process") );
+  emit newTask( i18n("Preparing data") );
+
+  m_doc->dataDoc()->prepareFilenames();
+  if( m_doc->dataDoc()->needToCutFilenames() ) {
+    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
+			     "of the Joliet extensions. Continue anyway?")
+			.arg( m_doc->dataDoc()->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
+      emit canceled();
+      jobFinished( false );
+      return;
+    }
+  }
 
   determineWritingMode();
 
