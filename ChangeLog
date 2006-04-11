@@ -1,6 +1,6 @@
 0.12.15
 =======
- * Write album id3 tag with external lame encoder
+ * Write more metadata tags in the default setup of the external encoder plugin.
  * Fixed on-the-fly Video DVD creation
  * Fixed data project verification in case filenames had to be shortened due to Joliet limitations.
  * Use -dvd-compat parameter to close DVDs in on-the-fly mode.

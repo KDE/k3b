@@ -96,6 +96,9 @@ static QValueList<K3bExternalEncoder::Command> readCommands()
       "--bps=16 "
       "-T ARTIST=%a "
       "-T TITLE=%t "
+      "-T TRACKNUMBER=%n "
+      "-T DATE=%y "
+      "-T ALBUM=%m "
       "-";
 
     cl.append( flacCmd );
