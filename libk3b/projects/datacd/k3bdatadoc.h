@@ -18,6 +18,7 @@
 #define K3BDATADOC_H
 
 #include <k3bdoc.h>
+#include <k3bdataitem.h>
 
 #include "k3bisooptions.h"
 
@@ -28,6 +29,7 @@
 #include <kurl.h>
 #include <kio/global.h>
 #include "k3b_export.h"
+
 class K3bDataItem;
 class K3bRootItem;
 class K3bDirItem;
@@ -153,6 +155,8 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   bool needToCutFilenames() const { return m_needToCutFilenames; }
 
+  const QValueList<K3bDataItem*>& needToCutFilenameItems() const { return m_needToCutFilenameItems; }
+
   /**
    * Imports a session into the project. This will create K3bSessionImportItems
    * and properly set the imported session size.
@@ -264,6 +268,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   bool m_bExistingItemsIgnoreAll;
 
   bool m_needToCutFilenames;
+  QValueList<K3bDataItem*> m_needToCutFilenameItems;
 
   friend class K3bMixedDoc;
   friend class K3bDirItem;

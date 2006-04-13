@@ -51,6 +51,7 @@
 #include <ktempfile.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>
+#include <kstringhandler.h>
 
 
 class K3bMixedJob::Private
@@ -145,9 +146,25 @@ void K3bMixedJob::start()
 
   m_doc->dataDoc()->prepareFilenames();
   if( m_doc->dataDoc()->needToCutFilenames() ) {
-    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
-			     "of the Joliet extensions. Continue anyway?")
-			.arg( m_doc->dataDoc()->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
+    QString listOfRenamedItems;
+    int maxlines = 10;
+    QValueList<K3bDataItem*>::const_iterator it;
+    for( it = m_doc->dataDoc()->needToCutFilenameItems().begin(); 
+	 maxlines > 0 && it != m_doc->dataDoc()->needToCutFilenameItems().end();
+	 ++it, --maxlines ) {
+      K3bDataItem* item = *it;
+      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
+	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
+	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
+      listOfRenamedItems += "<br>";
+    }
+    if( it != m_doc->dataDoc()->needToCutFilenameItems().end() )
+      listOfRenamedItems += "...";
+
+    if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
+				     "of the Joliet extensions. Continue anyway?")
+			.arg( m_doc->dataDoc()->isoOptions().jolietLong() ? 103 : 64 )
+			+ "<p>" + listOfRenamedItems ) ) {
       emit canceled();
       jobFinished( false );
       return;

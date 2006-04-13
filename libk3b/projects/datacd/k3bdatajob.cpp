@@ -47,6 +47,7 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <kdebug.h>
+#include <kstringhandler.h>
 
 
 
@@ -135,11 +136,31 @@ void K3bDataJob::start()
 
   emit newTask( i18n("Preparing data") );
 
+  // FIXME: the following is also used in K3bMixedJob
+  //        Convert the calculateSize slot in K3bIsoImager into an init() slot which
+  //        is always called before start and does this (and also the size calculation)
+  //
   d->doc->prepareFilenames();
   if( d->doc->needToCutFilenames() ) {
-    if( !questionYesNo( i18n("Some filenames need to be shortened due to the %1 char restriction "
-			     "of the Joliet extensions. Continue anyway?")
-			.arg( d->doc->isoOptions().jolietLong() ? 103 : 64 ) ) ) {
+    QString listOfRenamedItems;
+    int maxlines = 10;
+    QValueList<K3bDataItem*>::const_iterator it;
+    for( it = d->doc->needToCutFilenameItems().begin(); 
+	 maxlines > 0 && it != d->doc->needToCutFilenameItems().end();
+	 ++it, --maxlines ) {
+      K3bDataItem* item = *it;
+      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
+	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
+	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
+      listOfRenamedItems += "<br>";
+    }
+    if( it != d->doc->needToCutFilenameItems().end() )
+      listOfRenamedItems += "...";
+
+    if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
+				     "of the Joliet extensions. Continue anyway?")
+			.arg( d->doc->isoOptions().jolietLong() ? 103 : 64 )
+			+ "<p>" + listOfRenamedItems ) ) {
       emit canceled();
       jobFinished( false );
       return;

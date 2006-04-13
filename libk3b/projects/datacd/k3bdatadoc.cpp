@@ -1000,6 +1000,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
 void K3bDataDoc::prepareFilenames()
 {
   m_needToCutFilenames = false;
+  m_needToCutFilenameItems.clear();
 
   //
   // if joliet is used cut the names and rename if neccessary
@@ -1011,18 +1012,14 @@ void K3bDataDoc::prepareFilenames()
   //
 
   K3bDataItem* item = root();
+  int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
   while( (item = item->nextSibling()) ) {
     item->setWrittenName( treatWhitespace( item->k3bName() ) );
     
-    if( isoOptions().createJoliet() ) {
-      if( isoOptions().jolietLong() && item->writtenName().length() > 103 ) {
-	m_needToCutFilenames = true;
-	item->setWrittenName( K3b::cutFilename( item->writtenName(), 103 ) );
-      }
-      else if( !isoOptions().jolietLong() && item->writtenName().length() > 64 ) {
-	m_needToCutFilenames = true;
-	item->setWrittenName( K3b::cutFilename( item->writtenName(), 64 ) );
-      }
+    if( isoOptions().createJoliet() && item->writtenName().length() > maxlen ) {
+      m_needToCutFilenames = true;
+      item->setWrittenName( K3b::cutFilename( item->writtenName(), maxlen ) );
+      m_needToCutFilenameItems.append( item );
     }
 
     // TODO: check the Joliet charset
