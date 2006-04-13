@@ -312,7 +312,7 @@ void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sour
   
   // TODO: should we also merge the indices?
 
-  // now we can savely delete the track we merged
+  // now we can safely delete the track we merged
   delete trackToMerge;
 
   kdDebug() << "(K3bAudioTrack::merge) finished"  << endl;

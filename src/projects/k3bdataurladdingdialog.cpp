@@ -341,7 +341,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 					    "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
 					    "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
 					    "K3b project cannot be resolved."
-					    "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may savely "
+					    "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may safely "
 					    "ignore this warning and choose to add the link to the project.</b>")
 				       .arg(absFilePath)
 				       .arg(resolved ),
