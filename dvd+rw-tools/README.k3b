@@ -1,9 +1,0 @@
-This is a fork of Andy Polyakov's dvd+rw-tools based on an
-unreleased snapshot he sent me. Since he did not answer
-my emails for many month I included this fork into the K3b 
-sources to maintain an updated version of the dvd+rw-tools.
-
-See growisofs.c for a ChangeLog.
-
-
-Sebastian Trueg
