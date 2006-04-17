@@ -93,6 +93,7 @@ void K3bFileView::setupGUI()
   // create filter selection combobox
   m_toolBox->addSpacing();
   m_toolBox->addLabel( i18n("Filter:") );
+  m_toolBox->addSpacing();
   m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
   m_toolBox->addWidget( m_filterWidget );
   m_toolBox->addStretch();
