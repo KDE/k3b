@@ -1,3 +1,7 @@
+0.12.16
+=======
+ * FreeBSD Compile fixes (thanks to Heiner Eichmann)
+
 0.12.15
 =======
  * Write more metadata tags in the default setup of the external encoder plugin.
