@@ -68,8 +68,8 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   // we determine the size here to avoid problems with removed or renamed files
   // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
   // instead the size of the link.
-  struct stat64 statBuf;
-  if( ::lstat64( QFile::encodeName(filePath), &statBuf ) ) {
+  k3b_struct_stat statBuf;
+  if( k3b_stat( QFile::encodeName(filePath), &statBuf ) ) {
     m_size = K3b::filesize( filePath );
     kdError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
     m_id.inode = 0;
@@ -92,8 +92,8 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   m_sizeFollowed = m_size;
 
   if( isSymLink() ) {
-    struct stat64 statBuf;
-    if( ::stat64( QFile::encodeName(filePath), &statBuf ) == 0 ) {
+    k3b_struct_stat statBuf;
+    if( k3b_stat( QFile::encodeName(filePath), &statBuf ) == 0 ) {
       m_idFollowed.inode = statBuf.st_ino;
       m_idFollowed.device = statBuf.st_dev;
 
