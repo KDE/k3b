@@ -100,6 +100,7 @@ public:
 	if( !m_libcss->crackAllKeys() ) {
 	  m_libcss->close();
 	  emitInfoMessage( i18n("Failed to retrieve all CSS keys."), K3bJob::ERROR );
+	  emitInfoMessage( i18n("Video DVD decryption failed."), K3bJob::ERROR );
 	  emitFinished(false);
 	  return;
 	}

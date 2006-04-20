@@ -95,6 +95,9 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * The size of the resulting transcoded video.
    *
    * The default is to not resize the video at all (width=height=0)
+   *
+   * FIXME: introduce an option which allows to specify the size without the
+   *        clipping.
    */
   void setSize( int width, int height );
 
