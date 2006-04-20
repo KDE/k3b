@@ -27,6 +27,7 @@ K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo()
     audioStream(0),
     width(0),
     height(0),
+    videoBitrate(0),
     clipTop(0),
     clipLeft(0),
     clipBottom(0),
@@ -40,6 +41,7 @@ K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo( int _title,
 						   const QString& fn,
 						   int _width,
 						   int _height,
+						   int _videoBitrate,
 						   int _clipTop,
 						   int _clipLeft,
 						   int _clipBottom,
@@ -49,6 +51,7 @@ K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo( int _title,
     filename(fn),
     width(_width),
     height(_height),
+    videoBitrate(_videoBitrate),
     clipTop(_clipTop),
     clipLeft(_clipLeft),
     clipBottom(_clipBottom),
@@ -68,6 +71,8 @@ public:
   bool autoClipping;
 
   bool canceled;
+
+  int videoBitrate;
 };
 
 
@@ -129,6 +134,8 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
     jobFinished( false );
   }
   else if( success ) {
+    emit infoMessage( i18n("Successfully ripped title %1").arg(m_titleRipInfos[d->currentTitleInfoIndex].title), SUCCESS );
+
     ++d->currentTitleInfoIndex ;
     if( d->currentTitleInfoIndex < m_titleRipInfos.count() ) {
       if( d->autoClipping )
@@ -153,6 +160,12 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
     jobFinished( false );
   }
   else if( success ) {
+    emit infoMessage( i18n("Determined clipping values for title %1").arg(m_titleRipInfos[d->currentTitleInfoIndex].title), SUCCESS );
+    emit infoMessage( i18n("Top: %1, Bottom: %2")
+		      .arg(m_detectClippingJob->clippingTop()).arg(m_detectClippingJob->clippingBottom()), INFO );
+    emit infoMessage( i18n("Left: %1, Right: %2")
+		      .arg(m_detectClippingJob->clippingLeft()).arg(m_detectClippingJob->clippingRight()), INFO );
+
     m_titleRipInfos[d->currentTitleInfoIndex].clipTop = m_detectClippingJob->clippingTop();
     m_titleRipInfos[d->currentTitleInfoIndex].clipLeft = m_detectClippingJob->clippingLeft();
     m_titleRipInfos[d->currentTitleInfoIndex].clipBottom = m_detectClippingJob->clippingBottom();
@@ -183,6 +196,11 @@ void K3bVideoDVDRippingJob::startTranscoding( int ripInfoIndex )
 				 m_titleRipInfos[ripInfoIndex].clipRight );
   m_transcodingJob->setSize( m_titleRipInfos[ripInfoIndex].width, m_titleRipInfos[ripInfoIndex].height );
   m_transcodingJob->setFilename( m_titleRipInfos[ripInfoIndex].filename );
+
+  if( m_titleRipInfos[ripInfoIndex].videoBitrate > 0 )
+    m_transcodingJob->setVideoBitrate( m_titleRipInfos[ripInfoIndex].videoBitrate );
+  else
+    m_transcodingJob->setVideoBitrate( d->videoBitrate );
 
   m_transcodingJob->start();
 }
@@ -263,7 +281,7 @@ void K3bVideoDVDRippingJob::setVideoCodec( int codec )
 
 void K3bVideoDVDRippingJob::setVideoBitrate( int bitrate )
 {
-  m_transcodingJob->setVideoBitrate( bitrate );
+  d->videoBitrate = bitrate;
 }
 
 

@@ -24,6 +24,8 @@
 
 class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
 {
+  Q_OBJECT
+
  public:
   K3bVideoDVDRippingWidget( QWidget* parent );
   ~K3bVideoDVDRippingWidget();
@@ -35,6 +37,9 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
   void setSelectedVideoCodec( int codec );
   void setSelectedAudioCodec( int codec );
   void setSelectedAudioBitrate( int bitrate );
+
+ signals:
+  void changed();
 };
 
 #endif

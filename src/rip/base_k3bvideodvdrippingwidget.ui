@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bVideoDVDRippingWidget</class>
 <author>Seastian Trueg</author>
 <widget class="QWidget">
@@ -10,8 +10,11 @@
             <x>0</x>
             <y>0</y>
             <width>738</width>
-            <height>633</height>
+            <height>534</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -50,249 +53,296 @@
                 <attribute name="title">
                     <string>Setti&amp;ngs</string>
                 </attribute>
-                <hbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget">
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
-                            <cstring>layout6</cstring>
+                            <cstring>groupBox1</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Filetype</string>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QGroupBox">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>groupBox1</cstring>
+                                    <cstring>layout1</cstring>
                                 </property>
-                                <property name="title">
-                                    <string>Filetype</string>
-                                </property>
-                                <vbox>
+                                <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLayoutWidget">
+                                    <widget class="QLabel">
                                         <property name="name">
-                                            <cstring>layout1</cstring>
+                                            <cstring>textLabel1</cstring>
                                         </property>
-                                        <hbox>
-                                            <property name="name">
-                                                <cstring>unnamed</cstring>
-                                            </property>
-                                            <widget class="QLabel">
-                                                <property name="name">
-                                                    <cstring>textLabel1</cstring>
-                                                </property>
-                                                <property name="text">
-                                                    <string>Video Codec:</string>
-                                                </property>
-                                            </widget>
-                                            <widget class="QComboBox">
-                                                <property name="name">
-                                                    <cstring>m_comboVideoCodec</cstring>
-                                                </property>
-                                            </widget>
-                                        </hbox>
+                                        <property name="text">
+                                            <string>Video Codec:</string>
+                                        </property>
                                     </widget>
-                                    <widget class="QLayoutWidget">
+                                    <widget class="QComboBox">
                                         <property name="name">
-                                            <cstring>layout2</cstring>
+                                            <cstring>m_comboVideoCodec</cstring>
                                         </property>
-                                        <hbox>
-                                            <property name="name">
-                                                <cstring>unnamed</cstring>
-                                            </property>
-                                            <widget class="QLabel">
-                                                <property name="name">
-                                                    <cstring>textLabel2</cstring>
-                                                </property>
-                                                <property name="text">
-                                                    <string>Audio Codec:</string>
-                                                </property>
-                                            </widget>
-                                            <widget class="QComboBox">
-                                                <property name="name">
-                                                    <cstring>m_comboAudioCodec</cstring>
-                                                </property>
-                                            </widget>
-                                        </hbox>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>1</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
                                     </widget>
-                                </vbox>
+                                </hbox>
                             </widget>
-                            <widget class="QGroupBox">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>groupBox1_2</cstring>
+                                    <cstring>layout2</cstring>
                                 </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>1</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="title">
-                                    <string>Destination Base Directory</string>
-                                </property>
-                                <grid>
+                                <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLabel" row="1" column="0">
+                                    <widget class="QLabel">
                                         <property name="name">
-                                            <cstring>textLabel1_2</cstring>
+                                            <cstring>textLabel2</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Free space in directory:</string>
+                                            <string>Audio Codec:</string>
                                         </property>
                                     </widget>
-                                    <widget class="KURLRequester" row="0" column="0" rowspan="1" colspan="2">
+                                    <widget class="QComboBox">
                                         <property name="name">
-                                            <cstring>m_editBaseDir</cstring>
+                                            <cstring>m_comboAudioCodec</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>1</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
                                         </property>
                                     </widget>
-                                    <widget class="QLabel" row="1" column="1">
-                                        <property name="name">
-                                            <cstring>m_labelFreeSpace</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>-</string>
-                                        </property>
-                                        <property name="alignment">
-                                            <set>AlignVCenter|AlignRight</set>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel" row="2" column="0">
-                                        <property name="name">
-                                            <cstring>textLabel1_2_2</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Space needed:</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel" row="2" column="1">
-                                        <property name="name">
-                                            <cstring>m_labelNeededSpace</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>-</string>
-                                        </property>
-                                        <property name="alignment">
-                                            <set>AlignVCenter|AlignRight</set>
-                                        </property>
-                                    </widget>
-                                </grid>
+                                </hbox>
                             </widget>
                         </vbox>
                     </widget>
-                    <widget class="QLayoutWidget">
+                    <widget class="QGroupBox" row="0" column="1">
                         <property name="name">
-                            <cstring>layout5</cstring>
+                            <cstring>groupBox6</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Video Quality</string>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QGroupBox">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>groupBox6</cstring>
+                                    <cstring>layout20</cstring>
                                 </property>
-                                <property name="title">
-                                    <string>Manual Video Quality</string>
-                                </property>
-                                <property name="checkable">
-                                    <bool>true</bool>
-                                </property>
-                                <vbox>
+                                <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLayoutWidget">
+                                    <widget class="QLabel">
                                         <property name="name">
-                                            <cstring>layout3</cstring>
+                                            <cstring>textLabel2_2</cstring>
                                         </property>
-                                        <hbox>
-                                            <property name="name">
-                                                <cstring>unnamed</cstring>
-                                            </property>
-                                            <widget class="QLabel">
-                                                <property name="name">
-                                                    <cstring>textLabel3</cstring>
-                                                </property>
-                                                <property name="text">
-                                                    <string>Video Bitrate:</string>
-                                                </property>
-                                            </widget>
-                                            <widget class="QSpinBox">
-                                                <property name="name">
-                                                    <cstring>m_spinVideoBitrate</cstring>
-                                                </property>
-                                                <property name="suffix">
-                                                    <string> kbps</string>
-                                                </property>
-                                                <property name="maxValue">
-                                                    <number>10000</number>
-                                                </property>
-                                                <property name="value">
-                                                    <number>1800</number>
-                                                </property>
-                                            </widget>
-                                        </hbox>
+                                        <property name="text">
+                                            <string>Video Size:</string>
+                                        </property>
                                     </widget>
-                                </vbox>
+                                    <widget class="QComboBox">
+                                        <property name="name">
+                                            <cstring>m_comboVideoSize</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>1</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
-                            <widget class="QGroupBox">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>groupBox4</cstring>
+                                    <cstring>layout21</cstring>
                                 </property>
-                                <property name="title">
-                                    <string>Audio Quality</string>
-                                </property>
-                                <vbox>
+                                <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
                                     <widget class="QCheckBox">
                                         <property name="name">
-                                            <cstring>m_checkAudioVBR</cstring>
+                                            <cstring>m_checkManualVideoBitrate</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>Variable &amp;Bitrate</string>
+                                            <string>Manual &amp;Video Bitrate:</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+V</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
                                         </property>
                                     </widget>
-                                    <widget class="QLayoutWidget">
+                                    <widget class="QSpinBox">
                                         <property name="name">
-                                            <cstring>layout4</cstring>
+                                            <cstring>m_spinVideoBitrate</cstring>
                                         </property>
-                                        <hbox>
-                                            <property name="name">
-                                                <cstring>unnamed</cstring>
-                                            </property>
-                                            <widget class="QLabel">
-                                                <property name="name">
-                                                    <cstring>textLabel1_3</cstring>
-                                                </property>
-                                                <property name="text">
-                                                    <string>Audio Bitrate:</string>
-                                                </property>
-                                            </widget>
-                                            <widget class="QComboBox">
-                                                <property name="name">
-                                                    <cstring>m_comboAudioBitrate</cstring>
-                                                </property>
-                                                <property name="duplicatesEnabled">
-                                                    <bool>false</bool>
-                                                </property>
-                                            </widget>
-                                        </hbox>
+                                        <property name="enabled">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>1</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="suffix">
+                                            <string> kbps</string>
+                                        </property>
+                                        <property name="maxValue">
+                                            <number>10000</number>
+                                        </property>
+                                        <property name="value">
+                                            <number>1800</number>
+                                        </property>
                                     </widget>
-                                </vbox>
+                                </hbox>
                             </widget>
                         </vbox>
                     </widget>
-                </hbox>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBox1_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>1</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Destination Base Directory</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Free space in directory:</string>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_editBaseDir</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_labelFreeSpace</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>-</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Space needed:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="1">
+                                <property name="name">
+                                    <cstring>m_labelNeededSpace</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>-</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="1">
+                        <property name="name">
+                            <cstring>groupBox4</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Audio Quality</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_checkAudioVBR</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Variable &amp;Bitrate</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+B</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout4</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Audio Bitrate:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox">
+                                        <property name="name">
+                                            <cstring>m_comboAudioBitrate</cstring>
+                                        </property>
+                                        <property name="duplicatesEnabled">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -495,13 +545,27 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
+<connections>
+    <connection>
+        <sender>m_checkManualVideoBitrate</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_spinVideoBitrate</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_checkBlankReplace</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_editBlankReplace</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
     <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kurllabel.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

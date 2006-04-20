@@ -21,6 +21,7 @@
 #include <klocale.h>
 
 #include <qcombobox.h>
+#include <qspinbox.h>
 
 
 // FIXME: these are mp3 bitrates. Do they also apply to AC3?
@@ -51,6 +52,14 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
   m_titleView->addColumn( i18n("Video Size") );
   m_titleView->addColumn( i18n("File Size") );
   m_titleView->addColumn( i18n("Filename") );
+  m_titleView->setSorting( -1 );
+
+  //
+  // Example filename pattern
+  //
+  m_comboFilenamePattern->insertItem( QString( "%b - %1 %t (%n %a %c)" ).arg(i18n("Title") ) );
+  m_comboFilenamePattern->insertItem( QString( "%{volumeid} (%{title})" ) );
+
 
   //
   // Add the Audio bitrates
@@ -68,6 +77,11 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
   for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i ) {
     m_comboAudioCodec->insertItem( K3bVideoDVDTitleTranscodingJob::audioCodecString( i ) );
   }
+
+  connect( m_comboAudioBitrate, SIGNAL(textChanged(const QString&)),
+	   this, SIGNAL(changed()) );
+  connect( m_spinVideoBitrate, SIGNAL(valueChanged(int)),
+	   this, SIGNAL(changed()) );
 }
 
 

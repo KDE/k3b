@@ -43,15 +43,17 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
     PATTERN_TITLE_NUMBER         = 't',
     PATTERN_VOLUME_ID            = 'v',
     PATTERN_BEAUTIFIED_VOLUME_ID = 'b',
-    PATTERN_LANGUAGE_CODE        = 'c',
-    PATTERN_LANGUAGE_NAME        = 'l',
+    PATTERN_LANGUAGE_CODE        = 'l',
+    PATTERN_LANGUAGE_NAME        = 'n',
     PATTERN_AUDIO_FORMAT         = 'a',
+    PATTERN_AUDIO_CHANNELS       = 'c',
     PATTERN_VIDEO_SIZE           = 'r'
   };
 
  private slots:
   void slotStartClicked();
   void slotUpdateFilenames();
+  void slotUpdateFilesizes();
 
  private:
   void populateTitleView( const QValueList<int>& titles );

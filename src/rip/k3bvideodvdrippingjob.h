@@ -45,6 +45,7 @@ class K3bVideoDVDRippingJob : public K3bJob
 		  const QString& fn = QString::null,
 		  int width = 0,  // 0 -> no resize
 		  int height = 0, // 0 -> no resize
+		  int videoBitrate = 0, // 0 -> use default from job settings
 		  int clipTop = 0,
 		  int clipLeft = 0,
 		  int clipBottom = 0,
@@ -54,6 +55,7 @@ class K3bVideoDVDRippingJob : public K3bJob
     QString filename;
     int width;
     int height;
+    int videoBitrate;
     int clipTop;
     int clipLeft;
     int clipBottom;
