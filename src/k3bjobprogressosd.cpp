@@ -211,7 +211,7 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
   }
   else if( e->button() == RightButton ) {
     KPopupMenu m;
-    if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->pos() ) )
+    if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->globalPos() ) )
       hide();
   }
 }
