@@ -236,7 +236,7 @@ int K3bDevice::DeviceManager::scanBus()
 
   //
   // we cannot trust HAL yet. At least on my system
-  // it is not able to detect USB nd Firewire devices
+  // it is not able to detect USB and Firewire devices
   // properly. We can though.
   //
   //  if( !d->hal.isOpen() ) {
@@ -256,70 +256,75 @@ int K3bDevice::DeviceManager::scanBus()
 
 void K3bDevice::DeviceManager::LinuxDeviceScan()
 {
+#ifdef HAVE_RESMGR
+  // 
+  // Resmgr device scan
+  //
+  char** resmgrDevices = rsm_list_devices( 0 );
+  if( resmgrDevices ) {
+    for( int i = 0; resmgrDevices[i]; ++i ) {
+      addDevice( resmgrDevices[i] );
+      free( resmgrDevices[i] );
+    }
+
+    free( resmgrDevices );
+  }
+#endif
+
   QFile info("/proc/sys/dev/cdrom/info");
   QString line,devstring;
-  info.open(IO_ReadOnly);
-  info.readLine(line,80); // CD-ROM information, Id: cdrom.c 3.12 2000/10/18
-  info.readLine(line,80); //
+  if( info.open(IO_ReadOnly) ) {
+    info.readLine(line,80); // CD-ROM information, Id: cdrom.c 3.12 2000/10/18
+    info.readLine(line,80); //
 
-  while (info.readLine(line,80) > 0)
-  {
-    if (line.contains("drive name") > 0)
-    {
-      int i = 1;
-      QString dev;
-      QRegExp re("[\t\n:]+");
-      while ( !(dev = line.section(re, i, i)).isEmpty() )
-      {
-        if( addDevice(QString("/dev/%1").arg(dev)) ) {
-          devstring += dev + "|";
-        }
-// according to the LINUX ALLOCATED DEVICES document (http://www.lanana.org/docs/device-list/),
-// the official device names for SCSI-CDROM's (block major 11) are /dev/sr*, the
-// prefix /dev/scd instead of /dev/sr has been used as well, and might make more sense.
-// Since there should be one and only one device node (and maybe several symbolic links) for
-// each physical device the next line should be better
-//      else if ( dev.startsWith("sr") )
-        if ( dev.startsWith("sr") )
-          if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) ) {
-            devstring += dev + "|";
-        }
-        ++i;
+    QRegExp re("[\t\n:]+");
+    while( info.readLine( line, 80 ) > 0 ) {
+      if( line.contains("drive name") > 0 ) {
+	int i = 1;
+	QString dev;
+	while( !(dev = line.section(re, i, i)).isEmpty() ) {
+	  if( addDevice( QString("/dev/%1").arg(dev) ) ) {
+	    devstring += dev + "|";
+	  }
+	  // according to the LINUX ALLOCATED DEVICES document (http://www.lanana.org/docs/device-list/),
+	  // the official device names for SCSI-CDROM's (block major 11) are /dev/sr*, the
+	  // prefix /dev/scd instead of /dev/sr has been used as well, and might make more sense.
+	  // Since there should be one and only one device node (and maybe several symbolic links) for
+	  // each physical device the next line should be better
+	  //      else if ( dev.startsWith("sr") )
+	  if ( dev.startsWith("sr") ) {
+	    if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) )
+	      devstring += dev + "|";
+	  }
+	  ++i;
+	}
       }
+      break;
     }
-    break;
+    info.close();
   }
-  info.close();
-
-#ifdef HAVE_RESMGR
-  int havenormaldevs = d->allDevices.count();
-#endif
-
-  // try to find symlinks
-  QString cmd = QString("find /dev -type l -printf \"%p\t%l\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder' | cut -f1").arg(devstring);
-  FILE *fd = popen(QFile::encodeName(cmd),"r");
-  if (fd) {
-     QFile links;
-     QString device;
-     links.open(IO_ReadOnly,fd);
-     while ( links.readLine(device,80) > 0) {
-       device = device.stripWhiteSpace();
-       K3bDevice::Device *d = findDevice(resolveSymLink(device));
-       if (d) {
-         d->addDeviceNode(device);
-         kdDebug() << "(K3bDevice::DeviceManager) Link: " << device << " -> " << d->devicename() << endl;
-       }
-#ifdef HAVE_RESMGR
-       // if we had no initial devices, add the symlinked devices.
-       if (!d) {
-         if (!havenormaldevs)
-           addDevice(device);
-       }
-#endif
-     }
+  else {
+    kdError() << "(K3bDevice::DeviceManager) could not open /proc/sys/dev/cdrom/info" << endl;
   }
-  pclose(fd);
 
+//   // try to find symlinks (UGLY!!!!)
+//   // FIXME: I really don't like popen here
+//   QString cmd = QString("find /dev -type l -printf \"%p\t%l\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder' | cut -f1").arg(devstring);
+//   FILE *fd = popen( QFile::encodeName(cmd),"r" );
+//   if( fd ) {
+//     QFile links;
+//     QString device;
+//     links.open(IO_ReadOnly,fd);
+//     while ( links.readLine(device,80) > 0) {
+//       device = device.stripWhiteSpace();
+//       K3bDevice::Device *d = findDevice(resolveSymLink(device));
+//       if (d) {
+// 	d->addDeviceNode(device);
+// 	kdDebug() << "(K3bDevice::DeviceManager) Link: " << device << " -> " << d->devicename() << endl;
+//       }
+//     }
+//     pclose(fd);
+//   }
 
   //
   // Scan the generic devices if we have scsi devices
@@ -656,7 +661,7 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
     cmd[5] = 0;
 
     if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-      kdError() << "(K3bDevice::Device) Unable to do inquiry." << endl;
+      kdDebug() << "(K3bDevice::Device) Unable to do inquiry. " << devicename << " is not a cdrom device" << endl;
     }
     else if( (inq->p_device_type&0x1f) != 0x5 ) {
       kdDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
