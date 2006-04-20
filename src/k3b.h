@@ -121,14 +121,14 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotWriteCdImage( const KURL& url );
   void slotWriteDvdIsoImage();
   void slotWriteDvdIsoImage( const KURL& url );
-  // encoding dialog for transcode encoding utility
-  void slotDivxEncoding();
   void cdCopy( K3bDevice::Device* );
   void slotCdCopy();
   void dvdCopy( K3bDevice::Device* );
   void slotDvdCopy();
   void cddaRip( K3bDevice::Device* );
   void slotCddaRip();
+  void videoDvdRip( K3bDevice::Device* );
+  void slotVideoDvdRip();
   void slotK3bSetup();
 
   void slotErrorMessage(const QString&);
@@ -288,9 +288,9 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionSettingsConfigure;
   KAction* actionSettingsK3bSetup;
   KAction* actionToolsBlankCdrw;
-  KAction* actionToolsDivxEncoding;
   KAction* actionToolsWriteCdImage;
   KAction* actionToolsCddaRip;
+  KAction* actionToolsVideoDvdRip;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewStatusBar;

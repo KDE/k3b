@@ -1,0 +1,9 @@
+[Desktop Entry]
+ServiceTypes=media/dvdvideo
+Actions=K3bRip;
+X-KDE-Priority=TopLevel
+
+[Desktop Action K3bRip]
+Name=Rip Video DVD Titles with K3b
+Exec=k3b --videodvdrip %u
+Icon=k3b

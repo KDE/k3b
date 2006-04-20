@@ -69,7 +69,8 @@ class K3bMedium
     CONTENT_AUDIO = 0x1,
     CONTENT_DATA = 0x2,
     CONTENT_VIDEO_CD = 0x4,
-    CONTENT_VIDEO_DVD = 0x8
+    CONTENT_VIDEO_DVD = 0x8,
+    CONTENT_ALL = 0xFF
   };
 
   /**

@@ -17,7 +17,9 @@
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
 #include <kdialogbase.h>
+#include <k3bmedium.h>
 
+class K3bMediaSelectionComboBox;
 namespace K3bDevice {
   class Device;
 }
@@ -47,12 +49,19 @@ class K3bMediaSelectionDialog : public KDialogBase
   void setWantedMediumState( int state );
 
   /**
+   * \see K3bMediaSelectionComboBox::setWantedMediumContent()
+   */
+  void setWantedMediumContent( int state );
+
+  /**
    * Although the dialog is used to select a medium the result is the
    * device containing that medium.
    */
   K3bDevice::Device* selectedDevice() const;
 
   /**
+   * \deprecated
+   *
    * Select a medium.
    * If only one medium of the wanted type is found the method returns immideately
    * without showing the dialog.
@@ -62,32 +71,17 @@ class K3bMediaSelectionDialog : public KDialogBase
 					  const QString& text = QString::null,
 					  bool* canceled = 0 );
 
-  // FIXME: make K3bDevice::ContentType bitwise combinable and rename it
-  //        to TocType
-  enum CDTocType {
-    TOC_AUDIO = 0x1,
-    TOC_MIXED = 0x2,
-    TOC_DATA = 0x4
-  };
-
-  /**
-   * Use this to select a specific non-empty CD type like an audio CD.
-   *
-   * If only one medium of the wanted type is found the method returns immideately
-   * without showing the dialog.
-   *
-   * \param bitwise combination of CDTocType
-   */
-  static K3bDevice::Device* selectCDMedium( int content, QWidget* parent = 0,
-					    const QString& title = QString::null, 
-					    const QString& text = QString::null );
+  static K3bDevice::Device* selectMedium( int type, int state, int content = K3bMedium::CONTENT_ALL,
+					  QWidget* parent = 0,
+					  const QString& title = QString::null, 
+					  const QString& text = QString::null,
+					  bool* canceled = 0 );
 
  private slots:
   void slotSelectionChanged( K3bDevice::Device* );
 
  private:
-  class MediumCombo;
-  MediumCombo* m_combo;
+  K3bMediaSelectionComboBox* m_combo;
 };
 
 #endif

@@ -23,69 +23,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-class K3bMediaSelectionDialog::MediumCombo : public K3bMediaSelectionComboBox
-{
-public:
-  MediumCombo( QWidget* parent )
-    : K3bMediaSelectionComboBox( parent ),
-      m_content( 0 ) {
-  }
-
-  void setWantedCDToc( int toc ) {
-    m_content = toc;
-    updateMedia();
-  }
-
-protected:
-  bool showMedium( const K3bMedium& m ) const {
-    if( m_content > 0 ) {
-      // CD only
-      if( m.diskInfo().isDvdMedia() )
-	return false;
-
-      int c = m.toc().contentType();
-      if( c == K3bDevice::AUDIO && m_content & TOC_AUDIO )
-	return true;
-      if( c == K3bDevice::MIXED && m_content & TOC_MIXED )
-	return true;
-      if( c == K3bDevice::DATA && m_content & TOC_DATA )
-	return true;
-      return false;
-    }
-    else
-      return K3bMediaSelectionComboBox::showMedium( m );
-  }
-
-  QString mediumString( const K3bMedium& medium ) const {
-    return medium.shortString( m_content > 0 );
-  }
-
-  QString mediumToolTip( const K3bMedium& m ) const {
-    return m.longString();
-  }
-
-  QString noMediumMessage() const {
-    if( m_content > 0 ) {
-      if( m_content == TOC_AUDIO )
-	return i18n("Please insert an audio CD...");
-      else if( m_content == TOC_MIXED )
-	return i18n("Please insert a mixed mode CD...");
-      else if( m_content == TOC_DATA )
-	return i18n("Please insert a data CD...");
-      else if( m_content == TOC_AUDIO|TOC_MIXED )
-	return i18n("Please insert an audio or mixed mode CD...");
-      else if( m_content == TOC_DATA|TOC_MIXED )
-	return i18n("Please insert a data or mixed mode CD...");
-      else
-	return i18n("Please insert a non-empty CD...");
-    }
-    else
-      return K3bMediaSelectionComboBox::noMediumMessage();
-  }
-
-  int m_content;
-};
-
 
 K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent, 
 						  const QString& title, 
@@ -102,7 +39,7 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
   QGridLayout* lay = new QGridLayout( plainPage() );
 
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, plainPage() );
-  m_combo = new MediumCombo( plainPage() );
+  m_combo = new K3bMediaSelectionComboBox( plainPage() );
 
   //  lay->setMargin( marginHint() );
   lay->setSpacing( spacingHint() );
@@ -132,6 +69,12 @@ void K3bMediaSelectionDialog::setWantedMediumState( int state )
 }
 
 
+void K3bMediaSelectionDialog::setWantedMediumContent( int content )
+{
+  m_combo->setWantedMediumContent( content );
+}
+
+
 K3bDevice::Device* K3bMediaSelectionDialog::selectedDevice() const
 {
   return m_combo->selectedDevice();
@@ -144,13 +87,15 @@ void K3bMediaSelectionDialog::slotSelectionChanged( K3bDevice::Device* dev )
 }
 
 
-K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, QWidget* parent, 
+K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, int content,
+							  QWidget* parent, 
 							  const QString& title, const QString& text,
 							  bool* canceled )
 {
   K3bMediaSelectionDialog dlg( parent, title, text );
   dlg.setWantedMediumType( type );
   dlg.setWantedMediumState( state );
+  dlg.setWantedMediumContent( content );
 
   // even if no usable medium is inserted the combobox shows the "insert one" message
   // so it's not sufficient to check for just one entry to check if there only is a 
@@ -169,17 +114,12 @@ K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, Q
 }
 
 
-K3bDevice::Device* K3bMediaSelectionDialog::selectCDMedium( int content, QWidget* parent, 
-							    const QString& title, const QString& text )
+K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, 
+							  QWidget* parent, 
+							  const QString& title, const QString& text,
+							  bool* canceled )
 {
-  K3bMediaSelectionDialog dlg( parent, title, text );
-  dlg.m_combo->setWantedCDToc( content );
-
-  if( ( dlg.selectedDevice() && dlg.m_combo->count() == 1 ) 
-      || dlg.exec() == Accepted )
-    return dlg.selectedDevice();
-  else
-    return 0;
+  return selectMedium( type, state, K3bMedium::CONTENT_ALL, parent, title, text, canceled );
 }
 
 #include "k3bmediaselectiondialog.moc"

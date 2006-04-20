@@ -95,7 +95,6 @@
 #include <k3bexternalbinmanager.h>
 #include "k3bprojecttabwidget.h"
 #include "misc/k3bcdcopydialog.h"
-#include "videoEncoding/k3bdivxview.h"
 #include "k3btempdirselectionwidget.h"
 #include <k3bbusywidget.h>
 #include "k3bstatusbarmanager.h"
@@ -291,8 +290,6 @@ void K3bMainWindow::initActions()
 				      actionCollection(), "tools_blank_cdrw" );
   /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "formatdvd", 0, this, 
 							 SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
-  actionToolsDivxEncoding = new KAction(i18n("&Encode Video..."),"gear", 0, this, SLOT( slotDivxEncoding() ),
-			    actionCollection(), "tools_encode_video");
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
   (void)new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
@@ -306,6 +303,8 @@ void K3bMainWindow::initActions()
 
   actionToolsCddaRip = new KAction( i18n("Rip Audio CD..."), "cddarip", 0, this, SLOT(slotCddaRip()),
 				    actionCollection(), "tools_cdda_rip" );
+  actionToolsVideoDvdRip = new KAction( i18n("Rip Video DVD..."), "videodvd", 0, this, SLOT(slotVideoDvdRip()),
+				    actionCollection(), "tools_videodvd_rip" );
 
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
@@ -1133,14 +1132,6 @@ K3bDoc* K3bMainWindow::slotNewMovixDvdDoc()
 }
 
 
-void K3bMainWindow::slotDivxEncoding()
-{
-  slotStatusMsg(i18n("Creating new video encoding project."));
-  K3bDivxView d( this, "divx");
-  d.exec();
-}
-
-
 void K3bMainWindow::slotCurrentDocChanged()
 {
   // check the doctype
@@ -1566,12 +1557,35 @@ void K3bMainWindow::cddaRip( K3bDevice::Device* dev )
 {
   if( !dev ||
       !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_AUDIO ) )
-    dev = K3bMediaSelectionDialog::selectCDMedium( K3bMediaSelectionDialog::TOC_AUDIO|K3bMediaSelectionDialog::TOC_MIXED, 
-						   this,
-						   i18n("Audio CD Rip") );
+    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_CD_ALL, 
+						 K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+						 K3bMedium::CONTENT_AUDIO, 
+						 this,
+						 i18n("Audio CD Rip") );
 
   if( dev )
     m_dirView->showDevice( dev );
+}
+
+
+void K3bMainWindow::videoDvdRip( K3bDevice::Device* dev )
+{
+  if( !dev ||
+      !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_VIDEO_DVD ) )
+    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_DVD_ALL, 
+						 K3bDevice::STATE_COMPLETE,
+						 K3bMedium::CONTENT_VIDEO_DVD, 
+						 this,
+						 i18n("Video DVD Rip") );
+
+  if( dev )
+    m_dirView->showDevice( dev );
+}
+
+
+void K3bMainWindow::slotVideoDvdRip()
+{
+  videoDvdRip( 0 );
 }
 
 #include "k3b.moc"

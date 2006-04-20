@@ -83,6 +83,7 @@ public:
 
   int wantedMediumType;
   int wantedMediumState;
+  int wantedMediumContent;
 
   QFont font;
 };
@@ -96,6 +97,7 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
   // set defaults
   d->wantedMediumType = K3bDevice::MEDIA_WRITABLE_CD;
   d->wantedMediumState = K3bDevice::STATE_EMPTY;
+  d->wantedMediumContent = K3bMedium::CONTENT_ALL;
 
   d->font = font();
 
@@ -157,6 +159,13 @@ void K3bMediaSelectionComboBox::setWantedMediumState( int state )
 }
 
 
+void K3bMediaSelectionComboBox::setWantedMediumContent( int content )
+{
+  d->wantedMediumContent = content;
+  updateMedia();
+}
+
+
 int K3bMediaSelectionComboBox::wantedMediumType() const
 {
   return d->wantedMediumType;
@@ -166,6 +175,12 @@ int K3bMediaSelectionComboBox::wantedMediumType() const
 int K3bMediaSelectionComboBox::wantedMediumState() const
 {
   return d->wantedMediumState;
+}
+
+
+int K3bMediaSelectionComboBox::wantedMediumContent() const
+{
+  return d->wantedMediumContent;
 }
 
 
@@ -338,6 +353,7 @@ bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
   // DVD+RW is never reported as appendable
   //
   return( m.diskInfo().mediaType() & d->wantedMediumType &&
+	  m.content() & d->wantedMediumContent &&
 	  ( m.diskInfo().diskState() & d->wantedMediumState 
 	    ||
 	    ( d->wantedMediumState & K3bDevice::STATE_EMPTY &&
@@ -345,7 +361,7 @@ bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
 	    ||
 	    ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
 	      !m.diskInfo().empty() &&
-	      m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) ) 
+	      m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) )
 	  );
 }
 
@@ -365,24 +381,49 @@ QString K3bMediaSelectionComboBox::mediumToolTip( const K3bMedium& m ) const
 QString K3bMediaSelectionComboBox::noMediumMessage() const
 {
   QString stateString;
-  if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
-    stateString = i18n("an empty %1 medium");
-  else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
-    stateString = i18n("an appendable %1 medium");
-  else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
-    stateString = i18n("a complete %1 medium");
-  else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
-	   !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
-    stateString = i18n("an empty or appendable %1 medium");
-  else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
-    stateString = i18n("a complete or appendable %1 medium");
-  else
-    stateString = i18n("a %1 medium");
+  if( d->wantedMediumContent == K3bMedium::CONTENT_ALL ) {
+    if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
+      stateString = i18n("an empty %1 medium");
+    else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
+      stateString = i18n("an appendable %1 medium");
+    else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
+      stateString = i18n("a complete %1 medium");
+    else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
+	     !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
+      stateString = i18n("an empty or appendable %1 medium");
+    else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
+      stateString = i18n("a complete or appendable %1 medium");
+    else
+      stateString = i18n("a %1 medium");
+  }
+  else {
+    //
+    // we only handle the combinations that make sense here
+    //
+    if( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_CD ||
+	d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_DVD )
+      stateString = i18n("a Video %1 medium");
+    else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO &&
+	d->wantedMediumContent & K3bMedium::CONTENT_DATA )
+      stateString = i18n("a Mixed Mode %1 medium");
+    else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO )
+      stateString = i18n("an Audio %1 medium");
+    else if( d->wantedMediumContent & K3bMedium::CONTENT_DATA )
+      stateString = i18n("a Data %1 medium");
+    else
+      stateString = i18n("an empty %1 medium");      
+  }
 
   // this is basicly the same as in K3bEmptyDiskWaiter
   // FIXME: include things like only rewritable dvd or cd since we will probably need that
   QString mediumString;
-  if( (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD) &&
+  if( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )
+    mediumString = i18n("CD or DVD");
+  else if( d->wantedMediumType == K3bDevice::MEDIA_CD_ALL )
+    mediumString = i18n("CD");
+  else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
+    mediumString = i18n("DVD");
+  else if( (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD) &&
       (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD) )
     mediumString = i18n("CD-R(W) or DVD±R(W)");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_SL )

@@ -47,6 +47,7 @@ class K3bMediaSelectionComboBox : public KComboBox
 
   int wantedMediumType() const;
   int wantedMediumState() const;
+  int wantedMediumContent() const;
 
  signals:
   /**
@@ -75,6 +76,15 @@ class K3bMediaSelectionComboBox : public KComboBox
    * \param state a bitwise combination of the K3bDevice::State enum
    */
   void setWantedMediumState( int state );
+
+  /**
+   * Set the wanted medium content type. The default is K3bMedium::CONTENT_ALL (i.e. ignore media 
+   * content)
+   * Be aware that 0 maps to K3bMedium::CONTENT_NONE, i.e. empty media.
+   *
+   * \param content A bitwise or of K3bMedium::MediumContent
+   */
+  void setWantedMediumContent( int content );
 
  private slots:
   void slotMediumChanged( K3bDevice::Device* );
