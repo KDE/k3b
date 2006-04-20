@@ -289,7 +289,7 @@ void K3bSetup2::updateDevices()
     if( !device->genericDevice().isEmpty() ) {
       QCheckListItem* item = createDeviceItem( device->genericDevice() );
       item->setOn( checkMap.contains(device->genericDevice()) ? checkMap[device->genericDevice()] : true );
-      item->setText( 0, device->vendor() + " " + device->description() );
+      item->setText( 0, device->vendor() + " " + device->description() + " (" + i18n("Generic SCSI Device") + ")" );
     }
   }
 }
