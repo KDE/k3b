@@ -42,7 +42,7 @@ double K3bVideoDVD::Time::totalSeconds() const
   s += 60.0 * (double)minute();
   s += 3600.0 * (double)hour();
 
-  return s * (double)( frame() / frameRate() );
+  return s + (double)( frame() / frameRate() );
 }
 
 
