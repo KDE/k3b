@@ -301,6 +301,9 @@ bool K3bApplication::processCmdLineArgs()
   if( args->isSet( "cddarip" ) ) {
     m_mainWindow->cddaRip( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "cddarip" ) ) ) );
   }
+  else if( args->isSet( "videodvdrip" ) ) {
+    m_mainWindow->videoDvdRip( K3b::urlToDevice( KURL::fromPathOrURL( args->getOption( "videodvdrip" ) ) ) );
+  }
 
   if( !dialogOpen && args->isSet( "burn" ) ) {
     if( m_core->projectManager()->activeDoc() ) {
