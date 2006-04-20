@@ -160,6 +160,8 @@ namespace K3bDevice {
     MEDIA_CD_RW = 0x8000,                          /**< */
     MEDIA_WRITABLE_CD = MEDIA_CD_R |               /**< This is a bitwise or of media types representing all writable CD media.*/
                         MEDIA_CD_RW,
+    MEDIA_CD_ALL = MEDIA_WRITABLE_CD |
+                   MEDIA_CD_ROM,
     MEDIA_WRITABLE_DVD_SL = MEDIA_DVD_R |          /**< This is a bitwise or of media types representing all writable single layer DVD media.*/
                             MEDIA_DVD_R_SEQ | 
                             MEDIA_DVD_RW |
@@ -190,6 +192,8 @@ namespace K3bDevice {
     MEDIA_DVD_PLUS_ALL = MEDIA_DVD_PLUS_RW |       /**< This is a bitwise or of media types representing all DVD+R/W media.*/
                          MEDIA_DVD_PLUS_R |
                          MEDIA_DVD_PLUS_R_DL,
+    MEDIA_DVD_ALL = MEDIA_WRITABLE_DVD |
+                    MEDIA_DVD_ROM,
     MEDIA_UNKNOWN = 0x1000000                      /**< Represents an unknown media type (when an error occured) */
   };
 
