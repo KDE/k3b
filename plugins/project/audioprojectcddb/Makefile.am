@@ -8,7 +8,7 @@ AM_CPPFLAGS = 	-I$(srcdir)/../../../libk3b/core \
 		-I$(srcdir)/../../../libk3b/plugin \
 		$(all_includes)
 
-lib_LTLIBRARIES = libk3baudioprojectcddbplugin.la
+kde_module_LTLIBRARIES = libk3baudioprojectcddbplugin.la
 
 libk3baudioprojectcddbplugin_la_SOURCES = k3baudioprojectcddbplugin.cpp
 
