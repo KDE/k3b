@@ -57,6 +57,9 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
+#ifdef HAVE_RESMGR
+#include <resmgr.h>
+#endif
 
 #ifdef Q_OS_LINUX
 
@@ -347,8 +350,8 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 {
   // Unfortunately uses lots of FBSD-specific data structures
 #ifndef Q_OS_FREEBSD
-  bool bsdspecificcode = false;
-  assert(bsdspecificcode);
+  // bool bsdspecificcode = false;
+  // assert(bsdspecificcode);
 #endif
 
 #ifdef Q_OS_FREEBSD
