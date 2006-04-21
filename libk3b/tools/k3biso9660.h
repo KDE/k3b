@@ -25,7 +25,6 @@
 #include <qstringlist.h>
 #include <qdict.h>
 
-#include "libisofs/isofs.h"
 
 
 namespace K3bDevice {
@@ -34,7 +33,11 @@ namespace K3bDevice {
 
 class K3bIso9660;
 class K3bIso9660Backend;
+struct iso_directory_record;
+struct el_torito_boot_descriptor;
+struct iso_primary_descriptor;
 
+typedef long sector_t;
 
 /**
  * Simplyfied primary descriptor which just contains the fields
