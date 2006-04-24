@@ -14,6 +14,7 @@
  */
 
 #include "k3binterferingsystemshandler.h"
+#include "k3blsofwrapper.h"
 
 #include <k3bdevice.h>
 #include <k3bprocess.h>
@@ -52,8 +53,8 @@ public:
 
 
 
-K3bInterferingSystemsHandler::K3bInterferingSystemsHandler( QObject* parent, const char* name )
-  : K3bJob( 0, parent, name )
+K3bInterferingSystemsHandler::K3bInterferingSystemsHandler( K3bJobHandler* hdl, QObject* parent, const char* name )
+  : K3bJob( hdl, parent, name )
 {
   d = new Private();
 }
@@ -106,6 +107,21 @@ void K3bInterferingSystemsHandler::disable()
 	emit infoMessage( i18n("Disabled Automounting."), INFO );
       else if( r == -1 )
 	emit infoMessage( i18n("Failed to disable Automounting."), WARNING );
+
+      //
+      // see if other applications are using the device
+      //
+      K3bLsofWrapper lsof;
+      if( lsof.checkDevice( d->device ) ) {
+	if( !lsof.usingApplications().isEmpty() ) {
+	  blockingInformation( i18n("<p>The device <em>%1</em> is already in use by other applications "
+				    "(<b>%2</b>) "
+				    "It highly recommended to quit those before continuing.")
+			       .arg(d->device->vendor() + " - " + d->device->description())
+			       .arg(lsof.usingApplications().join(", ")),
+			       i18n("Device in use") );
+	}
+      }
     }
   }
 }

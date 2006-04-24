@@ -101,7 +101,7 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* h
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
 
-  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this );
+  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this, this );
   connect( d->interferingSystemHndl, SIGNAL(infoMessage(const QString&, int)),
 	   this, SIGNAL(infoMessage(const QString&, int)) );
 

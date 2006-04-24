@@ -23,15 +23,6 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#ifndef __STDC_LIMIT_MACROS
-#define __STDC_LIMIT_MACROS //needed for *_MAX macros in dvdread headers
-#endif
-
-#include <inttypes.h> //needed by dvdreads headers
-#include <dvdread/dvd_reader.h>
-#include <dvdread/ifo_types.h>
-#include <dvdread/ifo_read.h>
-
 
 namespace K3bDevice {
   class Device;
@@ -86,10 +77,6 @@ namespace K3bVideoDVD
       void debug() const;
       
     private:
-      static void buildVideoStream( VideoStream* stream, video_attr_t* attr );
-      static void buildAudioStream( AudioStream* stream, audio_attr_t* attr );
-      static void buildSubPictureStream( SubPictureStream* stream, subp_attr_t* attr );
-
       K3bDevice::Device* m_device;
       QValueVector<Title> m_titles;
       QString m_volumeIdentifier;

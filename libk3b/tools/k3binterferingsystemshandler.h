@@ -28,6 +28,7 @@
  * \li SuSEPlugger (killed by pid and fired up again by desktop service)
  * \li automounting systems subfs, supermount (handled through 
  *     a script running suid root)
+ * \li Warns the user about other applications using the device.
  *
  * Also the K3bInterferingSystemsHandler is a K3bJob it is not intended to be used as such.
  * That means the normal K3bJob slots start() and cancel() do nothing. It has to be used
@@ -39,7 +40,7 @@ class K3bInterferingSystemsHandler : public K3bJob
   Q_OBJECT
 
  public:
-  K3bInterferingSystemsHandler( QObject* parent = 0, const char* name = 0 );
+  K3bInterferingSystemsHandler( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
   ~K3bInterferingSystemsHandler();
 
  public slots:

@@ -13,6 +13,11 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS // needed for *_MAX macros in dvdread headers
+#endif
+
 #include "k3bvideodvd.h"
 
 #include <k3bdevice.h>
@@ -20,6 +25,11 @@
 #include <qfile.h>
 
 #include <klocale.h>
+
+#include <inttypes.h> // needed by dvdreads headers
+#include <dvdread/dvd_reader.h>
+#include <dvdread/ifo_types.h>
+#include <dvdread/ifo_read.h>
 
 
 
@@ -120,21 +130,49 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
     //
     // Video stream information
     //
-    buildVideoStream( &m_titles[i].m_videoStream, &titleIfo->vtsi_mat->vts_video_attr );
+    m_titles[i].m_videoStream.m_permittedDf = titleIfo->vtsi_mat->vts_video_attr.permitted_df;
+    m_titles[i].m_videoStream.m_displayAspectRatio = titleIfo->vtsi_mat->vts_video_attr.display_aspect_ratio;
+    m_titles[i].m_videoStream.m_videoFormat = titleIfo->vtsi_mat->vts_video_attr.video_format;
+    m_titles[i].m_videoStream.m_mpegVersion = titleIfo->vtsi_mat->vts_video_attr.mpeg_version;
+    m_titles[i].m_videoStream.m_filmMode = titleIfo->vtsi_mat->vts_video_attr.film_mode;
+    m_titles[i].m_videoStream.m_letterboxed = titleIfo->vtsi_mat->vts_video_attr.letterboxed;
+    m_titles[i].m_videoStream.m_pictureSize = titleIfo->vtsi_mat->vts_video_attr.picture_size;
+    m_titles[i].m_videoStream.m_bitRate = titleIfo->vtsi_mat->vts_video_attr.bit_rate;
 
     //
     // Audio stream information
     //
     m_titles[i].m_audioStreams.resize( titleIfo->vtsi_mat->nr_of_vts_audio_streams );
-    for( unsigned int j = 0; j < titleIfo->vtsi_mat->nr_of_vts_audio_streams; ++j )
-      buildAudioStream( &m_titles[i].m_audioStreams[j], &titleIfo->vtsi_mat->vts_audio_attr[j] );
+    for( unsigned int j = 0; j < titleIfo->vtsi_mat->nr_of_vts_audio_streams; ++j ) {
+      m_titles[i].m_audioStreams[j].m_format = titleIfo->vtsi_mat->vts_audio_attr[j].audio_format;
+      m_titles[i].m_audioStreams[j].m_applicationMode = titleIfo->vtsi_mat->vts_audio_attr[j].application_mode;
+      m_titles[i].m_audioStreams[j].m_quantization = titleIfo->vtsi_mat->vts_audio_attr[j].quantization;
+      m_titles[i].m_audioStreams[j].m_sampleFrequency = titleIfo->vtsi_mat->vts_audio_attr[j].sample_frequency;
+      m_titles[i].m_audioStreams[j].m_codeExtension = titleIfo->vtsi_mat->vts_audio_attr[j].code_extension;
+      m_titles[i].m_audioStreams[j].m_multiChannelExt = titleIfo->vtsi_mat->vts_audio_attr[j].multichannel_extension;
+      m_titles[i].m_audioStreams[j].m_channels = titleIfo->vtsi_mat->vts_audio_attr[j].channels+1;
+      if( titleIfo->vtsi_mat->vts_audio_attr[j].lang_type == 1 )
+	m_titles[i].m_audioStreams[j].m_langCode.sprintf( "%c%c", 
+							  titleIfo->vtsi_mat->vts_audio_attr[j].lang_code>>8, 
+							  titleIfo->vtsi_mat->vts_audio_attr[j].lang_code & 0xff );
+      else
+	m_titles[i].m_audioStreams[j].m_langCode = QString::null;
+    }
 
     //
     // SubPicture stream information
     //
     m_titles[i].m_subPictureStreams.resize( titleIfo->vtsi_mat->nr_of_vts_subp_streams );
-    for( unsigned int j = 0; j < titleIfo->vtsi_mat->nr_of_vts_subp_streams; ++j )
-      buildSubPictureStream( &m_titles[i].m_subPictureStreams[j], &titleIfo->vtsi_mat->vts_subp_attr[j] );
+    for( unsigned int j = 0; j < titleIfo->vtsi_mat->nr_of_vts_subp_streams; ++j ) {
+      m_titles[i].m_subPictureStreams[j].m_codeMode = titleIfo->vtsi_mat->vts_subp_attr[j].code_mode;
+      m_titles[i].m_subPictureStreams[j].m_codeExtension = titleIfo->vtsi_mat->vts_subp_attr[j].code_extension;
+      if( titleIfo->vtsi_mat->vts_subp_attr[j].type == 1 )
+	m_titles[i].m_subPictureStreams[j].m_langCode.sprintf( "%c%c", 
+							       titleIfo->vtsi_mat->vts_subp_attr[j].lang_code>>8, 
+							       titleIfo->vtsi_mat->vts_subp_attr[j].lang_code & 0xff );
+      else
+	m_titles[i].m_subPictureStreams[j].m_langCode = QString::null;
+    }
 
     //
     // add chapter info
@@ -199,46 +237,6 @@ void K3bVideoDVD::VideoDVD::debug() const
 		<< subPictureCodeModeString( title(i).subPictureStream(j).codeMode() ) << ", "
 		<< subPictureCodeExtensionString( title(i).subPictureStream(j).codeExtension() ) << endl;
   }
-}
-
-
-void K3bVideoDVD::VideoDVD::buildVideoStream( K3bVideoDVD::VideoStream* stream, video_attr_t* attr )
-{
-  stream->m_permittedDf = attr->permitted_df;
-  stream->m_displayAspectRatio = attr->display_aspect_ratio;
-  stream->m_videoFormat = attr->video_format;
-  stream->m_mpegVersion = attr->mpeg_version;
-  stream->m_filmMode = attr->film_mode;
-  stream->m_letterboxed = attr->letterboxed;
-  stream->m_pictureSize = attr->picture_size;
-  stream->m_bitRate = attr->bit_rate;
-}
-
-
-void K3bVideoDVD::VideoDVD::buildAudioStream( K3bVideoDVD::AudioStream* stream, audio_attr_t* attr )
-{
-  stream->m_format = attr->audio_format;
-  stream->m_applicationMode = attr->application_mode;
-  stream->m_quantization = attr->quantization;
-  stream->m_sampleFrequency = attr->sample_frequency;
-  stream->m_codeExtension = attr->code_extension;
-  stream->m_multiChannelExt = attr->multichannel_extension;
-  stream->m_channels = attr->channels+1;
-  if( attr->lang_type == 1 )
-    stream->m_langCode.sprintf( "%c%c", attr->lang_code>>8, attr->lang_code & 0xff );
-  else
-    stream->m_langCode = QString::null;
-}
-
-
-void K3bVideoDVD::VideoDVD::buildSubPictureStream( K3bVideoDVD::SubPictureStream* stream, subp_attr_t* attr )
-{
-  stream->m_codeMode = attr->code_mode;
-  stream->m_codeExtension = attr->code_extension;
-  if( attr->type == 1 )
-    stream->m_langCode.sprintf( "%c%c", attr->lang_code>>8, attr->lang_code & 0xff );
-  else
-    stream->m_langCode = QString::null;
 }
 
 

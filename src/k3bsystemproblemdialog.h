@@ -25,6 +25,9 @@
 class QPushButton;
 class QCheckBox;
 class QCloseEvent;
+namespace K3bDevice {
+  class Device;
+}
 
 
 class K3bSystemProblem
@@ -55,10 +58,6 @@ class K3bSystemProblemDialog : public KDialog
   Q_OBJECT
 
  public:
-  K3bSystemProblemDialog( const QValueList<K3bSystemProblem>&,
-			  QWidget* parent = 0, 
-			  const char* name = 0 );
-
   static void checkSystem( QWidget* parent = 0, 
 			   const char* name = 0 );
 
@@ -69,6 +68,11 @@ class K3bSystemProblemDialog : public KDialog
   void slotK3bSetup();
 
  private:
+  K3bSystemProblemDialog( const QValueList<K3bSystemProblem>&,
+			  QWidget* parent = 0, 
+			  const char* name = 0 );
+  static int dmaActivated( K3bDevice::Device* );
+
   QPushButton* m_closeButton;
   QPushButton* m_k3bsetupButton;
   QCheckBox* m_checkDontShowAgain;

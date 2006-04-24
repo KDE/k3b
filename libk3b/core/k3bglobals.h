@@ -141,6 +141,12 @@ namespace K3b
   QString findTempFile( const QString& ending = QString::null, const QString& d = QString::null );
 
   /**
+   * Wrapper around KStandardDirs::findExe which searches the PATH and some additional
+   * directories to find system tools which are normally only in root's PATH.
+   */
+  LIBK3B_EXPORT QString findExe( const QString& name );
+
+  /**
    * get the default K3b temp path to store image files
    */
   LIBK3B_EXPORT QString defaultTempPath();

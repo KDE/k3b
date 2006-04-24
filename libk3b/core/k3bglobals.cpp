@@ -482,3 +482,16 @@ Q_INT64 K3b::fromLe64( char* data )
   return *((Q_INT64*)data);
 #endif
 }
+
+
+QString K3b::findExe( const QString& name )
+{
+  // first we search the path
+  QString bin = KStandardDirs::findExe( name );
+
+  // then go on with our own little list
+  if( bin.isEmpty() )
+    bin = KStandardDirs::findExe( name, "/bin:/sbin:/usr/sbin" );
+
+  return bin;
+}

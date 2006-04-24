@@ -28,7 +28,7 @@
 #include <k3bglobals.h>
 #include <k3bpluginmanager.h>
 #include <k3bplugin.h>
-
+#include <k3bprocess.h>
 #include <k3bthememanager.h>
 
 #include <qpushbutton.h>
@@ -45,6 +45,9 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kglobal.h>
+
+
+
 
 
 K3bSystemProblem::K3bSystemProblem( int t,
@@ -423,26 +426,36 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
        it.current(); ++it ) {
-    if( !QFileInfo( it.current()->blockDeviceName() ).isWritable() )
+    K3bDevice::Device* dev = it.current();
+
+    if( !QFileInfo( dev->blockDeviceName() ).isWritable() )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("No write access to device %1").arg(it.current()->blockDeviceName()),
+					 i18n("No write access to device %1").arg(dev->blockDeviceName()),
 					 i18n("K3b needs write access to all the devices to perform certain tasks. "
-					      "Without you might encounter problems with %1 - %2").arg(it.current()->vendor()).arg(it.current()->description()),
+					      "Without you might encounter problems with %1 - %2").arg(dev->vendor()).arg(dev->description()),
 					 i18n("Make sure you have write access to %1. In case you are not using "
-					      "devfs or udev K3bSetup is able to do this for you.").arg(it.current()->blockDeviceName()),
+					      "devfs or udev K3bSetup is able to do this for you.").arg(dev->blockDeviceName()),
 					 false ) );
 
 
-    if( it.current()->interfaceType() == K3bDevice::SCSI &&
-	!it.current()->genericDevice().isEmpty() &&
-	!QFileInfo( it.current()->genericDevice() ).isWritable() )
+    if( dev->interfaceType() == K3bDevice::SCSI &&
+	!dev->genericDevice().isEmpty() &&
+	!QFileInfo( dev->genericDevice() ).isWritable() )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("No write access to generic SCSI device %1").arg(it.current()->genericDevice()),
+					 i18n("No write access to generic SCSI device %1").arg(dev->genericDevice()),
 					 i18n("Without write access to the generic device you might "
-					      "encounter problems with Audio CD ripping from %1 - %2").arg(it.current()->vendor()).arg(it.current()->description()),
+					      "encounter problems with Audio CD ripping from %1 - %2").arg(dev->vendor()).arg(dev->description()),
 					 i18n("Make sure you have write access to %1. In case you are not using "
-					      "devfs or udev K3bSetup is able to do this for you.").arg(it.current()->genericDevice()),
+					      "devfs or udev K3bSetup is able to do this for you.").arg(dev->genericDevice()),
 					 false ) );
+
+    if( !dmaActivated( dev ) )
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("DMA disabled on device %1 - %2").arg(dev->vendor()).arg(dev->description()),
+					 i18n("With most modern CD/DVD devices enabling DMA highly increases "
+					      "read/write performance. If you experience very low writing speeds "
+					      "this is probably the cause."),
+					 i18n("Enable DMA temporarily as root with 'hdparm -d 1 %1'.").arg(dev->blockDeviceName()) ) );
   }
 
 
@@ -527,5 +540,25 @@ void K3bSystemProblemDialog::slotK3bSetup()
     KMessageBox::error( 0, i18n("Unable to start K3bSetup2.") );
 }
 
+
+int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
+{
+  QString hdparm = K3b::findExe( "hdparm" );
+  if( hdparm.isEmpty() )
+    return -1;
+
+  K3bProcess p;
+  K3bProcessOutputCollector out( &p );
+  p << hdparm << "-d" << dev->blockDeviceName();
+  if( !p.start( KProcess::Block, KProcess::AllOutput ) )
+    return -1;
+
+  if( out.output().contains( "1" ) )
+    return 1;
+  else if( out.output().contains( "0" ) )
+    return 0;
+  else
+    return -1;
+}
 
 #include "k3bsystemproblemdialog.moc"

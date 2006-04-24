@@ -1,4 +1,8 @@
-AM_CPPFLAGS= -I$(srcdir)/../../src -I$(srcdir)/../core -I$(srcdir)/../../libk3bdevice -I$(srcdir)/.. $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../../src \
+	-I$(srcdir)/../core \
+	-I$(srcdir)/../../libk3bdevice \
+	-I$(srcdir)/.. \
+	$(all_includes)
 
 noinst_LTLIBRARIES = libk3btools.la
 
@@ -16,7 +20,7 @@ libk3btools_la_SOURCES = k3bwavefilewriter.cpp k3bbusywidget.cpp k3bdeviceselect
 	k3bprogressdialog.cpp k3btoolbox.cpp k3bpushbutton.cpp \
 	k3blistviewitemanimator.cpp k3bthreadwidget.cpp k3bradioaction.cpp \
 	k3bsignalwaiter.cpp k3blibdvdcss.cpp k3biso9660backend.cpp \
-	k3binterferingsystemshandler.cpp
+	k3binterferingsystemshandler.cpp k3blsofwrapper.cpp
 
 include_HEADERS = k3bwavefilewriter.h k3bbusywidget.h k3bdeviceselectiondialog.h \
 	k3bmd5job.h k3bcutcombobox.h k3bstringutils.h \
