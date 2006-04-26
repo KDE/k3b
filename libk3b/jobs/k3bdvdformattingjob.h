@@ -27,7 +27,7 @@ namespace K3bDevice {
 }
 
 
-class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bJob
+class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bBurnJob
 {
   Q_OBJECT
 
@@ -37,6 +37,8 @@ class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bJob
 
   QString jobDescription() const;
   QString jobDetails() const;
+
+  K3bDevice::Device* writer() const;
 
  public slots:
   void start();

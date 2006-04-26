@@ -98,7 +98,10 @@ K3bAudioJob::~K3bAudioJob()
 
 K3bDevice::Device* K3bAudioJob::writer() const
 {
-  return m_doc->burner();
+  if( m_doc->onlyCreateImages() )
+    return 0; // no writer needed -> no blocking on K3bBurnJob
+  else
+    return m_doc->burner();
 }
 
 

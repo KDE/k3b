@@ -76,6 +76,9 @@ K3bDoc* K3bVcdJob::doc() const
 
 K3bDevice::Device* K3bVcdJob::writer() const
 {
+  if( doc()->onlyCreateImages() )
+    return 0;
+  else
     return doc() ->burner();
 }
 

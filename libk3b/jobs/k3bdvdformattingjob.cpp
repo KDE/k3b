@@ -25,7 +25,6 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bglobalsettings.h>
-#include <k3binterferingsystemshandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -67,18 +66,13 @@ public:
   bool running;
 
   bool forceNoEject;
-
-  K3bInterferingSystemsHandler* interferingSystemHndl;
 };
 
 
 K3bDvdFormattingJob::K3bDvdFormattingJob( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name )
+  : K3bBurnJob( jh, parent, name )
 {
   d = new Private;
-  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this );
-  connect( d->interferingSystemHndl, SIGNAL(infoMessage(const QString&, int)),
-	   this, SIGNAL(infoMessage(const QString&, int)) );
 }
 
 
@@ -86,6 +80,12 @@ K3bDvdFormattingJob::~K3bDvdFormattingJob()
 {
   delete d->process;
   delete d;
+}
+
+
+K3bDevice::Device* K3bDvdFormattingJob::writer() const
+{
+  return d->device;
 }
 
 
@@ -237,8 +237,6 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 
 void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
 {
-  d->interferingSystemHndl->enable();
-
   if( d->canceled ) {
     emit canceled();
     d->success = false;
@@ -501,8 +499,6 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
     }
     kdDebug() << s << endl << flush;
     emit debuggingOutput( "dvd+rw-format command:", s );
-
-    d->interferingSystemHndl->disable( d->device );
 
     if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
       // something went wrong when starting the program

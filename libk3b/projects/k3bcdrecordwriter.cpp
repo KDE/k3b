@@ -27,7 +27,6 @@
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 #include <k3bglobalsettings.h>
-#include <k3binterferingsystemshandler.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -66,8 +65,6 @@ public:
   QValueList<Track> tracks;
 
   KTempFile* cdTextFile;
-
-  K3bInterferingSystemsHandler* interferingSystemHndl;
 };
 
 
@@ -82,10 +79,6 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
-
-  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this, this );
-  connect( d->interferingSystemHndl, SIGNAL(infoMessage(const QString&, int)),
-	   this, SIGNAL(infoMessage(const QString&, int)) );
 
   m_process = 0;
   m_writingMode = K3b::TAO;
@@ -329,8 +322,6 @@ void K3bCdrecordWriter::start()
 
   // FIXME: check the return value
   k3bcore->blockDevice( burnDevice() );
-
-  d->interferingSystemHndl->disable( burnDevice() );
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
     // something went wrong when starting the program
@@ -643,8 +634,6 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
   // remove temporary cdtext file
   delete d->cdTextFile;
   d->cdTextFile = 0;
-
-  d->interferingSystemHndl->enable();
 
   k3bcore->unblockDevice( burnDevice() );
 

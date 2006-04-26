@@ -113,7 +113,10 @@ K3bDoc* K3bDataJob::doc() const
 
 K3bDevice::Device* K3bDataJob::writer() const
 {
-  return doc()->burner();
+  if( doc()->onlyCreateImages() )
+    return 0; // no writer needed -> no blocking on K3bBurnJob
+  else
+    return doc()->burner();
 }
 
 

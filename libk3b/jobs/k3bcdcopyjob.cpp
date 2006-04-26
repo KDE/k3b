@@ -1075,7 +1075,7 @@ void K3bCdCopyJob::cleanup()
 
     // remove the tempdir created in prepareImageFiles()
     if( d->deleteTempDir ) {
-      KIO::NetAccess::del( KURL::fromPathOrURL(m_tempPath) );
+      KIO::NetAccess::del( KURL::fromPathOrURL(m_tempPath), 0 );
       d->deleteTempDir = false;
     }
   }

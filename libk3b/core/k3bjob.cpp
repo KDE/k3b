@@ -17,12 +17,19 @@
 #include "k3bjob.h"
 #include <k3bglobals.h>
 #include <k3bcore.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <klocale.h>
 #include <kprocess.h>
 
 #include <qstringlist.h>
 #include <kdebug.h>
+
+
+class K3bJob::Private
+{
+public:
+};
 
 
 const char* K3bJob::DEFAULT_SIGNAL_CONNECTION = "K3bJobDefault";
@@ -215,16 +222,61 @@ void K3bJob::unregisterSubJob( K3bJob* job )
 
 
 
+
+class K3bBurnJob::Private
+{
+public:
+  K3bInterferingSystemsHandler* intfSHdl;
+};
+
+
+
 K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent, const char* name )
   : K3bJob( handler, parent, name ),
     m_writeMethod( K3b::DEFAULT )
 {
+  d = new Private;
+  d->intfSHdl = 0;
+}
+
+
+K3bBurnJob::~K3bBurnJob()
+{
+  delete d;
 }
 
 
 int K3bBurnJob::supportedWritingApps() const
 {
   return K3b::DEFAULT | K3b::CDRDAO | K3b::CDRECORD;
+}
+
+
+void K3bBurnJob::jobStarted()
+{
+  K3bJob::jobStarted();
+
+  //
+  // Do not block the device in sibjobs since this would create
+  // panic
+  //
+  if( jobHandler() && !jobHandler()->isJob() && writer() ) {
+    if( !d->intfSHdl ) {
+      d->intfSHdl = new K3bInterferingSystemsHandler( this, this );
+      connect( d->intfSHdl, SIGNAL(infoMessage(const QString&, int)),
+	       this, SIGNAL(infoMessage(const QString&, int)) );
+    }
+    d->intfSHdl->setDevice( writer() );
+    d->intfSHdl->disable();
+  }
+}
+
+
+void K3bBurnJob::jobFinished( bool success )
+{
+  if( d->intfSHdl )
+    d->intfSHdl->enable();
+  K3bJob::jobFinished( success );
 }
 
 #include "k3bjob.moc"

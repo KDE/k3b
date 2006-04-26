@@ -32,7 +32,7 @@
 
 
 K3bBlankingJob::K3bBlankingJob( K3bJobHandler* hdl, QObject* parent )
-  : K3bJob( hdl, parent ),
+  : K3bBurnJob( hdl, parent ),
     m_writerJob(0),
     m_force(true),
     m_device(0),
@@ -48,6 +48,12 @@ K3bBlankingJob::K3bBlankingJob( K3bJobHandler* hdl, QObject* parent )
 K3bBlankingJob::~K3bBlankingJob()
 {
   delete m_writerJob;
+}
+
+
+K3bDevice::Device* K3bBlankingJob::writer() const
+{
+  return m_device;
 }
 
 

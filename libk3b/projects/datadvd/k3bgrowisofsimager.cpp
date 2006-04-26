@@ -27,7 +27,6 @@
 #include <k3bthroughputestimator.h>
 #include <k3bgrowisofshandler.h>
 #include <k3bglobalsettings.h>
-#include <k3binterferingsystemshandler.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -53,8 +52,6 @@ public:
   int usedMultiSessionMode;
 
   K3bGrowisofsHandler* gh;
-
-  K3bInterferingSystemsHandler* interferingSystemHndl;
 };
 
 
@@ -68,10 +65,6 @@ K3bGrowisofsImager::K3bGrowisofsImager( K3bDataDoc* doc, K3bJobHandler* jh, QObj
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
-
-  d->interferingSystemHndl = new K3bInterferingSystemsHandler( this );
-  connect( d->interferingSystemHndl, SIGNAL(infoMessage(const QString&, int)),
-	   this, SIGNAL(infoMessage(const QString&, int)) );
 
   d->gh = new K3bGrowisofsHandler( this );
   connect( d->gh, SIGNAL(infoMessage(const QString&, int)),
@@ -248,8 +241,6 @@ void K3bGrowisofsImager::start()
 
   emit newSubTask( i18n("Preparing write process...") );
 
-  d->interferingSystemHndl->disable( m_doc->burner() );
-
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable
@@ -323,8 +314,6 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
   m_processExited = true;
 
   cleanup();
-
-  d->interferingSystemHndl->enable();
 
   if( m_canceled ) {
     emit canceled();

@@ -24,13 +24,15 @@ class K3bDevice::Device;
 class K3bAbstractWriter;
 
 
-class LIBK3B_EXPORT K3bBlankingJob : public K3bJob
+class LIBK3B_EXPORT K3bBlankingJob : public K3bBurnJob
 {
   Q_OBJECT
 
  public:
   K3bBlankingJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bBlankingJob();
+
+  K3bDevice::Device* writer() const;
 
   enum blank_mode { Fast, Complete, Track, Unclose, Session };
 

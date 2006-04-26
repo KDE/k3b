@@ -111,7 +111,10 @@ K3bMixedJob::~K3bMixedJob()
 
 K3bDevice::Device* K3bMixedJob::writer() const
 {
-  return m_doc->burner();
+  if( m_doc->onlyCreateImages() )
+    return 0;
+  else
+    return m_doc->burner();
 }
 
 

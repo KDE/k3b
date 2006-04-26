@@ -698,7 +698,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
 			  .arg(cp.cdText().performer())
 			  .arg(cp.cdText().title()) );
 
-  int i = 1;
+  unsigned int i = 1;
   for( K3bDevice::Toc::const_iterator it = cp.toc().begin();
        it != cp.toc().end(); ++it ) {
 
@@ -726,61 +726,54 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
 
 void K3bCdImageWritingDialog::slotToggleAll()
 {
-  kdDebug() << "(K3bCdImageWritingDialog) slotToggleAll() " << endl;
-
-  if (m_writerSelectionWidget->writerDevice()) {
-
-    // enable the Write-Button if we found a valid image or the user forced an image type
-    m_buttonStart->setEnabled( currentImageType() != IMAGE_UNKNOWN 
-			       && QFile::exists( imagePath() ) );
-
-    // cdrecord clone and cue both need DAO
-    if( m_writerSelectionWidget->writingApp() != K3b::CDRDAO 
-	&& ( currentImageType() == IMAGE_ISO ||
-	     currentImageType() == IMAGE_AUDIO_CUE ) )
-      m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW ); // stuff supported by cdrecord
+  // enable the Write-Button if we found a valid image or the user forced an image type
+  m_buttonStart->setEnabled( m_writerSelectionWidget->writerDevice() 
+			     && currentImageType() != IMAGE_UNKNOWN 
+			     && QFile::exists( imagePath() ) );
+  
+  // cdrecord clone and cue both need DAO
+  if( m_writerSelectionWidget->writingApp() != K3b::CDRDAO 
+      && ( currentImageType() == IMAGE_ISO ||
+	   currentImageType() == IMAGE_AUDIO_CUE ) )
+    m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW ); // stuff supported by cdrecord
+  else
+    m_writingModeWidget->setSupportedModes( K3b::DAO );
+  
+  // some stuff is only available for iso images
+  if( currentImageType() == IMAGE_ISO ) {
+    m_checkVerify->show();
+    if( !d->advancedTabVisible )
+      d->optionTabbed->addTab( d->advancedTab, i18n("Advanced") );
+    d->advancedTabVisible = true;
+    if( m_checkDummy->isChecked() ) {
+      m_checkVerify->setEnabled( false );
+      m_checkVerify->setChecked( false );
+    }
     else
-      m_writingModeWidget->setSupportedModes( K3b::DAO );
-
-    // some stuff is only available for iso images
-    if( currentImageType() == IMAGE_ISO ) {
-      m_checkVerify->show();
-      if( !d->advancedTabVisible )
-	d->optionTabbed->addTab( d->advancedTab, i18n("Advanced") );
-      d->advancedTabVisible = true;
-      if( m_checkDummy->isChecked() ) {
-	m_checkVerify->setEnabled( false );
-	m_checkVerify->setChecked( false );
-      }
-      else
-	m_checkVerify->setEnabled( true );	
-    }
-    else {
-      if( d->advancedTabVisible )
-	d->optionTabbed->removePage( d->advancedTab );
-      d->advancedTabVisible = false;
-      m_checkVerify->hide();
-    }
-
-    // and some other stuff only makes sense for audio cues
-    if( currentImageType() == IMAGE_AUDIO_CUE ) {
-      if( !d->tempPathTabVisible )
-	d->optionTabbed->addTab( d->tempPathTab, i18n("&Image") );
-      d->tempPathTabVisible = true;
-      m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
-    }
-    else {
-      if( d->tempPathTabVisible )
-	d->optionTabbed->removePage( d->tempPathTab );
-      d->tempPathTabVisible = false;
-    }
-    m_checkOnTheFly->setShown( currentImageType() == IMAGE_AUDIO_CUE );
-
-    m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
+      m_checkVerify->setEnabled( true );	
   }
   else {
-    m_buttonStart->setEnabled( false );
+    if( d->advancedTabVisible )
+      d->optionTabbed->removePage( d->advancedTab );
+    d->advancedTabVisible = false;
+    m_checkVerify->hide();
   }
+  
+  // and some other stuff only makes sense for audio cues
+  if( currentImageType() == IMAGE_AUDIO_CUE ) {
+    if( !d->tempPathTabVisible )
+      d->optionTabbed->addTab( d->tempPathTab, i18n("&Image") );
+    d->tempPathTabVisible = true;
+    m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
+  }
+  else {
+    if( d->tempPathTabVisible )
+      d->optionTabbed->removePage( d->tempPathTab );
+    d->tempPathTabVisible = false;
+  }
+  m_checkOnTheFly->setShown( currentImageType() == IMAGE_AUDIO_CUE );
+  
+  m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
 
   switch( currentImageType() ) {
   case IMAGE_CDRDAO_TOC:

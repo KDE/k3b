@@ -32,6 +32,9 @@ namespace K3bDevice {
  * This is the baseclass for all the jobs in K3b which actually do the work like burning a cd!
  * The K3bJob object takes care of registering with the k3bcore or with a parent K3bJob.
  *
+ * Every job has a jobhandler which can be another job (in which case the job is handled as
+ * a subjob) or an arbitrary class implementing the K3bJobHandler interface.
+ *
  * A Job should never create any widgets. User interaction should be done through the methods
  * questionYesNo, waitForMedia.
  *
@@ -62,7 +65,10 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
    * The default implementation is based on the canceled() signal.
    *
    * This means that one cannot count on this value beeing valid
-   * in a slot connected to the canceled() signal.
+   * in a slot connected to the canceled() signal. It is, however, save
+   * to call this method from a slot connected to the finished() signal
+   * in case the job makes proper usage of the jobStarted/jobFinished
+   * methods.
    */
   virtual bool hasBeenCanceled() const { return m_canceled; }
 
@@ -71,7 +77,7 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 
   /**
    * @returns the number of running subjobs.
-   * this is useful for proper canceling of jobs.
+   * this is useful for proper cancellation of jobs.
    */
   unsigned int numRunningSubJobs() const;
 
@@ -208,14 +214,18 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   /**
    * Call this in start() to properly register the job and emit the started() signal.
    * Do never emit the started() signal manually.
+   *
+   * Always call K3bJob::jobStarted in reimplementations.
    */
-  void jobStarted();
+  virtual void jobStarted();
 
   /**
    * Call this at the end of the job to properly deregister the job and emit the finished() signal.
    * Do never emit the started() signal manually.
+   *
+   * Always call K3bJob::jobFinished in reimplementations.
    */
-  void jobFinished( bool success );
+  virtual void jobFinished( bool success );
 
  private slots:
   void slotCanceled();
@@ -230,20 +240,28 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
 
   bool m_canceled;
   bool m_active;
+
+  class Private;
+  Private* d;
 };
 
 
+/**
+ * Every job used to actually burn a medium is derived from K3bBurnJob.
+ * This class implements additional signals like buffer status or writing speed
+ * as well as a handling of the used writing application.
+ */
 class LIBK3B_EXPORT K3bBurnJob : public K3bJob
 {
   Q_OBJECT
 	
  public:
   K3bBurnJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
-	
+  virtual ~K3bBurnJob();
+
   /**
-   * FIXME: what does this here?
-   */
-  virtual K3bDoc* doc() const { return 0; }
+   * The writing device used by this job.
+   */	
   virtual K3bDevice::Device* writer() const { return 0; }
 
   /**
@@ -282,7 +300,19 @@ class LIBK3B_EXPORT K3bBurnJob : public K3bJob
    */
   void burning(bool);
 
+ protected:
+  /**
+   * In addition to the registration and deregistration from K3bJob this
+   * method blocks the used burning device (\see K3bInterferingSystemHandler)
+   * in case this is a top level job
+   */
+  virtual void jobStarted();
+  virtual void jobFinished( bool success );
+
  private:
   int m_writeMethod;
+
+  class Private;
+  Private* d;
 };
 #endif
