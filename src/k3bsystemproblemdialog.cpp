@@ -553,9 +553,16 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
   if( !p.start( KProcess::Block, KProcess::AllOutput ) )
     return -1;
 
-  if( out.output().contains( "1" ) )
+  // output is something like:
+  //
+  // /dev/hda:
+  //  using_dma    =  1 (on)
+  //
+  // But we ignore the on/off since it might be translated
+  //
+  if( out.output().contains( "1 (" ) )
     return 1;
-  else if( out.output().contains( "0" ) )
+  else if( out.output().contains( "0 (" ) )
     return 0;
   else
     return -1;
