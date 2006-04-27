@@ -64,12 +64,15 @@ class K3bMedium
    */
   QString beautifiedVolumeId() const;
 
+  /**
+   * Content type. May be combined by a binary OR.
+   */
   enum MediumContent {
-    CONTENT_NONE = 0x0,
-    CONTENT_AUDIO = 0x1,
-    CONTENT_DATA = 0x2,
-    CONTENT_VIDEO_CD = 0x4,
-    CONTENT_VIDEO_DVD = 0x8,
+    CONTENT_NONE = 0x1,
+    CONTENT_AUDIO = 0x2,
+    CONTENT_DATA = 0x4,
+    CONTENT_VIDEO_CD = 0x8,
+    CONTENT_VIDEO_DVD = 0x10,
     CONTENT_ALL = 0xFF
   };
 
