@@ -37,6 +37,7 @@ class K3bVideoDvdJob : public K3bDvdJob
   virtual QString jobDetails() const;
 
  private:
+  bool prepareWriterJob();
   void prepareImager();
 
   K3bVideoDvdDoc* m_doc;
