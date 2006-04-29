@@ -150,6 +150,8 @@ void K3bAudioProjectConvertingThread::run()
       break;
     }
 
+    emitInfoMessage( i18n("Successfully converted track %1.").arg(i+1), K3bJob::INFO );
+
     track = track->next();
     ++i;
   }
