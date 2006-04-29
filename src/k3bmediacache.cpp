@@ -183,11 +183,11 @@ int K3bMediaCache::blockDevice( K3bDevice::Device* dev )
       // create (hopefully) unique id
       e->blockedId = KApplication::random();
 
-      // wait for the thread to stop
-      e->thread->wait();
-
       // let the info go
       e->mutex.unlock();
+
+      // wait for the thread to stop
+      e->thread->wait();
 
       return e->blockedId;
     }
