@@ -34,6 +34,7 @@ class QSpinBox;
 class QComboBox;
 class K3bWritingModeWidget;
 class QButtonGroup;
+class QGroupBox;
 
 
 /**
@@ -82,6 +83,9 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   QSpinBox* m_spinAudioRetries;
   K3bWritingModeWidget* m_writingModeWidget;
   QComboBox* m_comboCopyMode;
+
+  QGroupBox* m_groupAdvancedDataOptions;
+  QGroupBox* m_groupAdvancedAudioOptions;
 };
 
 #endif
