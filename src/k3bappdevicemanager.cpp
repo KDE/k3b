@@ -62,9 +62,9 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
   devicePopupMenu->insert( new KActionSeparator( this ) );
   devicePopupMenu->insert( actionEject );
   devicePopupMenu->insert( actionLoad );
-  devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( actionUnlock );
-  devicePopupMenu->insert( actionlock );
+//  devicePopupMenu->insert( new KActionSeparator( this ) );
+//  devicePopupMenu->insert( actionUnlock );
+//  devicePopupMenu->insert( actionlock );
   devicePopupMenu->insert( new KActionSeparator( this ) );
   devicePopupMenu->insert( actionSetReadSpeed );
 }
