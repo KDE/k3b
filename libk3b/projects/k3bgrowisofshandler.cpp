@@ -102,6 +102,10 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
 	emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
     }
 
+    else if( line.startsWith( ":-( unable to anonymously mmap" ) ) {
+      m_error = ERROR_MEMLOCK;
+    }
+
     else  
       emit infoMessage( line, K3bJob::ERROR );
   }
@@ -240,6 +244,12 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
     emit infoMessage( i18n("Optimum Power Calibration failed."), K3bJob::ERROR );
     emit infoMessage( i18n("Try adding '-use-the-force-luke=noopc' to the "
 			   "growisofs user parameters in the K3b settings."), K3bJob::ERROR );
+    break;
+
+  case ERROR_MEMLOCK:
+    emit infoMessage( i18n("Unable to allocate software buffer."), K3bJob::ERROR );
+    emit infoMessage( i18n("This error is caused by the low memorylocaked resource limit."), K3bJob::ERROR );
+    emit infoMessage( i18n("Please remove the suid root bit on the growisofs permissions for now."), K3bJob::ERROR );
     break;
 
   default:
