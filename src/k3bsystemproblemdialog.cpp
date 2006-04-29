@@ -281,16 +281,17 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					   i18n("Install a more recent version of %1.").arg("growisofs"),
 					   false ) );
       }
-      else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
-	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					   i18n("%1 will be run without root privileges").arg("growisofs"),
-					   i18n("It is highly recommended to configure growisofs "
-						"to run with root privileges. Only then growisofs "
-						"runs with high priority which increases the overall "
-						"stability of the burning process."),
-					   i18n("Use K3bSetup to solve this problem."),
-					   true ) );
-      }
+      // for now we ignore the suid root bit becasue of the memorylocked issue
+//       else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
+// 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 					   i18n("%1 will be run without root privileges").arg("growisofs"),
+// 					   i18n("It is highly recommended to configure growisofs "
+// 						"to run with root privileges. Only then growisofs "
+// 						"runs with high priority which increases the overall "
+// 						"stability of the burning process."),
+// 					   i18n("Use K3bSetup to solve this problem."),
+// 					   true ) );
+//       }
     }
 
     if( !k3bcore->externalBinManager()->foundBin( "dvd+rw-format" ) ) {
