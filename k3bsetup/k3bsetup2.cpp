@@ -73,8 +73,10 @@ static bool shouldRunSuidRoot( K3bExternalBin* bin )
   else if( bin->name() == "growisofs" ) {
     //
     // starting with 6.0 growiofs raises it's priority using nice(-20)
-    //
-    return bin->version >= K3bVersion( 6, 0 );
+    // BUT: newer kernels have ridiculously low default memorylocked resource limit, which prevents privileged 
+    // users from starting growisofs 6.0 with "unable to anonymously mmap 33554432: Resource temporarily unavailable" 
+    // error message. Until Andy releases a version including a workaround we simply never configure growisofs suid root
+    return false; // bin->version >= K3bVersion( 6, 0 );
   }
   else
     return false;
