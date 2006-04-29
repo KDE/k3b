@@ -29,6 +29,7 @@
 #include <qfile.h>
 #include <qglobal.h>
 #include <qvaluevector.h>
+#include <qmutex.h>
 
 #include <kdebug.h>
 
@@ -164,6 +165,8 @@ public:
 #endif
   bool openedReadWrite;
   bool burnfree;
+
+  QMutex mutex;
 };
 
 
@@ -1549,6 +1552,8 @@ bool K3bDevice::Device::open( bool write ) const
   if( d->openedReadWrite != write )
     close();
 
+  d->mutex.lock();
+
   d->openedReadWrite = write;
 
 #ifdef Q_OS_FREEBSD
@@ -1563,6 +1568,8 @@ bool K3bDevice::Device::open( bool write ) const
   if( d->deviceFd == -1 )
     d->deviceFd = openDevice( QFile::encodeName(devicename()), write );
 
+  d->mutex.unlock();
+
   return ( d->deviceFd != -1 );
 #endif
 }
@@ -1570,6 +1577,8 @@ bool K3bDevice::Device::open( bool write ) const
 
 void K3bDevice::Device::close() const
 {
+  d->mutex.lock();
+
 #ifdef Q_OS_FREEBSD
   if( d->cam ) {
     cam_close_device(d->cam);
@@ -1582,6 +1591,8 @@ void K3bDevice::Device::close() const
     d->deviceFd = -1;
   }
 #endif
+
+  d->mutex.unlock();
 }
 
 
