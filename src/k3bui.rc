@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="k3b" version="6">
+<kpartgui name="k3b" version="7">
 <MenuBar>
   <Menu name="project"><text>&amp;Project</text>
   	<Action name="project_add_files" />
@@ -29,9 +29,6 @@
 	<Action name ="device_eject" />
 	<Action name ="device_load" />
 	<Separator />
-	<Action name ="device_unlock" />
-	<Action name ="device_lock" />
-	<Separator />
 	<Action name ="device_set_read_speed" />
   </Menu>
 
@@ -57,7 +54,7 @@
 
 <ToolBar name="toolsToolBar"><text>Tools</text>
 	<Action name="tools_copy_cd" />
-	<Action name="tools_clone_cd" />
+	<Action name="tools_copy_dvd" />
 	<Action name="tools_blank_cdrw" />
 	<Action name="tools_format_dvd" />
 </ToolBar>
