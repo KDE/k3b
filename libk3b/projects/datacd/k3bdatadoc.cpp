@@ -327,6 +327,15 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
 
   // -----------------------------------------------------------------
 
+  //
+  // Old versions of K3b do not properly save the boot cataloge location
+  // and name. So to ensure we have one around even if loading an old project
+  // file we create a default one here.
+  //
+  if( !m_bootImages.isEmpty() && !m_bootCataloge )
+    createBootCatalogeItem( m_bootImages.first()->parent() );
+
+
   informAboutNotFoundFiles();
 
   return true;
@@ -542,9 +551,6 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 
       m_bootImages.append(bootItem);
 
-      // TODO: save location of the cataloge file
-      createBootCatalogeItem(parent);
-
       newItem = bootItem;
     }
 
@@ -554,6 +560,10 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 				 parent,
 				 elem.attributeNode( "name" ).value() );
     }
+  }
+  else if( elem.nodeName() == "special" ) {
+    if( elem.attributeNode( "type" ).value() == "boot cataloge" )
+      createBootCatalogeItem( parent )->setK3bName( elem.attributeNode( "name" ).value() );
   }
   else if( elem.nodeName() == "directory" ) {
     // This is for the VideoDVD project which already contains the *_TS folders
@@ -862,6 +872,13 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
       }
     }
   }
+  else if( item == m_bootCataloge ) {
+    QDomElement topElem = doc->createElement( "special" );
+    topElem.setAttribute( "name", m_bootCataloge->k3bName() );
+    topElem.setAttribute( "type", "boot cataloge" );
+
+    parent->appendChild( topElem );
+  }
   else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
     QDomElement topElem = doc->createElement( "directory" );
     topElem.setAttribute( "name", dirItem->k3bName() );
@@ -1012,7 +1029,7 @@ void K3bDataDoc::prepareFilenames()
   //
 
   K3bDataItem* item = root();
-  int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
+  unsigned int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
   while( (item = item->nextSibling()) ) {
     item->setWrittenName( treatWhitespace( item->k3bName() ) );
     
@@ -1478,6 +1495,8 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
     m_bootCataloge->setExtraInfo( i18n("El Torito boot catalog file") );
     b->setMimeType( i18n("Boot catalog") );
   }
+  else
+    m_bootCataloge->reparent( dir );
 
   return m_bootCataloge;
 }
@@ -1495,7 +1514,7 @@ void K3bDataDoc::removeBootItem( K3bBootItem* item )
 
 QValueList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) const
 {
-
+  Q_UNUSED( path );
   return QValueList<K3bDataItem*>();
 }
 
