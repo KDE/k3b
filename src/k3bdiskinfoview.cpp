@@ -186,7 +186,7 @@ void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
       }
     }
 
-    createMediaInfoItems( medium.diskInfo() );
+    createMediaInfoItems( medium );
 
 
     // iso9660 info
@@ -332,8 +332,10 @@ void K3bDiskInfoView::reload()
 }
 
 
-void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
+void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 {
+  const K3bDevice::DiskInfo& info = medium.diskInfo();
+
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Medium") );
   QString typeStr;
   if( info.currentProfile() != K3bDevice::MEDIA_UNKNOWN )
@@ -407,6 +409,26 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bDevice::DiskInfo& info )
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Sessions:"),
 				 QString::number( info.numSessions() ) );
+
+  if( info.mediaType() & K3bDevice::MEDIA_WRITABLE ) {
+    atipChild = new KListViewItem( atipItem, atipChild,
+				   i18n("Supported writing speeds:") );
+    QString s;
+    for( QValueList<int>::const_iterator it = medium.writingSpeeds().begin();
+	 it != medium.writingSpeeds().end(); ++it ) {
+      if( !s.isEmpty() ) {
+	s.append( "\n" );
+	atipChild->setMultiLinesEnabled( true );
+      }
+
+      if( info.isDvdMedia() )
+	s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
+      else
+	s.append( QString( "%1x (%2 KB/s)" ).arg( *it/175 ).arg( *it ) );
+    }
+
+    atipChild->setText( 1, s );
+  }
 
   atipItem->setOpen( true );
 }
