@@ -162,9 +162,10 @@ K3bDataDoc::MultiSessionMode K3bDvdJob::getMultiSessionMode( const K3bDevice::Di
 int K3bDvdJob::requestMedia( int state )
 {
   int mt = 0;
-  if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
-    mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
-  else if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
+//   if( m_doc->writingMode() == K3b::WRITING_MODE_INCR_SEQ || m_doc->writingMode() == K3b::DAO )
+//     mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
+//  else
+  if( m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
     mt = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R;
   else
     mt = K3bDevice::MEDIA_WRITABLE_DVD_SL;
