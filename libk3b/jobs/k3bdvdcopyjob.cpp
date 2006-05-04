@@ -676,6 +676,7 @@ bool K3bDvdCopyJob::waitForDvd()
 	}
 
 //	m_simulate = false;
+	emit newTask( i18n("Writing DVD copy") );
       }
       
       if( m_writingMode != K3b::WRITING_MODE_AUTO && m_writingMode != K3b::WRITING_MODE_RES_OVWR )
@@ -775,12 +776,6 @@ QString K3bDvdCopyJob::jobDescription() const
 {
   if( m_onlyCreateImage ) {
     return i18n("Creating DVD Image");
-  }
-  else if( m_simulate ) {
-    if( m_onTheFly )
-      return i18n("Simulating DVD Copy On-The-Fly");
-    else
-      return i18n("Simulating DVD Copy");
   }
   else {
     if( m_onTheFly )

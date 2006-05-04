@@ -211,6 +211,7 @@ bool K3bDvdJob::waitForMedium()
 	}
 
 	m_doc->setDummy( false );
+	emit newTask( i18n("Writing") );
       }
       
       if( m_doc->writingMode() != K3b::WRITING_MODE_AUTO && m_doc->writingMode() != K3b::WRITING_MODE_RES_OVWR )
