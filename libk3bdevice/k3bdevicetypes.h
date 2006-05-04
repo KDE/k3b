@@ -49,6 +49,10 @@ namespace K3bDevice {
   const unsigned short FEATURE_LAYER_JUMP_RECORDING = 0x033;
   const unsigned short FEATURE_CD_RW_MEDIA_WRITE_SUPPORT = 0x037;
   const unsigned short FEATURE_DVD_PLUS_R_DOUBLE_LAYER = 0x03B;
+  const unsigned short FEATURE_BD_READ = 0x040;
+  const unsigned short FEATURE_BD_WRITE = 0x041;
+  const unsigned short FEATURE_HD_DVD_READ = 0x050;
+  const unsigned short FEATURE_HD_DVD_WRITE = 0x051;
   const unsigned short FEATURE_POWER_MANAGEMENT = 0x100;
   const unsigned short FEATURE_EMBEDDED_CHANGER = 0x102;
   const unsigned short FEATURE_CD_AUDIO_ANALOG_PLAY = 0x103;
@@ -83,6 +87,12 @@ namespace K3bDevice {
     DEVICE_DVD_PLUS_R = 0x100,    /**< Device writes DVD+R media */
     DEVICE_DVD_PLUS_RW = 0x200,   /**< Device writes DVD+RW media */
     DEVICE_DVD_PLUS_R_DL = 0x400, /**< Device writes DVD+R Double Layer media */
+    DEVICE_HD_DVD_ROM = 0x800,    /**< Device reads HD DVD-ROM media */
+    DEVICE_HD_DVD_R = 0x1000,     /**< Device writes HD DVD-R media */
+    DEVICE_HD_DVD_RAM = 0x2000,   /**< Device writes HD DVD-RAM media */
+    DEVICE_BD_ROM = 0x4000,       /**< Device reads BD-ROM media */
+    DEVICE_BD_R = 0x8000,         /**< Device writes BD-R media */
+    DEVICE_BD_RE = 0x10000,       /**< Device writes BD-RE media */
     CDR = DEVICE_CD_R,            /**< \deprecated {use DEVICE_CD_R instead) */
     CDRW = DEVICE_CD_RW,          /**< \deprecated {use DEVICE_CD_RW instead) */
     CDROM = DEVICE_CD_ROM,        /**< \deprecated {use DEVICE_CD_ROM instead) */
@@ -158,6 +168,14 @@ namespace K3bDevice {
     MEDIA_CD_ROM = 0x2000,                         /**< */
     MEDIA_CD_R = 0x4000,                           /**< */
     MEDIA_CD_RW = 0x8000,                          /**< */
+    MEDIA_HD_DVD_ROM = 0x10000,                    /**< */
+    MEDIA_HD_DVD_R = 0x20000,                      /**< */
+    MEDIA_HD_DVD_RAM = 0x40000,                    /**< */
+    MEDIA_BD_ROM = 0x80000,                        /**< Read-only Blue-ray Disc (BD) */
+    MEDIA_BD_R = 0x100000,                         /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_SEQ = 0x200000,                     /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_RANDOM = 0x400000,                  /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_RE = 0x800000,                        /**< Rewritable Blue-ray Disc (BD-RE) */
     MEDIA_WRITABLE_CD = MEDIA_CD_R |               /**< This is a bitwise or of media types representing all writable CD media.*/
                         MEDIA_CD_RW,
     MEDIA_CD_ALL = MEDIA_WRITABLE_CD |

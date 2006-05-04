@@ -218,7 +218,7 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
   // use a 36 bytes buffer since not all devices return the full inquiry struct
   //
   ScsiCommand cmd( this );
-  unsigned char buf[36];
+  unsigned char buf[96];
   cmd.clear();
   ::memset( buf, 0, sizeof(buf) );
   struct inquiry* inq = (struct inquiry*)buf;
@@ -234,6 +234,19 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
     m_vendor = QString::fromLatin1( (char*)(inq->vendor), 8 ).stripWhiteSpace();
     m_description = QString::fromLatin1( (char*)(inq->product), 16 ).stripWhiteSpace();
     m_version = QString::fromLatin1( (char*)(inq->revision), 4 ).stripWhiteSpace();
+
+    //
+    // check the version descriptors
+    //
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " claims conformance with:" << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version1 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version2 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version3 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version4 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version5 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version6 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version7 ), 16 ) << endl;
+    kdDebug() << "                    " << QString::number( from2Byte( inq->version8 ), 16 ) << endl;
   }
 
   if( m_vendor.isEmpty() )
@@ -1632,6 +1645,9 @@ int K3bDevice::Device::currentProfile() const
     short profile = from2Byte( &profileBuf[6] );
     switch (profile) {
     case 0x00: return MEDIA_NONE;
+    case 0x08: return MEDIA_CD_ROM;
+    case 0x09: return MEDIA_CD_R;
+    case 0x0A: return MEDIA_CD_RW;
     case 0x10: return MEDIA_DVD_ROM;
     case 0x11: return MEDIA_DVD_R_SEQ;
     case 0x12: return MEDIA_DVD_RAM;
@@ -1642,9 +1658,13 @@ int K3bDevice::Device::currentProfile() const
     case 0x1A: return MEDIA_DVD_PLUS_RW;
     case 0x1B: return MEDIA_DVD_PLUS_R;
     case 0x2B: return MEDIA_DVD_PLUS_R_DL;
-    case 0x08: return MEDIA_CD_ROM;
-    case 0x09: return MEDIA_CD_R;
-    case 0x0A: return MEDIA_CD_RW;
+    case 0x40: return MEDIA_BD_ROM;
+    case 0x41: return MEDIA_BD_R_SEQ;
+    case 0x42: return MEDIA_BD_R_RANDOM;
+    case 0x43: return MEDIA_BD_RE;
+    case 0x50: return MEDIA_HD_DVD_ROM;
+    case 0x51: return MEDIA_HD_DVD_R;
+    case 0x52: return MEDIA_HD_DVD_RAM;
     default: return MEDIA_UNKNOWN;
     }
   }
@@ -2141,7 +2161,7 @@ int K3bDevice::Device::dvdMediaType() const
     if( !(m & (MEDIA_WRITABLE_DVD|MEDIA_DVD_ROM)) )
       m = MEDIA_UNKNOWN;  // no profile information or CD media
 
-    if( m & (MEDIA_UNKNOWN|MEDIA_DVD_ROM) ) {
+    if( m & (MEDIA_UNKNOWN|MEDIA_DVD_ROM|MEDIA_HD_DVD_ROM) ) {
       //
       // We prefere the mediatype as reported by the media since this way
       // even ROM drives may report the correct type of writable media.
@@ -2156,6 +2176,9 @@ int K3bDevice::Device::dvdMediaType() const
 	case 0x10: m = MEDIA_DVD_RAM; break;
 	case 0x20: m = MEDIA_DVD_R; break; // there seems to be no value for DVD-R DL, it reports DVD-R
 	case 0x30: m = MEDIA_DVD_RW; break;
+	case 0x40: m = MEDIA_HD_DVD_ROM; break;
+	case 0x50: m = MEDIA_HD_DVD_R; break;
+	case 0x60: m = MEDIA_HD_DVD_RAM; break;
 	case 0x90: m = MEDIA_DVD_PLUS_RW; break;
 	case 0xA0: m = MEDIA_DVD_PLUS_R; break;
 	case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
@@ -2340,6 +2363,7 @@ void K3bDevice::Device::checkFeatures()
   //
   // DVD-ROM
   //
+  // FIXME: since MMC5 the feature descr. is 8 bytes in length including a dvd dl read bit at byte 6
   cmd[2] = FEATURE_DVD_READ>>8;
   cmd[3] = FEATURE_DVD_READ;
   cmd[8] = 12;
@@ -2491,6 +2515,40 @@ void K3bDevice::Device::checkFeatures()
       m_writeModes |= WRITINGMODE_LAYER_JUMP;
     }
   }
+
+
+  //
+  // HD-DVD-ROM
+  //
+  cmd[2] = FEATURE_HD_DVD_READ>>8;
+  cmd[3] = FEATURE_HD_DVD_READ;
+  cmd[8] = 12;
+  if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
+    int len = from4Byte( header );
+    if( len == 8 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Read" << endl;
+      d->deviceType |= DEVICE_HD_DVD_ROM;
+    }
+  }
+
+
+  //
+  // HD-DVD-R(AM)
+  //
+  cmd[2] = FEATURE_HD_DVD_WRITE>>8;
+  cmd[3] = FEATURE_HD_DVD_WRITE;
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+    int len = from4Byte( header );
+    if( len == 8 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Write" << endl;      
+      if( header[12]&0x1 )
+	d->deviceType |= DEVICE_HD_DVD_R;
+      if( header[14]&0x1 )
+	d->deviceType |= DEVICE_HD_DVD_RAM;
+    }
+  }
+
 
 
   //

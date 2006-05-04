@@ -42,6 +42,18 @@ QString K3bDevice::deviceTypeString( int t )
     s += i18n("DVD-RW");
   if( t & K3bDevice::DEVICE_DVD_R_DL )
     s += i18n("DVD-R DL");
+  if( t & DEVICE_HD_DVD_ROM )
+    s += i18n("HD DVD-ROM");
+  if( t & DEVICE_HD_DVD_R )
+    s += i18n("HD DVD-R");
+  if( t & DEVICE_HD_DVD_RAM )
+    s += i18n("HD DVD-RAM");
+  if( t & DEVICE_BD_ROM )
+    s += i18n("BD-ROM");
+  if( t & DEVICE_BD_R )
+    s += i18n("BD-R");
+  if( t & DEVICE_BD_RE )
+    s += i18n("BD-RE");
   if( t & K3bDevice::DEVICE_DVD_PLUS_R )
     s += i18n("DVD+R");
   if( t & K3bDevice::DEVICE_DVD_PLUS_RW )
@@ -132,6 +144,23 @@ QString K3bDevice::mediaTypeString( int m, bool simple )
     s += i18n("CD-R");
   if( m & MEDIA_CD_RW )
     s += i18n("CD-RW");
+  if( m & MEDIA_HD_DVD_ROM )
+    s += i18n("HD DVD-ROM");
+  if( m & MEDIA_HD_DVD_R )
+    s += i18n("HD DVD-R");
+  if( m & MEDIA_HD_DVD_RAM )
+    s += i18n("HD DVD-RAM");
+  if( m & MEDIA_BD_ROM )
+    s += i18n("BD-ROM");
+  if( m & MEDIA_BD_R ||
+      (simple && (m & (MEDIA_BD_R_SEQ|MEDIA_BD_R_RANDOM))) )
+    s += i18n("BD-R");
+  if( m & MEDIA_BD_R_SEQ && !simple )
+    s += i18n("BD-R Sequential");
+  if( m & MEDIA_BD_R_RANDOM && !simple )
+    s += i18n("BD-R Random");
+  if( m & MEDIA_BD_RE )
+    s += i18n("BD-RE");
 
   if( s.isEmpty() )
     return i18n("Error");
