@@ -3,6 +3,7 @@ IconName=k3b
 Comment=K3b
 Comment[bn]=কে-থ্রি-বি
 Comment[hi]=के3बी
+Comment[mk]=К3б
 
 [SuccessfullyFinished]
 Name=Process successful
@@ -185,7 +186,7 @@ Name[is]=Býð eftir miðli
 Name[it]=Si è in attesa di un supporto
 Name[ja]=メディアを待っています
 Name[lt]=Laukiama disko
-Name[mk]=Исчекување за носач
+Name[mk]=Чекам за медиум
 Name[nb]=Venter på medium
 Name[nl]=Wacht op medium
 Name[pa]=ਮੀਡਿਅਮ ਦੀ ਉਡੀਕ ਜਾਰੀ
@@ -222,7 +223,7 @@ Comment[is]=Notandi verður að setja inn miðil
 Comment[it]=L'utente deve inserire un supporto
 Comment[ja]=メディアを入れて下さい
 Comment[lt]=Naudotojas turi įdėti diską
-Comment[mk]=Корисникот треба да внесе носач
+Comment[mk]=Корисникот треба да внесе медиум
 Comment[nb]=Brukeren må sette inn et medium
 Comment[nl]=De gebruiker dient een medium in te voeren
 Comment[pa]=ਉਪਭੋਗੀ ਨੂੰ ਮੀਡਿਅਮ ਪਾਉਣ ਦੀ ਲੋੜ ਹੈ
