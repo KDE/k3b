@@ -54,3 +54,29 @@ A: You are using a patched cdrecord version which tries to open the device exclu
    your are probably also using automounting. The solutions are to disable automounting altogether (and this is
    the recommended solution as automounting can cause other more serious problems with CD/DVD writing) or to
    install a non-patched cdrecord version.
+
+Q: My DVD drive supports 16X but K3B keeps burning at 1X! What's happening?
+
+A: Your kernel most likely didn't apply optimal settings for your drive when it detected it. You can find out
+   what are the current settings of your drive with the command "hdparm /dev/dvd":
+
+   /dev/dvd:
+    IO_support   =  0 (default 16-bit)
+    unmaskirq    =  0 (off)
+    using_dma    =  0 (off)
+    keepsettings =  0 (off)
+    readonly     =  0 (off)
+    readahead    = 256 (on)
+
+   The following options are known to maximize burning and playback performance:
+
+     hdparm -d1 -c1 -a8 -u1 /dev/dvd
+
+   To make these options permanent, a quick and dirty solution is to include the command in /etc/rc.local.
+   Consult your distribution documentation for a tailored solution.
+
+   Some drives have buggy DMA support. If you experience instability, leave these options disabled.
+
+   Some useful references:
+   http://www.togaware.com/linux/survivor/CD_DVD_Drives.shtml
+   http://www.linuxjournal.com/article/6921
