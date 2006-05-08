@@ -120,6 +120,7 @@
 #include "k3bmediaselectiondialog.h"
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
+#include "projects/k3bdatasessionimportdialog.h"
 
 
 class K3bMainWindow::Private
@@ -249,13 +250,15 @@ void K3bMainWindow::initActions()
 				 actionCollection(), "file_new_dvd");
   actionFileNewVideoDvd = new KAction(i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
 				      actionCollection(), "file_new_video_dvd");
-
+  actionFileContinueMultisession = new KAction( i18n("Continue Multisession Project"), "datacd", 0, this, SLOT(slotContinueMultisession()),
+						actionCollection(), "file_continue_multisession" );
 
 //   actionFileNewMenu->insert( actionMenuCD );
 //   actionFileNewMenu->insert( actionMenuDVD );
   actionFileNewMenu->setDelayed( false );
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->insert( actionFileNewDvd );
+  actionFileNewMenu->insert( actionFileContinueMultisession );
   actionFileNewMenu->insert( new KActionSeparator( this ) );
   actionFileNewMenu->insert( actionFileNewAudio );
   actionFileNewMenu->insert( new KActionSeparator( this ) );
@@ -288,8 +291,8 @@ void K3bMainWindow::initActions()
 
   actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "erasecd", 0, this, SLOT(slotBlankCdrw()),
 				      actionCollection(), "tools_blank_cdrw" );
-  /*KAction* actionToolsFormatDVD = */(void)new KAction( i18n("&Format DVD±RW..."), "formatdvd", 0, this, 
-							 SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
+  KAction* actionToolsFormatDVD = new KAction( i18n("&Format DVD±RW..."), "formatdvd", 0, this, 
+					       SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
   (void)new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
@@ -327,10 +330,11 @@ void K3bMainWindow::initActions()
   actionFileNewDvd->setToolTip( i18n("Creates a new data DVD project") );
   actionFileNewMovix->setToolTip( i18n("Creates a new eMovix CD project") );
   actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
-  actionToolsBlankCdrw->setToolTip( i18n("Opens CD-blanking dialog") );
-  actionCdCopy->setToolTip( i18n("Open the CD Copy dialog") );
+  actionToolsBlankCdrw->setToolTip( i18n("Open the CD-RW erasing dialog") );
+  actionToolsFormatDVD->setToolTip( i18n("Open the DVD±RW formatting dialog") );
+  actionCdCopy->setToolTip( i18n("Open the CD copy dialog") );
   actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image") );
-  actionToolsDvdCopy->setToolTip( i18n("Open the DVD Copy dialog") );
+  actionToolsDvdCopy->setToolTip( i18n("Open the DVD copy dialog") );
   //  actionToolsVideoDvdCopy->setToolTip( i18n("Open the VideoDVD Copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
@@ -1080,6 +1084,12 @@ K3bDoc* K3bMainWindow::slotNewDvdDoc()
   K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::DVD );
 
   return doc;
+}
+
+
+K3bDoc* K3bMainWindow::slotContinueMultisession()
+{
+  return K3bDataSessionImportDialog::importSession( 0, this );
 }
 
 

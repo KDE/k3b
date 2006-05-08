@@ -35,28 +35,28 @@ class K3bDataSessionImportDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bDataSessionImportDialog( QWidget* parent = 0 );
-  ~K3bDataSessionImportDialog();
-
   /**
    * Import a session into the project.
    * If the project is a DVD data project only DVD media are
    * presented for selection.
+   *
+   * \param doc if 0 a new project will be created.
+   *
+   * \return the project
    */
-  void importSession( K3bDataDoc* doc );
-
-  /**
-   * Convinience method.
-   */
-  static bool importSession( K3bDataDoc* doc, QWidget* parent );
+  static K3bDataDoc* importSession( K3bDataDoc* doc, QWidget* parent );
 
  private slots:
   void slotOk();
   void slotCancel();
 
+  void importSession( K3bDataDoc* doc );
   void slotSelectionChanged( K3bDevice::Device* );
 
  private:
+  K3bDataSessionImportDialog( QWidget* parent = 0 );
+  ~K3bDataSessionImportDialog();
+
   K3bDataDoc* m_doc;
   K3bMediaSelectionComboBox* m_comboMedia;
 };

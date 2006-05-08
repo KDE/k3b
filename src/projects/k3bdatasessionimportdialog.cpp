@@ -17,8 +17,10 @@
 #include "k3bmediaselectioncombobox.h"
 
 #include <k3bdatadoc.h>
-#include <k3bcore.h>
+#include <k3bapplication.h>
 #include <k3biso9660.h>
+#include <k3bmediacache.h>
+#include <k3b.h>
 
 #include <qpushbutton.h>
 #include <qcursor.h>
@@ -54,9 +56,14 @@ void K3bDataSessionImportDialog::importSession( K3bDataDoc* doc )
 {
   m_doc = doc;
 
-  m_comboMedia->setWantedMediumType( m_doc->type() == K3bDoc::DVD 
-				     ? K3bDevice::MEDIA_WRITABLE_DVD
-				     : K3bDevice::MEDIA_WRITABLE_CD );
+  if( doc ) {
+    m_comboMedia->setWantedMediumType( m_doc->type() == K3bDoc::DVD 
+				       ? K3bDevice::MEDIA_WRITABLE_DVD
+				       : K3bDevice::MEDIA_WRITABLE_CD );
+  }
+  else
+    m_comboMedia->setWantedMediumType( K3bDevice::MEDIA_WRITABLE );
+
   m_comboMedia->setWantedMediumState( K3bDevice::STATE_INCOMPLETE );
 
   slotSelectionChanged( m_comboMedia->selectedDevice() );
@@ -88,6 +95,13 @@ void K3bDataSessionImportDialog::slotOk()
       iso.close();
     }
 
+    if( !m_doc ) {
+      if( k3bappcore->mediaCache()->diskInfo( dev ).isDvdMedia() )
+	m_doc = static_cast<K3bDataDoc*>( k3bappcore->k3bMainWindow()->slotNewDvdDoc() );
+      else
+	m_doc = static_cast<K3bDataDoc*>( k3bappcore->k3bMainWindow()->slotNewDataDoc() );
+    }
+
     m_doc->setBurner( dev );    
     m_doc->importSession( dev );
 
@@ -112,12 +126,12 @@ void K3bDataSessionImportDialog::slotSelectionChanged( K3bDevice::Device* dev )
 }
 
 
-bool K3bDataSessionImportDialog::importSession( K3bDataDoc* doc, QWidget* parent )
+K3bDataDoc* K3bDataSessionImportDialog::importSession( K3bDataDoc* doc, QWidget* parent )
 {
   K3bDataSessionImportDialog dlg( parent );
   dlg.importSession( doc );
   dlg.exec();
-  return ( dlg.result() == 0 );
+  return dlg.m_doc;
 }
 
 

@@ -110,6 +110,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   K3bDoc* slotNewMovixDvdDoc();
   K3bDoc* slotNewDvdDoc();
   K3bDoc* slotNewVideoDvdDoc();
+  K3bDoc* slotContinueMultisession();
 
   void slotClearProject();
 
@@ -276,6 +277,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileNewMovixDvd;
   KAction* actionFileNewDvd;
   KAction* actionFileNewVideoDvd;
+  KAction* actionFileContinueMultisession;
   KAction* actionFileOpen;
   KRecentFilesAction* actionFileOpenRecent;
   KAction* actionFileSave;
