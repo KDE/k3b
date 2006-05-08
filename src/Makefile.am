@@ -23,12 +23,11 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3bwidgetshoweffect.cpp k3bmediaselectiondialog.cpp k3bdiskinfoview.cpp
 
 k3b_LDADD = ./option/liboption.la ./rip/librip.la \
-	./videoEncoding/libvideoEncoding.la \
 	./projects/libprojects.la ../libk3bdevice/libk3bdevice.la \
 	../libk3b/libk3b.la ./misc/libmisc.la \
 	-lkio -lkparts $(CAM_LIB) $(MUSICBRAINZ_LIBS)
 
-SUBDIRS = option misc rip projects videoEncoding pics icons konqi mimetypes sounds
+SUBDIRS = option misc rip projects pics icons konqi mimetypes sounds
 
 xdg_apps_DATA = k3b.desktop
 
