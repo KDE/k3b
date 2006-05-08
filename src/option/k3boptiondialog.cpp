@@ -44,22 +44,14 @@
 K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   : KDialogBase( IconList, i18n("Settings"), Apply|Ok|Cancel, Ok, parent,name, modal, true)
 {
-  setupBurningPage();
+  setupMiscPage();
   setupDevicePage();	
   setupProgramsPage();
   setupCddbPage();
   setupNotifyPage();
-
-//   addOptionPage( new K3bPluginOptionTab(),
-// 		 i18n("Plugins"), 
-// 		 i18n("K3b Plugin Configuration"),
-// 		 KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ) );
-
   setupPluginPage();
   setupThemePage();
-  setupMiscPage();
-  //not yet enabled for the next version
-  //setupDivxPage();
+  setupBurningPage();
 
   m_externalBinOptionTab->readSettings();
   m_cddbOptionTab->readSettings();
@@ -68,7 +60,6 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent, const char *name, bool modal )
   m_miscOptionTab->readSettings();
   m_notifyOptionTab->readSettings();
   m_pluginOptionTab->readSettings();
-  //m_divxOptionTab->readSettings();
   m_themeOptionTab->readSettings();
 
   // if we don't do this the dialog start really huge
@@ -137,7 +128,7 @@ void K3bOptionDialog::slotDefault()
 
 void K3bOptionDialog::setupBurningPage()
 {
-  QFrame* frame = addPage( i18n("Writing"), i18n("Writing Settings"),
+  QFrame* frame = addPage( i18n("Advanced"), i18n("Advanced Settings"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
 
   QGridLayout* _frameLayout = new QGridLayout( frame );

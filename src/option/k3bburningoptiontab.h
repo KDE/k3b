@@ -48,20 +48,12 @@ Q_OBJECT
   void setupGui();
 
   QCheckBox*    m_checkBurnfree;
-
   QCheckBox*    m_checkEject;
   QCheckBox*    m_checkAutoErasingRewritable;
   QCheckBox*    m_checkOverburn;
   QCheckBox*    m_checkManualWritingBufferSize;
   KIntNumInput* m_editWritingBufferSize;
   QCheckBox*    m_checkAllowWritingAppSelection;
-
-  QCheckBox* m_checkUsePbc;
-  QLabel* m_labelPlayTime;
-  QSpinBox* m_spinPlayTime;
-  QLabel* m_labelWaitTime;
-  QSpinBox* m_spinWaitTime;
-  QCheckBox* m_checkUseNumKey;
 };
 
 
