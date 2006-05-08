@@ -34,8 +34,13 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
   void save( K3bIsoOptions& );
 
  private slots:
-  void slotJolietToggled( bool );
-  void slotRockRidgeToggled( bool );
+  void slotSpaceHandlingChanged( int i );
+  void slotCustomFilesystems();
+  void slotFilesystemsChanged();
+
+ private:
+  class CustomFilesystemsDialog;
+  CustomFilesystemsDialog* m_customFsDlg;
 };
 
 

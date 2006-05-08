@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -9,14 +9,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>498</width>
-            <height>277</height>
+            <width>454</width>
+            <height>223</height>
         </rect>
     </property>
     <property name="caption">
         <string>Data Image Settings</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -26,14 +26,14 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>m_groupFilesystems</cstring>
             </property>
             <property name="title">
                 <string>File Systems</string>
             </property>
-            <vbox>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
@@ -43,69 +43,57 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QCheckBox">
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Linux/Unix only</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Linux/Unix + Windows</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Very large files (UDF)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Custom</string>
+                        </property>
+                    </item>
                     <property name="name">
-                        <cstring>m_checkRockRidge</cstring>
+                        <cstring>m_comboFilesystems</cstring>
                     </property>
-                    <property name="text">
-                        <string>Generate Rock Ridge extensions</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Add Rock Ridge extensions to the file system</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
-&lt;p&gt;Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
-&lt;p&gt;Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
-&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD or DVD.&lt;/b&gt;</string>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>m_checkJoliet</cstring>
+                        <cstring>m_buttonCustomFilesystems</cstring>
                     </property>
                     <property name="text">
-                        <string>Generate Joliet extensions</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Add Joliet extensions to the file system</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will add additional Joliet extensions to the ISO-9660 file system.
-&lt;p&gt;Joliet is not an accepted independent international standard like ISO-9660 or Rock Ridge. It is mainly used on Windows systems.
-&lt;p&gt;Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is annoying, as modern file systems all allow 255 characters per path name component.
-&lt;p&gt;Joliet uses UTF-16 coding.
-&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b&gt;never create Joliet-only CDs or DVDs&lt;/b&gt; for that reason.</string>
+                        <string>Custom...</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>m_checkUdf</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Generate UDF structures</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Add UDF structures to the file system</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will create UDF filesystem structures in addition to the ISO9660 filesystem.
-&lt;p&gt;The UDF (&lt;em&gt;&lt;b&gt;U&lt;/b&gt;niversal &lt;b&gt;D&lt;/b&gt;isk &lt;b&gt;F&lt;/b&gt;ormat&lt;/em&gt;) is mainly used for DVDs.</string>
-                    </property>
-                </widget>
-            </vbox>
+            </hbox>
         </widget>
-        <widget class="QGroupBox" row="0" column="1">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>m_groupLinks</cstring>
             </property>
             <property name="title">
-                <string>Symbolic Links</string>
+                <string>File System Settings</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
@@ -115,7 +103,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QCheckBox">
+                <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
                         <cstring>m_checkDiscardAllLinks</cstring>
                     </property>
@@ -130,7 +118,7 @@
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions.</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
+                <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
                         <cstring>m_checkDiscardBrokenLinks</cstring>
                     </property>
@@ -153,7 +141,19 @@
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions.</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
+                <widget class="QCheckBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_checkPreservePermissions</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Preserve file permissions (backup)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
+&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="1">
                     <property name="name">
                         <cstring>m_checkFollowLinks</cstring>
                     </property>
@@ -168,14 +168,22 @@
 &lt;p&gt;Be aware that in case Rock Ridge extensions are disabled (which is not recommended) symbolic links are always followed because ISO9660 does not support symbolic links.</string>
                     </property>
                 </widget>
-            </vbox>
+            </grid>
         </widget>
-        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QButtonGroup">
             <property name="name">
-                <cstring>m_groupPermissions</cstring>
+                <cstring>m_groupWhitespace</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="title">
-                <string>Permissions</string>
+                <string>Whitespace Treatment</string>
             </property>
             <hbox>
                 <property name="name">
@@ -187,93 +195,48 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QCheckBox">
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>No Change</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Strip</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Extended Strip</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Replace</string>
+                        </property>
+                    </item>
                     <property name="name">
-                        <cstring>m_checkPreservePermissions</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Preserve file permissions (backup)</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
-&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_groupWhitespace</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>1</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Whitespace Treatment</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>m_radioNoChange</cstring>
-                    </property>
-                    <property name="text">
-                        <string>No change</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
+                        <cstring>m_comboSpaceHandling</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Do not touch spaces in filenames</string>
+                        <string>Handling of spaces in filenames</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will leave all spaces in filenames as they are.</string>
+                        <string>&lt;p&gt;&lt;b&gt;No Change&lt;/b&gt;&lt;br&gt;
+If this option is checked, K3b will leave all spaces in filenames as they are.
+&lt;p&gt;&lt;b&gt;Strip&lt;/b&gt;&lt;br&gt;
+If this option is checked, K3b will remove all spaces from all filenames.&lt;br&gt;
+Example: 'my good file.ext' becomes 'mygoodfile.ext'
+&lt;p&gt;&lt;b&gt;Extended Strip&lt;/b&gt;&lt;br&gt;
+If this option is checked K3b will remove all spaces in all filenames and capitalize all letters following a space.&lt;br&gt;
+Example: 'my good file.ext' becomes 'myGoodFile.ext'
+&lt;p&gt;&lt;b&gt;Replace&lt;/b&gt;&lt;br&gt;
+If this option is checked, K3b will replace all spaces in all filenames with the specified characters.&lt;br&gt;
+Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>m_radioStrip</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Strip</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Just remove all spaces</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will remove all spaces from all filenames.
-&lt;p&gt;Example: 'my good file.ext' becomes 'mygoodfile.ext'</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>m_radioReplace</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Replace with:</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Replace all spaces</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, K3b will replace all spaces in all filenames with the specified characters.
-&lt;p&gt;For example with an underscore: 'my good file.ext' becomes 'my_good_file.ext'</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="2">
+                <widget class="QLineEdit">
                     <property name="name">
                         <cstring>m_editReplace</cstring>
                     </property>
@@ -295,44 +258,28 @@
                         <string>The string to replace spaces with</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="0" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>m_radioExtendedStrip</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Extended strip</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Remove all spaces and capitalize the letters following them</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked K3b will remove all spaces in all filenames and capitalize all letters following a space.
-&lt;p&gt;Example: 'my good file.ext' becomes 'myGoodFile.ext'</string>
-                    </property>
-                </widget>
-            </grid>
+            </hbox>
         </widget>
-    </grid>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>1</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
 </widget>
 <connections>
-    <connection>
-        <sender>m_radioReplace</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_editReplace</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkRockRidge</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_checkPreservePermissions</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkRockRidge</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_groupLinks</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
     <connection>
         <sender>m_checkDiscardAllLinks</sender>
         <signal>toggled(bool)</signal>
@@ -353,15 +300,9 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>m_checkRockRidge</tabstop>
-    <tabstop>m_checkJoliet</tabstop>
     <tabstop>m_checkDiscardAllLinks</tabstop>
     <tabstop>m_checkDiscardBrokenLinks</tabstop>
     <tabstop>m_checkPreservePermissions</tabstop>
-    <tabstop>m_radioNoChange</tabstop>
-    <tabstop>m_radioStrip</tabstop>
-    <tabstop>m_radioExtendedStrip</tabstop>
-    <tabstop>m_radioReplace</tabstop>
     <tabstop>m_editReplace</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
