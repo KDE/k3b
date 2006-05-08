@@ -479,7 +479,11 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     updateDisplay();
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
-    KMessageBox::information( this, i18n("No CDDB entry found."), i18n("CDDB") );
+    if( !KConfigGroup( k3bcore->config(), "Cddb" ).readBoolEntry( "use remote cddb", false ) )
+      KMessageBox::information( this, i18n("<p>No CDDB entry found. Enable remote CDDB queries in the K3b settings to get access "
+					   "to more entries through the internet."), i18n("CDDB") );
+    else
+      KMessageBox::information( this, i18n("No CDDB entry found."), i18n("CDDB") );
   }
   else {
     KMessageBox::information( this, m_cddb->errorString(), i18n("Cddb error") );
