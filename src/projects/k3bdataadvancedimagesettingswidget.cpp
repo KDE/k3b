@@ -145,12 +145,30 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   : base_K3bAdvancedDataImageSettings( parent, name )
 {
   m_viewIsoSettings->header()->hide();
-  
+  m_viewIsoSettings->setSorting( -1 );
+
   // create WhatsThis for the isoSettings view
   (void)new PrivateIsoWhatsThis( this );
 
   // create all the view items
-  m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( m_viewIsoSettings, 
+  QCheckListItem* iso9660Root = new QCheckListItem( m_viewIsoSettings, 
+						    i18n("IS09660 Settings"),
+						    QCheckListItem::Controller );
+  QCheckListItem* rrRoot = new QCheckListItem( m_viewIsoSettings, 
+					       iso9660Root,
+					       i18n("Rock Ridge Settings"),
+					       QCheckListItem::Controller );
+  QCheckListItem* jolietRoot = new QCheckListItem( m_viewIsoSettings, 
+						   rrRoot,
+						   i18n("Joliet Settings"),
+						   QCheckListItem::Controller );
+  QCheckListItem* miscRoot = new QCheckListItem( m_viewIsoSettings, 
+						 jolietRoot,
+						 i18n("Misc Settings"),
+						 QCheckListItem::Controller );
+
+  // ISO9660 settings
+  m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( iso9660Root, 
 								i18n( "Allow untranslated ISO9660 filenames" ), 
 								QCheckListItem::CheckBox );
   m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
@@ -182,26 +200,8 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 							QCheckListItem::CheckBox );
 
   m_checkAllowUntranslatedFilenames->setOpen(true);
-
-  m_checkJolietLong = new QCheckListItem( m_viewIsoSettings,
-					  i18n("Allow 103 character Joliet filenames"),
-					  QCheckListItem::CheckBox );
-
-  m_checkCreateTransTbl = new QCheckListItem( m_viewIsoSettings, 
-					      i18n( "Create TRANS.TBL files" ),
-					      QCheckListItem::CheckBox );
-  m_checkHideTransTbl = new QCheckListItem( m_viewIsoSettings, 
-					    i18n( "Hide TRANS.TBL files in Joliet" ),
-					    QCheckListItem::CheckBox );
-//   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
-// 						   i18n( "Follow symbolic links" ),
-// 						   QCheckListItem::CheckBox );
-
-  m_checkDoNotCacheInodes = new QCheckListItem( m_viewIsoSettings,
-						i18n("Do not cache inodes" ),
-						QCheckListItem::CheckBox );
-
-  m_isoLevelController = new QCheckListItem( m_viewIsoSettings,
+  m_isoLevelController = new QCheckListItem( iso9660Root, 
+					     m_checkAllowUntranslatedFilenames,
 					     i18n("ISO Level") );
 
   m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
@@ -216,6 +216,32 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 
   m_isoLevelController->setOpen(true);
 
+  // Joliet Settings
+  m_checkJolietLong = new QCheckListItem( jolietRoot,
+					  i18n("Allow 103 character Joliet filenames"),
+					  QCheckListItem::CheckBox );
+
+  // Rock Ridge Settings
+  m_checkCreateTransTbl = new QCheckListItem( rrRoot, 
+					      i18n( "Create TRANS.TBL files" ),
+					      QCheckListItem::CheckBox );
+  m_checkHideTransTbl = new QCheckListItem( rrRoot, m_checkCreateTransTbl, 
+					    i18n( "Hide TRANS.TBL files in Joliet" ),
+					    QCheckListItem::CheckBox );
+
+  // Misc Settings
+//   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
+// 						   i18n( "Follow symbolic links" ),
+// 						   QCheckListItem::CheckBox );
+
+  m_checkDoNotCacheInodes = new QCheckListItem( miscRoot,
+						i18n("Do not cache inodes" ),
+						QCheckListItem::CheckBox );
+
+  iso9660Root->setOpen( true );
+  jolietRoot->setOpen( true );
+  rrRoot->setOpen( true );
+  miscRoot->setOpen( true );
 
 
   m_comboInputCharset->setValidator( new QRegExpValidator( QRegExp("[\\w_-]*"), this ) );
@@ -249,8 +275,11 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
   m_checkForceInputCharset->setChecked( o.forceInputCharset() );
   m_comboInputCharset->setEditText( o.inputCharset() );
 
+  // RR settings
   m_checkCreateTransTbl->setOn( o.createTRANS_TBL() );
   m_checkHideTransTbl->setOn( o.hideTRANS_TBL() );
+
+  // iso9660 settings
   m_checkAllowUntranslatedFilenames->setOn( o.ISOuntranslatedFilenames() );
   m_checkAllow31CharFilenames->setOn( o.ISOallow31charFilenames() );
   m_checkAllowMaxLengthFilenames->setOn( o.ISOmaxFilenameLength() );
@@ -261,9 +290,13 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
   m_checkAllowOther->setOn( o.ISOnoIsoTranslate() );
   m_checkAllowMultiDot->setOn( o.ISOallowMultiDot() );
   m_checkAllowLowercaseCharacters->setOn( o.ISOallowLowercase() );
-  //  m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
+
+  // joliet settings
   m_checkJolietLong->setOn( o.jolietLong() );
+
+  // misc (FIXME: should not be here)
   m_checkDoNotCacheInodes->setOn( o.doNotCacheInodes() );
+  //  m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
 }
 
 

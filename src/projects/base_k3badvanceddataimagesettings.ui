@@ -31,7 +31,7 @@
                 <cstring>groupIsoSettings</cstring>
             </property>
             <property name="title">
-                <string>ISO9660 Filesystem</string>
+                <string>File System Settings</string>
             </property>
             <vbox>
                 <property name="name">
