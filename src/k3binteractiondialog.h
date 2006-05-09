@@ -138,6 +138,12 @@ class K3bInteractionDialog : public KDialog
 			  const QString& tooltip = QString::null, 
 			  const QString& whatsthis = QString::null );
 
+  /**
+   * If set true the init() method will be called via a QTimer to ensure event
+   * handling be done before (default: false).
+   */
+  void setDelayedInitialization( bool b ) { m_delayedInit = b; }
+
  protected slots:
    // FIXME: replace these with protected methods which are called from private slots.
   virtual void slotStartClicked();
@@ -204,6 +210,7 @@ class K3bInteractionDialog : public KDialog
   void slotSaveUserDefaults();
   void slotLoadLastSettings();
   void slotStartClickedInternal();
+  void slotDelayedInit();
 
  private:
   void initConnections();
@@ -220,6 +227,7 @@ class K3bInteractionDialog : public KDialog
 
   bool m_exitLoopOnHide;
   bool m_inLoop;
+  bool m_delayedInit;
 };
 
 #endif

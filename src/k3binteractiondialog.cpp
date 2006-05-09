@@ -34,6 +34,7 @@
 #include <qpopupmenu.h>
 #include <qeventloop.h>
 #include <qapplication.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -58,7 +59,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_defaultButton(defaultButton),
     m_configGroup(configGroup),
     m_exitLoopOnHide(true),
-    m_inLoop(false)
+    m_inLoop(false),
+    m_delayedInit(false)
 {
   mainGrid = new QGridLayout( this );
   mainGrid->setSpacing( spacingHint() );
@@ -430,7 +432,10 @@ int K3bInteractionDialog::exec( bool returnOnHide )
 
   slotLoadUserDefaults();
   show();
-  init();
+  if( m_delayedInit )
+    QTimer::singleShot( 0, this, SLOT(slotDelayedInit()) );
+  else
+    init();
   
   m_inLoop = true;
   QApplication::eventLoop()->enterLoop();
@@ -480,6 +485,12 @@ void K3bInteractionDialog::done( int r )
   }
 
   return KDialog::done( r );
+}
+
+
+void K3bInteractionDialog::slotDelayedInit()
+{
+  init();
 }
 
 #include "k3binteractiondialog.moc"
