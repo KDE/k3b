@@ -17,7 +17,7 @@
 #define K3BDATAVIEWITEM_H
 
 #include <k3blistview.h>
-#include <kfileitem.h>
+#include <kmimetype.h>
 
 class K3bDataItem;
 class K3bFileItem;
@@ -78,7 +78,7 @@ class K3bDataDirViewItem : public K3bDataViewItem
 };
 
 
-class K3bDataFileViewItem : public K3bDataViewItem, public KFileItem
+class K3bDataFileViewItem : public K3bDataViewItem
 {
  public:
   K3bDataFileViewItem( K3bFileItem*, QListView* parent );
@@ -90,7 +90,10 @@ class K3bDataFileViewItem : public K3bDataViewItem, public KFileItem
   K3bFileItem* fileItem() const { return m_fileItem; }
 
  private:
+  void init( K3bFileItem* );
+
   K3bFileItem* m_fileItem;
+  KMimeType::Ptr m_pMimeType;
 };
 
 

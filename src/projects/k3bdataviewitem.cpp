@@ -186,20 +186,29 @@ void K3bDataDirViewItem::highlightIcon( bool b )
 
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
-  : K3bDataViewItem( file, parent ),
-    KFileItem( KFileItem::Unknown, KFileItem::Unknown, KURL::fromPathOrURL(file->localPath()) )
+  : K3bDataViewItem( file, parent )
 {
-  m_fileItem = file;
-  setPixmap( 0, KFileItem::pixmap(16) );
+  init( file );
 }
 
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
-  : K3bDataViewItem( file, parent ),
-    KFileItem( KFileItem::Unknown, KFileItem::Unknown, KURL::fromPathOrURL(file->localPath()) )
+  : K3bDataViewItem( file, parent )
+{
+  init( file );
+}
+
+
+void K3bDataFileViewItem::init( K3bFileItem* file )
 {
   m_fileItem = file;
-  setPixmap( 0, KFileItem::pixmap(16) );
+
+  // determine the mimetype
+  m_pMimeType = KMimeType::findByURL( KURL::fromPathOrURL(file->localPath()) );
+  if( !m_pMimeType )
+    setPixmap( 0, DesktopIcon( "unknown", 16, KIcon::DefaultState ) );
+  else  
+    setPixmap( 0, m_pMimeType->pixmap( KURL::fromPathOrURL(file->localPath()), KIcon::Desktop, 16, KIcon::DefaultState ) );
 }
 
 	
@@ -210,19 +219,24 @@ QString K3bDataFileViewItem::text( int index ) const
     return m_fileItem->k3bName();
   case 1:
     {
+      QString comment = m_pMimeType->comment( KURL::fromPathOrURL(m_fileItem->localPath()), true );
+      if( comment.isEmpty() )
+	comment = m_pMimeType->name();
+
       if( m_fileItem->isSymLink() )
-	return i18n("Link to %1").arg(const_cast<K3bDataFileViewItem*>(this)->mimeComment());
+	return i18n("Link to %1").arg(comment);
       else
-	return const_cast<K3bDataFileViewItem*>(this)->mimeComment();
+	return comment;
     }
   case 2:
     return KIO::convertSize( m_fileItem->size() );
   case 3:
     return m_fileItem->localPath();
   case 4:
-    return ( m_fileItem->isValid()
-	     ? linkDest()
-	     : linkDest() + " (" + i18n("outside of project") + ")" );
+    if( m_fileItem->isValid() )
+      return K3b::resolveLink( m_fileItem->localPath() );
+    else
+      return K3b::resolveLink( m_fileItem->localPath() ) + " (" + i18n("outside of project") + ")";
   default:
     return "";
   }

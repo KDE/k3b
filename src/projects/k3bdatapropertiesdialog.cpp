@@ -91,7 +91,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( K3bDataItem* dataItem, QWidget
 
 
   if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
-    KFileItem kFileItem( 0, 0, KURL::fromPathOrURL(fileItem->localPath()) );
+    KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KURL::fromPathOrURL(fileItem->localPath()) );
     labelMimeType->setPixmap( kFileItem.pixmap(KIcon::SizeLarge) );
     if( fileItem->isSymLink() )
       m_labelType->setText( i18n("Link to %1").arg(kFileItem.mimeComment()) );
