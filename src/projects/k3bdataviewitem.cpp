@@ -187,7 +187,7 @@ void K3bDataDirViewItem::highlightIcon( bool b )
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
   : K3bDataViewItem( file, parent ),
-    KFileItem( 0, 0, KURL::fromPathOrURL(file->localPath()) )
+    KFileItem( KFileItem::Unknown, KFileItem::Unknown, KURL::fromPathOrURL(file->localPath()) )
 {
   m_fileItem = file;
   setPixmap( 0, KFileItem::pixmap(16) );
@@ -196,7 +196,7 @@ K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
 
 K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
   : K3bDataViewItem( file, parent ),
-    KFileItem( 0, 0, KURL::fromPathOrURL(file->localPath()) )
+    KFileItem( KFileItem::Unknown, KFileItem::Unknown, KURL::fromPathOrURL(file->localPath()) )
 {
   m_fileItem = file;
   setPixmap( 0, KFileItem::pixmap(16) );
