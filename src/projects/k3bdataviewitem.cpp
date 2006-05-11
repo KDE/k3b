@@ -233,6 +233,8 @@ QString K3bDataFileViewItem::text( int index ) const
   case 3:
     return m_fileItem->localPath();
   case 4:
+    if( !m_fileItem->isSymLink() )
+      return QString::null;
     if( m_fileItem->isValid() )
       return K3b::resolveLink( m_fileItem->localPath() );
     else
