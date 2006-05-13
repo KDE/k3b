@@ -1,2 +1,3 @@
 - When a saved audio project is opened in K3b it is marked as modified.
-
+- Iso Image growing (aka. DVD+RW multisession) does not work
+- Data verification is not reliable
