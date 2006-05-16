@@ -15,5 +15,6 @@ Name[pa]=K3b ਨਾਲ ਵੀਡਿਓ DVD ਟਾਇਟਲ ਰਿਪ
 Name[pt]=Extrair os Títulos do DVD de Vídeo com o K3b
 Name[pt_BR]=Extrair os Títulos do DVD de Vídeo com o K3b
 Name[sv]=Lagra dvd-titlar med K3b
+Name[uk]=Видерти заголовки з відео-DVD за допомогою K3b
 Exec=k3b --videodvdrip %u
 Icon=k3b
