@@ -99,6 +99,11 @@ void K3bMsInfoFetcher::getMsInfo()
 
     *m_process << "-msinfo";
 
+    // additional user parameters from config
+    const QStringList& params = bin->userParameters();
+    for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
+      *m_process << *it;
+
     kdDebug() << "***** " << bin->name() << " parameters:\n";
     const QValueList<QCString>& args = m_process->args();
     QString s;
