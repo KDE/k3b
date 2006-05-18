@@ -2045,10 +2045,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	// only one track on a DVD-RW media
 	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
 	  track_info_t* trackInfo = (track_info_t*)data;
-	  if( inf.empty() ) {
-	    inf.m_capacity = from4Byte( trackInfo->track_size );
-	  }
-	  else {
+	  inf.m_capacity = from4Byte( trackInfo->track_size );
+	  if( !inf.empty() ) {
 	    if( readFormatCapacity( 0x10, inf.m_capacity ) )
 	      kdDebug() << blockDeviceName() << ": Format capacity 0x10: " << inf.m_capacity.toString() << endl;
 	  
