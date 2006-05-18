@@ -20,6 +20,7 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bcore.h>
+#include <k3bglobals.h>
 
 #include <qrect.h>
 #include <qapplication.h>
@@ -35,6 +36,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kurlcompletion.h>
+#include <kuser.h>
 
 
 class K3bFileTreeComboBox::Private
@@ -205,15 +207,29 @@ void K3bFileTreeComboBox::slotGoUrl()
   }
 
   // no device -> select url
-  if( p.startsWith( "~/" ) || p == "~" )
-    p.replace( "~", QDir::homeDirPath() );
-  else if( p.startsWith( "~" ) ) {
-    int i = p.find( '/' );
-    if( i < 0 )
-      i = p.length();
-    QString userName = p.mid( 1, i-1 );
-    p = "/home/" + userName + p.mid( i );
+
+  //
+  // Properly replace home dirs.
+  // a single ~ will be replaced with the current user's home dir 
+  // while for example "~ftp" will be replaced by the home dir of user
+  // ftp
+  //
+  // TODO: move this to k3bglobals
+
+  // to expand another user's home dir we need a tilde followed by a user name
+  static QRegExp someUsersHomeDir( "\\~([^/]+)" );
+  int pos = 0;
+  while( ( pos = someUsersHomeDir.search( p, pos ) ) != -1 ) {
+    KUser user( someUsersHomeDir.cap(1) );
+    if( user.isValid() )
+      p.replace( pos, someUsersHomeDir.cap(1).length() + 1, user.homeDir() );
+    else
+      ++pos; // skip this ~
   }
+
+  // now replace the unmatched tildes with our home dir
+  p.replace( "~", K3b::prepareDir( QDir::homeDirPath() ) );
+
 
   lineEdit()->setText( p );
   KURL url;
