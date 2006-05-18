@@ -11,6 +11,6 @@ KDE_CHECK_HEADERS(dvdread/dvd_reader.h,
 ])
 
 if test "$have_libdvdread" = "no"; then	
-   AC_MSG_WARN([Could not find libdvdread. Please install.])
+   AC_MSG_ERROR([Could not find libdvdread. Please install.])
    DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
 fi
