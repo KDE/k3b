@@ -48,7 +48,8 @@ namespace K3bDevice {
   const unsigned short FEATURE_DDCD_RW_WRITE = 0x032;
   const unsigned short FEATURE_LAYER_JUMP_RECORDING = 0x033;
   const unsigned short FEATURE_CD_RW_MEDIA_WRITE_SUPPORT = 0x037;
-  const unsigned short FEATURE_DVD_PLUS_R_DOUBLE_LAYER = 0x03B;
+  const unsigned short FEATURE_DVD_PLUS_RW_DUAL_LAYER = 0x03A;            /**< since MMC5 revision 3 */
+  const unsigned short FEATURE_DVD_PLUS_R_DUAL_LAYER = 0x03B;
   const unsigned short FEATURE_BD_READ = 0x040;
   const unsigned short FEATURE_BD_WRITE = 0x041;
   const unsigned short FEATURE_HD_DVD_READ = 0x050;
@@ -165,6 +166,7 @@ namespace K3bDevice {
     MEDIA_DVD_PLUS_RW = 0x400,                     /**< */
     MEDIA_DVD_PLUS_R = 0x800,                      /**< */
     MEDIA_DVD_PLUS_R_DL = 0x1000,                  /**< Double Layer DVD+R media. */
+    MEDIA_DVD_PLUS_RW_DL = 0x1000000,              /**< Double Layer DVD+RW media. */
     MEDIA_CD_ROM = 0x2000,                         /**< */
     MEDIA_CD_R = 0x4000,                           /**< */
     MEDIA_CD_RW = 0x8000,                          /**< */
@@ -190,12 +192,14 @@ namespace K3bDevice {
     MEDIA_WRITABLE_DVD_DL = MEDIA_DVD_R_DL |       /**< This is a bitwise or of media types representing all writable double layer DVD media.*/
                             MEDIA_DVD_R_DL_SEQ |
                             MEDIA_DVD_R_DL_JUMP |
-                            MEDIA_DVD_PLUS_R_DL,
+                            MEDIA_DVD_PLUS_R_DL |
+                            MEDIA_DVD_PLUS_RW_DL,
     MEDIA_WRITABLE_DVD = MEDIA_WRITABLE_DVD_SL |   /**< This is a bitwise or of media types representing all writable DVD media.*/
                          MEDIA_WRITABLE_DVD_DL,
     MEDIA_REWRITABLE_DVD =  MEDIA_DVD_RW |
                             MEDIA_DVD_RW_OVWR |
                             MEDIA_DVD_RW_SEQ |
+                            MEDIA_DVD_PLUS_RW_DL |
                             MEDIA_DVD_PLUS_RW,
     MEDIA_WRITABLE = MEDIA_WRITABLE_CD |           /**< This is a bitwise or of media types representing all writable media.*/
                      MEDIA_WRITABLE_DVD,
@@ -209,10 +213,11 @@ namespace K3bDevice {
                           MEDIA_DVD_R_DL_JUMP,
     MEDIA_DVD_PLUS_ALL = MEDIA_DVD_PLUS_RW |       /**< This is a bitwise or of media types representing all DVD+R/W media.*/
                          MEDIA_DVD_PLUS_R |
-                         MEDIA_DVD_PLUS_R_DL,
+                         MEDIA_DVD_PLUS_R_DL |
+                         MEDIA_DVD_PLUS_RW_DL,
     MEDIA_DVD_ALL = MEDIA_WRITABLE_DVD |
                     MEDIA_DVD_ROM,
-    MEDIA_UNKNOWN = 0x1000000                      /**< Represents an unknown media type (when an error occured) */
+    MEDIA_UNKNOWN = 0x10000000                     /**< Represents an unknown media type (when an error occured) */
   };
 
   inline bool isDvdMedia( int mediaType ) {

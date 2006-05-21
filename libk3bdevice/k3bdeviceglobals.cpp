@@ -136,8 +136,10 @@ QString K3bDevice::mediaTypeString( int m, bool simple )
     s += i18n("DVD+RW");
   if( m & MEDIA_DVD_PLUS_R )
     s += i18n("DVD+R");
+  if( m & MEDIA_DVD_PLUS_RW_DL )
+    s += i18n("DVD+RW Dual Layer");
   if( m & MEDIA_DVD_PLUS_R_DL )
-    s += i18n("DVD+R Double Layer");
+    s += i18n("DVD+R Dual Layer");
   if( m & MEDIA_CD_ROM )
     s += i18n("CD-ROM");
   if( m & MEDIA_CD_R )

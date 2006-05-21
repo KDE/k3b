@@ -140,7 +140,8 @@ class K3bDevice::Device::Private
 {
 public:
   Private()
-    : deviceType(0),
+    : readCapabilities(0),
+      writeCapabilities(0),
       supportedProfiles(0),
 #ifdef Q_OS_LINUX
       deviceFd(-1),
@@ -152,7 +153,8 @@ public:
       burnfree(false) {
   }
 
-  int deviceType;
+  int readCapabilities;
+  int writeCapabilities;
   int supportedProfiles;
   QString mountPoint;
   QString mountDeviceName;
@@ -206,7 +208,7 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
   //
   // they all should read CD-ROM.
   //
-  d->deviceType = DEVICE_CD_ROM;
+  d->readCapabilities = MEDIA_CD_ROM;
 
   d->supportedProfiles = 0;
 
@@ -234,19 +236,6 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
     m_vendor = QString::fromLatin1( (char*)(inq->vendor), 8 ).stripWhiteSpace();
     m_description = QString::fromLatin1( (char*)(inq->product), 16 ).stripWhiteSpace();
     m_version = QString::fromLatin1( (char*)(inq->revision), 4 ).stripWhiteSpace();
-
-    //
-    // check the version descriptors
-    //
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " claims conformance with:" << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version1 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version2 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version3 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version4 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version5 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version6 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version7 ), 16 ) << endl;
-    kdDebug() << "                    " << QString::number( from2Byte( inq->version8 ), 16 ) << endl;
   }
 
   if( m_vendor.isEmpty() )
@@ -287,6 +276,11 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
   //
   checkForAncientWriters();
 
+  //
+  // If it can be written it can also be read
+  //
+  d->readCapabilities |= d->writeCapabilities;
+
   close();
 
   return furtherInit();
@@ -313,18 +307,16 @@ bool K3bDevice::Device::furtherInit()
     return false;
   }
 
-  d->deviceType |= DEVICE_CD_ROM;
+  d->readCapabilities |= DEVICE_CD_ROM;
 
-  if (drivetype & CDC_CD_R)
-    d->deviceType |= DEVICE_CD_R;
-  if (drivetype & CDC_CD_RW)
-    d->deviceType |= DEVICE_CD_RW;
-  if (drivetype & CDC_DVD_R)
-    d->deviceType |= DEVICE_DVD_R;
-  if (drivetype & CDC_DVD_RAM)
-    d->deviceType |= DEVICE_DVD_RAM;
-  if (drivetype & CDC_DVD)
-    d->deviceType |= DEVICE_DVD_ROM;
+  if( drivetype & CDC_CD_R )
+    d->writeCapabilities |= MEDIA_CD_R;
+  if( drivetype & CDC_CD_RW )
+    d->writeCapabilities |= MEDIA_CD_RW;
+  if( drivetype & CDC_DVD_R )
+    d->writeCapabilities |= MEDIA_DVD_R;
+  if( drivetype & CDC_DVD )
+    d->readCapabilities |= MEDIA_DVD_ROM;
 
   close();
 
@@ -358,7 +350,8 @@ void K3bDevice::Device::checkForAncientWriters()
       ||
       ( vendor().startsWith("Traxdata") && description().startsWith("CDR4120") ) ) {
     m_writeModes = WRITINGMODE_TAO;
-    d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
+    d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+    d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
     m_maxWriteSpeed = 4;
     m_maxReadSpeed = 12;
     m_bufferSize = 1024;
@@ -367,7 +360,8 @@ void K3bDevice::Device::checkForAncientWriters()
   else if( vendor().startsWith("TEAC") ) { 
     if( description().startsWith("CD-R56S") ) {
       m_writeModes |= TAO;
-      d->deviceType |= CDROM|CDR;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 6;
       m_maxReadSpeed = 24;
       m_bufferSize = 1302;
@@ -375,7 +369,8 @@ void K3bDevice::Device::checkForAncientWriters()
     }
     if( description().startsWith("CD-R58S") ) {
       m_writeModes |= TAO;
-      d->deviceType |= CDROM|CDR;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 8;
       m_maxReadSpeed = 24;
       m_bufferSize = 4096;
@@ -385,7 +380,8 @@ void K3bDevice::Device::checkForAncientWriters()
   else if( vendor().startsWith("MATSHITA") ) {
     if( description().startsWith("CD-R   CW-7501") ) {
       m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
-      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 2;
       m_maxReadSpeed = 4;
       m_bufferSize = 1024;
@@ -393,7 +389,8 @@ void K3bDevice::Device::checkForAncientWriters()
     }
     if( description().startsWith("CD-R   CW-7502") ) {
       m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
-      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 4;
       m_maxReadSpeed = 8;
       m_bufferSize = 1024;
@@ -401,7 +398,8 @@ void K3bDevice::Device::checkForAncientWriters()
     }
     else if( description().startsWith("CD-R56S") ) {
       m_writeModes |= WRITINGMODE_TAO;
-      d->deviceType |= DEVICE_CD_ROM|DEVICE_CD_R;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 6;
       m_maxReadSpeed = 24;
       m_bufferSize = 1302;
@@ -411,7 +409,8 @@ void K3bDevice::Device::checkForAncientWriters()
   else if( vendor().startsWith("HP") ) {
     if( description().startsWith("CD-Writer 6020") ) {
       m_writeModes = WRITINGMODE_TAO;
-      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 2;
       m_maxReadSpeed = 6;
       m_bufferSize = 1024;
@@ -421,7 +420,8 @@ void K3bDevice::Device::checkForAncientWriters()
   else if( vendor().startsWith( "PHILIPS" ) ) {
     if( description().startsWith( "CDD2600" ) ) {
       m_writeModes = WRITINGMODE_TAO|WRITINGMODE_SAO;
-      d->deviceType = DEVICE_CD_ROM|DEVICE_CD_R;
+      d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
+      d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
       m_maxWriteSpeed = 2;
       m_maxReadSpeed = 6;
       m_bufferSize = 1024;
@@ -454,7 +454,7 @@ bool K3bDevice::Device::supportsRawWriting() const
 
 bool K3bDevice::Device::writesCd() const
 {
-  return ( d->deviceType & DEVICE_CD_R ) && ( m_writeModes & WRITINGMODE_TAO );
+  return ( d->writeCapabilities & MEDIA_CD_R ) && ( m_writeModes & WRITINGMODE_TAO );
 }
 
 
@@ -466,7 +466,7 @@ bool K3bDevice::Device::burner() const
 
 bool K3bDevice::Device::writesCdrw() const
 {
-  return d->deviceType & DEVICE_CD_RW;
+  return d->writeCapabilities & MEDIA_CD_RW;
 }
 
 
@@ -478,25 +478,73 @@ bool K3bDevice::Device::writesDvd() const
 
 bool K3bDevice::Device::writesDvdPlus() const
 {
-  return d->deviceType & (DEVICE_DVD_PLUS_R|DEVICE_DVD_PLUS_RW);
+  return d->writeCapabilities & (MEDIA_DVD_PLUS_R|MEDIA_DVD_PLUS_RW);
 }
 
 
 bool K3bDevice::Device::writesDvdMinus() const
 {
-  return d->deviceType & (DEVICE_DVD_R|DEVICE_DVD_RW);
+  return d->writeCapabilities & (MEDIA_DVD_R|MEDIA_DVD_RW);
 }
 
 
 bool K3bDevice::Device::readsDvd() const
 {
-  return d->deviceType & (DEVICE_DVD_ROM|DEVICE_DVD_R|DEVICE_DVD_RAM|DEVICE_DVD_PLUS_R);
+  return d->readCapabilities & MEDIA_DVD_ROM;
 }
 
 
 int K3bDevice::Device::type() const
 {
-  return d->deviceType;
+  int r = 0;
+  if( readCapabilities() & MEDIA_CD_ROM )
+    r |= DEVICE_CD_ROM;
+  if( writeCapabilities() & MEDIA_CD_R )
+    r |= DEVICE_CD_R;
+  if( writeCapabilities() & MEDIA_CD_RW )
+    r |= DEVICE_CD_RW;
+  if( readCapabilities() & MEDIA_DVD_ROM )
+    r |= DEVICE_DVD_ROM;
+  if( writeCapabilities() & MEDIA_DVD_RAM )
+    r |= DEVICE_DVD_RAM;
+  if( writeCapabilities() & MEDIA_DVD_R )
+    r |= DEVICE_DVD_R;
+  if( writeCapabilities() & MEDIA_DVD_RW )
+    r |= DEVICE_DVD_RW;
+  if( writeCapabilities() & MEDIA_DVD_R_DL )
+    r |= DEVICE_DVD_R_DL;
+  if( writeCapabilities() & MEDIA_DVD_PLUS_R )
+    r |= DEVICE_DVD_PLUS_R;
+  if( writeCapabilities() & MEDIA_DVD_PLUS_RW )
+    r |= DEVICE_DVD_PLUS_RW;
+  if( writeCapabilities() & MEDIA_DVD_PLUS_R_DL )
+    r |= DEVICE_DVD_PLUS_R_DL;
+  if( readCapabilities() & MEDIA_HD_DVD_ROM )
+    r |= DEVICE_HD_DVD_ROM;
+  if( writeCapabilities() & MEDIA_HD_DVD_R )
+    r |= DEVICE_HD_DVD_R;
+  if( writeCapabilities() & MEDIA_HD_DVD_RAM )
+    r |= DEVICE_HD_DVD_RAM;
+  if( readCapabilities() & MEDIA_BD_ROM )
+    r |= DEVICE_BD_ROM;
+  if( writeCapabilities() & MEDIA_BD_R )
+    r |= DEVICE_BD_R;
+  if( writeCapabilities() & MEDIA_BD_RE )
+    r |= DEVICE_BD_RE;
+
+  return r;
+}
+
+
+int K3bDevice::Device::readCapabilities() const
+{
+  return d->readCapabilities;
+}
+
+
+int K3bDevice::Device::writeCapabilities() const
+{
+  return d->writeCapabilities;
 }
 
 
@@ -1483,16 +1531,27 @@ bool K3bDevice::Device::fixupToc( K3bDevice::Toc& toc ) const
 
 bool K3bDevice::Device::block( bool b ) const
 {
+  //
+  // For some reason the Scsi Command does not work here.
+  // So we use the ioctl on Linux systems
+  //
+#ifdef Q_OS_LINUX
+  open();
+  bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+  close();
+  return success;
+#else
   ScsiCommand cmd( this );
   cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
   if( b )
     cmd[4] = 0x01;
-  int r = cmd.transport();
+  int r = cmd.transport( TR_DIR_WRITE );
 
   if( r )
     kdDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed." << endl;
 
   return ( r == 0 );
+#endif
 }
 
 bool K3bDevice::Device::rewritable() const
@@ -2280,9 +2339,9 @@ void K3bDevice::Device::checkFeatures()
 
       struct cd_mastering_feature* p = (struct cd_mastering_feature*)&header[12];
       if( p->BUF ) d->burnfree = true;
-      d->deviceType |= DEVICE_CD_R;
+      d->writeCapabilities |= MEDIA_CD_R;
       if( p->cd_rw )
-	d->deviceType |= DEVICE_CD_RW;
+	d->writeCapabilities |= MEDIA_CD_RW;
 //       if( p->WRITINGMODE_SAO ) m_writeModes |= WRITINGMODE_SAO;
 //       if( p->raw || p->raw_ms ) m_writeModes |= WRITINGMODE_RAW;  // WRITINGMODE_RAW16 always supported when raw is supported?
     }
@@ -2326,9 +2385,9 @@ void K3bDevice::Device::checkFeatures()
       struct cd_track_at_once_feature* p = (struct cd_track_at_once_feature*)&header[12];
       m_writeModes |= WRITINGMODE_TAO;
       if( p->BUF ) d->burnfree = true;
-      d->deviceType |= DEVICE_CD_R;
+      d->writeCapabilities |= MEDIA_CD_R;
       if( p->cd_rw )
-	d->deviceType |= DEVICE_CD_RW;
+	d->writeCapabilities |= MEDIA_CD_RW;
 
       // is the following correct? What exactly does rw_sub tell us?
 //       if( m_writeModes & WRITINGMODE_RAW ) {
@@ -2353,7 +2412,7 @@ void K3bDevice::Device::checkFeatures()
     int len = from4Byte( header );
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
-      d->deviceType |= (DEVICE_CD_R|DEVICE_CD_RW);
+      d->writeCapabilities |= (MEDIA_CD_R|MEDIA_CD_RW);
     }
   }
 
@@ -2364,15 +2423,27 @@ void K3bDevice::Device::checkFeatures()
   // FIXME: since MMC5 the feature descr. is 8 bytes in length including a dvd dl read bit at byte 6
   cmd[2] = FEATURE_DVD_READ>>8;
   cmd[3] = FEATURE_DVD_READ;
-  cmd[8] = 12;
-  if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     int len = from4Byte( header );
-    if( len == 8 ) {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read" << endl;
-      d->deviceType |= DEVICE_DVD_ROM;
+    if( len == 12 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (MMC5)" << endl;
+      d->readCapabilities |= MEDIA_DVD_ROM;
+      if( header[8+6] & 0x1 )
+	d->readCapabilities |= MEDIA_WRITABLE_DVD_DL;
     }
   }
-
+  else {
+    // retry with pre-MMC5 length
+    cmd[8] = 12;
+    if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
+      int len = from4Byte( header );
+      if( len == 8 ) {
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (pre-MMC5)" << endl;
+	d->readCapabilities |= MEDIA_DVD_ROM;
+      }
+    }
+  }
 
   //
   // DVD+R(W) writing features
@@ -2384,8 +2455,9 @@ void K3bDevice::Device::checkFeatures()
     int len = from4Byte( header );
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+      d->readCapabilities |= MEDIA_DVD_PLUS_R;
       if( header[12] & 0x1 )
-	d->deviceType |= DEVICE_DVD_PLUS_R;
+	d->writeCapabilities |= MEDIA_DVD_PLUS_R;
     }
   }
 
@@ -2417,26 +2489,78 @@ void K3bDevice::Device::checkFeatures()
 #endif
 
       struct dvd_plus_rw_feature* p = (struct dvd_plus_rw_feature*)&header[12];
+      d->readCapabilities |= MEDIA_DVD_PLUS_RW;
       if( p->write )
-	d->deviceType |= DEVICE_DVD_PLUS_RW;
+	d->writeCapabilities |= MEDIA_DVD_PLUS_RW;
     }
   }
 
 
   // some older DVD-ROM drives claim to support DVD+R DL
-  if( d->deviceType & DEVICE_DVD_PLUS_R ) {
-    cmd[2] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER>>8;
-    cmd[3] = FEATURE_DVD_PLUS_R_DOUBLE_LAYER;
+  if( d->writeCapabilities & MEDIA_DVD_PLUS_R ) {
+    cmd[2] = FEATURE_DVD_PLUS_RW_DUAL_LAYER>>8;
+    cmd[3] = FEATURE_DVD_PLUS_RW_DUAL_LAYER;
+    cmd[8] = 16;
+    if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
+      int len = from4Byte( header );
+      if( len == 12 ) {
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW Double Layer" << endl;
+	d->readCapabilities |= MEDIA_DVD_PLUS_RW_DL;
+	if( header[12] & 0x1 )
+	  d->writeCapabilities |= MEDIA_DVD_PLUS_RW_DL;
+      }
+    }
+
+    cmd[2] = FEATURE_DVD_PLUS_R_DUAL_LAYER>>8;
+    cmd[3] = FEATURE_DVD_PLUS_R_DUAL_LAYER;
     cmd[8] = 16;
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
       int len = from4Byte( header );
       if( len == 12 ) {
 	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
+	d->readCapabilities |= MEDIA_DVD_PLUS_R_DL;
 	if( header[12] & 0x1 )
-	  d->deviceType |= DEVICE_DVD_PLUS_R_DL;
+	  d->writeCapabilities |= MEDIA_DVD_PLUS_R_DL;
       }
     }
   }
+
+
+  //
+  // Blue Ray
+  //
+  // We do not care for the different BD classes and versions here
+  //
+  cmd[2] = FEATURE_BD_READ>>8;
+  cmd[3] = FEATURE_BD_READ;
+  cmd[8] = 40;
+  if( !cmd.transport( TR_DIR_READ, header, 40 ) ) {
+    int len = from4Byte( header );
+    if( len == 36 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Read" << endl;
+      if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
+	d->readCapabilities |= MEDIA_BD_RE;
+      if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] )
+	d->readCapabilities |= MEDIA_BD_R;
+      if( header[8+24] || header[8+25] || header[8+26] || header[8+27] || header[8+28] || header[8+29] || header[8+30] || header[8+31] )
+	d->readCapabilities |= MEDIA_BD_ROM;
+    }
+  }
+
+  cmd[2] = FEATURE_BD_WRITE>>8;
+  cmd[3] = FEATURE_BD_WRITE;
+  cmd[8] = 32;
+  if( !cmd.transport( TR_DIR_READ, header, 32 ) ) {
+    int len = from4Byte( header );
+    if( len == 28 ) {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Write" << endl;
+      if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
+	d->writeCapabilities |= MEDIA_BD_RE;
+      if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] )
+	d->writeCapabilities |= MEDIA_BD_R;
+    }
+  }
+
 
 
 
@@ -2454,7 +2578,8 @@ void K3bDevice::Device::checkFeatures()
       struct dvd_r_rw_write_feature {
 	unsigned char reserved1 : 1;
 	unsigned char BUF       : 1;  // Burnfree
-	unsigned char reserved2 : 3;
+	unsigned char reserved2 : 2;
+	unsigned char RDL       : 1;
 	unsigned char testwrite : 1;  // Simulation write support
 	unsigned char dvd_rw    : 1;  // DVD-RW Writing
 	unsigned char reserved3 : 1;
@@ -2465,7 +2590,8 @@ void K3bDevice::Device::checkFeatures()
 	unsigned char reserved3 : 1;
 	unsigned char dvd_rw    : 1;  // DVD-RW Writing
 	unsigned char testwrite : 1;  // Simulation write support
-	unsigned char reserved2 : 3;
+	unsigned char RDL       : 1;
+	unsigned char reserved2 : 2;
 	unsigned char BUF       : 1;  // Burnfree
 	unsigned char reserved1 : 1;
 	unsigned char reserved4[3];
@@ -2474,9 +2600,11 @@ void K3bDevice::Device::checkFeatures()
 
       struct dvd_r_rw_write_feature* p = (struct dvd_r_rw_write_feature*)&header[12];
       if( p->BUF ) d->burnfree = true;
-      d->deviceType |= DEVICE_DVD_R;
+      d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_SEQ);
       if( p->dvd_rw )
-	d->deviceType |= DEVICE_DVD_RW;
+	d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_SEQ);
+      if( p->RDL )
+	d->writeCapabilities |= (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_SEQ);
 
       m_dvdMinusTestwrite = p->testwrite;
     }
@@ -2494,6 +2622,7 @@ void K3bDevice::Device::checkFeatures()
     if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
       m_writeModes |= WRITINGMODE_RES_OVWR;
+      d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_OVWR);
     }
   }
 
@@ -2503,13 +2632,13 @@ void K3bDevice::Device::checkFeatures()
   //
   cmd[2] = FEATURE_LAYER_JUMP_RECORDING>>8;
   cmd[3] = FEATURE_LAYER_JUMP_RECORDING;
-  cmd[8] = 16;
-  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
-    // Now the jump feature is longer than 8 bytes but we don't need the link sizes.
+  cmd[8] = 12;
+  if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
+    // Now the jump feature is longer than 4 bytes but we don't need the link sizes.
     int len = from4Byte( header );
-    if( len >= 12 ) {
+    if( len >= 8 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording" << endl;
-      d->deviceType |= DEVICE_DVD_R_DL;
+      d->writeCapabilities |= (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_JUMP);
       m_writeModes |= WRITINGMODE_LAYER_JUMP;
     }
   }
@@ -2520,12 +2649,16 @@ void K3bDevice::Device::checkFeatures()
   //
   cmd[2] = FEATURE_HD_DVD_READ>>8;
   cmd[3] = FEATURE_HD_DVD_READ;
-  cmd[8] = 12;
-  if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
+  cmd[8] = 16;
+  if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     int len = from4Byte( header );
-    if( len == 8 ) {
+    if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Read" << endl;
-      d->deviceType |= DEVICE_HD_DVD_ROM;
+      d->readCapabilities |= MEDIA_HD_DVD_ROM;
+      if( header[8+4] & 0x1 )
+	d->readCapabilities |= MEDIA_HD_DVD_R;
+      if( header[8+6] & 0x1 )
+	d->readCapabilities |= MEDIA_HD_DVD_RAM;
     }
   }
 
@@ -2538,12 +2671,12 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 16;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     int len = from4Byte( header );
-    if( len == 8 ) {
+    if( len == 12 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Write" << endl;      
-      if( header[12]&0x1 )
-	d->deviceType |= DEVICE_HD_DVD_R;
-      if( header[14]&0x1 )
-	d->deviceType |= DEVICE_HD_DVD_RAM;
+      if( header[8+4] & 0x1 )
+	d->writeCapabilities |= MEDIA_HD_DVD_R;
+      if( header[8+6] & 0x1 )
+	d->writeCapabilities |= MEDIA_HD_DVD_RAM;
     }
   }
 
@@ -2568,60 +2701,82 @@ void K3bDevice::Device::checkFeatures()
 	  short profile = from2Byte( &header[12+j] );
 	  
 	  switch (profile) {
-	  case 0x10:
-	    d->supportedProfiles |= MEDIA_DVD_ROM;
-	    d->deviceType |= DEVICE_DVD_ROM;
-	    break;
-	  case 0x11:
-	    d->supportedProfiles |= MEDIA_DVD_R_SEQ;
-	    d->deviceType |= DEVICE_DVD_R;
-	    break;
-	  case 0x12:
-	    d->supportedProfiles |= MEDIA_DVD_RAM;
-	    d->deviceType |= DEVICE_DVD_RAM;
-	    break;
-	  case 0x13:
-	    d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
-	    d->deviceType |= DEVICE_DVD_RW;
-	    break;
-	  case 0x14:
-	    d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
-	    d->deviceType |= DEVICE_DVD_RW;
-	    break;
-	  case 0x15:
-	    d->supportedProfiles |= MEDIA_DVD_R_DL_SEQ;
-	    d->deviceType |= (DEVICE_DVD_R|DEVICE_DVD_R_DL);
-	    break;
-	  case 0x16:
-	    d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
-	    d->deviceType |= (DEVICE_DVD_R|DEVICE_DVD_R_DL);
-	    break;
-	  case 0x1A:
-	    d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
-	    d->deviceType |= DEVICE_DVD_PLUS_RW;
-	    break;
-	  case 0x1B: 
-	    d->supportedProfiles |= MEDIA_DVD_PLUS_R;
-	    d->deviceType |= DEVICE_DVD_PLUS_R;
-	    break;
-	  case 0x2B:
-	    // some older DVD-ROM drives claim to support DVD+R DL
-	    if( d->deviceType & DEVICE_DVD_PLUS_R ) {
-	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
-	      d->deviceType |= (DEVICE_DVD_PLUS_R|DEVICE_DVD_PLUS_R_DL);
-	    }
-	    break;
 	  case 0x08:
 	    d->supportedProfiles |= MEDIA_CD_ROM;
-	    d->deviceType |= DEVICE_CD_ROM;
 	    break;
 	  case 0x09:
 	    d->supportedProfiles |= MEDIA_CD_R;
-	    d->deviceType |= DEVICE_CD_R;
 	    break;
 	  case 0x0A:
 	    d->supportedProfiles |= MEDIA_CD_RW;
-	    d->deviceType |= DEVICE_CD_RW;
+	    break;
+	  case 0x10:
+	    d->supportedProfiles |= MEDIA_DVD_ROM;
+// 	    d->readCapabilities |= MEDIA_DVD_ROM;
+	    break;
+	  case 0x11:
+	    d->supportedProfiles |= MEDIA_DVD_R_SEQ;
+// 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_SEQ);
+	    break;
+	  case 0x12:
+	    d->supportedProfiles |= MEDIA_DVD_RAM;
+// 	    d->readCapabilities |= (MEDIA_DVD_RAM|MEDIA_DVD_ROM);
+// 	    d->writeCapabilities |= MEDIA_DVD_RAM;
+	    break;
+	  case 0x13:
+	    d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
+// 	    d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_OVWR);
+	    break;
+	  case 0x14:
+	    d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
+// 	    d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_R|MEDIA_DVD_RW_SEQ|MEDIA_DVD_R_SEQ);
+	    break;
+	  case 0x15:
+	    d->supportedProfiles |= MEDIA_DVD_R_DL_SEQ;
+// 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_DL|MEDIA_DVD_R_SEQ|MEDIA_DVD_R_DL_SEQ);
+	    break;
+	  case 0x16:
+	    d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
+// 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_DL||MEDIA_DVD_R_DL_JUMP);
+	    break;
+	  case 0x1A:
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
+// 	    d->readCapabilities |= MEDIA_DVD_PLUS_RW;
+	    break;
+	  case 0x1B: 
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_R;
+// 	    d->readCapabilities |= MEDIA_DVD_PLUS_R;
+	    break;
+	  case 0x2A:
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_RW_DL;
+// 	    d->readCapabilities |= MEDIA_DVD_PLUS_RW_DL;
+	    break;
+	  case 0x2B:
+	    // some older DVD-ROM drives claim to support DVD+R DL
+	    if( d->supportedProfiles & MEDIA_DVD_PLUS_R ) {
+	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
+	    }
+	    break;
+	  case 0x40:
+	    d->supportedProfiles |= MEDIA_BD_ROM;
+	    break;
+	  case 0x41:
+	    d->supportedProfiles |= MEDIA_BD_R_SEQ;
+	    break;
+	  case 0x42:
+	    d->supportedProfiles |= MEDIA_BD_R_RANDOM;
+	    break;
+	  case 0x43:
+	    d->supportedProfiles |= MEDIA_BD_RE;
+	    break;
+	  case 0x50:
+	    d->supportedProfiles |= MEDIA_HD_DVD_ROM;
+	    break;
+	  case 0x51:
+	    d->supportedProfiles |= MEDIA_HD_DVD_R;
+	    break;
+	  case 0x52:
+	    d->supportedProfiles |= MEDIA_HD_DVD_RAM;
 	    break;
 	  default:
 	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " unknown profile: "
@@ -2645,22 +2800,22 @@ void K3bDevice::Device::checkFor2AFeatures()
       d->burnfree = true;
 
     if( mm_p->cd_r_write )
-      d->deviceType |= DEVICE_CD_R;
+      d->writeCapabilities |= MEDIA_CD_R;
     else
-      d->deviceType &= ~DEVICE_CD_R;
+      d->writeCapabilities &= ~MEDIA_CD_R;
 
     if( mm_p->cd_rw_write )
-      d->deviceType |= DEVICE_CD_RW;
+      d->writeCapabilities |= MEDIA_CD_RW;
     else
-      d->deviceType &= ~DEVICE_CD_RW;
+      d->writeCapabilities &= ~MEDIA_CD_RW;
 
     if( mm_p->dvd_r_write )
-      d->deviceType |= DEVICE_DVD_R;
+      d->writeCapabilities |= MEDIA_DVD_R;
     else
-      d->deviceType &= ~DEVICE_DVD_R;
+      d->writeCapabilities &= ~MEDIA_DVD_R;
 
     if( mm_p->dvd_rom_read || mm_p->dvd_r_read )
-      d->deviceType |= DEVICE_DVD_ROM;
+      d->readCapabilities |= MEDIA_DVD_ROM;
 
     m_maxReadSpeed = from2Byte(mm_p->max_read_speed);
     m_bufferSize = from2Byte( mm_p->buffer_size );
@@ -2729,7 +2884,7 @@ void K3bDevice::Device::checkWritingModes()
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for TAO" << endl;
     if( modeSelect( buffer, dataLen, 1, 0 ) ) {
       m_writeModes |= WRITINGMODE_TAO;
-      d->deviceType |= DEVICE_CD_R;
+      d->writeCapabilities |= MEDIA_CD_R;
 
       // WRITINGMODE_SAO
       mp->write_type = 0x02; // Session-at-once

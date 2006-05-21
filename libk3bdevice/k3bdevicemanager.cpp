@@ -504,7 +504,8 @@ void K3bDevice::DeviceManager::printDevices()
 	      << "Mountpoint:     " << dev->mountPoint() << endl
 	      << "Write speed:    " << dev->maxWriteSpeed() << endl
 	      << "Profiles:       " << mediaTypeString( dev->supportedProfiles() ) << endl
-	      << "Devicetype:     " << deviceTypeString( dev->type() ) << endl
+	      << "Read Cap:       " << mediaTypeString( dev->readCapabilities() ) << endl
+	      << "Write Cap:      " << mediaTypeString( dev->writeCapabilities() ) << endl
 	      << "Writing modes:  " << writingModeString( dev->writingModes() ) << endl
 	      << "Reader aliases: " << dev->deviceNodes().join(", ") << endl
 	      << "------------------------------" << endl;

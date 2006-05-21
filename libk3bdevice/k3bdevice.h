@@ -66,11 +66,26 @@ namespace K3bDevice
       Interface interfaceType() const;
 
       /**
+       * \deprecated use readCapabilities() and writeCapabilities()
        * The device type.
        *
        * @return A bitwise or of K3bDevice::DeviceType.
        */
       int type() const;
+
+      /**
+       * The mediatypes this device is able to read.
+       *
+       * \return A bitwise or of K3bDevice::MediaType
+       */
+      int readCapabilities() const;
+
+      /**
+       * The media types this device is able to write.
+       *
+       * \return A bitwise or of K3bDevice::MediaType
+       */      
+      int writeCapabilities() const;
 
       /**
        * \return Vendor string as reported by the device's firmware.
