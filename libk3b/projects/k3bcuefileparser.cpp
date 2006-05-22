@@ -29,6 +29,24 @@
 #include <kdebug.h>
 
 
+// avoid usage of QTextStream since K3b often
+// tries to open big files (iso images) in a 
+// cue file parser to test it.
+static QString readLine( QFile* f )
+{
+  QString s;
+  Q_LONG r = f->readLine( s, 1024 );
+  if( r >= 0 ) {
+    // remove the trailing newline
+    return s.stripWhiteSpace();
+  }
+  else {
+    // end of file or error
+    return QString::null;
+  }
+}
+
+
 // TODO: add method: usableByCdrecordDirectly()
 // TODO: add Toc with sector sizes
 
@@ -78,8 +96,7 @@ void K3bCueFileParser::readFile()
 
   QFile f( filename() );
   if( f.open( IO_ReadOnly ) ) {
-    QTextStream s( &f );
-    QString line = s.readLine();
+    QString line = readLine( &f );
     while( !line.isNull() ) {
       
       if( !parseLine(line) ) {
@@ -87,7 +104,7 @@ void K3bCueFileParser::readFile()
 	break;
       }
 
-      line = s.readLine();
+      line = readLine( &f );
     }
 
     if( isValid() ) {
