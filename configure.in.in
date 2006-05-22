@@ -121,6 +121,10 @@ dnl - check the byte order -
 dnl this will define WORDS_BIGENDIAN or do nothing
 AC_C_BIGENDIAN()
 
+AC_CHECK_HEADERS(sys/statfs.h sys/statvfs.h)
+
+AC_CHECK_FUNCS(statfs statvfs)
+
 dnl === Ogg Vorbis Test - Begin ===
 AC_ARG_WITH(
 	oggvorbis, 
