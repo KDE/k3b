@@ -186,6 +186,9 @@ void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKe
 #ifdef Q_OS_FREEBSD
 #include "k3bscsicommand_bsd.cpp"
 #endif
+#ifdef Q_OS_NETBSD
+#include "k3bscsicommand_netbsd.cpp"
+#endif
 
 
 
