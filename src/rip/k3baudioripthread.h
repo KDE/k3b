@@ -108,6 +108,8 @@ class K3bAudioRipThread : public QObject, public K3bThread
 
   QValueVector<QPair<int, QString> > m_tracks;
 
+  friend class K3bAudioRipJob;
+
   class Private;
   Private* d;
 };

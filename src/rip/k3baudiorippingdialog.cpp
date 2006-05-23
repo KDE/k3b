@@ -15,7 +15,7 @@
 
 
 #include "k3baudiorippingdialog.h"
-#include "k3baudioripthread.h"
+#include "k3baudioripjob.h"
 #include "k3bpatternparser.h"
 #include "k3bcddbpatternwidget.h"
 #include "k3baudioconvertingoptionwidget.h"
@@ -25,7 +25,6 @@
 #include <k3bglobals.h>
 #include <k3btrack.h>
 #include <k3bstdguiitems.h>
-#include <k3bthreadjob.h>
 
 #include <k3bpluginmanager.h>
 #include <k3baudioencoder.h>
@@ -259,35 +258,31 @@ void K3bAudioRippingDialog::slotStartClicked()
     ++i;
   }
 
-
-  K3bAudioEncoder* encoder = m_optionWidget->encoder();
-
-  K3bAudioRipThread* thread = new K3bAudioRipThread();
-  thread->setDevice( m_device );
-  thread->setCddbEntry( m_cddbEntry );
-  thread->setTracksToRip( tracksToRip );
-  thread->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
-  thread->setMaxRetries( m_spinRetries->value() );
-  thread->setNeverSkip( !m_checkIgnoreReadErrors->isChecked() );
-  thread->setSingleFile( m_optionWidget->createSingleFile() );
-  thread->setWriteCueFile( m_optionWidget->createCueFile() );
-  thread->setEncoder( encoder );
-  thread->setWritePlaylist( m_optionWidget->createPlaylist() );
-  thread->setPlaylistFilename( d->playlistFilename );
-  thread->setUseRelativePathInPlaylist( m_optionWidget->playlistRelativePath() );
-  thread->setUseIndex0( m_checkUseIndex0->isChecked() );
-  if( encoder )
-    thread->setFileType( m_optionWidget->extension() );
-
   K3bJobProgressDialog ripDialog( parentWidget(), "Ripping" );
 
-  K3bThreadJob job( thread, &ripDialog, this );
+  K3bAudioEncoder* encoder = m_optionWidget->encoder();
+  K3bAudioRipJob* job = new K3bAudioRipJob( &ripDialog, this );
+  job->setDevice( m_device );
+  job->setCddbEntry( m_cddbEntry );
+  job->setTracksToRip( tracksToRip );
+  job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+  job->setMaxRetries( m_spinRetries->value() );
+  job->setNeverSkip( !m_checkIgnoreReadErrors->isChecked() );
+  job->setSingleFile( m_optionWidget->createSingleFile() );
+  job->setWriteCueFile( m_optionWidget->createCueFile() );
+  job->setEncoder( encoder );
+  job->setWritePlaylist( m_optionWidget->createPlaylist() );
+  job->setPlaylistFilename( d->playlistFilename );
+  job->setUseRelativePathInPlaylist( m_optionWidget->playlistRelativePath() );
+  job->setUseIndex0( m_checkUseIndex0->isChecked() );
+  if( encoder )
+    job->setFileType( m_optionWidget->extension() );
 
   hide();
-  ripDialog.startJob(&job);
+  ripDialog.startJob(job);
 
-  kdDebug() << "(K3bAudioRippingDialog) deleting ripthread." << endl;
-  delete thread;
+  kdDebug() << "(K3bAudioRippingDialog) deleting ripjob." << endl;
+  delete job;
 
   close();
 }
