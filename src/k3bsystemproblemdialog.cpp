@@ -19,6 +19,7 @@
 
 #include "k3bapplication.h"
 #include "k3bsystemproblemdialog.h"
+#include "k3bpassivepopup.h"
 #include <k3btitlelabel.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bstdguiitems.h>
@@ -526,8 +527,10 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 	      << " SOLUTION: " << p.solution << endl << endl;
 
   }
-  if( problems.isEmpty() )
+  if( problems.isEmpty() ) {
     kdDebug() << "          - none - " << endl;
+    K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System Problems") );
+  }
   else {
     K3bSystemProblemDialog( problems, parent, name ).exec();
   }

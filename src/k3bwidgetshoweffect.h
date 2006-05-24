@@ -47,13 +47,17 @@ class K3bWidgetShowEffect : public QObject
 
   /**
    * Using the widget effects the easy way.
+   * \returns the K3bWidgetShowEffect instance used to show the widget.
+   * Can be used to connect to signals.
    */
-  static void showWidget( QWidget* w, Effect );
+  static K3bWidgetShowEffect* showWidget( QWidget* w, Effect );
 
   /**
    * Using the widget effects the easy way.
+   * \returns the K3bWidgetShowEffect instance used to hide the widget.
+   * Can be used to connect to signals.
    */
-  static void hideWidget( QWidget* w, Effect );
+  static K3bWidgetShowEffect* hideWidget( QWidget* w, Effect );
 
  signals:
   void widgetShown( QWidget* );

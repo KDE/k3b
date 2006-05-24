@@ -47,6 +47,7 @@ void K3bWidgetShowEffect::hide( bool effectOnly )
 {
   m_bEffectOnly = effectOnly;
   m_bShow = false;
+  m_offset = m_widget->height();
   killTimer( m_timerId );
   m_timerId = startTimer( 6 );
 }
@@ -55,8 +56,11 @@ void K3bWidgetShowEffect::hide( bool effectOnly )
 void K3bWidgetShowEffect::show( bool effectOnly )
 {
   m_bShow = true;
+  m_offset = 0;
   m_dissolveSize = 24;
   m_dissolveDelta = -1;
+
+  m_widget->polish();
 
   if( m_effect == Dissolve ) {
     // necessary to create the mask
@@ -148,7 +152,7 @@ void K3bWidgetShowEffect::dissolveMask()
 void K3bWidgetShowEffect::slideMask()
 {
   if( m_bShow ) {
-    m_widget->move( 0, m_widget->parentWidget()->y() - m_offset );
+    m_widget->move( 0, m_widget->parentWidget()->height() - m_offset );
     
     m_offset++;
     if( m_offset > m_widget->height() ) {
@@ -162,7 +166,7 @@ void K3bWidgetShowEffect::slideMask()
   }
   else {
     m_offset--;
-    m_widget->move( 0, m_widget->parentWidget()->y() - m_offset );
+    m_widget->move( 0, m_widget->parentWidget()->height() - m_offset );
     
     if( m_offset < 0 ) {
       // finally hide the widget
@@ -178,19 +182,21 @@ void K3bWidgetShowEffect::slideMask()
 
 
 
-void K3bWidgetShowEffect::showWidget( QWidget* w, Effect m )
+K3bWidgetShowEffect* K3bWidgetShowEffect::showWidget( QWidget* w, Effect m )
 {
   K3bWidgetShowEffect* e = new K3bWidgetShowEffect( w, m );
   e->m_deleteSelf = true;
   e->show();
+  return e;
 }
 
 
-void K3bWidgetShowEffect::hideWidget( QWidget* w, Effect m )
+K3bWidgetShowEffect* K3bWidgetShowEffect::hideWidget( QWidget* w, Effect m )
 {
   K3bWidgetShowEffect* e = new K3bWidgetShowEffect( w, m );
   e->m_deleteSelf = true;
   e->hide();
+  return e;
 }
 
 #include "k3bwidgetshoweffect.moc"
