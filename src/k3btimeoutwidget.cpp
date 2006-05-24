@@ -130,7 +130,8 @@ void K3bTimeoutWidget::paintEvent( QPaintEvent* )
     QRect r = rect();
     r.setSize( minimumSizeHint() );
     r.moveCenter( rect().center() );
-    
+
+    p.drawArc( r, 0, 360*16 );    
     p.drawPie( r, 90*16, 360*16*d->currentTime/d->timeout );
     
     p.setPen( Qt::black );
