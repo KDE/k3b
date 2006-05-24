@@ -92,7 +92,9 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
    * @reimplemented from K3bJobHandler
    */
   bool questionYesNo( const QString& text,
-		      const QString& caption = QString::null );
+		      const QString& caption = QString::null,
+		      const QString& yesText = QString::null,
+		      const QString& noText = QString::null );
 
   /**
    * reimplemented from K3bJobHandler

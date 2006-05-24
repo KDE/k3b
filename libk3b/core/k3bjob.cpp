@@ -106,9 +106,11 @@ int K3bJob::waitForMedia( K3bDevice::Device* device,
 
 
 bool K3bJob::questionYesNo( const QString& text,
-			    const QString& caption )
+			    const QString& caption,
+			    const QString& yesText,
+			    const QString& noText )
 {
-  return m_jobHandler->questionYesNo( text, caption );
+  return m_jobHandler->questionYesNo( text, caption, yesText, noText );
 }
 
 

@@ -668,9 +668,15 @@ int K3bJobProgressDialog::waitForMedia( K3bDevice::Device* device,
 
   
 bool K3bJobProgressDialog::questionYesNo( const QString& text,
-					  const QString& caption )
+					  const QString& caption,
+					  const QString& yesText,
+					  const QString& noText )
 {
-  return ( KMessageBox::questionYesNo( this, text, caption ) == KMessageBox::Yes );
+  return ( KMessageBox::questionYesNo( this, 
+				       text, 
+				       caption, 
+				       yesText.isEmpty() ? KStdGuiItem::yes() : KGuiItem(yesText),
+				       noText.isEmpty() ? KStdGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
 }
 
 

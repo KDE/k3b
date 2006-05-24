@@ -161,12 +161,21 @@ void K3bDataJob::start()
       listOfRenamedItems += "...";
 
     if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
-				     "of the Joliet extensions. Continue anyway?")
+				     "of the Joliet extensions. If the Joliet extensions are disabled filenames "
+				     "do not have to be shortened but long filenames will not be available on "
+				     "Windows systems.")
 			.arg( d->doc->isoOptions().jolietLong() ? 103 : 64 )
-			+ "<p>" + listOfRenamedItems ) ) {
-      emit canceled();
-      jobFinished( false );
-      return;
+			+ "<p>" + listOfRenamedItems,
+			i18n("Warning"),
+			i18n("Shorten Filenames"),
+			i18n("Disable Joliet extensions") ) ) {
+      // No -> disable joliet
+      // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
+      K3bIsoOptions op = d->doc->isoOptions();
+      op.setCreateJoliet( false );
+      op.setCreateRockRidge( true );
+      d->doc->setIsoOptions( op );
+      d->doc->prepareFilenames();
     }
   }
 

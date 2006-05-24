@@ -58,7 +58,7 @@ A: You are using a patched cdrecord version which tries to open the device exclu
 Q: My DVD drive supports 16X but K3B keeps burning at 1X! What's happening?
 
 A: Your kernel most likely didn't apply optimal settings for your drive when it detected it. You can find out
-   what are the current settings of your drive with the command "hdparm /dev/dvd":
+   what are the current settings of your drive with the command "hdparm -v /dev/dvd":
 
    /dev/dvd:
     IO_support   =  0 (default 16-bit)

@@ -47,7 +47,9 @@ class K3bJobHandler
 			    const QString& message = QString::null ) = 0;
   
   virtual bool questionYesNo( const QString& text,
-			      const QString& caption = QString::null ) = 0;
+			      const QString& caption = QString::null,
+			      const QString& yesText = QString::null,
+			      const QString& noText = QString::null ) = 0;
 
   /**
    * Use this if you need the user to do something before the job is able to continue.
