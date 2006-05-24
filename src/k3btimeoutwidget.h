@@ -37,6 +37,8 @@ class K3bTimeoutWidget : public QWidget
   void setTimeout( int msecs );
   void start();
   void stop();
+  void pause();
+  void resume();
 
  signals:
   void timeout();

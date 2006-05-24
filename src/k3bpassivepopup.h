@@ -66,16 +66,11 @@ class K3bPassivePopup : public QFrame
   void slotShown();
   void slotHidden();
   void slotClose();
+  void slotSticky( bool );
 
  private:
-  int m_timeout;
-  int m_showEffect;
-
-  K3bTimeoutWidget* m_timeoutWidget;
-  QLabel* m_titleLabel;
-  KActiveLabel* m_messageLabel;
-  QLabel* m_pixmapLabel;
-  KPushButton* m_closeButton;
+  class Private;
+  Private* d;
 };
 
 #endif

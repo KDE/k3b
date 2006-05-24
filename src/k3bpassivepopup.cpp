@@ -16,6 +16,7 @@
 #include "k3bpassivepopup.h"
 #include "k3bwidgetshoweffect.h"
 #include "k3btimeoutwidget.h"
+#include "k3bminibutton.h"
 
 #include "k3bthememanager.h"
 #include <k3bapplication.h>
@@ -32,7 +33,21 @@
 #include <qlabel.h>
 #include <qmainwindow.h>
 #include <qmessagebox.h>
+#include <qstyle.h>
+#include <qtooltip.h>
+#include <qfont.h>
 
+
+static const char* const sticky_xpm[] = {
+  "5 5 2 1",
+  "# c black",
+  ". c None",
+  "#####",
+  "#...#",
+  "#...#",
+  "#...#",
+  "#####"
+};
 
 static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
 {
@@ -66,14 +81,30 @@ static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
 }
 
 
-K3bPassivePopup::K3bPassivePopup( QWidget* parent )
-: QFrame( parent ),
-  m_timeout(10000),
-  m_showEffect(0),
-  m_timeoutWidget(0)
+class K3bPassivePopup::Private
 {
+public:
+  int timeout;
+  int showEffect;
+
+  K3bTimeoutWidget* timeoutWidget;
+  QLabel* titleLabel;
+  KActiveLabel* messageLabel;
+  QLabel* pixmapLabel;
+  K3bMiniButton* closeButton;
+  K3bMiniButton* stickyButton;
+};
+
+
+K3bPassivePopup::K3bPassivePopup( QWidget* parent )
+  : QFrame( parent )
+{
+  d = new Private;
+  d->timeout = 10000;
+  d->showEffect = 0;
+
   setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
-  setWFlags( Qt::WX11BypassWM );
+  //  setWFlags( Qt::WX11BypassWM );
 
   QVBoxLayout* mainLay = new QVBoxLayout( this );
   mainLay->setMargin( frameWidth() );
@@ -83,39 +114,52 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   grid->setMargin( 9 );
   grid->setSpacing( 6 );
 
-  m_titleLabel = new QLabel( this );
-  m_titleLabel->setMargin( 3 );
-  m_titleLabel->setAlignment( Qt::AlignCenter );
-  //  m_titleLabel->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  d->titleLabel = new QLabel( this );
+  d->titleLabel->setMargin( 5 );
+  d->titleLabel->setAlignment( Qt::AlignCenter );
+  QFont fnt( d->titleLabel->font() );
+  fnt.setBold( true );
+  d->titleLabel->setFont( fnt );
 
-  m_messageLabel = new KActiveLabel( this );
+  d->messageLabel = new KActiveLabel( this );
 
-  m_pixmapLabel = new QLabel( this );
-  m_pixmapLabel->setAlignment( Qt::AlignTop );
+  d->pixmapLabel = new QLabel( this );
+  d->pixmapLabel->setAlignment( Qt::AlignTop );
 
-  m_timeoutWidget = new K3bTimeoutWidget( this );
-  connect( m_timeoutWidget, SIGNAL(timeout()), this, SLOT(slotClose()) );
+  d->timeoutWidget = new K3bTimeoutWidget( this );
+  connect( d->timeoutWidget, SIGNAL(timeout()), this, SLOT(slotClose()) );
 
-  m_closeButton = new KPushButton( KStdGuiItem::close(), this );
-  connect( m_closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
+  d->closeButton = new K3bMiniButton( d->titleLabel );
+  d->closeButton->setPixmap( style().stylePixmap( QStyle::SP_TitleBarCloseButton, this ) );
+  d->closeButton->setFixedSize( d->closeButton->pixmap()->width(), d->closeButton->pixmap()->height() );
+  QToolTip::add( d->closeButton, i18n("Close") );
+  connect( d->closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
 
+  d->stickyButton = new K3bMiniButton( d->titleLabel );
+  d->stickyButton->setToggleButton( true );
+  d->stickyButton->setPixmap( const_cast< const char** >( sticky_xpm ) );
+  d->stickyButton->setFixedSize( d->closeButton->pixmap()->width(), d->closeButton->pixmap()->height() );
+  QToolTip::add( d->stickyButton, i18n("Keep Open") );
+  connect( d->stickyButton, SIGNAL(toggled(bool)), this, SLOT(slotSticky(bool)) );
 
-  QHBoxLayout* buttonLay = new QHBoxLayout;
-  buttonLay->addItem( new QSpacerItem( 4, 4, QSizePolicy::Expanding, QSizePolicy::Preferred ) );
-  buttonLay->addWidget( m_closeButton );
-
-  grid->addWidget( m_pixmapLabel, 0, 0 );
-  grid->addWidget( m_messageLabel, 0, 1 );
-  grid->addWidget( m_timeoutWidget, 0, 2 );
-  grid->addMultiCellLayout( buttonLay, 1, 1, 0, 2 );
+  grid->addWidget( d->pixmapLabel, 0, 0 );
+  grid->addWidget( d->messageLabel, 0, 1 );
+  grid->addWidget( d->timeoutWidget, 0, 2 );
   grid->setColStretch( 1, 1 );
 
-  mainLay->addWidget( m_titleLabel );
-  mainLay->addLayout( grid );
+  mainLay->addWidget( d->titleLabel );
+  mainLay->addLayout( grid, 1 );
+
+  QHBoxLayout* titleLay = new QHBoxLayout( d->titleLabel );
+  titleLay->setMargin( d->titleLabel->margin() );
+  titleLay->setSpacing( 2 );
+  titleLay->addStretch();
+  titleLay->addWidget( d->stickyButton );
+  titleLay->addWidget( d->closeButton );
 
   if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    m_titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
+    d->titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+    d->titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
   }
 
   setTitle( QString::null );
@@ -125,66 +169,68 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
 
 K3bPassivePopup::~K3bPassivePopup()
 {
+  delete d;
 }
 
 
 void K3bPassivePopup::setShowCloseButton( bool b )
 {
-  m_closeButton->setShown( b );
+  d->closeButton->setShown( b );
   adjustSize();
 }
 
 
 void K3bPassivePopup::setShowCountdown( bool b )
 {
-  m_timeoutWidget->setShown( b );
+  d->timeoutWidget->setShown( b );
+  d->stickyButton->setShown( b );
 }
 
 
 void K3bPassivePopup::setMessage( const QString& m )
 {
-  m_messageLabel->setText( "<qt>" + m );
+  d->messageLabel->setText( "<qt>" + m );
   adjustSize();
 }
 
 
 void K3bPassivePopup::setTitle( const QString& t )
 {
-  m_titleLabel->setText( "<qt><b>" + t );
-  m_titleLabel->setShown( !t.isEmpty() );
+  d->titleLabel->setText( t );
+  //  d->titleLabel->setShown( !t.isEmpty() );
   adjustSize();
 }
 
 
 void K3bPassivePopup::setTimeout( int msecs )
 {
-  m_timeout = msecs;
+  d->timeout = msecs;
 }
 
 
 void K3bPassivePopup::setMessageType( MessageType m )
 {
-  m_pixmapLabel->setPixmap( themedMessageBoxIcon( m ) );
+  d->pixmapLabel->setPixmap( themedMessageBoxIcon( m ) );
   adjustSize();
 }
 
 
 void K3bPassivePopup::slideIn()
 {
-  m_showEffect = K3bWidgetShowEffect::Slide;
-  connect( K3bWidgetShowEffect::showWidget( this, (K3bWidgetShowEffect::Effect)m_showEffect ), SIGNAL(widgetShown(QWidget*)),
+  d->showEffect = K3bWidgetShowEffect::Slide;
+  connect( K3bWidgetShowEffect::showWidget( this, (K3bWidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetShown(QWidget*)),
 	   this, SLOT(slotShown()) );  
 }
 
 
 void K3bPassivePopup::slotShown()
 {
-  if( m_timeoutWidget->isVisible() ) {
-    m_timeoutWidget->setTimeout( m_timeout );
-    m_timeoutWidget->start();
+  if( d->timeoutWidget->isVisible() ) {
+    d->timeoutWidget->setTimeout( d->timeout );
+    d->timeoutWidget->start();
   }
   else
-    QTimer::singleShot( m_timeout, this, SLOT(slotClose()) );
+    QTimer::singleShot( d->timeout, this, SLOT(slotClose()) );
 }
 
 
@@ -196,12 +242,23 @@ void K3bPassivePopup::slotHidden()
 
 void K3bPassivePopup::slotClose()
 {
-  if( m_showEffect != 0 ) {
-    connect( K3bWidgetShowEffect::hideWidget( this, (K3bWidgetShowEffect::Effect)m_showEffect ), SIGNAL(widgetHidden(QWidget*)),
+  if( d->showEffect != 0 ) {
+    connect( K3bWidgetShowEffect::hideWidget( this, (K3bWidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetHidden(QWidget*)),
 	     this, SLOT(slotHidden()) );
   }
   else
     deleteLater();
+}
+
+
+void K3bPassivePopup::slotSticky( bool b )
+{
+  if( b ) {
+    d->timeoutWidget->pause();
+  }
+  else {
+    d->timeoutWidget->resume();
+  }
 }
 
 

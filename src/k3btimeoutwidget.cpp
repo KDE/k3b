@@ -40,7 +40,7 @@ K3bTimeoutWidget::K3bTimeoutWidget( QWidget* parent )
 {
   d = new Private;
   d->timeout = 10000;
-  d->margin = 2;
+  d->margin = 4;
   connect( &d->timer, SIGNAL(timeout()), this, SLOT(timeStep()) );
 }
 
@@ -61,6 +61,19 @@ void K3bTimeoutWidget::start()
 void K3bTimeoutWidget::stop()
 {
   d->timer.stop();
+  d->currentTime = 0;
+}
+
+
+void K3bTimeoutWidget::pause()
+{
+  d->timer.stop();
+}
+
+
+void K3bTimeoutWidget::resume()
+{
+  startTimer();
 }
 
 
@@ -83,7 +96,7 @@ QSize K3bTimeoutWidget::sizeHint() const
 
 QSize K3bTimeoutWidget::minimumSizeHint() const
 {
-  int fw = fontMetrics().width( QString::number( d->timeout ) );
+  int fw = fontMetrics().width( QString::number( d->timeout/1000 ) );
   int fh = fontMetrics().height();
 
   int diam = QMAX( fw, fh ) + 2*d->margin;
@@ -118,7 +131,7 @@ void K3bTimeoutWidget::paintEvent( QPaintEvent* )
     r.setSize( minimumSizeHint() );
     r.moveCenter( rect().center() );
     
-    p.drawPie( r, 0, 360*16*d->currentTime/d->timeout );
+    p.drawPie( r, 90*16, 360*16*d->currentTime/d->timeout );
     
     p.setPen( Qt::black );
     p.drawText( rect(), Qt::AlignCenter, QString::number( (d->timeout - d->currentTime + 500)/1000 ) );
