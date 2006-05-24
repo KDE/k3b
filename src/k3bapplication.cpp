@@ -24,6 +24,7 @@
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
 #include "k3bmediacache.h"
+#include "k3bpassivepopup.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -316,7 +317,9 @@ bool K3bApplication::processCmdLineArgs()
   // FIXME: seems not like the right place...
   if( args->isSet( "ao" ) )
     if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
-      KMessageBox::error( m_mainWindow, i18n("Could not find Audio Output plugin '%1'").arg( args->getOption("ao") ) );
+      K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'").arg( args->getOption("ao") ),
+				  i18n("Initialization Problem"),
+				  K3bPassivePopup::Warning );
 
   args->clear();
 

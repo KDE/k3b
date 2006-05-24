@@ -17,6 +17,7 @@
 #include "k3baudiorippingdialog.h"
 #include "k3baudiocdlistview.h"
 
+#include <k3bpassivepopup.h>
 #include <k3btoc.h>
 #include <k3bdiskinfo.h>
 #include <k3bdevicehandler.h>
@@ -480,13 +481,13 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
     if( !KConfigGroup( k3bcore->config(), "Cddb" ).readBoolEntry( "use remote cddb", false ) )
-      KMessageBox::information( this, i18n("<p>No CDDB entry found. Enable remote CDDB queries in the K3b settings to get access "
-					   "to more entries through the internet."), i18n("CDDB") );
+      K3bPassivePopup::showPopup( i18n("<p>No CDDB entry found. Enable remote CDDB queries in the K3b settings to get access "
+				       "to more entries through the internet."), i18n("CDDB") );
     else
-      KMessageBox::information( this, i18n("No CDDB entry found."), i18n("CDDB") );
+      K3bPassivePopup::showPopup( i18n("No CDDB entry found."), i18n("CDDB") );
   }
   else {
-    KMessageBox::information( this, m_cddb->errorString(), i18n("Cddb error") );
+    K3bPassivePopup::showPopup( m_cddb->errorString(), i18n("Cddb error") );
   }
 
   enableInteraction(true);
@@ -533,10 +534,10 @@ void K3bAudioCdView::slotSaveCddbLocally()
   m_cddb->readConfig( c );
 
   m_cddb->saveEntry( m_cddbInfo );
-  KMessageBox::information( this, 
-			    i18n("Saved entry (%1) in category %2.")
-			    .arg(m_cddbInfo.discid)
-			    .arg(m_cddbInfo.category) );
+  K3bPassivePopup::showPopup( i18n("Saved entry (%1) in category %2.")
+			      .arg(m_cddbInfo.discid)
+			      .arg(m_cddbInfo.category),
+			      i18n("CDDB") );
 }
 
 
