@@ -16,7 +16,11 @@
 #ifndef _K3B_INTERFERING_SYSTEMS_HANDLER_H_
 #define _K3B_INTERFERING_SYSTEMS_HANDLER_H_
 
-#include <k3bjob.h>
+#include <qobject.h>
+
+namespace K3bDevice {
+  class Device;
+}
 
 
 /**
@@ -30,32 +34,47 @@
  *     a script running suid root)
  * \li Warns the user about other applications using the device.
  *
- * Also the K3bInterferingSystemsHandler is a K3bJob it is not intended to be used as such.
- * That means the normal K3bJob slots start() and cancel() do nothing. It has to be used
- * through disable() and enable().
- * There will be no started() or finished() signals.
+ * The K3bInterferingSystemsHandler will cache multiple calls to disable
+ * and remember them. The interfering systems are enabled when enable
+ * has been called for every call of disable.
  */
-class K3bInterferingSystemsHandler : public K3bJob
+class K3bInterferingSystemsHandler : public QObject
 {
   Q_OBJECT
 
  public:
-  K3bInterferingSystemsHandler( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
   ~K3bInterferingSystemsHandler();
 
- public slots:
-  void setDevice( K3bDevice::Device* );
-  void disable( K3bDevice::Device* );
-  void disable();
-  void enable();
+  static K3bInterferingSystemsHandler* instance();
 
-  void start() {}
-  void cancel() {}
+  void disable( K3bDevice::Device* dev );
+  void enable( K3bDevice::Device* dev );
+
+  static void threadSafeEnable( K3bDevice::Device* dev );
+  static void threadSafeDisable( K3bDevice::Device* dev );
+
+ signals:
+  /**
+   * The K3bInterferingSystemsHandler emits info messages
+   * like a K3bJob. Connect to this signal to inform the
+   * user about changes.
+   */
+  void infoMessage( const QString& message, int type );
 
  private:
+  K3bInterferingSystemsHandler();
+
+  void disableInternal( K3bDevice::Device* dev );
+  void enableInternal( K3bDevice::Device* dev );
+
   int startStopMediaManager( bool start );
   int startStopSuSEPlugger( bool start );
   int startStopAutomounting( bool start, K3bDevice::Device* dev );
+  int blockUnblockPmount( bool block, K3bDevice::Device* dev );
+
+  void customEvent( QCustomEvent* e );
+
+  static K3bInterferingSystemsHandler* s_instance;
 
   class Private;
   Private* d;

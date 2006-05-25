@@ -24,6 +24,7 @@
 #include <k3bcdparanoialib.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bcore.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -81,6 +82,7 @@ K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bAudioCdTrackSource& sourc
 
 K3bAudioCdTrackSource::~K3bAudioCdTrackSource()
 {
+  closeParanoia();
   delete m_cdParanoiaLib;
 }
 
@@ -118,8 +120,12 @@ bool K3bAudioCdTrackSource::initParanoia()
       if( m_toc.isEmpty() )
 	m_toc = m_lastUsedDevice->readToc();
 
-      if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) )
+      K3bInterferingSystemsHandler::threadSafeDisable( m_lastUsedDevice );
+
+      if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) ) {
+	K3bInterferingSystemsHandler::threadSafeEnable( m_lastUsedDevice );
 	return false;
+      }
 
       if( doc() ) {
 	m_cdParanoiaLib->setParanoiaMode( doc()->audioRippingParanoiaMode() );
@@ -141,8 +147,10 @@ bool K3bAudioCdTrackSource::initParanoia()
 
 void K3bAudioCdTrackSource::closeParanoia()
 {
-  if( m_cdParanoiaLib && m_initialized )
+  if( m_cdParanoiaLib && m_initialized ) {
     m_cdParanoiaLib->close();
+    K3bInterferingSystemsHandler::threadSafeEnable( m_lastUsedDevice );
+  }
   m_initialized = false;
 }
 

@@ -228,7 +228,7 @@ void K3bJob::unregisterSubJob( K3bJob* job )
 class K3bBurnJob::Private
 {
 public:
-  K3bInterferingSystemsHandler* intfSHdl;
+  bool interfSInit;
 };
 
 
@@ -238,7 +238,7 @@ K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent, const char* nam
     m_writeMethod( K3b::DEFAULT )
 {
   d = new Private;
-  d->intfSHdl = 0;
+  d->interfSInit = false;
 }
 
 
@@ -263,21 +263,21 @@ void K3bBurnJob::jobStarted()
   // panic
   //
   if( jobHandler() && !jobHandler()->isJob() && writer() ) {
-    if( !d->intfSHdl ) {
-      d->intfSHdl = new K3bInterferingSystemsHandler( this, this );
-      connect( d->intfSHdl, SIGNAL(infoMessage(const QString&, int)),
+    if( !d->interfSInit ) {
+      d->interfSInit = true;
+      connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
 	       this, SIGNAL(infoMessage(const QString&, int)) );
     }
-    d->intfSHdl->setDevice( writer() );
-    d->intfSHdl->disable();
+    K3bInterferingSystemsHandler::instance()->disable( writer() );
   }
 }
 
 
 void K3bBurnJob::jobFinished( bool success )
 {
-  if( d->intfSHdl )
-    d->intfSHdl->enable();
+  if( d->interfSInit )
+    K3bInterferingSystemsHandler::instance()->enable( writer() );
+
   K3bJob::jobFinished( success );
 }
 

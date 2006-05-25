@@ -18,43 +18,78 @@
 
 #include <k3bdevice.h>
 #include <k3bprocess.h>
+#include <k3bjob.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <kstaticdeleter.h>
 #include <dcopclient.h>
 
 #include <qcstring.h>
 #include <qvaluelist.h>
+#include <qmap.h>
+#include <qwaitcondition.h>
+#include <qevent.h>
+#include <qthread.h>
 
 #include <sys/types.h>
 #include <signal.h>
+#include <unistd.h>
 
+
+static Qt::HANDLE s_guiThreadHandle = QThread::currentThread();
+
+
+class DisableEvent : public QCustomEvent
+{
+  public:
+  DisableEvent( bool disable_, K3bDevice::Device* dev, QWaitCondition* wc_ )
+    : QCustomEvent( QEvent::User + 33 ),
+      disable(disable_),
+      device(dev),
+      wc(wc_) {
+  }
+
+  bool disable;
+  K3bDevice::Device* device;
+  QWaitCondition* wc;
+};
+
+
+K3bInterferingSystemsHandler* K3bInterferingSystemsHandler::s_instance = 0;
 
 class K3bInterferingSystemsHandler::Private
 {
 public:
   Private()
-    : device( 0 ),
-      disabled(false),
+    : /*disabledCnt( 0 ),*/
       disabledMediaManager(false),
-      disabledSuSEPlugger(false),
-      disabledAutofs(false) {
+      disabledSuSEPlugger(false) {
   }
 
-  K3bDevice::Device* device;
+  int& operator[]( K3bDevice::Device* dev ) {
+    QMap<K3bDevice::Device*,int>::iterator it = disabledCntMap.find( dev );
+    if( it != disabledCntMap.end() )
+      return it.data();
+    else
+      disabledCntMap[dev] = 0;
+    return disabledCntMap[dev];
+  }
 
-  bool disabled;
+  QMap<K3bDevice::Device*,int> disabledCntMap;
+
+  //  int disabledCnt;
 
   bool disabledMediaManager;
   bool disabledSuSEPlugger;
-  bool disabledAutofs;
 };
 
 
 
-K3bInterferingSystemsHandler::K3bInterferingSystemsHandler( K3bJobHandler* hdl, QObject* parent, const char* name )
-  : K3bJob( hdl, parent, name )
+K3bInterferingSystemsHandler::K3bInterferingSystemsHandler()
+  : QObject()
 {
   d = new Private();
 }
@@ -62,108 +97,127 @@ K3bInterferingSystemsHandler::K3bInterferingSystemsHandler( K3bJobHandler* hdl, 
 
 K3bInterferingSystemsHandler::~K3bInterferingSystemsHandler()
 {
+  // enable everything in case someone forgot to call enable
+  for( QMap<K3bDevice::Device*,int>::const_iterator it = d->disabledCntMap.begin();
+       it != d->disabledCntMap.end(); ++it ) {
+    if( it.data() > 0 )
+      enableInternal( it.key() );
+  }
+
   delete d;
-}
-
-
-void K3bInterferingSystemsHandler::setDevice( K3bDevice::Device* dev )
-{
-  d->device = dev;
 }
 
 
 void K3bInterferingSystemsHandler::disable( K3bDevice::Device* dev )
 {
-  setDevice( dev );
-  disable();
+  int& cnt = (*d)[dev];
+  if( cnt == 0 )
+    disableInternal( dev );
+  ++cnt;
 }
 
 
-// TODO: maybe create a class K3bInterferingSystemModule which we simply keep in a list
-void K3bInterferingSystemsHandler::disable()
+void K3bInterferingSystemsHandler::enable( K3bDevice::Device* dev )
 {
-  if( !d->disabled ) {
-    d->disabled = true;
-
-    int r = startStopMediaManager( false );
-    d->disabledMediaManager = ( r == 1 );
-    if( r == 1 )
-      emit infoMessage( i18n("Disabled KDED module mediamanager."), INFO );
-    else if( r == -1 )
-      emit infoMessage( i18n("Failed to disable KDED module mediamanager."), WARNING );
-
-
-    r = startStopSuSEPlugger( false );
-    d->disabledSuSEPlugger = ( r == 1 );
-    if( r == 1 )
-      emit infoMessage( i18n("Shut down SuSEPlugger."), INFO );
-    else if( r == -1 )
-      emit infoMessage( i18n("Failed to shut down SuSEPlugger."), WARNING );
-
-    if( d->device ) {
-      r = startStopAutomounting( false, d->device );
-      d->disabledAutofs = ( r == 1 );
-      if( r == 1 )
-	emit infoMessage( i18n("Disabled Automounting."), INFO );
-      else if( r == -1 )
-	emit infoMessage( i18n("Failed to disable Automounting."), WARNING );
-
-      //
-      // see if other applications are using the device
-      //
-      K3bLsofWrapper lsof;
-      if( lsof.checkDevice( d->device ) ) {
-	if( !lsof.usingApplications().isEmpty() ) {
-	  blockingInformation( i18n("<p>The device <em>%1</em> is already in use by other applications "
-				    "(<b>%2</b>) "
-				    "It highly recommended to quit those before continuing.")
-			       .arg(d->device->vendor() + " - " + d->device->description())
-			       .arg(lsof.usingApplications().join(", ")),
-			       i18n("Device in use") );
-	}
-      }
-    }
+  int& cnt = (*d)[dev];
+  if( cnt > 0 ) {
+    --cnt;
+    if( cnt == 0 )
+      enableInternal( dev );
   }
 }
 
 
-void K3bInterferingSystemsHandler::enable()
+// TODO: maybe create a class K3bInterferingSystemModule which we simply keep in a list
+void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
 {
-  if( d->disabled ) {
-    if( d->disabledMediaManager ) {
-      int r = startStopMediaManager( true );
-      if( r == -1 )
-	emit infoMessage( i18n("Failed to enable KDED module mediamanager."), WARNING );
-      else {
-	d->disabledMediaManager = false;
-	if( r == 1 )
-	  emit infoMessage( i18n("Enabled KDED module mediamanager."), INFO );
+  if( !d->disabledMediaManager ) {
+    int r = startStopMediaManager( false );
+    d->disabledMediaManager = ( r == 1 );
+    if( r == 1 )
+      emit infoMessage( i18n("Disabled KDED module mediamanager."), K3bJob::INFO );
+    else if( r == -1 )
+      emit infoMessage( i18n("Failed to disable KDED module mediamanager."), K3bJob::WARNING );
+  }
+
+  if( !d->disabledSuSEPlugger ) {
+    int r = startStopSuSEPlugger( false );
+    d->disabledSuSEPlugger = ( r == 1 );
+    if( r == 1 )
+      emit infoMessage( i18n("Shut down SuSEPlugger."), K3bJob::INFO );
+    else if( r == -1 )
+      emit infoMessage( i18n("Failed to shut down SuSEPlugger."), K3bJob::WARNING );
+  }
+
+  if( dev ) {
+    blockUnblockPmount( true, dev );
+
+    int r = startStopAutomounting( false, dev );
+    if( r == 1 )
+      emit infoMessage( i18n("Disabled Automounting."), K3bJob::INFO );
+    else if( r == -1 )
+      emit infoMessage( i18n("Failed to disable Automounting."), K3bJob::WARNING );
+    
+    //
+    // see if other applications are using the device
+    //
+    K3bLsofWrapper lsof;
+    if( lsof.checkDevice( dev ) ) {
+      if( !lsof.usingApplications().isEmpty() ) {
+	// TODO: In a perfect workd we would block here until the user shut down the other
+	//       applications but that is not easy:
+	//       1. we are in libk3b -> no GUI if possible
+	//       2. If we would for example use KMessageBox we would not have a parent widget and thus
+	//          with some window managers the user would not see the dialog but only the stalled
+	//          progress.
+	emit infoMessage( i18n("<p>The device <em>%1</em> is already in use by other applications "
+			       "(<b>%2</b>) "
+			       "It highly recommended to quit those.")
+			  .arg(dev->vendor() + " - " + dev->description())
+			  .arg(lsof.usingApplications().join(", ")),
+			  K3bJob::WARNING );
       }
     }
+  }
 
-    if( d->disabledSuSEPlugger ) {
-      int r = startStopSuSEPlugger( true );
-      if( r == -1 )
-	emit infoMessage( i18n("Failed to start SuSEPlugger."), WARNING );
-      else {
-	d->disabledSuSEPlugger = false;
-	if( r == 1 )
-	  emit infoMessage( i18n("Restarted SuSEPlugger."), INFO );
-      }
+  kdDebug() << "(K3bInterferingSystemsHandler) disabled for device " << dev->blockDeviceName() << endl;
+}
+
+
+void K3bInterferingSystemsHandler::enableInternal( K3bDevice::Device* dev )
+{
+  if( d->disabledMediaManager ) {
+    int r = startStopMediaManager( true );
+    if( r == -1 )
+      emit infoMessage( i18n("Failed to enable KDED module mediamanager."), K3bJob::WARNING );
+    else {
+      d->disabledMediaManager = false;
+      if( r == 1 )
+	emit infoMessage( i18n("Enabled KDED module mediamanager."), K3bJob::INFO );
     }
+  }
 
-    if( d->disabledAutofs ) {
-      int r = startStopAutomounting( true, d->device );
-      if( r == -1 )
-	emit infoMessage( i18n("Failed to enable Automounting."), WARNING );
-      else {
-	d->disabledAutofs = false;
-	if( r == 1 )
-	  emit infoMessage( i18n("Enabled Automounting."), INFO );
-      }
+  if( d->disabledSuSEPlugger ) {
+    int r = startStopSuSEPlugger( true );
+    if( r == -1 )
+      emit infoMessage( i18n("Failed to start SuSEPlugger."), K3bJob::WARNING );
+    else {
+      d->disabledSuSEPlugger = false;
+      if( r == 1 )
+	emit infoMessage( i18n("Restarted SuSEPlugger."), K3bJob::INFO );
     }
+  }
 
-    d->disabled = false;
+  if( dev ) {
+    blockUnblockPmount( false, dev );
+
+    int r = startStopAutomounting( true, dev );
+    if( r == -1 )
+      emit infoMessage( i18n("Failed to enable Automounting."), K3bJob::WARNING );
+    else {
+      if( r == 1 )
+	emit infoMessage( i18n("Enabled Automounting."), K3bJob::INFO );
+    }
   }
 }
 
@@ -335,6 +389,111 @@ int K3bInterferingSystemsHandler::startStopAutomounting( bool start, K3bDevice::
     kdDebug() << "(K3bInterferingSystemsHandler) could not start the automounting script." << endl;
     return -1;
   }
+}
+
+
+int K3bInterferingSystemsHandler::blockUnblockPmount( bool block, K3bDevice::Device* dev )
+{
+  // pumount [-l] dev
+  // pmount --lock dev pid
+  // pmount --unlock dev pid
+  QString pmountBin = K3b::findExe( "pmount" );
+  QString pumountBin = K3b::findExe( "pumount" );
+
+  //
+  // If pmount is not installed blocking it would not make sense anyway ;)
+  //
+  if( pmountBin.isEmpty() || pumountBin.isEmpty() ) {
+    kdDebug() << "(K3bInterferingSystemsHandler) could not find pmount/pumount." << endl;    
+    return 0;
+  }
+
+
+  //
+  // first unmount the device and ignore the outcome
+  //
+  if( block ) {
+    KProcess p;
+    p << pumountBin;
+    // p << "-l"; // lazy unmount
+    p << dev->blockDeviceName();
+    p.start( KProcess::Block );
+  }
+
+  //
+  // Now lock/unlock it
+  //
+  KProcess p;
+  p << pmountBin;
+  if( block )
+    p << "--lock";
+  else
+    p << "--unlock";
+  p << dev->blockDeviceName();
+  p << QString::number( (int)::getpid() );
+  if( p.start( KProcess::Block ) && p.normalExit() && p.exitStatus() == 0 ) {
+    kdDebug() << "(K3bInterferingSystemsHandler) " << (block?"blocked":"unblocked") << " " << dev->blockDeviceName() << " with pid " << (int)::getpid() << endl;
+    return 1;
+  }
+  else
+    return -1;
+}
+
+
+// static
+void K3bInterferingSystemsHandler::threadSafeDisable( K3bDevice::Device* dev )
+{
+  if( QThread::currentThread() == s_guiThreadHandle ) {
+    instance()->disable( dev );
+  }
+  else {
+    QWaitCondition w;
+    
+    QApplication::postEvent( K3bInterferingSystemsHandler::instance(),
+			     new DisableEvent( true, dev, &w ) );
+    
+    w.wait();
+  }
+}
+
+
+// static
+void K3bInterferingSystemsHandler::threadSafeEnable( K3bDevice::Device* dev )
+{
+  if( QThread::currentThread() == s_guiThreadHandle ) {
+    instance()->enable( dev );
+  }
+  else {
+    QWaitCondition w;
+    
+    QApplication::postEvent( K3bInterferingSystemsHandler::instance(),
+			     new DisableEvent( false, dev, &w ) );
+    
+    w.wait();
+  }
+}
+
+
+void K3bInterferingSystemsHandler::customEvent( QCustomEvent* e )
+{
+  if( DisableEvent* de = dynamic_cast<DisableEvent*>(e) ) {
+    if( de->disable )
+      disable( de->device );
+    else
+      enable( de->device );
+    de->wc->wakeAll();
+  }
+}
+
+
+K3bInterferingSystemsHandler* K3bInterferingSystemsHandler::instance()
+{
+  static KStaticDeleter<K3bInterferingSystemsHandler> sd;
+
+  if( !s_instance )
+    sd.setObject( s_instance, new K3bInterferingSystemsHandler() );
+
+  return s_instance;
 }
 
 #include "k3binterferingsystemshandler.moc"

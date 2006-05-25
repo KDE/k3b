@@ -21,6 +21,7 @@
 #include <k3bwavefilewriter.h>
 #include <k3bglobals.h>
 #include <k3bdevice.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -61,7 +62,11 @@ public:
     if( toc.isEmpty() )
       toc = device->readToc();
 
+    // make sure the read device is fully accessible for cdparanoia
+    K3bInterferingSystemsHandler::threadSafeDisable( device );
+
     if( !paranoia->initParanoia( device, toc ) ) {
+      K3bInterferingSystemsHandler::threadSafeEnable( device );
       emitInfoMessage( i18n("Could not open device %1").arg(device->blockDeviceName()),
 		       K3bJob::ERROR );
       emitFinished(false);
@@ -69,10 +74,13 @@ public:
     }
 
     if( !paranoia->initReading() ) {
+      K3bInterferingSystemsHandler::threadSafeEnable( device );
       emitInfoMessage( i18n("Error while initializing audio ripping."), K3bJob::ERROR );
       emitFinished(false);    
       return;
     }
+
+    device->block( true );
 
     // init settings
     paranoia->setMaxRetries( retries );
@@ -151,6 +159,10 @@ public:
       waveFileWriter->close();
 
     paranoia->close();
+
+    device->block( false );
+
+    K3bInterferingSystemsHandler::threadSafeEnable( device );
 
     if( status != K3bCdparanoiaLib::S_OK ) {
       emitInfoMessage( i18n("Unrecoverable error while ripping track %1.").arg(trackNum), K3bJob::ERROR );
