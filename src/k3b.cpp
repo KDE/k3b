@@ -121,6 +121,8 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 #include "projects/k3bdatasessionimportdialog.h"
+#include <k3binterferingsystemshandler.h>
+#include "k3bpassivepopup.h"
 
 
 class K3bMainWindow::Private
@@ -177,6 +179,11 @@ K3bMainWindow::K3bMainWindow()
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+
+  // connect to the K3bInterferingSystemsHandler to let the user know if K3b disabled something even if no
+  // job is running
+  connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
+	   this, SLOT(slotInterferingSystemsHandlerMessage(const QString&, int)) );
 
   // FIXME: now make sure the welcome screen is displayed completely
   resize( 780, 550 );
@@ -675,12 +682,11 @@ void K3bMainWindow::readProperties( KConfig* c )
   //        since that's when we can be sure we never need the session stuff again.
 
   // 1. read all projects from the config
-  // 2. simply open all of them
+  // 2. simply open all of themg
   // 3. reset the saved urls and the modified state
   // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
 
   QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
-  kdDebug() << "(K3bMainWindow::readProperties) saveDir: " << saveDir << endl;
 
   int cnt = c->readNumEntry( "Number of projects", 0 );
   kdDebug() << "(K3bMainWindow::readProperties) num: " << cnt << endl;
@@ -1219,6 +1225,18 @@ void K3bMainWindow::slotErrorMessage(const QString& message)
 void K3bMainWindow::slotWarningMessage(const QString& message)
 {
   KMessageBox::sorry( this, message );
+}
+
+
+void K3bMainWindow::slotInterferingSystemsHandlerMessage( const QString& message, int type )
+{
+  K3bPassivePopup::showPopup( message, 
+			      i18n("K3b core message"),
+			      type == K3bJob::ERROR 
+			      ? K3bPassivePopup::Error 
+			      : ( type == K3bJob::WARNING 
+				  ? K3bPassivePopup::Warning 
+				  : K3bPassivePopup::Information ) );
 }
 
 
