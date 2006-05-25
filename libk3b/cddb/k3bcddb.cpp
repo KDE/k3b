@@ -57,7 +57,7 @@ void K3bCddb::readConfig( KConfig* c )
 {
   c->setGroup( "Cddb" );
 
-  m_bRemoteCddbQuery = c->readBoolEntry( "use remote cddb", false );
+  m_bRemoteCddbQuery = c->readBoolEntry( "use remote cddb", true );
   m_bLocalCddbQuery = c->readBoolEntry( "use local cddb query", false );
 
   // old config <= 0.7.3
