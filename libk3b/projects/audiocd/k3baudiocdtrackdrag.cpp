@@ -37,7 +37,7 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QValu
 {
   QByteArray data;
   QDataStream s( data, IO_WriteOnly );
-  s << (int)toc.count();
+  s << (unsigned int)toc.count();
   for( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
     const K3bDevice::Track& track = *it;
     s << track.firstSector().lba() << track.lastSector().lba();
@@ -50,7 +50,7 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QValu
       << cddb.titles[i] << endl;
   }
 
-  s << cdTrackNumbers.count();
+  s << (unsigned int)cdTrackNumbers.count();
 
   for( QValueList<int>::const_iterator it = cdTrackNumbers.begin();
        it != cdTrackNumbers.end(); ++it )
@@ -74,9 +74,9 @@ bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
 
   QDataStream s( data, IO_ReadOnly );
 
-  int trackCnt;
+  unsigned int trackCnt;
   s >> trackCnt;
-  for( int i = 0; i < trackCnt; ++i ) {
+  for( unsigned int i = 0; i < trackCnt; ++i ) {
     int fs, ls;
     s >> fs;
     s >> ls;
@@ -88,14 +88,14 @@ bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
   cddb.titles.clear();
   cddb.cdArtist = t.readLine();
   cddb.cdTitle = t.readLine();
-  for( int i = 0; i < trackCnt; ++i ) {
+  for( unsigned int i = 0; i < trackCnt; ++i ) {
     cddb.artists.append( t.readLine() );
     cddb.titles.append( t.readLine() );
   }
 
   s >> trackCnt;
   trackNumbers.clear();
-  for( int i = 0; i < trackCnt; ++i ) {
+  for( unsigned int i = 0; i < trackCnt; ++i ) {
     int trackNumber = 0;
     s >> trackNumber;
     trackNumbers.append( trackNumber );
