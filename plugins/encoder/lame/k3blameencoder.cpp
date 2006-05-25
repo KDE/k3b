@@ -199,6 +199,13 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
   lame_set_num_channels( d->flags, 2 );
 
   //
+  // Lame by default determines the samplerate based on the bitrate
+  // since we have no option for the user to influence this yet
+  // we just keep to the good old 44.1 khz
+  //
+  lame_set_out_samplerate( d->flags, 44100 );
+
+  //
   // Choose the quality level
   //
   if( c->readBoolEntry( "Manual Bitrate Settings", false ) ) {
