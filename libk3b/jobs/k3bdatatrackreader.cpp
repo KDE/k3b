@@ -149,6 +149,8 @@ public:
       }
     }
 
+    m_device->block( true );
+
     //
     // set the error recovery mode to 0x21 or 0x20 depending on m_ignoreReadErrors
     // TODO: should we also set RC=1 in m_ignoreReadErrors mode (0x11 because TB is ignored)
@@ -174,6 +176,7 @@ public:
     if( s_bufferSizeSectors <= 0 ) {
       emitInfoMessage( i18n("Error while reading sector %1.").arg(m_firstSector.lba()), K3bJob::ERROR );
       emitFinished(false);
+      m_device->block( false );
       return;
     }
 
@@ -248,6 +251,8 @@ public:
 
     // reset the error recovery mode
     setErrorRecovery( m_device, m_oldErrorRecoveryMode );
+
+    m_device->block( false );
 
     // cleanup
     if( m_useLibdvdcss )
