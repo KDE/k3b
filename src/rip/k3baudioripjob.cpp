@@ -18,6 +18,7 @@
 
 #include <k3bthreadjob.h>
 #include <k3binterferingsystemshandler.h>
+#include <k3bcore.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -28,8 +29,7 @@ K3bAudioRipJob::K3bAudioRipJob( K3bJobHandler* hdl, QObject* parent )
 {
   m_thread = new K3bAudioRipThread();
   m_threadJob = new K3bThreadJob( m_thread, this, this );
-  m_interferingSystemsHandler = new K3bInterferingSystemsHandler( this, this );
-  connect( m_interferingSystemsHandler, SIGNAL(infoMessage(const QString&, int)),
+  connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
 	   this, SIGNAL(infoMessage(const QString&, int)) );
   connectSubJob( m_threadJob,
 		 SLOT(slotRippingFinished(bool)),
@@ -59,9 +59,8 @@ QString K3bAudioRipJob::jobDetails() const
 
 void K3bAudioRipJob::start()
 {
-  m_interferingSystemsHandler->setDevice( m_thread->m_device );
-  m_interferingSystemsHandler->disable();
-
+  K3bInterferingSystemsHandler::instance()->disable( m_thread->m_device );
+  k3bcore->blockDevice( m_thread->m_device );
   m_threadJob->start();
 }
 
@@ -74,7 +73,8 @@ void K3bAudioRipJob::cancel()
 
 void K3bAudioRipJob::slotRippingFinished( bool success )
 {
-  m_interferingSystemsHandler->enable();
+  K3bInterferingSystemsHandler::instance()->enable( m_thread->m_device );
+  k3bcore->unblockDevice( m_thread->m_device );
   jobFinished( success );
 }
 
