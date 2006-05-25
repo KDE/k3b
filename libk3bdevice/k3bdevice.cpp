@@ -1536,10 +1536,16 @@ bool K3bDevice::Device::block( bool b ) const
   // So we use the ioctl on Linux systems
   //
 #ifdef Q_OS_LINUX
-  open();
-  bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
-  close();
-  return success;
+  bool needToClose = !isOpen();
+
+  if( open() ) {
+    bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+    if( needToClose )
+      close();
+    return success;
+  }
+  else
+    return false;
 #else
   ScsiCommand cmd( this );
   cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
