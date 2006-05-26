@@ -60,12 +60,15 @@ static bool shouldRunSuidRoot( K3bExternalBin* bin )
   // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
   // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
   //
+  // Some kernel version 2.6.16.something again introduced a problem here. Since I do not know the exact version
+  // and a workaround was introduced in cdrecord 2.01.01a05 just use that version as the first for suid root.
+  //
   // Seems as if cdrdao never had problems with suid root...
   //
   
   if( bin->name() == "cdrecord" ) {
     return ( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ||
-	     bin->version >= K3bVersion( 2, 1, 1, "a02" ) );
+	     bin->version >= K3bVersion( 2, 1, 1, "a05" ) );
   }
   else if( bin->name() == "cdrdao" ) {
     return true;
