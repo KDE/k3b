@@ -154,6 +154,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
   connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), 
 	   this, SIGNAL(writerChanged(K3bDevice::Device*)) );
+  connect( m_comboMedium, SIGNAL(newMedia()), this, SIGNAL(newMedia()) );
   connect( m_comboWritingApp, SIGNAL(activated(int)), this, SLOT(slotWritingAppSelected(int)) );
   connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
@@ -285,6 +286,12 @@ void K3bWriterSelectionWidget::slotWritingAppSelected( int )
 K3bDevice::Device* K3bWriterSelectionWidget::writerDevice() const
 {
   return m_comboMedium->selectedDevice();
+}
+
+
+QValueList<K3bDevice::Device*> K3bWriterSelectionWidget::allDevices() const
+{
+  return m_comboMedium->allDevices();
 }
 
 

@@ -28,7 +28,7 @@
 
 #include <qfont.h>
 #include <qmap.h>
-#include <qptrvector.h>
+#include <qvaluevector.h>
 #include <qtooltip.h>
 #include <qlistbox.h>
 
@@ -76,7 +76,7 @@ class K3bMediaSelectionComboBox::Private
 {
 public:
   QMap<K3bDevice::Device*, int> deviceIndexMap;
-  QPtrVector<K3bDevice::Device> devices;
+  QValueVector<K3bDevice::Device*> devices;
 
   // medium strings for every entry
   QMap<QString, int> mediaStringMap;
@@ -132,6 +132,15 @@ K3bDevice::Device* K3bMediaSelectionComboBox::selectedDevice() const
 }
 
 
+QValueList<K3bDevice::Device*> K3bMediaSelectionComboBox::allDevices() const
+{
+  QValueList<K3bDevice::Device*> l;
+  for( unsigned int i = 0; i < d->devices.count(); ++i )
+    l.append( d->devices[i] );
+  return l;
+}
+
+
 void K3bMediaSelectionComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
   if( dev && d->deviceIndexMap.contains( dev ) ) {
@@ -143,7 +152,7 @@ void K3bMediaSelectionComboBox::setSelectedDevice( K3bDevice::Device* dev )
 
 void K3bMediaSelectionComboBox::setWantedMediumType( int type )
 {
-  if( type != 0 ) {
+  if( type != 0 && type != d->wantedMediumType) {
     d->wantedMediumType = type;
     updateMedia();
   }
@@ -152,7 +161,7 @@ void K3bMediaSelectionComboBox::setWantedMediumType( int type )
 
 void K3bMediaSelectionComboBox::setWantedMediumState( int state )
 {
-  if( state != 0 ) {
+  if( state != 0 && state != d->wantedMediumState ) {
     d->wantedMediumState = state;
     updateMedia();
   }
@@ -161,8 +170,10 @@ void K3bMediaSelectionComboBox::setWantedMediumState( int state )
 
 void K3bMediaSelectionComboBox::setWantedMediumContent( int content )
 {
-  d->wantedMediumContent = content;
-  updateMedia();
+  if( content != d->wantedMediumContent ) {
+    d->wantedMediumContent = content;
+    updateMedia();
+  }
 }
 
 
@@ -222,6 +233,9 @@ void K3bMediaSelectionComboBox::updateMedia()
   // reset font
   setFont( d->font );
 
+  // remember set of devices
+  QValueVector<K3bDevice::Device*> oldDevices = d->devices;
+
   // remember last selected medium
   K3bDevice::Device* selected = selectedDevice();
   
@@ -258,15 +272,21 @@ void K3bMediaSelectionComboBox::updateMedia()
   //
   // Now in case no usable medium was found show the user a little message
   //
-  if( d->devices.isEmpty() ) {
+  if( d->devices.isEmpty() && selected != 0 ) {
     showNoMediumMessage();
     // inform that we have no medium at all
     emit selectionChanged( 0 );
   }
-  else if( selected && d->deviceIndexMap.contains( selected ) )
-    setSelectedDevice( selected );
-  else
+  else if( selected && d->deviceIndexMap.contains( selected ) ) {
+    setCurrentItem( d->deviceIndexMap[selected] );
+  }
+  else {
     emit selectionChanged( selectedDevice() );
+  }
+
+  // did the selection of devices change
+  if( !(d->devices == oldDevices) )
+    emit newMedia();
 }
 
 
@@ -324,8 +344,7 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
   // update the helper structures
   //
   d->deviceIndexMap[dev] = count()-1;
-  d->devices.resize( count() );
-  d->devices.insert(count()-1, dev);
+  d->devices.append( dev );
 }
 
 
@@ -350,7 +369,7 @@ bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
   // also use if wantedMediumState empty and medium rewritable
   // because we can always format/erase/overwrite it
   //
-  // DVD+RW is never reported as appendable
+  // DVD+RW and DVD-RW restr. ovwr. are never reported as appendable
   //
   return( m.diskInfo().mediaType() & d->wantedMediumType &&
 	  m.content() & d->wantedMediumContent &&

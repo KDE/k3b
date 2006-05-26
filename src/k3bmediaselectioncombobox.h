@@ -45,6 +45,8 @@ class K3bMediaSelectionComboBox : public KComboBox
    */
   K3bDevice::Device* selectedDevice() const;
 
+  QValueList<K3bDevice::Device*> allDevices() const;
+
   int wantedMediumType() const;
   int wantedMediumState() const;
   int wantedMediumContent() const;
@@ -55,6 +57,12 @@ class K3bMediaSelectionComboBox : public KComboBox
    * no medium is available with a null pointer.
    */
   void selectionChanged( K3bDevice::Device* );
+
+  /**
+   * This signal is emitted if the selection of media changed.
+   * This includes a change due to changing the wanted medium state.
+   */
+  void newMedia();
 
  public slots:
   /**

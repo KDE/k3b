@@ -46,6 +46,8 @@ class K3bWriterSelectionWidget : public QWidget
   int writerSpeed() const;
   K3bDevice::Device* writerDevice() const;
 
+  QValueList<K3bDevice::Device*> allDevices() const;
+
   /**
    * returns K3b::WritingApp
    */
@@ -99,6 +101,11 @@ class K3bWriterSelectionWidget : public QWidget
   void writerChanged();
   void writerChanged( K3bDevice::Device* );
   void writingAppChanged( int app );
+
+  /**
+   * \see K3bMediaSelectionComboBox
+   */
+  void newMedia();
 
  private slots:
   void slotRefreshWriterSpeeds();
