@@ -71,7 +71,7 @@ public:
 
       if( !m_bCanceled && command & CD_TEXT_RAW ) {
 	unsigned char* data = 0;
-	int dataLen = 0;
+	unsigned int dataLen = 0;
 	if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
 	  // we need more than the header and a multible of 18 bytes to have valid CD-TEXT
 	  if( dataLen > 4 && dataLen%18 == 4 ) {
