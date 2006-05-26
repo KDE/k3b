@@ -520,24 +520,24 @@ namespace K3bDevice
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool readDiscInfo( unsigned char** data, int& dataLen ) const;
+      bool readDiscInfo( unsigned char** data, unsigned int& dataLen ) const;
 
       /**
        * @param pf If false all fields in the descriptor data is vendor specific. Default should be true.
        */
-      bool modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const;
+      bool modeSelect( unsigned char* page, unsigned int pageLen, bool pf, bool sp ) const;
 
       /**
        * if true is returned pageLen specifies the actual length of *pageData which needs to be
        * deleted after using.
        */
-      bool modeSense( unsigned char** pageData, int& pageLen, int page ) const;
+      bool modeSense( unsigned char** pageData, unsigned int& pageLen, int page ) const;
 
       /**
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool msf, int track ) const;
+      bool readTocPmaAtip( unsigned char** data, unsigned int& dataLen, int format, bool msf, int track ) const;
 
       /**
        * @param type specifies what value means:
@@ -547,13 +547,13 @@ namespace K3bDevice
        *        \li 10b - value refers to a session number
        *
        */
-      bool readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const;
+      bool readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, unsigned long value ) const;
 
       /**
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool readDvdStructure( unsigned char** data, int& dataLen, 
+      bool readDvdStructure( unsigned char** data, unsigned int& dataLen, 
 			     unsigned int format = 0x0,
 			     unsigned int layer = 0x0,
 			     unsigned long adress = 0,
@@ -563,20 +563,20 @@ namespace K3bDevice
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool mechanismStatus( unsigned char** data, int& dataLen ) const;
+      bool mechanismStatus( unsigned char** data, unsigned int& dataLen ) const;
 
       /**
        * Read a single feature.
        * data will be filled with the feature header and the descriptor
        */
-      bool getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const;
+      bool getFeature( unsigned char** data, unsigned int& dataLen, unsigned int feature ) const;
 
 
       /**
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool getPerformance( unsigned char** data, int& dataLen,
+      bool getPerformance( unsigned char** data, unsigned int& dataLen,
 			   unsigned int type,
 			   unsigned int dataType,
 			   unsigned int lba = 0 ) const;
@@ -606,7 +606,7 @@ namespace K3bDevice
        *                    \li 100b - Corrected and de-interleaved R-W Sub-channel (96 bytes)
        */
       bool readCdMsf( unsigned char* data,
-		      int dataLen,
+		      unsigned int dataLen,
 		      int sectorType,
 		      bool dap,
 		      const K3b::Msf& startAdress,
@@ -637,7 +637,7 @@ namespace K3bDevice
        *                    \li 100b - Corrected and de-interleaved R-W Sub-channel (96 bytes)
        */
       bool readCd( unsigned char* data,
-		   int dataLen,
+		   unsigned int dataLen,
 		   int sectorType,
 		   bool dap,
 		   unsigned long startAdress,
@@ -651,13 +651,13 @@ namespace K3bDevice
 		   int subChannel ) const;
 
       bool read10( unsigned char* data,
-		   int dataLen,
+		   unsigned int dataLen,
 		   unsigned long startAdress,
 		   unsigned int length,
 		   bool fua = false ) const;
 
       bool read12( unsigned char* data,
-		   int dataLen,
+		   unsigned int dataLen,
 		   unsigned long startAdress,
 		   unsigned long length,
 		   bool streaming = false,
@@ -670,7 +670,7 @@ namespace K3bDevice
        * @param trackNumber only valid if subchannelParam == 03h
        */
       bool readSubChannel( unsigned char** data,
-			   int& dataLen,
+			   unsigned int& dataLen,
 			   unsigned int subchannelParam,
 			   unsigned int trackNumber ) const;
 
@@ -764,7 +764,7 @@ namespace K3bDevice
        * Internal method which checks if the raw toc data has bcd values or hex.
        * @return 0 if hex, 1 if bcd, -1 if none
        */
-      int rawTocDataWithBcdValues( unsigned char* data, int dataLen ) const;
+      int rawTocDataWithBcdValues( unsigned char* data, unsigned int dataLen ) const;
 
       bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, bool dvd ) const;
       bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, bool dvd ) const;

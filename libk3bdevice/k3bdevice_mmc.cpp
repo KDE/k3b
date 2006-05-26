@@ -35,7 +35,7 @@ bool K3bDevice::Device::testUnitReady() const
 }
 
 
-bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned int feature ) const
+bool K3bDevice::Device::getFeature( unsigned char** data, unsigned int& dataLen, unsigned int feature ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -87,7 +87,7 @@ bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned
 int K3bDevice::Device::featureCurrent( unsigned int feature ) const
 {
   unsigned char* data = 0;
-  int dataLen = 0;
+  unsigned int dataLen = 0;
   if( getFeature( &data, dataLen, feature ) ) {
     int ret = -1;
     if( dataLen >= 11 )
@@ -105,7 +105,7 @@ int K3bDevice::Device::featureCurrent( unsigned int feature ) const
 bool K3bDevice::Device::readIsrc( unsigned int track, QCString& isrc ) const
 {
   unsigned char* data = 0;
-  int dataLen = 0;
+  unsigned int dataLen = 0;
 
   if( readSubChannel( &data, dataLen, 0x3, track ) ) {
     bool isrcValid = false;
@@ -133,7 +133,7 @@ bool K3bDevice::Device::readIsrc( unsigned int track, QCString& isrc ) const
 bool K3bDevice::Device::readMcn( QCString& mcn ) const
 {
   unsigned char* data = 0;
-  int dataLen = 0;
+  unsigned int dataLen = 0;
 
   if( readSubChannel( &data, dataLen, 0x2, 0 ) ) {
     bool mcnValid = false;
@@ -154,7 +154,7 @@ bool K3bDevice::Device::readMcn( QCString& mcn ) const
 }
 
 
-bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
+bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& dataLen,
 					unsigned int type,
 					unsigned int dataType,
 					unsigned int lba ) const
@@ -191,7 +191,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
     *data = new unsigned char[dataLen];
     ::memset( *data, 0, dataLen );
 
-    int numDesc = (dataLen-8)/16;
+    unsigned int numDesc = (dataLen-8)/16;
 
     cmd[8] = numDesc>>8;
     cmd[9] = numDesc;
@@ -241,7 +241,7 @@ bool K3bDevice::Device::seek( unsigned long lba ) const
 }
 
 
-bool K3bDevice::Device::readTrackInformation( unsigned char** data, int& dataLen, int type, unsigned long value ) const
+bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, unsigned long value ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -305,7 +305,7 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, int& dataLen
 
 
 bool K3bDevice::Device::read10( unsigned char* data,
-				int dataLen,
+				unsigned int dataLen,
 				unsigned long startAdress,
 				unsigned int length,
 				bool fua ) const
@@ -332,7 +332,7 @@ bool K3bDevice::Device::read10( unsigned char* data,
 
 
 bool K3bDevice::Device::read12( unsigned char* data,
-				int dataLen,
+				unsigned int dataLen,
 				unsigned long startAdress,
 				unsigned long length,
 				bool streaming,
@@ -363,7 +363,7 @@ bool K3bDevice::Device::read12( unsigned char* data,
 
 
 bool K3bDevice::Device::readCd( unsigned char* data,
-				int dataLen,
+				unsigned int dataLen,
 				int sectorType,
 				bool dap,
 				unsigned long startAdress,
@@ -407,7 +407,7 @@ bool K3bDevice::Device::readCd( unsigned char* data,
 
 
 bool K3bDevice::Device::readCdMsf( unsigned char* data,
-				   int dataLen,
+				   unsigned int dataLen,
 				   int sectorType,
 				   bool dap,
 				   const K3b::Msf& startAdress,
@@ -448,7 +448,7 @@ bool K3bDevice::Device::readCdMsf( unsigned char* data,
 }
 
 
-bool K3bDevice::Device::readSubChannel( unsigned char** data, int& dataLen,
+bool K3bDevice::Device::readSubChannel( unsigned char** data, unsigned int& dataLen,
 					unsigned int subchannelParam,
 					unsigned int trackNumber ) const
 {
@@ -499,7 +499,7 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, int& dataLen,
 }
 
 
-bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, int& dataLen, int format, bool time, int track ) const
+bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& dataLen, int format, bool time, int track ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -549,7 +549,7 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, int& dataLen, int 
 }
 
 
-bool K3bDevice::Device::mechanismStatus( unsigned char** data, int& dataLen ) const
+bool K3bDevice::Device::mechanismStatus( unsigned char** data, unsigned int& dataLen ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -599,7 +599,7 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, int& dataLen ) co
 
 
 
-bool K3bDevice::Device::modeSense( unsigned char** pageData, int& pageLen, int page ) const
+bool K3bDevice::Device::modeSense( unsigned char** pageData, unsigned int& pageLen, int page ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
@@ -646,7 +646,7 @@ bool K3bDevice::Device::modeSense( unsigned char** pageData, int& pageLen, int p
 }
 
 
-bool K3bDevice::Device::modeSelect( unsigned char* page, int pageLen, bool pf, bool sp ) const
+bool K3bDevice::Device::modeSelect( unsigned char* page, unsigned int pageLen, bool pf, bool sp ) const
 {
   page[0] = 0;
   page[1] = 0;
@@ -703,7 +703,7 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
   cmd[8] = maxLen & 0xFF;
   if( cmd.transport( TR_DIR_READ, buffer, maxLen ) == 0 ) {
 
-    int realLength = buffer[3] + 4;
+    unsigned int realLength = buffer[3] + 4;
 
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
 	      << (int)(buffer[8]&0x3) << " " << from4Byte( &buffer[4] ) << endl;
@@ -720,7 +720,7 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
     // 2 - formatted. Here we get the used capacity (lead-in to last lead-out/border-out)
     // 3 - No media present
     //
-    for( int i = 12; i < realLength-4; i+=8 ) {
+    for( unsigned int i = 12; i < realLength-4; i+=8 ) {
       int format = (int)((buffer[i+4]>>2)&0x3f);
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: "
 		<< format << " " << from4Byte( &buffer[i] )
@@ -740,7 +740,7 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 }
 
 
-bool K3bDevice::Device::readDiscInfo( unsigned char** data, int& dataLen ) const
+bool K3bDevice::Device::readDiscInfo( unsigned char** data, unsigned int& dataLen ) const
 {
   unsigned char header[2];
   ::memset( header, 0, 2 );
@@ -774,7 +774,7 @@ bool K3bDevice::Device::readDiscInfo( unsigned char** data, int& dataLen ) const
 }
 
 
-bool K3bDevice::Device::readDvdStructure( unsigned char** data, int& dataLen, 
+bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& dataLen, 
 					  unsigned int format,
 					  unsigned int layer,
 					  unsigned long adress,
@@ -828,7 +828,7 @@ int K3bDevice::Device::readBufferCapacity( long long& bufferLength, long long& b
   if( r )
     return r;
 
-  int dataLength = from2Byte( data );
+  unsigned int dataLength = from2Byte( data );
 
   if( dataLength >= 10 ) {
     bufferLength = from4Byte( &data[4] );

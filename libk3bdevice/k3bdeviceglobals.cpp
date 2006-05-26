@@ -183,14 +183,14 @@ void K3bDevice::debugBitfield( unsigned char* data, long len )
 }
 
 
-unsigned short K3bDevice::from2Byte( unsigned char* d )
+K3bDevice::uint16 K3bDevice::from2Byte( unsigned char* d )
 {
   return ( d[0] << 8 & 0xFF00 |
 	   d[1]      & 0xFF );
 }
 
 
-unsigned long K3bDevice::from4Byte( unsigned char* d )
+K3bDevice::uint32 K3bDevice::from4Byte( unsigned char* d )
 {
   return ( d[0] << 24 & 0xFF000000 |
 	   d[1] << 16 & 0xFF0000 |

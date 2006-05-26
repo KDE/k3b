@@ -23,6 +23,9 @@
 
 namespace K3bDevice 
 {
+  typedef Q_UINT16 uint16;
+  typedef Q_UINT32 uint32;
+
   class Device;
 
   LIBK3BDEVICE_EXPORT QString deviceTypeString( int );
@@ -31,14 +34,14 @@ namespace K3bDevice
    * @param simplyfied if true the formatting state of DVD media is left out.
    */
   LIBK3BDEVICE_EXPORT QString mediaTypeString( int, bool simplyfied = false );
-  void debugBitfield( unsigned char* data, long len );
+  LIBK3BDEVICE_EXPORT void debugBitfield( unsigned char* data, long len );
 
-  LIBK3BDEVICE_EXPORT unsigned short from2Byte( unsigned char* );
-  unsigned long from4Byte( unsigned char* );
+  LIBK3BDEVICE_EXPORT uint16 from2Byte( unsigned char* );
+  LIBK3BDEVICE_EXPORT uint32 from4Byte( unsigned char* );
   
-  char fromBcd( const char& );
-  char toBcd( const char& );
-  bool isValidBcd( const char& );
+  LIBK3BDEVICE_EXPORT char fromBcd( const char& );
+  LIBK3BDEVICE_EXPORT char toBcd( const char& );
+  LIBK3BDEVICE_EXPORT bool isValidBcd( const char& );
 
   /**
    * @return the maximum nuber of sectors that can be read from device @p dev starting
