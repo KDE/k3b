@@ -201,15 +201,17 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
     //
     // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
-    // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
+    // So far we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
+    //
+    // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
     //
     if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
-	k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a02" ) ) {
+	k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) ) {
       if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a02"),
+					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a05"),
 					   i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
-						"root for security reasons anymore.").arg("cdrecord <= 2.01.01a02"),
+						"root for security reasons anymore.").arg("cdrecord <= 2.01.01a05"),
 					   i18n("Use K3bSetup to solve this problem."),
 					   true ) );
     }
@@ -440,8 +442,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
 
 
-    if( dev->interfaceType() == K3bDevice::SCSI &&
-	!dev->genericDevice().isEmpty() &&
+    if( !dev->genericDevice().isEmpty() &&
 	!QFileInfo( dev->genericDevice() ).isWritable() )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("No write access to generic SCSI device %1").arg(dev->genericDevice()),
