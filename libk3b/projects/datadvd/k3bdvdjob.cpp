@@ -29,6 +29,7 @@
 #include <k3bdeviceglobals.h>
 #include <k3bglobalsettings.h>
 #include <k3biso9660.h>
+#include <k3bmsinfofetcher.h>
 
 #include <klocale.h>
 #include <kapplication.h>
@@ -56,7 +57,6 @@ K3bDvdJob::~K3bDvdJob()
 
 void K3bDvdJob::prepareData()
 {
-  // nothing to prepare here I think
 }
 
 
@@ -87,6 +87,14 @@ bool K3bDvdJob::prepareWriterJob()
   }
   else
     writer->setImageToWrite( m_doc->tempDir() );
+
+  if( usedMultiSessionMode() != K3bDataDoc::NONE ) {
+    //
+    // growisofs wants a valid -C parameter for multisession, so we get it from the 
+    // K3bMsInfoFetcher (see K3bDataJob::slotMsInfoFetched)
+    //
+    writer->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
+  }
 
   setWriterJob( writer );
 

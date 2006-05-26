@@ -45,7 +45,8 @@ class K3bJobHandler
 			    int mediaState = K3bDevice::STATE_EMPTY,
 			    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
 			    const QString& message = QString::null ) = 0;
-  
+
+  // FIXME: use KGuiItem  
   virtual bool questionYesNo( const QString& text,
 			      const QString& caption = QString::null,
 			      const QString& yesText = QString::null,

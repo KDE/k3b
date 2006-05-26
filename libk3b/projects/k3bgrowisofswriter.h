@@ -79,6 +79,12 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
    */
   void setImageToWrite( const QString& );
 
+  /**
+   * While reading the image from stdin growisofs needs 
+   * a valid -C parameter for multisession.
+   */
+  void setMultiSessionInfo( const QString& );
+
  protected:
   bool prepareProcess();
 

@@ -86,6 +86,8 @@ public:
 
   bool usingRingBuffer;
   K3bPipeBuffer* ringBuffer;
+
+  QString multiSessionInfo;
 };
 
 
@@ -212,6 +214,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   }
   else
     s += d->image;
+
+  if( d->multiSession && !d->multiSessionInfo.isEmpty() )
+    *d->process << "-C" << d->multiSessionInfo;
 
   if( d->multiSession )
     *d->process << "-M";
@@ -571,6 +576,12 @@ void K3bGrowisofsWriter::slotFlushingCache()
     emit processedSize( d->overallSizeFromOutput/1024/1024,
 			d->overallSizeFromOutput/1024/1024 );
   }
+}
+
+
+void K3bGrowisofsWriter::setMultiSessionInfo( const QString& info )
+{
+  d->multiSessionInfo = info;
 }
 
 #include "k3bgrowisofswriter.moc"
