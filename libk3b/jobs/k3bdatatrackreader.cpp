@@ -348,7 +348,7 @@ public:
 
   bool setErrorRecovery( K3bDevice::Device* dev, int code ) {
     unsigned char* data = 0;
-    int dataLen = 0;
+    unsigned int dataLen = 0;
     if( !dev->modeSense( &data, dataLen, 0x01 ) )
       return false;
     
