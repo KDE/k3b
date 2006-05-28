@@ -143,7 +143,7 @@ void K3bCddbOptionTab::readSettings()
 
   QStringList localCddbDirs = c->readPathListEntry( "local cddb dirs" );
 
-  m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", false ) );
+  m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", true ) );
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
   m_checkSaveLocalEntries->setChecked( c->readBoolEntry( "save cddb entries locally", true ) );
   m_checkManualCgiPath->setChecked( c->readBoolEntry( "use manual cgi path", false ) );
