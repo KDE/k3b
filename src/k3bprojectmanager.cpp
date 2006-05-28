@@ -329,8 +329,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   }
 
   case K3bDoc::DATA:
-  case K3bDoc::DVD:
-  case K3bDoc::VIDEODVD: {
+  case K3bDoc::DVD: {
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
 
     dataDoc->setIsoOptions( K3bIsoOptions::load( c ) );
@@ -357,6 +356,12 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     else
       dataDoc->setMultiSessionMode( K3bDataDoc::AUTO );
 
+    break;
+  }
+
+  case K3bDoc::VIDEODVD: {
+    K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
+    dataDoc->setIsoOptions( K3bIsoOptions::load( c ) );
     break;
   }
 
