@@ -547,7 +547,7 @@ namespace K3bDevice
        *        \li 10b - value refers to a session number
        *
        */
-      bool readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, unsigned long value ) const;
+      bool readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, int value ) const;
 
       /**
        * if true is returned dataLen specifies the actual length of *data which needs to be

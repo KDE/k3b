@@ -8,8 +8,8 @@ lib_LTLIBRARIES = libk3bdevice.la
 
 libk3bdevice_la_LIBADD = $(LIB_KIO) $(RESMGR_LIB) $(CAM_LIB) $(HAL_DBUS_LIBS)
 
-# lib version 3 for K3b 0.13.x 
-libk3bdevice_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
+# lib version 4 for K3b 1.0
+libk3bdevice_la_LDFLAGS = $(all_libraries) -version-info 4:0:0 -no-undefined
 
 if include_HAL
 libk3bdevice_la_SOURCES = k3bdevice.cpp k3bdevice_mmc.cpp k3bscsicommand.cpp \

@@ -3353,24 +3353,28 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
     if( readDiscInfo( &data, dataLen ) ) {
       disc_info_t* inf = (disc_info_t*)data;
       
-      if( inf->border == 0x01 ) {
-	// the incomplete track number
-	unsigned int nextTrack = inf->last_track_l|inf->last_track_m<<8;
+      //
+      // The state of the last session has to be "empty" (0x0) or "incomplete" (0x1)
+      // The procedure here is taken from the dvd+rw-tools
+      // 
+      if( !(inf->border & 0x2) ) {
+	// the incomplete track number is the first track in the last session (the empty session)
+	int nextTrack = inf->first_track_l|inf->first_track_m<<8;
 
 	unsigned char* trackData = 0;
 	unsigned int trackDataLen = 0;
 
 	// Read start address of the incomplete track
 	if( readTrackInformation( &trackData, trackDataLen, 0x1, nextTrack ) ) {
-	  nextWritableAdress = from4Byte( &data[8] );
+	  nextWritableAdress = from4Byte( &trackData[8] );
 	  delete [] trackData;
-	}
 
-	// Read start adress of the first track in the last session
-	if( readTocPmaAtip( &trackData, trackDataLen, 0x1, false, 0x0  ) ) {
-	  lastSessionStart = from4Byte( &trackData[8] );
-	  delete [] trackData;
-	  success = true;
+	  // Read start adress of the first track in the last session
+	  if( readTocPmaAtip( &trackData, trackDataLen, 0x1, false, 0x0  ) ) {
+	    lastSessionStart = from4Byte( &trackData[8] );
+	    delete [] trackData;
+	    success = true;
+	  }
 	}
       }
     }

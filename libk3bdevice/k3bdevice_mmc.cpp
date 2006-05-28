@@ -241,7 +241,7 @@ bool K3bDevice::Device::seek( unsigned long lba ) const
 }
 
 
-bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, unsigned long value ) const
+bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, int value ) const
 {
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
