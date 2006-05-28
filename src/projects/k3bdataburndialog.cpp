@@ -161,7 +161,7 @@ void K3bDataBurnDialog::readSettings()
 
   m_dataModeWidget->setDataMode( ((K3bDataDoc*)doc())->dataMode() );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -229,7 +229,7 @@ void K3bDataBurnDialog::loadK3bDefaults()
   m_comboMultisession->setMultiSessionMode( K3bDataDoc::AUTO );
   m_checkVerify->setChecked( false );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -247,7 +247,7 @@ void K3bDataBurnDialog::loadUserDefaults( KConfigBase* c )
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -268,9 +268,9 @@ void K3bDataBurnDialog::saveUserDefaults( KConfigBase* c )
 }
 
 
-void K3bDataBurnDialog::toggleAllOptions()
+void K3bDataBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
     m_checkVerify->setChecked(false);
@@ -291,7 +291,8 @@ void K3bDataBurnDialog::slotMultiSessionModeChanged()
     m_spinCopies->setEnabled(false);
 
   // wait for the proper medium
-  // we have to do this in another slot than toggleAllOptions to avoid an endless loop
+  // we have to do this in another slot than toggleAll to avoid an endless loop
+  // FIXME: K3bInteractionDialog::slotToggleAll is endless loop protected
   if( m_comboMultisession->multiSessionMode() == K3bDataDoc::NONE )
     m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
   else if( m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||

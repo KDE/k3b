@@ -47,6 +47,7 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void loadK3bDefaults();
    void loadUserDefaults( KConfigBase* );
    void saveUserDefaults( KConfigBase* );
+   void toggleAll();
 
    K3bDataVolumeDescWidget* m_volumeDescWidget;
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
@@ -61,7 +62,6 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   void toggleAllOptions();
    void slotOnTheFlyToggled( bool on );
    void slotNormalizeToggled( bool on );
 

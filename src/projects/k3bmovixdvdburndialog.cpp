@@ -111,7 +111,7 @@ void K3bMovixDvdBurnDialog::loadK3bDefaults()
 
   m_checkVerify->setChecked( false );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -128,7 +128,7 @@ void K3bMovixDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -217,9 +217,9 @@ void K3bMovixDvdBurnDialog::slotStartClicked()
 }
 
 
-void K3bMovixDvdBurnDialog::toggleAllOptions()
+void K3bMovixDvdBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
     m_checkVerify->setChecked(false);

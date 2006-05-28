@@ -103,10 +103,10 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   addPage( advancedTab, i18n("Advanced") );
 
-  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(slotNormalizeToggled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotOnTheFlyToggled(bool)) );
-  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 
   readSettings();
 
@@ -176,7 +176,7 @@ void K3bAudioBurnDialog::readSettings()
   if( !doc()->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -192,7 +192,7 @@ void K3bAudioBurnDialog::loadK3bDefaults()
   m_checkAudioRippingIgnoreReadErrors->setChecked( true );
   m_spinAudioRippingReadRetries->setValue( 5 );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -208,7 +208,7 @@ void K3bAudioBurnDialog::loadUserDefaults( KConfigBase* c )
   m_checkAudioRippingIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", true ) );
   m_spinAudioRippingReadRetries->setValue( c->readNumEntry( "read retries", 5 ) );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -225,9 +225,9 @@ void K3bAudioBurnDialog::saveUserDefaults( KConfigBase* c )
   c->writeEntry( "read retries", m_spinAudioRippingReadRetries->value() );
 }
 
-void K3bAudioBurnDialog::toggleAllOptions()
+void K3bAudioBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
   bool cdrecordOnTheFly = false;
   bool cdrecordCdText = false;

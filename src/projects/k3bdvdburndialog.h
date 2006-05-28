@@ -40,7 +40,6 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
    ~K3bDvdBurnDialog();
 
  protected slots:
-   void toggleAllOptions();
    void slotMultiSessionModeChanged();
 
    void saveSettings();
@@ -50,6 +49,7 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
    void loadK3bDefaults();
    void loadUserDefaults( KConfigBase* );
    void saveUserDefaults( KConfigBase* );
+   void toggleAll();
 
  private:
    void setupSettingsTab();

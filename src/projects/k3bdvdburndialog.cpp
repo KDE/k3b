@@ -177,13 +177,13 @@ void K3bDvdBurnDialog::readSettings()
   else
     m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_SL );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
-void K3bDvdBurnDialog::toggleAllOptions()
+void K3bDvdBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
   // Multisession in DAO is not possible
   if( m_writingModeWidget->writingMode() == K3b::DAO ) {
@@ -265,7 +265,7 @@ void K3bDvdBurnDialog::loadK3bDefaults()
 
   m_comboMultisession->setMultiSessionMode( K3bDataDoc::AUTO );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -282,7 +282,7 @@ void K3bDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 

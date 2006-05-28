@@ -59,7 +59,6 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   void slotMd5JobFinished( bool );
   void slotMd5SumCompare();
 
-  void slotToggleAll();
   void slotUpdateImage( const QString& );
 
  protected:
@@ -72,6 +71,8 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   void dropEvent( QDropEvent* );
 
   void init();
+
+  void toggleAll();
 
  private:
   enum {

@@ -724,7 +724,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
 }
 
 
-void K3bCdImageWritingDialog::slotToggleAll()
+void K3bCdImageWritingDialog::toggleAll()
 {
   // enable the Write-Button if we found a valid image or the user forced an image type
   m_buttonStart->setEnabled( m_writerSelectionWidget->writerDevice() 

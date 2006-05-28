@@ -99,8 +99,8 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(slotNormalizeToggled(bool)) );
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotOnTheFlyToggled(bool)) );
-  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(toggleAllOptions()) );
-  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
+  connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleAll()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 
   readSettings();
 }
@@ -250,7 +250,7 @@ void K3bMixedBurnDialog::readSettings()
 
   m_dataModeWidget->setDataMode( m_doc->dataDoc()->dataMode() );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -269,7 +269,7 @@ void K3bMixedBurnDialog::loadK3bDefaults()
   m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -295,7 +295,7 @@ void K3bMixedBurnDialog::loadUserDefaults( KConfigBase* c )
   m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -328,9 +328,9 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigBase* c )
 }
 
 
-void K3bMixedBurnDialog::toggleAllOptions()
+void K3bMixedBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
   bool cdrecordOnTheFly = false;
   bool cdrecordCdText = false;

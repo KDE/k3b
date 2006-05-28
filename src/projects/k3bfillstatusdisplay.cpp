@@ -238,7 +238,8 @@ public:
     tip( parentWidget()->rect(),
 	 KIO::convertSize( m_doc->size() ) +
 	 " (" + KGlobal::locale()->formatNumber( m_doc->size(), 0 ) + "), " +
-	 m_doc->length().toString(false) + " " + i18n("min") );
+	 m_doc->length().toString(false) + " " + i18n("min") +
+	 " (" + i18n("Right click for media sizes") + ")");
   }
 
 private:

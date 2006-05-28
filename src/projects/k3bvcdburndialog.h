@@ -127,6 +127,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         void saveCdiConfig();
         void loadCdiConfig();
         void loadDefaultCdiConfig();
+        void toggleAll();
 
     protected slots:
         void slotStartClicked();
@@ -136,8 +137,6 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         void slotVcdTypeClicked( int );
         void slotCdiSupportChecked( bool );
         void slotAutoDetect( bool );
-
-        void toggleAllOptions();
 };
 
 #endif

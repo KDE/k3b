@@ -60,6 +60,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_configGroup(configGroup),
     m_exitLoopOnHide(true),
     m_inLoop(false),
+    m_inToggleMode(false),
     m_delayedInit(false)
 {
   mainGrid = new QGridLayout( this );
@@ -485,6 +486,21 @@ void K3bInteractionDialog::done( int r )
   }
 
   return KDialog::done( r );
+}
+
+
+void K3bInteractionDialog::slotToggleAll()
+{
+  if( !m_inToggleMode ) {
+    m_inToggleMode = true;
+    toggleAll();
+    m_inToggleMode = false;
+  }
+}
+
+
+void K3bInteractionDialog::toggleAll()
+{
 }
 
 

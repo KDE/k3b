@@ -54,13 +54,13 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
   void loadUserDefaults( KConfigBase* );
   void saveUserDefaults( KConfigBase* );
   void showEvent( QShowEvent* );
+  void toggleAll();
 
  protected slots:
   /**
    * Reimplemented for internal reasons (shut down the audio player)
    */
   void slotStartClicked();
-  void toggleAllOptions();
   void slotOnTheFlyToggled( bool on );
   void slotNormalizeToggled( bool on );
 

@@ -54,6 +54,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void loadK3bDefaults();
    void loadUserDefaults( KConfigBase* );
    void saveUserDefaults( KConfigBase* );
+   void toggleAll();
 
    K3bDataVolumeDescWidget* m_volumeDescWidget;
 
@@ -76,7 +77,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   void toggleAllOptions();
    void slotMultiSessionModeChanged();
 };
 

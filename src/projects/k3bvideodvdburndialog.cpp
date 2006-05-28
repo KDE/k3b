@@ -109,13 +109,13 @@ void K3bVideoDvdBurnDialog::readSettings()
 
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
-void K3bVideoDvdBurnDialog::toggleAllOptions()
+void K3bVideoDvdBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
 //   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
 //     m_checkVerify->setChecked(false);
@@ -133,7 +133,7 @@ void K3bVideoDvdBurnDialog::loadK3bDefaults()
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
   //  m_checkVerify->setChecked( false );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -146,7 +146,7 @@ void K3bVideoDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 
   //  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 

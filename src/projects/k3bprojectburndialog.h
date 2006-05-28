@@ -77,8 +77,6 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     */
    virtual void slotWritingAppChanged( int );
 
-   virtual void toggleAllOptions();
-
  signals:
    void writerChanged();
 
@@ -154,6 +152,8 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     * </ul>
     */
    virtual void readSettings();
+
+   virtual void toggleAll();
 
    /**
     * use this to set additionell stuff in the job

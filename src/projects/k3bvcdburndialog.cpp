@@ -1079,9 +1079,9 @@ void K3bVcdBurnDialog::slotAutoDetect( bool b )
 
 }
 
-void K3bVcdBurnDialog::toggleAllOptions()
+void K3bVcdBurnDialog::toggleAll()
 {
-    K3bProjectBurnDialog::toggleAllOptions();
+    K3bProjectBurnDialog::toggleAll();
 
     m_writingModeWidget->setSupportedModes( K3b::DAO );
     m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );

@@ -91,17 +91,17 @@ void K3bProjectBurnDialog::init()
 
 void K3bProjectBurnDialog::slotWriterChanged()
 {
-  toggleAllOptions();
+  slotToggleAll();
 }
 
 
 void K3bProjectBurnDialog::slotWritingAppChanged( int )
 {
-  toggleAllOptions();
+  slotToggleAll();
 }
 
 
-void K3bProjectBurnDialog::toggleAllOptions()
+void K3bProjectBurnDialog::toggleAll()
 {
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
@@ -304,10 +304,10 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
 	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
-  connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
-  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(toggleAllOptions()) );
-  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(toggleAllOptions()) );
+  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 }
 
 

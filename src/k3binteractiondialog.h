@@ -155,7 +155,22 @@ class K3bInteractionDialog : public KDialog
   virtual void slotCancelClicked();
   virtual void slotSaveClicked();
 
+  /**
+   * This slot will call the toggleAll() method protecting from infinite loops
+   * caused by one element influencing another element which in turn influences
+   * the first.
+   *
+   * Connect this slot to GUI elements (like Checkboxes) that change
+   * the state of the whole dialog.
+   */
+  void slotToggleAll();
+
  protected:
+  /**
+   * Reimplement this method in case you are using slotToggleAll()
+   */
+  virtual void toggleAll();
+
   /**
    * Reimplement this to support the save/load user default buttons.
    * @p config is already set to the correct group.
@@ -227,6 +242,7 @@ class K3bInteractionDialog : public KDialog
 
   bool m_exitLoopOnHide;
   bool m_inLoop;
+  bool m_inToggleMode;
   bool m_delayedInit;
 };
 

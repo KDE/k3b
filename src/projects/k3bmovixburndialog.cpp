@@ -136,7 +136,7 @@ void K3bMovixBurnDialog::loadK3bDefaults()
 
   m_checkVerify->setChecked( false );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -157,7 +157,7 @@ void K3bMovixBurnDialog::loadUserDefaults( KConfigBase* c )
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
-  toggleAllOptions();
+  toggleAll();
 }
 
 
@@ -268,9 +268,9 @@ void K3bMovixBurnDialog::slotStartClicked()
 }
 
 
-void K3bMovixBurnDialog::toggleAllOptions()
+void K3bMovixBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAllOptions();
+  K3bProjectBurnDialog::toggleAll();
 
   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
     m_checkVerify->setChecked(false);
