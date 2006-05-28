@@ -272,10 +272,12 @@ void K3bMediaSelectionComboBox::updateMedia()
   //
   // Now in case no usable medium was found show the user a little message
   //
-  if( d->devices.isEmpty() && selected != 0 ) {
+  if( d->devices.isEmpty() ) {
     showNoMediumMessage();
-    // inform that we have no medium at all
-    emit selectionChanged( 0 );
+    if( selected != 0 ) {
+      // inform that we have no medium at all
+      emit selectionChanged( 0 );
+    }
   }
   else if( selected && d->deviceIndexMap.contains( selected ) ) {
     setCurrentItem( d->deviceIndexMap[selected] );
