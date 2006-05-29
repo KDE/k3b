@@ -471,10 +471,11 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
       emit rangeChanged( m_draggedRange->id, m_draggedRange->start, m_draggedRange->end );
 
       // only update the range stuff
-      QRect rect = contentsRect();
-      rect.setLeft( x1 );
-      rect.setRight( x2 );
-      update( rect );
+//       QRect rect = contentsRect();
+//       rect.setLeft( x1 );
+//       rect.setRight( x2 );
+//       update( rect );
+      update();
     }
     else if( m_draggedMarker ) {
       int x1 = QMIN( e->pos().x(), fromPosToX( m_draggedMarker->pos ) );
@@ -484,10 +485,11 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
       emit markerMoved( m_draggedMarker->id, m_draggedMarker->pos );
 
       // only update the marker
-      QRect rect = contentsRect();
-      rect.setLeft( x1 );
-      rect.setRight( x2 );
-      update( rect );
+//       QRect rect = contentsRect();
+//       rect.setLeft( x1 );
+//       rect.setRight( x2 );
+//       update( rect );
+      update();
     }
   }
   else if( findRange( e->pos(), 0 ) || findMarker( e->pos() ) )
