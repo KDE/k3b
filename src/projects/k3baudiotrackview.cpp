@@ -835,10 +835,6 @@ void K3bAudioTrackView::slotEditSource()
     lay->setMargin( 0 );
     lay->setSpacing( KDialog::spacingHint() );
     lay->setAutoAdd( true );
-//     (void)new QLabel( i18n("<p>Here you may change the used part of the source. "
-// 			   "Drag the start or end offset of the highlighted part "
-// 			   "to cut the source at the beginning or the end."),
-// 		      dlg.plainPage() );
     K3bAudioDataSourceEditWidget* editW = new K3bAudioDataSourceEditWidget( dlg.plainPage() );
     editW->loadSource( source );
     if( dlg.exec() == QDialog::Accepted )

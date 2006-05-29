@@ -21,6 +21,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -58,6 +59,10 @@ K3bAudioDataSourceEditWidget::K3bAudioDataSourceEditWidget( QWidget* parent, con
 
   connect( m_editEndOffset, SIGNAL(valueChanged(const K3b::Msf&)),
 	   this, SLOT(slotEndOffsetEdited(const K3b::Msf&)) );
+
+  QToolTip::add( m_editor, i18n("Drag the edges of the highlighted area to define the portion of the "
+				"audio source you want to include in the Audio CD track. "
+				"You can also use the input windows to fine-tune your selection.") );
 }
 
 

@@ -19,6 +19,8 @@
 #include <qcolor.h>
 #include <qpixmap.h>
 #include <qcursor.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
 
 
 // TODO: add tooltips for ranges and labels
@@ -111,8 +113,12 @@ QSize K3bAudioEditorWidget::minimumSizeHint() const
 {
   constPolish();
   // some fixed height minimum and enough space for a tickmark every minute
-  // FIXME: this is bad for long sources and there might be 60 minutes sources!
-  return QSize( 2*m_margin + 2*frameWidth() + (m_length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" ), 
+  // But never exceed 2/3 of the the screen width, otherwise it just looks ugly
+  // FIXME: this is still bad for long sources and there might be 60 minutes sources!
+
+  int maxWidth = QApplication::desktop()->width()*2/3;
+  int wantedWidth = 2*m_margin + 2*frameWidth() + (m_length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" );
+  return QSize( QMIN( maxWidth, wantedWidth ), 
 		2*m_margin + 12 /*12 for the tickmarks */ + fontMetrics().height() + 2*frameWidth() );
 }
 
@@ -344,15 +350,38 @@ void K3bAudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
   p->drawLine( drawRect.right(), drawRect.top(), 
 	       drawRect.right(), drawRect.bottom() );
 
-  // draw the timemark things every second
-  // FIXME: seconds if enough space
-  int pos = 1;
+  // draw minute markers every minute
+  int minute = 1;
+  int minuteStep = 1;
   int markerVPos = drawRect.bottom();
-  while( pos*60*75 < m_length ) {
-    int x = fromPosToX( pos*60*75 );
-    p->drawLine( x, markerVPos, x, markerVPos-5 );
-    p->drawText( x, markerVPos-6, QString::number(pos) );
-    ++pos;
+  int maxMarkerWidth = fontMetrics().width( QString::number(m_length.minutes()) );
+  int minNeededSpace = maxMarkerWidth + 1;
+  int x = 0;
+  while( minute*60*75 < m_length ) {
+    int newX = fromPosToX( minute*60*75 );
+
+    // only draw the mark if we have anough space
+    if( newX - x >= minNeededSpace ) {
+      p->drawLine( newX, markerVPos, newX, markerVPos-5 );
+      QRect txtRect( newX-(maxMarkerWidth/2), 
+		     markerVPos - 6 - fontMetrics().height(), 
+		     maxMarkerWidth, 
+		     fontMetrics().height() );
+      p->drawText( txtRect, Qt::AlignCenter, QString::number(minute) );
+
+      // FIXME: draw second markers if we have enough space
+
+      x = newX;
+    }
+    else {
+      minute -= minuteStep;
+      if( minuteStep == 1 )
+	minuteStep = 5;
+      else
+	minuteStep *= 2;
+    }
+
+    minute += minuteStep;
   }
 }
 
