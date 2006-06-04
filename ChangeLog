@@ -4,6 +4,7 @@
  * Always force 44.1khz in the Lame MP3 encoder plugin.
  * Fixed VideoDVD creation on rewritable media.
  * NetBSD support (thanks to Mark Davies).
+ * Fixed Copy of Enhanced Audio CDs with CD-Text
 
 0.12.15
 =======

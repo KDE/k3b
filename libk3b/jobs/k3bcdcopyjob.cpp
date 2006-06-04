@@ -923,6 +923,9 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( d->imageNames[d->toc.count()-1] );
     else
       d->cdrecordWriter->addArgument( d->imageNames[d->currentWrittenSession-1] );
+
+    // clear cd text from previous sessions
+    d->cdrecordWriter->setRawCdText( QByteArray() );
   }
 
 
