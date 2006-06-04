@@ -1,8 +1,9 @@
 0.12.16
 =======
- * FreeBSD Compile fixes (thanks to Heiner Eichmann)
- * Always force 44.1khz in the Lame MP3 encoder plugin
+ * FreeBSD Compile fixes (thanks to Heiner Eichmann).
+ * Always force 44.1khz in the Lame MP3 encoder plugin.
  * Fixed VideoDVD creation on rewritable media.
+ * NetBSD support (thanks to Mark Davies).
 
 0.12.15
 =======
