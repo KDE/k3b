@@ -828,7 +828,6 @@ void K3bCdImageWritingDialog::slotMd5JobPercent( int p )
 void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 {
   if( success ) {
-    d->md5SumItem->setPixmap( 0, SmallIcon( "ok") );
     d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
   }
   else {
