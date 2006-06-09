@@ -126,8 +126,8 @@ void K3bTimeoutWidget::paintEvent( QPaintEvent* )
       p.setBrush( theme->backgroundColor() );
       p.setPen( theme->backgroundColor() );
     }
-    
-    QRect r = rect();
+
+    QRect r;
     r.setSize( minimumSizeHint() );
     r.moveCenter( rect().center() );
 

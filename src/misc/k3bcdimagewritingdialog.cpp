@@ -833,7 +833,6 @@ void K3bCdImageWritingDialog::slotMd5JobPercent( int p )
 void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 {
   if( success ) {
-    d->md5SumItem->setPixmap( 0, SmallIcon( "ok") );
     d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
   }
   else {
@@ -857,7 +856,7 @@ void K3bCdImageWritingDialog::slotMd5SumCompare()
 						   &ok,
 						   this );
   if( ok ) {
-    if( md5sumToCompare.utf8() == d->md5Job->hexDigest() )
+    if( md5sumToCompare.lower().utf8() == d->md5Job->hexDigest().lower() )
       KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(imagePath()),
 				i18n("MD5 Sums Equal") );
     else
