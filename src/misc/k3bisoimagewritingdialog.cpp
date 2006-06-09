@@ -446,7 +446,7 @@ void K3bIsoImageWritingDialog::slotMd5SumCompare()
 						   &ok,
 						   this );
   if( ok ) {
-    if( md5sumToCompare.utf8() == m_md5Job->hexDigest() )
+    if( md5sumToCompare.lower().utf8() == m_md5Job->hexDigest().lower() )
       KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(imagePath()),
 				i18n("MD5 Sums Equal") );
     else

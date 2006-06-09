@@ -5,6 +5,7 @@
  * Fixed VideoDVD creation on rewritable media.
  * NetBSD support (thanks to Mark Davies).
  * Fixed Copy of Enhanced Audio CDs with CD-Text
+ * Ignore case when comparing MD5 sums entered by the user.
 
 0.12.15
 =======
