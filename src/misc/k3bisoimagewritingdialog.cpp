@@ -94,7 +94,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
   m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
   m_writingModeWidget->setSupportedModes( K3b::DAO|K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR );
 
-  m_job = 0;
   m_md5Job = new K3bMd5Job( 0, this );
   connect( m_md5Job, SIGNAL(finished(bool)),
 	   this, SLOT(slotMd5JobFinished(bool)) );
@@ -119,7 +118,6 @@ K3bIsoImageWritingDialog::K3bIsoImageWritingDialog( QWidget* parent, const char*
 K3bIsoImageWritingDialog::~K3bIsoImageWritingDialog()
 {
   delete d;
-  delete m_job;
 }
 
 
@@ -249,23 +247,24 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
 
   // create the job
-  if( m_job == 0 )
-    m_job = new K3bIso9660ImageWritingJob( &dlg );
+  K3bIso9660ImageWritingJob* job = new K3bIso9660ImageWritingJob( &dlg );
 
-  m_job->setBurnDevice( m_writerSelectionWidget->writerDevice() );
-  m_job->setSpeed( m_writerSelectionWidget->writerSpeed() );
-  m_job->setSimulate( m_checkDummy->isChecked() );
-  m_job->setWritingMode( m_writingModeWidget->writingMode() );
-  m_job->setVerifyData( m_checkVerify->isChecked() );
-  m_job->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
-  m_job->setImagePath( imagePath() );
+  job->setBurnDevice( m_writerSelectionWidget->writerDevice() );
+  job->setSpeed( m_writerSelectionWidget->writerSpeed() );
+  job->setSimulate( m_checkDummy->isChecked() );
+  job->setWritingMode( m_writingModeWidget->writingMode() );
+  job->setVerifyData( m_checkVerify->isChecked() );
+  job->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
+  job->setImagePath( imagePath() );
 
   // HACK (needed since if the medium is forced the stupid K3bIso9660ImageWritingJob defaults to cd writing)
-  m_job->setWritingApp( K3b::GROWISOFS );
+  job->setWritingApp( K3b::GROWISOFS );
 
   hide();
 
-  dlg.startJob(m_job);
+  dlg.startJob( job );
+
+  delete job;
 
   show();
 }
