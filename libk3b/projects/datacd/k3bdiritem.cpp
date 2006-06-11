@@ -77,15 +77,28 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
   if( m_children.findRef( item ) == -1 ) {
     if( item->isFile() ) {
       // do we replace an old item?
-      if( K3bDataItem* oldItem = find( item->k3bName() ) ) {
+      QString name = item->k3bName();
+      int cnt = 1;
+      while( K3bDataItem* oldItem = find( item->k3bName() ) ) {
 	if( !oldItem->isDir() && oldItem->isFromOldSession() ) {
 	  // in this case we remove this item from it's parent and save it in the new one
 	  // to be able to recover it
 	  oldItem->take();
 	  static_cast<K3bSessionImportItem*>(oldItem)->setReplaceItem( static_cast<K3bFileItem*>(item) );
 	  static_cast<K3bFileItem*>(item)->setReplacedItemFromOldSession( oldItem );
+	  break;
+	}
+      	else {
+	  //
+	  // add a counter to the filename
+	  //
+	  if( item->k3bName()[item->k3bName().length()-4] == '.' )
+	    name = item->k3bName().left( item->k3bName().length()-4 ) + QString::number(cnt++) + item->k3bName().right(4);
+	  else
+	    name = item->k3bName() + QString::number(cnt++);
 	}
       }
+      item->setK3bName( name );
     }
 
     m_children.append( item->take() );
