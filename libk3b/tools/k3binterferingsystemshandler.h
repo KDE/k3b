@@ -17,6 +17,7 @@
 #define _K3B_INTERFERING_SYSTEMS_HANDLER_H_
 
 #include <qobject.h>
+#include "k3b_export.h"
 
 namespace K3bDevice {
   class Device;
@@ -38,7 +39,7 @@ namespace K3bDevice {
  * and remember them. The interfering systems are enabled when enable
  * has been called for every call of disable.
  */
-class K3bInterferingSystemsHandler : public QObject
+class LIBK3B_EXPORT K3bInterferingSystemsHandler : public QObject
 {
   Q_OBJECT
 
