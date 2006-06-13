@@ -738,21 +738,21 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
     {
     case 0:
       if( simulate() )
-        emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
+        emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
       else
         switch ( m_command )
         {
         case READ:
-          emit infoMessage( i18n("Reading successfully finished"), K3bJob::SUCCESS );
+          emit infoMessage( i18n("Reading successfully completed"), K3bJob::SUCCESS );
           break;
         case WRITE:
-          emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
+          emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
           break;
         case COPY:
-          emit infoMessage( i18n("Copying successfully finished"), K3bJob::SUCCESS );
+          emit infoMessage( i18n("Copying successfully completed"), K3bJob::SUCCESS );
           break;
         case BLANK:
-          emit infoMessage( i18n("Blanking successfully finished"), K3bJob::SUCCESS );
+          emit infoMessage( i18n("Blanking successfully completed"), K3bJob::SUCCESS );
           break;
         }
 

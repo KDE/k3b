@@ -335,9 +335,9 @@ void K3bGrowisofsImager::slotProcessExited( KProcess* p )
 			.arg(av).arg(KGlobal::locale()->formatNumber((double)av/1385.0, 2)), INFO );
 
       if( m_doc->dummy() )
-	emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
+	emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
       else
-	emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
+	emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
 
       d->success = true;
     }

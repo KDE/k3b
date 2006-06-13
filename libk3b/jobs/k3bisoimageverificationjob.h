@@ -36,6 +36,7 @@ class K3bIsoImageVerificationJob : public K3bJob
   void cancel();
   void setDevice( K3bDevice::Device* dev );
   void setImageFileName( const QString& f );
+  void setImageMD5Sum( const QCString& );
 
  private slots:
   void slotMediaReloaded( bool success );

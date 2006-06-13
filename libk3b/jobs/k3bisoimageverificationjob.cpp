@@ -39,7 +39,7 @@ public:
   }
 
   bool canceled;
-  bool imageMd5SumCalculated;
+  bool needToCalcMd5;
   K3bMd5Job* md5Job;
   K3bDevice::Device* device;
   QString imageFileName;
@@ -85,6 +85,13 @@ void K3bIsoImageVerificationJob::setDevice( K3bDevice::Device* dev )
 void K3bIsoImageVerificationJob::setImageFileName( const QString& f )
 {
   d->imageFileName = f;
+  d->imageMd5Sum.truncate(0);
+}
+
+
+void K3bIsoImageVerificationJob::setImageMD5Sum( const QCString& md5 )
+{
+  d->imageMd5Sum = md5;
 }
 
 
@@ -93,7 +100,7 @@ void K3bIsoImageVerificationJob::start()
   jobStarted();
 
   d->canceled = false;
-  d->imageMd5SumCalculated = false;
+  d->needToCalcMd5 = d->imageMd5Sum.isEmpty();
 
   // first we need to reload and mount the device
   emit newTask( i18n("Reloading the media") );
@@ -109,11 +116,16 @@ void K3bIsoImageVerificationJob::slotMediaReloaded( bool success )
     blockingInformation( i18n("Please reload the medium and press 'ok'"),
 			 i18n("Unable to Close the Tray") );
 
-  emit newTask( i18n("Calculating the image's md5sum") );
-  
-  // start it
-  d->md5Job->setFile( d->imageFileName );
-  d->md5Job->start();
+  if( d->needToCalcMd5 ) {
+    emit newTask( i18n("Calculating the image's md5sum") );
+    
+    // start it
+    d->md5Job->setFile( d->imageFileName );
+    d->md5Job->start();
+  }
+  else {
+    slotMd5JobFinished( true );
+  }
 }
 
 
@@ -125,7 +137,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
 
   if( success ) {
 
-    if( d->imageMd5SumCalculated ) {
+    if( !d->imageMd5Sum.isEmpty() ) {
       // compare the two sums
       if( d->imageMd5Sum != d->md5Job->hexDigest() ) {
 	emit infoMessage( i18n("The written data differs."), ERROR );
@@ -139,7 +151,6 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
     else {
       
       d->imageMd5Sum = d->md5Job->hexDigest();
-      d->imageMd5SumCalculated = true;
 
       //
       // now we need to calculate the md5sum of the written image
@@ -175,7 +186,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
 
 void K3bIsoImageVerificationJob::slotMd5JobProgress( int p )
 {
-  if( d->imageMd5SumCalculated )
+  if( !d->needToCalcMd5 && !d->imageMd5Sum.isEmpty() )
     emit percent( 50 + p/2 );
   else
     emit percent( p/2 );

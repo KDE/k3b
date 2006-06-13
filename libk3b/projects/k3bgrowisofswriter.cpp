@@ -517,9 +517,9 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
       emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
 
     if( simulate() )
-      emit infoMessage( i18n("Simulation successfully finished"), K3bJob::SUCCESS );
+      emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
     else
-      emit infoMessage( i18n("Writing successfully finished"), K3bJob::SUCCESS );
+      emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
 
     d->success = true;
   }

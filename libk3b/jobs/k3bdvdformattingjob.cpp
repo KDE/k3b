@@ -243,7 +243,7 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
   }
   else if( p->normalExit() ) {
     if( p->exitStatus() == 0 ) {
-      emit infoMessage( i18n("Formatting successfully finished"), K3bJob::SUCCESS );
+      emit infoMessage( i18n("Formatting successfully completed"), K3bJob::SUCCESS );
 
       if( d->lastProgressValue < 100 ) {
 	emit infoMessage( i18n("Do not be concerned with the progress stopping before 100%."), INFO );
