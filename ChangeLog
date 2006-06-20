@@ -9,7 +9,8 @@
  * Fixed a crash when reusing the same DVD Iso Image writing dialog.
  * Ignore case when comparing MD5 sums entered by the user.
  * Make sure that filenames in a data project's folder are unique.
-	
+ * Allow index statements bigger than 99 minutes in cue files.
+
 0.12.15
 =======
  * Write more metadata tags in the default setup of the external encoder plugin.
