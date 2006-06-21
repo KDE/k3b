@@ -921,6 +921,9 @@ bool K3bCdCopyJob::writeNextSession()
       d->cdrecordWriter->addArgument( d->imageNames[d->toc.count()-1] );
     else
       d->cdrecordWriter->addArgument( d->imageNames[d->currentWrittenSession-1] );
+
+    // clear cd text from previous sessions
+    d->cdrecordWriter->setRawCdText( QByteArray() );
   }
 
 
@@ -959,9 +962,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 	    // becasue if it did not it might happen that k3b overwrites a CD-RW
 	    // source)
 	    if( !m_readerDevice->eject() ) {
-	      emit infoMessage( i18n("Unable to eject media."), ERROR );
-	      finishJob( false, true );
-	      return;
+	      blockingInformation( i18n("K3b was unable to eject the source disk. Please do so manually.") );
 	    }
 	  }
 	  

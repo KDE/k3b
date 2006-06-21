@@ -522,12 +522,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	// because if it did not it might happen that k3b overwrites a CD-RW
 	// source)
 	if( !m_readerDevice->eject() ) {
-	  emit infoMessage( i18n("Unable to eject media."), ERROR );
-	  if( m_removeImageFiles )
-	    removeImageFiles();
-	  d->running = false;
-	  emit finished(false);
-	  return;
+	  blockingInformation( i18n("K3b was unable to eject the source disk. Please do so manually.") );
 	}
       }
 
