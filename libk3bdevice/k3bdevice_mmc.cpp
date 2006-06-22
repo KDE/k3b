@@ -30,6 +30,7 @@ bool K3bDevice::Device::testUnitReady() const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_TEST_UNIT_READY;
+  cmd[5] = 0; // Necessary to set the proper command length
   return( cmd.transport() == 0 );
 }
 
@@ -45,6 +46,7 @@ bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned
   cmd[2] = feature>>8;
   cmd[3] = feature;
   cmd[8] = 8;      // we only read the data length first
+  cmd[9] = 0;      // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
     // again with real length
     dataLen = from4Byte( header ) + 4;
@@ -170,6 +172,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, int& dataLen,
   cmd[5] = lba;
   cmd[9] = 1;      // first we read only the header and one descriptor
   cmd[10] = type;
+  cmd[11] = 0;     // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, header, 8 + 16 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( header ) + 4;
@@ -223,6 +226,7 @@ bool K3bDevice::Device::setSpeed( unsigned int readingSpeed,
   cmd[3] = readingSpeed;
   cmd[4] = writingSpeed >> 8;
   cmd[5] = writingSpeed;
+  cmd[11] = 0;      // Necessary to set the proper command length
   return ( cmd.transport( TR_DIR_WRITE ) == 0 );
 }
 
@@ -235,7 +239,7 @@ bool K3bDevice::Device::seek( unsigned long lba ) const
   cmd[3] = lba>>16;
   cmd[4] = lba>>8;
   cmd[5] = lba;
-
+  cmd[9] = 0;      // Necessary to set the proper command length
   return !cmd.transport();
 }
 
@@ -247,6 +251,7 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, int& dataLen
 
   ScsiCommand cmd( this );
   cmd[0] = MMC_READ_TRACK_INFORMATION;
+  cmd[9] = 0;      // Necessary to set the proper command length
 
   switch( type ) {
   case 0:
@@ -320,6 +325,7 @@ bool K3bDevice::Device::read10( unsigned char* data,
   cmd[5] = startAdress;
   cmd[7] = length>>8;
   cmd[8] = length;
+  cmd[9] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 10 failed!" << endl;
@@ -351,6 +357,7 @@ bool K3bDevice::Device::read12( unsigned char* data,
   cmd[8] = length>>8;
   cmd[9] = length;
   cmd[10] = (streaming ? 0x80 : 0 );
+  cmd[11] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 12 failed!" << endl;
@@ -394,6 +401,7 @@ bool K3bDevice::Device::readCd( unsigned char* data,
 	     ( edcEcc    ? 0x8  : 0x0 ) |
 	     ( c2<<1 & 0x6 ) );
   cmd[10] = subChannel & 0x7;
+  cmd[11] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD failed!" << endl;
@@ -437,6 +445,7 @@ bool K3bDevice::Device::readCdMsf( unsigned char* data,
 	     ( edcEcc    ? 0x8  : 0x0 ) |
 	     ( c2<<1 & 0x6 ) );
   cmd[10] = subChannel & 0x7;
+  cmd[11] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD MSF failed!" << endl;
@@ -460,6 +469,7 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, int& dataLen,
   cmd[3] = subchannelParam;
   cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
   cmd[8] = 4;      // first we read the header
+  cmd[9] = 0;      // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( &header[2] ) + 4;
@@ -508,7 +518,8 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, int& dataLen, int 
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
   cmd[6] = track;
-  cmd[8] = 2; // we only read the length first
+  cmd[8] = 2;      // we only read the length first
+  cmd[9] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
     // again with real length
@@ -556,6 +567,7 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, int& dataLen ) co
   ScsiCommand cmd( this );
   cmd[0] = MMC_MECHANISM_STATUS;
   cmd[9] = 8;     // first we read the header
+  cmd[11] = 0;    // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( &header[6] ) + 8;
@@ -608,6 +620,7 @@ bool K3bDevice::Device::modeSense( unsigned char** pageData, int& pageLen, int p
   cmd[1] = 0x08;        // Disable Block Descriptors
   cmd[2] = page;
   cmd[8] = 8;           // first we determine the data length
+  cmd[9] = 0;           // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
     pageLen = from2Byte( header ) + 2;
@@ -674,6 +687,7 @@ bool K3bDevice::Device::readCapacity( K3b::Msf& r ) const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_READ_CAPACITY;
+  cmd[9] = 0;      // Necessary to set the proper command length
   unsigned char buf[8];
   ::memset( buf, 0, 8 );
   if( cmd.transport( TR_DIR_READ, buf, 8 ) == 0 ) {
@@ -700,6 +714,7 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
   cmd[0] = MMC_READ_FORMAT_CAPACITIES;
   cmd[7] = maxLen >> 8;
   cmd[8] = maxLen & 0xFF;
+  cmd[9] = 0;      // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, buffer, maxLen ) == 0 ) {
 
     int realLength = buffer[3] + 4;
@@ -747,6 +762,7 @@ bool K3bDevice::Device::readDiscInfo( unsigned char** data, int& dataLen ) const
   ScsiCommand cmd( this );
   cmd[0] = MMC_READ_DISK_INFORMATION;
   cmd[8] = 2;
+  cmd[9] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
     // again with real length
@@ -791,6 +807,7 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, int& dataLen,
   cmd[6] = layer;
   cmd[7] = format;
   cmd[10] = (agid<<6);
+  cmd[11] = 0;      // Necessary to set the proper command length
 
   cmd[9] = 4;
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
@@ -823,6 +840,7 @@ int K3bDevice::Device::readBufferCapacity( long long& bufferLength, long long& b
   ScsiCommand cmd( this );
   cmd[0] = MMC_READ_BUFFER_CAPACITY;
   cmd[8] = 12;
+  cmd[9] = 0;      // Necessary to set the proper command length
   int r = cmd.transport( TR_DIR_READ, data, 12 );
   if( r )
     return r;
