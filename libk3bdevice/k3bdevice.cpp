@@ -1549,6 +1549,7 @@ bool K3bDevice::Device::block( bool b ) const
 #else
   ScsiCommand cmd( this );
   cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
+  cmd[5] = 0; // Necessary to set the proper command length
   if( b )
     cmd[4] = 0x01;
   int r = cmd.transport( TR_DIR_WRITE );
@@ -1581,6 +1582,7 @@ bool K3bDevice::Device::eject() const
 {
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
+  cmd[5] = 0; // Necessary to set the proper command length
 
   // Since all other eject methods I saw also start the unit before ejecting
   // we do it also although I don't know why...
@@ -1598,6 +1600,7 @@ bool K3bDevice::Device::load() const
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
   cmd[4] = 0x3;    // LoEj = 1, Start = 1
+  cmd[5] = 0;      // Necessary to set the proper command length
   return !cmd.transport();
 }
 
@@ -1700,6 +1703,7 @@ int K3bDevice::Device::currentProfile() const
   cmd[0] = MMC_GET_CONFIGURATION;
   cmd[1] = 1;
   cmd[8] = 8;
+  cmd[9] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
     kdDebug() << "(K3bDevice::Device) GET_CONFIGURATION failed." << endl;
@@ -2305,6 +2309,7 @@ void K3bDevice::Device::checkFeatures()
   ScsiCommand cmd( this );
   cmd[0] = MMC_GET_CONFIGURATION;
   cmd[1] = 2;
+  cmd[9] = 0;      // Necessary to set the proper command length
 
 
   //
