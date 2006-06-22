@@ -10,6 +10,7 @@
  * Ignore case when comparing MD5 sums entered by the user.
  * Make sure that filenames in a data project's folder are unique.
  * Allow index statements bigger than 99 minutes in cue files.
+ * Properly set the length of SCSI commands (this fixes some device detection problems).
 
 0.12.15
 =======
