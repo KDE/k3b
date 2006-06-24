@@ -432,7 +432,10 @@ void K3bIsoImageWritingDialog::slotMd5JobFinished( bool success )
   }
   else {
     d->md5SumItem->setForegroundColor( 1, Qt::red );
-    d->md5SumItem->setText( 1, i18n("Calculation failed") );
+    if( m_md5Job->hasBeenCanceled() )
+      d->md5SumItem->setText( 1, i18n("Calculation cancelled") );
+    else
+      d->md5SumItem->setText( 1, i18n("Calculation failed") );
     d->md5SumItem->setPixmap( 0, SmallIcon( "stop") );
     d->lastCheckedFile = "";
   }
