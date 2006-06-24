@@ -149,7 +149,7 @@ bool K3bCueFileParser::parseLine( QString& line )
 
   // use cap(1) for the index number, cap(3) for the minutes, cap(4) for the seconds, cap(5) for the frames,
   // and cap(2) for the MSF value string
-  static QRegExp indexRx( "INDEX\\s(\\d{1,2})\\s((\\d\\d):([0-5]\\d):((?:[0-6]\\d)|(?:7[0-4])))" );
+  static QRegExp indexRx( "INDEX\\s(\\d{1,2})\\s((\\d+):([0-5]\\d):((?:[0-6]\\d)|(?:7[0-4])))" );
 
   // use cap(1) for the MCN
   static QRegExp catalogRx( "CATALOG\\s(\\w{13,13})" );
