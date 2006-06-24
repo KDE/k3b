@@ -73,7 +73,7 @@ void K3bWritingModeWidget::initWhatsThisHelp()
 				  "The laser is never turned off while writing the CD or DVD. "
 				  "This is the preferred mode to write audio CDs since it allows "
 				  "pregaps other than 2 seconds. Not all writers support DAO.<br>"
-				  "DVDs written in DAO provide the best DVD-Video compatibility.");
+				  "DVD-R(W)s written in DAO provide the best DVD-Video compatibility.");
   static QString s_taoHelp = i18n("<em>Track At Once</em> should be supported by every CD writer. "
 				  "The laser will be turned off after every track.<br>"
 				  "Most CD writers need this mode for writing multisession CDs.");
@@ -87,7 +87,8 @@ void K3bWritingModeWidget::initWhatsThisHelp()
   static QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
 				  "or a DVD+RW. The media may just be overwritten. It is not possible "
 				  "to write multisession DVD-RWs in this mode but K3b uses growisofs "
-				  "to grow an ISO9660 filesystem within the first session.");
+				  "to grow an ISO9660 filesystem within the first session, thus allowing "
+				  "new files to be added to an already burned disk.");
 
   QWhatsThis::remove( this );
   QString wh =
@@ -106,9 +107,10 @@ void K3bWritingModeWidget::initWhatsThisHelp()
   if( d->modes & K3b::WRITING_MODE_RES_OVWR )
     wh += "<p><b>" + i18n("Restricted Overwrite") + "</b><br>" + s_ovwHelp + "</p>";
 
-  if( d->modes & K3b::WRITING_MODE_RES_OVWR )
-    wh += "<p>" + i18n("Be aware that the writing mode is ignored when writing DVD+R(W) since "
-		       "there is only one way to write them.");
+  wh += "<p>" + i18n("Be aware that the writing mode is ignored when writing DVD+R(W) since "
+		     "there is only one way to write them.");
+  
+  wh += "<p><i>" + i18n("The selection of writing modes depends on the inserted burning medium.") + "</i>";
 
   QWhatsThis::add( this, wh );
 }
