@@ -23,7 +23,6 @@
 class QCheckBox;
 class K3bWriterSelectionWidget;
 class QLabel;
-class K3bIso9660ImageWritingJob;
 class KURL;
 class K3bMd5Job;
 class K3bWritingModeWidget;
@@ -70,7 +69,6 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void setupGui();
   QString imagePath() const;
 
-  K3bIso9660ImageWritingJob* m_job;
   K3bMd5Job* m_md5Job;
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
