@@ -372,42 +372,42 @@ void K3bCdCopyDialog::slotToggleAll()
   if ( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
 
-   if( m_comboCopyMode->currentItem() == 1 ) {
-     // cdrecord does not support cloning on-the-fly
-     m_checkOnTheFly->setChecked(false);
-     m_checkOnTheFly->setEnabled(false);
+  if( m_comboCopyMode->currentItem() == 1 ) {
+    // cdrecord does not support cloning on-the-fly
+    m_checkOnTheFly->setChecked(false);
+    m_checkOnTheFly->setEnabled(false);
+    
+    m_writingModeWidget->setSupportedModes( K3b::RAW );
+  }
+  else {
+//     if( dev == m_comboSourceDevice->selectedDevice() ) {
+//       m_checkOnTheFly->setChecked( false );
+//       m_checkOnTheFly->setEnabled( false );
+//     }
+//     else
+    
+    m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
+  }
 
-     m_writingModeWidget->setSupportedModes( K3b::RAW );
-   }
-   else {
-     if( dev == m_comboSourceDevice->selectedDevice() ) {
-       m_checkOnTheFly->setChecked( false );
-       m_checkOnTheFly->setEnabled( false );
-     }
-     else
-       m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-
-     m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
-   }
-
-   static_cast<QWidget*>( child( "audio_options" ) )->setDisabled( m_comboCopyMode->currentItem() == 1 );
-
-   m_checkIgnoreDataReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
-
-   m_groupAdvancedAudioOptions->setEnabled( k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).content() & K3bMedium::CONTENT_AUDIO &&
-					    m_comboCopyMode->currentItem() == 0 );
-
-   m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-
-   m_buttonStart->setEnabled( m_comboSourceDevice->selectedDevice() && 
-			      (dev || m_checkOnlyCreateImage->isChecked()) );
+  updateOverrideDevice();
+  
+  static_cast<QWidget*>( child( "audio_options" ) )->setDisabled( m_comboCopyMode->currentItem() == 1 );
+  
+  m_checkIgnoreDataReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
+  
+  m_groupAdvancedAudioOptions->setEnabled( k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).content() & K3bMedium::CONTENT_AUDIO &&
+					   m_comboCopyMode->currentItem() == 0 );
+  
+  m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+  
+  m_buttonStart->setEnabled( m_comboSourceDevice->selectedDevice() && 
+			     (dev || m_checkOnlyCreateImage->isChecked()) );
 }
 
 
 void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
-  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning"),
-					      i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+  updateOverrideDevice();
 
   if( k3bappcore->mediaCache()->toc( dev ).contentType() == K3bDevice::DATA ) {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
@@ -448,6 +448,17 @@ void K3bCdCopyDialog::slotNewBurnMedia()
       }
     }
   }
+}
+
+
+void K3bCdCopyDialog::updateOverrideDevice()
+{
+  if( m_checkOnTheFly->isChecked() )
+    m_writerSelectionWidget->setOverrideDevice( 0 );
+  else
+    m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
+						i18n("Use the same device for burning"),
+						i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
 }
 
 

@@ -47,6 +47,7 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   void slotStartClicked();
   void slotSourceMediumChanged( K3bDevice::Device* );
   void slotNewBurnMedia();
+  void updateOverrideDevice();
 
  protected:
   void init();

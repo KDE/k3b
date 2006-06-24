@@ -93,9 +93,10 @@ class K3bWriterSelectionWidget : public QWidget
    * and writing without having the user to choose the same medium.
    *
    * \param overrideString A string which will be shown in place of the medium string.
-   *                       For example: "Burn to the same device"
+   *                       For example: "Burn to the same device". Set it to 0 in order
+   *                       to disable the feature.
    */
-  void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString, const QString& tooltip );
+  void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString = QString::null, const QString& tooltip = QString::null );
 
  signals:
   void writerChanged();

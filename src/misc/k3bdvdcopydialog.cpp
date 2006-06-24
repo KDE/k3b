@@ -356,14 +356,6 @@ void K3bDvdCopyDialog::toggleAll()
       m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
     }
 
-    if( m_comboSourceDevice->selectedDevice() == dev ) {
-      m_checkOnTheFly->setEnabled( false );
-      m_checkOnTheFly->setChecked( false );
-    }
-    else {
-      m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
-    }
-
     // select the proper writing modes
     // if writing and reading devices are the same we cannot use 
     // K3bWritingModeWidget::determineSupportedModesFromMedium since the inserted medium is not the one we 
@@ -382,6 +374,8 @@ void K3bDvdCopyDialog::toggleAll()
       m_writingModeWidget->determineSupportedModesFromMedium( dev );
   }
 
+  updateOverrideDevice();
+
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
@@ -398,8 +392,8 @@ void K3bDvdCopyDialog::toggleAll()
 
 void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
-  m_writerSelectionWidget->setOverrideDevice( dev, i18n("Use the same device for burning"),
-					      i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+  updateOverrideDevice();
+
   m_writerSelectionWidget->setWantedMediumType( k3bappcore->mediaCache()->diskInfo( dev ).numLayers() > 1 &&
 						k3bappcore->mediaCache()->diskInfo( dev ).size().mode1Bytes() > 4700372992LL
 						? K3bDevice::MEDIA_WRITABLE_DVD_DL
@@ -426,6 +420,17 @@ void K3bDvdCopyDialog::slotNewBurnMedia()
       }
     }
   }
+}
+
+
+void K3bDvdCopyDialog::updateOverrideDevice()
+{
+  if( m_checkOnTheFly->isChecked() )
+    m_writerSelectionWidget->setOverrideDevice( 0 );
+  else
+    m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
+						i18n("Use the same device for burning"),
+						i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
 }
 
 #include "k3bdvdcopydialog.moc"
