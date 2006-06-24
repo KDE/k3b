@@ -81,6 +81,7 @@ public:
   long layerBreak;
 
   unsigned long long overallSizeFromOutput;
+  long long firstSizeFromOutput;
 
   QFile inputFile;
 
@@ -316,6 +317,7 @@ void K3bGrowisofsWriter::start()
   d->lastWritingSpeed = 0;
   d->lastProgressed = 0;
   d->lastProgress = 0;
+  d->firstSizeFromOutput = -1;
   d->lastSpeedCalculationTime = QTime::currentTime();
   d->lastSpeedCalculationBytes = 0;
   d->writingStarted = false;
@@ -358,7 +360,7 @@ void K3bGrowisofsWriter::start()
       }
       else {
 	emit newTask( i18n("Writing") );
-	emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
+	emit infoMessage( i18n("Starting disc write..."), K3bJob::INFO );
       }
 
       d->gh->handleStart();
@@ -450,6 +452,10 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     unsigned long long done = line.left( pos ).toULongLong();
     bool ok = true;
     d->overallSizeFromOutput = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toULongLong( &ok );
+    if( d->firstSizeFromOutput == -1 )
+      d->firstSizeFromOutput = done;
+    done -= d->firstSizeFromOutput;
+    d->overallSizeFromOutput -= d->firstSizeFromOutput;
     if( ok ) {
       int p = (int)(100 * done / d->overallSizeFromOutput);
       if( p > d->lastProgress ) {
