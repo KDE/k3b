@@ -93,11 +93,28 @@ namespace K3bDevice
       ScsiCommand( const Device* );
       ~ScsiCommand();
 
-      void enableErrorMessages( bool b ) { m_printErrors = b; }
+      /**
+       * Enales or disables printing of debugging messages for failed
+       * commands.
+       *
+       * Default is enabled.
+       */
+      static void enableErrorMessages( bool b ) { s_printErrors = b; }
 
       void clear();
 
       unsigned char& operator[]( size_t );
+
+      // TODO: use this
+/*       union ErrorCode { */
+/* 	K3bDevice::uint32 code; */
+/* 	struct { */
+/* 	  K3bDevice::uint8 errorCode; */
+/* 	  K3bDevice::uint8 senseKey; */
+/* 	  K3bDevice::uint8 asc; */
+/* 	  K3bDevice::uint8 ascq; */
+/* 	} details; */
+/*       }; */
 
       /**
        * \return 0 on success, -1 if the device could not be opened, and
@@ -117,7 +134,8 @@ namespace K3bDevice
       Private *d;
       Device::Handle m_deviceHandle;
       const Device* m_device;
-      bool m_printErrors;
+
+      static bool s_printErrors;
     };
 }
 

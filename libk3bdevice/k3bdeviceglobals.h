@@ -23,6 +23,7 @@
 
 namespace K3bDevice 
 {
+  typedef Q_UINT8 uint8;
   typedef Q_UINT16 uint16;
   typedef Q_UINT32 uint32;
 

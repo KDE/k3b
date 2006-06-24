@@ -123,7 +123,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     else
       d->sgIo.dxfer_direction = SG_DXFER_NONE;
 
-    i = ioctl( m_deviceHandle, SG_IO, &d->sgIo );
+    i = ::ioctl( m_deviceHandle, SG_IO, &d->sgIo );
 
     if( ( d->sgIo.info&SG_INFO_OK_MASK ) != SG_INFO_OK )
       i = -1;

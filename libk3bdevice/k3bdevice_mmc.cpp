@@ -48,39 +48,37 @@ bool K3bDevice::Device::getFeature( unsigned char** data, unsigned int& dataLen,
   cmd[3] = feature;
   cmd[8] = 8;      // we only read the data length first
   cmd[9] = 0;      // Necessary to set the proper command length
-  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
-    // again with real length
+
+  // we only read the data length first
+  dataLen = 8;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) )
     dataLen = from4Byte( header ) + 4;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( dataLen == 8 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	dataLen = from2Byte( header ) + 4;
-    }
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      return true;
-    }
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( dataLen == 8 )
+    dataLen = 0xFFFF;
+  
+  // again with real length
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+  
+  cmd[7] = dataLen>>8;
+  cmd[8] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+  }
 
   return false;
 }
@@ -269,40 +267,37 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
     return false;
   }
 
-  cmd[8] = 4;      // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
-    // again with real length
+  // first we read the header
+  dataLen = 4;
+  cmd[8] = 4;
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( header ) + 2;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( dataLen == 4 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	dataLen = from2Byte( header ) + 2;
-    }
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      return true;
-    }
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( dataLen == 4 )
+    dataLen = 0xFFFF;
+  
+  // again with real length
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+  
+  cmd[7] = dataLen>>8;
+  cmd[8] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+  }
 
   return false;
 }
@@ -469,41 +464,39 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, unsigned int& data
   cmd[2] = 0x40;    // SUBQ
   cmd[3] = subchannelParam;
   cmd[6] = trackNumber;   // only used when subchannelParam == 03h (ISRC)
-  cmd[8] = 4;      // first we read the header
+  cmd[8] = 4;
   cmd[9] = 0;      // Necessary to set the proper command length
-  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
-    // again with real length
+
+  // first we read the header
+  dataLen = 4;
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( &header[2] ) + 4;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( dataLen == 4 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	dataLen = from2Byte( &header[2] ) + 4;
-    }
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      return true;
-    }
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( dataLen == 4 )
+    dataLen = 0xFFFF;
+
+  // again with real length
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+
+  cmd[7] = dataLen>>8;
+  cmd[8] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+  }
 
   return false;
 }
@@ -519,42 +512,39 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
   cmd[6] = track;
-  cmd[8] = 2;      // we only read the length first
+  cmd[8] = 2;
   cmd[9] = 0;      // Necessary to set the proper command length
 
-  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
-    // again with real length
+  // we only read the length first
+  dataLen = 2;
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
     dataLen = from2Byte( header ) + 2;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( dataLen == 2 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	dataLen = from2Byte( header ) + 2;
-    }
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
-      return true;
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
-		<< format << " with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( dataLen == 2 )
+    dataLen = 0xFFFF;
+
+  // again with real length
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+
+  cmd[7] = dataLen>>8;
+  cmd[8] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
+    return true;
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
+	      << format << " with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+  }
 
   return false;
 }
@@ -567,44 +557,42 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, unsigned int& dat
 
   ScsiCommand cmd( this );
   cmd[0] = MMC_MECHANISM_STATUS;
-  cmd[9] = 8;     // first we read the header
+  cmd[9] = 8;
   cmd[11] = 0;    // Necessary to set the proper command length
-  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
-    // again with real length
+
+  // first we read the header
+  dataLen = 8;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
     dataLen = from4Byte( &header[6] ) + 8;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( dataLen == 8 ) {
-      cmd[8] = 2048>>8;
-      cmd[9] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	dataLen = from2Byte( &header[6] ) + 8;
-    }
-
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS "
-	      << (int)header[5] << " slots." << endl;
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    cmd[8] = dataLen>>8;
-    cmd[9] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      return true;
-    }
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( dataLen == 8 )
+    dataLen = 0xFFFF;
+  
+  kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS "
+	    << (int)header[5] << " slots." << endl;
+  
+  // again with real length
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+  
+  cmd[8] = dataLen>>8;
+  cmd[9] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+  }
 
   return false;
 }
@@ -618,42 +606,41 @@ bool K3bDevice::Device::modeSense( unsigned char** pageData, unsigned int& pageL
 
   ScsiCommand cmd( this );
   cmd[0] = MMC_MODE_SENSE;
-  cmd[1] = 0x08;        // Disable Block Descriptors
-  cmd[2] = page;
-  cmd[8] = 8;           // first we determine the data length
+  cmd[1] = 0x8;        // Disable Block Descriptors
+  cmd[2] = page & 0x3F;
+  cmd[8] = 8;
   cmd[9] = 0;           // Necessary to set the proper command length
-  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
-    // again with real length
+
+  // first we determine the data length
+  pageLen = 8;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
     pageLen = from2Byte( header ) + 2;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( pageLen == 8 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	pageLen = from2Byte( header ) + 2;
-    }
-
-    *pageData = new unsigned char[pageLen];
-    ::memset( *pageData, 0, pageLen );
-
-    cmd[7] = pageLen>>8;
-    cmd[8] = pageLen;
-    if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 )
-      return true;
-    else {
-      delete [] *pageData;
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE with real length "
-		<< pageLen << " failed." << endl;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // with these buggy drives.
+  // We cannot use this as default since many firmwares fail with a too high data length.
+  //
+  if( pageLen == 8 )
+    pageLen = 0xFFFF;
+
+  // again with real length
+  *pageData = new unsigned char[pageLen];
+  ::memset( *pageData, 0, pageLen );
+  
+  cmd[7] = pageLen>>8;
+  cmd[8] = pageLen;
+  if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 ) {
+    return true;
+  }
+  else {
+    delete [] *pageData;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE with real length "
+	      << pageLen << " failed." << endl;
+  }
 
   return false;
 }
