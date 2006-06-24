@@ -1480,11 +1480,11 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
 K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
 {
   if( !m_bootCataloge ) {
-    QString newName = "boot.cataloge";
+    QString newName = "boot.catalog";
     int i = 0;
-    while( dir->alreadyInDirectory( "boot.cataloge" ) ) {
+    while( dir->alreadyInDirectory( "boot.catalog" ) ) {
       ++i;
-      newName = QString( "boot%1.cataloge" ).arg(i);
+      newName = QString( "boot%1.catalog" ).arg(i);
     }
 
     K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, dir, newName );
