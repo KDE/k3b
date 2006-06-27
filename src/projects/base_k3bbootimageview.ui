@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bBootImageView</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -12,6 +12,9 @@
             <width>276</width>
             <height>380</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>base_K3bBootImageView</string>
     </property>
     <vbox>
         <property name="name">
@@ -78,6 +81,17 @@
                 </property>
                 <property name="resizable">
                     <bool>false</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Size</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
                 </property>
             </column>
             <column>
@@ -307,8 +321,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>m_radioFloppy</sender>
