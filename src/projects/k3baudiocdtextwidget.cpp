@@ -23,6 +23,7 @@
 #include <qtoolbutton.h>
 #include <qptrlist.h>
 #include <qlayout.h>
+#include <qgroupbox.h>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -62,7 +63,7 @@ K3bAudioCdTextWidget::~K3bAudioCdTextWidget()
 void K3bAudioCdTextWidget::load( K3bAudioDoc* doc )
 {
   m_doc = doc;
-  m_checkCdText->setChecked( doc->cdText() );
+  m_groupCdText->setChecked( doc->cdText() );
 
   m_editTitle->setText( doc->title() );
   m_editPerformer->setText( doc->artist() );
@@ -77,7 +78,7 @@ void K3bAudioCdTextWidget::load( K3bAudioDoc* doc )
 void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
 {
   m_doc = doc;
-  doc->writeCdText( m_checkCdText->isChecked() );
+  doc->writeCdText( m_groupCdText->isChecked() );
 
   doc->setTitle( m_editTitle->text() );
   doc->setArtist( m_editPerformer->text() );
@@ -91,12 +92,12 @@ void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
 
 void K3bAudioCdTextWidget::setChecked( bool b )
 {
-  m_checkCdText->setChecked( b );
+  m_groupCdText->setChecked( b );
 }
 
 bool K3bAudioCdTextWidget::isChecked() const
 {
-  return m_checkCdText->isChecked();
+  return m_groupCdText->isChecked();
 }
 
 
