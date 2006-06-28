@@ -24,10 +24,26 @@ if test "$ac_cv_use_ffmpeg" = "yes"; then
 		int main() {
 		  AVFormatContext* fc = 0;
 		  AVPacket* p = 0;
+		  av_register_all();
 		  return av_read_frame( fc, p );
 		},
-	[have_ffmpeg=yes], [] )
+	[ffmpeg_compiles=yes], [ffmpeg_compiles=no] )
+	OLD_LIBS=$LIBS
+	LIBS="-lavformat -lavcodec -lavutil"
+	AC_LINK_IFELSE( 
+		#include <ffmpeg/avformat.h>
+		#include <ffmpeg/avcodec.h>
+
+		int main() {
+		  AVFormatContext* fc = 0;
+		  AVPacket* p = 0;
+		  av_register_all();
+		  return av_read_frame( fc, p );
+		},
+	[ffmpeg_links=yes], [ffmpeg_links=no] )
 	AC_LANG_RESTORE
+	LIBS=$OLD_LIBS
+	have_ffmpeg=$ffmpeg_links
 	AC_MSG_RESULT($have_ffmpeg)
 fi
 AM_CONDITIONAL(include_FFMPEG, [test x$have_ffmpeg = xyes])

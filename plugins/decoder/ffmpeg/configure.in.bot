@@ -4,8 +4,14 @@ if test  x$have_ffmpeg = xyes; then
 else
         echo "                                        no"
 if test "$ac_cv_use_ffmpeg" = "yes"; then
-	echo "    You are missing the ffmpeg headers and libraries"
-	echo "    version 0.4.9 or higher."
+	if test "$ffmpeg_compiles" = "yes"; then
+		echo "    You are missing the ffmpeg libraries."
+		echo "    Make sure ffmpeg has been configured as a"
+		echo "    shared library (which is not the default)."
+	else
+		echo "    You are missing the ffmpeg headers and libraries"
+		echo "    version 0.4.9 or higher."
+	fi
 	echo "    The ffmpeg audio decoding plugin (decodes wma and"
 	echo "    others) won't be compiled."
 fi
