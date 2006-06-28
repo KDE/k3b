@@ -35,7 +35,7 @@ if test "$ac_cv_use_flac" = "yes"; then
 		[defined if the installed flac binary's version is bigger than or equal to 1.1.2]
 	)
     fi
-  el
+  else
     have_flac=no
   fi
 fi
