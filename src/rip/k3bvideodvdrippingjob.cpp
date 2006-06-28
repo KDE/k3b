@@ -17,6 +17,7 @@
 
 #include <k3bvideodvdtitletranscodingjob.h>
 #include <k3bvideodvdtitledetectclippingjob.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -120,6 +121,8 @@ void K3bVideoDVDRippingJob::start()
   jobStarted();
   d->canceled = false;
 
+  K3bInterferingSystemsHandler::instance()->disable( m_dvd.device() );
+
   if( d->autoClipping )
     startTranscoding( 0 );
   else
@@ -130,6 +133,7 @@ void K3bVideoDVDRippingJob::start()
 void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 {
   if( d->canceled ) {
+    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
     emit canceled();
     jobFinished( false );
   }
@@ -143,11 +147,14 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
       else
 	startTranscoding( d->currentTitleInfoIndex );
     }
-    else
+    else {
+      K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
       jobFinished( true );
+    }
   }
   else {
     // the transcoding job should say what went wrong
+    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
     jobFinished( false );
   }
 }
@@ -156,6 +163,7 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 {
   if( d->canceled ) {
+    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
     emit canceled();
     jobFinished( false );
   }
@@ -178,6 +186,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
     // This will probably never happen since transcode does not provide a proper error code and
     // the detect clipping job rather returns 0 clipping values than fail.
     //
+    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
     jobFinished( false );
   }
 }
