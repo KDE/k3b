@@ -1,0 +1,11 @@
+if test x$have_mpc = xyes; then
+	echo "Musepack support:                      yes"
+else
+	echo "Musepack support:                       no"
+if test "$ac_cv_use_mpc" = "yes"; then
+	echo "    You are missing the Musepack headers and libraries >= 1.1."
+	echo "    The Musepack audio decoding plugin won't be compiled."
+fi
+fi
+
+echo ""

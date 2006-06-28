@@ -1,0 +1,11 @@
+if test x$ogg_vorbis = xyes; then
+	echo "Ogg Vorbis support:                    yes"
+else
+	echo "Ogg Vorbis support:                     no"
+if test "$ac_cv_use_oggvorbis" = "yes"; then
+	echo "    You are missing the Ogg-Vorbis headers and libraries."
+	echo "    The Ogg Vorbis decoding and encoding plugins won't be compiled."
+fi
+fi
+
+echo ""

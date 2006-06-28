@@ -1,0 +1,16 @@
+if test x$have_flac = xyes; then
+	echo "FLAC support:                          yes"
+else
+	echo "FLAC support:                           no"
+if test "$ac_cv_use_flac" = "yes"; then
+	if test "$have_flac" = "no"; then
+		echo "    You are missing the FLAC++ headers and libraries."
+		echo "    The FLAC decoding plugin won't be compiled."
+	elif test "$have_flac_bin" = "no"; then
+		echo "    You are missing the flac binary."
+		echo "    K3b's flac version autoconf check depends on it."
+	fi
+fi
+fi
+
+echo ""

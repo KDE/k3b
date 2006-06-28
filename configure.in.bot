@@ -11,30 +11,6 @@ if test "$use_k3b_debug" = "yes"; then
 	echo 	""
 fi
 
-if test x$ogg_vorbis = xyes; then
-	echo "Ogg Vorbis support:                    yes"
-else
-	echo "Ogg Vorbis support:                     no"
-if test "$ac_cv_use_oggvorbis" = "yes"; then
-	echo "    You are missing the Ogg-Vorbis headers and libraries."
-	echo "    The Ogg Vorbis decoding and encoding plugins won't be compiled."
-fi
-fi
-
-echo ""
-
-if test -n "$MAD_LIB"; then
-	echo "Mp3 decoding support (libmad):         yes"
-else
-	echo "Mp3 decoding support (libmad):          no"
-if test "$ac_cv_use_libmad" = "yes"; then
-	echo "    You are missing the libmad headers and libraries."
-	echo "    The Mp3 decoding plugin won't be compiled."
-fi
-fi
-
-echo ""
-
 if $have_taglib; then
 	echo "Audio meta data reading with Taglib:   yes"
 else
@@ -42,54 +18,6 @@ else
 	echo "    You are missing the Taglib headers and libraries."
 	echo "    The mp3 and flac decoder plugins will fall back to"
 	echo "    using KMetaFileInfo."
-fi
-
-echo ""
-
-if $av_cv_sndfile; then
-	echo "libsndfile audio decoding support:     yes"
-else
-	echo "libsndfile audio decoding support:      no"
-if test "$ac_cv_use_sndfile" = "yes"; then
-	echo "    You are missing the libsndfile headers and libraries."
-	echo "    The libsndfile audio decoding plugin won't be compiled."
-fi
-fi
-
-echo ""
-
-if test x$have_flac = xyes; then
-	echo "FLAC support:                          yes"
-else
-	echo "FLAC support:                           no"
-if test "$ac_cv_use_flac" = "yes"; then
-	echo "    You are missing the FLAC++ headers and libraries."
-	echo "    The FLAC decoding plugin won't be compiled."
-fi
-fi
-
-echo ""
-
-if test x$have_mpc = xyes; then
-	echo "Musepack support:                      yes"
-else
-	echo "Musepack support:                       no"
-if test "$ac_cv_use_mpc" = "yes"; then
-	echo "    You are missing the Musepack headers and libraries >= 1.1."
-	echo "    The Musepack audio decoding plugin won't be compiled."
-fi
-fi
-
-echo ""
-
-if test x$have_lame = xyes; then
-	echo "Lame Mp3 encoder plugin:               yes"
-else
-	echo "Lame Mp3 encoder plugin                 no"
-if test "$ac_cv_use_lame" = "yes"; then
-	echo "    You are missing the Lame headers and libraries."
-	echo "    The Lame Mp3 encoding plugin won't be compiled."
-fi
 fi
 
 echo ""
