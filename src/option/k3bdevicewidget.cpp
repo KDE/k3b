@@ -49,15 +49,11 @@ public:
   PrivateTempDevice( K3bDevice::Device* d ) {
     device = d;
     cdrdaoDriver = d->cdrdaoDriver();
-    maxReadSpeed = d->maxReadSpeed() / 175;
-    maxWriteSpeed = d->maxWriteSpeed() / 175;
     cdTextCapable = ( d->cdTextCapable() != 2 );
     writer = d->burner();
   }
 
   K3bDevice::Device* device;
-  int maxReadSpeed;
-  int maxWriteSpeed;
   QString cdrdaoDriver;
   bool cdTextCapable;
   bool writer;
@@ -84,12 +80,6 @@ public:
   void setText(int col, const QString& text) {
     if( col == 1 ) {
       switch(m_type) {
-      case t_maxReadSpeed:
-	dev->maxReadSpeed = text.toInt();
-	break;
-      case t_maxWriteSpeed:
-	dev->maxWriteSpeed = text.toInt();
-	break;
       case t_cdrdaoDriver:
 	dev->cdrdaoDriver = text;
 	break;
@@ -103,12 +93,6 @@ public:
 
   QString text( int col ) const {
     switch(m_type) {
-    case t_maxReadSpeed:
-      return (col == 0 ? i18n("Max read speed:") : QString::number(dev->maxReadSpeed) );
-      break;
-    case t_maxWriteSpeed:
-      return (col == 0 ? i18n("Max write speed:") : QString::number(dev->maxWriteSpeed) );
-      break;
     case t_cdrdaoDriver:
       return (col == 0 ? i18n("Cdrdao driver:") : dev->cdrdaoDriver );
       break;
@@ -124,7 +108,7 @@ public:
     return "???";
   }
 
-  enum itemType { t_maxReadSpeed, t_maxWriteSpeed, t_cdrdaoDriver, t_cdTextCapable };
+  enum itemType { t_cdrdaoDriver, t_cdTextCapable };
 
   PrivateTempDevice* dev;
 
@@ -134,12 +118,6 @@ private:
     static QStringList l2;
 
     switch(m_type) {
-    case t_maxReadSpeed:
-      setEditor( 1, SPIN );
-      break;
-    case t_maxWriteSpeed:
-      setEditor( 1, SPIN );
-      break;
     case t_cdrdaoDriver:
       if( l.isEmpty() )
 	for( int i = 0; i < 13; i++ )
@@ -345,26 +323,14 @@ void K3bDeviceWidget::updateDeviceListViews()
       typeItem->setForegroundColor( 1, palette().disabled().foreground() );
     }
 
-    // WE DO NOT USE THE READ SPEED YET SO IT WOULD JUST DISTRACT THE USER
-
-    PrivateDeviceViewItem1* maxReadSpeedItem = static_cast<PrivateDeviceViewItem1 *>( typeItem );
-//                                             new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxReadSpeed,
-// 									   dev,
-// 									   devRoot,
-// 									   typeItem );
     PrivateDeviceViewItem1* cdrdaoDriverItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdrdaoDriver,
 									   dev,
 									   devRoot,
-									   maxReadSpeedItem );
+									   typeItem );
+
 
     // now add the writer specific items
     if( dev->writer ) {
-      // add max write speed item after the maxreadspeed item
-      (void)new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_maxWriteSpeed,
-					dev,
-					devRoot,
-					maxReadSpeedItem );
-
       PrivateDeviceViewItem1* cdTextItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdTextCapable,
 								       dev,
 								       devRoot,
@@ -427,8 +393,6 @@ void K3bDeviceWidget::apply()
   // update the devices
   PrivateTempDevice* tempDev = m_tempDevices.first();
   while( tempDev != 0 ) {
-    tempDev->device->setMaxReadSpeed( tempDev->maxReadSpeed * 175 );
-    tempDev->device->setMaxWriteSpeed( tempDev->maxWriteSpeed * 175 );
     tempDev->device->setCdrdaoDriver( tempDev->cdrdaoDriver );
     tempDev->device->setCdTextCapability( tempDev->cdTextCapable );
 

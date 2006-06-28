@@ -16,7 +16,6 @@
 
 #include "k3bapplication.h"
 #include "k3b.h"
-#include "k3bwriterspeedverificationdialog.h"
 #include "k3bsplash.h"
 #include "k3baudioserver.h"
 #include "k3binterface.h"
@@ -139,42 +138,7 @@ void K3bApplication::init()
 
     config()->setGroup( "General Options" );
 
-    //
-    // K3b is able to autodetect most every device feature. One exception is the writing speed
-    // So the first time K3b is started with some device configuration we ask the user to verify
-    // the writing speeds if any writers are installed
-    //
-    // To check if there is a writer whose config has not been verified yet we search for a config
-    // entry for every writer containing a valid writing speed entry (we changed from cd writing 
-    // speed multiplicator to KB/s)
-    //
-    K3bVersion configVersion( config()->readEntry( "config version", "0.1" ) );
-    QPtrList<K3bDevice::Device> wlist( k3bcore->deviceManager()->cdWriter() );
-    bool needToVerify = ( configVersion < K3bVersion( 0, 10, 99 ) );
-    if( !needToVerify ) {
-      // search the config
-      config()->setGroup( "Devices" );
-
-      for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->cdWriter() ); *it; ++it ) {
-	K3bDevice::Device* dev = *it;
-	QString configEntryName = dev->vendor() + " " + dev->description();
-	QStringList list = config()->readListEntry( configEntryName );
-	if( list.count() > 1 && list[1].toInt() > 175 )
-	  wlist.removeRef( dev );
-      }
-    
-      // the devices left in wlist are the once not verified yet
-      needToVerify = !wlist.isEmpty();
-    }
-
     emit initializationDone();
-
-    if( needToVerify && !wlist.isEmpty() ) {
-      if( splash )
-	splash->close();
-      K3bWriterSpeedVerificationDialog::verify( wlist, m_mainWindow );
-    }
-
 
     config()->setGroup( "General Options" );
     if( config()->readBoolEntry( "check system config", true ) ) {
