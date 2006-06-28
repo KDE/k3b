@@ -19,6 +19,7 @@
 
 #include <k3bapplication.h>
 #include <k3b.h>
+#include <k3bcore.h>
 
 #include <kcombiview.h>
 #include <kfilepreview.h>
@@ -33,11 +34,14 @@
 K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* name )
   : KDirOperator( url, parent, name )
 {
+  setViewConfig( k3bcore->config(), "file view" );
+  setMode( KFile::Files );
+
   // disable the del-key since we still have a focus problem and users keep
   // deleting files when they want to remove project entries
   KAction* aDelete = actionCollection()->action("delete");
   if( aDelete )
-    aDelete->setAccel( 0 );
+    aDelete->setShortcut( 0 );
 
   // add the bookmark stuff
   KBookmarkManager* bmMan = KBookmarkManager::managerForFile( locateLocal( "data", "k3b/bookmarks.xml" ), false );
@@ -66,6 +70,7 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
   cfg->setGroup( group );
 
   KDirOperator::readConfig( cfg, group );
+  setView( KFile::Default );
 
   //
   // There seems to be a bug in the KDELibs which makes setURL crash on
@@ -112,7 +117,7 @@ QString K3bDirOperator::currentURL() const
 }
 
 
-void K3bDirOperator::activatedMenu( const KFileItem* item, const QPoint& pos )
+void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
 {
   // both from KDirOperator
   setupMenu();

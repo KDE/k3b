@@ -67,9 +67,6 @@ void K3bFileView::setupGUI()
   //  layout->setAutoAdd( true );
 
   m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );
-  m_dirOp->setViewConfig( k3bcore->config(), "file view" );
-  m_dirOp->setMode( KFile::Files );
-
   m_toolBox = new K3bToolBox( this );
 
   layout->addWidget( m_toolBox );
