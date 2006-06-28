@@ -65,6 +65,7 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
   cfg->setGroup( group );
 
   KDirOperator::readConfig( cfg, group );
+  setView( KFile::Default );
 
   //
   // There seems to be a bug in the KDELibs which makes setURL crash on

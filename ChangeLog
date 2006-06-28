@@ -1,3 +1,7 @@
+0.12.17
+=======
+ * Fixed saving/loading of the file view configuration.
+
 0.12.16
 =======
  * FreeBSD Compile fixes (thanks to Heiner Eichmann).
