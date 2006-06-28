@@ -94,21 +94,6 @@ fi
 
 echo ""
 
-echo "FFMpeg decoder plugin (decodes wma and others):"
-if test  x$have_ffmpeg = xyes; then
-        echo "                                       yes"
-else
-        echo "                                        no"
-if test "$ac_cv_use_ffmpeg" = "yes"; then
-	echo "    You are missing the ffmpeg headers and libraries"
-	echo "    version 0.4.9 or higher."
-	echo "    The ffmpeg audio decoding plugin (decodes wma and"
-	echo "    others) won't be compiled."
-fi
-fi
-
-echo ""
-
 if test -n "$RESMGR_LIB"; then
 	echo "Resmgr support:                        yes"
 else

@@ -1,6 +1,7 @@
 0.12.17
 =======
  * Fixed saving/loading of the file view configuration.
+ * Improved ffmpeg autoconf check.
 
 0.12.16
 =======
