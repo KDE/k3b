@@ -279,8 +279,8 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       r = (KMessageBox::ButtonCode)
 	KMessageBox::questionYesNoCancel( this,
 					  i18n("<p>You have selected the K3b Video DVD ripping tool."
-					       "<p>It is intended to <em>rip single titles</em> from a video DVD for further "
-					       "processing like compression. Menu structures are completely ignored."
+					       "<p>It is intended to <em>rip single titles</em> from a video DVD "
+					       "into a compressed format such as XviD. Menu structures are completely ignored."
 					       "<p>If you intend to copy the plain Video DVD vob files from the DVD "
 					       "(including decryption) for further processing with another application, "
 					       "please use the following link to access the Video DVD file structure: "
