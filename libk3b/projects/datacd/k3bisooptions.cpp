@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 K3bIsoOptions::K3bIsoOptions()
   : m_volumeID( "K3b data project" ),
-    m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2005 SEBASTIAN TRUEG AND THE K3B TEAM") ),
+    m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2006 SEBASTIAN TRUEG AND THE K3B TEAM") ),
     m_systemId( K3b::systemName().upper() ),
     m_inputCharset( "iso8859-1" ),
     m_whiteSpaceTreatmentReplaceString( "_" )
