@@ -64,7 +64,7 @@ QString K3bDevice::deviceTypeString( int t )
   if( s.isEmpty() )
     return i18n("Error");
   else
-    return s.join( "; " );
+    return s.join( ", " );
 }
 
 
@@ -97,7 +97,7 @@ QString K3bDevice::writingModeString( int m )
   if( s.isEmpty() )
     return i18n("None");
   else
-    return s.join( "; " );
+    return s.join( ", " );
 }
 
 
@@ -167,7 +167,7 @@ QString K3bDevice::mediaTypeString( int m, bool simple )
   if( s.isEmpty() )
     return i18n("Error");
   else
-    return s.join( "; " );
+    return s.join( ", " );
 }
 
 
