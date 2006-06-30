@@ -48,7 +48,7 @@ K3bIsoOptions::K3bIsoOptions()
   m_followSymbolicLinks = false;
   m_createTRANS_TBL = false;
   m_hideTRANS_TBL = false;
-  m_jolietLong = false;
+  m_jolietLong = true;
 
   m_doNotCacheInodes = false;
 

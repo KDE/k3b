@@ -21,7 +21,6 @@
 #include <k3bmovixoptionswidget.h>
 
 #include <k3bdataimagesettingswidget.h>
-#include <k3bdataadvancedimagesettingswidget.h>
 #include <k3bdatavolumedescwidget.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bwriterselectionwidget.h>
@@ -70,11 +69,6 @@ K3bMovixDvdBurnDialog::K3bMovixDvdBurnDialog( K3bMovixDvdDoc* doc, QWidget* pare
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
-  // create advanced image settings tab
-  m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
-  m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
-  addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
-
   // for now we just put the verify checkbox on the main page...
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
   m_optionGroupLayout->addWidget( m_checkVerify );
@@ -104,7 +98,6 @@ void K3bMovixDvdBurnDialog::loadK3bDefaults()
   K3bProjectBurnDialog::loadK3bDefaults();
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
   m_movixOptionsWidget->loadDefaults();
@@ -121,7 +114,6 @@ void K3bMovixDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
-  m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
   m_movixOptionsWidget->loadConfig(c);
@@ -138,7 +130,6 @@ void K3bMovixDvdBurnDialog::saveUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
-  m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   o.save( c );
 
@@ -157,7 +148,6 @@ void K3bMovixDvdBurnDialog::saveSettings()
   // save iso image settings
   K3bIsoOptions o = m_doc->isoOptions();
   m_imageSettingsWidget->save( o );
-  m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   m_doc->setIsoOptions( o );
 
@@ -173,7 +163,6 @@ void K3bMovixDvdBurnDialog::readSettings()
   K3bProjectBurnDialog::readSettings();
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
-  m_advancedImageSettingsWidget->load( m_doc->isoOptions() );
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
   m_checkVerify->setChecked( m_doc->verifyData() );

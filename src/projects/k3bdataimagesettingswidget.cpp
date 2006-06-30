@@ -14,7 +14,7 @@
  */
 
 #include "k3bdataimagesettingswidget.h"
-#include "base_k3bdatacustomfilesystemswidget.h"
+#include "k3bdataadvancedimagesettingswidget.h"
 
 #include "k3bisooptions.h"
 
@@ -28,14 +28,27 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <kdebug.h>
 
 
 // indices for the filesystems combobox
 static const int FS_LINUX_ONLY = 0;
 static const int FS_LINUX_AND_WIN = 1;
 static const int FS_UDF = 2;
-static const int FS_CUSTOM = 3;
+static const int FS_DOS_COMP = 3;
+static const int FS_CUSTOM = 4;
+static const int FS_MAX = 5;
 
+static const char* s_fsPresetNames[] = {
+  I18N_NOOP("Linux/Unix only"),
+  I18N_NOOP("Linux/Unix + Windows"),
+  I18N_NOOP("Very large files (UDF)"),
+  I18N_NOOP("DOS Compatibility"),
+  I18N_NOOP("Custom")
+};
+
+static bool s_fsPresetsInitialized = false;
+static K3bIsoOptions s_fsPresets[FS_CUSTOM];
 
 // indices for the whitespace treatment combobox
 static const int WS_NO_CHANGE = 0;
@@ -44,9 +57,60 @@ static const int WS_EXTENDED_STRIP = 2;
 static const int WS_REPLACE = 3;
 
 //
-// FIXME: include all the adavnced settings into this dialog
-//        and add presets such as "DOS compatibility"
+// returns true if the part of the options that is presented in the advanced custom 
+// settings dialog is equal. used to determine if some preset is used.
 //
+static bool compareAdvancedOptions( const K3bIsoOptions& o1, const K3bIsoOptions& o2 )
+{
+  return ( o1.forceInputCharset() == o2.forceInputCharset() &&
+	   ( !o1.forceInputCharset() || o1.inputCharset() == o2.inputCharset() ) &&
+	   o1.createRockRidge() == o2.createRockRidge() &&
+	   o1.createJoliet() == o2.createJoliet() &&
+	   o1.createUdf() == o2.createUdf() &&
+	   o1.ISOallowLowercase() == o2.ISOallowLowercase() &&
+	   o1.ISOallowPeriodAtBegin() == o2.ISOallowPeriodAtBegin() &&
+	   o1.ISOallow31charFilenames() == o2.ISOallow31charFilenames() &&
+	   o1.ISOomitVersionNumbers() == o2.ISOomitVersionNumbers() &&
+	   o1.ISOomitTrailingPeriod() == o2.ISOomitTrailingPeriod() &&
+	   o1.ISOmaxFilenameLength() == o2.ISOmaxFilenameLength() &&
+	   o1.ISOrelaxedFilenames() == o2.ISOrelaxedFilenames() &&
+	   o1.ISOnoIsoTranslate() == o2.ISOnoIsoTranslate() &&
+	   o1.ISOallowMultiDot() == o2.ISOallowMultiDot() &&
+	   o1.ISOuntranslatedFilenames() == o2.ISOuntranslatedFilenames() &&
+	   o1.createTRANS_TBL() == o2.createTRANS_TBL() &&
+	   o1.hideTRANS_TBL() == o2.hideTRANS_TBL() &&
+	   o1.jolietLong() == o2.jolietLong() &&
+	   o1.ISOLevel() == o2.ISOLevel() );
+}
+
+
+static void initializePresets()
+{
+  // Linux-only
+  s_fsPresets[FS_LINUX_ONLY].setCreateJoliet( false );
+  s_fsPresets[FS_LINUX_ONLY].setISOallow31charFilenames( true );
+
+  // Linux + Windows
+  s_fsPresets[FS_LINUX_AND_WIN].setCreateJoliet( true );
+  s_fsPresets[FS_LINUX_AND_WIN].setJolietLong( true );
+  s_fsPresets[FS_LINUX_AND_WIN].setISOallow31charFilenames( true );
+
+  // UDF
+  s_fsPresets[FS_UDF].setCreateJoliet( false );
+  s_fsPresets[FS_UDF].setCreateUdf( true );
+  s_fsPresets[FS_UDF].setISOallow31charFilenames( true );
+
+  // DOS comp
+  s_fsPresets[FS_DOS_COMP].setCreateJoliet( false );
+  s_fsPresets[FS_DOS_COMP].setCreateRockRidge( false );
+  s_fsPresets[FS_DOS_COMP].setISOallow31charFilenames( false );
+  s_fsPresets[FS_DOS_COMP].setISOLevel( 1 );
+
+  s_fsPresetsInitialized = true;
+}
+
+
+
 class K3bDataImageSettingsWidget::CustomFilesystemsDialog : public KDialogBase
 {
 public:
@@ -58,11 +122,11 @@ public:
 		   Ok|Cancel,
 		   Ok,
 		   true ) {
-    w = new base_K3bDataCustomFilesystemsWidget( this );
+    w = new K3bDataAdvancedImageSettingsWidget( this );
     setMainWidget( w );
   }
 
-  base_K3bDataCustomFilesystemsWidget* w;
+  K3bDataAdvancedImageSettingsWidget* w;
 };
 
 
@@ -72,12 +136,16 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
 {
   m_customFsDlg = new CustomFilesystemsDialog( this );
 
-  connect( m_comboFilesystems, SIGNAL(activated(int)),
-	   this, SLOT(slotFilesystemsChanged()) );
   connect( m_buttonCustomFilesystems, SIGNAL(clicked()),
 	   this, SLOT(slotCustomFilesystems()) );
   connect( m_comboSpaceHandling, SIGNAL(activated(int)),
 	   this, SLOT(slotSpaceHandlingChanged(int)) );
+
+  for( int i = 0; i < FS_MAX; ++i )
+    m_comboFilesystems->insertItem( i18n( s_fsPresetNames[i] ) );
+
+  if( !s_fsPresetsInitialized )
+    initializePresets();
 }
 
 
@@ -94,25 +162,12 @@ void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 
 void K3bDataImageSettingsWidget::slotCustomFilesystems()
 {
-  switch( m_comboFilesystems->currentItem() ) {
-  case FS_LINUX_ONLY:
-    m_customFsDlg->w->m_checkRockRidge->setChecked( true );
-    m_customFsDlg->w->m_checkJoliet->setChecked( false );
-    m_customFsDlg->w->m_checkUdf->setChecked( false );
-    break;
-  case FS_LINUX_AND_WIN:
-    m_customFsDlg->w->m_checkRockRidge->setChecked( true );
-    m_customFsDlg->w->m_checkJoliet->setChecked( true );
-    m_customFsDlg->w->m_checkUdf->setChecked( false );
-    break;
-  case FS_UDF:
-    m_customFsDlg->w->m_checkRockRidge->setChecked( true );
-    m_customFsDlg->w->m_checkJoliet->setChecked( false );
-    m_customFsDlg->w->m_checkUdf->setChecked( true );
-    break;
-  case FS_CUSTOM:
-    // keep the settings
-    break;
+  //
+  // Load the preset settings. If the custom item is selected we just keep
+  // the settings
+  //
+  if( m_comboFilesystems->currentItem() != FS_CUSTOM ) {
+    m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
   }
 
   if( m_customFsDlg->exec() == QDialog::Accepted ) {
@@ -136,6 +191,18 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
     m_comboFilesystems->changeItem( i18n("Custom (ISO9660 only)"), FS_CUSTOM );
   else
     m_comboFilesystems->changeItem( i18n("Custom (%1)").arg( s.join(", ") ), FS_CUSTOM );
+
+  // see if any of the presets is loaded
+  m_comboFilesystems->setCurrentItem( FS_CUSTOM );
+  K3bIsoOptions o;
+  m_customFsDlg->w->save( o );
+  for( int i = 0; i < FS_CUSTOM; ++i ) {
+    if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
+      kdDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i] << endl;
+      m_comboFilesystems->setCurrentItem( i );
+      break;
+    }
+  }
 
   if( m_comboFilesystems->currentItem() == FS_CUSTOM ) {
     if( !m_customFsDlg->w->m_checkRockRidge->isChecked() ) {
@@ -165,18 +232,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 
 void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 {
-  m_customFsDlg->w->m_checkRockRidge->setChecked( o.createRockRidge() );
-  m_customFsDlg->w->m_checkJoliet->setChecked( o.createJoliet() );
-  m_customFsDlg->w->m_checkUdf->setChecked( o.createUdf() );
-
-  if( o.createRockRidge() && !o.createJoliet() && !o.createUdf() )
-    m_comboFilesystems->setCurrentItem( FS_LINUX_ONLY );
-  else if( o.createRockRidge() && o.createJoliet() && !o.createUdf() )
-    m_comboFilesystems->setCurrentItem( FS_LINUX_AND_WIN );
-  else if( o.createRockRidge() && !o.createJoliet() && o.createUdf() )
-    m_comboFilesystems->setCurrentItem( FS_UDF );
-  else
-    m_comboFilesystems->setCurrentItem( FS_CUSTOM );
+  m_customFsDlg->w->load( o );
 
   slotFilesystemsChanged();
 
@@ -207,27 +263,9 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 
 void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
 {
-  switch( m_comboFilesystems->currentItem() ) {
-  case FS_LINUX_ONLY:
-    o.setCreateRockRidge( true );
-    o.setCreateJoliet( false );
-    o.setCreateUdf( false );
-    break;
-  case FS_LINUX_AND_WIN:
-    o.setCreateRockRidge( true );
-    o.setCreateJoliet( true );
-    o.setCreateUdf( false );
-    break;
-  case FS_UDF:
-    o.setCreateRockRidge( true );
-    o.setCreateJoliet( false );
-    o.setCreateUdf( true );
-    break;
-  default:
-    o.setCreateRockRidge( m_customFsDlg->w->m_checkRockRidge->isChecked() );
-    o.setCreateJoliet( m_customFsDlg->w->m_checkJoliet->isChecked() );
-    o.setCreateUdf( m_customFsDlg->w->m_checkUdf->isChecked() );
-  }
+  if( m_comboFilesystems->currentItem() != FS_CUSTOM )
+    m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
+  m_customFsDlg->w->save( o );
 
   o.setDiscardSymlinks( m_checkDiscardAllLinks->isChecked() );
   o.setDiscardBrokenSymlinks( m_checkDiscardBrokenLinks->isChecked() );
@@ -250,6 +288,5 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
   }
   o.setWhiteSpaceTreatmentReplaceString( m_editReplace->text() );
 }
-
 
 #include "k3bdataimagesettingswidget.moc"

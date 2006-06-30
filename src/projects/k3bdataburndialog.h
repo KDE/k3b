@@ -31,7 +31,6 @@ class K3bTempDirSelectionWidget;
 class K3bDataDoc;
 class KLineEdit;
 class K3bDataImageSettingsWidget;
-class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
 class K3bDataModeWidget;
 class K3bDataMultiSessionCombobox;
@@ -61,10 +60,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    // --- settings tab ---------------------------
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    // ----------------------------------------------
-	
-   // --- advanced tab -------------------------
-   K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
-   // ---------------------------------------------
 	
    QGroupBox* m_groupDataMode;
    K3bDataModeWidget* m_dataModeWidget;

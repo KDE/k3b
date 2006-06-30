@@ -204,14 +204,14 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 					     m_checkAllowUntranslatedFilenames,
 					     i18n("ISO Level") );
 
-  m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
-					 i18n("Level %1").arg(1),
+  m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController, 
+					 i18n("Level %1").arg(3),
 					 QCheckListItem::RadioButton );
   m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController, 
 					 i18n("Level %1").arg(2),
 					 QCheckListItem::RadioButton );
-  m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController, 
-					 i18n("Level %1").arg(3),
+  m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
+					 i18n("Level %1").arg(1),
 					 QCheckListItem::RadioButton );
 
   m_isoLevelController->setOpen(true);
@@ -260,6 +260,10 @@ K3bDataAdvancedImageSettingsWidget::~K3bDataAdvancedImageSettingsWidget()
 
 void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
 {
+  m_checkRockRidge->setChecked( o.createRockRidge() );
+  m_checkJoliet->setChecked( o.createJoliet() );
+  m_checkUdf->setChecked( o.createUdf() );
+
   switch( o.ISOLevel() ) {
   case 1:
     m_radioIsoLevel1->setOn(true);
@@ -302,6 +306,10 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
 
 void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
 {
+  o.setCreateRockRidge( m_checkRockRidge->isChecked() );
+  o.setCreateJoliet( m_checkJoliet->isChecked() );
+  o.setCreateUdf( m_checkUdf->isChecked() );
+
   // save iso-level
   if( m_radioIsoLevel3->isOn() )
     o.setISOLevel( 3 );

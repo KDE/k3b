@@ -42,7 +42,6 @@ libprojects_la_SOURCES = k3baudioburndialog.cpp \
 			 k3bmixedview.cpp \
 			 base_k3badvanceddataimagesettings.ui \
 			 base_k3bbootimageview.ui \
-			 base_k3bdatacustomfilesystemswidget.ui \
 			 base_k3bdataimagesettings.ui \
 			 base_k3bdatavolumedescwidget.ui \
 			 k3bdataadvancedimagesettingswidget.cpp \

@@ -16,7 +16,6 @@
 
 #include "k3bdataburndialog.h"
 #include "k3bdataimagesettingswidget.h"
-#include "k3bdataadvancedimagesettingswidget.h"
 #include "k3bdatavolumedescwidget.h"
 #include "k3bdatamultisessioncombobox.h"
 #include "k3bdataview.h"
@@ -90,11 +89,6 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
-  // create advanced image settings tab
-  m_advancedImageSettingsWidget = new K3bDataAdvancedImageSettingsWidget( this );
-  m_advancedImageSettingsWidget->layout()->setMargin( marginHint() );
-  addPage( m_advancedImageSettingsWidget, i18n("Advanced") );
-
   connect( m_comboMultisession, SIGNAL(activated(int)),
 	   this, SLOT(slotMultiSessionModeChanged()) );
 
@@ -125,7 +119,6 @@ void K3bDataBurnDialog::saveSettings()
   // save iso image settings
   K3bIsoOptions o = ((K3bDataDoc*)doc())->isoOptions();
   m_imageSettingsWidget->save( o );
-  m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   ((K3bDataDoc*)doc())->setIsoOptions( o );
 
@@ -156,7 +149,6 @@ void K3bDataBurnDialog::readSettings()
   m_checkVerify->setChecked( ((K3bDataDoc*)doc())->verifyData() );
 
   m_imageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
-  m_advancedImageSettingsWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
   m_volumeDescWidget->load( ((K3bDataDoc*)doc())->isoOptions() );
 
   m_dataModeWidget->setDataMode( ((K3bDataDoc*)doc())->dataMode() );
@@ -224,7 +216,6 @@ void K3bDataBurnDialog::loadK3bDefaults()
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_advancedImageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
   m_comboMultisession->setMultiSessionMode( K3bDataDoc::AUTO );
   m_checkVerify->setChecked( false );
@@ -242,7 +233,6 @@ void K3bDataBurnDialog::loadUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
-  m_advancedImageSettingsWidget->load( o );
   m_volumeDescWidget->load( o );
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
@@ -260,7 +250,6 @@ void K3bDataBurnDialog::saveUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
-  m_advancedImageSettingsWidget->save( o );
   m_volumeDescWidget->save( o );
   o.save( c );
 

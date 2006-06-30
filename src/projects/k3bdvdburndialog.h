@@ -22,7 +22,6 @@
 
 class K3bDvdDoc;
 class K3bDataImageSettingsWidget;
-class K3bDataAdvancedImageSettingsWidget;
 class K3bDataVolumeDescWidget;
 class QGroupBox;
 class QRadioButton;
@@ -59,10 +58,6 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
    // --- settings tab ---------------------------
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    // ----------------------------------------------
-	
-   // --- advanced tab -------------------------
-   K3bDataAdvancedImageSettingsWidget* m_advancedImageSettingsWidget;
-   // ---------------------------------------------
 	
    // --- multisession tab -------------------------
    K3bDataMultiSessionCombobox* m_comboMultisession;

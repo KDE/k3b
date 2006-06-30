@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -44,26 +44,6 @@
                     <number>6</number>
                 </property>
                 <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Linux/Unix only</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Linux/Unix + Windows</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Very large files (UDF)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Custom</string>
-                        </property>
-                    </item>
                     <property name="name">
                         <cstring>m_comboFilesystems</cstring>
                     </property>
