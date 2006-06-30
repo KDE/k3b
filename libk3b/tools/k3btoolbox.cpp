@@ -88,7 +88,10 @@ K3bToolBoxButton::K3bToolBoxButton( KAction* action, QWidget* parent )
   setEnabled( action->isEnabled() );
 
   QWhatsThis::add( this, action->whatsThis() );
-  QToolTip::add( this, action->toolTip() );
+  if( action->toolTip().isEmpty() )
+    QToolTip::add( this, action->text() );
+  else
+    QToolTip::add( this, action->toolTip() );
 
   if( KToggleAction* ta = dynamic_cast<KToggleAction*>( action ) ) {
     setToggleButton( true );
