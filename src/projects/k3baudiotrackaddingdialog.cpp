@@ -104,7 +104,7 @@ int K3bAudioTrackAddingDialog::addUrls( const KURL::List& urls,
   dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(doc->URL().fileName()) );
 
   dlg.m_busyWidget->showBusy(true);
-  dlg.slotAddUrls();
+  QTimer::singleShot( 0, &dlg, SLOT(slotAddUrls()) );
   int ret = dlg.exec();
 
   QString message;
