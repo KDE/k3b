@@ -130,6 +130,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotCddaRip();
   void videoDvdRip( K3bDevice::Device* );
   void slotVideoDvdRip();
+  void videoCdRip( K3bDevice::Device* );
+  void slotVideoCdRip();
   void slotK3bSetup();
 
   void slotErrorMessage(const QString&);
@@ -294,6 +296,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionToolsWriteCdImage;
   KAction* actionToolsCddaRip;
   KAction* actionToolsVideoDvdRip;
+  KAction* actionToolsVideoCdRip;
   KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewStatusBar;
