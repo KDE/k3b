@@ -4,6 +4,6 @@ Group=AudioDecoder
 Name=K3b FFMpeg Decoder
 Author=Sebastian Trueg
 Email=trueg@k3b.org
-Version=0.9
+Version=0.9.1
 Comment=Decoding module to decode wma files
 Licence=GPL

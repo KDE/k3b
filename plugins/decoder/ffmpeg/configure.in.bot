@@ -1,6 +1,11 @@
 echo "FFMpeg decoder plugin (decodes wma and others):"
 if test  x$have_ffmpeg = xyes; then
         echo "                                       yes"
+	if test x$enable_ffmpeg_all_codecs = xyes; then
+		echo "    WARNING: You enabled all codecs in the ffmpeg decoder plugin."
+		echo "             Be aware that most are not tested and track lengths"
+		echo "             will be wrong in many cases."
+	fi
 else
         echo "                                        no"
 if test "$ac_cv_use_ffmpeg" = "yes"; then

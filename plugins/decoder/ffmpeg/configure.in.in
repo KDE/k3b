@@ -49,3 +49,13 @@ fi
 AM_CONDITIONAL(include_FFMPEG, [test x$have_ffmpeg = xyes])
 
 dnl --------------- FFMPEG CHECK END ------------------------------
+
+AC_ARG_ENABLE(
+	ffmpeg-all-codecs, 
+	AS_HELP_STRING(
+		[--enable-ffmpeg-all-codecs], 
+		[allow all audio codecs supported by ffmpeg (default=disabled)]),
+	[AC_DEFINE(K3B_FFMPEG_ALL_CODECS, 1, [Defined if all ffmpeg codecs should be allowed])
+	 enable_ffmpeg_all_codecs=yes], 
+	[enable_ffmpeg_all_codecs=no]
+)

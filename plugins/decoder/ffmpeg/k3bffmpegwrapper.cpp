@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,6 +12,8 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
+
+#include <config.h>
 
 #include "k3bffmpegwrapper.h"
 
@@ -111,7 +113,7 @@ bool K3bFFMpegFile::open()
   }
 
   // determine the length of the stream
-  d->length = K3b::Msf::fromSeconds( (double)d->formatContext->streams[0]->duration / (double)AV_TIME_BASE );
+  d->length = K3b::Msf::fromSeconds( (double)d->formatContext->duration / (double)AV_TIME_BASE );
 
   if( d->length == 0 ) {
     kdDebug() << "(K3bFFMpegDecoderFactory) invalid length." << endl;
@@ -185,11 +187,7 @@ int K3bFFMpegFile::type() const
 
 QString K3bFFMpegFile::typeComment() const
 {
-#ifdef FFMPEG_BUILD_PRE_4629
-  switch( d->formatContext->streams[0]->codec.codec_id ) {
-#else
-  switch( d->formatContext->streams[0]->codec->codec_id ) {
-#endif
+  switch( type() ) {
   case CODEC_ID_WMAV1:
     return i18n("Windows Media v1");
   case CODEC_ID_WMAV2:
@@ -354,8 +352,18 @@ K3bFFMpegWrapper* K3bFFMpegWrapper::instance()
 K3bFFMpegFile* K3bFFMpegWrapper::open( const QString& filename ) const
 {
   K3bFFMpegFile* file = new K3bFFMpegFile( filename );
-  if( file->open() )
-    return file;
+  if( file->open() ) {
+#ifndef K3B_FFMPEG_ALL_CODECS
+    //
+    // only allow tested formats. ffmpeg seems not to be too reliable with every format.
+    // mp3 being one of them sadly. Most importantly: allow the libsndfile decoder to do
+    // its thing.
+    //
+    if( file->type() == CODEC_ID_WMAV1 ||
+	file->type() == CODEC_ID_WMAV2 )
+#endif
+      return file;
+  }
 
   delete file;
   return 0;

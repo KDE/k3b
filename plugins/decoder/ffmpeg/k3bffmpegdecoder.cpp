@@ -95,21 +95,17 @@ bool K3bFFMpegDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, i
     samplerate = m_file->sampleRate();
     ch = m_file->channels();
     m_type = m_file->typeComment();
+    frames = m_file->length();
 
-    // ffmpeg cannot handle vbr mp3 files properly (their length)
+    // ffmpeg's length information is not reliable at all
     // so we have to decode the whole file in order to get the correct length
-    if( m_file->type() == CODEC_ID_MP3LAME ) {
-      kdDebug() << "(K3bFFMpegDecoder) mp3. Have to decode the hole file to get it's length." << endl;
-      char buffer[10*2048];
-      int len = 0;
-      unsigned long long bytes = 0;
-      while( ( len = m_file->read( buffer, 10*2048 ) ) > 0 )
-	bytes += len;
-      
-      frames = (unsigned long)ceil((double)bytes/2048.0);
-    }
-    else
-      frames = m_file->length();
+//     char buffer[10*2048];
+//     int len = 0;
+//     unsigned long long bytes = 0;
+//     while( ( len = m_file->read( buffer, 10*2048 ) ) > 0 )
+//       bytes += len;
+    
+//     frames = (unsigned long)ceil((double)bytes/2048.0);
 
     // cleanup;
     delete m_file;
