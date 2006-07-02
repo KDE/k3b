@@ -239,8 +239,6 @@ void K3bMainWindow::initActions()
   KStdAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
 
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
-//   KActionMenu* actionMenuCD = new KActionMenu( i18n("&CD Project"), "filenew", actionCollection(), "file_new_cd" );
-//   KActionMenu* actionMenuDVD = new KActionMenu( i18n("&DVD Project"), "filenew", actionCollection(), "file_new_dvd" );
   actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
   actionFileNewData = new KAction(i18n("New Data &CD Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
@@ -260,8 +258,6 @@ void K3bMainWindow::initActions()
   actionFileContinueMultisession = new KAction( i18n("Continue Multisession Project"), "datacd", 0, this, SLOT(slotContinueMultisession()),
 						actionCollection(), "file_continue_multisession" );
 
-//   actionFileNewMenu->insert( actionMenuCD );
-//   actionFileNewMenu->insert( actionMenuDVD );
   actionFileNewMenu->setDelayed( false );
   actionFileNewMenu->insert( actionFileNewData );
   actionFileNewMenu->insert( actionFileNewDvd );
@@ -315,6 +311,8 @@ void K3bMainWindow::initActions()
 				    actionCollection(), "tools_cdda_rip" );
   actionToolsVideoDvdRip = new KAction( i18n("Rip Video DVD..."), "videodvd", 0, this, SLOT(slotVideoDvdRip()),
 				    actionCollection(), "tools_videodvd_rip" );
+  actionToolsVideoCdRip = new KAction( i18n("Rip Video CD..."), "videocd", 0, this, SLOT(slotVideoCdRip()),
+				       actionCollection(), "tools_videocd_rip" );
 
   (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
 		     actionCollection(), "help_check_system" );
@@ -1615,6 +1613,28 @@ void K3bMainWindow::slotVideoDvdRip()
 {
   videoDvdRip( 0 );
 }
+
+
+void K3bMainWindow::videoCdRip( K3bDevice::Device* dev )
+{
+  if( !dev ||
+      !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_VIDEO_CD ) )
+    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_CD_ALL, 
+						 K3bDevice::STATE_COMPLETE,
+						 K3bMedium::CONTENT_VIDEO_CD, 
+						 this,
+						 i18n("Video CD Rip") );
+
+  if( dev )
+    m_dirView->showDevice( dev );
+}
+
+
+void K3bMainWindow::slotVideoCdRip()
+{
+  videoCdRip( 0 );
+}
+
 
 #include "k3b.moc"
 

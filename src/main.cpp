@@ -65,6 +65,7 @@ static KCmdLineOptions options[] =
 	{ "formatdvd <device>", I18N_NOOP("Format a DVD-RW or DVD+RW"), 0 },
 	{ "cddarip <device>", I18N_NOOP("Extract Audio tracks digitally (+encoding)"), 0 },
 	{ "videodvdrip <device>", I18N_NOOP("Rip Video DVD Titles (+transcoding)"), 0 },
+	{ "videocdrip <device>", I18N_NOOP("Rip Video CD Tracks"), 0 },
 	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },
 	{ "nosplash", I18N_NOOP("Disable the splash screen"), 0 },
 	{ "ao <method>", I18N_NOOP("Set the audio output method (like arts or alsa depending on the installed plugins)"), 0 },
