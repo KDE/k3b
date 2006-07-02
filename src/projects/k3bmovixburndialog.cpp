@@ -238,7 +238,7 @@ void K3bMovixBurnDialog::slotStartClicked()
       if( KMessageBox::warningContinueCancel( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
 				     i18n("File Exists"), i18n("Overwrite") )
-	  != KMessageBox::Yes )
+	  != KMessageBox::Continue )
 	return;
     }
   }
