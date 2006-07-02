@@ -118,6 +118,35 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
    */
   void informAboutNotFoundFiles();
 
+  /**
+   * returns the new after track, ie. the the last added track or null if
+   * the import failed.
+   *
+   * This is a blocking method.
+   *
+   * \param cuefile The Cuefile to be imported
+   * \param after   The track after which the new tracks should be inserted
+   * \param decoder The decoder to be used for the new tracks. If 0 a new one will be created.
+   *
+   * BE AWARE THAT THE DECODER HAS TO FIT THE AUDIO FILE IN THE CUE.
+   */
+  K3bAudioTrack* importCueFile( const QString& cuefile, K3bAudioTrack* after, K3bAudioDecoder* decoder = 0 );
+
+  /**
+   * Create a decoder for a specific url. If another AudioFileSource with this
+   * url is already part of this project the associated decoder is returned.
+   *
+   * In the first case the decoder will not be initialized yet (K3bAudioDecoder::analyseFile
+   * is not called yet).
+   *
+   * \param url The url for which a decoder is requested.
+   * \param reused If not null this variable is set to true if the decoder is already in
+   *               use and K3bAudioDecoder::analyseFile() does not have to be called anymore.
+   */
+  K3bAudioDecoder* getDecoderForUrl( const KURL& url, bool* reused = 0 );
+
+  static bool readPlaylistFile( const KURL& url, KURL::List& playlist );
+
  public slots:
   void addUrls( const KURL::List& );
   void addTrack( const KURL&, uint );
@@ -159,7 +188,6 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
  private slots:
   void slotTrackChanged( K3bAudioTrack* );
   void slotTrackRemoved( K3bAudioTrack* );
-  void slotHouseKeeping();
 
  signals:
   void trackChanged( K3bAudioTrack* );
@@ -176,14 +204,8 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
  private:
   // the stuff for adding files
   // ---------------------------------------------------------
-  bool readM3uFile( const KURL& url, KURL::List& playlist );
   K3bAudioTrack* createTrack( const KURL& url );
-  K3bAudioDecoder* getDecoderForUrl( const KURL& url );
-  /**
-   * returns the new after track, ie. the the last added track or null if
-   * the import failed.
-   */
-  K3bAudioTrack* importCueFile( const QString& cuefile, K3bAudioTrack* after );
+
   /**
    * Handle directories and M3u files
    */
@@ -232,10 +254,6 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
   QMap<K3bAudioDecoder*, int> m_decoderUsageCounterMap;
   // used to check if we already have a decoder for a specific file
   QMap<QString, K3bAudioDecoder*> m_decoderPresenceMap;
-  // used to properly delete the finished analyser threads
-  class AudioFileAnalyzerThread;
-  QPtrList<AudioFileAnalyzerThread> m_audioTrackStatusThreads;
-  QMap<K3bAudioDecoder*, QPtrList<K3bAudioTrack> > m_decoderMetaInfoSetMap;
 };
 
 

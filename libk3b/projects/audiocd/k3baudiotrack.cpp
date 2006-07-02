@@ -193,37 +193,44 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
     }
       
     // make sure we do not mess up the list
-    if( doc()->firstTrack() )
-      moveAhead( doc()->firstTrack() );
-    else
+    if( doc()->lastTrack() )
+      moveAfter( doc()->lastTrack() );
+    else {
       doc()->setFirstTrack( take() );
-    return;
+      doc()->setLastTrack( this );
+    }
   }
-
-  if( track == this ) {
+  else if( track == this ) {
     kdDebug() << "(K3bAudioTrack::moveAfter) trying to move this after this." << endl;
     return;
   }
+  else if( track->doc() != doc() ) {
+    kdDebug() << "(K3bAudioTrack::moveAfter) trying to add track with different doc." << endl;
+    return;
+  }
+  else {
+    // remove this from the list
+    take();
+    
+    // set the new parent doc
+    m_parent = track->doc();
+    
+    K3bAudioTrack* oldNext = track->m_next;
+    
+    // set track as prev
+    track->m_next = this;
+    m_prev = track;
+    
+    // set oldNext as next
+    if( oldNext )
+      oldNext->m_prev = this;
+    m_next = oldNext;
 
-  // remove this from the list
-  take();
-
-  // set the new parent doc
-  m_parent = track->doc();
-
-  K3bAudioTrack* oldNext = track->m_next;
-
-  // set track as prev
-  track->m_next = this;
-  m_prev = track;
-
-  // set oldNext as next
-  if( oldNext )
-    oldNext->m_prev = this;
-  m_next = oldNext;
-
-  if( !m_next )
-    doc()->setLastTrack( this );
+    if( !m_prev )
+      doc()->setFirstTrack( this );    
+    if( !m_next )
+      doc()->setLastTrack( this );
+  }
 
   emitChanged();
 }
@@ -238,40 +245,44 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
     }
 
     // make sure we do not mess up the list
-    if( doc()->lastTrack() )
-      moveAfter( doc()->lastTrack() );
-    else
+    if( doc()->firstTrack() )
+      moveAhead( doc()->firstTrack() );
+    else {
       doc()->setFirstTrack( take() );
-    return;
+      doc()->setLastTrack( this );
+    }
   }
-
-  if( track->doc() != doc() )
-    return;
-
-  if( track == this ) {
+  else if( track == this ) {
     kdDebug() << "(K3bAudioTrack::moveAhead) trying to move this ahead of this." << endl;
     return;
   }
-
-  // remove this from the list
-  take();
-
-  // set the new parent doc
-  m_parent = track->doc();
-
-  K3bAudioTrack* oldPrev = track->m_prev;
-
-  // set track as next
-  m_next = track;
-  track->m_prev = this;
-
-  // set oldPrev as prev
-  m_prev = oldPrev;
-  if( oldPrev )
-    oldPrev->m_next = this;
-
-  if( !m_prev )
-    doc()->setFirstTrack( this );
+  else if( track->doc() != doc() ) {
+    kdDebug() << "(K3bAudioTrack::moveAfter) trying to add track with different doc." << endl;
+    return;
+  }
+  else {
+    // remove this from the list
+    take();
+    
+    // set the new parent doc
+    m_parent = track->doc();
+    
+    K3bAudioTrack* oldPrev = track->m_prev;
+    
+    // set track as next
+    m_next = track;
+    track->m_prev = this;
+    
+    // set oldPrev as prev
+    m_prev = oldPrev;
+    if( oldPrev )
+      oldPrev->m_next = this;
+    
+    if( !m_prev )
+      doc()->setFirstTrack( this );
+    if( !m_next )
+      doc()->setLastTrack( this );
+  }
 
   emitChanged();
 }

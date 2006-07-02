@@ -30,6 +30,7 @@
 #include "k3baudiocdtracksource.h"
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3baudiodatasourceeditwidget.h"
+#include "k3baudiotrackaddingdialog.h"
 
 #include <k3bview.h>
 #include <k3bcdtextvalidator.h>
@@ -236,30 +237,30 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
   if( !e->isAccepted() )
     return;
 
-  K3bAudioTrack* trackAfter = 0;
-  K3bAudioTrack* trackParent = 0;
-  K3bAudioDataSource* sourceAfter = 0;
+ m_dropTrackAfter = 0;
+ m_dropTrackParent = 0;
+ m_dropSourceAfter = 0;
   if( after ) {
     if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( after ) ) {
-      trackAfter = tv->track();
+      m_dropTrackAfter = tv->track();
     }
     else if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>( after ) ) {
-      sourceAfter = sv->source();
+      m_dropSourceAfter = sv->source();
     }
   }
 
   if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( parent ) ) {
-    trackParent = tv->track();
+    m_dropTrackParent = tv->track();
   }
 
   //
   // In case the sources are not shown we do not want to handle them because the average
   // user would be confused otherwise
   //
-  if( trackParent && !m_trackItemMap[trackParent]->showingSources() ) {
+  if( m_dropTrackParent && !m_trackItemMap[m_dropTrackParent]->showingSources() ) {
     kdDebug() << "(K3bAudioTrackView) dropped after track which does not show it's sources." << endl;
-    trackAfter = trackParent;
-    trackParent = 0;
+    m_dropTrackAfter = m_dropTrackParent;
+    m_dropTrackParent = 0;
   }
 
   if( e->source() == viewport() ) {
@@ -290,14 +291,14 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
     //
     for( QPtrListIterator<K3bAudioTrack> it( tracks ); it.current(); ++it ) {
       K3bAudioTrack* track = *it;
-      if( trackParent ) {
-	trackParent->merge( copyItems ? track->copy() : track, sourceAfter );
+      if( m_dropTrackParent ) {
+	m_dropTrackParent->merge( copyItems ? track->copy() : track, m_dropSourceAfter );
       }
-      else if( trackAfter ) {
+      else if( m_dropTrackAfter ) {
 	if( copyItems )
-	  track->copy()->moveAfter( trackAfter );
+	  track->copy()->moveAfter( m_dropTrackAfter );
 	else
-	  track->moveAfter( trackAfter );
+	  track->moveAfter( m_dropTrackAfter );
       }
       else {
 	if( copyItems )
@@ -312,18 +313,18 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
     //
     for( QPtrListIterator<K3bAudioDataSource> it( sources ); it.current(); ++it ) {
       K3bAudioDataSource* source = *it;
-      if( trackParent ) {
-	if( sourceAfter ) {
+      if( m_dropTrackParent ) {
+	if( m_dropSourceAfter ) {
 	  if( copyItems )
-	    source->copy()->moveAfter( sourceAfter );
+	    source->copy()->moveAfter( m_dropSourceAfter );
 	  else
-	    source->moveAfter( sourceAfter );
+	    source->moveAfter( m_dropSourceAfter );
 	}
 	else {
 	  if( copyItems )
-	    source->copy()->moveAhead( trackParent->firstSource() );
+	    source->copy()->moveAhead( m_dropTrackParent->firstSource() );
 	  else
-	    source->moveAhead( trackParent->firstSource() );
+	    source->moveAhead( m_dropTrackParent->firstSource() );
 	}
       }
       else {
@@ -332,21 +333,21 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
 
 	// special case: the source we remove from the track is the last and the track
 	// will be deleted.
-	if( !copyItems && trackAfter == source->track() && trackAfter->numberSources() == 1 )
-	  trackAfter = trackAfter->prev();
+	if( !copyItems && m_dropTrackAfter == source->track() && m_dropTrackAfter->numberSources() == 1 )
+	  m_dropTrackAfter = m_dropTrackAfter->prev();
 
 	if( copyItems )
 	  track->addSource( source->copy() );
 	else
 	  track->addSource( source );
 
-	if( trackAfter ) {
-	  track->moveAfter( trackAfter );
-	  trackAfter = track;
+	if( m_dropTrackAfter ) {
+	  track->moveAfter( m_dropTrackAfter );
+	  m_dropTrackAfter = track;
 	}
 	else {
 	  track->moveAhead( m_doc->firstTrack() );
-	  trackAfter = track;
+	  m_dropTrackAfter = track;
 	}
       }
     }
@@ -366,42 +367,47 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
       int trackNumber = *it;
 
       K3bAudioCdTrackSource* source = new K3bAudioCdTrackSource( toc, trackNumber, cddb, dev );
-      if( trackParent ) {
-	source->moveAfter( sourceAfter );
-	if( sourceAfter )
-	  sourceAfter = source;
+      if( m_dropTrackParent ) {
+	source->moveAfter( m_dropSourceAfter );
+	if( m_dropSourceAfter )
+	  m_dropSourceAfter = source;
       }
       else {
 	K3bAudioTrack* track = new K3bAudioTrack();
 	track->setPerformer( cddb.artists[trackNumber-1] );
 	track->setTitle( cddb.titles[trackNumber-1] );
 	track->addSource( source );
-	if( trackAfter )
-	  track->moveAfter( trackAfter );
+	if( m_dropTrackAfter )
+	  track->moveAfter( m_dropTrackAfter );
 	else
 	  m_doc->addTrack( track, 0 );
 
-	trackAfter = track;
+	m_dropTrackAfter = track;
       }
     }
   }
   else{
-    KURL::List urls;
-    KURLDrag::decode( e, urls );
-
-    if( trackParent ) {
-      m_doc->addSources( trackParent, urls, sourceAfter );
-    }
-    else {
-      // add as new tracks
-      m_doc->addTracks( urls, trackAfter ? trackAfter->trackNumber() : 0 );
+    m_dropUrls.clear();
+    if( KURLDrag::decode( e, m_dropUrls ) ) {
+      //
+      // This is a small (not to ugly) hack to circumvent problems with the
+      // event queues: the url adding dialog will be non-modal regardless of
+      // the settings in case we open it directly.
+      //
+      QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
     }
   }
-
+  
   showAllSources();
-
+  
   // now grab that focus
   setFocus();
+}
+
+
+void K3bAudioTrackView::slotAddUrls()
+{
+  K3bAudioTrackAddingDialog::addUrls( m_dropUrls, m_doc, m_dropTrackAfter, m_dropTrackParent, m_dropSourceAfter, this );
 }
 
 

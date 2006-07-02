@@ -18,6 +18,8 @@
 #include "k3bmixeddoc.h"
 #include "k3bmixedburndialog.h"
 #include "k3bmixeddirtreeview.h"
+#include "k3baudiotrackaddingdialog.h"
+#include "k3bdataurladdingdialog.h"
 
 #include <k3baudiotrackplayer.h>
 #include <k3baudiodoc.h>
@@ -139,6 +141,15 @@ void K3bMixedView::slotBurn()
 K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent, const char* name )
 {
   return new K3bMixedBurnDialog( m_doc, parent, name, true );
+}
+
+
+void K3bMixedView::addUrls( const KURL::List& urls )
+{
+  if( m_widgetStack->visibleWidget() == m_dataFileView )
+    K3bDataUrlAddingDialog::addUrls( urls, currentDir() );
+  else
+    K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
 }
 
 #include "k3bmixedview.moc"

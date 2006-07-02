@@ -80,4 +80,5 @@ libprojects_la_SOURCES = k3baudioburndialog.cpp \
 			 k3bmusicbrainzjob.cpp \
 			 k3bdataurladdingdialog.cpp \
 			 k3bdatasessionimportdialog.cpp \
-			 k3baudiodatasourceeditwidget.cpp
+			 k3baudiodatasourceeditwidget.cpp \
+			 k3baudiotrackaddingdialog.cpp

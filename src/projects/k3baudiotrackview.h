@@ -20,6 +20,7 @@
 
 #include <qmap.h>
 #include <qptrlist.h>
+#include <kurl.h>
 
 class K3bAudioTrack;
 class K3bAudioTrackViewItem;
@@ -96,6 +97,12 @@ class K3bAudioTrackView : public K3bListView
   // to animate the player icon
   K3bListViewItemAnimator* m_playerItemAnimator;
 
+  // used for the drop-event hack
+  KURL::List m_dropUrls;
+  K3bAudioTrack* m_dropTrackAfter;
+  K3bAudioTrack* m_dropTrackParent;
+  K3bAudioDataSource* m_dropSourceAfter;
+
  private slots:
   void slotAnimation();
   void slotDropped( QDropEvent* e, QListViewItem* parent, QListViewItem* after );
@@ -115,6 +122,9 @@ class K3bAudioTrackView : public K3bListView
   void slotPlayTrack();
   void slotQueryMusicBrainz();
   void slotEditSource();
+
+  // drop-event hack slot
+  void slotAddUrls();
 
  protected:
   void keyPressEvent( QKeyEvent* e );

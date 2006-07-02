@@ -23,8 +23,6 @@
 #include "k3baudiocdtracksource.h"
 #include <k3bcuefileparser.h>
 
-#include <k3bthread.h>
-#include <k3bthreadjob.h>
 #include <k3bcore.h>
 #include <k3baudiodecoder.h>
 
@@ -56,30 +54,6 @@
 #include <iostream>
 
 
-static QSemaphore s_threadCnt( 10 );
-
-// this simple thread is just used to asynchronously determine the
-// length and integrety of the tracks
-class K3bAudioDoc::AudioFileAnalyzerThread : public QThread
-{
-public:
-  AudioFileAnalyzerThread( K3bAudioDecoder* dec ) 
-    : m_decoder(dec) {
-  }
-
-  K3bAudioDecoder* m_decoder;
-
-protected:
-  void run() {
-    s_threadCnt++;
-    kdDebug() << "(AudioFileAnalyzerThread) running on decoder for " << m_decoder->filename() << endl;
-    m_decoder->analyseFile();
-    kdDebug() << "(AudioFileAnalyzerThread) finished for " << m_decoder->filename() << endl;
-    s_threadCnt--;
-  }
-};
-
-
 
 K3bAudioDoc::K3bAudioDoc( QObject* parent )
   : K3bDoc( parent ),
@@ -87,7 +61,6 @@ K3bAudioDoc::K3bAudioDoc( QObject* parent )
     m_lastTrack(0)
 {
   m_docType = AUDIO;
-  m_audioTrackStatusThreads.setAutoDelete(true);
 }
 
 K3bAudioDoc::~K3bAudioDoc()
@@ -199,25 +172,12 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
     if( K3bAudioTrack* track = createTrack( url ) ) {
       addTrack( track, position );
 
-      //
-      // We need some evil hacking here because the meta info in the decoder will
-      // not be ready before it did not finish the analysing. So we somehow need to
-      // determine when this happens. With the current design that's a problem.
-      // So we check here if the decoder already finished and if so set the meta info
-      // right away. If not we set it in the housekeeping slot before the analysing
-      // thread is deleted.
-      //
-
       K3bAudioDecoder* dec = static_cast<K3bAudioFile*>( track->firstSource() )->decoder();
-      if( dec->length() == 0 && dec->isValid() )
-	m_decoderMetaInfoSetMap[dec].append( track );
-      else {
-	track->setTitle( dec->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	track->setArtist( dec->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	track->setSongwriter( dec->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	track->setComposer( dec->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
-      }
+      track->setTitle( dec->metaInfo( K3bAudioDecoder::META_TITLE ) );
+      track->setArtist( dec->metaInfo( K3bAudioDecoder::META_ARTIST ) );
+      track->setSongwriter( dec->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
+      track->setComposer( dec->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
+      track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
     }
   }
   
@@ -257,7 +217,7 @@ KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
 	   dirIt != entries.end(); ++dirIt )
 	it = allUrls.insert( oldIt, KURL::fromPathOrURL( dir.absPath() + "/" + *dirIt ) );
     }
-    else if( readM3uFile( url, urlsFromPlaylist ) ) {
+    else if( readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );
       KURL::List::iterator oldIt = it;
       // add all files into the list after the current item
@@ -273,7 +233,7 @@ KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
 }
 
 
-bool K3bAudioDoc::readM3uFile( const KURL& url, KURL::List& playlist )
+bool K3bAudioDoc::readPlaylistFile( const KURL& url, KURL::List& playlist )
 {
   // check if the file is a m3u playlist
   // and if so add all listed files
@@ -334,7 +294,7 @@ void K3bAudioDoc::addSources( K3bAudioTrack* parent,
 }
 
 
-K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack* after )
+K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack* after, K3bAudioDecoder* decoder )
 {
   if( !after )
     after = m_lastTrack;
@@ -351,8 +311,14 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
     if( !parser.cdText().performer().isEmpty() )
       setPerformer( parser.cdText().performer() );
 
-    K3bAudioDecoder* decoder = getDecoderForUrl( KURL::fromPathOrURL(parser.imageFilename()) );
+    bool reused = true;
+    if( !decoder )
+      decoder = getDecoderForUrl( KURL::fromPathOrURL(parser.imageFilename()), &reused );
+
     if( decoder ) {
+      if( !reused )
+	decoder->analyseFile();
+      
       K3bAudioFile* newFile = 0;
       unsigned int i = 0;
       for( K3bDevice::Toc::const_iterator it = parser.toc().begin();
@@ -393,27 +359,21 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 }
 
 
-K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url )
+K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url, bool* reused )
 {
   K3bAudioDecoder* decoder = 0;
 
   // check if we already have a proper decoder
   if( m_decoderPresenceMap.contains( url.path() ) ) {
     decoder = m_decoderPresenceMap[url.path()];
+    *reused = true;
   }
   else if( (decoder = K3bAudioDecoderFactory::createDecoder( url )) ) {
     kdDebug() << "(K3bAudioDoc) using " << decoder->className()
 	      << " for decoding of " << url.path() << endl;
     
     decoder->setFilename( url.path() );
-    
-    //
-    // start a thread to analyse the file
-    //
-    AudioFileAnalyzerThread* thread = new AudioFileAnalyzerThread( decoder );
-    thread->start();
-    m_audioTrackStatusThreads.append( thread );
-    QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
+    *reused = false;
   }
   
   return decoder;
@@ -426,9 +386,12 @@ K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
     m_notFoundFiles.append( url.path() );
     return 0;
   }
-  
-  K3bAudioDecoder* decoder = getDecoderForUrl( url );
+
+  bool reused;  
+  K3bAudioDecoder* decoder = getDecoderForUrl( url, &reused );
   if( decoder ) {
+    if( !reused )
+      decoder->analyseFile();
     return new K3bAudioFile( decoder, this );
   }
   else {
@@ -1024,47 +987,12 @@ void K3bAudioDoc::increaseDecoderUsage( K3bAudioDecoder* decoder )
 
 void K3bAudioDoc::decreaseDecoderUsage( K3bAudioDecoder* decoder )
 {
-  // FIXME: what if the thread did not finish yet?
   m_decoderUsageCounterMap[decoder]--;
   if( m_decoderUsageCounterMap[decoder] <= 0 ) {
     m_decoderUsageCounterMap.erase(decoder);
     m_decoderPresenceMap.erase(decoder->filename());
-    m_decoderMetaInfoSetMap.erase(decoder);
     delete decoder;
   }
-}
-
-
-void K3bAudioDoc::slotHouseKeeping()
-{
-  kdDebug() << "(K3bAudioDoc::slotHouseKeeping)" << endl;
-  for( QPtrListIterator<AudioFileAnalyzerThread> it( m_audioTrackStatusThreads );
-       it.current(); ++it ) {
-    AudioFileAnalyzerThread* thread = *it;
-    if( thread->finished() ) {
-      kdDebug() << "(K3bAudioDoc::slotHouseKeeping) removing thread for "
-		<< thread->m_decoder->filename() << endl;
-
-      const QPtrList<K3bAudioTrack>& tracks = m_decoderMetaInfoSetMap[thread->m_decoder];
-      for( QPtrListIterator<K3bAudioTrack> it( tracks ); *it; ++it ) {
-	K3bAudioTrack* track = *it;
-	track->setTitle( thread->m_decoder->metaInfo( K3bAudioDecoder::META_TITLE ) );
-	track->setPerformer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-	track->setSongwriter( thread->m_decoder->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-	track->setComposer( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-	track->setCdTextMessage( thread->m_decoder->metaInfo( K3bAudioDecoder::META_COMMENT ) );
-      }
-      m_decoderMetaInfoSetMap.erase( thread->m_decoder );
-      m_audioTrackStatusThreads.removeRef( thread );
-    }
-  }
-
-  if( !m_audioTrackStatusThreads.isEmpty() )
-    QTimer::singleShot( 500, this, SLOT(slotHouseKeeping()) );
-  else
-    emit changed(); // inform about the changed length
-
-  kdDebug() << "(K3bAudioDoc::slotHouseKeeping) finished" << endl;
 }
 
 

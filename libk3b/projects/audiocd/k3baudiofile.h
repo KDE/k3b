@@ -29,8 +29,20 @@ class K3bAudioTrack;
 class LIBK3B_EXPORT K3bAudioFile : public K3bAudioDataSource
 {
  public:
+  /**
+   * The AudioFile registers itself with the doc. This is part of the
+   * decoder handling facility in K3bAudioDoc which reuses the same decoder
+   * for sources with the same url.
+   *
+   * Use K3bAudioDoc::getDecoderForUrl to create a decoder.
+   */
   K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* );
   K3bAudioFile( const K3bAudioFile& );
+
+  /**
+   * The AudioFile deregisters itself from the doc. If it was the last file
+   * to use the decoder the doc will take care of deleting it.
+   */
   ~K3bAudioFile();
 
   const QString& filename() const;

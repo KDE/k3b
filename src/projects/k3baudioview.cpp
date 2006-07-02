@@ -20,6 +20,7 @@
 #include "k3baudioburndialog.h"
 #include "k3baudiotrackplayer.h"
 #include "k3baudioburndialog.h"
+#include "k3baudiotrackaddingdialog.h"
 #include <k3bapplication.h>
 
 #include <k3baudiodoc.h>
@@ -124,6 +125,12 @@ void K3bAudioView::slotAudioConversion()
 {
   K3bAudioProjectConvertingDialog dlg( m_doc, this );
   dlg.exec();
+}
+
+
+void K3bAudioView::addUrls( const KURL::List& urls )
+{
+  K3bAudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, this );
 }
 
 #include "k3baudioview.moc"

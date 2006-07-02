@@ -268,6 +268,8 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 	  kdDebug() << "no dataviewitem" << endl;
       }
 
+      // FIXME: Use a special move mechanism which allows to ask for renaming in case
+      //        files with the same name exist
       m_doc->moveItems( selectedDataItems, m_addParentDir );
     }
     else if( e->source() == m_treeView->viewport() ) {
