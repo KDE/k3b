@@ -46,6 +46,7 @@
  * Save/load audio cd track sources in audio projects
  * Display a beautified volume id. For example: THE_TRANSPORTER -> The Transporter
  * Check if the image directory exists before starting to create a project image
+ * File System presets for all data projects including all the advanced options.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
