@@ -204,10 +204,6 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
     kdDebug() << "(K3bAudioTrack::moveAfter) trying to move this after this." << endl;
     return;
   }
-  else if( track->doc() != doc() ) {
-    kdDebug() << "(K3bAudioTrack::moveAfter) trying to add track with different doc." << endl;
-    return;
-  }
   else {
     // remove this from the list
     take();
@@ -254,10 +250,6 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
   }
   else if( track == this ) {
     kdDebug() << "(K3bAudioTrack::moveAhead) trying to move this ahead of this." << endl;
-    return;
-  }
-  else if( track->doc() != doc() ) {
-    kdDebug() << "(K3bAudioTrack::moveAfter) trying to add track with different doc." << endl;
     return;
   }
   else {
@@ -481,6 +473,7 @@ K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
       splitTrack->addSource( addSource );
     }
 
+    kdDebug() << "(K3bAudioTrack) moving track " << splitTrack << " after this (" << this << ") with parent " << doc() << endl;
     splitTrack->moveAfter( this );
 
     return splitTrack;

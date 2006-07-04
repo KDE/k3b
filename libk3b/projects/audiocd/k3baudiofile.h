@@ -26,6 +26,16 @@ class K3bAudioDecoder;
 class K3bAudioTrack;
 
 
+/**
+ * The K3bAudioFile is the most important audio data source. It gets its data
+ * from an audio file and uses a K3bAudioDecoder to decode this data.
+ *
+ * Be aware that it is currently not possible to change the doc of an AudioFile.
+ * The reason for this is the decoder sharing which is in place to allow gapless
+ * splitting of audio files into several tracks.
+ *
+ * \see K3bAudioDoc::createDecoderForUrl
+ */
 class LIBK3B_EXPORT K3bAudioFile : public K3bAudioDataSource
 {
  public:
