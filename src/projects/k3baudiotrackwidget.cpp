@@ -147,7 +147,7 @@ void K3bAudioTrackWidget::slotIndex0Checked( bool b )
 
     m_index0Range = m_audioEditor->addRange( newIndex0, 
 					     m_tracks.first()->length()-1, 
-					     false, true, colorGroup().highlight() );
+					     false, true, QString::null, colorGroup().highlight() );
 
     setIndex0Editors( newIndex0 );
   }

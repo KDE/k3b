@@ -238,9 +238,9 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
   if( !e->isAccepted() )
     return;
 
- m_dropTrackAfter = 0;
- m_dropTrackParent = 0;
- m_dropSourceAfter = 0;
+  m_dropTrackAfter = 0;
+  m_dropTrackParent = 0;
+  m_dropSourceAfter = 0;
   if( after ) {
     if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( after ) ) {
       m_dropTrackAfter = tv->track();

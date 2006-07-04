@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,10 +55,7 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
 
   // default split
   m_firstRange = m_editorWidget->addRange( 0, m_track->length().lba() / 2-1, 
-					   true, false, colorGroup().highlight() );
-  m_secondRange = m_editorWidget->addRange( m_track->length().lba() / 2, m_track->length()-1, 
-					    true, false, colorGroup().base() );
-
+					   true, false, QString::null, colorGroup().highlight() );
 
   connect( m_editorWidget, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),
 	   this, SLOT(slotRangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
@@ -72,23 +69,15 @@ K3bAudioTrackSplitDialog::~K3bAudioTrackSplitDialog()
 }
 
 
-void K3bAudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& start, const K3b::Msf& end )
+void K3bAudioTrackSplitDialog::slotRangeModified( int, const K3b::Msf&, const K3b::Msf& end )
 {
-  if( id == m_firstRange ) {
-    m_editorWidget->modifyRange( m_secondRange, end+1, m_track->length()-1 );
-    m_msfEdit->setMsfValue( end+1 ); // start of next track
-  }
-  else {
-    m_msfEdit->setMsfValue( start-1 );
-    m_editorWidget->modifyRange( m_firstRange, 0, start-1 );
-  }
+  m_msfEdit->setMsfValue( end+1 ); // start of next track
 }
 
 
 void K3bAudioTrackSplitDialog::slotMsfChanged( const K3b::Msf& msf )
 {
   m_editorWidget->modifyRange( m_firstRange, 0, msf-1 );
-  m_editorWidget->modifyRange( m_secondRange, msf, m_track->length()-1 );
 }
 
 

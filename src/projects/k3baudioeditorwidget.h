@@ -51,6 +51,7 @@ class K3bAudioEditorWidget : public QFrame
    */
   int addRange( const K3b::Msf& start, const K3b::Msf& end, 
 		bool startFixed = false, bool endFixed = false,
+		const QString& toolTip = QString::null,
 		const QBrush& brush = QBrush() );
 
   /**
@@ -72,7 +73,8 @@ class K3bAudioEditorWidget : public QFrame
    * @param fixed if true the marker cannot be changed by the user, only with moveMarker
    * @return -1 on error or an identifier on success.
    */
-  int addMarker( const K3b::Msf& pos, bool fixed = false );
+  int addMarker( const K3b::Msf& pos, bool fixed = false, 
+		 const QString& toolTip = QString::null, const QColor& color = QColor() );
 
   /**
    * @return false if the marker does not exist.
@@ -110,6 +112,7 @@ class K3bAudioEditorWidget : public QFrame
  private:
   class Range;
   class Marker;
+  class ToolTip;
 
   void mousePressEvent( QMouseEvent* e );
   void mouseReleaseEvent( QMouseEvent* e );
@@ -122,7 +125,8 @@ class K3bAudioEditorWidget : public QFrame
 
   Range* getRange( int i ) const;
   Marker* getMarker( int i ) const;
-  Range* findRange( const QPoint& p, bool* end ) const;
+  Range* findRange( const QPoint& p ) const;
+  Range* findRangeEdge( const QPoint& p, bool* end = 0 ) const;
   Marker* findMarker( const QPoint& p ) const;
   QColor determineNewColor() const;
   K3b::Msf fromPointToPos( const QPoint& p ) const;
@@ -143,6 +147,8 @@ class K3bAudioEditorWidget : public QFrame
   Range* m_draggedRange;
   bool m_draggingRangeEnd;
   Marker* m_draggedMarker;
+
+  ToolTip* m_toolTip;
 };
 
 #endif

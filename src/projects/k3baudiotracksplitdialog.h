@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,6 @@ class K3bAudioTrackSplitDialog : public KDialogBase
   K3bAudioEditorWidget* m_editorWidget;
   K3bMsfEdit* m_msfEdit;
   int m_firstRange;
-  int m_secondRange;
   K3bAudioTrack* m_track;
 };
 
