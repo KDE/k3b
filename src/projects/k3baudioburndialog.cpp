@@ -108,8 +108,6 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotOnTheFlyToggled(bool)) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 
-  readSettings();
-
   // ToolTips
   // -------------------------------------------------------------------------
   QToolTip::add( m_checkHideFirstTrack, i18n("Hide the first track in the first pregap") );

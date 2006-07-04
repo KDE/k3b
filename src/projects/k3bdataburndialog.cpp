@@ -94,8 +94,6 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
 
-  readSettings();
-
   m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
   QString path = _doc->tempDir();
   if( path.isEmpty() ) {

@@ -75,8 +75,6 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
 
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
 
-  readSettings();
-
   QString path = m_doc->tempDir();
   if( path.isEmpty() ) {
     path = K3b::defaultTempPath();

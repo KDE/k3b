@@ -95,8 +95,6 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
   connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotOnTheFlyToggled(bool)) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
-
-  readSettings();
 }
 
 

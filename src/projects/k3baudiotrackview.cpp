@@ -36,6 +36,7 @@
 #include <k3bcdtextvalidator.h>
 #include <k3blistviewitemanimator.h>
 #include <k3baudiodecoder.h>
+#include <k3bmsfedit.h>
 
 #include <qheader.h>
 #include <qtimer.h>
@@ -161,7 +162,7 @@ void K3bAudioTrackView::setupActions()
 				Key_Delete, this, SLOT(slotRemove()), 
 				actionCollection(), "track_remove" );
 
-  m_actionAddSilence = new KAction( i18n("Add Silence"), "misc",
+  m_actionAddSilence = new KAction( i18n("Add Silence") + "...", "misc",
 				    KShortcut(), this, SLOT(slotAddSilence()),
 				    actionCollection(), "track_add_silence" );
   m_actionMergeTracks = new KAction( i18n("Merge Tracks"), "misc",
@@ -754,12 +755,29 @@ void K3bAudioTrackView::slotAddSilence()
 {
   QListViewItem* item = selectedItems().first();
   if( item ) {
-    K3bAudioZeroData* zero = new K3bAudioZeroData();
-    if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
-      tv->track()->addSource( zero );
-    }
-    else if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>(item) ) {
-      zero->moveAfter( sv->source() );
+    //
+    // create a simple dialog for asking the length of the silence
+    //
+    KDialogBase dlg( KDialogBase::Plain, 
+		     i18n("Add Silence"),
+		     KDialogBase::Ok|KDialogBase::Cancel,
+		     KDialogBase::Ok,
+		     this );
+    QHBoxLayout* dlgLayout = new QHBoxLayout( dlg.plainPage(), 0, KDialog::spacingHint() );
+    dlgLayout->setAutoAdd( true );
+    (void)new QLabel( i18n("Length of silence:"), dlg.plainPage() );
+    K3bMsfEdit* msfEdit = new K3bMsfEdit( dlg.plainPage() );
+    msfEdit->setValue( 150 ); // 2 seconds default
+    msfEdit->setFocus();
+
+    if( dlg.exec() == QDialog::Accepted ) {
+      K3bAudioZeroData* zero = new K3bAudioZeroData( msfEdit->value() );
+      if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
+	tv->track()->addSource( zero );
+      }
+      else if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>(item) ) {
+	zero->moveAfter( sv->source() );
+      }
     }
   }
 }
