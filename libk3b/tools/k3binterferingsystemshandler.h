@@ -70,7 +70,7 @@ class LIBK3B_EXPORT K3bInterferingSystemsHandler : public QObject
 
   int startStopMediaManager( bool start );
   int startStopSuSEPlugger( bool start );
-  int startStopAutomounting( bool start, K3bDevice::Device* dev );
+  //  int startStopAutomounting( bool start, K3bDevice::Device* dev );
   int blockUnblockPmount( bool block, K3bDevice::Device* dev );
 
   void customEvent( QCustomEvent* e );

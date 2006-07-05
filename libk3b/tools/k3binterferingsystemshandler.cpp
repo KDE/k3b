@@ -152,11 +152,11 @@ void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
   if( dev ) {
     blockUnblockPmount( true, dev );
 
-    int r = startStopAutomounting( false, dev );
-    if( r == 1 )
-      emit infoMessage( i18n("Disabled Automounting."), K3bJob::INFO );
-    else if( r == -1 )
-      emit infoMessage( i18n("Failed to disable Automounting."), K3bJob::WARNING );
+//     int r = startStopAutomounting( false, dev );
+//     if( r == 1 )
+//       emit infoMessage( i18n("Disabled Automounting."), K3bJob::INFO );
+//     else if( r == -1 )
+//       emit infoMessage( i18n("Failed to disable Automounting."), K3bJob::WARNING );
     
     //
     // see if other applications are using the device
@@ -211,13 +211,13 @@ void K3bInterferingSystemsHandler::enableInternal( K3bDevice::Device* dev )
   if( dev ) {
     blockUnblockPmount( false, dev );
 
-    int r = startStopAutomounting( true, dev );
-    if( r == -1 )
-      emit infoMessage( i18n("Failed to enable Automounting."), K3bJob::WARNING );
-    else {
-      if( r == 1 )
-	emit infoMessage( i18n("Enabled Automounting."), K3bJob::INFO );
-    }
+//     int r = startStopAutomounting( true, dev );
+//     if( r == -1 )
+//       emit infoMessage( i18n("Failed to enable Automounting."), K3bJob::WARNING );
+//     else {
+//       if( r == 1 )
+// 	emit infoMessage( i18n("Enabled Automounting."), K3bJob::INFO );
+//     }
   }
 }
 
@@ -338,58 +338,58 @@ int K3bInterferingSystemsHandler::startStopSuSEPlugger( bool start )
 }
 
 
-int K3bInterferingSystemsHandler::startStopAutomounting( bool start, K3bDevice::Device* dev )
-{
-  //
-  // here we simply call the script if we can find it and don't care if automounting is actually enabled
-  // or not since the script returns a proper error code telling us everything we need to know.
-  //
-  QString autoMountingScript = KStandardDirs::findExe( "k3b_automount" );
-  if( autoMountingScript.isEmpty() ) {
-    kdDebug() << "(K3bInterferingSystemsHandler) could not find the automounting script" << endl;
-    return -1;
-  }
+// int K3bInterferingSystemsHandler::startStopAutomounting( bool start, K3bDevice::Device* dev )
+// {
+//   //
+//   // here we simply call the script if we can find it and don't care if automounting is actually enabled
+//   // or not since the script returns a proper error code telling us everything we need to know.
+//   //
+//   QString autoMountingScript = KStandardDirs::findExe( "k3b_automount" );
+//   if( autoMountingScript.isEmpty() ) {
+//     kdDebug() << "(K3bInterferingSystemsHandler) could not find the automounting script" << endl;
+//     return -1;
+//   }
 
-  KProcess p;
-  p << autoMountingScript;
-  if( start )
-    p << "enable";
-  else
-    p << "disable";
-  p << dev->blockDeviceName();
+//   KProcess p;
+//   p << autoMountingScript;
+//   if( start )
+//     p << "enable";
+//   else
+//     p << "disable";
+//   p << dev->blockDeviceName();
 
-  if( p.start( KProcess::Block ) ) {
-    if( p.normalExit() ) {
-      //
-      //  Exit codes:
-      //    0 - success
-      //    1 - wrong usage
-      //    2 - device not configured with subfs/supermount in /etc/fstab
-      //    X - failed to mount/umount
-      //
-      switch( p.exitStatus() ) {
-      case 0:
-	return 1;
-      case 1:
-	kdDebug() << "(K3bInterferingSystemsHandler) k3b_automount usage failure." << endl;
-	return -1;
-      case 2:
-	return 0;
-      default:
-	kdDebug() << "(K3bInterferingSystemsHandler) some k3b_automount problem." << endl;
-	return -1;
-      }
-    }
-    else {
-      kdDebug() << "(K3bInterferingSystemsHandler) the automounting script failed in some way." << endl;
-      return -1;
-    }
-  }
-  else {
-    kdDebug() << "(K3bInterferingSystemsHandler) could not start the automounting script." << endl;
-    return -1;
-  }
-}
+//   if( p.start( KProcess::Block ) ) {
+//     if( p.normalExit() ) {
+//       //
+//       //  Exit codes:
+//       //    0 - success
+//       //    1 - wrong usage
+//       //    2 - device not configured with subfs/supermount in /etc/fstab
+//       //    X - failed to mount/umount
+//       //
+//       switch( p.exitStatus() ) {
+//       case 0:
+// 	return 1;
+//       case 1:
+// 	kdDebug() << "(K3bInterferingSystemsHandler) k3b_automount usage failure." << endl;
+// 	return -1;
+//       case 2:
+// 	return 0;
+//       default:
+// 	kdDebug() << "(K3bInterferingSystemsHandler) some k3b_automount problem." << endl;
+// 	return -1;
+//       }
+//     }
+//     else {
+//       kdDebug() << "(K3bInterferingSystemsHandler) the automounting script failed in some way." << endl;
+//       return -1;
+//     }
+//   }
+//   else {
+//     kdDebug() << "(K3bInterferingSystemsHandler) could not start the automounting script." << endl;
+//     return -1;
+//   }
+// }
 
 
 int K3bInterferingSystemsHandler::blockUnblockPmount( bool block, K3bDevice::Device* dev )
