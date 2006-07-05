@@ -340,7 +340,7 @@ void K3bVideoCdView::initActions()
     m_popupMenu->insert( actionStartRip );
 
     // setup the toolbox
-    m_toolBox->addButton( actionStartRip );
+    m_toolBox->addButton( actionStartRip, true );
 }
 
 

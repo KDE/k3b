@@ -66,7 +66,7 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent,
   connect( m_editBaseDir, SIGNAL(textChanged(const QString&)), this, SIGNAL(changed()) );
   connect( m_buttonConfigurePlugin, SIGNAL(clicked()), this, SLOT(slotConfigurePlugin()) );
 
-  m_editBaseDir->setMode( KFile::Directory );
+  m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
   m_buttonConfigurePlugin->setIconSet( SmallIconSet( "gear" ) );
 
   d->encoderMap.clear();

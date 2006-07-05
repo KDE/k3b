@@ -19,6 +19,7 @@
 
 #include <klistview.h>
 #include <klocale.h>
+#include <kurlrequester.h>
 
 #include <qcombobox.h>
 #include <qspinbox.h>
@@ -48,6 +49,8 @@ static const int s_bitrates[] = {
 K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
   : base_K3bVideoDVDRippingWidget( parent )
 {
+  m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+
   m_titleView->addColumn( i18n("Title") );
   m_titleView->addColumn( i18n("Video Size") );
   m_titleView->addColumn( i18n("File Size") );

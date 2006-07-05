@@ -124,9 +124,9 @@ void K3bVideoDVDRippingJob::start()
   K3bInterferingSystemsHandler::instance()->disable( m_dvd.device() );
 
   if( d->autoClipping )
-    startTranscoding( 0 );
-  else
     startDetectClipping( 0 );
+  else
+    startTranscoding( 0 );
 }
 
 

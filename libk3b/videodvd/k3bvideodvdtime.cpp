@@ -79,13 +79,13 @@ double K3bVideoDVD::Time::frameRate() const
 QString K3bVideoDVD::Time::toString( bool includeFrames ) const
 {
   if( includeFrames )
-    return QString().sprintf( "%02x:%02x:%02x.%02x", 
+    return QString().sprintf( "%02d:%02d:%02d.%02d", 
 			      m_hour,
 			      m_minute,
 			      m_second,
 			      m_frame & 0x3f );
   else
-    return QString().sprintf( "%02x:%02x:%02x", 
+    return QString().sprintf( "%02d:%02d:%02d", 
 			      m_hour,
 			      m_minute,
 			      m_second + ( m_frame > 0 ? 1 : 0 ) );

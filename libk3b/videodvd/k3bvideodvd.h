@@ -36,7 +36,7 @@ namespace K3bDevice {
  * Additional Video DVD constructs such as title sets, parts of titles (chapters),
  * program chanins, or cells are not handled explicitely.
  *
- * The usage is very simple. Once creates a VideoDVD instance and calls the open()
+ * The usage is very simple. One creates a VideoDVD instance and calls the open()
  * method with a device containing a Video DVD. If the method returns true the
  * analysis was successful and the structures are filled.
  *

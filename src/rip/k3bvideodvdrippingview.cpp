@@ -20,6 +20,7 @@
 #include <k3bvideodvd.h>
 #include <k3btoolbox.h>
 #include <k3bthememanager.h>
+#include <k3bglobals.h>
 
 #include <qcursor.h>
 #include <qlayout.h>
@@ -53,8 +54,8 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
   // ----------------------------------------------------------------------------------
   m_titleView = new K3bVideoDVDRippingTitleListView( mainWidget() );
 
-//   connect( m_titleView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-// 	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+  connect( m_titleView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
   // general layout
   // ----------------------------------------------------------------------------------
@@ -62,14 +63,9 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
   mainGrid->addWidget( m_titleView, 1, 0 );
 
 
-  // init actions
-  // ----------------------------------------------------------------------------------
-  KActionCollection* actionCollection = new KActionCollection( this );
-  KAction* actionStartRip = new KAction( i18n("Start Ripping"), "gear", 0, this,
-					 SLOT(slotStartRipping()), actionCollection, "start_rip" );
-  actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
+  initActions();
 
-  m_toolBox->addButton( actionStartRip );
+  m_toolBox->addButton( actionCollection()->action("start_rip"), true );
 
   setLeftPixmap( K3bTheme::MEDIA_LEFT );
   setRightPixmap( K3bTheme::MEDIA_VIDEO );
@@ -83,6 +79,17 @@ K3bVideoDVDRippingView::~K3bVideoDVDRippingView()
 
 void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
 {
+  //
+  // For VideoDVD reading it is important that the DVD is not mounted
+  //
+  if( K3b::isMounted( medium.device() ) && !K3b::unmount( medium.device() ) ) {
+    KMessageBox::error( this, 
+			i18n("K3b was unable to unmount device '%1' containing medium '%2'. "
+			     "Video DVD ripping will not work if the device is mounted. "
+			     "Please unmount manually."),
+			i18n("Unmounting failed") );
+  }
+
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
   if( m_dvd.open( medium.device() ) ) {
@@ -108,6 +115,77 @@ void K3bVideoDVDRippingView::slotStartRipping()
 
   K3bVideoDVDRippingDialog dlg( m_dvd, titles, this );
   dlg.exec();
+}
+
+
+void K3bVideoDVDRippingView::slotContextMenu( KListView*, QListViewItem*, const QPoint& p )
+{
+  m_popupMenu->popup(p);
+}
+
+
+void K3bVideoDVDRippingView::slotCheckAll()
+{
+  for( QListViewItemIterator it( m_titleView ); it.current(); ++it )
+    dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(true);
+}
+
+
+void K3bVideoDVDRippingView::slotUncheckAll()
+{
+  for( QListViewItemIterator it( m_titleView ); it.current(); ++it )
+    dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(false);
+}
+
+
+void K3bVideoDVDRippingView::slotCheck()
+{
+  QPtrList<QListViewItem> items( m_titleView->selectedItems() );
+  for( QPtrListIterator<QListViewItem> it( items );
+       it.current(); ++it )
+    dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(true);
+}
+
+
+void K3bVideoDVDRippingView::slotUncheck()
+{
+  QPtrList<QListViewItem> items( m_titleView->selectedItems() );
+  for( QPtrListIterator<QListViewItem> it( items );
+       it.current(); ++it )
+    dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(false);
+}
+
+
+void K3bVideoDVDRippingView::initActions()
+{
+  m_actionCollection = new KActionCollection( this );
+
+  KAction* actionSelectAll = new KAction( i18n("Check All"), 0, 0, this,
+					  SLOT(slotCheckAll()), actionCollection(),
+					  "check_all" );
+  KAction* actionDeselectAll = new KAction( i18n("Uncheck All"), 0, 0, this,
+					    SLOT(slotUncheckAll()), actionCollection(),
+					    "uncheck_all" );
+  KAction* actionSelect = new KAction( i18n("Check Track"), 0, 0, this,
+				       SLOT(slotCheck()), actionCollection(),
+				       "select_track" );
+  KAction* actionDeselect = new KAction( i18n("Uncheck Track"), 0, 0, this,
+					 SLOT(slotUncheck()), actionCollection(),
+					 "deselect_track" );
+  KAction* actionStartRip = new KAction( i18n("Start Ripping"), "gear", 0, this,
+					 SLOT(slotStartRipping()), m_actionCollection, "start_rip" );
+
+  actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
+
+  // setup the popup menu
+  m_popupMenu = new KActionMenu( actionCollection(), "popup_menu" );
+  KAction* separator = new KActionSeparator( actionCollection(), "separator" );
+  m_popupMenu->insert( actionSelect );
+  m_popupMenu->insert( actionDeselect );
+  m_popupMenu->insert( actionSelectAll );
+  m_popupMenu->insert( actionDeselectAll );
+  m_popupMenu->insert( separator );
+  m_popupMenu->insert( actionStartRip );
 }
 
 #include "k3bvideodvdrippingview.moc"

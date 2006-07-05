@@ -268,7 +268,7 @@ void K3bAudioCdView::initActions()
   m_popupMenu->insert( actionStartRip );
 
   // setup the toolbox
-  m_toolBox->addButton( actionStartRip );
+  m_toolBox->addButton( actionStartRip, true );
   m_toolBox->addSpacing();
   m_toolBox->addButton( actionQueryCddb );
   m_toolBox->addButton( actionSaveCddbLocally );
