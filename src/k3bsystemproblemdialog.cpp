@@ -338,7 +338,6 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     if( it.current()->type() & K3bDevice::DEVICE_DVD_R_DL )
       dvd_r_dl = true;
 
-#if 0
     if( it.current()->automount() ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					 i18n("Writing device %1 - %2 is automounted.")
@@ -347,10 +346,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "with rewritable media. Although it might all work just fine it "
 					      "is recommended to disable automounting completely for now."),
 					 i18n("Replace the automounting entries in /etc/fstab with old-fashioned "
-					      "ones."),
+					      "ones or use pmount or ivman."),
 					 false ) );
     }
-#endif
   }
 
   if( atapiWriter ) {
