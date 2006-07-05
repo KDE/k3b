@@ -146,7 +146,8 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   enum AudioCodec {
     AUDIO_CODEC_MP3,
     /*    AUDIO_CODEC_OGG_VORBIS,*/
-    AUDIO_CODEC_AC3,
+    AUDIO_CODEC_AC3_STEREO,
+    AUDIO_CODEC_AC3_PASSTHROUGH,
     AUDIO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
   };
 

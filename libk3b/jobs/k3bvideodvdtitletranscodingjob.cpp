@@ -171,7 +171,8 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
     //       audioCodecString = "0xfffe";
     //       break;
 
-  case AUDIO_CODEC_AC3:
+  case AUDIO_CODEC_AC3_STEREO:
+  case AUDIO_CODEC_AC3_PASSTHROUGH:
     audioCodecString = "0x2000";
     break;
 
@@ -240,12 +241,8 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
     if( m_resampleAudio )
       *d->process << "-E" << "44100";
 
-    // FIXME: what does this actually do? Do we need it? Does it make sense?
-    //    if( m_audioCodec == AUDIO_CODEC_AC3 )
-    //    *d->process << "-A";
-
-    // FIXME: and what about this?
-    //    *d->process << "--a52_demux";
+    if( m_audioCodec == AUDIO_CODEC_AC3_PASSTHROUGH )
+      *d->process << "-A";
     
     // the output filename
     *d->process << "-o" << m_filename;
@@ -423,8 +420,10 @@ void K3bVideoDVDTitleTranscodingJob::setSize( int width, int height )
 QString K3bVideoDVDTitleTranscodingJob::audioCodecString( int codec )
 {
   switch( codec ) {
-  case AUDIO_CODEC_AC3:
-    return i18n("AC3");
+  case AUDIO_CODEC_AC3_STEREO:
+    return i18n("AC3 (Stereo)");
+  case AUDIO_CODEC_AC3_PASSTHROUGH:
+    return i18n("AC3 (Passthrough)");
   case AUDIO_CODEC_MP3:
     return i18n("MPEG1 Layer III");
   default:

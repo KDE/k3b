@@ -55,8 +55,10 @@ static QString audioCodecId( int codec )
   switch( codec ) {
   case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3:
     return "mp3";
-  case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3:
-    return "ac3";
+  case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO:
+    return "ac3_stereo";
+  case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH:
+    return "ac3_passthrough";
   default:
     return "none";
   }
@@ -78,8 +80,10 @@ static int audioCodecFromId( const QString& codec )
 {
   if( codec == "mp3" )
     return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3;
-  else if( codec == "ac3" )
-    return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3;
+  else if( codec == "ac3_stereo" )
+    return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO;
+  else if( codec == "ac3_passthrough" )
+    return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH;
   else
     return 0;
 }

@@ -100,6 +100,22 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
   }
   else {
     QApplication::restoreOverrideCursor();
+
+    //
+    // For now we do not have error handling in K3bVideoDVD::XXX. Mostly becasue libdvdread
+    // does not provide an error
+    // But we can at least test the availability of libdvdcss here
+    //
+    if( medium.device()->copyrightProtectionSystemType() > 0 ) {
+      K3bLibDvdCss* css = K3bLibDvdCss::create();
+      if( !css ) {
+	KMessageBox::error( this, i18n("<p>Unable to read Video DVD contents: Found encrypted Video DVD."
+				       "<p>Install <i>libdvdcss</i> to get Video DVD decryption support.") );
+	return;
+      }
+      else
+	delete css;
+    }
     KMessageBox::error( this, i18n("Unable to read Video DVD contents.") );
   }
 }
@@ -113,8 +129,14 @@ void K3bVideoDVDRippingView::slotStartRipping()
     if( static_cast<K3bCheckListViewItem*>( *it )->isChecked() )
       titles.append( i );
 
-  K3bVideoDVDRippingDialog dlg( m_dvd, titles, this );
-  dlg.exec();
+  if( titles.isEmpty() ) {
+    KMessageBox::error( this, i18n("Please select the titles to rip."),
+			i18n("No Titles Selected") );
+  }
+  else {
+    K3bVideoDVDRippingDialog dlg( m_dvd, titles, this );
+    dlg.exec();
+  }
 }
 
 
