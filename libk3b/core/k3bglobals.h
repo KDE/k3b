@@ -219,6 +219,14 @@ namespace K3b
   LIBK3B_EXPORT Q_INT16 fromLe16( char* );
   LIBK3B_EXPORT Q_INT32 fromLe32( char* );
   LIBK3B_EXPORT Q_INT64 fromLe64( char* );
+
+  LIBK3B_EXPORT bool isMounted( K3bDevice::Device* );
+
+  /**
+   * Tries to unmount the device ignoring its actual mounting state.
+   * This method uses both KIO::unmount and pumount if available.
+   */
+  LIBK3B_EXPORT bool unmount( K3bDevice::Device* );
 }
 
 #endif

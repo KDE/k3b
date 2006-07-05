@@ -31,9 +31,11 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
 #include <dcopref.h>
+#include <kprocess.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -494,4 +496,40 @@ QString K3b::findExe( const QString& name )
     bin = KStandardDirs::findExe( name, "/bin:/sbin:/usr/sbin" );
 
   return bin;
+}
+
+
+bool K3b::isMounted( K3bDevice::Device* dev )
+{
+  QString mntDev( dev->mountDevice() );
+  if( mntDev.isEmpty() )
+    mntDev = dev->blockDeviceName();
+
+  return !KIO::findDeviceMountPoint( mntDev ).isEmpty();
+}
+
+
+bool K3b::unmount( K3bDevice::Device* dev )
+{
+  QString mntDev( dev->mountDevice() );
+  if( mntDev.isEmpty() )
+    mntDev = dev->blockDeviceName();
+
+  // first try to unmount it the standard way
+  if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
+    return true;
+
+  // now try pmount
+  QString pumountBin = K3b::findExe( "pumount" );
+  if( !pumountBin.isEmpty() ) {
+    KProcess p;
+    p << pumountBin;
+    p << "-l"; // lazy unmount
+    p << dev->blockDeviceName();
+    p.start( KProcess::Block );
+    return !p.exitStatus();
+  }
+  else {
+    return false;
+  }
 }
