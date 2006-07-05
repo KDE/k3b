@@ -21,6 +21,7 @@
 #include <k3btoolbox.h>
 #include <k3bthememanager.h>
 #include <k3bglobals.h>
+#include <k3blibdvdcss.h>
 
 #include <qcursor.h>
 #include <qlayout.h>
