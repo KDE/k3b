@@ -23,6 +23,7 @@
 
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
+#include <k3bglobals.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -147,15 +148,21 @@ void K3bDeviceBranch::mount()
 
 void K3bDeviceBranch::unmount()
 {
-  QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
-  if( mp.isEmpty() ) {
+  if( K3b::isMounted( m_device ) ) {
     emit unmountFinished( this, true );   
   }
   else {
     setAutoUpdate(false);
-    connect( KIO::unmount( device()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	     this, SLOT( slotUnmountFinished(KIO::Job*) ) );
+    if( K3b::unmount( m_device ) ) {
+      emit clear();
+      emit unmountFinished( this, true );
+    }
+    else {
+      emit unmountFinished( this, false );
+    }
   }
+
+  setAutoUpdate(true);
 }
 
 
@@ -170,21 +177,6 @@ void K3bDeviceBranch::slotMountFinished( KIO::Job* job )
     populate( KURL::fromPathOrURL(m_device->mountPoint()), root() );
     emit mountFinished( this, m_device->mountPoint() );
   }
-}
-
-
-void K3bDeviceBranch::slotUnmountFinished( KIO::Job* job )
-{
-  if( job->error() ) {
-    job->showErrorDialog();
-    emit unmountFinished( this, false );
-  }
-  else {
-    emit clear();
-    emit unmountFinished( this, true );
-  }
-
-  setAutoUpdate(true);
 }
 
 

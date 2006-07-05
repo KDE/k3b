@@ -68,7 +68,6 @@ class K3bDeviceBranch : public KFileTreeBranch
 
  private slots:
   void slotMountFinished( KIO::Job* );
-  void slotUnmountFinished( KIO::Job* );
   void slotMediumChanged( K3bDevice::Device* );
 
  private:
