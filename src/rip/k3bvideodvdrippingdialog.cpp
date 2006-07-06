@@ -135,12 +135,12 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
 	   this, SLOT(slotUpdateFilenames()) );
   connect( m_w->m_editBlankReplace, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(slotUpdateFilenames()) );
-  connect( m_w->m_editBaseDir, SIGNAL(textChanged(const QString&)),
-	   this, SLOT(slotUpdateFilenames()) );
   connect( m_w->m_checkBlankReplace, SIGNAL(toggled(bool)),
 	   this, SLOT(slotUpdateFilenames()) );
   connect( m_w, SIGNAL(changed()),
 	   this, SLOT(slotUpdateFilesizes()) );
+  connect( m_w, SIGNAL(changed()),
+	   this, SLOT(slotUpdateFilenames()) );
 
   setTitle( i18n("Video DVD Ripping"), 
 	    i18n("1 title from %1", "%n titles from %1", titles.count())
@@ -249,6 +249,7 @@ void K3bVideoDVDRippingDialog::slotUpdateFilenames()
 void K3bVideoDVDRippingDialog::slotUpdateFilesizes()
 {
   double bitrate = (double)m_w->m_spinVideoBitrate->value();
+  KIO::filesize_t overallSize = 0ULL;
 
   // update file sizes
   for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
@@ -257,13 +258,18 @@ void K3bVideoDVDRippingDialog::slotUpdateFilesizes()
     double sec = m_dvd[it.data().title-1].playbackTime().totalSeconds();
 
     // estimate the filesize
-    KIO::filesize_t mbSize = (KIO::filesize_t)( sec * bitrate * 1000.0 / 8.0 / 1024.0 / 1024.0 );
+    KIO::filesize_t size = (KIO::filesize_t)( sec * bitrate * 1000.0 / 8.0 );
 
     // add audio stream size
-    mbSize += (KIO::filesize_t)( sec * m_w->selectedAudioBitrate() / 8.0 / 1024.0 );
+    // FIXME: consider AC3 passthrough
+    size += (KIO::filesize_t)( sec * m_w->selectedAudioBitrate() / 8.0 * 1024.0 );
 
-    it.key()->setText( 2, KIO::convertSizeFromKB( mbSize * 1024 ) );
-  }  
+    it.key()->setText( 2, KIO::convertSize( size * 1024 ) );
+
+    overallSize += size;
+  }
+
+  m_w->setNeededSize( overallSize );
 }
 
 
@@ -349,6 +355,16 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 		   keyword == "vsize" ) {
 	    c = PATTERN_VIDEO_SIZE;
 	  }
+	  else if( keyword == "aspect_ratio" ||
+		   keyword == "aspectratio" ||
+		   keyword == "ratio" ) {
+	    c = PATTERN_ASPECT_RATIO;
+	  }
+	  else if( keyword == "current_date" ||
+		   keyword == "currentdate" ||
+		   keyword == "date" ) {
+	    c = PATTERN_CURRENT_DATE;
+	  }
 	  else {
 	    // unusable pattern
 	    c = '*';
@@ -382,10 +398,12 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 	  f.append( KGlobal::locale()->twoAlphaToLanguageName( title.audioStream( info.audioStream ).langCode() ) );
 	break;
       case PATTERN_AUDIO_FORMAT:
+	// FIXME: consider the configured audio codec
 	if( title.numAudioStreams() > 0 )
 	  f.append( K3bVideoDVD::audioFormatString( title.audioStream( info.audioStream ).format() ) );
 	break;
       case PATTERN_AUDIO_CHANNELS:
+	// FIXME: consider the configured audio codec
 	if( title.numAudioStreams() > 0 )
 	  f.append( i18n("%nCh", "%nCh", title.audioStream( info.audioStream ).channels() ) );
 	break;
@@ -399,6 +417,15 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 	  f.append( QString("%1x%2")
 		    .arg(title.videoStream().pictureWidth())
 		    .arg(title.videoStream().pictureHeight()) );
+	break;
+      case PATTERN_ASPECT_RATIO:
+	if( title.videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
+	  f.append( "4:3" );
+	else
+	  f.append( "16:9" );
+	break;
+      case PATTERN_CURRENT_DATE:
+	f.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );
 	break;
       default:
 	f.append( pattern[i-1] );

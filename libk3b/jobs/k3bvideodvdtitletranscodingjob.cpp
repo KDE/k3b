@@ -61,7 +61,7 @@ K3bVideoDVDTitleTranscodingJob::K3bVideoDVDTitleTranscodingJob( K3bJobHandler* h
     m_videoBitrate( 1800 ),
     m_audioBitrate( 128 ),
     m_audioVBR( false ),
-    m_resampleAudio( true ),
+    m_resampleAudio( false ),
     m_twoPassEncoding( false ),
     m_lowPriority( true )
 {
@@ -234,15 +234,18 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
     // select the audio codec to use
     *d->process << "-N" << audioCodecString;
 
-    // audio quality settings
-    *d->process << "-b" << QString("%1,%2").arg(m_audioBitrate).arg(m_audioVBR ? 1 : 0);
-
-    // resample audio stream to 44.1 khz
-    if( m_resampleAudio )
-      *d->process << "-E" << "44100";
-
-    if( m_audioCodec == AUDIO_CODEC_AC3_PASSTHROUGH )
+    if( m_audioCodec == AUDIO_CODEC_AC3_PASSTHROUGH ) {
+      // keep 5.1 sound
       *d->process << "-A";
+    }
+    else {
+      // audio quality settings
+      *d->process << "-b" << QString("%1,%2").arg(m_audioBitrate).arg(m_audioVBR ? 1 : 0);
+
+      // resample audio stream to 44.1 khz
+      if( m_resampleAudio )
+	*d->process << "-E" << "44100";
+    }
     
     // the output filename
     *d->process << "-o" << m_filename;
@@ -264,8 +267,51 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   *d->process << "-w" << QString::number( m_videoBitrate );
 
   // video resizing
-  if( m_width > 0 && m_height > 0 )
-    *d->process << "-Z" << QString("%1x%2").arg(m_width).arg(m_height);
+  int usedWidth = m_width;
+  int usedHeight = m_height;
+  if( m_width == 0 || m_height == 0 ) {
+    //
+    // Determine the correct size according to the aspect ratio
+    //
+    double aspectRatio = 0.0;
+    if( m_dvd[m_titleNumber-1].videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
+      aspectRatio = 4.0/3.0;
+    else
+      aspectRatio = 16.0/9.0;
+
+    //
+    // The "real" size of the video, considering anamorph encoding
+    //
+    int realHeight = m_dvd[m_titleNumber-1].videoStream().pictureHeight();
+    int readWidth = (int)(aspectRatio * (double)realHeight);
+
+    //
+    // The clipped size with the correct aspect ratio
+    //
+    int clippedHeight = realHeight - m_clippingTop - m_clippingBottom;
+    int clippedWidth = readWidth - m_clippingLeft - m_clippingRight;
+
+    //
+    // Now simply resize the clipped video to the wanted size
+    //
+    if( usedWidth > 0 ) {
+      usedHeight = clippedHeight * clippedWidth / usedWidth;
+    }
+    else {
+      if( usedHeight == 0 ) {
+	//
+	// This is the default case in which both m_width and m_height are 0.
+	// The result will be a size of clippedWidth x clippedHeight
+	//
+	usedHeight = clippedHeight;
+      }
+      usedWidth = clippedWidth * clippedHeight / usedHeight;
+    }
+  }
+  // we only give information about the resizing of the video once
+  if( pass < 2 )
+    emit infoMessage( i18n("Resizing picture of title %1 to %2x%3").arg(m_titleNumber).arg(usedWidth).arg(usedHeight), INFO );
+  *d->process << "-Z" << QString("%1x%2").arg(usedWidth).arg(usedHeight);
 
   // additional user parameters from config
   const QStringList& params = d->usedTranscodeBin->userParameters();
@@ -345,10 +391,11 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line )
 	  emit subPercent( progress );
 	}
 
-	if( d->currentEncodingPass == 1 )
+	if( m_twoPassEncoding ) {
 	  progress /= 2;
-	if( d->currentEncodingPass == 2 )
-	  progress += 50;
+	  if( d->currentEncodingPass == 2 )
+	    progress += 50;
+	}
 
 	if( progress > d->lastProgress ) {
 	  d->lastProgress = progress;

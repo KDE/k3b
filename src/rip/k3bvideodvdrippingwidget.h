@@ -21,6 +21,9 @@
 #include <qvaluevector.h>
 #include <qmap.h>
 
+#include <kio/global.h>
+
+class QTimer;
 
 class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
 {
@@ -38,8 +41,18 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
   void setSelectedAudioCodec( int codec );
   void setSelectedAudioBitrate( int bitrate );
 
+  void setNeededSize( KIO::filesize_t );
+
  signals:
   void changed();
+
+ private slots:
+  void slotUpdateFreeTempSpace();
+  void slotSeeSpecialStrings();
+
+ private:
+  QTimer* m_freeSpaceUpdateTimer;
+  KIO::filesize_t m_neededSize;
 };
 
 #endif

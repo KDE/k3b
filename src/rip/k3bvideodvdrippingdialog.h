@@ -47,7 +47,9 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
     PATTERN_LANGUAGE_NAME        = 'n',
     PATTERN_AUDIO_FORMAT         = 'a',
     PATTERN_AUDIO_CHANNELS       = 'c',
-    PATTERN_VIDEO_SIZE           = 'r'
+    PATTERN_VIDEO_SIZE           = 's',
+    PATTERN_ASPECT_RATIO         = 'r',
+    PATTERN_CURRENT_DATE         = 'd'
   };
 
  private slots:

@@ -94,10 +94,15 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   /**
    * The size of the resulting transcoded video.
    *
-   * The default is to not resize the video at all (width=height=0)
+   * The default is to automatically adjust the size (width=height=0), which
+   * essentially means that anamorph encoded source material will be resized
+   * according to its aspect ratio.
    *
-   * FIXME: introduce an option which allows to specify the size without the
-   *        clipping.
+   * It is also possible to set just the width or just the height and leave 
+   * the other value to 0 which will then be determined automatically.
+   *
+   * The clipping values will be taken into account if at least one value
+   * is determined automatically.
    */
   void setSize( int width, int height );
 
@@ -163,6 +168,10 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * Set the bitrate used to encode the audio stream.
    *
    * The default is 128
+   *
+   * In case of the AC3 codec the bitrate can be some value between 32 and 640.
+   *
+   * For the AC3 passthrough mode the bitrate is ignored.
    */
   void setAudioBitrate( int bitrate ) { m_audioBitrate = bitrate; }
 
@@ -170,13 +179,17 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * Set if the audio stream should be encoded with a variable bitrate.
    *
    * The default is false.
+   *
+   * For the AC3 passthrough mode the bitrate is ignored.
    */
   void setAudioVBR( bool vbr ) { m_audioVBR = vbr; }
 
   /**
    * Set if the audio data should be resampled to 44100 Hz/s
    *
-   * The default is true.
+   * The default is false.
+   *
+   * For the AC3 passthrough mode this is ignored.
    */
   void setResampleAudioTo44100( bool b ) { m_resampleAudio = b; }
 
