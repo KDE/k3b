@@ -308,6 +308,13 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
       usedWidth = clippedWidth * clippedHeight / usedHeight;
     }
   }
+
+  //
+  // Now make sure both width and height are multiple of 16 the simple way
+  //
+  usedWidth -= usedWidth%16;
+  usedHeight -= usedHeight%16;
+
   // we only give information about the resizing of the video once
   if( pass < 2 )
     emit infoMessage( i18n("Resizing picture of title %1 to %2x%3").arg(m_titleNumber).arg(usedWidth).arg(usedHeight), INFO );
@@ -418,10 +425,12 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( KProcess* p )
     switch( p->exitStatus() ) {
     case 0:
       if( d->currentEncodingPass == 1 ) {
+	emit percent( 50 );
 	// start second encoding pass
 	startTranscode( 2 );
       }
       else {
+	emit percent( 100 );
 	cleanup( true );
 	jobFinished( true );
       }
@@ -454,6 +463,11 @@ void K3bVideoDVDTitleTranscodingJob::setClipping( int top, int left, int bottom,
   m_clippingLeft = left;
   m_clippingBottom = bottom;
   m_clippingRight = right;
+
+  //
+  // transcode seems unable to handle different clipping values for left and right
+  //
+  m_clippingLeft = m_clippingRight = QMIN( m_clippingRight, m_clippingLeft );
 }
 
 

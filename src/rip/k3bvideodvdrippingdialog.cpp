@@ -31,6 +31,7 @@
 #include <klineedit.h>
 #include <kio/global.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 
 #include <qlayout.h>
 #include <qcheckbox.h>
@@ -506,6 +507,22 @@ void K3bVideoDVDRippingDialog::saveUserDefaults( KConfigBase* c )
 
 void K3bVideoDVDRippingDialog::slotStartClicked()
 {
+  // check if we need to overwrite some files...
+  QStringList filesToOverwrite;
+  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+       it != m_titleRipInfos.end(); ++it ) {
+    if( QFile::exists( it.data().filename ) )
+      filesToOverwrite.append( it.data().filename );
+  }
+
+  if( !filesToOverwrite.isEmpty() )
+    if( KMessageBox::questionYesNoList( this, 
+					i18n("Do you want to overwrite these files?"),
+					filesToOverwrite,
+					i18n("Files Exist"), i18n("Overwrite"), KStdGuiItem::cancel() ) == KMessageBox::No )
+      return;
+
+
   int i = 0;
   QValueVector<K3bVideoDVDRippingJob::TitleRipInfo> titles( m_titleRipInfos.count() );
   for( QMapConstIterator<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> it = m_titleRipInfos.begin();

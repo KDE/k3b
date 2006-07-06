@@ -118,8 +118,16 @@ void K3bVideoDVDTitleDetectClippingJob::start()
 void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
 {
   d->currentChapter = chapter;
-  d->currentFrames = QMIN( 200, QMAX( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
   d->lastSubProgress = 0;
+
+  //
+  // If we have only one chapter and it is not longer than 2 minutes (value guessed based on some test DVD)
+  // use the whole chapter
+  //
+  if( d->totalChapters == 1 )
+    d->currentFrames = QMIN( 3000, QMAX( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+  else
+    d->currentFrames = QMIN( 200, QMAX( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
 
   //
   // prepare the process

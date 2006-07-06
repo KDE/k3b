@@ -87,6 +87,10 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * Set the clipping values for the Video title.
    * The clipping will be applied before the transcoding.
    *
+   * For now it is not possible to use different clipping values for left
+   * and right as transcode cannot handle this. Thus, the job uses the
+   * smaller value for both the left and right clipping.
+   *
    * The default is to not clip the video.
    */
   void setClipping( int top, int left, int bottom, int right );
@@ -103,6 +107,11 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    *
    * The clipping values will be taken into account if at least one value
    * is determined automatically.
+   *
+   * The width and height values have to be a mutiple of 16. If it is not, 
+   * they will be changed accordingly.
+   *
+   * FIXME: GET INFORMATION: why a multiple of 16 and not 8 or 32?
    */
   void setSize( int width, int height );
 
