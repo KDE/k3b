@@ -19,6 +19,7 @@
 #include <klocale.h>
 
 #include <qheader.h>
+#include <qtooltip.h>
 
 
 K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, const char* name )
@@ -45,6 +46,8 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, c
   header()->setResizeEnabled( false,0 );
 
   setColumnAlignment( 4, Qt::AlignHCenter );
+
+  QToolTip::add( viewport(), i18n("Check the tracks that should be ripped") );
 }
 
 

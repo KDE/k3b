@@ -74,6 +74,9 @@ public:
   bool canceled;
 
   int videoBitrate;
+
+  QValueVector<double> titleProgressParts;
+  QValueVector<double> titleClippingProgressParts;
 };
 
 
@@ -122,6 +125,8 @@ void K3bVideoDVDRippingJob::start()
   d->canceled = false;
 
   K3bInterferingSystemsHandler::instance()->disable( m_dvd.device() );
+
+  initProgressInfo();
 
   if( d->autoClipping )
     startDetectClipping( 0 );
@@ -241,34 +246,36 @@ void K3bVideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
 
 void K3bVideoDVDRippingJob::slotTranscodingProgress( int p )
 {
-  // FIXME: it is not really accurate to treat the clipping detection as half the work!
-  int parts = m_titleRipInfos.count();
-  if( d->autoClipping )
-    parts *= 2;
-
-  int partsDone = d->currentTitleInfoIndex;
-  if( d->autoClipping ) {
-    partsDone *= 2;
-    partsDone++; // the autoclipping for the current title is already done
+  // calculate the part already done
+  double doneParts = 0.0;
+  for( unsigned int i = 0; i < d->currentTitleInfoIndex; ++i ) {
+    doneParts += d->titleProgressParts[i];
+    if( d->autoClipping )
+      doneParts += d->titleClippingProgressParts[i];
   }
+  if( d->autoClipping )
+    doneParts += doneParts += d->titleClippingProgressParts[d->currentTitleInfoIndex];
 
-  emit percent( (int)( 100.0*(float)partsDone/(float)parts + (float)p/(float)parts ) );
+  // and the current thing
+  doneParts += (double)p/100.0*d->titleProgressParts[d->currentTitleInfoIndex];
+
+  emit percent( (int)( 100.0*doneParts ) );
 }
 
 
 void K3bVideoDVDRippingJob::slotDetectClippingProcess( int p )
 {
-  // FIXME: it is not really accurate to treat the clipping detection as half the work!
-  int parts = m_titleRipInfos.count();
-  if( d->autoClipping )
-    parts *= 2;
-
-  int partsDone = d->currentTitleInfoIndex;
-  if( d->autoClipping ) {
-    partsDone *= 2;
+  // calculate the part already done
+  double doneParts = 0.0;
+  for( unsigned int i = 0; i < d->currentTitleInfoIndex; ++i ) {
+    doneParts += d->titleProgressParts[i];
+    doneParts += d->titleClippingProgressParts[i];
   }
 
-  emit percent( (int)( 100.0*(float)partsDone/(float)parts + (float)p/(float)parts ) );
+  // and the current thing
+  doneParts += (double)p/100.0*d->titleClippingProgressParts[d->currentTitleInfoIndex];
+
+  emit percent( (int)( 100.0*doneParts ) );
 }
 
 
@@ -333,6 +340,39 @@ void K3bVideoDVDRippingJob::setLowPriority( bool b )
 void K3bVideoDVDRippingJob::setAutoClipping( bool b )
 {
   d->autoClipping = b;
+}
+
+
+void K3bVideoDVDRippingJob::initProgressInfo()
+{
+  d->titleProgressParts.resize( m_titleRipInfos.count() );
+  d->titleClippingProgressParts.resize( m_titleRipInfos.count() );
+
+  unsigned long long totalFrames = 0ULL;
+  for( unsigned int i = 0; i < m_titleRipInfos.count(); ++i ) {
+    if( m_transcodingJob->twoPassEncoding() )
+      totalFrames += m_dvd[m_titleRipInfos[i].title-1].playbackTime().totalFrames() * 2;
+    else
+      totalFrames += m_dvd[m_titleRipInfos[i].title-1].playbackTime().totalFrames();
+
+    // using my knowledge of the internals of the clipping detection job: it decodes 200 frames
+    // of every chapter
+    if( d->autoClipping )
+      totalFrames += m_dvd[m_titleRipInfos[i].title-1].numChapters() * 200;
+  }
+
+  for( unsigned int i = 0; i < m_titleRipInfos.count(); ++i ) {
+    unsigned long long titleFrames = m_dvd[m_titleRipInfos[i].title-1].playbackTime().totalFrames();
+    if( m_transcodingJob->twoPassEncoding() )
+      titleFrames *= 2;
+
+    // using my knowledge of the internals of the clipping detection job: it decodes 200 frames
+    // of every chapter
+    unsigned long long titleClippingFrames = m_dvd[m_titleRipInfos[i].title-1].numChapters() * 200;
+
+    d->titleProgressParts[i] = (double)titleFrames/(double)totalFrames;
+    d->titleClippingProgressParts[i] = (double)titleClippingFrames/(double)totalFrames;
+  }
 }
 
 #include "k3bvideodvdrippingjob.moc"

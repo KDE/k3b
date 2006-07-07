@@ -265,7 +265,7 @@ void K3bVideoDVDRippingDialog::slotUpdateFilesizes()
     // FIXME: consider AC3 passthrough
     size += (KIO::filesize_t)( sec * m_w->selectedAudioBitrate() / 8.0 * 1024.0 );
 
-    it.key()->setText( 2, KIO::convertSize( size * 1024 ) );
+    it.key()->setText( 2, KIO::convertSize( size ) );
 
     overallSize += size;
   }
@@ -531,6 +531,18 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
     if( m_w->m_checkManualVideoBitrate->isChecked() )
       titles[i].videoBitrate = 0;
     ++i;
+  }
+
+  // sort the titles which come from a map and are thus not sorted properly
+  // simple bubble sort for these small arrays is sufficient
+  for( unsigned int i = 0; i < titles.count(); ++i ) {
+    for( unsigned int j = i+1; j < titles.count(); ++j ) {
+      if( titles[i].title > titles[j].title ) {
+	K3bVideoDVDRippingJob::TitleRipInfo tmp = titles[i];
+	titles[i] = titles[j];
+	titles[j] = tmp;
+      }
+    }
   }
 
   // start the job

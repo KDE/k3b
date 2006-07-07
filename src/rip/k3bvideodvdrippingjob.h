@@ -91,6 +91,7 @@ class K3bVideoDVDRippingJob : public K3bJob
  private:
   void startTranscoding( int ripInfoIndex );
   void startDetectClipping( int ripInfoIndex );
+  void initProgressInfo();
 
   K3bVideoDVD::VideoDVD m_dvd;
   QValueVector<TitleRipInfo> m_titleRipInfos;
