@@ -171,31 +171,12 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 				    .arg(m_dvd[*it-1].playbackTime().toString()),
 				    QCheckListItem::RadioButtonController );
     titleItem->setText( 1, QString("%1x%2")
-		       .arg(m_dvd[*it-1].videoStream().pictureWidth())
-		       .arg(m_dvd[*it-1].videoStream().pictureHeight()) );
+		       .arg(m_dvd[*it-1].videoStream().realPictureWidth())
+		       .arg(m_dvd[*it-1].videoStream().realPictureHeight()) );
     titleItem->setText( 3, QString("%1 Title %2.avi").arg(m_dvd.volumeIdentifier()).arg(*it) );
 
     // now for the rip info
     K3bVideoDVDRippingJob::TitleRipInfo ri( *it );
-
-    //
-    // Set a default size (keep the original size (+ anamorhic handling)
-    // FIXME: allow user interaction
-    //
-//     double aspectRatioFactor = ( m_dvd[*it-1].videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3
-// 				 ? 4.0/3.0
-// 				 : 16.0/9.0 );
-//     double aspectRatioCorrect = ( aspectRatioFactor
-// 				  * (double)m_dvd[*it-1].videoStream().pictureHeight()
-// 				  / (double)m_dvd[*it-1].videoStream().pictureWidth() );
-    
-//     int newHeight = (int)( (double)( m_dvd[*it-1].videoStream().pictureHeight() )
-// 			   / aspectRatioCorrect );
-//     newHeight += (8 - (newHeight%8) ) % 8;
-    
-//     ri.width = m_dvd[*it-1].videoStream().pictureWidth();
-//     ri.height = newHeight;
-
 
     //
     // Determine default language selection:
