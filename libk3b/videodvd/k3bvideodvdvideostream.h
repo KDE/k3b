@@ -68,9 +68,28 @@ namespace K3bVideoDVD
       unsigned int pictureSize() const { return m_pictureSize; }
       unsigned int bitRate() const { return m_bitRate; }
 
+      /**
+       * The picture width of the video stream
+       */
       unsigned int pictureWidth() const;
+
+      /**
+       * The picture height of the video stream
+       */
       unsigned int pictureHeight() const;
-      
+
+      /**
+       * The width of the "real" video after applying aspect ratio
+       * correction
+       */
+      unsigned int realPictureWidth() const;
+
+      /**
+       * The height of the "real" video after applying aspect ratio
+       * correction
+       */
+      unsigned int realPictureHeight() const;
+
     private:
       unsigned int m_permittedDf:2;
       unsigned int m_displayAspectRatio:2;

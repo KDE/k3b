@@ -41,3 +41,20 @@ unsigned int K3bVideoDVD::VideoStream::pictureHeight() const
 
   return height;
 }
+
+
+unsigned int K3bVideoDVD::VideoStream::realPictureWidth() const
+{
+  double aspectRatio = 0.0;
+  if( displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
+    aspectRatio = 4.0/3.0;
+  else
+    aspectRatio = 16.0/9.0;
+  return (int)(aspectRatio * (double)realPictureHeight());
+}
+
+
+unsigned int K3bVideoDVD::VideoStream::realPictureHeight() const
+{
+  return pictureHeight();
+}

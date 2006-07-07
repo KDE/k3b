@@ -271,19 +271,10 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   int usedHeight = m_height;
   if( m_width == 0 || m_height == 0 ) {
     //
-    // Determine the correct size according to the aspect ratio
-    //
-    double aspectRatio = 0.0;
-    if( m_dvd[m_titleNumber-1].videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
-      aspectRatio = 4.0/3.0;
-    else
-      aspectRatio = 16.0/9.0;
-
-    //
     // The "real" size of the video, considering anamorph encoding
     //
-    int realHeight = m_dvd[m_titleNumber-1].videoStream().pictureHeight();
-    int readWidth = (int)(aspectRatio * (double)realHeight);
+    int realHeight = m_dvd[m_titleNumber-1].videoStream().realPictureHeight();
+    int readWidth = m_dvd[m_titleNumber-1].videoStream().realPictureWidth();
 
     //
     // The clipped size with the correct aspect ratio
