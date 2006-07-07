@@ -49,6 +49,7 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
  private slots:
   void slotUpdateFreeTempSpace();
   void slotSeeSpecialStrings();
+  void slotAudioCodecChanged( int codec );
 
  private:
   QTimer* m_freeSpaceUpdateTimer;

@@ -230,7 +230,7 @@ void K3bVideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
 		   SLOT(slotDetectClippingJobFinished(bool)),
 		   SIGNAL(newTask(const QString&)),
 		   SIGNAL(newSubTask(const QString&)),
-		   SLOT(slotDetectClippingProcess(int)),
+		   SLOT(slotDetectClippingProgress(int)),
 		   SIGNAL(subPercent(int)),
 		   0,
 		   0 );
@@ -254,7 +254,7 @@ void K3bVideoDVDRippingJob::slotTranscodingProgress( int p )
       doneParts += d->titleClippingProgressParts[i];
   }
   if( d->autoClipping )
-    doneParts += doneParts += d->titleClippingProgressParts[d->currentTitleInfoIndex];
+    doneParts += d->titleClippingProgressParts[d->currentTitleInfoIndex];
 
   // and the current thing
   doneParts += (double)p/100.0*d->titleProgressParts[d->currentTitleInfoIndex];
@@ -263,7 +263,7 @@ void K3bVideoDVDRippingJob::slotTranscodingProgress( int p )
 }
 
 
-void K3bVideoDVDRippingJob::slotDetectClippingProcess( int p )
+void K3bVideoDVDRippingJob::slotDetectClippingProgress( int p )
 {
   // calculate the part already done
   double doneParts = 0.0;

@@ -203,28 +203,34 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
     //
     ri.audioStream = 0;
     for( unsigned int i = 0; i < m_dvd[*it-1].numAudioStreams(); ++i ) {
-      if( m_dvd[*it-1].audioStream(i).langCode() == KGlobal::locale()->language() ) {
+      if( m_dvd[*it-1].audioStream(i).langCode() == KGlobal::locale()->language() && 
+	  m_dvd[*it-1].audioStream(i).format() != K3bVideoDVD::AUDIO_FORMAT_DTS ) {
 	ri.audioStream = i;
 	break;
       }
     }
 
-    QCheckListItem* asI = 0;
+    QListViewItem* asI = 0;
     for( unsigned int i = 0; i < m_dvd[*it-1].numAudioStreams(); ++i ) {
-      asI = new AudioStreamViewItem( this,
-				     titleItem, asI,
-				     i18n("%1 %2Ch (%3%4)")
-				     .arg( K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ) )
-				     .arg( m_dvd[*it-1].audioStream(i).channels() )
-				     .arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
-					   ? i18n("unknown language")
-					   : KGlobal::locale()->twoAlphaToLanguageName( m_dvd[*it-1].audioStream(i).langCode() ) )
-				     .arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
-					   ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
-					   : QString::null ),
-				     i );
-      if( ri.audioStream == (int)i )
-	asI->setState( QCheckListItem::On );
+      QString text = i18n("%1 %2Ch (%3%4)")
+	.arg( K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ) )
+	.arg( m_dvd[*it-1].audioStream(i).channels() )
+	.arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
+	      ? i18n("unknown language")
+	      : KGlobal::locale()->twoAlphaToLanguageName( m_dvd[*it-1].audioStream(i).langCode() ) )
+	.arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
+	      ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
+	      : QString::null );
+
+      if( m_dvd[*it-1].audioStream(i).format() == K3bVideoDVD::AUDIO_FORMAT_DTS ) {
+	asI = new QListViewItem( titleItem, asI, text + " (" + i18n("not supported") + ")" );
+      }
+      else {
+	asI = new AudioStreamViewItem( this, titleItem, asI, text, i );
+	
+	if( ri.audioStream == (int)i )
+	  ((AudioStreamViewItem*)asI)->setState( QCheckListItem::On );
+      }
     }
 
     titleItem->setOpen( true );
@@ -528,8 +534,7 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
   for( QMapConstIterator<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     titles[i] = it.data();
-    if( m_w->m_checkManualVideoBitrate->isChecked() )
-      titles[i].videoBitrate = 0;
+    titles[i].videoBitrate = 0; // use the global bitrate set below
     ++i;
   }
 

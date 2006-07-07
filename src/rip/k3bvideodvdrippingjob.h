@@ -86,7 +86,7 @@ class K3bVideoDVDRippingJob : public K3bJob
   void slotTranscodingJobFinished( bool );
   void slotDetectClippingJobFinished( bool );
   void slotTranscodingProgress( int );
-  void slotDetectClippingProcess( int );
+  void slotDetectClippingProgress( int );
 
  private:
   void startTranscoding( int ripInfoIndex );

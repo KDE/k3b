@@ -29,6 +29,7 @@
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qwhatsthis.h>
+#include <qwidgetstack.h>
 
 
 // FIXME: these are mp3 bitrates. AC3 bitrates range from 32 to 640 kbit.
@@ -87,10 +88,14 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     m_comboAudioCodec->insertItem( K3bVideoDVDTitleTranscodingJob::audioCodecString( i ) );
   }
 
+  slotAudioCodecChanged( m_comboAudioCodec->currentItem() );
+
   connect( m_comboAudioBitrate, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
   connect( m_spinVideoBitrate, SIGNAL(valueChanged(int)),
 	   this, SIGNAL(changed()) );
+  connect( m_comboAudioCodec, SIGNAL(activated(int)),
+	   this, SLOT(slotAudioCodecChanged(int)) );
   connect( m_editBaseDir, SIGNAL(textChanged(const QString&)), this, SIGNAL(changed()) );
   connect( m_specialStringsLabel, SIGNAL(leftClickedURL()),
 	   this, SLOT(slotSeeSpecialStrings()) );
@@ -130,19 +135,24 @@ int K3bVideoDVDRippingWidget::selectedAudioCodec() const
 void K3bVideoDVDRippingWidget::setSelectedAudioCodec( int codec )
 {
   m_comboAudioCodec->setCurrentItem( codec );
+  slotAudioCodecChanged( codec );
 }
 
 
 int K3bVideoDVDRippingWidget::selectedAudioBitrate() const
 {
-  return s_bitrates[m_comboAudioCodec->currentItem()];
+  if( selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 )
+    return s_bitrates[m_comboAudioCodec->currentItem()];
+  else
+    return m_spinAudioBitrate->value();
 }
 
 
 void K3bVideoDVDRippingWidget::setSelectedAudioBitrate( int bitrate )
 {
-  // select the bitrate closest to "bitrate"
+  m_spinAudioBitrate->setValue( bitrate );
 
+  // select the bitrate closest to "bitrate"
   int bi = 0;
   int diff = 1000;
   for( int i = 0; s_bitrates[i]; ++i ) {
@@ -213,6 +223,22 @@ void K3bVideoDVDRippingWidget::slotSeeSpecialStrings()
                              "</table>"
 			     "<p><em>Hint: K3b also accepts slight variantions of the long special strings. "
 			     "One can, for example, leave out the underscores.</em>") );
+}
+
+
+void K3bVideoDVDRippingWidget::slotAudioCodecChanged( int codec )
+{
+  switch( codec ) {
+  case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3:
+    m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityMp3 );
+    break;
+  case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO:
+    m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3 );
+    break;
+  case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH:
+    m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3Pt );
+    break;
+  }
 }
 
 #include "k3bvideodvdrippingwidget.moc"

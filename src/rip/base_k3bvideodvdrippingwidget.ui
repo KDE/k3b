@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bVideoDVDRippingWidget</class>
 <author>Seastian Trueg</author>
 <widget class="QWidget">
@@ -10,8 +10,11 @@
             <x>0</x>
             <y>0</y>
             <width>738</width>
-            <height>534</height>
+            <height>594</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -173,24 +176,18 @@
                             </widget>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout21</cstring>
+                                    <cstring>layout9</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QCheckBox">
+                                    <widget class="QLabel">
                                         <property name="name">
-                                            <cstring>m_checkManualVideoBitrate</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
+                                            <cstring>textLabel2_3</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Manual &amp;Video Bitrate:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
+                                            <string>Video Bitrate:</string>
                                         </property>
                                     </widget>
                                     <widget class="QSpinBox">
@@ -297,39 +294,166 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox">
+                            <widget class="QWidgetStack">
                                 <property name="name">
-                                    <cstring>m_checkAudioVBR</cstring>
+                                    <cstring>m_stackAudioQuality</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Variable &amp;Bitrate</string>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout4</cstring>
-                                </property>
-                                <hbox>
+                                <widget class="QWidget">
                                     <property name="name">
-                                        <cstring>unnamed</cstring>
+                                        <cstring>m_stackPageAudioQualityMp3</cstring>
                                     </property>
-                                    <widget class="QLabel">
+                                    <attribute name="id">
+                                        <number>0</number>
+                                    </attribute>
+                                    <vbox>
                                         <property name="name">
-                                            <cstring>textLabel1_3</cstring>
+                                            <cstring>unnamed</cstring>
                                         </property>
-                                        <property name="text">
-                                            <string>Audio Bitrate:</string>
+                                        <property name="margin">
+                                            <number>0</number>
                                         </property>
-                                    </widget>
-                                    <widget class="QComboBox">
+                                        <widget class="QCheckBox">
+                                            <property name="name">
+                                                <cstring>m_checkAudioVBR</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Variable &amp;Bitrate</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+B</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLayoutWidget">
+                                            <property name="name">
+                                                <cstring>layout4</cstring>
+                                            </property>
+                                            <hbox>
+                                                <property name="name">
+                                                    <cstring>unnamed</cstring>
+                                                </property>
+                                                <widget class="QLabel">
+                                                    <property name="name">
+                                                        <cstring>m_labelAudioBitrate</cstring>
+                                                    </property>
+                                                    <property name="text">
+                                                        <string>Audio Bitrate:</string>
+                                                    </property>
+                                                </widget>
+                                                <widget class="QComboBox">
+                                                    <property name="name">
+                                                        <cstring>m_comboAudioBitrate</cstring>
+                                                    </property>
+                                                    <property name="duplicatesEnabled">
+                                                        <bool>false</bool>
+                                                    </property>
+                                                </widget>
+                                            </hbox>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                                <widget class="QWidget">
+                                    <property name="name">
+                                        <cstring>m_stackPageAudioQualityAC3Pt</cstring>
+                                    </property>
+                                    <attribute name="id">
+                                        <number>1</number>
+                                    </attribute>
+                                    <hbox>
                                         <property name="name">
-                                            <cstring>m_comboAudioBitrate</cstring>
+                                            <cstring>unnamed</cstring>
                                         </property>
-                                        <property name="duplicatesEnabled">
-                                            <bool>false</bool>
+                                        <property name="margin">
+                                            <number>0</number>
                                         </property>
-                                    </widget>
-                                </hbox>
+                                        <widget class="KActiveLabel">
+                                            <property name="name">
+                                                <cstring>m_labelNoAudioSettings</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>5</hsizetype>
+                                                    <vsizetype>7</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="text">
+                                                <string>&lt;p&gt;No Audio Quality settings available for &lt;em&gt;AC3 pass-through&lt;/em&gt;. The audio stream from the Video DVD is used without any changes.</string>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget class="QWidget">
+                                    <property name="name">
+                                        <cstring>m_stackPageAudioQualityAC3</cstring>
+                                    </property>
+                                    <attribute name="id">
+                                        <number>2</number>
+                                    </attribute>
+                                    <vbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <property name="margin">
+                                            <number>0</number>
+                                        </property>
+                                        <widget class="QLayoutWidget">
+                                            <property name="name">
+                                                <cstring>layout8</cstring>
+                                            </property>
+                                            <hbox>
+                                                <property name="name">
+                                                    <cstring>unnamed</cstring>
+                                                </property>
+                                                <widget class="QLabel">
+                                                    <property name="name">
+                                                        <cstring>textLabel1_3</cstring>
+                                                    </property>
+                                                    <property name="text">
+                                                        <string>Audio Bitrate:</string>
+                                                    </property>
+                                                </widget>
+                                                <widget class="QSpinBox">
+                                                    <property name="name">
+                                                        <cstring>m_spinAudioBitrate</cstring>
+                                                    </property>
+                                                    <property name="suffix">
+                                                        <string> kbps</string>
+                                                    </property>
+                                                    <property name="maxValue">
+                                                        <number>640</number>
+                                                    </property>
+                                                    <property name="minValue">
+                                                        <number>32</number>
+                                                    </property>
+                                                    <property name="lineStep">
+                                                        <number>2</number>
+                                                    </property>
+                                                    <property name="value">
+                                                        <number>128</number>
+                                                    </property>
+                                                </widget>
+                                            </hbox>
+                                        </widget>
+                                        <spacer>
+                                            <property name="name">
+                                                <cstring>spacer3</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Vertical</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>0</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </vbox>
+                                </widget>
                             </widget>
                         </vbox>
                     </widget>
@@ -538,12 +662,6 @@
 </widget>
 <connections>
     <connection>
-        <sender>m_checkManualVideoBitrate</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_spinVideoBitrate</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
         <sender>m_checkBlankReplace</sender>
         <signal>toggled(bool)</signal>
         <receiver>m_editBlankReplace</receiver>
@@ -556,6 +674,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kactivelabel.h</includehint>
     <includehint>kurllabel.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
