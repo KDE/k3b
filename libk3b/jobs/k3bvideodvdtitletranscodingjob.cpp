@@ -286,7 +286,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
     // Now simply resize the clipped video to the wanted size
     //
     if( usedWidth > 0 ) {
-      usedHeight = clippedHeight * clippedWidth / usedWidth;
+      usedHeight = clippedHeight * usedWidth / clippedWidth;
     }
     else {
       if( usedHeight == 0 ) {
@@ -296,7 +296,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
 	//
 	usedHeight = clippedHeight;
       }
-      usedWidth = clippedWidth * clippedHeight / usedHeight;
+      usedWidth = clippedWidth * usedHeight / clippedHeight;
     }
   }
 
