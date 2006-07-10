@@ -41,12 +41,13 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 
   enum FileNamingPattern {
     PATTERN_TITLE_NUMBER         = 't',
-    PATTERN_VOLUME_ID            = 'v',
+    PATTERN_VOLUME_ID            = 'i',
     PATTERN_BEAUTIFIED_VOLUME_ID = 'b',
     PATTERN_LANGUAGE_CODE        = 'l',
     PATTERN_LANGUAGE_NAME        = 'n',
     PATTERN_AUDIO_FORMAT         = 'a',
     PATTERN_AUDIO_CHANNELS       = 'c',
+    PATTERN_ORIG_VIDEO_SIZE      = 'v',
     PATTERN_VIDEO_SIZE           = 's',
     PATTERN_ASPECT_RATIO         = 'r',
     PATTERN_CURRENT_DATE         = 'd'
@@ -56,6 +57,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
   void slotStartClicked();
   void slotUpdateFilenames();
   void slotUpdateFilesizes();
+  void slotUpdateVideoSizes();
 
  private:
   void populateTitleView( const QValueList<int>& titles );

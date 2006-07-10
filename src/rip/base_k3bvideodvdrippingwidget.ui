@@ -145,7 +145,7 @@
                             </property>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout20</cstring>
+                                    <cstring>layout9</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
@@ -170,6 +170,17 @@
                                                 <horstretch>1</horstretch>
                                                 <verstretch>0</verstretch>
                                             </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>m_buttonCustomPictureSize</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Custom...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+C</string>
                                         </property>
                                     </widget>
                                 </hbox>

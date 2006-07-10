@@ -90,6 +90,29 @@ static int audioCodecFromId( const QString& codec )
 }
 
 
+// resize according to aspect ratio
+static QSize resizeTitle( const K3bVideoDVD::VideoStream& title, const QSize& size )
+{
+  int w = size.width();
+  int h = size.height();
+  int rw = title.realPictureWidth();
+  int rh = title.realPictureHeight();
+
+  if( w == 0 && h == 0 ) {
+    w = rw;
+    h = rh;
+  }
+  else if( w == 0 ) {
+    w = h * rw / rh;
+  }
+  else if( h == 0 ) {
+    h = w * rh / rw;
+  }
+  
+  return QSize(w,h);
+}
+
+
 
 class K3bVideoDVDRippingDialog::AudioStreamViewItem : public QCheckListItem
 {
@@ -132,16 +155,12 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
   frameLayout->setAutoAdd( true );
   m_w = new K3bVideoDVDRippingWidget( frame );
 
-  connect( m_w->m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
-	   this, SLOT(slotUpdateFilenames()) );
-  connect( m_w->m_editBlankReplace, SIGNAL(textChanged(const QString&)),
-	   this, SLOT(slotUpdateFilenames()) );
-  connect( m_w->m_checkBlankReplace, SIGNAL(toggled(bool)),
-	   this, SLOT(slotUpdateFilenames()) );
   connect( m_w, SIGNAL(changed()),
 	   this, SLOT(slotUpdateFilesizes()) );
   connect( m_w, SIGNAL(changed()),
 	   this, SLOT(slotUpdateFilenames()) );
+  connect( m_w, SIGNAL(changed()),
+	   this, SLOT(slotUpdateVideoSizes()) );
 
   setTitle( i18n("Video DVD Ripping"), 
 	    i18n("1 title from %1", "%n titles from %1", titles.count())
@@ -261,6 +280,17 @@ void K3bVideoDVDRippingDialog::slotUpdateFilesizes()
 }
 
 
+void K3bVideoDVDRippingDialog::slotUpdateVideoSizes()
+{
+  QSize size = m_w->selectedPictureSize();
+  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+       it != m_titleRipInfos.end(); ++it ) {
+    QSize s( resizeTitle( m_dvd[it.data().title-1].videoStream(), size ) );
+    it.key()->setText( 1, QString("%1x%2").arg(s.width()).arg(s.height()) );
+  }
+}
+
+
 void K3bVideoDVDRippingDialog::setBaseDir( const QString& path )
 {
   m_w->m_editBaseDir->setURL( path );
@@ -343,6 +373,13 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 		   keyword == "vsize" ) {
 	    c = PATTERN_VIDEO_SIZE;
 	  }
+	  else if( keyword == "originalvideosize"  ||
+		   keyword == "original_video_size" ||
+		   keyword == "origvideosize"  ||
+		   keyword == "orig_video_size" ||
+		   keyword == "origvsize" ) {
+	    c = PATTERN_ORIG_VIDEO_SIZE;
+	  }
 	  else if( keyword == "aspect_ratio" ||
 		   keyword == "aspectratio" ||
 		   keyword == "ratio" ) {
@@ -386,26 +423,31 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 	  f.append( KGlobal::locale()->twoAlphaToLanguageName( title.audioStream( info.audioStream ).langCode() ) );
 	break;
       case PATTERN_AUDIO_FORMAT:
-	// FIXME: consider the configured audio codec
-	if( title.numAudioStreams() > 0 )
-	  f.append( K3bVideoDVD::audioFormatString( title.audioStream( info.audioStream ).format() ) );
+	// FIXME: what about MPEG audio streams?
+	if( title.numAudioStreams() > 0 ) {
+	  if( m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 )
+	    f.append( K3bVideoDVDTitleTranscodingJob::audioCodecString( m_w->selectedAudioCodec() ) );
+	  else
+	    f.append( K3bVideoDVD::audioFormatString( title.audioStream( info.audioStream ).format() ) );
+	}
 	break;
       case PATTERN_AUDIO_CHANNELS:
-	// FIXME: consider the configured audio codec
 	if( title.numAudioStreams() > 0 )
-	  f.append( i18n("%nCh", "%nCh", title.audioStream( info.audioStream ).channels() ) );
+	  f.append( i18n("%nCh", "%nCh", 
+			 m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH
+			 ? title.audioStream( info.audioStream ).channels()
+			 : 2 ) );
 	break;
-      case PATTERN_VIDEO_SIZE:
-	// FIXME: this size is bogus in case of automatic clipping! (at least the height)
-	if( info.width != 0 )
-	  f.append( QString("%1x%2")
-		    .arg(info.width)
-		    .arg(info.height) );
-	else
-	  f.append( QString("%1x%2")
-		    .arg(title.videoStream().pictureWidth())
-		    .arg(title.videoStream().pictureHeight()) );
+      case PATTERN_ORIG_VIDEO_SIZE:
+	f.append( QString("%1x%2")
+		  .arg(title.videoStream().pictureWidth())
+		  .arg(title.videoStream().pictureHeight()) );
 	break;
+      case PATTERN_VIDEO_SIZE: {
+	QSize s( resizeTitle( m_dvd[info.title-1].videoStream(), m_w->selectedPictureSize() ) );
+	f.append( QString("%1x%2").arg(s.width()).arg(s.height()) );
+	break;
+      }
       case PATTERN_ASPECT_RATIO:
 	if( title.videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
 	  f.append( "4:3" );
@@ -494,6 +536,22 @@ void K3bVideoDVDRippingDialog::saveUserDefaults( KConfigBase* c )
 
 void K3bVideoDVDRippingDialog::slotStartClicked()
 {
+  //
+  // check if the selected audio codec is usable for all selected audio streams
+  // We can only use the AC3 pass-through mode for AC3 streams
+  //
+  if( m_w->selectedAudioCodec() != K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH ) {
+    for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+	 it != m_titleRipInfos.end(); ++it ) {
+      if( m_dvd[it.data().title-1].audioStream(it.data().audioStream).format() != K3bVideoDVD::AUDIO_FORMAT_AC3 ) {
+	KMessageBox::sorry( this, i18n("When using the <em>AC3 pass-through</em> audio codec all selected audio "
+				       "streams need to be in AC3 format. Please select another audio codec or "
+				       "choose AC3 audio streams for all ripped titles.") );
+	return;
+      }
+    }
+  }
+
   // check if we need to overwrite some files...
   QStringList filesToOverwrite;
   for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
@@ -510,12 +568,15 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
       return;
 
 
+  QSize videoSize = m_w->selectedPictureSize();
   int i = 0;
   QValueVector<K3bVideoDVDRippingJob::TitleRipInfo> titles( m_titleRipInfos.count() );
   for( QMapConstIterator<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     titles[i] = it.data();
     titles[i].videoBitrate = 0; // use the global bitrate set below
+    titles[i].width = videoSize.width();
+    titles[i].height = videoSize.height();
     ++i;
   }
 

@@ -36,10 +36,12 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
   int selectedVideoCodec() const;
   int selectedAudioCodec() const;
   int selectedAudioBitrate() const;
+  QSize selectedPictureSize() const;
 
   void setSelectedVideoCodec( int codec );
   void setSelectedAudioCodec( int codec );
   void setSelectedAudioBitrate( int bitrate );
+  void setSelectedPictureSize( const QSize& );
 
   void setNeededSize( KIO::filesize_t );
 
@@ -50,10 +52,14 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
   void slotUpdateFreeTempSpace();
   void slotSeeSpecialStrings();
   void slotAudioCodecChanged( int codec );
+  void slotVideoSizeChanged( int sizeIndex );
+  void slotCustomPictureSize();
 
  private:
   QTimer* m_freeSpaceUpdateTimer;
   KIO::filesize_t m_neededSize;
+
+  QSize m_customVideoSize;
 };
 
 #endif

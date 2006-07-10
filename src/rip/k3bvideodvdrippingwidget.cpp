@@ -17,12 +17,15 @@
 
 #include <k3bvideodvdtitletranscodingjob.h>
 #include <k3bglobals.h>
+#include <k3brichtextlabel.h>
 
 #include <klistview.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kio/global.h>
 #include <kurllabel.h>
+#include <kdialogbase.h>
+#include <klineedit.h>
 
 #include <qcombobox.h>
 #include <qspinbox.h>
@@ -30,10 +33,12 @@
 #include <qtimer.h>
 #include <qwhatsthis.h>
 #include <qwidgetstack.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
+#include <qlayout.h>
 
 
-// FIXME: these are mp3 bitrates. AC3 bitrates range from 32 to 640 kbit.
-static const int s_bitrates[] = {
+static const int s_mp3Bitrates[] = {
   32,
   40,
   48,
@@ -51,6 +56,19 @@ static const int s_bitrates[] = {
   0 // just used for the loops below
 };
 
+
+static const int PICTURE_SIZE_ORIGINAL = 0;
+static const int PICTURE_SIZE_640 = 1;
+static const int PICTURE_SIZE_320 = 2;
+static const int PICTURE_SIZE_CUSTOM = 3;
+static const int PICTURE_SIZE_MAX = 4;
+
+static const char* s_pictureSizeNames[] = {
+  I18N_NOOP("Keep original dimensions"),
+  I18N_NOOP("640x? (automatic height)"),
+  I18N_NOOP("320x? (automatic height)"),
+  I18N_NOOP("Custom")
+};
 
 
 K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
@@ -74,8 +92,8 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
   //
   // Add the Audio bitrates
   //
-  for( int i = 0; s_bitrates[i]; ++i )
-    m_comboAudioBitrate->insertItem( i18n("%1 kbps" ).arg(s_bitrates[i]) );
+  for( int i = 0; s_mp3Bitrates[i]; ++i )
+    m_comboAudioBitrate->insertItem( i18n("%1 kbps" ).arg(s_mp3Bitrates[i]) );
 
 
   //
@@ -88,17 +106,33 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     m_comboAudioCodec->insertItem( K3bVideoDVDTitleTranscodingJob::audioCodecString( i ) );
   }
 
+  for( int i = 0; i < PICTURE_SIZE_MAX; ++i ) {
+    m_comboVideoSize->insertItem( i18n( s_pictureSizeNames[i] ) );
+  }
+
   slotAudioCodecChanged( m_comboAudioCodec->currentItem() );
 
   connect( m_comboAudioBitrate, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
   connect( m_spinVideoBitrate, SIGNAL(valueChanged(int)),
 	   this, SIGNAL(changed()) );
+  connect( m_checkBlankReplace, SIGNAL(toggled(bool)),
+	   this, SIGNAL(changed()) );
+  connect( m_editBlankReplace, SIGNAL(textChanged(const QString&)),
+	   this, SIGNAL(changed()) );
+  connect( m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
+	   this, SIGNAL(changed()) );
+  connect( m_editBaseDir, SIGNAL(textChanged(const QString&)), 
+	   this, SIGNAL(changed()) );
+
   connect( m_comboAudioCodec, SIGNAL(activated(int)),
 	   this, SLOT(slotAudioCodecChanged(int)) );
-  connect( m_editBaseDir, SIGNAL(textChanged(const QString&)), this, SIGNAL(changed()) );
   connect( m_specialStringsLabel, SIGNAL(leftClickedURL()),
 	   this, SLOT(slotSeeSpecialStrings()) );
+  connect( m_buttonCustomPictureSize, SIGNAL(clicked()),
+	   this, SLOT(slotCustomPictureSize()) );
+  connect( m_comboVideoSize, SIGNAL(activated(int)),
+	   this, SLOT(slotVideoSizeChanged(int)) );
 
   // refresh every 2 seconds
   m_freeSpaceUpdateTimer = new QTimer( this );
@@ -117,6 +151,40 @@ K3bVideoDVDRippingWidget::~K3bVideoDVDRippingWidget()
 int K3bVideoDVDRippingWidget::selectedVideoCodec() const
 {
   return m_comboVideoCodec->currentItem();
+}
+
+
+QSize K3bVideoDVDRippingWidget::selectedPictureSize() const
+{
+  switch( m_comboVideoSize->currentItem() ) {
+  case PICTURE_SIZE_ORIGINAL:
+    return QSize(0,0);
+  case PICTURE_SIZE_640:
+    return QSize(640,0);
+  case PICTURE_SIZE_320:
+    return QSize(320,0);
+  default:
+    return m_customVideoSize;
+  }
+}
+
+
+void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
+{
+  m_customVideoSize = size;
+  if( size == QSize(0,0) )
+    m_comboVideoSize->setCurrentItem( PICTURE_SIZE_ORIGINAL );
+  else if( size == QSize(640,0) )
+    m_comboVideoSize->setCurrentItem( PICTURE_SIZE_640 );
+  else if( size == QSize(320,0) )
+    m_comboVideoSize->setCurrentItem( PICTURE_SIZE_320 );
+  else {
+    m_comboVideoSize->changeItem( i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
+				  + QString(" (%1x%2)")
+				  .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
+				  .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())),
+				  PICTURE_SIZE_CUSTOM );
+  }
 }
 
 
@@ -142,7 +210,7 @@ void K3bVideoDVDRippingWidget::setSelectedAudioCodec( int codec )
 int K3bVideoDVDRippingWidget::selectedAudioBitrate() const
 {
   if( selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 )
-    return s_bitrates[m_comboAudioCodec->currentItem()];
+    return s_mp3Bitrates[m_comboAudioBitrate->currentItem()];
   else
     return m_spinAudioBitrate->value();
 }
@@ -155,8 +223,8 @@ void K3bVideoDVDRippingWidget::setSelectedAudioBitrate( int bitrate )
   // select the bitrate closest to "bitrate"
   int bi = 0;
   int diff = 1000;
-  for( int i = 0; s_bitrates[i]; ++i ) {
-    int newDiff = s_bitrates[i] - bitrate;
+  for( int i = 0; s_mp3Bitrates[i]; ++i ) {
+    int newDiff = s_mp3Bitrates[i] - bitrate;
     if( newDiff < 0 )
       newDiff = -1 * newDiff;
     if( newDiff < diff ) {
@@ -211,13 +279,14 @@ void K3bVideoDVDRippingWidget::slotSeeSpecialStrings()
                              "<p><table border=\"0\">"
 			     "<tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</em></td></tr>"
                              "<tr><td>%t</td><td>title number</td><td>%{t} or %{title_number}</td></tr>"
-                             "<tr><td>%v</td><td>volume id (mostly the name of the Video DVD)</td><td>%{v} or %{volume_id}</td></tr>"
+                             "<tr><td>%i</td><td>volume id (mostly the name of the Video DVD)</td><td>%{i} or %{volume_id}</td></tr>"
                              "<tr><td>%b</td><td>beautified volume id</td><td>%{b} or %{beautified_volume_id}</td></tr>"
                              "<tr><td>%l</td><td>two chars language code</td><td>%{l} or %{lang_code}</td></tr>"
                              "<tr><td>%n</td><td>language name</td><td>%{n} or %{lang_name}</td></tr>"
                              "<tr><td>%a</td><td>audio format (on the Video DVD)</td><td>%{a} or %{audio_format}</td></tr>"
                              "<tr><td>%c</td><td>number of audio channels (on the Video DVD)</td><td>%{c} or %{channels}</td></tr>"
-                             "<tr><td>%s</td><td>size of the original video</td><td>%{s} or %{video_size}</td></tr>"
+                             "<tr><td>%v</td><td>size of the original video</td><td>%{v} or %{orig_video_size}</td></tr>"
+                             "<tr><td>%s</td><td>size of the resulting video (<em>Caution: auto-clipping values are not taken into account!</em>)</td><td>%{s} or %{video_size}</td></tr>"
                              "<tr><td>%r</td><td>aspect ration of the original video</td><td>%{r} or %{aspect_ratio}</td></tr>"
                              "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
                              "</table>"
@@ -238,6 +307,61 @@ void K3bVideoDVDRippingWidget::slotAudioCodecChanged( int codec )
   case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH:
     m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3Pt );
     break;
+  }
+
+  emit changed();
+}
+
+
+void K3bVideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
+{
+  if( sizeIndex == PICTURE_SIZE_CUSTOM )
+    slotCustomPictureSize();
+  else
+    emit changed();
+}
+
+
+void K3bVideoDVDRippingWidget::slotCustomPictureSize()
+{
+  KDialogBase dlg( KDialogBase::Plain,
+		   i18n("Video Picture Size"),
+		   KDialogBase::Ok|KDialogBase::Cancel,
+		   KDialogBase::Ok,
+		   this,
+		   0,
+		   true,
+		   true );
+  K3bRichTextLabel* label = new K3bRichTextLabel( i18n("<p>Please choose the width and height of the resulting video. "
+						       "If one value is set to <em>Auto</em> K3b will choose this value "
+						       "depending on the aspect ratio of the video picture.<br>"
+						       "Be aware that setting both the width and the height to fixed values "
+						       "will result in no aspect ratio correction to be performed."), 
+					  dlg.plainPage() );
+  QSpinBox* spinWidth = new QSpinBox( 0, 20000, 16, dlg.plainPage() );
+  QSpinBox* spinHeight = new QSpinBox( 0, 20000, 16, dlg.plainPage() );
+  spinWidth->setSpecialValueText( i18n("Auto") );
+  spinHeight->setSpecialValueText( i18n("Auto") );
+  QLabel* labelW = new QLabel( spinWidth, i18n("Width") + ':', dlg.plainPage() );
+  QLabel* labelH = new QLabel( spinHeight, i18n("Height") + ':', dlg.plainPage() );
+  labelW->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
+  labelH->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
+
+  QGridLayout* grid = new QGridLayout( dlg.plainPage() );
+  grid->setMargin( 0 );
+  grid->setSpacing( KDialog::spacingHint() );
+  grid->addMultiCellWidget( label, 0, 0, 0, 3 );
+  grid->addWidget( labelW, 1, 0 );
+  grid->addWidget( spinWidth, 1, 1 );
+  grid->addWidget( labelH, 1, 2 );
+  grid->addWidget( spinHeight, 1, 3 );
+
+  spinWidth->setValue( m_customVideoSize.width() );
+  spinHeight->setValue( m_customVideoSize.height() );
+
+  if( dlg.exec() ) {
+    setSelectedPictureSize( QSize( spinWidth->value(), spinHeight->value() ) );
+    emit changed();
   }
 }
 
