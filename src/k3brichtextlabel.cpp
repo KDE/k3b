@@ -38,31 +38,31 @@ static QString qrichtextify( const QString& text )
   return lines.join(QString::null);
 }
 
-K3BRichTextLabel::K3BRichTextLabel( const QString &text , QWidget *parent, const char *name )
+K3bRichTextLabel::K3bRichTextLabel( const QString &text , QWidget *parent, const char *name )
  : QLabel ( parent, name ) {
   m_defaultWidth = QMIN(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
   setAlignment( Qt::WordBreak );
   setText(text);
 }
 
-K3BRichTextLabel::K3BRichTextLabel( QWidget *parent, const char *name )
+K3bRichTextLabel::K3bRichTextLabel( QWidget *parent, const char *name )
  : QLabel ( parent, name ) {
   m_defaultWidth = QMIN(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
   setAlignment( Qt::WordBreak );
 }
 
-void K3BRichTextLabel::setDefaultWidth(int defaultWidth)
+void K3bRichTextLabel::setDefaultWidth(int defaultWidth)
 {
   m_defaultWidth = defaultWidth;
   updateGeometry();
 }
 
-QSizePolicy K3BRichTextLabel::sizePolicy() const
+QSizePolicy K3bRichTextLabel::sizePolicy() const
 {
   return QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum, false);
 }
 
-QSize K3BRichTextLabel::minimumSizeHint() const
+QSize K3bRichTextLabel::minimumSizeHint() const
 {
   QString qt_text = qrichtextify( text() );
   int pref_width = 0;
@@ -97,16 +97,16 @@ QSize K3BRichTextLabel::minimumSizeHint() const
   return QSize(pref_width, rt.height());
 }
 
-QSize K3BRichTextLabel::sizeHint() const
+QSize K3bRichTextLabel::sizeHint() const
 {
   return minimumSizeHint();
 }
 
-void K3BRichTextLabel::setText( const QString &text ) {
+void K3bRichTextLabel::setText( const QString &text ) {
   QLabel::setText(text);
 }
 
-void K3BRichTextLabel::virtual_hook( int, void* )
+void K3bRichTextLabel::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/ }
 
 #include "k3brichtextlabel.moc"

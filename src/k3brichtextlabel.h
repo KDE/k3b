@@ -30,15 +30,15 @@
 /*
  * QLabel
  */
-class K3BRichTextLabel : public QLabel {
+class K3bRichTextLabel : public QLabel {
   Q_OBJECT
 
 public:
   /**
    * Default constructor.
    */
-  K3BRichTextLabel( QWidget *parent, const char *name = 0 );
-  K3BRichTextLabel( const QString &text, QWidget *parent, const char *name = 0 );
+  K3bRichTextLabel( QWidget *parent, const char *name = 0 );
+  K3bRichTextLabel( const QString &text, QWidget *parent, const char *name = 0 );
 
   int defaultWidth() const { return m_defaultWidth; }
   void setDefaultWidth(int defaultWidth);
@@ -56,8 +56,8 @@ protected:
 protected:
   virtual void virtual_hook( int id, void* data );
 private:
-  class K3BRichTextLabelPrivate;
-  K3BRichTextLabelPrivate *d;
+  class K3bRichTextLabelPrivate;
+  K3bRichTextLabelPrivate *d;
 };
 
 #endif // K3BRICHTEXTLABEL_H
