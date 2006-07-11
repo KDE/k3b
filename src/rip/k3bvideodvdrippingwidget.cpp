@@ -184,6 +184,7 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 				  .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
 				  .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())),
 				  PICTURE_SIZE_CUSTOM );
+    m_comboVideoSize->setCurrentItem( PICTURE_SIZE_CUSTOM );
   }
 }
 

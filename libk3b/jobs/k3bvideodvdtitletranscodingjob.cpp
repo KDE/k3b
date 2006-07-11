@@ -475,7 +475,7 @@ QString K3bVideoDVDTitleTranscodingJob::audioCodecString( int codec )
   case AUDIO_CODEC_AC3_STEREO:
     return i18n("AC3 (Stereo)");
   case AUDIO_CODEC_AC3_PASSTHROUGH:
-    return i18n("AC3 (Passthrough)");
+    return i18n("AC3 (Pass-through)");
   case AUDIO_CODEC_MP3:
     return i18n("MPEG1 Layer III");
   default:

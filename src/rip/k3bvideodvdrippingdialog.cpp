@@ -540,13 +540,14 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
   // check if the selected audio codec is usable for all selected audio streams
   // We can only use the AC3 pass-through mode for AC3 streams
   //
-  if( m_w->selectedAudioCodec() != K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH ) {
+  if( m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH ) {
     for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
 	 it != m_titleRipInfos.end(); ++it ) {
       if( m_dvd[it.data().title-1].audioStream(it.data().audioStream).format() != K3bVideoDVD::AUDIO_FORMAT_AC3 ) {
-	KMessageBox::sorry( this, i18n("When using the <em>AC3 pass-through</em> audio codec all selected audio "
+	KMessageBox::sorry( this, i18n("<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
 				       "streams need to be in AC3 format. Please select another audio codec or "
-				       "choose AC3 audio streams for all ripped titles.") );
+				       "choose AC3 audio streams for all ripped titles."),
+			    i18n("AC3 Pass-through") );
 	return;
       }
     }
