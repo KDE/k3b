@@ -8,6 +8,7 @@ listing=Name,Type,Size,Date
 Icon=dvd_unmount
 Class=:local
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[ar]= يسمح هذا ال-kioslave بنسخ الملفات من قرص مدمج مرئي رقمي DVD ( بما فيه فك التشفير )
 Description[bg]=kioslave, който Ви позволява да копирате файлове от видео DVD (включително декриптирането)
 Description[bn]=একটি কে-আই-ও স্লেভ যেটি একটি ভিডিও ডিভিডি থেকে ফাইল কপি করতে অনুমতিদেয় (ডিক্রিপশন সহ)
 Description[ca]=Un kioslave que permet que es copiïn fitxers des d'un DVD de vídeo (incloent el desxifrat)

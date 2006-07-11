@@ -4,6 +4,7 @@ Type=Link
 URL=videodvd:/
 Icon=dvd_unmount
 Name=Video DVD Browser
+Name[ar]= قارىء القرص المدمج المرئي الرقمي DVD
 Name[bg]=Браузър за видео DVD
 Name[br]=Furcher DVD Video
 Name[cs]=Prohlížeč Video DVD
