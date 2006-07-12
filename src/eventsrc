@@ -98,7 +98,7 @@ default_presentation=1
 
 [FinishedWithError]
 Name=Process error
-Name[ar]= خطء خلال المعالجة
+Name[ar]= خطأ خلال المعالجة
 Name[bg]=Грешка при обработката
 Name[bn]=প্রসেস ত্রুটি
 Name[bs]=Greška u procesu
@@ -140,7 +140,7 @@ Name[uz]=Хатоли жараён
 Name[xx]=xxProcess errorxx
 Name[zh_CN]=处理错误
 Comment=Process finished with errors
-Comment[ar]= انتهت المعالجة على خطء 
+Comment[ar]= انتهت المعالجة على خطأ 
 Comment[bg]=Обработката приключи с грешки
 Comment[bn]=প্রসেস ত্রুটিপূর্ণভাবে শেষ হল
 Comment[bs]=Proces je završen sa greškama
