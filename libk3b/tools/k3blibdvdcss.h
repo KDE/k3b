@@ -16,6 +16,8 @@
 #ifndef _K3B_LIBDVDCSS_H_
 #define _K3B_LIBDVDCSS_H_
 
+#include "k3b_export.h"
+
 namespace K3bDevice {
   class Device;
 }
@@ -25,7 +27,7 @@ namespace K3bDevice {
  * Wrapper class for libdvdcss. dynamically openes the library if it
  * is available on the system.
  */
-class K3bLibDvdCss
+class LIBK3B_EXPORT K3bLibDvdCss
 {
  public:
   ~K3bLibDvdCss();
