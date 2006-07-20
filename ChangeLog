@@ -2,6 +2,7 @@
 =======
  * Fixed saving/loading of the file view configuration.
  * Improved ffmpeg autoconf check.
+ * More FreeBSD Compile fixes (thanks to Heiner Eichmann).
 
 0.12.16
 =======
