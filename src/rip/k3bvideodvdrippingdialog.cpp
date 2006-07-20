@@ -36,6 +36,8 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
+#include <qstyle.h>
+#include <qfontmetrics.h>
 
 
 static QString videoCodecId( int codec )
@@ -223,7 +225,11 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 	      : QString::null );
 
       if( m_dvd[*it-1].audioStream(i).format() == K3bVideoDVD::AUDIO_FORMAT_DTS ) {
-	asI = new QListViewItem( titleItem, asI, text + " (" + i18n("not supported") + ")" );
+	// width of the radio button from QCheckListItem::paintCell
+	int buttonSize = style().pixelMetric( QStyle::PM_CheckListButtonSize, m_w->m_titleView ) + 4;
+	int spaceWidth = fontMetrics().width( ' ' );
+	int numSpaces = buttonSize/spaceWidth;
+	asI = new QListViewItem( titleItem, asI, QString().fill( ' ', numSpaces ) + text + " (" + i18n("not supported") + ")" );
       }
       else {
 	asI = new AudioStreamViewItem( this, titleItem, asI, text, i );
