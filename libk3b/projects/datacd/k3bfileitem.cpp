@@ -69,7 +69,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
   // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
   // instead the size of the link.
   k3b_struct_stat statBuf;
-  if( k3b_stat( QFile::encodeName(filePath), &statBuf ) ) {
+  if( k3b_lstat( QFile::encodeName(filePath), &statBuf ) ) {
     m_size = K3b::filesize( filePath );
     kdError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
     m_id.inode = 0;
