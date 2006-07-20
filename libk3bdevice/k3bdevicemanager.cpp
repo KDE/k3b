@@ -102,6 +102,10 @@ typedef unsigned char u8;
 #include <camlib.h>
 #endif
 
+#ifdef Q_OS_NETBSD
+#include <sys/scsiio.h>
+#endif
+
 
 
 class K3bDevice::DeviceManager::Private
@@ -249,6 +253,9 @@ int K3bDevice::DeviceManager::scanBus()
 #ifdef Q_OS_FREEBSD
     BSDDeviceScan();
 #endif
+#ifdef Q_OS_NETBSD
+  NetBSDDeviceScan();
+#endif
     //  }
 
   scanFstab();
@@ -343,6 +350,36 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
     }
   }
   // FIXME: also scan /dev/scsi/hostX.... for devfs without symlinks
+}
+
+
+void K3bDevice::DeviceManager::NetBSDDeviceScan()
+{
+  // Generate entries for /dev/cd* devices
+  // Note: As there are only 10 possible /dev/(r)cd devices,
+  // only these will be found.
+
+  int   i;
+
+  // Whole disk mask (According to cd(4), the AMD64, i386 and BeBox ports use
+  // 'd' as whole-disk partition, the rest uses 'c'.)
+
+#if defined(__i386__) || defined (__amd64__) || defined (__bebox__)
+  static const char slicename = 'd';
+#else
+  static const char slicename = 'c';
+#endif
+
+  char devicename[11]; // /dev/rcdXd + trailing zero
+
+  for (i = 0; i < 10; i++ ) // cd(4) claims there are max. 10 CD devices.
+  {
+    snprintf(devicename,11,"/dev/rcd%d%c",i, slicename);
+    if (addDevice(QString(devicename))) // let addDevice figure it out.
+    {
+      m_foundDevices++;
+    }
+  }
 }
 
 
@@ -635,7 +672,7 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
   Q_UNUSED(devicename);
   return true;
 #endif
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   bool ret = false;
   int cdromfd = K3bDevice::openDevice( devicename.ascii() );
   if (cdromfd < 0) {
@@ -652,7 +689,10 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
   }
   else {
     kdDebug() << devicename << " is block device (" << (int)(cdromStat.st_rdev & 0xFF) << ")" << endl;
-
+#if defined(Q_OS_NETBSD)
+  }
+  {
+#endif
     // inquiry
     // use a 36 bytes buffer since not all devices return the full inquiry struct
     unsigned char buf[36];
@@ -879,6 +919,46 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
   Q_UNUSED(lun);
   return false;
   /* NOTREACHED */
+#endif
+
+#ifdef Q_OS_NETBSD
+  int cdromfd = K3bDevice::openDevice ( dev.ascii() );
+  if (cdromfd < 0) {
+    int local_errno = errno; // For all we know, kdDebug() destroys errno
+    kdDebug() << "could not open device " << dev << " (" << strerror(local_errno) << ")" << endl;
+    return false;
+  }
+
+  struct scsi_addr my_addr;
+
+  if (::ioctl(cdromfd, SCIOCIDENTIFY, &my_addr))
+  {
+    int local_errno = errno; // For all we know, kdDebug() destroys errno
+    kdDebug() << "ioctl(SCIOCIDENTIFY) failed on device " << dev << " (" << strerror(local_errno) << ")" << endl;
+
+    ::close(cdromfd);
+    return false;
+  }
+
+  if (my_addr.type == TYPE_ATAPI)
+  {
+    // XXX Re-map atapibus, so it doesn't conflict with "real" scsi
+    // busses
+
+    bus = 15;
+    id  = my_addr.addr.atapi.drive + 2 * my_addr.addr.atapi.atbus;
+    lun = 0;
+  }
+  else
+  {
+    bus = my_addr.addr.scsi.scbus;
+    id  = my_addr.addr.scsi.target;
+    lun = my_addr.addr.scsi.lun;
+  }
+
+  ::close(cdromfd);
+
+  return true;
 #endif
 
 #ifdef Q_OS_LINUX

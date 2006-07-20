@@ -223,6 +223,7 @@ namespace K3bDevice {
       Device *addDevice( Device* );
 
       void BSDDeviceScan();
+      void NetBSDDeviceScan();
       void LinuxDeviceScan();
     };
 }
