@@ -1,1 +1,2 @@
 AC_CHECK_FUNCS(stat64)
+AC_CHECK_HEADERS(sys/vfs.h)
