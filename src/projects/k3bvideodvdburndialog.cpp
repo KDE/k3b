@@ -159,4 +159,29 @@ void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigBase* c )
   //  c->writeEntry( "verify data", m_checkVerify->isChecked() );
 }
 
+
+void K3bVideoDvdBurnDialog::slotStartClicked()
+{
+  if( m_checkOnlyCreateImage->isChecked() ||
+      !m_checkOnTheFly->isChecked() ) {
+    QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
+    if( fi.isDir() )
+      m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );
+
+    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
+      if( KMessageBox::warningContinueCancel( this,
+					      i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+					      i18n("File Exists"), i18n("Overwrite") )
+	  == KMessageBox::Continue ) {
+	// delete the file here to avoid problems with free space in K3bProjectBurnDialog::slotStartClicked
+	QFile::remove( m_tempDirSelectionWidget->tempPath() );
+      }
+      else
+	return;
+    }
+  }
+
+  K3bProjectBurnDialog::slotStartClicked();
+}
+
 #include "k3bvideodvdburndialog.moc"

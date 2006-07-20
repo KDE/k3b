@@ -49,6 +49,7 @@
 #include <qfileinfo.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
+#include <qfile.h>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -186,9 +187,13 @@ void K3bDataBurnDialog::slotStartClicked()
 
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::warningContinueCancel( this,
-				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				     i18n("File Exists"), i18n("Overwrite") )
-	  != KMessageBox::Continue )
+					      i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+					      i18n("File Exists"), i18n("Overwrite") )
+	  == KMessageBox::Continue ) {
+	// delete the file here to avoid problems with free space in K3bProjectBurnDialog::slotStartClicked
+	QFile::remove( m_tempDirSelectionWidget->tempPath() );
+      }
+      else
 	return;
     }
   }

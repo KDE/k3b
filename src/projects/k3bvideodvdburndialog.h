@@ -34,6 +34,7 @@ class K3bVideoDvdBurnDialog : public K3bProjectBurnDialog
    ~K3bVideoDvdBurnDialog();
 
  protected slots:
+   void slotStartClicked();
    void saveSettings();
    void readSettings();
 
