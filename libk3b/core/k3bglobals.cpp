@@ -46,11 +46,15 @@
 #include <sys/stat.h>
 #include <byteswap.h>
 
-#ifdef __FreeBSD__
-#include <sys/param.h>
-#include <sys/mount.h>
-#else
-#include <sys/vfs.h>
+#if defined(__FreeBSD__) || defined(__NetBSD__)
+#  include <sys/param.h>
+#  include <sys/mount.h>
+#endif
+#ifdef HAVE_SYS_STATVFS_H
+#  include <sys/statvfs.h>
+#endif
+#ifdef HAVE_SYS_VFS_H
+#  include <sys/vfs.h>
 #endif
 
 
