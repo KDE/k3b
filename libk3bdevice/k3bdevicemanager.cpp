@@ -375,10 +375,7 @@ void K3bDevice::DeviceManager::NetBSDDeviceScan()
   for (i = 0; i < 10; i++ ) // cd(4) claims there are max. 10 CD devices.
   {
     snprintf(devicename,11,"/dev/rcd%d%c",i, slicename);
-    if (addDevice(QString(devicename))) // let addDevice figure it out.
-    {
-      m_foundDevices++;
-    }
+    addDevice(QString(devicename));
   }
 }
 
