@@ -85,6 +85,8 @@ namespace K3bDevice
 
     void clear();
 
+    void debug() const;
+
   private:
     unsigned int m_discId;
     K3b::Msf m_firstSector;

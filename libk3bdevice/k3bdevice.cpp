@@ -1045,6 +1045,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
 	  track.m_firstSector = from4Byte( trackInfo->track_start );
 
 	  // There are drives that return 0 track length here!
+	  // Some drives return an invalid length here. :(
 	  if( from4Byte( trackInfo->track_size ) > 0 )
 	    track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
 
@@ -1193,6 +1194,8 @@ bool K3bDevice::Device::readRawToc( K3bDevice::Toc& toc ) const
 	      sessionLeadOut = K3b::Msf( tr[i].p_min, tr[i].p_sec, tr[i].p_frame ) - 150;
 	  }
 	}
+
+	kdDebug() << blockDeviceName() << ": setting last sector of last track to " << (sessionLeadOut-1).lba() << endl;
 
 	// set the last track's last sector
 	if( !toc.isEmpty() )
@@ -1348,7 +1351,11 @@ int K3bDevice::Device::rawTocDataWithBcdValues( unsigned char* data, unsigned in
     kdDebug() << "(K3bDevice::Device) found invalid hex values. No hex toc." << endl;
 
   if( notBcd == notHex ) {
-    kdDebug() << "(K3bDevice::Device) unable to determine if hex or bcd." << endl;
+    kdDebug() << "(K3bDevice::Device) unable to determine if hex (" << notHex << ") or bcd (" << notBcd << ")." << endl;
+    if( !notHex ) {
+      kdDebug() << "Assuming hex encoding in favor of newer drives and the more reliable raw toc." << endl;
+      return 0;
+    }
     return -1;
   }
   else if( notBcd )

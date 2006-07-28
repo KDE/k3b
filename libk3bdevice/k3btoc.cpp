@@ -128,3 +128,21 @@ void K3bDevice::Toc::clear()
   m_mcn.resize( 0 );
   m_firstSector = 0;
 }
+
+
+void K3bDevice::Toc::debug() const
+{
+  kdDebug() << count() << " in " << sessions() << " sessions" << endl;
+  int sessionN = 0;
+  int trackN = 0;
+  for( Toc::const_iterator it = begin(); it != end(); ++it ) {
+    ++trackN;
+    if( sessionN != (*it).session() ) {
+      sessionN = (*it).session();
+      kdDebug() << "Session Number " << sessionN << endl;
+    }
+    kdDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
+	      << " " << (*it).firstSector().lba() << " - " << (*it).lastSector().lba()
+	      << " (" << (*it).length().lba() << ")" << endl;
+  }
+}
