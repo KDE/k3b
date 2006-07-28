@@ -16,11 +16,13 @@
 #ifndef _K3B_PIPE_H_
 #define _K3B_PIPE_H_
 
+#include "k3b_export.h"
+
 /**
  * The K3bPipe class represents a file descriptor pair
  * which can for example be used to connect two processes
  */
-class K3bPipe
+class LIBK3B_EXPORT K3bPipe
 {
  public:
   /**
