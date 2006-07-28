@@ -52,6 +52,8 @@ public:
     : erasingInfoDialog(0) {
     dialogVisible = false;
     inLoop = false;
+    mediumChanged = 0;
+    blockMediaChange = false;
   }
 
   K3bDevice::Device* device;
@@ -64,6 +66,9 @@ public:
   int result;
   int dialogVisible;
   bool inLoop;
+
+  bool blockMediaChange;
+  int mediumChanged;
 
   bool forced;
   bool canceled;
@@ -139,6 +144,8 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   d->forced = false;
   d->canceled = false;
   d->waitingDone = false;
+  d->blockMediaChange = false;
+  d->mediumChanged = 0;
 
   //
   // We do not cover every case here but just the ones that really make sense
@@ -236,6 +243,18 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
   kdDebug() << "(K3bEmptyDiscWaiter) slotDeviceHandlerFinished() " << endl;
   if( d->forced || d->canceled || d->device != dev )
     return;
+
+  //
+  // This slot may open dialogs which enter a new event loop and that
+  // may result in another call to this slot if a medium changes while
+  // a dialog is open
+  //
+  if( d->blockMediaChange ) {
+    d->mediumChanged++;
+    return;
+  }
+  
+  d->blockMediaChange = true;
 
   KConfig* c = k3bcore->config();
   c->setGroup( "General Options" );
@@ -561,6 +580,13 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     kdDebug() << "(K3bEmptyDiscWaiter) ------ nothing useful found." << endl;
     continueWaiting();
   }
+
+  // handle queued medium changes
+  d->blockMediaChange = false;
+  if( d->mediumChanged > 0 ) {
+    d->mediumChanged--;
+    slotMediumChanged( dev );
+  }
 }
 
 
@@ -640,22 +666,23 @@ void K3bEmptyDiscWaiter::slotErasingFinished( bool success )
 	     SLOT(slotReloadingAfterErasingFinished(K3bDevice::DeviceHandler*)) );
   }
   else {
+    d->blockMediaChange = true;
     K3bDevice::eject( d->device );
     d->erasingInfoDialog->hide();
     KMessageBox::error( parentWidgetToUse(), i18n("Erasing failed.") );
-    kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: erasing finished." << endl;
+    d->blockMediaChange = false;
+
+    if( d->mediumChanged ) {
+      d->mediumChanged--;
+      slotMediumChanged( d->device );
+    }
   }
 }
 
 
-void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bDevice::DeviceHandler* dh )
+void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bDevice::DeviceHandler* )
 {
   d->erasingInfoDialog->hide();
-
-  if( !dh->success() ) {
-    KMessageBox::error( parentWidgetToUse(), i18n("Unable to reload media. Please reload manually."),
-			i18n("Reload Failed") );
-  }
 }
 
 
