@@ -336,6 +336,7 @@ void K3bJobProgressDialog::slotProcessedSubSize( int processedTrackSize, int tra
 void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type )
 {
   QListViewItem* currentInfoItem = new QListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
+  currentInfoItem->setSelectable( false );
 
   // set the icon
   switch( type ) {
