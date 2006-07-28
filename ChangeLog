@@ -46,6 +46,10 @@
  * Save/load audio cd track sources in audio projects
  * Display a beautified volume id. For example: THE_TRANSPORTER -> The Transporter
  * Check if the image directory exists before starting to create a project image
+ * Possibility to hide the OSD temporarily for one process.
+ * Completely rewritten Video DVD ripping and transcoding support:
+   - Simple on-the-fly transcoding of Video DVD titles
+   - Interface similar to Audio CD ripping
  * File System presets for all data projects including all the advanced options.
 
 0.12
