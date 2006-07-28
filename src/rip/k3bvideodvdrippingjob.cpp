@@ -124,6 +124,8 @@ void K3bVideoDVDRippingJob::start()
   jobStarted();
   d->canceled = false;
 
+  connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
+	   this, SIGNAL(infoMessage(const QString&, int)) );
   K3bInterferingSystemsHandler::instance()->disable( m_dvd.device() );
 
   initProgressInfo();
@@ -139,6 +141,7 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 {
   if( d->canceled ) {
     K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+    K3bInterferingSystemsHandler::instance()->disconnect( this );
     emit canceled();
     jobFinished( false );
   }
@@ -154,12 +157,14 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
     }
     else {
       K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+      K3bInterferingSystemsHandler::instance()->disconnect( this );
       jobFinished( true );
     }
   }
   else {
     // the transcoding job should say what went wrong
     K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+    K3bInterferingSystemsHandler::instance()->disconnect( this );
     jobFinished( false );
   }
 }
@@ -169,6 +174,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 {
   if( d->canceled ) {
     K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+    K3bInterferingSystemsHandler::instance()->disconnect( this );
     emit canceled();
     jobFinished( false );
   }
@@ -192,6 +198,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
     // the detect clipping job rather returns 0 clipping values than fail.
     //
     K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+    K3bInterferingSystemsHandler::instance()->disconnect( this );
     jobFinished( false );
   }
 }
