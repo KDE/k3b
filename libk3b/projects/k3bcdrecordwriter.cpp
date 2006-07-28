@@ -477,7 +477,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       m_cdrecordError = OPC_FAILED;
     }
     else if( errStr.startsWith( "Drive needs to reload the media" ) ) {
-      emit infoMessage( i18n("Reloading of media required"), K3bJob::INFO );
+      emit infoMessage( i18n("Reloading of medium required"), K3bJob::INFO );
     }
     else if( errStr.startsWith( "The current problem looks like a buffer underrun" ) ) {
       m_cdrecordError = BUFFER_UNDERRUN;
@@ -554,7 +554,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
     }
     else
-      emit infoMessage( i18n("Starting writing"), INFO );
+      emit infoMessage( i18n("Starting disc write"), INFO );
 
     m_currentTrack++;
 

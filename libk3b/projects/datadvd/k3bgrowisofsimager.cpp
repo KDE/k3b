@@ -261,7 +261,7 @@ void K3bGrowisofsImager::start()
     }
     else {
       emit newTask( i18n("Writing") );
-      emit infoMessage( i18n("Starting writing..."), K3bJob::INFO );
+      emit infoMessage( i18n("Starting disc write..."), K3bJob::INFO );
     }
 
     d->gh->handleStart();

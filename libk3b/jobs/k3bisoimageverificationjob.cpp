@@ -103,7 +103,7 @@ void K3bIsoImageVerificationJob::start()
   d->needToCalcMd5 = d->imageMd5Sum.isEmpty();
 
   // first we need to reload and mount the device
-  emit newTask( i18n("Reloading the media") );
+  emit newTask( i18n("Reloading the medium") );
 
   connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
 	     this, SLOT(slotMediaReloaded(bool)) );

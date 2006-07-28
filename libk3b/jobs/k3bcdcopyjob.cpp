@@ -1006,7 +1006,7 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
       d->currentReadSession++;
 
       // reload the media
-      emit newSubTask( i18n("Reloading the media") );
+      emit newSubTask( i18n("Reloading the medium") );
       connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	       this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
     }
