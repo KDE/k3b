@@ -280,8 +280,8 @@ void K3bMainWindow::initActions()
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
 				       actionCollection(), "project_add_files");
 
-  (void)new KAction( i18n("&Clear Project"), QApplication::reverseLayout() ? "clear_left" : "locationbar_erase", 0, 
-		     this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
+  KAction* actionClearProject = new KAction( i18n("&Clear Project"), QApplication::reverseLayout() ? "clear_left" : "locationbar_erase", 0, 
+					     this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
   actionViewDirTreeView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirTreeView()),
 					    actionCollection(), "view_dir_tree");
@@ -340,13 +340,21 @@ void K3bMainWindow::initActions()
   actionCdCopy->setToolTip( i18n("Open the CD copy dialog") );
   actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD copy dialog") );
-  //  actionToolsVideoDvdCopy->setToolTip( i18n("Open the VideoDVD Copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
   actionFileSave->setToolTip(i18n("Saves the current project"));
-  actionFileSaveAs->setToolTip(i18n("Saves the current project as..."));
+  actionFileSaveAs->setToolTip(i18n("Saves the current project to a new url"));
+  actionFileSaveAll->setToolTip(i18n("Saves all open projects"));
   actionFileClose->setToolTip(i18n("Closes the current project"));
+  actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
+  actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
+  actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions (requires root privileges)") );
+  actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
+  actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
+  actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
+  actionProjectAddFiles->setToolTip( i18n("Add files to the current project") );
+  actionClearProject->setToolTip( i18n("Clear the current project") );
 
   // make sure the tooltips are used for the menu
   actionCollection()->setHighlightingEnabled( true );
