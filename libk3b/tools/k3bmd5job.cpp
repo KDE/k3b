@@ -27,6 +27,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 #include <qcstring.h>
+#include <qsocketnotifier.h>
 
 #include <unistd.h>
 
@@ -36,6 +37,7 @@ class K3bMd5Job::K3bMd5JobPrivate
 public:
   K3bMd5JobPrivate()
     : fileDes(-1),
+      fdNotifier(0),
       finished(true),
       data(0),
       isoFile(0),
@@ -49,6 +51,7 @@ public:
   QString filename;
   int fileDes;
   K3bDevice::Device* device;
+  QSocketNotifier* fdNotifier;
 
   bool finished;
   char* data;
@@ -114,14 +117,27 @@ void K3bMd5Job::start()
     
   d->md5.reset();
   d->finished = false;
-  d->timer.start(0);
+  if( d->fileDes != -1 )
+    setupFdNotifier();
+  else
+    d->timer.start(0);
+}
+
+
+void K3bMd5Job::setupFdNotifier()
+{
+  // the QSocketNotifier will fire once the fd is closed
+  delete d->fdNotifier;
+  d->fdNotifier = new QSocketNotifier( d->fileDes, QSocketNotifier::Read, this );
+  connect( d->fdNotifier, SIGNAL(activated(int)), this, SLOT(slotUpdate()) );
+  d->fdNotifier->setEnabled( true );
 }
 
 
 void K3bMd5Job::cancel()
 {
   if( !d->finished ) {
-    stop();
+    stopAll();
 
     emit canceled();
     jobFinished( false );
@@ -181,7 +197,7 @@ void K3bMd5Job::slotUpdate()
       readSize = QMIN( readSize, d->maxSize - d->readData );
 
     if( readSize <= 0 ) {
-      stop();
+      stopAll();
       emit percent( 100 );
       jobFinished(true);
     }
@@ -221,18 +237,19 @@ void K3bMd5Job::slotUpdate()
       }
 
       //
-      // read from the file descriptor
+      // reading from the file descriptor
+      //
       else {
 	read = ::read( d->fileDes, d->data, readSize );
       }
 
       if( read < 0 ) {
 	emit infoMessage( i18n("Error while reading from file %1").arg(d->filename), ERROR );
-	stop();
+	stopAll();
 	jobFinished(false);
       }
       else if( read == 0 ) {
-	stop();
+	stopAll();
 	emit percent( 100 );
 	jobFinished(true);
       }
@@ -276,6 +293,15 @@ QCString K3bMd5Job::base64Digest()
 
 void K3bMd5Job::stop()
 {
+  stopAll();
+  jobFinished( true );
+}
+
+
+void K3bMd5Job::stopAll()
+{
+  if( d->fdNotifier )
+    d->fdNotifier->setEnabled( false );
   if( d->file.isOpen() )
     d->file.close();
   d->timer.stop();

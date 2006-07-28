@@ -41,6 +41,7 @@ class LIBK3B_EXPORT K3bMd5Job : public K3bJob
 
  public slots:
   void start();
+  void stop();
   void cancel();
 
   /**
@@ -60,7 +61,9 @@ class LIBK3B_EXPORT K3bMd5Job : public K3bJob
   void setDevice( K3bDevice::Device* dev );
 
   /**
-   * read from the opened file descriptor
+   * read from the opened file descriptor.
+   * One needs to set the max read length or call stop()
+   * to finish calculation.
    */
   void setFd( int fd );
 
@@ -71,9 +74,11 @@ class LIBK3B_EXPORT K3bMd5Job : public K3bJob
 
  private slots:
   void slotUpdate();
-  void stop();
 
  private:
+  void setupFdNotifier();
+  void stopAll();
+
   class K3bMd5JobPrivate;
   K3bMd5JobPrivate* d;
 };
