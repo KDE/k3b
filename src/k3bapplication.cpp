@@ -204,9 +204,10 @@ bool K3bApplication::processCmdLineArgs()
 
   // if we created a doc the urls are used to populate it
   if( doc ) {
-    for( int i = 0; i < args->count(); i++ ) {
-      doc->addUrl( args->url(i) );
-    }
+    KURL::List urls;
+    for( int i = 0; i < args->count(); i++ )
+      urls.append( args->url(i) );
+    dynamic_cast<K3bView*>( doc->view() )->addUrls( urls );
   }
   // otherwise we open them as documents
   else {
