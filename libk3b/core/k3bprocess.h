@@ -122,10 +122,6 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
    */
   void setRawStdout(bool b);
 
-  //class OutputCollector;
-
-  // FIXME: implement closeStdin, closeStdout, closeStderr
-
  public slots:
   void setSplitStdout( bool b ) { m_bSplitStdout = b; }
  
@@ -133,6 +129,9 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
    * default is true
    */
   void setSuppressEmptyLines( bool b );
+
+  bool closeStdin();
+  bool closeStdout();
 
  private slots:
   void slotSplitStderr( KProcess*, char*, int );

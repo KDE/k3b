@@ -214,7 +214,7 @@ int K3bProcess::setupCommunication( Communication comm )
     // Setup our own socketpair
     //
 
-    if( d->rawStdin || d->dupStdinFd ) {
+    if( d->rawStdin ) {
       if( socketpair(AF_UNIX, SOCK_STREAM, 0, d->in) == 0 ) {
 	fcntl(d->in[0], F_SETFD, FD_CLOEXEC);
 	fcntl(d->in[1], F_SETFD, FD_CLOEXEC);
@@ -223,7 +223,7 @@ int K3bProcess::setupCommunication( Communication comm )
 	return 0;
     }
 
-    if( d->rawStdout || d->dupStdoutFd ) {
+    if( d->rawStdout ) {
       if( socketpair(AF_UNIX, SOCK_STREAM, 0, d->out) == 0 ) {
 	fcntl(d->out[0], F_SETFD, FD_CLOEXEC);
 	fcntl(d->out[1], F_SETFD, FD_CLOEXEC);
@@ -246,11 +246,11 @@ int K3bProcess::setupCommunication( Communication comm )
 
 void K3bProcess::commClose()
 {
-  if( d->rawStdin || d->dupStdinFd ) {
+  if( d->rawStdin ) {
     close(d->in[1]);
     d->in[1] = -1;
   }
-  if( d->rawStdout || d->dupStdoutFd ) {
+  if( d->rawStdout ) {
     close(d->out[0]);
     d->out[0] = -1;
   }
@@ -263,9 +263,9 @@ int K3bProcess::commSetupDoneP()
 {
   int ok = KProcess::commSetupDoneP();
 
-  if( d->rawStdin || d->dupStdinFd )
+  if( d->rawStdin )
     close(d->in[0]);
-  if( d->rawStdout || d->dupStdoutFd )
+  if( d->rawStdout )
     close(d->out[1]);
 
   d->in[0] = d->out[1] = -1;
@@ -279,6 +279,10 @@ int K3bProcess::commSetupDoneC()
   int ok = KProcess::commSetupDoneC();
 
   if( d->dupStdoutFd != -1 ) {
+    //
+    // make STDOUT_FILENO a duplicate of d->dupStdoutFd such that writes to STDOUT_FILENO are "redirected"
+    // to d->dupStdoutFd
+    //
     if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) < 0 ) {
       kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
       ok = 0;
@@ -381,6 +385,30 @@ void K3bProcess::setRawStdout(bool b)
 void K3bProcess::setSuppressEmptyLines( bool b )
 {
   d->suppressEmptyLines = b;
+}
+
+
+bool K3bProcess::closeStdin()
+{
+  if( d->rawStdin ) {
+    close(d->in[1]);
+    d->in[1] = -1;
+    return true;
+  }
+  else
+    return KProcess::closeStdin();
+}
+
+
+bool K3bProcess::closeStdout()
+{
+  if( d->rawStdout ) {
+    close(d->out[0]);
+    d->out[0] = -1;
+    return true;
+  }
+  else
+    return KProcess::closeStdout();
 }
 
 
