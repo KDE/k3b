@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 #include <qregexp.h>
 #include <qtoolbutton.h>
 #include <qcheckbox.h>
+#include <qfile.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -281,6 +282,11 @@ bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, 
   d->extension = ext;
   d->initialized = false;
   d->length = length;
+
+  // delete existing files as some programs (like flac for example) might refuse to overwrite files
+  if( QFile::exists( filename ) )
+    QFile::remove( filename );
+
   return true;
 }
 
