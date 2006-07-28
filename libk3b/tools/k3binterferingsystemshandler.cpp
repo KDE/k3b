@@ -66,6 +66,7 @@ public:
   Private()
     : /*disabledCnt( 0 ),*/
       disabledMediaManager(false),
+      disabledMediaNotifier(false),
       disabledSuSEPlugger(false) {
   }
 
@@ -83,6 +84,7 @@ public:
   //  int disabledCnt;
 
   bool disabledMediaManager;
+  bool disabledMediaNotifier;
   bool disabledSuSEPlugger;
 };
 
@@ -135,9 +137,18 @@ void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
     int r = startStopMediaManager( false );
     d->disabledMediaManager = ( r == 1 );
     if( r == 1 )
-      emit infoMessage( i18n("Disabled KDED module mediamanager."), K3bJob::INFO );
+      emit infoMessage( i18n("Disabled KDED module %1.").arg( "mediamanager" ), K3bJob::INFO );
     else if( r == -1 )
-      emit infoMessage( i18n("Failed to disable KDED module mediamanager."), K3bJob::WARNING );
+      emit infoMessage( i18n("Failed to disable KDED module %1.").arg( "mediamanager" ), K3bJob::WARNING );
+  }
+
+  if( !d->disabledMediaNotifier ) {
+    int r = startStopMediaNotifier( false );
+    d->disabledMediaNotifier = ( r == 1 );
+    if( r == 1 )
+      emit infoMessage( i18n("Disabled KDED module %1.").arg( "medianotifier" ), K3bJob::INFO );
+    else if( r == -1 )
+      emit infoMessage( i18n("Failed to disable KDED module %1.").arg( "medianotifier" ), K3bJob::WARNING );
   }
 
   if( !d->disabledSuSEPlugger ) {
@@ -186,14 +197,25 @@ void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
 
 void K3bInterferingSystemsHandler::enableInternal( K3bDevice::Device* dev )
 {
+  if( d->disabledMediaNotifier ) {
+    int r = startStopMediaNotifier( true );
+    if( r == -1 )
+      emit infoMessage( i18n("Failed to enable KDED module %1.").arg( "medianotifier" ), K3bJob::WARNING );
+    else {
+      d->disabledMediaNotifier = false;
+      if( r == 1 )
+	emit infoMessage( i18n("Enabled KDED module %1.").arg( "medianotifier" ), K3bJob::INFO );
+    }
+  }
+
   if( d->disabledMediaManager ) {
     int r = startStopMediaManager( true );
     if( r == -1 )
-      emit infoMessage( i18n("Failed to enable KDED module mediamanager."), K3bJob::WARNING );
+      emit infoMessage( i18n("Failed to enable KDED module %1.").arg( "mediamanager" ), K3bJob::WARNING );
     else {
       d->disabledMediaManager = false;
       if( r == 1 )
-	emit infoMessage( i18n("Enabled KDED module mediamanager."), K3bJob::INFO );
+	emit infoMessage( i18n("Enabled KDED module %1.").arg( "mediamanager" ), K3bJob::INFO );
     }
   }
 
@@ -281,6 +303,82 @@ int K3bInterferingSystemsHandler::startStopMediaManager( bool start )
       //       QByteArray data;
       //       QDataStream ds( data, IO_WriteOnly );
       //       ds << QCString("mediamanager");
+      //       if( dcopClient()->call( "kded", 
+      // 			      "kded", 
+      // 			      "unloadModule(QCString)", 
+      // 			      data, 
+      // 			      replyType, 
+      // 			      replyData, 
+      // 			      false, 
+      // 			      10000 ) ) {
+      // TODO: check the return value
+      return 1;
+    }
+    else
+      return -1;
+  }
+}
+
+
+int K3bInterferingSystemsHandler::startStopMediaNotifier( bool start )
+{
+    // check if the mediamanager is running
+  bool running = false;
+  QByteArray replyData;
+  QCString replyType;
+  if( KApplication::dcopClient()->call( "kded",
+					"kded",
+					"loadedModules()",
+					QByteArray(),
+					replyType,
+					replyData,
+					false, /* no eventloop */
+					10000 /* 10 second timeout */ ) ) {
+    QCStringList l;    
+    QDataStream s( replyData, IO_ReadOnly );
+    s >> l;
+    kdDebug() << l << endl;
+    running = l.contains( QCString("medianotifier") );
+  }
+  else
+    kdDebug() << "(K3bApplication) call to kded::loadedModules failed." << endl;
+
+
+  if( start ) {
+    if( running )
+      return 0;
+
+    // FIXME: kded crashes when we do this through dcopClient(), so for now we call the dcop
+    //        command line tool
+    KProcess p;
+    p << "dcop" << "kded" << "kded" << "loadModule" << "medianotifier";
+    if( p.start( KProcess::Block ) ) {
+      //       QCString replyType;
+      //       QByteArray replyData;
+      //       if( dcopClient()->call( "kded", "kded", "loadModule(QCString)", QCString("medianotifier"), replyType, replyData, false, 10000 ) )
+      return 1;
+    }
+    else
+      return -1;
+  }
+
+  else {
+    if( !running )
+      return 0;
+    
+    //
+    // mediamanager is running
+    //
+    
+    // FIXME: kded crashes when we do this through dcopClient(), so for now we call the dcop
+    //        command line tool
+    KProcess p;
+    p << "dcop" << "kded" << "kded" << "unloadModule" << "medianotifier";
+    if( p.start( KProcess::Block ) ) {
+      
+      //       QByteArray data;
+      //       QDataStream ds( data, IO_WriteOnly );
+      //       ds << QCString("medianotifier");
       //       if( dcopClient()->call( "kded", 
       // 			      "kded", 
       // 			      "unloadModule(QCString)", 
