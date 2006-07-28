@@ -289,7 +289,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileClose;
   KAction* actionFileCloseAll;
   KAction* actionFileQuit;
-  KAction* actionFileBurn;
   KAction* actionSettingsConfigure;
   KAction* actionSettingsK3bSetup;
   KAction* actionToolsBlankCdrw;
@@ -305,10 +304,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   KToggleAction* actionViewDocumentHeader;
 
   // project actions
-  KAction* actionDataImportSession;
-  KAction* actionDataClearImportedSession;
-  KAction* actionDataEditBootImages;
-
   QPtrList<KAction> m_dataProjectActions;
 
   KDockWidget* mainDock;
