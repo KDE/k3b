@@ -105,7 +105,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
   QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
   m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
 
-  QGroupBox* groupNormalize = new QGroupBox( 1, Qt::Vertical, i18n("Misc."), w );
+  QGroupBox* groupNormalize = new QGroupBox( 1, Qt::Vertical, i18n("Misc"), w );
   m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( groupNormalize );
 
   m_groupMixedType = new QButtonGroup( 4, Qt::Vertical, i18n("Mixed Mode Type"), w );
@@ -133,7 +133,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
   grid->setRowStretch( 3, 1 );
 
 
-  addPage( w, i18n("Settings") );
+  addPage( w, i18n("Misc") );
 }
 
 

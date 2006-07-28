@@ -75,15 +75,16 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   // the data actions
   KAction* actionImportSession = new KAction(i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
 					     actionCollection(), "project_data_import_session" );
-  actionImportSession->setToolTip( i18n("Import a previous session from an appendable data medium.") );
   KAction* actionClearSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
 					    SLOT(clearImportedSession()), actionCollection(),
 					    "project_data_clear_imported_session" );
-  actionClearSession->setToolTip( i18n("Clear the imported session.") );
   KAction* actionEditBootImages = new KAction(i18n("&Edit Boot Images..."), "cdtrack", 0, this,
 					      SLOT(editBootImages()), actionCollection(),
 					      "project_data_edit_boot_images" );
-  actionEditBootImages->setToolTip( i18n("Edit the boot images of this project to make it bootable.") );
+
+  actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
+  actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
+  actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
 
   toolBox()->addButton( actionImportSession );
   toolBox()->addButton( actionClearSession );

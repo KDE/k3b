@@ -117,7 +117,7 @@ void K3bDvdBurnDialog::setupSettingsTab()
   frameLayout->addWidget( groupMultiSession, 0, 0 );
   frameLayout->setRowStretch( 1, 1 );
 
-  addPage( frame, i18n("Settings") );
+  addPage( frame, i18n("Misc") );
 
   connect( m_comboMultisession, SIGNAL(activated(int)),
 	   this, SLOT(slotMultiSessionModeChanged()) );

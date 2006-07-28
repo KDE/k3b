@@ -173,7 +173,7 @@ void K3bDataBurnDialog::setupSettingsTab()
   frameLayout->addWidget( groupMultiSession, 1, 0 );
   frameLayout->setRowStretch( 2, 1 );
 
-  addPage( frame, i18n("Settings") );
+  addPage( frame, i18n("Misc") );
 }
 
 
