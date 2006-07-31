@@ -26,4 +26,4 @@ librip_la_SOURCES = base_k3baudiorippingoptionwidget.ui base_k3bcddbpatternwidge
 	k3baudioprojectconvertingthread.cpp \
 	k3bvideodvdrippingview.cpp k3bvideodvdrippingtitlelistview.cpp \
 	k3bvideodvdrippingjob.cpp k3bvideodvdrippingwidget.cpp \
-	k3bvideodvdrippingdialog.cpp k3baudioripjob.cpp
+	k3bvideodvdrippingdialog.cpp k3baudioripjob.cpp k3bvideodvdrippingpreview.cpp

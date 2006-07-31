@@ -19,6 +19,11 @@
 #include <k3blistview.h>
 #include <k3bvideodvd.h>
 
+#include <qvaluevector.h>
+
+
+class K3bVideoDVDRippingPreview;
+
 class K3bVideoDVDRippingTitleListView : public K3bListView
 {
   Q_OBJECT
@@ -29,11 +34,20 @@ class K3bVideoDVDRippingTitleListView : public K3bListView
 
   void setVideoDVD( const K3bVideoDVD::VideoDVD& dvd );
 
+ private slots:
+  void slotPreviewDone( bool );
+
  private:
   class TitleViewItem;
   class TitleToolTip;
 
   TitleToolTip* m_toolTip;
+
+  QValueVector<TitleViewItem*> m_itemMap;
+  K3bVideoDVDRippingPreview* m_previewGen;
+  unsigned int m_currentPreviewTitle;
+
+  K3bVideoDVD::VideoDVD m_dvd;
 };
 
 #endif

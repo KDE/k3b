@@ -14,6 +14,7 @@
  */
 
 #include "k3bvideodvdrippingtitlelistview.h"
+#include "k3bvideodvdrippingpreview.h"
 
 #include <k3bvideodvd.h>
 #include <k3bvideodvdaudiostream.h>
@@ -28,6 +29,8 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <kapplication.h>
 
 
 static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
@@ -92,7 +95,10 @@ public:
     setMarginHorizontal( 2, 2 );
     setMarginHorizontal( 3, 2 );
     setMarginHorizontal( 4, 2 );
+    setMarginHorizontal( 5, 2 );
     setChecked(true);
+
+    m_previewSet = false;
   }
 
   const K3bVideoDVD::Title& videoDVDTitle() const { return m_title; }
@@ -121,25 +127,76 @@ public:
     }
   }
 
+  void setPreview( const QImage& preview ) {
+    m_preview = preview;
+    m_scaledPreview = QPixmap();
+
+    m_previewSet = true;
+
+    repaint();
+  }
+
 protected:
   void paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align ) {
     if( col == 0 ) {
       // the check mark
       K3bCheckListViewItem::paintK3bCell( p, cg, col, width, align );
     }
+    else if( col == 2 ) {
+      if( isSelected() ) {
+	p->fillRect( 0, 0, width, height(),
+		     cg.brush( QColorGroup::Highlight ) );
+	p->setPen( cg.highlightedText() );
+      }
+      else {
+	p->fillRect( 0, 0, width, height(), cg.base() ); 
+	p->setPen( cg.text() );
+      }
+
+      // draw the preview
+      int h = height();
+      h -= 2*marginVertical();
+      h -= 1; // the separator
+      if( !m_preview.isNull() ) {
+	if( m_scaledPreview.height() != h ) {
+	  // recreate scaled preview
+	  m_scaledPreview.convertFromImage( m_preview.scale( m_preview.width(), h, QImage::ScaleMin ), 0 );
+	}
+
+	// center the preview in the column
+	int yPos = ( height() - m_scaledPreview.height() ) / 2;
+	int xPos = ( width - m_scaledPreview.width() ) / 2;
+
+	p->drawPixmap( xPos, yPos, m_scaledPreview );
+      }
+      else if( m_previewSet ) {
+	int w = 0;
+	if( m_title.videoStream().displayAspectRatio()	== K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
+	  w = h*4/3;
+	else
+	  w = h*16/9;
+
+	p->drawRect( ( width - w ) / 2, ( height() - h ) / 2, w, h );
+	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIcon::NoGroup, KIcon::SizeSmall, KIcon::DefaultState, 0, true );
+	p->drawPixmap( ( width - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
+      }
+      else {
+	p->drawText( 0, 0, width, height(), Qt::AlignCenter, "..." );
+      }
+    }
     else {
       QString s = text( col );
       if( s.isEmpty() )
 	K3bCheckListViewItem::paintK3bCell( p, cg, col, width, align );
       else {
+	QColorGroup cg1( cg );
 	if( isSelected() ) {
 	  p->fillRect( 0, 0, width, height(),
 		       cg.brush( QColorGroup::Highlight ) );
-	  p->setPen( cg.highlightedText() );
+	  cg1.setColor( QColorGroup::Text, cg.highlightedText() );
 	}
 	else {
 	  p->fillRect( 0, 0, width, height(), cg.base() ); 
-	  p->setPen( cg.text() );
 	}
 
 	// paint using QSimpleRichText
@@ -148,7 +205,7 @@ protected:
 	// normally we would have to clip the height to height()-2*marginVertical(). But if we do that
 	// some characters are cut (such as p or q). It seems as if QSimpleRichText does not properly 
 	// calculate it's height...
-	rt.draw( p, 0, marginVertical(), QRect( 0, 0, width, height() ), cg );
+	rt.draw( p, 0, marginVertical(), QRect( 0, 0, width, height() ), cg1 );
       }
     }
 
@@ -174,7 +231,7 @@ private:
 	.arg( m_title.playbackTime().toString( false ) )
 	.arg( i18n("%n chapter", "%n chapters", m_title.numPTTs() ) );
 
-    case 2:
+    case 3:
       // video stream info
       return QString("<p>%1 %2x%3<br>%4%5")
 	.arg( m_title.videoStream().mpegVersion() == 0 ? i18n("MPEG1") : i18n("MPEG2") )
@@ -185,14 +242,14 @@ private:
 	      m_title.videoStream().permittedDf() == K3bVideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED 
 	      ? QString(" - <em>") + i18n("anamorph") + QString("</em>") : QString::null );
 
-    case 3:
+    case 4:
       // audio streams info
       if( m_title.numAudioStreams() > 0 )
 	return audioStreamString( m_title, 2, false );
       else
 	return "<p><small><em>" + i18n("No audio streams") + "</em>";
 
-    case 4:
+    case 5:
       // subpicture streams info
       if( m_title.numSubPictureStreams() > 0 )
 	return subpictureStreamString( m_title, 2, false );
@@ -200,11 +257,15 @@ private:
 	return "<p><small><em>" + i18n("No Subpicture streams") + "</em>";
 
     default:
-      return QString::null;
+      return K3bCheckListViewItem::text( col );
     }
   }
 
   K3bVideoDVD::Title m_title;
+
+  bool m_previewSet;
+  QImage m_preview;
+  QPixmap m_scaledPreview;
 };
 
 
@@ -229,10 +290,13 @@ public:
     r.setRight( headerPos + m_view->header()->sectionSize( col ) );
 
     switch( col ) {
-    case 3:
-      tip( r, "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( item->videoDVDTitle() ) );
+    case 2:
+      // FIXME: show the bigger preview as the tooltip (maybe use K3bToolTip)
       break;
     case 4:
+      tip( r, "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( item->videoDVDTitle() ) );
+      break;
+    case 5:
       tip( r, "<p><b>" + i18n("Subpicture Streams") + "</b><p>" + subpictureStreamString( item->videoDVDTitle() ) );
       break;
     }
@@ -254,6 +318,7 @@ K3bVideoDVDRippingTitleListView::K3bVideoDVDRippingTitleListView( QWidget* paren
 
   addColumn( "" );
   addColumn( i18n("Title") );
+  addColumn( i18n("Preview") );
   addColumn( i18n("Video") );
   addColumn( i18n("Audio") );
   addColumn( i18n("Subpicture") );
@@ -264,6 +329,10 @@ K3bVideoDVDRippingTitleListView::K3bVideoDVDRippingTitleListView( QWidget* paren
   header()->setResizeEnabled( false, 0 );
 
   m_toolTip = new TitleToolTip( this );
+
+  m_previewGen = new K3bVideoDVDRippingPreview( this );
+  connect( m_previewGen, SIGNAL(previewDone(bool)),
+	   this, SLOT(slotPreviewDone(bool)) );
 }
 
 
@@ -277,10 +346,27 @@ void K3bVideoDVDRippingTitleListView::setVideoDVD( const K3bVideoDVD::VideoDVD& 
 {
   clear();
 
-  for( unsigned int i = 0; i < dvd.numTitles(); ++i ) {
-    (void)new TitleViewItem( this, lastItem(), dvd.title(i) );
-  }
+  m_dvd = dvd;
+  m_itemMap.resize( dvd.numTitles() );
+
+  for( unsigned int i = 0; i < dvd.numTitles(); ++i )
+    m_itemMap[i] = new TitleViewItem( this, lastItem(), dvd.title(i) );
+
+  m_currentPreviewTitle = 1;
+  m_previewGen->generatePreview( m_dvd, 1 );
 }
 
+
+void K3bVideoDVDRippingTitleListView::slotPreviewDone( bool success )
+{
+  if( success )
+    m_itemMap[m_currentPreviewTitle-1]->setPreview( m_previewGen->preview() );
+  else
+    m_itemMap[m_currentPreviewTitle-1]->setPreview( QImage() );
+
+  ++m_currentPreviewTitle;
+  if( m_currentPreviewTitle <= m_dvd.numTitles() )
+    m_previewGen->generatePreview( m_dvd, m_currentPreviewTitle );
+}
 
 #include "k3bvideodvdrippingtitlelistview.moc"
