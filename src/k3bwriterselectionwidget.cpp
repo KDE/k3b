@@ -209,6 +209,18 @@ void K3bWriterSelectionWidget::setWantedMediumState( int state )
 }
 
 
+int K3bWriterSelectionWidget::wantedMediumType() const
+{
+  m_comboMedium->wantedMediumType();
+}
+
+
+int K3bWriterSelectionWidget::wantedMediumState() const
+{
+  m_comboMedium->wantedMediumState();
+}
+
+
 void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
 {
   KConfigGroup g( c, "General Options" );

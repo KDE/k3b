@@ -53,6 +53,9 @@ class K3bWriterSelectionWidget : public QWidget
    */
   int writingApp() const;
 
+  int wantedMediumType() const;
+  int wantedMediumState() const;
+
   void loadDefaults();
   void loadConfig( KConfigBase* );
   void saveConfig( KConfigBase* );
