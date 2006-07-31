@@ -17,6 +17,9 @@
 #define _K3B_TOOLTIP_H_
 
 #include <qobject.h>
+#include <qpixmap.h>
+
+#include "k3bwidgetshoweffect.h"
 
 class QTimer;
 
@@ -35,7 +38,7 @@ class K3bToolTip : public QObject
 
  public slots:
   /**
-   * default is 2 seconds.
+   * default is 700 mseconds (same as QToolTip)
    */
   void setTipTimeout( int msec ) { m_tipTimeout = msec; }
 
@@ -48,12 +51,14 @@ class K3bToolTip : public QObject
   /**
    * Show a tooltip.
    */
-  void tip( const QRect&, const QString& );
+  void tip( const QRect&, const QString&, int effect = K3bWidgetShowEffect::Dissolve );
+  void tip( const QRect& rect, const QPixmap& pix, int effect = K3bWidgetShowEffect::Dissolve );
 
   /**
    * Use some arbitrary widget as the tooltip
+   * \param effect Use 0 for no effect
    */
-  void tip( const QRect&, QWidget* w );
+  void tip( const QRect&, QWidget* w, int effect = K3bWidgetShowEffect::Dissolve );
 
   bool eventFilter( QObject* o, QEvent* e );
 

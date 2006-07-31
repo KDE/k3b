@@ -16,6 +16,8 @@
 #include "k3bvideodvdrippingtitlelistview.h"
 #include "k3bvideodvdrippingpreview.h"
 
+#include <k3btooltip.h>
+
 #include <k3bvideodvd.h>
 #include <k3bvideodvdaudiostream.h>
 #include <k3bvideodvdvideostream.h>
@@ -134,6 +136,10 @@ public:
     m_previewSet = true;
 
     repaint();
+  }
+
+  const QImage& preview() const {
+    return m_preview;
   }
 
 protected:
@@ -269,11 +275,11 @@ private:
 };
 
 
-class K3bVideoDVDRippingTitleListView::TitleToolTip : public QToolTip
+class K3bVideoDVDRippingTitleListView::TitleToolTip : public K3bToolTip
 {
 public:
   TitleToolTip( K3bVideoDVDRippingTitleListView* view )
-    : QToolTip( view->viewport() ),
+    : K3bToolTip( view->viewport() ),
       m_view( view ) {
   }
 
@@ -291,13 +297,19 @@ public:
 
     switch( col ) {
     case 2:
-      // FIXME: show the bigger preview as the tooltip (maybe use K3bToolTip)
+      if( !item->preview().isNull() ) {
+	QPixmap previewPix;
+	if( previewPix.convertFromImage( item->preview() ) )
+	  tip( r, previewPix, 0 );
+      }
       break;
     case 4:
-      tip( r, "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( item->videoDVDTitle() ) );
+      if( item->videoDVDTitle().numAudioStreams() > 0 )
+	tip( r, "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( item->videoDVDTitle() ), 0 );
       break;
     case 5:
-      tip( r, "<p><b>" + i18n("Subpicture Streams") + "</b><p>" + subpictureStreamString( item->videoDVDTitle() ) );
+      if( item->videoDVDTitle().numSubPictureStreams() > 0 )
+	tip( r, "<p><b>" + i18n("Subpicture Streams") + "</b><p>" + subpictureStreamString( item->videoDVDTitle() ), 0 );
       break;
     }
   }

@@ -36,7 +36,7 @@ class K3bWidgetShowEffect : public QObject
  public:
   // FIXME: add an effect direction
   enum Effect {
-    Dissolve,
+    Dissolve = 1,
     Slide
   };
 

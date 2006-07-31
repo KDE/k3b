@@ -54,6 +54,9 @@ class K3bVideoDVDRippingPreview : public QObject
   QImage m_preview;
   KTempDir* m_tempDir;
   KProcess* m_process;
+  int m_title;
+  int m_chapter;
+  K3bVideoDVD::VideoDVD m_dvd;
 };
 
 #endif

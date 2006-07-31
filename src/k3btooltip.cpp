@@ -16,8 +16,12 @@
 #include "k3btooltip.h"
 #include "k3bwidgetshoweffect.h"
 
+#include <k3bthememanager.h>
+#include <k3bapplication.h>
+
 #include <qtimer.h>
 #include <qapplication.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 
@@ -27,7 +31,7 @@ K3bToolTip::K3bToolTip( QWidget* widget )
     m_parentWidget( widget ),
     m_currentTip( 0 ),
     m_tipTimer( new QTimer( this ) ),
-    m_tipTimeout( 2000 )
+    m_tipTimeout( 700 )
 {
   m_parentWidget->installEventFilter( this );
   connect( m_tipTimer, SIGNAL(timeout()),
@@ -40,13 +44,32 @@ K3bToolTip::~K3bToolTip()
 }
 
 
-void K3bToolTip::tip( const QRect&, const QString& )
+void K3bToolTip::tip( const QRect& rect, const QString& text, int effect )
 {
-  // FIXME: create a tip widget, show the tip
+  QLabel* label = new QLabel( text, parentWidget() );
+  label->setMargin( 6 );
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    label->setPaletteBackgroundColor( theme->backgroundColor() );
+    label->setPaletteForegroundColor( theme->foregroundColor() );
+  }
+  tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
 }
 
 
-void K3bToolTip::tip( const QRect& rect, QWidget* w )
+void K3bToolTip::tip( const QRect& rect, const QPixmap& pix, int effect )
+{
+  QLabel* label = new QLabel( parentWidget() );
+  label->setMargin( 6 );
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    label->setPaletteBackgroundColor( theme->backgroundColor() );
+    label->setPaletteForegroundColor( theme->foregroundColor() );
+  }
+  label->setPixmap( pix );
+  tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
+}
+
+
+void K3bToolTip::tip( const QRect& rect, QWidget* w, int effect )
 {
   // stop the timer
   m_tipTimer->stop();
@@ -92,7 +115,10 @@ void K3bToolTip::tip( const QRect& rect, QWidget* w )
   m_currentTip = w;
   m_currentTipRect = rect;
   w->move( p );
-  K3bWidgetShowEffect::showWidget( w, K3bWidgetShowEffect::Dissolve );//w->show();
+  if( effect )
+    K3bWidgetShowEffect::showWidget( w, (K3bWidgetShowEffect::Effect)effect );
+  else
+    w->show();
   w->raise();
 }
 

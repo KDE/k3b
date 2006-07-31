@@ -57,13 +57,18 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   }
 
   // auto-select a chapter
+  // choose the center chapter, but not the first or last if possible
   if( chapter == 0 )
-    chapter = QMIN( QMAX( dvd[title-1].numChapters()/2, 2 ), dvd[title-1].numChapters() );
+    chapter = QMIN( QMAX( dvd[title-1].numChapters()/2, 2 ), QMAX( dvd[title-1].numChapters() - 1, 1 ) );
 
   // select a frame number
   unsigned int frame = 20;
   if( dvd[title-1][chapter-1].playbackTime().totalFrames() < frame )
     frame = dvd[title-1][chapter-1].playbackTime().totalFrames() / 2;
+
+  m_dvd = dvd;
+  m_title = title;
+  m_chapter = chapter;
 
   m_tempDir = new KTempDir();
   m_tempDir->setAutoDelete( true );
@@ -76,7 +81,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   *m_process << "--dvd_access_delay" << "0";
   *m_process << "-y" << "ppm,null";
   *m_process << "-c" << QString("%1-%2").arg( frame ).arg( frame+1 );
-  *m_process << "-Z" << "100x";
+  *m_process << "-Z" << "x200";
   *m_process << "-o" << m_tempDir->name();
 
   connect( m_process, SIGNAL(processExited(KProcess*)),
@@ -110,7 +115,11 @@ void K3bVideoDVDRippingPreview::slotTranscodeFinished( KProcess* )
   delete m_process;
   m_process = 0;
 
-  emit previewDone( success );
+  // retry the first chapter in case another failed
+  if( !success && m_chapter > 1 )
+    generatePreview( m_dvd, m_title, 1 );
+  else
+    emit previewDone( success );
 }
 
 #include "k3bvideodvdrippingpreview.moc"
