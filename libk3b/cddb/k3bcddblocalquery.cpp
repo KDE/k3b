@@ -60,7 +60,7 @@ void K3bCddbLocalQuery::doQuery()
       }
       else {
 	QTextStream t( &f );
-	
+
 	K3bCddbResultEntry entry;
 	parseEntry( t, entry );
 	K3bCddbResultHeader header;

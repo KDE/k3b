@@ -80,6 +80,8 @@ bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
 {
   entry.rawData = "";
 
+  stream.setEncoding( QTextStream::UnicodeUTF8 );
+
   // parse data
   QString line;
   while( !(line = stream.readLine()).isNull() ) {
@@ -231,7 +233,7 @@ QString K3bCddbQuery::handshakeString() const
 QString K3bCddbQuery::queryString() const
 {
   QString query;
-  query.sprintf( "cddb query %08x %d", m_toc.discId(), m_toc.count() );
+  query.sprintf( "cddb query %08x %u", m_toc.discId(), (unsigned int)m_toc.count() );
   
   for( K3bDevice::Toc::const_iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
     query.append( QString( " %1" ).arg( (*it).firstSector().lba() ) );
