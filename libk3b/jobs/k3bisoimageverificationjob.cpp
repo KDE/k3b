@@ -117,7 +117,7 @@ void K3bIsoImageVerificationJob::slotMediaReloaded( bool success )
 			 i18n("Unable to Close the Tray") );
 
   if( d->needToCalcMd5 ) {
-    emit newTask( i18n("Calculating the image's md5sum") );
+    emit newTask( i18n("Reading original data") );
     
     // start it
     d->md5Job->setFile( d->imageFileName );
@@ -140,11 +140,11 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
     if( !d->imageMd5Sum.isEmpty() ) {
       // compare the two sums
       if( d->imageMd5Sum != d->md5Job->hexDigest() ) {
-	emit infoMessage( i18n("The written data differs."), ERROR );
+	emit infoMessage( i18n("Written data differs from original."), ERROR );
 	finishVerification(false);
       }
       else {
-	emit infoMessage( i18n("The written image seems binary equal."), SUCCESS );
+	emit infoMessage( i18n("Written data verified."), SUCCESS );
 	finishVerification(true);
       }
     }
@@ -170,7 +170,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
       }
       else {
 	// start the written data check
-	emit newTask( i18n("Calculating the written data's md5sum") );
+	emit newTask( i18n("Reading written data") );
 	d->md5Job->setDevice( d->device );
 	d->md5Job->setMaxReadSize( d->imageSize );
 	d->md5Job->start();
@@ -188,8 +188,10 @@ void K3bIsoImageVerificationJob::slotMd5JobProgress( int p )
 {
   if( !d->needToCalcMd5 && !d->imageMd5Sum.isEmpty() )
     emit percent( 50 + p/2 );
-  else
+  else if( d->needToCalcMd5 )
     emit percent( p/2 );
+  else
+    emit percent( p );
   emit subPercent( p );
 }
 
