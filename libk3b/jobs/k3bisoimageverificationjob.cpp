@@ -186,7 +186,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
 
 void K3bIsoImageVerificationJob::slotMd5JobProgress( int p )
 {
-  if( !d->needToCalcMd5 && !d->imageMd5Sum.isEmpty() )
+  if( d->needToCalcMd5 && !d->imageMd5Sum.isEmpty() )
     emit percent( 50 + p/2 );
   else if( d->needToCalcMd5 )
     emit percent( p/2 );
