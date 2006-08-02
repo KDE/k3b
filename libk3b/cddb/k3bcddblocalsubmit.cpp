@@ -83,6 +83,7 @@ void K3bCddbLocalSubmit::doSubmit()
     else {
       kdDebug() << "(K3bCddbLocalSubmit) creating file: " << path << endl;
       QTextStream entryStream( &entryFile );
+      entryStream.setEncoding( QTextStream::UnicodeUTF8 );
       entryStream << resultEntry().rawData;
       entryFile.close();
 
