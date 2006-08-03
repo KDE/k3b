@@ -4,6 +4,8 @@
  * Improved ffmpeg autoconf check.
  * More FreeBSD Compile fixes (thanks to Heiner Eichmann).
  * Fixed symbolic link handling in data projects (a bug introduced in 0.12.16)
+ * Use UTF-8 encoding to store and load local CDDB entries.
+ * Never use growisofs parameter -dvd-compat with DVD+RW media.
 
 0.12.16
 =======
