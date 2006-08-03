@@ -35,7 +35,7 @@ class K3bCddbQuery : public QObject
   K3bCddbQuery( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCddbQuery();
 
-  void query( const K3bToc& );
+  void query( const K3bDevice::Toc& );
 
   /**
    * Use this if the query returned multible matches
@@ -82,7 +82,7 @@ class K3bCddbQuery : public QObject
   virtual void doMatchQuery() = 0;
 
  protected:
-  const K3bToc& toc() const { return m_toc; }
+  const K3bDevice::Toc& toc() const { return m_toc; }
   K3bCddbResultHeader& header() { return m_header; }
   K3bCddbResultEntry& result() { return m_result; }
   void setError( int e ) { m_error = e; }
@@ -103,7 +103,7 @@ class K3bCddbQuery : public QObject
   QValueList<K3bCddbResultHeader> m_inexactMatches;
 
  private:
-  K3bToc m_toc;
+  K3bDevice::Toc m_toc;
   K3bCddbResultEntry m_result;
   K3bCddbResultHeader m_header;
   int m_error;

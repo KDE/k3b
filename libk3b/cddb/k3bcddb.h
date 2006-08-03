@@ -53,7 +53,7 @@ class K3bCddb : public QObject
 
  public slots:  
   /** query a cd and connect to the queryFinished signal */
-  void query( const K3bToc& );
+  void query( const K3bDevice::Toc& );
   void readConfig( KConfig* c );
   void saveEntry( const K3bCddbResultEntry& );
 
@@ -78,7 +78,7 @@ class K3bCddb : public QObject
   K3bCddbLocalQuery* m_localQuery;
   K3bCddbLocalSubmit* m_localSubmit;
 
-  K3bToc m_toc;
+  K3bDevice::Toc m_toc;
   unsigned int m_iCurrentQueriedServer;
   unsigned int m_iCurrentQueriedLocalDir;
 

@@ -57,7 +57,7 @@ void K3bCddb::readConfig( KConfig* c )
 {
   c->setGroup( "Cddb" );
 
-  m_bRemoteCddbQuery = c->readBoolEntry( "use remote cddb", false );
+  m_bRemoteCddbQuery = c->readBoolEntry( "use remote cddb", true );
   m_bLocalCddbQuery = c->readBoolEntry( "use local cddb query", false );
 
   // old config <= 0.7.3
@@ -92,12 +92,9 @@ void K3bCddb::readConfig( KConfig* c )
 }
 
 
-void K3bCddb::query( const K3bToc& toc )
+void K3bCddb::query( const K3bDevice::Toc& toc )
 {
   m_toc = toc;
-
-  // make sure we have a valid discId
-  m_toc.calculateDiscId();
 
   if( m_bLocalCddbQuery ) {
     m_iCurrentQueriedLocalDir = 0;
