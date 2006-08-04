@@ -46,16 +46,20 @@ bool K3bMovixProgram::scan( const QString& p )
 
   K3bMovixBin* bin = 0;
 
-  // probe version
-  KProcess vp;
+  //
+  // probe version and data dir
+  //
+  KProcess vp, dp;
   vp << path + "movix-version";
-  K3bProcessOutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  dp << path + "movix-conf";
+  K3bProcessOutputCollector vout( &vp ), dout( &dp );
+  if( vp.start( KProcess::Block, KProcess::AllOutput ) && dp.start( KProcess::Block, KProcess::AllOutput ) ) {
     // movix-version just gives us the version number on stdout
-    if( !out.output().isEmpty() ) {
+    if( !vout.output().isEmpty() && !dout.output().isEmpty() ) {
       bin = new K3bMovixBin( this );
-      bin->version = out.output().stripWhiteSpace();
+      bin->version = vout.output().stripWhiteSpace();
       bin->path = path;
+      bin->m_movixPath = dout.output().stripWhiteSpace();
     }
   }
   else {
@@ -97,139 +101,115 @@ bool K3bMovixProgram::scanNewEMovix( K3bMovixBin* bin, const QString& path )
 bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
 {
   //
-  // we have a valid version
-  // now search for the config (the movix files base dir)
+  // first check if all necessary directories are present
   //
-  KProcess cp;
-  cp << path + "movix-conf";
-  K3bProcessOutputCollector out( &cp );
-  if( cp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    // now search the needed files in the given dir
-    if( out.output().isEmpty() ) {
-      kdDebug() << "(K3bMovixProgram) no eMovix config info" << endl;
-      delete bin;
-      return false;
-    }
-
-    // save the path to all the movix scripts.
-    bin->path = out.output().stripWhiteSpace();
-
-    //
-    // first check if all necessary directories are present
-    //
-    QDir dir(bin->path);
-    QStringList subdirs = dir.entryList( QDir::Dirs );
-    if( !subdirs.contains( "boot-messages" ) ) {
-      kdDebug() << "(K3bMovixProgram) could not find subdir 'boot-messages'" << endl;
-      delete bin;
-      return false;
-    }
-    if( !subdirs.contains( "isolinux" ) ) {
-      kdDebug() << "(K3bMovixProgram) could not find subdir 'isolinux'" << endl;
-      delete bin;
-      return false;
-    }
-    if( !subdirs.contains( "movix" ) ) {
-      kdDebug() << "(K3bMovixProgram) could not find subdir 'movix'" << endl;
-      delete bin;
-      return false;
-    }
-    if( !subdirs.contains( "mplayer-fonts" ) ) {
-      kdDebug() << "(K3bMovixProgram) could not find subdir 'mplayer-fonts'" << endl;
-      delete bin;
-      return false;
-    }
-
-
-    //
-    // check if we have a version of eMovix which contains the movix-files script
-    //
-    if( QFile::exists( path + "movix-files" ) ) {
-      bin->addFeature( "files" );
-
-      KProcess p;
-      K3bProcessOutputCollector out( &p );
-      p << bin->path + "movix-files";
-      if( p.start( KProcess::Block, KProcess::AllOutput ) ) {
-	bin->m_movixFiles = QStringList::split( "\n", out.output() );
-      }
-    }
-
-    //
-    // fallback: to be compatible with 0.8.0rc2 we just add all files in the movix directory
-    //
-    if( bin->m_movixFiles.isEmpty() ) {
-      QDir dir( bin->path + "/movix" );
-      bin->m_movixFiles = dir.entryList(QDir::Files);
-    }
-
-    //
-    // these files are fixed. That should not be a problem
-    // since Isolinux is quite stable as far as I know.
-    //
-    bin->m_isolinuxFiles.append( "initrd.gz" );
-    bin->m_isolinuxFiles.append( "isolinux.bin" );
-    bin->m_isolinuxFiles.append( "isolinux.cfg" );
-    bin->m_isolinuxFiles.append( "kernel/vmlinuz" );
-    bin->m_isolinuxFiles.append( "movix.lss" );
-    bin->m_isolinuxFiles.append( "movix.msg" );
-
-
-    //
-    // check every single necessary file :(
-    //
-    for( QStringList::const_iterator it = bin->m_isolinuxFiles.begin();
-	 it != bin->m_isolinuxFiles.end(); ++it ) {
-      if( !QFile::exists( bin->path + "/isolinux/" + *it ) ) {
-	kdDebug() << "(K3bMovixProgram) Could not find file " << *it << endl;
-	delete bin;
-	return false;
-      }
-    }
-
-    //
-    // now check the boot-messages languages
-    //
-    dir.cd( "boot-messages" );
-    bin->m_supportedLanguages = dir.entryList(QDir::Dirs);
-    bin->m_supportedLanguages.remove(".");
-    bin->m_supportedLanguages.remove("..");
-    bin->m_supportedLanguages.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
-    bin->m_supportedLanguages.prepend( i18n("default") );
-    dir.cdUp();
-
-    //
-    // now check the supported mplayer-fontsets
-    // FIXME: every font dir needs to contain the "font.desc" file!
-    //
-    dir.cd( "mplayer-fonts" );
-    bin->m_supportedSubtitleFonts = dir.entryList( QDir::Dirs );
-    bin->m_supportedSubtitleFonts.remove(".");
-    bin->m_supportedSubtitleFonts.remove("..");
-    bin->m_supportedSubtitleFonts.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
-    // new ttf fonts in 0.8.0rc2
-    bin->m_supportedSubtitleFonts += dir.entryList( "*.ttf", QDir::Files );
-    bin->m_supportedSubtitleFonts.prepend( i18n("none") );
-    dir.cdUp();
-  
-    //
-    // now check the supported boot labels
-    //
-    dir.cd( "isolinux" );
-    bin->m_supportedBootLabels = determineSupportedBootLabels( dir.filePath("isolinux.cfg") );
-
-    //
-    // This seems to be a valid eMovix installation. :)
-    //
-
-    addBin(bin);
-    return true;
-  }
-  else {
-    kdDebug() << "(K3bMovixProgram) could not start " << path << endl;
+  QDir dir( bin->movixDataDir() );
+  QStringList subdirs = dir.entryList( QDir::Dirs );
+  if( !subdirs.contains( "boot-messages" ) ) {
+    kdDebug() << "(K3bMovixProgram) could not find subdir 'boot-messages'" << endl;
     delete bin;
     return false;
   }
+  if( !subdirs.contains( "isolinux" ) ) {
+    kdDebug() << "(K3bMovixProgram) could not find subdir 'isolinux'" << endl;
+    delete bin;
+    return false;
+  }
+  if( !subdirs.contains( "movix" ) ) {
+    kdDebug() << "(K3bMovixProgram) could not find subdir 'movix'" << endl;
+    delete bin;
+    return false;
+  }
+  if( !subdirs.contains( "mplayer-fonts" ) ) {
+    kdDebug() << "(K3bMovixProgram) could not find subdir 'mplayer-fonts'" << endl;
+    delete bin;
+    return false;
+  }
+
+
+  //
+  // check if we have a version of eMovix which contains the movix-files script
+  //
+  if( QFile::exists( path + "movix-files" ) ) {
+    bin->addFeature( "files" );
+
+    KProcess p;
+    K3bProcessOutputCollector out( &p );
+    p << bin->path + "movix-files";
+    if( p.start( KProcess::Block, KProcess::AllOutput ) ) {
+      bin->m_movixFiles = QStringList::split( "\n", out.output() );
+    }
+  }
+
+  //
+  // fallback: to be compatible with 0.8.0rc2 we just add all files in the movix directory
+  //
+  if( bin->m_movixFiles.isEmpty() ) {
+    QDir dir( bin->movixDataDir() + "/movix" );
+    bin->m_movixFiles = dir.entryList(QDir::Files);
+  }
+
+  //
+  // these files are fixed. That should not be a problem
+  // since Isolinux is quite stable as far as I know.
+  //
+  bin->m_isolinuxFiles.append( "initrd.gz" );
+  bin->m_isolinuxFiles.append( "isolinux.bin" );
+  bin->m_isolinuxFiles.append( "isolinux.cfg" );
+  bin->m_isolinuxFiles.append( "kernel/vmlinuz" );
+  bin->m_isolinuxFiles.append( "movix.lss" );
+  bin->m_isolinuxFiles.append( "movix.msg" );
+
+
+  //
+  // check every single necessary file :(
+  //
+  for( QStringList::const_iterator it = bin->m_isolinuxFiles.begin();
+       it != bin->m_isolinuxFiles.end(); ++it ) {
+    if( !QFile::exists( bin->movixDataDir() + "/isolinux/" + *it ) ) {
+      kdDebug() << "(K3bMovixProgram) Could not find file " << *it << endl;
+      delete bin;
+      return false;
+    }
+  }
+
+  //
+  // now check the boot-messages languages
+  //
+  dir.cd( "boot-messages" );
+  bin->m_supportedLanguages = dir.entryList(QDir::Dirs);
+  bin->m_supportedLanguages.remove(".");
+  bin->m_supportedLanguages.remove("..");
+  bin->m_supportedLanguages.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
+  bin->m_supportedLanguages.prepend( i18n("default") );
+  dir.cdUp();
+
+  //
+  // now check the supported mplayer-fontsets
+  // FIXME: every font dir needs to contain the "font.desc" file!
+  //
+  dir.cd( "mplayer-fonts" );
+  bin->m_supportedSubtitleFonts = dir.entryList( QDir::Dirs );
+  bin->m_supportedSubtitleFonts.remove(".");
+  bin->m_supportedSubtitleFonts.remove("..");
+  bin->m_supportedSubtitleFonts.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
+  // new ttf fonts in 0.8.0rc2
+  bin->m_supportedSubtitleFonts += dir.entryList( "*.ttf", QDir::Files );
+  bin->m_supportedSubtitleFonts.prepend( i18n("none") );
+  dir.cdUp();
+  
+  //
+  // now check the supported boot labels
+  //
+  dir.cd( "isolinux" );
+  bin->m_supportedBootLabels = determineSupportedBootLabels( dir.filePath("isolinux.cfg") );
+
+  //
+  // This seems to be a valid eMovix installation. :)
+  //
+
+  addBin(bin);
+  return true;
 }
 
 

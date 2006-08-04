@@ -420,6 +420,18 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
     }
   }
 
+  // Some distributions (such as Gentoo for example) do use the win32codecs package instead of the
+  // eMovix supplied codecs. These codecs are not picked up by the movix-conf script
+  K3bDirItem* codecDir = dynamic_cast<K3bDirItem*>( d->doc->root()->findByPath( "/eMoviX/codecs" ) );
+  if( !codecDir || codecDir->isEmpty() ) {
+    QDir localCodecDir( d->eMovixBin->movixDataDir() + "/codecs" );
+    if( localCodecDir.exists() ) {
+      QStringList codecFiles = localCodecDir.entryList( QDir::Files );
+      for( QStringList::const_iterator it = codecFiles.begin(); it != codecFiles.end(); ++it )
+	createItem( localCodecDir.path() + '/' + *it, "/eMoviX/codecs" );
+    }
+  }
+
   if( writePlaylistFile() && writeMovixRcFile() ) {
     // add the two items that are not listed by the script
     createItem( d->movixRcFile->name(), "/eMoviX/movix" )->setK3bName( "movixrc" );

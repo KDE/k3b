@@ -26,6 +26,8 @@ class LIBK3B_EXPORT K3bMovixBin : public K3bExternalBin
     : K3bExternalBin( p ) {
   }
 
+  const QString& movixDataDir() const { return m_movixPath; }
+
   const QStringList& supportedBootLabels() const { return m_supportedBootLabels; }
   QStringList supportedSubtitleFonts() const;
   QStringList supportedLanguages() const;
