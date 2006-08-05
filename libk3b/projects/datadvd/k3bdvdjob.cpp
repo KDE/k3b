@@ -126,7 +126,7 @@ K3bDataDoc::MultiSessionMode K3bDvdJob::getMultiSessionMode( const K3bDevice::Di
     //
     // we need to handle DVD+RW and DVD-RW overwrite media differently since remainingSize() is not valid
     // in both cases
-    // Since one never closes a DVD+RW we only differ between CONTINUE and NONE
+    // Since one never closes a DVD+RW we only differ between CONTINUE and START
     //
 
     // try to check the filesystem size
@@ -135,7 +135,7 @@ K3bDataDoc::MultiSessionMode K3bDvdJob::getMultiSessionMode( const K3bDevice::Di
       mode = K3bDataDoc::CONTINUE;
     }
     else {
-      mode = K3bDataDoc::NONE;
+      mode = K3bDataDoc::START;
     }
   }
   else if( info.appendable() ) {
