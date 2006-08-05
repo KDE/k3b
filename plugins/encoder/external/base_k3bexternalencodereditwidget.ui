@@ -1,0 +1,173 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>base_K3bExternalEncoderEditWidget</class>
+<author>Sebastian Trueg</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>base_K3bExternalEncoderEditWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>529</width>
+            <height>514</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>General</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>m_editExtension</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="0">
+                    <property name="name">
+                        <cstring>m_editName</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Filename extension:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Command</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KActiveLabel">
+                    <property name="name">
+                        <cstring>kActiveLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;p&gt;&lt;b&gt;Command&lt;/b&gt;&lt;br&gt;
+Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em&gt;Swap Byte Order&lt;/em&gt;) 16bit stereo audio frames from stdin.
+&lt;p&gt;The following strings will be replaced by K3b:&lt;br&gt;
+&lt;b&gt;%f&lt;/b&gt; - The filename of the resulting file. This is where the command has to write its output to.&lt;br&gt;
+&lt;em&gt;The following refer to metadata stored for example in the ID3 tag of am mp3 file (Be aware that these values might be empty).&lt;/em&gt;&lt;br&gt;
+&lt;b&gt;%t&lt;/b&gt; - Title&lt;br&gt;
+&lt;b&gt;%a&lt;/b&gt; - Artist&lt;br&gt;
+&lt;b&gt;%c&lt;/b&gt; - Comment&lt;br&gt;
+&lt;b&gt;%n&lt;/b&gt; - Track number&lt;br&gt;
+&lt;b&gt;%m&lt;/b&gt; - Album Title&lt;br&gt;
+&lt;b&gt;%r&lt;/b&gt; - Album Artist&lt;br&gt;
+&lt;b&gt;%x&lt;/b&gt; - Album comment&lt;br&gt;
+&lt;b&gt;%y&lt;/b&gt; - Release Year</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit">
+                    <property name="name">
+                        <cstring>m_editCommand</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox4</cstring>
+            </property>
+            <property name="title">
+                <string>Options</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkSwapByteOrder</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Swap &amp;Byte Order</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+B</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Swap the byte order of the input data</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt; If this option is checked K3b will swap the byte order of the input data. Thus, the command has to read big endian audio frames.
+&lt;p&gt;If the resulting audio file sounds bad it is highly likely that the byte order is wrong and this option has to be checked.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkWriteWaveHeader</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Write W&amp;ave Header</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Create a wave header for the input data</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will write a wave header. This is useful in case the encoder application cannot read plain raw audio data.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </vbox>
+</widget>
+<tabstops>
+    <tabstop>m_editName</tabstop>
+    <tabstop>m_editExtension</tabstop>
+    <tabstop>m_editCommand</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kactivelabel.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
+</UI>

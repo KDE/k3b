@@ -18,7 +18,6 @@
 
 
 #include <k3baudioencoder.h>
-#include <k3bpluginconfigwidget.h>
 
 
 class base_K3bExternalEncoderConfigWidget;
@@ -61,35 +60,6 @@ class K3bExternalEncoder : public K3bAudioEncoder
   long encodeInternal( const char* data, Q_ULONG len );
   void setMetaDataInternal( MetaDataField, const QString& );
   bool writeWaveHeader();
-
-  class Private;
-  Private* d;
-};
-
-
-class K3bExternalEncoderSettingsWidget : public K3bPluginConfigWidget
-{
-  Q_OBJECT
-
- public:
-  K3bExternalEncoderSettingsWidget( QWidget* parent = 0, const char* name = 0 );
-  ~K3bExternalEncoderSettingsWidget();
-
- public slots:
-  void loadConfig();
-  void saveConfig();
-
- private slots:
-  void slotHighlighted( int );
-  void slotNewCommand();
-  void slotDeleteCommand();
-  void updateCurrentCommand();
-
- private:
-  bool checkCurrentCommand();
-  void loadCommand( int );
-
-  base_K3bExternalEncoderConfigWidget* w;
 
   class Private;
   Private* d;

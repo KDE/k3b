@@ -1,17 +1,20 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bExternalEncoderConfigWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>Form1</cstring>
+        <cstring>base_K3bExternalEncoderConfigWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>529</width>
-            <height>437</height>
+            <width>441</width>
+            <height>354</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
     </property>
     <vbox>
         <property name="name">
@@ -20,229 +23,129 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLabel">
+        <widget class="KActiveLabel">
             <property name="name">
-                <cstring>textLabel5</cstring>
+                <cstring>kActiveLabel1</cstring>
             </property>
             <property name="text">
-                <string>Setup different external programs to encode audio data ripped from an audio CD.</string>
+                <string>&lt;p&gt;This dialog can be used to setup external command line applications as audio encoders. These can then be used by K3b to encode audio data (Tracks from an audio CD or the titles from an audio project) to formats that are normally not supported (i.e. no encoder plugin exists).
+&lt;p&gt;K3b comes with a selection of predefined external applications that depends on the installed applications.</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>layout8</cstring>
+                <cstring>groupBox1</cstring>
             </property>
-            <hbox>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Configured Encoders</string>
+            </property>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
+                <widget class="QListView">
+                    <column>
+                        <property name="text">
+                            <string>Name</string>
                         </property>
-                        <widget class="KListBox">
-                            <property name="name">
-                                <cstring>m_programList</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout1</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <spacer>
-                                    <property name="name">
-                                        <cstring>spacer1</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>51</width>
-                                            <height>21</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                                <widget class="QToolButton">
-                                    <property name="name">
-                                        <cstring>m_buttonNew</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>New</string>
-                                    </property>
-                                    <property name="autoRaise">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>New Program</string>
-                                    </property>
-                                </widget>
-                                <widget class="QToolButton">
-                                    <property name="name">
-                                        <cstring>m_buttonDelete</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Delete</string>
-                                    </property>
-                                    <property name="autoRaise">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Delete Program</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="Line">
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Extension</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Command</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
                     <property name="name">
-                        <cstring>line2</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>VLine</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
+                        <cstring>m_viewEncoders</cstring>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout6</cstring>
                     </property>
-                    <vbox>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout4</cstring>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>textLabel1</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Name:</string>
-                                    </property>
-                                </widget>
-                                <widget class="KLineEdit" row="1" column="1">
-                                    <property name="name">
-                                        <cstring>m_editExtension</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KLineEdit" row="0" column="1">
-                                    <property name="name">
-                                        <cstring>m_editName</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>textLabel3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Extension:</string>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p&gt;&lt;b&gt;Command&lt;/b&gt;&lt;br&gt;
-The command must at least contain the filename (%f). Metainfo may be set with:&lt;br&gt;
-&lt;b&gt;%t&lt;/b&gt; - Title; &lt;b&gt;%a&lt;/b&gt; - Artist; &lt;b&gt;%c&lt;/b&gt; - Comment; &lt;b&gt;%n&lt;/b&gt; - Track number;&lt;br&gt;
-&lt;b&gt;%m&lt;/b&gt; - Album Title; &lt;b&gt;%r&lt;/b&gt; - Album Artist; &lt;b&gt;%x&lt;/b&gt; - Album comment; &lt;b&gt;%y&lt;/b&gt; - Year&lt;br&gt;
-Be aware that these values might be empty.&lt;br&gt;
-The program has to read the data from stdin.&lt;br&gt;
-If you only hear noise you most likely need to swap the byte order.</string>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>m_editCommand</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>m_checkSwapByteOrder</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Swap &amp;Byte Order</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>m_checkWriteWaveHeader</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Write W&amp;ave Header</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>&lt;p&gt;If this option is checked K3b will write a wave header. This is useful in case the encoder application cannot read plain raw audio data.</string>
-                            </property>
-                        </widget>
                         <spacer>
                             <property name="name">
-                                <cstring>spacer2</cstring>
+                                <cstring>spacer3</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Vertical</enum>
+                                <enum>Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>41</width>
-                                    <height>50</height>
+                                    <width>71</width>
+                                    <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                    </vbox>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>m_buttonRemove</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Remove</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>m_buttonEdit</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Edit...</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>m_buttonAdd</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Add...</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-            </hbox>
+            </vbox>
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
-<tabstops>
-    <tabstop>m_editName</tabstop>
-    <tabstop>m_editExtension</tabstop>
-    <tabstop>m_editCommand</tabstop>
-    <tabstop>m_programList</tabstop>
-</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistbox.h</includehint>
+    <includehint>kactivelabel.h</includehint>
 </includehints>
 </UI>
