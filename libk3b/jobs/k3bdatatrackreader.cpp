@@ -20,6 +20,7 @@
 #include <k3bdeviceglobals.h>
 #include <k3btrack.h>
 #include <k3bthread.h>
+#include <k3bcore.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -133,8 +134,10 @@ public:
     }
 
     emitInfoMessage( i18n("Reading with sector size %1.").arg(m_usedSectorSize), K3bJob::INFO );
-    kdDebug() << "(K3bDataTrackReader::WorkThread) reading " << (m_lastSector.lba() - m_firstSector.lba() + 1)
-	      << " sectors with sector size: " << m_usedSectorSize << endl;
+    kdDebug() << "(K3bDataTrackReader::WorkThread) reading sectors " 
+	      << m_firstSector.lba() << " to " << m_lastSector.lba() 
+	      << " (" << (m_lastSector.lba() - m_firstSector.lba() + 1) 
+	      << ") with sector size: " << m_usedSectorSize << endl;
 
     QFile file;
     if( m_fd == -1 ) {
@@ -149,6 +152,7 @@ public:
       }
     }
 
+    k3bcore->blockDevice( m_device );
     m_device->block( true );
 
     //
@@ -164,7 +168,7 @@ public:
 
     s_bufferSizeSectors = 128;
     unsigned char* buffer = new unsigned char[m_usedSectorSize*s_bufferSizeSectors];
-    while( read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
+    while( s_bufferSizeSectors > 0 && read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
       kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
 		<< s_bufferSizeSectors << " too high." << endl;
       s_bufferSizeSectors--;
@@ -177,6 +181,7 @@ public:
       emitInfoMessage( i18n("Error while reading sector %1.").arg(m_firstSector.lba()), K3bJob::ERROR );
       emitFinished(false);
       m_device->block( false );
+      k3bcore->unblockDevice( m_device );
       return;
     }
 
@@ -253,6 +258,7 @@ public:
     setErrorRecovery( m_device, m_oldErrorRecoveryMode );
 
     m_device->block( false );
+    k3bcore->unblockDevice( m_device );
 
     // cleanup
     if( m_useLibdvdcss )
