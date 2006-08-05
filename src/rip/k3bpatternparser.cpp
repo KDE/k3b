@@ -197,20 +197,19 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   QString inclusion;
   bool isIncluded;
 
-  QRegExp* conditionrx =
-    new QRegExp( "^[@|!][atyegrmx](?:='.*')?\\{" );
-  conditionrx->setMinimal( TRUE );
+  static QRegExp conditionrx( "^[@|!][atyegrmx](?:='.*')?\\{" );
+  conditionrx.setMinimal( TRUE );
 
   for( unsigned int i = 0; i < dir.length(); ++i ) {
 
     offsetStack.push(
-      conditionrx->search(dir, i, QRegExp::CaretAtOffset) );
+      conditionrx.search(dir, i, QRegExp::CaretAtOffset) );
 
     if( offsetStack.top() == -1 ) {
       offsetStack.pop();
     }
     else {
-      i += conditionrx->matchedLength() - 1;
+      i += conditionrx.matchedLength() - 1;
       continue;
     }
 
@@ -293,8 +292,6 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
     } // end of replace (at closing bracket '}')
 
   } // end of conditional inclusion for(...)
-
-  delete conditionrx;
 
   // end of Conditional Inclusion */
 

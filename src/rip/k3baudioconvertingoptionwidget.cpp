@@ -45,6 +45,35 @@ public:
   QTimer freeSpaceUpdateTimer;
 
   KIO::filesize_t neededSize;
+
+  int getDefaultFormat() {
+    // we prefere formats in this order:
+    // 1. ogg
+    // 2. mp3
+    // 3. flac
+    // 4. wave
+    int ogg = -1;
+    int mp3 = -1;
+    int flac = -1;
+    for( QMap<int, QString>::const_iterator it = extensionMap.constBegin();
+	 it != extensionMap.constEnd(); ++it ) {
+      if( it.data() == "ogg" )
+	ogg = it.key();
+      else if( it.data() == "mp3" )
+	mp3 = it.key();
+      else if( it.data() == "flac" )
+	flac = it.key();
+    }
+
+    if( ogg > -1 )
+      return ogg;
+    else if( mp3 > -1 )
+      return mp3;
+    else if( flac > -1 )
+      return flac;
+    else
+	return 0;
+  }
 };
 
 
@@ -68,6 +97,9 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent,
 
   m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
   m_buttonConfigurePlugin->setIconSet( SmallIconSet( "gear" ) );
+
+  // FIXME: see if sox and the sox encoder are installed and if so do not put the internal wave
+  //        writer in the list of encoders.
 
   d->encoderMap.clear();
   d->extensionMap.clear();
@@ -180,7 +212,7 @@ void K3bAudioConvertingOptionWidget::loadDefaults()
   m_editBaseDir->setURL( QDir::homeDirPath() );
   m_checkSingleFile->setChecked( false );
   m_checkWriteCueFile->setChecked( false );
-  m_comboFileType->setCurrentItem(0); // Wave
+  m_comboFileType->setCurrentItem( d->getDefaultFormat() );
   m_checkCreatePlaylist->setChecked(false);
   m_checkPlaylistRelative->setChecked(false);
 
@@ -198,7 +230,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( KConfigBase* c )
   m_checkCreatePlaylist->setChecked( c->readBoolEntry( "create_playlist", false ) );
   m_checkPlaylistRelative->setChecked( c->readBoolEntry( "relative_path_in_playlist", false ) );
 
-  QString filetype = c->readEntry( "filetype", "wav" );
+  QString filetype = c->readEntry( "filetype", d->extensionMap[d->getDefaultFormat()] );
   if( filetype == "wav" )
     m_comboFileType->setCurrentItem(0);
   else {

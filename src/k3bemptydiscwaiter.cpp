@@ -318,7 +318,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	  connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
 	  connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	  job.start( medium.diskInfo() );
-	  d->erasingInfoDialog->exec(true);
+	  d->erasingInfoDialog->exec( true );
 	}
       }
       else {
@@ -494,7 +494,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
 	connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
 	job.start( medium.diskInfo() );
-	d->erasingInfoDialog->exec(true);
+	d->erasingInfoDialog->exec( true );
       }
       else {
 	kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW formatting." << endl;
@@ -568,7 +568,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
       connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
       connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
       job.start();
-      d->erasingInfoDialog->exec(false);
+      d->erasingInfoDialog->exec( false );
     }
     else {
       kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no CD-RW overwrite." << endl;
@@ -666,22 +666,16 @@ void K3bEmptyDiscWaiter::slotErasingFinished( bool success )
 	     SLOT(slotReloadingAfterErasingFinished(K3bDevice::DeviceHandler*)) );
   }
   else {
-    d->blockMediaChange = true;
     K3bDevice::eject( d->device );
-    d->erasingInfoDialog->hide();
-    KMessageBox::error( parentWidgetToUse(), i18n("Erasing failed.") );
-    d->blockMediaChange = false;
-
-    if( d->mediumChanged ) {
-      d->mediumChanged--;
-      slotMediumChanged( d->device );
-    }
+    KMessageBox::error( d->erasingInfoDialog, i18n("Erasing failed.") );
+    d->erasingInfoDialog->hide(); // close the dialog thus ending it's event loop -> back to slotMediumChanged
   }
 }
 
 
 void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bDevice::DeviceHandler* )
 {
+  // close the dialog thus ending it's event loop -> back to slotMediumChanged
   d->erasingInfoDialog->hide();
 }
 

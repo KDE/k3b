@@ -47,14 +47,14 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
   m_editBlankReplace->setValidator( dirValidator );
 
   // default pattern
-  m_comboFilenamePattern->insertItem( i18n( "%A/%T/%a - %t" ) );
-  m_comboFilenamePattern->insertItem( i18n( "%g/%A - %T/Track%n" ) );
+  m_comboFilenamePattern->insertItem( i18n( "%{albumartist} - %{albumtitle}/%{artist} - %{title}" ) );
+  m_comboFilenamePattern->insertItem( i18n( "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}" ) );
   m_comboFilenamePattern->insertItem( i18n( "music/ripped-tracks/%a - %t" ) );
   m_comboFilenamePattern->insertItem( i18n("%A - %T/!a='%A'{%a - }%t") );
 
-  m_comboPlaylistPattern->insertItem( i18n( "%A - %T" ) );
+  m_comboPlaylistPattern->insertItem( i18n( "%{albumartist} - %{albumtitle}" ) );
   m_comboPlaylistPattern->insertItem( i18n( "Playlist" ) );
-  m_comboPlaylistPattern->insertItem( i18n( "playlists/%A/%T" ) );
+  m_comboPlaylistPattern->insertItem( i18n( "playlists/%{albumartist}/%{albumtitle    }" ) );
 
   connect( m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
@@ -102,8 +102,8 @@ bool K3bCddbPatternWidget::replaceBlanks() const
 
 void K3bCddbPatternWidget::loadConfig( KConfigBase* c )
 {
-  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%A - %T" ) );
-  m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%A - %T/%a - %t" ) );
+  m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", "%{albumartist} - %{albumtitle}" ) );
+  m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", "%{albumartist} - %{albumtitle}/%{artist} - %{title}" ) );
   m_checkBlankReplace->setChecked( c->readBoolEntry( "replace blanks", false ) );
   m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );
 }
@@ -120,8 +120,8 @@ void K3bCddbPatternWidget::saveConfig( KConfigBase* c )
 
 void K3bCddbPatternWidget::loadDefaults()
 {
-  m_comboPlaylistPattern->setEditText( "%A - %T.m3u" );
-  m_comboFilenamePattern->setEditText( "%A - %T/%a - %t" );
+  m_comboPlaylistPattern->setEditText( "%%{albumartist} - %{albumtitle}" );
+  m_comboFilenamePattern->setEditText( "%{albumartist} - %{albumtitle}/%{artist} - %{title}" );
   m_checkBlankReplace->setChecked( false );
   m_editBlankReplace->setText( "_" );
 }

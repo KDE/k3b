@@ -84,6 +84,9 @@ void K3bFileView::setupGUI()
   m_toolBox->addButton( actionHome );
   m_toolBox->addButton( actionReload );
   m_toolBox->addSpacing();
+  m_toolBox->addButton( m_dirOp->actionCollection()->action("short view") );
+  m_toolBox->addButton( m_dirOp->actionCollection()->action("detailed view") );
+  m_toolBox->addSpacing();
   m_toolBox->addButton( m_dirOp->bookmarkMenu() );
   m_toolBox->addSpacing();
 
