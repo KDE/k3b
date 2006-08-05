@@ -1,0 +1,104 @@
+<chapter id="dcop">
+  <title>The &k3b; &DCOP; Interface</title>
+  <para>&k3b; features, like many other &kde; applications as well, a
+    &DCOP; interface which makes it possible to control a part of it's
+    functionality from &eg; a shellscript.</para>
+  <para>To use these &DCOP; functions you can either use the
+    <command>dcop</command> commandline program or the more convenient
+    <application>Kdcop</application> application. Both provide the same
+    functionality so it's mostly a matter of taste and context of usage when
+    deciding which way to choose.</para>
+  <para>This chapter assumes that you're using the <command>dcop</command>
+    commandline program. To access &k3b;'s &DCOP; functions, make sure that
+    &k3b; is started and then enter something like this at a console:
+<screen>
+<prompt>#</prompt> <command>dcop</command> <option>k3b</option> <option>K3bInterface</option> <replaceable>[function]</replaceable>
+</screen>
+</para>
+
+<para>Besides the generic &DCOP; functions available to all &kde;
+applications, &k3b;'s DCOP interface mainly consists of two parts as described below.</para>
+
+<sect1>
+<title>The default K3bInterface</title>
+
+<para>The default K3b DCOP interface provides functionality like copyCD, formatDVD, and methods for creating new projects.</para>
+
+<programlisting>
+DCOPRef createDataCDProject()
+DCOPRef createAudioCDProject()
+DCOPRef createMixedCDProject()
+DCOPRef createVideoCDProject()
+DCOPRef createMovixCDProject()
+DCOPRef createDataDVDProject()
+DCOPRef createVideoDVDProject()
+DCOPRef createMovixDVDProject()
+DCOPRef openProject(KURL url)
+QValueList&lt;DCOPRef&gt; projects()
+DCOPRef currentProject()
+void copyCd()
+void copyDvd()
+void eraseCdrw()
+void formatDvd()
+void burnCdImage(KURL url)
+void burnDvdImage(KURL url)
+</programlisting>
+
+<para>As result from one of the createXXXProject methods one gets a DCOP reference to the newly created project:
+
+<programlisting>DCOPRef(k3b,K3bProject-0)</programlisting>
+
+Alternatively you may create a project using the command line:
+
+<screen>
+<prompt>#</prompt> <command>k3b</command> <replaceable>--audiocd</replaceable>
+</screen>
+
+and then retrieve a reference to this project with
+
+<screen>
+<prompt>#</prompt> <command>dcop</command> <option>k3b</option> <option>K3bInterface</option> <replaceable>currentProject</replaceable>
+</screen>
+
+Using this reference it is possible to manipulate the project using the <link linkend="k3bprojectinterface">K3bProjectInterface</link>.</para>
+
+</sect1>
+
+<sect1 id="k3bprojectinterface">
+<title>K3bProjectInterface</title>
+
+<programlisting>
+void addUrls(KURL::List urls)
+void addUrl(KURL url)
+void burn()
+</programlisting>
+
+<para>K3b offers the K3bProjectInterface as listed above or the more powerful K3bDataProjectInterface which only applies to data projects (CD and DVD):
+
+<programlisting>
+void createFolder(QString name)
+void createFolder(QString name,QString parent)
+void addUrl(KURL url,QString parent)
+void addUrls(KURL::List urls,QString parent)
+void removeItem(QString path)
+void renameItem(QString path,QString newName)
+void setVolumeID(QString id)
+</programlisting>
+</para>
+
+<para>Using this it is possible to fill a data project with files and folders from a script.
+The following script for example creates a new data project, adds several folders to the project, and adds files to the newly created folders:
+
+<programlisting>
+#!/bin/bash
+PROJECT=$(dcop k3b K3bInterface createDataCDProject)
+dcop $PROJECT createFolder test
+dcop $PROJECT createFolder foo
+dcop $PROJECT createFolder bar /foo
+dcop $PROJECT addUrl /home/trueg/somefile.txt /foo/bar
+</programlisting>
+
+</para>
+
+</sect1>
+</chapter>

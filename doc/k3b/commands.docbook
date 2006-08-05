@@ -1,0 +1,700 @@
+<!-- The original version had the title 'Command Reference'
+with one sect1 sub-chapter called 'The main window'.
+However, the only features described were the menu entries,
+so a rename of this chapter does make sense. -->
+
+<chapter id="commands">
+  <title>The Menu Entries</title>
+
+  <sect1 id="filemenu">
+    <title>The <guimenu>File</guimenu> Menu</title>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>N</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>File</guimenu>
+              <guimenuitem>New Project</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Creates a new project.</action>
+              You have to choose the project type (Audio CD, Data DVD, ...).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>O</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>File</guimenu>
+              <guimenuitem>Open...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens an existing project</action> which
+              can be selected with KDE's Open File dialog.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>R</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>File</guimenu>
+              <guimenuitem>Open Recent</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This is a shortcut to <action>re-open recently opened
+              projects</action>. The sub-menu belonging to this item
+              contains a list of these projects, clicking on a specific file
+              will open it again.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>S</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>File</guimenu>
+              <guimenuitem>Save</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Saves the current project.</action>
+              If there has already been a save of the document then this
+              will overwrite the previously saved file without asking
+              for the user's consent. If it is the first save of a new
+              document the Save As dialog will be invoked.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>File</guimenu>
+              <guimenuitem>Save As...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Saves the current project with a new
+              file name.</action> KDE's Save As dialog appears to specify
+              name and directory of the new project file.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>File</guimenu>
+              <guimenuitem>Save All</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Saves all open projects.</action>
+              This is the same as selecting
+              <menuchoice>
+                <guimenu>File</guimenu>
+                <guimenuitem>Save</guimenuitem>
+              </menuchoice> for each of them.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>C</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>File</guimenu>
+              <guimenuitem>Close</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Closes the current project.</action>
+              If a project has been modified but not yet saved
+              then &k3b; will ask what to do.
+              You can choose to save or discard the changes,
+              and you also have the opportunity to cancel closing
+              and keep the project open.
+          </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>File</guimenu>
+              <guimenuitem>Close All</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Closes all open projects.</action> For each unsaved
+              project &k3b; will ask what to do, just like it does when
+              <menuchoice>
+                <guimenu>File</guimenu>
+                <guimenuitem>Close</guimenuitem>
+              </menuchoice> is selected.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>Q</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>File</guimenu>
+              <guimenuitem>Quit</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Quits &k3b;</action> after closing all of its open
+              projects. For every unsaved project &k3b; will ask what to do,
+              just like it does when
+              <menuchoice>
+                <guimenu>File</guimenu>
+                <guimenuitem>Close</guimenuitem>
+              </menuchoice> is selected.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+
+
+  <sect1 id="projectmenu">
+    <title>The <guimenu>Project</guimenu> Menu</title>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Add Files...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              When this item is selected, the appearing dialog
+              <action>lets you choose one or more files to be added
+              to the project.</action> This has the same effect as dragging
+              files directly from the Contents View into the Project View.
+              If the current project is a data disc project,
+              the added files will appear in the disc's root directory.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Clear Project</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Removes all files and directories
+              from the current project.</action>
+              The project itself remains open.
+          </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>B</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Burn...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the Burn dialog for the current project.</action>
+              This is in fact the same as the Properties dialog - the only
+              difference is that there is an additional Burn button which
+              causes &k3b; to burn a disc from project data. The Burn dialog
+              won't open if the project does not contain any files.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <shortcut>
+                <keycombo action="simul">&Ctrl;<keycap>P</keycap>
+                </keycombo>
+              </shortcut>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Properties...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the Properties dialog for the current project.
+              </action> Here you can specify a lot of options concerning
+              the project. Every project type has got a different set of
+              options, most of them can be explained by using What's This
+              (accessible by right-mouse-clicking).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Import Session</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This Item only appears if a Data CD/DVD or Video DVD project
+              is active. It causes K3b to <action>import the file entries
+              from the previous session to the current project</action>.
+              You can use this when compiling files for multi-session discs.
+              Hence that data from the previous session is always included,
+              even if you don't choose to make use of this command.
+              It just helps to know what's on the disc already.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Clear Imported Session</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This Item only appears if a Data CD/DVD or Video DVD project
+              is active. It causes K3b to <action>remove the file entries
+              from the current project that were imported</action> by
+              <menuchoice>
+                <guimenu>Project</guimenu>
+                <guimenuitem>Import Session</guimenuitem>
+              </menuchoice> while keeping all of the other data
+              in the project. Hence that making use of this command doesn't
+              actually remove anything from the disc that will be burned,
+              it just hides these files again.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Project</guimenu>
+              <guimenuitem>Edit Boot Images</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This Item only appears if a Data CD/DVD or Video DVD project
+              is active. <action>Here you can specify boot images</action>
+              in order to create bootable CDs or DVDs. A boot image can be
+              a direct copy of a floppy or hard disk (for example, created
+              by the dd shell command) as well as another disc's boot image.
+              In any case it's a single file containing a complete, bootable
+              system that is burned as a normal file. In order to let the
+              computer know that the disc contains a boot image, the burning
+              application creates a boot catalog file whose name can be
+              determined in the dialog window.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+
+
+<!-- This menu has been deleted in 0.12. Instead, the command has moved
+     to the project view, being a button there.
+  <sect1 id="pluginmenu">
+    <title>The <guimenu>Plugin</guimenu> Menu</title>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Plugins</guimenu>
+              <guimenuitem>Rename Audio Files...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              Allows you to <action>rename audio files</action>
+              in a data project using their meta information.
+              The new file names are defined by patterns
+              containing information like title or artist name.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+-->
+
+
+  <sect1 id="toolsmenu">
+    <title>The <guimenu>Tools</guimenu> Menu</title>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Copy CD...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the CD Copy dialog.</action>
+              Without the need of a project file, it provides
+              the ability to copy a CD's content to another disc.
+              Alternatively, you can choose only to create an image
+              of the source CD which can be burned anytime. There is
+              also an option to clone the CD instead of normal
+              copying, which should be preferred when copying CDs
+              with defective sectors or Video CDs.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Copy DVD...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the DVD Copy dialog.</action>
+              Without the need of a project file, it provides
+              the ability to copy a DVD's content to another disc.
+              Alternatively, you can choose only to create an image
+              of the source DVD which can be burned anytime.
+              Video transcoding within the DVD Copy dialog
+              is not yet supported, so the destination disc
+              has to be large enough to contain all of the
+              source disc's (video) data in its original form.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Erase CD-RW...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the Erase CD-RW dialog.</action>
+              With its help you can clear the contents of a CD-RW,
+              or part of it.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Format DVD±RW...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the DVD Formatting dialog.</action>
+              With its help you can format a DVD-R(W) or DVD+R(W),
+              which causes the disc's contents to be deleted.
+              &k3b; gives the choice between the "Overwrite" and
+              "Incremental" writing modes.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Burn CD Image...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Burns a previously created CD image.</action>
+              The Burn CD Image dialog asks to select an
+              <literal role="extension">*.iso</literal>,
+              <literal role="extension">*.cue</literal> or
+              <literal role="extension">*.toc</literal> file
+              as data source that you can instantly burn by pressing
+              the Start button.
+              (Nero <literal role="extension">*.nrg</literal> files
+              are currently not supported, so you have to make use
+              of other tools like <ulink
+              url="http://gregory.kokanosky.free.fr/v4/linux/nrg2iso.en.html">
+              <application>Nrg2Iso</application></ulink>.)
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Burn DVD ISO Image...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Burns a previously created DVD image.</action>
+              The Burn Iso9660 Image dialog asks to select an
+              <literal role="extension">*.iso</literal> file as data
+              source that you can instantly burn by pressing
+              the Start button.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Encode Video...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>A DVD video that has already been ripped can be
+              encoded</action> with a little help from the Encoding Video
+              dialog. This dialog box normally opens after ripping the DVD
+              from within the Contents View, but can also be used standalone.
+              It contains information about the ripped DVD video, encoding
+              options and even video resizing and cropping abilities.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Tools</guimenu>
+              <guimenuitem>Diskinfo</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Shows information about the inserted disk.</action>
+              This information will be displayed in the Contents View and
+              covers disk properties like type, size and track length
+              of the CD or DVD in your drive.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+
+
+  <sect1 id="settingsmenu">
+    <title>The <guimenu>Settings</guimenu> Menu</title>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Toolbars</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Pops up a list of &k3b;'s toolbars.</action>
+              If a toolbar entry is checked, it means that
+              the toolbar is currently visible.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Show/Hide Statusbar</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This enables you to <action>show or hide the small bar
+              at the bottom of the main window</action> containing
+              various information about &k3b;'s status and activities.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Show Directories</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Toggles the visibility of the Directory View.</action>
+              This view enables you to select directories and disc drives.
+              When selected, their contents will appear in the Contents View.
+              Disc drives have also got a context menu providing functions
+              like Disk Info, (un)mounting the drive or ejecting the medium.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Show Contents</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Toggles the visibility of the Contents View.</action>
+              This view enables you to select files that can be dragged
+              into the Project View in order to add them to the project.
+              The Contents View also acts as an interface to rip
+              audio CDs and video discs when a disc drive containing
+              an appropriate CD/DVD is selected in the Directory View.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Show Document Header</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Toggles the visibility of the document header</action>
+              belonging to the Project View. This is a small bar that is
+              only visible if the Project View contains any open projects.
+              The document header has no functionality, yet it's nice
+              eye candy and improves clarity by separating
+              the Project View from the other views.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Configure Shortcuts...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This command <action>opens a dialog box where the key bindings
+              for &k3b;'s menu commands may be changed</action>.
+              After selecting one of the available commands
+              from the upper part of the dialog, the shortcut
+              for this action can be changed in the lower part.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Configure Toolbars...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This command <action>opens a dialog box where the toolbars
+              can be customized</action>. The drop down box on top
+              of the dialog determines which toolbar can be edited
+              at the moment. The Available Actions list on the left contains
+              all commands that can be added to the toolbar,
+              the Current Actions list on the right shows the ones
+              that are already there. Items can be added by selecting
+              the appropriate command out of the Available Actions list and
+              pressing the right button to move it to the Current Actions
+              list. Removing an item works the other way round.
+              The up and down buttons change the commands's position
+              within the toolbar.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>&k3b; Setup</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              This <action>opens &k3bsetup;</action> which helps setting the
+              right permissions needed by &k3b; in order to burn
+              CDs and DVDs. Linux' user rights management permits program
+              execution and access to disc drives if no permissions have
+              been granted by the administrator. &k3bsetup; cannot set
+              permissions without administrator privileges, so you have
+              to enter the root password when starting up.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <menuchoice>
+              <guimenu>Settings</guimenu>
+              <guimenuitem>Configure &k3b;...</guimenuitem>
+            </menuchoice>
+          </term>
+          <listitem>
+            <para>
+              <action>Opens the Options dialog</action>
+              where general program settings can be configured.
+              Although most of &k3b;'s functionality should work out
+              of the box, this dialog allows to customize and fine-tune
+              the program.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+
+
+  <sect1 id="helpmenu">
+    <title>The <guimenu>Help</guimenu> Menu</title>
+<!-- Assuming you have a standard help menu (help, what's this, about &k3b;,
+about KDE) then the documentation is already written. The following entity
+is valid anywhere that a variablelist is valid.  -->&help.menu.documentation;
+  </sect1>
+
+</chapter>
+<!-- ______________________________________________ using this editor width-->

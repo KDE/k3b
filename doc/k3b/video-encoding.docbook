@@ -1,0 +1,88 @@
+<sect1 id="videointroduction">
+	<title>
+		How to rip a DVD and encode it into an MPEG-4 AVI with &k3b;
+	</title>
+	<sect2>
+		<title>Introduction</title>
+		<para>
+			This document is a description for the DVD ripping and video encoding feature 
+			of &k3b;. The document describes the single steps to backup a DVD to the harddisk and to encode it to an MPEG-4 compliant AVI.
+		</para>
+		<para>
+			&k3b; is only the frontend for these steps. For ripping and encoding the 
+			&Linux; video stream processing tool <application>transcode</application> is used.
+		</para>
+	</sect2>
+	<sect2>
+		<title>Dependencies</title>
+		<para>
+			<application>transcode</application> version 0.6.0pre5 and its 
+			<ulink url="http://www.theorie.physik.uni-goettingen.de/~ostreich/transcode/">dependencies</ulink> 
+			a MPEG-4 encoder; either <ulink url="http://www.xvid.org">Xvid</ulink> or
+			<ulink url="http://www.divx.com">DivX4/5</ulink>, libdvdread (tested with version 0.9.2, 
+			<ulink url="http://www.dtek.chalmers.se/groups/dvd/">www.dtek.chalmers.se/groups/dvd/</ulink>).
+		</para>
+	</sect2>
+	<sect2>
+		<title>Ripping the DVD</title>
+		<para>
+			First step is to choose the title/movie you want to rip. For this click on the drive icon 
+			of your DVD-Drive. You will now see a list that shows the content of the DVD with all movie 
+			sequence. The longest movie sequence (usually the main movie) is automatically selected. Right 
+			click on the title and choose copy.
+		</para>
+		<para>
+			In the following dialog enter the destination directory in the first line. The second 
+			and third will be filled out automatically. Don't change these paths.
+		</para>
+		<para>
+			Now press start and wait until the ripping has been finished.
+
+			You should now have a directory which contains a project file (k3bDVDRip.xml), a vob 
+			directory with the vob file (like vts_0x_y.vob) and tmp directory with the IFO files 
+			(video_ts.ifo and one like vts_0x_0.ifo)
+		</para>
+	</sect2>
+	<sect2>
+		<title>Setting up the encoding</title>
+		<para>
+			Open the encoding dialog in the menu Tools->Encode video. Now load the project 
+			file from the DVD-Rip (k3bDVDRip.xml in your movie directory) and set a file name for 
+			your final avi (movie.avi). You can now set the parameters for the encoding. For a 
+			first test choose the amount of CDs your final avi should be and the language you 
+			want it to have. The other settings can be left default.
+		</para>
+		<para>
+			(More information on each parameter and their choices is available 
+			as <guimenuitem>What's This</guimenuitem> help, via right clicking the corresponding 
+			GUI element). Change to the Advanced Audio/Video Settings tab panel to set the 
+			final size of your movie. Here you can cut off black borders and resize your movie 
+			to get a proper quality (We experienced good results with a width of 640).
+		</para>
+		<para>
+			Initializing of the preview could fail. So first click on the slider below the preview to get a new picture. To the right of the preview choose the "FAST" resizing method. This scaling can only handle pixel sizes which are a multipile of 8, but is a lot faster than pixel "EXACT" resizing. You may also enable auto-crop. (Auto-crop should work most times. If not first try another sample image.)
+		</para>
+		<para>
+			When changing the final size of your movie the "VIDEO QUALITY" should be greater than 0.15 (at least for a single CD rip).
+			Once again, see the "What's This" help for detailed information.
+			Now start encoding.
+		</para>
+	</sect2>
+	<sect2>
+		<title>Encoding process</title>
+		<para>
+			Encoding first scans the whole movie for the min/max level of the audio track. The result is a gain level to boost/normalize the audio track. (This is normally done by the AC3 decoder of your amplifier. This can't be done with the final AVI because it contains a MP3 track.)
+			After that the video and audio track will be encoded and after a few hours you are able to watch your encoded video with every DivX capable player (i.e mplayer, xine, aviplay and of course each player based on M$ Systems).
+		</para>
+	</sect2>
+	<sect2>
+		<title>Troubleshooting</title>
+		<para>
+			In general first see the debug output for further information. If this doesn't help you find help on the k3b-users mailing list (http://k3b.sourceforge.net/index.php?page=mailinglists.html).
+			If you are using DivX make sure you choose the codec version installed on your system. You cannot install both versions on your linux box because both binaries are using the same name. If you've trouble with the different installations search all libdivxencore.so and libdivxdecore.so files and delete them. Install the version you want and start encoding again.
+			If aspect ratio detection fails (your final movie is to high) set the height by hand after resizing and verify the aspect ratio in the info box "FINAL VIDEO".
+
+		</para>
+	</sect2>
+</sect1>
+
