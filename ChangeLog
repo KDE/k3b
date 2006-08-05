@@ -1,5 +1,5 @@
-0.13
-====
+1.0
+===
  * K3b now includes a VideoDVD kio slave. It can be used in Konqueror through the protocol videodvd:/
    to copy the files from a VideoDVD with on-the-fly decryption if libdvdcss is installed.
    (Be aware that in some contries it is not permitted to use libdvdcss.)
@@ -21,8 +21,9 @@
    Other advantages:
     - No waiting time anymore when asking for information on media (including for example Audio CD ripping).
     - Nice default image filenames.
+    - CD Copy: Enable/disable options based on the source medium
  * DCOP call directBurn() now returns a boolean value stating if the process could be started.
- * New DCOP call cddaRip() with media:/ url support.
+ * New DCOP calls cddaRip(), videocdrip(), and videodvdrip() with media:/ url support.
  * K3b can now handle media:/ urls from the command line to specify devices
  * Better Lame settings dialog. Easier to use for the novice user and better defaults.
  * Nicer Ogg Vorbis encoder settings dialog.
@@ -50,7 +51,11 @@
  * Completely rewritten Video DVD ripping and transcoding support:
    - Simple on-the-fly transcoding of Video DVD titles
    - Interface similar to Audio CD ripping
+   - Preview images in the ripping window
+   - Automatic clipping
+   - Simple resizing with automatic aspect ratio handling
  * File System presets for all data projects including all the advanced options.
+ * Completely rewritten data project verification
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
