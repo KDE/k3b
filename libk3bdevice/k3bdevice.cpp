@@ -737,12 +737,6 @@ K3b::Msf K3bDevice::Device::remainingSize() const
 int K3bDevice::Device::numSessions() const
 {
   //
-  // Althought disk_info should get the real value without ide-scsi
-  // I keep getting wrong values (the value is too high. I think the leadout
-  // gets counted as session sometimes :()
-  //
-
-  //
   // Session Info
   // ============
   // Byte 0-1: Data Length
@@ -752,15 +746,34 @@ int K3bDevice::Device::numSessions() const
 
   int ret = -1;
 
-  unsigned char* dat = 0;
+  unsigned char* data = 0;
   unsigned int len = 0;
-  if( readTocPmaAtip( &dat, len, 1, 0, 0 ) ) {
-    ret = dat[3];
 
-    delete [] dat;
+  if( isDVD() ) {
+    if( readDiscInfo( &data, len ) ) {
+      ret = (int)( data[9]<<8 | data[4] );
+
+      // do only count complete sessions
+      if( (data[2]>>2) != 3 )
+	ret--;
+
+      delete [] data;
+    }
   }
   else {
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": could not get session info !" << endl;
+    //
+    // Althought disk_info should get the real value without ide-scsi
+    // I keep getting wrong values (the value is too high. I think the leadout
+    // gets counted as session sometimes :()
+    //
+    if( readTocPmaAtip( &data, len, 1, 0, 0 ) ) {
+      ret = data[3];
+      
+      delete [] data;
+    }
+    else {
+      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": could not get session info !" << endl;
+    }
   }
 
   return ret;
@@ -1008,76 +1021,141 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
 
   toc.clear();
 
+  unsigned int lastTrack = 0;
+
   unsigned char* data = 0;
   unsigned int dataLen = 0;
-  if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
+  if( dvd ) {
+    //
+    // on DVD-R(W) multisession disks only two sessions are represented as tracks in the readTocPmaAtip 
+    // response (fabricated TOC). Thus, we use readDiscInfo for DVD media to get the proper number of tracks
+    //
+    if( readDiscInfo( &data, dataLen ) ) {
+      lastTrack = (int)( data[11]<<8 | data[6] );
 
-    if( dataLen < 4 ) {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": formatted toc data too small." << endl;
-    }
-    else if( dataLen != ( (unsigned int)sizeof(toc_track_descriptor) * ((unsigned int)data[3]+1) ) + 4 ) {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": invalid formatted toc data length: "
-		<< (dataLen-2) << endl;
-    }
-    else {
-      int lastTrack = data[3];
-      toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
-      for( int i = 0; i < lastTrack; ++i ) {
+      delete [] data;
+      
+      if( readTrackInformation( &data, dataLen, 1, lastTrack ) ) {
+	track_info_t* trackInfo = (track_info_t*)data;
 
-	Track track;
-	unsigned int control = 0;
-
-	//
-	// In case READ TRACK INFORMATION failes:
-	// no session number info
-	// no track length and thus possibly incorrect last sector for
-	// multisession disks
-	//
-	track.m_firstSector = from4Byte( td[i].start_adr );
-	track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
-	control = td[i].control;
-
-	unsigned char* trackData = 0;
-	unsigned int trackDataLen = 0;
-	if( readTrackInformation( &trackData, trackDataLen, 1, i+1 ) ) {
-	  track_info_t* trackInfo = (track_info_t*)trackData;
-
-	  track.m_firstSector = from4Byte( trackInfo->track_start );
-
-	  // There are drives that return 0 track length here!
-	  // Some drives return an invalid length here. :(
-	  if( from4Byte( trackInfo->track_size ) > 0 )
-	    track.m_lastSector = track.m_firstSector + from4Byte( trackInfo->track_size ) - 1;
-
-	  track.m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
-				  trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD?
-
-	  control = trackInfo->track_mode;
-
-	  delete [] trackData;
+	if( trackInfo->blank ) {
+	  lastTrack--;
 	}
 
-	if( dvd ) {
-	  track.m_type = Track::DATA;
-	  track.m_mode = Track::DVD;
-	}
-	else {
+	delete [] data;
+
+	success = true;
+      }
+      else
+	return false;
+    }
+    else
+      return false;
+  }
+  else {
+    if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
+      
+      if( dataLen < 4 ) {
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": formatted toc data too small." << endl;
+      }
+      else if( dataLen != ( (unsigned int)sizeof(toc_track_descriptor) * ((unsigned int)data[3]+1) ) + 4 ) {
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": invalid formatted toc data length: "
+		  << (dataLen-2) << endl;
+      }
+      else {
+	lastTrack = data[3];
+	toc_track_descriptor* td = (toc_track_descriptor*)&data[4];
+	for( unsigned int i = 0; i < lastTrack; ++i ) {
+	
+	  Track track;
+	  unsigned int control = 0;
+
+	  //
+	  // In case READ TRACK INFORMATION failes:
+	  // no session number info
+	  // no track length and thus possibly incorrect last sector for
+	  // multisession disks
+	  //
+	  track.m_firstSector = from4Byte( td[i].start_adr );
+	  track.m_lastSector = from4Byte( td[i+1].start_adr ) - 1;
+	  control = td[i].control;
+
 	  track.m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
 	  track.m_mode = getTrackDataMode( track );
-	}
-	track.m_copyPermitted = ( control & 0x2 );
-	track.m_preEmphasis = ( control & 0x1 );
+	  track.m_copyPermitted = ( control & 0x2 );
+	  track.m_preEmphasis = ( control & 0x1 );
 
-	toc.append( track );
+	  toc.append( track );
+	}
+
+	success = true;
       }
 
-      success = true;
+      delete [] data;
     }
-
-    delete [] data;
   }
 
 
+  //
+  // Try to get information for all the tracks
+  //
+  for( unsigned int i = 0; i < lastTrack; ++i ) {
+    if( toc.count() < i+1 )
+      toc.append( Track() );
+
+    unsigned char* trackData = 0;
+    unsigned int trackDataLen = 0;
+    if( readTrackInformation( &trackData, trackDataLen, 1, i+1 ) ) {
+      track_info_t* trackInfo = (track_info_t*)trackData;
+	
+      toc[i].m_firstSector = from4Byte( trackInfo->track_start );
+
+      if( i > 0 && toc[i-1].m_lastSector == 0 )
+	toc[i-1].m_lastSector = toc[i].m_firstSector - 1;
+	
+      // There are drives that return 0 track length here!
+      // Some drives even return an invalid length here. :(
+      if( from4Byte( trackInfo->track_size ) > 0 )
+	toc[i].m_lastSector = toc[i].m_firstSector + from4Byte( trackInfo->track_size ) - 1;
+	
+      toc[i].m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
+			       trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD?
+	
+      int control = trackInfo->track_mode;
+
+      if( dvd ) {
+	toc[i].m_type = Track::DATA;
+	toc[i].m_mode = Track::DVD;
+      }
+      else {
+	toc[i].m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
+	toc[i].m_mode = getTrackDataMode( toc[i] );
+      }
+      toc[i].m_copyPermitted = ( control & 0x2 );
+      toc[i].m_preEmphasis = ( control & 0x1 );
+	
+      delete [] trackData;
+    }
+    else if( dvd ) {
+      success = false;
+    }
+  }
+
+  // this can only happen with DVD media
+  if( toc.last().lastSector() == 0 ) {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " no track length for the last non-empty track." << endl;
+    unsigned char* trackData = 0;
+    unsigned int trackDataLen = 0;
+    if( readTrackInformation( &trackData, trackDataLen, 1, lastTrack+1 ) ) {
+      track_info_t* trackInfo = (track_info_t*)trackData;
+
+      toc.last().m_lastSector = from4Byte( trackInfo->track_start ) - 1;
+
+      delete [] trackData;
+    }
+  }
+      
+      
   if( needToClose )
     close();
 
@@ -1861,7 +1939,10 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       //
       // The mediatype needs to be set
       //
-      inf.m_mediaType = dvdMediaType();
+      if( readsDvd() )
+	inf.m_mediaType = dvdMediaType();
+      else
+	inf.m_mediaType = MEDIA_UNKNOWN;
 
       if( inf.m_mediaType == MEDIA_UNKNOWN ) {
 	// probably it is a CD
