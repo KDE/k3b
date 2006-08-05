@@ -93,18 +93,19 @@ K3bToolBoxButton::K3bToolBoxButton( KAction* action, QWidget* parent )
   else
     QToolTip::add( this, action->toolTip() );
 
-  if( KToggleAction* ta = dynamic_cast<KToggleAction*>( action ) ) {
-    setToggleButton( true );
+//   if( KToggleAction* ta = dynamic_cast<KToggleAction*>( action ) ) {
+//     setToggleButton( true );
     
-    // initial state
-    if( ta->isChecked() )
-      toggle();
+//     // initial state
+//     if( ta->isChecked() )
+//       toggle();
     
-    connect( ta, SIGNAL(toggled(bool)), this, SLOT(toggle()) );
-    connect( this, SIGNAL(toggled(bool)), ta, SLOT(setChecked(bool)) );
-  }
+//     connect( ta, SIGNAL(toggled(bool)), this, SLOT(toggle()) );
+//     connect( this, SIGNAL(toggled(bool)), ta, SLOT(setChecked(bool)) );
+//   }
 
-  else if( KActionMenu* am = dynamic_cast<KActionMenu*>( action ) ) {
+//  else
+  if( KActionMenu* am = dynamic_cast<KActionMenu*>( action ) ) {
     m_popupMenu = am->popupMenu();
     connect( this, SIGNAL(pressed()), this, SLOT(slotPopupActivated()) );
     setPopup( m_popupMenu );
