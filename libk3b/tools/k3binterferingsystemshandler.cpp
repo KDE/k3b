@@ -181,8 +181,8 @@ void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
 	//       2. If we would for example use KMessageBox we would not have a parent widget and thus
 	//          with some window managers the user would not see the dialog but only the stalled
 	//          progress.
-	emit infoMessage( i18n("<p>The device <em>%1</em> is already in use by other applications "
-			       "(<b>%2</b>) "
+	emit infoMessage( i18n("The device '%1' is already in use by other applications "
+			       "(%2) "
 			       "It highly recommended to quit those.")
 			  .arg(dev->vendor() + " - " + dev->description())
 			  .arg(lsof.usingApplications().join(", ")),
