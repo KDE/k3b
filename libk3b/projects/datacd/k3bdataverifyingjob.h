@@ -21,9 +21,7 @@
 
 
 class K3bDataDoc;
-namespace KIO {
-  class Job;
-}
+class K3bIsoImager;
 namespace K3bDevice {
   class DeviceHandler;
 }
@@ -45,17 +43,21 @@ class K3bDataVerifyingJob : public K3bJob
 
   void setDoc( K3bDataDoc* );
   void setDevice( K3bDevice::Device* );
-  void setUsedMultiSessionMode( K3bDataDoc::MultiSessionMode );
+  void setImager( K3bIsoImager* );
+  void setUsedMultisessionMode( int mode );
 
  private slots:
   void slotMediaReloaded( bool );
   void slotTocRead( K3bDevice::DeviceHandler* );
   void slotMd5JobFinished( bool );
-  void slotMd5JobProgress( int );
+  void slotDataTrackReaderFinished( bool success );
+  void slotDataTrackReaderProgress( int percent );
 
  private:
-  void compareNextFile();
+  void readWrittenChecksum();
+  void compareChecksums();
   void finishVerification( bool success );
+  int imageSize() const;
 
   class Private;
   Private* d;

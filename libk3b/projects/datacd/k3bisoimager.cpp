@@ -26,6 +26,7 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bglobals.h>
+#include <k3bchecksumpipe.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -54,6 +55,10 @@ int K3bIsoImager::s_imagerSessionCounter = 0;
 class K3bIsoImager::Private
 {
 public:
+  Private() 
+    : calcChecksum( false ) {
+  }
+
   QString imagePath;
   QFile imageFile;
   const K3bExternalBin* mkisofsBin;
@@ -68,6 +73,9 @@ public:
   int usedLinkHandling;
 
   bool knownError;
+
+  bool calcChecksum;
+  K3bChecksumPipe checksumPipe;
 };
 
 
@@ -86,7 +94,7 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent
     m_mkisofsPrintSizeResult( 0 ),
     m_fdToWriteTo(-1)
 {
-  d = new Private;
+  d = new Private();
 }
 
 
@@ -139,7 +147,14 @@ void K3bIsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 
 void K3bIsoImager::slotProcessExited( KProcess* p )
 {
+  kdDebug() << k_funcinfo << endl;
+
   m_processExited = true;
+
+  if( d->calcChecksum ) {
+    d->checksumPipe.close();
+    kdDebug() << "(K3bIsoImager) checksum from image: " << d->checksumPipe.checksum() << endl;
+  }
 
   if( d->imageFile.isOpen() )
     d->imageFile.close();
@@ -412,12 +427,14 @@ void K3bIsoImager::start()
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
 
-  if( m_fdToWriteTo != -1 )
-    m_process->writeToFd( m_fdToWriteTo );
+  int fd = -1;
+  if( m_fdToWriteTo != -1 ) {
+    fd = m_fdToWriteTo;
+  }
   else {
     d->imageFile.setName( d->imagePath );
     if( d->imageFile.open( IO_WriteOnly ) )
-      m_process->writeToFd( d->imageFile.handle() );
+      fd = d->imageFile.handle();
     else {
       emit infoMessage( i18n("Could not open %1 for writing").arg(d->imagePath), ERROR );
       cleanup();
@@ -425,6 +442,13 @@ void K3bIsoImager::start()
       return;
     }
   }
+  if( d->calcChecksum ) {
+    d->checksumPipe.writeToFd( fd );
+    d->checksumPipe.open();
+    m_process->writeToFd( d->checksumPipe.in() );
+  }
+  else
+    m_process->writeToFd( fd );
 
   kdDebug() << "***** mkisofs parameters:\n";
   const QValueList<QCString>& args = m_process->args();
@@ -1045,6 +1069,18 @@ void K3bIsoImager::clearDummyDirs()
     appDir.cdUp();
     appDir.rmdir( jobId );
   }
+}
+
+
+void K3bIsoImager::setCalculateChecksum( bool b )
+{
+  d->calcChecksum = b;
+}
+
+
+QCString K3bIsoImager::checksum() const
+{
+  return d->checksumPipe.checksum();
 }
 
 #include "k3bisoimager.moc"

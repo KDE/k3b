@@ -53,6 +53,8 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
   long numFiles() const;
   long numDirs() const;
 
+  bool isEmpty() const { return ( numDirs() + numFiles() == 0 ); }
+
   /**
    * returns true if item is a subItem of 
    * this dir item 

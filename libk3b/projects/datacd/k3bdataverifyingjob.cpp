@@ -15,16 +15,16 @@
 
 #include "k3bdataverifyingjob.h"
 #include "k3bdatadoc.h"
-#include "k3bfileitem.h"
-#include "k3bbootitem.h"
-#include "k3bdiritem.h"
-#include "k3bisooptions.h"
+#include "k3bisoimager.h"
 
 #include <k3bdevice.h>
 #include <k3btoc.h>
 #include <k3btrack.h>
 #include <k3bdevicehandler.h>
 #include <k3bmd5job.h>
+#include <k3bdatatrackreader.h>
+#include <k3bpipe.h>
+#include <k3bglobals.h>
 #include <k3biso9660.h>
 
 #include <kdebug.h>
@@ -34,6 +34,10 @@
 
 #include <qcstring.h>
 #include <qapplication.h>
+
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
 
 
 class K3bDataVerifyingJob::Private
@@ -45,8 +49,8 @@ public:
       md5Job(0),
       doc(0),
       device(0),
-      iso9660(0),
-      currentItem(0) {
+      dataTrackReader(0),
+      usedMultiSessionMode( K3bDataDoc::NONE ) {
   }
 
   bool running;
@@ -55,15 +59,16 @@ public:
   K3bMd5Job* md5Job;
   K3bDataDoc* doc;
   K3bDevice::Device* device;
-  K3bIso9660* iso9660;
-  K3bDataDoc::MultiSessionMode usedMultiSessionMode;
+  K3bDevice::Toc toc;
+  K3bDataTrackReader* dataTrackReader;
 
-  K3bDataItem* currentItem;
-  bool originalCalculated;
-  KIO::filesize_t alreadyCheckedData;
-  QCString originalMd5Sum;
-  bool filesDiffer;
+  K3bIsoImager* imager;
+
+  int usedMultiSessionMode;
+
   int lastProgress;
+
+  K3bPipe comm;
 };
 
 
@@ -93,11 +98,10 @@ void K3bDataVerifyingJob::start()
 
   jobStarted();
 
-  // TODO: do not compare the files from old sessions
-  // TODO: do not use doc->size() but calculate the sum of all filesizes in advance (mainly because of the above)
+  emit newTask( i18n("Preparing Data") );
   
   // first we need to reload the device
-  emit newTask( i18n("Reloading the media") );
+  emit newSubTask( i18n("Reloading the medium") );
   
   connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
 	   this, SLOT(slotMediaReloaded(bool)) );
@@ -107,7 +111,6 @@ void K3bDataVerifyingJob::start()
 void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 {
   if( d->canceled ) {
-    emit canceled();
     finishVerification( false );
   }
   else {
@@ -115,9 +118,9 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
       blockingInformation( i18n("Please reload the medium and press 'ok'"),
 			   i18n("Unable to close the tray") );
 
-    emit newTask( i18n("Reading TOC") );
+    emit newSubTask( i18n("Reading TOC") );
     
-    connect( K3bDevice::toc( d->device ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
+    connect( K3bDevice::diskInfo( d->device ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
 	     this, SLOT(slotTocRead(K3bDevice::DeviceHandler*)) );
   }
 }
@@ -125,82 +128,91 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 
 void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
 {
+  d->toc = dh->toc();
+
   if( d->canceled ) {
-    emit canceled();
     finishVerification(false);
   }
   else if( !dh->success() ) {
     emit infoMessage( i18n("Reading TOC failed."), ERROR );
     finishVerification(false);
   }
+  else if( ( dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) &&
+	   ( d->usedMultiSessionMode == K3bDataDoc::CONTINUE || d->usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
+    emit infoMessage( i18n("Sorry, no data verification if growing sessions on DVD+RW and DVD-RW media"), ERROR );
+    finishVerification(false);
+  }
   else {
     emit newTask( i18n("Verifying written data") );
 
-    delete d->iso9660;
-    unsigned long startSec = 0;
-    if( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
-	d->usedMultiSessionMode == K3bDataDoc::FINISH ) {
-      // in this case we only compare the files from the new session
-      K3bDevice::Toc::const_iterator it = dh->toc().end();
-      --it; // this is valid since there is at least one data track
-      while( it != dh->toc().begin() && (*it).type() != K3bDevice::Track::DATA )
-	--it;
-      startSec = (*it).firstSector().lba();
+    // initialize some variables
+    d->lastProgress = 0;
+
+    // initialize the job
+    if( !d->md5Job ) {
+      d->md5Job = new K3bMd5Job( this );
+      connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+      //      connect( d->md5Job, SIGNAL(percent(int)), this, SLOT(slotMd5JobProgress(int)) );
+      connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
     }
 
-    d->iso9660 = new K3bIso9660( d->device, startSec );
-    if( !d->iso9660->open() ) {
-      emit infoMessage( i18n("Unable to read ISO9660 filesystem."), ERROR );
-      finishVerification(false);
-    }
-    else {
-      // initialize some variables
-      d->currentItem = d->doc->root();
-      d->originalCalculated = false;
-      d->alreadyCheckedData = 0;
-      d->lastProgress = 0;
-      d->filesDiffer = false;
-
-      // initialize the job
-      if( !d->md5Job ) {
-	d->md5Job = new K3bMd5Job( this );
-	connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-	connect( d->md5Job, SIGNAL(percent(int)), this, SLOT(slotMd5JobProgress(int)) );
-	connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
-      }
-
-      compareNextFile();
-    }
+    // start the verification
+    readWrittenChecksum();
   }
 }
 
 
-void K3bDataVerifyingJob::compareNextFile()
+void K3bDataVerifyingJob::readWrittenChecksum()
 {
-  // we only compare files which have been written to cd
-  do {
-    d->currentItem = d->currentItem->nextSibling();
-  } while( d->currentItem && 
-	   (!d->currentItem->isFile() || 
-	    !d->currentItem->writeToCd() || 
-	    d->currentItem->isFromOldSession() ||
-	    (d->currentItem->isSymLink() && !d->doc->isoOptions().followSymbolicLinks()) ) );
-  
-  d->originalCalculated = false;
-  if( d->currentItem ) {
-    d->md5Job->setFile( d->currentItem->localPath() );
-    d->md5Job->start();
+  if( !d->dataTrackReader ) {
+    d->dataTrackReader = new K3bDataTrackReader( this, this );
+    connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), 
+	     this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( d->dataTrackReader, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
+    connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotDataTrackReaderProgress(int)) );
+    connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotDataTrackReaderFinished(bool)) );
   }
-  else {
-    // all files have been compared
-    if( d->filesDiffer ) {
-      finishVerification( false );
-    }
-    else {
-      emit infoMessage( i18n("Written data verified."), SUCCESS );
-      finishVerification( true );
-    }
+
+  // create fd pair for imager <-> md5job communication
+  if( !d->comm.open() ) {
+    finishVerification( false );
+    return;
   }
+
+  emit newSubTask( i18n("Reading written data") );
+
+  d->dataTrackReader->setDevice( d->device );
+  d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
+
+  // we always read the last track
+  // and use the size from the project instead of the toc since
+  // TAO recorded tracks have two run-out sectors and this way we do not
+  // have to care about those
+  d->dataTrackReader->setSectorRange( d->toc.last().firstSector(),
+				      d->toc.last().firstSector() + imageSize() - 1 );
+
+  d->dataTrackReader->writeToFd( d->comm.in() );
+  d->md5Job->setFd( d->comm.out() );
+  d->md5Job->start();
+  d->dataTrackReader->start();
+}
+
+
+void K3bDataVerifyingJob::slotDataTrackReaderProgress( int p )
+{
+  if( p > d->lastProgress ) {
+    d->lastProgress = p;
+    emit percent( p );
+  }
+}
+
+
+void K3bDataVerifyingJob::slotDataTrackReaderFinished( bool success )
+{
+  d->comm.closeIn();
+  //  d->md5Job->stop();
+
+  // FIXME: if( !success ) ...
 }
 
 
@@ -210,7 +222,15 @@ void K3bDataVerifyingJob::cancel()
     d->canceled = true;
     if( d->md5Job )
       d->md5Job->cancel();
+    if( d->dataTrackReader )
+      d->dataTrackReader->cancel();
   }
+}
+
+
+void K3bDataVerifyingJob::setImager( K3bIsoImager* imager )
+{
+  d->imager = imager;
 }
 
 
@@ -228,90 +248,37 @@ void K3bDataVerifyingJob::setDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bDataVerifyingJob::setUsedMultiSessionMode( K3bDataDoc::MultiSessionMode usedMultiSessionMode )
+void K3bDataVerifyingJob::setUsedMultisessionMode( int mode )
 {
-  d->usedMultiSessionMode = usedMultiSessionMode;
+  d->usedMultiSessionMode = mode;
 }
 
 
 void K3bDataVerifyingJob::slotMd5JobFinished( bool success )
 {
-  if( d->canceled ) {
-    emit canceled();
-    finishVerification(false);
-  }
-
-  if( success ) {
-    if( d->originalCalculated ) {
-      // compare the two md5sums
-      if( d->originalMd5Sum != d->md5Job->hexDigest() ) {
-
-	bool fileDiffers = true;
-
-	//
-	// there is one case when it's ok that original and written file differ:
-	// a boot image with enabled boot info table. In this case mkisofs will
-	// modify the source (which is a temporary copy of the original we compare to)
-	// 
-	if( K3bBootItem* bootItem = dynamic_cast<K3bBootItem*>( d->currentItem ) ) {
-	  if( bootItem->bootInfoTable() ) {
-	    fileDiffers = false;
-	  }
-	}
-
-	if( fileDiffers ) {
-	  d->filesDiffer = true;
-	  emit infoMessage( i18n("%1 differs.").arg( d->currentItem->k3bPath() ), ERROR );
-	  emit debuggingOutput( "Invalid files", 
-				QString("%1 (%2)")
-				.arg( d->currentItem->k3bPath() )
-				.arg( d->currentItem->iso9660Path() ) );
-	}
-      }
-
-      d->alreadyCheckedData += d->currentItem->size();
-
-      // go on with the next file
-      compareNextFile();
+  if( !d->dataTrackReader->active() ) {
+    d->comm.close();
+    if( d->canceled || !success ) {
+      finishVerification(false);
     }
     else {
-      d->originalCalculated = true;
-      d->originalMd5Sum = d->md5Job->hexDigest();
-      const K3bIso9660File* isoFile = 
-	dynamic_cast<const K3bIso9660File*>(d->iso9660->firstIsoDirEntry()->iso9660Entry( d->currentItem->iso9660Path() ) );
-      if( isoFile ) {
-	d->md5Job->setFile( isoFile );
-	d->md5Job->start();
-      }
-      else {
-	kdDebug() << "(K3bDataVerifyingJob) could not find " 
-		  << d->currentItem->iso9660Path()
-		  << " in filesystem." << endl;
-	emit infoMessage( i18n("Could not find file %1.").arg(d->currentItem->writtenName()), ERROR );
-	d->iso9660->debug();
-	finishVerification(false);
-      }
+      compareChecksums();
     }
-  }
-  else {
-    // The md5job emitted an error message. So there is no need to do this again
-    finishVerification(false);
   }
 }
 
 
-void K3bDataVerifyingJob::slotMd5JobProgress( int p )
+void K3bDataVerifyingJob::compareChecksums()
 {
-  double percentCurrentFile = (double)p/2.0;
-  if( d->originalCalculated )
-    percentCurrentFile += 50.0;
-
-  double doneCurrentFile = (double)d->currentItem->size()*percentCurrentFile/100.0;
-  int newProgress = (int)( 100.0 * ((double)d->alreadyCheckedData + doneCurrentFile) / (double)d->doc->burningSize() );
-
-  if( newProgress > d->lastProgress ) {
-    d->lastProgress = newProgress;
-    emit percent( newProgress );
+  if( d->imager->checksum() == d->md5Job->hexDigest() ) {
+    emit infoMessage( i18n("Written data verified."), SUCCESS );
+    finishVerification(true);
+  }
+  else {
+    emit infoMessage( i18n("Written data differs from original."), ERROR );
+    kdDebug() << "(K3bDataVerifyingJob) original: " << d->imager->checksum()
+	      << " burned: " << d->md5Job->hexDigest() << endl;
+    finishVerification(false);
   }
 }
 
@@ -320,9 +287,21 @@ void K3bDataVerifyingJob::finishVerification( bool success )
 {
   d->success = success;
   d->running = false;
-  if( d->iso9660 ) 
-    d->iso9660->close();
+
+  if( d->canceled ) {
+    emit canceled();
+  }
+
   jobFinished(d->success);
+}
+
+
+int K3bDataVerifyingJob::imageSize() const
+{
+  if( d->doc->onTheFly() )
+    return d->imager->size();
+  else
+    return K3b::filesize( d->doc->tempDir() )/2048;
 }
 
 #include "k3bdataverifyingjob.moc"

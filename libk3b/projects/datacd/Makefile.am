@@ -4,6 +4,7 @@ AM_CPPFLAGS= 	-I$(srcdir)/.. \
 		-I$(srcdir)/../../../libk3bdevice \
 		-I$(srcdir)/../../../src \
 		-I$(srcdir)/../../tools \
+		-I$(srcdir)/../../jobs \
 		-I$(srcdir)/../.. \
 		$(all_includes)
 

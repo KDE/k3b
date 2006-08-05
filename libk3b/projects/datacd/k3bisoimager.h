@@ -45,6 +45,11 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   int size() const { return m_mkisofsPrintSizeResult; }
 
+  /**
+   * Get the checksum calculated during the creation of the image.
+   */
+  QCString checksum() const;
+
  public slots:
   virtual void start();
   virtual void cancel();
@@ -59,6 +64,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   void writeToFd( int fd );
 
   void writeToImageFile( const QString& path );
+
+  void setCalculateChecksum( bool b );
 
   /**
    * If dev == 0 K3bIsoImager will ignore the data in the previous session. 

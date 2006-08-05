@@ -194,7 +194,7 @@ void K3bDataJob::prepareWriting()
     // no sense continuing the same session twice
     // FIXME: why not?
     d->copies = 1;
-    
+
     m_msInfoFetcher->setDevice( d->doc->burner() );
     
     if( !waitForMedium() ) {
@@ -243,6 +243,8 @@ void K3bDataJob::slotMsInfoFetched(bool success)
 
 void K3bDataJob::writeImage()
 {
+  m_isoImager->setCalculateChecksum( d->doc->verifyData() );
+
   if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
     m_isoImager->calculateSize();
   }
@@ -301,6 +303,8 @@ void K3bDataJob::cancel()
   emit canceled();
 
   cancelAll();
+
+  jobFinished( false );
 }
 
 
@@ -432,7 +436,9 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 	d->verificationJob = new K3bDataVerifyingJob( this, this );
 	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
 		 this, SIGNAL(infoMessage(const QString&, int)) );
-	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+// 	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+// 		 this, SIGNAL(newSubTask(const QString&)) );
+	connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
 		 this, SIGNAL(newSubTask(const QString&)) );
 	connect( d->verificationJob, SIGNAL(percent(int)),
 		 this, SLOT(slotVerificationProgress(int)) );
@@ -446,10 +452,12 @@ void K3bDataJob::slotWriterJobFinished( bool success )
       }
       d->verificationJob->setDoc( d->doc );
       d->verificationJob->setDevice( d->doc->burner() );
-      d->verificationJob->setUsedMultiSessionMode( d->usedMultiSessionMode );
+      d->verificationJob->setImager( m_isoImager );
+      d->verificationJob->setUsedMultisessionMode( d->usedMultiSessionMode );
+
+      emit burning(false);
 
       emit newTask( i18n("Verifying written data") );
-      emit burning(false);
 
       d->verificationJob->start();
     }
@@ -466,8 +474,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 	  failed = !startWriterJob();
 
 	if( failed ) {
-	  cancelAll();
-	  jobFinished( false );
+	  cancel();
 	}
       }
       else {
@@ -501,6 +508,9 @@ void K3bDataJob::slotVerificationFinished( bool success )
 {
   d->copiesDone++;
 
+  // reconnect our imager which we deconnected for the verification
+  connectImager();
+
   if( k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )
     K3bDevice::eject( d->doc->burner() );
   
@@ -512,7 +522,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
       failed = !startWriterJob();
     
     if( failed )
-      cancelAll();
+      cancel();
   }
   else {
     cleanup();
@@ -548,13 +558,20 @@ void K3bDataJob::setImager( K3bIsoImager* imager )
 
     m_isoImager = imager;
     
-    connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
-    connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
-    connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-    connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connectImager();
   }
+}
+
+
+void K3bDataJob::connectImager()
+{
+  m_isoImager->disconnect( this );
+  connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
+  connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+  connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
+  connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
+  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 }
 
 

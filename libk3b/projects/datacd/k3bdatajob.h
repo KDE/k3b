@@ -103,6 +103,7 @@ class K3bDataJob : public K3bBurnJob
   bool startWriterJob();
   bool startOnTheFlyWriting();
   void prepareWriting();
+  void connectImager();
 
   class Private;
   Private* d;
