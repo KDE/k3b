@@ -48,8 +48,8 @@ K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *pare
   setTitle( i18n("Video DVD Project"), i18n("Size: %1").arg( KIO::convertSize(doc->size()) ) );
 
   // for now we just put the verify checkbox on the main page...
-//   m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
-//   m_optionGroupLayout->addWidget( m_checkVerify );
+  m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+  m_optionGroupLayout->addWidget( m_checkVerify );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
@@ -90,7 +90,7 @@ void K3bVideoDvdBurnDialog::saveSettings()
   // save image file path
   m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
-  m_doc->setVerifyData( false /*m_checkVerify->isChecked()*/ );
+  m_doc->setVerifyData( m_checkVerify->isChecked() );
 }
 
 
@@ -103,7 +103,7 @@ void K3bVideoDvdBurnDialog::readSettings()
   else
     m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
 
-  //  m_checkVerify->setChecked( m_doc->verifyData() );
+  m_checkVerify->setChecked( m_doc->verifyData() );
 
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
@@ -115,12 +115,12 @@ void K3bVideoDvdBurnDialog::toggleAll()
 {
   K3bProjectBurnDialog::toggleAll();
 
-//   if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
-//     m_checkVerify->setChecked(false);
-//     m_checkVerify->setEnabled(false);
-//   }
-//   else
-//     m_checkVerify->setEnabled(true);
+  if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
+    m_checkVerify->setChecked(false);
+    m_checkVerify->setEnabled(false);
+  }
+  else
+    m_checkVerify->setEnabled(true);
 }
 
 
@@ -129,7 +129,7 @@ void K3bVideoDvdBurnDialog::loadK3bDefaults()
   K3bProjectBurnDialog::loadK3bDefaults();
 
   m_volumeDescWidget->load( K3bIsoOptions::defaults() );
-  //  m_checkVerify->setChecked( false );
+  m_checkVerify->setChecked( false );
 
   toggleAll();
 }
@@ -142,7 +142,7 @@ void K3bVideoDvdBurnDialog::loadUserDefaults( KConfigBase* c )
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_volumeDescWidget->load( o );
 
-  //  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
   toggleAll();
 }
@@ -156,7 +156,7 @@ void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigBase* c )
   m_volumeDescWidget->save( o );
   o.save( c );
 
-  //  c->writeEntry( "verify data", m_checkVerify->isChecked() );
+  c->writeEntry( "verify data", m_checkVerify->isChecked() );
 }
 
 
