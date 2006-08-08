@@ -37,3 +37,4 @@ Description[tr]= Bir Video DVD'sinden dosyaların kopyalanmasını (ve kodunun �
 Description[uk]=Підлеглий В/В, який дає змогу копіювати файли з Відео DVD (включаючи розшифрування)
 Description[xx]=xxA kioslave that allows files to be copied from a Video DVD (including decryption)xx
 Description[zh_CN]=允许从视频 DVD(包括加密影碟)中复制文件的 kioslave
+Description[zh_TW]=允許直接從 Video DVD 複製檔案的 kioslave(會自動解密)

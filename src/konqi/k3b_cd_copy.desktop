@@ -33,5 +33,6 @@ Name[sv]=Kopiera cd med K3b
 Name[uk]=Копіювати КД за допомогою K3b
 Name[uz]=K3b ёрдамида CD'дан нусха олиш
 Name[xx]=xxCopy CD with K3bxx
+Name[zh_TW]=使用 K3b 複製 CD
 Exec=k3b --copycd %u
 Icon=k3b
