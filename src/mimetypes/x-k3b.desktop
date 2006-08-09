@@ -44,6 +44,7 @@ Comment[ta]=K3bதிட்டம்
 Comment[tr]=K3b Projesi
 Comment[uk]=Проект K3b
 Comment[zh_CN]=K3b 方案
+Comment[zh_TW]=K3b 專案
 Icon=k3b
 Type=MimeType
 Patterns=*.k3b;
