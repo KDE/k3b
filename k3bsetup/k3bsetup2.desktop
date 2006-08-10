@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup 2 - modify permission for CD/DVD burning with K3b
+Comment[af]=K3bSetup 2 - verander regte vir CD/DVD skryf met K3b
 Comment[ar]= اعداد K3B  2 - غيًر الصلاحيات (الاذون ) كي تستطيع كتابة الاقراص المدمجة (CD) او الاقراص المرئية الرقمية (DVD)  بواسطة K3B
 Comment[bg]=Настройка 2 на K3b - промяна на правата за запис на CD/DVD с K3b
 Comment[bn]=কে-থ্রি-বি ব্যবস্থাপনা ২ - কে-থ্রি-বি দিয়ে সিডি/ডিভিডি লিখনের জন্য অনুমতি পরিবর্তন করে
@@ -81,6 +82,7 @@ X-KDE-ModuleType=Library
 X-KDE-RootOnly=true
 Categories=Application;System;X-KDE-System;
 GenericName=CD & DVD Burning Setup
+GenericName[af]=CD & DVD Skryf Opstelling
 GenericName[ar]=العام  اعداد كتابة القرص المدمج (CD) و القرص المرئي الرقمي (DVD)
 GenericName[bg]=Настройки за запис на CD и DVD
 GenericName[bn]=সিডি এবং ডিভিডি লিখন ব্যবস্থাপনা

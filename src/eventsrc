@@ -8,6 +8,7 @@ Comment[xx]=xxK3bxx
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[af]=Proses suksesvol
 Name[ar]= تمت المعالجة بنجاح
 Name[bg]=Обработката е успешна
 Name[bn]=প্রসেস সফল
@@ -52,6 +53,7 @@ Name[xx]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Name[zh_TW]=處理成功
 Comment=Process successfully finished
+Comment[af]=Proses het suksesvol klaar gemaak
 Comment[ar]=نهاية المعالجة بنجاح
 Comment[bg]=Обработката приключи успешно
 Comment[bn]=প্রসেস সফলভাবে শেষ হল
@@ -100,6 +102,7 @@ default_presentation=1
 
 [FinishedWithError]
 Name=Process error
+Name[af]=Verwerking fout
 Name[ar]= خطأ خلال المعالجة
 Name[bg]=Грешка при обработката
 Name[bn]=প্রসেস ত্রুটি
@@ -143,6 +146,7 @@ Name[xx]=xxProcess errorxx
 Name[zh_CN]=处理错误
 Name[zh_TW]=處理發生錯誤
 Comment=Process finished with errors
+Comment[af]=Die proses het met foute klaar gemaak
 Comment[ar]= انتهت المعالجة على خطأ 
 Comment[bg]=Обработката приключи с грешки
 Comment[bn]=প্রসেস ত্রুটিপূর্ণভাবে শেষ হল
@@ -190,6 +194,7 @@ default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
+Name[af]=Wag vir medium
 Name[ar]= في انتظار الواسطة
 Name[bg]=Изчакване за диск
 Name[bn]=মাধ্যমের জন্য অপেক্ষারত
@@ -234,6 +239,7 @@ Name[xx]=xxWaiting for mediumxx
 Name[zh_CN]=等待存储介质
 Name[zh_TW]=等待插入媒體
 Comment=The user needs to insert a medium
+Comment[af]=Die gebruiker moet 'n medium insit
 Comment[ar]= يجب على المستعمل ادخال الواسطة
 Comment[bg]=Потребителят трябва да постави диск в устройството
 Comment[bn]=ব্যবহারকারীর একটি মাধ্যম ভিতরে ঢোকানোর প্রয়োজন
