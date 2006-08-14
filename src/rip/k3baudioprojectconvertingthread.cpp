@@ -154,10 +154,12 @@ void K3bAudioProjectConvertingThread::run()
     ++i;
   }
 
-  if( d->encoder )
-    d->encoder->closeFile();
-  else
-    d->waveFileWriter->close();
+  if( m_singleFile ) {
+    if( d->encoder )
+      d->encoder->closeFile();
+    else
+      d->waveFileWriter->close();
+  }
   
   if( !d->canceled && m_writePlaylist ) {
     success = success && writePlaylist();
@@ -260,6 +262,13 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
     readFile += readLength;
     emitSubPercent( 100*readFile/track->size() );
     emitPercent( 100*d->overallBytesRead/d->overallBytesToRead );
+  }
+
+  if( !m_singleFile ) {
+    if( d->encoder )
+      d->encoder->closeFile();
+    else
+      d->waveFileWriter->close();
   }
 
   return ( readLength == 0 );

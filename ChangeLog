@@ -6,6 +6,7 @@
  * Fixed symbolic link handling in data projects (a bug introduced in 0.12.16)
  * Use UTF-8 encoding to store and load local CDDB entries.
  * Never use growisofs parameter -dvd-compat with DVD+RW media.
+ * Fixed flac audio encoding for the audio project conversion feature.
 
 0.12.16
 =======
