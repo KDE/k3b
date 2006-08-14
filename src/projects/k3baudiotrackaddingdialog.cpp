@@ -95,6 +95,9 @@ int K3bAudioTrackAddingDialog::addUrls( const KURL::List& urls,
 					K3bAudioDataSource* afterSource,
 					QWidget* parent )
 {
+  if( urls.isEmpty() )
+    return 0;
+
   K3bAudioTrackAddingDialog dlg( parent );
   dlg.m_urls = extractUrlList( urls );
   dlg.m_doc = doc;

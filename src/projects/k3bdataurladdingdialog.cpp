@@ -86,6 +86,9 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 				     K3bDirItem* dir,
 				     QWidget* parent )
 {
+  if( urls.isEmpty() )
+    return 0;
+
   //
   // Set the volume id from the first added url
   // FIXME: only do this once and not after the volume id was changed
