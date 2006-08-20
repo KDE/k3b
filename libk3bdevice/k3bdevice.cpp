@@ -1786,13 +1786,13 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	}
 
 	switch( dInf->border ) {
-	case 0x00:
+	case 0:
 	  inf.m_lastSessionState = STATE_EMPTY;
 	  break;
-	case 0x01:
+	case 1:
 	  inf.m_lastSessionState = STATE_INCOMPLETE;
 	  break;
-	case 0x11:
+	case 2:
 	  inf.m_lastSessionState = STATE_COMPLETE;
 	  break;
 	default:

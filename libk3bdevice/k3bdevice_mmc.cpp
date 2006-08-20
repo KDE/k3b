@@ -57,7 +57,7 @@ bool K3bDevice::Device::getFeature( unsigned char** data, int& dataLen, unsigned
     // with these buggy drives.
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
-    if( dataLen == 8 ) {
+    if( dataLen <= 8 ) {
       cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
@@ -268,40 +268,46 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, int& dataLen
     return false;
   }
 
-  cmd[8] = 4;      // first we read the header
-  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
-    // again with real length
+  // first we read the header
+  dataLen = 4;
+  cmd[8] = 4;
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( header ) + 2;
-
-    //
-    // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we use a high power of 2 to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( dataLen == 4 ) {
-      cmd[7] = 2048>>8;
-      cmd[8] = 2048;
-      if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
-	dataLen = from2Byte( header ) + 2;
-    }
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      return true;
-    }
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
-  }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed." << endl;
+
+  //
+  // Some buggy firmwares do not return the size of the available data
+  // but the returned data.
+  // So we try to determine the correct size based on the medium type
+  // DVD+R:  40 (MMC4)
+  // DVD-DL: 48 (MMC5)
+  // CD:     36 (MMC2)
+  //
+  if( dataLen <= 4 ) {
+    int m = dvdMediaType();
+    if( m & (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_SEQ|MEDIA_DVD_R_DL_JUMP) )
+      dataLen = 48;
+    else if( m & (MEDIA_DVD_PLUS_R|MEDIA_DVD_PLUS_R_DL) )
+      dataLen = 40;
+    else
+      dataLen = 36;
+  }
+  
+  // again with real length
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+  
+  cmd[7] = dataLen>>8;
+  cmd[8] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+  }
 
   return false;
 }
@@ -480,7 +486,7 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, int& dataLen,
     // with these buggy drives.
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
-    if( dataLen == 4 ) {
+    if( dataLen <= 4 ) {
       cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
@@ -531,7 +537,7 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, int& dataLen, int 
     // with these buggy drives.
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
-    if( dataLen == 2 ) {
+    if( dataLen <= 2 ) {
       cmd[7] = 2048>>8;
       cmd[8] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
@@ -578,7 +584,7 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, int& dataLen ) co
     // with these buggy drives.
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
-    if( dataLen == 8 ) {
+    if( dataLen <= 8 ) {
       cmd[8] = 2048>>8;
       cmd[9] = 2048;
       if( cmd.transport( TR_DIR_READ, header, 2048 ) == 0 )
