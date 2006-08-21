@@ -29,6 +29,7 @@ namespace K3bStdGuiItems
   LIBK3B_EXPORT QCheckBox* daoCheckbox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* burnproofCheckbox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* onlyCreateImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT QCheckBox* createCacheImageCheckbox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* removeImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
@@ -43,6 +44,8 @@ namespace K3bStdGuiItems
    * Creates a sunken purple frame that can be used to display Ayo's artwork.
    * Mainly used as header in dialogs.
    * Make sure to set a layout margin of at least 2.
+   *
+   * FIXME: move this out of libk3b
    */
   LIBK3B_EXPORT QFrame* purpleFrame( QWidget* parent = 0, const char* name = 0 );
 }

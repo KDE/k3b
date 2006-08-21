@@ -81,6 +81,19 @@ QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent, const char
   return c;
 }
 
+QCheckBox* K3bStdGuiItems::createCacheImageCheckbox( QWidget* parent, const char* name )
+{
+  QCheckBox* c = new QCheckBox( i18n("Cache data"), parent, name );
+  QWhatsThis::add( c, i18n("<p>If this option is checked, K3b will create an image before writing "
+			   "the files to the CD/DVD. Otherwise the data will be written <em>on-the-fly</em>, "
+			   "i.e. no intermediate image will be created."
+			   "<p><b>Caution:</b> Although writing on-the-fly should work on most systems, make sure "
+			   "the data is sent to the writer fast enough.")
+		   + i18n("<p>It is recommended to try a simulation first.") );
+  QToolTip::add( c, i18n("Cache the data to be written on the harddisk") );
+  return c;
+}
+
 QCheckBox* K3bStdGuiItems::removeImagesCheckbox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("Remove image"), parent, name );

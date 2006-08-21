@@ -183,7 +183,7 @@ void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
 	//          progress.
 	emit infoMessage( i18n("The device '%1' is already in use by other applications "
 			       "(%2) "
-			       "It highly recommended to quit those.")
+			       "It is highly recommended to quit those.")
 			  .arg(dev->vendor() + " - " + dev->description())
 			  .arg(lsof.usingApplications().join(", ")),
 			  K3bJob::WARNING );

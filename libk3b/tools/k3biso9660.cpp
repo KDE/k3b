@@ -840,13 +840,19 @@ void K3bIso9660::debug() const
 
 void K3bIso9660::debugEntry( const K3bIso9660Entry* entry, int depth ) const
 {
+  if( !entry ) {
+    kdDebug() << "(K3bIso9660::debugEntry) null entry." << endl;
+    return;
+  }
+
   QString spacer;
   spacer.fill( ' ', depth*3 );
   kdDebug() << spacer << "- " << entry->name() << " (" << entry->isoName() << ")" << endl;
   if( entry->isDirectory() ) {
     const K3bIso9660Directory* dir = dynamic_cast<const K3bIso9660Directory*>(entry);
     QStringList entries = dir->entries();
-    for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it )
+    for( QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it ) {
       debugEntry( dir->entry( *it ), depth+1 );
+    }
   }
 }
