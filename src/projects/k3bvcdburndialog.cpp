@@ -77,7 +77,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
     else
         m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRDAO );
 
-    m_checkOnTheFly->hide();
+    m_checkCacheImage->hide();
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     m_optionGroupLayout->addItem( spacer );

@@ -105,7 +105,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkNormalize, SIGNAL(toggled(bool)), this, SLOT(slotNormalizeToggled(bool)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotOnTheFlyToggled(bool)) );
+  connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotCacheImageToggled(bool)) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 
   // ToolTips
@@ -251,10 +251,10 @@ void K3bAudioBurnDialog::toggleAll()
     m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
   }
 
-  m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() && 
-			       onTheFly );
+  m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() && 
+				 onTheFly );
   if( !onTheFly )
-    m_checkOnTheFly->setChecked( false );
+    m_checkCacheImage->setChecked( true );
   m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
 			      cdText && 
 			      m_writingModeWidget->writingMode() != K3b::TAO );
@@ -305,7 +305,7 @@ void K3bAudioBurnDialog::slotNormalizeToggled( bool on )
 				     "use this functionality, please install it first.") );
       m_checkNormalize->setChecked( false );
     }
-    else if( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() ) {
+    else if( !m_checkCacheImage->isChecked() && !m_checkOnlyCreateImage->isChecked() ) {
       if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
 						"The external program used for this task only supports normalizing a set "
 						"of audio files."),
@@ -315,13 +315,13 @@ void K3bAudioBurnDialog::slotNormalizeToggled( bool on )
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
 	m_checkNormalize->setChecked( false );
       else
-	m_checkOnTheFly->setChecked( false );
+	m_checkCacheImage->setChecked( true );
     }
   }
 }
 
 
-void K3bAudioBurnDialog::slotOnTheFlyToggled( bool on )
+void K3bAudioBurnDialog::slotCacheImageToggled( bool on )
 {
   if( on ) {
     if( m_checkNormalize->isChecked() ) {
@@ -334,7 +334,7 @@ void K3bAudioBurnDialog::slotOnTheFlyToggled( bool on )
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
 	m_checkNormalize->setChecked( false );
       else
-	m_checkOnTheFly->setChecked( false );
+	m_checkCacheImage->setChecked( false );
     }
   }
 }

@@ -61,7 +61,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
    * Reimplemented for internal reasons (shut down the audio player)
    */
   void slotStartClicked();
-  void slotOnTheFlyToggled( bool on );
+  void slotCacheImageToggled( bool on );
   void slotNormalizeToggled( bool on );
 
  private:

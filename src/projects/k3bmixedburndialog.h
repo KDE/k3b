@@ -60,7 +60,7 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void saveSettings();
    void readSettings();
 
-   void slotOnTheFlyToggled( bool on );
+   void slotCacheImageToggled( bool on );
    void slotNormalizeToggled( bool on );
 
  private:

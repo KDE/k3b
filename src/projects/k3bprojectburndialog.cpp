@@ -126,13 +126,13 @@ void K3bProjectBurnDialog::toggleAll()
 
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
+  m_checkCacheImage->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || !m_checkCacheImage->isChecked() );
   if( m_checkOnlyCreateImage->isChecked() ) {
     m_checkRemoveBufferFiles->setChecked(false);
     m_buttonStart->setDisabled(false);
   }
-  m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
 
@@ -254,13 +254,13 @@ void K3bProjectBurnDialog::prepareGui()
   m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
   // add the options
-  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( m_optionGroup );
+  m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( m_optionGroup );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( m_optionGroup );
   m_checkRemoveBufferFiles = K3bStdGuiItems::removeImagesCheckbox( m_optionGroup );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
 
   m_optionGroupLayout->addWidget(m_checkSimulate);
-  m_optionGroupLayout->addWidget(m_checkOnTheFly);
+  m_optionGroupLayout->addWidget(m_checkCacheImage);
   m_optionGroupLayout->addWidget(m_checkOnlyCreateImage);
   m_optionGroupLayout->addWidget(m_checkRemoveBufferFiles);
 
@@ -304,7 +304,7 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
 	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
@@ -320,7 +320,7 @@ void K3bProjectBurnDialog::addPage( QWidget* page, const QString& title )
 void K3bProjectBurnDialog::saveSettings()
 {
   m_doc->setDummy( m_checkSimulate->isChecked() );
-  m_doc->setOnTheFly( m_checkOnTheFly->isChecked() );
+  m_doc->setOnTheFly( !m_checkCacheImage->isChecked() );
   m_doc->setOnlyCreateImages( m_checkOnlyCreateImage->isChecked() );
   m_doc->setRemoveImages( m_checkRemoveBufferFiles->isChecked() );
   m_doc->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -334,7 +334,7 @@ void K3bProjectBurnDialog::saveSettings()
 void K3bProjectBurnDialog::readSettings()
 {
   m_checkSimulate->setChecked( doc()->dummy() );
-  m_checkOnTheFly->setChecked( doc()->onTheFly() );
+  m_checkCacheImage->setChecked( !doc()->onTheFly() );
   m_checkOnlyCreateImage->setChecked( m_doc->onlyCreateImages() );
   m_checkRemoveBufferFiles->setChecked( m_doc->removeImages() );
   m_writingModeWidget->setWritingMode( doc()->writingMode() );
@@ -349,7 +349,7 @@ void K3bProjectBurnDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
 
@@ -362,7 +362,7 @@ void K3bProjectBurnDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", true ) );
+  m_checkCacheImage->setChecked( !c->readBoolEntry( "on_the_fly", true ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
 
@@ -376,7 +376,7 @@ void K3bProjectBurnDialog::loadK3bDefaults()
   m_writerSelectionWidget->loadDefaults();
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkSimulate->setChecked( false );
-  m_checkOnTheFly->setChecked( true );
+  m_checkCacheImage->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
 

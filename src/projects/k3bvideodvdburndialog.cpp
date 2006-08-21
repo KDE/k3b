@@ -163,7 +163,7 @@ void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigBase* c )
 void K3bVideoDvdBurnDialog::slotStartClicked()
 {
   if( m_checkOnlyCreateImage->isChecked() ||
-      !m_checkOnTheFly->isChecked() ) {
+      m_checkCacheImage->isChecked() ) {
     QFileInfo fi( m_tempDirSelectionWidget->tempPath() );
     if( fi.isDir() )
       m_tempDirSelectionWidget->setTempPath( fi.filePath() + "/image.iso" );

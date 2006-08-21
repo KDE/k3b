@@ -175,7 +175,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    K3bWritingModeWidget* m_writingModeWidget;
    QGroupBox* m_optionGroup;
    QVBoxLayout* m_optionGroupLayout;
-   QCheckBox* m_checkOnTheFly;
+   QCheckBox* m_checkCacheImage;
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkRemoveBufferFiles;
    QCheckBox* m_checkOnlyCreateImage;
