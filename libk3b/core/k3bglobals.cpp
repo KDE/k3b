@@ -44,11 +44,16 @@
 #include <cmath>
 #include <sys/utsname.h>
 #include <sys/stat.h>
-#include <byteswap.h>
 
 #if defined(__FreeBSD__) || defined(__NetBSD__)
 #  include <sys/param.h>
 #  include <sys/mount.h>
+#  include <sys/endian.h>
+#  define bswap_16(x) bswap16(x)
+#  define bswap_32(x) bswap32(x)
+#  define bswap_64(x) bswap64(x)
+#else
+#  include <byteswap.h>
 #endif
 #ifdef HAVE_SYS_STATVFS_H
 #  include <sys/statvfs.h>
@@ -256,10 +261,19 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
+#ifdef HAVE_STATVFS
+  struct statvfs fs;
+  if( ::statvfs( QFile::encodeName(path), &fs ) == 0 ) {
+    unsigned long kBfak = fs.f_frsize/1024;
+#else
+#  ifndef HAVE_STATFS
+#    error "No statfs, no statvfs? Help!"
+#  endif
   struct statfs fs;
 
   if( ::statfs( QFile::encodeName(path), &fs ) == 0 ) {
     unsigned long kBfak = fs.f_bsize/1024;
+#endif
 
     size = fs.f_blocks*kBfak;
     avail = fs.f_bavail*kBfak;
