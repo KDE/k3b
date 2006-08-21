@@ -70,7 +70,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
   QCheckBox* m_checkSimulate;
-  QCheckBox* m_checkOnTheFly;
+  QCheckBox* m_checkCacheImage;
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkOnlyCreateImage;
   QCheckBox* m_checkReadCdText;

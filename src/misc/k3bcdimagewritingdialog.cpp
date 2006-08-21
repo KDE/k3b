@@ -139,7 +139,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 	   this, SLOT(slotUpdateImage(const QString&)) );
   connect( m_checkDummy, SIGNAL(toggled(bool)),
 	   this, SLOT(slotToggleAll()) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)),
+  connect( m_checkCacheImage, SIGNAL(toggled(bool)),
 	   this, SLOT(slotToggleAll()) );
 }
 
@@ -257,7 +257,7 @@ void K3bCdImageWritingDialog::setupGui()
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
-  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( optionGroup );
+  m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( optionGroup );
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
   optionTabLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
@@ -370,7 +370,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
       job_->setWritingMode( m_writingModeWidget->writingMode() );
       job_->setCueFile( d->tocFile );
       job_->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
-      job_->setOnTheFly( m_checkOnTheFly->isChecked() );
+      job_->setOnTheFly( !m_checkCacheImage->isChecked() );
       job_->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
       job = job_;
@@ -764,14 +764,14 @@ void K3bCdImageWritingDialog::toggleAll()
     if( !d->tempPathTabVisible )
       d->optionTabbed->addTab( d->tempPathTab, i18n("&Image") );
     d->tempPathTabVisible = true;
-    m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
+    m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() );
   }
   else {
     if( d->tempPathTabVisible )
       d->optionTabbed->removePage( d->tempPathTab );
     d->tempPathTabVisible = false;
   }
-  m_checkOnTheFly->setShown( currentImageType() == IMAGE_AUDIO_CUE );
+  m_checkCacheImage->setShown( currentImageType() == IMAGE_AUDIO_CUE );
   
   m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
 
@@ -874,7 +874,7 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry("on_the_fly", true ) );
+  m_checkCacheImage->setChecked( !c->readBoolEntry("on_the_fly", true ) );
 
   m_dataModeWidget->loadConfig(c);
  
@@ -914,7 +914,7 @@ void K3bCdImageWritingDialog::saveUserDefaults( KConfigBase* c )
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "multisession", m_checkNoFix->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
   m_dataModeWidget->saveConfig(c);
   
   c->writeEntry( "verify_data", m_checkVerify->isChecked() );
@@ -958,7 +958,7 @@ void K3bCdImageWritingDialog::loadK3bDefaults()
   m_checkDummy->setChecked( false );
   m_checkVerify->setChecked( false );
   m_checkNoFix->setChecked( false );
-  m_checkOnTheFly->setChecked( true );
+  m_checkCacheImage->setChecked( false );
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
   m_comboImageType->setCurrentItem(0);
 

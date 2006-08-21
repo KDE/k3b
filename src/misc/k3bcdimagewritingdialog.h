@@ -94,7 +94,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   QCheckBox* m_checkDummy;
   QCheckBox* m_checkNoFix;
-  QCheckBox* m_checkOnTheFly;
+  QCheckBox* m_checkCacheImage;
   QCheckBox* m_checkVerify;
   K3bDataModeWidget* m_dataModeWidget;
   K3bWritingModeWidget* m_writingModeWidget;

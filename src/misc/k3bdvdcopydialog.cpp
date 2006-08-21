@@ -104,7 +104,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
+  m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( groupOptions );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
 
@@ -194,7 +194,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
 	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
 
@@ -232,7 +232,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   //
   // check for m_tempDirSelectionWidget->tempPath()
   //
-  if( !m_checkOnlyCreateImage->isChecked() && !m_checkOnTheFly->isChecked() ) 
+  if( !m_checkOnlyCreateImage->isChecked() && m_checkCacheImage->isChecked() ) 
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::warningContinueCancel( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
@@ -257,7 +257,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   job->setRemoveImageFiles( m_checkDeleteImages->isChecked() );
   job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
   job->setSimulate( m_checkSimulate->isChecked() );
-  job->setOnTheFly( m_checkOnTheFly->isChecked() );
+  job->setOnTheFly( !m_checkCacheImage->isChecked() );
   job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
   job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
   job->setWritingMode( m_writingModeWidget->writingMode() );
@@ -283,7 +283,7 @@ void K3bDvdCopyDialog::loadUserDefaults( KConfigBase* c )
   m_tempDirSelectionWidget->readConfig( c );
 
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
+  m_checkCacheImage->setChecked( !c->readBoolEntry( "on_the_fly", false ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
   m_checkDeleteImages->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
@@ -304,7 +304,7 @@ void K3bDvdCopyDialog::saveUserDefaults( KConfigBase* c )
   c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "remove_image", m_checkDeleteImages->isChecked() );
   c->writeEntry( "ignore read errors", m_checkIgnoreReadErrors->isChecked() );
@@ -326,7 +326,7 @@ void K3bDvdCopyDialog::loadK3bDefaults()
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
 
   m_checkSimulate->setChecked( false );
-  m_checkOnTheFly->setChecked( false );
+  m_checkCacheImage->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
   m_checkDeleteImages->setChecked( true );
   m_checkIgnoreReadErrors->setChecked(false);
@@ -340,7 +340,7 @@ void K3bDvdCopyDialog::loadK3bDefaults()
 void K3bDvdCopyDialog::toggleAll()
 {
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_checkOnTheFly->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  m_checkCacheImage->setDisabled( m_checkOnlyCreateImage->isChecked() );
 
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
@@ -378,9 +378,9 @@ void K3bDvdCopyDialog::toggleAll()
 
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkOnTheFly->isChecked() );
+  m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || !m_checkCacheImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
   if( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
@@ -425,7 +425,7 @@ void K3bDvdCopyDialog::slotNewBurnMedia()
 
 void K3bDvdCopyDialog::updateOverrideDevice()
 {
-  if( m_checkOnTheFly->isChecked() )
+  if( !m_checkCacheImage->isChecked() )
     m_writerSelectionWidget->setOverrideDevice( 0 );
   else
     m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),

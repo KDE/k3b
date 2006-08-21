@@ -122,7 +122,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-  m_checkOnTheFly = K3bStdGuiItems::onTheFlyCheckbox( groupOptions );
+  m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( groupOptions );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
 
@@ -201,7 +201,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
   connect( m_writerSelectionWidget, SIGNAL(newMedia()), this, SLOT(slotNewBurnMedia()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
-  connect( m_checkOnTheFly, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
+  connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_comboCopyMode, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
@@ -324,7 +324,7 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
     job->setSpeed( m_writerSelectionWidget->writerSpeed() );
     job->setSimulate( m_checkSimulate->isChecked() );
-    job->setOnTheFly( m_checkOnTheFly->isChecked() );
+    job->setOnTheFly( !m_checkCacheImage->isChecked() );
     job->setKeepImage( !m_checkDeleteImages->isChecked() );
     job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
     job->setTempPath( m_tempDirSelectionWidget->plainTempPath() );
@@ -362,30 +362,24 @@ void K3bCdCopyDialog::slotToggleAll()
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
 
   m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-  m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && !m_checkOnTheFly->isChecked() );
+  m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && m_checkCacheImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
-  m_tempDirSelectionWidget->setDisabled( m_checkOnTheFly->isChecked() );
-  m_checkOnlyCreateImage->setEnabled( !m_checkOnTheFly->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() );
+  m_checkOnlyCreateImage->setEnabled( m_checkCacheImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  m_checkOnTheFly->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+  m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
   if ( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
 
   if( m_comboCopyMode->currentItem() == 1 ) {
     // cdrecord does not support cloning on-the-fly
-    m_checkOnTheFly->setChecked(false);
-    m_checkOnTheFly->setEnabled(false);
+    m_checkCacheImage->setChecked(true);
+    m_checkCacheImage->setEnabled(false);
     
     m_writingModeWidget->setSupportedModes( K3b::RAW );
   }
   else {
-//     if( dev == m_comboSourceDevice->selectedDevice() ) {
-//       m_checkOnTheFly->setChecked( false );
-//       m_checkOnTheFly->setEnabled( false );
-//     }
-//     else
-    
     m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
   }
 
@@ -453,7 +447,7 @@ void K3bCdCopyDialog::slotNewBurnMedia()
 
 void K3bCdCopyDialog::updateOverrideDevice()
 {
-  if( m_checkOnTheFly->isChecked() )
+  if( !m_checkCacheImage->isChecked() )
     m_writerSelectionWidget->setOverrideDevice( 0 );
   else
     m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
@@ -468,7 +462,7 @@ void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
   m_writingModeWidget->loadConfig( c );
   m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkOnTheFly->setChecked( c->readBoolEntry( "on_the_fly", false ) );
+  m_checkCacheImage->setChecked( !c->readBoolEntry( "on_the_fly", false ) );
   m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
@@ -499,7 +493,7 @@ void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
-  c->writeEntry( "on_the_fly", m_checkOnTheFly->isChecked() );
+  c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
   c->writeEntry( "delete_images", m_checkDeleteImages->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
@@ -532,7 +526,7 @@ void K3bCdCopyDialog::loadK3bDefaults()
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_writerSelectionWidget->loadDefaults();
   m_checkSimulate->setChecked( false );
-  m_checkOnTheFly->setChecked( false );
+  m_checkCacheImage->setChecked( true );
   m_checkDeleteImages->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
   m_comboParanoiaMode->setCurrentItem(0);
