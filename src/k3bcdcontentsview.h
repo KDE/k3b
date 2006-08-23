@@ -20,7 +20,7 @@
 #include <qwidget.h>
 #include <k3bthememanager.h>
 
-class QLabel;
+class K3bThemedHeader;
 
 
 /**
@@ -45,16 +45,10 @@ class K3bCdContentsView : public QWidget
   void setLeftPixmap( K3bTheme::PixmapType );
   void setRightPixmap( K3bTheme::PixmapType );
 
- private slots:
-  void slotThemeChanged();
-
  private:
+  K3bThemedHeader* m_header;
+
   QWidget* m_centerWidget;
-  QLabel* m_labelTitle;
-  QLabel* m_pixmapLabelLeft;
-  QLabel* m_pixmapLabelRight;
-  K3bTheme::PixmapType m_leftPixmap;
-  K3bTheme::PixmapType m_rightPixmap;
 };
 
 #endif

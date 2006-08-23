@@ -49,6 +49,11 @@ K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent, const char* name )
 
   // make sure we are always visible
   KWin::setOnAllDesktops( winId(), true );
+
+  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+	   this, SLOT(refresh()) );
+  connect( kapp, SIGNAL(appearanceChanged()),
+	   this, SLOT(refresh()) );
 }
 
 

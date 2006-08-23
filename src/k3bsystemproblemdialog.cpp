@@ -20,6 +20,7 @@
 #include "k3bapplication.h"
 #include "k3bsystemproblemdialog.h"
 #include "k3bpassivepopup.h"
+#include "k3bthemedheader.h"
 #include <k3btitlelabel.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bstdguiitems.h>
@@ -74,32 +75,11 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
 
   // setup the title
   // ---------------------------------------------------------------------------------------------------
-  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
-  QHBoxLayout* layout4 = new QHBoxLayout( headerFrame ); 
-  layout4->setMargin( 2 ); // to make sure the frame gets displayed
-  layout4->setSpacing( 0 );
-  QLabel* pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-  pixmapLabelLeft->setScaledContents( FALSE );
-  layout4->addWidget( pixmapLabelLeft );
-  K3bTitleLabel* labelTitle = new K3bTitleLabel( headerFrame, "m_labelTitle" );
-  labelTitle->setTitle( i18n("System Configuration Problems"), 
+  K3bThemedHeader* titleFrame = new K3bThemedHeader( this );
+  titleFrame->setTitle( i18n("System Configuration Problems"), 
 			i18n("1 problem", "%n problems", problems.count() ) );
-  layout4->addWidget( labelTitle );
-  layout4->setStretchFactor( labelTitle, 1 );
-  QLabel* pixmapLabelRight = new QLabel( headerFrame, "pixmapLabelRight" );
-  pixmapLabelRight->setScaledContents( FALSE );
-  layout4->addWidget( pixmapLabelRight );
-
-
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelLeft->setPixmap( theme->pixmap( K3bTheme::MEDIA_LEFT ) );
-    pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelRight->setPixmap( theme->pixmap( K3bTheme::MEDIA_NONE ) );
-    labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
-    labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
-  }
-
+  titleFrame->setLeftPixmap( K3bTheme::MEDIA_LEFT );
+  titleFrame->setRightPixmap( K3bTheme::MEDIA_NONE );
 
   m_closeButton = new QPushButton( i18n("Close"), this );
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
@@ -121,7 +101,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   QGridLayout* grid = new QGridLayout( this );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
-  grid->addMultiCellWidget( headerFrame, 0, 0, 0, 1 );
+  grid->addMultiCellWidget( titleFrame, 0, 0, 0, 1 );
   grid->addMultiCellWidget( view, 1, 1, 0, 1 );
   grid->addWidget( m_checkDontShowAgain, 2, 0 );
   QHBoxLayout* buttonBox = new QHBoxLayout;

@@ -19,7 +19,7 @@
 #include "kcutlabel.h"
 #include "k3bstdguiitems.h"
 #include "k3bpushbutton.h"
-
+#include "k3bthemedheader.h"
 #include "k3bthememanager.h"
 #include <k3bapplication.h>
 
@@ -69,31 +69,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // header
   // ---------------------------------------------------------------------------------------------------
-  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
-  QHBoxLayout* layout4 = new QHBoxLayout( headerFrame );
-  layout4->setMargin( 2 ); // to make sure the frame gets displayed
-  layout4->setSpacing( 0 );
-  QLabel* pixmapLabelLeft = new QLabel( headerFrame, "pixmapLabelLeft" );
-  pixmapLabelLeft->setScaledContents( FALSE );
-  layout4->addWidget( pixmapLabelLeft );
-  m_labelTitle = new K3bTitleLabel( headerFrame, "m_labelTitle" );
-  layout4->addWidget( m_labelTitle );
-  layout4->setStretchFactor( m_labelTitle, 1 );
-  QLabel* pixmapLabelRight = new QLabel( headerFrame, "pixmapLabelRight" );
-  pixmapLabelRight->setScaledContents( FALSE );
-  layout4->addWidget( pixmapLabelRight );
-
-  mainGrid->addMultiCellWidget( headerFrame, 0, 0, 0, 1 );
-
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    pixmapLabelLeft->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelLeft->setPixmap( theme->pixmap( K3bTheme::DIALOG_LEFT ) );
-    pixmapLabelRight->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabelRight->setPixmap( theme->pixmap( K3bTheme::DIALOG_RIGHT ) );
-    m_labelTitle->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelTitle->setPaletteForegroundColor( theme->foregroundColor() );
-  }
-
+  m_dialogHeader = new K3bThemedHeader( this );
+  mainGrid->addMultiCellWidget( m_dialogHeader, 0, 0, 0, 1 );
 
   // action buttons
   // ---------------------------------------------------------------------------------------------------
@@ -227,9 +204,7 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
 
 void K3bInteractionDialog::setTitle( const QString& title, const QString& subTitle )
 {
-//   m_labelTitle->setText( QString("<qt><nobr><font size=\"+1\"><b>%1</b></font> "
-//  				 "<font size=\"-1\">%2</font></nobr></qt>").arg(title).arg(subTitle) );
-  m_labelTitle->setTitle( title, subTitle );
+  m_dialogHeader->setTitle( title, subTitle );
 
   setCaption( title );
 }

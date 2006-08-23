@@ -64,6 +64,8 @@ K3bThemeOptionTab::K3bThemeOptionTab(QWidget *parent, const char *name )
 
   connect( m_viewTheme, SIGNAL(selectionChanged()),
 	   this, SLOT(selectionChanged()) );
+  connect( kapp, SIGNAL(appearanceChanged()),
+	   this, SLOT(selectionChanged()) );
   connect( m_buttonInstallTheme, SIGNAL(clicked()),
 	   this, SLOT(slotInstallTheme()) );
   connect( m_buttonRemoveTheme, SIGNAL(clicked()),
@@ -109,6 +111,10 @@ void K3bThemeOptionTab::selectionChanged()
     m_centerPreviewLabel->setText( i18n("K3b - The CD/DVD Kreator") );
     m_centerPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
     m_centerPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
+    m_leftPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
+    m_leftPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
+    m_rightPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
+    m_rightPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
     m_leftPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_LEFT ) );
     m_rightPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
 

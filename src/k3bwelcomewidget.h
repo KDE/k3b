@@ -54,9 +54,6 @@ class K3bWelcomeWidget : public QScrollView
   void showEvent( QShowEvent* );
   void contentsMousePressEvent( QMouseEvent* e );
 
- private slots:
-  void slotThemeChanged();
-
  private:
   void fixSize();
 
@@ -72,9 +69,6 @@ class K3bWelcomeWidget::Display : public QWidget
  public:
   Display( QWidget* parent );
   ~Display();
-
-  void setHeaderBackgroundColor( const QColor& );
-  void setHeaderForegroundColor( const QColor& );
 
   QSize sizeHint() const;
   QSizePolicy sizePolicy () const;
@@ -108,9 +102,6 @@ class K3bWelcomeWidget::Display : public QWidget
   QPtrList<KAction> m_actions;
   QPtrList<K3bFlatButton> m_buttons;
   QMap<K3bFlatButton*, KAction*> m_buttonMap;
-
-  QColor m_headerBgColor;
-  QColor m_headerFgColor;
 
   bool m_infoTextVisible;
 

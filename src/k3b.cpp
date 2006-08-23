@@ -123,7 +123,7 @@
 #include "projects/k3bdatasessionimportdialog.h"
 #include <k3binterferingsystemshandler.h>
 #include "k3bpassivepopup.h"
-
+#include "k3bthemedheader.h"
 
 class K3bMainWindow::Private
 {
@@ -178,7 +178,6 @@ K3bMainWindow::K3bMainWindow()
   connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
 
   // connect to the K3bInterferingSystemsHandler to let the user know if K3b disabled something even if no
   // job is running
@@ -411,26 +410,11 @@ void K3bMainWindow::initView()
   documentHullLayout->setMargin( 2 );
   documentHullLayout->setSpacing( 0 );
 
-  m_documentHeader = K3bStdGuiItems::purpleFrame( d->documentHull );
-  QGridLayout* documentHeaderLayout = new QGridLayout( m_documentHeader );
-  documentHeaderLayout->setMargin( 2 );
-  documentHeaderLayout->setSpacing( 0 );
-
-  d->leftDocPicLabel = new QLabel( m_documentHeader );
-  d->centerDocLabel = new QLabel( m_documentHeader );
-  d->rightDocPicLabel = new QLabel( m_documentHeader );
-
-  d->centerDocLabel->setText( i18n("Current Projects") );
-  d->centerDocLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-  QFont f(d->centerDocLabel->font());
-  f.setBold(true);
-  f.setPointSize( 12 );
-  d->centerDocLabel->setFont(f);
-
-  documentHeaderLayout->addWidget( d->leftDocPicLabel, 0, 0 );
-  documentHeaderLayout->addWidget( d->centerDocLabel, 0, 1 );
-  documentHeaderLayout->addWidget( d->rightDocPicLabel, 0, 2 );
-  documentHeaderLayout->setColStretch( 1, 1 );
+  m_documentHeader = new K3bThemedHeader( d->documentHull );
+  m_documentHeader->setTitle( i18n("Current Projects") );
+  m_documentHeader->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+  m_documentHeader->setLeftPixmap( K3bTheme::PROJECT_LEFT );
+  m_documentHeader->setRightPixmap( K3bTheme::PROJECT_RIGHT );
 
   // add the document tab to the styled document box
   m_documentTab = new K3bProjectTabWidget( d->documentHull );
@@ -638,8 +622,6 @@ void K3bMainWindow::readOptions()
 
   slotViewDocumentHeader();
   slotCheckDockWidgetStatus();
-
-  slotThemeChanged();
 }
 
 
@@ -1548,17 +1530,6 @@ void K3bMainWindow::slotClearProject()
       doc->newDocument();
       k3bappcore->projectManager()->loadDefaults( doc );
     }
-  }
-}
-
-
-void K3bMainWindow::slotThemeChanged()
-{
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    d->leftDocPicLabel->setPixmap( theme->pixmap( K3bTheme::PROJECT_LEFT ) );
-    d->rightDocPicLabel->setPixmap( theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
-    d->centerDocLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    d->centerDocLabel->setPaletteForegroundColor( theme->foregroundColor() );
   }
 }
 

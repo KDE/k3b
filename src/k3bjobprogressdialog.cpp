@@ -21,6 +21,7 @@
 #include "k3bdebuggingoutputdialog.h"
 #include "k3bapplication.h"
 #include "k3bjobinterface.h"
+#include "k3bthemedlabel.h"
 #include <k3bjob.h>
 #include <kcutlabel.h>
 #include <k3bdevice.h>
@@ -118,12 +119,15 @@ void K3bJobProgressDialog::setupGUI()
 
   // header 
   // ------------------------------------------------------------------------------------------
-  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( this );
+  QFrame* headerFrame = new QFrame( this, "headerFrame" );
+  headerFrame->setFrameShape( QFrame::StyledPanel );
+  headerFrame->setFrameShadow( QFrame::Sunken );
+  headerFrame->setLineWidth( 1 );
+  headerFrame->setMargin( 1 );
   QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame ); 
   headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
   headerLayout->setSpacing( 0 );
-  m_pixLabel = new QLabel( headerFrame, "m_pixLabel" );
-  m_pixLabel->setScaledContents( FALSE );
+  m_pixLabel = new K3bThemedLabel( headerFrame );
   headerLayout->addWidget( m_pixLabel );
 
   QFrame* frame4 = new QFrame( headerFrame, "frame4" );
@@ -132,7 +136,7 @@ void K3bJobProgressDialog::setupGUI()
   frame4->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout"); 
 
-  m_labelJob = new KCutLabel( frame4, "m_labelJob" );
+  m_labelJob = new K3bThemedLabel( frame4 );
   m_labelJob->setMinimumVisibleText( 40 );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
@@ -141,7 +145,7 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
-  m_labelJobDetails = new KCutLabel( frame4, "m_labelJobDetails" );
+  m_labelJobDetails = new K3bThemedLabel( frame4 );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
   m_labelJobDetails->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJobDetails );
@@ -162,7 +166,12 @@ void K3bJobProgressDialog::setupGUI()
 
   // progress header
   // ------------------------------------------------------------------------------------------
-  QFrame* progressHeaderFrame = K3bStdGuiItems::purpleFrame( this );
+  QFrame* progressHeaderFrame = new QFrame( this, "progressHeaderFrame" );
+  progressHeaderFrame->setFrameShape( QFrame::StyledPanel );
+  progressHeaderFrame->setFrameShadow( QFrame::Sunken );
+  progressHeaderFrame->setLineWidth( 1 );
+  progressHeaderFrame->setMargin( 1 );
+
   QHBoxLayout* progressHeaderLayout = new QHBoxLayout( progressHeaderFrame ); 
   progressHeaderLayout->setMargin( 2 );
   progressHeaderLayout->setSpacing( 0 );
@@ -173,45 +182,21 @@ void K3bJobProgressDialog::setupGUI()
   frame5->setFrameShadow( QFrame::Raised );
   QVBoxLayout* frame5Layout = new QVBoxLayout( frame5, 6, 3, "frame5Layout"); 
 
-  m_labelTask = new KCutLabel( frame5, "m_labelTask" );
+  m_labelTask = new K3bThemedLabel( frame5 );
   QFont m_labelTask_font(  m_labelTask->font() );
   m_labelTask_font.setPointSize( m_labelTask_font.pointSize() + 2 );
   m_labelTask_font.setBold( TRUE );
   m_labelTask->setFont( m_labelTask_font ); 
   frame5Layout->addWidget( m_labelTask );
 
-  m_labelElapsedTime = new QLabel( frame5, "m_labelElapsedTime" );
+  m_labelElapsedTime = new K3bThemedLabel( frame5 );
   m_labelElapsedTime->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelElapsedTime->sizePolicy().hasHeightForWidth() ) );
   frame5Layout->addWidget( m_labelElapsedTime );
   progressHeaderLayout->addWidget( frame5 );
 
-  QLabel* pixmapLabel2 = new QLabel( progressHeaderFrame, "pixmapLabel2" );
-  pixmapLabel2->setScaledContents( FALSE );
-  progressHeaderLayout->addWidget( pixmapLabel2 );
+  progressHeaderLayout->addWidget( new K3bThemedLabel( K3bTheme::PROGRESS_RIGHT, progressHeaderFrame ) );
   mainLayout->addWidget( progressHeaderFrame );
   // ------------------------------------------------------------------------------------------
-
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    m_pixLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelJob->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelJobDetails->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelElapsedTime->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelTask->setPaletteBackgroundColor( theme->backgroundColor() );
-
-    m_pixLabel->setPaletteForegroundColor( theme->foregroundColor() );
-    m_labelJob->setPaletteForegroundColor( theme->foregroundColor() );
-    m_labelJobDetails->setPaletteForegroundColor( theme->foregroundColor() );
-    m_labelElapsedTime->setPaletteForegroundColor( theme->foregroundColor() );
-    m_labelTask->setPaletteForegroundColor( theme->foregroundColor() );
-
-    m_pixLabel->setPixmap( theme->pixmap( K3bTheme::PROGRESS_WORKING ) );
-    frame4->setPaletteBackgroundColor( theme->backgroundColor() );
-    frame5->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabel2->setPaletteBackgroundColor( theme->backgroundColor() );
-    pixmapLabel2->setPixmap( theme->pixmap( K3bTheme::PROGRESS_RIGHT ) );
-  }
-
-
 
   QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
 
@@ -264,6 +249,15 @@ void K3bJobProgressDialog::setupGUI()
   layout5->addWidget( m_buttonShowDebug );
 
   mainLayout->addLayout( layout5 );
+
+  m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_WORKING );
+
+  slotThemeChanged();
+
+  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+	   this, SLOT(slotThemeChanged()) );
+  connect( kapp, SIGNAL(appearanceChanged()),
+	   this, SLOT(slotThemeChanged()) );
 }
 
 
@@ -366,7 +360,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
   m_logFile.close();
 
   if( success ) {
-    m_pixLabel->setPixmap( k3bappcore->themeManager()->currentTheme()->pixmap( K3bTheme::PROGRESS_SUCCESS ) );
+    m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_SUCCESS );
 
     m_labelTask->setText( i18n("Success.") );
     m_labelTask->setPaletteForegroundColor( Qt::darkGreen );
@@ -385,7 +379,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
     KNotifyClient::event( 0, "SuccessfullyFinished", i18n("Successfully finished.") );
   }
   else {
-    m_pixLabel->setPixmap( k3bappcore->themeManager()->currentTheme()->pixmap( K3bTheme::PROGRESS_FAIL ) );
+    m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_FAIL );
 
     m_labelTask->setPaletteForegroundColor( Qt::red );
 
@@ -685,6 +679,21 @@ void K3bJobProgressDialog::blockingInformation( const QString& text,
 						const QString& caption )
 {
   KMessageBox::information( this, text, caption );
+}
+
+
+void K3bJobProgressDialog::slotThemeChanged()
+{
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    static_cast<QWidget*>(child( "frame4" ))->setPaletteBackgroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "frame4" ))->setPaletteForegroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "frame5" ))->setPaletteBackgroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "frame5" ))->setPaletteForegroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "progressHeaderFrame" ))->setPaletteBackgroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "progressHeaderFrame" ))->setPaletteForegroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "headerFrame" ))->setPaletteBackgroundColor( theme->backgroundColor() );
+    static_cast<QWidget*>(child( "headerFrame" ))->setPaletteForegroundColor( theme->backgroundColor() );
+  }
 }
 
 #include "k3bjobprogressdialog.moc"

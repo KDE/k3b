@@ -47,6 +47,8 @@
 K3bWelcomeWidget::Display::Display( QWidget* parent )
   : QWidget( parent )
 {
+  setWFlags( Qt::WNoAutoErase );
+
   QFont fnt(font());
   fnt.setBold(true);
   fnt.setPointSize( 16 );
@@ -69,20 +71,6 @@ K3bWelcomeWidget::Display::~Display()
 {
   delete m_header;
   delete m_infoText;
-}
-
-
-void K3bWelcomeWidget::Display::setHeaderBackgroundColor( const QColor& c )
-{
-  m_headerBgColor = c;
-  update();
-}
-
-
-void K3bWelcomeWidget::Display::setHeaderForegroundColor( const QColor& c )
-{
-  m_headerFgColor = c;
-  update();
 }
 
 
@@ -228,39 +216,43 @@ void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 }
 
 
-void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* e )
+void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
 {
-  QWidget::paintEvent( e );
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    QPainter p( this );
+    p.setPen( theme->foregroundColor() );
 
-  QPainter p( this );
-  p.setPen( m_headerFgColor );
+    // draw the background including first filling with the bg color for transparent images
+    p.fillRect( rect(), theme->backgroundColor() );
+    p.drawTiledPixmap( rect(), theme->pixmap( K3bTheme::WELCOME_BG ) );
 
-  // rect around the header
-  QRect rect( 10, 10, QMAX( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
-  p.fillRect( rect, m_headerBgColor );
-  p.drawRect( rect );
+    // rect around the header
+    QRect rect( 10, 10, QMAX( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
+    p.fillRect( rect, theme->backgroundColor() );
+    p.drawRect( rect );
 
-  // big rect around the whole thing
-  p.drawRect( 10, 10, width()-20, height()-20 );
+    // big rect around the whole thing
+    p.drawRect( 10, 10, width()-20, height()-20 );
 
-  // draw the header text
-  QColorGroup grp( colorGroup() );
-  grp.setColor( QColorGroup::Text, m_headerFgColor );
-  int pos = 20;
-  pos += QMAX( (width()-40-m_header->widthUsed())/2, 0 );
-  m_header->draw( &p, pos, 20, QRect(), grp );
+    // draw the header text
+    QColorGroup grp( colorGroup() );
+    grp.setColor( QColorGroup::Text, theme->foregroundColor() );
+    int pos = 20;
+    pos += QMAX( (width()-40-m_header->widthUsed())/2, 0 );
+    m_header->draw( &p, pos, 20, QRect(), grp );
 
-  if( m_infoTextVisible ) {
-    // draw the info box
-    //    int boxWidth = 20 + m_infoText->widthUsed();
-    int boxHeight = 20 + m_infoText->height();
-    QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
-		       height()-10-boxHeight,
-		       width()-20/*boxWidth*/,
-		       boxHeight );
-    p.fillRect( infoBoxRect, m_headerBgColor );
-    p.drawRect( infoBoxRect );
-    m_infoText->draw( &p, infoBoxRect.left()+10, infoBoxRect.top()+10, QRect(), grp );
+    if( m_infoTextVisible ) {
+      // draw the info box
+      //    int boxWidth = 20 + m_infoText->widthUsed();
+      int boxHeight = 20 + m_infoText->height();
+      QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
+			 height()-10-boxHeight,
+			 width()-20/*boxWidth*/,
+			 boxHeight );
+      p.fillRect( infoBoxRect, theme->backgroundColor() );
+      p.drawRect( infoBoxRect );
+      m_infoText->draw( &p, infoBoxRect.left()+10, infoBoxRect.top()+10, QRect(), grp );
+    }
   }
 }
 
@@ -289,9 +281,8 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
 
   connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
 
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
-
-  slotThemeChanged();
+  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), main, SLOT(update()) );
+  connect( kapp, SIGNAL(appearanceChanged()), main, SLOT(update()) );
 }
 
 
@@ -429,16 +420,5 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     fixSize();
   }
 }
-
-
-void K3bWelcomeWidget::slotThemeChanged()
-{
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    main->setPaletteBackgroundPixmap( theme->pixmap( K3bTheme::WELCOME_BG ) );
-    main->setHeaderBackgroundColor( theme->backgroundColor() );
-    main->setHeaderForegroundColor( theme->foregroundColor() );
-  }
-}
-
 
 #include "k3bwelcomewidget.moc"

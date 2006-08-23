@@ -52,7 +52,7 @@ class K3bBusyWidget;
 class KSystemTray;
 class K3bStatusBarManager;
 class K3bProjectInterface;
-
+class K3bThemedHeader;
 
 namespace K3bDevice {
   class DeviceManager;
@@ -239,8 +239,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   void showBusyInfo( const QString& str );
   void endBusy();
 
-  void slotThemeChanged();
-
   void createClient(K3bDoc* doc);
 
  private:
@@ -321,7 +319,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   bool m_initialized;
 
   // the funny header
-  QWidget* m_documentHeader;
+  K3bThemedHeader* m_documentHeader;
 
   class Private;
   Private* d;

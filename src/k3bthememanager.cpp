@@ -29,6 +29,23 @@
 
 
 
+QColor K3bTheme::backgroundColor() const
+{
+  if( m_bgColor.isValid() )
+    return m_bgColor;
+  else
+    return KGlobalSettings::activeTitleColor();
+}
+
+
+QColor K3bTheme::foregroundColor() const
+{
+  if( m_fgColor.isValid() )
+    return m_fgColor;
+  else
+    return KGlobalSettings::activeTextColor();
+}
+
 
 const QPixmap& K3bTheme::pixmap( const QString& name ) const
 {
@@ -274,10 +291,8 @@ void K3bThemeManager::loadTheme( const QString& name )
     t->m_author = cfg.readEntry( "Author" );
     t->m_comment = cfg.readEntry( "Comment" );
     t->m_version = cfg.readEntry( "Version" );
-    t->m_bgColor = KGlobalSettings::activeTitleColor();
-    t->m_fgColor = KGlobalSettings::activeTextColor();
-    t->m_bgColor = cfg.readColorEntry( "Backgroundcolor", &t->m_bgColor );
-    t->m_fgColor = cfg.readColorEntry( "Foregroundcolor", &t->m_fgColor );
+    t->m_bgColor = cfg.readColorEntry( "Backgroundcolor" );
+    t->m_fgColor = cfg.readColorEntry( "Foregroundcolor" );
 
     d->themes.append( t );
   }

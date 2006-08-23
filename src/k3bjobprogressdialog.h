@@ -43,7 +43,7 @@ class QCloseEvent;
 class QGridLayout;
 class QKeyEvent;
 class K3bJobProgressOSD;
-
+class K3bThemedLabel;
 
 
 class K3bJobProgressDialog : public KDialog, public K3bJobHandler
@@ -120,6 +120,8 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 
   void slotProgress( int );
 
+  virtual void slotThemeChanged();
+
  protected:
   void closeEvent( QCloseEvent* );
   void keyPressEvent( QKeyEvent* e );
@@ -127,11 +129,11 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   void setupGUI();
   void setupConnections();
 	
-  KCutLabel* m_labelJob;
-  KCutLabel* m_labelJobDetails;
+  K3bThemedLabel* m_labelJob;
+  K3bThemedLabel* m_labelJobDetails;
   KListView* m_viewInfo;
-  KCutLabel* m_labelTask;
-  QLabel* m_labelElapsedTime;
+  K3bThemedLabel* m_labelTask;
+  K3bThemedLabel* m_labelElapsedTime;
   KCutLabel* m_labelSubTask;
   QLabel* m_labelSubProcessedSize;
   KProgress* m_progressSubPercent;
@@ -141,7 +143,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
   QPushButton* m_buttonShowDebug;
-  QLabel* m_pixLabel;
+  K3bThemedLabel* m_pixLabel;
 
   QGridLayout* m_frameExtraInfoLayout;
 

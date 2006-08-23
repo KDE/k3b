@@ -63,8 +63,10 @@ class K3bJobProgressOSD : public QWidget
   void mouseReleaseEvent( QMouseEvent* );
   void mouseMoveEvent( QMouseEvent* );
   void renderOSD();
-  void refresh();
   void reposition( QSize size = QSize() );
+
+ protected slots:
+  void refresh();
 
  private:
   /**

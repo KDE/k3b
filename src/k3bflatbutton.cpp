@@ -58,6 +58,7 @@ void K3bFlatButton::init()
   setFrameStyle( QFrame::Box|QFrame::Plain );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+  connect( kapp, SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
   slotThemeChanged();
 }
 

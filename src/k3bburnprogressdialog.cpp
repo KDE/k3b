@@ -20,6 +20,7 @@
 #include "k3bjob.h"
 #include <k3bdevice.h>
 #include "k3bstdguiitems.h"
+#include "k3bthemedlabel.h"
 #include <k3bthememanager.h>
 
 #include <kglobal.h>
@@ -42,17 +43,16 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 0 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 0 );
 
-  QFrame* headerFrame = K3bStdGuiItems::purpleFrame( m_frameExtraInfo );
-  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
-  headerLayout->setMargin( 2 );
-  m_labelWriter = new QLabel( headerFrame );
-  headerLayout->addWidget( m_labelWriter );
+  m_labelWriter = new K3bThemedLabel( m_frameExtraInfo );
+  m_labelWriter->setFrameShape( QFrame::StyledPanel );
+  m_labelWriter->setFrameShadow( QFrame::Sunken );
+  m_labelWriter->setLineWidth( 1 );
+  m_labelWriter->setMargin( 5 );
   QFont textLabel14_font( m_labelWriter->font() );
   textLabel14_font.setBold( TRUE );
   m_labelWriter->setFont( textLabel14_font );
-  m_labelWriter->setMargin( 3 );
 
-  m_frameExtraInfoLayout->addMultiCellWidget( headerFrame, 0, 0, 0, 3 );
+  m_frameExtraInfoLayout->addMultiCellWidget( m_labelWriter, 0, 0, 0, 3 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Software buffer:"), m_frameExtraInfo ), 1, 2 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device buffer:"), m_frameExtraInfo ), 2, 2 );
 
@@ -61,17 +61,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
 
   m_progressDeviceBuffer = new KProgress( m_frameExtraInfo );
   m_frameExtraInfoLayout->addWidget( m_progressDeviceBuffer, 2, 3 );
-
-  QFrame* line1 = new QFrame( m_frameExtraInfo, "line1" );
-  line1->setFrameShape( QFrame::VLine );
-  line1->setFrameShadow( QFrame::Sunken );
-
-  m_frameExtraInfoLayout->addMultiCellWidget( line1, 1, 2, 1, 1 );
-
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    m_labelWriter->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_labelWriter->setPaletteForegroundColor( theme->foregroundColor() );
-  }
+  m_frameExtraInfoLayout->addMultiCellWidget( K3bStdGuiItems::verticalLine( m_frameExtraInfo ), 1, 2, 1, 1 );
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()
