@@ -64,6 +64,10 @@ typedef unsigned char u8;
 #define CD_FRAMESIZE_RAW 2352
 #endif
 
+#ifdef Q_OS_NETBSD
+#include <sys/cdio.h>
+#endif
+
 #ifdef HAVE_RESMGR
 extern "C" {
 #include <resmgr.h>
@@ -101,7 +105,7 @@ const char* K3bDevice::Device::cdrdao_drivers[] =
   };
 
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
 int K3bDevice::openDevice( const char* name, bool write )
 {
   int fd = -1;
@@ -140,10 +144,11 @@ class K3bDevice::Device::Private
 {
 public:
   Private()
-    : readCapabilities(0),
-      writeCapabilities(0),
-      supportedProfiles(0),
+    : supportedProfiles(0),
 #ifdef Q_OS_LINUX
+      deviceFd(-1),
+#endif
+#ifdef Q_OS_NETBSD
       deviceFd(-1),
 #endif
 #ifdef Q_OS_FREEBSD
@@ -160,6 +165,9 @@ public:
   QString mountDeviceName;
   QStringList allNodes;
 #ifdef Q_OS_LINUX
+  int deviceFd;
+#endif
+#ifdef Q_OS_NETBSD
   int deviceFd;
 #endif
 #ifdef Q_OS_FREEBSD
@@ -209,7 +217,7 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
   // they all should read CD-ROM.
   //
   d->readCapabilities = MEDIA_CD_ROM;
-
+  d->writeCapabilities  = 0;
   d->supportedProfiles = 0;
 
   if( !open() )
@@ -220,7 +228,7 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
   // use a 36 bytes buffer since not all devices return the full inquiry struct
   //
   ScsiCommand cmd( this );
-  unsigned char buf[96];
+  unsigned char buf[36];
   cmd.clear();
   ::memset( buf, 0, sizeof(buf) );
   struct inquiry* inq = (struct inquiry*)buf;
@@ -1142,7 +1150,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
   }
 
   // this can only happen with DVD media
-  if( toc.last().lastSector() == 0 ) {
+  if( !toc.isEmpty() && toc.last().lastSector() == 0 ) {
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " no track length for the last non-empty track." << endl;
     unsigned char* trackData = 0;
     unsigned int trackDataLen = 0;
@@ -1620,7 +1628,7 @@ bool K3bDevice::Device::block( bool b ) const
   // For some reason the Scsi Command does not work here.
   // So we use the ioctl on Linux systems
   //
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   bool needToClose = !isOpen();
 
   if( open() ) {
@@ -1665,6 +1673,19 @@ bool K3bDevice::Device::rewritable() const
 
 bool K3bDevice::Device::eject() const
 {
+#ifdef Q_OS_NETBSD
+  bool success = false;
+  bool needToClose = !isOpen();
+  int arg = 0;
+
+  if( open() ) {
+    if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
+      success = true;
+    if( needToClose )
+      close();
+  }
+  return success;
+#else
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
   cmd[5] = 0; // Necessary to set the proper command length
@@ -1677,16 +1698,31 @@ bool K3bDevice::Device::eject() const
   cmd[4] = 0x2;    // LoEj = 1, Start = 0
 
   return !cmd.transport();
+#endif
 }
 
 
 bool K3bDevice::Device::load() const
 {
+#ifdef Q_OS_NETBSD
+  bool success = false;
+  bool needToClose = !isOpen();
+  int arg = 0;
+
+  if( open() ) {
+    if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
+      success = true;
+    if( needToClose )
+      close();
+  }
+  return success;
+#else
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
   cmd[4] = 0x3;    // LoEj = 1, Start = 1
   cmd[5] = 0;      // Necessary to set the proper command length
   return !cmd.transport();
+#endif
 }
 
 
@@ -1730,7 +1766,7 @@ bool K3bDevice::Device::open( bool write ) const
   }
   return (d->cam != 0);
 #endif
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   if( d->deviceFd == -1 )
     d->deviceFd = openDevice( QFile::encodeName(devicename()), write );
 
@@ -1751,7 +1787,7 @@ void K3bDevice::Device::close() const
     d->cam = 0;
   }
 #endif
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   if( d->deviceFd != -1 ) {
     ::close( d->deviceFd );
     d->deviceFd = -1;
@@ -1767,7 +1803,7 @@ bool K3bDevice::Device::isOpen() const
 #ifdef Q_OS_FREEBSD
   return d->cam;
 #endif
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   return ( d->deviceFd != -1 );
 #endif
 }
@@ -1881,13 +1917,13 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	}
 
 	switch( dInf->border ) {
-	case 0x00:
+	case 0:
 	  inf.m_lastSessionState = STATE_EMPTY;
 	  break;
-	case 0x01:
+	case 1:
 	  inf.m_lastSessionState = STATE_INCOMPLETE;
 	  break;
-	case 0x11:
+	case 2:
 	  inf.m_lastSessionState = STATE_COMPLETE;
 	  break;
 	default:

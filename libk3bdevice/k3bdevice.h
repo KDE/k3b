@@ -553,6 +553,16 @@ namespace K3bDevice
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
+      bool readDiscStructure( unsigned char** data, unsigned int& dataLen, 
+			      unsigned int format = 0x0,
+			      unsigned int layer = 0x0,
+			      unsigned long adress = 0,
+			      unsigned int agid = 0x0 ) const;
+
+      /**
+       * In MMC5 readDvdStructure was renamed to readDiscStructure. This method does the same
+       * like the above.
+       */
       bool readDvdStructure( unsigned char** data, unsigned int& dataLen, 
 			     unsigned int format = 0x0,
 			     unsigned int layer = 0x0,

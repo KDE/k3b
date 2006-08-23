@@ -58,11 +58,12 @@ bool K3bDevice::Device::getFeature( unsigned char** data, unsigned int& dataLen,
 
   //
   // Some buggy firmwares do not return the size of the available data
-  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // but the returned data or something invalid altogether. 
+  // So we simply use the maximum possible value to be on the safe side
   // with these buggy drives.
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
-  if( dataLen == 8 )
+  if( (dataLen-8) % 8 || dataLen <= 8 )
     dataLen = 0xFFFF;
   
   // again with real length
@@ -159,8 +160,31 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
 					unsigned int dataType,
 					unsigned int lba ) const
 {
-  unsigned char header[2048];
-  ::memset( header, 0, 2048 );
+  unsigned int descLen = 0;
+  switch( type ) {
+  case 0x0:
+    descLen = 16;
+    break;
+  case 0x1:
+    descLen = 8;
+    break;
+  case 0x2:
+    descLen = 2048;
+    break;
+  case 0x3:
+    descLen = 16;
+    break;
+  case 0x4:
+    descLen = 8;
+    break;
+  case 0x5:
+    descLen = 8; // FIXME: ?? 
+    break;
+  }
+
+  unsigned char header[8];
+  ::memset( header, 0, 8 );
+  dataLen = 8;
 
   ScsiCommand cmd( this );
   cmd[0] = MMC_GET_PERFORMANCE;
@@ -169,17 +193,16 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
   cmd[3] = lba >> 16;
   cmd[4] = lba >> 8;
   cmd[5] = lba;
-  cmd[9] = 1;      // first we read only the header and one descriptor
+  cmd[9] = 0;      // first we read only the header
   cmd[10] = type;
   cmd[11] = 0;     // Necessary to set the proper command length
-  if( cmd.transport( TR_DIR_READ, header, 8 + 16 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
     // again with real length
     dataLen = from4Byte( header ) + 4;
 
     // At least one Panasonic drive returns gigantic changing numbers for the data length
     // which makes K3b crash below when *data cannot be allocated. That's why we cut the 
     // length here.
-
     // FIXME: 2048 is a proper upper boundry for the write speed but not for all
     //        return types. "Defect Status Data" for example might return way more data.
     if( dataLen > 2048 ) {
@@ -188,29 +211,31 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
 		<< " cutting to 2048." << endl;
       dataLen = 2048;
     }
-
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
-
-    unsigned int numDesc = (dataLen-8)/16;
-
-    cmd[8] = numDesc>>8;
-    cmd[9] = numDesc;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      return true;
-    }
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		<< ": GET PERFORMANCE with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
   }
   else
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
 	      << ": GET PERFORMANCE length det failed." << endl;
 
-  return false;
+  if( (dataLen-8) % descLen || dataLen <= 8 )
+    dataLen = 2048;
+
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+  
+  unsigned int numDesc = (dataLen-8)/descLen;
+ 
+  cmd[8] = numDesc>>8;
+  cmd[9] = numDesc;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
+  }
+  else {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+	      << ": GET PERFORMANCE with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
+    return false;
+  }
 }
 
 
@@ -277,12 +302,21 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
 
   //
   // Some buggy firmwares do not return the size of the available data
-  // but the returned data. So we simply use the maximum possible value to be on the safe side
-  // with these buggy drives.
-  // We cannot use this as default since many firmwares fail with a too high data length.
+  // but the returned data.
+  // So we try to determine the correct size based on the medium type
+  // DVD+R:  40 (MMC4)
+  // DVD-DL: 48 (MMC5)
+  // CD:     36 (MMC2)
   //
-  if( dataLen == 4 )
-    dataLen = 0xFFFF;
+  if( dataLen <= 4 ) {
+    int m = dvdMediaType();
+    if( m & (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_SEQ|MEDIA_DVD_R_DL_JUMP) )
+      dataLen = 48;
+    else if( m & (MEDIA_DVD_PLUS_R|MEDIA_DVD_PLUS_R_DL) )
+      dataLen = 40;
+    else
+      dataLen = 36;
+  }
   
   // again with real length
   *data = new unsigned char[dataLen];
@@ -480,7 +514,7 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, unsigned int& data
   // with these buggy drives.
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
-  if( dataLen == 4 )
+  if( dataLen <= 4 )
     dataLen = 0xFFFF;
 
   // again with real length
@@ -504,6 +538,29 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, unsigned int& data
 
 bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& dataLen, int format, bool time, int track ) const
 {
+  unsigned int descLen = 0;
+
+  switch( format ) {
+  case 0x0:
+    descLen = 8;
+    break;
+  case 0x1:
+    descLen = 8;
+    break;
+  case 0x2:
+    descLen = 11;
+    break;
+  case 0x3:
+    descLen = 11;
+    break;
+  case 0x4:
+    descLen = 4; // MMC2: 24 and MMC4: 28, so we use the highest common factor
+    break;
+  case 0x5:
+    descLen = 18;
+    break;
+  }
+
   unsigned char header[2048];
   ::memset( header, 0, 2048 );
 
@@ -523,13 +580,15 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
     kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
 
   //
-  // Some buggy firmwares do not return the size of the available data
-  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // Some buggy firmwares return an invalid size here
+  // So we simply use the maximum possible value to be on the safe side
   // with these buggy drives.
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
-  if( dataLen == 2 )
+  if( (dataLen-4) % descLen || dataLen <= 4+descLen) {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned." << endl;
     dataLen = 0xFFFF;
+  }
 
   // again with real length
   *data = new unsigned char[dataLen];
@@ -569,11 +628,12 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, unsigned int& dat
 
   //
   // Some buggy firmwares do not return the size of the available data
-  // but the returned data. So we simply use the maximum possible value to be on the safe side
+  // but the returned data or something invalid altogether.
+  // So we simply use the maximum possible value to be on the safe side
   // with these buggy drives.
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
-  if( dataLen == 8 )
+  if( (dataLen-8) % 4 || dataLen <= 8 )
     dataLen = 0xFFFF;
   
   kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS "
@@ -783,6 +843,16 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& da
 					  unsigned long adress,
 					  unsigned int agid ) const
 {
+  return readDiscStructure( data, dataLen, format, layer, adress, agid );
+}
+
+
+bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& dataLen, 
+					   unsigned int format,
+					   unsigned int layer,
+					   unsigned long adress,
+					   unsigned int agid ) const
+{
   unsigned char header[4];
   ::memset( header, 0, 4 );
 
@@ -811,6 +881,7 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& da
       return true;
     else {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed." << endl;
+      delete [] *data;
     }
   }
   else
