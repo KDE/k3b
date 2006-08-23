@@ -56,6 +56,8 @@
    - Simple resizing with automatic aspect ratio handling
  * File System presets for all data projects including all the advanced options.
  * Completely rewritten data project verification
+   - K3b now compares the written image instead of the single files
+   - Verification of Video DVD projects
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
