@@ -15,6 +15,8 @@
 
 #include "k3btitlelabel.h"
 
+#include <k3bstringutils.h>
+
 #include <qpainter.h>
 #include <qevent.h>
 #include <qfontmetrics.h>
@@ -27,17 +29,31 @@ public:
   Private() {
     titleLength = subTitleLength = 0;
     margin = 2;
+    alignment = Qt::AlignLeft;
+    cachedMinimumWidth = 0;
   }
 
   QString title;
   QString subTitle;
 
+  QString displayTitle;
+  QString displaySubTitle;
+
+  int alignment;
+
   int titleLength;
   int subTitleLength;
+  int displayTitleLength;
+  int displaySubTitleLength;
   int titleBaseLine;
   int subTitleBaseLine;
   int margin;
+
+  int cachedMinimumWidth;
 };
+
+
+// FIXME: add tooltip in case we cut the text
 
 
 K3bTitleLabel::K3bTitleLabel( QWidget* parent, const char* name )
@@ -61,14 +77,30 @@ void K3bTitleLabel::setTitle( const QString& title, const QString& subTitle )
   update();
 }
 
+
+void K3bTitleLabel::setSubTitle( const QString& subTitle )
+{
+  d->subTitle = subTitle;
+  updatePositioning();
+  update();
+}
+
+
+void K3bTitleLabel::setAlignment( int align )
+{
+  d->alignment = align;
+  update();
+}
+
+
 QSize K3bTitleLabel::sizeHint() const
 {
-  return minimumSizeHint();
+  return QSize( d->titleLength + d->subTitleLength + 2*d->margin, d->titleBaseLine );
 }
 
 QSize K3bTitleLabel::minimumSizeHint() const
 {
-  return QSize( d->titleLength + d->subTitleLength + 2*d->margin, d->titleBaseLine );
+  return QSize( d->cachedMinimumWidth, d->titleBaseLine );
 }
 
 void K3bTitleLabel::resizeEvent( QResizeEvent* e )
@@ -91,14 +123,26 @@ void K3bTitleLabel::drawContents( QPainter* p )
 
   p->setFont(f);
 
+  int neededWidth = d->displayTitleLength;
+  if( !d->displaySubTitle.isEmpty() )
+    neededWidth += d->displaySubTitleLength + 5;
+
+  int startPos = 0;
+  if( d->alignment & Qt::AlignHCenter )
+    startPos = r.left() + ( r.width() - 2*d->margin - neededWidth ) / 2;
+  else if( d->alignment & Qt::AlignRight )
+    startPos = r.right() - d->margin - neededWidth;
+  else
+    startPos = r.left() + d->margin;
+
   // paint title
-  p->drawText( r.left() + d->margin, r.top() + d->titleBaseLine, d->title );
+  p->drawText( startPos, r.top() + d->titleBaseLine, d->displayTitle );
 
   if( !d->subTitle.isEmpty() ) {
     f.setBold(false);
     f.setPointSize( f.pointSize() - 4 );
     p->setFont(f);
-    p->drawText( r.left() + d->margin + d->titleLength, r.top() + d->subTitleBaseLine, d->subTitle );
+    p->drawText( startPos + d->displayTitleLength + 5, r.top() + d->subTitleBaseLine, d->displaySubTitle );
   }
 
   p->restore();
@@ -125,11 +169,55 @@ void K3bTitleLabel::updatePositioning()
   QFontMetrics subTitleFm(f);
 
   d->titleBaseLine = contentsRect().height()/2 + titleFm.height()/2 - titleFm.descent();
-  d->titleLength = titleFm.width( d->title ) + 5;  // a fixed distance between title and subtitle is not good. :(
+  d->titleLength = titleFm.width( d->title );
 
   d->subTitleBaseLine = d->titleBaseLine - titleFm.underlinePos() + subTitleFm.underlinePos();
 
   d->subTitleLength = ( d->subTitle.isEmpty() ? 0 : subTitleFm.width( d->subTitle ) );
+
+  // cut the text to window width
+  d->displayTitle = d->title;
+  d->displaySubTitle = d->subTitle;
+  int widthAvail = contentsRect().width() - 2*margin();
+
+  // 5 pix spacing between title and subtitle
+  if( !d->subTitle.isEmpty() )
+    widthAvail -= 5;
+
+  if( d->titleLength > widthAvail/2 ) {
+    if( d->subTitleLength <= widthAvail/2 )
+      d->displayTitle = K3b::cutToWidth( titleFm, d->title, widthAvail - d->subTitleLength );
+    else
+      d->displayTitle = K3b::cutToWidth( titleFm, d->title, widthAvail/2 );
+  }
+  if( d->subTitleLength > widthAvail/2 ) {
+    if( d->titleLength <= widthAvail/2 )
+      d->displaySubTitle = K3b::cutToWidth( subTitleFm, d->subTitle, widthAvail - d->titleLength );
+    else
+      d->displaySubTitle = K3b::cutToWidth( subTitleFm, d->subTitle, widthAvail/2 );
+  }
+
+  d->displayTitleLength = titleFm.width( d->displayTitle );
+  d->displaySubTitleLength = subTitleFm.width( d->displaySubTitle );
+
+  // determine the minimum width for the minumum size hint
+  d->cachedMinimumWidth = 2*d->margin;
+  
+  QString cutTitle = d->title;
+  if( cutTitle.length() > 2 ) {
+    cutTitle.truncate( 2 );
+    cutTitle += "...";
+  }
+  QString cutSubTitle = d->subTitle;
+  if( cutSubTitle.length() > 2 ) {
+    cutSubTitle.truncate( 2 );
+    cutSubTitle += "...";
+  }
+
+  d->cachedMinimumWidth += titleFm.width( cutTitle ) + subTitleFm.width( cutSubTitle );
+  // 5 pix spacing between title and subtitle
+  if( !d->subTitle.isEmpty() )
+    d->cachedMinimumWidth += 5;
 }
 
 #include "k3btitlelabel.moc"

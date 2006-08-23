@@ -39,15 +39,6 @@ namespace K3bStdGuiItems
   LIBK3B_EXPORT QCheckBox* verifyCheckBox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QFrame* horizontalLine( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QFrame* verticalLine( QWidget* parent = 0, const char* name = 0 );
-
-  /**
-   * Creates a sunken purple frame that can be used to display Ayo's artwork.
-   * Mainly used as header in dialogs.
-   * Make sure to set a layout margin of at least 2.
-   *
-   * FIXME: move this out of libk3b
-   */
-  LIBK3B_EXPORT QFrame* purpleFrame( QWidget* parent = 0, const char* name = 0 );
 }
 
 #endif

@@ -31,8 +31,6 @@ class LIBK3B_EXPORT K3bTitleLabel : public QFrame
   K3bTitleLabel( QWidget* parent = 0, const char* name = 0 );
   ~K3bTitleLabel();
 
-  void setTitle( const QString& title, const QString& subTitle = QString::null );
-
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
 
@@ -41,6 +39,17 @@ class LIBK3B_EXPORT K3bTitleLabel : public QFrame
     * default: 2
     */
   void setMargin( int );
+
+  void setTitle( const QString& title, const QString& subTitle = QString::null );
+  void setSubTitle( const QString& subTitle );
+
+  /**
+   * The title label only supports alignments left, hcenter, and right
+   *
+   * Default alignment is left.
+   */
+  // FIXME: honor right-to-left languages
+  void setAlignment( int align );
 
  protected:
   void resizeEvent( QResizeEvent* );
