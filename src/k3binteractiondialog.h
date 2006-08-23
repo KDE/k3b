@@ -22,7 +22,7 @@
 class QGridLayout;
 class QLabel;
 class QPushButton;
-class K3bTitleLabel;
+class K3bThemedHeader;
 class KConfigBase;
 
 
@@ -207,7 +207,7 @@ class K3bInteractionDialog : public KDialog
    */
   virtual void keyPressEvent( QKeyEvent* );
 
-  K3bTitleLabel* m_labelTitle;
+  K3bThemedHeader* m_dialogHeader;
   QPushButton* m_buttonStart;
   QPushButton* m_buttonSave;
   QPushButton* m_buttonCancel;

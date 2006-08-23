@@ -31,8 +31,8 @@ class KConfigBase;
 class K3bTheme
 {
  public:
-  QColor backgroundColor() const { return m_bgColor; }
-  QColor foregroundColor() const { return m_fgColor; }
+  QColor backgroundColor() const;
+  QColor foregroundColor() const;
 
   enum PixmapType {
     MEDIA_AUDIO,      /**< Media information header, right side when showing an audio CD. */
