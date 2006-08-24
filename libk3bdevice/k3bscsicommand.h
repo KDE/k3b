@@ -99,7 +99,7 @@ namespace K3bDevice
        *
        * Default is enabled.
        */
-      static void enableErrorMessages( bool b ) { s_printErrors = b; }
+      void enableErrorMessages( bool b ) { m_printErrors = b; }
 
       void clear();
 
@@ -135,7 +135,7 @@ namespace K3bDevice
       Device::Handle m_deviceHandle;
       const Device* m_device;
 
-      static bool s_printErrors;
+      bool m_printErrors;
     };
 }
 

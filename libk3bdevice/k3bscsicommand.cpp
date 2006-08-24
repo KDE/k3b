@@ -19,9 +19,6 @@
 #include <kdebug.h>
 
 
-bool K3bDevice::ScsiCommand::s_printErrors = true;
-
-
 QString K3bDevice::commandString( const unsigned char& command )
 {
   if( command == MMC_BLANK )
@@ -169,7 +166,7 @@ QString K3bDevice::ScsiCommand::senseKeyToString( int key )
 
 
 void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKey, int asc, int ascq ) {
-  if( s_printErrors ) {
+  if( m_printErrors ) {
     kdDebug() << "(K3bDevice::ScsiCommand) failed: " << endl
 	      << "                           command:    " << QString("%1 (%2)")
       .arg( K3bDevice::commandString( command ) )
@@ -197,7 +194,8 @@ void K3bDevice::ScsiCommand::debugError( int command, int errorCode, int senseKe
 
 K3bDevice::ScsiCommand::ScsiCommand( K3bDevice::Device::Handle handle )
   : d(new Private),
-    m_device(0)
+    m_device(0),
+    m_printErrors(true)
 {
   m_deviceHandle = handle;
   clear();
@@ -206,7 +204,8 @@ K3bDevice::ScsiCommand::ScsiCommand( K3bDevice::Device::Handle handle )
 
 K3bDevice::ScsiCommand::ScsiCommand( const K3bDevice::Device* dev )
   : d(new Private),
-    m_device(dev)
+    m_device(dev),
+    m_printErrors(true)
 {
   clear();
 }
