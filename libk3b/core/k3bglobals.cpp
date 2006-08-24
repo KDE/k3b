@@ -261,19 +261,9 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
-#ifdef HAVE_STATVFS
   struct statvfs fs;
   if( ::statvfs( QFile::encodeName(path), &fs ) == 0 ) {
     unsigned long kBfak = fs.f_frsize/1024;
-#else
-#  ifndef HAVE_STATFS
-#    error "No statfs, no statvfs? Help!"
-#  endif
-  struct statfs fs;
-
-  if( ::statfs( QFile::encodeName(path), &fs ) == 0 ) {
-    unsigned long kBfak = fs.f_bsize/1024;
-#endif
 
     size = fs.f_blocks*kBfak;
     avail = fs.f_bavail*kBfak;
