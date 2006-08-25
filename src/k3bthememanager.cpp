@@ -116,9 +116,6 @@ QString K3bTheme::filenameForPixmapType( PixmapType t )
   case SPLASH:
     name = "splash";
     break;
-  case PROBING:
-    name = "probing";
-    break;
   case PROJECT_LEFT:
     name = "project_left";
     break;

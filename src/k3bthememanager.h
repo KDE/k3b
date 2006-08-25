@@ -49,7 +49,6 @@ class K3bTheme
     DIALOG_LEFT,      /**< Action dialog, left top. */
     DIALOG_RIGHT,     /**< Action dialog, right top. */
     SPLASH,           /**< K3b splash screen. Size not important. */
-    PROBING,          /**< Shown while probing media information. Size not important. */
     PROJECT_LEFT,     /**< Project header left side. */
     PROJECT_RIGHT,    /**< Project header right side. */
     WELCOME_BG        /**< Background pixmap of the welcome window. */

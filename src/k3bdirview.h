@@ -88,11 +88,6 @@ class K3bDirView : public QVBox
   K3bFileView* m_fileView;
   K3bDiskInfoView* m_infoView;
 
-  // these are used to display a message while retrieving disk information
-  class NoViewView;
-  NoViewView* m_noViewView;
-  QLabel* m_noViewLabel;
-
   KComboBox* m_urlCombo;
   QSplitter* m_mainSplitter;
   K3bFileTreeView* m_fileTreeView;

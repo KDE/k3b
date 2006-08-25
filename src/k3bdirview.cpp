@@ -76,96 +76,6 @@
 #include <kinputdialog.h>
 
 
-class K3bDirView::NoViewView : public QWidget
-{
-public:
-  NoViewView( QWidget* parent )
-    : QWidget( parent, 0, WNoAutoErase ),
-      m_text(0),
-      m_device(0) {
-  }
-
-  ~NoViewView() {
-    delete m_text;
-  }
-
-  QSize sizeHint() const {
-    if( m_text ) {
-      // margin of width 9 + line of size 1 + margin of width 10
-      // + width of the pixmap + max(widthused of the text, width of the pixmap)
-      // + max( height of the text, height of the pixmap )
-      return QSize( 40 + m_messageWidth, 40 + m_messageHeight );
-    }
-    else
-      return QWidget::sizeHint();
-  }
-
-  void setDevice( K3bDevice::Device* dev ) {
-    m_device = dev;
-    init();
-    update();
-  }
-
-protected:
-  void paintEvent( QPaintEvent* ) {
-    QPainter p( this );
-
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-      p.fillRect( rect(), theme->backgroundColor() );
-      p.setPen( theme->foregroundColor() );
-      //      p.drawRect( 10, 10, width() - 20, height() - 20 );
-
-      // position of the message
-      int mX = QMAX( 20, (width() - m_messageWidth)/2 );
-      int mY = QMAX( 20, (height() - m_messageHeight)/2 );
-
-      p.drawRect( mX-1, mY-1, m_messageWidth+2, m_messageHeight+2 );
-      p.drawPixmap( mX, mY, theme->pixmap( K3bTheme::PROBING ) );
-      mX += (theme->pixmap( K3bTheme::PROBING ).width() + 10);
-      mY += QMAX( 10, (m_messageHeight - m_text->height())/2 );
-      QColorGroup grp( colorGroup() );
-      grp.setColor( QColorGroup::Text, theme->foregroundColor() );
-      if( m_text )
-	m_text->draw( &p, mX, mY, QRect(), grp );
-    }
-  }
-
-  void resizeEvent( QResizeEvent* ) {
-    init();
-    update();
-  }
-
-private:
-  void init() {
-    delete m_text;
-    if( m_device ) {
-      m_text = new QSimpleRichText( i18n("<p>Please wait while K3b is retrieving information about "
-					 "the media in <b>%1</b>.")
-				    .arg( m_device->vendor() + " - " + m_device->description() ), font() );
-      m_messageHeight = 50;
-      int optWidth = 100;
-      if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-	m_messageWidth = theme->pixmap( K3bTheme::PROBING ).width();
-	optWidth = QMAX( 0, m_messageWidth - 20 );
-	m_messageHeight = QMAX( m_messageHeight, theme->pixmap( K3bTheme::PROBING ).height() );
-      }
-      
-      m_text->setWidth( optWidth );
-      while( m_text->height() > m_messageHeight-20 && optWidth < m_text->widthUsed() )
-	m_text->setWidth( ++optWidth );
-
-      m_messageHeight = QMAX( m_messageHeight, m_text->height()+20 );
-      m_messageWidth += QMAX( m_messageWidth, m_text->widthUsed()+20 );
-    }
-  }
-
-  QSimpleRichText* m_text;
-  K3bDevice::Device* m_device;
-  int m_messageHeight;
-  int m_messageWidth;
-};
-
-
 
 class K3bDirView::Private
 {
@@ -200,8 +110,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
   m_movieView    = new K3bVideoDVDRippingView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
-
-  m_noViewView = new NoViewView( m_viewStack );
 
   m_viewStack->raiseWidget( m_fileView );
 
