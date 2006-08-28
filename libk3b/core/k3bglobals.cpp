@@ -523,9 +523,22 @@ bool K3b::unmount( K3bDevice::Device* dev )
   if( mntDev.isEmpty() )
     mntDev = dev->blockDeviceName();
 
+#if KDE_IS_VERSION(3,4,0)
   // first try to unmount it the standard way
   if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
     return true;
+#endif
+
+  QString umountBin = K3b::findExe( "umount" );
+  if( !umountBin.isEmpty() ) {
+    KProcess p;
+    p << umountBin;
+    p << "-l"; // lazy unmount
+    p << dev->blockDeviceName();
+    p.start( KProcess::Block );
+    if( !p.exitStatus() )
+      return true;
+  }
 
   // now try pmount
   QString pumountBin = K3b::findExe( "pumount" );
