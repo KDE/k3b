@@ -22,6 +22,8 @@
 #include <k3bthememanager.h>
 #include <k3bglobals.h>
 #include <k3blibdvdcss.h>
+#include <k3bcore.h>
+#include <k3bexternalbinmanager.h>
 
 #include <qcursor.h>
 #include <qlayout.h>
@@ -31,7 +33,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kaction.h>
-
+#include <kconfig.h>
 
 
 K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
@@ -98,6 +100,13 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
     m_labelLength->setText( i18n("%n title", "%n titles", m_dvd.numTitles() ) );
     m_titleView->setVideoDVD( m_dvd );
     QApplication::restoreOverrideCursor();
+
+    if( !k3bcore ->externalBinManager() ->foundBin( "transcode" ) ) {
+      KMessageBox::sorry( this,
+			  i18n("K3b uses transcode to rip Video DVDs. "
+			       "Please make sure it is installed.") );
+    }
+    actionCollection()->action("start_rip")->setEnabled( k3bcore ->externalBinManager() ->foundBin( "transcode" ) );
   }
   else {
     QApplication::restoreOverrideCursor();
