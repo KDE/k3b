@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
 
 #include "k3bdirview.h"
 #include "k3bapplication.h"
@@ -20,8 +21,10 @@
 
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
+#ifdef HAVE_LIBDVDREAD
+#include "rip/videodvd/k3bvideodvdrippingview.h"
+#endif
 #include "k3bfileview.h"
-#include "rip/k3bvideodvdrippingview.h"
 #include "k3bfiletreeview.h"
 #include "k3bappdevicemanager.h"
 #include "k3bdiskinfoview.h"
@@ -29,6 +32,7 @@
 #include <k3bdevice.h>
 #include <k3bthememanager.h>
 #include <k3bmediacache.h>
+#include <k3bexternalbinmanager.h>
 
 #include <unistd.h>
 // QT-includes
@@ -108,8 +112,10 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
   m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
-  m_movieView    = new K3bVideoDVDRippingView(m_viewStack, "movieview");
   m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
+#ifdef HAVE_LIBDVDREAD
+  m_movieView    = new K3bVideoDVDRippingView(m_viewStack, "movieview");
+#endif
 
   m_viewStack->raiseWidget( m_fileView );
 
@@ -180,7 +186,10 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
     m_infoView->displayInfo( medium );
+    return;
   }
+
+#ifdef HAVE_LIBDVDREAD
   else if( medium.content() & K3bMedium::CONTENT_VIDEO_DVD ) {
     KMessageBox::ButtonCode r = KMessageBox::Yes;
     if( KMessageBox::shouldBeShownYesNo( "videodvdripping", r ) ) {
@@ -206,7 +215,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     }
 
     if( r == KMessageBox::Cancel ) {
-      m_viewStack->raiseWidget( m_fileView );
+      //      m_viewStack->raiseWidget( m_fileView );
     }
     else if( r == KMessageBox::No ) {
       m_viewStack->raiseWidget( m_fileView );
@@ -216,30 +225,64 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       m_movieView->setMedium( medium );
       m_viewStack->raiseWidget( m_movieView );
     }
+
+    return;
   }
-  else if( medium.toc().contentType() == K3bDevice::DATA ) {
-    // check for VCD and ask
-    bool mount = true;
+#endif
+  
+  else if( medium.content() & K3bMedium::CONTENT_DATA ) {
+    bool mount = false;
     if( medium.content() & K3bMedium::CONTENT_VIDEO_CD ) {
+      if( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
+	KMessageBox::sorry( this,
+			    i18n("K3b uses vcdxrip from the vcdimager package to rip Video CDs. "
+				 "Please make sure it is installed.") );
+	mount = true;
+      }
+      else {
+	mount = ( KMessageBox::questionYesNo( this,
+					      i18n("Found %1. Do you want K3b to mount the data part "
+						   "or show all the tracks?").arg( i18n("Video CD") ),
+					      i18n("Video CD"),
+					      i18n("Mount CD"),
+					      i18n("Show Video Tracks") ) == KMessageBox::Yes );
+      }
+
+      if( mount ) {
+	k3bappcore->appDeviceManager()->mountDisk();
+      }
+      else {
+	m_viewStack->raiseWidget( m_videoView );
+	m_videoView->setDisk( medium );
+      }
+    }
+    else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
       mount = ( KMessageBox::questionYesNo( this,
 					    i18n("Found %1. Do you want K3b to mount the data part "
-						 "or show all the tracks?").arg( i18n("Video CD") ),
-					    i18n("Video CD"),
+						 "or show all the tracks?").arg( i18n("Audio CD") ),
+					    i18n("Audio CD"),
 					    i18n("Mount CD"),
 					    i18n("Show Video Tracks") ) == KMessageBox::Yes );
-    }
-    
-    if( mount ) {
-      k3bappcore->appDeviceManager()->mountDisk();
-    }
-    else {
-      m_viewStack->raiseWidget( m_videoView );
-      m_videoView->setDisk( medium );
+      
+      if( mount ) {
+	k3bappcore->appDeviceManager()->mountDisk();
+      }
+      else {
+	m_viewStack->raiseWidget( m_cdView );
+	m_cdView->setDisk( medium );
+      }
     }
   }
-  else {
+
+  else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
     m_viewStack->raiseWidget( m_cdView );
     m_cdView->setDisk( medium );
+  }
+
+  else {
+    // show cd info
+    m_viewStack->raiseWidget( m_infoView );
+    m_infoView->displayInfo( medium );
   }
 
   d->contextMediaInfoRequested = false;

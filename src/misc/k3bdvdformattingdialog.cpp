@@ -141,7 +141,8 @@ void K3bDvdFormattingDialog::slotStartClicked()
 
   delete job;
 
-  if( !exitLoopOnHide() )
+  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+      !exitLoopOnHide() )
     show();
   else
     close();

@@ -57,6 +57,7 @@ void K3bMiscOptionTab::readSettings()
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
   m_checkShowProgressOSD->setChecked( c->readBoolEntry( "Show progress OSD", true ) );
   m_checkHideMainWindowWhileWriting->setChecked( c->readBoolEntry( "hide main window while writing", false ) );
+  m_checkKeepDialogsOpen->setChecked( c->readBoolEntry( "keep action dialogs open", false ) );
   m_checkSystemConfig->setChecked( c->readBoolEntry( "check system config", true ) );
 
   QString tempdir = c->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
@@ -88,6 +89,7 @@ bool K3bMiscOptionTab::saveSettings()
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
   c->writeEntry( "Show progress OSD", m_checkShowProgressOSD->isChecked() );
   c->writeEntry( "hide main window while writing", m_checkHideMainWindowWhileWriting->isChecked() );
+  c->writeEntry( "keep action dialogs open", m_checkKeepDialogsOpen->isChecked() );
   c->writeEntry( "check system config", m_checkSystemConfig->isChecked() );
 
   QString tempDir = m_editTempDir->url();

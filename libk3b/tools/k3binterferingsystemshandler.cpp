@@ -261,7 +261,7 @@ int K3bInterferingSystemsHandler::startStopMediaManager( bool start )
     QCStringList l;    
     QDataStream s( replyData, IO_ReadOnly );
     s >> l;
-    kdDebug() << l << endl;
+    //    kdDebug() << l << endl;
     running = l.contains( QCString("mediamanager") );
   }
   else
@@ -337,7 +337,7 @@ int K3bInterferingSystemsHandler::startStopMediaNotifier( bool start )
     QCStringList l;    
     QDataStream s( replyData, IO_ReadOnly );
     s >> l;
-    kdDebug() << l << endl;
+    // kdDebug() << l << endl;
     running = l.contains( QCString("medianotifier") );
   }
   else

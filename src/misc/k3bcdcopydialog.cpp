@@ -350,7 +350,8 @@ void K3bCdCopyDialog::slotStartClicked()
   delete dlg;
   delete burnJob;
 
-  if( !exitLoopOnHide() )
+  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+      !exitLoopOnHide() )
     show();
   else
     close();

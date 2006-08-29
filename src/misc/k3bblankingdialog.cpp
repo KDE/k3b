@@ -160,7 +160,8 @@ void K3bBlankingDialog::slotStartClicked()
   if( d->jobRunning ) // in case the job already finished in the start slot
     d->erasingDlg->exec(false);
 
-  if( !exitLoopOnHide() )
+  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+      !exitLoopOnHide() )
     show();
   else
     close();

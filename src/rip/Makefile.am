@@ -1,3 +1,8 @@
+if include_videodvdrip
+VIDEODVDRIPDIR = videodvd
+VIDEODVDRIPLIB = videodvd/libvideodvdrip.la
+endif
+
 AM_CPPFLAGS = 	-I$(srcdir)/../../libk3b/core \
 		-I$(srcdir)/../../libk3b/cddb \
 		-I$(srcdir)/../../libk3bdevice \
@@ -6,7 +11,6 @@ AM_CPPFLAGS = 	-I$(srcdir)/../../libk3b/core \
 		-I$(srcdir)/../../libk3b/projects \
 		-I$(srcdir)/../../libk3b/projects/audiocd \
 		-I$(srcdir)/../../libk3b/cddb \
-		-I$(srcdir)/../../libk3b/videodvd/ \
 		-I$(srcdir)/../../libk3b/jobs/ \
 		-I$(srcdir)/.. \
 		-I$(srcdir)/../projects \
@@ -15,15 +19,14 @@ AM_CPPFLAGS = 	-I$(srcdir)/../../libk3b/core \
 METASOURCES = AUTO
 
 noinst_LTLIBRARIES = librip.la
+librip_la_LIBADD = $(VIDEODVDRIPLIB)
 
-librip_la_SOURCES = base_k3baudiorippingoptionwidget.ui base_k3bcddbpatternwidget.ui \
-	base_k3bvideodvdrippingwidget.ui \
-	k3bpatternparser.cpp k3baudiorippingdialog.cpp \
+librip_la_SOURCES = base_k3baudiorippingoptionwidget.ui \
+	base_k3bcddbpatternwidget.ui k3bpatternparser.cpp k3baudiorippingdialog.cpp \
 	k3baudioripthread.cpp k3baudiocdview.cpp k3bcddbpatternwidget.cpp \
 	k3bvideocdinfo.cpp k3bvideocdview.cpp k3bvideocdrip.cpp \
 	k3bvideocdrippingdialog.cpp k3bcuefilewriter.cpp k3baudioconvertingoptionwidget.cpp \
 	k3baudiocdlistview.cpp k3baudioprojectconvertingdialog.cpp \
-	k3baudioprojectconvertingthread.cpp \
-	k3bvideodvdrippingview.cpp k3bvideodvdrippingtitlelistview.cpp \
-	k3bvideodvdrippingjob.cpp k3bvideodvdrippingwidget.cpp \
-	k3bvideodvdrippingdialog.cpp k3baudioripjob.cpp k3bvideodvdrippingpreview.cpp
+	k3baudioprojectconvertingthread.cpp k3baudioripjob.cpp
+
+SUBDIRS = $(VIDEODVDRIPDIR)

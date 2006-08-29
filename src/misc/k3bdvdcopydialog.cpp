@@ -264,11 +264,19 @@ void K3bDvdCopyDialog::slotStartClicked()
   job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
   job->setReadRetries( m_spinRetries->value() );
   
-  hide();
+  if( !exitLoopOnHide() )
+    hide();
+
   dlg->startJob( job );
-  delete job;
-  show();
+
   delete dlg;
+  delete job;
+
+  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+      !exitLoopOnHide() )
+    show();
+  else
+    close();
 }
 
 

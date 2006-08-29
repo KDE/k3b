@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bMiscOptionTab</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,8 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>467</width>
-            <height>309</height>
+            <height>392</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>base_K3bMiscOptionTab</string>
     </property>
     <vbox>
         <property name="name">
@@ -176,6 +179,20 @@
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Show the splash screen when K3b starts</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkKeepDialogsOpen</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Keep action dialogs open</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Do not close action dialogs after finishing the process</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked K3b will not close action dialogs such as the CD Copy dialog after the process has been finished. It will be kept open to start a new process like copying another CD.</string>
                     </property>
                 </widget>
             </vbox>

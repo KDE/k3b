@@ -78,6 +78,14 @@ void K3bSplash::mousePressEvent( QMouseEvent* )
 }
 
 
+void K3bSplash::show()
+{
+  QVBox::show();
+  // make sure the splash screen is shown immediately
+  qApp->processEvents();
+}
+
+
 void K3bSplash::addInfo( const QString& s )
 {
   m_infoBox->setText( s );

@@ -427,7 +427,8 @@ void K3bCdImageWritingDialog::slotStartClicked()
     
     delete job;
 
-    if( !exitLoopOnHide() )
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+	!exitLoopOnHide() )
       show();
     else
       close();
@@ -799,7 +800,11 @@ void K3bCdImageWritingDialog::toggleAll()
 void K3bCdImageWritingDialog::setImage( const KURL& url )
 {
   d->imageForced = true;
+#if KDE_IS_VERSION(3,4,0)
   m_editImagePath->setKURL( url );
+#else
+  m_editImagePath->setURL( url.path() );
+#endif
 }
 
 
@@ -991,7 +996,11 @@ void K3bCdImageWritingDialog::dropEvent( QDropEvent* e )
 {
   KURL::List urls;
   KURLDrag::decode( e, urls );
-  m_editImagePath->setKURL( urls.first());
+#if KDE_IS_VERSION(3,4,0)
+  m_editImagePath->setKURL( urls.first() );
+#else
+  m_editImagePath->setURL( urls.first().path() );
+#endif
 }
 
 #include "k3bcdimagewritingdialog.moc"
