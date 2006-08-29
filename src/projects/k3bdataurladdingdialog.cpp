@@ -42,6 +42,11 @@
 
 #include <unistd.h>
 
+#ifdef HAVE_ICONV_H
+#include <langinfo.h>
+#include <iconv.h>
+#endif
+
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain,
@@ -135,6 +140,11 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     message += QString("<p><b>%1:</b><br>%2")
       .arg( i18n("Some filenames had to be modified due to limitations in mkisofs") )
       .arg( dlg.m_mkisofsLimitationRenamedFiles.join( "<br>" ) );
+  if( !dlg.m_invalidFilenameEncodingFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("The following filenames have an invalid encoding. You may fix this "
+		 "with the convmv tool") )
+      .arg( dlg.m_invalidFilenameEncodingFiles.join( "<br>" ) );
 
   if( !message.isEmpty() )
     KMessageBox::detailedSorry( parent, i18n("Problems while adding files to the project."), message );
@@ -198,6 +208,27 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   }
 
   else {
+#ifdef HAVE_ICONV_H
+    //
+    // Check the filename encoding
+    //
+    // FIXME: do not reopen the iconv struct each time
+    char* codec = nl_langinfo( CODESET );
+    kdDebug() << "(K3bDataUrlAddingDialog) using locale codec: " << codec << endl;
+    iconv_t ic = ::iconv_open( "UCS-2BE", codec );
+    QCString locallyEncoded = QFile::encodeName( url.path() );
+    QCString utf8Encoded( locallyEncoded.length()*2 );
+    char* in = locallyEncoded.data();
+    char* out = utf8Encoded.data();
+    size_t inSize = locallyEncoded.length();
+    size_t outSize = utf8Encoded.size();
+    if( (size_t)-1 == ::iconv( ic, &in, &inSize, &out, &outSize ) ) {
+      m_invalidFilenameEncodingFiles.append( url.path() );
+      valid = false;
+    }
+    ::iconv_close( ic );
+#endif
+
     isSymLink = S_ISLNK(statBuf.st_mode);
     isFile = S_ISREG(statBuf.st_mode);
     isDir = S_ISDIR(statBuf.st_mode);

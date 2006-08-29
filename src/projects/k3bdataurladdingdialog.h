@@ -67,6 +67,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QStringList m_nonLocalFiles;
   QStringList m_tooBigFiles;
   QStringList m_mkisofsLimitationRenamedFiles;
+  QStringList m_invalidFilenameEncodingFiles;
 
   bool m_bCanceled;
 
