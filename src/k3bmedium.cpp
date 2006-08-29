@@ -67,6 +67,13 @@ void K3bMedium::update()
     reset();
 
     m_diskInfo = m_device->diskInfo();
+
+    if( m_diskInfo.diskState() != K3bDevice::STATE_NO_MEDIA ) {
+      kdDebug() << "(K3bMedium) found medium:" << endl
+		<< "=====================================================" << endl;
+      m_diskInfo.debug();
+      kdDebug() << "=====================================================" << endl;
+    }
     
     if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE || 
 	diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
