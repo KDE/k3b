@@ -48,7 +48,7 @@ namespace K3bDevice
   const unsigned char MMC_READ_CAPACITY = 0x25;
   const unsigned char MMC_READ_CD = 0xBE;
   const unsigned char MMC_READ_CD_MSF = 0xB9;
-  const unsigned char MMC_READ_DISK_INFORMATION = 0x51;
+  const unsigned char MMC_READ_DISC_INFORMATION = 0x51;
   const unsigned char MMC_READ_DVD_STRUCTURE = 0xAD;
   const unsigned char MMC_READ_DISC_STRUCTURE = 0xAD; /**< READ DVD STRUCTURE has been renamed to READ DISC STRUCTURE in MMC5 */
   const unsigned char MMC_READ_FORMAT_CAPACITIES = 0x23;

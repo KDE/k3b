@@ -802,35 +802,38 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 }
 
 
-bool K3bDevice::Device::readDiscInfo( unsigned char** data, unsigned int& dataLen ) const
+bool K3bDevice::Device::readDiscInformation( unsigned char** data, unsigned int& dataLen ) const
 {
   unsigned char header[2];
   ::memset( header, 0, 2 );
 
   ScsiCommand cmd( this );
-  cmd[0] = MMC_READ_DISK_INFORMATION;
+  cmd[0] = MMC_READ_DISC_INFORMATION;
   cmd[8] = 2;
   cmd[9] = 0;      // Necessary to set the proper command length
 
-  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
-    // again with real length
+  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
     dataLen = from2Byte( header ) + 2;
+  else
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
 
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+  if( dataLen <= 32 ) {
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": Device reports bogus disc information length of " << dataLen << endl;
+    dataLen = 32;
+  }
 
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 )
-      return true;
-    else {
-      kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
-		<< dataLen << " failed." << endl;
-      delete [] *data;
-    }
+  *data = new unsigned char[dataLen];
+  ::memset( *data, 0, dataLen );
+  
+  cmd[7] = dataLen>>8;
+  cmd[8] = dataLen;
+  if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
+    return true;
   }
   else {
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
+    kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
+	      << dataLen << " failed." << endl;
+    delete [] *data;
   }
 
   return false;

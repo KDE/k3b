@@ -644,7 +644,7 @@ int K3bDevice::Device::isEmpty() const
   unsigned char* data = 0;
   unsigned int dataLen = 0;
 
-  if( readDiscInfo( &data, dataLen ) ) {
+  if( readDiscInformation( &data, dataLen ) ) {
     disc_info_t* inf = (disc_info_t*)data;
     switch( inf->status ) {
     case 0:
@@ -684,7 +684,7 @@ K3b::Msf K3bDevice::Device::discSize() const
   unsigned char* data = 0;
   unsigned int dataLen = 0;
 
-  if( readDiscInfo( &data, dataLen ) ) {
+  if( readDiscInformation( &data, dataLen ) ) {
     disc_info_t* inf = (disc_info_t*)data;
     if ( inf->lead_out_m != 0xFF && inf->lead_out_s != 0xFF && inf->lead_out_f != 0xFF ) {
       ret = K3b::Msf( inf->lead_out_m, inf->lead_out_s, inf->lead_out_f );
@@ -717,7 +717,7 @@ K3b::Msf K3bDevice::Device::remainingSize() const
   unsigned char* data = 0;
   unsigned int dataLen = 0;
 
-  if( readDiscInfo( &data, dataLen ) ) {
+  if( readDiscInformation( &data, dataLen ) ) {
     disc_info_t* inf = (disc_info_t*)data;
     if ( inf->lead_in_m != 0xFF && inf->lead_in_s != 0xFF && inf->lead_in_f != 0xFF ) {
       ret = K3b::Msf( inf->lead_in_m, inf->lead_in_s, inf->lead_in_f );
@@ -758,7 +758,7 @@ int K3bDevice::Device::numSessions() const
   unsigned int len = 0;
 
   if( isDVD() ) {
-    if( readDiscInfo( &data, len ) ) {
+    if( readDiscInformation( &data, len ) ) {
       ret = (int)( data[9]<<8 | data[4] );
 
       // do only count complete sessions
@@ -1036,9 +1036,9 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
   if( dvd ) {
     //
     // on DVD-R(W) multisession disks only two sessions are represented as tracks in the readTocPmaAtip 
-    // response (fabricated TOC). Thus, we use readDiscInfo for DVD media to get the proper number of tracks
+    // response (fabricated TOC). Thus, we use readDiscInformation for DVD media to get the proper number of tracks
     //
-    if( readDiscInfo( &data, dataLen ) ) {
+    if( readDiscInformation( &data, dataLen ) ) {
       lastTrack = (int)( data[11]<<8 | data[6] );
 
       delete [] data;
@@ -1659,7 +1659,7 @@ bool K3bDevice::Device::rewritable() const
   unsigned char* data = 0;
   unsigned int dataLen = 0;
 
-  if( readDiscInfo( &data, dataLen ) ) {
+  if( readDiscInformation( &data, dataLen ) ) {
     disc_info_t* inf = (disc_info_t*)data;
     bool e = inf->erasable;
 
@@ -1896,7 +1896,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
 
-      if( readDiscInfo( &data, dataLen ) ) {
+      if( readDiscInformation( &data, dataLen ) ) {
 	disc_info_t* dInf = (disc_info_t*)data;
 	//
 	// Copy the needed values from the disk_info struct
@@ -3479,7 +3479,7 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
     unsigned char* data = 0;
     unsigned int dataLen = 0;
     
-    if( readDiscInfo( &data, dataLen ) ) {
+    if( readDiscInformation( &data, dataLen ) ) {
       disc_info_t* inf = (disc_info_t*)data;
       
       //

@@ -520,7 +520,7 @@ namespace K3bDevice
        * if true is returned dataLen specifies the actual length of *data which needs to be
        * deleted after using.
        */
-      bool readDiscInfo( unsigned char** data, unsigned int& dataLen ) const;
+      bool readDiscInformation( unsigned char** data, unsigned int& dataLen ) const;
 
       /**
        * @param pf If false all fields in the descriptor data is vendor specific. Default should be true.

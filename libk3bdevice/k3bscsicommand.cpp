@@ -69,8 +69,8 @@ QString K3bDevice::commandString( const unsigned char& command )
     return "READ CD";
   if( command == MMC_READ_CD_MSF )
     return "READ CD MSF";
-  if( command == MMC_READ_DISK_INFORMATION )
-    return "READ DISK INFORMATION";
+  if( command == MMC_READ_DISC_INFORMATION )
+    return "READ DISC INFORMATION";
   if( command == MMC_READ_DVD_STRUCTURE )
     return "READ DVD STRUCTURE";
   if( command == MMC_READ_FORMAT_CAPACITIES )
