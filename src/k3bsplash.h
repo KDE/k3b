@@ -34,6 +34,7 @@ Q_OBJECT
   ~K3bSplash();
 
  public slots:
+  void show();
   void addInfo( const QString& );
 
  protected:
