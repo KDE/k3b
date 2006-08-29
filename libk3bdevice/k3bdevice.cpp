@@ -2179,7 +2179,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	  //
 	  // get remaining space via the invisible track
 	  //
-	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
+	  if( readTrackInformation( &data, dataLen, 0x1, /*0xff*/ inf.numTracks()+1 ) ) {
 	    track_info_t* trackInfo = (track_info_t*)data;
 	    inf.m_usedCapacity = from4Byte( trackInfo->track_start );
 	    inf.m_capacity = from4Byte( trackInfo->track_start ) + from4Byte( trackInfo->track_size );
