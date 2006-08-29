@@ -29,7 +29,7 @@ if test "$ac_cv_use_ffmpeg" = "yes"; then
 		},
 	[ffmpeg_compiles=yes], [ffmpeg_compiles=no] )
 	OLD_LIBS=$LIBS
-	LIBS="-lavformat -lavcodec -lavutil"
+	LIBS="-lavformat -lavcodec"
 	AC_LINK_IFELSE( 
 		#include <ffmpeg/avformat.h>
 		#include <ffmpeg/avcodec.h>

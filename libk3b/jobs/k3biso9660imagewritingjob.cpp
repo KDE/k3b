@@ -78,7 +78,7 @@ void K3bIso9660ImageWritingJob::start()
     return;
   }
 
-  unsigned long gb = K3b::filesize( m_imagePath )/1024/1024/1024;
+  unsigned long gb = K3b::filesize( m_imagePath )/1024/1024;
 
   // very rough test but since most dvd images are 4,x or 8,x GB it should be enough
   m_dvd = ( gb > 900 );
