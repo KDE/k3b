@@ -189,7 +189,6 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   // setup connections
   // //////////////////////////////////////////////////////////////////////////
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
-  connect( m_writerSelectionWidget, SIGNAL(newMedia()), this, SLOT(slotNewBurnMedia()) );
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
 	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
@@ -408,26 +407,6 @@ void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 						: K3bDevice::MEDIA_WRITABLE_DVD_SL );
 
   m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + k3bappcore->mediaCache()->medium( dev ).volumeId().lower() + ".iso" );
-}
-
-
-void K3bDvdCopyDialog::slotNewBurnMedia()
-{
-  //
-  // In case the user inserted a new medium that we can use and the override device is currently selected
-  // select the new medium.
-  // There might still be cases where this is not the desired behaviour but I think in most cases it makes
-  // handling the dialog much easier
-  //
-  if( m_writerSelectionWidget->writerDevice() == readingDevice() ) {
-    QValueList<K3bDevice::Device*> devs = m_writerSelectionWidget->allDevices();
-    for( QValueList<K3bDevice::Device*>::iterator it = devs.begin(); it != devs.end(); ++it ) {
-      if( *it != readingDevice() ) {
-	m_writerSelectionWidget->setWriterDevice( *it );
-	return;
-      }
-    }
-  }
 }
 
 

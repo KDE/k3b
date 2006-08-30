@@ -199,7 +199,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
 	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
-  connect( m_writerSelectionWidget, SIGNAL(newMedia()), this, SLOT(slotNewBurnMedia()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -422,26 +421,6 @@ void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
   }
   else {
     m_comboCopyMode->setEnabled( true );
-  }
-}
-
-
-void K3bCdCopyDialog::slotNewBurnMedia()
-{
-  //
-  // In case the user inserted a new medium that we can use and the override device is currently selected
-  // select the new medium.
-  // There might still be cases where this is not the desired behaviour but I think in most cases it makes
-  // handling the dialog much easier
-  //
-  if( m_writerSelectionWidget->writerDevice() == readingDevice() ) {
-    QValueList<K3bDevice::Device*> devs = m_writerSelectionWidget->allDevices();
-    for( QValueList<K3bDevice::Device*>::iterator it = devs.begin(); it != devs.end(); ++it ) {
-      if( *it != readingDevice() ) {
-	m_writerSelectionWidget->setWriterDevice( *it );
-	return;
-      }
-    }
   }
 }
 

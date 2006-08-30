@@ -56,7 +56,6 @@ class K3bCdCopyDialog : public K3bInteractionDialog
 
   void slotToggleAll();
   void slotSourceMediumChanged( K3bDevice::Device* );
-  void slotNewBurnMedia();
   void updateOverrideDevice();
 
  protected:

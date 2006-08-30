@@ -110,6 +110,7 @@ class K3bWriterSelectionWidget : public QWidget
    * \see K3bMediaSelectionComboBox
    */
   void newMedia();
+  void newMedium( K3bDevice::Device* dev );
 
  private slots:
   void slotRefreshWriterSpeeds();
@@ -118,6 +119,7 @@ class K3bWriterSelectionWidget : public QWidget
   void slotConfigChanged( KConfigBase* c );
   void slotSpeedChanged( int index );
   void slotWriterChanged();
+  void slotNewBurnMedium( K3bDevice::Device* dev );
 
  private:
   void clearSpeedCombo();

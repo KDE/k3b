@@ -64,6 +64,8 @@ class K3bMediaSelectionComboBox : public KComboBox
    */
   void newMedia();
 
+  void newMedium( K3bDevice::Device* dev );
+
  public slots:
   /**
    * Only works in case the device actually contains a usable medium.

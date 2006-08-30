@@ -287,8 +287,18 @@ void K3bMediaSelectionComboBox::updateMedia()
   }
 
   // did the selection of devices change
-  if( !(d->devices == oldDevices) )
+  if( !(d->devices == oldDevices) ) {
     emit newMedia();
+    for( unsigned int i = 0; i < d->devices.count(); ++i ) {
+      unsigned int j = 0;
+      for( j = 0; j < oldDevices.count(); ++j ) {
+	if( oldDevices[j] == d->devices[i] )
+	  break;
+      }
+      if( j == oldDevices.count() )
+	emit newMedium( d->devices[i] );
+    }
+  }
 }
 
 
@@ -446,11 +456,11 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
     mediumString = i18n("DVD");
   else if( (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD) &&
       (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD) )
-    mediumString = i18n("CD-R(W) or DVD±R(W)");
+    mediumString = i18n("writable CD or DVD"); // CD-R(W) or DVD±R(W)
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    mediumString = i18n("DVD±R(W)");
+    mediumString = i18n("writable DVD"); // DVD±R(W)
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
-    mediumString = i18n("Double Layer DVD±R");
+    mediumString = i18n("Double Layer DVD"); // Double Layer DVD±R
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD )
     mediumString = i18n("CD-R(W)");
   else if( d->wantedMediumType & K3bDevice::MEDIA_DVD_ROM )
