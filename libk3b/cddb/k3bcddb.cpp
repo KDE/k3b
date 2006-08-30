@@ -88,7 +88,7 @@ void K3bCddb::readConfig( KConfig* c )
   }
 
   if( m_cddbServer.isEmpty() )
-    m_cddbServer.append( "Http freedb.org:80" );
+    m_cddbServer.append( "Http freedb2.org:80" );
 }
 
 

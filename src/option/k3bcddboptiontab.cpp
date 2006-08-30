@@ -169,7 +169,7 @@ void K3bCddbOptionTab::readSettings()
   }
 
   if( cddbServer.isEmpty() )
-    cddbServer.append( "Http freedb.org:80" );
+    cddbServer.append( "Http freedb2.org:80" );
 
   for( QStringList::const_iterator it = cddbServer.begin(); it != cddbServer.end(); ++it ) {
     const QString& s = *it;
