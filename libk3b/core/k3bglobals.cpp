@@ -501,7 +501,7 @@ QString K3b::findExe( const QString& name )
 
   // then go on with our own little list
   if( bin.isEmpty() )
-    bin = KStandardDirs::findExe( name, "/bin:/sbin:/usr/sbin" );
+    bin = KStandardDirs::findExe( name, k3bcore->externalBinManager()->searchPath().join(":") );
 
   return bin;
 }
