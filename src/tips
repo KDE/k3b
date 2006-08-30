@@ -38,3 +38,10 @@ window based on the media's contents. For an audio CD for example you will be gi
 the possibility to rip these tracks to any format supported by K3b (like mp3 or Ogg-Vorbis).</p>
 </html>
 </tip>
+
+<tip category="K3b">
+<html>
+<p>...that K3b lets you choose media instead of devices for burning. So if you want to burn to a certain
+medium simply insert it and wait for K3b to detect it. It will then appear as your burning medium.</p>
+</html>
+</tip>
