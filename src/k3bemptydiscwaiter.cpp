@@ -121,7 +121,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 
   QToolTip::add( actionButton(KDialogBase::User1),
-		 i18n("Force K3b to continue if it seems not to detect your empty CD-R(W)/DVD±R(W).") );
+		 i18n("Force K3b to continue if it seems not to detect your empty CD/DVD.") );
 }
 
 
@@ -152,11 +152,11 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   //
   if( (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD) &&
 	   (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_CD) )
-    d->wantedMediaTypeString = i18n("CD-R(W) or DVD±R(W)");
+    d->wantedMediaTypeString = i18n("writable CD or DVD"); // CD-R(W) or DVD±R(W)
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    d->wantedMediaTypeString = i18n("DVD±R(W)");
+    d->wantedMediaTypeString = i18n("writable DVD"); // DVD±R(W)
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
-    d->wantedMediaTypeString = i18n("Double Layer DVD±R");
+    d->wantedMediaTypeString = i18n("Double Layer DVD"); // Double Layer DVD±R
   else
     d->wantedMediaTypeString = i18n("CD-R(W)");
 
