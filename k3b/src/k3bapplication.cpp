@@ -149,6 +149,26 @@ void K3bApplication::init()
     if( processCmdLineArgs() )
       KTipDialog::showTip( m_mainWindow );
   }
+
+  QStringList knownBugs;
+  knownBugs += "* After burning a CD or DVD the KDE media notifier will pop up twice for each inserted medium (This is "
+    "caused by a bug in the kdelibs which will be fixed in KDE 3.5.5).";
+  knownBugs += "* K3b does not report if (un)mounting a CD/DVD was succesfull or not when left-clicking a medium.";
+  knownBugs += "* Growing sessions on DVD+RW media does not update the TOC properly. The result is that the new data "
+    "cannot be read. This is caused by a bug in growisofs and will hopefully be fixed soon.";
+  knownBugs += "* The progress bar in the file browser never disappears.";
+
+  KMessageBox::informationList( m_mainWindow,
+				QString("<p><b>This is a preview release of K3b 1.0.</b></p>"
+					"<p>K3b %1 may still contain a lot of bugs and is thus "
+					"not intended for daily use."
+					"<p>If you want to help in making K3b 1.0 rock stable "
+					"please test this preview release and report bugs via "
+					"the KDE bug tracking system."
+					"<p>Please DO NOT report any of the bugs below as they "
+					"are already known and being worked on:").arg(LIBK3B_VERSION),
+				knownBugs,
+				"K3b 1.0 Preview" );
 }
 
 
