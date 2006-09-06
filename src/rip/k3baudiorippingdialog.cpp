@@ -123,7 +123,7 @@ void K3bAudioRippingDialog::setupGui()
   Form1Layout->setMargin( 0 );
 
   m_viewTracks = new KListView( frame, "m_viewTracks" );
-  m_viewTracks->addColumn(i18n( "Filename (relative to base directory)") );
+  m_viewTracks->addColumn(i18n( "Filename") );
   m_viewTracks->addColumn(i18n( "Length") );
   m_viewTracks->addColumn(i18n( "File Size") );
   m_viewTracks->addColumn(i18n( "Type") );
