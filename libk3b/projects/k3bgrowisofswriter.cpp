@@ -267,7 +267,12 @@ bool K3bGrowisofsWriter::prepareProcess()
   else
     d->gh->reset( burnDevice(), false );
 
-  if( dvdCompat )
+  //
+  // Never use the -dvd-compat parameter with DVD+RW media
+  // because the only thing it does is creating problems.
+  // Normally this should be done in growisofs
+  //
+  if( dvdCompat && burnDevice()->dvdMediaType() != K3bDevice::MEDIA_DVD_PLUS_RW )
     *d->process << "-dvd-compat";
 
   //
