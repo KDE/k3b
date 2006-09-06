@@ -16,6 +16,7 @@
 #include <k3bglobals.h>
 
 #include "k3bdataurladdingdialog.h"
+#include "k3bencodingconverter.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -42,11 +43,6 @@
 
 #include <unistd.h>
 
-#ifdef HAVE_ICONV_H
-#include <langinfo.h>
-#include <iconv.h>
-#endif
-
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain,
@@ -64,6 +60,8 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* nam
     m_bCanceled(false),
     m_urlCounter(0)
 {
+  m_encodingConverter = new K3bEncodingConverter();
+
   QWidget* page = plainPage();
   QGridLayout* grid = new QGridLayout( page );
   grid->setSpacing( spacingHint() );
@@ -84,6 +82,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* nam
 
 K3bDataUrlAddingDialog::~K3bDataUrlAddingDialog()
 {
+  delete m_encodingConverter;
 }
 
 
@@ -207,28 +206,12 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     m_notFoundFiles.append( url.path() );
   }
 
-  else {
-#ifdef HAVE_ICONV_H
-    //
-    // Check the filename encoding
-    //
-    // FIXME: do not reopen the iconv struct each time
-    char* codec = nl_langinfo( CODESET );
-    kdDebug() << "(K3bDataUrlAddingDialog) using locale codec: " << codec << endl;
-    iconv_t ic = ::iconv_open( "UCS-2BE", codec );
-    QCString locallyEncoded = QFile::encodeName( url.path() );
-    QCString utf8Encoded( locallyEncoded.length()*2 );
-    char* in = locallyEncoded.data();
-    char* out = utf8Encoded.data();
-    size_t inSize = locallyEncoded.length();
-    size_t outSize = utf8Encoded.size();
-    if( (size_t)-1 == ::iconv( ic, &in, &inSize, &out, &outSize ) ) {
-      m_invalidFilenameEncodingFiles.append( url.path() );
-      valid = false;
-    }
-    ::iconv_close( ic );
-#endif
+  else if( !m_encodingConverter->encodedLocally( QFile::encodeName( url.path() ) ) ) {
+    valid = false;
+    m_invalidFilenameEncodingFiles.append( url.path() );
+  }
 
+  else {
     isSymLink = S_ISLNK(statBuf.st_mode);
     isFile = S_ISREG(statBuf.st_mode);
     isDir = S_ISDIR(statBuf.st_mode);
