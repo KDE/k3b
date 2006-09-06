@@ -117,10 +117,10 @@ void K3bProjectBurnDialog::toggleAll()
       }
     }
 
-    m_buttonStart->setDisabled(false);
+    setButtonEnabled( START_BUTTON, true );
   }
   else
-    m_buttonStart->setDisabled(true);
+    setButtonEnabled( START_BUTTON, false );
 
   m_writingModeWidget->determineSupportedModesFromMedium( dev );
 
@@ -130,7 +130,7 @@ void K3bProjectBurnDialog::toggleAll()
   m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() || !m_checkCacheImage->isChecked() );
   if( m_checkOnlyCreateImage->isChecked() ) {
     m_checkRemoveBufferFiles->setChecked(false);
-    m_buttonStart->setDisabled(false);
+    setButtonEnabled( START_BUTTON, true );
   }
   m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
@@ -147,11 +147,11 @@ void K3bProjectBurnDialog::toggleAll()
 int K3bProjectBurnDialog::execBurnDialog( bool burn )
 {
   if( burn && m_job == 0 ) {
-    m_buttonStart->show();
+    setButtonShown( START_BUTTON, true );
     setDefaultButton( START_BUTTON );
   }
   else {
-    m_buttonStart->hide();
+    setButtonShown( START_BUTTON, false );
     setDefaultButton( SAVE_BUTTON );
   }
 

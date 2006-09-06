@@ -392,8 +392,8 @@ void K3bDvdCopyDialog::toggleAll()
   if( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
   
-  m_buttonStart->setEnabled( m_comboSourceDevice->selectedDevice() && 
-			     (dev || m_checkOnlyCreateImage->isChecked()) );
+  setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() && 
+		    (dev || m_checkOnlyCreateImage->isChecked()) );
 }
 
 

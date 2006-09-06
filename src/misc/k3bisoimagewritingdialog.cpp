@@ -376,7 +376,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
   if( m_writerSelectionWidget->writerDevice() && !m_editImagePath->lineEdit()->text().isEmpty()) {
-    m_buttonStart->setEnabled( true );
+    setButtonEnabled( START_BUTTON, true );
 
     if( m_checkDummy->isChecked() ) {
       m_checkVerify->setEnabled( false );
@@ -387,7 +387,7 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
     m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
   }
   else {
-    m_buttonStart->setEnabled( false );
+    setButtonEnabled( START_BUTTON, false );
   }
 }
 

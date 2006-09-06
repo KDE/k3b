@@ -151,7 +151,7 @@ void K3bDvdFormattingDialog::slotStartClicked()
 
 void K3bDvdFormattingDialog::slotWriterChanged()
 {
-  m_buttonStart->setEnabled( m_writerSelectionWidget->writerDevice() != 0 );
+  setButtonEnabled( START_BUTTON, m_writerSelectionWidget->writerDevice() != 0 );
 } 
 
 

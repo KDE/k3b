@@ -22,9 +22,11 @@
 #include "k3bthemedheader.h"
 #include "k3bthememanager.h"
 #include <k3bapplication.h>
+#include <k3btoolbutton.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
@@ -42,7 +44,7 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
-
+#include <kiconloader.h>
 
 
 K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
@@ -63,6 +65,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_inToggleMode(false),
     m_delayedInit(false)
 {
+  installEventFilter( this );
+
   mainGrid = new QGridLayout( this );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
@@ -70,57 +74,66 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // header
   // ---------------------------------------------------------------------------------------------------
   m_dialogHeader = new K3bThemedHeader( this );
-  mainGrid->addMultiCellWidget( m_dialogHeader, 0, 0, 0, 1 );
-
-  // action buttons
-  // ---------------------------------------------------------------------------------------------------
-  QVBoxLayout* layout5 = new QVBoxLayout( 0, 0, spacingHint(), "layout5");
-
-  if( buttonMask & START_BUTTON ) {
-    KGuiItem startItem = KStdGuiItem::ok();
-    startItem.setText( i18n("Start") );
-    m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
-    layout5->addWidget( m_buttonStart );
-  }
-  else
-    m_buttonStart = 0;
-  if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
-    layout5->addWidget( m_buttonSave );
-  }
-  else
-    m_buttonSave = 0;
-  if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new KPushButton( KStdGuiItem::close(), this, "m_buttonCancel" );
-    layout5->addWidget( m_buttonCancel );
-  }
-  else
-    m_buttonCancel = 0;
-  QSpacerItem* spacer_2 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding );
-  layout5->addItem( spacer_2 );
-
-  mainGrid->addMultiCellLayout( layout5, 1, 2, 1, 1 );
+  mainGrid->addMultiCellWidget( m_dialogHeader, 0, 0, 0, 2 );
 
 
   // settings buttons
   // ---------------------------------------------------------------------------------------------------
   if( !m_configGroup.isEmpty() ) {
     QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
-    m_buttonK3bDefaults = new QPushButton( i18n("K3b Defaults"), this, "m_buttonK3bDefaults" );
+    m_buttonK3bDefaults = new QToolButton( /*i18n("K3b Defaults"), */this, "m_buttonK3bDefaults" );
+    ((QToolButton*)m_buttonK3bDefaults)->setIconSet( SmallIconSet( "revert" ) );
     layout2->addWidget( m_buttonK3bDefaults );
-    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    layout2->addItem( spacer );
-    m_buttonUserDefaults = new K3bPushButton( i18n("User Defaults"), this, "m_buttonUserDefaults" );
+
+    m_buttonUserDefaults = new K3bToolButton( /*i18n("User Defaults"), */this );
+    ((K3bToolButton*)m_buttonUserDefaults)->setIconSet( SmallIconSet( "revert" ) );
     QPopupMenu* userDefaultsPopup = new QPopupMenu( m_buttonUserDefaults );
     userDefaultsPopup->insertItem( i18n("Default Settings"), this, SLOT(slotLoadUserDefaults()) );
     userDefaultsPopup->insertItem( i18n("Last Used Settings"), this, SLOT(slotLoadLastSettings()) );
-    ((K3bPushButton*)m_buttonUserDefaults)->setDelayedPopupMenu( userDefaultsPopup );
+    ((QToolButton*)m_buttonUserDefaults)->setPopup( userDefaultsPopup );
+    ((QToolButton*)m_buttonUserDefaults)->setPopupDelay( QApplication::startDragTime() );
     layout2->addWidget( m_buttonUserDefaults );
-    m_buttonSaveUserDefaults = new QPushButton( i18n("Save User Defaults"), this, "m_buttonSaveUserDefaults" );
+
+    m_buttonSaveUserDefaults = new QToolButton( /*i18n("Save User Defaults"), */this, "m_buttonSaveUserDefaults" );
+    ((QToolButton*)m_buttonSaveUserDefaults)->setIconSet( SmallIconSet( "filesave" ) );
     layout2->addWidget( m_buttonSaveUserDefaults );
 
     mainGrid->addLayout( layout2, 2, 0 );
   }
+
+  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  mainGrid->addItem( spacer, 2, 1 );
+
+
+  // action buttons
+  // ---------------------------------------------------------------------------------------------------
+  QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, spacingHint(), "layout5");
+
+  if( buttonMask & CANCEL_BUTTON ) {
+    m_buttonCancel = new KPushButton( KStdGuiItem::close(), this, "m_buttonCancel" );
+    layout5->addWidget( m_buttonCancel );
+  }
+  else
+    m_buttonCancel = 0;
+  if( buttonMask & SAVE_BUTTON ) {
+    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
+    layout5->addWidget( m_buttonSave );
+  }
+  else
+    m_buttonSave = 0;
+  if( buttonMask & START_BUTTON ) {
+    KGuiItem startItem = KStdGuiItem::ok();
+    startItem.setText( i18n("Start") );
+    m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
+    QFont fnt( m_buttonStart->font() );
+    fnt.setBold(true);
+    m_buttonStart->setFont( fnt );
+    layout5->addWidget( m_buttonStart );
+  }
+  else
+    m_buttonStart = 0;
+
+  mainGrid->addLayout( layout5, 2, 2 );
 
   mainGrid->setRowStretch( 1, 1 );
 
@@ -128,6 +141,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   initConnections();
   initToolTipsAndWhatsThis();
+
+  setDefaultButton( START_BUTTON );
 }
 
 K3bInteractionDialog::~K3bInteractionDialog()
@@ -138,6 +153,8 @@ K3bInteractionDialog::~K3bInteractionDialog()
 void K3bInteractionDialog::show()
 {
   KDialog::show();
+  if( QPushButton* b = getButton( m_defaultButton ) )
+    b->setFocus();
 }
 
 
@@ -213,15 +230,14 @@ void K3bInteractionDialog::setTitle( const QString& title, const QString& subTit
 void K3bInteractionDialog::setMainWidget( QWidget* w )
 {
   w->reparent( this, QPoint(0,0) );
-  mainGrid->addWidget( w, 1, 0 );
+  mainGrid->addMultiCellWidget( w, 1, 1, 0, 2 );
   m_mainWidget = w;
 }
 
 QWidget* K3bInteractionDialog::mainWidget()
 {
   if( !m_mainWidget ) {
-    m_mainWidget = new QWidget( this );
-    mainGrid->addWidget( m_mainWidget, 1, 0 );
+    setMainWidget( new QWidget( this ) );
   }
   return m_mainWidget;
 }
@@ -282,46 +298,96 @@ void K3bInteractionDialog::slotSaveClicked()
 }
 
 
-void K3bInteractionDialog::setDefaultButton( int b )
+void K3bInteractionDialog::setDefaultButton( int button )
 {
-  m_defaultButton = b;
+  m_defaultButton = button;
+  if( QPushButton* b = getButton( button ) )
+    b->setDefault( true ); 
 }
 
 
-void K3bInteractionDialog::keyPressEvent( QKeyEvent* e )
+bool K3bInteractionDialog::eventFilter( QObject* o, QEvent* ev )
 {
-  switch ( e->key() ) {
-  case Key_Enter:
-  case Key_Return:
-    // if the process finished this closes the dialog
-    if( m_defaultButton == START_BUTTON ) {
-      if( m_buttonStart->isEnabled() )
-	slotStartClicked();
+  if( dynamic_cast<K3bInteractionDialog*>(o) == this &&
+      ev->type() == QEvent::KeyPress ) {
+
+    QKeyEvent* kev = dynamic_cast<QKeyEvent*>(ev);
+
+    switch ( kev->key() ) {
+    case Key_Enter:
+    case Key_Return:
+      // if the process finished this closes the dialog
+      if( m_defaultButton == START_BUTTON ) {
+	if( m_buttonStart->isEnabled() )
+	  slotStartClickedInternal();
+      }
+      else if( m_defaultButton == CANCEL_BUTTON ) {
+	if( m_buttonCancel->isEnabled() )
+	  slotCancelClicked();
+      }
+      else if( m_defaultButton == SAVE_BUTTON ) {
+	if( m_buttonSave->isEnabled() )
+	  slotSaveClicked();
+      }
+      return true;
+
+    case Key_Escape:
+      // simulate button clicks
+      if( m_buttonCancel ) {
+	if( m_buttonCancel->isEnabled() )
+	  slotCancelClicked();
+      }
+      return true;
     }
-    else if( m_defaultButton == CANCEL_BUTTON ) {
-      if( m_buttonCancel->isEnabled() )
-	slotCancelClicked();
-    }
-    else if( m_defaultButton == SAVE_BUTTON ) {
-      if( m_buttonSave->isEnabled() )
-	slotSaveClicked();
-    }
-    break;
-  case Key_Escape:
-    // simulate button clicks
-    if( m_buttonCancel ) {
-      if( m_buttonCancel->isEnabled() )
-	slotCancelClicked();
-    }
-    break;
-  default:
-    // nothing
-    break;
   }
 
-  // Does the tab key still work to jump between children?
+  return KDialog::eventFilter( o, ev );
+}
 
-  e->accept();
+
+QPushButton* K3bInteractionDialog::getButton( int button )
+{
+  switch( button ) {
+  case START_BUTTON:
+    return m_buttonStart;
+  case SAVE_BUTTON:
+    return m_buttonSave;
+  case CANCEL_BUTTON:
+    return m_buttonCancel;
+  default:
+    return 0;
+  }
+}
+
+
+void K3bInteractionDialog::setButtonText( int button,
+					  const QString& text, 
+					  const QString& tooltip, 
+					  const QString& whatsthis )
+{
+  if( QPushButton* b = getButton( button ) ) {
+    b->setText( text );
+    QToolTip::remove( b );
+    QWhatsThis::remove( b );
+    QToolTip::add( b, tooltip );
+    QWhatsThis::add( b, whatsthis );
+  }
+}
+
+
+void K3bInteractionDialog::setButtonEnabled( int button, bool enabled )
+{
+  if( QPushButton* b = getButton( button ) ) {
+    b->setEnabled( enabled );
+  }
+}
+
+
+void K3bInteractionDialog::setButtonShown( int button, bool shown )
+{
+  if( QPushButton* b = getButton( button ) ) {
+    b->setShown( shown );
+  }
 }
 
 

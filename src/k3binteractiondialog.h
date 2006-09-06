@@ -22,6 +22,7 @@
 class QGridLayout;
 class QLabel;
 class QPushButton;
+class QButton;
 class K3bThemedHeader;
 class KConfigBase;
 
@@ -128,15 +129,32 @@ class K3bInteractionDialog : public KDialog
   void saved();
 
  public slots:
+  /**
+   * \deprecated use setButtonText
+   */
   void setStartButtonText( const QString& text, 
 			   const QString& tooltip = QString::null, 
 			   const QString& whatsthis = QString::null );
+  /**
+   * \deprecated use setButtonText
+   */
   void setCancelButtonText( const QString& text, 
 			    const QString& tooltip = QString::null, 
 			    const QString& whatsthis = QString::null );
+  /**
+   * \deprecated use setButtonText
+   */
   void setSaveButtonText( const QString& text, 
 			  const QString& tooltip = QString::null, 
 			  const QString& whatsthis = QString::null );
+
+  void setButtonText( int button,
+		      const QString& text, 
+		      const QString& tooltip = QString::null, 
+		      const QString& whatsthis = QString::null );
+
+  void setButtonEnabled( int button, bool enabled );
+  void setButtonShown( int button, bool enabled );
 
   /**
    * If set true the init() method will be called via a QTimer to ensure event
@@ -205,13 +223,7 @@ class K3bInteractionDialog : public KDialog
   /**
    * reimplemented from QDialog
    */
-  virtual void keyPressEvent( QKeyEvent* );
-
-  K3bThemedHeader* m_dialogHeader;
-  QPushButton* m_buttonStart;
-  QPushButton* m_buttonSave;
-  QPushButton* m_buttonCancel;
-  QWidget* m_mainWidget;
+  virtual bool eventFilter( QObject*, QEvent* );
 
  protected slots:
   /**
@@ -232,9 +244,17 @@ class K3bInteractionDialog : public KDialog
   void initToolTipsAndWhatsThis();
   void saveLastSettings();
 
-  QPushButton* m_buttonK3bDefaults;
-  QPushButton* m_buttonUserDefaults;
-  QPushButton* m_buttonSaveUserDefaults;
+  QPushButton* getButton( int );
+
+  K3bThemedHeader* m_dialogHeader;
+  QPushButton* m_buttonStart;
+  QPushButton* m_buttonSave;
+  QPushButton* m_buttonCancel;
+  QWidget* m_mainWidget;
+
+  QButton* m_buttonK3bDefaults;
+  QButton* m_buttonUserDefaults;
+  QButton* m_buttonSaveUserDefaults;
 
   QGridLayout* mainGrid;
   int m_defaultButton;
