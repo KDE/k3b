@@ -23,7 +23,6 @@
 class K3bMovixDvdDoc;
 class K3bMovixOptionsWidget;
 class K3bDataImageSettingsWidget;
-class K3bDataVolumeDescWidget;
 class QCheckBox;
 
 
@@ -49,7 +48,6 @@ class K3bMovixDvdBurnDialog : public K3bProjectBurnDialog
  private:
   K3bMovixDvdDoc* m_doc;
   K3bMovixOptionsWidget* m_movixOptionsWidget;
-  K3bDataVolumeDescWidget* m_volumeDescWidget;
   K3bDataImageSettingsWidget* m_imageSettingsWidget;
 
   QCheckBox* m_checkVerify;

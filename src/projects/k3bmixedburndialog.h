@@ -24,7 +24,6 @@ class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class K3bMixedDoc;
 class K3bDataImageSettingsWidget;
-class K3bDataVolumeDescWidget;
 class QButtonGroup;
 class QRadioButton;
 class K3bAudioCdTextWidget;
@@ -48,7 +47,6 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    void saveUserDefaults( KConfigBase* );
    void toggleAll();
 
-   K3bDataVolumeDescWidget* m_volumeDescWidget;
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    K3bAudioCdTextWidget* m_cdtextWidget;
 

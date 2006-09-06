@@ -21,7 +21,6 @@
 #include <k3bmovixoptionswidget.h>
 
 #include <k3bdataimagesettingswidget.h>
-#include <k3bdatavolumedescwidget.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -59,11 +58,6 @@ K3bMovixDvdBurnDialog::K3bMovixDvdBurnDialog( K3bMovixDvdDoc* doc, QWidget* pare
   m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
   addPage( m_movixOptionsWidget, i18n("eMovix") );
 
-  // create volume descriptor tab
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
-  m_volumeDescWidget->layout()->setMargin( marginHint() );
-  addPage( m_volumeDescWidget, i18n("Volume Desc") );
-
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
@@ -98,7 +92,6 @@ void K3bMovixDvdBurnDialog::loadK3bDefaults()
   K3bProjectBurnDialog::loadK3bDefaults();
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
   m_movixOptionsWidget->loadDefaults();
 
@@ -114,7 +107,6 @@ void K3bMovixDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
-  m_volumeDescWidget->load( o );
 
   m_movixOptionsWidget->loadConfig(c);
 
@@ -130,7 +122,6 @@ void K3bMovixDvdBurnDialog::saveUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   o.save( c );
 
   c->writeEntry( "verify data", m_checkVerify->isChecked() );
@@ -148,7 +139,6 @@ void K3bMovixDvdBurnDialog::saveSettings()
   // save iso image settings
   K3bIsoOptions o = m_doc->isoOptions();
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   m_doc->setIsoOptions( o );
 
   m_doc->setVerifyData( m_checkVerify->isChecked() );
@@ -163,7 +153,6 @@ void K3bMovixDvdBurnDialog::readSettings()
   K3bProjectBurnDialog::readSettings();
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
-  m_volumeDescWidget->load( m_doc->isoOptions() );
 
   m_checkVerify->setChecked( m_doc->verifyData() );
 

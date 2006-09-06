@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bDataVolumeDescWidget</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>439</width>
-            <height>233</height>
+            <height>210</height>
         </rect>
     </property>
     <property name="caption">
@@ -47,7 +47,7 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Volume &amp;set name:</string>
+                <string>V&amp;olume set name:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>m_editVolumeSetName</cstring>
@@ -96,7 +96,7 @@
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>&amp;Publisher:</string>
+                <string>P&amp;ublisher:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>m_editPublisher</cstring>
@@ -107,7 +107,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Volume set s&amp;ize:</string>
+                <string>Volu&amp;me set size:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>m_spinVolumeSetSize</cstring>

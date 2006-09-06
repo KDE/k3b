@@ -20,7 +20,6 @@
 #include "k3bmovixoptionswidget.h"
 
 #include <k3bdataimagesettingswidget.h>
-#include <k3bdatavolumedescwidget.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -58,17 +57,12 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
   addPage( m_movixOptionsWidget, i18n("eMovix") );
 
-  setupSettingsPage();
-
-  // create volume descriptor tab
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
-  m_volumeDescWidget->layout()->setMargin( marginHint() );
-  addPage( m_volumeDescWidget, i18n("Volume Desc") );
-
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
+
+  setupSettingsPage();
 
   // for now we just put the verify checkbox on the main page...
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
@@ -111,7 +105,7 @@ void K3bMovixBurnDialog::setupSettingsPage()
   frameLayout->addWidget( groupMultisession, 1, 0 );
   frameLayout->setRowStretch( 2, 1 );
 
-  addPage( frame, i18n("Settings") );
+  addPage( frame, i18n("Misc") );
 }
 
 
@@ -123,7 +117,6 @@ void K3bMovixBurnDialog::loadK3bDefaults()
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
   m_movixOptionsWidget->loadDefaults();
 
@@ -143,7 +136,6 @@ void K3bMovixBurnDialog::loadUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
-  m_volumeDescWidget->load( o );
 
   m_movixOptionsWidget->loadConfig(c);
 
@@ -163,7 +155,6 @@ void K3bMovixBurnDialog::saveUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   o.save( c );
 
   c->writeEntry( "verify data", m_checkVerify->isChecked() );
@@ -183,7 +174,6 @@ void K3bMovixBurnDialog::saveSettings()
   // save iso image settings
   K3bIsoOptions o = m_doc->isoOptions();
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   m_doc->setIsoOptions( o );
 
   m_doc->setDataMode( m_dataModeWidget->dataMode() );
@@ -204,7 +194,6 @@ void K3bMovixBurnDialog::readSettings()
   m_checkVerify->setChecked( m_doc->verifyData() );
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
-  m_volumeDescWidget->load( m_doc->isoOptions() );
 
   m_dataModeWidget->setDataMode( m_doc->dataMode() );
 

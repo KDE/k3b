@@ -24,7 +24,6 @@
 #include <k3bwritingmodewidget.h>
 #include <k3bglobals.h>
 #include <k3bdataimagesettingswidget.h>
-#include <k3bdatavolumedescwidget.h>
 #include <k3bisooptions.h>
 #include <k3bstdguiitems.h>
 
@@ -59,17 +58,12 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
-  setupSettingsTab();
-
-  // create volume descriptor tab
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
-  m_volumeDescWidget->layout()->setMargin( marginHint() );
-  addPage( m_volumeDescWidget, i18n("Volume Desc") );
-
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
+
+  setupSettingsTab();
 
   m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
@@ -131,7 +125,6 @@ void K3bDvdBurnDialog::saveSettings()
   // save iso image settings
   K3bIsoOptions o = m_doc->isoOptions();
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   m_doc->setIsoOptions( o );
 
   // save image file path
@@ -159,7 +152,6 @@ void K3bDvdBurnDialog::readSettings()
   m_checkVerify->setChecked( m_doc->verifyData() );
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
-  m_volumeDescWidget->load( m_doc->isoOptions() );
 
   // for now we do not support dual layer multisession (growisofs does not handle layer jump yet)
   if( doc()->size() > 4700372992LL )
@@ -249,7 +241,6 @@ void K3bDvdBurnDialog::loadK3bDefaults()
   K3bProjectBurnDialog::loadK3bDefaults();
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
   m_checkVerify->setChecked( false );
 
   m_comboMultisession->setMultiSessionMode( K3bDataDoc::AUTO );
@@ -264,7 +255,6 @@ void K3bDvdBurnDialog::loadUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
-  m_volumeDescWidget->load( o );
 
   m_comboMultisession->loadConfig( c );
 
@@ -280,7 +270,6 @@ void K3bDvdBurnDialog::saveUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   o.save( c );
 
   m_comboMultisession->saveConfig( c );

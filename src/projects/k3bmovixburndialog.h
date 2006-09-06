@@ -23,7 +23,6 @@
 class K3bMovixDoc;
 class K3bMovixOptionsWidget;
 class K3bDataImageSettingsWidget;
-class K3bDataVolumeDescWidget;
 class QCheckBox;
 class K3bDataModeWidget;
 
@@ -52,7 +51,6 @@ class K3bMovixBurnDialog : public K3bProjectBurnDialog
 
   K3bMovixDoc* m_doc;
   K3bMovixOptionsWidget* m_movixOptionsWidget;
-  K3bDataVolumeDescWidget* m_volumeDescWidget;
   K3bDataImageSettingsWidget* m_imageSettingsWidget;
 
   QCheckBox* m_checkStartMultiSesssion;

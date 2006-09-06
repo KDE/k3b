@@ -18,7 +18,6 @@
 #include "k3bmixedview.h"
 
 #include <k3bdataimagesettingswidget.h>
-#include <k3bdatavolumedescwidget.h>
 #include <k3bdatadoc.h>
 #include <k3baudiodoc.h>
 #include <k3bdevice.h>
@@ -70,21 +69,16 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   m_checkOnlyCreateImage->hide();
 
-  setupSettingsPage();
-
   // create cd-text page
   m_cdtextWidget = new K3bAudioCdTextWidget( this );
   addPage( m_cdtextWidget, i18n("CD-Text") );
-
-  // create volume descriptor tab
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
-  m_volumeDescWidget->layout()->setMargin( marginHint() );
-  addPage( m_volumeDescWidget, i18n("Volume Desc") );
 
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
   m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
+
+  setupSettingsPage();
 
   createContextHelp();
 
@@ -202,7 +196,6 @@ void K3bMixedBurnDialog::saveSettings()
   // save iso image settings
   K3bIsoOptions o = m_doc->dataDoc()->isoOptions();
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   m_doc->dataDoc()->setIsoOptions( o );
 
   m_doc->dataDoc()->setDataMode( m_dataModeWidget->dataMode() );
@@ -236,7 +229,6 @@ void K3bMixedBurnDialog::readSettings()
   m_cdtextWidget->load( m_doc->audioDoc() );
 
   m_imageSettingsWidget->load( m_doc->dataDoc()->isoOptions() );
-  m_volumeDescWidget->load( m_doc->dataDoc()->isoOptions() );
 
   m_dataModeWidget->setDataMode( m_doc->dataDoc()->dataMode() );
 
@@ -256,7 +248,6 @@ void K3bMixedBurnDialog::loadK3bDefaults()
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
   m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
-  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
 
   toggleAll();
 }
@@ -281,7 +272,6 @@ void K3bMixedBurnDialog::loadUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
-  m_volumeDescWidget->load( o );
 
   toggleAll();
 }
@@ -306,7 +296,6 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigBase* c )
 
   K3bIsoOptions o;
   m_imageSettingsWidget->save( o );
-  m_volumeDescWidget->save( o );
   o.save( c );
 
   if( m_tempDirSelectionWidget->isEnabled() ) {

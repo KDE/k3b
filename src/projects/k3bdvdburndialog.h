@@ -22,7 +22,6 @@
 
 class K3bDvdDoc;
 class K3bDataImageSettingsWidget;
-class K3bDataVolumeDescWidget;
 class QGroupBox;
 class QRadioButton;
 class QButtonGroup;
@@ -53,8 +52,6 @@ class K3bDvdBurnDialog : public K3bProjectBurnDialog
 
  private:
    void setupSettingsTab();
-
-   K3bDataVolumeDescWidget* m_volumeDescWidget;
 
    // --- settings tab ---------------------------
    K3bDataImageSettingsWidget* m_imageSettingsWidget;

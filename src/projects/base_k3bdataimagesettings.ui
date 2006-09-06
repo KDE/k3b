@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>454</width>
-            <height>223</height>
+            <height>287</height>
         </rect>
     </property>
     <property name="caption">
@@ -26,6 +26,35 @@
         <property name="spacing">
             <number>6</number>
         </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>Volume Name</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_editVolumeName</cstring>
+                    </property>
+                    <property name="maxLength">
+                        <number>32</number>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_buttonMoreVolDescFields</cstring>
+                    </property>
+                    <property name="text">
+                        <string>More fields...</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>m_groupFilesystems</cstring>
@@ -61,7 +90,7 @@
                         <cstring>m_buttonCustomFilesystems</cstring>
                     </property>
                     <property name="text">
-                        <string>Custom...</string>
+                        <string>&amp;Custom...</string>
                     </property>
                 </widget>
             </hbox>
@@ -88,7 +117,7 @@
                         <cstring>m_checkDiscardAllLinks</cstring>
                     </property>
                     <property name="text">
-                        <string>Discard all symlinks</string>
+                        <string>&amp;Discard all symlinks</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Do not create symbolic links</string>
@@ -111,7 +140,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Discard broken symlinks</string>
+                        <string>Discard &amp;broken symlinks</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Ignore all links pointing outside the project</string>
@@ -126,7 +155,7 @@
                         <cstring>m_checkPreservePermissions</cstring>
                     </property>
                     <property name="text">
-                        <string>Preserve file permissions (backup)</string>
+                        <string>Preserve file permissions (bac&amp;kup)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
@@ -138,7 +167,7 @@
                         <cstring>m_checkFollowLinks</cstring>
                     </property>
                     <property name="text">
-                        <string>Follow symbolic links</string>
+                        <string>F&amp;ollow symbolic links</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Follow symbolic links for source files</string>
@@ -253,7 +282,7 @@ Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>1</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>

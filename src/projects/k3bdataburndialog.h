@@ -31,7 +31,6 @@ class K3bTempDirSelectionWidget;
 class K3bDataDoc;
 class KLineEdit;
 class K3bDataImageSettingsWidget;
-class K3bDataVolumeDescWidget;
 class K3bDataModeWidget;
 class K3bDataMultiSessionCombobox;
 
@@ -54,8 +53,6 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    void loadUserDefaults( KConfigBase* );
    void saveUserDefaults( KConfigBase* );
    void toggleAll();
-
-   K3bDataVolumeDescWidget* m_volumeDescWidget;
 
    // --- settings tab ---------------------------
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
