@@ -22,6 +22,7 @@
     - No waiting time anymore when asking for information on media (including for example Audio CD ripping).
     - Nice default image filenames.
     - CD Copy: Enable/disable options based on the source medium
+    - Automatically select newly inserted media as burning medium
  * DCOP call directBurn() now returns a boolean value stating if the process could be started.
  * New DCOP calls cddaRip(), videocdrip(), and videodvdrip() with media:/ url support.
  * K3b can now handle media:/ urls from the command line to specify devices
@@ -58,6 +59,10 @@
  * Completely rewritten data project verification
    - K3b now compares the written image instead of the single files
    - Verification of Video DVD projects
+ * Little GUI changes:
+   - Changed the dialog layout in the action dialogs.
+   - Simplified the layout of the burn dialogs for data projects (more advanced settings hidden)
+   - Improved theme support (transparent themes)
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
