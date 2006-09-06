@@ -15,6 +15,7 @@
 
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingswidget.h"
+#include "k3bdatavolumedescwidget.h"
 
 #include "k3bisooptions.h"
 
@@ -130,14 +131,41 @@ public:
 };
 
 
+class K3bDataImageSettingsWidget::VolumeDescDialog : public KDialogBase
+{
+public:
+  VolumeDescDialog( QWidget* parent )
+    : KDialogBase( parent,
+		   "voldesc_dialog",
+		   true,
+		   i18n("Volume Descriptor"),
+		   Ok|Cancel,
+		   Ok,
+		   true ) {
+    w = new K3bDataVolumeDescWidget( this );
+    setMainWidget( w );
+
+    // give ourselves a reasonable size
+    QSize s = sizeHint();
+    s.setWidth( QMAX(s.width(), 300) );
+    resize( s );
+  }
+
+  K3bDataVolumeDescWidget* w;
+};
+
+
 
 K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const char* name )
   : base_K3bDataImageSettings( parent, name )
 {
   m_customFsDlg = new CustomFilesystemsDialog( this );
+  m_volDescDlg = new VolumeDescDialog( this );
 
   connect( m_buttonCustomFilesystems, SIGNAL(clicked()),
 	   this, SLOT(slotCustomFilesystems()) );
+  connect( m_buttonMoreVolDescFields, SIGNAL(clicked()),
+	   this, SLOT(slotMoreVolDescFields()) );
   connect( m_comboSpaceHandling, SIGNAL(activated(int)),
 	   this, SLOT(slotSpaceHandlingChanged(int)) );
 
@@ -230,9 +258,27 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 }
 
 
+void K3bDataImageSettingsWidget::slotMoreVolDescFields()
+{
+  // remember old settings
+  K3bIsoOptions o;
+  m_volDescDlg->w->save( o );
+
+  if( m_volDescDlg->exec() == QDialog::Accepted ) {
+    m_volDescDlg->w->save( o );
+    m_editVolumeName->setText( o.volumeID() );
+  }
+  else {
+    // restore old settings
+    m_volDescDlg->w->load( o );
+  }
+}
+
+
 void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 {
   m_customFsDlg->w->load( o );
+  m_volDescDlg->w->load( o );
 
   slotFilesystemsChanged();
 
@@ -258,6 +304,8 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
   slotSpaceHandlingChanged( m_comboSpaceHandling->currentItem() );
 
   m_editReplace->setText( o.whiteSpaceTreatmentReplaceString() );
+
+  m_editVolumeName->setText( o.volumeID() );
 }
 
 
@@ -266,6 +314,8 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
   if( m_comboFilesystems->currentItem() != FS_CUSTOM )
     m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
   m_customFsDlg->w->save( o );
+
+  m_volDescDlg->w->save( o );
 
   o.setDiscardSymlinks( m_checkDiscardAllLinks->isChecked() );
   o.setDiscardBrokenSymlinks( m_checkDiscardBrokenLinks->isChecked() );
@@ -287,6 +337,8 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
     o.setWhiteSpaceTreatment( K3bIsoOptions::noChange );
   }
   o.setWhiteSpaceTreatmentReplaceString( m_editReplace->text() );
+
+  o.setVolumeID( m_editVolumeName->text() );
 }
 
 #include "k3bdataimagesettingswidget.moc"

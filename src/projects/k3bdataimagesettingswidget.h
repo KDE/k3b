@@ -36,11 +36,14 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
  private slots:
   void slotSpaceHandlingChanged( int i );
   void slotCustomFilesystems();
+  void slotMoreVolDescFields();
   void slotFilesystemsChanged();
 
  private:
   class CustomFilesystemsDialog;
+  class VolumeDescDialog;
   CustomFilesystemsDialog* m_customFsDlg;
+  VolumeDescDialog* m_volDescDlg;
 };
 
 

@@ -25,6 +25,7 @@
 class K3bBusyWidget;
 class QLabel;
 class K3bDirItem;
+class K3bEncodingConverter;
 
 
 class K3bDataUrlAddingDialog : public KDialogBase
@@ -54,6 +55,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
   K3bBusyWidget* m_busyWidget;
   QLabel* m_infoLabel;
+  K3bEncodingConverter* m_encodingConverter;
 
   QValueList< QPair<KURL, K3bDirItem*> > m_urlQueue;
 
