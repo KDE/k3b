@@ -1,0 +1,86 @@
+<sect1 id="cdcopyhowto">
+	<title>
+		Quickguide: Copying a Data-CD in 4 Steps
+	</title>
+	<para>
+		This Quickguide shows you how to create a Data-CD with &k3b;. To reproduce
+		these steps you need a working &k3b; and the CD you wish to copy inserted in your
+		CD-ROM. 
+	</para>
+	<sect2>
+		<title>Step 1</title>
+		<para>
+			To copy a Data-CD you select <guimenu>Tools</guimenu>,<guimenu>CD</guimenu><guimenu>Copy CD...</guimenu>
+			You will see a dialog where you can set up the burning.
+			<screenshot>
+				<screeninfo>In this dialog you can select the settings you want to use for the burning.</screeninfo>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="cdcopy_settings.png" format="PNG"/>
+					</imageobject>
+					<textobject>
+						<phrase>Screenshot</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+		</para>
+	</sect2>
+	<sect2>
+		<title>Step 2</title>
+		<para>
+			After you have set up &k3b; click on <guimenu>Start CD Copy</guimenu>. You will get a dialog similar to this:
+			<screenshot>
+				<screeninfo>In this dialog you can watch to progress of the copying. As soon as the writing of the
+				image-file is done you will be asked for a emtpy CD on which the data will be burned.</screeninfo>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="cdcopy_reading.png" format="PNG"/>
+					</imageobject>
+					<textobject>
+						<phrase>Screenshot</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+		</para>
+		<para>
+			In this dialog you can watch to progress of the copying. As soon as the writing of the
+			image-file is done you will be asked for a emtpy CD on which the data will be burned.
+		</para>
+	</sect2>
+	<sect2>
+		<title>Step 3</title>
+		<screenshot>
+			<screeninfo>&k3b; is burning the Image file. You have to wait until the <guilabel>Overall process</guilabel>
+			is at 100%</screeninfo>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="cdcopy_writing.png" format="PNG"/>
+				</imageobject>
+				<textobject>
+					<phrase>Screenshot</phrase>
+				</textobject>
+			</mediaobject>
+		</screenshot>
+		<para>
+			&k3b; is burning the Image file. You have to wait until the <guilabel>Overall process</guilabel>
+			is at 100%.
+		</para>
+	</sect2>
+	<sect2>
+		<title>Step 4</title>
+		<para>
+			<screenshot>
+				<screeninfo>In this dialog you can see the result of your burning</screeninfo>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="cdcopy_done.png" format="PNG"/>
+					</imageobject>
+					<textobject>
+						<phrase>Screenshot</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+			&k3b; has finished the burning. Click on <guilabel>Close</guilabel> to close the dialog.
+		</para>
+	</sect2>
+</sect1>
