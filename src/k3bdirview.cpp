@@ -262,7 +262,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 						 "or show all the tracks?").arg( i18n("Audio CD") ),
 					    i18n("Audio CD"),
 					    i18n("Mount CD"),
-					    i18n("Show Video Tracks") ) == KMessageBox::Yes );
+					    i18n("Show Audio Tracks") ) == KMessageBox::Yes );
       
       if( mount ) {
 	k3bappcore->appDeviceManager()->mountDisk();
