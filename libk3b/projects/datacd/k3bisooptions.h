@@ -94,6 +94,12 @@ class LIBK3B_EXPORT K3bIsoOptions
   void setISOLevel( int i ) { m_isoLevel = i; }
   void setSystemId( const QString& s ) { m_systemId = s; }
   void setApplicationID( const QString& s ) { m_applicationID = s; }
+
+  /**
+   * Set the filesystems volume id.
+   *
+   * max length for this field is 32 chars.
+   */
   void setVolumeID( const QString& s ) { m_volumeID = s; }
   void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
   void setVolumeSetSize( int size ) { m_volumeSetSize = size; }

@@ -51,8 +51,29 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   QCString checksum() const;
 
  public slots:
+  /**
+   * Starts the actual image creation. Always run init() 
+   * before starting the image creation
+   */
   virtual void start();
   virtual void cancel();
+
+  /**
+   * Initialize the image creator. This calculates the image size and performs
+   * some checks on the project.
+   *
+   * The initialization process also finishes with the finished() signal just
+   * like a normal job operation. Get the calculated image size via size()
+   */
+  virtual void init();
+
+  /**
+   * Only calculates the size of the image without the additional checks in
+   * init()
+   *
+   * Use this if you need to recalculate the image size for example if the
+   * multisession info changed.
+   */
   virtual void calculateSize();
 
   /**
@@ -65,8 +86,6 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   void writeToImageFile( const QString& path );
 
-  void setCalculateChecksum( bool b );
-
   /**
    * If dev == 0 K3bIsoImager will ignore the data in the previous session. 
    * This is usable for CD-Extra.
@@ -75,9 +94,6 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   K3bDevice::Device* device() const { return m_device; }
   K3bDataDoc* doc() const { return m_doc; }
-
- signals:
-  void sizeCalculated( int exitCode, int size );
 
  protected:
   virtual void handleMkisofsProgress( int );
@@ -98,7 +114,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   QString dummyDir( K3bDirItem* );
 
   void outputData();
-  void init();
+  void initVariables();
   virtual void cleanup();
   void clearDummyDirs();
 
@@ -135,6 +151,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   void slotMkisofsPrintSizeFinished();
 
  private:
+  void startSizeCalculation();
+
   class Private;
   Private* d;
 

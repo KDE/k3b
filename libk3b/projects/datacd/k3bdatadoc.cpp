@@ -1183,11 +1183,15 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device )
     if( !rootDir )
       rootDir = iso.firstIsoDirEntry();
     
-    createSessionImportItems( rootDir, root() );
-
-    emit changed();
-
-    return false;
+    if( rootDir ) {
+      createSessionImportItems( rootDir, root() );
+      emit changed();
+      return true;
+    }
+    else {
+      kdDebug() << "(K3bDataDoc::importSession) Could not find primary volume desc." << endl;
+      return false;
+    }
   }
   else {
     kdDebug() << "(K3bDataDoc) unable to read toc." << endl;
@@ -1198,6 +1202,7 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device )
 
 void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir, K3bDirItem* parent )
 {
+  Q_ASSERT(importDir);
   QStringList entries = importDir->entries();
   entries.remove( "." );
   entries.remove( ".." );

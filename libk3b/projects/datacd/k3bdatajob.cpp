@@ -47,7 +47,6 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <kdebug.h>
-#include <kstringhandler.h>
 
 
 
@@ -61,6 +60,7 @@ public:
 
   K3bDataDoc* doc;
 
+  bool initializingImager;
   bool imageFinished;
   bool canceled;
 
@@ -139,46 +139,6 @@ void K3bDataJob::start()
 
   emit newTask( i18n("Preparing data") );
 
-  // FIXME: the following is also used in K3bMixedJob
-  //        Convert the calculateSize slot in K3bIsoImager into an init() slot which
-  //        is always called before start and does this (and also the size calculation)
-  //
-  d->doc->prepareFilenames();
-  if( d->doc->needToCutFilenames() ) {
-    QString listOfRenamedItems;
-    int maxlines = 10;
-    QValueList<K3bDataItem*>::const_iterator it;
-    for( it = d->doc->needToCutFilenameItems().begin(); 
-	 maxlines > 0 && it != d->doc->needToCutFilenameItems().end();
-	 ++it, --maxlines ) {
-      K3bDataItem* item = *it;
-      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
-	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
-	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
-      listOfRenamedItems += "<br>";
-    }
-    if( it != d->doc->needToCutFilenameItems().end() )
-      listOfRenamedItems += "...";
-
-    if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
-				     "of the Joliet extensions. If the Joliet extensions are disabled filenames "
-				     "do not have to be shortened but long filenames will not be available on "
-				     "Windows systems.")
-			.arg( d->doc->isoOptions().jolietLong() ? 103 : 64 )
-			+ "<p>" + listOfRenamedItems,
-			i18n("Warning"),
-			i18n("Shorten Filenames"),
-			i18n("Disable Joliet extensions") ) ) {
-      // No -> disable joliet
-      // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
-      K3bIsoOptions op = d->doc->isoOptions();
-      op.setCreateJoliet( false );
-      op.setCreateRockRidge( true );
-      d->doc->setIsoOptions( op );
-      d->doc->prepareFilenames();
-    }
-  }
-
   if( d->usedMultiSessionMode == K3bDataDoc::AUTO && !d->doc->onlyCreateImages() )
     determineMultiSessionMode();
   else
@@ -214,7 +174,9 @@ void K3bDataJob::prepareWriting()
   else {
     m_isoImager->setMultiSessionInfo( QString::null );
     prepareData();
-    writeImage();
+
+    d->initializingImager = true;
+    m_isoImager->init();
   }
 }
 
@@ -231,7 +193,8 @@ void K3bDataJob::slotMsInfoFetched(bool success)
     else
       m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo(), d->doc->burner() );
 
-    writeImage();
+    d->initializingImager = true;
+    m_isoImager->init();
   }
   else {
     // the MsInfoFetcher already emitted failure info
@@ -243,42 +206,23 @@ void K3bDataJob::slotMsInfoFetched(bool success)
 
 void K3bDataJob::writeImage()
 {
-  m_isoImager->setCalculateChecksum( d->doc->verifyData() );
+  d->initializingImager = false;
 
-  if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
-    m_isoImager->calculateSize();
-  }
-  else {
-    emit burning(false);
-
-    // get image file path
-    if( d->doc->tempDir().isEmpty() )
-      d->doc->setTempDir( K3b::findUniqueFilePrefix( d->doc->isoOptions().volumeID() ) + ".iso" );
-
-    // TODO: check if the image file is part of the project and if so warn the user
-    //       and append some number to make the path unique.
-
-    emit newTask( i18n("Creating image file") );
-    emit newSubTask( i18n("Track 1 of 1") );
-    emit infoMessage( i18n("Creating image file in %1").arg(d->doc->tempDir()), INFO );
-
-    m_isoImager->writeToImageFile( d->doc->tempDir() );
-    m_isoImager->start();
-  }
-}
-
-
-void K3bDataJob::slotSizeCalculationFinished( int status, int size )
-{
-  emit debuggingOutput( "K3b", QString( "Size of filesystem calculated: %1" ).arg(size) );
-
-  //
-  // this is only called in on-the-fly mode
-  //
-  if( status == ERROR || !startOnTheFlyWriting() ) {
-    cancelAll();
-    jobFinished( false );
-  }
+  emit burning(false);
+  
+  // get image file path
+  if( d->doc->tempDir().isEmpty() )
+    d->doc->setTempDir( K3b::findUniqueFilePrefix( d->doc->isoOptions().volumeID() ) + ".iso" );
+  
+  // TODO: check if the image file is part of the project and if so warn the user
+  //       and append some number to make the path unique.
+  
+  emit newTask( i18n("Creating image file") );
+  emit newSubTask( i18n("Track 1 of 1") );
+  emit infoMessage( i18n("Creating image file in %1").arg(d->doc->tempDir()), INFO );
+  
+  m_isoImager->writeToImageFile( d->doc->tempDir() );
+  m_isoImager->start();
 }
 
 
@@ -289,6 +233,7 @@ bool K3bDataJob::startOnTheFlyWriting()
       // try a direct connection between the processes
       if( m_writerJob->fd() != -1 )
 	m_isoImager->writeToFd( m_writerJob->fd() );
+      d->initializingImager = false;
       m_isoImager->start();
       return true;
     }
@@ -333,47 +278,65 @@ void K3bDataJob::slotIsoImagerPercent( int p )
 
 void K3bDataJob::slotIsoImagerFinished( bool success )
 {
-  // tell the writer that there won't be more data
-  if( d->doc->onTheFly() && m_writerJob )
-    m_writerJob->closeFd();
-
-  if( !d->doc->onTheFly() ||
-      d->doc->onlyCreateImages() ) {
-
+  if( d->initializingImager ) {
     if( success ) {
-      emit infoMessage( i18n("Image successfully created in %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
-      d->imageFinished = true;
-
-      if( d->doc->onlyCreateImages() ) {
-	jobFinished( true );
+      if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
+	if( !startOnTheFlyWriting() ) {
+	  cancelAll();
+	  jobFinished( false );
+	}
       }
       else {
-	if( prepareWriterJob() )
-	  startWriterJob();
+	writeImage();
       }
     }
     else {
-      if( m_isoImager->hasBeenCanceled() )
-	emit canceled();
-      else
-	emit infoMessage( i18n("Error while creating ISO image"), ERROR );
-
-      cancelAll();
       jobFinished( false );
     }
   }
-  else if( !success ) { // on-the-fly
-    //
-    // In case the imager failed let's make sure the writer does not emit an unusable
-    // error message.
-    //
-    if( m_writerJob && m_writerJob->active() )
-      m_writerJob->setSourceUnreadable( true );
+  else {
+    // tell the writer that there won't be more data
+    if( d->doc->onTheFly() && m_writerJob )
+      m_writerJob->closeFd();
 
-    // there is one special case which we need to handle here: the iso imager might be cancelled 
-    // FIXME: the iso imager should not be able to cancel itself
-    if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
-      cancel();
+    if( !d->doc->onTheFly() ||
+	d->doc->onlyCreateImages() ) {
+
+      if( success ) {
+	emit infoMessage( i18n("Image successfully created in %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
+	d->imageFinished = true;
+
+	if( d->doc->onlyCreateImages() ) {
+	  jobFinished( true );
+	}
+	else {
+	  if( prepareWriterJob() )
+	    startWriterJob();
+	}
+      }
+      else {
+	if( m_isoImager->hasBeenCanceled() )
+	  emit canceled();
+	else
+	  emit infoMessage( i18n("Error while creating ISO image"), ERROR );
+
+	cancelAll();
+	jobFinished( false );
+      }
+    }
+    else if( !success ) { // on-the-fly
+      //
+      // In case the imager failed let's make sure the writer does not emit an unusable
+      // error message.
+      //
+      if( m_writerJob && m_writerJob->active() )
+	m_writerJob->setSourceUnreadable( true );
+
+      // there is one special case which we need to handle here: the iso imager might be cancelled 
+      // FIXME: the iso imager should not be able to cancel itself
+      if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
+	cancel();
+    }
   }
 }
 
@@ -566,7 +529,6 @@ void K3bDataJob::setImager( K3bIsoImager* imager )
 void K3bDataJob::connectImager()
 {
   m_isoImager->disconnect( this );
-  connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );

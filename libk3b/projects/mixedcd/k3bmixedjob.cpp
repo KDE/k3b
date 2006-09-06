@@ -61,6 +61,8 @@ public:
     : maxSpeedJob(0) {
   }
 
+  bool initializingImager;
+
   int copies;
   int copiesDone;
 
@@ -77,7 +79,6 @@ K3bMixedJob::K3bMixedJob( K3bMixedDoc* doc, K3bJobHandler* hdl, QObject* parent 
   d = new Private;
 
   m_isoImager = new K3bIsoImager( doc->dataDoc(), this, this );
-  connect( m_isoImager, SIGNAL(sizeCalculated(int, int)), this, SLOT(slotSizeCalculationFinished(int, int)) );
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
@@ -147,63 +148,16 @@ void K3bMixedJob::start()
 
   emit newTask( i18n("Preparing data") );
 
-  m_doc->dataDoc()->prepareFilenames();
-  if( m_doc->dataDoc()->needToCutFilenames() ) {
-    QString listOfRenamedItems;
-    int maxlines = 10;
-    QValueList<K3bDataItem*>::const_iterator it;
-    for( it = m_doc->dataDoc()->needToCutFilenameItems().begin(); 
-	 maxlines > 0 && it != m_doc->dataDoc()->needToCutFilenameItems().end();
-	 ++it, --maxlines ) {
-      K3bDataItem* item = *it;
-      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
-	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
-	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
-      listOfRenamedItems += "<br>";
-    }
-    if( it != m_doc->dataDoc()->needToCutFilenameItems().end() )
-      listOfRenamedItems += "...";
-
-    if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
-				     "of the Joliet extensions. If the Joliet extensions are disabled filenames "
-				     "do not have to be shortened but long filenames will not be available on "
-				     "Windows systems.")
-			.arg( m_doc->dataDoc()->isoOptions().jolietLong() ? 103 : 64 )
-			+ "<p>" + listOfRenamedItems,
-			i18n("Warning"),
-			i18n("Shorten Filenames"),
-			i18n("Disable Joliet extensions") ) ) {
-      // No -> disable joliet
-      // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
-      K3bIsoOptions op = m_doc->dataDoc()->isoOptions();
-      op.setCreateJoliet( false );
-      op.setCreateRockRidge( true );
-      m_doc->dataDoc()->setIsoOptions( op );
-      m_doc->dataDoc()->prepareFilenames();
-    }
-  }
-
   determineWritingMode();
 
-  // depending on the mixed type and if it's onthefly or not we
-  // decide what to do first
-
   //
-  // in case we write two sessions we need to check if the resulting data will really fit on the Cd
+  // First we make sure the data portion is valid
   //
-  if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
-    determinePreliminaryDataImageSize();
-  else
-    startFirstCopy();
-}
+  d->initializingImager = true;
 
-
-
-void K3bMixedJob::determinePreliminaryDataImageSize()
-{
   // we do not have msinfo yet
   m_isoImager->setMultiSessionInfo( QString::null );
-  m_isoImager->calculateSize();
+  m_isoImager->init();
 }
 
 
@@ -235,6 +189,7 @@ void K3bMixedJob::startFirstCopy()
       d->maxSpeedJob->start();
     }
     else if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
+      d->initializingImager = true;
       m_isoImager->calculateSize();
     }
     else {
@@ -278,6 +233,7 @@ void K3bMixedJob::slotMaxSpeedJobFinished( bool success )
     emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), WARNING );
 
   if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
+    d->initializingImager = true;
     m_isoImager->calculateSize();
   }
   else {
@@ -353,6 +309,7 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
 					.arg(m_msInfoFetcher->nextSessionStart()+150) );
 
     if( m_doc->onTheFly() ) {
+      d->initializingImager = true;
       m_isoImager->calculateSize();
     }
     else {
@@ -367,54 +324,49 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
 }
 
 
-void K3bMixedJob::slotSizeCalculationFinished( int status, int size )
-{
-  kdDebug() << "(K3bMixedJob) size calculated: " << size << endl;
-  emit debuggingOutput( "K3b", QString( "Size of filesystem calculated: %1" ).arg(size) );
-
-  if( status != ERROR ) {
-
-    if( m_currentAction == PREPARING_DATA ) {
-      // check the size
-      m_projectSize  = size + m_doc->audioDoc()->length();
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
-	m_projectSize += 11400; // the session gap
-      
-      startFirstCopy();
-    }
-
-    // 1. data in first track:
-    //    start isoimager and writer
-    //    when isoimager finishes start audiodecoder
-
-    // 2. data in last track
-    //    start audiodecoder and writer
-    //    when audiodecoder finishes start isoimager
-
-    // 3. data in second session
-    //    start audiodecoder and writer
-    //    start isoimager and writer
-
-    else if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      if( !prepareWriter() || !startWriting() ) {
-	cleanupAfterError();
-	jobFinished(false);
-      }
-      else
-	m_isoImager->start();
-    }
-    else
-      writeNextCopy();
-  }
-  else {
-    cleanupAfterError();
-    jobFinished( false );
-  }
-}
-
-
 void K3bMixedJob::slotIsoImagerFinished( bool success )
 {
+  if( d->initializingImager ) {
+    d->initializingImager = false;
+    if( success ) {
+      if( m_currentAction == PREPARING_DATA ) {
+	// check the size
+	m_projectSize  = m_isoImager->size() + m_doc->audioDoc()->length();
+	if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+	  m_projectSize += 11400; // the session gap
+      
+	startFirstCopy();
+      }
+
+      // 1. data in first track:
+      //    start isoimager and writer
+      //    when isoimager finishes start audiodecoder
+
+      // 2. data in last track
+      //    start audiodecoder and writer
+      //    when audiodecoder finishes start isoimager
+
+      // 3. data in second session
+      //    start audiodecoder and writer
+      //    start isoimager and writer
+
+      else if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+	if( !prepareWriter() || !startWriting() ) {
+	  cleanupAfterError();
+	  jobFinished(false);
+	}
+	else
+	  m_isoImager->start();
+      }
+      else
+	writeNextCopy();
+    }
+    else {
+      cleanupAfterError();
+      jobFinished( false );
+    }
+  }
+
   if( m_canceled || m_errorOccuredAndAlreadyReported )
     return;
 
@@ -508,8 +460,10 @@ void K3bMixedJob::slotMediaReloadedForSecondSession( bool success )
   }
   else if( m_doc->dummy() ) {
     // do not try to get ms info in simulation mode since the cd is empty!
-    if( m_doc->onTheFly() )
+    if( m_doc->onTheFly() ) {
+      d->initializingImager = true;
       m_isoImager->calculateSize();
+    }
     else 
       createIsoImage();
   }

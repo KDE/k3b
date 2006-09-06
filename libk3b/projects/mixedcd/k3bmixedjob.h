@@ -57,7 +57,6 @@ class K3bMixedJob : public K3bBurnJob
 
  protected slots:
   // iso imager slots
-  void slotSizeCalculationFinished( int, int );
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);
 

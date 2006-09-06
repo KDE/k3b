@@ -26,6 +26,7 @@
 #include <k3bpipe.h>
 #include <k3bglobals.h>
 #include <k3biso9660.h>
+#include <k3biso9660backend.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -59,6 +60,7 @@ public:
   K3bMd5Job* md5Job;
   K3bDataDoc* doc;
   K3bDevice::Device* device;
+  K3bDevice::DiskInfo diskInfo;
   K3bDevice::Toc toc;
   K3bDataTrackReader* dataTrackReader;
 
@@ -129,6 +131,7 @@ void K3bDataVerifyingJob::slotMediaReloaded( bool success )
 void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
 {
   d->toc = dh->toc();
+  d->diskInfo = dh->diskInfo();
 
   if( d->canceled ) {
     finishVerification(false);
@@ -137,11 +140,11 @@ void K3bDataVerifyingJob::slotTocRead( K3bDevice::DeviceHandler* dh )
     emit infoMessage( i18n("Reading TOC failed."), ERROR );
     finishVerification(false);
   }
-  else if( ( dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) &&
-	   ( d->usedMultiSessionMode == K3bDataDoc::CONTINUE || d->usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
-    emit infoMessage( i18n("Sorry, no data verification if growing sessions on DVD+RW and DVD-RW media"), ERROR );
-    finishVerification(false);
-  }
+//   else if( ( dh->diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) &&
+// 	   ( d->usedMultiSessionMode == K3bDataDoc::CONTINUE || d->usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
+//     emit infoMessage( i18n("Sorry, no data verification if growing sessions on DVD+RW and DVD-RW media"), ERROR );
+//     finishVerification(false);
+//   }
   else {
     emit newTask( i18n("Verifying written data") );
 
@@ -184,12 +187,36 @@ void K3bDataVerifyingJob::readWrittenChecksum()
   d->dataTrackReader->setDevice( d->device );
   d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
 
-  // we always read the last track
-  // and use the size from the project instead of the toc since
-  // TAO recorded tracks have two run-out sectors and this way we do not
-  // have to care about those
-  d->dataTrackReader->setSectorRange( d->toc.last().firstSector(),
-				      d->toc.last().firstSector() + imageSize() - 1 );
+  if( ( d->diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) &&
+      ( d->usedMultiSessionMode == K3bDataDoc::CONTINUE || d->usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
+    //
+    // we always have just one track and the filesystem has been grown. Thus, the complete filesystem to compare 
+    // can be found on the DVD at the end.
+    //
+
+    // force the backend since we don't need decryption
+    // which just slows down the whole process
+    K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
+    if( !iso.open() ) {
+      emit infoMessage( i18n("Failed to read file system."), ERROR );
+      finishVerification( false );
+      return;
+    }
+
+    int firstSector = iso.primaryDescriptor().volumeSpaceSize - imageSize();
+    d->dataTrackReader->setSectorRange( firstSector,
+					iso.primaryDescriptor().volumeSpaceSize -1 );
+  }
+  else {
+    //
+    // we always read the last track
+    // and use the size from the project instead of the toc since
+    // TAO recorded tracks have two run-out sectors and this way we do not
+    // have to care about those
+    //
+    d->dataTrackReader->setSectorRange( d->toc.last().firstSector(),
+					d->toc.last().firstSector() + imageSize() - 1 );
+  }
 
   d->dataTrackReader->writeToFd( d->comm.in() );
   d->md5Job->setFd( d->comm.out() );

@@ -68,7 +68,6 @@ class K3bDataJob : public K3bBurnJob
  protected slots:
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);
-  void slotSizeCalculationFinished( int, int );
   void slotWriterJobPercent( int p );
   void slotWriterNextTrack( int t, int tt );
   void slotWriterJobFinished( bool success );

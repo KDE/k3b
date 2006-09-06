@@ -35,6 +35,7 @@
 #include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kio/job.h>
+#include <kstringhandler.h>
 
 #include <qfile.h>
 #include <qregexp.h>
@@ -55,10 +56,6 @@ int K3bIsoImager::s_imagerSessionCounter = 0;
 class K3bIsoImager::Private
 {
 public:
-  Private() 
-    : calcChecksum( false ) {
-  }
-
   QString imagePath;
   QFile imageFile;
   const K3bExternalBin* mkisofsBin;
@@ -74,7 +71,6 @@ public:
 
   bool knownError;
 
-  bool calcChecksum;
   K3bChecksumPipe checksumPipe;
 };
 
@@ -151,7 +147,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
   m_processExited = true;
 
-  if( d->calcChecksum ) {
+  if( m_doc->verifyData() ) {
     d->checksumPipe.close();
     kdDebug() << "(K3bIsoImager) checksum from image: " << d->checksumPipe.checksum() << endl;
   }
@@ -232,32 +228,103 @@ void K3bIsoImager::cleanup()
 }
 
 
-void K3bIsoImager::calculateSize()
+void K3bIsoImager::init()
 {
+  jobStarted();
+
   cleanup();
 
-  d->mkisofsBin = initMkisofs();
-  if( !d->mkisofsBin ) {
-    emit sizeCalculated( ERROR, 0 );
-    return;
+  m_doc->prepareFilenames();
+  if( m_doc->needToCutFilenames() ) {
+    QString listOfRenamedItems;
+    int maxlines = 10;
+    QValueList<K3bDataItem*>::const_iterator it;
+    for( it = m_doc->needToCutFilenameItems().begin(); 
+	 maxlines > 0 && it != m_doc->needToCutFilenameItems().end();
+	 ++it, --maxlines ) {
+      K3bDataItem* item = *it;
+      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
+	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
+	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
+      listOfRenamedItems += "<br>";
+    }
+    if( it != m_doc->needToCutFilenameItems().end() )
+      listOfRenamedItems += "...";
+
+    if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
+				     "of the Joliet extensions. If the Joliet extensions are disabled filenames "
+				     "do not have to be shortened but long filenames will not be available on "
+				     "Windows systems.")
+			.arg( m_doc->isoOptions().jolietLong() ? 103 : 64 )
+			+ "<p>" + listOfRenamedItems,
+			i18n("Warning"),
+			i18n("Shorten Filenames"),
+			i18n("Disable Joliet extensions") ) ) {
+      // No -> disable joliet
+      // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
+      K3bIsoOptions op = m_doc->isoOptions();
+      op.setCreateJoliet( false );
+      op.setCreateRockRidge( true );
+      m_doc->setIsoOptions( op );
+      m_doc->prepareFilenames();
+    }
   }
 
-  init();
+  //
+  // The joliet extension encodes the volume desc in UCS-2, i.e. uses 16 bit for each char.
+  // Thus, the max length here is 16.
+  //
+  if( m_doc->isoOptions().createJoliet() &&
+      m_doc->isoOptions().volumeID().length() > 16 ) {
+    if( !questionYesNo( "<p>" + i18n("The Joliet extensions (which are needed for long filenames on Windows systems) "
+				     "restrict the length of the volume descriptior (the name of the filesystem) "
+				     "to %1 characters. The selected descriptor '%2' is longer than that. Do you "
+				     "want it to be cut or do you want to go back and change it manually?")
+			.arg( 16 ).arg( m_doc->isoOptions().volumeID() ),
+			i18n("Warning"),
+			i18n("Cut volume descriptor in the Joliet tree"),
+			i18n("Cancel and go back") ) ) {
+      jobFinished( false );
+      return;
+    }
+  }
 
+  //
+  // We always calculate the image size. It does not take long and at least the mixed job needs it
+  // anyway
+  //
+  startSizeCalculation();
+}
+
+
+void K3bIsoImager::calculateSize()
+{
+  jobStarted();
+  startSizeCalculation();
+}
+
+
+void K3bIsoImager::startSizeCalculation()
+{
+  d->mkisofsBin = initMkisofs();
+  if( !d->mkisofsBin ) {
+    jobFinished( false );
+    return;
+  }
+    
+  initVariables();
+    
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
-
+    
   emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
-
+    
   *m_process << d->mkisofsBin;
-
-  // prepare the filenames as written to the image
-  m_doc->prepareFilenames();
 
   if( !prepareMkisofsFiles() || 
       !addMkisofsParameters(true) ) {
     cleanup();
-    emit sizeCalculated( ERROR, 0 );
+    jobFinished( false );
     return;
   }
 
@@ -306,7 +373,7 @@ void K3bIsoImager::calculateSize()
     emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     cleanup();
 
-    emit sizeCalculated( ERROR, 0 );
+    jobFinished( false );
     return;
   }
 }
@@ -353,18 +420,18 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 
 
   if( success ) {
-    emit sizeCalculated( INFO, m_mkisofsPrintSizeResult );
+    jobFinished( true );
   }
   else {
     m_mkisofsPrintSizeResult = 0;
     kdDebug() << "(K3bIsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout << endl;
     emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
-    emit sizeCalculated( ERROR, 0 );
+    jobFinished( false );
   }
 }
 
 
-void K3bIsoImager::init()
+void K3bIsoImager::initVariables()
 {
   m_containsFilesWithMultibleBackslashes = false;
   m_processExited = false;
@@ -404,7 +471,7 @@ void K3bIsoImager::start()
     return;
   }
 
-  init();
+  initVariables();
 
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
@@ -442,7 +509,7 @@ void K3bIsoImager::start()
       return;
     }
   }
-  if( d->calcChecksum ) {
+  if( m_doc->verifyData() ) {
     d->checksumPipe.writeToFd( fd );
     d->checksumPipe.open();
     m_process->writeToFd( d->checksumPipe.in() );
@@ -1069,12 +1136,6 @@ void K3bIsoImager::clearDummyDirs()
     appDir.cdUp();
     appDir.rmdir( jobId );
   }
-}
-
-
-void K3bIsoImager::setCalculateChecksum( bool b )
-{
-  d->calcChecksum = b;
 }
 
 
