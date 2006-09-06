@@ -247,9 +247,21 @@ void K3bDataJob::cancel()
   emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
   emit canceled();
 
-  cancelAll();
-
-  jobFinished( false );
+  if( m_writerJob && m_writerJob->active() ) {
+    //
+    // lets wait for the writer job to finish
+    // and let it finish the job for good.
+    //
+    cancelAll();
+  }
+  else {
+    //
+    // Just cancel all and return
+    // This is bad design as we should wait for all subjobs to finish
+    //
+    cancelAll();
+    jobFinished( false );
+  }
 }
 
 
@@ -332,7 +344,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       if( m_writerJob && m_writerJob->active() )
 	m_writerJob->setSourceUnreadable( true );
 
-      // there is one special case which we need to handle here: the iso imager might be cancelled 
+      // there is one special case which we need to handle here: the iso imager might be canceled 
       // FIXME: the iso imager should not be able to cancel itself
       if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
 	cancel();
@@ -390,6 +402,15 @@ void K3bDataJob::slotWriterNextTrack( int t, int tt )
 
 void K3bDataJob::slotWriterJobFinished( bool success )
 {
+  //
+  // This is a little workaround for the bad cancellation handling in this job
+  // see cancel()
+  //
+  if( d->canceled ) {
+    if( active() )
+      jobFinished( false );
+  }
+
   if( success ) {
     // allright
     // the writerJob should have emited the "simulation/writing successful" signal
