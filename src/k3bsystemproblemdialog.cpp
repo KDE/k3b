@@ -48,8 +48,9 @@
 #include <kprocess.h>
 #include <kglobal.h>
 
-
-
+#ifdef HAVE_ICONV_H
+#include <langinfo.h>
+#endif
 
 
 K3bSystemProblem::K3bSystemProblem( int t,
@@ -483,6 +484,26 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "via an online update tool (i.e. SuSE's YOU)."),
 					 false ) );
   }
+
+#ifdef HAVE_ICONV_H
+  char* codec = nl_langinfo( CODESET );
+  if( strcmp( codec, "ANSI_X3.4-1968" ) == 0 ) {
+    //
+    // On a glibc system the system locale defaults to ANSI_X3.4-1968
+    // It is very unlikely that one would set the locale to ANSI_X3.4-1968
+    // intentionally
+    //
+    problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+				       i18n("System locale charset is ANSI_X3.4-1968"),
+				       i18n("Your system's locale charset (i.e. the charset used to encode filenames) "
+					    "is set to ANSI_X3.4-1968. It is highly unlikely that this has been done "
+					    "intentionally. Most likely the locale is not set at all. An invalid setting "
+					    "will result in problems when creating data projects."),
+				       i18n("To properly set the locale charset make sure the LC_* environment variables "
+					    "are set. Normally the distribution setup tools take care of this."),
+				       false ) );
+  }
+#endif
 
 
   kdDebug() << "(K3bCore) System problems:" << endl;
