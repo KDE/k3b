@@ -505,8 +505,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr.startsWith("Cannot send CUE sheet") ) {
       m_cdrecordError = CANNOT_SEND_CUE_SHEET;
     }
-    else if( errStr.startsWith( "Trying to use ultra high speed medium" ) ||
-	     errStr.startsWith( "Trying to use high speed medium" ) ) {
+    else if( errStr.startsWith( "Trying to use ultra high speed" ) ||
+	     errStr.startsWith( "Trying to use high speed" ) ) {
       m_cdrecordError = HIGH_SPEED_MEDIUM;
     }
     else if( errStr.startsWith( "You may have used an ultra low speed medium" ) ) {
