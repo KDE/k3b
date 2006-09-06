@@ -31,6 +31,7 @@ public:
     margin = 2;
     alignment = Qt::AlignLeft;
     cachedMinimumWidth = 0;
+    titleBaseLine = 0;
   }
 
   QString title;
