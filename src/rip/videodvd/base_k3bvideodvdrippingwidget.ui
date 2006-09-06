@@ -237,7 +237,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Destination Base Directory</string>
+                            <string>Target Folder</string>
                         </property>
                         <grid>
                             <property name="name">
