@@ -348,7 +348,9 @@ void K3bMainWindow::initActions()
   actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
   actionFileQuit->setToolTip(i18n("Quits the application"));
   actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
+#ifdef HAVE_K3BSETUP
   actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions (requires root privileges)") );
+#endif
   actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
   actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
   actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
