@@ -62,7 +62,7 @@ bool K3bEncodingConverter::encodedLocally( const QCString& s )
 {
 #ifdef HAVE_ICONV_H
   QCString utf8Encoded( s.length()*2 );
-  const char* in = s.data();
+  char* in = s.data();
   char* out = utf8Encoded.data();
   size_t inSize = s.length();
   size_t outSize = utf8Encoded.size();
@@ -107,7 +107,7 @@ bool K3bEncodingConverter::convert( const QCString& s, QCString& result, const Q
   iconv_t ic = ::iconv_open( to.local8Bit(), from.local8Bit() );
 
   result.resize( s.length() * 2 );
-  const char* in = s.data();
+  char* in = s.data();
   char* out = result.data();
   size_t inSize = s.length();
   size_t outSize = result.size();
