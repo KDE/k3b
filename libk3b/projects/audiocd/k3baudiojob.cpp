@@ -424,7 +424,7 @@ bool K3bAudioJob::prepareWriter()
 
     if( !writeInfFiles() ) {
       kdDebug() << "(K3bAudioJob) could not write inf-files." << endl;
-      emit infoMessage( i18n("IO Error"), ERROR );
+      emit infoMessage( i18n("IO Error. Most likely no space left on harddisk."), ERROR );
 
       return false;
     }
