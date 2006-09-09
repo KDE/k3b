@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,13 @@ class K3bAudioCdTextWidget : public base_K3bAudioCdTextWidget
   void slotCopyArranger();
   void slotCopySongwriter();
   void slotCopyComposer();
+  void slotMoreFields();
 
  private:
   K3bAudioDoc* m_doc;
+
+  class AllFieldsDialog;
+  AllFieldsDialog* m_allFieldsDlg;
 };
 
 #endif

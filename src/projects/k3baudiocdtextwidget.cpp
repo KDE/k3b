@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
  */
 
 #include "k3baudiocdtextwidget.h"
+#include "base_k3baudiocdtextallfieldswidget.h"
 
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
@@ -21,38 +22,77 @@
 
 #include <qcheckbox.h>
 #include <qtoolbutton.h>
+#include <qpushbutton.h>
 #include <qptrlist.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
 
 #include <klineedit.h>
 #include <klocale.h>
-#include <kdialog.h>
+#include <kdialogbase.h>
 #include <kiconloader.h>
+
+
+class K3bAudioCdTextWidget::AllFieldsDialog : public KDialogBase
+{
+public:
+  AllFieldsDialog( QWidget* parent )
+    : KDialogBase( parent,
+		   "cdtext_allfields_dialog",
+		   true,
+		   i18n("CD-Text"),
+		   Ok|Cancel,
+		   Ok,
+		   true ) {
+    w = new base_K3bAudioCdTextAllFieldsWidget( this );
+    setMainWidget( w );
+  }
+
+  base_K3bAudioCdTextAllFieldsWidget* w;
+};
 
 
 K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
   : base_K3bAudioCdTextWidget( parent, name ),
     m_doc(0)
 {
-  layout()->setSpacing( KDialog::spacingHint() );
-  layout()->setMargin( KDialog::marginHint() );
+  m_allFieldsDlg = new AllFieldsDialog( this );
 
   m_buttonCopyTitle->setPixmap( SmallIcon( "editcopy" ) );
   m_buttonCopyPerformer->setPixmap( SmallIcon( "editcopy" ) );
-  m_buttonCopySongwriter->setPixmap( SmallIcon( "editcopy" ) );
-  m_buttonCopyComposer->setPixmap( SmallIcon( "editcopy" ) );
-  m_buttonCopyArranger->setPixmap( SmallIcon( "editcopy" ) );
+
+  m_allFieldsDlg->w->m_buttonCopyTitle->setPixmap( SmallIcon( "editcopy" ) );
+  m_allFieldsDlg->w->m_buttonCopyPerformer->setPixmap( SmallIcon( "editcopy" ) );
+  m_allFieldsDlg->w->m_buttonCopySongwriter->setPixmap( SmallIcon( "editcopy" ) );
+  m_allFieldsDlg->w->m_buttonCopyComposer->setPixmap( SmallIcon( "editcopy" ) );
+  m_allFieldsDlg->w->m_buttonCopyArranger->setPixmap( SmallIcon( "editcopy" ) );
 
   QValidator* cdTextVal = new K3bCdTextValidator( this );
   m_editTitle->setValidator( cdTextVal );
   m_editPerformer->setValidator( cdTextVal );
-  m_editDisc_id->setValidator( cdTextVal );
-  m_editUpc_ean->setValidator( cdTextVal );
-  m_editMessage->setValidator( cdTextVal );
-  m_editArranger->setValidator( cdTextVal );
-  m_editSongwriter->setValidator( cdTextVal );
-  m_editComposer->setValidator( cdTextVal );
+
+  m_allFieldsDlg->w->m_editTitle->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editPerformer->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editDisc_id->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editUpc_ean->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editMessage->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editArranger->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editSongwriter->setValidator( cdTextVal );
+  m_allFieldsDlg->w->m_editComposer->setValidator( cdTextVal );
+
+  connect( m_allFieldsDlg->w->m_buttonCopyTitle, SIGNAL(clicked()),
+	   this, SLOT(slotCopyTitle()) );
+  connect( m_allFieldsDlg->w->m_buttonCopyPerformer, SIGNAL(clicked()),
+	   this, SLOT(slotCopyPerformer()) );
+  connect( m_allFieldsDlg->w->m_buttonCopyArranger, SIGNAL(clicked()),
+	   this, SLOT(slotCopyArranger()) );
+  connect( m_allFieldsDlg->w->m_buttonCopySongwriter, SIGNAL(clicked()),
+	   this, SLOT(slotCopySongwriter()) );
+  connect( m_allFieldsDlg->w->m_buttonCopyComposer, SIGNAL(clicked()),
+	   this, SLOT(slotCopyComposer()) );
+
+  connect( m_buttonMoreFields, SIGNAL(clicked()),
+	   this, SLOT(slotMoreFields()) );
 }
 
 
@@ -67,12 +107,15 @@ void K3bAudioCdTextWidget::load( K3bAudioDoc* doc )
 
   m_editTitle->setText( doc->title() );
   m_editPerformer->setText( doc->artist() );
-  m_editDisc_id->setText( doc->disc_id() );
-  m_editUpc_ean->setText( doc->upc_ean() );
-  m_editArranger->setText( doc->arranger() );
-  m_editSongwriter->setText( doc->songwriter() );
-  m_editComposer->setText( doc->composer() );
-  m_editMessage->setText( doc->cdTextMessage() );
+
+  m_allFieldsDlg->w->m_editTitle->setText( doc->title() );
+  m_allFieldsDlg->w->m_editPerformer->setText( doc->artist() );
+  m_allFieldsDlg->w->m_editDisc_id->setText( doc->disc_id() );
+  m_allFieldsDlg->w->m_editUpc_ean->setText( doc->upc_ean() );
+  m_allFieldsDlg->w->m_editArranger->setText( doc->arranger() );
+  m_allFieldsDlg->w->m_editSongwriter->setText( doc->songwriter() );
+  m_allFieldsDlg->w->m_editComposer->setText( doc->composer() );
+  m_allFieldsDlg->w->m_editMessage->setText( doc->cdTextMessage() );
 }
 
 void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
@@ -80,15 +123,54 @@ void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
   m_doc = doc;
   doc->writeCdText( m_groupCdText->isChecked() );
 
+  // we save the title and artist values from the main view since
+  // the dialog is only updated before it is shown
   doc->setTitle( m_editTitle->text() );
   doc->setArtist( m_editPerformer->text() );
-  doc->setDisc_id( m_editDisc_id->text() );
-  doc->setUpc_ean( m_editUpc_ean->text() );
-  doc->setArranger( m_editArranger->text() );
-  doc->setSongwriter( m_editSongwriter->text() );
-  doc->setComposer( m_editComposer->text() );
-  doc->setCdTextMessage( m_editMessage->text() );
+  doc->setDisc_id( m_allFieldsDlg->w->m_editDisc_id->text() );
+  doc->setUpc_ean( m_allFieldsDlg->w->m_editUpc_ean->text() );
+  doc->setArranger( m_allFieldsDlg->w->m_editArranger->text() );
+  doc->setSongwriter( m_allFieldsDlg->w->m_editSongwriter->text() );
+  doc->setComposer( m_allFieldsDlg->w->m_editComposer->text() );
+  doc->setCdTextMessage( m_allFieldsDlg->w->m_editMessage->text() );
 }
+
+
+void K3bAudioCdTextWidget::slotMoreFields()
+{
+  // update dlg to current state
+  m_allFieldsDlg->w->m_editTitle->setText( m_editTitle->text() );
+  m_allFieldsDlg->w->m_editPerformer->setText( m_editPerformer->text() );
+
+  // save old settings
+  QString title = m_allFieldsDlg->w->m_editTitle->text();
+  QString performer = m_allFieldsDlg->w->m_editPerformer->text();
+  QString disc_id = m_allFieldsDlg->w->m_editDisc_id->text();
+  QString upc_ean = m_allFieldsDlg->w->m_editUpc_ean->text();
+  QString arranger = m_allFieldsDlg->w->m_editArranger->text();
+  QString songwriter = m_allFieldsDlg->w->m_editSongwriter->text();
+  QString composer = m_allFieldsDlg->w->m_editComposer->text();
+  QString message = m_allFieldsDlg->w->m_editMessage->text();
+
+  // exec dlg
+  if( m_allFieldsDlg->exec() == QDialog::Accepted ) {
+    // accept new entries
+    m_editTitle->setText( m_allFieldsDlg->w->m_editTitle->text() );
+    m_editPerformer->setText( m_allFieldsDlg->w->m_editPerformer->text() );
+  }
+  else {
+    // reset
+    m_allFieldsDlg->w->m_editTitle->setText( title );
+    m_allFieldsDlg->w->m_editPerformer->setText( performer );
+    m_allFieldsDlg->w->m_editDisc_id->setText( disc_id );
+    m_allFieldsDlg->w->m_editUpc_ean->setText( upc_ean );
+    m_allFieldsDlg->w->m_editArranger->setText( arranger );
+    m_allFieldsDlg->w->m_editSongwriter->setText( songwriter );
+    m_allFieldsDlg->w->m_editComposer->setText( composer );
+    m_allFieldsDlg->w->m_editMessage->setText( message );
+  }
+}
+
 
 void K3bAudioCdTextWidget::setChecked( bool b )
 {
@@ -105,7 +187,9 @@ void K3bAudioCdTextWidget::slotCopyTitle()
 {
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
-    track->setTitle( m_editTitle->text() );
+    track->setTitle( m_allFieldsDlg->isVisible() 
+		     ? m_allFieldsDlg->w->m_editTitle->text()
+		     : m_editTitle->text() );
     track = track->next();
   }
 }
@@ -114,7 +198,9 @@ void K3bAudioCdTextWidget::slotCopyPerformer()
 {
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
-    track->setPerformer( m_editPerformer->text() );
+    track->setPerformer( m_allFieldsDlg->isVisible() 
+			 ? m_allFieldsDlg->w->m_editPerformer->text() 
+			 : m_editPerformer->text() );
     track = track->next();
   }
 }
@@ -123,7 +209,7 @@ void K3bAudioCdTextWidget::slotCopyArranger()
 {
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
-    track->setArranger( m_editArranger->text() );
+    track->setArranger( m_allFieldsDlg->w->m_editArranger->text() );
     track = track->next();
   }
 }
@@ -132,7 +218,7 @@ void K3bAudioCdTextWidget::slotCopySongwriter()
 {
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
-    track->setSongwriter( m_editSongwriter->text() );
+    track->setSongwriter( m_allFieldsDlg->w->m_editSongwriter->text() );
     track = track->next();
   }
 }
@@ -141,7 +227,7 @@ void K3bAudioCdTextWidget::slotCopyComposer()
 {
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
-    track->setComposer( m_editComposer->text() );
+    track->setComposer( m_allFieldsDlg->w->m_editComposer->text() );
     track = track->next();
   }
 }
