@@ -283,12 +283,11 @@ void K3bProjectBurnDialog::prepareGui()
   grid->setMargin( KDialog::marginHint() );
   grid->setSpacing( KDialog::spacingHint() );
 
-  //  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  grid->addWidget( groupWritingMode, 1, 0 );
-  grid->addMultiCellWidget( m_optionGroup, 1, 3, 1, 1 );
-  grid->addWidget( groupCopies, 3, 0 );
+  grid->addWidget( groupWritingMode, 0, 0 );
+  grid->addMultiCellWidget( m_optionGroup, 0, 2, 1, 1 );
+  grid->addWidget( groupCopies, 2, 0 );
   //  grid->addMultiCellWidget( m_tempDirSelectionWidget, 1, 3, 1, 1 );
-  grid->setRowStretch( 2, 1 );
+  grid->setRowStretch( 1, 1 );
   grid->setColStretch( 1, 1 );
 
   QWidget* tempW = new QWidget( m_tabWidget );

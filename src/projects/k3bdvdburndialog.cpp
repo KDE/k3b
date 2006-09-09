@@ -95,17 +95,7 @@ void K3bDvdBurnDialog::setupSettingsTab()
 
   // Multisession
   // ////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupMultiSession = new QGroupBox( 2, Qt::Vertical, i18n("Multisession Mode"), frame );
-  (void)new QLabel( i18n("<p>For DVD-R(W) in sequential incremental mode and "
-			 "DVD+R it behaves like multisession CDs.<br> "
-			 "<b>Caution:</b> Most DVD-ROM drives are only able "
-			 "to read the first session and most likely even on "
-			 "DVD writers only the first session will be mounted.</p>"
-			 "<p>For DVD+RW and DVD-RW in restricted overwrite mode "
-			 "K3b will utilize growisofs to <em>grow</em> the ISO9660 "
-			 "filesystem in the first session.</p>"
-			 "<p><b>Be aware that K3b needs to write multisession "
-			 "DVDs on-the-fly.</b>"), groupMultiSession );
+  QGroupBox* groupMultiSession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession Mode"), frame );
   m_comboMultisession = new K3bDataMultiSessionCombobox( groupMultiSession );
 
   frameLayout->addWidget( groupMultiSession, 0, 0 );

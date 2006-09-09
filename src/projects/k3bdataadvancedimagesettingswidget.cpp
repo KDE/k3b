@@ -278,6 +278,7 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
 
   m_checkForceInputCharset->setChecked( o.forceInputCharset() );
   m_comboInputCharset->setEditText( o.inputCharset() );
+  m_checkPreservePermissions->setChecked( o.preserveFilePermissions() );
 
   // RR settings
   m_checkCreateTransTbl->setOn( o.createTRANS_TBL() );
@@ -300,7 +301,6 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
 
   // misc (FIXME: should not be here)
   m_checkDoNotCacheInodes->setOn( o.doNotCacheInodes() );
-  //  m_checkFollowSymbolicLinks->setOn( o.followSymbolicLinks() );
 }
 
 
@@ -320,6 +320,7 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
 	
   o.setForceInputCharset( m_checkForceInputCharset->isChecked() );
   o.setInputCharset( m_comboInputCharset->currentText() );
+  o.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
 
   o.setCreateTRANS_TBL( m_checkCreateTransTbl->isOn() );
   o.setHideTRANS_TBL( m_checkHideTransTbl->isOn() );

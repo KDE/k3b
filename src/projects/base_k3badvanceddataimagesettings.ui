@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>515</width>
+            <width>526</width>
             <height>249</height>
         </rect>
     </property>
@@ -74,7 +74,7 @@
                         <cstring>m_checkRockRidge</cstring>
                     </property>
                     <property name="text">
-                        <string>Generate Rock Ridge extensions</string>
+                        <string>&amp;Generate Rock Ridge extensions</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -94,7 +94,7 @@
                         <cstring>m_checkJoliet</cstring>
                     </property>
                     <property name="text">
-                        <string>Generate Joliet extensions</string>
+                        <string>Generate &amp;Joliet extensions</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Add Joliet extensions to the file system</string>
@@ -112,7 +112,7 @@
                         <cstring>m_checkUdf</cstring>
                     </property>
                     <property name="text">
-                        <string>Generate UDF structures</string>
+                        <string>Generate &amp;UDF structures</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Add UDF structures to the file system</string>
@@ -148,7 +148,7 @@
                                 <cstring>m_checkForceInputCharset</cstring>
                             </property>
                             <property name="text">
-                                <string>Force input charset:</string>
+                                <string>F&amp;orce input charset:</string>
                             </property>
                         </widget>
                         <widget class="KComboBox">
@@ -163,6 +163,21 @@
                             </property>
                         </widget>
                     </hbox>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkPreservePermissions</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Preserve file permissions (bac&amp;kup)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
+&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
+                    </property>
                 </widget>
             </vbox>
         </widget>

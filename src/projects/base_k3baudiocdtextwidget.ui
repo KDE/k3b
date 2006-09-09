@@ -11,7 +11,7 @@
             <x>0</x>
             <y>0</y>
             <width>292</width>
-            <height>167</height>
+            <height>156</height>
         </rect>
     </property>
     <property name="caption">
@@ -70,7 +70,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Performer:</string>
+                                <string>Perf&amp;ormer:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>m_editPerformer</cstring>
@@ -137,20 +137,6 @@
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>m_editTitle</cstring>
-                            </property>
-                        </widget>
-                        <widget class="Line" row="3" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>line4</cstring>
-                            </property>
-                            <property name="frameShape">
-                                <enum>HLine</enum>
-                            </property>
-                            <property name="frameShadow">
-                                <enum>Sunken</enum>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
                             </property>
                         </widget>
                     </grid>

@@ -88,7 +88,8 @@ static bool compareAdvancedOptions( const K3bIsoOptions& o1, const K3bIsoOptions
 	   o1.createTRANS_TBL() == o2.createTRANS_TBL() &&
 	   o1.hideTRANS_TBL() == o2.hideTRANS_TBL() &&
 	   o1.jolietLong() == o2.jolietLong() &&
-	   o1.ISOLevel() == o2.ISOLevel() );
+	   o1.ISOLevel() == o2.ISOLevel() &&
+	   o1.preserveFilePermissions() == o2.preserveFilePermissions() );
 }
 
 
@@ -303,8 +304,6 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
   else
     m_comboSymlinkHandling->setCurrentItem( SYM_NO_CHANGE );
 
-  m_checkPreservePermissions->setChecked( o.preserveFilePermissions() );
-
   switch( o.whiteSpaceTreatment() ) {
   case K3bIsoOptions::strip:
     m_comboSpaceHandling->setCurrentItem( WS_STRIP );
@@ -337,8 +336,6 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
   o.setDiscardSymlinks( m_comboSymlinkHandling->currentItem() == SYM_DISCARD_ALL );
   o.setDiscardBrokenSymlinks( m_comboSymlinkHandling->currentItem() == SYM_DISCARD_BROKEN );
   o.setFollowSymbolicLinks( m_comboSymlinkHandling->currentItem() == SYM_FOLLOW );
-
-  o.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
 
   switch( m_comboSpaceHandling->currentItem() ) {
   case WS_STRIP:

@@ -54,7 +54,10 @@ K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent, const
 			      "<p><b>Finish Multisession</b><br>"
 			      "Continue an appendable data CD (as for example created in "
 			      "<em>Start Multisession</em> mode), add another session, "
-			      "and close the disk.") );
+			      "and close the disk."
+			      "<p><em>In the case of DVD+RW and DVD-RW restricted overwrite media "
+			      "K3b will not actually create multiple sessions but grow the "
+			      "file system to include the new data.</em>") );
 }
 
 

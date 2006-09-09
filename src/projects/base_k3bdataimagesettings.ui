@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>471</width>
-            <height>217</height>
+            <height>191</height>
         </rect>
     </property>
     <property name="caption">
@@ -62,7 +62,7 @@
             <property name="title">
                 <string>File System</string>
             </property>
-            <vbox>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
@@ -72,64 +72,31 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QComboBox">
                     <property name="name">
-                        <cstring>layout3</cstring>
+                        <cstring>m_comboFilesystems</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>File Systems:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>m_comboFilesystems</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>1</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>m_buttonCustomFilesystems</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Custom...</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+C</string>
-                            </property>
-                        </widget>
-                    </hbox>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                 </widget>
-                <widget class="QCheckBox">
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>m_checkPreservePermissions</cstring>
+                        <cstring>m_buttonCustomFilesystems</cstring>
                     </property>
                     <property name="text">
-                        <string>Preserve file permissions (bac&amp;kup)</string>
+                        <string>&amp;Custom...</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
-&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
+                        <string>Alt+C</string>
                     </property>
                 </widget>
-            </vbox>
+            </hbox>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -312,7 +279,6 @@ Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
     </vbox>
 </widget>
 <tabstops>
-    <tabstop>m_checkPreservePermissions</tabstop>
     <tabstop>m_editReplace</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
