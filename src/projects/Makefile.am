@@ -36,6 +36,7 @@ libprojects_la_SOURCES = k3baudioburndialog.cpp \
 			 k3baudiotrackviewitem.cpp \
 			 k3baudioview.cpp \
 			 base_k3baudiocdtextwidget.ui \
+			 base_k3baudiocdtextallfieldswidget.ui \
 	 		 base_k3baudiotrackwidget.ui \
 			 k3bmixedburndialog.cpp \
 			 k3bmixeddirtreeview.cpp \

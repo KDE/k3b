@@ -234,13 +234,19 @@ void K3bProjectBurnDialog::slotStartClicked()
 
 void K3bProjectBurnDialog::prepareGui()
 {
-  m_tabWidget = new QTabWidget( this );
-  setMainWidget( m_tabWidget );
-  QWidget* w = new QWidget( m_tabWidget );
-  m_tabWidget->addTab( w, i18n("Writing") );
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( w );
+  QVBoxLayout* mainLay = new QVBoxLayout( mainWidget() );
+  mainLay->setAutoAdd( true );
+  mainLay->setMargin( 0 );
+  mainLay->setSpacing( KDialog::spacingHint() );
+
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( mainWidget() );
   m_writerSelectionWidget->setWantedMediumType( m_dvd ? K3bDevice::MEDIA_WRITABLE_DVD : K3bDevice::MEDIA_WRITABLE_CD );
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+
+  m_tabWidget = new QTabWidget( mainWidget() );
+
+  QWidget* w = new QWidget( m_tabWidget );
+  m_tabWidget->addTab( w, i18n("Writing") );
 
   QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
   groupWritingMode->setInsideMargin( marginHint() );
@@ -277,7 +283,7 @@ void K3bProjectBurnDialog::prepareGui()
   grid->setMargin( KDialog::marginHint() );
   grid->setSpacing( KDialog::spacingHint() );
 
-  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+  //  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
   grid->addWidget( groupWritingMode, 1, 0 );
   grid->addMultiCellWidget( m_optionGroup, 1, 3, 1, 1 );
   grid->addWidget( groupCopies, 3, 0 );

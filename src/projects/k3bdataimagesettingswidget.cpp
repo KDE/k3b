@@ -57,6 +57,13 @@ static const int WS_STRIP = 1;
 static const int WS_EXTENDED_STRIP = 2;
 static const int WS_REPLACE = 3;
 
+// indices for the symlink handling combobox
+static const int SYM_NO_CHANGE = 0;
+static const int SYM_DISCARD_BROKEN = 1;
+static const int SYM_DISCARD_ALL = 2;
+static const int SYM_FOLLOW = 3;
+
+
 //
 // returns true if the part of the options that is presented in the advanced custom 
 // settings dialog is equal. used to determine if some preset is used.
@@ -260,11 +267,16 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 
 void K3bDataImageSettingsWidget::slotMoreVolDescFields()
 {
+  // update dlg to current state
+  m_volDescDlg->w->m_editVolumeName->setText( m_editVolumeName->text() );
+
   // remember old settings
   K3bIsoOptions o;
   m_volDescDlg->w->save( o );
 
+  // exec dlg
   if( m_volDescDlg->exec() == QDialog::Accepted ) {
+    // accept new entries
     m_volDescDlg->w->save( o );
     m_editVolumeName->setText( o.volumeID() );
   }
@@ -282,9 +294,14 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 
   slotFilesystemsChanged();
 
-  m_checkDiscardBrokenLinks->setChecked( o.discardBrokenSymlinks() );
-  m_checkDiscardAllLinks->setChecked( o.discardSymlinks() );
-  m_checkFollowLinks->setChecked( o.followSymbolicLinks() );
+  if( o.discardBrokenSymlinks() )
+    m_comboSymlinkHandling->setCurrentItem( SYM_DISCARD_BROKEN );
+  else if( o.discardSymlinks() )
+    m_comboSymlinkHandling->setCurrentItem( SYM_DISCARD_ALL );
+  else if( o.followSymbolicLinks() )
+    m_comboSymlinkHandling->setCurrentItem( SYM_FOLLOW );
+  else
+    m_comboSymlinkHandling->setCurrentItem( SYM_NO_CHANGE );
 
   m_checkPreservePermissions->setChecked( o.preserveFilePermissions() );
 
@@ -317,9 +334,9 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
 
   m_volDescDlg->w->save( o );
 
-  o.setDiscardSymlinks( m_checkDiscardAllLinks->isChecked() );
-  o.setDiscardBrokenSymlinks( m_checkDiscardBrokenLinks->isChecked() );
-  o.setFollowSymbolicLinks( m_checkFollowLinks->isChecked() );
+  o.setDiscardSymlinks( m_comboSymlinkHandling->currentItem() == SYM_DISCARD_ALL );
+  o.setDiscardBrokenSymlinks( m_comboSymlinkHandling->currentItem() == SYM_DISCARD_BROKEN );
+  o.setFollowSymbolicLinks( m_comboSymlinkHandling->currentItem() == SYM_FOLLOW );
 
   o.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
 
