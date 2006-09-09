@@ -168,6 +168,7 @@ void K3bIsoImageWritingDialog::setupGui()
   connect( m_infoView, SIGNAL(editorButtonClicked( K3bListViewItem*, int )),
 	   this, SLOT(slotMd5SumCompare()) );
 
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
   // options
   // -----------------------------------------------------------------------
@@ -178,8 +179,6 @@ void K3bIsoImageWritingDialog::setupGui()
   optionTabLayout->setAlignment( Qt::AlignTop );
   optionTabLayout->setSpacing( spacingHint() );
   optionTabLayout->setMargin( marginHint() );
-
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( optionTab );
 
   QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );
@@ -205,11 +204,10 @@ void K3bIsoImageWritingDialog::setupGui()
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
 
-  optionTabLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  optionTabLayout->addWidget( writingModeGroup, 1, 0 );
-  optionTabLayout->addWidget( groupCopies, 2, 0 );
-  optionTabLayout->addMultiCellWidget( optionGroup, 1, 2, 1, 1 );
-  optionTabLayout->setRowStretch( 2, 1 );
+  optionTabLayout->addWidget( writingModeGroup, 0, 0 );
+  optionTabLayout->addWidget( groupCopies, 1, 0 );
+  optionTabLayout->addMultiCellWidget( optionGroup, 0, 1, 1, 1 );
+  optionTabLayout->setRowStretch( 1, 1 );
   optionTabLayout->setColStretch( 1, 1 );
 
   optionTabbed->addTab( optionTab, i18n("Settings") );
@@ -221,7 +219,8 @@ void K3bIsoImageWritingDialog::setupGui()
 
   grid->addWidget( groupImageUrl, 0, 0 );
   grid->addWidget( m_infoView, 1, 0 );
-  grid->addWidget( optionTabbed, 2, 0 );
+  grid->addWidget( m_writerSelectionWidget, 2, 0 );
+  grid->addWidget( optionTabbed, 3, 0 );
 
   grid->setRowStretch( 1, 1 );
 }

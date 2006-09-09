@@ -222,6 +222,10 @@ void K3bCdImageWritingDialog::setupGui()
 	   this, SLOT(slotMd5SumCompare()) );
 
 
+  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+
   // options
   // -----------------------------------------------------------------------
   d->optionTabbed = new QTabWidget( frame );
@@ -231,10 +235,6 @@ void K3bCdImageWritingDialog::setupGui()
   optionTabLayout->setAlignment( Qt::AlignTop );
   optionTabLayout->setSpacing( spacingHint() );
   optionTabLayout->setMargin( marginHint() );
-
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( optionTab );
-  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
-  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
 
   QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );
@@ -260,11 +260,10 @@ void K3bCdImageWritingDialog::setupGui()
   m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( optionGroup );
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
 
-  optionTabLayout->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  optionTabLayout->addWidget( writingModeGroup, 1, 0 );
-  optionTabLayout->addWidget( groupCopies, 2, 0 );
-  optionTabLayout->addMultiCellWidget( optionGroup, 1, 2, 1, 1 );
-  optionTabLayout->setRowStretch( 2, 1 );
+  optionTabLayout->addWidget( writingModeGroup, 0, 0 );
+  optionTabLayout->addWidget( groupCopies, 1, 0 );
+  optionTabLayout->addMultiCellWidget( optionGroup, 0, 1, 1, 1 );
+  optionTabLayout->setRowStretch( 1, 1 );
   optionTabLayout->setColStretch( 1, 1 );
 
   d->optionTabbed->addTab( optionTab, i18n("Settings") );
@@ -315,7 +314,8 @@ void K3bCdImageWritingDialog::setupGui()
   grid->addWidget( groupImageUrl, 0, 0 );
   grid->addWidget( groupImageType, 0, 1 );
   grid->addMultiCellWidget( m_infoView, 1, 1, 0, 1 );
-  grid->addMultiCellWidget( d->optionTabbed, 2, 2, 0, 1 );
+  grid->addMultiCellWidget( m_writerSelectionWidget, 2, 2, 0, 1 );
+  grid->addMultiCellWidget( d->optionTabbed, 3, 3, 0, 1 );
 
   grid->setRowStretch( 1, 1 );
 }
