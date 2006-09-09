@@ -61,7 +61,6 @@ public:
     : maxSpeedJob(0) {
   }
 
-  bool initializingImager;
 
   int copies;
   int copiesDone;
@@ -153,9 +152,9 @@ void K3bMixedJob::start()
   //
   // First we make sure the data portion is valid
   //
-  d->initializingImager = true;
 
   // we do not have msinfo yet
+  m_currentAction = INITIALIZING_IMAGER;
   m_isoImager->setMultiSessionInfo( QString::null );
   m_isoImager->init();
 }
@@ -189,7 +188,7 @@ void K3bMixedJob::startFirstCopy()
       d->maxSpeedJob->start();
     }
     else if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
-      d->initializingImager = true;
+      m_currentAction = PREPARING_DATA;
       m_isoImager->calculateSize();
     }
     else {
@@ -233,7 +232,7 @@ void K3bMixedJob::slotMaxSpeedJobFinished( bool success )
     emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), WARNING );
 
   if( m_doc->mixedType() != K3bMixedDoc::DATA_SECOND_SESSION ) {
-    d->initializingImager = true;
+    m_currentAction = PREPARING_DATA;
     m_isoImager->calculateSize();
   }
   else {
@@ -309,7 +308,7 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
 					.arg(m_msInfoFetcher->nextSessionStart()+150) );
 
     if( m_doc->onTheFly() ) {
-      d->initializingImager = true;
+      m_currentAction = PREPARING_DATA;
       m_isoImager->calculateSize();
     }
     else {
@@ -326,31 +325,47 @@ void K3bMixedJob::slotMsInfoFetched( bool success )
 
 void K3bMixedJob::slotIsoImagerFinished( bool success )
 {
-  if( d->initializingImager ) {
-    d->initializingImager = false;
-    if( success ) {
-      if( m_currentAction == PREPARING_DATA ) {
-	// check the size
-	m_projectSize  = m_isoImager->size() + m_doc->audioDoc()->length();
-	if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
-	  m_projectSize += 11400; // the session gap
-      
-	startFirstCopy();
-      }
+  if( m_canceled || m_errorOccuredAndAlreadyReported )
+    return;
 
+  //
+  // Initializing imager before the first copy
+  //
+  if( m_currentAction == INITIALIZING_IMAGER ) {
+    if( success ) {
+      m_currentAction = PREPARING_DATA;
+      
+      // check the size
+      m_projectSize  = m_isoImager->size() + m_doc->audioDoc()->length();
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
+	m_projectSize += 11400; // the session gap
+      
+      startFirstCopy();
+    }
+    else {
+      cleanupAfterError();
+      jobFinished( false );
+    }
+  }
+
+  //
+  // Recalculated iso image size
+  //
+  else if( m_currentAction == PREPARING_DATA ) {
+    if( success ) {
       // 1. data in first track:
       //    start isoimager and writer
       //    when isoimager finishes start audiodecoder
-
+      
       // 2. data in last track
       //    start audiodecoder and writer
       //    when audiodecoder finishes start isoimager
-
+      
       // 3. data in second session
       //    start audiodecoder and writer
       //    start isoimager and writer
-
-      else if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+      
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
 	if( !prepareWriter() || !startWriting() ) {
 	  cleanupAfterError();
 	  jobFinished(false);
@@ -367,38 +382,40 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
     }
   }
 
-  if( m_canceled || m_errorOccuredAndAlreadyReported )
-    return;
-
-  if( !success ) {
-    emit infoMessage( i18n("Error while creating ISO image."), ERROR );
-    cleanupAfterError();
-
-    jobFinished( false );
-    return;
-  }
-
-  if( m_doc->onTheFly() ) {
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
-      m_currentAction = WRITING_AUDIO_IMAGE;
-      m_audioImager->start();
-    }
-  }
+  //
+  // Image creation finished
+  //
   else {
-    emit infoMessage( i18n("ISO image successfully created."), SUCCESS );
+    if( !success ) {
+      emit infoMessage( i18n("Error while creating ISO image."), ERROR );
+      cleanupAfterError();
 
-    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
-      m_currentAction = WRITING_ISO_IMAGE;
+      jobFinished( false );
+      return;
+    }
 
-      if( !prepareWriter() || !startWriting() ) {
-	cleanupAfterError();
-	jobFinished(false);
+    if( m_doc->onTheFly() ) {
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK ) {
+	m_currentAction = WRITING_AUDIO_IMAGE;
+	m_audioImager->start();
       }
     }
     else {
-      emit newTask( i18n("Creating audio image files") );
-      m_currentAction = CREATING_AUDIO_IMAGE;
-      m_audioImager->start();
+      emit infoMessage( i18n("ISO image successfully created."), SUCCESS );
+
+      if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+	m_currentAction = WRITING_ISO_IMAGE;
+
+	if( !prepareWriter() || !startWriting() ) {
+	  cleanupAfterError();
+	  jobFinished(false);
+	}
+      }
+      else {
+	emit newTask( i18n("Creating audio image files") );
+	m_currentAction = CREATING_AUDIO_IMAGE;
+	m_audioImager->start();
+      }
     }
   }
 }
@@ -461,13 +478,14 @@ void K3bMixedJob::slotMediaReloadedForSecondSession( bool success )
   else if( m_doc->dummy() ) {
     // do not try to get ms info in simulation mode since the cd is empty!
     if( m_doc->onTheFly() ) {
-      d->initializingImager = true;
+      m_currentAction = PREPARING_DATA;
       m_isoImager->calculateSize();
     }
     else 
       createIsoImage();
   }
   else {
+    m_currentAction = FETCHING_MSINFO;
     m_msInfoFetcher->setDevice( m_doc->burner() );
     m_msInfoFetcher->start();
   }

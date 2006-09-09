@@ -113,7 +113,8 @@ class K3bMixedJob : public K3bBurnJob
 
   KTempFile* m_tocFile;
 
-  enum Action { PREPARING_DATA,
+  enum Action { INITIALIZING_IMAGER,
+		PREPARING_DATA,
 		CREATING_ISO_IMAGE,
 		CREATING_AUDIO_IMAGE,
 		WRITING_ISO_IMAGE,
