@@ -458,7 +458,7 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
       (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD) )
     mediumString = i18n("CD-R(W) or DVD%1R(W)").arg("±");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    mediumString = i18n("writable DVD%1W").arg("±");
+    mediumString = i18n("DVD%1R(W)").arg("±");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
     mediumString = i18n("Double Layer DVD%1R").arg("±");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD )
