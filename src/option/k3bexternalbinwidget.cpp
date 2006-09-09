@@ -288,7 +288,7 @@ void K3bExternalBinWidget::slotSetDefaultButtonClicked()
     // remove all default flags
     K3bExternalBinViewItem* bi = (K3bExternalBinViewItem*)item->parentProgramItem()->firstChild();
     QListViewItemIterator it( bi );
-    while( it.current()->parent() == item->parentProgramItem() ) {
+    while( it.current() && it.current()->parent() == item->parentProgramItem() ) {
       ((K3bExternalBinViewItem*)it.current())->setDefault(false);
       ++it;
     }
