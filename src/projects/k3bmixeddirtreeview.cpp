@@ -17,6 +17,7 @@
 #include "k3bmixeddirtreeview.h"
 
 #include "k3bmixeddoc.h"
+#include "k3baudiotrackaddingdialog.h"
 #include <k3blistview.h>
 #include <k3baudiodoc.h>
 #include <k3bdataviewitem.h>
@@ -76,7 +77,7 @@ void K3bMixedDirTreeView::slotDropped( QDropEvent* e, QListViewItem* parent, QLi
   if( droppedItem == m_audioRootItem ) {
     KURL::List urls;
     if( KURLDrag::decode( e, urls ) ) {
-      m_doc->audioDoc()->addUrls( urls );
+      K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
     }
   }
   else
