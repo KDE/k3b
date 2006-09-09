@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>414</width>
+            <width>471</width>
             <height>217</height>
         </rect>
     </property>
@@ -28,45 +28,21 @@
                 <cstring>groupBox4</cstring>
             </property>
             <property name="title">
-                <string>General</string>
+                <string>Volume Name</string>
             </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QComboBox" row="1" column="1">
+                <widget class="QLineEdit">
                     <property name="name">
-                        <cstring>m_comboFilesystems</cstring>
+                        <cstring>m_editVolumeName</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="maxLength">
+                        <number>32</number>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="2">
-                    <property name="name">
-                        <cstring>m_buttonCustomFilesystems</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Custom...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Volume Name:</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="2">
+                <widget class="QPushButton">
                     <property name="name">
                         <cstring>m_buttonMoreVolDescFields</cstring>
                     </property>
@@ -77,30 +53,14 @@
                         <string>Alt+M</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>m_editVolumeName</cstring>
-                    </property>
-                    <property name="maxLength">
-                        <number>32</number>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>File Systems:</string>
-                    </property>
-                </widget>
-            </grid>
+            </hbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>m_groupLinks</cstring>
             </property>
             <property name="title">
-                <string>Filenames and Permissions</string>
+                <string>File System</string>
             </property>
             <vbox>
                 <property name="name">
@@ -114,21 +74,83 @@
                 </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>layout3</cstring>
                     </property>
-                    <grid>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="QLabel">
                             <property name="name">
-                                <cstring>textLabel4</cstring>
+                                <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Symlinks:</string>
+                                <string>File Systems:</string>
                             </property>
                         </widget>
-                        <widget class="QComboBox" row="0" column="1">
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>m_comboFilesystems</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>1</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>m_buttonCustomFilesystems</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Custom...</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkPreservePermissions</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Preserve file permissions (bac&amp;kup)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
+&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>groupBox3</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Symbolic Links</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
                             <item>
                                 <property name="text">
                                     <string>No Change</string>
@@ -182,51 +204,56 @@ Be aware that in case Rock Ridge extensions are disabled (which is not recommend
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions.</string>
                             </property>
                         </widget>
-                        <widget class="QLayoutWidget" row="1" column="1">
-                            <property name="name">
-                                <cstring>layout3</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
+                    </vbox>
+                </widget>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>groupBox4_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>White space handling</string>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>No Change</string>
                                 </property>
-                                <widget class="QComboBox">
-                                    <item>
-                                        <property name="text">
-                                            <string>No Change</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>Strip</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>Extended Strip</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>Replace</string>
-                                        </property>
-                                    </item>
-                                    <property name="name">
-                                        <cstring>m_comboSpaceHandling</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>1</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Handling of spaces in filenames</string>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>&lt;p&gt;&lt;b&gt;No Change&lt;/b&gt;&lt;br&gt;
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Strip</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Extended Strip</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Replace</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>m_comboSpaceHandling</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>1</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Handling of spaces in filenames</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;&lt;b&gt;No Change&lt;/b&gt;&lt;br&gt;
 If this option is checked, K3b will leave all spaces in filenames as they are.
 &lt;p&gt;&lt;b&gt;Strip&lt;/b&gt;&lt;br&gt;
 If this option is checked, K3b will remove all spaces from all filenames.&lt;br&gt;
@@ -237,58 +264,33 @@ Example: 'my good file.ext' becomes 'myGoodFile.ext'
 &lt;p&gt;&lt;b&gt;Replace&lt;/b&gt;&lt;br&gt;
 If this option is checked, K3b will replace all spaces in all filenames with the specified characters.&lt;br&gt;
 Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLineEdit">
-                                    <property name="name">
-                                        <cstring>m_editReplace</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>_</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>The string to replace spaces with</string>
-                                    </property>
-                                </widget>
-                            </hbox>
+                            </property>
                         </widget>
-                        <widget class="QLabel" row="1" column="0">
+                        <widget class="QLineEdit">
                             <property name="name">
-                                <cstring>textLabel3</cstring>
+                                <cstring>m_editReplace</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>White space:</string>
+                                <string>_</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>The string to replace spaces with</string>
                             </property>
                         </widget>
-                    </grid>
+                    </hbox>
                 </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>m_checkPreservePermissions</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Preserve file permissions (bac&amp;kup)</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
-&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
-                    </property>
-                </widget>
-            </vbox>
+            </hbox>
         </widget>
         <spacer>
             <property name="name">
@@ -303,7 +305,7 @@ Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>0</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
