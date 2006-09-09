@@ -506,10 +506,10 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       m_cdrecordError = CANNOT_SEND_CUE_SHEET;
     }
     else if( errStr.startsWith( "Trying to use ultra high speed" ) ||
-	     errStr.startsWith( "Trying to use high speed" ) 
+	     errStr.startsWith( "Trying to use high speed" ) ||
 	     errStr.startsWith( "Probably trying to use ultra high speed" ) ||
-	     errstr.startsWith( "You did use a high speed medium on an improper writer" ) ||
-	     errstr.startsWith( "You did use a ultra high speed medium on an improper writer" ) ) {
+	     errStr.startsWith( "You did use a high speed medium on an improper writer" ) ||
+	     errStr.startsWith( "You did use a ultra high speed medium on an improper writer" ) ) {
       m_cdrecordError = HIGH_SPEED_MEDIUM;
     }
     else if( errStr.startsWith( "You may have used an ultra low speed medium" ) ) {
