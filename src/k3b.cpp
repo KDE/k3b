@@ -293,7 +293,7 @@ void K3bMainWindow::initActions()
 
   actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "erasecd", 0, this, SLOT(slotBlankCdrw()),
 				      actionCollection(), "tools_blank_cdrw" );
-  KAction* actionToolsFormatDVD = new KAction( i18n("&Format rewritable DVD..."), "formatdvd", 0, this, 
+  KAction* actionToolsFormatDVD = new KAction( i18n("&Format DVD%1RW...").arg("±"), "formatdvd", 0, this, 
 					       SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
@@ -335,7 +335,7 @@ void K3bMainWindow::initActions()
   actionFileNewMovix->setToolTip( i18n("Creates a new eMovix CD project") );
   actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
   actionToolsBlankCdrw->setToolTip( i18n("Open the CD-RW erasing dialog") );
-  actionToolsFormatDVD->setToolTip( i18n("Open the DVD formatting dialog") );
+  actionToolsFormatDVD->setToolTip( i18n("Open the DVD%1RW formatting dialog").arg("±") );
   actionCdCopy->setToolTip( i18n("Open the CD copy dialog") );
   actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD copy dialog") );
@@ -967,9 +967,10 @@ void K3bMainWindow::slotFileCloseAll()
     if( pView ) {
       K3bDoc* pDoc = pView->doc();
 
-      if( canCloseDocument(pDoc) ) {
+      if( canCloseDocument(pDoc) )
 	closeProject(pDoc);
-      }
+      else
+	break;
     }
   }
 

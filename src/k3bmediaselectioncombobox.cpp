@@ -1,10 +1,10 @@
 /* 
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -456,11 +456,11 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
     mediumString = i18n("DVD");
   else if( (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD) &&
       (d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD) )
-    mediumString = i18n("writable CD or DVD"); // CD-R(W) or DVDÂ±R(W)
+    mediumString = i18n("CD-R(W) or DVD%1R(W)").arg("±");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    mediumString = i18n("writable DVD"); // DVDÂ±R(W)
+    mediumString = i18n("writable DVD%1W").arg("±");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
-    mediumString = i18n("Double Layer DVD"); // Double Layer DVDÂ±R
+    mediumString = i18n("Double Layer DVD%1R").arg("±");
   else if( d->wantedMediumType & K3bDevice::MEDIA_WRITABLE_CD )
     mediumString = i18n("CD-R(W)");
   else if( d->wantedMediumType & K3bDevice::MEDIA_DVD_ROM )
