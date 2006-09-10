@@ -105,6 +105,12 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
     }
     else if( line.endsWith( "has not an allowable size." ) ) {
       handleMkisofsInfoMessage( i18n("The boot image has an invalid size."), K3bJob::ERROR );      
+      d->readError = true;
+    }
+    else if( line.endsWith( "has multiple partitions." ) ) {
+      handleMkisofsInfoMessage( i18n("The boot image contains multiple partitions.."), K3bJob::ERROR );
+      handleMkisofsInfoMessage( i18n("A hard-disk boot image has to contain a single partition."), K3bJob::ERROR );
+      d->readError = true;
     }
     else {
       kdDebug() << "(mkisofs) " << line << endl;
