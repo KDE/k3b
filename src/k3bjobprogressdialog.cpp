@@ -317,13 +317,13 @@ void K3bJobProgressDialog::setupConnections()
 
 void K3bJobProgressDialog::slotProcessedSize( int processed, int size )
 {
-  m_labelProcessedSize->setText( i18n("%1 of %2 MB written").arg( processed ).arg( size ) );
+  m_labelProcessedSize->setText( i18n("%1 of %2 MB").arg( processed ).arg( size ) );
 }
 
 
 void K3bJobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
 {
-  m_labelSubProcessedSize->setText( i18n("%1 of %2 MB written").arg(processedTrackSize).arg(trackSize) );
+  m_labelSubProcessedSize->setText( i18n("%1 of %2 MB").arg(processedTrackSize).arg(trackSize) );
 }
 
 
