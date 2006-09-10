@@ -26,15 +26,16 @@
 K3bCdContentsView::K3bCdContentsView( bool withHeader,
 				      QWidget* parent, const char* name )
   : QWidget( parent, name ),
+    m_header(0),
     m_centerWidget(0)
 {
   if( withHeader ) {
-    QGridLayout* mainGrid = new QGridLayout( this );
-    mainGrid->setMargin( 2 );
-    mainGrid->setSpacing( 0 );
+    QVBoxLayout* lay = new QVBoxLayout( this );
+    lay->setMargin( 2 );
+    lay->setSpacing( 0 );
 
     m_header = new K3bThemedHeader( this );
-    mainGrid->addWidget( m_header, 0, 0 );
+    lay->addWidget( m_header );
 
     m_header->setLeftPixmap( K3bTheme::MEDIA_LEFT );
     m_header->setRightPixmap( K3bTheme::MEDIA_NONE );
@@ -63,25 +64,28 @@ void K3bCdContentsView::reload()
 void K3bCdContentsView::setMainWidget( QWidget* w )
 {
   m_centerWidget = w;
-  ((QGridLayout*)layout())->addWidget( w, 1, 0 );
+  ((QVBoxLayout*)layout())->addWidget( w );
 }
 
 
 void K3bCdContentsView::setTitle( const QString& s )
 {
-  m_header->setTitle( s );
+  if( m_header )
+    m_header->setTitle( s );
 }
 
 
 void K3bCdContentsView::setLeftPixmap( K3bTheme::PixmapType s )
 {
-  m_header->setLeftPixmap( s );
+  if( m_header )
+    m_header->setLeftPixmap( s );
 }
 
 
 void K3bCdContentsView::setRightPixmap( K3bTheme::PixmapType s )
 {
-  m_header->setRightPixmap( s );
+  if( m_header )
+    m_header->setRightPixmap( s );
 }
 
 #include "k3bcdcontentsview.moc"
