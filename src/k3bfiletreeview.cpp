@@ -577,6 +577,7 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
 KFileTreeBranch* K3bFileTreeView::addBranch( KFileTreeBranch* branch )
 {
   KFileTreeBranch* newBranch = KFileTreeView::addBranch( branch );
+  newBranch->setChildRecurse( false );
   setDirOnlyMode( newBranch, m_dirOnlyMode );
 
   return newBranch;
@@ -586,6 +587,7 @@ KFileTreeBranch* K3bFileTreeView::addBranch( KFileTreeBranch* branch )
 KFileTreeBranch* K3bFileTreeView::addBranch( const KURL& url, const QString& name, const QPixmap& pix, bool showHidden )
 {
   KFileTreeBranch* newBranch = KFileTreeView::addBranch( url, name, pix, showHidden );
+  newBranch->setChildRecurse( false );
   setDirOnlyMode( newBranch, m_dirOnlyMode );
 
   return newBranch;
