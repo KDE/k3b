@@ -173,9 +173,6 @@
                             <property name="text">
                                 <string>More Fiel&amp;ds...</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
-                            </property>
                         </widget>
                     </hbox>
                 </widget>

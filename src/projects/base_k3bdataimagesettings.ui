@@ -49,9 +49,6 @@
                     <property name="text">
                         <string>&amp;More fields...</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+M</string>
-                    </property>
                 </widget>
             </hbox>
         </widget>
@@ -91,9 +88,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Custom...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>

@@ -171,9 +171,6 @@
                     <property name="text">
                         <string>Preserve file permissions (bac&amp;kup)</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
-                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
 &lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
