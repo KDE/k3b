@@ -20,14 +20,17 @@
 #include <qtabwidget.h>
 #include <kurl.h>
 
-class K3bProjectTabBar;
 class KAction;
+class KActionMenu;
 class K3bDoc;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ * An enhanced Tab Widget that hides the tabbar in case only one page has been inserted
+ * and shows a context menu fpr K3b projects.
+ *
+ * @author Sebastian Trueg
+ */
 class K3bProjectTabWidget : public QTabWidget
 {
   Q_OBJECT
@@ -37,19 +40,36 @@ class K3bProjectTabWidget : public QTabWidget
   ~K3bProjectTabWidget();
 
   void insertTab( K3bDoc* );
+  
+  void addTab( QWidget * child, const QString & label );
+  void addTab( QWidget * child, const QIconSet & iconset, const QString & label );
+  void addTab( QWidget * child, QTab * tab );
+  void insertTab( QWidget * child, const QString & label, int index = -1 );
+  void insertTab( QWidget * child, const QIconSet & iconset, const QString & label, int index = -1 );
+  void insertTab( QWidget * child, QTab * tab, int index = -1 );
+
+  /**
+   * \return the project for the tab at position \p pos or 0 in case the tab is
+   * not a project tab.
+   */
+  K3bDoc* projectAt( const QPoint& pos ) const;
 
   /**
    * inserts the given action into the popup menu for the tabs
    */
   void insertAction( KAction* );
 
+  bool eventFilter( QObject* o, QEvent* e );
+
+ public slots:
+  void removePage( QWidget* );
+
  private slots:
-  void slotUrlsDropped( int id, const KURL::List& ulrs );
   void slotDocChanged( K3bDoc* );
   void slotDocSaved( K3bDoc* );
 
  private:
-  K3bProjectTabBar* m_tabBar;
+  KActionMenu* m_projectActionMenu;
 };
 
 #endif

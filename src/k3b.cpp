@@ -426,10 +426,11 @@ void K3bMainWindow::initView()
 
   connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged()) );
 
-  d->welcomeWidget = new K3bWelcomeWidget( this, d->documentStack );
+  d->welcomeWidget = new K3bWelcomeWidget( this, m_documentTab );
+  m_documentTab->addTab( d->welcomeWidget, i18n("Quickstart") );
 
-  d->documentStack->addWidget( d->welcomeWidget );
-  d->documentStack->raiseWidget( d->welcomeWidget );
+//   d->documentStack->addWidget( d->welcomeWidget );
+//   d->documentStack->raiseWidget( d->welcomeWidget );
   // ---------------------------------------------------------------------------------------------
 
   // --- Directory Dock --------------------------------------------------------------------------
@@ -1171,17 +1172,18 @@ void K3bMainWindow::slotCurrentDocChanged()
       kdDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance." << endl;
   }
   else
-      k3bappcore->projectManager()->setActive( 0L );
+    k3bappcore->projectManager()->setActive( 0L );
+
   if( k3bappcore->projectManager()->isEmpty() ) {
-    d->documentStack->raiseWidget( d->welcomeWidget );
     slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
   }
   else {
     d->documentStack->raiseWidget( d->documentHull );
-    // make sure the document header is shown (or not)
-    slotViewDocumentHeader();
     slotStateChanged( "state_project_active", KXMLGUIClient::StateNoReverse );
   }
+
+  // make sure the document header is shown (or not)
+  slotViewDocumentHeader();
 }
 
 
@@ -1410,7 +1412,8 @@ void K3bMainWindow::slotCheckDockWidgetStatus()
 
 void K3bMainWindow::slotViewDocumentHeader()
 {
-  if(actionViewDocumentHeader->isChecked()) {
+  if( actionViewDocumentHeader->isChecked() &&
+      !k3bappcore->projectManager()->isEmpty() ) {
     m_documentHeader->show();
   }
   else {
