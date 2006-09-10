@@ -396,6 +396,19 @@ void K3bCdImageWritingDialog::slotStartClicked()
 
   case IMAGE_ISO:
     {
+      K3bIso9660 isoFs( d->imageFile );
+      if( isoFs.open() ) {
+	if( K3b::filesize( KURL::fromPathOrURL(d->imageFile) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+	  if( KMessageBox::questionYesNo( this, i18n("Warning"),
+					  i18n("<p>This image has an invalid file size."
+					       "If it has been downloaded make sure the download is complete."
+					       "<p>Only continue if you know what you are doing."),
+					  i18n("Continue"),
+					  i18n("Cancel") ) == KMessageBox::No )
+	    return;
+	}
+      }
+
       K3bIso9660ImageWritingJob* job_ = new K3bIso9660ImageWritingJob( &dlg );
       
       job_->setBurnDevice( m_writerSelectionWidget->writerDevice() );
@@ -570,8 +583,10 @@ void K3bCdImageWritingDialog::createIso9660InfoItems( K3bIso9660* isoF )
   isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
   isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
+  KIO::filesize_t size = K3b::filesize( KURL::fromPathOrURL(isoF->fileName()) );
   K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-					       i18n("Filesize:"), KIO::convertSize( K3b::filesize(KURL::fromPathOrURL(isoF->fileName())) ) );
+					       i18n("Filesize:"), 
+					       KIO::convertSize( size ) );
   item->setForegroundColor( 0, palette().disabled().foreground() );
 
   item = new K3bListViewItem( isoRootItem, 

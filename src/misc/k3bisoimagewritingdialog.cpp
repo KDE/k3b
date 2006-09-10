@@ -237,6 +237,19 @@ void K3bIsoImageWritingDialog::slotStartClicked()
       return;
   }
 
+  K3bIso9660 isoFs( imagePath() );
+  if( isoFs.open() ) {
+    if( K3b::filesize( KURL::fromPathOrURL( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+      if( KMessageBox::questionYesNo( this, i18n("Warning"),
+				      i18n("<p>This image has an invalid file size."
+					   "If it has been downloaded make sure the download is complete."
+					   "<p>Only continue if you know what you are doing."),
+				      i18n("Continue"),
+				      i18n("Cancel") ) == KMessageBox::No )
+	return;
+    }
+  }
+
   m_md5Job->cancel();
 
   // save the path
