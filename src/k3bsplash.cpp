@@ -50,8 +50,10 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
   copyrightLabel->setAlignment( AlignRight );
 
   QLabel* picLabel = new QLabel( this );
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() )
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    picLabel->setPaletteBackgroundColor( theme->backgroundColor() );
     picLabel->setPixmap( theme->pixmap( K3bTheme::SPLASH ) );
+  }
 
   m_infoBox = new QLabel( this );
   m_infoBox->setMargin( 5 );
