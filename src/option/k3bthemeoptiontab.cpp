@@ -146,6 +146,7 @@ void K3bThemeOptionTab::slotInstallTheme()
   }
 
   // check if the archive contains a dir with a k3b.theme file
+  QString themeName;
   KTar archive( themeTmpFile );
   archive.open(IO_ReadOnly);
   const KArchiveDirectory* themeDir = archive.directory();
@@ -154,6 +155,7 @@ void K3bThemeOptionTab::slotInstallTheme()
   if( entries.count() > 0 ) {
     if( themeDir->entry(entries.first())->isDirectory() ) {
       const KArchiveDirectory* subDir = dynamic_cast<const KArchiveDirectory*>( themeDir->entry(entries.first()) );
+      themeName = subDir->name();
       if( subDir && subDir->entry( "k3b.theme" ) ) {
 	validThemeArchive = true;
 
@@ -172,8 +174,19 @@ void K3bThemeOptionTab::slotInstallTheme()
     KMessageBox::error( this, i18n("The file is not a valid K3b theme archive.") );
   }
   else {
-    // install the theme
-    archive.directory()->copyTo( locateLocal( "data", "k3b/pics/" ) );
+    QString themeBasePath = locateLocal( "data", "k3b/pics/" );
+
+    // check if there already is a theme by that name
+    if( !QFile::exists( themeBasePath + '/' + themeName ) ||
+	KMessageBox::warningYesNo( this,
+				   i18n("A theme with the name '%1' already exists. Do you want to "
+					"overwrite it?"),
+				   i18n("Theme exists"),
+				   i18n("Overwrite"),
+				   i18n("Cancel") ) == KMessageBox::Yes ) {
+      // install the theme
+      archive.directory()->copyTo( themeBasePath );
+    }
   }
 
   archive.close();
