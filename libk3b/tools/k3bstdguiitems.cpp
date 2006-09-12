@@ -178,11 +178,10 @@ QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent, const char* name 
 QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
 {
   QCheckBox* c = new QCheckBox( i18n("Verify written data"), parent, name );
-  QToolTip::add( c, i18n("Compare MD5 Sums of all written files") );
+  QToolTip::add( c, i18n("Compare original with written data") );
   QWhatsThis::add( c, i18n("<p>If this option is checked, then after successfully "
-			   "writing the disk K3b will compare the MD5 Sums of all written "
-			   "files with their local sources to verify that the "
-			   "disk has been written correctly.") );
+			   "writing the disk K3b will compare the original source data "
+			   "with the written data to verify that the disk has been written correctly.") );
   return c;
 }
 
