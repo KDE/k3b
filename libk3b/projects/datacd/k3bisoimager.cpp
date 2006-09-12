@@ -103,7 +103,7 @@ K3bIsoImager::~K3bIsoImager()
 
 bool K3bIsoImager::active() const
 {
-  return !m_processExited;
+  return K3bJob::active();
 }
 
 
@@ -152,10 +152,22 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
     kdDebug() << "(K3bIsoImager) checksum from image: " << d->checksumPipe.checksum() << endl;
   }
 
-  if( d->imageFile.isOpen() )
+  if( d->imageFile.isOpen() ) {
     d->imageFile.close();
 
-  if( !m_canceled ) {
+    if( m_canceled || p->exitStatus() != 0 ) {
+      d->imageFile.remove();
+      emit infoMessage( i18n("Removed incomplete image file %1.").arg(d->imageFile.name()), WARNING );
+    }
+  }
+
+  cleanup();
+
+  if( m_canceled ) {
+    emit canceled();
+    jobFinished(false);
+  }
+  else {
     if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
 	jobFinished( true );
@@ -200,8 +212,6 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
       jobFinished( false );
     }
   }
-
-  cleanup();
 }
 
 
@@ -541,13 +551,10 @@ void K3bIsoImager::cancel()
 {
   m_canceled = true;
 
-  if( m_process )
-    if( !m_processExited ) {
-      disconnect(m_process);
-      m_process->kill();
-    }
-
-  if( !m_processExited ) {
+  if( m_process && !m_processExited ) {
+    m_process->kill();
+  }
+  else if( active() ) {
     emit canceled();
     jobFinished(false);
   }
@@ -590,22 +597,34 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   QString s = m_doc->isoOptions().volumeSetId();
   s.truncate(128);  // ensure max length
   *m_process << "-volset" << s;
-
+  
   s = m_doc->isoOptions().applicationID();
   s.truncate(128);  // ensure max length
   *m_process << "-appid" << s;
-
+  
   s = m_doc->isoOptions().publisher();
   s.truncate(128);  // ensure max length
   *m_process << "-publisher" << s;
-
+  
   s = m_doc->isoOptions().preparer();
   s.truncate(128);  // ensure max length
   *m_process << "-preparer" << s;
-
+  
   s = m_doc->isoOptions().systemId();
   s.truncate(32);  // ensure max length
   *m_process << "-sysid" << s;
+  
+  s = m_doc->isoOptions().abstractFile();
+  s.truncate(37);  // ensure max length
+  *m_process << "-abstract" << s;
+
+  s = m_doc->isoOptions().copyrightFile();
+  s.truncate(37);  // ensure max length
+  *m_process << "-copyright" << s;
+
+  s = m_doc->isoOptions().bibliographFile();
+  s.truncate(37);  // ensure max length
+  *m_process << "-biblio" << s;
 
   int volsetSize = m_doc->isoOptions().volumeSetSize();
   int volsetSeqNo = m_doc->isoOptions().volumeSetNumber();

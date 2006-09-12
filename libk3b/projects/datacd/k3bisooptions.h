@@ -16,14 +16,6 @@
 #ifndef K3B_ISO_OPTIONS_H
 #define K3B_ISO_OPTIONS_H
 
-// these defines are from the mkisofs source and are needed to handle the
-// iso9660 filenames created by mkisofs
-#define      LEN_ISONAME             31
-#define      MAX_ISONAME_V1          37
-#define      MAX_ISONAME_V2          207
-#define      MAX_ISONAME_V2_RR       193
-#define      MAX_ISONAME             MAX_ISONAME_V2
-
 #include <qstring.h>
 #include "k3b_export.h"
 
@@ -72,6 +64,9 @@ class LIBK3B_EXPORT K3bIsoOptions
   int volumeSetNumber() const { return m_volumeSetNumber; }
   const QString& publisher() const { return m_publisher; }
   const QString& preparer() const { return m_preparer; }
+  const QString& abstractFile() const { return m_abstractFile; }
+  const QString& copyrightFile() const { return m_copyrightFile; }
+  const QString& bibliographFile() const { return m_bibliographFile; }
 	
   void setCreateRockRidge( bool b ) { m_createRockRidge = b; }
   void setCreateJoliet( bool b ) {  m_createJoliet = b; }
@@ -106,6 +101,9 @@ class LIBK3B_EXPORT K3bIsoOptions
   void setVolumeSetNumber( int n ) { m_volumeSetNumber = n; }
   void setPublisher( const QString& s ) { m_publisher = s; }
   void setPreparer( const QString& s ) { m_preparer = s; }
+  void setAbstractFile( const QString& s ) { m_abstractFile = s; }
+  void setCoprightFile( const QString& s ) { m_copyrightFile = s; }
+  void setBibliographFile( const QString& s ) { m_bibliographFile = s; }
 
   void setPreserveFilePermissions( bool b ) { m_preserveFilePermissions = b; }
   // ----------------------------------------------------------------- mkisofs-options -----------
@@ -128,11 +126,6 @@ class LIBK3B_EXPORT K3bIsoOptions
 
   void save( KConfigBase* c );
 
-  /**
-   * \return the max length of a filename in the resulting iso9660 image as created my mkisofs
-   */
-  int maxIso9660FilenameLength() const;
-
   static K3bIsoOptions load( KConfigBase* c );
   static K3bIsoOptions defaults();
 
@@ -144,6 +137,9 @@ class LIBK3B_EXPORT K3bIsoOptions
   QString m_publisher;
   QString m_systemId;
   QString m_volumeSetId;
+  QString m_abstractFile;
+  QString m_copyrightFile;
+  QString m_bibliographFile;
 
   int m_volumeSetSize;
   int m_volumeSetNumber;	

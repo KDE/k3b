@@ -21,6 +21,7 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qlabel.h>
+#include <qtoolbutton.h>
 
 
 K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* name )
@@ -46,6 +47,11 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
   textLabel2->hide();
   m_spinVolumeSetSize->hide();
   m_spinVolumeSetNumber->hide();
+
+  // FIXME: show the buttons and allow the selection of a file from the project
+  m_buttonFindAbstract->hide();
+  m_buttonFindCopyright->hide();
+  m_buttonFindBiblio->hide();
 }
 
 

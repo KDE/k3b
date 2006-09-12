@@ -76,6 +76,9 @@ void K3bIsoOptions::save( KConfigBase* c )
   c->writeEntry( "volume set id", m_volumeSetId );
   c->writeEntry( "volume set size", m_volumeSetSize );
   c->writeEntry( "volume set number", m_volumeSetNumber );
+  c->writeEntry( "abstract file", m_abstractFile );
+  c->writeEntry( "copyright file", m_copyrightFile );
+  c->writeEntry( "bibliograph file", m_bibliographFile );
 
   c->writeEntry( "rock_ridge", m_createRockRidge );
   c->writeEntry( "joliet", m_createJoliet );
@@ -141,6 +144,9 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c )
   options.setVolumeSetId( c->readEntry( "volume set id", options.volumeSetId() ) );
   options.setVolumeSetSize( c->readNumEntry( "volume set size", options.volumeSetSize() ) );
   options.setVolumeSetNumber( c->readNumEntry( "volume set number", options.volumeSetNumber() ) );
+  options.setAbstractFile( c->readEntry( "abstract file", options.abstractFile() ) );
+  options.setCoprightFile( c->readEntry( "copyright file", options.copyrightFile() ) );
+  options.setBibliographFile( c->readEntry( "bibliograph file", options.bibliographFile() ) );
 
   options.setForceInputCharset( c->readBoolEntry( "force input charset", options.forceInputCharset() ) );
   if( options.forceInputCharset() )
@@ -203,17 +209,4 @@ K3bIsoOptions K3bIsoOptions::defaults()
 {
   // let the constructor create defaults
   return K3bIsoOptions();
-}
-
-
-int K3bIsoOptions::maxIso9660FilenameLength() const
-{
-  int iso9660_namelen = LEN_ISONAME;
-  if( ISOLevel() == 4 )
-    iso9660_namelen = MAX_ISONAME_V2;
-  if( ISOmaxFilenameLength() )
-    iso9660_namelen = MAX_ISONAME_V1;
-  if( createRockRidge() && (iso9660_namelen > MAX_ISONAME_V2_RR) )
-    iso9660_namelen = MAX_ISONAME_V2_RR;
-  return iso9660_namelen;
 }
