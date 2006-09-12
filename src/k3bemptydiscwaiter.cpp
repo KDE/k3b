@@ -152,11 +152,11 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   //
   if( (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD) &&
 	   (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_CD) )
-    d->wantedMediaTypeString = i18n("writable CD or DVD"); // CD-R(W) or DVDÂ±R(W)
+    d->wantedMediaTypeString = i18n("CD-R(W) or DVD%1R(W)").arg("±");
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    d->wantedMediaTypeString = i18n("writable DVD"); // DVDÂ±R(W)
+    d->wantedMediaTypeString = i18n("DVD%1R(W)").arg("±");
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
-    d->wantedMediaTypeString = i18n("Double Layer DVD"); // Double Layer DVDÂ±R
+    d->wantedMediaTypeString = i18n("Double Layer DVD%1R").arg("±");
   else
     d->wantedMediaTypeString = i18n("CD-R(W)");
 
@@ -240,7 +240,7 @@ int K3bEmptyDiscWaiter::exec()
 
 void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 {
-  kdDebug() << "(K3bEmptyDiscWaiter) slotDeviceHandlerFinished() " << endl;
+  kdDebug() << "(K3bEmptyDiscWaiter) slotMediumChanged() " << endl;
   if( d->forced || d->canceled || d->device != dev )
     return;
 
@@ -266,6 +266,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 
   if( medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
     continueWaiting();
+    d->blockMediaChange = false;
     return;
   }
 
