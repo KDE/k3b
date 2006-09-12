@@ -528,16 +528,16 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
     // Estimated numbers based on the Vorbis FAQ:
     // http://www.xiph.org/archives/vorbis-faq/200203/0030.html
     
-    static long vorbis_q_bitrate[] = { 60,  74,  86,  106, 120, 152,
-				       183, 207, 239, 309, 440 };
+//     static long vorbis_q_bitrate[] = { 45, 60,  74,  86,  106, 120, 152,
+// 				       183, 207, 239, 309, 440 };
 
     int qualityLevel = c->readNumEntry( "quality level", 4 );
 
-    if( qualityLevel < 0 )
-      qualityLevel = 0;
+    if( qualityLevel < -1 )
+      qualityLevel = -1;
     else if( qualityLevel > 10 )
       qualityLevel = 10;
-    return ( (msf.totalFrames()/75) * vorbis_q_bitrate[qualityLevel] * 1000 ) / 8;
+    return ( (msf.totalFrames()/75) * s_rough_average_quality_level_bitrates[qualityLevel+1] * 1000 ) / 8;
   }
   else {
     return (msf.totalFrames()/75) * c->readNumEntry( "bitrate nominal", 160 ) * 1000 / 8;
