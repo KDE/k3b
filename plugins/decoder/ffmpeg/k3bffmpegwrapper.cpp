@@ -360,7 +360,8 @@ K3bFFMpegFile* K3bFFMpegWrapper::open( const QString& filename ) const
     // its thing.
     //
     if( file->type() == CODEC_ID_WMAV1 ||
-	file->type() == CODEC_ID_WMAV2 )
+	file->type() == CODEC_ID_WMAV2 ||
+	file->type() == CODEC_ID_AAC )
 #endif
       return file;
   }
