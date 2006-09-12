@@ -387,7 +387,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
       job_->setSpeed( m_writerSelectionWidget->writerSpeed() );
       job_->setTocFile( d->tocFile );
       job_->setSimulate(m_checkDummy->isChecked());
-      job_->setMulti(m_checkNoFix->isChecked());
+      job_->setMulti( false /*m_checkNoFix->isChecked()*/ );
       job_->setCopies( m_checkDummy->isChecked() ? 1 : m_spinCopies->value() );
       
       job = job_;

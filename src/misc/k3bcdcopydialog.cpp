@@ -422,6 +422,8 @@ void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
   else {
     m_comboCopyMode->setEnabled( true );
   }
+
+  toggleAll();
 }
 
 

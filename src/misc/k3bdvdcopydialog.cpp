@@ -407,6 +407,8 @@ void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 						: K3bDevice::MEDIA_WRITABLE_DVD_SL );
 
   m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + k3bappcore->mediaCache()->medium( dev ).volumeId().lower() + ".iso" );
+
+  toggleAll();
 }
 
 
