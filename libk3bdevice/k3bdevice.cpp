@@ -2018,7 +2018,14 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 		    << ") (" << QString::number(da1.mode1Bytes()) << " Bytes)" << endl;
 
 	  inf.m_numLayers = ((data[6]&0x60) == 0 ? 1 : 2);
-	  inf.m_firstLayerSize = da0;
+
+	  bool otp = (data[4+2] & 0xF);
+
+	  // ea0 is 0 if the medium does not use Opposite track path
+	  if( otp && ea0 > 0 )
+	    inf.m_firstLayerSize = da0;
+	  else
+	    inf.m_firstLayerSize = 0;
 
 	  delete [] data;
 	}

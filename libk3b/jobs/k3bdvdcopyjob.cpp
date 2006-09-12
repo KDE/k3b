@@ -441,7 +441,12 @@ void K3bDvdCopyJob::prepareWriter()
   d->writerJob->setWritingMode( d->usedWritingMode );
   d->writerJob->setCloseDvd( true );
  
-  if( d->sourceDiskInfo.numLayers() > 1 ) {
+  //
+  // In case the first layer size is not known let the
+  // split be determined by growisofs
+  //
+  if( d->sourceDiskInfo.numLayers() > 1 &&
+      d->sourceDiskInfo.firstLayerSize() > 0 ) {
     d->writerJob->setLayerBreak( d->sourceDiskInfo.firstLayerSize().lba() );
   }
   else {
