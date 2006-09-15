@@ -1066,16 +1066,20 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   else if( e->type() == QEvent::FocusOut ) {
     if( o == m_editorSpinBox ||
 	o == m_editorMsfEdit ||
-	o == m_editorLineEdit ) {
-      doRename();
-      hideEditor();
-    }
-    else if( o == m_editorComboBox ) {
-      // make sure we did not lose the focus to one of the combobox children
-      if( ( !m_editorComboBox->listBox() || !m_editorComboBox->listBox()->hasFocus() ) &&
-	  ( !m_editorComboBox->lineEdit() || !m_editorComboBox->lineEdit()->hasFocus() ) )
+	o == m_editorLineEdit ||
+	o == m_editorComboBox ) {
+      // make sure we did not lose the focus to one of the edit widgets' children
+      if( !qApp->focusWidget() || qApp->focusWidget()->parentWidget() != o ) {
+	doRename();
 	hideEditor();
+      }
     }
+//     else if( o == m_editorComboBox ) {
+//       // make sure we did not lose the focus to one of the combobox children
+//       if( ( !m_editorComboBox->listBox() || !m_editorComboBox->listBox()->hasFocus() ) &&
+// 	  ( !m_editorComboBox->lineEdit() || !m_editorComboBox->lineEdit()->hasFocus() ) )
+// 	hideEditor();
+//     }
   }
 
   return KListView::eventFilter( o, e );
