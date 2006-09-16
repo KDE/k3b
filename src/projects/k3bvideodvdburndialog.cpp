@@ -107,6 +107,11 @@ void K3bVideoDvdBurnDialog::readSettings()
 
   m_volumeDescWidget->load( m_doc->isoOptions() );
 
+  if( doc()->size() > 4700372992LL )
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
+  else
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );
+
   toggleAll();
 }
 

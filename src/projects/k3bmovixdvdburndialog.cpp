@@ -171,6 +171,11 @@ void K3bMovixDvdBurnDialog::readSettings()
     KMessageBox::error( this, i18n("Could not find a valid eMovix installation.") );
     slotCancelClicked();
   }
+
+  if( doc()->size() > 4700372992LL )
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
+  else
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );
 }
 
 
