@@ -93,21 +93,9 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
   if( urls.isEmpty() )
     return 0;
 
-  //
-  // Set the volume id from the first added url
-  // FIXME: only do this once and not after the volume id was changed
-  //
-  if( urls.count() == 1 && dir->doc()->root()->children().count() == 0 ) {
-    QString v = urls.first().fileName();
-    // remove the extension
-    int dotpos = v.findRev( '.' );
-    if( dotpos > 0 )
-      v.truncate( dotpos );
-    dir->doc()->setVolumeID( v );
-  }
-
   K3bDataUrlAddingDialog dlg( parent );
   dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
+  dlg.m_urls = urls;
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
     dlg.m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
 
@@ -378,6 +366,19 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   // now create the new item
   //
   if( valid ) {
+    //
+    // Set the volume id from the first added url
+    // FIXME: only do this once and not after the volume id was changed
+    //
+    if( m_urls.count() == 1 && dir->doc()->root()->children().count() == 0 ) {
+      QString v = newName;
+      // remove the extension
+      int dotpos = v.findRev( '.' );
+      if( dotpos > 0 )
+	v.truncate( dotpos );
+      dir->doc()->setVolumeID( v );
+    }
+
     if( isDir && !isSymLink ) {
       if( !newDirItem ) { // maybe we reuse an already existing dir
 	newDirItem = new K3bDirItem( newName , dir->doc(), dir );

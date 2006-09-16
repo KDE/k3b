@@ -57,6 +57,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QLabel* m_infoLabel;
   K3bEncodingConverter* m_encodingConverter;
 
+  KURL::List m_urls;
   QValueList< QPair<KURL, K3bDirItem*> > m_urlQueue;
 
   bool m_bExistingItemsReplaceAll;
