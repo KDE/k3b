@@ -1,7 +1,7 @@
 dnl === Ogg Vorbis Test - Begin ===
 AC_ARG_WITH(
 	oggvorbis, 
-	AS_HELP_STRING([--without-oggvorbis], [build without OggVorbis support (default=no)]), 
+	AS_HELP_STRING([--without-oggvorbis], [build K3b without OggVorbis support (default=no)]), 
 	[ac_cv_use_oggvorbis=$withval], 
 	[ac_cv_use_oggvorbis=yes]
 )

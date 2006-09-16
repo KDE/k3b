@@ -1,7 +1,7 @@
 dnl === test for FLAC++ and FLAC - begin ====
 AC_ARG_WITH(
 	flac, 
-	AS_HELP_STRING([--without-flac], [build without FLAC support (default=no)]), 
+	AS_HELP_STRING([--without-flac], [build K3b without FLAC support (default=no)]), 
 	[ac_cv_use_flac=$withval], 
 	[ac_cv_use_flac=yes]
 )

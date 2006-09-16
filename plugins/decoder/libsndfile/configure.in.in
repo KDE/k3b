@@ -12,7 +12,7 @@ fi
 AC_ARG_WITH(
 	sndfile, 
 	AS_HELP_STRING([--without-sndfile], 
-	[build without libsndfile support (default=no)]), 
+	[build K3b without libsndfile support (default=no)]), 
 	[ac_cv_use_sndfile=$withval], 
 	[ac_cv_use_sndfile=yes]
 )

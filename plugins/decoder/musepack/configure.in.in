@@ -4,7 +4,7 @@ AC_ARG_WITH(
 	musepack, 
 	AS_HELP_STRING(
 		[--without-musepack], 
-		[build without Musepack audio support (default=no)]),
+		[build K3b without Musepack audio support (default=no)]),
 	[ac_cv_use_mpc=$withval], 
 	[ac_cv_use_mpc=yes]
 )

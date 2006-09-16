@@ -111,7 +111,7 @@ AC_ARG_WITH(
 	musicbrainz, 
 	AS_HELP_STRING(
 		[--without-musicbrainz], 
-		[build without Musicbrainz support (default=no)]),
+		[build K3b without Musicbrainz support (default=no)]),
 	[ac_cv_use_musicbrainz=$withval], 
 	[ac_cv_use_musicbrainz=yes]
 )

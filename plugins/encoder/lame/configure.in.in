@@ -1,7 +1,7 @@
 dnl === test for LAME - begin ====
 AC_ARG_WITH(
 	lame, 
-	AS_HELP_STRING([--without-lame], [build without LAME support (default=no)]), 
+	AS_HELP_STRING([--without-lame], [build K3b without LAME support (default=no)]), 
 	[ac_cv_use_lame=$withval], 
 	[ac_cv_use_lame=yes]
 )

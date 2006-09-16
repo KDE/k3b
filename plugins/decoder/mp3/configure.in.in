@@ -1,7 +1,7 @@
 dnl === libmad MPEG decoder check - begin ===
 AC_ARG_WITH(
 	libmad, 
-	AS_HELP_STRING([--without-libmad], [build without libmad support (default=no)]), 
+	AS_HELP_STRING([--without-libmad], [build K3b without libmad support (default=no)]), 
 	[ac_cv_use_libmad=$withval], 
 	[ac_cv_use_libmad=yes]
 )

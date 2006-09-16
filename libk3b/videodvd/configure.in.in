@@ -2,7 +2,7 @@ AC_ARG_WITH(
 	libdvdread, 
 	AS_HELP_STRING(
 		[--without-libdvdread], 
-		[build without libdvdread (Video DVD ripping) support (default=no)]),
+		[build K3b without libdvdread (Video DVD ripping) support (default=no)]),
 	[ac_cv_use_libdvdread=$withval], 
 	[ac_cv_use_libdvdread=yes]
 )
