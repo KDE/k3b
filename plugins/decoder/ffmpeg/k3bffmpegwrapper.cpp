@@ -194,6 +194,8 @@ QString K3bFFMpegFile::typeComment() const
     return i18n("Windows Media v2");
   case CODEC_ID_MP3LAME:
     return i18n("MPEG 1 Layer III");
+  case CODEC_ID_AAC:
+    return i18n("Advanced Audio Coding (AAC)");
   default:
     return QString::fromLocal8Bit( d->codec->name );
   }
