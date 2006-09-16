@@ -309,7 +309,7 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
   // CD:     36 (MMC2)
   //
   if( dataLen <= 4 ) {
-    int m = dvdMediaType();
+    int m = mediaType();
     if( m & (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_SEQ|MEDIA_DVD_R_DL_JUMP) )
       dataLen = 48;
     else if( m & (MEDIA_DVD_PLUS_R|MEDIA_DVD_PLUS_R_DL) )
@@ -846,11 +846,12 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& da
 					  unsigned long adress,
 					  unsigned int agid ) const
 {
-  return readDiscStructure( data, dataLen, format, layer, adress, agid );
+  return readDiscStructure( data, dataLen, 0x0, format, layer, adress, agid );
 }
 
 
 bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& dataLen, 
+					   unsigned int mediaType,
 					   unsigned int format,
 					   unsigned int layer,
 					   unsigned long adress,
@@ -861,6 +862,7 @@ bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& d
 
   ScsiCommand cmd( this );
   cmd[0] = MMC_READ_DVD_STRUCTURE;
+  cmd[1] = mediaType & 0xF;
   cmd[2] = adress>>24;
   cmd[3] = adress>>16;
   cmd[4] = adress>>8;

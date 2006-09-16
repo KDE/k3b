@@ -94,6 +94,13 @@ QString K3bDevice::writingModeString( int m )
   if( m & K3bDevice::WRITINGMODE_LAYER_JUMP )
     s += i18n("Layer Jump");
 
+  if( m & K3bDevice::WRITINGMODE_RRM )
+    s += i18n("Random Recording");
+  if( m & K3bDevice::WRITINGMODE_SRM )
+    s += i18n("Sequential Recording");
+  if( m & K3bDevice::WRITINGMODE_SRM_POW )
+    s += i18n("Sequential Recording + POW");
+
   if( s.isEmpty() )
     return i18n("None");
   else
@@ -155,12 +162,14 @@ QString K3bDevice::mediaTypeString( int m, bool simple )
   if( m & MEDIA_BD_ROM )
     s += i18n("BD-ROM");
   if( m & MEDIA_BD_R ||
-      (simple && (m & (MEDIA_BD_R_SEQ|MEDIA_BD_R_RANDOM))) )
+      (simple && (m & (MEDIA_BD_R_SRM|MEDIA_BD_R_RRM))) )
     s += i18n("BD-R");
-  if( m & MEDIA_BD_R_SEQ && !simple )
-    s += i18n("BD-R Sequential");
-  if( m & MEDIA_BD_R_RANDOM && !simple )
-    s += i18n("BD-R Random");
+  if( m & MEDIA_BD_R_SRM && !simple )
+    s += i18n("BD-R Sequential (SRM)");
+  if( m & MEDIA_BD_R_SRM_POW && !simple )
+    s += i18n("BD-R Sequential Pseudo Overwrite (SRM+POW)");
+  if( m & MEDIA_BD_R_RRM && !simple )
+    s += i18n("BD-R Random (RRM)");
   if( m & MEDIA_BD_RE )
     s += i18n("BD-RE");
 

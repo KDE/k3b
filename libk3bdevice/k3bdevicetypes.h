@@ -48,6 +48,7 @@ namespace K3bDevice {
   const unsigned short FEATURE_DDCD_RW_WRITE = 0x032;
   const unsigned short FEATURE_LAYER_JUMP_RECORDING = 0x033;
   const unsigned short FEATURE_CD_RW_MEDIA_WRITE_SUPPORT = 0x037;
+  const unsigned short FEATURE_BD_PSEUDO_OVERWRITE = 0x038;
   const unsigned short FEATURE_DVD_PLUS_RW_DUAL_LAYER = 0x03A;            /**< since MMC5 revision 3 */
   const unsigned short FEATURE_DVD_PLUS_R_DUAL_LAYER = 0x03B;
   const unsigned short FEATURE_BD_READ = 0x040;
@@ -121,6 +122,9 @@ namespace K3bDevice {
     WRITINGMODE_INCR_SEQ = 0x100,    /**< Device writes DVD-R(W) media in incremental sequential writing mode */
     WRITINGMODE_RES_OVWR = 0x200,    /**< Device writes DVD-RW media in restricted overwrite mode */
     WRITINGMODE_LAYER_JUMP = 0x400,  /**< Device writes DVD-R Dual layer media in Layer Jump writing mode */
+    WRITINGMODE_RRM = 0x800,         /**< Device writes BD-R media in Random Recording Mode */
+    WRITINGMODE_SRM = 0x1000,        /**< Device writes BD-R media in Sequential recording mode */
+    WRITINGMODE_SRM_POW = 0x2000,    /**< Device writes BD-R media in Pseudo overwrite Sequential recording mode */
     SAO = WRITINGMODE_SAO,           /**< \deprecated {use WRITINGMODE_SAO instead) */
     TAO = WRITINGMODE_TAO,           /**< \deprecated {use WRITINGMODE_TAO instead) */
     RAW = WRITINGMODE_RAW,           /**< \deprecated {use WRITINGMODE_RAW instead) */
@@ -175,9 +179,10 @@ namespace K3bDevice {
     MEDIA_HD_DVD_RAM = 0x40000,                    /**< */
     MEDIA_BD_ROM = 0x80000,                        /**< Read-only Blue-ray Disc (BD) */
     MEDIA_BD_R = 0x100000,                         /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_SEQ = 0x200000,                     /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_RANDOM = 0x400000,                  /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_RE = 0x800000,                        /**< Rewritable Blue-ray Disc (BD-RE) */
+    MEDIA_BD_R_SRM = 0x200000,                     /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_SRM_POW = 0x400000,                 /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_RRM = 0x800000,                     /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_RE = 0x1000000,                       /**< Rewritable Blue-ray Disc (BD-RE) */
     MEDIA_WRITABLE_CD = MEDIA_CD_R |               /**< This is a bitwise or of media types representing all writable CD media.*/
                         MEDIA_CD_RW,
     MEDIA_CD_ALL = MEDIA_WRITABLE_CD |
@@ -201,8 +206,14 @@ namespace K3bDevice {
                             MEDIA_DVD_RW_SEQ |
                             MEDIA_DVD_PLUS_RW_DL |
                             MEDIA_DVD_PLUS_RW,
+    MEDIA_WRITABLE_BD = MEDIA_BD_R |               /**< This is a bitwise or of media types representing all writable BD media.*/
+                        MEDIA_BD_R_SRM |
+                        MEDIA_BD_R_SRM_POW |
+                        MEDIA_BD_R_RRM |
+                        MEDIA_BD_RE,
     MEDIA_WRITABLE = MEDIA_WRITABLE_CD |           /**< This is a bitwise or of media types representing all writable media.*/
-                     MEDIA_WRITABLE_DVD,
+                     MEDIA_WRITABLE_DVD |
+                     MEDIA_WRITABLE_BD,
     MEDIA_DVD_MINUS_ALL = MEDIA_DVD_R |            /**< This is a bitwise or of media types representing all DVD-R/W media.*/
                           MEDIA_DVD_R_SEQ | 
                           MEDIA_DVD_RW |
@@ -217,6 +228,8 @@ namespace K3bDevice {
                          MEDIA_DVD_PLUS_RW_DL,
     MEDIA_DVD_ALL = MEDIA_WRITABLE_DVD |
                     MEDIA_DVD_ROM,
+    MEDIA_BD_ALL = MEDIA_WRITABLE_BD |
+                   MEDIA_BD_ROM,
     MEDIA_UNKNOWN = 0x10000000                     /**< Represents an unknown media type (when an error occured) */
   };
 

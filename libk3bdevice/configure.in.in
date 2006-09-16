@@ -39,7 +39,7 @@ AC_SUBST(CAM_LIB)
 dnl === check for resmgr - begin ============
 AC_ARG_WITH(
 	resmgr, 
-	AS_HELP_STRING([--without-resmgr], [build without ResMgr support (default=no)]), 
+	AS_HELP_STRING([--without-resmgr], [build K3b without ResMgr support (default=no)]), 
 	[ac_cv_use_resmgr=$withval], 
 	[ac_cv_use_resmgr=yes]
 )
@@ -66,7 +66,7 @@ AC_ARG_WITH(
 	hal, 
 	AS_HELP_STRING(
 		[--without-hal], 
-		[build without HAL support (default=no)]),
+		[build K3b without HAL support (default=no)]),
 	[ac_cv_use_hal=$withval], 
 	[ac_cv_use_hal=yes]
 )

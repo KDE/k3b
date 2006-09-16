@@ -334,16 +334,6 @@ namespace K3bDevice
       int numSessions() const;
 
       /**
-       * @return The media size.
-       */
-      K3b::Msf discSize() const;
-
-      /**
-       * @return The remaining size on an appendable media
-       */
-      K3b::Msf remainingSize() const;
-
-      /**
        * @return The toc of the media or an empty (invalid) K3bDevice::Toc if 
        *         no or an empty media is inserted.
        */
@@ -446,16 +436,11 @@ namespace K3bDevice
 			       K3b::Msf* currentMax = 0, int* currentMaxFormat = 0 ) const;
 
       /**
-       * Does only make sense for cd media.
-       * @returns -1 on error K3bDevice::MediaType otherwise
+       * Determine the type of the currently mounted medium
+       *
+       * @returns K3bDevice::MediaType
        */
-      int cdMediaType() const;
-
-      /**
-       * Does only make sense for dvd media.
-       * @returns -1 on error K3bDevice::MediaType otherwise
-       */
-      int dvdMediaType() const;
+      int mediaType() const;
 
       /**
        * Returnes the list of supported writing speeds as reported by
@@ -554,6 +539,7 @@ namespace K3bDevice
        * deleted after using.
        */
       bool readDiscStructure( unsigned char** data, unsigned int& dataLen, 
+			      unsigned int mediaType = 0x0,
 			      unsigned int format = 0x0,
 			      unsigned int layer = 0x0,
 			      unsigned long adress = 0,
@@ -733,7 +719,7 @@ namespace K3bDevice
        * undefined for DVDs.
        */
       bool readRawToc( Toc& ) const;
-      bool readFormattedToc( Toc&, bool dvd = false ) const;
+      bool readFormattedToc( Toc&, int mediaType ) const;
 
       /**
        * Fixes the last block on CD-Extra disks. This is needed if the readRawToc failed since
@@ -778,6 +764,8 @@ namespace K3bDevice
 
       bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, bool dvd ) const;
       bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, bool dvd ) const;
+
+      QCString mediaId( int mediaType ) const;
 
       QString m_vendor;
       QString m_description;

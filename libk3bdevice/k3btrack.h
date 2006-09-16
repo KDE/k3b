@@ -83,6 +83,9 @@ namespace K3bDevice
     void setFirstSector( const K3b::Msf& msf ) { m_firstSector = msf; }
     void setLastSector( const K3b::Msf& msf ) { m_lastSector = msf; }
 
+    const K3b::Msf& nextWritableAddress() const { return m_nextWritableAddress; }
+    const K3b::Msf& freeBlocks() const { return m_freeBlocks; }
+
     K3b::Msf length() const;
 
     /**
@@ -123,6 +126,9 @@ namespace K3bDevice
     K3b::Msf m_firstSector;
     K3b::Msf m_lastSector;
     K3b::Msf m_index0;
+
+    K3b::Msf m_nextWritableAddress;
+    K3b::Msf m_freeBlocks;
 
     int m_type;
     int m_mode;

@@ -622,7 +622,7 @@ bool K3bDevice::Device::burnfree() const
 bool K3bDevice::Device::isDVD() const
 {
   if( readsDvd() )
-    return( dvdMediaType() != MEDIA_UNKNOWN );
+    return( mediaType() & MEDIA_DVD_ALL );
   else
     return false;
 }
@@ -671,77 +671,6 @@ int K3bDevice::Device::isEmpty() const
 }
 
 
-K3b::Msf K3bDevice::Device::discSize() const
-{
-  // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
-  bool needToClose = !isOpen();
-
-  K3b::Msf ret(0);
-  if( !open() )
-    return ret;
-
-  unsigned char* data = 0;
-  unsigned int dataLen = 0;
-
-  if( readDiscInformation( &data, dataLen ) ) {
-    disc_info_t* inf = (disc_info_t*)data;
-    if ( inf->lead_out_m != 0xFF && inf->lead_out_s != 0xFF && inf->lead_out_f != 0xFF ) {
-      ret = K3b::Msf( inf->lead_out_m, inf->lead_out_s, inf->lead_out_f );
-      ret -= 150;
-    }
-
-    delete [] data;
-  }
-
-  if( ret == 0 ) {
-    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-	      << "READ DISC INFORMATION failed. getting disk size via toc." << endl;
-    Toc toc = readToc();
-    ret = toc.lastSector();
-  }
-
-  if( needToClose )
-    close();
-
-  return ret;
-}
-
-
-K3b::Msf K3bDevice::Device::remainingSize() const
-{
-  K3b::Msf ret, size;
-  bool empty = false;
-  bool appendable = false;
-
-  unsigned char* data = 0;
-  unsigned int dataLen = 0;
-
-  if( readDiscInformation( &data, dataLen ) ) {
-    disc_info_t* inf = (disc_info_t*)data;
-    if ( inf->lead_in_m != 0xFF && inf->lead_in_s != 0xFF && inf->lead_in_f != 0xFF ) {
-      ret = K3b::Msf( inf->lead_in_m, inf->lead_in_s, inf->lead_in_f );
-    }
-    if ( inf->lead_out_m != 0xFF && inf->lead_out_s != 0xFF && inf->lead_out_f != 0xFF ) {
-      size = K3b::Msf( inf->lead_out_m, inf->lead_out_s, inf->lead_out_f );
-    }
-
-    empty = !inf->status;
-    appendable = ( inf->status == 1 );
-
-    delete [] data;
-  }
-  else
-    return 0;
-
-  if( empty )
-    return size - 150;
-  else if( appendable )
-    return size - ret - 4650;
-  else
-    return 0;
-}
-
 int K3bDevice::Device::numSessions() const
 {
   //
@@ -757,18 +686,7 @@ int K3bDevice::Device::numSessions() const
   unsigned char* data = 0;
   unsigned int len = 0;
 
-  if( isDVD() ) {
-    if( readDiscInformation( &data, len ) ) {
-      ret = (int)( data[9]<<8 | data[4] );
-
-      // do only count complete sessions
-      if( (data[2]>>2) != 3 )
-	ret--;
-
-      delete [] data;
-    }
-  }
-  else {
+  if( mediaType() & MEDIA_CD_ALL ) {
     //
     // Althought disk_info should get the real value without ide-scsi
     // I keep getting wrong values (the value is too high. I think the leadout
@@ -781,6 +699,17 @@ int K3bDevice::Device::numSessions() const
     }
     else {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": could not get session info !" << endl;
+    }
+  }
+  else {
+    if( readDiscInformation( &data, len ) ) {
+      ret = (int)( data[9]<<8 | data[4] );
+
+      // do only count complete sessions
+      if( (data[2]>>2) != 3 )
+	ret--;
+
+      delete [] data;
     }
   }
 
@@ -856,132 +785,74 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
   if( !open() )
     return toc;
 
-  if( isDVD() ) {
-    int mediaType = dvdMediaType();
-    //
-    // Use the profile if available because DVD-ROM units need to treat DVD+-R(W) media as DVD-ROM
-    // if supported at all
-    //
-    if( currentProfile() == MEDIA_DVD_ROM )
-      mediaType = MEDIA_DVD_ROM;
+  int mt = mediaType();
 
-    // FIXME: add DVD-R Dual Layer
+  //
+  // Use the profile if available because DVD-ROM units need to treat DVD+-R(W) media as DVD-ROM
+  // if supported at all
+  //
+  if( currentProfile() == MEDIA_DVD_ROM )
+    mt = MEDIA_DVD_ROM;
 
-   switch( mediaType ) {
-
-    case MEDIA_DVD_ROM:
-    case MEDIA_DVD_RW_OVWR:
-    case MEDIA_DVD_PLUS_RW:
-      {
-// 	unsigned char* data = 0;
-// 	int dataLen = 0;
-// 	if( readTrackInformation( &data, dataLen, 0x1, 0x1 ) ) {
-// 	  track_info_t* trackInfo = (track_info_t*)data;
-
-// 	  Track track;
-// 	  track.m_firstSector = 0;
-// 	  track.m_lastSector = from4Byte( trackInfo->track_size ) - 1;
-// 	  track.m_session = 1;
-// 	  track.m_type = Track::DATA;
-// 	  track.m_mode = Track::DVD;
-// 	  track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
-// 	  track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
-
-// 	  delete [] data;
-
-// 	  //
-// 	  // There seem to be devices that report a bogus track length here...
-// 	  // In that case we just fall through :(
-// 	  // Maybe we should try readFormattedToc here and do this check there
-// 	  //
-// 	  if( track.length() > 1 ) {
-// 	    toc.append( track );	    
-// 	    break;
-// 	  }
-// 	}
-// 	else
-// 	  kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-// 		    << "READ TRACK INFORMATION for toc failed." << endl;
-
-// FIXME: why not use this for all cases. In the end we always do a readFormattedToc anyway...
-	if( !readFormattedToc( toc, true ) ) {
-	  K3b::Msf size;
-	  if( readCapacity( size ) ) {
-	    Track track;
-	    track.m_firstSector = 0;
-	    track.m_lastSector = size.lba();
-	    track.m_session = 1;
-	    track.m_type = Track::DATA;
-	    track.m_mode = Track::DVD;
-	    track.m_copyPermitted = ( mediaType != MEDIA_DVD_ROM );
-	    track.m_preEmphasis = ( mediaType != MEDIA_DVD_ROM );
-	    
-	    toc.append( track );
-	    
-	    break;
-	  }
-	  else
-	    kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
-		      << "READ CAPACITY for toc failed." << endl;
-	}
-	else
-	  break;
+  if( mt & (MEDIA_DVD_MINUS_ALL|MEDIA_DVD_PLUS_RW|MEDIA_DVD_ROM) ) {
+    if( !readFormattedToc( toc, mt ) ) {
+      K3b::Msf size;
+      if( readCapacity( size ) ) {
+	Track track;
+	track.m_firstSector = 0;
+	track.m_lastSector = size.lba();
+	track.m_session = 1;
+	track.m_type = Track::DATA;
+	track.m_mode = Track::DVD;
+	track.m_copyPermitted = ( mt != MEDIA_DVD_ROM );
+	track.m_preEmphasis = ( mt != MEDIA_DVD_ROM );
+	
+	toc.append( track );
       }
-
-      // fallthrough...
-
-    case MEDIA_DVD_R:
-    case MEDIA_DVD_R_DL:
-    case MEDIA_DVD_R_DL_SEQ:
-    case MEDIA_DVD_R_DL_JUMP:
-    case MEDIA_DVD_R_SEQ:
-      // multisession possible
-      readFormattedToc( toc, true );
-      break;
-
-    case MEDIA_DVD_RW:
-    case MEDIA_DVD_RW_SEQ:
-      // is multisession possible?
-      readFormattedToc( toc, true );
-      break;
-
-    case MEDIA_DVD_PLUS_R:
-    case MEDIA_DVD_PLUS_R_DL:
-      //
-      // a DVD+R disk may have multible sessions
-      // every session may contain up to 16 fragments
-      // if the disk is open there is one open session
-      // every closed session is viewed as a track whereas
-      // every fragment of the open session is viewed as a track
-      //
-      // We may use
-      // READ DISK INFORMATION
-      // READ TRACK INFORMATION: track number FFh refers to the incomplete fragment (track)
-      // READ TOC/PMA/ATIP: form 0 refers to all closed sessions
-      //                    form 1 refers to the last closed session
-      //
-      readFormattedToc( toc, true );
-      break;
-
-    case MEDIA_DVD_RAM:
-      kdDebug() << "(K3bDevice::readDvdToc) no dvdram support" << endl;
-      break;
-    default:
-      kdDebug() << "(K3bDevice::readDvdToc) no dvd." << endl;
+      else
+	kdDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		  << "READ CAPACITY for toc failed." << endl;
     }
   }
-  else {
+
+  else if( mt & (MEDIA_DVD_PLUS_R|MEDIA_DVD_PLUS_R_DL) ) {
+    //
+    // a DVD+R disk may have multible sessions
+    // every session may contain up to 16 fragments
+    // if the disk is open there is one open session
+    // every closed session is viewed as a track whereas
+    // every fragment of the open session is viewed as a track
+    //
+    // We may use
+    // READ DISK INFORMATION
+    // READ TRACK INFORMATION: track number FFh, however, does not refer to the invisible track
+    // READ TOC/PMA/ATIP: form 0 refers to all closed sessions
+    //                    form 1 refers to the last closed session
+    //
+    readFormattedToc( toc, mt );
+  }
+
+  else if( mt & MEDIA_BD_ALL ) {
+    readFormattedToc( toc, mt );
+  }
+    
+  else if( mt == MEDIA_DVD_RAM ) {
+    kdDebug() << "(K3bDevice::readDvdToc) no dvdram support" << endl;
+  }
+
+
+  else if( mt & MEDIA_CD_ALL ) {
     bool success = readRawToc( toc );
     if( !success ) {
-      success = readFormattedToc( toc );
-
+      success = readFormattedToc( toc, mt );
+      
 #ifdef Q_OS_LINUX
       if( !success ) {
 	kdDebug() << "(K3bDevice::Device) MMC READ TOC failed. falling back to cdrom.h." << endl;
 	readTocLinux(toc);
       }
 #endif
-
+      
       if( success )
 	fixupToc( toc );
     }
@@ -1019,7 +890,7 @@ void K3bDevice::Device::readIsrcMcn( K3bDevice::Toc& toc ) const
 }
 
 
-bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
+bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multible method calls in a row
@@ -1033,7 +904,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
 
   unsigned char* data = 0;
   unsigned int dataLen = 0;
-  if( dvd ) {
+  if( !(mt & MEDIA_CD_ALL) ) {
     //
     // on DVD-R(W) multisession disks only two sessions are represented as tracks in the readTocPmaAtip 
     // response (fabricated TOC). Thus, we use readDiscInformation for DVD media to get the proper number of tracks
@@ -1079,7 +950,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
 	  unsigned int control = 0;
 
 	  //
-	  // In case READ TRACK INFORMATION failes:
+	  // In case READ TRACK INFORMATION fails:
 	  // no session number info
 	  // no track length and thus possibly incorrect last sector for
 	  // multisession disks
@@ -1125,26 +996,31 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, bool dvd ) const
       // Some drives even return an invalid length here. :(
       if( from4Byte( trackInfo->track_size ) > 0 )
 	toc[i].m_lastSector = toc[i].m_firstSector + from4Byte( trackInfo->track_size ) - 1;
+
+      if( trackInfo->nwa_v ) {
+	toc[i].m_nextWritableAddress = from4Byte( trackInfo->next_writable );
+	toc[i].m_freeBlocks = from4Byte( trackInfo->free_blocks );
+      }
 	
       toc[i].m_session = (int)(trackInfo->session_number_m<<8 & 0xf0 |
 			       trackInfo->session_number_l & 0x0f);  //FIXME: is this BCD?
 	
       int control = trackInfo->track_mode;
 
-      if( dvd ) {
-	toc[i].m_type = Track::DATA;
-	toc[i].m_mode = Track::DVD;
-      }
-      else {
+      if( mt & MEDIA_CD_ALL ) {
 	toc[i].m_type = (control & 0x4) ? Track::DATA : Track::AUDIO;
 	toc[i].m_mode = getTrackDataMode( toc[i] );
+      }
+      else {
+	toc[i].m_type = Track::DATA;
+	toc[i].m_mode = Track::DVD;
       }
       toc[i].m_copyPermitted = ( control & 0x2 );
       toc[i].m_preEmphasis = ( control & 0x1 );
 	
       delete [] trackData;
     }
-    else if( dvd ) {
+    else if( !(mt & MEDIA_CD_ALL) ) {
       success = false;
     }
   }
@@ -1402,7 +1278,7 @@ int K3bDevice::Device::rawTocDataWithBcdValues( unsigned char* data, unsigned in
     // TODO: also check the bcd values
     //
     K3bDevice::Toc formattedToc;
-    if( readFormattedToc( formattedToc, false ) ) {
+    if( readFormattedToc( formattedToc, MEDIA_CD_ROM ) ) {
       for( unsigned int i = 0; i < (dataLen-4)/(unsigned int)sizeof(toc_raw_track_descriptor); ++i ) {
 	if( tr[i].adr == 1 && tr[i].point < 0x64 ) {
 	  unsigned int track = (int)tr[i].point;
@@ -1849,8 +1725,13 @@ int K3bDevice::Device::currentProfile() const
     case 0x1B: return MEDIA_DVD_PLUS_R;
     case 0x2B: return MEDIA_DVD_PLUS_R_DL;
     case 0x40: return MEDIA_BD_ROM;
-    case 0x41: return MEDIA_BD_R_SEQ;
-    case 0x42: return MEDIA_BD_R_RANDOM;
+    case 0x41: {
+      if( featureCurrent( FEATURE_BD_PSEUDO_OVERWRITE ) == 1 )
+	return MEDIA_BD_R_SRM_POW;
+      else
+	return MEDIA_BD_R_SRM;
+    }
+    case 0x42: return MEDIA_BD_R_RRM;
     case 0x43: return MEDIA_BD_RE;
     case 0x50: return MEDIA_HD_DVD_ROM;
     case 0x51: return MEDIA_HD_DVD_R;
@@ -1936,6 +1817,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	inf.m_numTracks = (dInf->last_track_l & 0xff) | (dInf->last_track_m<<8 & 0xff00);
 	if( inf.diskState() == STATE_EMPTY )
 	  inf.m_numTracks = 0;
+
+	// FIXME: I am not sure if this is accurate. Better test the last track's RT field
 	else if( inf.diskState() == STATE_INCOMPLETE )
 	  inf.m_numTracks--;  // do not count the invisible track
 
@@ -1975,10 +1858,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       //
       // The mediatype needs to be set
       //
-      if( readsDvd() )
-	inf.m_mediaType = dvdMediaType();
-      else
-	inf.m_mediaType = MEDIA_UNKNOWN;
+      inf.m_mediaType = mediaType();
 
       if( inf.m_mediaType == MEDIA_UNKNOWN ) {
 	// probably it is a CD
@@ -1989,7 +1869,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	else
 	  inf.m_mediaType = MEDIA_CD_ROM;
       }
-      else {
+
+      if( inf.m_mediaType & MEDIA_DVD_ALL ) {
 	if( readDvdStructure( &data, dataLen ) ) {
 	  // some debugging stuff
 	  K3b::Msf sda, eda, ea0;
@@ -2049,42 +1930,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       else
 	inf.m_numSessions = 0;
 
-      //
-      // Media ID
-      //
-      switch( inf.mediaType() ) {
-      case MEDIA_CD_R:
-      case MEDIA_CD_RW:
-      case MEDIA_CD_ROM:
-	// FIXME:
-	break;
-
-      case MEDIA_DVD_R:
-      case MEDIA_DVD_R_SEQ:
-      case MEDIA_DVD_R_DL:
-      case MEDIA_DVD_R_DL_JUMP:
-      case MEDIA_DVD_R_DL_SEQ:
-      case MEDIA_DVD_RW:
-      case MEDIA_DVD_RW_SEQ:
-      case MEDIA_DVD_RW_OVWR:
-	if( readDvdStructure( &data, dataLen, 0x0E ) ) {
-	  if( data[4+16] == 3 && data[4+24] == 4 ) {
-	    inf.m_mediaId.sprintf( "%6.6s%-6.6s", data+4+17, data+4+25 );
-	  }
-	  delete [] data;
-	}
-	break;
-
-      case MEDIA_DVD_PLUS_R:
-      case MEDIA_DVD_PLUS_R_DL:
-      case MEDIA_DVD_PLUS_RW:
-	if( readDvdStructure( &data, dataLen, 0x11 ) ||
-	    readDvdStructure( &data, dataLen, 0x0 ) ) {
-	  inf.m_mediaId.sprintf( "%8.8s/%3.3s", data+23, data+31 );
-	  delete [] data;
-	}
-	break;
-      }
+      inf.m_mediaId = mediaId( inf.mediaType() );
 
       //
       // Now we determine the size:
@@ -2272,53 +2118,47 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
 	break;
       }
+
+      case MEDIA_BD_R:
+      case MEDIA_BD_R_SRM:
+      case MEDIA_BD_R_SRM_POW:
+      case MEDIA_BD_R_RRM:
+      case MEDIA_BD_RE:
+	//
+	// get the invisible track's first sector
+	// or the next writable address of the last open track
+	//
+	if( readDiscInformation( &data, dataLen ) ) {
+	  int lastTrack = (int)( data[11]<<8 | data[6] );
+	  delete [] data;
+
+	  if( readTrackInformation( &data, dataLen, 1, lastTrack ) ) {
+
+	    // capacity: last track's start address + last track's size
+	    inf.m_capacity = from4Byte( data+8 ) + from4Byte( data+24 );
+
+	    if( data[6] & 0x80 )
+	      inf.m_usedCapacity = from4Byte( data+8 );
+	    else if( data[7] & 0x1 )
+	      inf.m_usedCapacity = from4Byte( data+12 );
+	    delete [] data;
+	  }
+	}
+	break;
+
+      case MEDIA_BD_ROM: {
+	K3b::Msf readCap;
+	if( readCapacity( readCap ) ) {
+	  //
+	  // READ CAPACITY returns the last written sector
+	  // that means the size is actually readCap + 1
+	  //
+	  inf.m_usedCapacity = readCap + 1;
+	}
+	
+	break;
       }
-
-
-
-// 	  // read next writable adress
-// 	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
-// 	    track_info_t* trackInfo = (track_info_t*)data;
-// 	    if( trackInfo->nwa_v ) {
-// 	      K3b::Msf nwa = from4Byte( trackInfo->next_writable );
-// 	      kdDebug() << "(K3bDevice::Device) Next writale adress valid: " << nwa.toString() << endl;
-// 	      inf.m_remaining = inf.m_capacity - nwa - 150;  // reserve space for pre-gap after lead-in (?)
-// 	    }
-// 	    else {
-// 	      kdDebug() << "(K3bDevice::Device) Next writale adress invalid." << endl;
-// 	    }
-
-// 	    delete [] data;
-// 	  }
-// 	}
-//       }
-//       else {
-// 	K3b::Msf readCap;
-// 	if( readCapacity( readCap ) ) {
-// 	  kdDebug() << "(K3bDevice::Device) READ CAPACITY: " << readCap.toString()
-// 		    << " other capacity: " << inf.m_capacity.toString() << endl;
-
-// 	  //
-// 	  // READ CAPACITY returns the last written sector
-// 	  // that means the size is actually readCap + 1
-// 	  //
-// 	  inf.m_capacity = readCap + 1;
-// 	}
-// 	else {
-// 	  kdDebug() << "(K3bDevice::Device) READ CAPACITY failed. Falling back to READ TRACK INFO." << endl;
-
-// 	  if( readTrackInformation( &data, dataLen, 0x1, 0xff ) ) {
-// 	    track_info_t* trackInfo = (track_info_t*)data;
-// 	    inf.m_capacity = from4Byte( trackInfo->track_start );
-
-// 	    delete [] data;
-// 	  }
-// 	  else {
-// 	    kdDebug() << "(K3bDevice::Device) Falling back to readToc." << endl;
-// 	    inf.m_capacity = readToc().length();
-// 	  }
-// 	}
-//       }
+      }
     }
 
     if( needToClose )
@@ -2329,36 +2169,14 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 }
 
 
-int K3bDevice::Device::cdMediaType() const
+int K3bDevice::Device::mediaType() const
 {
   int m = MEDIA_UNKNOWN;
 
-  unsigned char* data = 0;
-  unsigned int dataLen = 0;
-  if( readTocPmaAtip( &data, dataLen, 4, false, 0 ) ) {
-    if( (data[6]>>6)&1 )
-      m = MEDIA_CD_RW;
-    else
-      m = MEDIA_CD_R;
+  if( testUnitReady() ) {
 
-    delete [] data;
-  }
-  else
-    m = MEDIA_CD_ROM;
-
-  return m;
-}
-
-
-int K3bDevice::Device::dvdMediaType() const
-{
-  int m = MEDIA_UNKNOWN;
-
-  if( readsDvd() ) {
     m = currentProfile();
-    if( !(m & (MEDIA_WRITABLE_DVD|MEDIA_DVD_ROM)) )
-      m = MEDIA_UNKNOWN;  // no profile information or CD media
-
+  
     if( m & (MEDIA_UNKNOWN|MEDIA_DVD_ROM|MEDIA_HD_DVD_ROM) ) {
       //
       // We prefere the mediatype as reported by the media since this way
@@ -2387,6 +2205,47 @@ int K3bDevice::Device::dvdMediaType() const
 
 	delete [] data;
       }
+    }
+
+    if( m & (MEDIA_UNKNOWN|MEDIA_BD_ROM) ) {
+      //
+      // We prefere the mediatype as reported by the media since this way
+      // even ROM drives may report the correct type of writable media.
+      //
+
+      unsigned char* data = 0;
+      unsigned int dataLen = 0;
+      if( readDiscStructure( &data, dataLen, 1, 0 ) ) {
+	if( dataLen > 4+12 &&
+	    data[4+8] == 'B' &&  data[4+9] == 'D' ) {
+	  switch( data[4+10] ) {
+	  case 'O': m = MEDIA_BD_ROM; break;
+	  case 'W': m = MEDIA_BD_RE; break;
+	  case 'R': m = MEDIA_BD_R; break;
+	  }
+	}
+	
+	delete [] data;
+      }
+    }
+    
+    //
+    // Only old CD or DVD devices do not report a current profile
+    // the latter has been handled above
+    //
+    if( m == MEDIA_UNKNOWN ) {
+      unsigned char* data = 0;
+      unsigned int dataLen = 0;
+      if( readTocPmaAtip( &data, dataLen, 4, false, 0 ) ) {
+	if( (data[6]>>6)&1 )
+	  m = MEDIA_CD_RW;
+	else
+	  m = MEDIA_CD_R;
+      
+	delete [] data;
+      }
+      else
+	m = MEDIA_CD_ROM;
     }
   }
 
@@ -2448,7 +2307,7 @@ void K3bDevice::Device::checkFeatures()
   //
   cmd[2] = FEATURE_CD_MASTERING>>8;
   cmd[3] = FEATURE_CD_MASTERING;
-  cmd[8] = 16;
+  cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 12 ) {
@@ -2491,7 +2350,7 @@ void K3bDevice::Device::checkFeatures()
 
   cmd[2] = FEATURE_CD_TRACK_AT_ONCE>>8;
   cmd[3] = FEATURE_CD_TRACK_AT_ONCE;
-  cmd[8] = 16;
+  cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 12 ) {
@@ -2549,7 +2408,7 @@ void K3bDevice::Device::checkFeatures()
 
   cmd[2] = FEATURE_CD_RW_MEDIA_WRITE_SUPPORT>>8;
   cmd[3] = FEATURE_CD_RW_MEDIA_WRITE_SUPPORT;
-  cmd[8] = 16;
+  cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 12 ) {
@@ -2565,7 +2424,7 @@ void K3bDevice::Device::checkFeatures()
   // FIXME: since MMC5 the feature descr. is 8 bytes in length including a dvd dl read bit at byte 6
   cmd[2] = FEATURE_DVD_READ>>8;
   cmd[3] = FEATURE_DVD_READ;
-  cmd[8] = 16;
+  cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 12 ) {
@@ -2577,7 +2436,7 @@ void K3bDevice::Device::checkFeatures()
   }
   else {
     // retry with pre-MMC5 length
-    cmd[8] = 12;
+    cmd[8] = 8+4;
     if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
       unsigned int len = from4Byte( header );
       if( len == 8 ) {
@@ -2592,7 +2451,7 @@ void K3bDevice::Device::checkFeatures()
   //
   cmd[2] = FEATURE_DVD_PLUS_R>>8;
   cmd[3] = FEATURE_DVD_PLUS_R;
-  cmd[8] = 16;
+  cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 12 ) {
@@ -2605,7 +2464,7 @@ void K3bDevice::Device::checkFeatures()
 
   cmd[2] = FEATURE_DVD_PLUS_RW>>8;
   cmd[3] = FEATURE_DVD_PLUS_RW;
-  cmd[8] = 16;
+  cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 12 ) {
@@ -2642,7 +2501,7 @@ void K3bDevice::Device::checkFeatures()
   if( d->writeCapabilities & MEDIA_DVD_PLUS_R ) {
     cmd[2] = FEATURE_DVD_PLUS_RW_DUAL_LAYER>>8;
     cmd[3] = FEATURE_DVD_PLUS_RW_DUAL_LAYER;
-    cmd[8] = 16;
+    cmd[8] = 8+8;
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
       unsigned int len = from4Byte( header );
       if( len == 12 ) {
@@ -2655,7 +2514,7 @@ void K3bDevice::Device::checkFeatures()
 
     cmd[2] = FEATURE_DVD_PLUS_R_DUAL_LAYER>>8;
     cmd[3] = FEATURE_DVD_PLUS_R_DUAL_LAYER;
-    cmd[8] = 16;
+    cmd[8] = 8+8;
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
       unsigned int len = from4Byte( header );
       if( len == 12 ) {
@@ -2675,7 +2534,7 @@ void K3bDevice::Device::checkFeatures()
   //
   cmd[2] = FEATURE_BD_READ>>8;
   cmd[3] = FEATURE_BD_READ;
-  cmd[8] = 40;
+  cmd[8] = 8+32;
   if( !cmd.transport( TR_DIR_READ, header, 40 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 36 ) {
@@ -2691,18 +2550,39 @@ void K3bDevice::Device::checkFeatures()
 
   cmd[2] = FEATURE_BD_WRITE>>8;
   cmd[3] = FEATURE_BD_WRITE;
-  cmd[8] = 32;
+  cmd[8] = 8+24;
   if( !cmd.transport( TR_DIR_READ, header, 32 ) ) {
     unsigned int len = from4Byte( header );
     if( len == 28 ) {
       kdDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Write" << endl;
       if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
 	d->writeCapabilities |= MEDIA_BD_RE;
-      if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] )
+      if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] ) {
 	d->writeCapabilities |= MEDIA_BD_R;
+	m_writeModes |= WRITINGMODE_SRM;
+
+	cmd[2] = FEATURE_BD_PSEUDO_OVERWRITE>>8;
+	cmd[3] = FEATURE_BD_PSEUDO_OVERWRITE;
+	cmd[8] = 8+8;
+	if( !cmd.transport( TR_DIR_READ, header, 8+8 ) ) {
+	  unsigned int len = from4Byte( header );
+	  if( len == 4+8 ) {
+	    m_writeModes |= WRITINGMODE_SRM_POW;
+	  }
+	}
+
+	cmd[2] = FEATURE_RANDOM_WRITABLE>>8;
+	cmd[3] = FEATURE_RANDOM_WRITABLE;
+	cmd[8] = 8+16;
+	if( !cmd.transport( TR_DIR_READ, header, 8+16 ) ) {
+	  unsigned int len = from4Byte( header );
+	  if( len == 4+16 ) {
+	   m_writeModes |= WRITINGMODE_RRM;
+	  }
+	}
+      }
     }
   }
-
 
 
 
@@ -2903,10 +2783,10 @@ void K3bDevice::Device::checkFeatures()
 	    d->supportedProfiles |= MEDIA_BD_ROM;
 	    break;
 	  case 0x41:
-	    d->supportedProfiles |= MEDIA_BD_R_SEQ;
+	    d->supportedProfiles |= MEDIA_BD_R_SRM;
 	    break;
 	  case 0x42:
-	    d->supportedProfiles |= MEDIA_BD_R_RANDOM;
+	    d->supportedProfiles |= MEDIA_BD_R_RRM;
 	    break;
 	  case 0x43:
 	    d->supportedProfiles |= MEDIA_BD_RE;
@@ -3121,13 +3001,11 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
   QValueList<int> ret;
 
   if( burner() ) {
-    bool dvd = isDVD();
-
     //
     // Tests with all my drives resulted in 2A for CD and GET PERFORMANCE for DVD media
     // as the valid method of speed detection.
     //
-    if( !dvd ) {
+    if( mediaType() & MEDIA_CD_ALL ) {
       if( !getSupportedWriteSpeedsVia2A( ret, false ) )
 	getSupportedWriteSpeedsViaGP( ret, false );
     }
@@ -3477,8 +3355,8 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
   bool success = false;
 
   // FIXME: add CD media handling
-  int m = dvdMediaType();
-  if( m > 0 ) {
+  int m = mediaType();
+  if( m & MEDIA_DVD_ALL ) {
     // DVD+RW always returns complete
     if( m & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) )
       return false;
@@ -3519,4 +3397,47 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
   }
   
   return success;
+}
+
+
+QCString K3bDevice::Device::mediaId( int mediaType ) const
+{
+  QCString id;
+
+  if( mediaType & MEDIA_CD_ALL ) {
+    // FIXME:
+  }
+
+  else if( mediaType & MEDIA_DVD_MINUS_ALL ) {
+    unsigned char* data = 0;
+    unsigned int dataLen = 0;
+    if( readDvdStructure( &data, dataLen, 0x0E ) ) {
+      if( data[4+16] == 3 && data[4+24] == 4 ) {
+	id.sprintf( "%6.6s%-6.6s", data+4+17, data+4+25 );
+      }
+      delete [] data;
+    }
+  }
+
+  else if( mediaType & MEDIA_DVD_PLUS_ALL ) {
+    unsigned char* data = 0;
+    unsigned int dataLen = 0;
+    if( readDvdStructure( &data, dataLen, 0x11 ) ||
+	readDvdStructure( &data, dataLen, 0x0 ) ) {
+      id.sprintf( "%8.8s/%3.3s", data+23, data+31 );
+      delete [] data;
+    }
+  }
+
+  else if( mediaType & MEDIA_BD_ALL ) {
+    unsigned char* data = 0;
+    unsigned int dataLen = 0;
+    if( readDiscStructure( &data, dataLen, 1, 0 ) ) {
+      if( data[4+0] == 'D' && data[4+1] == 'I' )
+	id.sprintf ("%6.6s/%-3.3s", data+4+100, data+4+106 );
+      delete [] data;
+    }
+  }
+
+  return id;
 }
