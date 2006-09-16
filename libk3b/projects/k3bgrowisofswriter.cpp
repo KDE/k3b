@@ -272,7 +272,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   // because the only thing it does is creating problems.
   // Normally this should be done in growisofs
   //
-  if( dvdCompat && burnDevice()->dvdMediaType() != K3bDevice::MEDIA_DVD_PLUS_RW )
+  if( dvdCompat && burnDevice()->mediaType() != K3bDevice::MEDIA_DVD_PLUS_RW )
     *d->process << "-dvd-compat";
 
   //
