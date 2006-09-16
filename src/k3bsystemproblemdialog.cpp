@@ -158,78 +158,81 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 {
   QValueList<K3bSystemProblem> problems;
 
-  // 1. cdrecord, cdrdao
-  if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
-    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-				       i18n("Unable to find %1 executable").arg("cdrecord"),
-				       i18n("K3b uses cdrecord to actually write CDs."),
-				       i18n("Install the cdrtools package which contains "
-					    "cdrecord."),
-				       false ) );
-  }
-  else {
-    if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) ) {
-      problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-					 i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject( "cdrecord" )->version),
-					 i18n("Although K3b supports all cdrtools versions since "
-					      "1.10 it is highly recommended to at least use "
-					      "version 2.0."),
-					 i18n("Install a more recent version of the cdrtools."),
+  if( !k3bcore->deviceManager()->cdWriter().isEmpty() ) {
+    // 1. cdrecord, cdrdao
+    if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Unable to find %1 executable").arg("cdrecord"),
+					 i18n("K3b uses cdrecord to actually write CDs."),
+					 i18n("Install the cdrtools package which contains "
+					      "cdrecord."),
 					 false ) );
     }
+    else {
+      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) ) {
+	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+					   i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject( "cdrecord" )->version),
+					   i18n("Although K3b supports all cdrtools versions since "
+						"1.10 it is highly recommended to at least use "
+						"version 2.0."),
+					   i18n("Install a more recent version of the cdrtools."),
+					   false ) );
+      }
     
 #ifdef Q_OS_LINUX
 
-    //
-    // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
-    // So far we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
-    //
-    // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
-    //
-    if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
-	k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) ) {
-      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+      //
+      // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
+      // So far we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
+      //
+      // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
+      //
+      if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
+	  k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) ) {
+	if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
+	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					     i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a05"),
+					     i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
+						  "root for security reasons anymore.").arg("cdrecord <= 2.01.01a05"),
+					     i18n("Use K3bSetup to solve this problem."),
+					     true ) );
+      }
+      else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					   i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a05"),
-					   i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
-						"root for security reasons anymore.").arg("cdrecord <= 2.01.01a05"),
+					   i18n("%1 will be run without root privileges").arg("cdrecord"),
+					   i18n("It is highly recommended to configure cdrecord "
+						"to run with root privileges. Only then cdrecord "
+						"runs with high priority which increases the overall "
+						"stability of the burning process. Apart from that "
+						"it allows changing the size of the used burning buffer. "
+						"A lot of user problems could be solved this way. This is also "
+						"true when using SuSE's resmgr."),
 					   i18n("Use K3bSetup to solve this problem."),
 					   true ) );
-    }
-    else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
-      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("%1 will be run without root privileges").arg("cdrecord"),
-					 i18n("It is highly recommended to configure cdrecord "
-					      "to run with root privileges. Only then cdrecord "
-					      "runs with high priority which increases the overall "
-					      "stability of the burning process. Apart from that "
-					      "it allows changing the size of the used burning buffer. "
-					      "A lot of user problems could be solved this way. This is also "
-					      "true when using SuSE's resmgr."),
-					 i18n("Use K3bSetup to solve this problem."),
-					 true ) );
 #endif
+    }
+
+    if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
+      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					 i18n("Unable to find %1 executable").arg("cdrdao"),
+					 i18n("K3b uses cdrdao to actually write CDs."),
+					 i18n("Install the cdrdao package."),
+					 false ) );
+    }
+    else {
+#ifdef Q_OS_LINUX
+      if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
+	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+					   i18n("%1 will be run without root privileges").arg("cdrdao"),
+					   i18n("It is highly recommended to configure cdrdao "
+						"to run with root privileges to increase the "
+						"overall stability of the burning process."),
+					   i18n("Use K3bSetup to solve this problem."),
+					   true ) );
+#endif
+    }
   }
 
-  if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
-    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-				       i18n("Unable to find %1 executable").arg("cdrdao"),
-				       i18n("K3b uses cdrdao to actually write CDs."),
-				       i18n("Install the cdrdao package."),
-				       false ) );
-  }
-  else {
-#ifdef Q_OS_LINUX
-    if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
-      problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					 i18n("%1 will be run without root privileges").arg("cdrdao"),
-					 i18n("It is highly recommended to configure cdrdao "
-					      "to run with root privileges to increase the "
-					      "overall stability of the burning process."),
-					 i18n("Use K3bSetup to solve this problem."),
-					 true ) );
-#endif
-  }
 
   if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
     if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
@@ -253,15 +256,18 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
-					   i18n("K3b won't be able to copy DVDs on-the-fly using a growisofs "
+					   i18n("K3b won't be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
+						"sessions using a growisofs "
 						"version older than 5.12."),
 					   i18n("Install a more recent version of %1.").arg("growisofs"),
 					   false ) );
       }
-      else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 6, 0 ) ) {
+      else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 7, 0 ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
-					   i18n("It is highly recommended to use growisofs 6.0 or higher."),
+					   i18n("It is highly recommended to use growisofs 7.0 or higher. "
+						"K3b won't be able to write a DVD+RW in multiple "
+						"sessions using a growisofs version older than 7.0." ),
 					   i18n("Install a more recent version of %1.").arg("growisofs"),
 					   false ) );
       }
