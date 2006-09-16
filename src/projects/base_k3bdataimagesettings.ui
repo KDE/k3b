@@ -81,6 +81,9 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>File system presets</string>
+                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">

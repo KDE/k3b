@@ -25,6 +25,7 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qwhatsthis.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -182,6 +183,25 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
 
   if( !s_fsPresetsInitialized )
     initializePresets();
+
+  QWhatsThis::add( m_comboFilesystems,
+		   i18n("<p><b>File System Presets</b>"
+			"<p>K3b provides the following file system Presets which allow for a quick selection "
+			"of the most frequently used settings.")
+		   + "<p><b>" + i18n(s_fsPresetNames[0]) + "</b><br>"
+		   + i18n("The file system is optimized for usage on Linux/Unix systems. This mainly means that "
+			  "it uses the Rock Ridge extensions to provide long filenames, symbolic links, and POSIX "
+			  "compatible file permissions.")
+		   + "<p><b>" + i18n(s_fsPresetNames[1]) + "</b><br>"
+		   + i18n("In addition to the settings for Linux/Unix the file system contains a Joliet tree which "
+			  "allows for long file names on Windows which does not support the Rock Ridget extensions. "
+			  "Be aware that the file name length is restricted to 103 characters.")
+		   + "<p><b>" + i18n(s_fsPresetNames[2]) + "</b><br>"
+		   + i18n("The file system has additional UDF entries attached to it. This raises the maximal file "
+			  "size to 4 GB. Be aware that the UDF support in K3b is limited.")
+		   + "<p><b>" + i18n(s_fsPresetNames[3]) + "</b><br>" 
+		   + i18n("The file system is optimized for compatibility with old systems. That means file names "
+			  "are restricted to 8.3 characters and no symbolic links or file permissions are supported.") );
 }
 
 
