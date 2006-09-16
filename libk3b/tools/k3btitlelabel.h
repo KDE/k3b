@@ -58,6 +58,9 @@ class LIBK3B_EXPORT K3bTitleLabel : public QFrame
  private:
   void updatePositioning();
 
+  class ToolTip;
+  ToolTip* m_toolTip;
+
   class Private;
   Private* d;
 };

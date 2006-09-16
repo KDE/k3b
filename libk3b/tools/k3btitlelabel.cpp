@@ -21,6 +21,7 @@
 #include <qevent.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
+#include <qtooltip.h>
 
 
 class K3bTitleLabel::Private
@@ -54,18 +55,56 @@ public:
 };
 
 
-// FIXME: add tooltip in case we cut the text
+class K3bTitleLabel::ToolTip : public QToolTip
+{
+public:
+  ToolTip( K3bTitleLabel* label )
+    : QToolTip( label ),
+      m_label(label) {
+  }
+  
+  void maybeTip( const QPoint &pos ) {
+    QRect r = m_label->contentsRect();
+
+    int neededWidth = m_label->d->displayTitleLength;
+    if( !m_label->d->displaySubTitle.isEmpty() )
+      neededWidth += m_label->d->displaySubTitleLength + 5;
+
+    int startPos = 0;
+    if( m_label->d->alignment & Qt::AlignHCenter )
+      startPos = r.left() + ( r.width() - 2*m_label->d->margin - neededWidth ) / 2;
+    else if( m_label->d->alignment & Qt::AlignRight )
+      startPos = r.right() - m_label->d->margin - neededWidth;
+    else
+      startPos = r.left() + m_label->d->margin;
+    
+    QRect titleTipRect( startPos, 0, m_label->d->displayTitleLength, m_label->height() );
+    QRect subTitleTipRect( startPos + m_label->d->displayTitleLength, 0, m_label->d->displaySubTitleLength, m_label->height() );
+
+    if( titleTipRect.contains( pos ) &&
+	m_label->d->displayTitle != m_label->d->title )
+      tip( titleTipRect, m_label->d->title );
+    else if( subTitleTipRect.contains( pos ) &&
+	m_label->d->displaySubTitle != m_label->d->subTitle )
+      tip( subTitleTipRect, m_label->d->subTitle );
+  }
+
+  K3bTitleLabel* m_label;
+};
+
 
 
 K3bTitleLabel::K3bTitleLabel( QWidget* parent, const char* name )
   : QFrame( parent, name )
 {
   d = new Private();
+  m_toolTip = new ToolTip( this );
 }
 
 
 K3bTitleLabel::~K3bTitleLabel()
 {
+  delete m_toolTip;
   delete d;
 }
 
