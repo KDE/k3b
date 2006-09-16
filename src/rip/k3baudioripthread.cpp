@@ -278,8 +278,8 @@ void K3bAudioRipThread::run()
     emitFinished(false);
   }
   else {
-  if( k3bcore->globalSettings()->ejectMedia() )
-    m_device->eject();
+    if( k3bcore->globalSettings()->ejectMedia() )
+      m_device->eject();
 
     emitFinished(success);
   }

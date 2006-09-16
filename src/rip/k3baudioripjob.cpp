@@ -59,6 +59,7 @@ QString K3bAudioRipJob::jobDetails() const
 
 void K3bAudioRipJob::start()
 {
+  emitStarted();
   K3bInterferingSystemsHandler::instance()->disable( m_thread->m_device );
   k3bcore->blockDevice( m_thread->m_device );
   m_threadJob->start();
