@@ -152,6 +152,22 @@ namespace K3bDevice {
       const QPtrList<Device>& dvdReader() const;
 
       /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all Blue Ray reader devices.
+       */
+      const QPtrList<Device>& blueRayReader() const;
+
+      /**
+       * Before getting the devices do a @ref scanBus() or add 
+       * devices via addDevice( const QString& ).
+       *
+       * \return List of all Blue Ray writer devices.
+       */
+      const QPtrList<Device>& blueRayWriters() const;
+
+      /**
        * Reads the device information from the config file.
        */
       virtual bool readConfig( KConfig* );

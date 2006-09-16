@@ -116,6 +116,8 @@ public:
   QPtrList<K3bDevice::Device> cdWriter;
   QPtrList<K3bDevice::Device> dvdReader;
   QPtrList<K3bDevice::Device> dvdWriter;
+  QPtrList<K3bDevice::Device> bdReader;
+  QPtrList<K3bDevice::Device> bdWriter;
 
   bool checkWritingModes;
 
@@ -214,6 +216,15 @@ const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
   return d->dvdReader;
 }
 
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::blueRayReader() const
+{
+  return d->bdReader;
+}
+
+const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::blueRayWriters() const
+{
+  return d->bdWriter;
+}
 
 const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
 {
@@ -248,10 +259,10 @@ int K3bDevice::DeviceManager::scanBus()
   //
   //  if( !d->hal.isOpen() ) {
 #ifdef Q_OS_LINUX
-    LinuxDeviceScan();
+  LinuxDeviceScan();
 #endif
 #ifdef Q_OS_FREEBSD
-    BSDDeviceScan();
+  BSDDeviceScan();
 #endif
 #ifdef Q_OS_NETBSD
   NetBSDDeviceScan();
@@ -316,25 +327,6 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   else {
     kdError() << "(K3bDevice::DeviceManager) could not open /proc/sys/dev/cdrom/info" << endl;
   }
-
-//   // try to find symlinks (UGLY!!!!)
-//   // FIXME: I really don't like popen here
-//   QString cmd = QString("find /dev -type l -printf \"%p\t%l\n\" | egrep '%1cdrom|dvd|cdwriter|cdrecorder' | cut -f1").arg(devstring);
-//   FILE *fd = popen( QFile::encodeName(cmd),"r" );
-//   if( fd ) {
-//     QFile links;
-//     QString device;
-//     links.open(IO_ReadOnly,fd);
-//     while ( links.readLine(device,80) > 0) {
-//       device = device.stripWhiteSpace();
-//       K3bDevice::Device *d = findDevice(resolveSymLink(device));
-//       if (d) {
-// 	d->addDeviceNode(device);
-// 	kdDebug() << "(K3bDevice::DeviceManager) Link: " << device << " -> " << d->devicename() << endl;
-//       }
-//     }
-//     pclose(fd);
-//   }
 
   //
   // Scan the generic devices if we have scsi devices
@@ -554,6 +546,8 @@ void K3bDevice::DeviceManager::clear()
   d->cdWriter.clear();
   d->dvdReader.clear();
   d->dvdWriter.clear();
+  d->bdReader.clear();
+  d->bdWriter.clear();
 
   // to make sure no one crashes lets keep the devices around until the changed
   // signals return
@@ -794,6 +788,10 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
       d->cdWriter.append( device );
     if( device->writesDvd() )
       d->dvdWriter.append( device );
+    if( device->readCapabilities() & MEDIA_BD_ALL )
+      d->bdReader.append( device );
+    if( device->writeCapabilities() & MEDIA_BD_ALL )
+      d->bdWriter.append( device );
 
     if( device->writesCd() ) {
       // default to max write speed
@@ -816,8 +814,10 @@ void K3bDevice::DeviceManager::removeDevice( const QString& dev )
   if( Device* device = findDevice( dev ) ) {
     d->cdReader.removeRef( device );
     d->dvdReader.removeRef( device );
+    d->bdReader.removeRef( device );
     d->cdWriter.removeRef( device );
     d->dvdWriter.removeRef( device );
+    d->bdWriter.removeRef( device );
     d->allDevices.removeRef( device );
 
     emit changed();
