@@ -47,6 +47,8 @@ K3bMsInfoFetcher::~K3bMsInfoFetcher()
 
 void K3bMsInfoFetcher::start()
 {
+  jobStarted();
+
   emit infoMessage( i18n("Searching previous session"), K3bJob::INFO );
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {

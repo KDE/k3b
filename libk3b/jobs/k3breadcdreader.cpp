@@ -94,6 +94,8 @@ void K3bReadcdReader::writeToFd( int fd )
 
 void K3bReadcdReader::start()
 {
+  jobStarted();
+
   d->blocksToRead = 1;
   d->unreadableBlocks = 0;
   d->lastProgress = 0;
