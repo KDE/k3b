@@ -499,7 +499,7 @@ void K3bVideoDVDRippingDialog::loadK3bDefaults()
   m_w->setSelectedAudioCodec( K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 );
   m_w->m_checkBlankReplace->setChecked( false );
   m_w->m_editBlankReplace->setText( "_" );
-  m_w->m_comboFilenamePattern->setEditText( QString( "%b - %1 %t (%n %a %c)" ).arg(i18n("Title") ) );
+  m_w->m_comboFilenamePattern->setEditText( m_w->m_comboFilenamePattern->text(0) );
   m_w->m_editBaseDir->setURL( K3b::defaultTempPath() );
 }
 
@@ -517,7 +517,7 @@ void K3bVideoDVDRippingDialog::loadUserDefaults( KConfigBase* c )
   m_w->setSelectedAudioCodec( audioCodecFromId( c->readEntry( "audio codec", audioCodecId( K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 ) ) ) );
   m_w->m_checkBlankReplace->setChecked( c->readBoolEntry( "replace blanks", false ) );
   m_w->m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );
-  m_w->m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", QString( "%b - %1 %t (%n %a %c)" ).arg(i18n("Title") ) ) );
+  m_w->m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", m_w->m_comboFilenamePattern->text(0) ) );
   m_w->m_editBaseDir->setURL( c->readPathEntry( "base dir", K3b::defaultTempPath() ) );
 }
 
