@@ -56,6 +56,26 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   bool resampleAudioTo44100() const { return m_resampleAudio; }
   bool lowPriority() const { return m_lowPriority; }
 
+  /**
+   * The video codecs supported by this job.
+   */
+  enum VideoCodec {
+    VIDEO_CODEC_XVID,
+    VIDEO_CODEC_FFMPEG_MPEG4,
+    VIDEO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
+  };
+
+  /**
+   * The audio codecs supported by this job.
+   */
+  enum AudioCodec {
+    AUDIO_CODEC_MP3,
+    /*    AUDIO_CODEC_OGG_VORBIS,*/
+    AUDIO_CODEC_AC3_STEREO,
+    AUDIO_CODEC_AC3_PASSTHROUGH,
+    AUDIO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
+  };
+
  public slots:
   void start();
   void cancel();
@@ -124,15 +144,6 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   void setFilename( const QString& name ) { m_filename = name; }
 
   /**
-   * The video codecs supported by this job.
-   */
-  enum VideoCodec {
-    VIDEO_CODEC_XVID,
-    VIDEO_CODEC_FFMPEG_MPEG4,
-    VIDEO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
-  };
-
-  /**
    * Set the video codec used to encode the video title.
    *
    * The default is VIDEO_CODEC_FFMPEG_MPEG4
@@ -153,17 +164,6 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * The default is false.
    */
   void setTwoPassEncoding( bool b ) { m_twoPassEncoding = b; }
-
-  /**
-   * The audio codecs supported by this job.
-   */
-  enum AudioCodec {
-    AUDIO_CODEC_MP3,
-    /*    AUDIO_CODEC_OGG_VORBIS,*/
-    AUDIO_CODEC_AC3_STEREO,
-    AUDIO_CODEC_AC3_PASSTHROUGH,
-    AUDIO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
-  };
 
   /**
    * Set the audio codec used to encode the audio stream
