@@ -60,7 +60,7 @@ QString K3bAudioRipJob::jobDetails() const
 void K3bAudioRipJob::start()
 {
   jobStarted();
-  K3bInterferingSystemsHandler::instance()->disable( m_thread->m_device );
+  K3bInterferingSystemsHandler::instance()->disable( m_thread->m_device, this );
   k3bcore->blockDevice( m_thread->m_device );
   m_threadJob->start();
 }
@@ -74,7 +74,7 @@ void K3bAudioRipJob::cancel()
 
 void K3bAudioRipJob::slotRippingFinished( bool success )
 {
-  K3bInterferingSystemsHandler::instance()->enable( m_thread->m_device );
+  K3bInterferingSystemsHandler::instance()->enable( m_thread->m_device, this );
   k3bcore->unblockDevice( m_thread->m_device );
   jobFinished( success );
 }

@@ -268,7 +268,7 @@ void K3bBurnJob::jobStarted()
       connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
 	       this, SIGNAL(infoMessage(const QString&, int)) );
     }
-    K3bInterferingSystemsHandler::instance()->disable( writer() );
+    K3bInterferingSystemsHandler::instance()->disable( writer(), this );
   }
 }
 
@@ -276,7 +276,7 @@ void K3bBurnJob::jobStarted()
 void K3bBurnJob::jobFinished( bool success )
 {
   if( d->interfSInit )
-    K3bInterferingSystemsHandler::instance()->enable( writer() );
+    K3bInterferingSystemsHandler::instance()->enable( writer(), this );
 
   K3bJob::jobFinished( success );
 }

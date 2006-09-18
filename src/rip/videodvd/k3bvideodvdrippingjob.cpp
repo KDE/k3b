@@ -129,7 +129,7 @@ void K3bVideoDVDRippingJob::start()
 
   connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
 	   this, SIGNAL(infoMessage(const QString&, int)) );
-  K3bInterferingSystemsHandler::instance()->disable( m_dvd.device() );
+  K3bInterferingSystemsHandler::instance()->disable( m_dvd.device(), this );
 
   initProgressInfo();
 
@@ -143,7 +143,7 @@ void K3bVideoDVDRippingJob::start()
 void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 {
   if( d->canceled ) {
-    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device(), this );
     K3bInterferingSystemsHandler::instance()->disconnect( this );
     emit canceled();
     jobFinished( false );
@@ -164,7 +164,7 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 	startTranscoding( d->currentTitleInfoIndex );
     }
     else {
-      K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+      K3bInterferingSystemsHandler::instance()->enable( m_dvd.device(), this );
       K3bInterferingSystemsHandler::instance()->disconnect( this );
       jobFinished( d->failedTitles == 0 );
     }
@@ -175,7 +175,7 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 {
   if( d->canceled ) {
-    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device() );
+    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device(), this );
     K3bInterferingSystemsHandler::instance()->disconnect( this );
     emit canceled();
     jobFinished( false );
@@ -195,9 +195,9 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 
       // let's see if the clipping values make sense
       if( m_detectClippingJob->clippingTop() + m_detectClippingJob->clippingBottom() 
-	  >= m_dvd[d->currentTitleInfoIndex].videoStream().pictureHeight() ||
+	  >= (int)m_dvd[d->currentTitleInfoIndex].videoStream().pictureHeight() ||
 	  m_detectClippingJob->clippingLeft() + m_detectClippingJob->clippingRight()
-	  >= m_dvd[d->currentTitleInfoIndex].videoStream().pictureWidth() ) {
+	  >= (int)m_dvd[d->currentTitleInfoIndex].videoStream().pictureWidth() ) {
 	emit infoMessage( i18n("Insane lipping values. No clipping will be done at all."), WARNING );
       }
       else {

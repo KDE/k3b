@@ -32,6 +32,7 @@
 #include <k3bcddbquery.h>
 #include <k3bcore.h>
 #include <k3binffilewriter.h>
+#include <k3binterferingsystemshandler.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -606,6 +607,8 @@ void K3bCdCopyJob::readNextSession()
     else
       d->audioSessionReader->setImageNames( d->imageNames );  // the audio tracks are always the first tracks
 
+    K3bInterferingSystemsHandler::instance()->disable( m_readerDevice, this );
+
     d->audioReaderRunning = true;
     d->audioSessionReader->start();
   }
@@ -659,6 +662,9 @@ void K3bCdCopyJob::readNextSession()
     d->dataReaderRunning = true;
     if( !m_onTheFly || m_onlyCreateImages )
       slotReadingNextTrack( 1, 1 );
+
+    K3bInterferingSystemsHandler::instance()->disable( m_readerDevice, this );
+
     d->dataTrackReader->start();
   }
 }
@@ -942,6 +948,8 @@ bool K3bCdCopyJob::writeNextSession()
 void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 {
   d->audioReaderRunning = d->dataReaderRunning = false;
+
+  K3bInterferingSystemsHandler::instance()->enable( m_readerDevice, this );
 
   if( success ) {
     if( d->numSessions > 1 )

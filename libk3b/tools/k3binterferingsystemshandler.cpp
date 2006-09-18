@@ -67,7 +67,8 @@ public:
     : /*disabledCnt( 0 ),*/
       disabledMediaManager(false),
       disabledMediaNotifier(false),
-      disabledSuSEPlugger(false) {
+      disabledSuSEPlugger(false),
+      handler(0) {
   }
 
   int& operator[]( K3bDevice::Device* dev ) {
@@ -86,6 +87,8 @@ public:
   bool disabledMediaManager;
   bool disabledMediaNotifier;
   bool disabledSuSEPlugger;
+
+  K3bJobHandler* handler;
 };
 
 
@@ -110,8 +113,10 @@ K3bInterferingSystemsHandler::~K3bInterferingSystemsHandler()
 }
 
 
-void K3bInterferingSystemsHandler::disable( K3bDevice::Device* dev )
+void K3bInterferingSystemsHandler::disable( K3bDevice::Device* dev, K3bJobHandler* hdl )
 {
+  d->handler = hdl;
+
   int& cnt = (*d)[dev];
   if( cnt == 0 )
     disableInternal( dev );
@@ -119,8 +124,10 @@ void K3bInterferingSystemsHandler::disable( K3bDevice::Device* dev )
 }
 
 
-void K3bInterferingSystemsHandler::enable( K3bDevice::Device* dev )
+void K3bInterferingSystemsHandler::enable( K3bDevice::Device* dev, K3bJobHandler* hdl )
 {
+  d->handler = hdl;
+
   int& cnt = (*d)[dev];
   if( cnt > 0 ) {
     --cnt;
@@ -175,18 +182,17 @@ void K3bInterferingSystemsHandler::disableInternal( K3bDevice::Device* dev )
     K3bLsofWrapper lsof;
     if( lsof.checkDevice( dev ) ) {
       if( !lsof.usingApplications().isEmpty() ) {
-	// TODO: In a perfect workd we would block here until the user shut down the other
-	//       applications but that is not easy:
-	//       1. we are in libk3b -> no GUI if possible
-	//       2. If we would for example use KMessageBox we would not have a parent widget and thus
-	//          with some window managers the user would not see the dialog but only the stalled
-	//          progress.
-	emit infoMessage( i18n("The device '%1' is already in use by other applications "
-			       "(%2) "
-			       "It is highly recommended to quit those.")
-			  .arg(dev->vendor() + " - " + dev->description())
-			  .arg(lsof.usingApplications().join(", ")),
-			  K3bJob::WARNING );
+	QString s = i18n("The device '%1' is already in use by other applications "
+			 "(%2) "
+			 "It is highly recommended to quit those.")
+	  .arg(dev->vendor() + " - " + dev->description())
+	  .arg(lsof.usingApplications().join(", "));
+
+	// TODO: should we always emit the info message?
+	if( d->handler )
+	  d->handler->blockingInformation( s, i18n("Warning") );
+	else
+	  emit infoMessage( s, K3bJob::WARNING );
       }
     }
   }

@@ -22,6 +22,10 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 
+#include <sys/types.h>
+#include <unistd.h>
+
+
 
 class K3bLsofWrapper::Private
 {
@@ -53,15 +57,28 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
   // run lsof
   KProcess p;
   K3bProcessOutputCollector out( &p );
-  p << d->lsofBin << "-Fc0" << dev->blockDeviceName();
-  if( !p.start( KProcess::Block, KProcess::AllOutput ) )
+
+  //
+  // We use the following output form: 
+  // p<PID>
+  // c<COMMAND_NAME>
+  //
+  p << d->lsofBin << "-Fpc" << dev->blockDeviceName();
+
+  if( !p.start( KProcess::Block, KProcess::Stdout ) )
     return false;
 
+  //
   // now process its output
   QStringList l = QStringList::split( "\n", out.output() );
   for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
-    QString app = (*it).mid( (*it).find( 'c' ) + 1 );
-    if( app != "k3b" )
+    int pid = (*it).mid(1).toInt();
+    QString app = (*(++it)).mid(1);
+
+    kdDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid << endl;
+
+    // we don't care about ourselves using the device ;)
+    if( pid != (int)::getpid() )
       d->apps.append( app );
   }
 

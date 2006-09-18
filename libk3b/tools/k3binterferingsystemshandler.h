@@ -22,6 +22,7 @@
 namespace K3bDevice {
   class Device;
 }
+class K3bJobHandler;
 
 
 /**
@@ -48,8 +49,26 @@ class LIBK3B_EXPORT K3bInterferingSystemsHandler : public QObject
 
   static K3bInterferingSystemsHandler* instance();
 
-  void disable( K3bDevice::Device* dev );
-  void enable( K3bDevice::Device* dev );
+  /**
+   * Disable all interfering systems for as specific device.
+   *
+   * Multiple calls to disable will be cached.
+   *
+   * \param dev The device that should be freed of any interfering systems.
+   * \param hdl If a  Job Handler is set it is used to interact with the 
+   *            user. For now the only thing used is the blocking information
+   *            call to notify of other applications using the device.
+   */
+  void disable( K3bDevice::Device* dev, K3bJobHandler* hdl = 0 );
+
+  /**
+   * Reenable all interfering systems which have been disabled by disable().
+   * Does nothing if called before disable()
+   *
+   * \param dev The device for which the system should be reenabled.
+   * \param hdl Unused for now.
+   */
+  void enable( K3bDevice::Device* dev, K3bJobHandler* hdl = 0 );
 
   static void threadSafeEnable( K3bDevice::Device* dev );
   static void threadSafeDisable( K3bDevice::Device* dev );
