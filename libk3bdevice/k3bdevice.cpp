@@ -1640,6 +1640,9 @@ bool K3bDevice::Device::open( bool write ) const
     kdDebug() << "(K3bDevice::openDevice) open device " << m_passDevice
 	      << ((d->cam)?" succeeded.":" failed.") << endl;
   }
+
+  d->mutex.unlock();
+
   return (d->cam != 0);
 #endif
 #if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
