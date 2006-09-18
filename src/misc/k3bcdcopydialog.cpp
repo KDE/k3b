@@ -403,9 +403,13 @@ void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
   updateOverrideDevice();
 
+  K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
+
   if( k3bappcore->mediaCache()->toc( dev ).contentType() == K3bDevice::DATA ) {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
-    m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + k3bappcore->mediaCache()->medium( dev ).volumeId().lower() + ".iso" );
+    m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() 
+					   + medium.volumeId().lower() 
+					   + ( medium.toc().count() == 1 ? QString(".iso") : QString::null ) );
   }
   else {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );
