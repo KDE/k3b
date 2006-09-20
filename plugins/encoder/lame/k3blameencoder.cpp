@@ -84,6 +84,20 @@ static const int s_lame_presets[] = {
 };
 
 
+static const int s_lame_preset_approx_bitrates[] = {
+  56,
+  90,
+  115,
+  130,
+  160,
+  175,
+  190,
+  210,
+  230,
+  320
+};
+
+
 static const char* s_lame_preset_strings[] = {
   I18N_NOOP("Low quality (56 kbps)"),
   I18N_NOOP("Low quality (90 kbps)"),
@@ -566,10 +580,30 @@ QString K3bLameEncoder::fileTypeComment( const QString& ) const
 
 long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
-  // FIXME!
   KConfig* c = k3bcore->config();
   c->setGroup( "K3bLameEncoderPlugin" );
-  int bitrate = c->readNumEntry( "Constant Bitrate", 128 );
+  int bitrate = 0;
+  if( c->readBoolEntry( "Manual Bitrate Settings", false ) ) {
+    if( c->readBoolEntry( "VBR", false ) ) {
+      if( c->readBoolEntry( "Use Maximum Bitrate", false ) )
+	bitrate = c->readNumEntry( "Maximum Bitrate", 224 );
+      if( c->readBoolEntry( "Use Minimum Bitrate", false ) )
+	bitrate = ( bitrate > 0 
+		    ? (bitrate - c->readNumEntry( "Minimum Bitrate", 32 )) / 2 
+		    : c->readNumEntry( "Minimum Bitrate", 32 ) );
+      if( c->readBoolEntry( "Use Average Bitrate", true ) )
+	bitrate = c->readNumEntry( "Average Bitrate", 128 );
+    }
+    else {
+      bitrate = c->readNumEntry( "Constant Bitrate", 128 );
+    }
+  }
+  else {
+    int q = c->readNumEntry( "Quality Level", 5 );
+    if( q < 0 ) q = 0;
+    if( q > 9 ) q = 9;
+    bitrate = s_lame_preset_approx_bitrates[q];
+  }
 
   return (msf.totalFrames()/75 * bitrate * 1000)/8;
 }
