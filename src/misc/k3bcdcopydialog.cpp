@@ -269,6 +269,18 @@ K3bDevice::Device* K3bCdCopyDialog::readingDevice() const
 
 void K3bCdCopyDialog::slotStartClicked()
 {
+  //
+  // Let's check the available size
+  //
+  if( m_checkCacheImage->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
+    if( neededSize()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+      if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
+							 "Write anyway?") ) == KMessageBox::Cancel )
+	return;
+    }
+  }
+
+
   K3bJobProgressDialog* dlg = 0;
   if( m_checkOnlyCreateImage->isChecked() ) {
     dlg = new K3bJobProgressDialog( kapp->mainWidget() );
@@ -393,6 +405,8 @@ void K3bCdCopyDialog::slotToggleAll()
 					   m_comboCopyMode->currentItem() == 0 );
   
   m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+
+  m_tempDirSelectionWidget->setNeededSize( neededSize() );
   
   setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() && 
 		    (dev || m_checkOnlyCreateImage->isChecked()) );
@@ -404,6 +418,8 @@ void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
   updateOverrideDevice();
 
   K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
+
+  m_tempDirSelectionWidget->setNeededSize( neededSize() );
 
   if( k3bappcore->mediaCache()->toc( dev ).contentType() == K3bDevice::DATA ) {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
@@ -528,6 +544,15 @@ void K3bCdCopyDialog::loadK3bDefaults()
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
 
   slotToggleAll();
+}
+
+
+KIO::filesize_t K3bCdCopyDialog::neededSize() const
+{
+  if( m_comboCopyMode->currentItem() == 0 )
+    return k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).diskInfo().size().mode1Bytes();
+  else
+    return k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).diskInfo().size().rawBytes();
 }
 
 #include "k3bcdcopydialog.moc"

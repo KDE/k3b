@@ -19,6 +19,9 @@
 
 #include <k3binteractiondialog.h>
 
+#include <kio/global.h>
+
+
 namespace K3bDevice {
   class Device;
   class DeviceManager;
@@ -56,6 +59,8 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   void loadUserDefaults( KConfigBase* );
   void saveUserDefaults( KConfigBase* );
   void loadK3bDefaults();
+
+  KIO::filesize_t neededSize() const;
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;

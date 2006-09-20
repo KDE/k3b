@@ -29,6 +29,7 @@
 #include <k3bthememanager.h>
 #include <k3bapplication.h>
 #include <k3bmediacache.h>
+#include <k3biso9660.h>
 
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -229,6 +230,17 @@ K3bDevice::Device* K3bDvdCopyDialog::readingDevice() const
 void K3bDvdCopyDialog::slotStartClicked()
 {
   //
+  // Let's check the available size
+  //
+  if( m_checkCacheImage->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
+    if( neededSize()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+      if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
+							 "Write anyway?") ) == KMessageBox::Cancel )
+	return;
+    }
+  }
+
+  //
   // check for m_tempDirSelectionWidget->tempPath()
   //
   if( !m_checkOnlyCreateImage->isChecked() && m_checkCacheImage->isChecked() ) 
@@ -401,12 +413,16 @@ void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 {
   updateOverrideDevice();
 
+  K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
+
   m_writerSelectionWidget->setWantedMediumType( k3bappcore->mediaCache()->diskInfo( dev ).numLayers() > 1 &&
 						k3bappcore->mediaCache()->diskInfo( dev ).size().mode1Bytes() > 4700372992LL
 						? K3bDevice::MEDIA_WRITABLE_DVD_DL
 						: K3bDevice::MEDIA_WRITABLE_DVD_SL );
 
-  m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + k3bappcore->mediaCache()->medium( dev ).volumeId().lower() + ".iso" );
+  m_tempDirSelectionWidget->setNeededSize( neededSize() );
+
+  m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + medium.volumeId().lower() + ".iso" );
 
   toggleAll();
 }
@@ -420,6 +436,19 @@ void K3bDvdCopyDialog::updateOverrideDevice()
     m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
 						i18n("Use the same device for burning"),
 						i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+}
+
+
+KIO::filesize_t K3bDvdCopyDialog::neededSize() const
+{
+  K3bMedium medium = k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() );
+
+  if( medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA )
+    return 0;
+  else if( medium.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW) )
+    return (KIO::filesize_t)medium.iso9660Descriptor()->volumeSpaceSize * (KIO::filesize_t)2048;
+  else
+    return medium.diskInfo().size().mode1Bytes();
 }
 
 #include "k3bdvdcopydialog.moc"
