@@ -5,6 +5,7 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bRip]
 Name=Rip Video DVD Titles with K3b
+Name[af]=Kopiëer Video DVD titels m.b.v. K3b
 Name[ar]= استخرج عناوين مرئيات من القرص المرئي الرقمي (DVD)  بواسطة K3b
 Name[bg]=Сваляне на DVD заглавия с K3b
 Name[cs]=Ripovat titulky video DVD pomocí K3b
