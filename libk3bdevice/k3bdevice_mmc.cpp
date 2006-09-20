@@ -203,7 +203,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
     // At least one Panasonic drive returns gigantic changing numbers for the data length
     // which makes K3b crash below when *data cannot be allocated. That's why we cut the 
     // length here.
-    // FIXME: 2048 is a proper upper boundry for the write speed but not for all
+    // FIXME: 2048 is a proper upper boundary for the write speed but not for all
     //        return types. "Defect Status Data" for example might return way more data.
     if( dataLen > 2048 ) {
       kdError() << "(K3bDevice::Device) " << blockDeviceName()

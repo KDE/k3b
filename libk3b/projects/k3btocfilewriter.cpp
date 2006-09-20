@@ -55,7 +55,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
     writeGlobalCdText(t);
 
   //
-  // see if we have multible sessions
+  // see if we have multiple sessions
   //
   int sessions = 1;
   for( K3bDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {

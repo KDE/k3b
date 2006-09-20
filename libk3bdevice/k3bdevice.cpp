@@ -631,7 +631,7 @@ bool K3bDevice::Device::isDVD() const
 int K3bDevice::Device::isEmpty() const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   int ret = STATE_UNKNOWN;
@@ -777,7 +777,7 @@ int K3bDevice::Device::getTrackDataMode( const K3bDevice::Track& track ) const
 K3bDevice::Toc K3bDevice::Device::readToc() const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   Toc toc;
@@ -817,7 +817,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
 
   else if( mt & (MEDIA_DVD_PLUS_R|MEDIA_DVD_PLUS_R_DL) ) {
     //
-    // a DVD+R disk may have multible sessions
+    // a DVD+R disk may have multiple sessions
     // every session may contain up to 16 fragments
     // if the disk is open there is one open session
     // every closed session is viewed as a track whereas
@@ -893,7 +893,7 @@ void K3bDevice::Device::readIsrcMcn( K3bDevice::Toc& toc ) const
 bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   bool success = false;
@@ -1050,7 +1050,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
 bool K3bDevice::Device::readRawToc( K3bDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   bool success = false;
@@ -1330,7 +1330,7 @@ int K3bDevice::Device::rawTocDataWithBcdValues( unsigned char* data, unsigned in
 K3bDevice::CdText K3bDevice::Device::readCdText() const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   K3bDevice::CdText textData;
@@ -1358,7 +1358,7 @@ K3bDevice::CdText K3bDevice::Device::readCdText() const
 bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   bool success = true;
@@ -1482,7 +1482,7 @@ bool K3bDevice::Device::fixupToc( K3bDevice::Toc& toc ) const
 
       //
       // data[6]    - first track number in last complete session
-      // data[8-11] - start adress of first track in last session
+      // data[8-11] - start address of first track in last session
       //
 
       toc[(unsigned int)data[6]-2].m_lastSector = from4Byte( &data[8] ) - 11400 - 1;
@@ -1751,7 +1751,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
   inf.m_diskState = STATE_UNKNOWN;
 
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   if( open() ) {
@@ -1828,7 +1828,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	inf.m_rewritable = dInf->erasable;
 
 	//
-	// This is the Last Possible Lead-Out Start Adress in HMSF format
+	// This is the Last Possible Lead-Out Start Address in HMSF format
 	// This is only valid for CD-R(W) and DVD+R media.
 	// For complete media this shall be filled with 0xff
 	//
@@ -2856,7 +2856,7 @@ void K3bDevice::Device::checkFor2AFeatures()
 void K3bDevice::Device::checkWritingModes()
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   if( !open() )
@@ -3128,7 +3128,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( QValueList<int>& list, boo
 int K3bDevice::Device::getIndex( unsigned long lba ) const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   if( !open() )
@@ -3224,7 +3224,7 @@ bool K3bDevice::Device::searchIndex0( unsigned long startSec,
 					  long& pregapStart ) const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   if( !open() )
@@ -3273,7 +3273,7 @@ bool K3bDevice::Device::searchIndex0( unsigned long startSec,
 bool K3bDevice::Device::indexScan( K3bDevice::Toc& toc ) const
 {
   // if the device is already opened we do not close it
-  // to allow fast multible method calls in a row
+  // to allow fast multiple method calls in a row
   bool needToClose = !isOpen();
 
   if( !open() )
@@ -3310,7 +3310,7 @@ bool K3bDevice::Device::indexScan( K3bDevice::Toc& toc ) const
 
 void K3bDevice::Device::searchIndexTransitions( long start, long end, K3bDevice::Track& track ) const
 {
-  kdDebug() << "(K3bDevice::Device) searching for index transitions betweeen "
+  kdDebug() << "(K3bDevice::Device) searching for index transitions between "
 	    << start << " and " << end << endl;
   int startIndex = getIndex( start );
   int endIndex = getIndex( end );
@@ -3386,7 +3386,7 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
 	  nextWritableAdress = from4Byte( &trackData[8] );
 	  delete [] trackData;
 
-	  // Read start adress of the first track in the last session
+	  // Read start address of the first track in the last session
 	  if( readTocPmaAtip( &trackData, trackDataLen, 0x1, false, 0x0  ) ) {
 	    lastSessionStart = from4Byte( &trackData[8] );
 	    delete [] trackData;

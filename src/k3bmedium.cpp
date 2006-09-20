@@ -138,7 +138,7 @@ void K3bMedium::analyseContent()
       m_content = CONTENT_NONE;
   }
 
-  // analyse filesystem
+  // analyze filesystem
   if( m_content & CONTENT_DATA ) {
     //kdDebug() << "(K3bMedium) Checking file system." << endl;
     if( !m_isoDesc )

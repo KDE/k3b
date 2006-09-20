@@ -6,4 +6,4 @@ Author=Sebastian Trueg
 Email=trueg@k3b.org
 Version=1.0
 Comment=Plugin to rename audio files in a data project based on the meta info.
-Licence=GPL
+License=GPL

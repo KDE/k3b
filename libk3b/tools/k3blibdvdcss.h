@@ -40,7 +40,7 @@ class LIBK3B_EXPORT K3bLibDvdCss
 
   /**
    * Try to open a Video DVD and authenticate it.
-   * @return true if the Video DVD could be authenticated succesfully, false otherwise.
+   * @return true if the Video DVD could be authenticated successfully, false otherwise.
    */
   bool open( K3bDevice::Device* dev );
   void close();

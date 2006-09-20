@@ -122,7 +122,7 @@ void K3bJobProgressOSD::renderOSD()
     int margin = 10;
     int textWidth = fontMetrics().width( m_text );
 
-    // do not change the size everytime the text changes, just in case we are too small
+    // do not change the size every time the text changes, just in case we are too small
     QSize newSize( QMAX( QMAX( 2*margin + icon.width() + margin + textWidth, 100 ), width() ),
 		   QMAX( 2*margin + icon.height(), 2*margin + fontMetrics().height()*2 ) );
     

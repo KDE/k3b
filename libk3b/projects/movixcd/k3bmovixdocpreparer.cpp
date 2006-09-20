@@ -291,7 +291,7 @@ bool K3bMovixDocPreparer::addMovixFiles()
   kernelDir->setSortWeight( 50 );
   bootItem->setSortWeight( 200 );
 
-  // rename the boot cataloge file
+  // rename the boot catalog file
   d->doc->bootCataloge()->setK3bName( "isolinux.boot" );
 
   // the following sucks! Redesign it!

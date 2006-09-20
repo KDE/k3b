@@ -137,7 +137,7 @@ namespace K3bDevice {
 
 
   enum MediaState { 
-    STATE_UNKNOWN = 256,   /**< Media state is unknown (when an error occured or the device is unable to determine the media state). */
+    STATE_UNKNOWN = 256,   /**< Media state is unknown (when an error occurred or the device is unable to determine the media state). */
     STATE_NO_MEDIA = 0,    /**< No media inserted. */
     STATE_COMPLETE = 1,    /**< The inserted media is complete. */ 
     STATE_INCOMPLETE = 2,  /**< The inserted media is incomplete/appendable. */
@@ -230,7 +230,7 @@ namespace K3bDevice {
                     MEDIA_DVD_ROM,
     MEDIA_BD_ALL = MEDIA_WRITABLE_BD |
                    MEDIA_BD_ROM,
-    MEDIA_UNKNOWN = 0x10000000                     /**< Represents an unknown media type (when an error occured) */
+    MEDIA_UNKNOWN = 0x10000000                     /**< Represents an unknown media type (when an error occurred) */
   };
 
   inline bool isDvdMedia( int mediaType ) {

@@ -156,7 +156,7 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   // null output
   *d->process << "-y" << "null,null" << "-o" << "/dev/null";
 
-  // analyse the first 200 frames
+  // analyze the first 200 frames
   *d->process << "-J" << QString("detectclipping=range=0-%1/5").arg(d->currentFrames);
 
   // also only decode the first 200 frames
@@ -262,7 +262,7 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( KProcess* p )
 	m_clippingTop = m_clippingLeft = m_clippingBottom = m_clippingRight = 0;
       
       if( d->totalChapters < m_dvd[m_titleNumber-1].numPTTs() )
-	emit infoMessage( i18n("Ignoring last chapter due to it's short playback time."), INFO );
+	emit infoMessage( i18n("Ignoring last chapter due to its short playback time."), INFO );
 
       jobFinished( true );
     }

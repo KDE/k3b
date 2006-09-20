@@ -23,7 +23,7 @@
 #include <kio/global.h>
 
 /**
- * This can be used to create fake items like the boot cataloge
+ * This can be used to create fake items like the boot catalog
  * It's mainly a K3bDataItem where everything has to be set manually
  */
 class K3bSpecialDataItem : public K3bDataItem

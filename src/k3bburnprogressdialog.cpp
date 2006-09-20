@@ -49,7 +49,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_labelWriter->setLineWidth( 1 );
   m_labelWriter->setMargin( 5 );
   QFont textLabel14_font( m_labelWriter->font() );
-  textLabel14_font.setBold( TRUE );
+  textLabel14_font.setBold( true );
   m_labelWriter->setFont( textLabel14_font );
 
   m_frameExtraInfoLayout->addMultiCellWidget( m_labelWriter, 0, 0, 0, 3 );

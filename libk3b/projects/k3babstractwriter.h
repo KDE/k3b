@@ -62,7 +62,7 @@ class K3bAbstractWriter : public K3bJob
    * Used to inform the writer that the source (especially useful when reading from 
    * another cd/dvd media) could not be read.
    *
-   * Basicly it should be used to make sure no "write an email" message is thrown.
+   * Basically it should be used to make sure no "write an email" message is thrown.
    */
   void setSourceUnreadable( bool b = true ) { m_sourceUnreadable = b; }
 

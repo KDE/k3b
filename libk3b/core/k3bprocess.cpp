@@ -161,7 +161,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
   QString buffer;
   for( int i = 0; i < len; i++ ) {
     if( data[i] == '\b' ) {
-      while( data[i] == '\b' )  // we replace multible backspaces with a single line feed
+      while( data[i] == '\b' )  // we replace multiple backspaces with a single line feed
 	i++;
       buffer += '\n';
     }

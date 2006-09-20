@@ -441,7 +441,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   kdDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*" << endl;
 
   //
-  // we cannot use the nameFilter in QDir because of the spaces that may occure in filenames
+  // we cannot use the nameFilter in QDir because of the spaces that may occur in filenames
   //
   QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
   int cnt = 0;

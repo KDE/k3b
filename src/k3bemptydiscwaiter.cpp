@@ -289,7 +289,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
   // /////////////////////////////////////////////////////////////
 
   // DVD+RW: if empty we need to preformat. Although growisofs does it before writing doing it here
-  //         allows better control and a progress bar. If it's not empty we shoud check if there is
+  //         allows better control and a progress bar. If it's not empty we should check if there is
   //         already a filesystem on the media.
   if( (d->wantedMediaType & K3bDevice::MEDIA_DVD_PLUS_RW) &&
       (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_RW) ) {

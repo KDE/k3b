@@ -101,7 +101,7 @@ void K3bSplash::addInfo( const QString& s )
 //   // first let the window paint the background and the child widget
 //   QWidget::paintEvent( e );
 
-//   // now create the text we wnat to display
+//   // now create the text we want to display
 //   // find the lower left corner and paint it on top of the pixmap
 //   QPainter p( this );
 //   p.setPen( Qt::blue );

@@ -750,7 +750,7 @@ bool K3bMainWindow::queryClose()
 // 				      i18n("Do you really want to cancel?"), 
 // 				      i18n("Cancel") ) == KMessageBox::Yes ) {
 // 	// cancel the job
-// 	kdDebug() << "(K3bMainWindow::queryClose) cancelling job." << endl;
+// 	kdDebug() << "(K3bMainWindow::queryClose) canceling job." << endl;
 // 	job->cancel();
 
 // 	// wait for the job to finish

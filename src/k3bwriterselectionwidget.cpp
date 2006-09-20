@@ -130,9 +130,9 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
   labelSpeed->setText( i18n( "Speed:" ) );
 
-  m_comboSpeed = new KComboBox( FALSE, groupWriter, "m_comboSpeed" );
-  m_comboSpeed->setAutoMask( FALSE );
-  m_comboSpeed->setDuplicatesEnabled( FALSE );
+  m_comboSpeed = new KComboBox( false, groupWriter, "m_comboSpeed" );
+  m_comboSpeed->setAutoMask( false );
+  m_comboSpeed->setDuplicatesEnabled( false );
 
   m_comboMedium = new MediaSelectionComboBox( groupWriter );
 

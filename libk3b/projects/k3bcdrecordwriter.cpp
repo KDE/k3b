@@ -526,7 +526,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       if( m_cdrecordError == UNKNOWN )
 	m_cdrecordError = CANNOT_FIXATE_DISK;
     }
-    else if( errStr == "A write error occured." ) {
+    else if( errStr == "A write error occurred." ) {
       m_cdrecordError = WRITE_ERROR;
     }
   }

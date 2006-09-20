@@ -123,7 +123,7 @@ FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLA
 
 FLAC__SeekableStreamDecoderSeekStatus 
 K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
-  if(file->at(absolute_byte_offset) == FALSE)
+  if(!file->at(absolute_byte_offset))
     return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_ERROR;
   else
     return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_OK;
@@ -381,7 +381,7 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
 
     kdDebug() << "(K3bFLACDecoder) " << url.path() << ": seeking to " 
               << pos << endl;
-    if(file.at(pos) != TRUE) {
+    if(!file.at(pos)) {
       kdDebug() << "(K3bFLACDecoder) " << url.path() << ": couldn't seek to " 
                 << pos << endl;
       return false;

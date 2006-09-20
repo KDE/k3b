@@ -26,7 +26,7 @@ namespace K3bDevice {
 }
 
 /**
- * Combo box which allows to select a media (in comparision
+ * Combo box which allows to select a media (in comparison 
  * to the K3bDeviceComboBox which allows to select a device.
  *
  * This class uses the K3bMediaCache to update it's status.

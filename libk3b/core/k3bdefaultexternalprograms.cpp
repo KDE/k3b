@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,8 +143,12 @@ bool K3bCdrecordProgram::scan( const QString& p )
     else {
       pos = out.output().find( "Cdrecord" );
     }
-    if( pos < 0 )
-      return false;
+    if( pos < 0 ) {
+      // for now allow symlinks to wodim
+      pos = out.output().find( "Wodim" );
+      if( pos < 0 )
+	return false;
+    }
 
     pos = out.output().find( QRegExp("[0-9]"), pos );
     if( pos < 0 )
@@ -160,7 +164,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
 
     pos = out.output().find( "Copyright") + 14;
     endPos = out.output().find( "\n", pos );
-    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
+
+    // cdrecord does not use local encoding for the copyright statement but plain latin1
+    bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).local8Bit() ).stripWhiteSpace();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;

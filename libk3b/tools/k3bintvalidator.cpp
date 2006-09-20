@@ -100,7 +100,7 @@ QValidator::State K3bIntValidator::validate ( QString &str, int & ) const
 
 void K3bIntValidator::fixup ( QString& ) const
 {
-  // TODO: remove preceeding zeros
+  // TODO: remove preceding zeros
 }
 
 

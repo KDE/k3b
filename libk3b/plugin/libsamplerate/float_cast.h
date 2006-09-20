@@ -58,8 +58,8 @@
 	/*
 	**	These defines enable functionality introduced with the 1999 ISO C
 	**	standard. They must be defined before the inclusion of math.h to
-	**	engage them. If optimisation is enabled, these functions will be
-	**	inlined. With optimisation switched off, you have to link in the
+	**	engage them. If optimization is enabled, these functions will be
+	**	inlined. With optimization switched off, you have to link in the
 	**	maths library using -lm.
 	*/
 

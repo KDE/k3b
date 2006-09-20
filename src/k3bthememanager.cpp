@@ -233,7 +233,7 @@ void K3bThemeManager::loadThemes()
   d->themes.clear();
 
   QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/pics" );
-  // now search for themes. As there may be multible themes with the same name
+  // now search for themes. As there may be multiple themes with the same name
   // we only use the names from this list and then use findResourceDir to make sure
   // the local is preferred over the global stuff (like testing a theme by copying it
   // to the .kde dir)

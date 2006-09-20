@@ -84,7 +84,7 @@ void K3bCloneTocReader::readFile()
       return;
     }
 
-    // the following bytes are multible instances of
+    // the following bytes are multiple instances of
     struct ftrackdesc {
       unsigned char sess_number;
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN

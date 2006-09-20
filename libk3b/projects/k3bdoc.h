@@ -92,7 +92,7 @@ class LIBK3B_EXPORT K3bDoc : public QObject
   QWidget* view() const { return m_view; }
 
   /**
-   * Just for convinience to make an easy mapping from doc to GUI possible.
+   * Just for convenience to make an easy mapping from doc to GUI possible.
    */
   void setView( QWidget* v ) { m_view = v; }
 

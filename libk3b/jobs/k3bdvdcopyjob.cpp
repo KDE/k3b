@@ -625,7 +625,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
 }
 
 
-// this is basicly the same code as in K3bDvdJob... :(
+// this is basically the same code as in K3bDvdJob... :(
 // perhaps this should be moved to some K3bGrowisofsHandler which also parses the growisofs output?
 bool K3bDvdCopyJob::waitForDvd()
 {

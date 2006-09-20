@@ -87,7 +87,7 @@ class K3bInterface : public DCOPObject
   void addUrl( const KURL& url );
 
   /**
-   * @return true if currenty some job is running.
+   * @return true if currently some job is running.
    */
   bool blocked() const;
 

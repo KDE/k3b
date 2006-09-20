@@ -63,7 +63,7 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
 
   m_fileTreeView = new K3bFileTreeView( this );
   m_fileTreeView->hide();
-  m_fileTreeView->reparent( this, WType_Popup, QPoint(0,0), FALSE );
+  m_fileTreeView->reparent( this, WType_Popup, QPoint(0,0), false );
   m_fileTreeView->header()->hide();
   m_fileTreeView->installEventFilter(this);
 

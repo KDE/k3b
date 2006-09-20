@@ -184,7 +184,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
     //
     // for now we copy audio, pure data (aka 1 data track), cd-extra (2 session, audio and data),
-    // and data multisession wich one track per session.
+    // and data multisession which one track per session.
     // Everything else will be rejected
     //
     bool canCopy = true;

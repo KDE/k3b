@@ -739,7 +739,7 @@ void K3bMixedJob::addAudioTracks( K3bCdrecordWriter* writer )
 
   writer->addArgument( "-audio" );
 
-  // we always pad because although K3b makes sure all tracks' lenght are multible of 2352
+  // we always pad because although K3b makes sure all tracks' length are multiples of 2352
   // it seems that normalize sometimes corrupts these lengths
   // FIXME: see K3bAudioJob for the whole less4secs and zeroPregap handling
   writer->addArgument( "-pad" );
@@ -964,7 +964,7 @@ bool K3bMixedJob::startWriting()
   }
 
   // in case we determined the max possible writing speed we have to reset the speed on the writer job
-  // here since an inserted media is neccessary
+  // here since an inserted media is necessary
   // the Max speed job will compare the max speed value with the supported values of the writer
   if( d->maxSpeed )
     m_writer->setBurnSpeed( d->maxSpeedJob->maxSpeed() );

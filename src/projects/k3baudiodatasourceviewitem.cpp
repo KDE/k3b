@@ -38,7 +38,7 @@ K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* p
 
   //  setMarginVertical( 2 );
 
-  // greyed out filename
+  // gray out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
 
   // smaller filename

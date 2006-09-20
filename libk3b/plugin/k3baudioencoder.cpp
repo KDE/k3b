@@ -167,7 +167,7 @@ void K3bAudioEncoder::setLastError( const QString& e )
 QString K3bAudioEncoder::lastErrorString() const
 {
   if( d->lastErrorString.isEmpty() )
-    return i18n("An unknown error occured.");
+    return i18n("An unknown error occurred.");
   else
     return d->lastErrorString;
 }

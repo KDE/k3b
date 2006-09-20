@@ -224,7 +224,7 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
       d->alreadyRead += read;
 
       if( read % 2 > 0 ) {
-	kdDebug() << "(K3bWaveDecoder) data length is not a multible of 2! Cutting data." << endl;
+	kdDebug() << "(K3bWaveDecoder) data length is not a multiple of 2! Cutting data." << endl;
 	read -= 1;
       }
 
@@ -274,7 +274,7 @@ bool K3bWaveDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
       size *= 2;
 
     //
-    // we pad to a multible of 2352 bytes 
+    // we pad to a multiple of 2352 bytes 
     // (the actual padding of zero data will be done by the K3bAudioDecoder class)
     //
     if( (size%2352) > 0 )

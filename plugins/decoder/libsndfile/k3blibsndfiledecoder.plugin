@@ -6,4 +6,4 @@ Author=Matthieu Bedouet
 Email=mbedouet@no-log.org
 Version=1.0
 Comment=Decoding module to decode audio files supported by libsndfile
-Licence=GPL
+License=GPL

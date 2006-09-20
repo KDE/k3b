@@ -517,7 +517,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
 
 void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
 {
-  // FIXME: progressedsize for multible copies
+  // FIXME: progressedsize for multiple copies
   m_writerJob = writer;
   connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );

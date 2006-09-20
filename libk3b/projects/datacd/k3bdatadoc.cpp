@@ -328,7 +328,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
   // -----------------------------------------------------------------
 
   //
-  // Old versions of K3b do not properly save the boot cataloge location
+  // Old versions of K3b do not properly save the boot catalog location
   // and name. So to ensure we have one around even if loading an old project
   // file we create a default one here.
   //
@@ -1020,7 +1020,7 @@ void K3bDataDoc::prepareFilenames()
   m_needToCutFilenameItems.clear();
 
   //
-  // if joliet is used cut the names and rename if neccessary
+  // if joliet is used cut the names and rename if necessary
   // 64 characters for standard joliet and 103 characters for long joliet names
   //
   // Rockridge supports the full 255 UNIX chars and in case Rockridge is disabled we leave
@@ -1178,8 +1178,9 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device )
     // TODO: also import some other pd fields
     
     const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
-    if( !rootDir )
-      rootDir = iso.firstJolietDirEntry();
+    // Jörg Schilling says that it is impossible to import the joliet tree for multisession
+//     if( !rootDir )
+//       rootDir = iso.firstJolietDirEntry();
     if( !rootDir )
       rootDir = iso.firstIsoDirEntry();
     

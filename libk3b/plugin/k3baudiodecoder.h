@@ -126,7 +126,7 @@ class LIBK3B_EXPORT K3bAudioDecoder : public QObject
    * Cleanup after decoding like closing files.
    * Be aware that this is the counterpart to @p initDecoder().
    *
-   * There might happen multible calls to initDecoder() and cleanup(). 
+   * There might happen multiple calls to initDecoder() and cleanup(). 
    */
   virtual void cleanup();
 
@@ -167,12 +167,12 @@ class LIBK3B_EXPORT K3bAudioDecoder : public QObject
    * This will be called once before the first call to decodeInternal.
    * Use it to initialize decoding structures if necessary.
    *
-   * There might happen multible calls to initDecoder() and cleanup(). 
+   * There might happen multiple calls to initDecoder() and cleanup(). 
    */
   virtual bool initDecoderInternal() = 0;
 
   /**
-   * This method should analyse the file to determine the exact length,
+   * This method should analyze the file to determine the exact length,
    * the samplerate in Hz, and the number of channels. The framework takes care of
    * resampling and converting mono to stereo data.
    * This method may be time consuming.

@@ -50,7 +50,7 @@ class K3bGrowisofsHandler : public QObject
 
  public slots:
   /**
-   * This will basicly reset the error type
+   * This will basically reset the error type
    * @param dao was growisofs called with DAO?
    */
   void reset( K3bDevice::Device* = 0, bool dao = false );

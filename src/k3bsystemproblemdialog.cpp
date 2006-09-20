@@ -84,7 +84,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
 
   m_closeButton = new QPushButton( i18n("Close"), this );
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
-  m_checkDontShowAgain = new QCheckBox( i18n("Don't show again"), this );
+  m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), this );
 
 #ifdef HAVE_K3BSETUP
   m_k3bsetupButton = new QPushButton( i18n("Start K3bSetup2"), this );
@@ -239,7 +239,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("Unable to find %1 executable").arg("growisofs"),
 					 i18n("K3b uses growisofs to actually write dvds. "
-					      "Without growisofs you won't be able to write dvds. "
+					      "Without growisofs you will not be able to write dvds. "
 					      "Make sure to install at least version 5.10."),
 					 i18n("Install the dvd+rw-tools package."),
 					 false ) );
@@ -256,7 +256,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					   i18n("Used %1 version %2 is outdated").arg("growisofs").arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version),
-					   i18n("K3b won't be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
+					   i18n("K3b will not be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
 						"sessions using a growisofs "
 						"version older than 5.12."),
 					   i18n("Install a more recent version of %1.").arg("growisofs"),

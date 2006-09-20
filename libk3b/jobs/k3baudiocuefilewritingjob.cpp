@@ -250,7 +250,7 @@ void K3bAudioCueFileWritingJob::importCueInProject()
       if( newFile )
 	newFile->setEndOffset(0);
 
-      // now analyse the source
+      // now analyze the source
       emit newTask( i18n("Analysing the audio file") );
       emit newSubTask( i18n("Analysing %1").arg( parser.imageFilename() ) );
 

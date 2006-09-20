@@ -116,13 +116,14 @@ bool K3bMiscOptionTab::saveSettings()
   if( fi.isFile() ) {
     KMessageBox::information( this, i18n("You specified a file for the temporary directory. "
 					 "K3b will use its base path as the temporary directory."), 
-			      i18n("Warning"), i18n("Don't show again.") );
+			      i18n("Warning"), 
+			      "temp file only using base path" );
     fi.setFile( fi.dirPath() );
   }
 
   // check for writing permission
   if( !fi.isWritable() ) {
-    KMessageBox::error( this, i18n("You don't have permission to write to %1.").arg(fi.absFilePath()) );
+    KMessageBox::error( this, i18n("You do not have permission to write to %1.").arg(fi.absFilePath()) );
     return false;
   }
 

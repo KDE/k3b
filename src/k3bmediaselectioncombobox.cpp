@@ -445,7 +445,7 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
       stateString = i18n("an empty %1 medium");      
   }
 
-  // this is basicly the same as in K3bEmptyDiskWaiter
+  // this is basically the same as in K3bEmptyDiskWaiter
   // FIXME: include things like only rewritable dvd or cd since we will probably need that
   QString mediumString;
   if( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )

@@ -176,7 +176,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
   m_viewDevices = new K3bListView( groupDevices, "m_viewDevicesReader" );
   m_viewDevices->addColumn( "V" );
   m_viewDevices->addColumn( "D" );
-  m_viewDevices->setAllColumnsShowFocus( TRUE );
+  m_viewDevices->setAllColumnsShowFocus( true );
   m_viewDevices->header()->hide();
   m_viewDevices->setSorting( -1 );
   m_viewDevices->setDoubleClickForEdit(false);

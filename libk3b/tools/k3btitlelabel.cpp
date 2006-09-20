@@ -240,7 +240,10 @@ void K3bTitleLabel::updatePositioning()
   d->displayTitleLength = titleFm.width( d->displayTitle );
   d->displaySubTitleLength = subTitleFm.width( d->displaySubTitle );
 
+
+  //
   // determine the minimum width for the minumum size hint
+  //
   d->cachedMinimumWidth = 2*d->margin;
   
   QString cutTitle = d->title;

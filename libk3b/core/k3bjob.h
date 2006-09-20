@@ -64,7 +64,7 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   /**
    * The default implementation is based on the canceled() signal.
    *
-   * This means that one cannot count on this value beeing valid
+   * This means that one cannot count on this value being valid
    * in a slot connected to the canceled() signal. It is, however, save
    * to call this method from a slot connected to the finished() signal
    * in case the job makes proper usage of the jobStarted/jobFinished

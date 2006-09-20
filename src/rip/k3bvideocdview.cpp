@@ -60,8 +60,8 @@ class K3bVideoCdView::VideoTrackViewItem : public QListViewItem
         }
         
         VideoTrackViewItem( QListViewItem* parent,
-                            QString name,
-                            QString id,
+                            const QString& name,
+                            const QString& id,
                             int _trackNumber,
                             const K3b::Msf& length )
                 : QListViewItem( parent )
@@ -91,7 +91,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public QCheckListItem
 {
     public:
         VideoTrackViewCheckItem( QListViewItem* parent,
-                                 QString desc )
+                                 const QString& desc )
                 : QCheckListItem( parent,
                                   QString::null,
                                   QCheckListItem::CheckBox )
@@ -102,7 +102,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public QCheckListItem
         }
 
         VideoTrackViewCheckItem( QListView* parent,
-                                 QString desc )
+                                 const QString& desc )
                 : QCheckListItem( parent,
                                   QString::null,
                                   QCheckListItem::CheckBox )
@@ -113,7 +113,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public QCheckListItem
         }
 
         VideoTrackViewCheckItem( VideoTrackViewCheckItem* parent,
-                                 QString desc )
+                                 const QString& desc )
                 : QCheckListItem( parent,
                                   QString::null,
                                   QCheckListItem::CheckBox )
@@ -461,7 +461,7 @@ void K3bVideoCdView::enableInteraction( bool b )
     m_toolBox->setEnabled( b );
 }
 
-void K3bVideoCdView::buildTree( QListViewItem *parentItem, const QDomElement &parentElement, QString pname )
+void K3bVideoCdView::buildTree( QListViewItem *parentItem, const QDomElement &parentElement, const QString& pname )
 {
     VideoTrackViewItem * thisItem = 0;
     QDomNode node = parentElement.firstChild();

@@ -208,7 +208,7 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
 {
   if( m_bCanceled ) {
     // We only started the analyser thread in case the decoder was new
-    // thus, we can savely delete it since no other source needs it.
+    // thus, we can safely delete it since no other source needs it.
     delete m_analyserThread->m_decoder;
     return;
   }

@@ -39,7 +39,7 @@ namespace K3bDevice
    * Since it's a K3bJob it is very easy to handle. Just use one of the methods and
    * connect to the finished signal.
    * Be aware that all methods only return valid values if the corresponding info has
-   * been successfully requested.
+   * been successfuly requested.
    *
    * Be aware that multiple requests in a row (without waiting for the job to finish) will
    * only result in one finished() signal answering the last request.
@@ -81,11 +81,11 @@ namespace K3bDevice
 
       enum Command {
 	/**
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	NG_DISKINFO = 1, // TODO: rename this into DISKINFO
 	/**
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	TOC = 2,
 	/**
@@ -97,19 +97,19 @@ namespace K3bDevice
 	 */
 	CD_TEXT_RAW = 8,
 	/**
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	DISKSIZE = 16,
 	/**
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	REMAININGSIZE = 32,
 	/**
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	TOCTYPE = 64,
 	/**
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	NUMSESSIONS = 128,
 	/**
@@ -135,7 +135,7 @@ namespace K3bDevice
 	 * The only difference to NG_DISKINFO|TOC|CD_TEXT is that no CD-Text is not
 	 * considered an error.
 	 *
-	 * Always successfull, even with an empty or no media at all!
+	 * Always successful, even with an empty or no media at all!
 	 */
 	DISKINFO = 4096,  // TODO: rename this in somthing like: DISKINFO_COMPLETE
 	/**

@@ -38,7 +38,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
   void query( const K3bDevice::Toc& );
 
   /**
-   * Use this if the query returned multible matches
+   * Use this if the query returned multiple matches
    */
   void queryMatch( const K3bCddbResultHeader& );
 
@@ -70,7 +70,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
   void queryFinished( K3bCddbQuery* );
 
   /**
-   * This gets emitted if multible entries have been found.
+   * This gets emitted if multiple entries have been found.
    * Call queryInexactMatch() after receiving it.
    */
   void inexactMatches( K3bCddbQuery* );

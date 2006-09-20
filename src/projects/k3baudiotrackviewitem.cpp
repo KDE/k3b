@@ -53,7 +53,7 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
   f.setItalic( true );
   setFont( 3, f );
 
-  // greyed out filename
+  // gray out filename
   setForegroundColor( 5, listView()->palette().disabled().foreground() );
 
   // smaller filename

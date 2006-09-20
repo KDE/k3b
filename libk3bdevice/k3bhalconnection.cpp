@@ -155,7 +155,7 @@ QStringList K3bDevice::HalConnection::devices() const
 
 QString K3bDevice::HalConnection::getSystemDeviceForCdrom( const char* udi ) const
 {
-  // ignore devices that have no property "info.capabilities" to supress error messages
+  // ignore devices that have no property "info.capabilities" to suppress error messages
   if( !libhal_device_property_exists( m_halContext, udi, "info.capabilities", 0 ) )
     return QString::null;
 

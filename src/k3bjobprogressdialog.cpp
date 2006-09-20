@@ -140,7 +140,7 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob->setMinimumVisibleText( 40 );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
-  m_labelJob_font.setBold( TRUE );
+  m_labelJob_font.setBold( true );
   m_labelJob->setFont( m_labelJob_font ); 
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
@@ -158,7 +158,7 @@ void K3bJobProgressDialog::setupGUI()
   m_viewInfo = new KListView( this, "m_viewInfo" );
   m_viewInfo->addColumn( "" );
   m_viewInfo->addColumn( i18n( "Message" ) );
-  m_viewInfo->setFullWidth( TRUE );
+  m_viewInfo->setFullWidth( true );
   m_viewInfo->header()->hide();
   m_viewInfo->setSorting(-1);
   mainLayout->addWidget( m_viewInfo );
@@ -185,7 +185,7 @@ void K3bJobProgressDialog::setupGUI()
   m_labelTask = new K3bThemedLabel( frame5 );
   QFont m_labelTask_font(  m_labelTask->font() );
   m_labelTask_font.setPointSize( m_labelTask_font.pointSize() + 2 );
-  m_labelTask_font.setBold( TRUE );
+  m_labelTask_font.setBold( true );
   m_labelTask->setFont( m_labelTask_font ); 
   frame5Layout->addWidget( m_labelTask );
 
@@ -621,7 +621,7 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
   // start the job after showing the dialog
   m_job->start();
 
-  in_loop = TRUE;
+  in_loop = true;
   QApplication::eventLoop()->enterLoop();
 
   if ( !wasShowModal )

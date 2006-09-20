@@ -78,7 +78,7 @@ bool K3bFFMpegFile::open()
     return false;
   }
 
-  // analyse the streams
+  // analyze the streams
   av_find_stream_info( d->formatContext );
 
   // we only handle files containing one audio stream

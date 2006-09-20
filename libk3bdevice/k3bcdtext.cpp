@@ -188,7 +188,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
       // pack.data has a length of 12
       //
       // id1 tells us the tracknumber of the data (0 for global)
-      // data may contain multible \0. In that case after every \0 the track number increases 1
+      // data may contain multiple \0. In that case after every \0 the track number increases 1
       //
 
       char* nullPos = (char*)pack[i].data - 1;
@@ -566,7 +566,7 @@ QCString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
     QCString r(s.length()+1);
 
     for( unsigned int i = 0; i < s.length(); ++i ) {
-      if( s[i].latin1() == 0 ) { // non-ASCII charater
+      if( s[i].latin1() == 0 ) { // non-ASCII character
 	r[i] = ' ';
 	if( illegalChars )
 	  *illegalChars = true;

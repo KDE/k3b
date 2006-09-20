@@ -120,10 +120,10 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after)
 
 
 K3bListViewItem::K3bListViewItem(QListView *parent,
-				 QString s1, QString s2,
-				 QString s3, QString s4,
-				 QString s5, QString s6,
-				 QString s7, QString s8)
+				 const QString& s1, const QString& s2,
+				 const QString& s3, const QString& s4,
+				 const QString& s5, const QString& s6,
+				 const QString& s7, const QString& s8)
   : KListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
@@ -131,10 +131,10 @@ K3bListViewItem::K3bListViewItem(QListView *parent,
 
 
 K3bListViewItem::K3bListViewItem(QListViewItem *parent,
-				 QString s1, QString s2,
-				 QString s3, QString s4,
-				 QString s5, QString s6,
-				 QString s7, QString s8)
+				 const QString& s1, const QString& s2,
+				 const QString& s3, const QString& s4,
+				 const QString& s5, const QString& s6,
+				 const QString& s7, const QString& s8)
   : KListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
@@ -142,10 +142,10 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent,
 
 
 K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after,
-				 QString s1, QString s2,
-				 QString s3, QString s4,
-				 QString s5, QString s6,
-				 QString s7, QString s8)
+				 const QString& s1, const QString& s2,
+				 const QString& s3, const QString& s4,
+				 const QString& s5, const QString& s6,
+				 const QString& s7, const QString& s8)
   : KListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
@@ -153,10 +153,10 @@ K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after,
 
 
 K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after,
-				 QString s1, QString s2,
-				 QString s3, QString s4,
-				 QString s5, QString s6,
-				 QString s7, QString s8)
+				 const QString& s1, const QString& s2,
+				 const QString& s3, const QString& s4,
+				 const QString& s5, const QString& s6,
+				 const QString& s7, const QString& s8)
   : KListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();

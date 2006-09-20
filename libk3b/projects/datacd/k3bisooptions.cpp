@@ -97,7 +97,7 @@ void K3bIsoOptions::save( KConfigBase* c )
   c->writeEntry( "omit version numbers", m_ISOomitVersionNumbers );
   c->writeEntry( "omit trailing period", m_ISOomitTrailingPeriod );
   c->writeEntry( "no iSO translation", m_ISOnoIsoTranslate );
-  c->writeEntry( "allow multible dots", m_ISOallowMultiDot );
+  c->writeEntry( "allow multiple dots", m_ISOallowMultiDot );
   c->writeEntry( "allow lowercase filenames", m_ISOallowLowercase );
   //  c->writeEntry( "follow symbolic links", m_followSymbolicLinks );
 
@@ -174,7 +174,7 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c )
   options.setISOrelaxedFilenames( c->readBoolEntry( "relaxed filenames", options.m_ISOrelaxedFilenames ) );
   options.setISOomitVersionNumbers( c->readBoolEntry( "omit version numbers", options.m_ISOomitVersionNumbers ) );
   options.setISOnoIsoTranslate( c->readBoolEntry( "no iSO translation", options.m_ISOnoIsoTranslate ) );
-  options.setISOallowMultiDot( c->readBoolEntry( "allow multible dots", options.m_ISOallowMultiDot ) );
+  options.setISOallowMultiDot( c->readBoolEntry( "allow multiple dots", options.m_ISOallowMultiDot ) );
   options.setISOallowLowercase( c->readBoolEntry( "allow lowercase filenames", options.m_ISOallowLowercase ) );
   options.setISOomitTrailingPeriod( c->readBoolEntry( "omit trailing period", options.m_ISOomitTrailingPeriod ) );
 

@@ -103,7 +103,7 @@ class LIBK3B_EXPORT K3bVersion
 				      const QString& suffix = QString::null );
 
   /**
-   * "Intelligent" comparision of two version suffixes.
+   * "Intelligent" comparison of two version suffixes.
    *
    * This method checks for the following types of suffixes and treats them in the
    * following order:

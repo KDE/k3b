@@ -73,7 +73,7 @@ public:
 	unsigned char* data = 0;
 	unsigned int dataLen = 0;
 	if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-	  // we need more than the header and a multible of 18 bytes to have valid CD-TEXT
+	  // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
 	  if( dataLen > 4 && dataLen%18 == 4 ) {
 	    cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
 	  }

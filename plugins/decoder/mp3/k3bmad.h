@@ -33,7 +33,7 @@ public:
 
   /**
    * @return true if the mad stream contains data
-   *         false if there is no data left or an error occured.
+   *         false if there is no data left or an error occurred.
    *         In the latter case inputError() returns true.
    */
   bool fillStreamBuffer();

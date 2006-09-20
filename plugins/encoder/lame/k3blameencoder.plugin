@@ -6,4 +6,4 @@ Author=Sebastian Trueg
 Email=trueg@k3b.org
 Version=3.0
 Comment=Encoding module to encode MPEG1 Layer III (mp3) files
-Licence=GPL
+License=GPL

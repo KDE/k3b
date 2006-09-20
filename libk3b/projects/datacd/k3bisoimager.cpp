@@ -168,7 +168,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
     jobFinished(false);
   }
   else {
-    if( p->normalExit() ) {
+    //    if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
 	jobFinished( true );
       }
@@ -206,11 +206,11 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
 	jobFinished( false );
       }
-    }
-    else {
-      emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
-      jobFinished( false );
-    }
+//     }
+//     else {
+//       emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
+//       jobFinished( false );
+//     }
   }
 }
 
@@ -958,7 +958,7 @@ bool K3bIsoImager::writeSortWeightFile()
   if( QTextStream* t = m_sortWeightFile->textStream() ) {
     //
     // We need to write the local path in combination with the sort weight
-    // mkisofs will take care of multible entries for one local file and always
+    // mkisofs will take care of multiple entries for one local file and always
     // use the highest weight
     //
     K3bDataItem* item = m_doc->root();
@@ -1020,7 +1020,7 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
       pos += 2;
     }
     else if( enc[pos] == '\\' ) {
-      // escape every occurence of two backslashes with two backslashes
+      // escape every occurrence of two backslashes with two backslashes
       if( pos+1 < enc.length() && enc[pos+1] == '\\' ) {
 	enc.insert( pos, "\\\\" );
 	pos += 4;

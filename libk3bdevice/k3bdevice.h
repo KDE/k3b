@@ -341,7 +341,7 @@ namespace K3bDevice
 
       /**
        * Append ISRC and MCN to the TOC if found
-       * This has been moved to a seperate method since it can take a very long time
+       * This has been moved to a separate method since it can take a very long time
        * to scan for all ISRCs.
        */
       void readIsrcMcn( Toc& toc ) const;
@@ -456,7 +456,7 @@ namespace K3bDevice
       int determineMaximalWriteSpeed() const;
 
       /**
-       * Open the device for acces via a file descriptor.
+       * Open the device for access via a file descriptor.
        * @return true on success or if the device is already open.
        * @see close()
        */
@@ -526,7 +526,7 @@ namespace K3bDevice
 
       /**
        * @param type specifies what value means:
-       *        \li 00b - value refers to a logical block adress
+       *        \li 00b - value refers to a logical block address
        *        \li 01b - value refers to a track number where 0 will treat the lead-in as if it
        *                  were a logical track and ffh will read the invisible or incomplete track.
        *        \li 10b - value refers to a session number
@@ -588,7 +588,7 @@ namespace K3bDevice
        * @param startAdress Lba 0 is mapped to msf 00:00:00 so this method uses
        *                    startAdress+150 as the starting msf.
        *
-       * @param endAdress This is the ending adress which is NOT included in the read operation.
+       * @param endAdress This is the ending address which is NOT included in the read operation.
        *                  Lba 0 is mapped to msf 00:00:00 so this method uses
        *                  endAdress+150 as the ending msf.
        *

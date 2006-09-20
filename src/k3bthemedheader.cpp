@@ -89,10 +89,10 @@ void K3bThemedHeader::init()
   layout->setSpacing( 0 );
 
   m_leftLabel = new QLabel( this );
-  m_leftLabel->setScaledContents( FALSE );
+  m_leftLabel->setScaledContents( false );
   m_titleLabel = new K3bTitleLabel( this );
   m_rightLabel = new QLabel( this );
-  m_rightLabel->setScaledContents( FALSE );
+  m_rightLabel->setScaledContents( false );
 
   layout->addWidget( m_leftLabel );
   layout->addWidget( m_titleLabel );

@@ -64,7 +64,7 @@ public:
 
   // since the current position above is measured in frames
   // there might be a little offset since the decoded data is not
-  // always a multible of 2353 bytes
+  // always a multiple of 2353 bytes
   int currentPosOffset;
 
   // already decoded bytes from last init or last seek

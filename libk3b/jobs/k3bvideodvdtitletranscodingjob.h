@@ -128,7 +128,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * The clipping values will be taken into account if at least one value
    * is determined automatically.
    *
-   * The width and height values have to be a mutiple of 16. If it is not, 
+   * The width and height values have to be a multiple of 16. If it is not, 
    * they will be changed accordingly.
    *
    * FIXME: GET INFORMATION: why a multiple of 16 and not 8 or 32?

@@ -35,7 +35,7 @@ class LIBK3B_EXPORT K3bAudioServer : public QObject
   ~K3bAudioServer();
 
   /**
-   * Returns false in case the named ouput method could not be found.
+   * Returns false in case the named output method could not be found.
    */
   bool setOutputMethod( const QCString& name );
   void setOutputPlugin( K3bAudioOutputPlugin* p );

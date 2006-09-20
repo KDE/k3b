@@ -214,7 +214,7 @@ void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
 
       int lastSession = 0;
 
-      // if we have multible sessions we create a header item for every session
+      // if we have multiple sessions we create a header item for every session
       KListViewItem* trackItem = 0;
       if( medium.diskInfo().numSessions() > 1 && medium.toc()[0].session() > 0 ) {
 	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1").arg(1) );

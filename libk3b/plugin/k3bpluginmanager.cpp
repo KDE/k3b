@@ -110,7 +110,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 					      c.readEntry( "Email" ),
 					      c.readEntry( "Comment" ),
 					      c.readEntry( "Version" ),
-					      c.readEntry( "Licence" ) );
+					      c.readEntry( "License" ) );
 	d->plugins.append( plugin );
       }
     }

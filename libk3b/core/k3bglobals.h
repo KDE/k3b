@@ -165,7 +165,7 @@ namespace K3b
   QString parentDir( const QString& path );
 
   /**
-   * For now this just replaces multible occurences of / with a single /
+   * For now this just replaces multiple occurrences of / with a single /
    */
   LIBK3B_EXPORT QString fixupPath( const QString& );
 
