@@ -476,13 +476,12 @@ void K3bVideoCdView::buildTree( QListViewItem *parentItem, const QDomElement &pa
             QString txt = node.firstChild().toElement().text();
             thisItem->setText( 0, txt);
             if ( node.nodeName() == "folder" ) {
-                pname += "_" + txt.lower();
+		buildTree( thisItem, node.toElement(), pname + "_" + txt.lower() );
             }
             else {
                 thisItem->setText( 1, pname + "_" + txt.lower() );
+		buildTree( thisItem, node.toElement(), pname );
             }
-
-            buildTree( thisItem, node.toElement(), pname );
         } else if ( node.isElement() && node.nodeName() == "segment-item" || node.nodeName() == "sequence-item" ) {
             if ( parentItem == 0 )
                 thisItem = new VideoTrackViewItem( m_trackView, thisItem );
