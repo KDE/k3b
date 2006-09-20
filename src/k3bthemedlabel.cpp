@@ -68,7 +68,7 @@ void K3bThemedLabel::slotThemeChanged()
     setPaletteForegroundColor( theme->foregroundColor() );
     if( m_themePixmapCode > -1 ) {
       setPixmap( theme->pixmap( (K3bTheme::PixmapType)m_themePixmapCode ) );
-      setScaledContents( FALSE );
+      setScaledContents( false );
     }
   }
 }

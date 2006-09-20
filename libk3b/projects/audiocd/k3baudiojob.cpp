@@ -593,7 +593,7 @@ bool K3bAudioJob::startWriting()
     return false;
 
   // in case we determined the max possible writing speed we have to reset the speed on the writer job
-  // here since an inserted media is neccessary
+  // here since an inserted media is necessary
   // the Max speed job will compare the max speed value with the supported values of the writer
   if( d->maxSpeed )
     m_writer->setBurnSpeed( m_maxSpeedJob->maxSpeed() );

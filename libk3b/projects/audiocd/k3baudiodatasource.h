@@ -52,7 +52,7 @@ class LIBK3B_EXPORT K3bAudioDataSource
   virtual ~K3bAudioDataSource();
 
   /**
-   * The original lenght of the source is the maximum data which is available
+   * The original length of the source is the maximum data which is available
    * when startOffset is 0 this is the max for endOffset
    *
    * Be aware that this may change (see K3bAudioZeroData)
@@ -87,7 +87,7 @@ class LIBK3B_EXPORT K3bAudioDataSource
   virtual QString sourceComment() const = 0;
 
   /**
-   * Used in case an error occured. For now this is used if the
+   * Used in case an error occurred. For now this is used if the
    * decoder was not able to decode an audiofile
    */
   virtual bool isValid() const { return true; }

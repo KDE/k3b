@@ -110,7 +110,7 @@ K3bAudioView::~K3bAudioView()
 void K3bAudioView::init()
 {
   if( k3bcore->pluginManager()->plugins( "AudioDecoder" ).isEmpty() )
-    KMessageBox::error( this, i18n("No audio decoder plugins found. You won't be able to add any files "
+    KMessageBox::error( this, i18n("No audio decoder plugins found. You will not be able to add any files "
 				   "to the audio project!") );
 }
 

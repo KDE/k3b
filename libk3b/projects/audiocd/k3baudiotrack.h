@@ -157,7 +157,7 @@ class LIBK3B_EXPORT K3bAudioTrack
 
   /**
    * Create a copy of this track containing copies of all the sources
-   * but not beeing part of some list.
+   * but not being part of some list.
    */
   K3bAudioTrack* copy() const;
 

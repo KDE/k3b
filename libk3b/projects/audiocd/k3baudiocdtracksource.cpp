@@ -201,7 +201,7 @@ K3b::Msf K3bAudioCdTrackSource::originalLength() const
 
 bool K3bAudioCdTrackSource::seek( const K3b::Msf& msf )
 {
-  // HACK: to reinitialize everytime we restart the decoding
+  // HACK: to reinitialize every time we restart the decoding
   if( msf == 0 && m_cdParanoiaLib )
     closeParanoia();
 

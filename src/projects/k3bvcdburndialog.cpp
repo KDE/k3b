@@ -976,7 +976,7 @@ void K3bVcdBurnDialog::slotVcdTypeClicked( int i )
     switch ( i ) {
         case 0:
             // vcd 1.1 no support for version 3.x.
-            // v4 work also for vcd 1.1 but without CD-i menues.
+            // v4 work also for vcd 1.1 but without CD-i menus.
             // Do anybody use vcd 1.1 with cd-i????
             m_checkCdiSupport->setEnabled( vcdDoc() ->vcdOptions() ->checkCdiFiles() );
             m_checkCdiSupport->setChecked( false );
