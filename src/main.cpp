@@ -78,10 +78,12 @@ int main( int argc, char* argv[] )
 			LIBK3B_VERSION, description, KAboutData::License_GPL,
 			I18N_NOOP("(c) 1999 - 2006, Sebastian Trüg and the K3b Team"), 0, "http://www.k3b.org" );
   aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
-  aboutData.addAuthor("Thomas Froescher",I18N_NOOP("VideoDVD ripping and video encoding"), "tfroescher@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
-  aboutData.addAuthor("Klaus-Dieter Krannich", I18N_NOOP("Developer"), "kd@k3b.org" );
+  aboutData.addCredit("Klaus-Dieter Krannich", I18N_NOOP("Advanced Cdrdao integration"), "kd@k3b.org" );
 
+  aboutData.addCredit("Thomas Froescher",
+		      I18N_NOOP("VideoDVD ripping and video encoding in pre-1.0 versions."),
+		      "tfroescher@k3b.org");
   aboutData.addCredit("Alexis Younes aka Ayo",
 		      I18N_NOOP("For his bombastic artwork."),
 		      "73lab@free.fr" );
@@ -118,6 +120,9 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Marcel Dierkes",
 		      I18N_NOOP("For the great K3b icon eyecandy."),
 		      "marcel.dierkes@gmx.de" );
+  aboutData.addCredit("Christoph Burger-Scheidlin",
+		      I18N_NOOP("For his neverending help cleaning out the K3b bug database."),
+		      "andersin@freenet.de" );
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
