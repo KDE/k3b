@@ -71,6 +71,7 @@ namespace K3b
       KIO::filesize_t mode2Form1Bytes() const;
       KIO::filesize_t mode2Form2Bytes() const;
       KIO::filesize_t audioBytes() const;
+      KIO::filesize_t rawBytes() const;
       unsigned long long pcmSamples() const { return lba()*588; }
 
       /**
