@@ -264,7 +264,7 @@ QString K3bMedium::shortString( bool useContent ) const
 	  return i18n("%1 (Appendable Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
 	}
 	else {
-	  return i18n("%1 (Full Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
+	  return i18n("%1 (Complete Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
 	}
       }
       else {
@@ -272,7 +272,7 @@ QString K3bMedium::shortString( bool useContent ) const
 	  return i18n("Appendable Data %1").arg( mediaTypeString );
 	}
 	else {
-	  return i18n("Full Data %1").arg( mediaTypeString );
+	  return i18n("Complete Data %1").arg( mediaTypeString );
 	}
       }
     }
@@ -283,7 +283,7 @@ QString K3bMedium::shortString( bool useContent ) const
 	return i18n("Appendable %1 medium").arg( mediaTypeString );
       }
       else {
-	return i18n("Full %1 medium").arg( mediaTypeString );
+	return i18n("Complete %1 medium").arg( mediaTypeString );
       }
     }
   }
