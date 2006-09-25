@@ -707,7 +707,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
     }
     return m_editorComboBox;
 
-  case K3bListViewItem::LINE:
+  case K3bListViewItem::LINE: {
     if( !m_editorLineEdit ) {
       m_editorLineEdit = new QLineEdit( viewport() );
       m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
@@ -717,8 +717,18 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       m_editorLineEdit->installEventFilter( this );
     }
 
-    m_editorLineEdit->setText( item->text( col ) );
+    QString txt = item->text( col );
+    m_editorLineEdit->setText( txt );
+
+    // select the edit text (handle extensions while doing so)
+    int pos = txt.findRev( '.' );
+    if( pos > 0 )
+      m_editorLineEdit->setSelection( 0, pos );
+    else
+      m_editorLineEdit->setSelection( 0, txt.length() );
+
     return m_editorLineEdit;
+  }
 
   case K3bListViewItem::SPIN:
     if( !m_editorSpinBox ) {
