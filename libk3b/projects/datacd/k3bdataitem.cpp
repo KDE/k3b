@@ -53,8 +53,8 @@ K3bDataItem::K3bDataItem( const K3bDataItem& item )
     m_bMovable( item.m_bMovable ),
     m_bHideable( item.m_bHideable ),
     m_bWriteToCd( item.m_bWriteToCd ),
-    m_sortWeight( item.m_sortWeight ),
-    m_extraInfo( item.m_extraInfo )
+    m_extraInfo( item.m_extraInfo ),
+    m_sortWeight( item.m_sortWeight )
 {
 }
 
