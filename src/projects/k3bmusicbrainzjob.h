@@ -20,7 +20,7 @@
 
 #ifdef HAVE_MUSICBRAINZ
 
-#include <k3bsimplejob.h>
+#include <k3bjob.h>
 
 
 class K3bAudioTrack;
@@ -32,7 +32,7 @@ class QWidget;
  * This job tries to determine K3bAudioTrack's title and artist using
  * Musicbrainz.
  */
-class K3bMusicBrainzJob : public K3bSimpleJob
+class K3bMusicBrainzJob : public K3bJob
 {
   Q_OBJECT
 

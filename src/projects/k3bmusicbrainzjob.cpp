@@ -25,6 +25,7 @@
 #include <k3bthreadjob.h>
 #include <k3baudiotrack.h>
 #include <k3baudiodatasource.h>
+#include <k3bsimplejobhandler.h>
 
 #include <kmessagebox.h>
 #include <kinputdialog.h>
@@ -139,7 +140,7 @@ private:
 
 
 K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent, const char* name )
-  : K3bSimpleJob( parent, name )
+  : K3bJob( new K3bSimpleJobHandler( this ), parent, name )
 {
   m_trmThread = new TRMThread();
   m_mbThread = new MusicBrainzThread();
