@@ -158,7 +158,16 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 {
   QValueList<K3bSystemProblem> problems;
 
-  if( !k3bcore->deviceManager()->cdWriter().isEmpty() ) {
+  if( k3bcore->deviceManager()->cdWriter().isEmpty() ) {
+    problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+				       i18n("No CD/DVD writer found."),
+				       i18n("K3b did not find an optical writing device in your system. Thus, "
+					    "you will not be able to burn CDs or DVDs. However, you can still "
+					    "use other K3b features like audio track extraction or audio "
+					    "transcoding or ISO9660 image creation."),
+					    false ) );
+  }
+  else {
     // 1. cdrecord, cdrdao
     if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
