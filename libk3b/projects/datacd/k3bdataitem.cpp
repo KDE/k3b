@@ -23,8 +23,8 @@
 
 
 K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
-  : m_bHideOnRockRidge(true),
-    m_bHideOnJoliet(true),
+  : m_bHideOnRockRidge(false),
+    m_bHideOnJoliet(false),
     m_bRemoveable(true),
     m_bRenameable(true),
     m_bMovable(true),
@@ -40,6 +40,24 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
   else
     m_parentDir = 0;
 }
+
+
+K3bDataItem::K3bDataItem( const K3bDataItem& item )
+  : m_k3bName( item.m_k3bName ),
+    m_doc( 0 ),
+    m_parentDir( 0 ),
+    m_bHideOnRockRidge( item.m_bHideOnRockRidge ),
+    m_bHideOnJoliet( item.m_bHideOnJoliet ),
+    m_bRemoveable( item.m_bRemoveable ),
+    m_bRenameable( item.m_bRenameable ),
+    m_bMovable( item.m_bMovable ),
+    m_bHideable( item.m_bHideable ),
+    m_bWriteToCd( item.m_bWriteToCd ),
+    m_sortWeight( item.m_sortWeight ),
+    m_extraInfo( item.m_extraInfo )
+{
+}
+
 
 K3bDataItem::~K3bDataItem()
 {

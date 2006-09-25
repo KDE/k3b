@@ -50,7 +50,16 @@ public:
 	       const k3b_struct_stat* followedStat, 
 	       const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
 
+  /**
+   * Default copy constructor
+   * Creates a copy of the fileitem. The copy, however, is not an exact duplicate of this item.
+   * The copy does not have a parent dir set and any old session items are set to 0.
+   */
+  K3bFileItem( const K3bFileItem& );
+
   virtual ~K3bFileItem();
+
+  virtual K3bDataItem* copy() const;
 	
   bool exists() const;
 

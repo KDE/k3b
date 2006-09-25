@@ -35,7 +35,16 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
 {
  public: 
   K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
+
+  /**
+   * Default copy constructor. Copies the dir including all children. However, none of the
+   * children will have set a doc and the copy dir will not have set a parent dir.
+   */
+  K3bDirItem( const K3bDirItem& );
+
   virtual ~K3bDirItem();
+
+  K3bDataItem* copy() const;
 	
   K3bDirItem* getDirItem() const;
 

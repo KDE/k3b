@@ -106,36 +106,85 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     ret = dlg.exec();
   }
 
-  QString message;
-  if( !dlg.m_unreadableFiles.isEmpty() )
-    message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Insufficient permissions to read the following files") )
-      .arg( dlg.m_unreadableFiles.join( "<br>" ) );
-  if( !dlg.m_notFoundFiles.isEmpty() )
-    message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Unable to find the following files") )
-      .arg( dlg.m_notFoundFiles.join( "<br>" ) );
-  if( !dlg.m_nonLocalFiles.isEmpty() )
-    message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("No non-local files supported") )
-      .arg( dlg.m_unreadableFiles.join( "<br>" ) );
-  if( !dlg.m_tooBigFiles.isEmpty() )
-    message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("It is not possible to add files bigger than 4 GB") )
-      .arg( dlg.m_tooBigFiles.join( "<br>" ) );
-  if( !dlg.m_mkisofsLimitationRenamedFiles.isEmpty() )
-    message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("Some filenames had to be modified due to limitations in mkisofs") )
-      .arg( dlg.m_mkisofsLimitationRenamedFiles.join( "<br>" ) );
-  if( !dlg.m_invalidFilenameEncodingFiles.isEmpty() )
-    message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("The following filenames have an invalid encoding. You may fix this "
-		 "with the convmv tool") )
-      .arg( dlg.m_invalidFilenameEncodingFiles.join( "<br>" ) );
-
+  QString message = dlg.resultMessage();
   if( !message.isEmpty() )
     KMessageBox::detailedSorry( parent, i18n("Problems while adding files to the project."), message );
 
+  return ret;
+}
+
+
+QString K3bDataUrlAddingDialog::resultMessage() const
+{
+  QString message;
+  if( !m_unreadableFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("Insufficient permissions to read the following files") )
+      .arg( m_unreadableFiles.join( "<br>" ) );
+  if( !m_notFoundFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("Unable to find the following files") )
+      .arg( m_notFoundFiles.join( "<br>" ) );
+  if( !m_nonLocalFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("No non-local files supported") )
+      .arg( m_unreadableFiles.join( "<br>" ) );
+  if( !m_tooBigFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("It is not possible to add files bigger than 4 GB") )
+      .arg( m_tooBigFiles.join( "<br>" ) );
+  if( !m_mkisofsLimitationRenamedFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("Some filenames had to be modified due to limitations in mkisofs") )
+      .arg( m_mkisofsLimitationRenamedFiles.join( "<br>" ) );
+  if( !m_invalidFilenameEncodingFiles.isEmpty() )
+    message += QString("<p><b>%1:</b><br>%2")
+      .arg( i18n("The following filenames have an invalid encoding. You may fix this "
+		 "with the convmv tool") )
+      .arg( m_invalidFilenameEncodingFiles.join( "<br>" ) );
+
+  return message;
+}
+
+
+int K3bDataUrlAddingDialog::moveItems( const QValueList<K3bDataItem*>& items, 
+				       K3bDirItem* dir,
+				       QWidget* parent )
+{
+  return copyMoveItems( items, dir, parent, false );
+}
+
+
+int K3bDataUrlAddingDialog::copyItems( const QValueList<K3bDataItem*>& items, 
+				       K3bDirItem* dir,
+				       QWidget* parent )
+{
+  return copyMoveItems( items, dir, parent, true );
+}
+
+
+int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items, 
+					   K3bDirItem* dir,
+					   QWidget* parent, 
+					   bool copy )
+{
+  if( items.isEmpty() )
+    return 0;
+
+  K3bDataUrlAddingDialog dlg( parent );
+  dlg.m_infoLabel->setText( i18n("Moving files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
+  dlg.m_copyItems = copy;
+
+  for( QValueList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it )
+    dlg.m_items.append( qMakePair( *it, dir ) );
+
+  dlg.slotCopyMoveItems();
+  int ret = QDialog::Accepted;
+  if( !dlg.m_items.isEmpty() ) {
+    dlg.m_busyWidget->showBusy(true);
+    ret = dlg.exec();
+  }
+  
   return ret;
 }
 
@@ -416,6 +465,150 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
     else                    // no GUI update -> fast
       slotAddUrls();
+  }
+}
+
+
+void K3bDataUrlAddingDialog::slotCopyMoveItems()
+{
+  //
+  // Pop first item from the item list
+  //
+  K3bDataItem* item = m_items.first().first;
+  K3bDirItem* dir = m_items.first().second;
+  m_items.remove( m_items.begin() );
+
+  if( dir == item->parent() ) {
+    kdDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir." << endl;
+  }
+  else if( dir == item ) {
+    kdDebug() << "(K3bDataUrlAddingDialog) trying to move an item into itselft." << endl;
+  }
+  else {
+    //
+    // Let's see if an item with that name alredy exists
+    //
+    if( K3bDataItem* oldItem = dir->find( item->k3bName() ) ) {
+      //
+      // reuse an existing dir: move all child items into the old dir
+      //
+      if( oldItem->isDir() && item->isDir() ) {
+	const QPtrList<K3bDataItem>& cl = dynamic_cast<K3bDirItem*>( item )->children();
+	for( QPtrListIterator<K3bDataItem> it( cl ); *it; ++it )
+	  m_items.append( qMakePair( *it, dynamic_cast<K3bDirItem*>( oldItem ) ) );
+
+	// FIXME: we need to remove the old dir item
+      }
+
+      //
+      // we cannot replace files in the old session with dirs and vice versa (I think)
+      // files are handled in K3bFileItem constructor and dirs handled above
+      //
+      else if( oldItem->isFromOldSession() &&
+	       item->isDir() != oldItem->isDir() ) {
+	QString newName;
+	if( getNewName( newName, dir, newName ) ) {
+	  if( m_copyItems )
+	    item = item->copy();
+	  item->setK3bName( newName );
+	  dir->addDataItem( item );
+	}
+      }
+
+      else if( m_bExistingItemsReplaceAll ) {
+	//
+	// if we replace an item from an old session K3bDirItem::addDataItem takes care
+	// of replacing the item
+	//
+	if( !oldItem->isFromOldSession() )
+	  delete oldItem;
+	if( m_copyItems )
+	  item = item->copy();
+	dir->addDataItem( item );
+      }
+
+      else if( !m_bExistingItemsIgnoreAll ) {
+	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
+					      i18n("<p>File <em>%1</em> already exists in "
+						   "project folder <em>%2</em>.")
+					      .arg( item->k3bName() )
+					      .arg("/" + dir->k3bPath()),
+					      this,
+					      0,
+					      6,
+					      KGuiItem( i18n("Replace"), 
+							QString::null,
+							i18n("Replace the existing file") ),
+					      KGuiItem( i18n("Replace All"),
+							QString::null,
+							i18n("Always replace existing files") ),
+					      KGuiItem( i18n("Ignore"),
+							QString::null,
+							i18n("Keep the existing file") ),
+					      KGuiItem( i18n("Ignore All"),
+							QString::null,
+							i18n("Always keep the existing file") ),
+					      KGuiItem( i18n("Rename"),
+							QString::null,
+							i18n("Rename the new file") ),
+					      KStdGuiItem::cancel() ) ) {
+	case 2: // replace all
+	  m_bExistingItemsReplaceAll = true;
+	  // fallthrough
+	case 1: // replace
+	  //
+	  // if we replace an item from an old session K3bDirItem::addDataItem takes care
+	  // of replacing the item
+	  //
+	  if( !oldItem->isFromOldSession() )
+	    delete oldItem;
+	  if( m_copyItems )
+	    item = item->copy();
+	  dir->addDataItem( item );
+	  break;
+	case 4: // ignore all
+	  m_bExistingItemsIgnoreAll = true;
+	  // fallthrough
+	case 3: // ignore
+	  // do nothing
+	  break;
+	case 5: {// rename
+	  QString newName;
+	  if( getNewName( newName, dir, newName ) ) {
+	    if( m_copyItems )
+	      item = item->copy();
+	    item->setK3bName( newName );
+	    dir->addDataItem( item );
+	  }
+	  break;
+	}
+	case 6: // cancel
+	  slotCancel();
+	  return;
+	}
+      }
+    }
+
+    //
+    // No old item with the same name
+    //
+    else {
+      if( m_copyItems )
+	item = item->copy();
+      dir->addDataItem( item );
+    }
+  }
+
+  if( m_items.isEmpty() ) {
+    m_urlCounter = 0;
+    accept();
+  }
+  else {
+    --m_urlCounter;
+    if( m_urlCounter == 0 ) // GUI update -> slow
+      QTimer::singleShot( 0, this, SLOT(slotCopyMoveItems()) );
+    else                    // no GUI update -> fast
+      slotCopyMoveItems();
   }
 }
 

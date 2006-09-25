@@ -30,7 +30,10 @@ class K3bSessionImportItem : public K3bDataItem
 {
  public:
   K3bSessionImportItem( const K3bIso9660File*, K3bDataDoc* doc, K3bDirItem* );
+  K3bSessionImportItem( const K3bSessionImportItem& );
   ~K3bSessionImportItem();
+
+  K3bDataItem* copy() const;
 
   K3bFileItem* replaceItem() const { return m_replaceItem; }
   void setReplaceItem( K3bFileItem* item ) { m_replaceItem = item; }

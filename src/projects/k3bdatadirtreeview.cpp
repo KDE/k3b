@@ -174,7 +174,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 	e->source() == m_fileView->viewport() ) {
       // move all selected items
       QPtrList<QListViewItem> selectedViewItems = m_fileView->selectedItems();
-      QPtrList<K3bDataItem> selectedDataItems;
+      QValueList<K3bDataItem*> selectedDataItems;
       QPtrListIterator<QListViewItem> it( selectedViewItems );
       for( ; it.current(); ++it ) {
 	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
@@ -184,12 +184,15 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, QListViewItem*, QListViewIt
 	  kdDebug() << "no dataviewitem" << endl;
       }
 
-      m_doc->moveItems( selectedDataItems, d->addParentDir );
+      K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, d->addParentDir, this, e->action() == QDropEvent::Copy );
     }
     else if( e->source() == viewport() ) {
       // move the selected dir
-      if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( selectedItem() ) )
-	m_doc->moveItem( dirItem->dirItem(), d->addParentDir );
+      if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( selectedItem() ) ) {
+	QValueList<K3bDataItem*> selectedDataItems;
+	selectedDataItems.append( dirItem->dirItem() );
+	K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, d->addParentDir, this, e->action() == QDropEvent::Copy );
+      }
     }
     else {
       // seems that new items have been dropped

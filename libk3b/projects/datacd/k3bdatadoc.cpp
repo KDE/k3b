@@ -87,7 +87,6 @@ bool K3bDataDoc::newDocument()
 {
   clearImportedSession();
 
-  m_bootImages.clear();
   m_bootCataloge = 0;
   m_oldSessionSize = 0;
   m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
@@ -549,8 +548,6 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
       bootItem->setLoadSegment( elem.attribute( "load_segment" ).toInt() );
       bootItem->setLoadSize( elem.attribute( "load_size" ).toInt() );
 
-      m_bootImages.append(bootItem);
-
       newItem = bootItem;
     }
 
@@ -915,6 +912,15 @@ void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
   if( !removedItem->isFromOldSession() )
     m_sizeHandler->removeFile( removedItem );
 
+  // update the boot item list
+  if( K3bBootItem* bi = dynamic_cast<K3bBootItem*>( removedItem ) ) {
+    m_bootImages.removeRef( bi );
+    if( m_bootImages.isEmpty() ) {
+      delete m_bootCataloge;
+      m_bootCataloge = 0;
+    }
+  }
+
   emit itemRemoved( removedItem );
   emit changed();
 }
@@ -925,6 +931,10 @@ void K3bDataDoc::itemAddedToDir( K3bDirItem*, K3bDataItem* item )
   // update the project size
   if( !item->isFromOldSession() )
     m_sizeHandler->addFile( item );
+
+  // update the boot item list
+  if( K3bBootItem* bi = dynamic_cast<K3bBootItem*>( item ) )
+    m_bootImages.append( bi );
 
   emit itemAdded( item );
   emit changed();
@@ -1317,28 +1327,10 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
   if( !dir )
     dir = bootImageDir();
 
-  QString newName = QFileInfo(filename).fileName();
+  K3bBootItem* boot = new K3bBootItem( filename, this, dir );
 
-  if( dir->alreadyInDirectory( newName ) ) {
-    bool ok = true;
-    QValidator* validator = K3bValidators::iso9660Validator( false, this );
-    do {
-      newName = KInputDialog::getText( i18n("Enter New Filename"),
-				       i18n("A file with that name already exists. Please enter a new name:"),
-				       newName, &ok, qApp->activeWindow(), "renamdlg", validator );
-    } while( ok && dir->alreadyInDirectory( newName ) );
-
-    delete validator;
-
-    if( !ok )
-      return 0;
-  }
-
-  K3bBootItem* boot = new K3bBootItem( filename, this, dir, newName );
-
-  m_bootImages.append(boot);
-
-  createBootCatalogeItem(dir);
+  if( !m_bootCataloge )
+    createBootCatalogeItem(dir);
 
   return boot;
 }
@@ -1366,16 +1358,6 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
     m_bootCataloge->reparent( dir );
 
   return m_bootCataloge;
-}
-
-
-void K3bDataDoc::removeBootItem( K3bBootItem* item )
-{
-  m_bootImages.removeRef(item);
-  if( m_bootImages.isEmpty() ) {
-    delete m_bootCataloge;
-    m_bootCataloge = 0;
-  }
 }
 
 

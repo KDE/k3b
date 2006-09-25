@@ -22,7 +22,10 @@ class K3bBootItem : public K3bFileItem
 {
  public:
   K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
+  K3bBootItem( const K3bBootItem& );
   ~K3bBootItem();
+
+  K3bDataItem* copy() const;
 
   bool isHideable() const { return false; }
 

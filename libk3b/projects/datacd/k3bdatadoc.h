@@ -138,9 +138,31 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   K3bDataItem* bootCataloge() { return m_bootCataloge; }
 
   K3bDirItem* bootImageDir();
+
+  /**
+   * Create a boot item and also create a boot cataloge file in case none
+   * exists in the project.
+   *
+   * Calling this method has the same effect like creating a new K3bBootItem 
+   * instance manually and then calling createBootCatalogeItem.
+   *
+   * \return The new boot item on success or 0 in case a file with the same
+   *         name already exists.
+   */
   K3bBootItem* createBootItem( const QString& filename, K3bDirItem* bootDir = 0 );
-  /** this will just remove it from the list of boot items, not remove it from the doc */
-  void removeBootItem( K3bBootItem* );
+
+  /**
+   * Create a new boot catalog item.
+   * For now this is not called automatically for internal reasons.
+   *
+   * Call this if you create boot items manually instead of using createBootItem.
+   *
+   * The boot catalog is automatically deleted once the last boot item is removed
+   * from the doc.
+   *
+   * \return The new boot catalog item or the old one if it already exists.
+   */
+  K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
 
   /**
    * This will prepare the filenames as written to the image.
@@ -225,7 +247,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
  private:
   void prepareFilenamesInDir( K3bDirItem* dir );
   void createSessionImportItems( const K3bIso9660Directory*, K3bDirItem* parent );
-  K3bDataItem* createBootCatalogeItem( K3bDirItem* bootDir );
 
   /**
    * used by K3bDirItem to inform about removed items.

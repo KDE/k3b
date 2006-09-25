@@ -32,8 +32,26 @@ K3bBootItem::K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* 
   setExtraInfo( i18n("El Torito Boot image") );
 }
 
+
+K3bBootItem::K3bBootItem( const K3bBootItem& item )
+  : K3bFileItem( item ),
+    m_noBoot( item.m_noBoot ),
+    m_bootInfoTable( item.m_bootInfoTable ),
+    m_loadSegment( item.m_loadSegment ),
+    m_loadSize( item.m_loadSize ),
+    m_imageType( item.m_imageType ),
+    m_tempPath( item.m_tempPath )
+{
+}
+
+
 K3bBootItem::~K3bBootItem()
 {
   take();
-  doc()->removeBootItem(this);
+}
+
+
+K3bDataItem* K3bBootItem::copy() const
+{
+  return new K3bBootItem( *this );
 }

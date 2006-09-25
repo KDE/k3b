@@ -258,7 +258,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
     if( e->source() == viewport() ) {
       // move all selected items
       QPtrList<QListViewItem> selectedViewItems = selectedItems();
-      QPtrList<K3bDataItem> selectedDataItems;
+      QValueList<K3bDataItem*> selectedDataItems;
       QPtrListIterator<QListViewItem> it( selectedViewItems );
       for( ; it.current(); ++it ) {
 	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
@@ -268,14 +268,15 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
 	  kdDebug() << "no dataviewitem" << endl;
       }
 
-      // FIXME: Use a special move mechanism which allows to ask for renaming in case
-      //        files with the same name exist
-      m_doc->moveItems( selectedDataItems, m_addParentDir );
+      K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, m_addParentDir, this, e->action() == QDropEvent::Copy );
     }
     else if( e->source() == m_treeView->viewport() ) {
       // move the selected dir
-      if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( m_treeView->selectedItem() ) )
-	m_doc->moveItem( dirItem->dirItem(), m_addParentDir );
+      if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( m_treeView->selectedItem() ) ) {
+	QValueList<K3bDataItem*> selectedDataItems;
+	selectedDataItems.append( dirItem->dirItem() );
+	K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, m_addParentDir, this, e->action() == QDropEvent::Copy );
+      }
     }
     else {
       // seems that new items have been dropped

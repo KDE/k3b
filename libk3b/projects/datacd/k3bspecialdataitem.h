@@ -40,10 +40,20 @@ class K3bSpecialDataItem : public K3bDataItem
 	parent->addDataItem( this );
     }
 
+    K3bSpecialDataItem( const K3bSpecialDataItem& item )
+      : K3bDataItem( item ),
+      m_mimeType( item.m_mimeType ),
+      m_size( item.m_size ) {
+    }
+
   ~K3bSpecialDataItem() {
     // remove this from parentdir
     if( parent() )
       parent()->takeDataItem( this );
+  }
+
+  K3bDataItem* copy() const {
+    return new K3bSpecialDataItem( *this );
   }
 
   void setMimeType( const QString& s ) { m_mimeType = s; }

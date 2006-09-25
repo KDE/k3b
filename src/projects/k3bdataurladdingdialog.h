@@ -24,6 +24,7 @@
 
 class K3bBusyWidget;
 class QLabel;
+class K3bDataItem;
 class K3bDirItem;
 class K3bEncodingConverter;
 
@@ -41,8 +42,18 @@ class K3bDataUrlAddingDialog : public KDialogBase
   static int addUrls( const KURL::List& urls, K3bDirItem* dir = 0,
 		      QWidget* parent = 0 );
 
+  static int moveItems( const QValueList<K3bDataItem*>& items, K3bDirItem* dir,
+			QWidget* parent = 0 );
+
+  static int copyItems( const QValueList<K3bDataItem*>& items, K3bDirItem* dir,
+			QWidget* parent = 0 );
+
+  static int copyMoveItems( const QValueList<K3bDataItem*>& items, K3bDirItem* dir,
+			    QWidget* parent, bool copy );
+
  private slots:
   void slotAddUrls();
+  void slotCopyMoveItems();
   void slotCancel();
 
  private:
@@ -53,12 +64,16 @@ class K3bDataUrlAddingDialog : public KDialogBase
   bool checkForHiddenFiles( const QDir& dir );
   bool checkForSystemFiles( const QDir& dir );
 
+  QString resultMessage() const;
+
   K3bBusyWidget* m_busyWidget;
   QLabel* m_infoLabel;
   K3bEncodingConverter* m_encodingConverter;
 
   KURL::List m_urls;
   QValueList< QPair<KURL, K3bDirItem*> > m_urlQueue;
+
+  QValueList< QPair<K3bDataItem*, K3bDirItem*> > m_items;
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;
@@ -75,6 +90,8 @@ class K3bDataUrlAddingDialog : public KDialogBase
   bool m_bCanceled;
 
   int m_urlCounter;
+
+  bool m_copyItems;
 };
 
 #endif

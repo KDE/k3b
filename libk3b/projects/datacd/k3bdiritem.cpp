@@ -41,6 +41,21 @@ K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentD
     parent()->addDataItem( this );
 }
 
+
+K3bDirItem::K3bDirItem( const K3bDirItem& item )
+  : K3bDataItem( item ),
+    m_size(0),
+    m_followSymlinksSize(0),
+    m_blocks(0),
+    m_followSymlinksBlocks(0),
+    m_files(0),
+    m_dirs(0),
+    m_localPath( item.m_localPath )
+{
+  for( QPtrListIterator<K3bDataItem> it( item.children() ); *it; ++it )
+    addDataItem( (*it)->copy() );
+}
+
 K3bDirItem::~K3bDirItem()
 {
   // delete all children
@@ -61,6 +76,13 @@ K3bDirItem::~K3bDirItem()
   // and all it's files' sizes have already been substracted
   take();
 }
+
+
+K3bDataItem* K3bDirItem::copy() const
+{
+  return new K3bDirItem( *this );
+}
+
 
 K3bDirItem* K3bDirItem::getDirItem() const
 {
@@ -114,7 +136,8 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
     item->m_parentDir = this;
 
     // inform the doc
-    doc()->itemAddedToDir( this, item );
+    if( doc() )
+      doc()->itemAddedToDir( this, item );
   }
 
   return this;
@@ -135,7 +158,8 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
     item->m_parentDir = 0;
     
     // inform the doc
-    doc()->itemRemovedFromDir( this, item );
+    if( doc() )
+      doc()->itemRemovedFromDir( this, item );
     
     if( item->isFile() ) {
       // restore the item imported from an old session
@@ -377,7 +401,7 @@ K3bRootItem::~K3bRootItem()
 }
 
 
-const QString& K3bRootItem:: k3bName()
+const QString& K3bRootItem::k3bName()
 {
   return doc()->isoOptions().volumeID();
 }

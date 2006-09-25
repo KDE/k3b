@@ -156,10 +156,29 @@ K3bFileItem::K3bFileItem( const k3b_struct_stat* stat,
 }
 
 
+K3bFileItem::K3bFileItem( const K3bFileItem& item )
+  : K3bDataItem( item ),
+    m_replacedItemFromOldSession(0),
+    m_size( item.m_size ),
+    m_sizeFollowed( item.m_sizeFollowed ),
+    m_id( item.m_id ),
+    m_idFollowed( item.m_idFollowed ),
+    m_localPath( item.m_localPath ),
+    m_bSymLink( item.m_bSymLink )
+{
+}
+
+
 K3bFileItem::~K3bFileItem()
 {
   // remove this from parentdir
   take();
+}
+
+
+K3bDataItem* K3bFileItem::copy() const
+{
+  return new K3bFileItem( *this );
 }
 
 

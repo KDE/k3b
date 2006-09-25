@@ -36,7 +36,24 @@ class LIBK3B_EXPORT K3bDataItem
 {
  public: 
   K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
+
+  /**
+   * Default copy constructor.
+   *
+   * The result is an exact copy except that no parent dir it set and, thus, also no doc.
+   */
+  K3bDataItem( const K3bDataItem& );
+
   virtual ~K3bDataItem();
+
+  /**
+   * Return an exact copy of this data item.
+   *
+   * The result is an exact copy except that no parent dir it set and, thus, also no doc.
+   *
+   * Implementations should use the default constructor.
+   */
+  virtual K3bDataItem* copy() const = 0;
 	
   K3bDirItem* parent() { return m_parentDir; }
   K3bDirItem* getParent() const { return m_parentDir; }

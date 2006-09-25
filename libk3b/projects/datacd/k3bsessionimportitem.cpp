@@ -34,6 +34,14 @@ K3bSessionImportItem::K3bSessionImportItem( const K3bIso9660File* isoF, K3bDataD
 }
 
 
+K3bSessionImportItem::K3bSessionImportItem( const K3bSessionImportItem& item )
+  : K3bDataItem( item ),
+    m_replaceItem( item.m_replaceItem ),
+    m_size( item.m_size )
+{
+}
+
+
 K3bSessionImportItem::~K3bSessionImportItem()
 {
   if( m_replaceItem )
@@ -42,4 +50,10 @@ K3bSessionImportItem::~K3bSessionImportItem()
   // remove this from parentdir
   if( parent() )
     parent()->takeDataItem( this );
+}
+
+
+K3bDataItem* K3bSessionImportItem::copy() const
+{
+  return new K3bSessionImportItem( *this );
 }
