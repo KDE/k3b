@@ -316,13 +316,20 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       else if( m_bExistingItemsIgnoreAll )
 	valid = false;
 
+      else if( oldItem->localPath() == resolved ) {
+	//
+	// Just ignore if the same file is added again
+	//
+	valid = false;
+      }
+      
       else if( m_bExistingItemsReplaceAll ) {
 	// if we replace an item from an old session the K3bFileItem constructor takes care
 	// of replacing the item
 	if( !oldItem->isFromOldSession() )
 	  delete oldItem;
       }
-      
+
       //
       // Let the user choose
       //
