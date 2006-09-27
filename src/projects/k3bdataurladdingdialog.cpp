@@ -32,6 +32,7 @@
 #include <k3bmultichoicedialog.h>
 #include <k3bvalidators.h>
 #include <k3bglobals.h>
+#include <k3bisooptions.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -40,6 +41,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kstdguiitem.h>
+#include <kconfig.h>
 
 #include <unistd.h>
 
@@ -424,15 +426,20 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   if( valid ) {
     //
     // Set the volume id from the first added url
-    // FIXME: only do this once and not after the volume id was changed
+    // only if it does not differ from the default
+    // FIXME: The default might still be changed after this project has been created
     //
-    if( m_urls.count() == 1 && dir->doc()->root()->children().count() == 0 ) {
-      QString v = newName;
-      // remove the extension
-      int dotpos = v.findRev( '.' );
-      if( dotpos > 0 )
-	v.truncate( dotpos );
-      dir->doc()->setVolumeID( v );
+    if( m_urls.count() == 1 && 
+	dir->doc()->root()->children().count() == 0 ) {
+      KConfigGroup grp( k3bcore->config(), "default " + dir->doc()->typeString() + " settings" );
+      if( dir->doc()->isoOptions().volumeID() == K3bIsoOptions::load( &grp ).volumeID() ) {
+	QString v = newName;
+	// remove the extension
+	int dotpos = v.findRev( '.' );
+	if( dotpos > 0 )
+	  v.truncate( dotpos );
+	dir->doc()->setVolumeID( v );
+      }
     }
 
     if( isDir && !isSymLink ) {
