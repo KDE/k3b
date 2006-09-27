@@ -11,8 +11,8 @@
 + video cd Navigation
 
 + Alsa output plugin
-* Rewrite of the DVD ripping/encoding stuff
-  * Encoding on-the-fly (no extra encoding dialog)
++ Rewrite of the DVD ripping/encoding stuff
+  + Encoding on-the-fly (no extra encoding dialog)
   + Do not rip in a special format but save the Video DVD as
     a normal VideoDVD structure (or encoded)
 
