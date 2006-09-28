@@ -236,7 +236,8 @@ void K3bDataDirTreeView::slotItemAdded( K3bDataItem* item )
 
 void K3bDataDirTreeView::slotDataItemRemoved( K3bDataItem* item )
 {
-  if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
+  if( item->isDir() ) {
+    K3bDirItem* dirItem = static_cast<K3bDirItem*>( item );
     QMapIterator<K3bDirItem*, K3bDataDirViewItem*> it = m_itemMap.find( dirItem );
     if( it != m_itemMap.end() ) {
       K3bDataDirViewItem* viewItem = it.data();

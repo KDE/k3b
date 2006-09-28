@@ -146,7 +146,7 @@ void K3bDataFileView::slotItemAdded( K3bDataItem* item )
 void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
 {
   if( item->isDir() ) {
-    if( ((K3bDirItem*)item)->isSubItem( currentDir() ) ) {
+    if( static_cast<K3bDirItem*>(item)->isSubItem( currentDir() ) ) {
       slotSetCurrentDir( m_doc->root() );
     }
   }
