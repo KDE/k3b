@@ -67,6 +67,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   virtual ~K3bDataDoc();
 
   virtual int type() const { return DATA; }
+  virtual QString typeString() const;
 
   virtual QString name() const;
 
@@ -236,8 +237,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   void saveDocumentDataHeader( QDomElement& headerElem );
   bool loadDocumentDataOptions( QDomElement optionsElem );
   bool loadDocumentDataHeader( QDomElement optionsElem );
-
-  virtual QString typeString() const;
 
   K3bFileCompilationSizeHandler* m_sizeHandler;
 
