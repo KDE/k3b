@@ -20,97 +20,199 @@
 #include <config.h>
 #endif
 
+#include "k3bdevice_export.h"
+
 #include <qobject.h>
 #include <qmap.h>
 #include <qstringlist.h>
 
-// We acknowledge the the dbus API is unstable
-#define DBUS_API_SUBJECT_TO_CHANGE
-#include <dbus/connection.h>
-#include <hal/libhal.h>
+class DBusConnection;
 
-
-// The HAL API changed between 0.4 and 0.5 series.
-// These defines enable backward compatibility
-#ifdef HAL_0_4
-#define libhal_free_string hal_free_string
-#define libhal_device_exists(ctx, udi, error) hal_device_exists(ctx, udi)
-#define libhal_device_property_watch_all(ctx, error) hal_device_property_watch_all(ctx)
-#define libhal_get_all_devices(ctx, num_devices, error) hal_get_all_devices(ctx, num_devices)
-#define libhal_device_property_exists(ctx, udi, key, error) hal_device_property_exists(ctx, udi, key)
-#define libhal_device_get_property_bool(ctx, udi, key, error) hal_device_get_property_bool(ctx, udi, key)
-#define libhal_device_get_property_string(ctx, udi, key, error) hal_device_get_property_string(ctx, udi, key)
-#define libhal_device_query_capability(ctx, udi, capability, error) hal_device_query_capability(ctx, udi, capability)
-#endif
 
 namespace K3bDevice {
 
+  class Device;
+
   /**
-   * This is a simple HAL/DBUS wrapper which just checks if 
-   * CDROM devices have been added or removed.
+   * This is a simple HAL/DBUS wrapper which creates QT signals whenever a new optical
+   * drive is plugged into the system or one is unplugged.
+   *
+   * The HalConnection class also handles media changes. Whenever a new medium is inserted
+   * into a drive or a medium is removed (i.e. ejected) a signal is emitted. This way it
+   * is easy to keep track of the inserted media.
    *
    * This class does not deal with K3b devices but with system device names
    * such as /dev/cdrom. These device names can be used in DeviceManager::findDevice().
    */
-  class HalConnection : public QObject
+  class LIBK3BDEVICE_EXPORT HalConnection : public QObject
     {
       Q_OBJECT
 
     public:
-      HalConnection( QObject* parent = 0, const char* name = 0 );
       ~HalConnection();
 
       /**
-       * Tries to open a connection to HAL.
+       * Creates a new singleton HalConnection object or returns the already existing one.
+       * A newly created HalConnection will emit newDevice signals for all devices in the HAL
+       * manager. However, since one cannot be sure if this is the first time the HalConnection
+       * is created it is recommended to connect to the signals and query the list of current
+       * devices.
        *
-       * \return true if a connection to HAL has been established. In this case
-       *         there will also already be deviceAdded signals.
+       * \return An instance of the singleton HalConnection object.
+       */
+      static HalConnection* instance();
+
+      /**
+       * \return a list of optical devices as reported by HAL.
+       */
+      QStringList devices() const;
+
+      /**
+       * \internal
+       */
+      void addDevice( const char* udi );
+
+      /**
+       * \internal
+       */
+      void removeDevice( const char* udi );
+
+      /**
+       * Error codes named as the HAL deamon raises them
+       */
+      enum ErrorCodes {
+	org_freedesktop_Hal_Success = 0, //*< The operation was successful. This code does not match any in HAL
+	org_freedesktop_Hal_CommunicationError, //*< DBus communication error. This code does not match any in HAL
+	org_freedesktop_Hal_NoSuchDevice,
+	org_freedesktop_Hal_DeviceAlreadyLocked,
+	org_freedesktop_Hal_PermissionDenied,
+	org_freedesktop_Hal_Device_Volume_NoSuchDevice,
+	org_freedesktop_Hal_Device_Volume_PermissionDenied,
+	org_freedesktop_Hal_Device_Volume_AlreadyMounted,
+	org_freedesktop_Hal_Device_Volume_InvalidMountOption,
+	org_freedesktop_Hal_Device_Volume_UnknownFilesystemType,
+	org_freedesktop_Hal_Device_Volume_InvalidMountpoint,
+	org_freedesktop_Hal_Device_Volume_MountPointNotAvailable,
+	org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy,
+	org_freedesktop_Hal_Device_Volume_InvalidUnmountOption,
+	org_freedesktop_Hal_Device_Volume_InvalidEjectOption
+      };
+
+     public slots:
+      /**
+       * Lock the device in HAL
+       * 
+       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * finished the procedure yet.
+       *
+       * \param dev The device to lock
+       * \return An error code
+       *
+       * \see ErrorCode
+       */
+      int lock( Device* );
+
+      /**
+       * Unlock a previously locked device in HAL
+       * 
+       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * finished the procedure yet.
+       *
+       * \param dev The device to lock
+       * \return An error code
+       *
+       * \see ErrorCode
+       */
+      int unlock( Device* );
+
+      /**
+       * Mounts a device via HAL
+       * 
+       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * finished the procedure yet.
+       *
+       * \param dev The device to lock
+       * \return An error code
+       *
+       * \see ErrorCode
+       */
+      int mount( Device*, 
+		 const QString& mountPoint = QString::null, 
+		 const QString& fstype = QString::null,
+		 const QStringList& options = QStringList() );
+
+      /**
+       * Unmounts a device via HAL
+       * 
+       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * finished the procedure yet.
+       *
+       * \param dev The device to lock
+       * \return An error code
+       *
+       * \see ErrorCode
+       */
+      int unmount( Device*,
+		   const QStringList& options = QStringList() );
+
+      /**
+       * Unmounts a device via HAL
+       * 
+       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * finished the procedure yet.
+       *
+       * \param dev The device to lock
+       * \return An error code
+       *
+       * \see ErrorCode
+       */
+      int eject( Device*,
+		 const QStringList& options = QStringList() );
+
+    signals:
+      /**
+       * This signal gets emitted whenever HAL finds a new optical drive.
+       *
+       * \param dev The block device name of the new drive.
+       */
+      void deviceAdded( const QString& dev );
+
+      /**
+       * This signal gets emitted whenever HAL detects that an optical drive
+       * has been unplugged.
+       *
+       * \param dev The block device name of the drive.
+       */
+      void deviceRemoved( const QString& dev );
+
+      /**
+       * This signal gets emitted whenever a new medium is inserted into a
+       * device or an inserted is removed (i.e. ejected)
+       *
+       * \param dev The block device name of the drive the medium is or was inserted into.
+       */
+      void mediumChanged( const QString& dev );
+
+    private:
+      /**
+       * HalConnection is a signelton class. Use the instance() method to create it.
+       */
+      HalConnection( QObject* parent = 0, const char* name = 0 );
+
+      /**
+       * Tries to open a connection to HAL.
        */
       bool open();
       void close();
 
       bool isOpen() const;
 
-      /**
-       * \return a list of CDROM devices as reported by HAL.
-       */
-      QStringList devices() const;
+      static HalConnection* s_instance;
 
-    signals:
-      void deviceAdded( const QString& dev );
-      void deviceRemoved( const QString& dev );
+      class Private;
+      Private* d;
 
-    private:
-      LibHalContext* m_halContext;
-      DBusQt::Connection* m_dBusQtConnection;
-#ifdef HAL_0_4
-      LibHalFunctions m_halFunctions;
-#endif
-
-      bool m_bOpen;
-
-      QMap<QCString, QString> m_udiDeviceMap;
-
-      /**
-       * \return the system device for cdrom devices and an empty string for all other devices.
-       */
-      QString getSystemDeviceForCdrom( const char* udi ) const;
-
-      // used by the static callbacks
-      void addDevice( const char* udi );
-      void removeDevice( const char* udi );
       void setupDBusQtConnection( DBusConnection* dbusConnection );
-
-      // HAL callback methods
-      static void halDeviceAdded( LibHalContext* ctx, const char* udi );
-      static void halDeviceRemoved( LibHalContext* ctx, const char* udi );
-
-#ifdef HAL_0_4
-      static void halMainLoopIntegration( LibHalContext* ctx, DBusConnection* dbus_connection );
-#endif
-
-      // since HalConnection is not a singlelton we need to have a context->HalConnection mapping
-      static QMap<LibHalContext*, HalConnection*> s_contextMap;
     };
 }
 

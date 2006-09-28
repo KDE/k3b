@@ -22,6 +22,7 @@
 #include <qstringlist.h>
 #include <qmemarray.h>
 #include <qptrlist.h>
+
 #include "k3bdevice_export.h"
 #include <kdebug.h>
 
@@ -183,8 +184,11 @@ namespace K3bDevice {
 
       /**
        * Scan the system for devices. Call this to initialize all devices.
-       * If HAL is available this will noly establish a connection to HAL
-       * and get the device list from there.
+       * 
+       * If the system uses the HAL device deamon it is possible to use
+       * HalConnection instead of calling this method.
+       *
+       * You might want to call scanFstab after calling this method.
        *
        * \return Number of found devices.
        **/
@@ -193,6 +197,9 @@ namespace K3bDevice {
       /**
        * Searches for mountpoints of the devices. This method will also add devices
        * that have an entry in the fstab file and have not yet been found.
+       *
+       * Most modern distributions do not use mount points for their optical devices
+       * anymore so this method might be useless there.
        */
       void scanFstab();
 
@@ -216,6 +223,11 @@ namespace K3bDevice {
        */
       virtual Device* addDevice( const QString& dev );
 
+      /**
+       * Remove a device from the device manager. Basicly this method
+       * only makes sense in combination with the HalConnection. Connect
+       * it to the deviceRemoved signal.
+       */
       virtual void removeDevice( const QString& dev );
 
     signals:

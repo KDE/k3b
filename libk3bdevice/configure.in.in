@@ -199,7 +199,7 @@ fi
 
 have_hal=no
 HAL_DBUS_LIBS=""
-if [test "x$hal" = "xFOUND"] && [test "x$dbus" = "xFOUND"] && [test "x$dbusqt" = "xFOUND"] ; then
+if [test "x$hal" = "xFOUND"] && [test "x$dbus" = "xFOUND"] && [test "x$dbusqt" = "xFOUND"] && [ test $hal_storage_version = 5 ] ; then
   AC_DEFINE(HAVE_HAL, , [compile in HAL support])
   have_hal=yes
   HAL_DBUS_LIBS="$HAL_LIBS $DBUS_LIBS $DBUSQT_LIBS"

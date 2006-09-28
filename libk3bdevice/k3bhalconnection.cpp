@@ -14,216 +14,616 @@
  */
 
 #include "k3bhalconnection.h"
+#include "k3bdevice.h"
 
 #include <kdebug.h>
+#include <klocale.h>
 
-QMap<LibHalContext*, K3bDevice::HalConnection*> K3bDevice::HalConnection::s_contextMap;
+#include <qtimer.h>
 
-#ifdef HAL_0_4
-static K3bDevice::HalConnection* s_setupHal = 0;
+#ifdef HAVE_HAL
+// We acknowledge the the dbus API is unstable
+#define DBUS_API_SUBJECT_TO_CHANGE
+#include <dbus/connection.h>
+#include <dbus/dbus.h>
+#include <hal/libhal.h>
 #endif
 
-K3bDevice::HalConnection::HalConnection( QObject* parent, const char* name )
-  : QObject( parent, name ),
-    m_halContext(0),
-    m_dBusQtConnection(0),
-    m_bOpen(false)
+static char** qstringListToArray( const QStringList& s )
 {
+  char** a = new char*[s.count()];
+  for( unsigned int i = 0; i < s.count(); ++i ) {
+    a[i] = new char[s[i].length()+1];
+    ::strncpy( a[i], s[i].local8Bit().data(), s[i].length() );
+    a[s[i].length()] = '\0';
+  }
+  return a;
+}
+
+static void freeArray( char** a, unsigned int length )
+{
+  for( unsigned int i = 0; i < length; ++i )
+    delete [] a[i];
+  delete a;
+}
+
+
+// CALLBACKS
+void halDeviceAdded( LibHalContext* ctx, const char* udi )
+{
+  Q_UNUSED( ctx );
+  kdDebug() << "adding udi   " << udi << endl;
+  K3bDevice::HalConnection::instance()->addDevice( udi );
+}
+
+
+void halDeviceRemoved( LibHalContext* ctx, const char* udi )
+{
+  Q_UNUSED( ctx );
+  kdDebug() << "removing udi " << udi << endl;
+  K3bDevice::HalConnection::instance()->removeDevice( udi );
+}
+
+
+K3bDevice::HalConnection* K3bDevice::HalConnection::s_instance = 0;
+
+
+class K3bDevice::HalConnection::Private
+{
+public:
+  Private()
+    : halContext(0),
+#ifdef HAVE_HAL
+      dBusQtConnection(0),
+#endif
+      bOpen(false) {
+  }
+
+  LibHalContext* halContext;
+#ifdef HAVE_HAL
+  DBusConnection* connection;
+  DBusQt::Connection* dBusQtConnection;
+#endif
+  
+  bool bOpen;
+  
+  QMap<QCString, QString> udiDeviceMap;
+  QMap<QString, QCString> deviceUdiMap;
+};
+
+
+K3bDevice::HalConnection* K3bDevice::HalConnection::instance()
+{
+  if( s_instance == 0 )
+    s_instance = new HalConnection( 0 );
+
+  if( !s_instance->isOpen() && !s_instance->open() )
+      kdDebug() << "(K3bDevice::HalConnection) failed to open connection to HAL." << endl;
+
+  return s_instance;
+}
+
+
+K3bDevice::HalConnection::HalConnection( QObject* parent, const char* name )
+  : QObject( parent, name )
+{
+  d = new Private();
 }
 
 
 K3bDevice::HalConnection::~HalConnection()
 {
+  s_instance = 0;
   close();
+  delete d;
 }
 
 
 bool K3bDevice::HalConnection::isOpen() const
 {
-  return m_bOpen;
+  return d->bOpen;
 }
 
 
 bool K3bDevice::HalConnection::open()
 {
+#ifdef HAVE_HAL
   close();
 
-#ifdef HAL_0_4
-  kdDebug() << "(K3bDevice::HalConnection) initializing HAL 0.4" << endl;
-
-  m_halFunctions.main_loop_integration    = K3bDevice::HalConnection::halMainLoopIntegration;
-  m_halFunctions.device_added             = K3bDevice::HalConnection::halDeviceAdded;
-  m_halFunctions.device_removed           = K3bDevice::HalConnection::halDeviceRemoved;
-  m_halFunctions.device_new_capability    = 0;
-  m_halFunctions.device_lost_capability   = 0;
-  m_halFunctions.device_property_modified = 0;
-  m_halFunctions.device_condition         = 0;
-
-  s_setupHal = this;
-  m_halContext = hal_initialize( &m_halFunctions, false );
-  s_setupHal = 0;
-  if( !m_halContext ) {
-    kdDebug() << "(K3bDevice::HalConnection) unable to create HAL context." << endl;
-    return false;
-  }
-
-  if( libhal_device_property_watch_all( m_halContext, 0 ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) Failed to watch HAL properties!" << endl;
-    return false;
-  }
-
-#else // HAL >= 0.5
   kdDebug() << "(K3bDevice::HalConnection) initializing HAL >= 0.5" << endl;
 
-  m_halContext = libhal_ctx_new();
-  if( !m_halContext ) {
+  d->halContext = libhal_ctx_new();
+  if( !d->halContext ) {
     kdDebug() << "(K3bDevice::HalConnection) unable to create HAL context." << endl;
     return false;
   }
 
   DBusError error;
   dbus_error_init( &error );
-  DBusConnection* dbus_connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
+  d->connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
   if( dbus_error_is_set(&error) ) {
     kdDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS: " << error.message << endl;
     return false;
   }
 
-  setupDBusQtConnection( dbus_connection );
+  setupDBusQtConnection( d->connection );
 
-  libhal_ctx_set_dbus_connection( m_halContext, dbus_connection );
+  libhal_ctx_set_dbus_connection( d->halContext, d->connection );
   
-  libhal_ctx_set_device_added( m_halContext, K3bDevice::HalConnection::halDeviceAdded );
-  libhal_ctx_set_device_removed( m_halContext, K3bDevice::HalConnection::halDeviceRemoved );
-  libhal_ctx_set_device_new_capability( m_halContext, 0 );
-  libhal_ctx_set_device_lost_capability( m_halContext, 0 );
-  libhal_ctx_set_device_property_modified( m_halContext, 0 );
-  libhal_ctx_set_device_condition( m_halContext, 0 );
+  libhal_ctx_set_device_added( d->halContext, halDeviceAdded );
+  libhal_ctx_set_device_removed( d->halContext, halDeviceRemoved );
+  libhal_ctx_set_device_new_capability( d->halContext, 0 );
+  libhal_ctx_set_device_lost_capability( d->halContext, 0 );
+  libhal_ctx_set_device_property_modified( d->halContext, 0 );
+  libhal_ctx_set_device_condition( d->halContext, 0 );
   
-  if( !libhal_ctx_init( m_halContext, 0 ) ) {
+  if( !libhal_ctx_init( d->halContext, 0 ) ) {
     kdDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!" << endl;
     return false;
   }
-#endif
 
-  // register us so the static hal callbacks can find us
-  s_contextMap[m_halContext] = this;
+  d->bOpen = true;
 
-  // report all already detected devices
+  //
+  // report all devices
+  //
   int numDevices;
-  char** halDeviceList = libhal_get_all_devices( m_halContext, &numDevices, 0 );
+  char** halDeviceList = libhal_get_all_devices( d->halContext, &numDevices, 0 );
   for( int i = 0; i < numDevices; ++i )
     addDevice( halDeviceList[i] );
 
-  m_bOpen = true;
-
   return true;
+#else
+  return false;
+#endif
 }
 
 
 void K3bDevice::HalConnection::close()
 {
-  if( m_halContext ) {
-    // remove us from the map
-    s_contextMap.remove( m_halContext );
-
+#ifdef HAVE_HAL
+  if( d->halContext ) {
     // clear the context
-#ifdef HAL_0_4
-    hal_shutdown( m_halContext );
-#else
-    if( isOpen() ) {
-      libhal_ctx_shutdown( m_halContext, 0 );
-    }
-    libhal_ctx_free( m_halContext );
-#endif
+    if( isOpen() )
+      libhal_ctx_shutdown( d->halContext, 0 );
+    libhal_ctx_free( d->halContext );
 
     // delete the connection (may be 0 if open() failed)
-    delete m_dBusQtConnection;
+    delete d->dBusQtConnection;
 
-    m_halContext = 0;
-    m_dBusQtConnection = 0;
-    m_bOpen = false;
+    d->halContext = 0;
+    d->dBusQtConnection = 0;
+    d->bOpen = false;
   }
+#endif
 }
 
 
 QStringList K3bDevice::HalConnection::devices() const
 {
-  return QStringList( m_udiDeviceMap.values() );
-}
-
-
-QString K3bDevice::HalConnection::getSystemDeviceForCdrom( const char* udi ) const
-{
-  // ignore devices that have no property "info.capabilities" to suppress error messages
-  if( !libhal_device_property_exists( m_halContext, udi, "info.capabilities", 0 ) )
-    return QString::null;
-
-  if( libhal_device_query_capability( m_halContext, udi, "storage.cdrom", 0 ) ) {
-    char* dev = libhal_device_get_property_string( m_halContext, udi, "block.device", 0 );
-    if( dev ) {
-      QString s( dev );
-      libhal_free_string( dev );
-      return s;
-    }
-  }
-
-  return QString::null;
+  return QStringList( d->udiDeviceMap.values() );
 }
 
 
 void K3bDevice::HalConnection::addDevice( const char* udi )
 {
-  QString s = getSystemDeviceForCdrom( udi );
-  if( !s.isEmpty() ) {
-    kdDebug() << "Mapping udi " << udi << " to device " << s << endl;
-    m_udiDeviceMap[udi] = s;
-    emit deviceAdded( s );
+#ifdef HAVE_HAL
+  // ignore devices that have no property "info.capabilities" to suppress error messages
+  if( !libhal_device_property_exists( d->halContext, udi, "info.capabilities", 0 ) )
+    return;
+
+  if( libhal_device_query_capability( d->halContext, udi, "storage.cdrom", 0 ) ) {
+    char* dev = libhal_device_get_property_string( d->halContext, udi, "block.device", 0 );
+    if( dev ) {
+      QString s( dev );
+      libhal_free_string( dev );
+
+      if( !s.isEmpty() ) {
+	kdDebug() << "Mapping udi " << udi << " to device " << s << endl;
+	d->udiDeviceMap[udi] = s;
+	d->deviceUdiMap[s] = udi;
+	emit deviceAdded( s );
+      }
+    }
   }
+  else {
+    if( libhal_device_property_exists( d->halContext, udi, "block.storage_device", 0 ) ) {
+      char* deviceUdi = libhal_device_get_property_string( d->halContext, udi, "block.storage_device", 0 );
+      if( deviceUdi ) {
+	QCString du( deviceUdi );
+	libhal_free_string( deviceUdi );
+
+	if( d->udiDeviceMap.contains( du ) ) {
+	  //
+	  // A new medium has been inserted. Save this medium's udi so we can reuse it later
+	  // on for the mount/unmount/eject methods
+	  //
+	  // FIXME: save the udi
+	  emit mediumChanged( d->udiDeviceMap[du] );
+	}
+      }
+    }
+  }
+
+#endif
 }
 
 
 void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
-  QMapIterator<QCString, QString> it = m_udiDeviceMap.find( udi );
-  if( it != m_udiDeviceMap.end() ) {
+#ifdef HAVE_HAL
+  QMapIterator<QCString, QString> it = d->udiDeviceMap.find( udi );
+  if( it != d->udiDeviceMap.end() ) {
     kdDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
     emit deviceRemoved( it.data() );
-    m_udiDeviceMap.erase( it );
+    d->udiDeviceMap.erase( it );
+    d->deviceUdiMap.erase( it.data() );
   }
+  else {
+    if( libhal_device_property_exists( d->halContext, udi, "block.storage_device", 0 ) ) {
+      char* deviceUdi = libhal_device_get_property_string( d->halContext, udi, "block.storage_device", 0 );
+      if( deviceUdi ) {
+	QCString du( deviceUdi );
+	libhal_free_string( deviceUdi );
+
+	if( d->udiDeviceMap.contains( du ) ) {
+	  //
+	  // A medium has been removed/ejected.
+	  //
+	  emit mediumChanged( d->udiDeviceMap[du] );
+	}
+      }
+    }
+  }
+#endif
+}
+
+
+int K3bDevice::HalConnection::lock( Device* dev )
+{
+#ifdef HAVE_HAL
+  //
+  // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
+  // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
+  //
+  DBusMessage *dmesg, *reply;
+  DBusError error;
+
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+    return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+  }
+
+  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+					       "org.freedesktop.Hal.Device",
+					       "Lock" ) ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not create dbus message\n";
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  if( !dbus_message_append_args( dmesg, 
+				 DBUS_TYPE_STRING, i18n("Locked by the K3b libraries").local8Bit().data(),
+				 DBUS_TYPE_INVALID ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not append args to dbus message\n";
+    dbus_message_unref( dmesg );
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  int ret = org_freedesktop_Hal_Success;
+
+  dbus_error_init( &error );
+  if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
+    kdError() << "(K3bDevice::HalConnection) lock failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    if( !strcmp(error.name, "org.freedesktop.Hal.NoSuchDevice" ) )
+      ret = org_freedesktop_Hal_NoSuchDevice;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.DeviceAlreadyLocked" ) )
+      ret = org_freedesktop_Hal_DeviceAlreadyLocked;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.PermissionDenied" ) )
+      ret = org_freedesktop_Hal_PermissionDenied;
+  
+    dbus_message_unref( dmesg );
+    dbus_error_free( &error );
+    return ret;
+  }
+
+  kdDebug() << "(K3bDevice::HalConnection) lock queued for " << udi << endl;
+
+  dbus_message_unref (dmesg);
+  dbus_message_unref (reply);
+
+  return ret;
+#else
+  return -1;
+#endif
+}
+
+
+int K3bDevice::HalConnection::unlock( Device* dev )
+{
+#ifdef HAVE_HAL
+  //
+  // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
+  // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
+  //
+  DBusMessage *dmesg, *reply;
+  DBusError error;
+
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+    return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+  }
+
+  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+					       "org.freedesktop.Hal.Device",
+					       "Unlock" ) ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not create dbus message\n";
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  if( !dbus_message_append_args( dmesg, 
+				 DBUS_TYPE_INVALID ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not append args to dbus message\n";
+    dbus_message_unref( dmesg );
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  int ret = org_freedesktop_Hal_Success;
+
+  dbus_error_init( &error );
+  if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
+    kdError() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    if( !strcmp(error.name, "org.freedesktop.Hal.NoSuchDevice" ) )
+      ret = org_freedesktop_Hal_NoSuchDevice;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.DeviceAlreadyLocked" ) )
+      ret = org_freedesktop_Hal_DeviceAlreadyLocked;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.PermissionDenied" ) )
+      ret = org_freedesktop_Hal_PermissionDenied;
+
+    dbus_message_unref( dmesg );
+    dbus_error_free( &error );
+    return ret;
+  }
+
+  kdDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi << endl;
+
+  dbus_message_unref (dmesg);
+  dbus_message_unref (reply);
+
+  return ret;
+#else
+  return -1;
+#endif
+}
+
+
+int K3bDevice::HalConnection::mount( K3bDevice::Device* dev, 
+				     const QString& mountPoint, 
+				     const QString& fstype,
+				     const QStringList& options )
+{
+#ifdef HAVE_HAL
+  //
+  // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
+  // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
+  //
+  DBusMessage *dmesg, *reply;
+  DBusError error;
+
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+    return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+  }
+
+  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+					       "org.freedesktop.Hal.Device.Volume",
+					       "Mount" ) ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << udi << ": could not create dbus message\n";
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  char** poptions = qstringListToArray( options );
+
+  if( !dbus_message_append_args( dmesg, 
+				 DBUS_TYPE_STRING, mountPoint.local8Bit().data(), 
+				 DBUS_TYPE_STRING, fstype.local8Bit().data(),
+				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
+				 DBUS_TYPE_INVALID ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << udi << ": could not append args to dbus message\n";
+    dbus_message_unref( dmesg );
+    freeArray( poptions, options.count() );
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  freeArray( poptions, options.count() );
+
+  int ret = org_freedesktop_Hal_Success;
+
+  dbus_error_init( &error );
+  if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
+    kdError() << "(K3bDevice::HalConnection) mount failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
+      ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
+      ret = org_freedesktop_Hal_Device_Volume_PermissionDenied;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.UnknownFilesystemType" ) )
+      ret = org_freedesktop_Hal_Device_Volume_UnknownFilesystemType;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.MountPointNotAvailable" ) )
+      ret = org_freedesktop_Hal_Device_Volume_MountPointNotAvailable;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.AlreadyMounted" ) )
+      ret = org_freedesktop_Hal_Device_Volume_AlreadyMounted;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.InvalidMountpoint" ) )
+      ret = org_freedesktop_Hal_Device_Volume_InvalidMountpoint;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.InvalidMountOption" ) )
+      ret = org_freedesktop_Hal_Device_Volume_InvalidMountOption;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDeniedByPolicy" ) )
+      ret = org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy;
+
+    dbus_message_unref( dmesg );
+    dbus_error_free( &error );
+    return ret;
+  }
+
+  kdDebug() << "(K3bDevice::HalConnection) mount queued for " << udi << endl;
+
+  dbus_message_unref (dmesg);
+  dbus_message_unref (reply);
+
+  return ret;
+#else
+  return -1;
+#endif
+}
+
+
+int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
+				       const QStringList& options )
+{
+#ifdef HAVE_HAL
+  //
+  // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
+  // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
+  //
+  DBusMessage *dmesg, *reply;
+  DBusError error;
+
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+    return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+  }
+
+  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+					       "org.freedesktop.Hal.Device.Volume",
+					       "Unmount" ) ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << udi << ": could not create dbus message\n";
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  char** poptions = qstringListToArray( options );
+
+  if( !dbus_message_append_args( dmesg, 
+				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
+				 DBUS_TYPE_INVALID ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << udi << ": could not append args to dbus message\n";
+    dbus_message_unref( dmesg );
+    freeArray( poptions, options.count() );
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  freeArray( poptions, options.count() );
+
+  int ret = org_freedesktop_Hal_Success;
+
+  dbus_error_init( &error );
+  if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
+    kdError() << "(K3bDevice::HalConnection) unmount failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
+      ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
+      ret = org_freedesktop_Hal_Device_Volume_PermissionDenied;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.MountPointNotAvailable" ) )
+      ret = org_freedesktop_Hal_Device_Volume_MountPointNotAvailable;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.InvalidUnmountOption" ) )
+      ret = org_freedesktop_Hal_Device_Volume_InvalidUnmountOption;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.InvalidMountpoint" ) )
+      ret = org_freedesktop_Hal_Device_Volume_InvalidMountpoint;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDeniedByPolicy" ) )
+      ret = org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy;
+
+    dbus_message_unref( dmesg );
+    dbus_error_free( &error );
+    return ret;
+  }
+
+  kdDebug() << "(K3bDevice::HalConnection) unmount queued for " << udi << endl;
+
+  dbus_message_unref (dmesg);
+  dbus_message_unref (reply);
+
+  return ret;
+#else
+  return -1;
+#endif
+}
+
+									
+int K3bDevice::HalConnection::eject( K3bDevice::Device* dev, 
+				     const QStringList& options )
+{
+#ifdef HAVE_HAL
+  //
+  // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
+  // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
+  //
+  DBusMessage *dmesg, *reply;
+  DBusError error;
+
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+    return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+  }
+
+  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+					       "org.freedesktop.Hal.Device.Volume",
+					       "Eject" ) ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << udi << ": could not create dbus message\n";
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  char** poptions = qstringListToArray( options );
+
+  if( !dbus_message_append_args( dmesg, 
+				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
+				 DBUS_TYPE_INVALID ) ) {
+    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << udi << ": could not append args to dbus message\n";
+    dbus_message_unref( dmesg );
+    freeArray( poptions, options.count() );
+    return org_freedesktop_Hal_CommunicationError;
+  }
+
+  freeArray( poptions, options.count() );
+
+  int ret = org_freedesktop_Hal_Success;
+
+  dbus_error_init( &error );
+  if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
+    kdError() << "(K3bDevice::HalConnection) eject failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
+      ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
+      ret = org_freedesktop_Hal_Device_Volume_PermissionDenied;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.InvalidEjectOption" ) )
+      ret = org_freedesktop_Hal_Device_Volume_InvalidEjectOption;
+    else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDeniedByPolicy" ) )
+      ret = org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy;
+
+    dbus_message_unref( dmesg );
+    dbus_error_free( &error );
+    return ret;
+  }
+
+  kdDebug() << "(K3bDevice::HalConnection) eject queued for " << udi << endl;
+
+  dbus_message_unref (dmesg);
+  dbus_message_unref (reply);
+
+  return ret;
+#else
+  return -1;
+#endif
 }
 
 
 void K3bDevice::HalConnection::setupDBusQtConnection( DBusConnection* dbusConnection )
 {
-  m_dBusQtConnection = new DBusQt::Connection( this );
-  m_dBusQtConnection->dbus_connection_setup_with_qt_main( dbusConnection );
-}
-
-
-// CALLBACKS
-void K3bDevice::HalConnection::halDeviceAdded( LibHalContext* ctx, const char* udi )
-{
-  kdDebug() << "adding udi   " << udi << endl;
-  HalConnection* con = s_contextMap[ctx];
-  con->addDevice( udi );
-}
-
-
-void K3bDevice::HalConnection::halDeviceRemoved( LibHalContext* ctx, const char* udi )
-{
-  kdDebug() << "removing udi " << udi << endl;
-  HalConnection* con = s_contextMap[ctx];
-  con->removeDevice( udi );
-}
-
-#ifdef HAL_0_4
-void K3bDevice::HalConnection::halMainLoopIntegration( LibHalContext* ctx, DBusConnection* dbus_connection )
-{
-  Q_UNUSED(ctx)
-  // we cannot use the map here since this is used while creating the context
-  s_setupHal->setupDBusQtConnection( dbus_connection );
-}
+#ifdef HAVE_HAL
+  d->dBusQtConnection = new DBusQt::Connection( this );
+  d->dBusQtConnection->dbus_connection_setup_with_qt_main( dbusConnection );
 #endif
+}
 
 #include "k3bhalconnection.moc"

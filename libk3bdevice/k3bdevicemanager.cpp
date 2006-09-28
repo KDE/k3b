@@ -21,10 +21,6 @@
 #include "k3bscsicommand.h"
 #include "k3bmmc.h"
 
-#ifdef HAVE_HAL
-#include "k3bhalconnection.h"
-#endif
-
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
@@ -120,10 +116,6 @@ public:
   QPtrList<K3bDevice::Device> bdWriter;
 
   bool checkWritingModes;
-
-#ifdef HAVE_HAL
-  HalConnection hal;
-#endif
 };
 
 
@@ -132,13 +124,6 @@ K3bDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
   : QObject( parent, name )
 {
   d = new Private;
-
-#ifdef HAVE_HAL
-    connect( &d->hal, SIGNAL(deviceAdded(const QString&)),
-	     this, SLOT(addDevice(const QString&)) );
-    connect( &d->hal, SIGNAL(deviceRemoved(const QString&)),
-	     this, SLOT(removeDevice(const QString&)) );
-#endif
 }
 
 
@@ -248,16 +233,6 @@ int K3bDevice::DeviceManager::scanBus()
 {
   unsigned int numDevs = d->allDevices.count();
 
-#ifdef HAVE_HAL
-  d->hal.open();
-#endif
-
-  //
-  // we cannot trust HAL yet. At least on my system
-  // it is not able to detect USB and Firewire devices
-  // properly. We can though.
-  //
-  //  if( !d->hal.isOpen() ) {
 #ifdef Q_OS_LINUX
   LinuxDeviceScan();
 #endif
@@ -267,10 +242,7 @@ int K3bDevice::DeviceManager::scanBus()
 #ifdef Q_OS_NETBSD
   NetBSDDeviceScan();
 #endif
-    //  }
-
-  scanFstab();
-
+  
   return d->allDevices.count() - numDevs;
 }
 
@@ -598,8 +570,6 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c )
 	dev->setCdTextCapability( list[3] == "yes" );
     }
   }
-
-  scanFstab();
 
   return true;
 }
