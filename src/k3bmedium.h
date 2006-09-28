@@ -20,8 +20,7 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 #include <k3bdevice.h>
-
-class K3bIso9660SimplePrimaryDescriptor;
+#include <k3biso9660.h>
 
 
 class K3bMedium
@@ -84,10 +83,9 @@ class K3bMedium
   int content() const { return m_content; }
 
   /**
-   * \return The volume descriptor from the ISO9660 filesystem or 0
-   *         if the medium does not contain an ISO9660 filesystem.
+   * \return The volume descriptor from the ISO9660 filesystem.
    */
-  const K3bIso9660SimplePrimaryDescriptor* iso9660Descriptor() const { return m_isoDesc; }
+  const K3bIso9660SimplePrimaryDescriptor& iso9660Descriptor() const { return m_isoDesc; }
 
   /**
    * \return A short one-liner string representing the medium.
@@ -114,7 +112,7 @@ class K3bMedium
   K3bDevice::Toc m_toc;
   K3bDevice::CdText m_cdText;
   QValueList<int> m_writingSpeeds;
-  K3bIso9660SimplePrimaryDescriptor* m_isoDesc;
+  K3bIso9660SimplePrimaryDescriptor m_isoDesc;
 
   int m_content;
 };

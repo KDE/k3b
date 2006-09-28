@@ -47,7 +47,7 @@ class K3bDiskInfoView : public K3bCdContentsView
 
  private:
   void createMediaInfoItems( const K3bMedium& );
-  void createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor* );
+  void createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& );
 
   KListView* m_infoView;
 

@@ -191,7 +191,7 @@ void K3bDiskInfoView::displayInfo( const K3bMedium& medium )
 
     // iso9660 info
     // /////////////////////////////////////////////////////////////////////////////////////
-    if( medium.iso9660Descriptor() ) {
+    if( medium.content() & K3bMedium::CONTENT_DATA ) {
       (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
       createIso9660InfoItems( medium.iso9660Descriptor() );
     }
@@ -434,7 +434,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 }
 
 
-void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor* iso )
+void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& iso )
 {
   KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), 
 						   i18n("ISO9660 Filesystem Info") );
@@ -442,43 +442,43 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescr
 
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("System Id:"),
-				    iso->systemId.isEmpty() 
+				    iso.systemId.isEmpty() 
 				    ? QString("-")
-				    : iso->systemId );
+				    : iso.systemId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Id:"),
-				    iso->volumeId.isEmpty() 
+				    iso.volumeId.isEmpty() 
 				    ? QString("-")
-				    : iso->volumeId );
+				    : iso.volumeId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Set Id:"),
-				    iso->volumeSetId.isEmpty()
+				    iso.volumeSetId.isEmpty()
 				    ? QString("-")
-				    : iso->volumeSetId );
+				    : iso.volumeSetId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Publisher Id:"),
-				    iso->publisherId.isEmpty()
+				    iso.publisherId.isEmpty()
 				    ? QString("-") 
-				    : iso->publisherId );
+				    : iso.publisherId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Preparer Id:"),
-				    iso->preparerId.isEmpty()
+				    iso.preparerId.isEmpty()
 				    ? QString("-") 
-				    : iso->preparerId );
+				    : iso.preparerId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Application Id:"),
-				    iso->applicationId.isEmpty()
+				    iso.applicationId.isEmpty()
 				    ? QString("-") 
-				    : iso->applicationId );
+				    : iso.applicationId );
 //   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 // 				    i18n("Volume Size:"),
 // 				    QString( "%1 (%2*%3)" )
-// 				    .arg(iso->logicalBlockSize
-// 					 *iso->volumeSpaceSize)
-// 				    .arg(iso->logicalBlockSize)
-// 				    .arg(iso->volumeSpaceSize),
-// 				    KIO::convertSize(iso->logicalBlockSize
-// 						     *iso->volumeSpaceSize)  );
+// 				    .arg(iso.logicalBlockSize
+// 					 *iso.volumeSpaceSize)
+// 				    .arg(iso.logicalBlockSize)
+// 				    .arg(iso.volumeSpaceSize),
+// 				    KIO::convertSize(iso.logicalBlockSize
+// 						     *iso.volumeSpaceSize)  );
 
   iso9660Item->setOpen( true );
 }
