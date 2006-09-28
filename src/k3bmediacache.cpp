@@ -127,11 +127,14 @@ void K3bMediaCache::PollThread::run()
       //
       // The medium has changed. We need to update the information.
       //
+      K3bMedium m( m_deviceEntry->medium.device() );
+      m.update();
       
       // block the info since it is not valid anymore
       m_deviceEntry->mutex.lock();
       
-      m_deviceEntry->medium.update();
+      //      m_deviceEntry->medium.update();
+      m_deviceEntry->medium = m;
       	
       //
       // inform the media chache about the media change
