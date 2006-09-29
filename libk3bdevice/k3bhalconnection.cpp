@@ -21,13 +21,12 @@
 
 #include <qtimer.h>
 
-#ifdef HAVE_HAL
 // We acknowledge the the dbus API is unstable
 #define DBUS_API_SUBJECT_TO_CHANGE
 #include <dbus/connection.h>
 #include <dbus/dbus.h>
 #include <hal/libhal.h>
-#endif
+
 
 static char** qstringListToArray( const QStringList& s )
 {
@@ -73,17 +72,13 @@ class K3bDevice::HalConnection::Private
 public:
   Private()
     : halContext(0),
-#ifdef HAVE_HAL
       dBusQtConnection(0),
-#endif
       bOpen(false) {
   }
 
   LibHalContext* halContext;
-#ifdef HAVE_HAL
   DBusConnection* connection;
   DBusQt::Connection* dBusQtConnection;
-#endif
   
   bool bOpen;
   
@@ -97,7 +92,7 @@ K3bDevice::HalConnection* K3bDevice::HalConnection::instance()
   if( s_instance == 0 )
     s_instance = new HalConnection( 0 );
 
-  if( !s_instance->isOpen() && !s_instance->open() )
+  if( !s_instance->isConnected() && !s_instance->open() )
       kdDebug() << "(K3bDevice::HalConnection) failed to open connection to HAL." << endl;
 
   return s_instance;
@@ -119,7 +114,7 @@ K3bDevice::HalConnection::~HalConnection()
 }
 
 
-bool K3bDevice::HalConnection::isOpen() const
+bool K3bDevice::HalConnection::isConnected() const
 {
   return d->bOpen;
 }
@@ -127,7 +122,6 @@ bool K3bDevice::HalConnection::isOpen() const
 
 bool K3bDevice::HalConnection::open()
 {
-#ifdef HAVE_HAL
   close();
 
   kdDebug() << "(K3bDevice::HalConnection) initializing HAL >= 0.5" << endl;
@@ -173,18 +167,14 @@ bool K3bDevice::HalConnection::open()
     addDevice( halDeviceList[i] );
 
   return true;
-#else
-  return false;
-#endif
 }
 
 
 void K3bDevice::HalConnection::close()
 {
-#ifdef HAVE_HAL
   if( d->halContext ) {
     // clear the context
-    if( isOpen() )
+    if( isConnected() )
       libhal_ctx_shutdown( d->halContext, 0 );
     libhal_ctx_free( d->halContext );
 
@@ -195,7 +185,6 @@ void K3bDevice::HalConnection::close()
     d->dBusQtConnection = 0;
     d->bOpen = false;
   }
-#endif
 }
 
 
@@ -207,7 +196,6 @@ QStringList K3bDevice::HalConnection::devices() const
 
 void K3bDevice::HalConnection::addDevice( const char* udi )
 {
-#ifdef HAVE_HAL
   // ignore devices that have no property "info.capabilities" to suppress error messages
   if( !libhal_device_property_exists( d->halContext, udi, "info.capabilities", 0 ) )
     return;
@@ -244,14 +232,11 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
       }
     }
   }
-
-#endif
 }
 
 
 void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
-#ifdef HAVE_HAL
   QMapIterator<QCString, QString> it = d->udiDeviceMap.find( udi );
   if( it != d->udiDeviceMap.end() ) {
     kdDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
@@ -275,13 +260,11 @@ void K3bDevice::HalConnection::removeDevice( const char* udi )
       }
     }
   }
-#endif
 }
 
 
 int K3bDevice::HalConnection::lock( Device* dev )
 {
-#ifdef HAVE_HAL
   //
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
@@ -333,15 +316,11 @@ int K3bDevice::HalConnection::lock( Device* dev )
   dbus_message_unref (reply);
 
   return ret;
-#else
-  return -1;
-#endif
 }
 
 
 int K3bDevice::HalConnection::unlock( Device* dev )
 {
-#ifdef HAVE_HAL
   //
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
@@ -392,9 +371,6 @@ int K3bDevice::HalConnection::unlock( Device* dev )
   dbus_message_unref (reply);
 
   return ret;
-#else
-  return -1;
-#endif
 }
 
 
@@ -403,7 +379,6 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
 				     const QString& fstype,
 				     const QStringList& options )
 {
-#ifdef HAVE_HAL
   //
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
@@ -472,16 +447,12 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
   dbus_message_unref (reply);
 
   return ret;
-#else
-  return -1;
-#endif
 }
 
 
 int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
 				       const QStringList& options )
 {
-#ifdef HAVE_HAL
   //
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
@@ -544,16 +515,12 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   dbus_message_unref (reply);
 
   return ret;
-#else
-  return -1;
-#endif
 }
 
 									
 int K3bDevice::HalConnection::eject( K3bDevice::Device* dev, 
 				     const QStringList& options )
 {
-#ifdef HAVE_HAL
   //
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
@@ -612,18 +579,13 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   dbus_message_unref (reply);
 
   return ret;
-#else
-  return -1;
-#endif
 }
 
 
 void K3bDevice::HalConnection::setupDBusQtConnection( DBusConnection* dbusConnection )
 {
-#ifdef HAVE_HAL
   d->dBusQtConnection = new DBusQt::Connection( this );
   d->dBusQtConnection->dbus_connection_setup_with_qt_main( dbusConnection );
-#endif
 }
 
 #include "k3bhalconnection.moc"

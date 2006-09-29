@@ -63,6 +63,12 @@ namespace K3bDevice {
       static HalConnection* instance();
 
       /**
+       * \return true if a connection to the HAL deamon could be established and
+       *         communication has been set up.
+       */
+      bool isConnected() const;
+
+      /**
        * \return a list of optical devices as reported by HAL.
        */
       QStringList devices() const;
@@ -204,8 +210,6 @@ namespace K3bDevice {
        */
       bool open();
       void close();
-
-      bool isOpen() const;
 
       static HalConnection* s_instance;
 
