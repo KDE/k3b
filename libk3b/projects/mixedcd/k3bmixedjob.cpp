@@ -366,6 +366,7 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
       //    start isoimager and writer
       
       if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
+	m_currentAction = WRITING_ISO_IMAGE;
 	if( !prepareWriter() || !startWriting() ) {
 	  cleanupAfterError();
 	  jobFinished(false);
