@@ -80,6 +80,7 @@ void K3bAudioTrackDialog::slotOk()
 void K3bAudioTrackDialog::slotApply()
 {
   m_audioTrackWidget->save();
+  
 }
 
 

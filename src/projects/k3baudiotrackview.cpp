@@ -49,6 +49,7 @@
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qvaluelist.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -828,9 +829,13 @@ void K3bAudioTrackView::slotSplitTrack()
 {
   QListViewItem* item = selectedItems().first();
   if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
-    K3b::Msf pos;
-    if( K3bAudioTrackSplitDialog::getSplitPos( tv->track(), pos, this ) ) {
-      tv->track()->split( pos );
+    QValueList<K3b::Msf> m_pos;
+     if( K3bAudioTrackSplitDialog::getSplitPos( tv->track(), m_pos, this ) ) {
+        QValueListIterator<K3b::Msf> it; 
+        for( it = m_pos.begin() ; it!=m_pos.end() ; ++it ) {
+	 K3b::Msf position = *it;
+         tv->track()->split( position );
+        } 
     }
   }
 }
@@ -897,8 +902,15 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
   }
   else if( numTracks == 1 && numSources == 0 ) {
     m_popupMenu->insertSeparator();
-    m_actionSplitTrack->plug( m_popupMenu );
+   
+    
+  
+    if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) )
+       if( tv->track()->length().lba() > 60 )
+          m_actionSplitTrack->plug( m_popupMenu );
+    
     m_actionEditSource->plug( m_popupMenu );
+ 
   }
   else if( numTracks > 1 ) {
     m_popupMenu->insertSeparator();
@@ -923,8 +935,8 @@ void K3bAudioTrackView::slotProperties()
 
   if( !tracks.isEmpty() ) {
     K3bAudioTrackDialog d( tracks, this );
-    d.exec();
-  }
+     d.exec();
+  }  
   else {
     static_cast<K3bView*>(m_doc->view())->slotProperties();
   }

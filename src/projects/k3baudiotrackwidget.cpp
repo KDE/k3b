@@ -45,7 +45,7 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const QPtrList<K3bAudioTrack>& tracks,
 
   connect( m_audioEditor, SIGNAL(mouseAt(const K3b::Msf&)),
 	   this, SLOT(slotEditorMouseAt(const K3b::Msf&)) );
-  connect( m_audioEditor, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),
+  connect( m_audioEditor, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&,bool)),
 	   this, SLOT(slotIndex0RangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
   connect( m_checkIndex0, SIGNAL(toggled(bool)),
 	   this, SLOT(slotIndex0Checked(bool)) );
@@ -82,28 +82,45 @@ void K3bAudioTrackWidget::slotEditorMouseAt( const K3b::Msf& msf )
 
 void K3bAudioTrackWidget::slotIndex0RangeModified( int, const K3b::Msf& start, const K3b::Msf& )
 {
+  kdDebug()<<k_funcinfo<<endl;
   setIndex0Editors( start );
 }
 
 
 void K3bAudioTrackWidget::slotIndex0Changed( const K3b::Msf& msf )
 {
-  m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 );
-  setIndex0Editors( msf );
+  /*m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 );
+  setIndex0Editors( msf );*/
+  kdDebug()<<k_funcinfo<<endl;
+  if(m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 )) {
+    kdDebug()<<k_funcinfo<<"ok"<<endl; 
+    setIndex0Editors( msf );
+    }
+  else {
+    setIndex0Editors(m_tracks.first()->length());
+  }
+
+
 }
 
 
 void K3bAudioTrackWidget::slotPostGapChanged( const K3b::Msf& msf )
 {
-  if( msf == 0 && m_checkIndex0->isChecked() ) {
+  
+ kdDebug()<<k_funcinfo<<endl;
+ if( msf == 0 && m_checkIndex0->isChecked() ) {
     m_checkIndex0->setChecked(false);
   }
   else if( !m_checkIndex0->isChecked() ) {
     m_checkIndex0->setChecked(true);
   }
   else {
-    setIndex0Editors( m_tracks.first()->length() - msf );
-    m_audioEditor->modifyRange( m_index0Range, m_tracks.first()->length() - msf, m_tracks.first()->length()-1 );
+    /*setIndex0Editors( m_tracks.first()->length() - msf );
+    m_audioEditor->modifyRange( m_index0Range, m_tracks.first()->length() - msf, m_tracks.first()->length()-1 );*/
+    
+    if(m_audioEditor->modifyRange( m_index0Range, m_tracks.first()->length() - msf, m_tracks.first()->length()-1 ))
+      setIndex0Editors( m_tracks.first()->length() - msf );
+ 
   }
 }
 
