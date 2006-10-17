@@ -150,9 +150,6 @@
                             <property name="text">
                                 <string>F&amp;orce input charset:</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+O</string>
-                            </property>
                         </widget>
                         <widget class="KComboBox">
                             <property name="name">
