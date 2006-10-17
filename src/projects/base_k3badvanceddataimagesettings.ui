@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>526</width>
+            <width>530</width>
             <height>249</height>
         </rect>
     </property>
@@ -150,6 +150,9 @@
                             <property name="text">
                                 <string>F&amp;orce input charset:</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+O</string>
+                            </property>
                         </widget>
                         <widget class="KComboBox">
                             <property name="name">
@@ -180,6 +183,14 @@
         </widget>
     </grid>
 </widget>
+<connections>
+    <connection>
+        <sender>m_checkForceInputCharset</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_comboInputCharset</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
 <tabstops>
     <tabstop>m_checkRockRidge</tabstop>
     <tabstop>m_checkJoliet</tabstop>
