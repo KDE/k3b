@@ -106,7 +106,7 @@ class K3bAudioEditorWidget : public QFrame
   /**
    * @returns a list of positions at which the track is to be split
    */
-  QValueList<K3b::Msf> K3bAudioEditorWidget::getSplitPos(); 
+  QValueList<K3b::Msf> getSplitPos(); 
 
   /**
    * sets essential parameters of the range which contains the point (first parameter) and also sets the msf of that point 
@@ -217,7 +217,7 @@ class K3bAudioEditorWidget : public QFrame
   K3b::Msf fromPointToPos( const QPoint& p ) const;
   int fromPosToX( const K3b::Msf& msf ) const;
 
-  void K3bAudioEditorWidget::contextMenuEvent( QContextMenuEvent * );
+  void contextMenuEvent( QContextMenuEvent * );
 
 /**
    * @param fixed if true the marker cannot be changed by the user, only with moveMarker
