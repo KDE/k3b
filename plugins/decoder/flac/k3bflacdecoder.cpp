@@ -35,11 +35,21 @@
 #include <taglib/flacfile.h>
 #endif
 
+#if !defined FLACPP_API_VERSION_CURRENT || FLACPP_API_VERSION_CURRENT < 6
+#define LEGACY_FLAC
+#else
+#undef LEGACY_FLAC
+#endif
+
 K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, K3bPluginFactory<K3bFLACDecoderFactory>( "libk3bflacdecoder" ) )
 
 
 class K3bFLACDecoder::Private
+#ifdef LEGACY_FLAC
   : public FLAC::Decoder::SeekableStream
+#else
+  : public FLAC::Decoder::Stream
+#endif
 {
 public:
   void open(QFile* f) {
@@ -63,7 +73,11 @@ public:
   }
 
   Private(QFile* f)
+#ifdef LEGACY_FLAC
     : FLAC::Decoder::SeekableStream(),
+#else
+    : FLAC::Decoder::Stream(),
+#endif
       comments(0) {
     internalBuffer = new QBuffer();
     internalBuffer->open(IO_ReadWrite);
@@ -92,10 +106,17 @@ public:
   FLAC__uint64 samples;
   
 protected:
+#ifdef LEGACY_FLAC
   virtual FLAC__SeekableStreamDecoderReadStatus read_callback(FLAC__byte buffer[], unsigned *bytes);
   virtual FLAC__SeekableStreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
   virtual FLAC__SeekableStreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
   virtual FLAC__SeekableStreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
+#else
+  virtual FLAC__StreamDecoderReadStatus read_callback(FLAC__byte buffer[], size_t *bytes);
+  virtual FLAC__StreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
+  virtual FLAC__StreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
+  virtual FLAC__StreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
+#endif
   virtual bool eof_callback();
   virtual void error_callback(FLAC__StreamDecoderErrorStatus){};
   virtual void metadata_callback(const ::FLAC__StreamMetadata *metadata);
@@ -111,6 +132,7 @@ bool K3bFLACDecoder::Private::eof_callback() {
   return file->atEnd();
 }
 
+#ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],                                                                             unsigned *bytes) {
   long retval =  file->readBlock((char *)buffer, (*bytes));
   if(-1 == retval) {
@@ -120,7 +142,19 @@ FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLA
     return FLAC__SEEKABLE_STREAM_DECODER_READ_STATUS_OK;
   }
 }
+#else
+FLAC__StreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],                                                                             size_t *bytes) {
+  long retval =  file->readBlock((char *)buffer, (*bytes));
+  if(-1 == retval) {
+    return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
+  } else {
+    (*bytes) = retval;
+    return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
+  }
+}
+#endif
 
+#ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderSeekStatus 
 K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
   if(!file->at(absolute_byte_offset))
@@ -128,18 +162,43 @@ K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
   else
     return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_OK;
 }
+#else
+FLAC__StreamDecoderSeekStatus 
+K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
+  if(file->at(absolute_byte_offset) == FALSE)
+    return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
+  else
+    return FLAC__STREAM_DECODER_SEEK_STATUS_OK;
+}
+#endif
 
+#ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderTellStatus 
 K3bFLACDecoder::Private::tell_callback(FLAC__uint64 *absolute_byte_offset) {
   (*absolute_byte_offset) = file->at();
   return FLAC__SEEKABLE_STREAM_DECODER_TELL_STATUS_OK;
 }
+#else
+FLAC__StreamDecoderTellStatus 
+K3bFLACDecoder::Private::tell_callback(FLAC__uint64 *absolute_byte_offset) {
+  (*absolute_byte_offset) = file->at();
+  return FLAC__STREAM_DECODER_TELL_STATUS_OK;
+}
+#endif
 
+#ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderLengthStatus 
 K3bFLACDecoder::Private::length_callback(FLAC__uint64 *stream_length) {
   (*stream_length) = file->size();
   return FLAC__SEEKABLE_STREAM_DECODER_LENGTH_STATUS_OK;
 }
+#else
+FLAC__StreamDecoderLengthStatus 
+K3bFLACDecoder::Private::length_callback(FLAC__uint64 *stream_length) {
+  (*stream_length) = file->size();
+  return FLAC__STREAM_DECODER_LENGTH_STATUS_OK;
+}
+#endif
 
 
 void K3bFLACDecoder::Private::metadata_callback(const FLAC__StreamMetadata *metadata) {
@@ -259,6 +318,7 @@ int K3bFLACDecoder::decodeInternal( char* _data, int maxLen )
   int bytesCopied;
   int bytesAvailable;
 
+#ifdef LEGACY_FLAC
   if(d->internalBuffer->size() == 0) {
     // want more data
     switch(d->get_state()) {
@@ -273,6 +333,19 @@ int K3bFLACDecoder::decodeInternal( char* _data, int maxLen )
       return -1;
     }
   }
+#else
+  if(d->internalBuffer->size() == 0) {
+    // want more data
+    if(d->get_state() == FLAC__STREAM_DECODER_END_OF_STREAM)
+      d->finish();
+    else if(d->get_state() < FLAC__STREAM_DECODER_END_OF_STREAM) {
+      if(! d->process_single())
+        return -1;
+    }
+    else
+      return -1;
+  }
+#endif
   
   bytesAvailable = d->internalBuffer->size() - d->internalBuffer->at();
   bytesToCopy = QMIN(maxLen, bytesAvailable);

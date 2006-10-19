@@ -9,7 +9,7 @@ AC_ARG_WITH(
 have_flac=no
 if test "$ac_cv_use_flac" = "yes"; then
   KDE_CHECK_HEADERS(FLAC++/decoder.h, [
-     AC_CHECK_LIB(FLAC,FLAC__seekable_stream_decoder_process_single,
+     AC_CHECK_LIB(FLAC,FLAC__stream_decoder_process_single,
 	        have_flac=yes,[],$all_libraries)])
 
     AC_MSG_CHECKING(for libFLAC newer than 1.1.1)
