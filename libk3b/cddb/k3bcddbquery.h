@@ -53,6 +53,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
   static const QStringList& categories();
 
   enum Error { SUCCESS = 0, 
+	       CANCELED,
 	       NO_ENTRY_FOUND, 
 	       CONNECTION_ERROR,
 	       QUERY_ERROR,

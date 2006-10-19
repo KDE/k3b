@@ -125,7 +125,11 @@ void K3bCddb::remoteQuery()
 
 void K3bCddb::slotMultibleMatches( K3bCddbQuery* query )
 {
-  query->queryMatch( K3bCddbMultiEntriesDialog::selectCddbEntry( query, 0 ) );
+  K3bCddbResultHeader hdr = K3bCddbMultiEntriesDialog::selectCddbEntry( query, 0 );
+  if( !hdr.discid.isEmpty() )
+    query->queryMatch( hdr );
+  else
+    emit queryFinished( K3bCddbQuery::CANCELED );
 }
 
 

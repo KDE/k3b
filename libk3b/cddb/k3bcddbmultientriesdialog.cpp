@@ -26,7 +26,7 @@
 
 
 K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const char* name )
-   : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok, Ok, parent, name ) 
+  : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Ok, parent, name ) 
 {
   QFrame* frame = plainPage();
   QVBoxLayout* layout = new QVBoxLayout( frame );
@@ -42,7 +42,7 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   setMinimumSize( 280, 200 );
 }
 
-const K3bCddbResultHeader& K3bCddbMultiEntriesDialog::selectCddbEntry( K3bCddbQuery* query, QWidget* parent )
+K3bCddbResultHeader K3bCddbMultiEntriesDialog::selectCddbEntry( K3bCddbQuery* query, QWidget* parent )
 {
   K3bCddbMultiEntriesDialog d( parent );
 
@@ -60,8 +60,10 @@ const K3bCddbResultHeader& K3bCddbMultiEntriesDialog::selectCddbEntry( K3bCddbQu
 
   d.m_listBox->setSelected( 0, true );
 
-  d.exec();
-  return headers[ d.m_listBox->currentItem() >= 0 ? d.m_listBox->currentItem() : 0 ];
+  if( d.exec() == QDialog::Accepted )
+    return headers[ d.m_listBox->currentItem() >= 0 ? d.m_listBox->currentItem() : 0 ];
+  else
+    return K3bCddbResultHeader();
 }
 
 

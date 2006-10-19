@@ -36,7 +36,7 @@ class K3bCddbMultiEntriesDialog : public KDialogBase
  public:
   ~K3bCddbMultiEntriesDialog();
   
-  static const K3bCddbResultHeader& selectCddbEntry( K3bCddbQuery* query, QWidget* parent = 0 );
+  static K3bCddbResultHeader selectCddbEntry( K3bCddbQuery* query, QWidget* parent = 0 );
 
  protected:
   K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);

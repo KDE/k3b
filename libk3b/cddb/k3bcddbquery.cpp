@@ -232,8 +232,10 @@ QString K3bCddbQuery::handshakeString() const
 
 QString K3bCddbQuery::queryString() const
 {
-  QString query;
-  query.sprintf( "cddb query %08x %u", m_toc.discId(), (unsigned int)m_toc.count() );
+  QString query = "cddb query " 
+    + QString::number( m_toc.discId(), 16 ).rightJustify( 8, '0' ) 
+    + " "
+    + QString::number( (unsigned int)m_toc.count() );
   
   for( K3bDevice::Toc::const_iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
     query.append( QString( " %1" ).arg( (*it).firstSector().lba() ) );
