@@ -330,11 +330,11 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
       //
       // Check if files with that name exists and if so append number
       //
-      if( find( item->parent(), newName + extension ) ) {
+      if( existsOtherItemWithSameName( item, newName + extension ) ) {
 	kdDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name " 
 		  << newName << extension << " already exists" << endl;
 	int i = 1;
-	while( find( item->parent(), newName + QString( " (%1)").arg(i) + extension ) )
+	while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )
 	  i++;
 	newName.append( QString( " (%1)").arg(i) );
       }
@@ -350,12 +350,14 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
 }
 
 
-bool K3bAudioMetainfoRenamerPluginWidget::find( K3bDirItem* item, const QString& name )
+bool K3bAudioMetainfoRenamerPluginWidget::existsOtherItemWithSameName( K3bFileItem* item, const QString& name )
 {
-  if( item->find( name ) )
+  K3bDirItem* dir = item->parent();
+  K3bDataItem* otherItem = dir->find( name );
+  if( otherItem && otherItem != item )
     return true;
 
-  QListViewItem* dirViewItem = d->dirItemDict[item];
+  QListViewItem* dirViewItem = d->dirItemDict[dir];
   QListViewItem* current = dirViewItem->firstChild();
   while( current && current->parent() == dirViewItem ) {
     if( current->text(0) == name )

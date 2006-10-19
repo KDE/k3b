@@ -17,6 +17,8 @@
 
 #include <k3bprojectplugin.h>
 
+#include <qwidget.h>
+
 
 K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc* doc, QWidget* parent, const char* name )
   : K3bInteractionDialog( parent, name,
@@ -29,8 +31,8 @@ K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc
 {
   m_pluginGui = plugin->createGUI( doc, this, 0 );
   Q_ASSERT( m_pluginGui );
-  Q_ASSERT( dynamic_cast<QWidget*>( m_pluginGui ) );
-  setMainWidget( dynamic_cast<QWidget*>( m_pluginGui ) );
+  Q_ASSERT( m_pluginGui->qWidget() );
+  setMainWidget( m_pluginGui->qWidget() );
   setTitle( m_pluginGui->title(), m_pluginGui->subTitle() );
 }
 

@@ -35,6 +35,8 @@ class K3bProjectPluginGUIBase
   K3bProjectPluginGUIBase() {}
   virtual ~K3bProjectPluginGUIBase() {}
 
+  virtual QWidget* qWidget() = 0;
+
   /**
    * Title used for the GUI
    */

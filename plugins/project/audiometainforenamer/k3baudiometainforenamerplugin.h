@@ -35,6 +35,8 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPlu
   K3bAudioMetainfoRenamerPluginWidget( K3bDoc* doc, QWidget* parent = 0, const char* name = 0 );
   ~K3bAudioMetainfoRenamerPluginWidget();
 
+  QWidget* qWidget() { return this; }
+
   QString title() const;
   QString subTitle() const;
 
@@ -50,7 +52,7 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPlu
  private:
   void scanDir( K3bDirItem*, QListViewItem* parent );
   QString createNewName( K3bFileItem* );
-  bool find( K3bDirItem*, const QString& );
+  bool existsOtherItemWithSameName( K3bFileItem*, const QString& );
 
   class Private;
   Private* d;
