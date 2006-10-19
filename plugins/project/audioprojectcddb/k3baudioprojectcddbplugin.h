@@ -38,12 +38,15 @@ class K3bAudioProjectCddbPlugin : public K3bProjectPlugin
 
  private slots:
   void slotCddbQueryFinished( int result );
+  void slotCancelClicked();
 
  private:
   K3bCddb* m_cddb;
   K3bAudioDoc* m_doc;
   K3bProgressDialog* m_progress;
   QWidget* m_parentWidget;
+
+  bool m_canceled;
 };
 
 

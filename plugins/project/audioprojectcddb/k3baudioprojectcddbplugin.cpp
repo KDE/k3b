@@ -65,6 +65,7 @@ void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
 {
   m_doc = dynamic_cast<K3bAudioDoc*>( doc );
   m_parentWidget = parent;
+  m_canceled = false;
 
   if( !m_doc || m_doc->numOfTracks() == 0 ) {
     KMessageBox::sorry( parent, i18n("Please select a non-empty audio project for a cddb query.") );
@@ -75,8 +76,11 @@ void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
       connect( m_cddb, SIGNAL(queryFinished(int)),
 	       this, SLOT(slotCddbQueryFinished(int)) );
     }
-    if( !m_progress )
+    if( !m_progress ) {
       m_progress = new K3bProgressDialog( i18n("Query Cddb"), parent, i18n("Audio Project") );
+      connect( m_progress, SIGNAL(cancelClicked()),
+	       this, SLOT(slotCancelClicked()) );
+    }
 
     // read the k3b config :)
     KConfig* c = k3bcore->config();
@@ -91,41 +95,50 @@ void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
 }
 
 
+void K3bAudioProjectCddbPlugin::slotCancelClicked()
+{
+  m_canceled = true;
+  m_progress->close();
+}
+
+
 void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( int error )
 {
-  m_progress->hide();
+  if( !m_canceled ) {
+    m_progress->hide();
 
-  if( error == K3bCddbQuery::SUCCESS ) {
-    K3bCddbResultEntry cddbInfo = m_cddb->result();
+    if( error == K3bCddbQuery::SUCCESS ) {
+      K3bCddbResultEntry cddbInfo = m_cddb->result();
 
-    // save the entry locally
-    KConfig* c = k3bcore->config();
-    c->setGroup( "Cddb" );
-    if( c->readBoolEntry( "save cddb entries locally", true ) )
-      m_cddb->saveEntry( cddbInfo );
+      // save the entry locally
+      KConfig* c = k3bcore->config();
+      c->setGroup( "Cddb" );
+      if( c->readBoolEntry( "save cddb entries locally", true ) )
+	m_cddb->saveEntry( cddbInfo );
 
-    // save the entry to the doc
-    m_doc->setTitle( cddbInfo.cdTitle );
-    m_doc->setPerformer( cddbInfo.cdArtist );
-    m_doc->setCdTextMessage( cddbInfo.cdExtInfo );
+      // save the entry to the doc
+      m_doc->setTitle( cddbInfo.cdTitle );
+      m_doc->setPerformer( cddbInfo.cdArtist );
+      m_doc->setCdTextMessage( cddbInfo.cdExtInfo );
 
-    int i = 0;
-    for( K3bAudioTrack* track = m_doc->firstTrack(); track; track = track->next() ) {
-      track->setTitle( cddbInfo.titles[i] );
-      track->setPerformer( cddbInfo.artists[i] );
-      track->setCdTextMessage( cddbInfo.extInfos[i] );
+      int i = 0;
+      for( K3bAudioTrack* track = m_doc->firstTrack(); track; track = track->next() ) {
+	track->setTitle( cddbInfo.titles[i] );
+	track->setPerformer( cddbInfo.artists[i] );
+	track->setCdTextMessage( cddbInfo.extInfos[i] );
 
-      ++i;
+	++i;
+      }
+
+      // and enable cd-text
+      m_doc->writeCdText( true );
     }
-
-    // and enable cd-text
-    m_doc->writeCdText( true );
-  }
-  else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
-    KMessageBox::information( m_parentWidget, i18n("No CDDB entry found."), i18n("CDDB") );
-  }
-  else {
-    KMessageBox::information( m_parentWidget, m_cddb->errorString(), i18n("Cddb error") );
+    else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
+      KMessageBox::information( m_parentWidget, i18n("No CDDB entry found."), i18n("CDDB") );
+    }
+    else if( error != K3bCddbQuery::CANCELED ) {
+      KMessageBox::information( m_parentWidget, m_cddb->errorString(), i18n("Cddb error") );
+    }
   }
 
   // make sure the progress dialog does not get deleted by it's parent
