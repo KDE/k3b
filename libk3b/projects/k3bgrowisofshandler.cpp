@@ -179,6 +179,9 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
       kdDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
   else if( (pos = line.find( "RBU" )) > 0 ) {
+
+    // FIXME: use QRegExp
+
     // parse ring buffer fill for growisofs >= 6.0
     pos += 4;
     int endPos = line.find( '%', pos+1 );
@@ -190,19 +193,24 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
 	d->lastBuffer = newBuffer;
 	emit buffer( newBuffer );
       }
+
+      // device buffer for growisofs >= 7.0
+      pos = line.find( "UBU", pos );
+      endPos = line.find( '%', pos+5 );
+      if( pos > 0 ) {
+	pos += 4;
+	val = line.mid( pos, endPos-pos ).toDouble( &ok );
+	if( ok ) {
+	  int newBuffer = (int)(val+0.5);
+	  if( newBuffer != d->lastDeviceBuffer ) {
+	    d->lastDeviceBuffer = newBuffer;
+	    emit deviceBuffer( newBuffer );
+	  }
+	}
+      }
     }
     else
       kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
-
-    // testing device buffer
-    pos = line.find( "BUF", pos );
-    if( pos > 0 ) {
-      int newBuffer = line.mid( pos+4 ).toInt();
-      if( newBuffer != d->lastDeviceBuffer ) {
-	d->lastDeviceBuffer = newBuffer;
-	emit deviceBuffer( newBuffer );
-      }
-    }
   }
   else if( line.startsWith("Buffer fill") ) {
     // parse device buffer fill for K3b patched growisofs
