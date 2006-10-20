@@ -162,14 +162,12 @@ void K3bDataJob::prepareWriting()
       return;
     }
     
-    if( !KIO::findDeviceMountPoint( d->doc->burner()->mountDevice() ).isEmpty() ) {
+    if( K3b::isMounted( d->doc->burner() ) ) {
       emit infoMessage( i18n("Unmounting disk"), INFO );
-      // unmount the cd
-      connect( KIO::unmount( d->doc->burner()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	       m_msInfoFetcher, SLOT(start()) );
+      K3b::unmount( d->doc->burner() );
     }
-    else
-      m_msInfoFetcher->start(); 
+
+    m_msInfoFetcher->start(); 
   }
   else {
     m_isoImager->setMultiSessionInfo( QString::null );

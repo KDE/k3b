@@ -34,14 +34,12 @@
 #include <ktempfile.h>
 
 #include <iostream>
-#include <fstab.h>
 #include <limits.h>
 #include <assert.h>
 
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>
 #include <sys/ucred.h>
-#include <sys/mount.h>
 #include <osreldate.h>
 #endif
 
@@ -498,8 +496,6 @@ void K3bDevice::DeviceManager::printDevices()
 	      << "Vendor:         " << dev->vendor() << endl
 	      << "Description:    " << dev->description() << endl
 	      << "Version:        " << dev->version() << endl
-	      << "MountDevice:    " << dev->mountDevice() << endl
-	      << "Mountpoint:     " << dev->mountPoint() << endl
 	      << "Write speed:    " << dev->maxWriteSpeed() << endl
 	      << "Profiles:       " << mediaTypeString( dev->supportedProfiles() ) << endl
 	      << "Read Cap:       " << mediaTypeString( dev->readCapabilities() ) << endl
@@ -795,85 +791,6 @@ void K3bDevice::DeviceManager::removeDevice( const QString& dev )
 
     delete device;
   }
-}
-
-
-void K3bDevice::DeviceManager::scanFstab()
-{
-  ::setfsent();
-
-  // clear all mount-Infos
-  for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); it.current(); ++it ) {
-    it.current()->setMountPoint( QString::null );
-    it.current()->setMountDevice( QString::null );
-  }
-
-  struct fstab * mountInfo = 0;
-  while( (mountInfo = ::getfsent()) )
-  {
-    // check if the entry corresponds to a device
-    QString md = QFile::decodeName( mountInfo->fs_spec );
-    QString type = QFile::decodeName( mountInfo->fs_vfstype );
-
-    bool automount = false;
-
-    if( type == "supermount" || type == "subfs" ) {
-      automount = true;
-
-      // parse the device
-      QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->fs_mntops) );
-      for( QStringList::const_iterator it = opts.constBegin(); it != opts.constEnd(); ++it ) {
-	if( (*it).startsWith("dev=") ) {
-	  md = (*it).mid( 4 );
-	  break;
-	}
-      }
-    }
-
-    if( md == "none" )
-      continue;
-
-    //    kdDebug() << "(K3bDevice::DeviceManager) scanning fstab: " << md << endl;
-
-    //
-    // Try finding the device
-    //
-    int bus = -1, id = -1, lun = -1;
-    K3bDevice::Device* dev = findDevice( resolveSymLink(md) );
-    if( !dev && determineBusIdLun( mountInfo->fs_spec, bus, id, lun ) )
-      dev = findDevice( bus, id, lun );
-
-    //
-    // Did we find a device?
-    //
-    if( dev ) {
-      bool isPreferredMountPoint = false;
-      //      kdDebug() << "(K3bDevice::DeviceManager) found device for " << md << ": " << resolveSymLink(md) << endl;
-
-#ifdef Q_OS_FREEBSD
-      // Several mount points for one device might exist. If more than one are found, the one with
-      // user permission should have a higher priority.
-      struct stat filestat;
-      if (mountInfo->fs_file &&
-	  !stat(mountInfo->fs_file, &filestat) &&
-	  filestat.st_uid == geteuid())	{
-	isPreferredMountPoint = true;
-      }
-#else
-      if( mountInfo->fs_file &&
-	  QString::fromLocal8Bit(mountInfo->fs_mntops).contains("users") )
-	isPreferredMountPoint = true;
-#endif
-
-      if( isPreferredMountPoint || dev->mountDevice().isEmpty() ) {
-        dev->setMountPoint( mountInfo->fs_file );
-        dev->setMountDevice( md );
-	dev->m_automount = automount;
-      }
-    }
-  } // while mountInfo
-
-  ::endfsent();
 }
 
 

@@ -117,8 +117,9 @@ void K3bAppDeviceManager::setCurrentDevice( K3bDevice::Device* dev )
 {
   if( dev && dev != m_currentDevice ) {
     m_currentDevice = dev;
-    actionCollection()->action( "device_mount" )->setEnabled( !dev->automount() );
-    actionCollection()->action( "device_unmount" )->setEnabled( !dev->automount() );
+#warning FIXME
+//     actionCollection()->action( "device_mount" )->setEnabled( !dev->automount() );
+//     actionCollection()->action( "device_unmount" )->setEnabled( !dev->automount() );
     emit currentDeviceChanged( dev );
   }
 }
@@ -148,54 +149,57 @@ void K3bAppDeviceManager::lockDevice()
 
 void K3bAppDeviceManager::mountDisk()
 {
-  if( currentDevice() ) {
-    if( !currentDevice()->mountPoint().isEmpty() ) {
-      QString mp = KIO::findDeviceMountPoint( currentDevice()->mountDevice() );
-      if( mp.isEmpty() )
-	connect( KIO::mount( true, 0, currentDevice()->mountDevice(), currentDevice()->mountPoint(), false ), 
-		 SIGNAL(result(KIO::Job*)),
-		 this, 
-		 SLOT(slotMountFinished(KIO::Job*)) );
-      else {
-	emit mountFinished( mp );
-      }
-    }
-    else
-      emit mountFinished( QString::null );
-  }
+#warning FIXME
+//   if( currentDevice() ) {
+//     if( !currentDevice()->mountPoint().isEmpty() ) {
+//       QString mp = KIO::findDeviceMountPoint( currentDevice()->mountDevice() );
+//       if( mp.isEmpty() )
+// 	connect( KIO::mount( true, 0, currentDevice()->mountDevice(), currentDevice()->mountPoint(), false ), 
+// 		 SIGNAL(result(KIO::Job*)),
+// 		 this, 
+// 		 SLOT(slotMountFinished(KIO::Job*)) );
+//       else {
+// 	emit mountFinished( mp );
+//       }
+//     }
+//     else
+//       emit mountFinished( QString::null );
+//   }
 }
 
 
 void K3bAppDeviceManager::slotMountFinished( KIO::Job* job )
 {
-  if( job->error() ) {
-    emit mountFinished( QString::null );
-  }
-  else {
-    emit mountFinished( currentDevice()->mountPoint() );
-  }
+#warning FIXME
+//   if( job->error() ) {
+//     emit mountFinished( QString::null );
+//   }
+//   else {
+//     emit mountFinished( currentDevice()->mountPoint() );
+//   }
 }
 
 
 void K3bAppDeviceManager::unmountDisk()
 {
-  if( currentDevice() ) {
-    QString mp = KIO::findDeviceMountPoint( currentDevice()->mountDevice() );
-    if( mp.isEmpty() ) {
-      if( m_ejectRequested ) {
-	m_ejectRequested = false;
-	K3bDevice::eject( currentDevice() );
-      }
-      else
-	emit unmountFinished( true );   
-    }
-    else {
-      connect( KIO::unmount( currentDevice()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	       this, SLOT(slotUnmountFinished(KIO::Job*)) );
-    }
-  }
-  else
-    m_ejectRequested = false;
+#warning FIXME
+//   if( currentDevice() ) {
+//     QString mp = KIO::findDeviceMountPoint( currentDevice()->mountDevice() );
+//     if( mp.isEmpty() ) {
+//       if( m_ejectRequested ) {
+// 	m_ejectRequested = false;
+// 	K3bDevice::eject( currentDevice() );
+//       }
+//       else
+// 	emit unmountFinished( true );   
+//     }
+//     else {
+//       connect( KIO::unmount( currentDevice()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+// 	       this, SLOT(slotUnmountFinished(KIO::Job*)) );
+//     }
+//   }
+//   else
+//     m_ejectRequested = false;
 }
 
 

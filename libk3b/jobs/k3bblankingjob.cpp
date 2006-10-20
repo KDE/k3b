@@ -70,15 +70,12 @@ void K3bBlankingJob::start()
 
   jobStarted();
 
-  if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() ) {
+  if( K3b::isMounted( m_device ) ) {
     emit infoMessage( i18n("Unmounting disk"), INFO );
-    // unmount the cd
-    connect( KIO::unmount( m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	     this, SLOT(slotStartErasing()) );
+    K3b::unmount( m_device );
   }
-  else {
-    slotStartErasing();
-  }
+
+  slotStartErasing();
 }
 
 void K3bBlankingJob::slotStartErasing()

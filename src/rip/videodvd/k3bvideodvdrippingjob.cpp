@@ -17,7 +17,6 @@
 
 #include <k3bvideodvdtitletranscodingjob.h>
 #include <k3bvideodvdtitledetectclippingjob.h>
-#include <k3binterferingsystemshandler.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -127,10 +126,6 @@ void K3bVideoDVDRippingJob::start()
   d->canceled = false;
   d->failedTitles = 0;
 
-  connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
-	   this, SIGNAL(infoMessage(const QString&, int)) );
-  K3bInterferingSystemsHandler::instance()->disable( m_dvd.device(), this );
-
   initProgressInfo();
 
   if( d->autoClipping )
@@ -143,8 +138,6 @@ void K3bVideoDVDRippingJob::start()
 void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 {
   if( d->canceled ) {
-    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device(), this );
-    K3bInterferingSystemsHandler::instance()->disconnect( this );
     emit canceled();
     jobFinished( false );
   }
@@ -164,8 +157,6 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 	startTranscoding( d->currentTitleInfoIndex );
     }
     else {
-      K3bInterferingSystemsHandler::instance()->enable( m_dvd.device(), this );
-      K3bInterferingSystemsHandler::instance()->disconnect( this );
       jobFinished( d->failedTitles == 0 );
     }
   }
@@ -175,8 +166,6 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 {
   if( d->canceled ) {
-    K3bInterferingSystemsHandler::instance()->enable( m_dvd.device(), this );
-    K3bInterferingSystemsHandler::instance()->disconnect( this );
     emit canceled();
     jobFinished( false );
   }

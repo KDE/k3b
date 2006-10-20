@@ -49,11 +49,10 @@ bool K3bDebuggingOutputFile::open()
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
     addOutput( "Devices", 
-	       QString( "%1 (%2, %3) at %4 [%5] [%6] [%7]" )
+	       QString( "%1 (%2, %3) [%5] [%6] [%7]" )
 	       .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
 	       .arg( dev->blockDeviceName() )
 	       .arg( dev->genericDevice() )
-	       .arg( dev->mountPoint() )
 	       .arg( K3bDevice::deviceTypeString( dev->type() ) )
 	       .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
 	       .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );

@@ -84,6 +84,8 @@ public:
   
   QMap<QCString, QString> udiDeviceMap;
   QMap<QString, QCString> deviceUdiMap;
+
+  QMap<QCString, QCString> deviceMediumUdiMap;
 };
 
 
@@ -226,7 +228,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
 	  // A new medium has been inserted. Save this medium's udi so we can reuse it later
 	  // on for the mount/unmount/eject methods
 	  //
-	  // FIXME: save the udi
+	  d->deviceMediumUdiMap[du] = QCString( udi );
 	  emit mediumChanged( d->udiDeviceMap[du] );
 	}
       }
@@ -255,6 +257,7 @@ void K3bDevice::HalConnection::removeDevice( const char* udi )
 	  //
 	  // A medium has been removed/ejected.
 	  //
+	  d->deviceMediumUdiMap[du] = 0;
 	  emit mediumChanged( d->udiDeviceMap[du] );
 	}
       }
@@ -269,7 +272,8 @@ int K3bDevice::HalConnection::lock( Device* dev )
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
   //
-  DBusMessage *dmesg, *reply;
+  DBusMessage* dmesg = 0;
+  DBusMessage* reply = 0;
   DBusError error;
 
   if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
@@ -285,8 +289,10 @@ int K3bDevice::HalConnection::lock( Device* dev )
     return org_freedesktop_Hal_CommunicationError;
   }
 
+  const char* lockComment = "Locked by the K3b libraries";
+
   if( !dbus_message_append_args( dmesg, 
-				 DBUS_TYPE_STRING, i18n("Locked by the K3b libraries").local8Bit().data(),
+				 DBUS_TYPE_STRING, &lockComment,
 				 DBUS_TYPE_INVALID ) ) {
     kdDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
@@ -312,8 +318,8 @@ int K3bDevice::HalConnection::lock( Device* dev )
 
   kdDebug() << "(K3bDevice::HalConnection) lock queued for " << udi << endl;
 
-  dbus_message_unref (dmesg);
-  dbus_message_unref (reply);
+  dbus_message_unref( dmesg );
+  dbus_message_unref( reply );
 
   return ret;
 }
@@ -325,7 +331,8 @@ int K3bDevice::HalConnection::unlock( Device* dev )
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
   //
-  DBusMessage *dmesg, *reply;
+  DBusMessage* dmesg = 0;
+  DBusMessage* reply = 0;
   DBusError error;
 
   if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
@@ -367,8 +374,8 @@ int K3bDevice::HalConnection::unlock( Device* dev )
 
   kdDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi << endl;
 
-  dbus_message_unref (dmesg);
-  dbus_message_unref (reply);
+  dbus_message_unref( dmesg );
+  dbus_message_unref( reply );
 
   return ret;
 }
@@ -383,30 +390,36 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
   //
-  DBusMessage *dmesg, *reply;
+  DBusMessage* dmesg = 0;
+  DBusMessage* reply = 0;
   DBusError error;
 
-  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) )
+    return org_freedesktop_Hal_NoSuchDevice;
+  
+  if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
-  }
 
-  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+  QCString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
 
-  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
 					       "Mount" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << udi << ": could not create dbus message\n";
+    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
   char** poptions = qstringListToArray( options );
 
+  const char* strMountPoint = mountPoint.local8Bit().data();
+  const char* strFstype = fstype.local8Bit().data();
+
   if( !dbus_message_append_args( dmesg, 
-				 DBUS_TYPE_STRING, mountPoint.local8Bit().data(), 
-				 DBUS_TYPE_STRING, fstype.local8Bit().data(),
+				 DBUS_TYPE_STRING, &strMountPoint,
+				 DBUS_TYPE_STRING, &strFstype,
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << udi << ": could not append args to dbus message\n";
+    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     freeArray( poptions, options.count() );
     return org_freedesktop_Hal_CommunicationError;
@@ -418,7 +431,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
 
   dbus_error_init( &error );
   if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
-    kdError() << "(K3bDevice::HalConnection) mount failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    kdError() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
@@ -441,10 +454,10 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) mount queued for " << udi << endl;
+  kdDebug() << "(K3bDevice::HalConnection) mount queued for " << mediumUdi << endl;
 
-  dbus_message_unref (dmesg);
-  dbus_message_unref (reply);
+  dbus_message_unref( dmesg );
+  dbus_message_unref( reply );
 
   return ret;
 }
@@ -457,19 +470,22 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
   //
-  DBusMessage *dmesg, *reply;
+  DBusMessage* dmesg = 0;
+  DBusMessage* reply = 0;
   DBusError error;
 
-  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) )
+    return org_freedesktop_Hal_NoSuchDevice;
+  
+  if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
-  }
 
-  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+  QCString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
 
-  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
 					       "Unmount" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << udi << ": could not create dbus message\n";
+    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
@@ -478,7 +494,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   if( !dbus_message_append_args( dmesg, 
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << udi << ": could not append args to dbus message\n";
+    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     freeArray( poptions, options.count() );
     return org_freedesktop_Hal_CommunicationError;
@@ -490,7 +506,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
 
   dbus_error_init( &error );
   if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
-    kdError() << "(K3bDevice::HalConnection) unmount failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    kdError() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
@@ -509,10 +525,10 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) unmount queued for " << udi << endl;
+  kdDebug() << "(K3bDevice::HalConnection) unmount queued for " << mediumUdi << endl;
 
-  dbus_message_unref (dmesg);
-  dbus_message_unref (reply);
+  dbus_message_unref( dmesg );
+  dbus_message_unref( reply );
 
   return ret;
 }
@@ -525,19 +541,22 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   // The code below is based on the code from kioslave/media/mediamanager/halbackend.cpp in the kdebase package
   // Copyright (c) 2004-2005 Jérôme Lodewyck <jerome dot lodewyck at normalesup dot org>
   //
-  DBusMessage *dmesg, *reply;
+  DBusMessage* dmesg = 0;
+  DBusMessage* reply = 0;
   DBusError error;
 
-  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) ) {
+  if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) )
+    return org_freedesktop_Hal_NoSuchDevice;
+  
+  if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
-  }
 
-  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+  QCString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
 
-  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
+  if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
 					       "Eject" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << udi << ": could not create dbus message\n";
+    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
@@ -546,7 +565,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   if( !dbus_message_append_args( dmesg, 
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << udi << ": could not append args to dbus message\n";
+    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     freeArray( poptions, options.count() );
     return org_freedesktop_Hal_CommunicationError;
@@ -558,7 +577,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
 
   dbus_error_init( &error );
   if( !( reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error ) ) ) {
-    kdError() << "(K3bDevice::HalConnection) eject failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    kdError() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
@@ -573,10 +592,10 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) eject queued for " << udi << endl;
+  kdDebug() << "(K3bDevice::HalConnection) eject queued for " << mediumUdi << endl;
 
-  dbus_message_unref (dmesg);
-  dbus_message_unref (reply);
+  dbus_message_unref( dmesg );
+  dbus_message_unref( reply );
 
   return ret;
 }

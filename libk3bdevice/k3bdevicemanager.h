@@ -44,7 +44,6 @@ namespace K3bDevice {
    * \code
    *   K3bDevice::DeviceManager* manager = new K3bDevice::DeviceManager( this );
    *   manager->scanBus();
-   *   manager->scanFstab();
    *   K3bDevice::Device* dev = manager->findDevice( "/dev/cdrom" );
    * \endcode
    */
@@ -188,20 +187,9 @@ namespace K3bDevice {
        * If the system uses the HAL device deamon it is possible to use
        * HalConnection instead of calling this method.
        *
-       * You might want to call scanFstab after calling this method.
-       *
        * \return Number of found devices.
        **/
       virtual int scanBus();
-
-      /**
-       * Searches for mountpoints of the devices. This method will also add devices
-       * that have an entry in the fstab file and have not yet been found.
-       *
-       * Most modern distributions do not use mount points for their optical devices
-       * anymore so this method might be useless there.
-       */
-      void scanFstab();
 
       /**
        * Clears the writers and readers list of devices.

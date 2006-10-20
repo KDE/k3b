@@ -161,8 +161,6 @@ public:
   int readCapabilities;
   int writeCapabilities;
   int supportedProfiles;
-  QString mountPoint;
-  QString mountDeviceName;
   QStringList allNodes;
 #ifdef Q_OS_LINUX
   int deviceFd;
@@ -184,8 +182,7 @@ K3bDevice::Device::Device( const QString& devname )
   : m_bus(-1),
     m_target(-1),
     m_lun(-1),
-    m_writeModes(0),
-    m_automount(false)
+    m_writeModes(0)
 {
   d = new Private;
 
@@ -581,30 +578,6 @@ void K3bDevice::Device::setCdTextCapability( bool b )
 {
   m_cdTextCapable = ( b ? 1 : 2 );
 }
-
-
-void K3bDevice::Device::setMountPoint( const QString& mp )
-{
-  d->mountPoint = mp;
-}
-
-void K3bDevice::Device::setMountDevice( const QString& md )
-{
-  d->mountDeviceName = md;
-}
-
-
-const QString& K3bDevice::Device::mountDevice() const
-{
-  return d->mountDeviceName;
-}
-
-
-const QString& K3bDevice::Device::mountPoint() const
-{
-  return d->mountPoint;
-}
-
 
 
 bool K3bDevice::Device::burnproof() const

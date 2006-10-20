@@ -51,7 +51,7 @@
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
   : KFileTreeBranch( view, 
-		     KURL(dev->mountPoint()), 
+		     KURL(), 
 		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
@@ -75,7 +75,7 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 bool K3bDeviceBranch::populate( const KURL& url,  KFileTreeViewItem *currItem )
 {
   // make sure we do not try to populate in case we are not mounted
-  if( !KIO::findDeviceMountPoint( m_device->mountDevice() ).isEmpty() )
+  if( K3b::isMounted( m_device ) )
     return KFileTreeBranch::populate( url, currItem );
   else
     populateFinished( currItem );
@@ -129,20 +129,21 @@ void K3bDeviceBranch::showBlockDeviceName( bool b )
 
 void K3bDeviceBranch::mount()
 {
-  if( !m_device->mountPoint().isEmpty() ) {
-    QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
-    if( mp.isEmpty() )
-      connect( KIO::mount( true, 0, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-	       this, SLOT( slotMountFinished(KIO::Job*) ) );
-    else {
-      kdDebug() << "(K3bDeviceBranch) device already mounted on " << mp << endl;
-      emit clear();
-      populate( KURL::fromPathOrURL(mp), root() );
-      emit mountFinished( this, mp );
-    }
-  }
-  else
-    emit mountFinished( this, QString::null );
+#warning FIXME: K3bDeviceBranch::mount()
+//   if( !m_device->mountPoint().isEmpty() ) {
+//     QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
+//     if( mp.isEmpty() )
+//       connect( KIO::mount( true, 0, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
+// 	       this, SLOT( slotMountFinished(KIO::Job*) ) );
+//     else {
+//       kdDebug() << "(K3bDeviceBranch) device already mounted on " << mp << endl;
+//       emit clear();
+//       populate( KURL::fromPathOrURL(mp), root() );
+//       emit mountFinished( this, mp );
+//     }
+//   }
+//   else
+//     emit mountFinished( this, QString::null );
 }
 
 
@@ -168,14 +169,15 @@ void K3bDeviceBranch::unmount()
 
 void K3bDeviceBranch::slotMountFinished( KIO::Job* job )
 {
-  if( job->error() && !m_device->automount() ) {
+  if( job->error() ) {
     job->showErrorDialog();
     emit mountFinished( this, QString::null );
   }
   else {
     emit clear();
-    populate( KURL::fromPathOrURL(m_device->mountPoint()), root() );
-    emit mountFinished( this, m_device->mountPoint() );
+    QString mp = KIO::findDeviceMountPoint( m_device->blockDeviceName() );
+    populate( KURL::fromPathOrURL( mp ), root() );
+    emit mountFinished( this, mp );
   }
 }
 
@@ -202,7 +204,7 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : KFileTreeViewItem( parent, 
-		       new KFileItem( KURL(dev->mountPoint()), 
+		       new KFileItem( KURL(), 
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
@@ -215,7 +217,7 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : KFileTreeViewItem( parent,
-		       new KFileItem( KURL(dev->mountPoint()), 
+		       new KFileItem( KURL(), 
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),

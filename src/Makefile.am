@@ -22,7 +22,8 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3bmediacache.cpp k3bmedium.cpp k3bmediaselectioncombobox.cpp k3btooltip.cpp \
 	k3bwidgetshoweffect.cpp k3bmediaselectiondialog.cpp k3bdiskinfoview.cpp \
 	k3bpassivepopup.cpp k3btimeoutwidget.cpp k3bminibutton.cpp \
-	k3bthemedheader.cpp k3bthemedlabel.cpp
+	k3bthemedheader.cpp k3bthemedlabel.cpp k3blsofwrapper.cpp \
+	k3blsofwrapperdialog.cpp
 
 k3b_LDADD = ./option/liboption.la ./rip/librip.la \
 	./projects/libprojects.la ../libk3bdevice/libk3bdevice.la \

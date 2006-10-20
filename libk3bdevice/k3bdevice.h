@@ -230,18 +230,6 @@ namespace K3bDevice
       void addDeviceNode( const QString& );
 
       /**
-       * \return The device name used for mounting.
-       * \see mountPoint()
-       */
-      const QString& mountDevice() const;
-
-      /**
-       * The mountpoint as found by DeviceManager::scanFstab()
-       * \see mountDevice()
-       */
-      const QString& mountPoint() const;
-
-      /**
        * Makes only sense to use with scsi devices
        * @return a string for use with the cdrtools
        * @deprecated
@@ -258,11 +246,6 @@ namespace K3bDevice
        * \deprecated the cdrdao driver has no place in this library. It will be removed.
        */
       const QString& cdrdaoDriver() const { return m_cdrdaoDriver; }
-
-      /**
-       * @return true if the device is mounted automatically (supermount or subfs)
-       */
-      bool automount() const { return m_automount; }
 
       /**
        * returns: 0 auto (no cdrdao-driver selected)
@@ -746,9 +729,6 @@ namespace K3bDevice
        */
       bool init( bool checkWritingModes = true );
 
-      void setMountPoint( const QString& );
-      void setMountDevice( const QString& );
-
       void searchIndexTransitions( long start, long end, K3bDevice::Track& track ) const;
       void checkWritingModes();
       void checkFeatures();
@@ -786,8 +766,6 @@ namespace K3bDevice
       int m_bufferSize;
 
       int m_writeModes;
-
-      bool m_automount;
 
       // only needed on FreeBSD
       QString m_passDevice;
