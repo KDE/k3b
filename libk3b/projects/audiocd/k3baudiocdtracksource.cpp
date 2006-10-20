@@ -24,7 +24,6 @@
 #include <k3bcdparanoialib.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bcore.h>
-#include <k3binterferingsystemshandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -117,13 +116,12 @@ bool K3bAudioCdTrackSource::initParanoia()
       if( !m_lastUsedDevice )
 	return false;
 
+      k3bcore->blockDevice( m_lastUsedDevice );
+
       if( m_toc.isEmpty() )
 	m_toc = m_lastUsedDevice->readToc();
 
-      K3bInterferingSystemsHandler::threadSafeDisable( m_lastUsedDevice );
-
       if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) ) {
-	K3bInterferingSystemsHandler::threadSafeEnable( m_lastUsedDevice );
 	return false;
       }
 
@@ -135,6 +133,9 @@ bool K3bAudioCdTrackSource::initParanoia()
 
       m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(), 
 				    m_toc[m_cdTrackNumber-1].firstSector().lba() + lastSector().lba() );
+
+      // we only block during the initialization because we cannot determine the end of the reading process :(
+      k3bcore->unblockDevice( m_lastUsedDevice );
 
       m_initialized = true;
       kdDebug() << "(K3bAudioCdTrackSource) initialized." << endl;
@@ -149,7 +150,6 @@ void K3bAudioCdTrackSource::closeParanoia()
 {
   if( m_cdParanoiaLib && m_initialized ) {
     m_cdParanoiaLib->close();
-    K3bInterferingSystemsHandler::threadSafeEnable( m_lastUsedDevice );
   }
   m_initialized = false;
 }

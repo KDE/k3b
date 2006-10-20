@@ -107,9 +107,6 @@ class K3bApplication::Core : public K3bCore
 
   K3bJobInterface* jobInterface() const { return m_jobInterface; }
 
-  virtual bool blockDevice( K3bDevice::Device* );
-  virtual void unblockDevice( K3bDevice::Device* );
-
   static Core* k3bAppCore() { return s_k3bAppCore; }
 
  public slots:
@@ -149,6 +146,9 @@ class K3bApplication::Core : public K3bCore
 
  private:
   void initDeviceManager();
+
+  bool internalBlockDevice( K3bDevice::Device* );
+  void internalUnblockDevice( K3bDevice::Device* );
 
   K3bInterface* m_interface;
   K3bJobInterface* m_jobInterface;

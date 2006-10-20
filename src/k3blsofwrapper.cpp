@@ -25,12 +25,19 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+static K3bLsofWrapper::Process createProcess( const QString& name, int pid )
+{
+  K3bLsofWrapper::Process p;
+  p.name = name;
+  p.pid = pid;
+  return p;
+}
 
 
 class K3bLsofWrapper::Private
 {
 public:
-  QStringList apps;
+  QValueList<Process> apps;
   QString lsofBin;
 };
 
@@ -79,14 +86,14 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
 
     // we don't care about ourselves using the device ;)
     if( pid != (int)::getpid() )
-      d->apps.append( app );
+      d->apps.append( createProcess( app, pid ) );
   }
 
   return true;
 }
 
 
-const QStringList& K3bLsofWrapper::usingApplications() const
+const QValueList<K3bLsofWrapper::Process>& K3bLsofWrapper::usingApplications() const
 {
   return d->apps;
 }

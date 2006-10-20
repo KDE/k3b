@@ -509,19 +509,13 @@ QString K3b::findExe( const QString& name )
 
 bool K3b::isMounted( K3bDevice::Device* dev )
 {
-  QString mntDev( dev->mountDevice() );
-  if( mntDev.isEmpty() )
-    mntDev = dev->blockDeviceName();
-
-  return !KIO::findDeviceMountPoint( mntDev ).isEmpty();
+  return !KIO::findDeviceMountPoint( dev->blockDeviceName() ).isEmpty();
 }
 
 
 bool K3b::unmount( K3bDevice::Device* dev )
 {
-  QString mntDev( dev->mountDevice() );
-  if( mntDev.isEmpty() )
-    mntDev = dev->blockDeviceName();
+  QString mntDev = dev->blockDeviceName();
 
 #if KDE_IS_VERSION(3,4,0)
   // first try to unmount it the standard way

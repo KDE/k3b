@@ -136,7 +136,6 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void slotErrorMessage(const QString&);
   void slotWarningMessage(const QString&);
-  void slotInterferingSystemsHandlerMessage( const QString& message, int type );
 
   void slotConfigureKeys();
   void slotShowTips();

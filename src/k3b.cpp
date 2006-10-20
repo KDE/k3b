@@ -121,7 +121,6 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 #include "projects/k3bdatasessionimportdialog.h"
-#include <k3binterferingsystemshandler.h>
 #include "k3bpassivepopup.h"
 #include "k3bthemedheader.h"
 
@@ -178,11 +177,6 @@ K3bMainWindow::K3bMainWindow()
   connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
   connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
-
-  // connect to the K3bInterferingSystemsHandler to let the user know if K3b disabled something even if no
-  // job is running
-  connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
-	   this, SLOT(slotInterferingSystemsHandlerMessage(const QString&, int)) );
 
   // FIXME: now make sure the welcome screen is displayed completely
   resize( 780, 550 );
@@ -1218,18 +1212,6 @@ void K3bMainWindow::slotErrorMessage(const QString& message)
 void K3bMainWindow::slotWarningMessage(const QString& message)
 {
   KMessageBox::sorry( this, message );
-}
-
-
-void K3bMainWindow::slotInterferingSystemsHandlerMessage( const QString& message, int type )
-{
-  K3bPassivePopup::showPopup( message, 
-			      i18n("K3b core message"),
-			      type == K3bJob::ERROR 
-			      ? K3bPassivePopup::Error 
-			      : ( type == K3bJob::WARNING 
-				  ? K3bPassivePopup::Warning 
-				  : K3bPassivePopup::Information ) );
 }
 
 

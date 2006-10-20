@@ -16,7 +16,7 @@
 #ifndef _K3B_LSOF_WRAPPER_H_
 #define _K3B_LSOF_WRAPPER_H_
 
-#include <qstringlist.h>
+#include <qvaluelist.h>
 
 namespace K3bDevice {
   class Device;
@@ -30,16 +30,24 @@ class K3bLsofWrapper
   ~K3bLsofWrapper();
 
   /**
+   * Checks which processes currently have an open file descriptor
+   * to the device.
+   *
    * \return true if lsof was successfully called.
    */
   bool checkDevice( K3bDevice::Device* );
+
+  struct Process {
+    QString name;
+    int pid;
+  };
 
   /**
    * \return A list of all applications that had an open
    * handle on the device used in the last successful call
    * to checkDevice.
    */
-  const QStringList& usingApplications() const;
+  const QValueList<Process>& usingApplications() const;
 
  private:
   bool findLsofExecutable();

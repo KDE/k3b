@@ -17,7 +17,6 @@
 #include "k3bjob.h"
 #include <k3bglobals.h>
 #include <k3bcore.h>
-#include <k3binterferingsystemshandler.h>
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -228,7 +227,6 @@ void K3bJob::unregisterSubJob( K3bJob* job )
 class K3bBurnJob::Private
 {
 public:
-  bool interfSInit;
 };
 
 
@@ -238,7 +236,6 @@ K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent, const char* nam
     m_writeMethod( K3b::DEFAULT )
 {
   d = new Private;
-  d->interfSInit = false;
 }
 
 
@@ -251,34 +248,6 @@ K3bBurnJob::~K3bBurnJob()
 int K3bBurnJob::supportedWritingApps() const
 {
   return K3b::DEFAULT | K3b::CDRDAO | K3b::CDRECORD;
-}
-
-
-void K3bBurnJob::jobStarted()
-{
-  K3bJob::jobStarted();
-
-  //
-  // Do not block the device in sibjobs since this would create
-  // panic
-  //
-  if( jobHandler() && !jobHandler()->isJob() && writer() ) {
-    if( !d->interfSInit ) {
-      d->interfSInit = true;
-      connect( K3bInterferingSystemsHandler::instance(), SIGNAL(infoMessage(const QString&, int)),
-	       this, SIGNAL(infoMessage(const QString&, int)) );
-    }
-    K3bInterferingSystemsHandler::instance()->disable( writer(), this );
-  }
-}
-
-
-void K3bBurnJob::jobFinished( bool success )
-{
-  if( d->interfSInit )
-    K3bInterferingSystemsHandler::instance()->enable( writer(), this );
-
-  K3bJob::jobFinished( success );
 }
 
 #include "k3bjob.moc"

@@ -38,7 +38,28 @@
 #include <kapplication.h>
 
 #include <qptrlist.h>
+#include <qthread.h>
+#include <qwaitcondition.h>
 
+
+static Qt::HANDLE s_guiThreadHandle = QThread::currentThread();
+
+class DeviceBlockingEvent : public QCustomEvent
+{
+  public:
+  DeviceBlockingEvent( bool block_, K3bDevice::Device* dev, QWaitCondition* wc_, bool* success_ )
+    : QCustomEvent( QEvent::User + 33 ),
+      block(block_),
+      device(dev),
+      wc(wc_),
+      success(success_) {
+  }
+
+  bool block;
+  K3bDevice::Device* device;
+  QWaitCondition* wc;
+  bool* success;
+};
 
 
 class K3bCore::Private {
@@ -168,7 +189,6 @@ void K3bCore::init()
 #else
   deviceManager()->scanBus();
 #endif
-  deviceManager()->scanFstab();
 }
 
 
@@ -269,6 +289,34 @@ const QValueList<K3bJob*>& K3bCore::runningJobs() const
 
 bool K3bCore::blockDevice( K3bDevice::Device* dev )
 {
+  if( QThread::currentThread() == s_guiThreadHandle ) {
+    return internalBlockDevice( dev );
+  }
+  else {
+    QWaitCondition w;
+    bool success = false;
+    QApplication::postEvent( this, new DeviceBlockingEvent( true, dev, &w, &success ) );
+    w.wait();
+    return success;
+  }
+}
+
+
+void K3bCore::unblockDevice( K3bDevice::Device* dev )
+{
+  if( QThread::currentThread() == s_guiThreadHandle ) {
+    internalUnblockDevice( dev );
+  }
+  else {
+    QWaitCondition w;
+    QApplication::postEvent( this, new DeviceBlockingEvent( false, dev, &w, 0 ) );
+    w.wait();
+  }
+}
+
+
+bool K3bCore::internalBlockDevice( K3bDevice::Device* dev )
+{
   if( !d->blockedDevices.contains( dev ) ) {
     d->blockedDevices.append( dev );
     return true;
@@ -278,9 +326,21 @@ bool K3bCore::blockDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bCore::unblockDevice( K3bDevice::Device* dev )
+void K3bCore::internalUnblockDevice( K3bDevice::Device* dev )
 {
   d->blockedDevices.remove( dev );
+}
+
+
+void K3bCore::customEvent( QCustomEvent* e )
+{
+  if( DeviceBlockingEvent* de = dynamic_cast<DeviceBlockingEvent*>(e) ) {
+    if( de->block )
+      *de->success = internalBlockDevice( de->device );
+    else
+      internalUnblockDevice( de->device );
+    de->wc->wakeAll();
+  }
 }
 
 #include "k3bcore.moc"

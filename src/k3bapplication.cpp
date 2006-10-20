@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,11 @@
 #include "k3bappdevicemanager.h"
 #include "k3bmediacache.h"
 #include "k3bpassivepopup.h"
+#include "k3blsofwrapperdialog.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
+#include <k3bhalconnection.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
@@ -408,12 +410,23 @@ void K3bApplication::Core::requestBusyFinish()
 }
 
 
-bool K3bApplication::Core::blockDevice( K3bDevice::Device* dev )
+bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
 {
-  if( K3bCore::blockDevice( dev ) ) {
+  if( K3bCore::internalBlockDevice( dev ) ) {
     if( mediaCache() ) {
       m_deviceBlockMap[dev] = mediaCache()->blockDevice( dev );
     }
+
+#ifdef HAVE_HAL
+    if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
+      kdDebug() << "(K3bInterferingSystemsHandler) HAL lock failed." << endl;
+#endif
+
+    //
+    // Check if the device is in use
+    //
+    K3bLsofWrapperDialog::checkDevice( dev );
+
     return true;
   }
   else
@@ -421,14 +434,18 @@ bool K3bApplication::Core::blockDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bApplication::Core::unblockDevice( K3bDevice::Device* dev )
+void K3bApplication::Core::internalUnblockDevice( K3bDevice::Device* dev )
 {
   if( mediaCache() ) {
     mediaCache()->unblockDevice( dev, m_deviceBlockMap[dev] );
     m_deviceBlockMap.erase( dev );
   }
 
-  K3bCore::unblockDevice( dev );
+#ifdef HAVE_HAL
+  K3bDevice::HalConnection::instance()->unlock( dev );
+#endif
+
+  K3bCore::internalUnblockDevice( dev );
 }
 
 #include "k3bapplication.moc"

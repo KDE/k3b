@@ -302,15 +302,6 @@ class LIBK3B_EXPORT K3bBurnJob : public K3bJob
    */
   void burning(bool);
 
- protected:
-  /**
-   * In addition to the registration and deregistration from K3bJob this
-   * method blocks the used burning device (\see K3bInterferingSystemHandler)
-   * in case this is a top level job
-   */
-  virtual void jobStarted();
-  virtual void jobFinished( bool success );
-
  private:
   int m_writeMethod;
 
