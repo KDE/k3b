@@ -29,6 +29,8 @@
 #include <k3bcore.h>
 #include <k3blistview.h>
 #include <k3biso9660.h>
+#include <k3bapplication.h>
+#include <k3bmediacache.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -388,8 +390,19 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
 
 void K3bIsoImageWritingDialog::slotWriterChanged()
 {
-  if( m_writerSelectionWidget->writerDevice() && !m_editImagePath->lineEdit()->text().isEmpty()) {
-    setButtonEnabled( START_BUTTON, true );
+  K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
+  if( dev ) {
+    K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
+    if( medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+      // no simulation support for DVD+R(W) media
+      m_checkDummy->setChecked(false);
+      m_checkDummy->setEnabled(false);
+    }
+    else {
+      m_checkDummy->setDisabled( false );
+    }
+
+    m_writingModeWidget->determineSupportedModesFromMedium( dev );
 
     if( m_checkDummy->isChecked() ) {
       m_checkVerify->setEnabled( false );
@@ -397,11 +410,12 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
     }
     else
       m_checkVerify->setEnabled( true );
+
     m_spinCopies->setEnabled( !m_checkDummy->isChecked() );
   }
-  else {
-    setButtonEnabled( START_BUTTON, false );
-  }
+
+  setButtonEnabled( START_BUTTON, 
+		    dev && !m_editImagePath->lineEdit()->text().isEmpty() );
 }
 
 

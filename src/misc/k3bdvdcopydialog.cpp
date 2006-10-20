@@ -363,11 +363,10 @@ void K3bDvdCopyDialog::toggleAll()
 
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
+    K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
 
-    // FIXME: use the medium type for this (is there still no DVD+R(W) simulation?)
-    if( (dev->type() & (K3bDevice::DVDPR|K3bDevice::DVDPRW)) &&
-	!(dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW)) ) {
-      // no simulation support for DVD+R(W) only drives
+    if( medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+      // no simulation support for DVD+R(W) media
       m_checkSimulate->setChecked(false);
       m_checkSimulate->setEnabled(false);
     }
