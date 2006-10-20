@@ -486,7 +486,7 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     else
       K3bPassivePopup::showPopup( i18n("No CDDB entry found."), i18n("CDDB") );
   }
-  else {
+  else if( error != K3bCddbQuery::CANCELED ) {
     K3bPassivePopup::showPopup( m_cddb->errorString(), i18n("Cddb error") );
   }
 
