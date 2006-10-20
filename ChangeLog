@@ -63,6 +63,188 @@
    - Changed the dialog layout in the action dialogs.
    - Simplified the layout of the burn dialogs for data projects (more advanced settings hidden)
    - Improved theme support (transparent themes)
+ * Device buffer status display for DVD burning with growisofs >= 7.0
+
+0.12.17
+=======
+ * Fixed saving/loading of the file view configuration.
+ * Improved ffmpeg autoconf check.
+ * More FreeBSD Compile fixes (thanks to Heiner Eichmann).
+ * Fixed symbolic link handling in data projects (a bug introduced in 0.12.16)
+ * Use UTF-8 encoding to store and load local CDDB entries.
+ * Never use growisofs parameter -dvd-compat with DVD+RW media.
+ * Fixed flac audio encoding for the audio project conversion feature.
+
+0.12.16
+=======
+ * FreeBSD Compile fixes (thanks to Heiner Eichmann).
+ * Always force 44.1khz in the Lame MP3 encoder plugin.
+ * Fixed VideoDVD creation on rewritable media.
+ * NetBSD support (thanks to Mark Davies).
+ * Fixed Copy of Enhanced Audio CDs with CD-Text
+ * Changed default boot cataloge name from "boot.cataloge" to "boot.catalog"
+ * Fixed a crash when reusing the same DVD Iso Image writing dialog.
+ * Ignore case when comparing MD5 sums entered by the user.
+ * Make sure that filenames in a data project's folder are unique.
+ * Allow index statements bigger than 99 minutes in cue files.
+ * Properly set the length of SCSI commands (this fixes some device detection problems).
+
+0.12.15
+=======
+ * Write more metadata tags in the default setup of the external encoder plugin.
+ * Fixed on-the-fly Video DVD creation
+ * Fixed data project verification in case filenames had to be shortened due to Joliet limitations.
+ * Use -dvd-compat parameter to close DVDs in on-the-fly mode.
+ * Fixed libdvdcss handling (again), no crashes anymore.
+ * Fixed the "invalid url" bug.
+ * Use SG IO for scsi commands with newer linux kernels. This should fix problems with scsi device
+   detection.
+ * Warn about shortened filenames due to Joliet restrictions before starting the burning process.
+
+0.12.14
+=======
+ * Make sure new projects are not already marked as modified.
+ * Fixed (hopefully) the last bug related to Data project verification.
+
+0.12.13
+=======
+ * Honor umask when creating directories for Audio CD ripping.
+ * Only update the buffer state for DVD burning if it really changes.
+ * Fixed a crash in verification if the CD/DVD does not contain RR extensions.
+ * Lowered default DVD writing buffer size to 32 MB to avoid "memorylock limit" problems
+   as described on http://fy.chalmers.se/~appro/linux/DVD+RW/tools/
+ * Fixed loading of libdvdcss.
+
+0.12.12
+=======
+ * Fixed another bug in the iso options code which sometimes resulted in a failed verification.
+ * Properly close the reading device when copying VideoDVDs. This bug resulted in a blocked device.
+ * Fixed handling of filenames in libdvdcss backend (this fixes VideoDVD copy).
+
+0.12.11
+=======
+ * Fixed selection in the audio CD ripping window.
+ * Fixed info block handling in WAVE audio file decoder: no more clicks at the end.
+ * Introduced a hack which fixes the "Wav detected as Mpeg file" bug.
+ * Fixed Auto multisession mode for DVD+RW and DVD-RW in restricted overwrite mode in case
+   a previous session was imported.
+ * Fixed a crash with HAL >= 0.5 when exiting K3b.
+ * Allow copying of double layer DVDs with a size below 4.3 GB to single layer media.
+ * Support for the ring buffer in growisofs 6.0.
+ * Use .iso extension for images instead of .img
+ * Properly remove the image file in case verification failed.
+ * Ignore mounting state of a medium when showing its contents.
+ * Fixed a bug in the iso options code which sometimes resulted in a failed verification.
+ * Properly handle cue files withan image file name like image.bin.cue + image.bin
+ * Write a proper Xing header when encoding VBR mp3 files.
+
+0.12.10
+=======
+ * Fixed Auto multisession mode in DVD projects
+ * Fixed crash in dcop call directBurn in case no valid burner device was set.
+ * Fixed verification of datacd projects when using the MaxIso9660 option without the OmitVersionNumber option
+
+0.12.9
+======
+ * New project dcop calls:
+    directBurn() - directly starts the burn process without user interaction
+    setBurnDevice(QString) - set the burn device to be used
+ * Disable the cd-text fields if cd-text writing is disabled.
+ * New Alsa audio output plugin.
+ * If a DVD project does not fill up the DVD completely do not close the DVD in automatic 
+   multisession mode.
+ * Fixed problems with filenames ending in backslashes.
+ * Fixed verification problems with localized characters.
+ * Added error handling for incorrectly encoded filenames.
+ * Automatically use a newly installed version of an external application at the next K3b start.
+ * Complete new set of K3b action icons for project types and tools. Many thanks to Marcel Dierkes.
+ * Show text on the burn button to make it catch the eye.
+ * Support for media:// urls in the Image writing dialogs.
+ * Fixed problems with files bigger than 2 GB on some systems.
+
+0.12.8
+======
+ * Load index0 value in audio project.
+ * Ignore case in cue files.
+ * The "eject media" setting was not used properly in some situations (thanks to simon@munton.demon.co.uk for the patch)
+ * Fixed a bug in the mp3 decoder which caused it to miss some perfectly valid mp3 files.
+
+0.12.7
+======
+ * Fixed crash when refreshing the device list.
+ * Fixed cancellation of adding files to a data project.
+ * Fixed on-the-fly data project burning.	
+ * Backported a warning about following links to folders (K3b cannot do that after the link has
+   been added to the project).
+
+0.12.6
+======
+ * Copy XA Form1 tracks always in TAO writing mode.
+ * Support for media:/ urls.
+ * No extra whitespace when renaming audio files in a data project anymore.
+ * Fixed verification of multisession CDs (thanks to simon@munton.demon.co.uk)
+ * Preserve directory access time in data projects when using the "backup" option.
+ * Disable the "audio normalization" option in case the normalize program is not installed.
+
+0.12.5
+======
+ * Fixed the progressbar in the file view
+ * It is possible to add the "New Data DVD Project" button to the welcome window again.
+ * Fixed problems with unreadable items when using a non-standard color scheme
+ * Properly set the permissions on cdrecord versions >= 2.01.01a02
+ * Fixed the "Disabled start button in Copy dialog" bug.
+ * Little window layout fix in K3bSetup2.
+ * Always use sector size 2048 when only creating an image in CD Copy. This means extracted
+   iso images from CDs with non-Mode1 tracks are useable again.
+ * Preserve directory permissions and user/group id in data projects when using the "backup" option.
+
+0.12.4
+======
+ * Fixed --cdimage and --dvdimage parameters.
+ * Fixed the file browser menu. Now it contains the bookmarks and "add to project" actions again.
+ * Fixed Index 0 (Pregap) handling in audio cue files.
+ * Improved handling of broken cue files: K3b now searches the directory for image files that could fit
+   the cue file in case the FILE entry is bogus.
+ * Always try to create a new session in case the old one has been imported regardless of the inserted
+   medium's free space.
+ * Fixed DVD-RW Restricted Overwrite media handling
+ * Use RAW writing mode for audio CDs in case the writer does not support DAO but RAW.
+ * Fixed compile problems with latest ffmpeg builds.
+	
+0.12.3
+======
+ * Ignore dock config from K3b versions older than 0.12
+ * Do not delete DVD project iso image if "remove image" is unchecked.
+ * Properly load multisession default settings.
+ * Update device selection boxes when devices are added or removed via HAL.
+ * Properly cancel DVD project writing.
+ * Fixed DVD+RW session import
+
+0.12.2
+======
+ * After for example copying a CD when the dialog comes up again keep the last settings.
+ * Default to incremental sequential writing mode when copying a DVD to a DVD-R.
+ * Fixed a crash when the DVD copy dialog is reused.
+ * Fixed inline editing in the audio CD view (without bigger changes this only works with a 
+   rather strange selection mode.)
+ * Show the configured splash screen image instead of the default.
+ * Fixed eMovix 0.9 default settings handling.
+ * Import session: disable RockRidge if the previous session does not contain RR extensions.
+   This fixes the problem with strange filenames if the new session is mounted via RR.
+ * Fixed the --cdimage parameter.
+ * Changed max copies from 99 to 999.
+ * Improved session import dialog.
+ * Properly default to DVD size in Video DVD project.
+ * Fixed automatic multisession handling for DVD+RW media.
+ * Fixed handbook installation.
+ * Fixed HAL backend: devices are properly removed now.
+ * Ignore K3b Themes that do not follow the new filename scheme.
+
+0.12.1
+Fixed compilation problems with older musepack library version.
+Fixed compile problem with older gcc versions.
+Enable verification checkbox for ISO9660 images in the CD writing dialog.
+Do not report success even if audio project conversion failed.
 
 0.12
 Added "Mpeg Still" support to Video-CD Project
