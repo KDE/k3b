@@ -39,6 +39,8 @@ class K3bIsoImageVerificationJob : public K3bJob
   void setImageMD5Sum( const QCString& );
 
  private slots:
+  void calculateImageChecksum();
+  void calculateWrittenDataChecksum();
   void slotMediaReloaded( bool success );
   void slotMd5JobFinished( bool success );
   void slotMd5JobProgress( int p );

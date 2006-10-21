@@ -90,6 +90,9 @@ class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
   int m_currentCopy;
 
   K3bIsoImageVerificationJob* m_verifyJob;
+
+  class Private;
+  Private* d;
 };
 
 #endif

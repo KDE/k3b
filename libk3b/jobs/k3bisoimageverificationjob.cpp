@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ public:
 
   bool canceled;
   bool needToCalcMd5;
+  bool imageMd5SumDone;
   K3bMd5Job* md5Job;
   K3bDevice::Device* device;
   QString imageFileName;
@@ -101,12 +102,19 @@ void K3bIsoImageVerificationJob::start()
 
   d->canceled = false;
   d->needToCalcMd5 = d->imageMd5Sum.isEmpty();
+  d->imageMd5SumDone = false;
+
+  d->imageSize = K3b::filesize( d->imageFileName );
+  if( d->imageSize == (KIO::filesize_t)0 ) {
+    emit infoMessage( i18n("Unable to determine size of file %1.").arg(d->imageFileName), ERROR );
+    finishVerification(false);
+  }
 
   // first we need to reload and mount the device
   emit newTask( i18n("Reloading the medium") );
 
   connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
-	     this, SLOT(slotMediaReloaded(bool)) );
+	   this, SLOT(slotMediaReloaded(bool)) );
 }
 
 
@@ -117,27 +125,42 @@ void K3bIsoImageVerificationJob::slotMediaReloaded( bool success )
 			 i18n("Unable to Close the Tray") );
 
   if( d->needToCalcMd5 ) {
-    emit newTask( i18n("Reading original data") );
-    
-    // start it
-    d->md5Job->setFile( d->imageFileName );
-    d->md5Job->start();
+    calculateImageChecksum();
   }
   else {
-    slotMd5JobFinished( true );
+    d->imageMd5SumDone = true;
+    calculateWrittenDataChecksum();
+  }
+}
+
+
+void K3bIsoImageVerificationJob::calculateImageChecksum()
+{
+  emit newTask( i18n("Reading original data") );
+  d->md5Job->setFile( d->imageFileName );
+  d->md5Job->start();
+}
+
+
+void K3bIsoImageVerificationJob::calculateWrittenDataChecksum()
+{
+  emit newTask( i18n("Reading written data") );
+  if( !d->device->open() ) {
+    emit infoMessage( i18n("Unable to open device %1.").arg(d->device->blockDeviceName()), ERROR );
+    finishVerification(false);
+  }
+  else {
+    d->md5Job->setDevice( d->device );
+    d->md5Job->setMaxReadSize( d->imageSize );
+    d->md5Job->start();
   }
 }
 
 
 void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
 {
-  if( d->canceled ) {
-    finishVerification(false);
-  }
-
-  if( success ) {
-
-    if( !d->imageMd5Sum.isEmpty() ) {
+  if( success && !d->canceled ) {
+    if( d->imageMd5SumDone ) {
       // compare the two sums
       if( d->imageMd5Sum != d->md5Job->hexDigest() ) {
 	emit infoMessage( i18n("Written data differs from original."), ERROR );
@@ -149,32 +172,9 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
       }
     }
     else {
-      
       d->imageMd5Sum = d->md5Job->hexDigest();
-
-      //
-      // now we need to calculate the md5sum of the written image
-      // since it is possible that the image has been padded while writing we need
-      // the image filesize to make sure we do not compare too much data and thus get
-      // a wrong result
-      //
-
-      d->imageSize = K3b::filesize( d->imageFileName );
-      if( d->imageSize == (KIO::filesize_t)0 ) {
-	emit infoMessage( i18n("Unable to determine size of file %1.").arg(d->imageFileName), ERROR );
-	finishVerification(false);
-      }
-      else if( !d->device->open() ) {
-	emit infoMessage( i18n("Unable to open device %1.").arg(d->device->blockDeviceName()), ERROR );
-	finishVerification(false);
-      }
-      else {
-	// start the written data check
-	emit newTask( i18n("Reading written data") );
-	d->md5Job->setDevice( d->device );
-	d->md5Job->setMaxReadSize( d->imageSize );
-	d->md5Job->start();
-      }
+      d->imageMd5SumDone = true;
+      calculateWrittenDataChecksum();
     }
   }
   else {
@@ -186,7 +186,7 @@ void K3bIsoImageVerificationJob::slotMd5JobFinished( bool success )
 
 void K3bIsoImageVerificationJob::slotMd5JobProgress( int p )
 {
-  if( d->needToCalcMd5 && !d->imageMd5Sum.isEmpty() )
+  if( d->needToCalcMd5 && d->imageMd5SumDone )
     emit percent( 50 + p/2 );
   else if( d->needToCalcMd5 )
     emit percent( p/2 );

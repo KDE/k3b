@@ -29,7 +29,10 @@ class K3bChecksumPipe::Private : public QThread
 {
 public:
   Private() :
-    fdToWriteTo(-1) {
+    fdToReadFrom(-1),
+    fdToWriteTo(-1),
+    closeFdToReadFrom(false),
+    closeFdToWriteTo(false) {
   }
 
   void run() {
@@ -37,19 +40,20 @@ public:
     buffer.resize( 10*2048 );
     ssize_t r = 0;
     ssize_t total = 0;
-    while( ( r = ::read( pipeIn.out(), buffer.data(), buffer.size() ) ) > 0 ) {
+    while( ( r = ::read( readFd(), buffer.data(), buffer.size() ) ) > 0 ) {
 
       // write it out
       ssize_t w = 0;
       ssize_t ww = 0;
       while( w < r ) {
-	if( ( ww = ::write( fdToWriteTo == -1 ? pipeOut.in() : fdToWriteTo,
-			    buffer.data()+w, r-w ) ) > 0 ) {
+	if( ( ww = ::write( writeFd(), buffer.data()+w, r-w ) ) > 0 ) {
 	  w += ww;
 	}
 	else {
 	  kdDebug() << "(K3bChecksumPipe) write failed." << endl;
-	  break;
+	  if( closeWhenDone )
+	    close();
+	  return;
 	}
       }
 
@@ -59,6 +63,9 @@ public:
       total += r;
     }
     kdDebug() << "(K3bChecksumPipe) thread done: " << r << " (total bytes: " << total << ")" << endl;
+
+    if( closeWhenDone )
+      close();
   }
 
   void update( const char* in, int len ) {
@@ -77,11 +84,43 @@ public:
     }
   }
 
+  int readFd() const {
+    if( fdToReadFrom == -1 )
+      return pipeIn.out();
+    else
+      return fdToReadFrom;
+  }
+
+  int writeFd() const {
+    if( fdToWriteTo == -1 )
+      return pipeOut.in();
+    else
+      return fdToWriteTo;
+  }
+
+  void close() {
+    pipeIn.close();
+    pipeOut.close();
+
+    if( fdToWriteTo != -1 &&
+	closeFdToWriteTo )
+      ::close( fdToWriteTo );
+
+    if( fdToReadFrom != -1 &&
+	closeFdToReadFrom )
+      ::close( fdToReadFrom );
+  }
+
   int checksumType;
 
+  int fdToReadFrom;
   int fdToWriteTo;
   K3bPipe pipeIn;
   K3bPipe pipeOut;
+
+  bool closeWhenDone;
+  bool closeFdToReadFrom;
+  bool closeFdToWriteTo;
 
   KMD5 md5;
 
@@ -101,13 +140,15 @@ K3bChecksumPipe::~K3bChecksumPipe()
 }
 
 
-bool K3bChecksumPipe::open( int type )
+bool K3bChecksumPipe::open( int type, bool closeWhenDone )
 {
-  close();
+  if( d->running() )
+    return false;
 
   d->checksumType = type;
+  d->closeWhenDone = closeWhenDone;
 
-  if( !d->pipeIn.open() ) {
+  if( d->fdToReadFrom == -1 && !d->pipeIn.open() ) {
     return false;
   }
 
@@ -126,17 +167,22 @@ bool K3bChecksumPipe::open( int type )
 void K3bChecksumPipe::close()
 {
   d->pipeIn.closeIn();
-
   d->wait();
-
-  d->pipeIn.close();
-  d->pipeOut.close();
+  d->close();
 }
 
 
-void K3bChecksumPipe::writeToFd( int fd )
+void K3bChecksumPipe::readFromFd( int fd, bool close )
+{
+  d->fdToReadFrom = fd;
+  d->closeFdToReadFrom = close;
+}
+
+
+void K3bChecksumPipe::writeToFd( int fd, bool close )
 {
   d->fdToWriteTo = fd;
+  d->closeFdToWriteTo = close;
 }
 
 
@@ -161,3 +207,4 @@ QCString K3bChecksumPipe::checksum() const
 
   return QCString();
 }
+

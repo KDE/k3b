@@ -27,6 +27,7 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bchecksumpipe.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -38,6 +39,14 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qapplication.h>
+
+
+class K3bIso9660ImageWritingJob::Private
+{
+public:
+  K3bChecksumPipe checksumPipe;
+  QFile imageFile;
+};
 
 
 K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob( K3bJobHandler* hdl )
@@ -53,11 +62,13 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob( K3bJobHandler* hdl )
     m_copies(1),
     m_verifyJob(0)
 {
+  d = new Private;
 }
 
 K3bIso9660ImageWritingJob::~K3bIso9660ImageWritingJob()
 {
   delete m_tocFile;
+  delete d;
 }
 
 
@@ -95,6 +106,8 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
     return;
   }
 
+  d->checksumPipe.close();
+
   if( success ) {
     if( !m_simulate && m_verifyData ) {
       emit burning(false);
@@ -112,6 +125,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
       }
       m_verifyJob->setDevice( m_device );
       m_verifyJob->setImageFileName( m_imagePath );
+      m_verifyJob->setImageMD5Sum( d->checksumPipe.checksum() );
       if( m_copies == 1 )
 	emit newTask( i18n("Verifying written data") );
       else
@@ -253,9 +267,18 @@ void K3bIso9660ImageWritingJob::startWriting()
     return;
   }
 
+  // we simply always calculate the checksum, thus making the code simpler
+  d->imageFile.close();
+  d->imageFile.setName( m_imagePath );
+  d->imageFile.open( IO_ReadOnly );
+  d->checksumPipe.close();
+  d->checksumPipe.readFromFd( d->imageFile.handle() );
+
   if( prepareWriter( media ) ) {
     emit burning(true);
     m_writer->start();
+    d->checksumPipe.writeToFd( m_writer->fd(), true );
+    d->checksumPipe.open( K3bChecksumPipe::MD5, true );
   }
   else {
     m_finished = true;
@@ -319,7 +342,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
       else
 	writer->addArgument("-data");
 
-      writer->addArgument( m_imagePath );
+      // read from stdin
+      writer->addArgument( "-" );
 
       m_writer = writer;
     }
@@ -349,7 +373,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	  *s << "\n";
 	  *s << "TRACK MODE1" << "\n";
 	}
-	*s << "DATAFILE \"" << m_imagePath << "\" 0 \n";
+	*s << "DATAFILE \"-\" 0 \n";
 
 	m_tocFile->close();
       }
@@ -382,12 +406,11 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     writer->setSimulate( m_simulate );
     writer->setBurnSpeed( m_speed );
     writer->setWritingMode( m_writingMode == K3b::DAO ? K3b::DAO : 0 );
-    writer->setImageToWrite( m_imagePath );
+    writer->setImageToWrite( QString::null ); // read from stdin
     writer->setCloseDvd( !m_noFix );
 
     m_writer = writer;
   }
-
 
   connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
