@@ -358,7 +358,6 @@ void K3bDvdCopyDialog::loadK3bDefaults()
 
 void K3bDvdCopyDialog::toggleAll()
 {
-  
   updateOverrideDevice();
 
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
@@ -366,17 +365,6 @@ void K3bDvdCopyDialog::toggleAll()
 
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
-    K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
-
-    if( medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
-      // no simulation support for DVD+R(W) media
-      m_checkSimulate->setChecked(false);
-      m_checkSimulate->setEnabled(false);
-    }
-    else {
-      m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
-    }
-
     // select the proper writing modes
     // if writing and reading devices are the same we cannot use 
     // K3bWritingModeWidget::determineSupportedModesFromMedium since the inserted medium is not the one we 
@@ -390,9 +378,20 @@ void K3bDvdCopyDialog::toggleAll()
       }
 
       m_writingModeWidget->setSupportedModes( modes );
+      m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
     }
-    else
+    else {
       m_writingModeWidget->determineSupportedModesFromMedium( dev );
+
+      if( k3bappcore->mediaCache()->diskInfo( dev ).mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+	// no simulation support for DVD+R(W) media
+	m_checkSimulate->setChecked(false);
+	m_checkSimulate->setEnabled(false);
+      }
+      else {
+	m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
+      }
+    }
   }
 
   
