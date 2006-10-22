@@ -371,6 +371,8 @@ void K3bCdCopyDialog::slotStartClicked()
 
 void K3bCdCopyDialog::slotToggleAll()
 {
+  updateOverrideDevice();
+
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
 
   m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
@@ -395,7 +397,7 @@ void K3bCdCopyDialog::slotToggleAll()
     m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
   }
 
-  updateOverrideDevice();
+  
   
   static_cast<QWidget*>( child( "audio_options" ) )->setDisabled( m_comboCopyMode->currentItem() == 1 );
   

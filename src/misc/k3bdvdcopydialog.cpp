@@ -358,6 +358,9 @@ void K3bDvdCopyDialog::loadK3bDefaults()
 
 void K3bDvdCopyDialog::toggleAll()
 {
+  
+  updateOverrideDevice();
+
   m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkCacheImage->setDisabled( m_checkOnlyCreateImage->isChecked() );
 
@@ -392,7 +395,7 @@ void K3bDvdCopyDialog::toggleAll()
       m_writingModeWidget->determineSupportedModesFromMedium( dev );
   }
 
-  updateOverrideDevice();
+  
 
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
