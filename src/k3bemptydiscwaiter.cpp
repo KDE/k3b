@@ -390,13 +390,13 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     // restr. ovw. and seq. incr. requested
 
     // we have exactly what was requested
-    if( (d->wantedMediaType & medium.diskInfo().currentProfile()) &&
+    if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
 	(d->wantedMediaState & medium.diskInfo().diskState()) ) {
-      finishWaiting( medium.diskInfo().currentProfile() );
+      finishWaiting( medium.diskInfo().mediaType() );
     }
 
     // DVD-RW in restr. overwrite may just be overwritten
-    else if( (medium.diskInfo().currentProfile() & K3bDevice::MEDIA_DVD_RW_OVWR) &&
+    else if( (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW_OVWR) &&
 	     (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) ) {
       if( d->wantedMediaState == K3bDevice::STATE_EMPTY ) {
 
@@ -411,7 +411,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
 						i18n("Found %1 media in %2 - %3. "
 						     "Should it be overwritten?")
-						.arg(K3bDevice::mediaTypeString(medium.diskInfo().currentProfile()))
+						.arg(K3bDevice::mediaTypeString(medium.diskInfo().mediaType()))
 						.arg(d->device->vendor())
 						.arg(d->device->description()),
 						i18n("Found %1").arg("DVD-RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
@@ -450,15 +450,15 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 
     // formatting
     else if( ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) &&
-	       (medium.diskInfo().currentProfile() & K3bDevice::MEDIA_DVD_RW_SEQ) &&
+	       (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW_SEQ) &&
 	       !(d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_SEQ) ) ||
 
 	     ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_SEQ) &&
-	       (medium.diskInfo().currentProfile() & K3bDevice::MEDIA_DVD_RW_OVWR) &&
+	       (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW_OVWR) &&
 	       !(d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) ) ||
 
 	     ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_SEQ) &&
-	       (medium.diskInfo().currentProfile() & K3bDevice::MEDIA_DVD_RW_SEQ) &&
+	       (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW_SEQ) &&
 	       (d->wantedMediaState == K3bDevice::STATE_EMPTY) &&
 	       (medium.diskInfo().diskState() != K3bDevice::STATE_EMPTY) ) ) {
 
@@ -468,7 +468,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	  KMessageBox::warningContinueCancel( parentWidgetToUse(),
 					      i18n("Found %1 media in %2 - %3. "
 						   "Should it be formatted?")
-					      .arg( K3bDevice::mediaTypeString(medium.diskInfo().currentProfile()) )
+					      .arg( K3bDevice::mediaTypeString(medium.diskInfo().mediaType()) )
 					      .arg(d->device->vendor())
 					      .arg(d->device->description()),
 					      i18n("Found %1").arg("DVD-RW"), i18n("Format") ) == KMessageBox::Continue ) {
@@ -482,7 +482,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	// we prefere the current mode of the media if no special mode has been requested
 	job.setMode( ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_SEQ) &&
 		       (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_OVWR) )
-		     ? ( medium.diskInfo().currentProfile() == K3bDevice::MEDIA_DVD_RW_OVWR
+		     ? ( medium.diskInfo().mediaType() == K3bDevice::MEDIA_DVD_RW_OVWR
 			 ? K3b::WRITING_MODE_RES_OVWR
 			 : K3b::WRITING_MODE_INCR_SEQ )
 		     : ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_SEQ)
@@ -524,8 +524,8 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	   (d->wantedMediaState & medium.diskInfo().diskState()) )
     finishWaiting( medium.diskInfo().mediaType() );
   
-  else if( (medium.diskInfo().currentProfile() != K3bDevice::MEDIA_UNKNOWN) &&
-	   (d->wantedMediaType & medium.diskInfo().currentProfile()) &&
+  else if( (medium.diskInfo().mediaType() != K3bDevice::MEDIA_UNKNOWN) &&
+	   (d->wantedMediaType & medium.diskInfo().mediaType()) &&
 	   (d->wantedMediaState & medium.diskInfo().diskState()) )
     finishWaiting( medium.diskInfo().mediaType() );
 
