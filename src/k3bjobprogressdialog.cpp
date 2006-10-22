@@ -570,9 +570,9 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
     break;
   case Key_Escape:
     // simulate button clicks
-    if( m_buttonCancel->isVisible() )
+    if( m_buttonCancel->isVisible() && m_buttonCancel->isEnabled() )
       slotCancelButtonPressed();
-    else
+    else if( !m_buttonCancel->isVisible() )
       close();
     break;
   default:
