@@ -70,6 +70,16 @@ class LIBK3B_EXPORT K3bThreadJob : public K3bJob
    */
   virtual void customEvent( QCustomEvent* );
 
+  /**
+   * Reimplement this method to do some housekeeping once
+   * the thread has finished.
+   *
+   * The default implementation does nothing.
+   *
+   * \param success True if the thread finished successfully
+   */
+  virtual void cleanupJob( bool success );
+
  private:
   K3bThread* m_thread;
   bool m_running;

@@ -29,6 +29,8 @@ namespace K3bDevice {
 
 class K3bAudioSessionReadingJob : public K3bThreadJob
 {
+  Q_OBJECT
+
  public:
   K3bAudioSessionReadingJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
   ~K3bAudioSessionReadingJob();
@@ -58,6 +60,12 @@ class K3bAudioSessionReadingJob : public K3bThreadJob
   void setParanoiaMode( int m );
   void setReadRetries( int );
   void setNeverSkip( bool b );
+
+ public slots:
+  void start();
+
+ protected:
+  void cleanupJob( bool success );
 
  private:
   class WorkThread;

@@ -21,6 +21,7 @@
 #include <k3bwavefilewriter.h>
 #include <k3bglobals.h>
 #include <k3bdevice.h>
+#include <k3bcore.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -239,3 +240,19 @@ void K3bAudioSessionReadingJob::setNeverSkip( bool b )
 {
   m_thread->neverSkip = b;
 }
+
+
+void K3bAudioSessionReadingJob::start()
+{
+  k3bcore->blockDevice( m_thread->device );
+  K3bThreadJob::start();
+}
+
+
+void K3bAudioSessionReadingJob::cleanupJob( bool success )
+{
+  Q_UNUSED( success );
+  k3bcore->unblockDevice( m_thread->device );
+}
+
+#include "k3baudiosessionreadingjob.moc"

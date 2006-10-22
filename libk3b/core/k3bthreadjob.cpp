@@ -94,6 +94,12 @@ void K3bThreadJob::cancel()
 }
 
 
+void K3bThreadJob::cleanupJob( bool success )
+{
+  Q_UNUSED( success );
+}
+
+
 void K3bThreadJob::customEvent( QCustomEvent* e )
 {
   if( K3bDataEvent* de = dynamic_cast<K3bDataEvent*>(e) ) {
@@ -131,6 +137,7 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
       kdDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
       m_thread->wait();
       kdDebug() << "(K3bThreadJob) thread finished." << endl;
+      cleanupJob( be->firstValue() );
       m_running = false;
       jobFinished( be->firstValue() );
       break;
