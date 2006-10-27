@@ -326,6 +326,7 @@ void K3bIsoImager::startSizeCalculation()
     
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
+  m_process->setSplitStdout(true);
     
   emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
     
@@ -366,8 +367,8 @@ void K3bIsoImager::startSizeCalculation()
 
   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
 	   this, SLOT(slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int)) );
-  connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	   this, SLOT(slotCollectMkisofsPrintSizeStdout(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(stdoutLine(const QString&)),
+	   this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotMkisofsPrintSizeFinished()) );
   
@@ -396,10 +397,12 @@ void K3bIsoImager::slotCollectMkisofsPrintSizeStderr(KProcess*, char* data , int
 }
 
 
-void K3bIsoImager::slotCollectMkisofsPrintSizeStdout(KProcess*, char* data, int len )
+void K3bIsoImager::slotCollectMkisofsPrintSizeStdout( const QString& line )
 {
-  emit debuggingOutput( "mkisofs", QString::fromLocal8Bit( data, len ) );
-  m_collectedMkisofsPrintSizeStdout.append( QString::fromLocal8Bit( data, len ) );
+  // newer versions of mkisofs outut additional lines of junk before the size :(
+  // so we only use the last line
+  emit debuggingOutput( "mkisofs", line );
+  m_collectedMkisofsPrintSizeStdout = line;
 }
 
 
@@ -407,11 +410,10 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
 {
   bool success = true;
 
-  kdDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout << endl;
-
   // if m_collectedMkisofsPrintSizeStdout is not empty we have a recent version of
   // mkisofs and parsing is very easy (s.o.)
   if( !m_collectedMkisofsPrintSizeStdout.isEmpty() ) {
+    kdDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout << endl;
     m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStdout.toInt( &success );
   }
   else {

@@ -147,7 +147,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
  private slots:
   void slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int);
-  void slotCollectMkisofsPrintSizeStdout(KProcess*, char*, int);
+  void slotCollectMkisofsPrintSizeStdout( const QString& );
   void slotMkisofsPrintSizeFinished();
 
  private:
