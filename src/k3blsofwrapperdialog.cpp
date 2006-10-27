@@ -71,9 +71,13 @@ bool K3bLsofWrapperDialog::slotCheckDevice()
       m_label->setText( i18n("<p>Device <b>'%1'</b> is already in use by other applications "
 			     "(<em>%2</em>) "
 			     "<p>It is highly recommended to quit those before continuing. "
-			     "Otherwise K3b might not be able to fully access the device.")
-			.arg(m_device->vendor() + " - " + m_device->description())
-			.arg(joinProcessNames(apps)) );
+			     "Otherwise K3b might not be able to fully access the device."
+			     "<p><em>Hint: Sometimes shutting down an application does not "
+			     "happen instantly. In that case you might have to use the '%3' "
+			     "button.")
+			.arg( m_device->vendor() + " - " + m_device->description() )
+			.arg( joinProcessNames(apps) )
+			.arg( actionButton( User2 )->text() ) );
       return true;
     }
   }

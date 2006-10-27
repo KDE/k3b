@@ -127,61 +127,6 @@ void K3bDeviceBranch::showBlockDeviceName( bool b )
 }
 
 
-void K3bDeviceBranch::mount()
-{
-#warning FIXME: K3bDeviceBranch::mount()
-//   if( !m_device->mountPoint().isEmpty() ) {
-//     QString mp = KIO::findDeviceMountPoint( m_device->mountDevice() );
-//     if( mp.isEmpty() )
-//       connect( KIO::mount( true, 0, m_device->mountDevice(), m_device->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-// 	       this, SLOT( slotMountFinished(KIO::Job*) ) );
-//     else {
-//       kdDebug() << "(K3bDeviceBranch) device already mounted on " << mp << endl;
-//       emit clear();
-//       populate( KURL::fromPathOrURL(mp), root() );
-//       emit mountFinished( this, mp );
-//     }
-//   }
-//   else
-//     emit mountFinished( this, QString::null );
-}
-
-
-void K3bDeviceBranch::unmount()
-{
-  if( K3b::isMounted( m_device ) ) {
-    emit unmountFinished( this, true );   
-  }
-  else {
-    setAutoUpdate(false);
-    if( K3b::unmount( m_device ) ) {
-      emit clear();
-      emit unmountFinished( this, true );
-    }
-    else {
-      emit unmountFinished( this, false );
-    }
-  }
-
-  setAutoUpdate(true);
-}
-
-
-void K3bDeviceBranch::slotMountFinished( KIO::Job* job )
-{
-  if( job->error() ) {
-    job->showErrorDialog();
-    emit mountFinished( this, QString::null );
-  }
-  else {
-    emit clear();
-    QString mp = KIO::findDeviceMountPoint( m_device->blockDeviceName() );
-    populate( KURL::fromPathOrURL( mp ), root() );
-    emit mountFinished( this, mp );
-  }
-}
-
-
 K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
 				      const KURL& url,
 				      const QString& name,
@@ -541,11 +486,6 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
 {
   K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
   addBranch( newBranch );
-  
-  connect( newBranch, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)),
-	   this, SIGNAL(mountFinished(K3bDeviceBranch*, const QString&)) );
-  connect( newBranch, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)),
-	   this, SIGNAL(unmountFinished(K3bDeviceBranch*, bool)) );
   
   // search for an equal device
   int equalCnt = 0;

@@ -227,6 +227,12 @@ namespace K3b
    * This method uses both KIO::unmount and pumount if available.
    */
   LIBK3B_EXPORT bool unmount( K3bDevice::Device* );
+
+  /**
+   * Tries to mount the medium. Since K3b does not gather any information
+   * about mount points the only methods used are pmount and HAL::mount
+   */
+  LIBK3B_EXPORT bool mount( K3bDevice::Device* );
 }
 
 #endif

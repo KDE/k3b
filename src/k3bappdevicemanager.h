@@ -96,8 +96,7 @@ class K3bAppDeviceManager : public K3bDevice::DeviceManager
   void setReadSpeed( K3bDevice::Device* );
 
  private slots:
-  void slotUnmountFinished( KIO::Job* );
-  void slotMountFinished( KIO::Job* );
+  void slotMenuActivated();
 
  private:
   mutable K3bDevice::Device* m_currentDevice;

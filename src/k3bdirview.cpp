@@ -33,6 +33,7 @@
 #include <k3bthememanager.h>
 #include <k3bmediacache.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bpassivepopup.h>
 
 #include <unistd.h>
 // QT-includes
@@ -145,6 +146,8 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
   connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
 	   this, SLOT(slotMountFinished(const QString&)) );
+  connect( k3bappcore->appDeviceManager(), SIGNAL(unmountFinished(bool)),
+	   this, SLOT(slotUnmountFinished(bool)) );
   connect( k3bappcore->appDeviceManager(), SIGNAL(detectingDiskInfo(K3bDevice::Device*)),
 	   this, SLOT(slotDetectingDiskInfo(K3bDevice::Device*)) );
 }
@@ -231,47 +234,41 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 #endif
   
   else if( medium.content() & K3bMedium::CONTENT_DATA ) {
-    bool mount = false;
+    bool mount = true;
     if( medium.content() & K3bMedium::CONTENT_VIDEO_CD ) {
       if( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
 	KMessageBox::sorry( this,
 			    i18n("K3b uses vcdxrip from the vcdimager package to rip Video CDs. "
 				 "Please make sure it is installed.") );
-	mount = true;
       }
       else {
-	mount = ( KMessageBox::questionYesNo( this,
-					      i18n("Found %1. Do you want K3b to mount the data part "
-						   "or show all the tracks?").arg( i18n("Video CD") ),
-					      i18n("Video CD"),
-					      i18n("Mount CD"),
-					      i18n("Show Video Tracks") ) == KMessageBox::Yes );
-      }
-
-      if( mount ) {
-	k3bappcore->appDeviceManager()->mountDisk();
-      }
-      else {
-	m_viewStack->raiseWidget( m_videoView );
-	m_videoView->setDisk( medium );
+	if( KMessageBox::questionYesNo( this,
+					i18n("Found %1. Do you want K3b to mount the data part "
+					     "or show all the tracks?").arg( i18n("Video CD") ),
+					i18n("Video CD"),
+					i18n("Mount CD"),
+					i18n("Show Video Tracks") ) == KMessageBox::No ) {
+	  mount = false;
+	  m_viewStack->raiseWidget( m_videoView );
+	  m_videoView->setDisk( medium );
+	}
       }
     }
     else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
-      mount = ( KMessageBox::questionYesNo( this,
-					    i18n("Found %1. Do you want K3b to mount the data part "
-						 "or show all the tracks?").arg( i18n("Audio CD") ),
-					    i18n("Audio CD"),
-					    i18n("Mount CD"),
-					    i18n("Show Audio Tracks") ) == KMessageBox::Yes );
-      
-      if( mount ) {
-	k3bappcore->appDeviceManager()->mountDisk();
-      }
-      else {
+      if( KMessageBox::questionYesNo( this,
+				      i18n("Found %1. Do you want K3b to mount the data part "
+					   "or show all the tracks?").arg( i18n("Audio CD") ),
+				      i18n("Audio CD"),
+				      i18n("Mount CD"),
+				      i18n("Show Audio Tracks") ) == KMessageBox::No ) {
+	mount = false;
 	m_viewStack->raiseWidget( m_cdView );
 	m_cdView->setDisk( medium );
       }
     }
+      
+    if( mount )
+      k3bappcore->appDeviceManager()->mountDisk( medium.device() );
   }
 
   else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
@@ -297,11 +294,31 @@ void K3bDirView::slotMountFinished( const QString& mp )
   }
   else {
     m_viewStack->raiseWidget( m_fileView );
-    // mounting failed.
-    // FIXME: use some silent message box like the amarok one here
-    // fallback to diskinfo
+    K3bPassivePopup::showPopup( i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>")
+				.arg( k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString() )
+				.arg( k3bappcore->appDeviceManager()->currentDevice()->vendor() )
+				.arg( k3bappcore->appDeviceManager()->currentDevice()->description() ),
+				i18n("Mount Failed"),
+				K3bPassivePopup::Warning );
   }
 }
+
+
+void K3bDirView::slotUnmountFinished( bool success )
+{
+  if( success ) {
+    // TODO: check if the fileview is still displaying a folder from the medium
+  }
+  else {
+    K3bPassivePopup::showPopup( i18n("<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>")
+				.arg( k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString() )
+				.arg( k3bappcore->appDeviceManager()->currentDevice()->vendor() )
+				.arg( k3bappcore->appDeviceManager()->currentDevice()->description() ),
+				i18n("Unmount Failed"),
+				K3bPassivePopup::Warning );
+  }
+}
+
 
 void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoint& p )
 {
@@ -320,10 +337,6 @@ void K3bDirView::slotDirActivated( const QString& url )
 
 void K3bDirView::slotDirActivated( const KURL& url )
 {
-  // cancel any previous disk info retrieval
-//   m_diskInfoDetector->cancel();
-  k3bappcore->requestBusyFinish();
-
   m_fileView->setUrl(url, true);
 //   m_urlCombo->setEditText( url.path() );
 

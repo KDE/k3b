@@ -69,6 +69,7 @@ class K3bDirView : public QVBox
   void slotDirActivated( const KURL& );
   void slotDirActivated( const QString& );
   void slotMountFinished( const QString& );
+  void slotUnmountFinished( bool );
   void showMediumInfo( const K3bMedium& );
   void slotDetectingDiskInfo( K3bDevice::Device* dev );
   void reload();

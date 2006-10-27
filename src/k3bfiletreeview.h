@@ -51,23 +51,12 @@ class K3bDeviceBranch : public KFileTreeBranch
    */
   void showBlockDeviceName( bool b );
 
- signals:
-  /**
-   * mountPoint is empty if not successful
-   */
-  void mountFinished( K3bDeviceBranch*, const QString& mountPoint );
-  void unmountFinished( K3bDeviceBranch*, bool success );
-
  public slots:
-  void mount();
-  void unmount();
-
   void setCurrent( bool );
 
   bool populate( const KURL& url,  KFileTreeViewItem *currItem );
 
  private slots:
-  void slotMountFinished( KIO::Job* );
   void slotMediumChanged( K3bDevice::Device* );
 
  private:
@@ -181,9 +170,6 @@ class K3bFileTreeView : public KFileTreeView
   void contextMenu( K3bDevice::Device*, const QPoint& );
   /** only gets emitted if the menu is disabled */
   void contextMenu( const KURL& url, const QPoint& );
-
-  void mountFinished( K3bDeviceBranch*, const QString& mountPoint );
-  void unmountFinished( K3bDeviceBranch*, bool success );
   
  private slots:
   void slotItemExecuted( QListViewItem* item );

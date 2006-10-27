@@ -17,6 +17,7 @@
 
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
+#include <k3bglobals.h>
 
 #include <kaction.h>
 #include <kinputdialog.h>
@@ -25,6 +26,7 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <kio/global.h>
+#include <kpopupmenu.h>
 
 
 K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
@@ -48,10 +50,10 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
 					m_actionCollection, "device_eject");
   KAction* actionLoad = new KAction( i18n("L&oad"), "", 0, this, SLOT(loadDisk()),
 					m_actionCollection, "device_load");
-  KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
-				       m_actionCollection, "device_unlock" );
-  KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
-				     m_actionCollection, "device_lock" );
+//   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
+// 				       m_actionCollection, "device_unlock" );
+//   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
+// 				     m_actionCollection, "device_lock" );
   KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(setReadSpeed()),
 					     m_actionCollection, "device_set_read_speed" );
 
@@ -67,6 +69,9 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
 //  devicePopupMenu->insert( actionlock );
   devicePopupMenu->insert( new KActionSeparator( this ) );
   devicePopupMenu->insert( actionSetReadSpeed );
+
+  connect( devicePopupMenu->popupMenu(), SIGNAL(aboutToShow()),
+	   this, SLOT(slotMenuActivated()) );
 }
 
 
@@ -113,13 +118,18 @@ K3bAppDeviceManager::~K3bAppDeviceManager()
 }
 
 
+void K3bAppDeviceManager::slotMenuActivated()
+{
+  bool mounted = K3b::isMounted( currentDevice() );
+  actionCollection()->action( "device_mount" )->setEnabled( !mounted );
+  actionCollection()->action( "device_unmount" )->setEnabled( mounted );
+}
+
+
 void K3bAppDeviceManager::setCurrentDevice( K3bDevice::Device* dev )
 {
   if( dev && dev != m_currentDevice ) {
     m_currentDevice = dev;
-#warning FIXME
-//     actionCollection()->action( "device_mount" )->setEnabled( !dev->automount() );
-//     actionCollection()->action( "device_unmount" )->setEnabled( !dev->automount() );
     emit currentDeviceChanged( dev );
   }
 }
@@ -149,75 +159,29 @@ void K3bAppDeviceManager::lockDevice()
 
 void K3bAppDeviceManager::mountDisk()
 {
-#warning FIXME
-//   if( currentDevice() ) {
-//     if( !currentDevice()->mountPoint().isEmpty() ) {
-//       QString mp = KIO::findDeviceMountPoint( currentDevice()->mountDevice() );
-//       if( mp.isEmpty() )
-// 	connect( KIO::mount( true, 0, currentDevice()->mountDevice(), currentDevice()->mountPoint(), false ), 
-// 		 SIGNAL(result(KIO::Job*)),
-// 		 this, 
-// 		 SLOT(slotMountFinished(KIO::Job*)) );
-//       else {
-// 	emit mountFinished( mp );
-//       }
-//     }
-//     else
-//       emit mountFinished( QString::null );
-//   }
-}
-
-
-void K3bAppDeviceManager::slotMountFinished( KIO::Job* job )
-{
-#warning FIXME
-//   if( job->error() ) {
-//     emit mountFinished( QString::null );
-//   }
-//   else {
-//     emit mountFinished( currentDevice()->mountPoint() );
-//   }
+  // FIXME: make this non-blocking
+  if( !K3b::isMounted( currentDevice() ) )
+    K3b::mount( currentDevice() );
+  
+  emit mountFinished( KIO::findDeviceMountPoint( currentDevice()->blockDeviceName() ) );
 }
 
 
 void K3bAppDeviceManager::unmountDisk()
 {
-#warning FIXME
-//   if( currentDevice() ) {
-//     QString mp = KIO::findDeviceMountPoint( currentDevice()->mountDevice() );
-//     if( mp.isEmpty() ) {
-//       if( m_ejectRequested ) {
-// 	m_ejectRequested = false;
-// 	K3bDevice::eject( currentDevice() );
-//       }
-//       else
-// 	emit unmountFinished( true );   
-//     }
-//     else {
-//       connect( KIO::unmount( currentDevice()->mountPoint(), false ), SIGNAL(result(KIO::Job*)),
-// 	       this, SLOT(slotUnmountFinished(KIO::Job*)) );
-//     }
-//   }
-//   else
-//     m_ejectRequested = false;
-}
-
-
-void K3bAppDeviceManager::slotUnmountFinished( KIO::Job* job )
-{
-  if( m_ejectRequested ) {
-    m_ejectRequested = false;
-    K3bDevice::eject( currentDevice() ); // just ignore errors here
-  }
+  // FIXME: make this non-blocking
+  if( K3b::isMounted( currentDevice() ) )
+    emit unmountFinished( K3b::unmount( currentDevice() ) );
   else
-    emit unmountFinished( job->error() );
+    emit unmountFinished( true );
 }
 
 
 void K3bAppDeviceManager::ejectDisk()
 {
-  m_ejectRequested = true;
+  // FIXME: make this non-blocking
   unmountDisk();
+  K3bDevice::eject( currentDevice() ); // just ignore errors here
 }
 
 

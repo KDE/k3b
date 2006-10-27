@@ -510,12 +510,18 @@ QString K3b::findExe( const QString& name )
 
 bool K3b::isMounted( K3bDevice::Device* dev )
 {
+  if( !dev )
+    return false;
+
   return !KIO::findDeviceMountPoint( dev->blockDeviceName() ).isEmpty();
 }
 
 
 bool K3b::unmount( K3bDevice::Device* dev )
 {
+  if( !dev )
+    return false;
+
   QString mntDev = dev->blockDeviceName();
 
 #if KDE_IS_VERSION(3,4,0)
@@ -552,4 +558,27 @@ bool K3b::unmount( K3bDevice::Device* dev )
     return false;
 #endif
   }
+}
+
+
+bool K3b::mount( K3bDevice::Device* dev )
+{
+  if( !dev )
+    return false;
+
+#ifdef HAVE_HAL
+  if( !K3bDevice::HalConnection::instance()->mount( dev ) )
+    return true;
+#endif
+
+  // now try pmount
+  QString pmountBin = K3b::findExe( "pmount" );
+  if( !pmountBin.isEmpty() ) {
+    KProcess p;
+    p << pmountBin;
+    p << dev->blockDeviceName();
+    p.start( KProcess::Block );
+    return !p.exitStatus();
+  }
+  return false;
 }
