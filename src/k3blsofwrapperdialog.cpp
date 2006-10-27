@@ -23,6 +23,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include <qpushbutton.h>
+
 #include <sys/types.h>
 #include <signal.h>
 
