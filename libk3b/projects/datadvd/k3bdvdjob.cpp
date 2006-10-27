@@ -147,7 +147,7 @@ K3bDataDoc::MultiSessionMode K3bDvdJob::getMultiSessionMode( const K3bDevice::Di
     //
     if( m_doc->size() > info.remainingSize().mode1Bytes() && !m_doc->sessionImported() )
       mode = K3bDataDoc::NONE;
-    else if( info.size() + m_doc->burningSize() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ )
+    else if( info.size() + m_doc->burningLength() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ )
       mode = K3bDataDoc::FINISH;
     else
       mode = K3bDataDoc::CONTINUE;
@@ -156,7 +156,7 @@ K3bDataDoc::MultiSessionMode K3bDvdJob::getMultiSessionMode( const K3bDevice::Di
     //
     // We only close the DVD if the project fills it beyond the 4GB boundary
     //
-    if( info.size() + m_doc->burningSize() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ||
+    if( info.size() + m_doc->burningLength() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ||
 	m_doc->writingMode() == K3b::DAO )
       mode = K3bDataDoc::NONE;
     else
