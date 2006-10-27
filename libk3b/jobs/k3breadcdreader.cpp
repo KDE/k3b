@@ -183,6 +183,9 @@ void K3bReadcdReader::start()
   if( d->firstSector < d->lastSector )
     *d->process << QString("sectors=%1-%2").arg(d->firstSector.lba()).arg(d->lastSector.lba()+1);
 
+  // Joerg sais it is a Linux kernel bug, anyway, with the default value it does not work
+  *d->process << "ts=128k";
+
   // additional user parameters from config
   const QStringList& params = d->readcdBinObject->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
