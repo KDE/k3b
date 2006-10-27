@@ -480,7 +480,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       emit infoMessage( i18n("Reloading of medium required"), K3bJob::INFO );
     }
     else if( errStr.startsWith( "The current problem looks like a buffer underrun" ) ) {
-      m_cdrecordError = BUFFER_UNDERRUN;
+      if( m_cdrecordError == UNKNOWN ) // it is almost never a buffer underrun these days.
+	m_cdrecordError = BUFFER_UNDERRUN;
     }
     else if( errStr.startsWith("WARNING: Data may not fit") ) {
       bool overburn = k3bcore->globalSettings()->overburn();
