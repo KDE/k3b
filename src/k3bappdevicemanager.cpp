@@ -121,7 +121,8 @@ K3bAppDeviceManager::~K3bAppDeviceManager()
 void K3bAppDeviceManager::slotMenuActivated()
 {
   bool mounted = K3b::isMounted( currentDevice() );
-  actionCollection()->action( "device_mount" )->setEnabled( !mounted );
+  bool mediumMountable = k3bappcore->mediaCache()->medium( currentDevice() ).content() & K3bMedium::CONTENT_DATA;
+  actionCollection()->action( "device_mount" )->setEnabled( !mounted && mediumMountable );
   actionCollection()->action( "device_unmount" )->setEnabled( mounted );
 }
 
