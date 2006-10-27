@@ -313,6 +313,11 @@ void K3bDvdFormattingJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* d
 
 void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
 {
+  if( K3b::isMounted( d->device ) ) {
+    emit infoMessage( i18n("Unmounting medium"), INFO );
+    K3b::unmount( d->device );
+  }
+
   //
   // Now check the media type:
   // if DVD-RW: use d->mode

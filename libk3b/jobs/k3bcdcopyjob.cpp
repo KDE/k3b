@@ -325,6 +325,11 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     }
 
     if( canCopy ) {
+      if( K3b::isMounted( m_readerDevice ) ) {
+	emit infoMessage( i18n("Unmounting source medium"), INFO );
+	K3b::unmount( m_readerDevice );
+      }
+
       d->overallSize = 0;
 
       // now create some progress helper values

@@ -23,6 +23,7 @@
 #include <k3bdeviceglobals.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bcore.h>
+#include <k3bhalconnection.h>
 
 #include <kdeversion.h>
 #include <kglobal.h>
@@ -545,6 +546,10 @@ bool K3b::unmount( K3bDevice::Device* dev )
     return !p.exitStatus();
   }
   else {
+#ifdef HAVE_HAL
+    return !K3bDevice::HalConnection::instance()->unmount( dev );
+#else
     return false;
+#endif
   }
 }

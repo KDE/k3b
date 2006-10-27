@@ -318,6 +318,10 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       }
     }
 
+    if( K3b::isMounted( m_readerDevice ) ) {
+      emit infoMessage( i18n("Unmounting source medium"), INFO );
+      K3b::unmount( m_readerDevice );
+    }
 
     if( m_onlyCreateImage || !m_onTheFly ) {
       emit newTask( i18n("Creating DVD image") );
