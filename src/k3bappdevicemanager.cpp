@@ -18,6 +18,8 @@
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
 #include <k3bglobals.h>
+#include <k3bapplication.h>
+#include <k3bmediacache.h>
 
 #include <kaction.h>
 #include <kinputdialog.h>
