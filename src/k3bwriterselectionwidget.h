@@ -120,6 +120,7 @@ class K3bWriterSelectionWidget : public QWidget
   void slotSpeedChanged( int index );
   void slotWriterChanged();
   void slotNewBurnMedium( K3bDevice::Device* dev );
+  void slotManualSpeed();
 
  private:
   void clearSpeedCombo();
