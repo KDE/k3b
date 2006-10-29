@@ -142,8 +142,7 @@ void K3bApplication::init()
 
     emit initializationDone();
 
-    config()->setGroup( "General Options" );
-    if( config()->readBoolEntry( "check system config", true ) ) {
+    if( K3bSystemProblemDialog::readCheckSystemConfig() ) {
       emit initializationInfo( i18n("Checking System") );
       K3bSystemProblemDialog::checkSystem();
     }
@@ -389,13 +388,11 @@ void K3bApplication::Core::readSettings( KConfig* cnf )
 
 void K3bApplication::Core::saveSettings( KConfig* cnf )
 {
+  if( !cnf )
+    cnf = config();
+
   K3bCore::saveSettings( cnf );
-
-  KConfig* c = cnf;
-  if( !c )
-    c = config();
-
-  m_themeManager->saveConfig( config() );
+  m_themeManager->saveConfig( cnf );
 }
 
 
@@ -425,6 +422,7 @@ bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
     //
     // Check if the device is in use
     //
+    // FIXME: Use the top level widget as parent
     K3bLsofWrapperDialog::checkDevice( dev );
 
     return true;

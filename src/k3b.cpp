@@ -583,6 +583,8 @@ void K3bMainWindow::saveOptions()
   m_config->writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
   actionFileOpenRecent->saveEntries( m_config, "Recent Files" );
 
+  m_config->writeEntry( "config version", k3bcore->version() );
+
   // save dock positions!
   manager()->writeConfig( m_config, "Docking Config" );
 

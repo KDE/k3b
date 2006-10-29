@@ -53,11 +53,30 @@ class K3bSystemProblem
 };
 
 
+/**
+ * The K3bSystemProblem checks for problems with the system setup
+ * that could prevent K3b from funcioning properly. Examples are
+ * missing external appplications like cdrecord or versions of 
+ * external applications that are too old.
+ *
+ * Usage:
+ * <pre>
+ * if( K3bSystemProblemDialog::readCheckSystemConfig() )
+ *    K3bSystemProblemDialog::checkSystem( this );
+ * </pre>
+ */
 class K3bSystemProblemDialog : public KDialog
 {
   Q_OBJECT
 
  public:
+  /**
+   * Determines if the system problem dialog should be shown or not.
+   * It basicly reads a config entry. But in addition it
+   * always forces the system check if a new version has been installed
+   * or K3b is started for the first time.
+   */
+  static bool readCheckSystemConfig();
   static void checkSystem( QWidget* parent = 0, 
 			   const char* name = 0 );
 

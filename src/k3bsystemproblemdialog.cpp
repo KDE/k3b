@@ -551,6 +551,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   else {
     K3bSystemProblemDialog( problems, parent, name ).exec();
   }
+
+  // remember which version of K3b checked the system the last time
+  KConfigGroup( k3bcore->config(), "General Options" ).writeEntry( "Last system check version", k3bcore->version() );
 }
 
 void K3bSystemProblemDialog::slotK3bSetup()
@@ -587,6 +590,18 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
     return 0;
   else
     return -1;
+}
+
+
+bool K3bSystemProblemDialog::readCheckSystemConfig()
+{
+  KConfigGroup cfgGrp( k3bcore->config(), "General Options" );
+
+  K3bVersion configVersion( cfgGrp.readEntry( "Last system check version", "0.1" ) );
+  if( configVersion < k3bcore->version() )
+    cfgGrp.writeEntry( "check system config", true );
+
+  return cfgGrp.readBoolEntry( "check system config", true );
 }
 
 #include "k3bsystemproblemdialog.moc"
