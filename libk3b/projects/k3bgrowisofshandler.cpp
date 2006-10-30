@@ -257,7 +257,8 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
   case ERROR_MEMLOCK:
     emit infoMessage( i18n("Unable to allocate software buffer."), K3bJob::ERROR );
     emit infoMessage( i18n("This error is caused by the low memorylocked resource limit."), K3bJob::ERROR );
-    emit infoMessage( i18n("Please remove the suid root bit on the growisofs permissions for now."), K3bJob::ERROR );
+    emit infoMessage( i18n("It can be solved by issuing the command 'ulimit -l unlimited'..."), K3bJob::ERROR );
+    emit infoMessage( i18n("...or by lowering the used software buffer size in the advanced K3b settings."), K3bJob::ERROR );
     break;
 
   default:
