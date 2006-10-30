@@ -34,6 +34,7 @@
 #include <qpainter.h>
 #include <qfontmetrics.h>
 #include <qtimer.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -244,12 +245,12 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
     return;
 
   // determine K3bDirItem to add the items to
-  m_addParentDir = 0;
+  m_addParentDir = currentDir();
+
   if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) ) ) {
-    m_addParentDir = dirViewItem->dirItem();
-  }
-  else {
-    m_addParentDir = currentDir();
+  // only add to a dir if we drop directly on the name
+    if( header()->sectionAt( e->pos().x() ) == 0 )
+      m_addParentDir = dirViewItem->dirItem();
   }
 
   if( m_addParentDir ) {
