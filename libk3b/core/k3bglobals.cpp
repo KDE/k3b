@@ -359,7 +359,7 @@ QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExtern
   //
   // experimental: always use block devices on 2.6 kernels
   //
-  if( 0 && simpleKernelVersion() >= K3bVersion( 2, 6, 0 ) )
+  if( simpleKernelVersion() >= K3bVersion( 2, 6, 0 ) )
     return dev->blockDeviceName();
   else if( dev->interfaceType() == K3bDevice::SCSI )
     return dev->busTargetLun();
