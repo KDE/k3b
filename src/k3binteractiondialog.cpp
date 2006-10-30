@@ -25,7 +25,6 @@
 #include <k3btoolbutton.h>
 
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -110,7 +109,12 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, spacingHint(), "layout5");
 
   if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new KPushButton( KStdGuiItem::close(), this, "m_buttonCancel" );
+    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
+				      .readBoolEntry( "keep action dialogs open", false ) 
+				      ? KStdGuiItem::close() 
+				      : KStdGuiItem::cancel(), 
+				      this, 
+				      "m_buttonCancel" );
     layout5->addWidget( m_buttonCancel );
   }
   else
@@ -123,8 +127,11 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_buttonSave = 0;
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStdGuiItem::ok();
-    startItem.setText( i18n("Start") );
     m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
+    // refine the button text
+    setButtonText( START_BUTTON,
+		   i18n("Start"),
+		   i18n("Start the task") );
     QFont fnt( m_buttonStart->font() );
     fnt.setBold(true);
     m_buttonStart->setFont( fnt );
@@ -153,7 +160,7 @@ K3bInteractionDialog::~K3bInteractionDialog()
 void K3bInteractionDialog::show()
 {
   KDialog::show();
-  if( QPushButton* b = getButton( m_defaultButton ) )
+  if( KPushButton* b = getButton( m_defaultButton ) )
     b->setFocus();
 }
 
@@ -303,15 +310,15 @@ void K3bInteractionDialog::setDefaultButton( int button )
   m_defaultButton = button;
 
   // reset all other default buttons
-  if( QPushButton* b = getButton( START_BUTTON ) )
+  if( KPushButton* b = getButton( START_BUTTON ) )
     b->setDefault( true ); 
-  if( QPushButton* b = getButton( SAVE_BUTTON ) )
+  if( KPushButton* b = getButton( SAVE_BUTTON ) )
     b->setDefault( true ); 
-  if( QPushButton* b = getButton( CANCEL_BUTTON ) )
+  if( KPushButton* b = getButton( CANCEL_BUTTON ) )
     b->setDefault( true ); 
 
   // set the selected default
-  if( QPushButton* b = getButton( button ) )
+  if( KPushButton* b = getButton( button ) )
     b->setDefault( true ); 
 }
 
@@ -355,7 +362,7 @@ bool K3bInteractionDialog::eventFilter( QObject* o, QEvent* ev )
 }
 
 
-QPushButton* K3bInteractionDialog::getButton( int button )
+KPushButton* K3bInteractionDialog::getButton( int button )
 {
   switch( button ) {
   case START_BUTTON:
@@ -370,12 +377,20 @@ QPushButton* K3bInteractionDialog::getButton( int button )
 }
 
 
+void K3bInteractionDialog::setButtonGui( int button,
+					 const KGuiItem& item )
+{
+  if( KPushButton* b = getButton( button ) )
+    b->setGuiItem( item );
+}
+
+
 void K3bInteractionDialog::setButtonText( int button,
 					  const QString& text, 
 					  const QString& tooltip, 
 					  const QString& whatsthis )
 {
-  if( QPushButton* b = getButton( button ) ) {
+  if( KPushButton* b = getButton( button ) ) {
     b->setText( text );
     QToolTip::remove( b );
     QWhatsThis::remove( b );
@@ -387,7 +402,7 @@ void K3bInteractionDialog::setButtonText( int button,
 
 void K3bInteractionDialog::setButtonEnabled( int button, bool enabled )
 {
-  if( QPushButton* b = getButton( button ) ) {
+  if( KPushButton* b = getButton( button ) ) {
     b->setEnabled( enabled );
     // make sure the correct button is selected as default again
     setDefaultButton( m_defaultButton );
@@ -397,7 +412,7 @@ void K3bInteractionDialog::setButtonEnabled( int button, bool enabled )
 
 void K3bInteractionDialog::setButtonShown( int button, bool shown )
 {
-  if( QPushButton* b = getButton( button ) ) {
+  if( KPushButton* b = getButton( button ) ) {
     b->setShown( shown );
     // make sure the correct button is selected as default again
     setDefaultButton( m_defaultButton );

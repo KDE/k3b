@@ -47,9 +47,6 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 			  "DVD Formatting", // config group
 			  modal )
 {
-  setCancelButtonText( i18n("Close") );
-
-
   QWidget* frame = mainWidget();
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );

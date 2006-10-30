@@ -78,7 +78,6 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   d = new Private();
   d->debugDialog = new K3bDebuggingOutputDialog( this );
 
-  setCancelButtonText( i18n("Close") );
   setupGui();
 
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );

@@ -69,9 +69,17 @@ K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const 
    */
   setDelayedInitialization( true );
 
-  setSaveButtonText( i18n("Save"), i18n("Save Settings and close"),
-		     i18n("Saves the settings to the project and closes the burn dialog.") );
-  setStartButtonText( i18n("Burn") );
+  setButtonGui( SAVE_BUTTON,
+		KStdGuiItem::close() );
+  setButtonText( SAVE_BUTTON,
+		i18n("Close"), 
+		i18n("Save Settings and close"),
+		i18n("Saves the settings to the project and closes the dialog.") );
+  setButtonGui( CANCEL_BUTTON, KStdGuiItem::cancel() );
+  setButtonText( CANCEL_BUTTON, 
+		 i18n("Cancel"),
+		 i18n("Discard all changes and close"),
+		 i18n("Discards all changes made in the dialog and closes it.") );
 
   m_job = 0;
 }
@@ -141,6 +149,14 @@ void K3bProjectBurnDialog::toggleAll()
     if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
       m_writingModeWidget->setSupportedModes( K3b::DAO );
   }
+
+  if( m_checkOnlyCreateImage->isChecked() )
+    setButtonText( START_BUTTON, 
+		   i18n("Start"),
+		   i18n("Start the image creation") );
+  else
+    setButtonText( START_BUTTON, i18n("Burn"),
+		   i18n("Start the burning process") );
 }
 
 

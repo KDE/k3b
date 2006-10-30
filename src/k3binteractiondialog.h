@@ -21,10 +21,11 @@
 
 class QGridLayout;
 class QLabel;
-class QPushButton;
+class KPushButton;
 class QButton;
 class K3bThemedHeader;
 class KConfigBase;
+class KGuiItem;
 
 
 /**
@@ -148,6 +149,9 @@ class K3bInteractionDialog : public KDialog
 			  const QString& tooltip = QString::null, 
 			  const QString& whatsthis = QString::null );
 
+  void setButtonGui( int button,
+		     const KGuiItem& );
+
   void setButtonText( int button,
 		      const QString& text, 
 		      const QString& tooltip = QString::null, 
@@ -244,12 +248,12 @@ class K3bInteractionDialog : public KDialog
   void initToolTipsAndWhatsThis();
   void saveLastSettings();
 
-  QPushButton* getButton( int );
+  KPushButton* getButton( int );
 
   K3bThemedHeader* m_dialogHeader;
-  QPushButton* m_buttonStart;
-  QPushButton* m_buttonSave;
-  QPushButton* m_buttonCancel;
+  KPushButton* m_buttonStart;
+  KPushButton* m_buttonSave;
+  KPushButton* m_buttonCancel;
   QWidget* m_mainWidget;
 
   QButton* m_buttonK3bDefaults;

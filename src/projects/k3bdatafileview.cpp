@@ -248,7 +248,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
   m_addParentDir = currentDir();
 
   if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>( itemAt(contentsToViewport(e->pos())) ) ) {
-  // only add to a dir if we drop directly on the name
+    // only add to a dir if we drop directly on the name
     if( header()->sectionAt( e->pos().x() ) == 0 )
       m_addParentDir = dirViewItem->dirItem();
   }
