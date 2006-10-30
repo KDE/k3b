@@ -301,6 +301,8 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       }
     }
     else {
+      if( m_isoImager->hasBeenCanceled() )
+	emit canceled();
       jobFinished( false );
     }
   }

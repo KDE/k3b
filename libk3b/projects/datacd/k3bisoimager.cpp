@@ -20,6 +20,7 @@
 #include "k3bdiritem.h"
 #include "k3bbootitem.h"
 #include "k3bdatadoc.h"
+#include "k3bdatapreparationjob.h"
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
 #include <k3bprocess.h>
@@ -41,6 +42,7 @@
 #include <qregexp.h>
 #include <qdir.h>
 #include <qapplication.h>
+#include <qvaluestack.h>
 
 #include <errno.h>
 #include <string.h>
@@ -72,6 +74,7 @@ public:
   bool knownError;
 
   K3bChecksumPipe checksumPipe;
+  K3bDataPreparationJob* dataPreparationJob;
 };
 
 
@@ -91,6 +94,10 @@ K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent
     m_fdToWriteTo(-1)
 {
   d = new Private();
+  d->dataPreparationJob = new K3bDataPreparationJob( doc, this, this );
+  connectSubJob( d->dataPreparationJob,
+		 SLOT(slotDataPreparationDone(bool)),
+		 DEFAULT_SIGNAL_CONNECTION );
 }
 
 
@@ -244,66 +251,26 @@ void K3bIsoImager::init()
 
   cleanup();
 
-  m_doc->prepareFilenames();
-  if( m_doc->needToCutFilenames() ) {
-    QString listOfRenamedItems;
-    int maxlines = 10;
-    QValueList<K3bDataItem*>::const_iterator it;
-    for( it = m_doc->needToCutFilenameItems().begin(); 
-	 maxlines > 0 && it != m_doc->needToCutFilenameItems().end();
-	 ++it, --maxlines ) {
-      K3bDataItem* item = *it;
-      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
-	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
-	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
-      listOfRenamedItems += "<br>";
-    }
-    if( it != m_doc->needToCutFilenameItems().end() )
-      listOfRenamedItems += "...";
+  d->dataPreparationJob->start();
+}
 
-    if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
-				     "of the Joliet extensions. If the Joliet extensions are disabled filenames "
-				     "do not have to be shortened but long filenames will not be available on "
-				     "Windows systems.")
-			.arg( m_doc->isoOptions().jolietLong() ? 103 : 64 )
-			+ "<p>" + listOfRenamedItems,
-			i18n("Warning"),
-			i18n("Shorten Filenames"),
-			i18n("Disable Joliet extensions") ) ) {
-      // No -> disable joliet
-      // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
-      K3bIsoOptions op = m_doc->isoOptions();
-      op.setCreateJoliet( false );
-      op.setCreateRockRidge( true );
-      m_doc->setIsoOptions( op );
-      m_doc->prepareFilenames();
-    }
+
+void K3bIsoImager::slotDataPreparationDone( bool success )
+{
+  if( success ) {
+    //
+    // We always calculate the image size. It does not take long and at least the mixed job needs it
+    // anyway
+    //
+    startSizeCalculation();
   }
-
-  //
-  // The joliet extension encodes the volume desc in UCS-2, i.e. uses 16 bit for each char.
-  // Thus, the max length here is 16.
-  //
-  if( m_doc->isoOptions().createJoliet() &&
-      m_doc->isoOptions().volumeID().length() > 16 ) {
-    if( !questionYesNo( "<p>" + i18n("The Joliet extensions (which are needed for long filenames on Windows systems) "
-				     "restrict the length of the volume descriptior (the name of the filesystem) "
-				     "to %1 characters. The selected descriptor '%2' is longer than that. Do you "
-				     "want it to be cut or do you want to go back and change it manually?")
-			.arg( 16 ).arg( m_doc->isoOptions().volumeID() ),
-			i18n("Warning"),
-			i18n("Cut volume descriptor in the Joliet tree"),
-			i18n("Cancel and go back") ) ) {
-      jobFinished( false );
-      return;
+  else {
+    if( d->dataPreparationJob->hasBeenCanceled() ) {
+      m_canceled = true;
+      emit canceled();
     }
+    jobFinished( false );
   }
-
-  //
-  // We always calculate the image size. It does not take long and at least the mixed job needs it
-  // anyway
-  //
-  startSizeCalculation();
 }
 
 
@@ -408,6 +375,12 @@ void K3bIsoImager::slotCollectMkisofsPrintSizeStdout( const QString& line )
 
 void K3bIsoImager::slotMkisofsPrintSizeFinished()
 {
+  if( m_canceled ) {
+    emit canceled();
+    jobFinished( false );
+    return;
+  }
+
   bool success = true;
 
   // if m_collectedMkisofsPrintSizeStdout is not empty we have a recent version of
@@ -797,7 +770,7 @@ int K3bIsoImager::writePathSpec()
 
 int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
-  if( dirItem->depth() > 7 ) {
+  if( !m_noDeepDirectoryRelocation && dirItem->depth() > 7 ) {
     kdDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
     m_noDeepDirectoryRelocation = true;
   }
@@ -1163,6 +1136,12 @@ void K3bIsoImager::clearDummyDirs()
 QCString K3bIsoImager::checksum() const
 {
   return d->checksumPipe.checksum();
+}
+
+
+bool K3bIsoImager::hasBeenCanceled() const
+{
+  return m_canceled;
 }
 
 #include "k3bisoimager.moc"

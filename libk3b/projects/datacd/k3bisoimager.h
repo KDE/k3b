@@ -45,6 +45,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
   int size() const { return m_mkisofsPrintSizeResult; }
 
+  virtual bool hasBeenCanceled() const; 
+
   /**
    * Get the checksum calculated during the creation of the image.
    */
@@ -149,6 +151,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   void slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int);
   void slotCollectMkisofsPrintSizeStdout( const QString& );
   void slotMkisofsPrintSizeFinished();
+  void slotDataPreparationDone( bool success );
 
  private:
   void startSizeCalculation();
