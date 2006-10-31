@@ -191,7 +191,7 @@ KIO::filesize_t K3b::Msf::audioBytes() const
 
 KIO::filesize_t K3b::Msf::rawBytes() const
 {
-  return audioBytes();
+  return (KIO::filesize_t)2448 * ( (KIO::filesize_t)lba() );
 }
 
 void K3b::Msf::makeValid()
