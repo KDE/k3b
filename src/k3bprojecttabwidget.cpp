@@ -32,6 +32,28 @@
 #include <qtabbar.h>
 
 
+class K3bProjectTabWidget::ProjectData
+{
+public:
+  ProjectData()
+    : doc(0),
+      modified(false) {
+  }
+
+  ProjectData( K3bDoc* doc_ )
+    : doc(doc_),
+      modified(false) {
+  }
+
+  // the project
+  K3bDoc* doc;
+
+  // is the project marked modified here
+  bool modified;
+};
+
+
+
 K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, WFlags f )
   : QTabWidget( parent, name, f )
 {
@@ -101,6 +123,9 @@ void K3bProjectTabWidget::insertTab( K3bDoc* doc )
   QTabWidget::insertTab( doc->view(), doc->URL().fileName() );
   connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
   connect( doc, SIGNAL(changed(K3bDoc*)), this, SLOT(slotDocChanged(K3bDoc*)) );
+
+  m_projectDataMap[doc] = ProjectData( doc );
+
   if( doc->isModified() )
     slotDocChanged( doc );
   else
@@ -116,14 +141,18 @@ void K3bProjectTabWidget::insertAction( KAction* action )
 
 void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 {
-  setTabIconSet( doc->view(), SmallIconSet( "filesave" ) );
-  changeTab( doc->view(), doc->URL().fileName() );
+  // we need to cache the icon changes since the changed() signal will be emitted very often
+  if( !m_projectDataMap[doc].modified ) {
+    setTabIconSet( doc->view(), SmallIconSet( "filesave" ) );
+    m_projectDataMap[doc].modified = true;
+  }
 }
 
 
 void K3bProjectTabWidget::slotDocSaved( K3bDoc* doc )
 {
   setTabIconSet( doc->view(), QIconSet() );
+  changeTab( doc->view(), doc->URL().fileName() );
 }
 
 

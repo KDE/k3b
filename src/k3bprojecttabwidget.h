@@ -70,6 +70,9 @@ class K3bProjectTabWidget : public QTabWidget
 
  private:
   KActionMenu* m_projectActionMenu;
+
+  class ProjectData;
+  QMap<K3bDoc*, ProjectData> m_projectDataMap;
 };
 
 #endif
