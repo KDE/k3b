@@ -19,6 +19,7 @@
 #include "k3bclonetocreader.h"
 
 #include <k3bdeviceglobals.h>
+#include <k3bglobals.h>
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -26,16 +27,35 @@
 #include <kdebug.h>
 
 
+class K3bCloneTocReader::Private
+{
+public:
+  Private()
+    : size(0) {
+  }
+
+  K3b::Msf size;
+};
+
+
 
 K3bCloneTocReader::K3bCloneTocReader( const QString& filename )
   : K3bImageFileReader()
 {
+  d = new Private;
   openFile( filename );
 }
 
 
 K3bCloneTocReader::~K3bCloneTocReader()
 {
+  delete d;
+}
+
+
+const K3b::Msf& K3bCloneTocReader::imageSize() const
+{
+  return d->size;
 }
 
 
@@ -54,6 +74,8 @@ void K3bCloneTocReader::readFile()
   }
 
   setImageFilename( imageFileName );
+
+  d->size = 0;
 
   QFile f( filename() );
   if( f.open( IO_ReadOnly ) ) {
@@ -78,7 +100,6 @@ void K3bCloneTocReader::readFile()
 
     struct tocheader* th = (struct tocheader*)buffer;
     int dataLen = K3bDevice::from2Byte( th->len ) + 2;  // the len field does not include it's own length
-    kdDebug() << "(K3bCloneTocReader) dataLen+2 = " << dataLen << endl;
 
     if( th->first != 1 ) {
       kdDebug() << "(K3bCloneTocReader) first session != 1" << endl;
@@ -174,6 +195,12 @@ void K3bCloneTocReader::readFile()
 	    return;
 	  }
 
+	  // start of the leadout = size of the image
+	  // substract 2 seconds since in cdrecord other than in K3b lba 0 = msf 2:00
+	  // (the cdrecord way is actually more accurate but we use k3b::Msf for many
+	  // things and it is simpler this way.)
+	  d->size = K3b::Msf( ft->pmin, ft->psec, ft->pframe ) - K3b::Msf( 0, 2, 0 );
+
 	  // leadout... no check so far...
 	  break;
 
@@ -185,6 +212,13 @@ void K3bCloneTocReader::readFile()
 	  break;
 	}
       }
+    }
+
+    kdDebug() << "(K3bCloneTocReader) image size: " << d->size.rawBytes() << " (" << d->size.toString() << ")" << endl;
+
+    if( d->size.rawBytes() != K3b::filesize( imageFileName ) ) {
+      kdDebug() << "(K3bCloneTocReader) image file size invalid." << endl;
+      return;
     }
     
     // ok, could be a cdrecord toc file

@@ -97,7 +97,8 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 		       HIGH_SPEED_MEDIUM,
 		       LOW_SPEED_MEDIUM,
 		       MEDIUM_ERROR,
-		       DEVICE_BUSY };
+		       DEVICE_BUSY,
+		       BLANK_FAILED };
 
   QStringList m_arguments;
 

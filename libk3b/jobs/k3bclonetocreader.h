@@ -17,7 +17,11 @@
 #define _K3B_CLONETOC_FILE_PARSER_H_
 
 #include "k3bimagefilereader.h"
+
+#include <k3bmsf.h>
+
 #include "k3b_export.h"
+
 
 /**
  * Reads a cdrecord clone toc file and searches for the 
@@ -29,8 +33,13 @@ class LIBK3B_EXPORT  K3bCloneTocReader : public K3bImageFileReader
   K3bCloneTocReader( const QString& filename = QString::null );
   ~K3bCloneTocReader();
 
+  const K3b::Msf& imageSize() const;
+
  protected:
   void readFile();
+
+  class Private;
+  Private* d;
 };
 
 #endif

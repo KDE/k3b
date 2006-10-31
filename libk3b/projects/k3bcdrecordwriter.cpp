@@ -530,6 +530,9 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr == "A write error occurred." ) {
       m_cdrecordError = WRITE_ERROR;
     }
+    else if( errStr.startsWith( "Try again with cdrecord blank=all." ) ) {
+      m_cdrecordError = BLANK_FAILED;
+    }
   }
 
   //
@@ -736,6 +739,10 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	emit infoMessage( i18n("A write error occurred."), ERROR );
 	if( m_writingMode == K3b::DAO )
 	  emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
+	break;
+      case BLANK_FAILED:
+	emit infoMessage( i18n("Some drives do not support all erase types."), ERROR );
+	emit infoMessage( i18n("Try again using 'Complete' erasing."), ERROR );
 	break;
       case UNKNOWN:
 	if( p->exitStatus() == 12 && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {

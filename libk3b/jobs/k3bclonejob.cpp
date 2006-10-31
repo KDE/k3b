@@ -22,6 +22,7 @@
 #include <k3bdevicehandler.h>
 #include <k3bglobals.h>
 #include <k3bcore.h>
+#include <k3bclonetocreader.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -276,13 +277,27 @@ void K3bCloneJob::slotReadingFinished( bool success )
   }
 
   if( success ) {
-    emit infoMessage( i18n("Successfully read disk."), INFO );
-    if( m_onlyCreateImage )
-      jobFinished(true);
+    //
+    // Make a quick test if the image is really valid.
+    // Readcd does not seem to have proper exit codes
+    //
+    K3bCloneTocReader ctr( m_imagePath );
+    if( ctr.isValid() ) {
+      emit infoMessage( i18n("Successfully read disk."), INFO );
+      if( m_onlyCreateImage ) {
+	m_running = false;
+	jobFinished(true);
+      }
+      else {
+	if( writer() == readingDevice() )
+	  K3bDevice::eject( writer() );
+	startWriting();
+      }
+    }
     else {
-      if( writer() == readingDevice() )
-	K3bDevice::eject( writer() );
-      startWriting();
+      emit infoMessage( i18n("Failed to read disk completely in clone mode."), ERROR );
+      m_running = false;
+      jobFinished(false);
     }
   }
   else {
