@@ -22,7 +22,32 @@
 #include <k3bdevice.h>
 #include <k3biso9660.h>
 
+#include <ksharedptr.h>
 
+
+/**
+ * Internal class used by K3bMedium
+ */
+class K3bMediumData : public KShared
+{
+public:
+  K3bMediumData();
+
+  K3bDevice::Device* device;
+  K3bDevice::DiskInfo diskInfo;
+  K3bDevice::Toc toc;
+  K3bDevice::CdText cdText;
+  QValueList<int> writingSpeeds;
+  K3bIso9660SimplePrimaryDescriptor isoDesc;
+  int content;
+};
+
+
+/**
+ * K3bMedium represents a medium in K3b.
+ *
+ * It is implicetely shared, thus copying is very fast.
+ */
 class K3bMedium
 {
  public:
@@ -30,7 +55,7 @@ class K3bMedium
   K3bMedium( K3bDevice::Device* dev );
   ~K3bMedium();
 
-  void setDevice( K3bDevice::Device* dev ) { m_device = dev; reset(); }
+  void setDevice( K3bDevice::Device* dev );
 
   /**
    * Resets everything to default values except the device.
@@ -46,12 +71,11 @@ class K3bMedium
    */
   void update();
 
-  K3bDevice::Device* device() const { return m_device; }
-
-  const K3bDevice::DiskInfo& diskInfo() const { return m_diskInfo; }
-  const K3bDevice::Toc& toc() const { return m_toc; }
-  const K3bDevice::CdText& cdText() const { return m_cdText; }
-  const QValueList<int>& writingSpeeds() const { return m_writingSpeeds; }
+  K3bDevice::Device* device() const;
+  const K3bDevice::DiskInfo& diskInfo() const;
+  const K3bDevice::Toc& toc() const;
+  const K3bDevice::CdText& cdText() const;
+  const QValueList<int>& writingSpeeds() const;
   const QString& volumeId() const;
 
   /**
@@ -80,12 +104,12 @@ class K3bMedium
    * A VideoCD for example may have the following content: 
    * CONTENT_AUDIO|CONTENT_DATA|CONTENT_VIDEO_CD
    */
-  int content() const { return m_content; }
+  int content() const;
 
   /**
    * \return The volume descriptor from the ISO9660 filesystem.
    */
-  const K3bIso9660SimplePrimaryDescriptor& iso9660Descriptor() const { return m_isoDesc; }
+  const K3bIso9660SimplePrimaryDescriptor& iso9660Descriptor() const;
 
   /**
    * \return A short one-liner string representing the medium.
@@ -106,15 +130,9 @@ class K3bMedium
  private:
   void analyseContent();
 
-  K3bDevice::Device* m_device;
+  void detach();
 
-  K3bDevice::DiskInfo m_diskInfo;
-  K3bDevice::Toc m_toc;
-  K3bDevice::CdText m_cdText;
-  QValueList<int> m_writingSpeeds;
-  K3bIso9660SimplePrimaryDescriptor m_isoDesc;
-
-  int m_content;
+  KSharedPtr<K3bMediumData> d;
 };
 
 #endif

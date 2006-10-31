@@ -27,18 +27,23 @@
 #include <kio/global.h>
 
 
-
-K3bMedium::K3bMedium()
-  : m_device( 0 ),
-    m_content( CONTENT_NONE )
+K3bMediumData::K3bMediumData()
+  : device( 0 ),
+    content( K3bMedium::CONTENT_NONE )
 {
 }
 
 
-K3bMedium::K3bMedium( K3bDevice::Device* dev )
-  : m_device( dev ),
-    m_content( CONTENT_NONE )
+K3bMedium::K3bMedium()
 {
+  d = new K3bMediumData;
+}
+
+
+K3bMedium::K3bMedium( K3bDevice::Device* dev )
+{
+  d = new K3bMediumData;
+  d->device = dev;
 }
 
 
@@ -47,52 +52,111 @@ K3bMedium::~K3bMedium()
 }
 
 
+void K3bMedium::detach()
+{
+  if( d.count() > 1 )
+    d = new K3bMediumData( *d );
+}
+
+
+void K3bMedium::setDevice( K3bDevice::Device* dev ) 
+{
+  if( d->device != dev ) {
+    reset();
+    d->device = dev;
+  }
+}
+
+K3bDevice::Device* K3bMedium::device() const
+{
+  return d->device; 
+}
+
+
+const K3bDevice::DiskInfo& K3bMedium::diskInfo() const
+{
+  return d->diskInfo;
+}
+
+
+const K3bDevice::Toc& K3bMedium::toc() const
+{
+  return d->toc;
+}
+
+
+const K3bDevice::CdText& K3bMedium::cdText() const
+{
+  return d->cdText;
+}
+
+
+const QValueList<int>& K3bMedium::writingSpeeds() const
+{
+  return d->writingSpeeds;
+}
+
+
+int K3bMedium::content() const
+{
+  return d->content;
+}
+
+
+const K3bIso9660SimplePrimaryDescriptor& K3bMedium::iso9660Descriptor() const
+{
+  return d->isoDesc;
+}
+
+
 void K3bMedium::reset()
 {
-  m_diskInfo = K3bDevice::DiskInfo();
-  m_toc.clear();
-  m_cdText.clear();
-  m_writingSpeeds.clear();
-  m_content = CONTENT_NONE;
+  detach();
+
+  d->diskInfo = K3bDevice::DiskInfo();
+  d->toc.clear();
+  d->cdText.clear();
+  d->writingSpeeds.clear();
+  d->content = CONTENT_NONE;
 
   // clear the desc
-  m_isoDesc = K3bIso9660SimplePrimaryDescriptor();
+  d->isoDesc = K3bIso9660SimplePrimaryDescriptor();
 }
 
 
 void K3bMedium::update()
 {
-  if( m_device ) {
+  if( d->device ) {
     reset();
 
-    m_diskInfo = m_device->diskInfo();
+    d->diskInfo = d->device->diskInfo();
 
-    if( m_diskInfo.diskState() != K3bDevice::STATE_NO_MEDIA ) {
+    if( d->diskInfo.diskState() != K3bDevice::STATE_NO_MEDIA ) {
       kdDebug() << "(K3bMedium) found medium:" << endl
 		<< "=====================================================" << endl;
-      m_diskInfo.debug();
+      d->diskInfo.debug();
       kdDebug() << "=====================================================" << endl;
     }
     
     if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE || 
 	diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
-      m_toc = m_device->readToc();
-      if( m_toc.contentType() == K3bDevice::AUDIO ||
-	  m_toc.contentType() == K3bDevice::MIXED )
-	m_cdText = m_device->readCdText();
+      d->toc = d->device->readToc();
+      if( d->toc.contentType() == K3bDevice::AUDIO ||
+	  d->toc.contentType() == K3bDevice::MIXED )
+	d->cdText = d->device->readCdText();
     }
     
     if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE ) {
-      m_writingSpeeds = m_device->determineSupportedWriteSpeeds();
+      d->writingSpeeds = d->device->determineSupportedWriteSpeeds();
 
       // some older drives do not report the speeds properly
-      if( m_writingSpeeds.isEmpty() ) {
+      if( d->writingSpeeds.isEmpty() ) {
 	// add speeds up to the max
-	int max = m_device->determineMaximalWriteSpeed();
+	int max = d->device->determineMaximalWriteSpeed();
 	int i = 1;
-	int speed = ( m_diskInfo.isDvdMedia() ? 1385 : 175 );
+	int speed = ( d->diskInfo.isDvdMedia() ? 1385 : 175 );
 	while( i*speed <= max ) {
-	  m_writingSpeeds.append( i*speed );
+	  d->writingSpeeds.append( i*speed );
 	  i = ( i == 1 ? 2 : i+2 );
 	}
       }
@@ -108,21 +172,21 @@ void K3bMedium::analyseContent()
   // set basic content types
   switch( toc().contentType() ) {
     case K3bDevice::AUDIO:
-      m_content = CONTENT_AUDIO;
+      d->content = CONTENT_AUDIO;
       break;
     case K3bDevice::DATA:
     case K3bDevice::DVD:
-      m_content = CONTENT_DATA;
+      d->content = CONTENT_DATA;
       break;
     case K3bDevice::MIXED:
-      m_content = CONTENT_AUDIO|CONTENT_DATA;
+      d->content = CONTENT_AUDIO|CONTENT_DATA;
       break;
     default:
-      m_content = CONTENT_NONE;
+      d->content = CONTENT_NONE;
   }
 
   // analyze filesystem
-  if( m_content & CONTENT_DATA ) {
+  if( d->content & CONTENT_DATA ) {
     //kdDebug() << "(K3bMedium) Checking file system." << endl;
 
     unsigned long startSec = 0;
@@ -148,18 +212,18 @@ void K3bMedium::analyseContent()
     
     // force the backend since we don't need decryption
     // which just slows down the whole process
-    K3bIso9660 iso( new K3bIso9660DeviceBackend( m_device ) );
+    K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
     iso.setStartSector( startSec );
     iso.setPlainIso9660( true );
     if( iso.open() ) {
-      m_isoDesc = iso.primaryDescriptor();
+      d->isoDesc = iso.primaryDescriptor();
       kdDebug() << "(K3bMedium) found volume id from start sector " << startSec 
-		<< ": '" << m_isoDesc.volumeId << "'" << endl;
+		<< ": '" << d->isoDesc.volumeId << "'" << endl;
 
       if( diskInfo().isDvdMedia() ) {
 	// Every VideoDVD needs to have a VIDEO_TS.IFO file
 	if( iso.firstIsoDirEntry()->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
-	  m_content |= CONTENT_VIDEO_DVD;
+	  d->content |= CONTENT_VIDEO_DVD;
       }
       else {
 	kdDebug() << "(K3bMedium) checking for VCD." << endl;
@@ -186,7 +250,7 @@ void K3bMedium::analyseContent()
 	       ( !qstrncmp( buffer, "VIDEO_CD", 8 ) ||
 		 !qstrncmp( buffer, "SUPERVCD", 8 ) ||
 		 !qstrncmp( buffer, "HQ-VCD  ", 8 ) ) )
-	    m_content |= CONTENT_VIDEO_CD;
+	    d->content |= CONTENT_VIDEO_CD;
 	}
       }
     }  // opened iso9660
@@ -271,9 +335,9 @@ QString K3bMedium::longString() const
 {
   QString s = QString("<p><nobr><b>%1 %2</b> (%3)</nobr>"
 		      "<p>")
-    .arg( m_device->vendor() )
-    .arg( m_device->description() )
-    .arg( m_device->blockDeviceName() )
+    .arg( d->device->vendor() )
+    .arg( d->device->description() )
+    .arg( d->device->blockDeviceName() )
     + shortString( true );
 
   if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
