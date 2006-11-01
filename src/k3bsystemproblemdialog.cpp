@@ -32,6 +32,7 @@
 #include <k3bplugin.h>
 #include <k3bprocess.h>
 #include <k3bthememanager.h>
+#include <k3bcore.h>
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
