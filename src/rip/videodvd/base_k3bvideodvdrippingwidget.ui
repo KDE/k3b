@@ -418,6 +418,9 @@
                                         <property name="name">
                                             <cstring>m_comboVideoCodec</cstring>
                                         </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Select the Video codec used to encode the DVD titles</string>
+                                        </property>
                                     </widget>
                                 </hbox>
                             </widget>
@@ -440,6 +443,9 @@
                                     <widget class="K3bIntMapComboBox">
                                         <property name="name">
                                             <cstring>m_comboAudioCodec</cstring>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Select the Audio codec used to encode the DVD titles</string>
                                         </property>
                                     </widget>
                                 </hbox>
