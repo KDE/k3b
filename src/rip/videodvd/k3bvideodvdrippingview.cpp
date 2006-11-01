@@ -18,6 +18,7 @@
 #include "k3bvideodvdrippingdialog.h"
 
 #include <k3bvideodvd.h>
+#include <k3bvideodvdtitletranscodingjob.h>
 #include <k3btoolbox.h>
 #include <k3bthememanager.h>
 #include <k3bglobals.h>
@@ -101,12 +102,33 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
     m_titleView->setVideoDVD( m_dvd );
     QApplication::restoreOverrideCursor();
 
+    bool transcodeUsable = true;
+
     if( !k3bcore ->externalBinManager() ->foundBin( "transcode" ) ) {
       KMessageBox::sorry( this,
 			  i18n("K3b uses transcode to rip Video DVDs. "
 			       "Please make sure it is installed.") );
+      transcodeUsable = false;
     }
-    actionCollection()->action("start_rip")->setEnabled( k3bcore ->externalBinManager() ->foundBin( "transcode" ) );
+    else {
+      int vc = 0, ac = 0;
+      for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i )
+	if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::VideoCodec)i ) )
+	  ++vc;
+      for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i )
+	if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i ) )
+	  ++ac;  
+      if( !ac || !vc ) {
+	KMessageBox::sorry( this,
+			    i18n("<p>K3b uses transcode to rip Video DVDs. "
+				 "Your installation of transcode (<em>%1</em>) lacks support for any of the "
+				 "codecs supported by K3b."
+				 "<p>Please make sure it is installed properly.") );
+	transcodeUsable = false;
+      }
+    }
+
+    actionCollection()->action("start_rip")->setEnabled( transcodeUsable );
   }
   else {
     QApplication::restoreOverrideCursor();

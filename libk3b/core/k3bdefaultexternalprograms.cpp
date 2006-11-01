@@ -19,6 +19,7 @@
 #include <k3bglobals.h>
 
 #include <qfile.h>
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qobject.h>
 #include <qregexp.h>
@@ -597,16 +598,17 @@ bool K3bTranscodeProgram::scan( const QString& p )
   QString path = p;
   if( path[path.length()-1] != '/' )
     path.append("/");
-  path.append(m_transcodeProgram);
 
-  if( !QFile::exists( path ) )
+  QString appPath = path + m_transcodeProgram;
+
+  if( !QFile::exists( appPath ) )
     return false;
 
   K3bExternalBin* bin = 0;
 
   // probe version
   KProcess vp;
-  vp << path ;
+  vp << appPath ;
   K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "transcode v" );
@@ -620,12 +622,32 @@ bool K3bTranscodeProgram::scan( const QString& p )
       return false;
 
     bin = new K3bExternalBin( this );
-    bin->path = path;
+    bin->path = appPath;
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kdDebug() << "(K3bTranscodeProgram) could not start " << path << endl;
+    kdDebug() << "(K3bTranscodeProgram) could not start " << appPath << endl;
     return false;
+  }
+
+  //
+  // Check features
+  //
+  QString modInfoBin = path + "tcmodinfo";
+  KProcess modp;
+  modp << modInfoBin << "-p";
+  out.setProcess( &modp );
+  if( modp.start( KProcess::Block, KProcess::AllOutput ) ) {
+    QString modPath = out.output().stripWhiteSpace();
+    QDir modDir( modPath );
+    if( !modDir.entryList( "*export_xvid*", QDir::Files ).isEmpty() )
+      bin->addFeature( "xvid" );
+    if( !modDir.entryList( "*export_lame*", QDir::Files ).isEmpty() )
+      bin->addFeature( "lame" );
+    if( !modDir.entryList( "*export_ffmpeg*", QDir::Files ).isEmpty() )
+      bin->addFeature( "ffmpeg" );
+    if( !modDir.entryList( "*export_ac3*", QDir::Files ).isEmpty() )
+      bin->addFeature( "ac3" );
   }
 
   addBin(bin);

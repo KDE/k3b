@@ -23,6 +23,7 @@
 
 
 class K3bVideoDVDRippingPreview;
+class QHideEvent;
 
 class K3bVideoDVDRippingTitleListView : public K3bListView
 {
@@ -38,6 +39,8 @@ class K3bVideoDVDRippingTitleListView : public K3bListView
   void slotPreviewDone( bool );
 
  private:
+  void hideEvent( QHideEvent* );
+
   class TitleViewItem;
   class TitleToolTip;
 

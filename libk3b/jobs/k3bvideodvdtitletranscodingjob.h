@@ -21,6 +21,7 @@
 #include <k3bvideodvd.h>
 
 class KProcess;
+class K3bExternalBin;
 
 
 /**
@@ -75,6 +76,16 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
     AUDIO_CODEC_AC3_PASSTHROUGH,
     AUDIO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
   };
+
+  /**
+   * \param bin If 0 the default binary from K3bCore will be used
+   */
+  static bool transcodeBinaryHasSupportFor( VideoCodec codec, const K3bExternalBin* bin = 0 );
+
+  /**
+   * \param bin If 0 the default binary from K3bCore will be used
+   */
+  static bool transcodeBinaryHasSupportFor( AudioCodec codec, const K3bExternalBin* bin = 0 );
 
  public slots:
   void start();

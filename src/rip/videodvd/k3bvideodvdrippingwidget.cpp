@@ -18,6 +18,7 @@
 #include <k3bvideodvdtitletranscodingjob.h>
 #include <k3bglobals.h>
 #include <k3brichtextlabel.h>
+#include <k3bintmapcombobox.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -96,21 +97,20 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     m_comboAudioBitrate->insertItem( i18n("%1 kbps" ).arg(s_mp3Bitrates[i]) );
 
 
-  //
-  // Add the codecs (we use a direct mapping between codec and combobox index)
-  //
   for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {
-    m_comboVideoCodec->insertItem( K3bVideoDVDTitleTranscodingJob::videoCodecString( i ) );
+    if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::VideoCodec)i ) )
+      m_comboVideoCodec->insertItem( i, K3bVideoDVDTitleTranscodingJob::videoCodecString( i ), "fixme" );
   }
   for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i ) {
-    m_comboAudioCodec->insertItem( K3bVideoDVDTitleTranscodingJob::audioCodecString( i ) );
+    if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i ) )
+      m_comboAudioCodec->insertItem( i, K3bVideoDVDTitleTranscodingJob::audioCodecString( i ), "fixme" );
   }
 
   for( int i = 0; i < PICTURE_SIZE_MAX; ++i ) {
     m_comboVideoSize->insertItem( i18n( s_pictureSizeNames[i] ) );
   }
 
-  slotAudioCodecChanged( m_comboAudioCodec->currentItem() );
+  slotAudioCodecChanged( m_comboAudioCodec->selectedValue() );
 
   connect( m_comboAudioBitrate, SIGNAL(textChanged(const QString&)),
 	   this, SIGNAL(changed()) );
@@ -125,7 +125,7 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
   connect( m_editBaseDir, SIGNAL(textChanged(const QString&)), 
 	   this, SIGNAL(changed()) );
 
-  connect( m_comboAudioCodec, SIGNAL(activated(int)),
+  connect( m_comboAudioCodec, SIGNAL(valueChanged(int)),
 	   this, SLOT(slotAudioCodecChanged(int)) );
   connect( m_specialStringsLabel, SIGNAL(leftClickedURL()),
 	   this, SLOT(slotSeeSpecialStrings()) );
@@ -150,7 +150,7 @@ K3bVideoDVDRippingWidget::~K3bVideoDVDRippingWidget()
 
 int K3bVideoDVDRippingWidget::selectedVideoCodec() const
 {
-  return m_comboVideoCodec->currentItem();
+  return m_comboVideoCodec->selectedValue();
 }
 
 
@@ -191,19 +191,19 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 
 void K3bVideoDVDRippingWidget::setSelectedVideoCodec( int codec )
 {
-  m_comboVideoCodec->setCurrentItem( codec );
+  m_comboVideoCodec->setSelectedValue( codec );
 }
 
 
 int K3bVideoDVDRippingWidget::selectedAudioCodec() const
 {
-  return m_comboAudioCodec->currentItem();
+  return m_comboAudioCodec->selectedValue();
 }
 
 
 void K3bVideoDVDRippingWidget::setSelectedAudioCodec( int codec )
 {
-  m_comboAudioCodec->setCurrentItem( codec );
+  m_comboAudioCodec->setSelectedValue( codec );
   slotAudioCodecChanged( codec );
 }
 

@@ -496,4 +496,26 @@ QString K3bVideoDVDTitleTranscodingJob::videoCodecString( int codec )
   }
 }
 
+
+bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( VideoCodec codec, const K3bExternalBin* bin )
+{
+  static char* s_codecFeatures[] = { "xvid", "ffmpeg" };
+  if( !bin )
+    bin = k3bcore->externalBinManager()->binObject("transcode");
+  if( !bin )
+    return false;
+  return bin->hasFeature( QString::fromLatin1( s_codecFeatures[(int)codec] ) );
+}
+
+
+bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( AudioCodec codec, const K3bExternalBin* bin )
+{
+  static char* s_codecFeatures[] = { "lame", "ac3", "ac3" };
+  if( !bin )
+    bin = k3bcore->externalBinManager()->binObject("transcode");
+  if( !bin )
+    return false;
+  return bin->hasFeature( QString::fromLatin1( s_codecFeatures[(int)codec] ) );
+}
+
 #include "k3bvideodvdtitletranscodingjob.moc"

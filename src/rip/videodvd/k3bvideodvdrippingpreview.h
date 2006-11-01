@@ -44,6 +44,8 @@ class K3bVideoDVDRippingPreview : public QObject
    */
   void generatePreview( const K3bVideoDVD::VideoDVD& dvd, int title, int chapter = 0 );
 
+  void cancel();
+
  signals:
   void previewDone( bool );
 
@@ -57,6 +59,8 @@ class K3bVideoDVDRippingPreview : public QObject
   int m_title;
   int m_chapter;
   K3bVideoDVD::VideoDVD m_dvd;
+
+  bool m_canceled;
 };
 
 #endif

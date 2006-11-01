@@ -49,6 +49,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   delete m_tempDir;
   m_process = 0;
   m_tempDir = 0;
+  m_canceled = false;
 
   const K3bExternalBin* bin = k3bcore->externalBinManager()->binObject("transcode");
   if( !bin ) {
@@ -99,13 +100,22 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
 }
 
 
+void K3bVideoDVDRippingPreview::cancel()
+{
+  if( m_process->isRunning() ) {
+    m_canceled = true;
+    m_process->kill();
+  }
+}
+
+
 void K3bVideoDVDRippingPreview::slotTranscodeFinished( KProcess* )
 {
   // read the image
   QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
   kdDebug() << "(K3bVideoDVDRippingPreview) reading from file " << filename << endl;
   m_preview = QImage( filename );
-  bool success = !m_preview.isNull();
+  bool success = !m_preview.isNull() && !m_canceled;
 
   // remove temp files
   delete m_tempDir;

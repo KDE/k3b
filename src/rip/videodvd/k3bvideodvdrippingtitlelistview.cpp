@@ -376,9 +376,23 @@ void K3bVideoDVDRippingTitleListView::slotPreviewDone( bool success )
   else
     m_itemMap[m_currentPreviewTitle-1]->setPreview( QImage() );
 
-  ++m_currentPreviewTitle;
-  if( m_currentPreviewTitle <= m_dvd.numTitles() )
-    m_previewGen->generatePreview( m_dvd, m_currentPreviewTitle );
+  if( isVisible() ) {
+    ++m_currentPreviewTitle;
+    if( m_currentPreviewTitle <= m_dvd.numTitles() )
+      m_previewGen->generatePreview( m_dvd, m_currentPreviewTitle );
+  }
+}
+
+
+void K3bVideoDVDRippingTitleListView::hideEvent( QHideEvent* e )
+{
+  //
+  // For now we do it the easy way: just stop the preview generation
+  // once this view is hidden
+  //
+  m_previewGen->cancel();
+
+  K3bListView::hideEvent( e );
 }
 
 #include "k3bvideodvdrippingtitlelistview.moc"

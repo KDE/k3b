@@ -70,6 +70,13 @@ void KCutLabel::setText( const QString &text )
   cutTextToLabel();
 }
 
+
+const QString& KCutLabel::fullText() const
+{
+  return m_fullText;
+}
+
+
 void KCutLabel::cutTextToLabel()
 {
   QToolTip::remove( this );

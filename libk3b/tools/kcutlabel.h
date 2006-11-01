@@ -37,6 +37,11 @@ class LIBK3B_EXPORT KCutLabel : public QLabel
 
   virtual QSize minimumSizeHint() const;
 
+  /**
+   * \return the full text while text() returns the cut text
+   */
+  const QString& fullText() const;
+
  public slots:
   void setText( const QString & );
 
