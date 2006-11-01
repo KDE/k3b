@@ -1456,14 +1456,6 @@ void K3bMainWindow::slotCheckSystem()
 
 void K3bMainWindow::addUrls( const KURL::List& urls )
 {
-  //
-  // A lot of users try to write an iso image with a data project
-  //
-  if( urls.count() == 1 ) {
-    if( isCdDvdImageAndIfSoOpenDialog( urls.first() ) )
-      return;
-  }
-
   if( K3bView* view = activeView() ) {
     view->addUrls( urls );
   }
@@ -1502,7 +1494,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
 
     if( audio )
       static_cast<K3bView*>(slotNewAudioDoc()->view())->addUrls( urls );
-    else
+    else if( urls.count() > 1 || !isCdDvdImageAndIfSoOpenDialog( urls.first() ) )
       static_cast<K3bView*>(slotNewDataDoc()->view())->addUrls( urls );
   }
 }

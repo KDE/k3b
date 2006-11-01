@@ -33,6 +33,9 @@
 #include <k3bvalidators.h>
 #include <k3bglobals.h>
 #include <k3bisooptions.h>
+#include <k3b.h>
+#include <k3bapplication.h>
+#include <k3biso9660.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -94,6 +97,31 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 {
   if( urls.isEmpty() )
     return 0;
+
+  //
+  // A common mistake by beginners is to try to burn an iso image
+  // with a data project. Let's warn them
+  //
+  if( urls.count() == 1 ) {
+    K3bIso9660 isoF( urls.first().path() );
+    if( isoF.open() ) {
+     if( KMessageBox::warningYesNo( parent,
+				    i18n("<p>The file you are about to add to the project is an ISO9660 image. As such "
+					 "it can be burned to a medium directly since it already contains a file "
+					 "system.<br>"
+					 "Are you sure you want to add this file to the project?"),
+				    i18n("Adding image file to project"),
+				    i18n("Add the file to the project"),
+				    i18n("Burn the image directly") ) == KMessageBox::No ) {
+       // very rough dvd image size test
+       if( K3b::filesize( urls.first() ) > 1000*1024*1024 )
+	 k3bappcore->k3bMainWindow()->slotWriteDvdIsoImage( urls.first() );
+       else
+	 k3bappcore->k3bMainWindow()->slotWriteCdImage( urls.first() );
+       return 0;
+     }
+    }
+  }
 
   K3bDataUrlAddingDialog dlg( parent );
   dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
