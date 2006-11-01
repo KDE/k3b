@@ -64,6 +64,7 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   setAcceptDrops( true );
   setBackgroundMode( PaletteBase );
   m_infoTextVisible = true;
+  m_rows = m_cols = 1;
 }
 
 

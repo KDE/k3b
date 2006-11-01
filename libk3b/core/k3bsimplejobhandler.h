@@ -30,6 +30,8 @@
  */
 class LIBK3B_EXPORT K3bSimpleJobHandler : public QObject, public K3bJobHandler
 {
+  Q_OBJECT
+
  public:
   K3bSimpleJobHandler( QObject* parent = 0 );
   ~K3bSimpleJobHandler();
