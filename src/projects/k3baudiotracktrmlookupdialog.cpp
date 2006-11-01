@@ -23,6 +23,7 @@
 #include <k3bbusywidget.h>
 #include <k3baudiotrack.h>
 #include <k3baudiofile.h>
+#include <k3bpassivepopup.h>
 
 #include <kmessagebox.h>
 #include <kinputdialog.h>
@@ -70,6 +71,8 @@ K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent, con
   connect( m_mbJob, SIGNAL(infoMessage(const QString&, int)), 
 	   this, SLOT(slotMbJobInfoMessage(const QString&, int)) );
   connect( m_mbJob, SIGNAL(finished(bool)), this, SLOT(slotMbJobFinished(bool)) );
+  connect( m_mbJob, SIGNAL(trackFinished(K3bAudioTrack*, bool)), 
+	   this, SLOT(slotTrackFinished(K3bAudioTrack*, bool)) );
 }
 
 
@@ -112,6 +115,15 @@ void K3bAudioTrackTRMLookupDialog::slotCancel()
 {
   actionButton( Cancel )->setEnabled( false );
   m_mbJob->cancel();
+}
+
+
+void K3bAudioTrackTRMLookupDialog::slotTrackFinished( K3bAudioTrack* track, bool success )
+{
+  if( !success )
+    K3bPassivePopup::showPopup( i18n("Track %1 was not found in the MusicBrainz database.")
+				.arg( track->trackNumber()),
+				i18n("Audio Project") );
 }
 
 #include "k3baudiotracktrmlookupdialog.moc"

@@ -44,6 +44,18 @@ class K3bMusicBrainzJob : public K3bJob
   K3bMusicBrainzJob( QWidget* parent = 0, const char* name = 0 );
   ~K3bMusicBrainzJob();
 
+  bool hasBeenCanceled() const { return m_canceled; }
+
+ signals:
+  /**
+   * Emitted for each track. This is signal can be used
+   * to display further information.
+   *
+   * \param track The track for which metadata was searched.
+   * \param success True if metadata was found
+   */
+  void trackFinished( K3bAudioTrack* track, bool success );
+
  public slots:
   void start();
   void cancel();
@@ -65,6 +77,8 @@ class K3bMusicBrainzJob : public K3bJob
   K3bThreadJob* m_mbJob;
 
   QPtrList<K3bAudioTrack> m_tracks;
+
+  bool m_canceled;
 };
 
 

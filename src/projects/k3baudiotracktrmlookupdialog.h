@@ -41,6 +41,7 @@ class K3bAudioTrackTRMLookupDialog : public KDialogBase
  private slots:
   void slotMbJobFinished( bool );
   void slotMbJobInfoMessage( const QString&, int );
+  void slotTrackFinished( K3bAudioTrack* track, bool success );
   void slotCancel();
 
  private:

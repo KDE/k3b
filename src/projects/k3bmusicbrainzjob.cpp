@@ -141,7 +141,8 @@ private:
 
 // cannot use this as parent for the K3bSimpleJobHandler since this has not been constructed yet
 K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent, const char* name )
-  : K3bJob( new K3bSimpleJobHandler( 0 ), parent, name )
+  : K3bJob( new K3bSimpleJobHandler( 0 ), parent, name ),
+    m_canceled( false )
 {
   m_trmThread = new TRMThread();
   m_mbThread = new MusicBrainzThread();
@@ -169,6 +170,8 @@ void K3bMusicBrainzJob::start()
 {
   jobStarted();
 
+  m_canceled = false;
+
   m_trmThread->track = m_tracks.first();
 
   emit infoMessage( i18n("Generating fingerprint for track %1.")
@@ -180,7 +183,9 @@ void K3bMusicBrainzJob::start()
 
 void K3bMusicBrainzJob::cancel()
 {
+  m_canceled = true;
   m_trmJob->cancel();
+  m_mbJob->cancel();
 }
 
 
@@ -215,6 +220,8 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
     jobFinished(false);
   }
   else {
+    emit trackFinished( m_tracks.current(), success );
+
     if( success ) {
       // found entries
       QStringList resultStrings, resultStringsUnique;
@@ -248,13 +255,6 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
 	m_tracks.current()->setTitle( m_mbThread->title(i) );
 	m_tracks.current()->setArtist( m_mbThread->artist(i) );
       }
-    }
-    else {
-      // no entry found
-      // inform user
-      KMessageBox::error( dynamic_cast<QWidget*>(parent()),
-			  i18n("Track %1 was not found in the MusicBrainz database.")
-			  .arg( m_tracks.current()->trackNumber()) );
     }
 
     // query next track
