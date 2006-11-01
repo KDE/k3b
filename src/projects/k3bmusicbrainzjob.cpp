@@ -139,8 +139,9 @@ private:
 };
 
 
+// cannot use this as parent for the K3bSimpleJobHandler since this has not been constructed yet
 K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent, const char* name )
-  : K3bJob( new K3bSimpleJobHandler( this ), parent, name )
+  : K3bJob( new K3bSimpleJobHandler( 0 ), parent, name )
 {
   m_trmThread = new TRMThread();
   m_mbThread = new MusicBrainzThread();
@@ -160,6 +161,7 @@ K3bMusicBrainzJob::~K3bMusicBrainzJob()
   delete m_trmJob;
   delete m_mbThread;
   delete m_mbJob;
+  delete jobHandler();
 }
 
 
