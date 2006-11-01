@@ -40,7 +40,7 @@
 #include <qfontmetrics.h>
 
 
-static QString videoCodecId( int codec )
+static QString videoCodecId( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
 {
   switch( codec ) {
   case K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_FFMPEG_MPEG4:
@@ -53,7 +53,7 @@ static QString videoCodecId( int codec )
 }
 
 
-static QString audioCodecId( int codec )
+static QString audioCodecId( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
 {
   switch( codec ) {
   case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3:
@@ -68,27 +68,23 @@ static QString audioCodecId( int codec )
 }
 
 
-static int videoCodecFromId( const QString& codec )
+static K3bVideoDVDTitleTranscodingJob::VideoCodec videoCodecFromId( const QString& codec )
 {
-  if( codec == "ffmpeg_mpeg4" )
-    return K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_FFMPEG_MPEG4;
-  else if( codec == "xvid" )
+  if( codec == "xvid" )
     return K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_XVID;
-  else 
-    return 0;
+  else //  if( codec == "ffmpeg_mpeg4" )
+    return K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_FFMPEG_MPEG4;
 }
 
 
-static int audioCodecFromId( const QString& codec )
+static K3bVideoDVDTitleTranscodingJob::AudioCodec audioCodecFromId( const QString& codec )
 {
-  if( codec == "mp3" )
-    return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3;
-  else if( codec == "ac3_stereo" )
+  if( codec == "ac3_stereo" )
     return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO;
   else if( codec == "ac3_passthrough" )
     return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH;
-  else
-    return 0;
+  else // if( codec == "mp3" )
+    return K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3;
 }
 
 

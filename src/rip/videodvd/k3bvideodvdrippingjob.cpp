@@ -296,7 +296,7 @@ void K3bVideoDVDRippingJob::cancel()
 }
 
 
-void K3bVideoDVDRippingJob::setVideoCodec( int codec )
+void K3bVideoDVDRippingJob::setVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
 {
   m_transcodingJob->setVideoCodec( codec );
 }
@@ -314,7 +314,7 @@ void K3bVideoDVDRippingJob::setTwoPassEncoding( bool b )
 }
 
 
-void K3bVideoDVDRippingJob::setAudioCodec( int codec )
+void K3bVideoDVDRippingJob::setAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
 {
   m_transcodingJob->setAudioCodec( codec );
 }

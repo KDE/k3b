@@ -98,12 +98,18 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
 
 
   for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {
-    if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::VideoCodec)i ) )
-      m_comboVideoCodec->insertItem( i, K3bVideoDVDTitleTranscodingJob::videoCodecString( i ), "fixme" );
+    K3bVideoDVDTitleTranscodingJob::VideoCodec codec( (K3bVideoDVDTitleTranscodingJob::VideoCodec)i );
+    if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
+      m_comboVideoCodec->insertItem( i,
+				     K3bVideoDVDTitleTranscodingJob::videoCodecString( codec ),
+				     K3bVideoDVDTitleTranscodingJob::videoCodecDescription( codec ) );
   }
   for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i ) {
-    if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i ) )
-      m_comboAudioCodec->insertItem( i, K3bVideoDVDTitleTranscodingJob::audioCodecString( i ), "fixme" );
+    K3bVideoDVDTitleTranscodingJob::AudioCodec codec( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i );
+    if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
+      m_comboAudioCodec->insertItem( i,
+				     K3bVideoDVDTitleTranscodingJob::audioCodecString( codec ), 
+				     K3bVideoDVDTitleTranscodingJob::audioCodecDescription( codec ) );
   }
 
   for( int i = 0; i < PICTURE_SIZE_MAX; ++i ) {
@@ -148,9 +154,9 @@ K3bVideoDVDRippingWidget::~K3bVideoDVDRippingWidget()
 }
 
 
-int K3bVideoDVDRippingWidget::selectedVideoCodec() const
+K3bVideoDVDTitleTranscodingJob::VideoCodec K3bVideoDVDRippingWidget::selectedVideoCodec() const
 {
-  return m_comboVideoCodec->selectedValue();
+  return (K3bVideoDVDTitleTranscodingJob::VideoCodec)m_comboVideoCodec->selectedValue();
 }
 
 
@@ -189,22 +195,22 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 }
 
 
-void K3bVideoDVDRippingWidget::setSelectedVideoCodec( int codec )
+void K3bVideoDVDRippingWidget::setSelectedVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
 {
-  m_comboVideoCodec->setSelectedValue( codec );
+  m_comboVideoCodec->setSelectedValue( (int)codec );
 }
 
 
-int K3bVideoDVDRippingWidget::selectedAudioCodec() const
+K3bVideoDVDTitleTranscodingJob::AudioCodec K3bVideoDVDRippingWidget::selectedAudioCodec() const
 {
-  return m_comboAudioCodec->selectedValue();
+  return (K3bVideoDVDTitleTranscodingJob::AudioCodec)m_comboAudioCodec->selectedValue();
 }
 
 
-void K3bVideoDVDRippingWidget::setSelectedAudioCodec( int codec )
+void K3bVideoDVDRippingWidget::setSelectedAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
 {
-  m_comboAudioCodec->setSelectedValue( codec );
-  slotAudioCodecChanged( codec );
+  m_comboAudioCodec->setSelectedValue( (int)codec );
+  slotAudioCodecChanged( (int)codec );
 }
 
 

@@ -469,7 +469,7 @@ void K3bVideoDVDTitleTranscodingJob::setSize( int width, int height )
 }
 
 
-QString K3bVideoDVDTitleTranscodingJob::audioCodecString( int codec )
+QString K3bVideoDVDTitleTranscodingJob::audioCodecString( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
 {
   switch( codec ) {
   case AUDIO_CODEC_AC3_STEREO:
@@ -484,7 +484,7 @@ QString K3bVideoDVDTitleTranscodingJob::audioCodecString( int codec )
 }
 
 
-QString K3bVideoDVDTitleTranscodingJob::videoCodecString( int codec )
+QString K3bVideoDVDTitleTranscodingJob::videoCodecString( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
 {
   switch( codec ) {
   case VIDEO_CODEC_FFMPEG_MPEG4:
@@ -497,7 +497,60 @@ QString K3bVideoDVDTitleTranscodingJob::videoCodecString( int codec )
 }
 
 
-bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( VideoCodec codec, const K3bExternalBin* bin )
+QString K3bVideoDVDTitleTranscodingJob::videoCodecDescription( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
+{
+  switch( codec ) {
+  case VIDEO_CODEC_FFMPEG_MPEG4:
+    return i18n("FFmpeg is an open-source project trying to support most video and audio codecs used "
+		"these days. Its subproject libavcodec forms the basis for multimedia players such as "
+		"xine or mplayer.")
+      + "<br>"
+      + i18n("FFmpeg contains an implementation of the MPEG-4 video encoding standard which produces "
+	     "high quality results.");
+  case VIDEO_CODEC_XVID:
+    return i18n("XviD is a free and open source MPEG-4 video codec. XviD was created by a group of "
+		"volunteer programmers after the OpenDivX source was closed in July 2001.")
+      + "<br>"
+      + i18n("XviD features MPEG-4 Advanced Simple Profile features such as b-frames, global "
+	     "and quarter pixel motion compensation, lumi masking, trellis quantization, and "
+	     "H.263, MPEG and custom quantization matrices.")
+      + "<br>"
+      + i18n("XviD is a primary competitor of DivX (XviD being DivX spelled backwards). "
+	     "While DivX is closed source and may only run on Windows, Mac OS and Linux, "
+	     "XviD is open source and can potentially run on any platform.")
+      + "<br><em>"
+      + i18n("(Description taken from the Wikipedia article)")
+      + "</em>";
+  default:
+    return "unknown video codec";
+  }
+}
+
+
+QString K3bVideoDVDTitleTranscodingJob::audioCodecDescription( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
+{
+  static QString s_ac3General = i18n("AC3, better known as Dolby Digital is standardized as ATSC A/52. "
+				     "It contains up to 6 total channels of sound.");
+  switch( codec ) {
+  case AUDIO_CODEC_AC3_STEREO:
+    return s_ac3General
+      + "<br>" + i18n("With this setting K3b will create a two-channel stereo "
+		      "Dolby Digital audio stream.");
+  case AUDIO_CODEC_AC3_PASSTHROUGH:
+    return s_ac3General
+      + "<br>" + i18n("With this setting K3b will use the Dolby Digital audio stream "
+		      "from the source DVD without changing it.")
+      + "<br>" + i18n("Use this setting to preserve 5.1 channel sound from the DVD.");
+  case AUDIO_CODEC_MP3:
+    return i18n("MPEG1 Layer III is better known as MP3 and is the most used lossy audio format.")
+      + "<br>" + i18n("With this setting K3b will create a two-channel stereo MPEG1 Layer III audio stream.");
+  default:
+    return "unknown audio codec";
+  }
+}
+
+
+bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3bVideoDVDTitleTranscodingJob::VideoCodec codec, const K3bExternalBin* bin )
 {
   static char* s_codecFeatures[] = { "xvid", "ffmpeg" };
   if( !bin )
@@ -508,7 +561,7 @@ bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( VideoCodec co
 }
 
 
-bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( AudioCodec codec, const K3bExternalBin* bin )
+bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3bVideoDVDTitleTranscodingJob::AudioCodec codec, const K3bExternalBin* bin )
 {
   static char* s_codecFeatures[] = { "lame", "ac3", "ac3" };
   if( !bin )

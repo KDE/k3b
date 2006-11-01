@@ -18,6 +18,8 @@
 
 #include "base_k3bvideodvdrippingwidget.h"
 
+#include <k3bvideodvdtitletranscodingjob.h>
+
 #include <qvaluevector.h>
 #include <qmap.h>
 
@@ -33,13 +35,13 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
   K3bVideoDVDRippingWidget( QWidget* parent );
   ~K3bVideoDVDRippingWidget();
 
-  int selectedVideoCodec() const;
-  int selectedAudioCodec() const;
+  K3bVideoDVDTitleTranscodingJob::VideoCodec selectedVideoCodec() const;
+  K3bVideoDVDTitleTranscodingJob::AudioCodec selectedAudioCodec() const;
   int selectedAudioBitrate() const;
   QSize selectedPictureSize() const;
 
-  void setSelectedVideoCodec( int codec );
-  void setSelectedAudioCodec( int codec );
+  void setSelectedVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec );
+  void setSelectedAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec );
   void setSelectedAudioBitrate( int bitrate );
   void setSelectedPictureSize( const QSize& );
 

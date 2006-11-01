@@ -38,25 +38,6 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   K3bVideoDVDTitleTranscodingJob( K3bJobHandler* hdl, QObject* parent );
   ~K3bVideoDVDTitleTranscodingJob();
 
-  const K3bVideoDVD::VideoDVD& videoDVD() const { return m_dvd; }
-  int title() const { return m_titleNumber; }
-  int audioStream() const { return m_audioStreamIndex; }
-  int clippingTop() const { return m_clippingTop; }
-  int clippingLeft() const { return m_clippingLeft; }
-  int clippingBottom() const { return m_clippingBottom; }
-  int clippingRight() const { return m_clippingRight; }
-  int height() const { return m_height; }
-  int width() const { return m_width; }
-  const QString& filename() { return m_filename; }
-  int videoCodec() const { return m_videoCodec; }
-  int videoBitrate() const { return m_videoBitrate; }
-  bool twoPassEncoding() const { return m_twoPassEncoding; }
-  int audioCodec() const { return m_audioCodec; }
-  int audioBitrate() const { return m_audioBitrate; }
-  bool audioVBR() const { return m_audioVBR; }
-  bool resampleAudioTo44100() const { return m_resampleAudio; }
-  bool lowPriority() const { return m_lowPriority; }
-
   /**
    * The video codecs supported by this job.
    */
@@ -77,6 +58,25 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
     AUDIO_CODEC_NUM_ENTRIES /**< Do not use this as a codec. */
   };
 
+  const K3bVideoDVD::VideoDVD& videoDVD() const { return m_dvd; }
+  int title() const { return m_titleNumber; }
+  int audioStream() const { return m_audioStreamIndex; }
+  int clippingTop() const { return m_clippingTop; }
+  int clippingLeft() const { return m_clippingLeft; }
+  int clippingBottom() const { return m_clippingBottom; }
+  int clippingRight() const { return m_clippingRight; }
+  int height() const { return m_height; }
+  int width() const { return m_width; }
+  const QString& filename() { return m_filename; }
+  VideoCodec videoCodec() const { return m_videoCodec; }
+  int videoBitrate() const { return m_videoBitrate; }
+  bool twoPassEncoding() const { return m_twoPassEncoding; }
+  AudioCodec audioCodec() const { return m_audioCodec; }
+  int audioBitrate() const { return m_audioBitrate; }
+  bool audioVBR() const { return m_audioVBR; }
+  bool resampleAudioTo44100() const { return m_resampleAudio; }
+  bool lowPriority() const { return m_lowPriority; }
+
   /**
    * \param bin If 0 the default binary from K3bCore will be used
    */
@@ -86,6 +86,12 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    * \param bin If 0 the default binary from K3bCore will be used
    */
   static bool transcodeBinaryHasSupportFor( AudioCodec codec, const K3bExternalBin* bin = 0 );
+
+  static QString videoCodecString( VideoCodec );
+  static QString audioCodecString( AudioCodec );
+
+  static QString videoCodecDescription( VideoCodec );
+  static QString audioCodecDescription( AudioCodec );
 
  public slots:
   void start();
@@ -159,7 +165,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    *
    * The default is VIDEO_CODEC_FFMPEG_MPEG4
    */
-  void setVideoCodec( int codec ) { m_videoCodec = codec; }
+  void setVideoCodec( VideoCodec codec ) { m_videoCodec = codec; }
 
   /**
    * Set the bitrate used to encode the video.
@@ -182,7 +188,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    *
    * The default is AUDIO_CODEC_MP3
    */
-  void setAudioCodec( int codec ) { m_audioCodec = codec; }
+  void setAudioCodec( AudioCodec codec ) { m_audioCodec = codec; }
 
   /**
    * Set the bitrate used to encode the audio stream.
@@ -221,9 +227,6 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    */
   void setLowPriority( bool b ) { m_lowPriority = b; }
 
-  static QString audioCodecString( int );
-  static QString videoCodecString( int );
-
  private slots:
   void slotTranscodeStderr( const QString& );
   void slotTranscodeExited( KProcess* );
@@ -253,8 +256,8 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   int m_titleNumber;
   int m_audioStreamIndex;  
 
-  int m_videoCodec;
-  int m_audioCodec;
+  VideoCodec m_videoCodec;
+  AudioCodec m_audioCodec;
 
   int m_videoBitrate;
   int m_audioBitrate;
