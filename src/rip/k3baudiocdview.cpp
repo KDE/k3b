@@ -32,6 +32,7 @@
 #include <k3bapplication.h>
 #include <k3bthememanager.h>
 #include <k3baudiocdtrackdrag.h>
+#include <k3bthemedlabel.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -52,6 +53,8 @@
 #include <qspinbox.h>
 #include <qfont.h>
 #include <qdragobject.h>
+
+
 
 
 class K3bAudioCdView::AudioTrackViewItem : public K3bCheckListViewItem
@@ -137,6 +140,11 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   setLeftPixmap( K3bTheme::MEDIA_LEFT );
   setRightPixmap( K3bTheme::MEDIA_AUDIO );
+
+  m_busyInfoLabel = new K3bThemedLabel( i18n("Searching for Artist information..."), this );
+  m_busyInfoLabel->setFrameStyle( QFrame::Box|QFrame::Plain );
+  m_busyInfoLabel->setMargin( 6 );
+  m_busyInfoLabel->hide();
 }
 
 
@@ -594,6 +602,21 @@ void K3bAudioCdView::updateDisplay()
 
 void K3bAudioCdView::enableInteraction( bool b )
 {
+  if( b ) {
+    m_busyInfoLabel->hide();
+  }
+  else {
+    // the themed label is a cut label, thus its size hint is
+    // based on the cut text, we force it to be full
+    m_busyInfoLabel->resize( width(), height() );
+    m_busyInfoLabel->resize( m_busyInfoLabel->sizeHint() );
+    int x = (width() - m_busyInfoLabel->width())/2;
+    int y = (height() - m_busyInfoLabel->height())/2;
+    QRect r( QPoint( x, y ), m_busyInfoLabel->size() );
+    m_busyInfoLabel->setGeometry( r );
+    m_busyInfoLabel->show();
+  }
+
   m_trackView->setEnabled(b);
   m_toolBox->setEnabled(b);
 }

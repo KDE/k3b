@@ -101,6 +101,8 @@ class K3bAudioCdView : public K3bCdContentsView
   K3bCddb* m_cddb;
 
   K3bDevice::CdText m_cdText;
+
+  QLabel* m_busyInfoLabel;
 };
 
 
