@@ -66,6 +66,7 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
   : K3bListView( parent, name ),
     m_doc(doc),
     m_updatingColumnWidths(false),
+    m_currentMouseOverItem(0),
     m_currentlyPlayingTrack(0)
 {
   m_player = new K3bAudioTrackPlayer( m_doc, this );
