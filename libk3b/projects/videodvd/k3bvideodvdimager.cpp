@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 #include "k3bvideodvdimager.h"
 #include "k3bvideodvddoc.h"
 #include <k3bdiritem.h>
+#include <k3bfileitem.h>
 #include <k3bprocess.h>
 #include <k3bglobals.h>
 
@@ -116,10 +117,35 @@ int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& st
   // We handle the VIDEO_TS dir differently since otherwise mkisofs is not able to 
   // open the VideoDVD structures (see addMkisofsParameters)
   //
-  if( dirItem != d->doc->videoTsDir() )
-    return K3bIsoImager::writePathSpecForDir( dirItem, stream );
-  else
+  if( dirItem == d->doc->videoTsDir() ) {
     return 0;
+  }
+
+  int num = 0;
+  for( QPtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
+    K3bDataItem* item = it.current();
+    num++;
+      
+    if( item->isDir() ) {
+      // we cannot add the video_ts dir twice
+      if( item != d->doc->videoTsDir() ) {
+	stream << escapeGraftPoint( item->writtenPath() )
+	       << "="
+	       << escapeGraftPoint( dummyDir( static_cast<K3bDirItem*>(item) ) ) << "\n";
+      }
+
+      int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
+      if( x >= 0 )
+	num += x;
+      else
+	return -1;
+    }
+    else {
+      writePathSpecForFile( static_cast<K3bFileItem*>(item), stream );
+    }
+  }
+
+  return num;
 }
 
 
