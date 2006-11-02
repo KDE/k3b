@@ -109,21 +109,6 @@ class K3bApplication::Core : public K3bCore
 
   static Core* k3bAppCore() { return s_k3bAppCore; }
 
- public slots:
-  /**
-   * This will just emit the busyInfoRequested signal
-   * Anyone may connect to it and show the string to the
-   * user in some way.
-   *
-   * FIXME: this is bad design
-   */
-  void requestBusyInfo( const QString& );
-
-  /**
-   * FIXME: this is bad design
-   */
-  void requestBusyFinish();
-
  signals:
   /**
    * This is used for showing info in the K3b splashscreen

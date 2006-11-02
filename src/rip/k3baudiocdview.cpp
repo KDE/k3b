@@ -128,10 +128,6 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   m_cddb = new K3bCddb( this );
 
-  connect( m_cddb, SIGNAL(infoMessage(const QString&)),
-	   k3bappcore, SLOT(requestBusyInfo(const QString&)) );
-  connect( m_cddb, SIGNAL(queryFinished(int)),
-	   k3bappcore, SLOT(requestBusyFinish()) );
   connect( m_cddb, SIGNAL(queryFinished(int)),
 	   this, SLOT(slotCddbQueryFinished(int)) );
 
@@ -455,8 +451,6 @@ void K3bAudioCdView::queryCddb()
 
 void K3bAudioCdView::slotCddbQueryFinished( int error )
 {
-  k3bappcore->requestBusyFinish();
-
   if( error == K3bCddbQuery::SUCCESS ) {
     m_cddbInfo = m_cddb->result();
 
@@ -465,25 +459,6 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     c->setGroup( "Cddb" );
     if( c->readBoolEntry( "save cddb entries locally", true ) )
       m_cddb->saveEntry( m_cddbInfo );
-
-    //       kdDebug() << "cddb info:" << endl;
-    //       kdDebug() << "DTITLE:  '" << m_cddbInfo.cdTitle << "'" << endl;
-    //       kdDebug() << "DARTIST: '" << m_cddbInfo.cdArtist << "'" << endl;
-    //       kdDebug() << "DEXT:    '" << m_cddbInfo.cdExtInfo << "'" << endl;
-    //       kdDebug() << "DISCID:  '" << m_cddbInfo.discid << "'" << endl;
-
-    //       for( QStringList::const_iterator it = m_cddbInfo.titles.begin();
-    // 	   it != m_cddbInfo.titles.end(); ++it ) {
-    // 	kdDebug() << "TTITLE:  '" << *it << "'" << endl;
-    //       }
-    //       for( QStringList::const_iterator it = m_cddbInfo.artists.begin();
-    // 	   it != m_cddbInfo.artists.end(); ++it ) {
-    // 	kdDebug() << "TARTIST: '" << *it << "'" << endl;
-    //       }
-    //       for( QStringList::const_iterator it = m_cddbInfo.extInfos.begin();
-    // 	   it != m_cddbInfo.extInfos.end(); ++it ) {
-    // 	kdDebug() << "TEXT:    '" << *it << "'" << endl;
-    //       }
 
     updateDisplay();
   }
@@ -495,7 +470,7 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
       K3bPassivePopup::showPopup( i18n("No CDDB entry found."), i18n("CDDB") );
   }
   else if( error != K3bCddbQuery::CANCELED ) {
-    K3bPassivePopup::showPopup( m_cddb->errorString(), i18n("Cddb error") );
+    K3bPassivePopup::showPopup( m_cddb->errorString(), i18n("CDDB Error") );
   }
 
   enableInteraction(true);

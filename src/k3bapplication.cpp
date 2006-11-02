@@ -396,17 +396,6 @@ void K3bApplication::Core::saveSettings( KConfig* cnf )
 }
 
 
-void K3bApplication::Core::requestBusyInfo( const QString& text )
-{
-  emit busyInfoRequested( text );
-}
-
-void K3bApplication::Core::requestBusyFinish()
-{
-  emit busyFinishRequested();
-}
-
-
 bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
 {
   if( K3bCore::internalBlockDevice( dev ) ) {

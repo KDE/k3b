@@ -100,7 +100,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   : QFrame( parent )
 {
   d = new Private;
-  d->timeout = 8000;
+  d->timeout = 6000;
   d->showEffect = 0;
 
   setFrameStyle( QFrame::StyledPanel | QFrame::Raised );

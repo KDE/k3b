@@ -48,7 +48,6 @@ class K3bOptionDialog;
 class K3bJob;
 class K3bProjectTabWidget;
 class K3bSongManager;
-class K3bBusyWidget;
 class KSystemTray;
 class K3bStatusBarManager;
 class K3bProjectInterface;
@@ -234,9 +233,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotDataImportSession();
   void slotDataClearImportedSession();
   void slotEditBootImages();
-
-  void showBusyInfo( const QString& str );
-  void endBusy();
 
   void createClient(K3bDoc* doc);
 

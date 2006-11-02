@@ -96,7 +96,6 @@
 #include "k3bprojecttabwidget.h"
 #include "misc/k3bcdcopydialog.h"
 #include "k3btempdirselectionwidget.h"
-#include <k3bbusywidget.h>
 #include "k3bstatusbarmanager.h"
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
@@ -173,9 +172,6 @@ K3bMainWindow::K3bMainWindow()
   // disable actions at startup
   slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
 
-  // connect to the busy signals
-  connect( k3bcore, SIGNAL(busyInfoRequested(const QString&)), this, SLOT(showBusyInfo(const QString&)) );
-  connect( k3bcore, SIGNAL(busyFinishRequested()), this, SLOT(endBusy()) );
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
 
   // FIXME: now make sure the welcome screen is displayed completely
@@ -371,18 +367,6 @@ void K3bMainWindow::slotConfigureKeys()
 void K3bMainWindow::initStatusBar()
 {
   m_statusBarManager = new K3bStatusBarManager( this );
-}
-
-
-void K3bMainWindow::showBusyInfo( const QString& str )
-{
-  m_statusBarManager->showBusyInfo(str);
-}
-
-
-void K3bMainWindow::endBusy()
-{
-  m_statusBarManager->endBusy();
 }
 
 
