@@ -136,31 +136,178 @@ extern "C" {
 
 
 
+/**
+ * Internal class used by K3bCdparanoiaLib
+ */
+class K3bCdparanoiaLibData
+{
+ public:
+  K3bCdparanoiaLibData( K3bDevice::Device* dev )
+    : m_device(dev),
+      m_drive(0),
+      m_paranoia(0),
+      m_currentSector(0) {
+  }
+
+  ~K3bCdparanoiaLibData() {
+    paranoiaFree();
+  }
+
+  K3bDevice::Device* device() const { return m_device; }
+  void paranoiaModeSet( int );
+  bool paranoiaInit();
+  void paranoiaFree();
+  int16_t* paranoiaRead( void(*callback)(long,int), int maxRetries );
+  long paranoiaSeek( long, int );
+  long firstSector( int );
+  long lastSector( int );
+  long sector() const { return m_currentSector; }
+
+ private:
+  K3bDevice::Device* m_device;
+
+  cdrom_drive* m_drive;
+  cdrom_paranoia* m_paranoia;
+
+  long m_currentSector;
+};
+
+
+bool K3bCdparanoiaLibData::paranoiaInit()
+{
+  if( m_drive )
+    paranoiaFree();
+
+  // since we use cdparanoia to open the device it is important to close
+  // the device here
+  m_device->close();
+
+  m_drive = cdda_cdda_identify( QFile::encodeName(m_device->blockDeviceName()), 0, 0 );
+  if( m_drive == 0 )
+    return false;
+
+  //  cdda_cdda_verbose_set( m_drive, 1, 1 );
+
+  cdda_cdda_open( m_drive );
+  m_paranoia = cdda_paranoia_init( m_drive );
+  if( m_paranoia == 0 ) {
+    paranoiaFree();
+    return false;
+  }
+
+  m_currentSector = 0;
+
+  return true;
+}
+
+
+void K3bCdparanoiaLibData::paranoiaFree()
+{
+  if( m_paranoia ) {
+    cdda_paranoia_free( m_paranoia );
+    m_paranoia = 0;
+  }
+  if( m_drive ) {
+    cdda_cdda_close( m_drive );
+    m_drive = 0;
+  }
+}
+
+
+void K3bCdparanoiaLibData::paranoiaModeSet( int mode )
+{
+  cdda_paranoia_modeset( m_paranoia, mode );
+}
+
+
+int16_t* K3bCdparanoiaLibData::paranoiaRead( void(*callback)(long,int), int maxRetries )
+{
+  if( m_paranoia ) {
+    int16_t* data = cdda_paranoia_read_limited( m_paranoia, callback, maxRetries );
+    if( data )
+      m_currentSector++;
+    return data;
+  }
+  else
+    return 0;
+}
+
+
+long K3bCdparanoiaLibData::firstSector( int track )
+{
+  if( m_drive )
+    return cdda_cdda_track_firstsector( m_drive, track );
+  else
+    return -1;
+}
+
+long K3bCdparanoiaLibData::lastSector( int track )
+{
+  if( m_drive )
+    return cdda_cdda_track_lastsector(m_drive, track );
+  else
+   return -1;
+}
+
+
+long K3bCdparanoiaLibData::paranoiaSeek( long sector, int mode )
+{
+  if( m_paranoia ) {
+    m_currentSector = cdda_paranoia_seek( m_paranoia, sector, mode );
+    return m_currentSector;
+  }
+  else
+    return -1;
+}
+
+
+//
+// We have exactly one instance of K3bCdparanoiaLibData per device
+//
+static QMap<K3bDevice::Device*, K3bCdparanoiaLibData*> s_dataMap;
 
 class K3bCdparanoiaLib::Private
 {
 public:
   Private() 
-    : drive(0),
-      paranoia(0),
-      paranoiaMode(0),
-      neverSkip(false),
-      maxRetries(5),
-      device(0),
+    : device(0),
       currentSector(0),
       startSector(0),
       lastSector(0),
-      status(S_OK) {
+      status(S_OK),
+      paranoiaLevel(0),
+      neverSkip(true),
+      maxRetries(5),
+      data(0) {
   }
 
   ~Private() {
   }
 
-  cdrom_drive* drive;
-  cdrom_paranoia* paranoia;
-  int paranoiaMode;
-  bool neverSkip;
-  int maxRetries;
+  void updateParanoiaMode() {
+    // from cdrdao 1.1.7
+    int paranoiaMode = PARANOIA_MODE_FULL^PARANOIA_MODE_NEVERSKIP;
+
+    switch( paranoiaLevel ) {
+    case 0:
+      paranoiaMode = PARANOIA_MODE_DISABLE;
+      break;
+
+    case 1:
+      paranoiaMode |= PARANOIA_MODE_OVERLAP;
+      paranoiaMode &= ~PARANOIA_MODE_VERIFY;
+      break;
+
+    case 2:
+      paranoiaMode &= ~(PARANOIA_MODE_SCRATCH|PARANOIA_MODE_REPAIR);
+      break;
+    }
+
+    if( neverSkip )
+      paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
+
+    data->paranoiaModeSet( paranoiaMode );
+  }
 
   // high-level api
   K3bDevice::Device* device;
@@ -170,122 +317,12 @@ public:
   long lastSector;
   int status;
   unsigned int currentTrack;
+  int paranoiaLevel;
+  bool neverSkip;
+  int maxRetries;
+
+  K3bCdparanoiaLibData* data;
 };
-
-
-bool K3bCdparanoiaLib::paranoiaInit( const QString& devicename )
-{
-  if( d->drive )
-    paranoiaFree();
-
-  d->drive = cdda_cdda_identify( QFile::encodeName(devicename), 0, 0 );
-  if( d->drive == 0 )
-    return false;
-
-  //  cdda_cdda_verbose_set( d->drive, 1, 1 );
-
-  cdda_cdda_open( d->drive );
-  d->paranoia = cdda_paranoia_init( d->drive );
-  if( d->paranoia == 0 ) {
-    paranoiaFree();
-    return false;
-  }
-
-  setParanoiaMode( d->paranoiaMode );
-
-  return true;
-}
-
-
-void K3bCdparanoiaLib::paranoiaFree()
-{
-  if( d->paranoia ) {
-    cdda_paranoia_free( d->paranoia );
-    d->paranoia = 0;
-  }
-  if( d->drive ) {
-    cdda_cdda_close( d->drive );
-    d->drive = 0;
-  }
-}
-
-
-void K3bCdparanoiaLib::setParanoiaMode( int mode )
-{
-  // from cdrdao 1.1.7
-  d->paranoiaMode = PARANOIA_MODE_FULL^PARANOIA_MODE_NEVERSKIP;
-
-  switch (mode) {
-  case 0:
-    d->paranoiaMode = PARANOIA_MODE_DISABLE;
-    break;
-
-  case 1:
-    d->paranoiaMode |= PARANOIA_MODE_OVERLAP;
-    d->paranoiaMode &= ~PARANOIA_MODE_VERIFY;
-    break;
-
-  case 2:
-    d->paranoiaMode &= ~(PARANOIA_MODE_SCRATCH|PARANOIA_MODE_REPAIR);
-    break;
-  }
-
-  if( d->neverSkip )
-    d->paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
-
-  if( d->paranoia )
-    cdda_paranoia_modeset( d->paranoia, d->paranoiaMode );
-}
-
-
-void K3bCdparanoiaLib::setNeverSkip( bool b )
-{
-  d->neverSkip = b;
-  setParanoiaMode( d->paranoiaMode );
-}
-
-
-  /** default: 20 */
-void K3bCdparanoiaLib::setMaxRetries( int m )
-{
-  d->maxRetries = m;
-}
-
-
-int16_t* K3bCdparanoiaLib::paranoiaRead( void(*callback)(long,int) )
-{
-  if( d->paranoia ) {
-    return cdda_paranoia_read_limited( d->paranoia, callback, d->maxRetries );
-  }
-  else
-    return 0;
-}
-
-
-long K3bCdparanoiaLib::firstSector( int track )
-{
-  if( d->drive )
-    return cdda_cdda_track_firstsector( d->drive, track );
-  else
-    return -1;
-}
-
-long K3bCdparanoiaLib::lastSector( int track )
-{
-  if( d->drive )
-    return cdda_cdda_track_lastsector(d->drive, track );
-  else
-   return -1;
-}
-
-
-long K3bCdparanoiaLib::paranoiaSeek( long sector, int mode )
-{
-  if( d->paranoia )
-    return cdda_paranoia_seek( d->paranoia, sector, mode );
-  else
-    return -1;
-}
 
 
 K3bCdparanoiaLib::K3bCdparanoiaLib()
@@ -294,11 +331,18 @@ K3bCdparanoiaLib::K3bCdparanoiaLib()
   s_counter++;
 }
 
+
 K3bCdparanoiaLib::~K3bCdparanoiaLib()
 {
   delete d;
   s_counter--;
   if( s_counter == 0 ) {
+    // clean up all K3bCdparanoiaLibData instances
+    for( QMap<K3bDevice::Device*, K3bCdparanoiaLibData*>::iterator it = s_dataMap.begin();
+	 it != s_dataMap.end(); ++it )
+      delete it.data();
+
+    // cleanup the dynamically loaded lib
     dlclose( s_libInterface );
     dlclose( s_libParanoia );
     s_libInterface = 0;
@@ -422,11 +466,7 @@ bool K3bCdparanoiaLib::initParanoia( K3bDevice::Device* dev, const K3bDevice::To
     return false;
   }
 
-  paranoiaFree();
-
-  // since we use cdparanoia to open the device it is important to close
-  // the device here
-  dev->close();
+  close();
 
   d->device = dev;
   d->toc = toc;
@@ -442,7 +482,14 @@ bool K3bCdparanoiaLib::initParanoia( K3bDevice::Device* dev, const K3bDevice::To
     return false;
   }
 
-  if( paranoiaInit( dev->blockDeviceName() ) ) {
+  //
+  // Get the appropriate data instance for this device
+  //
+  if( !s_dataMap[dev] )
+    s_dataMap[dev] = new K3bCdparanoiaLibData( dev );
+  d->data = s_dataMap[dev];
+
+  if( d->data->paranoiaInit() ) {
     d->startSector = d->currentSector = d->lastSector = 0;
 
     return true;
@@ -468,7 +515,8 @@ void K3bCdparanoiaLib::close()
 
 void K3bCdparanoiaLib::cleanup()
 {
-  paranoiaFree();
+  if( d->data )
+    d->data->paranoiaFree();
   d->device = 0;
   d->currentSector = 0;
 }
@@ -542,7 +590,7 @@ bool K3bCdparanoiaLib::initReading( long start, long end )
 	d->currentTrack++;
 
       // let the paranoia stuff point to the startSector
-      paranoiaSeek( start, SEEK_SET );
+      d->data->paranoiaSeek( start, SEEK_SET );
       return true;
     }
     else {
@@ -569,7 +617,19 @@ char* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track, bool littleE
     return 0;
   }
 
-  Q_INT16* data = paranoiaRead( paranoiaCallback );
+  if( d->currentSector != d->data->sector() ) {
+    kdDebug() << "(K3bCdparanoiaLib) need to seek before read. Looks as if we are reusing the paranoia instance." << endl;
+    if( !d->data->paranoiaSeek( d->currentSector, SEEK_SET ) )
+      return 0;
+  }
+
+  //
+  // The paranoia data could have been used by someone else before
+  // and setting the paranoia mode is fast
+  //
+  d->updateParanoiaMode();
+
+  Q_INT16* data = d->data->paranoiaRead( paranoiaCallback, d->maxRetries );
 
   char* charData = reinterpret_cast<char*>(data);
 
@@ -621,4 +681,22 @@ const K3bDevice::Toc& K3bCdparanoiaLib::toc() const
 long K3bCdparanoiaLib::rippedDataLength() const
 {
   return d->lastSector - d->startSector + 1;
+}
+
+
+void K3bCdparanoiaLib::setParanoiaMode( int m )
+{
+  d->paranoiaLevel = m;
+}
+
+
+void K3bCdparanoiaLib::setNeverSkip( bool b )
+{
+  d->neverSkip = b;
+}
+
+
+void K3bCdparanoiaLib::setMaxRetries( int r )
+{
+  d->maxRetries = r;
 }

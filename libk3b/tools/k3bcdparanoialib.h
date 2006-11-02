@@ -32,6 +32,21 @@ namespace K3bDevice {
 }
 
 
+/**
+ * K3bCdparanoiaLib is a convenience wrapper around libcdda_interface
+ * and libcdda_paranoia.
+ *
+ * It uses four paranoia levels 0-3 which can be set via setParanoiaMode
+ * and are used the same way as in cdrdao:
+ * \li 0: No checking, data is copied directly from the drive.
+ * \li 1: Perform overlapped reading to avoid jitter.
+ * \li 2: Like 1 but with additional checks of the read audio data.
+ * \li 3: Like 2 but with additional scratch detection and repair.
+ *
+ * K3bCdparanoiaLib is based on a shared data approach which makes sure
+ * that each device can only be opened once. This is necessary since 
+ * libcdda_interface opens the device exclusively on most distributions.
+ */
 class LIBK3B_EXPORT K3bCdparanoiaLib
 {
  public:
@@ -41,7 +56,7 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
   void setParanoiaMode( int );
   void setNeverSkip( bool b );
 
-  /** default: 20 */
+  /** default: 5 */
   void setMaxRetries( int );
 
   // high level API
@@ -105,20 +120,6 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
   long rippedDataLength() const;
   // ------------------------------------
 
-
-  // low level API
-  // ------------------------------------
-  bool paranoiaInit( const QString& devicename );
-  void paranoiaFree();
-
-  int16_t* paranoiaRead(void(*callback)(long,int));
-  long paranoiaSeek( long, int );
-
-  long firstSector( int );
-  long lastSector( int );
-  // ------------------------------------
-
-
   /**
    * returns 0 if the cdparanoialib could not
    * be found on the system.
@@ -133,12 +134,12 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
   K3bCdparanoiaLib();
   bool load();
 
+  class Private;
+  Private* d;
+
   static void* s_libInterface;
   static void* s_libParanoia;
   static int s_counter;
-
-  class Private;
-  Private* d;
 };
 
 

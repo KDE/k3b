@@ -89,21 +89,6 @@ K3bAudioCdTrackSource::~K3bAudioCdTrackSource()
 bool K3bAudioCdTrackSource::initParanoia()
 {
   if( !m_initialized ) {
-    // ============================================================
-    // HACK: since the paranoia is not properly closed we need to 
-    // make sure there is only one open
-    // The problem is that this means that only one track source
-    // can be used at the same time
-    // FIXME: one better hack would be to only close other sources
-    //        that use the same audio cd (i.e. device).
-    // ============================================================
-    static K3bAudioCdTrackSource* s_currentParanoiaUsingSource = 0;
-    if( s_currentParanoiaUsingSource ) {
-      s_currentParanoiaUsingSource->closeParanoia();
-    }
-    s_currentParanoiaUsingSource = this;
-    // ============================================================
-
     if( !m_cdParanoiaLib )
       m_cdParanoiaLib = K3bCdparanoiaLib::create();
     
