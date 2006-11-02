@@ -35,6 +35,7 @@ public:
   WorkThread();
   ~WorkThread();
 
+  void init();
   void run();
   void cancel();
 
@@ -71,10 +72,14 @@ K3bAudioSessionReadingJob::WorkThread::~WorkThread()
 }
 
 
-void K3bAudioSessionReadingJob::WorkThread::run()
+void K3bAudioSessionReadingJob::WorkThread::init()
 {
   canceled = false;
+}
 
+
+void K3bAudioSessionReadingJob::WorkThread::run()
+{
   if( !paranoia )
     paranoia = K3bCdparanoiaLib::create();
 
