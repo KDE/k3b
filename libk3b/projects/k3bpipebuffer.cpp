@@ -50,7 +50,7 @@ public:
     delete [] buffer;
   }
 
-  bool init() {
+  bool initFds() {
     if( inFd == -1 ) {
       if( ::socketpair(AF_UNIX, SOCK_STREAM, 0, inFdPair) ) {
       //      if( ::pipe( inFdPair ) ) {
@@ -241,7 +241,7 @@ void K3bPipeBuffer::start()
   // Create the socketpair in the gui thread to be sure it's available after 
   // this method returns.
   //
-  if( !m_thread->init() )
+  if( !m_thread->initFds() )
     jobFinished(false);
   else
     K3bThreadJob::start();

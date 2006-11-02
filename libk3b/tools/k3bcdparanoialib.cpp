@@ -24,7 +24,10 @@
 #include <kdebug.h>
 
 #include <dlfcn.h>
+
 #include <qfile.h>
+#include <qmutex.h>
+
 
 void* K3bCdparanoiaLib::s_libInterface = 0;
 void* K3bCdparanoiaLib::s_libParanoia = 0;
@@ -170,11 +173,15 @@ class K3bCdparanoiaLibData
   cdrom_paranoia* m_paranoia;
 
   long m_currentSector;
+
+  QMutex mutex;
 };
 
 
 bool K3bCdparanoiaLibData::paranoiaInit()
 {
+  mutex.lock();
+
   if( m_drive )
     paranoiaFree();
 
@@ -183,19 +190,24 @@ bool K3bCdparanoiaLibData::paranoiaInit()
   m_device->close();
 
   m_drive = cdda_cdda_identify( QFile::encodeName(m_device->blockDeviceName()), 0, 0 );
-  if( m_drive == 0 )
+  if( m_drive == 0 ) {
+    mutex.unlock();
     return false;
+  }
 
   //  cdda_cdda_verbose_set( m_drive, 1, 1 );
 
   cdda_cdda_open( m_drive );
   m_paranoia = cdda_paranoia_init( m_drive );
   if( m_paranoia == 0 ) {
+    mutex.unlock();
     paranoiaFree();
     return false;
   }
 
   m_currentSector = 0;
+
+  mutex.unlock();
 
   return true;
 }
@@ -203,6 +215,8 @@ bool K3bCdparanoiaLibData::paranoiaInit()
 
 void K3bCdparanoiaLibData::paranoiaFree()
 {
+  mutex.lock();
+
   if( m_paranoia ) {
     cdda_paranoia_free( m_paranoia );
     m_paranoia = 0;
@@ -211,21 +225,27 @@ void K3bCdparanoiaLibData::paranoiaFree()
     cdda_cdda_close( m_drive );
     m_drive = 0;
   }
+
+  mutex.unlock();
 }
 
 
 void K3bCdparanoiaLibData::paranoiaModeSet( int mode )
 {
+  mutex.lock();
   cdda_paranoia_modeset( m_paranoia, mode );
+  mutex.unlock();
 }
 
 
 int16_t* K3bCdparanoiaLibData::paranoiaRead( void(*callback)(long,int), int maxRetries )
 {
   if( m_paranoia ) {
+    mutex.lock();
     int16_t* data = cdda_paranoia_read_limited( m_paranoia, callback, maxRetries );
     if( data )
       m_currentSector++;
+    mutex.unlock();
     return data;
   }
   else
@@ -235,16 +255,24 @@ int16_t* K3bCdparanoiaLibData::paranoiaRead( void(*callback)(long,int), int maxR
 
 long K3bCdparanoiaLibData::firstSector( int track )
 {
-  if( m_drive )
-    return cdda_cdda_track_firstsector( m_drive, track );
+  if( m_drive ) {
+    mutex.lock();
+    long sector = cdda_cdda_track_firstsector( m_drive, track );
+    mutex.unlock();
+    return sector;
+  }
   else
     return -1;
 }
 
 long K3bCdparanoiaLibData::lastSector( int track )
 {
-  if( m_drive )
-    return cdda_cdda_track_lastsector(m_drive, track );
+  if( m_drive ) {
+    mutex.lock();
+    long sector = cdda_cdda_track_lastsector(m_drive, track );
+    mutex.unlock();
+    return sector;
+  }
   else
    return -1;
 }
@@ -253,7 +281,9 @@ long K3bCdparanoiaLibData::lastSector( int track )
 long K3bCdparanoiaLibData::paranoiaSeek( long sector, int mode )
 {
   if( m_paranoia ) {
+    mutex.lock();
     m_currentSector = cdda_paranoia_seek( m_paranoia, sector, mode );
+    mutex.unlock();
     return m_currentSector;
   }
   else

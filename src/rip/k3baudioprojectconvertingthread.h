@@ -61,6 +61,11 @@ class K3bAudioProjectConvertingThread : public K3bThread
   void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
   void setWriteCueFile( bool b ) { m_writeCueFile = b; }
 
+  /**
+   * \reimplemented from K3bThread
+   */
+  void init();
+
   void cancel();
 
  private:

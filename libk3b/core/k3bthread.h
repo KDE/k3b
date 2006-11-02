@@ -26,11 +26,13 @@ class QObject;
  * The threaded couterpart to K3bJob
  * instead of emitting the information signals
  * one has to use the emitXXX methods which will post
- * K3bProgressInfoEvents to the eventhandler
+ * K3bProgressInfoEvents to the eventhandler.
+ *
+ * K3bThreadJob can be used to automatically wrap the thread in a K3bJob.
  *
  * As in K3bJob it is important to call emitStarted and emitFinished.
  *
- * See K3bJob for more information.
+ * See K3bThreadJob for more information.
  */
 class LIBK3B_EXPORT K3bThread : public QThread
 {
@@ -40,6 +42,14 @@ class LIBK3B_EXPORT K3bThread : public QThread
   virtual ~K3bThread();
 
   void setProgressInfoEventHandler( QObject* eventHandler );
+
+  /**
+   * Initialize the thread before starting it in the GUi thread.
+   * K3bThreadJob automatically calls this.
+   *
+   * The default implementation does nothing.
+   */
+  virtual void init();
 
   /**
    * to provide the same api like K3bJob

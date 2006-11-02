@@ -86,6 +86,12 @@ void K3bAudioProjectConvertingThread::setEncoder( K3bAudioEncoder* f )
 }
 
 
+void K3bAudioProjectConvertingThread::init()
+{
+  d->canceled = false;
+}
+
+
 void K3bAudioProjectConvertingThread::run()
 {
   emitStarted();
@@ -96,7 +102,6 @@ void K3bAudioProjectConvertingThread::run()
       d->waveFileWriter = new K3bWaveFileWriter();
     
 
-  d->canceled = false;
   d->overallBytesRead = 0;
   d->overallBytesToRead = m_doc->length().audioBytes();
 

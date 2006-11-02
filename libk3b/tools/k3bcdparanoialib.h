@@ -46,6 +46,21 @@ namespace K3bDevice {
  * K3bCdparanoiaLib is based on a shared data approach which makes sure
  * that each device can only be opened once. This is necessary since 
  * libcdda_interface opens the device exclusively on most distributions.
+ *
+ * However, it is perfectly possible to have two instances of K3bCdparanoiaLib
+ * accessing the same device at the same time. K3bCdparanoiaLib will take care
+ * of the syncing and seeking issues automatically.
+ *
+ * K3bCdparanoiaLib is thread-safe.
+ *
+ * Usage:
+ * <pre>
+ * K3bCdparanoiaLib lib;
+ * lib.initParanoia( mydevice );
+ * lib.initReading( tracknumber );
+ * while( char* data = lib.read() )
+ *   dosomethingcoolwithdata( data );
+ * </pre>
  */
 class LIBK3B_EXPORT K3bCdparanoiaLib
 {
@@ -59,8 +74,6 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
   /** default: 5 */
   void setMaxRetries( int );
 
-  // high level API
-  // ------------------------------------
   /**
    * This will read the Toc and initialize some stuff.
    * It will also call paranoiaInit( const QString& )
@@ -93,16 +106,19 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
 
   /**
    * Read data.
-   * if errorCode is set it will be filled.
-   * @param track the tracknumer the data belongs to
+   * \param statusCode If not 0 will be set.
+   * \param track the tracknumer the data belongs to
    *
    * This method takes care of swapping the byte-order depending on the
    * machine type.
+   *
+   * \return The read sector data or 0 if all data within the specified range
+   *         has been read or an error has occured.
    */
   char* read( int* statusCode = 0, unsigned int* track = 0, bool littleEndian = true );
 
   /**
-   * This onyy is valid after a call to read()
+   * This only is valid after a call to read()
    */
   int status() const;
 
@@ -118,7 +134,6 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
   const K3bDevice::Toc& toc() const;
 
   long rippedDataLength() const;
-  // ------------------------------------
 
   /**
    * returns 0 if the cdparanoialib could not

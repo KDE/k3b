@@ -90,6 +90,12 @@ QString K3bThread::jobDetails() const
 }
 
 
+void K3bThread::init()
+{
+  // do nothing...
+}
+
+
 void K3bThread::cancel()
 {
   if( running() ) {

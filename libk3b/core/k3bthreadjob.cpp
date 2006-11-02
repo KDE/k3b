@@ -74,6 +74,7 @@ void K3bThreadJob::start()
     if( !m_running ) {
       m_thread->setProgressInfoEventHandler(this);
       m_running = true;
+      m_thread->init();
       m_thread->start();
     }
     else
@@ -90,7 +91,7 @@ void K3bThreadJob::cancel()
 {
   m_thread->cancel();
   // wait for the thread to finish
-  m_thread->wait();
+  //  m_thread->wait();
 }
 
 

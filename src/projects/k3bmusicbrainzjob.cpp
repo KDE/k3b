@@ -36,61 +36,13 @@
 class K3bMusicBrainzJob::TRMThread : public K3bThread
 {
 public:
-  TRMThread()
-    : m_canceled(false) {
-  }
+  TRMThread();
 
-  void run() {
+  void init() {
     m_canceled = false;
-
-    emitStarted();
-
-    track->seek(0);
-    m_trm.start( track->length() );
-
-    char buffer[2352*10];
-    int len = 0;
-    long long dataRead = 0;
-    while( !m_canceled && 
-	   (len = track->read( buffer, 2352*10 )) > 0 ) {
-
-      dataRead += len;
-
-      // swap data
-      char buf;
-      for( int i = 0; i < len-1; i+=2 ) {
-	buf = buffer[i];
-	buffer[i] = buffer[i+1];
-	buffer[i+1] = buf;
-      }
-
-      if( m_trm.generate( buffer, len ) ) {
-	len = 0;
-	break;
-      }
-
-      // FIXME: useless since libmusicbrainz does never need all the data
-      emitPercent( 100*dataRead/track->length().audioBytes() );
-    }
-
-    if( m_canceled )
-      emitCanceled();
-
-    if( len == 0 ) {
-      if( !m_trm.finalize() )
-	emitFinished( false );
-      else
-	emitFinished( !m_canceled );
-    }
-    else
-      emitFinished( false );
   }
-
-
-  void cancel() {
-    m_canceled = true;
-  }
-
+  void run();
+  void cancel();
   const QCString& signature() const {
     return m_trm.signature();
   }
@@ -103,18 +55,13 @@ private:
 };
 
 
-
 class K3bMusicBrainzJob::MusicBrainzThread : public K3bThread
 {
 public:
   MusicBrainzThread() {
   }
 
-  void run() {
-    emitStarted();
-    m_results = m_mb.query( m_sig );
-    emitFinished( m_results > 0 );
-  }
+  void run();
 
   void setSignature( const QCString& sig ) {
     m_sig = sig;
@@ -137,6 +84,72 @@ private:
   int m_results;
   QCString m_sig;
 };
+
+
+K3bMusicBrainzJob::TRMThread::TRMThread()
+  : m_canceled(false)
+{
+}
+
+
+void K3bMusicBrainzJob::TRMThread::run()
+{
+  emitStarted();
+
+  track->seek(0);
+  m_trm.start( track->length() );
+
+  char buffer[2352*10];
+  int len = 0;
+  long long dataRead = 0;
+  while( !m_canceled && 
+	 (len = track->read( buffer, 2352*10 )) > 0 ) {
+
+    dataRead += len;
+
+    // swap data
+    char buf;
+    for( int i = 0; i < len-1; i+=2 ) {
+      buf = buffer[i];
+      buffer[i] = buffer[i+1];
+      buffer[i+1] = buf;
+    }
+
+    if( m_trm.generate( buffer, len ) ) {
+      len = 0;
+      break;
+    }
+
+    // FIXME: useless since libmusicbrainz does never need all the data
+    emitPercent( 100*dataRead/track->length().audioBytes() );
+  }
+
+  if( m_canceled ) {
+    emitCanceled();
+    emitFinished( false );
+  }
+  else if( len == 0 ) {
+    emitFinished( m_trm.finalize() );
+  }
+  else
+    emitFinished( false );
+}
+
+
+void K3bMusicBrainzJob::TRMThread::cancel()
+{
+  m_canceled = true;
+}
+
+
+void K3bMusicBrainzJob::MusicBrainzThread::run()
+{
+  emitStarted();
+  m_results = m_mb.query( m_sig );
+  emitFinished( m_results > 0 );
+}
+
+
 
 
 // cannot use this as parent for the K3bSimpleJobHandler since this has not been constructed yet

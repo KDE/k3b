@@ -31,59 +31,10 @@
 class K3bDataPreparationJob::Private : public K3bThread
 {
 public:
-  Private( K3bDataDoc* _doc )
-    : doc(_doc) {
-  }
+  Private( K3bDataDoc* doc );
 
-  void run() {
-    emitStarted();
-
-    // clean up
-    nonExistingItems.clear();
-    listOfRenamedItems.truncate(0);
-
-    // initialize filenames in the project
-    doc->prepareFilenames();
-
-    // create the message string for the renamed files
-    if( doc->needToCutFilenames() ) {
-      int maxlines = 10;
-      QValueList<K3bDataItem*>::const_iterator it;
-      for( it = doc->needToCutFilenameItems().begin(); 
-	   maxlines > 0 && it != doc->needToCutFilenameItems().end();
-	   ++it, --maxlines ) {
-	K3bDataItem* item = *it;
-	listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
-	  .arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
-	  .arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
-	listOfRenamedItems += "<br>";
-      }
-      if( it != doc->needToCutFilenameItems().end() )
-	listOfRenamedItems += "...";
-    }
-
-    //
-    // Check for missing files
-    //
-    K3bDataItem* item = doc->root();
-    while( (item = item->nextSibling()) ) {
-      if( item->isFile() && !QFile::exists( item->localPath() ) ) {
-	nonExistingItems.append( item );
-      }
-      if( canceled ) {
-	emitCanceled();
-	emitFinished(false);
-	return;
-      }
-    }
-
-
-    emitFinished( true );
-  }
-
-  void cancel() {
-    canceled = true;
-  }
+  void run();
+  void cancel();
 
   K3bDataDoc* doc;
 
@@ -94,6 +45,68 @@ public:
 
   bool canceled;
 };
+
+
+K3bDataPreparationJob::Private::Private( K3bDataDoc* _doc )
+  : doc(_doc)
+{
+}
+
+
+void K3bDataPreparationJob::Private::run()
+{
+  emitStarted();
+
+  // clean up
+  nonExistingItems.clear();
+  listOfRenamedItems.truncate(0);
+
+  // initialize filenames in the project
+  doc->prepareFilenames();
+
+  // create the message string for the renamed files
+  if( doc->needToCutFilenames() ) {
+    int maxlines = 10;
+    QValueList<K3bDataItem*>::const_iterator it;
+    for( it = doc->needToCutFilenameItems().begin(); 
+	 maxlines > 0 && it != doc->needToCutFilenameItems().end();
+	 ++it, --maxlines ) {
+      K3bDataItem* item = *it;
+      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
+	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
+	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
+      listOfRenamedItems += "<br>";
+    }
+    if( it != doc->needToCutFilenameItems().end() )
+      listOfRenamedItems += "...";
+  }
+
+  //
+  // Check for missing files
+  //
+  K3bDataItem* item = doc->root();
+  while( (item = item->nextSibling()) ) {
+    if( item->isFile() && !QFile::exists( item->localPath() ) ) {
+      nonExistingItems.append( item );
+    }
+    if( canceled ) {
+      emitCanceled();
+      emitFinished(false);
+      return;
+    }
+  }
+
+
+  emitFinished( true );
+}
+
+
+void K3bDataPreparationJob::Private::cancel()
+{
+  canceled = true;
+}
+
+
 
 
 static QString createNonExistingItemsString( const QValueList<K3bDataItem*>& items, int max )
