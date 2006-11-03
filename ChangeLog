@@ -2,11 +2,11 @@
 ===
  * K3b now includes a VideoDVD kio slave. It can be used in Konqueror through the protocol videodvd:/
    to copy the files from a VideoDVD with on-the-fly decryption if libdvdcss is installed.
-   (Be aware that in some contries it is not permitted to use libdvdcss.)
+   (Be aware that in some countries it is not permitted to use libdvdcss.)
  * New Device menu containing all the actions possible for a device (like eject, unmount, ...).
-   This includes the possibility of assigning shotcuts to these kind of actions.
- * K3b now warns if user parameters for external programs have been specified. This has been introduces
-   becasue there were some bug report that were caused by faulty user parameters.
+   This includes the possibility of assigning shortcuts to these kind of actions.
+ * K3b now warns if user parameters for external programs have been specified. This has been introduced
+   because there were some bug report that were caused by faulty user parameters.
  * Cleaned up all the job classes: No job creates a widget anymore. This allows for non-GUI usage of libk3b.
    For example in a kioslave.
  * New option in the data project to not cache the inodes. That means it is possible to have multiple
@@ -14,7 +14,7 @@
  * K3b now tries to disable stuff that might influence the burning process. This includes the KDED module
    mediamanager, SuSEPlugger, and automounting (currently supported: subfs, supermount).
  * New Audio Track source editor dialog to cut audio track sources at the beginning and the end.
- * Splitted "read reties" and "ignore read errors" for data and audio sectors in cd copy and set new
+ * Splitted "read retries" and "ignore read errors" for data and audio sectors in cd copy and set new
    defaults for audio sectors which make more sense: 5 retires and skip unreadable sectors.
  * New Mediamanager which makes K3b always know which device contains which medium. This makes medium handling 
    more smooth and the user now selects a medium instead of a device.
