@@ -235,25 +235,9 @@ int K3bAudioEditorWidget::addRange( const K3b::Msf& start, const K3b::Msf& end,
 
   Range* r = new Range( m_idCnt++, start, end, startFixed, endFixed, toolTip,brush.style() != QBrush::NoBrush ? brush : QBrush(determineNewColor()) );
 
-  /*if(!startFixed)
-    {
-    kdDebug()<<"Ok once "<<endl; 
-    addMarker(r->start,r,false,false,toolTip,Qt::green);
-    }*/
-
   m_ranges.inSort( r );
 
-  /*for( QPtrListIterator<Range> it( m_ranges ); *it; ++it ) {
-    kdDebug()<<" "<<(*it)->start<<" "<<(*it)->end<<" "<<endl;
-    }
-
-    if( !(m_ranges.first())->endFixed ) {
-
-    kdDebug()<<"WTF ? TWICE !!! ";
-    addMarker(m_ranges.first()->end,(m_ranges.first()),true,false,toolTip,Qt::green);
-
-    }*/
-
+  
   // only update the changed range
   QRect rect = contentsRect();
   //rect.setLeft( fromPosToX( start ) );
@@ -617,6 +601,8 @@ void K3bAudioEditorWidget::drawRange( QPainter* p, const QRect& drawRect, K3bAud
     p->setPen( Qt::red );
     p->setBrush( Qt::red );
   }
+
+  
 
   if(r==m_draggedRange && m_draggingRangeEnd==true) {
     if(m_ranges.first()==r && !r->endFixed) {
@@ -993,41 +979,7 @@ void K3bAudioEditorWidget::slotMarkerMoved( int draggedMarkerId, const K3b::Msf&
 void K3bAudioEditorWidget::slotRangeChanged( int rangeId, const K3b::Msf& rangeStart ,
 					     const K3b::Msf& rangeEnd , bool draggingRangeEnd )
 {
-  /*
-    if(rangeLock == 0)       // locks used so that signalling doesn't go to an ifinfite loop
-    { 
-    rangeLock=1; 
-
-    kdDebug() <<k_funcinfo<<endl;
-
-    for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
-    {
-    kdDebug()<<"~~~ "<<(*it)->pos<<" ~~~"<<(*it)->range->start<<endl;
-
-    }
-
-    Range* range=getRange(rangeId);
-    kdDebug()<<" "<<range->start<<" "<<endl;
-    Marker* marker=0;
-
-
-
-    for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
-    if( ((*it)->range)->start == range->start  && 
-    ( range!=m_draggedRange ||  ( range==m_draggedRange && (*it)->end == draggingRangeEnd ) ) )
-    {
-    marker=*it;
-    if( range->start != marker->pos )
-    adjustMarker(marker->id,QPoint(fromPosToX(range->start),0));
-    break;
-    }
-
-    if(range==m_draggedRange)
-    m_draggedMarker=marker;
-
-    rangeLock=0;
-    }
-  */
+  ;
 }
 
 bool K3bAudioEditorWidget::adjustRange(const QPoint& e)
@@ -1060,32 +1012,54 @@ bool K3bAudioEditorWidget::adjustRange(const QPoint& e)
   otherEnd = ( m_draggingRangeEnd ? m_draggedRange->start : m_draggedRange->end );
 
   int offSet=100;
+  bool safetyValidate;
+  
+  
+  if(msfPos > m_draggedRange->end ) { // safety
+    
+    Range* safety_range=findRange(e); 
+     
+    if(safety_range)
+      m_draggedRange=safety_range;    
+    else 
+      return false;
 
-  if( msfPos > m_draggedRange->end)  {  //  safety           
-    
-    if(m_draggedRange==m_ranges.first()) {
-    
-    QPtrListIterator<Range> it5( m_ranges );
-    for(; (*it5)!=m_draggedRange; ++it5 ) {
+    draggedEnd = ( m_draggingRangeEnd ? m_draggedRange->end : m_draggedRange->start );
+    otherEnd = ( m_draggingRangeEnd ? m_draggedRange->start : m_draggedRange->end );
+
+  }
+  else {
+ 
+    QPtrListIterator<Range> temp_it5( m_ranges ),temp_it6(m_ranges);
+    for(; (*temp_it5)!=m_draggedRange; ++temp_it5 ) {
       ;}
-    --it5;
-    Range* temp_i=0;
-    if(it5)	{
-      temp_i=*it5;
-      if ( msfPos > temp_i->start ) {
-	m_draggedRange=temp_i;
-	draggedEnd = ( m_draggingRangeEnd ? m_draggedRange->end : m_draggedRange->start );
-	otherEnd = ( m_draggingRangeEnd ? m_draggedRange->start : m_draggedRange->end );
-	// THIS
-	updateRangeMarkerColor();
+    ++temp_it5;
+
+    if(temp_it5) {
+     
+      if( msfPos < (*temp_it5)->start ) {
+
+	Range* safety_range=findRange(e); 
+     
+	if(!safety_range)
+	  return false;
+	else {
+	  for(; (*temp_it6)!=safety_range; ++temp_it6 ) {
+	    ;}
+	  --temp_it6; 
+         
+	  m_draggedRange=*temp_it6;
+	  draggedEnd = ( m_draggingRangeEnd ? m_draggedRange->end : m_draggedRange->start );
+	  otherEnd = ( m_draggingRangeEnd ? m_draggedRange->start : m_draggedRange->end );      
+  
+
+        }
       }
+
     }
-    }	
-  }         
 
-
-
-
+  }
+         
 
   for( QPtrListIterator<Range> it( m_ranges ); *it; ++it ) {
 	
@@ -1103,6 +1077,7 @@ bool K3bAudioEditorWidget::adjustRange(const QPoint& e)
 	Range* temp_i=0;
 	if(it5) {
 	  temp_i=*it5;
+	
 	  if ( msfPos > temp_i->start ) {
 	    m_draggedRange=temp_i;
 	    range=m_draggedRange;
@@ -1181,11 +1156,11 @@ bool K3bAudioEditorWidget::adjustRange(const QPoint& e)
 
 
 	modifyRange(range->id,range->start,msfPos);  /// **** otherEnd-msfPos should be > some value && 
-	// / ***    range->start -msfpos >5
+	  // / ***    range->start -msfpos >5
 	
-	if(m_draggedRange)  
-	  m_oppositeRange=range;	// this is to compensate for  the msf editing
-	break;
+	  if(m_draggedRange)  
+	    m_oppositeRange=range;	// this is to compensate for  the msf editing
+	  break;
       }  
       else 
 	if ( msfPos >= range->start ) {
@@ -1256,7 +1231,7 @@ bool K3bAudioEditorWidget::adjustRange(const QPoint& e)
 	  if(range) {
 	    modifyRange(range->id,range->start,msfPos);  /// **** 
 	    
-	  }
+	      }
 
 	  m_oppositeRange=range;	// this is to compensate for  the msf editing	
 	  break;
