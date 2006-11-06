@@ -82,7 +82,7 @@ void K3bAudioTrackWidget::slotEditorMouseAt( const K3b::Msf& msf )
 
 void K3bAudioTrackWidget::slotIndex0RangeModified( int, const K3b::Msf& start, const K3b::Msf& )
 {
-  kdDebug()<<k_funcinfo<<endl;
+  
   setIndex0Editors( start );
 }
 
@@ -91,9 +91,9 @@ void K3bAudioTrackWidget::slotIndex0Changed( const K3b::Msf& msf )
 {
   /*m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 );
   setIndex0Editors( msf );*/
-  kdDebug()<<k_funcinfo<<endl;
+  
   if(m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 )) {
-    kdDebug()<<k_funcinfo<<"ok"<<endl; 
+    
     setIndex0Editors( msf );
     }
   else {
@@ -107,7 +107,7 @@ void K3bAudioTrackWidget::slotIndex0Changed( const K3b::Msf& msf )
 void K3bAudioTrackWidget::slotPostGapChanged( const K3b::Msf& msf )
 {
   
- kdDebug()<<k_funcinfo<<endl;
+ 
  if( msf == 0 && m_checkIndex0->isChecked() ) {
     m_checkIndex0->setChecked(false);
   }
@@ -155,9 +155,10 @@ void K3bAudioTrackWidget::slotIndex0Checked( bool b )
   }
   else if( m_index0Range == -1 ) {
     K3b::Msf newIndex0;
-    if( m_editPostGap->value() > 0 )
+    
+   if( m_editPostGap->value() > 0 )
       newIndex0 = m_tracks.first()->length() - m_editPostGap->msfValue();
-    else if( m_editIndex0->value() > 0 )
+    else if( m_editIndex0->value() > 0 && m_editIndex0->msfValue()!=m_tracks.first()->length())
       newIndex0 = m_editIndex0->msfValue();
     else
       newIndex0 = m_tracks.first()->length()-150;
@@ -173,7 +174,9 @@ void K3bAudioTrackWidget::slotIndex0Checked( bool b )
 
 void K3bAudioTrackWidget::load()
 {
-  if( !m_tracks.isEmpty() ) {
+  
+ 
+ if( !m_tracks.isEmpty() ) {
 
     K3bAudioTrack* track = m_tracks.first();
 
@@ -181,8 +184,8 @@ void K3bAudioTrackWidget::load()
       // here the user may edit the index 0 value directly
       m_audioEditor->setLength( track->length() );
       setIndex0Editors( track->index0() );
-
-      m_checkIndex0->setChecked( track->postGap() > 0 );
+      m_checkIndex0->setChecked( track->index0() > 0 );
+      //m_checkIndex0->setChecked( track->postGap() > 0 );
     }
     else {
       // allow the user to change all gaps at once
@@ -237,6 +240,8 @@ void K3bAudioTrackWidget::load()
 
 void K3bAudioTrackWidget::save()
 {
+
+  
   // save CD-Text, preemphasis, and copy protection for all tracks. no problem
   for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
     
@@ -272,6 +277,7 @@ void K3bAudioTrackWidget::save()
   if( m_tracks.count() == 1 ) {
     if( !m_checkIndex0->isChecked() || m_editIndex0->msfValue() == m_tracks.first()->length() )
       m_tracks.first()->setIndex0( 0 ); // no index 0
+       
     else
       m_tracks.first()->setIndex0( m_editIndex0->msfValue() );
   }
