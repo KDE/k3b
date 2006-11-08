@@ -37,6 +37,9 @@ class K3bIso9660;
 class K3bCueFileParser;
 class QDragEnterEvent;
 class QDropEvent;
+class KListView;
+class QListViewItem;
+class QPoint;
 
 
 /**
@@ -57,7 +60,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
 
   void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
-  void slotMd5SumCompare();
+  void slotContextMenu( KListView*, QListViewItem*, const QPoint& pos );
 
   void slotUpdateImage( const QString& );
 

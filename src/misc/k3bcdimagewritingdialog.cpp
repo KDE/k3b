@@ -73,6 +73,8 @@
 #include <qspinbox.h>
 #include <qmap.h>
 #include <qptrqueue.h>
+#include <qpopupmenu.h>
+#include <qclipboard.h>
 
 
 class K3bCdImageWritingDialog::Private
@@ -80,6 +82,7 @@ class K3bCdImageWritingDialog::Private
 public:
   Private()
     : md5SumItem(0),
+      haveMd5Sum( false ),
       imageForced( false ) {
   }
 
@@ -87,6 +90,7 @@ public:
   QString lastCheckedFile;
 
   K3bMd5Job* md5Job;
+  bool haveMd5Sum;
 
   int foundImageType;
 
@@ -216,10 +220,9 @@ void K3bCdImageWritingDialog::setupGui()
   m_infoView->setAlternateBackground( QColor() );
   m_infoView->setFullWidth(true);
   m_infoView->setSelectionMode( QListView::NoSelection );
-  m_infoView->setDoubleClickForEdit( false ); // just for the md5 button
 
-  connect( m_infoView, SIGNAL(editorButtonClicked( K3bListViewItem*, int )),
-	   this, SLOT(slotMd5SumCompare()) );
+  connect( m_infoView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
@@ -456,6 +459,7 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
 
   // check the image types
 
+  d->haveMd5Sum = false;
   d->md5Job->cancel();
   m_infoView->clear();
   m_infoView->header()->resizeSection( 0, 20 );
@@ -826,6 +830,8 @@ void K3bCdImageWritingDialog::setImage( const KURL& url )
 
 void K3bCdImageWritingDialog::calculateMd5Sum( const QString& file )
 {
+  d->haveMd5Sum = false;
+
   if( !d->md5SumItem )
     d->md5SumItem = new K3bListViewItem( m_infoView, m_infoView->firstChild() );
 
@@ -833,7 +839,6 @@ void K3bCdImageWritingDialog::calculateMd5Sum( const QString& file )
   d->md5SumItem->setForegroundColor( 0, palette().disabled().foreground() );
   d->md5SumItem->setProgress( 1, 0 );
   d->md5SumItem->setPixmap( 0, SmallIcon( "exec") );
-  d->md5SumItem->setButton( 1, false );
 
   if( file != d->lastCheckedFile ) {
     d->lastCheckedFile = file;
@@ -855,6 +860,7 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 {
   if( success ) {
     d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
+    d->haveMd5Sum = true;
   }
   else {
     d->md5SumItem->setForegroundColor( 1, Qt::red );
@@ -863,29 +869,42 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
     else
       d->md5SumItem->setText( 1, i18n("Calculation failed") );
     d->md5SumItem->setPixmap( 0, SmallIcon( "stop") );
-    d->lastCheckedFile = "";
+    d->lastCheckedFile.truncate(0);
   }
 
-  d->md5SumItem->setButton( 1, success );
   d->md5SumItem->setDisplayProgressBar( 1, false );
 }
 
 
-void K3bCdImageWritingDialog::slotMd5SumCompare()
+void K3bCdImageWritingDialog::slotContextMenu( KListView*, QListViewItem*, const QPoint& pos )
 {
-  bool ok;
-  QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
-						   i18n("Please insert the MD5 Sum to compare:"),
-						   QString::null,
-						   &ok,
-						   this );
-  if( ok ) {
-    if( md5sumToCompare.lower().utf8() == d->md5Job->hexDigest().lower() )
-      KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(imagePath()),
-				i18n("MD5 Sums Equal") );
-    else
-      KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from the specified.").arg(imagePath()),
-			  i18n("MD5 Sums Differ") );
+  if( !d->haveMd5Sum )
+    return;
+
+  QPopupMenu popup;
+  int copyItem = popup.insertItem( i18n("Copy checksum to clipboard") );
+  int compareItem = popup.insertItem( i18n("Compare checksum...") );
+
+  int r = popup.exec( pos );
+
+  if( r == compareItem ) {
+    bool ok;
+    QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
+						     i18n("Please insert the MD5 Sum to compare:"),
+						     QString::null,
+						     &ok,
+						     this );
+    if( ok ) {
+      if( md5sumToCompare.lower().utf8() == d->md5Job->hexDigest().lower() )
+	KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(imagePath()),
+				  i18n("MD5 Sums Equal") );
+      else
+	KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from the specified.").arg(imagePath()),
+			    i18n("MD5 Sums Differ") );
+    }
+  }
+  else if( r == copyItem ) {
+    QApplication::clipboard()->setText( d->md5Job->hexDigest().lower(), QClipboard::Clipboard );
   }
 }
 

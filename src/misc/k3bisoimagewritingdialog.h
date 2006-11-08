@@ -31,6 +31,9 @@ class K3bListView;
 class QSpinBox;
 class QDragEnterEvent;
 class QDropEvent;
+class KListView;
+class QListViewItem;
+class QPoint;
 
 
 /**
@@ -52,7 +55,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void slotWriterChanged();
   void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
-  void slotMd5SumCompare();
+  void slotContextMenu( KListView*, QListViewItem*, const QPoint& pos );
 
  protected:
   void loadUserDefaults( KConfigBase* );
