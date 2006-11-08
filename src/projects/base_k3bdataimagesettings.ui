@@ -25,7 +25,7 @@
         </property>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox4</cstring>
+                <cstring>m_groupVolumeName</cstring>
             </property>
             <property name="title">
                 <string>Volume Name</string>
@@ -54,7 +54,7 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>m_groupLinks</cstring>
+                <cstring>m_groupFileSystem</cstring>
             </property>
             <property name="title">
                 <string>File System</string>
@@ -105,7 +105,7 @@
                 </property>
                 <widget class="QGroupBox">
                     <property name="name">
-                        <cstring>groupBox3</cstring>
+                        <cstring>m_groupSymlinks</cstring>
                     </property>
                     <property name="title">
                         <string>Symbolic Links</string>
@@ -172,7 +172,7 @@ Be aware that in case Rock Ridge extensions are disabled (which is not recommend
                 </widget>
                 <widget class="QGroupBox">
                     <property name="name">
-                        <cstring>groupBox4_2</cstring>
+                        <cstring>m_groupWhitespace</cstring>
                     </property>
                     <property name="title">
                         <string>White space handling</string>

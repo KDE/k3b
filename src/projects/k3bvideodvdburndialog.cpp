@@ -22,7 +22,7 @@
 #include <k3bcore.h>
 #include <k3bwritingmodewidget.h>
 #include <k3bglobals.h>
-#include <k3bdatavolumedescwidget.h>
+#include <k3bdataimagesettingswidget.h>
 #include <k3bisooptions.h>
 #include <k3bstdguiitems.h>
 
@@ -54,10 +54,14 @@ K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *pare
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
-  // create volume descriptor tab
-  m_volumeDescWidget = new K3bDataVolumeDescWidget( this );
-  m_volumeDescWidget->layout()->setMargin( marginHint() );
-  addPage( m_volumeDescWidget, i18n("Volume Desc") );
+  // create image settings tab
+  m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+  m_imageSettingsWidget->layout()->setMargin( marginHint() );
+  m_imageSettingsWidget->m_groupFileSystem->hide();
+  m_imageSettingsWidget->m_groupSymlinks->hide();
+  m_imageSettingsWidget->m_groupWhitespace->hide();
+
+  addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
@@ -84,7 +88,7 @@ void K3bVideoDvdBurnDialog::saveSettings()
 
   // save iso image settings
   K3bIsoOptions o = m_doc->isoOptions();
-  m_volumeDescWidget->save( o );
+  m_imageSettingsWidget->save( o );
   m_doc->setIsoOptions( o );
 
   // save image file path
@@ -105,7 +109,7 @@ void K3bVideoDvdBurnDialog::readSettings()
 
   m_checkVerify->setChecked( m_doc->verifyData() );
 
-  m_volumeDescWidget->load( m_doc->isoOptions() );
+  m_imageSettingsWidget->load( m_doc->isoOptions() );
 
   if( doc()->size() > 4700372992LL )
     m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
@@ -133,7 +137,7 @@ void K3bVideoDvdBurnDialog::loadK3bDefaults()
 {
   K3bProjectBurnDialog::loadK3bDefaults();
 
-  m_volumeDescWidget->load( K3bIsoOptions::defaults() );
+  m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
   m_checkVerify->setChecked( false );
 
   toggleAll();
@@ -145,7 +149,7 @@ void K3bVideoDvdBurnDialog::loadUserDefaults( KConfigBase* c )
   K3bProjectBurnDialog::loadUserDefaults( c );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
-  m_volumeDescWidget->load( o );
+  m_imageSettingsWidget->load( o );
 
   m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
 
@@ -158,7 +162,7 @@ void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigBase* c )
   K3bProjectBurnDialog::saveUserDefaults(c);
 
   K3bIsoOptions o;
-  m_volumeDescWidget->save( o );
+  m_imageSettingsWidget->save( o );
   o.save( c );
 
   c->writeEntry( "verify data", m_checkVerify->isChecked() );

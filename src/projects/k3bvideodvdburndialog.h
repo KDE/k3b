@@ -21,7 +21,7 @@
 
 
 class K3bVideoDvdDoc;
-class K3bDataVolumeDescWidget;
+class K3bDataImageSettingsWidget;
 class QCheckBox;
 
 
@@ -45,7 +45,7 @@ class K3bVideoDvdBurnDialog : public K3bProjectBurnDialog
    void toggleAll();
 
  private:
-   K3bDataVolumeDescWidget* m_volumeDescWidget;
+   K3bDataImageSettingsWidget* m_imageSettingsWidget;
 
    QCheckBox* m_checkVerify;
 
