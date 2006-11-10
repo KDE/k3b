@@ -93,6 +93,8 @@ class K3bDeviceBranchViewItem : public KFileTreeViewItem
 
  private:
   bool m_bCurrent;
+
+  K3bDevice::Device* m_device;
 };
 
 

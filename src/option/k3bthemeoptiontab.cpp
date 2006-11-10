@@ -62,6 +62,8 @@ K3bThemeOptionTab::K3bThemeOptionTab(QWidget *parent, const char *name )
 {
   d = new Private();
 
+  m_viewTheme->setShadeSortColumn( false );
+
   connect( m_viewTheme, SIGNAL(selectionChanged()),
 	   this, SLOT(selectionChanged()) );
   connect( kapp, SIGNAL(appearanceChanged()),

@@ -21,15 +21,13 @@
 #include <qwidget.h>
 #include <qptrlist.h>
 
-#include <klistview.h>
+#include <k3blistview.h>
 
 
 class K3bExternalBinManager;
 class QPushButton;
-class KListView;
 class QTabWidget;
 class KEditListBox;
-class QListViewItem;
 class K3bExternalProgram;
 class K3bExternalBin;
 
@@ -59,7 +57,7 @@ class K3bExternalBinWidget : public QWidget
   K3bExternalBinManager* m_manager;
 
   QTabWidget* m_mainTabWidget;
-  KListView* m_programView;
+  K3bListView* m_programView;
   KListView* m_parameterView;
   KEditListBox* m_searchPathBox;
 
@@ -70,15 +68,12 @@ class K3bExternalBinWidget : public QWidget
 };
 
 
-class K3bExternalBinWidget::K3bExternalProgramViewItem : public KListViewItem
+class K3bExternalBinWidget::K3bExternalProgramViewItem : public K3bListViewItem
 {
  public:
   K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent );
   
   K3bExternalProgram* program() const { return m_program; }
-  
- protected:
-  void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
   
  private:
   K3bExternalProgram* m_program;
@@ -86,7 +81,7 @@ class K3bExternalBinWidget::K3bExternalProgramViewItem : public KListViewItem
 
 
 
-class K3bExternalBinWidget::K3bExternalBinViewItem : public KListViewItem
+class K3bExternalBinWidget::K3bExternalBinViewItem : public K3bListViewItem
 {
  public:
   K3bExternalBinViewItem( K3bExternalBin* bin, K3bExternalProgramViewItem* parent );

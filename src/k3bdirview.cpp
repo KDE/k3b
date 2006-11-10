@@ -138,6 +138,8 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 	   this, SLOT(slotDirActivated(const KURL&)) );
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
 	   this, SLOT(showDevice(K3bDevice::Device*)) );
+  connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
+	   this, SIGNAL(deviceSelected(K3bDevice::Device*)) );
   connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
 	   this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
 
@@ -341,6 +343,8 @@ void K3bDirView::slotDirActivated( const KURL& url )
 //   m_urlCombo->setEditText( url.path() );
 
   m_viewStack->raiseWidget( m_fileView );
+
+  emit urlEntered( url );
 }
 
 

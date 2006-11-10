@@ -355,15 +355,15 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
       info->margin > 0 ) {
     
     p->fillRect( 0, 0, info->margin, height(),
-		 cg.brush( QColorGroup::Highlight ) );
+		 cgh.brush( QColorGroup::Highlight ) );
     p->fillRect( width-info->margin, 0, info->margin, height(),
-		 cg.brush( QColorGroup::Highlight ) );
+		 cgh.brush( QColorGroup::Highlight ) );
   }
   else { // in case we use the KListView alternate color stuff
     p->fillRect( 0, 0, info->margin, height(),
-		 cg.brush( QColorGroup::Base ) );
+		 cgh.brush( QColorGroup::Base ) );
     p->fillRect( width-info->margin, 0, info->margin, height(),
-		 cg.brush( QColorGroup::Base ) );
+		 cgh.brush( QColorGroup::Base ) );
   }
 
   // FIXME: the margin (we can only translate horizontally since height() is used for painting)
@@ -382,7 +382,7 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
 
 void K3bListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
 {
-  KListViewItem::paintCell( p, cg, col, width, align );
+  QListViewItem::paintCell( p, cg, col, width, align );
 }
 
 

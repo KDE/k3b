@@ -443,6 +443,7 @@ void K3bMainWindow::initView()
   connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice::Device*)), m_dirView,
 	   SLOT(showDevice(K3bDevice::Device* )) );
   connect( m_dirView, SIGNAL(urlEntered(const KURL&)), m_fileTreeComboBox, SLOT(setUrl(const KURL&)) );
+  connect( m_dirView, SIGNAL(deviceSelected(K3bDevice::Device*)), m_fileTreeComboBox, SLOT(setDevice(K3bDevice::Device*)) );
 
   KWidgetAction* fileTreeComboAction = new KWidgetAction( m_fileTreeComboBox,
 							  i18n("&Quick Dir Selector"),

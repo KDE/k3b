@@ -97,10 +97,10 @@ void K3bBurningOptionTab::setupGui()
   // -----------------------------------------------------------------------
 
 
-
+  QToolTip::add( m_checkOverburn, i18n("Allow burning more than the official media capacity") );
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
-
   QToolTip::add( m_checkAutoErasingRewritable, i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
+  QToolTip::add( m_checkEject, i18n("Do not eject the burn medium after a completed burn process") );
 
   QWhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
                                                          "the possibility to choose between cdrecord "
@@ -109,6 +109,17 @@ void K3bBurningOptionTab::setupGui()
                                                          "does not support the used writer."
                                                          "<p><b>Be aware that K3b does not support both "
                                                          "programs in all project types.</b>") );
+
+  QWhatsThis::add( m_checkOverburn, i18n("<p>Each medium has an official maximum capacity which is stored in a read-only "
+					 "area of the medium and is guaranteed by the vendor. However, this official "
+					 "maximum is not always the actual maximum. Many media have an "
+					 "actual total capacity that is slightly larger than the official amount."
+					 "<p>If this option is checked K3b will disable a safety check that prevents "
+					 "burning beyond the offical capacity."
+					 "<p><b>Caution:</b> Enabling this option can cause failures in the end of the "
+					 "burning process if K3b attempts to write beyond the official capacity. It "
+					 "makes sense to first determine the actual maximum capacity of the media brand "
+					 "with a simulated burn.") );
 
   QWhatsThis::add( m_checkAutoErasingRewritable, i18n("<p>If this option is checked K3b will automatically "
                                                       "erase CD-RWs and format DVD-RWs if one is found instead "
@@ -119,6 +130,12 @@ void K3bBurningOptionTab::setupGui()
 							"sizes used are %1 MB for CD and %2 MB for DVD burning."
 							"<p>If this option is checked the value specified will be used for both "
 							"CD and DVD burning.").arg(4).arg(32) );
+
+  QWhatsThis::add( m_checkEject, i18n("<p>If this option is checked K3b will not eject the medium once the burn process "
+				      "finishes. This can be helpful in case one leaves the computer after starting the "
+				      "burning and does not want the tray to be open all the time."
+				      "<p>However, on Linux systems a freshly burned medium has to be reloaded. Otherwise "
+				      "the system will not detect the changes and still treat it as an empty medium.") );
 }
 
 

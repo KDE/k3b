@@ -94,7 +94,7 @@ K3bFileTreeComboBox::~K3bFileTreeComboBox()
 
 void K3bFileTreeComboBox::slotDeviceExecuted( K3bDevice::Device* dev )
 {
-  setEditText( SmallIcon("cdrom_unmount"), dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
+  setDevice( dev );
   popdown();
   emit deviceExecuted( dev );
 }
@@ -111,6 +111,12 @@ void K3bFileTreeComboBox::setUrl( const KURL& url )
 {
   setEditText( SmallIcon("folder"), url.path() );
   popdown();
+}
+
+
+void K3bFileTreeComboBox::setDevice( K3bDevice::Device* dev )
+{
+  setEditText( SmallIcon("cdrom_unmount"), dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
 }
 
 

@@ -78,6 +78,7 @@ class K3bDirView : public QVBox
 
  signals:
   void urlEntered( const KURL& );
+  void deviceSelected( K3bDevice::Device* );
 
  private:
   QWidgetStack* m_viewStack;

@@ -60,7 +60,9 @@ public:
 K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent, const char* name )
   : base_K3bPluginOptionTab( parent, name )
 {
-    connect( m_viewPlugins, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), this, SLOT( slotConfigureButtonClicked() ) );
+  m_viewPlugins->setShadeSortColumn( false );
+
+  connect( m_viewPlugins, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), this, SLOT(slotConfigureButtonClicked()) );
   connect( m_buttonConfigure, SIGNAL(clicked()), this, SLOT(slotConfigureButtonClicked()) );
   connect( m_viewPlugins, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()) );
 }

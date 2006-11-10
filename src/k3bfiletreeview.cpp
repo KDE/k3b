@@ -51,7 +51,7 @@
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
   : KFileTreeBranch( view, 
-		     KURL(), 
+		     KURL( "media:/" + dev->blockDeviceName() ), 
 		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
@@ -149,11 +149,12 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : KFileTreeViewItem( parent, 
-		       new KFileItem( KURL(), 
+		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ), 
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
-    m_bCurrent( false )
+    m_bCurrent( false ),
+    m_device( dev )
 {
 }
 
@@ -162,11 +163,12 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : KFileTreeViewItem( parent,
-		       new KFileItem( KURL(), 
+		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ), 
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
-    m_bCurrent( false )
+    m_bCurrent( false ),
+    m_device( dev )
 {
 }
 

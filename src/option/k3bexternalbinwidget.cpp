@@ -31,41 +31,34 @@
 #include <qwhatsthis.h>
 #include <qcursor.h>
 #include <qapplication.h>
+#include <qbitmap.h>
 
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <keditlistbox.h>
 #include <klistview.h>
-
+#include <kglobalsettings.h>
+#include <kdeversion.h>
 
 
 
 K3bExternalBinWidget::K3bExternalProgramViewItem::K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent )
-  : KListViewItem( parent ), m_program(p)
+  : K3bListViewItem( parent ), m_program(p)
 {
+  QFont f( listView()->font() );
+  f.setBold(true);
+  setFont( 0, f );
+  setBackgroundColor( 0, KGlobalSettings::alternateBackgroundColor() );
+  setBackgroundColor( 1, KGlobalSettings::alternateBackgroundColor() );
+  setBackgroundColor( 2, KGlobalSettings::alternateBackgroundColor() );
   setText( 0, p->name() );
-}
-
-
-void K3bExternalBinWidget::K3bExternalProgramViewItem::paintCell( QPainter* p, 
-								  const QColorGroup& cg, 
-								  int column, 
-								  int width, 
-								  int align )
-{
-  if( column == 0 ) {
-    QFont f( p->font() );
-    f.setBold(true);
-    p->setFont(f);
-  }
-  
-  KListViewItem::paintCell(p, cg, column, width, align );
+  setSelectable( false );
 }
 
 
 K3bExternalBinWidget::K3bExternalBinViewItem::K3bExternalBinViewItem( K3bExternalBin* bin, K3bExternalProgramViewItem* parent )
-  : KListViewItem( parent ), m_bin( bin ), m_parent( parent )
+  : K3bListViewItem( parent ), m_bin( bin ), m_parent( parent )
 {
   setText( 0, bin->path );
   setText( 1, bin->version );
@@ -77,11 +70,18 @@ K3bExternalBinWidget::K3bExternalBinViewItem::K3bExternalBinViewItem( K3bExterna
 
 void K3bExternalBinWidget::K3bExternalBinViewItem::setDefault( bool b )
 {
+  static QPixmap s_emptyPix( (int)KIcon::SizeSmall, (int)KIcon::SizeSmall );
+  static bool s_emptyPixInitialized = false;
+  if( !s_emptyPixInitialized ) {
+    s_emptyPix.setMask( QBitmap( (int)KIcon::SizeSmall, (int)KIcon::SizeSmall, true ) );
+    s_emptyPixInitialized = true;
+  }
+
   m_default = b;
   if( b )
     setPixmap( 0, SmallIcon( "ok" ) );
   else
-    setPixmap( 0, SmallIcon( "gear" ) );
+    setPixmap( 0, s_emptyPix );
 }
 
 
@@ -116,7 +116,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   QGridLayout* programTabLayout = new QGridLayout( programTab );
   programTabLayout->setMargin( KDialog::marginHint() );
   programTabLayout->setSpacing( KDialog::spacingHint() );
-  m_programView = new KListView( programTab );
+  m_programView = new K3bListView( programTab );
   m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
   QToolTip::add( m_defaultButton, i18n("Change the versions K3b should use.") );
   QWhatsThis::add( m_defaultButton, i18n("<p>If K3b found more than one installed version of a program "
@@ -135,7 +135,10 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   m_programView->addColumn( i18n("Features") );
   m_programView->setAllColumnsShowFocus(true);
   m_programView->setFullWidth(true);
-
+  m_programView->setAlternateBackground( QColor() );
+#if KDE_IS_VERSION(3,4,0)
+  m_programView->setShadeSortColumn( false );
+#endif
   m_mainTabWidget->addTab( programTab, i18n("Programs") );
 
 
