@@ -58,7 +58,7 @@ class K3bExternalBinWidget : public QWidget
 
   QTabWidget* m_mainTabWidget;
   K3bListView* m_programView;
-  KListView* m_parameterView;
+  K3bListView* m_parameterView;
   KEditListBox* m_searchPathBox;
 
   QPushButton* m_defaultButton;

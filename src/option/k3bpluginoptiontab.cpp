@@ -19,25 +19,25 @@
 #include <k3bpluginmanager.h>
 #include <k3bplugin.h>
 #include <k3bpluginconfigwidget.h>
-
+#include <k3blistview.h>
 #include <k3bcore.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <klistview.h>
 #include <kdialogbase.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 
 #include <qstringlist.h>
 #include <qpushbutton.h>
 
 
-class K3bPluginOptionTab::PluginViewItem : public KListViewItem
+class K3bPluginOptionTab::PluginViewItem : public K3bListViewItem
 {
 public:
   PluginViewItem( K3bPlugin* p, KListViewItem* parent )
-    : KListViewItem( parent ),
+    : K3bListViewItem( parent ),
       plugin(p) {
     const K3bPluginInfo& info = p->pluginInfo();
     setText( 0, info.name() );
@@ -62,6 +62,15 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent, const char* name )
 {
   m_viewPlugins->setShadeSortColumn( false );
 
+  m_viewPlugins->addColumn( i18n("Name") );
+  m_viewPlugins->addColumn( i18n("Author") );
+  m_viewPlugins->addColumn( i18n("Version") );
+  m_viewPlugins->addColumn( i18n("Description") );
+  m_viewPlugins->addColumn( i18n("License") );
+  m_viewPlugins->setAlternateBackground( QColor() );
+  m_viewPlugins->setShadeSortColumn( false );
+  m_viewPlugins->setAllColumnsShowFocus(true);
+
   connect( m_viewPlugins, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), this, SLOT(slotConfigureButtonClicked()) );
   connect( m_buttonConfigure, SIGNAL(clicked()), this, SLOT(slotConfigureButtonClicked()) );
   connect( m_viewPlugins, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()) );
@@ -81,9 +90,19 @@ void K3bPluginOptionTab::readSettings()
        it != groups.end(); ++it ) {
     const QString& group = *it;
 
-    KListViewItem* groupViewItem = new KListViewItem( m_viewPlugins,
-						      m_viewPlugins->lastChild(),
-						      group );
+    K3bListViewItem* groupViewItem = new K3bListViewItem( m_viewPlugins,
+							  m_viewPlugins->lastChild(),
+							  group );
+    QFont f( font() );
+    f.setBold(true);
+    groupViewItem->setFont( 0, f );
+    groupViewItem->setBackgroundColor( 0, KGlobalSettings::alternateBackgroundColor() );
+    groupViewItem->setBackgroundColor( 1, KGlobalSettings::alternateBackgroundColor() );
+    groupViewItem->setBackgroundColor( 2, KGlobalSettings::alternateBackgroundColor() );
+    groupViewItem->setBackgroundColor( 3, KGlobalSettings::alternateBackgroundColor() );
+    groupViewItem->setBackgroundColor( 4, KGlobalSettings::alternateBackgroundColor() );
+    groupViewItem->setSelectable( false );
+
     QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( group );
     for( QPtrListIterator<K3bPlugin> fit( fl ); fit.current(); ++fit )
       (void)new PluginViewItem( fit.current(), groupViewItem );

@@ -964,7 +964,7 @@ void K3bListView::slotEditorButtonClicked()
 }
 
 
-bool K3bListView::renameItem( K3bListViewItem*, int, const QString& )
+bool K3bListView::renameItem( K3bListViewItem*, int col, const QString& text )
 {
   return true;
 }

@@ -148,7 +148,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   QGridLayout* parametersTabLayout = new QGridLayout( parametersTab );
   parametersTabLayout->setMargin( KDialog::marginHint() );
   parametersTabLayout->setSpacing( KDialog::spacingHint() );
-  m_parameterView = new KListView( parametersTab );
+  m_parameterView = new K3bListView( parametersTab );
   parametersTabLayout->addWidget( m_parameterView, 1, 0 );
   parametersTabLayout->addWidget( new QLabel( i18n("User parameters have to be separated by space."), parametersTab ), 0, 0 );
 
@@ -159,6 +159,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   m_parameterView->setAllColumnsShowFocus(true);
   m_parameterView->setFullWidth(true);
   m_parameterView->setDefaultRenameAction( QListView::Accept );
+  m_parameterView->setDoubleClickForEdit( false );
 
   m_mainTabWidget->addTab( parametersTab, i18n("User Parameters") );
 
@@ -236,7 +237,7 @@ void K3bExternalBinWidget::load()
     if( p->supportsUserParameters() ) {
       K3bExternalProgramViewItem* paraV = new K3bExternalProgramViewItem( p, m_parameterView );
       paraV->setText( 1, p->userParameters().join( " " ) );
-      paraV->setRenameEnabled( 1, true );
+      paraV->setEditor( 1, K3bListViewItem::LINE );
     }
   }
 
