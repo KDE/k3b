@@ -21,6 +21,7 @@
 
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qwidgetstack.h>
 #include <qgroupbox.h>
@@ -35,35 +36,15 @@
 K3bAudioTrackWidget::K3bAudioTrackWidget( const QPtrList<K3bAudioTrack>& tracks, 
 					  QWidget* parent, const char* name )
   : base_K3bAudioTrackWidget( parent, name ),
-    m_tracks(tracks),
-    m_index0Range(-1)
+    m_tracks(tracks)
 {
-  if( m_tracks.count() == 1 )
-    m_index0Stack->raiseWidget(0);
-  else
-    m_index0Stack->raiseWidget(1);
+  m_labelPostGap->setBuddy( m_editPostGap );
 
-  connect( m_audioEditor, SIGNAL(mouseAt(const K3b::Msf&)),
-	   this, SLOT(slotEditorMouseAt(const K3b::Msf&)) );
-  connect( m_audioEditor, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&,bool)),
-	   this, SLOT(slotIndex0RangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
-  connect( m_checkIndex0, SIGNAL(toggled(bool)),
-	   this, SLOT(slotIndex0Checked(bool)) );
-  connect( m_editIndex0, SIGNAL(valueChanged(const K3b::Msf&)),
-	   this, SLOT(slotIndex0Changed(const K3b::Msf&)) );
-  connect( m_editPostGap, SIGNAL(valueChanged(const K3b::Msf&)),
-	   this, SLOT(slotPostGapChanged(const K3b::Msf&)) );
+  QToolTip::add( m_labelPostGap, QToolTip::textFor( m_editPostGap ) );
+  QWhatsThis::add( m_labelPostGap, QWhatsThis::textFor( m_editPostGap ) );
 
-
-  QWhatsThis::add( m_checkPreemphasis, i18n( "Preemphasis is mainly used in audio processing.\n"
-					     "Higher frequencies in audio signals usually have "
-					     "lower amplitudes.\n"
-					     "This can lead to bad signal quality on noisy "
-					     "transmission because the high frequencies might become "
-					     "too weak. To avoid this effect, high frequencies are "
-					     "amplified before transmission (preemphasis); "
-					     "the receiver will then weaken them accordingly for "
-					     "playback." ) );
+  // no post-gap for the last track
+  m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.getFirst()->next() );
 
   load();
 }
@@ -74,123 +55,13 @@ K3bAudioTrackWidget::~K3bAudioTrackWidget()
 }
 
 
-void K3bAudioTrackWidget::slotEditorMouseAt( const K3b::Msf& msf )
-{
-  m_labelCurrentIndexPos->setText( msf.toString() );
-}
-
-
-void K3bAudioTrackWidget::slotIndex0RangeModified( int, const K3b::Msf& start, const K3b::Msf& )
-{
-  
-  setIndex0Editors( start );
-}
-
-
-void K3bAudioTrackWidget::slotIndex0Changed( const K3b::Msf& msf )
-{
-  /*m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 );
-  setIndex0Editors( msf );*/
-  
-  if(m_audioEditor->modifyRange( m_index0Range, msf, m_tracks.first()->length()-1 )) {
-    
-    setIndex0Editors( msf );
-    }
-  else {
-    setIndex0Editors(m_tracks.first()->length());
-  }
-
-
-}
-
-
-void K3bAudioTrackWidget::slotPostGapChanged( const K3b::Msf& msf )
-{
-  
- 
- if( msf == 0 && m_checkIndex0->isChecked() ) {
-    m_checkIndex0->setChecked(false);
-  }
-  else if( !m_checkIndex0->isChecked() ) {
-    m_checkIndex0->setChecked(true);
-  }
-  else {
-    /*setIndex0Editors( m_tracks.first()->length() - msf );
-    m_audioEditor->modifyRange( m_index0Range, m_tracks.first()->length() - msf, m_tracks.first()->length()-1 );*/
-    
-    if(m_audioEditor->modifyRange( m_index0Range, m_tracks.first()->length() - msf, m_tracks.first()->length()-1 ))
-      setIndex0Editors( m_tracks.first()->length() - msf );
- 
-  }
-}
-
-
-void K3bAudioTrackWidget::setIndex0Editors( const K3b::Msf& msf )
-{
-  disconnect( m_editIndex0, SIGNAL(valueChanged(const K3b::Msf&)),
-	      this, SLOT(slotIndex0Changed(const K3b::Msf&)) );
-  disconnect( m_editPostGap, SIGNAL(valueChanged(const K3b::Msf&)),
-	      this, SLOT(slotPostGapChanged(const K3b::Msf&)) );
-
-  m_editIndex0->setMsfValue( msf );
-  m_editPostGap->setMsfValue( m_tracks.first()->length() - msf );
-
-  connect( m_editIndex0, SIGNAL(valueChanged(const K3b::Msf&)),
-	   this, SLOT(slotIndex0Changed(const K3b::Msf&)) );
-  connect( m_editPostGap, SIGNAL(valueChanged(const K3b::Msf&)),
-	   this, SLOT(slotPostGapChanged(const K3b::Msf&)) );
-}
-
-
-void K3bAudioTrackWidget::slotIndex0Checked( bool b )
-{
-  if( !b ) {
-    m_audioEditor->removeRange( m_index0Range );
-    m_index0Range = -1;
-    disconnect( m_editPostGap, SIGNAL(valueChanged(const K3b::Msf&)),
-		this, SLOT(slotPostGapChanged(const K3b::Msf&)) );
-    m_editPostGap->setValue(0);
-    connect( m_editPostGap, SIGNAL(valueChanged(const K3b::Msf&)),
-	     this, SLOT(slotPostGapChanged(const K3b::Msf&)) );
-  }
-  else if( m_index0Range == -1 ) {
-    K3b::Msf newIndex0;
-    
-   if( m_editPostGap->value() > 0 )
-      newIndex0 = m_tracks.first()->length() - m_editPostGap->msfValue();
-    else if( m_editIndex0->value() > 0 && m_editIndex0->msfValue()!=m_tracks.first()->length())
-      newIndex0 = m_editIndex0->msfValue();
-    else
-      newIndex0 = m_tracks.first()->length()-150;
-
-    m_index0Range = m_audioEditor->addRange( newIndex0, 
-					     m_tracks.first()->length()-1, 
-					     false, true, QString::null, colorGroup().highlight() );
-
-    setIndex0Editors( newIndex0 );
-  }
-}
-
-
 void K3bAudioTrackWidget::load()
 {
-  
- 
  if( !m_tracks.isEmpty() ) {
 
     K3bAudioTrack* track = m_tracks.first();
 
-    if( m_tracks.count() == 1 ) {
-      // here the user may edit the index 0 value directly
-      m_audioEditor->setLength( track->length() );
-      setIndex0Editors( track->index0() );
-      m_checkIndex0->setChecked( track->index0() > 0 );
-      //m_checkIndex0->setChecked( track->postGap() > 0 );
-    }
-    else {
-      // allow the user to change all gaps at once
-      m_editModifyAllIndex0->setValue( 150 );
-    }
+    m_editPostGap->setMsfValue( track->postGap() );
 
     m_editTitle->setText( track->title() );
     m_editPerformer->setText( track->artist() );
@@ -205,6 +76,9 @@ void K3bAudioTrackWidget::load()
     
     // load CD-Text for all other tracks
     for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
+
+      // FIXME: handle different post-gaps
+      // m_editPostGap->setMsfValue( track->postGap() );
 
       if( track->title() != m_editTitle->text() )
 	m_editTitle->setText( QString::null );
@@ -240,8 +114,6 @@ void K3bAudioTrackWidget::load()
 
 void K3bAudioTrackWidget::save()
 {
-
-  
   // save CD-Text, preemphasis, and copy protection for all tracks. no problem
   for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
     
@@ -271,23 +143,8 @@ void K3bAudioTrackWidget::save()
 
     if( m_checkPreemphasis->state() != QButton::NoChange )
       track->setPreEmp( m_checkPreemphasis->isChecked() );
-  }
 
-  // save pregap
-  if( m_tracks.count() == 1 ) {
-    if( !m_checkIndex0->isChecked() || m_editIndex0->msfValue() == m_tracks.first()->length() )
-      m_tracks.first()->setIndex0( 0 ); // no index 0
-       
-    else
-      m_tracks.first()->setIndex0( m_editIndex0->msfValue() );
-  }
-  else if( m_checkModifyAllIndex0->isChecked() ) {
-    for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
-      if( m_editModifyAllIndex0->value() > 0 )
-	track->setIndex0( track->length() - m_editModifyAllIndex0->msfValue() );
-      else
-	track->setIndex0( 0 );
-    }    
+    track->setIndex0( track->length() - m_editPostGap->msfValue() );
   }
 }
 

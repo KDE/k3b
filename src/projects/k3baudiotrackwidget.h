@@ -42,18 +42,7 @@ class K3bAudioTrackWidget : public base_K3bAudioTrackWidget
   void save();
   void load();
 
- private slots:
-  void slotEditorMouseAt( const K3b::Msf& );
-  void slotIndex0RangeModified( int, const K3b::Msf& start, const K3b::Msf& );
-  void slotIndex0Changed( const K3b::Msf& msf );
-  void slotIndex0Checked( bool b );
-  void slotPostGapChanged( const K3b::Msf& msf );
-
- private:
-  void setIndex0Editors( const K3b::Msf& msf );
-
   QPtrList<K3bAudioTrack> m_tracks;
-  int m_index0Range;
 };
 
 #endif
