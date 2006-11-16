@@ -144,7 +144,7 @@ void K3bApplication::init()
 
     if( K3bSystemProblemDialog::readCheckSystemConfig() ) {
       emit initializationInfo( i18n("Checking System") );
-      K3bSystemProblemDialog::checkSystem();
+      K3bSystemProblemDialog::checkSystem( m_mainWindow );
     }
 
     if( processCmdLineArgs() )
