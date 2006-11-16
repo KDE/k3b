@@ -27,6 +27,7 @@
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 #include <k3bglobalsettings.h>
+#include <k3btempfile.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -37,7 +38,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <ktempfile.h>
 #include <kglobal.h>
 
 #include <errno.h>
@@ -238,7 +238,7 @@ void K3bCdrecordWriter::prepareProcess()
   
   if( m_rawCdText.size() > 0 ) {
     delete d->cdTextFile;
-    d->cdTextFile = new KTempFile( QString::null, ".dat" );
+    d->cdTextFile = new K3bTempFile( QString::null, ".dat" );
     d->cdTextFile->setAutoDelete(true);
     d->cdTextFile->file()->writeBlock( m_rawCdText );
     d->cdTextFile->close();
