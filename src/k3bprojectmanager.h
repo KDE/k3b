@@ -52,7 +52,8 @@ class K3bProjectManager : public QObject
    */
   bool saveProject( K3bDoc*, const KURL &url );
 
-  K3bDoc* activeDoc() const;
+  K3bDoc* activeDoc() const { return activeProject(); }
+  K3bDoc* activeProject() const;
   K3bDoc* findByUrl( const KURL& url );
   bool isEmpty() const;
 
@@ -71,7 +72,11 @@ class K3bProjectManager : public QObject
   void newProject( K3bDoc* );
   void projectSaved( K3bDoc* );
   void closingProject( K3bDoc* );
+  void projectChanged( K3bDoc* doc );
   void activeProjectChanged( K3bDoc* );
+
+ private slots:
+  void slotProjectChanged( K3bDoc* doc );
 
  private:
   // used internal

@@ -21,9 +21,9 @@
 #include <qobject.h>
 
 class QLabel;
-class K3bBusyWidget;
 class K3bMainWindow;
 class QEvent;
+class K3bDoc;
 
 
 class K3bStatusBarManager : public QObject
@@ -36,13 +36,12 @@ class K3bStatusBarManager : public QObject
 
  public slots:
   void update();
-  void showBusyInfo( const QString& );
-  void endBusy();
 
  private slots:
   void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
   void showActionStatusText( const QString& text );
   void clearActionStatusText();
+  void slotActiveProjectChanged( K3bDoc* doc );
 
  private:
   bool eventFilter( QObject* o, QEvent* e );
@@ -51,7 +50,7 @@ class K3bStatusBarManager : public QObject
   QLabel* m_pixFreeTemp;
   QLabel* m_labelFreeTemp;
   QLabel* m_versionBox;
-  K3bBusyWidget* m_busyWidget;
+  QLabel* m_labelProjectInfo;
 
   K3bMainWindow* m_mainWindow;
 };

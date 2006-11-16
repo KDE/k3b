@@ -107,6 +107,10 @@ void K3bProjectManager::addProject( K3bDoc* doc )
     kdDebug() << "(K3bProjectManager) adding doc " << doc->URL().path() << endl;
     
     d->projects.append(doc);
+
+    connect( doc, SIGNAL(changed(K3bDoc*)),
+	     this, SLOT(slotProjectChanged(K3bDoc*)) );
+
     emit newProject( doc );
   }
 }
@@ -180,7 +184,7 @@ void K3bProjectManager::setActive( K3bDoc* doc )
 }
 
 
-K3bDoc* K3bProjectManager::activeDoc() const
+K3bDoc* K3bProjectManager::activeProject() const
 {
   return d->activeProject;
 }
@@ -621,5 +625,10 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
   return success;
 }
 
+
+void K3bProjectManager::slotProjectChanged( K3bDoc* doc )
+{
+  emit projectChanged( doc );
+}
 
 #include "k3bprojectmanager.moc"

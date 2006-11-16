@@ -19,6 +19,12 @@
 #include "k3b.h"
 #include <k3bversion.h>
 #include <k3bglobals.h>
+#include "k3bprojectmanager.h"
+#include "k3bapplication.h"
+#include <k3baudiodoc.h>
+#include <k3bdatadoc.h>
+#include <k3bmixeddoc.h>
+#include <k3bdiritem.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -45,14 +51,14 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   // setup free temp space box
   QHBox* boxFreeTemp = new QHBox( m_mainWindow->statusBar() );
   boxFreeTemp->setSpacing(2);
+
+  m_labelProjectInfo = new QLabel( m_mainWindow->statusBar() );
+
   m_pixFreeTemp = new QLabel( boxFreeTemp );
   (void)new QLabel( i18n("Temp:"), boxFreeTemp );
   m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
   m_labelFreeTemp = new QLabel( boxFreeTemp );
   boxFreeTemp->installEventFilter( this );
-
-  // busy widget
-  m_busyWidget = new K3bBusyWidget( m_mainWindow->statusBar() );
 
   // setup info area
   m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
@@ -63,8 +69,12 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 
   // setup the statusbar
   m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1 ); // for showing some info
-  m_mainWindow->statusBar()->addWidget( m_busyWidget, 0, true );
+  m_mainWindow->statusBar()->addWidget( m_labelProjectInfo, 0, true );
+  // a spacer item
+  m_mainWindow->statusBar()->addWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0, true );
   m_mainWindow->statusBar()->addWidget( boxFreeTemp, 0, true );
+  // a spacer item
+  m_mainWindow->statusBar()->addWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0, true );
   m_mainWindow->statusBar()->addWidget( m_versionBox, 0, true );
 
   connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );
@@ -72,6 +82,10 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 	   this, SLOT(showActionStatusText(const QString&)) );
   connect( m_mainWindow->actionCollection(), SIGNAL(clearStatusText()),
 	   this, SLOT(clearActionStatusText()) );
+  connect( k3bappcore->projectManager(), SIGNAL(activeProjectChanged(K3bDoc*)),
+	   this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
+  connect( k3bappcore->projectManager(), SIGNAL(projectChanged(K3bDoc*)),
+	   this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
 
   update();
 }
@@ -121,20 +135,6 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 }
 
 
-void K3bStatusBarManager::showBusyInfo( const QString& str )
-{
-  m_labelInfoMessage->setText( str );
-  m_busyWidget->showBusy( true );
-}
-
-
-void K3bStatusBarManager::endBusy()
-{
-  m_labelInfoMessage->setText( " " );
-  m_busyWidget->showBusy( false );
-}
-
-
 void K3bStatusBarManager::showActionStatusText( const QString& text )
 {
   m_mainWindow->statusBar()->message( text );
@@ -160,5 +160,72 @@ bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
   return QObject::eventFilter( o, e );
 }
 
+
+static QString dataDocStats( K3bDataDoc* dataDoc )
+{
+  return i18n("1 file in %1", "%n files in %1", dataDoc->root()->numFiles() )
+    .arg( i18n("1 folder", "%n folders", dataDoc->root()->numDirs() ) );
+}
+
+
+void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
+{
+  if( doc && doc == k3bappcore->projectManager()->activeProject() ) {
+    switch( doc->type() ) {
+    case K3bDoc::AUDIO: {
+      K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("Audio CD (1 track)", "Audio CD (%n tracks)", audioDoc->numOfTracks() ) );
+      break;
+    }
+
+    case K3bDoc::DATA: {
+      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("Data CD (%1)").arg(dataDocStats(dataDoc)) );
+      break;
+    }
+
+    case K3bDoc::MIXED: {
+      K3bAudioDoc* audioDoc = static_cast<K3bMixedDoc*>( doc )->audioDoc();
+      K3bDataDoc* dataDoc = static_cast<K3bMixedDoc*>( doc )->dataDoc();
+      m_labelProjectInfo->setText( i18n("Mixed CD (1 track and %1)", "Mixed CD (%n tracks and %1)", audioDoc->numOfTracks() )
+				   .arg( dataDocStats(dataDoc)) );
+      break;
+    }
+
+    case K3bDoc::VCD: {
+      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("Video CD (%1)").arg(dataDocStats(dataDoc)) );
+      break;
+    }
+
+    case K3bDoc::MOVIX: {
+      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("eMovix CD (%1)").arg(dataDocStats(dataDoc)) );
+      break;
+    }
+
+    case K3bDoc::MOVIX_DVD: {
+      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("eMovix DVD (%1)").arg(dataDocStats(dataDoc)) );
+      break;
+    }
+
+    case K3bDoc::DVD: {
+      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("Data DVD (%1)").arg(dataDocStats(dataDoc)) );
+      break;
+    }
+      
+    case K3bDoc::VIDEODVD: {
+      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("Video DVD (%1)").arg(dataDocStats(dataDoc)) );
+      break;
+    }
+    }
+  }
+  else if( !doc ) {
+    m_labelProjectInfo->setText( QString() );
+  }
+}
 
 #include "k3bstatusbarmanager.moc"
