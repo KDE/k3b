@@ -54,6 +54,7 @@ Q_OBJECT
   QCheckBox*    m_checkManualWritingBufferSize;
   KIntNumInput* m_editWritingBufferSize;
   QCheckBox*    m_checkAllowWritingAppSelection;
+  QCheckBox*    m_checkForceUnsafeOperations;
 };
 
 

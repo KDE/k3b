@@ -222,6 +222,11 @@ void K3bCdrecordWriter::prepareProcess()
     else
       emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), WARNING );
   }
+
+  if( k3bcore->globalSettings()->force() ) {
+    *m_process << "-force";
+    emit infoMessage( i18n("'Force unsafe operations' enabled."), WARNING );
+  }
   
   if( m_cue ) {
     m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
@@ -725,9 +730,11 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case HIGH_SPEED_MEDIUM:
 	emit infoMessage( i18n("Found a high-speed medium not suitable for the writer being used."), ERROR );
+	emit infoMessage( i18n("Use the 'force unsafe operations' option to ignore this."), ERROR );
 	break;
       case LOW_SPEED_MEDIUM:
 	emit infoMessage( i18n("Found a low-speed medium not suitable for the writer being used."), ERROR );
+	emit infoMessage( i18n("Use the 'force unsafe operations' option to ignore this."), ERROR );
 	break;
       case MEDIUM_ERROR:
 	emit infoMessage( i18n("Most likely the burning failed due to low-quality media."), ERROR );

@@ -66,16 +66,18 @@ void K3bBurningOptionTab::setupGui()
   bufferLayout->setSpacing( KDialog::spacingHint() );
 
   m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupWritingApp );
-  m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
+  m_checkOverburn = new QCheckBox( i18n("Allow overburning (&not supported by cdrecord <= 1.10)"), groupWritingApp );
+  m_checkForceUnsafeOperations = new QCheckBox( i18n("Force unsafe operations"), groupWritingApp );
   m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
   m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
   m_editWritingBufferSize->setSuffix( " " + i18n("MB") );
   m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
   bufferLayout->addMultiCellWidget( m_checkBurnfree, 0, 0, 0, 2 );
   bufferLayout->addMultiCellWidget( m_checkOverburn, 1, 1, 0, 2 );
-  bufferLayout->addWidget( m_checkManualWritingBufferSize, 2, 0 );
-  bufferLayout->addWidget( m_editWritingBufferSize, 2, 1 );
-  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 3, 3, 0, 2 );
+  bufferLayout->addMultiCellWidget( m_checkForceUnsafeOperations, 2, 2, 0, 2 );
+  bufferLayout->addWidget( m_checkManualWritingBufferSize, 3, 0 );
+  bufferLayout->addWidget( m_editWritingBufferSize, 3, 1 );
+  bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 4, 4, 0, 2 );
   bufferLayout->setColStretch( 2, 1 );
 
   QGroupBox* groupMisc = new QGroupBox( 2, Qt::Vertical, i18n("Miscellaneous"), this );
@@ -101,6 +103,7 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
   QToolTip::add( m_checkAutoErasingRewritable, i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
   QToolTip::add( m_checkEject, i18n("Do not eject the burn medium after a completed burn process") );
+  QToolTip::add( m_checkForceUnsafeOperations, i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
 
   QWhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
                                                          "the possibility to choose between cdrecord "
@@ -136,6 +139,13 @@ void K3bBurningOptionTab::setupGui()
 				      "burning and does not want the tray to be open all the time."
 				      "<p>However, on Linux systems a freshly burned medium has to be reloaded. Otherwise "
 				      "the system will not detect the changes and still treat it as an empty medium.") );
+
+  QWhatsThis::add( m_checkForceUnsafeOperations, i18n("<p>If this option is checked K3b will continue in some situations "
+						      "which would otherwise be deemed as unsafe."
+						      "<p>This setting for example disables the check for medium speed "
+						      "verification. Thus, one can force K3b to burn a high speed medium on "
+						      "a low speed writer."
+						      "<p><b>Caution:</b> Enabling this option may result in damaged media.") );
 }
 
 
@@ -150,6 +160,7 @@ void K3bBurningOptionTab::readSettings()
   m_checkBurnfree->setChecked( k3bcore->globalSettings()->burnfree() );
   m_checkEject->setChecked( !k3bcore->globalSettings()->ejectMedia() );
   m_checkOverburn->setChecked( k3bcore->globalSettings()->overburn() );
+  m_checkForceUnsafeOperations->setChecked( k3bcore->globalSettings()->force() );
   m_checkManualWritingBufferSize->setChecked( k3bcore->globalSettings()->useManualBufferSize() );
   if( k3bcore->globalSettings()->useManualBufferSize() )
     m_editWritingBufferSize->setValue( k3bcore->globalSettings()->bufferSize() );
@@ -169,6 +180,7 @@ void K3bBurningOptionTab::saveSettings()
   k3bcore->globalSettings()->setBurnfree( m_checkBurnfree->isChecked() );
   k3bcore->globalSettings()->setUseManualBufferSize( m_checkManualWritingBufferSize->isChecked() );
   k3bcore->globalSettings()->setBufferSize( m_editWritingBufferSize->value() );
+  k3bcore->globalSettings()->setForce( m_checkForceUnsafeOperations->isChecked() );
 
   // FIXME: remove this once libk3b does not use KConfig anymore for these values
   k3bcore->globalSettings()->saveSettings( c );

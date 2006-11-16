@@ -42,11 +42,20 @@ class LIBK3B_EXPORT K3bGlobalSettings
   bool useManualBufferSize() const { return m_useManualBufferSize; }
   int bufferSize() const { return m_bufferSize; }
 
+  /**
+   * If force is set to true K3b will continue in certain "unsafe" situations.
+   * The most common being a medium not suitable for the writer in terms of
+   * writing speed.
+   * Compare cdrecord's parameter -force
+   */
+  bool force() const { return m_force; }
+
   void setEjectMedia( bool b ) { m_eject = b; }
   void setBurnfree( bool b ) { m_burnfree = b; }
   void setOverburn( bool b ) { m_overburn = b; }
   void setUseManualBufferSize( bool b ) { m_useManualBufferSize = b; }
   void setBufferSize( int size ) { m_bufferSize = size; }
+  void setForce( bool b ) { m_force = b; }
 
  private:
   bool m_eject;
@@ -54,6 +63,7 @@ class LIBK3B_EXPORT K3bGlobalSettings
   bool m_overburn;
   bool m_useManualBufferSize;
   int m_bufferSize;
+  bool m_force;
 };
 
 

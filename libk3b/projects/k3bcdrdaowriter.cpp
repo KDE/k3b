@@ -289,6 +289,11 @@ void K3bCdrdaoWriter::setWriteArguments()
       emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.").arg(m_cdrdaoBinObject->version), WARNING );
   }
   
+  if( k3bcore->globalSettings()->force() ) {
+    *m_process << "--force";
+    emit infoMessage( i18n("'Force unsafe operations' enabled."), WARNING );
+  }
+
   bool manualBufferSize =
     k3bcore->globalSettings()->useManualBufferSize();
   if( manualBufferSize ) {

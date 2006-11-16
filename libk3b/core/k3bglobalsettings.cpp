@@ -23,7 +23,8 @@ K3bGlobalSettings::K3bGlobalSettings()
     m_burnfree(true),
     m_overburn(false),
     m_useManualBufferSize(false),
-    m_bufferSize(4)
+    m_bufferSize(4),
+    m_force(false)
 {
 }
 
@@ -38,6 +39,7 @@ void K3bGlobalSettings::readSettings( KConfig* c )
   m_overburn = c->readBoolEntry( "Allow overburning", false );
   m_useManualBufferSize = c->readBoolEntry( "Manual buffer size", false );
   m_bufferSize = c->readNumEntry( "Fifo buffer", 4 );
+  m_force = c->readBoolEntry( "Force unsafe operations", false );
 
   c->setGroup( lastG );
 }
@@ -53,6 +55,7 @@ void K3bGlobalSettings::saveSettings( KConfig* c )
   c->writeEntry( "Allow overburning", m_overburn );
   c->writeEntry( "Manual buffer size", m_useManualBufferSize );
   c->writeEntry( "Fifo buffer", m_bufferSize );
+  c->writeEntry( "Force unsafe operations", m_force );
 
   c->setGroup( lastG );
 }
