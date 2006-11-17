@@ -15,7 +15,7 @@
 
 #include "k3blsofwrapperdialog.h"
 #include "k3blsofwrapper.h"
-#include "k3brichtextlabel.h"
+#include <k3brichtextlabel.h>
 
 #include <k3bdevice.h>
 

@@ -17,7 +17,7 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3bprojectmanager.cpp k3btrm.cpp k3bmusicbrainz.cpp \
 	k3baudioprojectinterface.cpp k3bmixedprojectinterface.cpp \
 	k3baudioprojectinterface.skel k3bmixedprojectinterface.skel k3bflatbutton.cpp \
-	k3bemptydiscwaiter.cpp k3bjobprogressosd.cpp k3brichtextlabel.cpp \
+	k3bemptydiscwaiter.cpp k3bjobprogressosd.cpp \
 	k3bdebuggingoutputdialog.cpp k3bdebuggingoutputfile.cpp k3bappdevicemanager.cpp \
 	k3bmediacache.cpp k3bmedium.cpp k3bmediaselectioncombobox.cpp k3btooltip.cpp \
 	k3bwidgetshoweffect.cpp k3bmediaselectiondialog.cpp k3bdiskinfoview.cpp \
