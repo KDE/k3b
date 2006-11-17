@@ -286,6 +286,9 @@ class LIBK3B_EXPORT K3bListView : public KListView
 
   QPixmap m_backgroundPixmap;
   int m_backgroundPixmapPosition;
+
+  class Private;
+  Private* d;
 };
 
 

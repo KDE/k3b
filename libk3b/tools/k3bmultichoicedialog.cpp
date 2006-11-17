@@ -14,8 +14,12 @@
  */
 
 #include "k3bmultichoicedialog.h"
+#include "k3bstdguiitems.h"
+#include <k3brichtextlabel.h>
 
 #include <kpushbutton.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 
 #include <qlayout.h>
 #include <qsignalmapper.h>
@@ -41,8 +45,39 @@ public:
 };
 
 
+// from kmessagebox.cpp
+static QPixmap themedMessageBoxIcon(QMessageBox::Icon icon)
+{
+  QString icon_name;
+ 
+  switch(icon) {
+  case QMessageBox::NoIcon:
+    return QPixmap();
+    break;
+  case QMessageBox::Information:
+    icon_name = "messagebox_info";
+    break;
+  case QMessageBox::Warning:
+    icon_name = "messagebox_warning";
+    break;
+  case QMessageBox::Critical:
+    icon_name = "messagebox_critical";
+    break;
+  default:
+    break;
+  }
+ 
+  QPixmap ret = KApplication::kApplication()->iconLoader()->loadIcon(icon_name, KIcon::NoGroup, KIcon::SizeMedium, KIcon::DefaultState, 0, true);
+ 
+  if (ret.isNull())
+    return QMessageBox::standardIcon(icon);
+  else
+    return ret;
+}
+
 K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
 					    const QString& text,
+					    QMessageBox::Icon icon,
 					    QWidget* parent, const char* name )
   : KDialog( parent, name )
 {
@@ -57,24 +92,21 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
   mainGrid->setMargin( marginHint() );
 
   QHBox* contents = new QHBox( this );
-  contents->setSpacing(KDialog::spacingHint()*2);
-  contents->setMargin(KDialog::marginHint());
+  contents->setSpacing( KDialog::spacingHint()*2 );
+  contents->setMargin( 0 );
 
   QLabel* pixLabel = new QLabel( contents );
-  pixLabel->setPixmap( QMessageBox::standardIcon( QMessageBox::Question ) );
-  QLabel* label = new QLabel( text, contents );
+  pixLabel->setPixmap( themedMessageBoxIcon( icon ) );
+  pixLabel->setScaledContents( false );
+  QLabel* label = new K3bRichTextLabel( text, contents );
   contents->setStretchFactor( label, 1 );
-
-  QFrame* line = new QFrame( this );
-  line->setFrameShape( QFrame::HLine );
-  line->setFrameShadow( QFrame::Sunken );
 
   d->buttonLayout = new QHBoxLayout;
   d->buttonLayout->setSpacing( spacingHint() );
   d->buttonLayout->setMargin( 0 );
 
   mainGrid->addMultiCellWidget( contents, 0, 0, 0, 2 );
-  mainGrid->addMultiCellWidget( line, 1, 1, 0, 2 );
+  mainGrid->addMultiCellWidget( K3bStdGuiItems::horizontalLine( this ), 1, 1, 0, 2 );
   mainGrid->addLayout( d->buttonLayout, 2, 1 );
 
   mainGrid->setColStretch( 0, 1 );
@@ -128,6 +160,7 @@ void K3bMultiChoiceDialog::closeEvent( QCloseEvent* e )
 
 int K3bMultiChoiceDialog::choose( const QString& caption,
 				  const QString& text,
+				  QMessageBox::Icon icon,
 				  QWidget* parent, 
 				  const char* name,
 				  int buttonCount,
@@ -138,7 +171,7 @@ int K3bMultiChoiceDialog::choose( const QString& caption,
 				  const KGuiItem& b5,
 				  const KGuiItem& b6 )
 {
-  K3bMultiChoiceDialog dlg( caption, text, parent, name );
+  K3bMultiChoiceDialog dlg( caption, text, icon, parent, name );
   dlg.addButton( b1 );
   if( buttonCount > 1 )
     dlg.addButton( b2 );

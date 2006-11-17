@@ -22,12 +22,14 @@
 #include <qpair.h>
 #include <qdir.h>
 
-class K3bBusyWidget;
+class KProgress;
 class QLabel;
 class K3bDataItem;
 class K3bDirItem;
 class K3bEncodingConverter;
-
+class K3bDirSizeJob;
+class K3bDataDoc;
+class K3bThemedHeader;
 
 class K3bDataUrlAddingDialog : public KDialogBase
 {
@@ -55,19 +57,22 @@ class K3bDataUrlAddingDialog : public KDialogBase
   void slotAddUrls();
   void slotCopyMoveItems();
   void slotCancel();
+  void slotDirSizeDone( bool );
 
  private:
-  K3bDataUrlAddingDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent = 0, const char* name = 0 );
 
   bool getNewName( const QString& oldName, K3bDirItem* dir, QString& newName );
 
-  bool checkForHiddenFiles( const QDir& dir );
-  bool checkForSystemFiles( const QDir& dir );
+  bool addHiddenFiles();
+  bool addSystemFiles();
 
   QString resultMessage() const;
 
-  K3bBusyWidget* m_busyWidget;
+  KProgress* m_progressWidget;
+  K3bThemedHeader* m_header;
   QLabel* m_infoLabel;
+  QLabel* m_counterLabel;
   K3bEncodingConverter* m_encodingConverter;
 
   KURL::List m_urls;
@@ -75,8 +80,12 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
   QValueList< QPair<K3bDataItem*, K3bDirItem*> > m_items;
 
+  QValueList<KURL> m_dirSizeQueue;
+
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;
+  bool m_bFolderLinksFollowAll;
+  bool m_bFolderLinksAddAll;
   int m_iAddHiddenFiles;
   int m_iAddSystemFiles;
 
@@ -89,9 +98,11 @@ class K3bDataUrlAddingDialog : public KDialogBase
 
   bool m_bCanceled;
 
-  int m_urlCounter;
-
   bool m_copyItems;
+
+  KIO::filesize_t m_totalFiles;
+  KIO::filesize_t m_filesHandled;
+  K3bDirSizeJob* m_dirSizeJob;
 };
 
 #endif

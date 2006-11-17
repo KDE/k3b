@@ -49,6 +49,7 @@
 #include <kio/global.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
+#include <kpixmapeffect.h>
 
 
 class K3bFillStatusDisplayWidget::Private
@@ -148,6 +149,9 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   QRect crect( rect() );
   crect.setWidth( (int)(one*(double)docSize) );
 
+  p.setClipping(true);
+  p.setClipRect(crect);
+
   p.fillRect( crect, Qt::green );
 
   QRect oversizeRect(crect);
@@ -155,41 +159,40 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
   if( docSize > cdSize - tolerance ) {
     oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
     p.fillRect( oversizeRect, Qt::yellow );
+    KPixmap pix;
+    pix.resize( rect().height()*2, rect().height() );
+    KPixmapEffect::gradient( pix, green, yellow, KPixmapEffect::HorizontalGradient, 0 );
+    p.drawPixmap( oversizeRect.left() - pix.width()/2, 0, pix );
   }
 
   // draw red if docSize > cdSize + tolerance
   if( docSize > cdSize + tolerance ) {
     oversizeRect.setLeft( oversizeRect.left() + (int)(one * tolerance*2) );
     p.fillRect( oversizeRect, Qt::red );
+    KPixmap pix;
+    pix.resize( rect().height()*2, rect().height() );
+    KPixmapEffect::gradient( pix, yellow, red, KPixmapEffect::HorizontalGradient, 0 );
+    p.drawPixmap( oversizeRect.left() - pix.width()/2, 0, pix );
   }
 
+  p.setClipping(false);
 
+  // ====================================================================================
+  // Now the colored bar is painted
+  // Continue with the texts
+  // ====================================================================================
+
+  // first we determine the text to display
+  // ====================================================================================
   QString docSizeText;
   if( d->showTime )
     docSizeText = d->doc->length().toString(false) + " " + i18n("min");
   else
     docSizeText = KIO::convertSize( d->doc->size() );
 
-  //
-  // we want to draw the docSizeText centered in the filled area
-  // if there is not enough space we just align it left
-  //
-  int docSizeTextLength = fontMetrics().width(docSizeText);
-  if( docSizeTextLength + 8 > crect.width() )
-    p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter,
-		" " + docSizeText );
-  else
-    p.drawText( crect, Qt::AlignHCenter | Qt::AlignVCenter, docSizeText );
-
-
-  p.drawLine( rect().left() + (int)(one*cdSize), rect().bottom(),
-	      rect().left() + (int)(one*cdSize), rect().top() + ((rect().bottom()-rect().top())/2) );
-
-  // draw the text marks
-  crect = rect();
-  QString text;
+  QString overSizeText;
   if( d->cdSize.mode1Bytes() >= d->doc->size() )
-    text = i18n("Available: %1 of %2")
+    overSizeText = i18n("Available: %1 of %2")
       .arg( d->showTime
 	    ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
 	    : KIO::convertSize( QMAX( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
@@ -197,24 +200,65 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	    ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
 	    : KIO::convertSizeFromKB( cdSize * 1024 ) );
   else
-    text = i18n("Capacity exceeded by %1")
+    overSizeText = i18n("Capacity exceeded by %1")
       .arg( d->showTime
 	    ? i18n("%1 min").arg( (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
 	    : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
+  // ====================================================================================
 
-  QFont fnt(font());
-  fnt.setPointSize(8);
-  fnt.setBold(false);
-  p.setFont(fnt);
+  // draw the medium size marker
+  // ====================================================================================
+  int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize);
+  p.drawLine( mediumSizeMarkerPos, rect().bottom(),
+	      mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
+  // ====================================================================================
 
-  int textLength = QFontMetrics(fnt).width(text);
-  if( textLength+4 > crect.width() - (int)(one*cdSize) ) {
-    // we don't have enough space on the right, so we paint to the left of the line
-    crect.setLeft( (int)(one*cdSize) - textLength -4 );
+
+
+  // we want to draw the docSizeText centered in the filled area
+  // if there is not enough space we just align it left
+  // ====================================================================================
+  int docSizeTextPos = 0;
+  int docSizeTextLength = fontMetrics().width(docSizeText);
+  if( docSizeTextLength + 5 > crect.width() ) {
+    docSizeTextPos = crect.left() + 5; // a little margin
   }
-  else
-    crect.setLeft( (int)(one*cdSize) + 4 );
-  p.drawText( crect, Qt::AlignLeft | Qt::AlignVCenter, text );
+  else {
+    docSizeTextPos = ( crect.width() - docSizeTextLength ) / 2;
+
+    // make sure the text does not cross the medium size marker
+    if( docSizeTextPos <= mediumSizeMarkerPos && mediumSizeMarkerPos <= docSizeTextPos + docSizeTextLength )
+      docSizeTextPos = QMAX( crect.left() + 5, mediumSizeMarkerPos - docSizeTextLength - 5 );
+  }
+  // ====================================================================================
+
+  // draw the over size text
+  // ====================================================================================
+  QFont fnt(font());
+  fnt.setPointSize( QMAX( 8, fnt.pointSize()-4 ) );
+  fnt.setBold(false);
+
+  QRect overSizeTextRect( rect() );
+  int overSizeTextLength = QFontMetrics(fnt).width(overSizeText);
+  if( overSizeTextLength + 5 > overSizeTextRect.width() - (int)(one*cdSize) ) {
+    // we don't have enough space on the right, so we paint to the left of the line
+    overSizeTextRect.setLeft( (int)(one*cdSize) - overSizeTextLength - 5 );
+  }
+  else {
+    overSizeTextRect.setLeft( mediumSizeMarkerPos + 5 );
+  }
+
+  // make sure the two text do not overlap (this does not cover all cases though)
+  if( overSizeTextRect.left() < docSizeTextPos + docSizeTextLength )
+    docSizeTextPos = QMAX( crect.left() + 5, QMIN( overSizeTextRect.left() - docSizeTextLength - 5, mediumSizeMarkerPos - docSizeTextLength - 5 ) );
+
+  QRect docTextRect( rect() );
+  docTextRect.setLeft( docSizeTextPos );
+  p.drawText( docTextRect, Qt::AlignLeft | Qt::AlignVCenter, docSizeText );
+
+  p.setFont(fnt);
+  p.drawText( overSizeTextRect, Qt::AlignLeft | Qt::AlignVCenter, overSizeText );
+  // ====================================================================================
 
   p.end();
 

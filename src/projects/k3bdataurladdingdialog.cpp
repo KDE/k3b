@@ -24,7 +24,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
-#include <k3bbusywidget.h>
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
 #include <k3bcore.h>
@@ -36,6 +35,8 @@
 #include <k3b.h>
 #include <k3bapplication.h>
 #include <k3biso9660.h>
+#include <k3bdirsizejob.h>
+#include <k3bthemedheader.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -45,11 +46,13 @@
 #include <kglobal.h>
 #include <kstdguiitem.h>
 #include <kconfig.h>
+#include <ksqueezedtextlabel.h>
+#include <kprogress.h>
 
 #include <unistd.h>
 
 
-K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* name )
+K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent, const char* name )
   : KDialogBase( Plain,
 		 i18n("Please be patient..."),
 		 Cancel,
@@ -57,31 +60,39 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( QWidget* parent, const char* nam
 		 parent,
 		 name,
 		 true,
-		 true ),
+		 false ),
     m_bExistingItemsReplaceAll(false),
     m_bExistingItemsIgnoreAll(false),
+    m_bFolderLinksFollowAll(false),
+    m_bFolderLinksAddAll(false),
     m_iAddHiddenFiles(0),
     m_iAddSystemFiles(0),
     m_bCanceled(false),
-    m_urlCounter(0)
+    m_totalFiles(0),
+    m_filesHandled(0)
 {
   m_encodingConverter = new K3bEncodingConverter();
 
   QWidget* page = plainPage();
   QGridLayout* grid = new QGridLayout( page );
   grid->setSpacing( spacingHint() );
-  grid->setMargin( marginHint() );
+  grid->setMargin( 0 );
 
-//   QLabel* pixLabel = new QLabel( page );
-//   pixLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "editcopy", KIcon::NoGroup, 32 ) );
-//   pixLabel->setScaledContents( false );
+  m_counterLabel = new QLabel( page );
+  m_infoLabel = new KSqueezedTextLabel( i18n("Preparing..."), page );
+  m_progressWidget = new KProgress( 0, page );
 
-  m_infoLabel = new QLabel( page );
-  m_busyWidget = new K3bBusyWidget( page );
+  m_header = new K3bThemedHeader( page );
+  m_header->setTitle( i18n("Adding files to project '%1'").arg(doc->URL().fileName()), i18n("(counting)") );
 
-  //  grid->addMultiCellWidget( pixLabel, 0, 1, 0, 0 );
-  grid->addWidget( m_infoLabel, 0, 0 );
-  grid->addWidget( m_busyWidget, 1, 0 );
+  grid->addMultiCellWidget( m_header, 0, 0, 0, 1 );
+  grid->addWidget( m_counterLabel, 1, 1 );
+  grid->addWidget( m_infoLabel, 1, 0 );
+  grid->addMultiCellWidget( m_progressWidget, 2, 2, 0, 1 );
+
+  m_dirSizeJob = new K3bDirSizeJob( this );
+  connect( m_dirSizeJob, SIGNAL(finished(bool)),
+	   this, SLOT(slotDirSizeDone(bool)) );
 }
 
 
@@ -123,8 +134,7 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     }
   }
 
-  K3bDataUrlAddingDialog dlg( parent );
-  dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
+  K3bDataUrlAddingDialog dlg( dir->doc(), parent );
   dlg.m_urls = urls;
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
     dlg.m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
@@ -132,7 +142,9 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
   dlg.slotAddUrls();
   int ret = QDialog::Accepted;
   if( !dlg.m_urlQueue.isEmpty() ) {
-    dlg.m_busyWidget->showBusy(true);
+    dlg.m_dirSizeJob->setUrls( urls );
+    dlg.m_dirSizeJob->setFollowSymlinks( dir->doc()->isoOptions().followSymbolicLinks() );
+    dlg.m_dirSizeJob->start();
     ret = dlg.exec();
   }
 
@@ -201,17 +213,23 @@ int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items
   if( items.isEmpty() )
     return 0;
 
-  K3bDataUrlAddingDialog dlg( parent );
+  K3bDataUrlAddingDialog dlg( dir->doc(), parent );
   dlg.m_infoLabel->setText( i18n("Moving files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
   dlg.m_copyItems = copy;
 
-  for( QValueList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it )
+  for( QValueList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
     dlg.m_items.append( qMakePair( *it, dir ) );
+    ++dlg.m_totalFiles;
+    if( (*it)->isDir() ) {
+      dlg.m_totalFiles += static_cast<K3bDirItem*>( *it )->numFiles();
+      dlg.m_totalFiles += static_cast<K3bDirItem*>( *it )->numDirs();
+    }
+  }
 
   dlg.slotCopyMoveItems();
   int ret = QDialog::Accepted;
   if( !dlg.m_items.isEmpty() ) {
-    dlg.m_busyWidget->showBusy(true);
+    dlg.m_progressWidget->setTotalSteps( dlg.m_totalFiles );
     ret = dlg.exec();
   }
   
@@ -222,6 +240,7 @@ int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items
 void K3bDataUrlAddingDialog::slotCancel()
 {
   m_bCanceled = true;
+  m_dirSizeJob->cancel();
   KDialogBase::slotCancel();
 }
 
@@ -231,30 +250,12 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   if( m_bCanceled )
     return;
 
-  //
-  // Adding one url after the other and updating the gui after
-  // each single one results in a evry slow adding of urls.
-  // Thus, we use a counter to add urls in blocks.
-  // The values used here are only based on experiments and
-  // may need improvement
-  //
-  if( m_urlCounter == 0 ) {
-    //
-    // We want at least three updates during the adding of many urls
-    //
-    m_urlCounter = QMAX( 1, m_urlQueue.count() );
-
-    //
-    // But to avoid a too long blocking of the GUI choose some upper max
-    //
-    m_urlCounter = QMIN( m_urlCounter, 50 );
-  }
-
   // add next url
   KURL url = m_urlQueue.first().first;
   K3bDirItem* dir = m_urlQueue.first().second;
   m_urlQueue.remove( m_urlQueue.begin() );
-  QString absFilePath( QFileInfo(url.path()).absFilePath() );
+  QFileInfo info(url.path());
+  QString absFilePath( info.absFilePath() );
   QString resolved( absFilePath );
 
   bool valid = true;
@@ -262,6 +263,17 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   bool isSymLink = false;
   bool isDir = false;
   bool isFile = false;
+
+  ++m_filesHandled;
+  m_infoLabel->setText( url.path() );
+  if( m_totalFiles == 0 )
+    m_counterLabel->setText( QString("(%1)").arg(m_filesHandled) );
+  else
+    m_counterLabel->setText( QString("(%1/%2)").arg(m_filesHandled).arg(m_totalFiles) );
+
+  //
+  // 1. Check if we want and can add the url
+  //
 
   if( !url.isLocalFile() ) {
     valid = false;
@@ -301,8 +313,35 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	m_tooBigFiles.append( url.path() );
       }
     }
+
+    // FIXME: if we do not add hidden dirs the progress gets messed up!
+
+    //
+    // check for hidden and system files
+    //
+    if( valid ) {
+      if( info.isHidden() && !addHiddenFiles() )
+	valid = false;
+      if( S_ISCHR(statBuf.st_mode) || 
+	  S_ISBLK(statBuf.st_mode) || 
+	  S_ISFIFO(statBuf.st_mode) || 
+	  S_ISSOCK(statBuf.st_mode) )
+	if( !addSystemFiles() )
+	  valid = false;
+      if( isSymLink )
+	if( S_ISCHR(resolvedStatBuf.st_mode) || 
+	    S_ISBLK(resolvedStatBuf.st_mode) || 
+	    S_ISFIFO(resolvedStatBuf.st_mode) || 
+	    S_ISSOCK(resolvedStatBuf.st_mode) )
+	  if( !addSystemFiles() )
+	    valid = false;
+    }
   }
 
+
+  //
+  // 2. Handle the url
+  //
 
   QString newName = url.fileName();
 
@@ -368,7 +407,8 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 					      i18n("<p>File <em>%1</em> already exists in "
 						   "project folder <em>%2</em>.")
 					      .arg(newName)
-					      .arg("/" + dir->k3bPath()),
+					      .arg('/' + dir->k3bPath()),
+					      QMessageBox::Warning,
 					      this,
 					      0,
 					      6,
@@ -421,27 +461,58 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   // would change the doc. So we simply ask the user what to do with a link to a folder
   //
   if( valid ) {
-    if( isDir && isSymLink ) {
-      // let's see if this link starts a loop
-      // that means if it points to some folder above this one
-      // if so we cannot follow it anyway
-      if( !absFilePath.startsWith( resolved ) &&
-	  ( dir->doc()->isoOptions().followSymbolicLinks() ||
-	    KMessageBox::warningYesNo( this,
-				       i18n("<p>'%1' is a symbolic link to folder '%2'."
-					    "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
-					    "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
-					    "K3b project cannot be resolved."
-					    "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may safely "
-					    "ignore this warning and choose to add the link to the project.</b>")
-				       .arg(absFilePath)
-				       .arg(resolved ),
-				       i18n("Adding link to folder"),
-				       i18n("Follow link now"),
-				       i18n("Add symbolic link to project"),
-				       "ask_to_follow_link_to_folder" ) == KMessageBox::Yes ) ) {
+    // let's see if this link starts a loop
+    // that means if it points to some folder above this one
+    // if so we cannot follow it anyway
+    if( isDir && isSymLink && !absFilePath.startsWith( resolved ) ) {
+      bool followLink = dir->doc()->isoOptions().followSymbolicLinks() || m_bFolderLinksFollowAll;
+      if( !followLink && !m_bFolderLinksAddAll ) {
+	switch( K3bMultiChoiceDialog::choose( i18n("Adding link to folder"),
+					      i18n("<p>'%1' is a symbolic link to folder '%2'."
+						   "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
+						   "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
+						   "K3b project cannot be resolved."
+						   "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may safely "
+						   "ignore this warning and choose to add the link to the project.</b>")
+					      .arg(absFilePath)
+					      .arg(resolved ),
+					      QMessageBox::Warning,
+					      this,
+					      0,
+					      5,
+					      i18n("Follow link now"),
+					      i18n("Always follow links"),
+					      i18n("Add link to project"),
+					      i18n("Always add links"),
+					      KStdGuiItem::cancel() ) ) {
+	case 2:
+	  m_bFolderLinksFollowAll = true;
+	case 1:
+	  followLink = true;
+	  break;	    
+	case 4:
+	  m_bFolderLinksAddAll = true;
+	case 3:
+	  followLink = false;
+	  break;
+	case 5:
+	  slotCancel();
+	  return;
+	}
+      }
+
+      if( followLink ) {
 	absFilePath = resolved;
 	isSymLink = false;
+
+	// count the files in the followed dir
+	if( m_dirSizeJob->active() )
+	  m_dirSizeQueue.append( KURL::fromPathOrURL(absFilePath) );
+	else {
+	  m_progressWidget->setTotalSteps( 0 );
+	  m_dirSizeJob->setUrls( KURL::fromPathOrURL(absFilePath) );
+	  m_dirSizeJob->start();
+	}
       }
     }
   }
@@ -476,20 +547,17 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
       }
 
-      QDir newDir( absFilePath );      
-
-      int dirFilter = QDir::All;
-      if( checkForHiddenFiles( newDir ) )
-	dirFilter |= QDir::Hidden;
-      if( checkForSystemFiles( newDir ) )
-	dirFilter |= QDir::System;
+      QDir newDir( absFilePath );
+      int dirFilter = QDir::All|QDir::Hidden|QDir::System;
 	
       QStringList dlist = newDir.entryList( dirFilter );
-      dlist.remove(".");
-      dlist.remove("..");
+      const QString& dot = KGlobal::staticQString( "." );
+      const QString& dotdot = KGlobal::staticQString( ".." );
+      dlist.remove( dot );
+      dlist.remove( dotdot );
 
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(absFilePath + "/" + *it), newDirItem ) );
+	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(absFilePath + '/' + *it), newDirItem ) );
       }
     }
     else {
@@ -498,27 +566,36 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   }
 
   if( m_urlQueue.isEmpty() ) {
-    m_urlCounter = 0;
+    m_dirSizeJob->cancel();
+    m_progressWidget->setProgress( m_totalFiles );
     accept();
   }
   else {
-    --m_urlCounter;
-    if( m_urlCounter == 0 ) // GUI update -> slow
-      QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
-    else                    // no GUI update -> fast
-      slotAddUrls();
+    m_progressWidget->setProgress( m_filesHandled );
+    QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
   }
 }
 
 
 void K3bDataUrlAddingDialog::slotCopyMoveItems()
 {
+  if( m_bCanceled )
+    return;
+
   //
   // Pop first item from the item list
   //
   K3bDataItem* item = m_items.first().first;
   K3bDirItem* dir = m_items.first().second;
   m_items.remove( m_items.begin() );
+
+  ++m_filesHandled;
+  m_infoLabel->setText( item->k3bPath() );
+  if( m_totalFiles == 0 )
+    m_counterLabel->setText( QString("(%1)").arg(m_filesHandled) );
+  else
+    m_counterLabel->setText( QString("(%1/%2)").arg(m_filesHandled).arg(m_totalFiles) );
+
 
   if( dir == item->parent() ) {
     kdDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir." << endl;
@@ -575,6 +652,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 						   "project folder <em>%2</em>.")
 					      .arg( item->k3bName() )
 					      .arg("/" + dir->k3bPath()),
+					      QMessageBox::Warning,
 					      this,
 					      0,
 					      6,
@@ -642,15 +720,12 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
   }
 
   if( m_items.isEmpty() ) {
-    m_urlCounter = 0;
+    m_dirSizeJob->cancel();
     accept();
   }
   else {
-    --m_urlCounter;
-    if( m_urlCounter == 0 ) // GUI update -> slow
-      QTimer::singleShot( 0, this, SLOT(slotCopyMoveItems()) );
-    else                    // no GUI update -> fast
-      slotCopyMoveItems();
+    m_progressWidget->setProgress( m_filesHandled );
+    QTimer::singleShot( 0, this, SLOT(slotCopyMoveItems()) );
   }
 }
 
@@ -673,47 +748,53 @@ bool K3bDataUrlAddingDialog::getNewName( const QString& oldName, K3bDirItem* dir
 }
 
 
-bool K3bDataUrlAddingDialog::checkForHiddenFiles( const QDir& dir )
+bool K3bDataUrlAddingDialog::addHiddenFiles()
 {
   if( m_iAddHiddenFiles == 0 ) {
-    // check for hidden files (QDir::Hidden does not include hidden directories :(
-    QStringList hiddenFiles = dir.entryList( ".*", QDir::Hidden|QDir::All );
-    hiddenFiles.remove(".");
-    hiddenFiles.remove("..");
-    if( hiddenFiles.count() > 0 ) {
-      // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
-      if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
-				      i18n("Do you also want to add hidden files?"),
-				      i18n("Hidden Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
-	m_iAddHiddenFiles = 1;
-      else
-	m_iAddHiddenFiles = -1;
-    }
+    // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
+    if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
+				    i18n("Do you also want to add hidden files?"),
+				    i18n("Hidden Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
+      m_iAddHiddenFiles = 1;
+    else
+      m_iAddHiddenFiles = -1;
   }
   
   return ( m_iAddHiddenFiles == 1 );
 }
 
 
-bool K3bDataUrlAddingDialog::checkForSystemFiles( const QDir& dir )
+bool K3bDataUrlAddingDialog::addSystemFiles()
 {
   if( m_iAddSystemFiles == 0 ) {
-    // QDir::System does include broken links
-    QStringList systemFiles = dir.entryList( QDir::System );
-    systemFiles.remove(".");
-    systemFiles.remove("..");
-    if( systemFiles.count() > 0 ) {
-      if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
-				      i18n("Do you also want to add system files "
-					   "(FIFOs, sockets, device files, and broken symlinks)?"),
-				      i18n("System Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
-	m_iAddSystemFiles = 1;
-      else
-	m_iAddSystemFiles = -1;
-    }
+    if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
+				    i18n("Do you also want to add system files "
+					 "(FIFOs, sockets, device files, and broken symlinks)?"),
+				    i18n("System Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
+      m_iAddSystemFiles = 1;
+    else
+      m_iAddSystemFiles = -1;
   }
   
   return ( m_iAddSystemFiles == 1 );
+}
+
+
+void K3bDataUrlAddingDialog::slotDirSizeDone( bool success )
+{
+  if( success ) {
+    m_totalFiles += m_dirSizeJob->totalFiles() + m_dirSizeJob->totalDirs();
+    if( m_dirSizeQueue.isEmpty() ) {
+      m_header->setSubTitle( i18n("1 file", "%n files", m_totalFiles ) );
+      m_progressWidget->setTotalSteps( m_totalFiles );
+      m_progressWidget->setProgress( m_filesHandled );
+    }
+    else {
+      m_dirSizeJob->setUrls( m_dirSizeQueue.back() );
+      m_dirSizeQueue.pop_back();
+      m_dirSizeJob->start();
+    }
+  }
 }
 
 #include "k3bdataurladdingdialog.moc"

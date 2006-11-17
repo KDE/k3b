@@ -20,6 +20,9 @@
 #include <kstdguiitem.h>
 #include "k3b_export.h"
 
+#include <qmessagebox.h>
+
+
 class QCloseEvent;
 
 class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
@@ -29,6 +32,7 @@ class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
  public:
   K3bMultiChoiceDialog( const QString& caption,
 			const QString& text,
+			QMessageBox::Icon = QMessageBox::Information,
 			QWidget* parent = 0, const char* name = 0 );
   ~K3bMultiChoiceDialog();
 
@@ -39,6 +43,7 @@ class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
 
   static int choose( const QString& caption,
 		     const QString& text,
+		     QMessageBox::Icon = QMessageBox::Information,
 		     QWidget* parent = 0, 
 		     const char* name = 0,
 		     int buttonCount = 2,

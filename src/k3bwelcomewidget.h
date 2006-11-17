@@ -70,7 +70,7 @@ class K3bWelcomeWidget::Display : public QWidget
   Display( QWidget* parent );
   ~Display();
 
-  QSize sizeHint() const;
+  QSize minimumSizeHint() const;
   QSizePolicy sizePolicy () const;
   int heightForWidth ( int w ) const;
 

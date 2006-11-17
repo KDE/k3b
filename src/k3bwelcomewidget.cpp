@@ -106,6 +106,21 @@ void K3bWelcomeWidget::Display::rebuildGui( const QPtrList<KAction>& actions )
 }
 
 
+static void calculateButtons( int width, int numActions, int buttonWidth, int& cols, int& rows )
+{
+  // always try to avoid horizontal scrollbars
+  int wa = width - 40;
+  cols = QMAX( 1, QMIN( wa / (buttonWidth+4), numActions ) );
+  rows = numActions/cols;
+  if( numActions%cols ) {
+    rows++;
+    // try to avoid useless cols
+    if( cols-2 >= rows-1 )
+      cols--;
+  }
+}
+
+
 void K3bWelcomeWidget::Display::rebuildGui()
 {
   // step 1: delete all old buttons in the buttons QPtrList<K3bFlatButton>
@@ -133,20 +148,6 @@ void K3bWelcomeWidget::Display::rebuildGui()
       m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
     }
 
-    // calculate rows and columns
-    m_cols = 0;
-    m_rows = 0;
-    if( numActions < 3 )
-      m_rows = 1;
-    else if( numActions > 6 )
-      m_rows = 3;
-    else
-      m_rows = 2;
-
-    m_cols = numActions/m_rows;
-    if( numActions%m_rows )
-      m_cols++;
-
     repositionButtons();
   }
 }
@@ -154,8 +155,15 @@ void K3bWelcomeWidget::Display::rebuildGui()
 
 void K3bWelcomeWidget::Display::repositionButtons()
 {
-  int leftMargin = QMAX( 80, (width() - ((m_buttonSize.width()+4)*m_cols))/2 );
-  int topOffset = m_header->height() + 40 + 10;
+  // calculate rows and columns
+  calculateButtons( width(), m_actions.count(), m_buttonSize.width(), m_cols, m_rows );
+
+  int availHor = width() - 40;
+  int availVert = height() - 20 - 10 - m_header->height() - 10;
+  if( m_infoTextVisible )
+    availVert -= m_infoText->height();
+  int leftMargin = 20 + (availHor - (m_buttonSize.width()+4)*m_cols)/2;
+  int topOffset = m_header->height() + 20 + ( availVert - (m_buttonSize.height()+4)*m_rows )/2;
 
   int row = 0;
   int col = 0;
@@ -179,28 +187,32 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
 QSizePolicy K3bWelcomeWidget::Display::sizePolicy () const
 {
-  return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum, m_infoTextVisible );
+  return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum, true );
 }
 
 
-int K3bWelcomeWidget::Display::heightForWidth ( int w ) const
+int K3bWelcomeWidget::Display::heightForWidth( int w ) const
 {
   if( m_infoTextVisible ) {
     int ow = m_infoText->width();
     m_infoText->setWidth( w );
     int h = m_infoText->height();
     m_infoText->setWidth( ow );
-    return (20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*m_rows) + 20 + 10 + h + 10 + 10);
+
+    int cols, rows;
+    calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
+
+    return (20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 20 + 10 + h + 10 + 10);
   }
   else
     return 0;
 }
 
 
-QSize K3bWelcomeWidget::Display::sizeHint() const
+QSize K3bWelcomeWidget::Display::minimumSizeHint() const
 {
-  QSize size( QMAX(40+m_header->widthUsed(), 160+((m_buttonSize.width()+4)*m_cols)),
-	      20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*m_rows) + 20 + 10 );
+  QSize size( QMAX(40+m_header->widthUsed(), 40+m_buttonSize.width()),
+	      20 + m_header->height() + 20 + 10 + m_buttonSize.height() + 20 + 10 );
 
   if( m_infoTextVisible )
     size.setHeight( size.height() + 10 + m_infoText->height() + 10 );
@@ -348,12 +360,9 @@ void K3bWelcomeWidget::showEvent( QShowEvent* e )
 
 void K3bWelcomeWidget::fixSize()
 {
-  QRect r( contentsRect() );
-  QSize s = r.size();
-  if( s.width() < main->sizeHint().width() )
-    s.setWidth( main->sizeHint().width() );
-  if( s.height() < main->sizeHint().height() )
-    s.setHeight( main->sizeHint().height() );
+  QSize s = contentsRect().size();
+  s.setWidth( QMAX( main->minimumSizeHint().width(), s.width() ) );
+  s.setHeight( QMAX( main->heightForWidth(s.width()), s.height() ) );
 
   main->resize( s );
   viewport()->resize( s );
@@ -412,6 +421,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 	main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
       else if( r == infoTextAction ) {
 	main->m_infoTextVisible = !main->m_infoTextVisible;
+	main->repositionButtons();
 	main->update();
       }
       else

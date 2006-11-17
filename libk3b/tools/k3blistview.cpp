@@ -522,11 +522,21 @@ void K3bCheckListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int
 // ///////////////////////////////////////////////
 
 
+class K3bListView::Private
+{
+public:
+  QLineEdit* spinBoxLineEdit;
+  QLineEdit* msfEditLineEdit;
+};
+
+
 K3bListView::K3bListView( QWidget* parent, const char* name )
   : KListView( parent, name ),
     m_noItemVMargin( 20 ),
     m_noItemHMargin( 20 )
 {
+  d = new Private;
+
   connect( header(), SIGNAL( sizeChange( int, int, int ) ),
 	   this, SLOT( updateEditorSize() ) );
 
@@ -550,6 +560,8 @@ K3bListView::~K3bListView()
   delete m_editorSpinBox;
   delete m_editorLineEdit;
   delete m_editorMsfEdit;
+
+  delete d;
 }
 
 
@@ -730,12 +742,19 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
     return m_editorLineEdit;
   }
 
+  //
+  // A QSpinBox (and thus also a K3bMsfEdit) uses a QLineEdit), thus
+  // we have to use this QLineEdit as the actual object to dead with
+  //
+
   case K3bListViewItem::SPIN:
     if( !m_editorSpinBox ) {
       m_editorSpinBox = new QSpinBox( viewport() );
+      d->spinBoxLineEdit = static_cast<QLineEdit*>( m_editorSpinBox->child( 0, "QLineEdit" ) );
       connect( m_editorSpinBox, SIGNAL(valueChanged(int)),
 	       this, SLOT(slotEditorSpinBoxValueChanged(int)) );
-      m_editorSpinBox->installEventFilter( this );
+      //      m_editorSpinBox->installEventFilter( this );
+      d->spinBoxLineEdit->installEventFilter( this );
     }
     // set the range
     m_editorSpinBox->setValue( item->text(col).toInt() );
@@ -744,11 +763,11 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::MSF:
     if( !m_editorMsfEdit ) {
       m_editorMsfEdit = new K3bMsfEdit( viewport() );
-//       m_editorMsfEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
-//       m_editorMsfEdit->setLineWidth(1);
+      d->msfEditLineEdit = static_cast<QLineEdit*>( m_editorMsfEdit->child( 0, "QLineEdit" ) );
       connect( m_editorMsfEdit, SIGNAL(valueChanged(int)),
 	       this, SLOT(slotEditorMsfEditValueChanged(int)) );
-      m_editorMsfEdit->installEventFilter( this );
+      //      m_editorMsfEdit->installEventFilter( this );
+      d->msfEditLineEdit->installEventFilter( this );
     }
     m_editorMsfEdit->setText( item->text(col) );
     return m_editorMsfEdit;
@@ -991,7 +1010,9 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   if( e->type() == QEvent::KeyPress ) { 
      QKeyEvent* ke = static_cast<QKeyEvent*>(e);
      if( ke->key() == Key_Tab ) {
-       if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+       if( o == m_editorLineEdit || 
+	   o == d->msfEditLineEdit || 
+	   o == d->spinBoxLineEdit ) {
 	 K3bListViewItem* lastEditItem = m_currentEditItem;
 
 	 doRename();
@@ -1003,23 +1024,33 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	     ++col;
 	   if( col < columns() )
 	     editItem( lastEditItem, col );
-	   else if( K3bListViewItem* nextItem = 
-		    dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) ) {
-	     // edit first column
-	     col = 0;
-	     while( col < columns() && nextItem->editorType( col ) == K3bListViewItem::NONE )
-	       ++col;
-	     editItem( nextItem, col );
-	   }
-	   else
+	   else {
 	     hideEditor();
+
+	     // search for the next editable item
+	     while( K3bListViewItem* nextItem = 
+		    dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) ) {
+	       // edit first column
+	       col = 0;
+	       while( col < columns() && nextItem->editorType( col ) == K3bListViewItem::NONE )
+		 ++col;
+	       if( col < columns() ) {
+		 editItem( nextItem, col );
+		 break;
+	       }
+	       
+	       lastEditItem = nextItem;
+	     }
+	   }
 	 }
 
 	 return true;
        }
      }
      if( ke->key() == Key_Return ) {
-       if( o == m_editorLineEdit || o == m_editorMsfEdit || o == m_editorSpinBox ) {
+       if( o == m_editorLineEdit || 
+	   o == d->msfEditLineEdit || 
+	   o == d->spinBoxLineEdit ) {
 	 K3bListViewItem* lastEditItem = m_currentEditItem;
 	 doRename();
 
@@ -1033,7 +1064,9 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
        }
      }
      else if( ke->key() == Key_Escape ) {
-       if( o == m_editorLineEdit || o == m_editorSpinBox || o == m_editorMsfEdit ) {
+       if( o == m_editorLineEdit || 
+	   o == d->msfEditLineEdit || 
+	   o == d->spinBoxLineEdit ) {
 	 hideEditor();
 	 return true;
        }
@@ -1056,7 +1089,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
       }
     }
     if( me->button() == QMouseEvent::LeftButton ) {
-      if( item != m_currentEditItem ) {
+      if( item != m_currentEditItem || m_currentEditColumn != col ) {
 	doRename();
 	if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
 	  if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
@@ -1072,11 +1105,10 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
     }
   }
 
-
   else if( e->type() == QEvent::FocusOut ) {
-    if( o == m_editorSpinBox ||
-	o == m_editorMsfEdit ||
-	o == m_editorLineEdit ||
+    if( o == m_editorLineEdit || 
+	o == d->msfEditLineEdit || 
+	o == d->spinBoxLineEdit ||
 	o == m_editorComboBox ) {
       // make sure we did not lose the focus to one of the edit widgets' children
       if( !qApp->focusWidget() || qApp->focusWidget()->parentWidget() != o ) {
@@ -1084,12 +1116,6 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	hideEditor();
       }
     }
-//     else if( o == m_editorComboBox ) {
-//       // make sure we did not lose the focus to one of the combobox children
-//       if( ( !m_editorComboBox->listBox() || !m_editorComboBox->listBox()->hasFocus() ) &&
-// 	  ( !m_editorComboBox->lineEdit() || !m_editorComboBox->lineEdit()->hasFocus() ) )
-// 	hideEditor();
-//     }
   }
 
   return KListView::eventFilter( o, e );

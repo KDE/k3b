@@ -20,6 +20,8 @@
 #include <k3bthreadjob.h>
 #include <k3bthread.h>
 #include <k3bdiritem.h>
+#include <k3bfileitem.h>
+#include <k3bglobals.h>
 
 #include <klocale.h>
 #include <kstringhandler.h>
@@ -40,6 +42,7 @@ public:
 
   QValueList<K3bDataItem*> nonExistingItems;
   QString listOfRenamedItems;
+  QValueList<K3bDataItem*> folderSymLinkItems;
 
   K3bThreadJob* threadJob;
 
@@ -60,6 +63,7 @@ void K3bDataPreparationJob::Private::run()
   // clean up
   nonExistingItems.clear();
   listOfRenamedItems.truncate(0);
+  folderSymLinkItems.clear();
 
   // initialize filenames in the project
   doc->prepareFilenames();
@@ -82,13 +86,17 @@ void K3bDataPreparationJob::Private::run()
   }
 
   //
-  // Check for missing files
+  // Check for missing files and folder symlinks
   //
   K3bDataItem* item = doc->root();
   while( (item = item->nextSibling()) ) {
     if( item->isFile() && !QFile::exists( item->localPath() ) ) {
       nonExistingItems.append( item );
     }
+
+    if( item->isSymLink() && QFileInfo( K3b::resolveLink( item->localPath() ) ).isDir() )
+      folderSymLinkItems.append( item );
+
     if( canceled ) {
       emitCanceled();
       emitFinished(false);
@@ -109,10 +117,10 @@ void K3bDataPreparationJob::Private::cancel()
 
 
 
-static QString createNonExistingItemsString( const QValueList<K3bDataItem*>& items, int max )
+static QString createItemsString( const QValueList<K3bDataItem*>& items, unsigned int max )
 {
   QString s;
-  int cnt = 0;
+  unsigned int cnt = 0;
   for( QValueList<K3bDataItem*>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
 
@@ -124,6 +132,9 @@ static QString createNonExistingItemsString( const QValueList<K3bDataItem*>& ite
 
     s += "<br>";
   }
+
+  if( items.count() > max )
+    s += "...";
 
   return s;
 }
@@ -204,8 +215,7 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
     if( !d->nonExistingItems.isEmpty() ) {
       if( questionYesNo( "<p>" + i18n("The following files could not be found. Do you want to remove them from the "
 				      "project and continue without adding them to the image?") + 
-			 "<p>" + createNonExistingItemsString( d->nonExistingItems, 10 )
-			 + ( d->nonExistingItems.count() > 10 ? QString( "<br>..." ) : QString() ),
+			 "<p>" + createItemsString( d->nonExistingItems, 10 ),
 			 i18n("Warning"),
 			 i18n("Remove missing files and continue"),
 			 i18n("Cancel and go back") ) ) {
@@ -215,6 +225,24 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
 	}
       }
       else {
+	d->canceled = true;
+	emit canceled();
+	jobFinished(false);
+	return;
+      }
+    }
+
+    //
+    // Warn about symlinks to folders
+    //
+    if( d->doc->isoOptions().followSymbolicLinks() && !d->folderSymLinkItems.isEmpty() ) {
+      if( !questionYesNo( "<p>" + i18n("K3b is not able to follow symbolic links to folders after they have been added "
+				       "to the project. Do you want to continue "
+				       "without writing the symbolic links to the image?") +
+			  "<p>" + createItemsString( d->folderSymLinkItems, 10 ),
+			  i18n("Warning"),
+			  i18n("Discard symbolic links to folders"),
+			  i18n("Cancel and go back") ) ) {
 	d->canceled = true;
 	emit canceled();
 	jobFinished(false);
