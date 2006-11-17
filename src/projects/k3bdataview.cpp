@@ -173,7 +173,8 @@ void K3bDataView::slotBurn()
 
 void K3bDataView::slotDocChanged()
 {
-  m_dataDirTree->firstChild()->repaint();
+  if( m_dataDirTree->firstChild()->text(0) != m_doc->isoOptions().volumeID() )
+    m_dataDirTree->firstChild()->repaint();
 
   // do not update the editor in case it changed the volume id itself
   if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )

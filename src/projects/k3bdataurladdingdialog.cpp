@@ -36,7 +36,6 @@
 #include <k3bapplication.h>
 #include <k3biso9660.h>
 #include <k3bdirsizejob.h>
-#include <k3bthemedheader.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -54,13 +53,13 @@
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent, const char* name )
   : KDialogBase( Plain,
-		 i18n("Please be patient..."),
+		 i18n("Adding files to project '%1'").arg(doc->URL().fileName()),
 		 Cancel,
 		 Cancel,
 		 parent,
 		 name,
 		 true,
-		 false ),
+		 true ),
     m_bExistingItemsReplaceAll(false),
     m_bExistingItemsIgnoreAll(false),
     m_bFolderLinksFollowAll(false),
@@ -82,17 +81,15 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
   m_infoLabel = new KSqueezedTextLabel( i18n("Preparing..."), page );
   m_progressWidget = new KProgress( 0, page );
 
-  m_header = new K3bThemedHeader( page );
-  m_header->setTitle( i18n("Adding files to project '%1'").arg(doc->URL().fileName()), i18n("(counting)") );
-
-  grid->addMultiCellWidget( m_header, 0, 0, 0, 1 );
-  grid->addWidget( m_counterLabel, 1, 1 );
-  grid->addWidget( m_infoLabel, 1, 0 );
-  grid->addMultiCellWidget( m_progressWidget, 2, 2, 0, 1 );
+  grid->addWidget( m_counterLabel, 0, 1 );
+  grid->addWidget( m_infoLabel, 0, 0 );
+  grid->addMultiCellWidget( m_progressWidget, 1, 1, 0, 1 );
 
   m_dirSizeJob = new K3bDirSizeJob( this );
   connect( m_dirSizeJob, SIGNAL(finished(bool)),
 	   this, SLOT(slotDirSizeDone(bool)) );
+
+  resize( fontMetrics().width( caption() ) * 1.5, sizeHint().height() );
 }
 
 
@@ -785,7 +782,6 @@ void K3bDataUrlAddingDialog::slotDirSizeDone( bool success )
   if( success ) {
     m_totalFiles += m_dirSizeJob->totalFiles() + m_dirSizeJob->totalDirs();
     if( m_dirSizeQueue.isEmpty() ) {
-      m_header->setSubTitle( i18n("1 file", "%n files", m_totalFiles ) );
       m_progressWidget->setTotalSteps( m_totalFiles );
       m_progressWidget->setProgress( m_filesHandled );
     }

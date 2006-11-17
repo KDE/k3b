@@ -29,7 +29,7 @@ class K3bDirItem;
 class K3bEncodingConverter;
 class K3bDirSizeJob;
 class K3bDataDoc;
-class K3bThemedHeader;
+
 
 class K3bDataUrlAddingDialog : public KDialogBase
 {
@@ -70,7 +70,6 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QString resultMessage() const;
 
   KProgress* m_progressWidget;
-  K3bThemedHeader* m_header;
   QLabel* m_infoLabel;
   QLabel* m_counterLabel;
   K3bEncodingConverter* m_encodingConverter;
