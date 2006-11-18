@@ -554,13 +554,6 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
 
 K3bListView::~K3bListView()
 {
-  // FIXME: is this really necessary or does viewport() delete them?
-  delete m_editorButton;
-  delete m_editorComboBox;
-  delete m_editorSpinBox;
-  delete m_editorLineEdit;
-  delete m_editorMsfEdit;
-
   delete d;
 }
 
@@ -639,11 +632,8 @@ void K3bListView::showEditor( K3bListViewItem* item, int col )
 
 void K3bListView::placeEditor( K3bListViewItem* item, int col )
 {
+  ensureItemVisible( item );
   QRect r = itemRect( item );
-  if ( !r.size().isValid() ) {
-    ensureItemVisible( item );
-    r = itemRect( item );
-  }
 
   r.setX( contentsToViewport( QPoint(header()->sectionPos( col ), 0) ).x() );
   r.setWidth( header()->sectionSize( col ) - 1 );
@@ -983,8 +973,11 @@ void K3bListView::slotEditorButtonClicked()
 }
 
 
-bool K3bListView::renameItem( K3bListViewItem*, int col, const QString& text )
+bool K3bListView::renameItem( K3bListViewItem* item, int col, const QString& text )
 {
+  Q_UNUSED(item);
+  Q_UNUSED(col);
+  Q_UNUSED(text);
   return true;
 }
 
