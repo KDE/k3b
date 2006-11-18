@@ -34,6 +34,8 @@ class LIBK3B_EXPORT K3bBlankingJob : public K3bBurnJob
 
   K3bDevice::Device* writer() const;
 
+  bool hasBeenCanceled() const { return m_canceled; }
+
   enum blank_mode { Fast, Complete, Track, Unclose, Session };
 
  public slots:

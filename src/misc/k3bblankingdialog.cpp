@@ -174,8 +174,13 @@ void K3bBlankingDialog::slotJobFinished( bool success )
   d->debugFile.close();
 
   if( success )
-    KMessageBox::information( this, i18n("Successfully erased CD-RW."),
+    KMessageBox::information( this, 
+			      i18n("Successfully erased CD-RW."),
 			      i18n("Success") );
+  else if( d->job->hasBeenCanceled() ) 
+    KMessageBox::information( this, 
+			      i18n("Erasing CD-RW canceled."),
+			      i18n("Canceled") );
   else if( KMessageBox::warningYesNo( this, 
 				      i18n("The Erasing process failed. Do you want to see the debugging output?"),
 				      i18n("Erasing failed.") ) == KMessageBox::Yes )
