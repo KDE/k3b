@@ -591,6 +591,9 @@ void K3bListView::hideEditor()
     m_editorButton->hide();
   if( m_editorMsfEdit )
     m_editorMsfEdit->hide();
+
+  // keep the focus here
+  viewport()->setFocus();
 }
 
 void K3bListView::showEditor( K3bListViewItem* item, int col )
@@ -772,20 +775,11 @@ void K3bListView::setCurrentItem( QListViewItem* i )
   if( !i || i == currentItem() )
     return;
 
-//   if( m_currentEditItem )
-//     if( m_currentEditItem->editorType(m_currentEditColumn) == K3bListViewItem::LINE ) {
-//       if( m_editorLineEdit->validator() ) {
-// 	QString str = m_editorLineEdit->text();
-// 	int pos = 0;
-// 	if( m_editorLineEdit->validator()->validate( str, pos ) == QValidator::Acceptable )
-// 	  slotEditorLineEditReturnPressed();
-//       }
-//       else
-// 	slotEditorLineEditReturnPressed();
-//     }
-  doRename();
-  hideEditor();
-  m_currentEditItem = 0;
+  // I cannot remember why I did this here exactly. However, it resets the
+  // m_lastClickedItem and thus invalidates the editing.
+//   doRename();
+//   hideEditor();
+//   m_currentEditItem = 0;
   KListView::setCurrentItem( i );
 }
 
@@ -1069,7 +1063,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   else if( e->type() == QEvent::MouseButtonPress && o == viewport() ) {
 
     // first let's grab the focus
-    setFocus();
+    viewport()->setFocus();
 
     QMouseEvent* me = static_cast<QMouseEvent*>( e );
     QListViewItem* item = itemAt( me->pos() );
@@ -1081,6 +1075,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	return true;
       }
     }
+
     if( me->button() == QMouseEvent::LeftButton ) {
       if( item != m_currentEditItem || m_currentEditColumn != col ) {
 	doRename();

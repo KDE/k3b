@@ -205,8 +205,19 @@ void K3bFileTreeComboBox::popdown()
 void K3bFileTreeComboBox::slotGoUrl()
 {
   QString p = currentText();
-  if( p.startsWith("/dev/") ) {
-    if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( p ) ) {
+
+  // check for a media url or a device string
+  if( K3bDevice::Device* dev = K3b::urlToDevice( p ) ) {
+    emit deviceExecuted( dev );
+    return;
+  }
+
+  // check for our own internal format
+  else if( p.contains("/dev/") ) {
+    int pos1 = p.findRev('(');
+    int pos2 = p.findRev(')');
+    QString devStr = p.mid( pos1+1, pos2-pos1-1  );
+    if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( devStr ) ) {
       emit deviceExecuted( dev );
       return;
     }

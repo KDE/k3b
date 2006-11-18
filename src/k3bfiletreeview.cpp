@@ -385,6 +385,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   m_menuEnabled = false;
 
   connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+  connect( this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
   connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
 	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
 

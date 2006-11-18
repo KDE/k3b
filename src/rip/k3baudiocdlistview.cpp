@@ -38,7 +38,7 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, c
   addColumn( i18n("Length") );
   addColumn( i18n("Size") );
 
-  setDoubleClickForEdit( false );
+  setDoubleClickForEdit( true );
 
   header()->setClickEnabled(false);
   setColumnWidthMode( 0, QListView::Manual );
