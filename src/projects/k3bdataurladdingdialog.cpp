@@ -89,6 +89,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
   connect( m_dirSizeJob, SIGNAL(finished(bool)),
 	   this, SLOT(slotDirSizeDone(bool)) );
 
+  // try to start with a reasonable size
   resize( fontMetrics().width( caption() ) * 1.5, sizeHint().height() );
 }
 

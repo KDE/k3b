@@ -76,6 +76,7 @@ class K3bDataFileView : public K3bListView
   void slotDoubleClicked( QListViewItem* item );
   void slotItemAdded( K3bDataItem* );
   void slotAddUrls();
+  void slotOpen();
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
@@ -94,6 +95,7 @@ class K3bDataFileView : public K3bListView
   KAction* m_actionRename;
   KAction* m_actionNewDir;
   KAction* m_actionProperties;
+  KAction* m_actionOpen;
 
   K3bView* m_view;
 

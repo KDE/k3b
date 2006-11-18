@@ -42,6 +42,7 @@
 #include <kinputdialog.h>
 #include <kdebug.h>
 #include <kshortcut.h>
+#include <krun.h>
 
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
@@ -330,6 +331,8 @@ void K3bDataFileView::setupActions()
 				actionCollection(), "rename" );
   m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()),
 				   actionCollection(), "parent_dir" );
+  m_actionOpen = new KAction( i18n("Open"), "fileopen", 0, this, SLOT(slotOpen()),
+				   actionCollection(), "open" );
 
   m_popupMenu = new KActionMenu( m_actionCollection, "contextMenu" );
   m_popupMenu->insert( m_actionParentDir );
@@ -337,6 +340,8 @@ void K3bDataFileView::setupActions()
   m_popupMenu->insert( m_actionRename );
   m_popupMenu->insert( m_actionRemove );
   m_popupMenu->insert( m_actionNewDir );
+  m_popupMenu->insert( new KActionSeparator( this ) );
+  m_popupMenu->insert( m_actionOpen );
   m_popupMenu->insert( new KActionSeparator( this ) );
   m_popupMenu->insert( m_actionProperties );
   m_popupMenu->insert( new KActionSeparator( this ) );
@@ -354,10 +359,12 @@ void K3bDataFileView::showPopupMenu( KListView*, QListViewItem* item, const QPoi
       m_actionParentDir->setEnabled( false );
     else
       m_actionParentDir->setEnabled( true );
+    m_actionOpen->setEnabled( di->isFile() );
   }
   else {
     m_actionRemove->setEnabled( false );
     m_actionRename->setEnabled( false );
+    m_actionOpen->setEnabled( false );
   }
 
   m_popupMenu->popup( point );
@@ -437,6 +444,24 @@ void K3bDataFileView::slotProperties()
   }
   else
     m_view->slotProperties();
+}
+
+
+void K3bDataFileView::slotOpen()
+{
+  if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( selectedItems().first() ) ) {
+    K3bDataItem* item = viewItem->dataItem();
+    if( item->isFile() ) {
+      K3bDataFileViewItem* fvi = static_cast<K3bDataFileViewItem*>( viewItem );
+      if( fvi->mimeType() && 
+	  !KRun::isExecutableFile( KURL::fromPathOrURL(item->localPath()), 
+				   fvi->mimeType()->name() ) )
+	KRun::runURL( KURL::fromPathOrURL(item->localPath()), 
+		      fvi->mimeType()->name() );
+      else
+	KRun::displayOpenWithDialog( KURL::fromPathOrURL(item->localPath()) );
+    }
+  }
 }
 
 

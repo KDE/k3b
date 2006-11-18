@@ -89,6 +89,8 @@ class K3bDataFileViewItem : public K3bDataViewItem
 
   K3bFileItem* fileItem() const { return m_fileItem; }
 
+  const KMimeType::Ptr mimeType() const { return m_pMimeType; }
+
  private:
   void init( K3bFileItem* );
 
