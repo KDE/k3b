@@ -591,9 +591,6 @@ void K3bListView::hideEditor()
     m_editorButton->hide();
   if( m_editorMsfEdit )
     m_editorMsfEdit->hide();
-
-  // keep the focus here
-  viewport()->setFocus();
 }
 
 void K3bListView::showEditor( K3bListViewItem* item, int col )
@@ -862,8 +859,12 @@ void K3bListView::slotEditorLineEditReturnPressed()
     // TODO: add config for this
     if( K3bListViewItem* nextItem = dynamic_cast<K3bListViewItem*>( m_currentEditItem->nextSibling() ) )
       editItem( nextItem, currentEditColumn() );
-    else
+    else {
       hideEditor();
+
+      // keep the focus here
+      viewport()->setFocus();
+    }
   }
 }
 
@@ -1014,6 +1015,9 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	   else {
 	     hideEditor();
 
+	     // keep the focus here
+	     viewport()->setFocus();
+
 	     // search for the next editable item
 	     while( K3bListViewItem* nextItem = 
 		    dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) ) {
@@ -1044,8 +1048,12 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	 if( K3bListViewItem* nextItem = 
 	     dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) )
 	   editItem( nextItem, currentEditColumn() );
-	 else
+	 else {
 	   hideEditor();
+
+	   // keep the focus here
+	   viewport()->setFocus();
+	 }
 
 	 return true;
        }
@@ -1055,6 +1063,10 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	   o == d->msfEditLineEdit || 
 	   o == d->spinBoxLineEdit ) {
 	 hideEditor();
+
+	 // keep the focus here
+	 viewport()->setFocus();
+
 	 return true;
        }
      }
@@ -1082,11 +1094,19 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
 	  if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
 	    showEditor( k3bItem, col );
-	  else
+	  else {
 	    hideEditor();
+
+	    // keep the focus here
+	    viewport()->setFocus();
+	  }
 	}
-	else
+	else {
 	  hideEditor();
+
+	  // keep the focus here
+	  viewport()->setFocus();
+	}
 	
 	m_lastClickedItem = item;
       }
