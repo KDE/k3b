@@ -792,10 +792,22 @@ void K3bDataJob::determineMultiSessionMode()
 
 void K3bDataJob::slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh )
 {
-  d->usedMultiSessionMode = getMultiSessionMode( dh->diskInfo() );
+  //
+  // This is a little workaround for the bad cancellation handling in this job
+  // see cancel()
+  //
+  if( d->canceled ) {
+    if( active() ) {
+      cleanup();
+      jobFinished( false );
+    }
+  }
+  else {
+    d->usedMultiSessionMode = getMultiSessionMode( dh->diskInfo() );
 
-  // carry on with the writing
-  prepareWriting();
+    // carry on with the writing
+    prepareWriting();
+  }
 }
 
 
@@ -872,7 +884,7 @@ bool K3bDataJob::waitForMedium()
     return false;
   }
   else
-    return true;
+    return !d->canceled;
 }
 
 

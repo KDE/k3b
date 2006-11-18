@@ -197,7 +197,7 @@ bool K3bDvdJob::waitForMedium()
 				  K3bDevice::STATE_INCOMPLETE :
 				  K3bDevice::STATE_EMPTY );
 
-  if( foundMedium < 0 ) {
+  if( foundMedium < 0 || hasBeenCanceled() ) {
     return false;
   }
   
