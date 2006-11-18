@@ -49,6 +49,7 @@ void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 void K3b::addTranscodePrograms( K3bExternalBinManager* m )
 {
   static const char* transcodeTools[] =  { "transcode",
+					   0, // K3b 1.0 only uses the transcode binary
 					   "tcprobe",
 					   "tccat",
 					   "tcscan",
