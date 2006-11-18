@@ -70,6 +70,7 @@ void K3bWidgetShowEffect::show( bool effectOnly )
     m_timerId = startTimer( 1000 / 30 );
   }
   else {
+    m_widget->move( 0, m_widget->parentWidget()->height() );
     m_timerId = startTimer( 6 );
   }
   
