@@ -237,7 +237,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       if( m_writingMode != K3b::DAO || !m_onTheFly || m_onlyCreateImage ||
 	  ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
 	    k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) ) ) {
-	d->lastSector = dh->toc()[0].lastSector();
+	d->lastSector = dh->toc().lastSector();
 	break;
       }
 
