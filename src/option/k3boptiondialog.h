@@ -26,7 +26,6 @@ class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
 class K3bPluginOptionTab;
-class K3bDivxOptionTab;
 class K3bThemeOptionTab;
 
 
@@ -83,10 +82,6 @@ class K3bOptionDialog : public KDialogBase
   // plugin options
   K3bPluginOptionTab* m_pluginOptionTab;
   void setupPluginPage();
-
-  // divx options
-  K3bDivxOptionTab* m_divxOptionTab;
-  void setupDivxPage();
 
   // theme options
   K3bThemeOptionTab* m_themeOptionTab;

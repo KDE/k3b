@@ -24,7 +24,6 @@
 #include "k3bthemeoptiontab.h"
 #include "k3bpluginoptiontab.h"
 #include <k3bsystemproblemdialog.h>
-#include "k3bdivxoptiontab.h"
 
 
 #include <qlayout.h>
@@ -100,7 +99,6 @@ bool K3bOptionDialog::saveSettings()
   m_burningOptionTab->saveSettings();
   m_externalBinOptionTab->saveSettings();
   m_notifyOptionTab->saveSettings();
-  //m_divxOptionTab->saveSettings();
 
   m_themeOptionTab->saveSettings();
 
@@ -238,20 +236,6 @@ void K3bOptionDialog::setupThemePage()
 
   m_themeOptionTab = new K3bThemeOptionTab( frame );
   box->addWidget( m_themeOptionTab );
-}
-
-
-void K3bOptionDialog::setupDivxPage()
-{
-  QFrame* frame = addPage( i18n("MPEG4"), i18n("MPEG-4 Encoding Settings"),
-			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
-
-  QVBoxLayout* box = new QVBoxLayout( frame );
-  box->setSpacing( 0 );
-  box->setMargin( 0 );
-
-  m_divxOptionTab = new K3bDivxOptionTab( frame, "divxOptiontab" );
-  box->addWidget( m_divxOptionTab );
 }
 
 
