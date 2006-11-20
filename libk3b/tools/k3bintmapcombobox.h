@@ -64,6 +64,8 @@ class LIBK3B_EXPORT K3bIntMapComboBox : protected KComboBox
    */
   bool insertItem( int value, const QString& text, const QString& description, int index = -1 );
 
+  void addGlobalWhatsThisText( const QString& top, const QString& bottom );
+
  private slots:
   void slotItemActivated( int );
   void slotItemHighlighted( int );

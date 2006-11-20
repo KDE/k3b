@@ -25,6 +25,9 @@ class K3bIntMapComboBox::Private
 public:
   QMap<int, int> valueIndexMap;
   QValueVector<QPair<int, QString> > indexValueDescriptionMap;
+
+  QString topWhatsThis;
+  QString bottomWhatsThis;
 };
 
 
@@ -84,11 +87,12 @@ bool K3bIntMapComboBox::insertItem( int value, const QString& text, const QStrin
 
 void K3bIntMapComboBox::updateWhatsThis()
 {
-  QString ws;
+  QString ws( d->topWhatsThis );
   for( unsigned int i = 0; i < d->indexValueDescriptionMap.count(); ++i ) {
     ws += "<p><b>" + KComboBox::text( i ) + "</b><br>";
     ws += d->indexValueDescriptionMap[i].second;
-  }
+  }  
+  ws += "<p>" + d->bottomWhatsThis;
 
   QWhatsThis::add( this, ws );
 }
@@ -103,6 +107,14 @@ void K3bIntMapComboBox::slotItemHighlighted( int index )
 void K3bIntMapComboBox::slotItemActivated( int index )
 {
   emit valueChanged( d->indexValueDescriptionMap[index].first );
+}
+
+
+void K3bIntMapComboBox::addGlobalWhatsThisText( const QString& top, const QString& bottom )
+{
+  d->topWhatsThis = top;
+  d->bottomWhatsThis = bottom;
+  updateWhatsThis();
 }
 
 #include "k3bintmapcombobox.moc"

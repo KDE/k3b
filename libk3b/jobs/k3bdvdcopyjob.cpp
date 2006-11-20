@@ -28,6 +28,8 @@
 #include <k3bgrowisofswriter.h>
 #include <k3bversion.h>
 #include <k3biso9660.h>
+#include <k3bfilesplitter.h>
+#include <k3bchecksumpipe.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -49,6 +51,7 @@ public:
       readcdReader(0),
       dataTrackReader(0),
       usedWritingMode(0) {
+    outPipe.readFromIODevice( &imageFile );
   }
 
   int doneCopies;
@@ -67,6 +70,10 @@ public:
   K3b::Msf lastSector;
 
   int usedWritingMode;
+
+  K3bFileSplitter imageFile;
+  K3bChecksumPipe inPipe;
+  K3bActivePipe outPipe;
 };
 
 
@@ -316,6 +323,8 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	  return;
 	}
       }
+
+      d->imageFile.setName( m_imagePath );
     }
 
     if( K3b::isMounted( m_readerDevice ) ) {
@@ -373,28 +382,6 @@ void K3bDvdCopyJob::cancel()
 
 void K3bDvdCopyJob::prepareReader()
 {
-//   if( !d->readcdReader ) {
-//     d->readcdReader = new K3bReadcdReader( this );
-//     connect( d->readcdReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-//     connect( d->readcdReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
-//     connect( d->readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
-//     connect( d->readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-//     connect( d->readcdReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-//     connect( d->readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
-//              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-//   }
-
-//   d->readcdReader->setReadDevice( m_readerDevice );
-//   d->readcdReader->setReadSpeed( 0 ); // MAX
-//   d->readcdReader->setSectorRange( 0, d->lastSector );
-
-//   if( m_onTheFly && !m_onlyCreateImage )
-//     d->readcdReader->writeToFd( d->writerJob->fd() );
-//   else {
-//     d->readcdReader->writeToFd( -1 );
-//     d->readcdReader->setImagePath( m_imagePath );
-//   }
-
   if( !d->dataTrackReader ) {
     d->dataTrackReader = new K3bDataTrackReader( this );
     connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
@@ -410,12 +397,14 @@ void K3bDvdCopyJob::prepareReader()
   d->dataTrackReader->setIgnoreErrors( m_ignoreReadErrors );
   d->dataTrackReader->setRetries( m_readRetries );
   d->dataTrackReader->setSectorRange( 0, d->lastSector );
+
   if( m_onTheFly && !m_onlyCreateImage )
-    d->dataTrackReader->writeToFd( d->writerJob->fd() );
-  else {
-    d->dataTrackReader->writeToFd( -1 );
-    d->dataTrackReader->setImagePath( m_imagePath );
-  }
+    d->inPipe.writeToFd( d->writerJob->fd(), true );
+  else 
+    d->inPipe.writeToIODevice( &d->imageFile );
+
+  d->inPipe.open( true );
+  d->dataTrackReader->writeToFd( d->inPipe.in() );
 }
 
 
@@ -458,10 +447,7 @@ void K3bDvdCopyJob::prepareWriter()
     d->writerJob->setTrackSize( d->lastSector.lba()+1 );
   }
  
-  if( m_onTheFly )
-    d->writerJob->setImageToWrite( QString::null ); // write to stdin
-  else
-    d->writerJob->setImageToWrite( m_imagePath );
+  d->writerJob->setImageToWrite( QString::null ); // write to stdin
 }
 
 
@@ -547,6 +533,8 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	  
 	  d->writerRunning = true;
 	  d->writerJob->start();
+	  d->outPipe.writeToFd( d->writerJob->fd(), true );
+	  d->outPipe.open( true );
 	}
 	else {
 	  if( m_removeImageFiles )
@@ -611,6 +599,10 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
 	prepareReader();
 	d->readerRunning = true;
 	d->dataTrackReader->start();
+      }
+      else {
+	d->outPipe.writeToFd( d->writerJob->fd(), true );
+	d->outPipe.open( true );
       }
     }
     else {
@@ -770,7 +762,7 @@ bool K3bDvdCopyJob::waitForDvd()
 void K3bDvdCopyJob::removeImageFiles()
 {
   if( QFile::exists( m_imagePath ) ) {
-    QFile::remove( m_imagePath );
+    d->imageFile.remove();
     emit infoMessage( i18n("Removed image file %1").arg(m_imagePath), K3bJob::SUCCESS );
   }
 }

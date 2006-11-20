@@ -5,14 +5,6 @@
     <property name="name">
         <cstring>base_K3bDataVolumeDescWidget</cstring>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>392</width>
-            <height>309</height>
-        </rect>
-    </property>
     <property name="caption">
         <string>Volume Descriptor</string>
     </property>

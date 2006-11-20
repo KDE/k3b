@@ -299,6 +299,16 @@ KIO::filesize_t K3b::filesize( const KURL& url )
 }
 
 
+KIO::filesize_t K3b::imageFilesize( const KURL& url )
+{
+  KIO::filesize_t size = K3b::filesize( url );
+  int cnt = 0;
+  while( KIO::NetAccess::exists( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt).rightJustify( 3, '0' ) ), true ) )
+    size += K3b::filesize( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt++).rightJustify( 3, '0' ) ) );
+  return size;
+}
+
+
 QString K3b::cutFilename( const QString& name, unsigned int len )
 {
   if( name.length() > len ) {

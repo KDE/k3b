@@ -96,7 +96,8 @@ void K3bDataItem::setK3bName( const QString& name ) {
   }
    
   if( parent() ) {
-    if( parent()->find( name ) ) {
+    K3bDataItem* item = parent()->find( name );
+    if( item && item != this ) {
       kdDebug() << "(K3bDataItem) item with that name already exists." << endl;
       return;
     }

@@ -28,12 +28,12 @@ class QButtonGroup;
 class QRadioButton;
 class K3bAudioCdTextWidget;
 class K3bDataModeWidget;
+class K3bIntMapComboBox;
 
 
 /**
   *@author Sebastian Trueg
   */
-
 class K3bMixedBurnDialog : public K3bProjectBurnDialog  
 {
  Q_OBJECT
@@ -63,10 +63,9 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
 
  private:
    void setupSettingsPage();
-   void createContextHelp();
    K3bMixedDoc* m_doc;
 
-   QButtonGroup* m_groupMixedType;
+   K3bIntMapComboBox* m_comboMixedModeType;
    QRadioButton* m_radioMixedTypeFirstTrack;
    QRadioButton* m_radioMixedTypeLastTrack;
    QRadioButton* m_radioMixedTypeSessions;

@@ -16,13 +16,16 @@
 #ifndef _K3B_CHECKSUM_PIPE_H_
 #define _K3B_CHECKSUM_PIPE_H_
 
-#include <qcstring.h>
+#include <k3bactivepipe.h>
+
+#include <k3b_export.h>
+
 
 /**
  * The checksum pipe calculates the checksum of the data
  * passed through it.
  */
-class K3bChecksumPipe
+class LIBK3B_EXPORT K3bChecksumPipe : public K3bActivePipe
 {
  public:
   K3bChecksumPipe();
@@ -33,53 +36,27 @@ class K3bChecksumPipe
   };
 
   /**
+   * \reimplemented
+   * Defaults to MD5 checksum
+   */
+  bool open( bool closeWhenDone = false );
+
+  /**
    * Opens the pipe and thus starts the 
    * checksum calculation
    *
    * \param closeWhenDone If true the pipes will be closed
    *        once all data has been read.
    */
-  bool open( int type = MD5, bool closeWhenDone = false );
-
-  /**
-   * Close the pipe and finish the checksum.
-   */
-  void close();
-
-  /**
-   * Set the file descriptor to read from. If this is -1 (the default) then
-   * data has to be piped into the in() file descriptor.
-   *
-   * \param fd The file descriptor to read from.
-   * \param close If true the reading file descriptor will be closed on a call to close()
-   */
-  void readFromFd( int fd, bool close = false );
-
-  /**
-   * Set the file descriptor to write to. If this is -1 (the default) then
-   * data has to read from the out() file descriptor.
-   *
-   * \param fd The file descriptor to write to.
-   * \param close If true the reading file descriptor will be closed on a call to close()
-   */
-  void writeToFd( int fd, bool close = false );
-
-  /**
-   * The file descriptor to write into
-   * Only valid if no fd to read from has been set
-   */
-  int in() const;
-
-  /**
-   * The file descriptor to read from
-   * Only valid if no fd to write to has been set
-   */
-  int out() const;
+  bool open( Type type, bool closeWhenDone = false );
 
   /**
    * Get the calculated checksum
    */
   QCString checksum() const;
+
+ protected:
+  int write( char* data, int max );
 
  private:
   class Private;

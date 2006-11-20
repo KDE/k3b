@@ -237,14 +237,14 @@ void K3bIsoImageWritingDialog::slotStartClicked()
     if( KMessageBox::warningContinueCancel( this,
 				   i18n("The image you selected is not a valid ISO9660 image. "
 					"Are you sure you want to burn it anyway? "
-					"(There are other valid image types that are not detected by K3b but "
+					"(There may exist other valid image types that are not detected by K3b but "
 					"will work fine.)"), i18n("Burn") ) == KMessageBox::Cancel )
       return;
   }
 
   K3bIso9660 isoFs( imagePath() );
   if( isoFs.open() ) {
-    if( K3b::filesize( KURL::fromPathOrURL( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+    if( K3b::imageFilesize( KURL::fromPathOrURL( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
       if( KMessageBox::questionYesNo( this, 
 				      i18n("<p>This image has an invalid file size."
 					   "If it has been downloaded make sure the download is complete."

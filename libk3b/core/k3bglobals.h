@@ -186,6 +186,14 @@ namespace K3b
   LIBK3B_EXPORT KIO::filesize_t filesize( const KURL& );
 
   /**
+   * Calculate the total size of an image file. This also includes
+   * images splitted by a K3bFileSplitter.
+   *
+   * \returns the total size of the image file at url
+   */
+  LIBK3B_EXPORT KIO::filesize_t imageFilesize( const KURL& url );
+
+  /**
    * true if the kernel supports ATAPI devices without SCSI emulation.
    * use in combination with the K3bExternalProgram feature "plain-atapi"
    */

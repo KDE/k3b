@@ -28,6 +28,7 @@
 #include <k3bversion.h>
 #include <k3bglobals.h>
 #include <k3bchecksumpipe.h>
+#include <k3bfilesplitter.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -58,8 +59,12 @@ int K3bIsoImager::s_imagerSessionCounter = 0;
 class K3bIsoImager::Private
 {
 public:
+  Private()
+    : pipe(0) {
+  }
+
   QString imagePath;
-  QFile imageFile;
+  K3bFileSplitter imageFile;
   const K3bExternalBin* mkisofsBin;
 
   enum LinkHandling {
@@ -73,7 +78,7 @@ public:
 
   bool knownError;
 
-  K3bChecksumPipe checksumPipe;
+  K3bActivePipe* pipe;
   K3bDataPreparationJob* dataPreparationJob;
 };
 
@@ -154,10 +159,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
   m_processExited = true;
 
-  if( m_doc->verifyData() ) {
-    d->checksumPipe.close();
-    kdDebug() << "(K3bIsoImager) checksum from image: " << d->checksumPipe.checksum() << endl;
-  }
+  d->pipe->close();
 
   if( d->imageFile.isOpen() ) {
     d->imageFile.close();
@@ -479,28 +481,33 @@ void K3bIsoImager::start()
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
 
-  int fd = -1;
-  if( m_fdToWriteTo != -1 ) {
-    fd = m_fdToWriteTo;
-  }
-  else {
+  //
+  // Check the image file
+  if( m_fdToWriteTo == -1 ) {
     d->imageFile.setName( d->imagePath );
-    if( d->imageFile.open( IO_WriteOnly ) )
-      fd = d->imageFile.handle();
-    else {
+    if( !d->imageFile.open( IO_WriteOnly ) ) {
       emit infoMessage( i18n("Could not open %1 for writing").arg(d->imagePath), ERROR );
       cleanup();
       jobFinished(false);
       return;
     }
   }
-  if( m_doc->verifyData() ) {
-    d->checksumPipe.writeToFd( fd );
-    d->checksumPipe.open();
-    m_process->writeToFd( d->checksumPipe.in() );
-  }
+
+  //
+  // Open the active pipe which does the streaming
+  delete d->pipe;
+  if( m_doc->verifyData() )
+    d->pipe = new K3bChecksumPipe();
   else
-    m_process->writeToFd( fd );
+    d->pipe = new K3bActivePipe();
+
+  if( m_fdToWriteTo == -1 )
+    d->pipe->writeToIODevice( &d->imageFile );
+  else
+    d->pipe->writeToFd( m_fdToWriteTo );
+  d->pipe->open();
+  m_process->writeToFd( d->pipe->in() );
+
 
   kdDebug() << "***** mkisofs parameters:\n";
   const QValueList<QCString>& args = m_process->args();
@@ -1135,7 +1142,10 @@ void K3bIsoImager::clearDummyDirs()
 
 QCString K3bIsoImager::checksum() const
 {
-  return d->checksumPipe.checksum();
+  if( K3bChecksumPipe* p = dynamic_cast<K3bChecksumPipe*>( d->pipe ) )
+    return p->checksum();
+  else
+    return QCString();
 }
 
 

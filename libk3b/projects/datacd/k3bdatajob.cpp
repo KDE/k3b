@@ -32,6 +32,8 @@
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
 #include <k3bglobalsettings.h>
+#include <k3bactivepipe.h>
+#include <k3bfilesplitter.h>
 
 #include <kprocess.h>
 #include <kapplication.h>
@@ -75,6 +77,9 @@ public:
   int copiesDone;
 
   K3bDataVerifyingJob* verificationJob;
+
+  K3bFileSplitter imageFile;
+  K3bActivePipe pipe;
 };
 
 
@@ -138,6 +143,10 @@ void K3bDataJob::start()
   }
 
   emit newTask( i18n("Preparing data") );
+
+  // there is no harm in setting these even if we write on-the-fly
+  d->imageFile.setName( d->doc->tempDir() );
+  d->pipe.readFromIODevice( &d->imageFile );
 
   if( d->usedMultiSessionMode == K3bDataDoc::AUTO && !d->doc->onlyCreateImages() )
     determineMultiSessionMode();
@@ -322,8 +331,11 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 	  jobFinished( true );
 	}
 	else {
-	  if( prepareWriterJob() )
+	  if( prepareWriterJob() ) {
 	    startWriterJob();
+	    d->pipe.writeToFd( m_writerJob->fd(), true );
+	    d->pipe.open(true);
+	  }
 	}
       }
       else {
@@ -460,6 +472,10 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 	if( failed ) {
 	  cancel();
 	}
+	else if( !d->doc->onTheFly() ) {
+	  d->pipe.writeToFd( m_writerJob->fd(), true );
+	  d->pipe.open(true);
+	}
       }
       else {
 	cleanup();
@@ -507,6 +523,10 @@ void K3bDataJob::slotVerificationFinished( bool success )
     
     if( failed )
       cancel();
+    else if( !d->doc->onTheFly() ) {
+      d->pipe.writeToFd( m_writerJob->fd(), true );
+      d->pipe.open(true);
+    }
   }
   else {
     cleanup();
@@ -610,12 +630,7 @@ bool K3bDataJob::prepareWriterJob()
 	writer->addArgument( "-xa1" );
     }
 
-    if( d->doc->onTheFly() ) {
-      writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
-    }
-    else {
-      writer->addArgument( d->doc->tempDir() );
-    }
+    writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
 
     setWriterJob( writer );
   }
@@ -645,10 +660,8 @@ bool K3bDataJob::prepareWriterJob()
 	*s << "\n";
 	*s << "TRACK MODE2_FORM1" << "\n";
       }
-      if( d->doc->onTheFly() )
-	*s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
-      else
-	*s << "DATAFILE \"" << d->doc->tempDir() << "\"\n";
+
+      *s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
 
       d->tocFile->close();
     }
@@ -935,7 +948,7 @@ void K3bDataJob::cleanup()
 {
   if( !d->doc->onTheFly() && d->doc->removeImages() ) {
     if( QFile::exists( d->doc->tempDir() ) ) {
-      QFile::remove( d->doc->tempDir() );
+      d->imageFile.remove();
       emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
     }
   }

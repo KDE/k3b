@@ -34,6 +34,7 @@
 #include <k3bversion.h>
 #include <k3bcore.h>
 #include <k3baudiotrackplayer.h>
+#include <k3bintmapcombobox.h>
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
@@ -80,8 +81,6 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   setupSettingsPage();
 
-  createContextHelp();
-
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
@@ -102,71 +101,49 @@ void K3bMixedBurnDialog::setupSettingsPage()
   QGroupBox* groupNormalize = new QGroupBox( 1, Qt::Vertical, i18n("Misc"), w );
   m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( groupNormalize );
 
-  m_groupMixedType = new QButtonGroup( 4, Qt::Vertical, i18n("Mixed Mode Type"), w );
+  QGroupBox* groupMixedType = new QGroupBox( 1, Qt::Vertical, i18n("Mixed Mode Type"), w );
+  m_comboMixedModeType = new K3bIntMapComboBox( groupMixedType );
 
-  // Enhanced music CD/CD Extra/CD Plus format (Blue Book)
-  // to fulfill the standard we also need the special file structure
-  // but in the case of our simple mixed mode cd we allow to create blue book cds without
-  // these special files and directories
-  m_radioMixedTypeSessions = new QRadioButton( i18n("Data in second session (CD-Extra)"), m_groupMixedType );
-
-  // standard mixed mode
-  m_radioMixedTypeFirstTrack = new QRadioButton( i18n("Data in first track"), m_groupMixedType );
-
-  // is this a standard?
-  m_radioMixedTypeLastTrack = new QRadioButton( i18n("Data in last track"), m_groupMixedType );
-
-  m_groupMixedType->setExclusive(true);
-
+  m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_SECOND_SESSION,
+				    i18n("Data in second session (CD-Extra)"),
+				    i18n("<em>Blue book CD</em>"
+					 "<br>K3b will create a multisession CD with "
+					 "2 sessions. The first session will contain all "
+					 "audio tracks and the second session will contain "
+					 "a mode 2 form 1 data track."
+					 "<br>This mode is based on the <em>Blue book</em> "
+					 "standard (also known as <em>Extended Audio CD</em>, "
+					 "<em>CD-Extra</em>, or <em>CD Plus</em>) "
+					 "and has the advantage that a hifi audio "
+					 "CD player will only recognize the first session "
+					 "and ignore the second session with the data track."
+					 "<br>If the CD is intended to be used in a hifi audio CD player "
+					 "this is the recommended mode."
+					 "<br>Some older CD-ROMs may have problems reading "
+					 "a blue book CD since it is a multisession CD.") );
+  m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_FIRST_TRACK,
+				    i18n("Data in first track"),
+				    i18n("K3b will write the data track before all "
+					 "audio tracks.") );
+  m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_LAST_TRACK,
+				    i18n("Data in last track"),
+				    i18n("K3b will write the data track after all "
+					 "audio tracks.") );
+  m_comboMixedModeType->addGlobalWhatsThisText( QString(),
+						i18n("<b>Caution:</b> The last two modes should only be used for CDs that are unlikely to "
+						     "be played on a hifi audio CD player."
+						     "<br>It could lead to problems with some older "
+						     "hifi audio CD players that try to play the data track.") );
+				    
   QGridLayout* grid = new QGridLayout( w );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
-  grid->addWidget( m_groupMixedType, 0, 0 );
+  grid->addWidget( groupMixedType, 0, 0 );
   grid->addWidget( groupDataMode, 1, 0 );
   grid->addWidget( groupNormalize, 2, 0 );
   grid->setRowStretch( 3, 1 );
 
-
   addPage( w, i18n("Misc") );
-}
-
-
-void K3bMixedBurnDialog::createContextHelp()
-{
-  QToolTip::add( m_radioMixedTypeFirstTrack, i18n("First track will contain the data") );
-  QWhatsThis::add( m_radioMixedTypeFirstTrack, i18n("<p><b>Standard mixed mode CD 1</b>"
-						    "<p>K3b will write the data track before all "
-						    "audio tracks."
-						    "<p>This mode should only be used for CDs that are unlikely to "
-						    "be played on a hifi audio CD player."
-						    "<p><b>Caution:</b> It could lead to problems with some older "
-						    "hifi audio CD players that try to play the data track.") );
-
-  QToolTip::add( m_radioMixedTypeLastTrack, i18n("Last track will contain the data") );
-  QWhatsThis::add( m_radioMixedTypeLastTrack, i18n("<p><b>Standard mixed mode CD 2</b>"
-						   "<p>K3b will write the data track after all "
-						   "audio tracks."
-						    "<p>This mode should only be used for CDs that are unlikely to "
-						    "be played on a hifi audio CD player."
-						   "<p><b>Caution:</b> It could lead to problems with some older "
-						   "hifi audio CD players that try to play the data track.") );
-
-  QToolTip::add( m_radioMixedTypeSessions, i18n("The data will be written in a second session") );
-  QWhatsThis::add( m_radioMixedTypeSessions, i18n("<p><b>Blue book CD</b>"
-						  "<p>K3b will create a multisession CD with "
-						  "2 sessions. The first session will contain all "
-						  "audio tracks and the second session will contain "
-						  "a mode 2 form 1 data track."
-						  "<p>This mode is based on the <em>Blue book</em> "
-						  "standard (also known as <em>Extended Audio CD</em>, "
-						  "<em>CD-Extra</em>, or <em>CD Plus</em>) "
-						  "and has the advantage that a hifi audio "
-						  "CD player will only recognize the first session "
-						  "and ignore the second session with the data track."
-						  "<p>If the CD is intended to be used in a hifi audio CD player "
-						  "this is the recommended mode."
-						  "<p>Some older CD-ROMs may have problems reading "
-						  "a blue book CD since it is a multisession CD.") );
 }
 
 
@@ -182,12 +159,7 @@ void K3bMixedBurnDialog::saveSettings()
 {
   K3bProjectBurnDialog::saveSettings();
 
-  if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
-    m_doc->setMixedType( K3bMixedDoc::DATA_LAST_TRACK );
-  else if( m_groupMixedType->selected() == m_radioMixedTypeSessions )
-    m_doc->setMixedType( K3bMixedDoc::DATA_SECOND_SESSION );
-  else
-    m_doc->setMixedType( K3bMixedDoc::DATA_FIRST_TRACK );
+  m_doc->setMixedType( (K3bMixedDoc::MixedType)m_comboMixedModeType->selectedValue() );
 
   m_cdtextWidget->save( m_doc->audioDoc() );
 
@@ -214,17 +186,7 @@ void K3bMixedBurnDialog::readSettings()
   if( !m_doc->tempDir().isEmpty() )
     m_tempDirSelectionWidget->setTempPath( m_doc->tempDir() );
 
-  switch( m_doc->mixedType() ) {
-  case K3bMixedDoc::DATA_FIRST_TRACK:
-    m_radioMixedTypeFirstTrack->setChecked(true);
-    break;
-  case K3bMixedDoc::DATA_LAST_TRACK:
-    m_radioMixedTypeLastTrack->setChecked(true);
-    break;
-  case K3bMixedDoc::DATA_SECOND_SESSION:
-    m_radioMixedTypeSessions->setChecked(true);
-    break;
-  }
+  m_comboMixedModeType->setSelectedValue( m_doc->mixedType() );
 
   m_cdtextWidget->load( m_doc->audioDoc() );
 
@@ -241,9 +203,9 @@ void K3bMixedBurnDialog::loadK3bDefaults()
   K3bProjectBurnDialog::loadK3bDefaults();
 
   m_cdtextWidget->setChecked( false );
-  m_checkNormalize->setChecked(false);
+  m_checkNormalize->setChecked( false );
 
-  m_radioMixedTypeSessions->setChecked(true);
+  m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_SECOND_SESSION );
 
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
@@ -262,11 +224,11 @@ void K3bMixedBurnDialog::loadUserDefaults( KConfigBase* c )
 
   // load mixed type
   if( c->readEntry( "mixed_type" ) == "last_track" )
-    m_radioMixedTypeLastTrack->setChecked(true);
+    m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_LAST_TRACK );
   else if( c->readEntry( "mixed_type" ) == "first_track" )
-    m_radioMixedTypeFirstTrack->setChecked(true);
+    m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_FIRST_TRACK );
   else
-    m_radioMixedTypeSessions->setChecked(true);
+    m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_SECOND_SESSION );
 
   m_dataModeWidget->loadConfig(c);
 
@@ -285,12 +247,16 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigBase* c )
   c->writeEntry( "normalize", m_checkNormalize->isChecked() );
 
   // save mixed type
-  if( m_groupMixedType->selected() == m_radioMixedTypeLastTrack )
+  switch( m_comboMixedModeType->selectedValue() ) {
+  case K3bMixedDoc::DATA_LAST_TRACK:
    c->writeEntry( "mixed_type", "last_track" );
-  else if( m_groupMixedType->selected() == m_radioMixedTypeSessions )
-   c->writeEntry( "mixed_type", "second_session" );
-  else
+   break;
+  case K3bMixedDoc::DATA_FIRST_TRACK:
     c->writeEntry( "mixed_type", "first_track" );
+    break;
+  default:
+   c->writeEntry( "mixed_type", "second_session" );
+  }
 
   m_dataModeWidget->saveConfig(c);
 

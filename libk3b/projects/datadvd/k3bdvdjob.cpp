@@ -81,12 +81,8 @@ bool K3bDvdJob::prepareWriterJob()
   writer->setCloseDvd( usedMultiSessionMode() == K3bDataDoc::NONE ||
 		       usedMultiSessionMode() == K3bDataDoc::FINISH );
 
-  if( m_doc->onTheFly() ) {
-    writer->setImageToWrite( QString::null );  // read from stdin
-    writer->setTrackSize( m_isoImager->size() );
-  }
-  else
-    writer->setImageToWrite( m_doc->tempDir() );
+  writer->setImageToWrite( QString::null );  // read from stdin
+  writer->setTrackSize( m_isoImager->size() );
 
   if( usedMultiSessionMode() != K3bDataDoc::NONE ) {
     //

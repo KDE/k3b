@@ -44,6 +44,8 @@ class LIBK3B_EXPORT K3bMd5Job : public K3bJob
   void stop();
   void cancel();
 
+  // FIXME: read from QIODevice and thus add K3bFileSplitter support
+
   /**
    * read from a file
    */

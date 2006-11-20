@@ -22,7 +22,7 @@ libk3btools_la_SOURCES = k3bwavefilewriter.cpp k3bbusywidget.cpp k3bdeviceselect
 	k3bsignalwaiter.cpp k3blibdvdcss.cpp k3biso9660backend.cpp \
 	k3bpipe.cpp k3bchecksumpipe.cpp k3btoolbutton.cpp \
 	k3bintmapcombobox.cpp k3bdirsizejob.cpp k3brichtextlabel.cpp \
-	k3btempfile.cpp
+	k3btempfile.cpp k3bactivepipe.cpp k3bfilesplitter.cpp
 
 include_HEADERS = k3bwavefilewriter.h k3bbusywidget.h k3bdeviceselectiondialog.h \
 	k3bmd5job.h k3bcutcombobox.h k3bstringutils.h \
@@ -35,7 +35,8 @@ include_HEADERS = k3bwavefilewriter.h k3bbusywidget.h k3bdeviceselectiondialog.h
 	k3bthreadwidget.h k3bradioaction.h k3bsignalwaiter.h \
 	k3biso9660backend.h k3bpipe.h k3bdirsizejob.h \
 	k3bchecksumpipe.h k3btoolbutton.h k3bintmapcombobox.h \
-	k3brichtextlabel.h  k3btempfile.h
+	k3brichtextlabel.h  k3btempfile.h k3bactivepipe.h \
+	k3bfilesplitter.h
 
 METASOURCES = AUTO
 

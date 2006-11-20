@@ -28,6 +28,7 @@
 #include <k3bversion.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bchecksumpipe.h>
+#include <k3bfilesplitter.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -45,7 +46,7 @@ class K3bIso9660ImageWritingJob::Private
 {
 public:
   K3bChecksumPipe checksumPipe;
-  QFile imageFile;
+  K3bFileSplitter imageFile;
 };
 
 
@@ -272,7 +273,7 @@ void K3bIso9660ImageWritingJob::startWriting()
   d->imageFile.setName( m_imagePath );
   d->imageFile.open( IO_ReadOnly );
   d->checksumPipe.close();
-  d->checksumPipe.readFromFd( d->imageFile.handle() );
+  d->checksumPipe.readFromIODevice( &d->imageFile );
 
   if( prepareWriter( media ) ) {
     emit burning(true);

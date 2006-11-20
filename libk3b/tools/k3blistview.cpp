@@ -1092,7 +1092,9 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
       if( item != m_currentEditItem || m_currentEditColumn != col ) {
 	doRename();
 	if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
-	  if( item->isEnabled() && (m_lastClickedItem == item || !m_doubleClickForEdit) )
+	  if( me->pos().x() > item->depth()*treeStepSize() && 
+	      item->isEnabled() && 
+	      (m_lastClickedItem == item || !m_doubleClickForEdit) )
 	    showEditor( k3bItem, col );
 	  else {
 	    hideEditor();
@@ -1107,8 +1109,10 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	  // keep the focus here
 	  viewport()->setFocus();
 	}
-	
-	m_lastClickedItem = item;
+
+	// do not count clicks in the item tree for editing
+	if( me->pos().x() > item->depth()*treeStepSize() )
+	  m_lastClickedItem = item;
       }
     }
   }

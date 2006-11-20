@@ -5,14 +5,6 @@
     <property name="name">
         <cstring>base_K3bDataImageSetings</cstring>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>471</width>
-            <height>191</height>
-        </rect>
-    </property>
     <property name="caption">
         <string>Data Image Settings</string>
     </property>
@@ -269,7 +261,7 @@ Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>16</height>
+                    <height>0</height>
                 </size>
             </property>
         </spacer>
