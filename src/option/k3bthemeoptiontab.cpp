@@ -62,7 +62,9 @@ K3bThemeOptionTab::K3bThemeOptionTab(QWidget *parent, const char *name )
 {
   d = new Private();
 
+#if KDE_IS_VERSION(3,4,0)
   m_viewTheme->setShadeSortColumn( false );
+#endif
 
   connect( m_viewTheme, SIGNAL(selectionChanged()),
 	   this, SLOT(selectionChanged()) );
