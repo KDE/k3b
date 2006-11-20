@@ -214,8 +214,6 @@ void K3bCloneTocReader::readFile()
       }
     }
 
-    kdDebug() << "(K3bCloneTocReader) image size: " << d->size.rawBytes() << " (" << d->size.toString() << ")" << endl;
-
     if( d->size.rawBytes() != K3b::filesize( imageFileName ) ) {
       kdDebug() << "(K3bCloneTocReader) image file size invalid." << endl;
       return;
