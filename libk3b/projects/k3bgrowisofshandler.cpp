@@ -212,14 +212,6 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else
       kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
-  else if( line.startsWith("Buffer fill") ) {
-    // parse device buffer fill for K3b patched growisofs
-    int newBuffer = line.mid(13, line.find('%',13)-13).toInt();
-    if( newBuffer != d->lastDeviceBuffer ) {
-      d->lastDeviceBuffer = newBuffer;
-      emit deviceBuffer( newBuffer );
-    }
-  }
 
   else {
     kdDebug() << "(growisofs) " << line << endl;
