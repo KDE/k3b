@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <ktar.h>
 #include <kurlrequesterdlg.h>
+#include <kdeversion.h>
 
 #include <qlabel.h>
 #include <qfile.h>
