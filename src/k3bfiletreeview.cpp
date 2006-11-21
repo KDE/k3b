@@ -74,9 +74,14 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 
 bool K3bDeviceBranch::populate( const KURL& url,  KFileTreeViewItem *currItem )
 {
+  // FIXME: we somehow need to "unpopulate" once the medium is unmounted
+
   // make sure we do not try to populate in case we are not mounted
-  if( K3b::isMounted( m_device ) )
-    return KFileTreeBranch::populate( url, currItem );
+  if( K3b::isMounted( m_device ) ) {
+    bool b = KFileTreeBranch::populate( url, currItem );
+    populateFinished( currItem );
+    return b;
+  }
   else
     populateFinished( currItem );
 

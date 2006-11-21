@@ -449,7 +449,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					      "devfs or udev K3bSetup is able to do this for you.").arg(dev->genericDevice()),
 					 false ) );
 
-    if( !dmaActivated( dev ) )
+    if( dev->interfaceType() == K3bDevice::IDE && !dmaActivated( dev ) )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("DMA disabled on device %1 - %2").arg(dev->vendor()).arg(dev->description()),
 					 i18n("With most modern CD/DVD devices enabling DMA highly increases "

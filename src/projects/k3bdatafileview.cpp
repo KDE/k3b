@@ -35,6 +35,7 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 #include <qheader.h>
+#include <qfileinfo.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -43,6 +44,7 @@
 #include <kdebug.h>
 #include <kshortcut.h>
 #include <krun.h>
+#include <kdeversion.h>
 
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
@@ -453,9 +455,14 @@ void K3bDataFileView::slotOpen()
     K3bDataItem* item = viewItem->dataItem();
     if( item->isFile() ) {
       K3bDataFileViewItem* fvi = static_cast<K3bDataFileViewItem*>( viewItem );
-      if( fvi->mimeType() && 
+      if( fvi->mimeType() &&
+#if KDE_IS_VERSION(3,3,0)
 	  !KRun::isExecutableFile( KURL::fromPathOrURL(item->localPath()), 
-				   fvi->mimeType()->name() ) )
+				   fvi->mimeType()->name() )
+#else
+	  !QFileInfo( item->localPath() ).isExecutable()
+#endif
+	  )
 	KRun::runURL( KURL::fromPathOrURL(item->localPath()), 
 		      fvi->mimeType()->name() );
       else
