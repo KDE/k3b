@@ -1,17 +1,9 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>base_K3bMovixOptionsWidget</class>
 <author>Sebastian trueg</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>Form1</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>427</width>
-            <height>429</height>
-        </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
