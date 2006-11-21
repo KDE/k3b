@@ -690,6 +690,12 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
   QString resolved = resolveSymLink( devicename );
   kdDebug() << devicename << " resolved to " << resolved << endl;
 
+  if ( K3bDevice::Device* oldDev = findDevice(resolved) ) {
+    kdDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
+    oldDev->addDeviceNode( devicename );
+    return 0;
+  }
+
   if( !testForCdrom(resolved) ) {
 #ifdef HAVE_RESMGR
     // With resmgr we might only be able to open the symlink name.
@@ -702,12 +708,6 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
 #else
     return 0;
 #endif
-  }
-
-  if ( K3bDevice::Device* oldDev = findDevice(resolved) ) {
-    kdDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
-    oldDev->addDeviceNode( devicename );
-    return 0;
   }
 
   int bus = -1, target = -1, lun = -1;
