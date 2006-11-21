@@ -18,13 +18,13 @@
 #include <k3biso9660.h>
 #include <k3bglobals.h>
 #include <k3bdevice.h>
+#include <k3bfilesplitter.h>
 
 #include <kmdcodec.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 
-#include <qfile.h>
 #include <qtimer.h>
 #include <qcstring.h>
 #include <qsocketnotifier.h>
@@ -46,7 +46,7 @@ public:
   }
 
   KMD5 md5;
-  QFile file;
+  K3bFileSplitter file;
   QTimer timer;
   QString filename;
   int fileDes;

@@ -47,7 +47,11 @@ class LIBK3B_EXPORT K3bMd5Job : public K3bJob
   // FIXME: read from QIODevice and thus add K3bFileSplitter support
 
   /**
-   * read from a file
+   * read from a file.
+   *
+   * Be aware that the K3bMd5Job uses K3bFileSplitter to read splitted
+   * images. In the future this will be changed with the introduction
+   * of a setIODevice method.
    */
   void setFile( const QString& filename );
 
