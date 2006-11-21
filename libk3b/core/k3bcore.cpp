@@ -39,25 +39,54 @@
 
 #include <qptrlist.h>
 #include <qthread.h>
-#include <qwaitcondition.h>
+#include <qmutex.h>
 
 
 static Qt::HANDLE s_guiThreadHandle = QThread::currentThread();
 
+// We cannot use QWaitCondition here since the event might be handled faster
+// than the thread starts the waiting
+class DeviceBlockingEventDoneCondition {
+public:
+  DeviceBlockingEventDoneCondition()
+    : m_done(false) {
+  }
+
+  void done() {
+    m_doneMutex.lock();
+    m_done = true;
+    m_doneMutex.unlock();
+  }
+
+  void wait() {
+    while( true ) {
+      m_doneMutex.lock();
+      bool done = m_done;
+      m_doneMutex.unlock();
+      if( done )
+	return;
+    }
+  }
+
+private:
+  QMutex m_doneMutex;
+  bool m_done;
+};
+
 class DeviceBlockingEvent : public QCustomEvent
 {
-  public:
-  DeviceBlockingEvent( bool block_, K3bDevice::Device* dev, QWaitCondition* wc_, bool* success_ )
+public:
+  DeviceBlockingEvent( bool block_, K3bDevice::Device* dev, DeviceBlockingEventDoneCondition* cond_, bool* success_ )
     : QCustomEvent( QEvent::User + 33 ),
       block(block_),
       device(dev),
-      wc(wc_),
+      cond(cond_),
       success(success_) {
   }
 
   bool block;
   K3bDevice::Device* device;
-  QWaitCondition* wc;
+  DeviceBlockingEventDoneCondition* cond;
   bool* success;
 };
 
@@ -293,8 +322,8 @@ bool K3bCore::blockDevice( K3bDevice::Device* dev )
     return internalBlockDevice( dev );
   }
   else {
-    QWaitCondition w;
     bool success = false;
+    DeviceBlockingEventDoneCondition w;
     QApplication::postEvent( this, new DeviceBlockingEvent( true, dev, &w, &success ) );
     w.wait();
     return success;
@@ -308,7 +337,7 @@ void K3bCore::unblockDevice( K3bDevice::Device* dev )
     internalUnblockDevice( dev );
   }
   else {
-    QWaitCondition w;
+    DeviceBlockingEventDoneCondition w;
     QApplication::postEvent( this, new DeviceBlockingEvent( false, dev, &w, 0 ) );
     w.wait();
   }
@@ -339,7 +368,7 @@ void K3bCore::customEvent( QCustomEvent* e )
       *de->success = internalBlockDevice( de->device );
     else
       internalUnblockDevice( de->device );
-    de->wc->wakeAll();
+    de->cond->done();
   }
 }
 
