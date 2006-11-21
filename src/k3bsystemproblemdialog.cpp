@@ -555,7 +555,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
 
   // remember which version of K3b checked the system the last time
-  KConfigGroup( k3bcore->config(), "General Options" ).writeEntry( "Last system check version", k3bcore->version() );
+  KConfigGroup cfg( k3bcore->config(), "General Options" );
+  cfg.writeEntry( "Last system check version", k3bcore->version() );
 }
 
 void K3bSystemProblemDialog::slotK3bSetup()
