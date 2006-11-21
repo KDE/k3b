@@ -1,0 +1,96 @@
+<sect1 id="audiocdcdreating">
+	<title>
+		Quickguide: Burning an Audio-CD in 4 Steps
+	</title>
+	<para>
+		This Quickguide shows you how to create a AudioCD with &k3b;. To reproduce
+		these steps you need a working &k3b; and a directory in which you have
+		audiofiles. 
+	</para>
+	<sect2>
+		<title>Step 1</title>
+		<para>
+			When you start &k3b; you should see something like this.
+			<screenshot>
+				<screeninfo>Here you can select one of four projects &k3b; offers</screeninfo>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="select_project.png" format="PNG"/>
+					</imageobject>
+					<textobject>
+						<phrase>Screenshot</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+		</para>
+	</sect2>
+	<sect2>
+		<title>Step 2</title>
+		<para>
+			Now you click on "New Audio CD Project" 
+			<screenshot>
+				<screeninfo>This is a dialog where you can select which files you want to burn on a CD</screeninfo>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="select_audiofiles.png" format="PNG"/>
+					</imageobject>
+					<textobject>
+						<phrase>Screenshot</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+		</para>
+		<para>
+			The files you see on the top-part of &k3b; can be dropped with the mouse to the bottom-widget.
+			Another way is to right-click on a file an select <action>Add to Project</action>. In order to rearrange
+			the order of the audio-tracks you can simply move the tracks with the left mouse-button. The properties
+			of the tracks can be changed by clicking with the &RMB; and choosing <action>Properties</action>.
+			As soon as you like the arrangement of the tracks click on <action>Burn...</action> in the right-bottom
+			corner.
+		</para>
+		<note>
+			<para>
+				When you burn AudioCD from <acronym>MP3</acronym>s or other lossy compressed music, remember that if you encode this CD back to <acronym>MP3</acronym>, you'll get poorer quality regardless the bitrate you use. To check whether AudioCD was burnt from lossy format, try <ulink url="http://true-audio.com/analyzer.project">auCDtect</ulink>.
+			</para>
+		</note>
+	</sect2>
+	<sect2>
+		<title>Step 3</title>
+		<screenshot>
+			<screeninfo>This is a dialog where you can decide the settings for the CD.</screeninfo>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="burndialog_audio.png" format="PNG"/>
+				</imageobject>
+				<textobject>
+					<phrase>Screenshot</phrase>
+				</textobject>
+			</mediaobject>
+		</screenshot>
+		<para>
+			In this dialog you can control the settings of the burning itself. The default-settings of &k3b;
+			are probably correct for you. In the top-right corner you can control the speed. One last
+			step before the actual burning you can give the CD a title by choosing <guibutton>CD-Text</guibutton> and
+			selecting <guilabel>Write CD-Text</guilabel>. The two which are probably most important for you
+			are <guilabel>Title</guilabel> and <guilabel>Performer</guilabel>. As soon as you are content with
+			the settings click on <guibutton>Burn</guibutton>.
+		</para>
+	</sect2>
+	<sect2>
+		<title>Step 4</title>
+		<para>
+			<screenshot>
+				<screeninfo>In this dialog you can see the progress of you burning</screeninfo>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="burndialog_progress.png" format="PNG"/>
+					</imageobject>
+					<textobject>
+						<phrase>Screenshot</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+			In this dialog is nothing you can do. Just wait for you computer to finish the session.
+		</para>
+	</sect2>
+</sect1>
