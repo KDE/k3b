@@ -27,7 +27,6 @@
 #include <k3bbusywidget.h>
 #include <k3bprogressdialog.h>
 #include <k3bdvdformattingjob.h>
-#include <k3brichtextlabel.h>
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -95,7 +94,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
 
   // setup the gui
   // -----------------------------
-  d->labelRequest = new K3bRichTextLabel( plainPage() );
+  d->labelRequest = new QLabel( plainPage() );
   d->labelRequest->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
   d->labelFoundMedia = new QLabel( plainPage() );
   d->pixLabel = new QLabel( plainPage() );
