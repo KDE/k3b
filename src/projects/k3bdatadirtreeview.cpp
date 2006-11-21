@@ -56,6 +56,8 @@ public:
   // used for the urladdingdialog hack
   KURL::List addUrls;
   K3bDirItem* addParentDir;
+
+  QString lastUpdateVolumeId;
 };
 
 
@@ -86,6 +88,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   m_root = new K3bDataRootViewItem( doc, this );
   m_itemMap.insert( doc->root(), m_root );
 
+  connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
   connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
@@ -487,6 +490,16 @@ void K3bDataDirTreeView::checkForNewItems()
 
   // always show the first level
   m_root->setOpen( true );
+}
+
+
+void K3bDataDirTreeView::slotDocChanged()
+{
+  // avoid flicker
+  if( d->lastUpdateVolumeId != m_doc->isoOptions().volumeID() ) {
+    d->lastUpdateVolumeId = m_doc->isoOptions().volumeID();
+    root()->repaint();
+  }
 }
 
 #include "k3bdatadirtreeview.moc"

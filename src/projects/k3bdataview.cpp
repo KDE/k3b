@@ -173,10 +173,6 @@ void K3bDataView::slotBurn()
 
 void K3bDataView::slotDocChanged()
 {
-  // avoid flicker
-  if( m_dataDirTree->firstChild()->text(0) != m_doc->isoOptions().volumeID() )
-    m_dataDirTree->firstChild()->repaint();
-
   // do not update the editor in case it changed the volume id itself
   if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
     m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
