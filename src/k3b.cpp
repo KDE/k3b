@@ -173,6 +173,7 @@ K3bMainWindow::K3bMainWindow()
   slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
 
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
+  connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystem()) );
 
   // FIXME: now make sure the welcome screen is displayed completely
   resize( 780, 550 );
