@@ -433,7 +433,7 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( KProcess* p )
       emit infoMessage( i18n("%1 returned an unknown error (code %2).")
 			.arg(d->usedTranscodeBin->name()).arg(p->exitStatus()), 
 			K3bJob::ERROR );
-      emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
+      emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
       
       cleanup( false );
       jobFinished( false );

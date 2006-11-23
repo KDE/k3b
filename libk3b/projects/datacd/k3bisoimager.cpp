@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,8 +45,6 @@
 #include <qapplication.h>
 #include <qvaluestack.h>
 
-#include <errno.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -208,7 +206,6 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  if( !d->knownError && !mkisofsReadError() ) {
 	    emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("mkisofs").arg(p->exitStatus()),
 			      K3bJob::ERROR );
-	    emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	    emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	  }
 	}

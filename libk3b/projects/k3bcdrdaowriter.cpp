@@ -44,9 +44,6 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 
-#include <errno.h>
-#include <string.h>
-
 #include <sys/types.h>
 #include <sys/socket.h>
 
@@ -773,7 +770,6 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
       if( !m_knownError && !wasSourceUnreadable() ) {
         emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrdaoBinObject->name()).arg(p->exitStatus()), 
 			  K3bJob::ERROR );
-	emit infoMessage( strerror(p->exitStatus()), K3bJob::ERROR );
 	emit infoMessage( i18n("Please include the debugging output in your problem report."), K3bJob::ERROR );
       }
 

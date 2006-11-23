@@ -270,7 +270,6 @@ void K3bVideoCdRip::slotVcdXRipFinished()
                 break;
             default:
                 emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxrip" ).arg( m_process->exitStatus() ), K3bJob::ERROR );
-                emit infoMessage( strerror( m_process->exitStatus() ), K3bJob::ERROR );
                 emit infoMessage( i18n( "Please send me an email with the last output..." ), K3bJob::ERROR );
                 cancelAll();
                 jobFinished( false );
