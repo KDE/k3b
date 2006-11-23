@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,17 @@
 
 #include <qvalidator.h>
 #include "k3b_export.h"
+
+
+class LIBK3B_EXPORT K3bLatin1Validator : public QValidator
+{
+ public:
+  K3bLatin1Validator( QObject* parent = 0, const char* name = 0 );
+
+  State validate( QString& s, int& pos ) const;
+};
+
+
 /**
  * The K3bValidator extends QRegExpValidator with a fixup method
  * that just replaces all characters that are not allowed with the 

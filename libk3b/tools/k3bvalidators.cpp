@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,29 @@
 
 
 #include "k3bvalidators.h"
+
+//#include <ctype.h>
+
+
+K3bLatin1Validator::K3bLatin1Validator( QObject* parent, const char* name )
+  : QValidator( parent, name )
+{
+}
+
+
+QValidator::State K3bLatin1Validator::validate( QString& s, int& pos ) const
+{
+  Q_UNUSED(pos);
+
+  for( unsigned int i = 0; i < s.length(); ++i ) {
+    char c = s[i].latin1();
+    if( !c /*|| !::isascii(c)*/ )
+      return Invalid;
+  }
+
+  return Acceptable;
+}
+
 
 
 K3bValidator::K3bValidator( QObject* parent, const char* name )

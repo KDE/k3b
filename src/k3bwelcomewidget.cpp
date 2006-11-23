@@ -29,6 +29,7 @@
 #include <qptrlist.h>
 #include <qmap.h>
 #include <qtooltip.h>
+#include <qcursor.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -44,8 +45,8 @@
 #include <kactionclasses.h>
 
 
-K3bWelcomeWidget::Display::Display( QWidget* parent )
-  : QWidget( parent )
+K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
+  : QWidget( parent->viewport() )
 {
   setWFlags( Qt::WNoAutoErase );
 
@@ -53,18 +54,17 @@ K3bWelcomeWidget::Display::Display( QWidget* parent )
   fnt.setBold(true);
   fnt.setPointSize( 16 );
   m_header = new QSimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
-  m_infoText = new QSimpleRichText( i18n("<p align=\"center\">Change the welcome screen buttons with a "
-					 "right mouse click.<br>"
-					 "All other project types and the tools "
-					 "like Image writing or Formatting are accessible via the K3b menu."), font() );
+  m_infoText = new QSimpleRichText( i18n("<qt align=\"center\">K3b %1 (c) 1999 - 2006 Sebastian Trüg").arg(k3bcore->version()), font() );
 
   // set a large width just to be sure no linebreak occurs
   m_header->setWidth( 800 );
 
   setAcceptDrops( true );
   setBackgroundMode( PaletteBase );
-  m_infoTextVisible = true;
   m_rows = m_cols = 1;
+
+  m_buttonMore = new K3bFlatButton( i18n("Further actions..."), this );
+  connect( m_buttonMore, SIGNAL(pressed()), parent, SLOT(slotMoreActions()) );
 }
 
 
@@ -160,10 +160,9 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
   int availHor = width() - 40;
   int availVert = height() - 20 - 10 - m_header->height() - 10;
-  if( m_infoTextVisible )
-    availVert -= m_infoText->height();
+  availVert -= m_infoText->height() - 10;
   int leftMargin = 20 + (availHor - (m_buttonSize.width()+4)*m_cols)/2;
-  int topOffset = m_header->height() + 20 + ( availVert - (m_buttonSize.height()+4)*m_rows )/2;
+  int topOffset = m_header->height() + 20 + ( availVert - (m_buttonSize.height()+4)*m_rows - m_buttonMore->height() )/2;
 
   int row = 0;
   int col = 0;
@@ -182,6 +181,12 @@ void K3bWelcomeWidget::Display::repositionButtons()
       row++;
     }
   }
+  if( col > 0 )
+    ++row;
+
+  m_buttonMore->setGeometry( QRect( QPoint( leftMargin + 2,
+					    topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
+				    QSize( m_cols*(m_buttonSize.width()+4) - 4, m_buttonMore->height() ) ) );
 }
 
 
@@ -193,29 +198,22 @@ QSizePolicy K3bWelcomeWidget::Display::sizePolicy () const
 
 int K3bWelcomeWidget::Display::heightForWidth( int w ) const
 {
-  if( m_infoTextVisible ) {
-    int ow = m_infoText->width();
-    m_infoText->setWidth( w );
-    int h = m_infoText->height();
-    m_infoText->setWidth( ow );
+  int ow = m_infoText->width();
+  m_infoText->setWidth( w );
+  int h = m_infoText->height();
+  m_infoText->setWidth( ow );
 
-    int cols, rows;
-    calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
+  int cols, rows;
+  calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
 
-    return (20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 20 + 10 + h + 10 + 10);
-  }
-  else
-    return 0;
+  return (20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
 }
 
 
 QSize K3bWelcomeWidget::Display::minimumSizeHint() const
 {
   QSize size( QMAX(40+m_header->widthUsed(), 40+m_buttonSize.width()),
-	      20 + m_header->height() + 20 + 10 + m_buttonSize.height() + 20 + 10 );
-
-  if( m_infoTextVisible )
-    size.setHeight( size.height() + 10 + m_infoText->height() + 10 );
+	      20 + m_header->height() + 20 + 10 + m_buttonSize.height() + 10 + m_infoText->height() + 20 );
 
   return size;
 }
@@ -254,18 +252,16 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
     pos += QMAX( (width()-40-m_header->widthUsed())/2, 0 );
     m_header->draw( &p, pos, 20, QRect(), grp );
 
-    if( m_infoTextVisible ) {
-      // draw the info box
-      //    int boxWidth = 20 + m_infoText->widthUsed();
-      int boxHeight = 20 + m_infoText->height();
-      QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
-			 height()-10-boxHeight,
-			 width()-20/*boxWidth*/,
-			 boxHeight );
-      p.fillRect( infoBoxRect, theme->backgroundColor() );
-      p.drawRect( infoBoxRect );
-      m_infoText->draw( &p, infoBoxRect.left()+10, infoBoxRect.top()+10, QRect(), grp );
-    }
+    // draw the info box
+    //    int boxWidth = 20 + m_infoText->widthUsed();
+    int boxHeight = 10 + m_infoText->height();
+    QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
+		       height()-10-boxHeight,
+		       width()-20/*boxWidth*/,
+		       boxHeight );
+    p.fillRect( infoBoxRect, theme->backgroundColor() );
+    p.drawRect( infoBoxRect );
+    m_infoText->draw( &p, infoBoxRect.left()+5, infoBoxRect.top()+5, QRect(), grp );
   }
 }
 
@@ -289,7 +285,7 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
   : QScrollView( parent, name ),
     m_mainWindow( mw )
 {
-  main = new Display( viewport() );
+  main = new Display( this );
   addChild( main );
 
   connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
@@ -307,8 +303,6 @@ K3bWelcomeWidget::~K3bWelcomeWidget()
 void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 {
   c->setGroup( "Welcome Widget" );
-
-  main->m_infoTextVisible = c->readBoolEntry( "show info text", true );
 
   QStringList sl = c->readListEntry( "welcome_actions" );
 
@@ -333,8 +327,6 @@ void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 void K3bWelcomeWidget::saveConfig( KConfigBase* c )
 {
   c->setGroup( "Welcome Widget" );
-
-  c->writeEntry( "show info text", main->m_infoTextVisible );
 
   QStringList sl;
   for( QPtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
@@ -392,12 +384,6 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     // and unique throughout the entire application!
     int r = 0;
     int removeAction = 0;
-    int infoTextAction = 0;
-    QString infoTextActionText;
-    if( main->m_infoTextVisible )
-      infoTextActionText = i18n("Hide Info Text");
-    else
-      infoTextActionText = i18n("Show Info Text");
 
     QWidget* widgetAtPos = viewport()->childAt(e->pos());
     if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
@@ -406,30 +392,71 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
       if ( addPop.count() > 0 )
           pop.insertItem( i18n("Add Button"), &addPop );
       pop.insertSeparator();
-      infoTextAction = pop.insertItem( infoTextActionText );
       r = pop.exec( e->globalPos() );
     }
     else {
       addPop.insertTitle( i18n("Add Button"), -1, 0 );
       addPop.insertSeparator();
-      infoTextAction = addPop.insertItem( infoTextActionText );
       r = addPop.exec( e->globalPos() );
     }
 
     if( r != 0 ) {
       if( r == removeAction )
 	main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
-      else if( r == infoTextAction ) {
-	main->m_infoTextVisible = !main->m_infoTextVisible;
-	main->repositionButtons();
-	main->update();
-      }
       else
 	main->addAction( map[r] );
     }
 
     fixSize();
   }
+}
+
+
+void K3bWelcomeWidget::slotMoreActions()
+{
+  KPopupMenu popup;
+
+  m_mainWindow->actionCollection()->action( "file_new_data" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_dvd" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_continue_multisession" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_audio" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_mixed" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_vcd" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_video_dvd" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_movix" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "file_new_movix_dvd" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_copy_cd" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_copy_dvd" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_blank_cdrw" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_format_dvd" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_write_cd_image" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_write_dvd_iso" )->plug( &popup );
+  (new KActionSeparator( &popup ))->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_cdda_rip" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_videodvd_rip" )->plug( &popup );
+  m_mainWindow->actionCollection()->action( "tools_videocd_rip" )->plug( &popup );
+
+//   KActionPtrList actions = m_mainWindow->actionCollection()->actions();
+//   for( KActionPtrList::iterator it = actions.begin(); it != actions.end(); ++it ) {
+//     KAction* a = *it;
+//     // We only allow project and tools buttons but not the file_new action since this is
+//     // the actionmenu containing all the other file_new actions and that would not make sense
+//     // on a toolbutton
+//     QString aname(a->name());
+//     if( aname != "file_new" &&
+// 	( aname.startsWith( "tools" ) || aname.startsWith( "file_new" ) ) &&
+// 	!main->m_actions.containsRef(a) )
+//       a->plug( &popup );
+//   }
+
+  popup.exec( QCursor::pos() );
 }
 
 #include "k3bwelcomewidget.moc"

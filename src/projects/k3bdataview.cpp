@@ -28,6 +28,7 @@
 #include <k3bcore.h>
 #include <k3bprojectplugin.h>
 #include <k3btoolbox.h>
+#include <k3bvalidators.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -96,6 +97,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   toolBox()->addStretch();
 
   m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
+  m_volumeIDEdit->setValidator( new K3bLatin1Validator( m_volumeIDEdit ) );
   toolBox()->addLabel( i18n("Volume Name:") );
   toolBox()->addSpacing();
   toolBox()->addWidget( m_volumeIDEdit );

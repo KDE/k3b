@@ -35,6 +35,15 @@ K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
 }
 
 
+K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *name )
+  : QFrame( parent, name/*, WNoAutoErase*/ ),
+    m_pressed(false)
+{
+  init();
+  setText( text );
+}
+
+
 K3bFlatButton::K3bFlatButton( KAction* a, QWidget *parent, const char *name )
   : QFrame( parent, name/*, WNoAutoErase*/ ),
     m_pressed(false)
@@ -93,8 +102,10 @@ void K3bFlatButton::leaveEvent( QEvent* )
 
 void K3bFlatButton::mousePressEvent( QMouseEvent* e )
 {
-  if( e->button() == QMouseEvent::LeftButton )
+  if( e->button() == QMouseEvent::LeftButton ) {
+    emit pressed();
     m_pressed = true;
+  }
   else
     e->ignore();
 }
@@ -151,22 +162,23 @@ void K3bFlatButton::drawContents( QPainter* p )
 //   }
 
   p->save();
-  p->translate( rect.left(), rect.top() );
 
   QRect textRect = fontMetrics().boundingRect( m_text );
   int textX = QMAX( 0, ( rect.width() - textRect.width() ) / 2 );
   int textY = textRect.height();
 
   if( !m_pixmap.isNull() ) {
+    p->translate( rect.left(), rect.top() );
     textX = QMAX( textX, (m_pixmap.width() - textRect.width()) / 2 );
     textY += 5 + m_pixmap.height();
 
     int pixX = QMAX( QMAX( 0, (textRect.width() - m_pixmap.width()) / 2 ), 
 		     ( rect.width() - m_pixmap.width() ) / 2 );
     p->drawPixmap( pixX, 0, m_pixmap );
+    p->drawText( textX, textY, m_text ); 
   }
-
-  p->drawText( textX, textY, m_text ); 
+  else
+    p->drawText( rect, Qt::AlignCenter, m_text );
 
   p->restore();
 }

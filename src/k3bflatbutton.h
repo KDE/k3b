@@ -35,6 +35,7 @@ class K3bFlatButton : public QFrame
 
  public:
   K3bFlatButton( QWidget *parent = 0, const char *name = 0 );
+  K3bFlatButton( const QString& text, QWidget *parent = 0, const char *name = 0 );
   K3bFlatButton( KAction*, QWidget *parent = 0, const char *name = 0 );
   
   ~K3bFlatButton();
@@ -47,6 +48,7 @@ class K3bFlatButton : public QFrame
   void setPixmap( const QPixmap& );
 
  signals:
+  void pressed();
   void clicked();
 
  private slots:

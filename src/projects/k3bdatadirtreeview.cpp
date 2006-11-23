@@ -58,6 +58,9 @@ public:
   K3bDirItem* addParentDir;
 
   QString lastUpdateVolumeId;
+
+  QValidator* iso9660Validator;
+  QValidator* asciiValidator;
 };
 
 
@@ -80,8 +83,6 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
 
   addColumn( i18n("Directory") );
   header()->hide();
-
-  setValidator( K3bValidators::iso9660Validator( false, this ) );
 
   m_doc = doc;
 

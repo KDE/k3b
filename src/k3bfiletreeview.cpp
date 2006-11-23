@@ -110,6 +110,7 @@ void K3bDeviceBranch::updateLabel()
   if( k3bappcore->mediaCache() ) {
     root()->setMultiLinesEnabled( true );
     root()->setText( 0, name() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
+    static_cast<K3bFileTreeView*>( root()->listView() )->updateMinimumWidth();
   }
   else {
     root()->setMultiLinesEnabled( false );
@@ -245,6 +246,23 @@ void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int
   }
 
   p->restore();
+}
+
+
+int K3bDeviceBranchViewItem::widthHint() const
+{
+  int w = listView()->fontMetrics().width( text(0).left( text(0).find('\n') ) );
+  QFont f( listView()->font() );
+  f.setItalic( true );
+  f.setPointSize( f.pointSize() - 2 );
+  w = QMAX( w, QFontMetrics(f).width( text(0).mid( text(0).find('\n')+1 ) ) );
+
+  w++; // see paintCell
+
+  if( pixmap(0) )
+    w += pixmap(0)->width() + 5;
+
+  return w;
 }
 
 
@@ -668,6 +686,22 @@ void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, QListViewItem *item, c
 {
   if( (btn == LeftButton) && item )
     emitExecute(item, pos, c);
+}
+
+
+void K3bFileTreeView::updateMinimumWidth()
+{
+  //
+  // only handle the device branches, we don't care about the folders.
+  //
+  int w = 0;
+  for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
+       it != d->branchDeviceMap.end(); ++it ) {
+    w = QMAX( w, static_cast<K3bDeviceBranchViewItem*>( it.key()->root() )->widthHint() );
+  }
+
+  // width of the items + scrollbar width + the frame + a little eyecandy spacing
+  setMinimumWidth( w + verticalScrollBar()->sizeHint().width() + 2*frameWidth() + 2 );
 }
 
 #include "k3bfiletreeview.moc"

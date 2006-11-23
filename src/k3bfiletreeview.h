@@ -91,6 +91,8 @@ class K3bDeviceBranchViewItem : public KFileTreeViewItem
 
   void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
+  int widthHint() const;
+
  private:
   bool m_bCurrent;
 
@@ -163,6 +165,8 @@ class K3bFileTreeView : public KFileTreeView
    * @reimplemented
    */
   virtual void clear();
+
+  void updateMinimumWidth();
 
  signals:
   void urlExecuted( const KURL& url );

@@ -49,6 +49,9 @@ class K3bWelcomeWidget : public QScrollView
 
   class Display;
 
+ public slots:
+  void slotMoreActions();
+
  protected:
   void resizeEvent( QResizeEvent* );
   void showEvent( QShowEvent* );
@@ -67,7 +70,7 @@ class K3bWelcomeWidget::Display : public QWidget
   Q_OBJECT
 
  public:
-  Display( QWidget* parent );
+  Display( K3bWelcomeWidget* parent );
   ~Display();
 
   QSize minimumSizeHint() const;
@@ -102,6 +105,8 @@ class K3bWelcomeWidget::Display : public QWidget
   QPtrList<KAction> m_actions;
   QPtrList<K3bFlatButton> m_buttons;
   QMap<K3bFlatButton*, KAction*> m_buttonMap;
+
+  K3bFlatButton* m_buttonMore;
 
   bool m_infoTextVisible;
 

@@ -29,8 +29,7 @@ K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent, const char* n
 {
   // the maximal number of characters that can be inserted are set in the ui file!
 
-  // are this really the allowed characters? What about Joliet or UDF?
-  QValidator* isoValidator = K3bValidators::iso9660Validator( true, this );
+  QValidator* isoValidator = new K3bLatin1Validator( this );
 
   m_editVolumeName->setValidator( isoValidator );
   m_editVolumeSetName->setValidator( isoValidator );

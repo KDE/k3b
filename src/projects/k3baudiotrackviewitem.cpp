@@ -18,6 +18,7 @@
 #include "k3baudiodatasource.h"
 #include "k3baudiotrackview.h"
 #include "k3baudiotrack.h"
+#include <k3bcdtextvalidator.h>
 
 #include <kiconloader.h>
 
@@ -45,6 +46,8 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
   //  animationIconNumber = 1;
   setEditor( 1, LINE );
   setEditor( 2, LINE );
+  setValidator( 1, new K3bCdTextValidator() );
+  setValidator( 2, validator(1) );
 
   //  setMarginVertical( 5 );
 
@@ -62,6 +65,12 @@ K3bAudioTrackViewItem::K3bAudioTrackViewItem( K3bAudioTrackView* parent,
   setFont( 5, f );
 
   updateSourceItems();
+}
+
+
+K3bAudioTrackViewItem::~K3bAudioTrackViewItem()
+{
+  delete validator(1);
 }
 
 

@@ -33,7 +33,6 @@
 #include "k3baudiotrackaddingdialog.h"
 
 #include <k3bview.h>
-#include <k3bcdtextvalidator.h>
 #include <k3blistviewitemanimator.h>
 #include <k3baudiodecoder.h>
 #include <k3bmsfedit.h>
@@ -87,8 +86,6 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
 
   setNoItemText( i18n("Use drag'n'drop to add audio files to the project.") + "\n"
 		 + i18n("After that press the burn button to write the CD." ) );
-
-  setValidator( new K3bCdTextValidator( this ) );
 
   setupColumns();
   setupActions();

@@ -550,6 +550,17 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice::Device* 
 }
 
 
+// iso9660 + RR use some latin1 variant. So we need to cut the desc fields
+// counting 8bit chars. The GUI should take care of restricting the length
+// and the charset
+static void truncateTheHardWay( QString& s, int max )
+{
+  QCString cs = s.utf8();
+  cs.truncate(max);
+  s = QString::fromUtf8( cs );
+}
+
+
 bool K3bIsoImager::addMkisofsParameters( bool printSize )
 {
   // add multisession info
@@ -568,7 +579,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
 
   if( !m_doc->isoOptions().volumeID().isEmpty() ) {
     QString s = m_doc->isoOptions().volumeID();
-    s.truncate(32);  // ensure max length
+    truncateTheHardWay(s, 32);  // ensure max length
     *m_process << "-volid" << s;
   }
   else {
@@ -577,35 +588,35 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   }
 
   QString s = m_doc->isoOptions().volumeSetId();
-  s.truncate(128);  // ensure max length
+  truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-volset" << s;
   
   s = m_doc->isoOptions().applicationID();
-  s.truncate(128);  // ensure max length
+  truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-appid" << s;
   
   s = m_doc->isoOptions().publisher();
-  s.truncate(128);  // ensure max length
+  truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-publisher" << s;
   
   s = m_doc->isoOptions().preparer();
-  s.truncate(128);  // ensure max length
+  truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-preparer" << s;
   
   s = m_doc->isoOptions().systemId();
-  s.truncate(32);  // ensure max length
+  truncateTheHardWay(s, 32);  // ensure max length
   *m_process << "-sysid" << s;
   
   s = m_doc->isoOptions().abstractFile();
-  s.truncate(37);  // ensure max length
+  truncateTheHardWay(s, 37);  // ensure max length
   *m_process << "-abstract" << s;
 
   s = m_doc->isoOptions().copyrightFile();
-  s.truncate(37);  // ensure max length
+  truncateTheHardWay(s, 37);  // ensure max length
   *m_process << "-copyright" << s;
 
   s = m_doc->isoOptions().bibliographFile();
-  s.truncate(37);  // ensure max length
+  truncateTheHardWay(s, 37);  // ensure max length
   *m_process << "-biblio" << s;
 
   int volsetSize = m_doc->isoOptions().volumeSetSize();

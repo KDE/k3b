@@ -103,7 +103,7 @@ class K3bDataRootViewItem : public K3bDataDirViewItem
 {
  public:
   K3bDataRootViewItem( K3bDataDoc*, QListView* parent );
-  ~K3bDataRootViewItem() {}
+  ~K3bDataRootViewItem();
 	
   QString text( int ) const;
 	

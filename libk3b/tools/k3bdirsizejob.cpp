@@ -115,6 +115,7 @@ public:
   void cancel() {
     m_canceled = true;
     emitCanceled();
+    wait();
   }
 
   KURL::List urls;

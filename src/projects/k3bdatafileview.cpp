@@ -75,8 +75,6 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
 
   setSelectionModeExt( KListView::Extended );
 
-  setValidator( K3bValidators::iso9660Validator( false, this ) );
-
   m_doc = doc;
   m_currentDir = doc->root();
   checkForNewItems();

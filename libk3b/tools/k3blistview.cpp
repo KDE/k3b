@@ -59,7 +59,8 @@ public:
     : showProgress(false),
       progressValue(0),
       totalProgressSteps(100),
-      margin(0) {
+      margin(0),
+      validator(0) {
     editorType = NONE;
     button = false;
     comboEditable = false;
@@ -90,6 +91,8 @@ public:
   int progressValue;
   int totalProgressSteps;
   int margin;
+
+  QValidator* validator;
 };
 
 
@@ -194,6 +197,18 @@ void K3bListViewItem::setEditor( int column, int editor, const QStringList& cs )
   colInfo->editorType = editor;
   if( !cs.isEmpty() )
     colInfo->comboItems = cs;
+}
+
+
+void K3bListViewItem::setValidator( int column, QValidator* v )
+{
+  getColumnInfo(column)->validator = v;
+}
+
+
+QValidator* K3bListViewItem::validator( int col ) const
+{
+  return getColumnInfo(col)->validator;
 }
 
 
@@ -549,12 +564,28 @@ K3bListView::K3bListView( QWidget* parent, const char* name )
   m_currentEditColumn = 0;
   m_doubleClickForEdit = true;
   m_lastClickedItem = 0;
-  m_validator = 0;
 }
 
 K3bListView::~K3bListView()
 {
   delete d;
+}
+
+
+QWidget* K3bListView::editor( K3bListViewItem::EditorType t ) const
+{
+  switch( t ) {
+  case K3bListViewItem::COMBO:
+    return m_editorComboBox;
+  case K3bListViewItem::LINE:
+    return m_editorLineEdit;
+  case K3bListViewItem::SPIN:
+    return m_editorSpinBox;
+  case K3bListViewItem::MSF:
+    return m_editorMsfEdit;
+  default:
+    return 0;
+  }
 }
 
 
@@ -611,10 +642,12 @@ void K3bListView::showEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::COMBO:
     m_editorComboBox->show();
     m_editorComboBox->setFocus();
+    m_editorComboBox->setValidator( item->validator(col) );
     break;
   case K3bListViewItem::LINE:
     m_editorLineEdit->show();
     m_editorLineEdit->setFocus();
+    m_editorLineEdit->setValidator( item->validator(col) );
     break;
   case K3bListViewItem::SPIN:
     m_editorSpinBox->show();
@@ -693,8 +726,6 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       m_editorComboBox = new QComboBox( viewport() );
       connect( m_editorComboBox, SIGNAL(activated(const QString&)), 
 	       this, SLOT(slotEditorComboBoxActivated(const QString&)) );
-      if( m_validator )
-	m_editorComboBox->setValidator( m_validator );
       m_editorComboBox->installEventFilter( this );
     }
     m_editorComboBox->clear();
@@ -714,8 +745,6 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       m_editorLineEdit = new QLineEdit( viewport() );
       m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
       m_editorLineEdit->setLineWidth(1);
-      if( m_validator )
-	m_editorLineEdit->setValidator( m_validator );
       m_editorLineEdit->installEventFilter( this );
     }
 
@@ -983,16 +1012,6 @@ void K3bListView::slotEditorButtonClicked( K3bListViewItem* item, int col )
 }
 
 
-void K3bListView::setValidator( QValidator* v )
-{
-  m_validator = v;
-  if( m_editorLineEdit ) 
-    m_editorLineEdit->setValidator( v );
-  if( m_editorComboBox )
-    m_editorComboBox->setValidator( v );
-}
-
-
 bool K3bListView::eventFilter( QObject* o, QEvent* e )
 {
   if( e->type() == QEvent::KeyPress ) { 
@@ -1111,7 +1130,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	}
 
 	// do not count clicks in the item tree for editing
-	if( me->pos().x() > item->depth()*treeStepSize() )
+	if( item && me->pos().x() > item->depth()*treeStepSize() )
 	  m_lastClickedItem = item;
       }
     }

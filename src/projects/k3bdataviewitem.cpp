@@ -20,6 +20,7 @@
 #include "k3bspecialdataitem.h"
 #include "k3bsessionimportitem.h"
 #include "k3bdatadoc.h"
+#include <k3bvalidators.h>
 
 #include <kio/global.h>
 #include <kiconloader.h>
@@ -54,6 +55,8 @@ K3bDataViewItem::~K3bDataViewItem()
 void K3bDataViewItem::init()
 {
   setEditor( 0, LINE );
+  static QValidator* s_validator = K3bValidators::iso9660Validator();
+  setValidator( 0, s_validator );
 }
 
 void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
@@ -251,6 +254,13 @@ K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, QListView* parent )
 {
   m_doc = doc;
   setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
+  setValidator( 0, new K3bLatin1Validator() );
+}
+
+
+K3bDataRootViewItem::~K3bDataRootViewItem()
+{
+  delete validator(0);
 }
 
 

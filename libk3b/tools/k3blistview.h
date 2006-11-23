@@ -83,6 +83,9 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
   void setEditor( int col, int type, const QStringList& = QStringList() );
   void setButton( int col, bool );
 
+  void setValidator( int col, QValidator* v );
+  QValidator* validator( int col ) const;
+
   int editorType( int col ) const;
   bool needButton( int col ) const;
   const QStringList& comboStrings( int col ) const;
@@ -164,6 +167,8 @@ class LIBK3B_EXPORT K3bListView : public KListView
 
   K3bListViewItem* currentlyEditedItem() const { return m_currentEditItem; }
 
+  QWidget* editor( K3bListViewItem::EditorType ) const;
+
   enum BgPixPosition {
     TOP_LEFT,
     CENTER 
@@ -190,12 +195,11 @@ class LIBK3B_EXPORT K3bListView : public KListView
   void editorButtonClicked( K3bListViewItem*, int );
 
  public slots:
-   void setNoItemText( const QString& );
+  void setNoItemText( const QString& );
   //  void setNoItemPixmap( const QPixmap& );
   void setNoItemVerticalMargin( int i ) { m_noItemVMargin = i; }
   void setNoItemHorizontalMargin( int i ) { m_noItemHMargin = i; }
   void setDoubleClickForEdit( bool b ) { m_doubleClickForEdit = b; }
-  void setValidator( QValidator* v );
   void hideEditor();
   void editItem( K3bListViewItem*, int );
 
@@ -280,9 +284,6 @@ class LIBK3B_EXPORT K3bListView : public KListView
   QSpinBox* m_editorSpinBox;
   QLineEdit* m_editorLineEdit;
   K3bMsfEdit* m_editorMsfEdit;
-
-  // TODO: think about a more universal solution!
-  QValidator* m_validator;
 
   QPixmap m_backgroundPixmap;
   int m_backgroundPixmapPosition;
