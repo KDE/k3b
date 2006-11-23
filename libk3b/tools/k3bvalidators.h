@@ -20,12 +20,48 @@
 #include "k3b_export.h"
 
 
-class LIBK3B_EXPORT K3bLatin1Validator : public QValidator
+/**
+ * Simple validator that validates a string char by char
+ */
+class LIBK3B_EXPORT K3bCharValidator : public QValidator
+{
+ public:
+  K3bCharValidator( QObject* parent = 0, const char* name = 0 );
+
+  virtual State validateChar( const QChar& ) const = 0;
+
+  virtual State validate( QString& s, int& pos ) const;
+
+  /**
+   * Replaces all invalid chars with the repplace char
+   */
+  virtual void fixup( QString& ) const;
+
+  /**
+   * Default to '_'
+   */
+  void setReplaceChar( const QChar& c ) { m_replaceChar = c; }
+
+ private:
+  QChar m_replaceChar;
+};
+
+
+class LIBK3B_EXPORT K3bLatin1Validator : public K3bCharValidator
 {
  public:
   K3bLatin1Validator( QObject* parent = 0, const char* name = 0 );
 
-  State validate( QString& s, int& pos ) const;
+  virtual State validateChar( const QChar& ) const;
+};
+
+
+class LIBK3B_EXPORT K3bAsciiValidator : public K3bLatin1Validator
+{
+ public:
+  K3bAsciiValidator( QObject* parent = 0, const char* name = 0 );
+
+  virtual State validateChar( const QChar& ) const;
 };
 
 

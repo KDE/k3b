@@ -21,8 +21,9 @@
 #include "k3baudiofile.h"
 #include "k3baudiozerodata.h"
 #include "k3baudiocdtracksource.h"
-#include <k3bcuefileparser.h>
 
+#include <k3bcuefileparser.h>
+#include <k3bcdtextvalidator.h>
 #include <k3bcore.h>
 #include <k3baudiodecoder.h>
 
@@ -54,12 +55,27 @@
 #include <iostream>
 
 
+class K3bAudioDoc::Private
+{
+public:
+  Private() {
+    cdTextValidator = new K3bCdTextValidator();
+  }
+
+  ~Private() {
+    delete cdTextValidator;
+  }
+
+  K3bCdTextValidator* cdTextValidator;
+};
+
 
 K3bAudioDoc::K3bAudioDoc( QObject* parent )
   : K3bDoc( parent ),
     m_firstTrack(0),
     m_lastTrack(0)
 {
+  d = new Private;
   m_docType = AUDIO;
 }
 
@@ -74,6 +90,8 @@ K3bAudioDoc::~K3bAudioDoc()
     kdDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleted." << endl;
     ++i;
   }
+
+  delete d;
 }
 
 bool K3bAudioDoc::newDocument()
@@ -180,7 +198,7 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
       track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
     }
   }
-  
+
   emit changed();
 
   informAboutNotFoundFiles();
@@ -204,6 +222,7 @@ KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
     }
     else if( !fi.exists() ) {
       it = allUrls.remove( it );
+      kdDebug() << url.path() << " not found" << endl;
       m_notFoundFiles.append( url );
     }
     else if( fi.isDir() ) {
@@ -384,6 +403,7 @@ K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
 {
   if( !QFile::exists( url.path() ) ) {
     m_notFoundFiles.append( url.path() );
+    kdDebug() << "(K3bAudioDoc) could not find file " << url.path() << endl;
     return 0;
   }
 
@@ -396,6 +416,7 @@ K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
   }
   else {
     m_unknownFileFormatFiles.append( url.path() );
+    kdDebug() << "(K3bAudioDoc) unknown file type in file " << url.path() << endl;
     return 0;
   }
 }
@@ -906,32 +927,33 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
     QStringList l;
-    for( KURL::List::const_iterator it = m_notFoundFiles.begin(); 
+    for( KURL::List::const_iterator it = m_notFoundFiles.begin();
 	 it != m_notFoundFiles.end(); ++it )
       l.append( (*it).path() );
-    KMessageBox::informationList( qApp->activeWindow(), 
+    KMessageBox::informationList( qApp->activeWindow(),
 				  i18n("Could not find the following files:"),
- 				  l,
+				  l,
 				  i18n("Not Found") );
-    
+
     m_notFoundFiles.clear();
   }
   if( !m_unknownFileFormatFiles.isEmpty() ) {
     QStringList l;
-    for( KURL::List::const_iterator it = m_unknownFileFormatFiles.begin(); 
+    for( KURL::List::const_iterator it = m_unknownFileFormatFiles.begin();
 	 it != m_unknownFileFormatFiles.end(); ++it )
       l.append( (*it).path() );
-    KMessageBox::informationList( qApp->activeWindow(), 
+    KMessageBox::informationList( qApp->activeWindow(),
 				  i18n("<p>Unable to handle the following files due to an unsupported format:"
 				       "<p>You may manually convert these audio files to wave using another "
 				       "application supporting the audio format and then add the wave files "
 				       "to the K3b project."),
- 				  l,
+				  l,
 				  i18n("Unsupported Format") );
 
     m_unknownFileFormatFiles.clear();
   }
 }
+
 
 
 void K3bAudioDoc::removeCorruptTracks()
@@ -1024,6 +1046,82 @@ K3bDevice::Toc K3bAudioDoc::toToc() const
   }
 
   return toc; 
+}
+
+
+void K3bAudioDoc::setTitle( const QString& v )
+{
+  m_cdTextData.setTitle( v );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setArtist( const QString& v )
+{
+  setPerformer( v );
+}
+
+
+void K3bAudioDoc::setPerformer( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setPerformer( s );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setDisc_id( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setDiscId( s );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setArranger( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setArranger( s );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setSongwriter( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setSongwriter( s );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setComposer( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setComposer( s );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setUpc_ean( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setUpcEan( s );
+  emit changed();
+}
+
+
+void K3bAudioDoc::setCdTextMessage( const QString& v )
+{
+  QString s( v );
+  d->cdTextValidator->fixup( s );
+  m_cdTextData.setMessage( s );
+  emit changed();
 }
 
 #include "k3baudiodoc.moc"

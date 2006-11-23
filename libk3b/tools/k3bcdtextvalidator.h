@@ -18,10 +18,10 @@
 #define _K3BCDTEXTVALIDATOR_H_
 
 
-#include <qvalidator.h>
+#include <k3bvalidators.h>
 #include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bCdTextValidator : public QValidator
+class LIBK3B_EXPORT K3bCdTextValidator : public K3bLatin1Validator
 {
  public:
   K3bCdTextValidator(QObject *parent = 0, const char *name = 0);

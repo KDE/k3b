@@ -117,7 +117,7 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
    * Shows dialogs.
    */
   void informAboutNotFoundFiles();
-
+  
   /**
    * returns the new after track, ie. the the last added track or null if
    * the import failed.
@@ -168,15 +168,15 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
 
   // CD-Text
   void writeCdText( bool b ) { m_cdText = b; }
-  void setTitle( const QString& v ) { m_cdTextData.setTitle( v ); }
-  void setArtist( const QString& v ) { setPerformer( v ); }
-  void setPerformer( const QString& v ) { m_cdTextData.setPerformer( v ); }
-  void setDisc_id( const QString& v ) { m_cdTextData.setDiscId( v ); }
-  void setArranger( const QString& v ) { m_cdTextData.setArranger( v ); }
-  void setSongwriter( const QString& v ) { m_cdTextData.setSongwriter( v ); }
-  void setComposer( const QString& v ) { m_cdTextData.setComposer( v ); }
-  void setUpc_ean( const QString& v ) { m_cdTextData.setUpcEan( v ); }
-  void setCdTextMessage( const QString& v ) { m_cdTextData.setMessage( v ); }
+  void setTitle( const QString& v );
+  void setArtist( const QString& v );
+  void setPerformer( const QString& v );
+  void setDisc_id( const QString& v );
+  void setArranger( const QString& v );
+  void setSongwriter( const QString& v );
+  void setComposer( const QString& v );
+  void setUpc_ean( const QString& v );
+  void setCdTextMessage( const QString& v );
 
   // Audio-CD Ripping
   void setAudioRippingParanoiaMode( int i ) { m_audioRippingParanoiaMode = i; }
@@ -235,7 +235,7 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
 
   KURL::List m_notFoundFiles;
   KURL::List m_unknownFileFormatFiles;
- 	
+
   // CD-Text
   // --------------------------------------------------
   K3bDevice::CdText m_cdTextData;
@@ -254,6 +254,9 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
   QMap<K3bAudioDecoder*, int> m_decoderUsageCounterMap;
   // used to check if we already have a decoder for a specific file
   QMap<QString, K3bAudioDecoder*> m_decoderPresenceMap;
+
+  class Private;
+  Private* d;
 };
 
 

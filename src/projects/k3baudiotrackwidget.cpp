@@ -18,6 +18,8 @@
 #include "k3baudiotrack.h"
 
 #include <k3bmsfedit.h>
+#include <k3bvalidators.h>
+#include <k3bcdtextvalidator.h>
 
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -45,6 +47,15 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const QPtrList<K3bAudioTrack>& tracks,
 
   // no post-gap for the last track
   m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.getFirst()->next() );
+
+  K3bCdTextValidator* val = new K3bCdTextValidator( this );
+  m_editSongwriter->setValidator( val );
+  m_editArranger->setValidator( val );
+  m_editComposer->setValidator( val );
+  m_editMessage->setValidator( val );
+  m_editTitle->setValidator( val );
+  m_editPerformer->setValidator( val );
+  m_editIsrc->setValidator( K3bValidators::isrcValidator( this ) );
 
   load();
 }

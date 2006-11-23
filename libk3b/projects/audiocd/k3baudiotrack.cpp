@@ -20,11 +20,27 @@
 
 #include <k3baudiodecoder.h>
 #include <k3bcore.h>
+#include <k3bcdtextvalidator.h>
 
 #include <qstring.h>
 
 #include <kdebug.h>
 
+
+
+class K3bAudioTrack::Private
+{
+public:
+  Private() {
+    cdTextValidator = new K3bCdTextValidator();
+  }
+
+  ~Private() {
+    delete cdTextValidator;
+  }
+
+  K3bCdTextValidator* cdTextValidator;
+};
 
 
 K3bAudioTrack::K3bAudioTrack()
@@ -39,6 +55,7 @@ K3bAudioTrack::K3bAudioTrack()
     m_alreadyReadBytes(0),
     m_currentlyDeleting(false)
 {
+  d = new Private;
 }
 
 
@@ -54,6 +71,7 @@ K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
     m_alreadyReadBytes(0),
     m_currentlyDeleting(false)
 {
+  d = new Private;
 }
 
 
@@ -76,6 +94,8 @@ K3bAudioTrack::~K3bAudioTrack()
     delete m_firstSource->take();
 
   kdDebug() << "(K3bAudioTrack::~K3bAudioTrack) finished" << endl;
+
+  delete d;
 }
 
 
@@ -83,6 +103,80 @@ void K3bAudioTrack::emitChanged()
 {
   if( m_parent )
     m_parent->slotTrackChanged( this );
+}
+
+
+void K3bAudioTrack::setArtist( const QString& a )
+{
+  setPerformer( a );
+}
+
+
+void K3bAudioTrack::setPerformer( const QString& a )
+{
+  QString s( a );
+  d->cdTextValidator->fixup( s );
+  m_cdText.setPerformer(s);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setTitle( const QString& t )
+{
+  QString s( t );
+  d->cdTextValidator->fixup( s );
+  m_cdText.setTitle(s);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setArranger( const QString& t )
+{
+  QString s( t );
+  d->cdTextValidator->fixup( s );
+  m_cdText.setArranger(s);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setSongwriter( const QString& t )
+{
+  QString s( t );
+  d->cdTextValidator->fixup( s );
+  m_cdText.setSongwriter(s);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setComposer( const QString& t )
+{
+  QString s( t );
+  d->cdTextValidator->fixup( s );
+  m_cdText.setComposer(s);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setIsrc( const QString& t )
+{
+  m_cdText.setIsrc(t);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setCdTextMessage( const QString& t )
+{
+  QString s( t );
+  d->cdTextValidator->fixup( s );
+  m_cdText.setMessage(s);
+  emitChanged();
+}
+
+
+void K3bAudioTrack::setCdText( const K3bDevice::TrackCdText& cdtext )
+{
+  m_cdText = cdtext;
+  emitChanged();
 }
 
 

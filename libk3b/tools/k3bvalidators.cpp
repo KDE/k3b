@@ -16,26 +16,68 @@
 
 #include "k3bvalidators.h"
 
-//#include <ctype.h>
+#include <ctype.h>
 
 
-K3bLatin1Validator::K3bLatin1Validator( QObject* parent, const char* name )
-  : QValidator( parent, name )
+K3bCharValidator::K3bCharValidator( QObject* parent, const char* name )
+  : QValidator( parent, name ),
+    m_replaceChar( '_' )
 {
 }
 
 
-QValidator::State K3bLatin1Validator::validate( QString& s, int& pos ) const
+QValidator::State K3bCharValidator::validate( QString& s, int& pos ) const
 {
   Q_UNUSED(pos);
 
   for( unsigned int i = 0; i < s.length(); ++i ) {
-    char c = s[i].latin1();
-    if( !c /*|| !::isascii(c)*/ )
-      return Invalid;
+    State r = validateChar( s[i] );
+    if( r != Acceptable )
+      return r;
   }
 
   return Acceptable;
+}
+
+
+void K3bCharValidator::fixup( QString& s ) const
+{
+  for( unsigned int i = 0; i < s.length(); ++i ) {
+    if( validateChar( s[i] ) != Acceptable )
+      s[i] = m_replaceChar;
+  }
+}
+
+
+K3bLatin1Validator::K3bLatin1Validator( QObject* parent, const char* name )
+  : K3bCharValidator( parent, name )
+{
+}
+
+
+QValidator::State K3bLatin1Validator::validateChar( const QChar& c ) const
+{
+  if( !c.latin1() )
+    return Invalid;
+  else
+    return Acceptable;
+}
+
+
+K3bAsciiValidator::K3bAsciiValidator( QObject* parent, const char* name )
+  : K3bLatin1Validator( parent, name )
+{
+}
+
+
+QValidator::State K3bAsciiValidator::validateChar( const QChar& c ) const
+{
+  if( K3bLatin1Validator::validateChar( c ) == Invalid )
+    return Invalid;
+  else if( !::isascii( c.latin1() ) )
+    return Invalid;
+  else
+    return Acceptable;
 }
 
 

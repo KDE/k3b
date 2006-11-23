@@ -17,7 +17,7 @@
 #include "k3bcdtextvalidator.h"
 
 K3bCdTextValidator::K3bCdTextValidator(QObject *parent, const char *name)
-  : QValidator(parent, name)
+  : K3bLatin1Validator(parent, name)
 {
 }
 
@@ -27,19 +27,16 @@ K3bCdTextValidator::~K3bCdTextValidator()
 }
 
 
-QValidator::State K3bCdTextValidator::validate( QString& input, int& ) const
+QValidator::State K3bCdTextValidator::validate( QString& input, int& pos ) const
 {
   if( input.length() > 160 )
     return Invalid;
 
+  // forbid some characters that might introduce problems
   for( unsigned int i = 0; i < input.length(); ++i ) {
-    // CdText only allows ASCII
-    if( input[i].latin1() == 0 )
-      return Invalid;
-    // forbid some characters that might introduce problems
     if( input[i] == '/' || input[i] == '"' || input[i] == '\\' )
       return Invalid;
   }
 
-  return Acceptable;
+  return K3bLatin1Validator::validate( input, pos );
 }

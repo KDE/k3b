@@ -74,16 +74,16 @@ class LIBK3B_EXPORT K3bAudioTrack
   /**
    * @obsolete use setPerformer
    **/
-  void setArtist( const QString& a ) { m_cdText.setPerformer(a); emitChanged(); }
-  void setPerformer( const QString& a ) { m_cdText.setPerformer(a); emitChanged(); }
-  void setTitle( const QString& t ) { m_cdText.setTitle(t); emitChanged(); }
-  void setArranger( const QString& t ) { m_cdText.setArranger(t); emitChanged(); }
-  void setSongwriter( const QString& t ) { m_cdText.setSongwriter(t); emitChanged(); }
-  void setComposer( const QString& t ) { m_cdText.setComposer(t); emitChanged(); }
-  void setIsrc( const QString& t ) { m_cdText.setIsrc(t); emitChanged(); }
-  void setCdTextMessage( const QString& t ) { m_cdText.setMessage(t); emitChanged(); }
+  void setArtist( const QString& a );
+  void setPerformer( const QString& a );
+  void setTitle( const QString& t );
+  void setArranger( const QString& t );
+  void setSongwriter( const QString& t );
+  void setComposer( const QString& t );
+  void setIsrc( const QString& t );
+  void setCdTextMessage( const QString& t );
 
-  void setCdText( const K3bDevice::TrackCdText& cdtext ) { m_cdText = cdtext; emitChanged(); }
+  void setCdText( const K3bDevice::TrackCdText& cdtext );
 
   void setPreEmp( bool b ) { m_preEmp = b; emitChanged(); }
   void setCopyProtection( bool b ) { m_copy = b; emitChanged(); }
@@ -202,6 +202,9 @@ class LIBK3B_EXPORT K3bAudioTrack
   long long m_alreadyReadBytes;
 
   bool m_currentlyDeleting;
+
+  class Private;
+  Private* d;
 };
 
 
