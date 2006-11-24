@@ -56,10 +56,7 @@ K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *pare
 
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
-  m_imageSettingsWidget->layout()->setMargin( marginHint() );
-  m_imageSettingsWidget->m_groupFileSystem->hide();
-  m_imageSettingsWidget->m_groupSymlinks->hide();
-  m_imageSettingsWidget->m_groupWhitespace->hide();
+  m_imageSettingsWidget->showFileSystemOptions( false );
 
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 

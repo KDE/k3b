@@ -33,6 +33,8 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
   void load( const K3bIsoOptions& );
   void save( K3bIsoOptions& );
 
+  void showFileSystemOptions( bool );
+
  private slots:
   void slotSpaceHandlingChanged( int i );
   void slotCustomFilesystems();
@@ -44,6 +46,8 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
   class VolumeDescDialog;
   CustomFilesystemsDialog* m_customFsDlg;
   VolumeDescDialog* m_volDescDlg;
+
+  bool m_fileSystemOptionsShown;
 };
 
 

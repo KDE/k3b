@@ -166,7 +166,8 @@ public:
 
 
 K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const char* name )
-  : base_K3bDataImageSettings( parent, name )
+  : base_K3bDataImageSettings( parent, name ),
+    m_fileSystemOptionsShown(true)
 {
   m_customFsDlg = new CustomFilesystemsDialog( this );
   m_volDescDlg = new VolumeDescDialog( this );
@@ -210,6 +211,16 @@ K3bDataImageSettingsWidget::~K3bDataImageSettingsWidget()
 }
 
 
+void K3bDataImageSettingsWidget::showFileSystemOptions( bool b )
+{
+  m_groupFileSystem->setShown(b);
+  m_groupSymlinks->setShown(b);
+  m_groupWhitespace->setShown(b);
+
+  m_fileSystemOptionsShown = b;
+}
+
+
 void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 {
   m_editReplace->setEnabled( i == WS_REPLACE );
@@ -235,6 +246,9 @@ void K3bDataImageSettingsWidget::slotCustomFilesystems()
 
 void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 {
+  if( !m_fileSystemOptionsShown )
+    return;
+
   // new custom entry
   QStringList s;
   if( m_customFsDlg->w->m_checkRockRidge->isChecked() )
