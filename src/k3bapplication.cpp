@@ -25,6 +25,7 @@
 #include "k3bmediacache.h"
 #include "k3bpassivepopup.h"
 #include "k3blsofwrapperdialog.h"
+#include "k3bfirstrun.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
@@ -141,6 +142,8 @@ void K3bApplication::init()
     config()->setGroup( "General Options" );
 
     emit initializationDone();
+
+    K3bFirstRun::run( m_mainWindow );
 
     if( K3bSystemProblemDialog::readCheckSystemConfig() ) {
       emit initializationInfo( i18n("Checking System") );

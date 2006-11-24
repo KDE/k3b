@@ -24,6 +24,7 @@
 #include <k3baudiodoc.h>
 #include <k3bdatadoc.h>
 #include <k3bmixeddoc.h>
+#include <k3bvcddoc.h>
 #include <k3bdiritem.h>
 
 #include <kiconloader.h>
@@ -193,8 +194,8 @@ void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
     }
 
     case K3bDoc::VCD: {
-      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
-      m_labelProjectInfo->setText( i18n("Video CD (%1)").arg(dataDocStats(dataDoc)) );
+      K3bVcdDoc* vcdDoc = static_cast<K3bVcdDoc*>( doc );
+      m_labelProjectInfo->setText( i18n("Video CD (1 track)", "Video CD (%n tracks)", vcdDoc->numOfTracks() ) );
       break;
     }
 

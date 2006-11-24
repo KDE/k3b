@@ -560,6 +560,8 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
     // FIXME: find a better way to tell everyone (especially the projecttabwidget)
     //        that the doc is not changed
     emit projectSaved( newDoc );
+
+    kdDebug() << "(K3bProjectManager) loading project done." << endl;
   }
   else {
     delete newDoc;

@@ -20,6 +20,7 @@
 #include <k3baudiooutputplugin.h>
 #include <k3baudioserver.h>
 #include <k3bcore.h>
+#include <k3bservicemenuinstaller.h>
 
 #include <qcheckbox.h>
 #include <qfileinfo.h>
@@ -78,6 +79,9 @@ void K3bMiscOptionTab::readSettings()
 
   m_comboAudioOutputSystem->setCurrentItem( c->readEntry( "Audio Output System", "arts" ), false );
   m_buttonConfigureAudioOutput->setEnabled( m_comboAudioOutputSystem->count() > 0 );
+
+  K3bServiceInstaller si;
+  m_checkKonqiIntegration->setChecked( si.allInstalled() );
 }
 
 
@@ -141,6 +145,12 @@ bool K3bMiscOptionTab::saveSettings()
     c->writeEntry( "Audio Output System", m_comboAudioOutputSystem->currentText() );
     K3bAudioServer::instance()->setOutputMethod( m_comboAudioOutputSystem->currentText().local8Bit() );
   }
+
+  K3bServiceInstaller si;
+  if( m_checkKonqiIntegration->isChecked() )
+    si.install( this );
+  else
+    si.remove( this );
 
   return true;
 }

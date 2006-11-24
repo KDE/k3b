@@ -37,7 +37,6 @@
 #include <qdir.h>
 #include <qdom.h>
 #include <qdatetime.h>
-#include <qtimer.h>
 #include <qtextstream.h>
 #include <qsemaphore.h>
 
@@ -974,7 +973,6 @@ void K3bAudioDoc::slotTrackChanged( K3bAudioTrack* track )
 {
   kdDebug() << "(K3bAudioDoc::slotTrackChanged " << track << endl;
   setModified( true );
-  emit changed();
   // if the track is empty now we simply delete it
   if( track->firstSource() )
     emit trackChanged(track);

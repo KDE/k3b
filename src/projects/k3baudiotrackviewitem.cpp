@@ -112,7 +112,7 @@ QString K3bAudioTrackViewItem::text(int i) const
     case 0:
       return QString::number( m_track->trackNumber() ).rightJustify( 2, ' ' );
     case 1:
-      return m_track->artist();
+      return m_track->performer();
     case 2:
       return m_track->title();
     case 3:
@@ -134,13 +134,22 @@ QString K3bAudioTrackViewItem::text(int i) const
 
 void K3bAudioTrackViewItem::setText( int col, const QString& text )
 {
+  //
+  // Stupid QListViewItem actually calls setText in paintCell. Thus, once a new item
+  // is created setText is called and in turn the doc is marked as modified since
+  // we call setArtist or setPerformer here! :(
+  //
+  // Quick fix: check if the field actually changed
+  //
   if( col == 1 ) {
     // this is the cd-text artist field
-    m_track->setArtist( text );
+    if( text != m_track->performer() )
+      m_track->setPerformer( text );
   }
   else if( col == 2 ) {
     // this is the cd-text title field
-    m_track->setTitle( text );
+    if( text != m_track->title() )
+      m_track->setTitle( text );
   }
 
   KListViewItem::setText( col, text );

@@ -4,13 +4,8 @@
     <property name="name">
         <cstring>base_K3bMiscOptionTab</cstring>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>467</width>
-            <height>392</height>
-        </rect>
+    <property name="caption">
+        <string>base_K3bMiscOptionTab</string>
     </property>
     <vbox>
         <property name="name">
@@ -192,6 +187,22 @@
                         <string>&lt;p&gt;If this option is checked K3b will not close action dialogs such as the CD Copy dialog after the process has been finished. It will be kept open to start a new process like copying another CD.</string>
                     </property>
                 </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>m_checkKonqiIntegration</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Enable Konqueror integration</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enable integration of K3b actions into Konqueror menus</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;K3b can integrate itself into Konqueror. This integration allows to start K3b from the context menu in the file manager.
+&lt;p&gt;A typical example is: in order to burn a folder to a data CD one clicks on the folder using the right mouse button. In the appearing context menu one selects "Create Data CD with K3b..." and a new K3b project containing the folder is created.
+&lt;p&gt;&lt;em&gt;Konqueror integration is not enabled by default to prevent unwanted cluttering of the Konqueror menus.&lt;/em&gt;</string>
+                    </property>
+                </widget>
             </vbox>
         </widget>
         <spacer>
@@ -207,7 +218,7 @@
             <property name="sizeHint">
                 <size>
                     <width>31</width>
-                    <height>20</height>
+                    <height>0</height>
                 </size>
             </property>
         </spacer>

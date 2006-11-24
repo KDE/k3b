@@ -42,6 +42,7 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
 
   bool newDocument();
 
+  void setModified( bool m = true );
   bool isModified() const;
 
   KIO::filesize_t size() const;

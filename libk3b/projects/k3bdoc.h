@@ -99,7 +99,7 @@ class LIBK3B_EXPORT K3bDoc : public QObject
   /** 
    * sets the modified flag for the document after a modifying action on the view connected to the document.
    */
-  void setModified( bool m = true );
+  virtual void setModified( bool m = true );
 
   /** 
    * returns if the document is modified or not. Use this to determine 

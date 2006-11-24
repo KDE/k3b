@@ -69,11 +69,15 @@ QString K3bAudioDataSourceViewItem::text( int i ) const
 
 void K3bAudioDataSourceViewItem::setText( int col, const QString& text )
 {
+  //
+  // See K3bAudioTrackViewItem::setText for an explanation why we have to check if
+  // the value really changed
+  //
   if( col == 4 ) {
     if( K3bAudioZeroData* zero = dynamic_cast<K3bAudioZeroData*>( source() ) ) {
       bool ok;
       K3b::Msf f = K3b::Msf::fromString( text, &ok );
-      if( ok )
+      if( ok && f != zero->length() )
 	zero->setLength( f );
     }
   }

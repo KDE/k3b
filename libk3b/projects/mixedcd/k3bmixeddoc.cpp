@@ -72,6 +72,13 @@ void K3bMixedDoc::setURL( const KURL& url )
 }
 
 
+void K3bMixedDoc::setModified( bool m )
+{
+  m_audioDoc->setModified( m );
+  m_dataDoc->setModified( m );
+}
+
+
 bool K3bMixedDoc::isModified() const
 {
   return ( m_audioDoc->isModified() || m_dataDoc->isModified() );
@@ -198,8 +205,7 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   }
   mixedElem.appendChild( mixedTypeElem );
 
-  m_audioDoc->setModified( false );
-  m_dataDoc->setModified( false );
+  setModified( false );
 
   return true;
 }
