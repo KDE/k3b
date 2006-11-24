@@ -76,7 +76,6 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const
 
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
-  m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   setupSettingsPage();

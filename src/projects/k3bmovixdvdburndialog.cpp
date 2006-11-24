@@ -60,7 +60,6 @@ K3bMovixDvdBurnDialog::K3bMovixDvdBurnDialog( K3bMovixDvdDoc* doc, QWidget* pare
 
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
-  m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   // for now we just put the verify checkbox on the main page...

@@ -60,7 +60,6 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
 
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
-  m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   setupSettingsTab();

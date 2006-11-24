@@ -80,7 +80,6 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 
   // create image settings tab
   m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
-  m_imageSettingsWidget->layout()->setMargin( marginHint() );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   setupSettingsTab();

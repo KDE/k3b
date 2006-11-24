@@ -26,6 +26,7 @@
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qlayout.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -169,6 +170,8 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
   : base_K3bDataImageSettings( parent, name ),
     m_fileSystemOptionsShown(true)
 {
+  layout()->setMargin( KDialog::marginHint() );
+
   m_customFsDlg = new CustomFilesystemsDialog( this );
   m_volDescDlg = new VolumeDescDialog( this );
 

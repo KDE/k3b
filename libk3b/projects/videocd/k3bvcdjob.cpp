@@ -281,7 +281,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
 
             if ( tagName == "progress" ) {
                 const QString oper = el.attribute( "operation" ).lower();
-                const long long pos = el.attribute( "position" ).toLong();
+                const unsigned long long pos = el.attribute( "position" ).toLong();
                 const long long size = el.attribute( "size" ).toLong();
 
                 if ( oper == "scan" ) {
