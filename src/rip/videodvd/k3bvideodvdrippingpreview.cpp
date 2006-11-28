@@ -102,7 +102,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
 
 void K3bVideoDVDRippingPreview::cancel()
 {
-  if( m_process->isRunning() ) {
+  if( m_process && m_process->isRunning() ) {
     m_canceled = true;
     m_process->kill();
   }
