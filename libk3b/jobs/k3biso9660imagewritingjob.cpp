@@ -344,7 +344,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	writer->addArgument("-data");
 
       // read from stdin
-      writer->addArgument( "-" );
+      writer->addArgument( QString("-tsize=%1s").arg( K3b::imageFilesize( m_imagePath )/2048 ) )->addArgument( "-" );
 
       m_writer = writer;
     }
@@ -374,7 +374,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	  *s << "\n";
 	  *s << "TRACK MODE1" << "\n";
 	}
-	*s << "DATAFILE \"-\" 0 \n";
+	*s << "DATAFILE \"-\" " << QString::number( K3b::imageFilesize( m_imagePath ) ) << "\n";
 
 	m_tocFile->close();
       }
