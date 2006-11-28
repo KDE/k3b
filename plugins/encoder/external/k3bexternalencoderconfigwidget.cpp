@@ -177,6 +177,7 @@ void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
 {
   if( QListViewItem* item = w->m_viewEncoders->selectedItem() ) {
     d->commands.erase( item );
+    delete item;
   }
 }
 
