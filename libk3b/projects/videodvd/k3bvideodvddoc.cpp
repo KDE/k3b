@@ -39,16 +39,6 @@ bool K3bVideoDvdDoc::newDocument()
 {
   if( K3bDataDoc::newDocument() ) {
 
-    // Video DVD defaults
-    K3bIsoOptions o = isoOptions(); 
-    o.setISOLevel(1); 
-    o.setISOallow31charFilenames(false); 
-    o.setCreateJoliet(false); 
-    o.setJolietLong(false); 
-    o.setCreateRockRidge(false); 
-    o.setCreateUdf(true); 
-    setIsoOptions( o ); 
-
     // K3bDataDoc::newDocument already deleted m_videoTsDir (again: bad design!)
     m_videoTsDir = new K3bDirItem( "VIDEO_TS", this, root() );
     m_videoTsDir->setRemoveable(false);
