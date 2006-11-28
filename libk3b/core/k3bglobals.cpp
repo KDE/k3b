@@ -409,11 +409,18 @@ QString K3b::writingModeString( int mode )
 QString K3b::resolveLink( const QString& file )
 {
   QFileInfo f( file );
+  QStringList steps( f.absFilePath() );
   while( f.isSymLink() ) {
     QString p = f.readLink();
     if( !p.startsWith( "/" ) )
       p.prepend( f.dirPath(true) + "/" );
     f.setFile( p );
+    if( steps.contains( f.absFilePath() ) ) {
+      kdDebug() << "(K3b) symlink loop detected." << endl;
+      break;
+    }
+    else
+      steps.append( f.absFilePath() );	
   }
   return f.absFilePath();
 }
