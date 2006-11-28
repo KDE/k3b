@@ -16,6 +16,7 @@
 #include "k3baudiotrackplayer.h"
 #include <k3baudiodoc.h>
 #include <k3baudiotrack.h>
+#include <k3baudioserver.h>
 
 #include <kactionclasses.h>
 #include <klocale.h>
@@ -133,6 +134,10 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 	   this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
   connect( &d->sliderTimer, SIGNAL(timeout()),
 	   this, SLOT(slotUpdateSlider()) );
+
+  // we just stop the player if the audio server has an error. K3bMainWindow will show the error message
+  // This is all very hacky and has to be improved for K3b 2.0. But then we will probably use Phonon anyway...
+  connect( K3bAudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(stop()) );
 
   // tooltips
   d->actionPlay->setToolTip( i18n("Play") );

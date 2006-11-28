@@ -234,6 +234,8 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotDataClearImportedSession();
   void slotEditBootImages();
 
+  void slotAudioServerError( const QString& error );
+
   void createClient(K3bDoc* doc);
 
  private:

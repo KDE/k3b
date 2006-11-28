@@ -122,6 +122,8 @@
 #include "projects/k3bdatasessionimportdialog.h"
 #include "k3bpassivepopup.h"
 #include "k3bthemedheader.h"
+#include <k3baudioserver.h>
+
 
 class K3bMainWindow::Private
 {
@@ -174,6 +176,7 @@ K3bMainWindow::K3bMainWindow()
 
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
   connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystem()) );
+  connect( K3bAudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(slotAudioServerError(const QString&)) );
 
   // FIXME: now make sure the welcome screen is displayed completely
   resize( 780, 550 );
@@ -1582,6 +1585,11 @@ void K3bMainWindow::slotVideoCdRip()
   videoCdRip( 0 );
 }
 
+
+void K3bMainWindow::slotAudioServerError( const QString& error )
+{
+  K3bPassivePopup::showPopup( error, i18n("Audio Output Problem") );
+}
 
 #include "k3b.moc"
 

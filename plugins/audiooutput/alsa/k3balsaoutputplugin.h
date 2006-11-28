@@ -17,6 +17,9 @@
 #define _K3B_ALSA_AUDIO_OUTPUT_H_
 
 #include <k3baudiooutputplugin.h>
+#include <k3bpluginconfigwidget.h>
+
+class KComboBox;
 
 
 class K3bAlsaOutputPlugin : public K3bAudioOutputPlugin
@@ -35,9 +38,29 @@ class K3bAlsaOutputPlugin : public K3bAudioOutputPlugin
 
   int write( char* data, int len );
 
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
+					     const char* name = 0 ) const;
+
  private:
   class Private;
   Private* d;
+};
+
+
+class K3bAlsaOutputPluginConfigWidget : public K3bPluginConfigWidget
+{
+  Q_OBJECT
+
+ public:
+  K3bAlsaOutputPluginConfigWidget( QWidget* parent = 0, const char* name = 0 );
+  ~K3bAlsaOutputPluginConfigWidget();
+
+ public slots:
+  void loadConfig();
+  void saveConfig();
+
+ private:
+  KComboBox* m_comboDevice;
 };
 
 #endif

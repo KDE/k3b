@@ -14,6 +14,8 @@
  */
 
 #include <k3bcore.h>
+#include <k3bthread.h>
+#include <k3bprogressinfoevent.h>
 #include "k3baudioserver.h"
 #include "k3baudioclient.h"
 #include "k3bpluginmanager.h"
@@ -24,7 +26,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <qthread.h>
+#include <k3bthread.h>
 
 
 
@@ -32,12 +34,13 @@ K3bAudioServer* K3bAudioServer::s_instance = 0;
 
 
 
-class K3bAudioServer::Private : public QThread
+class K3bAudioServer::Private : public K3bThread
 {
 public:
   Private( K3bAudioServer* s )
     : m_streaming(false),
       m_server(s) {
+    setProgressInfoEventHandler( m_server );
   }
 
 
@@ -55,7 +58,11 @@ protected:
       int len = m_server->m_client->read( buffer, 2048*10 );
       if( len > 0 ) {
 	if( m_server->m_pluginInitialized ) {
-	  write( buffer, len );
+	  if( write( buffer, len ) < 0 ) {
+	    kdDebug() << "Audio Streaming failed: " << m_server->m_usedOutputPlugin->lastErrorMessage() << endl;
+	    emitInfoMessage( m_server->m_usedOutputPlugin->lastErrorMessage(), 0 );
+	    return;
+	  }
 	}
 	// else just drop the data into space...
       }
@@ -67,10 +74,13 @@ protected:
 
   int write( char* buffer, int len ) {
     int written = m_server->m_usedOutputPlugin->write( buffer, len );
-    if( written < len )
-      return write( buffer+written, len-written );
-    else
-      return len;
+    return written;
+//     if( written < 0 )
+//       return -1;
+//     else if( written < len )
+//       return write( buffer+written, len-written ) + written;
+//     else
+//       return len;
   }
 
 private:
@@ -142,9 +152,9 @@ void K3bAudioServer::attachClient( K3bAudioClient* c )
 
   if( m_usedOutputPlugin && !m_pluginInitialized ) {
     if( !m_usedOutputPlugin->init() ) {
-      KMessageBox::error( kapp->mainWidget(), i18n("Could not initialize Audio Output plugin %1 (%2)")
-			  .arg(m_usedOutputPlugin->name())
-			  .arg(m_usedOutputPlugin->lastErrorMessage()) );
+      emit error( i18n("Could not initialize Audio Output plugin %1 (%2)")
+		  .arg(m_usedOutputPlugin->pluginInfo().name())
+		  .arg(m_usedOutputPlugin->lastErrorMessage()) );
     }
     else
       m_pluginInitialized = true;
@@ -189,6 +199,16 @@ K3bAudioOutputPlugin* K3bAudioServer::findOutputPlugin( const QCString& name )
   kdDebug() << "(K3bAudioServer::findOutputPlugin) could not find output plugin " << name << endl;
 
   return 0;
+}
+
+
+void K3bAudioServer::customEvent( QCustomEvent* e )
+{
+  if( K3bProgressInfoEvent* be = dynamic_cast<K3bProgressInfoEvent*>(e) ) {
+    if( be->type() == K3bProgressInfoEvent::InfoMessage ) {
+      emit error( be->firstString() );
+    }
+  }
 }
 
 #include "k3baudioserver.moc"

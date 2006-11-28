@@ -64,7 +64,12 @@ class LIBK3B_EXPORT K3bAudioServer : public QObject
    */
   static K3bAudioOutputPlugin* findOutputPlugin( const QCString& name );
 
+ signals:
+  void error( const QString& );
+
  private:
+  void customEvent( QCustomEvent* e );
+
   class Private;
   friend class Private;
 
