@@ -112,11 +112,14 @@ static void calculateButtons( int width, int numActions, int buttonWidth, int& c
   int wa = width - 40;
   cols = QMAX( 1, QMIN( wa / (buttonWidth+4), numActions ) );
   rows = numActions/cols;
-  if( numActions%cols ) {
+  int over = numActions%cols;
+  if( over ) {
     rows++;
     // try to avoid useless cols
-    if( cols-2 >= rows-1 )
-      cols--;
+    while( over && cols - over - 1 >= rows-1 ) {
+      --cols;
+      over = numActions%cols;
+    }
   }
 }
 
