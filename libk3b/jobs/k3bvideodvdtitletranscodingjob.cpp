@@ -511,7 +511,7 @@ QString K3bVideoDVDTitleTranscodingJob::videoCodecDescription( K3bVideoDVDTitleT
     return i18n("XviD is a free and open source MPEG-4 video codec. XviD was created by a group of "
 		"volunteer programmers after the OpenDivX source was closed in July 2001.")
       + "<br>"
-      + i18n("XviD features MPEG-4 Advanced Simple Profile features such as b-frames, global "
+      + i18n("XviD features MPEG-4 Advanced Profile settings such as b-frames, global "
 	     "and quarter pixel motion compensation, lumi masking, trellis quantization, and "
 	     "H.263, MPEG and custom quantization matrices.")
       + "<br>"
