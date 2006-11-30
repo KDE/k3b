@@ -77,8 +77,14 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
   // some systems when used with a non-existing url
   //
   QString lastUrl = cfg->readPathEntry( "last url", QDir::home().absPath() );
-  if( !QFile::exists(lastUrl) )
-    lastUrl = QDir::home().absPath();
+  while( !QFile::exists(lastUrl) ) {
+    QString urlUp = lastUrl.section( '/', 0, -2 );
+    if( urlUp == lastUrl )
+      lastUrl = QDir::home().absPath();
+    else
+      lastUrl = urlUp;
+  }
+
   setURL( KURL::fromPathOrURL(lastUrl), true );
 
   cfg->setGroup( oldGroup );
