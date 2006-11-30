@@ -83,7 +83,7 @@ QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent, const char
 
 QCheckBox* K3bStdGuiItems::createCacheImageCheckbox( QWidget* parent, const char* name )
 {
-  QCheckBox* c = new QCheckBox( i18n("Cache data"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Create image"), parent, name );
   QWhatsThis::add( c, i18n("<p>If this option is checked, K3b will create an image before writing "
 			   "the files to the CD/DVD. Otherwise the data will be written <em>on-the-fly</em>, "
 			   "i.e. no intermediate image will be created."
