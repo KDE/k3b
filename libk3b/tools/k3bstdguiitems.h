@@ -37,6 +37,7 @@ namespace K3bStdGuiItems
   LIBK3B_EXPORT QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* normalizeCheckBox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QCheckBox* verifyCheckBox( QWidget* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT QCheckBox* ignoreAudioReadErrorsCheckBox( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QFrame* horizontalLine( QWidget* parent = 0, const char* name = 0 );
   LIBK3B_EXPORT QFrame* verticalLine( QWidget* parent = 0, const char* name = 0 );
 }

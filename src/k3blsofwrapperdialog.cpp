@@ -71,7 +71,7 @@ bool K3bLsofWrapperDialog::slotCheckDevice()
     const QValueList<K3bLsofWrapper::Process>& apps = lsof.usingApplications();
     if( apps.count() > 0 ) {
       m_label->setText( i18n("<p>Device <b>'%1'</b> is already in use by other applications "
-			     "(<em>%2</em>) "
+			     "(<em>%2</em>)."
 			     "<p>It is highly recommended to quit those before continuing. "
 			     "Otherwise K3b might not be able to fully access the device."
 			     "<p><em>Hint: Sometimes shutting down an application does not "

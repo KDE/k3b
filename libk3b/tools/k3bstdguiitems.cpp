@@ -186,6 +186,19 @@ QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
 }
 
 
+QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent, const char* name )
+{
+  QCheckBox* c = new QCheckBox( i18n("Ignore read errors"), parent, name );
+  QToolTip::add( c, i18n("Skip unreadable audio sectors") );
+  QWhatsThis::add( c, i18n("<p>If this option is checked and K3b is not able to read an "
+			   "audio sector from the source CD it will be replaced with zeros "
+			   "on the resulting copy."
+			   "<p>Since audio CD Player are able to interpolate small errors "
+			   "in the data it is no problem to let K3b skip unreadable sectors.") );
+  return c;
+}
+
+
 QFrame* K3bStdGuiItems::horizontalLine( QWidget* parent, const char* name )
 {
   QFrame* line = new QFrame( parent, name );

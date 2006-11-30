@@ -186,7 +186,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
 				      "<p><b>Ignore</b> (DVD only)<br>"
 				      "This will leave the speed selection to the writer device. "
 				      "Use this if K3b is unable to set the writing speed."
-				      "<p>1x refers to 1385 KB/s for DVD and 175 KB/S for CD.</p>"
+				      "<p>1x refers to 1385 KB/s for DVD and 175 KB/s for CD.</p>"
 				      "<p><b>Caution:</b> Make sure your system is able to send the data "
 				      "fast enough to prevent buffer underruns.") );
   QWhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "

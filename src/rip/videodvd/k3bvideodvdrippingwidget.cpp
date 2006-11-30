@@ -294,10 +294,10 @@ void K3bVideoDVDRippingWidget::slotSeeSpecialStrings()
                              "<tr><td>%c</td><td>number of audio channels (on the Video DVD)</td><td>%{c} or %{channels}</td></tr>"
                              "<tr><td>%v</td><td>size of the original video</td><td>%{v} or %{orig_video_size}</td></tr>"
                              "<tr><td>%s</td><td>size of the resulting video (<em>Caution: auto-clipping values are not taken into account!</em>)</td><td>%{s} or %{video_size}</td></tr>"
-                             "<tr><td>%r</td><td>aspect ration of the original video</td><td>%{r} or %{aspect_ratio}</td></tr>"
+                             "<tr><td>%r</td><td>aspect ratio of the original video</td><td>%{r} or %{aspect_ratio}</td></tr>"
                              "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
                              "</table>"
-			     "<p><em>Hint: K3b also accepts slight variantions of the long special strings. "
+			     "<p><em>Hint: K3b also accepts slight variations of the long special strings. "
 			     "One can, for example, leave out the underscores.</em>") );
 }
 

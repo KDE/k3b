@@ -187,7 +187,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 	  >= (int)m_dvd[d->currentTitleInfoIndex].videoStream().pictureHeight() ||
 	  m_detectClippingJob->clippingLeft() + m_detectClippingJob->clippingRight()
 	  >= (int)m_dvd[d->currentTitleInfoIndex].videoStream().pictureWidth() ) {
-	emit infoMessage( i18n("Insane lipping values. No clipping will be done at all."), WARNING );
+	emit infoMessage( i18n("Insane clipping values. No clipping will be done at all."), WARNING );
       }
       else {
 	m_titleRipInfos[d->currentTitleInfoIndex].clipTop = m_detectClippingJob->clippingTop();

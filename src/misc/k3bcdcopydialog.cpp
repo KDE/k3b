@@ -166,7 +166,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   box->setSpacing( spacingHint() );
   box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
   m_spinDataRetries = new QSpinBox( 1, 128, 1, box );
-  m_checkIgnoreDataReadErrors = new QCheckBox( i18n("Ignore read errors"), m_groupAdvancedDataOptions );
+  m_checkIgnoreDataReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedDataOptions );
   m_checkNoCorrection = new QCheckBox( i18n("No error correction"), m_groupAdvancedDataOptions );
 
   m_groupAdvancedAudioOptions = new QGroupBox( 5, Qt::Vertical, i18n("Audio"), advancedTab, "audio_options" ); 
@@ -176,7 +176,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   box->setSpacing( spacingHint() );
   box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
   m_spinAudioRetries = new QSpinBox( 1, 128, 1, box );
-  m_checkIgnoreAudioReadErrors = new QCheckBox( i18n("Ignore read errors"), m_groupAdvancedAudioOptions );
+  m_checkIgnoreAudioReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedAudioOptions );
   box = new QHBox( m_groupAdvancedAudioOptions );
   box->setSpacing( spacingHint() );
   box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
@@ -207,7 +207,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_checkReadCdText, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
 
   QToolTip::add( m_checkIgnoreDataReadErrors, i18n("Skip unreadable data sectors") );
-  QToolTip::add( m_checkIgnoreAudioReadErrors, i18n("Skip unreadable audio sectors") );
   QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
   QToolTip::add( m_checkPrefereCdText, i18n("Use CD-Text instead of cddb if available.") );
   QToolTip::add( m_checkReadCdText, i18n("Copy CD-Text from the source CD if available.") );
@@ -224,11 +223,6 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					      "copied to the resulting CD ignoring any potentially existing Cddb entries.") );
   QWhatsThis::add( m_checkIgnoreDataReadErrors, i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
 						     "source CD/DVD it will be replaced with zeros on the resulting copy.") );
-  QWhatsThis::add( m_checkIgnoreAudioReadErrors, i18n("<p>If this option is checked and K3b is not able to read a audio sector from the "
-						      "source CD it will be replaced with zeros on the resulting copy."
-						      "<p>Since audio CD Player are able to interpolate small errors in the data it is "
-						      "no problem to let K3b skip unreadable sectors.") );
-
 
   QWhatsThis::add( m_comboCopyMode, 
 		   "<p><b>" + i18n("Normal Copy") + "</b>"

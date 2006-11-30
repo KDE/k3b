@@ -187,11 +187,6 @@ void K3bAudioRippingDialog::setupContextHelp()
 				       "read a sector of audio data from the cd. After that "
 				       "K3b will either skip the sector if the <em>Ignore Read Errors</em> "
 				       "option is enabled or stop the process.") );
-  QToolTip::add( m_checkIgnoreReadErrors, i18n("Never skip a sector on error") );
-  QWhatsThis::add( m_checkIgnoreReadErrors, i18n("<p>If this option is checked and K3b is not able to read a audio sector from the "
-						 "source CD it will be replaced with zeros on the resulting copy."
-						 "<p>Since audio CD Player are able to interpolate small errors in the data it is "
-						 "no problem to let K3b skip unreadable sectors.") );
   QToolTip::add( m_checkUseIndex0, i18n("Do not read the pregaps at the end of every track") );
   QWhatsThis::add( m_checkUseIndex0, i18n("<p>If this option is checked K3b will not rip the audio "
 					  "data in the pregaps. Most audio tracks contain an empty "
