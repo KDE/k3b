@@ -83,6 +83,8 @@ void K3bIso9660ImageWritingJob::start()
   if( m_simulate )
     m_verifyData = false;
 
+  emit newTask( i18n("Preparing data") );
+
   if( !QFile::exists( m_imagePath ) ) {
     emit infoMessage( i18n("Could not find image %1").arg(m_imagePath), K3bJob::ERROR );
     jobFinished( false );
@@ -217,6 +219,8 @@ void K3bIso9660ImageWritingJob::cancel()
 
 void K3bIso9660ImageWritingJob::startWriting()
 {
+  emit newSubTask( i18n("Waiting for medium") );
+
   // we wait for the following:
   // 1. if writing mode auto and writing app auto: all writable media types
   // 2. if writing mode auto and writing app not growisofs: all writable cd types

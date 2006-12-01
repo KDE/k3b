@@ -584,7 +584,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
   }
 
   if( success ) {
-    emit infoMessage( i18n("Successfully written DVD copy %1.").arg(d->doneCopies), INFO );
+    emit infoMessage( i18n("Successfully written DVD copy %1.").arg(d->doneCopies+1), INFO );
 
     if( d->verifyData && !m_simulate ) {
       if( !d->verificationJob ) {
@@ -604,7 +604,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
   
       }
       d->verificationJob->setDevice( m_writerDevice );
-      d->verificationJob->addTrack( 1, d->inPipe.checksum(), d->lastSector );
+      d->verificationJob->addTrack( 1, d->inPipe.checksum(), d->lastSector+1 );
 
       if( m_copies > 1 )
 	emit newTask( i18n("Verifying DVD copy %1").arg(d->doneCopies+1) );

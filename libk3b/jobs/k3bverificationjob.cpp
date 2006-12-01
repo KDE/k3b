@@ -208,7 +208,7 @@ void K3bVerificationJob::readTrack( int trackIndex )
   d->currentTrackIndex = trackIndex;
   d->readSuccessful = true;
 
-  d->currentTrackSize = trackLength( d->tracks[trackIndex].trackNumber );
+  d->currentTrackSize = trackLength( trackIndex );
   if( d->currentTrackSize == 0 ) {
     jobFinished(false);
     return;
@@ -307,7 +307,7 @@ void K3bVerificationJob::slotReaderFinished( bool success )
   if( !d->readSuccessful )
     d->md5Job->cancel();
   else {
-    d->alreadyReadSectors += trackLength( d->tracks[d->currentTrackIndex].trackNumber );
+    d->alreadyReadSectors += trackLength( d->currentTrackIndex );
     d->md5Job->stop();
   }
 }
