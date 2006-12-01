@@ -57,6 +57,7 @@ class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
   void setWritingMode( int w ) { m_writingMode = w; }
   void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
   void setReadRetries( int i ) { m_readRetries = i; }
+  void setVerifyData( bool b );
 
  private slots:
   void slotDiskInfoReady( K3bDevice::DeviceHandler* );
@@ -65,6 +66,8 @@ class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
   void slotWriterProgress( int );
   void slotReaderFinished( bool );
   void slotWriterFinished( bool );
+  void slotVerificationFinished( bool );
+  void slotVerificationProgress( int p );
 
  private:
   bool waitForDvd();

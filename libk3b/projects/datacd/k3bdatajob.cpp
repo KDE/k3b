@@ -18,7 +18,6 @@
 #include "k3bdatadoc.h"
 #include "k3bisoimager.h"
 #include "k3bmsinfofetcher.h"
-#include "k3bdataverifyingjob.h"
 
 #include <k3bcore.h>
 #include <k3bglobals.h>
@@ -34,6 +33,7 @@
 #include <k3bglobalsettings.h>
 #include <k3bactivepipe.h>
 #include <k3bfilesplitter.h>
+#include <k3bverificationjob.h>
 
 #include <kprocess.h>
 #include <kapplication.h>
@@ -76,7 +76,7 @@ public:
   int copies;
   int copiesDone;
 
-  K3bDataVerifyingJob* verificationJob;
+  K3bVerificationJob* verificationJob;
 
   K3bFileSplitter imageFile;
   K3bActivePipe pipe;
@@ -429,11 +429,11 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
     if( d->doc->verifyData() ) {
       if( !d->verificationJob ) {
-	d->verificationJob = new K3bDataVerifyingJob( this, this );
+	d->verificationJob = new K3bVerificationJob( this, this );
 	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
 		 this, SIGNAL(infoMessage(const QString&, int)) );
-// 	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
-// 		 this, SIGNAL(newSubTask(const QString&)) );
+ 	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+ 		 this, SIGNAL(newSubTask(const QString&)) );
 	connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
 		 this, SIGNAL(newSubTask(const QString&)) );
 	connect( d->verificationJob, SIGNAL(percent(int)),
@@ -446,10 +446,10 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 		 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   
       }
-      d->verificationJob->setDoc( d->doc );
+      d->verificationJob->clear();
       d->verificationJob->setDevice( d->doc->burner() );
-      d->verificationJob->setImager( m_isoImager );
-      d->verificationJob->setUsedMultisessionMode( d->usedMultiSessionMode );
+      d->verificationJob->setGrownSessionSize( m_isoImager->size() );
+      d->verificationJob->addTrack( 0, m_isoImager->checksum() );
 
       emit burning(false);
 

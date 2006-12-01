@@ -101,13 +101,14 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   groupWritingMode->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 
-  QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n("Settings"), optionTab );
+  QGroupBox* groupOptions = new QGroupBox( 5, Qt::Vertical, i18n("Settings"), optionTab );
   groupOptions->setInsideSpacing( spacingHint() );
   groupOptions->setInsideMargin( marginHint() );
   m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
   m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( groupOptions );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
+  m_checkVerifyData = K3bStdGuiItems::verifyCheckBox( groupOptions );
 
   QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
@@ -274,6 +275,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   job->setWritingMode( m_writingModeWidget->writingMode() );
   job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
   job->setReadRetries( m_spinRetries->value() );
+  job->setVerifyData( m_checkVerifyData->isChecked() );
   
   if( !exitLoopOnHide() )
     hide();
@@ -308,6 +310,7 @@ void K3bDvdCopyDialog::loadUserDefaults( KConfigBase* c )
   m_checkIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", false ) );
   m_spinRetries->setValue( c->readNumEntry( "retries", 128 ) );
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+  m_checkVerifyData->setChecked( c->readBoolEntry( "verify data", false ) );
 
   slotToggleAll();
 }
@@ -329,6 +332,7 @@ void K3bDvdCopyDialog::saveUserDefaults( KConfigBase* c )
   c->writeEntry( "ignore read errors", m_checkIgnoreReadErrors->isChecked() );
   c->writeEntry( "retries", m_spinRetries->value() );
   c->writeEntry( "copies", m_spinCopies->value() );
+  c->writeEntry( "verify data", m_checkVerifyData->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
 
@@ -351,6 +355,7 @@ void K3bDvdCopyDialog::loadK3bDefaults()
   m_checkIgnoreReadErrors->setChecked(false);
   m_spinCopies->setValue( 1 );
   m_spinRetries->setValue(128);
+  m_checkVerifyData->setChecked( false );
 
   slotToggleAll();
 }
@@ -404,6 +409,8 @@ void K3bDvdCopyDialog::toggleAll()
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
   if( m_checkOnlyCreateImage->isChecked() )
     m_checkDeleteImages->setChecked( false );
+
+  m_checkVerifyData->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkSimulate->isChecked() );
   
   setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() && 
 		    (dev || m_checkOnlyCreateImage->isChecked()) );

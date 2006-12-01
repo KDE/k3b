@@ -15,7 +15,7 @@
 
 
 #include "k3biso9660imagewritingjob.h"
-#include "k3bisoimageverificationjob.h"
+#include "k3bverificationjob.h"
 
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
@@ -117,7 +117,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
       // the writerJob should have emited the "simulation/writing successful" signal
 
       if( !m_verifyJob ) {
-	m_verifyJob = new K3bIsoImageVerificationJob( this );
+	m_verifyJob = new K3bVerificationJob( this );
 	connectSubJob( m_verifyJob,
 		       SLOT(slotVerificationFinished(bool)),
 		       true,
@@ -125,12 +125,14 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
 		       SIGNAL(subPercent(int)) );
       }
       m_verifyJob->setDevice( m_device );
-      m_verifyJob->setImageFileName( m_imagePath );
-      m_verifyJob->setImageMD5Sum( d->checksumPipe.checksum() );
+      m_verifyJob->clear();
+      m_verifyJob->addTrack( 1, d->checksumPipe.checksum() );
+
       if( m_copies == 1 )
 	emit newTask( i18n("Verifying written data") );
       else
 	emit newTask( i18n("Verifying written copy %1 of %2").arg(m_currentCopy).arg(m_copies) );
+
       m_verifyJob->start();
     }
     else if( m_currentCopy >= m_copies ) {

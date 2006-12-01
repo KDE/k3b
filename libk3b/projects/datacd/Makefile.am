@@ -22,7 +22,6 @@ libdata_la_SOURCES =    k3bdatajob.cpp \
 			k3bbootitem.cpp \
 			k3bisooptions.cpp \
 			k3bfilecompilationsizehandler.cpp \
-			k3bdataverifyingjob.cpp \
 			k3bsessionimportitem.cpp \
 			k3bmkisofshandler.cpp \
 			k3bdatapreparationjob.cpp

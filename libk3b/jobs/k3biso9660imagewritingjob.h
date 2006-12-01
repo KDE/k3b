@@ -25,7 +25,7 @@ class KTempFile;
 namespace K3bDevice {
   class Device;
 }
-class K3bIsoImageVerificationJob;
+class K3bVerificationJob;
 
 
 /**
@@ -89,7 +89,7 @@ class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
   int m_copies;
   int m_currentCopy;
 
-  K3bIsoImageVerificationJob* m_verifyJob;
+  K3bVerificationJob* m_verifyJob;
 
   class Private;
   Private* d;

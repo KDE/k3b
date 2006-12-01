@@ -30,6 +30,7 @@
 #include <k3biso9660.h>
 #include <k3bfilesplitter.h>
 #include <k3bchecksumpipe.h>
+#include <k3bverificationjob.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,7 +51,9 @@ public:
       writerJob(0),
       readcdReader(0),
       dataTrackReader(0),
-      usedWritingMode(0) {
+      verificationJob(0),
+      usedWritingMode(0),
+      verifyData(false) {
     outPipe.readFromIODevice( &imageFile );
   }
 
@@ -64,6 +67,7 @@ public:
   K3bGrowisofsWriter* writerJob;
   K3bReadcdReader* readcdReader;
   K3bDataTrackReader* dataTrackReader;
+  K3bVerificationJob* verificationJob;
 
   K3bDevice::DiskInfo sourceDiskInfo;
 
@@ -74,6 +78,8 @@ public:
   K3bFileSplitter imageFile;
   K3bChecksumPipe inPipe;
   K3bActivePipe outPipe;
+
+  bool verifyData;
 };
 
 
@@ -453,13 +459,12 @@ void K3bDvdCopyJob::prepareWriter()
 
 void K3bDvdCopyJob::slotReaderProgress( int p )
 {
-  if( !m_onTheFly || m_onlyCreateImage )
+  if( !m_onTheFly || m_onlyCreateImage ) {
     emit subPercent( p );
 
-  if( m_onlyCreateImage )
-    emit percent( p );
-  else if( !m_onTheFly )
-    emit percent( p/2 );
+    int bigParts = ( m_onlyCreateImage ? 1 : (m_simulate ? 2 : ( d->verifyData ? m_copies*2 : m_copies ) + 1 ) );
+    emit percent( p/bigParts );
+  }
 }
 
 
@@ -475,12 +480,19 @@ void K3bDvdCopyJob::slotReaderProcessedSize( int p, int c )
 
 void K3bDvdCopyJob::slotWriterProgress( int p )
 {
-  emit subPercent( p );
+  int bigParts = ( m_simulate ? 1 : ( d->verifyData ? m_copies*2 : m_copies ) ) + ( m_onTheFly ? 0 : 1 );
+  int doneParts = ( m_simulate ? 0 : ( d->verifyData ? d->doneCopies*2 : d->doneCopies ) ) + ( m_onTheFly ? 0 : 1 );
+  emit percent( 100*doneParts/bigParts + p/bigParts );
 
-  if( m_onTheFly )
-    emit percent( p );
-  else
-    emit percent( 50 + p/2 );
+  emit subPercent( p );
+}
+
+
+void K3bDvdCopyJob::slotVerificationProgress( int p )
+{
+  int bigParts = ( m_simulate ? 1 : ( d->verifyData ? m_copies*2 : m_copies ) ) + ( m_onTheFly ? 0 : 1 );
+  int doneParts = ( m_simulate ? 0 : ( d->verifyData ? d->doneCopies*2 : d->doneCopies ) ) + ( m_onTheFly ? 0 : 1 ) + 1;
+  emit percent( 100*doneParts/bigParts + p/bigParts );
 }
 
 
@@ -572,11 +584,39 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
   }
 
   if( success ) {
-    d->doneCopies++;
-
     emit infoMessage( i18n("Successfully written DVD copy %1.").arg(d->doneCopies), INFO );
 
-    if( d->doneCopies < m_copies ) {
+    if( d->verifyData && !m_simulate ) {
+      if( !d->verificationJob ) {
+	d->verificationJob = new K3bVerificationJob( this, this );
+	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
+		 this, SIGNAL(infoMessage(const QString&, int)) );
+	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+		 this, SIGNAL(newSubTask(const QString&)) );
+	connect( d->verificationJob, SIGNAL(percent(int)),
+		 this, SLOT(slotVerificationProgress(int)) );
+	connect( d->verificationJob, SIGNAL(percent(int)),
+		 this, SIGNAL(subPercent(int)) );
+	connect( d->verificationJob, SIGNAL(finished(bool)),
+		 this, SLOT(slotVerificationFinished(bool)) );
+	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+		 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+  
+      }
+      d->verificationJob->setDevice( m_writerDevice );
+      d->verificationJob->addTrack( 1, d->inPipe.checksum(), d->lastSector );
+
+      if( m_copies > 1 )
+	emit newTask( i18n("Verifying DVD copy %1").arg(d->doneCopies+1) );
+      else
+	emit newTask( i18n("Verifying DVD copy") );
+
+      emit burning( false );
+
+      d->verificationJob->start();
+    }
+
+    else if( ++d->doneCopies < m_copies ) {
 
       if( waitForDvd() ) {
 	prepareWriter();
@@ -617,6 +657,48 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
       removeImageFiles();
     d->running = false;
     jobFinished(false);
+  }
+}
+
+
+void K3bDvdCopyJob::slotVerificationFinished( bool success )
+{
+  // we simply ignore the results from the verification, the verification
+  // job already emits a message
+  if( ++d->doneCopies < m_copies ) {
+
+    if( waitForDvd() ) {
+      prepareWriter();
+      emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
+
+      emit burning(true);
+
+      d->writerRunning = true;
+      d->writerJob->start();
+    }
+    else {
+      if( d->canceled )
+	emit canceled();
+      jobFinished(false);
+      d->running = false;
+      return;
+    }
+      
+    if( m_onTheFly ) {
+      prepareReader();
+      d->readerRunning = true;
+      d->dataTrackReader->start();
+    }
+    else {
+      d->outPipe.writeToFd( d->writerJob->fd(), true );
+      d->outPipe.open( true );
+    }
+  }
+  else {
+    if( m_removeImageFiles )
+      removeImageFiles();
+    d->running = false;
+    jobFinished( success );
   }
 }
 
@@ -710,9 +792,9 @@ bool K3bDvdCopyJob::waitForDvd()
       // if this size is wrong
       // With growisofs 5.15 we have the option to specify the size of the image to be written in DAO mode.
       //
-      bool sizeWithDao = ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
-			   k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) );
-
+//       bool sizeWithDao = ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+// 			   k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) );
+      
 
       // TODO: check for feature 0x21
 
@@ -787,6 +869,12 @@ QString K3bDvdCopyJob::jobDetails() const
   return i18n("Creating 1 copy", 
 	      "Creating %n copies", 
 	      (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
+}
+
+
+void K3bDvdCopyJob::setVerifyData( bool b )
+{
+  d->verifyData = b;
 }
 
 #include "k3bdvdcopyjob.moc"

@@ -69,6 +69,7 @@ class K3bDvdCopyDialog : public K3bInteractionDialog
   QCheckBox* m_checkDeleteImages;
   QCheckBox* m_checkOnlyCreateImage;
   QCheckBox* m_checkCacheImage;
+  QCheckBox* m_checkVerifyData;
   QSpinBox* m_spinCopies;
   QSpinBox* m_spinRetries;
   QCheckBox* m_checkIgnoreReadErrors;

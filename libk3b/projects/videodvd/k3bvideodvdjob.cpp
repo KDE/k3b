@@ -20,7 +20,6 @@
 
 #include <k3bcore.h>
 #include <k3bisoimager.h>
-#include <k3bdataverifyingjob.h>
 #include <k3bgrowisofswriter.h>
 #include <k3bglobals.h>
 
