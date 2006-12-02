@@ -367,6 +367,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // the only defaults we need here are the volume id and stuff
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
     dataDoc->setIsoOptions( K3bIsoOptions::load( c ) );
+    dataDoc->setVerifyData( c->readBoolEntry( "verify data", false ) );
     break;
   }
 
