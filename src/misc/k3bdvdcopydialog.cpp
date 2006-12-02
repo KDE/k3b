@@ -266,7 +266,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
   job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
   job->setImagePath( m_tempDirSelectionWidget->tempPath() );
-  job->setRemoveImageFiles( m_checkDeleteImages->isChecked() );
+  job->setRemoveImageFiles( m_checkDeleteImages->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
   job->setSimulate( m_checkSimulate->isChecked() );
   job->setOnTheFly( !m_checkCacheImage->isChecked() );
@@ -407,9 +407,6 @@ void K3bDvdCopyDialog::toggleAll()
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || !m_checkCacheImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
-  if( m_checkOnlyCreateImage->isChecked() )
-    m_checkDeleteImages->setChecked( false );
-
   m_checkVerifyData->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkSimulate->isChecked() );
   
   setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() && 

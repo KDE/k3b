@@ -83,6 +83,7 @@ public:
   Private()
     : md5SumItem(0),
       haveMd5Sum( false ),
+      foundImageType( IMAGE_UNKNOWN ),
       imageForced( false ) {
   }
 

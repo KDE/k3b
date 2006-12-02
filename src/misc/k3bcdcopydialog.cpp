@@ -313,7 +313,7 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
     job->setImagePath( m_tempDirSelectionWidget->tempPath() );
     job->setNoCorrection( m_checkNoCorrection->isChecked() );
-    job->setRemoveImageFiles( m_checkDeleteImages->isChecked() );
+    job->setRemoveImageFiles( m_checkDeleteImages->isChecked() && !m_checkOnlyCreateImage->isChecked() );
     job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
     job->setSimulate( m_checkSimulate->isChecked() );
     job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -330,7 +330,7 @@ void K3bCdCopyDialog::slotStartClicked()
     job->setSpeed( m_writerSelectionWidget->writerSpeed() );
     job->setSimulate( m_checkSimulate->isChecked() );
     job->setOnTheFly( !m_checkCacheImage->isChecked() );
-    job->setKeepImage( !m_checkDeleteImages->isChecked() );
+    job->setKeepImage( !m_checkDeleteImages->isChecked() || m_checkOnlyCreateImage->isChecked() );
     job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
     job->setTempPath( m_tempDirSelectionWidget->plainTempPath() );
     job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
@@ -376,9 +376,6 @@ void K3bCdCopyDialog::slotToggleAll()
   m_checkOnlyCreateImage->setEnabled( m_checkCacheImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-
-  if ( m_checkOnlyCreateImage->isChecked() )
-    m_checkDeleteImages->setChecked( false );
 
   if( m_comboCopyMode->currentItem() == 1 ) {
     // cdrecord does not support cloning on-the-fly
