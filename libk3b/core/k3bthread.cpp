@@ -42,6 +42,10 @@ void K3bThread::waitUntilFinished()
 class K3bThread::Private
 {
 public:
+  Private()
+    : eventHandler( 0 ) {
+  }
+
   QObject* eventHandler;
 };
 
