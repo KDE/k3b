@@ -20,9 +20,15 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 
-#include <sys/vfs.h>
 #include <errno.h>
 #include <string.h>
+
+#ifdef Q_OS_FREEBSD
+#include <sys/param.h>
+#include <sys/mount.h>
+#else
+#include <sys/vfs.h>
+#endif
 
 
 class K3bFileSplitter::Private
