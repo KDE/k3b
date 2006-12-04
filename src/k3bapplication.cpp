@@ -127,6 +127,7 @@ void K3bApplication::init()
 
   m_mainWindow = new K3bMainWindow();
   m_core->m_mainWindow = m_mainWindow;
+  m_core->interface()->setMainWindow( m_mainWindow );
 
   if( isRestored() ) {
     // we only have one single mainwindow to restore  
@@ -319,7 +320,7 @@ K3bApplication::Core::Core( QObject* parent )
   m_themeManager->loadThemes();
 
   m_jobInterface = new K3bJobInterface( this );
-  m_interface = new K3bInterface( m_mainWindow );
+  m_interface = new K3bInterface();
   dcopClient()->setDefaultObject( m_interface->objId() );
 }
 

@@ -31,9 +31,9 @@
 
 
 
-K3bInterface::K3bInterface( K3bMainWindow* w )
+K3bInterface::K3bInterface()
   : DCOPObject( "K3bInterface" ),
-    m_main( w )
+    m_main( 0 )
 {
 }
 

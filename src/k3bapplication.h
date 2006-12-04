@@ -105,6 +105,8 @@ class K3bApplication::Core : public K3bCore
 
   K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
+  K3bInterface* interface() const { return m_interface; }
+
   K3bJobInterface* jobInterface() const { return m_jobInterface; }
 
   static Core* k3bAppCore() { return s_k3bAppCore; }

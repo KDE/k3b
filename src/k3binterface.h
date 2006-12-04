@@ -34,7 +34,9 @@ class K3bInterface : public DCOPObject
   K_DCOP
 
  public:
-  K3bInterface( K3bMainWindow* );
+  K3bInterface();
+
+  void setMainWindow( K3bMainWindow* mw ) { m_main = mw; }
 
  k_dcop:
   /**
