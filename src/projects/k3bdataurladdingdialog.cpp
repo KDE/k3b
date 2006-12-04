@@ -78,7 +78,8 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
   grid->setMargin( 0 );
 
   m_counterLabel = new QLabel( page );
-  m_infoLabel = new KSqueezedTextLabel( i18n("Preparing..."), page );
+  m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'")
+					.arg(doc->URL().fileName()) + "...", page );
   m_progressWidget = new KProgress( 0, page );
 
   grid->addWidget( m_counterLabel, 0, 1 );
@@ -263,11 +264,14 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   bool isFile = false;
 
   ++m_filesHandled;
+
+#if 0
   m_infoLabel->setText( url.path() );
   if( m_totalFiles == 0 )
     m_counterLabel->setText( QString("(%1)").arg(m_filesHandled) );
   else
     m_counterLabel->setText( QString("(%1/%2)").arg(m_filesHandled).arg(m_totalFiles) );
+#endif
 
   //
   // 1. Check if we want and can add the url
