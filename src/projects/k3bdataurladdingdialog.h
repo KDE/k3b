@@ -58,6 +58,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
   void slotCopyMoveItems();
   void slotCancel();
   void slotDirSizeDone( bool );
+  void updateProgress();
 
  private:
   K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent = 0, const char* name = 0 );
@@ -102,6 +103,8 @@ class K3bDataUrlAddingDialog : public KDialogBase
   KIO::filesize_t m_totalFiles;
   KIO::filesize_t m_filesHandled;
   K3bDirSizeJob* m_dirSizeJob;
+
+  unsigned int m_lastProgress;
 };
 
 #endif

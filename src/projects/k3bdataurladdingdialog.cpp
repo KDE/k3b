@@ -68,7 +68,8 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
     m_iAddSystemFiles(0),
     m_bCanceled(false),
     m_totalFiles(0),
-    m_filesHandled(0)
+    m_filesHandled(0),
+    m_lastProgress(0)
 {
   m_encodingConverter = new K3bEncodingConverter();
 
@@ -91,7 +92,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
 	   this, SLOT(slotDirSizeDone(bool)) );
 
   // try to start with a reasonable size
-  resize( fontMetrics().width( caption() ) * 1.5, sizeHint().height() );
+  resize( (int)( fontMetrics().width( caption() ) * 1.5 ), sizeHint().height() );
 }
 
 
@@ -569,11 +570,11 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
   if( m_urlQueue.isEmpty() ) {
     m_dirSizeJob->cancel();
-    m_progressWidget->setProgress( m_totalFiles );
+    m_progressWidget->setProgress( 100 );
     accept();
   }
   else {
-    m_progressWidget->setProgress( m_filesHandled );
+    updateProgress();
     QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
   }
 }
@@ -726,7 +727,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
     accept();
   }
   else {
-    m_progressWidget->setProgress( m_filesHandled );
+    updateProgress();
     QTimer::singleShot( 0, this, SLOT(slotCopyMoveItems()) );
   }
 }
@@ -787,14 +788,30 @@ void K3bDataUrlAddingDialog::slotDirSizeDone( bool success )
   if( success ) {
     m_totalFiles += m_dirSizeJob->totalFiles() + m_dirSizeJob->totalDirs();
     if( m_dirSizeQueue.isEmpty() ) {
-      m_progressWidget->setTotalSteps( m_totalFiles );
-      m_progressWidget->setProgress( m_filesHandled );
+      m_progressWidget->setTotalSteps( 100 );
+      updateProgress();
     }
     else {
       m_dirSizeJob->setUrls( m_dirSizeQueue.back() );
       m_dirSizeQueue.pop_back();
       m_dirSizeJob->start();
     }
+  }
+}
+
+
+void K3bDataUrlAddingDialog::updateProgress()
+{
+  if( m_totalFiles > 0 ) {
+    unsigned int p = 100*m_filesHandled/m_totalFiles;
+    if( p > m_lastProgress ) {
+      m_lastProgress = p;
+      m_progressWidget->setProgress( p );
+    }
+  }
+  else {
+    // make sure the progress bar shows something
+    m_progressWidget->setProgress( m_filesHandled );
   }
 }
 
