@@ -566,8 +566,11 @@ void K3bFileTreeView::slotItemExecuted( QListViewItem* item )
 {
   KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
   if( d->branchDeviceMap.contains( treeItem->branch() ) &&
-      treeItem == treeItem->branch()->root() )
-    emit deviceExecuted( d->branchDeviceMap[treeItem->branch()] );
+      treeItem == treeItem->branch()->root() ) {
+    K3bDevice::Device* dev = d->branchDeviceMap[treeItem->branch()];
+      k3bappcore->appDeviceManager()->setCurrentDevice( dev );
+    emit deviceExecuted( dev );
+  }
   else
     emit urlExecuted( treeItem->url() );
 }

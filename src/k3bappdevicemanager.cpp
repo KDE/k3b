@@ -42,45 +42,47 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
 
   // setup actions
   KActionMenu* devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup" );
-  KAction* actionDiskInfo = new KAction( i18n("Media &Info"), "info", 0, this, SLOT(diskInfo()),
-					 m_actionCollection, "device_diskinfo");
-  KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(unmountDisk()),
-					m_actionCollection, "device_unmount");
-  KAction* actionMount = new KAction( i18n("&Mount"), "cdrom_mount", 0, this, SLOT(mountDisk()),
-				      m_actionCollection, "device_mount");
-  KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(ejectDisk()),
-					m_actionCollection, "device_eject");
-  KAction* actionLoad = new KAction( i18n("L&oad"), "", 0, this, SLOT(loadDisk()),
-					m_actionCollection, "device_load");
+  m_actionDiskInfo = new KAction( i18n("Media &Info"), "info", 0, this, SLOT(diskInfo()),
+				  m_actionCollection, "device_diskinfo");
+  m_actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(unmountDisk()),
+				 m_actionCollection, "device_unmount");
+  m_actionMount = new KAction( i18n("&Mount"), "cdrom_mount", 0, this, SLOT(mountDisk()),
+			       m_actionCollection, "device_mount");
+  m_actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(ejectDisk()),
+			       m_actionCollection, "device_eject");
+  m_actionLoad = new KAction( i18n("L&oad"), "", 0, this, SLOT(loadDisk()),
+			      m_actionCollection, "device_load");
 //   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
 // 				       m_actionCollection, "device_unlock" );
 //   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
 // 				     m_actionCollection, "device_lock" );
-  KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(setReadSpeed()),
-					     m_actionCollection, "device_set_read_speed" );
+  m_actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(setReadSpeed()),
+				      m_actionCollection, "device_set_read_speed" );
 
-  actionDiskInfo->setToolTip( i18n("Display generic medium information") );
-  actionUnmount->setToolTip( i18n("Unmount the medium") );
-  actionMount->setToolTip( i18n("Mount the medium") );
-  actionEject->setToolTip( i18n("Eject the medium") );
-  actionLoad->setToolTip( i18n("(Re)Load the medium") );
-  actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
+  m_actionDiskInfo->setToolTip( i18n("Display generic medium information") );
+  m_actionUnmount->setToolTip( i18n("Unmount the medium") );
+  m_actionMount->setToolTip( i18n("Mount the medium") );
+  m_actionEject->setToolTip( i18n("Eject the medium") );
+  m_actionLoad->setToolTip( i18n("(Re)Load the medium") );
+  m_actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
 
-  devicePopupMenu->insert( actionDiskInfo );
+  devicePopupMenu->insert( m_actionDiskInfo );
   devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( actionUnmount );
-  devicePopupMenu->insert( actionMount );
+  devicePopupMenu->insert( m_actionUnmount );
+  devicePopupMenu->insert( m_actionMount );
   devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( actionEject );
-  devicePopupMenu->insert( actionLoad );
+  devicePopupMenu->insert( m_actionEject );
+  devicePopupMenu->insert( m_actionLoad );
 //  devicePopupMenu->insert( new KActionSeparator( this ) );
 //  devicePopupMenu->insert( actionUnlock );
 //  devicePopupMenu->insert( actionlock );
   devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( actionSetReadSpeed );
+  devicePopupMenu->insert( m_actionSetReadSpeed );
 
-  connect( devicePopupMenu->popupMenu(), SIGNAL(aboutToShow()),
-	   this, SLOT(slotMenuActivated()) );
+  setCurrentDevice( 0 );
+
+  connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
+	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 }
 
 
@@ -127,12 +129,21 @@ K3bAppDeviceManager::~K3bAppDeviceManager()
 }
 
 
-void K3bAppDeviceManager::slotMenuActivated()
+void K3bAppDeviceManager::slotMediumChanged( K3bDevice::Device* dev )
 {
-  bool mounted = K3b::isMounted( currentDevice() );
-  bool mediumMountable = k3bappcore->mediaCache()->medium( currentDevice() ).content() & K3bMedium::CONTENT_DATA;
-  actionCollection()->action( "device_mount" )->setEnabled( !mounted && mediumMountable );
-  actionCollection()->action( "device_unmount" )->setEnabled( mounted );
+  m_actionDiskInfo->setEnabled( dev != 0 );
+  m_actionUnmount->setEnabled( dev != 0 );
+  m_actionMount->setEnabled( dev != 0 );
+  m_actionEject->setEnabled( dev != 0 );
+  m_actionLoad->setEnabled( dev != 0 );
+  m_actionSetReadSpeed->setEnabled( dev != 0 );
+
+  if( dev && dev == currentDevice() ) {
+    bool mounted = K3b::isMounted( dev );
+    bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_DATA;
+    m_actionMount->setEnabled( !mounted && mediumMountable );
+    m_actionUnmount->setEnabled( mounted );
+  }
 }
 
 
@@ -142,6 +153,8 @@ void K3bAppDeviceManager::setCurrentDevice( K3bDevice::Device* dev )
     m_currentDevice = dev;
     emit currentDeviceChanged( dev );
   }
+
+  slotMediumChanged( dev );
 }
 
 

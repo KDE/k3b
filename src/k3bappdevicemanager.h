@@ -17,6 +17,7 @@
 #define _K3B_APP_DEVICE_MANAGER_H_
 
 class KActionCollection;
+class KAction;
 
 namespace K3bDevice {
   class Device;
@@ -96,9 +97,16 @@ class K3bAppDeviceManager : public K3bDevice::DeviceManager
   void setReadSpeed( K3bDevice::Device* );
 
  private slots:
-  void slotMenuActivated();
+  void slotMediumChanged( K3bDevice::Device* dev );
 
  private:
+  KAction* m_actionDiskInfo;
+  KAction* m_actionUnmount;
+  KAction* m_actionMount;
+  KAction* m_actionEject;
+  KAction* m_actionLoad;
+  KAction* m_actionSetReadSpeed;
+
   mutable K3bDevice::Device* m_currentDevice;
   KActionCollection* m_actionCollection;
   K3bDevice::DiskInfoDetector* m_diskInfoDetector;
