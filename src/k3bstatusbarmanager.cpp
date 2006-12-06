@@ -26,6 +26,7 @@
 #include <k3bmixeddoc.h>
 #include <k3bvcddoc.h>
 #include <k3bdiritem.h>
+#include <k3bview.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -87,6 +88,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 	   this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
   connect( k3bappcore->projectManager(), SIGNAL(projectChanged(K3bDoc*)),
 	   this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
+  connect( (m_updateTimer = new QTimer( this )), SIGNAL(timeout()), this, SLOT(slotUpdateProjectStats()) );
 
   update();
 }
@@ -172,6 +174,22 @@ static QString dataDocStats( K3bDataDoc* dataDoc )
 void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
 {
   if( doc && doc == k3bappcore->projectManager()->activeProject() ) {
+    // cache updates
+    if( !m_updateTimer->isActive() ) {
+      slotUpdateProjectStats();
+      m_updateTimer->start( 1000, false );
+    }
+  }
+  else if( !doc ) {
+    m_labelProjectInfo->setText( QString() );
+  }
+}
+
+
+void K3bStatusBarManager::slotUpdateProjectStats()
+{
+  K3bDoc* doc = k3bappcore->projectManager()->activeProject();
+  if( doc ) {
     switch( doc->type() ) {
     case K3bDoc::AUDIO: {
       K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>( doc );
@@ -224,7 +242,7 @@ void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
     }
     }
   }
-  else if( !doc ) {
+  else {
     m_labelProjectInfo->setText( QString() );
   }
 }

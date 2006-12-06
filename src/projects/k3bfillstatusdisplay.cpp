@@ -352,7 +352,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const 
   showDvdSizes( false );
 
   connect( d->doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
-  connect( &d->updateTimer, SIGNAL(timeout()), d->displayWidget, SLOT(update()) );
+  connect( &d->updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
   connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 }
@@ -721,18 +721,22 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
 }
 
 
-void K3bFillStatusDisplay::slotDocChanged()
+void K3bFillStatusDisplay::slotUpdateDisplay()
 {
-  // cache updates
-  if( !d->updateTimer.isActive() ) {
-    d->displayWidget->update();
-    d->updateTimer.start( 2000, false );
-  }
-
   //
   // also update the medium list in case the docs size exceeds the capacity
   //
   slotMediumChanged( 0 );
+}
+
+
+void K3bFillStatusDisplay::slotDocChanged()
+{
+  // cache updates
+  if( !d->updateTimer.isActive() ) {
+    slotUpdateDisplay();
+    d->updateTimer.start( 1000, false );
+  }
 }
 
 #include "k3bfillstatusdisplay.moc"

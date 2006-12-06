@@ -102,6 +102,7 @@ class K3bFillStatusDisplay : public QFrame  {
   void slotDetermineSize();
   void slotDocChanged();
   void slotMediumChanged( K3bDevice::Device* dev );
+  void slotUpdateDisplay();
 
   void slotLoadUserDefaults();
   void slotSaveUserDefaults();

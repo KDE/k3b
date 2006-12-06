@@ -24,7 +24,7 @@ class QLabel;
 class K3bMainWindow;
 class QEvent;
 class K3bDoc;
-
+class QTimer;
 
 class K3bStatusBarManager : public QObject
 {
@@ -42,6 +42,7 @@ class K3bStatusBarManager : public QObject
   void showActionStatusText( const QString& text );
   void clearActionStatusText();
   void slotActiveProjectChanged( K3bDoc* doc );
+  void slotUpdateProjectStats();
 
  private:
   bool eventFilter( QObject* o, QEvent* e );
@@ -53,6 +54,8 @@ class K3bStatusBarManager : public QObject
   QLabel* m_labelProjectInfo;
 
   K3bMainWindow* m_mainWindow;
+
+  QTimer* m_updateTimer;
 };
 
 #endif
