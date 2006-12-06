@@ -109,7 +109,7 @@ void K3bFileTreeComboBox::slotUrlExecuted( const KURL& url )
 
 void K3bFileTreeComboBox::setUrl( const KURL& url )
 {
-  setEditText( SmallIcon("folder"), url.path() );
+  setEditText( SmallIcon("folder"), K3b::convertToLocalUrl(url).path() );
   popdown();
 }
 

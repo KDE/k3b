@@ -16,6 +16,7 @@
 #include "k3bpluginmanager.h"
 #include "k3bplugin.h"
 #include "k3bpluginconfigwidget.h"
+#include <k3bversion.h>
 
 #include <kdebug.h>
 #include <ksimpleconfig.h>
@@ -111,7 +112,26 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 					      c.readEntry( "Comment" ),
 					      c.readEntry( "Version" ),
 					      c.readEntry( "License" ) );
-	d->plugins.append( plugin );
+
+	// make sure to only use the latest version of one plugin
+	bool addPlugin = true;
+	for( QPtrListIterator<K3bPlugin> it( d->plugins ); *it; ++it ) {
+	  if( it.current()->pluginInfo().name() == plugin->pluginInfo().name() ) {
+	    if( K3bVersion(it.current()->pluginInfo().version()) < K3bVersion(plugin->pluginInfo().version()) ) {
+	      K3bPlugin* p = it.current();
+	      d->plugins.removeRef( p );
+	      delete p;
+	    }
+	    else {
+	      addPlugin = false;
+	    }
+	    break;
+	  }
+	}
+	if( addPlugin )
+	  d->plugins.append( plugin );
+	else
+	  delete plugin;
       }
     }
     else

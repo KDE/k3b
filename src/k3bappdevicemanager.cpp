@@ -59,6 +59,13 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
   KAction* actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(setReadSpeed()),
 					     m_actionCollection, "device_set_read_speed" );
 
+  actionDiskInfo->setToolTip( i18n("Display generic medium information") );
+  actionUnmount->setToolTip( i18n("Unmount the medium") );
+  actionMount->setToolTip( i18n("Mount the medium") );
+  actionEject->setToolTip( i18n("Eject the medium") );
+  actionLoad->setToolTip( i18n("(Re)Load the medium") );
+  actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
+
   devicePopupMenu->insert( actionDiskInfo );
   devicePopupMenu->insert( new KActionSeparator( this ) );
   devicePopupMenu->insert( actionUnmount );

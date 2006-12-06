@@ -291,8 +291,8 @@ void K3bMainWindow::initActions()
 					       SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
-  (void)new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
-		    actionCollection(), "tools_write_dvd_iso" );
+  KAction* actionToolsWriteDvdImage = new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
+						 actionCollection(), "tools_write_dvd_iso" );
 
   actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
 			     actionCollection(), "tools_copy_cd" );
@@ -331,7 +331,8 @@ void K3bMainWindow::initActions()
   actionToolsBlankCdrw->setToolTip( i18n("Open the CD-RW erasing dialog") );
   actionToolsFormatDVD->setToolTip( i18n("Open the DVD%1RW formatting dialog").arg("±") );
   actionCdCopy->setToolTip( i18n("Open the CD copy dialog") );
-  actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image") );
+  actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to CD") );
+  actionToolsWriteDvdImage->setToolTip( i18n("Write an Iso9660 image to DVD") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
