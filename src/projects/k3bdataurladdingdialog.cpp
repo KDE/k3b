@@ -254,6 +254,12 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   KURL url = m_urlQueue.first().first;
   K3bDirItem* dir = m_urlQueue.first().second;
   m_urlQueue.remove( m_urlQueue.begin() );
+  //
+  // HINT:
+  // we only use QFileInfo::absFilePath() and QFileInfo::isHidden()
+  // both do not cause QFileInfo to stat, thus no speed improvement
+  // can come from removing QFileInfo usage here.
+  //
   QFileInfo info(url.path());
   QString absFilePath( info.absFilePath() );
   QString resolved( absFilePath );
