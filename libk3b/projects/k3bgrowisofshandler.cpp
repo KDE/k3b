@@ -106,6 +106,10 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
       m_error = ERROR_MEMLOCK;
     }
 
+    else if( line.startsWith( ":-( write failed" ) ) {
+      m_error = ERROR_WRITE_FAILED;
+    }
+
     else  
       emit infoMessage( line, K3bJob::ERROR );
   }
@@ -251,6 +255,10 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
     emit infoMessage( i18n("This error is caused by the low memorylocked resource limit."), K3bJob::ERROR );
     emit infoMessage( i18n("It can be solved by issuing the command 'ulimit -l unlimited'..."), K3bJob::ERROR );
     emit infoMessage( i18n("...or by lowering the used software buffer size in the advanced K3b settings."), K3bJob::ERROR );
+    break;
+
+  case ERROR_WRITE_FAILED:
+    emit infoMessage( i18n("Write error"), K3bJob::ERROR );
     break;
 
   default:

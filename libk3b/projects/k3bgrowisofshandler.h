@@ -43,7 +43,8 @@ class K3bGrowisofsHandler : public QObject
     ERROR_OVERSIZE,
     ERROR_SPEED_SET_FAILED,
     ERROR_OPC,
-    ERROR_MEMLOCK
+    ERROR_MEMLOCK,
+    ERROR_WRITE_FAILED
   };
 
   int error() const { return m_error; }

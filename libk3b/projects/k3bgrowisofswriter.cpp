@@ -521,7 +521,8 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 
   d->finished = true;
 
-  if( p->exitStatus() == 0 ) {
+  // it seems that growisofs sometimes exits with a valid exit code while a write error occured
+  if( p->exitStatus() == 0 && d->gh->error() != K3bGrowisofsHandler::ERROR_WRITE_FAILED ) {
 
     int s = d->speedEst->average();
     if( s > 0 )
