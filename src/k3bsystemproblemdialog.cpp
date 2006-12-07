@@ -53,6 +53,8 @@
 #include <langinfo.h>
 #endif
 
+#include <fstab.h>
+
 
 K3bSystemProblem::K3bSystemProblem( int t,
 				    const QString& p,
@@ -323,32 +325,29 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   bool dvd_r_dl = false;
   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
        it.current(); ++it ) {
-    if( it.current()->interfaceType() == K3bDevice::IDE ) {
+    if( it.current()->interfaceType() == K3bDevice::IDE )
       atapiReader = true;
-      break;
-    }
+    if( it.current()->type() & K3bDevice::DEVICE_DVD_R_DL )
+      dvd_r_dl = true;
   }
 
-#warning FIXME: do an fstab scan do check for automounted devices
-//   for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->burningDevices() );
-//        it.current(); ++it ) {
-//     if( it.current()->interfaceType() == K3bDevice::IDE )
-//       atapiWriter = true;
-//     if( it.current()->type() & K3bDevice::DEVICE_DVD_R_DL )
-//       dvd_r_dl = true;
 
-//     if( it.current()->automount() ) {
-//       problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-// 					 i18n("Writing device %1 - %2 is automounted.")
-// 					 .arg(it.current()->vendor()).arg(it.current()->description()),
-// 					 i18n("Automounting can cause problems with CD/DVD writing, especially "
-// 					      "with rewritable media. Although it might all work just fine it "
-// 					      "is recommended to disable automounting completely for now."),
-// 					 i18n("Replace the automounting entries in /etc/fstab with old-fashioned "
-// 					      "ones or use pmount or ivman."),
-// 					 false ) );
-//     }
-//   }
+  // check automounted devices
+  QPtrList<K3bDevice::Device> automountedDevices = checkForAutomounting();
+  for( QPtrListIterator<K3bDevice::Device> it( automountedDevices );
+       it.current(); ++it ) {
+    problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+				       i18n("Device %1 - %2 is automounted.")
+				       .arg(it.current()->vendor()).arg(it.current()->description()),
+				       i18n("K3b is not able to unmount automounted devices. Thus, especially "
+					    "DVD+RW rewriting might fail. There is no need to report this as "
+					    "a bug or feature wish; it is not possible to solve this problem "
+					    "from within K3b."),
+				       i18n("Replace the automounting entries in /etc/fstab with old-fashioned "
+					    "ones or use a user-space mounting solution like pmount or ivman."),
+				       false ) );
+  }
+
 
   if( atapiWriter ) {
     if( !K3b::plainAtapiSupport() &&
@@ -593,6 +592,40 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
     return 0;
   else
     return -1;
+}
+
+
+QPtrList<K3bDevice::Device> K3bSystemProblemDialog::checkForAutomounting()
+{
+  QPtrList<K3bDevice::Device> l;
+
+  ::setfsent();
+
+  struct fstab * mountInfo = 0;
+  while( (mountInfo = ::getfsent()) )
+  {
+    // check if the entry corresponds to a device
+    QString md = K3b::resolveLink( QFile::decodeName( mountInfo->fs_spec ) );
+    QString type = QFile::decodeName( mountInfo->fs_vfstype );
+
+    if( type == "supermount" || type == "subfs" ) {
+      // parse the device
+      QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->fs_mntops) );
+      for( QStringList::const_iterator it = opts.begin(); it != opts.end(); ++it ) {
+	if( (*it).startsWith("dev=") ) {
+	  md = (*it).mid( 4 );
+	  break;
+	}
+      }
+
+      if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( md ) )
+	l.append( dev );
+    }
+  } // while mountInfo
+
+  ::endfsent();
+
+  return l;
 }
 
 
