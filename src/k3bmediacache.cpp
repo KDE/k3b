@@ -206,6 +206,11 @@ bool K3bMediaCache::unblockDevice( K3bDevice::Device* dev, int id )
   if( e && e->blockedId && e->blockedId == id ) {
     e->blockedId = 0;
 
+    // for security reasons we emit no medium signal at this point
+    // otherwise a job might resuse the old medium information
+    e->medium = K3bMedium( dev );
+    emit mediumChanged( dev );
+
     // restart the poll thread
     e->thread->start();
 
