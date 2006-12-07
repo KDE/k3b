@@ -51,6 +51,8 @@ K3bLsofWrapperDialog::K3bLsofWrapperDialog( QWidget* parent )
 		 KGuiItem( i18n("Quit the other applications") ),
 		 KGuiItem( i18n("Check again") ) )
 {
+  setButtonText( Close, i18n("Continue") );
+
   m_label = new K3bRichTextLabel( this );
   setMainWidget( m_label );
 
