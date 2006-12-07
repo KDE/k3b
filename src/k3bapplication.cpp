@@ -178,6 +178,9 @@ bool K3bApplication::processCmdLineArgs()
   bool dialogOpen = false;
 
   if( k3bcore->jobsRunning() > 0 ) {
+    K3bPassivePopup::showPopup( i18n("K3b is currently busy and cannot start any other operations."),
+				i18n("K3b is busy"),
+				K3bPassivePopup::Information );
     return true;
   }
 
