@@ -415,6 +415,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     writer->setWritingMode( m_writingMode == K3b::DAO ? K3b::DAO : 0 );
     writer->setImageToWrite( QString::null ); // read from stdin
     writer->setCloseDvd( !m_noFix );
+    writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );
 
     m_writer = writer;
   }
