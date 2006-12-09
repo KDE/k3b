@@ -21,6 +21,8 @@
 #include <k3baudioserver.h>
 #include <k3bcore.h>
 #include <k3bservicemenuinstaller.h>
+#include <k3binteractiondialog.h>
+#include <k3bintmapcombobox.h>
 
 #include <qcheckbox.h>
 #include <qfileinfo.h>
@@ -42,6 +44,21 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
   m_editTempDir->setMode( KFile::Directory );
   connect( m_buttonConfigureAudioOutput, SIGNAL(clicked()),
 	   this, SLOT(slotConfigureAudioOutput()) );
+
+  m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_K3B_DEFAULTS, 
+					   i18n("Default Settings"),
+					   i18n("Load the K3b Defaults at dialog startup.") );
+  m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_SAVED_SETTINGS, 
+					   i18n("Saved Settings"),
+					   i18n("Load the settings saved by the user at dialog startup.") );
+  m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_LAST_SETTINGS, 
+					   i18n("Last Used Settings"),
+					   i18n("Load the last used settings at dialog startup.") );
+  m_comboActionDialogSettings->addGlobalWhatsThisText( i18n("K3b handles three sets of settings in action dialogs "
+							    "(action dialogs include the CD Copy dialog or the Audio CD "
+							    "project dialog):"),
+						       i18n("One of these sets is loaded once an action dialog is opened. "
+							    "This setting defines which set it will be.") );
 }
 
 
@@ -59,6 +76,8 @@ void K3bMiscOptionTab::readSettings()
   m_checkShowProgressOSD->setChecked( c->readBoolEntry( "Show progress OSD", true ) );
   m_checkHideMainWindowWhileWriting->setChecked( c->readBoolEntry( "hide main window while writing", false ) );
   m_checkKeepDialogsOpen->setChecked( c->readBoolEntry( "keep action dialogs open", false ) );
+  m_comboActionDialogSettings->setSelectedValue( c->readNumEntry( "action dialog startup settings", 
+								  K3bInteractionDialog::LOAD_SAVED_SETTINGS ) );
   m_checkSystemConfig->setChecked( c->readBoolEntry( "check system config", true ) );
 
   QString tempdir = c->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
@@ -95,6 +114,7 @@ bool K3bMiscOptionTab::saveSettings()
   c->writeEntry( "hide main window while writing", m_checkHideMainWindowWhileWriting->isChecked() );
   c->writeEntry( "keep action dialogs open", m_checkKeepDialogsOpen->isChecked() );
   c->writeEntry( "check system config", m_checkSystemConfig->isChecked() );
+  c->writeEntry( "action dialog startup settings", m_comboActionDialogSettings->selectedValue() );
 
   QString tempDir = m_editTempDir->url();
   QFileInfo fi( tempDir );

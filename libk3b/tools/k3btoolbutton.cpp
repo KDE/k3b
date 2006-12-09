@@ -27,6 +27,7 @@ class K3bToolButton::Private
 {
 public:
   QPoint mousePressPos;
+  bool instantMenu;
 };
 
 
@@ -34,6 +35,7 @@ K3bToolButton::K3bToolButton( QWidget* parent )
   : QToolButton( parent )
 {
   d = new Private;
+  d->instantMenu = false;
   installEventFilter(this);
 }
 
@@ -41,6 +43,12 @@ K3bToolButton::K3bToolButton( QWidget* parent )
 K3bToolButton::~K3bToolButton()
 {
   delete d;
+}
+
+
+void K3bToolButton::setInstantMenu( bool b )
+{
+  d->instantMenu = b;
 }
 
 
@@ -75,12 +83,21 @@ bool K3bToolButton::eventFilter( QObject* o, QEvent* ev )
     // is moved by a small distance.
     if( QToolButton::popup() ) {
       if( ev->type() == QEvent::MouseButtonPress ) {
-        QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
-        d->mousePressPos = mev->pos();
+	QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
+
+	if( d->instantMenu ) {
+	  setDown(true);
+	  openPopup();
+	  return true;
+	}
+	else {
+	  d->mousePressPos = mev->pos();
+	}
       }
       else if( ev->type() == QEvent::MouseMove ) {
         QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
-        if( ( mev->pos() - d->mousePressPos).manhattanLength() > KGlobalSettings::dndEventDelay() ) {
+        if( !d->instantMenu &&
+	    ( mev->pos() - d->mousePressPos).manhattanLength() > KGlobalSettings::dndEventDelay() ) {
 	  openPopup();
           return true;
         }

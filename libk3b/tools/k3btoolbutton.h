@@ -36,6 +36,8 @@ class LIBK3B_EXPORT K3bToolButton : public QToolButton
   K3bToolButton( QWidget* parent = 0 );
   ~K3bToolButton();
 
+  void setInstantMenu( bool );
+
  protected:
   virtual void drawButton( QPainter* );
   virtual bool eventFilter( QObject*, QEvent* );

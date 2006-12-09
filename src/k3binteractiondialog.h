@@ -124,6 +124,12 @@ class K3bInteractionDialog : public KDialog
    */
   bool exitLoopOnHide() const { return m_exitLoopOnHide; }
 
+  enum StartUpSettings {
+    LOAD_K3B_DEFAULTS = 1,
+    LOAD_SAVED_SETTINGS = 2,
+    LOAD_LAST_SETTINGS = 3
+  };
+
  signals:
   void started();
   void canceled();
@@ -247,6 +253,7 @@ class K3bInteractionDialog : public KDialog
   void initConnections();
   void initToolTipsAndWhatsThis();
   void saveLastSettings();
+  void loadStartupSettings();
 
   KPushButton* getButton( int );
 
@@ -256,9 +263,8 @@ class K3bInteractionDialog : public KDialog
   KPushButton* m_buttonCancel;
   QWidget* m_mainWidget;
 
-  QButton* m_buttonK3bDefaults;
-  QButton* m_buttonUserDefaults;
-  QButton* m_buttonSaveUserDefaults;
+  QButton* m_buttonLoadSettings;
+  QButton* m_buttonSaveSettings;
 
   QGridLayout* mainGrid;
   int m_defaultButton;

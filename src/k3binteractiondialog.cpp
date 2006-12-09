@@ -23,6 +23,7 @@
 #include "k3bthememanager.h"
 #include <k3bapplication.h>
 #include <k3btoolbutton.h>
+#include <k3bmultichoicedialog.h>
 
 #include <qlabel.h>
 #include <qtoolbutton.h>
@@ -80,22 +81,19 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // ---------------------------------------------------------------------------------------------------
   if( !m_configGroup.isEmpty() ) {
     QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
-    m_buttonK3bDefaults = new QToolButton( /*i18n("K3b Defaults"), */this, "m_buttonK3bDefaults" );
-    ((QToolButton*)m_buttonK3bDefaults)->setIconSet( SmallIconSet( "revert" ) );
-    layout2->addWidget( m_buttonK3bDefaults );
+    m_buttonLoadSettings = new K3bToolButton( /*i18n("User Defaults"), */this );
+    ((K3bToolButton*)m_buttonLoadSettings)->setIconSet( SmallIconSet( "revert" ) );
+    QPopupMenu* userDefaultsPopup = new QPopupMenu( m_buttonLoadSettings );
+    userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
+    userDefaultsPopup->insertItem( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
+    userDefaultsPopup->insertItem( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
+    ((QToolButton*)m_buttonLoadSettings)->setPopup( userDefaultsPopup );
+    ((K3bToolButton*)m_buttonLoadSettings)->setInstantMenu( true );
+    layout2->addWidget( m_buttonLoadSettings );
 
-    m_buttonUserDefaults = new K3bToolButton( /*i18n("User Defaults"), */this );
-    ((K3bToolButton*)m_buttonUserDefaults)->setIconSet( SmallIconSet( "revert" ) );
-    QPopupMenu* userDefaultsPopup = new QPopupMenu( m_buttonUserDefaults );
-    userDefaultsPopup->insertItem( i18n("Default Settings"), this, SLOT(slotLoadUserDefaults()) );
-    userDefaultsPopup->insertItem( i18n("Last Used Settings"), this, SLOT(slotLoadLastSettings()) );
-    ((QToolButton*)m_buttonUserDefaults)->setPopup( userDefaultsPopup );
-    ((QToolButton*)m_buttonUserDefaults)->setPopupDelay( QApplication::startDragTime() );
-    layout2->addWidget( m_buttonUserDefaults );
-
-    m_buttonSaveUserDefaults = new QToolButton( /*i18n("Save User Defaults"), */this, "m_buttonSaveUserDefaults" );
-    ((QToolButton*)m_buttonSaveUserDefaults)->setIconSet( SmallIconSet( "filesave" ) );
-    layout2->addWidget( m_buttonSaveUserDefaults );
+    m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */this, "m_buttonSaveSettings" );
+    ((QToolButton*)m_buttonSaveSettings)->setIconSet( SmallIconSet( "filesave" ) );
+    layout2->addWidget( m_buttonSaveSettings );
 
     mainGrid->addLayout( layout2, 2, 0 );
   }
@@ -194,11 +192,7 @@ void K3bInteractionDialog::initConnections()
 	     this, SLOT(slotCancelClicked()) );
 
   if( !m_configGroup.isEmpty() ) {
-    connect( m_buttonK3bDefaults, SIGNAL(clicked()),
-	     this, SLOT(slotLoadK3bDefaults()) );
-    connect( m_buttonUserDefaults, SIGNAL(clicked()),
-	     this, SLOT(slotLoadUserDefaults()) );
-    connect( m_buttonSaveUserDefaults, SIGNAL(clicked()),
+    connect( m_buttonSaveSettings, SIGNAL(clicked()),
 	     this, SLOT(slotSaveUserDefaults()) );
   }
 }
@@ -209,19 +203,17 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
   if( !m_configGroup.isEmpty() ) {
     // ToolTips
     // -------------------------------------------------------------------------
-    QToolTip::add( m_buttonK3bDefaults, i18n("Load K3b default settings") );
-    QToolTip::add( m_buttonUserDefaults, i18n("Load user default settings") );
-    QToolTip::add( m_buttonSaveUserDefaults, i18n("Save user default settings for new projects") );
+    QToolTip::add( m_buttonLoadSettings, i18n("Load default or saved settings") );
+    QToolTip::add( m_buttonSaveSettings, i18n("Save current settings to reuse them later") );
 
     // What's This info
     // -------------------------------------------------------------------------
-    QWhatsThis::add( m_buttonK3bDefaults, i18n("<p>This sets all options back to K3b defaults.") );
-    QWhatsThis::add( m_buttonUserDefaults, i18n("<p>This loads the settings saved with the <em>Save User Defaults</em> "
-						"button.") );
-    QWhatsThis::add( m_buttonSaveUserDefaults, i18n("<p>Saves the current settings as the default for all new projects."
-						    "<p>These settings can also be loaded with the <em>User Defaults</em> "
-						    "button."
-						    "<p><b>The K3b defaults are not overwritten by this.</b>") );
+    QWhatsThis::add( m_buttonLoadSettings, i18n("<p>Load a set of settings either from the default K3b settings, "
+						"settings saved before, or the last used ones.") );
+    QWhatsThis::add( m_buttonSaveSettings, i18n("<p>Saves the current settings of the action dialog."
+						"<p>These settings can be loaded with the <em>Load saved settings</em> "
+						"button."
+						"<p><b>The K3b defaults are not overwritten by this.</b>") );
   }
 }
 
@@ -284,6 +276,36 @@ void K3bInteractionDialog::saveLastSettings()
 void K3bInteractionDialog::slotStartClickedInternal()
 {
   saveLastSettings();
+
+  KConfigGroup c( k3bcore->config(), "General Options" );
+  if( !c.readNumEntry( "action dialog startup settings", 0 ) ) {
+    // first time saving last used settings
+    switch( K3bMultiChoiceDialog::choose( i18n("Action Dialog Settings"),
+					  i18n("<p>K3b handles three sets of settings in action dialogs: "
+					       "the defaults, the saved settings, and the last used settings. "
+					       "Please choose which of these sets should be loaded if an action "
+					       "dialog is opened again."
+					       "<p><em>Be aware that this choice can always be changed from the K3b "
+					       "configuration dialog.</em>"),
+					  QMessageBox::Question,
+					  this,
+					  0,
+					  3,
+					  i18n("Default Settings"),
+					  i18n("Saved Settings"),
+					  i18n("Last Used Settings") ) ) {
+    case 1:
+      c.writeEntry( "action dialog startup settings", LOAD_K3B_DEFAULTS );
+      break;
+    case 2:
+      c.writeEntry( "action dialog startup settings", LOAD_SAVED_SETTINGS );
+      break;
+    case 3:
+      c.writeEntry( "action dialog startup settings", LOAD_LAST_SETTINGS );
+      break;
+    }
+  }
+
   slotStartClicked();
 }
 
@@ -477,6 +499,27 @@ void K3bInteractionDialog::loadK3bDefaults()
 }
 
 
+void K3bInteractionDialog::loadStartupSettings()
+{
+  KConfigGroup c( k3bcore->config(), "General Options" );
+
+  // earlier K3b versions loaded the saved settings
+  // so that is what we do as a default
+  int i = c.readNumEntry( "action dialog startup settings", LOAD_SAVED_SETTINGS );
+  switch( i ) {
+  case LOAD_K3B_DEFAULTS:
+    slotLoadK3bDefaults();
+    break;
+  case LOAD_SAVED_SETTINGS:
+    slotLoadUserDefaults();
+    break;
+  case LOAD_LAST_SETTINGS:
+    slotLoadLastSettings();
+    break;
+  }
+}
+
+
 int K3bInteractionDialog::exec()
 {
   return exec( true );
@@ -501,7 +544,7 @@ int K3bInteractionDialog::exec( bool returnOnHide )
   setWFlags( WShowModal );
   setResult( 0 );
 
-  slotLoadUserDefaults();
+  loadStartupSettings();
   show();
   if( m_delayedInit )
     QTimer::singleShot( 0, this, SLOT(slotDelayedInit()) );

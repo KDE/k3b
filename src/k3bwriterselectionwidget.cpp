@@ -197,6 +197,8 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
 					   "with a certain writer. In this case one may select the "
 					   "application manually.") );
 
+  clearSpeedCombo();
+
   slotConfigChanged(k3bcore->config());
   slotWriterChanged();
 }
