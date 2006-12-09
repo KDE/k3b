@@ -177,7 +177,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
   else {
     //    if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
-	jobFinished( true );
+	jobFinished( !mkisofsReadError() );
       }
       else {
 	switch( p->exitStatus() ) {

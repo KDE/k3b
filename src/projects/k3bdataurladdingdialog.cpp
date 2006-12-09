@@ -173,7 +173,7 @@ QString K3bDataUrlAddingDialog::resultMessage() const
       .arg( m_unreadableFiles.join( "<br>" ) );
   if( !m_tooBigFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("It is not possible to add files bigger than 4 GB") )
+      .arg( i18n("It is not possible to add files bigger than %1").arg(KIO::convertSize(0xFFFFFFFF)) )
       .arg( m_tooBigFiles.join( "<br>" ) );
   if( !m_mkisofsLimitationRenamedFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
@@ -317,7 +317,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	valid = false;
 	m_unreadableFiles.append( url.path() );
       }
-      else if( isFile && (long long)(statBuf.st_size) > 4LL*1024LL*1024LL*1024LL ) {
+      else if( isFile && statBuf.st_size >= (off_t)0xFFFFFFFF ) {
 	valid = false;
 	m_tooBigFiles.append( url.path() );
       }
