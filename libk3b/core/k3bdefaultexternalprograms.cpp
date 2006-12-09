@@ -609,7 +609,7 @@ bool K3bTranscodeProgram::scan( const QString& p )
 
   // probe version
   KProcess vp;
-  vp << appPath ;
+  vp << appPath << "-v";
   K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = out.output().find( "transcode v" );
