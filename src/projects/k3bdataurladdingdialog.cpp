@@ -317,7 +317,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	valid = false;
 	m_unreadableFiles.append( url.path() );
       }
-      else if( isFile && statBuf.st_size >= (off_t)0xFFFFFFFF ) {
+      else if( isFile && statBuf.st_size >= static_cast<off_t>(0xFFFFFFFFUL) ) {
 	valid = false;
 	m_tooBigFiles.append( url.path() );
       }
