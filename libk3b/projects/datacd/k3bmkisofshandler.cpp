@@ -88,7 +88,7 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
 	d->readError = true;
       }
       else if( errorLine.startsWith( "Value too large for defined data type" ) ) {
-	handleMkisofsInfoMessage( i18n("Used version of mkisofs doe not have large file support."), K3bJob::ERROR );
+	handleMkisofsInfoMessage( i18n("Used version of mkisofs does not have large file support."), K3bJob::ERROR );
 	handleMkisofsInfoMessage( i18n("Files bigger than 2 GB cannot be handled."), K3bJob::ERROR );
 	d->readError = true;
       }
