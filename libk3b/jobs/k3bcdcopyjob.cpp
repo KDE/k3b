@@ -151,6 +151,8 @@ void K3bCdCopyJob::start()
   d->sessionSizes.clear();
   d->dataSessionProbablyTAORecorded.clear();
   d->deleteTempDir = false;
+  d->haveCdText = false;
+  d->haveCddb = false;
 
   jobStarted();
 

@@ -61,6 +61,10 @@ public:
     : pipe(0) {
   }
 
+  ~Private() {
+    delete pipe;
+  }
+
   QString imagePath;
   K3bFileSplitter imageFile;
   const K3bExternalBin* mkisofsBin;
@@ -168,14 +172,12 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
     }
   }
 
-  cleanup();
-
   if( m_canceled ) {
     emit canceled();
     jobFinished(false);
   }
   else {
-    //    if( p->normalExit() ) {
+    if( p->normalExit() ) {
       if( p->exitStatus() == 0 ) {
 	jobFinished( !mkisofsReadError() );
       }
@@ -212,12 +214,14 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
 	jobFinished( false );
       }
-//     }
-//     else {
-//       emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
-//       jobFinished( false );
-//     }
+    }
+    else {
+      emit infoMessage( i18n("%1 did not exit cleanly.").arg("mkisofs"), ERROR );
+      jobFinished( false );
+    }
   }
+
+  cleanup();
 }
 
 
@@ -289,7 +293,8 @@ void K3bIsoImager::startSizeCalculation()
   }
     
   initVariables();
-    
+
+  delete m_process;    
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
   m_process->setSplitStdout(true);
