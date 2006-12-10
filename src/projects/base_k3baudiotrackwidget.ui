@@ -211,9 +211,6 @@
                         <property name="text">
                             <string>Preemph&amp;asis</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+A</string>
-                        </property>
                         <property name="whatsThis" stdset="0">
                             <string>&lt;p&gt;Preemphasis is mainly used in audio processing. Higher frequencies in audio signals usually have lower amplitudes. This can lead to bad signal quality on noisy transmission because the high frequencies might become too weak. To avoid this effect, high frequencies are amplified before transmission (preemphasis); the receiver will then weaken them accordingly for playback.</string>
                         </property>
@@ -224,9 +221,6 @@
                         </property>
                         <property name="text">
                             <string>&amp;Copy permitted</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+C</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">

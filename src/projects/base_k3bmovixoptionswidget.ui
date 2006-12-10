@@ -5,9 +5,6 @@
     <property name="name">
         <cstring>Form1</cstring>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -71,9 +68,6 @@
                             <property name="text">
                                 <string>Pla&amp;y files randomly</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+Y</string>
-                            </property>
                             <property name="toolTip" stdset="0">
                                 <string>The files are played in random order</string>
                             </property>
@@ -87,9 +81,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Do not use DMA</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Do not use DMA for media access</string>
@@ -282,9 +273,6 @@
                     <property name="text">
                         <string>E&amp;ject disk</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+J</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Eject the disk after playing has finished</string>
                     </property>
@@ -299,9 +287,6 @@
                     <property name="text">
                         <string>Sh&amp;utdown</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Shutdown after playing has finished</string>
                     </property>
@@ -315,9 +300,6 @@
                     </property>
                     <property name="text">
                         <string>Re&amp;boot</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Reboot after playing has finished</string>
