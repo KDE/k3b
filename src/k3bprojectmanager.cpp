@@ -22,6 +22,7 @@
 #include "kostore/koStore.h"
 #include "kostore/koStoreDevice.h"
 #include "k3bapplication.h"
+#include "k3binteractiondialog.h"
 
 #include <k3baudiodoc.h>
 #include <k3baudiodatasourceiterator.h>
@@ -273,8 +274,18 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 void K3bProjectManager::loadDefaults( K3bDoc* doc )
 {
   KConfig* c = kapp->config();
+  QString cg = "default " + doc->typeString() + " settings";
 
-  c->setGroup( "default " + doc->typeString() + " settings" );
+  // earlier K3b versions loaded the saved settings
+  // so that is what we do as a default
+  int i = KConfigGroup( c, "General Options" ).readNumEntry( "action dialog startup settings", 
+							     K3bInteractionDialog::LOAD_SAVED_SETTINGS );
+  if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
+    return; // the default k3b settings are the ones everyone starts with
+  else if( i == K3bInteractionDialog::LOAD_LAST_SETTINGS )
+    cg = "last used " + cg;
+
+  c->setGroup( cg );
 
   QString mode = c->readEntry( "writing_mode" );
   if ( mode == "dao" )
