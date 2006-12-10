@@ -150,10 +150,13 @@ class K3bCdparanoiaLibData
       m_drive(0),
       m_paranoia(0),
       m_currentSector(0) {
+    s_dataMap.insert( dev, this );
   }
 
   ~K3bCdparanoiaLibData() {
     paranoiaFree();
+
+    s_dataMap.erase( m_device );
   }
 
   K3bDevice::Device* device() const { return m_device; }
@@ -166,7 +169,27 @@ class K3bCdparanoiaLibData
   long lastSector( int );
   long sector() const { return m_currentSector; }
 
+  static K3bCdparanoiaLibData* data( K3bDevice::Device* dev ) {
+    QMap<K3bDevice::Device*, K3bCdparanoiaLibData*>::const_iterator it = s_dataMap.find( dev );
+    if( it == s_dataMap.constEnd() )
+      return new K3bCdparanoiaLibData( dev );
+    else
+      return *it;
+  }
+
+  static void freeAll() {
+    // clean up all K3bCdparanoiaLibData instances
+    for( QMap<K3bDevice::Device*, K3bCdparanoiaLibData*>::iterator it = s_dataMap.begin();
+	 it != s_dataMap.end(); ++it )
+      delete it.data();
+  }
+
  private:
+  //
+  // We have exactly one instance of K3bCdparanoiaLibData per device
+  //
+  static QMap<K3bDevice::Device*, K3bCdparanoiaLibData*> s_dataMap;
+
   K3bDevice::Device* m_device;
 
   cdrom_drive* m_drive;
@@ -177,6 +200,8 @@ class K3bCdparanoiaLibData
   QMutex mutex;
 };
 
+
+QMap<K3bDevice::Device*, K3bCdparanoiaLibData*> K3bCdparanoiaLibData::s_dataMap;
 
 bool K3bCdparanoiaLibData::paranoiaInit()
 {
@@ -291,10 +316,6 @@ long K3bCdparanoiaLibData::paranoiaSeek( long sector, int mode )
 }
 
 
-//
-// We have exactly one instance of K3bCdparanoiaLibData per device
-//
-static QMap<K3bDevice::Device*, K3bCdparanoiaLibData*> s_dataMap;
 
 class K3bCdparanoiaLib::Private
 {
@@ -367,10 +388,7 @@ K3bCdparanoiaLib::~K3bCdparanoiaLib()
   delete d;
   s_counter--;
   if( s_counter == 0 ) {
-    // clean up all K3bCdparanoiaLibData instances
-    for( QMap<K3bDevice::Device*, K3bCdparanoiaLibData*>::iterator it = s_dataMap.begin();
-	 it != s_dataMap.end(); ++it )
-      delete it.data();
+    K3bCdparanoiaLibData::freeAll();
 
     // cleanup the dynamically loaded lib
     dlclose( s_libInterface );
@@ -515,9 +533,7 @@ bool K3bCdparanoiaLib::initParanoia( K3bDevice::Device* dev, const K3bDevice::To
   //
   // Get the appropriate data instance for this device
   //
-  if( !s_dataMap[dev] )
-    s_dataMap[dev] = new K3bCdparanoiaLibData( dev );
-  d->data = s_dataMap[dev];
+  d->data = K3bCdparanoiaLibData::data( dev );
 
   if( d->data->paranoiaInit() ) {
     d->startSector = d->currentSector = d->lastSector = 0;
