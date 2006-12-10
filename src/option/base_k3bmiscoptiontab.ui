@@ -4,9 +4,6 @@
     <property name="name">
         <cstring>base_K3bMiscOptionTab</cstring>
     </property>
-    <property name="caption">
-        <string>base_K3bMiscOptionTab</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -144,9 +141,6 @@
                     <property name="text">
                         <string>Show progress &amp;OSD</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked K3b will display the progress in an OSD which always stays on top of all other windows.</string>
                     </property>
@@ -183,9 +177,6 @@
                     <property name="text">
                         <string>E&amp;nable Konqueror integration</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Enable integration of K3b actions into Konqueror menus</string>
                     </property>
@@ -201,9 +192,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Keep action dialogs open</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Do not close action dialogs after finishing the process</string>
