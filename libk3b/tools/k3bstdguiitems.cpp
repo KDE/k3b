@@ -181,12 +181,8 @@ QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
   QToolTip::add( c, i18n("Compare original with written data") );
   QWhatsThis::add( c, i18n("<p>If this option is checked, then after successfully "
 			   "writing the disk K3b will compare the original source data "
-			   "with the written data to verify that the disk has been written correctly."
-			   "<p>Audio CD tracks do not contain error correction data and hifi "
-			   "audio CD players are able to interpolate little errors in the data. "
-			   "Thus, differences between the original and written data does not "
-			   "necessarily mean a failed burn. In this case K3b will only display "
-			   "a warning.") );
+			   "with the written data to verify that the disk has been written "
+			   "correctly.") );
   return c;
 }
 
