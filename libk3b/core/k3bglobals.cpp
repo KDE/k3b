@@ -331,6 +331,16 @@ QString K3b::cutFilename( const QString& name, unsigned int len )
 }
 
 
+QString K3b::removeFilenameExtension( const QString& name )
+{
+  QString v = name;
+  int dotpos = v.findRev( '.' );
+  if( dotpos > 0 )
+    v.truncate( dotpos );
+  return v;
+}
+
+
 QString K3b::appendNumberToFilename( const QString& name, int num, unsigned int maxlen )
 {
   // determine extension (we think of an extension to be at most 5 chars in length)

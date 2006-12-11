@@ -66,19 +66,21 @@ K3bIsoOptions::K3bIsoOptions()
 }
 
 
-void K3bIsoOptions::save( KConfigBase* c )
+void K3bIsoOptions::save( KConfigBase* c, bool saveVolumeDesc )
 {
-  c->writeEntry( "volume id", m_volumeID );
-  c->writeEntry( "application id", m_applicationID );
-  c->writeEntry( "preparer", m_preparer );
-  c->writeEntry( "publisher", m_publisher );
-  c->writeEntry( "system id", m_systemId );
-  c->writeEntry( "volume set id", m_volumeSetId );
-  c->writeEntry( "volume set size", m_volumeSetSize );
-  c->writeEntry( "volume set number", m_volumeSetNumber );
-  c->writeEntry( "abstract file", m_abstractFile );
-  c->writeEntry( "copyright file", m_copyrightFile );
-  c->writeEntry( "bibliograph file", m_bibliographFile );
+  if( saveVolumeDesc ) {
+    c->writeEntry( "volume id", m_volumeID );
+    c->writeEntry( "application id", m_applicationID );
+    c->writeEntry( "preparer", m_preparer );
+    c->writeEntry( "publisher", m_publisher );
+    c->writeEntry( "system id", m_systemId );
+    c->writeEntry( "volume set id", m_volumeSetId );
+    c->writeEntry( "volume set size", m_volumeSetSize );
+    c->writeEntry( "volume set number", m_volumeSetNumber );
+    c->writeEntry( "abstract file", m_abstractFile );
+    c->writeEntry( "copyright file", m_copyrightFile );
+    c->writeEntry( "bibliograph file", m_bibliographFile );
+  }
 
   c->writeEntry( "rock_ridge", m_createRockRidge );
   c->writeEntry( "joliet", m_createJoliet );
@@ -132,21 +134,23 @@ void K3bIsoOptions::save( KConfigBase* c )
 }
 
 
-K3bIsoOptions K3bIsoOptions::load( KConfigBase* c )
+K3bIsoOptions K3bIsoOptions::load( KConfigBase* c, bool loadVolumeDesc )
 {
   K3bIsoOptions options;
 
-  options.setVolumeID( c->readEntry( "volume id", options.volumeID() ) );
-  options.setApplicationID( c->readEntry( "application id", options.applicationID() ) );
-  options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
-  options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-  options.setSystemId( c->readEntry( "system id", options.systemId() ) );
-  options.setVolumeSetId( c->readEntry( "volume set id", options.volumeSetId() ) );
-  options.setVolumeSetSize( c->readNumEntry( "volume set size", options.volumeSetSize() ) );
-  options.setVolumeSetNumber( c->readNumEntry( "volume set number", options.volumeSetNumber() ) );
-  options.setAbstractFile( c->readEntry( "abstract file", options.abstractFile() ) );
-  options.setCoprightFile( c->readEntry( "copyright file", options.copyrightFile() ) );
-  options.setBibliographFile( c->readEntry( "bibliograph file", options.bibliographFile() ) );
+  if( loadVolumeDesc ) {
+    options.setVolumeID( c->readEntry( "volume id", options.volumeID() ) );
+    options.setApplicationID( c->readEntry( "application id", options.applicationID() ) );
+    options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
+    options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
+    options.setSystemId( c->readEntry( "system id", options.systemId() ) );
+    options.setVolumeSetId( c->readEntry( "volume set id", options.volumeSetId() ) );
+    options.setVolumeSetSize( c->readNumEntry( "volume set size", options.volumeSetSize() ) );
+    options.setVolumeSetNumber( c->readNumEntry( "volume set number", options.volumeSetNumber() ) );
+    options.setAbstractFile( c->readEntry( "abstract file", options.abstractFile() ) );
+    options.setCoprightFile( c->readEntry( "copyright file", options.copyrightFile() ) );
+    options.setBibliographFile( c->readEntry( "bibliograph file", options.bibliographFile() ) );
+  }
 
   options.setForceInputCharset( c->readBoolEntry( "force input charset", options.forceInputCharset() ) );
   if( options.forceInputCharset() )

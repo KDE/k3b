@@ -650,8 +650,10 @@ void K3bFileTreeView::setCurrentDevice( K3bDevice::Device* dev )
   if( d->currentDeviceBranch )
     d->currentDeviceBranch->setCurrent( false );
 
-  d->currentDeviceBranch = branch( dev );
-  d->currentDeviceBranch->setCurrent( true );
+  if( dev ) {
+    d->currentDeviceBranch = branch( dev );
+    d->currentDeviceBranch->setCurrent( true );
+  }
 }
 
 

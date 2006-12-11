@@ -18,6 +18,7 @@
 
 class KActionCollection;
 class KAction;
+class K3bMediaCache;
 
 namespace K3bDevice {
   class Device;
@@ -46,6 +47,7 @@ class K3bAppDeviceManager : public K3bDevice::DeviceManager
 
   K3bDevice::Device* currentDevice() const;
   KActionCollection* actionCollection() const { return m_actionCollection; }
+  void setMediaCache( K3bMediaCache* c );
 
  signals:
   void currentDeviceChanged( K3bDevice::Device* );

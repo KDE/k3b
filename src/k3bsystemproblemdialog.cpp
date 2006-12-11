@@ -524,6 +524,25 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 #endif
 
 
+  //
+  // Never run K3b as root and especially not suid root! The latter is not possible anyway since
+  // the kdelibs refuse it.
+  //
+  if( ::getuid() == 0 ) {
+    problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+				       i18n("Running K3b as root user"),
+				       i18n("It is not recommended to run K3b under the root user account. "
+					    "This introduces unnecessary security risks."),
+				       i18n("Run K3b from a proper user account and setup the device and "
+					    "external tool permissions appropriately.")
+#ifdef HAVE_K3BSETUP
+				       + ' ' + i18n("The latter can be done via K3bSetup.")
+#endif
+				       ,
+				       true ) );
+  }
+
+
   kdDebug() << "(K3bCore) System problems:" << endl;
   for( QValueList<K3bSystemProblem>::const_iterator it = problems.begin();
        it != problems.end(); ++it ) {

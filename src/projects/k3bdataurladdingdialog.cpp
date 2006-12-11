@@ -36,6 +36,7 @@
 #include <k3bapplication.h>
 #include <k3biso9660.h>
 #include <k3bdirsizejob.h>
+#include <k3binteractiondialog.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -534,20 +535,12 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   if( valid ) {
     //
     // Set the volume id from the first added url
-    // only if it does not differ from the default
-    // FIXME: The default might still be changed after this project has been created
+    // only if the doc was not changed yet
     //
     if( m_urls.count() == 1 && 
-	dir->doc()->root()->children().count() == 0 ) {
-      KConfigGroup grp( k3bcore->config(), "default " + dir->doc()->typeString() + " settings" );
-      if( dir->doc()->isoOptions().volumeID() == K3bIsoOptions::load( &grp ).volumeID() ) {
-	QString v = newName;
-	// remove the extension
-	int dotpos = v.findRev( '.' );
-	if( dotpos > 0 )
-	  v.truncate( dotpos );
-	dir->doc()->setVolumeID( v );
-      }
+	!dir->doc()->isModified() &&
+	!dir->doc()->isSaved() ) {
+      dir->doc()->setVolumeID( K3b::removeFilenameExtension( newName ) );
     }
 
     if( isDir && !isSymLink ) {

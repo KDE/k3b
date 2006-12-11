@@ -392,7 +392,7 @@ K3bRootItem::~K3bRootItem()
 }
 
 
-const QString& K3bRootItem::k3bName()
+const QString& K3bRootItem::k3bName() const
 {
   return doc()->isoOptions().volumeID();
 }

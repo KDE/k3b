@@ -122,6 +122,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
   m_fileTreeView->addDefaultBranches();
   m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
+  m_fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
 
   m_fileView->setAutoUpdate( true ); // in case we look at the mounted path
 

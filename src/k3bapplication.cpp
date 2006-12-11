@@ -345,6 +345,8 @@ void K3bApplication::Core::initDeviceManager()
     // once the devicemanager has scanned for devices.
     m_mediaCache = new K3bMediaCache( this );
   }
+
+  m_appDeviceManager->setMediaCache( m_mediaCache );
 }
 
 

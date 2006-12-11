@@ -80,8 +80,12 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
   devicePopupMenu->insert( m_actionSetReadSpeed );
 
   setCurrentDevice( 0 );
+}
 
-  connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
+
+void K3bAppDeviceManager::setMediaCache( K3bMediaCache* c )
+{
+  connect( c, SIGNAL(mediumChanged(K3bDevice::Device*)),
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 }
 

@@ -146,7 +146,7 @@ class K3bRootItem : public K3bDirItem
   K3bRootItem( K3bDataDoc* );
   ~K3bRootItem();
 
-  const QString& k3bName();
+  const QString& k3bName() const;
   void setK3bName( const QString& );
 
   bool isMoveable() const { return false; }

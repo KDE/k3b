@@ -347,7 +347,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::DVD: {
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
 
-    dataDoc->setIsoOptions( K3bIsoOptions::load( c ) );
+    dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
 
     QString datamode = c->readEntry( "data_track_mode" );
     if( datamode == "mode1" )
@@ -377,7 +377,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::VIDEODVD: {
     // the only defaults we need here are the volume id and stuff
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
-    dataDoc->setIsoOptions( K3bIsoOptions::load( c ) );
+    dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
     dataDoc->setVerifyData( c->readBoolEntry( "verify data", false ) );
     break;
   }
@@ -404,10 +404,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     else
       mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_AUTO );
 
-    mixedDoc->dataDoc()->setIsoOptions( K3bIsoOptions::load( c ) );
+    mixedDoc->dataDoc()->setIsoOptions( K3bIsoOptions::load( c, false ) );
 
     if( mixedDoc->dataDoc()->isoOptions().volumeID().isEmpty() )
-      mixedDoc->dataDoc()->setVolumeID( doc->URL().path() );
+      mixedDoc->dataDoc()->setVolumeID( doc->URL().fileName() );
 
     break;
   }
@@ -423,7 +423,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     vcdDoc->vcdOptions()->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
 
     if( vcdDoc->vcdOptions()->volumeId().isEmpty() )
-      vcdDoc->vcdOptions()->setVolumeId( doc->URL().path() );
+      vcdDoc->vcdOptions()->setVolumeId( doc->URL().fileName() );
 
     break;
   }
@@ -435,7 +435,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
       doc->type() == K3bDoc::VIDEODVD ||
       doc->type() == K3bDoc::DVD ) {
     if( static_cast<K3bDataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
-      static_cast<K3bDataDoc*>(doc)->setVolumeID( doc->URL().path() );
+      static_cast<K3bDataDoc*>(doc)->setVolumeID( doc->URL().fileName() );
   }
 
   doc->setModified( false );

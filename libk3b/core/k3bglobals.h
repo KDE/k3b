@@ -125,20 +125,22 @@ namespace K3b
   /**
    * Cut a filename preserving the extension
    */
-  QString cutFilename( const QString& name, unsigned int len );
+  LIBK3B_EXPORT QString cutFilename( const QString& name, unsigned int len );
+
+  LIBK3B_EXPORT QString removeFilenameExtension( const QString& name );
 
   /**
    * Append a number to a filename preserving the extension.
    * The resulting name's length will not exceed @p maxlen
    */
-  QString appendNumberToFilename( const QString& name, int num, unsigned int maxlen );
+  LIBK3B_EXPORT QString appendNumberToFilename( const QString& name, int num, unsigned int maxlen );
 
-  QString findUniqueFilePrefix( const QString& _prefix = QString::null, const QString& path = QString::null );
+  LIBK3B_EXPORT QString findUniqueFilePrefix( const QString& _prefix = QString::null, const QString& path = QString::null );
 
   /**
    * Find a unique filename in directory d (if d is empty the method uses the defaultTempPath)
    */
-  QString findTempFile( const QString& ending = QString::null, const QString& d = QString::null );
+  LIBK3B_EXPORT QString findTempFile( const QString& ending = QString::null, const QString& d = QString::null );
 
   /**
    * Wrapper around KStandardDirs::findExe which searches the PATH and some additional
