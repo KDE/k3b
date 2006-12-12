@@ -95,6 +95,5 @@ QCString K3bChecksumPipe::checksum() const
 int K3bChecksumPipe::write( char* data, int max )
 {
   d->update( data, max );
-  K3bActivePipe::write( data, max );
-  return 0;
+  return K3bActivePipe::write( data, max );
 }
