@@ -96,4 +96,5 @@ int K3bChecksumPipe::write( char* data, int max )
 {
   d->update( data, max );
   K3bActivePipe::write( data, max );
+  return 0;
 }
