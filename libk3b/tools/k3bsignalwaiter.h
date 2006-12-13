@@ -18,6 +18,8 @@
 
 #include <qobject.h>
 
+#include <k3b_export.h>
+
 class K3bJob;
 
 class K3bSignalWaiter : public QObject
@@ -28,13 +30,13 @@ class K3bSignalWaiter : public QObject
   /**
    * Use this to syncroneously wait for a signal.
    */
-  static void waitForSignal( QObject* o, const char* signal );
+  LIBK3B_EXPORT static void waitForSignal( QObject* o, const char* signal );
 
   /**
    * Use this to syncroneously wait for a job to finish.
    * If the job is not running at all this returns immedeately.
    */
-  static void waitForJob( K3bJob* job );
+  LIBK3B_EXPORT static void waitForJob( K3bJob* job );
 
  private slots:
   void slotSignal();
