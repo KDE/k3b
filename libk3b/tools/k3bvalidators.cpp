@@ -74,7 +74,7 @@ QValidator::State K3bAsciiValidator::validateChar( const QChar& c ) const
 {
   if( K3bLatin1Validator::validateChar( c ) == Invalid )
     return Invalid;
-  else if( !::isascii( c.latin1() ) )
+  else if( !isascii( c.latin1() ) )
     return Invalid;
   else
     return Acceptable;
