@@ -24,6 +24,7 @@
 #include "k3baudiojobtempdata.h"
 #include "k3baudiomaxspeedjob.h"
 #include "k3baudiocdtracksource.h"
+#include "k3baudiofile.h"
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>
@@ -43,6 +44,32 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktempfile.h>
+#include <kstringhandler.h>
+
+
+
+static QString createNonExistingFilesString( const QValueList<K3bAudioFile*>& items, unsigned int max )
+{
+  QString s;
+  unsigned int cnt = 0;
+  for( QValueList<K3bAudioFile*>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
+
+    s += KStringHandler::csqueeze( (*it)->filename(), 60 );
+
+    ++cnt;
+    if( cnt >= max || it == items.end() )
+      break;
+
+    s += "<br>";
+  }
+
+  if( items.count() > max )
+    s += "...";
+
+  return s;
+}
+
 
 
 class K3bAudioJob::Private
@@ -129,10 +156,49 @@ void K3bAudioJob::start()
 
   emit newTask( i18n("Preparing data") );
 
+
+  //
+  // Check if all files exist
+  //
+  QValueList<K3bAudioFile*> nonExistingFiles;
+  K3bAudioTrack* track = m_doc->firstTrack();
+  while( track ) {
+    K3bAudioDataSource* source = track->firstSource();
+    while( source ) {
+      if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) ) {
+	if( !QFile::exists( file->filename() ) )
+	  nonExistingFiles.append( file );
+      }
+      source = source->next();
+    }
+    track = track->next();
+  }
+  if( !nonExistingFiles.isEmpty() ) {
+    if( questionYesNo( "<p>" + i18n("The following files could not be found. Do you want to remove them from the "
+				    "project and continue without adding them to the image?") + 
+		       "<p>" + createNonExistingFilesString( nonExistingFiles, 10 ),
+		       i18n("Warning"),
+		       i18n("Remove missing files and continue"),
+		       i18n("Cancel and go back") ) ) {
+      for( QValueList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
+	   it != nonExistingFiles.end(); ++it ) {
+	delete *it;
+      }
+    }
+    else {
+      m_canceled = true;
+      emit canceled();
+      jobFinished(false);
+      return;
+    }
+  }
+
+
   if( m_doc->onTheFly() && !checkAudioSources() ) {
     emit infoMessage( i18n("Unable to write on-the-fly with these audio sources."), WARNING );
     m_doc->setOnTheFly(false);
   }
+
 
   // we don't need this when only creating image and it is possible
   // that the burn device is null
@@ -147,7 +213,7 @@ void K3bAudioJob::start()
     //
     d->zeroPregap = false;
     d->less4Sec = false;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    track = m_doc->firstTrack();
     while( track ) {
       if( track->postGap() == 0 && track->next() != 0 ) // the last track's postgap is always 0
 	d->zeroPregap = true;
