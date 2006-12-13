@@ -15,6 +15,7 @@
 
 
 #include "k3btoc.h"
+#include "k3bdebug.h"
 
 #include <qstring.h>
 
@@ -132,16 +133,16 @@ void K3bDevice::Toc::clear()
 
 void K3bDevice::Toc::debug() const
 {
-  kdDebug() << count() << " in " << sessions() << " sessions" << endl;
+  k3bDebug() << count() << " in " << sessions() << " sessions" << endl;
   int sessionN = 0;
   int trackN = 0;
   for( Toc::const_iterator it = begin(); it != end(); ++it ) {
     ++trackN;
     if( sessionN != (*it).session() ) {
       sessionN = (*it).session();
-      kdDebug() << "Session Number " << sessionN << endl;
+      k3bDebug() << "Session Number " << sessionN << endl;
     }
-    kdDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
+    k3bDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
 	      << " " << (*it).firstSector().lba() << " - " << (*it).lastSector().lba()
 	      << " (" << (*it).length().lba() << ")" << endl;
   }

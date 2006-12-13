@@ -19,7 +19,7 @@
 #include <k3bmsf.h>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <k3bdebug.h>
 #include <kio/global.h>
 
 #include <qstringlist.h>
@@ -162,7 +162,7 @@ K3b::Msf K3bDevice::DiskInfo::firstLayerSize() const
 
 void K3bDevice::DiskInfo::debug() const
 {
-  kdDebug() << "DiskInfo:" << endl
+  k3bDebug() << "DiskInfo:" << endl
 	    << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
 	    << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
 	    << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ? 
@@ -180,23 +180,20 @@ void K3bDevice::DiskInfo::debug() const
 	    << "Sessions:        " << numSessions() << endl
 	    << "Tracks:          " << numTracks() << endl
 	    << "Layers:          " << numLayers() << endl
-	    << "Capacity:        " << capacity().toString() 
-	    << " (LBA " << QString::number(capacity().lba())
-	    << ") (" << QString::number(capacity().mode1Bytes()) << " Bytes) (" 
-	    << KIO::convertSize(capacity().mode1Bytes()) << ")" << endl
+	    << "Capacity:        " << capacity()
+	    << " (LBA " << capacity().lba()
+	    << ") (" << capacity().mode1Bytes() << " Bytes)" << endl
 
-	    << "Remaining size:  " << remainingSize().toString() 
-	    << " (LBA " << QString::number(remainingSize().lba())
-	    << ") (" << QString::number(remainingSize().mode1Bytes()) << " Bytes) (" 
-	    << KIO::convertSize(remainingSize().mode1Bytes()) << ")" << endl
+	    << "Remaining size:  " << remainingSize() 
+	    << " (LBA " << remainingSize().lba()
+	    << ") (" << remainingSize().mode1Bytes() << " Bytes)" << endl
 
-	    << "Used Size:       " << size().toString()  
-	    << " (LBA " << QString::number(size().lba())
-	    << ") (" << QString::number(size().mode1Bytes()) << " Bytes) (" 
-	    << KIO::convertSize(size().mode1Bytes()) << ")" << endl;
+	    << "Used Size:       " << size()
+	    << " (LBA " << size().lba()
+	    << ") (" << size().mode1Bytes() << " Bytes)" << endl;
 
   if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
-    kdDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ? 
+    k3bDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ? 
 					  "none" :
 					  ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
 					    "incomplete" :

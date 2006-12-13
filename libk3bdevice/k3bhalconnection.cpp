@@ -16,7 +16,7 @@
 #include "k3bhalconnection.h"
 #include "k3bdevice.h"
 
-#include <kdebug.h>
+#include <k3bdebug.h>
 #include <klocale.h>
 
 #include <qtimer.h>
@@ -51,7 +51,7 @@ static void freeArray( char** a, unsigned int length )
 void halDeviceAdded( LibHalContext* ctx, const char* udi )
 {
   Q_UNUSED( ctx );
-  kdDebug() << "adding udi   " << udi << endl;
+  k3bDebug() << "adding udi   " << udi << endl;
   K3bDevice::HalConnection::instance()->addDevice( udi );
 }
 
@@ -59,7 +59,7 @@ void halDeviceAdded( LibHalContext* ctx, const char* udi )
 void halDeviceRemoved( LibHalContext* ctx, const char* udi )
 {
   Q_UNUSED( ctx );
-  kdDebug() << "removing udi " << udi << endl;
+  k3bDebug() << "removing udi " << udi << endl;
   K3bDevice::HalConnection::instance()->removeDevice( udi );
 }
 
@@ -95,7 +95,7 @@ K3bDevice::HalConnection* K3bDevice::HalConnection::instance()
     s_instance = new HalConnection( 0 );
 
   if( !s_instance->isConnected() && !s_instance->open() )
-      kdDebug() << "(K3bDevice::HalConnection) failed to open connection to HAL." << endl;
+      k3bDebug() << "(K3bDevice::HalConnection) failed to open connection to HAL." << endl;
 
   return s_instance;
 }
@@ -126,11 +126,11 @@ bool K3bDevice::HalConnection::open()
 {
   close();
 
-  kdDebug() << "(K3bDevice::HalConnection) initializing HAL >= 0.5" << endl;
+  k3bDebug() << "(K3bDevice::HalConnection) initializing HAL >= 0.5" << endl;
 
   d->halContext = libhal_ctx_new();
   if( !d->halContext ) {
-    kdDebug() << "(K3bDevice::HalConnection) unable to create HAL context." << endl;
+    k3bDebug() << "(K3bDevice::HalConnection) unable to create HAL context." << endl;
     return false;
   }
 
@@ -138,7 +138,7 @@ bool K3bDevice::HalConnection::open()
   dbus_error_init( &error );
   d->connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
   if( dbus_error_is_set(&error) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS: " << error.message << endl;
+    k3bDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS: " << error.message << endl;
     return false;
   }
 
@@ -154,7 +154,7 @@ bool K3bDevice::HalConnection::open()
   libhal_ctx_set_device_condition( d->halContext, 0 );
   
   if( !libhal_ctx_init( d->halContext, 0 ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!" << endl;
+    k3bDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!" << endl;
     return false;
   }
 
@@ -209,7 +209,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
       libhal_free_string( dev );
 
       if( !s.isEmpty() ) {
-	kdDebug() << "Mapping udi " << udi << " to device " << s << endl;
+	k3bDebug() << "Mapping udi " << udi << " to device " << s << endl;
 	d->udiDeviceMap[udi] = s;
 	d->deviceUdiMap[s] = udi;
 	emit deviceAdded( s );
@@ -241,7 +241,7 @@ void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
   QMapIterator<QCString, QString> it = d->udiDeviceMap.find( udi );
   if( it != d->udiDeviceMap.end() ) {
-    kdDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
+    k3bDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
     emit deviceRemoved( it.data() );
     d->udiDeviceMap.erase( it );
     d->deviceUdiMap.erase( it.data() );
@@ -285,7 +285,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
 					       "org.freedesktop.Hal.Device",
 					       "Lock" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not create dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
@@ -294,7 +294,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
   if( !dbus_message_append_args( dmesg, 
 				 DBUS_TYPE_STRING, &lockComment,
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not append args to dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     return org_freedesktop_Hal_CommunicationError;
   }
@@ -316,7 +316,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) lock queued for " << udi << endl;
+  k3bDebug() << "(K3bDevice::HalConnection) lock queued for " << udi << endl;
 
   dbus_message_unref( dmesg );
   dbus_message_unref( reply );
@@ -344,13 +344,13 @@ int K3bDevice::HalConnection::unlock( Device* dev )
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
 					       "org.freedesktop.Hal.Device",
 					       "Unlock" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not create dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
   if( !dbus_message_append_args( dmesg, 
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not append args to dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     return org_freedesktop_Hal_CommunicationError;
   }
@@ -372,7 +372,7 @@ int K3bDevice::HalConnection::unlock( Device* dev )
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi << endl;
+  k3bDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi << endl;
 
   dbus_message_unref( dmesg );
   dbus_message_unref( reply );
@@ -405,7 +405,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
 					       "Mount" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not create dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
@@ -419,7 +419,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
 				 DBUS_TYPE_STRING, &strFstype,
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not append args to dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     freeArray( poptions, options.count() );
     return org_freedesktop_Hal_CommunicationError;
@@ -454,7 +454,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) mount queued for " << mediumUdi << endl;
+  k3bDebug() << "(K3bDevice::HalConnection) mount queued for " << mediumUdi << endl;
 
   dbus_message_unref( dmesg );
   dbus_message_unref( reply );
@@ -485,7 +485,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
 					       "Unmount" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not create dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
@@ -494,7 +494,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   if( !dbus_message_append_args( dmesg, 
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not append args to dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     freeArray( poptions, options.count() );
     return org_freedesktop_Hal_CommunicationError;
@@ -525,7 +525,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) unmount queued for " << mediumUdi << endl;
+  k3bDebug() << "(K3bDevice::HalConnection) unmount queued for " << mediumUdi << endl;
 
   dbus_message_unref( dmesg );
   dbus_message_unref( reply );
@@ -556,7 +556,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
 					       "Eject" ) ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not create dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not create dbus message\n";
     return org_freedesktop_Hal_CommunicationError;
   }
 
@@ -565,7 +565,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   if( !dbus_message_append_args( dmesg, 
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
-    kdDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not append args to dbus message\n";
+    k3bDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
     freeArray( poptions, options.count() );
     return org_freedesktop_Hal_CommunicationError;
@@ -592,7 +592,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
     return ret;
   }
 
-  kdDebug() << "(K3bDevice::HalConnection) eject queued for " << mediumUdi << endl;
+  k3bDebug() << "(K3bDevice::HalConnection) eject queued for " << mediumUdi << endl;
 
   dbus_message_unref( dmesg );
   dbus_message_unref( reply );

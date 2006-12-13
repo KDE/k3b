@@ -16,7 +16,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <kdebug.h>
+#include <k3bdebug.h>
 
 #include <stdio.h>
 #include <errno.h>
@@ -78,7 +78,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   d->ccb.ccb_h.target_id  = m_device->handle()->target_id;
   d->ccb.ccb_h.target_lun = m_device->handle()->target_lun;
 
-  kdDebug() << "(K3bDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
+  k3bDebug() << "(K3bDevice::ScsiCommand) transport command " << QString::number((int)d->ccb.csio.cdb_io.cdb_bytes[0], 16) << ", length: " << (int)d->ccb.csio.cdb_len << endl;
   int ret=0;
   int direction = CAM_DEV_QFRZDIS;
   if (!len)
@@ -89,7 +89,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   unsigned char * sense = (unsigned char *)&d->ccb.csio.sense_data;
   if ((ret = cam_send_ccb(m_device->handle(), &d->ccb)) < 0)
     {
-      kdDebug() << "(K3bDevice::ScsiCommand) transport failed: " << ret << endl;
+      k3bDebug() << "(K3bDevice::ScsiCommand) transport failed: " << ret << endl;
       struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
       debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 		  senset->error_code & SSD_ERRCODE,
@@ -137,7 +137,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.resid = resid;
       if (ret<0)
 	{
-	  kdDebug() << "(K3bDevice::ScsiCommand) transport failed (2): " << ret << endl;
+	  k3bDebug() << "(K3bDevice::ScsiCommand) transport failed (2): " << ret << endl;
 	  ret = -1;
 	  struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
 	  debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
@@ -153,7 +153,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 	}
       if ((d->ccb.ccb_h.status&CAM_STATUS_MASK) != CAM_REQ_CMP)
 	{
-	  kdDebug() << "(K3bDevice::ScsiCommand) transport failed (3): " << ret << endl;
+	  k3bDebug() << "(K3bDevice::ScsiCommand) transport failed (3): " << ret << endl;
 	  errno=EIO,-1;
 	  ret = -1;
 	  struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
@@ -173,7 +173,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     }
 
   ret = ERRCODE(sense);
-  kdDebug() << "(K3bDevice::ScsiCommand) transport failed (4): " << ret << endl;
+  k3bDebug() << "(K3bDevice::ScsiCommand) transport failed (4): " << ret << endl;
   if (ret == 0)
     ret = -1;
   else

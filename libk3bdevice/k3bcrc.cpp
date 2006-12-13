@@ -15,7 +15,7 @@
 
 #include "k3bcrc.h"
 
-#include <kdebug.h>
+#include <k3bdebug.h>
 
 
 static Q_UINT16 g_x25Table[1<<8] = {
