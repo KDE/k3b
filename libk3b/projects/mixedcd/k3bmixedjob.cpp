@@ -41,6 +41,7 @@
 #include <k3btocfilewriter.h>
 #include <k3binffilewriter.h>
 #include <k3bglobalsettings.h>
+#include <k3baudiofile.h>
 
 #include <qfile.h>
 #include <qdatastream.h>
@@ -52,6 +53,30 @@
 #include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kstringhandler.h>
+
+
+static QString createNonExistingFilesString( const QValueList<K3bAudioFile*>& items, unsigned int max )
+{
+  QString s;
+  unsigned int cnt = 0;
+  for( QValueList<K3bAudioFile*>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
+
+    s += KStringHandler::csqueeze( (*it)->filename(), 60 );
+
+    ++cnt;
+    if( cnt >= max || it == items.end() )
+      break;
+
+    s += "<br>";
+  }
+
+  if( items.count() > max )
+    s += "...";
+
+  return s;
+}
+
 
 
 class K3bMixedJob::Private
@@ -139,6 +164,52 @@ void K3bMixedJob::start()
     d->copies = 1;
 
   prepareProgressInformation();
+
+  //
+  // Check if all files exist
+  //
+  QValueList<K3bAudioFile*> nonExistingFiles;
+  K3bAudioTrack* track = m_doc->audioDoc()->firstTrack();
+  while( track ) {
+    K3bAudioDataSource* source = track->firstSource();
+    while( source ) {
+      if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) ) {
+	if( !QFile::exists( file->filename() ) )
+	  nonExistingFiles.append( file );
+      }
+      source = source->next();
+    }
+    track = track->next();
+  }
+  if( !nonExistingFiles.isEmpty() ) {
+    if( questionYesNo( "<p>" + i18n("The following files could not be found. Do you want to remove them from the "
+				    "project and continue without adding them to the image?") + 
+		       "<p>" + createNonExistingFilesString( nonExistingFiles, 10 ),
+		       i18n("Warning"),
+		       i18n("Remove missing files and continue"),
+		       i18n("Cancel and go back") ) ) {
+      for( QValueList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
+	   it != nonExistingFiles.end(); ++it ) {
+	delete *it;
+      }
+    }
+    else {
+      m_canceled = true;
+      emit canceled();
+      jobFinished(false);
+      return;
+    }
+  }
+
+  //
+  // Make sure the project is not empty
+  //
+  if( m_doc->audioDoc()->numOfTracks() == 0 ) {
+    emit infoMessage( i18n("Please add files to your project first."), ERROR );
+    jobFinished(false);
+    return;
+  }
+
 
   // set some flags that are needed
   m_doc->audioDoc()->setOnTheFly( m_doc->onTheFly() );  // for the toc writer
