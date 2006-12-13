@@ -193,6 +193,14 @@ void K3bAudioJob::start()
     }
   }
 
+  //
+  // Make sure the project is not empty
+  //
+  if( m_doc->numOfTracks() == 0 ) {
+    emit infoMessage( i18n("Please add files to your project first."), ERROR );
+    jobFinished(false);
+    return;
+  }
 
   if( m_doc->onTheFly() && !checkAudioSources() ) {
     emit infoMessage( i18n("Unable to write on-the-fly with these audio sources."), WARNING );
