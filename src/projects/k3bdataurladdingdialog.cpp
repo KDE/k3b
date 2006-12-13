@@ -37,6 +37,8 @@
 #include <k3biso9660.h>
 #include <k3bdirsizejob.h>
 #include <k3binteractiondialog.h>
+#include <k3bthread.h>
+#include <k3bsignalwaiter.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -148,6 +150,10 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
     dlg.m_dirSizeJob->start();
     ret = dlg.exec();
   }
+
+  // make sure the dir size job is finished
+  dlg.m_dirSizeJob->cancel();
+  K3bSignalWaiter::waitForJob( dlg.m_dirSizeJob );
 
   QString message = dlg.resultMessage();
   if( !message.isEmpty() )
