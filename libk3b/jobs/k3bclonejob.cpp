@@ -296,6 +296,7 @@ void K3bCloneJob::slotReadingFinished( bool success )
     }
     else {
       emit infoMessage( i18n("Failed to read disk completely in clone mode."), ERROR );
+      removeImageFiles();
       m_running = false;
       jobFinished(false);
     }

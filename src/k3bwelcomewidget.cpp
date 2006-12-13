@@ -54,7 +54,8 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
   fnt.setBold(true);
   fnt.setPointSize( 16 );
   m_header = new QSimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
-  m_infoText = new QSimpleRichText( i18n("<qt align=\"center\">K3b %1 (c) 1999 - 2006 Sebastian Trüg").arg(k3bcore->version()), font() );
+  m_infoText = new QSimpleRichText( i18n("<qt align=\"center\">K3b %1 (c) 1999 - 2006 Sebastian Trüg")
+				    .arg(kapp->aboutData()->version()), font() );
 
   // set a large width just to be sure no linebreak occurs
   m_header->setWidth( 800 );

@@ -35,6 +35,7 @@ public:
   }
 
   K3b::Msf size;
+  QString tocFile;
 };
 
 
@@ -66,8 +67,14 @@ void K3bCloneTocReader::readFile()
   //   somedata
   //   somedata.toc
 
+  // filename should always be the toc file
+  if( filename().right( 4 ) == ".toc" )
+    d->tocFile = filename();
+  else
+    d->tocFile = filename() + ".toc";
+
   // now get rid of the ".toc" extension
-  QString imageFileName = filename().left( filename().length()-4 );
+  QString imageFileName = d->tocFile.left( d->tocFile.length()-4 );
   if( !QFile::exists( imageFileName ) ) {
     kdDebug() << "(K3bCloneTocReader) could not find image file " << imageFileName << endl;
     return;
@@ -77,7 +84,7 @@ void K3bCloneTocReader::readFile()
 
   d->size = 0;
 
-  QFile f( filename() );
+  QFile f( d->tocFile );
   if( f.open( IO_ReadOnly ) ) {
     //
     // Inspired by clone.c from the cdrecord sources
@@ -223,6 +230,6 @@ void K3bCloneTocReader::readFile()
     setValid(true);
   }
   else {
-    kdDebug() << "(K3bCloneTocReader) could not open file " << filename() << endl;
+    kdDebug() << "(K3bCloneTocReader) could not open file " << d->tocFile << endl;
   }
 }
