@@ -30,6 +30,7 @@
 #include <k3bisooptions.h>
 #include <k3bwritingmodewidget.h>
 #include <k3bcore.h>
+#include <k3bglobalsettings.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -171,7 +172,9 @@ void K3bMovixDvdBurnDialog::readSettings()
     slotCancelClicked();
   }
 
-  if( doc()->size() > 4700372992LL )
+  if( doc()->size() > 4700372992LL &&
+      ( !k3bcore->globalSettings()->overburn() ||
+	doc()->size() > 4900000000LL ) )
     m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
   else
     m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );

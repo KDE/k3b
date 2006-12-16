@@ -25,6 +25,7 @@
 #include <k3bdataimagesettingswidget.h>
 #include <k3bisooptions.h>
 #include <k3bstdguiitems.h>
+#include <k3bglobalsettings.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -108,7 +109,11 @@ void K3bVideoDvdBurnDialog::readSettings()
 
   m_imageSettingsWidget->load( m_doc->isoOptions() );
 
-  if( doc()->size() > 4700372992LL )
+  // in case overburn is enabled we allow some made up max size 
+  // before we force a DL medium
+  if( doc()->size() > 4700372992LL &&
+      ( !k3bcore->globalSettings()->overburn() ||
+	doc()->size() > 4900000000LL ) )
     m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
   else
     m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );
