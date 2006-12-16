@@ -174,6 +174,7 @@ int K3bDvdJob::requestMedia( int state )
     mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
   // double layer media
+  // FIXME: what about overwriting??
   if( m_doc->size() > 4700372992LL )
     mt = K3bDevice::MEDIA_WRITABLE_DVD_DL;
 
