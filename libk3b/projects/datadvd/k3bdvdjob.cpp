@@ -174,9 +174,14 @@ int K3bDvdJob::requestMedia( int state )
     mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
   // double layer media
-  // FIXME: what about overwriting??
-  if( m_doc->size() > 4700372992LL )
-    mt = K3bDevice::MEDIA_WRITABLE_DVD_DL;
+  // in case overburn is enabled we allow some made up max size 
+  // before we force a DL medium
+  if( m_doc->size() > 4700372992LL ) {
+    if( !k3bcore->globalSettings()->overburn() ||
+	m_doc->size() > 4900000000LL ) {
+      mt = K3bDevice::MEDIA_WRITABLE_DVD_DL;
+    }
+  }
 
   return waitForMedia( m_doc->burner(),
 		       state, 
