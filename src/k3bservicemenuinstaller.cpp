@@ -66,7 +66,7 @@ bool K3bServiceInstaller::allInstalled() const
   d->update();
 
   for( unsigned int i = 0; i < d->allServiceMenuFiles.count(); ++i )
-    if( !KIO::NetAccess::exists( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], true ) )
+    if( !KIO::NetAccess::exists( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], true, 0 ) )
       return false;
   
   return true;
@@ -77,16 +77,22 @@ bool K3bServiceInstaller::install( QWidget* parent )
 {
   d->update();
 
+  bool success = true;
+
   // simply link all the globally installed K3b service menus to the local konqi service menu folder
-  if( !KIO::NetAccess::dircopy( d->allServiceMenus, d->konqiServicemenusFolder ) ) {
-    if( parent )
-      KMessageBox::error( parent,
-			  KIO::NetAccess::lastErrorString(),
-			  i18n("Failed to copy service menu files") );
-    return false;
-  }
-  else
-    return true;
+  for( QStringList::const_iterator it = d->allServiceMenus.constBegin();
+       it != d->allServiceMenus.constEnd(); ++it )
+    if( !KIO::NetAccess::file_copy( KURL::fromPathOrURL(*it), 
+				    KURL::fromPathOrURL(d->konqiServicemenusFolder), -1, 
+				    true, false, parent ) )
+      success = false;
+
+  if( !success && parent )
+    KMessageBox::error( parent,
+			KIO::NetAccess::lastErrorString(),
+			i18n("Failed to copy service menu files") );
+
+  return success;
 }
 
 
@@ -97,8 +103,8 @@ bool K3bServiceInstaller::remove( QWidget* parent )
   bool success = true;
 
   for( unsigned int i = 0; i < d->allServiceMenuFiles.count(); ++i )
-    if( KIO::NetAccess::exists( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], true ) )
-      if( !KIO::NetAccess::del( d->konqiServicemenusFolder + d->allServiceMenuFiles[i] ) )
+    if( KIO::NetAccess::exists( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], true, parent ) )
+      if( !KIO::NetAccess::del( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], parent ) )
 	success = false;
 
   if( !success && parent )
