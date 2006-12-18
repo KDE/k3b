@@ -449,7 +449,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
       d->verificationJob->clear();
       d->verificationJob->setDevice( d->doc->burner() );
       d->verificationJob->setGrownSessionSize( m_isoImager->size() );
-      d->verificationJob->addTrack( 0, m_isoImager->checksum() );
+      d->verificationJob->addTrack( 0, m_isoImager->checksum(), m_isoImager->size() );
 
       emit burning(false);
 
