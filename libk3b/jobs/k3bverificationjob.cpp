@@ -158,8 +158,10 @@ void K3bVerificationJob::start()
 void K3bVerificationJob::slotMediaReloaded( bool success )
 {
   if( !success )
-    blockingInformation( i18n("Please reload the medium and press 'ok'"),
-			 i18n("Unable to Close the Tray") );
+    waitForMedia( d->device,
+		  K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+		  K3bDevice::MEDIA_WRITABLE,
+		  i18n("Unable to Close the Tray") );
 
   emit newTask( i18n("Checking medium") );
 
