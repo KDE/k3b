@@ -459,7 +459,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 
 	     ( (d->wantedMediaType & K3bDevice::MEDIA_DVD_RW_SEQ) &&
 	       (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW_SEQ) &&
-	       (d->wantedMediaState == K3bDevice::STATE_EMPTY) &&
+	       (d->wantedMediaState & K3bDevice::STATE_EMPTY) &&
 	       (medium.diskInfo().diskState() != K3bDevice::STATE_EMPTY) ) ) {
 
       kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW needs to be formated." << endl;
@@ -512,7 +512,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     }
   } // --- DVD-RW ------
 
-
+  
     // /////////////////////////////////////////////////////////////
     //
     // CD handling (and DVD-R and DVD+R)
