@@ -31,6 +31,7 @@
 #include <qfont.h>
 #include <qpalette.h>
 #include <qwidgetstack.h>
+#include <qtimer.h>
 
 #include <kdockwidget.h>
 #include <kkeydialog.h>
@@ -175,7 +176,7 @@ K3bMainWindow::K3bMainWindow()
   slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
 
   connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
-  connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystem()) );
+  connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystemTimed()) );
   connect( K3bAudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(slotAudioServerError(const QString&)) );
 
   // FIXME: now make sure the welcome screen is displayed completely
@@ -1435,6 +1436,15 @@ void K3bMainWindow::slotEditBootImages()
       view->editBootImages();
     }
   }
+}
+
+
+void K3bMainWindow::slotCheckSystemTimed()
+{
+  // run the system check from the event queue so we do not
+  // mess with the device state resetting throughout the app
+  // when called from K3bDeviceManager::changed
+  QTimer::singleShot( 0, this, SLOT(slotCheckSystem()) );
 }
 
 

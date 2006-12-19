@@ -238,6 +238,11 @@ class K3bMainWindow : public KParts::DockMainWindow
 
   void createClient(K3bDoc* doc);
 
+  /**
+   * Run slotCheckSystem with a timer
+   */
+  void slotCheckSystemTimed();
+
  private:
   void fileSave( K3bDoc* doc = 0 );
   void fileSaveAs( K3bDoc* doc = 0 );
