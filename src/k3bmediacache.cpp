@@ -137,7 +137,7 @@ void K3bMediaCache::PollThread::run()
       m_deviceEntry->medium = m;
       	
       //
-      // inform the media chache about the media change
+      // inform the media cache about the media change
       //
       if( m_deviceEntry->blockedId == 0 )
 	QApplication::postEvent( m_deviceEntry->cache,
@@ -307,6 +307,8 @@ QString K3bMediaCache::mediumString( K3bDevice::Device* device, bool useContent 
 
 void K3bMediaCache::clearDeviceList()
 {
+  kdDebug() << k_funcinfo << endl;
+
   // make all the threads stop
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
        it != m_deviceMap.end(); ++it ) {
@@ -316,6 +318,7 @@ void K3bMediaCache::clearDeviceList()
   // and remove them
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
        it != m_deviceMap.end(); ++it ) {
+    kdDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish" << endl;
     it.data()->thread->wait();
     delete it.data();
   }
@@ -344,8 +347,10 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 
   // start all the polling threads
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
-       it != m_deviceMap.end(); ++it )
-    it.data()->thread->start();
+       it != m_deviceMap.end(); ++it ) {
+    if( !it.data()->blockedId )
+      it.data()->thread->start();
+  }
 }
 
 
