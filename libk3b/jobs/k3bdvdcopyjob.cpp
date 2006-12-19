@@ -331,6 +331,12 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       }
 
       d->imageFile.setName( m_imagePath );
+      if( !d->imageFile.open( IO_WriteOnly ) ) {
+	emit infoMessage( i18n("Unable to open '%1' for writing.").arg(m_imagePath), ERROR );
+	jobFinished( false );
+	d->running = false;
+	return;
+      }
     }
 
     if( K3b::isMounted( m_readerDevice ) ) {
