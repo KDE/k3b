@@ -525,8 +525,8 @@ void K3bDevice::DeviceManager::clear()
 
   d->allDevices.clear();
 
-  emit changed();
   emit changed( this );
+  emit changed();
 }
 
 
@@ -768,8 +768,8 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
       device->setCurrentWriteSpeed( device->maxWriteSpeed() );
     }
 
-    emit changed();
     emit changed( this );
+    emit changed();
   }
 
   return device;
@@ -787,8 +787,8 @@ void K3bDevice::DeviceManager::removeDevice( const QString& dev )
     d->bdWriter.removeRef( device );
     d->allDevices.removeRef( device );
 
-    emit changed();
     emit changed( this );
+    emit changed();
 
     delete device;
   }
