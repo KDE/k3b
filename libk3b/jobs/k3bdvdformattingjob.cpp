@@ -66,6 +66,8 @@ public:
   bool running;
 
   bool forceNoEject;
+
+  bool error;
 };
 
 
@@ -114,6 +116,7 @@ void K3bDvdFormattingJob::start()
 {
   d->canceled = false;
   d->running = true;
+  d->error = false;
 
   jobStarted();
 
@@ -219,6 +222,11 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
   else if( !line.startsWith("*") ) {
     pos = line.find( QRegExp( "\\d" ) );
   }
+  else if( line.startsWith( ":-(" ) ) {
+    if( line.startsWith( ":-( unable to proceed with format" ) ) {
+      d->error = true;
+    }
+  }
 
   if( pos >= 0 ) {
     int endPos = line.find( QRegExp("[^\\d\\.]"), pos ) - 1;
@@ -242,7 +250,7 @@ void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
     d->success = false;
   }
   else if( p->normalExit() ) {
-    if( p->exitStatus() == 0 ) {
+    if( !d->error && p->exitStatus() == 0 ) {
       emit infoMessage( i18n("Formatting successfully completed"), K3bJob::SUCCESS );
 
       if( d->lastProgressValue < 100 ) {
