@@ -1,20 +1,20 @@
+echo ""
+
 if test -n "$RESMGR_LIB"; then
-	echo "Resmgr support:                        yes"
+	echo "K3b - Resmgr support:                        yes"
 else
-	echo "Resmgr support:                         no"
+	echo "K3b - Resmgr support:                         no"
 fi
 
 echo ""
 
 
 if test x$have_hal = xyes; then
-	echo "Compile HAL support                    yes"
+	echo "K3b - Compile HAL support                    yes"
 else
-	echo "Compile HAL support                     no"
+	echo "K3b - Compile HAL support                     no"
 if test "x$ac_cv_use_hal" = "xyes" ; then
-	echo "    You are missing the HAL >= 0.5 headers and libraries"
-	echo "    or the DBus Qt bindings."
+	echo "K3b -     You are missing the HAL >= 0.5 headers and libraries"
+	echo "K3b -     or the DBus Qt bindings."
 fi
 fi
-
-echo ""

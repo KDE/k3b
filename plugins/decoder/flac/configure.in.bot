@@ -1,13 +1,13 @@
+echo ""
+
 if test x$have_flac = xyes; then
-	echo "FLAC support:                          yes"
+	echo "K3b - FLAC support:                          yes"
 else
-	echo "FLAC support:                           no"
+	echo "K3b - FLAC support:                           no"
 if test "$ac_cv_use_flac" = "yes"; then
 	if test "$have_flac" = "no"; then
-		echo "    You are missing the FLAC++ headers and libraries."
-		echo "    The FLAC decoding plugin won't be compiled."
+		echo "K3b -     You are missing the FLAC++ headers and libraries."
+		echo "K3b -     The FLAC decoding plugin won't be compiled."
 	fi
 fi
 fi
-
-echo ""

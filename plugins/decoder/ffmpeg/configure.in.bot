@@ -1,25 +1,25 @@
-echo "FFMpeg decoder plugin (decodes wma and others):"
+echo ""
+
+echo "K3b - FFMpeg decoder plugin (decodes wma and others):"
 if test  x$have_ffmpeg = xyes; then
-        echo "                                       yes"
+        echo "K3b -                                        yes"
 	if test x$enable_ffmpeg_all_codecs = xyes; then
-		echo "    WARNING: You enabled all codecs in the ffmpeg decoder plugin."
-		echo "             Be aware that most are not tested and track lengths"
-		echo "             will be wrong in many cases."
+		echo "K3b -     WARNING: You enabled all codecs in the ffmpeg decoder plugin."
+		echo "K3b -              Be aware that most are not tested and track lengths"
+		echo "K3b -              will be wrong in many cases."
 	fi
 else
-        echo "                                        no"
+        echo "K3b -                                         no"
 if test "$ac_cv_use_ffmpeg" = "yes"; then
 	if test "$ffmpeg_compiles" = "yes"; then
-		echo "    You are missing the ffmpeg libraries."
-		echo "    Make sure ffmpeg has been configured as a"
-		echo "    shared library (which is not the default)."
+		echo "K3b -     You are missing the ffmpeg libraries."
+		echo "K3b -     Make sure ffmpeg has been configured as a"
+		echo "K3b -     shared library (which is not the default)."
 	else
-		echo "    You are missing the ffmpeg headers and libraries"
-		echo "    version 0.4.9 or higher."
+		echo "K3b -     You are missing the ffmpeg headers and libraries"
+		echo "K3b -     version 0.4.9 or higher."
 	fi
-	echo "    The ffmpeg audio decoding plugin (decodes wma and"
-	echo "    others) won't be compiled."
+	echo "K3b -     The ffmpeg audio decoding plugin (decodes wma and"
+	echo "K3b -     others) won't be compiled."
 fi
 fi
-
-echo ""

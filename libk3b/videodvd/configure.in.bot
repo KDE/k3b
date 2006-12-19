@@ -1,11 +1,11 @@
-echo "Include libdvdread (Video DVD ripping) support:"
+echo ""
+
+echo "K3b - Include libdvdread (Video DVD ripping) support:"
 if test "$have_libdvdread" = "yes"; then
-	echo "                                       yes"
+	echo "K3b -                                        yes"
 else
-	echo "                                       no"
+	echo "K3b -                                        no"
 	if test "$ac_cv_use_libdvdread" = "yes"; then
-		echo "    You are missing the libdvdread library."
+		echo "K3b -     You are missing the libdvdread library."
 	fi
 fi
-
-echo ""
