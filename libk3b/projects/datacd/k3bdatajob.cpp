@@ -414,6 +414,8 @@ void K3bDataJob::slotWriterNextTrack( int t, int tt )
 
 void K3bDataJob::slotWriterJobFinished( bool success )
 {
+  d->pipe.close();
+
   //
   // This is a little workaround for the bad cancellation handling in this job
   // see cancel()
@@ -880,6 +882,8 @@ void K3bDataJob::cancelAll()
     m_writerJob->cancel();
   if( d->verificationJob )
     d->verificationJob->cancel();
+
+  d->pipe.close();
 
   cleanup();
 }

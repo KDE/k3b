@@ -385,6 +385,9 @@ void K3bDvdCopyJob::cancel()
       d->dataTrackReader->cancel();
     if( d->writerRunning )
       d->writerJob->cancel();
+    d->inPipe.close();
+    d->outPipe.close();
+    d->imageFile.close();
   }
   else {
     kdDebug() << "(K3bDvdCopyJob) not running." << endl;
@@ -506,6 +509,8 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 {
   d->readerRunning = false;
 
+  d->inPipe.close();
+
   // close the socket
   // otherwise growisofs will never quit.
   // FIXME: is it posiible to do this in a generic manner?
@@ -576,6 +581,8 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 void K3bDvdCopyJob::slotWriterFinished( bool success )
 {
   d->writerRunning = false;
+
+  d->outPipe.close();
 
   // already finished?
   if( !d->running )
