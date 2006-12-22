@@ -311,7 +311,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::AUDIO: {
     K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>(doc);
 
-    audioDoc->writeCdText( c->readBoolEntry( "cd_text", false ) );
+    audioDoc->writeCdText( c->readBoolEntry( "cd_text", true ) );
     audioDoc->setHideFirstTrack( c->readBoolEntry( "hide_first_track", false ) );
     audioDoc->setNormalize( c->readBoolEntry( "normalize", false ) );
     audioDoc->setAudioRippingParanoiaMode( c->readNumEntry( "paranoia mode", 0 ) );
@@ -385,7 +385,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::MIXED: {
     K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
 
-    mixedDoc->audioDoc()->writeCdText( c->readBoolEntry( "cd_text", false ) );
+    mixedDoc->audioDoc()->writeCdText( c->readBoolEntry( "cd_text", true ) );
     mixedDoc->audioDoc()->setNormalize( c->readBoolEntry( "normalize", false ) );
 
     // load mixed type
