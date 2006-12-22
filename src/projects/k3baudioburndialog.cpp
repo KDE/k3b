@@ -323,7 +323,7 @@ void K3bAudioBurnDialog::slotNormalizeToggled( bool on )
 
 void K3bAudioBurnDialog::slotCacheImageToggled( bool on )
 {
-  if( on ) {
+  if( !on ) {
     if( m_checkNormalize->isChecked() ) {
       if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
 						"The external program used for this task only supports normalizing a set "
@@ -334,7 +334,7 @@ void K3bAudioBurnDialog::slotCacheImageToggled( bool on )
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
 	m_checkNormalize->setChecked( false );
       else
-	m_checkCacheImage->setChecked( false );
+	m_checkCacheImage->setChecked( true );
     }
   }
 }
