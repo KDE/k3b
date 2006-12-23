@@ -22,7 +22,14 @@
 #include <math.h>
 
 
-K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
+class K3bDataItem::Private
+{
+public:
+  int flags;
+};
+
+
+K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent, int flags )
   : m_bHideOnRockRidge(false),
     m_bHideOnJoliet(false),
     m_bRemoveable(true),
@@ -32,6 +39,9 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent )
     m_bWriteToCd(true),
     m_sortWeight(0)
 {
+  d = new Private;
+  d->flags = flags;
+
   m_doc = doc;
   m_bHideOnRockRidge = m_bHideOnJoliet = false;
 
@@ -56,11 +66,26 @@ K3bDataItem::K3bDataItem( const K3bDataItem& item )
     m_extraInfo( item.m_extraInfo ),
     m_sortWeight( item.m_sortWeight )
 {
+  d = new Private;
+  d->flags = item.d->flags;
 }
 
 
 K3bDataItem::~K3bDataItem()
 {
+  delete d;
+}
+
+
+void K3bDataItem::setFlags( int flags )
+{
+  d->flags = flags;
+}
+
+
+bool K3bDataItem::isBootItem() const
+{
+  return d->flags & BOOT_IMAGE;
 }
 
 

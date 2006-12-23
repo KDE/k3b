@@ -57,8 +57,8 @@ bool operator>( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
 
 
 
-K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-  : K3bDataItem( doc, dir ),
+K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName, int flags )
+  : K3bDataItem( doc, dir, flags ),
     m_replacedItemFromOldSession(0),
     m_localPath(filePath)
 {

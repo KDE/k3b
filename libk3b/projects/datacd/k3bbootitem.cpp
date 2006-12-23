@@ -15,6 +15,7 @@
 
 #include "k3bbootitem.h"
 #include "k3bdatadoc.h"
+#include "k3bdiritem.h"
 
 #include <klocale.h>
 
@@ -22,7 +23,7 @@
 
 
 K3bBootItem::K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-  : K3bFileItem( fileName, doc, dir, k3bName ),
+  : K3bFileItem( fileName, doc, dir, k3bName, FILE|BOOT_IMAGE ),
     m_noBoot(false),
     m_bootInfoTable(false),
     m_loadSegment(0),

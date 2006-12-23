@@ -35,7 +35,7 @@ class K3bDataDoc;
 class LIBK3B_EXPORT K3bDataItem
 {
  public: 
-  K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0 );
+  K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent = 0, int flags = 0 );
 
   /**
    * Default copy constructor.
@@ -132,11 +132,26 @@ class LIBK3B_EXPORT K3bDataItem
 
   virtual void reparent( K3bDirItem* );
 
+  // FIXME: use all these flags and make the isXXX methods
+  // non-virtual. Then move the parent()->addDataItem call
+  // to the K3bDataItem constructor
+  enum ItemFlags {
+    DIR = 0x1,
+    FILE = 0x2,
+    SPECIALFILE = 0x4,
+    SYMLINK = 0x8,
+    OLD_SESSION = 0x10,
+    BOOT_IMAGE = 0x11
+  };
+
+  int flags() const;
+
   virtual bool isDir() const { return false; }
   virtual bool isFile() const { return false; }
   virtual bool isSpecialFile() const { return false; }
   virtual bool isSymLink() const { return false; }	
   virtual bool isFromOldSession() const { return false; }
+  bool isBootItem() const;
 
   bool hideOnRockRidge() const;
   bool hideOnJoliet() const;
@@ -181,7 +196,12 @@ class LIBK3B_EXPORT K3bDataItem
 
   QString m_k3bName;
 
+  void setFlags( int flags );
+
  private:
+  class Private;
+  Private* d;
+
   QString m_writtenName;
   QString m_rawIsoName;
 

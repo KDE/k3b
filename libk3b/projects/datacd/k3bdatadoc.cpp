@@ -913,8 +913,8 @@ void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
     m_sizeHandler->removeFile( removedItem );
 
   // update the boot item list
-  if( K3bBootItem* bi = dynamic_cast<K3bBootItem*>( removedItem ) ) {
-    m_bootImages.removeRef( bi );
+  if( removedItem->isBootItem() ) {
+    m_bootImages.removeRef( static_cast<K3bBootItem*>( removedItem ) );
     if( m_bootImages.isEmpty() ) {
       delete m_bootCataloge;
       m_bootCataloge = 0;
@@ -933,8 +933,8 @@ void K3bDataDoc::itemAddedToDir( K3bDirItem*, K3bDataItem* item )
     m_sizeHandler->addFile( item );
 
   // update the boot item list
-  if( K3bBootItem* bi = dynamic_cast<K3bBootItem*>( item ) )
-    m_bootImages.append( bi );
+  if( item->isBootItem() )
+    m_bootImages.append( static_cast<K3bBootItem*>( item ) );
 
   emit itemAdded( item );
   emit changed();

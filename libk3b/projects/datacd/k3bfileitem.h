@@ -39,7 +39,7 @@ public:
   /**
    * Creates a new K3bFileItem
    */
-  K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
+  K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0, int flags = 0 );
 
   /**
    * Constructor for optimized file item creation which does no additional stat.
