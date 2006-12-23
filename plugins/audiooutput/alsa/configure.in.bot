@@ -1,6 +1,6 @@
 echo ""
 
-if test "x$have_alsa_0_9" = xyes || test "x$have_alsa_1" = xyes; then
+if test "x$have_alsa" = xyes; then
 	echo "K3b - Audioplayer available (alsa)           yes"
 else
 	echo "K3b - Audioplayer available (alsa)            no"
