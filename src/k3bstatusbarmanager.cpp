@@ -167,7 +167,7 @@ bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
 static QString dataDocStats( K3bDataDoc* dataDoc )
 {
   return i18n("1 file in %1", "%n files in %1", dataDoc->root()->numFiles() )
-    .arg( i18n("1 folder", "%n folders", dataDoc->root()->numDirs() ) );
+    .arg( i18n("1 folder", "%n folders", dataDoc->root()->numDirs()+1 ) );
 }
 
 
