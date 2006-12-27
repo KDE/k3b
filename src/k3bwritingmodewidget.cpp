@@ -25,16 +25,44 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
+static const QString s_autoHelp = i18n("Let K3b select the best-suited mode. This is the recommended selection.");
+static const QString s_daoHelp = i18n("<em>Disk At Once</em> or more properly <em>Session At Once</em>. "
+				      "The laser is never turned off while writing the CD or DVD. "
+				      "This is the preferred mode to write audio CDs since it allows "
+				      "pregaps other than 2 seconds. Not all writers support DAO.<br>"
+				      "DVD-R(W)s written in DAO provide the best DVD-Video compatibility.");
+static const QString s_taoHelp = i18n("<em>Track At Once</em> should be supported by every CD writer. "
+				      "The laser will be turned off after every track.<br>"
+				      "Most CD writers need this mode for writing multisession CDs.");
+// TODO: add something like: "No CD-TEXT writing in TAO mode."
+
+static const QString s_rawHelp = i18n("RAW writing mode. The error correction data is created by the "
+				      "software instead of the writer device.<br>"
+				      "Try this if your CD writer fails to write in DAO and TAO.");
+static const QString s_seqHelp = i18n("Incremental sequential is the default writing mode for DVD-R(W). "
+				      "It allows multisession DVD-R(W)s. It only applies to DVD-R(W).");
+static const QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
+				      "or a DVD+RW. The media may just be overwritten. It is not possible "
+				      "to write multisession DVD-RWs in this mode but K3b uses growisofs "
+				      "to grow an ISO9660 filesystem within the first session, thus allowing "
+				      "new files to be added to an already burned disk.");
+
 
 class K3bWritingModeWidget::Private
 {
 public:
-  int modes;  
+  // modes set via setSupportedModes
+  int supportedModes;
+
+  // filtered modes
+  int selectedModes;
+
+  K3bDevice::Device* device;
 };
 
 
 K3bWritingModeWidget::K3bWritingModeWidget( int modes, QWidget* parent, const char* name )
-  : KComboBox( parent, name )
+  : K3bIntMapComboBox( parent, name )
 {
   init();
   setSupportedModes( modes );
@@ -42,7 +70,7 @@ K3bWritingModeWidget::K3bWritingModeWidget( int modes, QWidget* parent, const ch
 
 
 K3bWritingModeWidget::K3bWritingModeWidget( QWidget* parent, const char* name )
-  : KComboBox( parent, name )
+  : K3bIntMapComboBox( parent, name )
 {
   init();
   setSupportedModes( K3b::DAO | K3b::TAO | K3b::RAW );   // default: support all CD-R(W) modes
@@ -58,8 +86,9 @@ K3bWritingModeWidget::~K3bWritingModeWidget()
 void K3bWritingModeWidget::init()
 {
   d = new Private();
+  d->device = 0;
 
-  connect( this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)) );
+  connect( this, SIGNAL(valueChanged(int)), this, SIGNAL(writingModeChanged(int)) );
 
   QToolTip::add( this, i18n("Select the writing mode to use") );
 
@@ -69,93 +98,25 @@ void K3bWritingModeWidget::init()
 
 void K3bWritingModeWidget::initWhatsThisHelp()
 {
-  static QString s_daoHelp = i18n("<em>Disk At Once</em> or more properly <em>Session At Once</em>. "
-				  "The laser is never turned off while writing the CD or DVD. "
-				  "This is the preferred mode to write audio CDs since it allows "
-				  "pregaps other than 2 seconds. Not all writers support DAO.<br>"
-				  "DVD-R(W)s written in DAO provide the best DVD-Video compatibility.");
-  static QString s_taoHelp = i18n("<em>Track At Once</em> should be supported by every CD writer. "
-				  "The laser will be turned off after every track.<br>"
-				  "Most CD writers need this mode for writing multisession CDs.");
-  // TODO: add something like: "No CD-TEXT writing in TAO mode."
-
-  static QString s_rawHelp = i18n("RAW writing mode. The error correction data is created by the "
-				  "software instead of the writer device.<br>"
-				  "Try this if your CD writer fails to write in DAO and TAO.");
-  static QString s_seqHelp = i18n("Incremental sequential is the default writing mode for DVD-R(W). "
-				  "It allows multisession DVD-R(W)s. It only applies to DVD-R(W).");
-  static QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
-				  "or a DVD+RW. The media may just be overwritten. It is not possible "
-				  "to write multisession DVD-RWs in this mode but K3b uses growisofs "
-				  "to grow an ISO9660 filesystem within the first session, thus allowing "
-				  "new files to be added to an already burned disk.");
-
-  QWhatsThis::remove( this );
-  QString wh =
-    "<p><b>" + i18n("Writing mode") + "</b></p>" +
-    "<p><b>" + i18n("Auto") + "</b><br>" +
-    i18n("Let K3b select the best-suited mode. This is the recommended selection.") + "</p>";
-
-  if( d->modes & K3b::DAO )
-    wh += "<p><b>" + i18n("DAO") + "</b><br>" + s_daoHelp + "</p>";
-  if( d->modes & K3b::TAO )
-    wh += "<p><b>" + i18n("TAO") + "</b><br>" + s_taoHelp + "</p>";
-  if( d->modes & K3b::RAW )
-    wh += "<p><b>" + i18n("RAW") + "</b><br>" + s_rawHelp + "</p>";
-  if( d->modes & K3b::WRITING_MODE_INCR_SEQ )
-    wh += "<p><b>" + i18n("Incremental") + "</b><br>" + s_seqHelp + "</p>";
-  if( d->modes & K3b::WRITING_MODE_RES_OVWR )
-    wh += "<p><b>" + i18n("Restricted Overwrite") + "</b><br>" + s_ovwHelp + "</p>";
-
-  wh += "<p>" + i18n("Be aware that the writing mode is ignored when writing DVD+R(W) since "
-		     "there is only one way to write them.");
-  
-  wh += "<p><i>" + i18n("The selection of writing modes depends on the inserted burning medium.") + "</i>";
-
-  QWhatsThis::add( this, wh );
+  addGlobalWhatsThisText( "<p><b>" + i18n("Writing mode") + "</b></p>", 
+			  i18n("Be aware that the writing mode is ignored when writing DVD+R(W) since "
+			       "there is only one way to write them.")
+			  + "<p><i>"
+			  + i18n("The selection of writing modes depends on the inserted burning medium.")
+			  + "</i>" );
 }
 
 
 int K3bWritingModeWidget::writingMode() const
 {
-  if( currentText() == i18n("DAO") )
-    return K3b::DAO;
-  else if( currentText() == i18n("TAO") )
-    return K3b::TAO;
-  else if( currentText() == i18n("RAW") )
-    return K3b::RAW;
-  else if( currentText() == i18n("Incremental") )
-    return K3b::WRITING_MODE_INCR_SEQ;
-  else if( currentText() == i18n("Writing mode", "Overwrite") )
-    return K3b::WRITING_MODE_RES_OVWR;
-  else
-    return K3b::WRITING_MODE_AUTO;
+  return selectedValue();
 }
 
 
 void K3bWritingModeWidget::setWritingMode( int m )
 {
-  if( m & d->modes ) {
-    switch( m ) {
-    case K3b::DAO:
-      setCurrentItem( i18n("DAO"), false );
-      break;
-    case K3b::TAO:
-      setCurrentItem( i18n("TAO"), false );
-      break;
-    case K3b::RAW:
-      setCurrentItem( i18n("RAW"), false );
-      break;
-    case K3b::WRITING_MODE_INCR_SEQ:
-      setCurrentItem( i18n("Incremental"), false );
-      break;
-    case K3b::WRITING_MODE_RES_OVWR:
-      setCurrentItem( i18n("Writing mode", "Overwrite") );
-      break;
-    default:
-      setCurrentItem( 0 ); // WRITING_MODE_AUTO
-      break;
-    }
+  if( m & d->selectedModes ) {
+    setSelectedValue( m );
   }
   else {
     setCurrentItem( 0 ); // WRITING_MODE_AUTO
@@ -168,32 +129,41 @@ void K3bWritingModeWidget::setSupportedModes( int m )
   // save current mode
   int currentMode = writingMode();
 
-  d->modes = m|K3b::WRITING_MODE_AUTO;  // we always support the Auto mode
+  d->supportedModes = m|K3b::WRITING_MODE_AUTO;  // we always support the Auto mode
 
-  clear();
+  updateModes();
 
-  insertItem( i18n("Auto") );
-  if( m & K3b::DAO )
-    insertItem( i18n("DAO") );
-  if( m & K3b::TAO )
-    insertItem( i18n("TAO") );
-  if( m & K3b::RAW )
-    insertItem( i18n("RAW") );
-  if( m & K3b::WRITING_MODE_RES_OVWR )
-    insertItem( i18n("Writing mode", "Overwrite") );
-  if( m & K3b::WRITING_MODE_INCR_SEQ )
-    insertItem( i18n("Incremental") );
-
-  // restore saved mode
   setWritingMode( currentMode );
-
-  initWhatsThisHelp();
 }
 
 
-void K3bWritingModeWidget::slotActivated( int )
+void K3bWritingModeWidget::setDevice( K3bDevice::Device* dev )
 {
-  emit writingModeChanged( writingMode() );
+  d->device = dev;
+  updateModes();
+}
+
+
+void K3bWritingModeWidget::updateModes()
+{
+  clear();
+
+  if( d->device )
+    d->selectedModes = d->supportedModes & d->device->writingModes();
+  else
+    d->selectedModes = d->supportedModes;
+
+  insertItem( 0, i18n("Auto"), s_autoHelp );
+  if( d->selectedModes & K3b::DAO )
+    insertItem( K3b::DAO, i18n("DAO"), s_daoHelp );
+  if( d->selectedModes & K3b::TAO )
+    insertItem( K3b::TAO, i18n("TAO"), s_taoHelp );
+  if( d->selectedModes & K3b::RAW )
+    insertItem( K3b::RAW, i18n("RAW"), s_rawHelp );
+  if( d->selectedModes & K3b::WRITING_MODE_RES_OVWR )
+    insertItem( K3b::WRITING_MODE_RES_OVWR, i18n("Restricted Overwrite"), s_ovwHelp );
+  if( d->selectedModes & K3b::WRITING_MODE_INCR_SEQ )
+    insertItem( K3b::WRITING_MODE_INCR_SEQ, i18n("Incremental"), s_seqHelp );
 }
 
 
@@ -263,6 +233,7 @@ void K3bWritingModeWidget::determineSupportedModesFromMedium( const K3bMedium& m
     modes |= K3b::WRITING_MODE_RES_OVWR;
 
   setSupportedModes( modes );
+  setDevice( m.device() );
 }
 
 

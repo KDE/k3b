@@ -27,7 +27,7 @@
  * The K3bIntMapComboBox will create a WhatsThis help automatically from
  * the description texts (if all are set). The ToolTip has to be set manually.
  */
-class LIBK3B_EXPORT K3bIntMapComboBox : protected KComboBox
+class LIBK3B_EXPORT K3bIntMapComboBox : public KComboBox
 {
   Q_OBJECT
 
@@ -49,7 +49,10 @@ class LIBK3B_EXPORT K3bIntMapComboBox : protected KComboBox
   void valueHighlighted( int );
 
  public slots:
-  void setSelectedValue( int );
+  /**
+   * If \a v has not been added via insertItem the selection will not be changed
+   */
+  void setSelectedValue( int v );
 
   void clear();
 

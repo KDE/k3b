@@ -569,44 +569,43 @@ K3bDoc* K3bMainWindow::openDocument(const KURL& url)
 
 void K3bMainWindow::saveOptions()
 {
-  m_config->setGroup( "General Options" );
-
-  m_config->writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
-  actionFileOpenRecent->saveEntries( m_config, "Recent Files" );
-
-  m_config->writeEntry( "config version", k3bcore->version() );
+  actionFileOpenRecent->saveEntries( config(), "Recent Files" );
 
   // save dock positions!
-  manager()->writeConfig( m_config, "Docking Config" );
+  manager()->writeConfig( config(), "Docking Config" );
 
   m_dirView->saveConfig( config() );
 
-  saveMainWindowSettings( m_config, "main_window_settings" );
+  saveMainWindowSettings( config(), "main_window_settings" );
 
   k3bcore->saveSettings( config() );
 
   d->welcomeWidget->saveConfig( config() );
+
+  KConfigGroup grp( m_config, "General Options" );
+  grp.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
+  grp.writeEntry( "config version", k3bcore->version() );
 }
 
 
 void K3bMainWindow::readOptions()
 {
-  m_config->setGroup("General Options");
+  KConfigGroup grp( m_config, "General Options" );
 
-  bool bViewDocumentHeader = m_config->readBoolEntry("Show Document Header", true);
+  bool bViewDocumentHeader = grp.readBoolEntry("Show Document Header", true);
   actionViewDocumentHeader->setChecked(bViewDocumentHeader);
 
   // initialize the recent file list
-  actionFileOpenRecent->loadEntries(m_config,"Recent Files");
+  actionFileOpenRecent->loadEntries( config(), "Recent Files" );
 
   // do not read dock-positions from a config that has been saved by an old version
-  K3bVersion configVersion( m_config->readEntry( "config version", "0.1" ) );
+  K3bVersion configVersion( grp.readEntry( "config version", "0.1" ) );
   if( configVersion >= K3bVersion("0.12") )
-    manager()->readConfig( m_config, "Docking Config" );
+    manager()->readConfig( config(), "Docking Config" );
   else
     kdDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion << endl;
 
-  applyMainWindowSettings( m_config, "main_window_settings" );
+  applyMainWindowSettings( config(), "main_window_settings" );
 
   m_dirView->readConfig( config() );
 
@@ -623,6 +622,13 @@ void K3bMainWindow::saveProperties( KConfig* c )
   // 4. save the status of every project (modified/saved)
 
   QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
+
+  // FIXME: for some reason the config entries are not properly stored when using the default
+  //        KMainWindow session config. Since I was not able to find the bug I use another config object
+  // ----------------------------------------------------------
+  c = new KSimpleConfig( saveDir + "list", false );
+  c->setGroup( "Saved Session" );
+  // ----------------------------------------------------------
 
   const QPtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
   c->writeEntry( "Number of projects", docs.count() );
@@ -650,6 +656,12 @@ void K3bMainWindow::saveProperties( KConfig* c )
 
     ++cnt;
   }
+
+  // FIXME: for some reason the config entries are not properly stored when using the default
+  //        KMainWindow session config. Since I was not able to find the bug I use another config object
+  // ----------------------------------------------------------
+  delete c;
+  // ----------------------------------------------------------
 }
 
 
@@ -666,8 +678,16 @@ void K3bMainWindow::readProperties( KConfig* c )
 
   QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
 
+  // FIXME: for some reason the config entries are not properly stored when using the default
+  //        KMainWindow session config. Since I was not able to find the bug I use another config object
+  // ----------------------------------------------------------
+  c = new KSimpleConfig( saveDir + "list", true );
+  c->setGroup( "Saved Session" );
+  // ----------------------------------------------------------
+
   int cnt = c->readNumEntry( "Number of projects", 0 );
-  kdDebug() << "(K3bMainWindow::readProperties) num: " << cnt << endl;
+  kdDebug() << "(K3bMainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
+	    << "                                read from config group " << c->group() << endl;
 
   for( int i = 1; i <= cnt; ++i ) {
     // in this case the constructor works since we saved as url()
@@ -697,6 +717,12 @@ void K3bMainWindow::readProperties( KConfig* c )
 
   // and now remove the temp dir
   KIO::del( KURL::fromPathOrURL(saveDir), false, false );
+
+  // FIXME: for some reason the config entries are not properly stored when using the default
+  //        KMainWindow session config. Since I was not able to find the bug I use another config object
+  // ----------------------------------------------------------
+  delete c;
+  // ----------------------------------------------------------
 }
 
 
@@ -797,8 +823,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
   if( !doc->isModified() )
     return true;
 
-  m_config->setGroup( "General Options" );
-  if( !m_config->readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
+  if( !KConfigGroup( config(), "General Options" ).readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
     return true;
 
   switch ( KMessageBox::warningYesNoCancel( this, 

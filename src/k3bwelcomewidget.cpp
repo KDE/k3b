@@ -54,7 +54,7 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
   fnt.setBold(true);
   fnt.setPointSize( 16 );
   m_header = new QSimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
-  m_infoText = new QSimpleRichText( QString("<qt align=\"center\">K3b %1 (c) 1999 - 2006 Sebastian Trüg")
+  m_infoText = new QSimpleRichText( QString::fromUtf8("<qt align=\"center\">K3b %1 (c) 1999 - 2006 Sebastian Trüg")
 				    .arg(kapp->aboutData()->version()), font() );
 
   // set a large width just to be sure no linebreak occurs
@@ -306,9 +306,7 @@ K3bWelcomeWidget::~K3bWelcomeWidget()
 
 void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 {
-  c->setGroup( "Welcome Widget" );
-
-  QStringList sl = c->readListEntry( "welcome_actions" );
+  QStringList sl = KConfigGroup( c, "Welcome Widget" ).readListEntry( "welcome_actions" );
 
   if( sl.isEmpty() ) {
     sl.append( "file_new_audio" );
@@ -330,13 +328,13 @@ void K3bWelcomeWidget::loadConfig( KConfigBase* c )
 
 void K3bWelcomeWidget::saveConfig( KConfigBase* c )
 {
-  c->setGroup( "Welcome Widget" );
+  KConfigGroup grp( c, "Welcome Widget" );
 
   QStringList sl;
   for( QPtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
     sl.append( it.current()->name() );
 
-  c->writeEntry( "welcome_actions", sl );
+  grp.writeEntry( "welcome_actions", sl );
 }
 
 

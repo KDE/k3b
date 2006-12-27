@@ -17,7 +17,7 @@
 #ifndef _K3B_WRITING_MODE_WIDGET_H_
 #define _K3B_WRITING_MODE_WIDGET_H_
 
-#include <kcombobox.h>
+#include <k3bintmapcombobox.h>
 
 #include <k3bmedium.h>
 
@@ -27,7 +27,7 @@ class KConfigBase;
 /**
  * Allows selection of K3b::WritingMode
  */
-class K3bWritingModeWidget : public KComboBox
+class K3bWritingModeWidget : public K3bIntMapComboBox
 {
   Q_OBJECT
 
@@ -52,10 +52,19 @@ class K3bWritingModeWidget : public KComboBox
   void setSupportedModes( int );
 
   /**
+   * If the device is set the supported writing modes
+   * will be filtered by the ones supported by the drive.
+   */
+  void setDevice( K3bDevice::Device* );
+
+  /**
    * Set the writing modes which make sense with the provided medium.
+   * This will also reset the device from the medium.
    *
    * \param m The medium. May even be non-writable or no medium at all
    *          in which case only the auto mode will be selected.
+   *
+   * \sa setDevice
    */
   void determineSupportedModesFromMedium( const K3bMedium& m );
 
@@ -70,11 +79,9 @@ class K3bWritingModeWidget : public KComboBox
  signals:
   void writingModeChanged( int );
 
- private slots:
-  void slotActivated( int );
-
  private:
   void init();
+  void updateModes();
   void initWhatsThisHelp();
 
   class Private;

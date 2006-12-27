@@ -136,6 +136,8 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent, const char* n
 	   this, SLOT(slotToggleAll()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)),
 	   this, SLOT(slotToggleAll()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
+	   m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
   connect( m_comboImageType, SIGNAL(activated(int)),
 	   this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)),

@@ -285,25 +285,19 @@ QPoint K3bJobProgressOSD::fixupPosition( const QPoint& pp )
 
 void K3bJobProgressOSD::readSettings( KConfigBase* c )
 {
-  QString oldGroup = c->group();
-  c->setGroup( "OSD Position" );
+  KConfigGroup grp( c, "OSD Position" );
 
-  setPosition( c->readPointEntry( "Position", 0 ) );
-  setScreen( c->readNumEntry( "Screen", 0 ) );
-    
-  c->setGroup( oldGroup );
+  setPosition( grp.readPointEntry( "Position", 0 ) );
+  setScreen( grp.readNumEntry( "Screen", 0 ) );
 }
 
 
 void K3bJobProgressOSD::saveSettings( KConfigBase* c )
 {
-  QString oldGroup = c->group();
-  c->setGroup( "OSD Position" );
+  KConfigGroup grp( c, "OSD Position" );
 
-  c->writeEntry( "Position", m_position );
-  c->writeEntry( "Screen", m_screen );
-
-  c->setGroup( oldGroup );
+  grp.writeEntry( "Position", m_position );
+  grp.writeEntry( "Screen", m_screen );
 }
 
 #include "k3bjobprogressosd.moc"

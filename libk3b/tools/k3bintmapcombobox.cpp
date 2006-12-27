@@ -24,7 +24,7 @@ class K3bIntMapComboBox::Private
 {
 public:
   QMap<int, int> valueIndexMap;
-  QValueVector<QPair<int, QString> > indexValueDescriptionMap;
+  QMap<int, QPair<int, QString> > indexValueDescriptionMap;
 
   QString topWhatsThis;
   QString bottomWhatsThis;
@@ -50,13 +50,17 @@ K3bIntMapComboBox::~K3bIntMapComboBox()
 
 int K3bIntMapComboBox::selectedValue() const
 {
-  return d->indexValueDescriptionMap[KComboBox::currentItem()].first;
+  if( (int)d->indexValueDescriptionMap.count() > KComboBox::currentItem() )
+    return d->indexValueDescriptionMap[KComboBox::currentItem()].first;
+  else
+    return 0;
 }
 
 
 void K3bIntMapComboBox::setSelectedValue( int value )
 {
-  KComboBox::setCurrentItem( d->valueIndexMap[value] );
+  if( d->valueIndexMap.contains( value ) )
+    KComboBox::setCurrentItem( d->valueIndexMap[value] );
 }
 
 
@@ -74,10 +78,13 @@ bool K3bIntMapComboBox::insertItem( int value, const QString& text, const QStrin
   if( d->valueIndexMap.contains( value ) )
     return false;
 
-  d->valueIndexMap[value] = KComboBox::count();
-  d->indexValueDescriptionMap.append( qMakePair<int, QString>( value, description ) );
+  // FIXME: allow inserition at any index
+  index = KComboBox::count();
 
-  KComboBox::insertItem( text, index );
+  d->valueIndexMap[value] = index;
+  d->indexValueDescriptionMap[index] = qMakePair<int, QString>( value, description );
+
+  KComboBox::insertItem( text );
 
   updateWhatsThis();
 

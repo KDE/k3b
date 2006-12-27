@@ -93,12 +93,13 @@ K3bApplication::~K3bApplication()
 
 void K3bApplication::init()
 {
+  KConfigGroup generalOptions( config(), "General Options" );
+
   QGuardedPtr<K3bSplash> splash;
   if( !isRestored() ) {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    config()->setGroup( "General Options" );
-    if( config()->readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
+    if( generalOptions.readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
       // we need the correct splash pic
       m_core->m_themeManager->readConfig( config() );
 
@@ -120,8 +121,7 @@ void K3bApplication::init()
 
   m_core->deviceManager()->printDevices();
 
-  config()->setGroup( "General Options" );
-  m_audioServer->setOutputMethod( config()->readEntry( "Audio Output System", "arts" ).local8Bit() );
+  m_audioServer->setOutputMethod( generalOptions.readEntry( "Audio Output System", "arts" ).local8Bit() );
 
   emit initializationInfo( i18n("Creating GUI...") );
 
@@ -139,8 +139,6 @@ void K3bApplication::init()
     m_mainWindow->show();
 
     emit initializationInfo( i18n("Ready.") );
-
-    config()->setGroup( "General Options" );
 
     emit initializationDone();
 

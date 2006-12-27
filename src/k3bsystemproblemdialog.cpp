@@ -146,8 +146,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
 void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 {
   if( m_checkDontShowAgain->isChecked() ) {
-    kapp->config()->setGroup( "General Options" );
-    kapp->config()->writeEntry( "check system config", false );
+    KConfigGroup( kapp->config(), "General Options" ).writeEntry( "check system config", false );
   }
 
   e->accept();

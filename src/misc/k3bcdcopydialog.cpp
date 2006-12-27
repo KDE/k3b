@@ -199,6 +199,8 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
 	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
+	   m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );

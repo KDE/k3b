@@ -274,6 +274,9 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 void K3bProjectManager::loadDefaults( K3bDoc* doc )
 {
   KConfig* c = kapp->config();
+
+  QString oldGroup = c->group();
+
   QString cg = "default " + doc->typeString() + " settings";
 
   // earlier K3b versions loaded the saved settings
@@ -439,6 +442,8 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   }
 
   doc->setModified( false );
+
+  c->setGroup( oldGroup );
 }
 
 

@@ -145,6 +145,9 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
   if( !m_projectDataMap[doc].modified ) {
     setTabIconSet( doc->view(), SmallIconSet( "filesave" ) );
     m_projectDataMap[doc].modified = true;
+
+    // we need this one for the session management
+    changeTab( doc->view(), doc->URL().fileName() );
   }
 }
 

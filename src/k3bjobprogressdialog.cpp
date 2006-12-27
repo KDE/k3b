@@ -263,15 +263,12 @@ void K3bJobProgressDialog::setupGUI()
 
 void K3bJobProgressDialog::show()
 {
-  KConfig* c = k3bcore->config();
-  c->setGroup( "General Options");
-
-  if( c->readBoolEntry( "hide main window while writing", false ) )
+  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "hide main window while writing", false ) )
     if( QWidget* w = kapp->mainWidget() )
       w->hide();
 
   if( m_osd ) {
-    m_osd->readSettings( c );
+    m_osd->readSettings( k3bcore->config() );
     m_osd->show();
   }
 
@@ -460,8 +457,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
     setCaption( m_job->jobDescription() );
 
-    kapp->config()->setGroup( "General Options" );
-    if( kapp->config()->readBoolEntry( "Show progress OSD", true ) ) {
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "Show progress OSD", true ) ) {
       if( !m_osd )
 	m_osd = new K3bJobProgressOSD( this, "progressosd" );
     }
