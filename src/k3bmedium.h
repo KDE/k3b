@@ -26,24 +26,6 @@
 
 
 /**
- * Internal class used by K3bMedium
- */
-class K3bMediumData : public KShared
-{
-public:
-  K3bMediumData();
-
-  K3bDevice::Device* device;
-  K3bDevice::DiskInfo diskInfo;
-  K3bDevice::Toc toc;
-  K3bDevice::CdText cdText;
-  QValueList<int> writingSpeeds;
-  K3bIso9660SimplePrimaryDescriptor isoDesc;
-  int content;
-};
-
-
-/**
  * K3bMedium represents a medium in K3b.
  *
  * It is implicetely shared, thus copying is very fast.
@@ -52,8 +34,11 @@ class K3bMedium
 {
  public:
   K3bMedium();
+  K3bMedium( const K3bMedium& );
   K3bMedium( K3bDevice::Device* dev );
   ~K3bMedium();
+
+  K3bMedium& operator=( const K3bMedium& );
 
   void setDevice( K3bDevice::Device* dev );
 
@@ -127,12 +112,15 @@ class K3bMedium
    */
   QString longString() const;
 
+  bool operator==( const K3bMedium& other );
+
  private:
   void analyseContent();
 
   void detach();
 
-  KSharedPtr<K3bMediumData> d;
+  class Data;
+  KSharedPtr<Data> d;
 };
 
 #endif

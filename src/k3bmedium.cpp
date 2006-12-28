@@ -26,8 +26,26 @@
 #include <klocale.h>
 #include <kio/global.h>
 
+/**
+ * Internal class used by K3bMedium
+ */
+class K3bMedium::Data : public KShared
+{
+public:
+  Data();
 
-K3bMediumData::K3bMediumData()
+  K3bDevice::Device* device;
+  K3bDevice::DiskInfo diskInfo;
+  K3bDevice::Toc toc;
+  K3bDevice::CdText cdText;
+  QValueList<int> writingSpeeds;
+  K3bIso9660SimplePrimaryDescriptor isoDesc;
+  int content;
+};
+
+
+
+K3bMedium::Data::Data()
   : device( 0 ),
     content( K3bMedium::CONTENT_NONE )
 {
@@ -36,13 +54,20 @@ K3bMediumData::K3bMediumData()
 
 K3bMedium::K3bMedium()
 {
-  d = new K3bMediumData;
+  d = new Data;
+}
+
+
+
+K3bMedium::K3bMedium( const K3bMedium& other )
+{
+  d = other.d;
 }
 
 
 K3bMedium::K3bMedium( K3bDevice::Device* dev )
 {
-  d = new K3bMediumData;
+  d = new Data;
   d->device = dev;
 }
 
@@ -52,10 +77,18 @@ K3bMedium::~K3bMedium()
 }
 
 
+K3bMedium& K3bMedium::operator=( const K3bMedium& other )
+{
+  if( this != &other )
+    d = other.d;
+  return *this;
+}
+
+
 void K3bMedium::detach()
 {
   if( d.count() > 1 )
-    d = new K3bMediumData( *d );
+    d = new Data( *d );
 }
 
 
@@ -411,4 +444,18 @@ QString K3bMedium::beautifiedVolumeId() const
   }
 
   return newId;
+}
+
+
+bool K3bMedium::operator==( const K3bMedium& other )
+{
+  if( this->d == other.d )
+    return true;
+
+  return( this->device() == other.device() &&
+	  this->diskInfo() == other.diskInfo() &&
+	  this->toc() == other.toc() &&
+	  this->cdText() == other.cdText() &&
+	  this->content() == other.content() &&
+	  this->iso9660Descriptor() == other.iso9660Descriptor() );
 }
