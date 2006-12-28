@@ -124,24 +124,24 @@ void K3bMediaContentsView::reload()
 
 void K3bMediaContentsView::enableInteraction( bool enable )
 {
-  setEnabled( enable );
+  mainWidget()->setEnabled( enable );
 }
 
 
 void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
 {
-  if( !d->autoReload )
+  if( !d->autoReload || !isVisible() )
     return;
 
-  if( dev == d->medium.device() ) {
+  if( dev == device() ) {
     K3bMedium m = k3bappcore->mediaCache()->medium( dev );
     if( m.content() & supportedMediumContent() &&
 	m.diskInfo().mediaType() & supportedMediumTypes() &&
 	m.diskInfo().diskState() & supportedMediumStates() )
       reload( m );
+    else
+      enableInteraction( false );
   }
-  else
-    setEnabled( false );
 }
 
 #include "k3bmediacontentsview.moc"
