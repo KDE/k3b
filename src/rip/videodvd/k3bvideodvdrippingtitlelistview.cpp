@@ -17,6 +17,8 @@
 #include "k3bvideodvdrippingpreview.h"
 
 #include <k3btooltip.h>
+#include <k3bapplication.h>
+#include <k3bmediacache.h>
 
 #include <k3bvideodvd.h>
 #include <k3bvideodvdaudiostream.h>
@@ -359,6 +361,7 @@ void K3bVideoDVDRippingTitleListView::setVideoDVD( const K3bVideoDVD::VideoDVD& 
   clear();
 
   m_dvd = dvd;
+  m_medium = k3bappcore->mediaCache()->medium( m_dvd.device() );
   m_itemMap.resize( dvd.numTitles() );
 
   for( unsigned int i = 0; i < dvd.numTitles(); ++i )
@@ -376,7 +379,8 @@ void K3bVideoDVDRippingTitleListView::slotPreviewDone( bool success )
   else
     m_itemMap[m_currentPreviewTitle-1]->setPreview( QImage() );
 
-  if( isVisible() ) {
+  // cancel if we got hidden or if the medium changed.
+  if( isVisible() && m_medium == k3bappcore->mediaCache()->medium( m_dvd.device() ) ) {
     ++m_currentPreviewTitle;
     if( m_currentPreviewTitle <= m_dvd.numTitles() )
       m_previewGen->generatePreview( m_dvd, m_currentPreviewTitle );

@@ -246,4 +246,11 @@ void K3bVideoDVDRippingView::initActions()
   m_popupMenu->insert( actionStartRip );
 }
 
+
+void K3bVideoDVDRippingView::enableInteraction( bool enable )
+{
+  actionCollection()->action( "start_rip" )->setEnabled( enable );
+}
+
+
 #include "k3bvideodvdrippingview.moc"

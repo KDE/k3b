@@ -50,7 +50,7 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
 
  private:
   void reloadMedium();
-
+  void enableInteraction( bool enable );
   void initActions();
 
   KActionCollection* m_actionCollection;

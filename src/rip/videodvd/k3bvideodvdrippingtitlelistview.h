@@ -18,6 +18,7 @@
 
 #include <k3blistview.h>
 #include <k3bvideodvd.h>
+#include <k3bmedium.h>
 
 #include <qvaluevector.h>
 
@@ -51,6 +52,7 @@ class K3bVideoDVDRippingTitleListView : public K3bListView
   unsigned int m_currentPreviewTitle;
 
   K3bVideoDVD::VideoDVD m_dvd;
+  K3bMedium m_medium;
 };
 
 #endif

@@ -63,7 +63,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
     chapter = QMIN( QMAX( dvd[title-1].numChapters()/2, 2 ), QMAX( dvd[title-1].numChapters() - 1, 1 ) );
 
   // select a frame number
-  unsigned int frame = 20;
+  unsigned int frame = 30;
   if( dvd[title-1][chapter-1].playbackTime().totalFrames() < frame )
     frame = dvd[title-1][chapter-1].playbackTime().totalFrames() / 2;
 
