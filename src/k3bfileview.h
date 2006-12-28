@@ -18,7 +18,7 @@
 #define K3BFILEVIEW_H
 
 
-#include "k3bcdcontentsview.h"
+#include "k3bcontentsview.h"
 
 
 class K3bDirOperator;
@@ -34,7 +34,7 @@ class K3bToolBox;
 /**
   *@author Sebastian Trueg
   */
-class K3bFileView : public K3bCdContentsView
+class K3bFileView : public K3bContentsView
 {
   Q_OBJECT
 

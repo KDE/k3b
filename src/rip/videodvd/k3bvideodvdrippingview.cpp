@@ -38,7 +38,11 @@
 
 
 K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
-  : K3bCdContentsView( true, parent, name )
+  : K3bMediaContentsView( true, 
+			  K3bMedium::CONTENT_VIDEO_DVD,
+			  K3bDevice::MEDIA_DVD_ALL,
+			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
+			  parent, name )
 {
   QGridLayout* mainGrid = new QGridLayout( mainWidget() );
 
@@ -81,12 +85,12 @@ K3bVideoDVDRippingView::~K3bVideoDVDRippingView()
 }
 
 
-void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
+void K3bVideoDVDRippingView::reloadMedium()
 {
   //
   // For VideoDVD reading it is important that the DVD is not mounted
   //
-  if( K3b::isMounted( medium.device() ) && !K3b::unmount( medium.device() ) ) {
+  if( K3b::isMounted( device() ) && !K3b::unmount( device() ) ) {
     KMessageBox::error( this, 
 			i18n("K3b was unable to unmount device '%1' containing medium '%2'. "
 			     "Video DVD ripping will not work if the device is mounted. "
@@ -98,7 +102,7 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
   // K3bVideoDVD::open does not necessarily fail on encrypted DVDs if dvdcss is not
   // available. Thus, we test the availability of libdvdcss here
   //
-  if( medium.device()->copyrightProtectionSystemType() > 0 ) {
+  if( device()->copyrightProtectionSystemType() > 0 ) {
     K3bLibDvdCss* css = K3bLibDvdCss::create();
     if( !css ) {
       KMessageBox::error( this, i18n("<p>Unable to read Video DVD contents: Found encrypted Video DVD."
@@ -111,8 +115,8 @@ void K3bVideoDVDRippingView::setMedium( const K3bMedium& medium )
 
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-  if( m_dvd.open( medium.device() ) ) {
-    setTitle( medium.beautifiedVolumeId() + " (" + i18n("Video DVD") + ")" );
+  if( m_dvd.open( device() ) ) {
+    setTitle( medium().beautifiedVolumeId() + " (" + i18n("Video DVD") + ")" );
     m_labelLength->setText( i18n("%n title", "%n titles", m_dvd.numTitles() ) );
     m_titleView->setVideoDVD( m_dvd );
     QApplication::restoreOverrideCursor();

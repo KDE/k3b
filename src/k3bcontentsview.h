@@ -1,6 +1,6 @@
 /* 
  *
- * $Id$
+ * $Id: k3bcdcontentsview.h 576315 2006-08-23 19:32:42Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -14,8 +14,8 @@
  */
 
 
-#ifndef K3BCD_CONTENTS_VIEW_H
-#define K3BCD_CONTENTS_VIEW_H
+#ifndef _K3B_CONTENTS_VIEW_H_
+#define _K3B_CONTENTS_VIEW_H_
 
 #include <qwidget.h>
 #include <k3bthememanager.h>
@@ -23,22 +23,18 @@
 class K3bThemedHeader;
 
 
-/**
- * Abstract class from which all cd views must be
- * derived.
- */
-class K3bCdContentsView : public QWidget
+class K3bContentsView : public QWidget
 {
   Q_OBJECT
 
  public:
-  K3bCdContentsView( bool withHeader,
-		     QWidget* parent = 0, const char* name = 0 );
-  virtual ~K3bCdContentsView();
-
-  virtual void reload();
+  virtual ~K3bContentsView();
 
  protected:
+  K3bContentsView( bool withHeader,
+		   QWidget* parent = 0, 
+		   const char* name = 0 );
+
   QWidget* mainWidget();
   void setMainWidget( QWidget* );
   void setTitle( const QString& );
@@ -47,7 +43,6 @@ class K3bCdContentsView : public QWidget
 
  private:
   K3bThemedHeader* m_header;
-
   QWidget* m_centerWidget;
 };
 

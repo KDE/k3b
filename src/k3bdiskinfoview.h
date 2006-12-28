@@ -18,9 +18,8 @@
 #ifndef K3BDISKINFOVIEW_H
 #define K3BDISKINFOVIEW_H
 
-#include "../k3bcdcontentsview.h"
-
-#include "../k3bmedium.h"
+#include "k3bmediacontentsview.h"
+#include "k3bmedium.h"
 
 class QLabel;
 class KListView;
@@ -32,7 +31,7 @@ namespace K3bDevice {
   class DiskInfo;
 }
 
-class K3bDiskInfoView : public K3bCdContentsView
+class K3bDiskInfoView : public K3bMediaContentsView
 {
   Q_OBJECT
 
@@ -40,12 +39,9 @@ class K3bDiskInfoView : public K3bCdContentsView
   K3bDiskInfoView( QWidget* parent = 0, const char* name = 0 );
   ~K3bDiskInfoView();
 
-  void reload();
-
- public slots:
-  void displayInfo( const K3bMedium& );
-
  private:
+  void reloadMedium();
+
   void createMediaInfoItems( const K3bMedium& );
   void createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& );
 

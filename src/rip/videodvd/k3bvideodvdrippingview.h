@@ -16,7 +16,7 @@
 #ifndef _K3B_VIDEODVD_RIPPING_VIEW_H_
 #define _K3B_VIDEODVD_RIPPING_VIEW_H_
 
-#include <k3bcdcontentsview.h>
+#include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
 #include <k3bvideodvd.h>
 
@@ -28,15 +28,13 @@ class KActionMenu;
 class KListView;
 class QListViewItem;
 
-class K3bVideoDVDRippingView : public K3bCdContentsView
+class K3bVideoDVDRippingView : public K3bMediaContentsView
 {
   Q_OBJECT
 
  public:
   K3bVideoDVDRippingView( QWidget* parent = 0, const char * name = 0 );
   ~K3bVideoDVDRippingView();
-
-  void setMedium( const K3bMedium& medium );
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
@@ -51,6 +49,8 @@ class K3bVideoDVDRippingView : public K3bCdContentsView
   void slotUncheck();
 
  private:
+  void reloadMedium();
+
   void initActions();
 
   KActionCollection* m_actionCollection;

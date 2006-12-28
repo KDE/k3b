@@ -17,7 +17,7 @@
 #ifndef _K3B_AUDIOCD_VIEW_H_
 #define _K3B_AUDIOCD_VIEW_H_
 
-#include <k3bcdcontentsview.h>
+#include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
 
 #include <k3btoc.h>
@@ -41,17 +41,13 @@ namespace K3bDevice {
 }
 
 
-class K3bAudioCdView : public K3bCdContentsView
+class K3bAudioCdView : public K3bMediaContentsView
 {
   Q_OBJECT
 
  public:
   K3bAudioCdView( QWidget* parent = 0, const char * name = 0 );
   ~K3bAudioCdView();
-
-  void setDisk( const K3bMedium& );
-
-  //  const K3bDevice::DiskInfo& displayedDisk() const { return m_diskInfo; }
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
@@ -61,7 +57,6 @@ class K3bAudioCdView : public K3bCdContentsView
   QDragObject* dragObject();
 
  public slots:
-  void reload();
   void queryCddb();
 
  private slots:
@@ -80,9 +75,12 @@ class K3bAudioCdView : public K3bCdContentsView
   void slotDeselect();
 
  private:
+  void reloadMedium();
+
   void initActions();
   void updateDisplay();
   void enableInteraction( bool );
+  void showBusyLabel( bool );
 
   K3bDevice::Toc m_toc;
   K3bDevice::Device* m_device;

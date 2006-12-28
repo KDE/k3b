@@ -57,8 +57,6 @@ class K3bDirView : public QVBox
   K3bDirView(K3bFileTreeView* tree, QWidget *parent=0, const char *name=0);
   ~K3bDirView();
 
-  //  K3bCdView* getCdView() { return m_cdView; }
-
  public slots:
   void saveConfig( KConfig* c );
   void readConfig( KConfig* c );
@@ -72,7 +70,6 @@ class K3bDirView : public QVBox
   void slotUnmountFinished( bool );
   void showMediumInfo( const K3bMedium& );
   void slotDetectingDiskInfo( K3bDevice::Device* dev );
-  void reload();
   void home();
   void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
 

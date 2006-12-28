@@ -230,6 +230,9 @@ namespace K3bDevice {
                     MEDIA_DVD_ROM,
     MEDIA_BD_ALL = MEDIA_WRITABLE_BD |
                    MEDIA_BD_ROM,
+    MEDIA_ALL = MEDIA_CD_ALL |
+                MEDIA_DVD_ALL |
+                MEDIA_BD_ALL,
     MEDIA_UNKNOWN = 0x10000000                     /**< Represents an unknown media type (when an error occurred) */
   };
 

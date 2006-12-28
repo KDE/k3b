@@ -95,7 +95,11 @@ public:
 
 
 K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
-  : K3bCdContentsView( true, parent, name )
+  : K3bMediaContentsView( true, 
+			  K3bMedium::CONTENT_AUDIO,
+			  K3bDevice::MEDIA_CD_ALL,
+			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
+			  parent, name )
 {
   QGridLayout* mainGrid = new QGridLayout( mainWidget() );
 
@@ -149,14 +153,14 @@ K3bAudioCdView::~K3bAudioCdView()
 }
 
 
-void K3bAudioCdView::setDisk( const K3bMedium& medium )
+void K3bAudioCdView::reloadMedium()
 {
-  m_toc = medium.toc();
-  m_device = medium.device();
+  m_toc = medium().toc();
+  m_device = medium().device();
 
   // initialize cddb info for editing
   m_cddbInfo = K3bCddbResultEntry();
-  m_cddbInfo.discid = QString::number( medium.toc().discId(), 16 );
+  m_cddbInfo.discid = QString::number( medium().toc().discId(), 16 );
 
   for( int i = 0; i < (int)m_toc.count(); ++i ) {
     m_cddbInfo.titles.append("");
@@ -165,7 +169,7 @@ void K3bAudioCdView::setDisk( const K3bMedium& medium )
   }
 
   m_trackView->clear();
-  enableInteraction(false);
+  showBusyLabel(true);
 
   // create a listviewItem for every audio track
   int index = 1;
@@ -184,14 +188,8 @@ void K3bAudioCdView::setDisk( const K3bMedium& medium )
     index++;
   }
 
-  m_cdText = medium.cdText();
+  m_cdText = medium().cdText();
       
-  reload();
-}
-
-
-void K3bAudioCdView::reload()
-{
   // simulate a cddb entry with the cdtext data
   m_cddbInfo.cdTitle = m_cdText.title();
   m_cddbInfo.cdArtist = m_cdText.performer();
@@ -220,7 +218,7 @@ void K3bAudioCdView::reload()
 				    "prefereCdTextOverCddb" ) == KMessageBox::No ) )
     queryCddb();
   else
-    enableInteraction(true);
+    showBusyLabel(false);
 }
 
 
@@ -442,7 +440,7 @@ void K3bAudioCdView::queryCddb()
   if( c->readBoolEntry( "use local cddb query", true ) || 
       c->readBoolEntry( "use remote cddb", false ) ) {
 
-    enableInteraction(false);
+    showBusyLabel(true);
  
     m_cddb->query( m_toc );
   }
@@ -575,9 +573,9 @@ void K3bAudioCdView::updateDisplay()
 }
 
 
-void K3bAudioCdView::enableInteraction( bool b )
+void K3bAudioCdView::showBusyLabel( bool b )
 {
-  if( b ) {
+  if( !b ) {
     m_busyInfoLabel->hide();
   }
   else {
@@ -590,10 +588,22 @@ void K3bAudioCdView::enableInteraction( bool b )
     QRect r( QPoint( x, y ), m_busyInfoLabel->size() );
     m_busyInfoLabel->setGeometry( r );
     m_busyInfoLabel->show();
-  }
 
-  m_trackView->setEnabled(b);
-  m_toolBox->setEnabled(b);
+    m_trackView->setEnabled( false );
+    enableInteraction( false );
+  }
+}
+
+
+void K3bAudioCdView::enableInteraction( bool b )
+{
+  // we leave the track view enabled in default disabled mode
+  // since drag'n'drop to audio projects does not need an inserted CD
+  m_toolBox->setEnabled( b );
+  if( b ) {
+    m_trackView->setEnabled( true );
+    showBusyLabel( false );
+  }
 }
 
 

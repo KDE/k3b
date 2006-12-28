@@ -135,7 +135,11 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public QCheckListItem
 };
 
 K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
-        : K3bCdContentsView( true, parent, name )
+        : K3bMediaContentsView( true,
+				K3bMedium::CONTENT_VIDEO_CD,
+				K3bDevice::MEDIA_CD_ALL,
+				K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
+				parent, name )
 {
     QGridLayout * mainGrid = new QGridLayout( mainWidget() );
 
@@ -197,10 +201,9 @@ K3bVideoCdView::~K3bVideoCdView()
 }
 
 
-void K3bVideoCdView::setDisk( const K3bMedium& medium )
+void K3bVideoCdView::reloadMedium()
 {
-  m_toc = medium.toc();
-    m_device = medium.device();
+    m_toc = medium().toc();
 
     m_trackView->clear();
     enableInteraction( false );
@@ -238,10 +241,10 @@ void K3bVideoCdView::setDisk( const K3bMedium& medium )
 
     ( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ] ) ->updateData( sequenceSize, true );
 
-    m_videooptions ->setVideoCdSource( m_device->devicename() );
+    m_videooptions ->setVideoCdSource( device()->devicename() );
     
     m_videocdinfo = new K3bVideoCdInfo( this );
-    m_videocdinfo->info( m_device->devicename() );
+    m_videocdinfo->info( device()->devicename() );
 
     connect( m_videocdinfo, SIGNAL( infoFinished( bool ) ),
              this, SLOT( slotVideoCdInfoFinished( bool ) ) );

@@ -1,6 +1,6 @@
 /* 
  *
- * $Id$
+ * $Id: k3bcdcontentsview.cpp 582796 2006-09-10 15:31:38Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -13,7 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bcdcontentsview.h"
+#include "k3bcontentsview.h"
 
 #include <k3bthemedheader.h>
 
@@ -22,9 +22,9 @@
 #include <qpixmap.h>
 
 
-
-K3bCdContentsView::K3bCdContentsView( bool withHeader,
-				      QWidget* parent, const char* name )
+K3bContentsView::K3bContentsView( bool withHeader,
+				  QWidget* parent, 
+				  const char* name )
   : QWidget( parent, name ),
     m_header(0),
     m_centerWidget(0)
@@ -43,12 +43,19 @@ K3bCdContentsView::K3bCdContentsView( bool withHeader,
 }
 
 
-K3bCdContentsView::~K3bCdContentsView()
+K3bContentsView::~K3bContentsView()
 {
 }
 
 
-QWidget* K3bCdContentsView::mainWidget()
+void K3bContentsView::setMainWidget( QWidget* w )
+{
+  m_centerWidget = w;
+  ((QVBoxLayout*)layout())->addWidget( w );
+}
+
+
+QWidget* K3bContentsView::mainWidget()
 {
   if( !m_centerWidget )
     setMainWidget( new QWidget( this ) );
@@ -56,36 +63,24 @@ QWidget* K3bCdContentsView::mainWidget()
 }
 
 
-void K3bCdContentsView::reload()
-{
-}
-
-
-void K3bCdContentsView::setMainWidget( QWidget* w )
-{
-  m_centerWidget = w;
-  ((QVBoxLayout*)layout())->addWidget( w );
-}
-
-
-void K3bCdContentsView::setTitle( const QString& s )
+void K3bContentsView::setTitle( const QString& s )
 {
   if( m_header )
     m_header->setTitle( s );
 }
 
 
-void K3bCdContentsView::setLeftPixmap( K3bTheme::PixmapType s )
+void K3bContentsView::setLeftPixmap( K3bTheme::PixmapType s )
 {
   if( m_header )
     m_header->setLeftPixmap( s );
 }
 
 
-void K3bCdContentsView::setRightPixmap( K3bTheme::PixmapType s )
+void K3bContentsView::setRightPixmap( K3bTheme::PixmapType s )
 {
   if( m_header )
     m_header->setRightPixmap( s );
 }
 
-#include "k3bcdcontentsview.moc"
+#include "k3bcontentsview.moc"

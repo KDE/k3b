@@ -191,7 +191,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
-    m_infoView->displayInfo( medium );
+    m_infoView->reload( medium );
     return;
   }
 
@@ -228,7 +228,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotDvdCopy();
     }
     else {
-      m_movieView->setMedium( medium );
+      m_movieView->reload( medium );
       m_viewStack->raiseWidget( m_movieView );
     }
 
@@ -253,7 +253,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 					i18n("Show Video Tracks") ) == KMessageBox::No ) {
 	  mount = false;
 	  m_viewStack->raiseWidget( m_videoView );
-	  m_videoView->setDisk( medium );
+	  m_videoView->reload( medium );
 	}
       }
     }
@@ -266,7 +266,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 				      i18n("Show Audio Tracks") ) == KMessageBox::No ) {
 	mount = false;
 	m_viewStack->raiseWidget( m_cdView );
-	m_cdView->setDisk( medium );
+	m_cdView->reload( medium );
       }
     }
       
@@ -276,13 +276,13 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 
   else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
     m_viewStack->raiseWidget( m_cdView );
-    m_cdView->setDisk( medium );
+    m_cdView->reload( medium );
   }
 
   else {
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
-    m_infoView->displayInfo( medium );
+    m_infoView->reload( medium );
   }
 
   d->contextMediaInfoRequested = false;
@@ -293,7 +293,7 @@ void K3bDirView::slotMountFinished( const QString& mp )
 {
   if( !mp.isEmpty() ) {
     slotDirActivated( mp );
-    reload(); // HACK to get the contents shown... FIXME
+    m_fileView->reload(); // HACK to get the contents shown... FIXME
   }
   else {
     m_viewStack->raiseWidget( m_fileView );
@@ -346,17 +346,6 @@ void K3bDirView::slotDirActivated( const KURL& url )
   m_viewStack->raiseWidget( m_fileView );
 
   emit urlEntered( url );
-}
-
-
-void K3bDirView::reload()
-{
-  // TODO: the fileview should be a special case
-  //       and then the boolean withHeader parameter should be removed from
-  //       K3bCdContentsView
-  K3bCdContentsView* v = (K3bCdContentsView*)m_viewStack->visibleWidget();
-
-  v->reload();
 }
 
 

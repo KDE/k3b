@@ -19,7 +19,7 @@
 
 #include <qdom.h>
 
-#include <k3bcdcontentsview.h>
+#include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
 
 #include "k3bvideocdinfo.h"
@@ -43,20 +43,13 @@ namespace K3bDevice
 }
 
 
-class K3bVideoCdView : public K3bCdContentsView
+class K3bVideoCdView : public K3bMediaContentsView
 {
         Q_OBJECT
 
     public:
         K3bVideoCdView( QWidget* parent = 0, const char * name = 0 );
         ~K3bVideoCdView();
-
-        void setDisk( const K3bMedium& );
-
-/*         const K3bDevice::DiskInfo& displayedDisk() const */
-/*         { */
-/*             return m_diskInfo; */
-/*         } */
 
         KActionCollection* actionCollection() const
         {
@@ -80,13 +73,14 @@ class K3bVideoCdView : public K3bCdContentsView
         class VideoTrackViewCheckItem;
         class VideoTrackViewItem;
 
+	void reloadMedium();
+
         void initActions();
         void updateDisplay();
         void enableInteraction( bool );
         void buildTree( QListViewItem *parentItem, const QDomElement &parentElement, const QString& pname = QString::null );
 
         K3bDevice::Toc m_toc;
-        K3bDevice::Device* m_device;
 
         KActionCollection* m_actionCollection;
         KActionMenu* m_popupMenu;
