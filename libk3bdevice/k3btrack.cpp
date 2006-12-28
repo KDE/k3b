@@ -98,3 +98,26 @@ int K3bDevice::Track::indexCount() const
 {
   return m_indices.count()-1;
 }
+
+
+bool K3bDevice::Track::operator==( const Track& other ) const
+{
+  return( m_firstSector == other.m_firstSector &&
+	  m_lastSector == other.m_lastSector &&
+	  m_index0 == other.m_index0 &&
+	  m_nextWritableAddress == other.m_nextWritableAddress &&
+	  m_freeBlocks == other.m_freeBlocks &&
+	  m_type == other.m_type &&
+	  m_mode == other.m_mode &&
+	  m_copyPermitted == other.m_copyPermitted &&
+	  m_preEmphasis == other.m_preEmphasis &&
+	  m_session == other.m_session &&
+	  m_indices == other.m_indices &&
+	  m_isrc == other.m_isrc );
+}
+
+
+bool K3bDevice::Track::operator!=( const Track& other ) const
+{
+  return !operator==( other );
+}

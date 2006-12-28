@@ -147,3 +147,17 @@ void K3bDevice::Toc::debug() const
 	      << " (" << (*it).length().lba() << ")" << endl;
   }
 }
+
+
+bool K3bDevice::Toc::operator==( const Toc& other ) const
+{
+  return( m_firstSector == other.m_firstSector &&
+	  QValueList<Track>::operator==( other ) );
+}
+
+
+bool K3bDevice::Toc::operator!=( const Toc& other ) const
+{
+  return( m_firstSector != other.m_firstSector ||
+	  QValueList<Track>::operator!=( other ) );
+}

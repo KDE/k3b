@@ -203,6 +203,24 @@ void K3bDevice::DiskInfo::debug() const
 }
 
 
+bool K3bDevice::DiskInfo::operator==( const K3bDevice::DiskInfo& other ) const
+{
+  return( m_mediaType == other.m_mediaType &&
+	  m_currentProfile == other.m_currentProfile &&
+	  m_diskState == other.m_diskState &&
+	  m_lastSessionState == other.m_lastSessionState &&
+	  m_bgFormatState == other.m_bgFormatState &&
+	  m_numSessions == other.m_numSessions &&
+	  m_numTracks == other.m_numTracks &&
+	  m_numLayers == other.m_numLayers &&
+	  m_rewritable == other.m_rewritable &&
+	  m_capacity == other.m_capacity &&
+	  m_usedCapacity == other.m_usedCapacity &&
+	  m_firstLayerSize == other.m_firstLayerSize &&
+	  m_mediaId == other.m_mediaId );
+}
+
+
 // kdbgstream& K3bDevice::operator<<( kdbgstream& s, const K3bDevice::DiskInfo& ngInf )
 // {
 //    s << "DiskInfo:" << endl

@@ -645,3 +645,41 @@ void K3bDevice::CdText::debug() const
 	      << "  Isrc:       '" << at(i).isrc() << "'" << endl;
   }
 }
+
+
+bool K3bDevice::TrackCdText::operator==( const K3bDevice::TrackCdText& other ) const
+{
+  return( m_title == other.m_title &&
+	  m_performer == other.m_performer &&
+	  m_songwriter == other.m_songwriter &&
+	  m_composer == other.m_composer &&
+	  m_arranger == other.m_arranger &&
+	  m_message == other.m_message &&
+	  m_isrc == other.m_isrc );
+}
+
+
+bool K3bDevice::TrackCdText::operator!=( const K3bDevice::TrackCdText& other ) const
+{
+  return !operator==( other );
+}
+
+
+bool K3bDevice::CdText::operator==( const K3bDevice::CdText& other ) const
+{
+  return( m_title == other.m_title &&
+	  m_performer == other.m_performer &&
+	  m_songwriter == other.m_songwriter &&
+	  m_composer == other.m_composer &&
+	  m_arranger == other.m_arranger &&
+	  m_message == other.m_message &&
+	  m_discId == other.m_discId &&
+	  m_upcEan == other.m_upcEan &&
+	  QValueVector<TrackCdText>::operator==( other ) );
+}
+
+
+bool K3bDevice::CdText::operator!=( const K3bDevice::CdText& other ) const
+{
+  return !operator==( other );
+}

@@ -122,6 +122,9 @@ namespace K3bDevice
      */
     const QValueVector<K3b::Msf>& indices() const { return m_indices; }
 
+    bool operator==( const Track& ) const;
+    bool operator!=( const Track& ) const;
+
   private:
     K3b::Msf m_firstSector;
     K3b::Msf m_lastSector;

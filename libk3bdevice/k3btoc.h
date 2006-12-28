@@ -87,6 +87,9 @@ namespace K3bDevice
 
     void debug() const;
 
+    bool operator==( const Toc& ) const;
+    bool operator!=( const Toc& ) const;
+
   private:
     unsigned int m_discId;
     K3b::Msf m_firstSector;

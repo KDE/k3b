@@ -79,6 +79,9 @@ namespace K3bDevice
 	return true;
       }
 
+      bool operator==( const TrackCdText& ) const;
+      bool operator!=( const TrackCdText& ) const;
+
     private:
       // TODO: remove this (see above)
       void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
@@ -168,6 +171,9 @@ namespace K3bDevice
        */
       static bool checkCrc( const unsigned char*, int );
       static bool checkCrc( const QByteArray& );
+
+      bool operator==( const CdText& ) const;
+      bool operator!=( const CdText& ) const;
 	
     private:
       // TODO: remove this (see above)

@@ -152,6 +152,8 @@ namespace K3bDevice
 
       void debug() const;
 
+      bool operator==( const DiskInfo& ) const;
+
     private:
       int m_mediaType;
       int m_currentProfile;
@@ -175,6 +177,5 @@ namespace K3bDevice
 
   //  kdbgstream& operator<<( kdbgstream& s, const DiskInfo& ngInf );
 }
-
 
 #endif
