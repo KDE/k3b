@@ -62,6 +62,10 @@ class LIBK3B_EXPORT K3bIso9660SimplePrimaryDescriptor
 };
 
 
+LIBK3B_EXPORT bool operator==( const K3bIso9660SimplePrimaryDescriptor& d1,
+			       const K3bIso9660SimplePrimaryDescriptor& d2 );
+
+
 /**
  * Base class for all entries in a K3bIso9660 archive. A lot has been copied
  * from KArchive.

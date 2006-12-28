@@ -856,3 +856,19 @@ void K3bIso9660::debugEntry( const K3bIso9660Entry* entry, int depth ) const
     }
   }
 }
+
+
+bool operator==( const K3bIso9660SimplePrimaryDescriptor& d1,
+		 const K3bIso9660SimplePrimaryDescriptor& d2 )
+{
+  return( d1.volumeId == d2.volumeId &&
+	  d1.systemId == d2.systemId &&
+	  d1.volumeSetId == d2.volumeSetId &&
+	  d1.publisherId == d2.publisherId &&
+	  d1.preparerId == d2.preparerId &&
+	  d1.applicationId == d2.applicationId &&
+	  d1.volumeSetSize == d2.volumeSetSize&
+	  d1.volumeSetNumber == d2.volumeSetNumber &&
+	  d1.logicalBlockSize == d2.logicalBlockSize &&
+	  d1.volumeSpaceSize == d2.volumeSpaceSize );
+}
