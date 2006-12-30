@@ -42,6 +42,10 @@ class K3bTempDirSelectionWidget : public QGroupBox
 
   int selectionMode() const { return m_mode; }
 
+  /**
+   * \return Free space in KB
+   * FIXME: use KIO::filesize_t and return the number of bytes
+   */
   unsigned long freeTempSpace() const;
   QString tempPath() const;
   QString tempDirectory() const;
