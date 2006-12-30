@@ -74,6 +74,9 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
   QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
 
   class AudioStreamViewItem;
+
+  class Private;
+  Private* d;
 };
 
 #endif

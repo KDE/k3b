@@ -15,8 +15,11 @@
 
 #include "k3bfilesysteminfo.h"
 
+#include <k3bglobals.h>
+
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 
@@ -100,8 +103,10 @@ QString K3bFileSystemInfo::path() const
 
 void K3bFileSystemInfo::setPath( const QString& path )
 {
-  d->path = path;
-  d->statDone = false;
+  if( d->path != path ) {
+    d->path = path;
+    d->statDone = false;
+  }
 }
 
 
@@ -110,4 +115,14 @@ K3bFileSystemInfo::FileSystemType K3bFileSystemInfo::type() const
   if( !d->statDone )
     d->stat();
   return d->type;
+}
+
+
+QString K3bFileSystemInfo::fixupPath( const QString& path )
+{
+  QString s = K3b::fixupPath( path );
+  if( type() == K3bFileSystemInfo::FS_FAT )
+    return s.replace( QRegExp("\"?*/\\[]|=:;"), "_" );
+  else
+    return s;
 }

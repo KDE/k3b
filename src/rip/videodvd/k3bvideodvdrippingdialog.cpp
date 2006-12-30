@@ -21,6 +21,7 @@
 #include <k3bmedium.h>
 #include <k3bmediacache.h>
 #include <k3bglobals.h>
+#include <k3bfilesysteminfo.h>
 
 #include <klocale.h>
 #include <klistview.h>
@@ -136,6 +137,13 @@ private:
 };
 
 
+class K3bVideoDVDRippingDialog::Private
+{
+public:
+  K3bFileSystemInfo fsInfo;
+};
+
+
 K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
 						    const QValueList<int>& titles,
 						    QWidget* parent, const char* name )
@@ -147,6 +155,8 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
 			  "VideoDVD Ripping" ), // config group 
     m_dvd( dvd )
 {
+  d = new Private;
+
   QWidget* frame = mainWidget();
   QHBoxLayout* frameLayout = new QHBoxLayout( frame );
   frameLayout->setMargin( 0 );
@@ -171,6 +181,7 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
 
 K3bVideoDVDRippingDialog::~K3bVideoDVDRippingDialog()
 {
+  delete d;
 }
 
 
@@ -244,12 +255,15 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 
 void K3bVideoDVDRippingDialog::slotUpdateFilenames()
 {
+  QString baseDir = K3b::prepareDir( m_w->m_editBaseDir->url() );
+  d->fsInfo.setPath( baseDir );
+
   for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     QString f = createFilename( it.data(), m_w->m_comboFilenamePattern->currentText() );
     if( m_w->m_checkBlankReplace->isChecked() )
       f.replace( QRegExp( "\\s" ), m_w->m_editBlankReplace->text() );
-    it.data().filename = K3b::prepareDir( m_w->m_editBaseDir->url() ) + f;
+    it.data().filename = d->fsInfo.fixupPath( baseDir + f );
     it.key()->setText( 3, f );
   }
 }

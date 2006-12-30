@@ -39,6 +39,15 @@ class LIBK3B_EXPORT K3bFileSystemInfo
 
   FileSystemType type() const;
 
+  /**
+   * Ensures that the file path does not contain
+   * any invalid chars.
+   *
+   * For now it only replaces characters like * or [
+   * on FAT file systems.
+   */
+  QString fixupPath( const QString& );
+
  private:
   class Private;
   Private* d;

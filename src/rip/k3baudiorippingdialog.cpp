@@ -25,7 +25,7 @@
 #include <k3bglobals.h>
 #include <k3btrack.h>
 #include <k3bstdguiitems.h>
-
+#include <k3bfilesysteminfo.h>
 #include <k3bpluginmanager.h>
 #include <k3baudioencoder.h>
 
@@ -74,6 +74,7 @@ public:
 
   QValueVector<QString> filenames;
   QString playlistFilename;
+  K3bFileSystemInfo fsInfo;
 };
 
 
@@ -289,6 +290,7 @@ void K3bAudioRippingDialog::refresh()
   d->filenames.clear();
 
   QString baseDir = K3b::prepareDir( m_optionWidget->baseDir() );
+  d->fsInfo.setPath( baseDir );
 
   KIO::filesize_t overallSize = 0;
 
@@ -333,8 +335,7 @@ void K3bAudioRippingDialog::refresh()
 			     K3b::Msf(length).toString(),
 			     fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
 			     i18n("Audio") );
-
-    d->filenames.append( K3b::fixupPath( baseDir + "/" + filename + "." + extension ) );
+    d->filenames.append( d->fsInfo.fixupPath( baseDir + "/" + filename + "." + extension ) );
 
     if( m_optionWidget->createCueFile() )
       (void)new KListViewItem( m_viewTracks,
@@ -391,7 +392,7 @@ void K3bAudioRippingDialog::refresh()
 			       fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
 			       (m_toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
 
-      d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
+      d->filenames.append( d->fsInfo.fixupPath( baseDir + "/" + filename ) );
     }
   }
 
@@ -409,7 +410,7 @@ void K3bAudioRippingDialog::refresh()
 			     "-",
 			     i18n("Playlist") );
     
-    d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
+    d->playlistFilename = d->fsInfo.fixupPath( baseDir + "/" + filename );
   }
 
   if( overallSize > 0 )
