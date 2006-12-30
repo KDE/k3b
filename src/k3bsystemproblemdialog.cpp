@@ -567,7 +567,13 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System Problems") );
   }
   else {
-    K3bSystemProblemDialog( problems, parent, name ).exec();
+    static K3bSystemProblemDialog* s_openDlg = 0;
+    if( s_openDlg )
+      s_openDlg->close();
+    K3bSystemProblemDialog dlg( problems, parent, name );
+    s_openDlg = &dlg;
+    dlg.exec();
+    s_openDlg = 0;
   }
 
   // remember which version of K3b checked the system the last time
