@@ -113,6 +113,7 @@ class K3bMedium
   QString longString() const;
 
   bool operator==( const K3bMedium& other );
+  bool operator!=( const K3bMedium& other );
 
  private:
   void analyseContent();

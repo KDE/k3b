@@ -130,17 +130,31 @@ void K3bMediaContentsView::enableInteraction( bool enable )
 
 void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
 {
+  kdDebug() << k_funcinfo << endl;
   if( !d->autoReload || !isVisible() )
     return;
 
   if( dev == device() ) {
+    kdDebug() << k_funcinfo << " checking medium in " << dev->blockDeviceName() << endl;
     K3bMedium m = k3bappcore->mediaCache()->medium( dev );
-    if( m.content() & supportedMediumContent() &&
-	m.diskInfo().mediaType() & supportedMediumTypes() &&
-	m.diskInfo().diskState() & supportedMediumStates() )
+
+    // no need to reload if the medium did not change (this is even
+    // important since K3b blocks the devices in action and after
+    // the release they are signalled as changed)
+    if( m == medium() ) {
+      kdDebug() << k_funcinfo << " medium did not change" << endl;
+      enableInteraction( true );
+    }
+    else if( m.content() & supportedMediumContent() &&
+	     m.diskInfo().mediaType() & supportedMediumTypes() &&
+	     m.diskInfo().diskState() & supportedMediumStates() ) {
+      kdDebug() << k_funcinfo << " new supported medium found" << endl;
       reload( m );
-    else
+    }
+    else {
+      kdDebug() << k_funcinfo << " unsupported medium found" << endl;
       enableInteraction( false );
+    }
   }
 }
 

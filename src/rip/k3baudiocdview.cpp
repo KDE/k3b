@@ -576,6 +576,7 @@ void K3bAudioCdView::updateDisplay()
 void K3bAudioCdView::showBusyLabel( bool b )
 {
   if( !b ) {
+    actionCollection()->action( "start_rip" )->setEnabled( true );
     m_trackView->setEnabled( true );
     m_busyInfoLabel->hide();
   }
@@ -601,10 +602,8 @@ void K3bAudioCdView::enableInteraction( bool b )
   // we leave the track view enabled in default disabled mode
   // since drag'n'drop to audio projects does not need an inserted CD
   actionCollection()->action( "start_rip" )->setEnabled( b );
-  if( b ) {
-    m_trackView->setEnabled( true );
+  if( b )
     showBusyLabel( false );
-  }
 }
 
 

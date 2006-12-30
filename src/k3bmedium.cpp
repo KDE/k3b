@@ -459,3 +459,17 @@ bool K3bMedium::operator==( const K3bMedium& other )
 	  this->content() == other.content() &&
 	  this->iso9660Descriptor() == other.iso9660Descriptor() );
 }
+
+
+bool K3bMedium::operator!=( const K3bMedium& other )
+{
+  if( this->d == other.d )
+    return false;
+
+  return( this->device() != other.device() ||
+	  this->diskInfo() != other.diskInfo() ||
+	  this->toc() != other.toc() ||
+	  this->cdText() != other.cdText() ||
+	  this->content() != other.content() ||
+	  this->iso9660Descriptor() != other.iso9660Descriptor() );
+}

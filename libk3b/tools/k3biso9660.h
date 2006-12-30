@@ -49,6 +49,11 @@ typedef long sector_t;
 class LIBK3B_EXPORT K3bIso9660SimplePrimaryDescriptor
 {
  public:
+  /**
+   * Creates an empty descriptor
+   */
+  K3bIso9660SimplePrimaryDescriptor();
+
   QString volumeId;
   QString systemId;
   QString volumeSetId;
@@ -63,6 +68,8 @@ class LIBK3B_EXPORT K3bIso9660SimplePrimaryDescriptor
 
 
 LIBK3B_EXPORT bool operator==( const K3bIso9660SimplePrimaryDescriptor& d1,
+			       const K3bIso9660SimplePrimaryDescriptor& d2 );
+LIBK3B_EXPORT bool operator!=( const K3bIso9660SimplePrimaryDescriptor& d1,
 			       const K3bIso9660SimplePrimaryDescriptor& d2 );
 
 
