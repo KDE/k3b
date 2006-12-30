@@ -52,6 +52,12 @@
 #include <kpixmapeffect.h>
 
 
+static const int DEFAULT_CD_SIZE_74 = 74*60*75;
+static const int DEFAULT_CD_SIZE_80 = 80*60*74;
+static const int DEFAULT_CD_SIZE_100 = 100*60*75;
+static const int DEFAULT_DVD_SIZE_4_4 = 2295104;
+static const int DEFAULT_DVD_SIZE_8_0 = 4173824;
+
 class K3bFillStatusDisplayWidget::Private
 {
 public:
@@ -390,8 +396,9 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				      d->actionCollection, "fillstatus_100minutes" );
   d->actionDvd4_7GB = new KRadioAction( KIO::convertSizeFromKB((int)(4.4*1024.0*1024.0)), 0, this, SLOT(slotDvd4_7GB()),
 					d->actionCollection, "fillstatus_dvd_4_7gb" );
-  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB((int)(8.0*1024.0*1024.0)), 0, this, SLOT(slotDvdDoubleLayer()),
-					 d->actionCollection, "fillstatus_dvd_double_layer" );
+  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB((int)(8.0*1024.0*1024.0)), 
+					      0, this, SLOT(slotDvdDoubleLayer()),
+					      d->actionCollection, "fillstatus_dvd_double_layer" );
   d->actionCustomSize = new K3bRadioAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
 					    d->actionCollection, "fillstatus_custom_size" );
   d->actionCustomSize->setAlwaysEmitActivated(true);
@@ -489,31 +496,31 @@ void K3bFillStatusDisplay::slotAutoSize()
 
 void K3bFillStatusDisplay::slot74Minutes()
 {
-  d->displayWidget->setCdSize( 74*60*75 );
+  d->displayWidget->setCdSize( DEFAULT_CD_SIZE_74 );
 }
 
 
 void K3bFillStatusDisplay::slot80Minutes()
 {
-  d->displayWidget->setCdSize( 80*60*75 );
+  d->displayWidget->setCdSize( DEFAULT_CD_SIZE_80 );
 }
 
 
 void K3bFillStatusDisplay::slot100Minutes()
 {
-  d->displayWidget->setCdSize( 100*60*75 );
+  d->displayWidget->setCdSize( DEFAULT_CD_SIZE_100 );
 }
 
 
 void K3bFillStatusDisplay::slotDvd4_7GB()
 {
-  d->displayWidget->setCdSize( 2295104 );
+  d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_4_4 );
 }
 
 
 void K3bFillStatusDisplay::slotDvdDoubleLayer()
 {
-  d->displayWidget->setCdSize( 4173824 );
+  d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_8_0 );
 }
 
 
@@ -690,7 +697,8 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
 	}
 
 	// roughly compare the sizes of the two usable media. If they match, carry on.
-	else if( k3bappcore->mediaCache()->diskInfo( dev ).capacity().lba()/75/60 != medium.diskInfo().capacity().lba()/75/60 ) {
+	else if( k3bappcore->mediaCache()->diskInfo( dev ).capacity().lba()/75/60
+		 != medium.diskInfo().capacity().lba()/75/60 ) {
 	  // different usable media -> fallback
 	  dev = 0;
 	  break;
@@ -704,7 +712,14 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
     }
     else {
       // default fallback
-      d->displayWidget->setCdSize( d->showDvdSizes ? 510*60*75 : 80*60*75 );
+      if( d->showDvdSizes ) {
+	if( d->doc->length().lba() > DEFAULT_DVD_SIZE_4_4 )
+	  d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_8_0 );
+	else
+	  d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_4_4 );
+      }
+      else
+	d->displayWidget->setCdSize( DEFAULT_CD_SIZE_80 );
     }
   }
 }
