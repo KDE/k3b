@@ -465,8 +465,9 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
       delete m_osd;
 
     if( m_osd ) {
+      m_osd->setText( job->jobDescription() );
       // FIXME: use a setJob method and let the osd also change the text color to red/green
-      connect( job, SIGNAL(newTask(const QString&)), m_osd, SLOT(setText(const QString&)) );
+      //      connect( job, SIGNAL(newTask(const QString&)), m_osd, SLOT(setText(const QString&)) );
       connect( job, SIGNAL(percent(int)), m_osd, SLOT(setProgress(int)) );
     }
   }
