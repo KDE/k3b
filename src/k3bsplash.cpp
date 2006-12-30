@@ -35,8 +35,8 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
   : QVBox( parent, name, 
 	   WStyle_Customize|
 	   WDestructiveClose|
-	   /*WStyle_Splash*/WType_Dialog|
-	   /*	   WShowModal|*/
+	   /*	   WStyle_Splash|*/
+	   WX11BypassWM|
 	   WStyle_NoBorder|
 	   WStyle_StaysOnTop )
 {
