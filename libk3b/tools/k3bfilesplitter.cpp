@@ -14,21 +14,11 @@
  */
 
 #include "k3bfilesplitter.h"
+#include "k3bfilesysteminfo.h"
 
 #include <kdebug.h>
 
 #include <qfile.h>
-#include <qfileinfo.h>
-
-#include <errno.h>
-#include <string.h>
-
-#ifdef Q_OS_FREEBSD
-#include <sys/param.h>
-#include <sys/mount.h>
-#else
-#include <sys/vfs.h>
-#endif
 
 
 class K3bFileSplitter::Private
@@ -48,23 +38,13 @@ public:
   KIO::filesize_t currentOverallPos;
   KIO::filesize_t currentFilePos;
 
-  bool determineMaxFileSize() {
+  void determineMaxFileSize() {
     if( maxFileSize == 0 ) {
-      struct statfs fs;
-      if( !::statfs( QFile::encodeName( QFileInfo(filename).dirPath( true ) ), &fs ) ) {
-	// FIXME: find a generic way
-	if( fs.f_type == 0x4d44 ) // MS-DOS
-	  maxFileSize = 1024ULL*1024ULL*1024ULL; // 1GB
-	else
-	  maxFileSize = 1024ULL*1024ULL*1024ULL*1024ULL*1024ULL;  // incredibly big, 1024 TB
-      }
-      else {
-	kdDebug() << "(K3bFileSplitter) statfs failed: " << ::strerror(errno) << endl;
-	return false;
-      }
+      if( K3bFileSystemInfo( filename ).type() == K3bFileSystemInfo::FS_FAT )
+	maxFileSize = 1024ULL*1024ULL*1024ULL; // 1GB
+      else
+	maxFileSize = 1024ULL*1024ULL*1024ULL*1024ULL*1024ULL;  // incredibly big, 1024 TB
     }
-
-    return true;
   }
 
   QString buildFileName( int counter ) {
@@ -142,8 +122,7 @@ bool K3bFileSplitter::open( int mode )
 {
   close();
 
-  if( !d->determineMaxFileSize() )
-    return false;
+  d->determineMaxFileSize();
 
   d->counter = 0;
   d->currentFilePos = 0;
