@@ -153,6 +153,7 @@ namespace K3bDevice
       void debug() const;
 
       bool operator==( const DiskInfo& ) const;
+      bool operator!=( const DiskInfo& ) const;
 
     private:
       int m_mediaType;
