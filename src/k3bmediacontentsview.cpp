@@ -130,12 +130,10 @@ void K3bMediaContentsView::enableInteraction( bool enable )
 
 void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
 {
-  kdDebug() << k_funcinfo << endl;
   if( !d->autoReload || !isVisible() )
     return;
 
   if( dev == device() ) {
-    kdDebug() << k_funcinfo << " checking medium in " << dev->blockDeviceName() << endl;
     K3bMedium m = k3bappcore->mediaCache()->medium( dev );
 
     // no need to reload if the medium did not change (this is even
