@@ -110,6 +110,7 @@ void K3bApplication::init()
       QTimer::singleShot( 5000, splash, SLOT(close()) );
       
       splash->show();
+      qApp->processEvents();
     }
   }
 
