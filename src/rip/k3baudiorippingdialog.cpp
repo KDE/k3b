@@ -328,6 +328,7 @@ void K3bAudioRippingDialog::refresh()
       filename = i18n("Album");
     }
 
+    filename = d->fsInfo.fixupPath( filename );
 
     (void)new KListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
@@ -335,7 +336,7 @@ void K3bAudioRippingDialog::refresh()
 			     K3b::Msf(length).toString(),
 			     fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
 			     i18n("Audio") );
-    d->filenames.append( d->fsInfo.fixupPath( baseDir + "/" + filename + "." + extension ) );
+    d->filenames.append( baseDir + "/" + filename + "." + extension );
 
     if( m_optionWidget->createCueFile() )
       (void)new KListViewItem( m_viewTracks,
@@ -385,6 +386,8 @@ void K3bAudioRippingDialog::refresh()
 	filename = i18n("Track%1").arg( QString::number( *it ).rightJustify( 2, '0' ) ) + "." + extension;
       }
 
+      filename = d->fsInfo.fixupPath( filename );
+
       (void)new KListViewItem( m_viewTracks,
 			       m_viewTracks->lastItem(),
 			       filename,
@@ -392,7 +395,7 @@ void K3bAudioRippingDialog::refresh()
 			       fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
 			       (m_toc[index].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
 
-      d->filenames.append( d->fsInfo.fixupPath( baseDir + "/" + filename ) );
+      d->filenames.append( baseDir + "/" + filename );
     }
   }
 

@@ -260,10 +260,10 @@ void K3bVideoDVDRippingDialog::slotUpdateFilenames()
 
   for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
-    QString f = createFilename( it.data(), m_w->m_comboFilenamePattern->currentText() );
+    QString f = d->fsInfo.fixupPath( createFilename( it.data(), m_w->m_comboFilenamePattern->currentText() ) );
     if( m_w->m_checkBlankReplace->isChecked() )
       f.replace( QRegExp( "\\s" ), m_w->m_editBlankReplace->text() );
-    it.data().filename = d->fsInfo.fixupPath( baseDir + f );
+    it.data().filename = baseDir + f;
     it.key()->setText( 3, f );
   }
 }

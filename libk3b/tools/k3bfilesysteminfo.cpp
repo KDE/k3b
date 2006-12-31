@@ -122,7 +122,7 @@ QString K3bFileSystemInfo::fixupPath( const QString& path )
 {
   QString s = K3b::fixupPath( path );
   if( type() == K3bFileSystemInfo::FS_FAT )
-    return s.replace( QRegExp("[\"?*/\\[]|=:;]"), "_" );
+    return s.replace( QRegExp("[\"\\?\\*/\\\\[\\]\\|\\=\\:;]"), "_" );
   else
     return s;
 }
