@@ -250,6 +250,8 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   for( int i = 0; mkisofsCharacterSets[i]; i++ ) {
     m_comboInputCharset->insertItem( QString( mkisofsCharacterSets[i] ) );
   }
+
+  connect( m_checkJoliet, SIGNAL(toggled(bool)), this, SLOT(slotJolietToggled(bool)) );
 }
 
 
@@ -301,6 +303,8 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
 
   // misc (FIXME: should not be here)
   m_checkDoNotCacheInodes->setOn( o.doNotCacheInodes() );
+
+  slotJolietToggled( m_checkJoliet->isChecked() );
 }
 
 
@@ -339,5 +343,10 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
   o.setDoNotCacheInodes( m_checkDoNotCacheInodes->isOn() );
 }
 
+
+void K3bDataAdvancedImageSettingsWidget::slotJolietToggled( bool on )
+{
+  m_checkJolietLong->setEnabled( on );
+}
 
 #include "k3bdataadvancedimagesettingswidget.moc"

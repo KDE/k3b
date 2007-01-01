@@ -34,6 +34,9 @@ class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSetti
   void load( const K3bIsoOptions& );
   void save( K3bIsoOptions& );
 
+ private slots:
+  void slotJolietToggled( bool on );
+
  private:
   QCheckListItem* m_checkAllowUntranslatedFilenames;
   QCheckListItem* m_checkAllowMaxLengthFilenames;
