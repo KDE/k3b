@@ -42,6 +42,9 @@ class K3bAlsaOutputPlugin : public K3bAudioOutputPlugin
 					     const char* name = 0 ) const;
 
  private:
+  bool setupHwParams();
+  bool recoverFromError( int err );
+
   class Private;
   Private* d;
 };

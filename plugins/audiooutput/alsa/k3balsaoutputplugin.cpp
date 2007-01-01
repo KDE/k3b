@@ -49,6 +49,8 @@ public:
   QString lastErrorMessage;
 
   bool swap;
+
+  unsigned int sampleRate;
 };
 
 
@@ -66,44 +68,11 @@ K3bAlsaOutputPlugin::~K3bAlsaOutputPlugin()
   delete d;
 }
 
-// from xine-lib
-static int resume(snd_pcm_t *pcm)
-{
-  int res;
-  while ((res = snd_pcm_resume(pcm)) == -EAGAIN)
-    sleep(1);
-  if (! res)
-    return 0;
-  return snd_pcm_prepare(pcm);
-}
-
 
 int K3bAlsaOutputPlugin::write( char* data, int len )
 {
   if( d->error )
     return -1;
-
-  snd_pcm_state_t state = snd_pcm_state( d->pcm_playback );
-
-  if( state == SND_PCM_STATE_SUSPENDED ) {
-    int r = resume( d->pcm_playback );
-    if( r < 0 ) {
-      kdDebug() << "(K3bAlsaOutputPlugin) resume failed: " << snd_strerror(r) << endl;
-      d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg(snd_strerror(r));
-      return -1;
-    }
-    state = snd_pcm_state( d->pcm_playback );
-  }
-
-  if( state == SND_PCM_STATE_XRUN ) {
-    kdDebug() << "(K3bAlsaOutputPlugin) preparing..." << endl;
-    int r = snd_pcm_prepare( d->pcm_playback );
-    if( r < 0 ) {
-      kdDebug() << "(K3bAlsaOutputPlugin) failed preparation: " << snd_strerror(r) << endl;
-      d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg(snd_strerror(r));
-      return -1;
-    }
-  }
 
   char* buffer = data;
   if( d->swap ) {
@@ -116,36 +85,51 @@ int K3bAlsaOutputPlugin::write( char* data, int len )
 
   int written = 0;
   while( written < len ) {
-    if( state == SND_PCM_STATE_RUNNING ) {
-      int wait_result = snd_pcm_wait( d->pcm_playback, 1000000 );
-      if( wait_result < 0 ) {
-	kdDebug() << "(K3bAlsaOutputPlugin) wait failed: " << snd_strerror(wait_result) << endl;
-	d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg(snd_strerror(wait_result));
-	return -1;
-      }
-    }
-
-    if( state != SND_PCM_STATE_PREPARED &&
-	state != SND_PCM_STATE_DRAINING &&
-	state != SND_PCM_STATE_RUNNING ) {
-      kdDebug() << "(K3bAlsaOutputPlugin) invalid state: " << state << endl;
-      d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg("invalid state");
-      return -1;
-    }
-    
     snd_pcm_sframes_t frames = snd_pcm_writei( d->pcm_playback, 
 					       buffer+written, 
 					       snd_pcm_bytes_to_frames( d->pcm_playback, len-written ) );
-    if( frames > 0 )
-      written += snd_pcm_frames_to_bytes( d->pcm_playback, frames );
+
+    if( frames < 0 ) {
+      if( !recoverFromError( frames ) ) {
+	d->error = true;
+	return -1;
+      }
+    }
     else {
-      kdDebug() << "(K3bAlsaOutputPlugin) write failed: " << snd_strerror(frames) << endl;
-      d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg(snd_strerror(frames));
-      return -1;
+      written += snd_pcm_frames_to_bytes( d->pcm_playback, frames );
     }
   }
 
   return written;
+}
+
+
+bool K3bAlsaOutputPlugin::recoverFromError( int err )
+{
+  if( err == -EPIPE ) {
+    err = snd_pcm_prepare( d->pcm_playback );
+    if( err < 0 ) {
+      d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg(snd_strerror(err));
+      return false;
+    }
+  }
+  else if( err == -ESTRPIPE ) {
+    while( ( err = snd_pcm_resume( d->pcm_playback ) ) == -EAGAIN )
+      sleep( 1 );
+
+    if (err < 0) {
+      // unable to wake up pcm device, restart it
+      err = snd_pcm_prepare( d->pcm_playback );
+      if( err < 0 ) {
+	d->lastErrorMessage = i18n("Internal Alsa problem: %1").arg(snd_strerror(err));
+	return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
 }
 
 
@@ -174,7 +158,20 @@ bool K3bAlsaOutputPlugin::init()
     return false;
   }
 
+  if( !setupHwParams() ) {
+    d->error = true;
+    return false;
+  }  
+
+  d->error = false;
+  return true;
+}
+
+
+bool K3bAlsaOutputPlugin::setupHwParams()
+{
   snd_pcm_hw_params_t* hw_params;
+  int err = 0;
 
   if( ( err = snd_pcm_hw_params_malloc( &hw_params ) ) < 0 ) {
     d->lastErrorMessage = i18n("Could not allocate hardware parameter structure (%1)").arg(snd_strerror(err));
@@ -209,13 +206,15 @@ bool K3bAlsaOutputPlugin::init()
   else
     d->swap = false;
 
-  unsigned int rate = 44100;
-  if( (err = snd_pcm_hw_params_set_rate_near( d->pcm_playback, hw_params, &rate, 0)) < 0) {
+  d->sampleRate = 44100;
+  if( (err = snd_pcm_hw_params_set_rate_near( d->pcm_playback, hw_params, &d->sampleRate, 0)) < 0) {
     d->lastErrorMessage = i18n("Could not set sample rate (%1).").arg(snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
     return false;
   }
+
+  kdDebug() << "(K3bAlsaOutputPlugin) samplerate set to " << d->sampleRate << endl;
 
   if( (err = snd_pcm_hw_params_set_channels( d->pcm_playback, hw_params, 2)) < 0) {
     d->lastErrorMessage = i18n("Could not set channel count (%1).").arg(snd_strerror(err));
@@ -224,7 +223,7 @@ bool K3bAlsaOutputPlugin::init()
     return false;
   }
 
-  if( (err = snd_pcm_hw_params( d->pcm_playback, hw_params)) < 0) {
+  if( (err = snd_pcm_hw_params( d->pcm_playback, hw_params )) < 0) {
     d->lastErrorMessage = i18n("Could not set parameters (%1).").arg(snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
@@ -232,14 +231,7 @@ bool K3bAlsaOutputPlugin::init()
   }
         
   snd_pcm_hw_params_free(hw_params);
-  
-//   if( (err = snd_pcm_prepare( d->pcm_playback )) < 0 ) {
-//     d->lastErrorMessage = i18n("Could not prepare audio interface for use (%1).").arg(snd_strerror(err));
-//     d->error = true;
-//     return false;
-//   }
 
-  d->error = false;
   return true;
 }
 
