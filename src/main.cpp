@@ -76,7 +76,7 @@ int main( int argc, char* argv[] )
 {
   KAboutData aboutData( "k3b", "K3b",
 			LIBK3B_VERSION, description, KAboutData::License_GPL,
-			"(c) 1999 - 2006, Sebastian Trüg", 0, "http://www.k3b.org" );
+			"(c) 1999 - 2007, Sebastian Trüg", 0, "http://www.k3b.org" );
   aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
   aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
   aboutData.addCredit("Klaus-Dieter Krannich", I18N_NOOP("Advanced Cdrdao integration"), "kd@k3b.org" );
