@@ -30,6 +30,8 @@
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcursor.h>
+#include <qapplication.h>
 
 // k3b includes
 #include "k3bvideocdview.h"
@@ -206,7 +208,10 @@ void K3bVideoCdView::reloadMedium()
     m_toc = medium().toc();
 
     m_trackView->clear();
-    enableInteraction( false );
+
+    m_trackView->setEnabled( false );
+    m_toolBox->setEnabled( false );
+    QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
     m_contentList.append( new VideoTrackViewCheckItem( m_trackView, i18n("Video CD MPEG tracks") ) );
     m_contentList.append( new VideoTrackViewCheckItem( m_trackView, i18n("Video CD DATA track" ) ) );
@@ -253,13 +258,15 @@ void K3bVideoCdView::reloadMedium()
 
 void K3bVideoCdView::slotVideoCdInfoFinished( bool success )
 {
-
     if ( success ) {
         m_videocdinfoResult = m_videocdinfo->result();
         updateDisplay();
     }
 
-    enableInteraction( true );
+    m_trackView->setEnabled( true );
+    m_toolBox->setEnabled( true );
+    QApplication::restoreOverrideCursor();
+
 }
 
 void K3bVideoCdView::updateDisplay()
@@ -460,8 +467,7 @@ void K3bVideoCdView::slotDeselect()
 
 void K3bVideoCdView::enableInteraction( bool b )
 {
-    m_trackView->setEnabled( b );
-    m_toolBox->setEnabled( b );
+  actionCollection()->action( "start_rip" )->setEnabled( b );
 }
 
 void K3bVideoCdView::buildTree( QListViewItem *parentItem, const QDomElement &parentElement, const QString& pname )

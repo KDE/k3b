@@ -28,7 +28,6 @@ class K3bIso9660;
 namespace K3bDevice {
   class DiskInfoDetector;
   class DiskInfo;
-  class DiskInfo;
 }
 
 class K3bDiskInfoView : public K3bMediaContentsView
@@ -38,6 +37,8 @@ class K3bDiskInfoView : public K3bMediaContentsView
  public:
   K3bDiskInfoView( QWidget* parent = 0, const char* name = 0 );
   ~K3bDiskInfoView();
+
+  void enableInteraction( bool enable );
 
  private:
   void reloadMedium();

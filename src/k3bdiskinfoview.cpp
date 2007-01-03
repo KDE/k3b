@@ -148,7 +148,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_infoView->header()->hide();
 
   // do not automatically reload the disk info
-  setAutoReload( false );
+  //  setAutoReload( false );
 }
 
 
@@ -482,6 +482,15 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescr
   iso9660Item->setOpen( true );
 }
 
+
+void K3bDiskInfoView::enableInteraction( bool enable )
+{
+  QListViewItemIterator it( m_infoView );
+  while( it.current() ) {
+    it.current()->setEnabled( enable );
+    ++it;
+  }
+}
 
 #include "k3bdiskinfoview.moc"
 
