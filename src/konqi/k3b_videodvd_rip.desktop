@@ -31,6 +31,7 @@ Name[sr]=Исчупај титлове са видео DVD-а помоћу K3b-�
 Name[sr@Latn]=Isčupaj titlove sa video DVD-a pomoću K3b-a
 Name[sv]=Lagra dvd-titlar med K3b
 Name[uk]=Видерти заголовки з відео-DVD за допомогою K3b
+Name[zh_CN]=用 K3b 提取视频 DVD
 Name[zh_TW]=使用 K3b 提取視像 DVD Titles
 Exec=k3b --videodvdrip %u
 Icon=k3b
