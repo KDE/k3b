@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003-2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -203,6 +203,7 @@ void K3bMd5Job::slotUpdate()
       readSize = QMIN( readSize, d->maxSize - d->readData );
 
     if( readSize <= 0 ) {
+      kdDebug() << "(K3bMd5Job) reached max size of " << d->maxSize << ". Stopping." << endl;
       stopAll();
       emit percent( 100 );
       jobFinished(true);
@@ -255,6 +256,7 @@ void K3bMd5Job::slotUpdate()
 	jobFinished(false);
       }
       else if( read == 0 ) {
+	kdDebug() << "(K3bMd5Job) read all data. Total size: " << d->readData << ". Stopping." << endl;
 	stopAll();
 	emit percent( 100 );
 	jobFinished(true);

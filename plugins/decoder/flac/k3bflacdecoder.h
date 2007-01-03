@@ -1,7 +1,7 @@
 /* 
  * FLAC decoder module for K3b.
  * Based on the Ogg Vorbis module for same.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2003 John Steele Scott <toojays@toojays.net>
  *
  * This program is free software; you can redistribute it and/or modify

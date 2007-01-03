@@ -36,7 +36,7 @@ fi
 DIR=`pwd`
 cd ..
 L10NDIR=`ls -d *i18n*`
-if [ -n $L10NDIR ] && [ ! -e $L10NDIR/INSTALL ]; then
+if [ -e $L10NDIR ] && [ ! -e $L10NDIR/INSTALL ]; then
 	echo "   --- Creating i18n toplevel files"
 	echo "#MIN_CONFIG(3.2)" > $L10NDIR/configure.in.in
 	touch $L10NDIR/ChangeLog

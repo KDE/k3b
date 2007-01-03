@@ -2,10 +2,10 @@
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (c) 2005 Laurent Montel <montel@kde.org>
- * Copyright (C) 2005-2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

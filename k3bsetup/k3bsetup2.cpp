@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   m_aboutData = new KAboutData(I18N_NOOP("k3bsetup2"),
 			       I18N_NOOP("K3bSetup 2"),
 			       0, 0, KAboutData::License_GPL,
-			       I18N_NOOP("(C) 2003-2004 Sebastian Trueg"));
+			       I18N_NOOP("(C) 2003-2007 Sebastian Trueg"));
   m_aboutData->addAuthor("Sebastian Trueg", 0, "trueg@k3b.org");
 
   setButtons( KCModule::Apply|KCModule::Cancel|KCModule::Ok|KCModule::Default );
