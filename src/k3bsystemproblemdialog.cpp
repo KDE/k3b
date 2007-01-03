@@ -56,6 +56,15 @@
 #include <fstab.h>
 
 
+static QString markupString( const QString& s_ )
+{
+  QString s(s_);
+  s.replace( '<', "&lt;" );
+  s.replace( '>', "&gt;" );
+  return s;
+}
+
+
 K3bSystemProblem::K3bSystemProblem( int t,
 				    const QString& p,
 				    const QString& d,
@@ -126,11 +135,11 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
     text.append( "<p><b>" );
     if( p.type == K3bSystemProblem::CRITICAL )
       text.append( "<span style=\"color:red\">" );
-    text.append( p.problem );
+    text.append( markupString( p.problem ) );
     if( p.type == K3bSystemProblem::CRITICAL )
       text.append( "</span>" );
     text.append( "</b><br>" );
-    text.append( p.details + "<br>" );
+    text.append( markupString( p.details ) + "<br>" );
     text.append( "<i>" + i18n("Solution") + "</i>: " + p.solution );
     text.append( "</p>" );
   }
@@ -199,12 +208,11 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       //
       if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
 	  k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) ) {
-	// FIXME: replace ">" with "&gt;"
 	if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					     i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord &lt;= 2.01.01a05"),
+					     i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a05"),
 					     i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
-						  "root for security reasons anymore.").arg("cdrecord &lt;= 2.01.01a05"),
+						  "root for security reasons anymore.").arg("cdrecord <= 2.01.01a05"),
 					     i18n("Use K3bSetup to solve this problem."),
 					     true ) );
       }
