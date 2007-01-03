@@ -233,10 +233,10 @@ K3bVersion K3b::kernelVersion()
   utsname unameinfo;
   if( ::uname(&unameinfo) == 0 ) {
     v = QString::fromLocal8Bit( unameinfo.release );
-    kdDebug() << "linux kernel version: " << v << endl;
+    kdDebug() << "kernel version: " << v << endl;
   }
   else
-    kdError() << "could not determine Linux kernel version." << endl;
+    kdError() << "could not determine kernel version." << endl;
   return v;
 }
 
@@ -361,7 +361,7 @@ QString K3b::appendNumberToFilename( const QString& name, int num, unsigned int 
 
 bool K3b::plainAtapiSupport()
 {
-  // IMPROVEME!!!
+  // FIXME: what about BSD?
   return ( K3b::simpleKernelVersion() >= K3bVersion( 2, 5, 40 ) );
 }
 
@@ -376,12 +376,15 @@ bool K3b::hackedAtapiSupport()
 
 QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* bin )
 {
+#ifdef Q_OS_LINUX
   //
   // experimental: always use block devices on 2.6 kernels
   //
   if( simpleKernelVersion() >= K3bVersion( 2, 6, 0 ) )
     return dev->blockDeviceName();
-  else if( dev->interfaceType() == K3bDevice::SCSI )
+  else 
+#endif
+  if( dev->interfaceType() == K3bDevice::SCSI )
     return dev->busTargetLun();
   else if( (plainAtapiSupport() && bin->hasFeature("plain-atapi") ) )
     return dev->blockDeviceName();
