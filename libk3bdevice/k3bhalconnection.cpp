@@ -318,7 +318,8 @@ int K3bDevice::HalConnection::lock( Device* dev )
     k3bDebug() << "(K3bDevice::HalConnection) lock queued for " << udi << endl;
 
   dbus_message_unref( dmesg );
-  dbus_message_unref( reply );
+  if( reply )
+    dbus_message_unref( reply );
 
   return ret;
 }
@@ -373,7 +374,8 @@ int K3bDevice::HalConnection::unlock( Device* dev )
     k3bDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi << endl;
 
   dbus_message_unref( dmesg );
-  dbus_message_unref( reply );
+  if( reply )
+    dbus_message_unref( reply );
 
   return ret;
 }
@@ -454,7 +456,8 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
     k3bDebug() << "(K3bDevice::HalConnection) mount queued for " << mediumUdi << endl;
 
   dbus_message_unref( dmesg );
-  dbus_message_unref( reply );
+  if( reply )
+    dbus_message_unref( reply );
 
   return ret;
 }
@@ -524,7 +527,8 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
     k3bDebug() << "(K3bDevice::HalConnection) unmount queued for " << mediumUdi << endl;
 
   dbus_message_unref( dmesg );
-  dbus_message_unref( reply );
+  if( reply )
+    dbus_message_unref( reply );
 
   return ret;
 }
@@ -590,7 +594,8 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
     k3bDebug() << "(K3bDevice::HalConnection) eject queued for " << mediumUdi << endl;
 
   dbus_message_unref( dmesg );
-  dbus_message_unref( reply );
+  if( reply )
+    dbus_message_unref( reply );
 
   return ret;
 }
