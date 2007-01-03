@@ -242,16 +242,8 @@ void K3bDvdCopyDialog::slotStartClicked()
   }
 
   //
-  // check for m_tempDirSelectionWidget->tempPath()
+  // The job asks if we want to overwrite.
   //
-  if( !m_checkOnlyCreateImage->isChecked() && m_checkCacheImage->isChecked() ) 
-    if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
-      if( KMessageBox::warningContinueCancel( this,
-				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				     i18n("File Exists"), i18n("Overwrite") )
-	  != KMessageBox::Continue )
-	return;
-    }
 
   K3bJobProgressDialog* dlg = 0;
   if( m_checkOnlyCreateImage->isChecked() ) {
