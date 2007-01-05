@@ -827,14 +827,7 @@ void K3bAudioTrackView::slotSplitTrack()
 {
   QListViewItem* item = selectedItems().first();
   if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
-    QValueList<K3b::Msf> m_pos;
-     if( K3bAudioTrackSplitDialog::getSplitPos( tv->track(), m_pos, this ) ) {
-        QValueListIterator<K3b::Msf> it; 
-        for( it = m_pos.begin() ; it!=m_pos.end() ; ++it ) {
-	 K3b::Msf position = *it;
-         tv->track()->split( position );
-        } 
-    }
+    K3bAudioTrackSplitDialog::splitTrack( tv->track(), this );
   }
 }
 

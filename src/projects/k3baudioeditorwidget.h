@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,11 +18,10 @@
 
 #include <qframe.h>
 #include <qptrlist.h>
-#include <qsortedlist.h>
 
 #include <k3bmsf.h>
 
-class QPoint;
+
 class QPainter;
 
 
@@ -34,8 +33,6 @@ class K3bAudioEditorWidget : public QFrame
   K3bAudioEditorWidget( QWidget* parent = 0, const char* name = 0 );
   ~K3bAudioEditorWidget();
 
-  
-
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
 
@@ -43,6 +40,8 @@ class K3bAudioEditorWidget : public QFrame
    * For now the Editor has only one parameter: the length data.
    */
   void setLength( const K3b::Msf& length );
+
+  const K3b::Msf length() const;
 
   /**
    * Add a user editable range.
@@ -58,6 +57,19 @@ class K3bAudioEditorWidget : public QFrame
 		const QBrush& brush = QBrush() );
 
   /**
+   * \returns the identifier of the range which spans over x position \a pos or
+   * 0 if no range is defined in this region.
+   */
+  int findRange( int pos ) const;
+
+  /**
+   * Searches for a range edge at x position \a pos.
+   * \return The ranges identifier if an edge could be found or 0 if there is no
+   * range edge at the position.
+   */
+  int findRangeEdge( int pos, bool* end = 0 ) const;
+
+  /**
    * @returns false if the range does not exist or end was bigger than start.
    */
   bool modifyRange( int identifier, const K3b::Msf& start, const K3b::Msf& end );
@@ -70,23 +82,25 @@ class K3bAudioEditorWidget : public QFrame
   K3b::Msf rangeStart( int identifier ) const;
   K3b::Msf rangeEnd( int identifier ) const;
 
+  /**
+   * \return A list of all ranges' identifiers sorted ascending by start
+   * offset
+   */
+  QValueList<int> allRanges() const;
+
   void setMaxNumberOfMarkers( int );
+
+  /**
+   * @param fixed if true the marker cannot be changed by the user, only with moveMarker
+   * @return -1 on error or an identifier on success.
+   */
+  int addMarker( const K3b::Msf& pos, bool fixed = false, 
+		 const QString& toolTip = QString::null, const QColor& color = QColor() );
 
   /**
    * @return false if the marker does not exist.
    */
   bool removeMarker( int identifier );
-
-  /**
-   * @return false if the range does does not exist
-   */
-  bool removeRange(QPoint m_rangePointClicked);
-
-  /**
-   * @return false if the range does does not exist
-   */
-
-  bool removeRangeAdjust(QPoint m_rangePointClicked);
 
   /**
    * @return false if the marker does not exist.
@@ -96,64 +110,40 @@ class K3bAudioEditorWidget : public QFrame
   void enableMouseAtSignal( bool b ) { m_mouseAt = b; }
 
   /**
-    * prepare the menu to be popped up when user right clicks on a range
-    */
-  // void setupSplitActions();
-
-  
-
-
-  /**
-   * @returns a list of positions at which the track is to be split
+   * By default ranges can overlap. If overlapping ranges are not allowed
+   * the editor widget will modify and delete ranges accordingly.
+   *
+   * Caution: So far setting this will not check if ranges already overlap.
    */
-  QValueList<K3b::Msf> getSplitPos(); 
+  void setAllowOverlappingRanges( bool b );
 
   /**
-   * sets essential parameters of the range which contains the point (first parameter) and also sets the msf of that point 
+   * Range selection is by default disabled. If it is enabled the editor visually
+   * highlights the last clicked range.
+   *
+   * \sa setSelectedRange
    */
-  void getRangeParametersFromPoint(QPoint m_rangePointClicked,K3b::Msf& current,K3b::Msf& posStart,K3b::Msf& posEnd,
-                                  bool& startFixed,bool& endFixed);
+  void enableRangeSelection( bool b );
 
-  
-  
-  
-   /** gets the parameters of the range which was being dragged 
-    *
-    */
-  void getDraggedRangeParameters (int& rangeId,K3b::Msf& start,K3b::Msf& end , bool& draggedEnd ) ;
-    
-   /** gets the parameters of the range which was next to the one being dragged 
-    *
-    */
-  void getOppositeRangeParameters (int& rangeId,K3b::Msf& start,K3b::Msf& end ,bool& draggedEnd) ;
+  bool allowOverlappingRanges() const;
+  bool rangeSelectedEnabled() const;
 
-  void resetPointers(int,int);
-  
+  void setSelectedRange( int id );
+
   /**
-   * for remote adusting of range  
-   */ 
-  bool adjustRange(const K3b::Msf& pos);
-  
-  /**
-   * @return s the no. of ranges in the track
+   * \return The identifier of the currently selected range or 0
+   * if none is selected.
    */
-  int getRangeCount() const ;
+  int selectedRange() const;
 
- protected slots:
-   //void slotSplitHere();
+  K3b::Msf posToMsf( int x ) const;
+  int msfToPos( const K3b::Msf& msf ) const;
 
-   //void slotRemoveRange();
-
-     // to compensate for the msf edit movement
-  
-   /**
-    * shows the popupMenu
-    */
-  //void showPopmenu(const QPoint&);
-
-  void slotMarkerMoved( int draggedMarkerId, const K3b::Msf& draggedMarkerPos );
-  void slotRangeChanged(int , const K3b::Msf& , const K3b::Msf& , bool );
-
+  /**
+   * Set the brush to paint the selected range. Default is QColorGroup::Highlight
+   */
+  void setSelectedRangeBrush( const QBrush& );
+  const QBrush& selectedRangeBrush() const;
 
  signals:
   /**
@@ -165,8 +155,10 @@ class K3bAudioEditorWidget : public QFrame
    * Emitted when the user changed a range.
    * This signal is not emitted when a range is changed via modifyRange.
    */
-  void rangeChanged( int identifier, const K3b::Msf& start, const K3b::Msf& end , bool m_draggingRangeEnd);
+  void rangeChanged( int identifier, const K3b::Msf& start, const K3b::Msf& end );
   void rangeRemoved( int );
+
+  void selectedRangeChanged( int );
 
   /**
    * Emitted when the user moves a marker.
@@ -176,21 +168,14 @@ class K3bAudioEditorWidget : public QFrame
   void markerAdded( int identifier, const K3b::Msf& pos );
   void markerRemoved( int identifier );
 
-  /**
-    * emitted when user right clicks on range
-    */ 
- 
-  void contextMenu(const QPoint&);  
-
-  void edgeClicked(const K3b::Msf&);
-
-  void changeMsf(const K3b::Msf&);
-
-
  private:
   class Range;
+  class RangeList;
   class Marker;
   class ToolTip;
+
+  class Private;
+  Private* d;
 
   void mousePressEvent( QMouseEvent* e );
   void mouseReleaseEvent( QMouseEvent* e );
@@ -201,44 +186,24 @@ class K3bAudioEditorWidget : public QFrame
   void drawRange( QPainter* p, const QRect&, Range* r );
   void drawMarker( QPainter* p, const QRect&, Marker* m );
 
-  void updateRangeMarkerColor();
-
-  bool adjustRange(const QPoint& p);
-  
-  void adjustMarker(int identifier,const QPoint& p);
-  void reColor();  
+  /**
+   * Makes sure that \a r does not overlap any other range by modifying and
+   * deleting other ranges.
+   */
+  void fixupOverlappingRanges( Range* r );
 
   Range* getRange( int i ) const;
   Marker* getMarker( int i ) const;
   Range* findRange( const QPoint& p ) const;
   Range* findRangeEdge( const QPoint& p, bool* end = 0 ) const;
   Marker* findMarker( const QPoint& p ) const;
-  QColor determineNewColor() ;
-  K3b::Msf fromPointToPos( const QPoint& p ) const;
-  int fromPosToX( const K3b::Msf& msf ) const;
-
-  void contextMenuEvent( QContextMenuEvent * );
-
-/**
-   * @param fixed if true the marker cannot be changed by the user, only with moveMarker
-   * @return -1 on error or an identifier on success.
-   */
-  int addMarker( const K3b::Msf&,K3bAudioEditorWidget::Range*, bool end=false ,bool fixed = false, 
-		 const QString& toolTip = QString::null, const QColor& color = QColor() );
-
-  
-
- int rangeLock;    // another one of my helpless hack  (not used currently)
- int signalLockFlag;
+  void setSelectedRange( Range* );
 
   int m_maxMarkers;
-  QPoint m_rangePointClicked;
   K3b::Msf m_length;
-  QSortedList<Range> m_ranges;
   QPtrList<Marker> m_markers;
   int m_idCnt;
   bool m_mouseAt;
-  
 
   /**
    * Margin around the timethingy
@@ -247,10 +212,7 @@ class K3bAudioEditorWidget : public QFrame
 
   Range* m_draggedRange;
   bool m_draggingRangeEnd;
-  Range* m_oppositeRange;
   Marker* m_draggedMarker;
-
-  
 
   ToolTip* m_toolTip;
 };

@@ -51,7 +51,7 @@ K3bAudioDataSourceEditWidget::K3bAudioDataSourceEditWidget( QWidget* parent, con
   grid->setColStretch( 1, 1 );
 
   // setup connections between the msfedits and the editor
-  connect( m_editor, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&,bool)),
+  connect( m_editor, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),
 	   this, SLOT(slotRangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
 
   connect( m_editStartOffset, SIGNAL(valueChanged(const K3b::Msf&)),

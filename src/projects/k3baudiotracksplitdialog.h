@@ -17,18 +17,15 @@
 #define _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 
 #include <kdialogbase.h>
-# include "k3baudioeditorwidget.h"
 
 namespace K3b {
   class Msf;
 }
 class K3bAudioTrack;
-
+class K3bAudioEditorWidget;
 class K3bMsfEdit;
 class KActionCollection;
-class KAction;
 class KPopupMenu;
-
 
 
 /**
@@ -42,48 +39,33 @@ class K3bAudioTrackSplitDialog : public KDialogBase
   K3bAudioTrackSplitDialog( K3bAudioTrack*, QWidget* parent = 0, const char* name = 0 );
   ~K3bAudioTrackSplitDialog();
 
-  QValueList<K3b::Msf> currentSplitPos();
+  bool eventFilter( QObject* o, QEvent* e );
 
- 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
- /**
+  /**
    * if this method returns true val is filled with the user selected value.
    */
-  static bool getSplitPos( K3bAudioTrack* track, QValueList<K3b::Msf>& val, QWidget* parent = 0, const char* name = 0 );
+  static void splitTrack( K3bAudioTrack* track, QWidget* parent = 0, const char* name = 0 );
 
  private slots:
-  void slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& , bool);
-  void slotMsfChanged( const K3b::Msf& msf );
-
-  void setMsf(const K3b::Msf&);
-  
-  void showPopmenu(const QPoint& pos);
+  void slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& );
+  void slotMsfEditChanged( const K3b::Msf& msf );
+  void slotRangeSelectionChanged( int );
   void slotSplitHere();
   void slotRemoveRange();
-
-  void slotEdgeClicked(const K3b::Msf&);
+  void splitAt( const QPoint& p );
 
  private:
-  
-  void setupSplitActions();
+  void setupActions();
 
   K3bAudioEditorWidget* m_editorWidget;
-  K3bMsfEdit* m_msfEdit;
-  int m_firstRange;
-int m_secondRange; /* changed here */
+  K3bMsfEdit* m_msfEditStart;
+  K3bMsfEdit* m_msfEditEnd;
   K3bAudioTrack* m_track;
-
-  int msfLock;
-  int funcLock;  //  locking functions from changing the msfEdit value
-
-  KAction*  m_actionSplitHere;
-  KAction* m_actionRemoveRange;
   KActionCollection* m_actionCollection;
-
-  QPoint m_rangePointClicked;
-
-   KPopupMenu* m_popupMenu;
+  KPopupMenu* m_popupMenu;
+  QPoint m_lastClickPosition;
 };
 
 #endif

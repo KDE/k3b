@@ -16,20 +16,18 @@
 #include "k3baudiotracksplitdialog.h"
 #include "k3baudiotrack.h"
 #include "k3baudioeditorwidget.h"
-#include <iostream>
+
 #include <k3bmsf.h>
 #include <k3bmsfedit.h>
 
 #include <klocale.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 #include <kpopupmenu.h>
 
 #include <qlabel.h>
 #include <qframe.h>
 #include <qlayout.h>
-#include <qcolor.h>
-#include <qbrush.h>
-
 
 
 K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent, const char* name )
@@ -41,57 +39,47 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
   QFrame* frame = plainPage();
   
   m_editorWidget = new K3bAudioEditorWidget( frame );
-  m_msfEdit = new K3bMsfEdit( frame );
+  m_msfEditStart = new K3bMsfEdit( frame );
+  m_msfEditEnd = new K3bMsfEdit( frame );
 
   QGridLayout* layout = new QGridLayout( frame );
   layout->setMargin( 0 );
   layout->setSpacing( spacingHint() );
 
+  // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
   layout->addMultiCellWidget( new QLabel( i18n("Please select the position where the track should be split."),
-					  frame ), 0, 0, 0, 1 );
-  layout->addMultiCellWidget( m_editorWidget, 1, 1, 0, 1 );
-  layout->addWidget( m_msfEdit, 2, 1 );
+			      frame ), 0, 0, 0, 3 );
+  layout->addMultiCellWidget( m_editorWidget, 1, 1, 0, 3 );
+  layout->addWidget( m_msfEditStart, 2, 1 );
+  layout->addWidget( new QLabel( " - ", frame ), 2, 2 );
+  layout->addWidget( m_msfEditEnd, 2, 3 );
   layout->addWidget( new QLabel( i18n("Split track at:"), frame ), 2, 0 );
   layout->setColStretch( 0, 1 );
 
+  m_editorWidget->setAllowOverlappingRanges( false );
+  m_editorWidget->enableRangeSelection( true );
+  m_editorWidget->installEventFilter( this );
+
+  connect( m_editorWidget, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),
+	   this, SLOT(slotRangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
+  connect( m_editorWidget, SIGNAL(selectedRangeChanged(int)),
+	   this, SLOT(slotRangeSelectionChanged(int)) );
+  connect( m_msfEditStart, SIGNAL(valueChanged(const K3b::Msf&)),
+	   this, SLOT(slotMsfEditChanged(const K3b::Msf&)) );
+  connect( m_msfEditEnd, SIGNAL(valueChanged(const K3b::Msf&)),
+	   this, SLOT(slotMsfEditChanged(const K3b::Msf&)) );
+
+  setupActions();
+
   // load the track
   m_editorWidget->setLength( m_track->length() );
-  m_msfEdit->setValue( m_track->length().lba() / 2 );
 
   // default split
-  
-  setupSplitActions();
+  K3b::Msf mid = m_track->length().lba() / 2;
+  m_editorWidget->addRange( 0, mid-1 );
+  m_editorWidget->addRange( mid, m_track->length()-1 );
 
-  msfLock=0;
-  funcLock=0;
-  
-  // please do not change the order in which this is added else, it will mess up the markers 
-
-  m_secondRange=m_editorWidget->addRange(m_track->length().lba() / 2+1,m_track->length().lba()-1, 
-					 false, true, QString::null,QBrush(Qt::NoBrush) );
-  m_firstRange = m_editorWidget->addRange(0, m_track->length().lba() / 2, 
-					  true, false, QString::null,QBrush(Qt::NoBrush) );
- 
-   
- 
-
- 
-
-  connect( m_editorWidget, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&, bool)),
-	   this, SLOT(slotRangeModified(int, const K3b::Msf&, const K3b::Msf& , bool)) );
- 
-  connect( m_editorWidget, SIGNAL(contextMenu(const QPoint&)), 
-           this, SLOT( showPopmenu(const QPoint&) ));
-
-  connect( m_msfEdit, SIGNAL(valueChanged(const K3b::Msf&)),
-	   this, SLOT(slotMsfChanged(const K3b::Msf&)) );
-
-  connect(m_editorWidget, SIGNAL(edgeClicked(const K3b::Msf&)),
-	  this, SLOT(slotEdgeClicked(const K3b::Msf&)));
-
-  connect(m_editorWidget, SIGNAL(changeMsf(const K3b::Msf&)),
-	  this,SLOT(setMsf(const K3b::Msf&)));
-
+  slotRangeSelectionChanged( 0 );
 }
 
 
@@ -100,163 +88,142 @@ K3bAudioTrackSplitDialog::~K3bAudioTrackSplitDialog()
 }
 
 
-void K3bAudioTrackSplitDialog::slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& end ,bool draggingRangeEnd)
+void K3bAudioTrackSplitDialog::setupActions()
 {
-   
-  
-  msfLock=1;
-  if(draggingRangeEnd)
-    m_msfEdit->setMsfValue( end ); // start of next track
-  else
-    m_msfEdit->setMsfValue( start ); // start of next track
-  msfLock=0;
-  
-  
-
-}
-
-void K3bAudioTrackSplitDialog::setMsf(const K3b::Msf& msf)
-{
-  
-  msfLock=1;
-  m_msfEdit->setMsfValue(msf); // start of next track
-  msfLock=0;
-  
-
-}
-
-void K3bAudioTrackSplitDialog::slotMsfChanged( const K3b::Msf& msf )
-{
-  
-  
- 
-  if(msfLock==0) {
-     
-    
-    K3b::Msf temp2=m_track->length().lba();
-    if(  msf > temp2 ) {
-      msfLock=1;
-      m_msfEdit->setMsfValue(temp2);
-      msfLock=0;      
-    }
-    else
-      if(!m_editorWidget->adjustRange(msf)){
-	msfLock=1;
-	K3b::Msf temp=0;
-	m_msfEdit->setMsfValue(temp);
-	msfLock=0;
-      }
-  
-  } 
-
- 
-}
-
-
-QValueList<K3b::Msf> K3bAudioTrackSplitDialog::currentSplitPos()
-{
-  return m_editorWidget->getSplitPos();
-}
-
-
-bool K3bAudioTrackSplitDialog::getSplitPos( K3bAudioTrack* track, QValueList<K3b::Msf>& val, 
-					    QWidget* parent, const char* name )
-{
-  K3bAudioTrackSplitDialog d( track, parent, name );
-  if( d.exec() == QDialog::Accepted ) {
-    val = d.currentSplitPos();
-    return true;
-  }
-  else
-    return false;
-}
-
-void K3bAudioTrackSplitDialog::setupSplitActions()
-{
-  
   m_actionCollection = new KActionCollection( this );
   m_popupMenu = new KPopupMenu( this );
 
-  m_actionSplitHere = new KAction( i18n("Split Here"), "track_split",
-				   KShortcut(), this, SLOT(slotSplitHere()), 
-				   actionCollection(), "range_split" );
-  
- 
-  m_actionRemoveRange = new KAction( i18n( "Remove this Range" ), "track_remove",
-				     KShortcut(), this, SLOT(slotRemoveRange()), 
-				     actionCollection(), "range_remove" );
-  
+  KAction* actionSplitHere = new KAction( i18n("Split Here"), 0,
+					  KShortcut(), this, SLOT(slotSplitHere()),
+					  actionCollection(), "range_split" );
+  // FIXME: after the message freeze give this action a proper name like "Remove track part"
+  KAction* actionRemoveRange = new KAction( i18n("Remove this Range"), 0,
+					    KShortcut(), this, SLOT(slotRemoveRange()),
+					    actionCollection(), "range_remove" );
 
+  actionSplitHere->plug( m_popupMenu );
+  actionRemoveRange->plug( m_popupMenu );
 }
 
 
-void K3bAudioTrackSplitDialog::showPopmenu(const QPoint& pos)
+void K3bAudioTrackSplitDialog::slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& end )
 {
-  
+  m_msfEditStart->blockSignals( true );
+  m_msfEditEnd->blockSignals( true );
 
-  // first store the local version of the point
-  m_rangePointClicked=mapFromGlobal(pos);
+  m_msfEditStart->setMsfValue( start );
+  m_msfEditEnd->setMsfValue( end );
 
-  m_popupMenu->clear();
-  
-  m_actionSplitHere->plug(m_popupMenu);
- 
-  if( m_editorWidget->getRangeCount() > 2)
-    m_actionRemoveRange->plug(m_popupMenu);
-  
-  
-  m_popupMenu->popup( pos );
- 
+  m_msfEditStart->blockSignals( false );
+  m_msfEditEnd->blockSignals( false );
 }
+
+
+void K3bAudioTrackSplitDialog::slotMsfEditChanged( const K3b::Msf& )
+{
+  m_editorWidget->modifyRange( m_editorWidget->selectedRange(), m_msfEditStart->msfValue(), m_msfEditEnd->msfValue() );
+}
+
+
+void K3bAudioTrackSplitDialog::slotRangeSelectionChanged( int id )
+{
+  if( id > 0 ) {
+    m_msfEditStart->blockSignals( true );
+    m_msfEditEnd->blockSignals( true );
+
+    m_msfEditStart->setMsfValue( m_editorWidget->rangeStart( id ) );
+    m_msfEditEnd->setMsfValue( m_editorWidget->rangeEnd( id ) );
+    m_msfEditStart->setEnabled( true );
+    m_msfEditEnd->setEnabled( true );
+
+    m_msfEditStart->blockSignals( false );
+    m_msfEditEnd->blockSignals( false );
+  }
+  else {
+    m_msfEditStart->setEnabled( false );
+    m_msfEditEnd->setEnabled( false );
+  }
+}
+
+
+void K3bAudioTrackSplitDialog::splitAt( const QPoint& p )
+{
+  int id = m_editorWidget->findRange( p.x() );
+  if( id ) {
+    K3b::Msf msf = m_editorWidget->posToMsf( p.x() );
+    m_editorWidget->addRange( msf+1, m_editorWidget->rangeEnd( id ) );
+    m_editorWidget->modifyRange( id, m_editorWidget->rangeStart( id ), msf );
+  }
+}
+
+
+bool K3bAudioTrackSplitDialog::eventFilter( QObject* o, QEvent* e )
+{
+  if( o == m_editorWidget ) {
+    if( e->type() == QEvent::MouseButtonDblClick ) {
+      QMouseEvent* me = static_cast<QMouseEvent*>( e );
+      splitAt( me->pos() );
+    }
+    else if( e->type() == QEvent::ContextMenu ) {
+      QContextMenuEvent* ce = static_cast<QContextMenuEvent*>( e );
+      ce->consume();
+      m_lastClickPosition = ce->pos();
+      if( m_editorWidget->findRange( ce->pos().x() ) > 0 )
+	m_popupMenu->popup( ce->globalPos() );
+    }
+  }
+
+  return KDialogBase::eventFilter( o, e );
+}
+
 
 void K3bAudioTrackSplitDialog::slotSplitHere()
 {
-  
-  int rangeIdentifier1,rangeIdentifier2;
-  
-  K3b::Msf posStart;
-  K3b::Msf posEnd;
-  K3b::Msf current;
-  bool startFixed,endFixed;
-  
-  m_editorWidget->getRangeParametersFromPoint(m_rangePointClicked,current,posStart,posEnd,startFixed,endFixed);
- 
-  if(m_editorWidget->removeRange(m_rangePointClicked)) {
-    // please do not change the order in which this is added else, it will mess up the markers
-
-    rangeIdentifier2=m_editorWidget->addRange(current +1,posEnd,false,endFixed,
-					      QString::null,Qt::green);
-          
-
-    rangeIdentifier1=m_editorWidget->addRange(posStart,current,startFixed,false,
-					      QString::null,Qt::blue);
-                   
-  }
-
-  m_editorWidget->resetPointers(rangeIdentifier2,rangeIdentifier1);
-   
-  msfLock=1;
-  m_msfEdit->setMsfValue(current);    
-  msfLock=0;
- 
+  splitAt( m_lastClickPosition );
 }
+
 
 void K3bAudioTrackSplitDialog::slotRemoveRange()
 {
-  
-   
-  m_editorWidget->removeRangeAdjust(m_rangePointClicked);
-  
- 
+  m_editorWidget->removeRange( m_editorWidget->findRange( m_lastClickPosition.x() ) );
 }
 
-void K3bAudioTrackSplitDialog::slotEdgeClicked(const K3b::Msf& pos)
+
+void K3bAudioTrackSplitDialog::splitTrack( K3bAudioTrack* track,
+					   QWidget* parent, 
+					   const char* name )
 {
-  
-  msfLock=1;
-  m_msfEdit->setMsfValue(pos);
-  
-  msfLock=0;    
+  K3bAudioTrackSplitDialog d( track, parent, name );
+  if( d.exec() == QDialog::Accepted ) {
+    QValueList<int> ranges = d.m_editorWidget->allRanges();
+    // we split the track at all range ends and just delete those that relate to the gaps in between
+    K3b::Msf pos = 0;
+    for( QValueList<int>::const_iterator it = ranges.constBegin();
+	 it != ranges.constEnd(); ++it ) {
 
+      // delete the unwanted part
+      if( d.m_editorWidget->rangeStart( *it ) > pos ) {
+	// split so the range's start is the first frame of the new track
+	K3bAudioTrack* nextTrack = track->split( d.m_editorWidget->rangeStart( *it ) - pos );
+	delete track;
+	track = nextTrack;
+      }
+
+      // create a new track part for the range itself
+      pos = d.m_editorWidget->rangeStart( *it );
+      if( d.m_editorWidget->rangeEnd( *it ) < d.m_editorWidget->length()-1 ) {
+	// split so the range's end is the last frame in the old track 
+	// and thus, the range's end + 1 the first frame in the new track
+	track = track->split( d.m_editorWidget->rangeEnd( *it ) - pos + 1 );
+      }
+      pos = d.m_editorWidget->rangeEnd( *it )+1;
+    }
+
+    // remove the last unwanted part
+    if( pos < d.m_editorWidget->length() ) {
+      delete track;
+    }
+  }
 }
+
 #include "k3baudiotracksplitdialog.moc"
