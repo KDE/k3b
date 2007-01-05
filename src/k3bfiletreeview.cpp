@@ -539,6 +539,8 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
   // add to maps
   d->branchDeviceMap.insert( newBranch, dev );
   d->deviceBranchDict.insert( (void*)dev, newBranch );
+
+  updateMinimumWidth();
 }
 
 
