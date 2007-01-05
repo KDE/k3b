@@ -69,7 +69,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   //
   // Source group
   // //////////////////////////////////////////////////////////////////////////
-  QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("DVD Reader Device"), w );
+  QGroupBox* groupSource = new QGroupBox( 1, Qt::Vertical, i18n("Source Medium"), w );
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
   m_comboSourceDevice = new K3bMediaSelectionComboBox( groupSource );
