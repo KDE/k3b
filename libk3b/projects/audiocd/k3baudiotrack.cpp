@@ -560,6 +560,7 @@ K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
 
     // the new track should include all sources from splitSource and below
     K3bAudioTrack* splitTrack = new K3bAudioTrack();
+    splitTrack->m_cdText = m_cdText;
     source = splitSource;
     while( source ) {
       K3bAudioDataSource* addSource = source;

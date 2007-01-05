@@ -165,6 +165,9 @@ class LIBK3B_EXPORT K3bAudioTrack
    * Split the track at position pos and return the splitted track
    * on success.
    * The new track will be moved after this track.
+   *
+   * \param pos The position at which to split. \a pos will be the 
+   * first frame in the new track.
    */
   K3bAudioTrack* split( const K3b::Msf& pos );
 
