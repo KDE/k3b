@@ -6,14 +6,6 @@
     <property name="name">
         <cstring>K3bAudioCDTextWidget</cstring>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>292</width>
-            <height>156</height>
-        </rect>
-    </property>
     <property name="caption">
         <string>K3bAudioCDTextWidget</string>
     </property>
@@ -161,8 +153,8 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>211</width>
-                                    <height>21</height>
+                                    <width>0</width>
+                                    <height>0</height>
                                 </size>
                             </property>
                         </spacer>
