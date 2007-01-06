@@ -125,7 +125,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   box->setSpacing( KDialog::spacingHint() );
 
   KTextEdit* label = new KTextEdit( this );
-  label->setText( "<h2>" + "K3bSetup" + "</h2>"
+  label->setText( "<h2>K3bSetup</h2>"
 		  + i18n("<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
 			 "burn CDs and DVDs. "
 			 "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
