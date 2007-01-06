@@ -111,10 +111,10 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   d = new Private();
   d->config = new KConfig( "k3bsetup2rc" );
 
-  m_aboutData = new KAboutData(I18N_NOOP("k3bsetup2"),
-			       I18N_NOOP("K3bSetup 2"),
+  m_aboutData = new KAboutData("k3bsetup2",
+			       "K3bSetup 2",
 			       0, 0, KAboutData::License_GPL,
-			       I18N_NOOP("(C) 2003-2007 Sebastian Trueg"));
+			       "(C) 2003-2007 Sebastian Trueg");
   m_aboutData->addAuthor("Sebastian Trueg", 0, "trueg@k3b.org");
 
   setButtons( KCModule::Apply|KCModule::Cancel|KCModule::Ok|KCModule::Default );
@@ -125,7 +125,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   box->setSpacing( KDialog::spacingHint() );
 
   KTextEdit* label = new KTextEdit( this );
-  label->setText( "<h2>" + i18n("K3bSetup") + "</h2>"
+  label->setText( "<h2>" + "K3bSetup" + "</h2>"
 		  + i18n("<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
 			 "burn CDs and DVDs. "
 			 "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
