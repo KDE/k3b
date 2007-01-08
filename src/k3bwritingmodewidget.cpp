@@ -126,14 +126,8 @@ void K3bWritingModeWidget::setWritingMode( int m )
 
 void K3bWritingModeWidget::setSupportedModes( int m )
 {
-  // save current mode
-  int currentMode = writingMode();
-
   d->supportedModes = m|K3b::WRITING_MODE_AUTO;  // we always support the Auto mode
-
   updateModes();
-
-  setWritingMode( currentMode );
 }
 
 
@@ -146,6 +140,9 @@ void K3bWritingModeWidget::setDevice( K3bDevice::Device* dev )
 
 void K3bWritingModeWidget::updateModes()
 {
+  // save current mode
+  int currentMode = writingMode();
+
   clear();
 
   if( d->device )
@@ -164,6 +161,8 @@ void K3bWritingModeWidget::updateModes()
     insertItem( K3b::WRITING_MODE_RES_OVWR, i18n("Restricted Overwrite"), s_ovwHelp );
   if( d->selectedModes & K3b::WRITING_MODE_INCR_SEQ )
     insertItem( K3b::WRITING_MODE_INCR_SEQ, i18n("Incremental"), s_seqHelp );
+
+  setWritingMode( currentMode );
 }
 
 
