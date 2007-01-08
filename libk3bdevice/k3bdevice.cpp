@@ -1477,11 +1477,23 @@ bool K3bDevice::Device::block( bool b ) const
   // For some reason the Scsi Command does not work here.
   // So we use the ioctl on Linux systems
   //
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
+#if defined(Q_OS_LINUX)
   bool needToClose = !isOpen();
 
   if( open() ) {
     bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+    if( needToClose )
+      close();
+    return success;
+  }
+  else
+    return false;
+#elif defined(Q_OS_NETBSD)
+  bool needToClose = !isOpen();
+  int arg = b ? 1 : 0;
+
+  if( open() ) {
+    bool success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
     if( needToClose )
       close();
     return success;

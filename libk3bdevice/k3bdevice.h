@@ -778,7 +778,7 @@ namespace K3bDevice
       friend class DeviceManager;
     };
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   /**
    * This should always be used to open a device since it
    * uses the resmgr
