@@ -16,11 +16,13 @@ AC_TRY_COMPILE([
 	[linux_scsi=yes])
 AC_MSG_RESULT($linux_scsi)
 
-if test "FreeBSD" = `uname -s` ; then
+case "$host_os" in
+freebsd*|dragonfly*)
 	# I'll be damned if lousy coding prevents us from running
 	# this application.
 	linux_scsi=yes
-fi
+	;;
+esac
 
 if test "x$linux_scsi" = "xno" ; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE k3b"
