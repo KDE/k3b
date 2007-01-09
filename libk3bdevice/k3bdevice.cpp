@@ -1733,7 +1733,6 @@ int K3bDevice::Device::currentProfile() const
 K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 {
   DiskInfo inf;
-  inf.m_diskState = STATE_UNKNOWN;
 
   // if the device is already opened we do not close it
   // to allow fast multiple method calls in a row
@@ -1746,16 +1745,17 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
     //
     // The first thing to do should be: checking if a media is loaded
-    // We do this with requesting the current profile. If it is 0 no media
-    // should be loaded. On an error we just go on.
+    // We cannot rely on the profile here since at least some Plextor
+    // drives return the NO MEDIUM profile for CD media
     //
     if( !testUnitReady() ) {
       // no disk or tray open
       inf.m_diskState = STATE_NO_MEDIA;
       inf.m_mediaType = MEDIA_NONE;
+      inf.m_currentProfile = MEDIA_NONE;
     }
-
-    inf.m_currentProfile = currentProfile();
+    else
+      inf.m_currentProfile = currentProfile();
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
 
@@ -1842,7 +1842,9 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       //
       inf.m_mediaType = mediaType();
 
-      if( inf.m_mediaType == MEDIA_UNKNOWN ) {
+      // At least some Plextor drives return profile NONE for CD media
+      if( inf.m_mediaType == MEDIA_UNKNOWN ||
+	  inf.m_mediaType == MEDIA_NONE ) {
 	// probably it is a CD
 	if( inf.rewritable() )
 	  inf.m_mediaType = MEDIA_CD_RW;
