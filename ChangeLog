@@ -64,6 +64,7 @@
    - Simplified the layout of the burn dialogs for data projects (more advanced settings hidden)
    - Improved theme support (transparent themes)
  * Device buffer status display for DVD burning with growisofs >= 7.0
+ * Support for Audio CD ripping with libcdio instead of libcdparanoia
 
 0.12.17
 =======
