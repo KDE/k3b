@@ -4,7 +4,7 @@
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2004 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,28 @@
 #include <qmutex.h>
 
 
+static bool s_haveLibCdio = false;
+
+
 void* K3bCdparanoiaLib::s_libInterface = 0;
 void* K3bCdparanoiaLib::s_libParanoia = 0;
 int K3bCdparanoiaLib::s_counter = 0;
+
+
+#define CDDA_IDENTIFY          s_haveLibCdio ? "cdio_cddap_identify" : "cdda_identify"
+#define CDDA_CLOSE             s_haveLibCdio ? "cdio_cddap_close" : "cdda_close"
+#define CDDA_OPEN              s_haveLibCdio ? "cdio_cddap_open" : "cdda_open"
+#define CDDA_TRACK_FIRSTSECTOR s_haveLibCdio ? "cdio_cddap_track_firstsector" : "cdda_track_firstsector"
+#define CDDA_TRACK_LASTSECTOR  s_haveLibCdio ? "cdio_cddap_track_lastsector" : "cdda_track_lastsector"
+#define CDDA_VERBOSE_SET       s_haveLibCdio ? "cdio_cddap_verbose_set" : "cdda_verbose_set"
+#define CDDA_DISC_FIRSTSECTOR  s_haveLibCdio ? "cdio_cddap_disc_firstsector" : "cdda_disc_firstsector"
+
+#define PARANOIA_INIT          s_haveLibCdio ? "cdio_paranoia_init" : "paranoia_init"
+#define PARANOIA_FREE          s_haveLibCdio ? "cdio_paranoia_free" : "paranoia_free"
+#define PARANOIA_MODESET       s_haveLibCdio ? "cdio_paranoia_modeset" : "paranoia_modeset"
+#define PARANOIA_SEEK          s_haveLibCdio ? "cdio_paranoia_seek" : "paranoia_seek"
+#define PARANOIA_READ_LIMITED  s_haveLibCdio ? "cdio_paranoia_read_limited" : "paranoia_read_limited"
+
 
 // from cdda_paranoia.h
 #define PARANOIA_CB_READ           0
@@ -401,19 +420,19 @@ K3bCdparanoiaLib::~K3bCdparanoiaLib()
 
 bool K3bCdparanoiaLib::load()
 {
-  cdda_cdda_identify = (cdrom_drive* (*) (const char*, int, char**))dlsym( s_libInterface, "cdda_identify");
-  cdda_cdda_open = (int (*) (cdrom_drive*))dlsym( s_libInterface, "cdda_open");
-  cdda_cdda_close = (int (*) (cdrom_drive*))dlsym( s_libInterface, "cdda_close");
-  cdda_cdda_track_firstsector = (long (*)(cdrom_drive*, int))dlsym( s_libInterface, "cdda_track_firstsector");
-  cdda_cdda_track_lastsector = (long (*)(cdrom_drive*, int))dlsym( s_libInterface, "cdda_track_lastsector");
-  cdda_cdda_verbose_set = (void (*)(cdrom_drive *d,int err_action, int mes_action))dlsym( s_libInterface, "cdda_verbose_set");
-  cdda_cdda_disc_firstsector = (long (*)(cdrom_drive *d))dlsym( s_libInterface, "cdda_disc_firstsector");
+  cdda_cdda_identify = (cdrom_drive* (*) (const char*, int, char**))dlsym( s_libInterface, CDDA_IDENTIFY );
+  cdda_cdda_open = (int (*) (cdrom_drive*))dlsym( s_libInterface, CDDA_OPEN );
+  cdda_cdda_close = (int (*) (cdrom_drive*))dlsym( s_libInterface, CDDA_CLOSE );
+  cdda_cdda_track_firstsector = (long (*)(cdrom_drive*, int))dlsym( s_libInterface, CDDA_TRACK_FIRSTSECTOR );
+  cdda_cdda_track_lastsector = (long (*)(cdrom_drive*, int))dlsym( s_libInterface, CDDA_TRACK_LASTSECTOR );
+  cdda_cdda_verbose_set = (void (*)(cdrom_drive *d,int err_action, int mes_action))dlsym( s_libInterface, CDDA_VERBOSE_SET );
+  cdda_cdda_disc_firstsector = (long (*)(cdrom_drive *d))dlsym( s_libInterface, CDDA_DISC_FIRSTSECTOR );
 
-  cdda_paranoia_init = (cdrom_paranoia* (*)(cdrom_drive*))dlsym( s_libParanoia, "paranoia_init");
-  cdda_paranoia_free = (void (*)(cdrom_paranoia *p))dlsym( s_libParanoia, "paranoia_free");
-  cdda_paranoia_modeset = (void (*)(cdrom_paranoia *p, int mode))dlsym( s_libParanoia, "paranoia_modeset");
-  cdda_paranoia_read_limited = (int16_t* (*)(cdrom_paranoia *p, void(*callback)(long,int), int))dlsym( s_libParanoia, "paranoia_read_limited");
-  cdda_paranoia_seek = (long (*)(cdrom_paranoia *p,long seek,int mode))dlsym( s_libParanoia, "paranoia_seek");
+  cdda_paranoia_init = (cdrom_paranoia* (*)(cdrom_drive*))dlsym( s_libParanoia, PARANOIA_INIT );
+  cdda_paranoia_free = (void (*)(cdrom_paranoia *p))dlsym( s_libParanoia, PARANOIA_FREE );
+  cdda_paranoia_modeset = (void (*)(cdrom_paranoia *p, int mode))dlsym( s_libParanoia, PARANOIA_MODESET );
+  cdda_paranoia_read_limited = (int16_t* (*)(cdrom_paranoia *p, void(*callback)(long,int), int))dlsym( s_libParanoia, PARANOIA_READ_LIMITED );
+  cdda_paranoia_seek = (long (*)(cdrom_paranoia *p,long seek,int mode))dlsym( s_libParanoia, PARANOIA_SEEK );
 
   // check if all symbols could be resoled
   if( cdda_cdda_identify == 0 ) {
@@ -475,19 +494,35 @@ K3bCdparanoiaLib* K3bCdparanoiaLib::create()
 {
   // check if libcdda_interface is avalilable
   if( s_libInterface == 0 ) {
+    s_haveLibCdio = false;
+
     s_libInterface = dlopen( "libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
-      // try the redhat & Co. location
+
+    // try the redhat & Co. location
     if( s_libInterface == 0 )
       s_libInterface = dlopen( "cdda/libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
+
+    // try the new cdio lib
+    if( s_libInterface == 0 ) {
+      s_libInterface = dlopen( "libcdio_cdda.so", RTLD_NOW|RTLD_GLOBAL );
+      s_haveLibCdio = true;
+    }
 
     if( s_libInterface == 0 ) {
       kdDebug() << "(K3bCdparanoiaLib) Error while loading libcdda_interface. " << endl;
       return 0;
     }
 
+
     s_libParanoia = dlopen( "libcdda_paranoia.so.0", RTLD_NOW );
+
+    // try the redhat & Co. location
     if( s_libParanoia == 0 )
       s_libParanoia = dlopen( "cdda/libcdda_paranoia.so.0", RTLD_NOW );
+
+    // try the new cdio lib
+    if( s_haveLibCdio && s_libParanoia == 0 )
+      s_libParanoia = dlopen( "libcdio_paranoia.so.0", RTLD_NOW );
 
     if( s_libParanoia == 0 ) {
       kdDebug() << "(K3bCdparanoiaLib) Error while loading libcdda_paranoia. " << endl;
