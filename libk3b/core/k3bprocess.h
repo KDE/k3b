@@ -186,8 +186,8 @@ class LIBK3B_EXPORT K3bProcessOutputCollector: public QObject
   void setProcess( KProcess* );
   
   const QString& output() const { return m_gatheredOutput; }
-  const QString& stderr() const { return m_stderrOutput; }
-  const QString& stdout() const { return m_stdoutOutput; }
+  const QString& stderrOutput() const { return m_stderrOutput; }
+  const QString& stdoutOutput() const { return m_stdoutOutput; }
   
  private slots:
   void slotGatherStderr( KProcess*, char*, int );
