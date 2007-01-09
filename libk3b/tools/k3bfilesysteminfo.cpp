@@ -26,6 +26,8 @@
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>
 #include <sys/mount.h>
+#elif defined Q_OS_NETBSD
+#include <sys/statvfs.h>
 #else
 #include <sys/vfs.h>
 #endif
