@@ -1691,8 +1691,8 @@ int K3bDevice::Device::currentProfile() const
   cmd[9] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
-    k3bDebug() << "(K3bDevice::Device) GET_CONFIGURATION failed." << endl;
-
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
+	       << " GET_CONFIGURATION failed." << endl;
     return MEDIA_UNKNOWN;
   }
   else {
@@ -1754,14 +1754,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       inf.m_diskState = STATE_NO_MEDIA;
       inf.m_mediaType = MEDIA_NONE;
     }
-    else {
-      int profile = currentProfile();
-      if( profile == MEDIA_NONE ) {
-	inf.m_diskState = STATE_NO_MEDIA;
-	inf.m_mediaType = MEDIA_NONE;
-      }
-      inf.m_currentProfile = profile;
-    }
+
+    inf.m_currentProfile = currentProfile();
 
     if( inf.diskState() != STATE_NO_MEDIA ) {
 
