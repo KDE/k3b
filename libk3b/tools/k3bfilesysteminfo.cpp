@@ -13,6 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include <config.h>
+
 #include "k3bfilesysteminfo.h"
 
 #include <k3bglobals.h>
@@ -26,10 +28,12 @@
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>
 #include <sys/mount.h>
-#elif defined Q_OS_NETBSD
-#include <sys/statvfs.h>
-#else
-#include <sys/vfs.h>
+#endif
+#ifdef HAVE_SYS_STATVFS_H
+#  include <sys/statvfs.h>
+#endif
+#ifdef HAVE_SYS_VFS_H
+#  include <sys/vfs.h>
 #endif
 
 #include <errno.h>
