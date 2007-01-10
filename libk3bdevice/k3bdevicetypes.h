@@ -137,18 +137,18 @@ namespace K3bDevice {
 
 
   enum MediaState { 
-    STATE_UNKNOWN = 256,   /**< Media state is unknown (when an error occurred or the device is unable to determine the media state). */
-    STATE_NO_MEDIA = 0,    /**< No media inserted. */
-    STATE_COMPLETE = 1,    /**< The inserted media is complete. */ 
-    STATE_INCOMPLETE = 2,  /**< The inserted media is incomplete/appendable. */
-    STATE_EMPTY = 4        /**< The inserted media is empty. */
+    STATE_UNKNOWN = 0x1,    /**< Media state is unknown (when an error occurred or the device is unable to determine the media state). */
+    STATE_NO_MEDIA = 0x2,   /**< No media inserted. */
+    STATE_COMPLETE = 0x4,   /**< The inserted media is complete. */ 
+    STATE_INCOMPLETE = 0x8, /**< The inserted media is incomplete/appendable. */
+    STATE_EMPTY = 0x10      /**< The inserted media is empty. */
   };
 
   enum BackGroundFormattingState {
-    BG_FORMAT_NONE = 0,
-    BG_FORMAT_INCOMPLETE = 1,
-    BG_FORMAT_IN_PROGRESS = 2,
-    BG_FORMAT_COMPLETE = 3
+    BG_FORMAT_NONE = 0x1,
+    BG_FORMAT_INCOMPLETE = 0x2,
+    BG_FORMAT_IN_PROGRESS = 0x4,
+    BG_FORMAT_COMPLETE = 0x8
   };
 
   /**
@@ -156,33 +156,34 @@ namespace K3bDevice {
    * Device::cdMediaType() and Device::dvdMediaType()
    */
   enum MediaType {
-    MEDIA_NONE = 0x0,                              /**< */
-    MEDIA_DVD_ROM = 0x1,                           /**< */
-    MEDIA_DVD_R = 0x2,                             /**< */
-    MEDIA_DVD_R_SEQ = 0x4,                         /**< */
-    MEDIA_DVD_R_DL = 0x8,                          /**< Dual Layer DVD-R media. */
-    MEDIA_DVD_R_DL_SEQ = 0x10,                     /**< */
-    MEDIA_DVD_R_DL_JUMP = 0x20,                    /**< */
-    MEDIA_DVD_RAM = 0x40,                          /**< */
-    MEDIA_DVD_RW = 0x80,                           /**< */
-    MEDIA_DVD_RW_OVWR = 0x100,                     /**< DVD-RW media formatted in Restricted Overwrite mode. */
-    MEDIA_DVD_RW_SEQ = 0x200,                      /**< DVD-RW media formatted in Incremental Sequential mode. */
-    MEDIA_DVD_PLUS_RW = 0x400,                     /**< */
-    MEDIA_DVD_PLUS_R = 0x800,                      /**< */
-    MEDIA_DVD_PLUS_R_DL = 0x1000,                  /**< Double Layer DVD+R media. */
-    MEDIA_DVD_PLUS_RW_DL = 0x1000000,              /**< Double Layer DVD+RW media. */
-    MEDIA_CD_ROM = 0x2000,                         /**< */
-    MEDIA_CD_R = 0x4000,                           /**< */
-    MEDIA_CD_RW = 0x8000,                          /**< */
-    MEDIA_HD_DVD_ROM = 0x10000,                    /**< */
-    MEDIA_HD_DVD_R = 0x20000,                      /**< */
-    MEDIA_HD_DVD_RAM = 0x40000,                    /**< */
-    MEDIA_BD_ROM = 0x80000,                        /**< Read-only Blue-ray Disc (BD) */
-    MEDIA_BD_R = 0x100000,                         /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_SRM = 0x200000,                     /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_SRM_POW = 0x400000,                 /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_RRM = 0x800000,                     /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_RE = 0x1000000,                       /**< Rewritable Blue-ray Disc (BD-RE) */
+    MEDIA_UNKNOWN = 0x1,                           /**< Represents an unknown media type (when an error occurred) */
+    MEDIA_NONE = 0x2,                              /**< No medium is inserted */
+    MEDIA_DVD_ROM = 0x4,                           /**< */
+    MEDIA_DVD_R = 0x8,                             /**< */
+    MEDIA_DVD_R_SEQ = 0x10,                        /**< */
+    MEDIA_DVD_R_DL = 0x20,                         /**< Dual Layer DVD-R media. */
+    MEDIA_DVD_R_DL_SEQ = 0x40,                     /**< */
+    MEDIA_DVD_R_DL_JUMP = 0x80,                    /**< */
+    MEDIA_DVD_RAM = 0x100,                         /**< */
+    MEDIA_DVD_RW = 0x200,                          /**< */
+    MEDIA_DVD_RW_OVWR = 0x400,                     /**< DVD-RW media formatted in Restricted Overwrite mode. */
+    MEDIA_DVD_RW_SEQ = 0x800,                      /**< DVD-RW media formatted in Incremental Sequential mode. */
+    MEDIA_DVD_PLUS_RW = 0x1000,                    /**< */
+    MEDIA_DVD_PLUS_R = 0x2000,                     /**< */
+    MEDIA_DVD_PLUS_R_DL = 0x4000,                  /**< Double Layer DVD+R media. */
+    MEDIA_DVD_PLUS_RW_DL = 0x8000,                 /**< Double Layer DVD+RW media. */
+    MEDIA_CD_ROM = 0x10000,                        /**< */
+    MEDIA_CD_R = 0x20000,                          /**< */
+    MEDIA_CD_RW = 0x40000,                         /**< */
+    MEDIA_HD_DVD_ROM = 0x80000,                    /**< */
+    MEDIA_HD_DVD_R = 0x100000,                     /**< */
+    MEDIA_HD_DVD_RAM = 0x200000,                   /**< */
+    MEDIA_BD_ROM = 0x400000,                       /**< Read-only Blue-ray Disc (BD) */
+    MEDIA_BD_R = 0x800000,                         /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_SRM = 0x1000000,                    /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_SRM_POW = 0x2000000,                /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_R_RRM = 0x4000000,                    /**< Writable Blue-ray Disc (BD-R) */
+    MEDIA_BD_RE = 0x8000000,                       /**< Rewritable Blue-ray Disc (BD-RE) */
     MEDIA_WRITABLE_CD = MEDIA_CD_R |               /**< This is a bitwise or of media types representing all writable CD media.*/
                         MEDIA_CD_RW,
     MEDIA_CD_ALL = MEDIA_WRITABLE_CD |
@@ -232,8 +233,7 @@ namespace K3bDevice {
                    MEDIA_BD_ROM,
     MEDIA_ALL = MEDIA_CD_ALL |
                 MEDIA_DVD_ALL |
-                MEDIA_BD_ALL,
-    MEDIA_UNKNOWN = 0x10000000                     /**< Represents an unknown media type (when an error occurred) */
+                MEDIA_BD_ALL
   };
 
   inline bool isDvdMedia( int mediaType ) {

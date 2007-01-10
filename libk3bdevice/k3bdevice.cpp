@@ -1697,6 +1697,31 @@ int K3bDevice::Device::currentProfile() const
   }
   else {
     short profile = from2Byte( &profileBuf[6] );
+
+    //
+    // Plextor drives might not set a current profile
+    // In that case we get the list of all current profiles
+    // and simply use the first one in that list.
+    //
+    if( profile == 0x00 ) {
+      k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() 
+		 << " current profile 0. Checking current profile list instead." << endl;
+      unsigned char* data;
+      unsigned int len = 0;
+      if( getFeature( &data, len, FEATURE_PROFILE_LIST ) ) {
+	int featureLen( data[11] );
+	for( int j = 0; j < featureLen; j+=4 ) {
+	  // use the first current profile we encounter
+	  if( data[12+j+2] & 0x1 ) {
+	    profile = from2Byte( &data[12+j] );
+	    break;
+	  }
+	}
+
+	delete[] data; 
+      }
+    }
+
     switch (profile) {
     case 0x00: return MEDIA_NONE;
     case 0x08: return MEDIA_CD_ROM;
@@ -1843,8 +1868,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       inf.m_mediaType = mediaType();
 
       // At least some Plextor drives return profile NONE for CD media
-      if( inf.m_mediaType == MEDIA_UNKNOWN ||
-	  inf.m_mediaType == MEDIA_NONE ) {
+      if( inf.m_mediaType & (MEDIA_UNKNOWN|MEDIA_NONE) ) {
 	// probably it is a CD
 	if( inf.rewritable() )
 	  inf.m_mediaType = MEDIA_CD_RW;

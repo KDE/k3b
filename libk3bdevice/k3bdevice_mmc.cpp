@@ -816,10 +816,12 @@ bool K3bDevice::Device::readDiscInformation( unsigned char** data, unsigned int&
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
     dataLen = from2Byte( header ) + 2;
   else
-    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DISC INFORMATION length det failed" << endl;
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() 
+	       << ": READ DISC INFORMATION length det failed" << endl;
 
   if( dataLen <= 32 ) {
-    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": Device reports bogus disc information length of " << dataLen << endl;
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() 
+	       << ": Device reports bogus disc information length of " << dataLen << endl;
     dataLen = 32;
   }
 
