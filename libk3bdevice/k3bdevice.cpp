@@ -1859,7 +1859,17 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 
 	delete [] data;
       }
-
+      else {
+	k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		   << " fabricating disk information for a stupid device." << endl;
+	Toc toc = readToc();
+	if( !toc.isEmpty() ) {
+	  inf.m_diskState = STATE_COMPLETE;
+	  inf.m_lastSessionState = STATE_COMPLETE;
+	  inf.m_numTracks = toc.count();
+	  inf.m_capacity = inf.m_usedCapacity = toc.length();
+	}
+      }
 
 
       //
@@ -2982,19 +2992,25 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
   unsigned char* data = 0;
   unsigned int dataLen = 0;
 
+  if( mediaType() & MEDIA_CD_ALL ) {
+    if( modeSense( &data, dataLen, 0x2A ) ) {
+      mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+      
+      // MMC1 used byte 18 and 19 for the max write speed
+      if( dataLen > 19 )
+	ret = from2Byte( mm->max_write_speed );
+      
+      delete [] data;
+
+      if( ret > 0 )
+	return ret;
+    }
+  }
+
   QValueList<int> list = determineSupportedWriteSpeeds();
   if( !list.isEmpty() ) {
     for( QValueList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
       ret = QMAX( ret, *it );
-  }
-  else if( modeSense( &data, dataLen, 0x2A ) ) {
-    mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
-
-    // MMC1 used byte 18 and 19 for the max write speed
-    if( dataLen > 19 )
-      ret = from2Byte( mm->max_write_speed );
-
-    delete [] data;
   }
 
   if( ret > 0 )
@@ -3016,6 +3032,29 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
     if( mediaType() & MEDIA_CD_ALL ) {
       if( !getSupportedWriteSpeedsVia2A( ret, false ) )
 	getSupportedWriteSpeedsViaGP( ret, false );
+
+      // restrict to max speed, although deprecated in MMC3 is still used everywhere and
+      // cdrecord also uses it as the max writing speed.
+      int max = 0;
+      unsigned char* data = 0;
+      unsigned int dataLen = 0;
+      if( modeSense( &data, dataLen, 0x2A ) ) {
+	mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+	
+	// MMC1 used byte 18 and 19 for the max write speed
+	if( dataLen > 19 )
+	  max = from2Byte( mm->max_write_speed );
+	
+	delete [] data;
+
+	if( max > 0 ) {
+	  while( ret.last() > max ) {
+	    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		       << " writing speed " << ret.last() << " higher than max " << max << endl;
+	    ret.pop_back();
+	  }
+	}
+      }
     }
     else {
       if( !getSupportedWriteSpeedsViaGP( ret, true ) )
@@ -3100,6 +3139,14 @@ bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( QValueList<int>& list, boo
 
     for( int i = 0; i < numDesc; ++i ) {
       int s = from4Byte( &data[20+i*16] );
+
+      // Looks as if the code below does not make sense with most drives
+//       if( !( data[4+i*16] & 0x2 ) ) {
+// 	k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
+// 		   << " No write speed: " << s << " KB/s" << endl;
+// 	continue;
+//       }
+
       if( dvd && s < 1352 ) {
 	//
 	// Does this ever happen?
