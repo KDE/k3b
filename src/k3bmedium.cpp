@@ -181,18 +181,6 @@ void K3bMedium::update()
     
     if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE ) {
       d->writingSpeeds = d->device->determineSupportedWriteSpeeds();
-
-      // some older drives do not report the speeds properly
-      if( d->writingSpeeds.isEmpty() ) {
-	// add speeds up to the max
-	int max = d->device->determineMaximalWriteSpeed();
-	int i = 1;
-	int speed = ( d->diskInfo.isDvdMedia() ? 1385 : 175 );
-	while( i*speed <= max ) {
-	  d->writingSpeeds.append( i*speed );
-	  i = ( i == 1 ? 2 : i+2 );
-	}
-      }
     }
 
     analyseContent();

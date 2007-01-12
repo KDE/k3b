@@ -266,7 +266,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
       d->haveIgnoreSpeed = false;
 
     if( !d->forceAutoSpeed ) {
-      if( writerDevice() == m_comboMedium->overrideDevice() ) {
+      if( speeds.isEmpty() || writerDevice() == m_comboMedium->overrideDevice() ) {
 	//
 	// In case of the override device we do not know which medium will actually be used
 	// So this is the only case in which we need to use the device's max writing speed
@@ -286,8 +286,9 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	}
 
 	//
-	// Since we do not know the exact max writing speed (we can't becasue the writer always returns the
-	// speed relative to the inserted medium) we allow the user to specify the speed manually
+	// Since we do not know the exact max writing speed if an override device is set (we can't becasue
+	// the writer always returns the speed relative to the inserted medium) we allow the user to specify
+	// the speed manually
 	//
 	m_comboSpeed->insertItem( i18n("More...") );
 	d->haveManualSpeed = true;
@@ -297,7 +298,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	  insertSpeedItem( *it );
       }
     }
-    
+
     // try to reload last set speed
     if( d->lastSetSpeed == -1 )
       setSpeed( lastSpeed );

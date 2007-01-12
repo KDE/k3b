@@ -413,18 +413,21 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Supported writing speeds:") );
     QString s;
-    for( QValueList<int>::const_iterator it = medium.writingSpeeds().begin();
-	 it != medium.writingSpeeds().end(); ++it ) {
-      if( !s.isEmpty() ) {
-	s.append( "\n" );
-	atipChild->setMultiLinesEnabled( true );
+    if( medium.writingSpeeds().isEmpty() )
+      s = "-";
+    else
+      for( QValueList<int>::const_iterator it = medium.writingSpeeds().begin();
+	   it != medium.writingSpeeds().end(); ++it ) {
+	if( !s.isEmpty() ) {
+	  s.append( "\n" );
+	  atipChild->setMultiLinesEnabled( true );
+	}
+	
+	if( info.isDvdMedia() )
+	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
+	else
+	  s.append( QString( "%1x (%2 KB/s)" ).arg( *it/175 ).arg( *it ) );
       }
-
-      if( info.isDvdMedia() )
-	s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
-      else
-	s.append( QString( "%1x (%2 KB/s)" ).arg( *it/175 ).arg( *it ) );
-    }
 
     atipChild->setText( 1, s );
   }

@@ -60,6 +60,13 @@ class K3bMedium
   const K3bDevice::DiskInfo& diskInfo() const;
   const K3bDevice::Toc& toc() const;
   const K3bDevice::CdText& cdText() const;
+
+  /**
+   * The writing speeds the device supports with the inserted medium.
+   * With older devices this list might even be empty for writable
+   * media. In that case refer to K3bDevice::Device::maxWriteSpeed
+   * combined with a manual speed selection.
+   */
   const QValueList<int>& writingSpeeds() const;
   const QString& volumeId() const;
 
