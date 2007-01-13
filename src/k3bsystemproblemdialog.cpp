@@ -140,7 +140,12 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
       text.append( "</span>" );
     text.append( "</b><br>" );
     text.append( markupString( p.details ) + "<br>" );
-    text.append( "<i>" + i18n("Solution") + "</i>: " + p.solution );
+    if( !p.solution.isEmpty() )
+      text.append( "<i>" + i18n("Solution") + "</i>: " + p.solution );
+#ifdef HAVE_K3BSETUP
+    else if( p.solvableByK3bSetup )
+      text.append( "<i>" + i18n("Solution") + "</i>: " + i18n("Use K3bSetup to solve this problem.") );
+#endif
     text.append( "</p>" );
   }
 
@@ -213,7 +218,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					     i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a05"),
 					     i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
 						  "root for security reasons anymore.").arg("cdrecord <= 2.01.01a05"),
-					     i18n("Use K3bSetup to solve this problem."),
+					     QString::null,
 					     true ) );
       }
       else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
@@ -226,7 +231,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 						"it allows changing the size of the used burning buffer. "
 						"A lot of user problems could be solved this way. This is also "
 						"true when using SuSE's resmgr."),
-					   i18n("Use K3bSetup to solve this problem."),
+					   QString::null,
 					   true ) );
 #endif
     }
@@ -246,7 +251,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					   i18n("It is highly recommended to configure cdrdao "
 						"to run with root privileges to increase the "
 						"overall stability of the burning process."),
-					   i18n("Use K3bSetup to solve this problem."),
+					   QString::null,
 					   true ) );
 #endif
     }
@@ -298,7 +303,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 // 						"to run with root privileges. Only then growisofs "
 // 						"runs with high priority which increases the overall "
 // 						"stability of the burning process."),
-// 					   i18n("Use K3bSetup to solve this problem."),
+// 					   QString::null,
 // 					   true ) );
 //       }
     }
