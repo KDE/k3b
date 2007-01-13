@@ -56,7 +56,8 @@ void K3bDevice::ScsiCommand::clear()
 
 unsigned char& K3bDevice::ScsiCommand::operator[]( size_t i )
 {
-  d->ccb.csio.cdb_len = i+1;
+  if( d->ccb.csio.cdb_len < i+1 )
+    d->ccb.csio.cdb_len = i+1;
   return d->ccb.csio.cdb_io.cdb_bytes[i];
 }
 
