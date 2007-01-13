@@ -43,6 +43,8 @@ void K3bDevice::ScsiCommand::clear()
 
 unsigned char& K3bDevice::ScsiCommand::operator[]( size_t i )
 {
+  if( d->cmd.cmdlen < i+1 )
+    d->cmd.cmdlen = i+1;
   return d->cmd.cmd[i];
 }
 
@@ -63,7 +65,6 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   if( m_deviceHandle == -1 )
     return -1;
 
-  d->cmd.cmdlen = 12;
   d->cmd.timeout = 10000;
   d->cmd.databuf = (caddr_t) data;
   d->cmd.datalen = len;
