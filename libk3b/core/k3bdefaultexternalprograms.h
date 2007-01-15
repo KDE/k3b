@@ -42,15 +42,6 @@ class LIBK3B_EXPORT K3bCdrecordProgram : public K3bExternalProgram
 };
 
 
-class LIBK3B_EXPORT K3bDvdrecordProgram : public K3bExternalProgram
-{
- public:
-  K3bDvdrecordProgram();
-
-  bool scan( const QString& );
-};
-
-
 class LIBK3B_EXPORT K3bMkisofsProgram : public K3bExternalProgram
 {
  public:

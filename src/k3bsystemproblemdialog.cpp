@@ -193,7 +193,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
     }
     else {
-      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) ) {
+      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) &&
+	  !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					   i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject( "cdrecord" )->version),
 					   i18n("Although K3b supports all cdrtools versions since "
@@ -212,7 +213,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
       // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
       //
       if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
-	  k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) ) {
+	  k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) &&
+	  !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
 	if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					     i18n("%1 will be run with root privileges on kernel >= 2.6.8").arg("cdrecord <= 2.01.01a05"),

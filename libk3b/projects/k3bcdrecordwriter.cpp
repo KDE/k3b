@@ -211,7 +211,7 @@ void K3bCdrecordWriter::prepareProcess()
       d->usingBurnfree = true;
 
       // with cdrecord 1.11a02 burnproof was renamed to burnfree
-      if( m_cdrecordBinObject->version < K3bVersion( "1.11a02" ) )
+      if( m_cdrecordBinObject->hasFeature( "burnproof" ) )
 	*m_process << "driveropts=burnproof";
       else
 	*m_process << "driveropts=burnfree";

@@ -1129,8 +1129,7 @@ void K3bMixedJob::determineWritingMode()
   
   if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
     cdrecordOnTheFly =
-      k3bcore->externalBinManager()->binObject("cdrecord")->version
-      >= K3bVersion( 2, 1, -1, "a13" );
+      k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
     cdrecordCdText =
       k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
     cdrecordUsable =

@@ -230,8 +230,7 @@ void K3bAudioBurnDialog::toggleAll()
   bool cdrecordOnTheFly = false;
   bool cdrecordCdText = false;
   if ( k3bcore->externalBinManager()->binObject("cdrecord") ) {
-    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version
-      >= K3bVersion( 2, 1, -1, "a13" );
+    cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
     cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
   }
 

@@ -82,53 +82,66 @@ K3bCdrecordProgram::K3bCdrecordProgram( bool dvdPro )
 }
 
 
+//
+// This is a hack for Debian based systems which use
+// a wrapper cdrecord script to call cdrecord.mmap or cdrecord.shm
+// depending on the kernel version.
+// For 2.0.x and 2.2.x kernels the shm version is used. In all
+// other cases it's the mmap version.
+//
+// But since it may be that someone manually installed cdrecord 
+// replacing the wrapper we check if cdrecord is a script.
+//
+static QString& debianWeirdnessHack( QString& path )
+{
+  if( QFile::exists( path + ".mmap" ) ) {
+    kdDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script." << endl;
+    if( QFileInfo( path ).size() < 1024 ) {
+      kdDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
+      QFile f( path );
+      f.open( IO_ReadOnly );
+      QString s = QTextStream( &f ).read();
+      if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
+	kdDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
+	QString ext;
+	if( K3b::kernelVersion().versionString().left(3) > "2.2" )
+	  ext = ".mmap";
+	else
+	  ext = ".shm";
+	
+	kdDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
+	
+	path += ext;
+      }
+    }
+  }
+
+  return path;
+}
+
+
 bool K3bCdrecordProgram::scan( const QString& p )
 {
   if( p.isEmpty() )
     return false;
 
+  bool wodim = false;
   QString path = p;
   QFileInfo fi( path );
   if( fi.isDir() ) {
     if( path[path.length()-1] != '/' )
       path.append("/");
-    path.append("cdrecord");
 
-    //
-    // This is a hack for Debian based systems which use
-    // a wrapper cdrecord script to call cdrecord.mmap or cdrecord.shm
-    // depending on the kernel version.
-    // For 2.0.x and 2.2.x kernels the shm version is used. In all
-    // other cases it's the mmap version.
-    //
-    // But since it may be that someone manually installed cdrecord 
-    // replacing the wrapper we check if cdrecord is a script.
-    //
-    if( QFile::exists( path + ".mmap" ) ) {
-      kdDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script." << endl;
-      if( QFileInfo( path ).size() < 1024 ) {
-	kdDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
-	QFile f( path );
-	f.open( IO_ReadOnly );
-	QString s = QTextStream( &f ).read();
-	if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
-	  kdDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
-	  QString ext;
-	  if( K3b::kernelVersion().versionString().left(3) > "2.2" )
-	    ext = ".mmap";
-	  else
-	    ext = ".shm";
-
-	  kdDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
-
-	  path += ext;
-	}
-      }
+    if( QFile::exists( path + "cdrecord" ) ) {
+      path += "cdrecord";
+    }
+    else if( QFile::exists( path + "wodim" ) ) {
+      wodim = true;
+      path += "wodim";
     }
   }
 
-  if( !QFile::exists( path ) )
-    return false;
+  debianWeirdnessHack( path );
 
   K3bExternalBin* bin = 0;
 
@@ -139,18 +152,18 @@ bool K3bCdrecordProgram::scan( const QString& p )
   vp << path << "-version";
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
     int pos = -1;
-    if( m_dvdPro ) {
+    if( wodim ) {
+      pos = out.output().find( "Wodim" );
+    }
+    else if( m_dvdPro ) {
       pos = out.output().find( "Cdrecord-ProDVD" );
     }
     else {
       pos = out.output().find( "Cdrecord" );
     }
-    if( pos < 0 ) {
-      // for now allow symlinks to wodim
-      pos = out.output().find( "Wodim" );
-      if( pos < 0 )
-	return false;
-    }
+
+    if( pos < 0 )
+      return false;
 
     pos = out.output().find( QRegExp("[0-9]"), pos );
     if( pos < 0 )
@@ -163,6 +176,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    if( wodim )
+      bin->addFeature( "wodim" );
 
     pos = out.output().find( "Copyright") + 14;
     endPos = out.output().find( "\n", pos );
@@ -196,7 +212,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     if( out.output().contains( "-tao" ) )
       bin->addFeature( "tao" );
     if( out.output().contains( "cuefile=" ) && 
-	bin->version > K3bVersion( 2, 1, -1, "a14") ) // cuefile handling was still buggy in a14
+	( wodim || bin->version > K3bVersion( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
 
     // new mode 2 options since cdrecord 2.01a12
@@ -205,7 +221,8 @@ bool K3bCdrecordProgram::scan( const QString& p )
     // two checks)
     // and the version check does not handle versions like 2.01-dvd properly
     if( out.output().contains( "-xamix" ) ||
-	bin->version >= K3bVersion( 2, 1, -1, "a12" ) )
+	bin->version >= K3bVersion( 2, 1, -1, "a12" ) || 
+	wodim )
       bin->addFeature( "xamix" );
    
     // check if we run cdrecord as root
@@ -222,94 +239,21 @@ bool K3bCdrecordProgram::scan( const QString& p )
   }
 
   // FIXME: are these version correct?
-  if( bin->version >= K3bVersion("1.11a38") )
+  if( bin->version >= K3bVersion("1.11a38") || wodim )
     bin->addFeature( "plain-atapi" );
-  if( bin->version > K3bVersion("1.11a17") )
+  if( bin->version > K3bVersion("1.11a17") || wodim )
     bin->addFeature( "hacked-atapi" );
 
-  if( bin->version >= K3bVersion( 2, 1, 1, "a02" ) )
+  if( bin->version >= K3bVersion( 2, 1, 1, "a02" ) || wodim )
     bin->addFeature( "short-track-raw" );
 
-  addBin( bin );
-  return true;
-}
+  if( bin->version >= K3bVersion( 2, 1, -1, "a13" ) || wodim )
+    bin->addFeature( "audio-stdin" );
 
-
-K3bDvdrecordProgram::K3bDvdrecordProgram()
-  : K3bExternalProgram( "dvdrecord" )
-{
-}
-
-
-bool K3bDvdrecordProgram::scan( const QString& p )
-{
-  if( p.isEmpty() )
-    return false;
-
-  QString path = p;
-  QFileInfo fi( path );
-  if( fi.isDir() ) {
-    if( path[path.length()-1] != '/' )
-      path.append("/");
-    path.append("dvdrecord");
-  }
-
-  if( !QFile::exists( path ) )
-    return false;
-
-  K3bExternalBin* bin = 0;
-
-  // probe version
-  KProcess vp;
-  K3bProcessOutputCollector out( &vp );
-
-  vp << path << "-version";
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    int pos = out.output().find( "dvdrtools" );
-    if( pos < 0 )
-      return false;
-
-    pos = out.output().find( QRegExp("[0-9]"), pos );
-    if( pos < 0 )
-      return false;
-
-    int endPos = out.output().find( "\n", pos );
-    if( endPos < 0 )
-      return false;
-
-    bin = new K3bExternalBin( this );
-    bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
-  }
-  else {
-    kdDebug() << "(K3bDvdrecordProgram) could not start " << path << endl;
-    return false;
-  }
-
-
-
-  // probe features
-  KProcess fp;
-  out.setProcess( &fp );
-  fp << path << "-help";
-  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    if( out.output().contains( "-delay" ) )
-      bin->addFeature( "delay" );
-    if( out.output().contains( "-overburn" ) )
-      bin->addFeature( "overburn" );
-    
-    // check if we run cdrecord as root
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-      if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-	bin->addFeature( "suidroot" );
-    }
-  }
-  else {
-    kdDebug() << "(K3bDvdrecordProgram) could not start " << bin->path << endl;
-    delete bin;
-    return false;
-  }
+  if( bin->version >= K3bVersion( "1.11a02" ) || wodim )
+    bin->addFeature( "burnfree" );
+  else
+    bin->addFeature( "burnproof" );
 
   addBin( bin );
   return true;

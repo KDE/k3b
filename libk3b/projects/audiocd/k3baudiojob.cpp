@@ -264,7 +264,7 @@ void K3bAudioJob::start()
     bool cdrecordOnTheFly = false;
     bool cdrecordCdText = false;
     if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
-      cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->version >= K3bVersion( 2, 1, -1, "a13" );
+      cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
       cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
     }    
 
@@ -521,7 +521,7 @@ bool K3bAudioJob::prepareWriter()
     // we only need to pad in one case. cdrecord < 2.01.01a03 cannot handle shorttrack + raw
     if( d->less4Sec ) {
       if( m_usedWritingMode == K3b::RAW &&
-	  k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a03" ) ) {
+	  !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "short-track-raw" ) ) {
 	writer->addArgument( "-pad" );
       }
       else {
