@@ -169,7 +169,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( ' ', pos+1 );
+    int endPos = out.output().find( QRegExp("\\s"), pos+1 );
     if( endPos < 0 )
       return false;
 

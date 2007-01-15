@@ -68,7 +68,8 @@ static bool shouldRunSuidRoot( K3bExternalBin* bin )
   
   if( bin->name() == "cdrecord" ) {
     return ( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ||
-	     bin->version >= K3bVersion( 2, 1, 1, "a05" ) );
+	     bin->version >= K3bVersion( 2, 1, 1, "a05" ) ||
+	     bin->hasFeature( "wodim" ) );
   }
   else if( bin->name() == "cdrdao" ) {
     return true;
