@@ -49,6 +49,8 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
 
   connect( m_combo, SIGNAL(selectionChanged(K3bDevice::Device*)),
 	   this, SLOT(slotSelectionChanged(K3bDevice::Device*)) );
+
+  slotSelectionChanged( m_combo->selectedDevice() );
 }
 
 
