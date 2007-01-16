@@ -359,7 +359,7 @@ void K3bAudioCdView::slotEditTrackCddb()
     grid->setRowStretch( 4, 1 );
 
     d.setMainWidget(w);
-    d.resize(260, d.sizeHint().height());
+    d.resize( QMAX( QMAX(d.sizeHint().height(), d.sizeHint().width()), 300), d.sizeHint().height() );
 
     if( d.exec() == QDialog::Accepted ) {
       m_cddbInfo.titles[a->trackNumber-1] = editTitle->text();
@@ -415,7 +415,7 @@ void K3bAudioCdView::slotEditAlbumCddb()
   grid->setRowStretch( 7, 1 );
 
   d.setMainWidget(w);
-  d.resize(260, d.sizeHint().height());
+  d.resize( QMAX( QMAX(d.sizeHint().height(), d.sizeHint().width()), 300), d.sizeHint().height() );
 
   if( d.exec() == QDialog::Accepted ) {
     m_cddbInfo.cdTitle = editTitle->text();
