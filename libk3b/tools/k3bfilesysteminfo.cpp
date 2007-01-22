@@ -31,6 +31,13 @@
 #endif
 #ifdef HAVE_SYS_STATVFS_H
 #  include <sys/statvfs.h>
+#  if defined(Q_OS_NETBSD)
+#    include <sys/param.h>
+#    if __NetBSD_Version__ > 299000000
+#      define statfs		statvfs
+#      define f_type		f_fsid
+#    endif
+#  endif
 #endif
 #ifdef HAVE_SYS_VFS_H
 #  include <sys/vfs.h>
