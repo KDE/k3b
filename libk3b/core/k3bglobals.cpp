@@ -596,6 +596,14 @@ bool K3b::mount( K3bDevice::Device* dev )
   if( !dev )
     return false;
 
+  QString mntDev = dev->blockDeviceName();
+
+#if KDE_IS_VERSION(3,4,0)
+  // first try to mount it the standard way
+  if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
+    return true;
+#endif
+
 #ifdef HAVE_HAL
   if( !K3bDevice::HalConnection::instance()->mount( dev ) )
     return true;
@@ -606,7 +614,7 @@ bool K3b::mount( K3bDevice::Device* dev )
   if( !pmountBin.isEmpty() ) {
     KProcess p;
     p << pmountBin;
-    p << dev->blockDeviceName();
+    p << mntDev;
     p.start( KProcess::Block );
     return !p.exitStatus();
   }
