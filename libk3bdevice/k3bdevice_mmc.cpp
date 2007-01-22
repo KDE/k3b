@@ -885,7 +885,7 @@ bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& d
   cmd[11] = 0;      // Necessary to set the proper command length
 
   cmd[9] = 4;
-  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 ) {
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
     // again with real length
     dataLen = from2Byte( header ) + 2;
 
