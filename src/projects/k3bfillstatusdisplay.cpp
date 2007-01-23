@@ -672,9 +672,6 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
 
     // TODO: once we have only one data project we need to change this to handle both
 
-    // FIXME: unless we do not know the real capacity of CD-RW media we can only use
-    //        empty here
-
     K3bDevice::Device* dev = 0;
     QPtrList<K3bDevice::Device> devs;
     if( d->showDvdSizes )
@@ -687,7 +684,7 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
 
       if( ( medium.diskInfo().empty() || 
 	    medium.diskInfo().appendable() || 
-	    (medium.diskInfo().rewritable() && medium.diskInfo().isDvdMedia()) ) &&
+	    medium.diskInfo().rewritable() ) &&
 	  ( medium.diskInfo().isDvdMedia() == d->showDvdSizes ) &&
 	  d->doc->length() <= medium.diskInfo().capacity() ) {
 
