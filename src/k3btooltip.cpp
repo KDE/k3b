@@ -24,6 +24,7 @@
 #include <qlabel.h>
 
 #include <kdebug.h>
+#include <fixx11h.h>
 
 
 K3bToolTip::K3bToolTip( QWidget* widget )
