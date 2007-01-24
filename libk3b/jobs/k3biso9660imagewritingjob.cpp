@@ -128,7 +128,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
       }
       m_verifyJob->setDevice( m_device );
       m_verifyJob->clear();
-      m_verifyJob->addTrack( 1, d->checksumPipe.checksum() );
+      m_verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( m_imagePath )/2048 );
 
       if( m_copies == 1 )
 	emit newTask( i18n("Verifying written data") );
