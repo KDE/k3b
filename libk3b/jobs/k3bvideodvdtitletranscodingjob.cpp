@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -117,7 +118,11 @@ void K3bVideoDVDTitleTranscodingJob::start()
     // let's see if the directory exists and we can write to it
     QFileInfo fileInfo( m_filename );
     QFileInfo dirInfo( fileInfo.dirPath() );
-    if( !dirInfo.isDir() || !dirInfo.isWritable() ) {
+    if( !dirInfo.exists() && !KStandardDirs::makeDir( dirInfo.absFilePath() ) ) {
+      emit infoMessage( i18n("Unable to create folder '%1'").arg(dirInfo.filePath()), ERROR );
+      return;
+    }
+    else if( !dirInfo.isDir() || !dirInfo.isWritable() ) {
       emit infoMessage( i18n("Invalid filename: '%1'").arg(m_filename), ERROR );
       jobFinished( false );
       return;
