@@ -214,7 +214,7 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
   // they all should read CD-ROM.
   //
   d->readCapabilities = MEDIA_CD_ROM;
-  d->writeCapabilities  = 0;
+  d->writeCapabilities = 0;
   d->supportedProfiles = 0;
 
   if( !open() )
@@ -2328,7 +2328,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
 #ifdef WORDS_BIGENDIAN
       struct cd_mastering_feature {
@@ -2371,7 +2371,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
 #ifdef WORDS_BIGENDIAN
       struct cd_track_at_once_feature {
@@ -2429,7 +2429,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
       d->writeCapabilities |= (MEDIA_CD_R|MEDIA_CD_RW);
     }
@@ -2445,7 +2445,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (MMC5)" << endl;
       d->readCapabilities |= MEDIA_DVD_ROM;
       if( header[8+6] & 0x1 )
@@ -2457,7 +2457,7 @@ void K3bDevice::Device::checkFeatures()
     cmd[8] = 8+4;
     if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
       unsigned int len = from4Byte( header );
-      if( len == 8 ) {
+      if( len >= 8 ) {
 	k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (pre-MMC5)" << endl;
 	d->readCapabilities |= MEDIA_DVD_ROM;
       }
@@ -2472,7 +2472,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
       d->readCapabilities |= MEDIA_DVD_PLUS_R;
       if( header[12] & 0x1 )
@@ -2485,7 +2485,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+8;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
 #ifdef WORDS_BIGENDIAN
       struct dvd_plus_rw_feature {
@@ -2522,7 +2522,7 @@ void K3bDevice::Device::checkFeatures()
     cmd[8] = 8+8;
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
       unsigned int len = from4Byte( header );
-      if( len == 12 ) {
+      if( len >= 12 ) {
 	k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW Double Layer" << endl;
 	d->readCapabilities |= MEDIA_DVD_PLUS_RW_DL;
 	if( header[12] & 0x1 )
@@ -2535,7 +2535,7 @@ void K3bDevice::Device::checkFeatures()
     cmd[8] = 8+8;
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
       unsigned int len = from4Byte( header );
-      if( len == 12 ) {
+      if( len >= 12 ) {
 	k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
 	d->readCapabilities |= MEDIA_DVD_PLUS_R_DL;
 	if( header[12] & 0x1 )
@@ -2555,7 +2555,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+32;
   if( !cmd.transport( TR_DIR_READ, header, 40 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 36 ) {
+    if( len >= 36 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Read" << endl;
       if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
 	d->readCapabilities |= MEDIA_BD_RE;
@@ -2571,7 +2571,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 8+24;
   if( !cmd.transport( TR_DIR_READ, header, 32 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 28 ) {
+    if( len >= 28 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Write" << endl;
       if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
 	d->writeCapabilities |= MEDIA_BD_RE;
@@ -2584,7 +2584,7 @@ void K3bDevice::Device::checkFeatures()
 	cmd[8] = 8+8;
 	if( !cmd.transport( TR_DIR_READ, header, 8+8 ) ) {
 	  unsigned int len = from4Byte( header );
-	  if( len == 4+8 ) {
+	  if( len >= 4+8 ) {
 	    m_writeModes |= WRITINGMODE_SRM_POW;
 	  }
 	}
@@ -2594,7 +2594,7 @@ void K3bDevice::Device::checkFeatures()
 	cmd[8] = 8+16;
 	if( !cmd.transport( TR_DIR_READ, header, 8+16 ) ) {
 	  unsigned int len = from4Byte( header );
-	  if( len == 4+16 ) {
+	  if( len >= 4+16 ) {
 	   m_writeModes |= WRITINGMODE_RRM;
 	  }
 	}
@@ -2612,7 +2612,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 16;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
 #ifdef WORDS_BIGENDIAN
       struct dvd_r_rw_write_feature {
@@ -2659,7 +2659,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 16;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
       m_writeModes |= WRITINGMODE_RES_OVWR;
       d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_OVWR);
@@ -2692,7 +2692,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 16;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Read" << endl;
       d->readCapabilities |= MEDIA_HD_DVD_ROM;
       if( header[8+4] & 0x1 )
@@ -2711,7 +2711,7 @@ void K3bDevice::Device::checkFeatures()
   cmd[8] = 16;
   if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
     unsigned int len = from4Byte( header );
-    if( len == 12 ) {
+    if( len >= 12 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Write" << endl;      
       if( header[8+4] & 0x1 )
 	d->writeCapabilities |= MEDIA_HD_DVD_R;
@@ -2752,50 +2752,48 @@ void K3bDevice::Device::checkFeatures()
 	    break;
 	  case 0x10:
 	    d->supportedProfiles |= MEDIA_DVD_ROM;
-// 	    d->readCapabilities |= MEDIA_DVD_ROM;
+	    // 	    d->readCapabilities |= MEDIA_DVD_ROM;
 	    break;
 	  case 0x11:
 	    d->supportedProfiles |= MEDIA_DVD_R_SEQ;
-// 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_SEQ);
+	    // 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_SEQ);
 	    break;
 	  case 0x12:
 	    d->supportedProfiles |= MEDIA_DVD_RAM;
-// 	    d->readCapabilities |= (MEDIA_DVD_RAM|MEDIA_DVD_ROM);
-// 	    d->writeCapabilities |= MEDIA_DVD_RAM;
+//  	    d->readCapabilities |= (MEDIA_DVD_RAM|MEDIA_DVD_ROM);
+//  	    d->writeCapabilities |= MEDIA_DVD_RAM;
 	    break;
 	  case 0x13:
 	    d->supportedProfiles |= MEDIA_DVD_RW_OVWR;
-// 	    d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_OVWR);
+	    // 	    d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_OVWR);
 	    break;
 	  case 0x14:
 	    d->supportedProfiles |= MEDIA_DVD_RW_SEQ;
-// 	    d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_R|MEDIA_DVD_RW_SEQ|MEDIA_DVD_R_SEQ);
+	    // 	    d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_R|MEDIA_DVD_RW_SEQ|MEDIA_DVD_R_SEQ);
 	    break;
 	  case 0x15:
 	    d->supportedProfiles |= MEDIA_DVD_R_DL_SEQ;
-// 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_DL|MEDIA_DVD_R_SEQ|MEDIA_DVD_R_DL_SEQ);
+	    // 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_DL|MEDIA_DVD_R_SEQ|MEDIA_DVD_R_DL_SEQ);
 	    break;
 	  case 0x16:
 	    d->supportedProfiles |= MEDIA_DVD_R_DL_JUMP;
-// 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_DL||MEDIA_DVD_R_DL_JUMP);
+	    // 	    d->writeCapabilities |= (MEDIA_DVD_R|MEDIA_DVD_R_DL||MEDIA_DVD_R_DL_JUMP);
 	    break;
 	  case 0x1A:
 	    d->supportedProfiles |= MEDIA_DVD_PLUS_RW;
-// 	    d->readCapabilities |= MEDIA_DVD_PLUS_RW;
+	    // 	    d->writeCapabilities |= MEDIA_DVD_PLUS_RW;
 	    break;
 	  case 0x1B: 
 	    d->supportedProfiles |= MEDIA_DVD_PLUS_R;
-// 	    d->readCapabilities |= MEDIA_DVD_PLUS_R;
+	    // 	    d->writeCapabilities |= MEDIA_DVD_PLUS_R;
 	    break;
 	  case 0x2A:
 	    d->supportedProfiles |= MEDIA_DVD_PLUS_RW_DL;
-// 	    d->readCapabilities |= MEDIA_DVD_PLUS_RW_DL;
+	    // 	    d->writeCapabilities |= MEDIA_DVD_PLUS_RW_DL;
 	    break;
 	  case 0x2B:
-	    // some older DVD-ROM drives claim to support DVD+R DL
-	    if( d->supportedProfiles & MEDIA_DVD_PLUS_R ) {
-	      d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
-	    }
+	    d->supportedProfiles |= MEDIA_DVD_PLUS_R_DL;
+	    //	    d->writeCapabilities |= MEDIA_DVD_PLUS_R_DL;
 	    break;
 	  case 0x40:
 	    d->supportedProfiles |= MEDIA_BD_ROM;
@@ -2822,6 +2820,13 @@ void K3bDevice::Device::checkFeatures()
 	    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << " unknown profile: "
 		      << profile << endl;
 	  }
+	}
+
+	// some older DVD-ROM drives claim to support DVD+R DL
+	if( !(d->supportedProfiles & MEDIA_DVD_PLUS_R) ) {
+	  // remove DVD+R DL capability
+	  //	  d->writeCapabilities &= ~MEDIA_DVD_PLUS_R_DL;
+	  d->supportedProfiles &= ~MEDIA_DVD_PLUS_R_DL;
 	}
       }
     }
