@@ -139,6 +139,8 @@ bool K3bCdrecordProgram::scan( const QString& p )
       wodim = true;
       path += "wodim";
     }
+    else
+      return false;
   }
 
   debianWeirdnessHack( path );
