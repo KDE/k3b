@@ -344,8 +344,6 @@ void K3bDirView::slotDirActivated( const KURL& url )
 //   m_urlCombo->setEditText( url.path() );
 
   m_viewStack->raiseWidget( m_fileView );
-
-  emit urlEntered( url );
 }
 
 
