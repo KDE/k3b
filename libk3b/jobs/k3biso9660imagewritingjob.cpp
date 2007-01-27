@@ -250,19 +250,19 @@ void K3bIso9660ImageWritingJob::startWriting()
   else if( m_writingMode == K3b::DAO ) {
     if( writingApp() == K3b::DEFAULT ) {
       if( m_dvd )
-	mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
+	mt = K3bDevice::MEDIA_WRITABLE_DVD;
       else
 	mt = K3bDevice::MEDIA_WRITABLE_CD;
     }
     else if( writingApp() == K3b::GROWISOFS )
-      mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
+      mt = K3bDevice::MEDIA_WRITABLE_DVD;
     else
       mt = K3bDevice::MEDIA_WRITABLE_CD;
   }
-  else if( m_writingMode == K3b::WRITING_MODE_INCR_SEQ )
-    mt = K3bDevice::MEDIA_DVD_RW_SEQ|K3bDevice::MEDIA_DVD_R_SEQ;
+  else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
+    mt = K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR;
   else
-    mt = K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR;
+    mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
 
   // wait for the media

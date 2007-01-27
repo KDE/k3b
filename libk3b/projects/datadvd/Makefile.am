@@ -15,7 +15,6 @@ noinst_LTLIBRARIES = libdvd.la
 
 libdvd_la_SOURCES = 	k3bdvddoc.cpp \
 			k3bdvdjob.cpp \
-			k3bgrowisofsimager.cpp \
 			k3bdvdbooktypejob.cpp
 
 include_HEADERS = 	k3bdvddoc.h \
