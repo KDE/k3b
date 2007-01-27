@@ -65,6 +65,7 @@
    - Improved theme support (transparent themes)
  * Device buffer status display for DVD burning with growisofs >= 7.0
  * Support for Audio CD ripping with libcdio instead of libcdparanoia
+ * Support for Cdrkit, the Debian fork of cdrtools
 
 0.12.17
 =======

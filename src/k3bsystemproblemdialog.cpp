@@ -193,8 +193,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
     }
     else {
-      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 0 ) &&
-	  !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
+      if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "outdated" ) ) {
 	problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 					   i18n("Used %1 version %2 is outdated").arg("cdrecord").arg(k3bcore->externalBinManager()->binObject( "cdrecord" )->version),
 					   i18n("Although K3b supports all cdrtools versions since "
@@ -322,7 +321,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   if( !k3bcore->externalBinManager()->foundBin( "mkisofs" ) ) {
 
   }
-  else if( k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 14 ) ) {
+  else if( k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "outdated" ) ) {
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("Used %1 version %2 is outdated")
 					 .arg("mkisofs")

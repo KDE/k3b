@@ -196,7 +196,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 	  // mkisofs 1.14 has the bug, 1.15a40 not
 	  // TODO: find out the version that fixed the bug
 	  if( m_containsFilesWithMultibleBackslashes &&
-	      k3bcore->externalBinManager()->binObject( "mkisofs" )->version < K3bVersion( 1, 15, -1, "a40" ) ) {
+	      !k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "backslashed_filenames" ) ) {
 	    emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
 				   "filenames that contain more than one backslash:"), ERROR );
 

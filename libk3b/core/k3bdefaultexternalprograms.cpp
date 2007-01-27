@@ -240,6 +240,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
     return false;
   }
 
+  if( bin->version < K3bVersion( 2, 0 ) && !wodim )
+    bin->addFeature( "outdated" );
+
   // FIXME: are these version correct?
   if( bin->version >= K3bVersion("1.11a38") || wodim )
     bin->addFeature( "plain-atapi" );
@@ -273,16 +276,23 @@ bool K3bMkisofsProgram::scan( const QString& p )
   if( p.isEmpty() )
     return false;
 
+  bool genisoimage = false;
   QString path = p;
   QFileInfo fi( path );
   if( fi.isDir() ) {
     if( path[path.length()-1] != '/' )
       path.append("/");
-    path.append("mkisofs");
-  }
 
-  if( !QFile::exists( path ) )
-    return false;
+    if( QFile::exists( path + "mkisofs" ) ) {
+      path += "mkisofs";
+    }
+    else if( QFile::exists( path + "genisoimage" ) ) {
+      genisoimage = true;
+      path += "genisoimage";
+    }
+    else
+      return false;
+  }
 
   K3bExternalBin* bin = 0;
 
@@ -291,7 +301,12 @@ bool K3bMkisofsProgram::scan( const QString& p )
   vp << path << "-version";
   K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    int pos = out.output().find( "mkisofs" );
+    int pos = -1;
+    if( genisoimage )
+      pos = out.output().find( "genisoimage" );
+    else
+      pos = out.output().find( "mkisofs" );
+
     if( pos < 0 )
       return false;
 
@@ -306,6 +321,9 @@ bool K3bMkisofsProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    if( genisoimage )
+      bin->addFeature( "genisoimage" );
   }
   else {
     kdDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
@@ -343,6 +361,12 @@ bool K3bMkisofsProgram::scan( const QString& p )
     return false;
   }
 
+  if( bin->version < K3bVersion( 1, 14) && !genisoimage )
+    bin->addFeature( "outdated" );
+
+  if( bin->version >= K3bVersion( 1, 15, -1, "a40" ) || genisoimage )
+    bin->addFeature( "backslashed_filenames" );
+
   addBin(bin);
   return true;
 }
@@ -358,12 +382,22 @@ bool K3bReadcdProgram::scan( const QString& p )
   if( p.isEmpty() )
     return false;
 
+  bool readom = false;
   QString path = p;
   QFileInfo fi( path );
   if( fi.isDir() ) {
     if( path[path.length()-1] != '/' )
       path.append("/");
-    path.append("readcd");
+
+    if( QFile::exists( path + "readcd" ) ) {
+      path += "readcd";
+    }
+    else if( QFile::exists( path + "readom" ) ) {
+      readom = true;
+      path += "readom";
+    }
+    else
+      return false;
   }
 
   if( !QFile::exists( path ) )
@@ -376,7 +410,11 @@ bool K3bReadcdProgram::scan( const QString& p )
   vp << path << "-version";
   K3bProcessOutputCollector out( &vp );
   if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    int pos = out.output().find( "readcd" );
+    int pos = -1;
+    if( readom )
+      pos = out.output().find( "readom" );
+    else
+      pos = out.output().find( "readcd" );
     if( pos < 0 )
       return false;
 
@@ -391,6 +429,9 @@ bool K3bReadcdProgram::scan( const QString& p )
     bin = new K3bExternalBin( this );
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
+
+    if( readom )
+      bin->addFeature( "readom" );
   }
   else {
     kdDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
@@ -422,9 +463,9 @@ bool K3bReadcdProgram::scan( const QString& p )
 
 
   // FIXME: are these version correct?
-  if( bin->version >= K3bVersion("1.11a38") )
+  if( bin->version >= K3bVersion("1.11a38") || readom )
     bin->addFeature( "plain-atapi" );
-  if( bin->version > K3bVersion("1.11a17") )
+  if( bin->version > K3bVersion("1.11a17") || readom )
     bin->addFeature( "hacked-atapi" );
 
   addBin(bin);
