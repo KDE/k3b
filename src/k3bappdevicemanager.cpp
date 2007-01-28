@@ -207,8 +207,7 @@ void K3bAppDeviceManager::unmountDisk()
 void K3bAppDeviceManager::ejectDisk()
 {
   // FIXME: make this non-blocking
-  unmountDisk();
-  K3bDevice::eject( currentDevice() ); // just ignore errors here
+  K3b::eject( currentDevice() ); // just ignore errors here
 }
 
 

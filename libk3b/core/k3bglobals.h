@@ -243,6 +243,13 @@ namespace K3b
    * about mount points the only methods used are pmount and HAL::mount
    */
   LIBK3B_EXPORT bool mount( K3bDevice::Device* );
+
+  /**
+   * Ejects the medium in the device or simply opens the tray.
+   * This method improves over K3bDevice::Device::eject in that it
+   * unmounts before ejecting and introduces HAL support.
+   */
+  LIBK3B_EXPORT bool eject( K3bDevice::Device* );
 }
 
 #endif

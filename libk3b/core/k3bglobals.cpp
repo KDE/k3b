@@ -620,3 +620,17 @@ bool K3b::mount( K3bDevice::Device* dev )
   }
   return false;
 }
+
+
+bool K3b::eject( K3bDevice::Device* dev )
+{
+#ifdef HAVE_HAL
+  if( !K3bDevice::HalConnection::instance()->eject( dev ) )
+    return true;
+#endif
+
+  if( K3b::isMounted( dev ) )
+    K3b::unmount( dev );
+
+  return dev->eject();
+}
