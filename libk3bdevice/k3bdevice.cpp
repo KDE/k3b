@@ -3277,8 +3277,8 @@ int K3bDevice::Device::getIndex( unsigned long lba ) const
 
 
 bool K3bDevice::Device::searchIndex0( unsigned long startSec,
-					  unsigned long endSec,
-					  long& pregapStart ) const
+				      unsigned long endSec,
+				      long& pregapStart ) const
 {
   // if the device is already opened we do not close it
   // to allow fast multiple method calls in a row
