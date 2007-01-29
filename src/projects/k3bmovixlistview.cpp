@@ -17,6 +17,7 @@
 #include "k3bmovixlistview.h"
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
+#include <k3bdiritem.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -26,6 +27,7 @@
 #include <qdragobject.h>
 #include <qptrlist.h>
 #include <qevent.h>
+#include <qheader.h>
 
 
 K3bMovixListViewItem::K3bMovixListViewItem( K3bMovixDoc* doc, 
@@ -187,6 +189,7 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const cha
 		 + i18n("To remove or rename files use the context menu.") + "\n"
 		 + i18n("After that press the burn button to write the CD.") );
 
+  connect( m_doc, SIGNAL(changed()), this, SLOT(slotChanged()) );
   connect( m_doc, SIGNAL(newMovixFileItems()), this, SLOT(slotNewFileItems()) );
   connect( m_doc, SIGNAL(movixItemRemoved(K3bMovixFileItem*)), this, SLOT(slotFileItemRemoved(K3bMovixFileItem*)) );
   connect( m_doc, SIGNAL(subTitleItemRemoved(K3bMovixFileItem*)), this, SLOT(slotSubTitleItemRemoved(K3bMovixFileItem*)) );
@@ -195,6 +198,7 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const cha
 
   // let's see what the doc already has
   slotNewFileItems();
+  slotChanged();
 }
 
 
@@ -312,6 +316,12 @@ QDragObject* K3bMovixListView::dragObject()
     urls.append( KURL( ((K3bMovixListViewItem*)it.current())->fileItem()->localPath() ) );
 
   return KURLDrag::newDrag( urls, viewport() );
+}
+
+
+void K3bMovixListView::slotChanged()
+{
+  header()->setShown( m_doc->root()->numFiles() > 0 );
 }
 
 #include "k3bmovixlistview.moc"

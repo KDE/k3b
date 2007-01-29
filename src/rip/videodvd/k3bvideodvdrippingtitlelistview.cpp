@@ -145,19 +145,21 @@ public:
   }
 
 protected:
-  void paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align ) {
+  void paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int w, int align ) {
+    p->save();
+
     if( col == 0 ) {
       // the check mark
-      K3bCheckListViewItem::paintK3bCell( p, cg, col, width, align );
+      K3bCheckListViewItem::paintK3bCell( p, cg, col, w, align );
     }
     else if( col == 2 ) {
       if( isSelected() ) {
-	p->fillRect( 0, 0, width, height(),
+	p->fillRect( 0, 0, w, height(),
 		     cg.brush( QColorGroup::Highlight ) );
 	p->setPen( cg.highlightedText() );
       }
       else {
-	p->fillRect( 0, 0, width, height(), cg.base() ); 
+	p->fillRect( 0, 0, w, height(), cg.base() ); 
 	p->setPen( cg.text() );
       }
 
@@ -168,43 +170,49 @@ protected:
       if( !m_preview.isNull() ) {
 	if( m_scaledPreview.height() != h ) {
 	  // recreate scaled preview
-	  m_scaledPreview.convertFromImage( m_preview.scale( m_preview.width(), h, QImage::ScaleMin ), 0 );
+	  int preH = m_preview.height()*w/m_preview.width();
+	  int preW = m_preview.width()*h/m_preview.height();
+	  if( preH > h )
+	    preH = m_preview.height()*preW/m_preview.width();
+	  if( preW > w )
+	    preW = m_preview.width()*preH/m_preview.height();
+	  m_scaledPreview.convertFromImage( m_preview.smoothScale( preW, preH ), 0 );
 	}
 
 	// center the preview in the column
 	int yPos = ( height() - m_scaledPreview.height() ) / 2;
-	int xPos = ( width - m_scaledPreview.width() ) / 2;
+	int xPos = ( w - m_scaledPreview.width() ) / 2;
 
 	p->drawPixmap( xPos, yPos, m_scaledPreview );
       }
       else if( m_previewSet ) {
-	int w = 0;
+	int preW = 0;
 	if( m_title.videoStream().displayAspectRatio()	== K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
-	  w = h*4/3;
+	  preW = h*4/3;
 	else
-	  w = h*16/9;
+	  preW = h*16/9;
 
-	p->drawRect( ( width - w ) / 2, ( height() - h ) / 2, w, h );
+	p->drawRect( ( w - preW ) / 2, ( height() - h ) / 2, preW, h );
 	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIcon::NoGroup, KIcon::SizeSmall, KIcon::DefaultState, 0, true );
-	p->drawPixmap( ( width - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
+	p->drawPixmap( ( w - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
       }
       else {
-	p->drawText( 0, 0, width, height(), Qt::AlignCenter, "..." );
+	p->drawText( 0, 0, w, height(), Qt::AlignCenter, "..." );
       }
     }
     else {
       QString s = text( col );
       if( s.isEmpty() )
-	K3bCheckListViewItem::paintK3bCell( p, cg, col, width, align );
+	K3bCheckListViewItem::paintK3bCell( p, cg, col, w, align );
       else {
 	QColorGroup cg1( cg );
 	if( isSelected() ) {
-	  p->fillRect( 0, 0, width, height(),
+	  p->fillRect( 0, 0, w, height(),
 		       cg.brush( QColorGroup::Highlight ) );
 	  cg1.setColor( QColorGroup::Text, cg.highlightedText() );
 	}
 	else {
-	  p->fillRect( 0, 0, width, height(), cg.base() ); 
+	  p->fillRect( 0, 0, w, height(), cg.base() ); 
 	}
 
 	// paint using QSimpleRichText
@@ -213,19 +221,19 @@ protected:
 	// normally we would have to clip the height to height()-2*marginVertical(). But if we do that
 	// some characters are cut (such as p or q). It seems as if QSimpleRichText does not properly 
 	// calculate it's height...
-	rt.draw( p, 0, marginVertical(), QRect( 0, 0, width, height() ), cg1 );
+	rt.draw( p, 0, marginVertical(), QRect( 0, 0, w, height() ), cg1 );
       }
     }
 
     // draw the separator
     if( listView()->firstChild() != this ) {
-      p->save();
       p->translate( -1*marginHorizontal(col), 0 );
       // FIXME: modify the value from palette().disabled().foreground() to be lighter (or darker, depending on the background color )
       p->setPen( Qt::lightGray );
-      p->drawLine( 0, 0, width+2*marginHorizontal(col), 0 );
-      p->restore();
+      p->drawLine( 0, 0, w+2*marginHorizontal(col), 0 );
     }
+
+    p->restore();
   }
 
 private:

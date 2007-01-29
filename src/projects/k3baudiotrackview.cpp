@@ -431,6 +431,8 @@ void K3bAudioTrackView::slotChanged()
     showAllSources();
   }
 
+  header()->setShown( m_doc->numOfTracks() > 0 );
+
   kdDebug() << "(K3bAudioTrackView::slotChanged) finished" << endl;
 }
 
