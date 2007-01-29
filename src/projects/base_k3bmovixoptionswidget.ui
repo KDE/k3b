@@ -221,7 +221,7 @@
                         <cstring>m_comboDefaultBootLabel</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Select the default Linux kernal configuration</string>
+                        <string>Select the default Linux kernel configuration</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;&lt;b&gt;eMovix Boot Labels&lt;/b&gt;
