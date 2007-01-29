@@ -30,6 +30,7 @@ Description[ja]=ビデオDVDからファイルをコピーすることを可能�
 Description[ka]=Kioslave, რომელიც იძლევა Video DVD-დან ასლის ფაილების მიღების საშუელებას (გაშიფრვასთან ერთად)
 Description[nl]=Een kioslave waarmee u bestanden van een video-dvd kunt kopiëren (inclusief versleuteling)
 Description[pa]=ਇੱਕ kioslave ਹੈ, ਜੋ ਕਿ ਫਾਇਲਾਂ ਨੂੰ ਇੱਕ DVD (ਡਿਸਕਰਿਪਸ਼ਨ ਸਮੇ) ਤੋਂ ਨਕਲ ਕਰਨ ਲਈ ਸਹਾਇਕ ਹੈ
+Description[pl]=Wtyczka protokołu pozwalająca kopiować pliki z płyt DVD Video (łącznie z odszyfrowywaniem)
 Description[pt]=Um 'kioslave' que permite copiar ficheiros de um DVD Vídeo (incluindo decifrar)
 Description[pt_BR]=Um kioslave que permite que arquivos sejam copiados de um DVD de Vídeo (incluindo a quebra da proteção)
 Description[ru]=Позволяет копировать файлы с Video DVD (с дешифровкой)
