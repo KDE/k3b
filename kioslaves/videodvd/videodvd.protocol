@@ -24,6 +24,7 @@ Description[fi]=Kioslave-palvelu, joka mahdollistaa tiedostojen purkamisen dvd-l
 Description[fr]=Un kioslave qui permet de copier des fichiers depuis un DVD Vidéo (incluant le déchiffrement)
 Description[gl]=Un kioslave que permite copiar ficheiros dun Video DVD (incluindo descifrar)
 Description[he]=עבד קלט/פלט של KDE המאפשר לקבצים להיות מועתקים מתקליטור וידאו של DVD (כולל פענוח)
+Description[hu]=Kioslave, amellyel fájlokat lehet másolni Video DVD-ről (dekódolással együtt)
 Description[is]=Kioslave sem leyfir afritun af skrám frá vídeó DVD (með afkóðun)
 Description[it]=Un kioslave per permettere ai file di essere copiati da un DVD video (incluso decifrazione)
 Description[ja]=ビデオDVDからファイルをコピーすることを可能にする kioslave (暗号解除も含む)
