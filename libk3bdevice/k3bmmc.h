@@ -17,8 +17,9 @@
 #ifndef _K3B_MMC_H_
 #define _K3B_MMC_H_
 
-
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 
 
 namespace K3bDevice 

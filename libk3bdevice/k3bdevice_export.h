@@ -17,7 +17,9 @@
 #ifndef _K3BDEVICE_EXPORT_H_
 #define _K3BDEVICE_EXPORT_H_
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 
 #ifdef __KDE_HAVE_GCC_VISIBILITY
 #define LIBK3BDEVICE_NO_EXPORT __attribute__ ((visibility("hidden")))
