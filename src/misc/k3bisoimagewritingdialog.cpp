@@ -519,6 +519,7 @@ void K3bIsoImageWritingDialog::loadUserDefaults( KConfigBase* c )
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
   m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
+  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
   m_writerSelectionWidget->loadConfig( c );
 
@@ -535,6 +536,7 @@ void K3bIsoImageWritingDialog::saveUserDefaults( KConfigBase* c )
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );
   c->writeEntry( "verify_data", m_checkVerify->isChecked() );
+  c->writeEntry( "copies", m_spinCopies->value() );
 
   m_writerSelectionWidget->saveConfig( c );
 
@@ -548,6 +550,7 @@ void K3bIsoImageWritingDialog::loadK3bDefaults()
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_checkDummy->setChecked( false );
   m_checkVerify->setChecked( false );
+  m_spinCopies->setValue( 1 );
 }
 
 

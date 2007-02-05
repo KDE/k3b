@@ -373,6 +373,7 @@ void K3bProjectBurnDialog::saveUserDefaults( KConfigBase* c )
   c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
   c->writeEntry( "remove_image", m_checkRemoveBufferFiles->isChecked() );
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+  c->writeEntry( "copies", m_spinCopies->value() );
 
   m_tempDirSelectionWidget->saveConfig( c );
   m_writerSelectionWidget->saveConfig( c );
@@ -386,6 +387,7 @@ void K3bProjectBurnDialog::loadUserDefaults( KConfigBase* c )
   m_checkCacheImage->setChecked( !c->readBoolEntry( "on_the_fly", true ) );
   m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
+  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
   m_tempDirSelectionWidget->readConfig( c );
   m_writerSelectionWidget->loadConfig( c );
@@ -400,6 +402,7 @@ void K3bProjectBurnDialog::loadK3bDefaults()
   m_checkCacheImage->setChecked( false );
   m_checkRemoveBufferFiles->setChecked( true );
   m_checkOnlyCreateImage->setChecked( false );
+  m_spinCopies->setValue( 1 );
 
   if( m_tempDirSelectionWidget->selectionMode() == K3bTempDirSelectionWidget::DIR )
     m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );

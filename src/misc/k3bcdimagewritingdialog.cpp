@@ -920,6 +920,8 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
   m_checkCacheImage->setChecked( !c->readBoolEntry("on_the_fly", true ) );
 
   m_dataModeWidget->loadConfig(c);
+
+  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
  
   m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
 
@@ -966,6 +968,8 @@ void K3bCdImageWritingDialog::saveUserDefaults( KConfigBase* c )
 
   c->writePathEntry( "image path", imagePath() );
 
+  c->writeEntry( "copies", m_spinCopies->value() );
+
   QString imageType;
   if( m_comboImageType->currentItem() == 0 )
     imageType = "auto";
@@ -1004,6 +1008,7 @@ void K3bCdImageWritingDialog::loadK3bDefaults()
   m_checkCacheImage->setChecked( false );
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
   m_comboImageType->setCurrentItem(0);
+  m_spinCopies->setValue( 1 );
 
   slotToggleAll();
 }
