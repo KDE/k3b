@@ -520,9 +520,12 @@ void K3bAudioEditorWidget::drawContents( QPainter* p )
 void K3bAudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
 {
   // we simply draw the ranges one after the other.
-  // since K3b doesn't use multiple overlapping ranges anyway this is no problem
   for( QPtrListIterator<Range> it( d->ranges ); *it; ++it )
     drawRange( p, drawRect, *it );
+
+  // Hack to make sure the currently selected range is always on top
+  if( d->selectedRange )
+    drawRange( p, drawRect, d->selectedRange );
   
   for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
     drawMarker( p, drawRect, *it );
@@ -630,6 +633,19 @@ void K3bAudioEditorWidget::fixupOverlappingRanges( Range* r )
 	  setSelectedRange( 0 );
 	delete range;
       }
+      // split the range if it contains r completely
+      else if( r->start >= range->start &&
+	       r->end <= range->end ) {
+	// create a new range that spans the part after r
+	addRange( r->end+1, range->end, 
+		  range->startFixed, range->endFixed,
+		  range->toolTip,
+		  range->brush );
+
+	// modify the old range to only span the part before r
+	range->end = r->start-1;
+	emit rangeChanged( range->id, range->start, range->end );
+      }
       else if( range->start >= r->start && range->start <= r->end ) {
 	range->start = r->end+1;
 	emit rangeChanged( range->id, range->start, range->end );
@@ -668,12 +684,18 @@ void K3bAudioEditorWidget::mousePressEvent( QMouseEvent* e )
 
 void K3bAudioEditorWidget::mouseReleaseEvent( QMouseEvent* e )
 {
-  if( m_draggedRange && !d->allowOverlappingRanges ) {
+  if( !d->allowOverlappingRanges ) {
     //
     // modify and even delete ranges that we touched
     //
-    fixupOverlappingRanges( m_draggedRange );
-    repaint( false );
+    if( m_draggedRange ) {
+      fixupOverlappingRanges( m_draggedRange );
+      repaint( false );
+    }
+    else if( d->movedRange ) {
+      fixupOverlappingRanges( d->movedRange );
+      repaint( false );
+    }
   }
 
   m_draggedRange = 0;
@@ -734,8 +756,8 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
       d->movedRange->start += diff;
       d->movedRange->end += diff;
 
-      if( !d->allowOverlappingRanges )
-	fixupOverlappingRanges( d->movedRange );
+//       if( !d->allowOverlappingRanges )
+// 	fixupOverlappingRanges( d->movedRange );
 
       d->lastMovePosition = posToMsf( e->pos().x() );
 

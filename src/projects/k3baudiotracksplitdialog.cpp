@@ -106,16 +106,18 @@ void K3bAudioTrackSplitDialog::setupActions()
 }
 
 
-void K3bAudioTrackSplitDialog::slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& end )
+void K3bAudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& start, const K3b::Msf& end )
 {
-  m_msfEditStart->blockSignals( true );
-  m_msfEditEnd->blockSignals( true );
-
-  m_msfEditStart->setMsfValue( start );
-  m_msfEditEnd->setMsfValue( end );
-
-  m_msfEditStart->blockSignals( false );
-  m_msfEditEnd->blockSignals( false );
+  if( id == m_editorWidget->selectedRange() ) {
+    m_msfEditStart->blockSignals( true );
+    m_msfEditEnd->blockSignals( true );
+    
+    m_msfEditStart->setMsfValue( start );
+    m_msfEditEnd->setMsfValue( end );
+    
+    m_msfEditStart->blockSignals( false );
+    m_msfEditEnd->blockSignals( false );
+  }
 }
 
 
@@ -153,6 +155,7 @@ void K3bAudioTrackSplitDialog::splitAt( const QPoint& p )
     K3b::Msf msf = m_editorWidget->posToMsf( p.x() );
     m_editorWidget->addRange( msf+1, m_editorWidget->rangeEnd( id ) );
     m_editorWidget->modifyRange( id, m_editorWidget->rangeStart( id ), msf );
+    slotRangeSelectionChanged( m_editorWidget->selectedRange() );
   }
 }
 
