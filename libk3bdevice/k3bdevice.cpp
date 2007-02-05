@@ -3053,7 +3053,7 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
 	delete [] data;
 
 	if( max > 0 ) {
-	  while( ret.last() > max ) {
+	  while( !ret.isEmpty() && ret.last() > max ) {
 	    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
 		       << " writing speed " << ret.last() << " higher than max " << max << endl;
 	    ret.pop_back();
