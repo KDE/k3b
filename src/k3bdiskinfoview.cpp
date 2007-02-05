@@ -144,6 +144,9 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
   m_infoView->addColumn( "2" );
   m_infoView->addColumn( "3" );
   m_infoView->addColumn( "4" );
+#ifdef K3B_DEBUG
+  m_infoView->addColumn( "index0" );
+#endif
 
   m_infoView->header()->hide();
 
@@ -219,6 +222,10 @@ void K3bDiskInfoView::reloadMedium()
 					       i18n("First-Last Sector"),
 					       i18n("Length") );
 
+#ifdef K3B_DEBUG
+      item->setText( 4, "Index0" );
+#endif
+
       int lastSession = 0;
 
       // if we have multiple sessions we create a header item for every session
@@ -249,15 +256,6 @@ void K3bDiskInfoView::reloadMedium()
         if( track.type() == K3bTrack::AUDIO ) {
           item->setPixmap( 0, SmallIcon( "sound" ) );
           text = i18n("Audio");
-
-	  // DEBUGGING:
-// 	  for( unsigned int i = 0; i <= track.indexCount(); ++i )
-// 	    (void)new KListViewItem( item, 
-// 				     QString::number( i ),
-// 				     QString("%1 (%2)").arg(track.index(i)).arg(K3b::Msf(track.index(i)).toString()) );
-
-// 	  item->setOpen(true);
-
         } else {
           item->setPixmap( 0, SmallIcon( "tar" ) );
           if( track.mode() == K3bTrack::MODE1 )
@@ -282,6 +280,11 @@ void K3bDiskInfoView::reloadMedium()
 		       .arg(track.firstSector().lba())
 		       .arg(track.lastSector().lba()) );
         item->setText( 3, QString::number( track.length().lba() ) + " (" + track.length().toString() + ")" );
+
+#ifdef K3B_DEBUG
+        if( track.type() == K3bTrack::AUDIO )
+	  item->setText( 4, QString( "%1 (%2)" ).arg(track.index0().toString()).arg(track.index0().lba()) );
+#endif
         ++index;
       }
 
