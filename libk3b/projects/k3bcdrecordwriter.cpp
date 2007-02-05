@@ -301,7 +301,10 @@ void K3bCdrecordWriter::start()
   emit debuggingOutput( "Used versions", "cdrecord: " + m_cdrecordBinObject->version );
 
   if( !m_cdrecordBinObject->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg(m_cdrecordBinObject->name()).arg(m_cdrecordBinObject->version).arg(m_cdrecordBinObject->copyright), INFO );
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
+		      .arg(m_cdrecordBinObject->hasFeature( "wodim" ) ? "Wodim" : "Cdrecord" )
+		      .arg(m_cdrecordBinObject->version)
+		      .arg(m_cdrecordBinObject->copyright), INFO );
 
 
   kdDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
