@@ -348,6 +348,10 @@ void K3bGrowisofsWriter::start()
     emit newSubTask( i18n("Preparing write process...") );
 
     // FIXME: check the return value
+    if( K3b::isMounted( burnDevice() ) ) {
+      emit infoMessage( i18n("Unmounting medium"), INFO );
+      K3b::unmount( burnDevice() );
+    }
     k3bcore->blockDevice( burnDevice() );
 
     if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {

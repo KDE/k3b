@@ -70,11 +70,6 @@ void K3bBlankingJob::start()
 
   jobStarted();
 
-  if( K3b::isMounted( m_device ) ) {
-    emit infoMessage( i18n("Unmounting medium"), INFO );
-    K3b::unmount( m_device );
-  }
-
   slotStartErasing();
 }
 

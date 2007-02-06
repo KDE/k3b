@@ -156,7 +156,6 @@ void K3bAudioJob::start()
 
   emit newTask( i18n("Preparing data") );
 
-
   //
   // Check if all files exist
   //

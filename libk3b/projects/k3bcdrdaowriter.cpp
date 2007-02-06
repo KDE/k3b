@@ -564,6 +564,10 @@ void K3bCdrdaoWriter::start()
     }
 
   // FIXME: check the return value
+  if( K3b::isMounted( burnDevice() ) ) {
+    emit infoMessage( i18n("Unmounting medium"), INFO );
+    K3b::unmount( burnDevice() );
+  }
   k3bcore->blockDevice( burnDevice() );
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
