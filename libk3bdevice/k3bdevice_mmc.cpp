@@ -207,10 +207,14 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
     // length here.
     // FIXME: 2048 is a proper upper boundary for the write speed but not for all
     //        return types. "Defect Status Data" for example might return way more data.
+    // FIXME: I added a "return false" here since there was a situation in which this method
+    //        returned a gigantic dataLen even with this cut. So there is still some bug here.
+    //        Since we only use getPerformance for writing speeds and without a proper length
+    //        those do not make sense it is better to fail here anyway.
     if( dataLen > 2048 ) {
-      kdError() << "(K3bDevice::Device) " << blockDeviceName()
-		<< ": GET PERFORMANCE reports bogus dataLen: " << dataLen
-		<< " cutting to 2048." << endl;
+      k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
+		 << ": GET PERFORMANCE reports bogus dataLen: " << dataLen << endl;
+      return false;
       dataLen = 2048;
     }
   }
