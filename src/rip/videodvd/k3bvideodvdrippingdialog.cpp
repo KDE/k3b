@@ -501,7 +501,7 @@ void K3bVideoDVDRippingDialog::loadK3bDefaults()
   m_w->m_spinVideoBitrate->setValue( 1800 );
   m_w->m_checkTwoPassEncoding->setChecked( true );
   m_w->m_checkAudioResampling->setChecked( false );
-  m_w->m_checkAutoClipping->setChecked( true );
+  m_w->m_checkAutoClipping->setChecked( false );
   m_w->m_checkLowPriority->setChecked( true );
   m_w->m_checkAudioVBR->setChecked( true );
   m_w->setSelectedAudioBitrate( 128 );
@@ -519,7 +519,7 @@ void K3bVideoDVDRippingDialog::loadUserDefaults( KConfigBase* c )
   m_w->m_spinVideoBitrate->setValue( c->readNumEntry( "video bitrate", 1200 ) );
   m_w->m_checkTwoPassEncoding->setChecked( c->readBoolEntry( "two pass encoding", true ) );
   m_w->m_checkAudioResampling->setChecked( c->readBoolEntry( "audio resampling", false ) );
-  m_w->m_checkAutoClipping->setChecked( c->readBoolEntry( "auto clipping", true ) );
+  m_w->m_checkAutoClipping->setChecked( c->readBoolEntry( "auto clipping", false ) );
   m_w->m_checkLowPriority->setChecked( c->readBoolEntry( "low priority", true ) );
   m_w->m_checkAudioVBR->setChecked( c->readBoolEntry( "vbr audio", true ) );
   m_w->setSelectedAudioBitrate( c->readNumEntry( "audio bitrate", 128 ) );
