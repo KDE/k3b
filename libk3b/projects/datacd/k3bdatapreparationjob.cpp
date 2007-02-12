@@ -90,12 +90,21 @@ void K3bDataPreparationJob::Private::run()
   //
   K3bDataItem* item = doc->root();
   while( (item = item->nextSibling()) ) {
-    if( item->isFile() && !QFile::exists( item->localPath() ) ) {
+
+    if( item->isSymLink() ) {
+      if( doc->isoOptions().followSymbolicLinks() ) {
+	QFileInfo f( K3b::resolveLink( item->localPath() ) );
+	if( !f.exists() ) {
+	  nonExistingItems.append( item );
+	}
+	else if( f.isDir() ) {
+	  folderSymLinkItems.append( item );
+	}
+      }
+    }
+    else if( item->isFile() && !QFile::exists( item->localPath() ) ) {
       nonExistingItems.append( item );
     }
-
-    if( item->isSymLink() && QFileInfo( K3b::resolveLink( item->localPath() ) ).isDir() )
-      folderSymLinkItems.append( item );
 
     if( canceled ) {
       emitCanceled();
