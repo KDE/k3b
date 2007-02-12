@@ -1878,7 +1878,8 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       inf.m_mediaType = mediaType();
 
       // At least some Plextor drives return profile NONE for CD media
-      if( inf.m_mediaType & (MEDIA_UNKNOWN|MEDIA_NONE) ) {
+      // or CD_ROM for writable media
+      if( inf.m_mediaType & (MEDIA_UNKNOWN|MEDIA_NONE|MEDIA_CD_ROM) ) {
 	// probably it is a CD
 	if( inf.rewritable() )
 	  inf.m_mediaType = MEDIA_CD_RW;
@@ -2249,9 +2250,9 @@ int K3bDevice::Device::mediaType() const
     
     //
     // Only old CD or DVD devices do not report a current profile
-    // the latter has been handled above
+    // or report CD-ROM profile for all CD types
     //
-    if( m == MEDIA_UNKNOWN ) {
+    if( m & (MEDIA_UNKNOWN|MEDIA_CD_ROM) ) {
       unsigned char* data = 0;
       unsigned int dataLen = 0;
       if( readTocPmaAtip( &data, dataLen, 4, false, 0 ) ) {
