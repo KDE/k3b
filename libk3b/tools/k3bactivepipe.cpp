@@ -40,10 +40,12 @@ public:
 
   void run() {
     kdDebug() << "(K3bActivePipe) started thread." << endl;
+    bytesRead = bytesWritten = 0;
     buffer.resize( 10*2048 );
     ssize_t r = 0;
-    ssize_t total = 0;
     while( ( r = m_pipe->read( buffer.data(), buffer.size() ) ) > 0 ) {
+
+      bytesRead += r;
 
       // write it out
       ssize_t w = 0;
@@ -51,6 +53,7 @@ public:
       while( w < r ) {
 	if( ( ww = m_pipe->write( buffer.data()+w, r-w ) ) > 0 ) {
 	  w += ww;
+	  bytesWritten += ww;
 	}
 	else {
 	  kdDebug() << "(K3bActivePipe) write failed." << endl;
@@ -58,10 +61,8 @@ public:
 	  return;
 	}
       }
-
-      total += r;
     }
-    kdDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes: " << total << ")" << endl;
+    kdDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")" << endl;
     close( closeWhenDone );
   }
 
@@ -115,6 +116,9 @@ public:
   bool closeFdToWriteTo;
 
   QByteArray buffer;
+
+  Q_UINT64 bytesRead;
+  Q_UINT64 bytesWritten;
 };
 
 
@@ -236,4 +240,16 @@ bool K3bActivePipe::pumpSync()
   else
     return false;
   return true;
+}
+
+
+Q_UINT64 K3bActivePipe::bytesRead() const
+{
+  return d->bytesRead;
+}
+
+
+Q_UINT64 K3bActivePipe::bytesWritten() const
+{
+  return d->bytesWritten;
 }

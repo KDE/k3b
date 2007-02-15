@@ -95,6 +95,8 @@ K3bVerificationJob::K3bVerificationJob( K3bJobHandler* hdl, QObject* parent, con
   d->md5Job = new K3bMd5Job( this );
   connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
+  connect( d->md5Job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 }
 
 
@@ -255,10 +257,10 @@ void K3bVerificationJob::readTrack( int trackIndex )
       d->dataTrackReader->setSectorRange( d->toc[d->tracks[trackIndex].trackNumber-1].firstSector(),
 					  d->toc[d->tracks[trackIndex].trackNumber-1].firstSector() + d->currentTrackSize -1 );
     
+    d->md5Job->setMaxReadSize( d->currentTrackSize.mode1Bytes() );
+
     d->dataTrackReader->writeToFd( d->pipe.in() );
     d->dataTrackReader->start();
-
-    d->md5Job->setMaxReadSize( d->currentTrackSize.mode1Bytes() );
   }
   else {
     // FIXME: handle audio tracks
@@ -310,7 +312,10 @@ void K3bVerificationJob::slotReaderFinished( bool success )
     d->md5Job->cancel();
   else {
     d->alreadyReadSectors += trackLength( d->currentTrackIndex );
-    d->md5Job->stop();
+
+    // close the pipe and let the md5 job finish gracefully
+    d->pipe.closeIn();
+    //    d->md5Job->stop();
   }
 }
 

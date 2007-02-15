@@ -39,6 +39,7 @@ class K3bVideoDvdImager : public K3bIsoImager
 
  public slots:
   virtual void start();
+  virtual void init();
   virtual void calculateSize();
 
  protected:
@@ -51,6 +52,8 @@ class K3bVideoDvdImager : public K3bIsoImager
   virtual void slotReceivedStderr( const QString& );
 
  private:
+  void fixVideoDVDSettings();
+
   class Private;
   Private* d;
 };

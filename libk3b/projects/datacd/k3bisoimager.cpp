@@ -163,6 +163,10 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
   d->pipe->close();
 
+  emit debuggingOutput( "K3bIsoImager", 
+			QString("Pipe throughput: %1 bytes read, %2 bytes written.")
+			.arg(d->pipe->bytesRead()).arg(d->pipe->bytesWritten()) );
+
   if( d->imageFile.isOpen() ) {
     d->imageFile.close();
 
@@ -321,7 +325,7 @@ void K3bIsoImager::startSizeCalculation()
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
-
+  emit debuggingOutput("mkisofs calculate size command:", s);
 
   // since output changed during mkisofs version changes we grab both
   // stdout and stderr
@@ -404,6 +408,10 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
       m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStderr.mid( pos+33 ).toInt( &success );
   }
 
+  emit debuggingOutput( "K3bIsoImager", 
+			QString("mkisofs print size result: %1 (%2 bytes)")
+			.arg(m_mkisofsPrintSizeResult)
+			.arg(Q_UINT64(m_mkisofsPrintSizeResult)*2048ULL) );
 
   cleanup();
 

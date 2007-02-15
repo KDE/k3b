@@ -184,10 +184,13 @@ void K3bDataTrackReader::WorkThread::run()
   }
 
   emitInfoMessage( i18n("Reading with sector size %1.").arg(m_usedSectorSize), K3bJob::INFO );
-  kdDebug() << "(K3bDataTrackReader::WorkThread) reading sectors " 
-	    << m_firstSector.lba() << " to " << m_lastSector.lba() 
-	    << " (" << (m_lastSector.lba() - m_firstSector.lba() + 1) 
-	    << ") with sector size: " << m_usedSectorSize << endl;
+  emitDebuggingOutput( "K3bDataTrackReader", 
+		       QString("reading sectors %1 to %2 with sector size %3. Length: %4 sectors, %5 bytes.")
+		       .arg( m_firstSector.lba() )
+		       .arg( m_lastSector.lba() )
+		       .arg( m_usedSectorSize )
+		       .arg( m_lastSector.lba() - m_firstSector.lba() + 1 )
+		       .arg( Q_UINT64(m_usedSectorSize) * (Q_UINT64)(m_lastSector.lba() - m_firstSector.lba() + 1) ) );
 
   QFile file;
   if( m_fd == -1 ) {
@@ -236,9 +239,11 @@ void K3bDataTrackReader::WorkThread::run()
   }
 
   kdDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks." << endl;
+  emitDebuggingOutput( "K3bDataTrackReader", QString("using buffer size of %1 blocks.").arg( s_bufferSizeSectors ) );
 
   // 2. get it on
   K3b::Msf currentSector = m_firstSector;
+  K3b::Msf totalReadSectors;
   m_nextReadSector = 0;
   m_errorSectorCount = 0;
   bool writeError = false;
@@ -264,12 +269,17 @@ void K3bDataTrackReader::WorkThread::run()
 	readSectors = maxReadSectors;
     }
 
+    totalReadSectors += readSectors;
+
     int readBytes = readSectors * m_usedSectorSize;
 
     if( m_fd != -1 ) {
       if( ::write( m_fd, reinterpret_cast<void*>(buffer), readBytes ) != readBytes ) {
 	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to fd " << m_fd 
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
+	emitDebuggingOutput( "K3bDataTrackReader", 
+			     QString("Error while writing to fd %1. Current sector is %2.")
+			     .arg(m_fd).arg(currentSector.lba()-m_firstSector.lba()) );
 	writeError = true;
 	break;
       }
@@ -278,6 +288,9 @@ void K3bDataTrackReader::WorkThread::run()
       if( file.writeBlock( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
 	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to file " << m_imagePath
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
+	emitDebuggingOutput( "K3bDataTrackReader", 
+			     QString("Error while writing to file %1. Current sector is %2.")
+			     .arg(m_imagePath).arg(currentSector.lba()-m_firstSector.lba()) );
 	writeError = true;
 	break;
       }
@@ -315,6 +328,11 @@ void K3bDataTrackReader::WorkThread::run()
     m_libcss->close();
   m_device->close();
   delete [] buffer;
+
+  emitDebuggingOutput( "K3bDataTrackReader", 
+		       QString("Read a total of %1 sectors (%2 bytes)")
+		       .arg(totalReadSectors.lba())
+		       .arg((Q_UINT64)totalReadSectors.lba()*(Q_UINT64)m_usedSectorSize) );
 
   if( m_canceled )
     emitCanceled();
@@ -368,7 +386,7 @@ int K3bDataTrackReader::WorkThread::read( unsigned char* buffer, unsigned long s
 // here we read every single sector for itself to find the troubleing ones
 bool K3bDataTrackReader::WorkThread::retryRead( unsigned char* buffer, unsigned long startSector, unsigned int len )
 {
-
+  emitDebuggingOutput( "K3bDataTrackReader", QString( "Problem while reading. Retrying from sector %1.").arg(startSector) );
   emitInfoMessage( i18n("Problem while reading. Retrying from sector %1.").arg(startSector), K3bJob::WARNING );
 
   int sectorsRead = -1;
@@ -387,12 +405,15 @@ bool K3bDataTrackReader::WorkThread::retryRead( unsigned char* buffer, unsigned 
     if( !success ) {
       if( m_ignoreReadErrors ) {
 	emitInfoMessage( i18n("Ignoring read error in sector %1.").arg(sector), K3bJob::ERROR );
+	emitDebuggingOutput( "K3bDataTrackReader", QString( "Ignoring read error in sector %1.").arg(sector) );
+
 	++m_errorSectorCount;
 	//	  ::memset( &buffer[i], 0, 1 );
 	success = true;
       }
       else {
 	emitInfoMessage( i18n("Error while reading sector %1.").arg(sector), K3bJob::ERROR );
+	emitDebuggingOutput( "K3bDataTrackReader", QString( "Read error in sector %1.").arg(sector) );
 	break;
       }
     }

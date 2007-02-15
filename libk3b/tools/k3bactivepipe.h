@@ -99,6 +99,16 @@ class LIBK3B_EXPORT K3bActivePipe
    */
   int out() const;
 
+  /**
+   * The number of bytes that have been read.
+   */
+  Q_UINT64 bytesRead() const;
+
+  /**
+   * The number of bytes that have been written.
+   */
+  Q_UINT64 bytesWritten() const;
+
  protected:
   /**
    * Reads the data from the source.

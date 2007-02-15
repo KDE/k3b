@@ -58,6 +58,20 @@ K3bVideoDvdImager::~K3bVideoDvdImager()
 
 void K3bVideoDvdImager::start()
 {
+  fixVideoDVDSettings();
+  K3bIsoImager::start();
+}
+
+
+void K3bVideoDvdImager::init()
+{
+  fixVideoDVDSettings();
+  K3bIsoImager::init();
+}
+
+
+void K3bVideoDvdImager::fixVideoDVDSettings()
+{
   // Video DVD defaults, we cannot set these in K3bVideoDvdDoc since they
   // will be overwritten in the burn dialog unless we create some K3bVideoDVDIsoOptions
   // class with different defaults. But since the whole Video DVD project is a hack we
@@ -70,13 +84,12 @@ void K3bVideoDvdImager::start()
   o.setCreateRockRidge(false); 
   o.setCreateUdf(true); 
   d->doc->setIsoOptions( o ); 
-
-  K3bIsoImager::start();
 }
 
 
 void K3bVideoDvdImager::calculateSize()
 {
+  fixVideoDVDSettings();
   K3bIsoImager::calculateSize();
 }
 
