@@ -295,8 +295,11 @@ void K3bMediaSelectionComboBox::updateMedia()
 	if( oldDevices[j] == d->devices[i] )
 	  break;
       }
-      if( j == oldDevices.count() )
+      if( j == oldDevices.count() ) {
+	// prefere a newly inserted medium over the previously selected
+	setSelectedDevice( d->devices[i] );
 	emit newMedium( d->devices[i] );
+      }
     }
   }
 }
