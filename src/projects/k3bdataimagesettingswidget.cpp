@@ -91,7 +91,8 @@ static bool compareAdvancedOptions( const K3bIsoOptions& o1, const K3bIsoOptions
 	   o1.hideTRANS_TBL() == o2.hideTRANS_TBL() &&
 	   o1.jolietLong() == o2.jolietLong() &&
 	   o1.ISOLevel() == o2.ISOLevel() &&
-	   o1.preserveFilePermissions() == o2.preserveFilePermissions() );
+	   o1.preserveFilePermissions() == o2.preserveFilePermissions() &&
+	   o1.doNotCacheInodes() == o2.doNotCacheInodes() );
 }
 
 
@@ -232,17 +233,16 @@ void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 
 void K3bDataImageSettingsWidget::slotCustomFilesystems()
 {
-  //
-  // Load the preset settings. If the custom item is selected we just keep
-  // the settings
-  //
-  if( m_comboFilesystems->currentItem() != FS_CUSTOM ) {
-    m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
-  }
+  // store the current settings in case the user cancels the changes
+  K3bIsoOptions o;
+  m_customFsDlg->w->save( o );
 
   if( m_customFsDlg->exec() == QDialog::Accepted ) {
-    m_comboFilesystems->setCurrentItem( FS_CUSTOM );
     slotFilesystemsChanged();
+  }
+  else {
+    // reload the old settings discarding any changes
+    m_customFsDlg->w->load( o );
   }
 }
 
