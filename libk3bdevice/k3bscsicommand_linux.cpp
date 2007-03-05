@@ -116,6 +116,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     d->sgIo.flags     = SG_FLAG_LUN_INHIBIT|SG_FLAG_DIRECT_IO;
     d->sgIo.dxferp    = data;
     d->sgIo.dxfer_len = len;
+    d->sgIo.timeout   = 5000;
     if( dir == TR_DIR_READ )
       d->sgIo.dxfer_direction = SG_DXFER_FROM_DEV;
     else if( dir == TR_DIR_WRITE )
