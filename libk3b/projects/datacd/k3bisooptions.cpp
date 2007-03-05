@@ -50,7 +50,7 @@ K3bIsoOptions::K3bIsoOptions()
   m_hideTRANS_TBL = false;
   m_jolietLong = true;
 
-  m_doNotCacheInodes = false;
+  m_doNotCacheInodes = true;
 
   m_isoLevel = 2;
 
