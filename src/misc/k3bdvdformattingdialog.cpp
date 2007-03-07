@@ -51,7 +51,10 @@ K3bDvdFormattingDialog::K3bDvdFormattingDialog( QWidget* parent, const char* nam
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
   m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_REWRITABLE_DVD );
-  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
+  // we need state empty here for preformatting DVD+RW.
+  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|
+						 K3bDevice::STATE_INCOMPLETE|
+						 K3bDevice::STATE_EMPTY );
   m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
   m_writerSelectionWidget->setForceAutoSpeed(true);
 
