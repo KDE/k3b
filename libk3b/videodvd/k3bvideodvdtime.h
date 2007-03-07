@@ -48,6 +48,8 @@ namespace K3bVideoDVD
       QString toString( bool includeFrames = true ) const;
 
     private:
+      void makeValid();
+
       unsigned int m_hour;
       unsigned int m_minute;
       unsigned int m_second;

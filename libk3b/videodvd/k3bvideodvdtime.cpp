@@ -78,6 +78,9 @@ double K3bVideoDVD::Time::frameRate() const
 
 QString K3bVideoDVD::Time::toString( bool includeFrames ) const
 {
+  // FIXME: use a d-pointer
+  const_cast<K3bVideoDVD::Time*>(this)->makeValid();
+
   if( includeFrames )
     return QString().sprintf( "%02d:%02d:%02d.%02d", 
 			      m_hour,
@@ -89,4 +92,15 @@ QString K3bVideoDVD::Time::toString( bool includeFrames ) const
 			      m_hour,
 			      m_minute,
 			      m_second + ( m_frame > 0 ? 1 : 0 ) );
+}
+
+
+void K3bVideoDVD::Time::makeValid()
+{
+  // FIXME: how to handle the frames?
+
+  m_minute += m_second/60;
+  m_second = m_second % 60;
+  m_hour += m_minute/60;
+  m_minute = m_minute % 60;
 }

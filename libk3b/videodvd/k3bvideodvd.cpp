@@ -32,6 +32,10 @@
 #include <dvdread/ifo_read.h>
 
 
+// I don't get this stuff, I should read something about VideoDVD some day...
+#define CONVERT_TIME(x) (((x & 0xf0) >> 3) * 5 + (x & 0x0f))
+#define CONVERT_FRAME(x) (((x & 0x30) >> 3) * 5 + (x & 0x0f))
+
 
 K3bVideoDVD::VideoDVD::VideoDVD()
 {
@@ -122,10 +126,10 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
     // (first?) program chain of the first partoftitle of the current title
     pgc_t* cur_pgc = titleIfo->vts_pgcit->pgci_srp[ pgc_id - 1 ].pgc;
 
-    m_titles[i].m_playbackTime = Time( cur_pgc->playback_time.hour,
-				       cur_pgc->playback_time.minute,
-				       cur_pgc->playback_time.second,
-				       cur_pgc->playback_time.frame_u );
+    m_titles[i].m_playbackTime = Time( CONVERT_TIME(cur_pgc->playback_time.hour),
+				       CONVERT_TIME(cur_pgc->playback_time.minute),
+				       CONVERT_TIME(cur_pgc->playback_time.second),
+				       CONVERT_FRAME(cur_pgc->playback_time.frame_u) );
 
     //
     // Video stream information
@@ -180,10 +184,10 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
     m_titles[i].m_ptts.resize( m_titles[i].numPTTs() );
     for( unsigned int j = 0; j < m_titles[i].numPTTs(); ++j ) {
       m_titles[i].m_ptts[j].m_pttNum = j+1;
-      m_titles[i].m_ptts[j].m_playbackTime = Time( cur_pgc->cell_playback[j].playback_time.hour,
-						   cur_pgc->cell_playback[j].playback_time.minute,
-						   cur_pgc->cell_playback[j].playback_time.second,
-						   cur_pgc->cell_playback[j].playback_time.frame_u );
+      m_titles[i].m_ptts[j].m_playbackTime = Time( CONVERT_TIME(cur_pgc->cell_playback[j].playback_time.hour),
+						   CONVERT_TIME(cur_pgc->cell_playback[j].playback_time.minute),
+						   CONVERT_TIME(cur_pgc->cell_playback[j].playback_time.second),
+						   CONVERT_FRAME(cur_pgc->cell_playback[j].playback_time.frame_u) );
       m_titles[i].m_ptts[j].m_firstSector = cur_pgc->cell_playback[j].first_sector;
       m_titles[i].m_ptts[j].m_lastSector = cur_pgc->cell_playback[j].last_sector;
     }
