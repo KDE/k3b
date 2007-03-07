@@ -21,6 +21,7 @@
 #include <kurlrequester.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 // qt includes
 #include <qgroupbox.h>
@@ -155,6 +156,15 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     QStringList filesExists;
     QDir d;
     d.setPath( m_editDirectory ->url() );
+    if( !d.exists() ) {
+      if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?").arg( m_editDirectory->url() ) )
+	  == KMessageBox::Yes ) {
+	if( !KStandardDirs::makeDir( m_editDirectory->url() ) ) {
+	  KMessageBox::error( this, i18n("Failed to create folder '%1'.").arg( m_editDirectory->url() ) );
+	  return;
+	}
+      }
+    }
     const QFileInfoList* list = d.entryInfoList();
     QFileInfoListIterator it( *list );
     QFileInfo* fi;
