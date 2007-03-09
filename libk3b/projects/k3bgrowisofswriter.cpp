@@ -27,6 +27,7 @@
 #include "k3bgrowisofshandler.h"
 #include <k3bpipebuffer.h>
 #include <k3bglobalsettings.h>
+#include <k3bdeviceglobals.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -310,6 +311,8 @@ bool K3bGrowisofsWriter::prepareProcess()
   const QStringList& params = d->growisofsBin->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *d->process << *it;
+
+  emit debuggingOutput( "Burned media", K3bDevice::mediaTypeString(burnDevice()->mediaType()) );
 
   return true;
 }
