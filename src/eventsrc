@@ -4,19 +4,25 @@ Comment=K3b
 
 [SuccessfullyFinished]
 Name=Process successful
+Name[el]=Διεργασία επιτυχής
 Comment=Process successfully finished
+Comment[el]=Η διεργασία ολοκληρώθηκε επιτυχώς
 default_sound=k3b_success1.wav
 default_presentation=1
 # None = 0, Sound = 1, Messagebox = 2, Logfile = 4, Stderr = 8, PassivePopup = 16, Execute = 32
 
 [FinishedWithError]
 Name=Process error
+Name[el]=Σφάλμα διεργασίας
 Comment=Process finished with errors
+Comment[el]=Η διεργασία ολοκληρώθηκε με σφάλματα
 default_sound=k3b_error1.wav
 default_presentation=1
 
 [WaitingForMedium]
 Name=Waiting for medium
+Name[el]=Αναμονή για μέσο
 Comment=The user needs to insert a medium
+Comment[el]=Ο χρήστης πρέπει να εισάγει ένα μέσο
 default_sound=k3b_wait_media1.wav
 default_presentation=1

@@ -8,3 +8,4 @@ listing=Name,Type,Size,Date
 Icon=dvd_unmount
 Class=:local
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[el]=Ένα kioslave που επιτρέπει την αντιγραφή αρχείων από ένα DVD βίντεο (δυνατότητα αποκρυπτογράφησης)

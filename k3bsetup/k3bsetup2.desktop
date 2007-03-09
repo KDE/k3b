@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup 2 - modify permission for CD/DVD burning with K3b
+Comment[el]=Ρύθμιση K3b 2 - τροποποίηση δικαιωμάτων για εγγραφή CD/DVD με το K3b
 Exec=k3bsetup
 Keywords=K3bSetup2,k3bsetup2
+Keywords[el]=Ρύθμιση K3b 2,k3bsetup2
 Name=K3bSetup
 Terminal=false
 Type=Application
@@ -13,3 +15,4 @@ X-KDE-ModuleType=Library
 X-KDE-RootOnly=true
 Categories=Application;System;X-KDE-System;
 GenericName=CD & DVD Burning Setup
+GenericName[el]=Ρύθμιση εγγραφής CD & DVD
