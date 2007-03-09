@@ -578,12 +578,12 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   cmd[1] = ( time ? 0x2 : 0x0 );
   cmd[2] = format & 0x0F;
   cmd[6] = track;
-  cmd[8] = 2;
+  cmd[8] = 4;
   cmd[9] = 0;      // Necessary to set the proper command length
 
-  // we only read the length first
-  dataLen = 2;
-  if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
+  // we only read the header
+  dataLen = 4;
+  if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( header ) + 2;
   else
     k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
@@ -594,10 +594,16 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   // with these buggy drives.
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
-  if( (dataLen-4) % descLen || dataLen <= 4+descLen) {
-    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned." << endl;
+  if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned: " << dataLen << endl;
     dataLen = 0xFFFF;
   }
+
+  //
+  // Not all drives like uneven numbers
+  //
+  if( dataLen%2 )
+    ++dataLen;
 
   // again with real length
   *data = new unsigned char[dataLen];
