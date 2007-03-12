@@ -132,12 +132,12 @@ bool K3bCdrecordProgram::scan( const QString& p )
     if( path[path.length()-1] != '/' )
       path.append("/");
 
-    if( QFile::exists( path + "cdrecord" ) ) {
-      path += "cdrecord";
-    }
-    else if( QFile::exists( path + "wodim" ) ) {
+    if( QFile::exists( path + "wodim" ) ) {
       wodim = true;
       path += "wodim";
+    }
+    else if( QFile::exists( path + "cdrecord" ) ) {
+      path += "cdrecord";
     }
     else
       return false;
@@ -283,12 +283,12 @@ bool K3bMkisofsProgram::scan( const QString& p )
     if( path[path.length()-1] != '/' )
       path.append("/");
 
-    if( QFile::exists( path + "mkisofs" ) ) {
-      path += "mkisofs";
-    }
-    else if( QFile::exists( path + "genisoimage" ) ) {
+    if( QFile::exists( path + "genisoimage" ) ) {
       genisoimage = true;
       path += "genisoimage";
+    }
+    else if( QFile::exists( path + "mkisofs" ) ) {
+      path += "mkisofs";
     }
     else
       return false;
@@ -389,12 +389,12 @@ bool K3bReadcdProgram::scan( const QString& p )
     if( path[path.length()-1] != '/' )
       path.append("/");
 
-    if( QFile::exists( path + "readcd" ) ) {
-      path += "readcd";
-    }
-    else if( QFile::exists( path + "readom" ) ) {
+    if( QFile::exists( path + "readom" ) ) {
       readom = true;
       path += "readom";
+    }
+    else if( QFile::exists( path + "readcd" ) ) {
+      path += "readcd";
     }
     else
       return false;
