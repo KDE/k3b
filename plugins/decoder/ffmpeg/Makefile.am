@@ -1,4 +1,5 @@
 AM_CPPFLAGS = -I$(srcdir)/../../../libk3b/core -I$(srcdir)/../../../libk3b/plugin -I$(srcdir)/../../../libk3bdevice $(all_includes)
+KDE_CXXFLAGS = -D__STDC_CONSTANT_MACROS
 
 kde_module_LTLIBRARIES = libk3bffmpegdecoder.la
 
