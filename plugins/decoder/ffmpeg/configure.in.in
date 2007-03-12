@@ -14,6 +14,8 @@ AC_ARG_WITH(
 #
 have_ffmpeg=no
 if test "$ac_cv_use_ffmpeg" = "yes"; then
+	k3b_cxxflags_save="$CXXFLAGS"
+	CXXFLAGS="$CXXFLAGS -D__STDC_CONSTANT_MACRO"
 	AC_MSG_CHECKING(for ffmpeg >= 0.4.9)
 	AC_LANG_SAVE
 	AC_LANG_CPLUSPLUS
@@ -49,6 +51,7 @@ if test "$ac_cv_use_ffmpeg" = "yes"; then
 	LIBS=$OLD_LIBS
 	have_ffmpeg=$ffmpeg_links
 	AC_MSG_RESULT($have_ffmpeg)
+	CXXFLAGS=$k3b_cxxflags_save
 fi
 AM_CONDITIONAL(include_FFMPEG, [test x$have_ffmpeg = xyes])
 
