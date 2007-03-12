@@ -17,8 +17,10 @@
 
 #include "k3bffmpegwrapper.h"
 
+extern "C" {
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+}
 
 #include <string.h>
 
