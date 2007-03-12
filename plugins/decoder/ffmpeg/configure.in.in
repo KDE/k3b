@@ -18,8 +18,10 @@ if test "$ac_cv_use_ffmpeg" = "yes"; then
 	AC_LANG_SAVE
 	AC_LANG_CPLUSPLUS
 	AC_COMPILE_IFELSE( 
+		extern "C" {
 		#include <ffmpeg/avformat.h>
 		#include <ffmpeg/avcodec.h>
+		}
 
 		int main() {
 		  AVFormatContext* fc = 0;
@@ -31,8 +33,10 @@ if test "$ac_cv_use_ffmpeg" = "yes"; then
 	OLD_LIBS=$LIBS
 	LIBS="-lavformat -lavcodec $LIBS"
 	AC_LINK_IFELSE( 
+		extern "C" {
 		#include <ffmpeg/avformat.h>
 		#include <ffmpeg/avcodec.h>
+		}
 
 		int main() {
 		  AVFormatContext* fc = 0;
