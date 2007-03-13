@@ -90,10 +90,11 @@ void K3bThemeOptionTab::readSettings()
 
   k3bappcore->themeManager()->loadThemes();
 
-  const QPtrList<K3bTheme>& themes = k3bappcore->themeManager()->themes();
-  for( QPtrListIterator<K3bTheme> it( themes ); it.current(); ++it ) {
-    ThemeViewItem* item = new ThemeViewItem( it.current(), m_viewTheme, m_viewTheme->lastItem() );
-    if( it.current() == k3bappcore->themeManager()->currentTheme() )
+  QValueList<K3bTheme*> themes = k3bappcore->themeManager()->themes();
+  for( QValueList<K3bTheme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
+    K3bTheme* theme = *it;
+    ThemeViewItem* item = new ThemeViewItem( theme, m_viewTheme, m_viewTheme->lastItem() );
+    if( theme == k3bappcore->themeManager()->currentTheme() )
       m_viewTheme->setSelected( item, true );
   }
 }

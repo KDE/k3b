@@ -20,6 +20,7 @@
 #include <qscrollview.h>
 #include <qptrlist.h>
 #include <qmap.h>
+#include <qimage.h>
 
 #include <kurl.h>
 #include <kaction.h>
@@ -92,8 +93,12 @@ class K3bWelcomeWidget::Display : public QWidget
   void dropEvent( QDropEvent* event );
   void dragEnterEvent( QDragEnterEvent* event );
 
+ private slots:
+  void slotThemeChanged();
+
  private:
   void repositionButtons();
+  void updateBgPix();
 
   QSimpleRichText* m_header;
   QSimpleRichText* m_infoText;
@@ -109,6 +114,9 @@ class K3bWelcomeWidget::Display : public QWidget
   K3bFlatButton* m_buttonMore;
 
   bool m_infoTextVisible;
+
+  QPixmap m_bgPixmap;
+  QImage m_bgImage;
 
   friend class K3bWelcomeWidget;
 };

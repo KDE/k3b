@@ -114,8 +114,8 @@ void K3bThemedHeader::init()
 void K3bThemedHeader::slotThemeChanged()
 {
   if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    setPaletteBackgroundColor( theme->backgroundColor() );
-    setPaletteForegroundColor( theme->foregroundColor() );
+//     setPaletteBackgroundColor( theme->backgroundColor() );
+//     setPaletteForegroundColor( theme->foregroundColor() );
 
     m_leftLabel->setPaletteBackgroundColor( theme->backgroundColor() );
     m_leftLabel->setPixmap( theme->pixmap( m_leftPix ) );

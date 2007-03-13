@@ -1,0 +1,63 @@
+#
+# Imlib/Mosfet scaling
+#
+AM_PROG_AS
+
+# MMX test duped from kdelibs/kdefx - it should be probably moved to admin/
+dnl -----------------------------------------------------
+dnl IA32 checks
+dnl -----------------------------------------------------
+
+gv_asm_defs=
+case $host_cpu in
+  i*86 )
+  AC_MSG_CHECKING(for assembler support for IA32 extensions)
+ 
+  dnl MMX check
+  AC_TRY_COMPILE(, [ __asm__("pxor %mm0, %mm0") ],
+  [
+    echo $ECHO_N "MMX yes$ECHO_C"
+    AC_DEFINE_UNQUOTED(HAVE_X86_MMX, 1, [Define to 1 if the assembler supports MMX instructions.])
+    gv_asm_defs="$gv_asm_defs -DHAVE_X86_MMX"
+  ], [ echo $ECHO_N "MMX no$ECHO_C" ])
+
+  dnl SSE check
+  AC_TRY_COMPILE(,[ __asm__("xorps %xmm0, %xmm0") ],
+  [
+    echo $ECHO_N ", SSE yes$ECHO_C"
+    AC_DEFINE_UNQUOTED(HAVE_X86_SSE, 1, [Define to 1 if the assembler supports SSE instructions.])
+    gv_asm_defs="$gv_asm_defs -DHAVE_X86_SSE"
+  ], [ echo $ECHO_N ", SSE no$ECHO_C" ])
+
+  dnl SSE2 check
+  AC_TRY_COMPILE(, [ __asm__("xorpd %xmm0, %xmm0") ],
+  [
+    echo $ECHO_N ", SSE2 yes$ECHO_C"
+    AC_DEFINE_UNQUOTED(HAVE_X86_SSE2, 1, [Define to 1 if the assembler supports SSE2 instructions.])
+    gv_asm_defs="$gv_asm_defs -DHAVE_X86_SSE2"
+  ], [ echo $ECHO_N ", SSE2 no$ECHO_C" ])
+ 
+  dnl 3DNOW check
+  AC_TRY_COMPILE(, [ __asm__("femms") ],
+  [
+    echo $ECHO_N ", 3DNOW yes$ECHO_C"
+    AC_DEFINE_UNQUOTED(HAVE_X86_3DNOW, 1, [Define to 1 if the assembler supports 3DNOW instructions.])
+    gv_asm_defs="$gv_asm_defs -DHAVE_X86_3DNOW"
+  ], [ echo $ECHO_N ", 3DNOW no$ECHO_C" ])
+  echo
+  ;;
+  powerpc )
+  AC_MSG_CHECKING(for assembler support for AltiVec instructions)
+  dnl AltiVec check
+  AC_TRY_COMPILE(, [ __asm__("mtspr 256, %0\n\t" "vand %%v0, %%v0, %%v0" : : "r"(-1) ) ],
+  [
+    echo $ECHO_N " yes$ECHO_C"
+    AC_DEFINE_UNQUOTED(HAVE_PPC_ALTIVEC, 1, [Define to 1 if the assembler supports AltiVec instructions.])
+    gv_asm_defs="$gv_asm_defs -DHAVE_PPC_ALTIVEC"
+  ], [ echo $ECHO_N ", AltiVec no$ECHO_C" ])
+  echo
+  ;;
+esac
+
+GV_ASM_DEFS="$gv_asm_defs"
+AC_SUBST(GV_ASM_DEFS)

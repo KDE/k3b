@@ -390,7 +390,9 @@ void K3bApplication::Core::readSettings( KConfig* cnf )
   if( !c )
     c = config();
 
-  m_themeManager->readConfig( config() );
+  K3bVersion configVersion( KConfigGroup( cnf, "General Options" ).readEntry( "config version", "0.1" ) );
+  if( configVersion >= K3bVersion("1.0") )
+    m_themeManager->readConfig( config() );
 }
 
 
@@ -401,6 +403,8 @@ void K3bApplication::Core::saveSettings( KConfig* cnf )
 
   K3bCore::saveSettings( cnf );
   m_themeManager->saveConfig( cnf );
+
+  KConfigGroup( cnf, "General Options" ).writeEntry( "config version", version() );
 }
 
 

@@ -17,7 +17,7 @@
 #define _K3B_THEME_MANAGER_H_
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <qvaluelist.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qcolor.h>
@@ -31,6 +31,8 @@ class KConfigBase;
 class K3bTheme
 {
  public:
+  K3bTheme();
+
   QColor backgroundColor() const;
   QColor foregroundColor() const;
 
@@ -54,12 +56,19 @@ class K3bTheme
     WELCOME_BG        /**< Background pixmap of the welcome window. */
   };
 
+  enum BackgroundMode {
+    BG_TILE,         /**< Keep the pixmap's size and tile the welcome widget */
+    BG_SCALE         /**< Scale the pixmap to fill the welcome widget. */
+  };
+
   const QPixmap& pixmap( PixmapType ) const;
 
   /**
    * \deprecated use pixmap( PixmapType )
    */
   const QPixmap& pixmap( const QString& name ) const;
+
+  BackgroundMode backgroundMode() const;
 
   const QString& name() const { return m_name; }
   const QString& author() const { return m_author; }
@@ -89,6 +98,7 @@ class K3bTheme
   QString m_version;
   QColor m_bgColor;
   QColor m_fgColor;
+  BackgroundMode m_bgMode;
 
   mutable QMap<QString, QPixmap> m_pixmapMap;
 
@@ -106,7 +116,7 @@ class K3bThemeManager : public QObject
   K3bThemeManager( QObject* parent = 0, const char* name = 0 );
   ~K3bThemeManager();
 
-  const QPtrList<K3bTheme>& themes() const;
+  const QValueList<K3bTheme*>& themes() const;
 
   /**
    * This is never null. If no theme could be found an empty dummy theme

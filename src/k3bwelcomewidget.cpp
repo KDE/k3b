@@ -30,6 +30,7 @@
 #include <qmap.h>
 #include <qtooltip.h>
 #include <qcursor.h>
+#include <qimage.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -66,6 +67,10 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
 
   m_buttonMore = new K3bFlatButton( i18n("Further actions..."), this );
   connect( m_buttonMore, SIGNAL(pressed()), parent, SLOT(slotMoreActions()) );
+
+  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+
+  slotThemeChanged();
 }
 
 
@@ -228,6 +233,30 @@ void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
   m_infoText->setWidth( width() - 20 );
   QWidget::resizeEvent(e);
   repositionButtons();
+  if( e->size() != m_bgPixmap.size() )
+    updateBgPix();
+}
+
+
+void K3bWelcomeWidget::Display::slotThemeChanged()
+{
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() )
+    if( theme->backgroundMode() == K3bTheme::BG_SCALE )
+      m_bgImage = theme->pixmap( K3bTheme::WELCOME_BG ).convertToImage();
+
+  updateBgPix();
+  update();
+}
+
+#include "fastscale/scale.h"
+void K3bWelcomeWidget::Display::updateBgPix()
+{
+  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( theme->backgroundMode() == K3bTheme::BG_SCALE )
+      m_bgPixmap.convertFromImage( ImageUtils::scale( m_bgImage, rect().width(), rect().height(), ImageUtils::SMOOTH_FAST ) );
+    else
+      m_bgPixmap = theme->pixmap( K3bTheme::WELCOME_BG );
+  }
 }
 
 
@@ -239,7 +268,7 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
 
     // draw the background including first filling with the bg color for transparent images
     p.fillRect( rect(), theme->backgroundColor() );
-    p.drawTiledPixmap( rect(), theme->pixmap( K3bTheme::WELCOME_BG ) );
+    p.drawTiledPixmap( rect(), m_bgPixmap );
 
     // rect around the header
     QRect rect( 10, 10, QMAX( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
@@ -294,7 +323,6 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
 
   connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
 
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), main, SLOT(update()) );
   connect( kapp, SIGNAL(appearanceChanged()), main, SLOT(update()) );
 }
 

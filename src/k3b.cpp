@@ -584,7 +584,6 @@ void K3bMainWindow::saveOptions()
 
   KConfigGroup grp( m_config, "General Options" );
   grp.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
-  grp.writeEntry( "config version", k3bcore->version() );
 }
 
 

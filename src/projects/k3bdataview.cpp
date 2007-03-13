@@ -91,6 +91,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   toolBox()->addButton( actionClearSession );
   toolBox()->addButton( actionEditBootImages );
   toolBox()->addSeparator();
+  toolBox()->addButton( m_dataFileView->actionCollection()->action("parent_dir") );
+  toolBox()->addSeparator();
 
   addPluginButtons( K3bProjectPlugin::DATA_CD );
 

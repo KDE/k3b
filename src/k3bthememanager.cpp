@@ -15,6 +15,8 @@
 
 #include "k3bthememanager.h"
 
+#include <k3bversion.h>
+
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <ksimpleconfig.h>
@@ -26,7 +28,13 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstringlist.h>
+#include <qvaluelist.h>
 
+
+K3bTheme::K3bTheme()
+  : m_bgMode(BG_TILE)
+{
+}
 
 
 QColor K3bTheme::backgroundColor() const
@@ -135,6 +143,12 @@ QString K3bTheme::filenameForPixmapType( PixmapType t )
 }
 
 
+K3bTheme::BackgroundMode K3bTheme::backgroundMode() const
+{
+  return m_bgMode;
+}
+
+
 
 class K3bThemeManager::Private
 {
@@ -143,7 +157,7 @@ public:
     : currentTheme(&emptyTheme) {
   }
 
-  QPtrList<K3bTheme> themes;
+  QValueList<K3bTheme*> themes;
   K3bTheme* currentTheme;
   QString currentThemeName;
 
@@ -166,7 +180,7 @@ K3bThemeManager::~K3bThemeManager()
 }
 
 
-const QPtrList<K3bTheme>& K3bThemeManager::themes() const
+const QValueList<K3bTheme*>& K3bThemeManager::themes() const
 {
   return d->themes;
 }
@@ -180,7 +194,16 @@ K3bTheme* K3bThemeManager::currentTheme() const
 
 void K3bThemeManager::readConfig( KConfigBase* c )
 {
-  setCurrentTheme( KConfigGroup( c, "General Options" ).readEntry( "current theme", "crystal" ) );
+  KConfigGroup generalOptions( c, "General Options" );
+
+  // allow to override the default theme by packaging a default config file
+  QString defaultTheme = generalOptions.readEntry( "default theme", "quant" );
+
+  K3bVersion configVersion( generalOptions.readEntry( "config version", "0.1" ) );
+  if( configVersion >= K3bVersion("1.0") )
+    setCurrentTheme( KConfigGroup( c, "General Options" ).readEntry( "current theme", defaultTheme ) );
+  else
+    setCurrentTheme( defaultTheme );
 }
 
 
@@ -203,7 +226,7 @@ void K3bThemeManager::setCurrentTheme( const QString& name )
 void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 {
   if( !theme )
-    theme = findTheme( "crystal" ); // default
+    theme = d->themes.first();
 
   if( theme ) {
     if( theme != d->currentTheme ) {
@@ -219,9 +242,9 @@ void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 
 K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 {
-  for( QPtrListIterator<K3bTheme> it( d->themes ); it.current(); ++it )
-    if( it.current()->name() == name )
-      return it.current();
+  for( QValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+    if( (*it)->name() == name )
+      return *it;
   return 0;
 }
 
@@ -229,7 +252,8 @@ K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 void K3bThemeManager::loadThemes()
 {
   // first we cleanup the loaded themes
-  d->themes.setAutoDelete(true);
+  for( QValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+    delete *it;
   d->themes.clear();
 
   QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/pics" );
@@ -290,6 +314,7 @@ void K3bThemeManager::loadTheme( const QString& name )
     t->m_version = cfg.readEntry( "Version" );
     t->m_bgColor = cfg.readColorEntry( "Backgroundcolor" );
     t->m_fgColor = cfg.readColorEntry( "Foregroundcolor" );
+    t->m_bgMode = ( cfg.readEntry( "BackgroundMode" ) == "Scaled" ? K3bTheme::BG_SCALE : K3bTheme::BG_TILE );
 
     d->themes.append( t );
   }
