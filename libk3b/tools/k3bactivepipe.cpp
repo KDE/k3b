@@ -62,7 +62,7 @@ public:
 	}
       }
     }
-    kdDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")" << endl;
+    //    kdDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")" << endl;
     close( closeWhenDone );
   }
 
