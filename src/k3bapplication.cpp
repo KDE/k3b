@@ -105,10 +105,10 @@ void K3bApplication::init()
 
       splash = new K3bSplash( 0 );
       splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
-      
+
       // kill the splash after 5 seconds
       QTimer::singleShot( 5000, splash, SLOT(close()) );
-      
+
       splash->show();
       qApp->processEvents();
     }
@@ -131,7 +131,7 @@ void K3bApplication::init()
   m_core->interface()->setMainWindow( m_mainWindow );
 
   if( isRestored() ) {
-    // we only have one single mainwindow to restore  
+    // we only have one single mainwindow to restore
     m_mainWindow->restore(1);
   }
   else {
@@ -390,9 +390,7 @@ void K3bApplication::Core::readSettings( KConfig* cnf )
   if( !c )
     c = config();
 
-  K3bVersion configVersion( KConfigGroup( cnf, "General Options" ).readEntry( "config version", "0.1" ) );
-  if( configVersion >= K3bVersion("1.0") )
-    m_themeManager->readConfig( config() );
+  m_themeManager->readConfig( config() );
 }
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -64,7 +64,7 @@ const QPixmap& K3bTheme::pixmap( const QString& name ) const
   // try loading the image
   if( QFile::exists( m_path + name ) )
     return *m_pixmapMap.insert( name, QPixmap( m_path + name ) );
-    
+
   kdDebug() << "(K3bTheme) " << m_name << ": could not load image " << name << endl;
 
   return m_emptyPixmap;
@@ -200,8 +200,8 @@ void K3bThemeManager::readConfig( KConfigBase* c )
   QString defaultTheme = generalOptions.readEntry( "default theme", "quant" );
 
   K3bVersion configVersion( generalOptions.readEntry( "config version", "0.1" ) );
-  if( configVersion >= K3bVersion("1.0") )
-    setCurrentTheme( KConfigGroup( c, "General Options" ).readEntry( "current theme", defaultTheme ) );
+  if( configVersion >= K3bVersion("0.98") )
+    setCurrentTheme( generalOptions.readEntry( "current theme", defaultTheme ) );
   else
     setCurrentTheme( defaultTheme );
 }
@@ -232,7 +232,7 @@ void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
     if( theme != d->currentTheme ) {
       d->currentTheme = theme;
       d->currentThemeName = theme->name();
-      
+
       emit themeChanged();
       emit themeChanged( theme );
     }
