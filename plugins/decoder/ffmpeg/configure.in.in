@@ -15,7 +15,7 @@ AC_ARG_WITH(
 have_ffmpeg=no
 if test "$ac_cv_use_ffmpeg" = "yes"; then
 	k3b_cxxflags_save="$CXXFLAGS"
-	CXXFLAGS="$CXXFLAGS -D__STDC_CONSTANT_MACRO"
+	CXXFLAGS="$CXXFLAGS -D__STDC_CONSTANT_MACROS"
 	AC_MSG_CHECKING(for ffmpeg >= 0.4.9)
 	AC_LANG_SAVE
 	AC_LANG_CPLUSPLUS
