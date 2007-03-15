@@ -123,6 +123,12 @@ int main( int argc, char* argv[] )
   aboutData.addCredit("Christoph Burger-Scheidlin",
 		      I18N_NOOP("For his neverending help cleaning out the K3b bug database."),
 		      "andersin@freenet.de" );
+  aboutData.addCredit( "Robert Wadley",
+                       I18N_NOOP( "Rob created a great theme and came up with the idea for transparent themes." ),
+                       "rob@robntina.fastmail.us" );
+  aboutData.addCredit( "Dmitry Novikov",
+                       I18N_NOOP( "For the amazing K3b 1.0 theme." ),
+                       "quant@trktvs.ru" );
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
@@ -131,9 +137,9 @@ int main( int argc, char* argv[] )
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
-	kdDebug() << "Unable to set to language " << args->getOption("lang") 
+	kdDebug() << "Unable to set to language " << args->getOption("lang")
 		  << " current is: " << KGlobal::locale()->language() << endl;
-  
+
     K3bApplication app;
 
     // we need a running app for the init method
