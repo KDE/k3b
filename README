@@ -1,26 +1,29 @@
-K3b Version 0.12
+K3b Version 1.0
 
 Thanx for downloading K3b - The CD Kreator
 
 These are the features so far:
  - the most userfriendly interface ever ;-)
-   - themable (for now with Ayo's original theme and a crystal theme from Everaldo)
+   - themable
+
+ - Media-centric user interface:
+   - Select the medium to use for burning instead of the device
+   - K3b always knows about all optical devices and inserted media and adjusts the UI accordingly
 
  - writing audio-cds
    - On-the-fly decoding of many audio formats through plugin struxture
      (decoding plugins for mp3, ogg vorbis, flac, wave, musepack, wma, aiff, and others)
    - CD-Text support
-   - Metadata support, fill CD-Text from metadata
+   - Metadata support, fill CD-Text from metadata or via Internet queries (CDDB + Musicbrainz)
    - little gimmick: hide the first track (so that you have to search back from the 
      beginning of the cd to find it)
    - volume level normalization (only when writing with an image)
    - multiple sources for one track possible (merging of tracks, splitting of tracks, 
      adding silence of arbitrary length)
-   - Query Cddb servers for Metadata
-   - Query Musicbrainz for Metadata
    - integrated "preview" player
+   - Directly add audio tracks from other CDs and let K3b take care of the rest.
    
- - writing ISO-cds
+ - writing ISO9660-CDs and DVDs
    - Joliet/Rockridge support
    - Udf filestructures (no pure Udf so far)
    - create image/write image
@@ -34,7 +37,7 @@ These are the features so far:
    - multisession support (including importing old sessions and overwriting files from old sessions)
      Automagically multisession handling: start, continue, or finish multisession CDs and DVDs based on 
      the size of the project and the remaining capacity on the media.
-   - El Torito bootable CD support
+   - El Torito bootable CD/DVD support
 
  - writing Video CDs
    - VCD 1.1, 2.0, SVCD
@@ -71,14 +74,12 @@ These are the features so far:
    - CD-TEXT support
 
  - DVD ripping with the transcode tools
-
- - DivX/XviD encoding
-
- - K3b checks if the user inserted an empty disk
+   - Support for automatic clipping
+   - DivX/XviD encoding
 
  - Retrieving CD/DVD info and toc
 
- - Support for ATAPI drives without SCSI-emulation
+ - Powerful default and automatic settings
 
  
 See INSTALL for further information

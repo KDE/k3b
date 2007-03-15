@@ -1,8 +1,8 @@
 Begin3
 Title:          K3b 
-Version:        0.12
+Version:        1.0
 Entered-date:   
-Description:    CD writing software for KDE 3
+Description:    CD writing software for KDE 3.2 and above
 Keywords:       CD-Writing, Ripping, CD-Audio, CDDA
 Author:         Sebastian Trueg <trueg@k3b.org> 
 Maintained-by:  Sebastian Trueg <trueg@k3b.org> 
@@ -10,5 +10,5 @@ Primary-site:
 Home-page:      http://www.k3b.org
 Original-site:  
 Platforms:       Linux
-Copying-policy: GNU Public License
+Copying-policy:  GNU Public License
 End
