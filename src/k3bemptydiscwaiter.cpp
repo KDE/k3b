@@ -87,7 +87,7 @@ public:
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent, const char* name )
   : KDialogBase( KDialogBase::Plain, i18n("Waiting for Disk"),
 		 KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3,
-		 KDialogBase::Cancel, parent, name, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
+		 KDialogBase::User3, parent, name, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
 {
   d = new Private();
   d->device = device;
@@ -253,7 +253,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     d->mediumChanged++;
     return;
   }
-  
+
   d->blockMediaChange = true;
 
   KConfig* c = k3bcore->config();
@@ -306,13 +306,13 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	else {
 	  // empty - preformat without asking
 	  prepareErasingDialog();
-	    
+
 	  K3bDvdFormattingJob job( this );
 	  job.setDevice( d->device );
 	  job.setQuickFormat( true );
 	  job.setForce( false );
 	  job.setForceNoEject( true );
-	    
+
 	  d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
 	  connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
 	  connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
@@ -400,11 +400,11 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
       if( d->wantedMediaState == K3bDevice::STATE_EMPTY ) {
 
 	kdDebug() << "(K3bEmptyDiscWaiter) ------ DVD-RW restricted overwrite." << endl;
-	  
+
 	// check if the media contains a filesystem
 	K3bIso9660 isoF( d->device );
 	bool hasIso = isoF.open();
-	  
+
 	if( formatWithoutAsking ||
 	    !hasIso ||
 	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
@@ -511,7 +511,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     }
   } // --- DVD-RW ------
 
-  
+
     // /////////////////////////////////////////////////////////////
     //
     // CD handling (and DVD-R and DVD+R)
@@ -522,7 +522,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
   else if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
 	   (d->wantedMediaState & medium.diskInfo().diskState()) )
     finishWaiting( medium.diskInfo().mediaType() );
-  
+
   else if( (medium.diskInfo().mediaType() != K3bDevice::MEDIA_UNKNOWN) &&
 	   (d->wantedMediaType & medium.diskInfo().mediaType()) &&
 	   (d->wantedMediaState & medium.diskInfo().diskState()) )
@@ -543,8 +543,8 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	KMessageBox::questionYesNo( parentWidgetToUse(),
 				    i18n("Found rewritable media in %1 - %2. "
 					 "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
-				    i18n("Found Rewritable Disk"), 
-				    KGuiItem(i18n("&Erase"), "cdrwblank"), 
+				    i18n("Found Rewritable Disk"),
+				    KGuiItem(i18n("&Erase"), "cdrwblank"),
 				    KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {
 
 
@@ -744,9 +744,9 @@ bool K3bEmptyDiscWaiter::questionYesNo( const QString& text,
 					const QString& yesText,
 					const QString& noText )
 {
-  return ( KMessageBox::questionYesNo( parentWidgetToUse(), 
-				       text, 
-				       caption, 
+  return ( KMessageBox::questionYesNo( parentWidgetToUse(),
+				       text,
+				       caption,
 				       yesText.isEmpty() ? KStdGuiItem::yes() : KGuiItem(yesText),
 				       noText.isEmpty() ? KStdGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
 }
