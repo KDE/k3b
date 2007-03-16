@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -59,18 +59,18 @@ bool K3bDevice::Device::getFeature( unsigned char** data, unsigned int& dataLen,
 
   //
   // Some buggy firmwares do not return the size of the available data
-  // but the returned data or something invalid altogether. 
+  // but the returned data or something invalid altogether.
   // So we simply use the maximum possible value to be on the safe side
   // with these buggy drives.
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
   if( (dataLen-8) % 8 || dataLen <= 8 )
     dataLen = 0xFFFF;
-  
+
   // again with real length
   *data = new unsigned char[dataLen];
   ::memset( *data, 0, dataLen );
-  
+
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
@@ -180,7 +180,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
     descLen = 8;
     break;
   case 0x5:
-    descLen = 8; // FIXME: ?? 
+    descLen = 8; // FIXME: ??
     break;
   }
 
@@ -203,7 +203,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
     dataLen = from4Byte( header ) + 4;
 
     // At least one Panasonic drive returns gigantic changing numbers for the data length
-    // which makes K3b crash below when *data cannot be allocated. That's why we cut the 
+    // which makes K3b crash below when *data cannot be allocated. That's why we cut the
     // length here.
     // FIXME: 2048 is a proper upper boundary for the write speed but not for all
     //        return types. "Defect Status Data" for example might return way more data.
@@ -227,9 +227,9 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
 
   *data = new unsigned char[dataLen];
   ::memset( *data, 0, dataLen );
-  
+
   unsigned int numDesc = (dataLen-8)/descLen;
- 
+
   cmd[8] = numDesc>>8;
   cmd[9] = numDesc;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
@@ -324,11 +324,11 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
     else
       dataLen = 36;
   }
-  
+
   // again with real length
   *data = new unsigned char[dataLen];
   ::memset( *data, 0, dataLen );
-  
+
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
@@ -613,7 +613,13 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
     dataLen = QMIN( dataLen, from2Byte( *data ) + 2u );
-    return true;
+    if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
+        // useless length
+        delete [] *data;
+        return false;
+    }
+    else
+        return true;
   }
   else {
     k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
@@ -652,14 +658,14 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, unsigned int& dat
   //
   if( (dataLen-8) % 4 || dataLen <= 8 )
     dataLen = 0xFFFF;
-  
+
   k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS "
 	    << (int)header[5] << " slots." << endl;
-  
+
   // again with real length
   *data = new unsigned char[dataLen];
   ::memset( *data, 0, dataLen );
-  
+
   cmd[8] = dataLen>>8;
   cmd[9] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
@@ -708,7 +714,7 @@ bool K3bDevice::Device::modeSense( unsigned char** pageData, unsigned int& pageL
   // again with real length
   *pageData = new unsigned char[pageLen];
   ::memset( *pageData, 0, pageLen );
-  
+
   cmd[7] = pageLen>>8;
   cmd[8] = pageLen;
   if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 ) {
@@ -834,18 +840,18 @@ bool K3bDevice::Device::readDiscInformation( unsigned char** data, unsigned int&
   if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
     dataLen = from2Byte( header ) + 2;
   else
-    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() 
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
 	       << ": READ DISC INFORMATION length det failed" << endl;
 
-  if( dataLen <= 32 ) {
-    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() 
+  if( dataLen < 32 ) {
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
 	       << ": Device reports bogus disc information length of " << dataLen << endl;
     dataLen = 32;
   }
 
   *data = new unsigned char[dataLen];
   ::memset( *data, 0, dataLen );
-  
+
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
@@ -862,7 +868,7 @@ bool K3bDevice::Device::readDiscInformation( unsigned char** data, unsigned int&
 }
 
 
-bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& dataLen, 
+bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& dataLen,
 					  unsigned int format,
 					  unsigned int layer,
 					  unsigned long adress,
@@ -872,7 +878,7 @@ bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& da
 }
 
 
-bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& dataLen, 
+bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& dataLen,
 					   unsigned int mediaType,
 					   unsigned int format,
 					   unsigned int layer,
