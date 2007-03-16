@@ -172,7 +172,7 @@ void K3bDiskInfoView::reloadMedium()
   else {
     if( medium().diskInfo().empty() ) {
       setRightPixmap( K3bTheme::MEDIA_EMPTY );
-    } 
+    }
     else {
       switch( medium().toc().contentType() ) {
       case K3bDevice::AUDIO:
@@ -212,7 +212,7 @@ void K3bDiskInfoView::reloadMedium()
 
       if( m_infoView->childCount() )
 	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
-      
+
       KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
 
       // create header item
@@ -246,8 +246,8 @@ void K3bDiskInfoView::reloadMedium()
 	if( medium().diskInfo().numSessions() > 1 && track.session() != lastSession ) {
 	  lastSession = track.session();
 	  trackItem->setOpen(true);
-	  trackItem = new HeaderViewItem( trackHeaderItem, 
-					  m_infoView->lastItem()->parent(), 
+	  trackItem = new HeaderViewItem( trackHeaderItem,
+					  m_infoView->lastItem()->parent(),
 					  i18n("Session %1").arg(lastSession) );
 	}
 
@@ -272,10 +272,10 @@ void K3bDiskInfoView::reloadMedium()
         item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, ' ' )).arg(text) );
 	item->setText( 1, QString( "%1/%2" )
 		       .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
-		       .arg( track.type() == K3bTrack::AUDIO 
+		       .arg( track.type() == K3bTrack::AUDIO
 			    ? ( track.preEmphasis() ?  i18n("preemp") : i18n("no preemp") )
 			    : ( track.recordedIncremental() ?  i18n("incremental") : i18n("uninterrupted") ) ) );
-        item->setText( 2, 
+        item->setText( 2,
 		       QString("%1 - %2")
 		       .arg(track.firstSector().lba())
 		       .arg(track.lastSector().lba()) );
@@ -300,8 +300,8 @@ void K3bDiskInfoView::reloadMedium()
       if( m_infoView->childCount() )
 	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-      KListViewItem* cdTextHeaderItem = new HeaderViewItem( m_infoView, 
-							    m_infoView->lastChild(), 
+      KListViewItem* cdTextHeaderItem = new HeaderViewItem( m_infoView,
+							    m_infoView->lastChild(),
 							    i18n("CD-TEXT (excerpt)") );
 
       // create header item
@@ -316,7 +316,7 @@ void K3bDiskInfoView::reloadMedium()
       item->setText( 1, medium().cdText().title() );
       item->setText( 2, medium().cdText().songwriter() );
       item->setText( 3, medium().cdText().composer() );
-      
+
       int index = 1;
       for( unsigned int i = 0; i < medium().cdText().count(); ++i ) {
         item = new KListViewItem( cdTextHeaderItem, item );
@@ -340,9 +340,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 
   KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Medium") );
   QString typeStr;
-  if( info.currentProfile() != K3bDevice::MEDIA_UNKNOWN )
-    typeStr = K3bDevice::mediaTypeString( info.currentProfile() );
-  else if( info.mediaType() != K3bDevice::MEDIA_UNKNOWN )
+  if( info.mediaType() != K3bDevice::MEDIA_UNKNOWN )
     typeStr = K3bDevice::mediaTypeString( info.mediaType() );
   else
     typeStr = i18n("Unknown (probably CD-ROM)");
@@ -353,7 +351,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Media ID:"),
 				   !info.mediaId().isEmpty() ? QString::fromLatin1( info.mediaId() ) : i18n("unknown") );
- 
+
 
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Capacity:"),
@@ -371,7 +369,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 				   i18n("Remaining:"),
 				   i18n("%1 min").arg( info.remainingSize().toString() ),
 				   KIO::convertSize(info.remainingSize().mode1Bytes()) );
-  
+
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Rewritable:"),
 				 info.rewritable() ? i18n("yes") : i18n("no") );
@@ -388,7 +386,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Layers:"),
 				   QString::number( info.numLayers() ) );
-    
+
   if( info.mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW ) {
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Background Format:") );
@@ -407,7 +405,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
       break;
     }
   }
-    
+
   atipChild = new KListViewItem( atipItem, atipChild,
 				 i18n("Sessions:"),
 				 QString::number( info.numSessions() ) );
@@ -425,7 +423,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 	  s.append( "\n" );
 	  atipChild->setMultiLinesEnabled( true );
 	}
-	
+
 	if( info.isDvdMedia() )
 	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
 	else
@@ -441,18 +439,18 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 
 void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& iso )
 {
-  KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(), 
+  KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(),
 						   i18n("ISO9660 Filesystem Info") );
   KListViewItem* iso9660Child = 0;
 
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("System Id:"),
-				    iso.systemId.isEmpty() 
+				    iso.systemId.isEmpty()
 				    ? QString("-")
 				    : iso.systemId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Id:"),
-				    iso.volumeId.isEmpty() 
+				    iso.volumeId.isEmpty()
 				    ? QString("-")
 				    : iso.volumeId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
@@ -463,17 +461,17 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescr
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Publisher Id:"),
 				    iso.publisherId.isEmpty()
-				    ? QString("-") 
+				    ? QString("-")
 				    : iso.publisherId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Preparer Id:"),
 				    iso.preparerId.isEmpty()
-				    ? QString("-") 
+				    ? QString("-")
 				    : iso.preparerId );
   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 				    i18n("Application Id:"),
 				    iso.applicationId.isEmpty()
-				    ? QString("-") 
+				    ? QString("-")
 				    : iso.applicationId );
 //   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
 // 				    i18n("Volume Size:"),
