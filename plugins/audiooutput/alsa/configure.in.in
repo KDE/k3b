@@ -5,8 +5,6 @@ AC_DEFUN([KDE_CHECK_ALSA],
   PKG_CHECK_MODULES([ALSA], [alsa >= 0.9], [have_alsa=yes], [have_alsa=no])
   AC_SUBST([ALSA_CFLAGS])
   AC_SUBST([ALSA_LIBS])
-
-  AM_CONDITIONAL(include_ALSA, [test "x$have_alsa" = "xyes"])
 ])
 
 AC_ARG_WITH(alsa,
@@ -22,5 +20,7 @@ if test "x$with_alsa" != xno; then
     AC_MSG_FAILURE([--with-alsa was given, but test for ALSA failed])
   fi
 fi
+
+AM_CONDITIONAL(include_ALSA, [test "x$have_alsa" = "xyes"])
 
 dnl --------- ALSA CHECK END ---------------
