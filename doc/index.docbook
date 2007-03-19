@@ -1,0 +1,340 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+<!ENTITY k3b "<application>K3b</application>">
+<!ENTITY cdrdao "<application>cdrdao</application>">
+<!ENTITY dvdtools "<application>DVD+RW-Tools</application>">
+<!ENTITY mkisofs "<application>mkisofs</application>">
+<!ENTITY cdrecord "<application>cdrecord</application>">
+<!ENTITY k3bsetup "<application>K3bSetup</application>">
+<!ENTITY k3b-commands SYSTEM "commands.docbook">
+<!ENTITY k3b-audiocd-howto SYSTEM "audiocd-howto.docbook">
+<!ENTITY k3b-cdcopy-howto SYSTEM "cdcopy-howto.docbook">
+<!ENTITY k3b-dcop SYSTEM "dcop.docbook">
+  <!ENTITY kappname "&k3b;">
+  <!ENTITY package "kdeextragear-1">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &k3b; Handbook</title>
+
+<authorgroup>
+  <author>
+    <firstname>Carsten</firstname>
+    <surname>Niehaus</surname>
+  </author>
+  <author>
+    <firstname>Jakob</firstname>
+    <surname>Petsovits</surname>
+  </author>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+</authorgroup>
+
+
+<copyright>
+  <year>2003-2004</year>
+<holder>Carsten Niehaus</holder>
+</copyright>
+<!-- Translators: put here the copyright notice of the translation -->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2005-06-21</date>
+<releaseinfo>0.03.00</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+  &k3b; is a CD and DVD burning application for &kde; with a comfortable user interface.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kdeextragear</keyword>
+<keyword>cdrecord</keyword>
+<keyword>DVD</keyword>
+<keyword>CD</keyword>
+<keyword>burning</keyword>
+<keyword>ripping</keyword>
+<keyword>iso</keyword>
+<keyword>K3b</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>
+  &k3b; is a CD and DVD burning application for Linux systems
+  optimized for &kde;. It provides a comfortable user interface
+  to perform most CD/DVD burning tasks like creating an Audio CD
+  from a set of audio files or copying a CD.
+  While the experienced user can take influence in all steps
+  of the burning process, the beginner may find comfort
+  in the automatic settings and the reasonable &k3b; defaults
+  which allow a quick start. The actual burning in K3b is done
+  by the command line utilities
+  <application>cdrecord</application>,
+  <application>cdrdao</application>, and
+  <application>growisofs</application>.
+</para>
+</chapter>
+
+<!-- the GUI comands -->
+&k3b-commands;
+
+<chapter id="howtos">
+  <title>HOWTOs for a quickstart to &k3b;</title>
+
+  &k3b-audiocd-howto;
+  &k3b-cdcopy-howto;
+
+</chapter>
+
+<!-- now the desciption of the DCOP-Interface -->
+&k3b-dcop;
+
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<!-- (OPTIONAL but recommended) This chapter should include all of the silly
+(and not-so-silly) newbie questions that fill up your mailbox. This chapter
+should be reserved for BRIEF questions and answers! If one question uses more
+than a page or so then it should probably be part of the
+"Using this Application" chapter instead. You should use links to
+cross-reference questions to the parts of your documentation that answer them.
+This is also a great place to provide pointers to other FAQ's if your users
+must do some complicated configuration on other programs in order for your
+application work. -->
+
+&reporting.bugs;
+&updating.documentation;
+
+<qandaset id="faqlist">
+  <qandaentry>
+    <question>
+      <para>
+        Compiling &k3b; fails with undefined type "struct KComboBox".
+      </para>
+    </question>
+    <answer>
+      <para>
+        The QTDesigner tool <application>uic</application> is not able to find the kde widget plugins.
+        To solve this run <application>qtconfig</application> and add
+        <filename class="directory">$<envar>KDEDIR</envar>/lib/kde3/plugins</filename> to the
+        plugin search path (replace $<envar>KDEDIR</envar> with your kde base dir).
+      </para>
+    </answer>
+  </qandaentry>
+  <!-- This is a template for a new Q&A-set
+  <qandaentry>
+    <question>
+      <para>
+        QUESTION
+      </para>
+    </question>
+    <answer>
+      <para>
+         ANSWER
+      </para>
+    </answer>
+  </qandaentry>
+  -->
+</qandaset>
+</chapter>
+
+<chapter id="credits">
+
+<!-- Include credits for the programmers, documentation writers, and
+contributors here. The license for your software should then be included below
+the credits with a reference to the appropriate license file included in the KDE
+distribution. -->
+
+<title>Credits and License</title>
+
+<para>
+&k3b;
+</para>
+<para>
+  Program copyright 1999-2005 Sebastian Trueg <email>trueg@k3b.org</email>
+  and the K3b team
+</para>
+<para>
+Contributors:
+<itemizedlist>
+  <listitem><para>Thomas Froescher <email>tfroescher@k3b.org</email></para>
+</listitem>
+<listitem><para>Christian Kvasny <email>chris@k3b.org</email></para>
+</listitem>
+<listitem><para>Klaus-Dieter Krannich <email>kd@k3b.org</email></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>
+  Documentation Copyright &copy; 2003-2004 Carsten Niehaus <email>cniehaus@kde.org</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove -->
+
+<!-- Determine which license your application is licensed under,
+     and delete all the remaining licenses below:
+
+     (NOTE:  All documentation are licensed under the FDL,
+     regardless of what license the application uses) -->
+
+&underGPL;        	 <!-- GPL License -->
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kapp">
+<title>How to obtain &k3b;</title>
+
+<!-- This first entity contains boiler plate for applications that are
+part of KDE CVS.  You should remove it if you are releasing your
+application -->
+<!-- &install.intro.documentation; ok, removed -->
+
+<para>
+  The main information site for &k3b; is
+  <ulink url="http://www.k3b.org/">www.k3b.org</ulink>.
+  For the most current version of &k3b;, feedback and
+  community help as well as &k3b; news and other information,
+  this is the place to go.
+</para>
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+  In order to successfully use &k3b;, you need &kde; &gt;= 3.1 and &Qt; &gt;= 3.1.
+</para>
+<para>
+  &cdrdao;: Records audio or data CD-Rs in disk-at-once (DAO)
+  mode based on a textual description of the CD contents (toc-file).
+</para>
+<para>
+  &cdrecord;/&mkisofs;: Records any kind of CD-Rs. &cdrecord; contains all of &cdrdao;'s features and extended functionality and therefore is &k3b;'s standard choice for CD burning. In some cases, &cdrdao; reaches better audio CD burning quality though.
+</para>
+<para>
+  &dvdtools;: The &dvdtools; are used to burn and format DVD+R(W) and DVD-R(W) media.
+</para>
+
+<para>
+  Optionally &k3b; can make use of all these libraries:
+</para>
+
+<para>
+cdparanoia: A Compact Disc Digital Audio (CDDA) extraction tool,
+commonly known on the net as a 'ripper'.
+</para>
+
+<para>
+Ogg Vorbis library: Ogg Vorbis is a completely open, patent-free,
+professional audio encoding and streaming technology with all the benefits
+of Open Source, and in direct competition with the MP3 format.
+Used by the Ogg Vorbis Decoder and Encoder plugins.
+</para>
+
+<para>
+MAD (MPEG Audio Decoder) Library: A high-quality MPEG audio decoder,
+supporting the MPEG-1, MPEG-2 and MPEG 2.5 formats. All three audio
+layers Layer I, Layer II, and Layer III (i.e. MP3) are fully implemented.
+Used by the MP3 Decoder plugin.
+</para>
+
+<para>
+LAME: A highly evolved MP3 encoder, with quality and speed able to rival
+state of the art commercial encoders. Used by the MP3 Encoder plugin.
+</para>
+
+<para>
+FLAC: A free, open source codec for lossless audio compression and
+decompression. Used by the FLAC Decoder plugin and the
+External Audio Encoder plugin, so you can read and write FLAC files.
+</para>
+
+<para>
+Libsndfile, FFmpeg, FLAC, Musepack decoders: Other libraries for processing a
+broad range of audio file formats. For example, with FFmpeg it is possible to
+decode WMA files in order to burn them onto audio CDs.
+Used by the respective plugins.
+</para>
+
+<para>
+SoX: A utility that can convert between various audio file formats.
+Used by the SoX Audio Encoder plugin.
+</para>
+
+<para>
+transcode: A Linux text-console utility for video stream processing.
+You need this if you want to rip DVD video.
+</para>
+
+<para>
+VCDImager: A full-featured mastering suite for authoring,
+disassembling and analyzing Video CDs and Super Video CDs.
+</para>
+
+<para>
+Normalize: A tool for adjusting the volume of audio files to a standard level.
+This is useful for things like creating mixed CDs and MP3 collections, where
+different recording levels on different albums can cause the volume to vary
+greatly from song to song.
+</para>
+
+<para>
+eMovix: A tiny Linux distribution that is burned on CD together with video
+files. eMovix contains all the software to boot from a CD and automatically
+play every video file localized in the CD root.
+</para>
+
+<!-- For a list of updates, you may refer to the application web site
+or the ChangeLog file, or ... -->
+<para>
+You can find a list of changes to &k3b; at <ulink
+url="http://www.k3b.org">http://www.k3b.org</ulink>.
+</para>
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<!-- This entity contains the boilerplate text for standard -->
+<!-- compilation instructions.  If your application requires any -->
+<!-- special handling, remove it, and replace with your own text. -->
+
+&install.compile.documentation;
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: xml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab 
+-->
