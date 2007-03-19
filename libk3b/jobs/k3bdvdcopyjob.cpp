@@ -44,7 +44,7 @@
 class K3bDvdCopyJob::Private
 {
 public:
-  Private() 
+  Private()
     : doneCopies(0),
       running(false),
       canceled(false),
@@ -118,7 +118,7 @@ void K3bDvdCopyJob::start()
 
   emit newTask( i18n("Checking Source Medium") );
 
-  if( m_onTheFly && 
+  if( m_onTheFly &&
       k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
     m_onTheFly = false;
     emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.")
@@ -213,7 +213,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     case K3bDevice::MEDIA_DVD_R_DL_SEQ:
     case K3bDevice::MEDIA_DVD_R_DL_JUMP:
       if( !m_onlyCreateImage ) {
-	if( dh->diskInfo().numLayers() > 1 && 
+	if( dh->diskInfo().numLayers() > 1 &&
 	    dh->diskInfo().size().mode1Bytes() > 4700372992LL ) {
 	  if( !(m_writerDevice->type() & (K3bDevice::DEVICE_DVD_R_DL|K3bDevice::DEVICE_DVD_PLUS_R_DL)) ) {
 	    emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), ERROR );
@@ -222,7 +222,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	    return;
 	  }
 	  // FIXME: check for growisofs 5.22 (or whatever version is needed) for DVD-R DL
-	  else if( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+	  else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
 		   k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
 	    emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), ERROR );
 	    d->running = false;
@@ -248,7 +248,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       // writable space in DAO mode
       // with version >= 5.15 growisofs supports specifying the size of the track
       if( m_writingMode != K3b::DAO || !m_onTheFly || m_onlyCreateImage ||
-	  ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+	  ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
 	    k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) ) ) {
 	d->lastSector = dh->toc().lastSector();
 	break;
@@ -264,7 +264,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
 	K3bIso9660 isoF( m_readerDevice, 0 );
 	if( isoF.open() ) {
-	  d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL;
+	  d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL - 1;
 	}
 	else {
 	  emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
@@ -294,7 +294,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       // Check the image path
       //
       QFileInfo fi( m_imagePath );
-      if( !fi.isFile() || 
+      if( !fi.isFile() ||
 	  questionYesNo( i18n("Do you want to overwrite %1?").arg(m_imagePath),
 			 i18n("File Exists") ) ) {
 	if( fi.isDir() )
@@ -404,7 +404,7 @@ void K3bDvdCopyJob::prepareReader()
     connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
     connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( d->dataTrackReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+    connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
 
@@ -415,7 +415,7 @@ void K3bDvdCopyJob::prepareReader()
 
   if( m_onTheFly && !m_onlyCreateImage )
     d->inPipe.writeToFd( d->writerJob->fd(), true );
-  else 
+  else
     d->inPipe.writeToIODevice( &d->imageFile );
 
   d->inPipe.open( true );
@@ -440,7 +440,7 @@ void K3bDvdCopyJob::prepareWriter()
   connect( d->writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
   //  connect( d->writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
   connect( d->writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-  connect( d->writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( d->writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   // these do only make sense with DVD-R(W)
@@ -448,7 +448,7 @@ void K3bDvdCopyJob::prepareWriter()
   d->writerJob->setBurnSpeed( m_speed );
   d->writerJob->setWritingMode( d->usedWritingMode );
   d->writerJob->setCloseDvd( true );
- 
+
   //
   // In case the first layer size is not known let the
   // split be determined by growisofs
@@ -461,7 +461,7 @@ void K3bDvdCopyJob::prepareWriter()
     // this is only used in DAO mode with growisofs >= 5.15
     d->writerJob->setTrackSize( d->lastSector.lba()+1 );
   }
- 
+
   d->writerJob->setImageToWrite( QString::null ); // write to stdin
 }
 
@@ -520,7 +520,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
   // already finished?
   if( !d->running )
     return;
- 
+
   if( d->canceled ) {
     removeImageFiles();
     emit canceled();
@@ -551,9 +551,9 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
 	    emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
 	  else
 	    emit newTask( i18n("Writing DVD copy") );
-	  
+
 	  emit burning(true);
-	  
+
 	  d->writerRunning = true;
 	  d->writerJob->start();
 	  d->outPipe.writeToFd( d->writerJob->fd(), true );
@@ -612,9 +612,9 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
 		 this, SIGNAL(subPercent(int)) );
 	connect( d->verificationJob, SIGNAL(finished(bool)),
 		 this, SLOT(slotVerificationFinished(bool)) );
-	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 		 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-  
+
       }
       d->verificationJob->setDevice( m_writerDevice );
       d->verificationJob->addTrack( 1, d->inPipe.checksum(), d->lastSector+1 );
@@ -647,7 +647,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
 	d->running = false;
 	return;
       }
-      
+
       if( m_onTheFly ) {
 	prepareReader();
 	d->readerRunning = true;
@@ -696,7 +696,7 @@ void K3bDvdCopyJob::slotVerificationFinished( bool success )
       d->running = false;
       return;
     }
-      
+
     if( m_onTheFly ) {
       prepareReader();
       d->readerRunning = true;
@@ -741,7 +741,7 @@ bool K3bDvdCopyJob::waitForDvd()
     cancel();
     return false;
   }
-  
+
   if( m == 0 ) {
     emit infoMessage( i18n("Forced by user. Growisofs will be called without further tests."), INFO );
   }
@@ -766,7 +766,7 @@ bool K3bDvdCopyJob::waitForDvd()
 //	m_simulate = false;
 	emit newTask( i18n("Writing DVD copy") );
       }
-      
+
       if( m_writingMode != K3b::WRITING_MODE_AUTO && m_writingMode != K3b::WRITING_MODE_RES_OVWR )
 	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 
@@ -802,9 +802,9 @@ bool K3bDvdCopyJob::waitForDvd()
       // if this size is wrong
       // With growisofs 5.15 we have the option to specify the size of the image to be written in DAO mode.
       //
-//       bool sizeWithDao = ( k3bcore->externalBinManager()->binObject( "growisofs" ) && 
+//       bool sizeWithDao = ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
 // 			   k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) );
-      
+
 
       // TODO: check for feature 0x21
 
@@ -876,8 +876,8 @@ QString K3bDvdCopyJob::jobDescription() const
 
 QString K3bDvdCopyJob::jobDetails() const
 {
-  return i18n("Creating 1 copy", 
-	      "Creating %n copies", 
+  return i18n("Creating 1 copy",
+	      "Creating %n copies",
 	      (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
 }
 
