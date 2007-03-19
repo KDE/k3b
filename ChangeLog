@@ -1,3 +1,9 @@
+1.0.1
+=====
+ * Fixed crash when using the Device menu without a selected device.
+ * Fixed DVD copy when reading from a DVD+RW.
+ * Fixed --without-alsa configure check
+
 1.0
 ===
  * K3b now includes a VideoDVD kio slave. It can be used in Konqueror through the protocol videodvd:/

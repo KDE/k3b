@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -186,28 +186,33 @@ void K3bAppDeviceManager::lockDevice()
 
 void K3bAppDeviceManager::mountDisk()
 {
-  // FIXME: make this non-blocking
-  if( !K3b::isMounted( currentDevice() ) )
-    K3b::mount( currentDevice() );
-  
-  emit mountFinished( KIO::findDeviceMountPoint( currentDevice()->blockDeviceName() ) );
+    if ( currentDevice() ) {
+        // FIXME: make this non-blocking
+        if( !K3b::isMounted( currentDevice() ) )
+            K3b::mount( currentDevice() );
+
+        emit mountFinished( KIO::findDeviceMountPoint( currentDevice()->blockDeviceName() ) );
+    }
 }
 
 
 void K3bAppDeviceManager::unmountDisk()
 {
-  // FIXME: make this non-blocking
-  if( K3b::isMounted( currentDevice() ) )
-    emit unmountFinished( K3b::unmount( currentDevice() ) );
-  else
-    emit unmountFinished( true );
+    if ( currentDevice() ) {
+        // FIXME: make this non-blocking
+        if( K3b::isMounted( currentDevice() ) )
+            emit unmountFinished( K3b::unmount( currentDevice() ) );
+        else
+            emit unmountFinished( true );
+    }
 }
 
 
 void K3bAppDeviceManager::ejectDisk()
 {
   // FIXME: make this non-blocking
-  K3b::eject( currentDevice() ); // just ignore errors here
+    if ( currentDevice() )
+        K3b::eject( currentDevice() ); // just ignore errors here
 }
 
 
