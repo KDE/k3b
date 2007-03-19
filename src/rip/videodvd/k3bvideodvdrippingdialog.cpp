@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -107,7 +107,7 @@ static QSize resizeTitle( const K3bVideoDVD::VideoStream& title, const QSize& si
   else if( h == 0 ) {
     h = w * rh / rw;
   }
-  
+
   return QSize(w,h);
 }
 
@@ -117,7 +117,7 @@ class K3bVideoDVDRippingDialog::AudioStreamViewItem : public QCheckListItem
 {
 public:
   AudioStreamViewItem( K3bVideoDVDRippingDialog* dlg,
-		       QCheckListItem* parent, QListViewItem* after, const QString& text, 
+		       QCheckListItem* parent, QListViewItem* after, const QString& text,
 		       int audioStream )
     : QCheckListItem( parent, after, text, RadioButton ),
       m_audioStream( audioStream ),
@@ -144,7 +144,7 @@ public:
 };
 
 
-K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
+K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd,
 						    const QValueList<int>& titles,
 						    QWidget* parent, const char* name )
   : K3bInteractionDialog( parent, name,
@@ -152,7 +152,7 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
 			  QString::null,
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
-			  "VideoDVD Ripping" ), // config group 
+			  "VideoDVD Ripping" ), // config group
     m_dvd( dvd )
 {
   d = new Private;
@@ -170,7 +170,7 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
   connect( m_w, SIGNAL(changed()),
 	   this, SLOT(slotUpdateVideoSizes()) );
 
-  setTitle( i18n("Video DVD Ripping"), 
+  setTitle( i18n("Video DVD Ripping"),
 	    i18n("1 title from %1", "%n titles from %1", titles.count())
 	    .arg( k3bappcore->mediaCache()->medium(m_dvd.device()).beautifiedVolumeId() ) );
 
@@ -192,7 +192,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 
   QCheckListItem* titleItem = 0;
   for( QValueList<int>::const_iterator it = titles.begin(); it != titles.end(); ++it ) {
-    titleItem = new QCheckListItem( m_w->m_titleView, 
+    titleItem = new QCheckListItem( m_w->m_titleView,
 				    titleItem,
 				    i18n("Title %1 (%2)")
 				    .arg(*it)
@@ -212,7 +212,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
     //
     ri.audioStream = 0;
     for( unsigned int i = 0; i < m_dvd[*it-1].numAudioStreams(); ++i ) {
-      if( m_dvd[*it-1].audioStream(i).langCode() == KGlobal::locale()->language() && 
+      if( m_dvd[*it-1].audioStream(i).langCode() == KGlobal::locale()->language() &&
 	  m_dvd[*it-1].audioStream(i).format() != K3bVideoDVD::AUDIO_FORMAT_DTS ) {
 	ri.audioStream = i;
 	break;
@@ -227,7 +227,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 	.arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
 	      ? i18n("unknown language")
 	      : KGlobal::locale()->twoAlphaToLanguageName( m_dvd[*it-1].audioStream(i).langCode() ) )
-	.arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
+	.arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
 	      ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
 	      : QString::null );
 
@@ -240,7 +240,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
       }
       else {
 	asI = new AudioStreamViewItem( this, titleItem, asI, text, i );
-	
+
 	if( ri.audioStream == (int)i )
 	  ((AudioStreamViewItem*)asI)->setState( QCheckListItem::On );
       }
@@ -336,19 +336,19 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 	  c = '*';
 	else {
 	  QString keyword = pattern.mid( i+1, j-i-1 );
-	  if( keyword == "titlenumber"  || 
-	      keyword == "title_number" || 
+	  if( keyword == "titlenumber"  ||
+	      keyword == "title_number" ||
 	      keyword == "title" ) {
 	    c = PATTERN_TITLE_NUMBER;
 	  }
-	  else if( keyword == "volumeid"  || 
-		   keyword == "volume_id" || 
-		   keyword == "volid"     || 
+	  else if( keyword == "volumeid"  ||
+		   keyword == "volume_id" ||
+		   keyword == "volid"     ||
 		   keyword == "vol_id" ) {
 	    c = PATTERN_VOLUME_ID;
 	  }
-	  else if( keyword == "beautifiedvolumeid"   || 
-		   keyword == "beautified_volumeid"  || 
+	  else if( keyword == "beautifiedvolumeid"   ||
+		   keyword == "beautified_volumeid"  ||
 		   keyword == "beautified_volume_id" ||
 		   keyword == "beautifiedvolid"      ||
 		   keyword == "beautified_volid"     ||
@@ -449,7 +449,7 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 	break;
       case PATTERN_AUDIO_CHANNELS:
 	if( title.numAudioStreams() > 0 )
-	  f.append( i18n("%nCh", "%nCh", 
+	  f.append( i18n("%nCh", "%nCh",
 			 m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH
 			 ? title.audioStream( info.audioStream ).channels()
 			 : 2 ) );
@@ -559,7 +559,8 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
   if( m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH ) {
     for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
 	 it != m_titleRipInfos.end(); ++it ) {
-      if( m_dvd[it.data().title-1].audioStream(it.data().audioStream).format() != K3bVideoDVD::AUDIO_FORMAT_AC3 ) {
+      if( m_dvd[it.data().title-1].numAudioStreams() > 0 &&
+          m_dvd[it.data().title-1].audioStream(it.data().audioStream).format() != K3bVideoDVD::AUDIO_FORMAT_AC3 ) {
 	KMessageBox::sorry( this, i18n("<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
 				       "streams need to be in AC3 format. Please select another audio codec or "
 				       "choose AC3 audio streams for all ripped titles."),
@@ -578,7 +579,7 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
   }
 
   if( !filesToOverwrite.isEmpty() )
-    if( KMessageBox::questionYesNoList( this, 
+    if( KMessageBox::questionYesNoList( this,
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
 					i18n("Files Exist"), i18n("Overwrite"), KStdGuiItem::cancel() ) == KMessageBox::No )
