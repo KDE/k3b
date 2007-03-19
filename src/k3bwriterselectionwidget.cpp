@@ -44,6 +44,9 @@
 #include <qapplication.h>
 
 
+#include <stdlib.h>
+
+
 class K3bWriterSelectionWidget::MediaSelectionComboBox : public K3bMediaSelectionComboBox
 {
 public:
@@ -161,7 +164,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   setTabOrder( m_comboSpeed, m_comboWritingApp );
 
   connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
-  connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+  connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)),
 	   this, SIGNAL(writerChanged(K3bDevice::Device*)) );
   connect( m_comboMedium, SIGNAL(newMedia()), this, SIGNAL(newMedia()) );
   connect( m_comboMedium, SIGNAL(newMedium(K3bDevice::Device*)), this, SIGNAL(newMedium(K3bDevice::Device*)) );
@@ -256,7 +259,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
     int lastSpeed = writerSpeed();
 
     clearSpeedCombo();
-   
+
     m_comboSpeed->insertItem( i18n("Auto") );
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
       m_comboSpeed->insertItem( i18n("Ignore") );
@@ -284,20 +287,22 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	    insertSpeedItem( (int)(2.4*1385.0) );
 	  i = ( i == 1 ? 2 : i+2 );
 	}
-
-	//
-	// Since we do not know the exact max writing speed if an override device is set (we can't becasue
-	// the writer always returns the speed relative to the inserted medium) we allow the user to specify
-	// the speed manually
-	//
-	m_comboSpeed->insertItem( i18n("More...") );
-	d->haveManualSpeed = true;
       }
       else {
 	for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
 	  insertSpeedItem( *it );
       }
     }
+
+
+    //
+    // Although most devices return all speeds properly there are still some dumb ones around
+    // that don't. Users of those will need the possibility to set the speed manually even if
+    // a medium is inserted.
+    //
+    m_comboSpeed->insertItem( i18n("More...") );
+    d->haveManualSpeed = true;
+
 
     // try to reload last set speed
     if( d->lastSetSpeed == -1 )
@@ -322,18 +327,35 @@ void K3bWriterSelectionWidget::clearSpeedCombo()
 
 void K3bWriterSelectionWidget::insertSpeedItem( int speed )
 {
-  if( !d->speedIndexMap.contains( speed ) ) {
-    d->indexSpeedMap[m_comboSpeed->count()] = speed;
-    d->speedIndexMap[speed] = m_comboSpeed->count();
+    //
+    // polish the speed
+    //
+    if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
+        //
+        // AFAIK there is only one strange DVD burning speed like 2.4
+        //
+        int xs = ( int )( 1385.0*2.4 );
+        if ( abs( speed - xs ) < 1385/2 )
+            speed = xs;
+        else
+            speed = ( ( speed+692 )/1385 )*1385;
+    }
+    else {
+        speed = ( ( speed+87 )/175 )*175;
+    }
 
-    if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
-      m_comboSpeed->insertItem( ( speed%1385 > 0
-				? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
-				: QString::number( speed/1385 ) ) 
-			      + "x" );
-    else
-      m_comboSpeed->insertItem( QString("%1x").arg(speed/175) );
-  }
+    if( !d->speedIndexMap.contains( speed ) ) {
+        d->indexSpeedMap[m_comboSpeed->count()] = speed;
+        d->speedIndexMap[speed] = m_comboSpeed->count();
+
+        if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
+            m_comboSpeed->insertItem( ( speed%1385 > 0
+                                        ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+                                        : QString::number( speed/1385 ) )
+                                      + "x" );
+        else
+            m_comboSpeed->insertItem( QString("%1x").arg(speed/175) );
+    }
 }
 
 
@@ -437,7 +459,7 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int s )
   }
   else {
     d->lastSetSpeed = d->indexSpeedMap[s];
-    
+
     if( K3bDevice::Device* dev = writerDevice() )
       dev->setCurrentWriteSpeed( writerSpeed() );
   }
@@ -447,7 +469,7 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int s )
 void K3bWriterSelectionWidget::slotWriterChanged()
 {
   slotRefreshWriterSpeeds();
-  slotRefreshWritingApps();  
+  slotRefreshWritingApps();
 
   // save last selected writer
   if( K3bDevice::Device* dev = writerDevice() ) {
@@ -554,7 +576,7 @@ void K3bWriterSelectionWidget::slotNewBurnMedium( K3bDevice::Device* dev )
     //
     // Prefer an empty medium over one that has to be erased
     //
-    else if( wantedMediumState() & K3bDevice::STATE_EMPTY && 
+    else if( wantedMediumState() & K3bDevice::STATE_EMPTY &&
 	     !k3bappcore->mediaCache()->diskInfo( writerDevice() ).empty() &&
 	     medium.diskInfo().empty() ) {
       setWriterDevice( dev );
@@ -565,37 +587,61 @@ void K3bWriterSelectionWidget::slotNewBurnMedium( K3bDevice::Device* dev )
 
 void K3bWriterSelectionWidget::slotManualSpeed()
 {
-  //
-  // We need to know if it will be a CD or DVD medium. Since the override device
-  // is only used for CD/DVD copy anyway we simply reply on the inserted medium's type.
-  //
-  int speedFactor = ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ? 1385 : 175 );
+    //
+    // In case we think we have all the available speeds (i.e. if the device reported a non-empty list)
+    // we just treat it as a manual selection. Otherwise we admit that we cannot do better
+    //
+    bool haveSpeeds = ( writerDevice() && !k3bappcore->mediaCache()->writingSpeeds( writerDevice() ).isEmpty() );
+    QString s;
+    if ( haveSpeeds ) {
+        s = i18n( "Please enter the speed that K3b should use for burning (Example: 16x)." );
+    }
+    else {
+        s = i18n("<p>K3b is not able to perfectly determine the maximum "
+                 "writing speed of an optical writer. Writing speed is always "
+                 "reported subject to the inserted medium."
+                 "<p>Please enter the writing speed here and K3b will remember it "
+                 "for future sessions (Example: 16x).");
+    }
 
-  bool ok = true;
-  int newSpeed = KInputDialog::getInteger( i18n("Set writing speed manually"),
-					   i18n("<p>K3b is not able to perfectly determine the maximum "
-						"writing speed of an optical writer. Writing speed is always "
-						"reported subject to the inserted medium."
-						"<p>Please enter the writing speed here and K3b will remember it "
-						"for future sessions (Example: 16x)."),
-					   writerDevice()->maxWriteSpeed()/speedFactor,
-					   1,
-					   10000,
-					   1,
-					   10,
-					   &ok,
-					   this ) * speedFactor;
-  if( ok ) {
-    writerDevice()->setMaxWriteSpeed( QMAX( newSpeed, writerDevice()->maxWriteSpeed() ) );
-    slotRefreshWriterSpeeds();
-    setSpeed( newSpeed );
-  }
-  else {
-    if( d->lastSetSpeed == -1 )
-      m_comboSpeed->setCurrentItem( 0 ); // Auto
-    else
-      setSpeed( d->lastSetSpeed );
-  }
+    //
+    // We need to know if it will be a CD or DVD medium. Since the override device
+    // is only used for CD/DVD copy anyway we simply reply on the inserted medium's type.
+    //
+    int speedFactor = ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ? 1385 : 175 );
+
+    bool ok = true;
+    int newSpeed = KInputDialog::getInteger( i18n("Set writing speed manually"),
+                                             s,
+                                             writerDevice()->maxWriteSpeed()/speedFactor,
+                                             1,
+                                             10000,
+                                             1,
+                                             10,
+                                             &ok,
+                                             this ) * speedFactor;
+    if( ok ) {
+        writerDevice()->setMaxWriteSpeed( QMAX( newSpeed, writerDevice()->maxWriteSpeed() ) );
+        if ( haveSpeeds ) {
+            //
+            // Hack: insert the new speed item. This is ugly and
+            // needs fixing but should not be used often
+            //
+            m_comboSpeed->removeItem( m_comboSpeed->count()-1 );
+            insertSpeedItem( newSpeed );
+            m_comboSpeed->insertItem( i18n("More...") );
+        }
+        else {
+            slotRefreshWriterSpeeds();
+        }
+        setSpeed( newSpeed );
+    }
+    else {
+        if( d->lastSetSpeed == -1 )
+            m_comboSpeed->setCurrentItem( 0 ); // Auto
+        else
+            setSpeed( d->lastSetSpeed );
+    }
 }
 
 #include "k3bwriterselectionwidget.moc"
