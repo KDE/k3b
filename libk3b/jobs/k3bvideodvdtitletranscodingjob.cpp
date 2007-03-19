@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -56,7 +56,7 @@ K3bVideoDVDTitleTranscodingJob::K3bVideoDVDTitleTranscodingJob( K3bJobHandler* h
     m_width( 0 ),
     m_height( 0 ),
     m_titleNumber( 1 ),
-    m_audioStreamIndex( 0 ),  
+    m_audioStreamIndex( 0 ),
     m_videoCodec( VIDEO_CODEC_FFMPEG_MPEG4 ),
     m_audioCodec( AUDIO_CODEC_MP3 ),
     m_videoBitrate( 1800 ),
@@ -157,7 +157,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   case VIDEO_CODEC_FFMPEG_MPEG4:
     videoCodecString = "ffmpeg";
     break;
-    
+
   default:
     emit infoMessage( i18n("Invalid Video codec set: %1").arg(m_videoCodec), ERROR );
     jobFinished( false );
@@ -218,7 +218,8 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   *d->process << "-T" << QString("%1,-1,1").arg( m_titleNumber );
 
   // select the audio stream to extract
-  *d->process << "-a" << QString::number( m_audioStreamIndex );
+  if ( m_dvd[m_titleNumber-1].numAudioStreams() > 0 )
+      *d->process << "-a" << QString::number( m_audioStreamIndex );
 
   // clipping
   *d->process << "-j" << QString("%1,%2,%3,%4")
@@ -251,7 +252,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
       if( m_resampleAudio )
 	*d->process << "-E" << "44100";
     }
-    
+
     // the output filename
     *d->process << "-o" << m_filename;
   }
@@ -431,15 +432,15 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( KProcess* p )
 	jobFinished( true );
       }
       break;
-      
+
     default:
       // FIXME: error handling
 
       emit infoMessage( i18n("%1 returned an unknown error (code %2).")
-			.arg(d->usedTranscodeBin->name()).arg(p->exitStatus()), 
+			.arg(d->usedTranscodeBin->name()).arg(p->exitStatus()),
 			K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
-      
+
       cleanup( false );
       jobFinished( false );
     }
