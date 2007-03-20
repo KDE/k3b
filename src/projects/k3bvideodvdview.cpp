@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -18,6 +18,7 @@
 #include "k3bvideodvdburndialog.h"
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
+#include "k3bdataurladdingdialog.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bdatafileview.h>
 #include <k3btoolbox.h>
@@ -74,5 +75,10 @@ void K3bVideoDvdView::init()
 			    "video_dvd_restrictions" );
 }
 
-//#include "k3bvideodvdview.moc"
+
+void K3bVideoDvdView::addUrls( const KURL::List& urls )
+{
+  K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
+}
+
 #include "k3bvideodvdview.moc"
