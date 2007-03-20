@@ -2,7 +2,7 @@
 Actions=CreateK3bDataDVDProject
 Encoding=UTF-8
 ServiceTypes=all/allfiles,inode/directory
-ExcludeServiceTypes=application/x-cd-image
+ExcludeServiceTypes=application/x-iso
 
 [Desktop Action CreateK3bDataDVDProject]
 Exec=k3b --datadvd %F
