@@ -156,7 +156,7 @@ void K3bApplication::init()
 
   // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
   // use a proper value
-  generalOptions.writeEntry( "config version", version() );
+  generalOptions.writeEntry( "config version", m_core->version() );
 }
 
 
