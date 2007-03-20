@@ -153,6 +153,10 @@ void K3bApplication::init()
     if( processCmdLineArgs() )
       KTipDialog::showTip( m_mainWindow );
   }
+
+  // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
+  // use a proper value
+  generalOptions.writeEntry( "config version", version() );
 }
 
 
@@ -401,8 +405,6 @@ void K3bApplication::Core::saveSettings( KConfig* cnf )
 
   K3bCore::saveSettings( cnf );
   m_themeManager->saveConfig( cnf );
-
-  KConfigGroup( cnf, "General Options" ).writeEntry( "config version", version() );
 }
 
 
