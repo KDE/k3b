@@ -163,7 +163,7 @@ void K3bIsoImager::slotProcessExited( KProcess* p )
 
   d->pipe->close();
 
-  emit debuggingOutput( "K3bIsoImager", 
+  emit debuggingOutput( "K3bIsoImager",
 			QString("Pipe throughput: %1 bytes read, %2 bytes written.")
 			.arg(d->pipe->bytesRead()).arg(d->pipe->bytesWritten()) );
 
@@ -295,19 +295,19 @@ void K3bIsoImager::startSizeCalculation()
     jobFinished( false );
     return;
   }
-    
+
   initVariables();
 
-  delete m_process;    
+  delete m_process;
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
   m_process->setSplitStdout(true);
-    
+
   emit debuggingOutput( "Used versions", "mkisofs: " + d->mkisofsBin->version );
-    
+
   *m_process << d->mkisofsBin;
 
-  if( !prepareMkisofsFiles() || 
+  if( !prepareMkisofsFiles() ||
       !addMkisofsParameters(true) ) {
     cleanup();
     jobFinished( false );
@@ -346,7 +346,7 @@ void K3bIsoImager::startSizeCalculation()
 	   this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
   connect( m_process, SIGNAL(processExited(KProcess*)),
 	   this, SLOT(slotMkisofsPrintSizeFinished()) );
-  
+
   // we also want error messages
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
@@ -408,7 +408,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
       m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStderr.mid( pos+33 ).toInt( &success );
   }
 
-  emit debuggingOutput( "K3bIsoImager", 
+  emit debuggingOutput( "K3bIsoImager",
 			QString("mkisofs print size result: %1 (%2 bytes)")
 			.arg(m_mkisofsPrintSizeResult)
 			.arg(Q_UINT64(m_mkisofsPrintSizeResult)*2048ULL) );
@@ -527,7 +527,7 @@ void K3bIsoImager::start()
   }
   kdDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs command:", s);
-  
+
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable
@@ -600,39 +600,42 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   QString s = m_doc->isoOptions().volumeSetId();
   truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-volset" << s;
-  
+
   s = m_doc->isoOptions().applicationID();
   truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-appid" << s;
-  
+
   s = m_doc->isoOptions().publisher();
   truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-publisher" << s;
-  
+
   s = m_doc->isoOptions().preparer();
   truncateTheHardWay(s, 128);  // ensure max length
   *m_process << "-preparer" << s;
-  
+
   s = m_doc->isoOptions().systemId();
   truncateTheHardWay(s, 32);  // ensure max length
   *m_process << "-sysid" << s;
-  
+
   s = m_doc->isoOptions().abstractFile();
   truncateTheHardWay(s, 37);  // ensure max length
-  *m_process << "-abstract" << s;
+  if ( !s.isEmpty() )
+      *m_process << "-abstract" << s;
 
   s = m_doc->isoOptions().copyrightFile();
   truncateTheHardWay(s, 37);  // ensure max length
-  *m_process << "-copyright" << s;
+  if ( !s.isEmpty() )
+      *m_process << "-copyright" << s;
 
   s = m_doc->isoOptions().bibliographFile();
   truncateTheHardWay(s, 37);  // ensure max length
-  *m_process << "-biblio" << s;
+  if ( !s.isEmpty() )
+      *m_process << "-biblio" << s;
 
   int volsetSize = m_doc->isoOptions().volumeSetSize();
   int volsetSeqNo = m_doc->isoOptions().volumeSetNumber();
   if( volsetSeqNo > volsetSize ) {
-    kdDebug() << "(K3bIsoImager) invalid volume set sequence number: " << volsetSeqNo 
+    kdDebug() << "(K3bIsoImager) invalid volume set sequence number: " << volsetSeqNo
 	      << " with volume set size: " << volsetSize << endl;
     volsetSeqNo = volsetSize;
   }
@@ -678,7 +681,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   if( filesGreaterThan2Gb )
     emit infoMessage( i18n("Found files bigger than 2 GB. These files will only be fully accessible if mounted with UDF."),
 		      WARNING );
-  
+
   bool udf = m_doc->isoOptions().createUdf();
   if( !udf && filesGreaterThan2Gb ) {
     emit infoMessage( i18n("Enabling UDF extension."), INFO );
@@ -850,13 +853,13 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
       // that contain one or more backslashes
       if( item->writtenPath().contains("\\") )
 	m_containsFilesWithMultibleBackslashes = true;
-      
-      
+
+
       if( item->isDir() ) {
 	stream << escapeGraftPoint( item->writtenPath() )
 	       << "="
 	       << escapeGraftPoint( dummyDir( static_cast<K3bDirItem*>(item) ) ) << "\n";
-	
+
 	int x = writePathSpecForDir( dynamic_cast<K3bDirItem*>(item), stream );
 	if( x >= 0 )
 	  num += x;
@@ -877,21 +880,21 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream 
 {
   stream << escapeGraftPoint( item->writtenPath() )
 	 << "=";
-  
+
   if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
-    
+
     // create temp file
     KTempFile temp;
     QString tempPath = temp.name();
     temp.unlink();
-    
+
     if( !KIO::NetAccess::copy( KURL(item->localPath()), KURL::fromPathOrURL(tempPath) ) ) {
       emit infoMessage( i18n("Failed to backup boot image file %1").arg(item->localPath()), ERROR );
       return;
     }
-    
+
     static_cast<K3bBootItem*>(item)->setTempPath( tempPath );
-    
+
     m_tempFiles.append(tempPath);
     stream << escapeGraftPoint( tempPath ) << "\n";
   }
@@ -971,8 +974,8 @@ bool K3bIsoImager::writeSortWeightFile()
 	  *t << escapeGraftPoint( static_cast<K3bBootItem*>(item)->tempPath() ) << " " << item->sortWeight() << endl;
 	}
 	else if( item->isDir() ) {
-	  // 
-	  // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path 
+	  //
+	  // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path
 	  // for sorting we need to create a different dummy dir for every sort weight value.
 	  //
 	  *t << escapeGraftPoint( dummyDir( static_cast<K3bDirItem*>(item) ) ) << " " << item->sortWeight() << endl;
@@ -1002,16 +1005,16 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
   // while single backslashes at the end of a filename need to be escaped
   // with two backslashes.
   //
-  // There is one more problem though: the name in the iso tree can never 
+  // There is one more problem though: the name in the iso tree can never
   // in any number of backslashes. mkisofs simply cannot handle it. So we
-  // need to remove these slashes somewhere or ignore those files (we do 
+  // need to remove these slashes somewhere or ignore those files (we do
   // that in K3bDataDoc::addUrls)
   //
 
   //
   // we do not use QString::replace to have full control
   // this might be slow since QString::insert is slow but we don't care
-  // since this is only called to prepare the iso creation which is not 
+  // since this is only called to prepare the iso creation which is not
   // time critical. :)
   //
 
