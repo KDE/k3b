@@ -206,7 +206,10 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
     *d->process << "--nice" << "19";
 
   // we only need 100 steps, but to make sure we use 150
-  *d->process << "--print_status" << QString::number(m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150);
+  if ( d->usedTranscodeBin->version.simplify() >= K3bVersion( 1, 1, 0 ) )
+      *d->process << "--progress_meter" << "2" << "--progress_rate" << QString::number(m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150);
+  else
+      *d->process << "--print_status" << QString::number(m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150);
 
   // the input
   *d->process << "-i" << m_dvd.device()->blockDeviceName();
