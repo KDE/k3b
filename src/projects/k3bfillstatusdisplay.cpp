@@ -396,7 +396,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				      d->actionCollection, "fillstatus_100minutes" );
   d->actionDvd4_7GB = new KRadioAction( KIO::convertSizeFromKB((int)(4.4*1024.0*1024.0)), 0, this, SLOT(slotDvd4_7GB()),
 					d->actionCollection, "fillstatus_dvd_4_7gb" );
-  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB((int)(8.0*1024.0*1024.0)), 
+  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB((int)(8.0*1024.0*1024.0)),
 					      0, this, SLOT(slotDvdDoubleLayer()),
 					      d->actionCollection, "fillstatus_dvd_double_layer" );
   d->actionCustomSize = new K3bRadioAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
@@ -548,9 +548,9 @@ void K3bFillStatusDisplay::slotCustomSize()
 					i18n("<p>Please specify the size of the media. Use suffixes <b>gb</b>,<b>mb</b>, "
 					     "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
 					     " respectively."),
-					d->showDvdSizes ? QString("4%14%2").arg(KGlobal::locale()->decimalSymbol()).arg(gbS) : 
+					d->showDvdSizes ? QString("4%14%2").arg(KGlobal::locale()->decimalSymbol()).arg(gbS) :
 					(d->showTime ? QString("74")+minS : QString("650")+mbS),
-					&ok, this, (const char*)0, 
+					&ok, this, (const char*)0,
 					new QRegExpValidator( rx, this ) );
   if( ok ) {
     // determine size
@@ -682,8 +682,8 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
     for( QPtrListIterator<K3bDevice::Device> it( devs ); *it; ++it ) {
       const K3bMedium& medium = k3bappcore->mediaCache()->medium( *it );
 
-      if( ( medium.diskInfo().empty() || 
-	    medium.diskInfo().appendable() || 
+      if( ( medium.diskInfo().empty() ||
+	    medium.diskInfo().appendable() ||
 	    medium.diskInfo().rewritable() ) &&
 	  ( medium.diskInfo().isDvdMedia() == d->showDvdSizes ) &&
 	  d->doc->length() <= medium.diskInfo().capacity() ) {
@@ -735,10 +735,15 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
 
 void K3bFillStatusDisplay::slotUpdateDisplay()
 {
-  //
-  // also update the medium list in case the docs size exceeds the capacity
-  //
-  slotMediumChanged( 0 );
+  if( d->actionAuto->isChecked() ) {
+      //
+      // also update the medium list in case the docs size exceeds the capacity
+      //
+      slotMediumChanged( 0 );
+  }
+  else {
+      d->displayWidget->update();
+  }
 }
 
 
@@ -747,7 +752,7 @@ void K3bFillStatusDisplay::slotDocChanged()
   // cache updates
   if( !d->updateTimer.isActive() ) {
     slotUpdateDisplay();
-    d->updateTimer.start( 1000, false );
+    d->updateTimer.start( 500, false );
   }
 }
 
