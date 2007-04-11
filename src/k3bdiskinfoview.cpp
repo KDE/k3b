@@ -424,10 +424,10 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 	  atipChild->setMultiLinesEnabled( true );
 	}
 
-	if( info.isDvdMedia() )
-	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
-	else
+	if( info.mediaType() & K3bDevice::MEDIA_CD_ALL )
 	  s.append( QString( "%1x (%2 KB/s)" ).arg( *it/175 ).arg( *it ) );
+	else
+	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
       }
 
     atipChild->setText( 1, s );
