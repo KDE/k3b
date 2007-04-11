@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -35,7 +35,7 @@ K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentD
     m_dirs(0)
 {
   m_k3bName = name;
-  
+
   // add automagically like a qlistviewitem
   if( parent() )
     parent()->addDataItem( this );
@@ -59,7 +59,7 @@ K3bDirItem::K3bDirItem( const K3bDirItem& item )
 K3bDirItem::~K3bDirItem()
 {
   // delete all children
-  // doing this by hand is much saver than using the 
+  // doing this by hand is much saver than using the
   // auto-delete feature since some of the items' destructors
   // may change the list
   K3bDataItem* i = m_children.first();
@@ -69,7 +69,7 @@ K3bDirItem::~K3bDirItem()
     takeDataItem(i);
     delete i;
     i = m_children.first();
-  }    
+  }
 
   // this has to be done after deleting the children
   // because the directory itself has a size of 0 in K3b
@@ -156,11 +156,11 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
       updateFiles( -1, 0 );
 
     item->m_parentDir = 0;
-    
+
     // inform the doc
     if( doc() )
       doc()->itemRemovedFromDir( this, item );
-    
+
     if( item->isFile() ) {
       // restore the item imported from an old session
       if( static_cast<K3bFileItem*>(item)->replaceItemFromOldSession() )
@@ -234,7 +234,7 @@ K3bDataItem* K3bDirItem::findByPath( const QString& p )
 
 bool K3bDirItem::mkdir( const QString& dirPath )
 {
-  // 
+  //
   // An absolut path always starts at the root item
   //
   if( dirPath[0] == '/' ) {
@@ -334,21 +334,23 @@ bool K3bDirItem::isRemoveable() const
 
 void K3bDirItem::updateSize( K3bDataItem* item, bool removed )
 {
-  if( removed ) {
-    m_followSymlinksSize -= item->itemSize( true );
-    m_size -= item->itemSize( false );
-    m_followSymlinksBlocks -= item->itemBlocks( true ).lba();
-    m_blocks -= item->itemBlocks( false ).lba();
-  }
-  else {
-    m_followSymlinksSize += item->itemSize( true );
-    m_size += item->itemSize( false );
-    m_followSymlinksBlocks += item->itemBlocks( true ).lba();
-    m_blocks += item->itemBlocks( false ).lba();
-  }
+    if ( !item->isFromOldSession() ) {
+        if( removed ) {
+            m_followSymlinksSize -= item->itemSize( true );
+            m_size -= item->itemSize( false );
+            m_followSymlinksBlocks -= item->itemBlocks( true ).lba();
+            m_blocks -= item->itemBlocks( false ).lba();
+        }
+        else {
+            m_followSymlinksSize += item->itemSize( true );
+            m_size += item->itemSize( false );
+            m_followSymlinksBlocks += item->itemBlocks( true ).lba();
+            m_blocks += item->itemBlocks( false ).lba();
+        }
+    }
 
-  if( parent() )
-    parent()->updateSize( item, removed );
+    if( parent() )
+        parent()->updateSize( item, removed );
 }
 
 void K3bDirItem::updateFiles( long files, long dirs )
