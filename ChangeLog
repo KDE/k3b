@@ -6,6 +6,8 @@
  * Fixed a crash in Video DVD ripping when the title does not contain an audio stream
  * Only use the mkisofs parameters -biblio, -copyright, and -abstract if they have been set. Using them
    with invalid values (empty) seems to result in broken iso images sometimes.
+ * Better compatibility with recent transcode development branch
+ * Fixed Multisession import size handling.
 	
 1.0
 ===
