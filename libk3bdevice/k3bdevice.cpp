@@ -1546,7 +1546,7 @@ bool K3bDevice::Device::eject() const
       close();
   }
   return success;
-#elifdef Q_OS_LINUX
+#elif defined(Q_OS_LINUX)
   bool success = false;
   bool needToClose = !isOpen();
 
@@ -1588,7 +1588,7 @@ bool K3bDevice::Device::load() const
       close();
   }
   return success;
-#elifdef Q_OS_LINUX
+#elif defined(Q_OS_LINUX)
   bool success = false;
   bool needToClose = !isOpen();
 
