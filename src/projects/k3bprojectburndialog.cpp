@@ -22,6 +22,10 @@
 #include "k3bwriterselectionwidget.h"
 #include "k3bstdguiitems.h"
 #include "k3bwritingmodewidget.h"
+#include "k3bapplication.h"
+#include "k3bmediacache.h"
+#include "k3bmedium.h"
+
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
 #include <k3bglobals.h>
@@ -52,8 +56,8 @@
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const char *name, bool modal, bool dvd )
-  : K3bInteractionDialog( parent, name, i18n("Project"), QString::null, 
-			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON, 
+  : K3bInteractionDialog( parent, name, i18n("Project"), QString::null,
+			  START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON, START_BUTTON,
 			  "default " + doc->typeString() + " settings", modal ),
     m_writerSelectionWidget(0),
     m_tempDirSelectionWidget(0),
@@ -72,11 +76,11 @@ K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const 
   setButtonGui( SAVE_BUTTON,
 		KStdGuiItem::close() );
   setButtonText( SAVE_BUTTON,
-		i18n("Close"), 
+		i18n("Close"),
 		i18n("Save Settings and close"),
 		i18n("Saves the settings to the project and closes the dialog.") );
   setButtonGui( CANCEL_BUTTON, KStdGuiItem::cancel() );
-  setButtonText( CANCEL_BUTTON, 
+  setButtonText( CANCEL_BUTTON,
 		 i18n("Cancel"),
 		 i18n("Discard all changes and close"),
 		 i18n("Discards all changes made in the dialog and closes it.") );
@@ -113,19 +117,18 @@ void K3bProjectBurnDialog::toggleAll()
 {
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
-    if( m_dvd ) {
-      if( (dev->type() & (K3bDevice::DVDPR|K3bDevice::DVDPRW)) &&
-	  !(dev->type() & (K3bDevice::DVDR|K3bDevice::DVDRW)) ) {
-	// no simulation support for DVD+R(W) only drives
-	m_checkSimulate->setChecked(false);
-	m_checkSimulate->setEnabled(false);
+      K3bMedium burnMedium = k3bappcore->mediaCache()->medium( dev );
+
+      if( burnMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+          // no simulation support for DVD+R(W)
+          m_checkSimulate->setChecked(false);
+          m_checkSimulate->setEnabled(false);
       }
       else {
-	m_checkSimulate->setEnabled(true);
+          m_checkSimulate->setEnabled(true);
       }
-    }
 
-    setButtonEnabled( START_BUTTON, true );
+      setButtonEnabled( START_BUTTON, true );
   }
   else
     setButtonEnabled( START_BUTTON, false );
@@ -151,7 +154,7 @@ void K3bProjectBurnDialog::toggleAll()
   }
 
   if( m_checkOnlyCreateImage->isChecked() )
-    setButtonText( START_BUTTON, 
+    setButtonText( START_BUTTON,
 		   i18n("Start"),
 		   i18n("Start the image creation") );
   else
@@ -210,7 +213,7 @@ void K3bProjectBurnDialog::slotStartClicked()
 	  return;
       }
 
-      //    
+      //
       // check if enough space in tempdir if not on-the-fly
       //
       if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
@@ -269,10 +272,9 @@ void K3bProjectBurnDialog::prepareGui()
   m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 
   m_optionGroup = new QGroupBox( 0, Qt::Vertical, i18n("Settings"), w );
-  m_optionGroup->layout()->setMargin(0);
   m_optionGroup->layout()->setSpacing(0);
   m_optionGroupLayout = new QVBoxLayout( m_optionGroup->layout() );
-  m_optionGroupLayout->setMargin( KDialog::marginHint() );
+  m_optionGroupLayout->setMargin( 0 );
   m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
   // add the options
@@ -322,7 +324,7 @@ void K3bProjectBurnDialog::prepareGui()
 
   // some default connections that should always be useful
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
 	   m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
   connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );

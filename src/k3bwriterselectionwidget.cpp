@@ -125,12 +125,11 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   groupWriter->setTitle( i18n( "Burn Medium" ) );
   groupWriter->setColumnLayout(0, Qt::Vertical );
   groupWriter->layout()->setSpacing( 0 );
-  groupWriter->layout()->setMargin( 0 );
 
   QGridLayout* groupWriterLayout = new QGridLayout( groupWriter->layout() );
   groupWriterLayout->setAlignment( Qt::AlignTop );
   groupWriterLayout->setSpacing( KDialog::spacingHint() );
-  groupWriterLayout->setMargin( KDialog::marginHint() );
+  groupWriterLayout->setMargin( 0 );
 
   QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
   labelSpeed->setText( i18n( "Speed:" ) );
