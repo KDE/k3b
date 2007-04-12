@@ -85,8 +85,22 @@ class K3bSoxProgram : public K3bExternalProgram
 
 	return true;
       }
-      else
-	return false;
+      else {
+        pos = out.output().find( "sox: Version" );
+        endPos = out.output().find( "\n", pos );
+        if( pos > 0 && endPos > 0 ) {
+	  pos += 13;
+	  bin = new K3bExternalBin( this );
+	  bin->path = path;
+	  bin->version = out.output().mid( pos, endPos-pos );
+
+	  addBin( bin );
+
+	  return true;
+        }
+        else
+  	  return false;
+      }
     }
     else
       return false;
