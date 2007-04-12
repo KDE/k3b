@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -165,14 +165,14 @@ void K3bDevice::DiskInfo::debug() const
   k3bDebug() << "DiskInfo:" << endl
 	    << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
 	    << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
-	    << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ? 
+	    << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ?
 					"empty" :
 					( diskState() == K3bDevice::STATE_INCOMPLETE ?
 					  "incomplete" :
 					  ( diskState() == K3bDevice::STATE_COMPLETE ?
-					    "complete" : 
+					    "complete" :
 					    ( diskState() == K3bDevice::STATE_NO_MEDIA ?
-					      "no media" : 
+					      "no media" :
 					      "unknown" ) ) ) ) << endl
 	    << "Empty:           " << empty() << endl
 	    << "Rewritable:      " << rewritable() << endl
@@ -184,7 +184,7 @@ void K3bDevice::DiskInfo::debug() const
 	    << " (LBA " << capacity().lba()
 	    << ") (" << capacity().mode1Bytes() << " Bytes)" << endl
 
-	    << "Remaining size:  " << remainingSize() 
+	    << "Remaining size:  " << remainingSize()
 	    << " (LBA " << remainingSize().lba()
 	    << ") (" << remainingSize().mode1Bytes() << " Bytes)" << endl
 
@@ -193,13 +193,14 @@ void K3bDevice::DiskInfo::debug() const
 	    << ") (" << size().mode1Bytes() << " Bytes)" << endl;
 
   if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
-    k3bDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ? 
+    k3bDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
 					  "none" :
 					  ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
 					    "incomplete" :
 					    ( bgFormatState() == BG_FORMAT_IN_PROGRESS ?
 					      "in progress" :
-					      "complete" ) ) ) << endl;
+					      ( bgFormatState() == BG_FORMAT_COMPLETE ?
+                                                "complete" : "unknown" ) ) ) ) << endl;
 }
 
 
@@ -244,14 +245,14 @@ bool K3bDevice::DiskInfo::operator!=( const K3bDevice::DiskInfo& other ) const
 //    s << "DiskInfo:" << endl
 //      << "Mediatype:       " << K3bDevice::mediaTypeString( ngInf.mediaType() ) << endl
 //      << "Current Profile: " << K3bDevice::mediaTypeString( ngInf.currentProfile() ) << endl
-//      << "Disk state:      " << ( ngInf.diskState() == K3bDevice::STATE_EMPTY ? 
+//      << "Disk state:      " << ( ngInf.diskState() == K3bDevice::STATE_EMPTY ?
 // 				 "empty" :
 // 				 ( ngInf.diskState() == K3bDevice::STATE_INCOMPLETE ?
 // 				   "incomplete" :
 // 				   ( ngInf.diskState() == K3bDevice::STATE_COMPLETE ?
-// 				     "complete" : 
+// 				     "complete" :
 // 				     ( ngInf.diskState() == K3bDevice::STATE_NO_MEDIA ?
-// 				       "no media" : 
+// 				       "no media" :
 // 				       "unknown" ) ) ) ) << endl
 //      << "Empty:           " << ngInf.empty() << endl
 //      << "Rewritable:      " << ngInf.rewritable() << endl
@@ -260,6 +261,6 @@ bool K3bDevice::DiskInfo::operator!=( const K3bDevice::DiskInfo& other ) const
 //      << "Tracks:          " << ngInf.numTracks() << endl
 //      << "Size:            " << ngInf.capacity().toString() << endl
 //      << "Remaining size:  " << ngInf.remainingSize().toString() << endl;
-   
+
 //    return s;
 // }
