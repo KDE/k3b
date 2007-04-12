@@ -1532,6 +1532,7 @@ bool K3bDevice::Device::rewritable() const
     return false;
 }
 
+
 bool K3bDevice::Device::eject() const
 {
 #ifdef Q_OS_NETBSD
@@ -1841,7 +1842,20 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	  break;
 	}
 
-	inf.m_bgFormatState = dInf->bg_f_status&0x3;
+        switch( dInf->bg_f_status&0x3 ) {
+        case 0x0:
+            inf.m_bgFormatState = BG_FORMAT_NONE;
+            break;
+        case 0x1:
+            inf.m_bgFormatState = BG_FORMAT_INCOMPLETE;
+            break;
+        case 0x2:
+            inf.m_bgFormatState = BG_FORMAT_IN_PROGRESS;
+            break;
+        case 0x3:
+            inf.m_bgFormatState = BG_FORMAT_COMPLETE;
+            break;
+        }
 
 	inf.m_numTracks = (dInf->last_track_l & 0xff) | (dInf->last_track_m<<8 & 0xff00);
 	if( inf.diskState() == STATE_EMPTY )
