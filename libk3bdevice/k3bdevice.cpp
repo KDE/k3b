@@ -1546,7 +1546,8 @@ bool K3bDevice::Device::eject() const
     if( needToClose )
       close();
   }
-  return success;
+  if ( success )
+      return success;
 #elif defined(Q_OS_LINUX)
   bool success = false;
   bool needToClose = !isOpen();
@@ -1557,8 +1558,10 @@ bool K3bDevice::Device::eject() const
     if( needToClose )
       close();
   }
-  return success;
-#else
+  if ( success )
+      return success;
+#endif
+
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
   cmd[5] = 0; // Necessary to set the proper command length
@@ -1571,7 +1574,6 @@ bool K3bDevice::Device::eject() const
   cmd[4] = 0x2;    // LoEj = 1, Start = 0
 
   return !cmd.transport();
-#endif
 }
 
 
@@ -1588,7 +1590,8 @@ bool K3bDevice::Device::load() const
     if( needToClose )
       close();
   }
-  return success;
+  if ( success )
+      return success;
 #elif defined(Q_OS_LINUX)
   bool success = false;
   bool needToClose = !isOpen();
@@ -1599,14 +1602,15 @@ bool K3bDevice::Device::load() const
     if( needToClose )
       close();
   }
-  return success;
-#else
+  if ( success )
+      return success;
+#endif
+
   ScsiCommand cmd( this );
   cmd[0] = MMC_START_STOP_UNIT;
   cmd[4] = 0x3;    // LoEj = 1, Start = 1
   cmd[5] = 0;      // Necessary to set the proper command length
   return !cmd.transport();
-#endif
 }
 
 
