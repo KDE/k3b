@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -240,13 +240,13 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     if( c->readBoolEntry( "VBR", false ) ) {
       // we use the default algorithm here
       lame_set_VBR( d->flags, vbr_default );
-      
+
       if( c->readBoolEntry( "Use Maximum Bitrate", false ) ) {
 	lame_set_VBR_max_bitrate_kbps( d->flags, c->readNumEntry( "Maximum Bitrate", 224 ) );
       }
       if( c->readBoolEntry( "Use Minimum Bitrate", false ) ) {
 	lame_set_VBR_min_bitrate_kbps( d->flags, c->readNumEntry( "Minimum Bitrate", 32 ) );
-	
+
 	// TODO: lame_set_hard_min
       }
       if( c->readBoolEntry( "Use Average Bitrate", true ) ) {
@@ -272,7 +272,15 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     int q = c->readNumEntry( "Quality Level", 5 );
     if( q < 0 ) q = 0;
     if( q > 9 ) q = 9;
-    
+
+    kdDebug() << "(K3bLameEncoder) setting preset encoding value to " << q << endl;
+
+    if ( q < 2 || q > 8 ) {
+        lame_set_VBR( d->flags, vbr_abr );
+    }
+    else {
+        lame_set_VBR( d->flags, vbr_default );
+    }
     lame_set_preset( d->flags, s_lame_presets[q] );
 
     if( q < 2 )
@@ -282,7 +290,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
 
   //
   // file options
-  //  
+  //
   lame_set_copyright( d->flags, c->readBoolEntry( "Copyright", false ) );
   lame_set_original( d->flags, c->readBoolEntry( "Original", true ) );
   lame_set_strict_ISO( d->flags, c->readBoolEntry( "ISO compliance", false ) );
@@ -588,8 +596,8 @@ long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
       if( c->readBoolEntry( "Use Maximum Bitrate", false ) )
 	bitrate = c->readNumEntry( "Maximum Bitrate", 224 );
       if( c->readBoolEntry( "Use Minimum Bitrate", false ) )
-	bitrate = ( bitrate > 0 
-		    ? (bitrate - c->readNumEntry( "Minimum Bitrate", 32 )) / 2 
+	bitrate = ( bitrate > 0
+		    ? (bitrate - c->readNumEntry( "Minimum Bitrate", 32 )) / 2
 		    : c->readNumEntry( "Minimum Bitrate", 32 ) );
       if( c->readBoolEntry( "Use Average Bitrate", true ) )
 	bitrate = c->readNumEntry( "Average Bitrate", 128 );
@@ -609,7 +617,7 @@ long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 }
 
 
-K3bPluginConfigWidget* K3bLameEncoder::createConfigWidget( QWidget* parent, 
+K3bPluginConfigWidget* K3bLameEncoder::createConfigWidget( QWidget* parent,
 							   const char* name ) const
 {
   return new K3bLameEncoderSettingsWidget( parent, name );

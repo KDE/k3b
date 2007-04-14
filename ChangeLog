@@ -8,6 +8,7 @@
    with invalid values (empty) seems to result in broken iso images sometimes.
  * Better compatibility with recent transcode development branch
  * Fixed Multisession import size handling.
+ * Fixed Lame quality preset handling.
 	
 1.0
 ===
