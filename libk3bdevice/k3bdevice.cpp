@@ -43,6 +43,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <math.h>
+#include <stdarg.h>
 
 
 #ifdef Q_OS_LINUX
@@ -1347,6 +1348,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
     // cdth_trk0: First Track Number
     // cdth_trk1: Last Track Number
     //
+    usageLock();
     if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) ) {
       k3bDebug() << "(K3bDevice::Device) could not get toc header !" << endl;
       success = false;
@@ -1416,6 +1418,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
         lastTrack = Track( startSec, startSec, trackType, trackMode );
       }
     }
+    usageUnlock();
 
     if( needToClose )
       close();
@@ -1481,7 +1484,9 @@ bool K3bDevice::Device::block( bool b ) const
   bool needToClose = !isOpen();
 
   if( open() ) {
+        usageLock();
     bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+        usageUnlock();
     if( needToClose )
       close();
     return success;
@@ -1493,7 +1498,9 @@ bool K3bDevice::Device::block( bool b ) const
   int arg = b ? 1 : 0;
 
   if( open() ) {
+        usageLock();
     bool success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
+        usageUnlock();
     if( needToClose )
       close();
     return success;
@@ -1541,8 +1548,10 @@ bool K3bDevice::Device::eject() const
   int arg = 0;
 
   if( open() ) {
+        usageLock();
     if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
       success = true;
+        usageUnlock();
     if( needToClose )
       close();
   }
@@ -1553,8 +1562,10 @@ bool K3bDevice::Device::eject() const
   bool needToClose = !isOpen();
 
   if( open() ) {
-    if( ::ioctl( d->deviceFd, CDROMEJECT, 0 ) >= 0 )
+        usageLock();
+        if( ::ioctl( d->deviceFd, CDROMEJECT ) >= 0 )
       success = true;
+        usageUnlock();
     if( needToClose )
       close();
   }
@@ -1563,11 +1574,12 @@ bool K3bDevice::Device::eject() const
 #endif
 
   ScsiCommand cmd( this );
-  cmd[0] = MMC_START_STOP_UNIT;
+    cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
   cmd[5] = 0; // Necessary to set the proper command length
+    cmd.transport();
 
-  // Since all other eject methods I saw also start the unit before ejecting
-  // we do it also although I don't know why...
+    cmd[0] = MMC_START_STOP_UNIT;
+    cmd[5] = 0; // Necessary to set the proper command length
   cmd[4] = 0x1;      // Start unit
   cmd.transport();
 
@@ -1585,8 +1597,10 @@ bool K3bDevice::Device::load() const
   int arg = 0;
 
   if( open() ) {
+        usageLock();
     if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
       success = true;
+        usageUnlock();
     if( needToClose )
       close();
   }
@@ -1597,8 +1611,10 @@ bool K3bDevice::Device::load() const
   bool needToClose = !isOpen();
 
   if( open() ) {
-    if( ::ioctl( d->deviceFd, CDROMEJECT, 1 ) >= 0 )
+        usageLock();
+        if( ::ioctl( d->deviceFd, CDROMCLOSETRAY ) >= 0 )
       success = true;
+        usageUnlock();
     if( needToClose )
       close();
   }
@@ -1611,6 +1627,25 @@ bool K3bDevice::Device::load() const
   cmd[4] = 0x3;    // LoEj = 1, Start = 1
   cmd[5] = 0;      // Necessary to set the proper command length
   return !cmd.transport();
+}
+
+
+bool K3bDevice::Device::setAutoEjectEnabled( bool enabled ) const
+{
+  bool success = false;
+#ifdef Q_OS_LINUX
+
+  bool needToClose = !isOpen();
+  if ( open() ) {
+      usageLock();
+      success = ( ::ioctl( d->deviceFd, CDROMEJECT_SW, enabled ? 1 : 0 ) == 0 );
+      usageUnlock();
+      if ( needToClose ) {
+          close();
+      }
+  }
+#endif
+  return success;
 }
 
 
@@ -3541,4 +3576,33 @@ QCString K3bDevice::Device::mediaId( int mediaType ) const
   }
 
   return id;
+}
+
+
+// int K3bDevice::Device::ioctl( int request, ... ) const
+// {
+//     int r = -1;
+// #if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
+//     d->mutex.lock();
+
+//     va_list ap;
+//     va_start( ap, request );
+//     r = ::ioctl( d->deviceFd, request, ap );
+//     va_end( ap );
+
+//     d->mutex.unlock();
+// #endif
+//     return r;
+// }
+
+
+void K3bDevice::Device::usageLock() const
+{
+    d->mutex.lock();
+}
+
+
+void K3bDevice::Device::usageUnlock() const
+{
+    d->mutex.unlock();
 }

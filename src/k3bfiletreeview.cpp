@@ -50,16 +50,16 @@
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
-  : KFileTreeBranch( view, 
-		     KURL( "media:/" + dev->blockDeviceName() ), 
+  : KFileTreeBranch( view,
+		     KURL( "media:/" + dev->blockDeviceName() ),
 		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
 		       : SmallIcon("cdrom_unmount") ),
-		     false, 
-		     item == 0 
+		     false,
+		     item == 0
 		     ? new K3bDeviceBranchViewItem( view, dev, this )
-		     : item ), 
+		     : item ),
     m_device( dev ),
     m_showBlockDeviceName( false )
 {
@@ -151,11 +151,11 @@ K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
 
 
 
-K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent, 
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
-  : KFileTreeViewItem( parent, 
-		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ), 
+  : KFileTreeViewItem( parent,
+		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ),
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
@@ -169,7 +169,7 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : KFileTreeViewItem( parent,
-		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ), 
+		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ),
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
@@ -200,7 +200,7 @@ void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int
     p->setPen( cg.highlightedText() );
   }
   else {
-    p->fillRect( 0, 0, width, height(), cg.base() ); 
+    p->fillRect( 0, 0, width, height(), cg.base() );
     p->setPen( cg.text() );
   }
 
@@ -255,6 +255,9 @@ int K3bDeviceBranchViewItem::widthHint() const
   QFont f( listView()->font() );
   f.setItalic( true );
   f.setPointSize( f.pointSize() - 2 );
+  if ( m_bCurrent ) {
+      f.setBold( true );
+  }
   w = QMAX( w, QFontMetrics(f).width( text(0).mid( text(0).find('\n')+1 ) ) );
 
   w++; // see paintCell
@@ -295,9 +298,9 @@ class K3bDeviceTreeToolTip : public K3bToolTip
 {
 public:
   K3bDeviceTreeToolTip( QWidget* parent, K3bFileTreeView* lv );
-  
+
   void maybeTip( const QPoint &pos );
-  
+
 private:
   K3bFileTreeView* m_view;
 };
@@ -500,9 +503,15 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
 	       this, SLOT(setCurrentDevice(K3bDevice::Device*)) );
   }
 
-  d->currentDeviceBranch = d->deviceBranchDict[k3bappcore->appDeviceManager()->currentDevice()];
-  if( d->currentDeviceBranch )
+  K3bDevice::Device* currentDevice = k3bappcore->appDeviceManager()->currentDevice();
+  if ( !currentDevice && !k3bappcore->appDeviceManager()->allDevices().isEmpty() ) {
+      k3bappcore->appDeviceManager()->setCurrentDevice( k3bappcore->appDeviceManager()->allDevices().getFirst() );
+  }
+
+  d->currentDeviceBranch = d->deviceBranchDict[currentDevice];
+  if( d->currentDeviceBranch ) {
     d->currentDeviceBranch->setCurrent( true );
+  }
 
   kdDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
 }
@@ -512,7 +521,7 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
 {
   K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
   addBranch( newBranch );
-  
+
   // search for an equal device
   int equalCnt = 0;
   K3bDeviceBranch* equalBranch = 0;
@@ -605,14 +614,14 @@ void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QP
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
   if( treeItem ) {
     K3bDevice::Device* device = 0;
-    QMap<KFileTreeBranch*, K3bDevice::Device*>::iterator devIt = 
+    QMap<KFileTreeBranch*, K3bDevice::Device*>::iterator devIt =
       d->branchDeviceMap.find( treeItem->branch() );
     if( devIt != d->branchDeviceMap.end() )
       device = devIt.data();
-   
+
     setCurrentItem( treeItem );
     setSelected( treeItem, true);
-    
+
     if( device ) {
       k3bappcore->appDeviceManager()->setCurrentDevice( device );
       emit contextMenu( device, p );

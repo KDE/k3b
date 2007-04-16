@@ -199,7 +199,8 @@ void K3bDevice::DiskInfo::debug() const
 					    "incomplete" :
 					    ( bgFormatState() == BG_FORMAT_IN_PROGRESS ?
 					      "in progress" :
-					      "complete" ) ) ) << endl;
+					      ( bgFormatState() == BG_FORMAT_COMPLETE ?
+                                                "complete" : "unknown" ) ) ) ) << endl;
 }
 
 

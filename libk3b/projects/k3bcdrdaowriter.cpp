@@ -568,7 +568,14 @@ void K3bCdrdaoWriter::start()
     emit infoMessage( i18n("Unmounting medium"), INFO );
     K3b::unmount( burnDevice() );
   }
+
+  // block the device (including certain checks)
   k3bcore->blockDevice( burnDevice() );
+
+  // lock the device for good in this process since it will
+  // be opened in the growisofs process
+  burnDevice()->close();
+  burnDevice()->usageLock();
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
@@ -704,6 +711,10 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line )
 
 void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 {
+  // release the device within this process
+  burnDevice()->usageUnlock();
+
+  // unblock the device
   k3bcore->unblockDevice( burnDevice() );
 
   switch ( m_command )

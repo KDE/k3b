@@ -178,12 +178,12 @@ namespace K3bDevice {
     MEDIA_HD_DVD_ROM = 0x80000,                    /**< */
     MEDIA_HD_DVD_R = 0x100000,                     /**< */
     MEDIA_HD_DVD_RAM = 0x200000,                   /**< */
-    MEDIA_BD_ROM = 0x400000,                       /**< Read-only Blue-ray Disc (BD) */
-    MEDIA_BD_R = 0x800000,                         /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_SRM = 0x1000000,                    /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_SRM_POW = 0x2000000,                /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_R_RRM = 0x4000000,                    /**< Writable Blue-ray Disc (BD-R) */
-    MEDIA_BD_RE = 0x8000000,                       /**< Rewritable Blue-ray Disc (BD-RE) */
+    MEDIA_BD_ROM = 0x400000,                       /**< Read-only Blu-ray Disc (BD) */
+    MEDIA_BD_R = 0x800000,                         /**< Writable Blu-ray Disc (BD-R) */
+    MEDIA_BD_R_SRM = 0x1000000,                    /**< Writable Blu-ray Disc (BD-R) */
+    MEDIA_BD_R_SRM_POW = 0x2000000,                /**< Writable Blu-ray Disc (BD-R) */
+    MEDIA_BD_R_RRM = 0x4000000,                    /**< Writable Blu-ray Disc (BD-R) */
+    MEDIA_BD_RE = 0x8000000,                       /**< Rewritable Blu-ray Disc (BD-RE) */
     MEDIA_WRITABLE_CD = MEDIA_CD_R |               /**< This is a bitwise or of media types representing all writable CD media.*/
                         MEDIA_CD_RW,
     MEDIA_CD_ALL = MEDIA_WRITABLE_CD |
@@ -215,6 +215,9 @@ namespace K3bDevice {
     MEDIA_WRITABLE = MEDIA_WRITABLE_CD |           /**< This is a bitwise or of media types representing all writable media.*/
                      MEDIA_WRITABLE_DVD |
                      MEDIA_WRITABLE_BD,
+    MEDIA_REWRITABLE = MEDIA_CD_RW |
+                       MEDIA_REWRITABLE_DVD |
+                       MEDIA_BD_RE,
     MEDIA_DVD_MINUS_ALL = MEDIA_DVD_R |            /**< This is a bitwise or of media types representing all DVD-R/W media.*/
                           MEDIA_DVD_R_SEQ | 
                           MEDIA_DVD_RW |

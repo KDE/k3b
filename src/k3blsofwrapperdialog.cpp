@@ -40,9 +40,9 @@ static QString joinProcessNames( const QValueList<K3bLsofWrapper::Process>& apps
 
 
 K3bLsofWrapperDialog::K3bLsofWrapperDialog( QWidget* parent )
-  : KDialogBase( KDialogBase::Swallow, 
-		 i18n("Device in use"), 
-		 Close|User1|User2, 
+  : KDialogBase( KDialogBase::Swallow,
+		 i18n("Device in use"),
+		 Close|User1|User2,
 		 Close,
 		 parent,
 		 0,
@@ -53,7 +53,7 @@ K3bLsofWrapperDialog::K3bLsofWrapperDialog( QWidget* parent )
 {
   setButtonText( Close, i18n("Continue") );
 
-  m_label = new K3bRichTextLabel( this );
+  m_label = new K3BRichTextLabel( this );
   setMainWidget( m_label );
 
   connect( this, SIGNAL(user1Clicked()), SLOT(slotQuitOtherApps()) );
@@ -99,7 +99,7 @@ void K3bLsofWrapperDialog::slotQuitOtherApps()
   if( lsof.checkDevice( m_device ) ) {
     const QValueList<K3bLsofWrapper::Process>& apps = lsof.usingApplications();
     if( apps.count() > 0 ) {
-      if( KMessageBox::warningYesNo( this, 
+      if( KMessageBox::warningYesNo( this,
 				     i18n("<p>Do you really want K3b to kill the following processes: <em>")
 					  + joinProcessNames(apps) ) == KMessageBox::Yes ) {
 	for( QValueList<K3bLsofWrapper::Process>::const_iterator it = apps.begin();

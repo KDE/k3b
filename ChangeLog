@@ -9,7 +9,8 @@
  * Better compatibility with recent transcode development branch
  * Fixed Multisession import size handling.
  * Fixed Lame quality preset handling.
-	
+ * Made libk3bdevice really thread-safe. This fixes the disabled DMA bug!
+
 1.0
 ===
  * K3b now includes a VideoDVD kio slave. It can be used in Konqueror through the protocol videodvd:/

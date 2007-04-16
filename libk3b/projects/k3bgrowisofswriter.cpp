@@ -355,7 +355,14 @@ void K3bGrowisofsWriter::start()
       emit infoMessage( i18n("Unmounting medium"), INFO );
       K3b::unmount( burnDevice() );
     }
+
+    // block the device (including certain checks)
     k3bcore->blockDevice( burnDevice() );
+
+    // lock the device for good in this process since it will
+    // be opened in the growisofs process
+    burnDevice()->close();
+    burnDevice()->usageLock();
 
     if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
       // something went wrong when starting the program
@@ -515,6 +522,10 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 {
   d->inputFile.close();
 
+  // release the device within this process
+  burnDevice()->usageUnlock();
+
+  // unblock the device
   k3bcore->unblockDevice( burnDevice() );
 
   if( d->canceled ) {

@@ -124,7 +124,13 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     else
       d->sgIo.dxfer_direction = SG_DXFER_NONE;
 
+    if ( m_device ) {
+        m_device->usageLock();
+    }
     i = ::ioctl( m_deviceHandle, SG_IO, &d->sgIo );
+    if ( m_device ) {
+        m_device->usageUnlock();
+    }
 
     if( ( d->sgIo.info&SG_INFO_OK_MASK ) != SG_INFO_OK )
       i = -1;
@@ -140,7 +146,13 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     else
       d->cmd.data_direction = CGC_DATA_NONE;
     
+    if ( m_device ) {
+        m_device->usageLock();
+    }
     i = ::ioctl( m_deviceHandle, CDROM_SEND_PACKET, &d->cmd );
+    if ( m_device ) {
+        m_device->usageUnlock();
+    }
 #ifdef SG_IO
   }
 #endif    

@@ -39,7 +39,11 @@ namespace K3bDevice
    * \brief The main class representing a device.
    *
    * Devices are constructed by the DeviceManager.
+   *
+   * All methods in Device are thread-safe which basicly means that
+   * no two commands are sent to the device at the same time.
    */
+  // FIXME: all methods are const which makes no sense at all!
   class LIBK3BDEVICE_EXPORT Device
     {
     public:
@@ -371,6 +375,13 @@ namespace K3bDevice
       bool load() const;
 
       /**
+       * Enable or disable auto-ejecting. For now this is a no-op on non-Linux systems.
+       * \param enabled if true auto-ejecting will be enabled, otherwise disabled.
+       * \return true if the operation was successful, false otherwise
+       */
+      bool setAutoEjectEnabled( bool enabled ) const;
+
+      /**
        * The supported writing modes.
        *
        * \return A bitwise or of K3bDevice::WritingMode or 0 in case of a read-only device.
@@ -687,6 +698,28 @@ namespace K3bDevice
       bool seek( unsigned long lba ) const;
 
       bool getNextWritableAdress( unsigned int& lastSessionStart, unsigned int& nextWritableAdress ) const;
+
+      /**
+       * Locks the device for usage. This means that no MMC command can be performed
+       * until usageUnlock is called.
+       *
+       * Locking a device is useful when an external application or library is called
+       * that opens the device itself.
+       *
+       * \sa usageUnlock
+       */
+      void usageLock() const;
+
+      /**
+       * Unlock the device after a call to usageLock.
+       */
+      void usageUnlock() const;
+
+      /**
+       * Thread-safe ioctl call for this device for Linux and Net-BSD systems.
+       * Be aware that so far this does not include opening the device
+       */
+//      int ioctl( int request, ... ) const;
 
     protected:
       bool furtherInit();

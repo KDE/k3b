@@ -83,7 +83,9 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       break;
   }
 
+  m_device->usageLock();
   int i = ::ioctl( m_deviceHandle, SCIOCCOMMAND, &d->cmd );
+  m_device->usageUnlock();
 
   if( needToClose )
     m_device->close();
