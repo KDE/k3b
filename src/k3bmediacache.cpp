@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -61,13 +61,13 @@ public:
   K3bMedium medium;
 
   int blockedId;
-  
+
   QMutex mutex;
 
   K3bMediaCache::PollThread* thread;
 
   K3bMediaCache* cache;
-  
+
   void clear() {
     medium.reset();
   }
@@ -115,38 +115,37 @@ void K3bMediaCache::PollThread::run()
   while( m_deviceEntry->blockedId == 0 ) {
     bool unitReady = m_deviceEntry->medium.device()->testUnitReady();
     bool mediumCached = ( m_deviceEntry->medium.diskInfo().diskState() != K3bDevice::STATE_NO_MEDIA );
-    
+
     //
     // we only get the other information in case the disk state changed or if we have
     // no info at all (FIXME: there are drives around that are not able to provide a proper
     // disk state)
     //
-    if( m_deviceEntry->medium.diskInfo().diskState() == K3bDevice::STATE_UNKNOWN || 
+    if( m_deviceEntry->medium.diskInfo().diskState() == K3bDevice::STATE_UNKNOWN ||
 	unitReady != mediumCached ) {
-      
+
       //
       // The medium has changed. We need to update the information.
       //
       K3bMedium m( m_deviceEntry->medium.device() );
       m.update();
-      
+
       // block the info since it is not valid anymore
       m_deviceEntry->mutex.lock();
-      
-      //      m_deviceEntry->medium.update();
+
       m_deviceEntry->medium = m;
-      	
+
       //
       // inform the media cache about the media change
       //
       if( m_deviceEntry->blockedId == 0 )
 	QApplication::postEvent( m_deviceEntry->cache,
 				 new K3bMediaCache::MediaChangeEvent( m_deviceEntry->medium.device() ) );
-      
+
       // the information is valid. let the info go.
       m_deviceEntry->mutex.unlock();
     }
-      
+
     if( m_deviceEntry->blockedId == 0 )
       QThread::sleep( 2 );
   }
@@ -206,8 +205,6 @@ bool K3bMediaCache::unblockDevice( K3bDevice::Device* dev, int id )
   if( e && e->blockedId && e->blockedId == id ) {
     e->blockedId = 0;
 
-    // for security reasons we emit no medium signal at this point
-    // otherwise a job might resuse the old medium information
     e->medium = K3bMedium( dev );
     emit mediumChanged( dev );
 
@@ -310,13 +307,13 @@ void K3bMediaCache::clearDeviceList()
   kdDebug() << k_funcinfo << endl;
 
   // make all the threads stop
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
        it != m_deviceMap.end(); ++it ) {
     it.data()->blockedId = 1;
   }
 
   // and remove them
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
        it != m_deviceMap.end(); ++it ) {
     kdDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish" << endl;
     it.data()->thread->wait();
@@ -331,7 +328,7 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 {
   // remember blocked ids
   QMap<K3bDevice::Device*, int> blockedIds;
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
        it != m_deviceMap.end(); ++it )
     blockedIds.insert( it.key(), it.data()->blockedId );
 
@@ -346,7 +343,7 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
   }
 
   // start all the polling threads
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin(); 
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
        it != m_deviceMap.end(); ++it ) {
     if( !it.data()->blockedId )
       it.data()->thread->start();

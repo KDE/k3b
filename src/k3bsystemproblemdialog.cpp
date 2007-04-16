@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -80,7 +80,7 @@ K3bSystemProblem::K3bSystemProblem( int t,
 
 
 K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProblem>& problems,
-						QWidget* parent, 
+						QWidget* parent,
 						const char* name )
   : KDialog( parent, name )
 {
@@ -89,7 +89,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
   // setup the title
   // ---------------------------------------------------------------------------------------------------
   K3bThemedHeader* titleFrame = new K3bThemedHeader( this );
-  titleFrame->setTitle( i18n("System Configuration Problems"), 
+  titleFrame->setTitle( i18n("System Configuration Problems"),
 			i18n("1 problem", "%n problems", problems.count() ) );
 
   m_closeButton = new QPushButton( i18n("Close"), this );
@@ -168,7 +168,7 @@ void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 }
 
 
-void K3bSystemProblemDialog::checkSystem( QWidget* parent, 
+void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					  const char* name )
 {
   QValueList<K3bSystemProblem> problems;
@@ -202,7 +202,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					   i18n("Install a more recent version of the cdrtools."),
 					   false ) );
       }
-    
+
 #ifdef Q_OS_LINUX
 
       //
@@ -580,7 +580,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
   if( problems.isEmpty() ) {
     kdDebug() << "          - none - " << endl;
-    K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System Problems") );
+    K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
   }
   else {
     static K3bSystemProblemDialog* s_openDlg = 0;
