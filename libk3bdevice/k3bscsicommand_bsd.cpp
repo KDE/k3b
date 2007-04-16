@@ -88,7 +88,12 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     direction |= (dir & TR_DIR_READ)?CAM_DIR_IN : CAM_DIR_OUT;
   cam_fill_csio (&(d->ccb.csio), 1, 0 /* NULL */, direction, MSG_SIMPLE_Q_TAG, (u_int8_t *)data, len, sizeof(d->ccb.csio.sense_data), d->ccb.csio.cdb_len, 30*1000);
   unsigned char * sense = (unsigned char *)&d->ccb.csio.sense_data;
-  if ((ret = cam_send_ccb(m_device->handle(), &d->ccb)) < 0)
+
+  m_device->usageLock();
+  ret = cam_send_ccb(m_device->handle(), &d->ccb);
+  m_device->usageUnlock();
+
+  if (ret < 0)
     {
       k3bDebug() << "(K3bDevice::ScsiCommand) transport failed: " << ret << endl;
       struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
@@ -133,7 +138,10 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.data_ptr  = _sense;
       d->ccb.csio.dxfer_len = sizeof(_sense);
       d->ccb.csio.sense_len = 0;
+
+      m_device->usageLock();
       ret = cam_send_ccb(m_device->handle(), &d->ccb);
+      m_device->usageUnlock();
 
       d->ccb.csio.resid = resid;
       if (ret<0)

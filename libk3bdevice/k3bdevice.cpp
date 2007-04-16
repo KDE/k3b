@@ -43,6 +43,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <math.h>
+#include <stdarg.h>
 
 
 #ifdef Q_OS_LINUX
@@ -1347,7 +1348,8 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
     // cdth_trk0: First Track Number
     // cdth_trk1: Last Track Number
     //
-    if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) ) {
+    usageLock();
+    if( ::ioctl( d->deviceFd, CDROMREADTOCHDR, &tochdr ) ) {
       k3bDebug() << "(K3bDevice::Device) could not get toc header !" << endl;
       success = false;
     }
@@ -1382,7 +1384,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
         //                 2: CD-XA Mode2
         //
 
-        if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) ) {
+        if( ::ioctl( d->deviceFd, CDROMREADTOCENTRY, &tocentry ) ) {
           k3bDebug() << "(K3bDevice::Device) error reading tocentry " << i << endl;
 	  success = false;
 	  break;
@@ -1416,6 +1418,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
         lastTrack = Track( startSec, startSec, trackType, trackMode );
       }
     }
+    usageUnlock();
 
     if( needToClose )
       close();
@@ -1478,40 +1481,44 @@ bool K3bDevice::Device::block( bool b ) const
   // So we use the ioctl on Linux systems
   //
 #if defined(Q_OS_LINUX)
-  bool needToClose = !isOpen();
+    bool needToClose = !isOpen();
 
-  if( open() ) {
-    bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
-    if( needToClose )
-      close();
-    return success;
-  }
-  else
-    return false;
+    if( open() ) {
+        usageLock();
+        bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+        usageUnlock();
+        if( needToClose )
+            close();
+        return success;
+    }
+    else
+        return false;
 #elif defined(Q_OS_NETBSD)
-  bool needToClose = !isOpen();
-  int arg = b ? 1 : 0;
+    bool needToClose = !isOpen();
+    int arg = b ? 1 : 0;
 
-  if( open() ) {
-    bool success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
-    if( needToClose )
-      close();
-    return success;
-  }
-  else
-    return false;
+    if( open() ) {
+        usageLock();
+        bool success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
+        usageUnlock();
+        if( needToClose )
+            close();
+        return success;
+    }
+    else
+        return false;
 #else
-  ScsiCommand cmd( this );
-  cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
-  cmd[5] = 0; // Necessary to set the proper command length
-  if( b )
-    cmd[4] = 0x01;
-  int r = cmd.transport( TR_DIR_WRITE );
+    ScsiCommand cmd( this );
+    cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
+    cmd[5] = 0; // Necessary to set the proper command length
+    if( b )
+        cmd[4] = 0x01;
+    int r = cmd.transport( TR_DIR_WRITE );
 
-  if( r )
-    k3bDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed." << endl;
+    if( r )
+        k3bDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed." << endl;
 
-  return ( r == 0 );
+    return ( r == 0 );
 #endif
 }
 
@@ -1536,81 +1543,109 @@ bool K3bDevice::Device::rewritable() const
 bool K3bDevice::Device::eject() const
 {
 #ifdef Q_OS_NETBSD
-  bool success = false;
-  bool needToClose = !isOpen();
-  int arg = 0;
+    bool success = false;
+    bool needToClose = !isOpen();
+    int arg = 0;
 
-  if( open() ) {
-    if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
-      success = true;
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+    if( open() ) {
+        usageLock();
+        if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
+            success = true;
+        usageUnlock();
+        if( needToClose )
+            close();
+    }
+    if ( success )
+        return success;
 #elif defined(Q_OS_LINUX)
-  bool success = false;
-  bool needToClose = !isOpen();
+    bool success = false;
+    bool needToClose = !isOpen();
 
-  if( open() ) {
-    if( ::ioctl( d->deviceFd, CDROMEJECT, 0 ) >= 0 )
-      success = true;
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+    if( open() ) {
+        usageLock();
+        if( ::ioctl( d->deviceFd, CDROMEJECT ) >= 0 )
+            success = true;
+        usageUnlock();
+        if( needToClose )
+            close();
+    }
+    if ( success )
+        return success;
 #endif
 
-  ScsiCommand cmd( this );
-  cmd[0] = MMC_START_STOP_UNIT;
-  cmd[5] = 0; // Necessary to set the proper command length
+    ScsiCommand cmd( this );
+    cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
+    cmd[5] = 0; // Necessary to set the proper command length
+    cmd.transport();
 
-  // Since all other eject methods I saw also start the unit before ejecting
-  // we do it also although I don't know why...
-  cmd[4] = 0x1;      // Start unit
-  cmd.transport();
+    cmd[0] = MMC_START_STOP_UNIT;
+    cmd[5] = 0; // Necessary to set the proper command length
+    cmd[4] = 0x1;      // Start unit
+    cmd.transport();
 
-  cmd[4] = 0x2;    // LoEj = 1, Start = 0
+    cmd[4] = 0x2;    // LoEj = 1, Start = 0
 
-  return !cmd.transport();
+    return !cmd.transport();
 }
 
 
 bool K3bDevice::Device::load() const
 {
 #ifdef Q_OS_NETBSD
-  bool success = false;
-  bool needToClose = !isOpen();
-  int arg = 0;
+    bool success = false;
+    bool needToClose = !isOpen();
+    int arg = 0;
 
-  if( open() ) {
-    if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
-      success = true;
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+    if( open() ) {
+        usageLock();
+        if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
+            success = true;
+        usageUnlock();
+        if( needToClose )
+            close();
+    }
+    if ( success )
+        return success;
 #elif defined(Q_OS_LINUX)
-  bool success = false;
-  bool needToClose = !isOpen();
+    bool success = false;
+    bool needToClose = !isOpen();
 
-  if( open() ) {
-    if( ::ioctl( d->deviceFd, CDROMEJECT, 1 ) >= 0 )
-      success = true;
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+    if( open() ) {
+        usageLock();
+        if( ::ioctl( d->deviceFd, CDROMCLOSETRAY ) >= 0 )
+            success = true;
+        usageUnlock();
+        if( needToClose )
+            close();
+    }
+    if ( success )
+        return success;
 #endif
 
-  ScsiCommand cmd( this );
-  cmd[0] = MMC_START_STOP_UNIT;
-  cmd[4] = 0x3;    // LoEj = 1, Start = 1
-  cmd[5] = 0;      // Necessary to set the proper command length
-  return !cmd.transport();
+    ScsiCommand cmd( this );
+    cmd[0] = MMC_START_STOP_UNIT;
+    cmd[4] = 0x3;    // LoEj = 1, Start = 1
+    cmd[5] = 0;      // Necessary to set the proper command length
+    return !cmd.transport();
+}
+
+
+bool K3bDevice::Device::setAutoEjectEnabled( bool enabled ) const
+{
+  bool success = false;
+#ifdef Q_OS_LINUX
+
+  bool needToClose = !isOpen();
+  if ( open() ) {
+      usageLock();
+      success = ( ::ioctl( d->deviceFd, CDROMEJECT_SW, enabled ? 1 : 0 ) == 0 );
+      usageUnlock();
+      if ( needToClose ) {
+          close();
+      }
+  }
+#endif
+  return success;
 }
 
 
@@ -3541,4 +3576,33 @@ QCString K3bDevice::Device::mediaId( int mediaType ) const
   }
 
   return id;
+}
+
+
+// int K3bDevice::Device::ioctl( int request, ... ) const
+// {
+//     int r = -1;
+// #if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
+//     d->mutex.lock();
+
+//     va_list ap;
+//     va_start( ap, request );
+//     r = ::ioctl( d->deviceFd, request, ap );
+//     va_end( ap );
+
+//     d->mutex.unlock();
+// #endif
+//     return r;
+// }
+
+
+void K3bDevice::Device::usageLock() const
+{
+    d->mutex.lock();
+}
+
+
+void K3bDevice::Device::usageUnlock() const
+{
+    d->mutex.unlock();
 }

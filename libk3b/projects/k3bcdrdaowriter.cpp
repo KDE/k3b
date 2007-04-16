@@ -51,7 +51,7 @@
 
 #define PGSMSG_MIN PGSMSG_RCD_ANALYZING
 #define PGSMSG_RCD_ANALYZING   1
-#define PGSMSG_RCD_EXTRACTING  2 
+#define PGSMSG_RCD_EXTRACTING  2
 #define PGSMSG_WCD_LEADIN      3
 #define PGSMSG_WCD_DATA        4
 #define PGSMSG_WCD_LEADOUT     5
@@ -285,7 +285,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     else
       emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.").arg(m_cdrdaoBinObject->version), WARNING );
   }
-  
+
   if( k3bcore->globalSettings()->force() ) {
     *m_process << "--force";
     emit infoMessage( i18n("'Force unsafe operations' enabled."), WARNING );
@@ -568,7 +568,14 @@ void K3bCdrdaoWriter::start()
     emit infoMessage( i18n("Unmounting medium"), INFO );
     K3b::unmount( burnDevice() );
   }
+
+  // block the device (including certain checks)
   k3bcore->blockDevice( burnDevice() );
+
+  // lock the device for good in this process since it will
+  // be opened in the growisofs process
+  burnDevice()->close();
+  burnDevice()->usageLock();
 
   if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
     {
@@ -585,7 +592,7 @@ void K3bCdrdaoWriter::start()
 	case WRITE:
 	  if( simulate() )
 	    {
-	      emit infoMessage(i18n("Starting DAO simulation at %1x speed...").arg(d->usedSpeed), 
+	      emit infoMessage(i18n("Starting DAO simulation at %1x speed...").arg(d->usedSpeed),
 			       K3bJob::INFO );
 	      emit newTask( i18n("Simulating") );
 	    }
@@ -627,7 +634,7 @@ void K3bCdrdaoWriter::cancel()
     if( m_process->isRunning() ) {
       m_process->disconnect();
       m_process->kill();
-      
+
       // we need to unlock the device because cdrdao locked it while writing
       //
       // FIXME: try to determine wheater we are writing or reading and choose
@@ -704,6 +711,10 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line )
 
 void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 {
+  // release the device within this process
+  burnDevice()->usageUnlock();
+
+  // unblock the device
   k3bcore->unblockDevice( burnDevice() );
 
   switch ( m_command )
@@ -772,7 +783,7 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
 
     default:
       if( !m_knownError && !wasSourceUnreadable() ) {
-        emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrdaoBinObject->name()).arg(p->exitStatus()), 
+        emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(m_cdrdaoBinObject->name()).arg(p->exitStatus()),
 			  K3bJob::ERROR );
 	emit infoMessage( i18n("Please include the debugging output in your problem report."), K3bJob::ERROR );
       }
@@ -892,7 +903,7 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
   }
   else if( (pos = line.find( "Illegal option" )) > 0 ) {
     // ERROR: Illegal option: -wurst
-    emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrdaoBinObject->name()).arg(line.mid(pos+16)), 
+    emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrdaoBinObject->name()).arg(line.mid(pos+16)),
 		      ERROR );
     m_knownError = true;
   }

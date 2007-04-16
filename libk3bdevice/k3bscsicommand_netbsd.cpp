@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Mark Davies <mark@mcs.vuw.ac.nz>
@@ -83,7 +83,9 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       break;
   }
 
+  m_device->usageLock();
   int i = ::ioctl( m_deviceHandle, SCIOCCOMMAND, &d->cmd );
+  m_device->usageUnlock();
 
   if( needToClose )
     m_device->close();
