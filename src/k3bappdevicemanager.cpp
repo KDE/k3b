@@ -92,13 +92,7 @@ void K3bAppDeviceManager::setMediaCache( K3bMediaCache* c )
 
 int K3bAppDeviceManager::scanBus()
 {
-  int c = K3bDevice::DeviceManager::scanBus();
-
-  if( allDevices().getFirst() ) {
-    setCurrentDevice( allDevices().getFirst() );
-  }
-
-  return c;
+  return K3bDevice::DeviceManager::scanBus();
 }
 
 
