@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,7 +26,7 @@
 
 
 K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const char* name )
-  : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Ok, parent, name ) 
+  : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Ok, parent, name )
 {
   QFrame* frame = plainPage();
   QVBoxLayout* layout = new QVBoxLayout( frame );
@@ -34,7 +34,7 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   layout->setSpacing( spacingHint() );
   layout->setMargin( 0 );
 
-  QLabel* infoLabel = new QLabel( i18n("K3b found multiple inexact CDDB entries. Please select one."), frame );
+  QLabel* infoLabel = new QLabel( i18n("K3b found multiple or inexact CDDB entries. Please select one."), frame );
   infoLabel->setAlignment( WordBreak );
 
   m_listBox = new KListBox( frame, "list_box");
@@ -51,9 +51,9 @@ K3bCddbResultHeader K3bCddbMultiEntriesDialog::selectCddbEntry( K3bCddbQuery* qu
   int i = 1;
   for( QValueListConstIterator<K3bCddbResultHeader> it = headers.begin();
        it != headers.end(); ++it ) {
-    d.m_listBox->insertItem( QString::number(i) + " " + 
-			     (*it).artist + " - " + 
-			     (*it).title + " (" + 
+    d.m_listBox->insertItem( QString::number(i) + " " +
+			     (*it).artist + " - " +
+			     (*it).title + " (" +
 			     (*it).category + ")" );
     ++i;
   }
