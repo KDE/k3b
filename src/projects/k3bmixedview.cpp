@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -56,9 +56,9 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
 
   setMainWidget( splitter );
 
-  connect( m_mixedDirTreeView, SIGNAL(audioTreeSelected()), 
+  connect( m_mixedDirTreeView, SIGNAL(audioTreeSelected()),
 	   this, SLOT(slotAudioTreeSelected()) );
-  connect( m_mixedDirTreeView, SIGNAL(dataTreeSelected()), 
+  connect( m_mixedDirTreeView, SIGNAL(dataTreeSelected()),
 	   this, SLOT(slotDataTreeSelected()) );
 
   m_widgetStack->raiseWidget( m_dataFileView );
@@ -70,7 +70,7 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
   toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
   toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
   toolBox()->addSpacing();
-  toolBox()->addWidgetAction( static_cast<KWidgetAction*>(m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
+  m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ

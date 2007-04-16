@@ -41,9 +41,10 @@
 #include <kmessagebox.h>
 #include <kdirlister.h>
 #include <kprogress.h>
+#include <ktoolbar.h>
 
 
-K3bFileView::K3bFileView(QWidget *parent, const char *name ) 
+K3bFileView::K3bFileView(QWidget *parent, const char *name )
   : K3bContentsView( false, parent, name)
 {
   setupGUI();
@@ -67,7 +68,7 @@ void K3bFileView::setupGUI()
   //  layout->setAutoAdd( true );
 
   m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );
-  m_toolBox = new K3bToolBox( this );
+  m_toolBox = new K3bToolBox( this, "file_view_toolbox" );
 
   layout->addWidget( m_toolBox );
   layout->addWidget( m_dirOp );
@@ -157,7 +158,7 @@ void K3bFileView::slotFilterChanged()
   }
   else
     m_dirOp->setNameFilter( filter );
-  
+
   m_dirOp->rereadDir();
   //  emit filterChanged( filter );
 }

@@ -16,10 +16,12 @@
 #ifndef K3B_TOOLBOX_H
 #define K3B_TOOLBOX_H
 
-#include <qframe.h>
 #include <qstring.h>
 #include <qtoolbutton.h>
 #include <qptrlist.h>
+
+#include <ktoolbar.h>
+
 #include "k3b_export.h"
 
 class KAction;
@@ -28,34 +30,10 @@ class KWidgetAction;
 class QGridLayout;
 class QPopupMenu;
 class QResizeEvent;
+class QMouseEvent;
 
 
-/**
- * internal class. Do not use!
- */
-class LIBK3B_EXPORT K3bToolBoxButton : public QToolButton
-{
-  Q_OBJECT
-
- public:
-  K3bToolBoxButton( KAction*, QWidget* parent );
-  K3bToolBoxButton( const QString& text, const QString& icon, 
-		    const QString& tooltip, const QString& whatsthis,
-		    QObject* receiver, const char* slot,
-		    QWidget* parent );
-
- private slots:
-  void slotPopupActivated();
-
- protected:
-  void resizeEvent( QResizeEvent* );
-
- private:
-  QPopupMenu* m_popupMenu;
-};
-
-
-class LIBK3B_EXPORT K3bToolBox : public QFrame
+class LIBK3B_EXPORT K3bToolBox : public KToolBar
 {
   Q_OBJECT
 
@@ -63,12 +41,13 @@ class LIBK3B_EXPORT K3bToolBox : public QFrame
   K3bToolBox( QWidget* parent = 0, const char* name = 0 );
   ~K3bToolBox();
 
-  K3bToolBoxButton* addButton( const QString& text, const QString& icon, 
+  KToolBarButton* addButton( const QString& text, const QString& icon, 
 			       const QString& tooltip = QString::null, const QString& whatsthis = QString::null,
 			       QObject* receiver = 0, const char* slot = 0,
 			       bool forceTextLabel = false );
-  K3bToolBoxButton* addButton( KAction*, bool forceTextLabel = false );
-  K3bToolBoxButton* addToggleButton( KToggleAction* );
+  KToolBarButton* addToggleButton( KToggleAction* );
+
+  KToolBarButton* addButton( KAction* action, bool forceText = false );
   void addWidgetAction( KWidgetAction* );
 
   /**
@@ -85,8 +64,17 @@ class LIBK3B_EXPORT K3bToolBox : public QFrame
   void clear();
 
  protected:
-  QGridLayout* m_mainLayout;
-  QPtrList<QWidget> m_doNotDeleteWidgets;
+  void mousePressEvent( QMouseEvent* m );
+
+ private slots:
+  void slotContextAboutToShow();
+
+ private:
+  void saveSettings();
+  void loadSettings();
+
+  class Private;
+  Private* d;
 };
 
 

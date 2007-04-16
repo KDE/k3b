@@ -19,6 +19,7 @@
 #include <qobject.h>
 
 #include <k3baudioclient.h>
+#include <k3bwidgetfactoryaction.h>
 
 #include <k3bmsf.h>
 
@@ -82,6 +83,23 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
 
   class Private;
   Private* d;
+};
+
+
+class K3bAudioTrackPlayerSeekAction : public K3bWidgetFactoryAction
+{
+ public:
+    K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent, const char* name );
+    ~K3bAudioTrackPlayerSeekAction();
+
+    void setValue( int v );
+    void setMaxValue( int v );
+
+ protected:
+    QWidget* createWidget( QWidget* container);
+
+ private:
+    K3bAudioTrackPlayer* m_player;
 };
 
 #endif

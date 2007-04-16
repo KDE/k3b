@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <ktoolbarbutton.h>
 
 // application specific includes
 #include "k3bview.h"
@@ -46,7 +47,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
 {
   QGridLayout* grid = new QGridLayout( this );
 
-  m_toolBox = new K3bToolBox( this, "toolbox" );
+  m_toolBox = new K3bToolBox( this );
   m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
 
   grid->addMultiCellWidget( m_toolBox, 0, 0, 0, 1 );
@@ -125,7 +126,7 @@ void K3bView::slotProperties()
 
 // KActionCollection* K3bView::actionCollection() const
 // {
-//   return m_actionCollection; 
+//   return m_actionCollection;
 // }
 
 
@@ -139,7 +140,7 @@ void K3bView::addPluginButtons( int projectType )
 						  pp->icon(),
 						  pp->toolTip(),
 						  pp->whatsThis(),
-						  this, 
+						  this,
 						  SLOT(slotPluginButtonClicked()) );
       m_plugins.insert( static_cast<void*>(button), pp );
     }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -27,6 +27,53 @@
 #include <qtooltip.h>
 
 
+K3bAudioTrackPlayerSeekAction::K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent, const char* name )
+    : K3bWidgetFactoryAction( parent, name ),
+      m_player( player )
+{
+}
+
+
+K3bAudioTrackPlayerSeekAction::~K3bAudioTrackPlayerSeekAction()
+{
+}
+
+void K3bAudioTrackPlayerSeekAction::setValue( int v )
+{
+    int len = containerCount();
+    for( int i = 0; i < len; ++i ) {
+        QWidget* w = widget( container( i ) );
+        if ( w ) {
+            static_cast<QSlider*>( w )->setValue( v );
+        }
+        else
+            kdDebug() << "(K3bAudioTrackPlayerSeekAction::setValue) no widget found for container " << container( i ) << endl;
+    }
+}
+
+
+void K3bAudioTrackPlayerSeekAction::setMaxValue( int v )
+{
+    int len = containerCount();
+    for( int i = 0; i < len; ++i ) {
+        QWidget* w = widget( container( i ) );
+        if ( w ) {
+            static_cast<QSlider*>( w )->setMaxValue( v );
+        }
+        else
+            kdDebug() << "(K3bAudioTrackPlayerSeekAction::setMaxValue) no widget found for container " << container( i ) << endl;
+    }
+}
+
+
+QWidget* K3bAudioTrackPlayerSeekAction::createWidget( QWidget* container)
+{
+    QSlider* seekSlider = new QSlider( 0, 100, 1, 0, Qt::Horizontal, container );
+    connect( seekSlider, SIGNAL(sliderMoved(int)), m_player, SLOT(slotSeek(int)) );
+    return seekSlider;
+}
+
+
 class K3bAudioTrackPlayer::Private
 {
 public:
@@ -36,12 +83,11 @@ public:
   KAction* actionStop;
   KAction* actionNext;
   KAction* actionPrev;
-  KAction* actionSeek;
+  K3bAudioTrackPlayerSeekAction* actionSeek;
 
   // just to handle them easily;
   KActionCollection* actionCollection;
 
-  QSlider* seekSlider;
   QTimer sliderTimer;
 
   // used to make sure that no seek and read operation occur in parallel
@@ -67,58 +113,44 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 
   // create the actions
   // TODO: create shortcuts (is there a way to let the user change them?)
-  d->actionPlay = new KAction( i18n("Play"), 
-			       "player_play", 
-			       KShortcut(), 
-			       this, SLOT(playPause()), 
+  d->actionPlay = new KAction( i18n("Play"),
+			       "player_play",
+			       KShortcut(),
+			       this, SLOT(playPause()),
 			       d->actionCollection,
 			       "play" );
-  d->actionPause = new KAction( i18n("Pause"), 
-				"player_pause", 
-				KShortcut(), 
-				this, SLOT(playPause()), 
+  d->actionPause = new KAction( i18n("Pause"),
+				"player_pause",
+				KShortcut(),
+				this, SLOT(playPause()),
 				d->actionCollection,
 				"pause" );
-  d->actionPlayPause = new KAction( i18n("Play/Pause"), 
-				    "player_play", 
-				    KShortcut(), 
-				    this, SLOT(playPause()), 
+  d->actionPlayPause = new KAction( i18n("Play/Pause"),
+				    "player_play",
+				    KShortcut(),
+				    this, SLOT(playPause()),
 				    d->actionCollection,
 				    "play_pause" );
 
-  d->actionStop = new KAction( i18n("Stop"), 
-			       "player_stop", 
-			       KShortcut(), 
-			       this, SLOT(stop()), 
+  d->actionStop = new KAction( i18n("Stop"),
+			       "player_stop",
+			       KShortcut(),
+			       this, SLOT(stop()),
 			       d->actionCollection,
 			       "stop" );
-  d->actionNext = new KAction( i18n("Next"), 
-			       "player_end", 
-			       KShortcut(), 
-			       this, SLOT(next()), 
+  d->actionNext = new KAction( i18n("Next"),
+			       "player_end",
+			       KShortcut(),
+			       this, SLOT(next()),
 			       d->actionCollection,
 			       "next" );
-  d->actionPrev = new KAction( i18n("Prev"), 
-			       "player_start", 
-			       KShortcut(), 
-			       this, SLOT(prev()), 
+  d->actionPrev = new KAction( i18n("Prev"),
+			       "player_start",
+			       KShortcut(),
+			       this, SLOT(prev()),
 			       d->actionCollection,
 			       "prev" );
-
-  d->seekSlider = new QSlider( 0, 100, 1, 0, Qt::Horizontal, 0, "audiotrackplayerslider" );
-  connect( d->seekSlider, SIGNAL(sliderMoved(int)), this, SLOT(slotSeek(int)) );
-  // FIXME: maybe it's not such a good idea to use a KWidgetAction here since this way the player
-  // can only be used once in one widget. If the action would always create a new slider we could plug
-  // the action into several toolboxes and also use it in some resizing or track splitting dialogs.
-  d->actionSeek = new KWidgetAction( d->seekSlider,
-				     i18n("Seek"),
-				     KShortcut(),
-				     0,
-				     0,
-				     d->actionCollection,
-				     "seek" );
-  // this should be done in KWidgetAction but is not yet
-  connect( d->actionSeek, SIGNAL(enabled(bool)), d->seekSlider, SLOT(setEnabled(bool)) );
+  d->actionSeek = new K3bAudioTrackPlayerSeekAction( this, d->actionCollection, "seek" );
 
   d->actionStop->setEnabled(false);
   d->actionPause->setEnabled(false);
@@ -126,7 +158,7 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
   d->actionPrev->setEnabled(false);
   d->actionSeek->setEnabled(false);
 
-  connect( m_doc, SIGNAL(changed()), 
+  connect( m_doc, SIGNAL(changed()),
 	   this, SLOT(slotDocChanged()) );
   connect( m_doc, SIGNAL(trackChanged(K3bAudioTrack*)),
 	   this, SLOT(slotTrackChanged(K3bAudioTrack*)) );
@@ -151,7 +183,6 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, con
 K3bAudioTrackPlayer::~K3bAudioTrackPlayer()
 {
   stop();
-  delete d->seekSlider;
   delete d;
 }
 
@@ -178,17 +209,16 @@ KAction* K3bAudioTrackPlayer::action( int action ) const
   }
 }
 
-  
+
 void K3bAudioTrackPlayer::playTrack( K3bAudioTrack* track )
 {
   if( track ) {
     // we show the currently playing track as a tooltip on the slider
-    QToolTip::remove( d->seekSlider );
-    QToolTip::add( d->seekSlider, i18n("Playing track %1: %2 - %3")
-		   .arg(track->trackNumber())
-		   .arg(track->artist())
-		   .arg(track->title()) );
-    d->seekSlider->setMaxValue( track->length().totalFrames() );
+    d->actionSeek->setToolTip( i18n("Playing track %1: %2 - %3")
+                               .arg(track->trackNumber())
+                               .arg(track->artist())
+                               .arg(track->title()) );
+    d->actionSeek->setMaxValue( track->length().totalFrames() );
     m_currentTrack = track;
     d->paused = true;
 
@@ -258,6 +288,7 @@ void K3bAudioTrackPlayer::stop()
   d->actionSeek->setEnabled(false);
   d->actionNext->setEnabled(false);
   d->actionPrev->setEnabled(false);
+  d->sliderTimer.stop();
 
   d->actionPlayPause->setIcon( "player_play" );
 
@@ -341,14 +372,14 @@ void K3bAudioTrackPlayer::slotTrackRemoved( K3bAudioTrack* track )
 void K3bAudioTrackPlayer::slotTrackChanged( K3bAudioTrack* track )
 {
   if( m_currentTrack == track ) {
-    d->seekSlider->setMaxValue( track->length().totalFrames() );
+    d->actionSeek->setMaxValue( track->length().totalFrames() );
   }
 }
 
 
 void K3bAudioTrackPlayer::slotUpdateSlider()
 {
-  d->seekSlider->setValue( m_currentPosition.totalFrames() );
+  d->actionSeek->setValue( m_currentPosition.totalFrames() );
 }
 
 

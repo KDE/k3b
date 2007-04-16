@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -59,7 +59,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   fillStatusDisplay()->showTime();
 
   // add button for the audio conversion
-  KAction* conversionAction = new KAction( i18n("Convert Tracks"), "redo", 0, this, SLOT(slotAudioConversion()), 
+  KAction* conversionAction = new KAction( i18n("Convert Tracks"), "redo", 0, this, SLOT(slotAudioConversion()),
 					   actionCollection(), "project_audio_convert" );
   conversionAction->setToolTip( i18n("Convert audio tracks to other audio formats." ) );
 
@@ -73,7 +73,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
   toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
   toolBox()->addSpacing();
-  toolBox()->addWidgetAction( static_cast<KWidgetAction*>(m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )) );
+  m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
