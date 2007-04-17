@@ -222,6 +222,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					     QString::null,
 					     true ) );
       }
+#ifdef CDRECORD_SUID_ROOT_CHECK
       else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					   i18n("%1 will be run without root privileges").arg("cdrecord"),
@@ -234,6 +235,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 						"true when using SuSE's resmgr."),
 					   QString::null,
 					   true ) );
+#endif // CDRECORD_SUID_ROOT_CHECK
 #endif
     }
 
@@ -246,6 +248,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
     }
     else {
 #ifdef Q_OS_LINUX
+#ifdef CDRECORD_SUID_ROOT_CHECK
       if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					   i18n("%1 will be run without root privileges").arg("cdrdao"),
@@ -254,6 +257,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 						"overall stability of the burning process."),
 					   QString::null,
 					   true ) );
+#endif // CDRECORD_SUID_ROOT_CHECK
 #endif
     }
   }

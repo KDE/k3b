@@ -8,6 +8,13 @@ if test "$use_k3b_debug" = "yes"; then
 	echo 	""
 fi
 
+if test "$cdrecord_suid_root" != "yes"; then
+	echo    ""
+	echo    "K3b - Suid root test for cdrecord, cdrdao, and wodim deactivated"
+	echo    "K3b - This is NOT recommended although it might work out fine ;)"
+	echo    ""
+fi
+
 if $have_taglib; then
 	echo "K3b - Audio meta data reading with Taglib:   yes"
 else
