@@ -10,6 +10,8 @@
  * Fixed Multisession import size handling.
  * Fixed Lame quality preset handling.
  * Made libk3bdevice really thread-safe. This fixes the disabled DMA bug!
+ * New configure check --without-cdrecord-suid-root to disable K3b's check for cdrecord permissions.
+   Although not recommended it is requested by many distributors.
 
 1.0
 ===

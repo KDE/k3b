@@ -63,6 +63,20 @@ fi
 AM_CONDITIONAL(with_k3bsetup1, [test x$compile_k3bsetup = xyes])
 
 
+cdrecord_suid_root=yes
+AC_ARG_WITH(
+	cdrecord-suid-root, 
+	AS_HELP_STRING(
+		[--without-cdrecord-suid-root], 
+		[enable or disable K3b's suid root check for cdrecord/cdrdao/wodim (default=enabled)]),
+	[cdrecord_suid_root=$withval], 
+	[cdrecord_suid_root=yes]
+)
+if test x$cdrecord_suid_root = xyes; then
+	AC_DEFINE(CDRECORD_SUID_ROOT_CHECK,1,[defined if K3b should check cdrecord for suid root])
+fi
+
+
 # Extra SCSI support libs can go in CAM_LIB, and are linked into
 # libk3bdevice. For Linux, nothing is needed. FreeBSD requires -lcam
 # (which is in base, so no test is needed).
