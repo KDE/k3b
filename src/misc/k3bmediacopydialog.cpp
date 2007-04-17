@@ -1,8 +1,7 @@
 /*
  *
- * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
- *                    Klaus-Dieter Krannich <kd@k3b.org>
+ * $Id: k3bcdcopydialog.h 619556 2007-01-03 17:38:12Z trueg $
+ * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -14,12 +13,13 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#include "k3bcdcopydialog.h"
+#include "k3bmediacopydialog.h"
 
 #include "k3bmediaselectioncombobox.h"
-#include "k3bcdcopyjob.h"
-#include "k3bclonejob.h"
+
+#include <k3bcdcopyjob.h>
+#include <k3bclonejob.h>
+#include <k3bdvdcopyjob.h>
 
 #include <k3bwriterselectionwidget.h>
 #include <k3btempdirselectionwidget.h>
@@ -63,12 +63,12 @@
 #include <qfileinfo.h>
 
 
-K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal )
-  : K3bInteractionDialog( parent, name, i18n("CD Copy"), i18n("and CD Cloning"),
+K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
+  : K3bInteractionDialog( parent, 0, i18n("Disk Copy"), i18n("and CD Cloning"),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
-			  "CD Copy",
-			  modal )
+			  "Disk Copy",
+                          true )
 {
   QWidget* main = mainWidget();
 
@@ -80,13 +80,11 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   groupSource->setInsideSpacing( spacingHint() );
   groupSource->setInsideMargin( marginHint() );
   m_comboSourceDevice = new K3bMediaSelectionComboBox( groupSource );
-  m_comboSourceDevice->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_CD_ROM );
+  m_comboSourceDevice->setWantedMediumType( K3bDevice::MEDIA_ALL );
   m_comboSourceDevice->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
-  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
-  m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
 
   // tab widget --------------------
   QTabWidget* tabWidget = new QTabWidget( main );
@@ -125,6 +123,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( groupOptions );
   m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
   m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
+  m_checkVerifyData = K3bStdGuiItems::verifyCheckBox( groupOptions );
 
   optionTabGrid->addWidget( groupCopyMode, 0, 0 );
   optionTabGrid->addWidget( groupWritingMode, 1, 0 );
@@ -196,7 +195,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)),
-	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
+	   this, SLOT(slotToggleAll()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
 	   m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
@@ -220,12 +219,12 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 					   "Disable it if your CD drive has problems with reading CD-Text or you want "
 					   "to stick to Cddb info.") );
   QWhatsThis::add( m_checkIgnoreDataReadErrors, i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
-						     "source CD/DVD it will be replaced with zeros on the resulting copy.") );
+						     "source medium it will be replaced with zeros on the resulting copy.") );
 
   QWhatsThis::add( m_comboCopyMode,
 		   "<p><b>" + i18n("Normal Copy") + "</b>"
-		   + i18n("<p>This is the normal copy mode recommended for most CD types. "
-			  "It allows copying Audio CDs, multi and single session Data CDs, and "
+		   + i18n("<p>This is the normal copy mode for DVD, Blu-ray, and most CD media types. "
+			  "It allows copying Audio CDs, multi and single session Data Media, and "
 			  "Enhanced Audio CDs (an Audio CD containing an additional data session)."
 			  "<p>For VideoCDs please use the CD Cloning mode.")
 		   + "<p><b>" + i18n("Clone Copy") + "</b>"
@@ -236,144 +235,226 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 }
 
 
-K3bCdCopyDialog::~K3bCdCopyDialog()
+K3bMediaCopyDialog::~K3bMediaCopyDialog()
 {
 }
 
 
-void K3bCdCopyDialog::init()
+void K3bMediaCopyDialog::init()
 {
-  slotSourceMediumChanged( m_comboSourceDevice->selectedDevice() );
+    slotToggleAll();
 }
 
 
-void K3bCdCopyDialog::setReadingDevice( K3bDevice::Device* dev )
+void K3bMediaCopyDialog::setReadingDevice( K3bDevice::Device* dev )
 {
   m_comboSourceDevice->setSelectedDevice( dev );
 }
 
 
-K3bDevice::Device* K3bCdCopyDialog::readingDevice() const
+K3bDevice::Device* K3bMediaCopyDialog::readingDevice() const
 {
   return m_comboSourceDevice->selectedDevice();
 }
 
 
-void K3bCdCopyDialog::slotStartClicked()
+void K3bMediaCopyDialog::slotStartClicked()
 {
-  //
-  // Let's check the available size
-  //
-  if( m_checkCacheImage->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
-    if( neededSize()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
-      if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
-							 "Write anyway?") ) == KMessageBox::Cancel )
-	return;
-    }
-  }
-
-
-  K3bJobProgressDialog* dlg = 0;
-  if( m_checkOnlyCreateImage->isChecked() ) {
-    dlg = new K3bJobProgressDialog( kapp->mainWidget() );
-  }
-  else {
-    dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
-  }
-
-  K3bBurnJob* burnJob = 0;
-
-  if( m_comboCopyMode->currentItem() == 1 ) {
-
     //
-    // check for m_tempDirSelectionWidget->tempPath() and
-    // m_tempDirSelectionWidget-tempPath() + ".toc"
+    // Let's check the available size
     //
-    if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
-      if( KMessageBox::warningContinueCancel( this,
-				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-				     i18n("File Exists"), i18n("Overwrite") )
-	  != KMessageBox::Continue )
-	return;
+    if( m_checkCacheImage->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
+        if( neededSize()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+            if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
+                                                               "Write anyway?") ) == KMessageBox::Cancel )
+                return;
+        }
     }
 
-    if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
-      if( KMessageBox::warningContinueCancel( this,
-				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
-				     i18n("File Exists"), i18n("Overwrite") )
-	  != KMessageBox::Continue )
-	return;
+    K3bDevice::Device* readDev = m_comboSourceDevice->selectedDevice();
+    K3bDevice::Device* burnDev = m_writerSelectionWidget->writerDevice();
+    K3bMedium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
+    K3bMedium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
+
+    K3bJobProgressDialog* dlg = 0;
+    if( m_checkOnlyCreateImage->isChecked() ) {
+        dlg = new K3bJobProgressDialog( kapp->mainWidget() );
+    }
+    else {
+        dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
     }
 
-    K3bCloneJob* job = new K3bCloneJob( dlg, this );
+    K3bBurnJob* burnJob = 0;
 
-    job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
-    job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
-    job->setImagePath( m_tempDirSelectionWidget->tempPath() );
-    job->setNoCorrection( m_checkNoCorrection->isChecked() );
-    job->setRemoveImageFiles( m_checkDeleteImages->isChecked() && !m_checkOnlyCreateImage->isChecked() );
-    job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-    job->setSimulate( m_checkSimulate->isChecked() );
-    job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
-    job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
-    job->setReadRetries( m_spinDataRetries->value() );
+    if( m_comboCopyMode->currentItem() == 1 ) {
 
-    burnJob = job;
-  }
-  else {
-    K3bCdCopyJob* job = new K3bCdCopyJob( dlg, this );
+        //
+        // check for m_tempDirSelectionWidget->tempPath() and
+        // m_tempDirSelectionWidget-tempPath() + ".toc"
+        //
+        if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
+            if( KMessageBox::warningContinueCancel( this,
+                                                    i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+                                                    i18n("File Exists"), i18n("Overwrite") )
+                != KMessageBox::Continue )
+                return;
+        }
 
-    job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
-    job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
-    job->setSpeed( m_writerSelectionWidget->writerSpeed() );
-    job->setSimulate( m_checkSimulate->isChecked() );
-    job->setOnTheFly( !m_checkCacheImage->isChecked() );
-    job->setKeepImage( !m_checkDeleteImages->isChecked() || m_checkOnlyCreateImage->isChecked() );
-    job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
-    job->setTempPath( m_tempDirSelectionWidget->plainTempPath() );
-    job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
-    job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
-    job->setDataReadRetries( m_spinDataRetries->value() );
-    job->setAudioReadRetries( m_spinAudioRetries->value() );
-    job->setCopyCdText( m_checkReadCdText->isChecked() );
-    job->setIgnoreDataReadErrors( m_checkIgnoreDataReadErrors->isChecked() );
-    job->setIgnoreAudioReadErrors( m_checkIgnoreAudioReadErrors->isChecked() );
-    job->setNoCorrection( m_checkNoCorrection->isChecked() );
-    job->setWritingMode( m_writingModeWidget->writingMode() );
+        if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
+            if( KMessageBox::warningContinueCancel( this,
+                                                    i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
+                                                    i18n("File Exists"), i18n("Overwrite") )
+                != KMessageBox::Continue )
+                return;
+        }
 
-    burnJob = job;
-  }
+        K3bCloneJob* job = new K3bCloneJob( dlg, this );
 
-  if( !exitLoopOnHide() )
-    hide();
+        job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
+        job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
+        job->setImagePath( m_tempDirSelectionWidget->tempPath() );
+        job->setNoCorrection( m_checkNoCorrection->isChecked() );
+        job->setRemoveImageFiles( m_checkDeleteImages->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+        job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+        job->setSimulate( m_checkSimulate->isChecked() );
+        job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
+        job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
+        job->setReadRetries( m_spinDataRetries->value() );
 
-  dlg->startJob( burnJob );
+        burnJob = job;
+    }
+    else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
+        K3bCdCopyJob* job = new K3bCdCopyJob( dlg, this );
 
-  delete dlg;
-  delete burnJob;
+        job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
+        job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
+        job->setSpeed( m_writerSelectionWidget->writerSpeed() );
+        job->setSimulate( m_checkSimulate->isChecked() );
+        job->setOnTheFly( !m_checkCacheImage->isChecked() );
+        job->setKeepImage( !m_checkDeleteImages->isChecked() || m_checkOnlyCreateImage->isChecked() );
+        job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+        job->setTempPath( m_tempDirSelectionWidget->plainTempPath() );
+        job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
+        job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
+        job->setDataReadRetries( m_spinDataRetries->value() );
+        job->setAudioReadRetries( m_spinAudioRetries->value() );
+        job->setCopyCdText( m_checkReadCdText->isChecked() );
+        job->setIgnoreDataReadErrors( m_checkIgnoreDataReadErrors->isChecked() );
+        job->setIgnoreAudioReadErrors( m_checkIgnoreAudioReadErrors->isChecked() );
+        job->setNoCorrection( m_checkNoCorrection->isChecked() );
+        job->setWritingMode( m_writingModeWidget->writingMode() );
 
-  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
-      !exitLoopOnHide() )
-    show();
-  else
-    close();
+        burnJob = job;
+    }
+    else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+        K3bDvdCopyJob* job = new K3bDvdCopyJob( dlg, this );
+
+        job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
+        job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
+        job->setImagePath( m_tempDirSelectionWidget->tempPath() );
+        job->setRemoveImageFiles( m_checkDeleteImages->isChecked() && !m_checkOnlyCreateImage->isChecked() );
+        job->setOnlyCreateImage( m_checkOnlyCreateImage->isChecked() );
+        job->setSimulate( m_checkSimulate->isChecked() );
+        job->setOnTheFly( !m_checkCacheImage->isChecked() );
+        job->setWriteSpeed( m_writerSelectionWidget->writerSpeed() );
+        job->setCopies( m_checkSimulate->isChecked() ? 1 : m_spinCopies->value() );
+        job->setWritingMode( m_writingModeWidget->writingMode() );
+        job->setIgnoreReadErrors( m_checkIgnoreDataReadErrors->isChecked() );
+        job->setReadRetries( m_spinDataRetries->value() );
+        job->setVerifyData( m_checkVerifyData->isChecked() );
+
+        burnJob = job;
+    }
+    else {
+        KMessageBox::sorry( this, "Ups", "No copy support for this source media type yet." );
+        return;
+    }
+
+    if( !exitLoopOnHide() )
+        hide();
+
+    dlg->startJob( burnJob );
+
+    delete dlg;
+    delete burnJob;
+
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+        !exitLoopOnHide() )
+        show();
+    else
+        close();
 }
 
 
-void K3bCdCopyDialog::slotToggleAll()
+void K3bMediaCopyDialog::toggleAll()
 {
   updateOverrideDevice();
 
-  K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
+  K3bDevice::Device* readDev = m_comboSourceDevice->selectedDevice();
+  K3bDevice::Device* burnDev = m_writerSelectionWidget->writerDevice();
+  K3bMedium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
+  K3bMedium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
 
-  m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+  if ( burnDev ) {
+      if( readDev != burnDev &&
+          burnMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+          // no simulation support for DVD+R(W) media
+          m_checkSimulate->setChecked(false);
+          m_checkSimulate->setEnabled(false);
+      }
+      else {
+          m_checkSimulate->setDisabled( m_checkOnlyCreateImage->isChecked() );
+      }
+  }
+  else {
+      m_checkSimulate->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+  }
+
   m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && m_checkCacheImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
   m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() );
-  m_checkOnlyCreateImage->setEnabled( m_checkCacheImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() );
+  m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
+  // FIXME: no verification for CD yet
+  m_checkVerifyData->setDisabled( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ||
+                                  sourceMedium.content() & K3bMedium::CONTENT_AUDIO );
+
+  // we can only clone single session CDs
+  if( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
+      m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
+      m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
+
+      if ( sourceMedium.toc().sessions() == 1 ) {
+          m_comboCopyMode->setEnabled( true );
+      }
+      else {
+          m_comboCopyMode->setEnabled( false );
+          m_comboCopyMode->setCurrentItem( 0 );
+      }
+  }
+  else {
+      m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
+
+      m_comboCopyMode->setEnabled( false );
+      m_comboCopyMode->setCurrentItem( 0 );
+
+      // FIXME: at some point the media combo should also handle media sizes!
+
+      if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+          m_writerSelectionWidget->setWantedMediumType( sourceMedium.diskInfo().numLayers() > 1 &&
+                                                        sourceMedium.diskInfo().size().mode1Bytes() > 4700372992LL
+                                                        ? K3bDevice::MEDIA_WRITABLE_DVD_DL
+                                                        : K3bDevice::MEDIA_WRITABLE_DVD_SL );
+      }
+      else {
+          // FIXME: do the same single layer/dual layer thing like with DVD
+          m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_BD );
+      }
+  }
+
+  // CD Cloning
   if( m_comboCopyMode->currentItem() == 1 ) {
     // cdrecord does not support cloning on-the-fly
     m_checkCacheImage->setChecked(true);
@@ -381,63 +462,69 @@ void K3bCdCopyDialog::slotToggleAll()
 
     m_writingModeWidget->setSupportedModes( K3b::RAW );
   }
+
+  // Normal CD/DVD/Blue-Ray copy
   else {
-    m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
+      //
+      // If the same device is used for reading and writing all we can present is a fuzzy
+      // selection of the writing mode
+      //
+      if( burnDev == readDev ) {
+          int modes = 0;
+          if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
+              modes = K3b::TAO|K3b::DAO|K3b::RAW;
+          }
+          else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+              // only auto for DVD+R(W)
+              if( burnDev->writeCapabilities() & (K3bDevice::MEDIA_DVD_R|K3bDevice::MEDIA_DVD_RW) ) {
+                  modes |= K3b::DAO|K3b::WRITING_MODE_RES_OVWR;
+                  if( burnDev->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
+                      modes |= K3b::WRITING_MODE_INCR_SEQ;
+              }
+
+              // TODO: once we have layer jump support: this is where it goes
+//               if ( burnDev->supportsWritingMode( K3bDevice::WRITING_MODE_LAYER_JUMP ) ) {
+//                   modes |= K3bDevice::WRITING_MODE_LAYER_JUMP;
+//               }
+          }
+          else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_BD_ALL ) {
+              // no modes, only auto
+          }
+
+          m_writingModeWidget->setSupportedModes( modes );
+      }
+      else {
+          m_writingModeWidget->determineSupportedModesFromMedium( burnDev );
+      }
   }
 
-
-
-  static_cast<QWidget*>( child( "audio_options" ) )->setDisabled( m_comboCopyMode->currentItem() == 1 );
-
-  m_checkIgnoreDataReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
-
-  m_groupAdvancedAudioOptions->setEnabled( k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).content() & K3bMedium::CONTENT_AUDIO &&
-					   m_comboCopyMode->currentItem() == 0 );
-
-  m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
-
   m_tempDirSelectionWidget->setNeededSize( neededSize() );
 
-  setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() &&
-		    (dev || m_checkOnlyCreateImage->isChecked()) );
-}
-
-
-void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
-{
-  updateOverrideDevice();
-
-  K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
-
-  m_tempDirSelectionWidget->setNeededSize( neededSize() );
-
-  if( k3bappcore->mediaCache()->toc( dev ).contentType() == K3bDevice::DATA ) {
+  if( sourceMedium.toc().contentType() == K3bDevice::DATA &&
+      sourceMedium.toc().count() == 1 ) {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
     m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory()
-					   + medium.volumeId().lower()
-					   + ( medium.toc().count() == 1 ? QString(".iso") : QString::null ) );
+					   + sourceMedium.volumeId().lower()
+					   + QString(".iso") );
   }
   else {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );
+    m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory()
+					   + sourceMedium.volumeId().lower() );
   }
 
-  m_groupAdvancedAudioOptions->setEnabled( k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_AUDIO );
-  m_groupAdvancedDataOptions->setEnabled( k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_DATA );
+  m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_AUDIO && m_comboCopyMode->currentItem() == 0 );
+  m_groupAdvancedDataOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_DATA );
 
-  // we can only clone single session CDs
-  if( k3bappcore->mediaCache()->toc( dev ).sessions() > 1 ) {
-    m_comboCopyMode->setEnabled( false );
-    m_comboCopyMode->setCurrentItem( 0 );
-  }
-  else {
-    m_comboCopyMode->setEnabled( true );
-  }
+  setButtonEnabled( START_BUTTON,
+                    m_comboSourceDevice->selectedDevice() &&
+		    (burnDev || m_checkOnlyCreateImage->isChecked()) );
 
-  toggleAll();
+  K3bInteractionDialog::toggleAll();
 }
 
 
-void K3bCdCopyDialog::updateOverrideDevice()
+void K3bMediaCopyDialog::updateOverrideDevice()
 {
   if( !m_checkCacheImage->isChecked() )
     m_writerSelectionWidget->setOverrideDevice( 0 );
@@ -448,7 +535,7 @@ void K3bCdCopyDialog::updateOverrideDevice()
 }
 
 
-void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
+void K3bMediaCopyDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writerSelectionWidget->loadConfig( c );
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
@@ -458,6 +545,7 @@ void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
   m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
   m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
   m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
+  m_checkVerifyData->setChecked( c->readBoolEntry( "verify data", false ) );
 
   m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
 
@@ -480,7 +568,7 @@ void K3bCdCopyDialog::loadUserDefaults( KConfigBase* c )
 }
 
 
-void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
+void K3bMediaCopyDialog::saveUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -489,6 +577,7 @@ void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
   c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
   c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
   c->writeEntry( "copies", m_spinCopies->value() );
+  c->writeEntry( "verify data", m_checkVerifyData->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
   m_tempDirSelectionWidget->saveConfig( c );
@@ -511,7 +600,7 @@ void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
 }
 
 
-void K3bCdCopyDialog::loadK3bDefaults()
+void K3bMediaCopyDialog::loadK3bDefaults()
 {
   m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
   m_writerSelectionWidget->loadDefaults();
@@ -529,17 +618,24 @@ void K3bCdCopyDialog::loadK3bDefaults()
   m_spinDataRetries->setValue(128);
   m_spinAudioRetries->setValue(5);
   m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
+  m_checkVerifyData->setChecked( false );
 
   slotToggleAll();
 }
 
 
-KIO::filesize_t K3bCdCopyDialog::neededSize() const
+KIO::filesize_t K3bMediaCopyDialog::neededSize() const
 {
-  if( m_comboCopyMode->currentItem() == 0 )
-    return k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).diskInfo().size().mode1Bytes();
-  else
-    return k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).diskInfo().size().rawBytes();
+    K3bMedium medium = k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() );
+
+    if( medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA )
+        return 0;
+    else if( medium.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW) )
+        return (KIO::filesize_t)medium.iso9660Descriptor().volumeSpaceSize * (KIO::filesize_t)2048;
+    else if ( m_comboCopyMode->currentItem() == 0 )
+        return medium.diskInfo().size().mode1Bytes();
+    else
+        return medium.diskInfo().size().rawBytes();
 }
 
-#include "k3bcdcopydialog.moc"
+#include "k3bmediacopydialog.moc"

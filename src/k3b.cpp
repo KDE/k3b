@@ -104,7 +104,8 @@
 #include "k3bstdguiitems.h"
 #include "misc/k3bdvdformattingdialog.h"
 #include "misc/k3bdvdcopydialog.h"
-//#include "dvdcopy/k3bvideodvdcopydialog.h"
+#include "misc/k3bmediacopydialog.h"
+#include "misc/k3bmediaformattingdialog.h"
 #include "k3bprojectmanager.h"
 #include "k3bwelcomewidget.h"
 #include <k3bpluginmanager.h>
@@ -215,10 +216,10 @@ void K3bMainWindow::initActions()
   actionFileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
   actionFileSave = KStdAction::save(this, SLOT(slotFileSave()), actionCollection());
   actionFileSaveAs = KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
-  actionFileSaveAll = new KAction( i18n("Save All"), "save_all", 0, this, SLOT(slotFileSaveAll()), 
+  actionFileSaveAll = new KAction( i18n("Save All"), "save_all", 0, this, SLOT(slotFileSaveAll()),
 				   actionCollection(), "file_save_all" );
   actionFileClose = KStdAction::close(this, SLOT(slotFileClose()), actionCollection());
-  actionFileCloseAll = new KAction( i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()), 
+  actionFileCloseAll = new KAction( i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()),
 				    actionCollection(), "file_close_all" );
   actionFileQuit = KStdAction::quit(this, SLOT(slotFileQuit()), actionCollection());
   actionViewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
@@ -274,7 +275,7 @@ void K3bMainWindow::initActions()
   actionProjectAddFiles = new KAction( i18n("&Add Files..."), "filenew", 0, this, SLOT(slotProjectAddFiles()),
 				       actionCollection(), "project_add_files");
 
-  KAction* actionClearProject = new KAction( i18n("&Clear Project"), QApplication::reverseLayout() ? "clear_left" : "locationbar_erase", 0, 
+  KAction* actionClearProject = new KAction( i18n("&Clear Project"), QApplication::reverseLayout() ? "clear_left" : "locationbar_erase", 0,
 					     this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
   actionViewDirTreeView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirTreeView()),
@@ -288,8 +289,10 @@ void K3bMainWindow::initActions()
 
   actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "erasecd", 0, this, SLOT(slotBlankCdrw()),
 				      actionCollection(), "tools_blank_cdrw" );
-  KAction* actionToolsFormatDVD = new KAction( i18n("&Format DVD%1RW...").arg("±"), "formatdvd", 0, this, 
+  KAction* actionToolsFormatDVD = new KAction( i18n("&Format DVD%1RW...").arg("±"), "formatdvd", 0, this,
 					       SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
+  KAction* actionToolsFormatMedium = new KAction( i18n("&Format/Erase rewritable disk...").arg("±"), "formatdvd", 0, this,
+                                                  SLOT(slotFormatMedium()), actionCollection(), "tools_format_medium" );
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
   KAction* actionToolsWriteDvdImage = new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
@@ -300,6 +303,9 @@ void K3bMainWindow::initActions()
 
   KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "dvdcopy", 0, this, SLOT(slotDvdCopy()),
 					    actionCollection(), "tools_copy_dvd" );
+
+  KAction* actionToolsMediaCopy = new KAction(i18n("Copy &Medium..."), "cdcopy", 0, this, SLOT(slotMediaCopy()),
+					    actionCollection(), "tools_copy_media" );
 
   actionToolsCddaRip = new KAction( i18n("Rip Audio CD..."), "cddarip", 0, this, SLOT(slotCddaRip()),
 				    actionCollection(), "tools_cdda_rip" );
@@ -317,7 +323,7 @@ void K3bMainWindow::initActions()
 #endif
 
 #ifdef K3B_DEBUG
-  (void)new KAction( "Test Media Selection ComboBox", 0, 0, this, 
+  (void)new KAction( "Test Media Selection ComboBox", 0, 0, this,
 		     SLOT(slotMediaSelectionTester()), actionCollection(),
 		     "test_media_selection" );
 #endif
@@ -331,10 +337,12 @@ void K3bMainWindow::initActions()
   actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
   actionToolsBlankCdrw->setToolTip( i18n("Open the CD-RW erasing dialog") );
   actionToolsFormatDVD->setToolTip( i18n("Open the DVD%1RW formatting dialog").arg("±") );
+  actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
   actionCdCopy->setToolTip( i18n("Open the CD copy dialog") );
   actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to CD") );
   actionToolsWriteDvdImage->setToolTip( i18n("Write an Iso9660 image to DVD") );
   actionToolsDvdCopy->setToolTip( i18n("Open the DVD copy dialog") );
+  actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
   actionFileSave->setToolTip(i18n("Saves the current project"));
@@ -471,18 +479,18 @@ void K3bMainWindow::createClient( K3bDoc* doc )
     break;
   case K3bDoc::DATA:
     view = new K3bDataView( static_cast<K3bDataDoc*>(doc), m_documentTab );
-    break; 
+    break;
   case K3bDoc::MIXED:
     {
       K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
       view = new K3bMixedView( mixedDoc, m_documentTab );
       mixedDoc->dataDoc()->setView( view );
       mixedDoc->audioDoc()->setView( view );
-      break; 
+      break;
     }
   case K3bDoc::VCD:
     view = new K3bVcdView( static_cast<K3bVcdDoc*>(doc), m_documentTab );
-    break; 
+    break;
   case K3bDoc::MOVIX:
     view = new K3bMovixView( static_cast<K3bMovixDoc*>(doc), m_documentTab );
     break;
@@ -741,7 +749,7 @@ bool K3bMainWindow::queryClose()
 
 //     kdDebug() << "(K3bMainWindow::queryClose) jobs running." << endl;
 //     K3bJob* job = k3bcore->runningJobs().getFirst();
-    
+
 //     // now search for the major job (to be on the safe side although for now no subjobs register with the k3bcore)
 //     K3bJobHandler* jh = job->jobHandler();
 //     while( jh->isJob() ) {
@@ -759,7 +767,7 @@ bool K3bMainWindow::queryClose()
 //     // now ask the user if he/she really wants to cancel this job
 //     if( job->active() ) {
 //       if( KMessageBox::questionYesNo( progressDialog ? progressDialog : this,
-// 				      i18n("Do you really want to cancel?"), 
+// 				      i18n("Do you really want to cancel?"),
 // 				      i18n("Cancel") ) == KMessageBox::Yes ) {
 // 	// cancel the job
 // 	kdDebug() << "(K3bMainWindow::queryClose) canceling job." << endl;
@@ -776,7 +784,7 @@ bool K3bMainWindow::queryClose()
 // 	  //
 // 	  // now here we have the problem that due to the whole Qt event thing the exec call (or
 // 	  // in this case most likely the startJob call) does not return until we leave this method.
-// 	  // That means that the progress dialog might be deleted by it's parent below (when we 
+// 	  // That means that the progress dialog might be deleted by it's parent below (when we
 // 	  // close docs) before it is deleted by the creator (most likely a projectburndialog).
 // 	  // That would result in a double deletion and thus a crash.
 // 	  // So we just reparent the dialog to 0 here so it's (former) parent won't delete it.
@@ -795,7 +803,7 @@ bool K3bMainWindow::queryClose()
   // if we are closed by the session manager everything is fine since we store the
   // current state in saveProperties
   //
-  if( kapp->sessionSaving() ) 
+  if( kapp->sessionSaving() )
     return true;
 
   // FIXME: do not close the docs here. Just ask for them to be saved and return false
@@ -825,9 +833,9 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
   if( !KConfigGroup( config(), "General Options" ).readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
     return true;
 
-  switch ( KMessageBox::warningYesNoCancel( this, 
+  switch ( KMessageBox::warningYesNoCancel( this,
 					    i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
-					    i18n("Closing Project"), 
+					    i18n("Closing Project"),
 					    KStdGuiItem::save(),
 					    KGuiItem( i18n("&Discard"), "editshred" ) ) )
     {
@@ -940,7 +948,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
       bool exists = KIO::NetAccess::exists( url, false, 0 );
       if( !exists ||
 	  ( exists &&
-	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?").arg( url.prettyURL() ), 
+	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?").arg( url.prettyURL() ),
 						i18n("File Exists"), i18n("Overwrite") )
 	    == KMessageBox::Continue ) ) {
 
@@ -1267,9 +1275,9 @@ void K3bMainWindow::slotProjectAddFiles()
   K3bView* view = activeView();
 
   if( view ) {
-    QStringList files = KFileDialog::getOpenFileNames( ":k3b-project-add-files", 
-						       i18n("*|All Files"), 
-						       this, 
+    QStringList files = KFileDialog::getOpenFileNames( ":k3b-project-add-files",
+						       i18n("*|All Files"),
+						       this,
 						       i18n("Select Files to Add to Project") );
 
     KURL::List urls;
@@ -1354,6 +1362,34 @@ void K3bMainWindow::slotDvdCopy()
 }
 
 
+void K3bMainWindow::formatMedium( K3bDevice::Device* dev )
+{
+  K3bMediaFormattingDialog d( this );
+  d.setDevice( dev );
+  d.exec(false);
+}
+
+
+void K3bMainWindow::slotFormatMedium()
+{
+    formatMedium( 0 );
+}
+
+
+void K3bMainWindow::mediaCopy( K3bDevice::Device* dev )
+{
+  K3bMediaCopyDialog d( this );
+  d.setReadingDevice( dev );
+  d.exec(false);
+}
+
+
+void K3bMainWindow::slotMediaCopy()
+{
+  mediaCopy( 0 );
+}
+
+
 // void K3bMainWindow::slotVideoDvdCopy()
 // {
 //   K3bVideoDvdCopyDialog d( this );
@@ -1375,12 +1411,12 @@ void K3bMainWindow::slotShowContentsView()
 }
 
 
-void K3bMainWindow::slotShowMenuBar() 
-{ 
-  if( menuBar()->isVisible() ) 
-    menuBar()->hide(); 
-  else 
-    menuBar()->show(); 
+void K3bMainWindow::slotShowMenuBar()
+{
+  if( menuBar()->isVisible() )
+    menuBar()->hide();
+  else
+    menuBar()->show();
 }
 
 
@@ -1568,9 +1604,9 @@ void K3bMainWindow::cddaRip( K3bDevice::Device* dev )
 {
   if( !dev ||
       !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_AUDIO ) )
-    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_CD_ALL, 
+    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_CD_ALL,
 						 K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-						 K3bMedium::CONTENT_AUDIO, 
+						 K3bMedium::CONTENT_AUDIO,
 						 this,
 						 i18n("Audio CD Rip") );
 
@@ -1583,9 +1619,9 @@ void K3bMainWindow::videoDvdRip( K3bDevice::Device* dev )
 {
   if( !dev ||
       !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_VIDEO_DVD ) )
-    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_DVD_ALL, 
+    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_DVD_ALL,
 						 K3bDevice::STATE_COMPLETE,
-						 K3bMedium::CONTENT_VIDEO_DVD, 
+						 K3bMedium::CONTENT_VIDEO_DVD,
 						 this,
 						 i18n("Video DVD Rip") );
 
@@ -1604,9 +1640,9 @@ void K3bMainWindow::videoCdRip( K3bDevice::Device* dev )
 {
   if( !dev ||
       !(k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_VIDEO_CD ) )
-    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_CD_ALL, 
+    dev = K3bMediaSelectionDialog::selectMedium( K3bDevice::MEDIA_CD_ALL,
 						 K3bDevice::STATE_COMPLETE,
-						 K3bMedium::CONTENT_VIDEO_CD, 
+						 K3bMedium::CONTENT_VIDEO_CD,
 						 this,
 						 i18n("Video CD Rip") );
 

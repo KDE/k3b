@@ -90,6 +90,12 @@ public:
   K3bPipeBuffer* ringBuffer;
 
   QString multiSessionInfo;
+
+    int burnedMediumType;
+
+    int speedMultiplicator() const {
+        return ( burnedMediumType & K3bDevice::MEDIA_BD_ALL ? 4496 : 1385 );
+    }
 };
 
 
@@ -268,12 +274,14 @@ bool K3bGrowisofsWriter::prepareProcess()
   else
     d->gh->reset( burnDevice(), false );
 
+  d->burnedMediumType = burnDevice()->mediaType();
+
   //
   // Never use the -dvd-compat parameter with DVD+RW media
   // because the only thing it does is creating problems.
   // Normally this should be done in growisofs
   //
-  if( dvdCompat && burnDevice()->mediaType() != K3bDevice::MEDIA_DVD_PLUS_RW )
+  if( dvdCompat && d->burnedMediumType != K3bDevice::MEDIA_DVD_PLUS_RW )
     *d->process << "-dvd-compat";
 
   //
@@ -291,11 +299,17 @@ bool K3bGrowisofsWriter::prepareProcess()
       speed = burnDevice()->determineMaximalWriteSpeed();
     }
 
-    // speed may be a float number. example: DVD+R(W): 2.4x
-    if( speed != 0 )
-      *d->process << QString("-speed=%1").arg( speed%1385 > 0
-					      ? QString::number( (float)speed/1385.0, 'f', 1 )
-					      : QString::number( speed/1385 ) );
+    if( speed != 0 ) {
+        if ( d->burnedMediumType & K3bDevice::MEDIA_DVD_ALL ) {
+            // speed may be a float number. example: DVD+R(W): 2.4x
+            *d->process << QString("-speed=%1").arg( speed%1385 > 0
+                                                     ? QString::number( (float)speed/1385.0, 'f', 1 )
+                                                     : QString::number( speed/1385 ) );
+        }
+        else if ( d->burnedMediumType & K3bDevice::MEDIA_BD_ALL ) {
+            *d->process << QString("-speed=%1").arg( QString::number( speed/4496 ) );
+        }
+    }
   }
 
   if( k3bcore->globalSettings()->overburn() )
@@ -495,7 +509,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 	double speed = line.mid( pos, line.find( 'x', pos ) - pos ).toDouble(&ok);
 	if( ok ) {
 	  if( d->lastWritingSpeed != speed )
-	    emit writeSpeed( (int)(speed*1385.0), 1385 );
+	    emit writeSpeed( (int)(speed*d->speedMultiplicator()), d->speedMultiplicator() );
 	  d->lastWritingSpeed = speed;
 	}
 	else
@@ -544,7 +558,9 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
 
     int s = d->speedEst->average();
     if( s > 0 )
-      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/1385.0), 2), INFO );
+      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)")
+                        .arg(s)
+                        .arg(KGlobal::locale()->formatNumber( ( double )s/( double )d->speedMultiplicator()), 2), INFO );
 
     if( simulate() )
       emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
@@ -592,7 +608,7 @@ void K3bGrowisofsWriter::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
 
 void K3bGrowisofsWriter::slotThroughput( int t )
 {
-  emit writeSpeed( t, 1385 );
+  emit writeSpeed( t, d->speedMultiplicator() );
 }
 
 

@@ -1,8 +1,7 @@
 /* 
  *
- * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
- *                    Klaus-Dieter Krannich <kd@k3b.org>
+ * $Id: k3bcdcopydialog.h 619556 2007-01-03 17:38:12Z trueg $
+ * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -14,13 +13,10 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#ifndef _K3B_MEDIA_COPY_DIALOG_H_
+#define _K3B_MEDIA_COPY_DIALOG_H_
 
-#ifndef K3BCDCOPYDIALOG_H
-#define K3BCDCOPYDIALOG_H
-
-
-#include <k3binteractiondialog.h>
-
+#include "k3binteractiondialog.h"
 #include <kio/global.h>
 
 namespace K3bDevice {
@@ -38,29 +34,23 @@ class K3bWritingModeWidget;
 class QButtonGroup;
 class QGroupBox;
 
-
-/**
-  *@author Sebastian Trueg
-  */
-class K3bCdCopyDialog : public K3bInteractionDialog
+class K3bMediaCopyDialog : public K3bInteractionDialog
 {
   Q_OBJECT
 
  public: 
-  K3bCdCopyDialog(QWidget *parent = 0, const char *name = 0, bool modal = true );
-  ~K3bCdCopyDialog();
+  K3bMediaCopyDialog( QWidget *parent = 0 );
+  ~K3bMediaCopyDialog();
 
   void setReadingDevice( K3bDevice::Device* );
   K3bDevice::Device* readingDevice() const;
 
  private slots:
   void slotStartClicked();
-
-  void slotToggleAll();
-  void slotSourceMediumChanged( K3bDevice::Device* );
   void updateOverrideDevice();
 
  protected:
+  void toggleAll();
   void init();
 
  private:
@@ -80,6 +70,7 @@ class K3bCdCopyDialog : public K3bInteractionDialog
   QCheckBox* m_checkIgnoreDataReadErrors;
   QCheckBox* m_checkIgnoreAudioReadErrors;
   QCheckBox* m_checkNoCorrection;
+  QCheckBox* m_checkVerifyData;
   K3bMediaSelectionComboBox* m_comboSourceDevice;
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinCopies;

@@ -241,7 +241,7 @@ int K3bDevice::DeviceManager::scanBus()
 #ifdef Q_OS_NETBSD
   NetBSDDeviceScan();
 #endif
-  
+
   return d->allDevices.count() - numDevs;
 }
 
@@ -249,7 +249,7 @@ int K3bDevice::DeviceManager::scanBus()
 void K3bDevice::DeviceManager::LinuxDeviceScan()
 {
 #ifdef HAVE_RESMGR
-  // 
+  //
   // Resmgr device scan
   //
   char** resmgrDevices = rsm_list_devices( 0 );
@@ -702,7 +702,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
     // With resmgr we might only be able to open the symlink name.
     if( testForCdrom(devicename) ) {
       resolved = devicename;
-    } 
+    }
     else {
       return 0;
     }

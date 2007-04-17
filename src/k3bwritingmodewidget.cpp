@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -98,7 +98,7 @@ void K3bWritingModeWidget::init()
 
 void K3bWritingModeWidget::initWhatsThisHelp()
 {
-  addGlobalWhatsThisText( "<p><b>" + i18n("Writing mode") + "</b></p>", 
+  addGlobalWhatsThisText( "<p><b>" + i18n("Writing mode") + "</b></p>",
 			  i18n("Be aware that the writing mode is ignored when writing DVD+R(W) since "
 			       "there is only one way to write them.")
 			  + "<p><i>"
@@ -230,6 +230,8 @@ void K3bWritingModeWidget::determineSupportedModesFromMedium( const K3bMedium& m
 				  K3bDevice::MEDIA_DVD_RW_SEQ|
 				  K3bDevice::MEDIA_DVD_RW_OVWR) )
     modes |= K3b::WRITING_MODE_RES_OVWR;
+
+// FIXME: add Blu-Ray media
 
   setSupportedModes( modes );
   setDevice( m.device() );

@@ -126,7 +126,6 @@ K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
     m_noCorrection(false),
     m_dataReadRetries(128),
     m_audioReadRetries(5),
-    m_preferCdText(false),
     m_copyCdText(true),
     m_writingMode( K3b::WRITING_MODE_AUTO )
 {
@@ -205,7 +204,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       else
 	emit infoMessage( i18n("Copying Data CD."), INFO );
       break;
-      
+
     case K3bDevice::MIXED:
       audio = true;
       if( dh->diskInfo().numSessions() != 2 || d->toc[0].type() != K3bDevice::Track::AUDIO ) {
@@ -259,7 +258,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     //
     // To copy mode2 data tracks we need cdrecord >= 2.01a12 which introduced the -xa1 and -xamix options
     //
-    if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+    if( k3bcore->externalBinManager()->binObject("cdrecord") &&
 	!k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) ) {
       for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
 	if( (*it).type() == K3bDevice::Track::DATA &&
@@ -366,10 +365,10 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 void K3bCdCopyJob::searchCdText()
 {
   emit newSubTask( i18n("Searching CD-TEXT") );
-  
+
   connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
 	   SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	   this, 
+	   this,
 	   SLOT(slotCdTextReady(K3bDevice::DeviceHandler*)) );
 }
 
@@ -387,19 +386,14 @@ void K3bCdCopyJob::slotCdTextReady( K3bDevice::DeviceHandler* dh )
       emit infoMessage( i18n("Found corrupted CD-TEXT. Ignoring it."), WARNING );
       d->haveCdText = false;
     }
-
-    if( d->haveCdText && m_preferCdText )
-      startCopy();
-    else
-      queryCddb();  
   }
   else {
     emit infoMessage( i18n("No CD-TEXT found."), INFO );
 
     d->haveCdText = false;
-
-    queryCddb();
   }
+
+  queryCddb();
 }
 
 
@@ -452,7 +446,19 @@ void K3bCdCopyJob::startCopy()
 {
   d->currentWrittenSession = d->currentReadSession = 1;
   d->doneCopies = 0;
-  
+
+  if ( d->haveCdText && d->haveCddb ) {
+      K3bDevice::CdText cdt( d->cdTextRaw );
+      if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used to generate the CD-TEXT on the new CD?" )
+                          .arg(cdt.performer()).arg(cdt.title())
+                          .arg(d->cddbInfo.cdArtist).arg(d->cddbInfo.cdTitle),
+                          i18n( "CD-TEXT" ),
+                          i18n( "Use CD-TEXT data" ),
+                          i18n( "Use Cddb entry" ) ) ) {
+          d->haveCdText = false;
+      }
+  }
+
   if( m_onTheFly ) {
     emit newSubTask( i18n("Preparing write process...") );
 
@@ -553,7 +559,7 @@ bool K3bCdCopyJob::prepareImageFiles()
   }
   else {
     // we only need a single image file
-    if( !fi.isFile() || 
+    if( !fi.isFile() ||
 	questionYesNo( i18n("Do you want to overwrite %1?").arg(m_tempPath),
 		       i18n("File Exists") ) ) {
       if( fi.isDir() )
@@ -594,9 +600,9 @@ void K3bCdCopyJob::readNextSession()
   if( d->currentReadSession == 1 && d->toc[0].type() == K3bDevice::Track::AUDIO ) {
     if( !d->audioSessionReader ) {
       d->audioSessionReader = new K3bAudioSessionReadingJob( this, this );
-      connect( d->audioSessionReader, SIGNAL(nextTrack(int, int)), 
+      connect( d->audioSessionReader, SIGNAL(nextTrack(int, int)),
 	       this, SLOT(slotReadingNextTrack(int, int)) );
-      connectSubJob( d->audioSessionReader, 
+      connectSubJob( d->audioSessionReader,
 		     SLOT(slotSessionReaderFinished(bool)),
 		     true,
 		     SLOT(slotReaderProgress(int)),
@@ -623,7 +629,7 @@ void K3bCdCopyJob::readNextSession()
       connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
       connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
       connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-      connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+      connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
     }
 
@@ -662,7 +668,7 @@ void K3bCdCopyJob::readNextSession()
       d->dataTrackReader->writeToFd( d->cdrecordWriter->fd() );
     else
       d->dataTrackReader->setImagePath( d->imageNames[trackNum-1] );
-    
+
     d->dataReaderRunning = true;
     if( !m_onTheFly || m_onlyCreateImages )
       slotReadingNextTrack( 1, 1 );
@@ -695,7 +701,7 @@ bool K3bCdCopyJob::writeNextSession()
   emit newSubTask( i18n("Waiting for media") );
 
   // if session > 1 we wait for an appendable CD
-  if( waitForMedia( m_writerDevice, 
+  if( waitForMedia( m_writerDevice,
 		    d->currentWrittenSession > 1 && !m_simulate
 		    ? K3bDevice::STATE_INCOMPLETE
 		    : K3bDevice::STATE_EMPTY,
@@ -719,7 +725,7 @@ bool K3bCdCopyJob::writeNextSession()
     connect( d->cdrecordWriter, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
     //    connect( d->cdrecordWriter, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
     connect( d->cdrecordWriter, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( d->cdrecordWriter, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+    connect( d->cdrecordWriter, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
 
@@ -835,7 +841,7 @@ bool K3bCdCopyJob::writeNextSession()
       if( usedWritingMode == K3b::TAO ) {
 	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
       }
-      else if( d->haveCdText && ( !d->haveCddb || m_preferCdText ) ) {
+      else if( d->haveCdText ) {
 	// use the raw CDTEXT data
 	d->cdrecordWriter->setRawCdText( d->cdTextRaw );
       }
@@ -883,7 +889,7 @@ bool K3bCdCopyJob::writeNextSession()
       // since writing data tracks in TAO mode is no loss let's default to TAO in the case of 2056 byte
       // sectors (which is when writing xa form1 sectors here)
       if( m_writerDevice->dao() &&
-	  d->toc.count() == 1 && 
+	  d->toc.count() == 1 &&
 	  !multi &&
 	  track->mode() == K3bDevice::Track::MODE1 )
  	usedWritingMode = K3b::DAO;
@@ -973,7 +979,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 	      blockingInformation( i18n("K3b was unable to eject the source disk. Please do so manually.") );
 	    }
 	  }
-	  
+
 	  if( !writeNextSession() ) {
 	    // nothing is running here...
 	    finishJob( d->canceled, d->error );
@@ -989,7 +995,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
     if( !d->canceled ) {
       emit infoMessage( i18n("Error while reading session %1.").arg(d->currentReadSession), ERROR );
       if( m_onTheFly )
-	d->cdrecordWriter->setSourceUnreadable(true);	
+	d->cdrecordWriter->setSourceUnreadable(true);
     }
 
     finishJob( d->canceled, !d->canceled );
@@ -1186,8 +1192,8 @@ QString K3bCdCopyJob::jobDescription() const
 
 QString K3bCdCopyJob::jobDetails() const
 {
-  return i18n("Creating 1 copy", 
-	      "Creating %n copies", 
+  return i18n("Creating 1 copy",
+	      "Creating %n copies",
 	      (m_simulate||m_onlyCreateImages) ? 1 : m_copies );
 }
 
@@ -1201,11 +1207,11 @@ void K3bCdCopyJob::finishJob( bool c, bool e )
     }
     if( e )
       d->error = true;
-    
+
     cleanup();
-    
+
     d->running = false;
-    
+
     jobFinished( !(c||e) );
   }
 }

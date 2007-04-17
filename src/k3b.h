@@ -121,10 +121,14 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotWriteCdImage( const KURL& url );
   void slotWriteDvdIsoImage();
   void slotWriteDvdIsoImage( const KURL& url );
+  void formatMedium( K3bDevice::Device* );
+  void slotFormatMedium();
   void cdCopy( K3bDevice::Device* );
   void slotCdCopy();
   void dvdCopy( K3bDevice::Device* );
   void slotDvdCopy();
+  void mediaCopy( K3bDevice::Device* );
+  void slotMediaCopy();
   void cddaRip( K3bDevice::Device* );
   void slotCddaRip();
   void videoDvdRip( K3bDevice::Device* );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -135,19 +135,19 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
     // FIXME: we also need this if we seek into a new title (not only the start of the title)
     if( titleStart == firstSector )
       startOfTitle = needToSeek = inTitle = true;
-    
+
     // check if a new title or non-title area starts inside the read sector range
     if( firstSector < titleStart && firstSector+sectors > titleStart ) {
-      kdDebug() << "(K3bLibDvdCss) title start inside of sector range (" 
-		<< firstSector << "-" << (firstSector+sectors-1) 
+      kdDebug() << "(K3bLibDvdCss) title start inside of sector range ("
+		<< firstSector << "-" << (firstSector+sectors-1)
 		<< "). only reading " << (titleStart - firstSector) << " sectors up to title offset "
 		<< (titleStart-1) << endl;
       sectors = titleStart - firstSector;
     }
-    
+
     if( firstSector < titleEnd && firstSector+sectors > titleEnd ) {
-      kdDebug() << "(K3bLibDvdCss) title end inside of sector range (" 
-		<< firstSector << "-" << (firstSector+sectors-1) 
+      kdDebug() << "(K3bLibDvdCss) title end inside of sector range ("
+		<< firstSector << "-" << (firstSector+sectors-1)
 		<< "). only reading " << (titleEnd - firstSector + 1) << " sectors up to title offset "
 		<< titleEnd << endl;
       sectors = titleEnd - firstSector + 1;
@@ -229,8 +229,7 @@ bool K3bLibDvdCss::crackAllKeys()
       d->titleOffsets.append( qMakePair( (int)file->startSector(), (int)(file->size() / 2048U) ) );
       kdDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector() << endl;
       if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
-	kdDebug() << "(K3bLibDvdCss) unable to seek to " << file->startSector() << endl;
-	return false;
+        kdDebug() << "(K3bLibDvdCss) failed to crash key for " << filename << " at " << file->startSector() << endl;
       }
     }
 
@@ -248,8 +247,7 @@ bool K3bLibDvdCss::crackAllKeys()
 	    p.second = file->size() / 2048;
 	    kdDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector() << endl;
 	    if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
-	      kdDebug() << "(K3bLibDvdCss) unable to seek to " << file->startSector() << endl;
-	      return false;
+                kdDebug() << "(K3bLibDvdCss) failed to crash key for " << filename << " at " << file->startSector() << endl;
 	    }
 	  }
 	  else {

@@ -63,7 +63,6 @@ class LIBK3B_EXPORT K3bCdCopyJob : public K3bBurnJob
   void setDataReadRetries( int i ) { m_dataReadRetries = i; }
   void setIgnoreAudioReadErrors( bool b ) { m_ignoreAudioReadErrors = b; }
   void setAudioReadRetries( int i ) { m_audioReadRetries = i; }
-  void setPreferCdText( bool b ) { m_preferCdText = b; }
   void setCopyCdText( bool b ) { m_copyCdText = b; }
   void setNoCorrection( bool b ) { m_noCorrection = b; }
 
@@ -105,7 +104,6 @@ class LIBK3B_EXPORT K3bCdCopyJob : public K3bBurnJob
   bool m_noCorrection;
   int m_dataReadRetries;
   int m_audioReadRetries;
-  bool m_preferCdText;
   bool m_copyCdText;
   QString m_tempPath;
   int m_writingMode;

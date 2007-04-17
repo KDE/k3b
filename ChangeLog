@@ -1,6 +1,10 @@
 1.1
 ===
  * Always allow manual writing speed selection.
+ * Use proper toolbars instead of the toolboxes -> nicer layouting with different styles
+ * Merged CD and DVD copy dialogs
+ * Merged CD-RW erasing and DVD formatting dialogs
+ * Removed CD copy option "prefere CD-Text". K3b will now ask individually.
 
 1.0.1
 =====
