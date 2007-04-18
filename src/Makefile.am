@@ -10,7 +10,7 @@ k3b_SOURCES = k3bwelcomewidget.cpp k3bapplication.cpp k3bdiroperator.cpp \
 	k3bprojectinterface.cpp k3bprojectinterface.skel \
 	k3bdataprojectinterface.cpp k3bdataprojectinterface.skel \
 	k3bsystemproblemdialog.cpp k3bmediacontentsview.cpp \
-	k3bsidepanel.cpp k3bcontentsview.cpp k3brichtextlabel.cpp \
+	k3bsidepanel.cpp k3bcontentsview.cpp \
 	k3bjobprogressdialog.cpp k3bburnprogressdialog.cpp k3btempdirselectionwidget.cpp \
 	k3bdatamodewidget.cpp k3bwritingmodewidget.cpp k3bwriterselectionwidget.cpp \
 	k3binteractiondialog.cpp k3bthememanager.cpp \

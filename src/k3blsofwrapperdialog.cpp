@@ -53,7 +53,7 @@ K3bLsofWrapperDialog::K3bLsofWrapperDialog( QWidget* parent )
 {
   setButtonText( Close, i18n("Continue") );
 
-  m_label = new K3BRichTextLabel( this );
+  m_label = new K3bRichTextLabel( this );
   setMainWidget( m_label );
 
   connect( this, SIGNAL(user1Clicked()), SLOT(slotQuitOtherApps()) );

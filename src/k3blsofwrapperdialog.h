@@ -18,7 +18,7 @@
 
 #include <kdialogbase.h>
 
-class K3BRichTextLabel;
+class K3bRichTextLabel;
 namespace K3bDevice {
   class Device;
 }
@@ -47,7 +47,7 @@ class K3bLsofWrapperDialog : public KDialogBase
   K3bLsofWrapperDialog( QWidget* parent );
 
   K3bDevice::Device* m_device;
-  K3BRichTextLabel* m_label;
+  K3bRichTextLabel* m_label;
 };
 
 #endif
