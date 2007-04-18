@@ -14,6 +14,7 @@
    Although not recommended it is requested by many distributors.
  * Changed the order of the buttons in the tool dialogs to match the KDE order.
  * Added handling of the newly introduced genisoimage parameter -allow-limited-size
+ * Make the K3b Sox audio encoder plugin work with newer sox versions (Thanks, Stephan.)
 
 1.0
 ===

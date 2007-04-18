@@ -73,9 +73,22 @@ class K3bSoxProgram : public K3bExternalProgram
     
     vp << path << "-h";
     if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
-      int pos = out.output().find( "sox: Version" );
+      int pos = out.output().find( "sox: SoX Version" );
       int endPos = out.output().find( "\n", pos );
       if( pos > 0 && endPos > 0 ) {
+	pos += 17;
+	bin = new K3bExternalBin( this );
+	bin->path = path;
+	bin->version = out.output().mid( pos, endPos-pos );
+
+	addBin( bin );
+
+	return true;
+      }
+      else {
+        pos = out.output().find( "sox: Version" );
+        endPos = out.output().find( "\n", pos );
+        if( pos > 0 && endPos > 0 ) {
 	pos += 13;
 	bin = new K3bExternalBin( this );
 	bin->path = path;
@@ -87,6 +100,7 @@ class K3bSoxProgram : public K3bExternalProgram
       }
       else
 	return false;
+    }
     }
     else
       return false;
