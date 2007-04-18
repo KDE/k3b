@@ -13,6 +13,7 @@
  * New configure check --without-cdrecord-suid-root to disable K3b's check for cdrecord permissions.
    Although not recommended it is requested by many distributors.
  * Changed the order of the buttons in the tool dialogs to match the KDE order.
+ * Added handling of the newly introduced genisoimage parameter -allow-limited-size
 
 1.0
 ===
