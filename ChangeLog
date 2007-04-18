@@ -12,6 +12,7 @@
  * Made libk3bdevice really thread-safe. This fixes the disabled DMA bug!
  * New configure check --without-cdrecord-suid-root to disable K3b's check for cdrecord permissions.
    Although not recommended it is requested by many distributors.
+ * Changed the order of the buttons in the tool dialogs to match the KDE order.
 
 1.0
 ===

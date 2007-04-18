@@ -106,23 +106,6 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // ---------------------------------------------------------------------------------------------------
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, spacingHint(), "layout5");
 
-  if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
-				      .readBoolEntry( "keep action dialogs open", false ) 
-				      ? KStdGuiItem::close() 
-				      : KStdGuiItem::cancel(), 
-				      this, 
-				      "m_buttonCancel" );
-    layout5->addWidget( m_buttonCancel );
-  }
-  else
-    m_buttonCancel = 0;
-  if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
-    layout5->addWidget( m_buttonSave );
-  }
-  else
-    m_buttonSave = 0;
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStdGuiItem::ok();
     m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
@@ -137,6 +120,25 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   }
   else
     m_buttonStart = 0;
+
+  if( buttonMask & SAVE_BUTTON ) {
+    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
+    layout5->addWidget( m_buttonSave );
+  }
+  else
+    m_buttonSave = 0;
+
+  if( buttonMask & CANCEL_BUTTON ) {
+    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
+				      .readBoolEntry( "keep action dialogs open", false )
+				      ? KStdGuiItem::close()
+				      : KStdGuiItem::cancel(),
+				      this,
+				      "m_buttonCancel" );
+    layout5->addWidget( m_buttonCancel );
+  }
+  else
+    m_buttonCancel = 0;
 
   mainGrid->addLayout( layout5, 2, 2 );
 

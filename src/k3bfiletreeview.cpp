@@ -221,6 +221,7 @@ void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int
 
   QFont f( listView()->font() );
   f.setItalic( true );
+  f.setBold( false );
   f.setPointSize( f.pointSize() - 2 );
   p->setFont( f );
 
@@ -251,13 +252,15 @@ void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int
 
 int K3bDeviceBranchViewItem::widthHint() const
 {
-  int w = listView()->fontMetrics().width( text(0).left( text(0).find('\n') ) );
   QFont f( listView()->font() );
-  f.setItalic( true );
-  f.setPointSize( f.pointSize() - 2 );
   if ( m_bCurrent ) {
       f.setBold( true );
   }
+  int w = QFontMetrics(f).width( text(0).left( text(0).find('\n') ) );
+
+  f.setItalic( true );
+  f.setBold( false );
+  f.setPointSize( f.pointSize() - 2 );
   w = QMAX( w, QFontMetrics(f).width( text(0).mid( text(0).find('\n')+1 ) ) );
 
   w++; // see paintCell
@@ -665,6 +668,8 @@ void K3bFileTreeView::setCurrentDevice( K3bDevice::Device* dev )
     d->currentDeviceBranch = branch( dev );
     d->currentDeviceBranch->setCurrent( true );
   }
+
+  updateMinimumWidth();
 }
 
 
