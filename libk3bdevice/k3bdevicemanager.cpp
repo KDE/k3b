@@ -809,8 +809,7 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
 #ifdef Q_OS_NETBSD
   int cdromfd = K3bDevice::openDevice ( dev.ascii() );
   if (cdromfd < 0) {
-    int local_errno = errno; // For all we know, k3bDebug() destroys errno
-    k3bDebug() << "could not open device " << dev << " (" << strerror(local_errno) << ")" << endl;
+    k3bDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
     return false;
   }
 
@@ -818,8 +817,7 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
 
   if (::ioctl(cdromfd, SCIOCIDENTIFY, &my_addr))
   {
-    int local_errno = errno; // For all we know, k3bDebug() destroys errno
-    k3bDebug() << "ioctl(SCIOCIDENTIFY) failed on device " << dev << " (" << strerror(local_errno) << ")" << endl;
+    k3bDebug() << "ioctl(SCIOCIDENTIFY) failed on device " << dev << " (" << strerror(errno) << ")" << endl;
 
     ::close(cdromfd);
     return false;
@@ -854,7 +852,9 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
   }
 
   struct stat cdromStat;
-  ::fstat( cdromfd, &cdromStat );
+  if ( ::fstat( cdromfd, &cdromStat ) ) {
+      return false;
+  }
 
   if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ||
       SCSI_GENERIC_MAJOR == (cdromStat.st_rdev>>8) ) {
@@ -868,8 +868,8 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
     // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
     if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
          (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
-      k3bDebug() << "Need a filename that resolves to a SCSI device" << endl;
-      ret = false;
+        k3bDebug() << "(K3bDevice::DeviceManager) no SCSI device: " << dev << endl;
+        ret = false;
     }
     else {
       id  = idLun.id & 0xff;
