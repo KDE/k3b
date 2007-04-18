@@ -665,6 +665,8 @@ void K3bFileTreeView::setCurrentDevice( K3bDevice::Device* dev )
     d->currentDeviceBranch = branch( dev );
     d->currentDeviceBranch->setCurrent( true );
   }
+
+  updateMinimumWidth();
 }
 
 

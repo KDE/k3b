@@ -412,7 +412,7 @@ void K3bMediaCopyDialog::toggleAll()
 
   m_checkDeleteImages->setEnabled( !m_checkOnlyCreateImage->isChecked() && m_checkCacheImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
-  m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() );
+  m_tempDirSelectionWidget->setDisabled( !m_checkCacheImage->isChecked() && !m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() );
   m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );

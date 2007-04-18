@@ -106,23 +106,6 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // ---------------------------------------------------------------------------------------------------
   QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, spacingHint(), "layout5");
 
-  if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
-				      .readBoolEntry( "keep action dialogs open", false ) 
-				      ? KStdGuiItem::close() 
-				      : KStdGuiItem::cancel(), 
-				      this, 
-				      "m_buttonCancel" );
-    layout5->addWidget( m_buttonCancel );
-  }
-  else
-    m_buttonCancel = 0;
-  if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
-    layout5->addWidget( m_buttonSave );
-  }
-  else
-    m_buttonSave = 0;
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStdGuiItem::ok();
     m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
@@ -137,6 +120,25 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   }
   else
     m_buttonStart = 0;
+
+  if( buttonMask & SAVE_BUTTON ) {
+    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
+    layout5->addWidget( m_buttonSave );
+  }
+  else
+    m_buttonSave = 0;
+
+  if( buttonMask & CANCEL_BUTTON ) {
+    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
+				      .readBoolEntry( "keep action dialogs open", false )
+				      ? KStdGuiItem::close()
+				      : KStdGuiItem::cancel(),
+				      this,
+				      "m_buttonCancel" );
+    layout5->addWidget( m_buttonCancel );
+  }
+  else
+    m_buttonCancel = 0;
 
   mainGrid->addLayout( layout5, 2, 2 );
 
@@ -333,15 +335,15 @@ void K3bInteractionDialog::setDefaultButton( int button )
 
   // reset all other default buttons
   if( KPushButton* b = getButton( START_BUTTON ) )
-    b->setDefault( true ); 
+    b->setDefault( true );
   if( KPushButton* b = getButton( SAVE_BUTTON ) )
-    b->setDefault( true ); 
+    b->setDefault( true );
   if( KPushButton* b = getButton( CANCEL_BUTTON ) )
-    b->setDefault( true ); 
+    b->setDefault( true );
 
   // set the selected default
   if( KPushButton* b = getButton( button ) )
-    b->setDefault( true ); 
+    b->setDefault( true );
 }
 
 
@@ -408,8 +410,8 @@ void K3bInteractionDialog::setButtonGui( int button,
 
 
 void K3bInteractionDialog::setButtonText( int button,
-					  const QString& text, 
-					  const QString& tooltip, 
+					  const QString& text,
+					  const QString& tooltip,
 					  const QString& whatsthis )
 {
   if( KPushButton* b = getButton( button ) ) {
@@ -536,10 +538,10 @@ int K3bInteractionDialog::exec( bool returnOnHide )
     kdError() << "(K3bInteractionDialog::exec) Recursive call detected." << endl;
     return -1;
   }
-  
+
   bool destructiveClose = testWFlags( WDestructiveClose );
   clearWFlags( WDestructiveClose );
-  
+
   bool wasShowModal = testWFlags( WShowModal );
   setWFlags( WShowModal );
   setResult( 0 );
@@ -550,18 +552,18 @@ int K3bInteractionDialog::exec( bool returnOnHide )
     QTimer::singleShot( 0, this, SLOT(slotDelayedInit()) );
   else
     init();
-  
+
   m_inLoop = true;
   QApplication::eventLoop()->enterLoop();
-  
+
   if( !wasShowModal )
     clearWFlags( WShowModal );
-  
+
   int res = result();
-  
+
   if( destructiveClose )
     delete this;
-  
+
   return res;
 }
 
@@ -570,9 +572,9 @@ void K3bInteractionDialog::hide()
 {
   if( isHidden() )
     return;
-  
+
   KDialog::hide();
-  
+
   if( m_inLoop && m_exitLoopOnHide ) {
     m_inLoop = false;
     QApplication::eventLoop()->exitLoop();
