@@ -2043,21 +2043,20 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
       switch( media ) {
       case MEDIA_CD_R:
       case MEDIA_CD_RW:
-	// The code below does not produce valid values. I just leave it here so I won't try it again. ;)
-// 	if( inf.m_capacity == 0 ) {
-// 	  if( readTocPmaAtip( &data, dataLen, 0x100, true, 0 ) ) {
+	if( inf.m_capacity == 0 ) {
+	  if( readTocPmaAtip( &data, dataLen, 0x4, true, 0 ) ) {
 
-// 	    struct atip_descriptor* atip = (struct atip_descriptor*)data;
+	    struct atip_descriptor* atip = (struct atip_descriptor*)data;
 
-// 	    if( dataLen >= 11 ) {
-// 	      inf.m_capacity = K3b::Msf( atip->lead_out_m, atip->lead_out_s, atip->lead_out_f ) - 150;
-// 	      debugBitfield( &atip->lead_out_m, 3 );
-// 	      k3bDebug() << blockDeviceName() << ": ATIP capacity: " << inf.m_capacity.toString() << endl;
-// 	    }
+	    if( dataLen >= 11 ) {
+	      inf.m_capacity = K3b::Msf( atip->lead_out_m, atip->lead_out_s, atip->lead_out_f ) - 150;
+	      debugBitfield( &atip->lead_out_m, 3 );
+	      k3bDebug() << blockDeviceName() << ": ATIP capacity: " << inf.m_capacity.toString() << endl;
+	    }
 
-// 	    delete [] data;
-// 	  }
-// 	}
+	    delete [] data;
+	  }
+	}
 
 	//
 	// for empty and appendable media capacity and usedCapacity should be filled in from

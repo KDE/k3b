@@ -1,3 +1,7 @@
+1.0.2
+=====
+ * Properly determine the capacity of complete CD-R(W) media.
+
 1.0.1
 =====
  * Fixed crash when using the Device menu without a selected device.
