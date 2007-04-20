@@ -12,8 +12,8 @@ else
     echo "No doc subdir found."
 fi
 
-echo "   --- Fixing version field in src/main.cpp"
-sed -i "s/-svn//g" src/main.cpp
+echo "   --- Fixing version field in libk3b/core/k3bcore.h"
+sed -i "s/svn//g" libk3b/core/k3bcore.h
 
 if [ -e tests ]; then
 	echo "   --- Removing tests"
