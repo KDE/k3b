@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -69,7 +69,7 @@ void K3b::addVcdimagerPrograms( K3bExternalBinManager* m )
                                      "vcdxminfo",
                                      "vcdxrip",
                                      0 };
-  
+
   for( int i = 0; vcdTools[i]; ++i )
     m->addProgram( new K3bVcdbuilderProgram( vcdTools[i] ) );
 }
@@ -89,7 +89,7 @@ K3bCdrecordProgram::K3bCdrecordProgram( bool dvdPro )
 // For 2.0.x and 2.2.x kernels the shm version is used. In all
 // other cases it's the mmap version.
 //
-// But since it may be that someone manually installed cdrecord 
+// But since it may be that someone manually installed cdrecord
 // replacing the wrapper we check if cdrecord is a script.
 //
 static QString& debianWeirdnessHack( QString& path )
@@ -108,9 +108,9 @@ static QString& debianWeirdnessHack( QString& path )
 	  ext = ".mmap";
 	else
 	  ext = ".shm";
-	
+
 	kdDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
-	
+
 	path += ext;
       }
     }
@@ -213,20 +213,20 @@ bool K3bCdrecordProgram::scan( const QString& p )
       bin->addFeature( "clone" );
     if( out.output().contains( "-tao" ) )
       bin->addFeature( "tao" );
-    if( out.output().contains( "cuefile=" ) && 
+    if( out.output().contains( "cuefile=" ) &&
 	( wodim || bin->version > K3bVersion( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
 
     // new mode 2 options since cdrecord 2.01a12
-    // we use both checks here since the help was not updated in 2.01a12 yet (well, I 
-    // just double-checked and the help page is proper but there is no harm in having 
+    // we use both checks here since the help was not updated in 2.01a12 yet (well, I
+    // just double-checked and the help page is proper but there is no harm in having
     // two checks)
     // and the version check does not handle versions like 2.01-dvd properly
     if( out.output().contains( "-xamix" ) ||
-	bin->version >= K3bVersion( 2, 1, -1, "a12" ) || 
+	bin->version >= K3bVersion( 2, 1, -1, "a12" ) ||
 	wodim )
       bin->addFeature( "xamix" );
-   
+
     // check if we run cdrecord as root
     struct stat s;
     if( !::stat( QFile::encodeName(path), &s ) ) {
@@ -366,6 +366,9 @@ bool K3bMkisofsProgram::scan( const QString& p )
 
   if( bin->version >= K3bVersion( 1, 15, -1, "a40" ) || genisoimage )
     bin->addFeature( "backslashed_filenames" );
+
+  if ( genisoimage && bin->version >= K3bVersion( 1, 1, 4 ) )
+      bin->addFeature( "no-4gb-limit" );
 
   addBin(bin);
   return true;
@@ -557,7 +560,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
 
   // SuSE 9.0 ships with a patched cdrdao 1.1.7 which contains an updated libschily
   // Gentoo ships with a patched cdrdao 1.1.7 which contains scglib support
-  if( bin->version > K3bVersion( 1, 1, 7 ) || 
+  if( bin->version > K3bVersion( 1, 1, 7 ) ||
       bin->version == K3bVersion( 1, 1, 7, "-gentoo" ) ||
       bin->version == K3bVersion( 1, 1, 7, "-suse" ) ) {
     //    bin->addFeature( "plain-atapi" );
@@ -890,7 +893,7 @@ bool K3bDvdformatProgram::scan( const QString& p )
     if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
       bin->addFeature( "suidroot" );
   }
-  
+
   addBin( bin );
   return true;
 }
@@ -1017,7 +1020,7 @@ bool K3bCdda2wavProgram::scan( const QString& p )
     if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
       bin->addFeature( "suidroot" );
   }
- 
+
   addBin( bin );
   return true;
 }

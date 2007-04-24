@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -39,6 +39,7 @@
 #include <k3binteractiondialog.h>
 #include <k3bthread.h>
 #include <k3bsignalwaiter.h>
+#include <k3bexternalbinmanager.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -105,7 +106,7 @@ K3bDataUrlAddingDialog::~K3bDataUrlAddingDialog()
 }
 
 
-int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls, 
+int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 				     K3bDirItem* dir,
 				     QWidget* parent )
 {
@@ -180,7 +181,7 @@ QString K3bDataUrlAddingDialog::resultMessage() const
       .arg( m_unreadableFiles.join( "<br>" ) );
   if( !m_tooBigFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("It is not possible to add files bigger than %1").arg(KIO::convertSize(0xFFFFFFFF)) )
+      .arg( i18n("To burn files bigger than %1 please use %1").arg(KIO::convertSize(0xFFFFFFFF)).arg( "genisoimage >= 1.1.4" ) )
       .arg( m_tooBigFiles.join( "<br>" ) );
   if( !m_mkisofsLimitationRenamedFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
@@ -196,7 +197,7 @@ QString K3bDataUrlAddingDialog::resultMessage() const
 }
 
 
-int K3bDataUrlAddingDialog::moveItems( const QValueList<K3bDataItem*>& items, 
+int K3bDataUrlAddingDialog::moveItems( const QValueList<K3bDataItem*>& items,
 				       K3bDirItem* dir,
 				       QWidget* parent )
 {
@@ -204,7 +205,7 @@ int K3bDataUrlAddingDialog::moveItems( const QValueList<K3bDataItem*>& items,
 }
 
 
-int K3bDataUrlAddingDialog::copyItems( const QValueList<K3bDataItem*>& items, 
+int K3bDataUrlAddingDialog::copyItems( const QValueList<K3bDataItem*>& items,
 				       K3bDirItem* dir,
 				       QWidget* parent )
 {
@@ -212,9 +213,9 @@ int K3bDataUrlAddingDialog::copyItems( const QValueList<K3bDataItem*>& items,
 }
 
 
-int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items, 
+int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items,
 					   K3bDirItem* dir,
-					   QWidget* parent, 
+					   QWidget* parent,
 					   bool copy )
 {
   if( items.isEmpty() )
@@ -239,7 +240,7 @@ int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items
     dlg.m_progressWidget->setTotalSteps( dlg.m_totalFiles );
     ret = dlg.exec();
   }
-  
+
   return ret;
 }
 
@@ -325,8 +326,10 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	m_unreadableFiles.append( url.path() );
       }
       else if( isFile && (unsigned long long)statBuf.st_size >= 0xFFFFFFFFULL ) {
-	valid = false;
-	m_tooBigFiles.append( url.path() );
+          if ( !k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "no-4gb-limit" ) ) {
+              valid = false;
+              m_tooBigFiles.append( url.path() );
+          }
       }
     }
 
@@ -338,16 +341,16 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     if( valid ) {
       if( info.isHidden() && !addHiddenFiles() )
 	valid = false;
-      if( S_ISCHR(statBuf.st_mode) || 
-	  S_ISBLK(statBuf.st_mode) || 
-	  S_ISFIFO(statBuf.st_mode) || 
+      if( S_ISCHR(statBuf.st_mode) ||
+	  S_ISBLK(statBuf.st_mode) ||
+	  S_ISFIFO(statBuf.st_mode) ||
 	  S_ISSOCK(statBuf.st_mode) )
 	if( !addSystemFiles() )
 	  valid = false;
       if( isSymLink )
-	if( S_ISCHR(resolvedStatBuf.st_mode) || 
-	    S_ISBLK(resolvedStatBuf.st_mode) || 
-	    S_ISFIFO(resolvedStatBuf.st_mode) || 
+	if( S_ISCHR(resolvedStatBuf.st_mode) ||
+	    S_ISBLK(resolvedStatBuf.st_mode) ||
+	    S_ISFIFO(resolvedStatBuf.st_mode) ||
 	    S_ISSOCK(resolvedStatBuf.st_mode) )
 	  if( !addSystemFiles() )
 	    valid = false;
@@ -369,7 +372,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   }
   if( bsAtEnd )
     m_mkisofsLimitationRenamedFiles.append( url.path() + " -> " + newName );
-  
+
   // backup dummy name
   if( newName.isEmpty() )
     newName = "1";
@@ -407,7 +410,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	//
 	valid = false;
       }
-      
+
       else if( m_bExistingItemsReplaceAll ) {
 	// if we replace an item from an old session the K3bFileItem constructor takes care
 	// of replacing the item
@@ -428,7 +431,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 					      this,
 					      0,
 					      6,
-					      KGuiItem( i18n("Replace"), 
+					      KGuiItem( i18n("Replace"),
 							QString::null,
 							i18n("Replace the existing file") ),
 					      KGuiItem( i18n("Replace All"),
@@ -505,7 +508,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	  m_bFolderLinksFollowAll = true;
 	case 1:
 	  followLink = true;
-	  break;	    
+	  break;
 	case 4:
 	  m_bFolderLinksAddAll = true;
 	case 3:
@@ -543,7 +546,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     // Set the volume id from the first added url
     // only if the doc was not changed yet
     //
-    if( m_urls.count() == 1 && 
+    if( m_urls.count() == 1 &&
 	!dir->doc()->isModified() &&
 	!dir->doc()->isSaved() ) {
       dir->doc()->setVolumeID( K3b::removeFilenameExtension( newName ) );
@@ -557,7 +560,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
       QDir newDir( absFilePath );
       int dirFilter = QDir::All|QDir::Hidden|QDir::System;
-	
+
       QStringList dlist = newDir.entryList( dirFilter );
       const QString& dot = KGlobal::staticQString( "." );
       const QString& dotdot = KGlobal::staticQString( ".." );
@@ -664,7 +667,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 					      this,
 					      0,
 					      6,
-					      KGuiItem( i18n("Replace"), 
+					      KGuiItem( i18n("Replace"),
 							QString::null,
 							i18n("Replace the existing file") ),
 					      KGuiItem( i18n("Replace All"),
@@ -747,9 +750,9 @@ bool K3bDataUrlAddingDialog::getNewName( const QString& oldName, K3bDirItem* dir
     newName = KInputDialog::getText( i18n("Enter New Filename"),
 				     i18n("A file with that name already exists. Please enter a new name:"),
 				     newName, &ok, this, "renamedialog", validator );
-    
+
   } while( ok && dir->find( newName ) );
-  
+
   delete validator;
 
   return ok;
@@ -767,7 +770,7 @@ bool K3bDataUrlAddingDialog::addHiddenFiles()
     else
       m_iAddHiddenFiles = -1;
   }
-  
+
   return ( m_iAddHiddenFiles == 1 );
 }
 
@@ -783,7 +786,7 @@ bool K3bDataUrlAddingDialog::addSystemFiles()
     else
       m_iAddSystemFiles = -1;
   }
-  
+
   return ( m_iAddSystemFiles == 1 );
 }
 

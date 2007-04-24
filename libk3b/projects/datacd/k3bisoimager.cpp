@@ -670,12 +670,27 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   // Check if we have files > 2 GB and enable udf in that case.
   //
   bool filesGreaterThan2Gb = false;
+  bool filesGreaterThan4Gb = false;
   K3bDataItem* item = m_doc->root();
   while( (item = item->nextSibling()) ) {
-    if( item->isFile() && item->size() > 2LL*1024LL*1024LL*1024LL ) {
-      filesGreaterThan2Gb = true;
-      break;
+    if ( item->isFile() && item->size() >= 0xFFFFFFFFULL ) {
+        filesGreaterThan4Gb = filesGreaterThan2Gb = true;
+        break;
     }
+    else if( item->isFile() && item->size() > 2LL*1024LL*1024LL*1024LL ) {
+      filesGreaterThan2Gb = true;
+      if ( filesGreaterThan4Gb )
+          break;
+    }
+  }
+
+  if ( filesGreaterThan4Gb ) {
+      if ( !d->mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
+          emit infoMessage( i18n( "Found files bigger than 4 GB. K3b needs at least %1 to continue." )
+                            .arg( "genisoimage >= 1.1.4" ),
+                            ERROR );
+          return false;
+      }
   }
 
   if( filesGreaterThan2Gb ) {
