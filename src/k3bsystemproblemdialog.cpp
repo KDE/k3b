@@ -517,7 +517,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 i18n("To enable Mp3 support, please install the MAD Mp3 decoding library as well as the "
 					      "K3b MAD Mp3 decoder plugin (the latter may already be installed but not functional "
 					      "due to the missing libmad). Some distributions allow installation of Mp3 support "
-					      "via an online update tool (i.e. SuSE's YOU)."),
+					      "via an online update tool (e.g. SuSE's YOU)."),
 					 false ) );
   }
 
