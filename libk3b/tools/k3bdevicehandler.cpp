@@ -25,114 +25,121 @@
 class K3bDevice::DeviceHandler::DeviceHandlerThread : public K3bThread
 {
 public:
-  DeviceHandlerThread() 
-    : K3bThread(),
-      dev(0) {
-  }
-
-
-  void run() {
-    success = false;
-    m_bCanceled = false;
-
-    // clear data
-    toc.clear();
-    ngInfo = DiskInfo();
-    cdText.clear();
-    cdTextRaw.resize(0);
-
-    if( dev ) {
-      success = dev->open();
-      if( !m_bCanceled && command & DISKINFO ) {
-	ngInfo = dev->diskInfo();
-	if( !m_bCanceled && !ngInfo.empty() ) {
-	  toc = dev->readToc();
-	  if( toc.contentType() == AUDIO ||
-	      toc.contentType() == MIXED )
-	    cdText = dev->readCdText();
-	}
-      }
-
-      if( !m_bCanceled && command & (NG_DISKINFO|
-				     DISKSIZE|
-				     REMAININGSIZE|
-				     NUMSESSIONS) ) {
-	ngInfo = dev->diskInfo();
-      }
-
-      if( !m_bCanceled && command & (TOC|TOCTYPE) ) {
-	toc = dev->readToc();
-      }
-
-      if( !m_bCanceled && command & CD_TEXT ) {
-	cdText = dev->readCdText();
-	success = (success && !cdText.isEmpty());
-      }
-
-      if( !m_bCanceled && command & CD_TEXT_RAW ) {
-	unsigned char* data = 0;
-	unsigned int dataLen = 0;
-	if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-	  // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
-	  if( dataLen > 4 && dataLen%18 == 4 ) {
-	    cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
-	  }
-	  else {
-	    kdDebug() << "(K3bDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
-	    delete [] data;
-	    success = false;
-	  }
-	}
-	else
-	  success = false;
-      }
-
-      if( !m_bCanceled && command & BLOCK )
-	success = (success && dev->block( true ));
-
-      if( !m_bCanceled && command & UNBLOCK )
-	success = (success && dev->block( false ));
-
-      //
-      // It is important that eject is performed before load
-      // since the RELOAD command is a combination of both
-      //
-
-      if( !m_bCanceled && command & EJECT )
-	success = (success && dev->eject());
-
-      if( !m_bCanceled && command & LOAD )
-	success = (success && dev->load());
-
-      if( !m_bCanceled && command & BUFFER_CAPACITY )
-	success = dev->readBufferCapacity( bufferCapacity, availableBufferCapacity );
-	
-      dev->close();
+    DeviceHandlerThread()
+        : K3bThread(),
+          dev(0) {
     }
 
-    //
-    // This thread only gets cancelled if a new request was started.
-    // So we don't emit the finished signal for this (old) request.
-    //
-    if( !m_bCanceled )
-      emitFinished(success);
-  }
 
-  void cancel() {
-    m_bCanceled = true;
-  }
+    void run() {
+        success = false;
+        m_bCanceled = false;
+
+        // clear data
+        toc.clear();
+        ngInfo = DiskInfo();
+        cdText.clear();
+        cdTextRaw.resize(0);
+
+        if( dev ) {
+            success = dev->open();
+            if( !m_bCanceled && command & DISKINFO ) {
+                ngInfo = dev->diskInfo();
+                if( !m_bCanceled && !ngInfo.empty() ) {
+                    toc = dev->readToc();
+                    if( toc.contentType() == AUDIO ||
+                        toc.contentType() == MIXED )
+                        cdText = dev->readCdText();
+                }
+            }
+
+            if( !m_bCanceled && command & (NG_DISKINFO|
+                                           DISKSIZE|
+                                           REMAININGSIZE|
+                                           NUMSESSIONS) ) {
+                ngInfo = dev->diskInfo();
+            }
+
+            if( !m_bCanceled && command & (TOC|TOCTYPE) ) {
+                toc = dev->readToc();
+            }
+
+            if( !m_bCanceled && command & CD_TEXT ) {
+                cdText = dev->readCdText();
+                success = (success && !cdText.isEmpty());
+            }
+
+            if( !m_bCanceled && command & CD_TEXT_RAW ) {
+                unsigned char* data = 0;
+                unsigned int dataLen = 0;
+                if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
+                    // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
+                    if( dataLen > 4 && dataLen%18 == 4 ) {
+                        cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
+                    }
+                    else {
+                        kdDebug() << "(K3bDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
+                        delete [] data;
+                        success = false;
+                    }
+                }
+                else
+                    success = false;
+            }
+
+            if( !m_bCanceled && command & BLOCK )
+                success = (success && dev->block( true ));
+
+            if( !m_bCanceled && command & UNBLOCK )
+                success = (success && dev->block( false ));
+
+            //
+            // It is important that eject is performed before load
+            // since the RELOAD command is a combination of both
+            //
+
+            if( !m_bCanceled && command & EJECT )
+                success = (success && dev->eject());
+
+            if( !m_bCanceled && command & LOAD )
+                success = (success && dev->load());
+
+            if( !m_bCanceled && command & BUFFER_CAPACITY )
+                success = dev->readBufferCapacity( bufferCapacity, availableBufferCapacity );
+
+            if ( !m_bCanceled && command & NEXT_WRITABLE_ADDRESS ) {
+                int nwa = dev->nextWritableAddress();
+                nextWritableAddress = nwa;
+                success = ( success && ( nwa > 0 ) );
+            }
+
+            dev->close();
+        }
+
+        //
+        // This thread only gets cancelled if a new request was started.
+        // So we don't emit the finished signal for this (old) request.
+        //
+        if( !m_bCanceled )
+            emitFinished(success);
+    }
+
+    void cancel() {
+        m_bCanceled = true;
+    }
 
 
-  bool success;
-  int errorCode;
-  int command;
-  DiskInfo ngInfo;
-  Toc toc;
-  CdText cdText;
-  QByteArray cdTextRaw;
-  long long bufferCapacity;
-  long long availableBufferCapacity;
-  Device* dev;
+    bool success;
+    int errorCode;
+    int command;
+    DiskInfo ngInfo;
+    Toc toc;
+    CdText cdText;
+    QByteArray cdTextRaw;
+    long long bufferCapacity;
+    long long availableBufferCapacity;
+    Device* dev;
+    K3b::Msf nextWritableAddress;
 
 private:
   bool m_bCanceled;
@@ -236,6 +243,11 @@ long long K3bDevice::DeviceHandler::bufferCapacity() const
 long long K3bDevice::DeviceHandler::availableBufferCapacity() const
 {
   return m_thread->availableBufferCapacity;
+}
+
+K3b::Msf K3bDevice::DeviceHandler::nextWritableAddress() const
+{
+    return m_thread->nextWritableAddress;
 }
 
 void K3bDevice::DeviceHandler::setDevice( Device* dev )

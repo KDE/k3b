@@ -560,6 +560,18 @@ void K3bIsoImager::setMultiSessionInfo( const QString& info, K3bDevice::Device* 
 }
 
 
+QString K3bIsoImager::multiSessionInfo() const
+{
+    return m_multiSessionInfo;
+}
+
+
+K3bDevice::Device* K3bIsoImager::multiSessionImportDevice() const
+{
+    return m_device;
+}
+
+
 // iso9660 + RR use some latin1 variant. So we need to cut the desc fields
 // counting 8bit chars. The GUI should take care of restricting the length
 // and the charset

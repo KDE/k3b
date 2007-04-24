@@ -71,6 +71,8 @@ namespace K3bDevice
       long long bufferCapacity() const;
       long long availableBufferCapacity() const;
 
+      K3b::Msf nextWritableAddress() const;
+
       bool success() const;
 
       /**
@@ -83,51 +85,52 @@ namespace K3bDevice
 	/**
 	 * Always successful, even with an empty or no media at all!
 	 */
-	NG_DISKINFO = 1, // TODO: rename this into DISKINFO
+	NG_DISKINFO = 0x1, // TODO: rename this into DISKINFO
 	/**
 	 * Always successful, even with an empty or no media at all!
 	 */
-	TOC = 2,
+	TOC = 0x2,
 	/**
 	 * Successful if the media contains CD-Text.
 	 */
-	CD_TEXT = 4,
+	CD_TEXT = 0x4,
 	/**
 	 * Successful if the media contains CD-Text.
 	 */
-	CD_TEXT_RAW = 8,
+	CD_TEXT_RAW = 0x8,
 	/**
 	 * Always successful, even with an empty or no media at all!
 	 */
-	DISKSIZE = 16,
+	DISKSIZE = 0x10,
 	/**
 	 * Always successful, even with an empty or no media at all!
 	 */
-	REMAININGSIZE = 32,
+	REMAININGSIZE = 0x20,
 	/**
 	 * Always successful, even with an empty or no media at all!
 	 */
-	TOCTYPE = 64,
+	TOCTYPE = 0x40,
 	/**
 	 * Always successful, even with an empty or no media at all!
 	 */
-	NUMSESSIONS = 128,
+	NUMSESSIONS = 0x80,
 	/**
 	 * Successful if the drive could be blocked.
 	 */
-	BLOCK = 256,
+	BLOCK = 0x100,
 	/**
 	 * Successful if the drive could be unblocked.
 	 */
-	UNBLOCK = 512,
+	UNBLOCK = 0x200,
 	/**
 	 * Successful if the media was ejected.
 	 */
-	EJECT = 1024,
+	EJECT = 0x400,
 	/**
 	 * Successful if the media was loaded
 	 */
-	LOAD = 2048,
+	LOAD = 0x800,
+
 	RELOAD = EJECT|LOAD,
 	/**
 	 * Retrieves NG_DISKINFO, TOC, and CD-Text in case of an audio or mixed
@@ -137,11 +140,13 @@ namespace K3bDevice
 	 *
 	 * Always successful, even with an empty or no media at all!
 	 */
-	DISKINFO = 4096,  // TODO: rename this in somthing like: DISKINFO_COMPLETE
+	DISKINFO = 0x1000,  // TODO: rename this in somthing like: DISKINFO_COMPLETE
 	/**
 	 * Determine the device buffer state.
 	 */
-	BUFFER_CAPACITY = 8192
+	BUFFER_CAPACITY = 0x2000,
+
+	NEXT_WRITABLE_ADDRESS = 0x4000
       };
 
     signals:

@@ -3535,6 +3535,46 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
 }
 
 
+int K3bDevice::Device::nextWritableAddress() const
+{
+    unsigned char* data = 0;
+    unsigned int dataLen = 0;
+    int nwa = -1;
+
+    if( readDiscInformation( &data, dataLen ) ) {
+        disc_info_t* inf = (disc_info_t*)data;
+
+        //
+        // The state of the last session has to be "empty" (0x0) or "incomplete" (0x1)
+        // The procedure here is taken from the dvd+rw-tools and wodim
+        //
+        if( !(inf->border & 0x2) ) {
+            // the incomplete track number is the first track in the last session (the empty session)
+            int nextTrack = inf->first_track_l|inf->first_track_m<<8;
+
+            unsigned char* trackData = 0;
+            unsigned int trackDataLen = 0;
+
+            // Read start address of the incomplete track
+            if( readTrackInformation( &trackData, trackDataLen, 0x1, nextTrack ) ) {
+                nwa = from4Byte( &trackData[8] );
+                delete [] trackData;
+            }
+
+            // Read start address of the invisible track
+            else if ( readTrackInformation( &trackData, trackDataLen, 0x1, 0xff ) ) {
+                nwa = from4Byte( &trackData[8] );
+                delete [] trackData;
+            }
+        }
+
+        delete [] data;
+    }
+
+    return nwa;
+}
+
+
 QCString K3bDevice::Device::mediaId( int mediaType ) const
 {
   QCString id;

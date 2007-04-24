@@ -18,7 +18,6 @@ libdata_la_SOURCES =    k3bdatajob.cpp \
 			k3bdiritem.cpp \
 			k3bfileitem.cpp \
 			k3bisoimager.cpp \
-			k3bmsinfofetcher.cpp \
 			k3bbootitem.cpp \
 			k3bisooptions.cpp \
 			k3bfilecompilationsizehandler.cpp \

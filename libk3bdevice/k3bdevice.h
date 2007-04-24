@@ -700,6 +700,13 @@ namespace K3bDevice
       bool getNextWritableAdress( unsigned int& lastSessionStart, unsigned int& nextWritableAdress ) const;
 
       /**
+       * Retrieve the next writable address from the currently mounted writable medium.
+       * \return The next writable address if the medium is empty or appendable or -1
+       * if an error occured.
+       */
+      int nextWritableAddress() const;
+
+      /**
        * Locks the device for usage. This means that no MMC command can be performed
        * until usageUnlock is called.
        *

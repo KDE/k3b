@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -27,7 +27,6 @@
 #include <k3bdeviceglobals.h>
 #include <k3bglobalsettings.h>
 #include <k3biso9660.h>
-#include <k3bmsinfofetcher.h>
 
 #include <klocale.h>
 #include <kapplication.h>
@@ -61,7 +60,7 @@ void K3bDvdJob::prepareData()
 bool K3bDvdJob::prepareWriterJob()
 {
   K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this, this );
-  
+
   // these do only make sense with DVD-R(W)
   writer->setSimulate( m_doc->dummy() );
   writer->setBurnSpeed( m_doc->speed() );
@@ -84,10 +83,10 @@ bool K3bDvdJob::prepareWriterJob()
 
   if( usedMultiSessionMode() != K3bDataDoc::NONE ) {
     //
-    // growisofs wants a valid -C parameter for multisession, so we get it from the 
+    // growisofs wants a valid -C parameter for multisession, so we get it from the
     // K3bMsInfoFetcher (see K3bDataJob::slotMsInfoFetched)
     //
-    writer->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
+    writer->setMultiSessionInfo( m_isoImager->multiSessionInfo() );
   }
 
   setWriterJob( writer );
@@ -104,9 +103,9 @@ void K3bDvdJob::determineMultiSessionMode()
     cancel();
   }
   else {
-     connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, m_doc->burner() ), 
+     connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, m_doc->burner() ),
 	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	     this, 
+	     this,
 	     SLOT(slotDetermineMultiSessionMode(K3bDevice::DeviceHandler*)) );
   }
 }
@@ -139,7 +138,7 @@ K3bDataDoc::MultiSessionMode K3bDvdJob::getMultiSessionMode( const K3bDevice::Di
     //  2. the project does fit and fills up the CD (No new sessions after the 4GB boundary) -> finish multisession
     //  3. the project does fit and does not fill up the CD -> continue multisession
     //
-    if( m_doc->size() > info.remainingSize().mode1Bytes() && !m_doc->sessionImported() )
+    if( m_doc->size() > info.remainingSize().mode1Bytes() && m_doc->importedSession() < 0 )
       mode = K3bDataDoc::NONE;
     else if( info.size() + m_doc->burningLength() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ )
       mode = K3bDataDoc::FINISH;
@@ -170,7 +169,7 @@ int K3bDvdJob::requestMedia( int state )
     mt = K3bDevice::MEDIA_WRITABLE_DVD;
 
   // double layer media
-  // in case overburn is enabled we allow some made up max size 
+  // in case overburn is enabled we allow some made up max size
   // before we force a DL medium
   if( m_doc->size() > 4700372992LL ) {
     if( !k3bcore->globalSettings()->overburn() ||
@@ -180,7 +179,7 @@ int K3bDvdJob::requestMedia( int state )
   }
 
   return waitForMedia( m_doc->burner(),
-		       state, 
+		       state,
 		       mt );
 }
 
@@ -197,7 +196,7 @@ bool K3bDvdJob::waitForMedium()
   if( foundMedium < 0 || hasBeenCanceled() ) {
     return false;
   }
-  
+
   if( foundMedium == 0 ) {
     emit infoMessage( i18n("Forced by user. Growisofs will be called without further tests."), INFO );
   }
@@ -218,7 +217,7 @@ bool K3bDvdJob::waitForMedium()
 	m_doc->setDummy( false );
 	emit newTask( i18n("Writing") );
       }
-      
+
       if( m_doc->writingMode() != K3b::WRITING_MODE_AUTO && m_doc->writingMode() != K3b::WRITING_MODE_RES_OVWR )
 	emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 
@@ -274,7 +273,7 @@ bool K3bDvdJob::waitForMedium()
 	  emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
 
 	else {
-	  // check if the writer supports writing sequential and thus multisession (on -1 the burner cannot handle 
+	  // check if the writer supports writing sequential and thus multisession (on -1 the burner cannot handle
 	  // features and we simply ignore it and hope for the best)
 	  if( m_doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) == 0 ) {
 	    if( !questionYesNo( i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
@@ -293,7 +292,7 @@ bool K3bDvdJob::waitForMedium()
 	    if( !(foundMedium & (K3bDevice::MEDIA_DVD_RW|K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_RW_SEQ)) &&
 		m_doc->writingMode() == K3b::WRITING_MODE_RES_OVWR )
 	      emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
-	    
+
 	    emit infoMessage( i18n("Writing %1 in incremental mode.").arg( K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
 	  }
 	}
@@ -328,7 +327,7 @@ QString K3bDvdJob::jobDescription() const
 
 QString K3bDvdJob::jobDetails() const
 {
-  if( m_doc->copies() > 1 && 
+  if( m_doc->copies() > 1 &&
       !m_doc->dummy() &&
       !(m_doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	m_doc->multiSessionMode() == K3bDataDoc::FINISH) )

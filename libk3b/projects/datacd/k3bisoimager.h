@@ -94,6 +94,9 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
    */
   void setMultiSessionInfo( const QString&, K3bDevice::Device* dev = 0 );
 
+  QString multiSessionInfo() const;
+  K3bDevice::Device* multiSessionImportDevice() const;
+
   K3bDevice::Device* device() const { return m_device; }
   K3bDataDoc* doc() const { return m_doc; }
 

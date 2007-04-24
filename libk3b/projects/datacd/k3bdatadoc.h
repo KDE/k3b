@@ -192,9 +192,14 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    *
    * \see clearImportedSession()
    */
-  bool importSession( K3bDevice::Device* );
+  bool importSession( K3bDevice::Device*, int session );
 
-  bool sessionImported() const;
+  /**
+   * The session number that has been imported.
+   * \return The number of the imported session or 0 if no session information
+   * was available (last track imported) or -1 if no session was imported.
+   */
+  int importedSession() const;
 
   /**
    * Searches for an item by it's local path.
@@ -279,6 +284,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
 
   MultiSessionMode m_multisessionMode;
   QPtrList<K3bDataItem> m_oldSession;
+  int m_importedSession;
 
   // boot cd stuff
   K3bDataItem* m_bootCataloge;

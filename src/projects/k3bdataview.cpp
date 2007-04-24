@@ -22,6 +22,7 @@
 #include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
 #include "k3bdatasessionimportdialog.h"
+#include "k3bdatamultisessionimportdialog.h"
 #include <k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bfillstatusdisplay.h>
@@ -65,7 +66,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   setMainWidget( mainSplitter );
 
 
-  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), 
+  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)),
 	   m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
   connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 
@@ -103,7 +104,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   toolBox()->addLabel( i18n("Volume Name:") );
   toolBox()->addSpacing();
   toolBox()->addWidget( m_volumeIDEdit );
-  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)), 
+  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
 	   m_doc,
 	   SLOT(setVolumeID(const QString&)) );
 
@@ -135,7 +136,7 @@ K3bDirItem* K3bDataView::currentDir() const
 
 void K3bDataView::importSession()
 {
-  K3bDataSessionImportDialog::importSession( m_doc, this );
+  K3bDataMultisessionImportDialog::importSession( m_doc, this );
 }
 
 

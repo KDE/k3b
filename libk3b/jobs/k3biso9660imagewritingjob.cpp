@@ -91,10 +91,10 @@ void K3bIso9660ImageWritingJob::start()
     return;
   }
 
-  unsigned long gb = K3b::imageFilesize( m_imagePath )/1024/1024;
+  KIO::filesize_t mb = K3b::imageFilesize( m_imagePath )/1024ULL/1024ULL;
 
   // very rough test but since most dvd images are 4,x or 8,x GB it should be enough
-  m_dvd = ( gb > 900 );
+  m_dvd = ( mb > 900ULL );
 
   startWriting();
 }
@@ -245,8 +245,9 @@ void K3bIso9660ImageWritingJob::startWriting()
     else
       mt = K3bDevice::MEDIA_WRITABLE_DVD;
   }
-  else if( m_writingMode == K3b::TAO || m_writingMode == K3b::RAW )
+  else if( m_writingMode == K3b::TAO || m_writingMode == K3b::RAW ) {
     mt = K3bDevice::MEDIA_WRITABLE_CD;
+  }
   else if( m_writingMode == K3b::DAO ) {
     if( writingApp() == K3b::DEFAULT ) {
       if( m_dvd )
@@ -259,10 +260,12 @@ void K3bIso9660ImageWritingJob::startWriting()
     else
       mt = K3bDevice::MEDIA_WRITABLE_CD;
   }
-  else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
+  else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) {
     mt = K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR;
-  else
+  }
+  else {
     mt = K3bDevice::MEDIA_WRITABLE_DVD;
+  }
 
 
   // wait for the media
@@ -340,7 +343,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	  m_dataMode == K3b::MODE2 ) {
-	if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+	if( k3bcore->externalBinManager()->binObject("cdrecord") &&
 	    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
 	  writer->addArgument( "-xa" );
 	else
@@ -405,7 +408,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	  return false;
 	}
       }
-      
+
       m_simulate = false;
     }
 
@@ -443,8 +446,8 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
     return i18n("Simulating ISO9660 Image");
   else
     return ( i18n("Burning ISO9660 Image")
-	     + ( m_copies > 1 
-		 ? i18n(" - %n Copy", " - %n Copies", m_copies) 
+	     + ( m_copies > 1
+		 ? i18n(" - %n Copy", " - %n Copies", m_copies)
 		 : QString::null ) );
 }
 

@@ -121,7 +121,7 @@
 #include "k3bmediaselectiondialog.h"
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
-#include "projects/k3bdatasessionimportdialog.h"
+#include "projects/k3bdatamultisessionimportdialog.h"
 #include "k3bpassivepopup.h"
 #include "k3bthemedheader.h"
 #include <k3baudioserver.h>
@@ -1106,7 +1106,7 @@ K3bDoc* K3bMainWindow::slotNewDvdDoc()
 
 K3bDoc* K3bMainWindow::slotContinueMultisession()
 {
-  return K3bDataSessionImportDialog::importSession( 0, this );
+  return K3bDataMultisessionImportDialog::importSession( 0, this );
 }
 
 

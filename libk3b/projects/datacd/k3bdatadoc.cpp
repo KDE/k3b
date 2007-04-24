@@ -90,6 +90,7 @@ bool K3bDataDoc::newDocument()
   m_bootCataloge = 0;
   m_oldSessionSize = 0;
   m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
+  m_importedSession = -1;
 
   if( m_root ) {
     while( m_root->children().getFirst() )
@@ -1042,7 +1043,7 @@ void K3bDataDoc::prepareFilenames()
   unsigned int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
   while( (item = item->nextSibling()) ) {
     item->setWrittenName( treatWhitespace( item->k3bName() ) );
-    
+
     if( isoOptions().createJoliet() && item->writtenName().length() > maxlen ) {
       m_needToCutFilenames = true;
       item->setWrittenName( K3b::cutFilename( item->writtenName(), maxlen ) );
@@ -1072,12 +1073,12 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 
     if( item->isDir() )
       prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );
-    
+
     // insertion sort
     unsigned int i = 0;
     while( i < sortedChildren.count() && item->writtenName() > sortedChildren.at(i)->writtenName() )
       ++i;
-    
+
     sortedChildren.insert( i, item );
   }
 
@@ -1141,7 +1142,7 @@ void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 }
 
 
-bool K3bDataDoc::importSession( K3bDevice::Device* device )
+bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
 {
   K3bDevice::DiskInfo diskInfo = device->diskInfo();
   // DVD+RW media is reported as non-appendable
@@ -1150,50 +1151,59 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device )
     return false;
 
   K3bDevice::Toc toc = device->readToc();
-  if( toc.isEmpty() || 
+  if( toc.isEmpty() ||
       toc.last().type() != K3bDevice::Track::DATA )
     return false;
 
   long startSec = toc.last().firstSector().lba();
+  if ( session > 0 ) {
+      for ( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
+          if ( ( *it ).session() == session ) {
+              startSec = ( *it ).firstSector().lba();
+              break;
+          }
+      }
+  }
   K3bIso9660 iso( device, startSec );
 
   if( iso.open() ) {
     // remove previously imported sessions
     clearImportedSession();
-    
+
     // set multisession option
     if( m_multisessionMode != FINISH && m_multisessionMode != AUTO )
       m_multisessionMode = CONTINUE;
-    
+
     // since in iso9660 it is possible that two files share it's data
     // simply summing the file sizes could result in wrong values
     // that's why we use the size from the toc. This is more accurate
     // anyway since there might be files overwritten or removed
     m_oldSessionSize = toc.last().lastSector().mode1Bytes();
-    
+    m_importedSession = session;
+
     kdDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize) << endl;
-    
-    // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem 
+
+    // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem
     // size. in that case we need to use the filesystem's size (which is ok since it's one track anyway,
     // no real multisession)
     if( diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
-      m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize 
+      m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize
 	* iso.primaryDescriptor().logicalBlockSize;
     }
-    
+
     // import some former settings
     m_isoOptions.setCreateRockRidge( iso.firstRRDirEntry() != 0 );
     m_isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
     m_isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
     // TODO: also import some other pd fields
-    
+
     const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
     // Jörg Schilling says that it is impossible to import the joliet tree for multisession
 //     if( !rootDir )
 //       rootDir = iso.firstJolietDirEntry();
     if( !rootDir )
       rootDir = iso.firstIsoDirEntry();
-    
+
     if( rootDir ) {
       createSessionImportItems( rootDir, root() );
       emit changed();
@@ -1368,9 +1378,9 @@ QValueList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) 
 }
 
 
-bool K3bDataDoc::sessionImported() const
+int K3bDataDoc::importedSession() const
 {
-  return !m_oldSession.isEmpty();
+  return ( m_oldSession.isEmpty() ? -1 : m_importedSession );
 }
 
 #include "k3bdatadoc.moc"

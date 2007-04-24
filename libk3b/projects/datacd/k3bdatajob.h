@@ -27,7 +27,6 @@ class QDataStream;
 class K3bAbstractWriter;
 class K3bIsoImager;
 class KTempFile;
-class K3bMsInfoFetcher;
 
 namespace K3bDevice {
   class DeviceHandler;
@@ -73,7 +72,6 @@ class K3bDataJob : public K3bBurnJob
   void slotWriterJobFinished( bool success );
   void slotVerificationProgress( int );
   void slotVerificationFinished( bool );
-  void slotMsInfoFetched(bool);
   void slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh );
   void writeImage();
   void cancelAll();
@@ -83,6 +81,9 @@ class K3bDataJob : public K3bBurnJob
    * Basically used for DVD writing.
    */
   virtual bool waitForMedium();
+
+ private slots:
+  void slotDiskInfoReadyForMultiSessionWriting( K3bDevice::DeviceHandler* dh );
 		
  protected:
   virtual void prepareData();
@@ -96,13 +97,14 @@ class K3bDataJob : public K3bBurnJob
 
   K3bAbstractWriter* m_writerJob;
   K3bIsoImager* m_isoImager;
-  K3bMsInfoFetcher* m_msInfoFetcher;
 
  private:
   bool startWriterJob();
   bool startOnTheFlyWriting();
   void prepareWriting();
+  void prepareMultiSessionWriting();
   void connectImager();
+  bool setupMultisessionImport();
 
   class Private;
   Private* d;
