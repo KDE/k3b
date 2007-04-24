@@ -21,7 +21,6 @@
 #include "k3bdatadirtreeview.h"
 #include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
-#include "k3bdatasessionimportdialog.h"
 #include "k3bdatamultisessionimportdialog.h"
 #include <k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
