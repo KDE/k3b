@@ -75,7 +75,7 @@ class K3bVerificationJob : public K3bJob
   void setGrownSessionSize( const K3b::Msf& );
 
  private slots:
-  void slotMediaReloaded( bool success );
+//  void slotMediaReloaded( bool success );
   void slotDiskInfoReady( K3bDevice::DeviceHandler* dh );
   void readTrack( int trackIndex );
   void slotMd5JobFinished( bool success );
