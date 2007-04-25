@@ -248,6 +248,9 @@ bool K3bGrowisofsWriter::prepareProcess()
   // we check for existing filesystems ourselves, so we always force the overwrite...
   *d->process << "-use-the-force-luke=tty";
 
+  // we do the 4GB boundary check ourselves
+  *d->process << "-use-the-force-luke=4gms";
+
   bool dvdCompat = d->closeDvd;
 
   // DL writing with forced layer break

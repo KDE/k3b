@@ -19,8 +19,12 @@
 
 #include <qthread.h>
 #include "k3b_export.h"
+#include <k3bdevicetypes.h>
 
 class QObject;
+namespace K3bDevice {
+    class Device;
+}
 
 /**
  * The threaded couterpart to K3bJob
@@ -84,8 +88,29 @@ class LIBK3B_EXPORT K3bThread : public QThread
   void emitNewTask( const QString& job );
   void emitNewSubTask( const QString& job );
   void emitDebuggingOutput(const QString&, const QString&);
-  void emitData( const char* data, int len );
   void emitNextTrack( int track, int trackNum );
+
+  /**
+   * \sa K3bJobHandler::waitForMedia
+   */
+  int waitForMedia( K3bDevice::Device*,
+		    int mediaState = K3bDevice::STATE_EMPTY,
+		    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+		    const QString& message = QString::null );
+
+  /**
+   * \sa K3bJobHandler::questionYesNo
+   */
+  bool questionYesNo( const QString& text,
+		      const QString& caption = QString::null,
+		      const QString& yesText = QString::null,
+		      const QString& noText = QString::null );
+
+  /**
+   * \sa K3bJobHandler::blockingInformation
+   */
+  void blockingInformation( const QString& text,
+			    const QString& caption = QString::null );
 
  private:
   class Private;

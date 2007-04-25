@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,7 +16,7 @@
 #include "k3bthreadjob.h"
 #include "k3bthread.h"
 #include "k3bprogressinfoevent.h"
-#include "k3bdataevent.h"
+#include "k3bthreadjobcommunicationevent.h"
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -103,59 +103,78 @@ void K3bThreadJob::cleanupJob( bool success )
 
 void K3bThreadJob::customEvent( QCustomEvent* e )
 {
-  if( K3bDataEvent* de = dynamic_cast<K3bDataEvent*>(e) ) {
-    emit data( de->data(), de->length() );
-  }
-  else {
-    K3bProgressInfoEvent* be = static_cast<K3bProgressInfoEvent*>(e);
-    switch( be->type() ) {
-    case K3bProgressInfoEvent::Progress:
-      emit percent( be->firstValue() );
-      break;
-    case K3bProgressInfoEvent::SubProgress:
-      emit subPercent( be->firstValue() );
-      break;
-    case K3bProgressInfoEvent::ProcessedSize:
-      emit processedSize( be->firstValue(), be->secondValue() );
-      break;
-    case K3bProgressInfoEvent::ProcessedSubSize:
-      emit processedSubSize( be->firstValue(), be->secondValue() );
-      break;
-    case K3bProgressInfoEvent::InfoMessage:
-      emit infoMessage( be->firstString(), be->firstValue() ); 
-      break;
-    case K3bProgressInfoEvent::Started:
-      jobStarted();
-      break;
-    case K3bProgressInfoEvent::Canceled:
-      emit canceled();
-      break;
-    case K3bProgressInfoEvent::Finished:
-      // we wait until the thred really finished
-      // although this may be dangerous if some thread
-      // emits the finished signal although it has not finished yet
-      // but makes a lot stuff easier.
-      kdDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
-      m_thread->wait();
-      kdDebug() << "(K3bThreadJob) thread finished." << endl;
-      cleanupJob( be->firstValue() );
-      m_running = false;
-      jobFinished( be->firstValue() );
-      break;
-    case K3bProgressInfoEvent::NewTask:
-      emit newTask( be->firstString() );
-      break;
-    case K3bProgressInfoEvent::NewSubTask:
-      emit newSubTask( be->firstString() );
-      break;
-    case K3bProgressInfoEvent::DebuggingOutput:
-      emit debuggingOutput( be->firstString(), be->secondString() );
-      break;
-    case K3bProgressInfoEvent::NextTrack:
-      emit nextTrack( be->firstValue(), be->secondValue() );
-      break;
+    if( K3bThreadJobCommunicationEvent* ce = dynamic_cast<K3bThreadJobCommunicationEvent*>(e) ) {
+        int result = 0;
+        switch( ce->type() ) {
+        case K3bThreadJobCommunicationEvent::WaitForMedium:
+            result = waitForMedia( ce->device(),
+                                   ce->wantedMediaState(),
+                                   ce->wantedMediaType(),
+                                   ce->text() );
+            break;
+        case K3bThreadJobCommunicationEvent::QuestionYesNo:
+            result = questionYesNo( ce->text(),
+                                    ce->caption(),
+                                    ce->yesText(),
+                                    ce->noText() )
+                     ? 1 : 0;
+            break;
+        case K3bThreadJobCommunicationEvent::BlockingInfo:
+            blockingInformation( ce->text(), ce->caption() );
+            break;
+        }
+        ce->done( result );
     }
-  }
+    else {
+        K3bProgressInfoEvent* be = static_cast<K3bProgressInfoEvent*>(e);
+        switch( be->type() ) {
+        case K3bProgressInfoEvent::Progress:
+            emit percent( be->firstValue() );
+            break;
+        case K3bProgressInfoEvent::SubProgress:
+            emit subPercent( be->firstValue() );
+            break;
+        case K3bProgressInfoEvent::ProcessedSize:
+            emit processedSize( be->firstValue(), be->secondValue() );
+            break;
+        case K3bProgressInfoEvent::ProcessedSubSize:
+            emit processedSubSize( be->firstValue(), be->secondValue() );
+            break;
+        case K3bProgressInfoEvent::InfoMessage:
+            emit infoMessage( be->firstString(), be->firstValue() );
+            break;
+        case K3bProgressInfoEvent::Started:
+            jobStarted();
+            break;
+        case K3bProgressInfoEvent::Canceled:
+            emit canceled();
+            break;
+        case K3bProgressInfoEvent::Finished:
+            // we wait until the thred really finished
+            // although this may be dangerous if some thread
+            // emits the finished signal although it has not finished yet
+            // but makes a lot stuff easier.
+            kdDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
+            m_thread->wait();
+            kdDebug() << "(K3bThreadJob) thread finished." << endl;
+            cleanupJob( be->firstValue() );
+            m_running = false;
+            jobFinished( be->firstValue() );
+            break;
+        case K3bProgressInfoEvent::NewTask:
+            emit newTask( be->firstString() );
+            break;
+        case K3bProgressInfoEvent::NewSubTask:
+            emit newSubTask( be->firstString() );
+            break;
+        case K3bProgressInfoEvent::DebuggingOutput:
+            emit debuggingOutput( be->firstString(), be->secondString() );
+            break;
+        case K3bProgressInfoEvent::NextTrack:
+            emit nextTrack( be->firstValue(), be->secondValue() );
+            break;
+        }
+    }
 }
 
 #include "k3bthreadjob.moc"

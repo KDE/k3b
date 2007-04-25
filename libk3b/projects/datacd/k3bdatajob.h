@@ -72,7 +72,6 @@ class K3bDataJob : public K3bBurnJob
   void slotWriterJobFinished( bool success );
   void slotVerificationProgress( int );
   void slotVerificationFinished( bool );
-  void slotDetermineMultiSessionMode( K3bDevice::DeviceHandler* dh );
   void writeImage();
   void cancelAll();
 
@@ -83,14 +82,12 @@ class K3bDataJob : public K3bBurnJob
   virtual bool waitForMedium();
 
  private slots:
-  void slotDiskInfoReadyForMultiSessionWriting( K3bDevice::DeviceHandler* dh );
+  void slotMultiSessionParamterSetupDone( bool );
 		
  protected:
   virtual void prepareData();
   virtual bool prepareWriterJob();
   virtual void prepareImager();
-  virtual void determineMultiSessionMode();
-  virtual K3bDataDoc::MultiSessionMode getMultiSessionMode( const K3bDevice::DiskInfo& );
   virtual void cleanup();
 
   K3bDataDoc::MultiSessionMode usedMultiSessionMode() const;
@@ -102,9 +99,7 @@ class K3bDataJob : public K3bBurnJob
   bool startWriterJob();
   bool startOnTheFlyWriting();
   void prepareWriting();
-  void prepareMultiSessionWriting();
   void connectImager();
-  bool setupMultisessionImport();
 
   class Private;
   Private* d;

@@ -42,8 +42,6 @@ class K3bDvdJob : public K3bDataJob
  protected:
   void prepareData();
   virtual bool prepareWriterJob();
-  void determineMultiSessionMode();
-  K3bDataDoc::MultiSessionMode getMultiSessionMode( const K3bDevice::DiskInfo& );
   bool waitForMedium();
   int requestMedia( int state );
 

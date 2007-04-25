@@ -184,7 +184,6 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   void newTask( const QString& job );
   void newSubTask( const QString& job );
   void debuggingOutput(const QString&, const QString&);
-  void data( const char* data, int len );
   void nextTrack( int track, int numTracks );
 
   void canceled();

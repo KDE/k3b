@@ -34,8 +34,9 @@ class K3bThread;
  *   job->start();
  *   d.exec();
  *   delete job;
+ *   delete thread;
  * </pre>
- * Be aware that K3bThreadJob'd destructor does NOT delete the thread.
+ * Be aware that K3bThreadJob's destructor does NOT delete the thread.
  */
 class LIBK3B_EXPORT K3bThreadJob : public K3bJob
 {

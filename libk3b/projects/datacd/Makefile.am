@@ -24,7 +24,8 @@ libdata_la_SOURCES =    k3bdatajob.cpp \
 			k3bsessionimportitem.cpp \
 			k3bmkisofshandler.cpp \
 			k3bdatapreparationjob.cpp \
-			k3bmsinfofetcher.cpp
+			k3bmsinfofetcher.cpp \
+			k3bdatamultisessionparameterjob.cpp
 
 include_HEADERS = 	k3bdatadoc.h \
 			k3bdatajob.h \

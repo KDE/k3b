@@ -16,7 +16,7 @@
 
 #include "k3bthread.h"
 #include "k3bprogressinfoevent.h"
-#include "k3bdataevent.h"
+#include "k3bthreadjobcommunicationevent.h"
 
 #include <kdebug.h>
 
@@ -78,8 +78,8 @@ K3bThread::~K3bThread()
 
 
 void K3bThread::setProgressInfoEventHandler( QObject* eventHandler )
-{ 
-  d->eventHandler = eventHandler; 
+{
+  d->eventHandler = eventHandler;
 }
 
 QString K3bThread::jobDescription() const
@@ -114,7 +114,7 @@ void K3bThread::cancel()
 
 void K3bThread::emitInfoMessage( const QString& msg, int type )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler,
 			     new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage, msg, QString::null, type ) );
   else
@@ -123,7 +123,7 @@ void K3bThread::emitInfoMessage( const QString& msg, int type )
 
 void K3bThread::emitPercent( int p )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler,
 			     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress, p ) );
   else
@@ -132,7 +132,7 @@ void K3bThread::emitPercent( int p )
 
 void K3bThread::emitSubPercent( int p )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler,
 			     new K3bProgressInfoEvent( K3bProgressInfoEvent::SubProgress, p ) );
   else
@@ -157,7 +157,7 @@ void K3bThread::emitCanceled()
 
 void K3bThread::emitFinished( bool success )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished, success ) );
   else
     kdWarning() << "(K3bThread) call to emitFinished() without eventHandler." << endl;
@@ -165,7 +165,7 @@ void K3bThread::emitFinished( bool success )
 
 void K3bThread::emitProcessedSize( int p, int size )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSize, p, size ) );
   else
     kdWarning() << "(K3bThread) call to emitProcessedSize() without eventHandler." << endl;
@@ -173,7 +173,7 @@ void K3bThread::emitProcessedSize( int p, int size )
 
 void K3bThread::emitProcessedSubSize( int p, int size )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSubSize, p, size ) );
   else
     kdWarning() << "(K3bThread) call to emitProcessedSubSize() without eventHandler." << endl;
@@ -181,7 +181,7 @@ void K3bThread::emitProcessedSubSize( int p, int size )
 
 void K3bThread::emitNewTask( const QString& job )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewTask, job ) );
   else
     kdWarning() << "(K3bThread) call to emitNewTask() without eventHandler." << endl;
@@ -189,7 +189,7 @@ void K3bThread::emitNewTask( const QString& job )
 
 void K3bThread::emitNewSubTask( const QString& job )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewSubTask, job ) );
   else
     kdWarning() << "(K3bThread) call to emitNewSubTask() without eventHandler." << endl;
@@ -203,19 +203,68 @@ void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
     kdWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler." << endl;
 }
 
-void K3bThread::emitData( const char* data, int len )
-{
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bDataEvent( data, len ) );
-  else
-    kdWarning() << "(K3bThread) call to emitData() without eventHandler." << endl;
-}
 
 void K3bThread::emitNextTrack( int t, int n )
 {
-  if( d->eventHandler ) 
+  if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NextTrack, t, n ) );
   else
     kdWarning() << "(K3bThread) call to emitNextTrack() without eventHandler." << endl;
 }
 
+
+int K3bThread::waitForMedia( K3bDevice::Device* device,
+                             int mediaState,
+                             int mediaType,
+                             const QString& message )
+{
+    if( d->eventHandler ) {
+        K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::waitForMedium( device,
+                                                                                               mediaState,
+                                                                                               mediaType,
+                                                                                               message );
+        QApplication::postEvent( d->eventHandler, event );
+        event->wait();
+        return event->intResult();
+    }
+    else {
+        kdWarning() << "(K3bThread) call to waitForMedium() without eventHandler." << endl;
+        return 0;
+    }
+}
+
+
+bool K3bThread::questionYesNo( const QString& text,
+                               const QString& caption,
+                               const QString& yesText,
+                               const QString& noText )
+{
+    if( d->eventHandler ) {
+        K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::questionYesNo( text,
+                                                                                               caption,
+                                                                                               yesText,
+                                                                                               noText );
+        QApplication::postEvent( d->eventHandler, event );
+        event->wait();
+        return event->boolResult();
+    }
+    else {
+        kdWarning() << "(K3bThread) call to questionYesNo() without eventHandler." << endl;
+        return false;
+    }
+}
+
+
+void K3bThread::blockingInformation( const QString& text,
+                                     const QString& caption )
+{
+    if( d->eventHandler ) {
+        K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::blockingInformation( text,
+                                                                                                     caption );
+        QApplication::postEvent( d->eventHandler, event );
+        event->wait();
+    }
+    else {
+        kdWarning() << "(K3bThread) call to blockingInformation() without eventHandler." << endl;
+    }
+}
