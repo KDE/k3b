@@ -57,7 +57,7 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
 			   "(or <em>Just Link</em>). This is "
 			   "a feature of the CD writer which avoids buffer underruns."
 			   "<p>Without <em>burnfree</em>, if the writer cannot get any more "
-			   "data a buffer underrun would occurs, since the writer needs "
+			   "data a buffer underrun would occur, since the writer needs "
 			   "a constant stream of data to write the CD."
 			   "<p>With <em>burnfree</em> the writer can <em>mark</em> the current "
 			   "position of the laser and get back to it when the buffer is filled again;"

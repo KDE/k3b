@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -45,12 +45,12 @@ K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent, const
 			      "Create a single-session CD or DVD and close the disk."
 			      "<p><b>Start Multisession</b><br>"
 			      "Start a multisession CD or DVD, not closing the disk to "
-			      "allow further sessions to be apppended."
+			      "allow further sessions to be appended."
 			      "<p><b>Continue Multisession</b><br>"
 			      "Continue an appendable data CD (as for example created in "
 			      "<em>Start Multisession</em> mode) and add another session "
 			      "without closing the disk to "
-			      "allow further sessions to be apppended."
+			      "allow further sessions to be appended."
 			      "<p><b>Finish Multisession</b><br>"
 			      "Continue an appendable data CD (as for example created in "
 			      "<em>Start Multisession</em> mode), add another session, "

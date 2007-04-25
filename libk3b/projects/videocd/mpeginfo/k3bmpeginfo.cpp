@@ -93,13 +93,13 @@ bool K3bMpegInfo::MpegParsePacket ()
         kdDebug() << QString( "(K3bMpegInfo::mpeg_parse_packet ()) pack header code 0x%1 expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 ) << endl;
 
         if ( code == 0x00000100 + MPEG_SEQUENCE_CODE ) {
-            kdDebug() << "...this looks like a elementary video stream but a multiplexed program stream was required." << endl;
-            m_error_string = i18n( "This looks like a elementary video stream but a multiplexed program stream was required." );
+            kdDebug() << "...this looks like an elementary video stream but a multiplexed program stream was required." << endl;
+            m_error_string = i18n( "This looks like an elementary video stream but a multiplexed program stream was required." );
         }
 
         if ( ( 0xfff00000 & code ) == 0xfff00000 ) {
-            kdDebug() << "...this looks like a elementary audio stream but a multiplexed program stream was required." << endl;
-            m_error_string = i18n( "This looks like a elementary audio stream but a multiplexed program stream was required." );
+            kdDebug() << "...this looks like an elementary audio stream but a multiplexed program stream was required." << endl;
+            m_error_string = i18n( "This looks like an elementary audio stream but a multiplexed program stream was required." );
         }
 
         if ( code == 0x52494646 ) {
@@ -131,12 +131,12 @@ bool K3bMpegInfo::MpegParsePacket ()
     /*
         int pkt = 0;
         offset = FindNextMarker( 0, MPEG_PACK_HEADER_CODE );
-     
+
         while ( offset != -1 ) {
             pkt++;
             offset = FindNextMarker( offset+1, MPEG_PACK_HEADER_CODE );
         }
-     
+
         kdDebug() << "Pkt found: " << pkt << endl;
     */
 

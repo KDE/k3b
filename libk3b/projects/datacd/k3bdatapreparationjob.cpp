@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -72,7 +72,7 @@ void K3bDataPreparationJob::Private::run()
   if( doc->needToCutFilenames() ) {
     int maxlines = 10;
     QValueList<K3bDataItem*>::const_iterator it;
-    for( it = doc->needToCutFilenameItems().begin(); 
+    for( it = doc->needToCutFilenameItems().begin();
 	 maxlines > 0 && it != doc->needToCutFilenameItems().end();
 	 ++it, --maxlines ) {
       K3bDataItem* item = *it;
@@ -204,7 +204,7 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
     if( d->doc->isoOptions().createJoliet() &&
 	d->doc->isoOptions().volumeID().length() > 16 ) {
       if( !questionYesNo( "<p>" + i18n("The Joliet extensions (which are needed for long filenames on Windows systems) "
-				       "restrict the length of the volume descriptior (the name of the filesystem) "
+				       "restrict the length of the volume descriptor (the name of the filesystem) "
 				       "to %1 characters. The selected descriptor '%2' is longer than that. Do you "
 				       "want it to be cut or do you want to go back and change it manually?")
 			  .arg( 16 ).arg( d->doc->isoOptions().volumeID() ),
@@ -223,7 +223,7 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
     //
     if( !d->nonExistingItems.isEmpty() ) {
       if( questionYesNo( "<p>" + i18n("The following files could not be found. Do you want to remove them from the "
-				      "project and continue without adding them to the image?") + 
+				      "project and continue without adding them to the image?") +
 			 "<p>" + createItemsString( d->nonExistingItems, 10 ),
 			 i18n("Warning"),
 			 i18n("Remove missing files and continue"),

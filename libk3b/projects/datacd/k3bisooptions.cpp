@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -24,7 +24,7 @@
 
 
 K3bIsoOptions::K3bIsoOptions()
-  : m_volumeID( "K3b data project" ),
+  : m_volumeID( i18n( "K3b data project" ) ),
     m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2006 SEBASTIAN TRUEG AND THE K3B TEAM") ),
     m_systemId( K3b::systemName().upper() ),
     m_inputCharset( "iso8859-1" ),
