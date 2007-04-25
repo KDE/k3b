@@ -32,6 +32,9 @@ class LIBK3B_EXPORT K3bBlankingJob : public K3bBurnJob
   K3bBlankingJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bBlankingJob();
 
+  QString jobDescription() const;
+  QString jobDetails() const;
+
   K3bDevice::Device* writer() const;
 
   bool hasBeenCanceled() const { return m_canceled; }

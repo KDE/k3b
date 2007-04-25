@@ -300,7 +300,7 @@ QString K3bMedium::shortString( bool useContent ) const
       // AUDIO + MIXED
       if( toc().contentType() == K3bDevice::AUDIO ||
 	  toc().contentType() == K3bDevice::MIXED ) {
-	if( !cdText().isEmpty() ) {
+	if( !cdText().performer().isEmpty() || !cdText().title().isEmpty() ) {
 	  return QString("%1 - %2 (%3)")
 	    .arg( cdText().performer() )
 	    .arg( cdText().title() )

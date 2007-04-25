@@ -698,17 +698,15 @@ bool K3bCdCopyJob::writeNextSession()
       emit newTask( i18n("Writing Copy") );
   }
 
-  emit newSubTask( i18n("Waiting for media") );
+  if ( d->currentWrittenSession == 1 ) {
+      emit newSubTask( i18n("Waiting for media") );
 
-  // if session > 1 we wait for an appendable CD
-  if( waitForMedia( m_writerDevice,
-		    d->currentWrittenSession > 1 && !m_simulate
-		    ? K3bDevice::STATE_INCOMPLETE
-		    : K3bDevice::STATE_EMPTY,
-		    K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
-
-    finishJob( true, false );
-    return false;
+      if( waitForMedia( m_writerDevice,
+                        K3bDevice::STATE_EMPTY,
+                        K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
+          finishJob( true, false );
+          return false;
+      }
   }
 
   if( !d->cdrecordWriter ) {
@@ -1020,9 +1018,16 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
       d->currentReadSession++;
 
       // reload the media
-      emit newSubTask( i18n("Reloading the medium") );
-      connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	       this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
+//       emit newSubTask( i18n("Reloading the medium") );
+//       connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
+// 	       this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
+
+      if( !writeNextSession() ) {
+          // nothing is running here...
+          finishJob( d->canceled, d->error );
+      }
+      else if( m_onTheFly )
+          readNextSession();
     }
     else {
       d->doneCopies++;

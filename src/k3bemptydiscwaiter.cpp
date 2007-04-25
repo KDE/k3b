@@ -663,23 +663,14 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
 void K3bEmptyDiscWaiter::slotErasingFinished( bool success )
 {
   if( success ) {
-    connect( K3bDevice::reload( d->device ),
-	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	     this,
-	     SLOT(slotReloadingAfterErasingFinished(K3bDevice::DeviceHandler*)) );
+      // close the dialog thus ending it's event loop -> back to slotMediumChanged
+      d->erasingInfoDialog->hide();
   }
   else {
     K3bDevice::eject( d->device );
     KMessageBox::error( d->erasingInfoDialog, i18n("Erasing failed.") );
     d->erasingInfoDialog->hide(); // close the dialog thus ending it's event loop -> back to slotMediumChanged
   }
-}
-
-
-void K3bEmptyDiscWaiter::slotReloadingAfterErasingFinished( K3bDevice::DeviceHandler* )
-{
-  // close the dialog thus ending it's event loop -> back to slotMediumChanged
-  d->erasingInfoDialog->hide();
 }
 
 

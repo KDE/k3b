@@ -99,7 +99,7 @@ void K3bDvdFormattingJob::setForceNoEject( bool b )
 
 QString K3bDvdFormattingJob::jobDescription() const
 {
-  return i18n("Formatting DVD"); // Formatting DVDÂ±RW
+    return i18n("Formatting DVD%1RW").arg("±");
 }
 
 

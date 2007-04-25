@@ -70,6 +70,9 @@ void K3bBlankingJob::start()
 
   jobStarted();
 
+  emit newTask( i18n( "Erasing CD-RW" ) );
+  emit infoMessage( i18n( "When erasing a CD-RW no progress information is available." ), WARNING );
+
   slotStartErasing();
 }
 
@@ -83,7 +86,7 @@ void K3bBlankingJob::slotStartErasing()
   if( m_writingApp == K3b::CDRDAO ) {
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
     m_writerJob = writer;
-    
+
     writer->setCommand(K3bCdrdaoWriter::BLANK);
     writer->setBlankMode( m_mode == Fast ? K3bCdrdaoWriter::MINIMAL : K3bCdrdaoWriter::FULL );
     writer->setForce(m_force);
@@ -112,9 +115,9 @@ void K3bBlankingJob::slotStartErasing()
       mode = "session";
       break;
     }
-    
+
     writer->addArgument("blank="+ mode);
-    
+
     if (m_force)
       writer->addArgument("-force");
     writer->setBurnSpeed(m_speed);
@@ -124,10 +127,10 @@ void K3bBlankingJob::slotStartErasing()
   connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
   connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
           this,SIGNAL(infoMessage( const QString&, int)));
-  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-  if( waitForMedia( m_device,  
+  if( waitForMedia( m_device,
 		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
 		    K3bDevice::MEDIA_CD_RW,
 		    i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.")
@@ -155,12 +158,11 @@ void K3bBlankingJob::cancel()
 void K3bBlankingJob::slotFinished(bool success)
 {
   if( success ) {
-    emit infoMessage( i18n("Process completed successfully"), K3bJob::SUCCESS );
-    jobFinished( true );
+      emit percent( 100 );
+      jobFinished( true );
   }
   else {
     if( m_canceled ) {
-      emit infoMessage( i18n("Canceled."), ERROR );
       emit canceled();
     }
     else {
@@ -172,5 +174,18 @@ void K3bBlankingJob::slotFinished(bool success)
 }
 
 
+QString K3bBlankingJob::jobDescription() const
+{
+  return i18n("Erasing CD-RW");
+}
+
+
+QString K3bBlankingJob::jobDetails() const
+{
+  if( m_mode == Fast )
+    return i18n("Quick Format");
+  else
+    return QString::null;
+}
 
 #include "k3bblankingjob.moc"
