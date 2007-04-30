@@ -1,6 +1,7 @@
 1.0.2
 =====
  * Properly determine the capacity of complete CD-R(W) media.
+ * Mark a data project as modified if files are renamed.
 
 1.0.1
 =====
