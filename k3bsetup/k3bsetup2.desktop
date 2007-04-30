@@ -45,6 +45,7 @@ Comment[ta]= K3bஅமைவு2 - K3b ஐ CD/DVD களோடு எழுத�
 Comment[tg]=K3bSetup 2 - танзим кардани иҷозат барои сабт бо ёрии K3b
 Comment[tr]=K3bSetup 2 - K3b ile CD/DVD kaydetme izinlerini ayarlama
 Comment[uk]=K3bSetup 2 - зміна прав доступу для запису КД/DVD за допомогою K3b
+Comment[uz]=K3bSetup 2 - K3b ёрдамида CD/DVD'га ёзиш ҳуқуқини мослаш
 Comment[zh_CN]=K3b 设置 2 - 修改使用 K3b 烧录 CD/DVD 的权限
 Comment[zh_TW]=K3bSetup 2 - 為 K3b 燒錄 CD/DVD 修改權限
 Exec=k3bsetup
