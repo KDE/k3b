@@ -1,5 +1,5 @@
 
-/* 
+/*
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -92,7 +92,7 @@ void K3bMedium::detach()
 }
 
 
-void K3bMedium::setDevice( K3bDevice::Device* dev ) 
+void K3bMedium::setDevice( K3bDevice::Device* dev )
 {
   if( d->device != dev ) {
     reset();
@@ -102,7 +102,7 @@ void K3bMedium::setDevice( K3bDevice::Device* dev )
 
 K3bDevice::Device* K3bMedium::device() const
 {
-  return d->device; 
+  return d->device;
 }
 
 
@@ -170,15 +170,15 @@ void K3bMedium::update()
       d->diskInfo.debug();
       kdDebug() << "=====================================================" << endl;
     }
-    
-    if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE || 
+
+    if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
 	diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
       d->toc = d->device->readToc();
       if( d->toc.contentType() == K3bDevice::AUDIO ||
 	  d->toc.contentType() == K3bDevice::MIXED )
 	d->cdText = d->device->readCdText();
     }
-    
+
     if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE ) {
       d->writingSpeeds = d->device->determineSupportedWriteSpeeds();
     }
@@ -228,9 +228,9 @@ void K3bMedium::analyseContent()
 	++it;
       startSec = (*it).firstSector().lba();
     }
-    
+
     //kdDebug() << "(K3bMedium) Checking file system at " << startSec << endl;
-    
+
     // force the backend since we don't need decryption
     // which just slows down the whole process
     K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
@@ -238,7 +238,7 @@ void K3bMedium::analyseContent()
     iso.setPlainIso9660( true );
     if( iso.open() ) {
       d->isoDesc = iso.primaryDescriptor();
-      kdDebug() << "(K3bMedium) found volume id from start sector " << startSec 
+      kdDebug() << "(K3bMedium) found volume id from start sector " << startSec
 		<< ": '" << d->isoDesc.volumeId << "'" << endl;
 
       if( diskInfo().isDvdMedia() ) {
@@ -266,7 +266,7 @@ void K3bMedium::analyseContent()
 
 	if( vcdInfoFile ) {
 	  char buffer[8];
-	    
+
 	  if ( vcdInfoFile->read( 0, buffer, 8 ) == 8 &&
 	       ( !qstrncmp( buffer, "VIDEO_CD", 8 ) ||
 		 !qstrncmp( buffer, "SUPERVCD", 8 ) ||
@@ -282,7 +282,7 @@ void K3bMedium::analyseContent()
 QString K3bMedium::shortString( bool useContent ) const
 {
   QString mediaTypeString = K3bDevice::mediaTypeString( diskInfo().mediaType(), true );
-  
+
   if( diskInfo().diskState() == K3bDevice::STATE_UNKNOWN ) {
     return i18n("No medium information");
   }
@@ -300,7 +300,7 @@ QString K3bMedium::shortString( bool useContent ) const
       // AUDIO + MIXED
       if( toc().contentType() == K3bDevice::AUDIO ||
 	  toc().contentType() == K3bDevice::MIXED ) {
-	if( !cdText().isEmpty() ) {
+	if( !cdText().performer().isEmpty() || !cdText().title().isEmpty() ) {
 	  return QString("%1 - %2 (%3)")
 	    .arg( cdText().performer() )
 	    .arg( cdText().title() )
@@ -313,7 +313,7 @@ QString K3bMedium::shortString( bool useContent ) const
 	  return i18n("%1 (Mixed CD)").arg( beautifiedVolumeId() );
 	}
       }
-      
+
       // DATA CD and DVD
       else if( !volumeId().isEmpty() ) {
 	if( content() & CONTENT_VIDEO_DVD ) {
@@ -338,7 +338,7 @@ QString K3bMedium::shortString( bool useContent ) const
 	}
       }
     }
-    
+
     // without content
     else {
       if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {

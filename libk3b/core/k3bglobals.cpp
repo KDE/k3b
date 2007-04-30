@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -73,14 +73,14 @@ struct Sample {
 
   short left() const {
     return ( msbLeft << 8 ) | lsbLeft;
-  } 
+  }
   short right() const {
     return ( msbRight << 8 ) | lsbRight;
-  } 
+  }
   void left( short d ) {
     msbLeft = d >> 8;
     lsbLeft = d;
-  } 
+  }
   void right( short d ) {
     msbRight = d >> 8;
     lsbRight = d;
@@ -155,7 +155,7 @@ QString K3b::findUniqueFilePrefix( const QString& _prefix, const QString& path )
   QDir dir( url );
   QStringList entries = dir.entryList( QDir::DefaultFilter, QDir::Name );
   int i = 0;
-  for( QStringList::iterator it = entries.begin(); 
+  for( QStringList::iterator it = entries.begin();
        it != entries.end(); ++it ) {
     if( (*it).startsWith( prefix + QString::number(i) ) ) {
       i++;
@@ -278,24 +278,22 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 
 KIO::filesize_t K3b::filesize( const KURL& url )
 {
-  KIO::filesize_t fSize = 0;
-  if( url.isLocalFile() ) {
-    k3b_struct_stat buf;
-    k3b_stat( QFile::encodeName( url.path() ), &buf );
-    fSize = (KIO::filesize_t)buf.st_size;
-  }
-  else {
+    if( url.isLocalFile() ) {
+        k3b_struct_stat buf;
+        if ( !k3b_stat( QFile::encodeName( url.path() ), &buf ) ) {
+            return (KIO::filesize_t)buf.st_size;
+        }
+    }
+
     KIO::UDSEntry uds;
     KIO::NetAccess::stat( url, uds, 0 );
     for( KIO::UDSEntry::const_iterator it = uds.begin(); it != uds.end(); ++it ) {
-      if( (*it).m_uds == KIO::UDS_SIZE ) {
-	fSize = (*it).m_long;
-	break;
-      }
+        if( (*it).m_uds == KIO::UDS_SIZE ) {
+            return (*it).m_long;
+        }
     }
-  }
 
-  return fSize;
+    return ( KIO::filesize_t )0;
 }
 
 
@@ -382,7 +380,7 @@ QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExtern
   //
   if( simpleKernelVersion() >= K3bVersion( 2, 6, 0 ) )
     return dev->blockDeviceName();
-  else 
+  else
 #endif
   if( dev->interfaceType() == K3bDevice::SCSI )
     return dev->busTargetLun();
@@ -433,7 +431,7 @@ QString K3b::resolveLink( const QString& file )
       break;
     }
     else
-      steps.append( f.absFilePath() );	
+      steps.append( f.absFilePath() );
   }
   return f.absFilePath();
 }
@@ -455,7 +453,7 @@ K3bDevice::Device* K3b::urlToDevice( const KURL& deviceUrl )
       return k3bcore->deviceManager()->findDevice( properties[5] );
     }
   }
-  
+
   return k3bcore->deviceManager()->findDevice( deviceUrl.path() );
 }
 

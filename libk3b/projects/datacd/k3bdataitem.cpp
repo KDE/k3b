@@ -114,6 +114,7 @@ K3b::Msf K3bDataItem::itemBlocks( bool followSymbolicLinks ) const
 
 
 void K3bDataItem::setK3bName( const QString& name ) {
+    if ( name != m_k3bName ) {
   // test for not-allowed characters
   if( name.contains('/') ) {
     kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
@@ -129,6 +130,8 @@ void K3bDataItem::setK3bName( const QString& name ) {
   }
 
   m_k3bName = name;
+        m_doc->setModified();
+}
 }
 
 
@@ -230,8 +233,12 @@ void K3bDataItem::setHideOnRockRidge( bool b )
 {
   // there is no use in changing the value if 
   // it is already set by the parent
-  if( !getParent() || !getParent()->hideOnRockRidge() )
+    if( ( !getParent() || !getParent()->hideOnRockRidge() ) &&
+        b != m_bHideOnRockRidge ) {
     m_bHideOnRockRidge = b;
+        if ( m_doc )
+            m_doc->setModified();
+}
 }
 
 
@@ -239,8 +246,12 @@ void K3bDataItem::setHideOnJoliet( bool b )
 { 
   // there is no use in changing the value if 
   // it is already set by the parent
-  if( !getParent() || !getParent()->hideOnJoliet() )
+    if( ( !getParent() || !getParent()->hideOnJoliet() ) &&
+        b != m_bHideOnJoliet ) {
     m_bHideOnJoliet = b;
+    if ( m_doc )
+        m_doc->setModified();
+}
 }
 
 
