@@ -1,9 +1,17 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>base_K3bAdvancedDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>base_K3bDataCustomFilesystemsWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>552</width>
+            <height>320</height>
+        </rect>
     </property>
     <property name="caption">
         <string>Custom Data Filesystems</string>
@@ -127,41 +135,15 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>m_checkForceInputCharset</cstring>
-                            </property>
-                            <property name="text">
-                                <string>F&amp;orce input charset:</string>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>m_comboInputCharset</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="editable">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>m_checkPreservePermissions</cstring>
                     </property>
                     <property name="text">
                         <string>Preserve file permissions (bac&amp;kup)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
@@ -172,14 +154,6 @@
         </widget>
     </grid>
 </widget>
-<connections>
-    <connection>
-        <sender>m_checkForceInputCharset</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_comboInputCharset</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
 <tabstops>
     <tabstop>m_checkRockRidge</tabstop>
     <tabstop>m_checkJoliet</tabstop>
@@ -187,7 +161,5 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

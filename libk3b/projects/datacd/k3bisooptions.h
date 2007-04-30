@@ -26,13 +26,6 @@ class LIBK3B_EXPORT K3bIsoOptions
 {
  public:
   K3bIsoOptions();
-
-  bool forceInputCharset() const { return m_bForceInputCharset; }
-  const QString& inputCharset() const { return m_inputCharset; }
-
-  void setForceInputCharset( bool b ) { m_bForceInputCharset = b; }
-  void setInputCharset( const QString& cs ) { m_inputCharset = cs; }
-
 	
   // -- mkisofs-options ----------------------------------------------------------------------
   bool createRockRidge() const { return m_createRockRidge; }

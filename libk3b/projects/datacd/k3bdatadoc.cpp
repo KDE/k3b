@@ -414,12 +414,6 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
     else if( e.nodeName() == "preserve_file_permissions")
       m_isoOptions.setPreserveFilePermissions( e.attributeNode( "activated" ).value() == "yes" );
 
-    else if( e.nodeName() == "force_input_charset")
-      m_isoOptions.setForceInputCharset( e.attributeNode( "activated" ).value() == "yes" );
-
-    else if( e.nodeName() == "input_charset")
-      m_isoOptions.setInputCharset( e.text() );
-
     else if( e.nodeName() == "do_not_cache_inodes" )
       m_isoOptions.setDoNotCacheInodes( e.attributeNode( "activated" ).value() == "yes" );
 
@@ -725,16 +719,8 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
   topElem.setAttribute( "activated", isoOptions().preserveFilePermissions() ? "yes" : "no" );
   optionsElem.appendChild( topElem );
 
-  topElem = doc.createElement( "force_input_charset" );
-  topElem.setAttribute( "activated", isoOptions().forceInputCharset() ? "yes" : "no" );
-  optionsElem.appendChild( topElem );
-
   topElem = doc.createElement( "do_not_cache_inodes" );
   topElem.setAttribute( "activated", isoOptions().doNotCacheInodes() ? "yes" : "no" );
-  optionsElem.appendChild( topElem );
-
-  topElem = doc.createElement( "input_charset" );
-  topElem.appendChild( doc.createTextNode( isoOptions().inputCharset() ) );
   optionsElem.appendChild( topElem );
 
 

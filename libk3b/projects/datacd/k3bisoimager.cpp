@@ -762,9 +762,6 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
 
   *m_process << "-iso-level" << QString::number(m_doc->isoOptions().ISOLevel());
 
-  if( m_doc->isoOptions().forceInputCharset() )
-    *m_process << "-input-charset" << m_doc->isoOptions().inputCharset();
-
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile->name());
 
 

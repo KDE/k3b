@@ -27,11 +27,8 @@ K3bIsoOptions::K3bIsoOptions()
   : m_volumeID( i18n( "K3b data project" ) ),
     m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2006 SEBASTIAN TRUEG AND THE K3B TEAM") ),
     m_systemId( K3b::systemName().upper() ),
-    m_inputCharset( "iso8859-1" ),
     m_whiteSpaceTreatmentReplaceString( "_" )
 {
-  m_bForceInputCharset = false;
-
   m_createRockRidge = true;
   m_createJoliet = true;
   m_createUdf = false;
@@ -105,9 +102,6 @@ void K3bIsoOptions::save( KConfigBase* c, bool saveVolumeDesc )
 
   c->writeEntry( "joliet long", m_jolietLong );
 
-  c->writeEntry( "force input charset", m_bForceInputCharset );
-  c->writeEntry( "input charset", m_inputCharset );
-
   c->writeEntry( "do not cache inodes", m_doNotCacheInodes );
 
   // save whitespace-treatment
@@ -151,10 +145,6 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c, bool loadVolumeDesc )
     options.setCoprightFile( c->readEntry( "copyright file", options.copyrightFile() ) );
     options.setBibliographFile( c->readEntry( "bibliograph file", options.bibliographFile() ) );
   }
-
-  options.setForceInputCharset( c->readBoolEntry( "force input charset", options.forceInputCharset() ) );
-  if( options.forceInputCharset() )
-    options.setInputCharset( c->readEntry( "input charset", options.inputCharset() ) );
 
   options.setCreateRockRidge( c->readBoolEntry( "rock_ridge", options.createRockRidge() ) );
   options.setCreateJoliet( c->readBoolEntry( "joliet", options.createJoliet() ) );

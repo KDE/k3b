@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -34,51 +34,11 @@
 #include <kdebug.h>
 
 
-static const char * mkisofsCharacterSets[] = { "cp10081",
-					       "cp10079",
-					       "cp10029",
-					       "cp10007",
-					       "cp10006",
-					       "cp10000",
-					       "koi8-u",
-					       "koi8-r",
-					       "cp1251",
-					       "cp1250",
-					       "cp874",
-					       "cp869",
-					       "cp866",
-					       "cp865",
-					       "cp864",
-					       "cp863",
-					       "cp862",
-					       "cp861",
-					       "cp860",
-					       "cp857",
-					       "cp855",
-					       "cp852",
-					       "cp850",
-					       "cp775",
-					       "cp737",
-					       "cp437",
-					       "iso8859-15",
-					       "iso8859-14",
-					       "iso8859-9",
-					       "iso8859-8",
-					       "iso8859-7",
-					       "iso8859-6",
-					       "iso8859-5",
-					       "iso8859-4",
-					       "iso8859-3",
-					       "iso8859-2",
-					       "iso8859-1",
-					       0 };  // terminating zero
-
-
 
 class K3bDataAdvancedImageSettingsWidget::PrivateIsoWhatsThis : public QWhatsThis
 {
 public:
-  PrivateIsoWhatsThis( K3bDataAdvancedImageSettingsWidget* w ) 
+  PrivateIsoWhatsThis( K3bDataAdvancedImageSettingsWidget* w )
     : QWhatsThis( w->m_viewIsoSettings->viewport() ) {
     this->w = w;
   }
@@ -92,8 +52,8 @@ public:
 
     if( i == w->m_checkAllowUntranslatedFilenames )
       return i18n( "Force all options below" );
-    else if( i == w->m_radioIsoLevel1 || 
-	     i == w->m_radioIsoLevel2 || 
+    else if( i == w->m_radioIsoLevel1 ||
+	     i == w->m_radioIsoLevel2 ||
 	     i == w->m_radioIsoLevel3 ||
 	     i == w->m_isoLevelController )
       return i18n( "<p>Set the ISO-9660 conformance level.\n"
@@ -110,7 +70,7 @@ public:
     else
       return i18n("Set special ISO9660 Filesystem preferences.");
   }
-  
+
 private:
   K3bDataAdvancedImageSettingsWidget* w;
 };
@@ -151,66 +111,66 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   (void)new PrivateIsoWhatsThis( this );
 
   // create all the view items
-  QCheckListItem* iso9660Root = new QCheckListItem( m_viewIsoSettings, 
+  QCheckListItem* iso9660Root = new QCheckListItem( m_viewIsoSettings,
 						    i18n("IS09660 Settings"),
 						    QCheckListItem::Controller );
-  QCheckListItem* rrRoot = new QCheckListItem( m_viewIsoSettings, 
+  QCheckListItem* rrRoot = new QCheckListItem( m_viewIsoSettings,
 					       iso9660Root,
 					       i18n("Rock Ridge Settings"),
 					       QCheckListItem::Controller );
-  QCheckListItem* jolietRoot = new QCheckListItem( m_viewIsoSettings, 
+  QCheckListItem* jolietRoot = new QCheckListItem( m_viewIsoSettings,
 						   rrRoot,
 						   i18n("Joliet Settings"),
 						   QCheckListItem::Controller );
-  QCheckListItem* miscRoot = new QCheckListItem( m_viewIsoSettings, 
+  QCheckListItem* miscRoot = new QCheckListItem( m_viewIsoSettings,
 						 jolietRoot,
 						 i18n("Misc Settings"),
 						 QCheckListItem::Controller );
 
   // ISO9660 settings
-  m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( iso9660Root, 
-								i18n( "Allow untranslated ISO9660 filenames" ), 
+  m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( iso9660Root,
+								i18n( "Allow untranslated ISO9660 filenames" ),
 								QCheckListItem::CheckBox );
-  m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							     i18n( "Allow max length ISO9660 filenames (37 characters)" ),
 							     QCheckListItem::CheckBox );
-  m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 						    i18n( "Allow full ASCII charset for ISO9660 filenames" ),
 						    QCheckListItem::CheckBox );
-  m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 						i18n( "Allow ~ and # in ISO9660 filenames" ),
 						QCheckListItem::CheckBox );
-  m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							      i18n( "Allow lowercase characters in ISO9660 filenames" ),
 							      QCheckListItem::CheckBox );
-  m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 						   i18n( "Allow multiple dots in ISO9660 filenames" ),
 						   QCheckListItem::CheckBox );
-  m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							  i18n( "Allow 31 character ISO9660 filenames" ),
 							  QCheckListItem::CheckBox );
-  m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							  i18n( "Allow leading period in ISO9660 filenames" ),
 							  QCheckListItem::CheckBox );
-  m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							i18n( "Omit version numbers in ISO9660 filenames" ),
 							QCheckListItem::CheckBox );
-  m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames, 
+  m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							i18n( "Omit trailing period in ISO9660 filenames" ),
 							QCheckListItem::CheckBox );
 
   m_checkAllowUntranslatedFilenames->setOpen(true);
-  m_isoLevelController = new QCheckListItem( iso9660Root, 
+  m_isoLevelController = new QCheckListItem( iso9660Root,
 					     m_checkAllowUntranslatedFilenames,
 					     i18n("ISO Level") );
 
-  m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController, 
+  m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController,
 					 i18n("Level %1").arg(3),
 					 QCheckListItem::RadioButton );
-  m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController, 
+  m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController,
 					 i18n("Level %1").arg(2),
 					 QCheckListItem::RadioButton );
-  m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController, 
+  m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController,
 					 i18n("Level %1").arg(1),
 					 QCheckListItem::RadioButton );
 
@@ -222,15 +182,15 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 					  QCheckListItem::CheckBox );
 
   // Rock Ridge Settings
-  m_checkCreateTransTbl = new QCheckListItem( rrRoot, 
+  m_checkCreateTransTbl = new QCheckListItem( rrRoot,
 					      i18n( "Create TRANS.TBL files" ),
 					      QCheckListItem::CheckBox );
-  m_checkHideTransTbl = new QCheckListItem( rrRoot, m_checkCreateTransTbl, 
+  m_checkHideTransTbl = new QCheckListItem( rrRoot, m_checkCreateTransTbl,
 					    i18n( "Hide TRANS.TBL files in Joliet" ),
 					    QCheckListItem::CheckBox );
 
   // Misc Settings
-//   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings, 
+//   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings,
 // 						   i18n( "Follow symbolic links" ),
 // 						   QCheckListItem::CheckBox );
 
@@ -242,14 +202,6 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   jolietRoot->setOpen( true );
   rrRoot->setOpen( true );
   miscRoot->setOpen( true );
-
-
-  m_comboInputCharset->setValidator( new QRegExpValidator( QRegExp("[\\w_-]*"), this ) );
-
-  // fill charset combo
-  for( int i = 0; mkisofsCharacterSets[i]; i++ ) {
-    m_comboInputCharset->insertItem( QString( mkisofsCharacterSets[i] ) );
-  }
 
   connect( m_checkJoliet, SIGNAL(toggled(bool)), this, SLOT(slotJolietToggled(bool)) );
 }
@@ -278,8 +230,6 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
     break;
   }
 
-  m_checkForceInputCharset->setChecked( o.forceInputCharset() );
-  m_comboInputCharset->setEditText( o.inputCharset() );
   m_checkPreservePermissions->setChecked( o.preserveFilePermissions() );
 
   // RR settings
@@ -321,9 +271,7 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
     o.setISOLevel( 2 );
   else
     o.setISOLevel( 1 );
-	
-  o.setForceInputCharset( m_checkForceInputCharset->isChecked() );
-  o.setInputCharset( m_comboInputCharset->currentText() );
+
   o.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
 
   o.setCreateTRANS_TBL( m_checkCreateTransTbl->isOn() );
