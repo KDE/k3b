@@ -291,7 +291,7 @@ void K3bMainWindow::initActions()
 				      actionCollection(), "tools_blank_cdrw" );
   KAction* actionToolsFormatDVD = new KAction( i18n("&Format DVD%1RW...").arg("±"), "formatdvd", 0, this,
 					       SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
-  KAction* actionToolsFormatMedium = new KAction( i18n("&Format/Erase rewritable disk...").arg("±"), "formatdvd", 0, this,
+  KAction* actionToolsFormatMedium = new KAction( i18n("&Format/Erase rewritable disk..."), "formatdvd", 0, this,
                                                   SLOT(slotFormatMedium()), actionCollection(), "tools_format_medium" );
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
 					 actionCollection(), "tools_write_cd_image" );
