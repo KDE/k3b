@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -91,8 +91,8 @@ bool K3bDataItem::isBootItem() const
 
 KIO::filesize_t K3bDataItem::size() const
 {
-  return itemSize( m_doc 
-		   ? m_doc->isoOptions().followSymbolicLinks() || 
+  return itemSize( m_doc
+		   ? m_doc->isoOptions().followSymbolicLinks() ||
 		   !m_doc->isoOptions().createRockRidge()
 		   : false );
 }
@@ -100,8 +100,8 @@ KIO::filesize_t K3bDataItem::size() const
 
 K3b::Msf K3bDataItem::blocks() const
 {
-  return itemBlocks( m_doc 
-		     ? m_doc->isoOptions().followSymbolicLinks() || 
+  return itemBlocks( m_doc
+		     ? m_doc->isoOptions().followSymbolicLinks() ||
 		     !m_doc->isoOptions().createRockRidge()
 		     : false );
 }
@@ -114,21 +114,24 @@ K3b::Msf K3bDataItem::itemBlocks( bool followSymbolicLinks ) const
 
 
 void K3bDataItem::setK3bName( const QString& name ) {
-  // test for not-allowed characters
-  if( name.contains('/') ) {
-    kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
-    return;
-  }
-   
-  if( parent() ) {
-    K3bDataItem* item = parent()->find( name );
-    if( item && item != this ) {
-      kdDebug() << "(K3bDataItem) item with that name already exists." << endl;
-      return;
-    }
-  }
+    if ( name != m_k3bName ) {
+        // test for not-allowed characters
+        if( name.contains('/') ) {
+            kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
+            return;
+        }
 
-  m_k3bName = name;
+        if( parent() ) {
+            K3bDataItem* item = parent()->find( name );
+            if( item && item != this ) {
+                kdDebug() << "(K3bDataItem) item with that name already exists." << endl;
+                return;
+            }
+        }
+
+        m_k3bName = name;
+        m_doc->setModified();
+    }
 }
 
 
@@ -184,11 +187,11 @@ K3bDataItem* K3bDataItem::nextSibling() const
 {
   K3bDataItem* item = const_cast<K3bDataItem*>(this); // urg, but we know that we don't mess with it, so...
   K3bDirItem* parentItem = getParent();
-	
+
   while( parentItem ) {
     if( K3bDataItem* i = parentItem->nextChild( item ) )
       return i;
-		
+
     item = parentItem;
     parentItem = item->getParent();
   }
@@ -205,12 +208,12 @@ void K3bDataItem::reparent( K3bDirItem* newParent )
 
 
 bool K3bDataItem::hideOnRockRidge() const
-{ 
+{
   if( !isHideable() )
     return false;
   if( getParent() )
     return m_bHideOnRockRidge || getParent()->hideOnRockRidge();
-  else 
+  else
     return m_bHideOnRockRidge;
 }
 
@@ -219,7 +222,7 @@ bool K3bDataItem::hideOnJoliet() const
 {
   if( !isHideable() )
     return false;
-  if( getParent() ) 
+  if( getParent() )
     return m_bHideOnJoliet || getParent()->hideOnJoliet();
   else
     return m_bHideOnJoliet;
@@ -228,19 +231,27 @@ bool K3bDataItem::hideOnJoliet() const
 
 void K3bDataItem::setHideOnRockRidge( bool b )
 {
-  // there is no use in changing the value if 
+  // there is no use in changing the value if
   // it is already set by the parent
-  if( !getParent() || !getParent()->hideOnRockRidge() )
-    m_bHideOnRockRidge = b;
+    if( ( !getParent() || !getParent()->hideOnRockRidge() ) &&
+        b != m_bHideOnRockRidge ) {
+        m_bHideOnRockRidge = b;
+        if ( m_doc )
+            m_doc->setModified();
+    }
 }
 
 
-void K3bDataItem::setHideOnJoliet( bool b ) 
-{ 
-  // there is no use in changing the value if 
+void K3bDataItem::setHideOnJoliet( bool b )
+{
+  // there is no use in changing the value if
   // it is already set by the parent
-  if( !getParent() || !getParent()->hideOnJoliet() )
+    if( ( !getParent() || !getParent()->hideOnJoliet() ) &&
+        b != m_bHideOnJoliet ) {
     m_bHideOnJoliet = b;
+    if ( m_doc )
+        m_doc->setModified();
+  }
 }
 
 
