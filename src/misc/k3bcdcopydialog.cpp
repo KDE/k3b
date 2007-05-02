@@ -499,7 +499,7 @@ void K3bCdCopyDialog::saveUserDefaults( KConfigBase* c )
   m_writerSelectionWidget->saveConfig( c );
   m_tempDirSelectionWidget->saveConfig( c );
 
-  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
+  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->devicename() : QString() );
 
   c->writeEntry( "copy cdtext", m_checkReadCdText->isChecked() );
   c->writeEntry( "prefer cdtext", m_checkPrefereCdText->isChecked() );

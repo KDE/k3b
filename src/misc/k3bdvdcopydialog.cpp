@@ -315,7 +315,7 @@ void K3bDvdCopyDialog::saveUserDefaults( KConfigBase* c )
   m_writingModeWidget->saveConfig( c );
   m_tempDirSelectionWidget->saveConfig( c );
 
-  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
+  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->devicename() : QString() );
 
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
   c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
