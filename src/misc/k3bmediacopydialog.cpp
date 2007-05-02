@@ -582,7 +582,7 @@ void K3bMediaCopyDialog::saveUserDefaults( KConfigBase* c )
   m_writerSelectionWidget->saveConfig( c );
   m_tempDirSelectionWidget->saveConfig( c );
 
-  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice()->devicename() );
+  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->devicename() : QString() );
 
   c->writeEntry( "copy cdtext", m_checkReadCdText->isChecked() );
   c->writeEntry( "ignore data read errors", m_checkIgnoreDataReadErrors->isChecked() );
