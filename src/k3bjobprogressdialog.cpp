@@ -78,8 +78,8 @@ public:
 
 
 
-K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent, 
-					    const char* name, 
+K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
+					    const char* name,
 					    bool showSubProgress,
 					    bool modal, WFlags fl )
   : KDialog( parent, name, modal, fl ),
@@ -114,17 +114,17 @@ K3bJobProgressDialog::~K3bJobProgressDialog()
 
 void K3bJobProgressDialog::setupGUI()
 {
-  QVBoxLayout* mainLayout = new QVBoxLayout( this, 11, 6, "mainLayout"); 
+  QVBoxLayout* mainLayout = new QVBoxLayout( this, 11, 6, "mainLayout");
 
 
-  // header 
+  // header
   // ------------------------------------------------------------------------------------------
   QFrame* headerFrame = new QFrame( this, "headerFrame" );
   headerFrame->setFrameShape( QFrame::StyledPanel );
   headerFrame->setFrameShadow( QFrame::Sunken );
   headerFrame->setLineWidth( 1 );
   headerFrame->setMargin( 1 );
-  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame ); 
+  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
   headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
   headerLayout->setSpacing( 0 );
   m_pixLabel = new K3bThemedLabel( headerFrame );
@@ -134,14 +134,14 @@ void K3bJobProgressDialog::setupGUI()
   frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
   frame4->setFrameShape( QFrame::NoFrame );
   frame4->setFrameShadow( QFrame::Raised );
-  QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout"); 
+  QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout");
 
   m_labelJob = new K3bThemedLabel( frame4 );
   m_labelJob->setMinimumVisibleText( 40 );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
   m_labelJob_font.setBold( true );
-  m_labelJob->setFont( m_labelJob_font ); 
+  m_labelJob->setFont( m_labelJob_font );
   m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
@@ -172,7 +172,7 @@ void K3bJobProgressDialog::setupGUI()
   progressHeaderFrame->setLineWidth( 1 );
   progressHeaderFrame->setMargin( 1 );
 
-  QHBoxLayout* progressHeaderLayout = new QHBoxLayout( progressHeaderFrame ); 
+  QHBoxLayout* progressHeaderLayout = new QHBoxLayout( progressHeaderFrame );
   progressHeaderLayout->setMargin( 2 );
   progressHeaderLayout->setSpacing( 0 );
 
@@ -180,13 +180,13 @@ void K3bJobProgressDialog::setupGUI()
   frame5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame5->sizePolicy().hasHeightForWidth() ) );
   frame5->setFrameShape( QFrame::NoFrame );
   frame5->setFrameShadow( QFrame::Raised );
-  QVBoxLayout* frame5Layout = new QVBoxLayout( frame5, 6, 3, "frame5Layout"); 
+  QVBoxLayout* frame5Layout = new QVBoxLayout( frame5, 6, 3, "frame5Layout");
 
   m_labelTask = new K3bThemedLabel( frame5 );
   QFont m_labelTask_font(  m_labelTask->font() );
   m_labelTask_font.setPointSize( m_labelTask_font.pointSize() + 2 );
   m_labelTask_font.setBold( true );
-  m_labelTask->setFont( m_labelTask_font ); 
+  m_labelTask->setFont( m_labelTask_font );
   frame5Layout->addWidget( m_labelTask );
 
   m_labelElapsedTime = new K3bThemedLabel( frame5 );
@@ -198,7 +198,7 @@ void K3bJobProgressDialog::setupGUI()
   mainLayout->addWidget( progressHeaderFrame );
   // ------------------------------------------------------------------------------------------
 
-  QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
+  QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3");
 
   m_labelSubTask = new KCutLabel( this, "m_labelSubTask" );
   layout3->addWidget( m_labelSubTask );
@@ -211,7 +211,7 @@ void K3bJobProgressDialog::setupGUI()
   m_progressSubPercent = new KProgress( this, "m_progressSubPercent" );
   mainLayout->addWidget( m_progressSubPercent );
 
-  QHBoxLayout* layout4 = new QHBoxLayout( 0, 0, 6, "layout4"); 
+  QHBoxLayout* layout4 = new QHBoxLayout( 0, 0, 6, "layout4");
 
   QLabel* textLabel5 = new QLabel( i18n("Overall progress:"), this, "textLabel5" );
   layout4->addWidget( textLabel5 );
@@ -227,7 +227,7 @@ void K3bJobProgressDialog::setupGUI()
   m_frameExtraInfo = new QFrame( this, "m_frameExtraInfo" );
   m_frameExtraInfo->setFrameShape( QFrame::NoFrame );
   m_frameExtraInfo->setFrameShadow( QFrame::Raised );
-  m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo ); 
+  m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo );
   m_frameExtraInfoLayout->setMargin(0);
   m_frameExtraInfoLayout->setSpacing( spacingHint() );
   mainLayout->addWidget( m_frameExtraInfo );
@@ -237,7 +237,7 @@ void K3bJobProgressDialog::setupGUI()
  line2->setFrameShadow( QFrame::Sunken );
   mainLayout->addWidget( line2 );
 
-  QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
+  QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5");
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout5->addItem( spacer );
 
@@ -390,7 +390,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
       if( m_osd )
 	m_osd->setText( i18n("Error.") );
     }
-   
+
     KNotifyClient::event( 0, "FinishedWithError", i18n("Finished with errors") );
   }
 
@@ -435,20 +435,20 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
     // connect to all the shit
     connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
-    
+
     connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
     connect( job, SIGNAL(percent(int)), this, SLOT(slotProgress(int)) );
     connect( job, SIGNAL(subPercent(int)), m_progressSubPercent, SLOT(setValue(int)) );
-    
+
     connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(slotProcessedSubSize(int, int)) );
     connect( job, SIGNAL(processedSize(int, int)), this, SLOT(slotProcessedSize(int, int)) );
-    
+
     connect( job, SIGNAL(newTask(const QString&)), this, SLOT(slotNewTask(const QString&)) );
     connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
     connect( job, SIGNAL(started()), this, SLOT(slotStarted()) );
     connect( job, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
     connect( job, SIGNAL(canceled()), this, SLOT(slotCanceled()) );
-    
+
     connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	     this, SLOT(slotDebuggingOutput(const QString&, const QString&)) );
 
@@ -515,10 +515,10 @@ void K3bJobProgressDialog::slotUpdateTime()
 {
   int elapsed = m_startTime.secsTo( QTime::currentTime() );
 
-  QString s = i18n("Elapsed time: %1 h").arg( QTime().addSecs(elapsed).toString() );
+  QString s = i18n("Elapsed time: %1").arg( QTime().addSecs(elapsed).toString() );
   if( d->lastProgress > 0 && d->lastProgress < 100 ) {
     int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
-    s += " / " + i18n("Remaining: %1 h").arg( QTime().addSecs(rem).toString() );
+    s += " / " + i18n("Remaining: %1").arg( QTime().addSecs(rem).toString() );
   }
 
   m_labelElapsedTime->setText( s );
@@ -605,16 +605,16 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
     kdError() << "(K3bJobProgressDialog::startJob) Recursive call detected." << endl;
     return -1;
   }
-  
+
   bool destructiveClose = testWFlags( WDestructiveClose );
   clearWFlags( WDestructiveClose );
-  
+
   bool wasShowModal = testWFlags( WShowModal );
   setWFlags( WShowModal );
   setResult( 0 );
 
   show();
-  
+
   // start the job after showing the dialog
   m_job->start();
 
@@ -623,12 +623,12 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
 
   if ( !wasShowModal )
     clearWFlags( WShowModal );
-  
+
   int res = result();
-  
+
   if ( destructiveClose )
     delete this;
-  
+
   return res;
 }
 
@@ -640,9 +640,9 @@ void K3bJobProgressDialog::hide()
 
   if ( isHidden() )
     return;
-  
+
   KDialog::hide();
-  
+
   if ( in_loop ) {
     in_loop = FALSE;
     QApplication::eventLoop()->exitLoop();
@@ -658,15 +658,15 @@ int K3bJobProgressDialog::waitForMedia( K3bDevice::Device* device,
   return K3bEmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
 }
 
-  
+
 bool K3bJobProgressDialog::questionYesNo( const QString& text,
 					  const QString& caption,
 					  const QString& yesText,
 					  const QString& noText )
 {
-  return ( KMessageBox::questionYesNo( this, 
-				       text, 
-				       caption, 
+  return ( KMessageBox::questionYesNo( this,
+				       text,
+				       caption,
 				       yesText.isEmpty() ? KStdGuiItem::yes() : KGuiItem(yesText),
 				       noText.isEmpty() ? KStdGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
 }
