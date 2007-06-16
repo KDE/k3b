@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 
-K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber, 
+K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber,
 					      const K3bCddbResultEntry& cddb, K3bDevice::Device* dev )
   : K3bAudioDataSource(),
     m_discId( toc.discId() ),
@@ -44,7 +44,7 @@ K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdT
 }
 
 
-K3bAudioCdTrackSource::K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber, 
+K3bAudioCdTrackSource::K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber,
 					      const QString& artist, const QString& title,
 					      const QString& cdArtist, const QString& cdTitle )
   : K3bAudioDataSource(),
@@ -91,7 +91,7 @@ bool K3bAudioCdTrackSource::initParanoia()
   if( !m_initialized ) {
     if( !m_cdParanoiaLib )
       m_cdParanoiaLib = K3bCdparanoiaLib::create();
-    
+
     if( m_cdParanoiaLib ) {
       m_lastUsedDevice = searchForAudioCD();
 
@@ -100,10 +100,10 @@ bool K3bAudioCdTrackSource::initParanoia()
 	// could not find the CD, so ask for it
 	QString s = i18n("Please insert Audio CD %1%2")
 	  .arg(m_discId, 0, 16)
-	  .arg(m_cddbEntry.cdTitle.isEmpty() || m_cddbEntry.cdArtist.isEmpty() 
-	       ? QString::null 
+	  .arg(m_cddbEntry.cdTitle.isEmpty() || m_cddbEntry.cdArtist.isEmpty()
+	       ? QString::null
 	       : " (" + m_cddbEntry.cdArtist + " - " + m_cddbEntry.cdTitle + ")");
-	
+
 	while( K3bDevice::Device* dev = K3bThreadWidget::selectDevice( track()->doc()->view(), s ) ) {
 	  if( searchForAudioCD( dev ) ) {
 	    m_lastUsedDevice = dev;
@@ -122,7 +122,8 @@ bool K3bAudioCdTrackSource::initParanoia()
 	m_toc = m_lastUsedDevice->readToc();
 
       if( !m_cdParanoiaLib->initParanoia( m_lastUsedDevice, m_toc ) ) {
-	return false;
+          k3bcore->unblockDevice( m_lastUsedDevice );
+          return false;
       }
 
       if( doc() ) {
@@ -131,7 +132,7 @@ bool K3bAudioCdTrackSource::initParanoia()
 	m_cdParanoiaLib->setMaxRetries( doc()->audioRippingRetries() );
       }
 
-      m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(), 
+      m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(),
 				    m_toc[m_cdTrackNumber-1].firstSector().lba() + lastSector().lba() );
 
       // we only block during the initialization because we cannot determine the end of the reading process :(
@@ -208,7 +209,7 @@ bool K3bAudioCdTrackSource::seek( const K3b::Msf& msf )
   m_position = msf;
 
   if( m_cdParanoiaLib )
-    m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(), 
+    m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(),
 				  m_toc[m_cdTrackNumber-1].firstSector().lba() + lastSector().lba() );
 
   return true;

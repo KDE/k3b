@@ -3,6 +3,7 @@
  * Properly determine the capacity of complete CD-R(W) media.
  * Mark a data project as modified if files are renamed.
  * Allow adding of all actions to the welcome window (Bug 145866)
+ * Added "NoDisplay=true" property to k3b-cue.desktop and k3b-iso.desktop 
 
 1.0.1
 =====
