@@ -1,6 +1,7 @@
 # KDE Config File
 [Desktop Entry]
 Type=Application
+NoDisplay=true
 Exec=k3b --cdimage %U
 Icon=k3b
 Terminal=false
