@@ -46,6 +46,36 @@
 #include <kactionclasses.h>
 
 
+static const char* s_allActions[] = {
+  "file_new_data",
+  "file_new_dvd",
+  "file_continue_multisession",
+  "_sep_",
+  "file_new_audio",
+  "_sep_",
+  "file_new_mixed",
+  "_sep_",
+  "file_new_vcd",
+  "file_new_video_dvd",
+  "_sep_",
+  "file_new_movix",
+  "file_new_movix_dvd",
+  "_sep_",
+  "tools_copy_cd",
+  "tools_copy_dvd",
+  "_sep_",
+  "tools_blank_cdrw",
+  "tools_format_dvd",
+  "_sep_",
+  "tools_write_cd_image",
+  "tools_write_dvd_iso",
+  "_sep_",
+  "tools_cdda_rip",
+  "tools_videodvd_rip",
+  "tools_videocd_rip",
+  0
+};
+
 K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
   : QWidget( parent->viewport() )
 {
@@ -397,17 +427,13 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
     QMap<int, KAction*> map;
     KPopupMenu addPop;
 
-    KActionPtrList actions = m_mainWindow->actionCollection()->actions();
-    for( KActionPtrList::iterator it = actions.begin(); it != actions.end(); ++it ) {
-      KAction* a = *it;
-      // We only allow project and tools buttons but not the file_new action since this is
-      // the actionmenu containing all the other file_new actions and that would not make sense
-      // on a toolbutton
-      QString aname(a->name());
-      if( aname != "file_new" &&
-	  ( aname.startsWith( "tools" ) || aname.startsWith( "file_new" ) ) &&
-	  !main->m_actions.containsRef(a) )
-	map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
+    for ( int i = 0; s_allActions[i]; ++i ) {
+        if ( s_allActions[i][0] != '_' ) {
+            KAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
+            if ( a && !main->m_actions.containsRef(a) ) {
+                map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
+            }
+        }
     }
 
     // menu identifiers in QT are always < 0 (when automatically generated)
@@ -446,45 +472,14 @@ void K3bWelcomeWidget::slotMoreActions()
 {
   KPopupMenu popup;
 
-  m_mainWindow->actionCollection()->action( "file_new_data" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_dvd" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_continue_multisession" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_audio" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_mixed" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_vcd" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_video_dvd" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_movix" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "file_new_movix_dvd" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_copy_cd" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_copy_dvd" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_blank_cdrw" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_format_dvd" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_write_cd_image" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_write_dvd_iso" )->plug( &popup );
-  (new KActionSeparator( &popup ))->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_cdda_rip" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_videodvd_rip" )->plug( &popup );
-  m_mainWindow->actionCollection()->action( "tools_videocd_rip" )->plug( &popup );
-
-//   KActionPtrList actions = m_mainWindow->actionCollection()->actions();
-//   for( KActionPtrList::iterator it = actions.begin(); it != actions.end(); ++it ) {
-//     KAction* a = *it;
-//     // We only allow project and tools buttons but not the file_new action since this is
-//     // the actionmenu containing all the other file_new actions and that would not make sense
-//     // on a toolbutton
-//     QString aname(a->name());
-//     if( aname != "file_new" &&
-// 	( aname.startsWith( "tools" ) || aname.startsWith( "file_new" ) ) &&
-// 	!main->m_actions.containsRef(a) )
-//       a->plug( &popup );
-//   }
+  for ( int i = 0; s_allActions[i]; ++i ) {
+      if ( s_allActions[i][0] == '_' ) {
+          (new KActionSeparator( &popup ))->plug( &popup );
+      }
+      else {
+          m_mainWindow->actionCollection()->action( s_allActions[i] )->plug( &popup );
+      }
+  }
 
   popup.exec( QCursor::pos() );
 }
