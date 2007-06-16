@@ -2,6 +2,7 @@
 =====
  * Properly determine the capacity of complete CD-R(W) media.
  * Mark a data project as modified if files are renamed.
+ * Allow adding of all actions to the welcome window (Bug 145866)
 
 1.0.1
 =====
