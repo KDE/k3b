@@ -640,7 +640,9 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
 
   // stat the device
   struct stat cdromStat;
-  ::fstat( cdromfd, &cdromStat );
+  if ( ::fstat( cdromfd, &cdromStat ) ) {
+      return false;
+  }
 
   if( !S_ISBLK( cdromStat.st_mode) ) {
     k3bDebug() << devicename << " is no block device" << endl;

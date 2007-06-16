@@ -2200,10 +2200,18 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	K3b::Msf currentMax;
 	int currentMaxFormat = 0;
 	if( readFormatCapacity( 0x26, inf.m_capacity, &currentMax, &currentMaxFormat ) ) {
-	  if( inf.bgFormatState() != BG_FORMAT_NONE )
-	    inf.m_usedCapacity = currentMax;
-	  else
-	    inf.m_usedCapacity = 0;
+            if( currentMaxFormat == 0x1 ) { // unformatted or blank media
+                inf.m_usedCapacity = 0;
+                inf.m_capacity = currentMax;
+            }
+            else {
+                inf.m_usedCapacity = currentMax;
+                // Plextor drives tend to screw things up and report invalid values
+                // for the max format capacity of 1.4 GB DVD media
+                if ( inf.bgFormatState() == BG_FORMAT_COMPLETE ) {
+                    inf.m_capacity = currentMax;
+                }
+            }
        	}
 	else
 	  k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
