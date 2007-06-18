@@ -117,6 +117,9 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool doNotCacheInodes() const { return m_doNotCacheInodes; }
   void setDoNotCacheInodes( bool b ) { m_doNotCacheInodes = b; }
 
+  bool doNotImportSession() const { return m_doNotImportSession; }
+  void setDoNotImportSession( bool b ) { m_doNotImportSession = b; }
+  
   void save( KConfigBase* c, bool saveVolumeDesc = true );
 
   static K3bIsoOptions load( KConfigBase* c, bool loadVolumeDesc = true );
@@ -162,6 +165,7 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool m_jolietLong;
 
   bool m_doNotCacheInodes;
+  bool m_doNotImportSession;
 	
   int m_isoLevel;
 

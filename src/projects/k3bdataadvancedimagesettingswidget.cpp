@@ -198,6 +198,10 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
 						i18n("Do not cache inodes" ),
 						QCheckListItem::CheckBox );
 
+  m_checkDoNotImportSession = new QCheckListItem( miscRoot,
+                                                  i18n("Do not import previous session" ),
+                                                  QCheckListItem::CheckBox );
+
   iso9660Root->setOpen( true );
   jolietRoot->setOpen( true );
   rrRoot->setOpen( true );
@@ -253,6 +257,7 @@ void K3bDataAdvancedImageSettingsWidget::load( const K3bIsoOptions& o )
 
   // misc (FIXME: should not be here)
   m_checkDoNotCacheInodes->setOn( o.doNotCacheInodes() );
+  m_checkDoNotImportSession->setOn( o.doNotImportSession() );
 
   slotJolietToggled( m_checkJoliet->isChecked() );
 }
@@ -289,6 +294,7 @@ void K3bDataAdvancedImageSettingsWidget::save( K3bIsoOptions& o )
   //  o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isOn() );
   o.setJolietLong( m_checkJolietLong->isOn() );
   o.setDoNotCacheInodes( m_checkDoNotCacheInodes->isOn() );
+  o.setDoNotImportSession( m_checkDoNotImportSession->isOn() );
 }
 
 

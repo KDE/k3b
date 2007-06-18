@@ -587,9 +587,10 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
 {
   // add multisession info
   if( !m_multiSessionInfo.isEmpty() ) {
-    *m_process << "-cdrecord-params" << m_multiSessionInfo;
-    if( m_device )
-      *m_process << "-prev-session" << m_device->blockDeviceName();
+      *m_process << "-cdrecord-params" << m_multiSessionInfo;
+      if( m_device && !m_doc->isoOptions().doNotImportSession() ) {
+          *m_process << "-prev-session" << m_device->blockDeviceName();
+      }
   }
 
   // add the arguments

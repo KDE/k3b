@@ -25,7 +25,7 @@
 
 K3bIsoOptions::K3bIsoOptions()
   : m_volumeID( i18n( "K3b data project" ) ),
-    m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2006 SEBASTIAN TRUEG AND THE K3B TEAM") ),
+    m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2007 SEBASTIAN TRUEG") ),
     m_systemId( K3b::systemName().upper() ),
     m_whiteSpaceTreatmentReplaceString( "_" )
 {
@@ -48,6 +48,7 @@ K3bIsoOptions::K3bIsoOptions()
   m_jolietLong = true;
 
   m_doNotCacheInodes = true;
+  m_doNotImportSession = false;
 
   m_isoLevel = 2;
 
@@ -103,6 +104,7 @@ void K3bIsoOptions::save( KConfigBase* c, bool saveVolumeDesc )
   c->writeEntry( "joliet long", m_jolietLong );
 
   c->writeEntry( "do not cache inodes", m_doNotCacheInodes );
+  c->writeEntry( "do not import last session", m_doNotImportSession );
 
   // save whitespace-treatment
   switch( m_whiteSpaceTreatment ) {
@@ -177,6 +179,7 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c, bool loadVolumeDesc )
   options.setJolietLong( c->readBoolEntry( "joliet long", options.jolietLong() ) );
 
   options.setDoNotCacheInodes( c->readBoolEntry( "do not cache inodes", options.doNotCacheInodes() ) );
+  options.setDoNotImportSession( c->readBoolEntry( "no not import last session", options.doNotImportSession() ) );
 
   QString w = c->readEntry( "white_space_treatment", "noChange" );
   if( w == "replace" )
