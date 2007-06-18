@@ -193,6 +193,12 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
   d->toc = dh->toc();
   d->totalSectors = 0;
 
+  if ( d->toc.isEmpty() ) {
+      emit infoMessage( i18n( "No tracks to verify found." ), ERROR );
+      jobFinished( false );
+      return;
+  }
+
   // just to be sure check if we actually have all the tracks
   int i = 0;
   for( QValueList<K3bVerificationJobTrackEntry>::iterator it = d->tracks.begin();
@@ -229,9 +235,11 @@ void K3bVerificationJob::readTrack( int trackIndex )
 
   emit newTask( i18n("Verifying track %1").arg( d->tracks[trackIndex].trackNumber ) );
 
+  K3bDevice::Track& track = d->toc[d->tracks[trackIndex].trackNumber-1];
+
   d->pipe.open();
 
-  if( d->toc[d->tracks[trackIndex].trackNumber-1].type() == K3bDevice::Track::DATA ) {
+  if( track.type() == K3bDevice::Track::DATA ) {
     if( !d->dataTrackReader ) {
       d->dataTrackReader = new K3bDataTrackReader( this );
       connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
@@ -263,8 +271,8 @@ void K3bVerificationJob::readTrack( int trackIndex )
       }
     }
     else
-      d->dataTrackReader->setSectorRange( d->toc[d->tracks[trackIndex].trackNumber-1].firstSector(),
-					  d->toc[d->tracks[trackIndex].trackNumber-1].firstSector() + d->currentTrackSize -1 );
+      d->dataTrackReader->setSectorRange( track.firstSector(),
+					  track.firstSector() + d->currentTrackSize -1 );
 
     d->md5Job->setMaxReadSize( d->currentTrackSize.mode1Bytes() );
 
@@ -334,11 +342,13 @@ K3b::Msf K3bVerificationJob::trackLength( int trackIndex )
   K3b::Msf& trackSize = d->tracks[trackIndex].length;
   const int& trackNum = d->tracks[trackIndex].trackNumber;
 
+  K3bDevice::Track& track = d->toc[trackNum-1];
+
   if( trackSize == 0 ) {
-    trackSize = d->toc[trackNum-1].length();
+    trackSize = track.length();
 
     if( d->diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
-      K3bIso9660 isoF( d->device, d->toc[trackNum-1].firstSector().lba() );
+      K3bIso9660 isoF( d->device, track.firstSector().lba() );
       if( isoF.open() ) {
 	trackSize = isoF.primaryDescriptor().volumeSpaceSize;
       }
@@ -356,12 +366,12 @@ K3b::Msf K3bVerificationJob::trackLength( int trackIndex )
     // So the solution for now is to simply try to read the last sector of a data track. If this is not
     // possible we assume it was written in TAO mode and reduce the length by 2 sectors
     //
-    if( d->toc[trackNum-1].type() == K3bDevice::Track::DATA &&
+    if( track.type() == K3bDevice::Track::DATA &&
 	d->diskInfo.mediaType() & K3bDevice::MEDIA_CD_ALL ) {
       // we try twice just to be sure
       unsigned char buffer[2048];
-      if( !d->device->read10( buffer, 2048, d->toc[trackNum-1].lastSector().lba(), 1 ) &&
-	  !d->device->read10( buffer, 2048, d->toc[trackNum-1].lastSector().lba(), 1 ) ) {
+      if( !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
+	  !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
 	trackSize -= 2;
 	kdDebug() << "(K3bCdCopyJob) track " << trackNum << " probably TAO recorded." << endl;
       }
