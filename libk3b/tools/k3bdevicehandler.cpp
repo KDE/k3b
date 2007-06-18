@@ -32,6 +32,8 @@ public:
 
 
     void run() {
+        kdDebug() << "(K3bDevice::DeviceHandler) starting command: " << command << endl;
+
         success = false;
         m_bCanceled = false;
 
@@ -115,6 +117,8 @@ public:
 
             dev->close();
         }
+
+        kdDebug() << "(K3bDevice::DeviceHandler) finished command: " << command << endl;
 
         //
         // This thread only gets cancelled if a new request was started.
@@ -270,8 +274,6 @@ void K3bDevice::DeviceHandler::sendCommand( int command )
   }
   else
     jobStarted();
-
-  kdDebug() << "(K3bDevice::DeviceHandler) starting command: " << command << endl;
 
   m_thread->command = command;
   m_thread->start();

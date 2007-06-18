@@ -165,6 +165,14 @@ void K3bVerificationJob::start()
 // 		  K3bDevice::MEDIA_WRITABLE,
 // 		  i18n("Unable to Close the Tray") );
 
+  // make sure the job is initialized
+  if ( d->tracks.isEmpty() ) {
+      emit infoMessage( i18n( "Internal error: Verification job improperly initialized (%1)" )
+                        .arg( "no tracks added" ), ERROR );
+      jobFinished( false );
+      return;
+  }
+
   emit newTask( i18n("Checking medium") );
 
   connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::DISKINFO, d->device ),
@@ -195,7 +203,8 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       (*it).trackNumber = d->toc.count();
 
     if( (int)d->toc.count() < (*it).trackNumber ) {
-      emit infoMessage( i18n("Internal Error: Verification job improperly initialized"), ERROR );
+      emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)")
+                        .arg( "Specified track number not found on medium" ), ERROR );
       jobFinished( false );
       return;
     }
