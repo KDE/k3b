@@ -40,6 +40,7 @@ class QDropEvent;
 class KListView;
 class QListViewItem;
 class QPoint;
+class KComboBox;
 
 
 /**
@@ -104,6 +105,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   QSpinBox* m_spinCopies;
 
   KURLRequester* m_editImagePath;
+  KComboBox* m_comboRecentImages;
   QComboBox* m_comboImageType;
 
   K3bListView* m_infoView;
