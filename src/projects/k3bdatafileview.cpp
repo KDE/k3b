@@ -48,7 +48,7 @@
 
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
-  : K3bListView( parent ), 
+  : K3bListView( parent ),
     m_view(view),
     m_dropDirItem(0)
 {
@@ -100,7 +100,7 @@ K3bDataFileView::~K3bDataFileView()
 
 
 K3bDirItem* K3bDataFileView::currentDir() const
-{ 
+{
   if( !m_currentDir )
     m_currentDir = m_doc->root();
   return m_currentDir;
@@ -138,7 +138,7 @@ void K3bDataFileView::slotItemAdded( K3bDataItem* item )
       vi = new K3bSessionImportViewItem( static_cast<K3bSessionImportItem*>(item), this );
     else
       kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
-    
+
     if( vi )
       m_itemMap[item] = vi;
   }
@@ -152,7 +152,7 @@ void K3bDataFileView::slotDataItemRemoved( K3bDataItem* item )
       slotSetCurrentDir( m_doc->root() );
     }
   }
-  
+
   if( m_itemMap.contains( item ) ) {
     delete m_itemMap[item];
     m_itemMap.remove(item);
@@ -176,7 +176,7 @@ void K3bDataFileView::checkForNewItems()
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
     if( dataViewItem && dataViewItem->dataItem()->parent() != currentDir() )
       delete dataViewItem;
-  }  
+  }
 }
 
 
@@ -202,8 +202,8 @@ QDragObject* K3bDataFileView::dragObject()
 
 bool K3bDataFileView::acceptDrag(QDropEvent* e) const
 {
-  return ( e->source() == viewport() || 
-	   KURLDrag::canDecode(e) || 
+  return ( e->source() == viewport() ||
+	   KURLDrag::canDecode(e) ||
 	   e->source() == m_treeView->viewport() );
 }
 
@@ -427,19 +427,23 @@ void K3bDataFileView::slotParentDir()
 
 void K3bDataFileView::slotProperties()
 {
-  K3bDataItem* dataItem = 0;
+  QValueList<K3bDataItem*> dataItems;
 
   // get selected item
-  if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( selectedItems().first() ) ) {
-    dataItem = viewItem->dataItem();
-  }
-  else {
-    // default to current dir
-    dataItem = currentDir();
+  QPtrList<QListViewItem> viewItems = selectedItems();
+  for ( QPtrListIterator<QListViewItem> it( viewItems ); *it; ++it ) {
+      if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( *it ) ) {
+          dataItems.append( viewItem->dataItem() );
+      }
   }
 
-  if( dataItem ) {
-    K3bDataPropertiesDialog d( dataItem, this );
+  if ( dataItems.isEmpty() && currentDir() ) {
+    // default to current dir
+    dataItems.append( currentDir() );
+  }
+
+  if( !dataItems.isEmpty() ) {
+    K3bDataPropertiesDialog d( dataItems, this );
     d.exec();
   }
   else
@@ -455,13 +459,13 @@ void K3bDataFileView::slotOpen()
       K3bDataFileViewItem* fvi = static_cast<K3bDataFileViewItem*>( viewItem );
       if( fvi->mimeType() &&
 #if KDE_IS_VERSION(3,3,0)
-	  !KRun::isExecutableFile( KURL::fromPathOrURL(item->localPath()), 
+	  !KRun::isExecutableFile( KURL::fromPathOrURL(item->localPath()),
 				   fvi->mimeType()->name() )
 #else
 	  !QFileInfo( item->localPath() ).isExecutable()
 #endif
 	  )
-	KRun::runURL( KURL::fromPathOrURL(item->localPath()), 
+	KRun::runURL( KURL::fromPathOrURL(item->localPath()),
 		      fvi->mimeType()->name() );
       else
 	KRun::displayOpenWithDialog( KURL::fromPathOrURL(item->localPath()) );
@@ -472,12 +476,7 @@ void K3bDataFileView::slotOpen()
 
 void K3bDataFileView::slotDoubleClicked( QListViewItem* )
 {
-  if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( selectedItems().first() ) ) {
-    if( !viewItem->dataItem()->isDir() ) {
-      K3bDataPropertiesDialog d( viewItem->dataItem(), this );
-      d.exec();
-    }
-  }
+    slotProperties();
 }
 
 #include "k3bdatafileview.moc"

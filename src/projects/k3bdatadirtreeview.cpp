@@ -43,7 +43,7 @@
 class K3bDataDirTreeView::Private
 {
 public:
-  Private() 
+  Private()
     : animatedDirItem(0),
       dropDirItem(0) {
   }
@@ -371,16 +371,18 @@ void K3bDataDirTreeView::slotRemoveItem()
 void K3bDataDirTreeView::slotProperties()
 {
   K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( currentItem() );
-  if(  viewItem && currentItem() != root() ) {
-    K3bDataPropertiesDialog d( viewItem->dataItem(), this );
-    if( d.exec() ) {
-      repaint();
-      if( m_fileView )
-	m_fileView->repaint();
-    }
+  if( viewItem && currentItem() != root() ) {
+      QValueList<K3bDataItem*> dataItems;
+      dataItems.append( viewItem->dataItem() );
+      K3bDataPropertiesDialog d( dataItems, this );
+      if( d.exec() ) {
+          repaint();
+          if( m_fileView )
+              m_fileView->repaint();
+      }
   }
   else
-    m_view->slotProperties();
+      m_view->slotProperties();
 }
 
 

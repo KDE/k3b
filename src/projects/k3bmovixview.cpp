@@ -81,7 +81,7 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
   toolBox()->addLabel( i18n("Volume Name:") );
   toolBox()->addSpacing();
   toolBox()->addWidget( m_volumeIDEdit );
-  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)), 
+  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
 	   m_doc,
 	   SLOT(setVolumeID(const QString&)) );
 
@@ -111,15 +111,18 @@ void K3bMovixView::slotContextMenuRequested(QListViewItem* item, const QPoint& p
 
 void K3bMovixView::showPropertiesDialog()
 {
-  K3bFileItem* dataItem = 0;
+  QValueList<K3bDataItem*> dataItems;
 
   // get selected item
-  if( K3bMovixListViewItem* viewItem = dynamic_cast<K3bMovixListViewItem*>( m_listView->selectedItems().first() ) ) {
-    dataItem = viewItem->fileItem();
+  QPtrList<QListViewItem> viewItems = m_listView->selectedItems();
+  for ( QPtrListIterator<QListViewItem> it( viewItems ); *it; ++it ) {
+      if( K3bMovixListViewItem* viewItem = dynamic_cast<K3bMovixListViewItem*>( *it ) ) {
+          dataItems.append( viewItem->fileItem() );
+      }
   }
 
-  if( dataItem ) {
-    K3bDataPropertiesDialog d( dataItem, this );
+  if( !dataItems.isEmpty() ) {
+    K3bDataPropertiesDialog d( dataItems, this );
     d.exec();
   }
   else
