@@ -20,6 +20,8 @@
 #include <k3bglobals.h>
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
+#include <k3bcore.h>
+#include <k3bglobalsettings.h>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -91,7 +93,6 @@ void K3bBlankingJob::slotStartErasing()
     writer->setBlankMode( m_mode == Fast ? K3bCdrdaoWriter::MINIMAL : K3bCdrdaoWriter::FULL );
     writer->setForce(m_force);
     writer->setBurnSpeed(m_speed);
-    writer->setForceNoEject( m_forceNoEject );
   }
   else {
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
@@ -121,7 +122,6 @@ void K3bBlankingJob::slotStartErasing()
     if (m_force)
       writer->addArgument("-force");
     writer->setBurnSpeed(m_speed);
-    writer->setForceNoEject( m_forceNoEject );
   }
 
   connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
@@ -157,20 +157,24 @@ void K3bBlankingJob::cancel()
 
 void K3bBlankingJob::slotFinished(bool success)
 {
-  if( success ) {
-      emit percent( 100 );
-      jobFinished( true );
-  }
-  else {
-    if( m_canceled ) {
-      emit canceled();
+    if ( !m_forceNoEject && k3bcore->globalSettings()->ejectMedia() ) {
+        K3bDevice::eject( m_device );
+    }
+
+    if( success ) {
+        emit percent( 100 );
+        jobFinished( true );
     }
     else {
-      emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
-      emit infoMessage( i18n("Sorry, no error handling yet."), K3bJob::ERROR );
+        if( m_canceled ) {
+            emit canceled();
+        }
+        else {
+            emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
+            emit infoMessage( i18n("Sorry, no error handling yet."), K3bJob::ERROR );
+        }
+        jobFinished( false );
     }
-    jobFinished( false );
-  }
 }
 
 

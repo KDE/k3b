@@ -2,6 +2,7 @@
 *
 * $Id$
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -42,6 +43,9 @@
 #include <k3bglobals.h>
 #include <k3bcdrecordwriter.h>
 #include <k3bcdrdaowriter.h>
+#include <k3bglobalsettings.h>
+#include <k3bdevicehandler.h>
+
 
 K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
         : K3bBurnJob( jh, parent, name )
@@ -495,8 +499,14 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
         // allright
         // the writerJob should have emited the "simulation/writing successful" signal
         if ( m_currentcopy >= m_doc->copies() ) {
+            if ( k3bcore->globalSettings()->ejectMedia() ) {
+                K3bDevice::eject( m_doc->burner() );
+            }
             jobFinished( true );
         } else {
+            if( !m_doc->burner()->eject() ) {
+                blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+            }
             m_currentcopy++;
             startWriterjob();
         }

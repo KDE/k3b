@@ -84,12 +84,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   void setEject(bool e) { m_eject=e; };  
 // ---------------------
 
-  /**
-   * If set true the job ignores the global K3b setting
-   * and does not eject the CD-RW after finishing
-   */
-  void setForceNoEject( bool b ) { m_forceNoEject = b; }
-
  private slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
@@ -147,8 +141,6 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
 
   int m_size;
   int m_currentTrack;
-
-  bool m_forceNoEject;
 
   class Private;
   Private* d;

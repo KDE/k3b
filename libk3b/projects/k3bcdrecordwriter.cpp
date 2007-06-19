@@ -69,8 +69,7 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl
 				      QObject* parent, const char* name )
   : K3bAbstractWriter( dev, hdl, parent, name ),
     m_clone(false),
-    m_cue(false),
-    m_forceNoEject(false)
+    m_cue(false)
 {
   d = new Private();
   d->speedEst = new K3bThroughputEstimator( this );
@@ -243,10 +242,6 @@ void K3bCdrecordWriter::prepareProcess()
     *m_process << "textfile=" + d->cdTextFile->name();
   }
 
-  if( k3bcore->globalSettings()->ejectMedia() &&
-      !m_forceNoEject )
-    *m_process << "-eject";
-
   bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
   if( manualBufferSize ) {
     *m_process << QString("fs=%1m").arg( k3bcore->globalSettings()->bufferSize() );
@@ -335,7 +330,7 @@ void K3bCdrecordWriter::start()
   k3bcore->blockDevice( burnDevice() );
 
   // lock the device for good in this process since it will
-  // be opened in the growisofs process
+  // be opened in the cdrecord process
   burnDevice()->close();
   burnDevice()->usageLock();
 

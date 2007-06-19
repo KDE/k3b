@@ -31,6 +31,7 @@
 #include <k3bfilesplitter.h>
 #include <k3bchecksumpipe.h>
 #include <k3bverificationjob.h>
+#include <k3bglobalsettings.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -631,6 +632,10 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
 
     else if( ++d->doneCopies < m_copies ) {
 
+        if( !m_writerDevice->eject() ) {
+            blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+        }
+
       if( waitForDvd() ) {
 	prepareWriter();
 	emit newTask( i18n("Writing DVD copy %1").arg(d->doneCopies+1) );
@@ -659,10 +664,13 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
       }
     }
     else {
-      if( m_removeImageFiles )
-	removeImageFiles();
-      d->running = false;
-      jobFinished(true);
+        if ( k3bcore->globalSettings()->ejectMedia() ) {
+            K3bDevice::eject( m_writerDevice );
+        }
+        if( m_removeImageFiles )
+            removeImageFiles();
+        d->running = false;
+        jobFinished(true);
     }
   }
   else {

@@ -578,15 +578,7 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     d->success = false;
   }
 
-  if( !k3bcore->globalSettings()->ejectMedia() )
-    jobFinished(d->success);
-  else {
-    emit newSubTask( i18n("Ejecting DVD") );
-    connect( K3bDevice::eject( burnDevice() ),
-	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	     this,
-	     SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
-  }
+  jobFinished(d->success);
 }
 
 
@@ -597,15 +589,6 @@ void K3bGrowisofsWriter::slotRingBufferFinished( bool )
     // this will unblock and eject the drive and emit the finished/canceled signals
     K3bAbstractWriter::cancel();
   }
-}
-
-
-void K3bGrowisofsWriter::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
-{
-  if( !dh->success() )
-    emit infoMessage( i18n("Unable to eject media."), ERROR );
-
-  jobFinished(d->success);
 }
 
 

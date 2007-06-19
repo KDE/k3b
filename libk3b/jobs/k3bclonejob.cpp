@@ -23,6 +23,7 @@
 #include <k3bglobals.h>
 #include <k3bcore.h>
 #include <k3bclonetocreader.h>
+#include <k3bglobalsettings.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -35,7 +36,7 @@
 class K3bCloneJob::Private
 {
 public:
-  Private() 
+  Private()
     : doneCopies(0) {
   }
 
@@ -158,7 +159,7 @@ void K3bCloneJob::prepareReader()
     connect( m_readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReadingFinished(bool)) );
     connect( m_readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_readcdReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+    connect( m_readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
 
@@ -186,7 +187,7 @@ void K3bCloneJob::prepareWriter()
     connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
     //    connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
     connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+    connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
   }
 
@@ -228,35 +229,39 @@ void K3bCloneJob::slotWriterNextTrack( int t, int tt )
 
 void K3bCloneJob::slotWriterFinished( bool success )
 {
-  if( m_canceled ) {
-    removeImageFiles();
-    m_running = false;
-    emit canceled();
-    jobFinished(false);
-    return;
-  }
+    if( m_canceled ) {
+        removeImageFiles();
+        m_running = false;
+        emit canceled();
+        jobFinished(false);
+        return;
+    }
 
-  if( success ) {
-    d->doneCopies++;
+    if( success ) {
+        d->doneCopies++;
 
-    emit infoMessage( i18n("Successfully written clone copy %1.").arg(d->doneCopies), INFO );
+        emit infoMessage( i18n("Successfully written clone copy %1.").arg(d->doneCopies), INFO );
 
-    if( d->doneCopies < m_copies ) {
-      K3bDevice::eject( writer() );
-      startWriting();
+        if( d->doneCopies < m_copies ) {
+            K3bDevice::eject( writer() );
+            startWriting();
+        }
+        else {
+            if ( k3bcore->globalSettings()->ejectMedia() ) {
+                K3bDevice::eject( writer() );
+            }
+
+            if( m_removeImageFiles )
+                removeImageFiles();
+            m_running = false;
+            jobFinished(true);
+        }
     }
     else {
-      if( m_removeImageFiles )
-	removeImageFiles();
-      m_running = false;
-      jobFinished(true);
+        removeImageFiles();
+        m_running = false;
+        jobFinished(false);
     }
-  }
-  else {
-    removeImageFiles();
-    m_running = false;
-    jobFinished(false);
-  }
 }
 
 
@@ -316,8 +321,8 @@ void K3bCloneJob::startWriting()
 
   // start writing
   prepareWriter();
-    
-  if( waitForMedia( writer(), 
+
+  if( waitForMedia( writer(),
 		    K3bDevice::STATE_EMPTY,
 		    K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
     removeImageFiles();
@@ -326,7 +331,7 @@ void K3bCloneJob::startWriting()
     jobFinished(false);
     return;
   }
-  
+
   if( m_simulate )
     emit newTask( i18n("Simulating clone copy") );
   else
@@ -367,8 +372,8 @@ QString K3bCloneJob::jobDescription() const
 
 QString K3bCloneJob::jobDetails() const
 {
-  return i18n("Creating 1 clone copy", 
-	      "Creating %n clone copies", 
+  return i18n("Creating 1 clone copy",
+	      "Creating %n clone copies",
 	      (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
 }
 

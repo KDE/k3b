@@ -58,12 +58,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
   void setRawCdText( const QByteArray& a ) { m_rawCdText = a; }
 
-  /**
-   * If set true the job ignores the global K3b setting
-   * and does not eject the CD-RW after finishing
-   */
-  void setForceNoEject( bool b ) { m_forceNoEject = b; }
-
  protected slots:
   void slotStdLine( const QString& line );
   void slotProcessExited(KProcess*);
@@ -111,8 +105,6 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   int m_lastFifoValue;
 
   int m_cdrecordError;
-
-  bool m_forceNoEject;
 
   QByteArray m_rawCdText;
 

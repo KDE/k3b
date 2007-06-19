@@ -139,17 +139,15 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
     m_taoSourceAdjust(-1),
     m_paranoiaMode(-1),
     m_session(-1),
+    m_eject( false ),
     m_process(0),
     m_comSock(0),
-    m_currentTrack(0),
-    m_forceNoEject(false)
+    m_currentTrack(0)
 {
   d = new Private();
   d->speedEst = new K3bThroughputEstimator( this );
   connect( d->speedEst, SIGNAL(throughput(int)),
 	   this, SLOT(slotThroughput(int)) );
-
-  m_eject = k3bcore->globalSettings()->ejectMedia();
 
   ::memset( &d->oldMsg, 0, sizeof(ProgressMsg2) );
   ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
@@ -428,7 +426,7 @@ void K3bCdrdaoWriter::setCommonArguments()
   *m_process << "--force";
 
   // eject
-  if( m_eject && !m_forceNoEject )
+  if( m_eject )
     *m_process << "--eject";
 
   // remote

@@ -29,6 +29,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bchecksumpipe.h>
 #include <k3bfilesplitter.h>
+#include <k3bglobalsettings.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -170,7 +171,7 @@ void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
   }
 
   k3bcore->config()->setGroup("General Options");
-  if( !k3bcore->config()->readBoolEntry( "No cd eject", false ) )
+  if( k3bcore->globalSettings()->ejectMedia() )
     K3bDevice::eject( m_device );
 
   m_finished = true;

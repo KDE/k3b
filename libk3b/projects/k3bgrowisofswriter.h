@@ -91,7 +91,6 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
  protected slots:
   void slotReceivedStderr( const QString& );
   void slotProcessExited( KProcess* );
-  void slotEjectingFinished( K3bDevice::DeviceHandler* dh );
   void slotThroughput( int t );
   void slotFlushingCache();
   void slotRingBufferFinished( bool );

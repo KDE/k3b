@@ -21,6 +21,8 @@
 #include <k3bdevice.h>
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bglobalsettings.h>
+#include <k3bdevicehandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -80,7 +82,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 
   int usedWritingApp = writingApp();
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-  if( usedWritingApp == K3b::CDRECORD || 
+  if( usedWritingApp == K3b::CDRECORD ||
       ( usedWritingApp == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") && m_device->dao() ) ) {
     usedWritingApp = K3b::CDRECORD;
 
@@ -192,11 +194,15 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
   if (ok) {
     m_finishedCopies++;
     if ( m_finishedCopies == m_copies ) {
-      emit infoMessage( i18n("%n copy successfully created", "%n copies successfully created", m_copies),K3bJob::INFO );
-      jobFinished( true );
+        if ( k3bcore->globalSettings()->ejectMedia() ) {
+            K3bDevice::eject( m_device );
+        }
+        emit infoMessage( i18n("%n copy successfully created", "%n copies successfully created", m_copies),K3bJob::INFO );
+        jobFinished( true );
     }
     else {
-      writerStart();
+        K3bDevice::eject( m_device );
+        writerStart();
     }
   }
   else {
@@ -214,8 +220,8 @@ void K3bBinImageWritingJob::slotNextTrack( int t, int tt )
 QString K3bBinImageWritingJob::jobDescription() const
 {
   return ( i18n("Writing cue/bin Image")
-	   + ( m_copies > 1 
-	       ? i18n(" - %n Copy", " - %n Copies", m_copies) 
+	   + ( m_copies > 1
+	       ? i18n(" - %n Copy", " - %n Copies", m_copies)
 	       : QString::null ) );
 }
 

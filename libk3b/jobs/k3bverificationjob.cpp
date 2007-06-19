@@ -149,21 +149,9 @@ void K3bVerificationJob::start()
   d->currentTrackIndex = 0;
   d->alreadyReadSectors = 0;
 
-//   // first we need to reload and mount the device
-//   emit newTask( i18n("Reloading the medium") );
-
-//   connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
-// 	   this, SLOT(slotMediaReloaded(bool)) );
-// }
-
-
-// void K3bVerificationJob::slotMediaReloaded( bool success )
-// {
-//   if( !success )
-//     waitForMedia( d->device,
-// 		  K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-// 		  K3bDevice::MEDIA_WRITABLE,
-// 		  i18n("Unable to Close the Tray") );
+  waitForMedia( d->device,
+                K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+                K3bDevice::MEDIA_WRITABLE );
 
   // make sure the job is initialized
   if ( d->tracks.isEmpty() ) {

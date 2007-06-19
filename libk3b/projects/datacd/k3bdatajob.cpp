@@ -394,81 +394,86 @@ void K3bDataJob::slotWriterNextTrack( int t, int tt )
 
 void K3bDataJob::slotWriterJobFinished( bool success )
 {
-  d->pipe.close();
+    d->pipe.close();
 
-  //
-  // This is a little workaround for the bad cancellation handling in this job
-  // see cancel()
-  //
-  if( d->canceled ) {
-    if( active() )
-      jobFinished( false );
-  }
+    //
+    // This is a little workaround for the bad cancellation handling in this job
+    // see cancel()
+    //
+    if( d->canceled ) {
+        if( active() )
+            jobFinished( false );
+    }
 
-  if( success ) {
-    // allright
-    // the writerJob should have emited the "simulation/writing successful" signal
+    if( success ) {
+        // allright
+        // the writerJob should have emited the "simulation/writing successful" signal
 
-    if( d->doc->verifyData() ) {
-      if( !d->verificationJob ) {
-	d->verificationJob = new K3bVerificationJob( this, this );
-	connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
-		 this, SIGNAL(infoMessage(const QString&, int)) );
- 	connect( d->verificationJob, SIGNAL(newTask(const QString&)),
- 		 this, SIGNAL(newSubTask(const QString&)) );
-	connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
-		 this, SIGNAL(newSubTask(const QString&)) );
-	connect( d->verificationJob, SIGNAL(percent(int)),
-		 this, SLOT(slotVerificationProgress(int)) );
-	connect( d->verificationJob, SIGNAL(percent(int)),
-		 this, SIGNAL(subPercent(int)) );
-	connect( d->verificationJob, SIGNAL(finished(bool)),
-		 this, SLOT(slotVerificationFinished(bool)) );
-	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-		 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+        if( d->doc->verifyData() ) {
+            if( !d->verificationJob ) {
+                d->verificationJob = new K3bVerificationJob( this, this );
+                connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
+                         this, SIGNAL(infoMessage(const QString&, int)) );
+                connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+                         this, SIGNAL(newSubTask(const QString&)) );
+                connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
+                         this, SIGNAL(newSubTask(const QString&)) );
+                connect( d->verificationJob, SIGNAL(percent(int)),
+                         this, SLOT(slotVerificationProgress(int)) );
+                connect( d->verificationJob, SIGNAL(percent(int)),
+                         this, SIGNAL(subPercent(int)) );
+                connect( d->verificationJob, SIGNAL(finished(bool)),
+                         this, SLOT(slotVerificationFinished(bool)) );
+                connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
+                         this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-      }
-      d->verificationJob->clear();
-      d->verificationJob->setDevice( d->doc->burner() );
-      d->verificationJob->setGrownSessionSize( m_isoImager->size() );
-      d->verificationJob->addTrack( 0, m_isoImager->checksum(), m_isoImager->size() );
+            }
+            d->verificationJob->clear();
+            d->verificationJob->setDevice( d->doc->burner() );
+            d->verificationJob->setGrownSessionSize( m_isoImager->size() );
+            d->verificationJob->addTrack( 0, m_isoImager->checksum(), m_isoImager->size() );
 
-      emit burning(false);
+            emit burning(false);
 
-      emit newTask( i18n("Verifying written data") );
+            emit newTask( i18n("Verifying written data") );
 
-      d->verificationJob->start();
+            d->verificationJob->start();
+        }
+        else {
+            d->copiesDone++;
+
+            if( d->copiesDone < d->copies ) {
+                if( !d->doc->burner()->eject() ) {
+                    blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+                }
+
+                bool failed = false;
+                if( d->doc->onTheFly() )
+                    failed = !startOnTheFlyWriting();
+                else
+                    failed = !startWriterJob();
+
+                if( failed ) {
+                    cancel();
+                }
+                else if( !d->doc->onTheFly() ) {
+                    d->pipe.writeToFd( m_writerJob->fd(), true );
+                    d->pipe.open(true);
+                }
+            }
+            else {
+                cleanup();
+                if ( k3bcore->globalSettings()->ejectMedia() ) {
+                    K3bDevice::eject( d->doc->burner() );
+                }
+                jobFinished(true);
+            }
+        }
     }
     else {
-      d->copiesDone++;
-
-      if( d->copiesDone < d->copies ) {
-	K3bDevice::eject( d->doc->burner() );
-
-	bool failed = false;
-	if( d->doc->onTheFly() )
-	  failed = !startOnTheFlyWriting();
-	else
-	  failed = !startWriterJob();
-
-	if( failed ) {
-	  cancel();
-	}
-	else if( !d->doc->onTheFly() ) {
-	  d->pipe.writeToFd( m_writerJob->fd(), true );
-	  d->pipe.open(true);
-	}
-      }
-      else {
-	cleanup();
-	jobFinished(true);
-      }
+        cancelAll();
+        jobFinished( false );
     }
-  }
-  else {
-    cancelAll();
-    jobFinished( false );
-  }
 }
 
 

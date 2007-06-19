@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -37,6 +37,7 @@
 #include <k3bcdrdaowriter.h>
 #include <k3btocfilewriter.h>
 #include <k3binffilewriter.h>
+#include <k3bglobalsettings.h>
 
 #include <qfile.h>
 #include <qvaluevector.h>
@@ -101,15 +102,15 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, K3bJobHandler* hdl, QObject* parent 
   d = new Private;
 
   m_audioImager = new K3bAudioImager( m_doc, this, this );
-  connect( m_audioImager, SIGNAL(infoMessage(const QString&, int)), 
+  connect( m_audioImager, SIGNAL(infoMessage(const QString&, int)),
 	   this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_audioImager, SIGNAL(percent(int)), 
+  connect( m_audioImager, SIGNAL(percent(int)),
 	   this, SLOT(slotAudioDecoderPercent(int)) );
-  connect( m_audioImager, SIGNAL(subPercent(int)), 
+  connect( m_audioImager, SIGNAL(subPercent(int)),
 	   this, SLOT(slotAudioDecoderSubPercent(int)) );
-  connect( m_audioImager, SIGNAL(finished(bool)), 
+  connect( m_audioImager, SIGNAL(finished(bool)),
 	   this, SLOT(slotAudioDecoderFinished(bool)) );
-  connect( m_audioImager, SIGNAL(nextTrack(int, int)), 
+  connect( m_audioImager, SIGNAL(nextTrack(int, int)),
 	   this, SLOT(slotAudioDecoderNextTrack(int, int)) );
 
   m_writer = 0;
@@ -174,7 +175,7 @@ void K3bAudioJob::start()
   }
   if( !nonExistingFiles.isEmpty() ) {
     if( questionYesNo( "<p>" + i18n("The following files could not be found. Do you want to remove them from the "
-				    "project and continue without adding them to the image?") + 
+				    "project and continue without adding them to the image?") +
 		       "<p>" + createNonExistingFilesString( nonExistingFiles, 10 ),
 		       i18n("Warning"),
 		       i18n("Remove missing files and continue"),
@@ -265,7 +266,7 @@ void K3bAudioJob::start()
     if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
       cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
       cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
-    }    
+    }
 
     // determine writing app
     if( writingApp() == K3b::DEFAULT ) {
@@ -314,9 +315,9 @@ void K3bAudioJob::start()
       emit newSubTask( i18n("Determining maximum writing speed") );
       if( !m_maxSpeedJob ) {
 	m_maxSpeedJob = new K3bAudioMaxSpeedJob( m_doc, this, this );
-	connect( m_maxSpeedJob, SIGNAL(percent(int)), 
+	connect( m_maxSpeedJob, SIGNAL(percent(int)),
 		 this, SIGNAL(subPercent(int)) );
-	connect( m_maxSpeedJob, SIGNAL(finished(bool)), 
+	connect( m_maxSpeedJob, SIGNAL(finished(bool)),
 		 this, SLOT(slotMaxSpeedJobFinished(bool)) );
       }
       m_maxSpeedJob->start();
@@ -328,9 +329,9 @@ void K3bAudioJob::start()
 	jobFinished(false);
 	return;
       }
-      
+
       if( startWriting() ) {
-	
+
 	// now the writer is running and we can get it's stdin
 	// we only use this method when writing on-the-fly since
 	// we cannot easily change the audioDecode fd while it's working
@@ -372,7 +373,7 @@ void K3bAudioJob::slotMaxSpeedJobFinished( bool success )
     jobFinished(false);
     return;
   }
-  
+
   if( startWriting() )
     m_audioImager->writeToFd( m_writer->fd() );
 
@@ -400,39 +401,45 @@ void K3bAudioJob::cancel()
 
 void K3bAudioJob::slotWriterFinished( bool success )
 {
-  if( m_canceled || m_errorOccuredAndAlreadyReported )
-    return;
+    if( m_canceled || m_errorOccuredAndAlreadyReported )
+        return;
 
-  if( !success ) {
-    cleanupAfterError();
-    jobFinished(false);
-    return;
-  }
-  else {
-    d->copiesDone++;
-
-    if( d->copiesDone == d->copies ) {
-      if( m_doc->onTheFly() || m_doc->removeImages() )
-	removeBufferFiles();
-
-      jobFinished(true);
+    if( !success ) {
+        cleanupAfterError();
+        jobFinished(false);
+        return;
     }
     else {
-      K3bDevice::eject( m_doc->burner() );
+        d->copiesDone++;
 
-      if( startWriting() ) {
-	if( m_doc->onTheFly() ) {
-	  // now the writer is running and we can get it's stdin
-	  // we only use this method when writing on-the-fly since
-	  // we cannot easily change the audioDecode fd while it's working
-	  // which we would need to do since we write into several
-	  // image files.
-	  m_audioImager->writeToFd( m_writer->fd() );
-	  m_audioImager->start();
-	}
-      }
+        if( d->copiesDone == d->copies ) {
+            if( m_doc->onTheFly() || m_doc->removeImages() )
+                removeBufferFiles();
+
+            if ( k3bcore->globalSettings()->ejectMedia() ) {
+                K3bDevice::eject( m_doc->burner() );
+            }
+
+            jobFinished(true);
+        }
+        else {
+            if( !m_doc->burner()->eject() ) {
+                blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+            }
+
+            if( startWriting() ) {
+                if( m_doc->onTheFly() ) {
+                    // now the writer is running and we can get it's stdin
+                    // we only use this method when writing on-the-fly since
+                    // we cannot easily change the audioDecode fd while it's working
+                    // which we would need to do since we write into several
+                    // image files.
+                    m_audioImager->writeToFd( m_writer->fd() );
+                    m_audioImager->start();
+                }
+            }
+        }
     }
-  }
 }
 
 
@@ -482,7 +489,7 @@ void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
     emit newSubTask( i18n("Decoding audio track %1 of %2%3")
 		     .arg(t)
 		     .arg(tt)
-		     .arg( track->title().isEmpty() || track->artist().isEmpty() 
+		     .arg( track->title().isEmpty() || track->artist().isEmpty()
 			   ? QString::null
 			   : " (" + track->artist() + " - " + track->title() + ")" ) );
   }
@@ -590,7 +597,7 @@ void K3bAudioJob::slotWriterNextTrack( int t, int tt )
   emit newSubTask( i18n("Writing track %1 of %2%3")
 		   .arg(t)
 		   .arg(tt)
-		   .arg( track->title().isEmpty() || track->artist().isEmpty() 
+		   .arg( track->title().isEmpty() || track->artist().isEmpty()
 			 ? QString::null
 			 : " (" + track->artist() + " - " + track->title() + ")" ) );
 }
@@ -757,7 +764,7 @@ void K3bAudioJob::slotNormalizeProgress( int p )
 {
   double totalTasks = d->copies+2.0;
   double tasksDone = 1; // the decoding has been finished
-  
+
   emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 }
 
@@ -810,7 +817,7 @@ bool K3bAudioJob::checkAudioSources()
 {
   K3bAudioTrack* track = m_doc->firstTrack();
   K3bAudioDataSource* source = track->firstSource();
-  
+
   while( source ) {
 
     if( K3bAudioCdTrackSource* cdSource = dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
@@ -842,7 +849,7 @@ bool K3bAudioJob::checkAudioSources()
 QString K3bAudioJob::jobDescription() const
 {
   return i18n("Writing Audio CD")
-    + ( m_doc->title().isEmpty() 
+    + ( m_doc->title().isEmpty()
 	? QString::null
 	: QString( " (%1)" ).arg(m_doc->title()) );
 }
@@ -850,11 +857,11 @@ QString K3bAudioJob::jobDescription() const
 
 QString K3bAudioJob::jobDetails() const
 {
-  return ( i18n( "1 track (%1 minutes)", 
-		 "%n tracks (%1 minutes)", 
+  return ( i18n( "1 track (%1 minutes)",
+		 "%n tracks (%1 minutes)",
 		 m_doc->numOfTracks() ).arg(m_doc->length().toString())
 	   + ( m_doc->copies() > 1 && !m_doc->dummy()
-	       ? i18n(" - %n copy", " - %n copies", m_doc->copies()) 
+	       ? i18n(" - %n copy", " - %n copies", m_doc->copies())
 	       : QString::null ) );
 }
 

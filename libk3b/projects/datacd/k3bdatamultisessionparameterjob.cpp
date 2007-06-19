@@ -76,7 +76,7 @@ void K3bDataMultiSessionParameterJob::WorkThread::run()
 
     if ( m_usedMultiSessionMode == K3bDataDoc::AUTO ) {
         if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ||
-            m_doc->writingMode() == K3b::TAO ) {
+            !( m_doc->writingMode() & (K3bDevice::WRITINGMODE_SAO|K3bDevice::WRITINGMODE_RAW) ) ) {
             emitNewSubTask( i18n("Searching for old session") );
 
             //
@@ -104,7 +104,6 @@ void K3bDataMultiSessionParameterJob::WorkThread::run()
             }
         }
         else {
-            // we need TAO for multisession
             m_usedMultiSessionMode = K3bDataDoc::NONE;
         }
     }
@@ -126,7 +125,11 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
 {
     K3bDevice::DiskInfo info = m_doc->burner()->diskInfo();
 
-    if( info.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+    // FIXME: Does BD-RE really behave like DVD+RW here?
+    if( info.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|
+                            K3bDevice::MEDIA_DVD_PLUS_RW_DL|
+                            K3bDevice::MEDIA_DVD_RW_OVWR|
+                            K3bDevice::MEDIA_BD_RE) ) {
         //
         // we need to handle DVD+RW and DVD-RW overwrite media differently since remainingSize() is not valid
         // in both cases

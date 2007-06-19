@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -495,38 +495,44 @@ void K3bMixedJob::slotIsoImagerFinished( bool success )
 
 void K3bMixedJob::slotWriterFinished( bool success )
 {
-  if( m_canceled || m_errorOccuredAndAlreadyReported )
-    return;
+    if( m_canceled || m_errorOccuredAndAlreadyReported )
+        return;
 
-  if( !success ) {
-    cleanupAfterError();
-    jobFinished(false);
-    return;
-  }
+    if( !success ) {
+        cleanupAfterError();
+        jobFinished(false);
+        return;
+    }
 
-  emit burning(false);
+    emit burning(false);
 
-  if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
-    // reload the media (as a subtask so the user does not see the "Flushing cache" or "Fixating" messages while
-    // doing so
+    if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
+        // reload the media (as a subtask so the user does not see the "Flushing cache" or "Fixating" messages while
+        // doing so
 //     emit newSubTask( i18n("Reloading the medium") );
 //     connect( K3bDevice::reload( m_doc->burner() ), SIGNAL(finished(bool)),
 // 	     this, SLOT(slotMediaReloadedForSecondSession(bool)) );
-      slotMediaReloadedForSecondSession( true );
-  }
-  else {
-    d->copiesDone++;
-    if( d->copiesDone < d->copies ) {
-      K3bDevice::eject( m_doc->burner() );
-      writeNextCopy();
+        slotMediaReloadedForSecondSession( true );
     }
     else {
-      if( !m_doc->onTheFly() && m_doc->removeImages() )
-	removeBufferFiles();
+        d->copiesDone++;
+        if( d->copiesDone < d->copies ) {
+            if( !m_doc->burner()->eject() ) {
+                blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+            }
+            writeNextCopy();
+        }
+        else {
+            if( !m_doc->onTheFly() && m_doc->removeImages() )
+                removeBufferFiles();
 
-      jobFinished(true);
+            if ( k3bcore->globalSettings()->ejectMedia() ) {
+                K3bDevice::eject( m_doc->burner() );
+            }
+
+            jobFinished(true);
+        }
     }
-  }
 }
 
 

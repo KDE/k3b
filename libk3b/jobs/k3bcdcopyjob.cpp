@@ -32,6 +32,7 @@
 #include <k3bcddbquery.h>
 #include <k3bcore.h>
 #include <k3binffilewriter.h>
+#include <k3bglobalsettings.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -1033,8 +1034,10 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
       d->doneCopies++;
 
       if( !m_simulate && d->doneCopies < m_copies ) {
-	// start next copy
-	K3bDevice::eject( m_writerDevice );
+          // start next copy
+          if( !m_writerDevice->eject() ) {
+              blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+          }
 
 	d->currentWrittenSession = 1;
 	d->currentReadSession = 1;
@@ -1048,7 +1051,10 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
 	}
       }
       else {
-	finishJob( false, false );
+          if ( k3bcore->globalSettings()->ejectMedia() ) {
+              K3bDevice::eject( m_writerDevice );
+          }
+          finishJob( false, false );
       }
     }
   }

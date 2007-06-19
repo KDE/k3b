@@ -1,7 +1,7 @@
-/* 
+/*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -71,7 +71,7 @@ K3bDevice::Device* K3bMovixJob::writer() const
 
 K3bDoc* K3bMovixJob::doc() const
 {
-  return m_doc; 
+  return m_doc;
 }
 
 
@@ -121,11 +121,11 @@ QString K3bMovixJob::jobDescription() const
 
 QString K3bMovixJob::jobDetails() const
 {
-  return ( i18n("1 file (%1) and about 8 MB eMovix data", 
-		"%n files (%1) and about 8 MB eMovix data", 
+  return ( i18n("1 file (%1) and about 8 MB eMovix data",
+		"%n files (%1) and about 8 MB eMovix data",
 		m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size()))
-	   + ( m_doc->copies() > 1 
-	       ? i18n(" - %n copy", " - %n copies", m_doc->copies()) 
+	   + ( m_doc->copies() > 1
+	       ? i18n(" - %n copy", " - %n copies", m_doc->copies())
 	       : QString::null ) );
 }
 
