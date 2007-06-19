@@ -153,8 +153,8 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 
   K3bJob* m_job;
   QTimer* m_timer;
-  QTime m_startTime;
-  QTime m_lastProgressUpdateTime;
+  QDateTime m_startTime;
+  QDateTime m_lastProgressUpdateTime;
 
   K3bDebuggingOutputFile m_logFile;
 

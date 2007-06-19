@@ -73,7 +73,7 @@
 class K3bJobProgressDialog::Private
 {
 public:
-  int lastProgress;
+    int lastProgress;
 };
 
 
@@ -503,7 +503,7 @@ void K3bJobProgressDialog::slotStarted()
 {
   d->lastProgress = 0;
   m_timer->start( 1000 );
-  m_startTime = QTime::currentTime();
+  m_startTime = QDateTime::currentDateTime();
   if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
     m_plainCaption = w->caption();
 
@@ -513,15 +513,25 @@ void K3bJobProgressDialog::slotStarted()
 
 void K3bJobProgressDialog::slotUpdateTime()
 {
-  int elapsed = m_startTime.secsTo( QTime::currentTime() );
+    int elapsedDays = m_startTime.daysTo( QDateTime::currentDateTime() );
+    int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() ) % (24*60*60);
 
-  QString s = i18n("Elapsed time: %1").arg( QTime().addSecs(elapsed).toString() );
-  if( d->lastProgress > 0 && d->lastProgress < 100 ) {
-    int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
-    s += " / " + i18n("Remaining: %1").arg( QTime().addSecs(rem).toString() );
-  }
+    QString s = i18n("Elapsed time") + ": ";
+    if ( elapsedDays > 0 ) {
+        s += i18n( "1 Day", "%n Days", elapsedDays ) + ", ";
+    }
+    s += QTime().addSecs(elapsedSecs).toString();
 
-  m_labelElapsedTime->setText( s );
+    if( d->lastProgress > 0 && d->lastProgress < 100 ) {
+        int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
+        s += " / " + i18n("Remaining" ) + ": ";
+        if ( rem >= 24*60*60 ) {
+            s += i18n( "1 Day", "%n Days", rem/(24*60*60) ) + ", ";
+        }
+        s += QTime().addSecs(rem%(24*60*60)).toString();
+    }
+
+    m_labelElapsedTime->setText( s );
 }
 
 
@@ -544,7 +554,7 @@ void K3bJobProgressDialog::slotProgress( int percent )
 {
   if( percent > d->lastProgress ) {
     d->lastProgress = percent;
-    m_lastProgressUpdateTime = QTime::currentTime();
+    m_lastProgressUpdateTime = QDateTime::currentDateTime();
     if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) ) {
       w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
     }
