@@ -195,7 +195,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
   cmd[3] = lba >> 16;
   cmd[4] = lba >> 8;
   cmd[5] = lba;
-  cmd[9] = 0;      // first we read only the header
+  cmd[9] = 1;      // first we read one descriptor
   cmd[10] = type;
   cmd[11] = 0;     // Necessary to set the proper command length
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
