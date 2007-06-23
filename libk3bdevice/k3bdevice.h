@@ -40,7 +40,7 @@ namespace K3bDevice
    *
    * Devices are constructed by the DeviceManager.
    *
-   * All methods in Device are thread-safe which basicly means that
+   * All methods except for open and close in Device are thread-safe which basicly means that
    * no two commands are sent to the device at the same time.
    */
   // FIXME: all methods are const which makes no sense at all!
@@ -454,12 +454,16 @@ namespace K3bDevice
        * Open the device for access via a file descriptor.
        * @return true on success or if the device is already open.
        * @see close()
+       *
+       * Be aware that this method is not thread-safe.
        */
       bool open( bool write = false ) const;
 
       /**
        * Close the files descriptor.
        * @see open()
+       *
+       * Be aware that this method is not thread-safe.
        */
       void close() const;
 
@@ -783,8 +787,8 @@ namespace K3bDevice
        */
       int rawTocDataWithBcdValues( unsigned char* data, unsigned int dataLen ) const;
 
-      bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, bool dvd ) const;
-      bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, bool dvd ) const;
+      bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, int type ) const;
+      bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, int type ) const;
 
       QCString mediaId( int mediaType ) const;
 

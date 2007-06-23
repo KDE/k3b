@@ -55,15 +55,21 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 {
   bool needToClose = false;
   if( m_device ) {
-    if( !m_device->isOpen() ) {
-      needToClose = true;
-    }
-    m_device->open( dir == TR_DIR_WRITE );
-    m_deviceHandle = m_device->handle();
+      m_device->usageLock();
+      if( !m_device->isOpen() ) {
+          needToClose = true;
+      }
+      m_device->open( dir == TR_DIR_WRITE );
+      m_deviceHandle = m_device->handle();
   }
 
-  if( m_deviceHandle == -1 )
-    return -1;
+  if( m_deviceHandle == -1 ) {
+      if ( m_device ) {
+          m_device->usageUnlock();
+      }
+
+      return -1;
+  }
 
   d->cmd.timeout = 10000;
   d->cmd.databuf = (caddr_t) data;
@@ -72,33 +78,34 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   d->cmd.senselen = SENSEBUFLEN;
   switch (dir)
   {
-    case TR_DIR_READ:
+  case TR_DIR_READ:
       d->cmd.flags = SCCMD_READ;
       break;
-    case TR_DIR_WRITE:
+  case TR_DIR_WRITE:
       d->cmd.flags = SCCMD_WRITE;
       break;
-    default:
+  default:
       d->cmd.flags = SCCMD_READ;
       break;
   }
 
-  m_device->usageLock();
   int i = ::ioctl( m_deviceHandle, SCIOCCOMMAND, &d->cmd );
-  m_device->usageUnlock();
 
-  if( needToClose )
-    m_device->close();
+  if ( m_device ) {
+      if( needToClose )
+          m_device->close();
+      m_device->usageUnlock();
+  }
 
   if( i || (d->cmd.retsts != SCCMD_OK)) {
-    debugError( d->cmd.cmd[0],
-		d->cmd.retsts,
-		d->cmd.sense[2],
-		d->cmd.sense[12],
-		d->cmd.sense[13] );
+      debugError( d->cmd.cmd[0],
+                  d->cmd.retsts,
+                  d->cmd.sense[2],
+                  d->cmd.sense[12],
+                  d->cmd.sense[13] );
 
-     return 1;
+      return 1;
   }
   else
-    return 0;
+      return 0;
 }

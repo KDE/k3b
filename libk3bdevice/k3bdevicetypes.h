@@ -240,18 +240,15 @@ namespace K3bDevice {
   };
 
   inline bool isDvdMedia( int mediaType ) {
-    return ( mediaType == MEDIA_DVD_ROM || 
-	     mediaType == MEDIA_DVD_R || 
-	     mediaType == MEDIA_DVD_R_SEQ || 
-	     mediaType == MEDIA_DVD_R_DL ||
-	     mediaType == MEDIA_DVD_R_DL_SEQ ||
-	     mediaType == MEDIA_DVD_R_DL_JUMP ||
-	     mediaType == MEDIA_DVD_RW || 
-	     mediaType == MEDIA_DVD_RW_OVWR || 
-	     mediaType == MEDIA_DVD_RW_SEQ || 
-	     mediaType == MEDIA_DVD_PLUS_RW || 
-	     mediaType == MEDIA_DVD_PLUS_R ||
-	     mediaType == MEDIA_DVD_PLUS_R_DL );
+    return ( mediaType & MEDIA_DVD_ALL );
+  }
+
+  inline bool isCdMedia( int mediaType ) {
+      return ( mediaType & MEDIA_CD_ALL );
+  }
+
+  inline bool isBdMedia( int mediaType ) {
+      return ( mediaType & MEDIA_BD_ALL );
   }
 
   inline bool isRewritableMedia( int mediaType ) {
