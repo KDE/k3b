@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>base_K3bAdvancedDataImageSettings</class>
 <author>Sebastian Trueg</author>
 <widget class="QWidget">
@@ -141,9 +141,6 @@
                     </property>
                     <property name="text">
                         <string>Preserve file permissions (bac&amp;kup)</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+K</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
