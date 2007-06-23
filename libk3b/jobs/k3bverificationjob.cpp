@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: k3bisoimageverificationjob.cpp 597651 2006-10-21 08:04:01Z trueg $
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -38,7 +38,7 @@
 class K3bVerificationJobTrackEntry
 {
 public:
-  K3bVerificationJobTrackEntry() 
+  K3bVerificationJobTrackEntry()
     : trackNumber(0) {
   }
 
@@ -95,7 +95,7 @@ K3bVerificationJob::K3bVerificationJob( K3bJobHandler* hdl, QObject* parent, con
   d->md5Job = new K3bMd5Job( this );
   connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
-  connect( d->md5Job, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( d->md5Job, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 }
 
@@ -149,21 +149,9 @@ void K3bVerificationJob::start()
   d->currentTrackIndex = 0;
   d->alreadyReadSectors = 0;
 
-  // first we need to reload and mount the device
-  emit newTask( i18n("Reloading the medium") );
-
-  connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
-	   this, SLOT(slotMediaReloaded(bool)) );
-}
-
-
-void K3bVerificationJob::slotMediaReloaded( bool success )
-{
-  if( !success )
-    waitForMedia( d->device,
-		  K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-		  K3bDevice::MEDIA_WRITABLE,
-		  i18n("Unable to Close the Tray") );
+//   waitForMedia( d->device,
+//                 K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+//                 K3bDevice::MEDIA_WRITABLE );
 
   emit newTask( i18n("Checking medium") );
 
@@ -184,6 +172,12 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
   d->diskInfo = dh->diskInfo();
   d->toc = dh->toc();
   d->totalSectors = 0;
+
+  if ( d->toc.isEmpty() ) {
+      emit infoMessage( i18n( "No tracks to verify found." ), ERROR );
+      jobFinished( false );
+      return;
+  }
 
   // just to be sure check if we actually have all the tracks
   int i = 0;
@@ -230,7 +224,7 @@ void K3bVerificationJob::readTrack( int trackIndex )
       connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
       connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
       connect( d->dataTrackReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-      connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+      connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
     }
 
@@ -256,7 +250,7 @@ void K3bVerificationJob::readTrack( int trackIndex )
     else
       d->dataTrackReader->setSectorRange( d->toc[d->tracks[trackIndex].trackNumber-1].firstSector(),
 					  d->toc[d->tracks[trackIndex].trackNumber-1].firstSector() + d->currentTrackSize -1 );
-    
+
     d->md5Job->setMaxReadSize( d->currentTrackSize.mode1Bytes() );
 
     d->dataTrackReader->writeToFd( d->pipe.in() );
@@ -327,7 +321,7 @@ K3b::Msf K3bVerificationJob::trackLength( int trackIndex )
 
   if( trackSize == 0 ) {
     trackSize = d->toc[trackNum-1].length();
-  
+
     if( d->diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
       K3bIso9660 isoF( d->device, d->toc[trackNum-1].firstSector().lba() );
       if( isoF.open() ) {

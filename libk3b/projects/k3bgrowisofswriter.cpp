@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -42,7 +42,7 @@
 class K3bGrowisofsWriter::Private
 {
 public:
-  Private() 
+  Private()
     : writingMode( 0 ),
       closeDvd(false),
       multiSession(false),
@@ -51,7 +51,8 @@ public:
       trackSize(-1),
       layerBreak(0),
       usingRingBuffer(false),
-      ringBuffer(0) {
+      ringBuffer(0),
+    forceNoEject( false ) {
   }
 
   int writingMode;
@@ -90,6 +91,8 @@ public:
   K3bPipeBuffer* ringBuffer;
 
   QString multiSessionInfo;
+
+    bool forceNoEject;
 };
 
 
@@ -155,10 +158,10 @@ bool K3bGrowisofsWriter::prepareProcess()
     emit infoMessage( i18n("Could not find %1 executable.").arg("growisofs"), ERROR );
     return false;
   }
-  
+
   if( d->growisofsBin->version < K3bVersion( 5, 10 ) ) {
     emit infoMessage( i18n("Growisofs version %1 is too old. "
-			   "K3b needs at least version 5.10.").arg(d->growisofsBin->version), 
+			   "K3b needs at least version 5.10.").arg(d->growisofsBin->version),
 		      ERROR );
     return false;
   }
@@ -253,7 +256,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   // the tracksize parameter takes priority over the dao:tracksize parameter since growisofs 5.18
   else if( d->growisofsBin->version > K3bVersion( 5, 17 ) && d->trackSize > 0 )
     *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize + trackSizePadding);
-  
+
   if( simulate() )
     *d->process << "-use-the-force-luke=dummy";
 
@@ -291,7 +294,7 @@ bool K3bGrowisofsWriter::prepareProcess()
       speed = burnDevice()->determineMaximalWriteSpeed();
     }
 
-    // speed may be a float number. example: DVD+R(W): 2.4x    
+    // speed may be a float number. example: DVD+R(W): 2.4x
     if( speed != 0 )
       *d->process << QString("-speed=%1").arg( speed%1385 > 0
 					      ? QString::number( (float)speed/1385.0, 'f', 1 )
@@ -374,7 +377,7 @@ void K3bGrowisofsWriter::start()
     else {
       if( simulate() ) {
 	emit newTask( i18n("Simulating") );
-	emit infoMessage( i18n("Starting simulation..."), 
+	emit infoMessage( i18n("Starting simulation..."),
 			  K3bJob::INFO );
       }
       else {
@@ -465,7 +468,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       d->writingStarted = true;
       emit newSubTask( i18n("Writing data") );
     }
-    
+
     // parse progress
     int pos = line.find( "/" );
     unsigned long long done = line.left( pos ).toULongLong();
@@ -499,7 +502,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 	  d->lastWritingSpeed = speed;
 	}
 	else
-	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '" 
+	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '"
 		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
       }
       else {
@@ -507,7 +510,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       }
     }
     else
-      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '" 
+      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
 		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
   }
 
@@ -559,13 +562,13 @@ void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
     d->success = false;
   }
 
-  if( !k3bcore->globalSettings()->ejectMedia() )
+  if( !k3bcore->globalSettings()->ejectMedia() || d->forceNoEject )
     jobFinished(d->success);
   else {
     emit newSubTask( i18n("Ejecting DVD") );
-    connect( K3bDevice::eject( burnDevice() ), 
+    connect( K3bDevice::eject( burnDevice() ),
 	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	     this, 
+	     this,
 	     SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
   }
 }
@@ -612,6 +615,12 @@ void K3bGrowisofsWriter::slotFlushingCache()
 void K3bGrowisofsWriter::setMultiSessionInfo( const QString& info )
 {
   d->multiSessionInfo = info;
+}
+
+
+void K3bGrowisofsWriter::setForceNoEject( bool b )
+{
+    d->forceNoEject = b;
 }
 
 #include "k3bgrowisofswriter.moc"

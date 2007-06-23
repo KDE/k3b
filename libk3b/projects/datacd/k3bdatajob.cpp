@@ -97,7 +97,7 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
   m_msInfoFetcher = new K3bMsInfoFetcher( this, this );
   connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
   connect( m_msInfoFetcher, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( m_msInfoFetcher, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_msInfoFetcher, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   d->imageFinished = true;
@@ -157,7 +157,7 @@ void K3bDataJob::start()
 
 void K3bDataJob::prepareWriting()
 {
-  if( !d->doc->onlyCreateImages() && 
+  if( !d->doc->onlyCreateImages() &&
       ( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
 	d->usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
     // no sense continuing the same session twice
@@ -165,18 +165,18 @@ void K3bDataJob::prepareWriting()
     d->copies = 1;
 
     m_msInfoFetcher->setDevice( d->doc->burner() );
-    
+
     if( !waitForMedium() ) {
       cancel();
       return;
     }
-    
+
     if( K3b::isMounted( d->doc->burner() ) ) {
       emit infoMessage( i18n("Unmounting disk"), INFO );
       K3b::unmount( d->doc->burner() );
     }
 
-    m_msInfoFetcher->start(); 
+    m_msInfoFetcher->start();
   }
   else {
     m_isoImager->setMultiSessionInfo( QString::null );
@@ -216,18 +216,18 @@ void K3bDataJob::writeImage()
   d->initializingImager = false;
 
   emit burning(false);
-  
+
   // get image file path
   if( d->doc->tempDir().isEmpty() )
     d->doc->setTempDir( K3b::findUniqueFilePrefix( d->doc->isoOptions().volumeID() ) + ".iso" );
-  
+
   // TODO: check if the image file is part of the project and if so warn the user
   //       and append some number to make the path unique.
-  
+
   emit newTask( i18n("Creating image file") );
   emit newSubTask( i18n("Track 1 of 1") );
   emit infoMessage( i18n("Creating image file in %1").arg(d->doc->tempDir()), INFO );
-  
+
   m_isoImager->writeToImageFile( d->doc->tempDir() );
   m_isoImager->start();
 }
@@ -356,7 +356,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
       if( m_writerJob && m_writerJob->active() )
 	m_writerJob->setSourceUnreadable( true );
 
-      // there is one special case which we need to handle here: the iso imager might be canceled 
+      // there is one special case which we need to handle here: the iso imager might be canceled
       // FIXME: the iso imager should not be able to cancel itself
       if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
 	cancel();
@@ -377,7 +377,7 @@ bool K3bDataJob::startWriterJob()
   // if we append a new session we asked for an appendable cd already
   if( d->usedMultiSessionMode == K3bDataDoc::NONE ||
       d->usedMultiSessionMode == K3bDataDoc::START ) {
-	  
+
     if( !waitForMedium() ) {
       return false;
     }
@@ -444,9 +444,9 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 		 this, SIGNAL(subPercent(int)) );
 	connect( d->verificationJob, SIGNAL(finished(bool)),
 		 this, SLOT(slotVerificationFinished(bool)) );
-	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+	connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 		 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-  
+
       }
       d->verificationJob->clear();
       d->verificationJob->setDevice( d->doc->burner() );
@@ -480,6 +480,9 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 	}
       }
       else {
+          if( k3bcore->globalSettings()->ejectMedia() )
+              K3bDevice::eject( d->doc->burner() );
+
 	cleanup();
 	jobFinished(true);
       }
@@ -501,7 +504,7 @@ void K3bDataJob::slotVerificationProgress( int p )
     totalTasks+=1.0;
     tasksDone+=1.0;
   }
-  
+
   emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
 }
 
@@ -515,14 +518,14 @@ void K3bDataJob::slotVerificationFinished( bool success )
 
   if( k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )
     K3bDevice::eject( d->doc->burner() );
-  
+
   if( !d->canceled && d->copiesDone < d->copies ) {
     bool failed = false;
     if( d->doc->onTheFly() )
       failed = !startOnTheFlyWriting();
     else
       failed = !startWriterJob();
-    
+
     if( failed )
       cancel();
     else if( !d->doc->onTheFly() ) {
@@ -552,7 +555,7 @@ void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
   connect( m_writerJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
   connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
   connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 }
 
@@ -563,7 +566,7 @@ void K3bDataJob::setImager( K3bIsoImager* imager )
     delete m_isoImager;
 
     m_isoImager = imager;
-    
+
     connectImager();
   }
 }
@@ -575,7 +578,7 @@ void K3bDataJob::connectImager()
   connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
   connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)), 
+  connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 }
 
@@ -625,7 +628,7 @@ bool K3bDataJob::prepareWriterJob()
     if( d->usedDataMode == K3b::MODE1 )
       writer->addArgument( "-data" );
     else {
-      if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+      if( k3bcore->externalBinManager()->binObject("cdrecord") &&
 	  k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
 	writer->addArgument( "-xa" );
       else
@@ -633,6 +636,7 @@ bool K3bDataJob::prepareWriterJob()
     }
 
     writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
+    writer->setForceNoEject( true );
 
     setWriterJob( writer );
   }
@@ -645,6 +649,7 @@ bool K3bDataJob::prepareWriterJob()
     // multisession
     writer->setMulti( d->usedMultiSessionMode == K3bDataDoc::START ||
 		      d->usedMultiSessionMode == K3bDataDoc::CONTINUE );
+    writer->setForceNoEject( true );
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
@@ -769,29 +774,29 @@ void K3bDataJob::determineMultiSessionMode()
   if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ||
       d->doc->writingMode() == K3b::TAO ) {
     emit newSubTask( i18n("Searching for old session") );
-    
+
     //
     // Wait for the medium.
     // In case an old session was imported we always want to continue or finish a multisession CD/DVD.
-    // Otherwise we wait for everything we could handle and decide what to do in 
+    // Otherwise we wait for everything we could handle and decide what to do in
     // determineMultiSessionMode( K3bDevice::DeviceHandler* ) below.
     //
 
     int wantedMediaState = K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY;
     if( d->doc->sessionImported() )
       wantedMediaState = K3bDevice::STATE_INCOMPLETE;
-    
-    int m = waitForMedia( d->doc->burner(), 
+
+    int m = waitForMedia( d->doc->burner(),
 			  wantedMediaState,
 			  K3bDevice::MEDIA_WRITABLE_CD );
-    
+
     if( m < 0 )
       cancel();
     else {
       // now we need to determine the media's size
-      connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->doc->burner() ), 
+      connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->doc->burner() ),
 	       SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	       this, 
+	       this,
 	       SLOT(slotDetermineMultiSessionMode(K3bDevice::DeviceHandler*)) );
     }
   }
@@ -892,7 +897,7 @@ void K3bDataJob::cancelAll()
 bool K3bDataJob::waitForMedium()
 {
   emit newSubTask( i18n("Waiting for a medium") );
-  if( waitForMedia( d->doc->burner(), 
+  if( waitForMedia( d->doc->burner(),
 		    d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
 		    d->usedMultiSessionMode == K3bDataDoc::FINISH ?
 		    K3bDevice::STATE_INCOMPLETE :
@@ -928,11 +933,11 @@ QString K3bDataJob::jobDescription() const
 
 QString K3bDataJob::jobDetails() const
 {
-  if( d->doc->copies() > 1 && 
+  if( d->doc->copies() > 1 &&
       !d->doc->dummy() &&
       !(d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
 	d->doc->multiSessionMode() == K3bDataDoc::FINISH) )
-    return i18n("ISO9660 Filesystem (Size: %1) - %n copy", 
+    return i18n("ISO9660 Filesystem (Size: %1) - %n copy",
 		"ISO9660 Filesystem (Size: %1) - %n copies",
 		d->doc->copies() )
       .arg(KIO::convertSize( d->doc->size() ));
@@ -956,7 +961,7 @@ void K3bDataJob::cleanup()
       emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
     }
   }
-  
+
   if( d->tocFile ) {
     delete d->tocFile;
     d->tocFile = 0;

@@ -85,6 +85,8 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
    */
   void setMultiSessionInfo( const QString& );
 
+  void setForceNoEject( bool );
+
  protected:
   bool prepareProcess();
 

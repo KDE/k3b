@@ -5,6 +5,7 @@
  * Allow adding of all actions to the welcome window (Bug 145866)
  * Added "NoDisplay=true" property to k3b-cue.desktop and k3b-iso.desktop 
  * Fixed supported write speed detection on some devices
+ * No reload before verification and between writing sessions (CD copy + Mixed Mode CD) anymore
 
 1.0.1
 =====

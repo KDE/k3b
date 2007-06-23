@@ -70,7 +70,6 @@ class LIBK3B_EXPORT K3bCdCopyJob : public K3bBurnJob
  private slots:
   void slotDiskInfoReady( K3bDevice::DeviceHandler* );
   void slotCdTextReady( K3bDevice::DeviceHandler* );
-  void slotMediaReloadedForNextSession( K3bDevice::DeviceHandler* dh );
   void slotCddbQueryFinished(int);
   void slotWritingNextTrack( int t, int tt );
   void slotReadingNextTrack( int t, int tt );

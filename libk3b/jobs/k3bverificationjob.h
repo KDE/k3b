@@ -41,8 +41,6 @@ namespace K3bDevice {
  * i.e. Video CDs cannot be verified.
  *
  * TAO written tracks have two run-out sectors that are not read.
- *
- * The VerificationJob will also reload the medium before starting.
  */
 class K3bVerificationJob : public K3bJob
 {
@@ -75,7 +73,6 @@ class K3bVerificationJob : public K3bJob
   void setGrownSessionSize( const K3b::Msf& );
 
  private slots:
-  void slotMediaReloaded( bool success );
   void slotDiskInfoReady( K3bDevice::DeviceHandler* dh );
   void readTrack( int trackIndex );
   void slotMd5JobFinished( bool success );
