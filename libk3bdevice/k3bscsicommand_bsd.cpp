@@ -68,13 +68,17 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   if( !m_device )
     return -1;
 
+  m_device->usageLock();
+
   bool needToClose = false;
   if( !m_device->isOpen() ) {
     needToClose = true;
   }
 
-  if( !m_device->open( true ) )
-    return -1;
+  if( !m_device->open( true ) ) {
+      m_device->usageUnlock();
+      return -1;
+  }
   d->ccb.ccb_h.path_id    = m_device->handle()->path_id;
   d->ccb.ccb_h.target_id  = m_device->handle()->target_id;
   d->ccb.ccb_h.target_lun = m_device->handle()->target_lun;
@@ -89,13 +93,16 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
   cam_fill_csio (&(d->ccb.csio), 1, 0 /* NULL */, direction, MSG_SIMPLE_Q_TAG, (u_int8_t *)data, len, sizeof(d->ccb.csio.sense_data), d->ccb.csio.cdb_len, 30*1000);
   unsigned char * sense = (unsigned char *)&d->ccb.csio.sense_data;
 
-  m_device->usageLock();
   ret = cam_send_ccb(m_device->handle(), &d->ccb);
-  m_device->usageUnlock();
 
-  if (ret < 0)
-    {
+  if (ret < 0) {
       k3bDebug() << "(K3bDevice::ScsiCommand) transport failed: " << ret << endl;
+
+      if( needToClose )
+          m_device->close();
+
+      m_device->usageUnlock();
+
       struct scsi_sense_data* senset = (struct scsi_sense_data*)sense;
       debugError( d->ccb.csio.cdb_io.cdb_bytes[0],
 		  senset->error_code & SSD_ERRCODE,
@@ -103,20 +110,19 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		  senset->add_sense_code,
 		  senset->add_sense_code_qual );
 
-      if( needToClose )
-	m_device->close();
-
       int result = (((senset->error_code & SSD_ERRCODE)<<24) & 0xF000 |
-	      ((senset->flags & SSD_KEY)<<16)          & 0x0F00 |
-	      (senset->add_sense_code<<8)              & 0x00F0 |
-	      (senset->add_sense_code_qual)            & 0x000F );
+                    ((senset->flags & SSD_KEY)<<16)          & 0x0F00 |
+                    (senset->add_sense_code<<8)              & 0x00F0 |
+                    (senset->add_sense_code_qual)            & 0x000F );
 
       return result ? result : ret;
-    }
-  if ((d->ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP) {
-    if( needToClose )
-      m_device->close();
-    return 0;
+  }
+
+  else if ((d->ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP) {
+      if( needToClose )
+          m_device->close();
+      m_device->usageUnlock();
+      return 0;
   }
 
   errno = EIO;
@@ -139,9 +145,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       d->ccb.csio.dxfer_len = sizeof(_sense);
       d->ccb.csio.sense_len = 0;
 
-      m_device->usageLock();
       ret = cam_send_ccb(m_device->handle(), &d->ccb);
-      m_device->usageUnlock();
 
       d->ccb.csio.resid = resid;
       if (ret<0)
@@ -157,6 +161,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 
 	  if( needToClose )
 	    m_device->close();
+          m_device->usageUnlock();
 
 	  return -1;
 	}
@@ -174,6 +179,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 
 	  if( needToClose )
 	    m_device->close();
+          m_device->usageUnlock();
 
 	  return -1;
 	}
@@ -196,6 +202,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 
   if( needToClose )
     m_device->close();
+  m_device->usageUnlock();
 
   return ret;
 }
