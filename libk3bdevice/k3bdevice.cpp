@@ -176,6 +176,7 @@ public:
   bool burnfree;
 
   QMutex mutex;
+    QMutex openCloseMutex;
 };
 
 
@@ -1342,14 +1343,14 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
   struct cdrom_tochdr tochdr;
   struct cdrom_tocentry tocentry;
 
+  usageLock();
   if( open() ) {
     //
     // CDROMREADTOCHDR ioctl returns:
     // cdth_trk0: First Track Number
     // cdth_trk1: Last Track Number
     //
-    usageLock();
-    if( ::ioctl(d->deviceFd,CDROMREADTOCHDR,&tochdr) ) {
+    if( ::ioctl( d->deviceFd, CDROMREADTOCHDR, &tochdr ) ) {
       k3bDebug() << "(K3bDevice::Device) could not get toc header !" << endl;
       success = false;
     }
@@ -1384,7 +1385,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
         //                 2: CD-XA Mode2
         //
 
-        if( ::ioctl(d->deviceFd,CDROMREADTOCENTRY,&tocentry) ) {
+        if( ::ioctl( d->deviceFd, CDROMREADTOCENTRY, &tocentry ) ) {
           k3bDebug() << "(K3bDevice::Device) error reading tocentry " << i << endl;
 	  success = false;
 	  break;
@@ -1418,13 +1419,14 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
         lastTrack = Track( startSec, startSec, trackType, trackMode );
       }
     }
-    usageUnlock();
 
     if( needToClose )
       close();
   }
   else
     success = false;
+
+  usageUnlock();
 
   return success;
 }
@@ -1481,45 +1483,43 @@ bool K3bDevice::Device::block( bool b ) const
   // So we use the ioctl on Linux systems
   //
 #if defined(Q_OS_LINUX)
-  bool needToClose = !isOpen();
-
-  if( open() ) {
-        usageLock();
-    bool success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
-        usageUnlock();
-    if( needToClose )
-      close();
-    return success;
-  }
-  else
-    return false;
+    bool success = false;
+    bool needToClose = !isOpen();
+    usageLock();
+    if( open() ) {
+        success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+        if( needToClose )
+            close();
+    }
+    usageUnlock();
+    if ( success )
+        return success;
 #elif defined(Q_OS_NETBSD)
-  bool needToClose = !isOpen();
-  int arg = b ? 1 : 0;
-
-  if( open() ) {
-        usageLock();
-    bool success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
-        usageUnlock();
-    if( needToClose )
-      close();
-    return success;
-  }
-  else
-    return false;
-#else
-  ScsiCommand cmd( this );
-  cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
-  cmd[5] = 0; // Necessary to set the proper command length
-  if( b )
-    cmd[4] = 0x01;
-  int r = cmd.transport( TR_DIR_WRITE );
-
-  if( r )
-    k3bDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed." << endl;
-
-  return ( r == 0 );
+    bool success = false;
+    bool needToClose = !isOpen();
+    int arg = b ? 1 : 0;
+    usageLock();
+    if( open() ) {
+        success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
+        if( needToClose )
+            close();
+    }
+    usageUnlock();
+    if ( success )
+        return success;
 #endif
+
+    ScsiCommand cmd( this );
+    cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
+    cmd[5] = 0; // Necessary to set the proper command length
+    if( b )
+        cmd[4] = 0x01;
+    int r = cmd.transport( TR_DIR_WRITE );
+
+    if( r )
+        k3bDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed." << endl;
+
+    return ( r == 0 );
 }
 
 bool K3bDevice::Device::rewritable() const
@@ -1543,90 +1543,90 @@ bool K3bDevice::Device::rewritable() const
 bool K3bDevice::Device::eject() const
 {
 #ifdef Q_OS_NETBSD
-  bool success = false;
-  bool needToClose = !isOpen();
-  int arg = 0;
+    bool success = false;
+    bool needToClose = !isOpen();
+    int arg = 0;
 
-  if( open() ) {
-        usageLock();
-    if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
-      success = true;
-        usageUnlock();
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+    usageLock();
+    if( open() ) {
+        if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
+            success = true;
+        if( needToClose )
+            close();
+    }
+    usageUnlock();
+    if ( success )
+        return success;
 #elif defined(Q_OS_LINUX)
-  bool success = false;
-  bool needToClose = !isOpen();
+    bool success = false;
+    bool needToClose = !isOpen();
 
-  if( open() ) {
-        usageLock();
+    usageLock();
+    if( open() ) {
         if( ::ioctl( d->deviceFd, CDROMEJECT ) >= 0 )
-      success = true;
-        usageUnlock();
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+            success = true;
+        if( needToClose )
+            close();
+    }
+    usageUnlock();
+    if ( success )
+        return success;
 #endif
 
-  ScsiCommand cmd( this );
+    ScsiCommand cmd( this );
     cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
-  cmd[5] = 0; // Necessary to set the proper command length
+    cmd[5] = 0; // Necessary to set the proper command length
     cmd.transport();
 
     cmd[0] = MMC_START_STOP_UNIT;
     cmd[5] = 0; // Necessary to set the proper command length
-  cmd[4] = 0x1;      // Start unit
-  cmd.transport();
+    cmd[4] = 0x1;      // Start unit
+    cmd.transport();
 
-  cmd[4] = 0x2;    // LoEj = 1, Start = 0
+    cmd[4] = 0x2;    // LoEj = 1, Start = 0
 
-  return !cmd.transport();
+    return !cmd.transport();
 }
 
 
 bool K3bDevice::Device::load() const
 {
 #ifdef Q_OS_NETBSD
-  bool success = false;
-  bool needToClose = !isOpen();
-  int arg = 0;
+    bool success = false;
+    bool needToClose = !isOpen();
+    int arg = 0;
 
-  if( open() ) {
-        usageLock();
-    if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
-      success = true;
-        usageUnlock();
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+    usageLock();
+    if( open() ) {
+        if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
+            success = true;
+        if( needToClose )
+            close();
+    }
+    usageUnlock();
+    if ( success )
+        return success;
 #elif defined(Q_OS_LINUX)
-  bool success = false;
-  bool needToClose = !isOpen();
+    bool success = false;
+    bool needToClose = !isOpen();
 
-  if( open() ) {
-        usageLock();
+    usageLock();
+    if( open() ) {
         if( ::ioctl( d->deviceFd, CDROMCLOSETRAY ) >= 0 )
-      success = true;
-        usageUnlock();
-    if( needToClose )
-      close();
-  }
-  if ( success )
-      return success;
+            success = true;
+        if( needToClose )
+            close();
+    }
+    usageUnlock();
+    if ( success )
+        return success;
 #endif
 
-  ScsiCommand cmd( this );
-  cmd[0] = MMC_START_STOP_UNIT;
-  cmd[4] = 0x3;    // LoEj = 1, Start = 1
-  cmd[5] = 0;      // Necessary to set the proper command length
-  return !cmd.transport();
+    ScsiCommand cmd( this );
+    cmd[0] = MMC_START_STOP_UNIT;
+    cmd[4] = 0x3;    // LoEj = 1, Start = 1
+    cmd[5] = 0;      // Necessary to set the proper command length
+    return !cmd.transport();
 }
 
 
@@ -1636,14 +1636,14 @@ bool K3bDevice::Device::setAutoEjectEnabled( bool enabled ) const
 #ifdef Q_OS_LINUX
 
   bool needToClose = !isOpen();
+  usageLock();
   if ( open() ) {
-      usageLock();
       success = ( ::ioctl( d->deviceFd, CDROMEJECT_SW, enabled ? 1 : 0 ) == 0 );
-      usageUnlock();
       if ( needToClose ) {
           close();
       }
   }
+  usageUnlock();
 #endif
   return success;
 }
@@ -1677,7 +1677,7 @@ bool K3bDevice::Device::open( bool write ) const
   if( d->openedReadWrite != write )
     close();
 
-  d->mutex.lock();
+  QMutexLocker ml( &d->openCloseMutex );
 
   d->openedReadWrite = write;
 
@@ -1688,15 +1688,11 @@ bool K3bDevice::Device::open( bool write ) const
 	      << ((d->cam)?" succeeded.":" failed.") << endl;
   }
 
-  d->mutex.unlock();
-
   return (d->cam != 0);
 #endif
 #if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   if( d->deviceFd == -1 )
     d->deviceFd = openDevice( QFile::encodeName(devicename()), write );
-
-  d->mutex.unlock();
 
   return ( d->deviceFd != -1 );
 #endif
@@ -1705,7 +1701,7 @@ bool K3bDevice::Device::open( bool write ) const
 
 void K3bDevice::Device::close() const
 {
-  d->mutex.lock();
+  QMutexLocker ml( &d->openCloseMutex );
 
 #ifdef Q_OS_FREEBSD
   if( d->cam ) {
@@ -1719,8 +1715,6 @@ void K3bDevice::Device::close() const
     d->deviceFd = -1;
   }
 #endif
-
-  d->mutex.unlock();
 }
 
 
@@ -2200,10 +2194,18 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
 	K3b::Msf currentMax;
 	int currentMaxFormat = 0;
 	if( readFormatCapacity( 0x26, inf.m_capacity, &currentMax, &currentMaxFormat ) ) {
-	  if( inf.bgFormatState() != BG_FORMAT_NONE )
-	    inf.m_usedCapacity = currentMax;
-	  else
-	    inf.m_usedCapacity = 0;
+            if( currentMaxFormat == 0x1 ) { // unformatted or blank media
+                inf.m_usedCapacity = 0;
+                inf.m_capacity = currentMax;
+            }
+            else {
+                inf.m_usedCapacity = currentMax;
+                // Plextor drives tend to screw things up and report invalid values
+                // for the max format capacity of 1.4 GB DVD media
+                if ( inf.bgFormatState() == BG_FORMAT_COMPLETE ) {
+                    inf.m_capacity = currentMax;
+                }
+            }
        	}
 	else
 	  k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
@@ -3532,6 +3534,46 @@ bool K3bDevice::Device::getNextWritableAdress( unsigned int& lastSessionStart, u
   }
 
   return success;
+}
+
+
+int K3bDevice::Device::nextWritableAddress() const
+{
+    unsigned char* data = 0;
+    unsigned int dataLen = 0;
+    int nwa = -1;
+
+    if( readDiscInformation( &data, dataLen ) ) {
+        disc_info_t* inf = (disc_info_t*)data;
+
+        //
+        // The state of the last session has to be "empty" (0x0) or "incomplete" (0x1)
+        // The procedure here is taken from the dvd+rw-tools and wodim
+        //
+        if( !(inf->border & 0x2) ) {
+            // the incomplete track number is the first track in the last session (the empty session)
+            int nextTrack = inf->first_track_l|inf->first_track_m<<8;
+
+            unsigned char* trackData = 0;
+            unsigned int trackDataLen = 0;
+
+            // Read start address of the incomplete track
+            if( readTrackInformation( &trackData, trackDataLen, 0x1, nextTrack ) ) {
+                nwa = from4Byte( &trackData[8] );
+                delete [] trackData;
+            }
+
+            // Read start address of the invisible track
+            else if ( readTrackInformation( &trackData, trackDataLen, 0x1, 0xff ) ) {
+                nwa = from4Byte( &trackData[8] );
+                delete [] trackData;
+            }
+        }
+
+        delete [] data;
+    }
+
+    return nwa;
 }
 
 

@@ -40,7 +40,7 @@ namespace K3bDevice
    *
    * Devices are constructed by the DeviceManager.
    *
-   * All methods in Device are thread-safe which basicly means that
+   * All methods except for open and close in Device are thread-safe which basicly means that
    * no two commands are sent to the device at the same time.
    */
   // FIXME: all methods are const which makes no sense at all!
@@ -454,12 +454,16 @@ namespace K3bDevice
        * Open the device for access via a file descriptor.
        * @return true on success or if the device is already open.
        * @see close()
+       *
+       * Be aware that this method is not thread-safe.
        */
       bool open( bool write = false ) const;
 
       /**
        * Close the files descriptor.
        * @see open()
+       *
+       * Be aware that this method is not thread-safe.
        */
       void close() const;
 
@@ -698,6 +702,13 @@ namespace K3bDevice
       bool seek( unsigned long lba ) const;
 
       bool getNextWritableAdress( unsigned int& lastSessionStart, unsigned int& nextWritableAdress ) const;
+
+      /**
+       * Retrieve the next writable address from the currently mounted writable medium.
+       * \return The next writable address if the medium is empty or appendable or -1
+       * if an error occured.
+       */
+      int nextWritableAddress() const;
 
       /**
        * Locks the device for usage. This means that no MMC command can be performed

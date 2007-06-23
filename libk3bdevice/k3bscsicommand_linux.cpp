@@ -95,15 +95,20 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 {
   bool needToClose = false;
   if( m_device ) {
-    if( !m_device->isOpen() ) {
-      needToClose = true;
-    }
-    m_device->open( dir == TR_DIR_WRITE );
-    m_deviceHandle = m_device->handle();
+      m_device->usageLock();
+      if( !m_device->isOpen() ) {
+          needToClose = true;
+      }
+      if ( !m_device->open( dir == TR_DIR_WRITE ) ) {
+          m_device->usageUnlock();
+          return -1;
+      }
+      m_deviceHandle = m_device->handle();
   }
 
-  if( m_deviceHandle == -1 )
+  if( m_deviceHandle == -1 ) {
     return -1;
+  }
 
   int i = -1;
 
@@ -124,13 +129,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
     else
       d->sgIo.dxfer_direction = SG_DXFER_NONE;
 
-    if ( m_device ) {
-        m_device->usageLock();
-    }
     i = ::ioctl( m_deviceHandle, SG_IO, &d->sgIo );
-    if ( m_device ) {
-        m_device->usageUnlock();
-    }
 
     if( ( d->sgIo.info&SG_INFO_OK_MASK ) != SG_INFO_OK )
       i = -1;
@@ -145,21 +144,19 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
       d->cmd.data_direction = CGC_DATA_WRITE;
     else
       d->cmd.data_direction = CGC_DATA_NONE;
-    
-    if ( m_device ) {
-        m_device->usageLock();
-    }
+
     i = ::ioctl( m_deviceHandle, CDROM_SEND_PACKET, &d->cmd );
-    if ( m_device ) {
-        m_device->usageUnlock();
-    }
 #ifdef SG_IO
   }
-#endif    
+#endif
 
   if( needToClose )
     m_device->close();
-    
+
+  if ( m_device ) {
+      m_device->usageUnlock();
+  }
+
   if( i ) {
     debugError( d->cmd.cmd[0],
 		d->sense.error_code,
@@ -167,7 +164,7 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		d->sense.asc,
 		d->sense.ascq );
 
-    int errCode = 
+    int errCode =
       (d->sense.error_code<<24) & 0xF000 |
       (d->sense.sense_key<<16)  & 0x0F00 |
       (d->sense.asc<<8)         & 0x00F0 |
