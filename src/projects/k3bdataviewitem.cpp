@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -32,6 +32,7 @@
 
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qfileinfo.h>
 
 
 K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, QListView* parent )
@@ -90,7 +91,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
   }
   else if( column == 4 ) {
     if( dataItem()->isSymLink() ) {
-      if( !dataItem()->doc()->isoOptions().followSymbolicLinks() && 
+      if( !dataItem()->doc()->isoOptions().followSymbolicLinks() &&
 	  dataItem()->doc()->isoOptions().createRockRidge() &&
 	  !dataItem()->isValid() ) {
 	// paint the link in red
@@ -210,11 +211,11 @@ void K3bDataFileViewItem::init( K3bFileItem* file )
   m_pMimeType = KMimeType::findByURL( KURL::fromPathOrURL(file->localPath()) );
   if( !m_pMimeType )
     setPixmap( 0, DesktopIcon( "unknown", 16, KIcon::DefaultState ) );
-  else  
+  else
     setPixmap( 0, m_pMimeType->pixmap( KURL::fromPathOrURL(file->localPath()), KIcon::Desktop, 16, KIcon::DefaultState ) );
 }
 
-	
+
 QString K3bDataFileViewItem::text( int index ) const
 {
   switch( index ) {
@@ -234,14 +235,26 @@ QString K3bDataFileViewItem::text( int index ) const
   case 2:
     return KIO::convertSize( m_fileItem->size() );
   case 3:
-    return m_fileItem->localPath();
-  case 4:
-    if( !m_fileItem->isSymLink() )
-      return QString::null;
-    if( m_fileItem->isValid() )
-      return K3b::resolveLink( m_fileItem->localPath() );
-    else
-      return K3b::resolveLink( m_fileItem->localPath() ) + " (" + i18n("outside of project") + ")";
+      return m_fileItem->localPath();
+  case 4: {
+      if( !m_fileItem->isSymLink() ) {
+          return QString::null;
+      }
+
+      QString s;
+      if ( m_fileItem->doc()->isoOptions().followSymbolicLinks() ) {
+          s = K3b::resolveLink( m_fileItem->localPath() );
+      }
+      else {
+          s = QFileInfo( m_fileItem->localPath() ).readLink();
+      }
+
+      if( !m_fileItem->isValid() ) {
+          s += " (" + i18n("outside of project") + ")";
+      }
+
+      return s;
+  }
   default:
     return "";
   }
