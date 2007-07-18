@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -155,10 +155,10 @@ void K3bAudioTrackView::setupActions()
   m_popupMenu = new KPopupMenu( this );
 
   m_actionProperties = new KAction( i18n("Properties"), "misc",
-				    KShortcut(), this, SLOT(slotProperties()), 
+				    KShortcut(), this, SLOT(slotProperties()),
 				    actionCollection(), "track_properties" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-				Key_Delete, this, SLOT(slotRemove()), 
+				Key_Delete, this, SLOT(slotRemove()),
 				actionCollection(), "track_remove" );
 
   m_actionAddSilence = new KAction( i18n("Add Silence") + "...", "misc",
@@ -180,7 +180,7 @@ void K3bAudioTrackView::setupActions()
 				   KShortcut(), this, SLOT(slotPlayTrack()),
 				   actionCollection(), "track_play" );
 #ifdef HAVE_MUSICBRAINZ
-  KAction* mbAction = new KAction( i18n("Musicbrainz Lookup"), "musicbrainz", 0, this, 
+  KAction* mbAction = new KAction( i18n("Musicbrainz Lookup"), "musicbrainz", 0, this,
 				   SLOT(slotQueryMusicBrainz()),
 				   actionCollection(), "project_audio_musicbrainz" );
   mbAction->setToolTip( i18n("Try to determine meta information over the internet") );
@@ -275,7 +275,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
     getSelectedItems( tracks, sources );
 
     //
-    // remove all sources which belong to one of the selected tracks since they will be 
+    // remove all sources which belong to one of the selected tracks since they will be
     // moved along with their tracks
     //
     QPtrListIterator<K3bAudioDataSource> srcIt( sources );
@@ -397,9 +397,9 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, QListViewItem* parent, QList
       QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
     }
   }
-  
+
   showAllSources();
-  
+
   // now grab that focus
   setFocus();
 }
@@ -446,7 +446,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track
     if( track->prev() && m_trackItemMap.contains( track->prev() ) )
       prevItem = m_trackItemMap[track->prev()];
     K3bAudioTrackViewItem* newItem = new K3bAudioTrackViewItem( this, prevItem, track );
-    // 
+    //
     // disable the item until the files have been analysed
     // so the user may not change the cd-text until the one from the
     // file is loaded.
@@ -485,7 +485,7 @@ void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 
     if( track->numberSources() > 1 )
       item->showSources(true);
-   
+
     // the length might have changed
     item->repaint();
 
@@ -510,6 +510,9 @@ void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
 {
   kdDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )" << endl;
+  if ( m_playerItemAnimator->item() == m_trackItemMap[track] ) {
+      m_playerItemAnimator->stop();
+  }
   delete m_trackItemMap[track];
   m_trackItemMap.erase(track);
 }
@@ -699,7 +702,7 @@ void K3bAudioTrackView::slotDragTimeout()
 }
 
 
-void K3bAudioTrackView::getSelectedItems( QPtrList<K3bAudioTrack>& tracks, 
+void K3bAudioTrackView::getSelectedItems( QPtrList<K3bAudioTrack>& tracks,
 					  QPtrList<K3bAudioDataSource>& sources )
 {
   tracks.clear();
@@ -712,7 +715,7 @@ void K3bAudioTrackView::getSelectedItems( QPtrList<K3bAudioTrack>& tracks,
     else {
       K3bAudioDataSourceViewItem* sv = static_cast<K3bAudioDataSourceViewItem*>( *it );
       // do not select hidden source items or unfinished source files
-      if( sv->trackViewItem()->showingSources() && 
+      if( sv->trackViewItem()->showingSources() &&
 	  !(sv->source()->isValid() && sv->source()->length() == 0) )
 	sources.append( sv->source() );
     }
@@ -727,7 +730,7 @@ void K3bAudioTrackView::slotRemove()
   getSelectedItems( tracks, sources );
 
   //
-  // remove all sources which belong to one of the selected tracks since they will be 
+  // remove all sources which belong to one of the selected tracks since they will be
   // deleted along with their tracks
   //
   QPtrListIterator<K3bAudioDataSource> srcIt( sources );
@@ -759,7 +762,7 @@ void K3bAudioTrackView::slotAddSilence()
     //
     // create a simple dialog for asking the length of the silence
     //
-    KDialogBase dlg( KDialogBase::Plain, 
+    KDialogBase dlg( KDialogBase::Plain,
 		     i18n("Add Silence"),
 		     KDialogBase::Ok|KDialogBase::Cancel,
 		     KDialogBase::Ok,
@@ -895,15 +898,15 @@ void K3bAudioTrackView::showPopupMenu( KListView*, QListViewItem* item, const QP
   }
   else if( numTracks == 1 && numSources == 0 ) {
     m_popupMenu->insertSeparator();
-   
-    
-  
+
+
+
     if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) )
        if( tv->track()->length().lba() > 60 )
           m_actionSplitTrack->plug( m_popupMenu );
-    
+
     m_actionEditSource->plug( m_popupMenu );
- 
+
   }
   else if( numTracks > 1 ) {
     m_popupMenu->insertSeparator();
@@ -929,7 +932,7 @@ void K3bAudioTrackView::slotProperties()
   if( !tracks.isEmpty() ) {
     K3bAudioTrackDialog d( tracks, this );
      d.exec();
-  }  
+  }
   else {
     static_cast<K3bView*>(m_doc->view())->slotProperties();
   }
@@ -951,7 +954,7 @@ void K3bAudioTrackView::showPlayerIndicator( K3bAudioTrack* track )
   removePlayerIndicator();
   m_currentlyPlayingTrack = track;
   K3bAudioTrackViewItem* item = getTrackViewItem( track );
-  item->setPixmap( 1, SmallIcon( "player_play" ) );  
+  item->setPixmap( 1, SmallIcon( "player_play" ) );
   m_playerItemAnimator->setItem( item, 1 );
 }
 

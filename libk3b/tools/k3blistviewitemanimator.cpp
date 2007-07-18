@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -39,6 +39,12 @@ K3bListViewItemAnimator::K3bListViewItemAnimator( QListViewItem* item, int col, 
 
 K3bListViewItemAnimator::~K3bListViewItemAnimator()
 {
+}
+
+
+QListViewItem* K3bListViewItemAnimator::item() const
+{
+    return m_item;
 }
 
 
@@ -109,7 +115,7 @@ void K3bListViewItemAnimator::slotAnimate()
     KPixmap pix( m_pixmap );
     m_item->setPixmap( m_column, KPixmapEffect::fade( pix, val, m_fadeColor ) );;
   }
-  
+
   if( m_animationBack ) {
     --m_animationStep;
     if( m_animationStep < 0 ) {

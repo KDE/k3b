@@ -39,6 +39,8 @@ class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
   K3bListViewItemAnimator( QListViewItem* item, int col, QObject* parent = 0, const char* name = 0 );
   ~K3bListViewItemAnimator();
 
+  QListViewItem* item() const;
+
  public slots:
   void start();
   void stop();
