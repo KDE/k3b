@@ -340,7 +340,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	  m_dataMode == K3b::MODE2 ) {
-	if( k3bcore->externalBinManager()->binObject("cdrecord") && 
+	if( k3bcore->externalBinManager()->binObject("cdrecord") &&
 	    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
 	  writer->addArgument( "-xa" );
 	else
@@ -351,6 +351,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       // read from stdin
       writer->addArgument( QString("-tsize=%1s").arg( K3b::imageFilesize( m_imagePath )/2048 ) )->addArgument( "-" );
+
+      writer->setForceNoEject( m_verifyData );
 
       m_writer = writer;
     }
@@ -392,6 +394,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       writer->setTocFile( m_tocFile->name() );
 
+      writer->setForceNoEject( m_verifyData );
+
       m_writer = writer;
     }
   }
@@ -405,7 +409,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	  return false;
 	}
       }
-      
+
       m_simulate = false;
     }
 
@@ -416,6 +420,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     writer->setImageToWrite( QString::null ); // read from stdin
     writer->setCloseDvd( !m_noFix );
     writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );
+
+    writer->setForceNoEject( m_verifyData );
 
     m_writer = writer;
   }
@@ -443,8 +449,8 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
     return i18n("Simulating ISO9660 Image");
   else
     return ( i18n("Burning ISO9660 Image")
-	     + ( m_copies > 1 
-		 ? i18n(" - %n Copy", " - %n Copies", m_copies) 
+	     + ( m_copies > 1
+		 ? i18n(" - %n Copy", " - %n Copies", m_copies)
 		 : QString::null ) );
 }
 
