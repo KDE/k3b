@@ -83,6 +83,7 @@ K3bBlankingDialog::K3bBlankingDialog( QWidget* parent, const char* name )
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
   connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
   slotWriterChanged();
+	slotWritingAppChanged( m_writerSelectionWidget->writingApp() );
 }
 
 
