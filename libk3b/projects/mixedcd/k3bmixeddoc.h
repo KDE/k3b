@@ -40,6 +40,8 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
 
   QString name() const;
 
+  int supportedMediaTypes() const;
+
   bool newDocument();
 
   void setModified( bool m = true );

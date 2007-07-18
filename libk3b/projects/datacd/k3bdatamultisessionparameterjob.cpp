@@ -202,7 +202,12 @@ bool K3bDataMultiSessionParameterJob::WorkThread::setupMultiSessionParameters()
     unsigned long lastSessionStart = 0;
     unsigned long nextSessionStart = 0;
     m_importSession = true;
-    if( info.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+
+    // FIXME: Does BD-RE really behave like DVD+RW here?
+    if( info.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|
+                            K3bDevice::MEDIA_DVD_PLUS_RW_DL|
+                            K3bDevice::MEDIA_DVD_RW_OVWR|
+                            K3bDevice::MEDIA_BD_RE) ) {
         lastSessionStart = 0;
 
         // get info from iso filesystem

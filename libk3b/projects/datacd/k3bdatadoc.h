@@ -71,6 +71,13 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
 
   virtual QString name() const;
 
+  /**
+   * The spported media types based on the project size
+   * and settings (example: if writing mode == TAO we force
+   * CD media)
+   */
+  virtual int supportedMediaTypes() const;
+
   enum MultiSessionMode { 
     /**
      * Let the K3bDataJob decide if to close the CD or not.

@@ -145,7 +145,7 @@ void K3bAudioDoc::setLastTrack( K3bAudioTrack* track )
 }
 
 
-KIO::filesize_t K3bAudioDoc::size() const 
+KIO::filesize_t K3bAudioDoc::size() const
 {
   // This is not really correct but what the user expects ;)
   return length().mode1Bytes();
@@ -185,7 +185,7 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 	continue;
       }
     }
-    
+
     if( K3bAudioTrack* track = createTrack( url ) ) {
       addTrack( track, position );
 
@@ -288,12 +288,12 @@ bool K3bAudioDoc::readPlaylistFile( const KURL& url, KURL::List& playlist )
 }
 
 
-void K3bAudioDoc::addSources( K3bAudioTrack* parent, 
-			      const KURL::List& urls, 
+void K3bAudioDoc::addSources( K3bAudioTrack* parent,
+			      const KURL::List& urls,
 			      K3bAudioDataSource* sourceAfter )
 {
   kdDebug() << "(K3bAudioDoc::addSources( " << parent << ", "
-	    << urls.first().path() << ", " 
+	    << urls.first().path() << ", "
 	    << sourceAfter << " )" << endl;
   KURL::List allUrls = extractUrlList( urls );
   KURL::List::const_iterator end(allUrls.end());
@@ -336,7 +336,7 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
     if( decoder ) {
       if( !reused )
 	decoder->analyseFile();
-      
+
       K3bAudioFile* newFile = 0;
       unsigned int i = 0;
       for( K3bDevice::Toc::const_iterator it = parser.toc().begin();
@@ -389,11 +389,11 @@ K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url, bool* reused )
   else if( (decoder = K3bAudioDecoderFactory::createDecoder( url )) ) {
     kdDebug() << "(K3bAudioDoc) using " << decoder->className()
 	      << " for decoding of " << url.path() << endl;
-    
+
     decoder->setFilename( url.path() );
     *reused = false;
   }
-  
+
   return decoder;
 }
 
@@ -406,7 +406,7 @@ K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
     return 0;
   }
 
-  bool reused;  
+  bool reused;
   K3bAudioDecoder* decoder = getDecoderForUrl( url, &reused );
   if( decoder ) {
     if( !reused )
@@ -509,7 +509,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 
     if( e.isNull() )
       return false;
-    
+
     if( e.nodeName() == "general" ) {
       if( !readGeneralDocumentData( e ) )
 	return false;
@@ -517,10 +517,10 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 
     else if( e.nodeName() == "normalize" )
       setNormalize( e.text() == "yes" );
-    
+
     else if( e.nodeName() == "hide_first_track" )
       setHideFirstTrack( e.text() == "yes" );
-    
+
     else if( e.nodeName() == "audio_ripping" ) {
       QDomNodeList ripNodes = e.childNodes();
       for( uint j = 0; j < ripNodes.length(); j++ ) {
@@ -539,7 +539,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	return false;
 
       writeCdText( e.attributeNode( "activated" ).value() == "yes" );
-    
+
       QDomNodeList cdTextNodes = e.childNodes();
       for( uint j = 0; j < cdTextNodes.length(); j++ ) {
 	if( cdTextNodes.item(j).nodeName() == "title" )
@@ -569,7 +569,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
     }
 
     else if( e.nodeName() == "contents" ) {
-	
+
       QDomNodeList contentNodes = e.childNodes();
 
       for( uint j = 0; j< contentNodes.length(); j++ ) {
@@ -584,7 +584,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	// -----------------------------------------------------------------------------------------------------
 	QDomAttr oldUrlAttr = trackElem.attributeNode( "url" );
 	if( !oldUrlAttr.isNull() ) {
-	  if( K3bAudioFile* file = 
+	  if( K3bAudioFile* file =
 	      createAudioFile( KURL::fromPathOrURL( oldUrlAttr.value() ) ) ) {
 	    track->addSource( file );
 	  }
@@ -600,7 +600,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	    for( unsigned int sourcesIndex = 0; sourcesIndex < sourcesNodes.length(); sourcesIndex++ ) {
 	      QDomElement sourceElem = sourcesNodes.item(sourcesIndex).toElement();
 	      if( sourceElem.nodeName() == "file" ) {
-		if( K3bAudioFile* file = 
+		if( K3bAudioFile* file =
 		    createAudioFile( KURL::fromPathOrURL( sourceElem.attributeNode( "url" ).value() ) ) ) {
 		  file->setStartOffset( K3b::Msf::fromString( sourceElem.attributeNode( "start_offset" ).value() ) );
 		  file->setEndOffset( K3b::Msf::fromString( sourceElem.attributeNode( "end_offset" ).value() ) );
@@ -636,7 +636,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 		}
 
 		if( discid != 0 && titlenum > 0 ) {
-		  K3bAudioCdTrackSource* cdtrack = new K3bAudioCdTrackSource( discid, length, titlenum, 
+		  K3bAudioCdTrackSource* cdtrack = new K3bAudioCdTrackSource( discid, length, titlenum,
 									      artist, title,
 									      cdArtist, cdTitle );
 		  cdtrack->setStartOffset( K3b::Msf::fromString( sourceElem.attributeNode( "start_offset" ).value() ) );
@@ -661,22 +661,22 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	    for( uint trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
 	      if( cdTextNodes.item(trackCdTextJ).nodeName() == "title" )
 		track->setTitle( cdTextNodes.item(trackCdTextJ).toElement().text() );
-	      
+
 	      else if( cdTextNodes.item(trackCdTextJ).nodeName() == "artist" )
 		track->setArtist( cdTextNodes.item(trackCdTextJ).toElement().text() );
-	      
+
 	      else if( cdTextNodes.item(trackCdTextJ).nodeName() == "arranger" )
 		track->setArranger( cdTextNodes.item(trackCdTextJ).toElement().text() );
-	      
+
 	      else if( cdTextNodes.item(trackCdTextJ).nodeName() == "songwriter" )
 		track->setSongwriter( cdTextNodes.item(trackCdTextJ).toElement().text() );
-	      
+
 	      else if( cdTextNodes.item(trackCdTextJ).nodeName() == "composer" )
 		track->setComposer( cdTextNodes.item(trackCdTextJ).toElement().text() );
-	      
+
 	      else if( cdTextNodes.item(trackCdTextJ).nodeName() == "isrc" )
 		track->setIsrc( cdTextNodes.item(trackCdTextJ).toElement().text() );
-	      
+
 	      else if( cdTextNodes.item(trackCdTextJ).nodeName() == "message" )
 		track->setCdTextMessage( cdTextNodes.item(trackCdTextJ).toElement().text() );
 	    }
@@ -814,7 +814,7 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
       }
       else if( K3bAudioCdTrackSource* cdTrack = dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
 	QDomElement sourceElem = doc.createElement( "cdtrack" );
-	sourceElem.setAttribute( "length", cdTrack->originalLength().toString() );	
+	sourceElem.setAttribute( "length", cdTrack->originalLength().toString() );
 	sourceElem.setAttribute( "start_offset", cdTrack->startOffset().toString() );
 	sourceElem.setAttribute( "end_offset", cdTrack->endOffset().toString() );
 
@@ -863,15 +863,15 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
     cdTextElem = doc.createElement( "title" );
     cdTextElem.appendChild( doc.createTextNode( (track->title())) );
     cdTextMain.appendChild( cdTextElem );
-    
+
     cdTextElem = doc.createElement( "artist" );
     cdTextElem.appendChild( doc.createTextNode( (track->artist())) );
     cdTextMain.appendChild( cdTextElem );
-    
+
     cdTextElem = doc.createElement( "arranger" );
     cdTextElem.appendChild( doc.createTextNode( (track->arranger()) ) );
     cdTextMain.appendChild( cdTextElem );
-    
+
     cdTextElem = doc.createElement( "songwriter" );
     cdTextElem.appendChild( doc.createTextNode( (track->songwriter()) ) );
     cdTextMain.appendChild( cdTextElem );
@@ -879,11 +879,11 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
     cdTextElem = doc.createElement( "composer" );
     cdTextElem.appendChild( doc.createTextNode( (track->composer()) ) );
     cdTextMain.appendChild( cdTextElem );
-    
+
     cdTextElem = doc.createElement( "isrc" );
     cdTextElem.appendChild( doc.createTextNode( ( track->isrc()) ) );
     cdTextMain.appendChild( cdTextElem );
-    
+
     cdTextElem = doc.createElement( "message" );
     cdTextElem.appendChild( doc.createTextNode( (track->cdTextMessage()) ) );
     cdTextMain.appendChild( cdTextElem );
@@ -891,12 +891,12 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
     trackElem.appendChild( cdTextMain );
 
     // add copy protection
-    QDomElement copyElem = doc.createElement( "copy_protection" );    
+    QDomElement copyElem = doc.createElement( "copy_protection" );
     copyElem.appendChild( doc.createTextNode( track->copyProtection() ? "yes" : "no" ) );
     trackElem.appendChild( copyElem );
 
     // add pre emphasis
-    copyElem = doc.createElement( "pre_emphasis" );    
+    copyElem = doc.createElement( "pre_emphasis" );
     copyElem.appendChild( doc.createTextNode( track->preEmp() ? "yes" : "no" ) );
     trackElem.appendChild( copyElem );
 
@@ -1045,7 +1045,7 @@ K3bDevice::Toc K3bAudioDoc::toToc() const
     track = track->next();
   }
 
-  return toc; 
+  return toc;
 }
 
 
@@ -1122,6 +1122,12 @@ void K3bAudioDoc::setCdTextMessage( const QString& v )
   d->cdTextValidator->fixup( s );
   m_cdTextData.setMessage( s );
   emit changed();
+}
+
+
+int K3bAudioDoc::supportedMediaTypes() const
+{
+    return K3bDevice::MEDIA_WRITABLE_CD;
 }
 
 #include "k3baudiodoc.moc"

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -210,11 +210,11 @@ bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
   return true;
 }
 
-  
+
 K3bDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength ) const
 {
   // !inaccurate datatrack size!
-  K3bDevice::Track dataTrack( 0, dataTrackLength > 0 ? dataTrackLength-1 : m_dataDoc->length()-1, 
+  K3bDevice::Track dataTrack( 0, dataTrackLength > 0 ? dataTrackLength-1 : m_dataDoc->length()-1,
 				K3bDevice::Track::DATA, dataMode );
   K3bDevice::Toc toc = audioDoc()->toToc();
   if( mixedType() == DATA_FIRST_TRACK ) {
@@ -230,7 +230,7 @@ K3bDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength
     dataTrack.setLastSector( dataTrack.lastSector() + toc.back().lastSector()+1 );
     dataTrack.setFirstSector( toc.back().lastSector()+1 );
     toc.append( dataTrack );
-    
+
     if( mixedType() == DATA_SECOND_SESSION ) {
       // fix the session numbers
       for( K3bDevice::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
@@ -241,8 +241,14 @@ K3bDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength
       }
     }
   }
-  
+
   return toc;
+}
+
+
+int K3bMixedDoc::supportedMediaTypes() const
+{
+    return K3bDevice::MEDIA_WRITABLE_CD;
 }
 
 #include "k3bmixeddoc.moc"

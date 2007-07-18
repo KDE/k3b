@@ -188,7 +188,9 @@ bool K3bApplication::processCmdLineArgs()
   }
 
   K3bDoc* doc = 0;
-  if( args->isSet( "datacd" ) ) {
+  if( args->isSet( "data" ) ||
+      args->isSet( "datacd" ) ||
+      args->isSet( "datadvd" )) {
     doc = m_mainWindow->slotNewDataDoc();
   }
   else if( args->isSet( "audiocd" ) ) {
@@ -200,14 +202,10 @@ bool K3bApplication::processCmdLineArgs()
   else if( args->isSet( "videocd" ) ) {
     doc = m_mainWindow->slotNewVcdDoc();
   }
-  else if( args->isSet( "emovixcd" ) ) {
+  else if( args->isSet( "emovix" ) ||
+           args->isSet( "emovixcd" ) ||
+           args->isSet( "emovixdvd" ) ) {
     doc = m_mainWindow->slotNewMovixDoc();
-  }
-  else if( args->isSet( "datadvd" ) ) {
-    doc = m_mainWindow->slotNewDvdDoc();
-  }
-  else if( args->isSet( "emovixdvd" ) ) {
-    doc = m_mainWindow->slotNewMovixDvdDoc();
   }
   else if( args->isSet( "videodvd" ) ) {
     doc = m_mainWindow->slotNewVideoDvdDoc();
@@ -253,25 +251,19 @@ bool K3bApplication::processCmdLineArgs()
 	m_mainWindow->slotWriteCdImage( url );
     }
   }
-  else if( args->isSet("copycd") ) {
+  else if( args->isSet("copy") ||
+           args->isSet("copycd") ||
+           args->isSet("copydvd")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->cdCopy( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
+    m_mainWindow->mediaCopy( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
   }
-  else if( args->isSet("copydvd") ) {
+  else if( args->isSet("erasecd") ||
+           args->isSet("formatdvd") ||
+           args->isSet("format")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->dvdCopy( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "copydvd" ) ) ) ) );
-  }
-  else if( args->isSet("erasecd") ) {
-    showTips = false;
-    dialogOpen = true;
-    m_mainWindow->blankCdrw( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
-  }
-  else if( args->isSet("formatdvd") ) {
-    showTips = false;
-    dialogOpen = true;
-    m_mainWindow->formatDvd( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "formatdvd" ) ) ) ) );
+    m_mainWindow->formatMedium( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
   }
 
   // no dialog used here

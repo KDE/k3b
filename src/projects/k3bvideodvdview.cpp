@@ -35,8 +35,6 @@ K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent, const ch
   : K3bView( doc, parent, name ),
     m_doc(doc)
 {
-  fillStatusDisplay()->showDvdSizes(true);
-
   // --- setup GUI ---------------------------------------------------
   QSplitter* mainSplitter = new QSplitter( this );
   m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );

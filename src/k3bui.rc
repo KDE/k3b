@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="k3b" version="9">
+<kpartgui name="k3b" version="12">
 <MenuBar>
   <Menu name="project"><text>&amp;Project</text>
   	<Action name="project_add_files" />
@@ -7,14 +7,8 @@
   </Menu>
 
   <Menu name="tools"><text>&amp;Tools</text>
-	<Action name="tools_copy_cd" />
-  	<Action name="tools_copy_dvd" />
-  	<Action name="tools_copy_media" />
-	<Separator />
-	<Action name="tools_blank_cdrw" />
-	<Action name="tools_format_dvd" />
+  	<Action name="tools_copy_medium" />
 	<Action name="tools_format_medium" />
-	<Separator />
 	<Action name="tools_write_cd_image" />
 	<Action name="tools_write_dvd_iso" />
 	<Separator />
@@ -56,10 +50,8 @@
 </ToolBar>
 
 <ToolBar name="toolsToolBar"><text>Tools</text>
-	<Action name="tools_copy_cd" />
-	<Action name="tools_copy_dvd" />
-	<Action name="tools_blank_cdrw" />
-	<Action name="tools_format_dvd" />
+	<Action name="tools_copy_media" />
+	<Action name="tools_format_medium" />
 </ToolBar>
 	
 <ToolBar name="quickDirSelector" fullWidth="true"><text>Quick Dir Selector</text>

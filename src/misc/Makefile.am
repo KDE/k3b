@@ -10,6 +10,5 @@ METASOURCES = AUTO
 
 noinst_LTLIBRARIES = libmisc.la
 
-libmisc_la_SOURCES = k3bdvdformattingdialog.cpp k3bcdcopydialog.cpp k3bdvdcopydialog.cpp \
-	k3bcdimagewritingdialog.cpp k3bisoimagewritingdialog.cpp k3bblankingdialog.cpp \
+libmisc_la_SOURCES = k3bcdimagewritingdialog.cpp k3bisoimagewritingdialog.cpp \
 	k3bmediacopydialog.cpp k3bmediaformattingdialog.cpp

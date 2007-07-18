@@ -281,7 +281,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
         if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
             x1Speed = 1385;
         }
-        else if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() & K3bDevice::MEDIA_BD_ALL ) {
+        else if ( K3bDevice::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
             x1Speed = 4496;
         }
 	int max = writerDevice()->maxWriteSpeed();

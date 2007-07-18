@@ -106,27 +106,17 @@ class K3bMainWindow : public KParts::DockMainWindow
   K3bDoc* slotNewMixedDoc();
   K3bDoc* slotNewVcdDoc();
   K3bDoc* slotNewMovixDoc();
-  K3bDoc* slotNewMovixDvdDoc();
-  K3bDoc* slotNewDvdDoc();
   K3bDoc* slotNewVideoDvdDoc();
   K3bDoc* slotContinueMultisession();
 
   void slotClearProject();
 
-  void blankCdrw( K3bDevice::Device* );
-  void slotBlankCdrw();
-  void formatDvd( K3bDevice::Device* );
-  void slotFormatDvd();
   void slotWriteCdImage();
   void slotWriteCdImage( const KURL& url );
   void slotWriteDvdIsoImage();
   void slotWriteDvdIsoImage( const KURL& url );
   void formatMedium( K3bDevice::Device* );
   void slotFormatMedium();
-  void cdCopy( K3bDevice::Device* );
-  void slotCdCopy();
-  void dvdCopy( K3bDevice::Device* );
-  void slotDvdCopy();
   void mediaCopy( K3bDevice::Device* );
   void slotMediaCopy();
   void cddaRip( K3bDevice::Device* );
@@ -281,8 +271,6 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileNewMixed;
   KAction* actionFileNewVcd;
   KAction* actionFileNewMovix;
-  KAction* actionFileNewMovixDvd;
-  KAction* actionFileNewDvd;
   KAction* actionFileNewVideoDvd;
   KAction* actionFileContinueMultisession;
   KAction* actionFileOpen;
@@ -295,12 +283,10 @@ class K3bMainWindow : public KParts::DockMainWindow
   KAction* actionFileQuit;
   KAction* actionSettingsConfigure;
   KAction* actionSettingsK3bSetup;
-  KAction* actionToolsBlankCdrw;
   KAction* actionToolsWriteCdImage;
   KAction* actionToolsCddaRip;
   KAction* actionToolsVideoDvdRip;
   KAction* actionToolsVideoCdRip;
-  KAction* actionCdCopy;
   KAction* actionProjectAddFiles;
   KToggleAction* actionViewStatusBar;
   KToggleAction* actionViewDirTreeView;

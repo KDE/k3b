@@ -41,8 +41,6 @@ namespace K3bDevice {
  * i.e. Video CDs cannot be verified.
  *
  * TAO written tracks have two run-out sectors that are not read.
- *
- * The VerificationJob will also reload the medium before starting.
  */
 class K3bVerificationJob : public K3bJob
 {

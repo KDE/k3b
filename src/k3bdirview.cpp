@@ -188,7 +188,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
   if( !d->contextMediaInfoRequested ||
       medium.diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
       medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
-    
+
     // show cd info
     m_viewStack->raiseWidget( m_infoView );
     m_infoView->reload( medium );
@@ -225,7 +225,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     }
     else if( r == KMessageBox::No ) {
       m_viewStack->raiseWidget( m_fileView );
-      static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotDvdCopy();
+      static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotMediaCopy();
     }
     else {
       m_movieView->reload( medium );
@@ -235,7 +235,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     return;
   }
 #endif
-  
+
   else if( medium.content() & K3bMedium::CONTENT_DATA ) {
     bool mount = true;
     if( medium.content() & K3bMedium::CONTENT_VIDEO_CD ) {
@@ -269,7 +269,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 	m_cdView->reload( medium );
       }
     }
-      
+
     if( mount )
       k3bappcore->appDeviceManager()->mountDisk( medium.device() );
   }

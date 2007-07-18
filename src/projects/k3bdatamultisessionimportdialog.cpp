@@ -104,10 +104,7 @@ void K3bDataMultisessionImportDialog::slotOk()
         }
 
         if( !d->doc ) {
-            if( k3bappcore->mediaCache()->diskInfo( dev ).isDvdMedia() )
-                d->doc = static_cast<K3bDataDoc*>( k3bappcore->k3bMainWindow()->slotNewDvdDoc() );
-            else
-                d->doc = static_cast<K3bDataDoc*>( k3bappcore->k3bMainWindow()->slotNewDataDoc() );
+            d->doc = static_cast<K3bDataDoc*>( k3bappcore->k3bMainWindow()->slotNewDataDoc() );
         }
 
         d->doc->setBurner( dev );

@@ -58,6 +58,11 @@ static const int DEFAULT_CD_SIZE_100 = 100*60*75;
 static const int DEFAULT_DVD_SIZE_4_4 = 2295104;
 static const int DEFAULT_DVD_SIZE_8_0 = 4173824;
 
+// FIXME: get the proper BD sizes
+static const int DEFAULT_BD_SIZE_25 = 13107200;
+static const int DEFAULT_BD_SIZE_50 = 26214400;
+
+
 class K3bFillStatusDisplayWidget::Private
 {
 public:
@@ -299,33 +304,34 @@ private:
 class K3bFillStatusDisplay::Private
 {
 public:
-  KActionCollection* actionCollection;
-  KRadioAction* actionShowMinutes;
-  KRadioAction* actionShowMegs;
-  KRadioAction* actionAuto;
-  KRadioAction* action74Min;
-  KRadioAction* action80Min;
-  KRadioAction* action100Min;
-  KRadioAction* actionDvd4_7GB;
-  KRadioAction* actionDvdDoubleLayer;
-  K3bRadioAction* actionCustomSize;
-  K3bRadioAction* actionDetermineSize;
-  KAction* actionSaveUserDefaults;
-  KAction* actionLoadUserDefaults;
+    KActionCollection* actionCollection;
+    KRadioAction* actionShowMinutes;
+    KRadioAction* actionShowMegs;
+    KRadioAction* actionAuto;
+    KRadioAction* action74Min;
+    KRadioAction* action80Min;
+    KRadioAction* action100Min;
+    KRadioAction* actionDvd4_7GB;
+    KRadioAction* actionDvdDoubleLayer;
+    KRadioAction* actionBD25;
+    KRadioAction* actionBD50;
 
-  KPopupMenu* popup;
-  KPopupMenu* dvdPopup;
+    K3bRadioAction* actionCustomSize;
+    K3bRadioAction* actionDetermineSize;
+    KAction* actionSaveUserDefaults;
+    KAction* actionLoadUserDefaults;
 
-  QToolButton* buttonMenu;
+    KPopupMenu* popup;
 
-  K3bFillStatusDisplayWidget* displayWidget;
+    QToolButton* buttonMenu;
 
-  bool showDvdSizes;
-  bool showTime;
+    K3bFillStatusDisplayWidget* displayWidget;
 
-  K3bDoc* doc;
+    bool showTime;
 
-  QTimer updateTimer;
+    K3bDoc* doc;
+
+    QTimer updateTimer;
 };
 
 
@@ -355,12 +361,12 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const 
 
   setupPopupMenu();
 
-  showDvdSizes( false );
-
   connect( d->doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
   connect( &d->updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
   connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
+
+  slotLoadUserDefaults();
 }
 
 K3bFillStatusDisplay::~K3bFillStatusDisplay()
@@ -376,7 +382,6 @@ void K3bFillStatusDisplay::setupPopupMenu()
 
   // we use a nother popup for the dvd sizes
   d->popup = new KPopupMenu( this, "popup" );
-  d->dvdPopup = new KPopupMenu( this, "dvdpopup" );
 
   d->actionShowMinutes = new KRadioAction( i18n("Minutes"), 0, this, SLOT(showTime()),
 					   d->actionCollection, "fillstatus_show_minutes" );
@@ -386,7 +391,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->actionShowMegs->setExclusiveGroup( "show_size_in" );
   d->actionShowMinutes->setExclusiveGroup( "show_size_in" );
 
-  d->actionAuto = new KRadioAction( i18n("Auto"), 0, this, SLOT(slotAutoSize()),
+  d->actionAuto = new KRadioAction( i18n("Automatic Size"), 0, this, SLOT(slotAutoSize()),
 				    d->actionCollection, "fillstatus_auto" );
   d->action74Min = new KRadioAction( i18n("%1 MB").arg(650), 0, this, SLOT(slot74Minutes()),
 				     d->actionCollection, "fillstatus_74minutes" );
@@ -399,6 +404,11 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB((int)(8.0*1024.0*1024.0)),
 					      0, this, SLOT(slotDvdDoubleLayer()),
 					      d->actionCollection, "fillstatus_dvd_double_layer" );
+  d->actionBD25 = new KRadioAction( KIO::convertSizeFromKB( 25*1024*1024 ), 0, this, SLOT( slotBD25() ),
+                                          d->actionCollection, "fillstatus_bd_25" );
+  d->actionBD50 = new KRadioAction( KIO::convertSizeFromKB( 50*1024*1024 ), 0, this, SLOT( slotBD50() ),
+                                          d->actionCollection, "fillstatus_bd_50" );
+
   d->actionCustomSize = new K3bRadioAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),
 					    d->actionCollection, "fillstatus_custom_size" );
   d->actionCustomSize->setAlwaysEmitActivated(true);
@@ -413,6 +423,8 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->action100Min->setExclusiveGroup( "cd_size" );
   d->actionDvd4_7GB->setExclusiveGroup( "cd_size" );
   d->actionDvdDoubleLayer->setExclusiveGroup( "cd_size" );
+  d->actionBD25->setExclusiveGroup( "cd_size" );
+  d->actionBD50->setExclusiveGroup( "cd_size" );
   d->actionCustomSize->setExclusiveGroup( "cd_size" );
   d->actionDetermineSize->setExclusiveGroup( "cd_size" );
 
@@ -430,27 +442,31 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->popup->insertTitle( i18n("Show Size In") );
   d->actionShowMinutes->plug( d->popup );
   d->actionShowMegs->plug( d->popup );
-  d->popup->insertTitle( i18n("CD Size") );
+  d->popup->insertSeparator();
   d->actionAuto->plug( d->popup );
-  d->action74Min->plug( d->popup );
-  d->action80Min->plug( d->popup );
-  d->action100Min->plug( d->popup );
+  if ( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_CD_ALL ) {
+      d->popup->insertTitle( i18n("CD Size") );
+      d->action74Min->plug( d->popup );
+      d->action80Min->plug( d->popup );
+      d->action100Min->plug( d->popup );
+  }
+  if ( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_DVD_ALL ) {
+      d->popup->insertTitle( i18n("DVD Size") );
+      dvdSizeInfoAction->plug( d->popup );
+      d->actionDvd4_7GB->plug( d->popup );
+      d->actionDvdDoubleLayer->plug( d->popup );
+  }
+  if ( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_BD_ALL ) {
+      d->popup->insertTitle( i18n("Blu-Ray Size") );
+      d->actionBD25->plug( d->popup );
+      d->actionBD50->plug( d->popup );
+  }
+  d->popup->insertSeparator();
   d->actionCustomSize->plug( d->popup );
   d->actionDetermineSize->plug( d->popup );
   d->popup->insertSeparator();
   d->actionLoadUserDefaults->plug( d->popup );
   d->actionSaveUserDefaults->plug( d->popup );
-
-  d->dvdPopup->insertTitle( i18n("DVD Size") );
-  dvdSizeInfoAction->plug( d->dvdPopup );
-  d->actionAuto->plug( d->dvdPopup );
-  d->actionDvd4_7GB->plug( d->dvdPopup );
-  d->actionDvdDoubleLayer->plug( d->dvdPopup );
-  d->actionCustomSize->plug( d->dvdPopup );
-  d->actionDetermineSize->plug( d->dvdPopup );
-  d->dvdPopup->insertSeparator();
-  d->actionLoadUserDefaults->plug( d->dvdPopup );
-  d->actionSaveUserDefaults->plug( d->dvdPopup );
 
   connect( d->displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
 }
@@ -478,13 +494,6 @@ void K3bFillStatusDisplay::showTime()
 
   d->showTime = true;
   d->displayWidget->setShowTime(true);
-}
-
-
-void K3bFillStatusDisplay::showDvdSizes( bool b )
-{
-  d->showDvdSizes = b;
-  slotLoadUserDefaults();
 }
 
 
@@ -524,6 +533,18 @@ void K3bFillStatusDisplay::slotDvdDoubleLayer()
 }
 
 
+void K3bFillStatusDisplay::slotBD25()
+{
+    d->displayWidget->setCdSize( DEFAULT_BD_SIZE_25 );
+}
+
+
+void K3bFillStatusDisplay::slotBD50()
+{
+    d->displayWidget->setCdSize( DEFAULT_BD_SIZE_50 );
+}
+
+
 void K3bFillStatusDisplay::slotWhy44()
 {
   QWhatsThis::display( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
@@ -542,14 +563,22 @@ void K3bFillStatusDisplay::slotCustomSize()
   QString mbS = i18n("mb");
   QString minS = i18n("min");
 
+  // we certainly do not have BD- or HD-DVD-only projects
+  QString defaultCustom;
+  if( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_CD_ALL ) {
+      defaultCustom = d->showTime ? QString("74") + minS : QString("650") + mbS;
+  }
+  else {
+      defaultCustom = QString("4%14%2").arg( KGlobal::locale()->decimalSymbol() ).arg( gbS );
+  }
+
   QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + "|" + mbS + "|" + minS + ")?" );
   bool ok;
   QString size = KInputDialog::getText( i18n("Custom Size"),
 					i18n("<p>Please specify the size of the media. Use suffixes <b>gb</b>,<b>mb</b>, "
 					     "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
 					     " respectively."),
-					d->showDvdSizes ? QString("4%14%2").arg(KGlobal::locale()->decimalSymbol()).arg(gbS) :
-					(d->showTime ? QString("74")+minS : QString("650")+mbS),
+                                        defaultCustom,
 					&ok, this, (const char*)0,
 					new QRegExpValidator( rx, this ) );
   if( ok ) {
@@ -561,7 +590,7 @@ void K3bFillStatusDisplay::slotCustomSize()
       double val = KGlobal::locale()->readNumber( valStr, &ok );
       if( ok ) {
 	QString s = rx.cap(2);
-	if( s == gbS || (s.isEmpty() && d->showDvdSizes) )
+	if( s == gbS )
 	  val *= 1024*512;
 	else if( s == mbS || (s.isEmpty() && !d->showTime) )
 	  val *= 512;
@@ -577,17 +606,14 @@ void K3bFillStatusDisplay::slotCustomSize()
 
 void K3bFillStatusDisplay::slotMenuButtonClicked()
 {
-  QSize size = d->showDvdSizes ? d->dvdPopup->sizeHint() : d->popup->sizeHint();
-  slotPopupMenu( d->buttonMenu->mapToGlobal(QPoint(d->buttonMenu->width(), 0)) +
-		 QPoint(-1*size.width(), -1*size.height()) );
+    QSize size = d->popup->sizeHint();
+    slotPopupMenu( d->buttonMenu->mapToGlobal(QPoint(d->buttonMenu->width(), 0)) +
+                   QPoint(-1*size.width(), -1*size.height()) );
 }
 
 
 void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 {
-  if( d->showDvdSizes )
-    d->dvdPopup->popup(p);
-  else
     d->popup->popup(p);
 }
 
@@ -595,7 +621,7 @@ void K3bFillStatusDisplay::slotPopupMenu( const QPoint& p )
 void K3bFillStatusDisplay::slotDetermineSize()
 {
   bool canceled = false;
-  K3bDevice::Device* dev = K3bMediaSelectionDialog::selectMedium( d->showDvdSizes ? K3bDevice::MEDIA_WRITABLE_DVD : K3bDevice::MEDIA_WRITABLE_CD,
+  K3bDevice::Device* dev = K3bMediaSelectionDialog::selectMedium( d->doc->supportedMediaTypes(),
 								  K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE,
 								  parentWidget(),
 								  QString::null, QString::null, &canceled );
@@ -627,29 +653,37 @@ void K3bFillStatusDisplay::slotLoadUserDefaults()
   d->actionShowMegs->setChecked( !d->showTime );
   d->actionShowMinutes->setChecked( d->showTime );
 
-
   long size = c->readNumEntry( "default media size", 0 );
 
   switch( size ) {
   case 0:
-    // automatic mode
-    d->actionAuto->setChecked( true );
-    break;
-  case 74:
-    d->action74Min->setChecked( true );
-    break;
-  case 80:
-    d->action80Min->setChecked( true );
-    break;
-  case 100:
-    d->action100Min->setChecked( true );
-    break;
-  case 510:
-    d->actionDvd4_7GB->setChecked( true );
-    break;
+      // automatic mode
+      d->actionAuto->setChecked( true );
+      break;
+  case DEFAULT_CD_SIZE_74:
+      d->action74Min->setChecked( true );
+      break;
+  case DEFAULT_CD_SIZE_80:
+      d->action80Min->setChecked( true );
+      break;
+  case DEFAULT_CD_SIZE_100:
+      d->action100Min->setChecked( true );
+      break;
+  case DEFAULT_DVD_SIZE_4_4:
+      d->actionDvd4_7GB->setChecked( true );
+      break;
+  case DEFAULT_DVD_SIZE_8_0:
+      d->actionDvdDoubleLayer->setChecked( true );
+      break;
+  case DEFAULT_BD_SIZE_25:
+      d->actionBD25->setChecked( true );
+      break;
+  case DEFAULT_BD_SIZE_50:
+      d->actionBD50->setChecked( true );
+      break;
   default:
-    d->actionCustomSize->setChecked( true );
-    break;
+      d->actionCustomSize->setChecked( true );
+      break;
   }
 
   if( size == 0 ) {
@@ -670,14 +704,8 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
     // we use that size
     //
 
-    // TODO: once we have only one data project we need to change this to handle both
-
     K3bDevice::Device* dev = 0;
-    QPtrList<K3bDevice::Device> devs;
-    if( d->showDvdSizes )
-      devs = k3bcore->deviceManager()->dvdWriter();
-    else
-      devs = k3bcore->deviceManager()->cdWriter();
+    QPtrList<K3bDevice::Device> devs = k3bcore->deviceManager()->burningDevices();
 
     for( QPtrListIterator<K3bDevice::Device> it( devs ); *it; ++it ) {
       const K3bMedium& medium = k3bappcore->mediaCache()->medium( *it );
@@ -685,7 +713,7 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
       if( ( medium.diskInfo().empty() ||
 	    medium.diskInfo().appendable() ||
 	    medium.diskInfo().rewritable() ) &&
-	  ( medium.diskInfo().isDvdMedia() == d->showDvdSizes ) &&
+	  ( medium.diskInfo().mediaType() & d->doc->supportedMediaTypes() ) &&
 	  d->doc->length() <= medium.diskInfo().capacity() ) {
 
 	// first usable medium
@@ -708,15 +736,34 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
       d->displayWidget->setCdSize( k3bappcore->mediaCache()->diskInfo( dev ).capacity().lba() );
     }
     else {
-      // default fallback
-      if( d->showDvdSizes ) {
-	if( d->doc->length().lba() > DEFAULT_DVD_SIZE_4_4 )
-	  d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_8_0 );
-	else
-	  d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_4_4 );
-      }
-      else
-	d->displayWidget->setCdSize( DEFAULT_CD_SIZE_80 );
+        bool haveDVD = !k3bcore->deviceManager()->dvdWriter().isEmpty();
+        bool haveBD = !k3bcore->deviceManager()->blueRayWriters().isEmpty();
+
+
+        // default fallback
+        // we do not have BD- or HD-DVD only projects
+        if( ( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_CD_ALL &&
+              d->doc->length().lba() <= DEFAULT_CD_SIZE_80 ) ||
+            !( d->doc->supportedMediaTypes() & ( K3bDevice::MEDIA_DVD_ALL|K3bDevice::MEDIA_BD_ALL ) ) ||
+            ( !haveDVD && !haveBD ) ) {
+            d->displayWidget->setCdSize( DEFAULT_CD_SIZE_80 );
+        }
+        else if ( haveDVD && (
+                      ( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_DVD_ALL &&
+                        d->doc->length().lba() <= DEFAULT_DVD_SIZE_8_0 ) ||
+                      !( d->doc->supportedMediaTypes() & K3bDevice::MEDIA_BD_ALL ) ||
+                      !haveBD ) ) {
+            if( d->doc->length().lba() > DEFAULT_DVD_SIZE_4_4 )
+                d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_8_0 );
+            else
+                d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_4_4 );
+        }
+        else if ( d->doc->length().lba() <= DEFAULT_BD_SIZE_25 ) {
+            d->displayWidget->setCdSize( DEFAULT_BD_SIZE_25 );
+        }
+        else {
+            d->displayWidget->setCdSize( DEFAULT_BD_SIZE_50 );
+        }
     }
   }
 }
@@ -729,7 +776,7 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
   c->setGroup( "default " + d->doc->typeString() + " settings" );
 
   c->writeEntry( "show minutes", d->showTime );
-  c->writeEntry( "default media size", d->actionAuto->isChecked() ? 0 : d->displayWidget->cdSize().totalFrames() );
+  c->writeEntry( "default media size", d->actionAuto->isChecked() ? 0 : d->displayWidget->cdSize().lba() );
 }
 
 

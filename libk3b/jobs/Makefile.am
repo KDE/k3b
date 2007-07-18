@@ -20,7 +20,7 @@ libjobs_la_SOURCES = k3bdatatrackreader.cpp k3breadcdreader.cpp \
 	k3baudiocuefilewritingjob.cpp k3bbinimagewritingjob.cpp \
 	k3biso9660imagewritingjob.cpp \
 	k3bdvdformattingjob.cpp k3bblankingjob.cpp k3bclonetocreader.cpp \
-	k3bverificationjob.cpp
+	k3bverificationjob.cpp k3bdvdbooktypejob.cpp
 
 include_HEADERS = k3bcdcopyjob.h k3bdvdcopyjob.h k3bclonejob.h \
 	k3baudiocuefilewritingjob.h k3bbinimagewritingjob.h \
@@ -34,7 +34,7 @@ libjobs_la_SOURCES = k3bdatatrackreader.cpp k3breadcdreader.cpp \
 	k3baudiocuefilewritingjob.cpp k3bbinimagewritingjob.cpp \
 	k3biso9660imagewritingjob.cpp \
 	k3bdvdformattingjob.cpp k3bblankingjob.cpp k3bclonetocreader.cpp \
-	k3bverificationjob.cpp
+	k3bverificationjob.cpp k3bdvdbooktypejob.cpp
 
 include_HEADERS = k3bcdcopyjob.h k3bdvdcopyjob.h k3bclonejob.h \
 	k3baudiocuefilewritingjob.h k3bbinimagewritingjob.h \

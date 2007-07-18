@@ -410,6 +410,25 @@ int K3b::writingAppFromString( const QString& s )
 }
 
 
+QString K3b::writingAppToString( int app )
+{
+    switch( app ) {
+    case CDRECORD:
+        return "cdrecord";
+    case CDRDAO:
+        return "cdrdao";
+    case DVDRECORD:
+        return "dvdrecord";
+    case GROWISOFS:
+        return "growisofs";
+    case DVD_RW_FORMAT:
+        return "dvd+rw-format";
+    default:
+        return "auto";
+    }
+}
+
+
 QString K3b::writingModeString( int mode )
 {
   if( mode == WRITING_MODE_AUTO )

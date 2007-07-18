@@ -5,10 +5,8 @@ AM_CPPFLAGS= 	-I$(srcdir)/../../libk3b/core \
 		-I$(srcdir)/../../libk3b/projects/datacd \
 		-I$(srcdir)/../../libk3b/projects/mixedcd \
 		-I$(srcdir)/../../libk3b/projects/movixcd \
-		-I$(srcdir)/../../libk3b/projects/datadvd \
 		-I$(srcdir)/../../libk3b/projects/videocd \
 		-I$(srcdir)/../../libk3b/projects/videodvd \
-		-I$(srcdir)/../../libk3b/projects/movixdvd \
 		-I$(srcdir)/../../libk3b/cddb \
 		-I$(srcdir)/../../libk3b/tools \
 		-I$(srcdir)/../../libk3b/plugin \
@@ -56,15 +54,11 @@ libprojects_la_SOURCES = k3baudioburndialog.cpp \
 			 k3bdataburndialog.cpp \
 			 k3bbootimagedialog.cpp \
 			 k3bbootimageview.cpp \
-			 k3bdvdburndialog.cpp \
-			 k3bdvdview.cpp \
 			 base_k3bmovixoptionswidget.ui \
 			 k3bmovixburndialog.cpp \
 			 k3bmovixlistview.cpp \
 			 k3bmovixoptionswidget.cpp \
 			 k3bmovixview.cpp \
-			 k3bmovixdvdburndialog.cpp \
-			 k3bmovixdvdview.cpp \
 			 k3bvideodvdburndialog.cpp \
 			 k3bvideodvdview.cpp \
 			 k3bvcdburndialog.cpp \

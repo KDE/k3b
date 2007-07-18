@@ -1,8 +1,8 @@
-AM_CPPFLAGS= -I$(srcdir)/../../src -I$(srcdir)/../core -I$(srcdir)/../plugin -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../tools -I$(srcdir)/datacd -I$(srcdir)/audiocd -I$(srcdir)/mixedcd -I$(srcdir)/movixcd -I$(srcdir)/movixdvd -I$(srcdir)/datadvd -I$(srcdir)/videocd -I$(srcdir)/videodvd $(all_includes)
+AM_CPPFLAGS= -I$(srcdir)/../../src -I$(srcdir)/../core -I$(srcdir)/../plugin -I$(srcdir)/../../libk3bdevice -I$(srcdir)/../tools -I$(srcdir)/datacd -I$(srcdir)/audiocd -I$(srcdir)/mixedcd -I$(srcdir)/movixcd -I$(srcdir)/videocd -I$(srcdir)/videodvd $(all_includes)
 
 noinst_LTLIBRARIES = libk3bproject.la
 
-libk3bproject_la_LIBADD = ./datacd/libdata.la ./datadvd/libdvd.la ./mixedcd/libmixed.la ./videocd/libvcd.la ./videodvd/libvideodvd.la ./movixcd/libmovix.la ./movixdvd/libmovixdvd.la ./audiocd/libaudio.la
+libk3bproject_la_LIBADD = ./datacd/libdata.la ./mixedcd/libmixed.la ./videocd/libvcd.la ./videodvd/libvideodvd.la ./movixcd/libmovix.la ./audiocd/libaudio.la
 
 libk3bproject_la_LDFLAGS = $(all_libraries)
 
@@ -27,6 +27,6 @@ include_HEADERS =          k3bdoc.h \
 			   k3bcuefileparser.h \
 			   k3bimagefilereader.h
 
-SUBDIRS = datacd audiocd mixedcd movixcd videocd datadvd movixdvd videodvd
+SUBDIRS = datacd audiocd mixedcd movixcd videocd videodvd
 
 METASOURCES = AUTO

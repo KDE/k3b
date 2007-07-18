@@ -349,7 +349,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	else {
 	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD+RW overwrite" << endl;
 	  K3b::unmount( d->device );
-	  K3bDevice::eject( d->device );
+	  d->device->eject();
 	  continueWaiting();
 	}
       }
@@ -419,7 +419,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	else {
 	  kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW overwrite." << endl;
 	  K3b::unmount( d->device );
-	  K3bDevice::eject( d->device );
+	  d->device->eject();
 	  continueWaiting();
 	}
       }
@@ -501,7 +501,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
       else {
 	kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no DVD-RW formatting." << endl;
 	K3b::unmount( d->device );
-	K3bDevice::eject( d->device );
+	d->device->eject();
 	continueWaiting();
       }
     }
@@ -574,7 +574,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     else {
       kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no CD-RW overwrite." << endl;
       K3b::unmount( d->device );
-      K3bDevice::eject( d->device );
+      d->device->eject();
       continueWaiting();
     }
   }

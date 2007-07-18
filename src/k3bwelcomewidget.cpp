@@ -48,7 +48,6 @@
 
 static const char* s_allActions[] = {
   "file_new_data",
-  "file_new_dvd",
   "file_continue_multisession",
   "_sep_",
   "file_new_audio",
@@ -59,13 +58,10 @@ static const char* s_allActions[] = {
   "file_new_video_dvd",
   "_sep_",
   "file_new_movix",
-  "file_new_movix_dvd",
   "_sep_",
-  "tools_copy_cd",
-  "tools_copy_dvd",
+  "tools_copy_medium",
   "_sep_",
-  "tools_blank_cdrw",
-  "tools_format_dvd",
+  "tools_format_medium",
   "_sep_",
   "tools_write_cd_image",
   "tools_write_dvd_iso",
@@ -367,10 +363,9 @@ void K3bWelcomeWidget::loadConfig( KConfigBase* c )
   QStringList sl = KConfigGroup( c, "Welcome Widget" ).readListEntry( "welcome_actions" );
 
   if( sl.isEmpty() ) {
-    sl.append( "file_new_audio" );
-    sl.append( "file_new_data" );
-    sl.append( "file_new_dvd" );
-    sl.append( "tools_copy_cd" );
+      sl.append( "file_new_data" );
+      sl.append( "file_new_audio" );
+      sl.append( "tools_copy_medium" );
   }
 
   QPtrList<KAction> actions;

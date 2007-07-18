@@ -68,8 +68,6 @@ class LIBK3B_EXPORT K3bDoc : public QObject
     MIXED, 
     VCD, 
     MOVIX,
-    MOVIX_DVD,
-    DVD,
     VIDEODVD 
   };
 
@@ -85,6 +83,12 @@ class LIBK3B_EXPORT K3bDoc : public QObject
    * \return A string representation of the document type.
    */
   virtual QString typeString() const = 0;
+
+  /**
+   * The media types that are supported by this project type.
+   * The default implementation returns all writable media types.
+   */
+  virtual int supportedMediaTypes() const;
 
   /** 
    * returns the view widget set with setView() or null if none has been set.

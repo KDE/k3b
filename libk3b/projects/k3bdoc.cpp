@@ -28,14 +28,6 @@
 #include <k3bglobals.h>
 #include <k3bdevice.h>
 #include <k3bmsf.h>
-#include <k3baudiodoc.h>
-#include <k3bdatadoc.h>
-#include <k3bvcddoc.h>
-#include <k3bmixeddoc.h>
-#include <k3bmovixdoc.h>
-#include <k3bmovixdvddoc.h>
-#include <k3bdvddoc.h>
-#include <k3bvideodvddoc.h>
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
 
@@ -65,7 +57,7 @@ void K3bDoc::setModified( bool m )
 {
   if( m != m_modified ) {
     m_modified = m;
-    if( m )    
+    if( m )
       emit changed();
   }
 }
@@ -217,5 +209,10 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
   return true;
 }
 
+
+int K3bDoc::supportedMediaTypes() const
+{
+    return K3bDevice::MEDIA_WRITABLE;
+}
 
 #include "k3bdoc.moc"

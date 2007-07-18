@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -25,7 +25,7 @@
 
 
 K3bVideoDvdDoc::K3bVideoDvdDoc( QObject* parent )
-  : K3bDvdDoc( parent )
+  : K3bDataDoc( parent )
 {
 }
 
@@ -66,6 +66,12 @@ bool K3bVideoDvdDoc::newDocument()
 K3bBurnJob* K3bVideoDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 {
   return new K3bVideoDvdJob( this, hdl, parent );
+}
+
+
+int K3bVideoDvdDoc::supportedMediaTypes() const
+{
+    return K3bDevice::MEDIA_WRITABLE_DVD;
 }
 
 //#include "k3bdvddoc.moc"

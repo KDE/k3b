@@ -78,8 +78,6 @@
 #include "k3bprojectburndialog.h"
 #include <k3bdatadoc.h>
 #include "k3bdataview.h"
-#include <k3bdvddoc.h>
-#include "k3bdvdview.h"
 #include <k3bvideodvddoc.h>
 #include "k3bvideodvdview.h"
 #include <k3bmixeddoc.h>
@@ -88,22 +86,16 @@
 #include "k3bvcdview.h"
 #include <k3bmovixdoc.h>
 #include "k3bmovixview.h"
-#include <k3bmovixdvddoc.h>
-#include "k3bmovixdvdview.h"
-#include "misc/k3bblankingdialog.h"
 #include "misc/k3bcdimagewritingdialog.h"
 #include "misc/k3bisoimagewritingdialog.h"
 #include <k3bexternalbinmanager.h>
 #include "k3bprojecttabwidget.h"
-#include "misc/k3bcdcopydialog.h"
 #include "k3btempdirselectionwidget.h"
 #include "k3bstatusbarmanager.h"
 #include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
 #include "k3bsidepanel.h"
 #include "k3bstdguiitems.h"
-#include "misc/k3bdvdformattingdialog.h"
-#include "misc/k3bdvdcopydialog.h"
 #include "misc/k3bmediacopydialog.h"
 #include "misc/k3bmediaformattingdialog.h"
 #include "k3bprojectmanager.h"
@@ -236,18 +228,14 @@ void K3bMainWindow::initActions()
   actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
   actionFileNewAudio = new KAction(i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
 			     actionCollection(), "file_new_audio");
-  actionFileNewData = new KAction(i18n("New Data &CD Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
+  actionFileNewData = new KAction(i18n("New &Data Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
 			    actionCollection(), "file_new_data");
   actionFileNewMixed = new KAction(i18n("New &Mixed Mode CD Project"), "mixedcd", 0, this, SLOT(slotNewMixedDoc()),
 				   actionCollection(), "file_new_mixed");
   actionFileNewVcd = new KAction(i18n("New &Video CD Project"), "videocd", 0, this, SLOT(slotNewVcdDoc()),
 				   actionCollection(), "file_new_vcd");
-  actionFileNewMovix = new KAction(i18n("New &eMovix CD Project"), "emovix", 0, this, SLOT(slotNewMovixDoc()),
+  actionFileNewMovix = new KAction(i18n("New &eMovix Project"), "emovix", 0, this, SLOT(slotNewMovixDoc()),
 				   actionCollection(), "file_new_movix");
-  actionFileNewMovixDvd = new KAction(i18n("New &eMovix DVD Project"), "emovix", 0, this, SLOT(slotNewMovixDvdDoc()),
-				      actionCollection(), "file_new_movix_dvd");
-  actionFileNewDvd = new KAction(i18n("New Data &DVD Project"), "datadvd", 0, this, SLOT(slotNewDvdDoc()),
-				 actionCollection(), "file_new_dvd");
   actionFileNewVideoDvd = new KAction(i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
 				      actionCollection(), "file_new_video_dvd");
   actionFileContinueMultisession = new KAction( i18n("Continue Multisession Project"), "datacd", 0, this, SLOT(slotContinueMultisession()),
@@ -255,18 +243,15 @@ void K3bMainWindow::initActions()
 
   actionFileNewMenu->setDelayed( false );
   actionFileNewMenu->insert( actionFileNewData );
-  actionFileNewMenu->insert( actionFileNewDvd );
   actionFileNewMenu->insert( actionFileContinueMultisession );
   actionFileNewMenu->insert( new KActionSeparator( this ) );
   actionFileNewMenu->insert( actionFileNewAudio );
-  actionFileNewMenu->insert( new KActionSeparator( this ) );
   actionFileNewMenu->insert( actionFileNewMixed );
   actionFileNewMenu->insert( new KActionSeparator( this ) );
   actionFileNewMenu->insert( actionFileNewVcd );
   actionFileNewMenu->insert( actionFileNewVideoDvd );
   actionFileNewMenu->insert( new KActionSeparator( this ) );
   actionFileNewMenu->insert( actionFileNewMovix );
-  actionFileNewMenu->insert( actionFileNewMovixDvd );
 
 
 
@@ -287,10 +272,6 @@ void K3bMainWindow::initActions()
   actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
 					       actionCollection(), "view_document_header");
 
-  actionToolsBlankCdrw = new KAction( i18n("&Erase CD-RW..."), "erasecd", 0, this, SLOT(slotBlankCdrw()),
-				      actionCollection(), "tools_blank_cdrw" );
-  KAction* actionToolsFormatDVD = new KAction( i18n("&Format DVD%1RW...").arg("±"), "formatdvd", 0, this,
-					       SLOT(slotFormatDvd()), actionCollection(), "tools_format_dvd" );
   KAction* actionToolsFormatMedium = new KAction( i18n("&Format/Erase rewritable disk..."), "formatdvd", 0, this,
                                                   SLOT(slotFormatMedium()), actionCollection(), "tools_format_medium" );
   actionToolsWriteCdImage = new KAction(i18n("&Burn CD Image..."), "burn_cdimage", 0, this, SLOT(slotWriteCdImage()),
@@ -298,14 +279,8 @@ void K3bMainWindow::initActions()
   KAction* actionToolsWriteDvdImage = new KAction(i18n("&Burn DVD ISO Image..."), "burn_dvdimage", 0, this, SLOT(slotWriteDvdIsoImage()),
 						 actionCollection(), "tools_write_dvd_iso" );
 
-  actionCdCopy = new KAction(i18n("&Copy CD..."), "cdcopy", 0, this, SLOT(slotCdCopy()),
-			     actionCollection(), "tools_copy_cd" );
-
-  KAction* actionToolsDvdCopy = new KAction(i18n("Copy &DVD..."), "dvdcopy", 0, this, SLOT(slotDvdCopy()),
-					    actionCollection(), "tools_copy_dvd" );
-
   KAction* actionToolsMediaCopy = new KAction(i18n("Copy &Medium..."), "cdcopy", 0, this, SLOT(slotMediaCopy()),
-					    actionCollection(), "tools_copy_media" );
+                                              actionCollection(), "tools_copy_medium" );
 
   actionToolsCddaRip = new KAction( i18n("Rip Audio CD..."), "cddarip", 0, this, SLOT(slotCddaRip()),
 				    actionCollection(), "tools_cdda_rip" );
@@ -329,19 +304,13 @@ void K3bMainWindow::initActions()
 #endif
 
   actionFileNewMenu->setToolTip(i18n("Creates a new project"));
-  actionFileNewData->setToolTip( i18n("Creates a new data CD project") );
+  actionFileNewData->setToolTip( i18n("Creates a new data project") );
   actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
-  actionFileNewMovixDvd->setToolTip( i18n("Creates a new eMovix DVD project") );
-  actionFileNewDvd->setToolTip( i18n("Creates a new data DVD project") );
-  actionFileNewMovix->setToolTip( i18n("Creates a new eMovix CD project") );
+  actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
   actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
-  actionToolsBlankCdrw->setToolTip( i18n("Open the CD-RW erasing dialog") );
-  actionToolsFormatDVD->setToolTip( i18n("Open the DVD%1RW formatting dialog").arg("±") );
   actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
-  actionCdCopy->setToolTip( i18n("Open the CD copy dialog") );
   actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to CD") );
   actionToolsWriteDvdImage->setToolTip( i18n("Write an Iso9660 image to DVD") );
-  actionToolsDvdCopy->setToolTip( i18n("Open the DVD copy dialog") );
   actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
   actionFileOpen->setToolTip(i18n("Opens an existing project"));
   actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
@@ -493,12 +462,6 @@ void K3bMainWindow::createClient( K3bDoc* doc )
     break;
   case K3bDoc::MOVIX:
     view = new K3bMovixView( static_cast<K3bMovixDoc*>(doc), m_documentTab );
-    break;
-  case K3bDoc::MOVIX_DVD:
-    view = new K3bMovixDvdView( static_cast<K3bMovixDvdDoc*>(doc), m_documentTab );
-    break;
-  case K3bDoc::DVD:
-    view = new K3bDvdView( static_cast<K3bDvdDoc*>(doc), m_documentTab );
     break;
   case K3bDoc::VIDEODVD:
     view = new K3bVideoDvdView( static_cast<K3bVideoDvdDoc*>(doc), m_documentTab );
@@ -1094,16 +1057,6 @@ K3bDoc* K3bMainWindow::slotNewDataDoc()
 }
 
 
-K3bDoc* K3bMainWindow::slotNewDvdDoc()
-{
-  slotStatusMsg(i18n("Creating new Data DVD Project."));
-
-  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::DVD );
-
-  return doc;
-}
-
-
 K3bDoc* K3bMainWindow::slotContinueMultisession()
 {
   return K3bDataMultisessionImportDialog::importSession( 0, this );
@@ -1141,19 +1094,9 @@ K3bDoc* K3bMainWindow::slotNewVcdDoc()
 
 K3bDoc* K3bMainWindow::slotNewMovixDoc()
 {
-  slotStatusMsg(i18n("Creating new eMovix CD Project."));
+  slotStatusMsg(i18n("Creating new eMovix Project."));
 
   K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::MOVIX );
-
-  return doc;
-}
-
-
-K3bDoc* K3bMainWindow::slotNewMovixDvdDoc()
-{
-  slotStatusMsg(i18n("Creating new eMovix DVD Project."));
-
-  K3bDoc* doc = k3bappcore->projectManager()->createProject( K3bDoc::MOVIX_DVD );
 
   return doc;
 }
@@ -1306,62 +1249,6 @@ void K3bMainWindow::slotK3bSetup()
 }
 
 
-void K3bMainWindow::blankCdrw( K3bDevice::Device* dev )
-{
-  K3bBlankingDialog dlg( this, "blankingdialog" );
-  dlg.setDevice( dev );
-  dlg.exec(false);
-}
-
-
-void K3bMainWindow::slotBlankCdrw()
-{
-  blankCdrw( 0 );
-}
-
-
-void K3bMainWindow::formatDvd( K3bDevice::Device* dev )
-{
-  K3bDvdFormattingDialog d( this );
-  d.setDevice( dev );
-  d.exec(false);
-}
-
-
-void K3bMainWindow::slotFormatDvd()
-{
-  formatDvd( 0 );
-}
-
-
-void K3bMainWindow::cdCopy( K3bDevice::Device* dev )
-{
-  K3bCdCopyDialog d( this );
-  d.setReadingDevice( dev );
-  d.exec(false);
-}
-
-
-void K3bMainWindow::slotCdCopy()
-{
-  cdCopy( 0 );
-}
-
-
-void K3bMainWindow::dvdCopy( K3bDevice::Device* dev )
-{
-  K3bDvdCopyDialog d( this );
-  d.setReadingDevice( dev );
-  d.exec(false);
-}
-
-
-void K3bMainWindow::slotDvdCopy()
-{
-  dvdCopy( 0 );
-}
-
-
 void K3bMainWindow::formatMedium( K3bDevice::Device* dev )
 {
   K3bMediaFormattingDialog d( this );
@@ -1378,9 +1265,9 @@ void K3bMainWindow::slotFormatMedium()
 
 void K3bMainWindow::mediaCopy( K3bDevice::Device* dev )
 {
-  K3bMediaCopyDialog d( this );
-  d.setReadingDevice( dev );
-  d.exec(false);
+    K3bMediaCopyDialog d( this );
+    d.setReadingDevice( dev );
+    d.exec(false);
 }
 
 

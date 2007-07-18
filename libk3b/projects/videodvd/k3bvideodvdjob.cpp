@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -31,7 +31,7 @@
 
 
 K3bVideoDvdJob::K3bVideoDvdJob( K3bVideoDvdDoc* doc, K3bJobHandler* jh, QObject* parent )
-  : K3bDvdJob( doc, jh, parent ),
+  : K3bDataJob( doc, jh, parent ),
     m_doc(doc)
 {
 }
@@ -45,34 +45,6 @@ K3bVideoDvdJob::~K3bVideoDvdJob()
 void K3bVideoDvdJob::prepareImager()
 {
   setImager( new K3bVideoDvdImager( m_doc, this ) );
-}
-
-
-bool K3bVideoDvdJob::prepareWriterJob()
-{
-  K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_doc->burner(), this, this );
-  
-  // these do only make sense with DVD-R(W)
-  writer->setSimulate( m_doc->dummy() );
-  writer->setBurnSpeed( m_doc->speed() );
-
-  // DAO seems to be the better default for Video DVD... !?
-  if( m_doc->writingMode() == K3b::DAO || m_doc->writingMode() == K3b::WRITING_MODE_AUTO )
-    writer->setWritingMode( K3b::DAO );
-
-  writer->setMultiSession( false );
-  writer->setCloseDvd( true );
-
-  if( m_doc->onTheFly() ) {
-    writer->setImageToWrite( QString::null );  // read from stdin
-    writer->setTrackSize( m_isoImager->size() );
-  }
-  else
-    writer->setImageToWrite( m_doc->tempDir() );
-
-  setWriterJob( writer );
-
-  return true;
 }
 
 
@@ -93,8 +65,8 @@ QString K3bVideoDvdJob::jobDescription() const
 QString K3bVideoDvdJob::jobDetails() const
 {
   return ( i18n("ISO9660/Udf Filesystem (Size: %1)").arg(KIO::convertSize( doc()->size() ))
-	   + ( m_doc->copies() > 1 
-	       ? i18n(" - %n copy", " - %n copies", m_doc->copies()) 
+	   + ( m_doc->copies() > 1
+	       ? i18n(" - %n copy", " - %n copies", m_doc->copies())
 	       : QString::null ) );
 }
 

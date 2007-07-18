@@ -259,7 +259,7 @@ void K3bProjectBurnDialog::prepareGui()
   mainLay->setSpacing( KDialog::spacingHint() );
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( mainWidget() );
-  m_writerSelectionWidget->setWantedMediumType( m_dvd ? K3bDevice::MEDIA_WRITABLE_DVD : K3bDevice::MEDIA_WRITABLE_CD );
+  m_writerSelectionWidget->setWantedMediumType( m_doc->supportedMediaTypes() );
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
 
   m_tabWidget = new QTabWidget( mainWidget() );
@@ -364,6 +364,8 @@ void K3bProjectBurnDialog::readSettings()
   m_writerSelectionWidget->setWriterDevice( doc()->burner() );
   m_writerSelectionWidget->setSpeed( doc()->speed() );
   m_writerSelectionWidget->setWritingApp( doc()->writingApp() );
+  // FIXME: problem: this does not take into account the changes made in the dialog like the writing mode
+  m_writerSelectionWidget->setWantedMediumType( doc()->supportedMediaTypes() );
   m_spinCopies->setValue( m_doc->copies() );
 }
 

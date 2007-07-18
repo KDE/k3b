@@ -891,4 +891,10 @@ bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
     return true;
 }
 
+
+int K3bVcdDoc::supportedMediaTypes() const
+{
+    return K3bDevice::MEDIA_WRITABLE_CD;
+}
+
 #include "k3bvcddoc.moc"

@@ -42,10 +42,12 @@ class K3bInterface : public DCOPObject
   /**
    * returns a DCOPRef to a K3bProjectInterface
    */
+  DCOPRef createDataProject();
   DCOPRef createDataCDProject();
   DCOPRef createAudioCDProject();
   DCOPRef createMixedCDProject();
   DCOPRef createVideoCDProject();
+  DCOPRef createMovixProject();
   DCOPRef createMovixCDProject();
   DCOPRef createDataDVDProject();
   DCOPRef createVideoDVDProject();
@@ -65,10 +67,13 @@ class K3bInterface : public DCOPObject
 
   QValueList<DCOPRef> projects();
 
+  void copyMedium();
   void copyCd();
   void copyDvd();
+  void copyMedium( const KURL& dev );
   void copyCd( const KURL& dev );
   void copyDvd( const KURL& dev );
+  void formatMedium();
   void eraseCdrw();
   void formatDvd();
   void burnCdImage( const KURL& url );

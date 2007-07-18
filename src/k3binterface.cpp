@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -37,10 +37,17 @@ K3bInterface::K3bInterface()
 {
 }
 
+DCOPRef K3bInterface::createDataProject()
+{
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
+}
+
 DCOPRef K3bInterface::createDataCDProject()
 {
-  return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
+    // backward compatibility
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
 }
 
 DCOPRef K3bInterface::createAudioCDProject()
@@ -61,16 +68,24 @@ DCOPRef K3bInterface::createVideoCDProject()
 		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::VCD ) )->objId() );
 }
 
+DCOPRef K3bInterface::createMovixProject()
+{
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
+}
+
 DCOPRef K3bInterface::createMovixCDProject()
 {
-  return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
+    // backward compatibility
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
 }
 
 DCOPRef K3bInterface::createDataDVDProject()
 {
-  return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DVD ) )->objId() );
+    // backward compatibility
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
 }
 
 DCOPRef K3bInterface::createVideoDVDProject()
@@ -81,8 +96,9 @@ DCOPRef K3bInterface::createVideoDVDProject()
 
 DCOPRef K3bInterface::createMovixDVDProject()
 {
-  return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX_DVD ) )->objId() );
+        // backward compatibility
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
 }
 
 DCOPRef K3bInterface::currentProject()
@@ -130,41 +146,62 @@ void K3bInterface::addUrl( const KURL& url )
 
 void K3bInterface::copyCd( const KURL& dev )
 {
-  m_main->cdCopy( K3b::urlToDevice( dev ) );
+    // backward compatibility
+    copyMedium( dev );
 }
 
 
 void K3bInterface::copyDvd( const KURL& dev )
 {
-  m_main->dvdCopy( K3b::urlToDevice( dev ) );
+    // backward compatibility
+    copyMedium( dev );
+}
+
+void K3bInterface::copyMedium( const KURL& dev )
+{
+    m_main->mediaCopy( K3b::urlToDevice( dev ) );
 }
 
 
 void K3bInterface::copyCd()
 {
-  // HACK since we want this method to return immediately
-  QTimer::singleShot( 0, m_main, SLOT(slotCdCopy()) );
+    // backward compatibility
+    copyMedium();
 }
 
 
 void K3bInterface::copyDvd()
 {
-  // HACK since we want this method to return immediately
-  QTimer::singleShot( 0, m_main, SLOT(slotDvdCopy()) );
+    // backward compatibility
+    copyMedium();
+}
+
+
+void K3bInterface::copyMedium()
+{
+    // HACK since we want this method to return immediately
+    QTimer::singleShot( 0, m_main, SLOT(slotMediaCopy()) );
 }
 
 
 void K3bInterface::eraseCdrw()
 {
-  // HACK since we want this method to return immediately
-  QTimer::singleShot( 0, m_main, SLOT(slotBlankCdrw()) );
+    // backward compatibility
+    formatMedium();
 }
 
 
 void K3bInterface::formatDvd()
 {
-  // HACK since we want this method to return immediately
-  QTimer::singleShot( 0, m_main, SLOT(slotFormatDvd()) );
+    // backward compatibility
+    formatMedium();
+}
+
+
+void K3bInterface::formatMedium()
+{
+    // HACK since we want this method to return immediately
+    QTimer::singleShot( 0, m_main, SLOT(slotFormatMedium()) );
 }
 
 

@@ -17,15 +17,15 @@
 #ifndef _K3B_VIDEO_DVD_JOB_H_
 #define _K3B_VIDEO_DVD_JOB_H_
 
-#include <k3bdvdjob.h>
+#include <k3bdatajob.h>
 
 
 class K3bVideoDvdDoc;
 
 /**
- * This class heavily depends on K3bDvdJob and uses some of it's internals.
+ * This class heavily depends on K3bDataJob and uses some of it's internals.
  */
-class K3bVideoDvdJob : public K3bDvdJob
+class K3bVideoDvdJob : public K3bDataJob
 {
   Q_OBJECT
 
@@ -37,7 +37,6 @@ class K3bVideoDvdJob : public K3bDvdJob
   virtual QString jobDetails() const;
 
  private:
-  bool prepareWriterJob();
   void prepareImager();
 
   K3bVideoDvdDoc* m_doc;

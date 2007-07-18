@@ -33,6 +33,7 @@
 #include <k3btrack.h>
 #include <k3bmultichoicedialog.h>
 #include <k3bvalidators.h>
+#include <k3bglobalsettings.h>
 
 #include <qdir.h>
 #include <qstring.h>
@@ -1367,6 +1368,45 @@ QValueList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) 
 int K3bDataDoc::importedSession() const
 {
   return ( m_oldSession.isEmpty() ? -1 : m_importedSession );
+}
+
+
+int K3bDataDoc::supportedMediaTypes() const
+{
+    int m = K3bDevice::MEDIA_WRITABLE;
+
+    // we go bottom-up and remove those media types that are too small
+    // (very very rough for now, we need the media size handling in the
+    // empty disk waiter)
+    if ( size() >= 1024ULL*1024ULL*1024ULL ) { // 1 GB -> no CD
+        m ^= K3bDevice::MEDIA_WRITABLE_CD;
+    }
+    // specal case: writing modes TAO and RAW apply only to CD
+    else if ( writingMode() == K3b::TAO || writingMode() == K3b::RAW ) {
+        m = K3bDevice::MEDIA_WRITABLE_CD;
+    }
+
+    // 4.3 GB -> no SL-DVD
+    // in case overburn is enabled we allow some made up max size
+    // before we force a DL medium
+    if( size() > 4700372992LL ) {
+        if( !k3bcore->globalSettings()->overburn() ||
+            size() > 4900000000LL ) {
+            m ^= K3bDevice::MEDIA_WRITABLE_DVD_SL;
+        }
+    }
+
+    // 9 GB -> no DVD at all
+    if ( size() >= 9ULL*1024ULL*1024ULL*1024ULL ) {
+        m ^= K3bDevice::MEDIA_WRITABLE_DVD;
+    }
+    // special case: the user selected a specific writing mode
+    else if( writingMode() == K3b::WRITING_MODE_RES_OVWR ) {
+        // we treat DVD+R(W) as restricted overwrite media
+        m = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R;
+    }
+
+    return m;
 }
 
 #include "k3bdatadoc.moc"

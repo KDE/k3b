@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -31,7 +31,7 @@ QCString K3bProjectInterface::newIfaceName()
 {
   static int s_docIFNumber = 0;
   QCString name;
-  name.setNum( s_docIFNumber++ ); 
+  name.setNum( s_docIFNumber++ );
   name.prepend("K3bProject-");
   return name;
 }
@@ -73,11 +73,11 @@ bool K3bProjectInterface::directBurn()
       dlg = new K3bJobProgressDialog( m_doc->view() );
     else
       dlg = new K3bBurnProgressDialog( m_doc->view() );
-    
+
     K3bJob* job = m_doc->newBurnJob( dlg );
-    
+
     dlg->startJob( job );
-    
+
     delete job;
     delete dlg;
 
@@ -119,17 +119,13 @@ QString K3bProjectInterface::projectType() const
   case K3bDoc::AUDIO:
     return "audiocd";
   case K3bDoc::DATA:
-    return "datacd";
+    return "data";
   case K3bDoc::MIXED:
     return "mixedcd";
   case K3bDoc::VCD:
     return "videocd";
   case K3bDoc::MOVIX:
-    return "emovixcd";
-  case K3bDoc::MOVIX_DVD:
-    return "emovixdvd";
-  case K3bDoc::DVD:
-    return "datadvd";
+    return "emovix";
   case K3bDoc::VIDEODVD:
     return "videodvd";
   default:

@@ -16,17 +16,19 @@
 #ifndef _K3B_VIDEODVD_DOC_H_
 #define _K3B_VIDEODVD_DOC_H_
 
-#include <k3bdvddoc.h>
+#include <k3bdatadoc.h>
 #include "k3b_export.h"
 class KConfig;
 
-class LIBK3B_EXPORT K3bVideoDvdDoc : public K3bDvdDoc
+class LIBK3B_EXPORT K3bVideoDvdDoc : public K3bDataDoc
 {
  public:
   K3bVideoDvdDoc( QObject* parent = 0 );
   virtual ~K3bVideoDvdDoc();
 
   virtual int type() const { return VIDEODVD; }
+
+  int supportedMediaTypes() const;
 
   virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
 

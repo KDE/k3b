@@ -85,7 +85,6 @@ class K3bDataJob : public K3bBurnJob
   void slotMultiSessionParamterSetupDone( bool );
 		
  protected:
-  virtual void prepareData();
   virtual bool prepareWriterJob();
   virtual void prepareImager();
   virtual void cleanup();
@@ -96,10 +95,14 @@ class K3bDataJob : public K3bBurnJob
   K3bIsoImager* m_isoImager;
 
  private:
+  bool analyseBurnMedium( int medium );
   bool startWriterJob();
   bool startOnTheFlyWriting();
   void prepareWriting();
   void connectImager();
+  bool setupCdrecordJob();
+  bool setupCdrdaoJob();
+  bool setupGrowisofsJob();
 
   class Private;
   Private* d;

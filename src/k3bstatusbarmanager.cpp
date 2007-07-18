@@ -199,7 +199,7 @@ void K3bStatusBarManager::slotUpdateProjectStats()
 
     case K3bDoc::DATA: {
       K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
-      m_labelProjectInfo->setText( i18n("Data CD (%1)").arg(dataDocStats(dataDoc)) );
+      m_labelProjectInfo->setText( i18n("Data Project (%1)").arg(dataDocStats(dataDoc)) );
       break;
     }
 
@@ -219,22 +219,10 @@ void K3bStatusBarManager::slotUpdateProjectStats()
 
     case K3bDoc::MOVIX: {
       K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
-      m_labelProjectInfo->setText( i18n("eMovix CD (%1)").arg(dataDocStats(dataDoc)) );
+      m_labelProjectInfo->setText( i18n("eMovix Project (%1)").arg(dataDocStats(dataDoc)) );
       break;
     }
 
-    case K3bDoc::MOVIX_DVD: {
-      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
-      m_labelProjectInfo->setText( i18n("eMovix DVD (%1)").arg(dataDocStats(dataDoc)) );
-      break;
-    }
-
-    case K3bDoc::DVD: {
-      K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
-      m_labelProjectInfo->setText( i18n("Data DVD (%1)").arg(dataDocStats(dataDoc)) );
-      break;
-    }
-      
     case K3bDoc::VIDEODVD: {
       K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
       m_labelProjectInfo->setText( i18n("Video DVD (%1)").arg(dataDocStats(dataDoc)) );

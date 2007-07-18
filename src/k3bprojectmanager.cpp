@@ -28,12 +28,10 @@
 #include <k3baudiodatasourceiterator.h>
 #include <k3baudiocdtracksource.h>
 #include <k3bdatadoc.h>
-#include <k3bdvddoc.h>
 #include <k3bvideodvddoc.h>
 #include <k3bmixeddoc.h>
 #include <k3bvcddoc.h>
 #include <k3bmovixdoc.h>
-#include <k3bmovixdvddoc.h>
 #include <k3bglobals.h>
 #include <k3bisooptions.h>
 #include <k3bdevicemanager.h>
@@ -66,8 +64,6 @@ public:
   int mixedUntitledCount;
   int vcdUntitledCount;
   int movixUntitledCount;
-  int movixDvdUntitledCount;
-  int dvdUntitledCount;
   int videoDvdUntitledCount;
 };
 
@@ -85,8 +81,6 @@ K3bProjectManager::K3bProjectManager( QObject* parent, const char* name )
   d->mixedUntitledCount = 0;
   d->vcdUntitledCount = 0;
   d->movixUntitledCount = 0;
-  d->movixDvdUntitledCount = 0;
-  d->dvdUntitledCount = 0;
   d->videoDvdUntitledCount = 0;
 }
 
@@ -106,7 +100,7 @@ void K3bProjectManager::addProject( K3bDoc* doc )
 {
   if( !d->projects.containsRef( doc ) ) {
     kdDebug() << "(K3bProjectManager) adding doc " << doc->URL().path() << endl;
-    
+
     d->projects.append(doc);
 
     connect( doc, SIGNAL(changed(K3bDoc*)),
@@ -205,7 +199,7 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
 
   case K3bDoc::DATA: {
     doc = new K3bDataDoc( this );
-    fileName = i18n("DataCD%1").arg(d->dataUntitledCount++);
+    fileName = i18n("Data%1").arg(d->dataUntitledCount++);
     break;
   }
 
@@ -223,22 +217,10 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
 
   case K3bDoc::MOVIX: {
     doc = new K3bMovixDoc( this );
-    fileName=i18n("eMovixCD%1").arg(d->movixUntitledCount++);
+    fileName=i18n("eMovix%1").arg(d->movixUntitledCount++);
     break;
   }
 
-  case K3bDoc::MOVIX_DVD: {
-    doc = new K3bMovixDvdDoc( this );
-    fileName=i18n("eMovixDVD%1").arg(d->movixDvdUntitledCount++);
-    break;
-  }
-
-  case K3bDoc::DVD: {
-    doc = new K3bDvdDoc( this );
-    fileName = i18n("DataDVD%1").arg(d->dvdUntitledCount++);
-    break;
-  }
-      
   case K3bDoc::VIDEODVD: {
     doc = new K3bVideoDvdDoc( this );
     fileName = i18n("VideoDVD%1").arg(d->videoDvdUntitledCount++);
@@ -251,7 +233,7 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
   doc->setURL(url);
 
   doc->newDocument();
-  
+
   loadDefaults( doc );
 
   return doc;
@@ -281,7 +263,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
   // earlier K3b versions loaded the saved settings
   // so that is what we do as a default
-  int i = KConfigGroup( c, "General Options" ).readNumEntry( "action dialog startup settings", 
+  int i = KConfigGroup( c, "General Options" ).readNumEntry( "action dialog startup settings",
 							     K3bInteractionDialog::LOAD_SAVED_SETTINGS );
   if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
     return; // the default k3b settings are the ones everyone starts with
@@ -324,8 +306,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     break;
   }
 
-  case K3bDoc::MOVIX:
-  case K3bDoc::MOVIX_DVD: {
+  case K3bDoc::MOVIX: {
     K3bMovixDoc* movixDoc = static_cast<K3bMovixDoc*>(doc);
 
     movixDoc->setSubtitleFontset( c->readEntry("subtitle_fontset") );
@@ -346,8 +327,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // fallthrough
   }
 
-  case K3bDoc::DATA:
-  case K3bDoc::DVD: {
+  case K3bDoc::DATA: {
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
 
     dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
@@ -359,7 +339,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
       dataDoc->setDataMode( K3b::MODE2 );
     else
       dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
-    
+
     dataDoc->setVerifyData( c->readBoolEntry( "verify data", false ) );
 
     QString s = c->readEntry( "multisession mode" );
@@ -434,9 +414,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
   if( doc->type() == K3bDoc::DATA ||
       doc->type() == K3bDoc::MOVIX ||
-      doc->type() == K3bDoc::MOVIX_DVD ||
-      doc->type() == K3bDoc::VIDEODVD ||
-      doc->type() == K3bDoc::DVD ) {
+      doc->type() == K3bDoc::VIDEODVD ) {
     if( static_cast<K3bDataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
       static_cast<K3bDataDoc*>(doc)->setVolumeID( doc->URL().fileName() );
   }
@@ -452,7 +430,7 @@ K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
   QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
   if( it == d->projectInterfaceMap.end() ) {
     K3bProjectInterface* dcopInterface = 0;
-    if( doc->type() == K3bDoc::DATA || doc->type() == K3bDoc::DVD )
+    if( doc->type() == K3bDoc::DATA )
       dcopInterface = new K3bDataProjectInterface( static_cast<K3bDataDoc*>(doc) );
     else if( doc->type() == K3bDoc::AUDIO )
       dcopInterface = new K3bAudioProjectInterface( static_cast<K3bAudioDoc*>(doc) );
@@ -548,9 +526,9 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
   else if( xmlDoc.doctype().name() == "k3b_movix_project" )
     type = K3bDoc::MOVIX;
   else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
-    type = K3bDoc::MOVIX_DVD;
+    type = K3bDoc::MOVIX; // backward compatibility
   else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
-    type = K3bDoc::DVD;
+      type = K3bDoc::DATA; // backward compatibility
   else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
     type = K3bDoc::VIDEODVD;
   else {
@@ -607,10 +585,10 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
     else {
       // open the document inside the store
       store->open( "maindata.xml" );
-      
+
       // save the data in the document
       QDomDocument xmlDoc( "k3b_" + doc->typeString() + "_project" );
-      
+
       xmlDoc.appendChild( xmlDoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
       QDomElement docElem = xmlDoc.createElement( "k3b_" + doc->typeString() + "_project" );
       xmlDoc.appendChild( docElem );
@@ -620,14 +598,14 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
 	dev.open( IO_WriteOnly );
 	QTextStream xmlStream( &dev );
 	xmlDoc.save( xmlStream, 0 );
-	
+
 	doc->setURL( url );
 	doc->setModified( false );
       }
-      
+
       // close the document inside the store
       store->close();
-      
+
       // remove the store (destructor writes the store to disk)
       delete store;
 

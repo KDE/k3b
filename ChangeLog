@@ -4,8 +4,9 @@
  * Use proper toolbars instead of the toolboxes -> nicer layouting with different styles
  * Merged CD and DVD copy dialogs
  * Merged CD-RW erasing and DVD formatting dialogs
+ * Merged Data CD and Data DVD projects into one plain data project with Blu-Ray support
+ * Merged eMovix CD and eMovix DVD projects
  * Removed CD copy option "prefere CD-Text". K3b will now ask individually.
- * No reload before verification and between writing sessions (CD copy + Mixed Mode CD) anymore
    (there is no need to do this if no mounting is involved.)
  * Allow importing of arbitrary sessions into a data project, thus continuing other than the
    last session.

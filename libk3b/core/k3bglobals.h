@@ -63,6 +63,7 @@ namespace K3b
   };
 
   LIBK3B_EXPORT int writingAppFromString( const QString& );
+  LIBK3B_EXPORT QString writingAppToString( int );
 
   /**
    * DATA_MODE_AUTO - let K3b determine the best mode

@@ -126,12 +126,7 @@ void K3bCdrecordWriter::setClone( bool b )
 
 void K3bCdrecordWriter::setWritingMode( int mode )
 {
-  if( mode == K3b::DAO ||
-      mode == K3b::TAO ||
-      mode == K3b::RAW )
     m_writingMode = mode;
-  else
-    kdError() << "(K3bCdrecordWriter) wrong writing mode: " << mode << endl;
 }
 
 
@@ -196,6 +191,10 @@ void K3bCdrecordWriter::prepareProcess()
       if( m_cdrecordBinObject->hasFeature( "tao" ) )
 	*m_process << "-tao";
     }
+  }
+  else if ( m_writingMode == K3b::WRITING_MODE_INCR_SEQ ||
+            m_writingMode == K3b::WRITING_MODE_RES_OVWR ) { // FIXME: is this true? Can cdrecord even use this mode?
+    *m_process << "-tao";
   }
   else if( m_cdrecordBinObject->hasFeature( "tao" ) )
     *m_process << "-tao";
@@ -342,6 +341,7 @@ void K3bCdrecordWriter::start()
     jobFinished(false);
   }
   else {
+      // FIXME: these messages should also take DVD into account.
     if( simulate() ) {
       emit newTask( i18n("Simulating") );
       emit infoMessage( i18n("Starting %1 simulation at %2x speed...")

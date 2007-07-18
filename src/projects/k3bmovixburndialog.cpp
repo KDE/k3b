@@ -18,6 +18,8 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixprogram.h"
 #include "k3bmovixoptionswidget.h"
+#include "../k3bapplication.h"
+#include "../k3bmediacache.h"
 
 #include <k3bdataimagesettingswidget.h>
 #include <k3bexternalbinmanager.h>
@@ -51,7 +53,7 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
 
   m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
-  setTitle( i18n("eMovix CD Project"),
+  setTitle( i18n("eMovix Project"),
 	    i18n("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size())) );
 
   m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
@@ -256,7 +258,9 @@ void K3bMovixBurnDialog::toggleAll()
   else
     m_checkVerify->setEnabled(true);
 
-  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
+  // we can only select the data mode for CD media
+  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() ||
+                                 !K3bDevice::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
   m_checkStartMultiSesssion->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 

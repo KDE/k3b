@@ -113,9 +113,9 @@ void K3bMovixJob::slotDataJobFinished( bool success )
 QString K3bMovixJob::jobDescription() const
 {
   if( m_doc->isoOptions().volumeID().isEmpty() )
-    return i18n("Writing eMovix CD");
+    return i18n("Writing eMovix Project");
   else
-    return i18n("Writing eMovix CD (%1)").arg(m_doc->isoOptions().volumeID());
+    return i18n("Writing eMovix Project (%1)").arg(m_doc->isoOptions().volumeID());
 }
 
 
