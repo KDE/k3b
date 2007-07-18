@@ -510,6 +510,9 @@ void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
 {
   kdDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )" << endl;
+  if ( m_playerItemAnimator->item() == m_trackItemMap[track] ) {
+      m_playerItemAnimator->stop();
+  }
   delete m_trackItemMap[track];
   m_trackItemMap.erase(track);
 }

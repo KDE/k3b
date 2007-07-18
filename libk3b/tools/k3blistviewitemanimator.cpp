@@ -42,6 +42,12 @@ K3bListViewItemAnimator::~K3bListViewItemAnimator()
 }
 
 
+QListViewItem* K3bListViewItemAnimator::item() const
+{
+    return m_item;
+}
+
+
 void K3bListViewItemAnimator::init()
 {
   m_item = 0;
