@@ -153,7 +153,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  QGroupBox* groupGeneral = new QGroupBox( 2, Qt::Vertical, i18n("General"), advancedTab ); 
+  QGroupBox* groupGeneral = new QGroupBox( 2, Qt::Vertical, i18n("General"), advancedTab );
   groupGeneral->setInsideSpacing( spacingHint() );
   groupGeneral->setInsideMargin( marginHint() );
   QHBox* box = new QHBox( groupGeneral );
@@ -192,7 +192,7 @@ K3bDvdCopyDialog::K3bDvdCopyDialog( QWidget* parent, const char* name, bool moda
   // //////////////////////////////////////////////////////////////////////////
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
-  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)),
 	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -268,7 +268,7 @@ void K3bDvdCopyDialog::slotStartClicked()
   job->setIgnoreReadErrors( m_checkIgnoreReadErrors->isChecked() );
   job->setReadRetries( m_spinRetries->value() );
   job->setVerifyData( m_checkVerifyData->isChecked() );
-  
+
   if( !exitLoopOnHide() )
     hide();
 
@@ -363,8 +363,8 @@ void K3bDvdCopyDialog::toggleAll()
   K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
   if( dev ) {
     // select the proper writing modes
-    // if writing and reading devices are the same we cannot use 
-    // K3bWritingModeWidget::determineSupportedModesFromMedium since the inserted medium is not the one we 
+    // if writing and reading devices are the same we cannot use
+    // K3bWritingModeWidget::determineSupportedModesFromMedium since the inserted medium is not the one we
     // will be using for burning. In that case we go the old fashioned way.
     if( dev == m_comboSourceDevice->selectedDevice() ) {
       int modes = 0;
@@ -391,7 +391,7 @@ void K3bDvdCopyDialog::toggleAll()
     }
   }
 
-  
+
 
   m_writingModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
   m_writerSelectionWidget->setDisabled( m_checkOnlyCreateImage->isChecked() );
@@ -400,8 +400,8 @@ void K3bDvdCopyDialog::toggleAll()
   m_checkDeleteImages->setDisabled( m_checkOnlyCreateImage->isChecked() || !m_checkCacheImage->isChecked() );
   m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
   m_checkVerifyData->setDisabled( m_checkOnlyCreateImage->isChecked() || m_checkSimulate->isChecked() );
-  
-  setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() && 
+
+  setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() &&
 		    (dev || m_checkOnlyCreateImage->isChecked()) );
 }
 
@@ -419,7 +419,7 @@ void K3bDvdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 
   m_tempDirSelectionWidget->setNeededSize( neededSize() );
 
-  m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + medium.volumeId().lower() + ".iso" );
+  m_tempDirSelectionWidget->setDefaultImageFileName( medium.volumeId().lower() + ".iso" );
 
   toggleAll();
 }

@@ -62,6 +62,13 @@ class K3bTempDirSelectionWidget : public QGroupBox
   void setNeededSize( KIO::filesize_t bytes );
 
   /**
+   * In file selection mode if the user enters a directory name it will
+   * automatically be expended to this filename.
+   * Default is k3b_image.iso
+   */
+  void setDefaultImageFileName( const QString& name );
+
+  /**
    * saves the current path as the global default tempd dir.
    */
   void saveConfig();
@@ -72,8 +79,11 @@ class K3bTempDirSelectionWidget : public QGroupBox
  private slots:
   void slotUpdateFreeTempSpace();
   void slotTempDirButtonPressed( KURLRequester* );
+  void slotFixTempPath();
 
  private:
+  void fixTempPath( bool forceNewImageName );
+
   QLabel* m_imageFileLabel;
   QLabel* m_labelCdSize;
   QLabel* m_labelFreeSpace;
@@ -83,6 +93,8 @@ class K3bTempDirSelectionWidget : public QGroupBox
   unsigned long m_requestedSize;
 
   int m_mode;
+
+  QString m_defaultImageFileName;
 };
 
 #endif

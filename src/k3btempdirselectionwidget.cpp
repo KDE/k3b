@@ -36,11 +36,13 @@
 #include <kurlrequester.h>
 #include <kio/global.h>
 #include <kconfig.h>
+#include <klineedit.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
   : QGroupBox( 4, Qt::Vertical, parent, name ),
-    m_labelCdSize(0)
+    m_labelCdSize(0),
+    m_defaultImageFileName( "k3b_image.iso" )
 {
   layout()->setSpacing( KDialog::spacingHint() );
   layout()->setMargin( KDialog::marginHint() );
@@ -61,6 +63,8 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 	   this, SLOT(slotTempDirButtonPressed(KURLRequester*)) );
   connect( m_editDirectory, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(slotUpdateFreeTempSpace()) );
+  connect( m_editDirectory->lineEdit(), SIGNAL(lostFocus()),
+           this, SLOT(slotFixTempPath()) );
 
   // choose a default
   setSelectionMode( DIR );
@@ -93,7 +97,7 @@ unsigned long K3bTempDirSelectionWidget::freeTempSpace() const
 
   unsigned long size;
   K3b::kbFreeOnFs( path, size, m_freeTempSpace );
-  
+
   return m_freeTempSpace;
 }
 
@@ -230,6 +234,44 @@ void K3bTempDirSelectionWidget::readConfig( KConfigBase* c )
 void K3bTempDirSelectionWidget::saveConfig( KConfigBase* c )
 {
   c->writePathEntry( "image path", tempPath() );
+}
+
+
+void K3bTempDirSelectionWidget::setDefaultImageFileName( const QString& name )
+{
+    if ( !name.isEmpty() ) {
+        bool changeImageName = false;
+        if ( selectionMode() == FILE ) {
+            if ( plainTempPath().section( '/', -1 ) == m_defaultImageFileName ) {
+                changeImageName = true;
+            }
+        }
+
+        m_defaultImageFileName = name;
+        if ( !m_defaultImageFileName.contains( '.' ) ) {
+            m_defaultImageFileName += ".iso";
+        }
+        fixTempPath( changeImageName );
+    }
+}
+
+
+void K3bTempDirSelectionWidget::slotFixTempPath()
+{
+    fixTempPath( false );
+}
+
+
+void K3bTempDirSelectionWidget::fixTempPath( bool forceNewImageName )
+{
+    // if in file selection mode and no image file is specified or
+    // forceNewImageName is true set the default image file name
+    if ( selectionMode() == FILE ) {
+        if ( forceNewImageName ||
+             QFileInfo( plainTempPath() ).isDir() ) {
+            setTempPath( tempDirectory() + m_defaultImageFileName );
+        }
+    }
 }
 
 #include "k3btempdirselectionwidget.moc"

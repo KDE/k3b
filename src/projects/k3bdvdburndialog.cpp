@@ -69,15 +69,16 @@ K3bDvdBurnDialog::K3bDvdBurnDialog( K3bDvdDoc* doc, QWidget *parent, const char 
 
   m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE );
 
-  QString path = m_doc->tempDir();
-  if( path.isEmpty() ) {
-    path = K3b::defaultTempPath();
-    if( m_doc->isoOptions().volumeID().isEmpty() )
-      path.append( "image.iso" );
-    else
-      path.append( m_doc->isoOptions().volumeID() + ".iso" );
+  QString path = doc->tempDir();
+  if( !path.isEmpty() ) {
+      m_tempDirSelectionWidget->setTempPath( path );
   }
-  m_tempDirSelectionWidget->setTempPath( path );
+  if( !doc->isoOptions().volumeID().isEmpty() ) {
+      m_tempDirSelectionWidget->setDefaultImageFileName( doc->isoOptions().volumeID() + ".iso" );
+  }
+
+  connect( m_imageSettingsWidget->m_editVolumeName, SIGNAL(textChanged(const QString&)),
+           m_tempDirSelectionWidget, SLOT(setDefaultImageFileName(const QString&)) );
 }
 
 
@@ -144,7 +145,7 @@ void K3bDvdBurnDialog::readSettings()
   m_imageSettingsWidget->load( m_doc->isoOptions() );
 
   // for now we do not support dual layer multisession (growisofs does not handle layer jump yet)
-  // in case overburn is enabled we allow some made up max size 
+  // in case overburn is enabled we allow some made up max size
   // before we force a DL medium
   if( doc()->size() > 4700372992LL &&
       ( !k3bcore->globalSettings()->overburn() ||

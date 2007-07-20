@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kstandarddirs.h>
-#include <kmessagebox.h> 
+#include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -159,7 +159,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  m_groupAdvancedDataOptions = new QGroupBox( 3, Qt::Vertical, i18n("Data"), advancedTab, "data_options" ); 
+  m_groupAdvancedDataOptions = new QGroupBox( 3, Qt::Vertical, i18n("Data"), advancedTab, "data_options" );
   m_groupAdvancedDataOptions->setInsideSpacing( spacingHint() );
   m_groupAdvancedDataOptions->setInsideMargin( marginHint() );
   QHBox* box = new QHBox( m_groupAdvancedDataOptions );
@@ -169,7 +169,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkIgnoreDataReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedDataOptions );
   m_checkNoCorrection = new QCheckBox( i18n("No error correction"), m_groupAdvancedDataOptions );
 
-  m_groupAdvancedAudioOptions = new QGroupBox( 5, Qt::Vertical, i18n("Audio"), advancedTab, "audio_options" ); 
+  m_groupAdvancedAudioOptions = new QGroupBox( 5, Qt::Vertical, i18n("Audio"), advancedTab, "audio_options" );
   m_groupAdvancedAudioOptions->setInsideSpacing( spacingHint() );
   m_groupAdvancedAudioOptions->setInsideMargin( marginHint() );
   box = new QHBox( m_groupAdvancedAudioOptions );
@@ -185,7 +185,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   m_checkPrefereCdText = new QCheckBox( i18n("Prefer CD-Text"), m_groupAdvancedAudioOptions );
 
   advancedTabGrid->addWidget( m_groupAdvancedDataOptions, 0, 1 );
-  advancedTabGrid->addWidget( m_groupAdvancedAudioOptions, 0, 0 );  
+  advancedTabGrid->addWidget( m_groupAdvancedAudioOptions, 0, 0 );
 
   tabWidget->addTab( advancedTab, i18n("&Advanced") );
 
@@ -196,10 +196,10 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
 
 
   connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
-  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+  connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)),
 	   this, SLOT(slotSourceMediumChanged(K3bDevice::Device*)) );
   connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)), 
+  connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
 	   m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -226,7 +226,7 @@ K3bCdCopyDialog::K3bCdCopyDialog( QWidget *parent, const char *name, bool modal 
   QWhatsThis::add( m_checkIgnoreDataReadErrors, i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
 						     "source CD/DVD it will be replaced with zeros on the resulting copy.") );
 
-  QWhatsThis::add( m_comboCopyMode, 
+  QWhatsThis::add( m_comboCopyMode,
 		   "<p><b>" + i18n("Normal Copy") + "</b>"
 		   + i18n("<p>This is the normal copy mode recommended for most CD types. "
 			  "It allows copying Audio CDs, multi and single session Data CDs, and "
@@ -300,7 +300,7 @@ void K3bCdCopyDialog::slotStartClicked()
 	  != KMessageBox::Continue )
 	return;
     }
-    
+
     if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
       if( KMessageBox::warningContinueCancel( this,
 				     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
@@ -308,7 +308,7 @@ void K3bCdCopyDialog::slotStartClicked()
 	  != KMessageBox::Continue )
 	return;
     }
-    
+
     K3bCloneJob* job = new K3bCloneJob( dlg, this );
 
     job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
@@ -326,7 +326,7 @@ void K3bCdCopyDialog::slotStartClicked()
   }
   else {
     K3bCdCopyJob* job = new K3bCdCopyJob( dlg, this );
-    
+
     job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
     job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
     job->setSpeed( m_writerSelectionWidget->writerSpeed() );
@@ -383,27 +383,27 @@ void K3bCdCopyDialog::slotToggleAll()
     // cdrecord does not support cloning on-the-fly
     m_checkCacheImage->setChecked(true);
     m_checkCacheImage->setEnabled(false);
-    
+
     m_writingModeWidget->setSupportedModes( K3b::RAW );
   }
   else {
     m_writingModeWidget->setSupportedModes( K3b::TAO|K3b::DAO|K3b::RAW );
   }
 
-  
-  
+
+
   static_cast<QWidget*>( child( "audio_options" ) )->setDisabled( m_comboCopyMode->currentItem() == 1 );
-  
+
   m_checkIgnoreDataReadErrors->setDisabled( m_comboCopyMode->currentItem() == 1 );
-  
+
   m_groupAdvancedAudioOptions->setEnabled( k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() ).content() & K3bMedium::CONTENT_AUDIO &&
 					   m_comboCopyMode->currentItem() == 0 );
-  
+
   m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
   m_tempDirSelectionWidget->setNeededSize( neededSize() );
-  
-  setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() && 
+
+  setButtonEnabled( START_BUTTON, m_comboSourceDevice->selectedDevice() &&
 		    (dev || m_checkOnlyCreateImage->isChecked()) );
 }
 
@@ -418,9 +418,8 @@ void K3bCdCopyDialog::slotSourceMediumChanged( K3bDevice::Device* dev )
 
   if( k3bappcore->mediaCache()->toc( dev ).contentType() == K3bDevice::DATA ) {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
-    m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() 
-					   + medium.volumeId().lower() 
-					   + ( medium.toc().count() == 1 ? QString(".iso") : QString::null ) );
+    m_tempDirSelectionWidget->setDefaultImageFileName( medium.volumeId().lower()
+                                                       + ( medium.toc().count() == 1 ? QString(".iso") : QString::null ) );
   }
   else {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );
