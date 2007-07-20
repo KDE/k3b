@@ -699,9 +699,12 @@ void K3bAudioJob::cleanupAfterError()
 
 void K3bAudioJob::removeBufferFiles()
 {
-  emit infoMessage( i18n("Removing temporary files."), INFO );
+    if ( !m_doc->onTheFly() ) {
+        emit infoMessage( i18n("Removing temporary files."), INFO );
+    }
 
-  m_tempData->cleanup();
+    // removes buffer images and temp toc or inf files
+    m_tempData->cleanup();
 }
 
 

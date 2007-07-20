@@ -1095,13 +1095,16 @@ void K3bMixedJob::cleanupAfterError()
 
 void K3bMixedJob::removeBufferFiles()
 {
-  emit infoMessage( i18n("Removing buffer files."), INFO );
+    if ( !m_doc->onTheFly() ) {
+        emit infoMessage( i18n("Removing buffer files."), INFO );
+    }
 
-  if( QFile::exists( m_isoImageFilePath ) )
-      if( !QFile::remove( m_isoImageFilePath ) )
-	emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFilePath), ERROR );
+    if( QFile::exists( m_isoImageFilePath ) )
+        if( !QFile::remove( m_isoImageFilePath ) )
+            emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFilePath), ERROR );
 
-  m_tempData->cleanup();
+    // removes buffer images and temp toc or inf files
+    m_tempData->cleanup();
 }
 
 
