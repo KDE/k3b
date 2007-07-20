@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -126,12 +126,12 @@ void K3bDataTrackReader::WorkThread::run()
     // In case of an encrypted VideoDVD we read with libdvdcss which takes care of decrypting the vobs
     //
     if( m_device->copyrightProtectionSystemType() > 0 ) {
-	
+
       // close the device for libdvdcss
       m_device->close();
-	
+
       kdDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss." << endl;
-	
+
       // open the libdvdcss stuff
       if( !m_libcss )
 	m_libcss = K3bLibDvdCss::create();
@@ -140,7 +140,7 @@ void K3bDataTrackReader::WorkThread::run()
 	emitFinished(false);
 	return;
       }
-	
+
       if( !m_libcss->open(m_device) ) {
 	emitInfoMessage( i18n("Could not open device %1").arg(m_device->blockDeviceName()), K3bJob::ERROR );
 	emitFinished(false);
@@ -184,7 +184,7 @@ void K3bDataTrackReader::WorkThread::run()
   }
 
   emitInfoMessage( i18n("Reading with sector size %1.").arg(m_usedSectorSize), K3bJob::INFO );
-  emitDebuggingOutput( "K3bDataTrackReader", 
+  emitDebuggingOutput( "K3bDataTrackReader",
 		       QString("reading sectors %1 to %2 with sector size %3. Length: %4 sectors, %5 bytes.")
 		       .arg( m_firstSector.lba() )
 		       .arg( m_lastSector.lba() )
@@ -197,7 +197,7 @@ void K3bDataTrackReader::WorkThread::run()
     file.setName( m_imagePath );
     if( !file.open( IO_WriteOnly ) ) {
       m_device->close();
-      if( m_useLibdvdcss )	
+      if( m_useLibdvdcss )
 	m_libcss->close();
       emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(m_imagePath), K3bJob::ERROR );
       emitFinished( false );
@@ -226,7 +226,7 @@ void K3bDataTrackReader::WorkThread::run()
 	      << s_bufferSizeSectors << " too high." << endl;
     s_bufferSizeSectors--;
   }
-  kdDebug() << "(K3bDataTrackReader) determine max read sectors: " 
+  kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
 	    << s_bufferSizeSectors << " is max." << endl;
 
   //    s_bufferSizeSectors = K3bDevice::determineMaxReadingBufferSize( m_device, m_firstSector );
@@ -255,12 +255,12 @@ void K3bDataTrackReader::WorkThread::run()
 
     int maxReadSectors = QMIN( bufferLen/m_usedSectorSize, m_lastSector.lba()-currentSector.lba()+1 );
 
-    int readSectors = read( buffer, 
-			    currentSector.lba(), 
+    int readSectors = read( buffer,
+			    currentSector.lba(),
 			    maxReadSectors );
     if( readSectors < 0 ) {
       if( !retryRead( buffer,
-		      currentSector.lba(), 
+		      currentSector.lba(),
 		      maxReadSectors ) ) {
 	readError = true;
 	break;
@@ -275,9 +275,9 @@ void K3bDataTrackReader::WorkThread::run()
 
     if( m_fd != -1 ) {
       if( ::write( m_fd, reinterpret_cast<void*>(buffer), readBytes ) != readBytes ) {
-	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to fd " << m_fd 
+	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to fd " << m_fd
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
-	emitDebuggingOutput( "K3bDataTrackReader", 
+	emitDebuggingOutput( "K3bDataTrackReader",
 			     QString("Error while writing to fd %1. Current sector is %2.")
 			     .arg(m_fd).arg(currentSector.lba()-m_firstSector.lba()) );
 	writeError = true;
@@ -288,7 +288,7 @@ void K3bDataTrackReader::WorkThread::run()
       if( file.writeBlock( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
 	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to file " << m_imagePath
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
-	emitDebuggingOutput( "K3bDataTrackReader", 
+	emitDebuggingOutput( "K3bDataTrackReader",
 			     QString("Error while writing to file %1. Current sector is %2.")
 			     .arg(m_imagePath).arg(currentSector.lba()-m_firstSector.lba()) );
 	writeError = true;
@@ -298,7 +298,7 @@ void K3bDataTrackReader::WorkThread::run()
 
     currentSector += readSectors;
 
-    int percent = 100 * (currentSector.lba() - m_firstSector.lba() + 1 ) / 
+    int percent = 100 * (currentSector.lba() - m_firstSector.lba() + 1 ) /
       (m_lastSector.lba() - m_firstSector.lba() + 1 );
 
     if( percent > lastPercent ) {
@@ -329,7 +329,7 @@ void K3bDataTrackReader::WorkThread::run()
   m_device->close();
   delete [] buffer;
 
-  emitDebuggingOutput( "K3bDataTrackReader", 
+  emitDebuggingOutput( "K3bDataTrackReader",
 		       QString("Read a total of %1 sectors (%2 bytes)")
 		       .arg(totalReadSectors.lba())
 		       .arg((Q_UINT64)totalReadSectors.lba()*(Q_UINT64)m_usedSectorSize) );
@@ -360,7 +360,7 @@ int K3bDataTrackReader::WorkThread::read( unsigned char* buffer, unsigned long s
     if( m_usedSectorSize == 2048 )
       success = m_device->read10( buffer, len*2048, sector, len );
     else
-      success = m_device->readCd( buffer, 
+      success = m_device->readCd( buffer,
 				  len*m_usedSectorSize,
 				  0,     // all sector types
 				  false, // no dap
@@ -391,10 +391,9 @@ bool K3bDataTrackReader::WorkThread::retryRead( unsigned char* buffer, unsigned 
 
   int sectorsRead = -1;
   bool success = true;
-  int i = 0;
   for( unsigned long sector = startSector; sector < startSector+len; ++sector ) {
     int retry = m_retries;
-    while( !m_canceled && retry && (sectorsRead = read( &buffer[i], sector, 1 )) < 0 )
+    while( !m_canceled && retry && (sectorsRead = read( &buffer[( sector - startSector ) * m_usedSectorSize], sector, 1 )) < 0 )
       --retry;
 
     success = ( sectorsRead > 0 );
@@ -417,8 +416,6 @@ bool K3bDataTrackReader::WorkThread::retryRead( unsigned char* buffer, unsigned 
 	break;
       }
     }
-
-    ++i;
   }
 
   return success;
@@ -431,7 +428,7 @@ bool K3bDataTrackReader::WorkThread::setErrorRecovery( K3bDevice::Device* dev, i
   unsigned int dataLen = 0;
   if( !dev->modeSense( &data, dataLen, 0x01 ) )
     return false;
-    
+
   // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
   if( dataLen < 8+8 ) {
     kdDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen << endl;
