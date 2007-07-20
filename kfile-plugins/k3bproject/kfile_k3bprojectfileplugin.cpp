@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader,v 1.3 2005/01/19 13:03:46 trueg Exp $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -83,9 +83,9 @@ bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     else if( xmlDoc.doctype().name() == "k3b_movix_project" )
       type = K3bDoc::MOVIX;
     else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
-      type = K3bDoc::MOVIX_DVD;
+        type = K3bDoc::MOVIX;
     else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
-      type = K3bDoc::DVD;
+      type = K3bDoc::DATA;
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
       type = K3bDoc::VIDEODVD;
     else {
@@ -96,28 +96,22 @@ bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     QString stringType;
     switch( type ) {
     case K3bDoc::AUDIO:
-      stringType = i18n("Audio CD");
+      stringType = i18n("Audio CD project");
       break;
     case K3bDoc::DATA:
-      stringType = i18n("Data CD");
+      stringType = i18n("Data project");
       break;
     case K3bDoc::MIXED:
-      stringType = i18n("Mixed Mode CD");
+      stringType = i18n("Mixed Mode CD project");
       break;
     case K3bDoc::VCD:
-      stringType = i18n("Video CD");
+      stringType = i18n("Video CD project");
       break;
     case K3bDoc::MOVIX:
-      stringType = i18n("eMovix CD");
-      break;
-    case K3bDoc::MOVIX_DVD:
-      stringType = i18n("eMovix DVD");
-      break;
-    case K3bDoc::DVD:
-      stringType = i18n("Data DVD");
+      stringType = i18n("eMovix project");
       break;
     case K3bDoc::VIDEODVD:
-      stringType = i18n("Video DVD");
+      stringType = i18n("Video DVD project");
       break;
     }
 
