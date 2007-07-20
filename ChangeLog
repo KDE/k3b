@@ -7,6 +7,7 @@
  * Added desktop actions to handle empty media with K3b.
  * Fixed read retry when reading data tracks (Bug 147778)
  * K3b's dialogs now honor the global button layout setting (Bug 147799)
+ * Do not crash on mp3 files without tags if compiled with taglib support (Bug 142651)
 
 1.0.2
 =====
