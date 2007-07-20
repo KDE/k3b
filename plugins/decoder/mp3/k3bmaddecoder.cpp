@@ -107,6 +107,7 @@ QString K3bMadDecoder::metaInfo( MetaDataField f )
 #ifdef HAVE_TAGLIB
   TagLib::MPEG::File file( QFile::encodeName( filename() ).data() );
 
+  if ( file.tag() ) {
   switch( f ) {
   case META_TITLE:
     return TStringToQString( file.tag()->title() );
@@ -116,6 +117,10 @@ QString K3bMadDecoder::metaInfo( MetaDataField f )
     return TStringToQString( file.tag()->comment() );
   default:
     return QString::null;
+  }
+  }
+  else {
+      return QString::null;
   }
 
 #else
