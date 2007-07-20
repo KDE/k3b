@@ -5,6 +5,8 @@
    medium before reload (Bugs 147297, 147328, 147420, 147698).
  * Do not crash when the currently playing audio project item is removed (Bug 147548).
  * Added desktop actions to handle empty media with K3b.
+ * Fixed read retry when reading data tracks (Bug 147778)
+ * K3b's dialogs now honor the global button layout setting (Bug 147799)
 
 1.0.2
 =====
