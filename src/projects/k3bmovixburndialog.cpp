@@ -72,15 +72,17 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   m_optionGroupLayout->addItem( spacer );
 
+  m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
   QString path = m_doc->tempDir();
-  if( path.isEmpty() ) {
-    path = K3b::defaultTempPath();
-    if( doc->isoOptions().volumeID().isEmpty() )
-      path.append( "image.iso" );
-    else
-      path.append( doc->isoOptions().volumeID() + ".iso" );
+  if( !path.isEmpty() ) {
+      m_tempDirSelectionWidget->setTempPath( path );
   }
-  m_tempDirSelectionWidget->setTempPath( path );
+  if( !m_doc->isoOptions().volumeID().isEmpty() ) {
+      m_tempDirSelectionWidget->setDefaultImageFileName( m_doc->isoOptions().volumeID() + ".iso" );
+  }
+
+  connect( m_imageSettingsWidget->m_editVolumeName, SIGNAL(textChanged(const QString&)),
+           m_tempDirSelectionWidget, SLOT(setDefaultImageFileName(const QString&)) );
 }
 
 
