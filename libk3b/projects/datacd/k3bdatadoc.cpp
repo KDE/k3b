@@ -86,21 +86,11 @@ K3bDataDoc::~K3bDataDoc()
 
 bool K3bDataDoc::newDocument()
 {
-  clearImportedSession();
+  clear();
+  if ( !m_root )
+      m_root = new K3bRootItem( this );
 
-  m_bootCataloge = 0;
-  m_oldSessionSize = 0;
   m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
-  m_importedSession = -1;
-
-  if( m_root ) {
-    while( m_root->children().getFirst() )
-      removeItem( m_root->children().getFirst() );
-  }
-  else
-    m_root = new K3bRootItem( this );
-
-  m_sizeHandler->clear();
 
   m_multisessionMode = AUTO;
   m_dataMode = K3b::DATA_MODE_AUTO;
@@ -108,6 +98,20 @@ bool K3bDataDoc::newDocument()
   m_isoOptions = K3bIsoOptions();
 
   return K3bDoc::newDocument();
+}
+
+
+void K3bDataDoc::clear()
+{
+  clearImportedSession();
+  m_importedSession = -1;
+  m_oldSessionSize = 0;
+  m_bootCataloge = 0;
+  if( m_root ) {
+    while( m_root->children().getFirst() )
+      removeItem( m_root->children().getFirst() );
+  }
+  m_sizeHandler->clear();
 }
 
 

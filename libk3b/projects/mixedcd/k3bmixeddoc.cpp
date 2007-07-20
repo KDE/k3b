@@ -58,6 +58,13 @@ bool K3bMixedDoc::newDocument()
 }
 
 
+void K3bMixedDoc::clear()
+{
+    m_dataDoc->clear();
+    m_audioDoc->clear();
+}
+
+
 QString K3bMixedDoc::name() const
 {
   return m_dataDoc->name();

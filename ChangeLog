@@ -10,6 +10,7 @@
    (there is no need to do this if no mounting is involved.)
  * Allow importing of arbitrary sessions into a data project, thus continuing other than the
    last session.
+ * "Clear" project" now only clears the added data but leaves the settings as they were (bug 147838)
 
 1.0.1
 =====

@@ -95,19 +95,24 @@ K3bAudioDoc::~K3bAudioDoc()
 
 bool K3bAudioDoc::newDocument()
 {
+    clear();
+    m_normalize = false;
+    m_hideFirstTrack = false;
+    m_cdText = false;
+    m_cdTextData.clear();
+    m_audioRippingParanoiaMode = 0;
+    m_audioRippingRetries = 5;
+    m_audioRippingIgnoreReadErrors = true;
+
+    return K3bDoc::newDocument();
+}
+
+
+void K3bAudioDoc::clear()
+{
   // delete all tracks
   while( m_firstTrack )
     delete m_firstTrack->take();
-
-  m_normalize = false;
-  m_hideFirstTrack = false;
-  m_cdText = false;
-  m_cdTextData.clear();
-  m_audioRippingParanoiaMode = 0;
-  m_audioRippingRetries = 5;
-  m_audioRippingIgnoreReadErrors = true;
-
-  return K3bDoc::newDocument();
 }
 
 

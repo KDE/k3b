@@ -1456,8 +1456,7 @@ void K3bMainWindow::slotClearProject()
 				    i18n("Clear Project"),
 				    i18n("Clear"),
 				    "clear_current_project_dontAskAgain" ) == KMessageBox::Continue ) {
-      doc->newDocument();
-      k3bappcore->projectManager()->loadDefaults( doc );
+      doc->clear();
     }
   }
 }

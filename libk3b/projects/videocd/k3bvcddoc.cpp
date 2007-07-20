@@ -2,6 +2,7 @@
 *
 * $Id$
 * Copyright (C) 2003-2005 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -78,14 +79,20 @@ K3bVcdDoc::~K3bVcdDoc()
 
 bool K3bVcdDoc::newDocument()
 {
-    if ( m_tracks )
-        while ( m_tracks->first() )
-            removeTrack( m_tracks->first() );
-    else
+    clear();
+    if ( !m_tracks )
         m_tracks = new QPtrList<K3bVcdTrack>;
     m_tracks->setAutoDelete( false );
 
     return K3bDoc::newDocument();
+}
+
+
+void K3bVcdDoc::clear()
+{
+    if ( m_tracks )
+        while ( m_tracks->first() )
+            removeTrack( m_tracks->first() );
 }
 
 

@@ -43,6 +43,7 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
   int supportedMediaTypes() const;
 
   bool newDocument();
+  void clear();
 
   void setModified( bool m = true );
   bool isModified() const;

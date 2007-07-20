@@ -114,8 +114,14 @@ class LIBK3B_EXPORT K3bDoc : public QObject
   /**
    * Subclasses should call this when reimplementing.
    * Sets some defaults.
+   * FIXME: this method is completely useless. Just do it all in the constructor
    */
   virtual bool newDocument();
+
+  /**
+   * Clear project, i.e. remove all data that has ben added
+   */
+  virtual void clear() = 0;
 
   /**
    * Load a project from an xml stream.

@@ -63,6 +63,8 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
 	
   bool newDocument();
 
+  void clear();
+
   int supportedMediaTypes() const;
 
   bool hideFirstTrack() const { return m_hideFirstTrack; }

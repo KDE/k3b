@@ -95,6 +95,8 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   K3bRootItem* root() const { return m_root; }
 
   virtual bool newDocument();
+  virtual void clear();
+
   virtual KIO::filesize_t size() const;
 
   /**

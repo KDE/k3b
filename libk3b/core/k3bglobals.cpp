@@ -642,6 +642,17 @@ bool K3b::mount( K3bDevice::Device* dev )
     p.start( KProcess::Block );
     return !p.exitStatus();
   }
+
+  // and the most simple one
+  QString mountBin = K3b::findExe( "mount" );
+  if( !mountBin.isEmpty() ) {
+    KProcess p;
+    p << mountBin;
+    p << mntDev;
+    p.start( KProcess::Block );
+    return !p.exitStatus();
+  }
+
   return false;
 }
 
