@@ -90,8 +90,6 @@ bool K3bDvdJob::prepareWriterJob()
     writer->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
   }
 
-  writer->setForceNoEject( true );
-
   setWriterJob( writer );
 
   return true;

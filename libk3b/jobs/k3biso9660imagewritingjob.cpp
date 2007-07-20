@@ -352,8 +352,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
       // read from stdin
       writer->addArgument( QString("-tsize=%1s").arg( K3b::imageFilesize( m_imagePath )/2048 ) )->addArgument( "-" );
 
-      writer->setForceNoEject( m_verifyData );
-
       m_writer = writer;
     }
     else {
@@ -394,8 +392,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       writer->setTocFile( m_tocFile->name() );
 
-      writer->setForceNoEject( m_verifyData );
-
       m_writer = writer;
     }
   }
@@ -420,8 +416,6 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     writer->setImageToWrite( QString::null ); // read from stdin
     writer->setCloseDvd( !m_noFix );
     writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );
-
-    writer->setForceNoEject( m_verifyData );
 
     m_writer = writer;
   }

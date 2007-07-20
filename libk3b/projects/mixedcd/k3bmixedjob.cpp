@@ -507,7 +507,11 @@ void K3bMixedJob::slotWriterFinished( bool success )
   emit burning(false);
 
   if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
-      slotMediaReloadedForSecondSession(true );
+    // reload the media (as a subtask so the user does not see the "Flushing cache" or "Fixating" messages while
+    // doing so
+    emit newSubTask( i18n("Reloading the medium") );
+    connect( K3bDevice::reload( m_doc->burner() ), SIGNAL(finished(bool)),
+	     this, SLOT(slotMediaReloadedForSecondSession(bool)) );
   }
   else {
     d->copiesDone++;
@@ -640,7 +644,6 @@ bool K3bMixedJob::prepareWriter()
 
     writer->setSimulate( m_doc->dummy() );
     writer->setBurnSpeed( m_doc->speed() );
-    writer->setForceNoEject( true );
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION ) {
       if( m_currentAction == WRITING_ISO_IMAGE ) {
@@ -683,7 +686,6 @@ bool K3bMixedJob::prepareWriter()
 		      && m_currentAction == WRITING_AUDIO_IMAGE );
 
     writer->setTocFile( m_tocFile->name() );
-    writer->setForceNoEject( true );
 
     m_writer = writer;
   }

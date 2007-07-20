@@ -31,7 +31,6 @@
 #include <k3bfilesplitter.h>
 #include <k3bchecksumpipe.h>
 #include <k3bverificationjob.h>
-#include <k3bglobalsettings.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -449,7 +448,6 @@ void K3bDvdCopyJob::prepareWriter()
   d->writerJob->setBurnSpeed( m_speed );
   d->writerJob->setWritingMode( d->usedWritingMode );
   d->writerJob->setCloseDvd( true );
-  d->writerJob->setForceNoEject( true );
 
   //
   // In case the first layer size is not known let the
@@ -667,10 +665,6 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
     else {
       if( m_removeImageFiles )
 	removeImageFiles();
-
-      if( k3bcore->globalSettings()->ejectMedia() )
-          K3bDevice::eject( m_writerDevice );
-
       d->running = false;
       jobFinished(true);
     }

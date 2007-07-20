@@ -480,9 +480,6 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 	}
       }
       else {
-          if( k3bcore->globalSettings()->ejectMedia() )
-              K3bDevice::eject( d->doc->burner() );
-
 	cleanup();
 	jobFinished(true);
       }
@@ -636,7 +633,6 @@ bool K3bDataJob::prepareWriterJob()
     }
 
     writer->addArgument( QString("-tsize=%1s").arg(m_isoImager->size()) )->addArgument("-");
-    writer->setForceNoEject( true );
 
     setWriterJob( writer );
   }
@@ -649,7 +645,6 @@ bool K3bDataJob::prepareWriterJob()
     // multisession
     writer->setMulti( d->usedMultiSessionMode == K3bDataDoc::START ||
 		      d->usedMultiSessionMode == K3bDataDoc::CONTINUE );
-    writer->setForceNoEject( true );
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;

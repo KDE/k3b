@@ -32,7 +32,6 @@
 #include <k3bcddbquery.h>
 #include <k3bcore.h>
 #include <k3binffilewriter.h>
-#include <k3bglobalsettings.h>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -728,7 +727,6 @@ bool K3bCdCopyJob::writeNextSession()
   d->cdrecordWriter->clearArguments();
   d->cdrecordWriter->setSimulate( m_simulate );
   d->cdrecordWriter->setBurnSpeed( m_speed );
-  d->cdrecordWriter->setForceNoEject( true );
 
 
   // create the cdrecord arguments
@@ -1015,21 +1013,17 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
       d->currentWrittenSession++;
       d->currentReadSession++;
 
-      if( !writeNextSession() ) {
-          // nothing is running here...
-          finishJob( d->canceled, d->error );
-      }
-      else if( m_onTheFly )
-          readNextSession();
+      // reload the media
+      emit newSubTask( i18n("Reloading the medium") );
+      connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
+	       this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
     }
     else {
       d->doneCopies++;
 
       if( !m_simulate && d->doneCopies < m_copies ) {
 	// start next copy
-	if ( !m_writerDevice->eject() ) {
-            blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
-        }
+	K3bDevice::eject( m_writerDevice );
 
 	d->currentWrittenSession = 1;
 	d->currentReadSession = 1;
@@ -1038,16 +1032,11 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
 	    readNextSession();
 	}
 	else {
-            if( k3bcore->globalSettings()->ejectMedia() )
-                K3bDevice::eject( m_writerDevice );
-
             // nothing running here...
             finishJob( d->canceled, d->error );
 	}
       }
       else {
-          if( k3bcore->globalSettings()->ejectMedia() )
-              K3bDevice::eject( m_writerDevice );
           finishJob( false, false );
       }
     }
@@ -1062,6 +1051,21 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
 
     finishJob( d->canceled, !d->canceled );
   }
+}
+
+
+void K3bCdCopyJob::slotMediaReloadedForNextSession( K3bDevice::DeviceHandler* dh )
+{
+  if( !dh->success() )
+    blockingInformation( i18n("Please reload the medium and press 'ok'"),
+			 i18n("Unable to close the tray") );
+
+  if( !writeNextSession() ) {
+    // nothing is running here...
+    finishJob( d->canceled, d->error );
+  }
+  else if( m_onTheFly )
+    readNextSession();
 }
 
 
