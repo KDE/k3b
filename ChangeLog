@@ -1,6 +1,10 @@
 1.0.3
 =====
- * Make sure the medium is not ejected before verification when burning ISO images.
+ * Reverted to old behaviour of reloading medium before verification. Not enough
+   testing had been done before introducing this and some systems fail to read the
+   medium before reload (Bugs 147297, 147328, 147420, 147698).
+ * Do not crash when the currently playing audio project item is removed (Bug 147548).
+ * Added desktop actions to handle empty media with K3b.
 
 1.0.2
 =====
