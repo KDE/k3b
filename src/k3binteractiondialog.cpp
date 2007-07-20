@@ -45,6 +45,7 @@
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kiconloader.h>
+#include <kglobalsettings.h>
 
 
 K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
@@ -116,14 +117,12 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     QFont fnt( m_buttonStart->font() );
     fnt.setBold(true);
     m_buttonStart->setFont( fnt );
-    layout5->addWidget( m_buttonStart );
   }
   else
     m_buttonStart = 0;
 
   if( buttonMask & SAVE_BUTTON ) {
     m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
-    layout5->addWidget( m_buttonSave );
   }
   else
     m_buttonSave = 0;
@@ -135,10 +134,41 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 				      : KStdGuiItem::cancel(),
 				      this,
 				      "m_buttonCancel" );
-    layout5->addWidget( m_buttonCancel );
   }
   else
     m_buttonCancel = 0;
+
+  // we only handle some of the possible settings since
+  // our buttons are always to the right of the dialog
+  switch( KGlobalSettings::buttonLayout() ) {
+  case 0: // KDE default
+  default:
+      if ( m_buttonStart )
+          layout5->addWidget( m_buttonStart );
+      if ( m_buttonSave )
+          layout5->addWidget( m_buttonSave );
+      if ( m_buttonCancel )
+          layout5->addWidget( m_buttonCancel );
+      break;
+
+  case 1: // something different
+      if ( m_buttonCancel )
+          layout5->addWidget( m_buttonCancel );
+      if ( m_buttonSave )
+          layout5->addWidget( m_buttonSave );
+      if ( m_buttonStart )
+          layout5->addWidget( m_buttonStart );
+      break;
+
+  case 2: // GTK-Style
+      if ( m_buttonSave )
+          layout5->addWidget( m_buttonSave );
+      if ( m_buttonCancel )
+          layout5->addWidget( m_buttonCancel );
+      if ( m_buttonStart )
+          layout5->addWidget( m_buttonStart );
+      break;
+  }
 
   mainGrid->addLayout( layout5, 2, 2 );
 
