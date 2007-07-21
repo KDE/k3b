@@ -247,11 +247,17 @@ void K3bCdrecordWriter::prepareProcess()
   }
 
   bool overburn = k3bcore->globalSettings()->overburn();
-  if( overburn )
-    if( m_cdrecordBinObject->hasFeature("overburn") )
-      *m_process << "-overburn";
-    else
-      emit infoMessage( i18n("Cdrecord %1 does not support overburning.").arg(m_cdrecordBinObject->version), WARNING );
+  if( overburn ) {
+      if( m_cdrecordBinObject->hasFeature("overburn") ) {
+          if ( k3bcore->globalSettings()->force() )
+              *m_process << "-ignsize";
+          else
+              *m_process << "-overburn";
+      }
+      else {
+          emit infoMessage( i18n("Cdrecord %1 does not support overburning.").arg(m_cdrecordBinObject->version), WARNING );
+      }
+  }
 
   // additional user parameters from config
   const QStringList& params = m_cdrecordBinObject->userParameters();
@@ -527,7 +533,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr.startsWith( "You may have used an ultra low speed medium" ) ) {
       m_cdrecordError = LOW_SPEED_MEDIUM;
     }
-    else if( errStr.startsWith( "Permission denied. Cannot open" ) ) {
+    else if( errStr.startsWith( "Permission denied. Cannot open" ) ||
+             errStr.startsWith( "Operation not permitted." ) ) {
       m_cdrecordError = PERMISSION_DENIED;
     }
     else if( errStr.startsWith( "Can only copy session # 1") ) {
@@ -729,8 +736,10 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case PERMISSION_DENIED:
 	emit infoMessage( i18n("%1 has no permission to open the device.").arg("Cdrecord"), ERROR );
+#ifdef HAVE_K3BSETUP
 	emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), ERROR );
-	break;
+#endif
+        break;
       case BUFFER_UNDERRUN:
 	  emit infoMessage( i18n("Probably a buffer underrun occurred."), ERROR );
 	  if( !d->usingBurnfree && burnDevice()->burnproof() )
