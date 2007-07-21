@@ -161,7 +161,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   setTabOrder( m_comboSpeed, m_comboWritingApp );
 
   connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
-  connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), 
+  connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)),
 	   this, SIGNAL(writerChanged(K3bDevice::Device*)) );
   connect( m_comboMedium, SIGNAL(newMedia()), this, SIGNAL(newMedia()) );
   connect( m_comboMedium, SIGNAL(newMedium(K3bDevice::Device*)), this, SIGNAL(newMedium(K3bDevice::Device*)) );
@@ -256,7 +256,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
     int lastSpeed = writerSpeed();
 
     clearSpeedCombo();
-   
+
     m_comboSpeed->insertItem( i18n("Auto") );
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
       m_comboSpeed->insertItem( i18n("Ignore") );
@@ -329,7 +329,7 @@ void K3bWriterSelectionWidget::insertSpeedItem( int speed )
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
       m_comboSpeed->insertItem( ( speed%1385 > 0
 				? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
-				: QString::number( speed/1385 ) ) 
+				: QString::number( speed/1385 ) )
 			      + "x" );
     else
       m_comboSpeed->insertItem( QString("%1x").arg(speed/175) );
@@ -437,7 +437,7 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int s )
   }
   else {
     d->lastSetSpeed = d->indexSpeedMap[s];
-    
+
     if( K3bDevice::Device* dev = writerDevice() )
       dev->setCurrentWriteSpeed( writerSpeed() );
   }
@@ -447,7 +447,7 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int s )
 void K3bWriterSelectionWidget::slotWriterChanged()
 {
   slotRefreshWriterSpeeds();
-  slotRefreshWritingApps();  
+  slotRefreshWritingApps();
 
   // save last selected writer
   if( K3bDevice::Device* dev = writerDevice() ) {
@@ -554,7 +554,7 @@ void K3bWriterSelectionWidget::slotNewBurnMedium( K3bDevice::Device* dev )
     //
     // Prefer an empty medium over one that has to be erased
     //
-    else if( wantedMediumState() & K3bDevice::STATE_EMPTY && 
+    else if( wantedMediumState() & K3bDevice::STATE_EMPTY &&
 	     !k3bappcore->mediaCache()->diskInfo( writerDevice() ).empty() &&
 	     medium.diskInfo().empty() ) {
       setWriterDevice( dev );
@@ -596,6 +596,12 @@ void K3bWriterSelectionWidget::slotManualSpeed()
     else
       setSpeed( d->lastSetSpeed );
   }
+}
+
+
+void K3bWriterSelectionWidget::setIgnoreDevice( K3bDevice::Device* dev )
+{
+    m_comboMedium->setIgnoreDevice( dev );
 }
 
 #include "k3bwriterselectionwidget.moc"

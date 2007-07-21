@@ -101,6 +101,11 @@ class K3bWriterSelectionWidget : public QWidget
    */
   void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString = QString::null, const QString& tooltip = QString::null );
 
+  /**
+   * Compare K3bMediaSelectionComboBox::setIgnoreDevice
+   */
+  void setIgnoreDevice( K3bDevice::Device* dev );
+
  signals:
   void writerChanged();
   void writerChanged( K3bDevice::Device* );

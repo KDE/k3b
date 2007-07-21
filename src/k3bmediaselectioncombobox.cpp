@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
@@ -24,6 +24,7 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 
 #include <qfont.h>
@@ -37,9 +38,9 @@ class K3bMediaSelectionComboBox::ToolTip : public QToolTip
 {
 public:
   ToolTip( K3bMediaSelectionComboBox* box );
-  
+
   void maybeTip( const QPoint &pos );
-  
+
 private:
   K3bMediaSelectionComboBox* m_box;
 };
@@ -75,17 +76,23 @@ void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
 class K3bMediaSelectionComboBox::Private
 {
 public:
-  QMap<K3bDevice::Device*, int> deviceIndexMap;
-  QValueVector<K3bDevice::Device*> devices;
+    Private()
+        : ignoreDevice( 0 ) {
+    }
 
-  // medium strings for every entry
-  QMap<QString, int> mediaStringMap;
+    QMap<K3bDevice::Device*, int> deviceIndexMap;
+    QValueVector<K3bDevice::Device*> devices;
 
-  int wantedMediumType;
-  int wantedMediumState;
-  int wantedMediumContent;
+    K3bDevice::Device* ignoreDevice;
 
-  QFont font;
+    // medium strings for every entry
+    QMap<QString, int> mediaStringMap;
+
+    int wantedMediumType;
+    int wantedMediumState;
+    int wantedMediumContent;
+
+    QFont font;
 };
 
 
@@ -120,6 +127,13 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
 K3bMediaSelectionComboBox::~K3bMediaSelectionComboBox()
 {
   delete d;
+}
+
+
+void K3bMediaSelectionComboBox::setIgnoreDevice( K3bDevice::Device* dev )
+{
+    d->ignoreDevice = dev;
+    updateMedia();
 }
 
 
@@ -238,18 +252,18 @@ void K3bMediaSelectionComboBox::updateMedia()
 
   // remember last selected medium
   K3bDevice::Device* selected = selectedDevice();
-  
+
   clear();
 
   //
   // We need to only check a selection of the available devices based on the
   // wanted media type.
   //
-  
+
   // no ROM media -> we most likely want only CD/DVD writers
   bool rwOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_DVD_ROM) );
   bool dvdOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_WRITABLE_CD) );
-  
+
   QPtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
   if( dvdOnly ) {
     if( rwOnly )
@@ -261,12 +275,16 @@ void K3bMediaSelectionComboBox::updateMedia()
     devices = k3bcore->deviceManager()->cdWriter();
   else
     devices = k3bcore->deviceManager()->cdReader();
-  
-  for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
-    K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
-    if( showMedium( medium ) )
-      addMedium( *it );
+  for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+      if ( d->ignoreDevice == *it ) {
+          continue;
+      }
+
+      K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
+
+      if( showMedium( medium ) )
+          addMedium( *it );
   }
 
   //
@@ -316,7 +334,7 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
 {
   //
   // In case we only want an empty medium (this might happen in case the
-  // the medium is rewritable) we do not care about the contents but tell 
+  // the medium is rewritable) we do not care about the contents but tell
   // the user that the medium is rewritable.
   // Otherwise we show the contents type since this might also be used
   // for source selection.
@@ -339,13 +357,13 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
     //
     int prevIndex = d->mediaStringMap[s];
     if( prevIndex >= 0 )
-      changeItem( text(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description()), 
+      changeItem( text(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description()),
 		  prevIndex );
 
     //
     // mark the string as already changed
     //
-    d->mediaStringMap[s] = -1;    
+    d->mediaStringMap[s] = -1;
   }
   else {
     //
@@ -388,10 +406,10 @@ bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
   //
   return( m.diskInfo().mediaType() & d->wantedMediumType &&
 	  m.content() & d->wantedMediumContent &&
-	  ( m.diskInfo().diskState() & d->wantedMediumState 
+	  ( m.diskInfo().diskState() & d->wantedMediumState
 	    ||
 	    ( d->wantedMediumState & K3bDevice::STATE_EMPTY &&
-	      m.diskInfo().rewritable() ) 
+	      m.diskInfo().rewritable() )
 	    ||
 	    ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
 	      !m.diskInfo().empty() &&
@@ -445,7 +463,7 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
     else if( d->wantedMediumContent & K3bMedium::CONTENT_DATA )
       stateString = i18n("a Data %1 medium");
     else
-      stateString = i18n("an empty %1 medium");      
+      stateString = i18n("an empty %1 medium");
   }
 
   // this is basically the same as in K3bEmptyDiskWaiter
