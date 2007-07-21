@@ -24,6 +24,7 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 
 #include <qfont.h>
@@ -75,8 +76,14 @@ void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
 class K3bMediaSelectionComboBox::Private
 {
 public:
+    Private()
+        : ignoreDevice( 0 ) {
+    }
+
   QMap<K3bDevice::Device*, int> deviceIndexMap;
   QValueVector<K3bDevice::Device*> devices;
+
+    K3bDevice::Device* ignoreDevice;
 
   // medium strings for every entry
   QMap<QString, int> mediaStringMap;
@@ -120,6 +127,13 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
 K3bMediaSelectionComboBox::~K3bMediaSelectionComboBox()
 {
   delete d;
+}
+
+
+void K3bMediaSelectionComboBox::setIgnoreDevice( K3bDevice::Device* dev )
+{
+    d->ignoreDevice = dev;
+    updateMedia();
 }
 
 
@@ -263,6 +277,10 @@ void K3bMediaSelectionComboBox::updateMedia()
     devices = k3bcore->deviceManager()->cdReader();
 
   for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+      if ( d->ignoreDevice == *it ) {
+          continue;
+      }
+
     K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
     if( showMedium( medium ) )

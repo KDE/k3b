@@ -96,6 +96,14 @@ class K3bMediaSelectionComboBox : public KComboBox
    */
   void setWantedMediumContent( int content );
 
+  /**
+   * Set the device to ignore. This device will not be checked for
+   * wanted media. This is many useful for media copy.
+   *
+   * \param dev The device to ignore or 0 to not ignore any device.
+   */
+  void setIgnoreDevice( K3bDevice::Device* dev );
+
  private slots:
   void slotMediumChanged( K3bDevice::Device* );
   void slotDeviceManagerChanged( K3bDevice::DeviceManager* );

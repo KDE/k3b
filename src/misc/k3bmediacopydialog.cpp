@@ -533,12 +533,16 @@ void K3bMediaCopyDialog::toggleAll()
 
 void K3bMediaCopyDialog::updateOverrideDevice()
 {
-  if( !m_checkCacheImage->isChecked() )
-    m_writerSelectionWidget->setOverrideDevice( 0 );
-  else
-    m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
-						i18n("Use the same device for burning"),
-						i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+    if( !m_checkCacheImage->isChecked() ) {
+        m_writerSelectionWidget->setOverrideDevice( 0 );
+        m_writerSelectionWidget->setIgnoreDevice( m_comboSourceDevice->selectedDevice() );
+    }
+    else {
+        m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
+                                                    i18n("Use the same device for burning"),
+                                                    i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+        m_writerSelectionWidget->setIgnoreDevice( 0 );
+    }
 }
 
 

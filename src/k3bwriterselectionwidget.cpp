@@ -668,4 +668,10 @@ void K3bWriterSelectionWidget::slotManualSpeed()
     }
 }
 
+
+void K3bWriterSelectionWidget::setIgnoreDevice( K3bDevice::Device* dev )
+{
+    m_comboMedium->setIgnoreDevice( dev );
+}
+
 #include "k3bwriterselectionwidget.moc"
