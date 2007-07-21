@@ -198,32 +198,28 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
   cmd[9] = 1;      // first we read one descriptor
   cmd[10] = type;
   cmd[11] = 0;     // Necessary to set the proper command length
-  if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 ) {
-    // again with real length
-    dataLen = from4Byte( header ) + 4;
+  if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
+    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
+	      << ": GET PERFORMANCE length det failed." << endl;
+    return false;
+  }
 
-    // At least one Panasonic drive returns gigantic changing numbers for the data length
-    // which makes K3b crash below when *data cannot be allocated. That's why we cut the
-    // length here.
-    // FIXME: 2048 is a proper upper boundary for the write speed but not for all
-    //        return types. "Defect Status Data" for example might return way more data.
-    // FIXME: I added a "return false" here since there was a situation in which this method
-    //        returned a gigantic dataLen even with this cut. So there is still some bug here.
-    //        Since we only use getPerformance for writing speeds and without a proper length
-    //        those do not make sense it is better to fail here anyway.
-    if( dataLen > 2048 ) {
+  dataLen = from4Byte( header ) + 4;
+
+  // At least one Panasonic drive returns gigantic changing numbers for the data length
+  // which makes K3b crash below when *data cannot be allocated. That's why we cut the
+  // length here.
+  // FIXME: 2048 is a proper upper boundary for the write speed but not for all
+  //        return types. "Defect Status Data" for example might return way more data.
+  // FIXME: Since we only use getPerformance for writing speeds and without a proper length
+  //        those do not make sense it is better to fail here anyway.
+  if( (dataLen-8) % descLen ||
+      dataLen <= 8 ||
+      dataLen > 2048 ) {
       k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
 		 << ": GET PERFORMANCE reports bogus dataLen: " << dataLen << endl;
       return false;
-      dataLen = 2048;
-    }
   }
-  else
-    k3bDebug() << "(K3bDevice::Device) " << blockDeviceName()
-	      << ": GET PERFORMANCE length det failed." << endl;
-
-  if( (dataLen-8) % descLen || dataLen <= 8 )
-    dataLen = 2048;
 
   *data = new unsigned char[dataLen];
   ::memset( *data, 0, dataLen );
