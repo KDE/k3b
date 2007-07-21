@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -38,7 +38,7 @@
 
 
 K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
-  : K3bMediaContentsView( true, 
+  : K3bMediaContentsView( true,
 			  K3bMedium::CONTENT_VIDEO_DVD,
 			  K3bDevice::MEDIA_DVD_ALL,
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
@@ -91,7 +91,7 @@ void K3bVideoDVDRippingView::reloadMedium()
   // For VideoDVD reading it is important that the DVD is not mounted
   //
   if( K3b::isMounted( device() ) && !K3b::unmount( device() ) ) {
-    KMessageBox::error( this, 
+    KMessageBox::error( this,
 			i18n("K3b was unable to unmount device '%1' containing medium '%2'. "
 			     "Video DVD ripping will not work if the device is mounted. "
 			     "Please unmount manually."),
@@ -102,7 +102,7 @@ void K3bVideoDVDRippingView::reloadMedium()
   // K3bVideoDVD::open does not necessarily fail on encrypted DVDs if dvdcss is not
   // available. Thus, we test the availability of libdvdcss here
   //
-  if( device()->copyrightProtectionSystemType() > 0 ) {
+  if( device()->copyrightProtectionSystemType() == K3bDevice::COPYRIGHT_PROTECTION_CSS ) {
     K3bLibDvdCss* css = K3bLibDvdCss::create();
     if( !css ) {
       KMessageBox::error( this, i18n("<p>Unable to read Video DVD contents: Found encrypted Video DVD."
@@ -136,7 +136,7 @@ void K3bVideoDVDRippingView::reloadMedium()
 	  ++vc;
       for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i )
 	if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i ) )
-	  ++ac;  
+	  ++ac;
       if( !ac || !vc ) {
 	KMessageBox::sorry( this,
 			    i18n("<p>K3b uses transcode to rip Video DVDs. "

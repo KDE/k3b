@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -32,15 +32,15 @@
 
 
 /* callback function for libisofs */
-int K3bIso9660::read_callback( char* buf, sector_t start, int len, void* udata ) 
+int K3bIso9660::read_callback( char* buf, sector_t start, int len, void* udata )
 {
   K3bIso9660* isoF = static_cast<K3bIso9660*>(udata);
-  
+
   return isoF->read( start, buf, len );
 }
 
 /* callback function for libisofs */
-int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata ) 
+int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
 {
   K3bIso9660 *iso = static_cast<K3bIso9660*> (udata);
   QString path, isoPath,user,group,symlink;
@@ -128,8 +128,8 @@ int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
 
   if (idr->flags[0] & 2) {
       entry = new K3bIso9660Directory( iso, isoPath, path, access | S_IFDIR, time, adate, cdate,
-				       user, group, symlink, 
-				       special ? 0 : isonum_733(idr->extent), 
+				       user, group, symlink,
+				       special ? 0 : isonum_733(idr->extent),
 				       special ? 0 : isonum_733(idr->size) );
   }
   else {
@@ -139,7 +139,7 @@ int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
       (static_cast<K3bIso9660File*>(entry))->setZF( z_algo, z_params, z_size );
   }
   iso->dirent->addEntry(entry);
-  
+
   return 0;
 }
 
@@ -151,7 +151,7 @@ K3bIso9660Entry::K3bIso9660Entry( K3bIso9660* archive,
 				  int access,
 				  int date,
 				  int adate,
-				  int cdate, 
+				  int cdate,
 				  const QString& user,
 				  const QString& group,
 				  const QString& symlink )
@@ -178,17 +178,17 @@ K3bIso9660Entry::~K3bIso9660Entry()
 
 
 
-K3bIso9660File::K3bIso9660File( K3bIso9660* archive, 
-				const QString& isoName, 
-				const QString& name, 
+K3bIso9660File::K3bIso9660File( K3bIso9660* archive,
+				const QString& isoName,
+				const QString& name,
 				int access,
-				int date, 
+				int date,
 				int adate,
-				int cdate, 
-				const QString& user, 
+				int cdate,
+				const QString& user,
 				const QString& group,
-				const QString& symlink, 
-				unsigned int pos, 
+				const QString& symlink,
+				unsigned int pos,
 				unsigned int size )
   : K3bIso9660Entry( archive, isoName, name, access, date, adate, cdate, user, group, symlink ),
     m_startSector(pos),
@@ -286,17 +286,17 @@ bool K3bIso9660File::copyTo( const QString& url ) const
 }
 
 
-K3bIso9660Directory::K3bIso9660Directory( K3bIso9660* archive, 
-					  const QString& isoName, 
-					  const QString& name, 
+K3bIso9660Directory::K3bIso9660Directory( K3bIso9660* archive,
+					  const QString& isoName,
+					  const QString& name,
 					  int access,
-					  int date, 
-					  int adate, 
-					  int cdate, 
-					  const QString& user, 
+					  int date,
+					  int adate,
+					  int cdate,
+					  const QString& user,
 					  const QString& group,
 					  const QString& symlink,
-					  unsigned int pos, 
+					  unsigned int pos,
 					  unsigned int size  )
   : K3bIso9660Entry( archive, isoName, name, access, date, adate, cdate, user, group, symlink ),
     m_bExpanded( size == 0 ), // we can only expand entries that represent an actual directory
@@ -329,11 +329,11 @@ QStringList K3bIso9660Directory::entries() const
   const_cast<K3bIso9660Directory*>(this)->expand();
 
   QStringList l;
-  
+
   QDictIterator<K3bIso9660Entry> it( m_entries );
   for( ; it.current(); ++it )
     l.append( it.currentKey() );
-  
+
   return l;
 }
 
@@ -344,11 +344,11 @@ QStringList K3bIso9660Directory::iso9660Entries() const
   const_cast<K3bIso9660Directory*>(this)->expand();
 
   QStringList l;
-  
+
   QDictIterator<K3bIso9660Entry> it( m_iso9660Entries );
   for( ; it.current(); ++it )
     l.append( it.currentKey() );
-  
+
   return l;
 }
 
@@ -454,7 +454,7 @@ void K3bIso9660Directory::addEntry( K3bIso9660Entry* entry )
 class K3bIso9660::Private
 {
 public:
-  Private() 
+  Private()
     : cdDevice(0),
       fd(-1),
       isOpen(false),
@@ -555,7 +555,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
   boot_entry *be;
   QString path;
   K3bIso9660File *entry;
-    
+
   entry=new K3bIso9660File( this, "Catalog", "Catalog", dirent->permissions() & ~S_IFDIR,
 			    dirent->date(), dirent->adate(), dirent->cdate(),
 			    dirent->user(), dirent->group(), QString::null,
@@ -588,36 +588,36 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
 
 bool K3bIso9660::open()
 {
-  if( d->isOpen )
-    return true;
+    if( d->isOpen )
+        return true;
 
-  if( !d->backend ) {
-    // create a backend
+    if( !d->backend ) {
+        // create a backend
 
-    if( !m_filename.isEmpty() )
-      d->backend = new K3bIso9660FileBackend( m_filename );
+        if( !m_filename.isEmpty() )
+            d->backend = new K3bIso9660FileBackend( m_filename );
 
-    else if( d->fd > 0 )
-      d->backend = new K3bIso9660FileBackend( d->fd );
+        else if( d->fd > 0 )
+            d->backend = new K3bIso9660FileBackend( d->fd );
 
-    else if( d->cdDevice ) {
-      // now check if we have a scrambled video dvd
-      if( d->cdDevice->copyrightProtectionSystemType() > 0 ) {
-      	
-	kdDebug() << "(K3bIso9660) found encrypted dvd. using libdvdcss." << endl;
-	
-	// open the libdvdcss stuff
-	d->backend = new K3bIso9660LibDvdCssBackend( d->cdDevice );
-	if( !d->backend->open() ) {
-	  // fallback to devicebackend
-	  delete d->backend;
-	  d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
-	}
-      }
-      else
-	d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
+        else if( d->cdDevice ) {
+            // now check if we have a scrambled video dvd
+            if( d->cdDevice->copyrightProtectionSystemType() == K3bDevice::COPYRIGHT_PROTECTION_CSS ) {
+
+                kdDebug() << "(K3bIso9660) found encrypted dvd. using libdvdcss." << endl;
+
+                // open the libdvdcss stuff
+                d->backend = new K3bIso9660LibDvdCssBackend( d->cdDevice );
+                if( !d->backend->open() ) {
+                    // fallback to devicebackend
+                    delete d->backend;
+                    d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
+                }
+            }
+            else
+                d->backend = new K3bIso9660DeviceBackend( d->cdDevice );
+        }
     }
-  }
 
   d->isOpen = d->backend->open();
   if( !d->isOpen )
@@ -666,11 +666,11 @@ bool K3bIso9660::open()
 	path="El Torito Boot";
 	if( c_b > 1 )
 	  path += " (" + QString::number(c_b) + ")";
-                        
+
 	dirent = new K3bIso9660Directory( this, path, path, access | S_IFDIR,
 					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
 	d->elToritoDirs.append( dirent );
-                        
+
 	addBoot(bootdesc);
 	c_b++;
       }
@@ -694,19 +694,19 @@ bool K3bIso9660::open()
 	  path = "Joliet level " + QString::number(m_joliet);
 	  if( c_j > 1 )
 	    path += " (" + QString::number(c_j) + ")";
-	} 
+	}
 	else {
-	  path = QString::fromLocal8Bit( primaryDesc->volume_id, 32 ); 
+	  path = QString::fromLocal8Bit( primaryDesc->volume_id, 32 );
 	  if( c_i > 1 )
 	    path += " (" + QString::number(c_i) + ")";
 	}
-	
+
 	dirent = new K3bIso9660Directory( this, path, path, access | S_IFDIR,
 					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
 
 	// expand the root entry
 	ProcessDir( &K3bIso9660::read_callback, isonum_733(idr->extent),isonum_733(idr->size),&K3bIso9660::isofs_callback,this);
-	
+
 	if (m_joliet)
 	  c_j++;
 	else
@@ -727,7 +727,7 @@ bool K3bIso9660::open()
   }
 
   FreeISO9660(desc);
-  
+
   return true;
 }
 
@@ -761,7 +761,7 @@ void K3bIso9660::close()
     // Since the first isoDir is the KArchive
     // root we must not delete it but all the
     // others.
-    
+
     d->elToritoDirs.setAutoDelete(true);
     d->jolietDirs.setAutoDelete(true);
     d->isoDirs.setAutoDelete(true);

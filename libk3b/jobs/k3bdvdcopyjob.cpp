@@ -164,7 +164,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
     d->running = false;
   }
   else {
-    if( m_readerDevice->copyrightProtectionSystemType() > 0 ) {
+      if( m_readerDevice->copyrightProtectionSystemType() == K3bDevice::COPYRIGHT_PROTECTION_CSS ) { // CSS is the the only one we support ATM
       emit infoMessage( i18n("Found encrypted DVD."), WARNING );
       // check for libdvdcss
       bool haveLibdvdcss = false;

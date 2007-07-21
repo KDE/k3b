@@ -125,7 +125,7 @@ void K3bDataTrackReader::WorkThread::run()
     //
     // In case of an encrypted VideoDVD we read with libdvdcss which takes care of decrypting the vobs
     //
-    if( m_device->copyrightProtectionSystemType() > 0 ) {
+    if( m_device->copyrightProtectionSystemType() == K3bDevice::COPYRIGHT_PROTECTION_CSS ) {
 
       // close the device for libdvdcss
       m_device->close();

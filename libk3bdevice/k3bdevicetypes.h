@@ -239,6 +239,14 @@ namespace K3bDevice {
                 MEDIA_BD_ALL
   };
 
+  enum CopyrightProtectionSytemType {
+      COPYRIGHT_PROTECTION_NONE = 0x0,
+      COPYRIGHT_PROTECTION_CSS = 0x1,
+      COPYRIGHT_PROTECTION_CPRM = 0x2,
+      COPYRIGHT_PROTECTION_AACS_HD_DVD = 0x3,
+      COPYRIGHT_PROTECTION_AACS_BD = 0x10
+  };
+
   inline bool isDvdMedia( int mediaType ) {
     return ( mediaType & MEDIA_DVD_ALL );
   }
