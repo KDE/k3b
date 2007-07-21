@@ -46,6 +46,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
+#include <kdeversion.h>
 
 
 K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
@@ -140,7 +141,11 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // we only handle some of the possible settings since
   // our buttons are always to the right of the dialog
-  switch( KGlobalSettings::buttonLayout() ) {
+  int btl = 0;
+#if KDE_IS_VERSION(3,3,0)
+  btl = KGlobalSettings::buttonLayout();
+#endif
+  switch( btl ) {
   case 0: // KDE default
   default:
       if ( m_buttonStart )
