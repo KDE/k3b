@@ -65,7 +65,7 @@ public:
 };
 
 
-K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl, 
+K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
 				      QObject* parent, const char* name )
   : K3bAbstractWriter( dev, hdl, parent, name ),
     m_clone(false),
@@ -118,7 +118,7 @@ void K3bCdrecordWriter::setCueFile( const QString& s)
   // cuefile only works in DAO mode
   setWritingMode( K3b::DAO );
 }
-  
+
 void K3bCdrecordWriter::setClone( bool b )
 {
   m_clone = b;
@@ -131,7 +131,7 @@ void K3bCdrecordWriter::setWritingMode( int mode )
       mode == K3b::TAO ||
       mode == K3b::RAW )
     m_writingMode = mode;
-  else 
+  else
     kdError() << "(K3bCdrecordWriter) wrong writing mode: " << mode << endl;
 }
 
@@ -158,10 +158,10 @@ void K3bCdrecordWriter::prepareProcess()
 
   // display progress
   *m_process << "-v";
-    
+
   if( m_cdrecordBinObject->hasFeature( "gracetime") )
     *m_process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
-    
+
   // Again we assume the device to be set!
   *m_process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(burnDevice(), m_cdrecordBinObject));
 
@@ -175,7 +175,7 @@ void K3bCdrecordWriter::prepareProcess()
   d->usedSpeed /= 175;
   if( d->usedSpeed != 0 )
     *m_process << QString("speed=%1").arg(d->usedSpeed);
-    
+
   if( m_writingMode == K3b::DAO || m_cue ) {
     if( burnDevice()->dao() )
       *m_process << "-dao";
@@ -203,7 +203,7 @@ void K3bCdrecordWriter::prepareProcess()
 
   if( simulate() )
     *m_process << "-dummy";
-    
+
   d->usingBurnfree = false;
   if( k3bcore->globalSettings()->burnfree() ) {
     if( burnDevice()->burnproof() ) {
@@ -224,22 +224,22 @@ void K3bCdrecordWriter::prepareProcess()
     *m_process << "-force";
     emit infoMessage( i18n("'Force unsafe operations' enabled."), WARNING );
   }
-  
+
   if( m_cue ) {
     m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
     *m_process << QString("cuefile=%1").arg( m_cueFile );
   }
-  
+
   if( m_clone )
     *m_process << "-clone";
-  
+
   if( m_rawCdText.size() > 0 ) {
     delete d->cdTextFile;
     d->cdTextFile = new K3bTempFile( QString::null, ".dat" );
     d->cdTextFile->setAutoDelete(true);
     d->cdTextFile->file()->writeBlock( m_rawCdText );
     d->cdTextFile->close();
-    
+
     *m_process << "textfile=" + d->cdTextFile->name();
   }
 
@@ -251,14 +251,14 @@ void K3bCdrecordWriter::prepareProcess()
   if( manualBufferSize ) {
     *m_process << QString("fs=%1m").arg( k3bcore->globalSettings()->bufferSize() );
   }
-    
+
   bool overburn = k3bcore->globalSettings()->overburn();
   if( overburn )
     if( m_cdrecordBinObject->hasFeature("overburn") )
       *m_process << "-overburn";
     else
       emit infoMessage( i18n("Cdrecord %1 does not support overburning.").arg(m_cdrecordBinObject->version), WARNING );
-    
+
   // additional user parameters from config
   const QStringList& params = m_cdrecordBinObject->userParameters();
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
@@ -351,14 +351,14 @@ void K3bCdrecordWriter::start()
       emit newTask( i18n("Simulating") );
       emit infoMessage( i18n("Starting %1 simulation at %2x speed...")
 			.arg(K3b::writingModeString(m_writingMode))
-			.arg(d->usedSpeed), 
+			.arg(d->usedSpeed),
 			K3bJob::INFO );
     }
     else {
       emit newTask( i18n("Writing") );
       emit infoMessage( i18n("Starting %1 writing at %2x speed...")
 			.arg(K3b::writingModeString(m_writingMode))
-			.arg(d->usedSpeed), 
+			.arg(d->usedSpeed),
 			K3bJob::INFO );
     }
   }
@@ -388,7 +388,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s(?:\\(fifo\\s*(\\d*)\\%\\)\\s*)?(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
 
   emit debuggingOutput( m_cdrecordBinObject->name(), line );
-  
+
   //
   // Progress and toc parsing
   //
@@ -409,17 +409,17 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	int sizeStart = line.find( QRegExp("\\d"), 10 );
 	int sizeEnd = line.find( "MB", sizeStart );
 	track.size = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
-	  
+
 	if( ok ) {
 	  d->tracks.append(track);
 	  m_totalSize += track.size;
 	}
 	else
-	  kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
+	  kdDebug() << "(K3bCdrecordWriter) track number parse error: "
 		    << line.mid( sizeStart, sizeEnd-sizeStart ) << endl;
       }
       else
-	kdDebug() << "(K3bCdrecordWriter) track number parse error: " 
+	kdDebug() << "(K3bCdrecordWriter) track number parse error: "
 		  << line.mid( 6, 2 ) << endl;
     }
 
@@ -470,7 +470,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   // With Debian's script it starts with cdrecord (or /usr/bin/cdrecord or whatever! I hate this script!)
   //
 
-  else if( line.startsWith( "cdrecord" ) || 
+  else if( line.startsWith( "cdrecord" ) ||
 	   line.startsWith( m_cdrecordBinObject->path ) ||
 	   line.startsWith( m_cdrecordBinObject->path.left(m_cdrecordBinObject->path.length()-5) ) ) {
     // get rid of the path and the following colon and space
@@ -510,7 +510,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       // parse option
       int pos = line.find( "Bad Option" ) + 13;
       int len = line.length() - pos - 1;
-      emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrecordBinObject->name()).arg(line.mid(pos, len)), 
+      emit infoMessage( i18n("No valid %1 option: %2").arg(m_cdrecordBinObject->name()).arg(line.mid(pos, len)),
 			ERROR );
     }
     else if( errStr.startsWith("Cannot set speed/dummy") ) {
@@ -532,7 +532,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     else if( errStr.startsWith( "You may have used an ultra low speed medium" ) ) {
       m_cdrecordError = LOW_SPEED_MEDIUM;
     }
-    else if( errStr.startsWith( "Permission denied. Cannot open" ) ) {
+    else if( errStr.startsWith( "Permission denied. Cannot open" ) ||
+             errStr.startsWith( "Operation not permitted." ) ) {
       m_cdrecordError = PERMISSION_DENIED;
     }
     else if( errStr.startsWith( "Can only copy session # 1") ) {
@@ -679,10 +680,10 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	  emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
 	else
 	  emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
-	
+
 	int s = d->speedEst->average();
 	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
-	
+
 	jobFinished( true );
       }
       break;
@@ -734,7 +735,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	break;
       case PERMISSION_DENIED:
 	emit infoMessage( i18n("%1 has no permission to open the device.").arg("Cdrecord"), ERROR );
+#ifdef HAVE_K3BSETUP
 	emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), ERROR );
+#endif
 	break;
       case BUFFER_UNDERRUN:
 	  emit infoMessage( i18n("Probably a buffer underrun occurred."), ERROR );
@@ -773,7 +776,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	}
 	else if( !wasSourceUnreadable() ) {
 	  emit infoMessage( i18n("%1 returned an unknown error (code %2).")
-			    .arg(m_cdrecordBinObject->name()).arg(p->exitStatus()), 
+			    .arg(m_cdrecordBinObject->name()).arg(p->exitStatus()),
 			    K3bJob::ERROR );
 
 	  if( p->exitStatus() >= 254 && m_writingMode == K3b::DAO ) {
@@ -792,7 +795,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
     }
   }
   else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_cdrecordBinObject->name()), 
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg(m_cdrecordBinObject->name()),
 		      ERROR );
     jobFinished( false );
   }
