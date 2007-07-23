@@ -231,6 +231,11 @@ void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 
 void K3bDataImageSettingsWidget::slotCustomFilesystems()
 {
+    // load settings in custom window
+    if( m_comboFilesystems->currentItem() != FS_CUSTOM ) {
+        m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
+    }
+
   // store the current settings in case the user cancels the changes
   K3bIsoOptions o;
   m_customFsDlg->w->save( o );
