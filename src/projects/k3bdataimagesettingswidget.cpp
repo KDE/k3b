@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -67,7 +67,7 @@ static const int SYM_FOLLOW = 3;
 
 
 //
-// returns true if the part of the options that is presented in the advanced custom 
+// returns true if the part of the options that is presented in the advanced custom
 // settings dialog is equal. used to determine if some preset is used.
 //
 static bool compareAdvancedOptions( const K3bIsoOptions& o1, const K3bIsoOptions& o2 )
@@ -126,7 +126,7 @@ static void initializePresets()
 class K3bDataImageSettingsWidget::CustomFilesystemsDialog : public KDialogBase
 {
 public:
-  CustomFilesystemsDialog( QWidget* parent ) 
+  CustomFilesystemsDialog( QWidget* parent )
     : KDialogBase( parent,
 		   "custom_filesystems_dialog",
 		   true,
@@ -204,7 +204,7 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
 		   + "<p><b>" + i18n(s_fsPresetNames[2]) + "</b><br>"
 		   + i18n("The file system has additional UDF entries attached to it. This raises the maximal file "
 			  "size to 4 GB. Be aware that the UDF support in K3b is limited.")
-		   + "<p><b>" + i18n(s_fsPresetNames[3]) + "</b><br>" 
+		   + "<p><b>" + i18n(s_fsPresetNames[3]) + "</b><br>"
 		   + i18n("The file system is optimized for compatibility with old systems. That means file names "
 			  "are restricted to 8.3 characters and no symbolic links or file permissions are supported.") );
 }
@@ -233,17 +233,22 @@ void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 
 void K3bDataImageSettingsWidget::slotCustomFilesystems()
 {
-  // store the current settings in case the user cancels the changes
-  K3bIsoOptions o;
-  m_customFsDlg->w->save( o );
+    // load settings in custom window
+    if( m_comboFilesystems->currentItem() != FS_CUSTOM ) {
+        m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
+    }
 
-  if( m_customFsDlg->exec() == QDialog::Accepted ) {
-    slotFilesystemsChanged();
-  }
-  else {
-    // reload the old settings discarding any changes
-    m_customFsDlg->w->load( o );
-  }
+    // store the current settings in case the user cancels the changes
+    K3bIsoOptions o;
+    m_customFsDlg->w->save( o );
+
+    if( m_customFsDlg->exec() == QDialog::Accepted ) {
+        slotFilesystemsChanged();
+    }
+    else {
+        // reload the old settings discarding any changes
+        m_customFsDlg->w->load( o );
+    }
 }
 
 
@@ -279,7 +284,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 
   if( m_comboFilesystems->currentItem() == FS_CUSTOM ) {
     if( !m_customFsDlg->w->m_checkRockRidge->isChecked() ) {
-      KMessageBox::information( this, 
+      KMessageBox::information( this,
 				i18n("<p>Be aware that it is not recommended to disable the Rock Ridge "
 				     "Extensions. There is no disadvantage in enabling Rock Ridge (except "
 				     "for a very small space overhead) but a lot of advantages."
@@ -291,7 +296,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
     }
 
     if( !m_customFsDlg->w->m_checkJoliet->isChecked() )
-      KMessageBox::information( this, 
+      KMessageBox::information( this,
 				i18n("<p>Be aware that without the Joliet extensions Windows "
 				     "systems will not be able to display long filenames. You "
 				     "will only see the ISO9660 filenames."
