@@ -1,3 +1,8 @@
+1.0.4
+=====
+ * Never use growisofs parameter -dvd-compat with DVD-RW media in restricted overwrite mode
+ * Unmount medium before DVD formatting
+
 1.0.3
 =====
  * Reverted to old behaviour of reloading medium before verification. Not enough
