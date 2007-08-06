@@ -127,6 +127,12 @@ void K3bDvdFormattingJob::start()
     return;
   }
 
+  // FIXME: check the return value
+  if( K3b::isMounted( d->device ) ) {
+      emit infoMessage( i18n("Unmounting medium"), INFO );
+      K3b::unmount( d->device );
+  }
+
   //
   // first wait for a dvd+rw or dvd-rw
   // Be aware that an empty DVD-RW might be reformatted to another writing mode
