@@ -46,7 +46,7 @@
 #include <sys/utsname.h>
 #include <sys/stat.h>
 
-#if defined(__FreeBSD__) || defined(__NetBSD__)
+#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
 #  include <sys/param.h>
 #  include <sys/mount.h>
 #  include <sys/endian.h>

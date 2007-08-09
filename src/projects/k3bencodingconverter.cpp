@@ -62,7 +62,7 @@ bool K3bEncodingConverter::encodedLocally( const QCString& s )
 {
 #ifdef HAVE_ICONV_H
   QCString utf8Encoded( s.length()*2 );
-#if defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)
+#if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(__DragonFly__)
   const char* in = s.data();
 #else
   char* in = s.data();
@@ -111,7 +111,7 @@ bool K3bEncodingConverter::convert( const QCString& s, QCString& result, const Q
   iconv_t ic = ::iconv_open( to.local8Bit(), from.local8Bit() );
 
   result.resize( s.length() * 2 );
-#if defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)
+#if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(__DragonFly__)
   const char* in = s.data();
 #else
   char* in = s.data();
