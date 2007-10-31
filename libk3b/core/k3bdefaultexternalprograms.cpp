@@ -260,6 +260,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
   else
     bin->addFeature( "burnproof" );
 
+  if ( bin->version >= K3bVersion( 2, 1, 1, "a29" ) && !wodim )
+      bin->addFeature( "blue-ray" );
+
   addBin( bin );
   return true;
 }
@@ -368,6 +371,9 @@ bool K3bMkisofsProgram::scan( const QString& p )
     bin->addFeature( "backslashed_filenames" );
 
   if ( genisoimage && bin->version >= K3bVersion( 1, 1, 4 ) )
+      bin->addFeature( "no-4gb-limit" );
+
+  if ( !genisoimage && bin->version >= K3bVersion( 2, 1, 1, "a32" ) )
       bin->addFeature( "no-4gb-limit" );
 
   addBin(bin);

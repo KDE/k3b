@@ -277,19 +277,19 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	// is only used for CD/DVD copy anyway we simply reply on the inserted medium's type.
 	//
 	int i = 1;
-        int x1Speed = 175;
+        int x1Speed = K3bDevice::SPEED_FACTOR_CD;
         if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
-            x1Speed = 1385;
+            x1Speed = K3bDevice::SPEED_FACTOR_DVD;
         }
         else if ( K3bDevice::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
-            x1Speed = 4496;
+            x1Speed = K3bDevice::SPEED_FACTOR_BD;
         }
 	int max = writerDevice()->maxWriteSpeed();
         while( i*x1Speed <= max ) {
 	  insertSpeedItem( i*x1Speed );
 	  // a little hack to handle the stupid 2.4x DVD speed
-	  if( i == 2 && x1Speed == 1385 )
-	    insertSpeedItem( (int)(2.4*1385.0) );
+	  if( i == 2 && x1Speed == K3bDevice::SPEED_FACTOR_DVD )
+	    insertSpeedItem( (int)(2.4*( double )K3bDevice::SPEED_FACTOR_DVD) );
 	  i = ( i == 1 ? 2 : i+2 );
 	}
       }
@@ -515,7 +515,9 @@ void K3bWriterSelectionWidget::slotRefreshWritingApps()
 
   // select the ones that make sense
   if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
-    i = K3b::GROWISOFS|K3b::DVD_RW_FORMAT|K3b::DVDRECORD;
+    i = K3b::GROWISOFS|K3b::DVD_RW_FORMAT|K3b::CDRECORD;
+  else if ( K3bDevice::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) )
+    i = K3b::GROWISOFS|K3b::CDRECORD;
   else
     i = K3b::CDRDAO|K3b::CDRECORD;
 

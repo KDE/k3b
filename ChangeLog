@@ -11,7 +11,11 @@
  * Allow importing of arbitrary sessions into a data project, thus continuing other than the
    last session.
  * "Clear" project" now only clears the added data but leaves the settings as they were (bug 147838)
-
+ * Support files bigger than 4GB via mkisofs 2.01.01a32 and above
+ * Do only reload the medium for verification if necessary (depends on the writer)
+ * Support for DVD writing via cdrecord
+ * Support for Blue-Ray writing
+	
 1.0.1
 =====
  * Fixed crash when using the Device menu without a selected device.

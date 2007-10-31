@@ -94,7 +94,7 @@ public:
     int burnedMediumType;
 
     int speedMultiplicator() const {
-        return ( burnedMediumType & K3bDevice::MEDIA_BD_ALL ? 4496 : 1385 );
+        return ( burnedMediumType & K3bDevice::MEDIA_BD_ALL ? K3bDevice::SPEED_FACTOR_BD : K3bDevice::SPEED_FACTOR_DVD );
     }
 };
 
@@ -284,7 +284,10 @@ bool K3bGrowisofsWriter::prepareProcess()
   // because the only thing it does is creating problems.
   // Normally this should be done in growisofs
   //
-  if( dvdCompat && d->burnedMediumType != K3bDevice::MEDIA_DVD_PLUS_RW )
+  int mediaType = burnDevice()->mediaType();
+  if( dvdCompat &&
+      mediaType != K3bDevice::MEDIA_DVD_PLUS_RW &&
+      mediaType != K3bDevice::MEDIA_DVD_RW_OVWR )
     *d->process << "-dvd-compat";
 
   //
@@ -329,7 +332,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
     *d->process << *it;
 
-  emit debuggingOutput( "Burned media", K3bDevice::mediaTypeString(burnDevice()->mediaType()) );
+  emit debuggingOutput( "Burned media", K3bDevice::mediaTypeString(mediaType) );
 
   return true;
 }

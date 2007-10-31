@@ -677,7 +677,7 @@ int K3bDevice::Device::numSessions() const
             k3bDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": could not get session info !" << endl;
         }
     }
-    else if ( m & ( MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR ) ) {
+    else if ( m & ( MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR|MEDIA_BD_RE ) ) {
         // fabricate value
         int e = isEmpty();
         return ( e == STATE_COMPLETE || e == STATE_COMPLETE ? 1 : 0 );

@@ -283,6 +283,49 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 
   // /////////////////////////////////////////////////////////////
   //
+  // BD-RE handling
+  //
+  // /////////////////////////////////////////////////////////////
+  if ( (d->wantedMediaType & K3bDevice::MEDIA_BD_RE) &&
+       (medium.diskInfo().mediaType() & K3bDevice::MEDIA_BD_RE) ) {
+
+      kdDebug() << "(K3bEmptyDiscWaiter) ------ found BD-RE as wanted." << endl;
+
+      if( d->wantedMediaState == K3bDevice::STATE_EMPTY ) {
+          // check if the media contains a filesystem
+          K3bIso9660 isoF( d->device );
+          bool hasIso = isoF.open();
+
+          if( formatWithoutAsking ||
+              !hasIso ||
+              KMessageBox::warningContinueCancel( parentWidgetToUse(),
+                                                  i18n("Found %1 media in %2 - %3. "
+                                                       "Should it be overwritten?")
+                                                  .arg("BD-RE")
+                                                  .arg(d->device->vendor())
+                                                  .arg(d->device->description()),
+                                                  i18n("Found %1").arg("BD-RE"),i18n("Overwrite") ) == KMessageBox::Continue ) {
+              finishWaiting( K3bDevice::MEDIA_BD_RE );
+          }
+          else {
+              kdDebug() << "(K3bEmptyDiscWaiter) starting devicehandler: no BD-RE overwrite" << endl;
+              K3b::unmount( d->device );
+              d->device->eject();
+              continueWaiting();
+          }
+      }
+
+      //
+      // We want a BD-RE not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
+      // are handled the same everywhere (isofs is grown).
+      //
+      else {
+          finishWaiting( K3bDevice::MEDIA_BD_RE );
+      }
+  }
+
+  // /////////////////////////////////////////////////////////////
+  //
   // DVD+RW handling
   //
   // /////////////////////////////////////////////////////////////
@@ -290,8 +333,8 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
   // DVD+RW: if empty we need to preformat. Although growisofs does it before writing doing it here
   //         allows better control and a progress bar. If it's not empty we should check if there is
   //         already a filesystem on the media.
-  if( (d->wantedMediaType & K3bDevice::MEDIA_DVD_PLUS_RW) &&
-      (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_RW) ) {
+  else if( (d->wantedMediaType & K3bDevice::MEDIA_DVD_PLUS_RW) &&
+           (medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_RW) ) {
 
     kdDebug() << "(K3bEmptyDiscWaiter) ------ found DVD+RW as wanted." << endl;
 

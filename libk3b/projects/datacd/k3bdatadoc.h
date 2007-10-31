@@ -278,6 +278,8 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
 
   void informAboutNotFoundFiles();
 
+  // FIXME: move all the members into a private d-pointer structure
+
   QStringList m_notFoundFiles;
   QStringList m_noPermissionFiles;
 
@@ -286,8 +288,6 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   int m_dataMode;
 
   bool m_verifyData;
-
-  KIO::filesize_t m_size;
 		
   K3bIsoOptions m_isoOptions;
 

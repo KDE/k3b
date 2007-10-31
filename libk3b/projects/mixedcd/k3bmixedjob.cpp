@@ -507,7 +507,17 @@ void K3bMixedJob::slotWriterFinished( bool success )
     emit burning(false);
 
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
-        slotMediaReloadedForSecondSession( true );
+        // many drives need to reload the medium to return to a proper state
+        if ( ( int )m_doc->burner()->readToc().count() < m_doc->numOfTracks()-1 ) {
+            emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+            connect( K3bDevice::reload( m_doc->burner() ),
+                     SIGNAL(finished(K3bDevice::DeviceHandler*)),
+                     this,
+                     SLOT(slotDiskInfoReady(K3bDevice::DeviceHandler*)) );
+        }
+        else {
+            slotMediaReloadedForSecondSession( true );
+        }
     }
     else {
         d->copiesDone++;

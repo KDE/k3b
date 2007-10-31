@@ -181,6 +181,9 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    QCheckBox* m_checkOnlyCreateImage;
    QSpinBox* m_spinCopies;
 
+ private slots:
+   void slotShowImageTip( bool buttonActivated );
+
  private:
    K3bDoc* m_doc;
    K3bBurnJob* m_job;

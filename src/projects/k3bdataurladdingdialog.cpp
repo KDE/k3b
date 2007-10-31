@@ -181,7 +181,7 @@ QString K3bDataUrlAddingDialog::resultMessage() const
       .arg( m_unreadableFiles.join( "<br>" ) );
   if( !m_tooBigFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("To burn files bigger than %1 please use %2").arg(KIO::convertSize(0xFFFFFFFF)).arg( "genisoimage >= 1.1.4" ) )
+      .arg( i18n("To burn files bigger than %1 please use %2").arg(KIO::convertSize(0xFFFFFFFF)).arg( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ) )
       .arg( m_tooBigFiles.join( "<br>" ) );
   if( !m_mkisofsLimitationRenamedFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")

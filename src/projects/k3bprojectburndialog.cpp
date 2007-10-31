@@ -216,7 +216,7 @@ void K3bProjectBurnDialog::slotStartClicked()
       //
       // check if enough space in tempdir if not on-the-fly
       //
-      if( doc()->size()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+      if( doc()->burningSize()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
 	if( KMessageBox::warningContinueCancel( this, i18n("There seems to be not enough free space in temporary directory. "
 							   "Write anyway?") ) == KMessageBox::Cancel )
 	  return;
@@ -331,6 +331,9 @@ void K3bProjectBurnDialog::prepareGui()
   connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
   connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
+
+  connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotShowImageTip(bool)) );
+  connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotShowImageTip(bool)) );
 }
 
 
@@ -412,6 +415,16 @@ void K3bProjectBurnDialog::loadK3bDefaults()
     m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
   else
     m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
+}
+
+
+void K3bProjectBurnDialog::slotShowImageTip( bool buttonActivated )
+{
+    if ( buttonActivated ) {
+        // FIXME: use the tab bar's position
+        QWhatsThis::display( i18n( "Use the 'Image' tab to optionally adjust the path of the image." ),
+                             mapToGlobal( QPoint( rect().center().x(), rect().top() ) ) );
+    }
 }
 
 #include "k3bprojectburndialog.moc"

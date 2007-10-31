@@ -119,7 +119,10 @@ void K3bDataTrackReader::WorkThread::run()
 
   m_useLibdvdcss = false;
   m_usedSectorSize = m_sectorSize;
-  if( m_device->isDVD() ) {
+
+  int mediaType = m_device->mediaType();
+
+  if( K3bDevice::isDvdMedia( mediaType ) ) {
     m_usedSectorSize = MODE1;
 
     //
@@ -158,6 +161,9 @@ void K3bDataTrackReader::WorkThread::run()
 
       m_useLibdvdcss = true;
     }
+  }
+  else if ( K3bDevice::isBdMedia( mediaType ) ) {
+      m_usedSectorSize = MODE1;
   }
   else {
     if( m_usedSectorSize == AUTO ) {

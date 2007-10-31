@@ -283,34 +283,12 @@ void K3bDeviceWidget::updateDeviceListViews()
     // drive type
     // --------------------------------
     K3bListViewItem* typeItem = new K3bListViewItem( devRoot, versionItem,
-						     i18n("Writes CD-R:"),
-						     dev->device->writesCd() ? i18n("yes") : i18n("no") );
+						     i18n("Write Capabilities:"),
+						     K3bDevice::mediaTypeString( dev->device->writeCapabilities(), true ) );
     typeItem->setForegroundColor( 1, palette().disabled().foreground() );
     typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes CD-RW:"),
-				    dev->device->writesCdrw() ? i18n("yes") : i18n("no") );
-    typeItem->setForegroundColor( 1, palette().disabled().foreground() );
-    typeItem = new K3bListViewItem( devRoot, typeItem, 
-				    i18n("Reads DVD:"),
-				    dev->device->readsDvd() ? i18n("yes") : i18n("no") );
-    typeItem->setForegroundColor( 1, palette().disabled().foreground() );
-    typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVD-R(W):"),
-				    dev->device->writesDvdMinus() ? i18n("yes") : i18n("no") );
-    typeItem->setForegroundColor( 1, palette().disabled().foreground() );
-    typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVD-R Dual Layer:"),
-				    (dev->device->type() & K3bDevice::DEVICE_DVD_R_DL)
-				    ? i18n("yes") : i18n("no") );
-    typeItem->setForegroundColor( 1, palette().disabled().foreground() );
-    typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVD+R(W):"),
-				    dev->device->writesDvdPlus() ? i18n("yes") : i18n("no") );
-    typeItem->setForegroundColor( 1, palette().disabled().foreground() );
-    typeItem = new K3bListViewItem( devRoot, typeItem,
-				    i18n("Writes DVD+R Double Layer:"),
-				    (dev->device->type() & K3bDevice::DEVICE_DVD_PLUS_R_DL)
-				    ? i18n("yes") : i18n("no") );
+                                    i18n("Read Capabilities:"),
+                                    K3bDevice::mediaTypeString( dev->device->readCapabilities(), true ) );
     typeItem->setForegroundColor( 1, palette().disabled().foreground() );
     // --------------------------------
 
@@ -341,11 +319,11 @@ void K3bDeviceWidget::updateDeviceListViews()
 				      dev->device->burnfree() ? i18n("yes") : i18n("no") );
       typeItem->setForegroundColor( 1, palette().disabled().foreground() );
 
-      
+
       // and at last the write modes
-      (new K3bListViewItem( devRoot, 
-			    typeItem, 
-			    i18n("Write modes:"), 
+      (new K3bListViewItem( devRoot,
+			    typeItem,
+			    i18n("Write modes:"),
 			    K3bDevice::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, palette().disabled().foreground() );
     }
 

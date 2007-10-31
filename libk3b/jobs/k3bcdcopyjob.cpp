@@ -1018,10 +1018,13 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
       d->currentWrittenSession++;
       d->currentReadSession++;
 
-      // reload the media
-//       emit newSubTask( i18n("Reloading the medium") );
-//       connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
-// 	       this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
+      // many drives need to reload the medium to return to a proper state
+      if ( m_writerDevice->diskInfo().numSessions() < ( int )d->currentWrittenSession ) {
+          emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+          emit newSubTask( i18n("Reloading the medium") );
+          connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
+                   this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
+      }
 
       if( !writeNextSession() ) {
           // nothing is running here...

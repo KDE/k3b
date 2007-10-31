@@ -62,6 +62,9 @@ public:
   QValueList<Track> tracks;
 
   KTempFile* cdTextFile;
+
+  int burnedMediaType;
+  int usedSpeedFactor;
 };
 
 
@@ -148,6 +151,8 @@ void K3bCdrecordWriter::prepareProcess()
   if( !m_cdrecordBinObject )
     return;
 
+  d->burnedMediaType = burnDevice()->mediaType();
+
   *m_process << m_cdrecordBinObject;
 
   // display progress
@@ -166,13 +171,30 @@ void K3bCdrecordWriter::prepareProcess()
     // the choice is left to cdrecord
     d->usedSpeed = burnDevice()->determineMaximalWriteSpeed();
   }
-  d->usedSpeed /= 175;
+
+  if ( d->burnedMediaType & K3bDevice::MEDIA_DVD_ALL ) {
+      d->usedSpeed /= K3bDevice::SPEED_FACTOR_DVD;
+      d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_DVD;
+  }
+  else if ( d->burnedMediaType & K3bDevice::MEDIA_BD_ALL ) {
+      d->usedSpeed /= K3bDevice::SPEED_FACTOR_BD;
+      d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_BD;
+  }
+  else {
+      d->usedSpeed /= K3bDevice::SPEED_FACTOR_CD;
+      d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_CD;
+  }
+
   if( d->usedSpeed != 0 )
     *m_process << QString("speed=%1").arg(d->usedSpeed);
 
-  if( m_writingMode == K3b::DAO || m_cue ) {
-    if( burnDevice()->dao() )
-      *m_process << "-dao";
+  if ( K3bDevice::isDvdMedia( d->burnedMediaType ) ) {
+      // cdrecord only supports SAo for DVD
+      *m_process << "-sao";
+  }
+  else if( m_writingMode == K3b::DAO || m_cue ) {
+      if( burnDevice()->dao() )
+      *m_process << "-sao";
     else {
       if( m_cdrecordBinObject->hasFeature( "tao" ) )
 	*m_process << "-tao";
@@ -683,7 +705,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 	  emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
 
 	int s = d->speedEst->average();
-	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
+	emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/( double )d->usedSpeedFactor), 2), INFO );
 
 	jobFinished( true );
       }
@@ -805,7 +827,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 
 void K3bCdrecordWriter::slotThroughput( int t )
 {
-  emit writeSpeed( t, d->tracks[m_currentTrack-1].audio ? 175 : 150 );
+    emit writeSpeed( t, d->tracks[m_currentTrack-1].audio ? K3bDevice::SPEED_FACTOR_CD_AUDIO : d->usedSpeedFactor );
 }
 
 #include "k3bcdrecordwriter.moc"

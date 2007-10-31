@@ -148,6 +148,7 @@ void K3bDataBurnDialog::readSettings()
   m_dataModeWidget->setDataMode( ((K3bDataDoc*)doc())->dataMode() );
 
   toggleAll();
+  slotMultiSessionModeChanged();
 }
 
 

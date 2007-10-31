@@ -215,4 +215,9 @@ int K3bDoc::supportedMediaTypes() const
     return K3bDevice::MEDIA_WRITABLE;
 }
 
+KIO::filesize_t K3bDoc::burningSize() const
+{
+    return size();
+}
+
 #include "k3bdoc.moc"

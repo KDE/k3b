@@ -239,6 +239,13 @@ namespace K3bDevice {
                 MEDIA_BD_ALL
   };
 
+  enum SpeedMultiplicators {
+      SPEED_FACTOR_CD = 150,
+      SPEED_FACTOR_CD_AUDIO = 175,
+      SPEED_FACTOR_DVD = 1385,
+      SPEED_FACTOR_BD = 4496 // 4495.5
+  };
+
   enum CopyrightProtectionSytemType {
       COPYRIGHT_PROTECTION_NONE = 0x0,
       COPYRIGHT_PROTECTION_CSS = 0x1,

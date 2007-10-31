@@ -346,7 +346,7 @@ void K3bMediaCopyDialog::slotStartClicked()
 
         burnJob = job;
     }
-    else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+    else if ( sourceMedium.diskInfo().mediaType() & ( K3bDevice::MEDIA_DVD_ALL|K3bDevice::MEDIA_BD_ALL ) ) {
         K3bDvdCopyJob* job = new K3bDvdCopyJob( dlg, this );
 
         job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
@@ -419,7 +419,8 @@ void K3bMediaCopyDialog::toggleAll()
 
   // FIXME: no verification for CD yet
   m_checkVerifyData->setDisabled( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ||
-                                  sourceMedium.content() & K3bMedium::CONTENT_AUDIO );
+                                  sourceMedium.content() & K3bMedium::CONTENT_AUDIO ||
+                                  m_checkSimulate->isChecked() );
 
   // we can only clone single session CDs
   if( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
@@ -435,7 +436,8 @@ void K3bMediaCopyDialog::toggleAll()
       }
   }
   else {
-      m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS );
+      // FIXME: handle Blue-Ray
+      m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS|K3b::CDRECORD );
 
       m_comboCopyMode->setEnabled( false );
       m_comboCopyMode->setCurrentItem( 0 );

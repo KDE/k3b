@@ -108,9 +108,20 @@ void K3bDataMultiSessionParameterJob::WorkThread::run()
         }
     }
 
+    // FIXME: not sure if it is good to always wait for a medium this early
     if( !m_doc->onlyCreateImages() &&
         ( m_usedMultiSessionMode == K3bDataDoc::CONTINUE ||
           m_usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
+        int m = waitForMedia( m_doc->burner(),
+                              K3bDevice::STATE_INCOMPLETE,
+                              K3bDevice::MEDIA_WRITABLE );
+
+        if( m < 0 ) {
+            emitCanceled();
+            emitFinished( false );
+            return;
+        }
+
         if ( !setupMultiSessionParameters() ) {
             emitFinished( false );
             return;
@@ -136,6 +147,8 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
         // Since one never closes a DVD+RW we only differ between CONTINUE and START
         //
 
+        kdDebug() << "(K3bDataMultiSessionParameterJob) found overwrite medium." << endl;
+
         // try to check the filesystem size
         K3bIso9660 iso( m_doc->burner() );
         if( iso.open() && info.capacity() - iso.primaryDescriptor().volumeSpaceSize >= m_doc->burningLength() ) {
@@ -154,6 +167,9 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
         //  3. Special case for the 4GB boundary which seems to be enforced by a linux kernel issue
         //  4. the project does fit and does not fill up the CD -> continue multisession
         //
+
+        kdDebug() << "(K3bDataMultiSessionParameterJob) found appendable medium." << endl;
+
         if( m_doc->size() > info.remainingSize().mode1Bytes() &&
             m_doc->importedSession() < 0 ) {
             return K3bDataDoc::NONE;
@@ -175,6 +191,9 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
         // 1. the project does fit and fills up the medium to some arbitrary percentage -> finish multisession
         // 2. Special case for the 4GB boundary which seems to be enforced by a linux kernel issue
         //
+
+        kdDebug() << "(K3bDataMultiSessionParameterJob) found empty or complete medium." << endl;
+
         if( m_doc->size() >= info.capacity().mode1Bytes()*9/10 ||
             m_doc->writingMode() == K3b::DAO ) {
             return K3bDataDoc::NONE;

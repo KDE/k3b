@@ -150,6 +150,12 @@ class LIBK3B_EXPORT K3bDoc : public QObject
   int copies() const { return m_copies; }
   int speed() const { return m_speed; }
   K3bDevice::Device* burner() const { return m_burner; }
+
+  /**
+   * \return the size that will actually be burnt to the medium.
+   * This only differs from size() for multisession projects.
+   */
+  virtual KIO::filesize_t burningSize() const;
   virtual KIO::filesize_t size() const = 0;
   virtual K3b::Msf length() const = 0;
 

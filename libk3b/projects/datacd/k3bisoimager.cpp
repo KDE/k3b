@@ -700,7 +700,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   if ( filesGreaterThan4Gb ) {
       if ( !d->mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
           emit infoMessage( i18n( "Found files bigger than 4 GB. K3b needs at least %1 to continue." )
-                            .arg( "genisoimage >= 1.1.4" ),
+                            .arg( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ),
                             ERROR );
           return false;
       }
@@ -761,7 +761,12 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   if( m_doc->isoOptions().hideTRANS_TBL()  )
     *m_process << "-hide-joliet-trans-tbl";
 
-  *m_process << "-iso-level" << QString::number(m_doc->isoOptions().ISOLevel());
+  int isoLevel = m_doc->isoOptions().ISOLevel();
+  if ( filesGreaterThan4Gb && isoLevel < 3 ) {
+      emit infoMessage( i18n( "Setting iso level to 3 to support files bigger than 4 GB." ), WARNING );
+      isoLevel = 3;
+  }
+  *m_process << "-iso-level" << QString::number( isoLevel );
 
   *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile->name());
 

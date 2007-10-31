@@ -382,7 +382,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 				 i18n("Empty:"),
 				 info.empty() ? i18n("yes") : i18n("no") );
 
-  if( info.isDvdMedia() )
+  if( K3bDevice::isDvdMedia( info.mediaType() ) )
     atipChild = new KListViewItem( atipItem, atipChild,
 				   i18n("Layers:"),
 				   QString::number( info.numLayers() ) );
@@ -425,11 +425,11 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 	}
 
 	if( K3bDevice::isCdMedia( info.mediaType() ) )
-	  s.append( QString( "%1x (%2 KB/s)" ).arg( *it/175 ).arg( *it ) );
+	  s.append( QString( "%1x (%2 KB/s)" ).arg( *it/K3bDevice::SPEED_FACTOR_CD ).arg( *it ) );
 	else if( K3bDevice::isDvdMedia( info.mediaType() ) )
-	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 1385.0, *it ) );
+	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / ( double )K3bDevice::SPEED_FACTOR_DVD, *it ) );
         else if ( K3bDevice::isBdMedia( info.mediaType() ) )
-	  s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / 4496.0, *it ) );
+            s.append( QString().sprintf( "%.1fx (%d KB/s)", (double)*it / ( double )K3bDevice::SPEED_FACTOR_BD, *it ) );
       }
 
     atipChild->setText( 1, s );

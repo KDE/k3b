@@ -46,7 +46,7 @@ class LIBK3B_EXPORT K3bGlobalSettings
    * If force is set to true K3b will continue in certain "unsafe" situations.
    * The most common being a medium not suitable for the writer in terms of
    * writing speed.
-   * Compare cdrecord's parameter -force
+   * Compare cdrecord's parameter -force and -ignsize
    */
   bool force() const { return m_force; }
 
