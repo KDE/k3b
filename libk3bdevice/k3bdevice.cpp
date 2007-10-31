@@ -3074,25 +3074,35 @@ void K3bDevice::Device::checkWritingModes()
 }
 
 
-int K3bDevice::Device::determineMaximalWriteSpeed() const
+int K3bDevice::Device::getMaxWriteSpeedVia2A() const
 {
     int ret = 0;
+
     unsigned char* data = 0;
     unsigned int dataLen = 0;
 
+    if( modeSense( &data, dataLen, 0x2A ) ) {
+        mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+
+        // MMC1 used byte 18 and 19 for the max write speed
+        if( dataLen > 19 )
+            ret = from2Byte( mm->max_write_speed );
+
+        delete [] data;
+    }
+
+    return ret;
+}
+
+
+int K3bDevice::Device::determineMaximalWriteSpeed() const
+{
+    int ret = 0;
+
     if( mediaType() & MEDIA_CD_ALL ) {
-        if( modeSense( &data, dataLen, 0x2A ) ) {
-            mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
-
-            // MMC1 used byte 18 and 19 for the max write speed
-            if( dataLen > 19 )
-                ret = from2Byte( mm->max_write_speed );
-
-            delete [] data;
-
-            if( ret > 0 )
-                return ret;
-        }
+        ret = getMaxWriteSpeedVia2A();
+        if ( ret > 0 )
+            return ret;
     }
 
     QValueList<int> list = determineSupportedWriteSpeeds();
@@ -3148,6 +3158,14 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
         else {
             if( !getSupportedWriteSpeedsViaGP( ret, m ) )
                 getSupportedWriteSpeedsVia2A( ret, m );
+        }
+
+        // construct writing speeds for old devices
+        if ( ret.isEmpty() && K3bDevice::isCdMedia( m ) ) {
+            int max = getMaxWriteSpeedVia2A();
+            for ( int i = 1; i <= max/SPEED_FACTOR_CD; i *= 2 ) {
+                ret.append( i * SPEED_FACTOR_CD );
+            }
         }
     }
 

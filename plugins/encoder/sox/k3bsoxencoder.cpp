@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -53,7 +53,7 @@ class K3bSoxProgram : public K3bExternalProgram
   bool scan( const QString& p ) {
     if( p.isEmpty() )
       return false;
-    
+
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
@@ -61,19 +61,21 @@ class K3bSoxProgram : public K3bExternalProgram
 	path.append("/");
       path.append("sox");
     }
-    
+
     if( !QFile::exists( path ) )
       return false;
-    
+
     K3bExternalBin* bin = 0;
-    
+
     // probe version
     KProcess vp;
     K3bProcessOutputCollector out( &vp );
-    
+
     vp << path << "-h";
     if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
       int pos = out.output().find( "sox: SoX Version" );
+      if ( pos < 0 )
+          pos = out.output().find( "sox: SoX v" ); // newer sox versions
       int endPos = out.output().find( "\n", pos );
       if( pos > 0 && endPos > 0 ) {
 	pos += 17;
@@ -143,7 +145,7 @@ void K3bSoxEncoder::finishEncoderInternal()
     if( d->process->isRunning() ) {
       ::close( d->process->stdinFd() );
 
-      // this is kind of evil... 
+      // this is kind of evil...
       // but we need to be sure the process exited when this method returnes
       ::waitpid( d->process->pid(), 0, 0 );
     }
@@ -188,7 +190,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
 	     this, SLOT(slotSoxOutputLine(const QString&)) );
 
     // input settings
-    *d->process << soxBin->path 
+    *d->process << soxBin->path
 		<< "-t" << "raw"    // raw samples
 		<< "-r" << "44100"  // samplerate
 		<< "-s"             // signed linear
@@ -270,7 +272,7 @@ QStringList K3bSoxEncoder::extensions() const
 {
   static QStringList s_extensions;
   if( s_extensions.isEmpty() ) {
-    s_extensions << "au" 
+    s_extensions << "au"
 		 << "8svx"
 		 << "aiff"
 		 << "avr"
@@ -362,7 +364,7 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 }
 
 
-K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent, 
+K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent,
 							  const char* name ) const
 {
   return new K3bSoxEncoderSettingsWidget( parent, name );
@@ -432,13 +434,13 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
 
   c->writeEntry( "manual settings", w->m_checkManual->isChecked() );
 
-  c->writeEntry( "channels", w->m_comboChannels->currentItem() == 0 
-		 ? 1 
-		 : ( w->m_comboChannels->currentItem() == 2 
-		     ? 4 
+  c->writeEntry( "channels", w->m_comboChannels->currentItem() == 0
+		 ? 1
+		 : ( w->m_comboChannels->currentItem() == 2
+		     ? 4
 		     : 2 ) );
 
-  c->writeEntry( "data size", w->m_comboSize->currentItem() == 0 
+  c->writeEntry( "data size", w->m_comboSize->currentItem() == 0
 		 ? 8
 		 : ( w->m_comboSize->currentItem() == 2
 		     ? 32

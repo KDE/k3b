@@ -367,7 +367,6 @@ void K3bProjectBurnDialog::readSettings()
   m_writerSelectionWidget->setWriterDevice( doc()->burner() );
   m_writerSelectionWidget->setSpeed( doc()->speed() );
   m_writerSelectionWidget->setWritingApp( doc()->writingApp() );
-  // FIXME: problem: this does not take into account the changes made in the dialog like the writing mode
   m_writerSelectionWidget->setWantedMediumType( doc()->supportedMediaTypes() );
   m_spinCopies->setValue( m_doc->copies() );
 }

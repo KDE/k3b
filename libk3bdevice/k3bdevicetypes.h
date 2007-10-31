@@ -240,8 +240,8 @@ namespace K3bDevice {
   };
 
   enum SpeedMultiplicators {
-      SPEED_FACTOR_CD = 150,
-      SPEED_FACTOR_CD_AUDIO = 175,
+      SPEED_FACTOR_CD = 175,
+      SPEED_FACTOR_CD_MODE1 = 150,
       SPEED_FACTOR_DVD = 1385,
       SPEED_FACTOR_BD = 4496 // 4495.5
   };

@@ -260,8 +260,9 @@ bool K3bCdrecordProgram::scan( const QString& p )
   else
     bin->addFeature( "burnproof" );
 
-  if ( bin->version >= K3bVersion( 2, 1, 1, "a29" ) && !wodim )
-      bin->addFeature( "blue-ray" );
+  // FIXME: cdrecord Blu-ray support not 100% yet
+//   if ( bin->version >= K3bVersion( 2, 1, 1, "a29" ) && !wodim )
+//       bin->addFeature( "blu-ray" );
 
   addBin( bin );
   return true;
@@ -829,6 +830,21 @@ bool K3bGrowisofsProgram::scan( const QString& p )
     if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
       bin->addFeature( "suidroot" );
   }
+
+  if ( bin->version >= K3bVersion( 5, 20 ) )
+      bin->addFeature( "dual-layer" );
+
+  if ( bin->version > K3bVersion( 5, 17 ) )
+      bin->addFeature( "tracksize" );
+
+  if ( bin->version >= K3bVersion( 5, 15 ) )
+      bin->addFeature( "daosize" );
+
+  if ( bin->version >= K3bVersion( 6, 0 ) )
+      bin->addFeature( "buffer" );
+
+  if ( bin->version >= K3bVersion( 7, 0 ) )
+      bin->addFeature( "blu-ray" );
 
   addBin( bin );
   return true;

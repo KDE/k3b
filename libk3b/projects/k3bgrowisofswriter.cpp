@@ -213,7 +213,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   *d->process << d->growisofsBin;
 
   // set this var to true to enable the ringbuffer
-  d->usingRingBuffer = ( d->growisofsBin->version < K3bVersion( 6, 0 ) );
+  d->usingRingBuffer = !d->growisofsBin->hasFeature( "buffer" );
 
   QString s = burnDevice()->blockDeviceName() + "=";
   if( d->usingRingBuffer || d->image.isEmpty() ) {
@@ -260,7 +260,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   }
 
   // the tracksize parameter takes priority over the dao:tracksize parameter since growisofs 5.18
-  else if( d->growisofsBin->version > K3bVersion( 5, 17 ) && d->trackSize > 0 )
+  else if( d->growisofsBin->hasFeature( "tracksize" ) && d->trackSize > 0 )
     *d->process << "-use-the-force-luke=tracksize:" + QString::number(d->trackSize + trackSizePadding);
 
   if( simulate() )
@@ -268,7 +268,7 @@ bool K3bGrowisofsWriter::prepareProcess()
 
   if( d->writingMode == K3b::DAO ) {
     dvdCompat = true;
-    if( d->growisofsBin->version >= K3bVersion( 5, 15 ) && d->trackSize > 0 )
+    if( d->growisofsBin->hasFeature( "daosize" ) && d->trackSize > 0 )
       *d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize + trackSizePadding);
     else
       *d->process << "-use-the-force-luke=dao";
@@ -321,7 +321,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( k3bcore->globalSettings()->overburn() )
     *d->process << "-overburn";
 
-  if( !d->usingRingBuffer && d->growisofsBin->version >= K3bVersion( 6, 0 ) ) {
+  if( !d->usingRingBuffer && d->growisofsBin->hasFeature( "buffer" ) ) {
     bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
     int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 32 );
     *d->process << QString("-use-the-force-luke=bufsize:%1m").arg(bufSize);

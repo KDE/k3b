@@ -305,7 +305,7 @@ void K3bMediaSelectionComboBox::updateMedia()
   }
 
   // did the selection of devices change
-  if( !(d->devices == oldDevices) ) {
+  if( !( d->devices == oldDevices ) ) {
     emit newMedia();
     for( unsigned int i = 0; i < d->devices.count(); ++i ) {
       unsigned int j = 0;
@@ -473,10 +473,11 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
           else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
               stateString = i18n("a Data DVD medium");
           else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
-              stateString = i18n("a Data Blu-Ray medium");
+              stateString = i18n("a Data Blu-ray medium");
       }
-      else
+      else {
           stateString = i18n("an empty medium");
+      }
   }
 
   // this is basically the same as in K3bEmptyDiskWaiter
@@ -491,7 +492,7 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
   else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
       mediumString = i18n("DVD");
   else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
-      mediumString = i18n( "Blu-Ray" );
+      mediumString = i18n( "Blu-ray" );
   else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_CD) )
       mediumString = i18n("CD-R(W) or DVD%1R(W)").arg("±");
   else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_BD) )
@@ -500,6 +501,8 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
       mediumString = i18n("DVD%1R(W)").arg("±");
   else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_DL )
       mediumString = i18n("Double Layer DVD%1R").arg("±");
+  else if ( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_BD )
+      mediumString = i18n( "Blu-ray BD-R(E)" );
   else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_CD )
       mediumString = i18n("CD-R(W)");
   else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ROM )

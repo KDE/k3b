@@ -1404,11 +1404,11 @@ int K3bDataDoc::supportedMediaTypes() const
     if ( size() >= 9ULL*1024ULL*1024ULL*1024ULL ) {
         m ^= K3bDevice::MEDIA_WRITABLE_DVD;
     }
-    // special case: the user selected a specific writing mode
-    else if( writingMode() == K3b::WRITING_MODE_RES_OVWR ) {
-        // we treat DVD+R(W) as restricted overwrite media
-        m = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R;
-    }
+//     // special case: the user selected a specific writing mode
+//     else if( writingMode() == K3b::WRITING_MODE_RES_OVWR ) {
+//         // we treat DVD+R(W) as restricted overwrite media
+//         m = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R;
+//     }
 
     return m;
 }

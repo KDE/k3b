@@ -790,6 +790,8 @@ namespace K3bDevice
       bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, int type ) const;
       bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, int type ) const;
 
+      int getMaxWriteSpeedVia2A() const;
+
       QCString mediaId( int mediaType ) const;
 
       QString m_vendor;

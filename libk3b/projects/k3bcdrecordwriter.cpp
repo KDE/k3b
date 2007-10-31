@@ -22,6 +22,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bprocess.h>
 #include <k3bdevice.h>
+#include <k3bdeviceglobals.h>
 #include <k3bdevicemanager.h>
 #include <k3bdevicehandler.h>
 #include <k3bglobals.h>
@@ -181,6 +182,7 @@ void K3bCdrecordWriter::prepareProcess()
       d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_BD;
   }
   else {
+      // cdrecord provides progress and speed as multiple of 150 KB (except for audio tracks)
       d->usedSpeed /= K3bDevice::SPEED_FACTOR_CD;
       d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_CD;
   }
@@ -188,38 +190,48 @@ void K3bCdrecordWriter::prepareProcess()
   if( d->usedSpeed != 0 )
     *m_process << QString("speed=%1").arg(d->usedSpeed);
 
-  if ( K3bDevice::isDvdMedia( d->burnedMediaType ) ) {
+
+  if ( K3bDevice::isBdMedia( d->burnedMediaType ) ) {
+      if ( !m_cdrecordBinObject->hasFeature( "blu-ray" ) ) {
+          emit infoMessage( i18n( "Cdrecord version %1 does not support Blu-ray writing." ).arg( m_cdrecordBinObject->version ), ERROR );
+          // FIXME: add a way to fail the whole thing here
+      }
+      *m_process << "-sao";
+  }
+  else if ( K3bDevice::isDvdMedia( d->burnedMediaType ) ) {
       // cdrecord only supports SAo for DVD
       *m_process << "-sao";
   }
-  else if( m_writingMode == K3b::DAO || m_cue ) {
-      if( burnDevice()->dao() )
-      *m_process << "-sao";
-    else {
-      if( m_cdrecordBinObject->hasFeature( "tao" ) )
-	*m_process << "-tao";
-      emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
-    }
+  else if( K3bDevice::isCdMedia( d->burnedMediaType ) ) {
+      if( m_writingMode == K3b::DAO || m_cue ) {
+          if( burnDevice()->dao() )
+              *m_process << "-sao";
+          else {
+              if( m_cdrecordBinObject->hasFeature( "tao" ) )
+                  *m_process << "-tao";
+              emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
+          }
+      }
+      else if( m_writingMode == K3b::RAW ) {
+          if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96R ) )
+              *m_process << "-raw96r";
+          else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R16 ) )
+              *m_process << "-raw16";
+          else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96P ) )
+              *m_process << "-raw96p";
+          else {
+              emit infoMessage( i18n("Writer does not support raw writing."), WARNING );
+              if( m_cdrecordBinObject->hasFeature( "tao" ) )
+                  *m_process << "-tao";
+          }
+      }
+      else if( m_cdrecordBinObject->hasFeature( "tao" ) )
+          *m_process << "-tao";
   }
-  else if( m_writingMode == K3b::RAW ) {
-    if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96R ) )
-      *m_process << "-raw96r";
-    else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R16 ) )
-      *m_process << "-raw16";
-    else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96P ) )
-      *m_process << "-raw96p";
-    else {
-      emit infoMessage( i18n("Writer does not support raw writing."), WARNING );
-      if( m_cdrecordBinObject->hasFeature( "tao" ) )
-	*m_process << "-tao";
-    }
+  else {
+      emit infoMessage( i18n( "Cdrecord does not support writing %1 media." ).arg( K3bDevice::mediaTypeString( d->burnedMediaType ) ), ERROR );
+      // FIXME: add a way to fail the whole thing here
   }
-  else if ( m_writingMode == K3b::WRITING_MODE_INCR_SEQ ||
-            m_writingMode == K3b::WRITING_MODE_RES_OVWR ) { // FIXME: is this true? Can cdrecord even use this mode?
-    *m_process << "-tao";
-  }
-  else if( m_cdrecordBinObject->hasFeature( "tao" ) )
-    *m_process << "-tao";
 
   if( simulate() )
     *m_process << "-dummy";
@@ -827,7 +839,9 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
 
 void K3bCdrecordWriter::slotThroughput( int t )
 {
-    emit writeSpeed( t, d->tracks[m_currentTrack-1].audio ? K3bDevice::SPEED_FACTOR_CD_AUDIO : d->usedSpeedFactor );
+    emit writeSpeed( t, d->tracks.count() > m_currentTrack && !d->tracks[m_currentTrack-1].audio
+                     ? K3bDevice::SPEED_FACTOR_CD_MODE1
+                     : d->usedSpeedFactor );
 }
 
 #include "k3bcdrecordwriter.moc"

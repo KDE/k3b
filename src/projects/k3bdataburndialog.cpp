@@ -255,36 +255,36 @@ void K3bDataBurnDialog::saveUserDefaults( KConfigBase* c )
 
 void K3bDataBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAll();
+    K3bProjectBurnDialog::toggleAll();
 
-  if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
-    m_checkVerify->setChecked(false);
-    m_checkVerify->setEnabled(false);
-  }
-  else
-    m_checkVerify->setEnabled(true);
+    if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
+        m_checkVerify->setChecked(false);
+        m_checkVerify->setEnabled(false);
+    }
+    else
+        m_checkVerify->setEnabled(true);
 
-  m_comboMultisession->setDisabled( m_checkOnlyCreateImage->isChecked() );
-  // we can only select the data mode for CD media
-  // IDEA: why not give GUI elements like this a slot that reacts on media changes?
-  m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() ||
-                                 !K3bDevice::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
+    m_comboMultisession->setDisabled( m_checkOnlyCreateImage->isChecked() );
+    // we can only select the data mode for CD media
+    // IDEA: why not give GUI elements like this a slot that reacts on media changes?
+    m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() ||
+                                   !K3bDevice::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
 
-  // Multisession in DAO is not possible
-  if( m_writingModeWidget->writingMode() == K3b::DAO ) {
-    if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
-	m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
-	m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
-      KMessageBox::information( this, i18n("It is not possible to write multisession media in DAO mode."
-					   "Multisession has been disabled."),
-				i18n("Multisession Problem"),
-				"multisession_no_dao" );
+    // Multisession in DAO is not possible
+    if( m_writingModeWidget->writingMode() == K3b::DAO ) {
+        if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
+            m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
+            m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
+            KMessageBox::information( this, i18n("It is not possible to write multisession media in DAO mode."
+                                                 "Multisession has been disabled."),
+                                      i18n("Multisession Problem"),
+                                      "multisession_no_dao" );
 
-    m_comboMultisession->setEnabled(false);
-  }
-  else {
-    m_comboMultisession->setEnabled(true);
-  }
+        m_comboMultisession->setEnabled(false);
+    }
+    else {
+        m_comboMultisession->setEnabled(true);
+    }
 }
 
 

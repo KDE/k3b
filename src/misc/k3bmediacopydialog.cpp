@@ -423,7 +423,7 @@ void K3bMediaCopyDialog::toggleAll()
                                   m_checkSimulate->isChecked() );
 
   // we can only clone single session CDs
-  if( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
+  if( K3bDevice::isCdMedia( sourceMedium.diskInfo().mediaType() ) ) {
       m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
       m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
 
@@ -436,7 +436,6 @@ void K3bMediaCopyDialog::toggleAll()
       }
   }
   else {
-      // FIXME: handle Blue-Ray
       m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS|K3b::CDRECORD );
 
       m_comboCopyMode->setEnabled( false );
@@ -444,11 +443,11 @@ void K3bMediaCopyDialog::toggleAll()
 
       // FIXME: at some point the media combo should also handle media sizes!
 
-      if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+      if ( K3bDevice::isDvdMedia( sourceMedium.diskInfo().mediaType() ) ) {
           m_writerSelectionWidget->setWantedMediumType( sourceMedium.diskInfo().numLayers() > 1 &&
                                                         sourceMedium.diskInfo().size().mode1Bytes() > 4700372992LL
                                                         ? K3bDevice::MEDIA_WRITABLE_DVD_DL
-                                                        : K3bDevice::MEDIA_WRITABLE_DVD_SL );
+                                                        : K3bDevice::MEDIA_WRITABLE_DVD );
       }
       else {
           // FIXME: do the same single layer/dual layer thing like with DVD
@@ -506,7 +505,7 @@ void K3bMediaCopyDialog::toggleAll()
       sourceMedium.toc().count() == 1 ) {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
     m_tempDirSelectionWidget->setDefaultImageFileName( sourceMedium.volumeId().lower()
-                                                       + QString(".iso") );
+                                                       + QString(".iso"), true );
   }
   else {
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );

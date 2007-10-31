@@ -87,6 +87,8 @@ class LIBK3B_EXPORT K3bDoc : public QObject
   /**
    * The media types that are supported by this project type.
    * The default implementation returns all writable media types.
+   * This should NOT take into accout settings like the writing mode
+   * or anything that can be changed in the burn dialog.
    */
   virtual int supportedMediaTypes() const;
 

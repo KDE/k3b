@@ -856,14 +856,18 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
     // Blu-Ray
     // --------------------
     else if ( foundMedium & K3bDevice::MEDIA_BD_ALL ) {
-        // FIXME: cdrecord knows blue-ray, too. We just need to check for the "blue-ray" feature
-        if ( writingApp() != K3b::GROWISOFS ) {
-            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." )
-                              .arg( K3bDevice::mediaTypeString( foundMedium, true ) ).arg( K3b::writingAppToString( writingApp() ) ), WARNING );
-            setWritingApp( K3b::DEFAULT );
+        d->usedWritingApp = writingApp();
+        if ( d->usedWritingApp == K3b::DEFAULT ) {
+            if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
+                d->usedWritingApp = K3b::CDRECORD;
+            else
+                d->usedWritingApp = K3b::GROWISOFS;
         }
 
-        d->usedWritingApp = K3b::GROWISOFS;
+        if ( d->usedWritingApp == K3b::CDRECORD &&
+            !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) ) {
+            d->usedWritingApp = K3b::GROWISOFS;
+        }
 
         // FIXME: what do we need to take care of with BD media?
         emit infoMessage( i18n( "Writing %1" ).arg( K3bDevice::mediaTypeString( foundMedium, true ) ), INFO );

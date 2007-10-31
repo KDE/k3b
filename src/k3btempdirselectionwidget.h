@@ -66,7 +66,7 @@ class K3bTempDirSelectionWidget : public QGroupBox
    * automatically be expended to this filename.
    * Default is k3b_image.iso
    */
-  void setDefaultImageFileName( const QString& name );
+  void setDefaultImageFileName( const QString& name, bool forceChange = false );
 
   /**
    * saves the current path as the global default tempd dir.

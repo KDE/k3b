@@ -139,7 +139,8 @@ class K3bMediaCache : public QObject
   class DeviceEntry;
   class MediaChangeEvent;
 
-  QMap<K3bDevice::Device*, DeviceEntry*> m_deviceMap;
+  class Private;
+  Private* const d;
 
   DeviceEntry* findDeviceEntry( K3bDevice::Device* );
   void customEvent( QCustomEvent* );

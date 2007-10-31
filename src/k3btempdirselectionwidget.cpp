@@ -237,10 +237,9 @@ void K3bTempDirSelectionWidget::saveConfig( KConfigBase* c )
 }
 
 
-void K3bTempDirSelectionWidget::setDefaultImageFileName( const QString& name )
+void K3bTempDirSelectionWidget::setDefaultImageFileName( const QString& name, bool changeImageName )
 {
     if ( !name.isEmpty() ) {
-        bool changeImageName = false;
         if ( selectionMode() == FILE ) {
             if ( plainTempPath().section( '/', -1 ) == m_defaultImageFileName ) {
                 changeImageName = true;

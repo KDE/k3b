@@ -20,6 +20,7 @@
 #include <k3bdeviceglobals.h>
 #include <k3bscsicommand.h>
 #include <k3bcore.h>
+#include <k3bcddb.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -160,8 +161,16 @@ void K3bMediaCache::PollThread::run()
 // ////////////////////////////////////////////////////////////////////////////////
 
 
+class K3bMediaCache::Private
+{
+public:
+    QMap<K3bDevice::Device*, DeviceEntry*> deviceMap;
+};
+
+
 K3bMediaCache::K3bMediaCache( QObject* parent )
-  : QObject( parent )
+  : QObject( parent ),
+    d( new Private() )
 {
 }
 
@@ -169,6 +178,7 @@ K3bMediaCache::K3bMediaCache( QObject* parent )
 K3bMediaCache::~K3bMediaCache()
 {
   clearDeviceList();
+  delete d;
 }
 
 
@@ -307,20 +317,20 @@ void K3bMediaCache::clearDeviceList()
   kdDebug() << k_funcinfo << endl;
 
   // make all the threads stop
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
-       it != m_deviceMap.end(); ++it ) {
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+       it != d->deviceMap.end(); ++it ) {
     it.data()->blockedId = 1;
   }
 
   // and remove them
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
-       it != m_deviceMap.end(); ++it ) {
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+       it != d->deviceMap.end(); ++it ) {
     kdDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish" << endl;
     it.data()->thread->wait();
     delete it.data();
   }
 
-  m_deviceMap.clear();
+  d->deviceMap.clear();
 }
 
 
@@ -328,23 +338,23 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 {
   // remember blocked ids
   QMap<K3bDevice::Device*, int> blockedIds;
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
-       it != m_deviceMap.end(); ++it )
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+       it != d->deviceMap.end(); ++it )
     blockedIds.insert( it.key(), it.data()->blockedId );
 
   clearDeviceList();
 
   const QPtrList<K3bDevice::Device>& devices = dm->allDevices();
   for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
-    m_deviceMap.insert( *it, new DeviceEntry( this, *it ) );
+    d->deviceMap.insert( *it, new DeviceEntry( this, *it ) );
     QMap<K3bDevice::Device*, int>::const_iterator bi_it = blockedIds.find( *it );
     if( bi_it != blockedIds.end() )
-      m_deviceMap[*it]->blockedId = bi_it.data();
+      d->deviceMap[*it]->blockedId = bi_it.data();
   }
 
   // start all the polling threads
-  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.begin();
-       it != m_deviceMap.end(); ++it ) {
+  for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+       it != d->deviceMap.end(); ++it ) {
     if( !it.data()->blockedId )
       it.data()->thread->start();
   }
@@ -353,8 +363,8 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 
 K3bMediaCache::DeviceEntry* K3bMediaCache::findDeviceEntry( K3bDevice::Device* dev )
 {
-  QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = m_deviceMap.find( dev );
-  if( it != m_deviceMap.end() )
+  QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.find( dev );
+  if( it != d->deviceMap.end() )
     return it.data();
   else
     return 0;

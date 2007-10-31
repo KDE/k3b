@@ -133,7 +133,7 @@ void K3bDvdCopyJob::start()
     // wait for a source disk
     if( waitForMedia( m_readerDevice,
                       K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-                      K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_DVD_ROM ) < 0 ) {
+                      K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_DVD_ROM|K3bDevice::MEDIA_BD_ALL ) < 0 ) {
         emit canceled();
         d->running = false;
         jobFinished( false );
@@ -225,7 +225,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
                     }
                     // FIXME: check for growisofs 5.22 (or whatever version is needed) for DVD-R DL
                     else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
-                             k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 20 ) ) {
+                             k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "dual-layer" ) ) {
                         emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), ERROR );
                         d->running = false;
                         jobFinished(false);
@@ -238,9 +238,12 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
         case K3bDevice::MEDIA_DVD_RW:
         case K3bDevice::MEDIA_DVD_RW_SEQ:
         case K3bDevice::MEDIA_DVD_PLUS_R:
+        case K3bDevice::MEDIA_BD_ROM:
+        case K3bDevice::MEDIA_BD_R:
+        case K3bDevice::MEDIA_BD_R_SRM:
 
             if( dh->diskInfo().numSessions() > 1 ) {
-                emit infoMessage( i18n("K3b does not support copying multi-session DVDs."), ERROR );
+                emit infoMessage( i18n("K3b does not support copying multi-session DVD or Blu-ray disks."), ERROR );
                 d->running = false;
                 jobFinished(false);
                 return;
@@ -251,7 +254,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             // with version >= 5.15 growisofs supports specifying the size of the track
             if( m_writingMode != K3b::DAO || !m_onTheFly || m_onlyCreateImage ||
                 ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
-                  k3bcore->externalBinManager()->binObject( "growisofs" )->version >= K3bVersion( 5, 15, -1 ) ) ) {
+                  k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ) {
                 d->lastSector = dh->toc().lastSector();
                 break;
             }
@@ -435,9 +438,13 @@ void K3bDvdCopyJob::prepareWriter()
     int usedApp = writingApp();
     if ( usedApp == K3b::DEFAULT ) {
         // let's default to cdrecord for the time being
-        // FIXME: check if our cdrecord does support it
         // FIXME: use growisofs for non-dao and non-auto mode
-        usedApp = K3b::CDRECORD;
+        if ( K3bDevice::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
+            if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
+                usedApp = K3b::CDRECORD;
+            else
+                usedApp = K3b::GROWISOFS;
+        }
     }
 
     if ( usedApp == K3b::GROWISOFS ) {
