@@ -4,6 +4,9 @@
  * Unmount medium before DVD formatting
  * Silently (without introducing new strings for translation) allow the burning of files
    bigger than 4 GB with appropriate versions of genisoimage or mkisofs.
+ * Do only reload the medium before verification if necessary, i.e. if the newly written
+   track cannot be read otherwise (many old drives depend on this). Hopefully this will
+   at least work around the aweful "DMA disabled" bug for many users.
 	
 1.0.3
 =====
