@@ -22,6 +22,7 @@
 #include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
 #include "k3bdatasessionimportdialog.h"
+#include "k3bdiritem.h"
 #include <k3bdevice.h>
 #include <k3bdeviceselectiondialog.h>
 #include <k3bfillstatusdisplay.h>
@@ -65,7 +66,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   setMainWidget( mainSplitter );
 
 
-  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), 
+  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)),
 	   m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
   connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 
@@ -103,7 +104,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   toolBox()->addLabel( i18n("Volume Name:") );
   toolBox()->addSpacing();
   toolBox()->addWidget( m_volumeIDEdit );
-  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)), 
+  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
 	   m_doc,
 	   SLOT(setVolumeID(const QString&)) );
 
@@ -163,15 +164,19 @@ K3bProjectBurnDialog* K3bDataView::newBurnDialog( QWidget* parent, const char* n
 
 void K3bDataView::slotBurn()
 {
-  if( m_doc->burningSize() == 0 ) {
-    KMessageBox::information( this, i18n("Please add files to your project first."),
-			      i18n("No Data to Burn"), QString::null, false );
-  }
-  else {
-    K3bProjectBurnDialog* dlg = newBurnDialog( this );
-    dlg->execBurnDialog(true);
-    delete dlg;
-  }
+    // Little hack which at least handles most situations (better in 1.1):
+    // If a session has been importet we cannot use the file count since that
+    // includes imported items
+    if( m_doc->sessionImported() && m_doc->burningSize() == 0 ||
+        m_doc->root()->numFiles() == 0 ) {
+        KMessageBox::information( this, i18n("Please add files to your project first."),
+                                  i18n("No Data to Burn"), QString::null, false );
+    }
+    else {
+        K3bProjectBurnDialog* dlg = newBurnDialog( this );
+        dlg->execBurnDialog(true);
+        delete dlg;
+    }
 }
 
 

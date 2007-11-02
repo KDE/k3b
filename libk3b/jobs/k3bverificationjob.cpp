@@ -84,6 +84,8 @@ public:
   K3bPipe pipe;
 
   bool readSuccessful;
+
+  bool mediumHasBeenReloaded;
 };
 
 
@@ -149,11 +151,13 @@ void K3bVerificationJob::start()
   d->currentTrackIndex = 0;
   d->alreadyReadSectors = 0;
 
-  // first we need to reload and mount the device
-  emit newTask( i18n("Reloading the medium") );
+  emit newTask( i18n("Checking medium") );
 
-  connect( K3bDevice::reload( d->device ), SIGNAL(finished(bool)),
-	   this, SLOT(slotMediaReloaded(bool)) );
+  d->mediumHasBeenReloaded = false;
+  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::DISKINFO, d->device ),
+           SIGNAL(finished(K3bDevice::DeviceHandler*)),
+           this,
+           SLOT(slotDiskInfoReady(K3bDevice::DeviceHandler*)) );
 }
 
 
@@ -164,6 +168,8 @@ void K3bVerificationJob::slotMediaReloaded( bool success )
 		  K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
 		  K3bDevice::MEDIA_WRITABLE,
 		  i18n("Unable to Close the Tray") );
+
+  d->mediumHasBeenReloaded = true;
 
   emit newTask( i18n("Checking medium") );
 
@@ -185,12 +191,6 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
   d->toc = dh->toc();
   d->totalSectors = 0;
 
-  if ( d->toc.isEmpty() ) {
-      emit infoMessage( i18n( "No tracks to verify found." ), ERROR );
-      jobFinished( false );
-      return;
-  }
-
   // just to be sure check if we actually have all the tracks
   int i = 0;
   for( QValueList<K3bVerificationJobTrackEntry>::iterator it = d->tracks.begin();
@@ -201,9 +201,21 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       (*it).trackNumber = d->toc.count();
 
     if( (int)d->toc.count() < (*it).trackNumber ) {
-      emit infoMessage( i18n("Internal Error: Verification job improperly initialized"), ERROR );
-      jobFinished( false );
-      return;
+        if ( d->mediumHasBeenReloaded ) {
+            emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)")
+                              .arg( "Specified track number not found on medium" ), ERROR );
+            jobFinished( false );
+            return;
+        }
+        else {
+            // many drives need to reload the medium to return to a proper state
+            emit newTask( i18n("Reloading the medium") );
+            connect( K3bDevice::reload( d->device ),
+                     SIGNAL(finished(bool)),
+                     this,
+                     SLOT(slotMediaReloaded(bool)) );
+            return;
+        }
     }
 
     d->totalSectors += trackLength( i );

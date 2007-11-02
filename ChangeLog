@@ -2,7 +2,9 @@
 =====
  * Never use growisofs parameter -dvd-compat with DVD-RW media in restricted overwrite mode
  * Unmount medium before DVD formatting
-
+ * Silently (without introducing new strings for translation) allow the burning of files
+   bigger than 4 GB with appropriate versions of genisoimage or mkisofs.
+	
 1.0.3
 =====
  * Reverted to old behaviour of reloading medium before verification. Not enough
