@@ -3444,30 +3444,31 @@ bool K3bDevice::Device::indexScan( K3bDevice::Toc& toc ) const
 
 void K3bDevice::Device::searchIndexTransitions( long start, long end, K3bDevice::Track& track ) const
 {
-  k3bDebug() << "(K3bDevice::Device) searching for index transitions between "
-	    << start << " and " << end << endl;
-  int startIndex = getIndex( start );
-  int endIndex = getIndex( end );
+    k3bDebug() << "(K3bDevice::Device) searching for index transitions between "
+               << start << " and " << end << endl;
+    int startIndex = getIndex( start );
+    int endIndex = getIndex( end );
 
-  if( startIndex < 0 || endIndex < 0 ) {
-    k3bDebug() << "(K3bDevice::Device) could not retrieve index values." << endl;
-  }
-
-  k3bDebug() << "(K3bDevice::Device) indices: " << start << " - " << startIndex
-	    << " and " << end << " - " << endIndex << endl;
-
-  if( startIndex != endIndex ) {
-    if( start+1 == end ) {
-      k3bDebug() << "(K3bDevice::Device) found index transition: " << endIndex << " " << end << endl;
-      track.m_indices.resize( endIndex );
-      // we save the index relative to the first sector
-      track.m_indices[endIndex-1] = K3b::Msf( end ) - track.firstSector();
+    if( startIndex < 0 || endIndex < 0 ) {
+        k3bDebug() << "(K3bDevice::Device) could not retrieve index values." << endl;
     }
     else {
-      searchIndexTransitions( start, start+(end-start)/2, track );
-      searchIndexTransitions( start+(end-start)/2, end, track );
+        k3bDebug() << "(K3bDevice::Device) indices: " << start << " - " << startIndex
+                   << " and " << end << " - " << endIndex << endl;
+
+        if( startIndex != endIndex ) {
+            if( start+1 == end ) {
+                k3bDebug() << "(K3bDevice::Device) found index transition: " << endIndex << " " << end << endl;
+                track.m_indices.resize( endIndex );
+                // we save the index relative to the first sector
+                track.m_indices[endIndex-1] = K3b::Msf( end ) - track.firstSector();
+            }
+            else {
+                searchIndexTransitions( start, start+(end-start)/2, track );
+                searchIndexTransitions( start+(end-start)/2, end, track );
+            }
+        }
     }
-  }
 }
 
 
