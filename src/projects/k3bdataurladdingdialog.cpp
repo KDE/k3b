@@ -39,6 +39,7 @@
 #include <k3binteractiondialog.h>
 #include <k3bthread.h>
 #include <k3bsignalwaiter.h>
+#include <k3bexternalbinmanager.h>
 
 #include <klocale.h>
 #include <kurl.h>
