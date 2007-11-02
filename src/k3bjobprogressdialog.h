@@ -20,6 +20,7 @@
 #include <kdialog.h>
 
 #include "k3bdebuggingoutputfile.h"
+#include "k3bdebuggingoutputcache.h"
 
 #include <k3bjobhandler.h>
 
@@ -157,8 +158,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   QDateTime m_lastProgressUpdateTime;
 
   K3bDebuggingOutputFile m_logFile;
-
-  QMap<QString, QStringList> m_debugOutputMap;
+  K3bDebuggingOutputCache m_logCache;
 
   bool m_bCanceled;
 

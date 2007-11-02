@@ -29,16 +29,13 @@ class K3bDebuggingOutputDialog : public KDialogBase
   K3bDebuggingOutputDialog( QWidget* parent );
   
  public slots:
-  void setOutput( const QMap<QString, QStringList>& );
-  void addOutput( const QString&, const QString& );
-  void clear();
+  void setOutput( const QString& );
 
  private:
   void slotUser1();
   void slotUser2();
   
   QTextEdit* debugView;
-  QMap<QString, int> m_paragraphMap;
 };
 
 

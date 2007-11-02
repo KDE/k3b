@@ -424,7 +424,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
   m_labelProcessedSize->setText("");
   m_labelSubProcessedSize->setText("");
   m_labelTask->setPaletteForegroundColor( k3bappcore->themeManager()->currentTheme()->foregroundColor() );
-  m_debugOutputMap.clear();
+  m_logCache.clear();
 
   // disconnect from the former job
   if( m_job )
@@ -537,15 +537,15 @@ void K3bJobProgressDialog::slotUpdateTime()
 
 void K3bJobProgressDialog::slotDebuggingOutput( const QString& type, const QString& output )
 {
-  m_debugOutputMap[type].append(output);
-  m_logFile.addOutput( type, output );
+    m_logCache.addOutput( type, output );
+    m_logFile.addOutput( type, output );
 }
 
 
 void K3bJobProgressDialog::slotShowDebuggingOutput()
 {
   K3bDebuggingOutputDialog debugWidget( this );
-  debugWidget.setOutput( m_debugOutputMap );
+  debugWidget.setOutput( m_logCache.toString() );
   debugWidget.exec();
 }
 
