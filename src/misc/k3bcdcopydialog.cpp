@@ -365,7 +365,7 @@ void K3bCdCopyDialog::slotStartClicked()
 }
 
 
-void K3bCdCopyDialog::slotToggleAll()
+void K3bCdCopyDialog::toggleAll()
 {
   updateOverrideDevice();
 
@@ -447,10 +447,12 @@ void K3bCdCopyDialog::updateOverrideDevice()
         m_writerSelectionWidget->setOverrideDevice( 0 );
         m_writerSelectionWidget->setIgnoreDevice( m_comboSourceDevice->selectedDevice() );
     }
-    else
+    else {
+        m_writerSelectionWidget->setIgnoreDevice( 0 );
         m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
                                                     i18n("Use the same device for burning"),
                                                     i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
+    }
 }
 
 

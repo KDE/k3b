@@ -283,8 +283,9 @@ void K3bMediaSelectionComboBox::updateMedia()
 
       K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
-      if( showMedium( medium ) )
+      if( showMedium( medium ) ) {
           addMedium( *it );
+      }
   }
 
   //

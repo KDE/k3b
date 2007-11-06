@@ -23,7 +23,7 @@
 #include "k3b_export.h"
 
 
-#define LIBK3B_VERSION "1.0.4svn"
+#define LIBK3B_VERSION "1.0.5svn"
 
 #define k3bcore K3bCore::k3bCore()
 

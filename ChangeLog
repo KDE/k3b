@@ -1,3 +1,7 @@
+1.0.5
+=====
+ * Fix CD Copy device selection (Bug 151924)
+
 1.0.4
 =====
  * Never use growisofs parameter -dvd-compat with DVD-RW media in restricted overwrite mode

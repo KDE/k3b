@@ -56,12 +56,12 @@ class K3bCdCopyDialog : public K3bInteractionDialog
  private slots:
   void slotStartClicked();
 
-  void slotToggleAll();
   void slotSourceMediumChanged( K3bDevice::Device* );
   void updateOverrideDevice();
 
  protected:
   void init();
+  void toggleAll();
 
  private:
   void loadUserDefaults( KConfigBase* );
