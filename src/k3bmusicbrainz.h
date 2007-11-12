@@ -16,7 +16,7 @@
 #ifndef _K3B_MUSICBRAINZ_H_
 #define _K3B_MUSICBRAINZ_H_
 
-#include <config.h>
+#include <config-k3b.h>
 
 #ifdef HAVE_MUSICBRAINZ
 

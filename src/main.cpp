@@ -39,7 +39,7 @@
 #include <k3bcore.h>
 
 
-#include <config.h>
+#include <config-k3b.h>
 
 static const char* description = I18N_NOOP("A CD and DVD burning application");
 

@@ -18,7 +18,7 @@
 #define _K3B_EXPORT_H_
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <config-k3b.h>
 #endif
 
 #ifdef __KDE_HAVE_GCC_VISIBILITY

@@ -14,7 +14,7 @@
  */
 
 
-#include <config.h>
+#include <config-k3b.h>
 
 #include "kfile_k3bprojectfileplugin.h"
 #include "kostore/koStore.h"

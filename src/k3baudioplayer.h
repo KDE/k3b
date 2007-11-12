@@ -19,7 +19,7 @@
 
 #include <k3listview.h>
 
-#include <config.h>
+#include <config-k3b.h>
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QLabel>

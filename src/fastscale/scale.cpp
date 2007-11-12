@@ -58,7 +58,7 @@
 %
 %
 */
-#include "config.h"
+#include "config-k3b.h"
 
 // System
 #ifdef HAVE_ENDIAN_H

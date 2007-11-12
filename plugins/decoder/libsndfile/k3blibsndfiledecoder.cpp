@@ -14,7 +14,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config.h>
+#include <config-k3b.h>
 
 #include "k3blibsndfiledecoder.h"
 

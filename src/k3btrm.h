@@ -19,7 +19,7 @@
 #define _K3B_TRM_H_
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <config-k3b.h>
 #endif
 
 #ifdef HAVE_MUSICBRAINZ

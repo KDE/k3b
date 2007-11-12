@@ -17,7 +17,7 @@
 #define _K3B_HAL_CONNECTION_H_
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <config-k3b.h>
 #endif
 
 #include "k3bdevice_export.h"

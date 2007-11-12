@@ -13,7 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config.h>
+#include <config-k3b.h>
 #include <k3bglobals.h>
 
 #include "k3biso9660.h"

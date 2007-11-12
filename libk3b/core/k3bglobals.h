@@ -18,7 +18,7 @@
 #define K3BGLOBALS_H
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <config-k3b.h>
 #endif
 
 #include <qstring.h>
