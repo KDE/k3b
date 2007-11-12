@@ -7,6 +7,7 @@ find_package(KDE4 REQUIRED)
 macro_optional_find_package(DvdRead)
 macro_optional_find_package(MusicBrainz)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+add_definitions (-DQT3_SUPPORT)
 
 include(ConvenienceLibs.cmake)
 
