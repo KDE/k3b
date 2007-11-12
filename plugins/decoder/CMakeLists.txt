@@ -1,13 +1,23 @@
-
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+macro_optional_find_package(OggVorbis)
+macro_optional_find_package(FFmpeg)
+macro_optional_find_package(Flac)
+macro_optional_find_package(Mad)
+if(OGGVORBIS_FOUND)
+   add_subdirectory(ogg)
+endif(OGGVORBIS_FOUND)
+if(FFMPEG_FOUND)
+   add_subdirectory(ffmpeg)
+endif(FFMPEG_FOUND)
+if(FLAC_FOUND)
+   add_subdirectory(flac)
+endif(FLAC_FOUND)
+if(MAD_FOUND)
+   add_subdirectory(mp3)
+endif(MAD_FOUND)
 
 add_subdirectory( wave )
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(DECOGGDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(DECMP3DIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(DECFLACDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(DECAIFFDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(FFMPEGDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MPCDIR)")
 
 ########### install files ###############
@@ -17,25 +27,11 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MPCDIR)")
 
 #original Makefile.am contents follow:
 
-#
-#if include_OGG
-#DECOGGDIR = ogg
-#endif
-#
 #if include_MP3
 #DECMP3DIR = mp3
 #endif
 #
-#if include_FLAC
-#DECFLACDIR = flac
-#endif
-#
-#if include_AIFF
 #DECAIFFDIR = libsndfile
-#endif
-#
-#if include_FFMPEG
-#FFMPEGDIR = ffmpeg
 #endif
 #
 #if include_MPC
