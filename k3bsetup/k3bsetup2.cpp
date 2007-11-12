@@ -407,7 +407,7 @@ void K3bSetup2::save()
     // TODO: create the group if it's not there
     g = getgrnam( burningGroup().local8Bit() );
     if( !g ) {
-      KMessageBox::error( this, i18n("There is no group %1.").arg(burningGroup()) );
+      KMessageBox::error( this, i18n("There is no group %1.",burningGroup()) );
       return;
     }
   }
@@ -538,7 +538,7 @@ void K3bSetup2::slotAddDevice()
       emit changed( d->changesNeeded );
     }
     else
-      KMessageBox::error( this, i18n("Could not find an additional device at\n%1").arg(newDevicename),
+      KMessageBox::error( this, i18n("Could not find an additional device at\n%1",newDevicename),
 			  i18n("Error"), false );
   }
 }

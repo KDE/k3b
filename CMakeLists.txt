@@ -16,7 +16,7 @@ ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice
 ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice )
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
-option(K3BSETUP_BUILD "Build k3bsetup")
+option(K3BSETUP_BUILD "Build k3bsetup" ON)
 option(ADD_K3B_DEBUG "K3b additional debugging support")
 
 
