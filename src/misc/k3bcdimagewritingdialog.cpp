@@ -272,7 +272,7 @@ void K3bCdImageWritingDialog::setupGui()
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
-  pixLabel->setPixmap( SmallIcon( "cdcopy", KIcon::SizeMedium ) );
+  pixLabel->setPixmap( SmallIcon( "cdcopy", KIconLoader::SizeMedium ) );
   pixLabel->setScaledContents( false );
   m_spinCopies = new QSpinBox( groupCopies );
   m_spinCopies->setMinValue( 1 );

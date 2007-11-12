@@ -65,7 +65,7 @@ K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
   : K3bMovixListViewItem( doc, item, parent, after ),
     KFileItem( 0, 0, KUrl::fromPathOrUrl(item->localPath()) )
 {
-  setPixmap( 1, KFileItem::pixmap( 16, KIcon::DefaultState ) );
+  setPixmap( 1, KFileItem::pixmap( 16, KIconLoader::DefaultState ) );
   setEditor( 1, LINE );
 }
 

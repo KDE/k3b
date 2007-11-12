@@ -210,9 +210,9 @@ void K3bDataFileViewItem::init( K3bFileItem* file )
   // determine the mimetype
   m_pMimeType = KMimeType::findByUrl( KUrl::fromPathOrUrl(file->localPath()) );
   if( !m_pMimeType )
-    setPixmap( 0, DesktopIcon( "unknown", 16, KIcon::DefaultState ) );
+    setPixmap( 0, DesktopIcon( "unknown", 16, KIconLoader::DefaultState ) );
   else
-    setPixmap( 0, m_pMimeType->pixmap( KUrl::fromPathOrUrl(file->localPath()), KIcon::Desktop, 16, KIcon::DefaultState ) );
+    setPixmap( 0, m_pMimeType->pixmap( KUrl::fromPathOrUrl(file->localPath()), KIcon::Desktop, 16, KIconLoader::DefaultState ) );
 }
 
 

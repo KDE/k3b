@@ -75,9 +75,9 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, Q3PtrList<K3bVcdTrack>& t
         m_muxrate->setText( i18n( "%1 bit/s", selectedTrack->muxrate() ) );
 
         if ( selectedTrack->isSegment() )
-            m_labelMimeType->setPixmap( SmallIcon( "image", KIcon::SizeMedium ) );
+            m_labelMimeType->setPixmap( SmallIcon( "image", KIconLoader::SizeMedium ) );
         else
-            m_labelMimeType->setPixmap( SmallIcon( "video", KIcon::SizeMedium ) );
+            m_labelMimeType->setPixmap( SmallIcon( "video", KIconLoader::SizeMedium ) );
 
         fillGui();
     }
