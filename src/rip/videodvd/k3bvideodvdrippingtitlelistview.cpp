@@ -196,7 +196,7 @@ protected:
 	  preW = h*16/9;
 
 	p->drawRect( ( w - preW ) / 2, ( height() - h ) / 2, preW, h );
-	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIconLoader::NoGroup, KIcon::SizeSmall, KIconLoader::DefaultState, 0, true );
+	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIconLoader::NoGroup, KIconLoader::SizeSmall, KIconLoader::DefaultState, 0, true );
 	p->drawPixmap( ( w - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
       }
       else {

@@ -201,7 +201,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 {
   if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
     KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl::fromPathOrUrl(fileItem->localPath()) );
-    m_labelIcon->setPixmap( kFileItem.pixmap(KIcon::SizeLarge) );
+    m_labelIcon->setPixmap( kFileItem.pixmap(KIconLoader::SizeLarge) );
     if( fileItem->isSymLink() )
       m_labelType->setText( i18n("Link to %1",kFileItem.mimeComment()) );
     else
@@ -225,7 +225,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 			  i18n("and 1 directory", "and %n directories", dirItem->numDirs()) + ")" );
   }
   else {
-    m_labelIcon->setPixmap( DesktopIcon("unknown", KIcon::SizeLarge) );
+    m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );
     m_labelType->setText( i18n("Special file") );
     m_labelLocalName->hide();
     m_labelLocalLocation->hide();
@@ -272,7 +272,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 
 void K3bDataPropertiesDialog::loadListProperties( const Q3ValueList<K3bDataItem*>& items )
 {
-    m_labelIcon->setPixmap( DesktopIcon( "kmultiple", KIcon::SizeLarge ) );
+    m_labelIcon->setPixmap( DesktopIcon( "kmultiple", KIconLoader::SizeLarge ) );
 
     int files = 0;
     int folders = 0;

@@ -212,7 +212,7 @@ void K3bDataFileViewItem::init( K3bFileItem* file )
   if( !m_pMimeType )
     setPixmap( 0, DesktopIcon( "unknown", 16, KIconLoader::DefaultState ) );
   else
-    setPixmap( 0, m_pMimeType->pixmap( KUrl::fromPathOrUrl(file->localPath()), KIcon::Desktop, 16, KIconLoader::DefaultState ) );
+    setPixmap( 0, m_pMimeType->pixmap( KUrl::fromPathOrUrl(file->localPath()), KIconLoader::Desktop, 16, KIconLoader::DefaultState ) );
 }
 
 

@@ -202,7 +202,7 @@ KMenu* K3bToolBox::Private::contextMenu()
   KIconTheme *theme = KIconLoader::global()->theme();
   Q3ValueList<int> avSizes;
   if (theme) {
-      avSizes = theme->querySizes( KIcon::Toolbar);
+      avSizes = theme->querySizes( KIconLoader::Toolbar);
   }
 
   iconSizes = avSizes;
