@@ -20,7 +20,7 @@
 #include <qpixmap.h>
 #include "k3b_export.h"
 
-class QListViewItem;
+class Q3ListViewItem;
 class QTimer;
 
 
@@ -36,16 +36,16 @@ class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
   /**
    * Will use the items pixmap.
    */
-  K3bListViewItemAnimator( QListViewItem* item, int col, QObject* parent = 0, const char* name = 0 );
+  K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent = 0, const char* name = 0 );
   ~K3bListViewItemAnimator();
 
-  QListViewItem* item() const;
+  Q3ListViewItem* item() const;
 
  public slots:
   void start();
   void stop();
 
-  void setItem( QListViewItem*, int col );
+  void setItem( Q3ListViewItem*, int col );
 
   /**
    * Default is the pixmap from the item.
@@ -69,7 +69,7 @@ class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
   bool m_animationBack;
   QPixmap m_pixmap;
   QColor m_fadeColor;
-  QListViewItem* m_item;
+  Q3ListViewItem* m_item;
   int m_column;
 
   QTimer* m_timer;

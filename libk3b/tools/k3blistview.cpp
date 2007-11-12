@@ -22,22 +22,30 @@
 #include <qstringlist.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qrect.h>
 #include <qpushbutton.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qevent.h>
 #include <qvalidator.h>
 #include <qfont.h>
 #include <qpalette.h>
 #include <qstyle.h>
 #include <qapplication.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include <kpixmapeffect.h>
 
@@ -97,32 +105,32 @@ public:
 
 
 
-K3bListViewItem::K3bListViewItem(QListView *parent)
+K3bListViewItem::K3bListViewItem(Q3ListView *parent)
   : KListViewItem( parent )
 { 
   init();
 }
 
-K3bListViewItem::K3bListViewItem(QListViewItem *parent)
+K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent)
   : KListViewItem( parent )
 { 
   init();
 }
 
-K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after)
+K3bListViewItem::K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after)
   : KListViewItem( parent, after )
 { 
   init();
 }
 
-K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after)
+K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after)
   : KListViewItem( parent, after )
 { 
   init();
 }
 
 
-K3bListViewItem::K3bListViewItem(QListView *parent,
+K3bListViewItem::K3bListViewItem(Q3ListView *parent,
 				 const QString& s1, const QString& s2,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
@@ -133,7 +141,7 @@ K3bListViewItem::K3bListViewItem(QListView *parent,
 }
 
 
-K3bListViewItem::K3bListViewItem(QListViewItem *parent,
+K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent,
 				 const QString& s1, const QString& s2,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
@@ -144,7 +152,7 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent,
 }
 
 
-K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after,
+K3bListViewItem::K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after,
 				 const QString& s1, const QString& s2,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
@@ -155,7 +163,7 @@ K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after,
 }
 
 
-K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after,
+K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after,
 				 const QString& s1, const QString& s2,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
@@ -184,7 +192,7 @@ void K3bListViewItem::init()
 }
 
 
-int K3bListViewItem::width( const QFontMetrics& fm, const QListView* lv, int c ) const
+int K3bListViewItem::width( const QFontMetrics& fm, const Q3ListView* lv, int c ) const
 {
   return KListViewItem::width( fm, lv, c ) + getColumnInfo(c)->margin*2;
 }
@@ -397,7 +405,7 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
 
 void K3bListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
 {
-  QListViewItem::paintCell( p, cg, col, width, align );
+  Q3ListViewItem::paintCell( p, cg, col, width, align );
 }
 
 
@@ -437,9 +445,9 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
 
   // this might be a stupid hack but most styles do not reimplement drawPrimitive PE_ProgressBarChunk
   // so this way the user is happy....
-  static QProgressBar* s_dummyProgressBar = 0;
+  static Q3ProgressBar* s_dummyProgressBar = 0;
   if( !s_dummyProgressBar ) {
-    s_dummyProgressBar = new QProgressBar();
+    s_dummyProgressBar = new Q3ProgressBar();
   }
 
   s_dummyProgressBar->setTotalSteps( info->totalProgressSteps );
@@ -461,28 +469,28 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
 
 
 
-K3bCheckListViewItem::K3bCheckListViewItem(QListView *parent)
+K3bCheckListViewItem::K3bCheckListViewItem(Q3ListView *parent)
   : K3bListViewItem( parent ),
     m_checked(false)
 {
 }
 
 
-K3bCheckListViewItem::K3bCheckListViewItem(QListViewItem *parent)
+K3bCheckListViewItem::K3bCheckListViewItem(Q3ListViewItem *parent)
   : K3bListViewItem( parent ),
     m_checked(false)
 {
 }
 
 
-K3bCheckListViewItem::K3bCheckListViewItem(QListView *parent, QListViewItem *after)
+K3bCheckListViewItem::K3bCheckListViewItem(Q3ListView *parent, Q3ListViewItem *after)
   : K3bListViewItem( parent, after ),
     m_checked(false)
 {
 }
 
 
-K3bCheckListViewItem::K3bCheckListViewItem(QListViewItem *parent, QListViewItem *after)
+K3bCheckListViewItem::K3bCheckListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after)
   : K3bListViewItem( parent, after ),
     m_checked(false)
 {
@@ -743,7 +751,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::LINE: {
     if( !m_editorLineEdit ) {
       m_editorLineEdit = new QLineEdit( viewport() );
-      m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
+      m_editorLineEdit->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
       m_editorLineEdit->setLineWidth(1);
       m_editorLineEdit->installEventFilter( this );
     }
@@ -796,7 +804,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   }
 }
 
-void K3bListView::setCurrentItem( QListViewItem* i )
+void K3bListView::setCurrentItem( Q3ListViewItem* i )
 {
   if( !i || i == currentItem() )
     return;
@@ -1097,7 +1105,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
     viewport()->setFocus();
 
     QMouseEvent* me = static_cast<QMouseEvent*>( e );
-    QListViewItem* item = itemAt( me->pos() );
+    Q3ListViewItem* item = itemAt( me->pos() );
     int col = header()->sectionAt( me->pos().x() );
     if( K3bCheckListViewItem* ci = dynamic_cast<K3bCheckListViewItem*>( item ) ) {
       if( col == 0 ) {
@@ -1205,7 +1213,7 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
 }
 
 
-QListViewItem* K3bListView::parentItem( QListViewItem* item )
+Q3ListViewItem* K3bListView::parentItem( Q3ListViewItem* item )
 {
   if( !item )
     return 0;
@@ -1216,7 +1224,7 @@ QListViewItem* K3bListView::parentItem( QListViewItem* item )
 }
 
 
-KPixmap K3bListView::createDragPixmap( const QPtrList<QListViewItem>& items )
+KPixmap K3bListView::createDragPixmap( const Q3PtrList<Q3ListViewItem>& items )
 {
   //
   // Create drag pixmap.
@@ -1225,7 +1233,7 @@ KPixmap K3bListView::createDragPixmap( const QPtrList<QListViewItem>& items )
   //
   int width = header()->width();
   int height = 0;
-  for( QPtrListIterator<QListViewItem> it( items ); *it; ++it ) {
+  for( Q3PtrListIterator<Q3ListViewItem> it( items ); *it; ++it ) {
     QRect r = itemRect( *it );
 
     if( r.isValid() ) {
@@ -1249,8 +1257,8 @@ KPixmap K3bListView::createDragPixmap( const QPtrList<QListViewItem>& items )
   // now paint all the visible items into the pixmap
   // FIXME: only paint the visible items
   QPainter p( &pix );
-  for( QListViewItemIterator it( this ); *it; ++it ) {
-    QListViewItem* item = *it;
+  for( Q3ListViewItemIterator it( this ); *it; ++it ) {
+    Q3ListViewItem* item = *it;
 
     // FIXME: items on other than the top level have a smaller first column
     //        the same goes for all items if root is decorated

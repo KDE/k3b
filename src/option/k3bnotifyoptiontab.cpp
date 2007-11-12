@@ -22,6 +22,8 @@
 #include <kdebug.h>
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 
 
@@ -30,7 +32,7 @@ K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent, const char* name )
 {
   m_notifyWidget = new KNotify::KNotifyWidget( this );
 
-  QHBoxLayout* box = new QHBoxLayout( this );
+  Q3HBoxLayout* box = new Q3HBoxLayout( this );
   box->addWidget( m_notifyWidget );
 }
 

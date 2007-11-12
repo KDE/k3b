@@ -24,10 +24,12 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qwidgetstack.h>
-#include <qgroupbox.h>
+#include <q3whatsthis.h>
+#include <q3widgetstack.h>
+#include <q3groupbox.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -35,7 +37,7 @@
 
 
 
-K3bAudioTrackWidget::K3bAudioTrackWidget( const QPtrList<K3bAudioTrack>& tracks, 
+K3bAudioTrackWidget::K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks, 
 					  QWidget* parent, const char* name )
   : base_K3bAudioTrackWidget( parent, name ),
     m_tracks(tracks)
@@ -43,7 +45,7 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const QPtrList<K3bAudioTrack>& tracks,
   m_labelPostGap->setBuddy( m_editPostGap );
 
   QToolTip::add( m_labelPostGap, QToolTip::textFor( m_editPostGap ) );
-  QWhatsThis::add( m_labelPostGap, QWhatsThis::textFor( m_editPostGap ) );
+  Q3WhatsThis::add( m_labelPostGap, Q3WhatsThis::textFor( m_editPostGap ) );
 
   // no post-gap for the last track
   m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.getFirst()->next() );

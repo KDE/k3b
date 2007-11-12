@@ -14,18 +14,21 @@
 */
 
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qspinbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qgrid.h>
+#include <q3whatsthis.h>
+#include <q3grid.h>
 #include <qtoolbutton.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -149,7 +152,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     // What's This info
     // -------------------------------------------------------------------------
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_radioVcd11, i18n( "<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
                               "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
                               "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
@@ -161,7 +164,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                               "<p>The CBR MPEG-1, layer II audio stream is fixed at 224 kbps with 1 stereo or 2 mono channels."
                               "<p><b>It is recommended to keep the video bit-rate under 1151929.1 bps.</b>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_radioVcd20, i18n( "<p>About two years after the Video CD 1.1 specification came out, an improved <b>Video CD 2.0</b> standard was published in 1995."
                               "<p>This one added the following items to the features already available in the Video CD 1.1 specification:"
                               "<ul><li>Support for MPEG segment play items (<b>\"SPI\"</b>), consisting of still pictures, motion pictures and/or audio (only) streams was added.</li>"
@@ -180,7 +183,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                               "<p>Also the possibility to have audio only streams and still pictures was provided."
                               "<p><b>The bit-rate of multiplex-ed streams should be kept under 174300 bytes/sec (except for single still picture items) in order to accommodate single speed drives.</b>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_radioSvcd10, i18n( "<p>With the upcoming of the DVD-V media, a new VCD standard had to be published in order to be able to keep up with technology, so the Super Video CD specification was called into life 1999."
                                "<p>In the midst of 2000 a full subset of this <b>Super Video CD</b> specification was published as <b>IEC-62107</b>."
                                "<p>As the most notable change over Video CD 2.0 is a switch from MPEG-1 CBR to MPEG-2 VBR encoding for the video stream was performed."
@@ -194,7 +197,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                "<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li>"
                                "<li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</li></ul>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_radioHqVcd10, i18n( "<p>This is actually just a minor variation defined in IEC-62107 on the Super Video CD 1.0 format for compatibility with current products in the market."
                                 "<p>It differs from the Super Video CD 1.0 format in the following items:"
                                 "<ul><li>The system profile tag field in <b>/SVCD/INFO.SVD</b> is set to <b>1</b> instead of <b>0</b>.</li>"
@@ -202,59 +205,59 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                 "<li><b>/EXT/SCANDATA.DAT</b> is mandatory instead of being optional.</li>"
                                 "<li><b>/SVCD/SEARCH.DAT</b> is optional instead of being mandatory.</li></ul>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkAutoDetect, i18n( "<p>If Autodetect is:</p>"
                                    "<ul><li>ON then K3b will set the correct VideoCD type.</li>"
                                    "<li>OFF then the correct VideoCD type needs to be set by the user.</li></ul>"
                                    "<p>If you are not sure about the correct VideoCD type, it is best to turn Autodetect ON.</p>"
                                    "<p>If you want to force the VideoCD type, you must turn Autodetect OFF. This is useful for some standalone DVD players without SVCD support.</p>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkNonCompliant, i18n( "<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
                                      "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li></ul>" ) );
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkVCD30interpretation, i18n( "<ul><li>Enables the use of the (deprecated) Chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
                                             "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_check2336, i18n( "<p>though most devices will have problems with such an out-of-specification media."
                              "<p><b>You may want use this option for images longer than 80 minutes</b>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkCdiSupport, i18n( "<p>To allow the play of Video-CDs on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
                                    "<p>This program is designed to:"
                                    "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
                                    "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
                                    "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_editCdiCfg, i18n( "<p>Configuration parameters only available for VideoCD 2.0"
                               "<p>The engine works perfectly well when used as-is."
                               "<p>You have the option to configure the VCD application."
                               "<p>You can adapt the color and/or the shape of the cursor and lots more." ) );
 
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkPbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkSegmentFolder, i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> should always be present."
                                       "<p>Some DVD players need the folder to give a faultless rendition." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkRelaxedAps, i18n( "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
                                    "<p>APS are required for entry points and scantables. APS have to fulfil the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
                                    "<p>The start codes of these 3 items are required to be contained all in the same MPEG pack/sector, thus forming a so-called access point sector."
                                    "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
                                    "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkUpdateScanOffsets, i18n( "<p>According to the specification, it is mandatory for Super Video CDs to encode scan information data into user data blocks in the picture layer of all intra coded picture."
                                           "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
                                           "<p>The already existing scan information data can be updated by enabling the update scan offsets option." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_labelRestriction, i18n( "<p>Viewing Restriction may be interpreted by the playing device."
                                     "<p>The allowed range goes from 0 to 3."
                                     "<ul><li>0 = unrestricted, free to view for all</li>"
@@ -262,25 +265,25 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                     "<p>Actually, the exact meaning is not defined and is player dependant."
                                     "<p><b>Most players ignore that value.<b>" ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_checkGaps, i18n( "<p>This option allows customization of Gaps and Margins." ) );
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_labelPreGapLeadout, i18n( "<p>This option allows to set the number of empty sectors added before the lead-out area begins, i.e. the number of post-gap sectors."
                                       "<p>The ECMA-130 specification requires the last data track before the lead-out to carry a post-gap of at least 150 sectors, which is used as default for this parameter."
                                       "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last MPEG track if this parameter is set too low."
                                       "<p>Allowed value content: [0..300]. Default: 150." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_labelPreGapTrack, i18n( "<p>Used to set the track pre-gap for all tracks in sectors globally."
                                     "<p>The specification requires the pre-gaps to be at least 150 sectors long."
                                     "<p>Allowed value content: [0..300]. Default: 150." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_labelFrontMarginTrack, i18n( "Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
                                          "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                          "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0." ) );
 
-    QWhatsThis::add
+    Q3WhatsThis::add
         ( m_labelRearMarginTrack, i18n( "<p>Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
                                         "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                         "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, otherwise 0." ) );
@@ -296,7 +299,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     QWidget * w = new QWidget( this );
 
     // ---------------------------------------------------- generic group ----
-    m_groupGeneric = new QGroupBox( 5, Qt::Vertical, i18n( "Generic" ), w );
+    m_groupGeneric = new Q3GroupBox( 5, Qt::Vertical, i18n( "Generic" ), w );
 
     m_checkPbc = new QCheckBox( i18n( "Playback Control (PBC)" ), m_groupGeneric );
     m_checkSegmentFolder = new QCheckBox( i18n( "SEGMENT Folder must always be present" ), m_groupGeneric );
@@ -306,11 +309,11 @@ void K3bVcdBurnDialog::setupAdvancedTab()
 
 
     // -------------------------------------------- gaps & margins group ----
-    m_groupGaps = new QGroupBox( 0, Qt::Vertical, i18n( "Gaps" ), w );
+    m_groupGaps = new Q3GroupBox( 0, Qt::Vertical, i18n( "Gaps" ), w );
     m_groupGaps->layout() ->setSpacing( spacingHint() );
     m_groupGaps->layout() ->setMargin( marginHint() );
 
-    QGridLayout* groupGapsLayout = new QGridLayout( m_groupGaps->layout() );
+    Q3GridLayout* groupGapsLayout = new Q3GridLayout( m_groupGaps->layout() );
     groupGapsLayout->setAlignment( Qt::AlignTop );
 
     m_checkGaps = new QCheckBox( i18n( "Customize gaps and margins" ), m_groupGaps );
@@ -402,11 +405,11 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     groupGapsLayout->setRowStretch( 4, 0 );
 
     // ------------------------------------------------------- misc group ----
-    m_groupMisc = new QGroupBox( 0, Qt::Vertical, i18n( "Misc" ), w );
+    m_groupMisc = new Q3GroupBox( 0, Qt::Vertical, i18n( "Misc" ), w );
     m_groupMisc->layout() ->setSpacing( spacingHint() );
     m_groupMisc->layout() ->setMargin( marginHint() );
 
-    QGridLayout* groupMiscLayout = new QGridLayout( m_groupMisc->layout() );
+    Q3GridLayout* groupMiscLayout = new Q3GridLayout( m_groupMisc->layout() );
     groupMiscLayout->setAlignment( Qt::AlignTop );
 
     m_labelRestriction = new QLabel( i18n( "Restriction category (0..3):" ), m_groupMisc, "m_labelRestriction" );
@@ -419,7 +422,7 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     groupMiscLayout->setRowStretch( 2, 0 );
 
     // ----------------------------------------------------------------------
-    QGridLayout* grid = new QGridLayout( w );
+    Q3GridLayout* grid = new Q3GridLayout( w );
     grid->setMargin( marginHint() );
     grid->setSpacing( spacingHint() );
     grid->addWidget( m_groupGeneric, 0, 0 );
@@ -434,7 +437,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     QWidget * w = new QWidget( this );
 
     // ---------------------------------------------------- Format group ----
-    m_groupVcdFormat = new QButtonGroup( 4, Qt::Vertical, i18n( "Type" ), w );
+    m_groupVcdFormat = new Q3ButtonGroup( 4, Qt::Vertical, i18n( "Type" ), w );
     m_radioVcd11 = new QRadioButton( i18n( "VideoCD 1.1" ), m_groupVcdFormat );
     m_radioVcd20 = new QRadioButton( i18n( "VideoCD 2.0" ), m_groupVcdFormat );
     m_radioSvcd10 = new QRadioButton( i18n( "Super-VideoCD" ), m_groupVcdFormat );
@@ -443,7 +446,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
 
     // ---------------------------------------------------- Options group ---
 
-    m_groupOptions = new QGroupBox( 5, Qt::Vertical, i18n( "Settings" ), w );
+    m_groupOptions = new Q3GroupBox( 5, Qt::Vertical, i18n( "Settings" ), w );
     m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
 
     m_checkNonCompliant = new QCheckBox( i18n( "Enable broken SVCD mode" ), m_groupOptions );
@@ -461,12 +464,12 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
 
     // ------------------------------------------------- CD-i Application ---
-    m_groupCdi = new QGroupBox( 4, Qt::Vertical, i18n( "VideoCD on CD-i" ), w );
-    m_editCdiCfg = new QMultiLineEdit( m_groupCdi, "m_editCdiCfg" );
-    m_editCdiCfg->setFrameShape( QTextEdit::NoFrame );
+    m_groupCdi = new Q3GroupBox( 4, Qt::Vertical, i18n( "VideoCD on CD-i" ), w );
+    m_editCdiCfg = new Q3MultiLineEdit( m_groupCdi, "m_editCdiCfg" );
+    m_editCdiCfg->setFrameShape( Q3TextEdit::NoFrame );
 
     // ----------------------------------------------------------------------
-    QGridLayout* grid = new QGridLayout( w );
+    Q3GridLayout* grid = new Q3GridLayout( w );
     grid->setMargin( marginHint() );
     grid->setSpacing( spacingHint() );
     grid->addMultiCellWidget( m_groupVcdFormat, 0, 1, 0, 0 );
@@ -524,14 +527,14 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_spinVolumeNumber->setMaxValue( 1 );
     m_spinVolumeCount->setMinValue( 1 );
 
-    QFrame* line = new QFrame( w );
-    line->setFrameShape( QFrame::HLine );
-    line->setFrameShadow( QFrame::Sunken );
-    line->setFrameShape( QFrame::HLine );
+    Q3Frame* line = new Q3Frame( w );
+    line->setFrameShape( Q3Frame::HLine );
+    line->setFrameShadow( Q3Frame::Sunken );
+    line->setFrameShape( Q3Frame::HLine );
 
 
     // ----------------------------------------------------------------------
-    QGridLayout* grid = new QGridLayout( w );
+    Q3GridLayout* grid = new Q3GridLayout( w );
     grid->setMargin( marginHint() );
     grid->setSpacing( spacingHint() );
 
@@ -888,10 +891,10 @@ void K3bVcdBurnDialog::saveCdiConfig()
             ( filename );
 
     QFile cdi( filename );
-    if ( !cdi.open( IO_WriteOnly ) )
+    if ( !cdi.open( QIODevice::WriteOnly ) )
         return ;
 
-    QTextStream s( &cdi );
+    Q3TextStream s( &cdi );
     int i = m_editCdiCfg->numLines();
 
     for ( int j = 0; j < i; j++ )
@@ -907,12 +910,12 @@ void K3bVcdBurnDialog::loadCdiConfig()
     QString filename = locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
-        if ( !cdi.open( IO_ReadOnly ) ) {
+        if ( !cdi.open( QIODevice::ReadOnly ) ) {
             loadDefaultCdiConfig();
             return ;
         }
 
-        QTextStream s( &cdi );
+        Q3TextStream s( &cdi );
 
         m_editCdiCfg->clear();
 
@@ -933,13 +936,13 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
     QString filename = locate( "data", "k3b/cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
-        if ( !cdi.open( IO_ReadOnly ) ) {
+        if ( !cdi.open( QIODevice::ReadOnly ) ) {
             m_checkCdiSupport->setChecked( false );
             m_checkCdiSupport->setEnabled( false );
             return ;
         }
 
-        QTextStream s( &cdi );
+        Q3TextStream s( &cdi );
 
         m_editCdiCfg->clear();
 

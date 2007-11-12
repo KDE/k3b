@@ -21,7 +21,7 @@
 
 #include <kdialogbase.h>
 #include "k3b_export.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 namespace K3bDevice {
   class Device;
@@ -40,7 +40,7 @@ class LIBK3B_EXPORT K3bDeviceSelectionDialog : public KDialogBase
   ~K3bDeviceSelectionDialog();
 
   void addDevice( K3bDevice::Device* );
-  void addDevices( const QPtrList<K3bDevice::Device>& );
+  void addDevices( const Q3PtrList<K3bDevice::Device>& );
 
   void setSelectedDevice( K3bDevice::Device* );
 
@@ -51,7 +51,7 @@ class LIBK3B_EXPORT K3bDeviceSelectionDialog : public KDialogBase
   static K3bDevice::Device* selectDevice( QWidget* parent, 
 					  const QString& text = QString::null );
   static K3bDevice::Device* selectDevice( QWidget* parent, 
-					  const QPtrList<K3bDevice::Device>& devices,
+					  const Q3PtrList<K3bDevice::Device>& devices,
 					  const QString& text = QString::null );
 
  private:

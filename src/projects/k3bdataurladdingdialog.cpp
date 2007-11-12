@@ -23,6 +23,10 @@
 #include <qlayout.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3GridLayout>
+#include <Q3PtrList>
 
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
@@ -78,7 +82,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
   m_encodingConverter = new K3bEncodingConverter();
 
   QWidget* page = plainPage();
-  QGridLayout* grid = new QGridLayout( page );
+  Q3GridLayout* grid = new Q3GridLayout( page );
   grid->setSpacing( spacingHint() );
   grid->setMargin( 0 );
 
@@ -197,7 +201,7 @@ QString K3bDataUrlAddingDialog::resultMessage() const
 }
 
 
-int K3bDataUrlAddingDialog::moveItems( const QValueList<K3bDataItem*>& items,
+int K3bDataUrlAddingDialog::moveItems( const Q3ValueList<K3bDataItem*>& items,
 				       K3bDirItem* dir,
 				       QWidget* parent )
 {
@@ -205,7 +209,7 @@ int K3bDataUrlAddingDialog::moveItems( const QValueList<K3bDataItem*>& items,
 }
 
 
-int K3bDataUrlAddingDialog::copyItems( const QValueList<K3bDataItem*>& items,
+int K3bDataUrlAddingDialog::copyItems( const Q3ValueList<K3bDataItem*>& items,
 				       K3bDirItem* dir,
 				       QWidget* parent )
 {
@@ -213,7 +217,7 @@ int K3bDataUrlAddingDialog::copyItems( const QValueList<K3bDataItem*>& items,
 }
 
 
-int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items,
+int K3bDataUrlAddingDialog::copyMoveItems( const Q3ValueList<K3bDataItem*>& items,
 					   K3bDirItem* dir,
 					   QWidget* parent,
 					   bool copy )
@@ -225,7 +229,7 @@ int K3bDataUrlAddingDialog::copyMoveItems( const QValueList<K3bDataItem*>& items
   dlg.m_infoLabel->setText( i18n("Moving files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
   dlg.m_copyItems = copy;
 
-  for( QValueList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
+  for( Q3ValueList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
     dlg.m_items.append( qMakePair( *it, dir ) );
     ++dlg.m_totalFiles;
     if( (*it)->isDir() ) {
@@ -623,8 +627,8 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
       // reuse an existing dir: move all child items into the old dir
       //
       if( oldItem->isDir() && item->isDir() ) {
-	const QPtrList<K3bDataItem>& cl = dynamic_cast<K3bDirItem*>( item )->children();
-	for( QPtrListIterator<K3bDataItem> it( cl ); *it; ++it )
+	const Q3PtrList<K3bDataItem>& cl = dynamic_cast<K3bDirItem*>( item )->children();
+	for( Q3PtrListIterator<K3bDataItem> it( cl ); *it; ++it )
 	  m_items.append( qMakePair( *it, dynamic_cast<K3bDirItem*>( oldItem ) ) );
 
 	// FIXME: we need to remove the old dir item

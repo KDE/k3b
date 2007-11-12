@@ -20,7 +20,7 @@
 #include <k3bpluginfactory.h>
 
 #include <qfile.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -297,7 +297,7 @@ bool K3bWaveDecoder::initDecoderInternal()
   cleanup();
 
   d->file->setName( filename() );
-  if( !d->file->open( IO_ReadOnly ) ) {
+  if( !d->file->open( QIODevice::ReadOnly ) ) {
     kdDebug() << "(K3bWaveDecoder) could not open file." << endl;
     return false;
   }
@@ -379,7 +379,7 @@ K3bAudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent,
 bool K3bWaveDecoderFactory::canDecode( const KURL& url ) 
 {
   QFile f( url.path() );
-  if( !f.open(	IO_ReadOnly ) ) {
+  if( !f.open(	QIODevice::ReadOnly ) ) {
     kdDebug() << "(K3bWaveDecoder) could not open file " << url.path() << endl;
     return false;
   }

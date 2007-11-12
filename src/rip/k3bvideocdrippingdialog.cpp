@@ -24,17 +24,19 @@
 #include <kstandarddirs.h>
 
 // qt includes
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 // k3b includes
 #include "k3bvideocdrippingdialog.h"
@@ -67,16 +69,16 @@ K3bVideoCdRippingDialog::~K3bVideoCdRippingDialog()
 void K3bVideoCdRippingDialog::setupGui()
 {
     QWidget * frame = mainWidget();
-    QGridLayout* MainLayout = new QGridLayout( frame );
+    Q3GridLayout* MainLayout = new Q3GridLayout( frame );
     MainLayout->setSpacing( KDialog::spacingHint() );
     MainLayout->setMargin( 0 );
 
     // ---------------------------------------------------- Directory group ---
-    QGroupBox* groupDirectory = new QGroupBox( 0, Qt::Vertical, i18n( "Destination Directory" ), frame );
+    Q3GroupBox* groupDirectory = new Q3GroupBox( 0, Qt::Vertical, i18n( "Destination Directory" ), frame );
     groupDirectory->layout() ->setSpacing( KDialog::spacingHint() );
     groupDirectory->layout() ->setMargin( KDialog::marginHint() );
 
-    QGridLayout* groupDirectoryLayout = new QGridLayout( groupDirectory->layout() );
+    Q3GridLayout* groupDirectoryLayout = new Q3GridLayout( groupDirectory->layout() );
     groupDirectoryLayout->setAlignment( Qt::AlignTop );
 
     QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
@@ -86,13 +88,13 @@ void K3bVideoCdRippingDialog::setupGui()
 
     rippathLabel->setBuddy( m_editDirectory );
 
-    QHBox* freeSpaceBox = new QHBox( groupDirectory );
+    Q3HBox* freeSpaceBox = new Q3HBox( groupDirectory );
     freeSpaceBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox, "FreeSpaceLabel" );
     m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox, "m_labelFreeSpace" );
     m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
 
-    QHBox* necessarySizeBox = new QHBox( groupDirectory );
+    Q3HBox* necessarySizeBox = new Q3HBox( groupDirectory );
     necessarySizeBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox, "StorSize" );
     m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox, "m_labelNecessarySize" );
@@ -105,7 +107,7 @@ void K3bVideoCdRippingDialog::setupGui()
     groupDirectoryLayout->addWidget( necessarySizeBox, 2, 1 );
 
     // ---------------------------------------------------- Options group ---
-    QGroupBox* groupOptions = new QGroupBox( 4, Qt::Vertical, i18n( "Settings" ), frame );
+    Q3GroupBox* groupOptions = new Q3GroupBox( 4, Qt::Vertical, i18n( "Settings" ), frame );
 
     m_ignoreExt = new QCheckBox( i18n( "Ignore /EXT/PSD_X.VCD" ), groupOptions );
 
@@ -137,14 +139,14 @@ void K3bVideoCdRippingDialog::setupContextHelp()
     QToolTip::add( m_labelNecessarySize, i18n("Necessary space for extracted files") );
 
     QToolTip::add( m_ignoreExt, i18n("Ignore extended PSD") );
-    QWhatsThis::add( m_ignoreExt, i18n("<p>Ignore extended PSD (located in the ISO-9660 filesystem under `/EXT/PSD_X.VCD') and use the <em>standard</em> PSD.</p>") );
+    Q3WhatsThis::add( m_ignoreExt, i18n("<p>Ignore extended PSD (located in the ISO-9660 filesystem under `/EXT/PSD_X.VCD') and use the <em>standard</em> PSD.</p>") );
 
     QToolTip::add( m_sector2336, i18n("Assume a 2336-byte sector mode") );
-    QWhatsThis::add( m_sector2336, i18n("<p>This option only makes sense if you are reading from a BIN CD disk image. This indicates to `vcdxrip' to assume a 2336-byte sector mode for image file.</p>"
+    Q3WhatsThis::add( m_sector2336, i18n("<p>This option only makes sense if you are reading from a BIN CD disk image. This indicates to `vcdxrip' to assume a 2336-byte sector mode for image file.</p>"
                                                             "<b>Note: This option is slated to disappear.</b>") );
 
     QToolTip::add( m_extractXML, i18n("Create XML description file.") );
-    QWhatsThis::add( m_extractXML, i18n("<p>This option creates an XML description file with all video CD information.</p>"
+    Q3WhatsThis::add( m_extractXML, i18n("<p>This option creates an XML description file with all video CD information.</p>"
 					"<p>This file will always contain all of the information.</p>"
 					"<p>Example: If you only extract sequences, the description file will also hold the information for files and segments.</p>"
 					"<p>The filename is the same as the video CD name, with a .xml extension. The default is VIDEOCD.xml.</p>") );

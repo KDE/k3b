@@ -24,6 +24,8 @@
 #include <kprotocolmanager.h>
 #include <kurl.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class K3bMusicBrainz::Private
@@ -51,7 +53,7 @@ K3bMusicBrainz::~K3bMusicBrainz()
 }
 
 
-int K3bMusicBrainz::query( const QCString& trm )
+int K3bMusicBrainz::query( const Q3CString& trm )
 {
   d->titles.clear();
   d->artists.clear();
@@ -69,7 +71,7 @@ int K3bMusicBrainz::query( const QCString& trm )
     
     unsigned int i = 1;
     while( mb_Select(d->mb, (char*)MBS_Rewind) && mb_Select1( d->mb, (char*)MBS_SelectTrack, i ) ) {
-      QCString data(256);
+      Q3CString data(256);
       mb_GetResultData( d->mb, (char*)MBE_TrackGetArtistName, data.data(), 256 );
       d->artists.append( QString::fromUtf8( data ).stripWhiteSpace() );
       mb_GetResultData( d->mb, (char*)MBE_TrackGetTrackName, data.data(), 256 );

@@ -23,6 +23,8 @@
 #include <k3bdataviewitem.h>
 
 #include <qevent.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -33,7 +35,7 @@
 class K3bMixedDirTreeView::PrivateAudioRootViewItem : public K3bListViewItem
 {
 public:
-  PrivateAudioRootViewItem( K3bMixedDoc* doc, QListView* parent, QListViewItem* after )
+  PrivateAudioRootViewItem( K3bMixedDoc* doc, Q3ListView* parent, Q3ListViewItem* after )
     : K3bListViewItem( parent, after ),
       m_doc(doc)
   {
@@ -57,8 +59,8 @@ K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidg
 {
   m_audioRootItem = new PrivateAudioRootViewItem( doc, this, root() );
 
-  connect( this, SIGNAL(selectionChanged(QListViewItem*)),
-	   this, SLOT(slotSelectionChanged(QListViewItem*)) );
+  connect( this, SIGNAL(selectionChanged(Q3ListViewItem*)),
+	   this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
   connect( m_doc->audioDoc(), SIGNAL(changed()), this, SLOT(slotNewAudioTracks()) );
 }
 
@@ -68,12 +70,12 @@ K3bMixedDirTreeView::~K3bMixedDirTreeView()
 }
 
 
-void K3bMixedDirTreeView::slotDropped( QDropEvent* e, QListViewItem* parent, QListViewItem* after )
+void K3bMixedDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after )
 {
   if( !e->isAccepted() )
     return;
 
-  QListViewItem* droppedItem = itemAt(e->pos());
+  Q3ListViewItem* droppedItem = itemAt(e->pos());
   if( droppedItem == m_audioRootItem ) {
     KURL::List urls;
     if( KURLDrag::decode( e, urls ) ) {
@@ -85,7 +87,7 @@ void K3bMixedDirTreeView::slotDropped( QDropEvent* e, QListViewItem* parent, QLi
 }
 
 
-void K3bMixedDirTreeView::slotSelectionChanged( QListViewItem* i )
+void K3bMixedDirTreeView::slotSelectionChanged( Q3ListViewItem* i )
 {
   if( i == m_audioRootItem )
     emit audioTreeSelected();

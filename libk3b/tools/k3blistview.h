@@ -20,14 +20,19 @@
 
 #include <klistview.h>
 #include "k3b_export.h"
-#include <qptrvector.h>
-#include <qptrlist.h>
+#include <q3ptrvector.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QEvent>
 #include <kpixmap.h>
 
 class QPainter;
 class QPushButton;
-class QIconSet;
+class QIcon;
 class QResizeEvent;
 class QComboBox;
 class QSpinBox;
@@ -42,30 +47,30 @@ class K3bListView;
 class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
 {
  public:
-  K3bListViewItem(QListView *parent);
-  K3bListViewItem(QListViewItem *parent);
-  K3bListViewItem(QListView *parent, QListViewItem *after);
-  K3bListViewItem(QListViewItem *parent, QListViewItem *after);
+  K3bListViewItem(Q3ListView *parent);
+  K3bListViewItem(Q3ListViewItem *parent);
+  K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after);
+  K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after);
 
-  K3bListViewItem(QListView *parent,
+  K3bListViewItem(Q3ListView *parent,
 		  const QString&, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null);
 
-  K3bListViewItem(QListViewItem *parent,
+  K3bListViewItem(Q3ListViewItem *parent,
 		  const QString&, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null);
 
-  K3bListViewItem(QListView *parent, QListViewItem *after,
+  K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after,
 		  const QString&, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null);
 
-  K3bListViewItem(QListViewItem *parent, QListViewItem *after,
+  K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after,
 		  const QString&, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
 		  const QString& = QString::null, const QString& = QString::null,
@@ -78,7 +83,7 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
    */
   void setup();
 
-  virtual int width( const QFontMetrics& fm, const QListView* lv, int c ) const;
+  virtual int width( const QFontMetrics& fm, const Q3ListView* lv, int c ) const;
 
   void setEditor( int col, int type, const QStringList& = QStringList() );
   void setButton( int col, bool );
@@ -136,10 +141,10 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
 class LIBK3B_EXPORT K3bCheckListViewItem : public K3bListViewItem
 {
  public:
-  K3bCheckListViewItem(QListView *parent);
-  K3bCheckListViewItem(QListViewItem *parent);
-  K3bCheckListViewItem(QListView *parent, QListViewItem *after);
-  K3bCheckListViewItem(QListViewItem *parent, QListViewItem *after);
+  K3bCheckListViewItem(Q3ListView *parent);
+  K3bCheckListViewItem(Q3ListViewItem *parent);
+  K3bCheckListViewItem(Q3ListView *parent, Q3ListViewItem *after);
+  K3bCheckListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after);
 
   virtual bool isChecked() const;
   virtual void setChecked( bool checked );
@@ -163,7 +168,7 @@ class LIBK3B_EXPORT K3bListView : public KListView
   K3bListView (QWidget *parent = 0, const char *name = 0);
   virtual ~K3bListView();
 
-  virtual void setCurrentItem( QListViewItem* );
+  virtual void setCurrentItem( Q3ListViewItem* );
 
   K3bListViewItem* currentlyEditedItem() const { return m_currentEditItem; }
 
@@ -183,13 +188,13 @@ class LIBK3B_EXPORT K3bListView : public KListView
   /**
    * Create a faded pixmap showing the items.
    */
-  KPixmap createDragPixmap( const QPtrList<QListViewItem>& items );
+  KPixmap createDragPixmap( const Q3PtrList<Q3ListViewItem>& items );
 
   /**
    * Searches for the first item above @p i which is one level higher.
    * For 1st level items this will always be the listview's root item.
    */
-  static QListViewItem* parentItem( QListViewItem* i );
+  static Q3ListViewItem* parentItem( Q3ListViewItem* i );
 
  signals:
   void editorButtonClicked( K3bListViewItem*, int );
@@ -277,7 +282,7 @@ class LIBK3B_EXPORT K3bListView : public KListView
   int m_currentEditColumn;
 
   bool m_doubleClickForEdit;
-  QListViewItem* m_lastClickedItem;
+  Q3ListViewItem* m_lastClickedItem;
 
   QPushButton* m_editorButton;
   QComboBox* m_editorComboBox;

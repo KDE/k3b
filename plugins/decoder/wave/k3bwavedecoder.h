@@ -20,7 +20,7 @@
 #include <k3b_export.h>
 
 #include <kurl.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 
 class QFile;

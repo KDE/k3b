@@ -18,6 +18,8 @@
 
 #include <k3baudiooutputplugin.h>
 #include <k3bpluginconfigwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KComboBox;
 
@@ -29,7 +31,7 @@ class K3bAlsaOutputPlugin : public K3bAudioOutputPlugin
   ~K3bAlsaOutputPlugin();
 
   int pluginSystemVersion() const { return 3; }
-  QCString soundSystem() const { return "alsa"; }
+  Q3CString soundSystem() const { return "alsa"; }
 
   bool init();
   void cleanup();

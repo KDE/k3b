@@ -193,7 +193,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     QDomElement elemPbc;
 
     // Add Tracks to XML
-    QPtrListIterator<K3bVcdTrack> it( *m_doc->tracks() );
+    Q3PtrListIterator<K3bVcdTrack> it( *m_doc->tracks() );
     for ( ; it.current(); ++it ) {
         if ( !it.current() ->isSegment() ) {
             QString seqId = QString::number( it.current() ->index() ).rightJustify( 3, '0' );
@@ -235,8 +235,8 @@ bool K3bVcdXmlView::write( const QString& fname )
     kdDebug() << QString( "(K3bVcdXmlView) Write Data to %1:" ).arg( fname ) << endl;
 
     QFile xmlFile( fname );
-    if ( xmlFile.open( IO_WriteOnly ) ) {
-        QTextStream ts( & xmlFile );
+    if ( xmlFile.open( QIODevice::WriteOnly ) ) {
+        Q3TextStream ts( & xmlFile );
         ts << m_xmlstring;
         xmlFile.close();
         return true;

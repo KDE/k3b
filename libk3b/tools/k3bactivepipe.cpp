@@ -142,7 +142,7 @@ bool K3bActivePipe::open( bool closeWhenDone )
   d->closeWhenDone = closeWhenDone;
 
   if( d->sourceIODevice ) {
-    if( !d->sourceIODevice->open( IO_ReadOnly ) )
+    if( !d->sourceIODevice->open( QIODevice::ReadOnly ) )
       return false;
   }
   else if( d->fdToReadFrom == -1 && !d->pipeIn.open() ) {
@@ -150,7 +150,7 @@ bool K3bActivePipe::open( bool closeWhenDone )
   }
 
   if( d->sinkIODevice ) {
-    if( !d->sinkIODevice->open( IO_WriteOnly ) )
+    if( !d->sinkIODevice->open( QIODevice::WriteOnly ) )
       return false;
   }
   else if( d->fdToWriteTo == -1 && !d->pipeOut.open() ) {

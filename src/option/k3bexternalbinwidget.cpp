@@ -17,10 +17,13 @@
 #include "k3bexternalbinmanager.h"
 
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
 #include <kdebug.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qstringlist.h>
 #include <qmap.h>
@@ -28,7 +31,7 @@
 #include <qfont.h>
 #include <qpainter.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qbitmap.h>
@@ -43,7 +46,7 @@
 
 
 
-K3bExternalBinWidget::K3bExternalProgramViewItem::K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent )
+K3bExternalBinWidget::K3bExternalProgramViewItem::K3bExternalProgramViewItem( K3bExternalProgram* p, Q3ListView* parent )
   : K3bListViewItem( parent ), m_program(p)
 {
   QFont f( listView()->font() );
@@ -98,7 +101,7 @@ void K3bExternalBinWidget::K3bExternalBinViewItem::setDefault( bool b )
 K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWidget* parent, const char* name )
   : QWidget( parent, name ), m_manager( manager )
 {
-  QGridLayout* mainGrid = new QGridLayout( this );
+  Q3GridLayout* mainGrid = new Q3GridLayout( this );
   mainGrid->setMargin( 0 );
   mainGrid->setSpacing( KDialog::spacingHint() );
 
@@ -113,13 +116,13 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   // setup program tab
   // ------------------------------------------------------------
   QWidget* programTab = new QWidget( m_mainTabWidget );
-  QGridLayout* programTabLayout = new QGridLayout( programTab );
+  Q3GridLayout* programTabLayout = new Q3GridLayout( programTab );
   programTabLayout->setMargin( KDialog::marginHint() );
   programTabLayout->setSpacing( KDialog::spacingHint() );
   m_programView = new K3bListView( programTab );
   m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
   QToolTip::add( m_defaultButton, i18n("Change the versions K3b should use.") );
-  QWhatsThis::add( m_defaultButton, i18n("<p>If K3b found more than one installed version of a program "
+  Q3WhatsThis::add( m_defaultButton, i18n("<p>If K3b found more than one installed version of a program "
 					 "it will choose one as the <em>default</em> which will be used "
 					 "to do the work. If you want to change the default select the "
 					 "wanted version and press this button.") );
@@ -145,7 +148,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   // setup parameters tab
   // ------------------------------------------------------------
   QWidget* parametersTab = new QWidget( m_mainTabWidget );
-  QGridLayout* parametersTabLayout = new QGridLayout( parametersTab );
+  Q3GridLayout* parametersTabLayout = new Q3GridLayout( parametersTab );
   parametersTabLayout->setMargin( KDialog::marginHint() );
   parametersTabLayout->setSpacing( KDialog::spacingHint() );
   m_parameterView = new K3bListView( parametersTab );
@@ -158,7 +161,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   m_parameterView->addColumn( i18n("Parameters") );
   m_parameterView->setAllColumnsShowFocus(true);
   m_parameterView->setFullWidth(true);
-  m_parameterView->setDefaultRenameAction( QListView::Accept );
+  m_parameterView->setDefaultRenameAction( Q3ListView::Accept );
   m_parameterView->setDoubleClickForEdit( false );
 
   m_mainTabWidget->addTab( parametersTab, i18n("User Parameters") );
@@ -167,7 +170,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   // setup search path tab
   // ------------------------------------------------------------
   QWidget* searchPathTab = new QWidget( m_mainTabWidget );
-  QGridLayout* searchPathTabLayout = new QGridLayout( searchPathTab );
+  Q3GridLayout* searchPathTabLayout = new Q3GridLayout( searchPathTab );
   searchPathTabLayout->setMargin( KDialog::marginHint() );
   searchPathTabLayout->setSpacing( KDialog::spacingHint() );
   m_searchPathBox = new KEditListBox( i18n("Search Path"), searchPathTab, "searchPathBox", true );
@@ -186,7 +189,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
 
   connect( m_rescanButton, SIGNAL(clicked()), this, SLOT(rescan()) );
   connect( m_defaultButton, SIGNAL(clicked()), this, SLOT(slotSetDefaultButtonClicked()) );
-  connect( m_programView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotProgramSelectionChanged(QListViewItem*)) );
+  connect( m_programView, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotProgramSelectionChanged(Q3ListViewItem*)) );
 
   slotProgramSelectionChanged( 0 );
 }
@@ -219,7 +222,7 @@ void K3bExternalBinWidget::load()
     K3bExternalProgramViewItem* pV = new K3bExternalProgramViewItem( p, m_programView );
     m_programRootItems.append( pV );
     // populate it
-    QPtrListIterator<K3bExternalBin> binIt( p->bins() );
+    Q3PtrListIterator<K3bExternalBin> binIt( p->bins() );
     for( ; binIt.current(); ++binIt ) {
       K3bExternalBin* b = *binIt;
       
@@ -255,7 +258,7 @@ void K3bExternalBinWidget::save()
 
 
   // save the default programs
-  QListViewItemIterator progIt( m_programView );
+  Q3ListViewItemIterator progIt( m_programView );
   while( progIt.current() ) {
     if( K3bExternalBinViewItem* bV = dynamic_cast<K3bExternalBinViewItem*>( progIt.current() ) ) {
       if( bV->isDefault() )
@@ -267,7 +270,7 @@ void K3bExternalBinWidget::save()
 
 
   // save the user parameters
-  QListViewItemIterator paraIt( m_parameterView );
+  Q3ListViewItemIterator paraIt( m_parameterView );
   QRegExp reSpace( "\\s" );
   while( paraIt.current() ) {
     K3bExternalProgramViewItem* pV = (K3bExternalProgramViewItem*)paraIt.current();
@@ -291,7 +294,7 @@ void K3bExternalBinWidget::slotSetDefaultButtonClicked()
   if( item ) {
     // remove all default flags
     K3bExternalBinViewItem* bi = (K3bExternalBinViewItem*)item->parentProgramItem()->firstChild();
-    QListViewItemIterator it( bi );
+    Q3ListViewItemIterator it( bi );
     while( it.current() && it.current()->parent() == item->parentProgramItem() ) {
       ((K3bExternalBinViewItem*)it.current())->setDefault(false);
       ++it;
@@ -302,7 +305,7 @@ void K3bExternalBinWidget::slotSetDefaultButtonClicked()
 }
 
 
-void K3bExternalBinWidget::slotProgramSelectionChanged( QListViewItem* item )
+void K3bExternalBinWidget::slotProgramSelectionChanged( Q3ListViewItem* item )
 {
   K3bExternalBinViewItem* bV = dynamic_cast<K3bExternalBinViewItem*>( item );
   if( bV ) {

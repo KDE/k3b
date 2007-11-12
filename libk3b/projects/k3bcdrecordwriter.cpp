@@ -32,10 +32,12 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qurl.h>
-#include <qvaluelist.h>
+#include <q3url.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -60,7 +62,7 @@ public:
     bool audio;
   };
 
-  QValueList<Track> tracks;
+  Q3ValueList<Track> tracks;
 
   KTempFile* cdTextFile;
 
@@ -258,7 +260,7 @@ void K3bCdrecordWriter::prepareProcess()
   }
 
   if( m_cue ) {
-    m_process->setWorkingDirectory(QUrl(m_cueFile).dirPath());
+    m_process->setWorkingDirectory(Q3Url(m_cueFile).dirPath());
     *m_process << QString("cuefile=%1").arg( m_cueFile );
   }
 
@@ -342,9 +344,9 @@ void K3bCdrecordWriter::start()
 
 
   kdDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
+  const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;

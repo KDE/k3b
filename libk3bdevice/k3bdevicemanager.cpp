@@ -24,7 +24,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
@@ -106,13 +106,13 @@ typedef unsigned char u8;
 class K3bDevice::DeviceManager::Private
 {
 public:
-  QPtrList<K3bDevice::Device> allDevices;
-  QPtrList<K3bDevice::Device> cdReader;
-  QPtrList<K3bDevice::Device> cdWriter;
-  QPtrList<K3bDevice::Device> dvdReader;
-  QPtrList<K3bDevice::Device> dvdWriter;
-  QPtrList<K3bDevice::Device> bdReader;
-  QPtrList<K3bDevice::Device> bdWriter;
+  Q3PtrList<K3bDevice::Device> allDevices;
+  Q3PtrList<K3bDevice::Device> cdReader;
+  Q3PtrList<K3bDevice::Device> cdWriter;
+  Q3PtrList<K3bDevice::Device> dvdReader;
+  Q3PtrList<K3bDevice::Device> dvdWriter;
+  Q3PtrList<K3bDevice::Device> bdReader;
+  Q3PtrList<K3bDevice::Device> bdWriter;
 
   bool checkWritingModes;
 };
@@ -147,7 +147,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::deviceByName( const QString& name )
 
 K3bDevice::Device* K3bDevice::DeviceManager::findDevice( int bus, int id, int lun )
 {
-  QPtrListIterator<K3bDevice::Device> it( d->allDevices );
+  Q3PtrListIterator<K3bDevice::Device> it( d->allDevices );
   while( it.current() )
   {
     if( it.current()->scsiBus() == bus &&
@@ -168,7 +168,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
     k3bDebug() << "(K3bDevice::DeviceManager) request for empty device!" << endl;
     return 0;
   }
-  QPtrListIterator<K3bDevice::Device> it( d->allDevices );
+  Q3PtrListIterator<K3bDevice::Device> it( d->allDevices );
   while( it.current() ) {
     if( it.current()->deviceNodes().contains(devicename) )
       return it.current();
@@ -180,49 +180,49 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdWriter() const
 {
   return d->cdWriter;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::cdReader() const
 {
   return d->cdReader;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdWriter() const
 {
   return d->dvdWriter;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::dvdReader() const
 {
   return d->dvdReader;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::blueRayReader() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::blueRayReader() const
 {
   return d->bdReader;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::blueRayWriters() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::blueRayWriters() const
 {
   return d->bdWriter;
 }
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::burningDevices() const
 {
   return cdWriter();
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::readingDevices() const
 {
   return cdReader();
 }
 
 
-const QPtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
+const Q3PtrList<K3bDevice::Device>& K3bDevice::DeviceManager::allDevices() const
 {
   return d->allDevices;
 }
@@ -265,7 +265,7 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
 
   QFile info("/proc/sys/dev/cdrom/info");
   QString line,devstring;
-  if( info.open(IO_ReadOnly) ) {
+  if( info.open(QIODevice::ReadOnly) ) {
     info.readLine(line,80); // CD-ROM information, Id: cdrom.c 3.12 2000/10/18
     info.readLine(line,80); //
 
@@ -489,7 +489,7 @@ void K3bDevice::DeviceManager::printDevices()
 {
   k3bDebug() << "Devices:" << endl
 	    << "------------------------------" << endl;
-  QPtrListIterator<Device> it( allDevices() );
+  Q3PtrListIterator<Device> it( allDevices() );
   for( ; *it; ++it ) {
     Device* dev = *it;
     k3bDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
@@ -520,7 +520,7 @@ void K3bDevice::DeviceManager::clear()
 
   // to make sure no one crashes lets keep the devices around until the changed
   // signals return
-  QPtrList<K3bDevice::Device> tmp = d->allDevices;
+  Q3PtrList<K3bDevice::Device> tmp = d->allDevices;
   tmp.setAutoDelete( true );
 
   d->allDevices.clear();
@@ -550,7 +550,7 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c )
   //
   // Iterate over all devices and check if we have a config entry
   //
-  for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
 
     QString configEntryName = dev->vendor() + " " + dev->description();
@@ -594,7 +594,7 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
     if( !saveDeviceSearchPath.contains( *it ) )
       saveDeviceSearchPath.append( *it );
 
-  for( QPtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDevice::Device> it( d->allDevices ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
 
     // update device search path

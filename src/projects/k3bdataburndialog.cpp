@@ -35,8 +35,8 @@
 #include <k3bwritingmodewidget.h>
 
 #include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
+#include <q3frame.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -44,14 +44,16 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qpoint.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qfileinfo.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -155,14 +157,14 @@ void K3bDataBurnDialog::readSettings()
 void K3bDataBurnDialog::setupSettingsTab()
 {
   QWidget* frame = new QWidget( this );
-  QGridLayout* frameLayout = new QGridLayout( frame );
+  Q3GridLayout* frameLayout = new Q3GridLayout( frame );
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  m_groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+  m_groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
   m_dataModeWidget = new K3bDataModeWidget( m_groupDataMode );
 
-  QGroupBox* groupMultiSession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession Mode"), frame );
+  Q3GroupBox* groupMultiSession = new Q3GroupBox( 1, Qt::Vertical, i18n("Multisession Mode"), frame );
   m_comboMultisession = new K3bDataMultiSessionCombobox( groupMultiSession );
 
   frameLayout->addWidget( m_groupDataMode, 0, 0 );

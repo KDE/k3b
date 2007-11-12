@@ -35,6 +35,8 @@
 #include <qlabel.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 class K3bThemeOptionTab::Private
@@ -46,7 +48,7 @@ public:
 class ThemeViewItem : public KListViewItem 
 {
 public:
-  ThemeViewItem( K3bTheme* theme_, QListView* parent, QListViewItem* after )
+  ThemeViewItem( K3bTheme* theme_, Q3ListView* parent, Q3ListViewItem* after )
     : KListViewItem( parent, after ),
       theme(theme_) {
     setText( 0, theme->name() );
@@ -90,8 +92,8 @@ void K3bThemeOptionTab::readSettings()
 
   k3bappcore->themeManager()->loadThemes();
 
-  QValueList<K3bTheme*> themes = k3bappcore->themeManager()->themes();
-  for( QValueList<K3bTheme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
+  Q3ValueList<K3bTheme*> themes = k3bappcore->themeManager()->themes();
+  for( Q3ValueList<K3bTheme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
     K3bTheme* theme = *it;
     ThemeViewItem* item = new ThemeViewItem( theme, m_viewTheme, m_viewTheme->lastItem() );
     if( theme == k3bappcore->themeManager()->currentTheme() )
@@ -154,7 +156,7 @@ void K3bThemeOptionTab::slotInstallTheme()
   // check if the archive contains a dir with a k3b.theme file
   QString themeName;
   KTar archive( themeTmpFile );
-  archive.open(IO_ReadOnly);
+  archive.open(QIODevice::ReadOnly);
   const KArchiveDirectory* themeDir = archive.directory();
   QStringList entries = themeDir->entries();
   bool validThemeArchive = false;

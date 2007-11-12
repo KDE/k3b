@@ -17,8 +17,10 @@
 #define K3BVCDTRACKDIALOG_H
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <k3bvcddoc.h>
 #include <k3blistview.h>
@@ -27,9 +29,9 @@ class K3bVcdTrack;
 class QLabel;
 class QCheckBox;
 class QComboBox;
-class QGroupBox;
+class Q3GroupBox;
 class QRadioButton;
-class QButtonGroup;
+class Q3ButtonGroup;
 class KCutLabel;
 class K3bCutComboBox;
 
@@ -39,7 +41,7 @@ class K3bVcdTrackDialog : public KDialogBase
         Q_OBJECT
 
     public:
-        K3bVcdTrackDialog( K3bVcdDoc*, QPtrList<K3bVcdTrack>& tracks, QPtrList<K3bVcdTrack>& selectedTracks, QWidget* parent = 0, const char* name = 0 );
+        K3bVcdTrackDialog( K3bVcdDoc*, Q3PtrList<K3bVcdTrack>& tracks, Q3PtrList<K3bVcdTrack>& selectedTracks, QWidget* parent = 0, const char* name = 0 );
         ~K3bVcdTrackDialog();
 
     protected slots:
@@ -56,8 +58,8 @@ class K3bVcdTrackDialog : public KDialogBase
 
     private:
         K3bVcdDoc* m_vcdDoc;
-        QPtrList<K3bVcdTrack> m_tracks;
-        QPtrList<K3bVcdTrack> m_selectedTracks;
+        Q3PtrList<K3bVcdTrack> m_tracks;
+        Q3PtrList<K3bVcdTrack> m_selectedTracks;
         QMap<QString, K3bVcdTrack*> m_numkeysmap;
         QTabWidget* m_mainTabbed;
 
@@ -83,9 +85,9 @@ class K3bVcdTrackDialog : public KDialogBase
         QLabel* m_labelAfterTimeout;
         QLabel* m_labelWait;
 
-        QGroupBox* m_groupPlay;
-        QGroupBox* m_groupPbc;
-        QGroupBox* m_groupKey;
+        Q3GroupBox* m_groupPlay;
+        Q3GroupBox* m_groupPbc;
+        Q3GroupBox* m_groupKey;
         QWidget* m_widgetnumkeys;
 
         K3bCutComboBox* m_pbc_previous;

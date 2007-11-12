@@ -23,8 +23,10 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -95,11 +97,11 @@ public:
 
   bool changesNeeded;
 
-  QMap<QCheckListItem*, QString> listDeviceMap;
-  QMap<QString, QCheckListItem*> deviceListMap;
+  QMap<Q3CheckListItem*, QString> listDeviceMap;
+  QMap<QString, Q3CheckListItem*> deviceListMap;
 
-  QMap<QCheckListItem*, K3bExternalBin*> listBinMap;
-  QMap<K3bExternalBin*, QCheckListItem*> binListMap;
+  QMap<Q3CheckListItem*, K3bExternalBin*> listBinMap;
+  QMap<K3bExternalBin*, Q3CheckListItem*> binListMap;
 
   KConfig* config;
 };
@@ -120,7 +122,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
 
   setButtons( KCModule::Apply|KCModule::Cancel|KCModule::Ok|KCModule::Default );
 
-  QHBoxLayout* box = new QHBoxLayout( this );
+  Q3HBoxLayout* box = new Q3HBoxLayout( this );
   box->setAutoAdd(true);
   box->setMargin(0);
   box->setSpacing( KDialog::spacingHint() );
@@ -201,9 +203,9 @@ void K3bSetup2::updatePrograms()
 {
   // first save which were checked
   QMap<K3bExternalBin*, bool> checkMap;
-  QListViewItemIterator listIt( w->m_viewPrograms );
+  Q3ListViewItemIterator listIt( w->m_viewPrograms );
   for( ; listIt.current(); ++listIt )
-    checkMap.insert( d->listBinMap[(QCheckListItem*)*listIt], ((QCheckListItem*)*listIt)->isOn() );
+    checkMap.insert( d->listBinMap[(Q3CheckListItem*)*listIt], ((Q3CheckListItem*)*listIt)->isOn() );
 
   w->m_viewPrograms->clear();
   d->binListMap.clear();
@@ -214,7 +216,7 @@ void K3bSetup2::updatePrograms()
   for( QMap<QString, K3bExternalProgram*>::const_iterator it = map.begin(); it != map.end(); ++it ) {
     K3bExternalProgram* p = it.data();
 
-    QPtrListIterator<K3bExternalBin> binIt( p->bins() );
+    Q3PtrListIterator<K3bExternalBin> binIt( p->bins() );
     for( ; binIt.current(); ++binIt ) {
       K3bExternalBin* b = *binIt;
 
@@ -226,7 +228,7 @@ void K3bSetup2::updatePrograms()
       }
       else {
 	// create a checkviewitem
-	QCheckListItem* bi = new QCheckListItem( w->m_viewPrograms, b->name(), QCheckListItem::CheckBox );
+	Q3CheckListItem* bi = new Q3CheckListItem( w->m_viewPrograms, b->name(), Q3CheckListItem::CheckBox );
 	bi->setText( 1, b->version );
 	bi->setText( 2, b->path );
 
@@ -276,24 +278,24 @@ void K3bSetup2::updateDevices()
 {
   // first save which were checked
   QMap<QString, bool> checkMap;
-  QListViewItemIterator listIt( w->m_viewDevices );
+  Q3ListViewItemIterator listIt( w->m_viewDevices );
   for( ; listIt.current(); ++listIt )
-    checkMap.insert( d->listDeviceMap[(QCheckListItem*)*listIt], ((QCheckListItem*)*listIt)->isOn() );
+    checkMap.insert( d->listDeviceMap[(Q3CheckListItem*)*listIt], ((Q3CheckListItem*)*listIt)->isOn() );
 
   w->m_viewDevices->clear();
   d->listDeviceMap.clear();
   d->deviceListMap.clear();
 
-  QPtrListIterator<K3bDevice::Device> it( d->deviceManager->allDevices() );
+  Q3PtrListIterator<K3bDevice::Device> it( d->deviceManager->allDevices() );
   for( ; it.current(); ++it ) {
     K3bDevice::Device* device = *it;
     // check the item on first insertion or if it was checked before
-    QCheckListItem* item = createDeviceItem( device->blockDeviceName() );
+    Q3CheckListItem* item = createDeviceItem( device->blockDeviceName() );
     item->setOn( checkMap.contains(device->blockDeviceName()) ? checkMap[device->blockDeviceName()] : true );
     item->setText( 0, device->vendor() + " " + device->description() );
   
     if( !device->genericDevice().isEmpty() ) {
-      QCheckListItem* item = createDeviceItem( device->genericDevice() );
+      Q3CheckListItem* item = createDeviceItem( device->genericDevice() );
       item->setOn( checkMap.contains(device->genericDevice()) ? checkMap[device->genericDevice()] : true );
       item->setText( 0, device->vendor() + " " + device->description() + " (" + i18n("Generic SCSI Device") + ")" );
     }
@@ -301,7 +303,7 @@ void K3bSetup2::updateDevices()
 }
 
 
-QCheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
+Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
 {
   QFileInfo fi( deviceNode );
   struct stat s;
@@ -311,9 +313,9 @@ QCheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
   }
   else {
     // create a checkviewitem
-    QCheckListItem* bi = new QCheckListItem( w->m_viewDevices,
+    Q3CheckListItem* bi = new Q3CheckListItem( w->m_viewDevices,
 					     deviceNode,
-					     QCheckListItem::CheckBox );
+					     Q3CheckListItem::CheckBox );
 
     d->listDeviceMap.insert( bi, deviceNode );
     d->deviceListMap.insert( deviceNode, bi );
@@ -412,10 +414,10 @@ void K3bSetup2::save()
 
 
   // save the device permissions
-  QListViewItemIterator listIt( w->m_viewDevices );
+  Q3ListViewItemIterator listIt( w->m_viewDevices );
   for( ; listIt.current(); ++listIt ) {
 
-    QCheckListItem* checkItem = (QCheckListItem*)listIt.current();
+    Q3CheckListItem* checkItem = (Q3CheckListItem*)listIt.current();
 
     if( checkItem->isOn() ) {
       QString dev = d->listDeviceMap[checkItem];
@@ -436,10 +438,10 @@ void K3bSetup2::save()
 
 
   // save the program permissions
-  listIt = QListViewItemIterator( w->m_viewPrograms );
+  listIt = Q3ListViewItemIterator( w->m_viewPrograms );
   for( ; listIt.current(); ++listIt ) {
 
-    QCheckListItem* checkItem = (QCheckListItem*)listIt.current();
+    Q3CheckListItem* checkItem = (Q3CheckListItem*)listIt.current();
 
     if( checkItem->isOn() ) {
 

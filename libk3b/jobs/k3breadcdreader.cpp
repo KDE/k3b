@@ -29,8 +29,11 @@
 #include <kconfig.h>
 
 #include <qregexp.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 
 
@@ -116,8 +119,8 @@ void K3bReadcdReader::start()
     if( !d->readcdBinObject->hasFeature( "clone" ) ) {
       // search all readcd installations
       K3bExternalProgram* readcdProgram = k3bcore->externalBinManager()->program( "readcd" );
-      const QPtrList<K3bExternalBin>& readcdBins = readcdProgram->bins();
-      for( QPtrListIterator<K3bExternalBin> it( readcdBins ); it.current(); ++it ) {
+      const Q3PtrList<K3bExternalBin>& readcdBins = readcdProgram->bins();
+      for( Q3PtrListIterator<K3bExternalBin> it( readcdBins ); it.current(); ++it ) {
 	if( it.current()->hasFeature( "clone" ) ) {
 	  d->readcdBinObject = it.current();
 	  emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.").arg(d->readcdBinObject->version), INFO );
@@ -193,9 +196,9 @@ void K3bReadcdReader::start()
 
 
   kdDebug() << "***** readcd parameters:\n";
-  const QValueList<QCString>& args = d->process->args();
+  const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;

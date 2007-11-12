@@ -19,8 +19,11 @@
 
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3ValueList>
 
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -105,7 +108,7 @@ void K3bExternalEncoderEditDialog::slotOk()
 class K3bExternalEncoderSettingsWidget::Private
 {
 public:
-  QMap<QListViewItem*, K3bExternalEncoderCommand> commands;
+  QMap<Q3ListViewItem*, K3bExternalEncoderCommand> commands;
 };
 
 
@@ -115,7 +118,7 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* par
   d = new Private();
 
   w = new base_K3bExternalEncoderConfigWidget( this );
-  QHBoxLayout* lay = new QHBoxLayout( this );
+  Q3HBoxLayout* lay = new Q3HBoxLayout( this );
   lay->setMargin( 0 );
   lay->addWidget( w );
 
@@ -145,7 +148,7 @@ void K3bExternalEncoderSettingsWidget::slotNewCommand()
 
   if( m_editDlg->exec() == QDialog::Accepted ) {
     K3bExternalEncoderCommand cmd = m_editDlg->currentCommand();
-    d->commands.insert( new QListViewItem( w->m_viewEncoders, 
+    d->commands.insert( new Q3ListViewItem( w->m_viewEncoders, 
 					   w->m_viewEncoders->lastItem(),
 					   cmd.name,
 					   cmd.extension,
@@ -164,7 +167,7 @@ void K3bExternalEncoderSettingsWidget::slotSelectionChanged()
 
 void K3bExternalEncoderSettingsWidget::slotEditCommand()
 {
-  if( QListViewItem* item = w->m_viewEncoders->selectedItem() ) {
+  if( Q3ListViewItem* item = w->m_viewEncoders->selectedItem() ) {
     m_editDlg->setCommand( d->commands[item] );
     if( m_editDlg->exec() == QDialog::Accepted ) {
       d->commands[item] = m_editDlg->currentCommand();
@@ -175,7 +178,7 @@ void K3bExternalEncoderSettingsWidget::slotEditCommand()
 
 void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
 {
-  if( QListViewItem* item = w->m_viewEncoders->selectedItem() ) {
+  if( Q3ListViewItem* item = w->m_viewEncoders->selectedItem() ) {
     d->commands.erase( item );
     delete item;
   }
@@ -187,11 +190,11 @@ void K3bExternalEncoderSettingsWidget::loadConfig()
   d->commands.clear();
   w->m_viewEncoders->clear();
 
-  QValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-  for( QValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin();
+  Q3ValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
+  for( Q3ValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin();
        it != cmds.end(); ++it ) {
     K3bExternalEncoderCommand& cmd = *it;
-    d->commands.insert( new QListViewItem( w->m_viewEncoders, 
+    d->commands.insert( new Q3ListViewItem( w->m_viewEncoders, 
 					   w->m_viewEncoders->lastItem(),
 					   cmd.name,
 					   cmd.extension,
@@ -208,7 +211,7 @@ void K3bExternalEncoderSettingsWidget::saveConfig()
   c->setGroup( "K3bExternalEncoderPlugin" );
 
   QStringList cmdNames;
-  for( QMapIterator<QListViewItem*, K3bExternalEncoderCommand> it = d->commands.begin();
+  for( QMapIterator<Q3ListViewItem*, K3bExternalEncoderCommand> it = d->commands.begin();
        it != d->commands.end(); ++it ) {
     QStringList cmd;
     cmd << it.data().name << it.data().extension << it.data().command;

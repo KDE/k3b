@@ -54,10 +54,10 @@
 #include <kstartupinfo.h>
 #include <kmessagebox.h>
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qtimer.h>
-#include <qvaluelist.h>
-#include <qcstring.h>
+#include <q3valuelist.h>
+#include <q3cstring.h>
 
 
 K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
@@ -95,7 +95,7 @@ void K3bApplication::init()
 {
   KConfigGroup generalOptions( config(), "General Options" );
 
-  QGuardedPtr<K3bSplash> splash;
+  QPointer<K3bSplash> splash;
   if( !isRestored() ) {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 

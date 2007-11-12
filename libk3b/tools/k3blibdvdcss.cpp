@@ -22,8 +22,8 @@
 #include <k3biso9660backend.h>
 
 #include <qfile.h>
-#include <qcstring.h>
-#include <qvaluevector.h>
+#include <q3cstring.h>
+#include <q3valuevector.h>
 #include <qpair.h>
 
 #include <dlfcn.h>
@@ -54,7 +54,7 @@ public:
 
   dvdcss_t dvd;
   K3bDevice::Device* device;
-  QValueVector< QPair<int,int> > titleOffsets;
+  Q3ValueVector< QPair<int,int> > titleOffsets;
   int currentSector;
   bool currentSectorInTitle;
 };

@@ -27,6 +27,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber,
@@ -163,8 +165,8 @@ K3bDevice::Device* K3bAudioCdTrackSource::searchForAudioCD() const
   if( m_lastUsedDevice && searchForAudioCD( m_lastUsedDevice ) )
     return m_lastUsedDevice;
 
-  const QPtrList<K3bDevice::Device>& devices = k3bcore->deviceManager()->readingDevices();
-  for( QPtrListIterator<K3bDevice::Device> it(devices); *it; ++it ) {
+  const Q3PtrList<K3bDevice::Device>& devices = k3bcore->deviceManager()->readingDevices();
+  for( Q3PtrListIterator<K3bDevice::Device> it(devices); *it; ++it ) {
     if( searchForAudioCD( *it ) ) {
       return *it;
     }

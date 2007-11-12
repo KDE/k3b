@@ -17,8 +17,8 @@
 #ifndef K3BTOC_H
 #define K3BTOC_H
 
-#include <qvaluelist.h>
-#include <qcstring.h>
+#include <q3valuelist.h>
+#include <q3cstring.h>
 
 #include <k3bmsf.h>
 
@@ -42,7 +42,7 @@ namespace K3bDevice
    * The Toc deletes all its tracks when it is deleted and
    * deletes removed tracks.
    */
-  class LIBK3BDEVICE_EXPORT Toc : public QValueList<K3bTrack>
+  class LIBK3BDEVICE_EXPORT Toc : public Q3ValueList<K3bTrack>
   {
   public:
     Toc();
@@ -58,7 +58,7 @@ namespace K3bDevice
      */
     unsigned int discId() const;
 
-    const QCString& mcn() const { return m_mcn; }
+    const Q3CString& mcn() const { return m_mcn; }
 
     /**
      * determine the contents type based on the tracks' types.
@@ -81,7 +81,7 @@ namespace K3bDevice
 
     void setFirstSector( int i ) { m_firstSector = i; }
 
-    void setMcn( const QCString& mcn ) { m_mcn = mcn; }
+    void setMcn( const Q3CString& mcn ) { m_mcn = mcn; }
 
     void clear();
 
@@ -94,7 +94,7 @@ namespace K3bDevice
     unsigned int m_discId;
     K3b::Msf m_firstSector;
 
-    QCString m_mcn;
+    Q3CString m_mcn;
   };
 }
 

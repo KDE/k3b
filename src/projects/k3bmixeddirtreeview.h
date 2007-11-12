@@ -19,11 +19,13 @@
 #define _K3B_MIXED_DIRTREEVIEW_H_
 
 #include <k3bdatadirtreeview.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 class K3bView;
 class K3bMixedDoc;
 class QDropEvent;
-class QListViewItem;
+class Q3ListViewItem;
 
 
 class K3bMixedDirTreeView : public K3bDataDirTreeView
@@ -39,10 +41,10 @@ class K3bMixedDirTreeView : public K3bDataDirTreeView
   void dataTreeSelected();
 
  protected slots:
-  void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
+  void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent );
   
  private slots:
-  void slotSelectionChanged( QListViewItem* i );
+  void slotSelectionChanged( Q3ListViewItem* i );
   void slotNewAudioTracks();
 
  private:

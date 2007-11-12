@@ -20,7 +20,7 @@
 
 #include <k3bmsf.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 class K3bAudioTrack;
@@ -34,7 +34,7 @@ class K3bAudioTrackWidget : public base_K3bAudioTrackWidget
   Q_OBJECT
 
  public:
-  K3bAudioTrackWidget( const QPtrList<K3bAudioTrack>& tracks, 
+  K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks, 
 		       QWidget* parent = 0, const char* name = 0 );
   ~K3bAudioTrackWidget();
 
@@ -42,7 +42,7 @@ class K3bAudioTrackWidget : public base_K3bAudioTrackWidget
   void save();
   void load();
 
-  QPtrList<K3bAudioTrack> m_tracks;
+  Q3PtrList<K3bAudioTrack> m_tracks;
 };
 
 #endif

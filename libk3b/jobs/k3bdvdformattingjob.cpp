@@ -29,8 +29,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <errno.h>
 #include <string.h>
@@ -505,9 +507,9 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
       *d->process << *it;
 
     kdDebug() << "***** dvd+rw-format parameters:\n";
-    const QValueList<QCString>& args = d->process->args();
+    const Q3ValueList<Q3CString>& args = d->process->args();
     QString s;
-    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
     kdDebug() << s << endl << flush;

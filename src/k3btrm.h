@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /* 
  *
  * $Id$
@@ -48,8 +50,8 @@ class K3bTRM
    */
   bool finalize();
 
-  const QCString& rawSignature() const;
-  const QCString& signature() const;
+  const Q3CString& rawSignature() const;
+  const Q3CString& signature() const;
 
  private:
   class Private;

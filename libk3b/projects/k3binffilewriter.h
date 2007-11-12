@@ -16,8 +16,10 @@
 #ifndef _K3B_INF_FILE_WRITER_H_
 #define _K3B_INF_FILE_WRITER_H_
 
-#include <qvaluevector.h>
-#include <qtextstream.h>
+#include <q3valuevector.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <k3bmsf.h>
 
@@ -34,7 +36,7 @@ class K3bInfFileWriter
  public:
   K3bInfFileWriter();
 
-  bool save( QTextStream& );
+  bool save( Q3TextStream& );
   bool save( const QString& filename );
 
   /**
@@ -87,13 +89,13 @@ class K3bInfFileWriter
   void setAlbumTitle( const QString& s ) { m_albumTitle = s; }
   void setAlbumPerformer( const QString& s ) { m_albumPerformer = s; }
 
-  void setIsrc( const QCString& s ) { m_isrc = s; }
-  void setMcn( const QCString& s ) { m_mcn = s; }
+  void setIsrc( const Q3CString& s ) { m_isrc = s; }
+  void setMcn( const Q3CString& s ) { m_mcn = s; }
 
  private:
   long m_index0;
 
-  QValueVector<long> m_indices;
+  Q3ValueVector<long> m_indices;
 
   int m_trackNumber;
   K3b::Msf m_trackStart;
@@ -112,8 +114,8 @@ class K3bInfFileWriter
   QString m_albumTitle;
   QString m_albumPerformer;
 
-  QCString m_isrc;
-  QCString m_mcn;
+  Q3CString m_isrc;
+  Q3CString m_mcn;
 };
 
 #endif

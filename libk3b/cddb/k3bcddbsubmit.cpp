@@ -45,7 +45,7 @@ void K3bCddbSubmit::createDataStream( K3bCddbResultEntry& entry )
 {
   entry.rawData.truncate(0);
   
-  QTextStream ts( &entry.rawData, IO_WriteOnly );
+  Q3TextStream ts( &entry.rawData, QIODevice::WriteOnly );
 
   ts << "#" << endl
      << "# Submitted via: K3b" << endl

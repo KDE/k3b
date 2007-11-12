@@ -21,6 +21,8 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -37,7 +39,7 @@ static K3bLsofWrapper::Process createProcess( const QString& name, int pid )
 class K3bLsofWrapper::Private
 {
 public:
-  QValueList<Process> apps;
+  Q3ValueList<Process> apps;
   QString lsofBin;
 };
 
@@ -93,7 +95,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
 }
 
 
-const QValueList<K3bLsofWrapper::Process>& K3bLsofWrapper::usingApplications() const
+const Q3ValueList<K3bLsofWrapper::Process>& K3bLsofWrapper::usingApplications() const
 {
   return d->apps;
 }

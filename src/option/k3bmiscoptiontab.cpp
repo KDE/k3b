@@ -27,6 +27,8 @@
 #include <qcheckbox.h>
 #include <qfileinfo.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -90,8 +92,8 @@ void K3bMiscOptionTab::readSettings()
 
   // Audio Output
   m_comboAudioOutputSystem->clear();
-  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
-  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+  Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
+  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioOutputPlugin* f = static_cast<K3bAudioOutputPlugin*>( it.current() );
     m_comboAudioOutputSystem->insertItem( QString::fromLocal8Bit(f->soundSystem()) );
   }

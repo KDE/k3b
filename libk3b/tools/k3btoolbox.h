@@ -18,7 +18,12 @@
 
 #include <qstring.h>
 #include <qtoolbutton.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3PopupMenu>
+#include <QMouseEvent>
+#include <Q3GridLayout>
 
 #include <ktoolbar.h>
 
@@ -27,8 +32,8 @@
 class KAction;
 class KToggleAction;
 class KWidgetAction;
-class QGridLayout;
-class QPopupMenu;
+class Q3GridLayout;
+class Q3PopupMenu;
 class QResizeEvent;
 class QMouseEvent;
 

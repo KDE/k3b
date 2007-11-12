@@ -19,7 +19,7 @@
 
 #include <qdir.h>
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -75,15 +75,15 @@ void K3bCddbLocalSubmit::doSubmit()
       kdDebug() << "(K3bCddbLocalSubmit) file already exists: " << path << endl;
     }
     
-    if( !entryFile.open( IO_WriteOnly ) ) {
+    if( !entryFile.open( QIODevice::WriteOnly ) ) {
       kdDebug() << "(K3bCddbLocalSubmit) could not create file: " << path << endl;
       setError( IO_ERROR );
       emit submitFinished( this );
     }
     else {
       kdDebug() << "(K3bCddbLocalSubmit) creating file: " << path << endl;
-      QTextStream entryStream( &entryFile );
-      entryStream.setEncoding( QTextStream::UnicodeUTF8 );
+      Q3TextStream entryStream( &entryFile );
+      entryStream.setEncoding( Q3TextStream::UnicodeUTF8 );
       entryStream << resultEntry().rawData;
       entryFile.close();
 

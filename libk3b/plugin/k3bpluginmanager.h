@@ -17,7 +17,7 @@
 #define _K3B_PLUGIN_MANAGER_H_
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 #include "k3b_export.h"
 
@@ -43,7 +43,7 @@ class LIBK3B_EXPORT K3bPluginManager : public QObject
   /**
    * if group is empty all plugins are returned
    */
-  QPtrList<K3bPlugin> plugins( const QString& group = QString::null ) const;
+  Q3PtrList<K3bPlugin> plugins( const QString& group = QString::null ) const;
 
   /**
    * Returnes a list of the available groups.

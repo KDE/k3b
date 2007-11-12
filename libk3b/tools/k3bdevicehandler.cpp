@@ -19,6 +19,8 @@
 #include <k3bthread.h>
 #include <k3bdevice.h>
 #include <k3bcdtext.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 
 

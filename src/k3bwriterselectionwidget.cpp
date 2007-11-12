@@ -34,14 +34,17 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qtooltip.h>
 #include <qtoolbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qmap.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
 #include <qcursor.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
 
 #include <stdlib.h>
@@ -121,12 +124,12 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   d->supportedWritingApps = K3b::CDRECORD|K3b::CDRDAO|K3b::GROWISOFS;
   d->lastSetSpeed = -1;
 
-  QGroupBox* groupWriter = new QGroupBox( this );
+  Q3GroupBox* groupWriter = new Q3GroupBox( this );
   groupWriter->setTitle( i18n( "Burn Medium" ) );
   groupWriter->setColumnLayout(0, Qt::Vertical );
   groupWriter->layout()->setSpacing( 0 );
 
-  QGridLayout* groupWriterLayout = new QGridLayout( groupWriter->layout() );
+  Q3GridLayout* groupWriterLayout = new Q3GridLayout( groupWriter->layout() );
   groupWriterLayout->setAlignment( Qt::AlignTop );
   groupWriterLayout->setSpacing( KDialog::spacingHint() );
   groupWriterLayout->setMargin( 0 );
@@ -151,7 +154,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   groupWriterLayout->setColStretch( 0, 1 );
 
 
-  QGridLayout* mainLayout = new QGridLayout( this );
+  Q3GridLayout* mainLayout = new Q3GridLayout( this );
   mainLayout->setAlignment( Qt::AlignTop );
   mainLayout->setSpacing( KDialog::spacingHint() );
   mainLayout->setMargin( 0 );
@@ -177,10 +180,10 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   QToolTip::add( m_comboSpeed, i18n("The speed at which to burn the medium") );
   QToolTip::add( m_comboWritingApp, i18n("The external application to actually burn the medium") );
 
-  QWhatsThis::add( m_comboMedium, i18n("<p>Select the medium that you want to use for burning."
+  Q3WhatsThis::add( m_comboMedium, i18n("<p>Select the medium that you want to use for burning."
 				       "<p>In most cases there will only be one medium available which "
 				       "does not leave much choice.") );
-  QWhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want to burn."
+  Q3WhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want to burn."
 				      "<p><b>Auto</b><br>"
 				      "This will choose the maximum writing speed possible with the used "
 				      "medium. "
@@ -191,7 +194,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
 				      "<p>1x refers to 175 KB/s for CD, 1385 KB/s for DVD, and 4496 KB/s for Blu-ray.</p>"
 				      "<p><b>Caution:</b> Make sure your system is able to send the data "
 				      "fast enough to prevent buffer underruns.") );
-  QWhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "
+  Q3WhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "
 					   "to actually write a CD or DVD."
 					   "<p>Normally K3b chooses the best "
 					   "suited application for every task automatically but in some cases it "
@@ -253,7 +256,7 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
   if( writerDevice() ) {
-    QValueList<int> speeds = k3bappcore->mediaCache()->writingSpeeds( writerDevice() );
+    Q3ValueList<int> speeds = k3bappcore->mediaCache()->writingSpeeds( writerDevice() );
 
     int lastSpeed = writerSpeed();
 
@@ -294,7 +297,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	}
       }
       else {
-	for( QValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
+	for( Q3ValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
 	  insertSpeedItem( *it );
       }
     }
@@ -391,7 +394,7 @@ K3bDevice::Device* K3bWriterSelectionWidget::writerDevice() const
 }
 
 
-QValueList<K3bDevice::Device*> K3bWriterSelectionWidget::allDevices() const
+Q3ValueList<K3bDevice::Device*> K3bWriterSelectionWidget::allDevices() const
 {
   return m_comboMedium->allDevices();
 }

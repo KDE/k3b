@@ -23,9 +23,9 @@
 #include <qcheckbox.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 
 #include <klineedit.h>
 #include <klocale.h>

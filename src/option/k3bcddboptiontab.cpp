@@ -16,15 +16,15 @@
 #include "k3bcddboptiontab.h"
 
 #include <qvariant.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qstringlist.h>
 #include <qcombobox.h>
 #include <qtoolbutton.h>
@@ -201,13 +201,13 @@ void K3bCddbOptionTab::apply()
   QStringList cddbServer;
   QStringList localCddbDirs;
 
-  QListViewItemIterator it( m_viewLocalDir );
+  Q3ListViewItemIterator it( m_viewLocalDir );
   while( it.current() ) {
     localCddbDirs.append( it.current()->text(0) );
     ++it;
   }
 
-  QListViewItemIterator it1( m_viewCddbServer );
+  Q3ListViewItemIterator it1( m_viewCddbServer );
   while( it1.current() ) {
     cddbServer.append( it1.current()->text(0) + " " + it1.current()->text(1) + ":" + it1.current()->text(2) );
     ++it1;
@@ -230,7 +230,7 @@ void K3bCddbOptionTab::slotLocalDirAdd()
 {
   if( !m_editLocalDir->text().isEmpty() ) {
       QString localDir( m_editLocalDir->text() );
-      QListViewItemIterator it( m_viewLocalDir );
+      Q3ListViewItemIterator it( m_viewLocalDir );
       while( it.current() ) {
           if ( it.current()->text(0) == localDir )
               return;
@@ -246,7 +246,7 @@ void K3bCddbOptionTab::slotLocalDirAdd()
 
 void K3bCddbOptionTab::slotLocalDirRemove()
 {
-  if( QListViewItem* item = m_viewLocalDir->selectedItem() )
+  if( Q3ListViewItem* item = m_viewLocalDir->selectedItem() )
     delete item;
 
   enDisableButtons();
@@ -268,7 +268,7 @@ void K3bCddbOptionTab::slotCddbServerAdd()
 
 void K3bCddbOptionTab::slotCddbServerRemove()
 {
-  if( QListViewItem* item = m_viewCddbServer->selectedItem() )
+  if( Q3ListViewItem* item = m_viewCddbServer->selectedItem() )
     delete item;
 
   enDisableButtons();
@@ -306,7 +306,7 @@ void K3bCddbOptionTab::slotServerTypeChanged()
 
 void K3bCddbOptionTab::slotLocalDirDown()
 {
-  QListViewItem* sel = m_viewLocalDir->selectedItem();
+  Q3ListViewItem* sel = m_viewLocalDir->selectedItem();
   m_viewLocalDir->moveItem( sel, 0, sel->nextSibling() );
   m_viewLocalDir->setSelected( sel, true );
 }
@@ -314,7 +314,7 @@ void K3bCddbOptionTab::slotLocalDirDown()
 
 void K3bCddbOptionTab::slotLocalDirUp()
 {
-  QListViewItem* sel = m_viewLocalDir->selectedItem();
+  Q3ListViewItem* sel = m_viewLocalDir->selectedItem();
   m_viewLocalDir->moveItem( sel, 0, sel->itemAbove()->itemAbove() );
   m_viewLocalDir->setSelected( sel, true );
 }
@@ -322,7 +322,7 @@ void K3bCddbOptionTab::slotLocalDirUp()
 
 void K3bCddbOptionTab::slotCddbServerDown()
 {
-  QListViewItem* sel = m_viewCddbServer->selectedItem();
+  Q3ListViewItem* sel = m_viewCddbServer->selectedItem();
   m_viewCddbServer->moveItem( sel, 0, sel->nextSibling() );
   m_viewCddbServer->setSelected( sel, true );
 }
@@ -330,7 +330,7 @@ void K3bCddbOptionTab::slotCddbServerDown()
 
 void K3bCddbOptionTab::slotCddbServerUp()
 {
-  QListViewItem* sel = m_viewCddbServer->selectedItem();
+  Q3ListViewItem* sel = m_viewCddbServer->selectedItem();
   m_viewCddbServer->moveItem( sel, 0, sel->itemAbove()->itemAbove() );
   m_viewCddbServer->setSelected( sel, true );
 }

@@ -36,6 +36,8 @@
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -104,7 +106,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
   f.setBold(true);
   d->labelFoundMedia->setFont( f );
 
-  QGridLayout* grid = new QGridLayout( plainPage() );
+  Q3GridLayout* grid = new Q3GridLayout( plainPage() );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
 

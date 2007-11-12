@@ -18,6 +18,8 @@
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
 #include <k3bisooptions.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 K3bDataProjectInterface::K3bDataProjectInterface( K3bDataDoc* doc, const char* name )
@@ -107,8 +109,8 @@ QStringList K3bDataProjectInterface::children( const QString& path ) const
   QStringList l;
   K3bDataItem* item =  m_dataDoc->root()->findByPath( path );
   if( item && item->isDir() ) {
-    const QPtrList<K3bDataItem>& cl = static_cast<K3bDirItem*>(item)->children();
-    for( QPtrListIterator<K3bDataItem> it( cl ); *it; ++it )
+    const Q3PtrList<K3bDataItem>& cl = static_cast<K3bDirItem*>(item)->children();
+    for( Q3PtrListIterator<K3bDataItem> it( cl ); *it; ++it )
       l.append( it.current()->k3bName() );
   }
 

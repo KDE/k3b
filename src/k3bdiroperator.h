@@ -20,8 +20,8 @@
 #include <kdiroperator.h>
 #include <kbookmarkmanager.h>
 
-class QIconViewItem;
-class QListViewItem;
+class Q3IconViewItem;
+class Q3ListViewItem;
 class KBookmarkMenu;
 class KActionMenu;
 

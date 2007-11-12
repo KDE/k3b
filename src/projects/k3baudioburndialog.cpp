@@ -32,7 +32,7 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -40,14 +40,17 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qgrid.h>
+#include <q3whatsthis.h>
+#include <q3grid.h>
 #include <qtoolbutton.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -75,22 +78,22 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   // create advanced tab
   // ----------------------------------------------------------
   QWidget* advancedTab = new QWidget( this );
-  QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
+  Q3GridLayout* advancedTabGrid = new Q3GridLayout( advancedTab );
   advancedTabGrid->setSpacing( spacingHint() );
   advancedTabGrid->setMargin( marginHint() );
 
-  QGroupBox* advancedSettingsGroup = new QGroupBox( 1, Qt::Vertical, i18n("Settings"), advancedTab );
+  Q3GroupBox* advancedSettingsGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Settings"), advancedTab );
   m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( advancedSettingsGroup );
 
-  QGroupBox* advancedGimmickGroup = new QGroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
+  Q3GroupBox* advancedGimmickGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
   m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
 
-  m_audioRippingGroup = new QGroupBox( 3, Qt::Vertical, i18n("Audio Ripping"), advancedTab );
-  QHBox* box = new QHBox( m_audioRippingGroup );
+  m_audioRippingGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Audio Ripping"), advancedTab );
+  Q3HBox* box = new Q3HBox( m_audioRippingGroup );
   box->setSpacing( spacingHint() );
   box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
-  box = new QHBox( m_audioRippingGroup );
+  box = new Q3HBox( m_audioRippingGroup );
   box->setSpacing( spacingHint() );
   box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
   m_spinAudioRippingReadRetries = new QSpinBox( 1, 128, 1, box );
@@ -114,7 +117,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   // What's This info
   // -------------------------------------------------------------------------
-  QWhatsThis::add( m_checkHideFirstTrack,
+  Q3WhatsThis::add( m_checkHideFirstTrack,
 		   i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
 			"<p>The audio CD standard uses pregaps before every track on the CD. "
 			"By default these last for 2 seconds and are silent. In DAO mode it "

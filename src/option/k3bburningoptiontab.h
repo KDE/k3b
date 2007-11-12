@@ -18,10 +18,12 @@
 #define K3B_BURNING_OPTION_TAB_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QCheckBox;
 class QLabel;
-class QGroupBox;
+class Q3GroupBox;
 class QComboBox;
 class QString;
 class QSpinBox;

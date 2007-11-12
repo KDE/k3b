@@ -26,7 +26,7 @@
 #include <kglobalsettings.h>
 #include <kapplication.h>
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 
 K3bDebuggingOutputFile::K3bDebuggingOutputFile()
@@ -37,7 +37,7 @@ K3bDebuggingOutputFile::K3bDebuggingOutputFile()
 
 bool K3bDebuggingOutputFile::open()
 {
-  if( !QFile::open( IO_WriteOnly ) )
+  if( !QFile::open( QIODevice::WriteOnly ) )
     return false;
 
   addOutput( "System", "K3b Version: " + k3bcore->version() );
@@ -46,7 +46,7 @@ bool K3bDebuggingOutputFile::open()
   addOutput( "System", "Kernel:      " + K3b::kernelVersion() );
   
   // devices in the logfile
-  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
     addOutput( "Devices", 
 	       QString( "%1 (%2, %3) [%5] [%6] [%7]" )
@@ -67,7 +67,7 @@ void K3bDebuggingOutputFile::addOutput( const QString& app, const QString& msg )
   if( !isOpen() )
     open();
 
-  QTextStream s( this );
+  Q3TextStream s( this );
   s << "[" << app << "] " << msg << endl;
   flush();
 }

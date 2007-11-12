@@ -24,7 +24,7 @@
 
 #include <kgenericfactory.h>
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdom.h>
 #include <qfile.h>
 
@@ -60,7 +60,7 @@ bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
   KoStore* store = KoStore::createStore( info.url().path(), KoStore::Read );
   if( store && !store->bad() && store->open( "maindata.xml" ) ) {
     QIODevice* dev = store->device();
-    dev->open( IO_ReadOnly );
+    dev->open( QIODevice::ReadOnly );
     if( xmlDoc.setContent( dev ) )
       success = true;
     dev->close();

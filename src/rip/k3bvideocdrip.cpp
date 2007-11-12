@@ -27,7 +27,10 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qtimer.h>
-#include <qurl.h>
+#include <q3url.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 // K3b Includes
 #include "k3bvideocdrip.h"
@@ -157,14 +160,14 @@ void K3bVideoCdRip::vcdxRip()
     connect( m_process, SIGNAL( processExited( KProcess* ) ),
              this, SLOT( slotVcdXRipFinished() ) );
 
-    m_process->setWorkingDirectory( QUrl( m_videooptions ->getVideoCdDestination() ).dirPath() );
+    m_process->setWorkingDirectory( Q3Url( m_videooptions ->getVideoCdDestination() ).dirPath() );
 
     // vcdxrip commandline parameters
     kdDebug() << "***** vcdxrip parameters:" << endl;
     ;
-    const QValueList<QCString>& args = m_process->args();
+    const Q3ValueList<Q3CString>& args = m_process->args();
     QString s;
-    for ( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for ( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
         s += *it + " ";
     }
     kdDebug() << s << flush << endl;

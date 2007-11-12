@@ -20,7 +20,7 @@
 
 #include <qfile.h>
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 // TODO: remove the items from the project if the savedSize differs
@@ -71,7 +71,7 @@ public:
    */
   K3b::Msf blocks() const { return K3b::Msf( usedBlocks(savedSize) ); }
 
-  QPtrList<K3bDataItem> items;
+  Q3PtrList<K3bDataItem> items;
 };
 
 
@@ -157,7 +157,7 @@ public:
   KIO::filesize_t size;
   K3b::Msf blocks;
 
-  QPtrList<K3bDataItem> specialItems;
+  Q3PtrList<K3bDataItem> specialItems;
 };
 
 

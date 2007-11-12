@@ -20,7 +20,7 @@
 
 #include <k3bvideodvdtitletranscodingjob.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qmap.h>
 
 #include <kio/global.h>

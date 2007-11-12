@@ -31,8 +31,8 @@ class QCheckBox;
 class QSpinBox;
 class QComboBox;
 class K3bWritingModeWidget;
-class QButtonGroup;
-class QGroupBox;
+class Q3ButtonGroup;
+class Q3GroupBox;
 
 class K3bMediaCopyDialog : public K3bInteractionDialog
 {
@@ -79,8 +79,8 @@ class K3bMediaCopyDialog : public K3bInteractionDialog
   K3bWritingModeWidget* m_writingModeWidget;
   QComboBox* m_comboCopyMode;
 
-  QGroupBox* m_groupAdvancedDataOptions;
-  QGroupBox* m_groupAdvancedAudioOptions;
+  Q3GroupBox* m_groupAdvancedDataOptions;
+  Q3GroupBox* m_groupAdvancedAudioOptions;
 };
 
 #endif

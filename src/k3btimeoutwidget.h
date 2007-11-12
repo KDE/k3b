@@ -17,6 +17,9 @@
 #define _K3B_TIMEOUT_WIDGET_H_
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
 
 class QPaintEvent;
 class QResizeEvent;

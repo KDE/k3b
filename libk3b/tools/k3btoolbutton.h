@@ -19,6 +19,8 @@
 #include "k3b_export.h"
 
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QEvent>
 
 class QPainter;
 class QEvent;

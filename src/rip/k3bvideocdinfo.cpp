@@ -16,7 +16,7 @@
 
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qdom.h>

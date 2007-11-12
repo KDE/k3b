@@ -18,8 +18,10 @@
 #define K3BDEVICE_H
 
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qglobal.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <k3bdevicetypes.h>
 #include <k3bdiskinfo.h>
@@ -443,7 +445,7 @@ namespace K3bDevice
        *
        * This only works with MMC3 compliant drives.
        */
-      QValueList<int> determineSupportedWriteSpeeds() const;
+      Q3ValueList<int> determineSupportedWriteSpeeds() const;
 
       /**
        * @returnes the speed in kb/s or 0 on failure.
@@ -669,9 +671,9 @@ namespace K3bDevice
 			   unsigned int subchannelParam,
 			   unsigned int trackNumber ) const;
 
-      bool readIsrc( unsigned int track, QCString& isrc ) const;
+      bool readIsrc( unsigned int track, Q3CString& isrc ) const;
 
-      bool readMcn( QCString& mcn ) const;
+      bool readMcn( Q3CString& mcn ) const;
 
       /**
        * MMC command Read Buffer Capacity
@@ -787,12 +789,12 @@ namespace K3bDevice
        */
       int rawTocDataWithBcdValues( unsigned char* data, unsigned int dataLen ) const;
 
-      bool getSupportedWriteSpeedsVia2A( QValueList<int>& list, int type ) const;
-      bool getSupportedWriteSpeedsViaGP( QValueList<int>& list, int type ) const;
+      bool getSupportedWriteSpeedsVia2A( Q3ValueList<int>& list, int type ) const;
+      bool getSupportedWriteSpeedsViaGP( Q3ValueList<int>& list, int type ) const;
 
       int getMaxWriteSpeedVia2A() const;
 
-      QCString mediaId( int mediaType ) const;
+      Q3CString mediaId( int mediaType ) const;
 
       QString m_vendor;
       QString m_description;

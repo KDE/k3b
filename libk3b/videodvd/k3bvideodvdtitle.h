@@ -24,7 +24,7 @@
 #include <k3bvideodvdsubpicturestream.h>
 #include <k3bvideodvdptt.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 
 namespace K3bVideoDVD
@@ -98,10 +98,10 @@ namespace K3bVideoDVD
       Time m_playbackTime;
       
       VideoStream m_videoStream;
-      QValueVector<AudioStream> m_audioStreams;
-      QValueVector<SubPictureStream> m_subPictureStreams;
+      Q3ValueVector<AudioStream> m_audioStreams;
+      Q3ValueVector<SubPictureStream> m_subPictureStreams;
 
-      QValueVector<PTT> m_ptts;
+      Q3ValueVector<PTT> m_ptts;
 
       //      VideoDVD* m_videoDVD;
 

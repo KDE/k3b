@@ -19,7 +19,10 @@
 
 #include <kdialogbase.h>
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QLabel>
 
 class K3bDataItem;
 
@@ -37,7 +40,7 @@ class K3bDataPropertiesDialog : public KDialogBase
 Q_OBJECT
 
  public: 
-  K3bDataPropertiesDialog( const QValueList<K3bDataItem*>&, QWidget* parent = 0, const char* name = 0 );
+  K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>&, QWidget* parent = 0, const char* name = 0 );
   ~K3bDataPropertiesDialog();
 
  protected slots:
@@ -53,7 +56,7 @@ Q_OBJECT
   QLabel* m_labelBlocks;
   QLabel* m_extraInfoLabel;
 
-  QFrame* m_spacerLine;
+  Q3Frame* m_spacerLine;
 
   QLabel* m_labelLocalNameText;
   QLabel* m_labelLocalLocationText;
@@ -64,10 +67,10 @@ Q_OBJECT
   QCheckBox* m_checkHideOnJoliet;
   KLineEdit* m_editSortWeight;
 
-  QValueList<K3bDataItem*> m_dataItems;
+  Q3ValueList<K3bDataItem*> m_dataItems;
 
   void loadItemProperties( K3bDataItem* );
-  void loadListProperties( const QValueList<K3bDataItem*>& );
+  void loadListProperties( const Q3ValueList<K3bDataItem*>& );
 };
 
 #endif

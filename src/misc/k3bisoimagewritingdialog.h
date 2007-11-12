@@ -18,6 +18,10 @@
 #define K3BISOIMAGEWRITINGDIALOG_H
 
 #include <k3binteractiondialog.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QLabel>
 
 
 class QCheckBox;
@@ -32,7 +36,7 @@ class QSpinBox;
 class QDragEnterEvent;
 class QDropEvent;
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 class QPoint;
 
 
@@ -55,7 +59,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void slotWriterChanged();
   void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
-  void slotContextMenu( KListView*, QListViewItem*, const QPoint& pos );
+  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& pos );
 
  protected:
   void loadUserDefaults( KConfigBase* );

@@ -34,14 +34,17 @@
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qcheckbox.h>
 #include <qtabwidget.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qspinbox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -253,7 +256,7 @@ void K3bProjectBurnDialog::slotStartClicked()
 
 void K3bProjectBurnDialog::prepareGui()
 {
-  QVBoxLayout* mainLay = new QVBoxLayout( mainWidget() );
+  Q3VBoxLayout* mainLay = new Q3VBoxLayout( mainWidget() );
   mainLay->setAutoAdd( true );
   mainLay->setMargin( 0 );
   mainLay->setSpacing( KDialog::spacingHint() );
@@ -267,13 +270,13 @@ void K3bProjectBurnDialog::prepareGui()
   QWidget* w = new QWidget( m_tabWidget );
   m_tabWidget->addTab( w, i18n("Writing") );
 
-  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
+  Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
   groupWritingMode->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
 
-  m_optionGroup = new QGroupBox( 0, Qt::Vertical, i18n("Settings"), w );
+  m_optionGroup = new Q3GroupBox( 0, Qt::Vertical, i18n("Settings"), w );
   m_optionGroup->layout()->setSpacing(0);
-  m_optionGroupLayout = new QVBoxLayout( m_optionGroup->layout() );
+  m_optionGroupLayout = new Q3VBoxLayout( m_optionGroup->layout() );
   m_optionGroupLayout->setMargin( 0 );
   m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
@@ -288,7 +291,7 @@ void K3bProjectBurnDialog::prepareGui()
   m_optionGroupLayout->addWidget(m_checkOnlyCreateImage);
   m_optionGroupLayout->addWidget(m_checkRemoveBufferFiles);
 
-  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), w );
+  Q3GroupBox* groupCopies = new Q3GroupBox( 2, Qt::Horizontal, i18n("Copies"), w );
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
@@ -297,7 +300,7 @@ void K3bProjectBurnDialog::prepareGui()
   m_spinCopies = new QSpinBox( 1, 999, 1, groupCopies );
 
   // arrange it
-  QGridLayout* grid = new QGridLayout( w );
+  Q3GridLayout* grid = new Q3GridLayout( w );
   grid->setMargin( KDialog::marginHint() );
   grid->setSpacing( KDialog::spacingHint() );
 
@@ -309,7 +312,7 @@ void K3bProjectBurnDialog::prepareGui()
   grid->setColStretch( 1, 1 );
 
   QWidget* tempW = new QWidget( m_tabWidget );
-  grid = new QGridLayout( tempW );
+  grid = new Q3GridLayout( tempW );
   grid->setMargin( KDialog::marginHint() );
   grid->setSpacing( KDialog::spacingHint() );
   m_tabWidget->addTab( tempW, i18n("Image") );
@@ -421,7 +424,7 @@ void K3bProjectBurnDialog::slotShowImageTip( bool buttonActivated )
 {
     if ( buttonActivated ) {
         // FIXME: use the tab bar's position
-        QWhatsThis::display( i18n( "Use the 'Image' tab to optionally adjust the path of the image." ),
+        Q3WhatsThis::display( i18n( "Use the 'Image' tab to optionally adjust the path of the image." ),
                              mapToGlobal( QPoint( rect().center().x(), rect().top() ) ) );
     }
 }

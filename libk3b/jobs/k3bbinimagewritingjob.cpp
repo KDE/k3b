@@ -28,7 +28,7 @@
 #include <kdebug.h>
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 
 
@@ -96,8 +96,8 @@ bool K3bBinImageWritingJob::prepareWriter()
       // TODO: check K3bCueFileParser::imageFilenameInCue()
       // let's see if cdrecord can handle the cue file
       QFile f( m_tocFile );
-      if( f.open( IO_ReadOnly ) ) {
-	QTextStream fStr( &f );
+      if( f.open( QIODevice::ReadOnly ) ) {
+	Q3TextStream fStr( &f );
 	if( fStr.read().contains( "MODE1/2352" ) ) {
 	  kdDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao." << endl;
 	  usedWritingApp = K3b::CDRDAO;

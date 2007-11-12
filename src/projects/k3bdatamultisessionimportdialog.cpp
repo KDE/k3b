@@ -17,10 +17,13 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qfont.h>
 #include <qmap.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -138,10 +141,10 @@ void K3bDataMultisessionImportDialog::updateMedia()
     d->sessionView->clear();
     d->sessions.clear();
 
-    QPtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
+    Q3PtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
 
     bool haveMedium = false;
-    for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+    for( Q3PtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
         K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
         if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE &&
@@ -265,7 +268,7 @@ K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* paren
                  false ),
     d( new Private() )
 {
-    QVBoxLayout* layout = new QVBoxLayout( plainPage() );
+    Q3VBoxLayout* layout = new Q3VBoxLayout( plainPage() );
     layout->setMargin( 0 );
     layout->setAutoAdd( true );
 

@@ -20,9 +20,13 @@
 #include <k3blistview.h>
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <Q3PtrList>
 
 class QDragEnterEvent;
-class QDragObject;
+class Q3DragObject;
 class QDropEvent;
 class QTimer;
 class KPopupMenu;
@@ -46,14 +50,14 @@ class K3bVcdListView : public K3bListView
         /**
          * reimplemented from KListView
          */
-        void insertItem( QListViewItem* );
+        void insertItem( Q3ListViewItem* );
 
         KActionCollection* actionCollection() const
         {
             return m_actionCollection;
         }
 
-        QPtrList<K3bVcdTrack> selectedTracks();
+        Q3PtrList<K3bVcdTrack> selectedTracks();
 
     signals:
         void lengthReady();
@@ -75,16 +79,16 @@ class K3bVcdListView : public K3bListView
         QMap<K3bVcdTrack*, K3bVcdListViewItem*> m_itemMap;
 
     private slots:
-        void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
+        void slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* after );
         void slotUpdateItems();
-        void showPopupMenu( KListView*, QListViewItem* item, const QPoint& );
+        void showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& );
         void showPropertiesDialog();
         void slotRemoveTracks();
         void slotTrackRemoved( K3bVcdTrack* );
 
     protected:
         bool acceptDrag( QDropEvent* e ) const;
-        QDragObject* dragObject();
+        Q3DragObject* dragObject();
 };
 
 #endif

@@ -17,7 +17,7 @@
 #define _K3B_EXTERNAL_ENCODER_COMMAND_H_
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 class K3bExternalEncoderCommand
 {
@@ -34,7 +34,7 @@ public:
   bool swapByteOrder;
   bool writeWaveHeader;
 
-  static QValueList<K3bExternalEncoderCommand> readCommands();
+  static Q3ValueList<K3bExternalEncoderCommand> readCommands();
 };
 
 #endif

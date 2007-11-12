@@ -28,8 +28,11 @@
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qglobal.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qmutex.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <k3bdebug.h>
 
@@ -849,7 +852,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
 void K3bDevice::Device::readIsrcMcn( K3bDevice::Toc& toc ) const
 {
     // read MCN and ISRC of all tracks
-    QCString mcn;
+    Q3CString mcn;
     if( readMcn( mcn ) ) {
         toc.setMcn( mcn );
         k3bDebug() << "(K3bDevice::Device) found MCN: " << mcn << endl;
@@ -858,7 +861,7 @@ void K3bDevice::Device::readIsrcMcn( K3bDevice::Toc& toc ) const
         k3bDebug() << "(K3bDevice::Device) no MCN found." << endl;
 
     for( unsigned int i = 1; i <= toc.count(); ++i ) {
-        QCString isrc;
+        Q3CString isrc;
         if( toc[i-1].type() == Track::AUDIO ) {
             if( readIsrc( i, isrc ) ) {
                 k3bDebug() << "(K3bDevice::Device) found ISRC for track " << i << ": " << isrc << endl;
@@ -3105,9 +3108,9 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
             return ret;
     }
 
-    QValueList<int> list = determineSupportedWriteSpeeds();
+    Q3ValueList<int> list = determineSupportedWriteSpeeds();
     if( !list.isEmpty() ) {
-        for( QValueList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+        for( Q3ValueList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
             ret = QMAX( ret, *it );
     }
 
@@ -3118,9 +3121,9 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
 }
 
 
-QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
+Q3ValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
 {
-    QValueList<int> ret;
+    Q3ValueList<int> ret;
 
     if( burner() ) {
         //
@@ -3173,7 +3176,7 @@ QValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
 }
 
 
-bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( QValueList<int>& list, int mediaType ) const
+bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( Q3ValueList<int>& list, int mediaType ) const
 {
     unsigned char* data = 0;
     unsigned int dataLen = 0;
@@ -3219,7 +3222,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( QValueList<int>& list, int
                         s = fixupDvdWritingSpeed( s );
 
                     // sort the list
-                    QValueList<int>::iterator it = list.begin();
+                    Q3ValueList<int>::iterator it = list.begin();
                     while( it != list.end() && *it < s )
                         ++it;
                     list.insert( it, s );
@@ -3234,7 +3237,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( QValueList<int>& list, int
 }
 
 
-bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( QValueList<int>& list, int mediaType ) const
+bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( Q3ValueList<int>& list, int mediaType ) const
 {
     unsigned char* data = 0;
     unsigned int dataLen = 0;
@@ -3268,7 +3271,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( QValueList<int>& list, int
                 if( isDvdMedia( mediaType ) )
                     s = fixupDvdWritingSpeed( s );
 
-                QValueList<int>::iterator it = list.begin();
+                Q3ValueList<int>::iterator it = list.begin();
                 while( it != list.end() && *it < s )
                     ++it;
                 // the speed might already have been found in the 2a modepage
@@ -3603,9 +3606,9 @@ int K3bDevice::Device::nextWritableAddress() const
 }
 
 
-QCString K3bDevice::Device::mediaId( int mediaType ) const
+Q3CString K3bDevice::Device::mediaId( int mediaType ) const
 {
-    QCString id;
+    Q3CString id;
 
     if( mediaType & MEDIA_CD_ALL ) {
         // FIXME:

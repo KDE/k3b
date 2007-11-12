@@ -41,14 +41,16 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <qgroupbox.h>
-#include <qheader.h>
+#include <q3groupbox.h>
+#include <q3header.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 
@@ -58,7 +60,7 @@ public:
   Private() {
   }
 
-  QValueVector<QString> filenames;
+  Q3ValueVector<QString> filenames;
   QString playlistFilename;
   QString cueFilename;
 };
@@ -94,7 +96,7 @@ K3bAudioProjectConvertingDialog::~K3bAudioProjectConvertingDialog()
 void K3bAudioProjectConvertingDialog::setupGui()
 {
   QWidget *frame = mainWidget();
-  QGridLayout* Form1Layout = new QGridLayout( frame );
+  Q3GridLayout* Form1Layout = new Q3GridLayout( frame );
   Form1Layout->setSpacing( KDialog::spacingHint() );
   Form1Layout->setMargin( 0 );
 
@@ -151,7 +153,7 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
   }
 
   // check if we need to overwrite some files...
-  QListViewItemIterator it( m_viewTracks );
+  Q3ListViewItemIterator it( m_viewTracks );
   QStringList filesToOverwrite;
   for( unsigned int i = 0; i < d->filenames.count(); ++i ) {
     if( QFile::exists( d->filenames[i] ) )
@@ -171,7 +173,7 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
 
   // just generate a fake m_tracks list for now so we can keep most of the methods
   // like they are in K3bAudioRipThread. This way future combination is easier
-  QValueVector<QPair<int, QString> > tracksToRip;
+  Q3ValueVector<QPair<int, QString> > tracksToRip;
   int i = 0;
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {

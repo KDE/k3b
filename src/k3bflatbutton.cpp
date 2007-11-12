@@ -25,10 +25,14 @@
 #include <qtooltip.h>
 #include <qfontmetrics.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QMouseEvent>
+#include <Q3Frame>
 
 
 K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
-  : QFrame( parent, name/*, WNoAutoErase*/ ),
+  : Q3Frame( parent, name/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -36,7 +40,7 @@ K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
 
 
 K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *name )
-  : QFrame( parent, name/*, WNoAutoErase*/ ),
+  : Q3Frame( parent, name/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -45,7 +49,7 @@ K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *
 
 
 K3bFlatButton::K3bFlatButton( KAction* a, QWidget *parent, const char *name )
-  : QFrame( parent, name/*, WNoAutoErase*/ ),
+  : Q3Frame( parent, name/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -64,7 +68,7 @@ void K3bFlatButton::init()
 {
   setHover(false);
   setMargin(5);
-  setFrameStyle( QFrame::Box|QFrame::Plain );
+  setFrameStyle( Q3Frame::Box|Q3Frame::Plain );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
   connect( kapp, SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );

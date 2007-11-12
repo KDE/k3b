@@ -18,7 +18,7 @@
 
 #include <qdir.h>
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -55,11 +55,11 @@ void K3bCddbLocalQuery::doQuery()
       // found file
       
       QFile f( file );
-      if( !f.open( IO_ReadOnly ) ) {
+      if( !f.open( QIODevice::ReadOnly ) ) {
 	kdDebug() << "(K3bCddbLocalQuery) Could not open file" << endl;
       }
       else {
-	QTextStream t( &f );
+	Q3TextStream t( &f );
 
 	K3bCddbResultEntry entry;
 	parseEntry( t, entry );
@@ -97,12 +97,12 @@ void K3bCddbLocalQuery::doMatchQuery()
   QString path = preparePath( m_cddbDir ) + header().category + "/" + header().discid;
 
   QFile f( path );
-  if( !f.open( IO_ReadOnly ) ) {
+  if( !f.open( QIODevice::ReadOnly ) ) {
     kdDebug() << "(K3bCddbLocalQuery) Could not open file" << endl;
     setError( READ_ERROR );
   }
   else {
-    QTextStream t( &f );
+    Q3TextStream t( &f );
     
     parseEntry( t, result() );
     result().discid = header().discid;

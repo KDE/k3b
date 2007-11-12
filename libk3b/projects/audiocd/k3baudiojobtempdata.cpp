@@ -22,8 +22,8 @@
 #include <k3bcore.h>
 
 #include <qfile.h>
-#include <qtextstream.h>
-#include <qvaluevector.h>
+#include <q3textstream.h>
+#include <q3valuevector.h>
 
 #include <kdebug.h>
 
@@ -35,8 +35,8 @@ public:
     : doc(_doc) {
   }
 
-  QValueVector<QString> bufferFiles;
-  QValueVector<QString> infFiles;
+  Q3ValueVector<QString> bufferFiles;
+  Q3ValueVector<QString> infFiles;
   QString tocFile;
 
   K3bAudioDoc* doc;

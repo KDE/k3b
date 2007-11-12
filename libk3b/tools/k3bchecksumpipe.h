@@ -19,6 +19,8 @@
 #include <k3bactivepipe.h>
 
 #include <k3b_export.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 /**
@@ -53,7 +55,7 @@ class LIBK3B_EXPORT K3bChecksumPipe : public K3bActivePipe
   /**
    * Get the calculated checksum
    */
-  QCString checksum() const;
+  Q3CString checksum() const;
 
  protected:
   int write( char* data, int max );

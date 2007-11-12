@@ -28,7 +28,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 
 K3bTheme::K3bTheme()
@@ -157,7 +157,7 @@ public:
     : currentTheme(&emptyTheme) {
   }
 
-  QValueList<K3bTheme*> themes;
+  Q3ValueList<K3bTheme*> themes;
   K3bTheme* currentTheme;
   QString currentThemeName;
 
@@ -180,7 +180,7 @@ K3bThemeManager::~K3bThemeManager()
 }
 
 
-const QValueList<K3bTheme*>& K3bThemeManager::themes() const
+const Q3ValueList<K3bTheme*>& K3bThemeManager::themes() const
 {
   return d->themes;
 }
@@ -242,7 +242,7 @@ void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 
 K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 {
-  for( QValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+  for( Q3ValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
     if( (*it)->name() == name )
       return *it;
   return 0;
@@ -252,7 +252,7 @@ K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 void K3bThemeManager::loadThemes()
 {
   // first we cleanup the loaded themes
-  for( QValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+  for( Q3ValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
     delete *it;
   d->themes.clear();
 

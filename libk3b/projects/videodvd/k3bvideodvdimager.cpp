@@ -26,10 +26,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 
@@ -118,7 +118,7 @@ int K3bVideoDvdImager::writePathSpec()
     return -1;
   }
   
-  for( QPtrListIterator<K3bDataItem> it( d->doc->videoTsDir()->children() ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( d->doc->videoTsDir()->children() ); *it; ++it ) {
     if( (*it)->isDir() ) {
       emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).").arg((*it)->k3bName()), ERROR );
       return -1;
@@ -137,7 +137,7 @@ int K3bVideoDvdImager::writePathSpec()
 }
 
 
-int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
+int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream )
 {
   //
   // We handle the VIDEO_TS dir differently since otherwise mkisofs is not able to 
@@ -148,7 +148,7 @@ int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& st
   }
 
   int num = 0;
-  for( QPtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
     num++;
       
@@ -195,7 +195,7 @@ void K3bVideoDvdImager::cleanup()
   if( QFile::exists( d->tempPath ) ) {
     QDir dir( d->tempPath );
     dir.cd( "VIDEO_TS" );
-    for( QPtrListIterator<K3bDataItem> it( d->doc->videoTsDir()->children() ); *it; ++it )
+    for( Q3PtrListIterator<K3bDataItem> it( d->doc->videoTsDir()->children() ); *it; ++it )
       dir.remove( (*it)->k3bName().upper() );
     dir.cdUp();
     dir.rmdir( "VIDEO_TS" );

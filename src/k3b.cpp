@@ -21,17 +21,22 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qtoolbutton.h>
 #include <qstring.h>
 #include <qsplitter.h>
 #include <qevent.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qfont.h>
 #include <qpalette.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <QShowEvent>
 
 #include <kdockwidget.h>
 #include <kkeydialog.h>
@@ -124,7 +129,7 @@ class K3bMainWindow::Private
 public:
   K3bDoc* lastDoc;
 
-  QWidgetStack* documentStack;
+  Q3WidgetStack* documentStack;
   K3bWelcomeWidget* welcomeWidget;
   QWidget* documentHull;
 
@@ -336,7 +341,7 @@ void K3bMainWindow::initActions()
 
 
 
-const QPtrList<K3bDoc>& K3bMainWindow::projects() const
+const Q3PtrList<K3bDoc>& K3bMainWindow::projects() const
 {
   return k3bappcore->projectManager()->projects();
 }
@@ -364,12 +369,12 @@ void K3bMainWindow::initView()
   setMainDockWidget( mainDock );
 
   // --- Document Dock ----------------------------------------------------------------------------
-  d->documentStack = new QWidgetStack( mainDock );
+  d->documentStack = new Q3WidgetStack( mainDock );
   mainDock->setWidget( d->documentStack );
 
   d->documentHull = new QWidget( d->documentStack );
   d->documentStack->addWidget( d->documentHull );
-  QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
+  Q3GridLayout* documentHullLayout = new Q3GridLayout( d->documentHull );
   documentHullLayout->setMargin( 2 );
   documentHullLayout->setSpacing( 0 );
 
@@ -600,11 +605,11 @@ void K3bMainWindow::saveProperties( KConfig* c )
   c->setGroup( "Saved Session" );
   // ----------------------------------------------------------
 
-  const QPtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
+  const Q3PtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
   c->writeEntry( "Number of projects", docs.count() );
 
   int cnt = 1;
-  for( QPtrListIterator<K3bDoc> it( docs ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDoc> it( docs ); *it; ++it ) {
     // the "name" of the project (or the original url if isSaved())
     c->writePathEntry( QString("%1 url").arg(cnt), (*it)->URL().url() );
 
@@ -850,7 +855,7 @@ void K3bMainWindow::slotFileOpenRecent(const KURL& url)
 
 void K3bMainWindow::slotFileSaveAll()
 {
-  for( QPtrListIterator<K3bDoc> it( k3bappcore->projectManager()->projects() );
+  for( Q3PtrListIterator<K3bDoc> it( k3bappcore->projectManager()->projects() );
        *it; ++it ) {
     fileSave( *it );
   }
@@ -1409,7 +1414,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
   else {
     // check if the files are all audio we can handle. If so create an audio project
     bool audio = true;
-    QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+    Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
     for( KURL::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
       const KURL& url = *it;
 
@@ -1419,7 +1424,7 @@ void K3bMainWindow::addUrls( const KURL::List& urls )
       }
 
       bool a = false;
-      for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+      for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
 	if( static_cast<K3bAudioDecoderFactory*>(it.current())->canDecode( url ) ) {
 	  a = true;
 	  break;

@@ -21,11 +21,11 @@
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
 
 #include <kmessagebox.h>
@@ -187,7 +187,7 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
   if( !s_fsPresetsInitialized )
     initializePresets();
 
-  QWhatsThis::add( m_comboFilesystems,
+  Q3WhatsThis::add( m_comboFilesystems,
 		   i18n("<p><b>File System Presets</b>"
 			"<p>K3b provides the following file system Presets which allow for a quick selection "
 			"of the most frequently used settings.")

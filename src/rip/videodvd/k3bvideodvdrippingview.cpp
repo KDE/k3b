@@ -29,6 +29,11 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -44,11 +49,11 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
 			  parent, name )
 {
-  QGridLayout* mainGrid = new QGridLayout( mainWidget() );
+  Q3GridLayout* mainGrid = new Q3GridLayout( mainWidget() );
 
   // toolbox
   // ----------------------------------------------------------------------------------
-  QHBoxLayout* toolBoxLayout = new QHBoxLayout( 0, 0, 0, "toolBoxLayout" );
+  Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0, "toolBoxLayout" );
   m_toolBox = new K3bToolBox( mainWidget() );
   toolBoxLayout->addWidget( m_toolBox );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -62,8 +67,8 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
   // ----------------------------------------------------------------------------------
   m_titleView = new K3bVideoDVDRippingTitleListView( mainWidget() );
 
-  connect( m_titleView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+  connect( m_titleView, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 
   // general layout
   // ----------------------------------------------------------------------------------
@@ -159,9 +164,9 @@ void K3bVideoDVDRippingView::reloadMedium()
 
 void K3bVideoDVDRippingView::slotStartRipping()
 {
-  QValueList<int> titles;
+  Q3ValueList<int> titles;
   int i = 1;
-  for( QListViewItemIterator it( m_titleView ); *it; ++it, ++i )
+  for( Q3ListViewItemIterator it( m_titleView ); *it; ++it, ++i )
     if( static_cast<K3bCheckListViewItem*>( *it )->isChecked() )
       titles.append( i );
 
@@ -176,7 +181,7 @@ void K3bVideoDVDRippingView::slotStartRipping()
 }
 
 
-void K3bVideoDVDRippingView::slotContextMenu( KListView*, QListViewItem*, const QPoint& p )
+void K3bVideoDVDRippingView::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& p )
 {
   m_popupMenu->popup(p);
 }
@@ -184,22 +189,22 @@ void K3bVideoDVDRippingView::slotContextMenu( KListView*, QListViewItem*, const 
 
 void K3bVideoDVDRippingView::slotCheckAll()
 {
-  for( QListViewItemIterator it( m_titleView ); it.current(); ++it )
+  for( Q3ListViewItemIterator it( m_titleView ); it.current(); ++it )
     dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(true);
 }
 
 
 void K3bVideoDVDRippingView::slotUncheckAll()
 {
-  for( QListViewItemIterator it( m_titleView ); it.current(); ++it )
+  for( Q3ListViewItemIterator it( m_titleView ); it.current(); ++it )
     dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(false);
 }
 
 
 void K3bVideoDVDRippingView::slotCheck()
 {
-  QPtrList<QListViewItem> items( m_titleView->selectedItems() );
-  for( QPtrListIterator<QListViewItem> it( items );
+  Q3PtrList<Q3ListViewItem> items( m_titleView->selectedItems() );
+  for( Q3PtrListIterator<Q3ListViewItem> it( items );
        it.current(); ++it )
     dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(true);
 }
@@ -207,8 +212,8 @@ void K3bVideoDVDRippingView::slotCheck()
 
 void K3bVideoDVDRippingView::slotUncheck()
 {
-  QPtrList<QListViewItem> items( m_titleView->selectedItems() );
-  for( QPtrListIterator<QListViewItem> it( items );
+  Q3PtrList<Q3ListViewItem> items( m_titleView->selectedItems() );
+  for( Q3PtrListIterator<Q3ListViewItem> it( items );
        it.current(); ++it )
     dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(false);
 }

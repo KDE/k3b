@@ -19,14 +19,16 @@
 #include <k3bjob.h>
 #include "k3bmkisofshandler.h"
 
-#include <qptrqueue.h>
+#include <q3ptrqueue.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataItem;
 class K3bFileItem;
-class QTextStream;
+class Q3TextStream;
 class K3bProcess;
 class KProcess;
 class K3bDevice::Device;
@@ -50,7 +52,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   /**
    * Get the checksum calculated during the creation of the image.
    */
-  QCString checksum() const;
+  Q3CString checksum() const;
 
  public slots:
   /**
@@ -132,8 +134,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   bool writeSortWeightFile();
 
   // used by writePathSpec
-  virtual int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
-  virtual void writePathSpecForFile( K3bFileItem*, QTextStream& stream );
+  virtual int writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream );
+  virtual void writePathSpecForFile( K3bFileItem*, Q3TextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
   KTempFile* m_pathSpecFile;

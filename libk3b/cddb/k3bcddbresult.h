@@ -20,6 +20,8 @@
 
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 class K3bCddbResultHeader
@@ -70,7 +72,7 @@ class K3bCddbResult
   int foundEntries() const;
 
  private:
-  QValueList<K3bCddbResultEntry> m_entries;
+  Q3ValueList<K3bCddbResultEntry> m_entries;
 
   K3bCddbResultEntry m_emptyEntry;
 };

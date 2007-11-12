@@ -20,7 +20,7 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kio/global.h>
 

@@ -33,8 +33,10 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <unistd.h>
 
@@ -236,7 +238,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( !d->image.isEmpty() && d->usingRingBuffer ) {
     d->inputFile.setName( d->image );
     d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
-    if( !d->inputFile.open( IO_ReadOnly ) ) {
+    if( !d->inputFile.open( QIODevice::ReadOnly ) ) {
       emit infoMessage( i18n("Could not open file %1.").arg(d->image), ERROR );
       return false;
     }
@@ -359,9 +361,9 @@ void K3bGrowisofsWriter::start()
   else {
 
     kdDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
-    const QValueList<QCString>& args = d->process->args();
+    const Q3ValueList<Q3CString>& args = d->process->args();
     QString s;
-    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
     kdDebug() << s << flush << endl;

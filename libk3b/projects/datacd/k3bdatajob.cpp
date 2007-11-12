@@ -1006,7 +1006,7 @@ bool K3bDataJob::setupCdrdaoJob()
     d->tocFile = new KTempFile( QString::null, "toc" );
     d->tocFile->setAutoDelete(true);
 
-    if( QTextStream* s = d->tocFile->textStream() ) {
+    if( Q3TextStream* s = d->tocFile->textStream() ) {
         if( d->usedDataMode == K3b::MODE1 ) {
             *s << "CD_ROM" << "\n";
             *s << "\n";

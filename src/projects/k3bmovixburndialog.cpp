@@ -41,8 +41,10 @@
 
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const char* name, bool modal )
@@ -94,14 +96,14 @@ K3bMovixBurnDialog::~K3bMovixBurnDialog()
 void K3bMovixBurnDialog::setupSettingsPage()
 {
   QWidget* frame = new QWidget( this );
-  QGridLayout* frameLayout = new QGridLayout( frame );
+  Q3GridLayout* frameLayout = new Q3GridLayout( frame );
   frameLayout->setSpacing( spacingHint() );
   frameLayout->setMargin( marginHint() );
 
-  QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+  Q3GroupBox* groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
   m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
 
-  QGroupBox* groupMultisession = new QGroupBox( 1, Qt::Vertical, i18n("Multisession"), frame );
+  Q3GroupBox* groupMultisession = new Q3GroupBox( 1, Qt::Vertical, i18n("Multisession"), frame );
   m_checkStartMultiSesssion = K3bStdGuiItems::startMultisessionCheckBox( groupMultisession );
 
   frameLayout->addWidget( groupDataMode, 0, 0 );

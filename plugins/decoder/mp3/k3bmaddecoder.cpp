@@ -37,7 +37,7 @@
 
 #include <qstring.h>
 #include <qfile.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <stdlib.h>
 #include <cmath>
@@ -70,7 +70,7 @@ public:
 
   K3bMad* handle;
 
-  QValueVector<unsigned long long> seekPositions;
+  Q3ValueVector<unsigned long long> seekPositions;
 
   bool bOutputFinished;
 
@@ -485,7 +485,7 @@ bool K3bMadDecoderFactory::canDecode( const KURL& url )
   // filter out wave files. :(
   //
   QFile f( url.path() );
-  if( !f.open( IO_ReadOnly ) )
+  if( !f.open( QIODevice::ReadOnly ) )
     return false;
   char buffer[12];
   if( f.readBlock( buffer, 12 ) != 12 )

@@ -15,10 +15,10 @@
 
 #include <config.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -67,7 +67,7 @@ extern "C"
 K3bDevice::DeviceManager* kio_videodvdProtocol::s_deviceManager = 0;
 int kio_videodvdProtocol::s_instanceCnt = 0;
 
-kio_videodvdProtocol::kio_videodvdProtocol(const QCString &pool_socket, const QCString &app_socket)
+kio_videodvdProtocol::kio_videodvdProtocol(const Q3CString &pool_socket, const Q3CString &app_socket)
     : SlaveBase("kio_videodvd", pool_socket, app_socket)
 {
   kdDebug() << "kio_videodvdProtocol::kio_videodvdProtocol()" << endl;
@@ -159,7 +159,7 @@ K3bIso9660* kio_videodvdProtocol::openIso( const KURL& url, QString& plainIsoPat
 
   // now search the devices for this volume id
   // FIXME: use the cache created in listVideoDVDs
-  for( QPtrListIterator<K3bDevice::Device> it( s_deviceManager->dvdReader() ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDevice::Device> it( s_deviceManager->dvdReader() ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
     K3bDevice::DiskInfo di = dev->diskInfo();
 
@@ -269,7 +269,7 @@ void kio_videodvdProtocol::listVideoDVDs()
 {
   int cnt = 0;
 
-  for( QPtrListIterator<K3bDevice::Device> it( s_deviceManager->dvdReader() ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDevice::Device> it( s_deviceManager->dvdReader() ); *it; ++it ) {
     K3bDevice::Device* dev = *it;
     K3bDevice::DiskInfo di = dev->diskInfo();
 

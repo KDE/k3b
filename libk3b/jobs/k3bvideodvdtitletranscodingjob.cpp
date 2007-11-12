@@ -26,6 +26,9 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 
 class K3bVideoDVDTitleTranscodingJob::Private
@@ -327,9 +330,9 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
 
   // produce some debugging output
   kdDebug() << "***** transcode parameters:\n";
-  const QValueList<QCString>& args = d->process->args();
+  const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;

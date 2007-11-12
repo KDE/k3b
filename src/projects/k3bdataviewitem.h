@@ -18,6 +18,8 @@
 
 #include <k3blistview.h>
 #include <kmimetype.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class K3bDataItem;
 class K3bFileItem;
@@ -34,8 +36,8 @@ class QColorGroup;
 class K3bDataViewItem : public K3bListViewItem
 {
  public:
-  K3bDataViewItem( K3bDataItem*, QListView* parent );
-  K3bDataViewItem( K3bDataItem*, QListViewItem* parent );
+  K3bDataViewItem( K3bDataItem*, Q3ListView* parent );
+  K3bDataViewItem( K3bDataItem*, Q3ListViewItem* parent );
   virtual ~K3bDataViewItem();
 	
   virtual K3bDataItem* dataItem() const { return m_dataItem; }
@@ -59,8 +61,8 @@ class K3bDataViewItem : public K3bListViewItem
 class K3bDataDirViewItem : public K3bDataViewItem
 {
  public:
-  K3bDataDirViewItem( K3bDirItem* dir, QListView* parent );
-  K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent );
+  K3bDataDirViewItem( K3bDirItem* dir, Q3ListView* parent );
+  K3bDataDirViewItem( K3bDirItem* dir, Q3ListViewItem* parent );
   ~K3bDataDirViewItem();
 	
   virtual QString text( int ) const;
@@ -81,8 +83,8 @@ class K3bDataDirViewItem : public K3bDataViewItem
 class K3bDataFileViewItem : public K3bDataViewItem
 {
  public:
-  K3bDataFileViewItem( K3bFileItem*, QListView* parent );
-  K3bDataFileViewItem( K3bFileItem*, QListViewItem* parent );
+  K3bDataFileViewItem( K3bFileItem*, Q3ListView* parent );
+  K3bDataFileViewItem( K3bFileItem*, Q3ListViewItem* parent );
   ~K3bDataFileViewItem() {}
 	
   QString text( int ) const;
@@ -102,7 +104,7 @@ class K3bDataFileViewItem : public K3bDataViewItem
 class K3bDataRootViewItem : public K3bDataDirViewItem
 {
  public:
-  K3bDataRootViewItem( K3bDataDoc*, QListView* parent );
+  K3bDataRootViewItem( K3bDataDoc*, Q3ListView* parent );
   ~K3bDataRootViewItem();
 	
   QString text( int ) const;
@@ -118,7 +120,7 @@ class K3bDataRootViewItem : public K3bDataDirViewItem
 class K3bSpecialDataViewItem : public K3bDataViewItem
 {
  public:
-  K3bSpecialDataViewItem( K3bSpecialDataItem*, QListView* );
+  K3bSpecialDataViewItem( K3bSpecialDataItem*, Q3ListView* );
 
   QString text( int ) const;
 };
@@ -127,7 +129,7 @@ class K3bSpecialDataViewItem : public K3bDataViewItem
 class K3bSessionImportViewItem : public K3bDataViewItem
 {
  public:
-  K3bSessionImportViewItem( K3bSessionImportItem*, QListView* );
+  K3bSessionImportViewItem( K3bSessionImportItem*, Q3ListView* );
 
   QString text( int ) const;
 };

@@ -20,7 +20,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "k3b_export.h"
 #include "k3bversion.h"
 
@@ -89,7 +89,7 @@ class LIBK3B_EXPORT K3bExternalProgram
   void setDefault( const K3bExternalBin* );
   void setDefault( const QString& path );
 
-  const QPtrList<K3bExternalBin>& bins() const { return m_bins; }
+  const Q3PtrList<K3bExternalBin>& bins() const { return m_bins; }
 
   /**
    * this scans for the program in the given path,
@@ -107,7 +107,7 @@ class LIBK3B_EXPORT K3bExternalProgram
  private:
   QString m_name;
   QStringList m_userParameters;
-  QPtrList<K3bExternalBin> m_bins;
+  Q3PtrList<K3bExternalBin> m_bins;
 };
 
 

@@ -20,6 +20,8 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qwaitcondition.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 
 class K3bThreadWidget::Data

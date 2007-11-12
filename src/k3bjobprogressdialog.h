@@ -26,22 +26,30 @@
 
 #include <qdatetime.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QCloseEvent>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class KListView;
-class QFrame;
-class QGroupBox;
+class Q3Frame;
+class Q3GroupBox;
 class QLabel;
-class QListViewItem;
+class Q3ListViewItem;
 class KProgress;
 class QPushButton;
 class QTimer;
 class K3bJob;
 class KCutLabel;
 class QCloseEvent;
-class QGridLayout;
+class Q3GridLayout;
 class QKeyEvent;
 class K3bJobProgressOSD;
 class K3bThemedLabel;
@@ -140,13 +148,13 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   KProgress* m_progressSubPercent;
   QLabel* m_labelProcessedSize;
   KProgress* m_progressPercent;
-  QFrame* m_frameExtraInfo;
+  Q3Frame* m_frameExtraInfo;
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
   QPushButton* m_buttonShowDebug;
   K3bThemedLabel* m_pixLabel;
 
-  QGridLayout* m_frameExtraInfoLayout;
+  Q3GridLayout* m_frameExtraInfoLayout;
 
  private:
   class Private;

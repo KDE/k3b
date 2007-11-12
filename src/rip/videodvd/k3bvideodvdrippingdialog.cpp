@@ -39,6 +39,9 @@
 #include <qspinbox.h>
 #include <qstyle.h>
 #include <qfontmetrics.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3ValueList>
 
 
 static QString videoCodecId( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
@@ -113,13 +116,13 @@ static QSize resizeTitle( const K3bVideoDVD::VideoStream& title, const QSize& si
 
 
 
-class K3bVideoDVDRippingDialog::AudioStreamViewItem : public QCheckListItem
+class K3bVideoDVDRippingDialog::AudioStreamViewItem : public Q3CheckListItem
 {
 public:
   AudioStreamViewItem( K3bVideoDVDRippingDialog* dlg,
-		       QCheckListItem* parent, QListViewItem* after, const QString& text,
+		       Q3CheckListItem* parent, Q3ListViewItem* after, const QString& text,
 		       int audioStream )
-    : QCheckListItem( parent, after, text, RadioButton ),
+    : Q3CheckListItem( parent, after, text, RadioButton ),
       m_audioStream( audioStream ),
       m_dlg( dlg ) {
   }
@@ -127,7 +130,7 @@ public:
 private:
   void stateChange( bool ) {
     if( state() == On ) {
-      m_dlg->m_titleRipInfos[static_cast<QCheckListItem*>(parent())].audioStream = m_audioStream;
+      m_dlg->m_titleRipInfos[static_cast<Q3CheckListItem*>(parent())].audioStream = m_audioStream;
       m_dlg->slotUpdateFilenames();
     }
   }
@@ -145,7 +148,7 @@ public:
 
 
 K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd,
-						    const QValueList<int>& titles,
+						    const Q3ValueList<int>& titles,
 						    QWidget* parent, const char* name )
   : K3bInteractionDialog( parent, name,
 			  i18n("Video DVD Ripping"),
@@ -158,7 +161,7 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
   d = new Private;
 
   QWidget* frame = mainWidget();
-  QHBoxLayout* frameLayout = new QHBoxLayout( frame );
+  Q3HBoxLayout* frameLayout = new Q3HBoxLayout( frame );
   frameLayout->setMargin( 0 );
   frameLayout->setAutoAdd( true );
   m_w = new K3bVideoDVDRippingWidget( frame );
@@ -185,19 +188,19 @@ K3bVideoDVDRippingDialog::~K3bVideoDVDRippingDialog()
 }
 
 
-void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles )
+void K3bVideoDVDRippingDialog::populateTitleView( const Q3ValueList<int>& titles )
 {
   m_w->m_titleView->clear();
   m_titleRipInfos.clear();
 
-  QCheckListItem* titleItem = 0;
-  for( QValueList<int>::const_iterator it = titles.begin(); it != titles.end(); ++it ) {
-    titleItem = new QCheckListItem( m_w->m_titleView,
+  Q3CheckListItem* titleItem = 0;
+  for( Q3ValueList<int>::const_iterator it = titles.begin(); it != titles.end(); ++it ) {
+    titleItem = new Q3CheckListItem( m_w->m_titleView,
 				    titleItem,
 				    i18n("Title %1 (%2)")
 				    .arg(*it)
 				    .arg(m_dvd[*it-1].playbackTime().toString()),
-				    QCheckListItem::RadioButtonController );
+				    Q3CheckListItem::RadioButtonController );
     titleItem->setText( 1, QString("%1x%2")
 		       .arg(m_dvd[*it-1].videoStream().realPictureWidth())
 		       .arg(m_dvd[*it-1].videoStream().realPictureHeight()) );
@@ -219,7 +222,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
       }
     }
 
-    QListViewItem* asI = 0;
+    Q3ListViewItem* asI = 0;
     for( unsigned int i = 0; i < m_dvd[*it-1].numAudioStreams(); ++i ) {
       QString text = i18n("%1 %2Ch (%3%4)")
 	.arg( K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ) )
@@ -236,13 +239,13 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QValueList<int>& titles 
 	int buttonSize = style().pixelMetric( QStyle::PM_CheckListButtonSize, m_w->m_titleView ) + 4;
 	int spaceWidth = fontMetrics().width( ' ' );
 	int numSpaces = buttonSize/spaceWidth;
-	asI = new QListViewItem( titleItem, asI, QString().fill( ' ', numSpaces ) + text + " (" + i18n("not supported") + ")" );
+	asI = new Q3ListViewItem( titleItem, asI, QString().fill( ' ', numSpaces ) + text + " (" + i18n("not supported") + ")" );
       }
       else {
 	asI = new AudioStreamViewItem( this, titleItem, asI, text, i );
 
 	if( ri.audioStream == (int)i )
-	  ((AudioStreamViewItem*)asI)->setState( QCheckListItem::On );
+	  ((AudioStreamViewItem*)asI)->setState( Q3CheckListItem::On );
       }
     }
 
@@ -258,7 +261,7 @@ void K3bVideoDVDRippingDialog::slotUpdateFilenames()
   QString baseDir = K3b::prepareDir( m_w->m_editBaseDir->url() );
   d->fsInfo.setPath( baseDir );
 
-  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+  for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     QString f = d->fsInfo.fixupPath( createFilename( it.data(), m_w->m_comboFilenamePattern->currentText() ) );
     if( m_w->m_checkBlankReplace->isChecked() )
@@ -275,7 +278,7 @@ void K3bVideoDVDRippingDialog::slotUpdateFilesizes()
   KIO::filesize_t overallSize = 0ULL;
 
   // update file sizes
-  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+  for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
 
     double sec = m_dvd[it.data().title-1].playbackTime().totalSeconds();
@@ -299,7 +302,7 @@ void K3bVideoDVDRippingDialog::slotUpdateFilesizes()
 void K3bVideoDVDRippingDialog::slotUpdateVideoSizes()
 {
   QSize size = m_w->selectedPictureSize();
-  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+  for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     QSize s( resizeTitle( m_dvd[it.data().title-1].videoStream(), size ) );
     it.key()->setText( 1, QString("%1x%2").arg(s.width()).arg(s.height()) );
@@ -557,7 +560,7 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
   // We can only use the AC3 pass-through mode for AC3 streams
   //
   if( m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH ) {
-    for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+    for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
 	 it != m_titleRipInfos.end(); ++it ) {
       if( m_dvd[it.data().title-1].numAudioStreams() > 0 &&
           m_dvd[it.data().title-1].audioStream(it.data().audioStream).format() != K3bVideoDVD::AUDIO_FORMAT_AC3 ) {
@@ -572,7 +575,7 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
 
   // check if we need to overwrite some files...
   QStringList filesToOverwrite;
-  for( QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
+  for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::iterator it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     if( QFile::exists( it.data().filename ) )
       filesToOverwrite.append( it.data().filename );
@@ -588,8 +591,8 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
 
   QSize videoSize = m_w->selectedPictureSize();
   int i = 0;
-  QValueVector<K3bVideoDVDRippingJob::TitleRipInfo> titles( m_titleRipInfos.count() );
-  for( QMapConstIterator<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> it = m_titleRipInfos.begin();
+  Q3ValueVector<K3bVideoDVDRippingJob::TitleRipInfo> titles( m_titleRipInfos.count() );
+  for( QMapConstIterator<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> it = m_titleRipInfos.begin();
        it != m_titleRipInfos.end(); ++it ) {
     titles[i] = it.data();
     titles[i].videoBitrate = 0; // use the global bitrate set below

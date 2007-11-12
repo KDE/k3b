@@ -19,6 +19,8 @@
 #include <kdebug.h>
 
 #include <unistd.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class K3bChecksumPipe::Private
@@ -81,14 +83,14 @@ bool K3bChecksumPipe::open( Type type, bool closeWhenDone )
 }
 
 
-QCString K3bChecksumPipe::checksum() const
+Q3CString K3bChecksumPipe::checksum() const
 {
   switch( d->checksumType ) {
   case MD5:
     return d->md5.hexDigest();
   }
 
-  return QCString();
+  return Q3CString();
 }
 
 

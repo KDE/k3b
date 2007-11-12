@@ -18,14 +18,16 @@
 #define K3BDATABURNDIALOG_H
 
 #include "k3bprojectburndialog.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class QCheckBox;
 class KComboBox;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
 class QToolButton;
 class QRadioButton;
-class QButtonGroup;
+class Q3ButtonGroup;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
 class K3bDataDoc;
@@ -58,7 +60,7 @@ class K3bDataBurnDialog : public K3bProjectBurnDialog
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    // ----------------------------------------------
 	
-   QGroupBox* m_groupDataMode;
+   Q3GroupBox* m_groupDataMode;
    K3bDataModeWidget* m_dataModeWidget;
    K3bDataMultiSessionCombobox* m_comboMultisession;
 

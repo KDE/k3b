@@ -20,7 +20,7 @@
 #include "k3bcddbquery.h"
 #include "k3bcddbresult.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 namespace KIO {
   class Job;

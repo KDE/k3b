@@ -19,6 +19,8 @@
 
 #include <kcombobox.h>
 #include "k3b_export.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 namespace K3bDevice {
   class Device;
@@ -46,11 +48,11 @@ class LIBK3B_EXPORT K3bDeviceComboBox : public KComboBox
 
  public slots:
   void addDevice( K3bDevice::Device* );
-  void addDevices( const QPtrList<K3bDevice::Device>& );
+  void addDevices( const Q3PtrList<K3bDevice::Device>& );
   /**
    * Clears the device combo and tries to keep the current selection
    */
-  void refreshDevices( const QPtrList<K3bDevice::Device>& );
+  void refreshDevices( const Q3PtrList<K3bDevice::Device>& );
   void removeDevice( K3bDevice::Device* );
   void setSelectedDevice( K3bDevice::Device* );
   void clear();

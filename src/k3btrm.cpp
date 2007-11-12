@@ -23,14 +23,16 @@
 #include <kdebug.h>
 #include <kprotocolmanager.h>
 #include <kurl.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class K3bTRM::Private
 {
 public:
   trm_t trm;
-  QCString sig;
-  QCString rawSig;
+  Q3CString sig;
+  Q3CString rawSig;
 };
 
 
@@ -79,13 +81,13 @@ bool K3bTRM::finalize()
 }
 
 
-const QCString& K3bTRM::rawSignature() const
+const Q3CString& K3bTRM::rawSignature() const
 {
   return d->rawSig;
 }
 
 
-const QCString& K3bTRM::signature() const
+const Q3CString& K3bTRM::signature() const
 {
   return d->sig;
 }

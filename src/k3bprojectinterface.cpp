@@ -24,13 +24,15 @@
 #include <k3bjob.h>
 
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 //static
-QCString K3bProjectInterface::newIfaceName()
+Q3CString K3bProjectInterface::newIfaceName()
 {
   static int s_docIFNumber = 0;
-  QCString name;
+  Q3CString name;
   name.setNum( s_docIFNumber++ );
   name.prepend("K3bProject-");
   return name;
@@ -38,7 +40,7 @@ QCString K3bProjectInterface::newIfaceName()
 
 
 K3bProjectInterface::K3bProjectInterface( K3bDoc* doc, const char* name )
-  : DCOPObject( name ? QCString(name) : newIfaceName() ),
+  : DCOPObject( name ? Q3CString(name) : newIfaceName() ),
     m_doc( doc )
 {
 }

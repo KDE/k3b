@@ -47,8 +47,8 @@
 #include <qstringlist.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <qtextstream.h>
-#include <qcstring.h>
+#include <q3textstream.h>
+#include <q3cstring.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qapplication.h>
@@ -108,10 +108,10 @@ public:
   bool haveCddb;
   bool haveCdText;
 
-  QValueVector<bool> dataSessionProbablyTAORecorded;
+  Q3ValueVector<bool> dataSessionProbablyTAORecorded;
 
   // used to determine progress
-  QValueVector<long> sessionSizes;
+  Q3ValueVector<long> sessionSizes;
   long overallSize;
 };
 

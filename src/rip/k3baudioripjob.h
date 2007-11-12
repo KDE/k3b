@@ -23,7 +23,7 @@
 #include <k3bcddbresult.h>
 #include <k3baudioencoder.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 class K3bInterferingSystemsHandler;
 class K3bThreadJob;
@@ -46,7 +46,7 @@ class K3bAudioRipJob : public K3bJob
 
   void setDevice( K3bDevice::Device* dev ) { m_thread->setDevice( dev ); }
   void setCddbEntry( const K3bCddbResultEntry& entry ) { m_thread->setCddbEntry( entry ); }
-  void setTracksToRip( const QValueVector<QPair<int, QString> >& tracksToRip ) { m_thread->setTracksToRip( tracksToRip ); }
+  void setTracksToRip( const Q3ValueVector<QPair<int, QString> >& tracksToRip ) { m_thread->setTracksToRip( tracksToRip ); }
   void setParanoiaMode( int mode ) { m_thread->setParanoiaMode( mode ); }
   void setMaxRetries( int retries ) { m_thread->setMaxRetries( retries ); }
   void setNeverSkip( bool neverSkip ) { m_thread->setNeverSkip( neverSkip ); }

@@ -21,15 +21,17 @@
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
-QValueList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
+Q3ValueList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
   KConfig* c = k3bcore->config();
 
   c->setGroup( "K3bExternalEncoderPlugin" );
 
-  QValueList<K3bExternalEncoderCommand> cl;
+  Q3ValueList<K3bExternalEncoderCommand> cl;
 
   QStringList cmds = c->readListEntry( "commands" );
   for( QStringList::iterator it = cmds.begin(); it != cmds.end(); ++it ) {

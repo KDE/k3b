@@ -17,6 +17,9 @@
 #define _K3B_AUDIO_SERVER_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QCustomEvent>
 #include "k3b_export.h"
 class K3bAudioOutputPlugin;
 class K3bAudioClient;
@@ -37,7 +40,7 @@ class LIBK3B_EXPORT K3bAudioServer : public QObject
   /**
    * Returns false in case the named output method could not be found.
    */
-  bool setOutputMethod( const QCString& name );
+  bool setOutputMethod( const Q3CString& name );
   void setOutputPlugin( K3bAudioOutputPlugin* p );
 
   /**
@@ -62,7 +65,7 @@ class LIBK3B_EXPORT K3bAudioServer : public QObject
   /**
    * Find a plugin by classname.
    */
-  static K3bAudioOutputPlugin* findOutputPlugin( const QCString& name );
+  static K3bAudioOutputPlugin* findOutputPlugin( const Q3CString& name );
 
  signals:
   void error( const QString& );

@@ -18,6 +18,8 @@
 #define _K3B_DEBUG_H_
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <k3bmsf.h>
 #include <k3bdevice_export.h>
@@ -45,7 +47,7 @@ class LIBK3BDEVICE_EXPORT K3bDebug
   K3bDebug& operator<<( float );
   K3bDebug& operator<<( double );
   K3bDebug& operator<<( const QString& );
-  K3bDebug& operator<<( const QCString& );
+  K3bDebug& operator<<( const Q3CString& );
   K3bDebug& operator<<( const char* );
   K3bDebug& operator<<( const K3b::Msf& );
 

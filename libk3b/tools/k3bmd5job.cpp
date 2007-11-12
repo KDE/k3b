@@ -26,7 +26,7 @@
 #include <kio/netaccess.h>
 
 #include <qtimer.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qsocketnotifier.h>
 
 #include <unistd.h>
@@ -103,7 +103,7 @@ void K3bMd5Job::start()
     }
 
     d->file.setName( d->filename );
-    if( !d->file.open( IO_ReadOnly ) ) {
+    if( !d->file.open( QIODevice::ReadOnly ) ) {
       emit infoMessage( i18n("Could not open file %1").arg(d->filename), ERROR );
       jobFinished(false);
       return;
@@ -282,7 +282,7 @@ void K3bMd5Job::slotUpdate()
 }
 
 
-QCString K3bMd5Job::hexDigest()
+Q3CString K3bMd5Job::hexDigest()
 {
   if( d->finished )
     return d->md5.hexDigest();
@@ -291,7 +291,7 @@ QCString K3bMd5Job::hexDigest()
 }
 
 
-QCString K3bMd5Job::base64Digest()
+Q3CString K3bMd5Job::base64Digest()
 {
   if( d->finished )
     return d->md5.base64Digest();  

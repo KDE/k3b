@@ -43,9 +43,9 @@
 #include <qpixmap.h>
 #include <qsplitter.h>
 #include <qlayout.h>
-#include <qdragobject.h>
-#include <qheader.h>
-#include <qptrlist.h>
+#include <q3dragobject.h>
+#include <q3header.h>
+#include <q3ptrlist.h>
 #include <qlineedit.h>
 
 #include <assert.h>

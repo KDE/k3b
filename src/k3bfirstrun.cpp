@@ -24,6 +24,9 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <Q3HBoxLayout>
 
 
 void K3bFirstRun::run( QWidget* parent )
@@ -60,7 +63,7 @@ K3bFirstRun::K3bFirstRun( QWidget* parent )
   setButtonOK( i18n("Enable Konqueror integration") );
   setButtonCancel( i18n("No Konqueror integration") );
 
-  QFrame* plain = plainPage();
+  Q3Frame* plain = plainPage();
   QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into Konqueror. This integration "
 				   "allows to start K3b from the context menu in the file manager."
 				   "<p><em>The Konqueror integration can always be disabled and "
@@ -68,7 +71,7 @@ K3bFirstRun::K3bFirstRun( QWidget* parent )
   QLabel* pixLabel = new QLabel( plain );
   pixLabel->setPixmap( DesktopIcon( "konqueror" ) );
 
-  QHBoxLayout* lay = new QHBoxLayout( plain );
+  Q3HBoxLayout* lay = new Q3HBoxLayout( plain );
   lay->setMargin( 0 );
   lay->setSpacing( spacingHint() );
   lay->addWidget( pixLabel );

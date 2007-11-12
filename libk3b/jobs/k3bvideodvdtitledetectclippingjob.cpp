@@ -22,6 +22,9 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 
 static const int s_unrealisticHighClippingValue = 100000;
@@ -169,9 +172,9 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
 
   // produce some debugging output
   kdDebug() << "***** transcode parameters:\n";
-  const QValueList<QCString>& args = d->process->args();
+  const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;

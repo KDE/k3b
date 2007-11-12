@@ -56,13 +56,13 @@
 #include <kurldrag.h>
 #include <kcombobox.h>
 
-#include <qheader.h>
-#include <qgroupbox.h>
+#include <q3header.h>
+#include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qlayout.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qfont.h>
@@ -70,12 +70,16 @@
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qspinbox.h>
 #include <qmap.h>
-#include <qptrqueue.h>
-#include <qpopupmenu.h>
+#include <q3ptrqueue.h>
+#include <q3popupmenu.h>
 #include <qclipboard.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 
 class K3bCdImageWritingDialog::Private
@@ -193,7 +197,7 @@ void K3bCdImageWritingDialog::setupGui()
 
   // image
   // -----------------------------------------------------------------------
-  QGroupBox* groupImageUrl = new QGroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
+  Q3GroupBox* groupImageUrl = new Q3GroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
   m_comboRecentImages = new KComboBox( true, this );
   m_editImagePath = new KURLRequester( m_comboRecentImages, groupImageUrl );
   m_editImagePath->setMode( KFile::File|KFile::ExistingOnly );
@@ -208,7 +212,7 @@ void K3bCdImageWritingDialog::setupGui()
 			      + "\n"
 			      + i18n("*|All Files") );
 
-  QGroupBox* groupImageType = new QGroupBox( 1, Qt::Horizontal, i18n("Image Type"), frame );
+  Q3GroupBox* groupImageType = new Q3GroupBox( 1, Qt::Horizontal, i18n("Image Type"), frame );
   m_comboImageType = new QComboBox( groupImageType );
   m_comboImageType->insertItem( i18n("Auto Detection") );
   m_comboImageType->insertItem( i18n("ISO9660 Image") );
@@ -238,10 +242,10 @@ void K3bCdImageWritingDialog::setupGui()
   m_infoView->setSorting( -1 );
   m_infoView->setAlternateBackground( QColor() );
   m_infoView->setFullWidth(true);
-  m_infoView->setSelectionMode( QListView::NoSelection );
+  m_infoView->setSelectionMode( Q3ListView::NoSelection );
 
-  connect( m_infoView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+  connect( m_infoView, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
@@ -253,18 +257,18 @@ void K3bCdImageWritingDialog::setupGui()
   d->optionTabbed = new QTabWidget( frame );
 
   QWidget* optionTab = new QWidget( d->optionTabbed );
-  QGridLayout* optionTabLayout = new QGridLayout( optionTab );
+  Q3GridLayout* optionTabLayout = new Q3GridLayout( optionTab );
   optionTabLayout->setAlignment( Qt::AlignTop );
   optionTabLayout->setSpacing( spacingHint() );
   optionTabLayout->setMargin( marginHint() );
 
-  QGroupBox* writingModeGroup = new QGroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
+  Q3GroupBox* writingModeGroup = new Q3GroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
 
 
   // copies --------
-  QGroupBox* groupCopies = new QGroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
+  Q3GroupBox* groupCopies = new Q3GroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
   groupCopies->setInsideSpacing( spacingHint() );
   groupCopies->setInsideMargin( marginHint() );
   QLabel* pixLabel = new QLabel( groupCopies );
@@ -275,7 +279,7 @@ void K3bCdImageWritingDialog::setupGui()
   m_spinCopies->setMaxValue( 999 );
   // -------- copies
 
-  QGroupBox* optionGroup = new QGroupBox( 3, Vertical, i18n("Settings"), optionTab );
+  Q3GroupBox* optionGroup = new Q3GroupBox( 3, Vertical, i18n("Settings"), optionTab );
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
@@ -293,7 +297,7 @@ void K3bCdImageWritingDialog::setupGui()
 
   // image tab ------------------------------------
   d->tempPathTab = new QWidget( d->optionTabbed );
-  QGridLayout* imageTabGrid = new QGridLayout( d->tempPathTab );
+  Q3GridLayout* imageTabGrid = new Q3GridLayout( d->tempPathTab );
   imageTabGrid->setSpacing( spacingHint() );
   imageTabGrid->setMargin( marginHint() );
 
@@ -308,7 +312,7 @@ void K3bCdImageWritingDialog::setupGui()
 
   // advanced ---------------------------------
   d->advancedTab = new QWidget( d->optionTabbed );
-  QGridLayout* advancedTabLayout = new QGridLayout( d->advancedTab );
+  Q3GridLayout* advancedTabLayout = new Q3GridLayout( d->advancedTab );
   advancedTabLayout->setAlignment( Qt::AlignTop );
   advancedTabLayout->setSpacing( spacingHint() );
   advancedTabLayout->setMargin( marginHint() );
@@ -329,7 +333,7 @@ void K3bCdImageWritingDialog::setupGui()
 
 
 
-  QGridLayout* grid = new QGridLayout( frame );
+  Q3GridLayout* grid = new Q3GridLayout( frame );
   grid->setSpacing( spacingHint() );
   grid->setMargin( 0 );
 
@@ -904,12 +908,12 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 }
 
 
-void K3bCdImageWritingDialog::slotContextMenu( KListView*, QListViewItem*, const QPoint& pos )
+void K3bCdImageWritingDialog::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& pos )
 {
   if( !d->haveMd5Sum )
     return;
 
-  QPopupMenu popup;
+  Q3PopupMenu popup;
   int copyItem = popup.insertItem( i18n("Copy checksum to clipboard") );
   int compareItem = popup.insertItem( i18n("Compare checksum...") );
 

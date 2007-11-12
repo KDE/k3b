@@ -20,6 +20,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 
 K3bContentsView::K3bContentsView( bool withHeader,
@@ -30,7 +32,7 @@ K3bContentsView::K3bContentsView( bool withHeader,
     m_centerWidget(0)
 {
   if( withHeader ) {
-    QVBoxLayout* lay = new QVBoxLayout( this );
+    Q3VBoxLayout* lay = new Q3VBoxLayout( this );
     lay->setMargin( 2 );
     lay->setSpacing( 0 );
 
@@ -51,7 +53,7 @@ K3bContentsView::~K3bContentsView()
 void K3bContentsView::setMainWidget( QWidget* w )
 {
   m_centerWidget = w;
-  ((QVBoxLayout*)layout())->addWidget( w );
+  ((Q3VBoxLayout*)layout())->addWidget( w );
 }
 
 

@@ -16,7 +16,7 @@
 #ifndef _K3B_CUE_FILE_WRITER_H_
 #define _K3B_CUE_FILE_WRITER_H_
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstringlist.h>
 
 #include <k3btoc.h>
@@ -37,7 +37,7 @@ class K3bCueFileWriter
  public:
   K3bCueFileWriter();
 
-  bool save( QTextStream& );
+  bool save( Q3TextStream& );
   bool save( const QString& filename );
 
   void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }

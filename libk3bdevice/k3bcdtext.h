@@ -18,7 +18,9 @@
 #define _K3B_CDTEXT_H_
 
 #include <qstring.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "k3bdevice_export.h"
 
 namespace K3bDevice
@@ -97,7 +99,7 @@ namespace K3bDevice
       friend class CdText;
     };
 
-  class LIBK3BDEVICE_EXPORT CdText : public QValueVector<TrackCdText>
+  class LIBK3BDEVICE_EXPORT CdText : public Q3ValueVector<TrackCdText>
     {
       friend class Device;
 
@@ -195,7 +197,7 @@ namespace K3bDevice
       QString m_upcEan;
     };
 
-  QCString encodeCdText( const QString& s, bool* illegalChars = 0 );
+  Q3CString encodeCdText( const QString& s, bool* illegalChars = 0 );
 }
 
 #endif

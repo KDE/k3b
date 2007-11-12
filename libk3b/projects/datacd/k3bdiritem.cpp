@@ -20,7 +20,7 @@
 #include "k3bfileitem.h"
 
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kdebug.h>
 
@@ -52,7 +52,7 @@ K3bDirItem::K3bDirItem( const K3bDirItem& item )
     m_dirs(0),
     m_localPath( item.m_localPath )
 {
-  for( QPtrListIterator<K3bDataItem> it( item.children() ); *it; ++it )
+  for( Q3PtrListIterator<K3bDataItem> it( item.children() ); *it; ++it )
     addDataItem( (*it)->copy() );
 }
 
@@ -202,7 +202,7 @@ bool K3bDirItem::alreadyInDirectory( const QString& filename ) const
 
 K3bDataItem* K3bDirItem::find( const QString& filename ) const
 {
-  for( QPtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
     if( it.current()->k3bName() == filename )
       return it.current();
   }
@@ -323,7 +323,7 @@ bool K3bDirItem::isRemoveable() const
   if( !K3bDataItem::isRemoveable() )
     return false;
 
-  for( QPtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
     if( !it.current()->isRemoveable() )
       return false;
   }
@@ -364,7 +364,7 @@ void K3bDirItem::updateFiles( long files, long dirs )
 
 bool K3bDirItem::isFromOldSession() const
 {
-  for( QPtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
     if( (*it)->isFromOldSession() )
       return true;
   }
@@ -375,7 +375,7 @@ bool K3bDirItem::isFromOldSession() const
 bool K3bDirItem::writeToCd() const
 {
   // check if this dir contains items to write
-  for( QPtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( m_children ); it.current(); ++it ) {
     if( (*it)->writeToCd() )
       return true;
   }

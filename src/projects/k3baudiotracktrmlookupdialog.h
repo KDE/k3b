@@ -17,7 +17,9 @@
 #define _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QLabel;
 class K3bAudioTrack;
@@ -36,7 +38,7 @@ class K3bAudioTrackTRMLookupDialog : public KDialogBase
   /**
    * This will show the dialog and start the lookup
    */
-  int lookup( const QPtrList<K3bAudioTrack>& tracks );
+  int lookup( const Q3PtrList<K3bAudioTrack>& tracks );
 
  private slots:
   void slotMbJobFinished( bool );

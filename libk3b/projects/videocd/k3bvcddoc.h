@@ -18,13 +18,15 @@
 #define K3BVCDDOC_H
 
 // Qt Includes
-#include <qptrqueue.h>
+#include <q3ptrqueue.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // Kde Includes
 #include <kurl.h>
@@ -104,7 +106,7 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
             return m_tracks->take( i );
         }
 
-        const QPtrList<K3bVcdTrack>* tracks() const
+        const Q3PtrList<K3bVcdTrack>* tracks() const
         {
             return m_tracks;
         }
@@ -178,10 +180,10 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         };
 
         /** Holds all the urls that have to be added to the list of tracks. **/
-        QPtrQueue<PrivateUrlToAdd> urlsToAdd;
+        Q3PtrQueue<PrivateUrlToAdd> urlsToAdd;
         QTimer* m_urlAddingTimer;
 
-        QPtrList<K3bVcdTrack>* m_tracks;
+        Q3PtrList<K3bVcdTrack>* m_tracks;
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 

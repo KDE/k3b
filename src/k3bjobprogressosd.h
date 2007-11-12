@@ -18,6 +18,9 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 class QPaintEvent;
 class QMouseEvent;

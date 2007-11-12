@@ -18,7 +18,9 @@
 #define _K3B_CORE_H_
 
 #include <qobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include "k3b_export.h"
 
@@ -64,7 +66,7 @@ class LIBK3B_EXPORT K3bCore : public QObject
   K3bCore( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bCore();
 
-  const QValueList<K3bJob*>& runningJobs() const;
+  const Q3ValueList<K3bJob*>& runningJobs() const;
 
   /**
    * Equals to !runningJobs().isEmpty()

@@ -29,9 +29,12 @@
 
 #include <qfont.h>
 #include <qmap.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qtooltip.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 
 class K3bMediaSelectionComboBox::ToolTip : public QToolTip
@@ -57,7 +60,7 @@ void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
   if( !parentWidget() || !m_box )
     return;
 
-  QListBoxItem* item = m_box->listBox()->itemAt( pos );
+  Q3ListBoxItem* item = m_box->listBox()->itemAt( pos );
   if( !item )
     return;
 
@@ -81,7 +84,7 @@ public:
     }
 
   QMap<K3bDevice::Device*, int> deviceIndexMap;
-  QValueVector<K3bDevice::Device*> devices;
+  Q3ValueVector<K3bDevice::Device*> devices;
 
     K3bDevice::Device* ignoreDevice;
 
@@ -146,9 +149,9 @@ K3bDevice::Device* K3bMediaSelectionComboBox::selectedDevice() const
 }
 
 
-QValueList<K3bDevice::Device*> K3bMediaSelectionComboBox::allDevices() const
+Q3ValueList<K3bDevice::Device*> K3bMediaSelectionComboBox::allDevices() const
 {
-  QValueList<K3bDevice::Device*> l;
+  Q3ValueList<K3bDevice::Device*> l;
   for( unsigned int i = 0; i < d->devices.count(); ++i )
     l.append( d->devices[i] );
   return l;
@@ -248,7 +251,7 @@ void K3bMediaSelectionComboBox::updateMedia()
   setFont( d->font );
 
   // remember set of devices
-  QValueVector<K3bDevice::Device*> oldDevices = d->devices;
+  Q3ValueVector<K3bDevice::Device*> oldDevices = d->devices;
 
   // remember last selected medium
   K3bDevice::Device* selected = selectedDevice();
@@ -264,7 +267,7 @@ void K3bMediaSelectionComboBox::updateMedia()
   bool rwOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_DVD_ROM) );
   bool dvdOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_WRITABLE_CD) );
 
-  QPtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
+  Q3PtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
   if( dvdOnly ) {
     if( rwOnly )
       devices = k3bcore->deviceManager()->dvdWriter();
@@ -276,7 +279,7 @@ void K3bMediaSelectionComboBox::updateMedia()
   else
     devices = k3bcore->deviceManager()->cdReader();
 
-  for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
       if ( d->ignoreDevice == *it ) {
           continue;
       }

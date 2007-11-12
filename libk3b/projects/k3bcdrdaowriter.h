@@ -25,7 +25,7 @@ class K3bExternalBin;
 class K3bProcess;
 class KProcess;
 class K3bDevice::Device;
-class QSocket;
+class Q3Socket;
 
 
 
@@ -131,7 +131,7 @@ class K3bCdrdaoWriter : public K3bAbstractWriter
   K3bProcess* m_process;
 
   int m_cdrdaoComm[2];
-  QSocket         *m_comSock;
+  Q3Socket         *m_comSock;
 
   bool m_canceled;
 

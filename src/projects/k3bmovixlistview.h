@@ -22,6 +22,8 @@
 #include <kfileitem.h>
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 
 class K3bMovixDoc;
@@ -32,8 +34,8 @@ class K3bFileItem;
 class K3bMovixListViewItem : public K3bListViewItem
 {
  public:
-  K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, QListView* parent, QListViewItem* after );
-  K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, QListViewItem* parent );
+  K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* after );
+  K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListViewItem* parent );
   ~K3bMovixListViewItem();
 
   K3bMovixFileItem* fileItem() const { return m_fileItem; }
@@ -50,7 +52,7 @@ class K3bMovixListViewItem : public K3bListViewItem
 class K3bMovixFileViewItem : public K3bMovixListViewItem, public KFileItem
 {
  public:
-  K3bMovixFileViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, QListView* parent, QListViewItem* );
+  K3bMovixFileViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* );
 
   QString text( int ) const;
   void setText(int col, const QString& text );
@@ -79,7 +81,7 @@ class K3bMovixListView : public K3bListView
   K3bMovixListView( K3bMovixDoc* doc, QWidget* parent = 0, const char* name = 0 );
   ~K3bMovixListView();
 
-  QDragObject* dragObject();
+  Q3DragObject* dragObject();
 
  protected:
   bool acceptDrag(QDropEvent* e) const;
@@ -88,7 +90,7 @@ class K3bMovixListView : public K3bListView
   void slotNewFileItems();
   void slotFileItemRemoved( K3bMovixFileItem* );
   void slotSubTitleItemRemoved( K3bMovixFileItem* );
-  void slotDropped( KListView*, QDropEvent* e, QListViewItem* after );
+  void slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* after );
   void slotChanged();
 
  private:

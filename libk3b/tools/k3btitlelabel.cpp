@@ -22,6 +22,9 @@
 #include <qfontmetrics.h>
 #include <qfont.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3Frame>
 
 
 class K3bTitleLabel::Private
@@ -95,7 +98,7 @@ public:
 
 
 K3bTitleLabel::K3bTitleLabel( QWidget* parent, const char* name )
-  : QFrame( parent, name )
+  : Q3Frame( parent, name )
 {
   d = new Private();
   m_toolTip = new ToolTip( this );
@@ -145,7 +148,7 @@ QSize K3bTitleLabel::minimumSizeHint() const
 
 void K3bTitleLabel::resizeEvent( QResizeEvent* e )
 {
-  QFrame::resizeEvent( e );
+  Q3Frame::resizeEvent( e );
   updatePositioning();
   update();
 }

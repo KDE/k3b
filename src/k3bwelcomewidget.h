@@ -17,10 +17,18 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <qscrollview.h>
-#include <qptrlist.h>
+#include <q3scrollview.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QShowEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include <kurl.h>
 #include <kaction.h>
@@ -31,13 +39,13 @@ class QDragEnterEvent;
 class K3bFlatButton;
 class QPaintEvent;
 class QResizeEvent;
-class QSimpleRichText;
+class Q3SimpleRichText;
 class KConfigBase;
 class QMouseEvent;
 class QShowEvent;
 
 
-class K3bWelcomeWidget : public QScrollView
+class K3bWelcomeWidget : public Q3ScrollView
 {
   Q_OBJECT
 
@@ -82,7 +90,7 @@ class K3bWelcomeWidget::Display : public QWidget
   void removeAction( KAction* );
   void removeButton( K3bFlatButton* );
   void rebuildGui();
-  void rebuildGui( const QPtrList<KAction>& );
+  void rebuildGui( const Q3PtrList<KAction>& );
 
  signals:
   void dropped( const KURL::List& );
@@ -100,15 +108,15 @@ class K3bWelcomeWidget::Display : public QWidget
   void repositionButtons();
   void updateBgPix();
 
-  QSimpleRichText* m_header;
-  QSimpleRichText* m_infoText;
+  Q3SimpleRichText* m_header;
+  Q3SimpleRichText* m_infoText;
 
   QSize m_buttonSize;
   int m_cols;
   int m_rows;
 
-  QPtrList<KAction> m_actions;
-  QPtrList<K3bFlatButton> m_buttons;
+  Q3PtrList<KAction> m_actions;
+  Q3PtrList<K3bFlatButton> m_buttons;
   QMap<K3bFlatButton*, KAction*> m_buttonMap;
 
   K3bFlatButton* m_buttonMore;

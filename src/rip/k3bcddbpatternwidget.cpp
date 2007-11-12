@@ -24,16 +24,18 @@
 
 #include <qregexp.h>
 #include <qvalidator.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
   : base_K3bCddbPatternWidget( parent, name )
 {
   // fix the layout
-  ((QGridLayout*)layout())->setRowStretch( 4, 1 );
+  ((Q3GridLayout*)layout())->setRowStretch( 4, 1 );
 
   // setup validators
   // there can never be one of the following characters in both dir and filename:
@@ -129,7 +131,7 @@ void K3bCddbPatternWidget::loadDefaults()
 
 void K3bCddbPatternWidget::slotSeeSpecialStrings()
 {
-  QWhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
+  Q3WhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
 			     "<p>The following strings will be replaced with their respective meaning in every "
 			     "track name.<br>"
 			     "<em>Hint:</em> %A differs from %a only on soundtracks or compilations."
@@ -150,7 +152,7 @@ void K3bCddbPatternWidget::slotSeeSpecialStrings()
 
 void K3bCddbPatternWidget::slotSeeConditionalInclusion()
 {
-  QWhatsThis::display( i18n( "<p><b>Conditional inclusion:</b>"
+  Q3WhatsThis::display( i18n( "<p><b>Conditional inclusion:</b>"
                              "<p>These patterns make it possible to selectively include texts, "
                              "depending on the value of CDDB entries. You can choose only to "
                              "include or exclude texts if one of the entries is empty, "

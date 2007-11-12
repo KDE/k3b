@@ -16,7 +16,7 @@
 #ifndef _K3B_ENCODING_CONVERTER_H_
 #define _K3B_ENCODING_CONVERTER_H_
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 
 class QWidget;
@@ -32,7 +32,7 @@ class K3bEncodingConverter
    *
    * \return True if the string is encoded in the local encoding.
    */
-  bool encodedLocally( const QCString& );
+  bool encodedLocally( const Q3CString& );
 
   /**
    * Tries to fix the encoding of a string to fit the local
@@ -47,10 +47,10 @@ class K3bEncodingConverter
    *
    * \return True if the conversion was successful.
    */
-  bool fixEncoding( const QCString& s, QCString& result, QWidget* parent = 0, bool cacheEncoding = true );
+  bool fixEncoding( const Q3CString& s, Q3CString& result, QWidget* parent = 0, bool cacheEncoding = true );
 
  private:
-  bool convert( const QCString& s, QCString& result, const QString& from, const QString& to );
+  bool convert( const Q3CString& s, Q3CString& result, const QString& from, const QString& to );
 
   class Private;
   Private* d;

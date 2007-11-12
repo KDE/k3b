@@ -35,14 +35,14 @@
 #include <qfileinfo.h>
 
 
-K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, QListView* parent )
+K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, Q3ListView* parent )
   : K3bListViewItem( parent ),
     m_dataItem(item)
 {
   init();
 }
 
-K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, QListViewItem* parent )
+K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, Q3ListViewItem* parent )
   : K3bListViewItem( parent ),
     m_dataItem(item)
 {
@@ -134,7 +134,7 @@ QString K3bDataViewItem::key( int col, bool a ) const
 }
 
 
-K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
+K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, Q3ListView* parent )
   : K3bDataViewItem( dir, parent )
 {
   m_dirItem = dir;
@@ -142,7 +142,7 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListView* parent )
 }
 
 
-K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, QListViewItem* parent )
+K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, Q3ListViewItem* parent )
   : K3bDataViewItem( dir, parent )
 {
   m_dirItem = dir;
@@ -189,14 +189,14 @@ void K3bDataDirViewItem::highlightIcon( bool b )
 
 
 
-K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListView* parent )
+K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, Q3ListView* parent )
   : K3bDataViewItem( file, parent )
 {
   init( file );
 }
 
 
-K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, QListViewItem* parent )
+K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, Q3ListViewItem* parent )
   : K3bDataViewItem( file, parent )
 {
   init( file );
@@ -262,7 +262,7 @@ QString K3bDataFileViewItem::text( int index ) const
 
 
 
-K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, QListView* parent )
+K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, Q3ListView* parent )
   : K3bDataDirViewItem( doc->root(), parent )
 {
   m_doc = doc;
@@ -297,7 +297,7 @@ void K3bDataRootViewItem::setText( int col, const QString& text )
 }
 
 
-K3bSpecialDataViewItem::K3bSpecialDataViewItem( K3bSpecialDataItem* item, QListView* parent )
+K3bSpecialDataViewItem::K3bSpecialDataViewItem( K3bSpecialDataItem* item, Q3ListView* parent )
   : K3bDataViewItem( item, parent )
 {
   setPixmap( 0, SmallIcon("unknown") );
@@ -319,7 +319,7 @@ QString K3bSpecialDataViewItem::text( int col ) const
 
 
 
-K3bSessionImportViewItem::K3bSessionImportViewItem( K3bSessionImportItem* item, QListView* parent )
+K3bSessionImportViewItem::K3bSessionImportViewItem( K3bSessionImportItem* item, Q3ListView* parent )
   : K3bDataViewItem( item, parent )
 {
   setPixmap( 0, SmallIcon("unknown") );

@@ -32,11 +32,13 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
-#include <qwhatsthis.h>
-#include <qwidgetstack.h>
+#include <q3whatsthis.h>
+#include <q3widgetstack.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 static const int s_mp3Bitrates[] = {
@@ -280,7 +282,7 @@ void K3bVideoDVDRippingWidget::setNeededSize( KIO::filesize_t size )
 
 void K3bVideoDVDRippingWidget::slotSeeSpecialStrings()
 {
-  QWhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
+  Q3WhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
 			     "<p>The following strings will be replaced with their respective meaning in every "
 			     "track name.<br>"
                              "<p><table border=\"0\">"
@@ -354,7 +356,7 @@ void K3bVideoDVDRippingWidget::slotCustomPictureSize()
   labelW->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
   labelH->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
 
-  QGridLayout* grid = new QGridLayout( dlg.plainPage() );
+  Q3GridLayout* grid = new Q3GridLayout( dlg.plainPage() );
   grid->setMargin( 0 );
   grid->setSpacing( KDialog::spacingHint() );
   grid->addMultiCellWidget( label, 0, 0, 0, 3 );

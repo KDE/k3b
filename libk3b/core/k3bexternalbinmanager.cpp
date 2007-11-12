@@ -24,7 +24,7 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -99,7 +99,7 @@ K3bExternalProgram::~K3bExternalProgram()
 
 const K3bExternalBin* K3bExternalProgram::mostRecentBin() const
 {
-  QPtrListIterator<K3bExternalBin> it( m_bins );
+  Q3PtrListIterator<K3bExternalBin> it( m_bins );
   K3bExternalBin* bin = *it;
   ++it;
   while( *it ) {
@@ -137,7 +137,7 @@ void K3bExternalProgram::setDefault( const K3bExternalBin* bin )
 
 void K3bExternalProgram::setDefault( const QString& path )
 {
-  for( QPtrListIterator<K3bExternalBin> it( m_bins ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bExternalBin> it( m_bins ); it.current(); ++it ) {
     if( it.current()->path == path ) {
       setDefault( it.current() );
       return;

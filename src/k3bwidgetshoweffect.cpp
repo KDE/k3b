@@ -23,6 +23,8 @@
 
 #include <qpainter.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QTimerEvent>
 
 
 K3bWidgetShowEffect::K3bWidgetShowEffect( QWidget* widget, Effect e )

@@ -19,6 +19,9 @@
 #define K3B_STATUSBAR_MANAGER_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QLabel>
 
 class QLabel;
 class K3bMainWindow;

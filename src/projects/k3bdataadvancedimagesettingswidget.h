@@ -20,7 +20,7 @@
 #include "base_k3badvanceddataimagesettings.h"
 
 class K3bIsoOptions;
-class QCheckListItem;
+class Q3CheckListItem;
 
 
 class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSettings
@@ -38,27 +38,27 @@ class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSetti
   void slotJolietToggled( bool on );
 
  private:
-  QCheckListItem* m_checkAllowUntranslatedFilenames;
-  QCheckListItem* m_checkAllowMaxLengthFilenames;
-  QCheckListItem* m_checkAllowFullAscii;
-  QCheckListItem* m_checkAllowOther;
-  QCheckListItem* m_checkAllowLowercaseCharacters;
-  QCheckListItem* m_checkAllowMultiDot;
-  QCheckListItem* m_checkOmitVersionNumbers;
-  QCheckListItem* m_checkOmitTrailingPeriod;
-  QCheckListItem* m_checkCreateTransTbl;
-  QCheckListItem* m_checkHideTransTbl;
-  QCheckListItem* m_checkFollowSymbolicLinks;
-  QCheckListItem* m_checkAllow31CharFilenames;
-  QCheckListItem* m_checkAllowBeginningPeriod;
-  QCheckListItem* m_checkJolietLong;
-  QCheckListItem* m_checkDoNotCacheInodes;
-  QCheckListItem* m_checkDoNotImportSession;
+  Q3CheckListItem* m_checkAllowUntranslatedFilenames;
+  Q3CheckListItem* m_checkAllowMaxLengthFilenames;
+  Q3CheckListItem* m_checkAllowFullAscii;
+  Q3CheckListItem* m_checkAllowOther;
+  Q3CheckListItem* m_checkAllowLowercaseCharacters;
+  Q3CheckListItem* m_checkAllowMultiDot;
+  Q3CheckListItem* m_checkOmitVersionNumbers;
+  Q3CheckListItem* m_checkOmitTrailingPeriod;
+  Q3CheckListItem* m_checkCreateTransTbl;
+  Q3CheckListItem* m_checkHideTransTbl;
+  Q3CheckListItem* m_checkFollowSymbolicLinks;
+  Q3CheckListItem* m_checkAllow31CharFilenames;
+  Q3CheckListItem* m_checkAllowBeginningPeriod;
+  Q3CheckListItem* m_checkJolietLong;
+  Q3CheckListItem* m_checkDoNotCacheInodes;
+  Q3CheckListItem* m_checkDoNotImportSession;
 
-  QCheckListItem* m_isoLevelController;
-  QCheckListItem* m_radioIsoLevel1;
-  QCheckListItem* m_radioIsoLevel2;
-  QCheckListItem* m_radioIsoLevel3;
+  Q3CheckListItem* m_isoLevelController;
+  Q3CheckListItem* m_radioIsoLevel1;
+  Q3CheckListItem* m_radioIsoLevel2;
+  Q3CheckListItem* m_radioIsoLevel3;
 
   class PrivateCheckViewItem;
   class PrivateIsoWhatsThis;

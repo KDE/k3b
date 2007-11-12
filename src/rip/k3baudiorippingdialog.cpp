@@ -43,27 +43,30 @@
 #include <kmessagebox.h>
 #include <kurllabel.h>
 
-#include <qgroupbox.h>
-#include <qheader.h>
+#include <q3groupbox.h>
+#include <q3header.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qmessagebox.h>
 #include <qfont.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qtoolbutton.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
-#include <qptrlist.h>
-#include <qintdict.h>
+#include <q3ptrlist.h>
+#include <q3intdict.h>
 #include <qpair.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
 
 class K3bAudioRippingDialog::Private
@@ -72,7 +75,7 @@ public:
   Private() {
   }
 
-  QValueVector<QString> filenames;
+  Q3ValueVector<QString> filenames;
   QString playlistFilename;
   K3bFileSystemInfo fsInfo;
 };
@@ -81,7 +84,7 @@ public:
 K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc, 
 					     K3bDevice::Device* device,
 					     const K3bCddbResultEntry& entry, 
-					     const QValueList<int>& tracks,
+					     const Q3ValueList<int>& tracks,
 					     QWidget *parent, const char *name )
   : K3bInteractionDialog( parent, name,
 			  QString::null,
@@ -100,7 +103,7 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
   setupContextHelp();
 
   K3b::Msf length;
-  for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
+  for( Q3ValueList<int>::const_iterator it = m_trackNumbers.begin();
        it != m_trackNumbers.end(); ++it ) {
     length += m_toc[*it-1].length();
   }
@@ -119,7 +122,7 @@ K3bAudioRippingDialog::~K3bAudioRippingDialog()
 void K3bAudioRippingDialog::setupGui()
 {
   QWidget *frame = mainWidget();
-  QGridLayout* Form1Layout = new QGridLayout( frame );
+  Q3GridLayout* Form1Layout = new Q3GridLayout( frame );
   Form1Layout->setSpacing( KDialog::spacingHint() );
   Form1Layout->setMargin( 0 );
 
@@ -148,7 +151,7 @@ void K3bAudioRippingDialog::setupGui()
   // setup advanced page
   // -------------------------------------------------------------------------------------------
   QWidget* advancedPage = new QWidget( mainTab );
-  QGridLayout* advancedPageLayout = new QGridLayout( advancedPage );
+  Q3GridLayout* advancedPageLayout = new Q3GridLayout( advancedPage );
   advancedPageLayout->setMargin( marginHint() );
   advancedPageLayout->setSpacing( spacingHint() );
   mainTab->addTab( advancedPage, i18n("Advanced") );
@@ -184,12 +187,12 @@ void K3bAudioRippingDialog::setupGui()
 void K3bAudioRippingDialog::setupContextHelp()
 {
   QToolTip::add( m_spinRetries, i18n("Maximal number of read retries") );
-  QWhatsThis::add( m_spinRetries, i18n("<p>This specifies the maximum number of retries to "
+  Q3WhatsThis::add( m_spinRetries, i18n("<p>This specifies the maximum number of retries to "
 				       "read a sector of audio data from the cd. After that "
 				       "K3b will either skip the sector if the <em>Ignore Read Errors</em> "
 				       "option is enabled or stop the process.") );
   QToolTip::add( m_checkUseIndex0, i18n("Do not read the pregaps at the end of every track") );
-  QWhatsThis::add( m_checkUseIndex0, i18n("<p>If this option is checked K3b will not rip the audio "
+  Q3WhatsThis::add( m_checkUseIndex0, i18n("<p>If this option is checked K3b will not rip the audio "
 					  "data in the pregaps. Most audio tracks contain an empty "
 					  "pregap which does not belong to the track itself.</p>"
 					  "<p>Although the default behaviour of nearly all ripping "
@@ -227,7 +230,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   }
 
   // check if we need to overwrite some files...
-  QListViewItemIterator it( m_viewTracks );
+  Q3ListViewItemIterator it( m_viewTracks );
   QStringList filesToOverwrite;
   for( unsigned int i = 0; i < d->filenames.count(); ++i ) {
     if( QFile::exists( d->filenames[i] ) )
@@ -246,9 +249,9 @@ void K3bAudioRippingDialog::slotStartClicked()
 
 
   // prepare list of tracks to rip
-  QValueVector<QPair<int, QString> > tracksToRip;
+  Q3ValueVector<QPair<int, QString> > tracksToRip;
   unsigned int i = 0;
-  for( QValueList<int>::const_iterator trackIt = m_trackNumbers.begin();
+  for( Q3ValueList<int>::const_iterator trackIt = m_trackNumbers.begin();
        trackIt != m_trackNumbers.end(); ++trackIt ) {
     tracksToRip.append( qMakePair( *trackIt, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
     ++i;
@@ -296,7 +299,7 @@ void K3bAudioRippingDialog::refresh()
 
   if( m_optionWidget->createSingleFile() ) {
     long length = 0;
-    for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
+    for( Q3ValueList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
       length += ( m_checkUseIndex0->isChecked() 
 		  ? m_toc[*it-1].realAudioLength().lba()
@@ -347,7 +350,7 @@ void K3bAudioRippingDialog::refresh()
 			       i18n("Cue-file") );
   }
   else {
-    for( QValueList<int>::const_iterator it = m_trackNumbers.begin();
+    for( Q3ValueList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
       int index = *it - 1;
 

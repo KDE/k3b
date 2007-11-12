@@ -38,8 +38,8 @@
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
+#include <q3frame.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -47,10 +47,12 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qvbox.h>
-#include <qbuttongroup.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -94,13 +96,13 @@ void K3bMixedBurnDialog::setupSettingsPage()
 {
   QWidget* w = new QWidget( this );
 
-  QGroupBox* groupDataMode = new QGroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
+  Q3GroupBox* groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
   m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
 
-  QGroupBox* groupNormalize = new QGroupBox( 1, Qt::Vertical, i18n("Misc"), w );
+  Q3GroupBox* groupNormalize = new Q3GroupBox( 1, Qt::Vertical, i18n("Misc"), w );
   m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( groupNormalize );
 
-  QGroupBox* groupMixedType = new QGroupBox( 1, Qt::Vertical, i18n("Mixed Mode Type"), w );
+  Q3GroupBox* groupMixedType = new Q3GroupBox( 1, Qt::Vertical, i18n("Mixed Mode Type"), w );
   m_comboMixedModeType = new K3bIntMapComboBox( groupMixedType );
 
   m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_SECOND_SESSION,
@@ -134,7 +136,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
 						     "<br>It could lead to problems with some older "
 						     "hifi audio CD players that try to play the data track.") );
 				    
-  QGridLayout* grid = new QGridLayout( w );
+  Q3GridLayout* grid = new Q3GridLayout( w );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
   grid->addWidget( groupMixedType, 0, 0 );

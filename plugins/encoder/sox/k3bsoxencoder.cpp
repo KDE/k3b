@@ -34,6 +34,10 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3CString>
+#include <Q3ValueList>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -232,9 +236,9 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
     *d->process << d->fileName;
 
     kdDebug() << "***** sox parameters:" << endl;
-    const QValueList<QCString>& args = d->process->args();
+    const Q3ValueList<Q3CString>& args = d->process->args();
     QString s;
-    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
     kdDebug() << s << flush << endl;
@@ -378,7 +382,7 @@ K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent, const
   w = new base_K3bSoxEncoderConfigWidget( this );
   w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );
 
-  QHBoxLayout* lay = new QHBoxLayout( this );
+  Q3HBoxLayout* lay = new Q3HBoxLayout( this );
   lay->setMargin( 0 );
 
   lay->addWidget( w );

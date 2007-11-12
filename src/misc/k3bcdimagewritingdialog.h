@@ -18,6 +18,10 @@
 #define _K3B_CDIMAGEWRITINGDIALOG_H_
 
 #include <k3binteractiondialog.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QLabel>
 
 
 class QCheckBox;
@@ -38,7 +42,7 @@ class K3bCueFileParser;
 class QDragEnterEvent;
 class QDropEvent;
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 class QPoint;
 class KComboBox;
 
@@ -61,7 +65,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
 
   void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
-  void slotContextMenu( KListView*, QListViewItem*, const QPoint& pos );
+  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& pos );
 
   void slotUpdateImage( const QString& );
 

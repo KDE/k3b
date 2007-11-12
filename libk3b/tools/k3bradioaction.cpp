@@ -32,7 +32,7 @@ K3bRadioAction::K3bRadioAction( const QString& text, const KShortcut& cut,
 {
 }
 
-K3bRadioAction::K3bRadioAction( const QString& text, const QIconSet& pix,
+K3bRadioAction::K3bRadioAction( const QString& text, const QIcon& pix,
 				const KShortcut& cut,
 				QObject* parent, const char* name )
   : KToggleAction( text, pix, cut, parent, name ),
@@ -48,7 +48,7 @@ K3bRadioAction::K3bRadioAction( const QString& text, const QString& pix,
 {
 }
 
-K3bRadioAction::K3bRadioAction( const QString& text, const QIconSet& pix,
+K3bRadioAction::K3bRadioAction( const QString& text, const QIcon& pix,
 				const KShortcut& cut,
 				const QObject* receiver, const char* slot,
 				QObject* parent, const char* name )

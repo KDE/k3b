@@ -18,6 +18,8 @@
 #include <qstyle.h>
 #include <qpainter.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kglobalsettings.h>
 #include <kapplication.h>

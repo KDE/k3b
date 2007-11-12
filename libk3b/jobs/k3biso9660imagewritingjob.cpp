@@ -38,7 +38,7 @@
 #include <kio/global.h>
 
 #include <qstring.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qfile.h>
 #include <qapplication.h>
 
@@ -281,7 +281,7 @@ void K3bIso9660ImageWritingJob::startWriting()
   // we simply always calculate the checksum, thus making the code simpler
   d->imageFile.close();
   d->imageFile.setName( m_imagePath );
-  d->imageFile.open( IO_ReadOnly );
+  d->imageFile.open( QIODevice::ReadOnly );
   d->checksumPipe.close();
   d->checksumPipe.readFromIODevice( &d->imageFile );
 
@@ -372,7 +372,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
       m_tocFile = new KTempFile( QString::null, "toc" );
       m_tocFile->setAutoDelete(true);
 
-      if( QTextStream* s = m_tocFile->textStream() ) {
+      if( Q3TextStream* s = m_tocFile->textStream() ) {
 	if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
 	    m_dataMode == K3b::MODE2 ) {
 	  *s << "CD_ROM_XA" << "\n";

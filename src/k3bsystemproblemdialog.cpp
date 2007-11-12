@@ -39,6 +39,12 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -79,7 +85,7 @@ K3bSystemProblem::K3bSystemProblem( int t,
 }
 
 
-K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProblem>& problems,
+K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProblem>& problems,
 						QWidget* parent,
 						const char* name )
   : KDialog( parent, name )
@@ -109,13 +115,13 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
 
 
   // layout everything
-  QGridLayout* grid = new QGridLayout( this );
+  Q3GridLayout* grid = new Q3GridLayout( this );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
   grid->addMultiCellWidget( titleFrame, 0, 0, 0, 1 );
   grid->addMultiCellWidget( view, 1, 1, 0, 1 );
   grid->addWidget( m_checkDontShowAgain, 2, 0 );
-  QHBoxLayout* buttonBox = new QHBoxLayout;
+  Q3HBoxLayout* buttonBox = new Q3HBoxLayout;
   buttonBox->setSpacing( spacingHint() );
   buttonBox->setMargin( 0 );
 #ifdef HAVE_K3BSETUP
@@ -128,7 +134,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QValueList<K3bSystemProble
 
   QString text = "<html>";
 
-  for( QValueList<K3bSystemProblem>::const_iterator it = problems.begin();
+  for( Q3ValueList<K3bSystemProblem>::const_iterator it = problems.begin();
        it != problems.end(); ++it ) {
     const K3bSystemProblem& p = *it;
 
@@ -171,7 +177,7 @@ void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					  const char* name )
 {
-  QValueList<K3bSystemProblem> problems;
+  Q3ValueList<K3bSystemProblem> problems;
 
   if( k3bcore->deviceManager()->cdWriter().isEmpty() ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
@@ -340,7 +346,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   bool atapiReader = false;
   bool atapiWriter = false;
   bool dvd_r_dl = false;
-  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
+  for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
        it.current(); ++it ) {
     if( it.current()->interfaceType() == K3bDevice::IDE )
       atapiReader = true;
@@ -350,8 +356,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
 
   // check automounted devices
-  QPtrList<K3bDevice::Device> automountedDevices = checkForAutomounting();
-  for( QPtrListIterator<K3bDevice::Device> it( automountedDevices );
+  Q3PtrList<K3bDevice::Device> automountedDevices = checkForAutomounting();
+  for( Q3PtrListIterator<K3bDevice::Device> it( automountedDevices );
        it.current(); ++it ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 				       i18n("Device %1 - %2 is automounted.")
@@ -442,7 +448,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
   }
 
-  for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
+  for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
        it.current(); ++it ) {
     K3bDevice::Device* dev = it.current();
 
@@ -500,9 +506,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   // Way too many users are complaining about K3b not being able to decode mp3 files. So just warn them about
   // the legal restrictions with many distros
   //
-  QPtrList<K3bPlugin> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+  Q3PtrList<K3bPlugin> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
   bool haveMp3Decoder = false;
-  for( QPtrListIterator<K3bPlugin> it( plugins ); *it; ++it ) {
+  for( Q3PtrListIterator<K3bPlugin> it( plugins ); *it; ++it ) {
     if( it.current()->pluginInfo().name() == "K3b MAD Decoder" ) {
       haveMp3Decoder = true;
       break;
@@ -562,7 +568,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
 
   kdDebug() << "(K3bCore) System problems:" << endl;
-  for( QValueList<K3bSystemProblem>::const_iterator it = problems.begin();
+  for( Q3ValueList<K3bSystemProblem>::const_iterator it = problems.begin();
        it != problems.end(); ++it ) {
     const K3bSystemProblem& p = *it;
 
@@ -638,9 +644,9 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
 }
 
 
-QPtrList<K3bDevice::Device> K3bSystemProblemDialog::checkForAutomounting()
+Q3PtrList<K3bDevice::Device> K3bSystemProblemDialog::checkForAutomounting()
 {
-  QPtrList<K3bDevice::Device> l;
+  Q3PtrList<K3bDevice::Device> l;
 
   ::setfsent();
 

@@ -37,9 +37,13 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qthread.h>
 #include <qmutex.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <Q3ValueList>
+#include <QEvent>
 
 
 static Qt::HANDLE s_guiThreadHandle = QThread::currentThread();
@@ -111,8 +115,8 @@ public:
   K3bPluginManager* pluginManager;
   K3bGlobalSettings* globalSettings;
 
-  QValueList<K3bJob*> runningJobs;
-  QValueList<K3bDevice::Device*> blockedDevices;
+  Q3ValueList<K3bJob*> runningJobs;
+  Q3ValueList<K3bDevice::Device*> blockedDevices;
 };
 
 
@@ -310,7 +314,7 @@ bool K3bCore::jobsRunning() const
 }
 
 
-const QValueList<K3bJob*>& K3bCore::runningJobs() const
+const Q3ValueList<K3bJob*>& K3bCore::runningJobs() const
 {
   return d->runningJobs;
 }

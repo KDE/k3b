@@ -35,7 +35,7 @@ bool K3bWaveFileWriter::open( const QString& filename )
 
   m_outputFile.setName( filename );
 
-  if( m_outputFile.open( IO_ReadWrite ) ) {
+  if( m_outputFile.open( QIODevice::ReadWrite ) ) {
     m_filename = filename;
 
     writeEmptyHeader();

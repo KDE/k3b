@@ -19,6 +19,8 @@
 #include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
 #include <k3bvideodvd.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class K3bVideoDVDRippingTitleListView;
 class K3bToolBox;
@@ -26,7 +28,7 @@ class QLabel;
 class KActionCollection;
 class KActionMenu;
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 
 class K3bVideoDVDRippingView : public K3bMediaContentsView
 {
@@ -41,7 +43,7 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
  private slots:
   void slotStartRipping();
 
-  void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
+  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
 
   void slotCheckAll();
   void slotUncheckAll();

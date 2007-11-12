@@ -19,7 +19,7 @@
 
 #include <k3bthread.h>
 #include <qobject.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qpair.h>
 
 #include <k3bcddbresult.h>
@@ -54,7 +54,7 @@ class K3bAudioProjectConvertingThread : public K3bThread
   /**
    * 1 is the first track
    */
-  void setTracksToRip( const QValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
+  void setTracksToRip( const Q3ValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
 
   void setWritePlaylist( bool b ) { m_writePlaylist = b; }
   void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
@@ -90,7 +90,7 @@ class K3bAudioProjectConvertingThread : public K3bThread
 
   bool m_writeCueFile;
 
-  QValueVector<QPair<int, QString> > m_tracks;
+  Q3ValueVector<QPair<int, QString> > m_tracks;
 
   K3bAudioDoc* m_doc;
 

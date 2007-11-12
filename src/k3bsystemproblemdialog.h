@@ -18,7 +18,10 @@
 #define _K3B_SYSTEM_DIALOG_H_
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QCloseEvent>
 
 #include <kdialog.h>
 
@@ -87,11 +90,11 @@ class K3bSystemProblemDialog : public KDialog
   void slotK3bSetup();
 
  private:
-  K3bSystemProblemDialog( const QValueList<K3bSystemProblem>&,
+  K3bSystemProblemDialog( const Q3ValueList<K3bSystemProblem>&,
 			  QWidget* parent = 0, 
 			  const char* name = 0 );
   static int dmaActivated( K3bDevice::Device* );
-  static QPtrList<K3bDevice::Device> checkForAutomounting();
+  static Q3PtrList<K3bDevice::Device> checkForAutomounting();
 
   QPushButton* m_closeButton;
   QPushButton* m_k3bsetupButton;

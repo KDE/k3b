@@ -201,7 +201,7 @@ void K3bDataTrackReader::WorkThread::run()
   QFile file;
   if( m_fd == -1 ) {
     file.setName( m_imagePath );
-    if( !file.open( IO_WriteOnly ) ) {
+    if( !file.open( QIODevice::WriteOnly ) ) {
       m_device->close();
       if( m_useLibdvdcss )
 	m_libcss->close();

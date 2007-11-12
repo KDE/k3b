@@ -25,11 +25,14 @@
 #include <k3bvideodvdvideostream.h>
 #include <k3bvideodvdsubpicturestream.h>
 
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QHideEvent>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -90,7 +93,7 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
 class K3bVideoDVDRippingTitleListView::TitleViewItem : public K3bCheckListViewItem
 {
 public:
-  TitleViewItem( K3bVideoDVDRippingTitleListView* parent, QListViewItem* after, const K3bVideoDVD::Title& title ) 
+  TitleViewItem( K3bVideoDVDRippingTitleListView* parent, Q3ListViewItem* after, const K3bVideoDVD::Title& title ) 
     : K3bCheckListViewItem( parent, after ),
       m_title( title ) {
 
@@ -113,7 +116,7 @@ public:
     // set a valid height
     int maxH = 0;
     for( int c = 1; c <= 4; ++c ) {
-      QSimpleRichText rt( text(c), listView()->font() );
+      Q3SimpleRichText rt( text(c), listView()->font() );
       rt.setWidth( 600 ); // way to big to avoid line breaks
       maxH = QMAX( maxH, rt.height() );
     }
@@ -121,11 +124,11 @@ public:
     setHeight( maxH + 2*marginVertical() );
   }
 
-  int width( const QFontMetrics& fm, const QListView* lv, int c ) const {
+  int width( const QFontMetrics& fm, const Q3ListView* lv, int c ) const {
     if( c == 0 )
       return K3bCheckListViewItem::width( fm, lv, c );
     else {
-      QSimpleRichText rt( text(c), lv->font() );
+      Q3SimpleRichText rt( text(c), lv->font() );
       rt.setWidth( 600 ); // way to big to avoid line breaks
       return rt.widthUsed() + 2*marginHorizontal( c );
     }
@@ -216,7 +219,7 @@ protected:
 	}
 
 	// paint using QSimpleRichText
-	QSimpleRichText rt( text(col), listView()->font() );
+	Q3SimpleRichText rt( text(col), listView()->font() );
 	rt.setWidth( 600 ); // way to big to avoid line breaks
 	// normally we would have to clip the height to height()-2*marginVertical(). But if we do that
 	// some characters are cut (such as p or q). It seems as if QSimpleRichText does not properly 
@@ -346,7 +349,7 @@ K3bVideoDVDRippingTitleListView::K3bVideoDVDRippingTitleListView( QWidget* paren
   addColumn( i18n("Subpicture") );
 
   header()->setClickEnabled( false );
-  setColumnWidthMode( 0, QListView::Manual );
+  setColumnWidthMode( 0, Q3ListView::Manual );
   setColumnWidth( 0, 20 );
   header()->setResizeEnabled( false, 0 );
 

@@ -21,12 +21,14 @@
 #include "k3bapplication.h"
 
 #include <qwidget.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qlayout.h>
 #include <qdir.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kfiledetailview.h>
 #include <klistview.h>
@@ -64,7 +66,7 @@ KActionCollection* K3bFileView::actionCollection() const
 
 void K3bFileView::setupGUI()
 {
-  QVBoxLayout* layout = new QVBoxLayout( this );
+  Q3VBoxLayout* layout = new Q3VBoxLayout( this );
   //  layout->setAutoAdd( true );
 
   m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );

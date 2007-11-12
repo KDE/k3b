@@ -22,7 +22,7 @@
 
 
 class K3bDirOperator;
-class QDragObject;
+class Q3DragObject;
 class KURL;
 class KFileFilterCombo;
 class KFileItem;

@@ -16,14 +16,16 @@
 #ifndef _K3B_THEMED_HEADER_H_
 #define _K3B_THEMED_HEADER_H_
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include "k3bthememanager.h"
 
 class K3bTitleLabel;
 class QLabel;
 
-class K3bThemedHeader : public QFrame
+class K3bThemedHeader : public Q3Frame
 {
   Q_OBJECT
 

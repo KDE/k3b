@@ -16,8 +16,8 @@
 #include "k3bcddbpquery.h"
 
 #include <qstringlist.h>
-#include <qsocket.h>
-#include <qtextstream.h>
+#include <q3socket.h>
+#include <q3textstream.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,9 +28,9 @@
 K3bCddbpQuery::K3bCddbpQuery( QObject* parent, const char* name )
   :K3bCddbQuery( parent, name )
 {
-  m_socket = new QSocket( this );
+  m_socket = new Q3Socket( this );
   m_stream.setDevice( m_socket );
-  m_stream.setEncoding( QTextStream::UnicodeUTF8 );
+  m_stream.setEncoding( Q3TextStream::UnicodeUTF8 );
 
   connect( m_socket, SIGNAL(connected()), this, SLOT(slotConnected()) );
   connect( m_socket, SIGNAL(hostFound()), this, SLOT(slotHostFound()) );
@@ -234,7 +234,7 @@ void K3bCddbpQuery::slotReadyRead()
 	
 	kdDebug() << "(K3bCddbpQuery) query finished." << endl;
 
-	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
+	Q3TextStream strStream( m_parsingBuffer, QIODevice::ReadOnly );
 	parseEntry( strStream, result() );
 
 	setError( SUCCESS );
@@ -257,15 +257,15 @@ void K3bCddbpQuery::slotReadyRead()
 void K3bCddbpQuery::slotError( int e )
 {
   switch(e) {
-  case QSocket::ErrConnectionRefused:
+  case Q3Socket::ErrConnectionRefused:
     kdDebug() <<  i18n("Connection to %1 refused").arg( m_server ) << endl;
     emit infoMessage( i18n("Connection to %1 refused").arg( m_server ) );
     break;
-  case QSocket::ErrHostNotFound:
+  case Q3Socket::ErrHostNotFound:
     kdDebug() <<  i18n("Could not find host %1").arg( m_server ) << endl;
     emit infoMessage( i18n("Could not find host %1").arg( m_server ) );
     break;
-  case QSocket::ErrSocketRead:
+  case Q3Socket::ErrSocketRead:
     kdDebug() <<  i18n("Error while reading from %1").arg( m_server ) << endl;
     emit infoMessage( i18n("Error while reading from %1").arg( m_server ) );
     break;

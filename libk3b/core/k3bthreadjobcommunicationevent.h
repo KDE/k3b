@@ -19,6 +19,8 @@
 #include <qevent.h>
 #include <qstring.h>
 #include <qwaitcondition.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 namespace K3bDevice {
     class Device;

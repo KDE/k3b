@@ -17,7 +17,7 @@
 #define _K3B_PROJECT_MANAGER_H_
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <k3bdoc.h>
 
 
@@ -33,7 +33,7 @@ class K3bProjectManager : public QObject
   K3bProjectManager( QObject* parent = 0, const char* name = 0 );
   virtual ~K3bProjectManager();
 
-  const QPtrList<K3bDoc>& projects() const;
+  const Q3PtrList<K3bDoc>& projects() const;
 
   /**
    * Create a new project including loading user defaults and creating

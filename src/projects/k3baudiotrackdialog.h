@@ -22,7 +22,7 @@
 
 #include <k3bmsf.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class K3bAudioTrack;
 class K3bAudioTrackWidget;
@@ -36,7 +36,7 @@ class K3bAudioTrackDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bAudioTrackDialog( QPtrList<K3bAudioTrack>&, QWidget *parent=0, const char *name=0);
+  K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>&, QWidget *parent=0, const char *name=0);
   ~K3bAudioTrackDialog();
 	
  protected slots:
@@ -46,7 +46,7 @@ class K3bAudioTrackDialog : public KDialogBase
   void updateTrackLengthDisplay();
 
  private:
-  QPtrList<K3bAudioTrack> m_tracks;
+  Q3PtrList<K3bAudioTrack> m_tracks;
 
   K3bAudioTrackWidget* m_audioTrackWidget;
 

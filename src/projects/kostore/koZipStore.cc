@@ -20,6 +20,8 @@
 #include "koZipStore.h"
 
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kzip.h>
 #include <kdebug.h>
@@ -31,7 +33,7 @@
 #include <qfileinfo.h>
 #endif
 
-KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
+KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification )
 {
     kdDebug(s_area) << "KoZipStore Constructor filename = " << _filename
                     << " mode = " << int(_mode)
@@ -57,13 +59,13 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
     }
 }
 
-KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
+KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification )
 {
     m_pZip = new KZip( dev );
     m_bGood = init( mode, appIdentification );
 }
 
-KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification )
 {
     kdDebug(s_area) << "KoZipStore Constructor url" << _url.prettyURL()
                     << " filename = " << _filename
@@ -107,11 +109,11 @@ KoZipStore::~KoZipStore()
     }
 }
 
-bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
+bool KoZipStore::init( Mode _mode, const Q3CString& appIdentification )
 {
     KoStore::init( _mode );
     m_currentDir = 0;
-    bool good = m_pZip->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
+    bool good = m_pZip->open( _mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly );
 
     if ( good && _mode == Read )
         good = m_pZip->directory() != 0;
@@ -135,7 +137,7 @@ bool KoZipStore::openWrite( const QString& name )
     // Prepare memory buffer for writing
     m_byteArray.resize( 0 );
     m_stream = new QBuffer( m_byteArray );
-    m_stream->open( IO_WriteOnly );
+    m_stream->open( QIODevice::WriteOnly );
     return true;
 #endif
     m_stream = 0L; // Don't use!

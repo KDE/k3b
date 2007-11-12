@@ -21,6 +21,9 @@
 #include <qstringlist.h>
 #include <qpair.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
 
 class KProgress;
 class QLabel;
@@ -44,13 +47,13 @@ class K3bDataUrlAddingDialog : public KDialogBase
   static int addUrls( const KURL::List& urls, K3bDirItem* dir = 0,
 		      QWidget* parent = 0 );
 
-  static int moveItems( const QValueList<K3bDataItem*>& items, K3bDirItem* dir,
+  static int moveItems( const Q3ValueList<K3bDataItem*>& items, K3bDirItem* dir,
 			QWidget* parent = 0 );
 
-  static int copyItems( const QValueList<K3bDataItem*>& items, K3bDirItem* dir,
+  static int copyItems( const Q3ValueList<K3bDataItem*>& items, K3bDirItem* dir,
 			QWidget* parent = 0 );
 
-  static int copyMoveItems( const QValueList<K3bDataItem*>& items, K3bDirItem* dir,
+  static int copyMoveItems( const Q3ValueList<K3bDataItem*>& items, K3bDirItem* dir,
 			    QWidget* parent, bool copy );
 
  private slots:
@@ -76,11 +79,11 @@ class K3bDataUrlAddingDialog : public KDialogBase
   K3bEncodingConverter* m_encodingConverter;
 
   KURL::List m_urls;
-  QValueList< QPair<KURL, K3bDirItem*> > m_urlQueue;
+  Q3ValueList< QPair<KURL, K3bDirItem*> > m_urlQueue;
 
-  QValueList< QPair<K3bDataItem*, K3bDirItem*> > m_items;
+  Q3ValueList< QPair<K3bDataItem*, K3bDirItem*> > m_items;
 
-  QValueList<KURL> m_dirSizeQueue;
+  Q3ValueList<KURL> m_dirSizeQueue;
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;

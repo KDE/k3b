@@ -97,7 +97,7 @@ bool K3bMpcWrapper::open( const QString& filename )
 
   m_input->setName( filename );
 
-  if( m_input->open( IO_ReadOnly ) ) {
+  if( m_input->open( QIODevice::ReadOnly ) ) {
     mpc_streaminfo_init( m_info );
     if( mpc_streaminfo_read( m_info, m_reader ) != ERROR_CODE_OK ) {
       kdDebug() << "(K3bMpcWrapper) Not a valid musepack file: \"" << filename << "\"" << endl;

@@ -23,7 +23,7 @@
 #include <qdatetime.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qdict.h>
+#include <q3dict.h>
 
 #include "k3b_export.h"
 
@@ -246,8 +246,8 @@ class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
  private:
   void expand();
 
-  QDict<K3bIso9660Entry> m_entries;
-  QDict<K3bIso9660Entry> m_iso9660Entries;
+  Q3Dict<K3bIso9660Entry> m_entries;
+  Q3Dict<K3bIso9660Entry> m_iso9660Entries;
 
   bool m_bExpanded;
   unsigned int m_startSector;

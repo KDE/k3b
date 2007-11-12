@@ -24,7 +24,7 @@
 class K3bDataDoc;
 class K3bDirItem;
 class K3bFileItem;
-class QListViewItem;
+class Q3ListViewItem;
 
 
 class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPluginGUIBase
@@ -50,7 +50,7 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPlu
   void slotScanClicked();
 
  private:
-  void scanDir( K3bDirItem*, QListViewItem* parent );
+  void scanDir( K3bDirItem*, Q3ListViewItem* parent );
   QString createNewName( K3bFileItem* );
   bool existsOtherItemWithSameName( K3bFileItem*, const QString& );
 

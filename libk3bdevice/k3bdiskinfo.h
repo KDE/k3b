@@ -23,7 +23,7 @@
 #include <k3bmsf.h>
 #include "k3bdevice_export.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 
 class kdbgstream;
@@ -148,7 +148,7 @@ namespace K3bDevice
        */
       K3b::Msf firstLayerSize() const;
 
-      const QCString& mediaId() const { return m_mediaId; }
+      const Q3CString& mediaId() const { return m_mediaId; }
 
       void debug() const;
 
@@ -171,7 +171,7 @@ namespace K3bDevice
       K3b::Msf m_usedCapacity;
       K3b::Msf m_firstLayerSize;
 
-      QCString m_mediaId;
+      Q3CString m_mediaId;
 
       friend class Device;
     };

@@ -29,14 +29,19 @@
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qstring.h>
 #include <qpoint.h>
 #include <qfont.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qeventloop.h>
 #include <qapplication.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -68,7 +73,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 {
   installEventFilter( this );
 
-  mainGrid = new QGridLayout( this );
+  mainGrid = new Q3GridLayout( this );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
@@ -81,10 +86,10 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // settings buttons
   // ---------------------------------------------------------------------------------------------------
   if( !m_configGroup.isEmpty() ) {
-    QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
+    Q3HBoxLayout* layout2 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout2");
     m_buttonLoadSettings = new K3bToolButton( /*i18n("User Defaults"), */this );
     ((K3bToolButton*)m_buttonLoadSettings)->setIconSet( SmallIconSet( "revert" ) );
-    QPopupMenu* userDefaultsPopup = new QPopupMenu( m_buttonLoadSettings );
+    Q3PopupMenu* userDefaultsPopup = new Q3PopupMenu( m_buttonLoadSettings );
     userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
     userDefaultsPopup->insertItem( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
     userDefaultsPopup->insertItem( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
@@ -105,7 +110,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // action buttons
   // ---------------------------------------------------------------------------------------------------
-  QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, spacingHint(), "layout5");
+  Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout5");
 
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStdGuiItem::ok();
@@ -240,9 +245,9 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
 
     // What's This info
     // -------------------------------------------------------------------------
-    QWhatsThis::add( m_buttonLoadSettings, i18n("<p>Load a set of settings either from the default K3b settings, "
+    Q3WhatsThis::add( m_buttonLoadSettings, i18n("<p>Load a set of settings either from the default K3b settings, "
 						"settings saved before, or the last used ones.") );
-    QWhatsThis::add( m_buttonSaveSettings, i18n("<p>Saves the current settings of the action dialog."
+    Q3WhatsThis::add( m_buttonSaveSettings, i18n("<p>Saves the current settings of the action dialog."
 						"<p>These settings can be loaded with the <em>Load saved settings</em> "
 						"button."
 						"<p><b>The K3b defaults are not overwritten by this.</b>") );
@@ -447,9 +452,9 @@ void K3bInteractionDialog::setButtonText( int button,
   if( KPushButton* b = getButton( button ) ) {
     b->setText( text );
     QToolTip::remove( b );
-    QWhatsThis::remove( b );
+    Q3WhatsThis::remove( b );
     QToolTip::add( b, tooltip );
-    QWhatsThis::add( b, whatsthis );
+    Q3WhatsThis::add( b, whatsthis );
   }
 }
 
@@ -481,9 +486,9 @@ void K3bInteractionDialog::setStartButtonText( const QString& text,
   if( m_buttonStart ) {
     m_buttonStart->setText( text );
     QToolTip::remove( m_buttonStart );
-    QWhatsThis::remove( m_buttonStart );
+    Q3WhatsThis::remove( m_buttonStart );
     QToolTip::add( m_buttonStart, tooltip );
-    QWhatsThis::add( m_buttonStart, whatsthis );
+    Q3WhatsThis::add( m_buttonStart, whatsthis );
   }
 }
 
@@ -495,9 +500,9 @@ void K3bInteractionDialog::setCancelButtonText( const QString& text,
   if( m_buttonCancel ) {
     m_buttonCancel->setText( text );
     QToolTip::remove( m_buttonCancel );
-    QWhatsThis::remove( m_buttonCancel );
+    Q3WhatsThis::remove( m_buttonCancel );
     QToolTip::add( m_buttonCancel, tooltip );
-    QWhatsThis::add( m_buttonCancel, whatsthis );
+    Q3WhatsThis::add( m_buttonCancel, whatsthis );
   }
 }
 
@@ -509,9 +514,9 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
   if( m_buttonSave ) {
     m_buttonSave->setText( text );
     QToolTip::remove( m_buttonSave );
-    QWhatsThis::remove( m_buttonSave );
+    Q3WhatsThis::remove( m_buttonSave );
     QToolTip::add( m_buttonSave, tooltip );
-    QWhatsThis::add( m_buttonSave, whatsthis );
+    Q3WhatsThis::add( m_buttonSave, whatsthis );
   }
 }
 

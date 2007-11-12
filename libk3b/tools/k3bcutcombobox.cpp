@@ -25,6 +25,9 @@
 #include <qpixmap.h>
 #include <qstyle.h>
 #include <qsizepolicy.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <QResizeEvent>
 
 
 class K3bCutComboBox::Private
@@ -112,12 +115,12 @@ void K3bCutComboBox::insertStringList( const QStringList&, int )
 }
 
 
-void K3bCutComboBox::insertStrList( const QStrList&, int )
+void K3bCutComboBox::insertStrList( const Q3StrList&, int )
 {
   // FIXME
 }
 
-void K3bCutComboBox::insertStrList( const QStrList*, int )
+void K3bCutComboBox::insertStrList( const Q3StrList*, int )
 {
   // FIXME
 }

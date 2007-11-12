@@ -19,6 +19,8 @@
 #include <kcombobox.h>
 
 #include "k3bmedium.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace K3bDevice {
   class Device;
@@ -45,7 +47,7 @@ class K3bMediaSelectionComboBox : public KComboBox
    */
   K3bDevice::Device* selectedDevice() const;
 
-  QValueList<K3bDevice::Device*> allDevices() const;
+  Q3ValueList<K3bDevice::Device*> allDevices() const;
 
   int wantedMediumType() const;
   int wantedMediumState() const;

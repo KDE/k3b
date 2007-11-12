@@ -19,6 +19,10 @@
 
 
 #include <kfiletreeview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 class KFileTreeBranch;
 class KActionCollection;
@@ -178,10 +182,10 @@ class K3bFileTreeView : public KFileTreeView
   void contextMenu( const KURL& url, const QPoint& );
   
  private slots:
-  void slotItemExecuted( QListViewItem* item );
-  void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
+  void slotItemExecuted( Q3ListViewItem* item );
+  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
   void slotSettingsChangedK3b(int category);
-  void slotMouseButtonClickedK3b( int btn, QListViewItem *item, const QPoint &pos, int c );
+  void slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c );
 
  private:
   void initActions();

@@ -29,6 +29,10 @@
 #include <qthread.h>
 #include <qmutex.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 
 // ////////////////////////////////////////////////////////////////////////////////
@@ -289,16 +293,16 @@ K3bDevice::CdText K3bMediaCache::cdText( K3bDevice::Device* dev )
 }
 
 
-QValueList<int> K3bMediaCache::writingSpeeds( K3bDevice::Device* dev )
+Q3ValueList<int> K3bMediaCache::writingSpeeds( K3bDevice::Device* dev )
 {
   if( DeviceEntry* e = findDeviceEntry( dev ) ) {
     e->mutex.lock();
-    QValueList<int> ws = e->medium.writingSpeeds();
+    Q3ValueList<int> ws = e->medium.writingSpeeds();
     e->mutex.unlock();
     return ws;
   }
   else
-    return QValueList<int>();
+    return Q3ValueList<int>();
 }
 
 
@@ -344,8 +348,8 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 
   clearDeviceList();
 
-  const QPtrList<K3bDevice::Device>& devices = dm->allDevices();
-  for( QPtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+  const Q3PtrList<K3bDevice::Device>& devices = dm->allDevices();
+  for( Q3PtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
     d->deviceMap.insert( *it, new DeviceEntry( this, *it ) );
     QMap<K3bDevice::Device*, int>::const_iterator bi_it = blockedIds.find( *it );
     if( bi_it != blockedIds.end() )

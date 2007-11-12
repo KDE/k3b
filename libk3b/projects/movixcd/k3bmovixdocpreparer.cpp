@@ -31,8 +31,10 @@
 #include <ktempfile.h>
 #include <kio/global.h>
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 class K3bMovixDocPreparer::Private
@@ -62,7 +64,7 @@ public:
   K3bDirItem* mplayerDir;
   K3bFileItem* playlistFileItem;
 
-  QPtrList<K3bDataItem> newMovixItems;
+  Q3PtrList<K3bDataItem> newMovixItems;
 
   bool structuresCreated;
 };
@@ -175,11 +177,11 @@ bool K3bMovixDocPreparer::writePlaylistFile()
   d->playlistFile = new KTempFile();
   d->playlistFile->setAutoDelete(true);
 
-  if( QTextStream* s = d->playlistFile->textStream() ) {
+  if( Q3TextStream* s = d->playlistFile->textStream() ) {
 
-    const QPtrList<K3bMovixFileItem>& movixFileItems = d->doc->movixFileItems();
+    const Q3PtrList<K3bMovixFileItem>& movixFileItems = d->doc->movixFileItems();
 
-    for( QPtrListIterator<K3bMovixFileItem> it( movixFileItems );
+    for( Q3PtrListIterator<K3bMovixFileItem> it( movixFileItems );
 	 *it; ++it ) {
       *s << "/cdrom/";
       *s << it.current()->writtenName();
@@ -202,14 +204,14 @@ bool K3bMovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath )
   d->isolinuxConfigFile = new KTempFile();
   d->isolinuxConfigFile->setAutoDelete(true);
 
-  if( QTextStream* s = d->isolinuxConfigFile->textStream() ) {
+  if( Q3TextStream* s = d->isolinuxConfigFile->textStream() ) {
 
     // now open the default isolinux.cfg and copy everything except the first line which contains
     // the default boot label
     QFile f( originalPath );
-    if( f.open( IO_ReadOnly ) ) {
+    if( f.open( QIODevice::ReadOnly ) ) {
 
-      QTextStream isolinuxConfigOrig( &f );
+      Q3TextStream isolinuxConfigOrig( &f );
 
       if(  d->doc->defaultBootLabel() != i18n("default") ) {
 	isolinuxConfigOrig.readLine(); // skip first line
@@ -241,7 +243,7 @@ bool K3bMovixDocPreparer::writeMovixRcFile()
   d->movixRcFile = new KTempFile();
   d->movixRcFile->setAutoDelete(true);
 
-  if( QTextStream* s = d->movixRcFile->textStream() ) {
+  if( Q3TextStream* s = d->movixRcFile->textStream() ) {
 
     if( !d->doc->additionalMPlayerOptions().isEmpty() )
       *s << "extra-mplayer-options=" << d->doc->additionalMPlayerOptions() << endl;

@@ -30,13 +30,15 @@
 #include <qlayout.h>
 #include <qfont.h>
 #include <qcolor.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qstring.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>
 #include <qregion.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -51,21 +53,21 @@
 class K3bDiskInfoView::HeaderViewItem : public KListViewItem
 {
 public:
-  HeaderViewItem( QListView* parent )
+  HeaderViewItem( Q3ListView* parent )
       : KListViewItem( parent ) {}
-  HeaderViewItem( QListViewItem* parent )
+  HeaderViewItem( Q3ListViewItem* parent )
       : KListViewItem( parent ) {}
-  HeaderViewItem( QListView* parent, QListViewItem* after )
+  HeaderViewItem( Q3ListView* parent, Q3ListViewItem* after )
       : KListViewItem( parent, after ) {}
-  HeaderViewItem( QListViewItem* parent, QListViewItem* after )
+  HeaderViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
       : KListViewItem( parent, after ) {}
-  HeaderViewItem( QListView* parent, const QString& t1 )
+  HeaderViewItem( Q3ListView* parent, const QString& t1 )
       : KListViewItem( parent, t1 ) {}
-  HeaderViewItem( QListViewItem* parent, const QString& t1 )
+  HeaderViewItem( Q3ListViewItem* parent, const QString& t1 )
       : KListViewItem( parent, t1 ) {}
-  HeaderViewItem( QListView* parent, QListViewItem* after, const QString& t1 )
+  HeaderViewItem( Q3ListView* parent, Q3ListViewItem* after, const QString& t1 )
       : KListViewItem( parent, after, t1 ) {}
-  HeaderViewItem( QListViewItem* parent, QListViewItem* after, const QString& t1 )
+  HeaderViewItem( Q3ListViewItem* parent, Q3ListViewItem* after, const QString& t1 )
       : KListViewItem( parent, after, t1 ) {}
 
   void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align )
@@ -81,21 +83,21 @@ public:
 class K3bDiskInfoView::TwoColumnViewItem : public KListViewItem
 {
 public:
-  TwoColumnViewItem( QListView* parent )
+  TwoColumnViewItem( Q3ListView* parent )
       : KListViewItem( parent ) {}
-  TwoColumnViewItem( QListViewItem* parent )
+  TwoColumnViewItem( Q3ListViewItem* parent )
       : KListViewItem( parent ) {}
-  TwoColumnViewItem( QListView* parent, QListViewItem* after )
+  TwoColumnViewItem( Q3ListView* parent, Q3ListViewItem* after )
       : KListViewItem( parent, after ) {}
-  TwoColumnViewItem( QListViewItem* parent, QListViewItem* after )
+  TwoColumnViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
       : KListViewItem( parent, after ) {}
-  TwoColumnViewItem( QListView* parent, const QString& t1 )
+  TwoColumnViewItem( Q3ListView* parent, const QString& t1 )
       : KListViewItem( parent, t1 ) {}
-  TwoColumnViewItem( QListViewItem* parent, const QString& t1 )
+  TwoColumnViewItem( Q3ListViewItem* parent, const QString& t1 )
       : KListViewItem( parent, t1 ) {}
-  TwoColumnViewItem( QListView* parent, QListViewItem* after, const QString& t1 )
+  TwoColumnViewItem( Q3ListView* parent, Q3ListViewItem* after, const QString& t1 )
       : KListViewItem( parent, after, t1 ) {}
-  TwoColumnViewItem( QListViewItem* parent, QListViewItem* after, const QString& t1 )
+  TwoColumnViewItem( Q3ListViewItem* parent, Q3ListViewItem* after, const QString& t1 )
       : KListViewItem( parent, after, t1 ) {}
 
   void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align )
@@ -136,7 +138,7 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
 
   m_infoView->setSorting( -1 );
   m_infoView->setAllColumnsShowFocus( true );
-  m_infoView->setSelectionMode( QListView::NoSelection );
+  m_infoView->setSelectionMode( Q3ListView::NoSelection );
   m_infoView->setResizeMode( KListView::AllColumns );
   m_infoView->setAlternateBackground( QColor() );
 
@@ -166,7 +168,7 @@ void K3bDiskInfoView::reloadMedium()
   setTitle( medium().shortString( true ) );
 
   if( medium().diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
-    (void)new QListViewItem( m_infoView, i18n("No medium present") );
+    (void)new Q3ListViewItem( m_infoView, i18n("No medium present") );
     setRightPixmap( K3bTheme::MEDIA_NONE );
   }
   else {
@@ -417,7 +419,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
     if( medium.writingSpeeds().isEmpty() )
       s = "-";
     else
-      for( QValueList<int>::const_iterator it = medium.writingSpeeds().begin();
+      for( Q3ValueList<int>::const_iterator it = medium.writingSpeeds().begin();
 	   it != medium.writingSpeeds().end(); ++it ) {
 	if( !s.isEmpty() ) {
 	  s.append( "\n" );
@@ -491,7 +493,7 @@ void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescr
 
 void K3bDiskInfoView::enableInteraction( bool enable )
 {
-  QListViewItemIterator it( m_infoView );
+  Q3ListViewItemIterator it( m_infoView );
   while( it.current() ) {
     it.current()->setEnabled( enable );
     ++it;

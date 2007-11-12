@@ -22,6 +22,9 @@
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qbitmap.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 
 class K3bTimeoutWidget::Private

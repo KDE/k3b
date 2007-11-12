@@ -17,6 +17,8 @@
 #define _K3B_VERIFICATION_JOB_H_
 
 #include <k3bjob.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace K3bDevice {
   class Device;
@@ -65,7 +67,7 @@ class K3bVerificationJob : public K3bJob
    *        useful when writing to DVD+RW media and the iso descriptor does not
    *        contain the exact image size (as true for many commercial Video DVDs)
    */
-  void addTrack( int tracknum, const QCString& checksum, const K3b::Msf& length = K3b::Msf() );
+  void addTrack( int tracknum, const Q3CString& checksum, const K3b::Msf& length = K3b::Msf() );
 
   /**
    * Handle the special case of iso session growing

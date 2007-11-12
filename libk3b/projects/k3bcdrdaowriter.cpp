@@ -29,14 +29,16 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qurl.h>
-#include <qsocket.h>
-#include <qsocketdevice.h>
+#include <q3url.h>
+#include <q3socket.h>
+#include <q3socketdevice.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -159,7 +161,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
   else
   {
     delete m_comSock;
-    m_comSock = new QSocket();
+    m_comSock = new Q3Socket();
     m_comSock->setSocket(m_cdrdaoComm[1]);
     m_comSock->socketDevice()->setReceiveBufferSize(49152);
     // magic number from Qt documentation
@@ -530,12 +532,12 @@ void K3bCdrdaoWriter::start()
     }
   prepareArgumentList();
   // set working dir to dir part of toc file (to allow rel names in toc-file)
-  m_process->setWorkingDirectory(QUrl(m_tocFile).dirPath());
+  m_process->setWorkingDirectory(Q3Url(m_tocFile).dirPath());
 
   kdDebug() << "***** cdrdao parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
+  const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it )
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it )
     {
       s += *it + " ";
     }
@@ -657,8 +659,8 @@ bool K3bCdrdaoWriter::cueSheet()
 
     if ( m_tocFile.lower().endsWith( ".cue" ) ) {
         QFile f( m_tocFile );
-        if ( f.open( IO_ReadOnly ) ) {
-            QTextStream ts( &f );
+        if ( f.open( QIODevice::ReadOnly ) ) {
+            Q3TextStream ts( &f );
             if ( !ts.eof() ) {
                 QString line = ts.readLine();
                 f.close();
@@ -1059,10 +1061,10 @@ bool K3bCdrdaoWriter::defaultToGenericMMC( K3bDevice::Device* dev, bool writer )
   QString driverTable = findDriverFile( m_cdrdaoBinObject );
   if( !driverTable.isEmpty() ) {
     QFile f( driverTable );
-    if( f.open( IO_ReadOnly ) ) {
+    if( f.open( QIODevice::ReadOnly ) ) {
       // read all drivers
       QStringList drivers;
-      QTextStream fStr( &f );
+      Q3TextStream fStr( &f );
       while( !fStr.atEnd() ) {
 	QString line = fStr.readLine();
 	if( line.isEmpty() )

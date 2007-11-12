@@ -20,7 +20,9 @@
 #include <k3bvideodvd.h>
 #include <k3bmedium.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QHideEvent>
 
 
 class K3bVideoDVDRippingPreview;
@@ -47,7 +49,7 @@ class K3bVideoDVDRippingTitleListView : public K3bListView
 
   TitleToolTip* m_toolTip;
 
-  QValueVector<TitleViewItem*> m_itemMap;
+  Q3ValueVector<TitleViewItem*> m_itemMap;
   K3bVideoDVDRippingPreview* m_previewGen;
   unsigned int m_currentPreviewTitle;
 

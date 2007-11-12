@@ -20,6 +20,8 @@
 #include <kdialogbase.h>
 #include <kurl.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QLabel>
 
 
 class K3bBusyWidget;

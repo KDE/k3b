@@ -20,6 +20,8 @@
 #include <dcopobject.h>
 #include <kio/global.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class K3bDoc;
 
@@ -36,7 +38,7 @@ class K3bProjectInterface : public DCOPObject
 
   // Generate a name for this interface. Automatically used if name=0 is
   // passed to the constructor
-  static QCString newIfaceName();
+  static Q3CString newIfaceName();
 
  k_dcop:
   virtual void addUrls( const QStringList& urls );

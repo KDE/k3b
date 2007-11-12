@@ -25,13 +25,18 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qstyle.h>
-#include <qlistbox.h>
-#include <qheader.h>
+#include <q3listbox.h>
+#include <q3header.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qdrawutil.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -376,7 +381,7 @@ void K3bFileTreeComboBox::paintEvent( QPaintEvent* )
 //     }
 //   } else if ( d->listBox() && d->listBox()->item( 0 ) ) {
     p.setClipping( FALSE );
-    QListBoxItem * item = listBox()->item( 0 );
+    Q3ListBoxItem * item = listBox()->item( 0 );
     const QPixmap *pix = item->pixmap();
     if ( pix ) {
       p.fillRect( re.x(), re.y(), pix->width() + 4, re.height(),

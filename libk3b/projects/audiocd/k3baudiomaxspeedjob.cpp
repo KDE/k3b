@@ -28,6 +28,8 @@
 #include <klocale.h>
 
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 class K3bAudioMaxSpeedJob::WorkThread : public K3bThread
@@ -183,11 +185,11 @@ int K3bAudioMaxSpeedJob::WorkThread::maxSpeedByMedia() const
 {
   int s = 0;
     
-  QValueList<int> speeds = m_doc->burner()->determineSupportedWriteSpeeds();
+  Q3ValueList<int> speeds = m_doc->burner()->determineSupportedWriteSpeeds();
   // simply use what we have and let the writer decide if the speeds are empty
   if( !speeds.isEmpty() ) {
     // start with the highest speed and go down the list until we are below our max
-    QValueListIterator<int> it = speeds.end();
+    Q3ValueListIterator<int> it = speeds.end();
     --it;
     while( *it > maxSpeed && it != speeds.begin() )
       --it;

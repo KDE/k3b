@@ -31,10 +31,10 @@
 #include <k3btoolbox.h>
 #include <k3bprojectplugin.h>
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qsplitter.h>
 #include <qlayout.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -49,7 +49,7 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name 
 {
   QSplitter* splitter = new QSplitter( this );
   m_mixedDirTreeView = new K3bMixedDirTreeView( this, doc, splitter );
-  m_widgetStack = new QWidgetStack( splitter );
+  m_widgetStack = new Q3WidgetStack( splitter );
   m_dataFileView = new K3bDataFileView( this, m_mixedDirTreeView, doc->dataDoc(), m_widgetStack );
   m_mixedDirTreeView->setFileView( m_dataFileView );
   m_audioListView = new K3bAudioTrackView( doc->audioDoc(), m_widgetStack );

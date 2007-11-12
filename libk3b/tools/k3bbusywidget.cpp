@@ -17,12 +17,14 @@
 
 #include <qtimer.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 #include <kglobalsettings.h>
 
 
 K3bBusyWidget::K3bBusyWidget( QWidget* parent, const char* name )
-  : QFrame( parent, name )
+  : Q3Frame( parent, name )
 {
   m_busyTimer = new QTimer( this );
   m_iBusyPosition = 0;

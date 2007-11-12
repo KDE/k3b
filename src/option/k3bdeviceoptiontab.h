@@ -18,6 +18,8 @@
 #define K3B_DEVICE_OPTIONTAB_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QLabel;
 class K3bDeviceWidget;

@@ -15,9 +15,9 @@
 
 #include "k3bintmapcombobox.h"
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qmap.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 
 class K3bIntMapComboBox::Private
@@ -101,7 +101,7 @@ void K3bIntMapComboBox::updateWhatsThis()
   }  
   ws += "<p>" + d->bottomWhatsThis;
 
-  QWhatsThis::add( this, ws );
+  Q3WhatsThis::add( this, ws );
 }
 
 

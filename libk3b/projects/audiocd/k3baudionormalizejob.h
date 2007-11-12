@@ -20,7 +20,7 @@
 
 #include <k3bjob.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 class K3bProcess;
 class KProcess;
@@ -38,7 +38,7 @@ class K3bAudioNormalizeJob : public K3bJob
   void start();
   void cancel();
 
-  void setFilesToNormalize( const QValueVector<QString>& files ) { m_files = files; }
+  void setFilesToNormalize( const Q3ValueVector<QString>& files ) { m_files = files; }
 
  private slots:
   void slotStdLine( const QString& line );
@@ -47,7 +47,7 @@ class K3bAudioNormalizeJob : public K3bJob
  private:
   K3bProcess* m_process;
 
-  QValueVector<QString> m_files;
+  Q3ValueVector<QString> m_files;
   bool m_canceled;
 
   enum Action {

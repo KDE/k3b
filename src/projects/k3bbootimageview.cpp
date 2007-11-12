@@ -27,11 +27,11 @@
 
 #include <qpushbutton.h>
 #include <qstring.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qregexp.h>
 
 
@@ -39,13 +39,13 @@
 class K3bBootImageView::PrivateBootImageViewItem : public KListViewItem
 {
 public:
-  PrivateBootImageViewItem( K3bBootItem* image, QListView* parent ) 
+  PrivateBootImageViewItem( K3bBootItem* image, Q3ListView* parent ) 
     : KListViewItem( parent ), 
       m_image( image ) {
 
   }
 
-  PrivateBootImageViewItem( K3bBootItem* image, QListView* parent, QListViewItem* after )
+  PrivateBootImageViewItem( K3bBootItem* image, Q3ListView* parent, Q3ListViewItem* after )
     : KListViewItem( parent, after ),
       m_image( image ) {
 
@@ -167,7 +167,7 @@ void K3bBootImageView::slotNewBootImage()
 
 void K3bBootImageView::slotDeleteBootImage()
 {
-  QListViewItem* item = m_viewImages->selectedItem();
+  Q3ListViewItem* item = m_viewImages->selectedItem();
   if( item ) {
     K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
     delete item;
@@ -178,7 +178,7 @@ void K3bBootImageView::slotDeleteBootImage()
 
 void K3bBootImageView::slotSelectionChanged()
 {
-  QListViewItem* item = m_viewImages->selectedItem();
+  Q3ListViewItem* item = m_viewImages->selectedItem();
   if( item )
     loadBootItemSettings( ((PrivateBootImageViewItem*)item)->bootImage() );
   else
@@ -189,7 +189,7 @@ void K3bBootImageView::slotSelectionChanged()
 void K3bBootImageView::updateBootImages()
 {
   m_viewImages->clear();
-  for( QPtrListIterator<K3bBootItem> it( m_doc->bootImages() ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bBootItem> it( m_doc->bootImages() ); it.current(); ++it ) {
     (void)new PrivateBootImageViewItem( *it, m_viewImages, 
 					m_viewImages->lastItem() );
   }
@@ -235,7 +235,7 @@ void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
 void K3bBootImageView::slotOptionsChanged()
 {
   if( !m_loadingItem ) {
-    QListViewItem* item = m_viewImages->selectedItem();
+    Q3ListViewItem* item = m_viewImages->selectedItem();
     if( item ) {
       K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
       

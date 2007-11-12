@@ -27,7 +27,7 @@
 #include <kstringhandler.h>
 
 #include <qfile.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 
 class K3bDataPreparationJob::Private : public K3bThread
@@ -40,9 +40,9 @@ public:
 
   K3bDataDoc* doc;
 
-  QValueList<K3bDataItem*> nonExistingItems;
+  Q3ValueList<K3bDataItem*> nonExistingItems;
   QString listOfRenamedItems;
-  QValueList<K3bDataItem*> folderSymLinkItems;
+  Q3ValueList<K3bDataItem*> folderSymLinkItems;
 
   K3bThreadJob* threadJob;
 
@@ -71,7 +71,7 @@ void K3bDataPreparationJob::Private::run()
   // create the message string for the renamed files
   if( doc->needToCutFilenames() ) {
     int maxlines = 10;
-    QValueList<K3bDataItem*>::const_iterator it;
+    Q3ValueList<K3bDataItem*>::const_iterator it;
     for( it = doc->needToCutFilenameItems().begin();
 	 maxlines > 0 && it != doc->needToCutFilenameItems().end();
 	 ++it, --maxlines ) {
@@ -126,11 +126,11 @@ void K3bDataPreparationJob::Private::cancel()
 
 
 
-static QString createItemsString( const QValueList<K3bDataItem*>& items, unsigned int max )
+static QString createItemsString( const Q3ValueList<K3bDataItem*>& items, unsigned int max )
 {
   QString s;
   unsigned int cnt = 0;
-  for( QValueList<K3bDataItem*>::const_iterator it = items.begin();
+  for( Q3ValueList<K3bDataItem*>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
 
     s += KStringHandler::csqueeze( (*it)->localPath(), 60 );
@@ -228,7 +228,7 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
 			 i18n("Warning"),
 			 i18n("Remove missing files and continue"),
 			 i18n("Cancel and go back") ) ) {
-	for( QValueList<K3bDataItem*>::const_iterator it = d->nonExistingItems.begin();
+	for( Q3ValueList<K3bDataItem*>::const_iterator it = d->nonExistingItems.begin();
 	     it != d->nonExistingItems.end(); ++it ) {
 	  delete *it;
 	}

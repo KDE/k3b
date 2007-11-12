@@ -29,7 +29,7 @@ K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent 
     animate();
 }
 
-K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent, QListViewItem* after )
+K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent, Q3ListViewItem* after )
         : K3bListViewItem( parent, after ), m_track( track )
 {
     setEditor( 1, LINE );

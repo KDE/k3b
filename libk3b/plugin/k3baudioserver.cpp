@@ -27,6 +27,10 @@
 #include <kmessagebox.h>
 
 #include <k3bthread.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QCustomEvent>
+#include <Q3PtrList>
 
 
 
@@ -107,7 +111,7 @@ K3bAudioServer::~K3bAudioServer()
 }
 
 
-bool K3bAudioServer::setOutputMethod( const QCString& name )
+bool K3bAudioServer::setOutputMethod( const Q3CString& name )
 {
   if( K3bAudioOutputPlugin* p = findOutputPlugin( name ) ) {
     setOutputPlugin( p );
@@ -184,11 +188,11 @@ void K3bAudioServer::detachClient( K3bAudioClient* c )
 }
 
 
-K3bAudioOutputPlugin* K3bAudioServer::findOutputPlugin( const QCString& name )
+K3bAudioOutputPlugin* K3bAudioServer::findOutputPlugin( const Q3CString& name )
 {
-  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
+  Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
   
-  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioOutputPlugin* f = dynamic_cast<K3bAudioOutputPlugin*>( it.current() );
 
     if( f && f->soundSystem() == name ) {

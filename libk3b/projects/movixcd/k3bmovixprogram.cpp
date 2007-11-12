@@ -23,7 +23,7 @@
 
 #include <qdir.h>
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 
 K3bMovixProgram::K3bMovixProgram()
@@ -218,11 +218,11 @@ QStringList K3bMovixProgram::determineSupportedBootLabels( const QString& isoCon
   QStringList list( i18n("default") );
 
   QFile f( isoConfigFile );
-  if( !f.open( IO_ReadOnly ) ) {
+  if( !f.open( QIODevice::ReadOnly ) ) {
     kdDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'" << endl;
   }
   else {
-    QTextStream fs( &f );
+    Q3TextStream fs( &f );
     QString line = fs.readLine();
     while( !line.isNull() ) {
       if( line.startsWith( "label" ) )

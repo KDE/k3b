@@ -23,10 +23,10 @@
 
 #include "libisofs/isofs.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kdebug.h>
 
@@ -268,7 +268,7 @@ int K3bIso9660File::read( unsigned int pos, char* data, int maxlen ) const
 bool K3bIso9660File::copyTo( const QString& url ) const
 {
   QFile of( url );
-  if( of.open( IO_WriteOnly ) ) {
+  if( of.open( QIODevice::WriteOnly ) ) {
     char buffer[2048*10];
     unsigned int pos = 0;
     int r = 0;
@@ -330,7 +330,7 @@ QStringList K3bIso9660Directory::entries() const
 
   QStringList l;
 
-  QDictIterator<K3bIso9660Entry> it( m_entries );
+  Q3DictIterator<K3bIso9660Entry> it( m_entries );
   for( ; it.current(); ++it )
     l.append( it.currentKey() );
 
@@ -345,7 +345,7 @@ QStringList K3bIso9660Directory::iso9660Entries() const
 
   QStringList l;
 
-  QDictIterator<K3bIso9660Entry> it( m_iso9660Entries );
+  Q3DictIterator<K3bIso9660Entry> it( m_iso9660Entries );
   for( ; it.current(); ++it )
     l.append( it.currentKey() );
 
@@ -463,10 +463,10 @@ public:
       backend(0) {
   }
 
-  QPtrList<K3bIso9660Directory> elToritoDirs;
-  QPtrList<K3bIso9660Directory> jolietDirs;
-  QPtrList<K3bIso9660Directory> isoDirs;
-  QPtrList<K3bIso9660Directory> rrDirs; // RockRidge
+  Q3PtrList<K3bIso9660Directory> elToritoDirs;
+  Q3PtrList<K3bIso9660Directory> jolietDirs;
+  Q3PtrList<K3bIso9660Directory> isoDirs;
+  Q3PtrList<K3bIso9660Directory> rrDirs; // RockRidge
 
   K3bIso9660SimplePrimaryDescriptor primaryDesc;
 

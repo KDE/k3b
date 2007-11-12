@@ -28,8 +28,13 @@
 
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
+#include <Q3Frame>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -126,10 +131,10 @@ void K3bOptionDialog::slotDefault()
 
 void K3bOptionDialog::setupBurningPage()
 {
-  QFrame* frame = addPage( i18n("Advanced"), i18n("Advanced Settings"),
+  Q3Frame* frame = addPage( i18n("Advanced"), i18n("Advanced Settings"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "cdwriter_unmount", KIcon::NoGroup, KIcon::SizeMedium ) );
 
-  QGridLayout* _frameLayout = new QGridLayout( frame );
+  Q3GridLayout* _frameLayout = new Q3GridLayout( frame );
   _frameLayout->setSpacing( 0 );
   _frameLayout->setMargin( 0 );
 
@@ -140,10 +145,10 @@ void K3bOptionDialog::setupBurningPage()
 
 void K3bOptionDialog::setupProgramsPage()
 {
-  QFrame* frame = addPage( i18n("Programs"), i18n("Setup External Programs"),
+  Q3Frame* frame = addPage( i18n("Programs"), i18n("Setup External Programs"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ) );
 
-  QGridLayout* _frameLayout = new QGridLayout( frame );
+  Q3GridLayout* _frameLayout = new Q3GridLayout( frame );
   _frameLayout->setSpacing( 0 );
   _frameLayout->setMargin( 0 );
 
@@ -154,10 +159,10 @@ void K3bOptionDialog::setupProgramsPage()
 
 void K3bOptionDialog::setupCddbPage()
 {
-  QFrame* frame = addPage( i18n("CDDB"), i18n("Setup the CDDB Server"),
+  Q3Frame* frame = addPage( i18n("CDDB"), i18n("Setup the CDDB Server"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "connect_established", KIcon::NoGroup, KIcon::SizeMedium ) );
 
-  QGridLayout* mainGrid = new QGridLayout( frame );
+  Q3GridLayout* mainGrid = new Q3GridLayout( frame );
   mainGrid->setSpacing(0);
   mainGrid->setMargin(0);
   //  QTabWidget *_tab = new QTabWidget( frame );
@@ -172,10 +177,10 @@ void K3bOptionDialog::setupCddbPage()
 
 void K3bOptionDialog::setupDevicePage()
 {
-  QFrame* frame = addPage( i18n("Devices"), i18n("Setup Devices"),
+  Q3Frame* frame = addPage( i18n("Devices"), i18n("Setup Devices"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ) );
 
-  QHBoxLayout* box = new QHBoxLayout( frame );
+  Q3HBoxLayout* box = new Q3HBoxLayout( frame );
   box->setSpacing(0);
   box->setMargin(0);
   m_deviceOptionTab = new K3bDeviceOptionTab( frame, "deviceOptionTab" );
@@ -185,10 +190,10 @@ void K3bOptionDialog::setupDevicePage()
 
 void K3bOptionDialog::setupMiscPage()
 {
-  QFrame* frame = addPage( i18n("Misc"), i18n("Miscellaneous Settings"),
+  Q3Frame* frame = addPage( i18n("Misc"), i18n("Miscellaneous Settings"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "misc", KIcon::NoGroup, KIcon::SizeMedium ) );
 
-  QVBoxLayout* box = new QVBoxLayout( frame );
+  Q3VBoxLayout* box = new Q3VBoxLayout( frame );
   box->setSpacing( 0 );
   box->setMargin( 0 );
 
@@ -199,10 +204,10 @@ void K3bOptionDialog::setupMiscPage()
 
 void K3bOptionDialog::setupNotifyPage()
 {
-  QFrame* frame = addPage( i18n("Notifications"), i18n("System Notifications"),
+  Q3Frame* frame = addPage( i18n("Notifications"), i18n("System Notifications"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "knotify", 
 									KIcon::NoGroup, KIcon::SizeMedium ) );
-  QVBoxLayout* box = new QVBoxLayout( frame );
+  Q3VBoxLayout* box = new Q3VBoxLayout( frame );
   box->setSpacing( 0 );
   box->setMargin( 0 );
 
@@ -213,10 +218,10 @@ void K3bOptionDialog::setupNotifyPage()
 
 void K3bOptionDialog::setupPluginPage()
 {
-  QFrame* frame = addPage( i18n("Plugins"), i18n("K3b Plugin Configuration"),
+  Q3Frame* frame = addPage( i18n("Plugins"), i18n("K3b Plugin Configuration"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "gear",
 									KIcon::NoGroup, KIcon::SizeMedium ) );
-  QVBoxLayout* box = new QVBoxLayout( frame );
+  Q3VBoxLayout* box = new Q3VBoxLayout( frame );
   box->setSpacing( 0 );
   box->setMargin( 0 );
 
@@ -227,10 +232,10 @@ void K3bOptionDialog::setupPluginPage()
 
 void K3bOptionDialog::setupThemePage()
 {
-  QFrame* frame = addPage( i18n("Themes"), i18n("K3b GUI Themes"),
+  Q3Frame* frame = addPage( i18n("Themes"), i18n("K3b GUI Themes"),
 			   KGlobal::instance()->iconLoader()->loadIcon( "style",
 									KIcon::NoGroup, KIcon::SizeMedium ) );
-  QVBoxLayout* box = new QVBoxLayout( frame );
+  Q3VBoxLayout* box = new Q3VBoxLayout( frame );
   box->setSpacing( 0 );
   box->setMargin( 0 );
 

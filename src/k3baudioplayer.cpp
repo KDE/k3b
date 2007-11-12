@@ -25,13 +25,17 @@
 #include <qdatetime.h>
 #include <qfont.h>
 #include <qslider.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qfile.h>
 #include <qpalette.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qevent.h>
-#include <qdragobject.h>
-#include <qptrlist.h>
+#include <q3dragobject.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <Q3GridLayout>
+#include <Q3Frame>
 #include <kurldrag.h>
 
 #include <kiconloader.h>
@@ -49,7 +53,7 @@
 
 using namespace std;
 
-K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, QListView* parent )
+K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* parent )
   : KListViewItem( parent ), m_filename( filename )
 {
   m_length = 0;
@@ -57,7 +61,7 @@ K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, QListView* pa
 }
 
 
-K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, QListView* parent, QListViewItem* after )
+K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* parent, Q3ListViewItem* after )
   : KListViewItem( parent, after ), m_filename( filename )
 {
   m_length = 0;
@@ -137,14 +141,14 @@ bool K3bPlayListView::acceptDrag( QDropEvent* e ) const
 }
 
 
-QDragObject* K3bPlayListView::dragObject()
+Q3DragObject* K3bPlayListView::dragObject()
 {
-  QPtrList<QListViewItem> list = selectedItems();
+  Q3PtrList<Q3ListViewItem> list = selectedItems();
 
   if( list.isEmpty() )
     return 0;
 
-  QPtrListIterator<QListViewItem> it(list);
+  Q3PtrListIterator<Q3ListViewItem> it(list);
   KURL::List urls;
 
   for( ; it.current(); ++it )
@@ -171,9 +175,9 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   m_labelOverallTime->setAlignment( AlignHCenter | AlignVCenter );
   m_labelCurrentTime->setAlignment( AlignHCenter | AlignVCenter );
-  m_labelOverallTime->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
-  m_labelCurrentTime->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
-  m_labelFilename->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
+  m_labelOverallTime->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
+  m_labelCurrentTime->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
+  m_labelFilename->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
   m_labelOverallTime->setPalette( QPalette( QColor(238, 238, 205) ) );
   m_labelCurrentTime->setPalette( QPalette( QColor(238, 238, 205) ) );
   m_labelFilename->setPalette( QPalette( QColor(238, 238, 205) ) );
@@ -196,7 +200,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   // layout
   // ------------------------------------------------------------------------
-  QGridLayout* grid = new QGridLayout( this );
+  Q3GridLayout* grid = new Q3GridLayout( this );
   grid->setSpacing( 2 );
   grid->setMargin( 0 );
 
@@ -237,8 +241,8 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   // connections
   // ------------------------------------------------------------------------
-  connect( m_viewPlayList, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-	   this, SLOT(slotShowContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+  connect( m_viewPlayList, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotShowContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 
   connect( m_buttonPlay, SIGNAL(clicked()), this, SLOT(play()) );
   connect( m_buttonStop, SIGNAL(clicked()), this, SLOT(stop()) );
@@ -253,10 +257,10 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotCheckEnd()) );
 
-  connect( m_viewPlayList, SIGNAL(doubleClicked(QListViewItem*)),
-	   this, SLOT(slotPlayItem(QListViewItem*)) );
-  connect( m_viewPlayList, SIGNAL(dropped(QDropEvent*,QListViewItem*)),
-	   this, SLOT(slotDropped(QDropEvent*,QListViewItem*)) );
+  connect( m_viewPlayList, SIGNAL(doubleClicked(Q3ListViewItem*)),
+	   this, SLOT(slotPlayItem(Q3ListViewItem*)) );
+  connect( m_viewPlayList, SIGNAL(dropped(QDropEvent*,Q3ListViewItem*)),
+	   this, SLOT(slotDropped(QDropEvent*,Q3ListViewItem*)) );
   // ------------------------------------------------------------------------
 
 
@@ -374,7 +378,7 @@ void K3bAudioPlayer::play()
 }
 
 
-void K3bAudioPlayer::slotPlayItem( QListViewItem* item )
+void K3bAudioPlayer::slotPlayItem( Q3ListViewItem* item )
 {
   setCurrentItem( item );
   play();
@@ -539,7 +543,7 @@ void K3bAudioPlayer::slotCheckEnd()
 }
 
 
-void K3bAudioPlayer::setCurrentItem( QListViewItem* item )
+void K3bAudioPlayer::setCurrentItem( Q3ListViewItem* item )
 {
   if( item == 0 ) {
     stop();
@@ -621,7 +625,7 @@ void K3bAudioPlayer::slotUpdateDisplay()
 }
 
 
-void K3bAudioPlayer::slotDropped( QDropEvent* e, QListViewItem* after )
+void K3bAudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
 {
   if( !after )
     after = m_viewPlayList->lastChild();
@@ -631,7 +635,7 @@ void K3bAudioPlayer::slotDropped( QDropEvent* e, QListViewItem* after )
 
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     if( QFile::exists( (*it).path() ) ) {
-      QListViewItem* newItem = new K3bPlayListViewItem( (*it).path(), m_viewPlayList, after );
+      Q3ListViewItem* newItem = new K3bPlayListViewItem( (*it).path(), m_viewPlayList, after );
       after = newItem;
     }
   }
@@ -640,8 +644,8 @@ void K3bAudioPlayer::slotDropped( QDropEvent* e, QListViewItem* after )
 
 void K3bAudioPlayer::slotRemoveSelected()
 {
-  QPtrList<QListViewItem> selected = m_viewPlayList->selectedItems();
-  for( QListViewItem* item = selected.first(); item; item = selected.next() ) {
+  Q3PtrList<Q3ListViewItem> selected = m_viewPlayList->selectedItems();
+  for( Q3ListViewItem* item = selected.first(); item; item = selected.next() ) {
     if( item == m_currentItem )
       setCurrentItem(0);
     delete item;
@@ -649,7 +653,7 @@ void K3bAudioPlayer::slotRemoveSelected()
 }
 
 
-void K3bAudioPlayer::slotShowContextMenu( KListView*, QListViewItem* item, const QPoint& p )
+void K3bAudioPlayer::slotShowContextMenu( KListView*, Q3ListViewItem* item, const QPoint& p )
 {
   if( item )
     m_actionRemove->setEnabled( true );

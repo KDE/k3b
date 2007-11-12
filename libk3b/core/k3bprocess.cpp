@@ -20,8 +20,10 @@
 
 #include <qstringlist.h>
 #include <qsocketnotifier.h>
-#include <qptrqueue.h>
+#include <q3ptrqueue.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -88,7 +90,7 @@ K3bProcess& K3bProcess::operator<<( const char* arg )
   return *this;
 }
 
-K3bProcess& K3bProcess::operator<<( const QCString& arg )
+K3bProcess& K3bProcess::operator<<( const Q3CString& arg )
 {
   static_cast<KProcess*>(this)->operator<<( arg );
   return *this;

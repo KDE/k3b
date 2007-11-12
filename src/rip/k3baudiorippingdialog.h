@@ -20,6 +20,8 @@
 #include <k3binteractiondialog.h>
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <k3bcddbquery.h>
 
@@ -49,7 +51,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   K3bAudioRippingDialog( const K3bDevice::Toc&, 
 			 K3bDevice::Device*,
 			 const K3bCddbResultEntry&, 
-			 const QValueList<int>&, 
+			 const Q3ValueList<int>&, 
 			 QWidget *parent = 0, const char *name = 0 );
   ~K3bAudioRippingDialog();
 
@@ -63,7 +65,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   K3bDevice::Toc m_toc;
   K3bDevice::Device* m_device;
   K3bCddbResultEntry m_cddbEntry;
-  QValueList<int> m_trackNumbers;
+  Q3ValueList<int> m_trackNumbers;
 
   KListView*    m_viewTracks;
 

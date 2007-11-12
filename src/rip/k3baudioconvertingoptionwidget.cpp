@@ -27,19 +27,21 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qmap.h>
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 
 class K3bAudioConvertingOptionWidget::Private
 {
 public:
-  QIntDict<K3bAudioEncoder> encoderMap;
+  Q3IntDict<K3bAudioEncoder> encoderMap;
   QMap<int, QString> extensionMap;
 
   QTimer freeSpaceUpdateTimer;
@@ -108,8 +110,8 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent,
   d->extensionMap[0] = "wav";
 
   // check the available encoding plugins
-  QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
-  for( QPtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
+  Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
+  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
     K3bAudioEncoder* f = (K3bAudioEncoder*)it.current();
     QStringList exL = f->extensions();
 

@@ -18,9 +18,11 @@
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qptrlist.h>
+#include <q3whatsthis.h>
+#include <q3ptrlist.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -45,7 +47,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
   : QWidget( parent, name ),
     m_doc( pDoc )
 {
-  QGridLayout* grid = new QGridLayout( this );
+  Q3GridLayout* grid = new Q3GridLayout( this );
 
   m_toolBox = new K3bToolBox( this );
   m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
@@ -88,7 +90,7 @@ K3bView::~K3bView()
 
 void K3bView::setMainWidget( QWidget* w )
 {
-  static_cast<QGridLayout*>(layout())->addMultiCellWidget( w, 1, 1, 0, 1 );
+  static_cast<Q3GridLayout*>(layout())->addMultiCellWidget( w, 1, 1, 0, 1 );
 }
 
 
@@ -132,8 +134,8 @@ void K3bView::slotProperties()
 
 void K3bView::addPluginButtons( int projectType )
 {
-  QPtrList<K3bPlugin> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
-  for( QPtrListIterator<K3bPlugin> it( pl ); *it; ++it ) {
+  Q3PtrList<K3bPlugin> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
+  for( Q3PtrListIterator<K3bPlugin> it( pl ); *it; ++it ) {
     K3bProjectPlugin* pp = dynamic_cast<K3bProjectPlugin*>( *it );
     if( pp && (pp->type() & projectType) ) {
       QToolButton* button = toolBox()->addButton( pp->text(),

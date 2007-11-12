@@ -32,6 +32,8 @@
 
 #include <qstringlist.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 class K3bPluginOptionTab::PluginViewItem : public K3bListViewItem
@@ -72,7 +74,7 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent, const char* name )
   m_viewPlugins->setAlternateBackground( QColor() );
   m_viewPlugins->setAllColumnsShowFocus(true);
 
-  connect( m_viewPlugins, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), this, SLOT(slotConfigureButtonClicked()) );
+  connect( m_viewPlugins, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), this, SLOT(slotConfigureButtonClicked()) );
   connect( m_buttonConfigure, SIGNAL(clicked()), this, SLOT(slotConfigureButtonClicked()) );
   connect( m_viewPlugins, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()) );
 }
@@ -104,8 +106,8 @@ void K3bPluginOptionTab::readSettings()
     groupViewItem->setBackgroundColor( 4, KGlobalSettings::alternateBackgroundColor() );
     groupViewItem->setSelectable( false );
 
-    QPtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( group );
-    for( QPtrListIterator<K3bPlugin> fit( fl ); fit.current(); ++fit )
+    Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( group );
+    for( Q3PtrListIterator<K3bPlugin> fit( fl ); fit.current(); ++fit )
       (void)new PluginViewItem( fit.current(), groupViewItem );
 
     groupViewItem->setOpen(true);
@@ -123,7 +125,7 @@ bool K3bPluginOptionTab::saveSettings()
 
 void K3bPluginOptionTab::slotConfigureButtonClicked()
 {
-  QListViewItem* item = m_viewPlugins->selectedItem();
+  Q3ListViewItem* item = m_viewPlugins->selectedItem();
   if( PluginViewItem* pi = dynamic_cast<PluginViewItem*>( item ) )
     k3bcore->pluginManager()->execPluginDialog( pi->plugin, this );
 }

@@ -17,14 +17,14 @@
 #define K3B_BUSY_WIDGET_H
 
 
-#include <qframe.h>
+#include <q3frame.h>
 #include "k3b_export.h"
 
 class QPainter;
 class QTimer;
 
 
-class LIBK3B_EXPORT K3bBusyWidget : public QFrame
+class LIBK3B_EXPORT K3bBusyWidget : public Q3Frame
 {
   Q_OBJECT
 

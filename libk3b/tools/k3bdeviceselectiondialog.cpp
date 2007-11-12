@@ -25,7 +25,10 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
 
 #include <klocale.h>
 
@@ -51,7 +54,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
 {
   d = new Private();
 
-  QGridLayout* lay = new QGridLayout( plainPage() );
+  Q3GridLayout* lay = new Q3GridLayout( plainPage() );
 
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, plainPage() );
   d->comboDevices = new K3bDeviceComboBox( plainPage() );
@@ -76,7 +79,7 @@ void K3bDeviceSelectionDialog::addDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bDeviceSelectionDialog::addDevices( const QPtrList<K3bDevice::Device>& list )
+void K3bDeviceSelectionDialog::addDevices( const Q3PtrList<K3bDevice::Device>& list )
 {
   d->comboDevices->addDevices( list );
 }
@@ -95,7 +98,7 @@ void K3bDeviceSelectionDialog::setSelectedDevice( K3bDevice::Device* dev )
 
 
 K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent, 
-							       const QPtrList<K3bDevice::Device>& devices,
+							       const Q3PtrList<K3bDevice::Device>& devices,
 							       const QString& text )
 {
   if( devices.isEmpty() )

@@ -20,6 +20,8 @@
 #include <klocale.h>
 
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // We acknowledge the the dbus API is unstable
 #define DBUS_API_SUBJECT_TO_CHANGE
@@ -82,10 +84,10 @@ public:
   
   bool bOpen;
   
-  QMap<QCString, QString> udiDeviceMap;
-  QMap<QString, QCString> deviceUdiMap;
+  QMap<Q3CString, QString> udiDeviceMap;
+  QMap<QString, Q3CString> deviceUdiMap;
 
-  QMap<QCString, QCString> deviceMediumUdiMap;
+  QMap<Q3CString, Q3CString> deviceMediumUdiMap;
 };
 
 
@@ -220,7 +222,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
     if( libhal_device_property_exists( d->halContext, udi, "block.storage_device", 0 ) ) {
       char* deviceUdi = libhal_device_get_property_string( d->halContext, udi, "block.storage_device", 0 );
       if( deviceUdi ) {
-	QCString du( deviceUdi );
+	Q3CString du( deviceUdi );
 	libhal_free_string( deviceUdi );
 
 	if( d->udiDeviceMap.contains( du ) ) {
@@ -228,7 +230,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
 	  // A new medium has been inserted. Save this medium's udi so we can reuse it later
 	  // on for the mount/unmount/eject methods
 	  //
-	  d->deviceMediumUdiMap[du] = QCString( udi );
+	  d->deviceMediumUdiMap[du] = Q3CString( udi );
 	  emit mediumChanged( d->udiDeviceMap[du] );
 	}
       }
@@ -239,7 +241,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
 
 void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
-  QMapIterator<QCString, QString> it = d->udiDeviceMap.find( udi );
+  QMapIterator<Q3CString, QString> it = d->udiDeviceMap.find( udi );
   if( it != d->udiDeviceMap.end() ) {
     k3bDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
     emit deviceRemoved( it.data() );
@@ -250,7 +252,7 @@ void K3bDevice::HalConnection::removeDevice( const char* udi )
     if( libhal_device_property_exists( d->halContext, udi, "block.storage_device", 0 ) ) {
       char* deviceUdi = libhal_device_get_property_string( d->halContext, udi, "block.storage_device", 0 );
       if( deviceUdi ) {
-	QCString du( deviceUdi );
+	Q3CString du( deviceUdi );
 	libhal_free_string( deviceUdi );
 
 	if( d->udiDeviceMap.contains( du ) ) {
@@ -280,7 +282,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
   }
 
-  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+  Q3CString udi = d->deviceUdiMap[dev->blockDeviceName()];
 
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
 					       "org.freedesktop.Hal.Device",
@@ -339,7 +341,7 @@ int K3bDevice::HalConnection::unlock( Device* dev )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
   }
 
-  QCString udi = d->deviceUdiMap[dev->blockDeviceName()];
+  Q3CString udi = d->deviceUdiMap[dev->blockDeviceName()];
 
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", udi.data(),
 					       "org.freedesktop.Hal.Device",
@@ -400,7 +402,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
   if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
 
-  QCString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
+  Q3CString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
 
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
@@ -480,7 +482,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
 
-  QCString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
+  Q3CString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
 
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",
@@ -551,7 +553,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
 
-  QCString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
+  Q3CString mediumUdi = d->deviceMediumUdiMap[d->deviceUdiMap[dev->blockDeviceName()]];
 
   if( !( dmesg = dbus_message_new_method_call( "org.freedesktop.Hal", mediumUdi.data(),
 					       "org.freedesktop.Hal.Device.Volume",

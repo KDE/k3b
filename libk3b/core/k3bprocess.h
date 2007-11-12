@@ -20,6 +20,8 @@
 
 #include <kprocess.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "k3b_export.h"
 
 class K3bExternalBin;
@@ -53,7 +55,7 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
 
   K3bProcess& operator<<( const QString& arg );
   K3bProcess& operator<<( const char* arg );
-  K3bProcess& operator<<( const QCString& arg );
+  K3bProcess& operator<<( const Q3CString& arg );
   K3bProcess& operator<<( const QStringList& args );
 
   bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );

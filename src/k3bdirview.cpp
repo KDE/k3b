@@ -38,24 +38,24 @@
 #include <unistd.h>
 // QT-includes
 #include <qdir.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qstring.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
-#include <qstrlist.h>
-#include <qheader.h>
+#include <q3strlist.h>
+#include <q3header.h>
 #include <qsplitter.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qiconset.h>
-#include <qvaluelist.h>
+#include <qicon.h>
+#include <q3valuelist.h>
 #include <qlabel.h>
-#include <qwidgetstack.h>
-#include <qscrollview.h>
+#include <q3widgetstack.h>
+#include <q3scrollview.h>
 #include <qpainter.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 
 // KDE-includes
 #include <kmimetype.h>
@@ -91,7 +91,7 @@ public:
 
 
 K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
-  : QVBox(parent, name),
+  : Q3VBox(parent, name),
     m_fileTreeView(treeView),
     m_bViewDiskInfo(false)
 {
@@ -101,10 +101,10 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   if( !m_fileTreeView ) {
     m_mainSplitter = new QSplitter( this );
     m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
-    m_viewStack    = new QWidgetStack( m_mainSplitter );
+    m_viewStack    = new Q3WidgetStack( m_mainSplitter );
   }
   else {
-    m_viewStack    = new QWidgetStack( this );
+    m_viewStack    = new Q3WidgetStack( this );
     m_mainSplitter = 0;
   }
 
@@ -128,7 +128,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
   if( m_mainSplitter ) {
     // split
-    QValueList<int> sizes = m_mainSplitter->sizes();
+    Q3ValueList<int> sizes = m_mainSplitter->sizes();
     int all = sizes[0] + sizes[1];
     sizes[1] = all*2/3;
     sizes[0] = all - sizes[1];

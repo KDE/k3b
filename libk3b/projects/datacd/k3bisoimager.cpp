@@ -43,7 +43,10 @@
 #include <qregexp.h>
 #include <qdir.h>
 #include <qapplication.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -319,9 +322,9 @@ void K3bIsoImager::startSizeCalculation()
   //  *m_process << dummyDir();
 
   kdDebug() << "***** mkisofs calculate size parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
+  const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
@@ -495,7 +498,7 @@ void K3bIsoImager::start()
   // Check the image file
   if( m_fdToWriteTo == -1 ) {
     d->imageFile.setName( d->imagePath );
-    if( !d->imageFile.open( IO_WriteOnly ) ) {
+    if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
       emit infoMessage( i18n("Could not open %1 for writing").arg(d->imagePath), ERROR );
       cleanup();
       jobFinished(false);
@@ -520,9 +523,9 @@ void K3bIsoImager::start()
 
 
   kdDebug() << "***** mkisofs parameters:\n";
-  const QValueList<QCString>& args = m_process->args();
+  const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << endl << flush;
@@ -577,7 +580,7 @@ K3bDevice::Device* K3bIsoImager::multiSessionImportDevice() const
 // and the charset
 static void truncateTheHardWay( QString& s, int max )
 {
-  QCString cs = s.utf8();
+  Q3CString cs = s.utf8();
   cs.truncate(max);
   s = QString::fromUtf8( cs );
 }
@@ -774,7 +777,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   // boot stuff
   if( !m_doc->bootImages().isEmpty() ) {
     bool first = true;
-    for( QPtrListIterator<K3bBootItem> it( m_doc->bootImages() );
+    for( Q3PtrListIterator<K3bBootItem> it( m_doc->bootImages() );
 	 *it; ++it ) {
       if( !first )
 	*m_process << "-eltorito-alt-boot";
@@ -822,7 +825,7 @@ int K3bIsoImager::writePathSpec()
   m_pathSpecFile = new KTempFile();
   m_pathSpecFile->setAutoDelete(true);
 
-  if( QTextStream* t = m_pathSpecFile->textStream() ) {
+  if( Q3TextStream* t = m_pathSpecFile->textStream() ) {
     // recursive path spec writing
     int num = writePathSpecForDir( m_doc->root(), *t );
 
@@ -835,7 +838,7 @@ int K3bIsoImager::writePathSpec()
 }
 
 
-int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
+int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream )
 {
   if( !m_noDeepDirectoryRelocation && dirItem->depth() > 7 ) {
     kdDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
@@ -844,7 +847,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 
   // now create the graft points
   int num = 0;
-  for( QPtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
     K3bDataItem* item = it.current();
     bool writeItem = item->writeToCd();
 
@@ -912,7 +915,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
 }
 
 
-void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream )
+void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, Q3TextStream& stream )
 {
   stream << escapeGraftPoint( item->writtenPath() )
 	 << "=";
@@ -947,7 +950,7 @@ bool K3bIsoImager::writeRRHideFile()
   m_rrHideFile = new KTempFile();
   m_rrHideFile->setAutoDelete(true);
 
-  if( QTextStream* t = m_rrHideFile->textStream() ) {
+  if( Q3TextStream* t = m_rrHideFile->textStream() ) {
 
     K3bDataItem* item = m_doc->root();
     while( item ) {
@@ -972,7 +975,7 @@ bool K3bIsoImager::writeJolietHideFile()
   m_jolietHideFile = new KTempFile();
   m_jolietHideFile->setAutoDelete(true);
 
-  if( QTextStream* t = m_jolietHideFile->textStream() ) {
+  if( Q3TextStream* t = m_jolietHideFile->textStream() ) {
 
     K3bDataItem* item = m_doc->root();
     while( item ) {
@@ -997,7 +1000,7 @@ bool K3bIsoImager::writeSortWeightFile()
   m_sortWeightFile = new KTempFile();
   m_sortWeightFile->setAutoDelete(true);
 
-  if( QTextStream* t = m_sortWeightFile->textStream() ) {
+  if( Q3TextStream* t = m_sortWeightFile->textStream() ) {
     //
     // We need to write the local path in combination with the sort weight
     // mkisofs will take care of multiple entries for one local file and always
@@ -1200,12 +1203,12 @@ void K3bIsoImager::clearDummyDirs()
 }
 
 
-QCString K3bIsoImager::checksum() const
+Q3CString K3bIsoImager::checksum() const
 {
   if( K3bChecksumPipe* p = dynamic_cast<K3bChecksumPipe*>( d->pipe ) )
     return p->checksum();
   else
-    return QCString();
+    return Q3CString();
 }
 
 

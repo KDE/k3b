@@ -34,6 +34,8 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 class K3bAudioTrackAddingDialog::AnalyserThread : public K3bThread
@@ -66,7 +68,7 @@ K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent, const cha
     m_bCanceled(false)
 {
   QWidget* page = plainPage();
-  QGridLayout* grid = new QGridLayout( page );
+  Q3GridLayout* grid = new Q3GridLayout( page );
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
 

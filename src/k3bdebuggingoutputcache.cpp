@@ -70,7 +70,7 @@ void K3bDebuggingOutputCache::clear()
     addOutput( "System", "Kernel:      " + K3b::kernelVersion() );
 
     // devices in the logfile
-    for( QPtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
+    for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
         K3bDevice::Device* dev = *it;
         addOutput( "Devices",
                    QString( "%1 (%2, %3) [%5] [%6] [%7]" )

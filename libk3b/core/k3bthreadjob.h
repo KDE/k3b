@@ -19,6 +19,8 @@
 
 #include "k3bjob.h"
 #include "k3b_export.h"
+//Added by qt3to4:
+#include <QCustomEvent>
 class QCustomEvent;
 class K3bThread;
 

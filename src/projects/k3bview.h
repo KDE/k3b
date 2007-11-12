@@ -23,7 +23,7 @@
 
 // include files for Qt
 #include <qwidget.h>
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 
 #include <kxmlguiclient.h>
 #include <kurl.h>
@@ -106,7 +106,7 @@ class K3bView : public QWidget, public KXMLGUIClient
   K3bFillStatusDisplay* m_fillStatusDisplay;
   K3bToolBox* m_toolBox;
 
-  QPtrDict<K3bProjectPlugin> m_plugins;
+  Q3PtrDict<K3bProjectPlugin> m_plugins;
 };
 
 #endif // K3BVIEW_H

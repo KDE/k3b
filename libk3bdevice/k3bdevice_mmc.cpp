@@ -25,6 +25,8 @@ to make the code more readable.
 #include "k3bdebug.h"
 
 #include <string.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 bool K3bDevice::Device::testUnitReady() const
@@ -105,7 +107,7 @@ int K3bDevice::Device::featureCurrent( unsigned int feature ) const
 }
 
 
-bool K3bDevice::Device::readIsrc( unsigned int track, QCString& isrc ) const
+bool K3bDevice::Device::readIsrc( unsigned int track, Q3CString& isrc ) const
 {
   unsigned char* data = 0;
   unsigned int dataLen = 0;
@@ -117,7 +119,7 @@ bool K3bDevice::Device::readIsrc( unsigned int track, QCString& isrc ) const
       isrcValid = (data[8+4]>>7 & 0x1);
 
       if( isrcValid ) {
-	isrc = QCString( reinterpret_cast<char*>(data[8+5]), 13 );
+	isrc = Q3CString( reinterpret_cast<char*>(data[8+5]), 13 );
 
 	// TODO: check the range of the chars
 
@@ -133,7 +135,7 @@ bool K3bDevice::Device::readIsrc( unsigned int track, QCString& isrc ) const
 }
 
 
-bool K3bDevice::Device::readMcn( QCString& mcn ) const
+bool K3bDevice::Device::readMcn( Q3CString& mcn ) const
 {
   unsigned char* data = 0;
   unsigned int dataLen = 0;
@@ -145,7 +147,7 @@ bool K3bDevice::Device::readMcn( QCString& mcn ) const
       mcnValid = (data[8+4]>>7 & 0x1);
 
       if( mcnValid )
-	mcn = QCString( reinterpret_cast<char*>(data[8+5]), 14 );
+	mcn = Q3CString( reinterpret_cast<char*>(data[8+5]), 14 );
     }
 
     delete [] data;

@@ -17,7 +17,7 @@
 #define K3BVCDVIEW_H
 
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 // K3b Includes
 #include <k3bview.h>
@@ -27,7 +27,7 @@ class K3bVcdListViewItem;
 class QWidget;
 class K3bVcdDoc;
 class K3bVcdTrack;
-class QListViewItem;
+class Q3ListViewItem;
 class KListView;
 class K3bVcdBurnDialog;
 class K3bProjectBurnDialog;

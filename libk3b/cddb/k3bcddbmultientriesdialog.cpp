@@ -17,8 +17,11 @@
 #include "k3bcddbmultientriesdialog.h"
 
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
 
 #include <klistbox.h>
 #include <klocale.h>
@@ -28,8 +31,8 @@
 K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Ok, parent, name )
 {
-  QFrame* frame = plainPage();
-  QVBoxLayout* layout = new QVBoxLayout( frame );
+  Q3Frame* frame = plainPage();
+  Q3VBoxLayout* layout = new Q3VBoxLayout( frame );
   layout->setAutoAdd( true );
   layout->setSpacing( spacingHint() );
   layout->setMargin( 0 );
@@ -46,10 +49,10 @@ K3bCddbResultHeader K3bCddbMultiEntriesDialog::selectCddbEntry( K3bCddbQuery* qu
 {
   K3bCddbMultiEntriesDialog d( parent );
 
-  const QValueList<K3bCddbResultHeader> headers = query->getInexactMatches();
+  const Q3ValueList<K3bCddbResultHeader> headers = query->getInexactMatches();
 
   int i = 1;
-  for( QValueListConstIterator<K3bCddbResultHeader> it = headers.begin();
+  for( Q3ValueListConstIterator<K3bCddbResultHeader> it = headers.begin();
        it != headers.end(); ++it ) {
     d.m_listBox->insertItem( QString::number(i) + " " +
 			     (*it).artist + " - " +

@@ -28,6 +28,9 @@
 #include <kdebug.h>
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 
 K3bMsInfoFetcher::K3bMsInfoFetcher( K3bJobHandler* jh, QObject* parent, const char* name )
@@ -107,9 +110,9 @@ void K3bMsInfoFetcher::getMsInfo()
       *m_process << *it;
 
     kdDebug() << "***** " << bin->name() << " parameters:\n";
-    const QValueList<QCString>& args = m_process->args();
+    const Q3ValueList<Q3CString>& args = m_process->args();
     QString s;
-    for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
     kdDebug() << s << flush << endl;

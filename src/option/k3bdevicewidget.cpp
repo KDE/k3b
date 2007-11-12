@@ -31,16 +31,18 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qheader.h>
+#include <q3whatsthis.h>
+#include <q3header.h>
 #include <qstring.h>
 #include <qcolor.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 class K3bDeviceWidget::PrivateTempDevice
@@ -63,14 +65,14 @@ public:
 class K3bDeviceWidget::PrivateDeviceViewItem1 : public K3bListViewItem
 {
 public:
-  PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, QListView* view, QListViewItem* after )
+  PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, Q3ListView* view, Q3ListViewItem* after )
     : K3bListViewItem( view, after ),
       m_type(type) {
     this->dev = dev;
     init();
   }
 
-  PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, QListViewItem* item, QListViewItem* after )
+  PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, Q3ListViewItem* item, Q3ListViewItem* after )
     : K3bListViewItem( item, after ),
       m_type(type) {
     this->dev = dev;
@@ -147,14 +149,14 @@ private:
 K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *parent, const char *name )
   : QWidget( parent, name ), m_deviceManager( manager )
 {
-  QGridLayout* frameLayout = new QGridLayout( this );
+  Q3GridLayout* frameLayout = new Q3GridLayout( this );
   frameLayout->setSpacing( KDialog::spacingHint() );
   frameLayout->setMargin( 0 );
 
 
   // buttons
   // ------------------------------------------------
-  QGridLayout* refreshButtonGrid = new QGridLayout;
+  Q3GridLayout* refreshButtonGrid = new Q3GridLayout;
   refreshButtonGrid->setSpacing( KDialog::spacingHint() );
   refreshButtonGrid->setMargin(0);
   m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this, "m_buttonRefreshDevices" );
@@ -169,7 +171,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
 
   // Devices Box
   // ------------------------------------------------
-  QGroupBox* groupDevices = new QGroupBox( 1, Qt::Vertical, i18n( "CD/DVD Drives" ), this );
+  Q3GroupBox* groupDevices = new Q3GroupBox( 1, Qt::Vertical, i18n( "CD/DVD Drives" ), this );
   groupDevices->layout()->setSpacing( KDialog::spacingHint() );
   groupDevices->layout()->setMargin( KDialog::marginHint() );
 
@@ -181,7 +183,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
   m_viewDevices->setSorting( -1 );
   m_viewDevices->setDoubleClickForEdit(false);
   m_viewDevices->setAlternateBackground( QColor() );
-  m_viewDevices->setSelectionMode( QListView::NoSelection );
+  m_viewDevices->setSelectionMode( Q3ListView::NoSelection );
   m_viewDevices->setFullWidth(true);
   // ------------------------------------------------
 
@@ -218,7 +220,7 @@ void K3bDeviceWidget::init()
   m_tempDevices.clear();
 
   // add the reading devices
-  for( QPtrListIterator<K3bDevice::Device> it( m_deviceManager->allDevices() ); *it; ++it )
+  for( Q3PtrListIterator<K3bDevice::Device> it( m_deviceManager->allDevices() ); *it; ++it )
     m_tempDevices.append( new PrivateTempDevice( *it ) );
 
   updateDeviceListViews();
@@ -231,11 +233,11 @@ void K3bDeviceWidget::updateDeviceListViews()
 
   // create the parent view items
   // -----------------------------------------
-  m_writerParentViewItem = new QListViewItem( m_viewDevices, i18n("Writer Drives") );
+  m_writerParentViewItem = new Q3ListViewItem( m_viewDevices, i18n("Writer Drives") );
   m_writerParentViewItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
   // spacer item
-  (void)new QListViewItem( m_viewDevices );
-  m_readerParentViewItem = new QListViewItem( m_viewDevices, i18n("Readonly Drives") );
+  (void)new Q3ListViewItem( m_viewDevices );
+  m_readerParentViewItem = new Q3ListViewItem( m_viewDevices, i18n("Readonly Drives") );
   m_readerParentViewItem->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
   // -----------------------------------------
 

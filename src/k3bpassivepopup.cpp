@@ -31,11 +31,17 @@
 #include <qtimer.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qmessagebox.h>
 #include <qstyle.h>
 #include <qtooltip.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <QPixmap>
+#include <Q3VBoxLayout>
 
 
 static const char* const sticky_xpm[] = {
@@ -97,20 +103,20 @@ public:
 
 
 K3bPassivePopup::K3bPassivePopup( QWidget* parent )
-  : QFrame( parent )
+  : Q3Frame( parent )
 {
   d = new Private;
   d->timeout = 6000;
   d->showEffect = 0;
 
-  setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
+  setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Raised );
   //  setWFlags( Qt::WX11BypassWM );
 
-  QVBoxLayout* mainLay = new QVBoxLayout( this );
+  Q3VBoxLayout* mainLay = new Q3VBoxLayout( this );
   mainLay->setMargin( frameWidth() );
   mainLay->setSpacing( 0 );
 
-  QGridLayout* grid = new QGridLayout;
+  Q3GridLayout* grid = new Q3GridLayout;
   grid->setMargin( 9 );
   grid->setSpacing( 6 );
 
@@ -150,7 +156,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   mainLay->addWidget( d->titleLabel );
   mainLay->addLayout( grid, 1 );
 
-  QHBoxLayout* titleLay = new QHBoxLayout( d->titleLabel );
+  Q3HBoxLayout* titleLay = new Q3HBoxLayout( d->titleLabel );
   titleLay->setMargin( d->titleLabel->margin() );
   titleLay->setSpacing( 2 );
   titleLay->addStretch();
@@ -268,7 +274,7 @@ void K3bPassivePopup::showPopup( const QString& message,
 				 bool countdown,
 				 bool button )
 {
-  K3bPassivePopup* pop = new K3bPassivePopup( static_cast<QMainWindow*>(qApp->mainWidget())->centralWidget() );
+  K3bPassivePopup* pop = new K3bPassivePopup( static_cast<Q3MainWindow*>(qApp->mainWidget())->centralWidget() );
   pop->setMessage( message );
   pop->setTitle( title );
   pop->setMessageType( messageType );

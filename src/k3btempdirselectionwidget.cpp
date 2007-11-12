@@ -19,12 +19,12 @@
 #include <k3bcore.h>
 
 #include <qlabel.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include <qtimer.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qfileinfo.h>
 
 #include <kconfig.h>
@@ -40,7 +40,7 @@
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
-  : QGroupBox( 4, Qt::Vertical, parent, name ),
+  : Q3GroupBox( 4, Qt::Vertical, parent, name ),
     m_labelCdSize(0),
     m_defaultImageFileName( "k3b_image.iso" )
 {
@@ -52,7 +52,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   m_imageFileLabel->setBuddy( m_editDirectory );
 
-  QHBox* freeTempSpaceBox = new QHBox( this );
+  Q3HBox* freeTempSpaceBox = new Q3HBox( this );
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
   (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox, "TextLabel2" );
   m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
@@ -78,7 +78,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   // What's This info
   // --------------------------------------------------------------------------------
-  QWhatsThis::add( m_editDirectory, i18n("<p>This is the directory in which K3b will save the <em>image files</em>."
+  Q3WhatsThis::add( m_editDirectory, i18n("<p>This is the directory in which K3b will save the <em>image files</em>."
 					 "<p>Please make sure that it resides on a partition that has enough free space.") );
 }
 
@@ -208,7 +208,7 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 {
   m_requestedSize = bytes;
   if( !m_labelCdSize ) {
-    QHBox* cdSizeBox = new QHBox( this );
+    Q3HBox* cdSizeBox = new Q3HBox( this );
     cdSizeBox->setSpacing( KDialog::spacingHint() );
     (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
     m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox, "m_labelCdSize" );

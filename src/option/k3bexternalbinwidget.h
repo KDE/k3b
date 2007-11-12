@@ -19,7 +19,7 @@
 
 
 #include <qwidget.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <k3blistview.h>
 
@@ -50,7 +50,7 @@ class K3bExternalBinWidget : public QWidget
 
  private slots:
   void slotSetDefaultButtonClicked();
-  void slotProgramSelectionChanged( QListViewItem* );
+  void slotProgramSelectionChanged( Q3ListViewItem* );
   void saveSearchPath();
 
  private:
@@ -64,14 +64,14 @@ class K3bExternalBinWidget : public QWidget
   QPushButton* m_defaultButton;
   QPushButton* m_rescanButton;
 
-  QPtrList<K3bExternalProgramViewItem> m_programRootItems;
+  Q3PtrList<K3bExternalProgramViewItem> m_programRootItems;
 };
 
 
 class K3bExternalBinWidget::K3bExternalProgramViewItem : public K3bListViewItem
 {
  public:
-  K3bExternalProgramViewItem( K3bExternalProgram* p, QListView* parent );
+  K3bExternalProgramViewItem( K3bExternalProgram* p, Q3ListView* parent );
   
   K3bExternalProgram* program() const { return m_program; }
   

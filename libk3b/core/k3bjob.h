@@ -18,7 +18,7 @@
 #define K3BJOB_H
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "k3bjobhandler.h"
 #include "k3b_export.h"
 
@@ -81,7 +81,7 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
    */
   unsigned int numRunningSubJobs() const;
 
-  const QPtrList<K3bJob>& runningSubJobs() const { return m_runningSubJobs; }
+  const Q3PtrList<K3bJob>& runningSubJobs() const { return m_runningSubJobs; }
 
   /**
    * \deprecated
@@ -237,7 +237,7 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
   void unregisterSubJob( K3bJob* );
 
   K3bJobHandler* m_jobHandler;
-  QPtrList<K3bJob> m_runningSubJobs;
+  Q3PtrList<K3bJob> m_runningSubJobs;
 
   bool m_canceled;
   bool m_active;

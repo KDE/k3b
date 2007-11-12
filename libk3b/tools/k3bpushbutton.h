@@ -19,6 +19,9 @@
 
 #include <kpushbutton.h>
 #include "k3b_export.h"
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3PopupMenu>
 
 /**
  * A pushbutton with delayed popu pmenu support just like the KToolBarButton
@@ -41,7 +44,7 @@ class LIBK3B_EXPORT K3bPushButton : public KPushButton
   /**
    * Constructor, that sets an icon and the button-text to @p text
    */
-  K3bPushButton( const QIconSet& icon, const QString& text,
+  K3bPushButton( const QIcon& icon, const QString& text,
 		 QWidget* parent = 0, const char* name = 0 );
 
   /**
@@ -59,7 +62,7 @@ class LIBK3B_EXPORT K3bPushButton : public KPushButton
    * The popup menu will show if the button is pressed down for about half a second
    * or if the mouse is moved while pressed just like the KToolBarButton.
    */
-  void setDelayedPopupMenu( QPopupMenu* );
+  void setDelayedPopupMenu( Q3PopupMenu* );
 
  protected:
   virtual bool eventFilter( QObject*, QEvent* );

@@ -21,6 +21,8 @@
 #define koZipStore_h
 
 #include "koStoreBase.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class KZip;
 class KArchiveDirectory;
@@ -29,19 +31,19 @@ class KURL;
 class KoZipStore : public KoStoreBase
 {
 public:
-    KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
-    KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    KoZipStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification );
+    KoZipStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification );
     /**
      * KURL-constructor
      * @todo saving not completely implemented (fixed temporary file)
      * @since 1.4
      */
-    KoZipStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
+    KoZipStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification );
     ~KoZipStore();
 
     virtual Q_LONG write( const char* _data, Q_ULONG _len );
 protected:
-    virtual bool init( Mode _mode, const QCString& appIdentification );
+    virtual bool init( Mode _mode, const Q3CString& appIdentification );
     virtual bool openWrite( const QString& name );
     virtual bool openRead( const QString& name );
     virtual bool closeWrite();

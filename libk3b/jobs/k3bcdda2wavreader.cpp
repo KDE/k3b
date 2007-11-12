@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qregexp.h>
 
 
@@ -48,7 +48,7 @@ public:
   int fdToWriteTo;
 
   int currentTrack;
-  QValueVector<int> trackOffsets;
+  Q3ValueVector<int> trackOffsets;
 };
 
 

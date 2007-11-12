@@ -18,13 +18,13 @@
 #define _videodvd_H_
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <kurl.h>
 #include <kio/global.h>
 #include <kio/slavebase.h>
 
-class QCString;
+class Q3CString;
 class K3bIso9660Entry;
 class K3bIso9660;
 namespace K3bDevice
@@ -35,7 +35,7 @@ namespace K3bDevice
 class kio_videodvdProtocol : public KIO::SlaveBase
 {
 public:
-  kio_videodvdProtocol(const QCString &pool_socket, const QCString &app_socket);
+  kio_videodvdProtocol(const Q3CString &pool_socket, const Q3CString &app_socket);
   ~kio_videodvdProtocol();
 
   void mimetype( const KURL& url );

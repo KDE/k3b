@@ -54,7 +54,7 @@ class K3bFLACDecoder::Private
 public:
   void open(QFile* f) {
     file = f;
-    file->open(IO_ReadOnly);
+    file->open(QIODevice::ReadOnly);
     
     internalBuffer->flush();
     
@@ -80,7 +80,7 @@ public:
 #endif
       comments(0) {
     internalBuffer = new QBuffer();
-    internalBuffer->open(IO_ReadWrite);
+    internalBuffer->open(QIODevice::ReadWrite);
 
     open(f);
   }
@@ -354,7 +354,7 @@ int K3bFLACDecoder::decodeInternal( char* _data, int maxLen )
   if(bytesCopied == bytesAvailable) {
     // reset the buffer
     d->internalBuffer->close();
-    d->internalBuffer->open(IO_ReadWrite|IO_Truncate);
+    d->internalBuffer->open(QIODevice::ReadWrite|QIODevice::Truncate);
   }
 
   return bytesCopied;
@@ -431,7 +431,7 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
   // by its destructor when this method (i.e. canDecode) returns.
   QFile file(url.path());
 
-  if(!file.open(IO_ReadOnly)) {
+  if(!file.open(QIODevice::ReadOnly)) {
     kdDebug() << "(K3bFLACDecoder) Could not open file " << url.path() << endl;
     return false;
   }

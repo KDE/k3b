@@ -16,8 +16,10 @@
 #include "k3bpushbutton.h"
 
 #include <qtimer.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kglobalsettings.h>
 #include <kapplication.h>
@@ -53,7 +55,7 @@ K3bPushButton::K3bPushButton( const QString& text, QWidget* parent, const char* 
 }
 
 
-K3bPushButton::K3bPushButton( const QIconSet& icon, const QString& text,
+K3bPushButton::K3bPushButton( const QIcon& icon, const QString& text,
 			      QWidget* parent, const char* name )
   : KPushButton( icon, text, parent, name )
 {
@@ -76,7 +78,7 @@ K3bPushButton::~K3bPushButton()
 }
 
 
-void K3bPushButton::setDelayedPopupMenu( QPopupMenu* popup )
+void K3bPushButton::setDelayedPopupMenu( Q3PopupMenu* popup )
 {
   if( !d->popupTimer ) {
     d->popupTimer = new QTimer( this );

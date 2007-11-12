@@ -18,6 +18,8 @@
 #define KCUTLABEL_H
 
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 #include "k3b_export.h"
 
 

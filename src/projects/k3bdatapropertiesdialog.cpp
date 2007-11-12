@@ -24,12 +24,15 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtabwidget.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
 #include <klineedit.h>
 #include <kiconloader.h>
@@ -41,7 +44,7 @@
 
 
 
-K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>& dataItems, QWidget* parent, const char* name )
+K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>& dataItems, QWidget* parent, const char* name )
   : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, name, true, false )
 {
   m_dataItems = dataItems;
@@ -65,7 +68,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>
 
   // layout
   // -----------------------------
-  QGridLayout* grid = new QGridLayout( plainPage() );
+  Q3GridLayout* grid = new Q3GridLayout( plainPage() );
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
 
@@ -78,8 +81,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>
   }
   int row = 1;
 
-  m_spacerLine = new QFrame( plainPage() );
-  m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  m_spacerLine = new Q3Frame( plainPage() );
+  m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
   grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
   ++row;
   if ( dataItems.count() == 1 ) {
@@ -94,8 +97,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>
   grid->addWidget( new QLabel( i18n("Used blocks:"), plainPage() ), row, 0 );
   grid->addWidget( m_labelBlocks, row++, 2 );
 
-  m_spacerLine = new QFrame( plainPage() );
-  m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  m_spacerLine = new Q3Frame( plainPage() );
+  m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
   grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
   ++row;
 
@@ -115,15 +118,15 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>
   // OPTIONS
   // /////////////////////////////////////////////////
   QTabWidget* optionTab = new QTabWidget( plainPage() );
-  m_spacerLine = new QFrame( plainPage() );
-  m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+  m_spacerLine = new Q3Frame( plainPage() );
+  m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
 
   grid->addMultiCellWidget( m_spacerLine, 10, 10, 0, 2 );
   grid->addMultiCellWidget( optionTab, 12, 12, 0, 2 );
   grid->setRowStretch( 11, 1 );
 
   QWidget* hideBox = new QWidget( optionTab );
-  QGridLayout* hideBoxGrid = new QGridLayout( hideBox );
+  Q3GridLayout* hideBoxGrid = new Q3GridLayout( hideBox );
   hideBoxGrid->setSpacing( spacingHint() );
   hideBoxGrid->setMargin( marginHint() );
   m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), hideBox );
@@ -135,7 +138,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>
 //   grid->addMultiCellWidget( m_checkHideOnJoliet, 11, 11, 0, 2 );
 
   QWidget* sortingBox = new QWidget( optionTab );
-  QGridLayout* sortingBoxGrid = new QGridLayout( sortingBox );
+  Q3GridLayout* sortingBoxGrid = new Q3GridLayout( sortingBox );
   sortingBoxGrid->setSpacing( spacingHint() );
   sortingBoxGrid->setMargin( marginHint() );
   m_editSortWeight = new KLineEdit( sortingBox );
@@ -163,21 +166,21 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QValueList<K3bDataItem*>
   QToolTip::add( m_checkHideOnRockRidge, i18n("Hide this file in the RockRidge filesystem") );
   QToolTip::add( m_checkHideOnJoliet, i18n("Hide this file in the Joliet filesystem") );
   QToolTip::add( m_editSortWeight, i18n("Modify the physical sorting") );
-  QWhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked, the file or directory "
+  Q3WhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked, the file or directory "
 						"(and its entire contents) will be hidden on the "
 						"ISO9660 and RockRidge filesystem.</p>"
 						"<p>This is useful, for example, for having different README "
 						"files for RockRidge and Joliet, which can be managed "
 						"by hiding README.joliet on RockRidge and README.rr "
 						"on the Joliet filesystem.</p>") );
-  QWhatsThis::add( m_checkHideOnJoliet, i18n("<p>If this option is checked, the file or directory "
+  Q3WhatsThis::add( m_checkHideOnJoliet, i18n("<p>If this option is checked, the file or directory "
 					     "(and its entire contents) will be hidden on the "
 					     "Joliet filesystem.</p>"
 					     "<p>This is useful, for example, for having different README "
 					     "files for RockRidge and Joliet, which can be managed "
 					     "by hiding README.joliet on RockRidge and README.rr "
 					     "on the Joliet filesystem.</p>") );
-  QWhatsThis::add( m_editSortWeight, i18n("<p>This value modifies the physical sort order of the files "
+  Q3WhatsThis::add( m_editSortWeight, i18n("<p>This value modifies the physical sort order of the files "
 					  "in the ISO9660 filesystem. A higher weighting means that the "
 					  "file will be located closer to the beginning of the image "
 					  "(and the disk)."
@@ -268,7 +271,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 }
 
 
-void K3bDataPropertiesDialog::loadListProperties( const QValueList<K3bDataItem*>& items )
+void K3bDataPropertiesDialog::loadListProperties( const Q3ValueList<K3bDataItem*>& items )
 {
     m_labelIcon->setPixmap( DesktopIcon( "kmultiple", KIcon::SizeLarge ) );
 
@@ -276,7 +279,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QValueList<K3bDataItem*>
     int folders = 0;
     KIO::filesize_t size = 0;
     K3b::Msf blocks = 0;
-    for ( QValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( Q3ValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( item->isFile() )
@@ -315,7 +318,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QValueList<K3bDataItem*>
 
 
     m_checkHideOnJoliet->setChecked( items.first()->hideOnJoliet() );
-    for ( QValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( Q3ValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( m_checkHideOnJoliet->isChecked() != item->hideOnJoliet() ) {
@@ -324,7 +327,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QValueList<K3bDataItem*>
         }
     }
     m_checkHideOnRockRidge->setChecked( items.first()->hideOnRockRidge() );
-    for ( QValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( Q3ValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( m_checkHideOnRockRidge->isChecked() != item->hideOnRockRidge() ) {
@@ -334,7 +337,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QValueList<K3bDataItem*>
     }
 
     int weight = items.first()->sortWeight();
-    for ( QValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( Q3ValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( weight != item->sortWeight() ) {
@@ -352,7 +355,7 @@ void K3bDataPropertiesDialog::slotOk()
         m_dataItems.first()->setK3bName( m_editName->text() );
     }
 
-    for ( QValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( Q3ValueList<K3bDataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( m_checkHideOnRockRidge->state() != QButton::NoChange )

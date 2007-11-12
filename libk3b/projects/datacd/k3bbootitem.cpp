@@ -19,7 +19,7 @@
 
 #include <klocale.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 K3bBootItem::K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )

@@ -19,7 +19,15 @@
 #include <k3blistview.h>
 
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QDragMoveEvent>
+#include <QKeyEvent>
+#include <QFocusEvent>
+#include <QDragLeaveEvent>
 #include <kurl.h>
 
 class K3bAudioTrack;
@@ -52,8 +60,8 @@ class K3bAudioTrackView : public K3bListView
 
   K3bAudioTrackPlayer* player() const { return m_player; }
 
-  void getSelectedItems( QPtrList<K3bAudioTrack>& tracks, 
-			 QPtrList<K3bAudioDataSource>& sources );
+  void getSelectedItems( Q3PtrList<K3bAudioTrack>& tracks, 
+			 Q3PtrList<K3bAudioDataSource>& sources );
 
  public slots:
   void showPlayerIndicator( K3bAudioTrack* );
@@ -105,7 +113,7 @@ class K3bAudioTrackView : public K3bListView
 
  private slots:
   void slotAnimation();
-  void slotDropped( QDropEvent* e, QListViewItem* parent, QListViewItem* after );
+  void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after );
   void slotChanged();
   void slotTrackChanged( K3bAudioTrack* );
   void slotTrackRemoved( K3bAudioTrack* );
@@ -117,7 +125,7 @@ class K3bAudioTrackView : public K3bListView
   void slotMergeTracks();
   void slotSplitSource();
   void slotSplitTrack();
-  void showPopupMenu( KListView*, QListViewItem* item, const QPoint& pos );
+  void showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& pos );
   void slotProperties();
   void slotPlayTrack();
   void slotQueryMusicBrainz();
@@ -136,7 +144,7 @@ class K3bAudioTrackView : public K3bListView
   void resizeEvent( QResizeEvent* e );
   void resizeColumns();
   bool acceptDrag(QDropEvent* e) const;
-  QDragObject* dragObject();
+  Q3DragObject* dragObject();
 };
 
 #endif

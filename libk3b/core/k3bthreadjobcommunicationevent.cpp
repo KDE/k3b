@@ -14,6 +14,8 @@
  */
 
 #include "k3bthreadjobcommunicationevent.h"
+//Added by qt3to4:
+#include <QCustomEvent>
 
 
 K3bThreadJobCommunicationEvent::K3bThreadJobCommunicationEvent( int type )

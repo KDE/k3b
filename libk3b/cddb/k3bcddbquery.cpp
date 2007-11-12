@@ -25,7 +25,7 @@
 #include <klocale.h>
 
 
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstringlist.h>
 #include <qregexp.h>
 #include <qtimer.h>
@@ -76,11 +76,11 @@ const QStringList& K3bCddbQuery::categories()
 }
 
 
-bool K3bCddbQuery::parseEntry( QTextStream& stream, K3bCddbResultEntry& entry )
+bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
 {
   entry.rawData = "";
 
-  stream.setEncoding( QTextStream::UnicodeUTF8 );
+  stream.setEncoding( Q3TextStream::UnicodeUTF8 );
 
   // parse data
   QString line;

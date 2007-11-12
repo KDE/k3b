@@ -22,7 +22,7 @@
 #include <k3bglobals.h>
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include <kdebug.h>
 
@@ -85,7 +85,7 @@ void K3bCloneTocReader::readFile()
   d->size = 0;
 
   QFile f( d->tocFile );
-  if( f.open( IO_ReadOnly ) ) {
+  if( f.open( QIODevice::ReadOnly ) ) {
     //
     // Inspired by clone.c from the cdrecord sources
     //

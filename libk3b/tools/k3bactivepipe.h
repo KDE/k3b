@@ -16,7 +16,7 @@
 #ifndef _K3B_ACTIVE_PIPE_H_
 #define _K3B_ACTIVE_PIPE_H_
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <k3b_export.h>
 

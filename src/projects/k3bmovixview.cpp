@@ -36,6 +36,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 
 K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name )
@@ -45,8 +48,8 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
   m_listView = new K3bMovixListView( m_doc, this );
   setMainWidget( m_listView );
 
-  connect( m_listView, SIGNAL(contextMenuRequested( QListViewItem*, const QPoint& , int )),
-	   this, SLOT(slotContextMenuRequested(QListViewItem*, const QPoint& , int )) );
+  connect( m_listView, SIGNAL(contextMenuRequested( Q3ListViewItem*, const QPoint& , int )),
+	   this, SLOT(slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int )) );
 
 
   // setup actions
@@ -94,7 +97,7 @@ K3bMovixView::~K3bMovixView()
 }
 
 
-void K3bMovixView::slotContextMenuRequested(QListViewItem* item, const QPoint& p, int )
+void K3bMovixView::slotContextMenuRequested(Q3ListViewItem* item, const QPoint& p, int )
 {
   if( item ) {
     m_actionRemove->setEnabled(true);
@@ -111,11 +114,11 @@ void K3bMovixView::slotContextMenuRequested(QListViewItem* item, const QPoint& p
 
 void K3bMovixView::showPropertiesDialog()
 {
-  QValueList<K3bDataItem*> dataItems;
+  Q3ValueList<K3bDataItem*> dataItems;
 
   // get selected item
-  QPtrList<QListViewItem> viewItems = m_listView->selectedItems();
-  for ( QPtrListIterator<QListViewItem> it( viewItems ); *it; ++it ) {
+  Q3PtrList<Q3ListViewItem> viewItems = m_listView->selectedItems();
+  for ( Q3PtrListIterator<Q3ListViewItem> it( viewItems ); *it; ++it ) {
       if( K3bMovixListViewItem* viewItem = dynamic_cast<K3bMovixListViewItem*>( *it ) ) {
           dataItems.append( viewItem->fileItem() );
       }
@@ -132,8 +135,8 @@ void K3bMovixView::showPropertiesDialog()
 
 void K3bMovixView::slotRemoveItems()
 {
-  QPtrList<QListViewItem> list = m_listView->selectedItems();
-  QPtrListIterator<QListViewItem> it(list);
+  Q3PtrList<Q3ListViewItem> list = m_listView->selectedItems();
+  Q3PtrListIterator<Q3ListViewItem> it(list);
 
   if( list.isEmpty() )
     kdDebug() << "nothing to remove" << endl;
@@ -150,8 +153,8 @@ void K3bMovixView::slotRemoveItems()
 
 void K3bMovixView::slotRemoveSubTitleItems()
 {
-  QPtrList<QListViewItem> list = m_listView->selectedItems();
-  QPtrListIterator<QListViewItem> it(list);
+  Q3PtrList<Q3ListViewItem> list = m_listView->selectedItems();
+  Q3PtrListIterator<Q3ListViewItem> it(list);
 
   if( list.isEmpty() )
     kdDebug() << "nothing to remove" << endl;
@@ -165,7 +168,7 @@ void K3bMovixView::slotRemoveSubTitleItems()
 
 void K3bMovixView::slotAddSubTitleFile()
 {
-  QListViewItem* item = m_listView->selectedItems().first();
+  Q3ListViewItem* item = m_listView->selectedItems().first();
   if( K3bMovixListViewItem* vi = dynamic_cast<K3bMovixListViewItem*>(item) ) {
 
     KURL url = KFileDialog::getOpenURL();

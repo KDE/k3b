@@ -16,7 +16,9 @@
 #ifndef _K3B_PASSIVE_POPUP_H_
 #define _K3B_PASSIVE_POPUP_H_
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class K3bTimeoutWidget;
 class KActiveLabel;
@@ -28,7 +30,7 @@ class QLabel;
  * A message box which is closed using a timer or a close button
  * It will delete itself once it has been closed.
  */
-class K3bPassivePopup : public QFrame
+class K3bPassivePopup : public Q3Frame
 {
   Q_OBJECT
 

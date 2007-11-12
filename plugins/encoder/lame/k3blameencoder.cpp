@@ -29,17 +29,19 @@
 #include <kdialogbase.h>
 
 #include <qlayout.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
-#include <qgroupbox.h>
-#include <qbuttongroup.h>
+#include <q3groupbox.h>
+#include <q3buttongroup.h>
 #include <qtextcodec.h>
 #include <qfile.h>
 #include <qslider.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <stdio.h>
 #include <lame/lame.h>
@@ -420,7 +422,7 @@ K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, con
     m_brW->m_comboConstantBitrate->insertItem( i18n("%1 kbps" ).arg(s_lame_bitrates[i]) );
 
 
-  QHBoxLayout* lay = new QHBoxLayout( this );
+  Q3HBoxLayout* lay = new Q3HBoxLayout( this );
   lay->setMargin( 0 );
   lay->addWidget( m_w );
 

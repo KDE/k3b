@@ -18,17 +18,19 @@
 #define K3BPROJECTBURNDIALOG_H
 
 #include <k3binteractiondialog.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 
 class K3bDoc;
 class K3bBurnJob;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
-class QGroupBox;
+class Q3GroupBox;
 class QCheckBox;
 class QTabWidget;
 class QSpinBox;
-class QVBoxLayout;
+class Q3VBoxLayout;
 class K3bWritingModeWidget;
 class KConfigBase;
 
@@ -173,8 +175,8 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    K3bWriterSelectionWidget* m_writerSelectionWidget;
    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
    K3bWritingModeWidget* m_writingModeWidget;
-   QGroupBox* m_optionGroup;
-   QVBoxLayout* m_optionGroupLayout;
+   Q3GroupBox* m_optionGroup;
+   Q3VBoxLayout* m_optionGroupLayout;
    QCheckBox* m_checkCacheImage;
    QCheckBox* m_checkSimulate;
    QCheckBox* m_checkRemoveBufferFiles;

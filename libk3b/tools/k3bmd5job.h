@@ -18,7 +18,7 @@
 #define _K3B_MD5_JOB_H_
 
 #include <k3bjob.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include "k3b_export.h"
 
 namespace K3bDevice {
@@ -36,8 +36,8 @@ class LIBK3B_EXPORT K3bMd5Job : public K3bJob
   K3bMd5Job( K3bJobHandler* jh , QObject* parent = 0, const char* name = 0 );
   ~K3bMd5Job();
 
-  QCString hexDigest();
-  QCString base64Digest();
+  Q3CString hexDigest();
+  Q3CString base64Digest();
 
  public slots:
   void start();

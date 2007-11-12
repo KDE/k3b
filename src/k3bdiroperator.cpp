@@ -148,7 +148,7 @@ void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
 void K3bDirOperator::slotAddFilesToProject()
 {
   KURL::List files;
-  for( QPtrListIterator<KFileItem> it( *(selectedItems()) ); it.current(); ++it ) {
+  for( Q3PtrListIterator<KFileItem> it( *(selectedItems()) ); it.current(); ++it ) {
     files.append( it.current()->url() );
   }    
   if( !files.isEmpty() )

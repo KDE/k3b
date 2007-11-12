@@ -22,6 +22,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -39,7 +41,7 @@ K3bAudioDataSourceEditWidget::K3bAudioDataSourceEditWidget( QWidget* parent, con
   QLabel* endLabel = new QLabel( i18n("End Offset") + ":", this );
   endLabel->setAlignment( Qt::AlignRight );
 
-  QGridLayout* grid = new QGridLayout( this );
+  Q3GridLayout* grid = new Q3GridLayout( this );
   grid->setMargin( 0 );
   grid->setSpacing( KDialog::spacingHint() );
 

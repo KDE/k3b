@@ -22,7 +22,7 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qregexp.h>
 #include <qdir.h>
 
@@ -95,7 +95,7 @@ void K3bCueFileParser::readFile()
   d->currentParsedTrack = 0;
 
   QFile f( filename() );
-  if( f.open( IO_ReadOnly ) ) {
+  if( f.open( QIODevice::ReadOnly ) ) {
     QString line = readLine( &f );
     while( !line.isNull() ) {
       

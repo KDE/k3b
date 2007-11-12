@@ -23,17 +23,19 @@
 #include <k3btoc.h>
 #include <k3bcddbresult.h>
 #include <k3bcdtext.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class K3bListView;
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 class QPoint;
 class KActionCollection;
 class KActionMenu;
 class K3bCddb;
 class QLabel;
 class K3bToolBox;
-class QDragObject;
+class Q3DragObject;
 
 
 namespace K3bDevice {
@@ -54,16 +56,16 @@ class K3bAudioCdView : public K3bMediaContentsView
   /**
    * internal
    */
-  QDragObject* dragObject();
+  Q3DragObject* dragObject();
 
  public slots:
   void queryCddb();
 
  private slots:
-  void slotContextMenu( KListView*, QListViewItem*, const QPoint& );
-  void slotItemRenamed( QListViewItem*, const QString&, int );
+  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
+  void slotItemRenamed( Q3ListViewItem*, const QString&, int );
   void slotCddbQueryFinished( int );
-  void slotTrackSelectionChanged( QListViewItem* );
+  void slotTrackSelectionChanged( Q3ListViewItem* );
   void slotSaveCddbLocally();
 
   void slotEditTrackCddb();

@@ -17,7 +17,7 @@
 #define _K3B_THEME_MANAGER_H_
 
 #include <qobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qcolor.h>
@@ -116,7 +116,7 @@ class K3bThemeManager : public QObject
   K3bThemeManager( QObject* parent = 0, const char* name = 0 );
   ~K3bThemeManager();
 
-  const QValueList<K3bTheme*>& themes() const;
+  const Q3ValueList<K3bTheme*>& themes() const;
 
   /**
    * This is never null. If no theme could be found an empty dummy theme

@@ -36,9 +36,9 @@
 #include <k3bisooptions.h>
 #include <k3bdevicemanager.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qapplication.h>
@@ -55,7 +55,7 @@
 class K3bProjectManager::Private
 {
 public:
-  QPtrList<K3bDoc> projects;
+  Q3PtrList<K3bDoc> projects;
   K3bDoc* activeProject;
   QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
 
@@ -90,7 +90,7 @@ K3bProjectManager::~K3bProjectManager()
 }
 
 
-const QPtrList<K3bDoc>& K3bProjectManager::projects() const
+const Q3PtrList<K3bDoc>& K3bProjectManager::projects() const
 {
   return d->projects;
 }
@@ -117,7 +117,7 @@ void K3bProjectManager::removeProject( K3bDoc* doc )
   // QPtrList.findRef seems to be buggy. Everytime we search for the
   // first added item it is not found!
   //
-  for( QPtrListIterator<K3bDoc> it( d->projects );
+  for( Q3PtrListIterator<K3bDoc> it( d->projects );
        it.current(); ++it ) {
     if( it.current() == doc ) {
 
@@ -141,7 +141,7 @@ void K3bProjectManager::removeProject( K3bDoc* doc )
 
 K3bDoc* K3bProjectManager::findByUrl( const KURL& url )
 {
-  for( QPtrListIterator<K3bDoc> it( d->projects );
+  for( Q3PtrListIterator<K3bDoc> it( d->projects );
        it.current(); ++it ) {
     K3bDoc* doc = it.current();
     if( doc->URL() == url )
@@ -169,7 +169,7 @@ void K3bProjectManager::setActive( K3bDoc* doc )
   // QPtrList.findRef seems to be buggy. Everytime we search for the
   // first added item it is not found!
   //
-  for( QPtrListIterator<K3bDoc> it( d->projects );
+  for( Q3PtrListIterator<K3bDoc> it( d->projects );
        it.current(); ++it ) {
     if( it.current() == doc ) {
       d->activeProject = doc;
@@ -465,7 +465,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
       // try opening the document inside the store
       if( store->open( "maindata.xml" ) ) {
 	QIODevice* dev = store->device();
-	dev->open( IO_ReadOnly );
+	dev->open( QIODevice::ReadOnly );
 	if( xmlDoc.setContent( dev ) )
 	  success = true;
 	dev->close();
@@ -479,7 +479,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
   if( !success ) {
     // try reading an old plain document
     QFile f( tmpfile );
-    if ( f.open( IO_ReadOnly ) ) {
+    if ( f.open( QIODevice::ReadOnly ) ) {
       //
       // First check if this is really an xml file beacuse if this is a very big file
       // the setContent method blocks for a very long time
@@ -595,8 +595,8 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
       success = doc->saveDocumentData( &docElem );
       if( success ) {
 	KoStoreDevice dev(store);
-	dev.open( IO_WriteOnly );
-	QTextStream xmlStream( &dev );
+	dev.open( QIODevice::WriteOnly );
+	Q3TextStream xmlStream( &dev );
 	xmlDoc.save( xmlStream, 0 );
 
 	doc->setURL( url );

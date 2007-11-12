@@ -53,7 +53,7 @@ bool K3bAudioEncoder::openFile( const QString& ext, const QString& filename, con
   closeFile();
 
   d->outputFile = new QFile( filename );
-  if( d->outputFile->open( IO_WriteOnly ) ) {
+  if( d->outputFile->open( QIODevice::WriteOnly ) ) {
     return initEncoder( ext, length );
   }
   else {

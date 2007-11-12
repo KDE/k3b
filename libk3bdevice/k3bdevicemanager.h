@@ -20,8 +20,8 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qmemarray.h>
-#include <qptrlist.h>
+#include <q3memarray.h>
+#include <q3ptrlist.h>
 
 #include "k3bdevice_export.h"
 #include <kdebug.h>
@@ -103,13 +103,13 @@ namespace K3bDevice {
        * \return List of all cd writer devices.
        * \deprecated use cdWriter()
        */
-      const QPtrList<Device>& burningDevices() const;
+      const Q3PtrList<Device>& burningDevices() const;
 
       /**
        * \return List of all reader devices without writer devices.
        * \deprecated use cdReader()
        **/
-      const QPtrList<Device>& readingDevices() const;
+      const Q3PtrList<Device>& readingDevices() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -117,7 +117,7 @@ namespace K3bDevice {
        *
        * \return List of all devices.
        */
-      const QPtrList<Device>& allDevices() const;
+      const Q3PtrList<Device>& allDevices() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -125,7 +125,7 @@ namespace K3bDevice {
        *
        * \return List of all cd writer devices.
        */
-      const QPtrList<Device>& cdWriter() const;
+      const Q3PtrList<Device>& cdWriter() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -133,7 +133,7 @@ namespace K3bDevice {
        *
        * \return List of all cd reader devices.
        */
-      const QPtrList<Device>& cdReader() const;
+      const Q3PtrList<Device>& cdReader() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -141,7 +141,7 @@ namespace K3bDevice {
        *
        * \return List of all DVD writer devices.
        */
-      const QPtrList<Device>& dvdWriter() const;
+      const Q3PtrList<Device>& dvdWriter() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -149,7 +149,7 @@ namespace K3bDevice {
        *
        * \return List of all DVD reader devices.
        */
-      const QPtrList<Device>& dvdReader() const;
+      const Q3PtrList<Device>& dvdReader() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -157,7 +157,7 @@ namespace K3bDevice {
        *
        * \return List of all Blue Ray reader devices.
        */
-      const QPtrList<Device>& blueRayReader() const;
+      const Q3PtrList<Device>& blueRayReader() const;
 
       /**
        * Before getting the devices do a @ref scanBus() or add 
@@ -165,7 +165,7 @@ namespace K3bDevice {
        *
        * \return List of all Blue Ray writer devices.
        */
-      const QPtrList<Device>& blueRayWriters() const;
+      const Q3PtrList<Device>& blueRayWriters() const;
 
       /**
        * Reads the device information from the config file.

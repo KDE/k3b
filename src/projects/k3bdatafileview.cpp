@@ -30,12 +30,18 @@
 #include <k3bview.h>
 
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qpainter.h>
 #include <qfontmetrics.h>
 #include <qtimer.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QDragLeaveEvent>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -82,13 +88,13 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   connect( m_treeView, SIGNAL(dirSelected(K3bDirItem*)), this, SLOT(slotSetCurrentDir(K3bDirItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( m_doc, SIGNAL(itemAdded(K3bDataItem*)), this, SLOT(slotItemAdded(K3bDataItem*)) );
-  connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
-  connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-	   this, SLOT(showPopupMenu(KListView*, QListViewItem*, const QPoint&)) );
-  connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*, QListViewItem*)),
-	   this, SLOT(slotDropped(QDropEvent*, QListViewItem*, QListViewItem*)) );
-  connect( this, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-	   this, SLOT(slotDoubleClicked(QListViewItem*)) );
+  connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
+  connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(showPopupMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(dropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)),
+	   this, SLOT(slotDropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)) );
+  connect( this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
+	   this, SLOT(slotDoubleClicked(Q3ListViewItem*)) );
 
   setupActions();
 }
@@ -165,14 +171,14 @@ void K3bDataFileView::checkForNewItems()
   hideEditor();
 
   // add items that are not there yet
-  for( QPtrListIterator<K3bDataItem> it( m_currentDir->children() ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bDataItem> it( m_currentDir->children() ); it.current(); ++it ) {
     if( !m_itemMap.contains( it.current() ) ) {
       slotItemAdded( it.current() );
     }
   }
 
   // now check if some of the items have been moved out of the currently showing dir.
-  for( QListViewItemIterator it( this ); it.current(); ++it ) {
+  for( Q3ListViewItemIterator it( this ); it.current(); ++it ) {
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
     if( dataViewItem && dataViewItem->dataItem()->parent() != currentDir() )
       delete dataViewItem;
@@ -180,11 +186,11 @@ void K3bDataFileView::checkForNewItems()
 }
 
 
-QDragObject* K3bDataFileView::dragObject()
+Q3DragObject* K3bDataFileView::dragObject()
 {
-  QPtrList<QListViewItem> selectedViewItems = selectedItems();
+  Q3PtrList<Q3ListViewItem> selectedViewItems = selectedItems();
   KURL::List urls;
-  for( QPtrListIterator<QListViewItem> it( selectedViewItems ); it.current(); ++it ) {
+  for( Q3PtrListIterator<Q3ListViewItem> it( selectedViewItems ); it.current(); ++it ) {
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
     if( dataViewItem ) {
       urls.append( KURL::fromPathOrURL(dataViewItem->dataItem()->localPath()) );
@@ -234,7 +240,7 @@ void K3bDataFileView::contentsDragLeaveEvent( QDragLeaveEvent* e )
 }
 
 
-void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem* )
+void K3bDataFileView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListViewItem* )
 {
   // remove any highlighting
   if( m_dropDirItem ) {
@@ -259,9 +265,9 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
     // check if items have been moved
     if( e->source() == viewport() ) {
       // move all selected items
-      QPtrList<QListViewItem> selectedViewItems = selectedItems();
-      QValueList<K3bDataItem*> selectedDataItems;
-      QPtrListIterator<QListViewItem> it( selectedViewItems );
+      Q3PtrList<Q3ListViewItem> selectedViewItems = selectedItems();
+      Q3ValueList<K3bDataItem*> selectedDataItems;
+      Q3PtrListIterator<Q3ListViewItem> it( selectedViewItems );
       for( ; it.current(); ++it ) {
 	K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
 	if( dataViewItem )
@@ -275,7 +281,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, QListViewItem*, QListViewItem*
     else if( e->source() == m_treeView->viewport() ) {
       // move the selected dir
       if( K3bDataDirViewItem* dirItem = dynamic_cast<K3bDataDirViewItem*>( m_treeView->selectedItem() ) ) {
-	QValueList<K3bDataItem*> selectedDataItems;
+	Q3ValueList<K3bDataItem*> selectedDataItems;
 	selectedDataItems.append( dirItem->dirItem() );
 	K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, m_addParentDir, this, e->action() == QDropEvent::Copy );
       }
@@ -305,7 +311,7 @@ void K3bDataFileView::slotAddUrls()
 }
 
 
-void K3bDataFileView::slotExecuted( QListViewItem* item )
+void K3bDataFileView::slotExecuted( Q3ListViewItem* item )
 {
   if( K3bDataDirViewItem* k = dynamic_cast<K3bDataDirViewItem*>( item ) ) {
     hideEditor();  // disable the K3bListView Editor
@@ -349,7 +355,7 @@ void K3bDataFileView::setupActions()
 }
 
 
-void K3bDataFileView::showPopupMenu( KListView*, QListViewItem* item, const QPoint& point )
+void K3bDataFileView::showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& point )
 {
   if( item ) {
     K3bDataItem* di = static_cast<K3bDataViewItem*>(item)->dataItem();
@@ -406,8 +412,8 @@ void K3bDataFileView::slotRenameItem()
 
 void K3bDataFileView::slotRemoveItem()
 {
-  QPtrList<QListViewItem> items = selectedItems();
-  QPtrListIterator<QListViewItem> it( items );
+  Q3PtrList<Q3ListViewItem> items = selectedItems();
+  Q3PtrListIterator<Q3ListViewItem> it( items );
   for(; it.current(); ++it ) {
     if( K3bDataViewItem* d = dynamic_cast<K3bDataViewItem*>( it.current() ) )
       m_doc->removeItem( d->dataItem() );
@@ -427,11 +433,11 @@ void K3bDataFileView::slotParentDir()
 
 void K3bDataFileView::slotProperties()
 {
-  QValueList<K3bDataItem*> dataItems;
+  Q3ValueList<K3bDataItem*> dataItems;
 
   // get selected item
-  QPtrList<QListViewItem> viewItems = selectedItems();
-  for ( QPtrListIterator<QListViewItem> it( viewItems ); *it; ++it ) {
+  Q3PtrList<Q3ListViewItem> viewItems = selectedItems();
+  for ( Q3PtrListIterator<Q3ListViewItem> it( viewItems ); *it; ++it ) {
       if( K3bDataViewItem* viewItem = dynamic_cast<K3bDataViewItem*>( *it ) ) {
           dataItems.append( viewItem->dataItem() );
       }
@@ -474,7 +480,7 @@ void K3bDataFileView::slotOpen()
 }
 
 
-void K3bDataFileView::slotDoubleClicked( QListViewItem* )
+void K3bDataFileView::slotDoubleClicked( Q3ListViewItem* )
 {
     slotProperties();
 }

@@ -17,7 +17,9 @@
 #define _K3B_THREAD_WIDGET_H_
 
 #include <qobject.h>
-#include <qintdict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 
 class QCustomEvent;
@@ -70,7 +72,7 @@ class K3bThreadWidget : public QObject
   Data* data( int id );
 
   int m_idCounter;
-  QIntDict<Data> m_dataMap;
+  Q3IntDict<Data> m_dataMap;
 
   static K3bThreadWidget* s_instance;
 };

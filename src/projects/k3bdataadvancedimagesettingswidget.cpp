@@ -19,9 +19,9 @@
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qheader.h>
-#include <qwhatsthis.h>
+#include <q3buttongroup.h>
+#include <q3header.h>
+#include <q3whatsthis.h>
 #include <qpoint.h>
 #include <qpainter.h>
 #include <qpalette.h>
@@ -35,17 +35,17 @@
 
 
 
-class K3bDataAdvancedImageSettingsWidget::PrivateIsoWhatsThis : public QWhatsThis
+class K3bDataAdvancedImageSettingsWidget::PrivateIsoWhatsThis : public Q3WhatsThis
 {
 public:
   PrivateIsoWhatsThis( K3bDataAdvancedImageSettingsWidget* w )
-    : QWhatsThis( w->m_viewIsoSettings->viewport() ) {
+    : Q3WhatsThis( w->m_viewIsoSettings->viewport() ) {
     this->w = w;
   }
 
   QString text( const QPoint& p ) {
-    QListViewItem* i = w->m_viewIsoSettings->selectedItem(); // dies funktioniert nur bei rechtsklick
-    QListViewItem* i2 = w->m_viewIsoSettings->itemAt( p ); // dies funktioniert nur bei action whatsthis
+    Q3ListViewItem* i = w->m_viewIsoSettings->selectedItem(); // dies funktioniert nur bei rechtsklick
+    Q3ListViewItem* i2 = w->m_viewIsoSettings->itemAt( p ); // dies funktioniert nur bei action whatsthis
 
     if( i2 != 0 )
       kdDebug() << "at p " << i2->text(0) << endl;
@@ -77,21 +77,21 @@ private:
 
 
 
-class K3bDataAdvancedImageSettingsWidget::PrivateCheckViewItem : public QCheckListItem
+class K3bDataAdvancedImageSettingsWidget::PrivateCheckViewItem : public Q3CheckListItem
 {
 public:
-  PrivateCheckViewItem( QListView* parent, const QString& text, Type tt = Controller )
-    : QCheckListItem( parent, text, tt ) {
+  PrivateCheckViewItem( Q3ListView* parent, const QString& text, Type tt = Controller )
+    : Q3CheckListItem( parent, text, tt ) {
   }
 
-  PrivateCheckViewItem( QListViewItem* parent, const QString& text, Type tt = Controller )
-    : QCheckListItem( parent, text, tt ) {
+  PrivateCheckViewItem( Q3ListViewItem* parent, const QString& text, Type tt = Controller )
+    : Q3CheckListItem( parent, text, tt ) {
   }
 
 protected:
   void stateChange( bool on ) {
     // enable or disable all children
-    QListViewItem* item = firstChild();
+    Q3ListViewItem* item = firstChild();
     while( item ) {
       if( PrivateCheckViewItem* pi = dynamic_cast<PrivateCheckViewItem*>(item) )
 	pi->setEnabled( !on );
@@ -111,96 +111,96 @@ K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget*
   (void)new PrivateIsoWhatsThis( this );
 
   // create all the view items
-  QCheckListItem* iso9660Root = new QCheckListItem( m_viewIsoSettings,
+  Q3CheckListItem* iso9660Root = new Q3CheckListItem( m_viewIsoSettings,
 						    i18n("IS09660 Settings"),
-						    QCheckListItem::Controller );
-  QCheckListItem* rrRoot = new QCheckListItem( m_viewIsoSettings,
+						    Q3CheckListItem::Controller );
+  Q3CheckListItem* rrRoot = new Q3CheckListItem( m_viewIsoSettings,
 					       iso9660Root,
 					       i18n("Rock Ridge Settings"),
-					       QCheckListItem::Controller );
-  QCheckListItem* jolietRoot = new QCheckListItem( m_viewIsoSettings,
+					       Q3CheckListItem::Controller );
+  Q3CheckListItem* jolietRoot = new Q3CheckListItem( m_viewIsoSettings,
 						   rrRoot,
 						   i18n("Joliet Settings"),
-						   QCheckListItem::Controller );
-  QCheckListItem* miscRoot = new QCheckListItem( m_viewIsoSettings,
+						   Q3CheckListItem::Controller );
+  Q3CheckListItem* miscRoot = new Q3CheckListItem( m_viewIsoSettings,
 						 jolietRoot,
 						 i18n("Misc Settings"),
-						 QCheckListItem::Controller );
+						 Q3CheckListItem::Controller );
 
   // ISO9660 settings
   m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( iso9660Root,
 								i18n( "Allow untranslated ISO9660 filenames" ),
-								QCheckListItem::CheckBox );
+								Q3CheckListItem::CheckBox );
   m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							     i18n( "Allow max length ISO9660 filenames (37 characters)" ),
-							     QCheckListItem::CheckBox );
+							     Q3CheckListItem::CheckBox );
   m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 						    i18n( "Allow full ASCII charset for ISO9660 filenames" ),
-						    QCheckListItem::CheckBox );
+						    Q3CheckListItem::CheckBox );
   m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 						i18n( "Allow ~ and # in ISO9660 filenames" ),
-						QCheckListItem::CheckBox );
+						Q3CheckListItem::CheckBox );
   m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							      i18n( "Allow lowercase characters in ISO9660 filenames" ),
-							      QCheckListItem::CheckBox );
+							      Q3CheckListItem::CheckBox );
   m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 						   i18n( "Allow multiple dots in ISO9660 filenames" ),
-						   QCheckListItem::CheckBox );
+						   Q3CheckListItem::CheckBox );
   m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							  i18n( "Allow 31 character ISO9660 filenames" ),
-							  QCheckListItem::CheckBox );
+							  Q3CheckListItem::CheckBox );
   m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							  i18n( "Allow leading period in ISO9660 filenames" ),
-							  QCheckListItem::CheckBox );
+							  Q3CheckListItem::CheckBox );
   m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							i18n( "Omit version numbers in ISO9660 filenames" ),
-							QCheckListItem::CheckBox );
+							Q3CheckListItem::CheckBox );
   m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
 							i18n( "Omit trailing period in ISO9660 filenames" ),
-							QCheckListItem::CheckBox );
+							Q3CheckListItem::CheckBox );
 
   m_checkAllowUntranslatedFilenames->setOpen(true);
-  m_isoLevelController = new QCheckListItem( iso9660Root,
+  m_isoLevelController = new Q3CheckListItem( iso9660Root,
 					     m_checkAllowUntranslatedFilenames,
 					     i18n("ISO Level") );
 
-  m_radioIsoLevel3 = new QCheckListItem( m_isoLevelController,
+  m_radioIsoLevel3 = new Q3CheckListItem( m_isoLevelController,
 					 i18n("Level %1").arg(3),
-					 QCheckListItem::RadioButton );
-  m_radioIsoLevel2 = new QCheckListItem( m_isoLevelController,
+					 Q3CheckListItem::RadioButton );
+  m_radioIsoLevel2 = new Q3CheckListItem( m_isoLevelController,
 					 i18n("Level %1").arg(2),
-					 QCheckListItem::RadioButton );
-  m_radioIsoLevel1 = new QCheckListItem( m_isoLevelController,
+					 Q3CheckListItem::RadioButton );
+  m_radioIsoLevel1 = new Q3CheckListItem( m_isoLevelController,
 					 i18n("Level %1").arg(1),
-					 QCheckListItem::RadioButton );
+					 Q3CheckListItem::RadioButton );
 
   m_isoLevelController->setOpen(true);
 
   // Joliet Settings
-  m_checkJolietLong = new QCheckListItem( jolietRoot,
+  m_checkJolietLong = new Q3CheckListItem( jolietRoot,
 					  i18n("Allow 103 character Joliet filenames"),
-					  QCheckListItem::CheckBox );
+					  Q3CheckListItem::CheckBox );
 
   // Rock Ridge Settings
-  m_checkCreateTransTbl = new QCheckListItem( rrRoot,
+  m_checkCreateTransTbl = new Q3CheckListItem( rrRoot,
 					      i18n( "Create TRANS.TBL files" ),
-					      QCheckListItem::CheckBox );
-  m_checkHideTransTbl = new QCheckListItem( rrRoot, m_checkCreateTransTbl,
+					      Q3CheckListItem::CheckBox );
+  m_checkHideTransTbl = new Q3CheckListItem( rrRoot, m_checkCreateTransTbl,
 					    i18n( "Hide TRANS.TBL files in Joliet" ),
-					    QCheckListItem::CheckBox );
+					    Q3CheckListItem::CheckBox );
 
   // Misc Settings
 //   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings,
 // 						   i18n( "Follow symbolic links" ),
 // 						   QCheckListItem::CheckBox );
 
-  m_checkDoNotCacheInodes = new QCheckListItem( miscRoot,
+  m_checkDoNotCacheInodes = new Q3CheckListItem( miscRoot,
 						i18n("Do not cache inodes" ),
-						QCheckListItem::CheckBox );
+						Q3CheckListItem::CheckBox );
 
-  m_checkDoNotImportSession = new QCheckListItem( miscRoot,
+  m_checkDoNotImportSession = new Q3CheckListItem( miscRoot,
                                                   i18n("Do not import previous session" ),
-                                                  QCheckListItem::CheckBox );
+                                                  Q3CheckListItem::CheckBox );
 
   iso9660Root->setOpen( true );
   jolietRoot->setOpen( true );

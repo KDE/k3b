@@ -21,7 +21,7 @@
 #include <k3bversion.h>
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdatetime.h>
 
 
@@ -34,18 +34,18 @@ bool K3bCueFileWriter::save( const QString& filename )
 {
   QFile f( filename );
 
-  if( !f.open( IO_WriteOnly ) ) {
+  if( !f.open( QIODevice::WriteOnly ) ) {
     kdDebug() << "(K3bCueFileWriter) could not open file " << f.name() << endl;
     return false;
   }
 
-  QTextStream s( &f );
+  Q3TextStream s( &f );
 
   return save( s );
 }
 
 
-bool K3bCueFileWriter::save( QTextStream& t )
+bool K3bCueFileWriter::save( Q3TextStream& t )
 {
   t << "REM Cue file written by K3b " << k3bcore->version() << endl
     << endl;

@@ -30,6 +30,9 @@
 
 #include <qregexp.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -59,8 +62,8 @@ static const char s_riffHeader[] =
 
 static K3bExternalEncoderCommand commandByExtension( const QString& extension )
 {
-  QValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-  for( QValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
+  Q3ValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
+  for( Q3ValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
     if( (*it).extension == extension )
       return *it;
 
@@ -234,9 +237,9 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
 
 
   kdDebug() << "***** external parameters:" << endl;
-  const QValueList<QCString>& args = d->process->args();
+  const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
-  for( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kdDebug() << s << flush << endl;
@@ -356,8 +359,8 @@ void K3bExternalEncoder::slotExternalProgramOutputLine( const QString& line )
 QStringList K3bExternalEncoder::extensions() const
 {
   QStringList el;
-  QValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-  for( QValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
+  Q3ValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
+  for( Q3ValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
     el.append( (*it).extension );
 
   return el;

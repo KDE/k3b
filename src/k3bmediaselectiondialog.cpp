@@ -22,6 +22,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent, 
@@ -36,7 +38,7 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
 		 0,
 		 modal )
 {
-  QGridLayout* lay = new QGridLayout( plainPage() );
+  Q3GridLayout* lay = new Q3GridLayout( plainPage() );
 
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, plainPage() );
   m_combo = new K3bMediaSelectionComboBox( plainPage() );

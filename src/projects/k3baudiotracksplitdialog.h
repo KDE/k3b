@@ -17,6 +17,8 @@
 #define _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QEvent>
 
 namespace K3b {
   class Msf;

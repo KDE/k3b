@@ -17,7 +17,9 @@
 #ifndef K3BDIRVIEW_H
 #define K3BDIRVIEW_H
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <k3bmedium.h>
 
@@ -29,9 +31,9 @@ class K3bFileView;
 class K3bVideoDVDRippingView;
 class KComboBox;
 class K3bFileTreeView;
-class QWidgetStack;
+class Q3WidgetStack;
 class K3bDiskInfoView;
-class QScrollView;
+class Q3ScrollView;
 class QLabel;
 class KConfig;
 class K3bDeviceBranch;
@@ -49,7 +51,7 @@ namespace KIO {
 /**
   *@author Sebastian Trueg
   */
-class K3bDirView : public QVBox
+class K3bDirView : public Q3VBox
 {
   Q_OBJECT
 
@@ -78,8 +80,8 @@ class K3bDirView : public QVBox
   void deviceSelected( K3bDevice::Device* );
 
  private:
-  QWidgetStack* m_viewStack;
-  QScrollView* m_scroll;
+  Q3WidgetStack* m_viewStack;
+  Q3ScrollView* m_scroll;
 
   K3bAudioCdView*   m_cdView;
   K3bVideoCdView*   m_videoView;

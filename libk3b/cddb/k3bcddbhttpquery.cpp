@@ -21,7 +21,7 @@
 
 #include <qstringlist.h>
 #include <qregexp.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -98,7 +98,7 @@ void K3bCddbHttpQuery::performCommand( const QString& cmd )
 void K3bCddbHttpQuery::slotData( KIO::Job*, const QByteArray& data )
 {
   if( data.size() ) {
-    QDataStream stream( m_data, IO_WriteOnly | IO_Append );
+    QDataStream stream( m_data, QIODevice::WriteOnly | QIODevice::Append );
     stream.writeRawBytes( data.data(), data.size() );
   }
 }
@@ -212,7 +212,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
 	
 	kdDebug() << "(K3bCddbHttpQuery query finished." << endl;
 
-	QTextStream strStream( m_parsingBuffer, IO_ReadOnly );
+	Q3TextStream strStream( m_parsingBuffer, QIODevice::ReadOnly );
 	parseEntry( strStream, result() );
 
 	setError(SUCCESS);

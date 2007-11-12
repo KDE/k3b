@@ -24,16 +24,18 @@
 #include <kio/global.h>
 #include <kurldrag.h>
 
-#include <qdragobject.h>
-#include <qptrlist.h>
+#include <q3dragobject.h>
+#include <q3ptrlist.h>
 #include <qevent.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 
 K3bMovixListViewItem::K3bMovixListViewItem( K3bMovixDoc* doc, 
 					    K3bMovixFileItem* item, 
-					    QListView* parent, 
-					    QListViewItem* after )
+					    Q3ListView* parent, 
+					    Q3ListViewItem* after )
   : K3bListViewItem( parent, after ),
     m_doc(doc),
     m_fileItem(item)
@@ -43,7 +45,7 @@ K3bMovixListViewItem::K3bMovixListViewItem( K3bMovixDoc* doc,
 
 K3bMovixListViewItem::K3bMovixListViewItem( K3bMovixDoc* doc, 
 					    K3bMovixFileItem* item, 
-					    QListViewItem* parent )
+					    Q3ListViewItem* parent )
   : K3bListViewItem( parent ),
     m_doc(doc),
     m_fileItem(item)
@@ -58,8 +60,8 @@ K3bMovixListViewItem::~K3bMovixListViewItem()
 
 K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc, 
 					    K3bMovixFileItem* item, 
-					    QListView* parent, 
-					    QListViewItem* after )
+					    Q3ListView* parent, 
+					    Q3ListViewItem* after )
   : K3bMovixListViewItem( doc, item, parent, after ),
     KFileItem( 0, 0, KURL::fromPathOrURL(item->localPath()) )
 {
@@ -193,8 +195,8 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const cha
   connect( m_doc, SIGNAL(newMovixFileItems()), this, SLOT(slotNewFileItems()) );
   connect( m_doc, SIGNAL(movixItemRemoved(K3bMovixFileItem*)), this, SLOT(slotFileItemRemoved(K3bMovixFileItem*)) );
   connect( m_doc, SIGNAL(subTitleItemRemoved(K3bMovixFileItem*)), this, SLOT(slotSubTitleItemRemoved(K3bMovixFileItem*)) );
-  connect( this, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*)),
-	   this, SLOT(slotDropped(KListView*, QDropEvent*, QListViewItem*)) );
+  connect( this, SIGNAL(dropped(KListView*, QDropEvent*, Q3ListViewItem*)),
+	   this, SLOT(slotDropped(KListView*, QDropEvent*, Q3ListViewItem*)) );
 
   // let's see what the doc already has
   slotNewFileItems();
@@ -217,7 +219,7 @@ bool K3bMovixListView::acceptDrag(QDropEvent* e) const
 void K3bMovixListView::slotNewFileItems()
 {
   K3bMovixFileItem* lastItem = 0;
-  for( QPtrListIterator<K3bMovixFileItem> it( m_doc->movixFileItems() ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bMovixFileItem> it( m_doc->movixFileItems() ); it.current(); ++it ) {
     K3bMovixFileItem* item = it.current();
     if( !m_itemMap.contains( item ) )
       m_itemMap.insert( item, new K3bMovixFileViewItem( m_doc, item, this, lastItem ? m_itemMap[lastItem] : 0L ) );
@@ -258,7 +260,7 @@ void K3bMovixListView::slotSubTitleItemRemoved( K3bMovixFileItem* item )
 }
 
 
-void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* after )
+void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* after )
 {
   if( !e->isAccepted() )
     return;
@@ -270,8 +272,8 @@ void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* af
     pos = m_doc->indexOf( ((K3bMovixListViewItem*)after)->fileItem() );
 
   if( e->source() == viewport() ) {
-    QPtrList<QListViewItem> sel = selectedItems();
-    QPtrListIterator<QListViewItem> it(sel);
+    Q3PtrList<Q3ListViewItem> sel = selectedItems();
+    Q3PtrListIterator<Q3ListViewItem> it(sel);
     K3bMovixFileItem* itemAfter = ( after ? ((K3bMovixListViewItem*)after)->fileItem() : 0 );
     while( it.current() ) {
       K3bMovixListViewItem* vi = (K3bMovixListViewItem*)it.current();
@@ -302,14 +304,14 @@ void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, QListViewItem* af
 }
 
 
-QDragObject* K3bMovixListView::dragObject()
+Q3DragObject* K3bMovixListView::dragObject()
 {
-  QPtrList<QListViewItem> list = selectedItems();
+  Q3PtrList<Q3ListViewItem> list = selectedItems();
 
   if( list.isEmpty() )
     return 0;
 
-  QPtrListIterator<QListViewItem> it(list);
+  Q3PtrListIterator<Q3ListViewItem> it(list);
   KURL::List urls;
 
   for( ; it.current(); ++it )

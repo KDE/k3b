@@ -22,10 +22,13 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QLabel>
 
 class QCheckBox;
 class QComboBox;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
 class QLineEdit;
 class QSpinBox;
@@ -68,7 +71,7 @@ class K3bAudioBurnDialog : public K3bProjectBurnDialog
   /**
    * We need this here to be able to hide/show the group
    */
-  QGroupBox* m_audioRippingGroup;
+  Q3GroupBox* m_audioRippingGroup;
   QCheckBox* m_checkHideFirstTrack;
   QCheckBox* m_checkNormalize;
   QCheckBox* m_checkAudioRippingIgnoreReadErrors;

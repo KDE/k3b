@@ -37,8 +37,8 @@
 #include <qdir.h>
 #include <qdom.h>
 #include <qdatetime.h>
-#include <qtextstream.h>
-#include <qsemaphore.h>
+#include <q3textstream.h>
+#include <q3semaphore.h>
 
 // KDE-includes
 #include <kprocess.h>
@@ -262,10 +262,10 @@ bool K3bAudioDoc::readPlaylistFile( const KURL& url, KURL::List& playlist )
   // and if so add all listed files
 
   QFile f( url.path() );
-  if( !f.open( IO_ReadOnly ) )
+  if( !f.open( QIODevice::ReadOnly ) )
     return false;
 
-  QTextStream t( &f );
+  Q3TextStream t( &f );
   char buf[7];
   t.readRawBytes( buf, 7 );
   if( QString::fromLatin1( buf, 7 ) != "#EXTM3U" )

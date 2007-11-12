@@ -24,9 +24,11 @@
 #endif
 
 // include files for Qt
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qworkspace.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QShowEvent>
 
 // include files for KDE
 #include <kapplication.h>
@@ -35,7 +37,7 @@
 #include <kaction.h>
 #include <kurl.h>
 
-class QVBox;
+class Q3VBox;
 
 
 // forward declaration of the K3b classes
@@ -87,7 +89,7 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   K3bDoc* activeDoc() const;
 
-  const QPtrList<K3bDoc>& projects() const;
+  const Q3PtrList<K3bDoc>& projects() const;
 
   bool eject();
   void showOptionDialog( int = 0 );
@@ -294,7 +296,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   KToggleAction* actionViewDocumentHeader;
 
   // project actions
-  QPtrList<KAction> m_dataProjectActions;
+  Q3PtrList<KAction> m_dataProjectActions;
 
   KDockWidget* mainDock;
   KDockWidget* m_contentsDock;

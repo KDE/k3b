@@ -21,14 +21,16 @@
 #include <kdebug.h>
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
-static QPtrList<K3bThread> s_threads;
+static Q3PtrList<K3bThread> s_threads;
 
 
 void K3bThread::waitUntilFinished()
 {
-  QPtrListIterator<K3bThread> it( s_threads );
+  Q3PtrListIterator<K3bThread> it( s_threads );
   while( it.current() ) {
     kdDebug() << "Waiting for thread " << it.current() << endl;
     it.current()->wait();

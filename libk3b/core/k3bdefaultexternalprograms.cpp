@@ -23,7 +23,7 @@
 #include <qfileinfo.h>
 #include <qobject.h>
 #include <qregexp.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include <k3bprocess.h>
 #include <kdebug.h>
@@ -99,8 +99,8 @@ static QString& debianWeirdnessHack( QString& path )
     if( QFileInfo( path ).size() < 1024 ) {
       kdDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
       QFile f( path );
-      f.open( IO_ReadOnly );
-      QString s = QTextStream( &f ).read();
+      f.open( QIODevice::ReadOnly );
+      QString s = Q3TextStream( &f ).read();
       if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
 	kdDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
 	QString ext;

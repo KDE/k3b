@@ -18,7 +18,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 
 
@@ -36,7 +36,7 @@ K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent, const
   init( false );
 
   QToolTip::add( this, i18n("Select the Multisession Mode for the project.") );
-  QWhatsThis::add( this, i18n("<p><b>Multisession Mode</b>"
+  Q3WhatsThis::add( this, i18n("<p><b>Multisession Mode</b>"
 			      "<p><b>Auto</b><br>"
 			      "Let K3b decide which mode to use. The decision will be based "
 			      "on the size of the project (does it fill the whole media) and "

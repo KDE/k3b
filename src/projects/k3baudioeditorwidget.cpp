@@ -22,6 +22,12 @@
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QMouseEvent>
+#include <Q3PtrList>
 
 
 
@@ -89,18 +95,18 @@ public:
 };
 
 
-class K3bAudioEditorWidget::RangeList : public QPtrList<K3bAudioEditorWidget::Range>
+class K3bAudioEditorWidget::RangeList : public Q3PtrList<K3bAudioEditorWidget::Range>
 {
 public:
   RangeList()
-    : QPtrList<Range>() {
+    : Q3PtrList<Range>() {
   }
 
   RangeList( const RangeList& l )
-    : QPtrList<Range>( l ) {
+    : Q3PtrList<Range>( l ) {
   }
 
-  int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 ) {
+  int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 ) {
     if( *static_cast<Range*>(item1) > *static_cast<Range*>(item2) )
       return 1;
     else if( *static_cast<Range*>(item1) < *static_cast<Range*>(item2) )
@@ -169,7 +175,7 @@ public:
 
 
 K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent, const char* name )
-  : QFrame( parent, name, Qt::WNoAutoErase ),
+  : Q3Frame( parent, name, Qt::WNoAutoErase ),
     m_maxMarkers(1),
     m_idCnt(1),
     m_mouseAt(true),
@@ -409,11 +415,11 @@ K3b::Msf K3bAudioEditorWidget::rangeEnd( int identifier ) const
 }
 
 
-QValueList<int> K3bAudioEditorWidget::allRanges() const
+Q3ValueList<int> K3bAudioEditorWidget::allRanges() const
 {
-  QValueList<int> l;
+  Q3ValueList<int> l;
   d->ranges.sort();
-  for( QPtrListIterator<Range> it( d->ranges ); *it; ++it )
+  for( Q3PtrListIterator<Range> it( d->ranges ); *it; ++it )
     l.append( (*it)->id );
   return l;
 }
@@ -520,14 +526,14 @@ void K3bAudioEditorWidget::drawContents( QPainter* p )
 void K3bAudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
 {
   // we simply draw the ranges one after the other.
-  for( QPtrListIterator<Range> it( d->ranges ); *it; ++it )
+  for( Q3PtrListIterator<Range> it( d->ranges ); *it; ++it )
     drawRange( p, drawRect, *it );
 
   // Hack to make sure the currently selected range is always on top
   if( d->selectedRange )
     drawRange( p, drawRect, d->selectedRange );
   
-  for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
+  for( Q3PtrListIterator<Marker> it( m_markers ); *it; ++it )
     drawMarker( p, drawRect, *it );
 
 
@@ -607,7 +613,7 @@ void K3bAudioEditorWidget::drawMarker( QPainter* p, const QRect& drawRect, K3bAu
   int x = msfToPos( m->pos );
   p->drawLine( x, drawRect.bottom(), x, drawRect.top() );
 
-  QPointArray points( 3 );
+  Q3PointArray points( 3 );
   points.setPoint( 0, x, drawRect.top() + 6 );
   points.setPoint( 1, x-3, drawRect.top() );
   points.setPoint( 2, x+3, drawRect.top() );
@@ -621,7 +627,7 @@ void K3bAudioEditorWidget::fixupOverlappingRanges( Range* r )
 {
   // copy the list to avoid problems with the iterator
   RangeList ranges( d->ranges );
-  for( QPtrListIterator<Range> it( ranges ); *it; ++it ) {
+  for( Q3PtrListIterator<Range> it( ranges ); *it; ++it ) {
     Range* range = *it;
     if( range != r ) {
       // remove the range if it is covered completely
@@ -678,7 +684,7 @@ void K3bAudioEditorWidget::mousePressEvent( QMouseEvent* e )
     m_draggedMarker = findMarker( e->pos() );
   }
 
-  QFrame::mousePressEvent(e);
+  Q3Frame::mousePressEvent(e);
 }
 
 
@@ -702,13 +708,13 @@ void K3bAudioEditorWidget::mouseReleaseEvent( QMouseEvent* e )
   m_draggedMarker = 0;
   d->movedRange = 0;
 
-  QFrame::mouseReleaseEvent(e);
+  Q3Frame::mouseReleaseEvent(e);
 }
 
 
 void K3bAudioEditorWidget::mouseDoubleClickEvent( QMouseEvent* e )
 {
-  QFrame::mouseDoubleClickEvent(e);
+  Q3Frame::mouseDoubleClickEvent(e);
 }
 
 
@@ -771,13 +777,13 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
   else
     setCursor( Qt::PointingHandCursor );
 
-  QFrame::mouseMoveEvent(e);
+  Q3Frame::mouseMoveEvent(e);
 }
 
 
 K3bAudioEditorWidget::Range* K3bAudioEditorWidget::getRange( int i ) const
 {
-  for( QPtrListIterator<Range> it( d->ranges ); *it; ++it )
+  for( Q3PtrListIterator<Range> it( d->ranges ); *it; ++it )
     if( (*it)->id == i )
       return *it;
 
@@ -789,7 +795,7 @@ K3bAudioEditorWidget::Range* K3bAudioEditorWidget::findRange( const QPoint& p ) 
 {
   // TODO: binary search; maybe store start and end positions in sorted lists for quick searching
   // this might be a stupid approach but we do not have many ranges anyway
-  for( QPtrListIterator<Range> it( d->ranges ); *it; ++it ) {
+  for( Q3PtrListIterator<Range> it( d->ranges ); *it; ++it ) {
     Range* range = *it;
     int start = msfToPos( range->start );
     int end = msfToPos( range->end );
@@ -806,7 +812,7 @@ K3bAudioEditorWidget::Range* K3bAudioEditorWidget::findRangeEdge( const QPoint& 
 {
   // TODO: binary search
   // this might be a stupid approach but we do not have many ranges anyway
-  for( QPtrListIterator<Range> it( d->ranges ); *it; ++it ) {
+  for( Q3PtrListIterator<Range> it( d->ranges ); *it; ++it ) {
     Range* range = *it;
     int start = msfToPos( range->start );
     int end = msfToPos( range->end );
@@ -833,7 +839,7 @@ K3bAudioEditorWidget::Range* K3bAudioEditorWidget::findRangeEdge( const QPoint& 
 
 K3bAudioEditorWidget::Marker* K3bAudioEditorWidget::getMarker( int i ) const
 {
-  for( QPtrListIterator<Marker> it( m_markers ); *it; ++it )
+  for( Q3PtrListIterator<Marker> it( m_markers ); *it; ++it )
     if( (*it)->id == i )
       return *it;
 
@@ -844,7 +850,7 @@ K3bAudioEditorWidget::Marker* K3bAudioEditorWidget::getMarker( int i ) const
 K3bAudioEditorWidget::Marker* K3bAudioEditorWidget::findMarker( const QPoint& p ) const
 {
   // TODO: binary search
-  for( QPtrListIterator<Marker> it( m_markers ); *it; ++it ) {
+  for( Q3PtrListIterator<Marker> it( m_markers ); *it; ++it ) {
     Marker* marker = *it;
     int start = msfToPos( marker->pos );
 

@@ -337,7 +337,7 @@ bool K3bMovixDoc::saveDocumentData( QDomElement* docElem )
 
 
   // save the movix items
-  for( QPtrListIterator<K3bMovixFileItem> it( m_movixFiles );
+  for( Q3PtrListIterator<K3bMovixFileItem> it( m_movixFiles );
        *it; ++it ) {
     K3bMovixFileItem* item = *it;
 

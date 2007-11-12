@@ -61,7 +61,7 @@ bool K3bMad::open( const QString& filename )
 
   m_inputFile.setName( filename );
    
-  if( !m_inputFile.open( IO_ReadOnly ) ) {
+  if( !m_inputFile.open( QIODevice::ReadOnly ) ) {
     kdError() << "(K3bMad) could not open file " << m_inputFile.name() << endl;
     return false;
   }

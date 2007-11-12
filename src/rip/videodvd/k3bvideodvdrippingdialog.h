@@ -20,12 +20,12 @@
 #include <k3bvideodvd.h>
 #include "k3bvideodvdrippingjob.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 
 
 class K3bVideoDVDRippingWidget;
-class QCheckListItem;
+class Q3CheckListItem;
 
 class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 {
@@ -33,7 +33,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 
  public: 
   K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
-			    const QValueList<int>& titles,
+			    const Q3ValueList<int>& titles,
 			    QWidget *parent = 0, const char *name = 0 );
   ~K3bVideoDVDRippingDialog();
 
@@ -60,7 +60,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
   void slotUpdateVideoSizes();
 
  private:
-  void populateTitleView( const QValueList<int>& titles );
+  void populateTitleView( const Q3ValueList<int>& titles );
 
   QString createFilename( const K3bVideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
 
@@ -71,7 +71,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
   K3bVideoDVDRippingWidget* m_w;
 
   K3bVideoDVD::VideoDVD m_dvd;
-  QMap<QCheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
+  QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
 
   class AudioStreamViewItem;
 

@@ -16,6 +16,8 @@
 #include "k3bdebug.h"
 
 #include <stdio.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 K3bDebug::K3bDebug()
@@ -91,7 +93,7 @@ K3bDebug& K3bDebug::operator<<( const QString& s )
 }
 
 
-K3bDebug& K3bDebug::operator<<( const QCString& s )
+K3bDebug& K3bDebug::operator<<( const Q3CString& s )
 {
   fprintf( stderr, "%s", s.data() );
   return *this;

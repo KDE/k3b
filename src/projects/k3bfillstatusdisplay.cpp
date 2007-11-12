@@ -36,8 +36,15 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <Q3Frame>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -336,7 +343,7 @@ public:
 
 
 K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const char *name )
-  : QFrame(parent,name)
+  : Q3Frame(parent,name)
 {
   d = new Private;
   d->doc = doc;
@@ -352,7 +359,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const 
 //   QToolTip::add( d->buttonMenu, i18n("Fill display properties") );
 //   connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
 
-  QGridLayout* layout = new QGridLayout( this );
+  Q3GridLayout* layout = new Q3GridLayout( this );
   layout->setSpacing(5);
   layout->setMargin(frameWidth());
   layout->addWidget( d->displayWidget, 0, 0 );
@@ -547,7 +554,7 @@ void K3bFillStatusDisplay::slotBD50()
 
 void K3bFillStatusDisplay::slotWhy44()
 {
-  QWhatsThis::display( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
+  Q3WhatsThis::display( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
 			    "it says on the media?</b>"
 			    "<p>A single layer DVD media has a capacity of approximately "
 			    "4.4 GB which equals 4.4*1024<sup>3</sup> bytes. Media producers just "
@@ -705,9 +712,9 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
     //
 
     K3bDevice::Device* dev = 0;
-    QPtrList<K3bDevice::Device> devs = k3bcore->deviceManager()->burningDevices();
+    Q3PtrList<K3bDevice::Device> devs = k3bcore->deviceManager()->burningDevices();
 
-    for( QPtrListIterator<K3bDevice::Device> it( devs ); *it; ++it ) {
+    for( Q3PtrListIterator<K3bDevice::Device> it( devs ); *it; ++it ) {
       const K3bMedium& medium = k3bappcore->mediaCache()->medium( *it );
 
       if( ( medium.diskInfo().empty() ||

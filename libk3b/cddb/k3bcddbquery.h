@@ -19,7 +19,9 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "k3bcddbresult.h"
 
@@ -48,7 +50,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
    * After emitting the signal inexactMatches one has to choose one
    * of these entries and query it with queryInexactMatch
    */
-  const QValueList<K3bCddbResultHeader>& getInexactMatches() const { return m_inexactMatches; }
+  const Q3ValueList<K3bCddbResultHeader>& getInexactMatches() const { return m_inexactMatches; }
 
   static const QStringList& categories();
 
@@ -88,7 +90,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
   K3bCddbResultEntry& result() { return m_result; }
   void setError( int e ) { m_error = e; }
 
-  bool parseEntry( QTextStream&, K3bCddbResultEntry& );
+  bool parseEntry( Q3TextStream&, K3bCddbResultEntry& );
   int getCode( const QString& );
   QString handshakeString() const;
   QString queryString() const;
@@ -101,7 +103,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
    */
   void emitQueryFinished();
 
-  QValueList<K3bCddbResultHeader> m_inexactMatches;
+  Q3ValueList<K3bCddbResultHeader> m_inexactMatches;
 
  private:
   K3bDevice::Toc m_toc;

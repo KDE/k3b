@@ -21,6 +21,8 @@
 #include <kinstance.h>
 #include <kglobal.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /**
  * Template based on KGenericFactory. This is just here to avoid using the QStringList args parameter
@@ -71,7 +73,7 @@ class K3bPluginFactory : public KLibFactory
   }
 
  private:
-  QCString m_instanceName;
+  Q3CString m_instanceName;
   bool m_catalogueInitialized;
 
   static KInstance* s_instance;

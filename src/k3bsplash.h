@@ -17,7 +17,11 @@
 #ifndef K3BSPLASH_H
 #define K3BSPLASH_H
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QLabel>
+#include <QMouseEvent>
 
 class QLabel;
 class QMouseEvent;
@@ -25,7 +29,7 @@ class QPaintEvent;
 class QString;
 
 
-class K3bSplash : public QVBox
+class K3bSplash : public Q3VBox
 {
 Q_OBJECT
 

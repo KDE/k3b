@@ -17,9 +17,13 @@
 #define _K3B_INTERACTION_DIALOG_H_
 
 #include <kdialog.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QEvent>
+#include <QLabel>
 
 
-class QGridLayout;
+class Q3GridLayout;
 class QLabel;
 class KPushButton;
 class QButton;
@@ -266,7 +270,7 @@ class K3bInteractionDialog : public KDialog
   QButton* m_buttonLoadSettings;
   QButton* m_buttonSaveSettings;
 
-  QGridLayout* mainGrid;
+  Q3GridLayout* mainGrid;
   int m_defaultButton;
   QString m_configGroup;
 

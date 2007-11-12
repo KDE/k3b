@@ -16,33 +16,33 @@
 #ifndef _K3B_AUDIO_CDTRACK_DRAG_H_
 #define _K3B_AUDIO_CDTRACK_DRAG_H_
 
-#include <qdragobject.h>
-#include <qcstring.h>
-#include <qvaluelist.h>
+#include <q3dragobject.h>
+#include <q3cstring.h>
+#include <q3valuelist.h>
 
 #include <k3btoc.h>
 #include <k3bcddbresult.h>
 #include <k3bdevice.h>
 #include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bAudioCdTrackDrag : public QStoredDrag
+class LIBK3B_EXPORT K3bAudioCdTrackDrag : public Q3StoredDrag
 {
  public:
-  K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QValueList<int>& cdTrackNumbers, const K3bCddbResultEntry& cddb,
+  K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const Q3ValueList<int>& cdTrackNumbers, const K3bCddbResultEntry& cddb,
 		       K3bDevice::Device* lastDev = 0, QWidget* dragSource = 0, const char* name = 0 );
 
   const K3bDevice::Toc& toc() const { return m_toc; }
-  const QValueList<int>& cdTrackNumbers() const { return m_cdTrackNumbers; }
+  const Q3ValueList<int>& cdTrackNumbers() const { return m_cdTrackNumbers; }
   const K3bCddbResultEntry& cddbEntry() const { return m_cddb; }
 
   bool provides( const char* mimetype ) const { return !qstrcmp( mimetype, "k3b/audio_track_drag" ); }
 
   static bool canDecode( const QMimeSource* s ) { return s->provides( "k3b/audio_track_drag" ); }
-  static bool decode( const QMimeSource* s, K3bDevice::Toc&, QValueList<int>& trackNumbers, K3bCddbResultEntry&, K3bDevice::Device** dev = 0 );
+  static bool decode( const QMimeSource* s, K3bDevice::Toc&, Q3ValueList<int>& trackNumbers, K3bCddbResultEntry&, K3bDevice::Device** dev = 0 );
 
  private:
   K3bDevice::Toc m_toc;
-  QValueList<int> m_cdTrackNumbers;
+  Q3ValueList<int> m_cdTrackNumbers;
   K3bCddbResultEntry m_cddb;
   K3bDevice::Device* m_device;
 };

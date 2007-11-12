@@ -35,13 +35,15 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 
 K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char* name, bool modal )
@@ -64,20 +66,20 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
   m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
   m_writerSelectionWidget->setForceAutoSpeed(true);
 
-  QGroupBox* groupWritingMode = new QGroupBox( 1, Qt::Vertical, i18n("Writing Mode"), frame );
+  Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), frame );
   groupWritingMode->layout()->setMargin( marginHint() );
   groupWritingMode->layout()->setSpacing( spacingHint() );
   m_writingModeWidget = new K3bWritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
 						  groupWritingMode );
 
 
-  QGroupBox* groupOptions = new QGroupBox( 2, Qt::Vertical, i18n("Settings"), frame );
+  Q3GroupBox* groupOptions = new Q3GroupBox( 2, Qt::Vertical, i18n("Settings"), frame );
   groupOptions->layout()->setMargin( marginHint() );
   groupOptions->layout()->setSpacing( spacingHint() );
   m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
   m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
 
-  QGridLayout* grid = new QGridLayout( frame );
+  Q3GridLayout* grid = new Q3GridLayout( frame );
   grid->setMargin( 0 );
   grid->setSpacing( spacingHint() );
 
@@ -88,7 +90,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
 
 // FIXME: check if we need Blu-ray comments here
   QToolTip::add( m_checkForce, i18n("Force formatting of empty DVDs") );
-  QWhatsThis::add( m_checkForce, i18n("<p>If this option is checked K3b will format a "
+  Q3WhatsThis::add( m_checkForce, i18n("<p>If this option is checked K3b will format a "
 				      "DVD-RW even if it is empty. It may also be used to "
 				      "force K3b to format a DVD+RW or a DVD-RW in restricted "
 				      "overwrite mode."
@@ -99,7 +101,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
 				      "restricted overwrite mode.") );
 
   QToolTip::add( m_checkQuickFormat, i18n("Try to perform quick formatting") );
-  QWhatsThis::add( m_checkQuickFormat, i18n("<p>If this option is checked K3b will tell the writer "
+  Q3WhatsThis::add( m_checkQuickFormat, i18n("<p>If this option is checked K3b will tell the writer "
 					    "to perform a quick format."
 					    "<p>Erasing a rewritable medium completely can take a very long "
 					    "time and some writers perform a full format even if "

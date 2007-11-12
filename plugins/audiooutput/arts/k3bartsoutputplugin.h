@@ -19,6 +19,8 @@
 #include <k3baudiooutputplugin.h>
 
 #include <artsc/artsc.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class K3bArtsOutputPlugin : public K3bAudioOutputPlugin
@@ -28,7 +30,7 @@ class K3bArtsOutputPlugin : public K3bAudioOutputPlugin
   ~K3bArtsOutputPlugin();
 
   int pluginSystemVersion() const { return 3; }
-  QCString soundSystem() const { return "arts"; }
+  Q3CString soundSystem() const { return "arts"; }
 
   bool init();
   void cleanup();

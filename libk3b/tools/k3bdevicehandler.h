@@ -23,7 +23,9 @@
 #include "k3bmsf.h"
 #include "k3bcdtext.h"
 #include "k3b_export.h"
-#include <qcstring.h>
+#include <q3cstring.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 class QCustomEvent;
 

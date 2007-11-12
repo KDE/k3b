@@ -18,20 +18,23 @@
 #define K3BDEVICEWIDGET_H
 
 #include <qwidget.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QLabel>
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
 
 class QComboBox;
 class QLabel;
-class QGroupBox;
+class Q3GroupBox;
 class QPushButton;
 class QCheckBox;
 class K3bListView;
 class QString;
 class KIntNumInput;
-class QFrame;
-class QListViewItem;
+class Q3Frame;
+class Q3ListViewItem;
 class QString;
 class QLineEdit;
 
@@ -63,10 +66,10 @@ class K3bDeviceWidget : public QWidget
   class PrivateDeviceViewItem1;
 
   /** list to save changes to the devices before applying */
-  QPtrList<PrivateTempDevice> m_tempDevices;
+  Q3PtrList<PrivateTempDevice> m_tempDevices;
 
-  QListViewItem* m_writerParentViewItem;
-  QListViewItem* m_readerParentViewItem;
+  Q3ListViewItem* m_writerParentViewItem;
+  Q3ListViewItem* m_readerParentViewItem;
 
   K3bDevice::DeviceManager* m_deviceManager;
 

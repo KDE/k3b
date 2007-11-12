@@ -50,7 +50,7 @@ class K3bAudioTrackViewItem : public K3bListViewItem
   /**
    * @reimpl
    */
-  void insertItem( QListViewItem* item );
+  void insertItem( Q3ListViewItem* item );
 
   void paintBranches( QPainter*, const QColorGroup &, int, int, int );
   void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );

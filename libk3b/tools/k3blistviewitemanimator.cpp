@@ -16,7 +16,9 @@
 #include "k3blistviewitemanimator.h"
 
 #include <qtimer.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
@@ -29,7 +31,7 @@ K3bListViewItemAnimator::K3bListViewItemAnimator( QObject* parent, const char* n
 }
 
 
-K3bListViewItemAnimator::K3bListViewItemAnimator( QListViewItem* item, int col, QObject* parent, const char* name )
+K3bListViewItemAnimator::K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent, const char* name )
   : QObject( parent, name )
 {
   init();
@@ -42,7 +44,7 @@ K3bListViewItemAnimator::~K3bListViewItemAnimator()
 }
 
 
-QListViewItem* K3bListViewItemAnimator::item() const
+Q3ListViewItem* K3bListViewItemAnimator::item() const
 {
     return m_item;
 }
@@ -75,7 +77,7 @@ void K3bListViewItemAnimator::stop()
 }
 
 
-void K3bListViewItemAnimator::setItem( QListViewItem* item, int col )
+void K3bListViewItemAnimator::setItem( Q3ListViewItem* item, int col )
 {
   m_item = item;
   m_column = col;

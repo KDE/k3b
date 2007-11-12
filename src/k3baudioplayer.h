@@ -20,6 +20,9 @@
 #include <klistview.h>
 
 #include <config.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QLabel>
 
 #ifdef WITH_ARTS
 #include <arts/kmedia2.h>
@@ -33,7 +36,7 @@ class QSlider;
 class QPainter;
 class QColorGroup;
 class QDropEvent;
-class QDragObject;
+class Q3DragObject;
 class KAction;
 class KActionMenu;
 
@@ -45,8 +48,8 @@ class KActionMenu;
 class K3bPlayListViewItem : public KListViewItem
 {
  public:
-  K3bPlayListViewItem( const QString&, QListView* parent );
-  K3bPlayListViewItem( const QString&, QListView* parent, QListViewItem* after );
+  K3bPlayListViewItem( const QString&, Q3ListView* parent );
+  K3bPlayListViewItem( const QString&, Q3ListView* parent, Q3ListViewItem* after );
   ~K3bPlayListViewItem();
 
   /** @returns the filename for the first column and the 
@@ -92,7 +95,7 @@ Q_OBJECT
 
  protected:
   bool acceptDrag( QDropEvent* e ) const;
-  QDragObject* dragObject();
+  Q3DragObject* dragObject();
 };
 
 
@@ -161,16 +164,16 @@ Q_OBJECT
   void slotUpdateCurrentTime( int time );
   void slotUpdateLength( long time );
   void slotUpdateFilename();
-  void slotPlayItem( QListViewItem* item );
-  void slotDropped( QDropEvent* e, QListViewItem* after );
+  void slotPlayItem( Q3ListViewItem* item );
+  void slotDropped( QDropEvent* e, Q3ListViewItem* after );
 
   /**
    * set the actual item. Will set m_currentItem and 
    * handle highlighting of the current item
    */
-  void setCurrentItem( QListViewItem* item );
+  void setCurrentItem( Q3ListViewItem* item );
   void slotRemoveSelected();
-  void slotShowContextMenu( KListView*, QListViewItem* item, const QPoint& p );
+  void slotShowContextMenu( KListView*, Q3ListViewItem* item, const QPoint& p );
 
  private:
 #ifdef WITH_ARTS

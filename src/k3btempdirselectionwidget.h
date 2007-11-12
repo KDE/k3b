@@ -17,7 +17,9 @@
 #ifndef K3BTEMPDIRSELECTIONWIDGET_H
 #define K3BTEMPDIRSELECTIONWIDGET_H
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <QLabel>
 #include <kio/global.h>
 
 class QTimer;
@@ -29,7 +31,7 @@ class KConfigBase;
 /**
   *@author Sebastian Trueg
   */
-class K3bTempDirSelectionWidget : public QGroupBox
+class K3bTempDirSelectionWidget : public Q3GroupBox
 {
   Q_OBJECT
 

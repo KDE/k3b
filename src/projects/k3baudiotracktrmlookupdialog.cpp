@@ -35,10 +35,13 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtimer.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qeventloop.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent, const char* name )
@@ -51,7 +54,7 @@ K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent, con
 		 true,
 		 true )
 {
-  QGridLayout* grid = new QGridLayout( plainPage() );
+  Q3GridLayout* grid = new Q3GridLayout( plainPage() );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
 
@@ -81,7 +84,7 @@ K3bAudioTrackTRMLookupDialog::~K3bAudioTrackTRMLookupDialog()
 }
 
 
-int K3bAudioTrackTRMLookupDialog::lookup( const QPtrList<K3bAudioTrack>& tracks )
+int K3bAudioTrackTRMLookupDialog::lookup( const Q3PtrList<K3bAudioTrack>& tracks )
 {
   m_mbJob->setTracks( tracks );
   m_mbJob->start();

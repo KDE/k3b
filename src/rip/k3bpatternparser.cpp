@@ -19,7 +19,7 @@
 
 #include <qregexp.h>
 #include <qdatetime.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -193,7 +193,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   // /* delete line comment to comment out
   // the following part: Conditional Inclusion
 
-  QValueStack<int> offsetStack;
+  Q3ValueStack<int> offsetStack;
   QString inclusion;
   bool isIncluded;
 

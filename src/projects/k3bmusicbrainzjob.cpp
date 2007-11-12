@@ -30,6 +30,8 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 // determine one trm
@@ -43,7 +45,7 @@ public:
   }
   void run();
   void cancel();
-  const QCString& signature() const {
+  const Q3CString& signature() const {
     return m_trm.signature();
   }
 
@@ -63,7 +65,7 @@ public:
 
   void run();
 
-  void setSignature( const QCString& sig ) {
+  void setSignature( const Q3CString& sig ) {
     m_sig = sig;
   }
 
@@ -82,7 +84,7 @@ public:
 private:
   K3bMusicBrainz m_mb;
   int m_results;
-  QCString m_sig;
+  Q3CString m_sig;
 };
 
 

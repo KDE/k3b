@@ -25,12 +25,19 @@
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qpainter.h>
-#include <qsimplerichtext.h>
-#include <qptrlist.h>
+#include <q3simplerichtext.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qtooltip.h>
 #include <qcursor.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QShowEvent>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -80,8 +87,8 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
   QFont fnt(font());
   fnt.setBold(true);
   fnt.setPointSize( 16 );
-  m_header = new QSimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
-  m_infoText = new QSimpleRichText( QString::fromUtf8("<qt align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg")
+  m_header = new Q3SimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
+  m_infoText = new Q3SimpleRichText( QString::fromUtf8("<qt align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg")
 				    .arg(kapp->aboutData()->version()), font() );
 
   // set a large width just to be sure no linebreak occurs
@@ -131,7 +138,7 @@ void K3bWelcomeWidget::Display::removeButton( K3bFlatButton* b )
 }
 
 
-void K3bWelcomeWidget::Display::rebuildGui( const QPtrList<KAction>& actions )
+void K3bWelcomeWidget::Display::rebuildGui( const Q3PtrList<KAction>& actions )
 {
   m_actions = actions;
   rebuildGui();
@@ -167,7 +174,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
   if( numActions > 0 ) {
 
     // create buttons
-    for( QPtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
+    for( Q3PtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
       KAction* a = it.current();
 
       K3bFlatButton* b = new K3bFlatButton( a, this );
@@ -179,7 +186,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
     // determine the needed button size (since all buttons should be equal in size
     // we use the max of all sizes)
     m_buttonSize = m_buttons.first()->sizeHint();
-    for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
+    for( Q3PtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
       m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
     }
 
@@ -202,7 +209,7 @@ void K3bWelcomeWidget::Display::repositionButtons()
   int row = 0;
   int col = 0;
 
-  for( QPtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
+  for( Q3PtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
     K3bFlatButton* b = it.current();
 
     b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
@@ -341,7 +348,7 @@ void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
 
 
 K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const char* name )
-  : QScrollView( parent, name ),
+  : Q3ScrollView( parent, name ),
     m_mainWindow( mw )
 {
   main = new Display( this );
@@ -368,7 +375,7 @@ void K3bWelcomeWidget::loadConfig( KConfigBase* c )
       sl.append( "tools_copy_medium" );
   }
 
-  QPtrList<KAction> actions;
+  Q3PtrList<KAction> actions;
   for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
     if( KAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
       actions.append(a);
@@ -384,7 +391,7 @@ void K3bWelcomeWidget::saveConfig( KConfigBase* c )
   KConfigGroup grp( c, "Welcome Widget" );
 
   QStringList sl;
-  for( QPtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
+  for( Q3PtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
     sl.append( it.current()->name() );
 
   grp.writeEntry( "welcome_actions", sl );
@@ -393,14 +400,14 @@ void K3bWelcomeWidget::saveConfig( KConfigBase* c )
 
 void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 {
-  QScrollView::resizeEvent( e );
+  Q3ScrollView::resizeEvent( e );
   fixSize();
 }
 
 
 void K3bWelcomeWidget::showEvent( QShowEvent* e )
 {
-  QScrollView::showEvent( e );
+  Q3ScrollView::showEvent( e );
   fixSize();
 }
 

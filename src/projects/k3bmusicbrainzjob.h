@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3PtrList>
 /* 
  *
  * $Id$
@@ -62,7 +64,7 @@ class K3bMusicBrainzJob : public K3bJob
   void start();
   void cancel();
 
-  void setTracks( const QPtrList<K3bAudioTrack>& tracks ) { m_tracks = tracks; }
+  void setTracks( const Q3PtrList<K3bAudioTrack>& tracks ) { m_tracks = tracks; }
 
  private slots:
   void slotTrmPercent( int p );
@@ -78,7 +80,7 @@ class K3bMusicBrainzJob : public K3bJob
   K3bThreadJob* m_trmJob;
   K3bThreadJob* m_mbJob;
 
-  QPtrList<K3bAudioTrack> m_tracks;
+  Q3PtrList<K3bAudioTrack> m_tracks;
 
   bool m_canceled;
 };

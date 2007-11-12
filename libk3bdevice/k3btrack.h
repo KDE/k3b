@@ -18,8 +18,8 @@
 #ifndef K3BTRACK_H
 #define K3BTRACK_H
 
-#include <qcstring.h>
-#include <qvaluevector.h>
+#include <q3cstring.h>
+#include <q3valuevector.h>
 
 #include <k3bmsf.h>
 #include "k3bdevice_export.h"
@@ -75,8 +75,8 @@ namespace K3bDevice
     bool recordedIncremental() const { return m_preEmphasis; }
     bool recordedUninterrupted() const { return !recordedIncremental(); }
 
-    const QCString& isrc() const { return m_isrc; }
-    void setIsrc( const QCString& s ) { m_isrc = s; }
+    const Q3CString& isrc() const { return m_isrc; }
+    void setIsrc( const Q3CString& s ) { m_isrc = s; }
 
     const K3b::Msf& firstSector() const { return m_firstSector; }
     const K3b::Msf& lastSector() const { return m_lastSector; }
@@ -120,7 +120,7 @@ namespace K3bDevice
      * All indices. Normally this list is empty as indices are rarely used.
      * Starts with index 2 (since index 1 are all other sectors FIXME)
      */
-    const QValueVector<K3b::Msf>& indices() const { return m_indices; }
+    const Q3ValueVector<K3b::Msf>& indices() const { return m_indices; }
 
     bool operator==( const Track& ) const;
     bool operator!=( const Track& ) const;
@@ -140,9 +140,9 @@ namespace K3bDevice
 
     int m_session;
 
-    QValueVector<K3b::Msf> m_indices;
+    Q3ValueVector<K3b::Msf> m_indices;
 
-    QCString m_isrc;
+    Q3CString m_isrc;
   };
 }
 

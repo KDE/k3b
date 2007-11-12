@@ -22,6 +22,8 @@
 #define _K3B_MINI_BUTTON_H_
 
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QEvent>
 
 class QPainter;
 class QEvent;

@@ -32,17 +32,17 @@
 #include <k3bversion.h>
 #include <k3bthememanager.h>
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qdatetime.h>
 #include <qstring.h>
-#include <qhbox.h>
-#include <qheader.h>
+#include <q3hbox.h>
+#include <q3header.h>
 #include <qscrollbar.h>
 #include <qpoint.h>
 #include <qfontmetrics.h>
@@ -51,6 +51,13 @@
 #include <qeventloop.h>
 #include <qfile.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QKeyEvent>
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
+#include <QCloseEvent>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -114,27 +121,27 @@ K3bJobProgressDialog::~K3bJobProgressDialog()
 
 void K3bJobProgressDialog::setupGUI()
 {
-  QVBoxLayout* mainLayout = new QVBoxLayout( this, 11, 6, "mainLayout");
+  Q3VBoxLayout* mainLayout = new Q3VBoxLayout( this, 11, 6, "mainLayout");
 
 
   // header
   // ------------------------------------------------------------------------------------------
-  QFrame* headerFrame = new QFrame( this, "headerFrame" );
-  headerFrame->setFrameShape( QFrame::StyledPanel );
-  headerFrame->setFrameShadow( QFrame::Sunken );
+  Q3Frame* headerFrame = new Q3Frame( this, "headerFrame" );
+  headerFrame->setFrameShape( Q3Frame::StyledPanel );
+  headerFrame->setFrameShadow( Q3Frame::Sunken );
   headerFrame->setLineWidth( 1 );
   headerFrame->setMargin( 1 );
-  QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
+  Q3HBoxLayout* headerLayout = new Q3HBoxLayout( headerFrame );
   headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
   headerLayout->setSpacing( 0 );
   m_pixLabel = new K3bThemedLabel( headerFrame );
   headerLayout->addWidget( m_pixLabel );
 
-  QFrame* frame4 = new QFrame( headerFrame, "frame4" );
+  Q3Frame* frame4 = new Q3Frame( headerFrame, "frame4" );
   frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
-  frame4->setFrameShape( QFrame::NoFrame );
-  frame4->setFrameShadow( QFrame::Raised );
-  QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout");
+  frame4->setFrameShape( Q3Frame::NoFrame );
+  frame4->setFrameShadow( Q3Frame::Raised );
+  Q3VBoxLayout* frame4Layout = new Q3VBoxLayout( frame4, 6, 3, "frame4Layout");
 
   m_labelJob = new K3bThemedLabel( frame4 );
   m_labelJob->setMinimumVisibleText( 40 );
@@ -166,21 +173,21 @@ void K3bJobProgressDialog::setupGUI()
 
   // progress header
   // ------------------------------------------------------------------------------------------
-  QFrame* progressHeaderFrame = new QFrame( this, "progressHeaderFrame" );
-  progressHeaderFrame->setFrameShape( QFrame::StyledPanel );
-  progressHeaderFrame->setFrameShadow( QFrame::Sunken );
+  Q3Frame* progressHeaderFrame = new Q3Frame( this, "progressHeaderFrame" );
+  progressHeaderFrame->setFrameShape( Q3Frame::StyledPanel );
+  progressHeaderFrame->setFrameShadow( Q3Frame::Sunken );
   progressHeaderFrame->setLineWidth( 1 );
   progressHeaderFrame->setMargin( 1 );
 
-  QHBoxLayout* progressHeaderLayout = new QHBoxLayout( progressHeaderFrame );
+  Q3HBoxLayout* progressHeaderLayout = new Q3HBoxLayout( progressHeaderFrame );
   progressHeaderLayout->setMargin( 2 );
   progressHeaderLayout->setSpacing( 0 );
 
-  QFrame* frame5 = new QFrame( progressHeaderFrame, "frame5" );
+  Q3Frame* frame5 = new Q3Frame( progressHeaderFrame, "frame5" );
   frame5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame5->sizePolicy().hasHeightForWidth() ) );
-  frame5->setFrameShape( QFrame::NoFrame );
-  frame5->setFrameShadow( QFrame::Raised );
-  QVBoxLayout* frame5Layout = new QVBoxLayout( frame5, 6, 3, "frame5Layout");
+  frame5->setFrameShape( Q3Frame::NoFrame );
+  frame5->setFrameShadow( Q3Frame::Raised );
+  Q3VBoxLayout* frame5Layout = new Q3VBoxLayout( frame5, 6, 3, "frame5Layout");
 
   m_labelTask = new K3bThemedLabel( frame5 );
   QFont m_labelTask_font(  m_labelTask->font() );
@@ -198,7 +205,7 @@ void K3bJobProgressDialog::setupGUI()
   mainLayout->addWidget( progressHeaderFrame );
   // ------------------------------------------------------------------------------------------
 
-  QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3");
+  Q3HBoxLayout* layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3");
 
   m_labelSubTask = new KCutLabel( this, "m_labelSubTask" );
   layout3->addWidget( m_labelSubTask );
@@ -211,7 +218,7 @@ void K3bJobProgressDialog::setupGUI()
   m_progressSubPercent = new KProgress( this, "m_progressSubPercent" );
   mainLayout->addWidget( m_progressSubPercent );
 
-  QHBoxLayout* layout4 = new QHBoxLayout( 0, 0, 6, "layout4");
+  Q3HBoxLayout* layout4 = new Q3HBoxLayout( 0, 0, 6, "layout4");
 
   QLabel* textLabel5 = new QLabel( i18n("Overall progress:"), this, "textLabel5" );
   layout4->addWidget( textLabel5 );
@@ -224,20 +231,20 @@ void K3bJobProgressDialog::setupGUI()
   m_progressPercent = new KProgress( this, "m_progressPercent" );
   mainLayout->addWidget( m_progressPercent );
 
-  m_frameExtraInfo = new QFrame( this, "m_frameExtraInfo" );
-  m_frameExtraInfo->setFrameShape( QFrame::NoFrame );
-  m_frameExtraInfo->setFrameShadow( QFrame::Raised );
-  m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo );
+  m_frameExtraInfo = new Q3Frame( this, "m_frameExtraInfo" );
+  m_frameExtraInfo->setFrameShape( Q3Frame::NoFrame );
+  m_frameExtraInfo->setFrameShadow( Q3Frame::Raised );
+  m_frameExtraInfoLayout = new Q3GridLayout( m_frameExtraInfo );
   m_frameExtraInfoLayout->setMargin(0);
   m_frameExtraInfoLayout->setSpacing( spacingHint() );
   mainLayout->addWidget( m_frameExtraInfo );
 
-  QFrame* line2 = new QFrame( this, "line2" );
-  line2->setFrameShape( QFrame::HLine );
- line2->setFrameShadow( QFrame::Sunken );
+  Q3Frame* line2 = new Q3Frame( this, "line2" );
+  line2->setFrameShape( Q3Frame::HLine );
+ line2->setFrameShadow( Q3Frame::Sunken );
   mainLayout->addWidget( line2 );
 
-  QHBoxLayout* layout5 = new QHBoxLayout( 0, 0, 6, "layout5");
+  Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, 6, "layout5");
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout5->addItem( spacer );
 
@@ -326,7 +333,7 @@ void K3bJobProgressDialog::slotProcessedSubSize( int processedTrackSize, int tra
 
 void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type )
 {
-  QListViewItem* currentInfoItem = new QListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
+  Q3ListViewItem* currentInfoItem = new Q3ListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
   currentInfoItem->setSelectable( false );
 
   // set the icon

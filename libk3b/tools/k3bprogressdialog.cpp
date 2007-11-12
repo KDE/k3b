@@ -20,8 +20,10 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qframe.h>
-#include <qwidgetstack.h>
+#include <q3frame.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kprogress.h>
@@ -33,13 +35,13 @@ K3bProgressDialog::K3bProgressDialog( const QString& text,
 				      const char* name ) 
   : KDialogBase( parent, name, true, caption, Cancel|Ok, Ok, true )
 {
-  QFrame* main = makeMainWidget();
-  QGridLayout* mainLayout = new QGridLayout( main );
+  Q3Frame* main = makeMainWidget();
+  Q3GridLayout* mainLayout = new Q3GridLayout( main );
   mainLayout->setMargin( marginHint() );
   mainLayout->setSpacing( spacingHint() );
 
   m_label = new QLabel( text, main );
-  m_stack = new QWidgetStack( main );
+  m_stack = new Q3WidgetStack( main );
   m_progressBar = new KProgress( m_stack );
   m_busyWidget = new K3bBusyWidget( m_stack );
   m_stack->addWidget( m_progressBar );

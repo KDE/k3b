@@ -22,7 +22,9 @@
 #include <qdom.h>
 #include <qdatetime.h>
 #include <qtimer.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 // KDE-includes
 #include <kprocess.h>
@@ -81,7 +83,7 @@ bool K3bVcdDoc::newDocument()
 {
     clear();
     if ( !m_tracks )
-        m_tracks = new QPtrList<K3bVcdTrack>;
+        m_tracks = new Q3PtrList<K3bVcdTrack>;
     m_tracks->setAutoDelete( false );
 
     return K3bDoc::newDocument();
@@ -457,7 +459,7 @@ void K3bVcdDoc::setPbcTracks()
         int count = m_tracks->count();
         kdDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count ) << endl;
 
-        QPtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
+        Q3PtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
         K3bVcdTrack* track;
         while ( ( track = iterTrack.current() ) != 0 ) {
             ++iterTrack;
@@ -841,7 +843,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
     // -------------------------------------------------------------
     QDomElement contentsElem = doc.createElement( "contents" );
 
-    QPtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
+    Q3PtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
     K3bVcdTrack* track;
 
     while ( ( track = iterTrack.current() ) != 0 ) {

@@ -61,7 +61,7 @@ class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
    *  @param parent This action's parent.
    *  @param name An internal name for this action.
    */
-  K3bRadioAction( const QString& text, const QIconSet& pix, const KShortcut& cut = KShortcut(),
+  K3bRadioAction( const QString& text, const QIcon& pix, const KShortcut& cut = KShortcut(),
                   QObject* parent = 0, const char* name = 0 );
 
   /**
@@ -83,7 +83,7 @@ class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
    *  @param parent This action's parent.
    *  @param name An internal name for this action.
    */
-  K3bRadioAction( const QString& text, const QIconSet& pix, const KShortcut& cut,
+  K3bRadioAction( const QString& text, const QIcon& pix, const KShortcut& cut,
                   const QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
 
   /**

@@ -22,6 +22,10 @@
 #include <kurl.h>
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
 
 
 class K3bDataDoc;
@@ -65,15 +69,15 @@ class K3bDataFileView : public K3bListView
 
  private slots:
   void slotDataItemRemoved( K3bDataItem* );
-  void slotExecuted( QListViewItem* );
-  void slotDropped( QDropEvent* e, QListViewItem* after, QListViewItem* parent );
-  void showPopupMenu( KListView*, QListViewItem* _item, const QPoint& );
+  void slotExecuted( Q3ListViewItem* );
+  void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent );
+  void showPopupMenu( KListView*, Q3ListViewItem* _item, const QPoint& );
   void slotRenameItem();
   void slotRemoveItem();
   void slotNewDir();
   void slotParentDir();
   void slotProperties();
-  void slotDoubleClicked( QListViewItem* item );
+  void slotDoubleClicked( Q3ListViewItem* item );
   void slotItemAdded( K3bDataItem* );
   void slotAddUrls();
   void slotOpen();
@@ -82,7 +86,7 @@ class K3bDataFileView : public K3bListView
   bool acceptDrag(QDropEvent* e) const;
   void contentsDragMoveEvent( QDragMoveEvent* e );
   void contentsDragLeaveEvent( QDragLeaveEvent* e );
-  QDragObject* dragObject();
+  Q3DragObject* dragObject();
 
  private:
   void clearItems();

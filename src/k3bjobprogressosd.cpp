@@ -29,6 +29,9 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 #include <X11/Xlib.h>
 

@@ -37,16 +37,20 @@
 
 #include <qdir.h>
 #include <qevent.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qcursor.h>
 #include <qnamespace.h>
 #include <qmap.h>
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 #include <qpainter.h>
 #include <qfont.h>
 #include <qstyle.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPixmap>
+#include <Q3Frame>
 
 
 K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
@@ -328,10 +332,10 @@ void K3bDeviceTreeToolTip::maybeTip( const QPoint& pos )
 
   K3bDevice::Device* dev = static_cast<K3bDeviceBranch*>( item->branch() )->device();
 
-  QFrame* tooltip = new QFrame( parentWidget() );
-  tooltip->setFrameStyle( QFrame::Panel | QFrame::Raised );
-  tooltip->setFrameShape( QFrame::StyledPanel );
-  QGridLayout* lay = new QGridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
+  Q3Frame* tooltip = new Q3Frame( parentWidget() );
+  tooltip->setFrameStyle( Q3Frame::Panel | Q3Frame::Raised );
+  tooltip->setFrameShape( Q3Frame::StyledPanel );
+  Q3GridLayout* lay = new Q3GridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
 
   QString text = k3bappcore->mediaCache()->medium( dev ).longString();
   int detailsStart = text.find( "<p>", 3 );
@@ -387,7 +391,7 @@ public:
       currentDeviceBranch(0) {
   }
 
-  QPtrDict<K3bDeviceBranch> deviceBranchDict;
+  Q3PtrDict<K3bDeviceBranch> deviceBranchDict;
   QMap<KFileTreeBranch*, K3bDevice::Device*> branchDeviceMap;
 
   K3bDevice::DeviceManager* deviceManager;
@@ -413,10 +417,10 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
   m_dirOnlyMode = true;
   m_menuEnabled = false;
 
-  connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
-  connect( this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
-  connect( this, SIGNAL(contextMenu(KListView*, QListViewItem* , const QPoint& )),
-	   this, SLOT(slotContextMenu(KListView*, QListViewItem* , const QPoint& )) );
+  connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
+  connect( this, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
+  connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem* , const QPoint& )),
+	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem* , const QPoint& )) );
 
   // we always simulate the single click
   slotSettingsChangedK3b(KApplication::SETTINGS_MOUSE);
@@ -489,7 +493,7 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
   d->branchDeviceMap.clear();
   d->deviceBranchDict.clear();
 
-  for( QPtrListIterator<K3bDevice::Device> it( dm->allDevices() ); *it; ++it )
+  for( Q3PtrListIterator<K3bDevice::Device> it( dm->allDevices() ); *it; ++it )
     addDeviceBranch( *it );
 
   if( dm != d->deviceManager ) {
@@ -576,7 +580,7 @@ KFileTreeBranch* K3bFileTreeView::addBranch( const KURL& url, const QString& nam
 }
 
 
-void K3bFileTreeView::slotItemExecuted( QListViewItem* item )
+void K3bFileTreeView::slotItemExecuted( Q3ListViewItem* item )
 {
   KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
   if( d->branchDeviceMap.contains( treeItem->branch() ) &&
@@ -612,7 +616,7 @@ void K3bFileTreeView::followUrl( const KURL& url )
 }
 
 
-void K3bFileTreeView::slotContextMenu( KListView*, QListViewItem* item, const QPoint& p )
+void K3bFileTreeView::slotContextMenu( KListView*, Q3ListViewItem* item, const QPoint& p )
 {
   KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
   if( treeItem ) {
@@ -693,17 +697,17 @@ void K3bFileTreeView::slotSettingsChangedK3b(int category)
   // we force single click like konqueror does. This really should be done in KFileTreeView
 
   if( category == KApplication::SETTINGS_MOUSE ) {
-    disconnect(this, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint &, int)),
-	       this, SLOT(slotMouseButtonClickedK3b(int, QListViewItem*, const QPoint &, int)));
+    disconnect(this, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint &, int)),
+	       this, SLOT(slotMouseButtonClickedK3b(int, Q3ListViewItem*, const QPoint &, int)));
 
     if( !KGlobalSettings::singleClick() )
-      connect(this, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint &, int)),
-	      this, SLOT(slotMouseButtonClickedK3b(int, QListViewItem*, const QPoint &, int)));
+      connect(this, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint &, int)),
+	      this, SLOT(slotMouseButtonClickedK3b(int, Q3ListViewItem*, const QPoint &, int)));
   }
 }
 
 
-void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, QListViewItem *item, const QPoint &pos, int c )
+void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c )
 {
   if( (btn == LeftButton) && item )
     emitExecute(item, pos, c);

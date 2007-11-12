@@ -22,12 +22,12 @@
 #include <k3bcdtext.h>
 #include <k3btoc.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include "k3b_export.h"
 #include <kurl.h>
 

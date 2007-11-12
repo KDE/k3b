@@ -24,6 +24,8 @@
 #include <qlayout.h>
 #include <qcursor.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kdialog.h>
@@ -35,7 +37,7 @@
 K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   : QWidget( parent, name )
 {
-  QGridLayout* frameLayout = new QGridLayout( this );
+  Q3GridLayout* frameLayout = new Q3GridLayout( this );
   frameLayout->setSpacing( KDialog::spacingHint() );
   frameLayout->setMargin( 0 );
 

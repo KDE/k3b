@@ -31,10 +31,12 @@
 #include <qslider.h>
 #include <qlcdnumber.h>
 #include <qcheckbox.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <vorbis/vorbisenc.h>
 
@@ -194,7 +196,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
   vorbis_comment_init( d->vorbisComment );
 
   // add the encoder tag (so everybody knows we did it! ;)
-  vorbis_comment_add_tag( d->vorbisComment, QCString("ENCODER").data(), QCString("K3bOggVorbisEncoderPlugin").data() );
+  vorbis_comment_add_tag( d->vorbisComment, Q3CString("ENCODER").data(), Q3CString("K3bOggVorbisEncoderPlugin").data() );
 
   // set up the analysis state and auxiliary encoding storage
   d->vorbisDspState = new vorbis_dsp_state;
@@ -331,7 +333,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
 void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
 {
   if( d->vorbisComment ) {
-    QCString key;
+    Q3CString key;
 
     switch( f ) {
     case META_TRACK_TITLE:
@@ -445,12 +447,12 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
   QToolTip::add( w->m_radioQualityLevel, ttQuality );
   QToolTip::add( w->m_labelQualityLevel, ttQuality );
   QToolTip::add( w->m_slideQualityLevel, ttQuality );
-  QWhatsThis::add( w->m_radioQualityLevel, wsQuality );
-  QWhatsThis::add( w->m_labelQualityLevel, wsQuality );
-  QWhatsThis::add( w->m_slideQualityLevel, wsQuality );
+  Q3WhatsThis::add( w->m_radioQualityLevel, wsQuality );
+  Q3WhatsThis::add( w->m_labelQualityLevel, wsQuality );
+  Q3WhatsThis::add( w->m_slideQualityLevel, wsQuality );
 
 
-  QHBoxLayout* lay = new QHBoxLayout( this );
+  Q3HBoxLayout* lay = new Q3HBoxLayout( this );
   lay->setMargin( 0 );
 
   lay->addWidget( w );

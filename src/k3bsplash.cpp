@@ -25,6 +25,8 @@
 #include <qstring.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -32,7 +34,7 @@
 
 
 K3bSplash::K3bSplash( QWidget* parent, const char* name )
-  : QVBox( parent, name, 
+  : Q3VBox( parent, name, 
 	   WStyle_Customize|
 	   WDestructiveClose|
 	   /*	   WStyle_Splash|*/
@@ -82,7 +84,7 @@ void K3bSplash::mousePressEvent( QMouseEvent* )
 
 void K3bSplash::show()
 {
-  QVBox::show();
+  Q3VBox::show();
   // make sure the splash screen is shown immediately
   qApp->processEvents();
 }

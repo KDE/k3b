@@ -17,16 +17,18 @@
 #define K3BVCDBURNDIALOG_H
 
 #include "k3bprojectburndialog.h"
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QCheckBox;
-class QGroupBox;
-class QButtonGroup;
+class Q3GroupBox;
+class Q3ButtonGroup;
 class QSpinBox;
 class QRadioButton;
 class QLabel;
 class QLineEdit;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 class QToolButton;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
@@ -61,22 +63,22 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         // the video-cd-tab
         // -----------------------------------------------------------
 
-        QButtonGroup* m_groupVcdFormat;
+        Q3ButtonGroup* m_groupVcdFormat;
         QRadioButton* m_radioVcd11;
         QRadioButton* m_radioVcd20;
         QRadioButton* m_radioSvcd10;
         QRadioButton* m_radioHqVcd10;
 
-        QGroupBox* m_groupOptions;
+        Q3GroupBox* m_groupOptions;
         QCheckBox* m_checkAutoDetect;
         QCheckBox* m_checkNonCompliant;
         QCheckBox* m_checkVCD30interpretation;
         QCheckBox* m_check2336;
 
         // CD-i
-        QGroupBox* m_groupCdi;
+        Q3GroupBox* m_groupCdi;
         QCheckBox* m_checkCdiSupport;
-        QMultiLineEdit* m_editCdiCfg;
+        Q3MultiLineEdit* m_editCdiCfg;
 
 
         // -----------------------------------------------------------
@@ -94,9 +96,9 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         // the advanced-tab
         // -----------------------------------------------------------
 
-        QGroupBox* m_groupGeneric;
-        QGroupBox* m_groupGaps;
-        QGroupBox* m_groupMisc;
+        Q3GroupBox* m_groupGeneric;
+        Q3GroupBox* m_groupGaps;
+        Q3GroupBox* m_groupMisc;
 
         QCheckBox* m_checkPbc;
         QCheckBox* m_checkSegmentFolder;

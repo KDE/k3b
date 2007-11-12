@@ -19,7 +19,9 @@
 
 #include <qobject.h>
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include <k3bdevice.h>
 #include <k3btoc.h>
@@ -101,7 +103,7 @@ class K3bMediaCache : public QObject
   /**
    * Read cached supported writing speeds.
    */
-  QValueList<int> writingSpeeds( K3bDevice::Device* );
+  Q3ValueList<int> writingSpeeds( K3bDevice::Device* );
 
   /**
    * \see K3bMedium::shortString()

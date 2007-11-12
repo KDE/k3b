@@ -16,9 +16,12 @@
 #ifndef FLATBUTTON_H
 #define FLATBUTTON_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcolor.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 
 class QEvent;
 class QMouseEvent;
@@ -29,7 +32,7 @@ class KAction;
 /**
 @author Sebastian Trueg
 */
-class K3bFlatButton : public QFrame
+class K3bFlatButton : public Q3Frame
 {
   Q_OBJECT
 

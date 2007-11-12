@@ -19,6 +19,8 @@
 
 #include <qwidget.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -58,10 +60,10 @@ K3bEncodingConverter::~K3bEncodingConverter()
 }
 
 
-bool K3bEncodingConverter::encodedLocally( const QCString& s )
+bool K3bEncodingConverter::encodedLocally( const Q3CString& s )
 {
 #ifdef HAVE_ICONV_H
-  QCString utf8Encoded( s.length()*2 );
+  Q3CString utf8Encoded( s.length()*2 );
 #if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(__DragonFly__)
   const char* in = s.data();
 #else
@@ -77,7 +79,7 @@ bool K3bEncodingConverter::encodedLocally( const QCString& s )
 }
 
 
-bool K3bEncodingConverter::fixEncoding( const QCString& s, QCString& result, QWidget* parent, bool cache )
+bool K3bEncodingConverter::fixEncoding( const Q3CString& s, Q3CString& result, QWidget* parent, bool cache )
 {
 #ifdef IMPLEMENT_THIS_METHOD // HAVE_ICONV_H
   if( !d->lastEncoding.isEmpty() ) {
@@ -103,7 +105,7 @@ bool K3bEncodingConverter::fixEncoding( const QCString& s, QCString& result, QWi
 }
 
 
-bool K3bEncodingConverter::convert( const QCString& s, QCString& result, const QString& from, const QString& to )
+bool K3bEncodingConverter::convert( const Q3CString& s, Q3CString& result, const QString& from, const QString& to )
 {
   bool r = false;
 

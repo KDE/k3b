@@ -30,6 +30,10 @@
 
 #include <qevent.h>
 #include <qtabbar.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QDragMoveEvent>
 
 
 class K3bProjectTabWidget::ProjectData
@@ -76,7 +80,7 @@ void K3bProjectTabWidget::addTab( QWidget* child, const QString& label )
 }
 
 
-void K3bProjectTabWidget::addTab( QWidget* child, const QIconSet& iconset, const QString& label )
+void K3bProjectTabWidget::addTab( QWidget* child, const QIcon& iconset, const QString& label )
 {
   QTabWidget::addTab( child, iconset, label );
   tabBar()->setShown( count() != 1 );
@@ -97,7 +101,7 @@ void K3bProjectTabWidget::insertTab( QWidget* child, const QString& label, int i
 }
 
 
-void K3bProjectTabWidget::insertTab( QWidget* child, const QIconSet& iconset, const QString& label, int index )
+void K3bProjectTabWidget::insertTab( QWidget* child, const QIcon& iconset, const QString& label, int index )
 {
   QTabWidget::insertTab( child, iconset, label, index );
   tabBar()->setShown( count() != 1 );
@@ -154,7 +158,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 
 void K3bProjectTabWidget::slotDocSaved( K3bDoc* doc )
 {
-  setTabIconSet( doc->view(), QIconSet() );
+  setTabIconSet( doc->view(), QIcon() );
   changeTab( doc->view(), doc->URL().fileName() );
 }
 

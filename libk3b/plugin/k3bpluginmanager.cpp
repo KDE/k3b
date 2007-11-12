@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 #include <klibloader.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qdir.h>
 
@@ -36,7 +36,7 @@
 class K3bPluginManager::Private
 {
 public:
-  QPtrList<K3bPlugin> plugins;
+  Q3PtrList<K3bPlugin> plugins;
 };
 
 
@@ -60,8 +60,8 @@ QStringList K3bPluginManager::groups() const
 {
   QStringList grps;
 
-  QPtrList<K3bPlugin> fl;
-  for( QPtrListIterator<K3bPlugin> it( d->plugins );
+  Q3PtrList<K3bPlugin> fl;
+  for( Q3PtrListIterator<K3bPlugin> it( d->plugins );
        it.current(); ++it ) {
     if( !grps.contains( it.current()->group() ) )
 	grps.append( it.current()->group() );
@@ -71,10 +71,10 @@ QStringList K3bPluginManager::groups() const
 }
 
 
-QPtrList<K3bPlugin> K3bPluginManager::plugins( const QString& group ) const
+Q3PtrList<K3bPlugin> K3bPluginManager::plugins( const QString& group ) const
 {
-  QPtrList<K3bPlugin> fl;
-  for( QPtrListIterator<K3bPlugin> it( d->plugins );
+  Q3PtrList<K3bPlugin> fl;
+  for( Q3PtrListIterator<K3bPlugin> it( d->plugins );
        it.current(); ++it ) {
     if( it.current()->group() == group || group.isEmpty() )
       fl.append( it.current() );
@@ -115,7 +115,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 
 	// make sure to only use the latest version of one plugin
 	bool addPlugin = true;
-	for( QPtrListIterator<K3bPlugin> it( d->plugins ); *it; ++it ) {
+	for( Q3PtrListIterator<K3bPlugin> it( d->plugins ); *it; ++it ) {
 	  if( it.current()->pluginInfo().name() == plugin->pluginInfo().name() ) {
 	    if( K3bVersion(it.current()->pluginInfo().version()) < K3bVersion(plugin->pluginInfo().version()) ) {
 	      K3bPlugin* p = it.current();

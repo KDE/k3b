@@ -18,16 +18,18 @@
 #include "k3bdebug.h"
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 K3bDevice::Toc::Toc()
-  : QValueList<K3bDevice::Track>()
+  : Q3ValueList<K3bDevice::Track>()
 {
 }
 
 
 K3bDevice::Toc::Toc( const Toc& toc )
-  : QValueList<K3bDevice::Track>( toc )
+  : Q3ValueList<K3bDevice::Track>( toc )
 {
   m_firstSector = toc.firstSector();
 }
@@ -44,7 +46,7 @@ K3bDevice::Toc& K3bDevice::Toc::operator=( const Toc& toc )
 
   m_firstSector = toc.firstSector();
 
-  QValueList<K3bDevice::Track>::operator=( toc );
+  Q3ValueList<K3bDevice::Track>::operator=( toc );
 
   return *this;
 }
@@ -125,7 +127,7 @@ int K3bDevice::Toc::sessions() const
 
 void K3bDevice::Toc::clear()
 {
-  QValueList<Track>::clear();
+  Q3ValueList<Track>::clear();
   m_mcn.resize( 0 );
   m_firstSector = 0;
 }
@@ -152,12 +154,12 @@ void K3bDevice::Toc::debug() const
 bool K3bDevice::Toc::operator==( const Toc& other ) const
 {
   return( m_firstSector == other.m_firstSector &&
-	  QValueList<Track>::operator==( other ) );
+	  Q3ValueList<Track>::operator==( other ) );
 }
 
 
 bool K3bDevice::Toc::operator!=( const Toc& other ) const
 {
   return( m_firstSector != other.m_firstSector ||
-	  QValueList<Track>::operator!=( other ) );
+	  Q3ValueList<Track>::operator!=( other ) );
 }

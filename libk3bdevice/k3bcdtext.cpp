@@ -21,6 +21,8 @@
 #include <k3bdebug.h>
 
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <string.h>
 
@@ -102,7 +104,7 @@ K3bDevice::CdText::CdText()
 
 
 K3bDevice::CdText::CdText( const K3bDevice::CdText& text )
-  : QValueVector<K3bDevice::TrackCdText>( text ),
+  : Q3ValueVector<K3bDevice::TrackCdText>( text ),
     m_title( text.title() ),
     m_performer( text.performer() ),
     m_songwriter( text.songwriter() ),
@@ -135,7 +137,7 @@ K3bDevice::CdText::CdText( int size )
 
 void K3bDevice::CdText::clear()
 {
-  QValueVector<TrackCdText>::clear();
+  Q3ValueVector<TrackCdText>::clear();
 
   m_title.setLength(0);
   m_performer.setLength(0);
@@ -381,7 +383,7 @@ QByteArray K3bDevice::CdText::createPackData( int packType, unsigned int& packCo
 {
   QByteArray data;
   unsigned int dataFill = 0;
-  QCString text = encodeCdText( textForPackType( packType, 0 ) );
+  Q3CString text = encodeCdText( textForPackType( packType, 0 ) );
   unsigned int currentTrack = 0;
   unsigned int textPos = 0;
   unsigned int packPos = 0;
@@ -471,7 +473,7 @@ void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned 
 
   // append the pack to data  
   if( data.size() < dataFill + sizeof(cdtext_pack) )
-    data.resize( dataFill + sizeof(cdtext_pack), QGArray::SpeedOptim );
+    data.resize( dataFill + sizeof(cdtext_pack), Q3GArray::SpeedOptim );
 
   ::memcpy( &data.data()[dataFill], reinterpret_cast<char*>( pack ), sizeof(cdtext_pack) );
 
@@ -551,7 +553,7 @@ unsigned int K3bDevice::CdText::textLengthForPackType( int packType ) const
 }
 
 
-QCString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
+Q3CString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
 {
   if( illegalChars )
     *illegalChars = false;
@@ -559,11 +561,11 @@ QCString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
   // TODO: do this without QT
   QTextCodec* codec = QTextCodec::codecForName("ISO8859-1");
   if( codec ) {
-    QCString encoded = codec->fromUnicode( s );
+    Q3CString encoded = codec->fromUnicode( s );
     return encoded;
   }
   else {
-    QCString r(s.length()+1);
+    Q3CString r(s.length()+1);
 
     for( unsigned int i = 0; i < s.length(); ++i ) {
       if( s[i].latin1() == 0 ) { // non-ASCII character
@@ -675,7 +677,7 @@ bool K3bDevice::CdText::operator==( const K3bDevice::CdText& other ) const
 	  m_message == other.m_message &&
 	  m_discId == other.m_discId &&
 	  m_upcEan == other.m_upcEan &&
-	  QValueVector<TrackCdText>::operator==( other ) );
+	  Q3ValueVector<TrackCdText>::operator==( other ) );
 }
 
 

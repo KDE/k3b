@@ -26,8 +26,14 @@
 #include <kpopupmenu.h>
 
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QEvent>
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QContextMenuEvent>
 
 
 K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent, const char* name )
@@ -36,13 +42,13 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
 		 KDialogBase::Ok, parent, name ),
     m_track(track)
 {
-  QFrame* frame = plainPage();
+  Q3Frame* frame = plainPage();
   
   m_editorWidget = new K3bAudioEditorWidget( frame );
   m_msfEditStart = new K3bMsfEdit( frame );
   m_msfEditEnd = new K3bMsfEdit( frame );
 
-  QGridLayout* layout = new QGridLayout( frame );
+  Q3GridLayout* layout = new Q3GridLayout( frame );
   layout->setMargin( 0 );
   layout->setSpacing( spacingHint() );
 
@@ -198,10 +204,10 @@ void K3bAudioTrackSplitDialog::splitTrack( K3bAudioTrack* track,
 {
   K3bAudioTrackSplitDialog d( track, parent, name );
   if( d.exec() == QDialog::Accepted ) {
-    QValueList<int> ranges = d.m_editorWidget->allRanges();
+    Q3ValueList<int> ranges = d.m_editorWidget->allRanges();
     // we split the track at all range ends and just delete those that relate to the gaps in between
     K3b::Msf pos = 0;
-    for( QValueList<int>::const_iterator it = ranges.constBegin();
+    for( Q3ValueList<int>::const_iterator it = ranges.constBegin();
 	 it != ranges.constEnd(); ++it ) {
 
       // delete the unwanted part

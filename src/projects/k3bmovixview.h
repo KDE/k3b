@@ -24,7 +24,7 @@ class K3bMovixDoc;
 class K3bMovixListView;
 class KAction;
 class KPopupMenu;
-class QListViewItem;
+class Q3ListViewItem;
 class QPoint;
 class QLineEdit;
 
@@ -38,7 +38,7 @@ class K3bMovixView : public K3bView
   virtual ~K3bMovixView();
 
  private slots:
-  void slotContextMenuRequested(QListViewItem*, const QPoint& , int );
+  void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
   void slotRemoveItems();
   void slotRemoveSubTitleItems();
   void showPropertiesDialog();

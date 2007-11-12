@@ -21,6 +21,8 @@
 #include <k3bjobhandler.h>
 
 #include <k3bdiskinfo.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 
 namespace K3bDevice {
   class Device;

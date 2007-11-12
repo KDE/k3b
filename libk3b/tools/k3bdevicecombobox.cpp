@@ -21,14 +21,16 @@
 #include <klocale.h>
 
 #include <qmap.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 class K3bDeviceComboBox::Private
 {
 public:
   QMap<QString, int> deviceIndexMap;
-  QPtrVector<K3bDevice::Device> devices;
+  Q3PtrVector<K3bDevice::Device> devices;
 };
 
 
@@ -99,7 +101,7 @@ void K3bDeviceComboBox::removeDevice( K3bDevice::Device* dev )
     if( d->deviceIndexMap.contains(dev->devicename()) ) {
       // let's make it easy and recreate the whole list
       K3bDevice::Device* selDev = selectedDevice();
-      QPtrList<K3bDevice::Device> devices;
+      Q3PtrList<K3bDevice::Device> devices;
       for( unsigned int i = 0; i < d->devices.size(); ++i )
 	devices.append( d->devices[i] );
 
@@ -114,15 +116,15 @@ void K3bDeviceComboBox::removeDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bDeviceComboBox::addDevices( const QPtrList<K3bDevice::Device>& list )
+void K3bDeviceComboBox::addDevices( const Q3PtrList<K3bDevice::Device>& list )
 {
-  for( QPtrListIterator<K3bDevice::Device> it( list );
+  for( Q3PtrListIterator<K3bDevice::Device> it( list );
        it.current(); ++it )
     addDevice( it.current() );
 }
 
 
-void K3bDeviceComboBox::refreshDevices( const QPtrList<K3bDevice::Device>& list )
+void K3bDeviceComboBox::refreshDevices( const Q3PtrList<K3bDevice::Device>& list )
 {
   K3bDevice::Device* selDev = selectedDevice();
   clear();

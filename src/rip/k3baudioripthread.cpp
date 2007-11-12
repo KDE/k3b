@@ -454,8 +454,8 @@ bool K3bAudioRipThread::writePlaylist()
   emitInfoMessage( i18n("Writing playlist to %1.").arg( m_playlistFilename ), K3bJob::INFO );
 
   QFile f( m_playlistFilename );
-  if( f.open( IO_WriteOnly ) ) {
-    QTextStream t( &f );
+  if( f.open( QIODevice::WriteOnly ) ) {
+    Q3TextStream t( &f );
 
     // format descriptor
     t << "#EXTM3U" << endl;

@@ -21,7 +21,7 @@
 #include <k3b_export.h>
 
 #include <qstring.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 
 namespace K3bDevice {
@@ -78,7 +78,7 @@ namespace K3bVideoDVD
       
     private:
       K3bDevice::Device* m_device;
-      QValueVector<Title> m_titles;
+      Q3ValueVector<Title> m_titles;
       QString m_volumeIdentifier;
     };
 

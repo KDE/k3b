@@ -47,12 +47,17 @@
 #include <kdialogbase.h>
 
 #include <qlayout.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qspinbox.h>
 #include <qfont.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3ValueList>
+#include <Q3GridLayout>
+#include <Q3PtrList>
 
 
 
@@ -60,8 +65,8 @@
 class K3bAudioCdView::AudioTrackViewItem : public K3bCheckListViewItem
 {
 public:
-  AudioTrackViewItem( QListView* parent, 
-		      QListViewItem* after,
+  AudioTrackViewItem( Q3ListView* parent, 
+		      Q3ListViewItem* after,
 		      int _trackNumber,
 		      const K3b::Msf& length) 
     : K3bCheckListViewItem( parent, after ) {
@@ -101,11 +106,11 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
 			  parent, name )
 {
-  QGridLayout* mainGrid = new QGridLayout( mainWidget() );
+  Q3GridLayout* mainGrid = new Q3GridLayout( mainWidget() );
 
   // toolbox
   // ----------------------------------------------------------------------------------
-  QHBoxLayout* toolBoxLayout = new QHBoxLayout( 0, 0, 0, "toolBoxLayout" );
+  Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0, "toolBoxLayout" );
   m_toolBox = new K3bToolBox( mainWidget() );
   toolBoxLayout->addWidget( m_toolBox );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -119,10 +124,10 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   // ----------------------------------------------------------------------------------
   m_trackView = new K3bAudioCdListView( this, mainWidget() );
 
-  connect( m_trackView, SIGNAL(itemRenamed(QListViewItem*, const QString&, int)),
-	   this, SLOT(slotItemRenamed(QListViewItem*, const QString&, int)) );
-  connect( m_trackView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-	   this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+  connect( m_trackView, SIGNAL(itemRenamed(Q3ListViewItem*, const QString&, int)),
+	   this, SLOT(slotItemRenamed(Q3ListViewItem*, const QString&, int)) );
+  connect( m_trackView, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 //   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
 // 	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
 
@@ -142,7 +147,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   setRightPixmap( K3bTheme::MEDIA_AUDIO );
 
   m_busyInfoLabel = new K3bThemedLabel( i18n("Searching for Artist information..."), this );
-  m_busyInfoLabel->setFrameStyle( QFrame::Box|QFrame::Plain );
+  m_busyInfoLabel->setFrameStyle( Q3Frame::Box|Q3Frame::Plain );
   m_busyInfoLabel->setMargin( 6 );
   m_busyInfoLabel->hide();
 }
@@ -279,13 +284,13 @@ void K3bAudioCdView::initActions()
 }
 
 
-void K3bAudioCdView::slotContextMenu( KListView*, QListViewItem*, const QPoint& p )
+void K3bAudioCdView::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& p )
 {
   m_popupMenu->popup(p);
 }
 
 
-void K3bAudioCdView::slotItemRenamed( QListViewItem* item, const QString& str, int col )
+void K3bAudioCdView::slotItemRenamed( Q3ListViewItem* item, const QString& str, int col )
 {
   AudioTrackViewItem* a = (AudioTrackViewItem*)item;
   if( col == 2 )
@@ -297,7 +302,7 @@ void K3bAudioCdView::slotItemRenamed( QListViewItem* item, const QString& str, i
 }
 
 
-void K3bAudioCdView::slotTrackSelectionChanged( QListViewItem* item )
+void K3bAudioCdView::slotTrackSelectionChanged( Q3ListViewItem* item )
 {
   actionCollection()->action("edit_track_cddb")->setEnabled( item != 0 );
   actionCollection()->action("select_track")->setEnabled( item != 0 );
@@ -307,8 +312,8 @@ void K3bAudioCdView::slotTrackSelectionChanged( QListViewItem* item )
 
 void K3bAudioCdView::startRip()
 {
-  QValueList<int> trackNumbers;
-  for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
+  Q3ValueList<int> trackNumbers;
+  for( Q3ListViewItemIterator it( m_trackView ); it.current(); ++it ) {
     AudioTrackViewItem* a = (AudioTrackViewItem*)it.current();
     if( a->isChecked() )
       trackNumbers.append( a->trackNumber );
@@ -331,7 +336,7 @@ void K3bAudioCdView::startRip()
 
 void K3bAudioCdView::slotEditTrackCddb()
 {
-  QPtrList<QListViewItem> items( m_trackView->selectedItems() );
+  Q3PtrList<Q3ListViewItem> items( m_trackView->selectedItems() );
   if( !items.isEmpty() ) {
     AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.first());
 
@@ -342,11 +347,11 @@ void K3bAudioCdView::slotEditTrackCddb()
     KLineEdit* editTitle = new KLineEdit( m_cddbInfo.titles[a->trackNumber-1], w );
     KLineEdit* editArtist = new KLineEdit( m_cddbInfo.artists[a->trackNumber-1], w );
     KLineEdit* editExtInfo = new KLineEdit( m_cddbInfo.extInfos[a->trackNumber-1], w );
-    QFrame* line = new QFrame( w );
-    line->setFrameShape( QFrame::HLine );
-    line->setFrameShadow( QFrame::Sunken );
+    Q3Frame* line = new Q3Frame( w );
+    line->setFrameShape( Q3Frame::HLine );
+    line->setFrameShadow( Q3Frame::Sunken );
 
-    QGridLayout* grid = new QGridLayout( w );
+    Q3GridLayout* grid = new Q3GridLayout( w );
     grid->setSpacing( KDialog::spacingHint() );
 
     grid->addWidget( new QLabel( i18n("Title:"), w ), 0, 0 );
@@ -383,9 +388,9 @@ void K3bAudioCdView::slotEditAlbumCddb()
   KLineEdit* editGenre = new KLineEdit( m_cddbInfo.genre, w );
   QSpinBox* spinYear = new QSpinBox( 0, 9999, 1, w );
   spinYear->setValue( m_cddbInfo.year );
-  QFrame* line = new QFrame( w );
-  line->setFrameShape( QFrame::HLine );
-  line->setFrameShadow( QFrame::Sunken );
+  Q3Frame* line = new Q3Frame( w );
+  line->setFrameShape( Q3Frame::HLine );
+  line->setFrameShadow( Q3Frame::Sunken );
   KComboBox* comboCat = new KComboBox( w );
   comboCat->insertStringList( K3bCddbQuery::categories() );
 
@@ -396,7 +401,7 @@ void K3bAudioCdView::slotEditAlbumCddb()
       break;
     }
 
-  QGridLayout* grid = new QGridLayout( w );
+  Q3GridLayout* grid = new Q3GridLayout( w );
   grid->setSpacing( KDialog::spacingHint() );
 
   grid->addWidget( new QLabel( i18n("Title:"), w ), 0, 0 );
@@ -524,28 +529,28 @@ void K3bAudioCdView::slotSaveCddbLocally()
 
 void K3bAudioCdView::slotCheckAll()
 {
-  for( QListViewItemIterator it( m_trackView ); it.current(); ++it )
+  for( Q3ListViewItemIterator it( m_trackView ); it.current(); ++it )
     ((AudioTrackViewItem*)it.current())->setChecked(true);
 }
 
 void K3bAudioCdView::slotUncheckAll()
 {
-  for( QListViewItemIterator it( m_trackView ); it.current(); ++it )
+  for( Q3ListViewItemIterator it( m_trackView ); it.current(); ++it )
     ((AudioTrackViewItem*)it.current())->setChecked(false);
 }
 
 void K3bAudioCdView::slotSelect()
 {
-  QPtrList<QListViewItem> items( m_trackView->selectedItems() );
-  for( QPtrListIterator<QListViewItem> it( items );
+  Q3PtrList<Q3ListViewItem> items( m_trackView->selectedItems() );
+  for( Q3PtrListIterator<Q3ListViewItem> it( items );
        it.current(); ++it )
     static_cast<AudioTrackViewItem*>(it.current())->setChecked(true);
 }
 
 void K3bAudioCdView::slotDeselect()
 {
-  QPtrList<QListViewItem> items( m_trackView->selectedItems() );
-  for( QPtrListIterator<QListViewItem> it( items );
+  Q3PtrList<Q3ListViewItem> items( m_trackView->selectedItems() );
+  for( Q3PtrListIterator<Q3ListViewItem> it( items );
        it.current(); ++it )
     static_cast<AudioTrackViewItem*>(it.current())->setChecked(false);
 }
@@ -553,7 +558,7 @@ void K3bAudioCdView::slotDeselect()
 void K3bAudioCdView::updateDisplay()
 {
   // update the listview
-  for( QListViewItemIterator it( m_trackView ); it.current(); ++it ) {
+  for( Q3ListViewItemIterator it( m_trackView ); it.current(); ++it ) {
     AudioTrackViewItem* item = (AudioTrackViewItem*)it.current();
     item->updateCddbData( m_cddbInfo );
   }
@@ -607,16 +612,16 @@ void K3bAudioCdView::enableInteraction( bool b )
 }
 
 
-QDragObject* K3bAudioCdView::dragObject()
+Q3DragObject* K3bAudioCdView::dragObject()
 {
-  QPtrList<QListViewItem> items = m_trackView->selectedItems();
-  QValueList<int> tracks;
-  for( QPtrListIterator<QListViewItem> it( items );
+  Q3PtrList<Q3ListViewItem> items = m_trackView->selectedItems();
+  Q3ValueList<int> tracks;
+  for( Q3PtrListIterator<Q3ListViewItem> it( items );
        it.current(); ++it )
     tracks.append( static_cast<AudioTrackViewItem*>(it.current())->trackNumber );
 
   if( !items.isEmpty() ) {
-    QDragObject* drag = new K3bAudioCdTrackDrag( m_toc, 
+    Q3DragObject* drag = new K3bAudioCdTrackDrag( m_toc, 
 						 tracks, 
 						 m_cddbInfo,
 						 m_device,

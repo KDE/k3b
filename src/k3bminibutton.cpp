@@ -21,6 +21,8 @@
 #include "k3bminibutton.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QEvent>
 
 
 K3bMiniButton::K3bMiniButton( QWidget *parent, const char * name )

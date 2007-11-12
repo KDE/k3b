@@ -21,17 +21,20 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <Q3HBoxLayout>
 
 
 K3bThemedHeader::K3bThemedHeader( QWidget* parent )
-  : QFrame( parent )
+  : Q3Frame( parent )
 {
   init();
 }
 
 
 K3bThemedHeader::K3bThemedHeader( const QString& title, const QString& subtitle, QWidget* parent )
-  : QFrame( parent )
+  : Q3Frame( parent )
 {
   setTitle( title );
   setSubTitle( subtitle );
@@ -79,12 +82,12 @@ void K3bThemedHeader::setAlignment( int align )
 
 void K3bThemedHeader::init()
 {
-  setFrameShape( QFrame::StyledPanel );
-  setFrameShadow( QFrame::Sunken );
+  setFrameShape( Q3Frame::StyledPanel );
+  setFrameShadow( Q3Frame::Sunken );
   setLineWidth( 1 );
   setMargin( 1 );
 
-  QHBoxLayout* layout = new QHBoxLayout( this );
+  Q3HBoxLayout* layout = new Q3HBoxLayout( this );
   layout->setMargin( 2 ); // to make sure the frame gets displayed
   layout->setSpacing( 0 );
 

@@ -21,7 +21,7 @@
 #include <k3bversion.h>
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdatetime.h>
 
 
@@ -36,18 +36,18 @@ bool K3bTocFileWriter::save( const QString& filename )
 {
   QFile f( filename );
 
-  if( !f.open( IO_WriteOnly ) ) {
+  if( !f.open( QIODevice::WriteOnly ) ) {
     kdDebug() << "(K3bCueFileWriter) could not open file " << f.name() << endl;
     return false;
   }
 
-  QTextStream s( &f );
+  Q3TextStream s( &f );
 
   return save( s );
 }
 
 
-bool K3bTocFileWriter::save( QTextStream& t )
+bool K3bTocFileWriter::save( Q3TextStream& t )
 {
   writeHeader(t);
 
@@ -153,7 +153,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeHeader( QTextStream& t )
+void K3bTocFileWriter::writeHeader( Q3TextStream& t )
 {
   // little comment
   t << "// TOC-file to use with cdrdao created by K3b " << k3bcore->version()
@@ -193,7 +193,7 @@ void K3bTocFileWriter::writeHeader( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, QTextStream& t )
+void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q3TextStream& t )
 {
   const K3bDevice::Track& track = m_toc[index];
 
@@ -305,7 +305,7 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
 }
 
 
-void K3bTocFileWriter::writeGlobalCdText( QTextStream& t )
+void K3bTocFileWriter::writeGlobalCdText( Q3TextStream& t )
 {
   t << "CD_TEXT {" << endl;
   t << "  LANGUAGE_MAP { 0: EN }" << endl;
@@ -325,7 +325,7 @@ void K3bTocFileWriter::writeGlobalCdText( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t )
+void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, Q3TextStream& t )
 {
   t << "CD_TEXT {" << endl;
   t << "  LANGUAGE 0 {" << endl;
@@ -341,7 +341,7 @@ void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, QT
 }
 
 
-void K3bTocFileWriter::writeDataSource( unsigned int trackIndex, QTextStream& t )
+void K3bTocFileWriter::writeDataSource( unsigned int trackIndex, Q3TextStream& t )
 {
   if( readFromStdin() )
     t << "\"-\" ";

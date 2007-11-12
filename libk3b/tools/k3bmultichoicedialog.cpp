@@ -23,10 +23,15 @@
 
 #include <qlayout.h>
 #include <qsignalmapper.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qlabel.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QCloseEvent>
 
 
 class K3bMultiChoiceDialog::Private
@@ -38,8 +43,8 @@ public:
   }
 
   QSignalMapper* mapper;
-  QPtrList<KPushButton> buttons;
-  QHBoxLayout* buttonLayout;
+  Q3PtrList<KPushButton> buttons;
+  Q3HBoxLayout* buttonLayout;
 
   bool buttonClicked;
 };
@@ -87,11 +92,11 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
 
   setCaption( caption );
 
-  QGridLayout* mainGrid = new QGridLayout( this );
+  Q3GridLayout* mainGrid = new Q3GridLayout( this );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
-  QHBox* contents = new QHBox( this );
+  Q3HBox* contents = new Q3HBox( this );
   contents->setSpacing( KDialog::spacingHint()*2 );
   contents->setMargin( 0 );
 
@@ -101,7 +106,7 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
   QLabel* label = new K3bRichTextLabel( text, contents );
   contents->setStretchFactor( label, 1 );
 
-  d->buttonLayout = new QHBoxLayout;
+  d->buttonLayout = new Q3HBoxLayout;
   d->buttonLayout->setSpacing( spacingHint() );
   d->buttonLayout->setMargin( 0 );
 

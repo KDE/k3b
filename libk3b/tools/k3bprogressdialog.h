@@ -19,11 +19,13 @@
 
 #include <kdialogbase.h>
 #include "k3b_export.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class K3bBusyWidget;
 class QLabel;
 class KProgress;
-class QWidgetStack;
+class Q3WidgetStack;
 
 
 /**
@@ -54,7 +56,7 @@ class LIBK3B_EXPORT  K3bProgressDialog : public KDialogBase
 
  private:
   QLabel* m_label;
-  QWidgetStack* m_stack;
+  Q3WidgetStack* m_stack;
   K3bBusyWidget* m_busyWidget;
   KProgress* m_progressBar;
 };

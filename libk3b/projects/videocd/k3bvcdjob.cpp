@@ -25,6 +25,9 @@
 #include <qdatetime.h>
 #include <qfile.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <qregexp.h>
 #include <qdom.h>
@@ -239,9 +242,9 @@ void K3bVcdJob::vcdxBuild()
     // vcdxbuild commandline parameters
     kdDebug() << "***** vcdxbuild parameters:" << endl;
     ;
-    const QValueList<QCString>& args = m_process->args();
+    const Q3ValueList<Q3CString>& args = m_process->args();
     QString s;
-    for ( QValueList<QCString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for ( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
         s += *it + " ";
     }
     kdDebug() << s << flush << endl;

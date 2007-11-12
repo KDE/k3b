@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 
 static const int s_autoIndex = 0;
@@ -36,7 +36,7 @@ K3bDataModeWidget::K3bDataModeWidget( QWidget* parent, const char* name )
   insertItem( i18n("Mode2"), s_mode2Index );
 
   QToolTip::add( this,i18n("Select the mode for the data-track") );
-  QWhatsThis::add( this, i18n("<p><b>Data Mode</b>"
+  Q3WhatsThis::add( this, i18n("<p><b>Data Mode</b>"
 			      "<p>Data tracks may be written in two different modes:</p>"
 			      "<p><b>Auto</b><br>"
 			      "Let K3b select the best suited data mode.</p>"

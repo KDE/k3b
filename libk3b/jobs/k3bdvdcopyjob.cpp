@@ -337,7 +337,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             }
 
             d->imageFile.setName( m_imagePath );
-            if( !d->imageFile.open( IO_WriteOnly ) ) {
+            if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
                 emit infoMessage( i18n("Unable to open '%1' for writing.").arg(m_imagePath), ERROR );
                 jobFinished( false );
                 d->running = false;

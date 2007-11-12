@@ -17,6 +17,12 @@
 #define _K3B_FILETREE_COMBOBOX_H_
 
 #include <kcombobox.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPixmap>
 
 class K3bFileTreeView;
 class QEvent;

@@ -28,14 +28,17 @@
 #include <qtoolbutton.h>
 #include <qsizepolicy.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qstyle.h>
 #include <qpainter.h>
 #include <qevent.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 // copied from ktoolbar.cpp
 enum {
@@ -67,7 +70,7 @@ public:
 
     KPopupMenu* contextMenu();
 
-    QValueList<int> iconSizes;
+    Q3ValueList<int> iconSizes;
 
 private:
     K3bToolBox* m_parent;
@@ -117,7 +120,7 @@ KToolBarButton* K3bToolBox::addButton( const QString& text, const QString& icon,
                                        bool forceText )
 {
     KToolBarButton* button = getButton( idAt( insertButton( icon, -1, 0, receiver, slot, true, text ) ) );
-    QWhatsThis::add( button, whatsthis );
+    Q3WhatsThis::add( button, whatsthis );
     QToolTip::add( button, tooltip );
     if ( forceText ) {
         button->setUsesTextLabel( true );
@@ -197,18 +200,18 @@ KPopupMenu* K3bToolBox::Private::contextMenu()
   size->insertItem( i18n("Default"), CONTEXT_ICONSIZES );
   // Query the current theme for available sizes
   KIconTheme *theme = KGlobal::instance()->iconLoader()->theme();
-  QValueList<int> avSizes;
+  Q3ValueList<int> avSizes;
   if (theme) {
       avSizes = theme->querySizes( KIcon::Toolbar);
   }
 
   iconSizes = avSizes;
-  qHeapSort(avSizes);
+  qSort(avSizes);
 
-  QValueList<int>::Iterator it;
+  Q3ValueList<int>::Iterator it;
   if (avSizes.count() < 10) {
       // Fixed or threshold type icons
-	  QValueList<int>::Iterator end(avSizes.end());
+	  Q3ValueList<int>::Iterator end(avSizes.end());
       for (it=avSizes.begin(); it!=end; ++it) {
           QString text;
           if ( *it < 19 )
@@ -279,8 +282,8 @@ void K3bToolBox::slotContextAboutToShow()
         break;
     }
 
-    QValueList<int>::ConstIterator iIt = d->iconSizes.begin();
-    QValueList<int>::ConstIterator iEnd = d->iconSizes.end();
+    Q3ValueList<int>::ConstIterator iIt = d->iconSizes.begin();
+    Q3ValueList<int>::ConstIterator iEnd = d->iconSizes.end();
     for (; iIt != iEnd; ++iIt )
         d->contextMenu()->setItemChecked( CONTEXT_ICONSIZES + *iIt, false );
 

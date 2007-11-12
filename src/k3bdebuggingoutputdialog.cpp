@@ -22,7 +22,7 @@
 #include <k3bversion.h>
 #include <k3bglobals.h>
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qcursor.h>
 #include <qfile.h>
 #include <qclipboard.h>
@@ -44,11 +44,11 @@ K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
   setButtonTip( User1, i18n("Save to file") );
   setButtonTip( User2, i18n("Copy to clipboard") );
 
-  debugView = new QTextEdit( this );
+  debugView = new Q3TextEdit( this );
   debugView->setReadOnly(true);
-  debugView->setTextFormat( QTextEdit::PlainText );
+  debugView->setTextFormat( Q3TextEdit::PlainText );
   debugView->setCurrentFont( KGlobalSettings::fixedFont() );
-  debugView->setWordWrap( QTextEdit::NoWrap );
+  debugView->setWordWrap( Q3TextEdit::NoWrap );
 
   setMainWidget( debugView );
 
@@ -77,8 +77,8 @@ void K3bDebuggingOutputDialog::slotUser1()
 						  i18n("File Exists"), i18n("Overwrite") )
 	== KMessageBox::Continue ) {
 
-      if( f.open( IO_WriteOnly ) ) {
-	QTextStream t( &f );
+      if( f.open( QIODevice::WriteOnly ) ) {
+	Q3TextStream t( &f );
 	t << debugView->text();
       }
       else {

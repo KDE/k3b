@@ -17,7 +17,7 @@
 
 #include <k3bjob.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatastream.h>
 
 
@@ -98,7 +98,7 @@ void K3bJobInterface::slotCanceled()
 void K3bJobInterface::slotFinished( bool success )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << success;
   emitDCOPSignal( "finished(bool)", params );
 }
@@ -107,7 +107,7 @@ void K3bJobInterface::slotFinished( bool success )
 void K3bJobInterface::slotInfoMessage( const QString& message, int type )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << message << type;
   emitDCOPSignal( "infoMessage(QString)", params );
 }
@@ -118,7 +118,7 @@ void K3bJobInterface::slotProgress( int val )
   if( m_lastProgress != val ) {
     m_lastProgress = val;
     QByteArray params;
-    QDataStream stream(params, IO_WriteOnly);
+    QDataStream stream(params, QIODevice::WriteOnly);
     stream << val;
     emitDCOPSignal( "progress(int)", params );
   }
@@ -130,7 +130,7 @@ void K3bJobInterface::slotSubProgress( int val )
   if( m_lastSubProgress != val ) {
     m_lastSubProgress = val;
     QByteArray params;
-    QDataStream stream(params, IO_WriteOnly);
+    QDataStream stream(params, QIODevice::WriteOnly);
     stream << val;
     emitDCOPSignal( "subProgress(int)", params );
   }
@@ -140,7 +140,7 @@ void K3bJobInterface::slotSubProgress( int val )
 void K3bJobInterface::slotNewTask( const QString& task )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << task;
   emitDCOPSignal( "newTask(QString)", params );
 }
@@ -149,7 +149,7 @@ void K3bJobInterface::slotNewTask( const QString& task )
 void K3bJobInterface::slotNewSubTask( const QString& task )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << task;
   emitDCOPSignal( "newSubTask(QString)", params );
 }
@@ -158,7 +158,7 @@ void K3bJobInterface::slotNewSubTask( const QString& task )
 void K3bJobInterface::slotBuffer( int val )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << val;
   emitDCOPSignal( "buffer(int)", params );
 }
@@ -167,7 +167,7 @@ void K3bJobInterface::slotBuffer( int val )
 void K3bJobInterface::slotDeviceBuffer( int val )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << val;
   emitDCOPSignal( "deviceBuffer(int)", params );
 }
@@ -176,7 +176,7 @@ void K3bJobInterface::slotDeviceBuffer( int val )
 void K3bJobInterface::slotNextTrack( int track, int numTracks )
 {
   QByteArray params;
-  QDataStream stream(params, IO_WriteOnly);
+  QDataStream stream(params, QIODevice::WriteOnly);
   stream << track << numTracks;
   emitDCOPSignal( "nextTrack(int,int)", params );
 }

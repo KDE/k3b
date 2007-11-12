@@ -18,7 +18,7 @@
 
 #include <klocale.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qtooltip.h>
 
 
@@ -41,7 +41,7 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, c
   setDoubleClickForEdit( true );
 
   header()->setClickEnabled(false);
-  setColumnWidthMode( 0, QListView::Manual );
+  setColumnWidthMode( 0, Q3ListView::Manual );
   setColumnWidth( 0, 20 );
   header()->setResizeEnabled( false,0 );
 
@@ -56,7 +56,7 @@ K3bAudioCdListView::~K3bAudioCdListView()
 }
 
 
-QDragObject* K3bAudioCdListView::dragObject()
+Q3DragObject* K3bAudioCdListView::dragObject()
 {
   return m_view->dragObject();
 }

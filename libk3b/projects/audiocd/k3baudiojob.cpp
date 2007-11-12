@@ -40,7 +40,9 @@
 #include <k3bglobalsettings.h>
 
 #include <qfile.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -49,11 +51,11 @@
 
 
 
-static QString createNonExistingFilesString( const QValueList<K3bAudioFile*>& items, unsigned int max )
+static QString createNonExistingFilesString( const Q3ValueList<K3bAudioFile*>& items, unsigned int max )
 {
   QString s;
   unsigned int cnt = 0;
-  for( QValueList<K3bAudioFile*>::const_iterator it = items.begin();
+  for( Q3ValueList<K3bAudioFile*>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
 
     s += KStringHandler::csqueeze( (*it)->filename(), 60 );
@@ -160,7 +162,7 @@ void K3bAudioJob::start()
   //
   // Check if all files exist
   //
-  QValueList<K3bAudioFile*> nonExistingFiles;
+  Q3ValueList<K3bAudioFile*> nonExistingFiles;
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
     K3bAudioDataSource* source = track->firstSource();
@@ -180,7 +182,7 @@ void K3bAudioJob::start()
 		       i18n("Warning"),
 		       i18n("Remove missing files and continue"),
 		       i18n("Cancel and go back") ) ) {
-      for( QValueList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
+      for( Q3ValueList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
 	   it != nonExistingFiles.end(); ++it ) {
 	delete *it;
       }
@@ -725,7 +727,7 @@ void K3bAudioJob::normalizeFiles()
 
   // add all the files
   // TODO: we may need to split the wave files and put them back together!
-  QValueVector<QString> files;
+  Q3ValueVector<QString> files;
   K3bAudioTrack* track = m_doc->firstTrack();
   while( track ) {
     files.append( m_tempData->bufferFileName(track) );

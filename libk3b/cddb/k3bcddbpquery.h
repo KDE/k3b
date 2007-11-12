@@ -20,10 +20,10 @@
 #include "k3bcddbresult.h"
 
 #include <qstring.h>
-#include <qvaluelist.h>
-#include <qtextstream.h>
+#include <q3valuelist.h>
+#include <q3textstream.h>
 
-class QSocket;
+class Q3Socket;
 
 class K3bCddbpQuery : public K3bCddbQuery
 {
@@ -53,8 +53,8 @@ class K3bCddbpQuery : public K3bCddbQuery
   QString m_server;
   int m_port;
 
-  QSocket* m_socket;
-  QTextStream m_stream;
+  Q3Socket* m_socket;
+  Q3TextStream m_stream;
 
   QString m_parsingBuffer;
 };

@@ -16,8 +16,11 @@
 #ifndef _K3B_AUDIO_EDITOR_WIDGET_H_
 #define _K3B_AUDIO_EDITOR_WIDGET_H_
 
-#include <qframe.h>
-#include <qptrlist.h>
+#include <q3frame.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3ValueList>
 
 #include <k3bmsf.h>
 
@@ -25,7 +28,7 @@
 class QPainter;
 
 
-class K3bAudioEditorWidget : public QFrame
+class K3bAudioEditorWidget : public Q3Frame
 {
   Q_OBJECT
 
@@ -86,7 +89,7 @@ class K3bAudioEditorWidget : public QFrame
    * \return A list of all ranges' identifiers sorted ascending by start
    * offset
    */
-  QValueList<int> allRanges() const;
+  Q3ValueList<int> allRanges() const;
 
   void setMaxNumberOfMarkers( int );
 
@@ -201,7 +204,7 @@ class K3bAudioEditorWidget : public QFrame
 
   int m_maxMarkers;
   K3b::Msf m_length;
-  QPtrList<Marker> m_markers;
+  Q3PtrList<Marker> m_markers;
   int m_idCnt;
   bool m_mouseAt;
 

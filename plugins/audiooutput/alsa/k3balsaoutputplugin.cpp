@@ -27,6 +27,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <alsa/asoundlib.h>
 #include <alsa/pcm.h>
@@ -253,7 +255,7 @@ K3bPluginConfigWidget* K3bAlsaOutputPlugin::createConfigWidget( QWidget* parent,
 K3bAlsaOutputPluginConfigWidget::K3bAlsaOutputPluginConfigWidget( QWidget* parent, const char* name )
   : K3bPluginConfigWidget( parent, name )
 {
-  QHBoxLayout* l = new QHBoxLayout( this );
+  Q3HBoxLayout* l = new Q3HBoxLayout( this );
   l->setSpacing( KDialog::spacingHint() );
   l->setAutoAdd( true );
 

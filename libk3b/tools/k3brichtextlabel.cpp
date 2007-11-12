@@ -16,8 +16,10 @@
 #include "k3brichtextlabel.h"
 
 #include <qtooltip.h>
-#include <qstylesheet.h>
-#include <qsimplerichtext.h>
+#include <q3stylesheet.h>
+#include <q3simplerichtext.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <kglobalsettings.h>
 
@@ -29,7 +31,7 @@ static QString qrichtextify( const QString& text )
   QStringList lines = QStringList::split('\n', text);
   for(QStringList::Iterator it = lines.begin(); it != lines.end(); ++it)
   {
-    *it = QStyleSheet::convertFromPlainText( *it, QStyleSheetItem::WhiteSpaceNormal );
+    *it = Q3StyleSheet::convertFromPlainText( *it, Q3StyleSheetItem::WhiteSpaceNormal );
   }
 
   return lines.join(QString::null);
@@ -64,7 +66,7 @@ QSize K3bRichTextLabel::minimumSizeHint() const
   QString qt_text = qrichtextify( text() );
   int pref_width = 0;
   int pref_height = 0;
-  QSimpleRichText rt(qt_text, font());
+  Q3SimpleRichText rt(qt_text, font());
   pref_width = m_defaultWidth;
   rt.setWidth(pref_width);
   int used_width = rt.widthUsed();

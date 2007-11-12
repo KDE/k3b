@@ -20,7 +20,7 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 // Kde Includes
 #include <kio/global.h>
@@ -31,7 +31,7 @@
 class LIBK3B_EXPORT K3bVcdTrack
 {
     public:
-        K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename );
+        K3bVcdTrack( Q3PtrList<K3bVcdTrack>* parent, const QString& filename );
         ~K3bVcdTrack();
 
         QString fileName() const
@@ -173,10 +173,10 @@ class LIBK3B_EXPORT K3bVcdTrack
         const QString audio_type2str( unsigned int , unsigned int, unsigned int );
         QString SecsToHMS( double );
 
-        QPtrList<K3bVcdTrack>* m_parent;
+        Q3PtrList<K3bVcdTrack>* m_parent;
 
         // PBC
-        QPtrList<K3bVcdTrack>* m_revreflist;          // List of Tracks which points to us
+        Q3PtrList<K3bVcdTrack>* m_revreflist;          // List of Tracks which points to us
         QMap<int, K3bVcdTrack*> m_pbctrackmap;        // Pbc Tracks (Previous, Next, ...)
         QMap<int, int> m_pbcnontrackmap;              // Pbc NON Track types (Previous, Next, ...)
         QMap<int, bool> m_pbcusrdefmap;               // Pbc is userdefined or defaults (Previous, Next, ...)

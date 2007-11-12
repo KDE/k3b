@@ -20,7 +20,7 @@
 #include <k3bvideodvd.h>
 #include <k3bvideodvdtitletranscodingjob.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 
 class K3bVideoDVDTitleDetectClippingJob;
@@ -70,7 +70,7 @@ class K3bVideoDVDRippingJob : public K3bJob
   void cancel();
 
   void setVideoDVD( const K3bVideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
-  void setTitles( const QValueVector<TitleRipInfo>& titles ) { m_titleRipInfos = titles; }
+  void setTitles( const Q3ValueVector<TitleRipInfo>& titles ) { m_titleRipInfos = titles; }
 
   void setVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec );
   void setVideoBitrate( int bitrate );
@@ -94,7 +94,7 @@ class K3bVideoDVDRippingJob : public K3bJob
   void initProgressInfo();
 
   K3bVideoDVD::VideoDVD m_dvd;
-  QValueVector<TitleRipInfo> m_titleRipInfos;
+  Q3ValueVector<TitleRipInfo> m_titleRipInfos;
 
   K3bVideoDVDTitleTranscodingJob* m_transcodingJob;
   K3bVideoDVDTitleDetectClippingJob* m_detectClippingJob;

@@ -76,8 +76,8 @@ public:
 
   int failedTitles;
 
-  QValueVector<double> titleProgressParts;
-  QValueVector<double> titleClippingProgressParts;
+  Q3ValueVector<double> titleProgressParts;
+  Q3ValueVector<double> titleClippingProgressParts;
 };
 
 

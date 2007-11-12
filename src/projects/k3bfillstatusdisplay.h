@@ -18,8 +18,11 @@
 #ifndef K3BFILLSTATUSDISPLAY_H
 #define K3BFILLSTATUSDISPLAY_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 
 class QPaintEvent;
@@ -72,7 +75,7 @@ class K3bFillStatusDisplayWidget : public QWidget
 };
 
 
-class K3bFillStatusDisplay : public QFrame  {
+class K3bFillStatusDisplay : public Q3Frame  {
 
   Q_OBJECT
 

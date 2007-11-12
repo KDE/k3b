@@ -18,6 +18,8 @@
 
 #include <qstring.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -30,7 +32,7 @@
 #include "k3bvcdtrack.h"
 #include <k3bglobals.h>
 
-K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename )
+K3bVcdTrack::K3bVcdTrack( Q3PtrList<K3bVcdTrack>* parent, const QString& filename )
         : m_pbcnumkeys( true ),
         m_pbcnumkeysuserdefined( false ),
         m_file( filename )
@@ -38,7 +40,7 @@ K3bVcdTrack::K3bVcdTrack( QPtrList<K3bVcdTrack>* parent, const QString& filename
     m_parent = parent;
     m_title = QFileInfo( m_file ).baseName( true );
 
-    m_revreflist = new QPtrList<K3bVcdTrack>;
+    m_revreflist = new Q3PtrList<K3bVcdTrack>;
 
     for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
         m_pbctrackmap.insert( i, 0L );

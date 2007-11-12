@@ -186,7 +186,7 @@ bool K3bAudioTrackViewItem::animate()
   //
   bool animate = false;
   bool valid = true;
-  QListViewItem* item = firstChild();
+  Q3ListViewItem* item = firstChild();
   while( item ) {
     K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item );
     animate = animate || sourceItem->animate();
@@ -213,7 +213,7 @@ void K3bAudioTrackViewItem::setSelected( bool s )
   K3bListViewItem::setSelected(s);
 
   // we also select or unselect all source items
-  QListViewItem* item = firstChild();
+  Q3ListViewItem* item = firstChild();
   while( item ) {
     item->setSelected(s);
     item = item->nextSibling();
@@ -221,7 +221,7 @@ void K3bAudioTrackViewItem::setSelected( bool s )
 }
 
 
-void K3bAudioTrackViewItem::insertItem( QListViewItem* item )
+void K3bAudioTrackViewItem::insertItem( Q3ListViewItem* item )
 {
   K3bListViewItem::insertItem( item );
   if( isSelected() )

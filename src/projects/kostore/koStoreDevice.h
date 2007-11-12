@@ -37,9 +37,9 @@ public:
   ~KoStoreDevice() {}
 
   bool open( int m ) {
-    if ( m & IO_ReadOnly )
+    if ( m & QIODevice::ReadOnly )
       return ( m_store->mode() == KoStore::Read );
-    if ( m & IO_WriteOnly )
+    if ( m & QIODevice::WriteOnly )
       return ( m_store->mode() == KoStore::Write );
     return false;
   }
