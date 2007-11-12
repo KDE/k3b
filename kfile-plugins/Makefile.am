@@ -1,1 +1,0 @@
-SUBDIRS = k3bproject
