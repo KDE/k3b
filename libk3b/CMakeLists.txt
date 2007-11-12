@@ -26,6 +26,44 @@ add_subdirectory( jobs )
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(VIDEODVDDIR)")
 
 ########### next target ###############
+#TODO verify it
+if(videodvdrip)
+set(k3b_jobs_SRCS
+  jobs/k3bdatatrackreader.cpp 
+  jobs/k3breadcdreader.cpp 
+  jobs/k3bcdcopyjob.cpp 
+  jobs/k3bclonejob.cpp 
+  jobs/k3baudiosessionreadingjob.cpp 
+  jobs/k3bdvdcopyjob.cpp 
+  jobs/k3bvideodvdtitletranscodingjob.cpp 
+  jobs/k3bvideodvdtitledetectclippingjob.cpp 
+  jobs/k3baudiocuefilewritingjob.cpp 
+  jobs/k3bbinimagewritingjob.cpp 
+  jobs/k3biso9660imagewritingjob.cpp 
+  jobs/k3bdvdformattingjob.cpp 
+  jobs/k3bblankingjob.cpp 
+  jobs/k3bclonetocreader.cpp 
+  jobs/k3bverificationjob.cpp 
+  jobs/k3bdvdbooktypejob.cpp
+)
+endif(videodvdrip)
+
+set(k3b_jobs_SRCS
+  jobs/k3bdatatrackreader.cpp 
+  jobs/k3breadcdreader.cpp 
+  jobs/k3bcdcopyjob.cpp 
+  jobs/k3bclonejob.cpp 
+  jobs/k3baudiosessionreadingjob.cpp 
+  jobs/k3bdvdcopyjob.cpp 
+  jobs/k3baudiocuefilewritingjob.cpp 
+  jobs/k3bbinimagewritingjob.cpp 
+  jobs/k3biso9660imagewritingjob.cpp 
+  jobs/k3bdvdformattingjob.cpp 
+  jobs/k3bblankingjob.cpp 
+  jobs/k3bclonetocreader.cpp 
+  jobs/k3bverificationjob.cpp 
+  jobs/k3bdvdbooktypejob.cpp
+)
 
 set(k3b_core_SRCS 
       core/k3bcore.cpp 
@@ -82,11 +120,12 @@ set(k3b_project_SRCS
     projects/k3bcuefileparser.cpp 
     projects/k3bpipebuffer.cpp)
 
-set(k3b_LIB_SRCS ${k3b_core_SRCS} ${k3b_tools_SRCS} ${k3b_plugin_SRCS} ${k3b_project_SRCS})
+set(k3b_LIB_SRCS ${k3b_core_SRCS} ${k3b_tools_SRCS} ${k3b_plugin_SRCS}
+${k3b_project_SRCS} ${k3b_jobs_SRCS})
 
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 
-target_link_libraries(k3b  ${KDE4_KDECORE_LIBS} jobs k3bdevice )
+target_link_libraries(k3b  ${KDE4_KDECORE_LIBS}  k3bdevice )
 
 set_target_properties(k3b PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install(TARGETS k3b DESTINATION ${LIB_INSTALL_DIR} )
