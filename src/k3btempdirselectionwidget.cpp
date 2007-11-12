@@ -74,7 +74,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   // ToolTips
   // --------------------------------------------------------------------------------
-  QToolTip::add( m_editDirectory, i18n("The directory in which to save the image files") );
+  m_editDirectory->setToolTip( i18n("The directory in which to save the image files") );
 
   // What's This info
   // --------------------------------------------------------------------------------

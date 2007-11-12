@@ -114,7 +114,7 @@ void K3bStatusBarManager::update()
 
   if( path != QToolTip::textFor( m_labelFreeTemp->parentWidget() ) ) {
     QToolTip::remove( m_labelFreeTemp->parentWidget() );
-    QToolTip::add( m_labelFreeTemp->parentWidget(), path );
+    m_labelFreeTemp->parentWidget()->setToolTip( path );
   }
 }
 

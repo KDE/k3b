@@ -121,7 +121,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   programTabLayout->setSpacing( KDialog::spacingHint() );
   m_programView = new K3bListView( programTab );
   m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
-  QToolTip::add( m_defaultButton, i18n("Change the versions K3b should use.") );
+  m_defaultButton->setToolTip( i18n("Change the versions K3b should use.") );
   m_defaultButton->setWhatsThis( i18n("<p>If K3b found more than one installed version of a program "
 					 "it will choose one as the <em>default</em> which will be used "
 					 "to do the work. If you want to change the default select the "

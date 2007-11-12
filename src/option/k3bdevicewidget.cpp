@@ -161,7 +161,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
   refreshButtonGrid->setMargin(0);
   m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this, "m_buttonRefreshDevices" );
   m_buttonAddDevice = new QPushButton( i18n( "Add Device..." ), this, "m_buttonAddDevice" );
-  QToolTip::add( m_buttonRefreshDevices, i18n( "Rescan the devices" ) );
+  m_buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   refreshButtonGrid->addItem( spacer, 0, 0 );
   refreshButtonGrid->addWidget( m_buttonRefreshDevices, 0, 2 );

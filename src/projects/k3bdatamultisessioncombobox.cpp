@@ -35,7 +35,7 @@ K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent, const
 {
   init( false );
 
-  QToolTip::add( this, i18n("Select the Multisession Mode for the project.") );
+  this->setToolTip( i18n("Select the Multisession Mode for the project.") );
   this->setWhatsThis( i18n("<p><b>Multisession Mode</b>"
 			      "<p><b>Auto</b><br>"
 			      "Let K3b decide which mode to use. The decision will be based "

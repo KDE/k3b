@@ -89,7 +89,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
   grid->setRowStretch( 1, 1 );
 
 // FIXME: check if we need Blu-ray comments here
-  QToolTip::add( m_checkForce, i18n("Force formatting of empty DVDs") );
+  m_checkForce->setToolTip( i18n("Force formatting of empty DVDs") );
   m_checkForce->setWhatsThis( i18n("<p>If this option is checked K3b will format a "
 				      "DVD-RW even if it is empty. It may also be used to "
 				      "force K3b to format a DVD+RW or a DVD-RW in restricted "
@@ -100,7 +100,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
 				      "just needs to be overwritten. The same applies to DVD-RW in "
 				      "restricted overwrite mode.") );
 
-  QToolTip::add( m_checkQuickFormat, i18n("Try to perform quick formatting") );
+  m_checkQuickFormat->setToolTip( i18n("Try to perform quick formatting") );
   m_checkQuickFormat->setWhatsThis( i18n("<p>If this option is checked K3b will tell the writer "
 					    "to perform a quick format."
 					    "<p>Erasing a rewritable medium completely can take a very long "

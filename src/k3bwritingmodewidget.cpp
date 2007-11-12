@@ -90,7 +90,7 @@ void K3bWritingModeWidget::init()
 
   connect( this, SIGNAL(valueChanged(int)), this, SIGNAL(writingModeChanged(int)) );
 
-  QToolTip::add( this, i18n("Select the writing mode to use") );
+  this->setToolTip( i18n("Select the writing mode to use") );
 
   initWhatsThisHelp();
 }

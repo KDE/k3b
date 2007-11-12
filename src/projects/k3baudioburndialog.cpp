@@ -113,7 +113,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   // ToolTips
   // -------------------------------------------------------------------------
-  QToolTip::add( m_checkHideFirstTrack, i18n("Hide the first track in the first pregap") );
+  m_checkHideFirstTrack->setToolTip( i18n("Hide the first track in the first pregap") );
 
   // What's This info
   // -------------------------------------------------------------------------

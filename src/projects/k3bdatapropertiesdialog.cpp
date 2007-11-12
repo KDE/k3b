@@ -162,9 +162,9 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*
   }
 
 
-  QToolTip::add( m_checkHideOnRockRidge, i18n("Hide this file in the RockRidge filesystem") );
-  QToolTip::add( m_checkHideOnJoliet, i18n("Hide this file in the Joliet filesystem") );
-  QToolTip::add( m_editSortWeight, i18n("Modify the physical sorting") );
+  m_checkHideOnRockRidge->setToolTip( i18n("Hide this file in the RockRidge filesystem") );
+  m_checkHideOnJoliet->setToolTip( i18n("Hide this file in the Joliet filesystem") );
+  m_editSortWeight->setToolTip( i18n("Modify the physical sorting") );
   m_checkHideOnRockRidge->setWhatsThis( i18n("<p>If this option is checked, the file or directory "
 						"(and its entire contents) will be hidden on the "
 						"ISO9660 and RockRidge filesystem.</p>"

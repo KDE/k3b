@@ -35,7 +35,7 @@ K3bDataModeWidget::K3bDataModeWidget( QWidget* parent, const char* name )
   insertItem( i18n("Mode1"), s_mode1Index );
   insertItem( i18n("Mode2"), s_mode2Index );
 
-  QToolTip::add( this,i18n("Select the mode for the data-track") );
+  this->setToolTip(i18n("Select the mode for the data-track") );
   this->setWhatsThis( i18n("<p><b>Data Mode</b>"
 			      "<p>Data tracks may be written in two different modes:</p>"
 			      "<p><b>Auto</b><br>"

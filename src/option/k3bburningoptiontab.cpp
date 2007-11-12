@@ -101,11 +101,11 @@ void K3bBurningOptionTab::setupGui()
   // -----------------------------------------------------------------------
 
 
-  QToolTip::add( m_checkOverburn, i18n("Allow burning more than the official media capacity") );
-  QToolTip::add( m_checkAllowWritingAppSelection, i18n("Allow to choose between cdrecord and cdrdao") );
-  QToolTip::add( m_checkAutoErasingRewritable, i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
-  QToolTip::add( m_checkEject, i18n("Do not eject the burn medium after a completed burn process") );
-  QToolTip::add( m_checkForceUnsafeOperations, i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
+  m_checkOverburn->setToolTip( i18n("Allow burning more than the official media capacity") );
+  m_checkAllowWritingAppSelection->setToolTip( i18n("Allow to choose between cdrecord and cdrdao") );
+  m_checkAutoErasingRewritable->setToolTip( i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
+  m_checkEject->setToolTip( i18n("Do not eject the burn medium after a completed burn process") );
+  m_checkForceUnsafeOperations->setToolTip( i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
 
   m_checkAllowWritingAppSelection->setWhatsThis( i18n("<p>If this option is checked K3b gives "
                                                          "the possibility to choose between cdrecord "

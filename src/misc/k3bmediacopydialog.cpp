@@ -208,9 +208,9 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
   connect( m_comboCopyMode, SIGNAL(activated(int)), this, SLOT(slotToggleAll()) );
   connect( m_checkReadCdText, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
 
-  QToolTip::add( m_checkIgnoreDataReadErrors, i18n("Skip unreadable data sectors") );
-  QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
-  QToolTip::add( m_checkReadCdText, i18n("Copy CD-Text from the source CD if available.") );
+  m_checkIgnoreDataReadErrors->setToolTip( i18n("Skip unreadable data sectors") );
+  m_checkNoCorrection->setToolTip( i18n("Disable the source drive's error correction") );
+  m_checkReadCdText->setToolTip( i18n("Copy CD-Text from the source CD if available.") );
 
   m_checkNoCorrection->setWhatsThis( i18n("<p>If this option is checked K3b will disable the "
 					     "source drive's ECC/EDC error correction. This way sectors "

@@ -138,14 +138,14 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   d->closeButton = new K3bMiniButton( d->titleLabel );
   d->closeButton->setPixmap( style().stylePixmap( QStyle::SP_TitleBarCloseButton, this ) );
   d->closeButton->setFixedSize( d->closeButton->pixmap()->width(), d->closeButton->pixmap()->height() );
-  QToolTip::add( d->closeButton, i18n("Close") );
+  d->closeButton->setToolTip( i18n("Close") );
   connect( d->closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
 
   d->stickyButton = new K3bMiniButton( d->titleLabel );
   d->stickyButton->setToggleButton( true );
   d->stickyButton->setPixmap( const_cast< const char** >( sticky_xpm ) );
   d->stickyButton->setFixedSize( d->closeButton->pixmap()->width(), d->closeButton->pixmap()->height() );
-  QToolTip::add( d->stickyButton, i18n("Keep Open") );
+  d->stickyButton->setToolTip( i18n("Keep Open") );
   connect( d->stickyButton, SIGNAL(toggled(bool)), this, SLOT(slotSticky(bool)) );
 
   grid->addWidget( d->pixmapLabel, 0, 0 );

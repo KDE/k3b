@@ -186,12 +186,12 @@ void K3bAudioRippingDialog::setupGui()
 
 void K3bAudioRippingDialog::setupContextHelp()
 {
-  QToolTip::add( m_spinRetries, i18n("Maximal number of read retries") );
+  m_spinRetries->setToolTip( i18n("Maximal number of read retries") );
   m_spinRetries->setWhatsThis( i18n("<p>This specifies the maximum number of retries to "
 				       "read a sector of audio data from the cd. After that "
 				       "K3b will either skip the sector if the <em>Ignore Read Errors</em> "
 				       "option is enabled or stop the process.") );
-  QToolTip::add( m_checkUseIndex0, i18n("Do not read the pregaps at the end of every track") );
+  m_checkUseIndex0->setToolTip( i18n("Do not read the pregaps at the end of every track") );
   m_checkUseIndex0->setWhatsThis( i18n("<p>If this option is checked K3b will not rip the audio "
 					  "data in the pregaps. Most audio tracks contain an empty "
 					  "pregap which does not belong to the track itself.</p>"

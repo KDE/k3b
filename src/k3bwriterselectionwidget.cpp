@@ -177,9 +177,9 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   connect( m_comboSpeed, SIGNAL(activated(int)), this, SLOT(slotSpeedChanged(int)) );
 
 
-  QToolTip::add( m_comboMedium, i18n("The medium that will be used for burning") );
-  QToolTip::add( m_comboSpeed, i18n("The speed at which to burn the medium") );
-  QToolTip::add( m_comboWritingApp, i18n("The external application to actually burn the medium") );
+  m_comboMedium->setToolTip( i18n("The medium that will be used for burning") );
+  m_comboSpeed->setToolTip( i18n("The speed at which to burn the medium") );
+  m_comboWritingApp->setToolTip( i18n("The external application to actually burn the medium") );
 
   m_comboMedium->setWhatsThis( i18n("<p>Select the medium that you want to use for burning."
 				       "<p>In most cases there will only be one medium available which "
