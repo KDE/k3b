@@ -1,7 +1,4 @@
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
 ########### next target ###############
 
 set(k3bdevice_LIB_SRCS 

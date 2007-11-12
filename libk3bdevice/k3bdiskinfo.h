@@ -26,8 +26,6 @@
 #include <q3cstring.h>
 
 
-class kdbgstream;
-
 
 namespace K3bDevice
 {

@@ -11,7 +11,8 @@ include(ConvenienceLibs.cmake)
 
 #include(ConfigureChecks.cmake)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
+${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice  )
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
 

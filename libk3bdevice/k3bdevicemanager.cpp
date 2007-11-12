@@ -32,7 +32,7 @@
 #include <k3process.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <iostream>
 #include <limits.h>
