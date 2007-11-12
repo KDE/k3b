@@ -1,3 +1,21 @@
+include_directories(
+${CMAKE_CURRENT_BINARY_DIR}
+${CMAKE_CURRENT_SOURCE_DIR}/core
+${CMAKE_CURRENT_SOURCE_DIR}/plugin
+${CMAKE_CURRENT_SOURCE_DIR}/tools
+${CMAKE_CURRENT_SOURCE_DIR}/projects
+${CMAKE_CURRENT_SOURCE_DIR}/cddb
+${CMAKE_CURRENT_SOURCE_DIR}/jobs
+${CMAKE_CURRENT_BINARY_DIR}/core
+${CMAKE_CURRENT_BINARY_DIR}/plugin
+${CMAKE_CURRENT_BINARY_DIR}/tools
+${CMAKE_CURRENT_BINARY_DIR}/projects
+${CMAKE_CURRENT_BINARY_DIR}/cddb
+${CMAKE_CURRENT_BINARY_DIR}/jobs
+)
+
+
+
 add_subdirectory( core )
 add_subdirectory( plugin )
 add_subdirectory( tools )
