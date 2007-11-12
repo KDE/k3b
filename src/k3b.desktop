@@ -118,4 +118,4 @@ MimeType=application/x-k3b
 X-KDE-StartupNotify=true
 X-KDE-NativeMimeType=application/x-k3b;application/x-iso
 Categories=KDE;Application;AudioVideo;DiscBurning;
-X-DCOP-ServiceType=Unique
+X-DBUS-ServiceType=Unique
